@@ -1,65 +1,65 @@
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2066.outbound.protection.outlook.com [40.107.96.66])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2042.outbound.protection.outlook.com [40.107.237.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABC61CD11;
-	Tue, 26 Mar 2024 17:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679BF13D519;
+	Tue, 26 Mar 2024 17:02:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711472524; cv=fail; b=P3foR8eYqSelhzGkkGg2OlnJi0qY3Y7AiNnimFkkIpZtFZnUyajnSocierMvJQW4q7rW+OpXTmHPBX9hTuiZcFYeXas5X841/+Ur8Y++amDIKLTXIFA8JHdomZlQQNX+0gSyGvmQYmr2G3aIwvIAuGfADsreaIDme507LbeFNOQ=
+	t=1711472528; cv=fail; b=fooV6T67rcHJPTGRcD22BQzZgEvcRfx0rA823kA30j12gkaZiEQztsFES+mEISHkygVGz0qg446Um6jOUafy0wmt4BnsVPB5a6eG+1L8ZVrteHcKYePERjLLvwYf7Lm9FSvYr1ivbbDsjpiJTayAcgXt/2FmVFVPjkb+yAVX4Gg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711472524; c=relaxed/simple;
-	bh=bIdZR29d71wog5DD+7gm3SQN4+IqO7xFShC5Vvpj8tw=;
+	s=arc-20240116; t=1711472528; c=relaxed/simple;
+	bh=+e09gFd1Ey7yx9/ihKE4m8zZz7PlKXX2DE515T37eBc=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n9/BXGILR/5zdRhMDiDoNv8p8yqWvXoeRjIW306G3atdxCJN3w7vF0PQOtUiGLRnbJzjlF8IqbWsEtIYsXAJAGF56f2CWyPpFeSHdGo2vrQI1rC+c8AfUV0kyN/sYIywGJzWDDlNhoVb5PCq4AYbEXZrrKjC7I8AOIVyAuQOfO8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Iobb6EHG; arc=fail smtp.client-ip=40.107.96.66
+	 MIME-Version:Content-Type; b=EAR0+yaRdDk/xRGVOIXh0ePNrXk60WvA5XcvpRQRW6OMjRawx7p3P3bpCMdiBxfODLoNqoYFhGQzxSXLTbabHOSewX4TFk8dzBpYTEFpec9lJoGxKOJ++Y4GnkPabg8Yrrvw0lSZaAz2MKLfwhhBG0fqdMMEV79IDlsOYWwjZM8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=E7zgNVpM; arc=fail smtp.client-ip=40.107.237.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Iobb6EHG"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="E7zgNVpM"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H8pW2wz393tuX8ZVbRUYVZ1N3FRC4PgTHUdIZN93/PirCzWpvFIAMCsqa12oFme5Ax1I5ugRslR3SX20NPeE/U+CdfiMYhx92jBa+4B6LbKxFR6l9y+YUAR1Jb1zNBeI0CbmkhGg/PxcZ5zbfzcBeUHWj2eiWlhldxD8oiOv2DRZ0z4S63O08qNpXq3R2v9mK5XGyf9Zr/DSUOqVuGc0ovrxKkDsl104CSdMjg5D3h6NaIPcXk83ELWN7OBC1pmG6yg33BhxI4UXveInPMIJZ4IY0EV9cxF4NO8YZVZ3In3VemdUImsaB4ym6oimyrxVKoNFfXM85zQ0IL0dWjOchA==
+ b=KUu2LjinVDFxej0twGpCL6LIrfz+pi375a9Xep7p1BzVzqSi6k/c4r2tjvv7NA+3CtQOXaOSaQHMCj5rCWy+6OcqylgxxfNMTxL6QH6P7mpcEVW5GNBV7UjBtwDWNJCiqj+psNQX12S4qy7o7EFHYuAiYRAN0SVYwFg1sTTpM0O2tK1z4yNFIw5RG4vlQ0ckb2xYZZMGlj9Gm2uxfJrj4FxBAMpgLFGBTRJE+kTiGylRC2o0IjUsQnLf1D90WJbE0WAJdPJJtszYrjXnO8JEAUpcf2T0r9qVmb2EzVPRD+fKqrq7qz/1nsqW55l6O48/dpRQo1zxKMkJewd09uxTRA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=14NYtEbeH0hz72BbkVr5R+v1zHQPqoAs0iuS1ashEos=;
- b=QvmjTOxZcVbqkzMvhlBcRjLyXRgnWFfaDrvv9ZXR5zL4o/Q8qWvNkxnamnLBflAket4AH7zK+iM4zEV+UFpzBm4xG81H01lfL30o9ZWjGHzN/lZ8yBXh79ymo1fj4pIlop1JGFbMiaWQlrxhYj6kvPAd93kR5GYwWxetKZDohlkutV6FHR0pdvmmljA+tPAt8NgfHFYaYoK/2uI8QSt90NLVkrlBpyW2d5sWl7+3LhEpjtSrwYDJeRF4mmCvSKGktF1Kvy5dq5H2yRU8sxVeokDF6THblJi1mGdzvS+wnp5y7W49IHDNT4cZvVSZNbOt8V5ug3qhDciKe7x4lE+Kow==
+ bh=W7sbgzMJiAtzTUrgb5Sbt851ursJ6UfzsRURrAyQZwU=;
+ b=CPggptNxHA/Bme7HNkgRoZMBL/bxiWlLHIh8kKG4lhrF2y1mImdfRqYKfKbeZRw97nZFiNsHl9awCDTSiZkgHWcqOcaLpEgVDF/86t/yFbvQ2OC86b4MzmNVKz9w9vPAC1t2MOvg1HbDqXAYLMAf1on8/skchSwgtnhi1KLleFYtZfqOanPiKDGRghegEBX6bHnF5f6VQCrd6BAXqssL/1gYbagmObMVGJ8VwAx9l1lydu9/GoDFxQ4YQ4noekDaE69midAwqY243Vrp6q7mq7qf15SN2sIImBL02D7lCZAmoOwbtBaR8PVLKJuoaM8IzV/v6rz0Vxho0bjibN/mgQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=14NYtEbeH0hz72BbkVr5R+v1zHQPqoAs0iuS1ashEos=;
- b=Iobb6EHGPbY8r3ERO8hmSrRsNpQdihQ4S3T+ZQYnFy1cJT0xRC2ER4AdY3BCimAiygUeRQgWCRnFtrVQ12sLaYv13rkGCpMXjsQDeDAXNFtTYYHG9EzEUHh64iCpBpuBwECLc8a8EtGBl/SLeO+sqw5nd0aERyv1945V3NsP6SqybBrfygnu688avMQPovagAQeHjxV3L6mqDc5W5jPB61J4PD0Z7m6LXOm3wAm07tNRQ2wuREF9U36fgkjdiuuJyHdROFtekqPiF8zCTn6UhkgMU7LKXuTeOdDgWmZEVhHHbWG5CgWl4xpG4F/puv3viyaCSj0lYd0fyl1p3P1BxA==
-Received: from CH0PR03CA0399.namprd03.prod.outlook.com (2603:10b6:610:11b::18)
- by DM4PR12MB6037.namprd12.prod.outlook.com (2603:10b6:8:b0::11) with
+ bh=W7sbgzMJiAtzTUrgb5Sbt851ursJ6UfzsRURrAyQZwU=;
+ b=E7zgNVpM1CbxpN+yQk8DCM5A7DacnxpkHfpDoY1i8Iag2DtCfj7oBhNrLlf2gQLcuelEvSxQWvsUyuZWg7BBbGOhIyTp+U0dKAZ3HcF80nsIdVOgzqqWjaG+lrxhjOcsbmSrq3UEoRy6be8HaMqqqBkCzRlPSEDloC5Jy1icXOhIdzpuV7SGvAE9LmszuUQooNN9EOU40a4NbG10espyFQHM+TKRDL7hDiaCPwjYMTfMZn6514BZ68qoSreMlQmzERkj7eWbWjSAgUQWOR7da3KzxIvLdAAhy2ltcYJXQtwn7GSCZ5W46t4OYLvjZG+NkapZRfj33bUivpS80ogMGw==
+Received: from BN0PR02CA0029.namprd02.prod.outlook.com (2603:10b6:408:e4::34)
+ by PH7PR12MB5595.namprd12.prod.outlook.com (2603:10b6:510:135::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Tue, 26 Mar
- 2024 17:01:40 +0000
-Received: from CH3PEPF0000000D.namprd04.prod.outlook.com
- (2603:10b6:610:11b:cafe::d1) by CH0PR03CA0399.outlook.office365.com
- (2603:10b6:610:11b::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.13 via Frontend
- Transport; Tue, 26 Mar 2024 17:01:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.31; Tue, 26 Mar
+ 2024 17:01:59 +0000
+Received: from BN1PEPF00004681.namprd03.prod.outlook.com
+ (2603:10b6:408:e4:cafe::79) by BN0PR02CA0029.outlook.office365.com
+ (2603:10b6:408:e4::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.26 via Frontend
+ Transport; Tue, 26 Mar 2024 17:01:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CH3PEPF0000000D.mail.protection.outlook.com (10.167.244.43) with Microsoft
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN1PEPF00004681.mail.protection.outlook.com (10.167.243.87) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7409.10 via Frontend Transport; Tue, 26 Mar 2024 17:01:37 +0000
+ 15.20.7409.10 via Frontend Transport; Tue, 26 Mar 2024 17:01:58 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 26 Mar
- 2024 10:01:07 -0700
+ 2024 10:01:26 -0700
 Received: from localhost.localdomain (10.126.230.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Tue, 26 Mar
- 2024 10:01:01 -0700
+ 2024 10:01:20 -0700
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -70,9 +70,9 @@ CC: Shuah Khan <shuah@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>,
  Schimmel" <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
 	<linux-kselftest@vger.kernel.org>, Petr Machata <petrm@nvidia.com>,
 	<mlxsw@nvidia.com>
-Subject: [PATCH net-next 10/14] selftests: forwarding: Convert log_test() to recognize RET values
-Date: Tue, 26 Mar 2024 17:54:37 +0100
-Message-ID: <e5f807cb5476ab795fd14ac74da53a731a9fc432.1711464583.git.petrm@nvidia.com>
+Subject: [PATCH net-next 13/14] selftests: forwarding: router_mpath_nh_lib: Don't skip, xfail on veth
+Date: Tue, 26 Mar 2024 17:54:40 +0100
+Message-ID: <15f0ab9637aa0497f164ec30e83c1c8f53d53719.1711464583.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <cover.1711464583.git.petrm@nvidia.com>
 References: <cover.1711464583.git.petrm@nvidia.com>
@@ -88,188 +88,109 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF0000000D:EE_|DM4PR12MB6037:EE_
-X-MS-Office365-Filtering-Correlation-Id: 592f3fc5-de39-45f8-fa39-08dc4db66672
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004681:EE_|PH7PR12MB5595:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a55ff65-c566-4ebf-de51-08dc4db67306
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	daB0S9nHk/O6Iqi+YUqqolXK2WTzbyPr0yGchej56548sfQvl8Xj9Iia1qyA95LIXywOfV7zNgmVFGGP9mWr48LLla965xbjPdwmPSr1HOG2onlF7T//hyPrE20RrEWDNwhD0ChE0iliDptmVDmsuVoHzDB8yn3msGzbu9XcW+wjgGfp8yr/W1Qg8lbWYXcyogeqeQCb3NBwbMO1HhSeKObO+j2OjM+cKcfa8T/eYx/txquATa+H12hzAddKt5IhwXCynOAWuqZUB0GcaM0vUO0lBs0kdS8A4LimZRhreP3/3/BrgAKQIezBbtvEtlSULtxiphTp16bZglReBqTE5a4vDRBsLvWe0KEg3eZq5WgevW5RYQEtXMiO4rVwSTv4CuxLmPE9wtddB43alsZ64AHODkiDutXgrTDbh6m0dmExQs2ZXwrx21pnWwN0jAscT2SKAuF8lb1RdG5jPUzWgR+W+V8zXeyzbVUApG7ywnrP45zqrRE7ioUugRvUS7U4IjEo7iSoTtO7tFZFWxU91s9p+lGFp3gSMYZFOACVzswv6BS3Ddi3q5lN7M8qy4jwbKRma1JOyPfxHCuhnLeygFIP21GOINo/AMlzSy1NuL0ot/2qJC6OV+mHmtZcn2xhIbCIUxKiMC889m5G1hn8/boI+nU70+fdg/3TvGKlJGy221pOq6yHI7EXThNS3q2L+7KwbG4qkRx6gNcWsLSDGpPL0H2LF5HZg/WSPQbWYTqvuLa0Ok9mYkwo6Gj39e9o
+	qHUY+KNp2G3x7VwAz8hhrN7nJdUSOscyrWLCcs4uawTG50LV6ucVyyoiIdTDagHCqUMX17m2FOdFveRHBI/r4wsUC9cxrHXCoyLxsatpzTXRIyuJgQDX45xe4MWLA7uP8Re+NkiwRajOa+bbVuVUoF+/4vVXNL8gG7cPCHoFAbQLJc0Q4vAMJkWDpZ7OY2s5n+4FmgqF0NrVmOmbmsmh9h2SIdHwVBT+pMFSr2JxRL16OG0gP7xA80p3/s8A/3Dtg4MW/F2e7QWx82jmfy/4eaehOagePanmZ7oA1ljpnGcHHSp+SY08fC5OOKyxW1xWtl9RtXL4fyhIzPaaC7cLFrrKZp8HkgKTevkxO6fJbggnZjPROYMni0q4O4RMveMHVCs20Hfl74kWr/QmkuAY5X0PIGM4gJih5iP0mgya9LfxfuYlj6QbOUtBcaxqT2Y9A0Dt/Vzr4b2y/RKWvV0QQ0PS59HqcqYtNV3vWaPaNSGE7yVHbe28JjE0rorfvU9UMmKw5nPpcmHXol/xChRZirqAGvdML3SxUUvICuFIzyTpvwJ8IdlHfQsY4bWSBBtDETOJa6BUokItH/sbmybV/S8fJgDWIlfl6oAhd1Jz3HelRgfVSoSJATSAekA7LX1p97/mdPFuXNfFAB+NxXaR6Q60yaSBbcrsywGNcCaqNnDdmBtvcGNpHV00IHY4s27uGSDMTFfoX41+btmICUhRawxH7Fv8M5lBSt4h1g0dCIRz48JAF6h3g/nub+e+YENd
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(7416005)(82310400014)(1800799015);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(82310400014)(376005)(1800799015)(7416005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 17:01:37.6403
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 17:01:58.6953
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 592f3fc5-de39-45f8-fa39-08dc4db66672
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a55ff65-c566-4ebf-de51-08dc4db67306
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF0000000D.namprd04.prod.outlook.com
+	BN1PEPF00004681.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6037
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5595
 
-In a previous patch, the interpretation of RET value was changed to mean
-the kselftest framework constant with the test outcome: $ksft_pass,
-$ksft_xfail, etc.
+When the NH group stats tests are currently run on a veth topology, the
+HW-stats leg of each test is SKIP'ped. But kernel networking CI interprets
+skips as a sign that tooling is missing, and prompts maintainer
+investigation. Lack of capability to pass a test should be expressed as
+XFAIL.
 
-Update log_test() to recognize the various possible RET values.
+Selftests that require HW should normally be put in drivers/net/hw, but
+doing so for the NH counter selftests would just lead to a lot of
+duplicity.
 
-Then have EXIT_STATUS track the RET value of the current test. This differs
-subtly from the way RET tracks the value: while for RET we want to
-recognize XFAIL as a separate status, for purposes of exit code, we want to
-to conflate XFAIL and PASS, because they both communicate non-failure. Thus
-add a new helper, ksft_exit_status_merge().
+So instead, introduce a helper, xfail_on_veth(), which can be used to mark
+selftests that should XFAIL instead of FAILing when run on a veth topology.
+On non-veth topology, they don't do anything.
 
-With this log_test_skip() and log_test_xfail() can be reexpressed as thin
-wrappers around log_test.
+Use the helper in the HW-stats part of router_mpath_nh_lib selftest.
 
 Signed-off-by: Petr Machata <petrm@nvidia.com>
 ---
- tools/testing/selftests/net/forwarding/lib.sh | 92 ++++++++++++++-----
- tools/testing/selftests/net/lib.sh            |  9 ++
- 2 files changed, 77 insertions(+), 24 deletions(-)
+ tools/testing/selftests/net/forwarding/lib.sh      | 14 ++++++++++++++
+ .../net/forwarding/router_mpath_nh_lib.sh          | 12 +-----------
+ 2 files changed, 15 insertions(+), 11 deletions(-)
 
 diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index ee8153651b38..370fc377249b 100644
+index 58df57855bff..4103ed7afcde 100644
 --- a/tools/testing/selftests/net/forwarding/lib.sh
 +++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -438,6 +438,62 @@ check_err_fail()
+@@ -459,6 +459,20 @@ xfail_on_slow()
  	fi
  }
  
-+log_test_result()
++xfail_on_veth()
 +{
-+	local test_name=$1; shift
-+	local opt_str=$1; shift
-+	local result=$1; shift
-+	local retmsg=$1; shift
++	local dev=$1; shift
++	local kind
 +
-+	printf "TEST: %-60s  [%s]\n" "$test_name $opt_str" "$result"
-+	if [[ $retmsg ]]; then
-+		printf "\t%s\n" "$retmsg"
-+	fi
-+}
-+
-+pause_on_fail()
-+{
-+	if [[ $PAUSE_ON_FAIL == yes ]]; then
-+		echo "Hit enter to continue, 'q' to quit"
-+		read a
-+		[[ $a == q ]] && exit 1
-+	fi
-+}
-+
-+handle_test_result_pass()
-+{
-+	local test_name=$1; shift
-+	local opt_str=$1; shift
-+
-+	log_test_result "$test_name" "$opt_str" " OK "
-+}
-+
-+handle_test_result_fail()
-+{
-+	local test_name=$1; shift
-+	local opt_str=$1; shift
-+
-+	log_test_result "$test_name" "$opt_str" FAIL "$retmsg"
-+	pause_on_fail
-+}
-+
-+handle_test_result_xfail()
-+{
-+	local test_name=$1; shift
-+	local opt_str=$1; shift
-+
-+	log_test_result "$test_name" "$opt_str" XFAIL "$retmsg"
-+	pause_on_fail
-+}
-+
-+handle_test_result_skip()
-+{
-+	local test_name=$1; shift
-+	local opt_str=$1; shift
-+
-+	log_test_result "$test_name" "$opt_str" SKIP "$retmsg"
-+}
-+
- log_test()
- {
- 	local test_name=$1
-@@ -447,40 +503,28 @@ log_test()
- 		opt_str="($opt_str)"
- 	fi
- 
--	if [[ $RET -ne 0 ]]; then
--		EXIT_STATUS=1
--		printf "TEST: %-60s  [FAIL]\n" "$test_name $opt_str"
--		if [[ ! -z "$retmsg" ]]; then
--			printf "\t%s\n" "$retmsg"
--		fi
--		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
--			echo "Hit enter to continue, 'q' to quit"
--			read a
--			[ "$a" = "q" ] && exit 1
--		fi
--		return 1
-+	if ((RET == ksft_pass)); then
-+		handle_test_result_pass "$test_name" "$opt_str"
-+	elif ((RET == ksft_xfail)); then
-+		handle_test_result_xfail "$test_name" "$opt_str"
-+	elif ((RET == ksft_skip)); then
-+		handle_test_result_skip "$test_name" "$opt_str"
++	kind=$(ip -j -d link show dev $dev |
++			jq -r '.[].linkinfo.info_kind')
++	if [[ $kind = veth ]]; then
++		FAIL_TO_XFAIL=yes "$@"
 +	else
-+		handle_test_result_fail "$test_name" "$opt_str"
- 	fi
- 
--	printf "TEST: %-60s  [ OK ]\n" "$test_name $opt_str"
--	return 0
-+	EXIT_STATUS=$(ksft_exit_status_merge $EXIT_STATUS $RET)
-+	return $RET
- }
- 
- log_test_skip()
- {
--	local test_name=$1
--	local opt_str=$2
--
--	printf "TEST: %-60s  [SKIP]\n" "$test_name $opt_str"
--	return 0
-+	RET=$ksft_skip retmsg= log_test "$@"
- }
- 
- log_test_xfail()
- {
--	local test_name=$1
--	local opt_str=$2
--
--	printf "TEST: %-60s  [XFAIL]\n" "$test_name $opt_str"
--	return 0
-+	RET=$ksft_xfail retmsg= log_test "$@"
- }
- 
- log_info()
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index 88f6133ca319..b7f7b8695165 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -49,6 +49,15 @@ ksft_status_merge()
- 		$ksft_pass $ksft_xfail $ksft_skip $ksft_fail
- }
- 
-+ksft_exit_status_merge()
-+{
-+	local a=$1; shift
-+	local b=$1; shift
-+
-+	__ksft_status_merge "$a" "$b" \
-+		$ksft_xfail $ksft_pass $ksft_skip $ksft_fail
++		"$@"
++	fi
 +}
 +
- busywait()
+ log_test_result()
  {
- 	local timeout=$1; shift
+ 	local test_name=$1; shift
+diff --git a/tools/testing/selftests/net/forwarding/router_mpath_nh_lib.sh b/tools/testing/selftests/net/forwarding/router_mpath_nh_lib.sh
+index b2d2c6cecc01..2903294d8bca 100644
+--- a/tools/testing/selftests/net/forwarding/router_mpath_nh_lib.sh
++++ b/tools/testing/selftests/net/forwarding/router_mpath_nh_lib.sh
+@@ -56,21 +56,12 @@ nh_stats_test_dispatch_swhw()
+ 	local group_id=$1; shift
+ 	local mz="$@"
+ 
+-	local used
+-
+ 	nh_stats_do_test "$what" "$nh1_id" "$nh2_id" "$group_id" \
+ 			 nh_stats_get "${mz[@]}"
+ 
+-	used=$(ip -s -j -d nexthop show id $group_id |
+-		   jq '.[].hw_stats.used')
+-	kind=$(ip -j -d link show dev $rp11 |
+-		   jq -r '.[].linkinfo.info_kind')
+-	if [[ $used == true ]]; then
++	xfail_on_veth $rp11 \
+ 		nh_stats_do_test "HW $what" "$nh1_id" "$nh2_id" "$group_id" \
+ 				 nh_stats_get_hw "${mz[@]}"
+-	elif [[ $kind == veth ]]; then
+-		log_test_xfail "HW stats not offloaded on veth topology"
+-	fi
+ }
+ 
+ nh_stats_test_dispatch()
+@@ -83,7 +74,6 @@ nh_stats_test_dispatch()
+ 	local mz="$@"
+ 
+ 	local enabled
+-	local kind
+ 
+ 	if ! ip nexthop help 2>&1 | grep -q hw_stats; then
+ 		log_test_skip "NH stats test: ip doesn't support HW stats"
 -- 
 2.43.0
 
