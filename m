@@ -1,176 +1,99 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2065.outbound.protection.outlook.com [40.107.237.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD9571B20
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Mar 2024 12:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711455263; cv=fail; b=jvtq7yJLMmeZlMw9apAhMco/65wDhXC9ZWdWROG2/90s8EAnw+PN1h7sWZM5fpFJwsZfnHynkxWwomIk4Z77q/PiIIg0qHC9u3+Z7ouGcNukTdK+XrqszJ06u8+c+yDiGr4gu9dPGQ6E+DDG1aWnrm2FpXAzZ3vJoGuNFeE1yoc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711455263; c=relaxed/simple;
-	bh=W2FoV8t9UTQ/XqUVR4pz8I6EYue488QIpwN8M5li+6Q=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=BIBEXkFpdmyAP8AJLrL+vq8LIbNTQphSs6beHU4JZyJickh745QI0sZBCkDbNMD0JsI9zYdsOrTuE1ndc8F7QOhMWNVLzjWKOKa2WRabcFqVMobXUOhkyvJ59a2KHe3Rp9/uqdyI/TKH053z9pVI2HdI2ShgEL0u4H5aNtTe/U4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Vj8DTUWl; arc=fail smtp.client-ip=40.107.237.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A08B5A0FA;
+	Tue, 26 Mar 2024 12:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711456526; cv=none; b=b9ln6Nu8dURopnmYGf+yhejfz869SE2sHpsiIXwTG0BwdOyPsmwbAD7P8uKDSREuwaD8ef5BsLpIh8EBva1jlB3ynE27HrtSdZBzqJQcyIpWC7+uIH1Y+Le3OAIsO4c6abhPd67jb79or9bK43YSviG5UP05jGqE/gfaCZJiCdk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711456526; c=relaxed/simple;
+	bh=6XTjoV9ZlDTzN5vXMrcYGZJGcOhwU6OBWtS33uI0Xvo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=i3D892kvvGPZn3PMrpNsQ1xmwt6EpPCa3qMfj9/xXWwuiMKiDhN3W4a85WrS5wYRMXhIVbYZSiFRK5dUOBnEsblZRrj19jASyX33mHiJaaZfa7GmhmHI5J+5WrfLVZAtgRMVaSHdd3WQV53X1ql5FKSpTd9l6379IbytP6LG7kI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PZDK5pEn; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Vj8DTUWl"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TDjPZ5gShAsaShv9xbHlq3EoRg6Lw2JdzoIvkD1N1xRSDCHoKxihmBO71SsQXNs/JUzA9Zuw9/ceqcM8WsTr1d4+3DXsuieir2bRp5aBBFiHfC7ePxDfce51zyyFGk2XQPy/xv58QHAp0e0V8icYU3AIhPoVlbIOqWgAfS6G5snhVkuqoZaLenecvrd5yCJFetqd1ZptNqziuAafDwr4TCy68hTSUBIDQgtxf0ifEoc6Df92iZ8rNqwQJ8b14etsXYzeKm1fRyb/puAWmqsYjeeRiJYZxolynXkv5tBQmRqn9lDWWohkSRD6FxtyPZnWY47w2wlVUM43MF7RDY3wug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RpjENSLu40/dEnZ7vFmNfngMsu6nhuzbCHKkHiB+p/Q=;
- b=V+dAxgcsmRB7l0pntDKCfozZq5pxU2ImmaADvdawlsye1Rxfpi9KLha4nnwza3jfdcT54eNJ/eUj4vpvlqZCKxv4yh2Y85ERm1QbPWcz04YH31z/SOjWiJmiUN1L8uZCPm7uPJMomdyKLIFug09gU1YvBdyLuFieCfPGhtLp/ub5KwheH/gmzbNFQhVPT3EPKbRxYRSH3pIr8stEe0qFeXY75a5aV73R/Sv9UqhzXoRsdkdYXwdk8xFlgz3Nb9p1A0u8m1+z7+qsbpyUln9FD2JgXpikJX0o6dz9PbhLSz4YFQs2CZJse2q+CXxR52XyoQ+SLFZ5+pajjYyTAwBcgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RpjENSLu40/dEnZ7vFmNfngMsu6nhuzbCHKkHiB+p/Q=;
- b=Vj8DTUWlIdKTxczRz08v649MZKIw3ZwQRrcnOKWeDgiuLZtAh5cyXed8+45rl2hgxmJqNAT3mw7wrRkc+HnVsYvCZflKJFuaQ9xS3+575UCmR7pLiE8Tyf5MEq5hTDRYk+uJLCO3TplaMcUPKqqFHfVx0hDaRIJBiOr7R+31tNQWtbmWd6OzcHuAyseER4R2N3Mcs84/ReStqgnwGbY2blGiVAAbjp3d9EAjb29xEjKpjbTMXiWGN84mJjq5C6jDgllFgTB1muM7N1eXrCGdD3Re1Emm2SVete5pU6BvXzeCNKy78K8hu/Wzh2JfRwI+eplx3ZjhLA0ipMotvP9ntw==
-Received: from CH2PR19CA0023.namprd19.prod.outlook.com (2603:10b6:610:4d::33)
- by CH2PR12MB4102.namprd12.prod.outlook.com (2603:10b6:610:a9::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.33; Tue, 26 Mar
- 2024 12:14:18 +0000
-Received: from CH3PEPF00000010.namprd04.prod.outlook.com
- (2603:10b6:610:4d:cafe::d6) by CH2PR19CA0023.outlook.office365.com
- (2603:10b6:610:4d::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.13 via Frontend
- Transport; Tue, 26 Mar 2024 12:14:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CH3PEPF00000010.mail.protection.outlook.com (10.167.244.41) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7409.10 via Frontend Transport; Tue, 26 Mar 2024 12:14:18 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 26 Mar
- 2024 05:14:06 -0700
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Tue, 26 Mar
- 2024 05:13:59 -0700
-References: <cover.1711385795.git.petrm@nvidia.com>
- <e819623af6aaeea49e9dc36cecd95694fad73bb8.1711385795.git.petrm@nvidia.com>
- <20240325173417.1a79b631@kernel.org>
-User-agent: mu4e 1.8.11; emacs 28.3
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Petr Machata <petrm@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	<nbu-linux-internal@nvidia.com>, Shuah Khan <shuah@kernel.org>, "Nikolay
- Aleksandrov" <razor@blackwall.org>, Hangbin Liu <liuhangbin@gmail.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>, Benjamin Poirier
-	<bpoirier@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, Jiri Pirko
-	<jiri@nvidia.com>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [RFC PATCH net-next mlxsw 03/14] selftests: forwarding: README:
- Document customization
-Date: Tue, 26 Mar 2024 11:31:31 +0100
-In-Reply-To: <20240325173417.1a79b631@kernel.org>
-Message-ID: <87cyrhjim4.fsf@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PZDK5pEn"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-41488f9708fso14299805e9.3;
+        Tue, 26 Mar 2024 05:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711456523; x=1712061323; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qj9viDkJqyEnEMoMdMZBdgZRhxl32v2W70TF8U83dEk=;
+        b=PZDK5pEnvwTucdkr4k8C4bCT2abBZisAuVojqflJm4boyzwQPnok9tPXFRGZBeukkL
+         85n+jXA7cmS+pWZwUxZ4M4wKMSeVHGF5Noc1At5Rmw81kmCJZwB0xBOFdRme2SzGkJ6Z
+         ageo9SYOJb1OC5PcZxkUQ9pdO0MeMM+hJRnLqVN8NzgYX87df9ddhsR8Xc4w9CfgHTaQ
+         JkQuvJ/t99pW71Q3Lv6vwRrb2gdNbbwfEadNZJOGSeTkfYI55q7AmCnT7vagk9d3pu/r
+         8TbsElkLZZW6Wka82JTGD5gmqVRpgC7OxiDX4CuyvyE+UaeLFhEjBj6pZRYldLsBC7gW
+         q0cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711456523; x=1712061323;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Qj9viDkJqyEnEMoMdMZBdgZRhxl32v2W70TF8U83dEk=;
+        b=dh5iQ1nkcuuTDVZ5mYS+vfnbuUD8Y0YZ2eDvr75/8RGdzxdhDd0NgM9MGymklcQXcS
+         OG+SLTCFKn2EOJIaMWKWzFuTj5ZN5rd+oVATdUVHn6g9HIpdnjhnmeKHjTj1n90NVCJ2
+         XYSnYq960ayi/sRhANS/2/4AAFaO012R3dOchAZUNT/xx9km/gNGclGoYhnXg+2k7lc9
+         WADGUzMXL5HgFAtlcEcGZhfcdbsPE4LPTqGeKLjnaV4foaic8BA59UOJLWCHBGTu4LFW
+         4GPnpeWqYBINHnqFsA8FlbN+8022G8i9vGFKP8YDG6gLxBejBPFsPbyT5zmYd2IauxRX
+         dwMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW7AWQhzGTUw3MO+eASSaNk3C7gGvMBshvhV1N41dSqm5mwWBCWa4Okei35XMyfs1e3EGvsSE/AbOLUW8tRkhBg4G+BU1jpZiZRm+xcV3cCTOtxcrkRqwDTsl+vkjLUlYBtpmc2u79MMtdx9FvKgw/hs3uw0RtaDwNqIdiU+hREBNKP6mEt
+X-Gm-Message-State: AOJu0YwUyWE3qZSL1Ek8n/He4JqxlxNp1kruHDjV5WT7dTuVr7YlTSYm
+	mL+7ZvBxzeZH9hTul5eEE8Ob9w8NEvLH+2nDL/PkdvsflbxobJWT
+X-Google-Smtp-Source: AGHT+IGwgyBsaN7Ms+0IYQV0NG9hS1YRmOySH9NZ+A+pwuMXCxDaV1ICp2UXSJ+LiXZ/6OR9OQynaQ==
+X-Received: by 2002:a7b:c7d0:0:b0:413:fc09:7b19 with SMTP id z16-20020a7bc7d0000000b00413fc097b19mr5846747wmk.40.1711456522630;
+        Tue, 26 Mar 2024 05:35:22 -0700 (PDT)
+Received: from debian ([146.70.204.204])
+        by smtp.gmail.com with ESMTPSA id k26-20020a05600c1c9a00b00414807ef8dfsm11144822wms.5.2024.03.26.05.35.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Mar 2024 05:35:22 -0700 (PDT)
+Message-ID: <494e8cac-e87a-4bc4-8a77-1801a703fd86@gmail.com>
+Date: Tue, 26 Mar 2024 13:35:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF00000010:EE_|CH2PR12MB4102:EE_
-X-MS-Office365-Filtering-Correlation-Id: deb2ee42-fc1c-4aa0-d2fe-08dc4d8e4305
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	FyipFfhI/Ampjh+avNGRhZZpbhL+3eAjcfLf0A6pmz3PVAEr6S1H5YiuUlOHZJtWkab3F8TU0PypjGUbfa6GIBVTNBK+zmS3yBP5QPZ1K+PtE5UcFeU7z7IOMFqTBxlxmHcfTpqdxoZD0ys6/cbbeFwvAUiGIWCsnTFwLheiHeGJXClh8QEkqyxiXbhb/8Aara52xgX7SpsivG8cPsspo4KFZKEpWi/LAe5LMJJd8nWBn8bxY9jqMshjW0QlKCgOTLEqJM3U0nurKs4L/RpjRTbLvyEGJ+kPTtSKmvrjaEVYyqe07PrrtqUOsHPFKVZhO9dyxi4F3MRuaMCzuQb/1cd54YieKs1q4nS6jxNt26m5ZtAZBHkn7LkUNGRX1Sc9Oz5psVsSJ/og/eOvB8B6SSMLZRQFn9OIrPfBan0yZlUOAFFvzM5a2P4Uo0p8sR/sn4XvHuYbwm4xvT9v9Hhr1a6eldQuzzb0m/jKrnrYPcQsdYew+dTvfyUQiOz3wOI43j0EXvjR8W+o94OH7fIyAf+UsKI+mE9Kb+U3b6qpprdt6/HOtkHfgXQUGEWc5bO9Os8GFX0Z0JMSUlMsHgIJoW1EzmKNmkGAuHdOCI1doC19oVVX0hq06Azkvskwp94dbXhcY+czjOKlsHfmaJgDexeRofSfDuN9TiOmIiOB9JNs+vrVM/6dZyOoQj6SehNwUzKRbRaSvxnWBVaAOoeSgKUSQSJwFk/+IMh8WdpSx09bezpIWojDEoTtMSpV7eT0
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(82310400014)(376005)(1800799015);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 12:14:18.3199
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: deb2ee42-fc1c-4aa0-d2fe-08dc4d8e4305
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF00000010.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4102
+Subject: Re: [PATCH net-next v4 4/4] net: gro: move L3 flush checks to
+ tcp_gro_receive
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, dsahern@kernel.org,
+ xeb@mail.ru, shuah@kernel.org, idosch@nvidia.com, amcohen@nvidia.com,
+ petrm@nvidia.com, jbenc@redhat.com, bpoirier@nvidia.com,
+ b.galvani@gmail.com, liujian56@huawei.com, horms@kernel.org,
+ linyunsheng@huawei.com, therbert@google.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20240325182543.87683-1-richardbgobert@gmail.com>
+ <20240325182543.87683-5-richardbgobert@gmail.com>
+ <6601c830c1daa_11c6072943b@willemb.c.googlers.com.notmuch>
+From: Richard Gobert <richardbgobert@gmail.com>
+In-Reply-To: <6601c830c1daa_11c6072943b@willemb.c.googlers.com.notmuch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+Willem de Bruijn wrote:
+> In v3 we discussed how the flush on network layer differences (like
+> TTL or ToS) currently only affect the TCP GRO path, but should apply
+> more broadly.
+> 
+> We agreed that it is fine to leave that to a separate patch series.
+> 
+> But seeing this patch, it introduces a lot of churn, but also makes
+> it harder to address that issue for UDP, as it now moves network
+> layer checks directly to the TCP code.
+Currently the logic of flush_id is scattered in tcp_gro_receive and
+{inet,ipv6}_gro_receive with conditionals rewriting ->flush and ->flush_id,
+so IMO the code should be more concise when it's in one place - in addition
+to not doing checks against non relevant packets.
 
-Jakub Kicinski <kuba@kernel.org> writes:
-
-> On Mon, 25 Mar 2024 18:29:10 +0100 Petr Machata wrote:
->> +The forwarding selftests framework uses a number of variables that
->> +influence its behavior and tools it invokes, and how it invokes them, in
->> +various ways. A number of these variables can be overridden. The way these
->> +overridable variables are specified is typically one of the following two
->> +syntaxes:
->> +
->> +	: "${VARIABLE:=default_value}"
->> +	VARIABLE=${VARIABLE:=default_value}
->> +
->> +Any of these variables can be overridden. Notably net/forwarding/lib.sh and
->> +net/lib.sh contain a number of overridable variables.
->> +
->> +One way of overriding these variables is through the environment:
->> +
->> +	PAUSE_ON_FAIL=yes ./some_test.sh
->
-> I like this conversion a lot. Makes me want to propose that we make this
-
-Convention you mean?
-Nothing was converted, this has always worked.
-
-> a standard feature of kselftest. If "env" file exists in the test
-> directory kselftest would load its contents before running every test.
->
-> That's more of a broader question to anyone reading on linux-kselftest@
-> if there's no interest more than happy to merge as is :)
->
->> +The variable NETIFS is special. Since it is an array variable, there is no
->> +way to pass it through the environment. Its value can instead be given as
->> +consecutive arguments to the selftest:
->> +
->> +	./some_test.sh swp{1..8}
->
-> Did you consider allowing them to be defined as NETIF_0, NETIF_1 etc.?
-> We can have lib.sh convert that into an array with a ugly-but-short
-> loop, it's a bit tempting to get rid of the exception.
-
-The exception is a bit annoying, yeah. But it works today, should stay,
-and therefore should be documented, so the paragraph won't go away. I
-use it all the time, too. I basically don't use the config file, I just
-use the env overrides and the argv interface names. It's very handy.
-
-The alternative is also very verbose:
-
-	NETIF_1=swp1 NETIF_2=swp2 NETIF_3=swp3 [...] ./some_test.sh.
-
-Maybe we could do this though?
-
-	NETIFS="swp1 swp2 swp3 swp4 swp5 swp6 swp7 swp8" ./some_test.sh
-
-And like this it won't make you want to pull your hair from all the
-repetition:
-
-	NETIFS=$(echo swp{1..8}) ./some_test.sh
-
-But NETIFS is going to be a special case one way or another. That you
-need to specify it through several variables, or a variable with a
-special value, means you need to explain it as a special case in the
-documentation. At which point you have two exceptions, and an
-interaction between them, to describe.
+With this patch, the fix will probably be simple, most likely just calling
+gro_network_flush from skb_gro_receive or from the relevant flow in
+udp_gro_receive_segment. Since this bug fix should be simple and it being
+not relevant to the optimization, I'd like to solve it in another series
+and properly test that new flow. Do you agree?
