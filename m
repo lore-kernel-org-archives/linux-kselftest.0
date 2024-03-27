@@ -1,45 +1,46 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071.outbound.protection.outlook.com [40.107.243.71])
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2077.outbound.protection.outlook.com [40.107.96.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521251170F;
-	Wed, 27 Mar 2024 05:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813AA12B93;
+	Wed, 27 Mar 2024 05:43:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.77
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711518195; cv=fail; b=PQ0hMKNHEcnkC7xYCjXk3OSBBO6fZiHcu6lgmJ96+g0pfHXfHE0Gw3xKANSgLx7f4SarCKD/8lypqH2y9wZurJ4kFeYI8eYowN8IvsPMVV5m44eWhkxHZB3BUDuP34u16su4YDg1Gtt5zXZsixiIPQZXRTCGPfWl39v6idy6YTE=
+	t=1711518196; cv=fail; b=Sh00xa/LGyIIHVfh0Pa59ICq+PhPwrQAv7t71KINS9WmDPNJhm47v5glvBYrqHVRjfH5QM0JZEvvSIjszsJ3Aa05Ipvw968q108px70YslPYr8O0lgA6yLqKnfCfPi/1Sc5XwQb9nqhFZS9excWMdTDpW3XDDXbszxvBA/noNxw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711518195; c=relaxed/simple;
-	bh=NG9hMChcaCi+j6JGdaNZjk9tvIzR7RSDJ2hDKYwkoUQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qDCaS1QHSxteVWCHYUiuXbJqhLlU17oPGl2QBnWi3FHZ9L6S7TUBImosML2w8bf3V/SPjaC9Er/VHcW1A2EVHEsCgFwP22njqkFwY3b8MPUZQL1jGZaIBa6Nv8z2IXGl8tcSjzC6rzZ7Xec1WFJNC0ko9UWKGpT9rmptmYSwt0A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=X0RmUpBR; arc=fail smtp.client-ip=40.107.243.71
+	s=arc-20240116; t=1711518196; c=relaxed/simple;
+	bh=rBEOAhMOr2Mc6g/4ZxVEi2d8HDiDHEUUh/g6HdOt+2c=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V6wk6LSb+3qXPj2OCfLIUNbwh88UAZkUSX3UtApfDciyxrqR9Aquvm4PJR9/H1hxhyMTgqHRPTTiOBoYAUlGofTyDfpP8ctoeC0TMG0ujmhddOzMV3HL43Wmlat79rqo1fsfn6GixvBG979U5UfOFwCv5vXIfeiddmXlVK8Nwfg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Tg/iRoW8; arc=fail smtp.client-ip=40.107.96.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="X0RmUpBR"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Tg/iRoW8"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FMxiYlLIT9lQYQJnBnvRVtpuuka5TiisVT/IUC1kI3ZgbH3pKZrasAql2qO81d9naFW2EGQ6Iz0CZAWF779czM8p5ZN5IsYyiOw6p2/ltH7obVTyn3N0BAmwMjXq4V6uTSD+QXg1o3606V/PNtXQoH1xWBenapnG6cerSpvt/89AkLDrKDALQCR+LGktLTMypOXPJYEB23O+HssppV7GhOI0P21HGxndHC32X0HcTG8FYjaR9Eu8rxk/Y2iaYPzip4cFLe90X4wfQusw1ZbzcBP3LUjLWBW/Wt5uvsqANvumMhl80TmIzGVmMquVvKeLI4qvSLR1YO1/FlQBP9ecXg==
+ b=UoZBvkDAyUuSKqCo0LGg1K4tSmp6oco7CIC90XaqAduOxP6aNrMdW4FQv2wRC57MVUYVQjjaqR1Jy3YnRv6pytA8KtK1H9kHdK83GWj6re4RJxD9RfyAj5Z3DYPBPL8OHXiIfFxURzEnkT/m2jc79i+brICRCLELDMMqN6i6kefMQpQr8vkEi3lrNZJD72tK2EOqXlXKPLXSyW5axdfLhfPyTq+AXHtcgG08D0Pr0yKdtymIhNH+xfgvWU65jIonQneukAwW0JJB+VeJIn4SHComgvE1EEepkix7EjWnEvWRJyeLxjTQ0+QO6McMMtrO36vlXbDaDTp0fvJJonwq8A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0CprrxlFKK3LRhWtZVs5VPT03qjw8ehkvVoW0C8gwK4=;
- b=HQUsrTnuc/UY8OYpNwl1+5oBXjqhsL+FVxKmBUDpEzWxPy4HnWEXcpUrcVExZj3NfpBj0e+6Evy8BTFPY3X9vZXbwOmdw9VzNLCRG1vkeqbiQtBPoxdgFUD7bleYgFjx1wCxhjMI4+rBVzx0VENEA+lKNoc8WDcP0kdIqaz99rxDe4rTgVUW3pIhtjY9E0De3aeJIQcanoSXswN1eozgYrVJCLHZ3VGMXMbTKtZocTT0mUvUsNtT6lQrTkXkJYB/SukyEen8ewKWuvSkb0ZB36e9OQnwZHvnDaCibVx6/Hcb3FV6q7dhmKupeqkBRiZnEL9AeE0NQd2JBqMzlIlh3w==
+ bh=QL+MOT1mtFeALiF8LL04IVbAndrtX+CkHbK57hwB8Z0=;
+ b=DtwbBI42WzQ9h4+1Rb7b5hv9FOv3Ddeq5l2/0n1Rv6E9vSpyS1n84mEAhaqL7/bHRBqzM7RBGHyoYP+YueMfVKxGgMtjGYT4ueXj4jw6+bxZUd6ibjeOn0+qUPUi3xNsgaNlnsDVYTscwu+t6iaA+uMttJlEIBXU+5gUpOyPtG12Gbul5oORKU0N5Hb2RGUkGXixnOordTyJGvY+/lYBAj4ZQwk6IZsfZgqi7iSxZJlIJ7C1FQUgh4aHk/6hW0csYkxULvZ92TXW13ulxhC+5iLUqzrpwp2rqfIdAmajLaXCadIdk2V/YnejFU6GV4muXv0hI2tah5408TSV9Co0tA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0CprrxlFKK3LRhWtZVs5VPT03qjw8ehkvVoW0C8gwK4=;
- b=X0RmUpBRq6A0rPVhO8zUoAXd4bU/gggm4Cikw1eMs5d8cPzN7jF1Ej5Oxrq1IpwraL9DJtzIynPa67a8vMBPNOeP6c3fnzIhStZ1hJWUbL5o3uV+05ib+J4suWx80DB8KUNqYOQp/j9iuW/v7BXIXQKRFADswi8zNxCsNt/JtVQ=
-Received: from CH0PR04CA0017.namprd04.prod.outlook.com (2603:10b6:610:76::22)
- by SA1PR12MB7222.namprd12.prod.outlook.com (2603:10b6:806:2bf::15) with
+ bh=QL+MOT1mtFeALiF8LL04IVbAndrtX+CkHbK57hwB8Z0=;
+ b=Tg/iRoW8U4EpyqV0CZU6Gj/gWdZ9cnILftpD1MK5zFsg4Ks/VgaaF2i0yRHt1bsTGcSI7eIOcFVpJoeeg8TvVXC4C8eSAYeKbhd4OG78eWQ3IzBQTqkACDHc+/m9vznkUFJUDOdo3cTQsogiMg0s/jMHfAOr2so+6fVx2ggxv0k=
+Received: from CH5PR05CA0017.namprd05.prod.outlook.com (2603:10b6:610:1f0::7)
+ by PH7PR12MB7938.namprd12.prod.outlook.com (2603:10b6:510:276::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.31; Wed, 27 Mar
- 2024 05:43:11 +0000
-Received: from CH1PEPF0000AD75.namprd04.prod.outlook.com
- (2603:10b6:610:76:cafe::61) by CH0PR04CA0017.outlook.office365.com
- (2603:10b6:610:76::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.13 via Frontend
- Transport; Wed, 27 Mar 2024 05:43:10 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.24; Wed, 27 Mar
+ 2024 05:43:12 +0000
+Received: from CH1PEPF0000AD7A.namprd04.prod.outlook.com
+ (2603:10b6:610:1f0:cafe::63) by CH5PR05CA0017.outlook.office365.com
+ (2603:10b6:610:1f0::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.12 via Frontend
+ Transport; Wed, 27 Mar 2024 05:43:11 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,21 +48,23 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CH1PEPF0000AD75.mail.protection.outlook.com (10.167.244.54) with Microsoft
+ CH1PEPF0000AD7A.mail.protection.outlook.com (10.167.244.59) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7409.10 via Frontend Transport; Wed, 27 Mar 2024 05:43:10 +0000
+ 15.20.7409.10 via Frontend Transport; Wed, 27 Mar 2024 05:43:11 +0000
 Received: from chalupa-4a00host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Wed, 27 Mar
- 2024 00:43:09 -0500
+ 2024 00:43:10 -0500
 From: Manali Shukla <manali.shukla@amd.com>
 To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC: <pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
 	<nikunj@amd.com>, <thomas.lendacky@amd.com>, <manali.shukla@amd.com>
-Subject: [PATCH v1 0/3] Add a test case for KVM_X86_DISABLE_EXIT
-Date: Wed, 27 Mar 2024 05:42:52 +0000
-Message-ID: <20240327054255.24626-1-manali.shukla@amd.com>
+Subject: [PATCH v1 2/3] KVM: selftests: Change __vm_create() to create a vm without in-kernel APIC
+Date: Wed, 27 Mar 2024 05:42:54 +0000
+Message-ID: <20240327054255.24626-3-manali.shukla@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240327054255.24626-1-manali.shukla@amd.com>
+References: <20240327054255.24626-1-manali.shukla@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,63 +77,130 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD75:EE_|SA1PR12MB7222:EE_
-X-MS-Office365-Filtering-Correlation-Id: e9c3fd63-e98f-4ef3-9c34-08dc4e20c999
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7A:EE_|PH7PR12MB7938:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8db197ee-3856-467b-8756-08dc4e20ca4d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	oOMSimNS9azvlS9wtPL0mTHReGdrGbfWfXuAVrSdYwOWWu2PHryvqbJKMDX8+yDGzdbd6iuuJN0Y7vE/bGcqqKN1hZVXqIy/v8JRwLL9ateSAlROVByOFjl6OhqZXGc8NuyryS4/xSkAs0RTTlKKVPzR2bFc7A242wiOWAWmas72roI/VtfCco6rMQLpDE02xPnnYbUdQsxatqSVqPwle+8aFFVV/nw8cqfVGHS6B2tQWse8p/DuFwRd5p7A32VKPjy77SBPQGc8HuMa2NKc7wQBxpB7aaz3EmrDK6wgqes3tWRDqvbaT/TC8WAfqAdBQN3uxyhLWJlRWNab9tC6JkITUTiGS0FUyQeVkT1RqpvKBXQnJ7nyAIG7qPhZ0QAN3Rcxtf/z8jjpg2l/tf8M8oiy+lRMhLmpdymYdHziu6LOCw6buDHNaBn/FjYRWSH+z0pgybI6oOY5arLuzvvDFu0XFUF3UcjeUevNflpK+nP0XICQeSLATnZAhchcrQQP8iDpp+26CvCz4jhoc7shejiTS8UyqD9lGW+OOcvELoIw2CHD3y47QqLGX2njnpXayLSIb4iQxw6bPiJMDdSn+maB9uQ6jiFCDVr4TRsWJWuIld+dbShwowXOvtebw5otaPb2T4+DEDFEG1evrd7l3RbfC1dbHB3pr4d0wcn9IALeLLx7Ws4rImSzl5uv9XBseHocWZ2mvAxyfdUmT+3T69qo/UWYlqnctRROLHP4rEC/lEfHlVGFb6tWRc/P7tpP
+	OgF+jvQtedAXvU01p43C/LfcoHUOZhpUVM90yXOfu/UhqNo4keaH7utEyl2aOyM6Fw/9je+jChzY9sHcp3K2afxKiBIi2MwbipSkqn2lvtqt7MCeyDopnQpEEpExFEWV073sGf3Q/4VTc32QbL3w1uM/QFBNeXoMJxkfWL9FwbgunfB145GnResPC9JhTGa0+ntPhE3dbau3BdW5u1XmyBfaPfBi76FJpOlGDkUKjeoAFlFEiMBFEmKngQJWY20sID4AVMaOXX9/u11ebBE1T/kspVo5mt5wTPQwUhWvvOJMOhKHO1Alwub5aj5HZWVysaRuY13qZns2U07LzT8RIjzAN1Hm7ZY0bGLTNw9tn2YzVsIud6gjwwNH08+9gY+gzacNPQkg9izQnirXtjbcktZQWfBuL2aS0hY1Z+4OCyXtG/9rNGHUZrFiCqWpC7ShuQA+J6WxDgjF/cnbrkDFqmD61JUb4Cp6qNVID6UxEEO7UkKuv80lkqTZHOHP4U9v1MiJ1kVYYMzbuQsO3NZkBVl2oYgxJ68+ZgAoPiw9eyRJ4akGgzjryjz5y24yyxlCSobipqgi6OmRVXyYl+pzIQMf5UHuGZ6pKULax+cyWQlN9VFLoDcnrtmPqsLrwB1Hkqxxx/WqZbIHPYUuNvHbAdCoHH0fHXm2yOX9grduvZ1B7McZ28gnZJ7nUkC+9f6/OAA/EpuqmoGQnwCh0fLZixmXKkDPn9hzmnVeysOw/D7BXAcNMYKNLBRKJ5uzz8od
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(36860700004)(376005)(82310400014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(82310400014)(1800799015)(376005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2024 05:43:10.7350
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2024 05:43:11.9141
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9c3fd63-e98f-4ef3-9c34-08dc4e20c999
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8db197ee-3856-467b-8756-08dc4e20ca4d
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH1PEPF0000AD75.namprd04.prod.outlook.com
+	CH1PEPF0000AD7A.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7222
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7938
 
-By default, HLT instruction executed by guest is intercepted by hypervisor.
-However, KVM_CAP_X86_DISABLE_EXITS capability can be used to not intercept
-HLT by setting KVM_X86_DISABLE_EXITS_HLT.
+Change __vm_create() to incorporate creation of a vm without in-kernel
+APIC.  Currently, all the vms are created with in-kernel APIC support in
+KVM selftests because KVM_CREATE_IRQCHIP ioctl is called by default from
+kvm_arch_vm_post_create().
 
-By default, vms are created with in-kernel APIC support in KVM selftests.
-VM needs to be created without in-kernel APIC support for this test, so
-that HLT will exit to userspace. To do so, __vm_create() is modified to not
-call KVM_CREATE_IRQCHIP ioctl while creating vm.
+Add a flag in __vm_create() for a userspace to decide whether to start a vm
+with in-kernel APIC or without in-kernel APIC.
 
-Add a test case to test KVM_X86_DISABLE_EXITS_HLT functionality.
+It is a preparatory patch to create a vm without in-kernel APIC support for
+the KVM_X86_DISABLE_EXITS_HLT test.
 
-Patch 1, 2 -> Preparatory patches to add the KVM_X86_DISABLE_EXITS_HLT test
-              case 
-Patch 3 -> Adds a test case for KVM_X86_DISABLE_EXITS_HLT
+Signed-off-by: Manali Shukla <manali.shukla@amd.com>
+---
+ tools/testing/selftests/kvm/dirty_log_test.c          |  2 +-
+ tools/testing/selftests/kvm/include/kvm_util_base.h   |  4 ++--
+ tools/testing/selftests/kvm/lib/kvm_util.c            | 11 ++++++++---
+ .../selftests/kvm/x86_64/ucna_injection_test.c        |  2 +-
+ 4 files changed, 12 insertions(+), 7 deletions(-)
 
-Testing done:
-Tested KVM_X86_DISABLE_EXITS_HLT test case on AMD and Intel machines.
-
-Manali Shukla (3):
-  KVM: selftests: Add safe_halt() and cli() helpers to common code
-  KVM: selftests: Change __vm_create() to create a vm without in-kernel
-    APIC
-  KVM: selftests: Add a test case for KVM_X86_DISABLE_EXITS_HLT
-
- tools/testing/selftests/kvm/Makefile          |   1 +
- tools/testing/selftests/kvm/dirty_log_test.c  |   2 +-
- .../selftests/kvm/include/kvm_util_base.h     |   4 +-
- .../selftests/kvm/include/x86_64/processor.h  |  17 +++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  11 +-
- .../kvm/x86_64/halt_disable_exit_test.c       | 113 ++++++++++++++++++
- .../kvm/x86_64/ucna_injection_test.c          |   2 +-
- 7 files changed, 143 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/x86_64/halt_disable_exit_test.c
-
-
-base-commit: e9da6f08edb0bd4c621165496778d77a222e1174
+diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+index 6cbecf499767..667a83d67bfe 100644
+--- a/tools/testing/selftests/kvm/dirty_log_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_test.c
+@@ -699,7 +699,7 @@ static struct kvm_vm *create_vm(enum vm_guest_mode mode, struct kvm_vcpu **vcpu,
+ 
+ 	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(mode));
+ 
+-	vm = __vm_create(VM_SHAPE(mode), 1, extra_mem_pages);
++	vm = __vm_create(VM_SHAPE(mode), 1, extra_mem_pages, true);
+ 
+ 	log_mode_create_vm_done(vm);
+ 	*vcpu = vm_vcpu_add(vm, 0, guest_code);
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index 4a40b332115d..00e37c376cf3 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -879,7 +879,7 @@ static inline vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
+  */
+ struct kvm_vm *____vm_create(struct vm_shape shape);
+ struct kvm_vm *__vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
+-			   uint64_t nr_extra_pages);
++			   uint64_t nr_extra_pages, bool is_in_kernel_apic);
+ 
+ static inline struct kvm_vm *vm_create_barebones(void)
+ {
+@@ -900,7 +900,7 @@ static inline struct kvm_vm *vm_create_barebones_protected_vm(void)
+ 
+ static inline struct kvm_vm *vm_create(uint32_t nr_runnable_vcpus)
+ {
+-	return __vm_create(VM_SHAPE_DEFAULT, nr_runnable_vcpus, 0);
++	return __vm_create(VM_SHAPE_DEFAULT, nr_runnable_vcpus, 0, true);
+ }
+ 
+ struct kvm_vm *__vm_create_with_vcpus(struct vm_shape shape, uint32_t nr_vcpus,
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index adc51b0712ca..9c2a9e216d80 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -354,7 +354,7 @@ static uint64_t vm_nr_pages_required(enum vm_guest_mode mode,
+ }
+ 
+ struct kvm_vm *__vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
+-			   uint64_t nr_extra_pages)
++			   uint64_t nr_extra_pages, bool is_in_kernel_apic)
+ {
+ 	uint64_t nr_pages = vm_nr_pages_required(shape.mode, nr_runnable_vcpus,
+ 						 nr_extra_pages);
+@@ -382,7 +382,12 @@ struct kvm_vm *__vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
+ 	slot0 = memslot2region(vm, 0);
+ 	ucall_init(vm, slot0->region.guest_phys_addr + slot0->region.memory_size);
+ 
+-	kvm_arch_vm_post_create(vm);
++	if (is_in_kernel_apic) {
++		kvm_arch_vm_post_create(vm);
++	} else {
++		sync_global_to_guest(vm, host_cpu_is_intel);
++		sync_global_to_guest(vm, host_cpu_is_amd);
++	}
+ 
+ 	return vm;
+ }
+@@ -415,7 +420,7 @@ struct kvm_vm *__vm_create_with_vcpus(struct vm_shape shape, uint32_t nr_vcpus,
+ 
+ 	TEST_ASSERT(!nr_vcpus || vcpus, "Must provide vCPU array");
+ 
+-	vm = __vm_create(shape, nr_vcpus, extra_mem_pages);
++	vm = __vm_create(shape, nr_vcpus, extra_mem_pages, true);
+ 
+ 	for (i = 0; i < nr_vcpus; ++i)
+ 		vcpus[i] = vm_vcpu_add(vm, i, guest_code);
+diff --git a/tools/testing/selftests/kvm/x86_64/ucna_injection_test.c b/tools/testing/selftests/kvm/x86_64/ucna_injection_test.c
+index 0ed32ec903d0..095188562709 100644
+--- a/tools/testing/selftests/kvm/x86_64/ucna_injection_test.c
++++ b/tools/testing/selftests/kvm/x86_64/ucna_injection_test.c
+@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
+ 
+ 	kvm_check_cap(KVM_CAP_MCE);
+ 
+-	vm = __vm_create(VM_SHAPE_DEFAULT, 3, 0);
++	vm = __vm_create(VM_SHAPE_DEFAULT, 3, 0, true);
+ 
+ 	kvm_ioctl(vm->kvm_fd, KVM_X86_GET_MCE_CAP_SUPPORTED,
+ 		  &supported_mcg_caps);
 -- 
 2.34.1
 
