@@ -1,167 +1,164 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2074.outbound.protection.outlook.com [40.107.220.74])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7397A152506;
-	Wed,  3 Apr 2024 17:11:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712164265; cv=fail; b=B7WkpKyiVt+WX2n3eCZ7NbzwkDaC1F1XSYpf+ozUu/XtI7ksnWLDEu25rbQgfbNDHCYLe63JzMObxT6rBjhhi6syfcS32Dd3FyG1m4Fn2xchL/OjI3w4II61ycgaF7J0suz+3rWcZK+qLXKLXbs0H7oXleigTJT7ZLkpPcwi/aQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712164265; c=relaxed/simple;
-	bh=5IWlBvI6ZNVu7Y/K8W7ArbnOjS2NWSEvVOz90rv0obg=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=uD8PDxKJqvSBq9MbtZpXAPvX8Wc/ipYgdD8WDU9CreU4tdSiRTtbmU+DF7ZF5QBcXOLxitFQAhtoLaaqRvIaXLjivAkvoh4g+2hj7tGtbEVWx0ITS8v2N3VsRZmFea6jVe7WOv3jBbG+bbCss8tbvf42llRawo0kVwXNIV6tqaw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=KQs7uIFM; arc=fail smtp.client-ip=40.107.220.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF49154C12;
+	Wed,  3 Apr 2024 17:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712165287; cv=none; b=TFOsEpHPHvMpsXSVOrzdJ3xGTcagVMBNbbDwbmjf+qVtNIX0VuATQVq3fneF066Qom8Xs5LS2t4j+H9tYTDnf8IotFc28fiFCSiiPEGQOg+qRqzm/2YA9t5d2gVpxJlGToWYeXoivbOjEGcAVkFxtmS2i0mp2UY4NwbU6EIEgD8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712165287; c=relaxed/simple;
+	bh=ev9qwjumkVBT21OJLnRxmj6j+tcZWLWc9gYIuhQP4YA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ia2opbuoxHt0lFkgWDWQ6GW72TwXxCw0yfeQSJ/LhG7sn01WZkrj8WZRUJRsE4888fMYzSyz3Ech/P1f6Gxg8GCCmQni6+lw8lB91KappKy7elE43A1OQAfDim+Rx3i92Q5ooTwIdQtz8KoPEYKbLRt0tvnVMBkb7I6ZXCcHAOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pJpsqN23; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="KQs7uIFM"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PSKNkj5lPB0fHrSOam0t06CLngeMnN54J/4xOGCMgxYn4BUL+DtEPF6WK+O1cZW6ZDTa9ximS6rI/dSQ+evXzSFS3tzobi+w+An8yLkhJz9lLqEnnuO1NGtbi27BwObrNtGvSgGCpoRiBHC+QiQGVUINWVL6RGp2+EiHrcMFqmsqQ9Gk0YE9R7LnbwTRULGBCahyX5VXDcqYKEN7v5Q12zw5cC1243Stf2Y9yk/OPWs+uQu4KISGvRBwhS1yje0/mx3HooySEow8o1yBZuu0TtvSFGy7dbG3IESocjLnmDx/9A6FwDvgbLDaOfZvt28UU0aTkPVKc24nYab9e1yONg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rS7pSqlP5c9ssV6gIAA1Z/R9ayWSMktu58NJpybRZJY=;
- b=YO3gKkVTn/x+AizgNfyMgzuBE+WKhTCS673ngMoWeidfSKBXbfigiEvNCeUZfR2imBedmWho9Hm5pWxec2djtr6Pb/u9+ctRiVmhkDTktb8AjyuFdFyqzc0iIl5SDvV1H4LcQjWqii+LSBTiZB6RRNuKCNcqoHcQ1eYEF0J6+kJ9WkdnBJQeoW3qloGYREC8uJAOVt12tvLFwCyihPlp1MP9QM8Iz3ypk4v61+1gP7Z0tAIqR9Z100IOokUs7yZag7AKrJNAeE9NiLWMKVnjl+X+Qc9nB/hzw/dQAbQjkSlWc58xQ4ow7h6a6JVhoDMTBsNry6Zy51a7qofjS7ji8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rS7pSqlP5c9ssV6gIAA1Z/R9ayWSMktu58NJpybRZJY=;
- b=KQs7uIFMXLcr0JE3Jjc2zz+5cRiZqBg245U9QLk5FHIUdYAAZGj2JVYShC7HO4BZVSTBuFGG2Pclgv7/WdpygKyStrFh9/nS6xBt+xVG/GiitqQkM7HGD65qeMoCUKAqZUFt59aUiodz61CDBCqpQjUhhdP19RdoC+9JFZxlxttI+eMbPkNijLGN6WUkKjzqHeJfzqN199G6V6e9+YhS4LObDMeiSF+bXuH+3FMLyKFEbCPtCL1GRKA3vsVBz7+K3ajTnsj+RaVjwcxFMXMB2cBkXjOONtMUGv03sPp7IUbQRwfDi+jpItFss5CgLzCWBXj3wYXTmAKLqVUehBiERw==
-Received: from SN6PR01CA0019.prod.exchangelabs.com (2603:10b6:805:b6::32) by
- IA1PR12MB6436.namprd12.prod.outlook.com (2603:10b6:208:3ac::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Wed, 3 Apr
- 2024 17:10:59 +0000
-Received: from SA2PEPF00001505.namprd04.prod.outlook.com
- (2603:10b6:805:b6:cafe::fe) by SN6PR01CA0019.outlook.office365.com
- (2603:10b6:805:b6::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46 via Frontend
- Transport; Wed, 3 Apr 2024 17:10:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SA2PEPF00001505.mail.protection.outlook.com (10.167.242.37) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7452.22 via Frontend Transport; Wed, 3 Apr 2024 17:10:58 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 3 Apr 2024
- 10:10:32 -0700
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Wed, 3 Apr
- 2024 10:10:28 -0700
-References: <20240402010520.1209517-1-kuba@kernel.org>
- <20240402010520.1209517-8-kuba@kernel.org> <87bk6rit8f.fsf@nvidia.com>
- <20240402103111.7d190fb1@kernel.org> <8734s3idys.fsf@nvidia.com>
- <20240402163649.4fdc2d3b@kernel.org> <87y19uhhhx.fsf@nvidia.com>
- <20240403065532.1f2a072d@kernel.org>
-User-agent: mu4e 1.8.11; emacs 28.3
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Petr Machata <petrm@nvidia.com>, <davem@davemloft.net>,
-	<netdev@vger.kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>,
-	<shuah@kernel.org>, <sdf@google.com>, <donald.hunter@gmail.com>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 7/7] testing: net-drv: add a driver test for
- stats reporting
-Date: Wed, 3 Apr 2024 18:52:50 +0200
-In-Reply-To: <20240403065532.1f2a072d@kernel.org>
-Message-ID: <87ttkigynz.fsf@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pJpsqN23"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25477C433F1;
+	Wed,  3 Apr 2024 17:27:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712165286;
+	bh=ev9qwjumkVBT21OJLnRxmj6j+tcZWLWc9gYIuhQP4YA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pJpsqN23a/bTPCDYI46/mddJ60857N8gxl0704dxwCHxM5gKzPHc731EgK6XTky8d
+	 UTSvCE/t886wLCwR1UtYWv7Xweb+uKowOagxSx/lUTLkXov7Dsf3h7EJVqcumDwZqs
+	 tOZb0mWrfqCf+8IONESe5080Pxu9nMjALf/FMnCDXF9xhUlL3R67eN2rH1I5mN6bzF
+	 1n8OJA3VkfjnGjVp4Z+o4CVz2zIgJ7Dmv0gNexlQEtkyGLrPexZxzjQpZtQ6ml5ppR
+	 mZhUqv9H4p4rGkxe60L9FXP3YjGI6r2+YWhPDeKU2GGU7vXAeDQM5+N6jWyDCaqmEM
+	 CqEUGy0nok9lw==
+Date: Wed, 3 Apr 2024 18:27:49 +0100
+From: Simon Horman <horms@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Amritha Nambiar <amritha.nambiar@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Florian Westphal <fw@strlen.de>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+	Arseniy Krasnov <avkrasnov@salutedevices.com>,
+	Aleksander Lobakin <aleksander.lobakin@intel.com>,
+	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Richard Gobert <richardbgobert@gmail.com>,
+	Sridhar Samudrala <sridhar.samudrala@intel.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Abel Wu <wuyun.abel@bytedance.com>,
+	Breno Leitao <leitao@debian.org>,
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>, linux-mm@kvack.org,
+	Matthew Wilcox <willy@infradead.org>
+Subject: Re: [RFC PATCH net-next v8 06/14] page_pool: convert to use netmem
+Message-ID: <20240403172749.GP26556@kernel.org>
+References: <20240403002053.2376017-1-almasrymina@google.com>
+ <20240403002053.2376017-7-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00001505:EE_|IA1PR12MB6436:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8dad3595-aaa8-4962-9e4b-08dc54010832
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	90Vb/erYaV/T8w8ZVV4MYpaNapNP3DQp3ol6aznG83OARnN4LneupFnAuj+522nFtdUwxX53fhZNrSp39H0zJNoIixYZc/OXq2bWtZOB2dDWUwBH1Ofvnh9WxB04KKg122FYM4dH7Yx0mF6pqWQR5DyYp2LUy0IlW0+fYrH50Xb6F4ZbXppJKquXemGrBwZxumY39+VT7dJR8Zwcp+jdQ4LHz6s1KGp116f+mlFXEn60tdzt8+OOtr8WDGhRTLkeK8BO6kaGZ3WVVzwom2a+LwFRn4npcTloGG25a+E/68j4VWfPVyfINBmAFUy27/42FvqmCQLhFz9L2wSqOMezlonhhmo7v++fiw31a8KVaIPmikjcAHDEoUgEDP5zCgpQQnVfBbHzPeXKD2AWHKnB649V8BnxH7V8t7XmLbsiMG50/vffTm19vxkfkzTm5njOTwSEye5y6TWNif9PVy+CbTidvkCbEoIj8EkQjHP3o6+p3fyJiFMVNF+j4NcH6qjWCBaztEJ6frfu4t9Uu+csR4X8+rP27UtUkzjzXZpG+whwtIUxLQ+Hih9YHbD0piemnO2RB8MXO8yF6NQ9r0oWUWO47ap/QwoWAPLs3w3A/7m5DiJYrPVp95RA2iqDzhmlVpqFdJPam2VUwVgAIQDfarWi0qYOFXYp8OwzcQ2xYVqkVwTNiR/k8L2YpXCyP6PfNXEN+7vwzxfGsCwsVDjxeTX5u0/mcuInFoGQszEsajKNSl57/pqsv74fVC/LuRsU
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(1800799015)(82310400014)(376005)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2024 17:10:58.6815
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8dad3595-aaa8-4962-9e4b-08dc54010832
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00001505.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6436
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403002053.2376017-7-almasrymina@google.com>
 
+On Tue, Apr 02, 2024 at 05:20:43PM -0700, Mina Almasry wrote:
+> Abstrace the memory type from the page_pool so we can later add support
+> for new memory types. Convert the page_pool to use the new netmem type
+> abstraction, rather than use struct page directly.
+> 
+> As of this patch the netmem type is a no-op abstraction: it's always a
+> struct page underneath. All the page pool internals are converted to
+> use struct netmem instead of struct page, and the page pool now exports
+> 2 APIs:
+> 
+> 1. The existing struct page API.
+> 2. The new struct netmem API.
+> 
+> Keeping the existing API is transitional; we do not want to refactor all
+> the current drivers using the page pool at once.
+> 
+> The netmem abstraction is currently a no-op. The page_pool uses
+> page_to_netmem() to convert allocated pages to netmem, and uses
+> netmem_to_page() to convert the netmem back to pages to pass to mm APIs,
+> 
+> Follow up patches to this series add non-paged netmem support to the
+> page_pool. This change is factored out on its own to limit the code
+> churn to this 1 patch, for ease of code review.
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-Jakub Kicinski <kuba@kernel.org> writes:
+...
 
-> On Wed, 3 Apr 2024 10:58:19 +0200 Petr Machata wrote:
->> Also, it's not clear what "del thing" should do in that context, because
->> if cfg also keeps a reference, __del__ won't get called. There could be
->> a direct method, like thing.exit() or whatever, but then you need
->> bookkeeping so as not to clean up the second time through cfg. It's the
->> less straightforward way of going about it IMHO.
->
-> I see, having read up on what del actually does - "del thing" would
-> indeed not work here.
->
->> I know that I must sound like a broken record at this point, but look:
->> 
->>     with build("ip link set dev %s master %s" % (swp1, h1),
->>                "ip link set dev %s nomaster" % swp1) as thing:
->>         ... some code which may rise ...
->>     ... more code, interface detached, `thing' gone ...
->> 
->> It's just as concise, makes it very clear where the device is part of
->> the bridge and where not anymore, and does away with the intricacies of
->> lifetime management.
->
-> My experience [1] is that with "with" we often end up writing tests
-> like this:
->
-> 	def test():
-> 		with a() as bunch,
-> 		     of() as things:
-> 			... entire body of the test indented ...
->
-> [1] https://github.com/kuba-moo/linux/blob/psp/tools/net/ynl/psp.py
+> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
 
-Yeah, that does end up happening. I think there are a couple places
-where you could have folded several withs in one, but it is going to be
-indented, yeah.
+...
 
-But you end up indenting for try: finally: to make the del work reliably
-anyway, so it's kinda lose/lose in that regard.
+> @@ -170,9 +172,10 @@ static inline void *page_pool_alloc_va(struct page_pool *pool,
+>  	struct page *page;
+>  
+>  	/* Mask off __GFP_HIGHMEM to ensure we can use page_address() */
+> -	page = page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM);
+> +	page = netmem_to_page(
+> +		page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM));
+>  	if (unlikely(!page))
+> -		return NULL;
+> +		return 0;
 
-> Nothing wrong with that. I guess the question in my mind is whether
-> we're aiming for making the tests "pythonic" (in which case "with"
-> definitely wins), or more of a "bash with classes" style trying to
-> avoid any constructs people may have to google. I'm on the fence on
-> that one, as the del example proves my python expertise is not high.
-> OTOH people who prefer bash will continue to write bash tests,
-> so maybe we don't have to worry about non-experts too much. Dunno.
+Hi Mina,
 
-What I'm saying is, bash is currently a bit of a mess when it comes to
-cleanups. It's hard to get right, annoying to review, and sometimes
-individual cases add state that they don't unwind in cleanup() but only
-later in the function, so when you C-c half-way through such case, stuff
-stays behind.
+This doesn't seem right, as the return type is a pointer rather than an
+integer.
 
-Python has tools to just magic all this away.
+Flagged by Sparse.
+
+>  
+>  	return page_address(page) + offset;
+>  }
