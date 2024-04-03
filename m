@@ -1,110 +1,118 @@
-Received: from mail-io1-f74.google.com (mail-io1-f74.google.com [209.85.166.74])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51401514EC
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 16:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CAD152502
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Apr 2024 17:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712162557; cv=none; b=RZo3p/9zQUklef+lox+Zy25MSVDDDRHHkt+KMY3GlvuYWIXZ4qYT6YBpYe/qUvyI6ISs+bOo3j1EE8QNL38rw+NRTkUQI9qO2+ouRk35RsisehiHSRiHcmA5z0dW/RkbU3pubd8zvLhi285p5m+IOLUhkuQaQCkJgTQ3NLa2ivI=
+	t=1712164051; cv=none; b=jg1I/o5FcR+EZG7659RwvjJ61MqdmED0WJkjSvEcyqQD08JQLys1drXMCgBUskUWaaxKnw3TOLIncrtUyj8TDE1QkikjILR8R+twGeCq/c/dLJUTL6a7Lh8Q+eB6+dSQ6Lrk6Sd2wrsnxFAm1ZqAEHOlCkLuqg/SD54G1Gbs4Sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712162557; c=relaxed/simple;
-	bh=13pzuYSzeQAEjsqL42hszPIFIbvOLO7/tUFfzFZ7DN4=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tiMi5eon7VV3KWyqggpdaWkf10qqwvIEBufudyhUzQtgKOKyJQTNZbOdk3FqECmBjF9goFDsjel3kUibOln70oTuRCo/doXqIbyPLqCeTMCii+NEHkkZDQOvPSyOn+iWXCEz3vtUTtpB8V/AF+lcv1p3LU9GigS2b2fJLUfPmlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rananta.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PIfAWDCk; arc=none smtp.client-ip=209.85.166.74
+	s=arc-20240116; t=1712164051; c=relaxed/simple;
+	bh=gX73Fd71Hr9LdsAlOuJUtvzibpHcNhprefVg3paVgDQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=h2x9Tm3/UNaw4Ir2DQ0zEpzmzjUQzNtj9FWNInjXtV4b/l2G2VTqZDhbO1rbbSjTVLMFTgdvQ+PHss273BiqGrL1b9k+YVCR4QV7XftzMFtnYTaJ/15SpDow5fdCTXSFnO+zW9k2W4be/cq/+qDz4KPTS78Hofs8P6BZt6/Fe1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=icAdKWSy; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rananta.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PIfAWDCk"
-Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-7cc61b1d690so2897539f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Apr 2024 09:42:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="icAdKWSy"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60cc8d4e1a4so1116937b3.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Apr 2024 10:07:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712162555; x=1712767355; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zL9VryjlYsGlQOxrrXBc4s+acw2W31pFo0ivkt7WDt4=;
-        b=PIfAWDCkfSG47Ye5IlLAlA7E4G3UIrfcHS+DCr5nxEsNYY3gIqXBRUpv7HXKwRe1wI
-         LkU+kUIzFc5ODGyU9dVvmdIPKtuRbBDJ0A79Es/2Eb4AdhaZS/hPiA7/7Dp+Z5VbXllh
-         GCI5CxHNZO9BXpWnjbLoAaWNVxg5XxGeSfiH1fKY8vinS5vkZhmAiI9EiIwqayS8/Ztj
-         0KkL/khK4IvvNeakhs/5wJjXXA17kqPzHjxVE+VODXDj60M2E4vxUiptH99PIYgCMZqy
-         nM5GqN5zlWl33Hh7mQWO/3N0Emdq3JkTzRmcShNMXtbkVBFjYlTLdOmcGchPbgFtKS+Q
-         7p/Q==
+        d=google.com; s=20230601; t=1712164048; x=1712768848; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XE+PG9zC5omixfQJghjjzCZLVaoeIvGmD0Or6PABHlQ=;
+        b=icAdKWSyvRSCf9tjeMZICzYfOPKdz7214hlszOGzL3yil1XhYOI6qzpm+L5C/GlbgU
+         HxmMQ5p2emVaMg8FcbzMm6pP7bW78qD+Fq2q7Hz8wV46dD82aR3fxYUMHwPdB8pndLtv
+         mC6NW/gk6qcTmiY42o303NuW8am9UoAB6C7b5PSMS/J/NqMXzC2gDiORn3YKbzpc0A1g
+         nMmj5abcLp0OPXyK/6TXRpk4juXZl8ITDpsqTdWMHxFiKqZ4A3jzPV8l4a/Y7L1t3vdh
+         Ev2jE1BXQzb9+0PXKyzuiMhzEoW6qj496yA8Va49UXaAq2MjZPFEgO2rrqfQbZpb1MjD
+         EMXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712162555; x=1712767355;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zL9VryjlYsGlQOxrrXBc4s+acw2W31pFo0ivkt7WDt4=;
-        b=GTTHA4NNek6uE4aytPICxHf7IehjbHj4xTN96BTjwFHm8YttuoUeV4pM3AAlghYqVv
-         TI8wcMQI2L2I0EeArSPbROsCItfqnVVBG4l+Qs3Y4e9guv5a09I807VBTuO/YpfT+CTO
-         D5vdtqkQbxtfVOCtt9QmgMESWjv1F0WuoSxXjAsi5N+Kt/Z4tvOio9rs+PKJZ06mNYgI
-         lQzOZibCRdqPrYWpXxhkpA3nY5alZXg1Xof8AT1dWnOEilD+a9/F/v4PqDUf1ouCYNTz
-         bjWIMFc5dw9tf5nDuLA6lDhRwHyGRo07QpDlfHxyZtwQqTjUF26z/Cmiwo1+RvfdNjAa
-         Bvww==
-X-Forwarded-Encrypted: i=1; AJvYcCXKqkC5uFukf4Q/oATHXuSPD0V8VB7AvbJyMBtDzk28i9JlSnCpQcJAovDCi227vh3ggRKCCfyTolcwgIi/6/WvgfbfL/nHGp9lI6VQpMyi
-X-Gm-Message-State: AOJu0YxAdNV9zmeHAjTN6Ey5WxveoajIcV8FfkQ2HH34cueIo4pIghR7
-	qCUMnl7Jwnf4cNCeFBwCMkeOubScYX6yOHwGe2t7m6NyGB8rzJr7ph6Q9hpjTxWTswryORxctbw
-	nRWqf6Q==
-X-Google-Smtp-Source: AGHT+IF0rO1Bjeb7TUkL6kSTrX663vMZ3XBPI3uHeZiTz2sTccbaBGMG83mBaqMove3qM6FC98OsRNgJym+A
-X-Received: from rananta-linux.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:20a1])
- (user=rananta job=sendgmr) by 2002:a05:6638:8904:b0:47f:1496:13e5 with SMTP
- id jc4-20020a056638890400b0047f149613e5mr111392jab.4.1712162555133; Wed, 03
- Apr 2024 09:42:35 -0700 (PDT)
-Date: Wed,  3 Apr 2024 16:42:30 +0000
+        d=1e100.net; s=20230601; t=1712164048; x=1712768848;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XE+PG9zC5omixfQJghjjzCZLVaoeIvGmD0Or6PABHlQ=;
+        b=QGZ+vne+w9APXJUNMVXZF7+QM42/DPZEajNB7eRP7KR3MX1MKelppvQXocTzl2fKfM
+         PBNan3+kte//+mXnjzW8RjNPxSW333kqb7sCkbkT0FYQafFJCBAjQowHRyOONz2d6aES
+         3wxQ1zW5oSFQ0F7Ay1Ho5hRP37XNqqCU+KhddkNk/Nd/p4EGxC050ZuwqTSEb21Zujw7
+         5McNkqOh4EEX5Sh3mR73cNc9lmc0ePrScdaaHl0mPky2q0jWlzsD3CofC1QIbtF3d8Ng
+         TWWOkkaaH+AG5bHfcuxK3Tss+qGbdqdWG2Ju1cPkQn5orDdlsDUODhk4lPgaXWsOj50n
+         xecQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUcd9kG8EzdF0FmtVQtRjhX8vbeG6quLoSqENGg2BqGsF9N7zbwM1Vrdbs9lS/zGWw3P/TRCZw8yI9/UO9WSOnZo9YNK03hBjZNUk/O3DjY
+X-Gm-Message-State: AOJu0YypY4KVFICPjjgDXj0PFJ4DxRIf/GjQcBRtJTUD8tISqLmeBB80
+	m97j4LwVs8RMSgoHuiLwl8q27/3/Iv9fi3IGmtE61a+MUlb1u73aGeK2G+tBFhjtbocDSG/I5RZ
+	dQw==
+X-Google-Smtp-Source: AGHT+IGJ6fjY3qPzfcuQ+Uj01adGJDcVM5deoqEJfvQ1/h41CQ3qzBzMvVGNTIzpPWuDCJzxpn4gGWghwiI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1005:b0:dc7:48ce:d17f with SMTP id
+ w5-20020a056902100500b00dc748ced17fmr10456ybt.10.1712164048738; Wed, 03 Apr
+ 2024 10:07:28 -0700 (PDT)
+Date: Wed, 3 Apr 2024 10:07:27 -0700
+In-Reply-To: <20240403164230.1722018-1-rananta@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240403164230.1722018-1-rananta@google.com>
-Subject: [PATCH v2] KVM: selftests: Fix build error due to assert in dirty_log_test
-From: Raghavendra Rao Ananta <rananta@google.com>
-To: Sean Christopherson <seanjc@google.com>, Sasha Levin <sashal@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Raghavendra Rao Ananta <rananta@google.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20240403164230.1722018-1-rananta@google.com>
+Message-ID: <Zg2Mz5ZcF6cO9Ipr@google.com>
+Subject: Re: [PATCH v2] KVM: selftests: Fix build error due to assert in dirty_log_test
+From: Sean Christopherson <seanjc@google.com>
+To: Raghavendra Rao Ananta <rananta@google.com>
+Cc: Sasha Levin <sashal@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-The commit e5ed6c922537 ("KVM: selftests: Fix a semaphore imbalance in
-the dirty ring logging test") backported the fix from v6.8 to stable
-v6.1. However, since the patch uses 'TEST_ASSERT_EQ()', which doesn't
-exist on v6.1, the following build error is seen:
+On Wed, Apr 03, 2024, Raghavendra Rao Ananta wrote:
+> The commit e5ed6c922537 ("KVM: selftests: Fix a semaphore imbalance in
+> the dirty ring logging test") backported the fix from v6.8 to stable
+> v6.1. However, since the patch uses 'TEST_ASSERT_EQ()', which doesn't
+> exist on v6.1, the following build error is seen:
+> 
+> dirty_log_test.c:775:2: error: call to undeclared function
+> 'TEST_ASSERT_EQ'; ISO C99 and later do not support implicit function
+> declarations [-Wimplicit-function-declaration]
+>         TEST_ASSERT_EQ(sem_val, 0);
+>         ^
+> 1 error generated.
+> 
+> Replace the macro with its equivalent, 'ASSERT_EQ()' to fix the issue.
+> 
+> Fixes: e5ed6c922537 ("KVM: selftests: Fix a semaphore imbalance in the dirty ring logging test")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 
-dirty_log_test.c:775:2: error: call to undeclared function
-'TEST_ASSERT_EQ'; ISO C99 and later do not support implicit function
-declarations [-Wimplicit-function-declaration]
-        TEST_ASSERT_EQ(sem_val, 0);
-        ^
-1 error generated.
+Just to be super explicit, this is specifically for 6.1.y.
 
-Replace the macro with its equivalent, 'ASSERT_EQ()' to fix the issue.
+Acked-by: Sean Christopherson <seanjc@google.com>
 
-Fixes: e5ed6c922537 ("KVM: selftests: Fix a semaphore imbalance in the dirty ring logging test")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
----
- tools/testing/selftests/kvm/dirty_log_test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
-index ec40a33c29fd..711b9e4d86aa 100644
---- a/tools/testing/selftests/kvm/dirty_log_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_test.c
-@@ -772,9 +772,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	 * verification of all iterations.
- 	 */
- 	sem_getvalue(&sem_vcpu_stop, &sem_val);
--	TEST_ASSERT_EQ(sem_val, 0);
-+	ASSERT_EQ(sem_val, 0);
- 	sem_getvalue(&sem_vcpu_cont, &sem_val);
--	TEST_ASSERT_EQ(sem_val, 0);
-+	ASSERT_EQ(sem_val, 0);
- 
- 	pthread_create(&vcpu_thread, NULL, vcpu_worker, vcpu);
- 
-
-base-commit: e5cd595e23c1a075359a337c0e5c3a4f2dc28dd1
--- 
-2.44.0.478.gd926399ef9-goog
-
+> ---
+>  tools/testing/selftests/kvm/dirty_log_test.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+> index ec40a33c29fd..711b9e4d86aa 100644
+> --- a/tools/testing/selftests/kvm/dirty_log_test.c
+> +++ b/tools/testing/selftests/kvm/dirty_log_test.c
+> @@ -772,9 +772,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>  	 * verification of all iterations.
+>  	 */
+>  	sem_getvalue(&sem_vcpu_stop, &sem_val);
+> -	TEST_ASSERT_EQ(sem_val, 0);
+> +	ASSERT_EQ(sem_val, 0);
+>  	sem_getvalue(&sem_vcpu_cont, &sem_val);
+> -	TEST_ASSERT_EQ(sem_val, 0);
+> +	ASSERT_EQ(sem_val, 0);
+>  
+>  	pthread_create(&vcpu_thread, NULL, vcpu_worker, vcpu);
+>  
+> 
+> base-commit: e5cd595e23c1a075359a337c0e5c3a4f2dc28dd1
+> -- 
+> 2.44.0.478.gd926399ef9-goog
+> 
