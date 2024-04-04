@@ -1,187 +1,147 @@
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F845757F8;
-	Thu,  4 Apr 2024 11:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712229806; cv=fail; b=p6tg0/0RjTYXFxC4tFRrT2T/wwVdwVuPw5N7gM5YraSt+bu4GDj/aOigFGopXtXsk3w4AwhS5tysQxX5wzpaNiB4cPzT0F6KMRUwrV+L50ALDjcrBoYiRuDNIltb7XG5E/xahmqkALkZ28yK6ID4PaTgUtcK331c6B+f2VZjzaw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712229806; c=relaxed/simple;
-	bh=iJkV+5QXOMt/0Qo/4ahXfYzQBbiPa93OAzG+vOrctoo=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=mVbwOy76kamnErTltJQ/0HOJaeRUA0YYnPsUSErf20K15U82uBcNoaLwr63wLNSagPiavZGCrw6bUmd3MPQikz8HBfasfc/bjmsgDqGk//ir+LuknLVSbiYpVdg2f+oBAOgRihj6PyDyotQdug9PVQIzxwhzeI0Te58NmGT8L98=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fOd42MNN; arc=fail smtp.client-ip=40.107.236.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F0982876;
+	Thu,  4 Apr 2024 11:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712231298; cv=none; b=u+wOFECmwBcpR468dEmMVoOhBPGDGZPLgSvU1nCCXO8280k78OhyDcibUY8n0e5b6YLbgGc6D19btO3mWkxnF/tCFhM3Kn5jphjzdDLSxDWx8fjY2iRUEOLq72CaeoJbRPnmnCrGjdrpcsqfqAxUvqmiomcSbiVQOViaRFo16is=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712231298; c=relaxed/simple;
+	bh=X+2uugPuVrXC1l1UkYxfOwgJq2ar4xrcrs39UDAIhSQ=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=AtlOYboXCeT7c+fogq9RCA7SBYnMypDvZiLO+8Ro47oHikhEdTGNBcQitA+gQZIOnrCWwq3ftwwQ3wO2x7fqsaKvtQjlNHPmGPKlAYpVpfxJJyn9QDvQsNyqGEI3JLbdNTjmSE1IL38FQsvvThZ1rzFHOy2X0rEYNiV5rd6PVNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=EMxuqA/C; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fOd42MNN"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W8UA6WWmnWFi3PnxZFS3pnPHe+/102EbYLF8UXYBGh0OQzLY2ZIv/gW0nTFaiWTToPRDl1wan8xBBggijuEyIiTJeIQdTnGIu8NICvMv/xO8BaSXcsiT3vhU4+urY0MPbunkO09aaR0FRG+qS0pw2ScMZ6m6ywi7TKg6JsAuT/krvQgtqGbCWeyCpQfK2/5VT/Pl64ne72Tl38ckEKhSDFWet1sqXJTozf6yneBRTpTCINi8go1s2MEiw1QWFQaQGiOHUN6QQja5kLiZE/zoMh7FAsLzPu1+lNgwVZutcdXKOJUJNeA4XCWjo2Ud/3+oZGNkGbQYvM9jlHZOwvUXpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yD+IdKoIgrnWmIibRwawUw7HFGKsSujic+64NwX7ykI=;
- b=FZC93CkusrfOIoQXniXrFYsHkn/70ZTZNht9M6agaVMAGMyowHXLSBpybVn0CrCwJEfL33BMPgbFkAQNjT+AqQQ37j7H2mm/UuXe/h3CDnqUmyNUqOvCC/G5ES07OS7uzSOllYNIno689LV2idTcndSBXEFqThWSxi752BHbzq685HeYNlCavnJ3WupsVPGIxjOBwGr1eDSAq424b0h5h0OHXKPUVv7rRrubpUW1A52E6lcABmrXP4BNkeIJC9AMMb4ktwfpg4+QZPZewbpDh6nly442fJBEqLSKwCARhbWFWszUXEOG18lsslH0/VtViAnSXUUstbFdMKskseoClQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yD+IdKoIgrnWmIibRwawUw7HFGKsSujic+64NwX7ykI=;
- b=fOd42MNNVJTEr9sgpMf250dXC4efdbmldUX0CNAlLqNRwdLcFHjhjjvsrDIIZ139UelPUNQIx/6ThLiQfPd62sFOcpKvf3Cx7zhmiD8noyDxk85NMD/gGVGr1SOC4WGgzf0UUajlKPpfy+O616+NForIlTYKDs3WEugmNiQ6MsyKWZvblkAccEA/eUuiL1j4yuKihXriHS+OVA7YBEgM3+gW8PUGWVSNIp19ypaCsOC6idHP/sUYAvbPusIAQTdnBl0vEJfDOQLUpJMI5YVwBv0UtDzIzzC2F7rX+U1dZmLczX9QFTvX5tYS+qpjLchL0+h7OEnOLbJQuXLpTX/DJA==
-Received: from SA1P222CA0137.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c2::6)
- by DS0PR12MB8453.namprd12.prod.outlook.com (2603:10b6:8:157::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Thu, 4 Apr
- 2024 11:23:22 +0000
-Received: from SA2PEPF00003AE4.namprd02.prod.outlook.com
- (2603:10b6:806:3c2:cafe::68) by SA1P222CA0137.outlook.office365.com
- (2603:10b6:806:3c2::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46 via Frontend
- Transport; Thu, 4 Apr 2024 11:23:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SA2PEPF00003AE4.mail.protection.outlook.com (10.167.248.4) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7452.22 via Frontend Transport; Thu, 4 Apr 2024 11:23:22 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 4 Apr 2024
- 04:23:11 -0700
-Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Thu, 4 Apr
- 2024 04:23:07 -0700
-References: <20240403023426.1762996-1-kuba@kernel.org>
- <20240403023426.1762996-7-kuba@kernel.org>
-User-agent: mu4e 1.8.11; emacs 28.3
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <shuah@kernel.org>, <sdf@google.com>,
-	<donald.hunter@gmail.com>, <linux-kselftest@vger.kernel.org>,
-	<petrm@nvidia.com>
-Subject: Re: [PATCH net-next v2 6/7] selftests: drivers: add scaffolding for
- Netlink tests in Python
-Date: Thu, 4 Apr 2024 12:42:24 +0200
-In-Reply-To: <20240403023426.1762996-7-kuba@kernel.org>
-Message-ID: <87zfu9fk2v.fsf@nvidia.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="EMxuqA/C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1712231293;
+	bh=X+2uugPuVrXC1l1UkYxfOwgJq2ar4xrcrs39UDAIhSQ=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=EMxuqA/CkRRKiGL1H3kwhSO7t636rfKNJSFagYNeGkQi30BSxSuudOK9sLwgDMZp0
+	 Fia08ny7dQml2JGL7l9z9aS/DIGbLZjzTEWFiv1phdhXd+AAx2TloQ+TuDEpGRbzvy
+	 mlxddAgHGqHi+Xy3YxPIYgPlE6Ujn25yvx9W5yzdYFRAaJ6f6frVKii5ugs+padpNk
+	 Jb2PKX1LccI2BIKtoOalTPb03IfZBJQVMXTbZ3XrgjDXv5STV72e7/0AvVZ3jlU7pK
+	 qhsbWWC3Ddy/368QXMnwwDOK634Le/UlmFEeOU2omFPnEWB8+6xteo81rmnmAkKq0P
+	 z6D62BJUak7RQ==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 82AAC378200D;
+	Thu,  4 Apr 2024 11:48:11 +0000 (UTC)
+Message-ID: <18b3976e-49a5-43d2-8d1b-bb87f2a312eb@collabora.com>
+Date: Thu, 4 Apr 2024 16:48:43 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE4:EE_|DS0PR12MB8453:EE_
-X-MS-Office365-Filtering-Correlation-Id: c9515932-e68d-4cbe-a460-08dc5499a326
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	aGpM05/pPjtraIv9js5rPOwgtTzOK/oQTiBfvMw7j9izcIU/p9wsePg1ZrMoCjnZPdN1ZX3mNv9tXrNKHRm0o7qDseGc53M6LfYHTLIDcTSa8U4Z6ecMtferkFaam1X6+/OdT9wnCNhPYqquEQ95YKPAhFJ/JXxLkLsov3dKbkmVgo4cagJmf3+coMCz/gPzr34WWcGMaHc4hEDV11ZilpQdf9LftQQ3vFe5EM2YYHXNXs54Ff9skamQ+jnN91q170LwXbhmAAa/UIL84XkAtB6LTxkmVOHVKNVlAzhCZP1JXaOaRO9o3xo0xk0Gc2g6bvRnXrpFmQoWvHzgML8sdPYo2K1ucJOQ4AZ6TJTotRZT8pehX6AKrTq6yEtbBH/aNXUCH1pIbamy53vepk1dBy1SCbCD6ZsDRXC2b8NDeNiMS0EIzN/pWBfSmvvkbctCOpgHcBMBH4SsNFGc/nQTeSuvoV2WrqrvK0JTBnxux6On91CUbN3eQaZ+nJfUrWE/k7uhiDhKYF/LjfcHwIrGIYALt+Vsw7fD5yvwUw1xgd42JhaGqRXA/tBc0ULffPuo87grvQ60E0xgK3cwIO70RH6ZZwbH7Ox5RsZPy8we2iwWPJ27DnSaFvdelEix7NWeqjYc6UzhCza8gFtLXEMJ1bKn6LVm602/KOa2tj/4AoF4RO0wqWdqCl/5f3BPbc1RjFedtz57OcO97eF1YM1dsJYJED4WkOrJBYNhz1uD7JoF4d7gdtGiGdivrEgeCyg/
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(82310400014)(36860700004)(376005)(1800799015);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2024 11:23:22.2309
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9515932-e68d-4cbe-a460-08dc5499a326
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003AE4.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8453
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Nicolin Chen <nicolinc@nvidia.com>, kernel@collabora.com,
+ iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Kevin Tian <kevin.tian@intel.com>,
+ Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] selftests: iommu: add config needed for iommufd_fail_nth
+To: Jason Gunthorpe <jgg@ziepe.ca>, Joao Martins <joao.m.martins@oracle.com>
+References: <20240325090048.1423908-1-usama.anjum@collabora.com>
+ <31fcc276-acd6-4277-bd6c-4a871c7fb28a@collabora.com>
+ <20240326150340.GE8419@ziepe.ca>
+ <56cc8b9e-c1cf-4520-ba45-b1237e8b7b64@collabora.com>
+ <20240327114958.GG8419@ziepe.ca>
+ <51f493a9-08e7-44d8-ae4a-58b2994ea276@oracle.com>
+ <f78b685d-a147-4b59-beb2-cde9d34ce22a@collabora.com>
+ <e9cb60bf-5035-4fed-9b36-ca2edf048fe8@oracle.com>
+ <20240327182050.GA1363414@ziepe.ca>
+ <ccab9229-c0de-4c38-bb5c-7f32cbd7fa2b@collabora.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ccab9229-c0de-4c38-bb5c-7f32cbd7fa2b@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 3/28/24 1:13 AM, Muhammad Usama Anjum wrote:
+> On 3/27/24 11:20 PM, Jason Gunthorpe wrote:
+>> On Wed, Mar 27, 2024 at 06:09:37PM +0000, Joao Martins wrote:
+>>> On 27/03/2024 17:49, Muhammad Usama Anjum wrote:
+>>>> On 3/27/24 7:59 PM, Joao Martins wrote:
+>>>>> On 27/03/2024 11:49, Jason Gunthorpe wrote:
+>>>>>> On Wed, Mar 27, 2024 at 03:14:25PM +0500, Muhammad Usama Anjum wrote:
+>>>>>>> On 3/26/24 8:03 PM, Jason Gunthorpe wrote:
+>>>>>>>> On Tue, Mar 26, 2024 at 06:09:34PM +0500, Muhammad Usama Anjum wrote:
+>>>>>>>>> Even after applying this config patch and following snippet (which doesn't
+>>>>>>>>> terminate the program if mmap doesn't allocate exactly as the hint), I'm
+>>>>>>>>> finding failed tests.
+>>>>>>>>>
+>>>>>>>>> @@ -1746,7 +1748,7 @@ FIXTURE_SETUP(iommufd_dirty_tracking)
+>>>>>>>>>         assert((uintptr_t)self->buffer % HUGEPAGE_SIZE == 0);
+>>>>>>>>>         vrc = mmap(self->buffer, variant->buffer_size, PROT_READ | PROT_WRITE,
+>>>>>>>>>                    mmap_flags, -1, 0);
+>>>>>>>>> -       assert(vrc == self->buffer);
+>>>>>>>>> +       assert(vrc == self->buffer);// ???
+>>>>>>>>>
+>>>>>>>>> On x86:
+>>>>>>>>> # Totals: pass:176 fail:4 xfail:0 xpass:0 skip:0 error:0
+>>>>>>>>> On ARM64:
+>>>>>>>>> # Totals: pass:166 fail:14 xfail:0 xpass:0 skip:0 error:0
+>>>>>>>>>
+>>>>>>>>> The log files are attached.
+>>>>>>>>
+>>>>>>>> You probably don't have enough transparent huge pages available to the process
+>>>>>>>>
+>>>>>>>>       echo 1024 > /proc/sys/vm/nr_hugepages
+>>>>>>> After making huge pages available, the iommufd test always passed on x86.
+>>>>>>> But there are still failures on arm64. I'm looking into the failures.
+>>>>>>
+>>>>>> Oh that is really strange. Joao? Nicolin?
+>>>>>>
+>>>>> Definitely strange, I'll have a look.
+>>>>>
+>>>>> So it set the expected number of dirty bits as that assert doesn't fail, but it
+>>>>> is failing when we check that even bits are set but not odd ones. Like it's
+>>>>> hasn't set those bits.
+>>>>>
+>>>>> For mock tests there should be no difference between x86 and ARM assuming the
+>>>>> typical 4K page-size. Maybe this is 64k base pages in ARM? That's the only thing
+>>>>> that I can think of that affected mock domain.
+>>>> The config is attached. The defaults are being used i.e., 4k page.
+>>>
+>>> Looks like CONFIG_IOMMUFD_DRIVER is not defined :(
+>>>
+>>> Thus no bits are being set.
+>>
+>> Oh! 
+>>
+>> --- a/drivers/iommu/iommufd/Kconfig
+>> +++ b/drivers/iommu/iommufd/Kconfig
+>> @@ -37,6 +37,7 @@ config IOMMUFD_TEST
+>>         depends on DEBUG_KERNEL
+>>         depends on FAULT_INJECTION
+>>         depends on RUNTIME_TESTING_MENU
+>> +       select IOMMUFD_DRIVER
+>>         default n
+>>         help
+>>           This is dangerous, do not enable unless running
+>>
+> Tested this patch on my system and it fixes all issues for ARM64. Please
+> add tag for this Kconfig patch:
+> Tested by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> 
+> Also please accept the patch in this current series.
+Please let me know if you need me to send the config patch. Please accept
+the config patch as well.
 
-Jakub Kicinski <kuba@kernel.org> writes:
+>>
+>> ???
+>>
+>> Jason
+> 
 
-> Add drivers/net as a target for mixed-use tests.
-> The setup is expected to work similarly to the forwarding tests.
-> Since we only need one interface (unlike forwarding tests)
-> read the target device name from NETIF. If not present we'll
-> try to run the test against netdevsim.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-
-However:
-
-> diff --git a/tools/testing/selftests/net/lib/py/nsim.py b/tools/testing/selftests/net/lib/py/nsim.py
-> new file mode 100644
-> index 000000000000..25ae0d081788
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/lib/py/nsim.py
-> @@ -0,0 +1,118 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +import json
-> +import os
-> +import random
-> +import re
-> +import time
-> +from .utils import cmd, ip
-> +
-> +
-> +class NetdevSim:
-> +    """
-> +    Class for netdevsim netdevice and its attributes.
-> +    """
-> +
-> +    def __init__(self, nsimdev, port_index, ifname, ns=None):
-> +        # In case udev renamed the netdev to according to new schema,
-> +        # check if the name matches the port_index.
-> +        nsimnamere = re.compile(r"eni\d+np(\d+)")
-> +        match = nsimnamere.match(ifname)
-> +        if match and int(match.groups()[0]) != port_index + 1:
-> +            raise Exception("netdevice name mismatches the expected one")
-> +
-> +        self.ifname = ifname
-> +        self.nsimdev = nsimdev
-> +        self.port_index = port_index
-> +        self.ns = ns
-> +        self.dfs_dir = "%s/ports/%u/" % (nsimdev.dfs_dir, port_index)
-> +        ret = ip("-j link show dev %s" % ifname, ns=ns)
-> +        self.dev = json.loads(ret.stdout)[0]
-
-I don't think self.ifname, .ns, .dfs_dir, .dev are actually used outside
-of this function.
-
-> +
-> +    def dfs_write(self, path, val):
-> +        self.nsimdev.dfs_write(f'ports/{self.port_index}/' + path, val)
-> +
-> +
-> +class NetdevSimDev:
-> +    """
-> +    Class for netdevsim bus device and its attributes.
-> +    """
-> +    @staticmethod
-> +    def ctrl_write(path, val):
-> +        fullpath = os.path.join("/sys/bus/netdevsim/", path)
-> +        with open(fullpath, "w") as f:
-> +            f.write(val)
-> +
-> +    def dfs_write(self, path, val):
-> +        fullpath = os.path.join(f"/sys/kernel/debug/netdevsim/netdevsim{self.addr}/", path)
-> +        with open(fullpath, "w") as f:
-> +            f.write(val)
-> +
-> +    def __init__(self, port_count=1, ns=None):
-> +        # nsim will spawn in init_net, we'll set to actual ns once we switch it the.sre
-
-the.sre?
+-- 
+BR,
+Muhammad Usama Anjum
