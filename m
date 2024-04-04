@@ -1,67 +1,67 @@
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2045.outbound.protection.outlook.com [40.107.237.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5CC101E6;
-	Thu,  4 Apr 2024 10:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8874F78B63;
+	Thu,  4 Apr 2024 10:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712227171; cv=fail; b=lci6fcNnTQnXyge0YHnHNZEZzIIu+NLlRoPLod8BUaA1UyeQguunjrz8QBB3mFLmT2EWkNxg2ImQ5+ZZJy/Ma936tyL9ABg7W4UOFHW7G1UCYWjGnk9H9BcRPivjMmEqEDuIoisxOVBQgO66JbYn1S6XIiaEM2YVha+s3i3FnBM=
+	t=1712227182; cv=fail; b=vFSqmyxSejv63Ykxava/DYpUhMkkWU2fTSMr5ydnoQt5SqMror81Tu2C7NhVlw0eS+7FHtCOSM4BfbdLbvunvaY2XWohx8BQv273Oj6Rz6eUrXS+eVVIeaej9WqN8eLDqvLU3/DZ2RYl5RoiKxSk2Wa34pgu6qDZBfaDhOARK44=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712227171; c=relaxed/simple;
-	bh=KEXa+FqIywG8GlqNCLNnTWg4rJLprk4KRDELpBlsV40=;
+	s=arc-20240116; t=1712227182; c=relaxed/simple;
+	bh=+XcOcfzbvbVB19EMZcCf+IOCkKm7J/8qOOnDQvkvaHk=;
 	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=Kgr4UDmnGWdnBrOTdCBJyugzxF74kI3ZUhU0vH7Ba5Dve2bu4CCGgfbCRtPCjq7hMfwzjz5+FaY+yFNiI5TT6Ni8hwFV5AqWK42oJLys4PHW5Mr8zBIYB51vedrc+HItAZhshfLIjxp46oHHldBJKHmvJ46T25vmufIctQ7gWi8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ukVUDuhf; arc=fail smtp.client-ip=40.107.236.40
+	 MIME-Version:Content-Type; b=qK3afw4xrYWDy7TRMSwedYwFst8Ndyv0CvBDkSowMptHYsnHO7Pu92nIoTgvOzHP9MrR4tibrKW/oTiTIw5f0oMUACTkGEK07W8T4XbLzSf3ZTGR5wh393vphptmc0n85xKvCsKd3o3Rhi0i6+BRAMWy/1s9f1OyHDx8hk8flwo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GzevARI7; arc=fail smtp.client-ip=40.107.237.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ukVUDuhf"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GzevARI7"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JAoxAqBfshCm/AOShtqPH03RNsPsI2mQWn9Gq9aRIs/0SDILYgij+S04V6acXmwEOoo8ZPBoQ4Xv6HnGpHc9hSDpAF48gOQwg6AcO5b1WHI1VoWwECDhc8/eY3rJyTP+S4u8sNAgj/I1kmxN0nVIMvxt2+WqcYWEL6y8GpAFFuqT6/oDLISvCqO7SMxIJmJs2XvVxZgWOrgCCWKGO+SSUKrsc8Asnlf62oF9GvCDRfR+DVzfy87cnrGmCeGkrR887XRVXc3M+Qyny4VAmbXzAscVpjeyIXrXF19ggMq3FyZ3Oe9bZVZ8Loaz78y22CghFqMLatcDCSyVS5Rh0O6eaQ==
+ b=RuPI2iv3+4gjTHBi4UrajG4xKOtXyyFTLnXe0R+nvG2emqi5jtiSNKYWo1qDYNEZW56q0MfKyA/8Y9fu+b1tGHZG4wLxiin4gnIs8K+gkXwx4pHCmoTIKqrwekmHRR3Sww9jykBSRMkFAHCIz3LQyo2vhcSlf4bJRLlqOocbs8F6Df8fspQsntuNVkeVYq4d2oPc8lljtU/Y1RvTi5AewP00u1IPTUDe8jQzKFhNgpvgXesBHI/lwT8dtoasKMtfDKKzYPdqvIs+bR1wQUiC5UAbDgk40RgqZqTDLvXHlCYTC0whxSHy+M0nk+ONGHxmIne3S4VfoprM6dAyQxIOUQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RaF1k1r87oA87FmjpM2v5zolwzmM/4ZzqpOZ5rIYXQY=;
- b=izDtenRu3B8WxCvOVmGfkhAjXEqiDGyqCKGs7eF5x9WfrN3MY7ZPwZODLzh//ZiPDZ6Ww3jUmyL4zaTz1/lRKXGFwVADQxDj0Q9eKcqTwbTiqSi0S3faAAicZQ2oTK3G12Pw9QftAYCSM4zxfLUO8vhJXjAfwD1wMQZIsVp2CcxxA9aPN4MYnjFWrS38PbOxxtnPn+0x1Sn0bgfDTkcZ4uwsUBQeJWf0/bijRZO5a9Puf+KUWYcyPFDeQuco23g67SGRbaFZggy9p6vgPPT2lOsSJkrHu7wD9ybhf1aeLeKYq3yRoU8v+4TrxVXqpZsAecvAIpVTxLp1rKTGdMoHpQ==
+ bh=3B6h9uKox5YyWetyXGdRDaDpj0sKdzIjQ/TsWQFuo7s=;
+ b=HUuJam6ciG/IWyd4CdJcf7phDbW+YxkVoBLlsVpT9tIdgtQKp08SvUNawOVvlxb7voJd4p2eTJwvNcVtz4csQIHEw/YXqDC34BbMuN9GqtRHg1No4+iQ/+tY7p0dEqh0Kg6+9ENZVZlwLvDPFHSHBAeApF2CXJSvXhOg0xjJt470hDlP0fzA0ctIdll0/5xvUigtH8Q/6dU1CvsnFBSiZPXxZ/Y62lrho1WqSe6wTbXB76FWaH39PHEiYys1gXgc9+MUxCSNK73Yxlhz6HD2m5IFBO8vrPBz/OiuX6HqOtv7rA6lI27zvKjSqe2evnsMUrJvAQdQXk3/GANOQFvcRQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RaF1k1r87oA87FmjpM2v5zolwzmM/4ZzqpOZ5rIYXQY=;
- b=ukVUDuhfV+ZlFIT0QWG01uZW72TH4qr1F1lrg7r0k1VPw/2+d0PaLyW+XXNm7k8OzoCIQBlEMsp2ctLNWeCwngWUdG47ExgK8xWPqIQYQMb1+LM5wi6Y74Pku/lL4gNNmeqZ8FT5Bmty80NwxSOQcD3ozXOWftBekKyjGaIWNJ9U0iniqKeqse1fSJkgERZ/7pQN6cnERwl4XmNHs0GOj14Pm7lDnoWsjtZcTCNT/nPNAdtxKM1hv6kghrhyVuQ+sSTLAIG3qpIa80mKKo/P6mhcBqnAHfs1LpIoDRAs3InUzoztUWtFS4woVIlP8hsrbeNL/hiGlnnjD712eKNINg==
-Received: from MW2PR16CA0055.namprd16.prod.outlook.com (2603:10b6:907:1::32)
- by SN7PR12MB6813.namprd12.prod.outlook.com (2603:10b6:806:267::20) with
+ bh=3B6h9uKox5YyWetyXGdRDaDpj0sKdzIjQ/TsWQFuo7s=;
+ b=GzevARI7PytvwUWBLX5SMIAu8bEWJE+PXtwMXG2qFBNEIEehlIqOCW7HUZ7chspherZP7R2g/cWqTb/CtI1Gw5YSh9TA1I0a5XRAuGAfjJyWTWH3pPzqoHl5XT+FAXEiv/sDbOvPQeGDI5+k/dLSPMVxbj43lXxfTjLMXAOvRjtKlOB7+Keq6WJZMpIWzSc2g+6a22tqA1Yqm7d3WikPXsN2pcUZtyOPOovVB6Z6DGeVZO3kI7JCI5VF/esad6ZSr3oLT82nZaHoPTNQTcRwnoIEdUMwjVdJyNHrTzxercGkXj5EXu9sl95n9SCTvgKXk9Wa9Ux0y+zsDruKD4Vreg==
+Received: from MN2PR05CA0014.namprd05.prod.outlook.com (2603:10b6:208:c0::27)
+ by DM4PR12MB6109.namprd12.prod.outlook.com (2603:10b6:8:ae::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Thu, 4 Apr
- 2024 10:39:26 +0000
-Received: from MWH0EPF000989E8.namprd02.prod.outlook.com
- (2603:10b6:907:1:cafe::f6) by MW2PR16CA0055.outlook.office365.com
- (2603:10b6:907:1::32) with Microsoft SMTP Server (version=TLS1_2,
+ 2024 10:39:35 +0000
+Received: from MN1PEPF0000F0E0.namprd04.prod.outlook.com
+ (2603:10b6:208:c0:cafe::ea) by MN2PR05CA0014.outlook.office365.com
+ (2603:10b6:208:c0::27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.26 via Frontend
- Transport; Thu, 4 Apr 2024 10:39:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ Transport; Thu, 4 Apr 2024 10:39:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- MWH0EPF000989E8.mail.protection.outlook.com (10.167.241.135) with Microsoft
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ MN1PEPF0000F0E0.mail.protection.outlook.com (10.167.242.38) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7452.22 via Frontend Transport; Thu, 4 Apr 2024 10:39:26 +0000
+ 15.20.7452.22 via Frontend Transport; Thu, 4 Apr 2024 10:39:34 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 4 Apr 2024
- 03:39:02 -0700
-Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
+ 03:39:29 -0700
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Thu, 4 Apr
- 2024 03:38:58 -0700
+ 2024 03:39:24 -0700
 References: <20240403023426.1762996-1-kuba@kernel.org>
- <20240403023426.1762996-2-kuba@kernel.org>
+ <20240403023426.1762996-4-kuba@kernel.org>
 User-agent: mu4e 1.8.11; emacs 28.3
 From: Petr Machata <petrm@nvidia.com>
 To: Jakub Kicinski <kuba@kernel.org>
@@ -69,11 +69,11 @@ CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
 	<pabeni@redhat.com>, <shuah@kernel.org>, <sdf@google.com>,
 	<donald.hunter@gmail.com>, <linux-kselftest@vger.kernel.org>,
 	<petrm@nvidia.com>
-Subject: Re: [PATCH net-next v2 1/7] netlink: specs: define ethtool header
- flags
-Date: Thu, 4 Apr 2024 12:38:33 +0200
-In-Reply-To: <20240403023426.1762996-2-kuba@kernel.org>
-Message-ID: <87le5th0ox.fsf@nvidia.com>
+Subject: Re: [PATCH net-next v2 3/7] selftests: net: add scaffolding for
+ Netlink tests in Python
+Date: Thu, 4 Apr 2024 11:11:57 +0200
+In-Reply-To: <20240403023426.1762996-4-kuba@kernel.org>
+Message-ID: <87cyr5h0o6.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,40 +85,119 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989E8:EE_|SN7PR12MB6813:EE_
-X-MS-Office365-Filtering-Correlation-Id: 66d00275-60a9-4303-02cc-08dc54938013
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0E0:EE_|DM4PR12MB6109:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4eccc805-8509-43e0-6216-08dc5493850e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	7BU4onPyTpVSekv/sdAnioviimtghxylfzz/cFMocexMTrZexl7taQ4q3ZaSqx6cx6DzJNVlMhBGznOAWdktbWpZYzoVS5UvAKOZxcg2jGIHLz5tM1c/Hfx4u2M0SF6jK1v+6HAY5/R9E2Nw+Y9rR5H1GOIGyBYx58Yd1WsAcrsx8HLN0yROxo3Ueprr9CAE6EoeUGV3pFQR1cTcprqLklJqxoChqC/RjQ56+aPZVY18MUl25WVkxw1M7eSdDClSdiez77/ZYSI1H4a1OfPvz8ko5l8VL039RO2C+l23ARhG7dPC702GwmtbarCNHZYHICJlkUceVRJkcmM81eAMAzKciejmgPrPXZ6/tH1XCpMUtNvcijBaRigNj9dbt287GgVq2GMmRMCUnXLmOufDF/2J/Q6cZ2Z3HZErUnvKL9Jk3qu3OECQ3mspulYb5Z/9/n5YrcB7AavEt/ZDTc4nYDe6zdMRK4dAjNO7fTGvb2ctECTeJUd/8bUZjuXw8zZOXUdnH2oFwoF/AsRElpZpnFmr4Hi//WhH/H8BHVv9xHwguiYHrU92atQct9k1j27E0blklVW+JAVa9/mZlNiDLeikebqO6pkK1hi/BKgTipzodfUUAxzSFs5eq4LJ8F8q5AHlDMp1UrjyuD/wCIoDlsgqIuX14IsnCZ2RiYkHtLLVTpEYDV6V9XA1KQzoV+AgXtPSsyr6ma8lGB9+Ii4w1oMvMZw9Vfxzfzn8O0OrMh3wbNsa1sJxdXJgzhwE2Q7w
+	Pjnp7KcUuatKugb8kbd5fFTkXVSg+FKsrTT8CTKlCemEQkspuwXVgD+7Wusq8hWNn1EyU7cajUqvDeB8JhMvbUyvf5gw6iplmcfkH2T+jwBauO0bprOnHA63XgDdEt9cNq+otbpBK2nOb/6C9rYwN9ERl0HDFkMVJpV8qR+hJONLyPNzMtUyzQQ9Xrl5RixfTkhTES2RYH5Mhrc9Z7lxqIAHPOxOcLl2mCEO5haPXr1PHCw23/VDpIynOen1NznuqzIZLfl7ck7hk0ZetO71w3zRY7YFjkAIAb9ye/FuAoE0rRw36I1nNMt1nvrWKRpUO5Nq3ztQ3Om6wNrNueoARZQGFPiFih46aLt+dWN1M7LhaLTnt1r4MEh8MJjd+zwVJT7KuefLNVddmz8stXpiC2eVIy3vDM5IAHbzfDo8gdPngznv2IcfNyxOP63c8/e5QSVcf6htrGrrT1MDI5ail+2iLnRSKV/5I1RkhiJp6aDZuTcH5C2QFCgOjgmuo8f1OG4DyOB24h5ti/V4hH++ubyVR4iSH+MUCsRnLmQdd2OI63a1F9zNYgpL9nHCPDVXaw3aiUl7TFBpj4HiFg9b19F1/oD1H9ebwW3z2RLqtGI64KiSXdXR2pFwbWh09rSFskKxnzx13tzz5qHx6ciU4Xhw0Otx9Gnp07K/zXWP2FIzq38OxdzRy0V5dk2rAoYM7L+j3Y6D/oJtvTXyMZC1a3W8+gqpDWDv4Cpa0W1xZC42xn3Ko0HZfqmQOZ1+oXvP
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(82310400014)(376005)(1800799015);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(36860700004)(376005)(82310400014)(1800799015);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2024 10:39:26.4485
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2024 10:39:34.6818
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66d00275-60a9-4303-02cc-08dc54938013
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4eccc805-8509-43e0-6216-08dc5493850e
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000989E8.namprd02.prod.outlook.com
+	MN1PEPF0000F0E0.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6813
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6109
 
 
 Jakub Kicinski <kuba@kernel.org> writes:
 
-> When interfacing with the ethtool commands it's handy to
-> be able to use the names of the flags. Example:
+> Add glue code for accessing the YNL library which lives under
+> tools/net and YAML spec files from under Documentation/.
+> Automatically figure out if tests are run in tree or not.
+> Since we'll want to use this library both from net and
+> drivers/net test targets make the library a target as well,
+> and automatically include it when net or drivers/net are
+> included. Making net/lib a target ensures that we end up
+> with only one copy of it, and saves us some path guessing.
 >
->     ethnl.pause_get({"header": {"dev-index": cfg.ifindex,
->                                 "flags": {'stats'}}})
->
-> Note that not all commands accept all the flags,
-> but the meaning of the bits does not change command
-> to command.
+> Add a tiny bit of formatting support to be able to output KTAP
+> from the start.
 >
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> v2:
+>  - include the net/lib only in install
+>  - support passing state to tests
+>  - don't apply Path() on what's already a Path()
+>  - fix spacing in Makefile's filter()
+>  - sort imports
+>
+> CC: shuah@kernel.org
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/Makefile              |  9 +-
+>  tools/testing/selftests/net/lib/Makefile      |  8 ++
+>  .../testing/selftests/net/lib/py/__init__.py  |  6 ++
+>  tools/testing/selftests/net/lib/py/consts.py  |  9 ++
+>  tools/testing/selftests/net/lib/py/ksft.py    | 96 +++++++++++++++++++
+>  tools/testing/selftests/net/lib/py/utils.py   | 47 +++++++++
+>  tools/testing/selftests/net/lib/py/ynl.py     | 49 ++++++++++
+>  7 files changed, 223 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/net/lib/Makefile
+>  create mode 100644 tools/testing/selftests/net/lib/py/__init__.py
+>  create mode 100644 tools/testing/selftests/net/lib/py/consts.py
+>  create mode 100644 tools/testing/selftests/net/lib/py/ksft.py
+>  create mode 100644 tools/testing/selftests/net/lib/py/utils.py
+>  create mode 100644 tools/testing/selftests/net/lib/py/ynl.py
+>
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index e1504833654d..f533eb7054fe 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -116,6 +116,13 @@ TARGETS += zram
+>  TARGETS_HOTPLUG = cpu-hotplug
+>  TARGETS_HOTPLUG += memory-hotplug
+>  
+> +# Networking tests want the net/lib target, include it automatically
+> +ifneq ($(filter net,$(TARGETS)),)
+> +ifeq ($(filter net/lib,$(TARGETS)),)
+> +	INSTALL_DEP_TARGETS := net/lib
+> +endif
+> +endif
+> +
+>  # User can optionally provide a TARGETS skiplist.  By default we skip
+>  # BPF since it has cutting edge build time dependencies which require
+>  # more effort to install.
+> @@ -245,7 +252,7 @@ ifdef INSTALL_PATH
+>  	install -m 744 run_kselftest.sh $(INSTALL_PATH)/
+>  	rm -f $(TEST_LIST)
+>  	@ret=1;	\
+> -	for TARGET in $(TARGETS); do \
+> +	for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
+>  		BUILD_TARGET=$$BUILD/$$TARGET;	\
+>  		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET install \
+>  				INSTALL_PATH=$(INSTALL_PATH)/$$TARGET \
+> diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
+> new file mode 100644
+> index 000000000000..5730682aeffb
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/lib/Makefile
+> @@ -0,0 +1,8 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +TEST_FILES := ../../../../../Documentation/netlink/s*
+
+Not sure I understand the motivation for the wildcard. Currently this
+matches Documentation/netlink/specs. Do you expect everything that
+starts with s to be a testfile?
+
+> +TEST_FILES += ../../../../net/*
+
+Likewise this -- it's just tools/net/ynl? Will everything that's there
+be a testfile?
+
+> +TEST_INCLUDES := $(wildcard py/*.py)
+> +
+> +include ../../lib.mk
+
+Other than that it looks OK.
 
 Reviewed-by: Petr Machata <petrm@nvidia.com>
