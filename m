@@ -1,71 +1,90 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED64200BF
-	for <linux-kselftest@vger.kernel.org>; Sat,  6 Apr 2024 08:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D421383B2
+	for <linux-kselftest@vger.kernel.org>; Sat,  6 Apr 2024 09:20:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712391923; cv=none; b=e20Zqjbtq6AmkdtBHrLUVJtfDEIpeGEUy1/h6ZJ3Ny80lebEGpi3Z3RPmI3q9xOg2hn5EJZ6Dll5jlhJt7JC09bnJc8wnxbDC6H3ybwj5zLaAotDO3ZqoUp13cvD9UnfTidajULDOc5i1iAPGp0EgKSAaSFp++ca43TKBWi+t6c=
+	t=1712395222; cv=none; b=TX/BJhxLDHOAEnjLHtkxF+4CIU+9ZBmCaQowCAYYozZR2oiKCpvACHfPVVJjE9NWer+Ldf/hPsgkRMWxG5hboZhqIWkjWlqRrZ5NOTintjBPaiNxcULk13OnwxV8D4CafSgxTlz7ma7125KORfIj1/Mcqiq5lnq31lhCZZGM7e0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712391923; c=relaxed/simple;
-	bh=Yp70LyV42TC86owiqwUo+ei2yFC/VLhbCv0icbZUJFE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sjGS0ncEmp8ku4bX8vQyUihquM5RadbFyzbPf5fLKkhn+5NL1EuVdQkiVyH8OUJ1zXDOC6KriliIFE0mqiGKsD97dXTKgIi9+FbDq8jgwL3en57bjIAVpPNXlGr4i9enpVxYBy8DHlkpwNBpo5rr+pB21qqJGKDfnv9PmH008os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=none smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=RQXFG31G; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
+	s=arc-20240116; t=1712395222; c=relaxed/simple;
+	bh=yt9tmTIBJzVdCFZ4PnU57SVH6MzeinR1L4YoDUXNjsE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gd4/YBWKOE0tn9KWR1+wqueKRDEfs5Wx5pKaYs3DofkDaYaHdgEmNKA40uMfAsn+LS1dZCJVaMBBCxJvRzIXJNkF/Ud1EdqHD7RjLv8vnITSN7T6mr0vScmnPFYwSSO4VAoZKyPSb3+R4TLfEKzPWzvjFQqFcde4YKmL61tgl4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=dOmJwRE8; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="RQXFG31G"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-416434311eeso201225e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 06 Apr 2024 01:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1712391920; x=1712996720; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QBJNfaYHzuiXuMZUpgDPs9xtiQNCWuPWeZpuB9UBK3o=;
-        b=RQXFG31GJAWymDTWNhTKADUAB9uLWMTl6XLDZsCjsq48E0qlICb8X5ZIYM+ZFvPxY+
-         2iTmDH2B1OdN9K8TMnnATglFXoHTbTWRzBWWDkwJ3o+vYAyxonhSKaU2L6EFlUFJMeVk
-         5eKsxULDCoQlQLghZy2H4tfZ62ywrUO4qnvkpTZCbil65UKBTo1Nk6cLNBkuuNAfi7ba
-         dnIVBhElxMmNSPRnwBE1OAan/2MXAgTo7UfQp1MkFaMFcRlS+vyE/6rw/Mn/VpWuJp3N
-         JETK06m6C8UTxZxjVMsd1Cg6mpJZwgChIcsqmUAK8gs32cNQoI7Ugv32HgdBYOXF7rHr
-         ++ug==
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="dOmJwRE8"
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 61B2B42495
+	for <linux-kselftest@vger.kernel.org>; Sat,  6 Apr 2024 09:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1712395216;
+	bh=G6LgQlJD57yHhfXydvKzs8A9bUpRZ0ooDJmyE1zvH0s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version;
+	b=dOmJwRE8oTUeXFiopPdOZhTIHljrEg1oNa6fQNSMzZh6tAzjyoAozBGY9xAPb1ZVs
+	 WdSHX3/8v9LKdS8sY05r+nyM4A4/cdYp4/30cmpsCgueAeY6vt5GKx8A/vplF3yxGs
+	 KbTV/CNFegIF5LT9jhQgEyFOdElabj2P+LUJgIUrRC64AFuTmzgtrQDqqOhbxdb/XI
+	 kTc5qrLPqjF38jkMXhWpv66GfIkwQc1/cAM5rWfPMGdOqYMfvygsu1Ocmg8UXQ1p22
+	 hkrhRMW2Pl5IWtj0oCxxIvxexWuoTIv0WXUzFDVofbSX6qhB3W51RyfNFpn6uea0R4
+	 QC8nFzUYu4MUA==
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2d6c94d98afso26915171fa.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 06 Apr 2024 02:20:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712391920; x=1712996720;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QBJNfaYHzuiXuMZUpgDPs9xtiQNCWuPWeZpuB9UBK3o=;
-        b=hkekcRCRVzm7CQ2trOXUm9ED+EgSso6TDFZn6NtAnyOVtO+wz3BStGfPnTTxxMtvih
-         2vJ6X1UTJUiaQwpi6drqrtx93ND5Y0vQmSGCqS03gqhxPgfPasbYqpr6KNsfu0jMdUME
-         kZ/xdXR21WBNqXQoiMQkJGTKAWNzVWouFhZ/yI/w40LcetUc7dy05d0NZH18HSf0Xcd+
-         MRd0EpCp6YrpMheMVE5cxFoIEZvxj5QwvpDKjcXHo1X3/fU23tZ/+JYFbHoa4znhMMJW
-         jycqfF8VeaRW39mL5BBH8s7QfmaWTtZJ2lxXIBLXghBp0zBUzS1PyT+gFrw7+POteZpb
-         O6oA==
-X-Forwarded-Encrypted: i=1; AJvYcCXuOJ2FfX497enNHqoWBzrtTSDaqDvHvNN8elTdrzdleFzL1N39NhpTteTmgKc0x+v9otxgQk/P6LKKZkSQbXxMoC+UOUlb/0d090HPNt9A
-X-Gm-Message-State: AOJu0YyAbDv+rkBWdfNyytLy7E5ahT+OPGwnNEOHUbGUT3HXc+xbpMEy
-	O0ucN1Z0wC9ZhF/a/2Y+6+yPgqCfQdO0i+KfKbVOnz4UNXXbDjA1LcBRLiF+b/I=
-X-Google-Smtp-Source: AGHT+IErFMsFHaLT/wvJseM7VLt7L5c4EEUPJNvPHKcBFR7A7uLC4IE0vs6uWbJXA8BJb/8NdN1U/g==
-X-Received: by 2002:a05:600c:1c13:b0:416:3de5:1364 with SMTP id j19-20020a05600c1c1300b004163de51364mr437857wms.18.1712391919991;
-        Sat, 06 Apr 2024 01:25:19 -0700 (PDT)
-Received: from f1.redhat.com ([2a06:c701:46c7:8900:15f8:24e1:258e:dbd5])
-        by smtp.gmail.com with ESMTPSA id g11-20020a05600c310b00b00416244a53b8sm5794220wmo.4.2024.04.06.01.25.18
+        d=1e100.net; s=20230601; t=1712395214; x=1713000014;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G6LgQlJD57yHhfXydvKzs8A9bUpRZ0ooDJmyE1zvH0s=;
+        b=dYpldi7AscDMrQBuMMob0Tql+LjvAkEh32FEr9yrLPCNYszgtcd1GG5aKl8wGwg0Hz
+         dEohg5aA1nt1lQbiWqw0ly6SbM/wCBPG724XhzN4sqICArU+2InZwRxONTEiTGkSCuJA
+         VF6okdLj1DW9pyLpP1QyUXCJ6RKjJfO2QhByf8DhQMLQOEgqKPx1ZPwc92UKEpTvXhTi
+         puQ65haFCWzml2hGs1ZPxqwiCIlbGefbvHuargDVHVqYtwouK64HKsrXahw3pdyZrOxX
+         PwoQKVE45X0EIFSRIG4O4z0DM5dSRlabXeXPQxZ/ycC24glZOLm2QumGbF9jXVuY8+rB
+         L74A==
+X-Forwarded-Encrypted: i=1; AJvYcCWMjgGxy/8VC23Q6YIMVL+PwkTt78cmUvzubcZmDwNItHNReE2nA1QvW6EgFjHRReDQkz13MqyVBwfN7J+k/hkq59t7D+u+Xp3xw2p2W1os
+X-Gm-Message-State: AOJu0YwxpMVpqAQenYBPVkeymDbAxfHvJURhUKsBdV6eeLUkfOawXkAB
+	Dt37go4prw8+Bx8Zdizl3o9aBLNKoF2klcN5RV9nmCWRDVyAKlBoZ/gJQu50mbY6XLSPY2HjcdC
+	ckpdgSFLgiVbPGyqLdbNY3nXaTCEkBV/NIrFWYW6q9NlgQtpS6qyHAJD93OczIBnQPA/+QxHr2Y
+	hTRTt7QQ==
+X-Received: by 2002:a2e:98d9:0:b0:2d6:d351:78ae with SMTP id s25-20020a2e98d9000000b002d6d35178aemr3079660ljj.29.1712395214347;
+        Sat, 06 Apr 2024 02:20:14 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEC5CR3YqSgu+J4/e2RoJd1lpNEBaMZEgCrY3TxjTsm1+4G8Z80bdHexcZXeNzlB0Tjro1Qiw==
+X-Received: by 2002:a2e:98d9:0:b0:2d6:d351:78ae with SMTP id s25-20020a2e98d9000000b002d6d35178aemr3079628ljj.29.1712395213639;
+        Sat, 06 Apr 2024 02:20:13 -0700 (PDT)
+Received: from gpd.station (net-2-39-142-110.cust.vodafonedsl.it. [2.39.142.110])
+        by smtp.gmail.com with ESMTPSA id l23-20020a7bc457000000b00414924f307csm5779993wmi.26.2024.04.06.02.20.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Apr 2024 01:25:19 -0700 (PDT)
-From: Yuri Benditovich <yuri.benditovich@daynix.com>
-To: willemdebruijn.kernel@gmail.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: yan@daynix.com,
-	andrew@daynix.com
-Subject: [PATCH] net: change maximum number of UDP segments to 128
-Date: Sat,  6 Apr 2024 11:25:13 +0300
-Message-Id: <20240406082513.78692-1-yuri.benditovich@daynix.com>
-X-Mailer: git-send-email 2.34.3
+        Sat, 06 Apr 2024 02:20:13 -0700 (PDT)
+From: Andrea Righi <andrea.righi@canonical.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Tejun Heo <tj@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/4] libbpf: Start v1.5 development cycle
+Date: Sat,  6 Apr 2024 11:15:41 +0200
+Message-ID: <20240406092005.92399-2-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240406092005.92399-1-andrea.righi@canonical.com>
+References: <20240406092005.92399-1-andrea.righi@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,51 +93,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Earlier commit fc8b2a619469378 ("net: more strict VIRTIO_NET_HDR_GSO_UDP_L4 validation")
-added check of potential number of UDP segment vs UDP_MAX_SEGMENTS
-in linux/virtio_net.h.
-After this change certification test of USO guest-to-guest
-transmit on Windows driver for virtio-net device fails,
-for example with packet size of ~64K and mss of 536 bytes.
-In general the USO should not be more restrictive than TSO.
-Indeed, in case of unreasonably small mss a lot of segments
-can cause queue overflow and packet loss on the destination.
-Limit of 128 segments is good for any practical purpose,
-with minimal meaningful mss of 536 the maximal UDP packet will
-be divided to ~120 segments.
+Bump libbpf.map to v1.5.0 to start a new libbpf version cycle.
 
-Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 ---
- include/linux/udp.h                  | 2 +-
- tools/testing/selftests/net/udpgso.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/lib/bpf/libbpf.map       | 3 +++
+ tools/lib/bpf/libbpf_version.h | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/udp.h b/include/linux/udp.h
-index 3748e82b627b..7e75ccdf25fe 100644
---- a/include/linux/udp.h
-+++ b/include/linux/udp.h
-@@ -108,7 +108,7 @@ struct udp_sock {
- #define udp_assign_bit(nr, sk, val)		\
- 	assign_bit(UDP_FLAGS_##nr, &udp_sk(sk)->udp_flags, val)
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 51732ecb1385..5dd81a7b96b5 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -416,3 +416,6 @@ LIBBPF_1.4.0 {
+ 		btf__new_split;
+ 		btf_ext__raw_data;
+ } LIBBPF_1.3.0;
++
++LIBBPF_1.5.0 {
++} LIBBPF_1.4.0;
+diff --git a/tools/lib/bpf/libbpf_version.h b/tools/lib/bpf/libbpf_version.h
+index e783a47da815..d6e5eff967cb 100644
+--- a/tools/lib/bpf/libbpf_version.h
++++ b/tools/lib/bpf/libbpf_version.h
+@@ -4,6 +4,6 @@
+ #define __LIBBPF_VERSION_H
  
--#define UDP_MAX_SEGMENTS	(1 << 6UL)
-+#define UDP_MAX_SEGMENTS	(1 << 7UL)
+ #define LIBBPF_MAJOR_VERSION 1
+-#define LIBBPF_MINOR_VERSION 4
++#define LIBBPF_MINOR_VERSION 5
  
- #define udp_sk(ptr) container_of_const(ptr, struct udp_sock, inet.sk)
- 
-diff --git a/tools/testing/selftests/net/udpgso.c b/tools/testing/selftests/net/udpgso.c
-index 1d975bf52af3..85b3baa3f7f3 100644
---- a/tools/testing/selftests/net/udpgso.c
-+++ b/tools/testing/selftests/net/udpgso.c
-@@ -34,7 +34,7 @@
- #endif
- 
- #ifndef UDP_MAX_SEGMENTS
--#define UDP_MAX_SEGMENTS	(1 << 6UL)
-+#define UDP_MAX_SEGMENTS	(1 << 7UL)
- #endif
- 
- #define CONST_MTU_TEST	1500
+ #endif /* __LIBBPF_VERSION_H */
 -- 
-2.34.3
+2.43.0
 
