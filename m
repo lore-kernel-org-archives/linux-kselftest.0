@@ -1,40 +1,40 @@
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B739618C1F;
-	Sat,  6 Apr 2024 21:04:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36F7482EA;
+	Sat,  6 Apr 2024 21:14:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712437488; cv=none; b=DtR3EjvYZ8XXsAEvDQGP5VSyiutnLBNGGUC19ht98mgeR+Za9bUBfhB22Ha9bCTfiNTkXsGMbYeKjQaxU2Q4O2GiaPSezZJh1bnT6neqsyS1SwlD4JFL0P7x812UFPnxgiVs55JV5PMm6XGMMZzZR5bpYn3WCsnPjZidgGNHvcs=
+	t=1712438090; cv=none; b=aJ9XL6hMc6BaPYwknhrJkAMXdNfdYxsgIaiUcp2PWeLHNJ0a235omjLwOZtdVWaTk5AIy2nLgEr2FraxhnqdnlYphedNrzAuq/3CHJKHubY8tweyLD195Pl6wPKnSFOJlHPUmc1VVCQlNp4UV9+OwYneUxWR+7Uda3zySqDgJD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712437488; c=relaxed/simple;
-	bh=64IYSKKJE5J1rChJs6720PfQX+7NKQslncXK2DYIEq0=;
+	s=arc-20240116; t=1712438090; c=relaxed/simple;
+	bh=hhz6IpanWydt8WUTjJ/lmeFHNnKRshU3Zaa8XFkk05s=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=eK5GzRhupKphRMfdxmdG73226xg73XFMA1+TOIdoQcVxLUL81YTplQf96hoJ2DNtI7a2WtMN1Kg0diuLHD602VMkjFhUkKg4diuJmVFRrIHsIOwxEMjWW1cv3U5UwkDdSP9k/LvZDLVYEk5TGdMj7zbDsT4HnTbvjADm5SHWN8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=5ZISUpw7; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=T+5S+Z0gx5Ik5yJxdBKlXNDH7l2GaSCWNd32QYOCl62qYDoI368D8TnSvk8/HMV9wjgHGinwGK5AQMvnTws67iKIBqPZ4BbVRS17ceGIQNBMidferBZx2Da5iWC0zpF+fLnebIYHpwTyG+fO+DjHWyc+6PbsRn6zsyXXQ1MoevY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=1oyfLxj/; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="5ZISUpw7"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="1oyfLxj/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1712437485;
-	bh=64IYSKKJE5J1rChJs6720PfQX+7NKQslncXK2DYIEq0=;
+	s=mail; t=1712438087;
+	bh=hhz6IpanWydt8WUTjJ/lmeFHNnKRshU3Zaa8XFkk05s=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=5ZISUpw7LX0vnCMpd1kfQoGuXQnhpMsio7mI8JzUfQm9eQfr24L9rhV9uothnUGbR
-	 Ijf2eO5yZ5iB/8uPLqwLzv08Q/YuRiLBoUW2u7AtYOdZhc5mLuboO8UeBciGTqrHKK
-	 Q5h6yErd8L0rHsDllpfuia7GhTXMOY/ieso1tvKgrCR8aC2RdpFKbblko4haLOMd7Q
-	 oalS9NRwI6TP72Jg+Pvnx2tmpmxWMlx0tvS9N2M6y5EuvpULgoUJTwqsU1qe/Ei5ut
-	 4M4MMWeoUW869POgdJ8rontwmgpWHZoAc9XA3CLI60skkwe3D42bMOFOtHhY7CChkY
-	 emrxcpm7punHw==
+	b=1oyfLxj/FML4m8aCygitnXqdREbMvB+E0/6/IWpycUDD+1I66xqzMJS8HzpBmdaQ2
+	 Apdo8+cnpRCATIUTHu/jlAaAMEj43pOUue6rPhzR53VKmApQ/WmQIxR+1L1tYKYpuS
+	 ZTN2FQ/wNuhYi9rOk++jBymeQbRJqwYCsdkkNYCRyBkODNOcIuIFAPOibsvGihjczV
+	 KROakduPEMduugmssUU1uKdjqEuxYiPT525vNXA8ve2sGLMxjlvkcoMhg68Bjw3lAL
+	 Zqa4+13Vlm6O0ECqP4sxfUzA0SbkI+NyjW5h6WVJRh1kGrL3PWztdJQ59aFeD5y8Kp
+	 kSty/OMXFwhZg==
 Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 483B93780894;
-	Sat,  6 Apr 2024 21:04:37 +0000 (UTC)
-Message-ID: <470d67f2-dd6f-48e1-8f42-a6c72e2d98e7@collabora.com>
-Date: Sun, 7 Apr 2024 02:05:10 +0500
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0E8F0378020A;
+	Sat,  6 Apr 2024 21:14:41 +0000 (UTC)
+Message-ID: <ab271c32-dca8-413f-b97e-c8ceb6d7924c@collabora.com>
+Date: Sun, 7 Apr 2024 02:15:15 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,56 +43,223 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Mark Rutland <mark.rutland@arm.com>, Aishwarya TCV <aishwarya.tcv@arm.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] tracing/selftests: Default to verbose mode when
- running in kselftest
-To: Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Shuah Khan <shuah@kernel.org>
-References: <20240325-kselftest-ftrace-ktap-verbose-v1-0-3785199809da@kernel.org>
- <20240325-kselftest-ftrace-ktap-verbose-v1-2-3785199809da@kernel.org>
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Anshuman.Khandual@arm.com, suzuki.poulose@arm.com, ryan.roberts@arm.com,
+ rob.herring@arm.com, Catalin.Marinas@arm.com, broonie@kernel.org,
+ will@kernel.org, mark.rutland@arm.com
+Subject: Re: [PATCH 4/4] selftests: Add build infrastructure along with README
+To: Dev Jain <dev.jain@arm.com>, shuah@kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20240405084410.256788-1-dev.jain@arm.com>
+ <20240405084410.256788-5-dev.jain@arm.com>
 Content-Language: en-US
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240325-kselftest-ftrace-ktap-verbose-v1-2-3785199809da@kernel.org>
+In-Reply-To: <20240405084410.256788-5-dev.jain@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 3/25/24 9:15 PM, Mark Brown wrote:
-> In order to facilitate debugging of issues from automated runs of the ftrace
-> selftests turn on verbose logging by default when run from the kselftest
-> runner. This is primarily used by automated systems where developers may
-> not have direct access to the system so defaulting to providing diagnostic
-> information which might help debug problems seems like a good idea.
+On 4/5/24 1:44 PM, Dev Jain wrote:
+> Add arm target, individual Makefile targets, and instructions to build the
+> tests.
 > 
-> When tests pass no extra output is generated, when they fail a full log of
-> the test run is provided. Since this really is rather verbose when there are
-> a large number of test failures or output is slow (eg, with a serial
-> console) this could substantially increase the run time for the tests which
-> might present problems with timeout detection for affected systems,
-> hopefully we keep the tests running well enough that this is not too much
-> of an issue.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-
+> Signed-off-by: Dev Jain <dev.jain@arm.com>
 > ---
->  tools/testing/selftests/ftrace/ftracetest-ktap | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/testing/selftests/Makefile            |  1 +
+>  tools/testing/selftests/arm/Makefile        | 57 +++++++++++++++++++++
+>  tools/testing/selftests/arm/README          | 31 +++++++++++
+>  tools/testing/selftests/arm/elf/Makefile    |  6 +++
+>  tools/testing/selftests/arm/mm/Makefile     |  6 +++
+>  tools/testing/selftests/arm/signal/Makefile | 30 +++++++++++
+>  6 files changed, 131 insertions(+)
+>  create mode 100644 tools/testing/selftests/arm/Makefile
+>  create mode 100644 tools/testing/selftests/arm/README
+>  create mode 100644 tools/testing/selftests/arm/elf/Makefile
+>  create mode 100644 tools/testing/selftests/arm/mm/Makefile
+>  create mode 100644 tools/testing/selftests/arm/signal/Makefile
+Add one recursive .gitignore file or multiple .gitignore files and put
+generated object files in it to avoid clutter of generated objects in git
+history.
+
 > 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-> index b3284679ef3a..14e62ef3f3b9 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest-ktap
-> +++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-> @@ -5,4 +5,4 @@
->  #
->  # Copyright (C) Arm Ltd., 2023
->  
-> -./ftracetest -K
-> +./ftracetest -K -v
-> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 15b6a111c3be..8478d94cda4c 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  TARGETS += alsa
+>  TARGETS += amd-pstate
+> +TARGETS += arm
+>  TARGETS += arm64
+>  TARGETS += bpf
+>  TARGETS += breakpoints
+> diff --git a/tools/testing/selftests/arm/Makefile b/tools/testing/selftests/arm/Makefile
+> new file mode 100644
+> index 000000000000..039224bc006e
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/Makefile
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +# When ARCH not overridden for crosscompiling, lookup machine
+> +ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+> +
+> +ifneq (,$(filter $(ARCH),aarch64 arm64 arm armv7l armv8l))
+> +ARM_SUBTARGETS ?= mm signal elf
+> +else
+> +ARM_SUBTARGETS :=
+> +endif
+> +
+> +CFLAGS := -Wall -O2 -g -static
+> +
+> +# A proper top_srcdir is needed by KSFT(lib.mk)
+> +top_srcdir = $(realpath ../../../../)
+> +
+> +# Additional include paths needed by kselftest.h and local headers
+> +CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
+> +
+> +CFLAGS += -I$(top_srcdir)/tools/include
+Please use KHDR_INCLUDE instead of using absolute path
+
+> +
+> +export CFLAGS
+> +export top_srcdir
+> +
+> +all:
+> +	@for DIR in $(ARM_SUBTARGETS); do				\
+> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+> +		mkdir -p $$BUILD_TARGET;			\
+> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+> +	done
+> +
+> +install: all
+> +	@for DIR in $(ARM_SUBTARGETS); do				\
+> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+> +	done
+> +
+> +run_tests: all
+> +	@for DIR in $(ARM_SUBTARGETS); do				\
+> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+> +	done
+> +
+> +# Avoid any output on non arm on emit_tests
+> +emit_tests:
+> +	@for DIR in $(ARM_SUBTARGETS); do				\
+> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+> +	done
+> +
+> +clean:
+> +	@for DIR in $(ARM_SUBTARGETS); do				\
+> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+> +	done
+> +
+> +.PHONY: all clean install run_tests emit_tests
+> diff --git a/tools/testing/selftests/arm/README b/tools/testing/selftests/arm/README
+> new file mode 100644
+> index 000000000000..1a05c043d7ee
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/README
+> @@ -0,0 +1,31 @@
+> +KSelfTest ARM
+> +===============
+> +
+> +- This is a series of compatibility tests, wherein the source files are
+> +  built statically into a 32 bit ELF; they should pass on both 32 and 64
+> +  bit kernels. They are not built or run but just skipped completely when
+> +  env-variable ARCH is found to be different than 'arm64' or 'arm' and
+> +  `uname -m` reports other than 'aarch64', 'armv7l' or 'armv8l'.
+> +
+> +- Please ensure that the test kernel is built with CONFIG_COMPAT enabled.
+Please create a config file and put all the per-requisite configurations in
+that. For example, look at tools/testing/selftests/mm/config
+
+> +
+> +- Holding true the above, ARM KSFT tests can be run within the KSelfTest
+> +  framework using standard Linux top-level-makefile targets. Please set
+> +  $(CROSS_COMPILE) to 'arm-linux-gnueabi-' or 'arm-linux-gnueabihf-'.
+> +
+> +      $ make TARGETS=arm kselftest-clean
+> +      $ make $(CROSS_COMPILE) TARGETS=arm kselftest
+> +
+> +      or
+> +
+> +      $ make $(CROSS_COMPILE) -C tools/testing/selftests TARGETS=arm \
+> +		INSTALL_PATH=<your-installation-path> install
+> +
+> +      or, alternatively, only specific arm/ subtargets can be picked:
+> +
+> +      $ make $(CROSS_COMPILE) -C tools/testing/selftests TARGETS=arm \
+> +		ARM_SUBTARGETS="signal" INSTALL_PATH=<your-installation-path> \
+> +			install
+> +
+> +   Further details on building and running KFST can be found in:
+> +     Documentation/dev-tools/kselftest.rst
+Thanks for this well written documentation.
+
+> diff --git a/tools/testing/selftests/arm/elf/Makefile b/tools/testing/selftests/arm/elf/Makefile
+> new file mode 100644
+> index 000000000000..86636fe02994
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/elf/Makefile
+> @@ -0,0 +1,6 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2024 ARM Limited
+> +
+> +TEST_GEN_PROGS := parse_elf
+> +
+> +include ../../lib.mk
+> diff --git a/tools/testing/selftests/arm/mm/Makefile b/tools/testing/selftests/arm/mm/Makefile
+> new file mode 100644
+> index 000000000000..d8bfa45df98c
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/mm/Makefile
+> @@ -0,0 +1,6 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2024 ARM Limited
+> +
+> +TEST_GEN_PROGS := compat_va
+> +
+> +include ../../lib.mk
+> diff --git a/tools/testing/selftests/arm/signal/Makefile b/tools/testing/selftests/arm/signal/Makefile
+> new file mode 100644
+> index 000000000000..3540a25de75a
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm/signal/Makefile
+> @@ -0,0 +1,30 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2024 ARM Limited
+> +
+> +# Additional include paths needed by kselftest.h and local headers
+> +CFLAGS += -D_GNU_SOURCE -std=gnu99 -I.
+> +
+> +SRCS := $(filter-out testcases/testcases.c,$(wildcard testcases/*.c))
+> +PROGS := $(patsubst %.c,%,$(SRCS))
+> +
+> +# Generated binaries to be installed by top KSFT script
+> +TEST_GEN_PROGS := $(notdir $(PROGS))
+> +
+> +# Get Kernel headers installed and use them.
+> +
+> +# Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
+> +# to account for any OUTPUT target-dirs optionally provided by
+> +# the toplevel makefile
+> +include ../../lib.mk
+> +
+> +$(TEST_GEN_PROGS): $(PROGS)
+> +	cp $(PROGS) $(OUTPUT)/
+> +
+> +# Common test-unit targets to build common-layout test-cases executables
+> +# Needs secondary expansion to properly include the testcase c-file in pre-reqs
+> +COMMON_SOURCES := test_signals.c test_signals_utils.c
+> +COMMON_HEADERS := test_signals.h test_signals_utils.h
+> +
+> +.SECONDEXPANSION:
+> +$(PROGS): $$@.c ${COMMON_SOURCES} ${COMMON_HEADERS}
+> +	$(CC) $(CFLAGS) ${@}.c ${COMMON_SOURCES} -o $@
 
 -- 
 BR,
