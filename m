@@ -1,48 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002AE142E6D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369BE143867;
 	Mon,  8 Apr 2024 16:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712594071; cv=none; b=J8dGTOMxqtS9ljSntXXksl+neu5Atmfb56r40T2K1LOfBu3+BO2rvdPpJ/S9JKnkS/M3jN8vZcN/SFpkjbZahcqOcONsDbNO/EJ+augcG2yhqeueZIVhEPFnQy8fs84yrGDBAiH4akZdga02Cc5aXRDZ4nkpZgr7fYcgJXpQyyc=
+	t=1712594071; cv=none; b=lv8/JhKqVEBl7wG1LSRcAWws3vfXPnTP7299P8SSTHMHP4BXTD9+QjZzEuB8qUm1l1WezZbINy7xF5X6U5It7LsvC2qfXfI45l8bJW3TtBHMYSSvRxHgIGyavxn0VMHELwg7Ae0/raEK0lNa9+WWfOWeYG5N7Qj7/77FTthniIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712594071; c=relaxed/simple;
-	bh=iFMcF4sxF33XR0Lkc9Cq46XcFGCgzur5ZS+neQp1wWE=;
+	bh=sd+UWMBUD1go7uGvWVLMqLFM6s7Hi1DdydnFYfzCGMs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hU3L0Yc+Ms78spJ91MU2zd341vghuE4pgz4uA8k+0cY1pACxvImxWIuST8J8mhE9mEgvFwrtMg3wkiwYMlTy0S/7MTSQxR7H2mqEjsEhzy3LakLayEkYp/vbqHVDsNq0/rHjavV29rbeCFgsJK++CnpiM7j5SdPuipkrdTzfr/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P+adrHRL; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version:Content-Type; b=AFgnVXfn8o4gmdlNU911z14TenZMf2L7/J3z6jaCOBmwhsdMTw/CyPUI1kcjcRQmDuIoo+OdHiMstyQl9141yhaaxJYOuAMgHTTBzUsmPGAEXnr4SQ7H6blqerKlAZUQecDE9w7jv1TggxUT8vLWL8ve3Oi3oGzq6Yz/dRTGiM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RE02mwzb; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P+adrHRL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RE02mwzb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712594071; x=1744130071;
+  t=1712594070; x=1744130070;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=iFMcF4sxF33XR0Lkc9Cq46XcFGCgzur5ZS+neQp1wWE=;
-  b=P+adrHRLZl6H9xRP9qLJHdufvLVPRC3VjxeehokucKLM6EE7fyzVj8P0
-   iKXAx7TosY06e5Oe3anE/RWnQJ+n4tWJAlBIfunR4FV5nGkFTEqT64uLA
-   kfwS64m/Y/XVquDh2yZVtAc/itQCtVo4thYcXQG2ahOJrRERYOHoPdvC/
-   flqrJm8Tn7QhE00Bw47PqVupCPmwnlTgGd3X91uAqqciFKXYzJYPOGwm9
-   Z2EtmrmENG4JdhqS9lEBk9D1wgg/6b4lrHMLUsvac2uNjLGtZvQqJ/t4z
-   kBvGb9v/GbJNHI7Fh0u6b5j6vpGf2eHMKO9GN4zwfciG6EzzrZ1hhpaSS
+  bh=sd+UWMBUD1go7uGvWVLMqLFM6s7Hi1DdydnFYfzCGMs=;
+  b=RE02mwzbq8SYXgjYB2woQsVNPSJASMWlJ/MDsjzb2iH6rzIPFKvmd0Um
+   laQRu/ZlMTosQA/BE9aghQN8BPnx2SGYACdKSl41U//v61PJvfm8DjeWO
+   JOdSN/N/o2UeGNLrQQLAvJXLsVM7yysojad7pY9QVl2Gbxw0Zui2a+d9M
+   x+QfZQ4g/IY9d5Xy61dQE/CwsgxMeg/eNKcisPEc9kwjXqYXKp7/qI2V0
+   pUeR9h7MaESvdvL86cjA6wfMcuhXpdc7b3YyPfZmMESYnaRLZfVyFjdMD
+   uJKE3A2BNGxIbMNw4m3Z/vKUjEvd4afjV29/UCO4Y/1ExMpi2iRCjLbwy
    Q==;
-X-CSE-ConnectionGUID: cBiNJ4h8QoGR87sOU/L18g==
-X-CSE-MsgGUID: wjjGYG3WRhOJczl2CjsCxQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="19315363"
+X-CSE-ConnectionGUID: x1sZu1aCQ9aGnG2WRY5OUA==
+X-CSE-MsgGUID: 0KJZdj9TR7KOCMToPswh5w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="7750046"
 X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="19315363"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 09:33:59 -0700
-X-CSE-ConnectionGUID: LT2GzFtkS7qSQ3N55rtxKg==
-X-CSE-MsgGUID: iY1ZCACeRRaG7V1N+76N+w==
+   d="scan'208";a="7750046"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 09:34:29 -0700
+X-CSE-ConnectionGUID: AA8YnXt7S46HRnOtBCkfdg==
+X-CSE-MsgGUID: Ynt99UfrQjuGXofDzRROUg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="43113598"
+   d="scan'208";a="57396648"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.28])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 09:33:54 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 09:34:20 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -52,9 +52,9 @@ To: linux-kselftest@vger.kernel.org,
 Cc: Fenghua Yu <fenghua.yu@intel.com>,
 	linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v3 07/16] selftests/resctrl: Cleanup bm_pid and ppid usage & limit scope
-Date: Mon,  8 Apr 2024 19:32:38 +0300
-Message-Id: <20240408163247.3224-8-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v3 10/16] selftests/resctrl: Add ->measure() callback to resctrl_val_param
+Date: Mon,  8 Apr 2024 19:32:41 +0300
+Message-Id: <20240408163247.3224-11-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240408163247.3224-1-ilpo.jarvinen@linux.intel.com>
 References: <20240408163247.3224-1-ilpo.jarvinen@linux.intel.com>
@@ -67,142 +67,174 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-'bm_pid' and 'ppid' are global variables. As they are used by different
-processes and in signal handler, they cannot be entirely converted into
-local variables.
+The measurement done in resctrl_val() varies depending on test type.
+The decision for how to measure is decided based on the string compare
+to test name which is quite inflexible.
 
-The scope of those variables can still be reduced into resctrl_val.c
-only. As PARENT_EXIT() macro is using 'ppid', make it a function in
-resctrl_val.c and pass ppid to it as an argument because it is easier
-to understand than using the global variable directly.
-
-Pass 'bm_pid' into measure_val() instead of relying on the global
-variable which helps to make the call signatures of measure_val() and
-measure_llc_resctrl() more similar to each other.
+Add ->measure() callback into the struct resctrl_val_param to allow
+each test to provide necessary code as a function which simplifies what
+resctrl_val() has to do.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl.h     |  9 --------
- tools/testing/selftests/resctrl/resctrl_val.c | 23 ++++++++++++-------
- 2 files changed, 15 insertions(+), 17 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index e6f221236c79..e4b6dc672ecc 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -43,13 +43,6 @@
- 
- #define DEFAULT_SPAN		(250 * MB)
- 
--#define PARENT_EXIT()				\
--	do {					\
--		kill(ppid, SIGKILL);		\
--		umount_resctrlfs();		\
--		exit(EXIT_FAILURE);		\
--	} while (0)
--
- /*
-  * user_params:		User supplied parameters
-  * @cpu:		CPU number to which the benchmark will be bound to
-@@ -127,8 +120,6 @@ struct perf_event_read {
-  */
- extern volatile int *value_sink;
- 
--extern pid_t bm_pid, ppid;
--
- extern char llc_occup_path[1024];
- 
- int get_vendor(void);
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 5ef97d171cef..928c31903af2 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -496,7 +496,7 @@ static int get_mem_bw_resctrl(unsigned long *mbm_total)
+v2:
+- spaces -> tabs
+---
+ tools/testing/selftests/resctrl/cmt_test.c    |  8 ++++++++
+ tools/testing/selftests/resctrl/mba_test.c    |  9 ++++++++-
+ tools/testing/selftests/resctrl/mbm_test.c    |  9 ++++++++-
+ tools/testing/selftests/resctrl/resctrl.h     |  6 ++++++
+ tools/testing/selftests/resctrl/resctrl_val.c | 18 +++++-------------
+ 5 files changed, 35 insertions(+), 15 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+index a44e6fcd37b7..d8521386cd18 100644
+--- a/tools/testing/selftests/resctrl/cmt_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -29,6 +29,13 @@ static int cmt_setup(const struct resctrl_test *test,
  	return 0;
  }
  
--pid_t bm_pid, ppid;
-+static pid_t bm_pid, ppid;
- 
- void ctrlc_handler(int signum, siginfo_t *info, void *ptr)
- {
-@@ -554,6 +554,13 @@ void signal_handler_unregister(void)
- 	}
- }
- 
-+static void parent_exit(pid_t ppid)
++static int cmt_measure(const struct user_params *uparams,
++		       struct resctrl_val_param *param, pid_t bm_pid)
 +{
-+	kill(ppid, SIGKILL);
-+	umount_resctrlfs();
-+	exit(EXIT_FAILURE);
++	sleep(1);
++	return measure_llc_resctrl(param->filename, bm_pid);
 +}
 +
- /*
-  * print_results_bw:	the memory bandwidth results are stored in a file
-  * @filename:		file that stores the results
-@@ -622,7 +629,7 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
+ static int show_results_info(unsigned long sum_llc_val, int no_of_bits,
+ 			     unsigned long cache_span, unsigned long max_diff,
+ 			     unsigned long max_diff_percent, unsigned long num_of_runs,
+@@ -133,6 +140,7 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
+ 		.mask		= ~(long_mask << n) & long_mask,
+ 		.num_of_runs	= 0,
+ 		.setup		= cmt_setup,
++		.measure	= cmt_measure,
+ 	};
+ 
+ 	span = cache_portion_size(cache_total_size, param.mask, long_mask);
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index 5d6af9e8afed..de6e29faf214 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -51,6 +51,12 @@ static int mba_setup(const struct resctrl_test *test,
+ 	return 0;
  }
  
- static int measure_vals(const struct user_params *uparams,
--			struct resctrl_val_param *param)
-+			struct resctrl_val_param *param, pid_t bm_pid)
++static int mba_measure(const struct user_params *uparams,
++		       struct resctrl_val_param *param, pid_t bm_pid)
++{
++	return measure_mem_bw(uparams, param, bm_pid);
++}
++
+ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+ {
+ 	int allocation, runs;
+@@ -150,7 +156,8 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+ 		.mongrp		= "m1",
+ 		.filename	= RESULT_FILE_NAME,
+ 		.bw_report	= "reads",
+-		.setup		= mba_setup
++		.setup		= mba_setup,
++		.measure	= mba_measure,
+ 	};
+ 	int ret;
+ 
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 3059ccc51a5a..b88762c4228a 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -105,6 +105,12 @@ static int mbm_setup(const struct resctrl_test *test,
+ 	return ret;
+ }
+ 
++static int mbm_measure(const struct user_params *uparams,
++		       struct resctrl_val_param *param, pid_t bm_pid)
++{
++	return measure_mem_bw(uparams, param, bm_pid);
++}
++
+ static void mbm_test_cleanup(void)
+ {
+ 	remove(RESULT_FILE_NAME);
+@@ -118,7 +124,8 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
+ 		.mongrp		= "m1",
+ 		.filename	= RESULT_FILE_NAME,
+ 		.bw_report	= "reads",
+-		.setup		= mbm_setup
++		.setup		= mbm_setup,
++		.measure	= mbm_measure,
+ 	};
+ 	int ret;
+ 
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index e4b6dc672ecc..5dc3def70669 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -87,6 +87,7 @@ struct resctrl_test {
+  * @filename:		Name of file to which the o/p should be written
+  * @bw_report:		Bandwidth report type (reads vs writes)
+  * @setup:		Call back function to setup test environment
++ * @measure:		Callback that performs the measurement (a single test)
+  */
+ struct resctrl_val_param {
+ 	char		*resctrl_val;
+@@ -99,6 +100,9 @@ struct resctrl_val_param {
+ 	int		(*setup)(const struct resctrl_test *test,
+ 				 const struct user_params *uparams,
+ 				 struct resctrl_val_param *param);
++	int		(*measure)(const struct user_params *uparams,
++				   struct resctrl_val_param *param,
++				   pid_t bm_pid);
+ };
+ 
+ struct perf_event_read {
+@@ -145,6 +149,8 @@ unsigned char *alloc_buffer(size_t buf_size, int memflush);
+ void mem_flush(unsigned char *buf, size_t buf_size);
+ void fill_cache_read(unsigned char *buf, size_t buf_size, bool once);
+ int run_fill_buf(size_t buf_size, int memflush, int op, bool once);
++int measure_mem_bw(const struct user_params *uparams,
++		   struct resctrl_val_param *param, pid_t bm_pid);
+ int resctrl_val(const struct resctrl_test *test,
+ 		const struct user_params *uparams,
+ 		const char * const *benchmark_cmd,
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index e8e5c0f7f20b..990648bcc366 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -598,8 +598,8 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
+  * @param:		parameters passed to resctrl_val()
+  * @bm_pid:		PID that runs the benchmark
+  */
+-static int measure_mem_bw(const struct user_params *uparams,
+-			  struct resctrl_val_param *param, pid_t bm_pid)
++int measure_mem_bw(const struct user_params *uparams,
++		   struct resctrl_val_param *param, pid_t bm_pid)
  {
  	unsigned long bw_resc, bw_resc_start, bw_resc_end;
  	float bw_imc;
-@@ -682,7 +689,7 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- 	fp = freopen("/dev/null", "w", stdout);
- 	if (!fp) {
- 		ksft_perror("Unable to direct benchmark status to /dev/null");
--		PARENT_EXIT();
-+		parent_exit(ppid);
+@@ -851,17 +851,9 @@ int resctrl_val(const struct resctrl_test *test,
+ 		if (ret < 0)
+ 			break;
+ 
+-		if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) ||
+-		    !strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR))) {
+-			ret = measure_mem_bw(uparams, param, bm_pid);
+-			if (ret)
+-				break;
+-		} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR))) {
+-			sleep(1);
+-			ret = measure_llc_resctrl(param->filename, bm_pid);
+-			if (ret)
+-				break;
+-		}
++		ret = param->measure(uparams, param, bm_pid);
++		if (ret)
++			break;
  	}
  
- 	if (strcmp(benchmark_cmd[0], "fill_buf") == 0) {
-@@ -696,7 +703,7 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- 			once = false;
- 		} else {
- 			ksft_print_msg("Invalid once parameter\n");
--			PARENT_EXIT();
-+			parent_exit(ppid);
- 		}
- 
- 		if (run_fill_buf(span, memflush, operation, once))
-@@ -710,7 +717,7 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- 
- 	fclose(stdout);
- 	ksft_print_msg("Unable to run specified benchmark\n");
--	PARENT_EXIT();
-+	parent_exit(ppid);
- }
- 
- /*
-@@ -789,7 +796,7 @@ int resctrl_val(const struct resctrl_test *test,
- 		/* Register for "SIGUSR1" signal from parent */
- 		if (sigaction(SIGUSR1, &sigact, NULL)) {
- 			ksft_perror("Can't register child for signal");
--			PARENT_EXIT();
-+			parent_exit(ppid);
- 		}
- 
- 		/* Tell parent that child is ready */
-@@ -807,7 +814,7 @@ int resctrl_val(const struct resctrl_test *test,
- 		sigsuspend(&sigact.sa_mask);
- 
- 		ksft_perror("Child is done");
--		PARENT_EXIT();
-+		parent_exit(ppid);
- 	}
- 
- 	ksft_print_msg("Benchmark PID: %d\n", bm_pid);
-@@ -877,7 +884,7 @@ int resctrl_val(const struct resctrl_test *test,
- 
- 		if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) ||
- 		    !strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR))) {
--			ret = measure_vals(uparams, param);
-+			ret = measure_vals(uparams, param, bm_pid);
- 			if (ret)
- 				break;
- 		} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR))) {
+ out:
 -- 
 2.39.2
 
