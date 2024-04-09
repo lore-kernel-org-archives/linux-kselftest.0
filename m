@@ -1,191 +1,134 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853555464A;
-	Tue,  9 Apr 2024 03:04:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFEB548F2
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Apr 2024 03:06:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712631875; cv=none; b=sPzOeysGwJ0rdbmkYfw9X8cFmdv87pG+OwqwIvdNf5toUMPI+ozLkiFjvoLaENCEZYbp5FH/9M4YcPnFmY4lZLYrFmJVQJvWHS7PexXAU2t4z2l5+48SRYF4QHM8lFbER2GrXKe85gWpBvoK7hVweb1Ah/4XXU4nH9Y1w+zych4=
+	t=1712631992; cv=none; b=B6LrTYyRaFAC9TEgETWzTDtwpaKBcqFvgHn/VAKKK1TJMSB+m/GYywO00ipdfhPqB3FK/4dsnpGMoxFIZM3iSlSkcOKFAzr9m+SByluuVtiH5YzRFGBjZiR0ffUClzdHaRqDMogYoSAkcp22c1biwIDVBvBxEZ5HVfYAkURRHVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712631875; c=relaxed/simple;
-	bh=fCm2QjzqZmE57hIW5ALy8jcaYaNfeVyVqC6/smTRYlA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qmS3OX4UvOQ13Nnp179zto1wS2obzxhUfGFP4LDNzoOIAyF/gnXdEDCwISt6qSJnY5QzHEyk0Fm+ksscoz/A9QMmYOJmtQkMqZPD06uIMttTtloIiGM3Oag817l9HDuOCHVCKTrquFaBHonvrrm3GjERAJkt8zUlRwmaWoPO9fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YflbFw/G; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712631992; c=relaxed/simple;
+	bh=N4sxI9pzkVnczNB9OhVPdKGn1mKGvMMhqcWAS7kPLTI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RSKx0BKejLI4Aaj9S2ye8lR2rYq5xXqvLym98XM2JxYvsUteYcAFzzVN7e6mc7KK+6WQw7oDdQrJ1G4TO/340H4EF56P6NPrlNbyvfiWbTQHBKbDgQ5mhursv2kwA0UPvfIY38A1Su5HZjcwV+dGEiQn81N1aUfPANFuQReRD+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ce21qbkg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YflbFw/G"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-343d7ff2350so2623968f8f.0;
-        Mon, 08 Apr 2024 20:04:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712631872; x=1713236672; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1xcSXujIE/jclEFI/AnTD1MfFWS/axn8b5ifK4JkF34=;
-        b=YflbFw/Gm7Fx7erRmB4CRkFHkXOS+vTb9VVuSeb624XzjH4FFbua96DKUTdpmWbzlK
-         vqd3gK8m7xKtuWV8L9hiHJ9tRpxNkJB5nh9GnfPWOvVFgXQgzQzfmqu9v2mzcLPKefCR
-         oYdIuA5AvFRC7xCxd46mQ+rfbzDzGe2OT4wbpyGSwH6dGM7QfhlajcQR+G7WcSmt0rsZ
-         Q6L5r+o1jPhDBzajamtHbrVe8utv7k7XVQcQVYgpRhh5jY3bWSU4JAzlAhLRN0pkkRBT
-         4TGCF4FAeNFzzDBaYWeZNb3ROJuo2mDRSG4UKgGWeLyCk4PP1+3k0c1/UcGTeYutuJ/S
-         eaow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712631872; x=1713236672;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1xcSXujIE/jclEFI/AnTD1MfFWS/axn8b5ifK4JkF34=;
-        b=JdDqExDE1UODAf7cqCymtG9Ztb+9B0fI91EgFr8IlcALtrCmVKphdui2Pw3uZH+oAa
-         wzXJABqlc0Sw1w5YYf4IsHtxMb4BtP61w/Sr0DMmjeUb3PV9+rQLZpKtq9wTKF3e/nwJ
-         b8iMYcFskzZKadpTUvQCTapMOItMCFuxdcB1rU1/RxC4VzobtfRc5uMhPmEqtwBvjc3t
-         E72oqgPcGVj9B5Q3WT4LoeZJkqFMvyAFO3EtGMf+Ix/4o7EikaNIMyQi/+nfyYWGgkCZ
-         jyraMoiGjSjZ/ht5xVCkTmqGPosb3PLcYhFkOl/PnH7ju1NSnjp2xll8sDdjpiW4axdG
-         8mDw==
-X-Forwarded-Encrypted: i=1; AJvYcCXwBZm/96sFrK6yG8HTPErQLvhzWSab8J9ZCYFagBUI0i76sODCQDqOhkXJXYdAvZL7O9B3xUO61We+9FpV9fGJRDg6WrUGga9fOg4dkASJVZZDjrlCgAEIhwUvWGNT8rzfwr+MtbrRGZLsn2jn0aMiTdDjaowlySV3Jku+/flMwK+t
-X-Gm-Message-State: AOJu0Yx2tvebd8yL6jVydjOEQ6s1H+UGQ2sXaovEw9BN8jeV/HaD/LZa
-	aUWEM/yfCpxYUajU/tI+fD+TRCLJ7k4Ayod3slDAEfR26C+91kV5jaLlJPlUzgTt1BYRNe60KBl
-	Bixs4BH6hoJoCUyxo55+bmC4mBc0=
-X-Google-Smtp-Source: AGHT+IGp41Cfuwq20B11xn8kWbTSIlrKYpIGB+tSGSBsGBTpF/qFVRzLEx0Dgq2MGYlXQ3lVJuI2UiF26VWt6AOFzFc=
-X-Received: by 2002:a5d:4b02:0:b0:341:b9dc:eb03 with SMTP id
- v2-20020a5d4b02000000b00341b9dceb03mr8491804wrq.3.1712631871629; Mon, 08 Apr
- 2024 20:04:31 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ce21qbkg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712631989;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oZkhwxc1rV+er5vlPURBYWccH3WvtLWNURgRz3mDLRM=;
+	b=ce21qbkgVcc2ilLNj76CAb6JFVjGX1HDIyImJdQc4ubq1gZ9ztURs/mLTgxdLzmFO0NDqn
+	E4tUlV8jIS2XElTrlRohe2ZH6vLx7m+0lZjR7N8hsbda9IDNHfjxssF+ZwCxq4tvipR3Bm
+	PEYFbTRR3twAuJhUTh2ZwVXViCI5pY8=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-63-UutkogDIMyqz7slyz7zimg-1; Mon,
+ 08 Apr 2024 23:06:27 -0400
+X-MC-Unique: UutkogDIMyqz7slyz7zimg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB65E1C03162;
+	Tue,  9 Apr 2024 03:06:26 +0000 (UTC)
+Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 64DA717AB1;
+	Tue,  9 Apr 2024 03:06:26 +0000 (UTC)
+From: Shaoqin Huang <shahuang@redhat.com>
+To: Oliver Upton <oliver.upton@linux.dev>,
+	Marc Zyngier <maz@kernel.org>,
+	kvmarm@lists.linux.dev
+Cc: Shaoqin Huang <shahuang@redhat.com>,
+	James Morse <james.morse@arm.com>,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: [PATCH v7 0/3] KVM: selftests: aarch64: Introduce pmu_event_filter_test
+Date: Mon,  8 Apr 2024 23:03:13 -0400
+Message-Id: <20240409030320.182591-1-shahuang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240408-hid-bpf-sleepable-v6-0-0499ddd91b94@kernel.org>
- <20240408-hid-bpf-sleepable-v6-1-0499ddd91b94@kernel.org> <65c249a6af45bfa5fe0f6c2331dcc1771a6f0b05.camel@gmail.com>
- <CAO-hwJ+0erX3iJcOh9KBG3f01UiYvGk_Gx+-zyFc4Vb5LCcHxA@mail.gmail.com>
-In-Reply-To: <CAO-hwJ+0erX3iJcOh9KBG3f01UiYvGk_Gx+-zyFc4Vb5LCcHxA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 8 Apr 2024 20:04:20 -0700
-Message-ID: <CAADnVQJRGgmBN+2wi9rKsLaVbBw5RuNtLN-pOBq-Pv3TC0-dww@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v6 1/6] bpf/helpers: introduce sleepable bpf_timers
-To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, Benjamin Tissoires <bentiss@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-On Mon, Apr 8, 2024 at 10:20=E2=80=AFAM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> On Mon, Apr 8, 2024 at 7:08=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
-m> wrote:
-> >
-> > On Mon, 2024-04-08 at 10:09 +0200, Benjamin Tissoires wrote:
-> >
-> > [...]
-> >
-> > > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > > index 9234174ccb21..fd05d4358b31 100644
-> > > --- a/kernel/bpf/helpers.c
-> > > +++ b/kernel/bpf/helpers.c
-> > > @@ -1096,12 +1096,19 @@ const struct bpf_func_proto bpf_snprintf_prot=
-o =3D {
-> > >   * freeing the timers when inner map is replaced or deleted by user =
-space.
-> > >   */
-> > >  struct bpf_hrtimer {
-> > > -     struct hrtimer timer;
-> > > +     union {
-> > > +             struct hrtimer timer;
-> > > +             struct work_struct work;
-> > > +     };
-> > >       struct bpf_map *map;
-> > >       struct bpf_prog *prog;
-> > >       void __rcu *callback_fn;
-> > >       void *value;
-> > > -     struct rcu_head rcu;
-> > > +     union {
-> > > +             struct rcu_head rcu;
-> > > +             struct work_struct sync_work;
-> >
-> > Nit:
-> > I find this name very confusing, the field is used to cancel timer
-> > execution, is it a convention to call such things '...sync...'?
-> >
-> > > +     };
-> > > +     u64 flags;
-> > >  };
-> > >
-> >
-> > [...]
-> >
-> > > +static void bpf_timer_sync_work_cb(struct work_struct *work)
-> > > +{
-> > > +     struct bpf_hrtimer *t =3D container_of(work, struct bpf_hrtimer=
-, sync_work);
-> > > +
-> > > +     cancel_work_sync(&t->work);
-> > > +
-> > > +     kfree_rcu(t, rcu);
-> >
-> > Sorry, I might be wrong, but this looks suspicious.
-> > The 'rcu' field of 'bpf_hrtimer' is defined as follows:
-> >
-> > struct bpf_hrtimer {
-> >         ...
-> >         union {
-> >                 struct rcu_head rcu;
-> >                 struct work_struct sync_work;
-> >         };
-> >         ...
-> > };
-> >
-> > And for sleepable timers the 'sync_work' field is set as follows:
-> >
-> > BPF_CALL_3(bpf_timer_init, struct bpf_timer_kern *, timer, struct bpf_m=
-ap *, map,
-> >            u64, flags)
-> > {
-> >         ...
-> >         INIT_WORK(&t->sync_work, bpf_timer_sync_work_cb);
-> >         ...
-> > }
-> >
-> > So, it looks like 'kfree_rcu' would be called for a non-rcu pointer.
->
-> That was my initial assumption too, but Alexei told me it was fine.
-> And I think he is correct because kfree_rcu doesn't need the rcu_head
-> to be initialized.
->
-> So in the end, we initialize the memory as a work_struct, and when
-> that work kicks in, we reuse that exact same memory as the rcu_head.
-> This is fine because that work will never be reused.
->
-> If I understand correctly, this is to save a few bytes as this is a
-> critical struct used in programs with a high rate usage, and every
-> byte counts.
+The test is inspired by the pmu_event_filter_test which implemented by x86. On
+the arm64 platform, there is the same ability to set the pmu_event_filter
+through the KVM_ARM_VCPU_PMU_V3_FILTER attribute. So add the test for arm64.
 
-Yes. All correct.
-Probably makes sense to add a comment before kfree_rcu()
-line in bpf_timer_sync_work_cb() that
-kfree_rcu will wait for bpf_timer_cancel() to finish
-as was done in
-commit 0281b919e175 ("bpf: Fix racing between
-bpf_timer_cancel_and_free and bpf_timer_cancel").
+The series first create the helper function which can be used
+for the vpmu related tests. Then, it implement the test.
 
-I suspect that's what confused Eduard.
+Changelog:
+----------
+v6->v7:
+  - Rebased to v6.9-rc3.
 
-The patch 1 looks great overall.
+v5->v6:
+  - Rebased to v6.9-rc1.
+  - Collect RB.
+  - Add multiple filter test.
 
-If we're going to keep this combined bpf_timer_* api for both wq
-and timer we'd need to add flags compatibility check
-to bpf_timer_start() too.
-We can disallow this flag in 'flags' argument and use one from t->flags.
-Which kinda makes sense to make bpf_timer_start() less verbose.
-Alternatively we can allow bpf_timer_start() to have it,
-but then we'd need to check that it is actually passed.
-Either way the patch needs an extra check in bpf_timer_start().
-Just ignoring BPF_F_TIMER_SLEEPABLE in bpf_timer_start() doesn't look right=
-.
+v4->v5:
+  - Rebased to v6.8-rc6.
+  - Refactor the helper function, make it fine-grained and easy to be used.
+  - Namimg improvements.
+  - Use the kvm_device_attr_set() helper.
+  - Make the test descriptor array readable and clean.
+  - Delete the patch which moves the pmu related helper to vpmu.h.
+  - Remove the kvm_supports_pmu_event_filter() function since nobody will run
+  this on a old kernel.
+
+v3->v4:
+  - Rebased to the v6.8-rc2.
+
+v2->v3:
+  - Check the pmceid in guest code instead of pmu event count since different
+  hardware may have different event count result, check pmceid makes it stable
+  on different platform.                        [Eric]
+  - Some typo fixed and commit message improved.
+
+v1->v2:
+  - Improve the commit message.                 [Eric]
+  - Fix the bug in [enable|disable]_counter.    [Raghavendra & Marc]
+  - Add the check if kvm has attr KVM_ARM_VCPU_PMU_V3_FILTER.
+  - Add if host pmu support the test event throught pmceid0.
+  - Split the test_invalid_filter() to another patch. [Eric]
+
+v1: https://lore.kernel.org/all/20231123063750.2176250-1-shahuang@redhat.com/
+v2: https://lore.kernel.org/all/20231129072712.2667337-1-shahuang@redhat.com/
+v3: https://lore.kernel.org/all/20240116060129.55473-1-shahuang@redhat.com/
+v4: https://lore.kernel.org/all/20240202025659.5065-1-shahuang@redhat.com/
+v5: https://lore.kernel.org/all/20240229065625.114207-1-shahuang@redhat.com/
+v6: https://lore.kernel.org/all/20240326033706.117189-1-shahuang@redhat.com/
+
+Shaoqin Huang (3):
+  KVM: selftests: aarch64: Add helper function for the vpmu vcpu
+    creation
+  KVM: selftests: aarch64: Introduce pmu_event_filter_test
+  KVM: selftests: aarch64: Add invalid filter test in
+    pmu_event_filter_test
+
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../kvm/aarch64/pmu_event_filter_test.c       | 336 ++++++++++++++++++
+ .../kvm/aarch64/vpmu_counter_access.c         |  33 +-
+ .../selftests/kvm/include/aarch64/vpmu.h      |  28 ++
+ 4 files changed, 372 insertions(+), 26 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+ create mode 100644 tools/testing/selftests/kvm/include/aarch64/vpmu.h
+
+-- 
+2.40.1
+
