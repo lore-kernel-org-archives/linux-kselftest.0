@@ -1,163 +1,397 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B7A13DDAA
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 07:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8629B13E3EA
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 07:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712820313; cv=none; b=fsUZg4Gdv8+f6sM+VulPuHjgnqT9jg/SCFQz865lX6F174pzNFmL6GjVoon1xa3DAyLlAkaPAopBXjXGJZ8Y1yHonf4DlOp0t3D06B2NIdraGGdEA9gQmJsnGHaKFkYnr/2HXI4+HIbx4pd/w+lK4r+L/INB1xCC4KpeuqTJ3ww=
+	t=1712820383; cv=none; b=hxPdFy4Lh6mv2H8PQ91VvZIS84wl676jEi3tNrlAyEjJM6ksrkwtKnrLh18FlHNvdGFtqiBG73qqO+EsrYmatMUKr0EhgC+VxoCJTUeDpFFu1gCnWIfhvr6nG8kyDRCKq28x2ZW0O8eEey+USjLzoSGMQtstpLlPr42n4Ifk41w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712820313; c=relaxed/simple;
-	bh=pJ8R9jxOZjfn6ejs9V833kwm1L/LeDLWxab3d8yLYsw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GsN7GlKRDWuAvtI7hlbBgjNOYODwtqYctDAaD9MCL61M0nL1BejsoFlwp8E5XOpCF/6THQG+MeYAab8Ul9nDbx1wg+MiOy4+003NkOEf8A8Enir0jI3X/xZLb5Iq1aKahRpZbVSb9ZPhFwsJexsYuBZ7JFodFKBShU6nVMeujDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=kj+VHARA; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	s=arc-20240116; t=1712820383; c=relaxed/simple;
+	bh=u4Zt6ncn47IgJB14JDZFwjyqGxYcviEbMnt3l0dVYJg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uMWedbhnraGrBGlOsdhX9Q70gQXKwfJIvPjddm9uOnx/wCGcu876Ea+zCEupee8jjw/E/jPvGcQFHMBFTDsrE46gdM5L8G7SE7Ff1etv8tofDvPxYZwLQvQ5WEgC/8lzZTkFkPtHF6XsvM6UKNmPqb1ifC2z1n7dJa9Ur2rktpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B2yq9Rak; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="kj+VHARA"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-343cb97e7f5so1440011f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 00:25:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712820308; x=1713425108; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JrjK0EsdKVt9QT2OnXkSvn4/gsAT0jsR16VIcuO+mkY=;
-        b=kj+VHARA3JQNk+YG+fgc9qULTOdLzWbfJbtJZZwhgHMAhvAhu1c4jKEao99NPKQgoe
-         MGZUvDaQnpZqmcMB+9ofvCsvK5QJjKbwyZsv7QjvkrDKyc2eg9DHHo4oYwGmdh2Xf6MP
-         V+hW7jO374WlUnh/qa9xx/rUWLGzjQM4uyFaadb3sm60lJ1dfyEcoL+CuIQDbObSggii
-         IZxRVBmbnJ/0IkAUiH3rLQNJA+qPmcpIeMGtjLlls5DYhFc9OP4rWbQN/kw7h2XDG3Ux
-         9HZpl+vbKADGael0/TXsO3yBRy7GsRqEbSQRwcIHDI9TT9VAA1r7vcIm9B8smLnTmzv8
-         fCaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712820308; x=1713425108;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JrjK0EsdKVt9QT2OnXkSvn4/gsAT0jsR16VIcuO+mkY=;
-        b=M4wi7kt1l3Ed+x/Do3eRAsBCLnmzBLG4n/KoFne5uZG4p/Jrf1cAXf3NSMpsLRu1we
-         Ok/hfoqchGOIX3PFMKt7OhUcE9qYuPN/P5WbuLcoX7lNwl/yo3relHqA8lUbBn3VCAJm
-         4MbAgYdGb5aEVrzYBn8MnxYKdvkUh/shmqYZ/nRB6mqZvOkTHD1aI3DwQX8fQECMXYpw
-         75Cba8eU3AsU1jbYFrY/hyxdxRvBARMcbM9f5Z26nhWYcAJIAwNiwTDkmniP3IQXRl2d
-         KHT3E2bf12WaR1ebA3z3GscRQoAbGDtHb24HEzyKWJPjHlZx/AOcubp+auyIzPokI1EC
-         HqOw==
-X-Forwarded-Encrypted: i=1; AJvYcCWXVZmdEwSCDTJcuck1vx5Vpzopi02RMYl+l/Rj6FEGQYB/uhrakWNkGWhej3gbT8eLgIs52MlwG7UFFjN4GhvpTzLsdE/n26jVWZYYjQB0
-X-Gm-Message-State: AOJu0Ywu7cKhtD3zEFNwog5gIKflk9nEUdiDJgaaZjXmsdEzvkCrgpg9
-	WToYhSzeVZTMiDAr1hHZg2ecIEiiGyzxmyVt2DlPVuPy9SFqRlpJ2Pjbr6w2iK8=
-X-Google-Smtp-Source: AGHT+IH7bDLPf+9sHTexaPC0l7JskFDeRSsnaH3OC8OfIIJJ6Vv6zjsrHnmGf08EGNEGbKXzsGI5Kw==
-X-Received: by 2002:a5d:4150:0:b0:346:4945:8851 with SMTP id c16-20020a5d4150000000b0034649458851mr3608971wrq.0.1712820307707;
-        Thu, 11 Apr 2024 00:25:07 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:999:a3a0:3624:d9b3:4998:d76b? ([2a01:e0a:999:a3a0:3624:d9b3:4998:d76b])
-        by smtp.gmail.com with ESMTPSA id b10-20020a056000054a00b00341b7d5054bsm1083326wrf.72.2024.04.11.00.25.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Apr 2024 00:25:07 -0700 (PDT)
-Message-ID: <1287e6e9-cb8e-4a78-9195-ce29f1c4bace@rivosinc.com>
-Date: Thu, 11 Apr 2024 09:25:06 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B2yq9Rak"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712820381; x=1744356381;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=u4Zt6ncn47IgJB14JDZFwjyqGxYcviEbMnt3l0dVYJg=;
+  b=B2yq9RakZBhX/QBU9GCpqQ8ISnZfXqczB5YY7btJdZ9ss0GLDdjZAb+U
+   gkz9LV+g+HdH3fIrH+CbT2FLsRj/K1sU782K2FaCoB3mQwwUdOGaZgz0O
+   onCXP1bS7WCn70tmBJ+awNDDKzYF1oy2ItOLDa41vQQ7cOP3UQjmlfl19
+   RB2LDGayLVUcMvkjmuV4VYsEpY2/6ScY2aSjN+pQtqZ+eLMFKalMcC9iy
+   3P1n3ka4wQvFCaVvxl65Kef/UTU1sWQG1F5iY7Uu8iKwnNkGeM7NuNULY
+   e8/o4GoISbqSK8Ruol01c1WJ5xF/WGo8rBfl/GdMwBEzZLeRqOj0CzwVd
+   w==;
+X-CSE-ConnectionGUID: 8EhH22QcRyKS6wQBOEFHWA==
+X-CSE-MsgGUID: H1JtXnHWTh6F4gc/op+RSA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="8074400"
+X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
+   d="scan'208";a="8074400"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 00:26:04 -0700
+X-CSE-ConnectionGUID: lJ3/DrzzRJORhGhCD+Jd/A==
+X-CSE-MsgGUID: PvvaWwV2Qnyx++zeZKMVHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
+   d="scan'208";a="20848555"
+Received: from vkasired-desk2.fm.intel.com ([10.105.128.132])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 00:26:04 -0700
+From: Vivek Kasireddy <vivek.kasireddy@intel.com>
+To: dri-devel@lists.freedesktop.org,
+	linux-mm@kvack.org
+Cc: Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Hildenbrand <david@redhat.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Hugh Dickins <hughd@google.com>,
+	Peter Xu <peterx@redhat.com>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Dongwon Kim <dongwon.kim@intel.com>,
+	Junxiao Chang <junxiao.chang@intel.com>,
+	linux-kselftest@vger.kernel.org,
+	Mike Kravetz <mike.kravetz@oracle.com>
+Subject: [PATCH v14 8/8] selftests/udmabuf: Add tests to verify data after page migration
+Date: Wed, 10 Apr 2024 23:59:44 -0700
+Message-ID: <20240411070157.3318425-9-vivek.kasireddy@intel.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240411070157.3318425-1-vivek.kasireddy@intel.com>
+References: <20240411070157.3318425-1-vivek.kasireddy@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/10] riscv: add ISA extension parsing for Zcmop
-To: Deepak Gupta <debug@rivosinc.com>, Conor Dooley <conor@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
- Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-References: <20240410091106.749233-1-cleger@rivosinc.com>
- <20240410091106.749233-8-cleger@rivosinc.com>
- <ZhcFeVYUQJmBAKuv@debug.ba.rivosinc.com>
- <20240410-jawless-cavalry-a3eaf9c562a4@spud>
- <20240410-judgingly-appease-5df493852b70@spud>
- <ZhcTiakvfbjb2hon@debug.ba.rivosinc.com>
-Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <ZhcTiakvfbjb2hon@debug.ba.rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Since the memfd pages associated with a udmabuf may be migrated
+as part of udmabuf create, we need to verify the data coherency
+after successful migration. The new tests added in this patch try
+to do just that using 4k sized pages and also 2 MB sized huge
+pages for the memfd.
 
+Successful completion of the tests would mean that there is no
+disconnect between the memfd pages and the ones associated with
+a udmabuf. And, these tests can also be augmented in the future
+to test newer udmabuf features (such as handling memfd hole punch).
 
-On 11/04/2024 00:32, Deepak Gupta wrote:
-> On Wed, Apr 10, 2024 at 11:27:16PM +0100, Conor Dooley wrote:
->> On Wed, Apr 10, 2024 at 11:16:11PM +0100, Conor Dooley wrote:
->>> On Wed, Apr 10, 2024 at 02:32:41PM -0700, Deepak Gupta wrote:
->>> > On Wed, Apr 10, 2024 at 11:11:00AM +0200, Clément Léger wrote:
->>> > > Add parsing for Zcmop ISA extension which was ratified in commit
->>> > > b854a709c00 ("Zcmop is ratified/1.0") of the riscv-isa-manual.
->>> > >
->>> > > Signed-off-by: Clément Léger <cleger@rivosinc.com>
->>> > > ---
->>> > > arch/riscv/include/asm/hwcap.h | 1 +
->>> > > arch/riscv/kernel/cpufeature.c | 1 +
->>> > > 2 files changed, 2 insertions(+)
->>> > >
->>> > > diff --git a/arch/riscv/include/asm/hwcap.h
->>> b/arch/riscv/include/asm/hwcap.h
->>> > > index b7551bad341b..cff7660de268 100644
->>> > > --- a/arch/riscv/include/asm/hwcap.h
->>> > > +++ b/arch/riscv/include/asm/hwcap.h
->>> > > @@ -86,6 +86,7 @@
->>> > > #define RISCV_ISA_EXT_ZCB        77
->>> > > #define RISCV_ISA_EXT_ZCD        78
->>> > > #define RISCV_ISA_EXT_ZCF        79
->>> > > +#define RISCV_ISA_EXT_ZCMOP        80
->>> > >
->>> > > #define RISCV_ISA_EXT_XLINUXENVCFG    127
->>> > >
->>> > > diff --git a/arch/riscv/kernel/cpufeature.c
->>> b/arch/riscv/kernel/cpufeature.c
->>> > > index 09dee071274d..f1450cd7231e 100644
->>> > > --- a/arch/riscv/kernel/cpufeature.c
->>> > > +++ b/arch/riscv/kernel/cpufeature.c
->>> > > @@ -265,6 +265,7 @@ const struct riscv_isa_ext_data
->>> riscv_isa_ext[] = {
->>> > >     __RISCV_ISA_EXT_DATA(zcb, RISCV_ISA_EXT_ZCB),
->>> > >     __RISCV_ISA_EXT_DATA(zcd, RISCV_ISA_EXT_ZCD),
->>> > >     __RISCV_ISA_EXT_DATA(zcf, RISCV_ISA_EXT_ZCF),
->>> > > +    __RISCV_ISA_EXT_DATA(zcmop, RISCV_ISA_EXT_ZCMOP),
->>> >
->>> > As per spec zcmop is dependent on zca. So perhaps below ?
->>> >
->>> > __RISCV_ISA_EXT_SUPERSET(zicboz, RISCV_ISA_EXT_ZCMOP,
->>> RISCV_ISA_EXT_ZCA)
->>>
->>> What's zicboz got to do with it, copy-pasto I guess?
-> 
-> Yes, copy-pasta :-)
-> 
->>> If we're gonna imply stuff like this though I think we need some
->>> comments explaining why it's okay.
->>
->> Also, I'm inclined to call that out specifically in the binding, I've
->> not yet checked if dependencies actually work for elements of a string
->> array like the do for individual properties. I'll todo list that..
-> 
-> Earlier examples of specifying dependency on envcfg actually had functional
-> use case.
-> So you are right, I am not sure if its actually needed in this
-> particular case.
+The idea for these tests comes from a patch by Mike Kravetz here:
+https://lists.freedesktop.org/archives/dri-devel/2023-June/410623.html
 
-I actually saw that and think about addressing it but AFAICT, this
-should be handled by the machine firmware passing the isa string to the
-kernel (ie, it should be valid). In the case of QEMU, it takes care of
-setting the extension that are required by this extension itself.
+v1->v2: (suggestions from Shuah)
+- Use ksft_* functions to print and capture results of tests
+- Use appropriate KSFT_* status codes for exit()
+- Add Mike Kravetz's suggested-by tag
 
-If we consider to have potentially broken isa string (ie extensions
-dependencies not correctly handled), then we'll need some way to
-validate this within the kernel.
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Gerd Hoffmann <kraxel@redhat.com>
+Cc: Dongwon Kim <dongwon.kim@intel.com>
+Cc: Junxiao Chang <junxiao.chang@intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
+Signed-off-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
+---
+ .../selftests/drivers/dma-buf/udmabuf.c       | 214 +++++++++++++++---
+ 1 file changed, 183 insertions(+), 31 deletions(-)
 
-Clément
+diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+index c812080e304e..6062723a172e 100644
+--- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
++++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+@@ -9,52 +9,162 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <malloc.h>
++#include <stdbool.h>
+ 
+ #include <sys/ioctl.h>
+ #include <sys/syscall.h>
++#include <sys/mman.h>
+ #include <linux/memfd.h>
+ #include <linux/udmabuf.h>
++#include "../../kselftest.h"
+ 
+ #define TEST_PREFIX	"drivers/dma-buf/udmabuf"
+ #define NUM_PAGES       4
++#define NUM_ENTRIES     4
++#define MEMFD_SIZE      1024 /* in pages */
+ 
+-static int memfd_create(const char *name, unsigned int flags)
++static unsigned int page_size;
++
++static int create_memfd_with_seals(off64_t size, bool hpage)
++{
++	int memfd, ret;
++	unsigned int flags = MFD_ALLOW_SEALING;
++
++	if (hpage)
++		flags |= MFD_HUGETLB;
++
++	memfd = memfd_create("udmabuf-test", flags);
++	if (memfd < 0) {
++		ksft_print_msg("%s: [skip,no-memfd]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
++	}
++
++	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
++	if (ret < 0) {
++		ksft_print_msg("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
++	}
++
++	ret = ftruncate(memfd, size);
++	if (ret == -1) {
++		ksft_print_msg("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	return memfd;
++}
++
++static int create_udmabuf_list(int devfd, int memfd, off64_t memfd_size)
++{
++	struct udmabuf_create_list *list;
++	int ubuf_fd, i;
++
++	list = malloc(sizeof(struct udmabuf_create_list) +
++		      sizeof(struct udmabuf_create_item) * NUM_ENTRIES);
++	if (!list) {
++		ksft_print_msg("%s: [FAIL, udmabuf-malloc]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	for (i = 0; i < NUM_ENTRIES; i++) {
++		list->list[i].memfd  = memfd;
++		list->list[i].offset = i * (memfd_size / NUM_ENTRIES);
++		list->list[i].size   = getpagesize() * NUM_PAGES;
++	}
++
++	list->count = NUM_ENTRIES;
++	list->flags = UDMABUF_FLAGS_CLOEXEC;
++	ubuf_fd = ioctl(devfd, UDMABUF_CREATE_LIST, list);
++	free(list);
++	if (ubuf_fd < 0) {
++		ksft_print_msg("%s: [FAIL, udmabuf-create]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	return ubuf_fd;
++}
++
++static void write_to_memfd(void *addr, off64_t size, char chr)
++{
++	int i;
++
++	for (i = 0; i < size / page_size; i++) {
++		*((char *)addr + (i * page_size)) = chr;
++	}
++}
++
++static void *mmap_fd(int fd, off64_t size)
+ {
+-	return syscall(__NR_memfd_create, name, flags);
++	void *addr;
++
++	addr = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
++	if (addr == MAP_FAILED) {
++		ksft_print_msg("%s: ubuf_fd mmap fail\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	return addr;
++}
++
++static int compare_chunks(void *addr1, void *addr2, off64_t memfd_size)
++{
++	off64_t off;
++	int i = 0, j, k = 0, ret = 0;
++	char char1, char2;
++
++	while (i < NUM_ENTRIES) {
++		off = i * (memfd_size / NUM_ENTRIES);
++		for (j = 0; j < NUM_PAGES; j++, k++) {
++			char1 = *((char *)addr1 + off + (j * getpagesize()));
++			char2 = *((char *)addr2 + (k * getpagesize()));
++			if (char1 != char2) {
++				ret = -1;
++				goto err;
++			}
++		}
++		i++;
++	}
++err:
++	munmap(addr1, memfd_size);
++	munmap(addr2, NUM_ENTRIES * NUM_PAGES * getpagesize());
++	return ret;
+ }
+ 
+ int main(int argc, char *argv[])
+ {
+ 	struct udmabuf_create create;
+ 	int devfd, memfd, buf, ret;
+-	off_t size;
+-	void *mem;
++	off64_t size;
++	void *addr1, *addr2;
++
++	ksft_print_header();
++	ksft_set_plan(6);
+ 
+ 	devfd = open("/dev/udmabuf", O_RDWR);
+ 	if (devfd < 0) {
+-		printf("%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
+-		       TEST_PREFIX);
+-		exit(77);
++		ksft_print_msg(
++			"%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
++			TEST_PREFIX);
++		exit(KSFT_SKIP);
+ 	}
+ 
+ 	memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
+ 	if (memfd < 0) {
+-		printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
+-		exit(77);
++		ksft_print_msg("%s: [skip,no-memfd]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
+ 	}
+ 
+ 	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
+ 	if (ret < 0) {
+-		printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
+-		exit(77);
++		ksft_print_msg("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
+ 	}
+ 
+-
+ 	size = getpagesize() * NUM_PAGES;
+ 	ret = ftruncate(memfd, size);
+ 	if (ret == -1) {
+-		printf("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
+-		exit(1);
++		ksft_print_msg("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
+ 	}
+ 
+ 	memset(&create, 0, sizeof(create));
+@@ -64,44 +174,86 @@ int main(int argc, char *argv[])
+ 	create.offset = getpagesize()/2;
+ 	create.size   = getpagesize();
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf >= 0) {
+-		printf("%s: [FAIL,test-1]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf >= 0)
++		ksft_test_result_fail("%s: [FAIL,test-1]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-1]\n", TEST_PREFIX);
+ 
+ 	/* should fail (size not multiple of page) */
+ 	create.memfd  = memfd;
+ 	create.offset = 0;
+ 	create.size   = getpagesize()/2;
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf >= 0) {
+-		printf("%s: [FAIL,test-2]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf >= 0)
++		ksft_test_result_fail("%s: [FAIL,test-2]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-2]\n", TEST_PREFIX);
+ 
+ 	/* should fail (not memfd) */
+ 	create.memfd  = 0; /* stdin */
+ 	create.offset = 0;
+ 	create.size   = size;
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf >= 0) {
+-		printf("%s: [FAIL,test-3]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf >= 0)
++		ksft_test_result_fail("%s: [FAIL,test-3]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-3]\n", TEST_PREFIX);
+ 
+ 	/* should work */
++	page_size = getpagesize();
++	addr1 = mmap_fd(memfd, size);
++	write_to_memfd(addr1, size, 'a');
+ 	create.memfd  = memfd;
+ 	create.offset = 0;
+ 	create.size   = size;
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf < 0) {
+-		printf("%s: [FAIL,test-4]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf < 0)
++		ksft_test_result_fail("%s: [FAIL,test-4]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-4]\n", TEST_PREFIX);
++
++	munmap(addr1, size);
++	close(buf);
++	close(memfd);
++
++	/* should work (migration of 4k size pages)*/
++	size = MEMFD_SIZE * page_size;
++	memfd = create_memfd_with_seals(size, false);
++	addr1 = mmap_fd(memfd, size);
++	write_to_memfd(addr1, size, 'a');
++	buf = create_udmabuf_list(devfd, memfd, size);
++	addr2 = mmap_fd(buf, NUM_PAGES * NUM_ENTRIES * getpagesize());
++	write_to_memfd(addr1, size, 'b');
++	ret = compare_chunks(addr1, addr2, size);
++	if (ret < 0)
++		ksft_test_result_fail("%s: [FAIL,test-5]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-5]\n", TEST_PREFIX);
++
++	close(buf);
++	close(memfd);
++
++	/* should work (migration of 2MB size huge pages)*/
++	page_size = getpagesize() * 512; /* 2 MB */
++	size = MEMFD_SIZE * page_size;
++	memfd = create_memfd_with_seals(size, true);
++	addr1 = mmap_fd(memfd, size);
++	write_to_memfd(addr1, size, 'a');
++	buf = create_udmabuf_list(devfd, memfd, size);
++	addr2 = mmap_fd(buf, NUM_PAGES * NUM_ENTRIES * getpagesize());
++	write_to_memfd(addr1, size, 'b');
++	ret = compare_chunks(addr1, addr2, size);
++	if (ret < 0)
++		ksft_test_result_fail("%s: [FAIL,test-6]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-6]\n", TEST_PREFIX);
+ 
+-	fprintf(stderr, "%s: ok\n", TEST_PREFIX);
+ 	close(buf);
+ 	close(memfd);
+ 	close(devfd);
++
++	ksft_print_msg("%s: ok\n", TEST_PREFIX);
++	ksft_print_cnts();
++
+ 	return 0;
+ }
+-- 
+2.43.0
 
-> 
-> And yes definitley, dependency should be mentioned in binding.
-> 
-> 
