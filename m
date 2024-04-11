@@ -1,397 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8629B13E3EA
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 07:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E7213E40C
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 07:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712820383; cv=none; b=hxPdFy4Lh6mv2H8PQ91VvZIS84wl676jEi3tNrlAyEjJM6ksrkwtKnrLh18FlHNvdGFtqiBG73qqO+EsrYmatMUKr0EhgC+VxoCJTUeDpFFu1gCnWIfhvr6nG8kyDRCKq28x2ZW0O8eEey+USjLzoSGMQtstpLlPr42n4Ifk41w=
+	t=1712821126; cv=none; b=i0TSUWhzEN7q4o3TfCCXQmyW/cJtvjXMEaBoB6gosJi9N1y1I4q4Jj37Iv6PLaAoK4zM8iRnNFA8SX618y1CeXnwivdmyxzlzvzOMEg6MdPPb00W2J7julDm4jA32p+4NKMDE1kEyY9QBJTRCAaQmBGSfYEKucNaulFu3yySlc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712820383; c=relaxed/simple;
-	bh=u4Zt6ncn47IgJB14JDZFwjyqGxYcviEbMnt3l0dVYJg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uMWedbhnraGrBGlOsdhX9Q70gQXKwfJIvPjddm9uOnx/wCGcu876Ea+zCEupee8jjw/E/jPvGcQFHMBFTDsrE46gdM5L8G7SE7Ff1etv8tofDvPxYZwLQvQ5WEgC/8lzZTkFkPtHF6XsvM6UKNmPqb1ifC2z1n7dJa9Ur2rktpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B2yq9Rak; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1712821126; c=relaxed/simple;
+	bh=1vkXgr7mU8ODetSlTUd524GtmWxMzUtCT+xXdKXnC+Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c2lrlw2xcNoVFnx69oJ2GvzSxOLgEydL2mfHP8i6/7C/JgamqYEhGa7nK+6L2YNGqfX/utrPz+HOkDuKKux6hFg2lGJlnRAZil/huBf9WC8NJlNgWHsho2TDYONu+bcTO3TomBJVBVMcp6QQa/iNAnXMkA5gJQv6DDEid24Pi+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=PyXZMQnv; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B2yq9Rak"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712820381; x=1744356381;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=u4Zt6ncn47IgJB14JDZFwjyqGxYcviEbMnt3l0dVYJg=;
-  b=B2yq9RakZBhX/QBU9GCpqQ8ISnZfXqczB5YY7btJdZ9ss0GLDdjZAb+U
-   gkz9LV+g+HdH3fIrH+CbT2FLsRj/K1sU782K2FaCoB3mQwwUdOGaZgz0O
-   onCXP1bS7WCn70tmBJ+awNDDKzYF1oy2ItOLDa41vQQ7cOP3UQjmlfl19
-   RB2LDGayLVUcMvkjmuV4VYsEpY2/6ScY2aSjN+pQtqZ+eLMFKalMcC9iy
-   3P1n3ka4wQvFCaVvxl65Kef/UTU1sWQG1F5iY7Uu8iKwnNkGeM7NuNULY
-   e8/o4GoISbqSK8Ruol01c1WJ5xF/WGo8rBfl/GdMwBEzZLeRqOj0CzwVd
-   w==;
-X-CSE-ConnectionGUID: 8EhH22QcRyKS6wQBOEFHWA==
-X-CSE-MsgGUID: H1JtXnHWTh6F4gc/op+RSA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="8074400"
-X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
-   d="scan'208";a="8074400"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 00:26:04 -0700
-X-CSE-ConnectionGUID: lJ3/DrzzRJORhGhCD+Jd/A==
-X-CSE-MsgGUID: PvvaWwV2Qnyx++zeZKMVHA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,192,1708416000"; 
-   d="scan'208";a="20848555"
-Received: from vkasired-desk2.fm.intel.com ([10.105.128.132])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 00:26:04 -0700
-From: Vivek Kasireddy <vivek.kasireddy@intel.com>
-To: dri-devel@lists.freedesktop.org,
-	linux-mm@kvack.org
-Cc: Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Hildenbrand <david@redhat.com>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Hugh Dickins <hughd@google.com>,
-	Peter Xu <peterx@redhat.com>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Gerd Hoffmann <kraxel@redhat.com>,
-	Dongwon Kim <dongwon.kim@intel.com>,
-	Junxiao Chang <junxiao.chang@intel.com>,
-	linux-kselftest@vger.kernel.org,
-	Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH v14 8/8] selftests/udmabuf: Add tests to verify data after page migration
-Date: Wed, 10 Apr 2024 23:59:44 -0700
-Message-ID: <20240411070157.3318425-9-vivek.kasireddy@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240411070157.3318425-1-vivek.kasireddy@intel.com>
-References: <20240411070157.3318425-1-vivek.kasireddy@intel.com>
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="PyXZMQnv"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a5224dfa9adso28263766b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Apr 2024 00:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1712821122; x=1713425922; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Qi1RHVmEtAvgNYlK/Z30HZoUwL3LvYqcc/16dHeni2I=;
+        b=PyXZMQnv7q/B4067/6mgaOEdkORETeuEB3mvFDQ4A0rKtG2pvW2uRyba18ydAUoWmM
+         6AUgOfSAYS1UorUFUhBo88UfWUOA2xPYmi84UgPQMJxKYo/pykINfEuKLiyx4crR14fq
+         nUsk5eUgBVGU0QsugfbOyQ/WLxwRXxSQ9R6LbXqY8vRueJpePn4WFi9FK1G/VbwYZ/kC
+         VL5z1uE86679A0/BxlJIegJiLKMFt9oiA/SVNS3bdtfbrdfDdzdiKJuwgVPqcp8gdLDY
+         6S5qVnuyXtGd5ztBBL+ddfBQJmMQDmN1rYIlemg1I41JRAWPSP33boe+WKqaXHAPp5Xm
+         rEyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712821122; x=1713425922;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qi1RHVmEtAvgNYlK/Z30HZoUwL3LvYqcc/16dHeni2I=;
+        b=GJSCTHow1oIvZxpht8IVUQFavWggc2T40GeXKG0egkWxcDOLe/tJXpghKyR9v9z6H9
+         YyjTi6bek0a5JW02Rt0J6DSASKspW+NqSgVyxUkhBWdpYWcGyIQNiV4M4YFS4Z+0Q6DJ
+         IPNiUV7cPAfiOmCoopdol8ybFvOKqSoLd5Mas/8jd8BWx9VV6VzL0uVMVpvZbeuHK/7k
+         2oKqh55x7fqNpiK96P3asYXMHVEgKSulo+rJQKidGI67PpNvvPEBu9XuimP8GrphU6Mr
+         nBopMHGWUY2vtKIwN17KF/rXtoOQBXk9AAMtI4fu22z8NM7QNorK4IjzlyjX26vMHXD6
+         /grg==
+X-Forwarded-Encrypted: i=1; AJvYcCW/OTX8kF7VWy204xgaBdvhOToNgFbVT5ZqD6l+3Sn7S7qRFmrjzh4Pyp6DQdzCL9jwhbgkvtSC55o+WCDxbh9JjAIOJnKBF/wzgu+Nl6QH
+X-Gm-Message-State: AOJu0YysY6O+ehioDMJBQrujgbyUhFWMOZdC/YszdIy8fY2LdbgiTjKG
+	0rK5tKBGoYzeZlJ4i8E3/jWFx2MIVsNG/PtLSn7vPngB1igkn7xCiFZ9kZR01RI=
+X-Google-Smtp-Source: AGHT+IHndxelT9zzrPtEEf61xurR5ZhY/uXW2mp7zI7XhBJBneHaSOP3oqNpAKZ/ndwpR0RWwH9wFg==
+X-Received: by 2002:a17:907:1c2a:b0:a4e:410e:9525 with SMTP id nc42-20020a1709071c2a00b00a4e410e9525mr1764454ejc.30.1712821122486;
+        Thu, 11 Apr 2024 00:38:42 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id gv7-20020a170906f10700b00a4e0df9e793sm478233ejb.136.2024.04.11.00.38.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Apr 2024 00:38:42 -0700 (PDT)
+Date: Thu, 11 Apr 2024 09:38:41 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Atish Patra <atishp@rivosinc.com>
+Cc: Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org, 
+	Anup Patel <anup@brainfault.org>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alexghiti@rivosinc.com>, Conor Dooley <conor.dooley@microchip.com>, 
+	Guo Ren <guoren@kernel.org>, Icenowy Zheng <uwu@icenowy.me>, kvm-riscv@lists.infradead.org, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v4 07/15] RISC-V: KVM: No need to exit to the user space
+ if perf event failed
+Message-ID: <20240411-6fe47ccc32d9cb7baa121b4d@orel>
+References: <20240229010130.1380926-1-atishp@rivosinc.com>
+ <20240229010130.1380926-8-atishp@rivosinc.com>
+ <20240302-1a3c0df25f2422e1e6abecf3@orel>
+ <CAOnJCUJCQjBfLZFW-3iLUB6ygyRmz1Anu+fhfrT4Lpoj2iNB5Q@mail.gmail.com>
+ <20240404-ea40bc0237635d671e64fef6@orel>
+ <7d02c86e-8c36-4e78-9fa8-5e30f3431eb3@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <7d02c86e-8c36-4e78-9fa8-5e30f3431eb3@rivosinc.com>
 
-Since the memfd pages associated with a udmabuf may be migrated
-as part of udmabuf create, we need to verify the data coherency
-after successful migration. The new tests added in this patch try
-to do just that using 4k sized pages and also 2 MB sized huge
-pages for the memfd.
+On Wed, Apr 10, 2024 at 03:44:32PM -0700, Atish Patra wrote:
+> On 4/4/24 05:16, Andrew Jones wrote:
+> > On Mon, Apr 01, 2024 at 03:37:01PM -0700, Atish Patra wrote:
+> > > On Sat, Mar 2, 2024 at 12:16 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> > > > 
+> > > > On Wed, Feb 28, 2024 at 05:01:22PM -0800, Atish Patra wrote:
+> > > > > Currently, we return a linux error code if creating a perf event failed
+> > > > > in kvm. That shouldn't be necessary as guest can continue to operate
+> > > > > without perf profiling or profiling with firmware counters.
+> > > > > 
+> > > > > Return appropriate SBI error code to indicate that PMU configuration
+> > > > > failed. An error message in kvm already describes the reason for failure.
+> > > > 
+> > > > I don't know enough about the perf subsystem to know if there may be
+> > > > a concern that resources are temporarily unavailable. If so, then this
+> > > 
+> > > Do you mean the hardware resources unavailable because the host is using it ?
+> > 
+> > Yes (I think). The issue I'm thinking of is if kvm_pmu_create_perf_event
+> > (perf_event_create_kernel_counter) returns something like EBUSY and then
+> > we translate that to SBI_ERR_NOT_SUPPORTED. I'm not sure guests would
+> > interpret not-supported as an error which means they can retry. Or if
+> > they retry and get something other than not-supported if they'd be
+> > confused.
+> > 
+> 
+> At least in Linux driver, treats -ENOTSUPP and it just fails. Other guest OS
+> implementation may interpret it differently. But they should fail at that
+> point as well. I don't see how can they interpret to be retry.
+> 
+> The perf user can retry again with assumption that may be enough counters
+> are not available at this moment. But that's different from return a retry
+> from driver code.
+> 
+> Even if we support a retry error code, when does the caller retry it ?
+> The driver doesn't know how long the user is going to run the perf command
+> to keep the hardware resources occupied.
+> 
+> I feel the perf user is the best entity to know that and should retry if it
+> knows the previous run is over which might have released the hardware
+> resources.
 
-Successful completion of the tests would mean that there is no
-disconnect between the memfd pages and the ones associated with
-a udmabuf. And, these tests can also be augmented in the future
-to test newer udmabuf features (such as handling memfd hole punch).
+I agree, but how does the user know that retrying makes sense? I presume
+-ENOTSUPP will get propagated all the way to the user in a form that
+means "not supported". Or, can the user list all resources and then
+when they see "not supported" know that means "not supported at the
+moment", as they've already seen that the resources exist?
 
-The idea for these tests comes from a patch by Mike Kravetz here:
-https://lists.freedesktop.org/archives/dri-devel/2023-June/410623.html
+Anyway, as I said, I don't know enough about the perf subsystem to know
+if this is a real concern or not, but it sort of looks like we have
+potential to tell users that something isn't supported when in fact it
+is supported, but only temporarily unavailable.
 
-v1->v2: (suggestions from Shuah)
-- Use ksft_* functions to print and capture results of tests
-- Use appropriate KSFT_* status codes for exit()
-- Add Mike Kravetz's suggested-by tag
-
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Gerd Hoffmann <kraxel@redhat.com>
-Cc: Dongwon Kim <dongwon.kim@intel.com>
-Cc: Junxiao Chang <junxiao.chang@intel.com>
-Cc: linux-kselftest@vger.kernel.org
-Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
-Signed-off-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
----
- .../selftests/drivers/dma-buf/udmabuf.c       | 214 +++++++++++++++---
- 1 file changed, 183 insertions(+), 31 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-index c812080e304e..6062723a172e 100644
---- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-+++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-@@ -9,52 +9,162 @@
- #include <errno.h>
- #include <fcntl.h>
- #include <malloc.h>
-+#include <stdbool.h>
- 
- #include <sys/ioctl.h>
- #include <sys/syscall.h>
-+#include <sys/mman.h>
- #include <linux/memfd.h>
- #include <linux/udmabuf.h>
-+#include "../../kselftest.h"
- 
- #define TEST_PREFIX	"drivers/dma-buf/udmabuf"
- #define NUM_PAGES       4
-+#define NUM_ENTRIES     4
-+#define MEMFD_SIZE      1024 /* in pages */
- 
--static int memfd_create(const char *name, unsigned int flags)
-+static unsigned int page_size;
-+
-+static int create_memfd_with_seals(off64_t size, bool hpage)
-+{
-+	int memfd, ret;
-+	unsigned int flags = MFD_ALLOW_SEALING;
-+
-+	if (hpage)
-+		flags |= MFD_HUGETLB;
-+
-+	memfd = memfd_create("udmabuf-test", flags);
-+	if (memfd < 0) {
-+		ksft_print_msg("%s: [skip,no-memfd]\n", TEST_PREFIX);
-+		exit(KSFT_SKIP);
-+	}
-+
-+	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
-+	if (ret < 0) {
-+		ksft_print_msg("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
-+		exit(KSFT_SKIP);
-+	}
-+
-+	ret = ftruncate(memfd, size);
-+	if (ret == -1) {
-+		ksft_print_msg("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	return memfd;
-+}
-+
-+static int create_udmabuf_list(int devfd, int memfd, off64_t memfd_size)
-+{
-+	struct udmabuf_create_list *list;
-+	int ubuf_fd, i;
-+
-+	list = malloc(sizeof(struct udmabuf_create_list) +
-+		      sizeof(struct udmabuf_create_item) * NUM_ENTRIES);
-+	if (!list) {
-+		ksft_print_msg("%s: [FAIL, udmabuf-malloc]\n", TEST_PREFIX);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	for (i = 0; i < NUM_ENTRIES; i++) {
-+		list->list[i].memfd  = memfd;
-+		list->list[i].offset = i * (memfd_size / NUM_ENTRIES);
-+		list->list[i].size   = getpagesize() * NUM_PAGES;
-+	}
-+
-+	list->count = NUM_ENTRIES;
-+	list->flags = UDMABUF_FLAGS_CLOEXEC;
-+	ubuf_fd = ioctl(devfd, UDMABUF_CREATE_LIST, list);
-+	free(list);
-+	if (ubuf_fd < 0) {
-+		ksft_print_msg("%s: [FAIL, udmabuf-create]\n", TEST_PREFIX);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	return ubuf_fd;
-+}
-+
-+static void write_to_memfd(void *addr, off64_t size, char chr)
-+{
-+	int i;
-+
-+	for (i = 0; i < size / page_size; i++) {
-+		*((char *)addr + (i * page_size)) = chr;
-+	}
-+}
-+
-+static void *mmap_fd(int fd, off64_t size)
- {
--	return syscall(__NR_memfd_create, name, flags);
-+	void *addr;
-+
-+	addr = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (addr == MAP_FAILED) {
-+		ksft_print_msg("%s: ubuf_fd mmap fail\n", TEST_PREFIX);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	return addr;
-+}
-+
-+static int compare_chunks(void *addr1, void *addr2, off64_t memfd_size)
-+{
-+	off64_t off;
-+	int i = 0, j, k = 0, ret = 0;
-+	char char1, char2;
-+
-+	while (i < NUM_ENTRIES) {
-+		off = i * (memfd_size / NUM_ENTRIES);
-+		for (j = 0; j < NUM_PAGES; j++, k++) {
-+			char1 = *((char *)addr1 + off + (j * getpagesize()));
-+			char2 = *((char *)addr2 + (k * getpagesize()));
-+			if (char1 != char2) {
-+				ret = -1;
-+				goto err;
-+			}
-+		}
-+		i++;
-+	}
-+err:
-+	munmap(addr1, memfd_size);
-+	munmap(addr2, NUM_ENTRIES * NUM_PAGES * getpagesize());
-+	return ret;
- }
- 
- int main(int argc, char *argv[])
- {
- 	struct udmabuf_create create;
- 	int devfd, memfd, buf, ret;
--	off_t size;
--	void *mem;
-+	off64_t size;
-+	void *addr1, *addr2;
-+
-+	ksft_print_header();
-+	ksft_set_plan(6);
- 
- 	devfd = open("/dev/udmabuf", O_RDWR);
- 	if (devfd < 0) {
--		printf("%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
--		       TEST_PREFIX);
--		exit(77);
-+		ksft_print_msg(
-+			"%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
-+			TEST_PREFIX);
-+		exit(KSFT_SKIP);
- 	}
- 
- 	memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
- 	if (memfd < 0) {
--		printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
--		exit(77);
-+		ksft_print_msg("%s: [skip,no-memfd]\n", TEST_PREFIX);
-+		exit(KSFT_SKIP);
- 	}
- 
- 	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
- 	if (ret < 0) {
--		printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
--		exit(77);
-+		ksft_print_msg("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
-+		exit(KSFT_SKIP);
- 	}
- 
--
- 	size = getpagesize() * NUM_PAGES;
- 	ret = ftruncate(memfd, size);
- 	if (ret == -1) {
--		printf("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
--		exit(1);
-+		ksft_print_msg("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
-+		exit(KSFT_FAIL);
- 	}
- 
- 	memset(&create, 0, sizeof(create));
-@@ -64,44 +174,86 @@ int main(int argc, char *argv[])
- 	create.offset = getpagesize()/2;
- 	create.size   = getpagesize();
- 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
--	if (buf >= 0) {
--		printf("%s: [FAIL,test-1]\n", TEST_PREFIX);
--		exit(1);
--	}
-+	if (buf >= 0)
-+		ksft_test_result_fail("%s: [FAIL,test-1]\n", TEST_PREFIX);
-+	else
-+		ksft_test_result_pass("%s: [PASS,test-1]\n", TEST_PREFIX);
- 
- 	/* should fail (size not multiple of page) */
- 	create.memfd  = memfd;
- 	create.offset = 0;
- 	create.size   = getpagesize()/2;
- 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
--	if (buf >= 0) {
--		printf("%s: [FAIL,test-2]\n", TEST_PREFIX);
--		exit(1);
--	}
-+	if (buf >= 0)
-+		ksft_test_result_fail("%s: [FAIL,test-2]\n", TEST_PREFIX);
-+	else
-+		ksft_test_result_pass("%s: [PASS,test-2]\n", TEST_PREFIX);
- 
- 	/* should fail (not memfd) */
- 	create.memfd  = 0; /* stdin */
- 	create.offset = 0;
- 	create.size   = size;
- 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
--	if (buf >= 0) {
--		printf("%s: [FAIL,test-3]\n", TEST_PREFIX);
--		exit(1);
--	}
-+	if (buf >= 0)
-+		ksft_test_result_fail("%s: [FAIL,test-3]\n", TEST_PREFIX);
-+	else
-+		ksft_test_result_pass("%s: [PASS,test-3]\n", TEST_PREFIX);
- 
- 	/* should work */
-+	page_size = getpagesize();
-+	addr1 = mmap_fd(memfd, size);
-+	write_to_memfd(addr1, size, 'a');
- 	create.memfd  = memfd;
- 	create.offset = 0;
- 	create.size   = size;
- 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
--	if (buf < 0) {
--		printf("%s: [FAIL,test-4]\n", TEST_PREFIX);
--		exit(1);
--	}
-+	if (buf < 0)
-+		ksft_test_result_fail("%s: [FAIL,test-4]\n", TEST_PREFIX);
-+	else
-+		ksft_test_result_pass("%s: [PASS,test-4]\n", TEST_PREFIX);
-+
-+	munmap(addr1, size);
-+	close(buf);
-+	close(memfd);
-+
-+	/* should work (migration of 4k size pages)*/
-+	size = MEMFD_SIZE * page_size;
-+	memfd = create_memfd_with_seals(size, false);
-+	addr1 = mmap_fd(memfd, size);
-+	write_to_memfd(addr1, size, 'a');
-+	buf = create_udmabuf_list(devfd, memfd, size);
-+	addr2 = mmap_fd(buf, NUM_PAGES * NUM_ENTRIES * getpagesize());
-+	write_to_memfd(addr1, size, 'b');
-+	ret = compare_chunks(addr1, addr2, size);
-+	if (ret < 0)
-+		ksft_test_result_fail("%s: [FAIL,test-5]\n", TEST_PREFIX);
-+	else
-+		ksft_test_result_pass("%s: [PASS,test-5]\n", TEST_PREFIX);
-+
-+	close(buf);
-+	close(memfd);
-+
-+	/* should work (migration of 2MB size huge pages)*/
-+	page_size = getpagesize() * 512; /* 2 MB */
-+	size = MEMFD_SIZE * page_size;
-+	memfd = create_memfd_with_seals(size, true);
-+	addr1 = mmap_fd(memfd, size);
-+	write_to_memfd(addr1, size, 'a');
-+	buf = create_udmabuf_list(devfd, memfd, size);
-+	addr2 = mmap_fd(buf, NUM_PAGES * NUM_ENTRIES * getpagesize());
-+	write_to_memfd(addr1, size, 'b');
-+	ret = compare_chunks(addr1, addr2, size);
-+	if (ret < 0)
-+		ksft_test_result_fail("%s: [FAIL,test-6]\n", TEST_PREFIX);
-+	else
-+		ksft_test_result_pass("%s: [PASS,test-6]\n", TEST_PREFIX);
- 
--	fprintf(stderr, "%s: ok\n", TEST_PREFIX);
- 	close(buf);
- 	close(memfd);
- 	close(devfd);
-+
-+	ksft_print_msg("%s: ok\n", TEST_PREFIX);
-+	ksft_print_cnts();
-+
- 	return 0;
- }
--- 
-2.43.0
-
+Thanks,
+drew
