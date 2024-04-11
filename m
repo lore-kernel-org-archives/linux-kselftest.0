@@ -1,157 +1,146 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E29714A094;
-	Thu, 11 Apr 2024 11:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4131514B081;
+	Thu, 11 Apr 2024 12:24:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712836521; cv=none; b=elUc1XiTYlcaZfD3O3nyGnMus5utac1TQbH3jr8A6FBP/w7NuXnDw/kK0QNOs0RVqEHc9TmEJvhrdrT9asGTwDpk2QmNtQNROgN3Jaxw1lq9BjlJLmdk7b2svOUY9N/ZUUuJ3CdM+iL7i/tkyZpEtJP/n0mWBtLj5tkDs4HEkzs=
+	t=1712838291; cv=none; b=OhKEliQh0tT4BDcSXOGeJn7StG5npMz8ZgxmjUlQQu9Gzn7GCfGa4hIidmZXWK1wyfnrMA3Hr0p9m6HYgPqDXn3qRX7xJSk4oF21+RQsFGKF0Ded0Aa4i6f0Z4y4aeCXCAmvDPVnFgtGBxFLypyJtq1qaxsIo82PTPChWAf+OBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712836521; c=relaxed/simple;
-	bh=qUHLbICK+OzVzpgAugTLlBx/+ikYrtOfR4K8Nx4oYfw=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sr3rCctWzL7tBgODvASomc3yId/sR/r0qOevb+lhYrs04lcZ2vFqAXLmxjEASs19YdSI3sh8LIxJ8exVBpJO6SSir1VdeyVsoOJwgItQ5SVCPNUocZx+HY8eFqa+cvJkANTgbwd+YlfZjOSR6P5qhjGAypIXIdanB+uZAyaIdcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=bP56bhYa; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="bP56bhYa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1712836519; x=1744372519;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qUHLbICK+OzVzpgAugTLlBx/+ikYrtOfR4K8Nx4oYfw=;
-  b=bP56bhYazXE6fy9pzuspJ00L7+mAYf9fViRTI/B1qbtIWpCrX5UoQgUr
-   bsim6FASELIQkXU8tHt60EukTZDXe0LjQuo4NSLV+7S/Fj3JtebeURRLi
-   cDS+/LaqmRv/U5HpGBa+A5vS1tV67B+o49zbWnUQhS2Zp97F3DZX0S+Pr
-   Bz3kT3FrCrjtDT/8reOa+zOyVND2f//FmvRwndqA4tZT4Q010JJw77jTu
-   A5YlSZEczLKN3i8aWAsom5h5/zlz22O0DNnmIfW+KJVpFhf0gxZq8I5Ms
-   o2jQu7ShpC9vB/21on4GXcydv0LkNlmK2kcWIQ5JyG8s/qJPJBrhbBwbg
-   g==;
-X-CSE-ConnectionGUID: z5vJuW0ISXO47ggJt+rbgA==
-X-CSE-MsgGUID: mQWA4GzKR12LP6aGbYLBwA==
-X-IronPort-AV: E=Sophos;i="6.07,193,1708412400"; 
-   d="asc'?scan'208";a="251356126"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Apr 2024 04:55:16 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 11 Apr 2024 04:54:36 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Thu, 11 Apr 2024 04:54:33 -0700
-Date: Thu, 11 Apr 2024 12:53:43 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
-CC: Deepak Gupta <debug@rivosinc.com>, Conor Dooley <conor@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>, Anup Patel <anup@brainfault.org>, Shuah
- Khan <shuah@kernel.org>, Atish Patra <atishp@atishpatra.org>,
-	<linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 07/10] riscv: add ISA extension parsing for Zcmop
-Message-ID: <20240411-backwater-opal-00c9aed2231e@wendy>
-References: <20240410091106.749233-1-cleger@rivosinc.com>
- <20240410091106.749233-8-cleger@rivosinc.com>
- <ZhcFeVYUQJmBAKuv@debug.ba.rivosinc.com>
- <20240410-jawless-cavalry-a3eaf9c562a4@spud>
- <20240410-judgingly-appease-5df493852b70@spud>
- <ZhcTiakvfbjb2hon@debug.ba.rivosinc.com>
- <1287e6e9-cb8e-4a78-9195-ce29f1c4bace@rivosinc.com>
- <20240411-superglue-errant-b32e5118695f@wendy>
- <c86f9fa8-e273-4509-83fa-f21d3265d5c9@rivosinc.com>
+	s=arc-20240116; t=1712838291; c=relaxed/simple;
+	bh=BwmI/VbTX1EvQiXLo6C/T9uCgo1d+R0nC9W0fag6FO8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=PdohCG0IuVSKtgI+Ow8K5+d0x1HMdhL/6JJw13Cmi+XKYCiKhkMDHU5UuR2t17UbT6onSGlfBji4Yv5O1/CYaRBRyv2jYggm4rsLp8heQnenNlek4soWknij9z3daaX2qRkjJ20ZzcphPbfVGXIroERMbVlyRItrWnP/SFZU+J0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4VFf5g1nCLz4f3kGC;
+	Thu, 11 Apr 2024 20:24:39 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 20E461A0DB7;
+	Thu, 11 Apr 2024 20:24:46 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+	by APP4 (Coremail) with SMTP id gCh0CgA3h2mJ1hdmZ5R_Jw--.23051S6;
+	Thu, 11 Apr 2024 20:24:45 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Brendan Jackman <jackmanb@chromium.org>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	Khadija Kamran <kamrankhadijadj@gmail.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	John Johansen <john.johansen@canonical.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Subject: [PATCH bpf-next v3 04/11] bpf, lsm: Add bpf lsm disabled hook list
+Date: Thu, 11 Apr 2024 20:27:45 +0800
+Message-Id: <20240411122752.2873562-5-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20240411122752.2873562-1-xukuohai@huaweicloud.com>
+References: <20240411122752.2873562-1-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="jM0CNQ7ZIr2lhGV/"
-Content-Disposition: inline
-In-Reply-To: <c86f9fa8-e273-4509-83fa-f21d3265d5c9@rivosinc.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgA3h2mJ1hdmZ5R_Jw--.23051S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfWry7KF1fKF1fKFyxAFb_yoW8CrWDpa
+	yfJryYk34Fvw4a93Z8tFs5urW5Jr4vqanrK3W7Jw1Yyr40vr1kX3WjkrsI9r9xuFyUJwn3
+	Kr4jgF1Ygry2vaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
+	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+	IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
---jM0CNQ7ZIr2lhGV/
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From: Xu Kuohai <xukuohai@huawei.com>
 
-On Thu, Apr 11, 2024 at 11:08:21AM +0200, Cl=E9ment L=E9ger wrote:
-> >> If we consider to have potentially broken isa string (ie extensions
-> >> dependencies not correctly handled), then we'll need some way to
-> >> validate this within the kernel.
-> >=20
-> > No, the DT passed to the kernel should be correct and we by and large we
-> > should not have to do validation of it. What I meant above was writing
-> > the binding so that something invalid will not pass dtbs_check.
->=20
-> Acked, I was mainly answering Deepak question about dependencies wrt to
-> using __RISCV_ISA_EXT_SUPERSET() which does not seems to be relevant
-> since we expect a correct isa string to be passed.
+Add a disabled hooks list for bpf lsm. progs being attached to the
+listed hooks will be rejected by the verifier.
 
-Ahh, okay.
+Suggested-by: KP Singh <kpsingh@kernel.org>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ kernel/bpf/bpf_lsm.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-> But as you stated, DT
-> validation clearly make sense. I think a lot of extensions strings would
-> benefit such support (All the Zv* depends on V, etc).
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 4e1a4a333000..7f5648b404f2 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -68,6 +68,12 @@ BTF_SET_START(bpf_lsm_hooks)
+ #undef LSM_HOOK
+ BTF_SET_END(bpf_lsm_hooks)
+ 
++BTF_SET_START(bpf_lsm_disabled_hooks)
++BTF_ID(func, bpf_lsm_getprocattr)
++BTF_ID(func, bpf_lsm_setprocattr)
++BTF_ID(func, bpf_lsm_ismaclabel)
++BTF_SET_END(bpf_lsm_disabled_hooks)
++
+ /* List of LSM hooks that should operate on 'current' cgroup regardless
+  * of function signature.
+  */
+@@ -129,15 +135,25 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
+ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+ 			const struct bpf_prog *prog)
+ {
++	u32 btf_id = prog->aux->attach_btf_id;
++	const char *func_name = prog->aux->attach_func_name;
++
+ 	if (!prog->gpl_compatible) {
+ 		bpf_log(vlog,
+ 			"LSM programs must have a GPL compatible license\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	if (!btf_id_set_contains(&bpf_lsm_hooks, prog->aux->attach_btf_id)) {
++	if (btf_id_set_contains(&bpf_lsm_disabled_hooks, btf_id)) {
++		bpf_log(vlog,
++			"attach_btf_id %u points to disabled bpf lsm hook %s\n",
++			btf_id, func_name);
++		return -EINVAL;
++	}
++
++	if (!btf_id_set_contains(&bpf_lsm_hooks, btf_id)) {
+ 		bpf_log(vlog, "attach_btf_id %u points to wrong type name %s\n",
+-			prog->aux->attach_btf_id, prog->aux->attach_func_name);
++			btf_id, func_name);
+ 		return -EINVAL;
+ 	}
+ 
+-- 
+2.30.2
 
-I think it is actually as simple something like this, which makes it
-invalid to have "d" without "f":
-
-| diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Do=
-cumentation/devicetree/bindings/riscv/extensions.yaml
-| index 468c646247aa..594828700cbe 100644
-| --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
-| +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
-| @@ -484,5 +484,20 @@ properties:
-|              Registers in the AX45MP datasheet.
-|              https://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-=
-5.0.0-Datasheet.pdf
-| =20
-| +allOf:
-| +  - if:
-| +      properties:
-| +        riscv,isa-extensions:
-| +          contains:
-| +            const: "d"
-| +          not:
-| +            contains:
-| +              const: "f"
-| +    then:
-| +      properties:
-| +        riscv,isa-extensions:
-| +          false
-| +
-| +
-|  additionalProperties: true
-|  ...
-
-If you do have d without f, the checker will say:
-cpu@2: riscv,isa-extensions: False schema does not allow ['i', 'm', 'a', 'd=
-', 'c']
-
-At least that's readable, even though not clear about what to do. I wish
-the former could be said about the wall of text you get for /each/
-undocumented entry in the string.
-
---jM0CNQ7ZIr2lhGV/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhfPRwAKCRB4tDGHoIJi
-0stXAP9uCAN5bZHcv91EPinTAeqedRCedCrkE5YEE9f8JUyrxgD8CAHddpGznZHx
-TNOtc9GaDiQRS4tdrlJo9+Hn1Puv4w0=
-=k3aJ
------END PGP SIGNATURE-----
-
---jM0CNQ7ZIr2lhGV/--
