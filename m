@@ -1,63 +1,66 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49BC14B073
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 16:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AAE14BF92
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 16:52:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712940767; cv=none; b=fU/Y/Uecc3p2xs9cQ+y8alKl6AYicF+A/0mHnBrKn2wsBVq6NYWj1zEkDZ1zWd181AxHOTCy0NbNqkJe9EK3SkJ5yvRXk4MZ3/dXfoRKsuoveEKnXVFxbPCmB4Y6MJcAUihSsvMPYCJo7IEcF3vXRS4vNR+gsTa1RkRE/2A35Fg=
+	t=1712940770; cv=none; b=L/h9fgvNmuF7k9c4p98pqkIZvb4gvV8nLgwFQyJ708iio1hjbuoOXH+BKiIMz1kJ2AXpO2LDe+pKzdwdIQssorjr9rA5sMOJu6xQcThJsXoj71WL98NowQIY+muA4QDIzOdpfDYz1nqPOE+U0Gyy2Im76kbLF3E5m9Rvi8BY5Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712940767; c=relaxed/simple;
-	bh=usmj1mNoKthI5m8l3Dk3m0aCP+Dn54ILjAR1+C5OQ2w=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=W+/vEYjXvrwS1cRrPttscdJG25zeF1n+WsMwVVL0BQw+gfBR6LgDRX8iW/aEvC6Oq4Z6WJ1e1566IDAePzSaXTLUE5rV2M27dljGwN8yWTypvtNGFeCyyPlUM5afZvodlezAUm8PBulmFn0tjK8Cz1bs5o5X4YQLzF76uO4dkuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CG2YHcOn; arc=none smtp.client-ip=209.85.128.201
+	s=arc-20240116; t=1712940770; c=relaxed/simple;
+	bh=4ysUujkhmWpniBw5497xDCByIggQ2+aGhR+vSt9krfU=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=nhUGYMTzIzCY8VmultF9hqgb9wE9Rk/IjOqtszE7rhu1Vyzu8df4uH/y7aXAOAlvEPgTlsq73NMwTQtupOBXAzy7hiw5tsLokQS2j/pPOsqyqyACr4O5uTfPmxHDavhITPF+mMEgqMgxolBxBghhHIeTCi1006/P3AsvEQZtNzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OPDcFsFC; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CG2YHcOn"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6180514a5ffso12998577b3.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 09:52:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OPDcFsFC"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dcd1779adbeso1792956276.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 09:52:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712940765; x=1713545565; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vQ3wry0bRnSowFxbBNPWKPghb31lBBPlIMBNxACr2OA=;
-        b=CG2YHcOni6AEmlQmicX+mS5T8GEIbabjEioW43Twavrb7oS7ALRRZZu5owzqsGNEyR
-         qlvHOvHmVpsN3sfYMRIZuz6DRLDwFf7QFj++azKzXYkNlayAh70uxajwA4MYOC4SqdfH
-         HMXzKLuQRnHTOZvm+bkY3g6gK8ynJK2d3evXEyD8mVjkHUk2KA5ZRJ0nDIp9WRmJ8Qw8
-         QFYWQwXheg1LE1W9HRkznh32p4iGWY1RPK+SNt5LY+m3bgd6PSafZcWg6A91DZ9+Y3RZ
-         1G7/ZCepk90a9uLuZxDznMZ2f+XYvIuYatPZgMsYRoURUPk0SATnQ3jULWQVrVAY6AQ5
-         ONTA==
+        d=google.com; s=20230601; t=1712940768; x=1713545568; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qrm0IPGHpUgLnmwZ4xUH2dS9N0r0jHRYc5VqLEJGVMg=;
+        b=OPDcFsFCfrVJ8hsCEXQulrKseMhaDD4m6Je4M32tv3NfJ/IQe1H/gDQaRUmog6fowk
+         eevFsaV906mnrxkJwqjvQwYXIss4mbuhSSoI8NDMCG2fUssdtN8NxmjbiSVHhD1DM0nw
+         v7k4cHocJ59XwrhSeQIvz5ugY6X4NdxFtGWJgtrWUrXffbvLllNjRt2K14kRxCcTRceJ
+         tFAxI0VC5yoCqL4by+kXkmr2Ga88BPJmihog8L/8Qz4IAbV2mj0kb8TGqauc8zqwbRbx
+         jxMDDsstWlNByr+sXxW1rYIJqQIFjZWSa83zKs9ygX9lhTtRdBs/Oa470p133/gxW9U6
+         oVtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712940765; x=1713545565;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vQ3wry0bRnSowFxbBNPWKPghb31lBBPlIMBNxACr2OA=;
-        b=U9R8cE1WfHubNLFyfAPhF7mqNXSYD4LJ9mTS7hQHcoX9ROdySFXrH5tvb26akewbmP
-         DUaM5xdhEUvwudkCcflOS/G2uXERJS7u5C7yDXwXbGZIJYSLBR0bvAO9o8bqxbykI64N
-         kj1hAzeE5VFW1KXrKCNBJp0gG9uEyFFpTr3ZzZLc3uCBT01DIOByRWU3zAxbN9AOMyzv
-         nJQC5wUSmgBbI8pQj0O1gJg7TxNN0ymUl/O5EkvT6DWhw+x+FDtZ79mRhcTdcJFsyXQ9
-         s4fFTpl12y2s5rsjRdYTq3xZcfqyV9S8kSMsValEtskoStO+IEgEcSPlpGz7icfAQvqv
-         oX0w==
-X-Forwarded-Encrypted: i=1; AJvYcCU5VC+2fn5Edhb0exwYNX5KpZzSXLTbApS4vaaLXS9NplorfH+iYI2NCYBEUy0C/X/iOoR2dogOHZtuk4/ohiuY3iQ/8AstLvQpNUzkOfze
-X-Gm-Message-State: AOJu0YwJ3FB9FWXW26/WLE80kl5yFdaaHJ+ITsHmemevLX5u5rFXkGp1
-	Cp7jZmAsFlikrAFOAPweh15rnfXN76Yst+aB0ksMO5Jdn5MKXcusa+TWt7esD+xs7FtA9RGjng=
+        d=1e100.net; s=20230601; t=1712940768; x=1713545568;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qrm0IPGHpUgLnmwZ4xUH2dS9N0r0jHRYc5VqLEJGVMg=;
+        b=e1VuKNDztkpw5JVgj1cbf9PpcNXbAXYIIuJbf+0wxXK0Ls73N1qS/Lq1k6Ww40A4l7
+         R/bS7Efca/AZ+ZP7SFOVScg5HztxGmOPViBBJ9v+ZwhjCYvaLEEeHmeVS65OSk8w4zaP
+         GqoKRxACwHYa6jXgaZZg9qdFLG1nBvpEc6QRP7wvz+rfN3xWQoEX0VxrE9NZ7hy1pYf3
+         3wX4Eu4/HN3GIEox0JQ7VbyjDzLVhFOAMVOYbO8fUfH9jqaomX0C3i1WjZytYHP5PbCD
+         KWYQ8luurkNWk5IMUs6JJ7iFkBmnR9Ok6FCyYiUzLnqs2v6E/zT3GnK5p9ntXSWUL137
+         MbLg==
+X-Forwarded-Encrypted: i=1; AJvYcCUZVH4BEXThEZ6XReqqvCIgP6uPUQKTTq7g6MPdhfOa6kZUZDGs2KGmNs3gUZtI/5W6r7yEzC5XxhqNsNzeIyhIEJ5ESRhY9ctWUwfJRMIM
+X-Gm-Message-State: AOJu0YwF5zv2OHDS5fhg4jSFRvuCvX6oahFCm8sOcjxU5XOznA6mGPD0
+	bSW/oIDTQoGpdcReCYrAf/VCFWpQcaKjD/j/Lo9MG09cfPk0n+ZGnFajECqXpQXJCDSkp5xPxA=
 	=
-X-Google-Smtp-Source: AGHT+IF9WYo61DUMT0LJwtbVzY7nTOoh6B3GbB8pT2/kXoroFpERZxCmf6idfLJrdqRCRd+UeikUEizhGg==
+X-Google-Smtp-Source: AGHT+IEvLXnUt1tDwR52cd2+PIzNCWsXEcc1PXHoC05DOnfM3doMKPwnA9b8H+lG2YivsGOn76jmhCohBw==
 X-Received: from jrife.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:9f])
- (user=jrife job=sendgmr) by 2002:a81:4c55:0:b0:618:3525:2bb4 with SMTP id
- z82-20020a814c55000000b0061835252bb4mr1435298ywa.3.1712940765015; Fri, 12 Apr
- 2024 09:52:45 -0700 (PDT)
-Date: Fri, 12 Apr 2024 11:52:21 -0500
+ (user=jrife job=sendgmr) by 2002:a25:8d83:0:b0:dd9:1dc0:b6c5 with SMTP id
+ o3-20020a258d83000000b00dd91dc0b6c5mr812753ybl.6.1712940768309; Fri, 12 Apr
+ 2024 09:52:48 -0700 (PDT)
+Date: Fri, 12 Apr 2024 11:52:23 -0500
+In-Reply-To: <20240412165230.2009746-1-jrife@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20240412165230.2009746-1-jrife@google.com>
 X-Mailer: git-send-email 2.44.0.683.g7961c838ac-goog
-Message-ID: <20240412165230.2009746-1-jrife@google.com>
-Subject: [PATCH v2 bpf-next 0/6] selftests/bpf: Add sockaddr tests for kernel networking
+Message-ID: <20240412165230.2009746-3-jrife@google.com>
+Subject: [PATCH v2 bpf-next 2/6] selftests/bpf: Implement socket kfuncs for bpf_testmod
 From: Jordan Rife <jrife@google.com>
 To: bpf@vger.kernel.org
 Cc: Jordan Rife <jrife@google.com>, linux-kselftest@vger.kernel.org, 
@@ -73,85 +76,241 @@ Cc: Jordan Rife <jrife@google.com>, linux-kselftest@vger.kernel.org,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This patch series adds test coverage for BPF sockaddr hooks and their
-interactions with kernel socket functions (i.e. kernel_bind(),
-kernel_connect(), kernel_sendmsg(), sock_sendmsg(),
-kernel_getpeername(), and kernel_getsockname()) while also rounding out
-IPv4 and IPv6 sockaddr hook coverage in prog_tests/sock_addr.c.
+This patch adds a set of kfuncs to bpf_testmod that can be used to
+manipulate a socket from kernel space.
 
-As with v1 of this patch series, we add regression coverage for the
-issues addressed by these patches,
+Signed-off-by: Jordan Rife <jrife@google.com>
+---
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 139 ++++++++++++++++++
+ .../bpf/bpf_testmod/bpf_testmod_kfunc.h       |  27 ++++
+ 2 files changed, 166 insertions(+)
 
-- commit 0bdf399342c5("net: Avoid address overwrite in kernel_connect")
-- commit 86a7e0b69bd5("net: prevent rewrite of msg_name in sock_sendmsg()")
-- commit c889a99a21bf("net: prevent address rewrite in kernel_bind()")
-- commit 01b2885d9415("net: Save and restore msg_namelen in sock_sendmsg")
-
-but broaden the focus a bit.
-
-In order to extend prog_tests/sock_addr.c to test these kernel
-functions, we add a set of new kfuncs that wrap individual socket
-operations to bpf_testmod and invoke them through set of corresponding
-SYSCALL programs (progs/sock_addr_kern.c). Each test case can be
-configured to use a different set of "sock_ops" depending on whether it
-is testing kernel calls (kernel_bind(), kernel_connect(), etc.) or
-system calls (bind(), connect(), etc.).
-
-=======
-Patches
-=======
-* Patch 1 fixes the sock_addr bind test program to work for big endian
-  architectures such as s390x.
-* Patch 2 introduces the new kfuncs to bpf_testmod.
-* Patch 3 introduces the BPF program which allows us to invoke these
-  kfuncs invividually from the test program.
-* Patch 4 lays the groundwork for IPv4 and IPv6 sockaddr hook coverage
-  by migrating much of the environment setup logic from
-  bpf/test_sock_addr.sh into prog_tests/sock_addr.c and adds test cases
-  to cover bind4/6, connect4/6, sendmsg4/6 and recvmsg4/6 hooks.
-* Patch 5 makes the set of socket operations for each test case
-  configurable, laying the groundwork for Patch 6.
-* Patch 6 introduces two sets of sock_ops that invoke the kernel
-  equivalents of connect(), bind(), etc. and uses these to add coverage
-  for the kernel socket functions.
-
-=======
-Changes
-=======
-v1->v2
-------
-* Dropped test_progs/sock_addr_kern.c and the sock_addr_kern test module
-  in favor of simply expanding bpf_testmod and test_progs/sock_addr.c.
-* Migrated environment setup logic from bpf/test_sock_addr.sh into
-  prog_tests/sock_addr.c rather than invoking the script from the test
-  program.
-* Added kfuncs to bpf_testmod as well as the sock_addr_kern BPF program
-  to enable us to invoke kernel socket functions from
-  test_progs/sock_addr.c.
-* Added test coverage for kernel socket functions to
-  test_progs/sock_addr.c.
-
-Link: https://lore.kernel.org/bpf/20240329191907.1808635-1-jrife@google.com/T/#u
-
-Jordan Rife (6):
-  selftests/bpf: Fix bind program for big endian systems
-  selftests/bpf: Implement socket kfuncs for bpf_testmod
-  selftests/bpf: Implement BPF programs for kernel socket operations
-  selftests/bpf: Add IPv4 and IPv6 sockaddr test cases
-  selftests/bpf: Make sock configurable for each test case
-  selftests/bpf: Add kernel socket operation tests
-
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 139 +++
- .../bpf/bpf_testmod/bpf_testmod_kfunc.h       |  27 +
- .../selftests/bpf/prog_tests/sock_addr.c      | 940 +++++++++++++++---
- .../testing/selftests/bpf/progs/bind4_prog.c  |  18 +-
- .../testing/selftests/bpf/progs/bind6_prog.c  |  18 +-
- tools/testing/selftests/bpf/progs/bind_prog.h |  19 +
- .../selftests/bpf/progs/sock_addr_kern.c      |  65 ++
- 7 files changed, 1077 insertions(+), 149 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/bind_prog.h
- create mode 100644 tools/testing/selftests/bpf/progs/sock_addr_kern.c
-
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index 39ad96a18123f..663df8148097e 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -10,18 +10,29 @@
+ #include <linux/percpu-defs.h>
+ #include <linux/sysfs.h>
+ #include <linux/tracepoint.h>
++#include <linux/net.h>
++#include <linux/socket.h>
++#include <linux/nsproxy.h>
++#include <linux/inet.h>
++#include <linux/in.h>
++#include <linux/in6.h>
++#include <linux/un.h>
++#include <net/sock.h>
+ #include "bpf_testmod.h"
+ #include "bpf_testmod_kfunc.h"
+ 
+ #define CREATE_TRACE_POINTS
+ #include "bpf_testmod-events.h"
+ 
++#define CONNECT_TIMEOUT_SEC 1
++
+ typedef int (*func_proto_typedef)(long);
+ typedef int (*func_proto_typedef_nested1)(func_proto_typedef);
+ typedef int (*func_proto_typedef_nested2)(func_proto_typedef_nested1);
+ 
+ DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) = 123;
+ long bpf_testmod_test_struct_arg_result;
++static struct socket *sock;
+ 
+ struct bpf_testmod_struct_arg_1 {
+ 	int a;
+@@ -494,6 +505,124 @@ __bpf_kfunc static u32 bpf_kfunc_call_test_static_unused_arg(u32 arg, u32 unused
+ 	return arg;
+ }
+ 
++__bpf_kfunc int bpf_kfunc_init_sock(struct init_sock_args *args)
++{
++	int proto;
++
++	if (sock)
++		pr_warn("%s called without releasing old sock", __func__);
++
++	switch (args->af) {
++	case AF_INET:
++	case AF_INET6:
++		proto = args->type == SOCK_STREAM ? IPPROTO_TCP : IPPROTO_UDP;
++		break;
++	case AF_UNIX:
++		proto = PF_UNIX;
++		break;
++	default:
++		pr_err("invalid address family %d\n", args->af);
++		return -EINVAL;
++	}
++
++	return sock_create_kern(&init_net, args->af, args->type, proto, &sock);
++}
++
++__bpf_kfunc void bpf_kfunc_close_sock(void)
++{
++	if (sock) {
++		sock_release(sock);
++		sock = NULL;
++	}
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_connect(struct addr_args *args)
++{
++	/* Set timeout for call to kernel_connect() to prevent it from hanging,
++	 * and consider the connection attempt failed if it returns
++	 * -EINPROGRESS.
++	 */
++	sock->sk->sk_sndtimeo = CONNECT_TIMEOUT_SEC * HZ;
++
++	return kernel_connect(sock, (struct sockaddr *)&args->addr,
++			      args->addrlen, 0);
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_bind(struct addr_args *args)
++{
++	return kernel_bind(sock, (struct sockaddr *)&args->addr, args->addrlen);
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_listen(void)
++{
++	return kernel_listen(sock, 128);
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_sendmsg(struct sendmsg_args *args)
++{
++	struct msghdr msg = {
++		.msg_name	= &args->addr.addr,
++		.msg_namelen	= args->addr.addrlen,
++	};
++	struct kvec iov;
++	int err;
++
++	iov.iov_base = args->msg;
++	iov.iov_len  = args->msglen;
++
++	err = kernel_sendmsg(sock, &msg, &iov, 1, args->msglen);
++	args->addr.addrlen = msg.msg_namelen;
++
++	return err;
++}
++
++__bpf_kfunc int bpf_kfunc_call_sock_sendmsg(struct sendmsg_args *args)
++{
++	struct msghdr msg = {
++		.msg_name	= &args->addr.addr,
++		.msg_namelen	= args->addr.addrlen,
++	};
++	struct kvec iov;
++	int err;
++
++	iov.iov_base = args->msg;
++	iov.iov_len  = args->msglen;
++
++	iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, &iov, 1, args->msglen);
++	err = sock_sendmsg(sock, &msg);
++	args->addr.addrlen = msg.msg_namelen;
++
++	return err;
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_getsockname(struct addr_args *args)
++{
++	int err;
++
++	err = kernel_getsockname(sock, (struct sockaddr *)&args->addr);
++	if (err < 0)
++		goto out;
++
++	args->addrlen = err;
++	err = 0;
++out:
++	return err;
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_getpeername(struct addr_args *args)
++{
++	int err;
++
++	err = kernel_getpeername(sock, (struct sockaddr *)&args->addr);
++	if (err < 0)
++		goto out;
++
++	args->addrlen = err;
++	err = 0;
++out:
++	return err;
++}
++
+ BTF_KFUNCS_START(bpf_testmod_check_kfunc_ids)
+ BTF_ID_FLAGS(func, bpf_testmod_test_mod_kfunc)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
+@@ -520,6 +649,15 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ref, KF_TRUSTED_ARGS | KF_RCU)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_destructive, KF_DESTRUCTIVE)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_static_unused_arg)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_offset)
++BTF_ID_FLAGS(func, bpf_kfunc_init_sock)
++BTF_ID_FLAGS(func, bpf_kfunc_close_sock)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_connect)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_bind)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_listen)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_sendmsg)
++BTF_ID_FLAGS(func, bpf_kfunc_call_sock_sendmsg)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_getsockname)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_getpeername)
+ BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
+ 
+ static int bpf_testmod_ops_init(struct btf *btf)
+@@ -650,6 +788,7 @@ static int bpf_testmod_init(void)
+ 		return ret;
+ 	if (bpf_fentry_test1(0) < 0)
+ 		return -EINVAL;
++	sock = NULL;
+ 	return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
+index 7c664dd610597..cdf7769a7d8ca 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
+@@ -64,6 +64,22 @@ struct prog_test_fail3 {
+ 	char arr2[];
+ };
+ 
++struct init_sock_args {
++	int af;
++	int type;
++};
++
++struct addr_args {
++	char addr[sizeof(struct __kernel_sockaddr_storage)];
++	int addrlen;
++};
++
++struct sendmsg_args {
++	struct addr_args addr;
++	char msg[10];
++	int msglen;
++};
++
+ struct prog_test_ref_kfunc *
+ bpf_kfunc_call_test_acquire(unsigned long *scalar_ptr) __ksym;
+ void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
+@@ -106,4 +122,15 @@ void bpf_kfunc_call_test_fail3(struct prog_test_fail3 *p);
+ void bpf_kfunc_call_test_mem_len_fail1(void *mem, int len);
+ 
+ void bpf_kfunc_common_test(void) __ksym;
++
++int bpf_kfunc_init_sock(struct init_sock_args *args) __ksym;
++void bpf_kfunc_close_sock(void) __ksym;
++int bpf_kfunc_call_kernel_connect(struct addr_args *args) __ksym;
++int bpf_kfunc_call_kernel_bind(struct addr_args *args) __ksym;
++int bpf_kfunc_call_kernel_listen(void) __ksym;
++int bpf_kfunc_call_kernel_sendmsg(struct sendmsg_args *args) __ksym;
++int bpf_kfunc_call_sock_sendmsg(struct sendmsg_args *args) __ksym;
++int bpf_kfunc_call_kernel_getsockname(struct addr_args *args) __ksym;
++int bpf_kfunc_call_kernel_getpeername(struct addr_args *args) __ksym;
++
+ #endif /* _BPF_TESTMOD_KFUNC_H */
 -- 
 2.44.0.478.gd926399ef9-goog
 
