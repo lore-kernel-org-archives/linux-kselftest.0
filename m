@@ -1,144 +1,156 @@
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CD414C587;
-	Fri, 12 Apr 2024 17:06:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712941611; cv=fail; b=dzyONIYps3G435oeynBigLUF5JXmLBTC01k29a1x5XHpwfTiGn22WdYS1FEEFltrpy1gKGvx44vmt4Nwbf/EwZt8Be+SsAU+sFRzSCvIoxpe9fGxQwvrC7EjV0DS0AtEEqQsltRAyhUK79bOhBvMD9DHj4p2eBaVgUks0N3hItk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712941611; c=relaxed/simple;
-	bh=SzDVnNiB8t4r0UjRH7hF5WyNf1yWrrvu6SpXAe50+YA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=i/7A2WaZLVJdArGDw1KdeA4KDdFoFnp2QB0h71slk8ohYdBT5GFcEMcapRPSXbEa329Qgir5WyQdmG649dUKIuR1YP3TCdXWf3XxMUU7FoIpVN2xKqwjI+GARqIRAJPrRky3ZCmqzgGxM3qry6WUNG5SLnAHvud47reEIjdZD5o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tHu9L6m5; arc=fail smtp.client-ip=40.107.94.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4EA148313
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 17:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712941945; cv=none; b=rM5Ceqg77ZlpfTwpy8fXA3j/XUr9mOhG6cdlnDk1/y1uT9ETeE/Hc24zSlqfu/4+HWDPiFeWruSrVC8oO9m3gAtXZW+bKZNbUr75vSzDTYD0bPRFCsIFL0llUQ41osioHKJk9fiOuuvJhWW+2AELxxNG1Bbi17iJBw0tMM38rvI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712941945; c=relaxed/simple;
+	bh=zqFAuUa4RtTLPiQXk/lFHSFz6oHcmMCx6C1nVyRW8AM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t03GPx1MZRetPCFy1oEiXozAM6lKGsBQTYMweFx6NZs9d5RoDdfAmaN8szDo57ZssbQlun3hrvet84bspkTm5id+Pnl/6u8WtPTVmwNRLYc9szzQ8cY/phJ9zgNtKHcgASZIUG/F2k9dWPGUPcKsIGYpexKQVZeR0HN1TOUga7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=D+RLPQOu; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tHu9L6m5"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SvzQY7AhWSLzLPyxSVT1dtZTjZjLZtIT07a3kMkH1x4z7XmjNDBjyTTgqA2Xq5C31wWqwGUsAu7gbyW0/9aKiJKWJWoHt278KINZfHOwj+JdXhvLI10Zvo0+hhWVm9FzrGjlzatTOXKu5IBEI2d6idhKHxZbP422cdHNsraflwsEKYE6rreT9dSdYOJtfLzFBPC+KsSolc+sxoTtaJC4eMpvHozU67XKzVR9/LX6Gor5vsPR48lb5rPvskOpLD1Vwk9rL58lc28BRYF3FqgtcoxeIJ0nvSf49pNnQ4e9kUHlObUiM4mhvtAnzsaWug5PdbuOgIu3pxTvfT/+wl28eA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kyeiRW2en3GKPn7qjCXQ5mReksSqxo0OFqtRi8QI2HM=;
- b=GBEoudj2DtIDAL6NQQbWpt08LcS8HqZAOmm5aJRmFFWrpuoz6139/dEtRzJLvAuBfW/QhFbOB+4jlepi1rRzzI/v5x86JSgbMCpax1i9qckghpyWKJoFlBSOAn0JUCilHOK8PHiCJIJjcSc3me6Echw/6zb2eik9+sxbqwHyhqmvHKKgGMlSI5/UQOyq4+oif2aHrsCXHdweTHFEc/MGQqjiGBroxX3fkIX4tblSxSQIm9WCym0kqN4r88N7/CEMbIXqmbBs3WD1ftp61Ar/fTE7EaBdXJaxkZ5GP1IARKkDxW5EioR+xm6EHj+ErMoWs49hBZiYf4J7AaTT+1OfZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kyeiRW2en3GKPn7qjCXQ5mReksSqxo0OFqtRi8QI2HM=;
- b=tHu9L6m57PE9yGzGLrJxgcl43Yo+P6SSqUb24Q2ahV8AQzqWRgjP0TPQVRTS1L+KNBefArqZUIEY5uRst2mXiAB9Pi2Dp2ZsQhalCB3S/5yxZWFRbadsYk8VdXVlkT5B473pqm8lGC1vr0oOgZFP2XPhS+6zcynZUwN/NW6I/h1lOV6zzzyHPcwPyo5jHtIccoKkca5ZMdN956J151L4nep6vqoUnjb8kw7vex+aDnOjNDFqEkyrGvyj87+J8mKZxmgWoSJRMHdVnsHFxm2eRbxixEP84fLTHVz7EMIIGfIkZbZ7TrrNy1/sPUUbCsEmxcDIWdoIvch8heWuHTNO1A==
-Received: from MW4PR03CA0150.namprd03.prod.outlook.com (2603:10b6:303:8c::35)
- by PH7PR12MB6719.namprd12.prod.outlook.com (2603:10b6:510:1b2::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.55; Fri, 12 Apr
- 2024 17:06:43 +0000
-Received: from MWH0EPF000971E3.namprd02.prod.outlook.com
- (2603:10b6:303:8c:cafe::7e) by MW4PR03CA0150.outlook.office365.com
- (2603:10b6:303:8c::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.26 via Frontend
- Transport; Fri, 12 Apr 2024 17:06:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MWH0EPF000971E3.mail.protection.outlook.com (10.167.243.70) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7452.22 via Frontend Transport; Fri, 12 Apr 2024 17:06:42 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 12 Apr
- 2024 10:06:20 -0700
-Received: from localhost.localdomain (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Fri, 12 Apr
- 2024 10:06:16 -0700
-From: Petr Machata <petrm@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, <netdev@vger.kernel.org>
-CC: Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	<linux-kselftest@vger.kernel.org>, Petr Machata <petrm@nvidia.com>,
-	<mlxsw@nvidia.com>
-Subject: [PATCH net-next 10/10] selftests: forwarding: router_nh: Add a diagram
-Date: Fri, 12 Apr 2024 19:03:13 +0200
-Message-ID: <ec60c64b682c307d8db9c9cb1f35d6e43bebd1e5.1712940759.git.petrm@nvidia.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <cover.1712940759.git.petrm@nvidia.com>
-References: <cover.1712940759.git.petrm@nvidia.com>
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="D+RLPQOu"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5ce9555d42eso714982a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 10:12:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712941943; x=1713546743; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=V6RQsJgA0sqhyVb4iUdwKlWBxVZP7PvFbdqSmnVezOg=;
+        b=D+RLPQOuO59Frl872Dq1M1BXp+H6DMxSrUpYFhphqoStzdMR5F5CmS+v7VjCYYBFk9
+         VyxPjF2P2a1sfW38Msxs07wCvPIk2OrtWZgnAsOywGWA3zUK9yUwUDtvhnE/C/mBYoR0
+         3a84ssdOeskMF336DP4192GCjKJfsIckDwa0AMlqoR1t/B1NK6oewhuFNNL7FsK4nhuS
+         /1yWKDVCK68KPbJyV6Aduv9vOwdsH2s11d3Oqhj42xAmT4gl2Di5xiRfsPjFvNi2Dkcw
+         dT9j3BRnG98HpCXMy7mPTICPjclKHObbjsaoZlVL20yrmIJIWgErGX0eAuoTxXaWQj8T
+         Klrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712941943; x=1713546743;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V6RQsJgA0sqhyVb4iUdwKlWBxVZP7PvFbdqSmnVezOg=;
+        b=dZBFMU7hqN0Aie3A+dITOhbIuXDEcynoiMJXfQETDAGGms52x6X1eaxK0ci3PqtLdM
+         sUSzkk58YCz4zWzxVaFuQd/zGBpjQVh9rPRj+eNsNwm2dyRS9FVto356jHTF+5suVQhY
+         cuChGIwO1GZAktDyRAAz0REpXlVZ3Ji8wnVQsPRvT/9q1sEMgjkT37EwpqrFpnuobmVg
+         J2ewBrmAYmuB7xDtiDtbLXWjAzt3GWrJfzgYRATY6130Y1MzLGy3LgMp2fSHHeSRUe6F
+         A2LVLpcOw8fIyM8DavSzQe0LUgIuyIxZWtq6yTXrzeqP3FI2gQ6pARnz2opR6/cK4JVq
+         Lpfg==
+X-Forwarded-Encrypted: i=1; AJvYcCVcatH/KhrJH4g3ZbA44RkTAAl+Wf74xj8egbPXBMy5cHN89qMzbdL7NUruKZAKynnDEL0lROhGGzncCiGcq/fCTJM/OPZ6QKVoUO9FlnO5
+X-Gm-Message-State: AOJu0YzX2YNv3QRBZAH50fhPXmd0OeMRULOkvPOfMONOMB0mlwrMjtFV
+	uSJAX9lUsUCDvRpyW3dOYov9bwd0M09TVKnTCrGHY3AADAmcbSzLd+e+D3oNi2A=
+X-Google-Smtp-Source: AGHT+IGENLLg9Nrtb+afnnQbyAqzrlHIs52avdhanWUzgTqUmFBmisUUxHkztjDQR67LUvfCdWQBaQ==
+X-Received: by 2002:a05:6a20:550a:b0:1a9:4343:765f with SMTP id ko10-20020a056a20550a00b001a94343765fmr3511412pzb.23.1712941942911;
+        Fri, 12 Apr 2024 10:12:22 -0700 (PDT)
+Received: from ghost ([2601:647:5700:6860:121b:da6b:94f1:304])
+        by smtp.gmail.com with ESMTPSA id u4-20020aa78484000000b006ed59179b14sm3114754pfn.83.2024.04.12.10.12.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Apr 2024 10:12:22 -0700 (PDT)
+Date: Fri, 12 Apr 2024 10:12:20 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 02/19] riscv: cpufeature: Fix thead vector hwcap removal
+Message-ID: <ZhlrdGXfSushUNTp@ghost>
+References: <20240411-dev-charlie-support_thead_vector_6_9-v1-0-4af9815ec746@rivosinc.com>
+ <20240411-dev-charlie-support_thead_vector_6_9-v1-2-4af9815ec746@rivosinc.com>
+ <20240412-tuesday-resident-d9d07e75463c@wendy>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E3:EE_|PH7PR12MB6719:EE_
-X-MS-Office365-Filtering-Correlation-Id: f534df45-e038-440d-ec8b-08dc5b12ed16
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	baMHu1liQ6TUFk4yYVVTSRwKNlK8RIeTiL9AoWDHhhueVmferO0s91yvHk7m5mJlnXN/x4dJuEjwMZWtmHesTr3pD2RtsCKOJb8xQtGcSyxl3hsQy5Lh3JNL1eIDJB7QAGakcw3v8i1Uw0ocqr+NMGUZ6rTgPH4cueNKXrWjHk4i+zkccvfblB3VJQpMniiYu0H5Qa9SdKfwsPfISf7sWxUR6fPXYGPTpKmXcRnBVnPf9+y0/cXgDvv+MjgSptHFlr/uU0c6Jiqc6R2STntxhXmzwHolWDc22AiKyZP+OALciT3TV1Y/aXiQIoS7mNYoGOIxoTcx0GAm7Lwg6qnR8JBixeN/1iRPYUutm+J41TzuJq8u7Kqau4PHX35n7eh0zkXt78TqgiyV5ctSp27yMvFDAfDrPo/gAzKefKWNq07MgtdlpdJckEMU5Qawja7PMDLxmidt7vY/G2EqaeQAP+nfCs2wjv56oC615ZsxRp3L5NkZ6wjJi4v5Ho7dHX7V3PB7XTHR0rLD9LMreeRBnRVShaBnDkbwpRReVyBEX3Bp+oXs6DOk29c5uDXygbCQR6ZdmLMj3g0kHHzeJBSdWCosCUn+ewlwOMReOCKivef/4uzd/tqlFtqvA5cOZ+cRii+IfYS54RUGijQVWd6xWRwFl8wAdqSo8gEGE9bLjyqqsuaxjEr2r9MrxJdlAGBNUeCgbJ+zvn+FGH+YDWRp7AYHRrPscAtClIXbbuVzymlaZUvNevJl1ghthcQ66b+J
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(1800799015)(376005)(82310400014)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2024 17:06:42.3915
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f534df45-e038-440d-ec8b-08dc5b12ed16
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000971E3.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6719
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240412-tuesday-resident-d9d07e75463c@wendy>
 
-This test lacks a topology diagram, making the setup not obvious.
-Add one.
+On Fri, Apr 12, 2024 at 11:25:47AM +0100, Conor Dooley wrote:
+> On Thu, Apr 11, 2024 at 09:11:08PM -0700, Charlie Jenkins wrote:
+> > The riscv_cpuinfo struct that contains mvendorid and marchid is not
+> > populated until all harts are booted which happens after the DT parsing.
+> > Use the vendorid/archid values from the DT if available or assume all
+> > harts have the same values as the boot hart as a fallback.
+> > 
+> > Fixes: d82f32202e0d ("RISC-V: Ignore V from the riscv,isa DT property on older T-Head CPUs")
+> 
+> If this is our only use case for getting the mvendorid/marchid stuff
+> from dt, then I don't think we should add it. None of the devicetrees
+> that the commit you're fixing here addresses will have these properties
+> and if they did have them, they'd then also be new enough to hopefully
+> not have "v" either - the issue is they're using whatever crap the
+> vendor shipped.
 
-Signed-off-by: Petr Machata <petrm@nvidia.com>
----
- .../testing/selftests/net/forwarding/router_nh.sh  | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Yes, the DT those shipped with will not have the property in the DT so
+will fall back on the boot hart. The addition of the DT properties allow
+future heterogenous systems to be able to function.
 
-diff --git a/tools/testing/selftests/net/forwarding/router_nh.sh b/tools/testing/selftests/net/forwarding/router_nh.sh
-index f3a53738bdcc..92904b01eae9 100755
---- a/tools/testing/selftests/net/forwarding/router_nh.sh
-+++ b/tools/testing/selftests/net/forwarding/router_nh.sh
-@@ -1,6 +1,20 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
-+# +-------------------------+  +-------------------------+
-+# | H1                      |  |                      H2 |
-+# |               $h1 +     |  |               $h2 +     |
-+# |      192.0.2.2/24 |     |  |   198.51.100.2/24 |     |
-+# |  2001:db8:1::2/64 |     |  |  2001:db8:2::2/64 |     |
-+# +-------------------|-----+  +-------------------|-----+
-+#                     |                            |
-+# +-------------------|----------------------------|-----+
-+# | R1                |                            |     |
-+# |              $rp1 +                       $rp2 +     |
-+# |      192.0.2.1/24              198.51.100.1/24       |
-+# |  2001:db8:1::1/64             2001:db8:2::1/64       |
-+# +------------------------------------------------------+
-+
- ALL_TESTS="
- 	ping_ipv4
- 	ping_ipv6
--- 
-2.43.0
+> If we're gonna get the information from DT, we already have something
+> that we can look at to perform the disable as the cpu compatibles give
+> us enough information to make the decision.
+> 
+> I also think that we could just cache the boot CPU's marchid/mvendorid,
+> since we already have to look at it in riscv_fill_cpu_mfr_info(), avoid
+> repeating these ecalls on all systems.
+
+Yeah that is a minor optimization that can I can apply.
+
+> 
+> Perhaps for now we could just look at the boot CPU alone? To my
+> knowledge the systems that this targets all have homogeneous
+> marchid/mvendorid values of 0x0.
+
+They have an mvendorid of 0x5b7.
+
+This is already falling back on the boot CPU, but that is not a solution
+that scales. Even though all systems currently have homogenous
+marchid/mvendorid I am hesitant to assert that all systems are
+homogenous without providing an option to override this. The overhead is
+looking for a field in the DT which does not seem to be impactful enough
+to prevent the addition of this option.
+
+> 
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> 
+> > @@ -514,12 +521,23 @@ static void __init riscv_fill_hwcap_from_isa_string(unsigned long *isa2hwcap)
+> >  				pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
+> >  				continue;
+> >  			}
+> > +			if (of_property_read_u64(node, "riscv,vendorid", &this_vendorid) < 0) {
+> > +				pr_warn("Unable to find \"riscv,vendorid\" devicetree entry, using boot hart mvendorid instead\n");
+> 
+> This should 100% not be a warning, it's not a required property in the
+> binding.
+
+Yes definitely, thank you.
+
+- Charlie
+
+> 
+> Cheers,
+> Conor.
+> 
+> > +				this_vendorid = boot_vendorid;
+> > +			}
+> 
+
 
