@@ -1,301 +1,154 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2075.outbound.protection.outlook.com [40.107.223.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BC514D2AA
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 17:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712941561; cv=none; b=M+zolwSEEL5F992jrbyYxnH1U/6TpL7I6nrb3az5qep2J73sfM0xiXLUXJKJcmeeHDL67eIJzPz5Wdvx3F2nWEf6kK/pem11I6t81MwXD54cC61yPlLs0J87DojmVvXaiji/l/YyWVgs2jtwihlJkOUlYhpFoEJG4UNKYONSiJ0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712941561; c=relaxed/simple;
-	bh=j3u4Pfc/DXRoTLtIqFpIe/08sKRybrTTrcMzZ99pca4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XRMya2s7f4eB6vkRh1dctC+YsUBT4GIy5hEQri8fvEzGJa1SB9O+nx/SvgRKYWh6JP3/3AW6JNS9YO7Az5Rvg31KHRkpQ28D/9O4cR2KLobGCqlN3Q0rogROW1oqdDV9TLi5uykGgSyKwkmUAWui/U98s7LQ4phkXPl5i40wLIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=WxJt3yaj; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792CB14D2B7;
+	Fri, 12 Apr 2024 17:06:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.75
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712941565; cv=fail; b=LsZ3oS+eCyASFaQQmdZgb1LXVuUrNzrAon/dGQhY8kRKpmfsqy6MAdCZNpqG26Qv8yGImhmKEdfoOW/dLDb25hjHwtz6p1NWrRL0anFA7ntQpOebbHY1QKJG6jeTxU9ruu1jxWzGdlFI/gtMBPUHLBY7xEp9cH2vk+iwapfh6Ow=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712941565; c=relaxed/simple;
+	bh=34TYIFjwAZVJDDkR3S4BqRdwI6qpi7VdlwWVqs+5iFs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KU69nrOJO2nFbzdfFdztWNKQml5P+04gTUYx9EADtWSyGRBq+4f+WKYDJtHLjVChKFzEPL9QkKLwbv7i8AIgMhElzWPSQmGu2NUoMQh2uaojsxjVkGuEo+J+56siR3c/6Hp5MYMG4b1aMwDyWy29dr+Iei0V1dm2P3Gg9gb/OK4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=iw2dVrRW; arc=fail smtp.client-ip=40.107.223.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="WxJt3yaj"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2d715638540so12986391fa.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Apr 2024 10:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712941558; x=1713546358; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Vu6rgY+yqOGOmOLw32t5d3GS611sOvqhECdZtjPZOA=;
-        b=WxJt3yajC3VWoWICwC0AiS1S8yKAce2dlQd3xqDY7gNy+H8lzoMqZgSJOXiDcwcBvz
-         WlUH60ecRuw39M1oleeVGzYZ5DVCsGRNO0hKaL/6jzwLPJVKsQEXjv4myrhwK9WfDdfC
-         ohR2g+E0grqq5yy19rGWdq6xPZ1n0p9CH0xMMX8mN1NyR10VZijRiovoC44xfLLDYz3z
-         HqtnOg7vHVok7wKHrE0jGrjtAb9it1K95uKkMQFMR33cl8KJLVVevv+xGNDk1FJDq6ah
-         rh3HWbE2lqyOCtynXaNIPLiG4WyRu0S21YPyD+gql44hqPMp/U6mcf/IGP1N31ankdUA
-         YFlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712941558; x=1713546358;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/Vu6rgY+yqOGOmOLw32t5d3GS611sOvqhECdZtjPZOA=;
-        b=oQOAmv4HYxDMJNzCQDSTj6AjxUp+hPFqDmOttTkzlWGCNHcb8bvyxufFzAn3rhdPXs
-         5nBaFlgl7Aepp0SJigo4mM9z9olR9euIsPGcSctxdHor1gBgUFq3Rx00tWZFcCxxY94Y
-         x86bADkNV5+nuu1KpWVxhxPLiT/fqsbzQMlap//ywDM7dX2dUxgMFXDi2MGNoijq1wHx
-         aj0dYWLx/yGxHEeaVRPq5uGpLimmzkq+dwil++MHDRH8dGCczyWYPjCmXTHTq9aufYM1
-         9LxBIGGHWvCU59Rspcv7EQI+QgG5Ptc6cwOqVQ/L421t0G6li7JsMKYBHkQVL11sjPcl
-         JeBw==
-X-Forwarded-Encrypted: i=1; AJvYcCUgBsR+zvm1hrddd7JXvLL3N8kJsJavOkfMnjl6sK2XEYAzJD6PoloVawO5QV4NCQ5KuSnE5I6a6QXsHelb96wcvNrJzQwAy4zMNz3C8qDq
-X-Gm-Message-State: AOJu0Yz+OKr8I57T7InROg12OVtNIVsiHHWfg79pnJvKna9f4YTXTsvi
-	bzkUrpWKP+Xckr9wg6FgXgEAHv5rBwn9UHnSScvXpySUFea3YeRPgapTiVAZN5Y7vjOGG4R1D2/
-	CB8AKfHY6JCHdqcmSWdFFoqE8/E8ted6meRmurA==
-X-Google-Smtp-Source: AGHT+IFYpm5VEIsLiYtOAsbNkvaiNNs0hgQdNZZaIKndtEvsgJfqKFi9pXG7Zi0EdKs2kJFE7fs5OvqkFRBwjf5hH7M=
-X-Received: by 2002:a2e:be04:0:b0:2d8:da4c:5909 with SMTP id
- z4-20020a2ebe04000000b002d8da4c5909mr2118700ljq.51.1712941557792; Fri, 12 Apr
- 2024 10:05:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="iw2dVrRW"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g1Zkd6ONnHhgwdZPdelR44SQnC7FsUhZ0u1uEwkTgpKhNt8g0wPKAnFW2tSM07ZJWsz2QqhuWQ6u6+Scx740t6ZYN2IQ1glLwLOJJ2wlHGmT3z813TMylwXCkarnp6L5D3hI2ei9Pzqvd0flCyuYh2mtqA+CqG5xCsXZvp8oMZbBM9jdGKi0T5dIRdaR3F/sfRSCxD/6ZVI2ZP1Kyonqb8oA1WA2M5vnx/Dn4OSbG7WQaoIAmQbtDTLqEGLumj3FZr8BjeF3/LJPwM9+5lrxFsTCWwShxs/8jjShnqq/9RUxy5lLlqSqpzTDlDbv3pTMZH39UXEquQNnfJM+PhXl6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xwtjWUQDN84A57tCUM8moOjJsU/1SbrWABgTuCj29pE=;
+ b=OjtjB5Xv81XMhSWkk4r3pWN7rpyMfBp7kC25MY3IrO9Yjwe83c7fNEOoef6tufHAVbijkaQgx57sNVXgzvNku0/+50FBVz8C2rQ4nj9n7G8MIdiU6GV7IOL5rju9T/9uG2+xOznWm3Jw5Ee9Os3nL3W35gKNJwcz3qANxp3a1sjx2Arc3dRVymi+TXGyDSoMKvsR9R7qWC4cwMW/XRGJ11EmDd5dRp8Y8soboRNsU1r/2JtmtzSEPAbWshxYPWaut4Hrt+WE09RcyaNLQCHM0MiFDfj5sWhsUexdMBs+lIathdpmnzKof0u+XBH0uLuJ1MV61DDyn15PH1empBvm+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xwtjWUQDN84A57tCUM8moOjJsU/1SbrWABgTuCj29pE=;
+ b=iw2dVrRW/M5Pt0soBCFg0wTHwq3HYOJik6k5HRoJJWgqP2aflXeOMJf5od7Te6tVuvEWRG0XdnMLREf6uUa20zlwkAX88hifPaHTQJ45e+QO4CEgo0TnUhQdRZVRp3lpzYma7LDgAPwcTf7gM+Q+jCnCmPr40jAE1I9QN1NHGY6DtsRWo0mbE8QcbejMFeo2gbujjOjeWCxS6+ilSuRQPJ3AK+bMj8LwM3loKLini8JzqyJZsT1Y7o89ft76JN44Qp1waI2zKBOwykkrlVpSRR9YJISgCWPEAO93rduxQ5//xjTb60Sj1EnfC2QLShGMnP76Cq6Qg1oUH4hoxJZq5Q==
+Received: from MW4PR03CA0124.namprd03.prod.outlook.com (2603:10b6:303:8c::9)
+ by PH7PR12MB9074.namprd12.prod.outlook.com (2603:10b6:510:2f4::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Fri, 12 Apr
+ 2024 17:06:00 +0000
+Received: from MWH0EPF000971E3.namprd02.prod.outlook.com
+ (2603:10b6:303:8c:cafe::a3) by MW4PR03CA0124.outlook.office365.com
+ (2603:10b6:303:8c::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.22 via Frontend
+ Transport; Fri, 12 Apr 2024 17:06:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ MWH0EPF000971E3.mail.protection.outlook.com (10.167.243.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7452.22 via Frontend Transport; Fri, 12 Apr 2024 17:05:59 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 12 Apr
+ 2024 10:05:33 -0700
+Received: from localhost.localdomain (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Fri, 12 Apr
+ 2024 10:05:28 -0700
+From: Petr Machata <petrm@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, <netdev@vger.kernel.org>
+CC: Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	<linux-kselftest@vger.kernel.org>, Petr Machata <petrm@nvidia.com>,
+	<mlxsw@nvidia.com>
+Subject: [PATCH net-next 00/10] selftests: Assortment of fixes
+Date: Fri, 12 Apr 2024 19:03:03 +0200
+Message-ID: <cover.1712940759.git.petrm@nvidia.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240411-dev-charlie-support_thead_vector_6_9-v1-0-4af9815ec746@rivosinc.com>
- <20240411-dev-charlie-support_thead_vector_6_9-v1-16-4af9815ec746@rivosinc.com>
-In-Reply-To: <20240411-dev-charlie-support_thead_vector_6_9-v1-16-4af9815ec746@rivosinc.com>
-From: Evan Green <evan@rivosinc.com>
-Date: Fri, 12 Apr 2024 10:05:21 -0700
-Message-ID: <CALs-Hss=vuNgq-8bVL1DOR431qFpn-D13yFGn6yf_2saZO0FVQ@mail.gmail.com>
-Subject: Re: [PATCH 16/19] riscv: hwprobe: Add vendor extension probing
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Conor Dooley <conor.dooley@microchip.com>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Palmer Dabbelt <palmer@rivosinc.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000971E3:EE_|PH7PR12MB9074:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9af903ca-55c5-487d-ae6a-08dc5b12d3c6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	n+31oAIB3w09xUxxabEh5vJot8IoNPJL5MOO4lIajSRpHO1c+X6zljkDsRftzgbJ3FZEMpMBPSg4aRlEfiCgVo8cD8w9yUXnBp1b0pmGWGFpAE3jjwUSoLL0/qEdheneKLlGNB/IeSwbF8gGOu0WYm3ci5nR8gwZozm5jZIh3B1y/57fWmio/i+fq1z7BhurrLautNb/8yfty7cMmp5Me12lV49E/0MPf4Ibl4/FzVnIemxNtPuM2bwEYxWxnWpuE8ydiXDKTyktLAP8MBlJVZzTBY/h7pB/q28sM52QV+WdzcA+FQKpSeKBucX1OtQSN2/E51QhBm27xtACBI+3Lmw+M2FU+civMnBUO3QOvzdTDG9SGzyPoODTaysHFs3hgxHBXBO28v/m5rcMFoggOXz5ze8vxYQzIOHM3d7AWk2RnC3wtlHA21NX9PrK6c9uZkY+uDUnTKo9BE8dylzUhVHADuajAz0GdKl0FsKD91QxScaVJiozPwVMuNftPq8dn5iCR08W6YARVCUVfMVlUDcpIeMTsXtHSecECp+M8QQtVMy/8BEU84zhVddNGp6b+JJRVr/DzI/+igWYHwMypHOKuk4r19Atv5NYEHA9SZtKVIUETLVZ9mH2vLGyEKrDUzq9M3uAbuWi88OY88rFWAW3ITyMOq21Iuf0iYeU0rU/VqlFCvHDB5ST3PIPNn1tfo1I+/ng8oifrh4oJaiLwKWo11GJWPFcyYWbeNbn8eFOU6mdDw1rCqcsxrMqgszK
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(82310400014)(36860700004)(1800799015)(376005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2024 17:05:59.9226
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9af903ca-55c5-487d-ae6a-08dc5b12d3c6
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000971E3.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9074
 
-On Thu, Apr 11, 2024 at 9:12=E2=80=AFPM Charlie Jenkins <charlie@rivosinc.c=
-om> wrote:
->
-> Add a new hwprobe key "RISCV_HWPROBE_KEY_VENDOR_EXT_0" which allows
-> userspace to probe for the new RISCV_ISA_VENDOR_EXT_XTHEADVECTOR vendor
-> extension.
->
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  arch/riscv/include/asm/hwprobe.h      |  4 +--
->  arch/riscv/include/uapi/asm/hwprobe.h | 10 +++++-
->  arch/riscv/kernel/sys_hwprobe.c       | 59 +++++++++++++++++++++++++++++=
-++++--
->  3 files changed, 68 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/hwprobe.h b/arch/riscv/include/asm/hw=
-probe.h
-> index 630507dff5ea..e68496b4f8de 100644
-> --- a/arch/riscv/include/asm/hwprobe.h
-> +++ b/arch/riscv/include/asm/hwprobe.h
-> @@ -1,6 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
->  /*
-> - * Copyright 2023 Rivos, Inc
-> + * Copyright 2023-2024 Rivos, Inc
->   */
->
->  #ifndef _ASM_HWPROBE_H
-> @@ -8,7 +8,7 @@
->
->  #include <uapi/asm/hwprobe.h>
->
-> -#define RISCV_HWPROBE_MAX_KEY 6
-> +#define RISCV_HWPROBE_MAX_KEY 7
->
->  static inline bool riscv_hwprobe_key_is_valid(__s64 key)
->  {
-> diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/u=
-api/asm/hwprobe.h
-> index 9f2a8e3ff204..6614d3adfc75 100644
-> --- a/arch/riscv/include/uapi/asm/hwprobe.h
-> +++ b/arch/riscv/include/uapi/asm/hwprobe.h
-> @@ -1,6 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
->  /*
-> - * Copyright 2023 Rivos, Inc
-> + * Copyright 2023-2024 Rivos, Inc
->   */
->
->  #ifndef _UAPI_ASM_HWPROBE_H
-> @@ -67,6 +67,14 @@ struct riscv_hwprobe {
->  #define                RISCV_HWPROBE_MISALIGNED_UNSUPPORTED    (4 << 0)
->  #define                RISCV_HWPROBE_MISALIGNED_MASK           (7 << 0)
->  #define RISCV_HWPROBE_KEY_ZICBOZ_BLOCK_SIZE    6
-> +/*
-> + * It is not possible for one CPU to have multiple vendor ids, so each v=
-endor
-> + * has its own vendor extension "namespace". The keys for each vendor st=
-arts
-> + * at zero.
-> + */
-> +#define RISCV_HWPROBE_KEY_VENDOR_EXT_0 7
-> + /* T-Head */
-> +#define                RISCV_HWPROBE_VENDOR_EXT_XTHEADVECTOR   (1 << 0)
->  /* Increase RISCV_HWPROBE_MAX_KEY when adding items. */
->
->  /* Flags */
-> diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwpr=
-obe.c
-> index e0a42c851511..365ce7380443 100644
-> --- a/arch/riscv/kernel/sys_hwprobe.c
-> +++ b/arch/riscv/kernel/sys_hwprobe.c
-> @@ -69,7 +69,8 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair=
-,
->         if (riscv_isa_extension_available(NULL, c))
->                 pair->value |=3D RISCV_HWPROBE_IMA_C;
->
-> -       if (has_vector() && !riscv_has_vendor_extension_unlikely(RISCV_IS=
-A_VENDOR_EXT_XTHEADVECTOR))
-> +       if (has_vector() &&
-> +           !__riscv_isa_vendor_extension_available(NULL, RISCV_ISA_VENDO=
-R_EXT_XTHEADVECTOR))
->                 pair->value |=3D RISCV_HWPROBE_IMA_V;
->
->         /*
-> @@ -112,7 +113,8 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pa=
-ir,
->                 EXT_KEY(ZACAS);
->                 EXT_KEY(ZICOND);
->
-> -               if (has_vector() && !riscv_has_vendor_extension_unlikely(=
-RISCV_ISA_VENDOR_EXT_XTHEADVECTOR)) {
-> +               if (has_vector() &&
-> +                   !riscv_has_vendor_extension_unlikely(RISCV_ISA_VENDOR=
-_EXT_XTHEADVECTOR)) {
->                         EXT_KEY(ZVBB);
->                         EXT_KEY(ZVBC);
->                         EXT_KEY(ZVKB);
-> @@ -139,6 +141,55 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *p=
-air,
->         pair->value &=3D ~missing;
->  }
->
-> +static void hwprobe_isa_vendor_ext0(struct riscv_hwprobe *pair,
-> +                                   const struct cpumask *cpus)
-> +{
-> +       int cpu;
-> +       u64 missing =3D 0;
-> +
-> +       pair->value =3D 0;
-> +
-> +       struct riscv_hwprobe mvendorid =3D {
-> +               .key =3D RISCV_HWPROBE_KEY_MVENDORID,
-> +               .value =3D 0
-> +       };
-> +
-> +       hwprobe_arch_id(&mvendorid, cpus);
-> +
-> +       /* Set value to zero if CPUs in the set do not have the same vend=
-or. */
-> +       if (mvendorid.value =3D=3D -1ULL)
-> +               return;
-> +
-> +       /*
-> +        * Loop through and record vendor extensions that 1) anyone has, =
-and
-> +        * 2) anyone doesn't have.
-> +        */
-> +       for_each_cpu(cpu, cpus) {
-> +               struct riscv_isainfo *isavendorinfo =3D &hart_isa_vendor[=
-cpu];
-> +
-> +#define VENDOR_EXT_KEY(ext)                                             =
-               \
-> +       do {                                                             =
-               \
-> +               if (__riscv_isa_vendor_extension_available(isavendorinfo-=
->isa,          \
-> +                                                        RISCV_ISA_VENDOR=
-_EXT_##ext))   \
-> +                       pair->value |=3D RISCV_HWPROBE_VENDOR_EXT_##ext; =
-                 \
-> +               else                                                     =
-               \
-> +                       missing |=3D RISCV_HWPROBE_VENDOR_EXT_##ext;     =
-                 \
-> +       } while (false)
-> +
-> +       /*
-> +        * Only use VENDOR_EXT_KEY() for extensions which can be exposed =
-to userspace,
-> +        * regardless of the kernel's configuration, as no other checks, =
-besides
-> +        * presence in the hart_vendor_isa bitmap, are made.
-> +        */
-> +       VENDOR_EXT_KEY(XTHEADVECTOR);
-> +
-> +#undef VENDOR_EXT_KEY
+This is a loose follow-up to the Kernel CI patchset posted recently. It
+contains various fixes that were supposed to be part of said patchset, but
+didn't fit due to its size. The latter 4 patches were written independently
+of the CI effort, but again didn't fit in their intended patchsets.
 
-Hey Charlie,
-Thanks for writing this up! At the very least I think the
-THEAD-specific stuff should probably end up in its own file, otherwise
-it'll get chaotic with vendors clamoring to add stuff right here.
-What do you think about this approach:
- * We leave RISCV_HWPROBE_MAX_KEY as the max key for the "generic
-world", eg 6-ish
- * We define that any key above 0x8000000000000000 is in the vendor
-space, so the meaning of the keys depends first on the mvendorid
-value.
- * In the kernel code, each new vendor adds on to a global struct,
-which might look something like:
-struct hwprobe_vendor_space vendor_space[] =3D {
-        {
-                .mvendorid =3D VENDOR_THEAD,
-                .max_hwprobe_key =3D THEAD_MAX_HWPROBE_KEY, // currently
-1 or 0x8000000000000001 with what you've got.
-                .hwprobe_fn =3D thead_hwprobe
-        },
-        ...
-};
+- Patch #1 unifies code of two very similar looking functions, busywait()
+  and slowwait().
 
- * A hwprobe_thead.c implements thead_hwprobe(), and is called
-whenever the generic hwprobe encounters a key >=3D0x8000000000000000.
- * Generic code for setting up the VDSO can then still call the
-vendor-specific hwprobe_fn() repeatedly with an "all CPUs" mask from
-the base to max_hwprobe_key and set up the cached tables in userspace.
- * Since the VDSO data has limited space we may have to cap the number
-of vendor keys we cache to be lower than max_hwprobe_key. Since the
-data itself is not exposed to usermode we can raise this cap later if
-needed.
+- Patch #2 adds sanity checks around the setting of NETIFS, which carries
+  list of interfaces to run on.
 
+- Patch #3 changes bail_on_lldpad() to SKIP instead of FAILing.
 
--Evan
+- Patches #4 to #7 fix issues in selftests.
 
-> +       }
-> +
-> +       /* Now turn off reporting features if any CPU is missing it. */
-> +       pair->value &=3D ~missing;
-> +}
-> +
->  static bool hwprobe_ext0_has(const struct cpumask *cpus, unsigned long e=
-xt)
->  {
->         struct riscv_hwprobe pair;
-> @@ -216,6 +267,10 @@ static void hwprobe_one_pair(struct riscv_hwprobe *p=
-air,
->                         pair->value =3D riscv_cboz_block_size;
->                 break;
->
-> +       case RISCV_HWPROBE_KEY_VENDOR_EXT_0:
-> +               hwprobe_isa_vendor_ext0(pair, cpus);
-> +               break;
-> +
->         /*
->          * For forward compatibility, unknown keys don't fail the whole
->          * call, but get their element key set to -1 and value set to 0
->
-> --
-> 2.44.0
->
+- Patches #8 to #10 add topology diagrams to several selftests.
+  This should have been part of the mlxsw leg of NH group stats patches,
+  but again, it did not fit in due to size.
+
+Danielle Ratson (1):
+  selftests: mlxsw: ethtool_lanes: Wait for lanes parameter dump
+    explicitly
+
+Petr Machata (9):
+  selftests: net: Unify code of busywait() and slowwait()
+  selftests: forwarding: lib.sh: Validate NETIFS
+  selftests: forwarding: bail_on_lldpad() should SKIP
+  selftests: drivers: hw: Fix ethtool_rmon
+  selftests: drivers: hw: ethtool.sh: Adjust output
+  selftests: drivers: hw: Include tc_common.sh in hw_stats_l3
+  selftests: forwarding: router_mpath_nh: Add a diagram
+  selftests: forwarding: router_mpath_nh_res: Add a diagram
+  selftests: forwarding: router_nh: Add a diagram
+
+ .../selftests/drivers/net/hw/ethtool.sh       | 15 +++---
+ .../selftests/drivers/net/hw/ethtool_rmon.sh  |  1 +
+ .../selftests/drivers/net/hw/hw_stats_l3.sh   |  1 +
+ .../drivers/net/hw/hw_stats_l3_gre.sh         |  1 +
+ .../drivers/net/mlxsw/ethtool_lanes.sh        | 14 +++---
+ tools/testing/selftests/net/forwarding/lib.sh | 49 +++++++++----------
+ .../net/forwarding/router_mpath_nh.sh         | 35 +++++++++++++
+ .../net/forwarding/router_mpath_nh_res.sh     | 35 +++++++++++++
+ .../selftests/net/forwarding/router_nh.sh     | 14 ++++++
+ tools/testing/selftests/net/lib.sh            | 16 ++++--
+ 10 files changed, 137 insertions(+), 44 deletions(-)
+
+-- 
+2.43.0
+
