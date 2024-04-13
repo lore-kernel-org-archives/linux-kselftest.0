@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A173233;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A4F7492;
 	Sat, 13 Apr 2024 01:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712972584; cv=none; b=i2CEKFGfCUxI9/N8kx1teQzl1IH4rg1m+AsNX1tdmNog0R8qimHELHaW6Hcn0VuHvWx10zfswmY1M1Ul0uNR/KGVTYMCiXZ9dcpMJ6w2v7+IETya2/MfNu+WkykVsB+oGmDA5I8IA54qBiO+8j2+SuXcoEVIstHbS7J10p4mXZk=
+	t=1712972584; cv=none; b=NZoYfBHs4YByH11dOAH1PgPNSq7XM9LRZwx6v5fvmVzXJ6o+cuiaLP78M7WD4vprOdnAM3RrSWzqGJ5vX3TpeZ3fZ6Ax0ZMmzoL9jRbBpwdlOD0bM3+WEOBr/eziZXenTYdylC61AJEYDnkEN/LwDund9NBr4Qky/BbjJUEvoWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712972584; c=relaxed/simple;
-	bh=1zBOLKB4+pIe6A93dx/WvIB9KUfoduEU9FapuBAIaA0=;
+	bh=tvGa1RDSYHvI02nHuHPX+BD+1F1uJG9F/D3Zv650p0g=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ERYXwfNNY7fElDJusuTBRV0UL1GKTLeLmnQYDSIDdi22VkRoBtzUJIcpYF1tpP6v0BzGYolxuky7bQawidUkdrSPXol6crmcDFXZ3kuUbHr4K3CXED1j3Ex+7sk4vk56qmG5M8N/j9YOjX9yuD0zWWHk8E7si/nOp9qw4s+mlMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hELGoIfC; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Cz1ywEdXxifd/xTck1wOHuS/fBhI7Yg14HNYxdRPzSiVdW+AvgR8NQuXgq9hMLhVIBztH73ZbPiEOzXRDMrmOVRZg4QxTptpq5NfQv+7aOggts2DvEj7dSjoaS1DMIvOp56Cv3mrlq58B4yyoRduLWEKul3rw26Spp1f+1q0cxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vs89Ysm6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hELGoIfC"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7ABA0C32786;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vs89Ysm6"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 68011C2BD11;
 	Sat, 13 Apr 2024 01:43:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1712972584;
-	bh=1zBOLKB4+pIe6A93dx/WvIB9KUfoduEU9FapuBAIaA0=;
+	bh=tvGa1RDSYHvI02nHuHPX+BD+1F1uJG9F/D3Zv650p0g=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=hELGoIfCH87KZzHVRnhTiDXXcXMJ+78K1DT/oWn2ddt9gSZlYsLnYJn0XKiL8o4TG
-	 Wbl4+KO9VIVNobzxrd8UU4P2ADNQoXo2wnxIPTNOb6y1ddeFjNtwUpC1fLgV6gve5n
-	 bZ+oZ3Ky61tFFgF7f1Jm6WoVXMt99pyXsOYGgrNVYM6ZgnfsWnGXlGYryrIdBXH1ZY
-	 WbYa2Lg/6gAj+imJOpLoetyJJUvtntxCUY08KvJpm40h4I6ylGBs1a+4zi8YrC/3hL
-	 A6zhCZVGLRizm+w6brBR+cB00oWUcmnY+4c9nfex/AxqZZR6FjRfLkPqhVpwjLLFEu
-	 XM1nTDr6e5syA==
+	b=Vs89Ysm6Eq6GyH7Erh2wAgEBXOtwbQsc6i4A+2O21cGpbZO8fEKMTenXKzqsXx+bG
+	 SoN0FNIKee2t8YjC9UmZgpM6HWpMtOiVEO1WVQ0WHAZSZ7yytceQryTiA+73AAQBnz
+	 /4PRBp1ETUKvUSkjX1j2Ffc5zsbM6kzAWiab+kKjnLyw45GSkYmaxobHIZN0QSaKtb
+	 hi3qZemRjiifBWn9pDEOeCTQn2dLAorItZqNNlhqmg4r1uuQFpnh4HNV9r7gbdz/o3
+	 gHjbSgAfFTBXDjXaBkZoDhgvf7B+eX1B388Fh5SGB4hGFahivOl/fLKGxu+ksBCfP+
+	 c9Z+N/KkJspSQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EE14C05023;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 506A0C00A94;
 	Sat, 13 Apr 2024 01:43:04 +0000 (UTC)
 From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
-Date: Sat, 13 Apr 2024 02:42:55 +0100
-Subject: [PATCH net 4/4] selftests/tcp_ao: Printing fixes to confirm with
- format-security
+Date: Sat, 13 Apr 2024 02:42:52 +0100
+Subject: [PATCH net 1/4] selftests/tcp_ao: Make RST tests less flaky
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,8 +39,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240413-tcp-ao-selftests-fixes-v1-4-f9c41c96949d@gmail.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240413-tcp-ao-selftests-fixes-v1-1-f9c41c96949d@gmail.com>
 References: <20240413-tcp-ao-selftests-fixes-v1-0-f9c41c96949d@gmail.com>
 In-Reply-To: <20240413-tcp-ao-selftests-fixes-v1-0-f9c41c96949d@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -50,11 +49,11 @@ To: "David S. Miller" <davem@davemloft.net>,
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Dmitry Safonov <0x7f454c46@gmail.com>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1712972582; l=3422;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1712972582; l=3102;
  i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
- bh=wxpBb6LXRSkXjmd5ZWPuyM5ay6kCGD4vUjqDQ4vhKHA=;
- b=RzjpBpFw7UrSJlsSzfmRDK0F7NIVVw+KR068dfVdNt06AMkdy9ah7w7UoWLndoMjzomBVdPa14O0
- ZCVN90BLA1GKUznUJw6J2yAK+8RkIyG4lKRpp4CSVb4z9l4mCxIC
+ bh=M06UR6shNbxtrWai0TpYoMLXyAZTaGGEZv0XA0Xj5PY=;
+ b=3va35F/mXlgdzh4og0lSK3APn3dow8vd3RX7hV6FJZKkqOHaKzkUaSBVDLVqV13KEESoEVRwIJt1
+ St/bbfmHDE5G6xTenLVkdp79QtRqUMLirepzGOgub8zEZ3hdVpl3
 X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
  pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
 X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
@@ -64,89 +63,78 @@ Reply-To: 0x7f454c46@gmail.com
 
 From: Dmitry Safonov <0x7f454c46@gmail.com>
 
-On my new laptop with packages from nixos-unstable, gcc 12.3.0 produces
-> lib/setup.c: In function ‘__test_msg’:
-> lib/setup.c:20:9: error: format not a string literal and no format arguments [-Werror=format-security]
->    20 |         ksft_print_msg(buf);
->       |         ^~~~~~~~~~~~~~
-> lib/setup.c: In function ‘__test_ok’:
-> lib/setup.c:26:9: error: format not a string literal and no format arguments [-Werror=format-security]
->    26 |         ksft_test_result_pass(buf);
->       |         ^~~~~~~~~~~~~~~~~~~~~
-> lib/setup.c: In function ‘__test_fail’:
-> lib/setup.c:32:9: error: format not a string literal and no format arguments [-Werror=format-security]
->    32 |         ksft_test_result_fail(buf);
->       |         ^~~~~~~~~~~~~~~~~~~~~
-> lib/setup.c: In function ‘__test_xfail’:
-> lib/setup.c:38:9: error: format not a string literal and no format arguments [-Werror=format-security]
->    38 |         ksft_test_result_xfail(buf);
->       |         ^~~~~~~~~~~~~~~~~~~~~~
-> lib/setup.c: In function ‘__test_error’:
-> lib/setup.c:44:9: error: format not a string literal and no format arguments [-Werror=format-security]
->    44 |         ksft_test_result_error(buf);
->       |         ^~~~~~~~~~~~~~~~~~~~~~
-> lib/setup.c: In function ‘__test_skip’:
-> lib/setup.c:50:9: error: format not a string literal and no format arguments [-Werror=format-security]
->    50 |         ksft_test_result_skip(buf);
->       |         ^~~~~~~~~~~~~~~~~~~~~
-> cc1: some warnings being treated as errors
+Currently, "active reset" cases are flaky, because select() is called
+for 3 sockets, while only 2 are expected to receive RST.
+The idea of the third socket was to get into request_sock_queue,
+but the test mistakenly attempted to connect() after the listener
+socket was shut down.
 
-As the buffer was already pre-printed into, print it as a string
-rather than a format-string.
+Repair this test, it's important to check the different kernel
+code-paths for signing RST TCP-AO segments.
 
-Fixes: cfbab37b3da0 ("selftests/net: Add TCP-AO library")
+Fixes: c6df7b2361d7 ("selftests/net: Add TCP-AO RST test")
+Reported-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
 ---
- tools/testing/selftests/net/tcp_ao/lib/setup.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ tools/testing/selftests/net/tcp_ao/rst.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tcp_ao/lib/setup.c b/tools/testing/selftests/net/tcp_ao/lib/setup.c
-index 92276f916f2f..e408b9243b2c 100644
---- a/tools/testing/selftests/net/tcp_ao/lib/setup.c
-+++ b/tools/testing/selftests/net/tcp_ao/lib/setup.c
-@@ -17,37 +17,37 @@ static pthread_mutex_t ksft_print_lock = PTHREAD_MUTEX_INITIALIZER;
- void __test_msg(const char *buf)
+diff --git a/tools/testing/selftests/net/tcp_ao/rst.c b/tools/testing/selftests/net/tcp_ao/rst.c
+index 7df8b8700e39..a2fe88d35ac0 100644
+--- a/tools/testing/selftests/net/tcp_ao/rst.c
++++ b/tools/testing/selftests/net/tcp_ao/rst.c
+@@ -256,8 +256,6 @@ static int test_wait_fds(int sk[], size_t nr, bool is_writable[],
+ 
+ static void test_client_active_rst(unsigned int port)
  {
- 	pthread_mutex_lock(&ksft_print_lock);
--	ksft_print_msg(buf);
-+	ksft_print_msg("%s", buf);
- 	pthread_mutex_unlock(&ksft_print_lock);
- }
- void __test_ok(const char *buf)
- {
- 	pthread_mutex_lock(&ksft_print_lock);
--	ksft_test_result_pass(buf);
-+	ksft_test_result_pass("%s", buf);
- 	pthread_mutex_unlock(&ksft_print_lock);
- }
- void __test_fail(const char *buf)
- {
- 	pthread_mutex_lock(&ksft_print_lock);
--	ksft_test_result_fail(buf);
-+	ksft_test_result_fail("%s", buf);
- 	pthread_mutex_unlock(&ksft_print_lock);
- }
- void __test_xfail(const char *buf)
- {
- 	pthread_mutex_lock(&ksft_print_lock);
--	ksft_test_result_xfail(buf);
-+	ksft_test_result_xfail("%s", buf);
- 	pthread_mutex_unlock(&ksft_print_lock);
- }
- void __test_error(const char *buf)
- {
- 	pthread_mutex_lock(&ksft_print_lock);
--	ksft_test_result_error(buf);
-+	ksft_test_result_error("%s", buf);
- 	pthread_mutex_unlock(&ksft_print_lock);
- }
- void __test_skip(const char *buf)
- {
- 	pthread_mutex_lock(&ksft_print_lock);
--	ksft_test_result_skip(buf);
-+	ksft_test_result_skip("%s", buf);
- 	pthread_mutex_unlock(&ksft_print_lock);
- }
+-	/* one in queue, another accept()ed */
+-	unsigned int wait_for = backlog + 2;
+ 	int i, sk[3], err;
+ 	bool is_writable[ARRAY_SIZE(sk)] = {false};
+ 	unsigned int last = ARRAY_SIZE(sk) - 1;
+@@ -275,16 +273,20 @@ static void test_client_active_rst(unsigned int port)
+ 	for (i = 0; i < last; i++) {
+ 		err = _test_connect_socket(sk[i], this_ip_dest, port,
+ 					       (i == 0) ? TEST_TIMEOUT_SEC : -1);
+-
+ 		if (err < 0)
+ 			test_error("failed to connect()");
+ 	}
+ 
+-	synchronize_threads(); /* 2: connection accept()ed, another queued */
+-	err = test_wait_fds(sk, last, is_writable, wait_for, TEST_TIMEOUT_SEC);
++	synchronize_threads(); /* 2: two connections: one accept()ed, another queued */
++	err = test_wait_fds(sk, last, is_writable, last, TEST_TIMEOUT_SEC);
+ 	if (err < 0)
+ 		test_error("test_wait_fds(): %d", err);
+ 
++	/* async connect() with third sk to get into request_sock_queue */
++	err = _test_connect_socket(sk[last], this_ip_dest, port, -1);
++	if (err < 0)
++		test_error("failed to connect()");
++
+ 	synchronize_threads(); /* 3: close listen socket */
+ 	if (test_client_verify(sk[0], packet_sz, quota / packet_sz, TEST_TIMEOUT_SEC))
+ 		test_fail("Failed to send data on connected socket");
+@@ -292,13 +294,14 @@ static void test_client_active_rst(unsigned int port)
+ 		test_ok("Verified established tcp connection");
+ 
+ 	synchronize_threads(); /* 4: finishing up */
+-	err = _test_connect_socket(sk[last], this_ip_dest, port, -1);
+-	if (err < 0)
+-		test_error("failed to connect()");
+ 
+ 	synchronize_threads(); /* 5: closed active sk */
+-	err = test_wait_fds(sk, ARRAY_SIZE(sk), NULL,
+-			    wait_for, TEST_TIMEOUT_SEC);
++	/*
++	 * Wait for 2 connections: one accepted, another in the accept queue,
++	 * the one in request_sock_queue won't get fully established, so
++	 * doesn't receive an active RST, see inet_csk_listen_stop().
++	 */
++	err = test_wait_fds(sk, last, NULL, last, TEST_TIMEOUT_SEC);
+ 	if (err < 0)
+ 		test_error("select(): %d", err);
  
 
 -- 
