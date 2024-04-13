@@ -1,100 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E049450;
-	Sat, 13 Apr 2024 01:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DD546BA;
+	Sat, 13 Apr 2024 01:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712972585; cv=none; b=dhyxO3qJgnVQVFnMV1B/5LxP5ZJEgEVR2F6kYAkxVXCH4IZL3CWqdWyHx37+1l9SCxtHZPzHiQD8nQKvdjXFhJIqKjeZwnvTjalMNb+g96uwC6Yb2aiPHRcMYytTHBAx6ATvw+7bUvty/UXszHK+K9yrCYhDfQa98974guZErcI=
+	t=1712973017; cv=none; b=KXVrmwZL+RR4l5UbDUImOmMu9uhNdrxv6vCSjcC31MSHUs7fE+7BDq9sXy71+7rHFNMcsWtpU9otlKVfWWZW8aZT8O3uYLfQk/rWXqkLwrGGKlk4H7cZFWyFJPX1Zn8FGn5COO01Qq3hZnMtGtpNTjPsLEGWi88BDsd4VM3qtow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712972585; c=relaxed/simple;
-	bh=0YWscSSm7l0v4qjTRd8h1MMOmKsL+vK8TQNftfhtfH8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GUyvnEGhrlJUz0hsafcdFVrOYjjqXQ32BsP2FjxqFjcw/AOwCtFgaVBDuYLDHGn4eVTQKIAEcb8JVq+iNDqQdO5kcPhi2km8IcM1BrLzGUpIjP0oH/1/RClmDpnKw56it1YHIVVgkJg0k9pp8ntNeOPPh64dsW7G5IY8q1UHGM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sxwhhqGk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712973017; c=relaxed/simple;
+	bh=nK7S4AX7MvARgqM6BBHBiwuYAnJjjYfTAUaMHXm0s7s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U2xrzWrmLvbFu6S7YoamNJgG24hdzIuz8Uxv9pD54RlnmzlwGyu9NpcvFhnL9FxI30t31x0LLuStMhaQCNnSc2I/V0uB8/e2z7df8eTOzZMrljFk+tA+SKcWcGz6Kb9mi8hg/K/JMHrNabMmMGu/h07lAU1nSQrz+BE863OTn9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fNrSaqOH; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sxwhhqGk"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 74573C4AF07;
-	Sat, 13 Apr 2024 01:43:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712972584;
-	bh=0YWscSSm7l0v4qjTRd8h1MMOmKsL+vK8TQNftfhtfH8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=sxwhhqGkB0GNDbvsQ90NrqhMJydecf3E700VIoqU8dT+JQyB2+Rai4TqNZEHTmSWT
-	 D3MKXxHrzKhseVEywetQTtHXcEj5Q7zkWiidA0qLTLdjmrzCv5wbE0YjqOwC9pLqXj
-	 bpNdKLO+yg5vV1RGxyZPUioGR8vM9dz1e1BOwC13o9wdHRRt0Pjgr7xzWxeP4h+6Mh
-	 ohjShaMivVL9L0l28IxFhnjJM+oc9N7SGQCu++KJC9Hb8w0cv/Ye3rRrnBC5Sd4gmU
-	 91UD9cjILn9TFWVmG118cg8tWHOvLFO7gWfDHPoMWn7oSZl7/8YtVEhGzU2/vHppUp
-	 20RxRYqhkSnsQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63CB0C04FF8;
-	Sat, 13 Apr 2024 01:43:04 +0000 (UTC)
-From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
-Date: Sat, 13 Apr 2024 02:42:54 +0100
-Subject: [PATCH net 3/4] selftests/tcp_ao: Fix fscanf() call for
- format-security
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fNrSaqOH"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2a2d0ca3c92so986493a91.0;
+        Fri, 12 Apr 2024 18:50:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712973015; x=1713577815; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4GoxZ/DDCn693PM29RJyJPYwUobIu0pR6Xc9xkzx0qE=;
+        b=fNrSaqOHzM3eH+01xq9bOJj41HrL/gZ+mehDlcXFXKa5e1VGoCAYLXjb/3PJGxwPtC
+         Q54QYm90XtMzOQkwGS9+T8XOmnlDguCL4jFm8RmPAwv3EGPyzbh505QXTAivmI9slmdG
+         vIcp5ZY6FydAMNksZ0O+N1cm6cnQsNg6u5f1j8+bzVlAGO/2usosmlxXMGRIpMe8MJob
+         dvy9KOQemat+M+Ii3kyC7DDzKsY3kUNabCmsKYvp2nTjXdfnJlgPzrnvTNuxWw/abXqa
+         2790AeMb/Vhgrt1bidNo29EuTRDuEKXyRJYXhRRmf+q0/9DdmEj1L1v6H1AiA1nDOpRJ
+         SzBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712973015; x=1713577815;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4GoxZ/DDCn693PM29RJyJPYwUobIu0pR6Xc9xkzx0qE=;
+        b=fuD2pBeQVB+nQD6sgfPTnK0wbD150HtcMJ+iL1VG3s1h6Z+mrjdV9WanzuxVem19+I
+         9H+UBASz5VVwgTwk7CFEusa7TYaYOyaTGnNDWH/VFs/cMdUI8IGVAKMigTVySDZwfEAp
+         ZSxe2LDbhtMrkKaSTZwG5JGWea8SiRX83sSdYM33+0dumaW4R4g/2iPIM+06ePB7yntH
+         MYN/2EtggHsPFMXXIWv0C/Nsrpp/YgKNX/uIfKeHQjYCLUZk1b8PJUgLWFNGPxMrgwpI
+         6vYeZJrntMzrwdcJF0ffyPAy0VyqKYWVbROBW/71Xbfccy0BOkPOg+Gv+9GFUzsrP4Je
+         0u0A==
+X-Forwarded-Encrypted: i=1; AJvYcCUxNLpc1aY7giA4IA0O1sicXLYUnKBeNfzC9Pnk/bB5IXJOP/RpQCZDnWl2NDEocXc6J/uSH2fZY5yOoqHd7xvgUdLCJDH1tV2nW5dQoxaKkZntyN68CDYihaQDbgxnAbyLKS1a4KU5pyEL36UQDSU58bPw+X1Mod+8/ka/gi49NWzB/J2Y
+X-Gm-Message-State: AOJu0Ywcs26gQ9iWqRuV9HrO7Vj0DxhWGMEAarPmUBJ9QnsPWi/FEpgp
+	Ne/HjsqfhPlQmc7tsrkTJPwflZS5GmCZ4FK2XrfVsh4RyAJwN4dKdlaXmsv66MZQGD1XnnliRsJ
+	gzrD+scO+3jT4pXdFMnsI/dSlD/0=
+X-Google-Smtp-Source: AGHT+IH6BUPdU+NoMidFc6+jlwGqlMb9lQWMamK9mVH+ehSf6Wk5SSCtqrn3kznnpDURD5OV1Dq7BRw/BiLOHFJ83j8=
+X-Received: by 2002:a17:90b:8cb:b0:2a5:3c66:25a8 with SMTP id
+ ds11-20020a17090b08cb00b002a53c6625a8mr10160280pjb.15.1712973015100; Fri, 12
+ Apr 2024 18:50:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240413-tcp-ao-selftests-fixes-v1-3-f9c41c96949d@gmail.com>
-References: <20240413-tcp-ao-selftests-fixes-v1-0-f9c41c96949d@gmail.com>
-In-Reply-To: <20240413-tcp-ao-selftests-fixes-v1-0-f9c41c96949d@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Dmitry Safonov <0x7f454c46@gmail.com>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1712972582; l=1369;
- i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
- bh=8QLIHbMoN2Kwyajab0w/1qWe3pRkg64mhy39Rmm7dW4=;
- b=E+Tm/hDau67ueNTODWxl1Xainp4x+/2jO0SZqndJTzxr2VvGLnENcbzY/loJ0nCmerjr1CVsT0A+
- bgy+z5hHAMtNEGPNhInjRYw45a9tupTNZ83cWzf41CbwVWFNmK7m
-X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
- pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
-X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
- auth_id=152
-X-Original-From: Dmitry Safonov <0x7f454c46@gmail.com>
-Reply-To: 0x7f454c46@gmail.com
-
+References: <20240413-tcp-ao-selftests-fixes-v1-0-f9c41c96949d@gmail.com> <20240413-tcp-ao-selftests-fixes-v1-3-f9c41c96949d@gmail.com>
+In-Reply-To: <20240413-tcp-ao-selftests-fixes-v1-3-f9c41c96949d@gmail.com>
 From: Dmitry Safonov <0x7f454c46@gmail.com>
+Date: Sat, 13 Apr 2024 02:50:03 +0100
+Message-ID: <CAJwJo6buDyTvL5Hh0Mhbrd-pzzom6m0D5==ujvKi3g5ejBURQg@mail.gmail.com>
+Subject: Re: [PATCH net 3/4] selftests/tcp_ao: Fix fscanf() call for format-security
+To: 0x7f454c46@gmail.com
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On my new laptop with packages from nixos-unstable, gcc 12.3.0 produces:
-> lib/proc.c: In function ‘netstat_read_type’:
-> lib/proc.c:89:9: error: format not a string literal and no format arguments [-Werror=format-security]
->    89 |         if (fscanf(fnetstat, type->header_name) == EOF)
->       |         ^~
-> cc1: some warnings being treated as errors
+On Sat, 13 Apr 2024 at 02:43, Dmitry Safonov via B4 Relay
+<devnull+0x7f454c46.gmail.com@kernel.org> wrote:
+>
+> From: Dmitry Safonov <0x7f454c46@gmail.com>
+>
+> On my new laptop with packages from nixos-unstable, gcc 12.3.0 produces:
+> > lib/proc.c: In function =E2=80=98netstat_read_type=E2=80=99:
+> > lib/proc.c:89:9: error: format not a string literal and no format argum=
+ents [-Werror=3Dformat-security]
+> >    89 |         if (fscanf(fnetstat, type->header_name) =3D=3D EOF)
+> >       |         ^~
+> > cc1: some warnings being treated as errors
+>
+> Here the selftests lib parses header name, while expectes non-space word
+> ending with a column.
+>
+> Fixes: cfbab37b3da0 ("selftests/net: Add TCP-AO library")
+> Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
 
-Here the selftests lib parses header name, while expectes non-space word
-ending with a column.
+Actually, now I see that it was also reported, adding
 
-Fixes: cfbab37b3da0 ("selftests/net: Add TCP-AO library")
-Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
----
- tools/testing/selftests/net/tcp_ao/lib/proc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Link: https://lore.kernel.org/all/0c6d4f0d-2064-4444-986b-1d1ed782135f@coll=
+abora.com/
 
-diff --git a/tools/testing/selftests/net/tcp_ao/lib/proc.c b/tools/testing/selftests/net/tcp_ao/lib/proc.c
-index 2fb6dd8adba6..8b984fa04286 100644
---- a/tools/testing/selftests/net/tcp_ao/lib/proc.c
-+++ b/tools/testing/selftests/net/tcp_ao/lib/proc.c
-@@ -86,7 +86,7 @@ static void netstat_read_type(FILE *fnetstat, struct netstat **dest, char *line)
- 
- 	pos = strchr(line, ' ') + 1;
- 
--	if (fscanf(fnetstat, type->header_name) == EOF)
-+	if (fscanf(fnetstat, "%[^ :]", type->header_name) == EOF)
- 		test_error("fscanf(%s)", type->header_name);
- 	if (fread(&tmp, 1, 1, fnetstat) != 1 || tmp != ':')
- 		test_error("Unexpected netstat format (%c)", tmp);
-
--- 
-2.42.0
-
-
+--=20
+             Dmitry
