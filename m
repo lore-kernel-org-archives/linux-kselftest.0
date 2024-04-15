@@ -1,149 +1,855 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D8C74E25
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 14:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB23C71B32;
+	Mon, 15 Apr 2024 14:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713190936; cv=none; b=C2NhoBw8PFAEOxz4J7g4lXRA+JVWD2hA7CB8LjjdEn6LuWs4UGKYE6VvzpDDFTdVXhdnbZKAa33eRl30uA42ZEnvk8YjoXozSIFkEZevX782aFjcMD5pV2DZAhoq6F2epgZ6vz2NOyuHQ2t/CmvPJdEF1+xXBuHsLO4eRV+F4+w=
+	t=1713191150; cv=none; b=BZkwbcY5+mj9kSDfWs3X2dyPnC21GA+ipRwVNUwIsZbTtYPbDRew+faMeYsddd7O2acSpiNdC2DzBpj54jVaInd8t6M99X8DcfVJpW4+EdbdPbodMsKypPr57zAIGHusYeDGLq/8N2Jb0AC9zDJHHpqzTvnJgUjpAkWQdYogasc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713190936; c=relaxed/simple;
-	bh=N6BsmOpUFv1NdzAIhR7wG4F9QbFYaKztoAW+/nHUQH4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KTmPWByYZTBWSADodsyzC37B82teSo0cJpYh3P7LZ0SCGM4wOZADxT+RFxWg6VsHkuZnPy+3FKZ860e9l2tMJkFFfeSJU5hEYSVWca1xpEg9or1KlKCntUYcPMzcZVRmpsleLeXnHVJeVKXYzVDQdgUGMe3XzVJxnFTzayGhi4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dvSHlq4f; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dvSHlq4f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713190934;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=1PbOJBRpspxdDa6pRJjCuw+ncvorVUgjMaFCtffqZ+Q=;
-	b=dvSHlq4ffl9La6scN3ja6neyqrTkmRvMbdijqJyANEVsfbidiQGhGNQb815FooC27p1FNq
-	cwNGx5babAkcrg3M+2h3HhbkCPZmXHP5k8cEyp7LhcF58PYNoMNlE8Tiv3p+BMoING5Fv8
-	qwaRIVbL644ii/9QoHe/kCcs/wI44sA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-689-z-pZk_jWP2-Z4eLNnpCS_Q-1; Mon, 15 Apr 2024 10:22:12 -0400
-X-MC-Unique: z-pZk_jWP2-Z4eLNnpCS_Q-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-41552c04845so12173835e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Apr 2024 07:22:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713190931; x=1713795731;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1PbOJBRpspxdDa6pRJjCuw+ncvorVUgjMaFCtffqZ+Q=;
-        b=Ao9uA3o1SPsucMW0SYBvUfZiMLx8gS1C0Rf1NglUkQc3K5QfChsZQD7kL0WyzJ1LYL
-         dVBCqnzgqG+nuw3MhxMFb+PZOs/D7MLEUnpmk0KCihHDrYfkBnvR5n9k9RXJD0nCCcPl
-         EvU92QZpEJhXUu5lq85hBLmbfF5yQExvbM1kbz324X4Tz5wkN3K9Fb2AlxA2RILXAsUx
-         jmmI25rBxneiXwqMImdqTHyubYH2D56fUJ6U0l6XxL/O6haTrPICZe7ke4wOkKhomWSD
-         PaZ9XTXdecHdZVsc4fl1CNiUPHrmLYT1waFCVv5zWrax8iyUgL6Q73Ve2xGqoNWnlcgO
-         EsrA==
-X-Forwarded-Encrypted: i=1; AJvYcCUSpM9ubZzngiel2831cDMQBqaZvqMsmpdfdeb+cjnxpq/o0U/mC9rM1jsxStOq88bsyaMszzyDpvLJ8TQpOicLu6hM3Ht/rGyDmXy2ppjD
-X-Gm-Message-State: AOJu0Yz9FTIMkD8dikFGWTwFIpBkHfb2QAd6ZFERLRz0pV4va4SIuXih
-	M/fw3R6mLRZRoV45nE18EUPmuQ4xDMkMoszzQaftRz7vE4JFn20kWh7ihNXNqOLldwa/y0YUUU8
-	wZiRlrPS8Vz7MAbMlHPwoq7rVWfJ46yZJ2tNepmdw9Draub5353rpEXi0UuC/fbIhkNb83pp+4A
-	==
-X-Received: by 2002:a05:600c:1c81:b0:418:7401:b15f with SMTP id k1-20020a05600c1c8100b004187401b15fmr1322458wms.38.1713190931712;
-        Mon, 15 Apr 2024 07:22:11 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGDak1eTKoWVr2U+6dT5ZcLn1063lRhwGMlTXR2A2YuvZAJE2t6UbWSYNg3COoiiV+lBsHBiw==
-X-Received: by 2002:a05:600c:1c81:b0:418:7401:b15f with SMTP id k1-20020a05600c1c8100b004187401b15fmr1322438wms.38.1713190931354;
-        Mon, 15 Apr 2024 07:22:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:d800:568a:6ea7:5272:797c? (p200300cbc706d800568a6ea75272797c.dip0.t-ipconnect.de. [2003:cb:c706:d800:568a:6ea7:5272:797c])
-        by smtp.gmail.com with ESMTPSA id q12-20020a05600c46cc00b00417bab31bd2sm16449015wmo.26.2024.04.15.07.22.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Apr 2024 07:22:10 -0700 (PDT)
-Message-ID: <513a9e86-6159-43dd-8b70-f903637f2cd0@redhat.com>
-Date: Mon, 15 Apr 2024 16:22:09 +0200
+	s=arc-20240116; t=1713191150; c=relaxed/simple;
+	bh=VxoB943/qpiY/Mw1kHIiGs+TDpKPTsVFmu4mQwiDlRo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YWltNbEMSLh8D6gxDY7OsIiE3mbQWSX2a4NIkZeC0Nvtkg3PWYpuW2KPlpEFuWEOjD+0BOYDrqfCnRAq/16NyY+hoH0/l4Dg5x6ALA/8IB79jKCot2HmN9AbC6sH/mdqQsEQI59tC/P29EQDId/C2ur7S93uAzYjsf6gwO7kc+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4VJ8DY5H8lz9xGmm;
+	Mon, 15 Apr 2024 22:09:17 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 8BCC3140628;
+	Mon, 15 Apr 2024 22:25:34 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwBnoSWrOB1myEJGBg--.9473S4;
+	Mon, 15 Apr 2024 15:25:33 +0100 (CET)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: corbet@lwn.net,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	akpm@linux-foundation.org,
+	shuah@kernel.org,
+	mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com,
+	mic@digikod.net
+Cc: linux-security-module@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org,
+	zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	linux-integrity@vger.kernel.org,
+	wufan@linux.microsoft.com,
+	pbrobinson@gmail.com,
+	zbyszek@in.waw.pl,
+	hch@lst.de,
+	mjg59@srcf.ucam.org,
+	pmatilai@redhat.com,
+	jannh@google.com,
+	dhowells@redhat.com,
+	jikos@kernel.org,
+	mkoutny@suse.com,
+	ppavlu@suse.com,
+	petr.vorel@gmail.com,
+	mzerqung@0pointer.de,
+	kgold@linux.ibm.com,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v4 02/14] security: Introduce the digest_cache LSM
+Date: Mon, 15 Apr 2024 16:24:24 +0200
+Message-Id: <20240415142436.2545003-3-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
+References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] KVM: s390x: selftests: Add shared zeropage test
-To: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>, Thomas Huth <thuth@redhat.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-References: <20240412084329.30315-1-david@redhat.com>
- <Zh03fI2oA0UkE0Kp@tuxmaker.boeblingen.de.ibm.com>
-Content-Language: en-US
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <Zh03fI2oA0UkE0Kp@tuxmaker.boeblingen.de.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwBnoSWrOB1myEJGBg--.9473S4
+X-Coremail-Antispam: 1UD129KBjvAXoWfuw4kXF4xXFWUXw1UXryxXwb_yoW5XFyUWo
+	ZayF47Jw10gFy7ur4kCF17Aa17u3ZYq3yxAr1kJrWDZF1IvFyDJasrCa1DJFy5Jr18GF93
+	A34kJw4UJFWUtr93n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUOY7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
+	yl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r
+	4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY
+	1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
+	AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZE
+	Xa7IU0c18PUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5x10AABsC
 
-On 15.04.24 16:19, Alexander Gordeev wrote:
-> On Fri, Apr 12, 2024 at 10:43:29AM +0200, David Hildenbrand wrote:
-> Hi David,
->>   tools/testing/selftests/kvm/Makefile          |   1 +
->>   .../kvm/s390x/shared_zeropage_test.c          | 110 ++++++++++++++++++
->>   2 files changed, 111 insertions(+)
->>   create mode 100644 tools/testing/selftests/kvm/s390x/shared_zeropage_test.c
-> 
-> Tested-by: Alexander Gordeev <agordeev@linux.ibm.com>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Thanks Alexander, especially also for discovering that nasty ifdef bug!
+Introduce the digest_cache LSM, to collect digests from various sources
+(called digest lists), and to store them in kernel memory, in a set of hash
+tables forming a digest cache. Extracted digests can be used as reference
+values for integrity verification of file data or metadata.
 
+A digest cache has three types of references: in the inode security blob of
+the digest list the digest cache was created from (dig_owner field); in the
+security blob of the inodes for which the digest cache is requested
+(dig_user field); a reference returned by digest_cache_get().
+
+References are released with digest_cache_put(), in the first two cases
+when inodes are evicted from memory, in the last case when that function is
+explicitly called. Obtaining a digest cache reference means that the digest
+cache remains valid and cannot be freed until releasing it and until the
+total number of references (stored in the digest cache) becomes zero.
+
+When digest_cache_get() is called on an inode to compare its digest with
+a reference value, the digest_cache LSM knows which digest cache to get
+from the new security.digest_list xattr added to that inode, which contains
+the file name of the desired digest list digests will be extracted from.
+
+All digest lists are expected to be in the same directory, defined in the
+kernel config, and modifiable (with a later patch) at run-time through
+securityfs. When the digest_cache LSM reads the security.digest_list xattr,
+it uses its value as last path component, appended to the default path
+(unless the default path is a file). If an inode does not have that xattr,
+the default path is considered as the final destination.
+
+The default path can be either a file or a directory. If it is a file, the
+digest_cache LSM always uses the same digest cache from that file to verify
+all inodes (the xattr, if present, is ignored). If it is a directory, and
+the inode to verify does not have the xattr, a subsequent patch will make
+it possible to iterate and lookup on the digest caches created from each
+directory entry.
+
+Digest caches are created on demand, only when digest_cache_get() is
+called. The first time a digest cache is requested, the digest_cache LSM
+creates it and sets its reference in the dig_owner and dig_user fields of
+the respective inode security blobs. On the next requests, the previously
+set reference is returned, after incrementing the reference count.
+
+Since there might be multiple digest_cache_get() calls for the same inode,
+or for different inodes pointing to the same digest list, dig_owner_mutex
+and dig_user_mutex have been introduced to protect the check and assignment
+of the digest cache reference in the inode security blob.
+
+Contenders that didn't get the lock also have to wait until the digest
+cache is fully instantiated (when the bit INIT_IN_PROGRESS is cleared).
+Dig_owner_mutex cannot be used for waiting on the instantiation to avoid
+lock inversion with the inode lock for directories.
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ MAINTAINERS                                   |   6 +
+ include/linux/digest_cache.h                  |  32 ++
+ include/uapi/linux/lsm.h                      |   1 +
+ include/uapi/linux/xattr.h                    |   3 +
+ security/Kconfig                              |  11 +-
+ security/Makefile                             |   1 +
+ security/digest_cache/Kconfig                 |  16 +
+ security/digest_cache/Makefile                |   7 +
+ security/digest_cache/internal.h              |  86 ++++
+ security/digest_cache/main.c                  | 404 ++++++++++++++++++
+ security/security.c                           |   3 +-
+ .../selftests/lsm/lsm_list_modules_test.c     |   3 +
+ 12 files changed, 567 insertions(+), 6 deletions(-)
+ create mode 100644 include/linux/digest_cache.h
+ create mode 100644 security/digest_cache/Kconfig
+ create mode 100644 security/digest_cache/Makefile
+ create mode 100644 security/digest_cache/internal.h
+ create mode 100644 security/digest_cache/main.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b1ca23ab8732..72801a88449c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6193,6 +6193,12 @@ L:	linux-gpio@vger.kernel.org
+ S:	Maintained
+ F:	drivers/gpio/gpio-gpio-mm.c
+ 
++DIGEST_CACHE LSM
++M:	Roberto Sassu <roberto.sassu@huawei.com>
++L:	linux-security-module@vger.kernel.org
++S:	Maintained
++F:	security/digest_cache/
++
+ DIGITEQ AUTOMOTIVE MGB4 V4L2 DRIVER
+ M:	Martin Tuma <martin.tuma@digiteqautomotive.com>
+ L:	linux-media@vger.kernel.org
+diff --git a/include/linux/digest_cache.h b/include/linux/digest_cache.h
+new file mode 100644
+index 000000000000..e79f94a60b0f
+--- /dev/null
++++ b/include/linux/digest_cache.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ *
++ * Public API of the digest_cache LSM.
++ */
++
++#ifndef _LINUX_DIGEST_CACHE_H
++#define _LINUX_DIGEST_CACHE_H
++
++#include <linux/fs.h>
++
++struct digest_cache;
++
++#ifdef CONFIG_SECURITY_DIGEST_CACHE
++struct digest_cache *digest_cache_get(struct dentry *dentry);
++void digest_cache_put(struct digest_cache *digest_cache);
++
++#else
++static inline struct digest_cache *digest_cache_get(struct dentry *dentry)
++{
++	return NULL;
++}
++
++static inline void digest_cache_put(struct digest_cache *digest_cache)
++{
++}
++
++#endif /* CONFIG_SECURITY_DIGEST_CACHE */
++#endif /* _LINUX_DIGEST_CACHE_H */
+diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
+index 33d8c9f4aa6b..832b3aea5c26 100644
+--- a/include/uapi/linux/lsm.h
++++ b/include/uapi/linux/lsm.h
+@@ -64,6 +64,7 @@ struct lsm_ctx {
+ #define LSM_ID_LANDLOCK		110
+ #define LSM_ID_IMA		111
+ #define LSM_ID_EVM		112
++#define LSM_ID_DIGEST_CACHE	113
+ 
+ /*
+  * LSM_ATTR_XXX definitions identify different LSM attributes
+diff --git a/include/uapi/linux/xattr.h b/include/uapi/linux/xattr.h
+index 9463db2dfa9d..8a58cf4bce65 100644
+--- a/include/uapi/linux/xattr.h
++++ b/include/uapi/linux/xattr.h
+@@ -54,6 +54,9 @@
+ #define XATTR_IMA_SUFFIX "ima"
+ #define XATTR_NAME_IMA XATTR_SECURITY_PREFIX XATTR_IMA_SUFFIX
+ 
++#define XATTR_DIGEST_LIST_SUFFIX "digest_list"
++#define XATTR_NAME_DIGEST_LIST XATTR_SECURITY_PREFIX XATTR_DIGEST_LIST_SUFFIX
++
+ #define XATTR_SELINUX_SUFFIX "selinux"
+ #define XATTR_NAME_SELINUX XATTR_SECURITY_PREFIX XATTR_SELINUX_SUFFIX
+ 
+diff --git a/security/Kconfig b/security/Kconfig
+index 52c9af08ad35..99f99cbd94cc 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -194,6 +194,7 @@ source "security/yama/Kconfig"
+ source "security/safesetid/Kconfig"
+ source "security/lockdown/Kconfig"
+ source "security/landlock/Kconfig"
++source "security/digest_cache/Kconfig"
+ 
+ source "security/integrity/Kconfig"
+ 
+@@ -233,11 +234,11 @@ endchoice
+ 
+ config LSM
+ 	string "Ordered list of enabled LSMs"
+-	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
+-	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
+-	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
+-	default "landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
+-	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
++	default "digest_cache,landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
++	default "digest_cache,landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
++	default "digest_cache,landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
++	default "digest_cache,landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
++	default "digest_cache,landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
+ 	help
+ 	  A comma-separated list of LSMs, in initialization order.
+ 	  Any LSMs left off this list, except for those with order
+diff --git a/security/Makefile b/security/Makefile
+index 59f238490665..e9b43e7b715a 100644
+--- a/security/Makefile
++++ b/security/Makefile
+@@ -25,6 +25,7 @@ obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
+ obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
+ obj-$(CONFIG_BPF_LSM)			+= bpf/
+ obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
++obj-$(CONFIG_SECURITY_DIGEST_CACHE)	+= digest_cache/
+ 
+ # Object integrity file lists
+ obj-$(CONFIG_INTEGRITY)			+= integrity/
+diff --git a/security/digest_cache/Kconfig b/security/digest_cache/Kconfig
+new file mode 100644
+index 000000000000..e53fbf0779d6
+--- /dev/null
++++ b/security/digest_cache/Kconfig
+@@ -0,0 +1,16 @@
++# SPDX-License-Identifier: GPL-2.0
++config SECURITY_DIGEST_CACHE
++	bool "Digest_cache LSM"
++	default n
++	help
++	  This option enables an LSM maintaining a cache of digests
++	  (e.g. of file data or metadata).
++
++	  This LSM can support other kernel components in making access
++	  control decisions.
++
++config DIGEST_LIST_DEFAULT_PATH
++	string
++	default "/etc/digest_lists"
++	help
++	  Default directory where digest_cache LSM expects to find digest lists.
+diff --git a/security/digest_cache/Makefile b/security/digest_cache/Makefile
+new file mode 100644
+index 000000000000..48848c41253e
+--- /dev/null
++++ b/security/digest_cache/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Makefile for building the digest_cache LSM.
++
++obj-$(CONFIG_SECURITY_DIGEST_CACHE) += digest_cache.o
++
++digest_cache-y := main.o
+diff --git a/security/digest_cache/internal.h b/security/digest_cache/internal.h
+new file mode 100644
+index 000000000000..5f04844af3a5
+--- /dev/null
++++ b/security/digest_cache/internal.h
+@@ -0,0 +1,86 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ *
++ * Internal header of the digest_cache LSM.
++ */
++
++#ifndef _DIGEST_CACHE_INTERNAL_H
++#define _DIGEST_CACHE_INTERNAL_H
++
++#include <linux/lsm_hooks.h>
++#include <linux/digest_cache.h>
++
++/* Digest cache bits in flags. */
++#define INIT_IN_PROGRESS	0	/* Digest cache being initialized. */
++
++/**
++ * struct digest_cache - Digest cache
++ * @ref_count: Number of references to the digest cache
++ * @path_str: Path of the digest list the digest cache was created from
++ * @flags: Control flags
++ *
++ * This structure represents a cache of digests extracted from a digest list.
++ */
++struct digest_cache {
++	atomic_t ref_count;
++	char *path_str;
++	unsigned long flags;
++};
++
++/**
++ * struct digest_cache_security - Digest cache pointers in inode security blob
++ * @dig_owner: Digest cache created from this inode
++ * @dig_owner_mutex: Protects @dig_owner
++ * @dig_user: Digest cache requested for this inode
++ * @dig_user_mutex: Protects @dig_user
++ *
++ * This structure contains references to digest caches, protected by their
++ * respective mutex.
++ */
++struct digest_cache_security {
++	struct digest_cache *dig_owner;
++	struct mutex dig_owner_mutex;
++	struct digest_cache *dig_user;
++	struct mutex dig_user_mutex;
++};
++
++extern struct lsm_blob_sizes digest_cache_blob_sizes;
++extern char *default_path_str;
++
++static inline struct digest_cache_security *
++digest_cache_get_security(const struct inode *inode)
++{
++	if (unlikely(!inode->i_security))
++		return NULL;
++
++	return inode->i_security + digest_cache_blob_sizes.lbs_inode;
++}
++
++static inline struct digest_cache *
++digest_cache_ref(struct digest_cache *digest_cache)
++{
++	atomic_inc(&digest_cache->ref_count);
++	pr_debug("Ref (+) digest cache %s (ref count: %d)\n",
++		 digest_cache->path_str, atomic_read(&digest_cache->ref_count));
++	return digest_cache;
++}
++
++static inline struct digest_cache *
++digest_cache_unref(struct digest_cache *digest_cache)
++{
++	bool ref_is_zero = atomic_dec_and_test(&digest_cache->ref_count);
++
++	pr_debug("Ref (-) digest cache %s (ref count: %d)\n",
++		 digest_cache->path_str, atomic_read(&digest_cache->ref_count));
++	return (ref_is_zero) ? digest_cache : NULL;
++}
++
++/* main.c */
++struct digest_cache *digest_cache_create(struct dentry *dentry,
++					 struct path *digest_list_path,
++					 char *path_str, char *filename);
++
++#endif /* _DIGEST_CACHE_INTERNAL_H */
+diff --git a/security/digest_cache/main.c b/security/digest_cache/main.c
+new file mode 100644
+index 000000000000..14dba8915e99
+--- /dev/null
++++ b/security/digest_cache/main.c
+@@ -0,0 +1,404 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ *
++ * Implement the main code of the digest_cache LSM.
++ */
++
++#define pr_fmt(fmt) "DIGEST CACHE: "fmt
++#include <linux/namei.h>
++#include <linux/xattr.h>
++
++#include "internal.h"
++
++static int digest_cache_enabled __ro_after_init = 1;
++static struct kmem_cache *digest_cache_cache __read_mostly;
++
++char *default_path_str = CONFIG_DIGEST_LIST_DEFAULT_PATH;
++
++/**
++ * digest_cache_alloc_init - Allocate and initialize a new digest cache
++ * @path_str: Path string of the digest list
++ * @filename: Digest list file name (can be an empty string)
++ *
++ * This function allocates and initializes a new digest cache.
++ *
++ * Return: A digest_cache structure on success, NULL on error.
++ */
++static struct digest_cache *digest_cache_alloc_init(char *path_str,
++						    char *filename)
++{
++	struct digest_cache *digest_cache;
++
++	digest_cache = kmem_cache_alloc(digest_cache_cache, GFP_KERNEL);
++	if (!digest_cache)
++		return digest_cache;
++
++	digest_cache->path_str = kasprintf(GFP_KERNEL, "%s%s%s", path_str,
++					   filename[0] ? "/" : "", filename);
++	if (!digest_cache->path_str) {
++		kmem_cache_free(digest_cache_cache, digest_cache);
++		return NULL;
++	}
++
++	atomic_set(&digest_cache->ref_count, 1);
++	digest_cache->flags = 0UL;
++
++	pr_debug("New digest cache %s (ref count: %d)\n",
++		 digest_cache->path_str, atomic_read(&digest_cache->ref_count));
++
++	return digest_cache;
++}
++
++/**
++ * digest_cache_free - Free all memory occupied by the digest cache
++ * @digest_cache: Digest cache
++ *
++ * This function frees the memory occupied by the digest cache.
++ */
++static void digest_cache_free(struct digest_cache *digest_cache)
++{
++	pr_debug("Freed digest cache %s\n", digest_cache->path_str);
++	kfree(digest_cache->path_str);
++	kmem_cache_free(digest_cache_cache, digest_cache);
++}
++
++/**
++ * digest_cache_create - Create a digest cache
++ * @dentry: Dentry of the inode for which the digest cache will be used
++ * @digest_list_path: Path structure of the digest list
++ * @path_str: Path string of the digest list
++ * @filename: Digest list file name (can be an empty string)
++ *
++ * This function first locates, from the passed path, the digest list inode
++ * from which the digest cache will be created or retrieved (if it already
++ * exists).
++ *
++ * If dig_owner is NULL in the inode security blob, this function creates a
++ * new digest cache with reference count set to 1 (reference returned), sets
++ * it to dig_owner and consequently increments again the digest cache reference
++ * count.
++ *
++ * Otherwise, it simply increments the reference count of the existing
++ * dig_owner, since that reference is returned to the caller.
++ *
++ * Incrementing the reference count twice before calling path_put() ensures
++ * that the digest cache returned is valid even if the inode is evicted from
++ * memory (which decreases the reference count).
++ *
++ * Releasing the dig_owner_mutex lock does not mean that the digest cache is
++ * ready for use. digest_cache_create() callers that found a partially
++ * instantiated digest cache have to wait until the INIT_IN_PROGRESS bit is
++ * cleared by the caller that is actually creating that digest cache.
++ *
++ * Return: A new digest cache on success, NULL on error.
++ */
++struct digest_cache *digest_cache_create(struct dentry *dentry,
++					 struct path *digest_list_path,
++					 char *path_str, char *filename)
++{
++	struct path file_path;
++	struct digest_cache *digest_cache = NULL;
++	struct digest_cache_security *dig_sec;
++	struct inode *inode = d_backing_inode(digest_list_path->dentry);
++	bool dig_owner_exists = false;
++	int ret;
++
++	if (S_ISDIR(d_backing_inode(digest_list_path->dentry)->i_mode) &&
++	    filename[0]) {
++		ret = vfs_path_lookup(digest_list_path->dentry,
++				      digest_list_path->mnt, filename, 0,
++				      &file_path);
++		if (ret < 0) {
++			pr_debug("Cannot find digest list %s/%s\n", path_str,
++				 filename);
++			return NULL;
++		}
++
++		digest_list_path = &file_path;
++		inode = d_backing_inode(file_path.dentry);
++
++		/*
++		 * Cannot request a digest cache for the same inode the
++		 * digest cache is populated from.
++		 */
++		if (d_backing_inode(dentry) == inode) {
++			pr_debug("Cannot request a digest cache for %s and use it as digest list\n",
++				 dentry->d_name.name);
++			goto out;
++		}
++
++		/* No support for nested directories. */
++		if (!S_ISREG(inode->i_mode)) {
++			pr_debug("%s is not a regular file (no support for nested directories)\n",
++				 dentry->d_name.name);
++			goto out;
++		}
++	}
++
++	dig_sec = digest_cache_get_security(inode);
++	if (unlikely(!dig_sec))
++		goto out;
++
++	/* Serialize check and assignment of dig_owner. */
++	mutex_lock(&dig_sec->dig_owner_mutex);
++	if (dig_sec->dig_owner) {
++		/* Increment ref. count for reference returned to the caller. */
++		digest_cache = digest_cache_ref(dig_sec->dig_owner);
++		dig_owner_exists = true;
++		mutex_unlock(&dig_sec->dig_owner_mutex);
++		goto exists;
++	}
++
++	/* Ref. count is already 1 for this reference. */
++	digest_cache = digest_cache_alloc_init(path_str, filename);
++	if (!digest_cache) {
++		mutex_unlock(&dig_sec->dig_owner_mutex);
++		goto out;
++	}
++
++	/* Increment ref. count for reference set to dig_owner. */
++	dig_sec->dig_owner = digest_cache_ref(digest_cache);
++
++	/* Make the other lock contenders wait until creation complete. */
++	set_bit(INIT_IN_PROGRESS, &dig_sec->dig_owner->flags);
++	mutex_unlock(&dig_sec->dig_owner_mutex);
++
++	/* Creation complete, notify the other lock contenders. */
++	clear_and_wake_up_bit(INIT_IN_PROGRESS, &dig_sec->dig_owner->flags);
++exists:
++	if (dig_owner_exists)
++		/* Wait until creation complete. */
++		wait_on_bit(&dig_sec->dig_owner->flags, INIT_IN_PROGRESS,
++			    TASK_UNINTERRUPTIBLE);
++out:
++	if (digest_list_path == &file_path)
++		path_put(&file_path);
++
++	return digest_cache;
++}
++
++/**
++ * digest_cache_new - Retrieve digest list file name and request digest cache
++ * @dentry: Dentry of the inode for which the digest cache will be used
++ *
++ * This function locates the default path. If it is a file, it directly creates
++ * a digest cache from it. Otherwise, it reads the digest list file name from
++ * the security.digest_list xattr and requests the creation of a digest cache
++ * with that file name. If security.digest_list is not found, this function
++ * requests the creation of a digest cache on the parent directory.
++ *
++ * Return: A new digest cache on success, NULL on error.
++ */
++static struct digest_cache *digest_cache_new(struct dentry *dentry)
++{
++	char filename[NAME_MAX + 1] = { 0 };
++	struct digest_cache *digest_cache = NULL;
++	struct path default_path;
++	int ret;
++
++	ret = kern_path(default_path_str, 0, &default_path);
++	if (ret < 0) {
++		pr_debug("Cannot find path %s\n", default_path_str);
++		return NULL;
++	}
++
++	/* The default path is a file, no need to get xattr. */
++	if (S_ISREG(d_backing_inode(default_path.dentry)->i_mode)) {
++		pr_debug("Default path %s is a file, not reading %s xattr\n",
++			 default_path_str, XATTR_NAME_DIGEST_LIST);
++		goto create;
++	} else if (!S_ISDIR(d_backing_inode(default_path.dentry)->i_mode)) {
++		pr_debug("Default path %s must be either a file or a directory\n",
++			 default_path_str);
++		goto out;
++	}
++
++	ret = vfs_getxattr(&nop_mnt_idmap, dentry, XATTR_NAME_DIGEST_LIST,
++			   filename, sizeof(filename) - 1);
++	if (ret <= 0) {
++		pr_debug("Digest list path not found for file %s, using %s\n",
++			 dentry->d_name.name, default_path_str);
++		goto create;
++	}
++
++	if (strchr(filename, '/')) {
++		pr_debug("%s xattr should contain only a file name, got: %s\n",
++			 XATTR_NAME_DIGEST_LIST, filename);
++		goto out;
++	}
++
++	pr_debug("Found %s xattr in %s, default path: %s, digest list: %s\n",
++		 XATTR_NAME_DIGEST_LIST, dentry->d_name.name, default_path_str,
++		 filename);
++create:
++	digest_cache = digest_cache_create(dentry, &default_path,
++					   default_path_str, filename);
++out:
++	path_put(&default_path);
++	return digest_cache;
++}
++
++/**
++ * digest_cache_get - Get a digest cache for a given inode
++ * @dentry: Dentry of the inode for which the digest cache will be used
++ *
++ * This function tries to find a digest cache from the inode security blob of
++ * the passed dentry (dig_user field). If a digest cache was not found, it calls
++ * digest_cache_new() to create a new one. In both cases, it increments the
++ * digest cache reference count before returning the reference to the caller.
++ *
++ * The caller is responsible to call digest_cache_put() to release the digest
++ * cache reference returned.
++ *
++ * Lock dig_user_mutex to protect against concurrent requests to obtain a digest
++ * cache for the same inode, and to make other contenders wait until the first
++ * requester finishes the process.
++ *
++ * Return: A digest cache on success, NULL otherwise.
++ */
++struct digest_cache *digest_cache_get(struct dentry *dentry)
++{
++	struct digest_cache_security *dig_sec;
++	struct digest_cache *digest_cache = NULL;
++	struct inode *inode = d_backing_inode(dentry);
++
++	if (!digest_cache_enabled)
++		return NULL;
++
++	dig_sec = digest_cache_get_security(inode);
++	if (unlikely(!dig_sec))
++		return NULL;
++
++	/* Serialize accesses to inode for which the digest cache is used. */
++	mutex_lock(&dig_sec->dig_user_mutex);
++	if (!dig_sec->dig_user)
++		/* Consume extra reference from digest_cache_create(). */
++		dig_sec->dig_user = digest_cache_new(dentry);
++
++	if (dig_sec->dig_user)
++		/* Increment ref. count for reference returned to the caller. */
++		digest_cache = digest_cache_ref(dig_sec->dig_user);
++
++	mutex_unlock(&dig_sec->dig_user_mutex);
++	return digest_cache;
++}
++EXPORT_SYMBOL_GPL(digest_cache_get);
++
++/**
++ * digest_cache_put - Release a digest cache reference
++ * @digest_cache: Digest cache
++ *
++ * This function decrements the reference count of the digest cache passed as
++ * argument. If the reference count reaches zero, it calls digest_cache_free()
++ * to free the digest cache.
++ */
++void digest_cache_put(struct digest_cache *digest_cache)
++{
++	struct digest_cache *to_free;
++
++	to_free = digest_cache_unref(digest_cache);
++	if (!to_free)
++		return;
++
++	digest_cache_free(to_free);
++}
++EXPORT_SYMBOL_GPL(digest_cache_put);
++
++struct lsm_blob_sizes digest_cache_blob_sizes __ro_after_init = {
++	.lbs_inode = sizeof(struct digest_cache_security),
++};
++
++/**
++ * digest_cache_inode_alloc_security - Initialize inode security blob
++ * @inode: Inode for which the security blob is initialized
++ *
++ * This function initializes the digest_cache_security structure, directly
++ * stored in the inode security blob.
++ *
++ * Return: Zero.
++ */
++static int digest_cache_inode_alloc_security(struct inode *inode)
++{
++	struct digest_cache_security *dig_sec;
++
++	/* The inode security blob is always allocated here. */
++	dig_sec = digest_cache_get_security(inode);
++	mutex_init(&dig_sec->dig_owner_mutex);
++	mutex_init(&dig_sec->dig_user_mutex);
++	return 0;
++}
++
++/**
++ * digest_cache_inode_free_security - Release the digest cache references
++ * @inode: Inode for which the digest cache references are released
++ *
++ * Since the inode is being evicted, this function releases the non-needed
++ * references to the digest caches stored in the digest_cache_security
++ * structure.
++ */
++static void digest_cache_inode_free_security(struct inode *inode)
++{
++	struct digest_cache_security *dig_sec;
++
++	dig_sec = digest_cache_get_security(inode);
++	if (!dig_sec)
++		return;
++
++	mutex_destroy(&dig_sec->dig_owner_mutex);
++	mutex_destroy(&dig_sec->dig_user_mutex);
++	if (dig_sec->dig_owner)
++		digest_cache_put(dig_sec->dig_owner);
++	if (dig_sec->dig_user)
++		digest_cache_put(dig_sec->dig_user);
++}
++
++static struct security_hook_list digest_cache_hooks[] __ro_after_init = {
++	LSM_HOOK_INIT(inode_alloc_security, digest_cache_inode_alloc_security),
++	LSM_HOOK_INIT(inode_free_security, digest_cache_inode_free_security),
++};
++
++/**
++ * digest_cache_init_once - Initialize the digest cache structure
++ * @foo: Digest cache structure to initialize
++ *
++ * This function fills the digest cache structure with zeros.
++ */
++static void digest_cache_init_once(void *foo)
++{
++	struct digest_cache *digest_cache = (struct digest_cache *)foo;
++
++	memset(digest_cache, 0, sizeof(*digest_cache));
++}
++
++static const struct lsm_id digest_cache_lsmid = {
++	.name = "digest_cache",
++	.id = LSM_ID_DIGEST_CACHE,
++};
++
++/**
++ * digest_cache_init - Initialize the digest_cache LSM
++ *
++ * Initialize the digest_cache LSM, by instantiating a cache for the
++ * digest_cache structure and by registering the digest_cache LSM hooks.
++ */
++static int __init digest_cache_init(void)
++{
++	digest_cache_cache = kmem_cache_create("digest_cache_cache",
++					       sizeof(struct digest_cache),
++					       0, SLAB_PANIC,
++					       digest_cache_init_once);
++
++	security_add_hooks(digest_cache_hooks, ARRAY_SIZE(digest_cache_hooks),
++			   &digest_cache_lsmid);
++	return 0;
++}
++
++DEFINE_LSM(digest_cache) = {
++	.name = "digest_cache",
++	.enabled = &digest_cache_enabled,
++	.init = digest_cache_init,
++	.blobs = &digest_cache_blob_sizes,
++};
+diff --git a/security/security.c b/security/security.c
+index cbdc9bebe802..cb084ed58617 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -50,7 +50,8 @@
+ 	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0) + \
+ 	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0) + \
+ 	(IS_ENABLED(CONFIG_IMA) ? 1 : 0) + \
+-	(IS_ENABLED(CONFIG_EVM) ? 1 : 0))
++	(IS_ENABLED(CONFIG_EVM) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_DIGEST_CACHE) ? 1 : 0))
+ 
+ /*
+  * These are descriptions of the reasons that can be passed to the
+diff --git a/tools/testing/selftests/lsm/lsm_list_modules_test.c b/tools/testing/selftests/lsm/lsm_list_modules_test.c
+index 4d5d4cee2586..d00831edc582 100644
+--- a/tools/testing/selftests/lsm/lsm_list_modules_test.c
++++ b/tools/testing/selftests/lsm/lsm_list_modules_test.c
+@@ -128,6 +128,9 @@ TEST(correct_lsm_list_modules)
+ 		case LSM_ID_EVM:
+ 			name = "evm";
+ 			break;
++		case LSM_ID_DIGEST_CACHE:
++			name = "digest_cache";
++			break;
+ 		default:
+ 			name = "INVALID";
+ 			break;
 -- 
-Cheers,
-
-David / dhildenb
+2.34.1
 
