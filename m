@@ -1,47 +1,62 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B38F9E8;
-	Tue, 16 Apr 2024 00:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD2E3D7A;
+	Tue, 16 Apr 2024 01:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713228365; cv=none; b=tCz+qELX/z4HetbmGLHwzS3eTAG0kkaMTxw2aXI3n9P75thYry4vpVhIe0NdJbiTuZTbaomfLcu8bBhEX56iNVi8xIn84xI4t/5WcyD6qjDQW4iIh/wIzz/CJwxfHuJsSHGqyu4Rvl+LYjBg+XgN16OTUiq3fu5jcXNITN17KNA=
+	t=1713229830; cv=none; b=s7EtVq+9ZXHpR9SNWlizu4+BVc1chN3ty40LzkbwfMxjNzkxbgYMF7s1tOVwDyy7MwyK6FgIB0STMJCpH3Vfg1j/Bg3FNjKr3YWYJzSrZA9Utg2cU87m4dhuBM28keXzrq1Yu07sx7LRQQuqIDEXvxvXMhsClX5yY5Q01vKysU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713228365; c=relaxed/simple;
-	bh=y9sov6G1b9aY1nBElEZFBTccJq2jlrMvMtldou9HhZ4=;
+	s=arc-20240116; t=1713229830; c=relaxed/simple;
+	bh=ZpmXc+jo5vS+063ZnNDqudgU3KZ6+0rnGyQbe6US0Lg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W+Ign38+sdA/FGco+GHh3CCydxbCo+tWuCX9EFVhcJXM6+4ykcSDmmypbzu2S26oZrQf+5KIpz5hdD7a9xtK1AcBeDBhPR/WrsmSD+hc/u8ME6tsToeJMKRa2OwBTkqfNx8+B5HSS0zL9mloTwnYoo0SWFwrTl/64VpABJAFcQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jK7vx2hu; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=W6MykMUHT47bLriw+1kd6jkglSFQNnYp/0HvjwzB7rltB+cAb5NIRfOT9xQqwbe+vS35fWw7hByDNsqXlU76264vNGQZA1cRPorl3zKm44ATMfrl9rGzzL/W9M+bSnK7C9oIj22s11aLSc1AEOnslRsmJc0s7V272q1jaVTjeqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=Fz4VEKnG; arc=none smtp.client-ip=4.36.192.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jK7vx2hu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8409C4AF0A;
-	Tue, 16 Apr 2024 00:46:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713228365;
-	bh=y9sov6G1b9aY1nBElEZFBTccJq2jlrMvMtldou9HhZ4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jK7vx2huxUkpe0ejXTzoWwg1Di4AzhlxmWPWVWTMRFZbMKwZE0GUvT8PRRtqV7T43
-	 GT+R8R0HPAC+hPB9BwRjBiCr+QaLY/RZFYXhYvtVWgdBkBGkGrppgJomb5BLm8PZ4r
-	 lx4D/FfGRmt5+2XpU++NXmNNlAbVRplBYjOtP2uIhfjc0jwHLCGCp4tsj+II8ygXxi
-	 obHZXYavyERu+5GKHyeKv6FRbB1x4D7TztinRugxheNGR3OT1cYn/FrBt1p4yJwVFW
-	 Ni2hirumzKhA7w4SURqpBFugRKxsbDdIr9mXgcOPfiZgrdmJaSKC+J8Z1FzSUEHSIY
-	 0KmFuSADRwBxA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	petrm@nvidia.com,
+	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="Fz4VEKnG"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
+	bh=W+i/4Tm5fzFDs0G6pROKKJsrD/qfJkZXPY0XHK3LoIs=; b=Fz4VEKnGfmwqKuMW91YzrhJCJ9
+	nIq96GoPO6g3ekQ883KmBc0UF9rzPMQ3pm9Tkn7hr3ow3SXOwxLMp+cv5x/+KCVVKPtFVHDo0zZJ4
+	SqEjiBj9lHTYXf5KcnrkD55MU83dD7mEGq6Cu+MFnqZUwpBFzPHs/JSQWM3JFQqzyTx4pl8TBjaNC
+	9R8jBAMXCS4lmAJhIj9u0NhMYS7RlxioqyiOIDOvSjreWhwe6bkmT91asx8DFNy0FGtifzkO8XSVI
+	t7ewCXikhFjUMcB9Vinx1Hjh+OqSBebXPHcFTNVAu2BX7VRI1CJ4OsyKNt5dTPFGe+QmCSivCYTXf
+	Zy9RL4BQ==;
+Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
+	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <zfigura@codeweavers.com>)
+	id 1rwXKy-00FbQv-2n;
+	Mon, 15 Apr 2024 20:10:16 -0500
+From: Elizabeth Figura <zfigura@codeweavers.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	wine-devel@winehq.org,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Arkadiusz Hiler <ahiler@codeweavers.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	willemdebruijn.kernel@gmail.com,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 6/6] selftests: drv-net: add a trivial ping test
-Date: Mon, 15 Apr 2024 17:45:56 -0700
-Message-ID: <20240416004556.1618804-7-kuba@kernel.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240416004556.1618804-1-kuba@kernel.org>
-References: <20240416004556.1618804-1-kuba@kernel.org>
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Elizabeth Figura <zfigura@codeweavers.com>
+Subject: [PATCH v4 04/27] ntsync: Introduce NTSYNC_IOC_MUTEX_UNLOCK.
+Date: Mon, 15 Apr 2024 20:08:14 -0500
+Message-ID: <20240416010837.333694-5-zfigura@codeweavers.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240416010837.333694-1-zfigura@codeweavers.com>
+References: <20240416010837.333694-1-zfigura@codeweavers.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,116 +65,111 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a very simple test for testing with a remote system.
-Both IPv4 and IPv6 connectivity is optional so tests
-will XFail is env doesn't define an address for the given
-family.
+This corresponds to the NT syscall NtReleaseMutant().
 
-Using netdevsim:
+This syscall decrements the mutex's recursion count by one, and returns the
+previous value. If the mutex is not owned by the given owner ID, the function
+instead fails and returns -EPERM.
 
- $ ./run_kselftest.sh -t drivers/net:ping.py
- TAP version 13
- 1..1
- # timeout set to 45
- # selftests: drivers/net: ping.py
- # KTAP version 1
- # 1..2
- # ok 1 ping.ping_v4
- # ok 2 ping.ping_v6
- # # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
- ok 1 selftests: drivers/net: ping.py
-
-Command line SSH:
-
- $ NETIF=virbr0 REMOTE_TYPE=ssh REMOTE_ARGS=root@192.168.122.123 \
-    LOCAL_V4=192.168.122.1 REMOTE_V4=192.168.122.123 \
-    ./tools/testing/selftests/drivers/net/ping.py
- KTAP version 1
- 1..2
- ok 1 ping.ping_v4
- ok 2 ping.ping_v6 # XFAIL
- # Totals: pass:1 fail:0 xfail:1 xpass:0 skip:0 error:0
-
-Existing devices placed in netns (and using net.config):
-
- $ cat drivers/net/net.config
- NETIF=veth0
- REMOTE_TYPE=netns
- REMOTE_ARGS=red
- LOCAL_V4="192.168.1.1"
- REMOTE_V4="192.168.1.2"
-
- $ ./run_kselftest.sh -t drivers/net:ping.py
- TAP version 13
- 1..1
- # timeout set to 45
- # selftests: drivers/net: ping.py
- # KTAP version 1
- # 1..2
- # ok 1 ping.ping_v4
- # ok 2 ping.ping_v6 # XFAIL
- # # Totals: pass:1 fail:0 xfail:1 xpass:0 skip:0 error:0
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
 ---
- tools/testing/selftests/drivers/net/Makefile |  5 ++-
- tools/testing/selftests/drivers/net/ping.py  | 32 ++++++++++++++++++++
- 2 files changed, 36 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/drivers/net/ping.py
+ drivers/misc/ntsync.c       | 64 +++++++++++++++++++++++++++++++++++++
+ include/uapi/linux/ntsync.h |  1 +
+ 2 files changed, 65 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index 379cdb1960a7..754ec643768a 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -2,6 +2,9 @@
+diff --git a/drivers/misc/ntsync.c b/drivers/misc/ntsync.c
+index 173513aeeacc..f7911ef78d5b 100644
+--- a/drivers/misc/ntsync.c
++++ b/drivers/misc/ntsync.c
+@@ -315,6 +315,68 @@ static int ntsync_sem_post(struct ntsync_obj *sem, void __user *argp)
+ 	return ret;
+ }
  
- TEST_INCLUDES := $(wildcard lib/py/*.py)
++/*
++ * Actually change the mutex state, returning -EPERM if not the owner.
++ */
++static int unlock_mutex_state(struct ntsync_obj *mutex,
++			      const struct ntsync_mutex_args *args)
++{
++	lockdep_assert_held(&mutex->lock);
++
++	if (mutex->u.mutex.owner != args->owner)
++		return -EPERM;
++
++	if (!--mutex->u.mutex.count)
++		mutex->u.mutex.owner = 0;
++	return 0;
++}
++
++static int ntsync_mutex_unlock(struct ntsync_obj *mutex, void __user *argp)
++{
++	struct ntsync_mutex_args __user *user_args = argp;
++	struct ntsync_device *dev = mutex->dev;
++	struct ntsync_mutex_args args;
++	__u32 prev_count;
++	int ret;
++
++	if (copy_from_user(&args, argp, sizeof(args)))
++		return -EFAULT;
++	if (!args.owner)
++		return -EINVAL;
++
++	if (mutex->type != NTSYNC_TYPE_MUTEX)
++		return -EINVAL;
++
++	if (atomic_read(&mutex->all_hint) > 0) {
++		spin_lock(&dev->wait_all_lock);
++		spin_lock_nest_lock(&mutex->lock, &dev->wait_all_lock);
++
++		prev_count = mutex->u.mutex.count;
++		ret = unlock_mutex_state(mutex, &args);
++		if (!ret) {
++			try_wake_all_obj(dev, mutex);
++			try_wake_any_mutex(mutex);
++		}
++
++		spin_unlock(&mutex->lock);
++		spin_unlock(&dev->wait_all_lock);
++	} else {
++		spin_lock(&mutex->lock);
++
++		prev_count = mutex->u.mutex.count;
++		ret = unlock_mutex_state(mutex, &args);
++		if (!ret)
++			try_wake_any_mutex(mutex);
++
++		spin_unlock(&mutex->lock);
++	}
++
++	if (!ret && put_user(prev_count, &user_args->count))
++		ret = -EFAULT;
++
++	return ret;
++}
++
+ static int ntsync_obj_release(struct inode *inode, struct file *file)
+ {
+ 	struct ntsync_obj *obj = file->private_data;
+@@ -334,6 +396,8 @@ static long ntsync_obj_ioctl(struct file *file, unsigned int cmd,
+ 	switch (cmd) {
+ 	case NTSYNC_IOC_SEM_POST:
+ 		return ntsync_sem_post(obj, argp);
++	case NTSYNC_IOC_MUTEX_UNLOCK:
++		return ntsync_mutex_unlock(obj, argp);
+ 	default:
+ 		return -ENOIOCTLCMD;
+ 	}
+diff --git a/include/uapi/linux/ntsync.h b/include/uapi/linux/ntsync.h
+index cd7841cdba49..fa2c9f638d77 100644
+--- a/include/uapi/linux/ntsync.h
++++ b/include/uapi/linux/ntsync.h
+@@ -43,5 +43,6 @@ struct ntsync_wait_args {
+ #define NTSYNC_IOC_CREATE_MUTEX		_IOWR('N', 0x84, struct ntsync_sem_args)
  
--TEST_PROGS := stats.py
-+TEST_PROGS := \
-+	ping.py \
-+	stats.py \
-+# end of TEST_PROGS
+ #define NTSYNC_IOC_SEM_POST		_IOWR('N', 0x81, __u32)
++#define NTSYNC_IOC_MUTEX_UNLOCK		_IOWR('N', 0x85, struct ntsync_mutex_args)
  
- include ../../lib.mk
-diff --git a/tools/testing/selftests/drivers/net/ping.py b/tools/testing/selftests/drivers/net/ping.py
-new file mode 100755
-index 000000000000..2d74f15a52a0
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/ping.py
-@@ -0,0 +1,32 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from lib.py import ksft_run, KsftXfailEx
-+from lib.py import NetDrvEpEnv
-+from lib.py import cmd
-+
-+
-+def ping_v4(cfg) -> None:
-+    if not cfg.v4:
-+        raise KsftXfailEx()
-+
-+    cmd(f"ping -c 1 -W0.5 {cfg.remote_v4}")
-+    cmd(f"ping -c 1 -W0.5 {cfg.v4}", host=cfg.remote)
-+
-+
-+def ping_v6(cfg) -> None:
-+    if not cfg.v6:
-+        raise KsftXfailEx()
-+
-+    cmd(f"ping -c 1 -W0.5 {cfg.remote_v6}")
-+    cmd(f"ping -c 1 -W0.5 {cfg.v6}", host=cfg.remote)
-+
-+
-+def main() -> None:
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run([ping_v4, ping_v6],
-+                 args=(cfg, ))
-+
-+
-+if __name__ == "__main__":
-+    main()
+ #endif
 -- 
-2.44.0
+2.43.0
 
