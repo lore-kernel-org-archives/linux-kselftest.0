@@ -1,129 +1,82 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC156131753;
-	Tue, 16 Apr 2024 14:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A434128805;
+	Tue, 16 Apr 2024 14:23:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713277222; cv=none; b=GTZFUcpyPhIewxOTZixe8vzB2GuOe2vhyX7RuLIisLinE3rIiWc9olq4QeL0g3ZzMl4lL7Q6yMe3bqiMb9UADM9mDWPxhsssXVSZc2jc7RkWCP4+uwoj8Gkf9ZlJV3G1YbY2VWNRh3FGYbFtSN8Oyqh5BLeUMIGGPnul1tjEIXs=
+	t=1713277399; cv=none; b=ZxLT2ZlXb763qxbrvA6py5mqqUVnNoUzR+D0Mjnrh1gciBfqWU3C1hNtMYlJNS2aZ+aVHXMZr4znG5RcgOl8BksV0n4v9sZrGq0aB27STz1G1KmbptrFoxIdq05rEKzyPZEEF7oiD7oNUSnmZ1sNGi4JgkI7QrhpbiKufxuGaAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713277222; c=relaxed/simple;
-	bh=292FtAHAQkVnLeVN989TV5AQEa/YkR9Vv3e9Rljpa14=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=irsUotC1/RGVslHEwzPJfb8S1f4bsDt3lnIY3CEPTe4W4bXEuXHbBOHHkC6+Qq8HCZQxN/xGgdK301cBpYB+Zsa6KPbDkh10QF+NWUZdKRyWSxv0xGOY2upyWvhw7pO+y3rZrf4w5ucyB/VU+14dM5oH7qcbj7V9wfq0pjgGMA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=APOrWBCW; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=APOrWBCW; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1713277399; c=relaxed/simple;
+	bh=ehDmFxuzMc0GABhu9Np0Q5YsywD0jqWWuiNwfGgzy7Y=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=Qc8SwEezAXpF9ji40lDQhcS4ioykpT5JdPgkcUonCeZvNQNSuDselS4RUfCuiLhuW0fgmqA5gRR3vjTC05XuJhSvtR/uwGBKDAwsw1wp97uev+D/OvdCeA7bwCVgWZRVrIxtQzQcwoZHIAC387bWdGJznK/QHmToVofdDRtmDHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kqDr96a+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="APOrWBCW";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="APOrWBCW"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0CD65374EA;
-	Tue, 16 Apr 2024 14:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1713277216; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vT8XBjOmiOF2DZOaI8CF1LOaUqXXvEhx/xriwZY31Nc=;
-	b=APOrWBCWxBz8CHg9/eOvGTrgu7rE3CXyuTCx4m1l7Wz7tx9O75yQLuXZ1ykLJ9LKp3dDpx
-	r8AEksQ+YF2dsYtmRQas+gLk15Nql1MYyHxHRh/MJ8XsI+fMQN/+dlgm+p2D2xAnpMxUhX
-	qgAEc1pGmQfeKKoVcsN/Q4z11Hl6j0g=
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1713277216; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vT8XBjOmiOF2DZOaI8CF1LOaUqXXvEhx/xriwZY31Nc=;
-	b=APOrWBCWxBz8CHg9/eOvGTrgu7rE3CXyuTCx4m1l7Wz7tx9O75yQLuXZ1ykLJ9LKp3dDpx
-	r8AEksQ+YF2dsYtmRQas+gLk15Nql1MYyHxHRh/MJ8XsI+fMQN/+dlgm+p2D2xAnpMxUhX
-	qgAEc1pGmQfeKKoVcsN/Q4z11Hl6j0g=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DC47C13942;
-	Tue, 16 Apr 2024 14:20:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id sCujNR+JHmbAbQAAD6G6ig
-	(envelope-from <mkoutny@suse.com>); Tue, 16 Apr 2024 14:20:15 +0000
-From: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To: cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: [PATCH v4 1/6] cgroup/pids: Remove superfluous zeroing
-Date: Tue, 16 Apr 2024 16:20:09 +0200
-Message-ID: <20240416142014.27630-2-mkoutny@suse.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240416142014.27630-1-mkoutny@suse.com>
-References: <20240416142014.27630-1-mkoutny@suse.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kqDr96a+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F67DC2BD10;
+	Tue, 16 Apr 2024 14:23:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713277399;
+	bh=ehDmFxuzMc0GABhu9Np0Q5YsywD0jqWWuiNwfGgzy7Y=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=kqDr96a+/EJLMGuxGhyn7HPaDovtgGPCfVn3A8iRwpoRF+dWD3mgbIj3UY4hSvYfo
+	 NFt34q7YXC5XQxqtIpgKYYDnXon0jFDN33kRrsQdqlwIvudhe0V29TxoEUKJuGJ6az
+	 tzE7Xdkra2kIZ+p6LSI6J3pDsd+dkboMo9LwilVhY8TlPY27f2ZVLw5R8fC4L8VbA0
+	 7urXrm8UItbRGNb7UFPSnxt/OyYLFP3Z8wvoBZBcq/tbHeTUXvaBW1Pcl3Y28IMOCJ
+	 dad87sgoJqYCWh2s5JhWG0T9hGsS/WG4hOet6yuKtJTmqgFcMxFDakskBbt0e0wT21
+	 GKslGlHo4IftQ==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -1.78
-X-Spam-Level: 
-X-Spamd-Result: default: False [-1.78 / 50.00];
-	BAYES_HAM(-1.48)[91.55%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+Date: Tue, 16 Apr 2024 17:23:10 +0300
+Message-Id: <D0LM5BP1D90R.2OLRV9OQG5596@kernel.org>
+Subject: Re: [PATCH v4 01/14] lib: Add TLV parser
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Randy Dunlap" <rdunlap@infradead.org>, "Roberto Sassu"
+ <roberto.sassu@huaweicloud.com>, <corbet@lwn.net>, <paul@paul-moore.com>,
+ <jmorris@namei.org>, <serge@hallyn.com>, <akpm@linux-foundation.org>,
+ <shuah@kernel.org>, <mcoquelin.stm32@gmail.com>,
+ <alexandre.torgue@foss.st.com>, <mic@digikod.net>
+Cc: <linux-security-module@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+ <linux-integrity@vger.kernel.org>, <wufan@linux.microsoft.com>,
+ <pbrobinson@gmail.com>, <zbyszek@in.waw.pl>, <hch@lst.de>,
+ <mjg59@srcf.ucam.org>, <pmatilai@redhat.com>, <jannh@google.com>,
+ <dhowells@redhat.com>, <jikos@kernel.org>, <mkoutny@suse.com>,
+ <ppavlu@suse.com>, <petr.vorel@gmail.com>, <mzerqung@0pointer.de>,
+ <kgold@linux.ibm.com>, "Roberto Sassu" <roberto.sassu@huawei.com>
+X-Mailer: aerc 0.17.0
+References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
+ <20240415142436.2545003-2-roberto.sassu@huaweicloud.com>
+ <D0KXTHHYLSX6.1IDLSEIVS9PA5@kernel.org>
+ <805af99c-4c78-4f2c-a15b-de69a4b8da99@infradead.org>
+In-Reply-To: <805af99c-4c78-4f2c-a15b-de69a4b8da99@infradead.org>
 
-Atomic counters are in kzalloc'd struct. They are zeroed already and
-atomic64_t does not need special initialization
-(cf kernel/trace/trace_clock.c:trace_counter).
+On Tue Apr 16, 2024 at 12:07 AM EEST, Randy Dunlap wrote:
+>
+>
+> On 4/15/24 12:19 PM, Jarkko Sakkinen wrote:
+> > On Mon Apr 15, 2024 at 5:24 PM EEST, Roberto Sassu wrote:
+> >> From: Roberto Sassu <roberto.sassu@huawei.com>
+> >>
+> >> Add a parser of a generic TLV format:
+> >=20
+> > What is TLV?
+>
+> type-length-value
+>
+> i.e., a descriptor that contains a value.
+>
+> IIUC.
 
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- kernel/cgroup/pids.c | 2 --
- 1 file changed, 2 deletions(-)
+Thanks Randy. If it had been "time-length-value (TLV)" then it would
+have been obvious :-)
 
-diff --git a/kernel/cgroup/pids.c b/kernel/cgroup/pids.c
-index 7695e60bcb40..0e5ec7d59b4d 100644
---- a/kernel/cgroup/pids.c
-+++ b/kernel/cgroup/pids.c
-@@ -75,9 +75,7 @@ pids_css_alloc(struct cgroup_subsys_state *parent)
- 	if (!pids)
- 		return ERR_PTR(-ENOMEM);
- 
--	atomic64_set(&pids->counter, 0);
- 	atomic64_set(&pids->limit, PIDS_MAX);
--	atomic64_set(&pids->events_limit, 0);
- 	return &pids->css;
- }
- 
--- 
-2.44.0
-
+BR, Jarkko
