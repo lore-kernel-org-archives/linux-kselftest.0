@@ -1,90 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF55717AD83;
-	Thu, 18 Apr 2024 19:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70DA17BB2C;
+	Thu, 18 Apr 2024 19:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713467192; cv=none; b=ap3O+OH6l9EhYyaG1D0ITxUn6/7rpus5nkTXOhKZ94m84qBAKzPz4dqtn7LY0Le2u9C7k2iguOXA+MUAxBrIzwQnchMpW/KZ0ozU2GcNy5szkKXdsBjilYu67+rvXf7suKIVC6Oy43zXAPJWnnB+5pNrIpgEaym4OTRxuuqBQFY=
+	t=1713468936; cv=none; b=r/GhNMDEiQoXjJA06GORZZ82qcIOeFVPHyCqGrxqs+YokgLqnCRzic18gR4GjtTQQ/xrNX79/eUOv89H2igrTxgd7l6NHxPJkhhl01GKwLUzjWbJc25pnjPkqxQqtgEjUs+GvxqZB1b3DoZUYEeGLB0s8mlzdlljd4jsbquIWvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713467192; c=relaxed/simple;
-	bh=5yE7gTbmJo1J/i8oxJyG/BtKhBBGRJSbKzrS01UohJw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sNbx/dQq86ou/k82aI5139pweZiVl4Vb7pFgOwCqdeQeLqRVfXjeJRDDVZPoIycMtP6iMRF9zIqouSuxNiGTKjG6AeGWfNF5IMZHHzC67YUH9BYD1MXdeME/JW7fm8KOjmfHmMr9xCcjfO+yagPr2f2py4FG/OmqkRD64yCPIcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RiIEs4X0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713468936; c=relaxed/simple;
+	bh=OzBOmiPfCAiq6pIsQFQkEaHriJFCH3cvPlNRRS9d+m8=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=fMVAE5jm4ih+TlRijlZrpyptjCE4q82qcUUFl/d3rWydD9sSGwvs55+whQjEPpSK37HkoAf/F3LrjH/XvQn2i3tYiCbpKq9R5/O20jzNKGE1kAdoePXIaPz45vrICQwIiPGNzxhesaiMYl3c6HrArvBRse2W9c0+h5LSEgqYW+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g7bPKhWe; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RiIEs4X0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F8D7C113CC;
-	Thu, 18 Apr 2024 19:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713467190;
-	bh=5yE7gTbmJo1J/i8oxJyG/BtKhBBGRJSbKzrS01UohJw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=RiIEs4X0gVy9qI8JGUr8/tjiBT5jgThH2L5iJF8qGVsF5dh8mIpMnF0jnoYmCLvcP
-	 UVElqdV71Xo4INIWy3gIuy+i34F2MHi53C3sfDhSm8nUo9wBNrR6A3jKpii6DrzDf8
-	 j/2PfcUs7TwQk/KcgVkqXqjnGugJWwxbuY6jY0/dBTQxKrG30l8OZTBTldSIKVrzLL
-	 0jmM6Gm5GtoONkMzj4U/vRNKB/2sh8zvUBCrN9I1jK2uFzOC8efC4PCnmAVYFf2bhM
-	 salRsYB1+3KPbUJjDJpH65lzqCaWCRcWcBfDaH8N6676Xk5ChM0zW0Juxoio+TwHCv
-	 PbI6Rw/QmuA6g==
-Date: Thu, 18 Apr 2024 12:06:28 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, shuah@kernel.org, petrm@nvidia.com,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g7bPKhWe"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-699320fcbc1so8350746d6.3;
+        Thu, 18 Apr 2024 12:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713468934; x=1714073734; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0PFMTMR+Bmu2rlw/d5DDVMiLx3235SXmGWbOxpv+fu8=;
+        b=g7bPKhWeF1d5yGleqTJ7KTnJ8C+F2u+B8OhTTJWO3uWhfnhnG94V8bJIXzHgnTMYQn
+         suXOufDghcb5efAhNzAY1bg8h05ukdeIepDdieB9NgdN93rGey31qGPr337YPa4WQPE5
+         GC+Uwjc6EtJS5SP0JkUfk9UvASvKKEidfChAanb/tDdzvQpgfqmPl7iWgIhWu6Lv/TEN
+         1H7cdgV/U2F6rVhu4P8WzLW88ivI1dmVElTGaON+WRFm0dFNU1B7Er83th0g8w7rzeeq
+         sCpScS27IOhwAFG/J2QwYFIRWA+mklROgSc17mFqxHQGny+ZVPS8984XVSXJxSQjE0Cb
+         2icQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713468934; x=1714073734;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0PFMTMR+Bmu2rlw/d5DDVMiLx3235SXmGWbOxpv+fu8=;
+        b=EF5A1NXjJMnqF0cSE7KDivAUVmWk9h2T8s4QNw5qY8UC1gpAvr47wu9hATbmFJW6eh
+         TXMy90RsxfcK78EHMfpPexXms3ZLoclynF6SBEJ0cX4Po85f9l5dk86RUgkL1zFj8Myf
+         2SL2m16g0a6yplLMlaST+go2vOMfGsEIRt+RUeUg4BqhJURRZDmWLJuadChIaveLSdwT
+         KXZTqOJydF1k0ZQEZtMxw988ffvWEuTTXa/DJqbHbPkyT4OlqzVv3SYB+XaRvrFD5BAM
+         JPyr0/e/x4yZ+eUJ/sxJqMdqjq2lH4BqFrLPlh/qIXKMxTwFx5Pjgqr/ptaMUbJ+wCnk
+         b31Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVQYmhk/Cq8gLyTZcGdMBpLv58aGozIXv1dP2Qx9ihQum6D1Uw/Ob5bgO/uJy17W2+LM1lr/MGuwvGRxwSXekA6RS+PCElzUSkBetOPaxlF751YWn+E8Dkhi6EtklLRhMNjuxfld/JM
+X-Gm-Message-State: AOJu0YzasqS9DaGX2aYLQdqevqNYa0lbEqO0rtXCnhRwzYibQDpMIeV8
+	DdoBqDDcMnM8QYUd8lz2w+tnf9n2RcBBUlHisHYGzFYNJ4kkyl+a
+X-Google-Smtp-Source: AGHT+IFpPZ0WwZ0qwB8imyUxvVkbkiPbf+zBUOfCiBjGAIaguZY3UQE7N2k0bQJD1ly5QG1Svlz1iA==
+X-Received: by 2002:a05:6214:1549:b0:69c:a51d:4041 with SMTP id t9-20020a056214154900b0069ca51d4041mr3883262qvw.45.1713468933794;
+        Thu, 18 Apr 2024 12:35:33 -0700 (PDT)
+Received: from localhost (73.84.86.34.bc.googleusercontent.com. [34.86.84.73])
+        by smtp.gmail.com with ESMTPSA id s5-20020a0c8d45000000b0069b4ddcbd42sm926014qvb.0.2024.04.18.12.35.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Apr 2024 12:35:33 -0700 (PDT)
+Date: Thu, 18 Apr 2024 15:35:33 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, 
+ netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ shuah@kernel.org, 
+ petrm@nvidia.com, 
  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v3 7/8] selftests: net: support matching cases
- by name prefix
-Message-ID: <20240418120628.381fd081@kernel.org>
-In-Reply-To: <66212d8b82945_ec9b9294aa@willemb.c.googlers.com.notmuch>
+Message-ID: <6621760535c64_f818029464@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240418120628.381fd081@kernel.org>
 References: <20240417231146.2435572-1-kuba@kernel.org>
-	<20240417231146.2435572-8-kuba@kernel.org>
-	<66212d8b82945_ec9b9294aa@willemb.c.googlers.com.notmuch>
+ <20240417231146.2435572-8-kuba@kernel.org>
+ <66212d8b82945_ec9b9294aa@willemb.c.googlers.com.notmuch>
+ <20240418120628.381fd081@kernel.org>
+Subject: Re: [PATCH net-next v3 7/8] selftests: net: support matching cases by
+ name prefix
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-On Thu, 18 Apr 2024 10:26:19 -0400 Willem de Bruijn wrote:
-> > -def ksft_run(cases, args=()):
-> > +def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
-> > +    cases = cases or []
-> > +
-> > +    if globs and case_pfx:
-> > +        for key, value in globs.items():
-> > +            stats_with_pfx = bool([pfx for pfx in case_pfx if key.startswith(pfx)])  
+Jakub Kicinski wrote:
+> On Thu, 18 Apr 2024 10:26:19 -0400 Willem de Bruijn wrote:
+> > > -def ksft_run(cases, args=()):
+> > > +def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
+> > > +    cases = cases or []
+> > > +
+> > > +    if globs and case_pfx:
+> > > +        for key, value in globs.items():
+> > > +            stats_with_pfx = bool([pfx for pfx in case_pfx if key.startswith(pfx)])  
+> > 
+> > stats -> starts
+> > 
+> > for the reader, just spell out prefix instead of pfx?
+> > 
+> > perhaps less pythonic, but just
+> > 
+> >     if key.startswith(prefix) and callable(value):
+> >       cases.append(value)
 > 
-> stats -> starts
+> like this?
 > 
-> for the reader, just spell out prefix instead of pfx?
-> 
-> perhaps less pythonic, but just
-> 
->     if key.startswith(prefix) and callable(value):
->       cases.append(value)
+> diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
+> index fe4025dc5a16..8018bf98a9d2 100644
+> --- a/tools/testing/selftests/net/lib/py/ksft.py
+> +++ b/tools/testing/selftests/net/lib/py/ksft.py
+> @@ -86,9 +86,12 @@ KSFT_RESULT_ALL = True
+>  
+>      if globs and case_pfx:
+>          for key, value in globs.items():
+> -            stats_with_pfx = bool([pfx for pfx in case_pfx if key.startswith(pfx)])
+> -            if callable(value) and stats_with_pfx:
+> -                cases.append(value)
+> +            if not callable(value):
+> +                continue
+> +            for prefix in case_pfx:
+> +                if key.startswith(prefix):
+> +                    cases.append(value)
+> +                    break
 
-like this?
+Yes. I would not have brought this up if it wasn't for the typo as
+well. Python developers perhaps find this less pythonic, but I do find
+it easier to follow.
 
-diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-index fe4025dc5a16..8018bf98a9d2 100644
---- a/tools/testing/selftests/net/lib/py/ksft.py
-+++ b/tools/testing/selftests/net/lib/py/ksft.py
-@@ -86,9 +86,12 @@ KSFT_RESULT_ALL = True
- 
-     if globs and case_pfx:
-         for key, value in globs.items():
--            stats_with_pfx = bool([pfx for pfx in case_pfx if key.startswith(pfx)])
--            if callable(value) and stats_with_pfx:
--                cases.append(value)
-+            if not callable(value):
-+                continue
-+            for prefix in case_pfx:
-+                if key.startswith(prefix):
-+                    cases.append(value)
-+                    break
- 
-     totals = {"pass": 0, "fail": 0, "skip": 0, "xfail": 0}
- 
