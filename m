@@ -1,126 +1,171 @@
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70DA17BB2C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83C1179204;
 	Thu, 18 Apr 2024 19:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713468936; cv=none; b=r/GhNMDEiQoXjJA06GORZZ82qcIOeFVPHyCqGrxqs+YokgLqnCRzic18gR4GjtTQQ/xrNX79/eUOv89H2igrTxgd7l6NHxPJkhhl01GKwLUzjWbJc25pnjPkqxQqtgEjUs+GvxqZB1b3DoZUYEeGLB0s8mlzdlljd4jsbquIWvA=
+	t=1713468936; cv=none; b=AHJgMNTFdSYhRjaqn7Z8fgbhknGgmVoI18JXcYHe/m5DUiwMayRINy70QtIR2Spz7XMeHf+XF3AdYL75iIitTT1EQkHyUawkEchOvGmqPEwGpoO4SDAkBDbD2VQLqYDOXAPCkW0hi7nR8ez2mR3Bjlu+v8ZnHog8H8TMufh+aec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713468936; c=relaxed/simple;
-	bh=OzBOmiPfCAiq6pIsQFQkEaHriJFCH3cvPlNRRS9d+m8=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=fMVAE5jm4ih+TlRijlZrpyptjCE4q82qcUUFl/d3rWydD9sSGwvs55+whQjEPpSK37HkoAf/F3LrjH/XvQn2i3tYiCbpKq9R5/O20jzNKGE1kAdoePXIaPz45vrICQwIiPGNzxhesaiMYl3c6HrArvBRse2W9c0+h5LSEgqYW+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g7bPKhWe; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	bh=8Q5mHERO3TSsf9UBiBduLaMBg9k96KmVbsHQLPWjcu0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=H36F50v4iCkzgqW52vfoodi+jYWbKTsXOiy0tlhlB/fzs3yyQza3QZxaOGoGZ6xnJj0wvSqr3Yyc6FAH9LDIhgRnoiZmAmY2FYgHaAmkLm3GxFkyLm+tRwHKRwCjcCPRUNsvn/4ikRCj+zzFQqc0n3gixQ6Ceqp9yiy3Vw+tNk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=J/Bbmdpm; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g7bPKhWe"
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-699320fcbc1so8350746d6.3;
-        Thu, 18 Apr 2024 12:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713468934; x=1714073734; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0PFMTMR+Bmu2rlw/d5DDVMiLx3235SXmGWbOxpv+fu8=;
-        b=g7bPKhWeF1d5yGleqTJ7KTnJ8C+F2u+B8OhTTJWO3uWhfnhnG94V8bJIXzHgnTMYQn
-         suXOufDghcb5efAhNzAY1bg8h05ukdeIepDdieB9NgdN93rGey31qGPr337YPa4WQPE5
-         GC+Uwjc6EtJS5SP0JkUfk9UvASvKKEidfChAanb/tDdzvQpgfqmPl7iWgIhWu6Lv/TEN
-         1H7cdgV/U2F6rVhu4P8WzLW88ivI1dmVElTGaON+WRFm0dFNU1B7Er83th0g8w7rzeeq
-         sCpScS27IOhwAFG/J2QwYFIRWA+mklROgSc17mFqxHQGny+ZVPS8984XVSXJxSQjE0Cb
-         2icQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713468934; x=1714073734;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0PFMTMR+Bmu2rlw/d5DDVMiLx3235SXmGWbOxpv+fu8=;
-        b=EF5A1NXjJMnqF0cSE7KDivAUVmWk9h2T8s4QNw5qY8UC1gpAvr47wu9hATbmFJW6eh
-         TXMy90RsxfcK78EHMfpPexXms3ZLoclynF6SBEJ0cX4Po85f9l5dk86RUgkL1zFj8Myf
-         2SL2m16g0a6yplLMlaST+go2vOMfGsEIRt+RUeUg4BqhJURRZDmWLJuadChIaveLSdwT
-         KXZTqOJydF1k0ZQEZtMxw988ffvWEuTTXa/DJqbHbPkyT4OlqzVv3SYB+XaRvrFD5BAM
-         JPyr0/e/x4yZ+eUJ/sxJqMdqjq2lH4BqFrLPlh/qIXKMxTwFx5Pjgqr/ptaMUbJ+wCnk
-         b31Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVQYmhk/Cq8gLyTZcGdMBpLv58aGozIXv1dP2Qx9ihQum6D1Uw/Ob5bgO/uJy17W2+LM1lr/MGuwvGRxwSXekA6RS+PCElzUSkBetOPaxlF751YWn+E8Dkhi6EtklLRhMNjuxfld/JM
-X-Gm-Message-State: AOJu0YzasqS9DaGX2aYLQdqevqNYa0lbEqO0rtXCnhRwzYibQDpMIeV8
-	DdoBqDDcMnM8QYUd8lz2w+tnf9n2RcBBUlHisHYGzFYNJ4kkyl+a
-X-Google-Smtp-Source: AGHT+IFpPZ0WwZ0qwB8imyUxvVkbkiPbf+zBUOfCiBjGAIaguZY3UQE7N2k0bQJD1ly5QG1Svlz1iA==
-X-Received: by 2002:a05:6214:1549:b0:69c:a51d:4041 with SMTP id t9-20020a056214154900b0069ca51d4041mr3883262qvw.45.1713468933794;
-        Thu, 18 Apr 2024 12:35:33 -0700 (PDT)
-Received: from localhost (73.84.86.34.bc.googleusercontent.com. [34.86.84.73])
-        by smtp.gmail.com with ESMTPSA id s5-20020a0c8d45000000b0069b4ddcbd42sm926014qvb.0.2024.04.18.12.35.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Apr 2024 12:35:33 -0700 (PDT)
-Date: Thu, 18 Apr 2024 15:35:33 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, 
- netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- shuah@kernel.org, 
- petrm@nvidia.com, 
- linux-kselftest@vger.kernel.org
-Message-ID: <6621760535c64_f818029464@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240418120628.381fd081@kernel.org>
-References: <20240417231146.2435572-1-kuba@kernel.org>
- <20240417231146.2435572-8-kuba@kernel.org>
- <66212d8b82945_ec9b9294aa@willemb.c.googlers.com.notmuch>
- <20240418120628.381fd081@kernel.org>
-Subject: Re: [PATCH net-next v3 7/8] selftests: net: support matching cases by
- name prefix
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="J/Bbmdpm"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=hX4HLV/CfHBx1G0t4ug9fAZz09QcMHZGPcRafQhkYa4=; b=J/BbmdpmevtDd/uokShWGlYYjd
+	/TwpZDY5GkWyg989M8XEmXu0Mo+cI22qFss8N/OCarIkR42Wl3jAhTg3dKAoAf2XkiA49ZPaidM2x
+	AjlnxcWsW6G1yxGV6l2p8BeHZt9SLPQuuh3KYx9V1BmVDujaPKoCF3a5DY8jX+NIZ9cer9aznCR3n
+	kRuXOSo19RGy3DXqqCP6NHNrsdZxTv7f50A8bdeX98OIqjJw8xZDimpfaUNPwc0N6DtitH1XKNv0y
+	VHR4eOowQZGPKvdatgDe7FsXboFxk4+u4EIclauuELL0FXptH7D41QBBd/uzCzNTtPumZVP0hlzEe
+	51Y1qDHw==;
+Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rxXXf-000000060xf-1u7B;
+	Thu, 18 Apr 2024 19:35:31 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rxXXf-00000000Asi-01VS;
+	Thu, 18 Apr 2024 20:35:31 +0100
+From: David Woodhouse <dwmw2@infradead.org>
+To: kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Paul Durrant <paul@xen.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Marcelo Tosatti <mtosatti@redhat.com>,
+	jalliste@amazon.co.uk,
+	sveith@amazon.de
+Subject: [PATCH 07/10] KVM: x86: Avoid NTP frequency skew for KVM clock on 32-bit host
+Date: Thu, 18 Apr 2024 20:34:46 +0100
+Message-ID: <20240418193528.41780-8-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240418193528.41780-1-dwmw2@infradead.org>
+References: <20240418193528.41780-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-Jakub Kicinski wrote:
-> On Thu, 18 Apr 2024 10:26:19 -0400 Willem de Bruijn wrote:
-> > > -def ksft_run(cases, args=()):
-> > > +def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
-> > > +    cases = cases or []
-> > > +
-> > > +    if globs and case_pfx:
-> > > +        for key, value in globs.items():
-> > > +            stats_with_pfx = bool([pfx for pfx in case_pfx if key.startswith(pfx)])  
-> > 
-> > stats -> starts
-> > 
-> > for the reader, just spell out prefix instead of pfx?
-> > 
-> > perhaps less pythonic, but just
-> > 
-> >     if key.startswith(prefix) and callable(value):
-> >       cases.append(value)
-> 
-> like this?
-> 
-> diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-> index fe4025dc5a16..8018bf98a9d2 100644
-> --- a/tools/testing/selftests/net/lib/py/ksft.py
-> +++ b/tools/testing/selftests/net/lib/py/ksft.py
-> @@ -86,9 +86,12 @@ KSFT_RESULT_ALL = True
->  
->      if globs and case_pfx:
->          for key, value in globs.items():
-> -            stats_with_pfx = bool([pfx for pfx in case_pfx if key.startswith(pfx)])
-> -            if callable(value) and stats_with_pfx:
-> -                cases.append(value)
-> +            if not callable(value):
-> +                continue
-> +            for prefix in case_pfx:
-> +                if key.startswith(prefix):
-> +                    cases.append(value)
-> +                    break
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Yes. I would not have brought this up if it wasn't for the typo as
-well. Python developers perhaps find this less pythonic, but I do find
-it easier to follow.
+Commit 53fafdbb8b21 ("KVM: x86: switch KVMCLOCK base to monotonic raw
+clock") did so only for 64-bit hosts, by capturing the boot offset from
+within the existing clocksource notifier update_pvclock_gtod().
+
+That notifier was added in commit 16e8d74d2da9 ("KVM: x86: notifier for
+clocksource changes") but only on x86_64, because its original purpose
+was just to disable the "master clock" mode which is only supported on
+x86_64.
+
+Now that the notifier is used for more than disabling master clock mode,
+(well, OK, more than a decade later but clocks are hard), enable it for
+the 32-bit build too so that get_kvmclock_base_ns() can be unaffected by
+NTP sync on 32-bit too.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+---
+ arch/x86/kvm/x86.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 00a7c1188dec..44b3d2a0da5b 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -2245,7 +2245,6 @@ static int do_set_msr(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
+ 	return kvm_set_msr_ignored_check(vcpu, index, *data, true);
+ }
+ 
+-#ifdef CONFIG_X86_64
+ struct pvclock_clock {
+ 	int vclock_mode;
+ 	u64 cycle_last;
+@@ -2303,13 +2302,6 @@ static s64 get_kvmclock_base_ns(void)
+ 	/* Count up from boot time, but with the frequency of the raw clock.  */
+ 	return ktime_to_ns(ktime_add(ktime_get_raw(), pvclock_gtod_data.offs_boot));
+ }
+-#else
+-static s64 get_kvmclock_base_ns(void)
+-{
+-	/* Master clock not used, so we can just use CLOCK_BOOTTIME.  */
+-	return ktime_get_boottime_ns();
+-}
+-#endif
+ 
+ static void kvm_write_wall_clock(struct kvm *kvm, gpa_t wall_clock, int sec_hi_ofs)
+ {
+@@ -9819,6 +9811,7 @@ static void pvclock_irq_work_fn(struct irq_work *w)
+ }
+ 
+ static DEFINE_IRQ_WORK(pvclock_irq_work, pvclock_irq_work_fn);
++#endif
+ 
+ /*
+  * Notification about pvclock gtod data update.
+@@ -9826,26 +9819,26 @@ static DEFINE_IRQ_WORK(pvclock_irq_work, pvclock_irq_work_fn);
+ static int pvclock_gtod_notify(struct notifier_block *nb, unsigned long unused,
+ 			       void *priv)
+ {
+-	struct pvclock_gtod_data *gtod = &pvclock_gtod_data;
+ 	struct timekeeper *tk = priv;
+ 
+ 	update_pvclock_gtod(tk);
+ 
++#ifdef CONFIG_X86_64
+ 	/*
+ 	 * Disable master clock if host does not trust, or does not use,
+ 	 * TSC based clocksource. Delegate queue_work() to irq_work as
+ 	 * this is invoked with tk_core.seq write held.
+ 	 */
+-	if (!gtod_is_based_on_tsc(gtod->clock.vclock_mode) &&
++	if (!gtod_is_based_on_tsc(pvclock_gtod_data.clock.vclock_mode) &&
+ 	    atomic_read(&kvm_guest_has_master_clock) != 0)
+ 		irq_work_queue(&pvclock_irq_work);
++#endif
+ 	return 0;
+ }
+ 
+ static struct notifier_block pvclock_gtod_notifier = {
+ 	.notifier_call = pvclock_gtod_notify,
+ };
+-#endif
+ 
+ static inline void kvm_ops_update(struct kvm_x86_init_ops *ops)
+ {
+@@ -9984,9 +9977,10 @@ int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
+ 
+ 	if (pi_inject_timer == -1)
+ 		pi_inject_timer = housekeeping_enabled(HK_TYPE_TIMER);
+-#ifdef CONFIG_X86_64
++
+ 	pvclock_gtod_register_notifier(&pvclock_gtod_notifier);
+ 
++#ifdef CONFIG_X86_64
+ 	if (hypervisor_is_type(X86_HYPER_MS_HYPERV))
+ 		set_hv_tscchange_cb(kvm_hyperv_tsc_notifier);
+ #endif
+-- 
+2.44.0
 
