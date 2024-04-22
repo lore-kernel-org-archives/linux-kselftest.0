@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8AC16E869;
-	Mon, 22 Apr 2024 23:57:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D88180A86;
+	Mon, 22 Apr 2024 23:57:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713830220; cv=none; b=LUf+VGbRPr2bnuVDkbobR35vXC7ioiipRojGnJ41Ox1ytu7B1NI+T6SISfbHptLf8kZ1Yscu5YjYCQXApxkP4H98BSOQUcav3bwMYbYybiCAY1RQZZi+3/ZMxR6rSbTPz02uciobJd0VTuVM6oCYI618QB9w1aKfcvaY2/2iK4Y=
+	t=1713830276; cv=none; b=Vm1BSCtqo01baVxeJ7vomwKNP+44v6xEpVgeTDYcnXjcfiEECOW2RxnhZC7UxBrcillvqWOyW8KrvoqsZehm2nZKZMq2tjHzuF0Psouux14FIVVJfN8AW23xVfk6UmHSPeN+doTvhpcbIIDdePtbB0KZ+g1ritUHP1ZBEZrnfxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713830220; c=relaxed/simple;
+	s=arc-20240116; t=1713830276; c=relaxed/simple;
 	bh=WQkBgi+Eaxxbb+FX/HL3Sm6zB6RvXwCNsTnQSDnjwh0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N8UAJpTKvVxNc5pJoCyZ6ZoSVsEyIAPwXdP8AextgYBN6hu1DDDoYiFg/VEzlIx/R+1L49QYWbxUShQdsQuT+cRF7Griqc8jOPFtP0EWlbQvpKGPSHdtuGqgFS3l669vsZcrs74yVs5Hk8921MpnhVXj6vn+FVfg+KSPuWuwgyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dkFEwQQT; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=O8k1Bn/HMaAiVe4iGbEzEL5w/YzExW6Yuaqtzin7q2AkLA9lD54Se+/vFns1fTYw1J2LsRMjRVNuWkVV7rT0SuTody1Sd16d5G7qN6Ltf8HK986EvbkfRhqhyn7Mhac4zDhjtVAKz9W4duUcJ5X3u3rdk9Ge9F/c1iESz4iYUWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bOT5ekKu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dkFEwQQT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C9C6C32783;
-	Mon, 22 Apr 2024 23:56:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOT5ekKu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 928EBC2BD11;
+	Mon, 22 Apr 2024 23:57:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713830220;
+	s=k20201202; t=1713830276;
 	bh=WQkBgi+Eaxxbb+FX/HL3Sm6zB6RvXwCNsTnQSDnjwh0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dkFEwQQTHp8jNekHFEm48xA2hTIC0N0YwGQaNiEaN+RmHUFdwBFCCeMaLJHd9UFYd
-	 8Z9+9RrgnxchJH/EcdXNOsFixM38kcaKk6DYKSpvidrxIC/iHVWUkufXQQr5Rel+MX
-	 pqZgBAJSwRgGihJiCglF0F2PiZbLTNeS5hRwFHpDGazF9Z/d3SNrWXvvdPBUEf6C3W
-	 edIEc1dy3+2S4gLqA/kEcNE0c5o+687FIuTJLyCci0pcMmGdeVPwc/Rtf70x43tULL
-	 5IMx0srRMxGDKluUJHkRiqvlURN3fJ4/NPTiEqDauocyQ0AVG7C6U2cfBdvtAUBaHq
-	 Y7eyWDId4ah3w==
+	b=bOT5ekKu5fwwj+vs8Z4v/tITmfNQ31fGh6z+OxUScf2guRAelWe4viEG6lODPt5dz
+	 ayCaJogTn+TEIIkH9D2Zz5BaFY8VU6wCo4leV7Rk4lQNKSpiwIE7lkpe6ltCZOOUUd
+	 h2uqZgRYPCahxwI5hUwavTXupaWYXwIlk6bu8rsxVU8VFTrDsQ4TAKUAG5K65vdv2P
+	 CDbCNIXOE7yfga7reyrlBRvm1PGW2Qn9nrJmkYa+t/guSZLPaGTQZhV1QZuc+RrIxx
+	 UUVTB5+xTEJK5g2oMMfpZNpKRZwPmmrW3ja910scz1B7Gl8n+WDpkiN111jdf89xvD
+	 pEzDbf4PKq91g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -38,12 +38,12 @@ Cc: John Stultz <jstultz@google.com>,
 	nathan@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 22/29] selftests: timers: Fix valid-adjtimex signed left-shift undefined behavior
-Date: Mon, 22 Apr 2024 19:17:03 -0400
-Message-ID: <20240422231730.1601976-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 15/19] selftests: timers: Fix valid-adjtimex signed left-shift undefined behavior
+Date: Mon, 22 Apr 2024 19:18:29 -0400
+Message-ID: <20240422231845.1607921-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240422231730.1601976-1-sashal@kernel.org>
-References: <20240422231730.1601976-1-sashal@kernel.org>
+In-Reply-To: <20240422231845.1607921-1-sashal@kernel.org>
+References: <20240422231845.1607921-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.28
+X-stable-base: Linux 6.1.87
 Content-Transfer-Encoding: 8bit
 
 From: John Stultz <jstultz@google.com>
