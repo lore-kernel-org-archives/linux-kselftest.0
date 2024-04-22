@@ -1,178 +1,168 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7644A1C286;
-	Mon, 22 Apr 2024 22:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E6E2942F;
+	Mon, 22 Apr 2024 23:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713823404; cv=none; b=G3eAzS69BoQBieMQng+YbcNPyWAqmXJk4wUtKnMh8ibd5UYbVpyRz4jJf8BDbpqX+6LTXYmuMSHIUhE0s8gp9Rj7YGgdOkKroryCLxYlGTlzNrOHM0SJTAWI40+ODoZodf8ODHPNutDOrR+F7I+ddlMX2BSV43Q8iIR2s4wKYlY=
+	t=1713828247; cv=none; b=NMHf8CJfgTCfa/UuC5GieYg4u5uR5wVfiPLjYOMCkST/xy/FhdQiRawTgzdSMn3M22A7r/zW/naYx9Etzm9OuaetkMy4ZzItJA/nVu2sbpyC+zoPU/qT/f07ZX3is3H+V5oFgTvP8qQVWGkxqiMDNiI+WVqbqUglM9h4fXPwxzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713823404; c=relaxed/simple;
-	bh=GY0MXRD7EIQgOXVFSSvngeEgnL9PKDqVeT3TM0piVIs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VDYfpJ8sEQub4vD4DujYba8ZymS6dwERV4L4eZ1ju2RiitLCfvUCzBo4NMd4/xvCc3l3ZSGGwpGXnYo5tkFrn6/vJZLD4TtNNy7VKvaG+p5oSvuplOMMZ6g4mKyG/7Dt2Wl2jWoIlLzz2O2HWC1/VY2dMWiTZh4DoUk2F/XHITA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PV7VWp2U; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1713828247; c=relaxed/simple;
+	bh=v3XW2cYQ79gqDMbF1UVESANI0NiQDi505TJ8KLujo5k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mulC7ptUOK1PmkPxdYk00nUKMamoFbWqdYfOUsu1UNATzmsZyYqVtN4n0BYY/rh4nSU31E4oSxq5Shzg9MyDXP3fvhRslmJ7rtQcbc1oCpZwUSBcYTzJaco7Z/9tZ7Vr93PEBu0zRtpT8RpvRvPZLY1jVsQtd3TzTtbek9282w8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s8yAgiDA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PV7VWp2U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713823403; x=1745359403;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GY0MXRD7EIQgOXVFSSvngeEgnL9PKDqVeT3TM0piVIs=;
-  b=PV7VWp2UI9VZ/Kj2cEIBvXpBBc2ET47RN+2P89JT1MjkNXz2q0Ilr//s
-   h1ItFJ3dhKTbj8f2rkH5NBFpc1RFPlwLkx4jCtFgN+7RMitScCKuSl/5b
-   5755i9+8w4anJptHWhuGNdwxv2Dkst1tAr9oZfsM6wd6VzZV6hQ/wd7eG
-   feUretYgn4903kH9763S1e1W1qPxeJGv+A6QmBPiR3nE4l1gD5aKTy1E7
-   tec50Pp7ajTAI9f24DO+JZ6Rjuy2oAo3oFaSgKf52Y83Ol9i7a7sIZM2L
-   GMK2QI2Nhu6lxfDVN/3HXVx4ao//rMIx3xS8Q1JE2SzzDjz1jEDRCOEG0
-   g==;
-X-CSE-ConnectionGUID: be4FNByxQ1CckZBPvbuu4Q==
-X-CSE-MsgGUID: G3nao+doTr2jLMyTRSe0fQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="31875700"
-X-IronPort-AV: E=Sophos;i="6.07,221,1708416000"; 
-   d="scan'208";a="31875700"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2024 15:02:52 -0700
-X-CSE-ConnectionGUID: G06rEvsPSBmK/RPfjndAuQ==
-X-CSE-MsgGUID: g//wDu7URXmaIJN9nPSsCA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,221,1708416000"; 
-   d="scan'208";a="28813444"
-Received: from soc-cp83kr3.jf.intel.com (HELO [10.24.10.61]) ([10.24.10.61])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2024 15:02:51 -0700
-Message-ID: <71260288-3666-4419-8283-6565e91aaba4@intel.com>
-Date: Mon, 22 Apr 2024 15:02:50 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s8yAgiDA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B6DC113CC;
+	Mon, 22 Apr 2024 23:24:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713828246;
+	bh=v3XW2cYQ79gqDMbF1UVESANI0NiQDi505TJ8KLujo5k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=s8yAgiDABYJJ5Q6dUW0bQqyeiS8he+8GKi6+qSH2CUjwIshTMK2Pmweg6oyFqcvce
+	 fVdaffWRShYGJ8PlgFk6UIM0a/ie3FY+avPhCyXknhkizTBzYmS5oRAhifjXIU9Bj+
+	 3yXDzzPDC6LWdVFOYJZu0hFT3i++tZF7ZxJxtV5FUSOUPdgWpTFmtU/Tqol6EZF+K2
+	 ZtqURe1IlXFEDkPbwts/B7hBcH09GXRFg3IDbs4sG+Rjns3fMnvf0BUERcRsl4FcCv
+	 /FxhJEqvCwwDxYbI3yzO2R7Ln2N9AlRiVGL5xMah5oMP2YeUmzixTqQjeLRTfZy1nT
+	 X6Kgf1sBnttMA==
+From: Stephen Boyd <sboyd@kernel.org>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	patches@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Daniel Latypov <dlatypov@google.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH v4 00/10] clk: Add kunit tests for fixed rate and parent data
+Date: Mon, 22 Apr 2024 16:23:53 -0700
+Message-ID: <20240422232404.213174-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] KVM: selftests: Add KVM/PV clock selftest to prove
- timer drift correction
-To: David Woodhouse <dwmw2@infradead.org>, Jack Allister
- <jalliste@amazon.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>, Sean Christopherson <seanjc@google.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: Paul Durrant <paul@xen.org>, kvm@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20240408220705.7637-1-jalliste@amazon.com>
- <20240408220705.7637-3-jalliste@amazon.com>
- <3664e8ec-1fa1-48c0-a80d-546b7f6cd671@intel.com>
- <17F1A2E9-6BAD-40E7-ACDD-B110CFC124B3@infradead.org>
- <65FF4D51-05A8-42E0-9D07-6E42913CC75E@infradead.org>
- <6dca783b-6532-4fa7-9e04-1c0a382a00b0@intel.com>
- <c863ffcfd4edda9a1a46e3351766a655c5523f7d.camel@infradead.org>
-Content-Language: en-US
-From: "Chen, Zide" <zide.chen@intel.com>
-In-Reply-To: <c863ffcfd4edda9a1a46e3351766a655c5523f7d.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+This patch series adds unit tests for the clk fixed rate basic type and
+the clk registration functions that use struct clk_parent_data. To get
+there, we add support for loading device tree overlays onto the live DTB
+along with probing platform drivers to bind to device nodes in the
+overlays. With this series, we're able to exercise some of the code in
+the common clk framework that uses devicetree lookups to find parents
+and the fixed rate clk code that scans device tree directly and creates
+clks. Please review.
+
+I Cced everyone to all the patches so they get the full context. I'm
+hoping I can take the whole pile through the clk tree as they all build
+upon each other. Or the DT part can be merged through the DT tree to
+reduce the dependencies.
+
+Changes from v3 (https://lore.kernel.org/r/20230327222159.3509818-1-sboyd@kernel.org):
+ * No longer depend on Frank's series[1] because it was merged upstream[2]
+ * Use kunit_add_action_or_reset() to shorten code
+ * Skip tests properly when CONFIG_OF_OVERLAY isn't set
+
+Changes from v2 (https://lore.kernel.org/r/20230315183729.2376178-1-sboyd@kernel.org):
+ * Overlays don't depend on __symbols__ node
+ * Depend on Frank's always create root node if CONFIG_OF series[1]
+ * Added kernel-doc to KUnit API doc
+ * Fixed some kernel-doc on functions
+ * More test cases for fixed rate clk
+
+Changes from v1 (https://lore.kernel.org/r/20230302013822.1808711-1-sboyd@kernel.org):
+ * Don't depend on UML, use unittest data approach to attach nodes
+ * Introduce overlay loading API for KUnit
+ * Move platform_device KUnit code to drivers/base/test
+ * Use #define macros for constants shared between unit tests and
+   overlays
+ * Settle on "test" as a vendor prefix
+ * Make KUnit wrappers have "_kunit" postfix
+
+[1] https://lore.kernel.org/r/20230317053415.2254616-1-frowand.list@gmail.com
+[2] https://lore.kernel.org/r/20240308195737.GA1174908-robh@kernel.org
+
+Stephen Boyd (10):
+  of: Add test managed wrappers for of_overlay_apply()/of_node_put()
+  dt-bindings: vendor-prefixes: Add "test" vendor for KUnit and friends
+  dt-bindings: test: Add KUnit empty node binding
+  of: Add a KUnit test for overlays and test managed APIs
+  platform: Add test managed platform_device/driver APIs
+  dt-bindings: kunit: Add fixed rate clk consumer test
+  clk: Add test managed clk provider/consumer APIs
+  clk: Add KUnit tests for clk fixed rate basic type
+  dt-bindings: clk: Add KUnit clk_parent_data test
+  clk: Add KUnit tests for clks registered with struct clk_parent_data
+
+ Documentation/dev-tools/kunit/api/clk.rst     |  10 +
+ Documentation/dev-tools/kunit/api/index.rst   |  21 +
+ Documentation/dev-tools/kunit/api/of.rst      |  13 +
+ .../dev-tools/kunit/api/platformdevice.rst    |  10 +
+ .../bindings/clock/test,clk-parent-data.yaml  |  47 ++
+ .../bindings/test/test,clk-fixed-rate.yaml    |  35 ++
+ .../devicetree/bindings/test/test,empty.yaml  |  30 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ drivers/base/test/Makefile                    |   3 +
+ drivers/base/test/platform_kunit-test.c       | 140 ++++++
+ drivers/base/test/platform_kunit.c            | 174 +++++++
+ drivers/clk/.kunitconfig                      |   2 +
+ drivers/clk/Kconfig                           |   9 +
+ drivers/clk/Makefile                          |   9 +-
+ drivers/clk/clk-fixed-rate_test.c             | 377 +++++++++++++++
+ drivers/clk/clk-fixed-rate_test.h             |   8 +
+ drivers/clk/clk_kunit.c                       | 198 ++++++++
+ drivers/clk/clk_parent_data_test.h            |  10 +
+ drivers/clk/clk_test.c                        | 451 +++++++++++++++++-
+ drivers/clk/kunit_clk_fixed_rate_test.dtso    |  19 +
+ drivers/clk/kunit_clk_parent_data_test.dtso   |  28 ++
+ drivers/of/.kunitconfig                       |   1 +
+ drivers/of/Kconfig                            |  10 +
+ drivers/of/Makefile                           |   2 +
+ drivers/of/kunit_overlay_test.dtso            |   9 +
+ drivers/of/of_kunit.c                         |  99 ++++
+ drivers/of/overlay_test.c                     | 115 +++++
+ include/kunit/clk.h                           |  28 ++
+ include/kunit/of.h                            |  94 ++++
+ include/kunit/platform_device.h               |  15 +
+ 30 files changed, 1967 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/dev-tools/kunit/api/clk.rst
+ create mode 100644 Documentation/dev-tools/kunit/api/of.rst
+ create mode 100644 Documentation/dev-tools/kunit/api/platformdevice.rst
+ create mode 100644 Documentation/devicetree/bindings/clock/test,clk-parent-data.yaml
+ create mode 100644 Documentation/devicetree/bindings/test/test,clk-fixed-rate.yaml
+ create mode 100644 Documentation/devicetree/bindings/test/test,empty.yaml
+ create mode 100644 drivers/base/test/platform_kunit-test.c
+ create mode 100644 drivers/base/test/platform_kunit.c
+ create mode 100644 drivers/clk/clk-fixed-rate_test.c
+ create mode 100644 drivers/clk/clk-fixed-rate_test.h
+ create mode 100644 drivers/clk/clk_kunit.c
+ create mode 100644 drivers/clk/clk_parent_data_test.h
+ create mode 100644 drivers/clk/kunit_clk_fixed_rate_test.dtso
+ create mode 100644 drivers/clk/kunit_clk_parent_data_test.dtso
+ create mode 100644 drivers/of/kunit_overlay_test.dtso
+ create mode 100644 drivers/of/of_kunit.c
+ create mode 100644 drivers/of/overlay_test.c
+ create mode 100644 include/kunit/clk.h
+ create mode 100644 include/kunit/of.h
+ create mode 100644 include/kunit/platform_device.h
 
 
-On 4/20/2024 9:03 AM, David Woodhouse wrote:
-> On Fri, 2024-04-19 at 16:54 -0700, Chen, Zide wrote:
->>
->> However, the selftest hangs:
->>
->> [Apr19 16:15] kselftest: Running tests in kvm
->> [Apr19 16:16] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
->> [  +0.000628] rcu:      78-...0: (1 GPs behind) idle=3c8c/1/0x4000000000000000 softirq=5908/5913 fqs=14025
->> [  +0.000468] rcu:      (detected by 104, t=60003 jiffies, g=60073, q=3100 ncpus=128)
->> [  +0.000389] Sending NMI from CPU 104 to CPUs 78:
->> [  +0.000360] NMI backtrace for cpu 78
->> [  +0.000004] CPU: 78 PID: 33515 Comm: pvclock_test Tainted: G O       6.9.0-rc1zide-l0+ #194
->> [  +0.000003] Hardware name: Inspur NF5280M7/NF5280M7, BIOS 05.08.01 08/18/2023
->> [  +0.000002] RIP: 0010:pvclock_update_vm_gtod_copy+0xb5/0x200 [kvm]
-> 
-> Ah, kvm_get_time_scale() doesn't much like being asked to scale to zero.
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index a07b60351894..45fb99986cf9 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3046,7 +3046,8 @@ static void pvclock_update_vm_gtod_copy(struct kvm *kvm)
->  		 * Copy from the field protected solely by ka->tsc_write_lock,
->  		 * to the field protected by the ka->pvclock_sc seqlock.
->  		 */
-> -		ka->master_tsc_scaling_ratio = ka->last_tsc_scaling_ratio;
-> +		ka->master_tsc_scaling_ratio = ka->last_tsc_scaling_ratio ? :
-> +			kvm_caps.default_tsc_scaling_ratio;
->  
->  		/*
->  		 * Calculate the scaling factors precisely the same way
-> 		 * that kvm_guest_time_update() does.
->  		last_tsc_hz = kvm_scale_tsc(tsc_khz * 1000,
->                                           ka->last_tsc_scaling_ratio);
+base-commit: 4cece764965020c22cff7665b18a012006359095
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
 
-Should be ka->master_tsc_scaling_ratio?
-
-If I restored the KVM_REQ_GLOBAL_CLOCK_UPDATE request from
-kvm_arch_vcpu_load(), the selftest works for me, and I ran the test for
-1000+ iterations, w/ or w/o TSC scaling, the TEST_ASSERT(delta_corrected
- <= ±1) never got hit. This is awesome!
-
-However, without KVM_REQ_GLOBAL_CLOCK_UPDATE, it still fails on creating
-a VM. Maybe the init sequence sill needs some rework.
-
- BUG: unable to handle page fault for address: 005b29e3f221ccf0
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 0
- Oops: 0000 [#1] PREEMPT SMP NOPTI
- CPU: 86 PID: 4118 Comm: pvclock_test Tainted
- Hardware name: Inspur NF5280M7/NF5280M7, BIOS 05.08.01 08/18/2023
- RIP: 0010:start_creating+0x80/0x190
- Code: ce ad 48 c7 c6 70 a1 ce ad 48 c7 c7 80 1c 9b ab e8 b5 10 d5 ff 4c
-63 e0 45 85 e4 0f 85 cd 00 00 00 48 85 db 0f 84 b5 00 00 00 <48> 8b 43
-30 48 8d b8 b8 >
- RSP: 0018:ff786eaacf3cfdd0 EFLAGS: 00010206
- RAX: 0000000000000000 RBX: 005b29e3f221ccc0 RCX: 0000000000000000
- RDX: 0000000000000001 RSI: ffffffffadcea170 RDI: 0000000000000000
- RBP: ffffffffc06ac8cf R08: ffffffffa6ea0fe0 R09: ffffffffc06a5940
- R10: ff786eaacf3cfe30 R11: 00000013a7b5feaa R12: 0000000000000000
- R13: 0000000000000124 R14: ff786eaacfa11000 R15: 00000000000081a4
- FS:  00007f0837c89740(0000) GS:ff4f44b6bfd80000(0000)
-knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0
- CR2: 005b29e3f221ccf0 CR3: 000000014bdf8002 CR4: 0000000000f73ef0
- DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
- PKRU: 55555554
- Call Trace:
-  <TASK>
-  ? __die+0x24/0x70
-  ? page_fault_oops+0x81/0x150
-  ? do_user_addr_fault+0x64/0x6c0
-  ? exc_page_fault+0x8a/0x1a0
-  ? asm_exc_page_fault+0x26/0x30
-  ? start_creating+0x80/0x190
-  __debugfs_create_file+0x43/0x1f0
-  kvm_create_vm_debugfs+0x28b/0x2d0 [kvm]
-  kvm_create_vm+0x457/0x650 [kvm]
-  kvm_dev_ioctl+0x88/0x180 [kvm]
-  __x64_sys_ioctl+0x8e/0xd0
-  do_syscall_64+0x5b/0x120
-  entry_SYSCALL_64_after_hwframe+0x71/0x79
- RIP: 0033:0x7f0837b1a94f
- Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89
-44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <41> 89 c0
-3d 00 f0 ff ff >
- RSP: 002b:00007ffe01be3fc0 EFLAGS: 00000246 ORIG_RAX
- RAX: ffffffffffffffda RBX: 0000000000434480 RCX: 00007f0837b1a94f
- RDX: 0000000000000000 RSI: 000000000000ae01 RDI: 0000000000000005
- RBP: 0000000000000009 R08: 000000000041b1a0 R09: 000000000041bfcf
- R10: 00007f0837bd8882 R11: 0000000000000246 R12: 0000000000434480
- R13: 000000000041e0f0 R14: 0000000000001000 R15: 0000000000000207
-  </TASK>
- Modules linked in: kvm_intel(O) kvm(O) [last unloaded: kvm(O)]
- CR2: 005b29e3f221ccf0
