@@ -1,66 +1,66 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D7B1422B7
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 20:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4942620B3E
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 21:02:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713905810; cv=none; b=Nhq9pQLpynmmugGPm25NWpIYuXnWCh3nrm0kWNk/zNCYRGASDkfDRQHPb662X4BNMuNbs3XjlqOa2BHoKkrsRVHNI5k06rvD/ts9PcHidSM5HX6ooRCpnKIjnNIs7xM7v3XCWHYHYn3gLJTawNuaG40adNde0m5enENUSM9xkgk=
+	t=1713906168; cv=none; b=nuWTsWyTq8bOIcIIZdSeDGZf7XLXTORvDodXYBmmsIvhW+0bFreSQsJZXQENHG3OoYdSsF4lktzN9Tob2zAdBDeViaUzJqddxVO+0m1QlD6kWf6kki4x0K1qoikJ6Ny+mksjjqvbkwX36IFQiznxTAFYquUEC6Rp7aQN/pKnAyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713905810; c=relaxed/simple;
-	bh=uR87EmySOCarCFtM1CgNk819VRY0fWJIAWPsF8SGnH4=;
+	s=arc-20240116; t=1713906168; c=relaxed/simple;
+	bh=42nvruzyY6ImBqfKJnawPKvzV07Fr0CgGhbxyeE6jgA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MulM3ZqMRSQ1L0EhSGL9HDs+HN9aJD8HTTzOyUFgrf882C+HGla7nZMDRt5wJCgKf/vvXOKgm1kENDLW9uUguUtK812PCVotAbyxqNoqrZY9xRESVBEUkUbpc2xoZJN3+iA/4HxVqdF4rD2uZ7D2X7mC5PcUtcXHobq70YOrT0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L3C8USlX; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=nvDRj725mgFVm4tXT9hiXpObTZy+5Hozs6Iu6h3shIEcQ2i1IPJtbGtunV+gczt28zkB5+NRPTURpBCGxYW10Xp5QYyOyi9tW88CnQymIWvx0/QyQlAtEZDScziOR/4K4mlUwRPH4KC/VZDJruPzUexZfV/pkLCNeobDi386asE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BgvAATui; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L3C8USlX"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BgvAATui"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713905807;
+	s=mimecast20190719; t=1713906165;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Ksuahojp/qsmKDrgqEjKz9PHKXyorgrQxu+0BWiM4Dk=;
-	b=L3C8USlXsQq+aDFou897tz64khEpS9pD/09lf7aY/L3I+8x1qWSAMVaejWMxiMGUaDoY7R
-	M5zeo7faSxy+SE5X4YglbKUWnZEjspYtCjwkTNhKmlvFehK/8DQGbKXiqlnBHonEn38YIE
-	4Q8gteR2N4ykFwZqRmPt1kvwoGawj3c=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Zxyy28Md6aPh5qs5ewJe58rAyJq1+GKjWz4Z6iDmhPc=;
+	b=BgvAATuijUulfsdJCgMtUf8GO0VG+s0wXnVSGSGhTPB7+Fenq5QVi4SLZdKSbAYr/a+PB3
+	B2MWs+Nly4T6mL6vPzOzJyxURnHTe3Rc2BCBMhrZtt0vmpI/NavDSGsPLrww1tLDpcBjbk
+	B46l7slw3HDXorYLAf08idotjgXhg2E=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-222-o1PpotqhN5iHIOHVzQg2uA-1; Tue, 23 Apr 2024 16:56:46 -0400
-X-MC-Unique: o1PpotqhN5iHIOHVzQg2uA-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-343e46df264so4109518f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 13:56:45 -0700 (PDT)
+ us-mta-439-9NMmEJX4OviB2MFwrlc96A-1; Tue, 23 Apr 2024 17:02:43 -0400
+X-MC-Unique: 9NMmEJX4OviB2MFwrlc96A-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-416e58bdc0eso25896035e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 14:02:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713905803; x=1714510603;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ksuahojp/qsmKDrgqEjKz9PHKXyorgrQxu+0BWiM4Dk=;
-        b=sI8mpsNUxtBY6YYNFnDm8F1a6NdEjPxkLJfHIhH0BzWTzujH7O3ZmvF40MCdXWeUmd
-         Zw0JvaX1w9ayz7qBw4TetlPmkI6mm5s9VBegzXsR3m49ozVc2BABhvGeu8jiy75+DocG
-         sfh4xwSVw6brf115cyGC/qS8yq2ASWd9Dli/Yqxfj1lwPL7/O1JqIickuQqUhC2mGGaZ
-         UFlcUWBzltAvEivGLSWI4DNgYLYYa27SuAA381GfCQID4GBt5eEjxAoA2uyfHTdOfPcy
-         v4lWVM2j+82UUvR8NjNSowBTOyTubzABSeHwnoux3ezEY+qyqX48U3bKlRw72WyjBNj3
-         9YhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWT6E4JCkrP/W0LRupsazLEBUFRz9QFOANVl2EBkRYgcKrHu+U+HBIRV5fbyKDp9lXlOdNYX1YbRUaXxbHjHDhVIyYCuRlAzdFvMN4O2W0F
-X-Gm-Message-State: AOJu0YwkK1+hlAgI+JzOW9wkI9LdNgA3WTzTgr6U/V1+Gsoagti8bkD0
-	YHGqlOZIzKdZLWCbXTCWC3O0DycRoqbInmGZAW4yngtZzS9132gG1c1edcpcbvZzaOGO6zlZV+s
-	oKz8klcywI/VgyfkvOCxmtDsePwZzvJztJu0RxedLMkcdMc8WZezI1rHQUYnE7D9h3Q==
-X-Received: by 2002:a05:600c:3c9e:b0:41a:28e6:b4c1 with SMTP id bg30-20020a05600c3c9e00b0041a28e6b4c1mr298787wmb.12.1713905803512;
-        Tue, 23 Apr 2024 13:56:43 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEysl1Gis+y0GmCe/kljdiLX4sR+hi+bh3iy19hL6MKl5z2mOObaUaf2wYm+z0KW7eFvhCZXw==
-X-Received: by 2002:a05:600c:3c9e:b0:41a:28e6:b4c1 with SMTP id bg30-20020a05600c3c9e00b0041a28e6b4c1mr298773wmb.12.1713905803011;
-        Tue, 23 Apr 2024 13:56:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713906162; x=1714510962;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Zxyy28Md6aPh5qs5ewJe58rAyJq1+GKjWz4Z6iDmhPc=;
+        b=IvQtacIROSz2fyYCgO4MhBBviGId8NXpPJpHgw0bL+A9Pg6P8yZtQeweERI1wlOkIf
+         L69MxbNtJxQdFN4YGjv6g5X+bt4usj6I3jw6R6fbBhyiOIgLNJWU44fmilwmVs4ZBnJv
+         Dyzb2uyLgUfb1YK0ES1fKGr1hG1ii2DSkcxWq7PFgmBMP/PXu22GO6NJE1HeRxfA8cr+
+         HvbKC9cfNTWi66s6M5zj1mnyPxkgmXmiiwkXaTdsEhF2cTKHUtRRC9J8xkYr+GynoYh5
+         kp8k5nIZiCiwa97RpqwkD71vXqnlHlKP6zzroXTcZAGcdS7MgVn0L0P/j2pVWsV9caWQ
+         e50A==
+X-Forwarded-Encrypted: i=1; AJvYcCUK3ssqCscsc2Y97PydT1Ppyqm4NxfgLLFpj1L+4Y7Gw6sYhGUYkrpPzJU2WIXWbFfJFP18CKF8S0HqDX4S6+7y4uU1IzWeLiw5TuP1kg1s
+X-Gm-Message-State: AOJu0Yx45Wzz4oojmd0wMtFgbFCbZdrjzyG5X296TIyiYDZINd2odyMh
+	C8sU2/Uj75GnEnSJu5Jfteb5AT041ITolJ8crHyDA4FdsFzmHtoAF4fC5vcsUrct4YQWEgQd5/L
+	qCMh1CM6dkCjJ8RK27SWna7DxAEH+LG794ENQJkLAJP/kqedZwqWRHnGD7HGDE0IntA==
+X-Received: by 2002:a05:600c:154f:b0:418:e08c:817 with SMTP id f15-20020a05600c154f00b00418e08c0817mr261601wmg.32.1713906162426;
+        Tue, 23 Apr 2024 14:02:42 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE+UZR9KJP/97XDIfEkl4YcqwqEPrjxlxOqOm/ztwKYnaqQd4CrowBy7cR5Iuw7eetUht662w==
+X-Received: by 2002:a05:600c:154f:b0:418:e08c:817 with SMTP id f15-20020a05600c154f00b00418e08c0817mr261583wmg.32.1713906161979;
+        Tue, 23 Apr 2024 14:02:41 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c706:fd00:fb07:92f8:8f0c:6a08? (p200300cbc706fd00fb0792f88f0c6a08.dip0.t-ipconnect.de. [2003:cb:c706:fd00:fb07:92f8:8f0c:6a08])
-        by smtp.gmail.com with ESMTPSA id n2-20020a05600c4f8200b0041884b79b81sm21436982wmq.1.2024.04.23.13.56.41
+        by smtp.gmail.com with ESMTPSA id n2-20020a05600c4f8200b0041884b79b81sm21451088wmq.1.2024.04.23.14.02.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Apr 2024 13:56:42 -0700 (PDT)
-Message-ID: <8dec06c3-62d6-47c8-aafb-61c7f01f92b4@redhat.com>
-Date: Tue, 23 Apr 2024 22:56:41 +0200
+        Tue, 23 Apr 2024 14:02:41 -0700 (PDT)
+Message-ID: <e001f009-0aeb-4a59-950e-3e5ed1c55751@redhat.com>
+Date: Tue, 23 Apr 2024 23:02:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,9 +70,9 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v1 0/5] arm64/mm: uffd write-protect and soft-dirty
  tracking
-To: Ryan Roberts <ryan.roberts@arm.com>, Mike Rapoport <rppt@linux.ibm.com>
-Cc: Shivansh Vij <shivanshvij@outlook.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+To: Shivansh Vij <shivanshvij@outlook.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Mike Rapoport <rppt@linux.ibm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
  Joey Gouly <joey.gouly@arm.com>, Ard Biesheuvel <ardb@kernel.org>,
  Mark Rutland <mark.rutland@arm.com>,
@@ -88,8 +88,9 @@ References: <20240419074344.2643212-1-ryan.roberts@arm.com>
  <ZiKcNJ0Qw2awRwaa@linux.ibm.com>
  <ac4ffd88-2d13-4764-bb4e-18d0c4b9948d@redhat.com>
  <9e73ad2f-198c-4ab5-a462-2e238edd9b34@arm.com>
-Content-Language: en-US
+ <MW4PR12MB68755A569FE893DC72D86616B9112@MW4PR12MB6875.namprd12.prod.outlook.com>
 From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
  dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
@@ -135,42 +136,70 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <9e73ad2f-198c-4ab5-a462-2e238edd9b34@arm.com>
+In-Reply-To: <MW4PR12MB68755A569FE893DC72D86616B9112@MW4PR12MB6875.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
->>>>
->>>> We further recently added a new UFFD_FEATURE_WP_ASYNC feature as part of
->>>> [2], because getting soft-dirty return reliable results in some cases turned
->>>> out rather hard to fix.
+>>
+>> Shivansh, do you speak for CRIU? Are you able to comment on whether CRIU
+>> supports checkpointing an app that uses uffd?
 > 
-> But it sounds like the current soft-dirty semantic is sufficient for CRIU on
-> other arches? If I understood correctly from my brief scan of the linked post,
-> the problem is that soft-dirty can sometimes provide false-positives? So could
-> result in uneccessary copy, but never lost data?
+> I do not speak for CRIU - I'm just a user (and hopefully a future contributor), but not a maintainer or owner. I can however comment on whether CRIU supports checkpointing an app that uses UFFD - it doesn't. Looking through both the implementation of CRIU (specifically how they restore memory [1]), and at recently filed Github issues [2], it's pretty clear that CRIU doesn't support processes using UFFD - that they do not currently have plans to [3].
 
-Yes, it seems to be good enough for them in that regard I think.
+Thanks for all these pointers!
 
-[...]
-
+> 
+> [1] https://github.com/checkpoint-restore/criu/blob/criu-2.x-stable/criu/mem.c#L683
+> [2] https://github.com/checkpoint-restore/criu/issues/2021
+> [3] https://github.com/checkpoint-restore/criu/issues/2021#issuecomment-1346971967
+> 
 >>>
->>>> But I'll throw in another idea: do we really need soft-dirty and uffd-wp to
->>>> exist at the same time in the same process (or the VMA?). In theory, we
+>>> Further ... isn't CRIU already using uffd in some cases? ...documentation
+>>> mentions [1] that it is used for "lazy (or post-copy) restore in CRIU". At least
+>>> if the documentation is correct and its actually implemented.
+>>>
+>>
+>> Shivansh, same question - do you know the current CRIU status/plans for using
+>> uffd-wp instead of soft-dirty? If CRIU doesn't currently implement it and has no
+>> current plans to, how can we guage interest in making a plan?
+>>
 > 
-> My instinct is that MUXing a PTE bit like this will lead to some subtle problems
-> that won't appear on arches that support either one or both of the features
-> independently and unconditionally. Surely better to limit ourselves to either
-> "arm64 will only support uffd-wp" or "arm64 will support both uffd-wp and
-> soft-dirty". That way, we could move ahead with reviewing/merging the uffd-wp
-> support asynchronously to deciding whether we want to support soft-dirty.
+> While I cannot gauge whether the maintainers or main contributors of CRIU plan on using uffd-wp instead of soft-dirty in the future, I can tell you that there is no currently open issue to track that work, and whenever anyone in the past has asked about ARM64 pre-dump support to CRIU (which is the feature that uses soft-dirty/would use uffd-wp), they've always just said it's not supported - but that they do want the feature [4].
+> 
+> So in summary, they want the feature, but no one is working on implementing it (either with soft-dirty or with uffd-wp).
+> 
+> I doubt that CRIU would have any issues with adding the feature via soft-dirty (since, as shown in [4] they're interested in it), but as for using uffd-wp they definitely haven't shown any interest thus far. Based on the fact that it would be a very significant amount of work and it would really only be for ARM64 support (which they're already fine without), I'd be very surprised if they were interested in pursuing it.
+> 
 
-Yes. MUXing would require some work, but likely better than wasting 1/64 
-PTE space on a corner case feature with one famous user that might be 
-able to port to an alternative with other active users (growing ;) ).
+Of course, nobody wants to do the work. But that doesn't mean that the 
+kernel has to do the work :)
 
-Anyhow, I don't maintain arm64 code and we have to carry that baggage in 
-the core either way for the time being ...
+If there are some major challenges why it cannot possible be done with 
+uffd-wp (unfixable), that's a different story.
+
+> [4] https://github.com/checkpoint-restore/criu/issues/1859#issuecomment-1972674047
+> 
+>>>
+>>>>
+>>>>> But I'll throw in another idea: do we really need soft-dirty and uffd-wp to
+>>>>> exist at the same time in the same process (or the VMA?). In theory, we
+>>
+>> My instinct is that MUXing a PTE bit like this will lead to some subtle problems
+>> that won't appear on arches that support either one or both of the features
+>> independently and unconditionally. Surely better to limit ourselves to either
+>> "arm64 will only support uffd-wp" or "arm64 will support both uffd-wp and
+>> soft-dirty". That way, we could move ahead with reviewing/merging the uffd-wp
+>> support asynchronously to deciding whether we want to support soft-dirty.
+>>
+> 
+> My personal preference is having both approaches supported - especially in the context of CRIU since I doubt they'll be willing to rewrite all of the dumping and restore logic just for ARM64 support.
+
+Sure, nobody does any work unless they are forced to.
+
+But this is something that arm64 maintainers will have to decide.
+
+Let's start with uffd-wp that has other well-known users that could 
+benefit (e.g., QEMU background snapshots).
 
 -- 
 Cheers,
