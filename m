@@ -1,132 +1,130 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3879C12D777
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 12:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0F8137900;
+	Tue, 23 Apr 2024 14:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713876252; cv=none; b=GtiqaOM2ATbn7Ngj8WlZMRcL8lhskTpgdjTHtCrdgCelNf7XmT7BCOSVzhgxswv44RWfg2IHljrLFq+mJBZXfsmXvVLjgaY0iLwUJ9ASjjUlGE3iKYe6mfsZOUjtEjiE6pQEk89aIy0m6M6WufPM1bg23f01IxEsl79MGJn8VM8=
+	t=1713881059; cv=none; b=V/l1E5GNNi6Fli8UTkTmNYco23vCNGHi/MvVh80IcNiKeHlX35w4iwVM/pYBIhnYKBPal04z7avBpClQJh429UJ+VlUXjMEzSmZ8wD50R9umoNMW8dWyYVLfQUn2C5oIBV9AS04UCKkXK5z5xE7H6zKNcxr1E0DOiwCq3a3ec8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713876252; c=relaxed/simple;
-	bh=Vz0s8AKnndRQ8cJTZ/3LH6Q9O7ZuS04mMnmJYlpWcHA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AnkRm2me+bxVc5OOUC+e9G9T3gNSIR2Gt4p1PxjcUW+Q4eUNTKFmgRTS1d1FQQBbOKvrbzy2VIsi0cL3A7G46Uo7l26q3ePz3aCKPPn6b7xQsw2zwC/ihodUu6LY6NmrYC8+KIr6KKwGuvx10PF6te3Zw5fHW5TW1oIiQfpMffQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Jo1dTDz3; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	s=arc-20240116; t=1713881059; c=relaxed/simple;
+	bh=neo6VBlrt3qDMQ41DWfk27jOXU9k4IUrHGw5mjmSN2I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QnZg/+iKdIU5jBKc29SkkoyjqhuF4xCPSXEsqL518JR/ML0N01+RgZngKVEEpi17/Gqld5UMlID1shv49f0BZY1kTnBywhvzg0+pu/cvE6QoAK90kZTe6H00TminBDdsPHPZQ7QrmOze1fnY37uCauXF0C7/yfjTlvdDFq4fLcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qpT3A78d; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Jo1dTDz3"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a469dffbdfeso125183466b.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 05:44:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1713876249; x=1714481049; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SqUXz3P/ILbAY/obovxuw/ulwPrEeHHfsINnJJgombQ=;
-        b=Jo1dTDz3oqPCQCyQg/Lt2wgsz4KFakpZXQ077zGwK59+kU25kEmiRoRvxMjGvxxIwA
-         q/0uFCWy0HBKg2Yj5SnmiktSa22LnmrMKlE+a7e7Sole3Khn7LT0by/yL5kKdL5+3zNf
-         KoxW2iLWe1EF1s59aJ/PJotcXk/+IFXQaC16NhWc8skxSd0oemPu3L7qqIJ18rSytTs3
-         6smFyzLlxbG78qux8/jn3meV9ywRCIgbs/mownIaMDkQSbUvd248cPPVPqTkldkvhrZE
-         AAT8veU49xaQmP6XMr5OVgOiAM7zvoIj24BkzmXA0+BbavXDC4j4OwCkp0ps5gMh2VVL
-         AVzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713876249; x=1714481049;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SqUXz3P/ILbAY/obovxuw/ulwPrEeHHfsINnJJgombQ=;
-        b=Es7qUaW/l39Ag155wChRIvIKjN3N0x2q/X9v5IV2qKTEkWeOJ86RkUc3NJeyOjRgZC
-         hZrBWfst5BE3rptXAkk7HZeB6ZV1CiACyPw+9GngtVx5lk0cIaRetUSLCE8IHeytOFr7
-         XwGQmj/CZXlWuWmGpOa3DPeGGpWUJPY/ezbbd1S3/att2gfL/XR0SlbTJcs5oIJO+tOC
-         DKo7u3frHoqaWAbPcHscWSeyqciLkbK+2sFTixsX9qKtESgUB4GdLOEU+t43oFlNuE1L
-         bXoo5MIe+2tyJYi6aZFf8ZEy+vRgvD5vgLMGg9WaxmmdFv4FuI84AQeIyyakA51xIS0K
-         XTog==
-X-Forwarded-Encrypted: i=1; AJvYcCXihZavRcC6t1OVlNewYLv3vFNsLpIrh2cHc1fGutEpEudJg8S7gWUItIeRJilTg2XrKF/btBZ2qLgWti1mDO0Qfi+ctGxoNybJjurtXvtG
-X-Gm-Message-State: AOJu0Ywq5a6eQcBGz6dOrjmaRVTTUzz1VjN2QSXjd9aygnFnKcp2yvvE
-	PYxvDDwuFkCGrcxzUxGNAq+KNFu4byPn6s0HoUf6kjv9p6hymVorHv3RpU/iohY=
-X-Google-Smtp-Source: AGHT+IGYD6R7lCuFXcFn1CiEepxwRzLgpJssX7t6iPTjHzI3S73/lLM0TpTesKJAZsPqOxcquQWylg==
-X-Received: by 2002:a05:600c:1c27:b0:41a:c4fe:b0a6 with SMTP id j39-20020a05600c1c2700b0041ac4feb0a6mr1112456wms.4.1713876229210;
-        Tue, 23 Apr 2024 05:43:49 -0700 (PDT)
-Received: from carbon-x1.. ([2a01:e0a:999:a3a0:71cb:1f75:7053:849c])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c470a00b00418a386c059sm19975709wmo.42.2024.04.23.05.43.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 05:43:48 -0700 (PDT)
-From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
-To: Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Anup Patel <anup@brainfault.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
-	Atish Patra <atishp@atishpatra.org>,
-	linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v3 07/11] dt-bindings: riscv: add Zcmop ISA extension description
-Date: Tue, 23 Apr 2024 14:43:21 +0200
-Message-ID: <20240423124326.2532796-8-cleger@rivosinc.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240423124326.2532796-1-cleger@rivosinc.com>
-References: <20240423124326.2532796-1-cleger@rivosinc.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qpT3A78d"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713881051;
+	bh=neo6VBlrt3qDMQ41DWfk27jOXU9k4IUrHGw5mjmSN2I=;
+	h=From:Subject:Date:To:Cc:From;
+	b=qpT3A78dofnqODQw2poC2hDIcGFP3T7ESuNcdikFHEdSGafE9QYN2hth0gc56/wrT
+	 Ghpv2hSSn4fyCAiLIwJ6bbTK4lzQSq/hsa7aaRNnjCW3y6A2TD+QEksq9Yp2X8mudb
+	 QBojiq+BjOVTfsPExYtD3jycZr0uiAfbZFNW3yG0xRqPxCLTPkYMLk5ytz1YOFKeN1
+	 z9CO/EBQFYtRj8K+puzwEkjRUhSrbnCi/nJnlJpcahuHll4lJLCET0nhQlEb11/8HB
+	 N6nM5+CxR/lxd2cHIKNhme2wRhMHnNDHxPWYrsX2R8jRtGe+lwEX82DRlIFprGVAlw
+	 B0VHZ7JchKZPA==
+Received: from [192.168.1.205] (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0E86737820F9;
+	Tue, 23 Apr 2024 14:04:09 +0000 (UTC)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Subject: [PATCH 0/3] kselftest: Add test to report device log errors
+Date: Tue, 23 Apr 2024 10:03:39 -0400
+Message-Id: <20240423-dev-err-log-selftest-v1-0-690c1741d68b@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALu/J2YC/x3MQQqEMAxG4atI1gZqUUa8irhw2r9OQFQSEaF49
+ ykuv8V7mQwqMBqqTIpLTPatoKkrCr95W8ASi8k737rWNxxxMVR53Rc2rOmEnez71H37FD4hOir
+ poUhyv9txep4/oPpJVmYAAAA=
+To: Shuah Khan <shuah@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+X-Mailer: b4 0.13.0
 
-Add description for the Zcmop (Compressed May-Be-Operations) ISA
-extension which was ratified in commit c732a4f39a4 ("Zcmop is
-ratified/1.0") of the riscv-isa-manual.
+Log errors are the most widely used mechanism for reporting issues in
+the kernel. When an error is logged using the device helpers, eg
+dev_err(), it gets metadata attached that identifies the subsystem and
+device where the message is coming from. This series makes use of that
+metadata in a new test to report which devices logged errors.
 
-Signed-off-by: Clément Léger <cleger@rivosinc.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+The first two patches move a test and a helper script to keep things
+organized before this new test is added in the third patch.
+
+It is expected that there might be many false-positive error messages
+throughout the drivers code which will be reported by this test. By
+having this test in the first place and working through the results we
+can address those occurrences by adjusting the loglevel of the messages
+that turn out to not be real errors that require the user's attention.
+It will also motivate additional error messages to be introduced in the
+code to detect real errors where they turn out to be missing, since
+it will be possible to detect said issues automatically.
+
+As an example, below you can see the test result for
+mt8192-asurada-spherion. The single standing issue has been investigated
+and will be addressed in an EC firmware update [1]:
+
+TAP version 13
+1..1
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `model_name' property: -6
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `energy_full_design' property: -6
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+not ok 1 +power_supply:sbs-8-000b
+ Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+
+[1] https://lore.kernel.org/all/cf4d8131-4b63-4c7a-9f27-5a0847c656c4@notapiano
+
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- .../devicetree/bindings/riscv/extensions.yaml        | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Nícolas F. R. A. Prado (3):
+      kselftest: devices: Move discoverable devices test to subdirectory
+      kselftest: Move ksft helper module to common directory
+      kselftest: devices: Add test to detect device error logs
 
-diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
-index 81bce4fa2424..1952d20b8996 100644
---- a/Documentation/devicetree/bindings/riscv/extensions.yaml
-+++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
-@@ -252,6 +252,11 @@ properties:
-             merged in the riscv-isa-manual by commit dbc79cf28a2 ("Initial seed
-             of zc.adoc to src tree.").
- 
-+        - const: zcmop
-+          description:
-+            The standard Zcmop extension version 1.0, as ratified in commit
-+            c732a4f39a4 ("Zcmop is ratified/1.0") of the riscv-isa-manual.
-+
-         - const: zfa
-           description:
-             The standard Zfa extension for additional floating point
-@@ -549,6 +554,13 @@ properties:
-                 const: zca
-             - contains:
-                 const: f
-+      # Zcmop depends on Zca
-+      - if:
-+          contains:
-+            const: zcmop
-+        then:
-+          contains:
-+            const: zca
- 
- allOf:
-   # Zcf extension does not exist on rv64
+ tools/testing/selftests/Makefile                   |  4 +-
+ tools/testing/selftests/devices/Makefile           |  4 -
+ .../testing/selftests/devices/error_logs/Makefile  |  3 +
+ .../devices/error_logs/test_device_error_logs.py   | 85 ++++++++++++++++++++++
+ tools/testing/selftests/devices/probe/Makefile     |  4 +
+ .../{ => probe}/boards/Dell Inc.,XPS 13 9300.yaml  |  0
+ .../{ => probe}/boards/google,spherion.yaml        |  0
+ .../{ => probe}/test_discoverable_devices.py       |  7 +-
+ .../selftests/{devices => kselftest}/ksft.py       |  0
+ 9 files changed, 101 insertions(+), 6 deletions(-)
+---
+base-commit: 7b4f2bc91c15fdcf948bb2d9741a9d7d54303f8d
+change-id: 20240421-dev-err-log-selftest-28f5b8fc7cd0
+
+Best regards,
 -- 
-2.43.0
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
