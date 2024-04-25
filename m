@@ -1,98 +1,120 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0571814C58E;
-	Thu, 25 Apr 2024 16:09:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCA114D282
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 16:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714061400; cv=none; b=c0gXfOFeDXZ9fMSgLAlifgbRk8W7TqlRf39Y+4REmCZgIgVrTWyCcZWNL1+lvolN3p08l6nAEY12JfRsvUz26X7nKjJOEP0a0WC6yrl87Y0DqwovqWnQ+ySI2ra9DQ5XocvA6bdqTl+QMWizPEyDT136a2Dnu3dobrIcWMAYITs=
+	t=1714061845; cv=none; b=Our4hco0FAfJcXTI9R5Uu7d9NkChgof/CwDQ2zyuS7Cdd7AGUPtw04D5/j7rQC8LFl7ZM7w2M9uFBNMmqAqAthZaJg8lVtzQCusmOG58G9T2bHxaSPpRxt/cOPoTpKBG/cScsGfBXKCojWr27d9/r4kjjHrYP48z5JKWedm3/ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714061400; c=relaxed/simple;
-	bh=8tM3DH8oxEqa4sOJHdQ9/tQtwJ1j7MGZxLZSkBO70pI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=scW2P3qupbvin1A8VyUnZ+bEiSSqYRfb6m1sfmcI6hyJbtcCHWVDAUKAKCJj1536b3Tei0JiTqA+wnENpEN97UQgkE5QtupdhJ+izzzFScjWkhjP2yFkWQSEcp0niJ5GqrbfBLAFU3/lQdnM7EEJDOCoYihvabrM599aKdy/xUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=pHvvMuiB; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1714061845; c=relaxed/simple;
+	bh=cyER0tCDsBziw32uLRrW1CVxp/jAM0IiNflpsGJ0Pto=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=Uj1YqLBQyY9eKdmMRNfby3t39pPrezr1KSJWFsq/k0oEfzt0TTB56dTfJGTZSxKYqdFHaGQDknVSwljOh/jbgXcuXENdHQ8LvReO3n0KeFkCV3xNgbkpczNbkaiUTJLU2TvJ7oa27pg5XrWd/6/VJA6kgaOB1Ir8XidBS67o4k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=O9mbrnhq; arc=none smtp.client-ip=209.85.166.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="pHvvMuiB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1714061393;
-	bh=8tM3DH8oxEqa4sOJHdQ9/tQtwJ1j7MGZxLZSkBO70pI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=pHvvMuiBHc0et/KIiwysnGMYMpvUMebecoj/ymo1Tyo0WJceyFQcVywUfJmyRdoJl
-	 FuEzvZmwPug9NlfjChEGBugWL5y3NeGFH2r5N4NTMHCcJPmvH5hI2TryKNAFuvGNmB
-	 /C0kg/75CkLHP2Q4knBeGj32AAsQnrHSkcUvaDDU=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Thu, 25 Apr 2024 18:09:26 +0200
-Subject: [PATCH 1/2] tools/nolibc: add limits for {u,}intmax_t, ulong and
- {u,}llong
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="O9mbrnhq"
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-36c191991e2so5475085ab.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 09:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1714061843; x=1714666643; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cyER0tCDsBziw32uLRrW1CVxp/jAM0IiNflpsGJ0Pto=;
+        b=O9mbrnhqkgGqlkIWLWjfywNk+b8hvzOFOtVes64QnVvrIkNY7g0LGaX+D7LJwv967q
+         SyD+MUjyNvmRag0P33RAvYU+nDLhqW3OeIsyBOiI/bMDMkxz/TOJJIzehO+4qjc+7V30
+         HMDAdR4RumU69xi1Jp8B/sjobsU52e/o/A4Kp6kMmiuOkGd0Ouv47+9SDZfHpbYJ5awL
+         PWDlstLz6XbEVJELVAlwriuEFt0BSY2jMRl59TEZKnuq6CVbqNFYd9KBNHCdX5/lv1Ud
+         FfcFJugxcLWvx+Mvaat7x7J+eDCMEeLO+3bs0xtt0S7Ql1mj57DXOJ07pZL2rH6M0zSC
+         xIqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714061843; x=1714666643;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cyER0tCDsBziw32uLRrW1CVxp/jAM0IiNflpsGJ0Pto=;
+        b=S/aDK7nNVIKkCQIUJgMSMOrq2nrBzzSIwMgd/e5+6uw3Oz4Q190ewhByzhFllhTjP8
+         UVESO72C+NBRjJs1vNdZ3ueRPouQXoW6tOL1tbzFd6W51ny5aVwNwhC2mWwRwmiBjihm
+         MuOGp3Np9113Pu9ZZ7kwghvHF+NaPjMhrd104CLWX4fjjW/qul6uoFjeP5frN08QkHH/
+         i3i787jiCMTtIU0GM4Euh/b0eflJxSFO1n4BS6UcX17PuDYdBkIuab3de97V8BnrsByY
+         srfi1FBdie4+5SjI01ciy+1wCBOkjSr5HEBSDj4cO2NaSNyZOdk56iCnMb6dzBd2lcrM
+         HDQw==
+X-Forwarded-Encrypted: i=1; AJvYcCV63dY2u7YdShB7xz1p0iieI+XELGa5EFujj10K03mXUL4ODHQaGDRnUWlVUFqUMbSXUr5hafeJNi2ZxRKQGr3henyrdKyt2veA9qfFWDZR
+X-Gm-Message-State: AOJu0YznLt0dUuv2TJXe3e3fFT/S8UgRnHqpq8Q4qgqjMbslBShUh+7N
+	thVIMsWIXFg1oXYxYe6Q+SmkK3Og3cTYSXEuqx+2yZR22rQqEqYqbJTbUfszsZs=
+X-Google-Smtp-Source: AGHT+IFiKKwCjlGCOK2QLiD684Fa0eyjQAMOCz/bbiL68N5tcmcGRSJea+bnlaWtzh6UXfIXUt5Ccg==
+X-Received: by 2002:a05:6e02:170f:b0:36c:297d:2c96 with SMTP id u15-20020a056e02170f00b0036c297d2c96mr234632ill.19.1714061843206;
+        Thu, 25 Apr 2024 09:17:23 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id m15-20020a656a0f000000b005dc4806ad7dsm11611129pgu.40.2024.04.25.09.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Apr 2024 09:17:22 -0700 (PDT)
+Message-ID: <662a8212.650a0220.eb522.809c@mx.google.com>
+Date: Thu, 25 Apr 2024 09:17:22 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240425-nolibc-strtol-v1-1-bfeef7846902@weissschuh.net>
-References: <20240425-nolibc-strtol-v1-0-bfeef7846902@weissschuh.net>
-In-Reply-To: <20240425-nolibc-strtol-v1-0-bfeef7846902@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1714061393; l=1268;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=8tM3DH8oxEqa4sOJHdQ9/tQtwJ1j7MGZxLZSkBO70pI=;
- b=63sr3XikAp5KBx6TgGfCxWFCGkN61MfltSj9ZTXvR9fB1AZ+ROBxWLoIZw2Ax/mbT3iet/b+F
- bOntliogisAD2OwMHbo287uR5xOGRC412oMO9sGAE9DhbIxVtl1XtDx
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: v6.9-rc4-32-g693fe2f6a9ea
+X-Kernelci-Report-Type: build
+Subject: kselftest/next build: 5 builds: 0 failed,
+ 5 passed (v6.9-rc4-32-g693fe2f6a9ea)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-They are useful for users and necessary for strtol() and friends.
+kselftest/next build: 5 builds: 0 failed, 5 passed (v6.9-rc4-32-g693fe2f6a9=
+ea)
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.9-rc4-32-g693fe2f6a9ea/
+
+Tree: kselftest
+Branch: next
+Git Describe: v6.9-rc4-32-g693fe2f6a9ea
+Git Commit: 693fe2f6a9ea17e4241e5114f54c6ae7bc2512d3
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
 ---
- tools/include/nolibc/stdint.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
-index 6665e272e213..cd79ddd6170e 100644
---- a/tools/include/nolibc/stdint.h
-+++ b/tools/include/nolibc/stdint.h
-@@ -96,6 +96,10 @@ typedef uint64_t          uintmax_t;
- #define UINT_FAST32_MAX  SIZE_MAX
- #define UINT_FAST64_MAX  UINT64_MAX
- 
-+#define INTMAX_MIN       INT64_MIN
-+#define INTMAX_MAX       INT64_MAX
-+#define UINTMAX_MAX      UINT64_MAX
-+
- #ifndef INT_MIN
- #define INT_MIN          (-__INT_MAX__ - 1)
- #endif
-@@ -110,4 +114,19 @@ typedef uint64_t          uintmax_t;
- #define LONG_MAX         __LONG_MAX__
- #endif
- 
-+#ifndef ULONG_MAX
-+#define ULONG_MAX         ((unsigned long)(__LONG_MAX__) * 2 + 1)
-+#endif
-+
-+#ifndef LLONG_MIN
-+#define LLONG_MIN         (-__LONG_LONG_MAX__ - 1)
-+#endif
-+#ifndef LLONG_MAX
-+#define LLONG_MAX         __LONG_LONG_MAX__
-+#endif
-+
-+#ifndef ULLONG_MAX
-+#define ULLONG_MAX         ((unsigned long long)(__LONG_LONG_MAX__) * 2 + 1)
-+#endif
-+
- #endif /* _NOLIBC_STDINT_H */
-
--- 
-2.44.0
-
+For more info write to <info@kernelci.org>
