@@ -1,374 +1,288 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178524DA00;
-	Sat, 27 Apr 2024 11:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B28F4F201;
+	Sat, 27 Apr 2024 13:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714216892; cv=none; b=jR/YuMFCpxsJLNO2D4zMz0u5eVT+exGjATlz8lfpJD4ScK5jUle5Z3I0lTXiHqlJDqCHEnPUEm5rKYyjBP66ESuczaRP4nygxkcYQCw9xFO3wamiRk7ISLFYL8S12R6+AU7DWQCaJ2HIM3WJTOsU20k0ef/C8AZB+gW+xzCCaXs=
+	t=1714225773; cv=none; b=MZGGGE6aXTDqDOcshNSkYtJeFF8CnymEc1wZEOBJOGGXtodGQ5Zy5P2HKoSLstD3ooKvR5egWD+pFZpn7Lr7x0OOXXpjdvEqvj0G4gyJCdVOHuJATAM7+ATheOfZiiymsqK/rxyZIUriMD8dDk92emgpERv8mSK2Cy6HU/ntTCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714216892; c=relaxed/simple;
-	bh=bt5ZK9z0bKFYX0/bOnrNtTFlIXKShYN2ESGBnXMeNqI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=coZnRS2etrXF5r9bgeG0bQvckN1sIwA3zB9aNjwIC7mpQx9jgo9GEbCKBGRp6SL0HMWvcmWDVaDqgGxFUAuFn6N9RuZIVn/3B9fsxQgd+sD6BbovdEQYFE4gkuy8uPWKGOEAnIYlVz3Kd5ar0qBvSTs5UEotWDwXwKQDsxutkkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jhEc64xq; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	s=arc-20240116; t=1714225773; c=relaxed/simple;
+	bh=37TP0DViE2pTNt0k4sP7y4WhwG/6OLmWNKr0syJIxHs=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=uk0beUqnrG2ztL6rh6OVS7nuGHJj87d9Pa3fksEikNApCfdVHJBzSctSLlRXPIa36sklMTTfpHpvRrH3+VGys5/pxT/mIq35chuQ2LPe/E+tdnm6DXK77wHPJUrGf0f4QmgXXsewy9lnqDm7FTWcR3ENZ+zKmZYyqExHIbTQCaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NrOSMGl5; arc=none smtp.client-ip=209.85.167.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jhEc64xq"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=/JDpaKVQe9XBet6gm2cGiomyiCiWrajRge7yHD8i1TM=; b=jhEc64xqBFfAB0bEkdVUB5Jvcj
-	e9d2YjzDwcEwkh+4Q2e5eVTXYMwuLDYAueDRxvFbbO1z47+FN/bImbnSDoRUVgk94e06lVIWJSHQb
-	lAwv5lLNxyZwqPTGH6qJ4E+H8Utztv03njrkJdfKsXuUsSfNjnx0FK0Qc3I3t9ro3su706bIily6E
-	oYwBwftC+0DeLpa92yYA51w1lBrIGdd7F2b0KHDMpxp1B1Fuy1/yWej9FP5jmmwYGt/bR9GuzGMuI
-	Qx8msONw5zhkhQGwsXM7Vxy3daH0nsPZxWhow535EkdAYpMSSoDcmZ0g2APucnhZYNgze9I9GvRbx
-	NZs79P5w==;
-Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s0g5h-0000000FeZf-3mf7;
-	Sat, 27 Apr 2024 11:20:51 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s0g5f-000000002bB-3w9q;
-	Sat, 27 Apr 2024 12:19:35 +0100
-From: David Woodhouse <dwmw2@infradead.org>
-To: kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sean Christopherson <seanjc@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paul Durrant <paul@xen.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	jalliste@amazon.co.uk,
-	sveith@amazon.de,
-	zide.chen@intel.com,
-	Dongli Zhang <dongli.zhang@oracle.com>
-Subject: [PATCH v2 03/15] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for accurate KVM clock migration
-Date: Sat, 27 Apr 2024 12:05:00 +0100
-Message-ID: <20240427111929.9600-4-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240427111929.9600-1-dwmw2@infradead.org>
-References: <20240427111929.9600-1-dwmw2@infradead.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NrOSMGl5"
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3c7510d1bacso1878487b6e.1;
+        Sat, 27 Apr 2024 06:49:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714225769; x=1714830569; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uif6sRwCq4B8viNrsdUGAHvyCJzvNgkSWnFMpuBhOpI=;
+        b=NrOSMGl5Aog1EsbHChbSO/cbNa++y0t0b8LMJI0lw+X9+VbI1YwwZrRYRn4CQ18V51
+         MREf7/PldjmyVTqUuClCxe3gcrAv3y4KItDqyqEgoU0pi7JXBHNRNIRffbzWNEuB7Qy1
+         4zsT7xTkWJw7MaLeglh94kU71PeeLNh2m5xaA4ywQJRJ4s4lVkcDIq7Z0Oh0H7laCtwV
+         9vILhgA8bQkQ9+fe5XcS6rKEJgq8hCv07aoVXysHr7fb/lNaHaYr0iUyRk8N5zLvTXkK
+         5ZmnONSkNJRyp2XfbXkFbsQEyQ1bsPq4QpAJ8H8VWumcWSao2Tqo4UvkgdTjMSg8Tnv7
+         6y8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714225769; x=1714830569;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uif6sRwCq4B8viNrsdUGAHvyCJzvNgkSWnFMpuBhOpI=;
+        b=Olmn7vMpZ+A8XYAmkgFsxj79tKKv49hex4Twv5m3cNjlrIQFQhOW6DDzteGwpkDkGz
+         vr8HAz2iWIf2MVeA8onLf9RYRKOo/NXkiCY7gACl5B9dr+snJSWHUrJuYM0X2UoZMxhP
+         pKBzaDCQv3eSyjgOuvr4sbyxHZWENm6RYrhu8+BLPzO6FRgK4A4pjpB5ikXqO9gt+cq3
+         +CA1RAXLiTQ5ah5eTRcGFykE9B8mcpVXEzfBvcJjGOx33AFH39OaZ4IIRDn8kztNpWn/
+         +5hJaHErtuGUt5YuGwaY8kiCveoEUuT4XS+3ZmEAHUpGe7BkWoVebeCoXvY6V9E5jIKP
+         D2Ow==
+X-Forwarded-Encrypted: i=1; AJvYcCXCtEyo5Dsnj3cO0WcL/ltpCse6sRbtN5kStXiiQSSA0rkWBnL3wAFS7vHPyyO/YWKdo3BSn9UbeknOCPpnobKK1zgCzLqNceoD9Tbn0731
+X-Gm-Message-State: AOJu0Yz+O7GH454eLJ9LqV4NkF8RlRSAgBDrMZOe+YvslBv4Tp302iU9
+	RcUEEpLoIPcTI3rnzO+D+fyQO+EunvBkvp5x7X4J9itG78njO4F9
+X-Google-Smtp-Source: AGHT+IHGgYWNmBXVNLK0MOhie3KsIcVdcxZ1aNfnbhC+ixNnJbZpTcdheWNcGZiFgyTm27NnbZU4Vw==
+X-Received: by 2002:a05:6808:2882:b0:3c8:4948:ee2b with SMTP id eu2-20020a056808288200b003c84948ee2bmr6876054oib.5.1714225769544;
+        Sat, 27 Apr 2024 06:49:29 -0700 (PDT)
+Received: from localhost (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05620a0d4f00b0078ee090baa3sm8829101qkl.10.2024.04.27.06.49.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Apr 2024 06:49:29 -0700 (PDT)
+Date: Sat, 27 Apr 2024 09:49:28 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ davem@davemloft.net
+Cc: netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ linux-kselftest@vger.kernel.org, 
+ willemdebruijn.kernel@gmail.com, 
+ Jakub Kicinski <kuba@kernel.org>
+Message-ID: <662d0268e71c5_28b98529417@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240426232400.624864-7-kuba@kernel.org>
+References: <20240426232400.624864-1-kuba@kernel.org>
+ <20240426232400.624864-7-kuba@kernel.org>
+Subject: Re: [PATCH net-next 6/6] selftests: drv-net-hw: add test for memory
+ allocation failures with page pool
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-From: Jack Allister <jalliste@amazon.com>
+Jakub Kicinski wrote:
+> Bugs in memory allocation failure paths are quite common.
+> Add a test exercising those paths based on qstat and page pool
+> failure hook.
+> 
+> Running on bnxt:
+> 
+>   # ./drivers/net/hw/pp_alloc_fail.py
+>   KTAP version 1
+>   1..1
+>   # ethtool -G change retval: success
+>   ok 1 pp_alloc_fail.test_pp_alloc
+>   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> I initially wrote this test to validate commit be43b7489a3c ("net/mlx5e:
+> RX, Fix page_pool allocation failure recovery for striding rq") but mlx5
+> still doesn't have qstat. So I run it on bnxt, and while bnxt survives
+> I found the problem fixed in commit 730117730709 ("eth: bnxt: fix counting
+> packets discarded due to OOM and netpoll").
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+>  .../testing/selftests/drivers/net/hw/Makefile |   1 +
+>  .../selftests/drivers/net/hw/pp_alloc_fail.py | 129 ++++++++++++++++++
+>  tools/testing/selftests/net/lib/py/ksft.py    |   4 +
+>  3 files changed, 134 insertions(+)
+>  create mode 100755 tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
+> 
+> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+> index 95f32158b095..1dd732855d76 100644
+> --- a/tools/testing/selftests/drivers/net/hw/Makefile
+> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
+> @@ -9,6 +9,7 @@ TEST_PROGS = \
+>  	hw_stats_l3.sh \
+>  	hw_stats_l3_gre.sh \
+>  	loopback.sh \
+> +	pp_alloc_fail.py \
+>  	#
+>  
+>  TEST_FILES := \
+> diff --git a/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py b/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
+> new file mode 100755
+> index 000000000000..026d98976c35
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
+> @@ -0,0 +1,129 @@
+> +#!/usr/bin/env python3
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +import time
+> +import os
+> +from lib.py import ksft_run, ksft_exit, ksft_pr
+> +from lib.py import KsftSkipEx, KsftFailEx
+> +from lib.py import NetdevFamily, NlError
+> +from lib.py import NetDrvEpEnv
+> +from lib.py import cmd, tool, GenerateTraffic
+> +
+> +
+> +def _write_fail_config(config):
+> +    for key, value in config.items():
+> +        with open("/sys/kernel/debug/fail_function/" + key, "w") as fp:
+> +            fp.write(str(value) + "\n")
+> +
+> +
+> +def _enable_pp_allocation_fail():
+> +    if not os.path.exists("/sys/kernel/debug/fail_function"):
+> +        raise KsftSkipEx("Kernel built without function error injection (or DebugFS)")
+> +
+> +    if not os.path.exists("/sys/kernel/debug/fail_function/page_pool_alloc_pages"):
+> +        with open("/sys/kernel/debug/fail_function/inject", "w") as fp:
+> +            fp.write("page_pool_alloc_pages\n")
+> +
+> +    _write_fail_config({
+> +        "verbose": 0,
+> +        "interval": 511,
+> +        "probability": 100,
+> +        "times": -1,
+> +    })
+> +
+> +
+> +def _disable_pp_allocation_fail():
+> +    if not os.path.exists("/sys/kernel/debug/fail_function"):
+> +        return
+> +
+> +    if os.path.exists("/sys/kernel/debug/fail_function/page_pool_alloc_pages"):
+> +        with open("/sys/kernel/debug/fail_function/inject", "w") as fp:
+> +            fp.write("\n")
+> +
+> +    _write_fail_config({
+> +        "probability": 0,
+> +        "times": 0,
+> +    })
+> +
+> +
+> +def test_pp_alloc(cfg, netdevnl):
+> +    def get_stats():
+> +        return netdevnl.qstats_get({"ifindex": cfg.ifindex}, dump=True)[0]
+> +
+> +    def check_traffic_flowing():
+> +        stat1 = get_stats()
+> +        time.sleep(1)
+> +        stat2 = get_stats()
+> +        if stat2['rx-packets'] - stat1['rx-packets'] < 15000:
+> +            raise KsftFailEx("Traffic seems low:", stat2['rx-packets'] - stat1['rx-packets'])
+> +
+> +
+> +    try:
+> +        stats = get_stats()
+> +    except NlError as e:
+> +        if e.nl_msg.error == -95:
+> +            stats = {}
+> +        else:
+> +            raise
+> +    if 'rx-alloc-fail' not in stats:
+> +        raise KsftSkipEx("Driver does not report 'rx-alloc-fail' via qstats")
+> +
+> +    set_g = False
+> +    traffic = None
+> +    try:
+> +        traffic = GenerateTraffic(cfg)
+> +
+> +        check_traffic_flowing()
+> +
+> +        _enable_pp_allocation_fail()
+> +
+> +        s1 = get_stats()
+> +        time.sleep(3)
+> +        s2 = get_stats()
+> +
+> +        if s2['rx-alloc-fail'] - s1['rx-alloc-fail'] < 1:
+> +            raise KsftSkipEx("Allocation failures not increasing")
+> +        if s2['rx-alloc-fail'] - s1['rx-alloc-fail'] < 100:
+> +            raise KsftSkipEx("Allocation increasing too slowly", s2['rx-alloc-fail'] - s1['rx-alloc-fail'],
+> +                             "packets:", s2['rx-packets'] - s1['rx-packets'])
+> +
+> +        # Basic failures are fine, try to wobble some settings to catch extra failures
+> +        check_traffic_flowing()
+> +        g = tool("ethtool", "-g " + cfg.ifname, json=True)[0]
+> +        if 'rx' in g and g["rx"] * 2 <= g["rx-max"]:
+> +            new_g = g['rx'] * 2
+> +        elif 'rx' in g:
+> +            new_g = g['rx'] // 2
+> +        else:
+> +            new_g = None
+> +
+> +        if new_g:
+> +            set_g = cmd(f"ethtool -G {cfg.ifname} rx {new_g}", fail=False).ret == 0
+> +            if set_g:
+> +                ksft_pr("ethtool -G change retval: success")
+> +            else:
+> +                ksft_pr("ethtool -G change retval: did not succeed", new_g)
+> +        else:
+> +                ksft_pr("ethtool -G change retval: did not try")
+> +
+> +        time.sleep(0.1)
+> +        check_traffic_flowing()
+> +    finally:
+> +        _disable_pp_allocation_fail()
+> +        if traffic:
+> +            traffic.stop()
 
-In the common case (where kvm->arch.use_master_clock is true), the KVM
-clock is defined as a simple arithmetic function of the guest TSC, based on
-a reference point stored in kvm->arch.master_kernel_ns and
-kvm->arch.master_cycle_now.
+Very cool!
 
-The existing KVM_[GS]ET_CLOCK functionality does not allow for this
-relationship to be precisely saved and restored by userspace. All it can
-currently do is set the KVM clock at a given UTC reference time, which is
-necessarily imprecise.
+Eventually probably want a more generic fault injection class.
 
-So on live update, the guest TSC can remain cycle accurate at precisely the
-same offset from the host TSC, but there is no way for userspace to restore
-the KVM clock accurately.
+And for both fault injection and background traffic the with object
+construct to ensure cleanup in all cases.
 
-Even on live migration to a new host, where the accuracy of the guest time-
-keeping is fundamentally limited by the accuracy of wallclock
-synchronization between the source and destination hosts, the clock jump
-experienced by the guest's TSC and its KVM clock should at least be
-*consistent*. Even when the guest TSC suffers a discontinuity, its KVM
-clock should still remain the *same* arithmetic function of the guest TSC,
-and not suffer an *additional* discontinuity.
+Maybe even the same for ethtool, as ip and ethtool config changes that
+need to be reverted to original state will be common.
 
-To allow for accurate migration of the KVM clock, add per-vCPU ioctls which
-save and restore the actual PV clock info in pvclock_vcpu_time_info.
+To be clear, not at all suggesting to revise this series for that.
 
-The restoration in KVM_SET_CLOCK_GUEST works by creating a new reference
-point in time just as kvm_update_masterclock() does, and calculating the
-corresponding guest TSC value. This guest TSC value is then passed through
-the user-provided pvclock structure to generate the *intended* KVM clock
-value at that point in time, and through the *actual* KVM clock calculation.
-Then kvm->arch.kvmclock_offset is adjusted to eliminate for the difference.
+> +        time.sleep(0.1)
+> +        if set_g:
+> +            cmd(f"ethtool -G {cfg.ifname} rx {g['rx']}")
+> +
+> +
+> +def main() -> None:
+> +    netdevnl = NetdevFamily()
+> +    with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
+> +
+> +        ksft_run([test_pp_alloc], args=(cfg, netdevnl, ))
+> +    ksft_exit()
+> +
+> +
+> +if __name__ == "__main__":
+> +    main()
+> diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
+> index f84e9fdd0032..4769b4eb1ea1 100644
+> --- a/tools/testing/selftests/net/lib/py/ksft.py
+> +++ b/tools/testing/selftests/net/lib/py/ksft.py
+> @@ -11,6 +11,10 @@ KSFT_RESULT = None
+>  KSFT_RESULT_ALL = True
+>  
+>  
+> +class KsftFailEx(Exception):
+> +    pass
+> +
+> +
+>  class KsftSkipEx(Exception):
+>      pass
+>  
+> -- 
+> 2.44.0
+> 
 
-Where kvm->arch.use_master_clock is false (because the host TSC is
-unreliable, or the guest TSCs are configured strangely), the KVM clock
-is *not* defined as a function of the guest TSC so KVM_GET_CLOCK_GUEST
-returns an error. In this case, as documented, userspace shall use the
-legacy KVM_GET_CLOCK ioctl. The loss of precision is acceptable in this
-case since the clocks are imprecise in this mode anyway.
-
-On *restoration*, if kvm->arch.use_master_clock is false, an error is
-returned for similar reasons and userspace shall fall back to using
-KVM_SET_CLOCK. This does mean that, as documented, userspace needs to use
-*both* KVM_GET_CLOCK_GUEST and KVM_GET_CLOCK and send both results with the
-migration data (unless the intent is to refuse to resume on a host with bad
-TSC).
-
-(It may have been possible to make KVM_SET_CLOCK_GUEST "good enough" in the
-non-masterclock mode, as that mode is necessarily imprecise anyway. The
-explicit fallback allows userspace to deliberately fail migration to a host
-with misbehaving TSC where master clock mode wouldn't be active.)
-
-Co-developed-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Jack Allister <jalliste@amazon.com>
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Reviewed-by: Paul Durrant <paul@xen.org>
-CC: Dongli Zhang <dongli.zhang@oracle.com>
----
- Documentation/virt/kvm/api.rst |  37 ++++++++
- arch/x86/kvm/x86.c             | 156 +++++++++++++++++++++++++++++++++
- include/uapi/linux/kvm.h       |   3 +
- 3 files changed, 196 insertions(+)
-
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index f0b76ff5030d..758f6fc08fe5 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -6352,6 +6352,43 @@ a single guest_memfd file, but the bound ranges must not overlap).
- 
- See KVM_SET_USER_MEMORY_REGION2 for additional details.
- 
-+4.143 KVM_GET_CLOCK_GUEST
-+----------------------------
-+
-+:Capability: none
-+:Architectures: x86_64
-+:Type: vcpu ioctl
-+:Parameters: struct pvclock_vcpu_time_info (out)
-+:Returns: 0 on success, <0 on error
-+
-+Retrieves the current time information structure used for KVM/PV clocks,
-+in precisely the form advertised to the guest vCPU, which gives parameters
-+for a direct conversion from a guest TSC value to nanoseconds.
-+
-+When the KVM clock not is in "master clock" mode, for example because the
-+host TSC is unreliable or the guest TSCs are oddly configured, the KVM clock
-+is actually defined by the host CLOCK_MONOTONIC_RAW instead of the guest TSC.
-+In this case, the KVM_GET_CLOCK_GUEST ioctl returns -EINVAL.
-+
-+4.144 KVM_SET_CLOCK_GUEST
-+----------------------------
-+
-+:Capability: none
-+:Architectures: x86_64
-+:Type: vcpu ioctl
-+:Parameters: struct pvclock_vcpu_time_info (in)
-+:Returns: 0 on success, <0 on error
-+
-+Sets the KVM clock (for the whole VM) in terms of the vCPU TSC, using the
-+pvclock structure as returned by KVM_GET_CLOCK_GUEST. This allows the precise
-+arithmetic relationship between guest TSC and KVM clock to be preserved by
-+userspace across migration.
-+
-+When the KVM clock is not in "master clock" mode, and the KVM clock is actually
-+defined by the host CLOCK_MONOTONIC_RAW, this ioctl returns -EINVAL. Userspace
-+may choose to set the clock using the less precise KVM_SET_CLOCK ioctl, or may
-+choose to fail, denying migration to a host whose TSC is misbehaving.
-+
- 5. The kvm_run structure
- ========================
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 23281c508c27..42abce7b4fc9 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -5868,6 +5868,154 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
- 	}
- }
- 
-+#ifdef CONFIG_X86_64
-+static int kvm_vcpu_ioctl_get_clock_guest(struct kvm_vcpu *v, void __user *argp)
-+{
-+	struct pvclock_vcpu_time_info *hv_clock = &v->arch.hv_clock;
-+
-+	/*
-+	 * If KVM_REQ_CLOCK_UPDATE is already pending, or if the hv_clock has
-+	 * never been generated at all, call kvm_guest_time_update() to do so.
-+	 * Might as well use the PVCLOCK_TSC_STABLE_BIT as the check for ever
-+	 * having been written.
-+	 */
-+	if (kvm_check_request(KVM_REQ_CLOCK_UPDATE, v) ||
-+	    !(hv_clock->flags & PVCLOCK_TSC_STABLE_BIT)) {
-+		if (kvm_guest_time_update(v))
-+			return -EINVAL;
-+	}
-+
-+	/*
-+	 * PVCLOCK_TSC_STABLE_BIT is set in use_master_clock mode where the
-+	 * KVM clock is defined in terms of the guest TSC. Otherwise, it is
-+	 * is defined by the host CLOCK_MONOTONIC_RAW, and userspace should
-+	 * use the legacy KVM_[GS]ET_CLOCK to migrate it.
-+	 */
-+	if (!(hv_clock->flags & PVCLOCK_TSC_STABLE_BIT))
-+		return -EINVAL;
-+
-+	if (copy_to_user(argp, hv_clock, sizeof(*hv_clock)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Reverse the calculation in the hv_clock definition.
-+ *
-+ * time_ns = ( (cycles << shift) * mul ) >> 32;
-+ * (although shift can be negative, so that's bad C)
-+ *
-+ * So for a single second,
-+ *  NSEC_PER_SEC = ( ( FREQ_HZ << shift) * mul ) >> 32
-+ *  NSEC_PER_SEC << 32 = ( FREQ_HZ << shift ) * mul
-+ *  ( NSEC_PER_SEC << 32 ) / mul = FREQ_HZ << shift
-+ *  ( NSEC_PER_SEC << 32 ) / mul ) >> shift = FREQ_HZ
-+ */
-+static uint64_t hvclock_to_hz(uint32_t mul, int8_t shift)
-+{
-+	uint64_t tm = NSEC_PER_SEC << 32;
-+
-+	/* Maximise precision. Shift right until the top bit is set */
-+	tm <<= 2;
-+	shift += 2;
-+
-+	/* While 'mul' is even, increase the shift *after* the division */
-+	while (!(mul & 1)) {
-+		shift++;
-+		mul >>= 1;
-+	}
-+
-+	tm /= mul;
-+
-+	if (shift > 0)
-+		return tm >> shift;
-+	else
-+		return tm << -shift;
-+}
-+
-+static int kvm_vcpu_ioctl_set_clock_guest(struct kvm_vcpu *v, void __user *argp)
-+{
-+	struct pvclock_vcpu_time_info user_hv_clock;
-+	struct kvm *kvm = v->kvm;
-+	struct kvm_arch *ka = &kvm->arch;
-+	uint64_t curr_tsc_hz, user_tsc_hz;
-+	uint64_t user_clk_ns;
-+	uint64_t guest_tsc;
-+	int rc = 0;
-+
-+	if (copy_from_user(&user_hv_clock, argp, sizeof(user_hv_clock)))
-+		return -EFAULT;
-+
-+	if (!user_hv_clock.tsc_to_system_mul)
-+		return -EINVAL;
-+
-+	user_tsc_hz = hvclock_to_hz(user_hv_clock.tsc_to_system_mul,
-+				    user_hv_clock.tsc_shift);
-+
-+
-+	kvm_hv_request_tsc_page_update(kvm);
-+	kvm_start_pvclock_update(kvm);
-+	pvclock_update_vm_gtod_copy(kvm);
-+
-+	/*
-+	 * If not in use_master_clock mode, do not allow userspace to set
-+	 * the clock in terms of the guest TSC. Userspace should either
-+	 * fail the migration (to a host with suboptimal TSCs), or should
-+	 * knowingly restore the KVM clock using KVM_SET_CLOCK instead.
-+	 */
-+	if (!ka->use_master_clock) {
-+		rc = -EINVAL;
-+		goto out;
-+	}
-+
-+	curr_tsc_hz = get_cpu_tsc_khz() * 1000LL;
-+	if (unlikely(curr_tsc_hz == 0)) {
-+		rc = -EINVAL;
-+		goto out;
-+	}
-+
-+	if (kvm_caps.has_tsc_control)
-+		curr_tsc_hz = kvm_scale_tsc(curr_tsc_hz,
-+					    v->arch.l1_tsc_scaling_ratio);
-+
-+	/*
-+	 * The scaling factors in the hv_clock do not depend solely on the
-+	 * TSC frequency *requested* by userspace. They actually use the
-+	 * host TSC frequency that was measured/detected by the host kernel,
-+	 * scaled by kvm_scale_tsc() with the vCPU's l1_tsc_scaling_ratio.
-+	 *
-+	 * So a sanity check that they *precisely* match would have false
-+	 * negatives. Allow for a discrepancy of 1 kHz either way.
-+	 */
-+	if (user_tsc_hz < curr_tsc_hz - 1000 ||
-+	    user_tsc_hz > curr_tsc_hz + 1000) {
-+		rc = -ERANGE;
-+		goto out;
-+	}
-+
-+	/*
-+	 * The call to pvclock_update_vm_gtod_copy() has created a new time
-+	 * reference point in ka->master_cycle_now and ka->master_kernel_ns.
-+	 *
-+	 * Calculate the guest TSC at that moment, and the corresponding KVM
-+	 * clock value according to user_hv_clock. The value according to the
-+	 * current hv_clock will of course be ka->master_kernel_ns since no
-+	 * TSC cycles have elapsed.
-+	 *
-+	 * Adjust ka->kvmclock_offset to the delta, so that both definitions
-+	 * of the clock give precisely the same reading at the reference time.
-+	 */
-+	guest_tsc = kvm_read_l1_tsc(v, ka->master_cycle_now);
-+	user_clk_ns = __pvclock_read_cycles(&user_hv_clock, guest_tsc);
-+	ka->kvmclock_offset = user_clk_ns - ka->master_kernel_ns;
-+
-+out:
-+	kvm_end_pvclock_update(kvm);
-+	return rc;
-+}
-+#endif
-+
- long kvm_arch_vcpu_ioctl(struct file *filp,
- 			 unsigned int ioctl, unsigned long arg)
- {
-@@ -6256,6 +6404,14 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
- 		srcu_read_unlock(&vcpu->kvm->srcu, idx);
- 		break;
- 	}
-+#ifdef CONFIG_X86_64
-+	case KVM_SET_CLOCK_GUEST:
-+		r = kvm_vcpu_ioctl_set_clock_guest(vcpu, argp);
-+		break;
-+	case KVM_GET_CLOCK_GUEST:
-+		r = kvm_vcpu_ioctl_get_clock_guest(vcpu, argp);
-+		break;
-+#endif
- #ifdef CONFIG_KVM_HYPERV
- 	case KVM_GET_SUPPORTED_HV_CPUID:
- 		r = kvm_ioctl_get_supported_hv_cpuid(vcpu, argp);
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 2190adbe3002..0d306311e4d6 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1548,4 +1548,7 @@ struct kvm_create_guest_memfd {
- 	__u64 reserved[6];
- };
- 
-+#define KVM_SET_CLOCK_GUEST       _IOW(KVMIO,  0xd5, struct pvclock_vcpu_time_info)
-+#define KVM_GET_CLOCK_GUEST       _IOR(KVMIO,  0xd6, struct pvclock_vcpu_time_info)
-+
- #endif /* __LINUX_KVM_H */
--- 
-2.44.0
 
