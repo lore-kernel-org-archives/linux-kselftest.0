@@ -1,38 +1,37 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C1648CFC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BD738DD3;
 	Sat, 27 Apr 2024 11:19:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714216786; cv=none; b=LAUHoEeMMnR0UKDxU4mcQpDabQULfmAy48MFFsyLn2i4+BuzB4/7YHt9/IiR7SDO2EULI7VoLqJ39NWI94y6gU/d6MZZuBkf95/i8tu08eDOu+H9CbkNz6lPVnAstZUYUGe9kzE3h5gbqQN2T8pEtUgm/xTBODaDOnbYS1/TyLM=
+	t=1714216787; cv=none; b=uAdDtT52Ht6eCNwrLddas4MC/kRgAOH979T3iYKApfg4gB0RptXDvOfTwzd04PAVF04sv5+X/QsHbJMmXwRKBNkZPqeLjlLIewrgD9MeJf6aAfdMfuSL/uF+qDlXQf81OqyaPAXLk4R5z4E5sAdSNnOlz+qegSmr+a5bqOvtMXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714216786; c=relaxed/simple;
-	bh=mwKQQD8/+RYFodyxB6WV+wW8JDfeqo6IS57yFs+a5y8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sx4ck57o1XKtqMKjAbC0Xw7/JHIsHT3ww3+sfdhQIjNwSesfBAsIRPesY4Rj9VcCwj7TrdUcSKp/ao6rSv9YUr+Duk14ONphbzBVdkdtNwNM67owJZ+H2B0kvp5h3JS7yiuGhzxL9IAdduFg4SwTfkCKKjXPMsWd939OuCkU0zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NGf2gG3L; arc=none smtp.client-ip=90.155.50.34
+	s=arc-20240116; t=1714216787; c=relaxed/simple;
+	bh=Dne5fBR1iIOYX/rPcjbOE3SYHMPYwk167rrQ55hOsLU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qrSPeXl7rrYSWIL/P8qGYMXq4JIQEWJZPtoQEZxuLJn7emWFORdMjj9qVLwgh+hKu8WaYaggUZ6EbzyxziZt/1Y/xmn/EQBp2VWiEkq6zgCBzSGOIbfyw8f6zXxYAXLtH9Hc5CbzEPE9vlHhP3EooI7dcOAac6wMrf5VSLFBfBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vS/M7D5S; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NGf2gG3L"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vS/M7D5S"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=07Y/gmhH+tDbkleYF4YdcC7uHOHG3j1TevROlC+ybZw=; b=NGf2gG3LvfJHzesc8T4yV2oaRx
-	QkXehjV5zoTgXnke8KHAE3LuMAHahUOH2BGj4pJPSPQc9NIB6Y2vhBDFFloWtDwwYr0sE1a9sthZU
-	yyBgI67jZXemMi+M8cMRonODjRxzocH3uxo/uDLEQ8Z2Seg6TYKrAS3edD72OQTH7ypCVDVReglc5
-	DdVADQ/+cYWbohjySr4pAfgMZQGpFmdfEC9WzIiy127c4e+GBs1CdZUMuYGFm2fWu4jAZrpk6F260
-	Tt+CVWmiJYuNqX1R2To3AIQ4T1SXrIWVvaew+eKWVSzi+hAxHbJHCLX8i/XFTNFI4eOiVXY6g+U1Z
-	zpEWykGA==;
+	Content-Type:MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=Z6fBy03Etm/CSR189UL7iYBAbnioWxrHrZek/W4lxZw=; b=vS/M7D5Sl4CQpsJxN9B544ayJl
+	NsbwfjA7eg/2ImNuB3vQ+FyO6KnYWChQhE9UEVfFRJmRllbf7DUhFzenLUO53LEAv2KInFk8Oyopb
+	9MjFoaiEhjWZejm4EGeYBo+qxV2Fdp1y9QNgkAKlrTFAoVmM8xKunZBtnnuKVSezJCdlERi2FB7//
+	jujUFNSHVAnwubObnsL7ygyYBQ0dIwi7XclXO4znpOewBlKzimiAe6eGE3mQuF7Wwdi4ZQImLLgC8
+	1juHV3lRqr0WEdRDyDptHnhZDzA9XiKwBEPic5gfoaMvn32X6ZBc3pRiqUA3XLJWQ41asQjYvd0XE
+	2ar5/N2A==;
 Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s0g5g-00000007Jwl-3YYy;
-	Sat, 27 Apr 2024 11:19:37 +0000
+	id 1s0g5g-00000007Jwg-1Y9q;
+	Sat, 27 Apr 2024 11:19:36 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s0g5g-000000002bZ-1W2k;
-	Sat, 27 Apr 2024 12:19:36 +0100
+	id 1s0g5f-000000002b0-2wnU;
+	Sat, 27 Apr 2024 12:19:35 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: Paolo Bonzini <pbonzini@redhat.com>,
@@ -55,176 +54,90 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	sveith@amazon.de,
 	zide.chen@intel.com,
 	Dongli Zhang <dongli.zhang@oracle.com>
-Subject: [PATCH v2 09/15] KVM: x86: Fix software TSC upscaling in kvm_update_guest_time()
-Date: Sat, 27 Apr 2024 12:05:06 +0100
-Message-ID: <20240427111929.9600-10-dwmw2@infradead.org>
+Subject: [RFC PATCH v2] Cleaning up the KVM clock mess
+Date: Sat, 27 Apr 2024 12:04:57 +0100
+Message-ID: <20240427111929.9600-1-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240427111929.9600-1-dwmw2@infradead.org>
-References: <20240427111929.9600-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+Clean up the KVM clock mess somewhat so that it is either based on the guest
+TSC ("master clock" mode), or on the host CLOCK_MONOTONIC_RAW in cases where
+the TSC isn't usable.
 
-There was some confusion in kvm_update_guest_time() when software needs
-to advance the guest TSC.
+Eliminate the third variant where it was based directly on the *host* TSC,
+due to bugs in e.g. __get_kvmclock().
 
-In master clock mode, there are two points of time which need to be taken
-into account. First there is the master clock reference point, stored in
-kvm->arch.master_kernel_ns (and associated host TSC ->master_cycle_now).
-Secondly, there is the time *now*, at the point kvm_update_guest_time()
-is being called.
+Kill off the last vestiges of the KVM clock being based on CLOCK_MONOTONIC
+instead of CLOCK_MONOTONIC_RAW and thus being subject to NTP skew.
 
-With software TSC upscaling, the guest TSC is getting further and further
-ahead of the host TSC as time elapses. So at time "now", the guest TSC
-should be further ahead of the host, than it was at master_kernel_ns.
+Fix up migration support to allow the KVM clock to be saved/restored as an
+arithmetic function of the guest TSC, since that's what it actually is in
+the *common* case so it can be migrated precisely. Or at least to within
+±1 ns which is good enough, as discussed in
+https://lore.kernel.org/kvm/c8dca08bf848e663f192de6705bf04aa3966e856.camel@infradead.org
 
-The adjustment in kvm_update_guest_time() was not taking that into
-account, and was only advancing the guest TSC by the appropriate amount
-for master_kernel_ns, *not* the current time.
+In v2 of this series, TSC synchronization is improved and simplified a bit
+too, and we allow masterclock mode to be used even when the guest TSCs are
+out of sync, as long as they're running at the same *rate*. The different
+*offset* shouldn't matter.
 
-Fix it to calculate them both correctly.
+And the kvm_get_time_scale() function annoyed me by being entirely opaque,
+so I studied it until my brain hurt and then added some comments.
 
-Since the KVM clock reference point in master_kernel_ns might actually
-be *earlier* than the reference point used for the guest TSC
-(vcpu->last_tsc_nsec), this might lead to a negative delta. Fix the
-compute_guest_tsc() function to cope with negative numbers, which
-then means there is no need to force a master clock update when the
-guest TSC is written.
+In v2 I also dropped the commits which were removing the periodic clock
+syncs. Those are going to be needed still but *only* for non-masterclock
+mode, which I'll do next. Along with ensuring that a masterclock update
+while already in masterclock mode doesn't jump the clock, and just does
+the same as KVM_SET_CLOCK_GUEST does to preserve it.
 
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- arch/x86/kvm/x86.c | 73 +++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 56 insertions(+), 17 deletions(-)
+Needs a *lot* more testing. I think I'm almost done refactoring the code,
+so should focus on building up the tests next.
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 89918ba266cd..e09dc44978ea 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -2491,10 +2491,19 @@ static int kvm_set_tsc_khz(struct kvm_vcpu *vcpu, u32 user_tsc_khz)
- 
- static u64 compute_guest_tsc(struct kvm_vcpu *vcpu, s64 kernel_ns)
- {
--	u64 tsc = pvclock_scale_delta(kernel_ns-vcpu->arch.this_tsc_nsec,
--				      vcpu->arch.virtual_tsc_mult,
--				      vcpu->arch.virtual_tsc_shift);
--	tsc += vcpu->arch.this_tsc_write;
-+	s64 delta = kernel_ns - vcpu->arch.this_tsc_nsec;
-+	u64 tsc = vcpu->arch.this_tsc_write;
-+
-+	/* pvclock_scale_delta cannot cope with negative deltas */
-+	if (delta >= 0)
-+		tsc += pvclock_scale_delta(delta,
-+					   vcpu->arch.virtual_tsc_mult,
-+					   vcpu->arch.virtual_tsc_shift);
-+	else
-+		tsc -= pvclock_scale_delta(-delta,
-+					   vcpu->arch.virtual_tsc_mult,
-+					   vcpu->arch.virtual_tsc_shift);
-+
- 	return tsc;
- }
- 
-@@ -2505,7 +2514,7 @@ static inline bool gtod_is_based_on_tsc(int mode)
- }
- #endif
- 
--static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu, bool new_generation)
-+static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu)
- {
- #ifdef CONFIG_X86_64
- 	struct kvm_arch *ka = &vcpu->kvm->arch;
-@@ -2522,12 +2531,9 @@ static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu, bool new_generation)
- 
- 	/*
- 	 * Request a masterclock update if the masterclock needs to be toggled
--	 * on/off, or when starting a new generation and the masterclock is
--	 * enabled (compute_guest_tsc() requires the masterclock snapshot to be
--	 * taken _after_ the new generation is created).
-+	 * on/off.
- 	 */
--	if ((ka->use_master_clock && new_generation) ||
--	    (ka->use_master_clock != use_master_clock))
-+	if ((ka->use_master_clock != use_master_clock))
- 		kvm_make_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu);
- 
- 	trace_kvm_track_tsc(vcpu->vcpu_id, ka->nr_vcpus_matched_tsc,
-@@ -2705,7 +2711,7 @@ static void __kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 offset, u64 tsc,
- 	vcpu->arch.this_tsc_nsec = kvm->arch.cur_tsc_nsec;
- 	vcpu->arch.this_tsc_write = kvm->arch.cur_tsc_write;
- 
--	kvm_track_tsc_matching(vcpu, !matched);
-+	kvm_track_tsc_matching(vcpu);
- }
- 
- static void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
-@@ -3300,8 +3306,6 @@ static int kvm_guest_time_update(struct kvm_vcpu *v)
- 		kernel_ns = get_kvmclock_base_ns();
- 	}
- 
--	tsc_timestamp = kvm_read_l1_tsc(v, host_tsc);
--
- 	/*
- 	 * We may have to catch up the TSC to match elapsed wall clock
- 	 * time for two reasons, even if kvmclock is used.
-@@ -3313,11 +3317,46 @@ static int kvm_guest_time_update(struct kvm_vcpu *v)
- 	 *	very slowly.
- 	 */
- 	if (vcpu->tsc_catchup) {
--		u64 tsc = compute_guest_tsc(v, kernel_ns);
--		if (tsc > tsc_timestamp) {
--			adjust_tsc_offset_guest(v, tsc - tsc_timestamp);
--			tsc_timestamp = tsc;
-+		uint64_t now_host_tsc, now_guest_tsc;
-+		int64_t adjustment;
-+
-+		/*
-+		 * First, calculate what the guest TSC should be at the
-+		 * time (kernel_ns) which will be placed in the hvclock.
-+		 * This may be the *current* time, or it may be the time
-+		 * of the master clock reference. This is 'tsc_timestamp'.
-+		 */
-+		tsc_timestamp = compute_guest_tsc(v, kernel_ns);
-+
-+		now_guest_tsc = tsc_timestamp;
-+		now_host_tsc = host_tsc;
-+
-+#ifdef CONFIG_X86_64
-+		/*
-+		 * If the master clock was used, calculate what the guest
-+		 * TSC should be *now* in order to advance to that.
-+		 */
-+		if (use_master_clock) {
-+			int64_t now_kernel_ns;
-+
-+			if (!kvm_get_time_and_clockread(&now_kernel_ns,
-+							&now_host_tsc)) {
-+				now_kernel_ns = get_kvmclock_base_ns();
-+				now_host_tsc = rdtsc();
-+			}
-+			now_guest_tsc = compute_guest_tsc(v, now_kernel_ns);
- 		}
-+#endif
-+		/*
-+		 * Calculate the delta between what the guest TSC *should* be,
-+		 * and what it actually is according to kvm_read_l1_tsc().
-+		 */
-+		adjustment = now_guest_tsc - kvm_read_l1_tsc(v, now_host_tsc);
-+
-+		if (adjustment > 0)
-+			adjust_tsc_offset_guest(v, adjustment);
-+	} else {
-+		tsc_timestamp = kvm_read_l1_tsc(v, host_tsc);
- 	}
- 
- 	local_irq_restore(flags);
--- 
-2.44.0
+(I do still hate that we're abusing KVM_GET_CLOCK just to get the tuple
+of {host_tsc, CLOCK_REALTIME} without even *caring* about the eponymous
+KVM clock. Especially as this information is (a) fundamentally what the
+vDSO gettimeofday() exposes to us anyway, (b) using CLOCK_REALTIME not
+TAI, (c) not available on other platforms, for example for migrating
+the Arm arch counter.)
+
+David Woodhouse (13):
+      KVM: x86/xen: Do not corrupt KVM clock in kvm_xen_shared_info_init()
+      KVM: x86: Improve accuracy of KVM clock when TSC scaling is in force
+      KVM: x86: Explicitly disable TSC scaling without CONSTANT_TSC
+      KVM: x86: Add KVM_VCPU_TSC_SCALE and fix the documentation on TSC migration
+      KVM: x86: Avoid NTP frequency skew for KVM clock on 32-bit host
+      KVM: x86: Fix KVM clock precision in __get_kvmclock()
+      KVM: x86: Fix software TSC upscaling in kvm_update_guest_time()
+      KVM: x86: Simplify and comment kvm_get_time_scale()
+      KVM: x86: Remove implicit rdtsc() from kvm_compute_l1_tsc_offset()
+      KVM: x86: Improve synchronization in kvm_synchronize_tsc()
+      KVM: x86: Kill cur_tsc_{nsec,offset,write} fields
+      KVM: x86: Allow KVM master clock mode when TSCs are offset from each other
+      KVM: x86: Factor out kvm_use_master_clock()
+
+Jack Allister (2):
+      KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for accurate KVM clock migration
+      KVM: selftests: Add KVM/PV clock selftest to prove timer correction
+
+ Documentation/virt/kvm/api.rst                    |  37 ++
+ Documentation/virt/kvm/devices/vcpu.rst           | 115 +++-
+ arch/x86/include/asm/kvm_host.h                   |  15 +-
+ arch/x86/include/uapi/asm/kvm.h                   |   6 +
+ arch/x86/kvm/svm/svm.c                            |   3 +-
+ arch/x86/kvm/vmx/vmx.c                            |   2 +-
+ arch/x86/kvm/x86.c                                | 687 +++++++++++++++-------
+ arch/x86/kvm/xen.c                                |   4 +-
+ include/uapi/linux/kvm.h                          |   3 +
+ tools/testing/selftests/kvm/Makefile              |   1 +
+ tools/testing/selftests/kvm/x86_64/pvclock_test.c | 192 ++++++
+ 11 files changed, 822 insertions(+), 243 deletions(-)
 
