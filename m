@@ -1,37 +1,38 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BD738DD3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D604AECE;
 	Sat, 27 Apr 2024 11:19:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714216787; cv=none; b=uAdDtT52Ht6eCNwrLddas4MC/kRgAOH979T3iYKApfg4gB0RptXDvOfTwzd04PAVF04sv5+X/QsHbJMmXwRKBNkZPqeLjlLIewrgD9MeJf6aAfdMfuSL/uF+qDlXQf81OqyaPAXLk4R5z4E5sAdSNnOlz+qegSmr+a5bqOvtMXk=
+	t=1714216788; cv=none; b=k7HkLjW19BJak7xGlBWJtqzibjXF2Q4SccA5DHJoddj7l346LHwwgiVFbCg3fSV8IkUWA2tS4jXvvm75yzShrFA8Iyt92roQ869TK4OpKLYv/UUt0oyxWg+G+LO1hBYvLKXZBhwxRTzlraJYsMxI22xtLCE2V46amTdVYtyE3G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714216787; c=relaxed/simple;
-	bh=Dne5fBR1iIOYX/rPcjbOE3SYHMPYwk167rrQ55hOsLU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qrSPeXl7rrYSWIL/P8qGYMXq4JIQEWJZPtoQEZxuLJn7emWFORdMjj9qVLwgh+hKu8WaYaggUZ6EbzyxziZt/1Y/xmn/EQBp2VWiEkq6zgCBzSGOIbfyw8f6zXxYAXLtH9Hc5CbzEPE9vlHhP3EooI7dcOAac6wMrf5VSLFBfBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vS/M7D5S; arc=none smtp.client-ip=90.155.50.34
+	s=arc-20240116; t=1714216788; c=relaxed/simple;
+	bh=oreP581RFFJ0udRz/Em+dh8lxr/hYKZ4qCRmSQDE6AM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZA/Kam1f0SS1zhCVYGSYD8m76T9L+wBVZcLjxouDH20qN2qGnM7VhfshIseKFhTf2+I9zqT89SPbBmOgJZJCB/D0WqKKmLYESWBsVKtg9VTtNdMCHkcY+8g9yiwFgxmyZyQGRR65+R41xg+DdYiPmyPdhk3nvAWT7idHwfLxf10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=W610WcHS; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vS/M7D5S"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="W610WcHS"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=Z6fBy03Etm/CSR189UL7iYBAbnioWxrHrZek/W4lxZw=; b=vS/M7D5Sl4CQpsJxN9B544ayJl
-	NsbwfjA7eg/2ImNuB3vQ+FyO6KnYWChQhE9UEVfFRJmRllbf7DUhFzenLUO53LEAv2KInFk8Oyopb
-	9MjFoaiEhjWZejm4EGeYBo+qxV2Fdp1y9QNgkAKlrTFAoVmM8xKunZBtnnuKVSezJCdlERi2FB7//
-	jujUFNSHVAnwubObnsL7ygyYBQ0dIwi7XclXO4znpOewBlKzimiAe6eGE3mQuF7Wwdi4ZQImLLgC8
-	1juHV3lRqr0WEdRDyDptHnhZDzA9XiKwBEPic5gfoaMvn32X6ZBc3pRiqUA3XLJWQ41asQjYvd0XE
-	2ar5/N2A==;
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=ApxpDJWImUR2W02lv4MOUaYvWzFyVZfupX+UUwfAxSw=; b=W610WcHSR5FZGmNJ7Qwdx6MtZ1
+	audraTB/PsYQ+q2LXRcLt4yxxCHZ4lXAyaUBBPsIrlgWtNDdJMPE0m1Mf9nbc75YgyPMKVbaJULx0
+	SHTwCz8FwB8f0Qx+cgthCrRCEKRcLnguVdx2di/2VO7lCT4mgcYlruTYLXZ9ZGcMFU4uDg7+g9BCs
+	kT5qxmDBOsPeDKH/uL6MQJQ3FDU22BMFwDkqNemcIH1k4bY0yFi3UbqXVSPofbd6iNJiN6w4CN714
+	ClGerZlwsmB8YqMhCiU6kJsfy5EHTyQNQHwxuzp46Q1ZTys178pUnaUmijJGHIcMYfXNf392tlLFq
+	Qz2TW98A==;
 Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s0g5g-00000007Jwg-1Y9q;
+	id 1s0g5g-00000007Jwk-2tcw;
 	Sat, 27 Apr 2024 11:19:36 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s0g5f-000000002b0-2wnU;
-	Sat, 27 Apr 2024 12:19:35 +0100
+	id 1s0g5g-000000002bR-14Az;
+	Sat, 27 Apr 2024 12:19:36 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: Paolo Bonzini <pbonzini@redhat.com>,
@@ -54,90 +55,120 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	sveith@amazon.de,
 	zide.chen@intel.com,
 	Dongli Zhang <dongli.zhang@oracle.com>
-Subject: [RFC PATCH v2] Cleaning up the KVM clock mess
-Date: Sat, 27 Apr 2024 12:04:57 +0100
-Message-ID: <20240427111929.9600-1-dwmw2@infradead.org>
+Subject: [PATCH v2 07/15] KVM: x86: Avoid NTP frequency skew for KVM clock on 32-bit host
+Date: Sat, 27 Apr 2024 12:05:04 +0100
+Message-ID: <20240427111929.9600-8-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240427111929.9600-1-dwmw2@infradead.org>
+References: <20240427111929.9600-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-Clean up the KVM clock mess somewhat so that it is either based on the guest
-TSC ("master clock" mode), or on the host CLOCK_MONOTONIC_RAW in cases where
-the TSC isn't usable.
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Eliminate the third variant where it was based directly on the *host* TSC,
-due to bugs in e.g. __get_kvmclock().
+Commit 53fafdbb8b21 ("KVM: x86: switch KVMCLOCK base to monotonic raw
+clock") did so only for 64-bit hosts, by capturing the boot offset from
+within the existing clocksource notifier update_pvclock_gtod().
 
-Kill off the last vestiges of the KVM clock being based on CLOCK_MONOTONIC
-instead of CLOCK_MONOTONIC_RAW and thus being subject to NTP skew.
+That notifier was added in commit 16e8d74d2da9 ("KVM: x86: notifier for
+clocksource changes") but only on x86_64, because its original purpose
+was just to disable the "master clock" mode which is only supported on
+x86_64.
 
-Fix up migration support to allow the KVM clock to be saved/restored as an
-arithmetic function of the guest TSC, since that's what it actually is in
-the *common* case so it can be migrated precisely. Or at least to within
-±1 ns which is good enough, as discussed in
-https://lore.kernel.org/kvm/c8dca08bf848e663f192de6705bf04aa3966e856.camel@infradead.org
+Now that the notifier is used for more than disabling master clock mode,
+(well, OK, more than a decade later but clocks are hard), enable it for
+the 32-bit build too so that get_kvmclock_base_ns() can be unaffected by
+NTP sync on 32-bit too.
 
-In v2 of this series, TSC synchronization is improved and simplified a bit
-too, and we allow masterclock mode to be used even when the guest TSCs are
-out of sync, as long as they're running at the same *rate*. The different
-*offset* shouldn't matter.
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Reviewed-by: Paul Durrant <paul@xen.org>
+---
+ arch/x86/kvm/x86.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-And the kvm_get_time_scale() function annoyed me by being entirely opaque,
-so I studied it until my brain hurt and then added some comments.
-
-In v2 I also dropped the commits which were removing the periodic clock
-syncs. Those are going to be needed still but *only* for non-masterclock
-mode, which I'll do next. Along with ensuring that a masterclock update
-while already in masterclock mode doesn't jump the clock, and just does
-the same as KVM_SET_CLOCK_GUEST does to preserve it.
-
-Needs a *lot* more testing. I think I'm almost done refactoring the code,
-so should focus on building up the tests next.
-
-(I do still hate that we're abusing KVM_GET_CLOCK just to get the tuple
-of {host_tsc, CLOCK_REALTIME} without even *caring* about the eponymous
-KVM clock. Especially as this information is (a) fundamentally what the
-vDSO gettimeofday() exposes to us anyway, (b) using CLOCK_REALTIME not
-TAI, (c) not available on other platforms, for example for migrating
-the Arm arch counter.)
-
-David Woodhouse (13):
-      KVM: x86/xen: Do not corrupt KVM clock in kvm_xen_shared_info_init()
-      KVM: x86: Improve accuracy of KVM clock when TSC scaling is in force
-      KVM: x86: Explicitly disable TSC scaling without CONSTANT_TSC
-      KVM: x86: Add KVM_VCPU_TSC_SCALE and fix the documentation on TSC migration
-      KVM: x86: Avoid NTP frequency skew for KVM clock on 32-bit host
-      KVM: x86: Fix KVM clock precision in __get_kvmclock()
-      KVM: x86: Fix software TSC upscaling in kvm_update_guest_time()
-      KVM: x86: Simplify and comment kvm_get_time_scale()
-      KVM: x86: Remove implicit rdtsc() from kvm_compute_l1_tsc_offset()
-      KVM: x86: Improve synchronization in kvm_synchronize_tsc()
-      KVM: x86: Kill cur_tsc_{nsec,offset,write} fields
-      KVM: x86: Allow KVM master clock mode when TSCs are offset from each other
-      KVM: x86: Factor out kvm_use_master_clock()
-
-Jack Allister (2):
-      KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for accurate KVM clock migration
-      KVM: selftests: Add KVM/PV clock selftest to prove timer correction
-
- Documentation/virt/kvm/api.rst                    |  37 ++
- Documentation/virt/kvm/devices/vcpu.rst           | 115 +++-
- arch/x86/include/asm/kvm_host.h                   |  15 +-
- arch/x86/include/uapi/asm/kvm.h                   |   6 +
- arch/x86/kvm/svm/svm.c                            |   3 +-
- arch/x86/kvm/vmx/vmx.c                            |   2 +-
- arch/x86/kvm/x86.c                                | 687 +++++++++++++++-------
- arch/x86/kvm/xen.c                                |   4 +-
- include/uapi/linux/kvm.h                          |   3 +
- tools/testing/selftests/kvm/Makefile              |   1 +
- tools/testing/selftests/kvm/x86_64/pvclock_test.c | 192 ++++++
- 11 files changed, 822 insertions(+), 243 deletions(-)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 00a7c1188dec..44b3d2a0da5b 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -2245,7 +2245,6 @@ static int do_set_msr(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
+ 	return kvm_set_msr_ignored_check(vcpu, index, *data, true);
+ }
+ 
+-#ifdef CONFIG_X86_64
+ struct pvclock_clock {
+ 	int vclock_mode;
+ 	u64 cycle_last;
+@@ -2303,13 +2302,6 @@ static s64 get_kvmclock_base_ns(void)
+ 	/* Count up from boot time, but with the frequency of the raw clock.  */
+ 	return ktime_to_ns(ktime_add(ktime_get_raw(), pvclock_gtod_data.offs_boot));
+ }
+-#else
+-static s64 get_kvmclock_base_ns(void)
+-{
+-	/* Master clock not used, so we can just use CLOCK_BOOTTIME.  */
+-	return ktime_get_boottime_ns();
+-}
+-#endif
+ 
+ static void kvm_write_wall_clock(struct kvm *kvm, gpa_t wall_clock, int sec_hi_ofs)
+ {
+@@ -9819,6 +9811,7 @@ static void pvclock_irq_work_fn(struct irq_work *w)
+ }
+ 
+ static DEFINE_IRQ_WORK(pvclock_irq_work, pvclock_irq_work_fn);
++#endif
+ 
+ /*
+  * Notification about pvclock gtod data update.
+@@ -9826,26 +9819,26 @@ static DEFINE_IRQ_WORK(pvclock_irq_work, pvclock_irq_work_fn);
+ static int pvclock_gtod_notify(struct notifier_block *nb, unsigned long unused,
+ 			       void *priv)
+ {
+-	struct pvclock_gtod_data *gtod = &pvclock_gtod_data;
+ 	struct timekeeper *tk = priv;
+ 
+ 	update_pvclock_gtod(tk);
+ 
++#ifdef CONFIG_X86_64
+ 	/*
+ 	 * Disable master clock if host does not trust, or does not use,
+ 	 * TSC based clocksource. Delegate queue_work() to irq_work as
+ 	 * this is invoked with tk_core.seq write held.
+ 	 */
+-	if (!gtod_is_based_on_tsc(gtod->clock.vclock_mode) &&
++	if (!gtod_is_based_on_tsc(pvclock_gtod_data.clock.vclock_mode) &&
+ 	    atomic_read(&kvm_guest_has_master_clock) != 0)
+ 		irq_work_queue(&pvclock_irq_work);
++#endif
+ 	return 0;
+ }
+ 
+ static struct notifier_block pvclock_gtod_notifier = {
+ 	.notifier_call = pvclock_gtod_notify,
+ };
+-#endif
+ 
+ static inline void kvm_ops_update(struct kvm_x86_init_ops *ops)
+ {
+@@ -9984,9 +9977,10 @@ int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
+ 
+ 	if (pi_inject_timer == -1)
+ 		pi_inject_timer = housekeeping_enabled(HK_TYPE_TIMER);
+-#ifdef CONFIG_X86_64
++
+ 	pvclock_gtod_register_notifier(&pvclock_gtod_notifier);
+ 
++#ifdef CONFIG_X86_64
+ 	if (hypervisor_is_type(X86_HYPER_MS_HYPERV))
+ 		set_hv_tscchange_cb(kvm_hyperv_tsc_notifier);
+ #endif
+-- 
+2.44.0
 
