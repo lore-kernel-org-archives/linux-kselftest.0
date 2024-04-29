@@ -1,102 +1,105 @@
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E373EA71
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 13:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2809468
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 14:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714396547; cv=none; b=NEppLxD/uHz6H1e0KsP4IqxS4/oB4MGD/SkCARnPCLwNQrcLYu7fKAJvHer/DFAmp25AutkPPVYNG88/r88w9Vf6bPKnhglFgGdCy15ZaL1I0n7smGE0xueAherKz4327b/fBj06vMMCn01swVtuAGBzh2X2G1vgnHJ9gUy/H8c=
+	t=1714399791; cv=none; b=k8X8FMRX7CnMgrL7YqATubAGjkuwQjH4Qu+41Ul+vybotJUfDfBdeRPRog7AFAgu85EO4K06eWLIpLZCBz+eKYdEf25qR0lavDlRqai6Yyunm2pjc2XNtz2qLyXEwQR+NHGXrDf8MrnOJMYFsRq4C1q8LVAlB2kaYShYxJbennU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714396547; c=relaxed/simple;
-	bh=G/CFiEQPBLvZ7poYbqwJYJrPoOi67Om8bQiF65fhYdE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SclUUcUZPdKDnsrznHriyB5eYwmsmNJvxnzZ3j1PoxaAoM3tF9FavwTkuJLam3nZpVFFQsLkyKfiOPodidYk2bGuTToU6FB4l671Qf50qgcFrZnfavJNcB9tB7msJVaKFA3znOWpRMjF6YCXBqDBO450shX283/H9rLVlXNBdow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=qNsnniR9; arc=none smtp.client-ip=45.157.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1714399791; c=relaxed/simple;
+	bh=2fJ5xeQeA6KeYE5PU+AdrKYf1O7FBI8o/A5sh/SrCuA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=HtqJUL/OczsbcGWH9N5peInSEul2+sR0di4F79RH0naOkC9pD7oIYrYDPh9EcDrOBn157nILUrmHTobK/xE+8NEZ9b7ISnGB9nHn/woXaVDk+cSpwh4fVielfItRz4gp+KFftgSL8k/srfKNNF5Cyhs6gvit62tRrLjshloTzvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=anw3SI+V; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="qNsnniR9"
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VSkFN68rjzGFv;
-	Mon, 29 Apr 2024 15:09:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714396184;
-	bh=G/CFiEQPBLvZ7poYbqwJYJrPoOi67Om8bQiF65fhYdE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qNsnniR953gMqqy/QjZcRxJ/zpeDoqtVqnrBv5GqYHGegNMoR/VMywB9jq5ieOAKc
-	 KcD2cPMTIEI/gqQvK3fzZkJ41ORVIm9ljAUsKK6uWVOCffESElznBFqHWtwsJW+Qdr
-	 bBbKRkPepYGoc74WNu20lrvDi8ZK5R7Sd/v9yDpI=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VSkFN1zrkzdKB;
-	Mon, 29 Apr 2024 15:09:44 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Christian Brauner <brauner@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Mark Brown <broonie@kernel.org>,
-	Shengyu Li <shengyu.li.evgeny@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Will Drewry <wad@chromium.org>,
-	kernel test robot <oliver.sang@intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v2 6/9] selftests/harness: Constify fixture variants
-Date: Mon, 29 Apr 2024 15:09:28 +0200
-Message-ID: <20240429130931.2394118-7-mic@digikod.net>
-In-Reply-To: <20240429130931.2394118-1-mic@digikod.net>
-References: <20240429130931.2394118-1-mic@digikod.net>
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="anw3SI+V"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1714399785;
+	bh=OSV4xQE36WJK5s4wJOfO2BbSCoo6uuLgwgYmh3Q3rks=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=anw3SI+VLR2Hx2VXa+Klq6C0hfY7AHmNOgWE1DdUeM5M9JDFlyHVVmSeNnk3bXzwn
+	 QHZJ0khvJBZh7GOYRjtCytgHd5d78U0ru7HWVrff9LjHe6uEe1ymL/3Drv3KP9aaVe
+	 lCN6YCDYKXz1fH0l/dFZ5xfIwTU0GNj1K+v2ipRbaSV9FUyZ80bMYKv6WBSQElrGLO
+	 dJP3csukXWhrz/+zriUv29T6F47cx7ORSQeujGSsIf6JCrf+4VJe7ESAl04cv6z1qQ
+	 4uBLFgT4setEpap0WjcCP7a8eDT3nUeTr2NoH9+qhqPK/Utx6JZK4cypTMa/BOmEXH
+	 ItzFx3DMLn+bQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VSlZd07lqz4wcd;
+	Tue, 30 Apr 2024 00:09:44 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Madhavan Srinivasan <maddy@linux.ibm.com>, npiggin@gmail.com,
+ christophe.leroy@csgroup.eu, aneesh.kumar@kernel.org,
+ naveen.n.rao@linux.ibm.com, shuah@kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Sachin Sant <sachinp@linux.ibm.com>
+Subject: Re: [PATCH 2/3] selftest/powerpc: Add flags.mk to support pmu
+ buildable
+In-Reply-To: <20240229093711.581230-2-maddy@linux.ibm.com>
+References: <20240229093711.581230-1-maddy@linux.ibm.com>
+ <20240229093711.581230-2-maddy@linux.ibm.com>
+Date: Tue, 30 Apr 2024 00:09:43 +1000
+Message-ID: <874jbkjm54.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Content-Type: text/plain
 
-FIXTURE_VARIANT_ADD() types are passed as const pointers to
-FIXTURE_TEARDOWN().  Make that explicit by constifying the variants
-declarations.
+Madhavan Srinivasan <maddy@linux.ibm.com> writes:
+> When running `make -C powerpc/pmu run_tests` from top level selftests
+> directory, currently this error is being reported
+>
+> make: Entering directory '/home/maddy/linux/tools/testing/selftests/powerpc/pmu'
+> Makefile:40: warning: overriding recipe for target 'emit_tests'
+> ../../lib.mk:111: warning: ignoring old recipe for target 'emit_tests'
+> gcc -m64    count_instructions.c ../harness.c event.c lib.c ../utils.c loop.S  -o /home/maddy/selftest_output//count_instructions
+> In file included from count_instructions.c:13:
+> event.h:12:10: fatal error: utils.h: No such file or directory
+> 12 | #include "utils.h"
+>   |          ^~~~~~~~~
+> compilation terminated.
+>
+> This is due to missing of include path in CFLAGS. That is, CFLAGS and
+> GIT_VERSION macros are defined in the powerpc/ folder Makefile which
+> in this case not involved.
+>
+> To address the failure incase of executing specific sub-folder test directly,
+> a new rule file has been addded by the patch called "flags.mk" under
+> selftest/powerpc/ folder and is linked to all the Makefile of powerpc/pmu
+> sub-folders.
 
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Will Drewry <wad@chromium.org>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240429130931.2394118-7-mic@digikod.net
----
+This patch made my selftest build go from ~10s to ~50s !
 
-Changes since v1:
-* Extract change from a bigger patch (suggested by Kees).
----
- tools/testing/selftests/kselftest_harness.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I tracked it down to "git describe" being run hundreds of times.
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 9f04638707ae..8a7d899a75e0 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -338,7 +338,7 @@ static pid_t __attribute__((__unused__)) clone3_vfork(void)
-  * variant.
-  */
- #define FIXTURE_VARIANT_ADD(fixture_name, variant_name) \
--	extern FIXTURE_VARIANT(fixture_name) \
-+	extern const FIXTURE_VARIANT(fixture_name) \
- 		_##fixture_name##_##variant_name##_variant; \
- 	static struct __fixture_variant_metadata \
- 		_##fixture_name##_##variant_name##_object = \
-@@ -350,7 +350,7 @@ static pid_t __attribute__((__unused__)) clone3_vfork(void)
- 		__register_fixture_variant(&_##fixture_name##_fixture_object, \
- 			&_##fixture_name##_##variant_name##_object);	\
- 	} \
--	FIXTURE_VARIANT(fixture_name) \
-+	const FIXTURE_VARIANT(fixture_name) \
- 		_##fixture_name##_##variant_name##_variant =
+> diff --git a/tools/testing/selftests/powerpc/flags.mk b/tools/testing/selftests/powerpc/flags.mk
+> new file mode 100644
+> index 000000000000..28374f470126
+> --- /dev/null
+> +++ b/tools/testing/selftests/powerpc/flags.mk
+> @@ -0,0 +1,12 @@
+> +#This checks for any ENV variables and add those.
+> +
+> +#ifeq ($(GIT_VERSION),)
  
- /**
--- 
-2.44.0
+This isn't right, # is a comment in make syntax, so this line is just a
+comment. It needs to be "ifeq".
 
+> +GIT_VERSION = $(shell git describe --always --long --dirty || echo "unknown")
+ 
+Using '=' here means Make re-runs the command every time the variable is
+used. Previously that was OK because the variable was set once and then
+exported. But now that it's a Make variable in each file it leads to
+"git describe" being run a few hundred times.
+
+I've squashed in those fixes, no need to send a v2.
+
+cheers
