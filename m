@@ -1,86 +1,108 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8080A17BB3E
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 21:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310191791F4
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 21:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714424596; cv=none; b=iW6LcTYXrHAg61zQ1y+0PW3XyT2IhJX4CmMfp8K8kLuBiOObiZ+SBtkspnGAOwCdHk1YBUvvJryAKvlJGu01kGCloRnPlj9gpEqeGDGgVXmvwgdUyLtQgK3dYaVnPciA4+anZodHeHnIVkBpRq+sFVuzOM9l6V5UM6qqDhMJ8iI=
+	t=1714424846; cv=none; b=Pnf1ub5ki1iSa7W0A2Xgxmazgna4seL37dbN4ACAnCtUmFHjZl565pHO7h9yO2AtxqGEZRod5O1J1a1F4DIRZ54NB8uh/VP/JLfKrRiRCsMunCqghtDSOH1fVBqstU9vhMuuN3rNtuRirZ3SfgYYYa72Abv1HAcW0+6eBKPmzDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714424596; c=relaxed/simple;
-	bh=JeyP8cn4XaLMo9uWQpa8hkNSVNY6YUTuJio+Ip9OTe0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qMG8pRSSI/58Q5MLXZHBmnZQSWOJkguNyi/fVkUTOw7Ft7frBWDwziBWJnp/YWjS+LgSLasvLfakeLVOmw4KvW/z5x2mIWQYYDSrlSZ8M6PKtCGX6D1xvY/yazX5j8T4Ger6urAtKZ5K14q8LyUu58/eS0JfQI2qkR/Es5BwwnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ar9O67WY; arc=none smtp.client-ip=209.85.216.74
+	s=arc-20240116; t=1714424846; c=relaxed/simple;
+	bh=bNW6HU81cGIeHe9Ew2GlDP3sf80i3dmA2+w1AJ4g7lk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=DzZDNgsaZhiMNk7/BQd376PaOP0f7G7Pore4xm1uo43bPS3+hn0PjFIMSgi9R69R1wKIxny+VNH5SPtgFDIiAKiGMpeBsmLLUnhTNz2tqCPBBuE2h5a03TyDYkr98g5wDUjVUEIkT3LCctYGjC4bHQXHRJ9Z19LFEs9DM7GXEw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hjhobwCN; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ar9O67WY"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2b2738ce656so155038a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 14:03:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hjhobwCN"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1e851c0204aso56852395ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 14:07:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714424595; x=1715029395; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FKzm6kyuYISrLzvb3bWjOOWCaxpGt4qDUIOJyhcwL9Y=;
-        b=Ar9O67WYJtmHiQcgrQgnBVHLA8mj5PKeyTwMexBGlEK5MV0zLQu2LrmhmZYxsFAHsc
-         3nlyqPJdqDvmzJ4E/dwfuzgn8OoVLDyPFPWtr9EzQNiMuhNZiCeLgkk8puGsA63mpqvr
-         qJ/iJaGEXp62/jxWsN6rycp0smiewcK1NEwK7OvJds5Jv97yOBw1DqD0oFaisJzsk7x8
-         l7eXEvDhlpjb2kSffXzSJTN4i/z4RLX4BBH22XVJi3ZS8OeJ8jgNQ4bJZexuxqxYVdS9
-         /CJ5O1HcNBO6/kS8B+CUzztZFdWnRTEUiJCvejhpnZ7h0o0pwZEL5D2APgijLrBE6lK6
-         1yVg==
+        d=google.com; s=20230601; t=1714424844; x=1715029644; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZPemufr3xn60MlET/JappNLxVr0lGO242Dr5arYhPmM=;
+        b=hjhobwCNrRJSkhf5bH+cBUw5BgLiVhEwsep+Fd0oAms1aHSPZSfSZr/Tk1bLdGvxc7
+         6QQog6N5tnCZBIni+oal4/kPfUyTfpSh3ZMCE4S4pG677Ulp75OnhNjmUguFdlWA1HbK
+         exAvQ7jOD3i9ey2WOSiMMe3BWxKsdxxyqM81fGmaFagg1kz81PwyYP9T7Re5v/V4gBhZ
+         4t5yAN45u1gpiQw7v062L6U+IGrfmzNjIlT0zVORBIZim02CkGQOZjyY+ruG95eoJdi5
+         XYMifmdgGpcO9J7MHgqRN+9ry8jH6C1f+9Jl3ehuro7JyN5a6W5gS0UIuSwwQvuOAjEp
+         oGZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714424595; x=1715029395;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FKzm6kyuYISrLzvb3bWjOOWCaxpGt4qDUIOJyhcwL9Y=;
-        b=ZiDGyJAy4TPWvP9ZUWGgp5CGVXA6vnqB9Fzo7YtQLbVdlWZa6/FnITLMvY3teylY02
-         39ba7gg0qZhymNi/LkSndBBF+R+vxVdLJsaxRexSJKT7HU05vIoD3GEMWC3wxR7CLP/2
-         AXga+7YHfdwb6p4rAmSKqlKaS4Jx3grIgscgnov4r2lCsKUoADxcXhSoin3sv6cX7l3z
-         yajdYx3Yl4HQ9EGVNeOqARRZLftvxMopkb09e5Qunn7FreXOYG1n/TJnRhvNL6sfJG2v
-         cHD0BCjpGZ5BxkPpNjENLF7tpu3d5qrZ5hPldlR0LRB+QExDma7DmJAUI5n7kd4g1ViE
-         WQeg==
-X-Forwarded-Encrypted: i=1; AJvYcCXbz0BM2N4raWddvhec5majjsq6RAspBZjf7hegVqPFnC15lU2Ocu42BYlKHZvqbXblUklejWGc5e4r5oersOJpZIwMzy40kb5j3CBrBOzK
-X-Gm-Message-State: AOJu0Yzku6icUoYrVZiizvIWd6AEgwEIcTEk7Lu9vSbt5IdsSGuKM1cD
-	DC39gNXIm6riL4zwTrY9f5ie2suehNeSQiG+HyX5c+8xTQz/6UDlnXu0O3YiJP6E9O2DaJDtC6v
-	DhA==
-X-Google-Smtp-Source: AGHT+IHPfYFTKFUMgRh/oKItKHonLuzFkQ6T1IrvmIEXH7s0Z5XPc7nJpOEKbPthWhRMiFtjpCLqdnBnkes=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:c58d:b0:2b0:e2cf:1187 with SMTP id
- l13-20020a17090ac58d00b002b0e2cf1187mr21017pjt.4.1714424594907; Mon, 29 Apr
- 2024 14:03:14 -0700 (PDT)
-Date: Mon, 29 Apr 2024 13:45:29 -0700
-In-Reply-To: <20240411210237.34646-1-zide.chen@intel.com>
+        d=1e100.net; s=20230601; t=1714424844; x=1715029644;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZPemufr3xn60MlET/JappNLxVr0lGO242Dr5arYhPmM=;
+        b=g2hTlwwk+xuXRwZnh/b8O5yEJYZ1GKqfSLz6kJHvB4E+PznaYiEoL7RNJ/DzwHQZAc
+         8DRBu3BTcWR/CImyR1ziWXe1fjyaoRJUJ/5u+I/Zoei9yVKsb7h6N2bYBfC++rg6uVF8
+         XRYO1nz+4rfLm4HynaApVnFOP3IByn00MhdNiHLWNvcPnmsb+lv4IIntODG1CQez7Zkq
+         gbXIytcdNfDCoENEviviZbG8WCOetWgzLyQF/nPv63hVdZblLZ2DL9AIzyFa7NM3YpR+
+         dvfSwXHV6V9z8D/llh1vp/LT8rVeUvFU6on8U5M6kayzaGUrj1l4g4oHSqV4bSzuc8li
+         DEHg==
+X-Gm-Message-State: AOJu0YxIYqXiF5uNgwSbMP0gqiSduBJ01SU4EnndPNYfOw91xXFqj7Qp
+	0BR92f28vdyNnltTrQ+DXlhfk4Dm3YeVZ2aB0NngWPCd9D+5zJUum9VypBnBZCNZLixeEac8BLU
+	OBQ==
+X-Google-Smtp-Source: AGHT+IFBGD7QB6vVNyyUyCjXOcacflWPyo+Z5Ud65lcVUKG1pidH8vesc6pbfjFPwGiC0U3xDqjPEOYjXtU=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a17:902:e88b:b0:1e3:e092:53b9 with SMTP id
+ w11-20020a170902e88b00b001e3e09253b9mr33232plg.4.1714424844307; Mon, 29 Apr
+ 2024 14:07:24 -0700 (PDT)
+Date: Mon, 29 Apr 2024 21:07:20 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240411210237.34646-1-zide.chen@intel.com>
 X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
-Message-ID: <171441840313.71030.14991866054241895716.b4-ty@google.com>
-Subject: Re: [PATCH] KVM: selftests: Make monitor_mwait require MONITOR/MWAIT feature
-From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, linux-kselftest@vger.kernel.org, 
-	Zide Chen <zide.chen@intel.com>
-Cc: pbonzini@redhat.com
-Content-Type: text/plain; charset="utf-8"
+Message-ID: <20240429210722.154156-1-edliaw@google.com>
+Subject: [PATCH v2] selftests/vDSO: Explicit unsigned char conversion for elf_hash
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andy Lutomirski <luto@mit.edu>, "H. Peter Anvin" <hpa@linux.intel.com>
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 11 Apr 2024 14:02:37 -0700, Zide Chen wrote:
-> If this feature is not supported or is disabled by IA32_MISC_ENABLE on
-> the host, executing MONITOR or MWAIT instruction from the guest doesn't
-> cause monitor/mwait VM exits, but a #UD.
-> 
-> So, we need to skip this test if CPUID.01H:ECX[3] is cleared.
-> 
-> 
-> [...]
+Fixes clang compilation warnings by adding explicit unsigned conversion:
 
-Applied to kvm-x86 selftests, thanks!
+parse_vdso.c:206:22: warning: passing 'const char *' to parameter of type 'const unsigned char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+        ver_hash = elf_hash(version);
+                            ^~~~~~~
+parse_vdso.c:59:52: note: passing argument to parameter 'name' here
+static unsigned long elf_hash(const unsigned char *name)
+                                                   ^
+parse_vdso.c:207:46: warning: passing 'const char *' to parameter of type 'const unsigned char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+        ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
+                                                    ^~~~
+parse_vdso.c:59:52: note: passing argument to parameter 'name' here
+static unsigned long elf_hash(const unsigned char *name)
 
-[1/1] KVM: selftests: Make monitor_mwait require MONITOR/MWAIT feature
-      https://github.com/kvm-x86/linux/commit/72cd4de01d8b
+Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+v2: update commit message with correct compiler warning
+---
+ tools/testing/selftests/vDSO/parse_vdso.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 413f75620a35..7e2ea9bea394 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -203,8 +203,8 @@ void *vdso_sym(const char *version, const char *name)
+ 	if (!vdso_info.valid)
+ 		return 0;
+
+-	ver_hash = elf_hash(version);
+-	ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
++	ver_hash = elf_hash((const unsigned char *)version);
++	ELF(Word) chain = vdso_info.bucket[elf_hash((const unsigned char *)name) % vdso_info.nbucket];
+
+ 	for (; chain != STN_UNDEF; chain = vdso_info.chain[chain]) {
+ 		ELF(Sym) *sym = &vdso_info.symtab[chain];
 --
-https://github.com/kvm-x86/linux/tree/next
+2.44.0.769.g3c40516874-goog
+
