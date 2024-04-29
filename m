@@ -1,76 +1,90 @@
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [84.16.66.170])
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BDFC2C6
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 12:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B423D53E08
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 13:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714394745; cv=none; b=hzyctw89pjW6wfP2vD2aF9VxCMeh81EQBujx8Y/8uZ/+NeEn5cwCmOuqvXUjrbOcbIxL0/ifzjjKNlgFLkE/iEJj4K0g09vfWIeofC9E5OOakJIhGma5CILpoLePClCnkmMk21vxLK6kS5SGBtoHUGGI0CUpYcwv8f+PTWywW7U=
+	t=1714396188; cv=none; b=Xh+BFJawbG//RC8ORUOe//tms4h5W2gliQdDEfZgvujoNB7AWeGLrkydBVWmXSiO3HLIS0aWGhTlctHI0BdIUim44YCqlVseQ5Egmnu1H34+n/NX0SVt9dNtE+rfdUyMxBsli7TD6QBZWfrPnH1YNxom2TXc4Fr7Cn9vRaFslks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714394745; c=relaxed/simple;
-	bh=xQ8IhuGGKzgAOYqouVROPG5PwWz+5I9v/foLO8Is22A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kee9fAgjzDLmFXc2aDWEDTRqUXaiLkGwsCIY5hUg756hk5Jj4lCezd7mTb+QuS+SwRFlhZKBILBGXGMscm2MtNhRosMlys7o9T+FR9f/CLMgTiYpKe989mK12d3gY5qevqewx579dY/ecQSuFduZT7grrTU1cy1R7xdwXiNVP/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=rFwDiDYF; arc=none smtp.client-ip=84.16.66.170
+	s=arc-20240116; t=1714396188; c=relaxed/simple;
+	bh=jU/EetW3hME+8bN/y9Bc1UJ0jwLikMjBwMhwVsjcUPs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QoPKCMC485EdA05NXoSfb4Wd9jKSVOMcFmmEsFqp98ENrnTulp3h3kiZo8TzggV/wE+Ya1EEuryRsKnMyCMl4rxZO04JlTxNlRlN1ldnjQBpPXlDnDZZIPqs+tBGlHesfD9FUiqMoDvnwggUhzphFbM0nI+eRixOUDUxC0i3z5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Oa1NumE3; arc=none smtp.client-ip=84.16.66.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="rFwDiDYF"
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VSjZ61JRYzfY;
-	Mon, 29 Apr 2024 14:39:10 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Oa1NumE3"
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VSkFG6Nm1zD1p;
+	Mon, 29 Apr 2024 15:09:38 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714394350;
-	bh=xQ8IhuGGKzgAOYqouVROPG5PwWz+5I9v/foLO8Is22A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rFwDiDYFNB8MxT+ieMChfPIAdInVvvEJdRgRTxPGApFXlh/QprCCHOWvjRrUYHguF
-	 nZhQ4PxUCPLZNQGOgx42jZGckE6sYYVJkIyjyp3+Amez+B617zmBCOO7RRhfVYtvEC
-	 EQP1B8jyNjb13m/oJMz5c5+AG9oyT8B9/QvO63lw=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VSjZ46STDzT34;
-	Mon, 29 Apr 2024 14:39:08 +0200 (CEST)
-Date: Mon, 29 Apr 2024 14:39:08 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Kees Cook <keescook@chromium.org>
-Cc: Christian Brauner <brauner@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Shengyu Li <shengyu.li.evgeny@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Will Drewry <wad@chromium.org>, kernel test robot <oliver.sang@intel.com>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 2/5] selftests/landlock: Fix FS tests when run on a
- private mount point
-Message-ID: <20240429.Chahf2sai1au@digikod.net>
-References: <20240426172252.1862930-1-mic@digikod.net>
- <20240426172252.1862930-3-mic@digikod.net>
- <202404261237.C703A7B1F4@keescook>
+	s=20191114; t=1714396178;
+	bh=jU/EetW3hME+8bN/y9Bc1UJ0jwLikMjBwMhwVsjcUPs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Oa1NumE3f0vHUhyXi3UuuMQJFN7lKI+CIfr0LYUX/MBskFe/uAgctxDHzS2jrRVJJ
+	 +N0VoBP9u/lneyCoYVZBnoCkGCRGLKG/DRtwdDJ6L0WEUx/fJvHo22Dbzvu59HRXzg
+	 ZmzTCCynzf66jEVrK1ovYuGp6u3fes5th2lGgX84=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VSkFG2zc1zKXB;
+	Mon, 29 Apr 2024 15:09:38 +0200 (CEST)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Christian Brauner <brauner@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Mark Brown <broonie@kernel.org>,
+	Shengyu Li <shengyu.li.evgeny@gmail.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Will Drewry <wad@chromium.org>,
+	kernel test robot <oliver.sang@intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v2 1/9] selftests/pidfd: Fix config for pidfd_setns_test
+Date: Mon, 29 Apr 2024 15:09:23 +0200
+Message-ID: <20240429130931.2394118-2-mic@digikod.net>
+In-Reply-To: <20240429130931.2394118-1-mic@digikod.net>
+References: <20240429130931.2394118-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <202404261237.C703A7B1F4@keescook>
 X-Infomaniak-Routing: alpha
 
-On Fri, Apr 26, 2024 at 12:38:17PM -0700, Kees Cook wrote:
-> On Fri, Apr 26, 2024 at 07:22:49PM +0200, Mickaël Salaün wrote:
-> > According to the test environment, the mount point of the test's working
-> > directory may be shared or not, which changes the visibility of the
-> > nested "tmp" mount point for the test's parent process calling
-> > umount("tmp").
-> > 
-> > This was spotted while running tests on different Linux distributions,
-> > with different mount point configurations.
-> 
-> Which distros did what?
+Required by switch_timens() to open /proc/self/ns/time_for_children.
 
-Actually it's not related to distros, but rather container runtime
-(Docker) vs. non-container environment.  With Docker (at least on my
-environment) all mount points are private, which is not the case (by
-default) when running the same UML environment not in a container. See
-https://github.com/landlock-lsm/landlock-test-tools/pull/4
+CONFIG_GENERIC_VDSO_TIME_NS is not available on UML, so pidfd_setns_test
+cannot be run successfully on this architecture.
 
-I'll update the description.
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: 2b40c5db73e2 ("selftests/pidfd: add pidfd setns tests")
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20240429130931.2394118-2-mic@digikod.net
+---
+ tools/testing/selftests/pidfd/config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/pidfd/config b/tools/testing/selftests/pidfd/config
+index f6f2965e17af..6133524710f7 100644
+--- a/tools/testing/selftests/pidfd/config
++++ b/tools/testing/selftests/pidfd/config
+@@ -3,5 +3,7 @@ CONFIG_IPC_NS=y
+ CONFIG_USER_NS=y
+ CONFIG_PID_NS=y
+ CONFIG_NET_NS=y
++CONFIG_TIME_NS=y
++CONFIG_GENERIC_VDSO_TIME_NS=y
+ CONFIG_CGROUPS=y
+ CONFIG_CHECKPOINT_RESTORE=y
+-- 
+2.44.0
+
