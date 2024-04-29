@@ -1,33 +1,33 @@
-Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [185.125.25.8])
+Received: from smtp-190a.mail.infomaniak.ch (smtp-190a.mail.infomaniak.ch [185.125.25.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9102F13B299
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 19:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE1613B5AB
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 19:19:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714418363; cv=none; b=ejmFj2iyWWszGChFvqGEb1e44AfeYFgR4PMIWDymS632hX1urGmWoAh9YhRXPU3O8Nie33spSfnMERV7e6GxGUH/fLmCbHyf3K7eYqsxBpdO6Fuq3KhQGvuIVy25xLAUboBEndevk+Psuo5eAU9c2MYp77s6zZwsTINHaeRDlbY=
+	t=1714418364; cv=none; b=YYE4KMFeI2TOdocq7Nlq1vUgJR7OnlnCCAf76iJmAWUkvpAUcnGbQ367bL1WhZjDATnyrvwhg8p9Y/03gfkMWYPs1OBcQsMuBdRhoqKrrKagvjEY5QRxQsYQ62XEJaKJLox3oVYdXEQbmB5/t6zj4xt1eHIL41KIj//sOgrd8GM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714418363; c=relaxed/simple;
-	bh=3DxANGGAo/N/R2VCEciaDgwx1jRJ+/NZcQBR2yba4ps=;
+	s=arc-20240116; t=1714418364; c=relaxed/simple;
+	bh=8zH5TDdNRcNb8ynFUJ7igfj446ezUJo3mZ7XXP6sHRM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SldGyuHMJ7M1GlmZpZqSCK5SpaItpYLMvWEhCcJw/aCD5ETu+TR7KYylp4SgJ4NpECsxGwDBB3+Dgnd0sBoPaa7RQvVN9uWuvRj+jIU93mYgWpQleJvQw19nEXvsp2jIagqZcpSKS5sM2gW+Sw+0P9Mx69zPvsn6hSwYW1gk5gM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=STN+6UbF; arc=none smtp.client-ip=185.125.25.8
+	 MIME-Version:Content-Type; b=pRm9gaTy3qs+3vASy/CHu6W8My8LTlHOV2dCNw5D2fvKYHWn1F7lpJ7bmDbAA8gVRfVkCH/khaH3faspZhwFuK6qylve7i2hxdnXp8xYIRzlHCox/77eycciKD/9mDWAHuGKHuLYLMjjjqiiRh4RRZ0Qvh/tIClKNIM7rwSYLtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Am1BAp+L; arc=none smtp.client-ip=185.125.25.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="STN+6UbF"
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VStRp26zCzSLR;
-	Mon, 29 Apr 2024 21:19:18 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Am1BAp+L"
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VStRk6FhqzPKS;
+	Mon, 29 Apr 2024 21:19:14 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714418358;
-	bh=3DxANGGAo/N/R2VCEciaDgwx1jRJ+/NZcQBR2yba4ps=;
+	s=20191114; t=1714418354;
+	bh=8zH5TDdNRcNb8ynFUJ7igfj446ezUJo3mZ7XXP6sHRM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=STN+6UbFseZfjTMTHo1ZOVIoY1lOBPhEcKfBPLVypSopbDl2Mkute9BHrJn9x6MFR
-	 HWWAH9VfWMNw2pI3a/veoNbFCMvPP/ZX+qp47tTV8YOXl3+PvexjJTjpiA0MHjLbkM
-	 +q6f6SEa06Aqy4NVD4Jmne/VO+QVPb1soM6Jhw+Q=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VStRn5FjqzYnM;
-	Mon, 29 Apr 2024 21:19:17 +0200 (CEST)
+	b=Am1BAp+LEgEWLwnTXkpS1w4M7TzJIps8z86ireglFeOYBSkdJg0zAIFpKkukCWr28
+	 4FOezYbR05C7k1FkJS4c6KYnF+NnhnQTajXey9F+eYZTguFs1A50GPN6bbtl1bDS7S
+	 nKVjCrPqqp/XItgCEK85gXQG2ZoxJicmqhJyIUe8=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VStRk1hVszYlS;
+	Mon, 29 Apr 2024 21:19:14 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Christian Brauner <brauner@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -41,10 +41,11 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	Will Drewry <wad@chromium.org>,
 	kernel test robot <oliver.sang@intel.com>,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 4/9] selftests/harness: Fix interleaved scheduling leading to race conditions
-Date: Mon, 29 Apr 2024 21:19:06 +0200
-Message-ID: <20240429191911.2552580-5-mic@digikod.net>
+	linux-kselftest@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v3 1/9] selftests/pidfd: Fix config for pidfd_setns_test
+Date: Mon, 29 Apr 2024 21:19:03 +0200
+Message-ID: <20240429191911.2552580-2-mic@digikod.net>
 In-Reply-To: <20240429191911.2552580-1-mic@digikod.net>
 References: <20240429191911.2552580-1-mic@digikod.net>
 Precedence: bulk
@@ -57,77 +58,33 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Fix a race condition when running several FIXTURE_TEARDOWN() managing
-the same resource.  This fixes a race condition in the Landlock file
-system tests when creating or unmounting the same directory.
+Required by switch_timens() to open /proc/self/ns/time_for_children.
 
-Using clone3() with CLONE_VFORK guarantees that the child and grandchild
-test processes are sequentially scheduled.  This is implemented with a
-new clone3_vfork() helper replacing the fork() call.
-
-This avoids triggering this error in __wait_for_test():
-  Test ended in some other way [127]
+CONFIG_GENERIC_VDSO_TIME_NS is not available on UML, so pidfd_setns_test
+cannot be run successfully on this architecture.
 
 Cc: Christian Brauner <brauner@kernel.org>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Günther Noack <gnoack@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Will Drewry <wad@chromium.org>
-Fixes: 41cca0542d7c ("selftests/harness: Fix TEST_F()'s vfork handling")
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: 2b40c5db73e2 ("selftests/pidfd: add pidfd setns tests")
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240429191911.2552580-5-mic@digikod.net
+Link: https://lore.kernel.org/r/20240429191911.2552580-2-mic@digikod.net
 ---
+ tools/testing/selftests/pidfd/config | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Changes since v2:
-* Replace __attribute__((__unused__)) with inline for clone3_vfork()
-  (suggested by Kees and Jakub)
----
- tools/testing/selftests/kselftest_harness.h | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 55699a762c45..9d7178a71c2c 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -66,6 +66,8 @@
- #include <sys/wait.h>
- #include <unistd.h>
- #include <setjmp.h>
-+#include <syscall.h>
-+#include <linux/sched.h>
- 
- #include "kselftest.h"
- 
-@@ -80,6 +82,17 @@
- #  define TH_LOG_ENABLED 1
- #endif
- 
-+/* Wait for the child process to end but without sharing memory mapping. */
-+static inline pid_t clone3_vfork(void)
-+{
-+	struct clone_args args = {
-+		.flags = CLONE_VFORK,
-+		.exit_signal = SIGCHLD,
-+	};
-+
-+	return syscall(__NR_clone3, &args, sizeof(args));
-+}
-+
- /**
-  * TH_LOG()
-  *
-@@ -1183,7 +1196,7 @@ void __run_test(struct __fixture_metadata *f,
- 	fflush(stdout);
- 	fflush(stderr);
- 
--	t->pid = fork();
-+	t->pid = clone3_vfork();
- 	if (t->pid < 0) {
- 		ksft_print_msg("ERROR SPAWNING TEST CHILD\n");
- 		t->exit_code = KSFT_FAIL;
+diff --git a/tools/testing/selftests/pidfd/config b/tools/testing/selftests/pidfd/config
+index f6f2965e17af..6133524710f7 100644
+--- a/tools/testing/selftests/pidfd/config
++++ b/tools/testing/selftests/pidfd/config
+@@ -3,5 +3,7 @@ CONFIG_IPC_NS=y
+ CONFIG_USER_NS=y
+ CONFIG_PID_NS=y
+ CONFIG_NET_NS=y
++CONFIG_TIME_NS=y
++CONFIG_GENERIC_VDSO_TIME_NS=y
+ CONFIG_CGROUPS=y
+ CONFIG_CHECKPOINT_RESTORE=y
 -- 
 2.44.0
 
