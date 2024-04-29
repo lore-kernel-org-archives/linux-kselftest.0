@@ -1,107 +1,158 @@
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08646839FD
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 19:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2921117597
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 19:39:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714418746; cv=none; b=pn9kH4VZrp2XUBMfMenCtQ1fgmVXaR6STypa1MGJAhALbxWzhJfOh0EP28FuTL+GZsvufRa7q580Jo+s96mtcv9ZJ6xLu0eFgwvXtDXMnh6XquDaBAouda6QkrlXR7BvL7YqIC/iha9VKf7LQhyU9T8WXOpNXlZqFSLe093UK0I=
+	t=1714419568; cv=none; b=PiHEGB/yPVML4m9tC0yCPHhYpvGuwx4WNBWY1OZINowDdxPFEN4EZ9E1JzXJjT+GVXWMRXzTdfOJ28asRRfhbR3ibzNE26kDUpqvjJicTrSmwrNVhOypp0Nto8iLXOJauUW7N9aTBnciYm/e71u5aBN/qmnyvYTVNfC/VyMZy9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714418746; c=relaxed/simple;
-	bh=uDMj38+fL//L5yXMbT+YKMkWgL3txmOHkNUEy1Src38=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tkMWFq3GrPb1eGHixWNLB/f97WlUezgpYq7Xj34b9QrIM9BltF/mJ4XGvHZpExaPFcfunbO3C34DFkDlVoFlmpC9LdZIMjombiSlJyiVdFAy/OgoyuRvMBPS7s8Ez0bAYmov2hjjoZ9peV4HW9ooJIeGIOeItHlt1wbiRtItRis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=NG0VA6yD; arc=none smtp.client-ip=45.157.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1714419568; c=relaxed/simple;
+	bh=JRtxdLkfzKIrxD/3LIGHg/Ivs7QrlpWQUo2COaYYXIE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=iaFWOTDBMobqqohNVPUuwwWHjTELbWXp+jPT9uEdqtqgBxwMiVC+bzzkx+lO6k3g+SSmL3ncHXlXw2eVljAC1JbfdoryFv4CyHgFxDtGauNgAcdTivyuqo9xPzMmFl5yod8g+ivbkM7GApKPPVt/sfJ61JQRNKsLOtkpzn3WXqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xz6Az1+E; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="NG0VA6yD"
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VStRm02zKz8B1;
-	Mon, 29 Apr 2024 21:19:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714418355;
-	bh=uDMj38+fL//L5yXMbT+YKMkWgL3txmOHkNUEy1Src38=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NG0VA6yDH70vKIGbabyBzpOFaTyb+OLMmYsrq2HFfce/EkAm6Pt5BX1UXPUc+NSAt
-	 KtIh0UiqAn0NL6foL4vQSwg84s4pFseDRAoagonAgB9iRkEEElLUghoIx8QXiUpVeP
-	 t87PZ7uuRC3y1OzKw3Q6hQXLnMm9e3WqJr2a1bk4=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VStRl2sCQzF8Z;
-	Mon, 29 Apr 2024 21:19:15 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Christian Brauner <brauner@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Mark Brown <broonie@kernel.org>,
-	Shengyu Li <shengyu.li.evgeny@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Will Drewry <wad@chromium.org>,
-	kernel test robot <oliver.sang@intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v3 2/9] selftests/landlock: Fix FS tests when run on a private mount point
-Date: Mon, 29 Apr 2024 21:19:04 +0200
-Message-ID: <20240429191911.2552580-3-mic@digikod.net>
-In-Reply-To: <20240429191911.2552580-1-mic@digikod.net>
-References: <20240429191911.2552580-1-mic@digikod.net>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xz6Az1+E"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-61be325413eso7598447b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 12:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1714419566; x=1715024366; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4hWdlcs3YEVtf1pgb8qjIY/JurboELnLgEhx/PSBt9A=;
+        b=Xz6Az1+EeZLM0pHgxeEQv0sZJ6BZ3FUX1WEYtHi2oGh0TiA2LzuTs3HqRraBK+8tFw
+         ghY08gABChqZshp2BsUQ16raePsU0HlXlOmFr9x6u6irq0a2/UBZ2BIx+ZTax9/BHsdM
+         kAB2ObWuWoFYoSwJ0pHSvMaXUfVN7Tj4MrpP1TEOcNESpnsSXffsCuQpApgbCTOPIlRG
+         2H700MMoFI8GvPCr+75yLi0YPZTrS/sq0IOzTdpFAdkf3xo8/qR50e1wWmPiDJBoul+y
+         xJYIRnhUgs9E1p3IEm1fJFYEIys/8V2yQsNKyKcp+08i1P2/fbsDrBPNijUUkIyoRYlr
+         W0MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714419566; x=1715024366;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4hWdlcs3YEVtf1pgb8qjIY/JurboELnLgEhx/PSBt9A=;
+        b=gjiNEyhOT1dGYW3Zri/r56bXGgmfGGv8QUWDfdqgs4/94mMhQ9sc0I00pCWyakc+Ak
+         Pp3Jal2Rp/kueWKc89E2TUT+IPUXe9iW53wO/zMxKWQgNND7XC7GhCmhkMr7tfVeHhBw
+         PsAp7VsjZoQoiZZPKtuIxqKOu2KflijG46mKgPuDnQqxCBmbMdYhr+vbDlF89Zq42AxZ
+         E/uWPi9/r8k1zwRAFUvcdaBVn9jPQZRr7v0+0f/DW5RtmI4wJ73s+1MK0uDsvX/yM+0Y
+         mgSTrc8LyxCjCpp+UZJab9s/gvqGJSnCCxtpjDZvjjnJETgeTi26/VKk+sbU/DAhYbRb
+         K1lg==
+X-Gm-Message-State: AOJu0YyLjg8ilFjnmcG3YwSm8foE+83Jm5rWNtuUkLVFBvtuxubtruqu
+	+tSeC1vPstdslSnkRN/KMdV9a7I7kTYqMpqL85A7TxU5dtm4/AOAvaciALhG/LsAmuvNmW2aKRS
+	2hA==
+X-Google-Smtp-Source: AGHT+IHyMp0GghfU4UXAfk84ZJHHi/VvT5BGJ7p5BMQ1/cpnPLjQsS8Twy0o3e1Z69pdVvlISv/IIR575zg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a0d:d9cf:0:b0:611:5a9d:bb0e with SMTP id
+ b198-20020a0dd9cf000000b006115a9dbb0emr130321ywe.4.1714419566117; Mon, 29 Apr
+ 2024 12:39:26 -0700 (PDT)
+Date: Mon, 29 Apr 2024 12:39:24 -0700
+In-Reply-To: <20240416225153.23801-1-zide.chen@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Mime-Version: 1.0
+References: <20240416225153.23801-1-zide.chen@intel.com>
+Message-ID: <Zi_3bNOgJl1m0wXy@google.com>
+Subject: Re: [PATCH V3] KVM: selftests: Add a new option to rseq_test
+From: Sean Christopherson <seanjc@google.com>
+To: Zide Chen <zide.chen@intel.com>
+Cc: linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
+	donsheng <dongsheng.x.zhang@intel.com>
+Content-Type: text/plain; charset="us-ascii"
 
-According to the test environment, the mount point of the test's working
-directory may be shared or not, which changes the visibility of the
-nested "tmp" mount point for the test's parent process calling
-umount("tmp").
+On Tue, Apr 16, 2024, Zide Chen wrote:
+> Currently, the migration worker delays 1-10 us, assuming that one
+> KVM_RUN iteration only takes a few microseconds.  But if the CPU low
+> power wakeup latency is large enough, for example, hundreds or even
+> thousands of microseconds deep C-state exit latencies on x86 server
+> CPUs, it may happen that it's not able to wakeup the target CPU before
+> the migration worker starts to migrate the vCPU thread to the next CPU.
+> 
+> If the system workload is light, most CPUs could be at a certain low
+> power state, which may result in less successful migrations and fail the
+> migration/KVM_RUN ratio sanity check.  But this is not supposed to be
+> deemed a test failure.
+> 
+> This patch adds a command line option to skip the sanity check in
+> this case.
+> 
+> Signed-off-by: Zide Chen <zide.chen@intel.com>
+> Signed-off-by: donsheng <dongsheng.x.zhang@intel.com>
 
-This was spotted while running tests in containers [1], where mount
-points are private.
+Why does this have Donghsheng's SoB?  Is this a Co-developed-by situation?
 
-Cc: Günther Noack <gnoack@google.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Link: https://github.com/landlock-lsm/landlock-test-tools/pull/4 [1]
-Fixes: 41cca0542d7c ("selftests/harness: Fix TEST_F()'s vfork handling")
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240429191911.2552580-3-mic@digikod.net
----
+> 
 
-Changes since v1:
-* Update commit description.
----
- tools/testing/selftests/landlock/fs_test.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Put per-patch notes that aren't intended for the final changelog...
 
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 9a6036fbf289..46b9effd53e4 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -293,7 +293,15 @@ static void prepare_layout(struct __test_metadata *const _metadata)
- static void cleanup_layout(struct __test_metadata *const _metadata)
- {
- 	set_cap(_metadata, CAP_SYS_ADMIN);
--	EXPECT_EQ(0, umount(TMP_DIR));
-+	if (umount(TMP_DIR)) {
-+		/*
-+		 * According to the test environment, the mount point of the
-+		 * current directory may be shared or not, which changes the
-+		 * visibility of the nested TMP_DIR mount point for the test's
-+		 * parent process doing this cleanup.
-+		 */
-+		ASSERT_EQ(EINVAL, errno);
-+	}
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- 	EXPECT_EQ(0, remove_path(TMP_DIR));
- }
--- 
-2.44.0
+> V2:
+> - removed the busy loop implementation
+> - add the new "-s" option
+> 
+> V3:
+> - drop the usleep randomization code
+> - removed the term C-state for less confusion for non-x86 archetectures
+> - changed subject
+> ---
 
+...down here below the "---", as this section is ignored by `git am`.  That way
+the maintainer (me) doesn't need to manually delete the notes when applying.
+
+>  tools/testing/selftests/kvm/rseq_test.c | 40 +++++++++++++++++++++++--
+>  1 file changed, 38 insertions(+), 2 deletions(-)
+
+> +static void help(const char *name)
+> +{
+> +	puts("");
+> +	printf("usage: %s [-h] [-s]\n", name);
+> +	printf(" -s: skip the sanity check for successful KVM_RUN.\n");
+
+Hmm, -s ends up being somewhat confusing because "sanity" also starts with 's',
+e.g. my first thought is that "./rseq_test -s" would be "run the test with sanity
+checks".
+
+Maybe -u for unchecked/unverified?
+
+	printf(" -u: Don't sanity check the number of successful KVM_RUNs\n");
+
+> @@ -254,9 +277,22 @@ int main(int argc, char *argv[])
+>  	 * getcpu() to stabilize.  A 2:1 migration:KVM_RUN ratio is a fairly
+>  	 * conservative ratio on x86-64, which can do _more_ KVM_RUNs than
+>  	 * migrations given the 1us+ delay in the migration task.
+> +	 *
+> +	 * Another reason why it may have small migration:KVM_RUN ratio is that,
+> +	 * on systems with large low power mode wakeup latency, it may happen
+> +	 * quite often that the scheduler is not able to wake up the target CPU
+> +	 * before the vCPU thread is scheduled to another CPU.
+>  	 */
+> -	TEST_ASSERT(i > (NR_TASK_MIGRATIONS / 2),
+> -		    "Only performed %d KVM_RUNs, task stalled too much?", i);
+> +	TEST_ASSERT(skip_sanity_check || i > (NR_TASK_MIGRATIONS / 1),
+> +		    "Only performed %d KVM_RUNs, task stalled too much? \n"
+> +		    "  Try to run it with -s option, or disable deep sleep "
+> +		    "states in the system,\n"
+> +		    "  e.g., boot the host with cpuidle.off=1 or other driver "
+> +		    "specific kernel options,\n"
+> +		    "  or do it through the PM QoS interface at runtime: \n"
+> +		    "    cat > /dev/cpu_dma_latency <(echo -e -n "
+> +		    "\"\\x0\\x0\\x0\\x0\"; sleep inf) &\n"
+> +		    "    PID=$! && run_the_test && kill $PID" , i);
+
+I appreciate trying to be helpful, but this is a bit too verbose.  I would also
+prefer to call out the command line option last, e.g. so that readers don't
+automatically rerun with the sanity check disabled without reading the rest of
+the error message.
+
+How about this?
+
+
+	TEST_ASSERT(skip_sanity_check || i > (NR_TASK_MIGRATIONS / 1),
+		    "Only performed %d KVM_RUNs, task stalled too much? \n"
+                    "Try disabling deep sleep states to reduce CPU wakeup latency,\n"
+		    "e.g. via cpuidle.off=1 or setting /dev/cpu_dma_latency to '0',\n"
+                    "or run with -u to disable this sanity check", i);
