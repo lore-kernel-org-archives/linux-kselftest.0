@@ -1,150 +1,229 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BBE12FB21;
-	Wed,  1 May 2024 19:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED06EAF6
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 May 2024 19:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714591923; cv=none; b=gJgMFp+GnOCXTF8I7wlYvFkh/XHHovpcWfKfuaKU22kMaQFyxsQh4fOypb5vauAZhYOfuXLwV+oeFCw1DafauxAibyfz0iTY6I7rg05AfcQBKx6rhd32YrvXAoJ90+paz3ZX0JyVoL/gQrnXw94Y/GmVdXZD18BxEW4FdCbL3Yw=
+	t=1714592748; cv=none; b=ted7p0LNesLNlyTy4nfDEdHe+de7/A3wn+d/ak0qavd/jX4TCgTl4gSW+j7sUdoQ0Tjxjvf6Kvd+CmQ3vzr5GlBnfjc1l+tBsMHMbGL0Dz9qASENgazd/JwYOMlfI7frZe+AmxdvuQE9NA+mXX38OS1rHhDCurM7w0ZdcNTYJH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714591923; c=relaxed/simple;
-	bh=IYmmU+NuTbvqIuAc6tjcsiAZkPW0JNhm8ZfoHMTeGZg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hHZUALF9QAD2vrFbN2fE/v1D1CGtgihiI7jKcrOUsYZfJrEXg/bXUSF4P41X7NLTGnNxvb6yC0ucweIU0FEZYOxUAzwDXTAxWylLfKQ3owU5gNDVMzf2jIYl6fxxOGqKKO3LIZjLFp/J/AqNGrKg39fs0KZ6HjWNh09tqP1XfTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a0pL17zF; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1714592748; c=relaxed/simple;
+	bh=rJzPsR+Qk5YamaIzt6KevMZRAvrz/pxeg0cG+yyl2iY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=euS1Gxa9PnvwuooZQwcVItufvJIZaE/VgexX8yv3nMX++iT1SXpQDgmjvvuuBVQXPz7QvPERitwIIkppznUghhAZy0OvOFY5pdk8k5Sz+pm3k5T8H5GTf8pQvUkHlQmY978HSGq+VGCHv+TP14wAZ5KVpP5Zbe0S4HwXy4OzFVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=baeMRTsy; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a0pL17zF"
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6a05f376effso55452246d6.0;
-        Wed, 01 May 2024 12:32:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="baeMRTsy"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1e4bf0b3e06so71438285ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2024 12:45:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714591920; x=1715196720; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AvK/+TT3eyfVBvg3l4D5twtFYStPyDuLHedQhz3UJMs=;
-        b=a0pL17zFsm/hweR0bHTiRS3JUwJXi36BVPfnSihLiCWeni+OxKS8F3ZX9xoCLUBTkt
-         QijFEMVEeYJSyop86be7wge7nnBKewW+Ioq+oeYT7UbthRBpDT/BMAvz2PIxdrrOXXyg
-         aNHpmhmqgD/xDNp82Q4BAScvDYorrYmEz+kwbmhaEALlXxxe8SkHbr0fmA7mlzlQltlN
-         TcIviAlnG6Mx1ZCRI0K70oO9gHCW9VEcjm91UkkVLLZwZ3A9GIitvEuBawjlOGHwrejm
-         eyvNDXDGKDJcD/ppeBl2+/czI73HOtURFfxs6xkjL3Z+UmKiZ6fXRzkTfjIhOVQiPuEx
-         Ydgg==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714592746; x=1715197546; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j1EbBqpWrfZZxoY9bSkBt1o8FAuASMzz42NrlJzrLQw=;
+        b=baeMRTsy0XcuR9NGbPwgrF8ldWgkuYrRIqY9sSeqmUfCLPRv314TZShhu0tGdez0de
+         2MYXC22HMIRfY1NbCtOZxwvSbIhWe8rRPeDb7bsfz8bDgTOsShSwV3JPbWqz97Pt00AS
+         gu0MnX6bKF6PE/CXO82nG6kN5VSPkxreSOc/z2UJ6s+8TACik5rGIj9CI2zoNCFUpnzm
+         WI9lAZaT1q6WPiOxf98xiJj1/1Qikr7uijRfsTLE0ej7+89pMHRpzjN5w4tlYJ2PUr3h
+         XD7fS0x4x37itGWWHXxuIuWLOyPupngNs5r1RIknitoJ/ufDkOBZ//+1mWHbJm38E8Zh
+         ePZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714591920; x=1715196720;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AvK/+TT3eyfVBvg3l4D5twtFYStPyDuLHedQhz3UJMs=;
-        b=mCVdxYvz1FTFRt+2Y+/owVVNftZmJzYtOuhvmg9PXZEFbqpQy0j4Fu/HhL4UVFOKAh
-         CAtTqoi4ZdPVihwdMhMa5PbX4Nd9dzI281+sqiM1oR5Rh9KFfGUXYDxHW58Y76r5wf1K
-         aMnJ2EbYz05Ze8MTSEkEcs6NmNbQ90+YSKhung2pi6yAVXc/DZRpk/laya4eIq+6YSmM
-         I8uehAb2NISO+CCQ/QDsfBhNTe1HeZsGU3GmvpSdUqZI6/awbxkLROMGQSH6m3F1QfGd
-         VVhHr9pleV+2uTKSsGNuzv9mg2/A5J9LHiwWw0fszrl0sTLGGzq0nmefdphHLqD5oMD8
-         81JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWIxufZpJdJokH9djJf/ifkkNUN4zvP9OiBoB9685cnLHwi8M8j3MIDMnDv20Fh8p/IxC0qajaZjuAhaQmL51/blrvNStUqrqFW77Di7glL
-X-Gm-Message-State: AOJu0YzGPWUbQFva4YYEbPIUW2KNXlyhPIpXdwo60OdGfx2zGxA3xKAg
-	R46nUshkiWsHo/TvvgUM8ek2kWvnmnl2kkHB+nspDV5fVA8k2o+tzAEiBA==
-X-Google-Smtp-Source: AGHT+IFqzF+4yncrf0c4kNpTQSNzy8ZNSti343o8z6T1GaeJYUNHUV2eVF1sQX5XZW7PrL+ZPjePQg==
-X-Received: by 2002:a05:6214:529c:b0:6a0:b3de:e3b2 with SMTP id kj28-20020a056214529c00b006a0b3dee3b2mr3579674qvb.52.1714591920051;
-        Wed, 01 May 2024 12:32:00 -0700 (PDT)
-Received: from willemb.c.googlers.com.com (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
-        by smtp.gmail.com with ESMTPSA id u6-20020a0cee86000000b006a0f057489fsm907965qvr.125.2024.05.01.12.31.59
+        d=1e100.net; s=20230601; t=1714592746; x=1715197546;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j1EbBqpWrfZZxoY9bSkBt1o8FAuASMzz42NrlJzrLQw=;
+        b=FO+4WoG2IjQtxgPnacjivPXo23E6SvA/h+Oa43HUDj5AZ5xl/ciXxTrtOnBR3Dgx4h
+         5Jgfw/RxYJLBJnJvkOSZMWTKzOfq3BCvWmlCpcP1CPhHqbxvCHEt/9rl+cV6B/b+Y24s
+         YAfesgHXaRO3barhHnem7uFFsn6WJQu2HRAErTO3GPpCDaYxNyRIL/Utt0df9ZIK2JzX
+         ugZpzUFMLt7npKCT0/4byIn4rRxiyHYTtM1auYTaf7+NXT/9V9S+mlz+qXvlNzojuyrx
+         9W6zpvrmETyT+BZ501XAUtpysx9C48kOciX8F88afMZ4K9tGBfuY5ERDHAx0Hev4b8h/
+         E6Lg==
+X-Forwarded-Encrypted: i=1; AJvYcCU1qklhz7H9lKcEJ0itcdc+/bNYZGMvldHJ5ZmkNqORUin49Tt+79B1HfThgZgz/N3nFF3Pp1GB1RdLA+8NpeuaPtw9UtvB2tx4+Lp4hILx
+X-Gm-Message-State: AOJu0Yx/cfO0Ddn429Gvn0tFa7x5y2jHzHhlv3kVl0TZ0XosgNDTZIyv
+	jmVtvkg65zJmiWXm6NsnWBZUlqkPU/xT+a4OSaX2LYzm1yh3IfIvV6W4+B1nPx0=
+X-Google-Smtp-Source: AGHT+IEAo4x8MOTk0rByHOk2fmlXZ3MwLp/YpTWYLg+olqE/2iU7l17JuO1KTk3z+XxlvKBKlVpzRA==
+X-Received: by 2002:a17:90a:1309:b0:2ab:e345:4685 with SMTP id h9-20020a17090a130900b002abe3454685mr3536711pja.17.1714592745626;
+        Wed, 01 May 2024 12:45:45 -0700 (PDT)
+Received: from ghost ([2601:647:5700:6860:1dcc:e03e:dc61:895d])
+        by smtp.gmail.com with ESMTPSA id bf15-20020a17090b0b0f00b002a2e6fc09b5sm1724376pjb.29.2024.05.01.12.45.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 May 2024 12:31:59 -0700 (PDT)
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	linux-kselftest@vger.kernel.org,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net-next] selftests/net: skip partial checksum packets in csum test
-Date: Wed,  1 May 2024 15:30:22 -0400
-Message-ID: <20240501193156.3627344-1-willemdebruijn.kernel@gmail.com>
-X-Mailer: git-send-email 2.45.0.rc1.225.g2a3ae87e7f-goog
+        Wed, 01 May 2024 12:45:45 -0700 (PDT)
+Date: Wed, 1 May 2024 12:45:41 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 06/16] riscv: Introduce vendor variants of extension
+ helpers
+Message-ID: <ZjKb5e584UzQxSgT@ghost>
+References: <20240426-dev-charlie-support_thead_vector_6_9-v4-0-b692f3c516ec@rivosinc.com>
+ <20240426-dev-charlie-support_thead_vector_6_9-v4-6-b692f3c516ec@rivosinc.com>
+ <20240501-tripping-acetone-e556e993ba95@spud>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240501-tripping-acetone-e556e993ba95@spud>
 
-From: Willem de Bruijn <willemb@google.com>
+On Wed, May 01, 2024 at 12:29:56PM +0100, Conor Dooley wrote:
+> On Fri, Apr 26, 2024 at 02:29:20PM -0700, Charlie Jenkins wrote:
+> 
+> > index c073494519eb..dd7e8e0c0af1 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -844,25 +844,41 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+> >  {
+> >  	struct alt_entry *alt;
+> >  	void *oldptr, *altptr;
+> > -	u16 id, value;
+> > +	u16 id, value, vendor;
+> >  
+> >  	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+> >  		return;
+> >  
+> >  	for (alt = begin; alt < end; alt++) {
+> > -		if (alt->vendor_id != 0)
+> > -			continue;
+> > -
+> >  		id = PATCH_ID_CPUFEATURE_ID(alt->patch_id);
+> > +		vendor = PATCH_ID_CPUFEATURE_ID(alt->vendor_id);
+> >  
+> > -		if (id >= RISCV_ISA_EXT_MAX) {
+> > +		/*
+> > +		 * Any alternative with a patch_id that is less than
+> > +		 * RISCV_ISA_EXT_MAX is interpreted as a standard extension.
+> > +		 *
+> > +		 * Any alternative with patch_id that is greater than or equal
+> > +		 * to RISCV_VENDOR_EXT_ALTERNATIVES_BASE is interpreted as a
+> > +		 * vendor extension.
+> 
+> I think this stuff is all fine, since we can always re-jig things in the
+> future if needs be.
+> 
+> > +		 */
+> > +		if (id < RISCV_ISA_EXT_MAX) {
+> > +			/*
+> > +			 * This patch should be treated as errata so skip
+> > +			 * processing here.
+> > +			 */
+> > +			if (alt->vendor_id != 0)
+> > +				continue;
+> > +
+> > +			if (!__riscv_isa_extension_available(NULL, id))
+> > +				continue;
+> > +		} else if (id >= RISCV_VENDOR_EXT_ALTERNATIVES_BASE) {
+> > +			if (!__riscv_isa_vendor_extension_available(VENDOR_EXT_ALL_CPUS, vendor, id))
+> > +				continue;
+> > +		} else {
+> >  			WARN(1, "This extension id:%d is not in ISA extension list", id);
+> >  			continue;
+> >  		}
+> >  
+> > -		if (!__riscv_isa_extension_available(NULL, id))
+> > -			continue;
+> > -
+> >  		value = PATCH_ID_CPUFEATURE_VALUE(alt->patch_id);
+> >  		if (!riscv_cpufeature_patch_check(id, value))
+> >  			continue;
+> > diff --git a/arch/riscv/kernel/vendor_extensions.c b/arch/riscv/kernel/vendor_extensions.c
+> > index f76cb3013c2d..eced93eec5a6 100644
+> > --- a/arch/riscv/kernel/vendor_extensions.c
+> > +++ b/arch/riscv/kernel/vendor_extensions.c
+> > @@ -3,6 +3,7 @@
+> >   * Copyright 2024 Rivos, Inc
+> >   */
+> >  
+> > +#include <asm/vendorid_list.h>
+> >  #include <asm/vendor_extensions.h>
+> >  #include <asm/vendor_extensions/thead.h>
+> >  
+> > @@ -16,3 +17,42 @@ const struct riscv_isa_vendor_ext_data_list *riscv_isa_vendor_ext_list[] = {
+> >  };
+> >  
+> >  const size_t riscv_isa_vendor_ext_list_size = ARRAY_SIZE(riscv_isa_vendor_ext_list);
+> > +
+> > +/**
+> > + * __riscv_isa_vendor_extension_available() - Check whether given vendor
+> > + * extension is available or not.
+> > + *
+> > + * @cpu: check if extension is available on this cpu
+> > + * @vendor: vendor that the extension is a member of
+> > + * @bit: bit position of the desired extension
+> > + * Return: true or false
+> > + *
+> > + * NOTE: When cpu is -1, will check if extension is available on all cpus
+> > + */
+> > +bool __riscv_isa_vendor_extension_available(int cpu, unsigned long vendor, unsigned int bit)
+> > +{
+> > +	unsigned long *bmap;
+> > +	struct riscv_isainfo *cpu_bmap;
+> > +	size_t bmap_size;
+> > +
+> > +	switch (vendor) {
+> > +#ifdef CONFIG_RISCV_ISA_VENDOR_EXT_THEAD
+> > +	case THEAD_VENDOR_ID:
+> > +		bmap = riscv_isa_vendor_ext_list_thead.vendor_bitmap;
+> > +		cpu_bmap = riscv_isa_vendor_ext_list_thead.per_hart_vendor_bitmap;
+> > +		bmap_size = riscv_isa_vendor_ext_list_thead.bitmap_size;
+> > +		break;
+> > +#endif
+> > +	default:
+> > +		return false;
+> > +	}
+> > +
+> > +	if (cpu != -1)
+> > +		bmap = cpu_bmap[cpu].isa;
+> > +
+> > +	if (bit >= bmap_size)
+> > +		return false;
+> > +
+> > +	return test_bit(bit, bmap) ? true : false;
+> > +}
+> > +EXPORT_SYMBOL_GPL(__riscv_isa_vendor_extension_available);
+> 
+> I wonder if we care to implement a non __ prefixed version of this, like
+> the standard stuff? The only __ version users of the standard one are in
+> kvm and core arch code, the "external" users all use the non-prefixed
+> version.
 
-Detect packets with ip_summed CHECKSUM_PARTIAL and skip these. These
-should not exist, as the test sends individual packets between two
-hosts. But if (HW) GRO is on, with randomized content sometimes
-subsequent packets can be coalesced.
+In vendor_extensions.h there is:
 
-In this case the GSO packet checksum is converted to a pseudo checksum
-in anticipation of sending out as TSO/USO. So the field will not match
-the expected value.
+#define riscv_isa_vendor_extension_available(vendor, ext)	\
+	__riscv_isa_vendor_extension_available(VENDOR_EXT_ALL_CPUS, vendor, \
+					       RISCV_ISA_VENDOR_EXT_##ext)
 
-Do not count these as test errors.
 
-Signed-off-by: Willem de Bruijn <willemb@google.com>
----
- tools/testing/selftests/net/csum.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+> 
+> In any case,
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-diff --git a/tools/testing/selftests/net/csum.c b/tools/testing/selftests/net/csum.c
-index 90eb06fefa59..b9f3fc3c3426 100644
---- a/tools/testing/selftests/net/csum.c
-+++ b/tools/testing/selftests/net/csum.c
-@@ -682,7 +682,7 @@ static int recv_verify_packet_ipv6(void *nh, int len)
- }
- 
- /* return whether auxdata includes TP_STATUS_CSUM_VALID */
--static bool recv_verify_packet_csum(struct msghdr *msg)
-+static uint32_t recv_get_packet_csum_status(struct msghdr *msg)
- {
- 	struct tpacket_auxdata *aux = NULL;
- 	struct cmsghdr *cm;
-@@ -706,7 +706,7 @@ static bool recv_verify_packet_csum(struct msghdr *msg)
- 	if (!aux)
- 		error(1, 0, "cmsg: no auxdata");
- 
--	return aux->tp_status & TP_STATUS_CSUM_VALID;
-+	return aux->tp_status;
- }
- 
- static int recv_packet(int fd)
-@@ -716,6 +716,7 @@ static int recv_packet(int fd)
- 	char ctrl[CMSG_SPACE(sizeof(struct tpacket_auxdata))];
- 	struct pkt *buf = (void *)_buf;
- 	struct msghdr msg = {0};
-+	uint32_t tp_status;
- 	struct iovec iov;
- 	int len, ret;
- 
-@@ -737,6 +738,17 @@ static int recv_packet(int fd)
- 		if (len == -1)
- 			error(1, errno, "recv p");
- 
-+		tp_status = recv_get_packet_csum_status(&msg);
-+
-+		/* GRO might coalesce randomized packets. Such GSO packets are
-+		 * then reinitialized for csum offload (CHECKSUM_PARTIAL), with
-+		 * a pseudo csum. Do not try to validate these checksums.
-+		 */
-+		if (tp_status & TP_STATUS_CSUMNOTREADY) {
-+			fprintf(stderr, "cmsg: GSO packet has partial csum: skip\n");
-+			continue;
-+		}
-+
- 		if (cfg_family == PF_INET6)
- 			ret = recv_verify_packet_ipv6(buf, len);
- 		else
-@@ -753,7 +765,7 @@ static int recv_packet(int fd)
- 		 * Do not fail if kernel does not validate a good csum:
- 		 * Absence of validation does not imply invalid.
- 		 */
--		if (recv_verify_packet_csum(&msg) && cfg_bad_csum) {
-+		if (tp_status & TP_STATUS_CSUM_VALID && cfg_bad_csum) {
- 			fprintf(stderr, "cmsg: expected bad csum, pf_packet returns valid\n");
- 			bad_validations++;
- 		}
--- 
-2.45.0.rc1.225.g2a3ae87e7f-goog
+Thanks!
+
+- Charlie
+
+> 
+> Cheers,
+> Conor.
+
 
