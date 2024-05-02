@@ -1,32 +1,33 @@
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
+Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0DF1DDD1
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 May 2024 21:09:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6EF5181D17
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 May 2024 21:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714684181; cv=none; b=R4AZkEDh8sRLyWIsqm9HUCnR7ddr9KcnFFSDDdeL3kK5NWEHnA41kFMk8zmxeIRmV4O/y5rS+8GYQGPsHHr/05LrUswjVd2N0FdmRIeLYh7JzbzGbNmKHKrrnUYRfe0vZyQzq2Vzyh3BlCC5G9aoFBdYCrLNDXlsvrhGgJxbVJI=
+	t=1714684188; cv=none; b=JkJl14hY7bdVPXuWeWYjVQhXxaKN23OXDeH20Ckmcl2a0tlQWyishJlT82LcNLZh6SbGabnGdzbypHxxNnmdhfctlcq30ZPF0h2SpLtVNfDEKCPkhbjvn1AhvEBWY7UW4aCJsveNhajPhVpdmIMcSFd60Ejb8lZjGOFLYZrdZOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714684181; c=relaxed/simple;
-	bh=xg2yiemt7g0L//ersE+e1X8N3O4VM6PY1gF/lS4OZEc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kFlvDBVnPAGxxKAanIEPRBpsU60jfXBVwrAMjNrBV0bnZjfxWY8iwVuPVfgY4H4/Vxz32zLkn3+sGkmU7X4mIq9HlyjyA09B2CAHP+OeYiJATiKRiI9ZOEtZGW+7fTIMMvZ/heM3vSI1diCQ3g8NpRaVQCukri7HIdOzwefYEQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=YmtamxYc; arc=none smtp.client-ip=84.16.66.171
+	s=arc-20240116; t=1714684188; c=relaxed/simple;
+	bh=f/p1tOYqxe+c3NIjeiRTNzU4W1mMlKeloFw4NDWiog8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CWAqcGKOHtDJT43jcIGdxYoeiR51e+6lnOv7VXJVKeCS321S83MWJWG1RnBjag4vZVNcX5BRPEJFnOZ9Yqc0t+VotQHuN8N+cq4lmMtnZVMlnD3a28O7bU8Wqt7sJf6s2sdXL2K5YgCtn0LYihfBKpuZv35/KAEwkYaX8barN54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=SDPWZaAp; arc=none smtp.client-ip=84.16.66.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="YmtamxYc"
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VVmlZ597czMTy;
-	Thu,  2 May 2024 23:09:30 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="SDPWZaAp"
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VVmlj5Qd9zKC9;
+	Thu,  2 May 2024 23:09:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714684170;
-	bh=xg2yiemt7g0L//ersE+e1X8N3O4VM6PY1gF/lS4OZEc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=YmtamxYcpWPtf1+c+J3FBMhnK2mbzUuwYj9TsAJeD1nMJcyiVVySKdGXEuU2boBpb
-	 es/PYh3z83nFhb0o0L01pxiH3bZ6KtHtlrW9vNGjZUUH06vqEwKVu+SRTUDsqQmTgs
-	 IndezI+4cCtQhql+ZEBEa3lVxijK90cuVA81rmfI=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VVmlY6dYvzVY0;
-	Thu,  2 May 2024 23:09:29 +0200 (CEST)
+	s=20191114; t=1714684177;
+	bh=f/p1tOYqxe+c3NIjeiRTNzU4W1mMlKeloFw4NDWiog8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=SDPWZaApk+TnghGGtnoL1SCVBkxYtTcyjZoa+3Lub7Ksb3aoZsVd84y/xUQDtlDYT
+	 VUsSTffM6hlnlO5Sg34eTga9pENM0ccsXB6jURu0T1jRMh1olGvkDxfBlgTm6i+F/c
+	 LpTpE2b6dpbzq45jQbyvfk+Jye528zAQf4U6oOpU=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VVmlj1XQ7zYJX;
+	Thu,  2 May 2024 23:09:37 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Christian Brauner <brauner@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -42,10 +43,13 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	kernel test robot <oliver.sang@intel.com>,
 	kvm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 00/10] Fix Kselftest's vfork() side effects
-Date: Thu,  2 May 2024 23:09:16 +0200
-Message-ID: <20240502210926.145539-1-mic@digikod.net>
+	linux-kselftest@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v4 02/10] selftests/landlock: Fix FS tests when run on a private mount point
+Date: Thu,  2 May 2024 23:09:18 +0200
+Message-ID: <20240502210926.145539-3-mic@digikod.net>
+In-Reply-To: <20240502210926.145539-1-mic@digikod.net>
+References: <20240502210926.145539-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,67 +60,50 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Hi,
+According to the test environment, the mount point of the test's working
+directory may be shared or not, which changes the visibility of the
+nested "tmp" mount point for the test's parent process calling
+umount("tmp").
 
-As reported by Kernel Test Robot [1], some pidfd tests fail.  This is
-due to the use of vfork() which introduced some side effects.
-Similarly, while making it more generic, a previous commit made some
-Landlock file system tests flaky, and subject to the host's file system
-mount configuration.
+This was spotted while running tests in containers [1], where mount
+points are private.
 
-This series fixes all these side effects by replacing vfork() with
-clone3() and CLONE_VFORK, which is cleaner (no arbitrary shared memory)
-and makes the Kselftest framework more robust.
+Cc: Günther Noack <gnoack@google.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://github.com/landlock-lsm/landlock-test-tools/pull/4 [1]
+Fixes: 41cca0542d7c ("selftests/harness: Fix TEST_F()'s vfork handling")
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20240502210926.145539-3-mic@digikod.net
+---
 
-I tried different approaches and I found this one to be the cleaner and
-less invasive for current test cases.
+Changes since v1:
+* Update commit description.
+---
+ tools/testing/selftests/landlock/fs_test.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-This fourth series add a patch from Sean Christopherson that fixes KVM
-tests.
-
-I successfully ran the following tests (using TEST_F and
-fork/clone/clone3) with this series:
-- landlock:fs_test
-- landlock:net_test
-- landlock:ptrace_test
-- move_mount_set_group:move_mount_set_group_test
-- net/af_unix:scm_pidfd
-- perf_events:remove_on_exec
-- pidfd:pidfd_getfd_test
-- pidfd:pidfd_setns_test
-- seccomp:seccomp_bpf
-- user_events:abi_test
-
-[1] https://lore.kernel.org/oe-lkp/202403291015.1fcfa957-oliver.sang@intel.com
-
-Previous versions:
-v1: https://lore.kernel.org/r/20240426172252.1862930-1-mic@digikod.net
-v2: https://lore.kernel.org/r/20240429130931.2394118-1-mic@digikod.net
-v3: https://lore.kernel.org/r/20240429191911.2552580-1-mic@digikod.net
-
-Regards,
-
-Mickaël Salaün (10):
-  selftests/pidfd: Fix config for pidfd_setns_test
-  selftests/landlock: Fix FS tests when run on a private mount point
-  selftests/harness: Fix fixture teardown
-  selftests/harness: Fix interleaved scheduling leading to race
-    conditions
-  selftests/landlock: Do not allocate memory in fixture data
-  selftests/harness: Constify fixture variants
-  selftests/pidfd: Fix wrong expectation
-  selftests/harness: Share _metadata between forked processes
-  selftests/harness: Fix vfork() side effects
-  selftests/harness: Fix TEST_F()'s exit codes
-
- tools/testing/selftests/kselftest_harness.h   | 123 +++++++++++++-----
- tools/testing/selftests/landlock/fs_test.c    |  83 +++++++-----
- tools/testing/selftests/pidfd/config          |   2 +
- .../selftests/pidfd/pidfd_setns_test.c        |   2 +-
- 4 files changed, 141 insertions(+), 69 deletions(-)
-
-
-base-commit: e67572cd2204894179d89bd7b984072f19313b03
+diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+index 9a6036fbf289..46b9effd53e4 100644
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -293,7 +293,15 @@ static void prepare_layout(struct __test_metadata *const _metadata)
+ static void cleanup_layout(struct __test_metadata *const _metadata)
+ {
+ 	set_cap(_metadata, CAP_SYS_ADMIN);
+-	EXPECT_EQ(0, umount(TMP_DIR));
++	if (umount(TMP_DIR)) {
++		/*
++		 * According to the test environment, the mount point of the
++		 * current directory may be shared or not, which changes the
++		 * visibility of the nested TMP_DIR mount point for the test's
++		 * parent process doing this cleanup.
++		 */
++		ASSERT_EQ(EINVAL, errno);
++	}
+ 	clear_cap(_metadata, CAP_SYS_ADMIN);
+ 	EXPECT_EQ(0, remove_path(TMP_DIR));
+ }
 -- 
 2.45.0
 
