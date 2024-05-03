@@ -1,108 +1,97 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E6112EBF1;
-	Fri,  3 May 2024 19:06:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9785D155320
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 19:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714763214; cv=none; b=u1gdJaBkAJrU/1A3rTLUjfBjXu8fUrSoFY0kUaJ7N2M/dBjXZqngE+/yirOmJI9yMdDuBTTznLFLiU2kcHGwpJKDG/ehcZQSkGvKQGzMg5YavQpu+VXKC9sdLo0cOUL4fIL8hXNcEiaBkIQKpJ3L5BzXyf1p4+8jPd2pFtVp/eI=
+	t=1714763580; cv=none; b=G6YyeXx0jjRnFNfZU/WZYyHKBspPCNGcN9JthS5/X/SAjem2RXpDonANvEUhdouL1SmzyaiNaTUBd6D2NihBbhfuWOMTNPKo25ijHPzvQdpOdp3da1iXwfAjZbsZ91eHbXF374bG9fYx2ePDUu+DMoyDoIaRl4bVqbI9+4w8LM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714763214; c=relaxed/simple;
-	bh=3fMQGIHvCxuh/KI+QGtnXkUw9u+MmF/lvsQK73wS5lo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Agdt4jaHYtOX1p4OBJRFakYMfO+wuUs4fZk/s377WMM2pDRhUUzWMsXkRY9adRysQXQp9V5Ou4O7MmdctEToa+XzBrLjOuPbh/PMKJ9QtqdJZHfrkvFEdOTq0hjiKL6qTO3QBSoHYIkB0NaLQXfLAe/jcNQ+J9k2FvSivuisZqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IYC4ktpa; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1714763580; c=relaxed/simple;
+	bh=IKLI/Q78RF9vVx/YNe7wLdlLEK7x6bEXRB/vPUdT3wY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=on2KTKa/8v+8LqTlnX5lGuhkptqCHNXffk7Y/KSMKUP/yWZ46XbyPm6GYTscYJssLfqm/ArcgA2nFtwvdmqyRn9YFpo2RILPuvR3vgVZS9q7Y7+7N9+Yb2OHgfghmjFskgW2Ixz+mP9joLsX5l4Mgk6PVCfohmpflMKTWMIcbXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bnHUGaJV; arc=none smtp.client-ip=209.85.166.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IYC4ktpa"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1e4c4fb6af3so266525ad.0;
-        Fri, 03 May 2024 12:06:52 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bnHUGaJV"
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7decb824727so95439f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 May 2024 12:12:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714763212; x=1715368012; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jcmBSm5zJ4Ky10rROpSv6jdG1exUyb1cNnY853+P3xQ=;
-        b=IYC4ktpaJW/oa5UQAqeNVJQZXwEMk33Lj/+zELKqT0vjiqX+veiTVtm7+GGVBBDoDs
-         Jj2Q4XCsf6w1D8GNtJupojDKu+zHAn5ixuzcV+k9cWsL0qmAhMygvog/vCajavQiScNH
-         WTtmSgESkCDrtJNSseXVEjzpcKkRAYxbYC9H3rFfRoUrdGQxWzu3SJZQwXDTZTgo0L/w
-         Y+QRXSHPcAu7BQ54bEBGDLWZ50Ec53eka5q+UQNBOsq6VGLkFUC5KanegNSCbrGkl9V/
-         CX2aFVigSdvxpnHT6zl1FqZ6Eg07Jm10tNhsAlMJ3X7xj3X5sLhoCShwUWOHhlqGIzIM
-         GEIw==
+        d=linuxfoundation.org; s=google; t=1714763578; x=1715368378; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oRFjxSyK4Qq5KgEaM3tSc2tgl3ftVperAuW9pNscAzY=;
+        b=bnHUGaJVArx1zjnPAlmtMbJ5EWx0tlMBSikRG0iuwjx43AsFkgAedIu4K/ircfIrhS
+         jmxy61DK+oCLTONNDU2hpkmcqsDE/DPvtaGIQNDmLxjHX1+VHZ7MvPVr6kb3KURU82Pz
+         OXxwdF4vuXNEuPglkGWcoLC0pS6RhRY4KlDv4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714763212; x=1715368012;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jcmBSm5zJ4Ky10rROpSv6jdG1exUyb1cNnY853+P3xQ=;
-        b=VD8qfwl84SUtu46L2OlZ2pDepO+tIxMDQMrvHpodisF+1bXV9cFkaMoFbOaU8hG/jp
-         vAkDc9U2w4prwLsl0uqZca2vTLPbbBtqfGHZvgOJjp7oGuOcU/T5H32syYH5iGhflT82
-         cxhYk7/2kkhcnocoBk1830YSEXZLLlxvLL8Ckaywyb0V6+4SGWH29aIwz3Yso+pjWiXc
-         e8lKoCP5fm5QDGoYMFt3YbMC4WqU9sfex9/XZnZlK0TlgC5ukKGwA/LaVgUR7Qr4SVaq
-         qlsz2PekNBZa6vCPThufXqdYT+BN+GfjJWncAwuZhbH2vHhEIV7q3Ulv7CPIY9WrCrGa
-         JEsg==
-X-Forwarded-Encrypted: i=1; AJvYcCXcHldNAV9lV5U4EIzbSGg9QL8BYkIbsCodr0S0zZloUyoCJW9gHvLcBHn4FabbcFb1rvMkDb6r2R7wfSUAQFK4eHQTLZmOjfl33NIBUaKofcOVj2nyyr0LecdwO6INZ7xYuO26LRB6WkxJWd5xlCjZTyLgrh2/TZnRnFVJUcU/8C7906ot0Q==
-X-Gm-Message-State: AOJu0YwuffC12nqVZue4geo9WUdPoH2s2J6/7Xg7381+aZMiJta2Ktj3
-	FU4693TMgB8LDT059yTrGH1UKJaaxRAnhzDFeVJRLuJ/wgqos5/C
-X-Google-Smtp-Source: AGHT+IFg6GGVyu95XtXhoIqjH+6iNScaK7UWQsRzeKPiKvgKFmZuo0v+/xZaWfl1gbkOvDC7TZ4nqw==
-X-Received: by 2002:a17:902:e885:b0:1e2:45f3:2d57 with SMTP id w5-20020a170902e88500b001e245f32d57mr5255562plg.6.1714763212311;
-        Fri, 03 May 2024 12:06:52 -0700 (PDT)
-Received: from localhost (dhcp-141-239-159-203.hawaiiantel.net. [141.239.159.203])
-        by smtp.gmail.com with ESMTPSA id jw19-20020a170903279300b001eab3ba8ccfsm3587280plb.285.2024.05.03.12.06.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 May 2024 12:06:52 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Fri, 3 May 2024 09:06:50 -1000
-From: Tejun Heo <tj@kernel.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Waiman Long <longman@redhat.com>,
-	Yosry Ahmed <yosryahmed@google.com>, Nhat Pham <nphamcs@gmail.com>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 0/4] selftests/cgroups: fix clang build failures, warnings
-Message-ID: <ZjU1yt3zU1p60JS7@slm.duckdns.org>
-References: <20240503035105.93280-1-jhubbard@nvidia.com>
+        d=1e100.net; s=20230601; t=1714763578; x=1715368378;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oRFjxSyK4Qq5KgEaM3tSc2tgl3ftVperAuW9pNscAzY=;
+        b=wxBx+RBBM6OUJpS7f508Kq5l27ONVOewAqL+UYAUhK8M/8+ThQyC2YVEFQqHE9DHwy
+         GMVm/gzdtylo8dc3PsFPMrM38vYCSt6hPAIpeUXaXC0kMxf/XIUNMTM6SJN3V2C+ew03
+         1/UbzlB+LpmY19iRIKtoLBT8V3BbwChJcrGqZawb2Tdv9RbGi80hPE8DGWPcB4jDenqF
+         cNOooQbcdiH34pJZfVLChBF3MlZxoGF7ehMKj3/A1eFPXGrjuBTu7ohnsX98RitBEJZU
+         XXCoUgBsMJk3BEC6jEccymwITFG1ku1uxm559smc/zAj+NYumkP7NOEeieIV6bk3CJJj
+         eLow==
+X-Forwarded-Encrypted: i=1; AJvYcCUNr5yYKdetb2zpnjMeWNPryGlXxd8GnG7RnNigl4TCEU7AZD/XzGRtUZi1Af+it0vciZxSQ6zJkZqb/Ie4jnLQIDSnc0sO7nbKiS+vSftI
+X-Gm-Message-State: AOJu0YytKk7eXFs5lgeWTl/Fwx6L8inir+JR+Ja4X59b2petWTdUtbL/
+	viOKXZFWmSiUF4FAXEgjBwpEZmRefVeiOY1iEFbhgOCkE48LBVsKXDwK3Do7eF8=
+X-Google-Smtp-Source: AGHT+IFeCr1sXlKuk6y/+HaEO2vkq/lW4xsCt4vEoT13BLeE623tRhqnA0qvoG5XspHJUW7YimhDEg==
+X-Received: by 2002:a5d:860e:0:b0:7d9:eeb8:ddeb with SMTP id f14-20020a5d860e000000b007d9eeb8ddebmr3581267iol.2.1714763577683;
+        Fri, 03 May 2024 12:12:57 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056602150600b007deeb2d7c4csm786391iow.12.2024.05.03.12.12.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 May 2024 12:12:57 -0700 (PDT)
+Message-ID: <5bdb08a2-0740-4ea0-be24-a948332d60ac@linuxfoundation.org>
+Date: Fri, 3 May 2024 13:12:56 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240503035105.93280-1-jhubbard@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v22 5/5] ring-buffer/selftest: Add ring-buffer mapping
+ test
+To: Vincent Donnefort <vdonnefort@google.com>, rostedt@goodmis.org,
+ mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Cc: mathieu.desnoyers@efficios.com, kernel-team@android.com,
+ rdunlap@infradead.org, rppt@kernel.org, david@redhat.com,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240430111354.637356-1-vdonnefort@google.com>
+ <20240430111354.637356-6-vdonnefort@google.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240430111354.637356-6-vdonnefort@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 02, 2024 at 08:51:01PM -0700, John Hubbard wrote:
-> Hi,
+On 4/30/24 05:13, Vincent Donnefort wrote:
+> This test maps a ring-buffer and validate the meta-page after reset and
+> after emitting few events.
 > 
-> Just a bunch of fixes as part of my work to make selftests build cleanly
-> with clang.
-> 
-> Enjoy!
-> 
-> thanks,
-> John Hubbard
-> 
-> 
-> John Hubbard (4):
->   selftests/cgroup: fix clang build failures for abs() calls
->   selftests/cgroup: fix clang warnings: uninitialized fd variable
->   selftests/cgroup: cpu_hogger init: use {} instead of {NULL}
->   selftests/cgroup: fix uninitialized variables in test_zswap.c
 
-Applied to cgroup/for-6.10.
+Changelog needs to be imperative - refer to the following:
 
-Thanks.
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html
 
--- 
-tejun
+Update the change log and describe what the test does and include
+test output.
+
+If the test requires root privileges - make sure add a check to skip
+when a normal use runs the test.
+
+The rest looks good.
+
+thanks,
+-- Shuah
