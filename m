@@ -1,33 +1,33 @@
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [83.166.143.170])
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E3F153507
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 10:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5917D153596
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 10:58:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714733922; cv=none; b=Wpr32XH4BKkXjqXhwhWiiCiVLSeoXqLsNxc/1i7jIYV5MUX0OBq/VfEQKVKUEz+LPmVihqrQznP6ZPtKfv3HIpyDM9mZ2l5T809OoAVdfoYYM70AxurgviQzZQ28TcaLr3s4T90GPJRI+92vuUD7C+iuwgQDb9QVkobOaboAMZs=
+	t=1714733922; cv=none; b=hzwGUlVw7luiuonvDEBqjpZC8JStq3M5Ly0J3lIbG4HeS/j3obL815WNNtgsua0hy2EMbP5a7od9VkTD/ZFSi6f0oP/Sfn5+zVqBikvS9DGRKr/qfIXJnKXHZM9M+myP1IkZPYOyohNaAXI0HlJGgrXxlPD8FaEjX6wFIKGAbao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714733922; c=relaxed/simple;
-	bh=VIIfuvsoJUeCLZIYhwgJBbJh36D5Fneuyd9EauHv5U8=;
+	bh=YYgJGzqiQDWk2U/jpEaS0iynxyFT/ValkUI+CWeo/nA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TBm4QE7khIv5r5qqIrE7p4OID1gyzVtuySi0sLb7wJajoMUTOKKVPn82B+oSY+NXGIaZVGDLdaHgYNmSGMSmgwuE8fyiKubpAp8LOv0fOip+T4DJPY3VbHN4JweEmecl/53uAUzDVSCGMIQfw2kvRH9gA/PacqggumKTLBBqk0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=sKwdrCO8; arc=none smtp.client-ip=83.166.143.170
+	 MIME-Version:Content-Type; b=boeylh5Lapoy/wIWzmDbIkNQ0RTJm6v2Xm8BixQ2VeGOrOJgiYMSvx75+uhIzAEuE8UErAjw4WCpDbs+HiB5/UH81znlCCF7u/LsrX+Tp+4vT5rvtm77TIWIvr/KFaCse9aAMGp2rGFwhC2SAdHmpsKrTCOWAua/cnyYEl0pT2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=jl4ORSgI; arc=none smtp.client-ip=45.157.188.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="sKwdrCO8"
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VW78F2df7zRxt;
-	Fri,  3 May 2024 12:58:37 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="jl4ORSgI"
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VW7891MNDzFCh;
+	Fri,  3 May 2024 12:58:33 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714733917;
-	bh=VIIfuvsoJUeCLZIYhwgJBbJh36D5Fneuyd9EauHv5U8=;
+	s=20191114; t=1714733913;
+	bh=YYgJGzqiQDWk2U/jpEaS0iynxyFT/ValkUI+CWeo/nA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sKwdrCO8UI5nYC4Nfkh5g9PYFG84eHS9PF5cJeWPTuemUtrmTnevZ0iJu9Wn4vy5G
-	 SYQPWK1+v2YM7pBheGumkYKy7ZX0I27kFvMPu73g4jmYsWFxdTlwu+PHmC7hXeM0iL
-	 trO1mk1zA9Y7KACzL7mjHWwE2Ya0VN16Yzv5Vj58=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VW78D52Gxzxyg;
-	Fri,  3 May 2024 12:58:36 +0200 (CEST)
+	b=jl4ORSgInVzriZlyH8Fh1bZt7ELq+4U1b5bQnofqUODUhK7HZsjSBaqC6uKAXU1mk
+	 LfXwcAvdjTv/k0iDazNVeEIKEAbrvGk+jsXNa5b2UtxIxtcEeWmvQ33q6vlzlZ2lTv
+	 ZJTKtV15YMGTt/Bdgw1F4RLtoloQlit1UTh/KRhU=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VW7884rhrzRXm;
+	Fri,  3 May 2024 12:58:32 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Christian Brauner <brauner@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -46,9 +46,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v5 06/10] selftests/harness: Constify fixture variants
-Date: Fri,  3 May 2024 12:58:16 +0200
-Message-ID: <20240503105820.300927-7-mic@digikod.net>
+Subject: [PATCH v5 02/10] selftests/landlock: Fix FS tests when run on a private mount point
+Date: Fri,  3 May 2024 12:58:12 +0200
+Message-ID: <20240503105820.300927-3-mic@digikod.net>
 In-Reply-To: <20240503105820.300927-1-mic@digikod.net>
 References: <20240503105820.300927-1-mic@digikod.net>
 Precedence: bulk
@@ -61,45 +61,50 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-FIXTURE_VARIANT_ADD() types are passed as const pointers to
-FIXTURE_TEARDOWN().  Make that explicit by constifying the variants
-declarations.
+According to the test environment, the mount point of the test's working
+directory may be shared or not, which changes the visibility of the
+nested "tmp" mount point for the test's parent process calling
+umount("tmp").
 
+This was spotted while running tests in containers [1], where mount
+points are private.
+
+Cc: Günther Noack <gnoack@google.com>
 Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Will Drewry <wad@chromium.org>
+Link: https://github.com/landlock-lsm/landlock-test-tools/pull/4 [1]
+Fixes: 41cca0542d7c ("selftests/harness: Fix TEST_F()'s vfork handling")
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240503105820.300927-7-mic@digikod.net
+Link: https://lore.kernel.org/r/20240503105820.300927-3-mic@digikod.net
 ---
 
 Changes since v1:
-* Extract change from a bigger patch (suggested by Kees).
+* Update commit description.
 ---
- tools/testing/selftests/kselftest_harness.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/landlock/fs_test.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 9d7178a71c2c..201040207c85 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -338,7 +338,7 @@ static inline pid_t clone3_vfork(void)
-  * variant.
-  */
- #define FIXTURE_VARIANT_ADD(fixture_name, variant_name) \
--	extern FIXTURE_VARIANT(fixture_name) \
-+	extern const FIXTURE_VARIANT(fixture_name) \
- 		_##fixture_name##_##variant_name##_variant; \
- 	static struct __fixture_variant_metadata \
- 		_##fixture_name##_##variant_name##_object = \
-@@ -350,7 +350,7 @@ static inline pid_t clone3_vfork(void)
- 		__register_fixture_variant(&_##fixture_name##_fixture_object, \
- 			&_##fixture_name##_##variant_name##_object);	\
- 	} \
--	FIXTURE_VARIANT(fixture_name) \
-+	const FIXTURE_VARIANT(fixture_name) \
- 		_##fixture_name##_##variant_name##_variant =
- 
- /**
+diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+index 9a6036fbf289..46b9effd53e4 100644
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -293,7 +293,15 @@ static void prepare_layout(struct __test_metadata *const _metadata)
+ static void cleanup_layout(struct __test_metadata *const _metadata)
+ {
+ 	set_cap(_metadata, CAP_SYS_ADMIN);
+-	EXPECT_EQ(0, umount(TMP_DIR));
++	if (umount(TMP_DIR)) {
++		/*
++		 * According to the test environment, the mount point of the
++		 * current directory may be shared or not, which changes the
++		 * visibility of the nested TMP_DIR mount point for the test's
++		 * parent process doing this cleanup.
++		 */
++		ASSERT_EQ(EINVAL, errno);
++	}
+ 	clear_cap(_metadata, CAP_SYS_ADMIN);
+ 	EXPECT_EQ(0, remove_path(TMP_DIR));
+ }
 -- 
 2.45.0
 
