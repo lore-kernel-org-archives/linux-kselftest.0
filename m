@@ -1,33 +1,33 @@
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
+Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [84.16.66.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B328154435
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 10:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB71155310
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 10:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714733926; cv=none; b=htBH7vPgTgSLxcwsKcFA1u0J1RTGEMuHBlezGNEpPqdrR4nyztru2VdhmFCYBUtw3PegZ1DQk2s3jZIctiUMrOhppwSqGH3COIpzsAetWEQ35+ETZDihx85QjfxhqLOBD8dyVbM3LpUh3sYXGeJxM4who6rwuJzcn+GWm1JshA4=
+	t=1714733927; cv=none; b=Mn5ktszTratnhaF6DT70M1J88S163ZL5P3dsGxzrv++5G8GQcJTsdCeioiPElz4jIdfaLO63NIXdSAu1ff4JRyDIbK8hZ4UmmlfWqoI97vw/94X+1s/w4U+zOlQh9YZLKdLFj4IQlsnCfbQ+zyeIBxbv/Ck7FT4igSYwB44onVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714733926; c=relaxed/simple;
-	bh=6KlePIHjh/F0rwXAtm5wVQtdAF3T8pKIS+NqlOPteLM=;
+	s=arc-20240116; t=1714733927; c=relaxed/simple;
+	bh=1L5PPLpNTzXpbKkNGS4y+eTSJHkTUDhusf1GwO2k4hM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gBdqep40lAploL35aUTXVAXMhusUzT9xtQaJrwL4eqyGMGop6XYFppmA0vjYb4taoHHiorgro/Cq29c2Yf2nc0Z5SMalH0ucfpOvpMajc01moI1Xti42Y+ZRfHnSNSdWWWd5iTBbQa+sVpiGRzvSOKjSDeh/3HLX11bKv4Rmw5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=u3RuLMfl; arc=none smtp.client-ip=45.157.188.14
+	 MIME-Version:Content-Type; b=mVIP1g+72uDMha4NPhZNXnm8mKizcEcvYKGoH3VGob6SwJ8DDteNAgKB+sRL9Do3Ra+Pmry4Q/tNq+pr/sSE2DGMd5wBilVicyl+HdvJWGEjnWtGuAzj48GKR1cB9q334n5W/Ct/eQ6MbSK+Ago7LszFRVh9JmlDOrjr8OwrwSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=v6T8rKzp; arc=none smtp.client-ip=84.16.66.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="u3RuLMfl"
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VW78K3mspzPNb;
-	Fri,  3 May 2024 12:58:41 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="v6T8rKzp"
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VW78G56DxzBk6;
+	Fri,  3 May 2024 12:58:38 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714733921;
-	bh=6KlePIHjh/F0rwXAtm5wVQtdAF3T8pKIS+NqlOPteLM=;
+	s=20191114; t=1714733918;
+	bh=1L5PPLpNTzXpbKkNGS4y+eTSJHkTUDhusf1GwO2k4hM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=u3RuLMfl4d1/sSvej3lawnt1ZSVCPWY173dYy3g+BPuBi1ca1seVVKZQZLqJkarRz
-	 6+jU6Ziqro+AbKmWEmsQXDb568J8msUDsipuKT9lYi4rnfiszNhVgoCWJ/nRvihgVV
-	 mYl8W7ehIrR5vqTyCRlD1YXcTfAWnOA2WFMuGocg=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VW78K0CSSz111K;
-	Fri,  3 May 2024 12:58:41 +0200 (CEST)
+	b=v6T8rKzpboKz4tC0UZH35bSt6WfIQeZkvc17Jm8vjjuiCz9bHb/JwZHP5K51pXp7v
+	 c4UgxyP3chVd6l8CTz2RWkRPtw/G1rVmTqLpzqm5LSPFJ8PmyJC5JxRolu4MRzNRZn
+	 ALOj4v07MgEp7cm/Wz95DkEAwsaI5Afz08jVidIo=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VW78G0lhNzV4C;
+	Fri,  3 May 2024 12:58:38 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Christian Brauner <brauner@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -44,10 +44,11 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	kvm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH v5 10/10] selftests/harness: Handle TEST_F()'s explicit exit codes
-Date: Fri,  3 May 2024 12:58:20 +0200
-Message-ID: <20240503105820.300927-11-mic@digikod.net>
+	netdev@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v5 07/10] selftests/pidfd: Fix wrong expectation
+Date: Fri,  3 May 2024 12:58:17 +0200
+Message-ID: <20240503105820.300927-8-mic@digikod.net>
 In-Reply-To: <20240503105820.300927-1-mic@digikod.net>
 References: <20240503105820.300927-1-mic@digikod.net>
 Precedence: bulk
@@ -60,56 +61,36 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-If TEST_F() explicitly calls exit(code) with code different than 0, then
-_metadata->exit_code is set to this code (e.g. KVM_ONE_VCPU_TEST()).  We
-need to keep in mind that _metadata->exit_code can be KSFT_SKIP while
-the process exit code is 0.
+Replace a wrong EXPECT_GT(self->child_pid_exited, 0) with EXPECT_GE(),
+which will be actually tested on the parent and child sides with a
+following commit.
 
-Initial patch written by Sean Christopherson [1].
-
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Will Drewry <wad@chromium.org>
-Link: https://lore.kernel.org/r/ZjPelW6-AbtYvslu@google.com [1]
-Fixes: 0710a1a73fb4 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Christian Brauner <brauner@kernel.org>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240503105820.300927-11-mic@digikod.net
+Link: https://lore.kernel.org/r/20240503105820.300927-8-mic@digikod.net
 ---
 
-Changes since v4:
-* Check abort status when the grandchild exited.
-* Keep the _exit(0) calls because _metadata->exit_code is always
-  checked.
-* Only set _metadata->exit_code to WEXITSTATUS() if it is not zero.
-
-Changes since v3:
-* New patch mainly from Sean Christopherson.
+Changes since v1:
+* Extract change from a bigger patch (suggested by Kees).
 ---
- tools/testing/selftests/kselftest_harness.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ tools/testing/selftests/pidfd/pidfd_setns_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index eb25f7c11949..7612bf09c5f8 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -462,9 +462,13 @@ static inline pid_t clone3_vfork(void)
- 		munmap(teardown, sizeof(*teardown)); \
- 		if (self && fixture_name##_teardown_parent) \
- 			munmap(self, sizeof(*self)); \
--		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
-+		if (WIFEXITED(status)) { \
-+			if (WEXITSTATUS(status)) \
-+				_metadata->exit_code = WEXITSTATUS(status); \
-+		} else if (WIFSIGNALED(status)) { \
- 			/* Forward signal to __wait_for_test(). */ \
- 			kill(getpid(), WTERMSIG(status)); \
-+		} \
- 		__test_check_assert(_metadata); \
- 	} \
- 	static void __attribute__((constructor)) \
+diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/testing/selftests/pidfd/pidfd_setns_test.c
+index 6e2f2cd400ca..47746b0c6acd 100644
+--- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
+@@ -158,7 +158,7 @@ FIXTURE_SETUP(current_nsset)
+ 	/* Create task that exits right away. */
+ 	self->child_pid_exited = create_child(&self->child_pidfd_exited,
+ 					      CLONE_NEWUSER | CLONE_NEWNET);
+-	EXPECT_GT(self->child_pid_exited, 0);
++	EXPECT_GE(self->child_pid_exited, 0);
+ 
+ 	if (self->child_pid_exited == 0)
+ 		_exit(EXIT_SUCCESS);
 -- 
 2.45.0
 
