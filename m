@@ -1,96 +1,87 @@
-Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [84.16.66.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB71155310
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 10:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.175
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5B2139D12;
+	Fri,  3 May 2024 11:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714733927; cv=none; b=Mn5ktszTratnhaF6DT70M1J88S163ZL5P3dsGxzrv++5G8GQcJTsdCeioiPElz4jIdfaLO63NIXdSAu1ff4JRyDIbK8hZ4UmmlfWqoI97vw/94X+1s/w4U+zOlQh9YZLKdLFj4IQlsnCfbQ+zyeIBxbv/Ck7FT4igSYwB44onVI=
+	t=1714734016; cv=none; b=TfJYMffRudrYxR2PhzGDcMhYaQcgkIYOkUinAdbRuiw1K/oHLHHz2ZaLhfB5+7glN0xeiOjdPsLFVMtgamVy3sgFoNR1SZFiNkkH7dHWEB+sZ9/Jm30yvJsBgHfhCXpsUXk9C8YWAgs961cQ+RZC4LzMtvBxeqF5jIx38gVmPVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714733927; c=relaxed/simple;
-	bh=1L5PPLpNTzXpbKkNGS4y+eTSJHkTUDhusf1GwO2k4hM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mVIP1g+72uDMha4NPhZNXnm8mKizcEcvYKGoH3VGob6SwJ8DDteNAgKB+sRL9Do3Ra+Pmry4Q/tNq+pr/sSE2DGMd5wBilVicyl+HdvJWGEjnWtGuAzj48GKR1cB9q334n5W/Ct/eQ6MbSK+Ago7LszFRVh9JmlDOrjr8OwrwSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=v6T8rKzp; arc=none smtp.client-ip=84.16.66.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="v6T8rKzp"
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VW78G56DxzBk6;
-	Fri,  3 May 2024 12:58:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714733918;
-	bh=1L5PPLpNTzXpbKkNGS4y+eTSJHkTUDhusf1GwO2k4hM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=v6T8rKzpboKz4tC0UZH35bSt6WfIQeZkvc17Jm8vjjuiCz9bHb/JwZHP5K51pXp7v
-	 c4UgxyP3chVd6l8CTz2RWkRPtw/G1rVmTqLpzqm5LSPFJ8PmyJC5JxRolu4MRzNRZn
-	 ALOj4v07MgEp7cm/Wz95DkEAwsaI5Afz08jVidIo=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VW78G0lhNzV4C;
-	Fri,  3 May 2024 12:58:38 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Christian Brauner <brauner@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Mark Brown <broonie@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Shengyu Li <shengyu.li.evgeny@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Will Drewry <wad@chromium.org>,
-	kernel test robot <oliver.sang@intel.com>,
-	kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v5 07/10] selftests/pidfd: Fix wrong expectation
-Date: Fri,  3 May 2024 12:58:17 +0200
-Message-ID: <20240503105820.300927-8-mic@digikod.net>
-In-Reply-To: <20240503105820.300927-1-mic@digikod.net>
-References: <20240503105820.300927-1-mic@digikod.net>
+	s=arc-20240116; t=1714734016; c=relaxed/simple;
+	bh=k4xkTuo7hYK9PbTnqwBgQ2Efeb49h1b70uqJXQeoiuI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r8RvBQbuni2Dn7SokGCsPGlZpHB6DKt8g0SpVs0yj42cL25w9B7vaATU5wZHD2NHqNwan1+NnIAejogm06gGd5mPRKitNsZzl70Tc2j+edvvid6+8yFbPSFeEGNcz/DvU3JINjGMwgs/vgr0M7ckzF3GnHr+CgoEkjy39eAfEfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69CEC2F4;
+	Fri,  3 May 2024 04:00:38 -0700 (PDT)
+Received: from [10.57.67.51] (unknown [10.57.67.51])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D620B3F793;
+	Fri,  3 May 2024 04:00:09 -0700 (PDT)
+Message-ID: <5f90431c-f27d-4b59-bf5a-32fd66101230@arm.com>
+Date: Fri, 3 May 2024 12:00:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] selftest mm/mseal: fix arm build
+Content-Language: en-GB
+To: jeffxu@chromium.org, Aishwarya TCV <Aishwarya.TCV@arm.com>
+Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org, corbet@lwn.net,
+ dave.hansen@intel.com, deraadt@openbsd.org, gregkh@linuxfoundation.org,
+ groeck@chromium.org, jannh@google.com, jeffxu@google.com,
+ jorgelo@chromium.org, keescook@chromium.org,
+ linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org, merimus@google.com,
+ pedro.falcato@gmail.com, rdunlap@infradead.org, sroettger@google.com,
+ surenb@google.com, torvalds@linux-foundation.org, usama.anjum@collabora.com,
+ willy@infradead.org
+References: <20240502225331.3806279-1-jeffxu@chromium.org>
+ <20240502225331.3806279-2-jeffxu@chromium.org>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20240502225331.3806279-2-jeffxu@chromium.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Content-Transfer-Encoding: 7bit
 
-Replace a wrong EXPECT_GT(self->child_pid_exited, 0) with EXPECT_GE(),
-which will be actually tested on the parent and child sides with a
-following commit.
+On 02/05/2024 23:53, jeffxu@chromium.org wrote:
+> From: Jeff Xu <jeffxu@chromium.org>
+> 
+> add include linux/mman.h to fix arm build
+> fix a typo
+> 
+> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+> Suggested-by: Ryan Roberts <ryan.roberts@arm.com>
 
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240503105820.300927-8-mic@digikod.net
----
+I confirm this has fixed our issue. Thanks!
 
-Changes since v1:
-* Extract change from a bigger patch (suggested by Kees).
----
- tools/testing/selftests/pidfd/pidfd_setns_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tested-by: Ryan Roberts <ryan.roberts@arm.com>
+Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-index 6e2f2cd400ca..47746b0c6acd 100644
---- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-@@ -158,7 +158,7 @@ FIXTURE_SETUP(current_nsset)
- 	/* Create task that exits right away. */
- 	self->child_pid_exited = create_child(&self->child_pidfd_exited,
- 					      CLONE_NEWUSER | CLONE_NEWNET);
--	EXPECT_GT(self->child_pid_exited, 0);
-+	EXPECT_GE(self->child_pid_exited, 0);
- 
- 	if (self->child_pid_exited == 0)
- 		_exit(EXIT_SUCCESS);
--- 
-2.45.0
+> ---
+>  tools/testing/selftests/mm/mseal_test.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+> index ca8dbee0c612..41998cf1dcf5 100644
+> --- a/tools/testing/selftests/mm/mseal_test.c
+> +++ b/tools/testing/selftests/mm/mseal_test.c
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #define _GNU_SOURCE
+> +#include <linux/mman.h>
+>  #include <sys/mman.h>
+>  #include <stdint.h>
+>  #include <unistd.h>
+> @@ -29,7 +30,7 @@
+>  # define PKEY_DISABLE_WRITE     0x2
+>  #endif
+>  
+> -#ifndef PKEY_BITS_PER_KEY
+> +#ifndef PKEY_BITS_PER_PKEY
+>  #define PKEY_BITS_PER_PKEY      2
+>  #endif
+>  
 
