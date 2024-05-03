@@ -1,32 +1,33 @@
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
+Received: from smtp-8fa9.mail.infomaniak.ch (smtp-8fa9.mail.infomaniak.ch [83.166.143.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234281509B6
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 10:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA35152198
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 10:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714733917; cv=none; b=RLdKIUDBrF9fGh68xc7Nn7EHsYW6ZSadNcQwuMLJV6yQTdRbAJaQgBUSoao9EuSUoIilfNQA6ghFpWyiTuV7fFAJJEjLizT+RbsBnXU6o1HZjPK5SkYVay/614l3mhLfEv//t5P6vzyMVP1Ou7cPqpYxAMGKwgWeD46LUUZuWOo=
+	t=1714733919; cv=none; b=NHnwsNOPaJLvdzSjnQzbYv/Hy5VH50DHTkytrb2juRS+WohWopzYzArtVWmp7vf/R62CBkKGgJn6ZWwS8wT1WTut12/CbHg5ISSBP0JlfPPzV0dg3J4CLiFYVivzC46oMPur7pmSdht60iWcvazuDaDksZ1hLXxRHicoDpPztVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714733917; c=relaxed/simple;
-	bh=fdS7g9OZWSVyYiFzvx5Vjx/iMPNyksye/pOut54QdLw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=C3W8fFgiXPyCAKBfPb+lHGRJfZKk0auT0sR1vKAwKhmzHOz8tt1LhF87niE2lI2bvLFsClGboUA8bS13jLJODag4IlUpSolU9gkgRdNVJ8DrOc4ZlepEGrmqweiS0IRvnWC8vGYQ5+oeGwnELGBD2CKhl1ySxh3hxW0grbzjz3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ViuqFlyT; arc=none smtp.client-ip=45.157.188.15
+	s=arc-20240116; t=1714733919; c=relaxed/simple;
+	bh=BIt36l2FjR1gUySHM36X1f9Iu+hPWXA/lkNOx4MEpHg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XFDK5XwsNarir+MEeEUrYReY5ch1JIjgz3eSZN24vAIT8XD0uYIr3zfmplaHv9/5EeSzD3Q88QnSfTUUeagCgz/mcROChiwIW3ut/jNx14FnnaASDRqFpUxx8n/qpWKDCEfk+zSEmIe22rzAaWE/RlnFNlALHjUqLV/us0YG4Gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=qkc6ln92; arc=none smtp.client-ip=83.166.143.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ViuqFlyT"
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VW7870Cg8z3j0;
-	Fri,  3 May 2024 12:58:31 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="qkc6ln92"
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VW78C2WfFz9wx;
+	Fri,  3 May 2024 12:58:35 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714733910;
-	bh=fdS7g9OZWSVyYiFzvx5Vjx/iMPNyksye/pOut54QdLw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ViuqFlyT6F0/nXHVXXY4zPieTYIyYqudSQ5VPCUi1FOX7dhb3F8Wz0ckvP+mX6QjE
-	 boQ4yyv1n/KEau6gcg7J1BjEJR/Jm+ariUYom6vNO+T1gIXSxE4T8AnBAxi+vslLZI
-	 xqIh+ae8jpIikO37aptyiLwq2XU/AFzn+Ht8LIJs=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VW7860V4rzYJW;
-	Fri,  3 May 2024 12:58:30 +0200 (CEST)
+	s=20191114; t=1714733915;
+	bh=BIt36l2FjR1gUySHM36X1f9Iu+hPWXA/lkNOx4MEpHg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=qkc6ln92mSHUeuzi8Fimn+OGoLCxBllwH6wC6oX+yyWhITCxj44XyJ8it83Cc/NJl
+	 II4R6ohGeN89pUtBv8KQooopouhQEAS90q+mZy5oWHx1qOrlG5kUYHlqe3+40CrWch
+	 KZIvEQPL9r4jIs3eCx3i8E4TR6uwp5uVX9JddsaE=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VW78B5mtdzjfK;
+	Fri,  3 May 2024 12:58:34 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Christian Brauner <brauner@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -44,9 +45,11 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH v5 00/10] Fix Kselftest's vfork() side effects
-Date: Fri,  3 May 2024 12:58:10 +0200
-Message-ID: <20240503105820.300927-1-mic@digikod.net>
+Subject: [PATCH v5 04/10] selftests/harness: Fix interleaved scheduling leading to race conditions
+Date: Fri,  3 May 2024 12:58:14 +0200
+Message-ID: <20240503105820.300927-5-mic@digikod.net>
+In-Reply-To: <20240503105820.300927-1-mic@digikod.net>
+References: <20240503105820.300927-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,72 +60,77 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Hi,
+Fix a race condition when running several FIXTURE_TEARDOWN() managing
+the same resource.  This fixes a race condition in the Landlock file
+system tests when creating or unmounting the same directory.
 
-This fifth series fixes _metadata reset and fixes the last patch to
-handle code set with direct calls to _exit().
+Using clone3() with CLONE_VFORK guarantees that the child and grandchild
+test processes are sequentially scheduled.  This is implemented with a
+new clone3_vfork() helper replacing the fork() call.
 
-As reported by Kernel Test Robot [1], some pidfd tests fail.  This is
-due to the use of vfork() which introduced some side effects.
-Similarly, while making it more generic, a previous commit made some
-Landlock file system tests flaky, and subject to the host's file system
-mount configuration.
+This avoids triggering this error in __wait_for_test():
+  Test ended in some other way [127]
 
-This series fixes all these side effects by replacing vfork() with
-clone3() and CLONE_VFORK, which is cleaner (no arbitrary shared memory)
-and makes the Kselftest framework more robust.
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Günther Noack <gnoack@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Will Drewry <wad@chromium.org>
+Fixes: 41cca0542d7c ("selftests/harness: Fix TEST_F()'s vfork handling")
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20240503105820.300927-5-mic@digikod.net
+---
 
-I tried different approaches and I found this one to be the cleaner and
-less invasive for current test cases.
+Changes since v2:
+* Replace __attribute__((__unused__)) with inline for clone3_vfork()
+  (suggested by Kees and Jakub)
+---
+ tools/testing/selftests/kselftest_harness.h | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-I successfully ran the following tests (using TEST_F and
-fork/clone/clone3, and KVM_ONE_VCPU_TEST) with this series:
-- kvm:fix_hypercall_test
-- kvm:sync_regs_test
-- kvm:userspace_msr_exit_test
-- kvm:vmx_pmu_caps_test
-- landlock:fs_test
-- landlock:net_test
-- landlock:ptrace_test
-- move_mount_set_group:move_mount_set_group_test
-- net/af_unix:scm_pidfd
-- perf_events:remove_on_exec
-- pidfd:pidfd_getfd_test
-- pidfd:pidfd_setns_test
-- seccomp:seccomp_bpf
-- user_events:abi_test
-
-[1] https://lore.kernel.org/oe-lkp/202403291015.1fcfa957-oliver.sang@intel.com
-
-Previous versions:
-v1: https://lore.kernel.org/r/20240426172252.1862930-1-mic@digikod.net
-v2: https://lore.kernel.org/r/20240429130931.2394118-1-mic@digikod.net
-v3: https://lore.kernel.org/r/20240429191911.2552580-1-mic@digikod.net
-v4: https://lore.kernel.org/r/20240502210926.145539-1-mic@digikod.net
-
-Regards,
-
-Mickaël Salaün (10):
-  selftests/pidfd: Fix config for pidfd_setns_test
-  selftests/landlock: Fix FS tests when run on a private mount point
-  selftests/harness: Fix fixture teardown
-  selftests/harness: Fix interleaved scheduling leading to race
-    conditions
-  selftests/landlock: Do not allocate memory in fixture data
-  selftests/harness: Constify fixture variants
-  selftests/pidfd: Fix wrong expectation
-  selftests/harness: Share _metadata between forked processes
-  selftests/harness: Fix vfork() side effects
-  selftests/harness: Handle TEST_F()'s explicit exit codes
-
- tools/testing/selftests/kselftest_harness.h   | 122 +++++++++++++-----
- tools/testing/selftests/landlock/fs_test.c    |  83 +++++++-----
- tools/testing/selftests/pidfd/config          |   2 +
- .../selftests/pidfd/pidfd_setns_test.c        |   2 +-
- 4 files changed, 143 insertions(+), 66 deletions(-)
-
-
-base-commit: e67572cd2204894179d89bd7b984072f19313b03
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 55699a762c45..9d7178a71c2c 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -66,6 +66,8 @@
+ #include <sys/wait.h>
+ #include <unistd.h>
+ #include <setjmp.h>
++#include <syscall.h>
++#include <linux/sched.h>
+ 
+ #include "kselftest.h"
+ 
+@@ -80,6 +82,17 @@
+ #  define TH_LOG_ENABLED 1
+ #endif
+ 
++/* Wait for the child process to end but without sharing memory mapping. */
++static inline pid_t clone3_vfork(void)
++{
++	struct clone_args args = {
++		.flags = CLONE_VFORK,
++		.exit_signal = SIGCHLD,
++	};
++
++	return syscall(__NR_clone3, &args, sizeof(args));
++}
++
+ /**
+  * TH_LOG()
+  *
+@@ -1183,7 +1196,7 @@ void __run_test(struct __fixture_metadata *f,
+ 	fflush(stdout);
+ 	fflush(stderr);
+ 
+-	t->pid = fork();
++	t->pid = clone3_vfork();
+ 	if (t->pid < 0) {
+ 		ksft_print_msg("ERROR SPAWNING TEST CHILD\n");
+ 		t->exit_code = KSFT_FAIL;
 -- 
 2.45.0
 
