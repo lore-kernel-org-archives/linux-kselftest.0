@@ -1,33 +1,32 @@
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9AF156C69
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 16:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803BB156F53;
+	Mon,  6 May 2024 16:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715014531; cv=none; b=GwTPWUGDt/ddbbz9JgcmDUk7qBd1bzVyLFCPT9Cklt1sG5c4+sGDBcIPWBY36hM1cikyqONbV9Zm40yXYvWESjLFmw/KqD7vq99FaJ6Vszd1KAKLhteRu/nCeyMF5MzqCpknAplAYvkmDm90aWURFbCNu1aD9opyY7xoi48C0UU=
+	t=1715014532; cv=none; b=pEXgqqecHwXSPqP1tXlyHkBmwX9Tz9LtslqIcKevISHBMqmusjnt6Z0FkUROmN4Hr6yfAiBVUpQrpIkST0JYyz7pKNbCfJqWTIeQ5dgkSarvuoTOhvMoMEupP39THeXmypkIvLhHZ83WPiuh/zYnT3OF2FWF4t50xrLQrOnfVz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715014531; c=relaxed/simple;
-	bh=gdjWab4WlvmPrqP7rpboralxnLabzwMWE9avaczrXTs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a+ZTt6EGF/W1KcanFq6ArJXnGAgUn3hAFwG4YZJ2cvlOsacTzpzqrk7Oq51JsUdezLN/6dOIvauhBUax9m/ffJPiHVu81v2Y0A+WxIvxXCFZIxU7gk9p8Gfe8dGdPXUs5WXawZQBwZJHenKpfx88daH8MigYHyOF5Qglg+b/R5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=1DU1kfR/; arc=none smtp.client-ip=84.16.66.172
+	s=arc-20240116; t=1715014532; c=relaxed/simple;
+	bh=8WXJkdX/4/+veG9WAOzi1ndePP+YpIaIGvCclyQG1xU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hILSaiXr+gBwCyfHukYafEFceFGUq5IN4rG2dScgZFqxXPvXF4PcmxWUnDKF0ihGf9V810TZv+LbFrd4llpXHzbm5vqqHyCbLSwIKtTFFp9oFTAeKFid6+4lnxQiv+3XEkJDc7gQHgspxd8e1LXPDvIE0v6FbMFi0NdcFEGPY0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=0MfOT0xP; arc=none smtp.client-ip=83.166.143.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="1DU1kfR/"
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VY6wb0X4wzvhq;
-	Mon,  6 May 2024 18:55:27 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="0MfOT0xP"
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VY6wW2787z1mB;
+	Mon,  6 May 2024 18:55:23 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1715014526;
-	bh=gdjWab4WlvmPrqP7rpboralxnLabzwMWE9avaczrXTs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=1DU1kfR/sXMZBLxgai2/BDVVqEj7PiizKYVxllSOUMXty7lPe28fR1havdD00J/mF
-	 Tw3fJ33J2L27vmFtr8p+G+TP2A2C4w54AyunZtTumG1czFOHP4W1vuYiWa4xDPC2Gs
-	 FnMZL20Cu11fLKacx/pUC06XfR6A2LdDjR1F6FGs=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VY6wZ1vl8zvSl;
-	Mon,  6 May 2024 18:55:26 +0200 (CEST)
+	s=20191114; t=1715014523;
+	bh=8WXJkdX/4/+veG9WAOzi1ndePP+YpIaIGvCclyQG1xU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=0MfOT0xP98tgT/5+SomnDxdohs2Y48SX45KtTePd76eDIu/sF5BDBxYo1KlzWAllj
+	 VZvfowjev+0Qi4Rti++4R5OWWPOYuR9uYGNjS+ImJWD5G8IxYV/fO5Iesvmf7ryDOz
+	 pfzUgeUa11sfMKskRv2imMnwElLPv+GpB1QsXeuw=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VY6wS6ZFYz3pZ;
+	Mon,  6 May 2024 18:55:20 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Christian Brauner <brauner@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -58,11 +57,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: [PATCH v6 03/10] selftests/harness: Fix fixture teardown
-Date: Mon,  6 May 2024 18:55:11 +0200
-Message-ID: <20240506165518.474504-4-mic@digikod.net>
-In-Reply-To: <20240506165518.474504-1-mic@digikod.net>
-References: <20240506165518.474504-1-mic@digikod.net>
+Subject: [PATCH v6 00/10] Fix Kselftest's vfork() side effects
+Date: Mon,  6 May 2024 18:55:08 +0200
+Message-ID: <20240506165518.474504-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,61 +70,83 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Make sure fixture teardowns are run when test cases failed, including
-when _metadata->teardown_parent is set to true.
+Hi,
 
-Make sure only one fixture teardown is run per test case, handling the
-case where the test child forks.
+This sixth series just update the last patch description.
 
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Shengyu Li <shengyu.li.evgeny@gmail.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Fixes: 72d7cb5c190b ("selftests/harness: Prevent infinite loop due to Assert in FIXTURE_TEARDOWN")
-Fixes: 0710a1a73fb4 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240506165518.474504-4-mic@digikod.net
----
- tools/testing/selftests/kselftest_harness.h | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+Shuah, I think this should be in -next really soon to make sure
+everything works fine for the v6.9 release, which is not currently the
+case.  I cannot test against all kselftests though.  I would prefer to
+let you handle this, but I guess you're not able to do so and I'll push
+it on my branch without reply from you.  Even if I push it on my branch,
+please push it on yours too as soon as you see this and I'll remove it
+from mine.
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index d98702b6955d..55699a762c45 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -382,7 +382,10 @@
- 		FIXTURE_DATA(fixture_name) self; \
- 		pid_t child = 1; \
- 		int status = 0; \
--		bool jmp = false; \
-+		/* Makes sure there is only one teardown, even when child forks again. */ \
-+		bool *teardown = mmap(NULL, sizeof(*teardown), \
-+			PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0); \
-+		*teardown = false; \
- 		memset(&self, 0, sizeof(FIXTURE_DATA(fixture_name))); \
- 		if (setjmp(_metadata->env) == 0) { \
- 			/* Use the same _metadata. */ \
-@@ -399,15 +402,16 @@
- 				_metadata->exit_code = KSFT_FAIL; \
- 			} \
- 		} \
--		else \
--			jmp = true; \
- 		if (child == 0) { \
--			if (_metadata->setup_completed && !_metadata->teardown_parent && !jmp) \
-+			if (_metadata->setup_completed && !_metadata->teardown_parent && \
-+					__sync_bool_compare_and_swap(teardown, false, true)) \
- 				fixture_name##_teardown(_metadata, &self, variant->data); \
- 			_exit(0); \
- 		} \
--		if (_metadata->setup_completed && _metadata->teardown_parent) \
-+		if (_metadata->setup_completed && _metadata->teardown_parent && \
-+				__sync_bool_compare_and_swap(teardown, false, true)) \
- 			fixture_name##_teardown(_metadata, &self, variant->data); \
-+		munmap(teardown, sizeof(*teardown)); \
- 		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
- 			/* Forward signal to __wait_for_test(). */ \
- 			kill(getpid(), WTERMSIG(status)); \
+Mark, Jakub, could you please test this series?
+
+As reported by Kernel Test Robot [1] and Sean Christopherson [2], some
+tests fail since v6.9-rc1 .  This is due to the use of vfork() which
+introduced some side effects.  Similarly, while making it more generic,
+a previous commit made some Landlock file system tests flaky, and
+subject to the host's file system mount configuration.
+
+This series fixes all these side effects by replacing vfork() with
+clone3() and CLONE_VFORK, which is cleaner (no arbitrary shared memory)
+and makes the Kselftest framework more robust.
+
+I tried different approaches and I found this one to be the cleaner and
+less invasive for current test cases.
+
+I successfully ran the following tests (using TEST_F and
+fork/clone/clone3, and KVM_ONE_VCPU_TEST) with this series:
+- kvm:fix_hypercall_test
+- kvm:sync_regs_test
+- kvm:userspace_msr_exit_test
+- kvm:vmx_pmu_caps_test
+- landlock:fs_test
+- landlock:net_test
+- landlock:ptrace_test
+- move_mount_set_group:move_mount_set_group_test
+- net/af_unix:scm_pidfd
+- perf_events:remove_on_exec
+- pidfd:pidfd_getfd_test
+- pidfd:pidfd_setns_test
+- seccomp:seccomp_bpf
+- user_events:abi_test
+
+[1] https://lore.kernel.org/oe-lkp/202403291015.1fcfa957-oliver.sang@intel.com
+[2] https://lore.kernel.org/r/ZjPelW6-AbtYvslu@google.com
+
+Previous versions:
+v1: https://lore.kernel.org/r/20240426172252.1862930-1-mic@digikod.net
+v2: https://lore.kernel.org/r/20240429130931.2394118-1-mic@digikod.net
+v3: https://lore.kernel.org/r/20240429191911.2552580-1-mic@digikod.net
+v4: https://lore.kernel.org/r/20240502210926.145539-1-mic@digikod.net
+v5: https://lore.kernel.org/r/20240503105820.300927-1-mic@digikod.net
+
+Regards,
+
+Mickaël Salaün (10):
+  selftests/pidfd: Fix config for pidfd_setns_test
+  selftests/landlock: Fix FS tests when run on a private mount point
+  selftests/harness: Fix fixture teardown
+  selftests/harness: Fix interleaved scheduling leading to race
+    conditions
+  selftests/landlock: Do not allocate memory in fixture data
+  selftests/harness: Constify fixture variants
+  selftests/pidfd: Fix wrong expectation
+  selftests/harness: Share _metadata between forked processes
+  selftests/harness: Fix vfork() side effects
+  selftests/harness: Handle TEST_F()'s explicit exit codes
+
+ tools/testing/selftests/kselftest_harness.h   | 122 +++++++++++++-----
+ tools/testing/selftests/landlock/fs_test.c    |  83 +++++++-----
+ tools/testing/selftests/pidfd/config          |   2 +
+ .../selftests/pidfd/pidfd_setns_test.c        |   2 +-
+ 4 files changed, 143 insertions(+), 66 deletions(-)
+
+
+base-commit: e67572cd2204894179d89bd7b984072f19313b03
 -- 
 2.45.0
 
