@@ -1,63 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7171B17F39F;
-	Tue, 14 May 2024 18:41:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B70B2AF09
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2024 19:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715712117; cv=none; b=nv3NoIyagoIulD3c75BgnSLwBP0gzw2BHlescj1Cm2YOyPTPniRjFxRT5PBAU4dTXcFu+8p+PoWa09sRHbzO86cwuiUitt/bIa3vJ8IIfnt8x5J0hXtEhM6via/qfIhDgGCUVf4n/D6sBOPOt6abf5GQQXHc//jcHX9iekE07ps=
+	t=1715716337; cv=none; b=XRzH5hcR1MSeIk2Z8GadlI44PFrTO4nx6deWpwF2wJ9sN1Tii6dyNUOUQ0NzXL7zkpZMVZGQblS0sc/xGACsIru5h1Sd4CZ/GFXlY1bpifwe+8Fia1GduQkzf/XFK/8g6MTZPlVW/arP3dFRVDmRisiucydWQbZ5FKBZG7i5gDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715712117; c=relaxed/simple;
-	bh=y/wfQYC0hWA/b5ghXxQQdWgODen5WHjvJfDJZyDLPqo=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=i2lP6Lw0mqjhm3EL6fXDw7xbBFps+sef7CYLioReAH/JGilBTSKILzoHbovkkOqyCp5kncjn9u+guIG2yDeF/GsEk37kD3INPxeYF1Rp6vzxugcYIaQn4w1a8EBT1jjAkQSGWa8pczHM9Rrm2a8t5m0I5YIk/TylFl9Y0rRr7QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5Uzhu9w; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715716337; c=relaxed/simple;
+	bh=sZP6tHo+9CZUoeCNklvRvOlqbMBw89gzuROoS4J3Mzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bfb83ZVGJMubvgbq2HNtsXzRuXF4tWw18sThcH+a5JvhyIacB5oOiFcBlr7HY9VjtiF1YJEbLvF8Ub2btQ4Dt69cJSRn4JDuDxMZu5/m7Mkd+JBauBKsNu2lM+vpwJjmNVe/047BPicC5//+q8jzppbfJFROzCn7ht7kmws1Hqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ZfnpfGN8; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5Uzhu9w"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 54667C4AF09;
-	Tue, 14 May 2024 18:41:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715712117;
-	bh=y/wfQYC0hWA/b5ghXxQQdWgODen5WHjvJfDJZyDLPqo=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=l5Uzhu9wHXxaq+TPT7tx9kfXG5FIPJuEYglKHPKVBpjc9oXatf0TufeUa3PeBc+vU
-	 NFTrhespfRtBu0HDf8Bd8fXpJgoaNSinAMXt0olwPS8+rBx8XlN2apKWhDEOQwYCAK
-	 Z0aca8CX/hgnTOfGyCEDbu6ipkI65eD5xeil2qGo76OJYyQVEe23APmck1TBd1TSVX
-	 cdBzms8ICkPc2W8qELUElOyJ/1aPtid9vEpf3ThQ62lPxMv3vgqxus71RQudAk/7fl
-	 aXOKqVVBkbdCEH3ov7Gex0r2yF8ZNGnCDLk7TcczcgPo6Yy5UBD5H9JnTNVU3wsSVI
-	 zuwtwK6hlRGeQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4BD32C3274D;
-	Tue, 14 May 2024 18:41:57 +0000 (UTC)
-Subject: Re: [GIT PULL] Kselftest update for Linux 6.10-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <2312d569-3c4b-4685-9678-746ae811c38b@linuxfoundation.org>
-References: <2312d569-3c4b-4685-9678-746ae811c38b@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
-X-PR-Tracked-Message-Id: <2312d569-3c4b-4685-9678-746ae811c38b@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-next-6.10-rc1
-X-PR-Tracked-Commit-Id: 2c3b8f8f37c6c0c926d584cf4158db95e62b960c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4b95dc87362aa57bdd0dcbad109ca5e5ef3cbb6c
-Message-Id: <171571211730.4202.6086721570364739143.pr-tracker-bot@kernel.org>
-Date: Tue, 14 May 2024 18:41:57 +0000
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>, Andrew Morton <akpm@linux-foundation.org>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZfnpfGN8"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1f05b669b6cso32798675ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2024 12:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1715716334; x=1716321134; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xh5lqeIFxmDIv6drPBD1UeOlHcOcbwmzayc2S6c55cU=;
+        b=ZfnpfGN87jzG0rt/lfhe7vQg/eTCzaodROzOlcQIx6Vet6mWXxV+LrOwJQblYLeni/
+         dJGrz1RnoNb1mWjELi77HQlSyyf24fbpmVjwXGl052q2NvRXmG4e1GlPytFtJhtpAEx1
+         B0izW07S5S2J58Qg+Fj2123oqlSEPnqklv1WM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715716334; x=1716321134;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xh5lqeIFxmDIv6drPBD1UeOlHcOcbwmzayc2S6c55cU=;
+        b=ltmzU3aQKBQ3zBHcYs+K9KIyyEO7Ngsa52hblxwHG2JgjspvUOa+n4tOruwcrN4H/d
+         oSHPV4B9gMQ/ZW49XGtLCbc4aBr0VeQ63OwDe8DvkUVF5U056UfsNMETIqbozUwCVYxy
+         rsWXQ4/SovucwYXnvvQBYCYaOp7oeJGavChgRVOyWiz56dDtCn+YSGUQt/hp0A7sDoFr
+         GxaEZ9F4bZd2m0ecWuU24/iLVovO7vfC7tQrrLHQrz3GV8/1aGXU/Fz06o1FB3j0FI0O
+         GVnucxriNkAe8pRE0BXxmORoMHWW1gewRXeq8TsIykS13fW9vHJxZa/yis5daH+kaHFv
+         cm9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW9uZ2IEBok5Nvd0UaAHHsMx8gJ6/LSeCP6AqhdgW10TbvTTVtWKUXXnWWJoxN6RwC5PUa/MOekx2OLDfyiiKnNWqK0UnIWRhe/btJTyh8v
+X-Gm-Message-State: AOJu0Yz6P7zBfusAZKtxFCTBh1e6xxiE/utc5lZv1t+hJvqKAOq1FhfM
+	yMJFmNRoq2M0XzxrNJHuLlnYha9JwYd9MPfN92pOANoqK9dexJzk2TvOvunqUQ==
+X-Google-Smtp-Source: AGHT+IE4USN+kE7T6RZD7G5inzqpecMh0wnrqgy4EQ6oLTRU7SRnjNyHXsSdHHrK+4e8wMQQLJM0Rg==
+X-Received: by 2002:a17:903:2290:b0:1e0:b2d5:5f46 with SMTP id d9443c01a7336-1ef440495b7mr159207695ad.46.1715716334549;
+        Tue, 14 May 2024 12:52:14 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c038c4csm104274535ad.226.2024.05.14.12.52.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 May 2024 12:52:14 -0700 (PDT)
+Date: Tue, 14 May 2024 12:52:13 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: jeffxu@chromium.org, jannh@google.com, sroettger@google.com,
+	willy@infradead.org, gregkh@linuxfoundation.org,
+	torvalds@linux-foundation.org, usama.anjum@collabora.com,
+	corbet@lwn.net, Liam.Howlett@oracle.com, surenb@google.com,
+	merimus@google.com, rdunlap@infradead.org, jeffxu@google.com,
+	jorgelo@chromium.org, groeck@chromium.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
+	linux-hardening@vger.kernel.org, deraadt@openbsd.org
+Subject: Re: [PATCH v10 0/5] Introduce mseal
+Message-ID: <202405141251.8E9580E@keescook>
+References: <20240415163527.626541-1-jeffxu@chromium.org>
+ <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org>
 
-The pull request you sent on Mon, 13 May 2024 11:38:51 -0600:
+On Tue, May 14, 2024 at 10:46:46AM -0700, Andrew Morton wrote:
+> On Mon, 15 Apr 2024 16:35:19 +0000 jeffxu@chromium.org wrote:
+> 
+> > This patchset proposes a new mseal() syscall for the Linux kernel.
+> 
+> I have not moved this into mm-stable for a 6.10 merge.  Mainly because
+> of the total lack of Reviewed-by:s and Acked-by:s.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-next-6.10-rc1
+Oh, I thought I had already reviewed it. FWIW, please consider it:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4b95dc87362aa57bdd0dcbad109ca5e5ef3cbb6c
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Thank you!
+> The code appears to be stable enough for a merge.
+
+Agreed.
+
+> It's awkward that we're in conference this week, but I ask people to
+> give consideration to the desirability of moving mseal() into mainline
+> sometime over the next week, please.
+
+Yes please. :)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Kees Cook
