@@ -1,342 +1,462 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60826144D21;
-	Thu, 16 May 2024 09:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354A2143882;
+	Thu, 16 May 2024 10:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715852059; cv=none; b=nD3hUz5yw9kBcROKSMl+4TZCBjbFgjHT6auXm29FIcmJ1OwWvG9K21xRPj4qcnaOm69UHmaV5Q2p923y0kGHaqlj5WXVdTJjtj0Q2FOiuGJA6Jh28SgIUyISsrN7GNUtSkWEExSdv1Ow+LkhGJ8inf01oreyTfOjDVrg+3Iexqw=
+	t=1715854799; cv=none; b=Gty0EZg1c5dWMtFYUQDQXUhWM4tc3jOXC4OYzcHFxAqLk24mW+l9GqUWz036+ZdQiW2GzQiCobLXeutG79oGhtAhSvmgygkHsc5RKaMA3ynHE9XFHpmfPMHgr0s7utMthkDPpBN/DNlVioKPLv3RHcyPQsKzyyWNznJS1ahB4pQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715852059; c=relaxed/simple;
-	bh=z1bEIZI1MNH9EenT73hgXO8ZkeN9edr3Kn7/hFxax9s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jHxUgiMTZKui6/Y4mn2uK1TSyPFzw6OyRQ4jCIabVoc9OScXE2E2egzwkKkhWN8lJyhDv1V9dAMV8vdcqEdLbPnU6fCnxuGbzxETRUqWPFY4WAo3nmZG17ZHINZq2xNQCmvNGvJbJOYtSQ3Ruf52lbek5fe3pLglRC3GFXQ9VJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WwKTJGvM; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1715854799; c=relaxed/simple;
+	bh=Fw7IjFe4M6KrJDw62K6ANnETEPQsg7M8pG6Bolv6SLQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Dte/bvAQjPUr5a90hOyfzepGXSnWdVdHCCySEtA4L0bAy/6PdmmetCCawlnj/9ocYzq341E+uFFdSRpRbBTsXwws4lPejCWDVvinfADUma5HgCs5BrfwmFkBshPFhU7eCi86cQ/WlbtfGTscB7QqMO8OmbODJfLf2V9lLW8cv+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=DBpCHYFY; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WwKTJGvM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715852058; x=1747388058;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=z1bEIZI1MNH9EenT73hgXO8ZkeN9edr3Kn7/hFxax9s=;
-  b=WwKTJGvMoaUzp5sPvSHn5q9a0y7KZngHUGw7Q/nrIq8SGlv7nza46Dbz
-   yvIfsemrHUWje8//c23juv1aSa/neS7t0w3jr3zZct+aTsgEfu5MeqpI2
-   rpxOcYk5bXvhlRJVMtb5LqkYDF7x9A1XkrDPoHL30BMCGXRfY7ZXcUseC
-   GKQrIavVjxwkf8+ScaMV//jSwRTavTGHK3yJQWEp+7IQwtJJVtUQUMwMe
-   Du59dridf3ba9iQpbxQQgV1K7RRK94DRZX83zlp2GhQXXvPu/jYAMkwjA
-   WQR4mW3S1ZjyUr4Yr3nhkoQWzteskEKXDvABAal72Bx6OezjDGeosjE2/
-   A==;
-X-CSE-ConnectionGUID: KtqkfFNXScKEi1l3TUWgGQ==
-X-CSE-MsgGUID: FlRa8US+SQ+qF3IsKyCC7g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="23355097"
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="23355097"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 02:34:17 -0700
-X-CSE-ConnectionGUID: cgN1CT//SLyjTRQzX4ZGLg==
-X-CSE-MsgGUID: P/22DOGFQF6FiIs41t5lyg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="31372510"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.108])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 02:34:12 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: linux-pci@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-	"Maciej W . Rozycki" <macro@orcam.me.uk>,
-	Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-pm@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH v6 8/8] selftests/pcie_bwctrl: Create selftests
-Date: Thu, 16 May 2024 12:32:22 +0300
-Message-Id: <20240516093222.1684-9-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240516093222.1684-1-ilpo.jarvinen@linux.intel.com>
-References: <20240516093222.1684-1-ilpo.jarvinen@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="DBpCHYFY"
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 44GAJmfj076754;
+	Thu, 16 May 2024 05:19:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1715854788;
+	bh=TL8ALtHjiWPiEXzAwdW5HYYCfVeWNtircvbwti0fXt8=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=DBpCHYFYwv9XZeERhUtQD7YylNIua2pgCd3KYP5R6SwH42L/l8ctoZ1jDuCAWMq1x
+	 VAsa6kXnyZ8Jq9WA3GeWzM+gkWVIxijCnWw/aViR4jESwjGsRhCno0Xohz4eeCGQTV
+	 mU9QpC0ur2Ymwg2zV066Tic/dVa9lCJIGFo1snSw=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 44GAJmYp008879
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 16 May 2024 05:19:48 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 16
+ May 2024 05:19:48 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 16 May 2024 05:19:48 -0500
+Received: from [172.24.227.193] (devarsht.dhcp.ti.com [172.24.227.193] (may be forged))
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 44GAJifm124010;
+	Thu, 16 May 2024 05:19:45 -0500
+Message-ID: <b7155efb-e99c-f385-3bf3-3ffcdefd1260@ti.com>
+Date: Thu, 16 May 2024 15:49:44 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6] lib: add basic KUnit test for lib/math
+To: Daniel Latypov <dlatypov@google.com>, <andriy.shevchenko@linux.intel.com>
+CC: <brendanhiggins@google.com>, <davidgow@google.com>,
+        <linux-kernel@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>,
+        Linux Media
+ Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>
+References: <20210416180427.1545645-1-dlatypov@google.com>
+Content-Language: en-US
+From: Devarsh Thakkar <devarsht@ti.com>
+In-Reply-To: <20210416180427.1545645-1-dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Create selftests for PCIe BW control through the PCIe cooling device
-sysfs interface.
+Hi Daniel, Andy,
 
-First, the BW control selftest finds the PCIe Port to test with. By
-default, the PCIe Port with the highest Link Speed is selected but
-another PCIe Port can be provided with -d parameter.
+On 16/04/21 23:34, Daniel Latypov wrote:
+> Add basic test coverage for files that don't require any config options:
+> * part of math.h (what seem to be the most commonly used macros)
+> * gcd.c
+> * lcm.c
+> * int_sqrt.c
+> * reciprocal_div.c
+> (Ignored int_pow.c since it's a simple textbook algorithm.)
+> 
+> These tests aren't particularly interesting, but they
+> * provide short and simple examples of parameterized tests
+> * provide a place to add tests for any new files in this dir
+> * are written so adding new test cases to cover edge cases should be easy
+>   * looking at code coverage, we hit all the branches in the .c files
+> 
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
 
-The actual test steps the cur_state of the cooling device one-by-one
-from max_state to what the cur_state was initially. The speed change
-is confirmed by observing the current_link_speed for the corresponding
-PCIe Port.
+Just checking if something else was pending on this patch-set for this not
+getting merged?
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
- .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 ++++++++++++++++++
- .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++++++++
- 5 files changed, 193 insertions(+)
- create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
- create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
- create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
+I needed this patch-set for adding tests for new macros I am adding in math.h
+as suggested in this thread [1], so wanted to pull this in my series and add
+changes on top of that for new macros.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3a94ae81b13f..5a3b69515256 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17106,6 +17106,7 @@ S:	Supported
- F:	drivers/pci/pcie/bwctrl.c
- F:	drivers/thermal/pcie_cooling.c
- F:	include/linux/pci-bwctrl.h
-+F:	tools/testing/selftests/pcie_bwctrl/
- 
- PCIE DRIVER FOR AMAZON ANNAPURNA LABS
- M:	Jonathan Chocron <jonnyc@amazon.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index e1504833654d..ac0bc8af4123 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -65,6 +65,7 @@ TARGETS += net/openvswitch
- TARGETS += net/tcp_ao
- TARGETS += netfilter
- TARGETS += nsfs
-+TARGETS += pcie_bwctrl
- TARGETS += perf_events
- TARGETS += pidfd
- TARGETS += pid_namespace
-diff --git a/tools/testing/selftests/pcie_bwctrl/Makefile b/tools/testing/selftests/pcie_bwctrl/Makefile
-new file mode 100644
-index 000000000000..3e84e26341d1
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/Makefile
-@@ -0,0 +1,2 @@
-+TEST_PROGS = set_pcie_cooling_state.sh
-+include ../lib.mk
-diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
-new file mode 100755
-index 000000000000..9df606552af3
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
-@@ -0,0 +1,122 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+SYSFS=
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+retval=0
-+skipmsg="skip all tests:"
-+
-+PCIEPORTTYPE="PCIe_Port_Link_Speed"
-+
-+prerequisite()
-+{
-+	local ports
-+
-+	if [ $UID != 0 ]; then
-+		echo $skipmsg must be run as root >&2
-+		exit $ksft_skip
-+	fi
-+
-+	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
-+
-+	if [ ! -d "$SYSFS" ]; then
-+		echo $skipmsg sysfs is not mounted >&2
-+		exit $ksft_skip
-+	fi
-+
-+	if ! ls $SYSFS/class/thermal/cooling_device* > /dev/null 2>&1; then
-+		echo $skipmsg thermal cooling devices missing >&2
-+		exit $ksft_skip
-+	fi
-+
-+	ports=`grep -e "^$PCIEPORTTYPE" $SYSFS/class/thermal/cooling_device*/type | wc -l`
-+	if [ $ports -eq 0 ]; then
-+		echo $skipmsg pcie cooling devices missing >&2
-+		exit $ksft_skip
-+	fi
-+}
-+
-+testport=
-+find_pcie_port()
-+{
-+	local patt="$1"
-+	local pcieports
-+	local max
-+	local cur
-+	local delta
-+	local bestdelta=-1
-+
-+	pcieports=`grep -l -F -e "$patt" /sys/class/thermal/cooling_device*/type`
-+	if [ -z "$pcieports" ]; then
-+		return
-+	fi
-+	pcieports=${pcieports//\/type/}
-+	# Find the port with the highest PCIe Link Speed
-+	for port in $pcieports; do
-+		max=`cat $port/max_state`
-+		cur=`cat $port/cur_state`
-+		delta=$((max-cur))
-+		if [ $delta -gt $bestdelta ]; then
-+			testport="$port"
-+			bestdelta=$delta
-+		fi
-+	done
-+}
-+
-+sysfspcidev=
-+find_sysfs_pci_dev()
-+{
-+	local typefile="$1/type"
-+	local pcidir
-+
-+	pcidir="$SYSFS/bus/pci/devices/`sed -e "s|^${PCIEPORTTYPE}_||g" $typefile`"
-+
-+	if [ -r "$pcidir/current_link_speed" ]; then
-+		sysfspcidev="$pcidir/current_link_speed"
-+	fi
-+}
-+
-+usage()
-+{
-+	echo "Usage $0 [ -d dev ]"
-+	echo -e "\t-d: PCIe port BDF string (e.g., 0000:00:04.0)"
-+}
-+
-+pattern="$PCIEPORTTYPE"
-+parse_arguments()
-+{
-+	while getopts d:h opt; do
-+		case $opt in
-+			h)
-+				usage "$0"
-+				exit 0
-+				;;
-+			d)
-+				pattern="$PCIEPORTTYPE_$OPTARG"
-+				;;
-+			*)
-+				usage "$0"
-+				exit 0
-+				;;
-+		esac
-+	done
-+}
-+
-+parse_arguments "$@"
-+prerequisite
-+find_pcie_port "$pattern"
-+if [ -z "$testport" ]; then
-+	echo $skipmsg "pcie cooling device not found from sysfs" >&2
-+	exit $ksft_skip
-+fi
-+find_sysfs_pci_dev "$testport"
-+if [ -z "$sysfspcidev" ]; then
-+	echo $skipmsg "PCIe port device not found from sysfs" >&2
-+	exit $ksft_skip
-+fi
-+
-+./set_pcie_speed.sh "$testport" "$sysfspcidev"
-+retval=$?
-+
-+exit $retval
-diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
-new file mode 100755
-index 000000000000..584596949312
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
-@@ -0,0 +1,67 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+set -e
-+
-+TESTNAME=set_pcie_speed
-+
-+declare -a PCIELINKSPEED=(
-+	"2.5 GT/s PCIe"
-+	"5.0 GT/s PCIe"
-+	"8.0 GT/s PCIe"
-+	"16.0 GT/s PCIe"
-+	"32.0 GT/s PCIe"
-+	"64.0 GT/s PCIe"
-+)
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+retval=0
-+
-+coolingdev="$1"
-+statefile="$coolingdev/cur_state"
-+maxfile="$coolingdev/max_state"
-+linkspeedfile="$2"
-+
-+oldstate=`cat $statefile`
-+maxstate=`cat $maxfile`
-+
-+set_state()
-+{
-+	local state=$1
-+	local linkspeed
-+	local expected_linkspeed
-+
-+	echo $state > $statefile
-+
-+	sleep 1
-+
-+	linkspeed="`cat $linkspeedfile`"
-+	expected_linkspeed=$((maxstate-state))
-+	expected_str="${PCIELINKSPEED[$expected_linkspeed]}"
-+	if [ ! "${expected_str}" = "${linkspeed}" ]; then
-+		echo "$TESTNAME failed: expected: ${expected_str}; got ${linkspeed}"
-+		retval=1
-+	fi
-+}
-+
-+cleanup_skip ()
-+{
-+	set_state $oldstate
-+	exit $ksft_skip
-+}
-+
-+trap cleanup_skip EXIT
-+
-+echo "$TESTNAME: testing states $maxstate .. $oldstate with $coolingdev"
-+for i in $(seq $maxstate -1 $oldstate); do
-+	set_state "$i"
-+done
-+
-+trap EXIT
-+if [ $retval -eq 0 ]; then
-+	echo "$TESTNAME [PASS]"
-+else
-+	echo "$TESTNAME [FAIL]"
-+fi
-+exit $retval
--- 
-2.39.2
+Kindly let me know your thoughts on this.
 
+[1]: https://lore.kernel.org/all/ZkIG0-01pz632l4R@smile.fi.intel.com/#t
+
+Regards
+Devarsh
+> ---
+> Changes since v5:
+> * add in test cases for roundup/rounddown
+> * address misc comments from David
+> 
+> Changes since v4:
+> * add in test cases for some math.h macros (abs, round_up/round_down,
+>   div_round_down/closest)
+> * use parameterized testing less to keep things terser
+> 
+> Changes since v3:
+> * fix `checkpatch.pl --strict` warnings
+> * add test cases for gcd(0,0) and lcm(0,0)
+> * minor: don't test both gcd(a,b) and gcd(b,a) when a == b
+> 
+> Changes since v2: mv math_test.c => math_kunit.c
+> 
+> Changes since v1:
+> * Rebase and rewrite to use the new parameterized testing support.
+> * misc: fix overflow in literal and inline int_sqrt format string.
+> * related: commit 1f0e943df68a ("Documentation: kunit: provide guidance
+> for testing many inputs") was merged explaining the patterns shown here.
+>   * there's an in-flight patch to update it for parameterized testing.
+> ---
+>  lib/math/Kconfig      |  12 ++
+>  lib/math/Makefile     |   2 +
+>  lib/math/math_kunit.c | 291 ++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 305 insertions(+)
+>  create mode 100644 lib/math/math_kunit.c
+> 
+> diff --git a/lib/math/Kconfig b/lib/math/Kconfig
+> index f19bc9734fa7..a974d4db0f9c 100644
+> --- a/lib/math/Kconfig
+> +++ b/lib/math/Kconfig
+> @@ -15,3 +15,15 @@ config PRIME_NUMBERS
+>  
+>  config RATIONAL
+>  	bool
+> +
+> +config MATH_KUNIT_TEST
+> +	tristate "KUnit test for lib/math and math.h" if !KUNIT_ALL_TESTS
+> +	depends on KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +		This builds unit tests for lib/math and math.h.
+> +
+> +		For more information on KUnit and unit tests in general, please refer
+> +		to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +		If unsure, say N.
+> diff --git a/lib/math/Makefile b/lib/math/Makefile
+> index be6909e943bd..30abb7a8d564 100644
+> --- a/lib/math/Makefile
+> +++ b/lib/math/Makefile
+> @@ -4,3 +4,5 @@ obj-y += div64.o gcd.o lcm.o int_pow.o int_sqrt.o reciprocal_div.o
+>  obj-$(CONFIG_CORDIC)		+= cordic.o
+>  obj-$(CONFIG_PRIME_NUMBERS)	+= prime_numbers.o
+>  obj-$(CONFIG_RATIONAL)		+= rational.o
+> +
+> +obj-$(CONFIG_MATH_KUNIT_TEST)	+= math_kunit.o
+> diff --git a/lib/math/math_kunit.c b/lib/math/math_kunit.c
+> new file mode 100644
+> index 000000000000..556c23b17c3c
+> --- /dev/null
+> +++ b/lib/math/math_kunit.c
+> @@ -0,0 +1,291 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Simple KUnit suite for math helper funcs that are always enabled.
+> + *
+> + * Copyright (C) 2020, Google LLC.
+> + * Author: Daniel Latypov <dlatypov@google.com>
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <linux/gcd.h>
+> +#include <linux/kernel.h>
+> +#include <linux/lcm.h>
+> +#include <linux/reciprocal_div.h>
+> +
+> +static void abs_test(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_EQ(test, abs((char)0), (char)0);
+> +	KUNIT_EXPECT_EQ(test, abs((char)42), (char)42);
+> +	KUNIT_EXPECT_EQ(test, abs((char)-42), (char)42);
+> +
+> +	/* The expression in the macro is actually promoted to an int. */
+> +	KUNIT_EXPECT_EQ(test, abs((short)0),  0);
+> +	KUNIT_EXPECT_EQ(test, abs((short)42),  42);
+> +	KUNIT_EXPECT_EQ(test, abs((short)-42),  42);
+> +
+> +	KUNIT_EXPECT_EQ(test, abs(0),  0);
+> +	KUNIT_EXPECT_EQ(test, abs(42),  42);
+> +	KUNIT_EXPECT_EQ(test, abs(-42),  42);
+> +
+> +	KUNIT_EXPECT_EQ(test, abs(0L), 0L);
+> +	KUNIT_EXPECT_EQ(test, abs(42L), 42L);
+> +	KUNIT_EXPECT_EQ(test, abs(-42L), 42L);
+> +
+> +	KUNIT_EXPECT_EQ(test, abs(0LL), 0LL);
+> +	KUNIT_EXPECT_EQ(test, abs(42LL), 42LL);
+> +	KUNIT_EXPECT_EQ(test, abs(-42LL), 42LL);
+> +
+> +	/* Unsigned types get casted to signed. */
+> +	KUNIT_EXPECT_EQ(test, abs(0ULL), 0LL);
+> +	KUNIT_EXPECT_EQ(test, abs(42ULL), 42LL);
+> +}
+> +
+> +static void int_sqrt_test(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_EQ(test, int_sqrt(0UL), 0UL);
+> +	KUNIT_EXPECT_EQ(test, int_sqrt(1UL), 1UL);
+> +	KUNIT_EXPECT_EQ(test, int_sqrt(4UL), 2UL);
+> +	KUNIT_EXPECT_EQ(test, int_sqrt(5UL), 2UL);
+> +	KUNIT_EXPECT_EQ(test, int_sqrt(8UL), 2UL);
+> +	KUNIT_EXPECT_EQ(test, int_sqrt(1UL << 30), 1UL << 15);
+> +}
+> +
+> +static void round_up_test(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_EQ(test, round_up(0, 1), 0);
+> +	KUNIT_EXPECT_EQ(test, round_up(1, 2), 2);
+> +	KUNIT_EXPECT_EQ(test, round_up(3, 2), 4);
+> +	KUNIT_EXPECT_EQ(test, round_up((1 << 30) - 1, 2), 1 << 30);
+> +	KUNIT_EXPECT_EQ(test, round_up((1 << 30) - 1, 1 << 29), 1 << 30);
+> +}
+> +
+> +static void round_down_test(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_EQ(test, round_down(0, 1), 0);
+> +	KUNIT_EXPECT_EQ(test, round_down(1, 2), 0);
+> +	KUNIT_EXPECT_EQ(test, round_down(3, 2), 2);
+> +	KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 2), (1 << 30) - 2);
+> +	KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 1 << 29), 1 << 29);
+> +}
+> +
+> +/* These versions can round to numbers that aren't a power of two */
+> +static void roundup_test(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_EQ(test, roundup(0, 1), 0);
+> +	KUNIT_EXPECT_EQ(test, roundup(1, 2), 2);
+> +	KUNIT_EXPECT_EQ(test, roundup(3, 2), 4);
+> +	KUNIT_EXPECT_EQ(test, roundup((1 << 30) - 1, 2), 1 << 30);
+> +	KUNIT_EXPECT_EQ(test, roundup((1 << 30) - 1, 1 << 29), 1 << 30);
+> +
+> +	KUNIT_EXPECT_EQ(test, roundup(3, 2), 4);
+> +	KUNIT_EXPECT_EQ(test, roundup(4, 3), 6);
+> +}
+> +
+> +static void rounddown_test(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_EQ(test, rounddown(0, 1), 0);
+> +	KUNIT_EXPECT_EQ(test, rounddown(1, 2), 0);
+> +	KUNIT_EXPECT_EQ(test, rounddown(3, 2), 2);
+> +	KUNIT_EXPECT_EQ(test, rounddown((1 << 30) - 1, 2), (1 << 30) - 2);
+> +	KUNIT_EXPECT_EQ(test, rounddown((1 << 30) - 1, 1 << 29), 1 << 29);
+> +
+> +	KUNIT_EXPECT_EQ(test, rounddown(3, 2), 2);
+> +	KUNIT_EXPECT_EQ(test, rounddown(4, 3), 3);
+> +}
+> +
+> +static void div_round_up_test(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(0, 1), 0);
+> +	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(20, 10), 2);
+> +	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 10), 3);
+> +	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 20), 2);
+> +	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(21, 99), 1);
+> +}
+> +
+> +static void div_round_closest_test(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(0, 1), 0);
+> +	KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(20, 10), 2);
+> +	KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(21, 10), 2);
+> +	KUNIT_EXPECT_EQ(test, DIV_ROUND_CLOSEST(25, 10), 3);
+> +}
+> +
+> +/* Generic test case for unsigned long inputs. */
+> +struct test_case {
+> +	unsigned long a, b;
+> +	unsigned long result;
+> +};
+> +
+> +static struct test_case gcd_cases[] = {
+> +	{
+> +		.a = 0, .b = 0,
+> +		.result = 0,
+> +	},
+> +	{
+> +		.a = 0, .b = 1,
+> +		.result = 1,
+> +	},
+> +	{
+> +		.a = 2, .b = 2,
+> +		.result = 2,
+> +	},
+> +	{
+> +		.a = 2, .b = 4,
+> +		.result = 2,
+> +	},
+> +	{
+> +		.a = 3, .b = 5,
+> +		.result = 1,
+> +	},
+> +	{
+> +		.a = 3 * 9, .b = 3 * 5,
+> +		.result = 3,
+> +	},
+> +	{
+> +		.a = 3 * 5 * 7, .b = 3 * 5 * 11,
+> +		.result = 15,
+> +	},
+> +	{
+> +		.a = 1 << 21,
+> +		.b = (1 << 21) - 1,
+> +		.result = 1,
+> +	},
+> +};
+> +
+> +KUNIT_ARRAY_PARAM(gcd, gcd_cases, NULL);
+> +
+> +static void gcd_test(struct kunit *test)
+> +{
+> +	const char *message_fmt = "gcd(%lu, %lu)";
+> +	const struct test_case *test_param = test->param_value;
+> +
+> +	KUNIT_EXPECT_EQ_MSG(test, test_param->result,
+> +			    gcd(test_param->a, test_param->b),
+> +			    message_fmt, test_param->a,
+> +			    test_param->b);
+> +
+> +	if (test_param->a == test_param->b)
+> +		return;
+> +
+> +	/* gcd(a,b) == gcd(b,a) */
+> +	KUNIT_EXPECT_EQ_MSG(test, test_param->result,
+> +			    gcd(test_param->b, test_param->a),
+> +			    message_fmt, test_param->b,
+> +			    test_param->a);
+> +}
+> +
+> +static struct test_case lcm_cases[] = {
+> +	{
+> +		.a = 0, .b = 0,
+> +		.result = 0,
+> +	},
+> +	{
+> +		.a = 0, .b = 1,
+> +		.result = 0,
+> +	},
+> +	{
+> +		.a = 1, .b = 2,
+> +		.result = 2,
+> +	},
+> +	{
+> +		.a = 2, .b = 2,
+> +		.result = 2,
+> +	},
+> +	{
+> +		.a = 3 * 5, .b = 3 * 7,
+> +		.result = 3 * 5 * 7,
+> +	},
+> +};
+> +
+> +KUNIT_ARRAY_PARAM(lcm, lcm_cases, NULL);
+> +
+> +static void lcm_test(struct kunit *test)
+> +{
+> +	const char *message_fmt = "lcm(%lu, %lu)";
+> +	const struct test_case *test_param = test->param_value;
+> +
+> +	KUNIT_EXPECT_EQ_MSG(test, test_param->result,
+> +			    lcm(test_param->a, test_param->b),
+> +			    message_fmt, test_param->a,
+> +			    test_param->b);
+> +
+> +	if (test_param->a == test_param->b)
+> +		return;
+> +
+> +	/* lcm(a,b) == lcm(b,a) */
+> +	KUNIT_EXPECT_EQ_MSG(test, test_param->result,
+> +			    lcm(test_param->b, test_param->a),
+> +			    message_fmt, test_param->b,
+> +			    test_param->a);
+> +}
+> +
+> +struct u32_test_case {
+> +	u32 a, b;
+> +	u32 result;
+> +};
+> +
+> +static struct u32_test_case reciprocal_div_cases[] = {
+> +	{
+> +		.a = 0, .b = 1,
+> +		.result = 0,
+> +	},
+> +	{
+> +		.a = 42, .b = 20,
+> +		.result = 2,
+> +	},
+> +	{
+> +		.a = 42, .b = 9999,
+> +		.result = 0,
+> +	},
+> +	{
+> +		.a = (1 << 16), .b = (1 << 14),
+> +		.result = 1 << 2,
+> +	},
+> +};
+> +
+> +KUNIT_ARRAY_PARAM(reciprocal_div, reciprocal_div_cases, NULL);
+> +
+> +static void reciprocal_div_test(struct kunit *test)
+> +{
+> +	const struct u32_test_case *test_param = test->param_value;
+> +	struct reciprocal_value rv = reciprocal_value(test_param->b);
+> +
+> +	KUNIT_EXPECT_EQ_MSG(test, test_param->result,
+> +			    reciprocal_divide(test_param->a, rv),
+> +			    "reciprocal_divide(%u, %u)",
+> +			    test_param->a, test_param->b);
+> +}
+> +
+> +static void reciprocal_scale_test(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_EQ(test, reciprocal_scale(0u, 100), 0u);
+> +	KUNIT_EXPECT_EQ(test, reciprocal_scale(1u, 100), 0u);
+> +	KUNIT_EXPECT_EQ(test, reciprocal_scale(1u << 4, 1 << 28), 1u);
+> +	KUNIT_EXPECT_EQ(test, reciprocal_scale(1u << 16, 1 << 28), 1u << 12);
+> +	KUNIT_EXPECT_EQ(test, reciprocal_scale(~0u, 1 << 28), (1u << 28) - 1);
+> +}
+> +
+> +static struct kunit_case math_test_cases[] = {
+> +	KUNIT_CASE(abs_test),
+> +	KUNIT_CASE(int_sqrt_test),
+> +	KUNIT_CASE(round_up_test),
+> +	KUNIT_CASE(round_down_test),
+> +	KUNIT_CASE(roundup_test),
+> +	KUNIT_CASE(rounddown_test),
+> +	KUNIT_CASE(div_round_up_test),
+> +	KUNIT_CASE(div_round_closest_test),
+> +	KUNIT_CASE_PARAM(gcd_test, gcd_gen_params),
+> +	KUNIT_CASE_PARAM(lcm_test, lcm_gen_params),
+> +	KUNIT_CASE_PARAM(reciprocal_div_test, reciprocal_div_gen_params),
+> +	KUNIT_CASE(reciprocal_scale_test),
+> +	{}
+> +};
+> +
+> +static struct kunit_suite math_test_suite = {
+> +	.name = "lib-math",
+> +	.test_cases = math_test_cases,
+> +};
+> +
+> +kunit_test_suites(&math_test_suite);
+> +
+> +MODULE_LICENSE("GPL v2");
+> 
+> base-commit: 7e25f40eab52c57ff6772d27d2aef3640a3237d7
