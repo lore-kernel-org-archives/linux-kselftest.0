@@ -1,207 +1,98 @@
-Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9C36E60E;
-	Sun, 19 May 2024 20:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D8C8F4A;
+	Sun, 19 May 2024 23:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716150322; cv=none; b=BlZ/gw9Dttk5FJ1vSRv6clyW+bYzgh09qTix3+2SGhw33gTy9QQSgnSCF+W5ZMhCHnyVMfxim5xW5rFS608yQs1l2HrQq8jL3/Rxb81Qsd434BwTpGno9osgEW7SvpRGiEKqG0wMW8WwD6CSlXf3CMZiDb2QSyYzz0Nd0g6K5aE=
+	t=1716162506; cv=none; b=XmiceVk3h4jPKK9dEB2ZKur0YtLsjWafmehjy+DF90jI62PdUZsOJLkc6m8OTP4aheyRKqn/g3ddfPdm7RzrWiI1wpv1rerK5GLoIGaWKATeooFtilb+1iScE81QF2lCPXcDoj7bqymYxr2D0InLIbN+4XEgU6oILG8c3rtBLfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716150322; c=relaxed/simple;
-	bh=8mBpNrep45/WQcWJkfana5grpHviuBbZ8c3NZYi9TZk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QxJHQsVoqIuXetfXWgopqUnry9ajqavaR2xxeIvERdDYACxbsLRwDJJ7xlaWy3iUXiBcN/cWzwKzIafnMG+SHclyXWn7Gd0WWtZ6gWCid9p9dM9Kl4sdD0UjkWA/n68UF7dRYzn9A3Fyl6m1n+52jVqek3WJGLtwZ1s42X+vuao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=UNJOwmxP; arc=none smtp.client-ip=4.36.192.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
+	s=arc-20240116; t=1716162506; c=relaxed/simple;
+	bh=a5IqfGM8Xs0u8K/8KiCDxhps6dGg21MfbLPXNVbgILw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=XwIsQZjI3rhqQIsGQPoxPIcuj/qTLP4nMY2NcMQngSsWeIV4YA0WRtnjFjx7NpBaKZcPHJ7yZ31rVuyg2SX0UYalIWUoSYPLzOl2F5fdKtX/1aB3tFamZlebR4EriGlBp2J7LELL715jZzes59rZG6M5YUeBg10sLVYHQXjoeLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=o63afiyR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="UNJOwmxP"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
-	bh=1lbo0bNxrPdMIVRoJ6+tExY5TotubsDpMSLovzCGBGc=; b=UNJOwmxP6SKaJHQteJMQXUg+aR
-	cCHpnKJDZ0yrSHVtUimpaLVKz1b1YkOf1HEf3glrA4uAfilvXM/bDry0FLbt+uyzInqPU/+ESPYUo
-	DW8A3zwdFhz2gsYKxYimBFHlx63q0Wx2FbSyHpr17HYUwBEAW4NbynDcRe1UO1Yn6PdxD1sSd8TWK
-	du7v2kV55sc3Ql8W5zO76xJVk4QpkGfJH4A2rFxaOLt1tcUiPcuhQDaPph2MatY/1HpSn3HReY0aX
-	eezoUcJVjB6Oii1HxHPK0d8uWt63hTU7U6LSgLaskDI80j69xb5k/3gamglF01pMiorcH1gPRh53Z
-	UFsFN0/w==;
-Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
-	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <zfigura@codeweavers.com>)
-	id 1s8n5e-008wIn-03;
-	Sun, 19 May 2024 15:25:06 -0500
-From: Elizabeth Figura <zfigura@codeweavers.com>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	wine-devel@winehq.org,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Arkadiusz Hiler <ahiler@codeweavers.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Elizabeth Figura <zfigura@codeweavers.com>
-Subject: [PATCH v5 16/28] selftests: ntsync: Add some tests for NTSYNC_IOC_WAIT_ANY.
-Date: Sun, 19 May 2024 15:24:42 -0500
-Message-ID: <20240519202454.1192826-17-zfigura@codeweavers.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240519202454.1192826-1-zfigura@codeweavers.com>
-References: <20240519202454.1192826-1-zfigura@codeweavers.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="o63afiyR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D331C32781;
+	Sun, 19 May 2024 23:48:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1716162505;
+	bh=a5IqfGM8Xs0u8K/8KiCDxhps6dGg21MfbLPXNVbgILw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=o63afiyR83+KBRwq41skI3q3A+V1GfTG/mO0OMqwZKAYVJ/Lu1hFXMVR6BSnO364e
+	 ELVQ64z8AJ9n92mv25r+SfyfU2wVgplSoD4yjHe+6dztoXWG1nvMFQePscRHGV/3Mr
+	 ZenLf2A1bm11k7GlaTypTAjU5iikZF9IF3pJ4zsU=
+Date: Sun, 19 May 2024 16:48:23 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Dev Jain <dev.jain@arm.com>
+Cc: shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Anshuman.Khandual@arm.com,
+ kirill.shutemov@linux.intel.com, AneeshKumar.KizhakeVeetil@arm.com
+Subject: Re: [PATCH] selftests/mm: va_high_addr_switch: Do not skip test and
+ give warning message post FEAT_LPA2
+Message-Id: <20240519164823.8e21acfd2bf9ad13f7798f1a@linux-foundation.org>
+In-Reply-To: <20240516035633.143793-1-dev.jain@arm.com>
+References: <20240516035633.143793-1-dev.jain@arm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Test basic synchronous functionality of NTSYNC_IOC_WAIT_ANY, when objects are
-considered signaled or not signaled, and how they are affected by a successful
-wait.
+On Thu, 16 May 2024 09:26:33 +0530 Dev Jain <dev.jain@arm.com> wrote:
 
-Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
----
- .../testing/selftests/drivers/ntsync/ntsync.c | 119 ++++++++++++++++++
- 1 file changed, 119 insertions(+)
+> Post FEAT_LPA2, Aarch64 extends the 4KB and 16KB translation granule to
+> large virtual addresses. Currently, the test is being skipped for said
+> granule sizes, because the page sizes have been statically defined; to
+> work around that would mean breaking the nice array of structs used for
+> adding testcases.
 
-diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
-index 7cd0f40594fd..40ad8cbd3138 100644
---- a/tools/testing/selftests/drivers/ntsync/ntsync.c
-+++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
-@@ -342,4 +342,123 @@ TEST(mutex_state)
- 	close(fd);
- }
- 
-+TEST(test_wait_any)
-+{
-+	int objs[NTSYNC_MAX_WAIT_COUNT + 1], fd, ret;
-+	struct ntsync_mutex_args mutex_args = {0};
-+	struct ntsync_sem_args sem_args = {0};
-+	__u32 owner, index, count, i;
-+	struct timespec timeout;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &timeout);
-+
-+	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
-+	ASSERT_LE(0, fd);
-+
-+	sem_args.count = 2;
-+	sem_args.max = 3;
-+	sem_args.sem = 0xdeadbeef;
-+	ret = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_NE(0xdeadbeef, sem_args.sem);
-+
-+	mutex_args.owner = 0;
-+	mutex_args.count = 0;
-+	mutex_args.mutex = 0xdeadbeef;
-+	ret = ioctl(fd, NTSYNC_IOC_CREATE_MUTEX, &mutex_args);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_NE(0xdeadbeef, mutex_args.mutex);
-+
-+	objs[0] = sem_args.sem;
-+	objs[1] = mutex_args.mutex;
-+
-+	ret = wait_any(fd, 2, objs, 123, &index);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(0, index);
-+	check_sem_state(sem_args.sem, 1, 3);
-+	check_mutex_state(mutex_args.mutex, 0, 0);
-+
-+	ret = wait_any(fd, 2, objs, 123, &index);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(0, index);
-+	check_sem_state(sem_args.sem, 0, 3);
-+	check_mutex_state(mutex_args.mutex, 0, 0);
-+
-+	ret = wait_any(fd, 2, objs, 123, &index);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(1, index);
-+	check_sem_state(sem_args.sem, 0, 3);
-+	check_mutex_state(mutex_args.mutex, 1, 123);
-+
-+	count = 1;
-+	ret = post_sem(sem_args.sem, &count);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(0, count);
-+
-+	ret = wait_any(fd, 2, objs, 123, &index);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(0, index);
-+	check_sem_state(sem_args.sem, 0, 3);
-+	check_mutex_state(mutex_args.mutex, 1, 123);
-+
-+	ret = wait_any(fd, 2, objs, 123, &index);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(1, index);
-+	check_sem_state(sem_args.sem, 0, 3);
-+	check_mutex_state(mutex_args.mutex, 2, 123);
-+
-+	ret = wait_any(fd, 2, objs, 456, &index);
-+	EXPECT_EQ(-1, ret);
-+	EXPECT_EQ(ETIMEDOUT, errno);
-+
-+	owner = 123;
-+	ret = ioctl(mutex_args.mutex, NTSYNC_IOC_MUTEX_KILL, &owner);
-+	EXPECT_EQ(0, ret);
-+
-+	ret = wait_any(fd, 2, objs, 456, &index);
-+	EXPECT_EQ(-1, ret);
-+	EXPECT_EQ(EOWNERDEAD, errno);
-+	EXPECT_EQ(1, index);
-+
-+	ret = wait_any(fd, 2, objs, 456, &index);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(1, index);
-+
-+	/* test waiting on the same object twice */
-+	count = 2;
-+	ret = post_sem(sem_args.sem, &count);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(0, count);
-+
-+	objs[0] = objs[1] = sem_args.sem;
-+	ret = wait_any(fd, 2, objs, 456, &index);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(0, index);
-+	check_sem_state(sem_args.sem, 1, 3);
-+
-+	ret = wait_any(fd, 0, NULL, 456, &index);
-+	EXPECT_EQ(-1, ret);
-+	EXPECT_EQ(ETIMEDOUT, errno);
-+
-+	for (i = 0; i < NTSYNC_MAX_WAIT_COUNT + 1; ++i)
-+		objs[i] = sem_args.sem;
-+
-+	ret = wait_any(fd, NTSYNC_MAX_WAIT_COUNT, objs, 123, &index);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(0, index);
-+
-+	ret = wait_any(fd, NTSYNC_MAX_WAIT_COUNT + 1, objs, 123, &index);
-+	EXPECT_EQ(-1, ret);
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	ret = wait_any(fd, -1, objs, 123, &index);
-+	EXPECT_EQ(-1, ret);
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	close(sem_args.sem);
-+	close(mutex_args.mutex);
-+
-+	close(fd);
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.43.0
+Which array is that?  testcases[]?  If so, we could keep if fairly nice
+by doing the array population at runtime.  Something like:
+
+static struct testcase *testcases;
+
+static void init_thing()
+{
+	struct testcase t[] = {
+		...
+	};
+
+	testcases = malloc(sizeof(t));
+	memcpy(testcases, t, sizeof(t));
+}
+	
+>  
+> +#if defined(__aarch64__)
+> +void failure_message(void)
+> +{
+> +	printf("TEST MAY FAIL: Are you running on a pagesize other than 64K?\n");
+> +	printf("If yes, please change macros manually. Ensure to change the\n");
+> +	printf("address macros too if running defconfig on 16K pagesize,\n");
+> +	printf("since userspace VA = 47 bits post FEAT_LPA2.\n");
+> +}
+> +#else
+> +void failure_message(void) {}
+> +#endif
+> +
+>  int main(int argc, char **argv)
+>  {
+>  	int ret;
+> @@ -308,5 +320,8 @@ int main(int argc, char **argv)
+>  	ret = run_test(testcases, ARRAY_SIZE(testcases));
+>  	if (argc == 2 && !strcmp(argv[1], "--run-hugetlb"))
+>  		ret = run_test(hugetlb_testcases, ARRAY_SIZE(hugetlb_testcases));
+> +
+> +	if (ret)
+> +		failure_message();
+>  	return ret;
+>  }
+
+This seems rather lame :(.  It would be nice to fix this for once and
+for all.
 
