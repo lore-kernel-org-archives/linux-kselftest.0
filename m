@@ -1,172 +1,141 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3946CA2D;
-	Mon, 20 May 2024 17:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B7E13791E
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2024 17:45:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716226913; cv=none; b=rwXKylQDclLi+5dChvPgjfiiXACJDEHn1Gcbd0c0hFQXRr5kxlhlVTNHywJl2cVZRExJthJjTdCD8iSKImWEtCQSYO4PyPfc3hoZhfI22WmwxJvUEIU9cJCW05imUvegk9so3RIrX+pMjIlhq0y0Udnd9A/5gdedf+FRJKPkItk=
+	t=1716227106; cv=none; b=gysiS+0fk6QjsDMwWXfAJemmdutAuTm3T2iTA2uIhyK4OOJZXkeV7YBm/zDiCkR1hvfLqV+yWLggL6AamDNiMcFyPwUgNkNpewxE9gqsvoXeaNv0Y7MSZum3wit+Aj9VrMxXxt+dUHtofnpx7Bq/0OvSLhJe3w0nA2xFA+Nf030=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716226913; c=relaxed/simple;
-	bh=USAnQFsFIAz4NTK1Wi/gNcItGq8+FboBq9Sm3p6WVJE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fbaiWSWHx0oE5qRHz8T/tK64v1EfhJBktP0q7hd50I2siz5TwB88AJ86gOhracSRepgnQ7KkP527VrV8pbyOFFLlJrtZSk5BGWm22cOcDW+xQ5nGe30tBf+tG8kfoiB+BHc+m3UvalzV8rxIxMq9Rb2Lq4EC5py6YMxOO5djAlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=1DAarIjl; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1716227106; c=relaxed/simple;
+	bh=NoF8Epxk+kPwoFDdVNCmSSKs5A0z9ukazRXDjetP+iQ=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=VXTEeUlc5iXvFjstDRyx0WrDEg+alv4pH7Br3Yum55/1UzSPLh5hv4/ccf4QjphRjRFs0BzvhZhFAIya2U/o8LltxgkQKtwkxAbFWJXLaDS2YVWHEfmBc7N0I8nlI673A3aWPprVG1he7uHjZIxb5Gx6beCc0iLW2YtqeOz5Y40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=Mxi1aJTW; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="1DAarIjl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1716226909;
-	bh=USAnQFsFIAz4NTK1Wi/gNcItGq8+FboBq9Sm3p6WVJE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=1DAarIjlKy2Zl60w7NfmP/MqF+2Vf/lBvTyq/6hDi9OQDKknjDXzFHqpwgOc+lUjA
-	 pphsH/zdCrKHAHbKSZ23D//Eca5Y3tqf5q/o6FJuyEeG5utOgnD/ano+hUgn4j9gBN
-	 985FZoqwm8oJcQR22Ds6awEbQptqdojjls4+AqLvJz4fXuykXdEvusxo2qAUVJ9APi
-	 I5NMO2wdKnu9z4NXjcdMw1JsDF/8pF1qCdzxKcoKubfulihtrzqImF0E3+kTDKIsfC
-	 1cvwoN9Mr2GFIii68eYdsOK+YJWALUX9iBLyUsWizv3g9WVl9KPrb56bji59IhTDA7
-	 HpNToWom1Nqmw==
-Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 09AC0378107D;
-	Mon, 20 May 2024 17:41:47 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: kernel@collabora.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: firmware: conform test to TAP
-Date: Mon, 20 May 2024 09:37:57 -0700
-Message-Id: <20240520163759.1427653-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Mxi1aJTW"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1edf506b216so79013955ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2024 10:45:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1716227104; x=1716831904; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WYOAib0im5YAIvaoLC4Jwr+EZhyCaxWhipiU5T6Uw8w=;
+        b=Mxi1aJTWHuxctKS6HMqgvuK4a2A6PFTfwT5xQdjEpJ/bIEFd0FyazEpTUnKSYaDjgG
+         B3W28FvkGGbNBWfi2qchfglF5lCiEz0Z2YPOTDu92NGT4mdE/9gn3iugFF1U8BJOMOWT
+         pS2eI9Gj3fynmBQWvF+VnNt+ep2XkP9veIUKuzPwRH8lU7x3otLtNebJjU65wvNGCgxh
+         k6oW1gMlkl1Xummo9iNFT970et91jcrKf4S597cbatMKF5Yd9d6G6j/UxYBkE6IyHxBj
+         PDDDJk9r3C8nr3XPiDXv4ZgECe5A6zxUZsac2Ew0a6w2CfXmLE8ikrPRFDj/yoFUn7Ib
+         xNPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716227104; x=1716831904;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WYOAib0im5YAIvaoLC4Jwr+EZhyCaxWhipiU5T6Uw8w=;
+        b=KmxJyNOu1xojwAaF0Dv2WZvONIc7qqeiFVcyl8YxZGtvLwJCfHpyOBxPd2g0Uo4dto
+         APs8V/1K5iyNLnVbwR0nZY0k4AKUr4eN51yHSjAWFN5UKZCihkEevMaMGwcVn+1wPzg8
+         EHw1yXeBDMNhsYTglUDCUy1R4Ws8axU2lWbKuKUHNhF/p9i6u8cTYOeiYaiw/dZ5FQp+
+         TkbL2Lij24Ik2DHHHy3Q4vzVByjUrkDZu/qE0iKSzZkuIyZBFx3a7U5mra0jqZ3UYv9K
+         rKu8YtatKFkzFRFwopFRVYOo39Pax45WQ1o3cH62+2MrL8pLDv/+WQWTA72IgMeppbzf
+         fi3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVIpaaR1fEajOCWefy8Fy+SQJMX0O6a2R8+Ju+yEjUCGdAoPJA5jP1xEzDYNJWY/RQia3twUVLZkVOzLSzoLRXbXvVllIHrDRhRrOdTqI9l
+X-Gm-Message-State: AOJu0Ywq3g4DRZAxzjsXSj10VFhlngBYt/b+WqCRwPpGoR/b55TbFnGY
+	2L3gvNSL89tYO8ABPqwo6aca4NXZlTB2+NYNOvb43764Yvv5GUEq/JmfFgPUBR4=
+X-Google-Smtp-Source: AGHT+IGSP83LK59lDrAUC06K8wYy4cJVLkLalIosHKTaUDb8DXNLIvnlR9bUemvrM7Ajwt7gOq2SbA==
+X-Received: by 2002:a17:902:7d95:b0:1ee:b2ff:c93a with SMTP id d9443c01a7336-1ef43f3e4admr280919625ad.40.1716227104077;
+        Mon, 20 May 2024 10:45:04 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d164dsm204987635ad.52.2024.05.20.10.45.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 May 2024 10:45:03 -0700 (PDT)
+Message-ID: <664b8c1f.170a0220.5691e.4a83@mx.google.com>
+Date: Mon, 20 May 2024 10:45:03 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: linux_kselftest-next-6.10-rc1-fixes
+X-Kernelci-Report-Type: build
+Subject: kselftest/next build: 4 builds: 0 failed, 4 passed,
+ 1 warning (linux_kselftest-next-6.10-rc1-fixes)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Conform the layout, informational and status messages to TAP. No
-functional change is intended other than the layout of output messages.
-Without using TAP messages, the passed/failed/skip test names cannot be
-found. This is a prepartory patch, more patches will be sent to comform
-the test completely.
+kselftest/next build: 4 builds: 0 failed, 4 passed, 1 warning (linux_kselft=
+est-next-6.10-rc1-fixes)
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+This legacy KernelCI providing this report will shutdown sometime
+soon in favor of our new KernelCI infra. Not all tests are being
+migrated.
+If you are still using this report and want us to prioritize your
+usecase in the new system, please let us know at
+kernelci@lists.linux.dev
+
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/linux_kselftest-next-6.10-rc1-fixes/
+
+Tree: kselftest
+Branch: next
+Git Describe: linux_kselftest-next-6.10-rc1-fixes
+Git Commit: a97853f25b06f71c23b2d7a59fbd40f3f42d55ac
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 3 unique architectures
+
+Warnings Detected:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x14dd29
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x14dd29
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
 ---
- .../selftests/firmware/fw_run_tests.sh        | 63 ++++++++++++-------
- 1 file changed, 40 insertions(+), 23 deletions(-)
-
-diff --git a/tools/testing/selftests/firmware/fw_run_tests.sh b/tools/testing/selftests/firmware/fw_run_tests.sh
-index f6d95a2d51249..5063c75345680 100755
---- a/tools/testing/selftests/firmware/fw_run_tests.sh
-+++ b/tools/testing/selftests/firmware/fw_run_tests.sh
-@@ -6,6 +6,9 @@
- 
- set -e
- 
-+DIR="$(dirname $(readlink -f "$0"))"
-+source "${DIR}"/../kselftest/ktap_helpers.sh
-+
- TEST_DIR=$(dirname $0)
- source $TEST_DIR/fw_lib.sh
- 
-@@ -26,54 +29,68 @@ run_tests()
- 	proc_set_force_sysfs_fallback $1
- 	proc_set_ignore_sysfs_fallback $2
- 	$TEST_DIR/fw_upload.sh
-+
-+	ktap_test_pass "Completed"
- }
- 
- run_test_config_0001()
- {
--	echo "-----------------------------------------------------"
--	echo "Running kernel configuration test 1 -- rare"
--	echo "Emulates:"
--	echo "CONFIG_FW_LOADER=y"
--	echo "CONFIG_FW_LOADER_USER_HELPER=n"
--	echo "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
-+	ktap_print_msg "-----------------------------------------------------"
-+	ktap_print_msg "Running kernel configuration test 1 -- rare"
-+	ktap_print_msg "Emulates:"
-+	ktap_print_msg "CONFIG_FW_LOADER=y"
-+	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER=n"
-+	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
- 	run_tests 0 1
- }
- 
- run_test_config_0002()
- {
--	echo "-----------------------------------------------------"
--	echo "Running kernel configuration test 2 -- distro"
--	echo "Emulates:"
--	echo "CONFIG_FW_LOADER=y"
--	echo "CONFIG_FW_LOADER_USER_HELPER=y"
--	echo "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
-+	ktap_print_msg "-----------------------------------------------------"
-+	ktap_print_msg "Running kernel configuration test 2 -- distro"
-+	ktap_print_msg "Emulates:"
-+	ktap_print_msg "CONFIG_FW_LOADER=y"
-+	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER=y"
-+	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
- 	proc_set_ignore_sysfs_fallback 0
- 	run_tests 0 0
- }
- 
- run_test_config_0003()
- {
--	echo "-----------------------------------------------------"
--	echo "Running kernel configuration test 3 -- android"
--	echo "Emulates:"
--	echo "CONFIG_FW_LOADER=y"
--	echo "CONFIG_FW_LOADER_USER_HELPER=y"
--	echo "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y"
-+	ktap_print_msg "-----------------------------------------------------"
-+	ktap_print_msg "Running kernel configuration test 3 -- android"
-+	ktap_print_msg "Emulates:"
-+	ktap_print_msg "CONFIG_FW_LOADER=y"
-+	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER=y"
-+	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y"
- 	run_tests 1 0
- }
- 
-+ktap_print_header
-+
- check_mods
- check_setup
- 
--echo "Running namespace test: "
--$TEST_DIR/fw_namespace $DIR/trigger_request
--echo "OK"
--
- if [ -f $FW_FORCE_SYSFS_FALLBACK ]; then
-+	ktap_set_plan "4"
-+
- 	run_test_config_0001
- 	run_test_config_0002
- 	run_test_config_0003
- else
--	echo "Running basic kernel configuration, working with your config"
-+	ktap_set_plan "2"
-+
-+	ktap_print_msg "Running basic kernel configuration, working with your config"
- 	run_tests
- fi
-+
-+ktap_print_msg "Running namespace test: "
-+$TEST_DIR/fw_namespace $DIR/trigger_request
-+if [ $? -eq 0 ]; then
-+    ktap_test_pass "fw_namespace completed successfully"
-+else
-+    ktap_test_fail "fw_namespace failed"
-+fi
-+
-+ktap_finished
--- 
-2.39.2
-
+For more info write to <info@kernelci.org>
