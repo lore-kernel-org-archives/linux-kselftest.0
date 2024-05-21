@@ -1,117 +1,280 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EA238DC3;
-	Tue, 21 May 2024 08:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9450D47A7C;
+	Tue, 21 May 2024 09:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716281392; cv=none; b=FFuD1wqeKIRKidG0BA//KPEkFw0Hzryxz52Lg/Iwog5DEDOzsKx5XGO8mT0LTw4XtoYodBBbtZblCTC1RmtkBg8/XBGm6SxW+bMGaMahj36Yt2jYu3ZSNTd2r1FTuKkTs8rAvQ/XYpaDvRaRqB0OsXAIqOGjm6BaW3Skk0QCcUs=
+	t=1716283295; cv=none; b=a3H+l6p4SzcFUClz9tumWq98Jk9Sm8bICOXtawGotd1CCnfNPFz+BNGy8lmc9ZqS+rOaLJygR4fqjLahwFF9Wtj3uEJwh7DweT16U05onozUFjXo6hPN1Q4P+bbzMPuv7jVUx1JBsHw6Iu4scMsx3wW1m3HJR1mg/Q+gLdo6g1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716281392; c=relaxed/simple;
-	bh=SFvM+4CQg9OhmwXJvfL6GQph7spU6XveHyFkL8ajJ4o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qqWd68DH6lHvb9+YUCRLb0Szx/Ifh3oAI4E7SJSsvi3lqgN4Hp/djF7KElQ+DooX+0Et1QP35mp/cX/FZp+/jSHzuQRj3p1Ny/ffbGRh3+x5uUlUPvbHgAZgjLUe727HBpQQYdfjVhbL0UMUfdEZS8kilDDqg0wnxgGkte9n/R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i/A7fRtY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716283295; c=relaxed/simple;
+	bh=b9/Tim9UjsTQ/Ly7qH+LkANsbWjkWuDa/ghrNqz0c68=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=acY1amqv1ST8Rp11Jp9IM3HhWVwJrEsR2Mc+r17YP/12ad2IgqpijclKxeHRqKIsuxh8gBbY+RIGTtLnIdkzvFvwI9VmHiieKdLR6LpPvrw79anu06J8kK+SB9AY4AYmEdKopFkuzDxLF6vjT7ksjdi11fmKvE2HPKSK+/I7D40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=kZwEtK84; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=kZwEtK84; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/A7fRtY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95187C2BD11;
-	Tue, 21 May 2024 08:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716281391;
-	bh=SFvM+4CQg9OhmwXJvfL6GQph7spU6XveHyFkL8ajJ4o=;
-	h=From:To:Cc:Subject:Date:From;
-	b=i/A7fRtYMOtCaMpoCusvfKBxz5VsHDxuwqfTjgYWkNdy2AfBqNJUxVntD60dRm8fG
-	 ySmEAyQMa5Js+1NkqHmasOf6BLrZbsvrnAhS4CEOpKKNdcwl1so8/O4kzf1DiwMA0a
-	 rIu+3pmmuFd4WcAVFQvZxtodvFE6mv/Q6IaezmONpUYu/xKLsDsjV5OmWPpxh9SCtt
-	 GZEAiB4iC9RJyflQpQn6ur3Fwrbb/4DfoW83oZXMwvkkjgiJ35wJGQR07mwmfz2sqf
-	 tspG4Uf6jHGIKOqmYtzlNat027pczO0fLPkqZywKmJp45J/CmTOfHFmA9tl+GTfKYW
-	 aiaR+4ULJJlEg==
-From: Geliang Tang <geliang@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	netdev@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="kZwEtK84";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="kZwEtK84"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id DC0C134632;
+	Tue, 21 May 2024 09:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1716283291; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=M71L2bSoBNtqG+SVJil6QJgye81u3ko4WdjXqhOELEM=;
+	b=kZwEtK84QrpZg2iSi1TYEcvAyxWELlaaewrMlLIc3ljcOamatu00lwUgDEvf++P0xuL6c+
+	et+YXWKxgmG4ubpJ5BoU/7GXEQ0zUv1EmQhsnjpXNPK9OWeLWqNJSoZNJEu4sszsKqUtWk
+	kUCAS+ddEURSaPIVEoDK7c/tHZPmeII=
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1716283291; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=M71L2bSoBNtqG+SVJil6QJgye81u3ko4WdjXqhOELEM=;
+	b=kZwEtK84QrpZg2iSi1TYEcvAyxWELlaaewrMlLIc3ljcOamatu00lwUgDEvf++P0xuL6c+
+	et+YXWKxgmG4ubpJ5BoU/7GXEQ0zUv1EmQhsnjpXNPK9OWeLWqNJSoZNJEu4sszsKqUtWk
+	kUCAS+ddEURSaPIVEoDK7c/tHZPmeII=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CC57613A7A;
+	Tue, 21 May 2024 09:21:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id WOzAMZtnTGaZYgAAD6G6ig
+	(envelope-from <mkoutny@suse.com>); Tue, 21 May 2024 09:21:31 +0000
+From: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To: cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: hsr: Fix "File exists" errors for hsr_ping
-Date: Tue, 21 May 2024 16:49:44 +0800
-Message-ID: <db256340b909f8b6f8bb7f9e42dbe71c228993b6.1716280848.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
+Cc: Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: [PATCH v5 3/5] cgroup/pids: Add pids.events.local
+Date: Tue, 21 May 2024 11:21:28 +0200
+Message-ID: <20240521092130.7883-4-mkoutny@suse.com>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240521092130.7883-1-mkoutny@suse.com>
+References: <20240521092130.7883-1-mkoutny@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Score: -3.30
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RL6j1h7wxugqfdyj8pnx7tibp9)];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo]
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Hierarchical counting of events is not practical for watching when a
+particular pids.max is being hit. Therefore introduce .local flavor of
+events file (akin to memory controller) that collects only events
+relevant to given cgroup.
 
-The hsr_ping test reports the following errors:
+The file is only added to the default hierarchy.
 
- INFO: preparing interfaces for HSRv0.
- INFO: Initial validation ping.
- INFO: Longer ping test.
- INFO: Cutting one link.
- INFO: Delay the link and drop a few packages.
- INFO: All good.
- INFO: preparing interfaces for HSRv1.
- RTNETLINK answers: File exists
- RTNETLINK answers: File exists
- RTNETLINK answers: File exists
- RTNETLINK answers: File exists
- RTNETLINK answers: File exists
- RTNETLINK answers: File exists
- Error: ipv4: Address already assigned.
- Error: ipv6: address already assigned.
- Error: ipv4: Address already assigned.
- Error: ipv6: address already assigned.
- Error: ipv4: Address already assigned.
- Error: ipv6: address already assigned.
- INFO: Initial validation ping.
-
-That is because the cleanup code for the 2nd round test before
-"setup_hsr_interfaces 1" is removed incorrectly in commit 680fda4f6714
-("test: hsr: Remove script code already implemented in lib.sh").
-
-This patch fixes it by adding a new helper delete_hsr_interfaces() to
-delete all interfaces before "setup_hsr_interfaces 1".
-
-Fixes: 680fda4f6714 ("test: hsr: Remove script code already implemented in lib.sh")
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
 ---
- tools/testing/selftests/net/hsr/hsr_ping.sh | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Documentation/admin-guide/cgroup-v2.rst |  5 ++
+ kernel/cgroup/pids.c                    | 89 ++++++++++++++++++++-----
+ 2 files changed, 76 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/net/hsr/hsr_ping.sh b/tools/testing/selftests/net/hsr/hsr_ping.sh
-index 790294c8af83..0be1d5f78dab 100755
---- a/tools/testing/selftests/net/hsr/hsr_ping.sh
-+++ b/tools/testing/selftests/net/hsr/hsr_ping.sh
-@@ -166,6 +166,14 @@ setup_hsr_interfaces()
- 	ip -net "$ns3" link set hsr3 up
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 0b5f77104e8b..782656dcf38b 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2211,6 +2211,11 @@ PID Interface Files
+ 		The number of times the cgroup's total number of processes hit the pids.max
+ 		limit (see also pids_localevents).
+ 
++  pids.events.local
++	Similar to pids.events but the fields in the file are local
++	to the cgroup i.e. not hierarchical. The file modified event
++	generated on this file reflects only the local events.
++
+ Organisational operations are not blocked by cgroup policies, so it is
+ possible to have pids.current > pids.max.  This can be done by either
+ setting the limit to be smaller than pids.current, or attaching enough
+diff --git a/kernel/cgroup/pids.c b/kernel/cgroup/pids.c
+index c09b744d548c..f5cb0ec45b9d 100644
+--- a/kernel/cgroup/pids.c
++++ b/kernel/cgroup/pids.c
+@@ -57,10 +57,12 @@ struct pids_cgroup {
+ 	atomic64_t			limit;
+ 	int64_t				watermark;
+ 
+-	/* Handle for "pids.events" */
++	/* Handles for pids.events[.local] */
+ 	struct cgroup_file		events_file;
++	struct cgroup_file		events_local_file;
+ 
+ 	atomic64_t			events[NR_PIDCG_EVENTS];
++	atomic64_t			events_local[NR_PIDCG_EVENTS];
+ };
+ 
+ static struct pids_cgroup *css_pids(struct cgroup_subsys_state *css)
+@@ -244,21 +246,23 @@ static void pids_event(struct pids_cgroup *pids_forking,
+ 	struct pids_cgroup *p = pids_forking;
+ 	bool limit = false;
+ 
+-	for (; parent_pids(p); p = parent_pids(p)) {
+-		/* Only log the first time limit is hit. */
+-		if (atomic64_inc_return(&p->events[PIDCG_FORKFAIL]) == 1) {
+-			pr_info("cgroup: fork rejected by pids controller in ");
+-			pr_cont_cgroup_path(p->css.cgroup);
+-			pr_cont("\n");
+-		}
+-		cgroup_file_notify(&p->events_file);
+-
+-		if (!cgroup_subsys_on_dfl(pids_cgrp_subsys) ||
+-		    cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS)
+-			break;
++	/* Only log the first time limit is hit. */
++	if (atomic64_inc_return(&p->events_local[PIDCG_FORKFAIL]) == 1) {
++		pr_info("cgroup: fork rejected by pids controller in ");
++		pr_cont_cgroup_path(p->css.cgroup);
++		pr_cont("\n");
++	}
++	cgroup_file_notify(&p->events_local_file);
++	if (!cgroup_subsys_on_dfl(pids_cgrp_subsys) ||
++	    cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS)
++		return;
+ 
+-		if (p == pids_over_limit)
++	for (; parent_pids(p); p = parent_pids(p)) {
++		if (p == pids_over_limit) {
+ 			limit = true;
++			atomic64_inc(&p->events_local[PIDCG_MAX]);
++			cgroup_file_notify(&p->events_local_file);
++		}
+ 		if (limit)
+ 			atomic64_inc(&p->events[PIDCG_MAX]);
+ 
+@@ -368,20 +372,68 @@ static s64 pids_peak_read(struct cgroup_subsys_state *css,
+ 	return READ_ONCE(pids->watermark);
  }
  
-+delete_hsr_interfaces()
-+{
-+	echo "INFO: delete interfaces."
-+	ip -net "$ns1" link del ns1eth1
-+	ip -net "$ns1" link del ns1eth2
-+	ip -net "$ns3" link del ns3eth2
+-static int pids_events_show(struct seq_file *sf, void *v)
++static int __pids_events_show(struct seq_file *sf, bool local)
+ {
+ 	struct pids_cgroup *pids = css_pids(seq_css(sf));
+ 	enum pidcg_event pe = PIDCG_MAX;
++	atomic64_t *events;
+ 
+ 	if (!cgroup_subsys_on_dfl(pids_cgrp_subsys) ||
+-	    cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS)
++	    cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS) {
+ 		pe = PIDCG_FORKFAIL;
++		local = true;
++	}
++	events = local ? pids->events_local : pids->events;
+ 
+-	seq_printf(sf, "max %lld\n", (s64)atomic64_read(&pids->events[pe]));
++	seq_printf(sf, "max %lld\n", (s64)atomic64_read(&events[pe]));
++	return 0;
 +}
 +
- check_prerequisites
- setup_ns ns1 ns2 ns3
- 
-@@ -174,6 +182,8 @@ trap cleanup_all_ns EXIT
- setup_hsr_interfaces 0
- do_complete_ping_test
- 
-+delete_hsr_interfaces
++static int pids_events_show(struct seq_file *sf, void *v)
++{
++	__pids_events_show(sf, false);
++	return 0;
++}
 +
- setup_hsr_interfaces 1
- do_complete_ping_test
++static int pids_events_local_show(struct seq_file *sf, void *v)
++{
++	__pids_events_show(sf, true);
+ 	return 0;
+ }
  
+ static struct cftype pids_files[] = {
++	{
++		.name = "max",
++		.write = pids_max_write,
++		.seq_show = pids_max_show,
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{
++		.name = "current",
++		.read_s64 = pids_current_read,
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{
++		.name = "peak",
++		.flags = CFTYPE_NOT_ON_ROOT,
++		.read_s64 = pids_peak_read,
++	},
++	{
++		.name = "events",
++		.seq_show = pids_events_show,
++		.file_offset = offsetof(struct pids_cgroup, events_file),
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{
++		.name = "events.local",
++		.seq_show = pids_events_local_show,
++		.file_offset = offsetof(struct pids_cgroup, events_local_file),
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{ }	/* terminate */
++};
++
++static struct cftype pids_files_legacy[] = {
+ 	{
+ 		.name = "max",
+ 		.write = pids_max_write,
+@@ -407,6 +459,7 @@ static struct cftype pids_files[] = {
+ 	{ }	/* terminate */
+ };
+ 
++
+ struct cgroup_subsys pids_cgrp_subsys = {
+ 	.css_alloc	= pids_css_alloc,
+ 	.css_free	= pids_css_free,
+@@ -415,7 +468,7 @@ struct cgroup_subsys pids_cgrp_subsys = {
+ 	.can_fork	= pids_can_fork,
+ 	.cancel_fork	= pids_cancel_fork,
+ 	.release	= pids_release,
+-	.legacy_cftypes	= pids_files,
++	.legacy_cftypes = pids_files_legacy,
+ 	.dfl_cftypes	= pids_files,
+ 	.threaded	= true,
+ };
 -- 
-2.43.0
+2.44.0
 
