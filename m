@@ -1,46 +1,46 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2086.outbound.protection.outlook.com [40.107.220.86])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2072.outbound.protection.outlook.com [40.107.220.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7F81BC40;
-	Tue, 28 May 2024 04:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78BA11D551;
+	Tue, 28 May 2024 04:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.72
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716869987; cv=fail; b=gpQ6T/kdPWvP39sOcA0g6hCzLSRDGYCPgU81sU0iu88U1lP5vZyYk0IBkIWPNNKVgov+7pGLWqy5/6Jav2TRlx2QsyCWFMBaEVXHW4VaEzrc/8+MJ8P4etGZS1IZqWAv0nZ2eXFY3HsKatuqdgQIbt9KQ6GQWxQ/rxlg1r24TPI=
+	t=1716869989; cv=fail; b=CDuZcw3HIqM0Y2rqDUHt6iuEOOhzzZG4cnQVqHha9IptNO93AECTIvR7lKjj70gnQSQHSLgXzapY9399woS6eVp41GOuYkiTQlAzAeYsBA7YV+u+JWYKtKnn9aa+66AVWQQapbZhlqLFNBptFUSIQAecp+j8LCJ0JOV+GsYv5dE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716869987; c=relaxed/simple;
-	bh=W3SoGjtP3/E+c/JuG/ackI/Xac4zWkk7EDVFsDH7UoA=;
+	s=arc-20240116; t=1716869989; c=relaxed/simple;
+	bh=TjAb69OVRcVxE+ATZRBVvDKSBq0XOqz4+21X4RPthus=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=U2T8/FX7mZ+I6vdOW9Hq7gtZuEI4AHh1aYe9LkC/DZ3C5wpGOEyCXnVu0+YiXbxkLpD28fUTicnUYgJJFI9sa0aA52AhiFS890jTWCijQwqS8B4SggF3PQYd3Bqi05MIBvmWbFnMj6XJ+x0r6/AlcFJI2KfXZJNBXA9iNDnPp3U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=4TDxtQzX; arc=fail smtp.client-ip=40.107.220.86
+	 MIME-Version:Content-Type; b=ugMePkheesjIbiIrwxrDqxvCLbaIjVx+LTuZAzTvEzzX+9/4a5XcdwD+pzuCgeXmnvywhXLTSu+ABNvrZ1JU0i5+3FYEYKI4KfLqcIOEiGFGKgWPc2aC2A0fq3gAcpMDui5zd/FFKawI2Glwr6215JAvtuAXisw5HL9j29dyYk8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=NcrzoNF6; arc=fail smtp.client-ip=40.107.220.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="4TDxtQzX"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="NcrzoNF6"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j0oyM/2qaSV57iNZltFGDhrRbQlagwiVq9aSomTN3rpEDAkXRRChOY2gV/o+1ZB8CEJH4LTf/jCOZSczmjDyVdoss/i4gSseMVF8XJSx/cWJzD2YGVzg3Gq2aiyV6zmTe4lvgC+RRuz7spysLv0D7uqNLSdVU76t4yp6LZPW43T2HxEiHNPJv1mL/0KN9u124c+Xe4agkGyYLApYY/+793xTKmlG0rktoNZY8zY8J9AGjzHpqRdp3/zjq3m8VZ+8nIXOMBgzrm683al1fzJ1au0Uzgieqvx9NBvUIV0C05qHg+WT0fNqgZlMs0jwCraj1dDIBUG1HyNr6xSXQ/q6Lw==
+ b=NVYzevsdFEZyN9BYT6HrPNe4UkqvP5j7b+ueHLq49bWT6OY4aimpmhKnmADKLKa+LD3bSgaBuZUaRNHqo8Z7S/tDN1m1D0tqSQxuheWubn7oDy7COZ+9HKe7tLoFU0BrGLYj3PGWvTgHWJhcHXexq6O6vPUMy087j6elO8/0Z0FzYXAxe/W6OjPoHHKDjP6+PxW7Kw0czfsSCzwZDA5mX4fp1vczfF9q1Qqjg5E9X+ll51f90dnx08/0JbpRltw+Ce8tcnk6pV1OFjyZw6IemtBLvKIffibOVwE5LhaIpst3dxB27j0LfiEftlqSvdIOefmRzNs81VqimXpofFMgKQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aqDkOBpQO/PeplcaBdvoCMmeLxIyffTnBOx2f9spVP8=;
- b=euHXIrKHa7tAD4evkGWhOB3KG9DorWeyXgbwZyN9g+t9bJrYuwMzLlWEHrLsjMzmPAkoFzE0OQFp9UrEpSo0ZCCQmhZhT7sv5nPeZ7d7bAYnHSxCNvU+R4ivt859flhxqFdMWJvvkvPmZH6+e+y4hiDvfervHodkZmCddDTpmVK9/pXDXZIrAB1sSZEn2z+Yt65X1ObsBS1F17auS3haK0wPRk37c/7h58NISQgEWYaMYJ5rZgDOI7IonYskfKlcez00jWy/UiX353Fe2hHpm/06zaP17yChwCCwS5+P81TeTcIvNKE5bBx19ltNGRQhocbIJS8Z6z4SrsHye4SiYw==
+ bh=JKpmEanb1+kqijWMrcl26r9SQLcjXziANdt0nCooqrI=;
+ b=hqoG/1nk14upxLbURXPVTSfXZdYpcmH/F48wOXn07VWihlXZifTjELVkhylS3NKGvs4bQQ8bAgw/CVNBe6dIbxrCkFN00gH/6UAI77Vjx9X5hDdbenBDlq4ua+zC8gqJvFyywcDjOW1M54P5kJ6v9bUFPIVsc1diuuHWxRkfuVauHNDzIF77XtTt61fHP0kihC6uHTItRH/cBvOkFGRnPxLElwqGM7dPuek0jtBujGtBNLG4z7hrHLfIqElKvOJ5rUd68skOlad4n0FJYxP7fC8QUWOaRRhpbQ0pHUYPIlwz3YuW3pk/YI8aQnlHdo6/daq6MmHrLwdSII9z7inGDw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aqDkOBpQO/PeplcaBdvoCMmeLxIyffTnBOx2f9spVP8=;
- b=4TDxtQzXYpHfvv4fu1odjYeMEuB2sayyjwivhXXzbguh9QzjlSrVPWKTZ4plzMMi9Tm3RP/1+stjrtdooKN7MTcmkVAV4nL6ffClHsbtpyk+KIJZl5wJF539VXxvAVNgeRQHGdHj5jgW7vEfg38n5acuI0/HWleN9ztJ3RtcDpA=
-Received: from BN9PR03CA0845.namprd03.prod.outlook.com (2603:10b6:408:13d::10)
- by IA0PR12MB8086.namprd12.prod.outlook.com (2603:10b6:208:403::7) with
+ bh=JKpmEanb1+kqijWMrcl26r9SQLcjXziANdt0nCooqrI=;
+ b=NcrzoNF649BLrc5F8BmDydvlzXVEPz9EsoGcG2TbRB4yEYiDi40r7T9KMXZLMt+5orjBIntIbBBscwlEfmlfaLKMt80YkArAH9ffVspOAkoxeGuAZ2bnLGw3NVvRyaTjuNc/jdPj0itnbg5ckRSlGa9kmRTQFJoZHp4g8nQry6Y=
+Received: from BN9P223CA0028.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::33)
+ by PH7PR12MB7937.namprd12.prod.outlook.com (2603:10b6:510:270::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.29; Tue, 28 May
- 2024 04:19:42 +0000
-Received: from BN2PEPF0000449E.namprd02.prod.outlook.com
- (2603:10b6:408:13d:cafe::6f) by BN9PR03CA0845.outlook.office365.com
- (2603:10b6:408:13d::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.30; Tue, 28 May
+ 2024 04:19:45 +0000
+Received: from BN2PEPF0000449D.namprd02.prod.outlook.com
+ (2603:10b6:408:10b:cafe::56) by BN9P223CA0028.outlook.office365.com
+ (2603:10b6:408:10b::33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.29 via Frontend
- Transport; Tue, 28 May 2024 04:19:42 +0000
+ Transport; Tue, 28 May 2024 04:19:44 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -48,21 +48,21 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN2PEPF0000449E.mail.protection.outlook.com (10.167.243.149) with Microsoft
+ BN2PEPF0000449D.mail.protection.outlook.com (10.167.243.148) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7633.15 via Frontend Transport; Tue, 28 May 2024 04:19:42 +0000
+ 15.20.7633.15 via Frontend Transport; Tue, 28 May 2024 04:19:44 +0000
 Received: from chalupa-4a00host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 27 May
- 2024 23:19:41 -0500
+ 2024 23:19:43 -0500
 From: Manali Shukla <manali.shukla@amd.com>
 To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC: <pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
 	<nikunj@amd.com>, <thomas.lendacky@amd.com>, <vkuznets@redhat.com>,
 	<manali.shukla@amd.com>, <bp@alien8.de>, <ajones@ventanamicro.com>
-Subject: [PATCH v3 3/5] KVM: selftests: Add safe_halt() and cli() helpers to common code
-Date: Tue, 28 May 2024 04:19:24 +0000
-Message-ID: <20240528041926.3989-4-manali.shukla@amd.com>
+Subject: [PATCH v3 5/5] KVM: selftests: KVM: SVM: Add Idle HLT intercept test
+Date: Tue, 28 May 2024 04:19:26 +0000
+Message-ID: <20240528041926.3989-6-manali.shukla@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240528041926.3989-1-manali.shukla@amd.com>
 References: <20240528041926.3989-1-manali.shukla@amd.com>
@@ -78,88 +78,188 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF0000449E:EE_|IA0PR12MB8086:EE_
-X-MS-Office365-Filtering-Correlation-Id: 39d2f06d-2bb4-4495-b356-08dc7ecd661a
+X-MS-TrafficTypeDiagnostic: BN2PEPF0000449D:EE_|PH7PR12MB7937:EE_
+X-MS-Office365-Filtering-Correlation-Id: e5129e38-61db-4cfe-ffe3-08dc7ecd675d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|1800799015|82310400017|376005|36860700004;
+	BCL:0;ARA:13230031|82310400017|1800799015|376005|36860700004;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1Jpj1rC/0YHPEFqcWaMsrBH089N5yumm1HNlDhxj5krliFp2877OcbpQyrj1?=
- =?us-ascii?Q?XeyL/aFlucg+mnAdJm+X6a2NFYCb+LtDakrkgODBo7sAayWh2Zx11FUAKjnt?=
- =?us-ascii?Q?HBVPCiNW6MVVvuVY5EBrjxPBJUiumzEswg/u9WpsZ9MF+qwpbAn3Q9BPfVid?=
- =?us-ascii?Q?IV/uelwJnIXe7voKqPOcTKxDxuGyClskQxseaKCjzXRfjCl9sRn25/VC3TCp?=
- =?us-ascii?Q?+mbrVnfOpzLmcwtEWtWXwCzQMA2u/DXhq6dwIY4QourLD0uKTamwqwUjJNRk?=
- =?us-ascii?Q?kITR2HZon3OdT5MkdgCrEgW49MLzwltgzQUAG2iUQXUPk8lIu9qTM3nF0Lsm?=
- =?us-ascii?Q?1h0TR0AtWInSJrd3wliwim0aAyRLpAbKstUrhIko4Sh2po1zyXYttZHuYfup?=
- =?us-ascii?Q?zGzybzy1F7v/CsDz83tDBZqnf2bpUeW6a7wTMP0ypwhEwJWUpafAH1PzW16q?=
- =?us-ascii?Q?PIEE+HRKqjljJev8HbJWxuj7rli+7razSG6A7NuueZ4n7vmHgF7bAlAV1GRI?=
- =?us-ascii?Q?uEwu00Cv71uql+MpxxeZRiptjylNxmAQALVRD+4WRPbv45PhfNRExYGKIjoW?=
- =?us-ascii?Q?1C876DWqvrQ8jFMo6fHHjiLQEaHg4ls3qQe3RgcgoflcJMQPvrjyuza6Hfot?=
- =?us-ascii?Q?NtS3fMZ9nGck5fMSpUnmcgrkTZDeN7sDAGw8WTYcAgViQ5RFFKTIK8nsGSEC?=
- =?us-ascii?Q?ELTnN/Wnd1/NEjeHY1V51lfyQKhXIFupQE9MkuAfsHGXxj0/5Di/XfeEhOuG?=
- =?us-ascii?Q?30B+JE94GIIIT9YFvDHUTD6/l2lla8qXYvTARLRMxnKhqw7KmjByVm2z/wFI?=
- =?us-ascii?Q?3PmY1U00czdQ54IC/+qMRAWyHZXc+UzASWY4zCR5YHig6vtd/u/GrRJwY6BT?=
- =?us-ascii?Q?30nQ+kXmoWRz9UU2EKdrk8oVmMvshEBQTidQxM+W7UvNvcbygJQ7zW0PbKld?=
- =?us-ascii?Q?6sc0jw8WLMUV7awk4+Z0PStKiWQASb/OCjxUAre6I8tx2PV69p/rh11uUBHY?=
- =?us-ascii?Q?glA96yJF6ftsOZ+enWZm2dgr0PxYH8SK3V+JxSPeM7/BhajS6mAV5oflclHP?=
- =?us-ascii?Q?YK5ORAfpslz12lqU4BPJTqQL366/mrr9j7v1P+FiL2waXrDhJLNng5LQjFYk?=
- =?us-ascii?Q?wb5ZLR/0JKyeEgGDPbu5v5h8kX3j69kbvZppu9koH2CKGJZKwWbwV+5trzZQ?=
- =?us-ascii?Q?SfQFQcE4zPa94XnxZncCtWU3a3CSZo2LbZCy8X+JmFRthFuyyuxqa3ZWlgjc?=
- =?us-ascii?Q?2HFlRP3jlB//0Q3OZjLB7zNGmAzqfzZ6pK4xk+rOAPhOl2Cjl3SjVRK777Dw?=
- =?us-ascii?Q?YTBQ6VLLoiEmV3aS27AtsMZl6nUeEAg6RWAOltDMdsh0Mug9tzr8pZu79c27?=
- =?us-ascii?Q?HLACDaPLJ4TbOmzwW26ZmQHjZCts?=
+	=?us-ascii?Q?wflSQkQcCkLiGooUIzSFpyP3YyzfhFUD5QwhqYq5OB308OhGMdiuXrckrb8S?=
+ =?us-ascii?Q?viPHTXShgNGTioWxqi43n4NbGmAZJ1uX/SVmgUH07Nqb6W8y4ZhppTd/u4io?=
+ =?us-ascii?Q?p7scKPwgJqMz+vevzYV+5PZPn7h/r3KNF5uDEd8sZdM+dvTg0unUmgmDoy6S?=
+ =?us-ascii?Q?9Ti3wO8DW1No/leSitzxHKCg45sPX5sJT74z0HRHtvzEQb5vuAJBh8aB1A8/?=
+ =?us-ascii?Q?T+2Xxvb9P1cVrEy2RynChr0vHmIiSVfmcmEriU6Gyol6wAM7fRXaWO5sqOT3?=
+ =?us-ascii?Q?YAh9N/NI4ckKVxC4P0W1Rv4FYG/oARW8x6hg+zCg1Zrx+FXkX2vFMNalKCWx?=
+ =?us-ascii?Q?oAXAbw7IRc3Nxot2t1mUIfopXT3ipZV/xEla5om7z1Kg2zk5YVCskOz3nrB6?=
+ =?us-ascii?Q?UJq5udleyFKD+LZkCzMQpFPiauSacX1xPUfQ/ILwheYZqoW2CReFrBxbV7ga?=
+ =?us-ascii?Q?VoI5WMYt/k5p+/4f6gR/Nfo57MpVuyQ5xGZh9FxEb6LRSfOH8eXTjS3jN9xU?=
+ =?us-ascii?Q?i+pQqm8r76InLehqZrnY0DPO/VTE6gKWIyWqbFjIaRKkMIpFKv8MLr/ayxcJ?=
+ =?us-ascii?Q?aYzPQ0IWZuxcL4C20UVAS/bi2ltiJ8ePNNVDAD7u25Ru0Rmu1gP8xiLSCTXf?=
+ =?us-ascii?Q?gnEkIabj/NYysmLdmk87UjWRSoemJrnjzFIAIb4lz+vHe7EJLSWhTzVQPA22?=
+ =?us-ascii?Q?MnGkKepCXgtFfcDfQuzbLabxkyB+MhH8oyUS83kjq42y0eYfT3e5uHU03ITd?=
+ =?us-ascii?Q?yC3270OFbU98t7L/S9Vtd6iKYZ2yyK4/LFfVivTT2BfhgOnk+ZqU3Cd/sZwg?=
+ =?us-ascii?Q?dgPILWDdwHGe47LHs9kXrO4/VpGf0QyJbGxTt6vEbU8RRakz8kIGqgm2myw/?=
+ =?us-ascii?Q?3ohm0ZZZDERaoBTlhxOahMw3nkKNnLxdX78SwBUa9znPq5fEfcaE7zskbHns?=
+ =?us-ascii?Q?TdbLgRAHFsqQyxfIAkCGibCUmeqRLppfTTqFWds9cZKCuqbQJ2OZH9DFWSdo?=
+ =?us-ascii?Q?VEMZE4fkXXajQ0e4WiredlGsOtB2P7AsIR3K0OBx9DSp0xpBX09ejI4x/o4D?=
+ =?us-ascii?Q?EtlzymR4UGACYFTQLdMpZSR12TU+Z4a/0NfZhnzmf8ezq1foxoHExYeAJZ1u?=
+ =?us-ascii?Q?LjapLMS5DQKUqaNbyxVt9y3+g0Dwp+Zy9zjqyox0mXbeSo7Y0EPmpDM03rSi?=
+ =?us-ascii?Q?Eri6DsxOM3D5p69u+8IiNQtoYwFLS0QdNaTMybtWELuhgk1QjHbo8DsncnpY?=
+ =?us-ascii?Q?wE6PgH3aIjhFS+tAFTyvP5BHrbdXevB0/FZp1j3Q2zXAZeRvZ8AJSuLQjCzv?=
+ =?us-ascii?Q?jlCAHPRVBXfayDkgI8zVDgxMF3LPXyuCJjPmBJ4Jlv88bC4uLB2WHXBJvhDL?=
+ =?us-ascii?Q?aLI0aT8=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(82310400017)(376005)(36860700004);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400017)(1800799015)(376005)(36860700004);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2024 04:19:42.5720
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2024 04:19:44.6908
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39d2f06d-2bb4-4495-b356-08dc7ecd661a
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5129e38-61db-4cfe-ffe3-08dc7ecd675d
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF0000449E.namprd02.prod.outlook.com
+	BN2PEPF0000449D.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8086
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7937
 
-Add safe_halt() and cli() helpers to processor.h to make them broadly
-available in KVM selftests.
+From: Manali Shukla <Manali.Shukla@amd.com>
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Manali Shukla <manali.shukla@amd.com>
+Execution of the HLT instruction results in VMEXIT. Hypervisor observes
+pending V_INTR and V_NMI events just after VMEXIT generated by HLT for
+the vCPU and causes VM entry to service the pending events.  The Idle
+HLT intercept feature avoids the wasteful VMEXIT during halt if there
+are pending V_INTR and V_NMI events for the vCPU.
+
+The selftest for Idle HLT intercept instruments above-mentioned scenario.
+
+Signed-off-by: Manali Shukla <Manali.Shukla@amd.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h    | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ tools/testing/selftests/kvm/Makefile          |  1 +
+ .../selftests/kvm/include/x86_64/processor.h  |  1 +
+ .../selftests/kvm/x86_64/svm_idle_hlt_test.c  | 89 +++++++++++++++++++
+ 3 files changed, 91 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/svm_idle_hlt_test.c
 
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 6de9994971c9..bd97586d7c04 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -93,6 +93,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/smaller_maxphyaddr_emulation_test
+ TEST_GEN_PROGS_x86_64 += x86_64/smm_test
+ TEST_GEN_PROGS_x86_64 += x86_64/state_test
+ TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
++TEST_GEN_PROGS_x86_64 += x86_64/svm_idle_hlt_test
+ TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
+ TEST_GEN_PROGS_x86_64 += x86_64/svm_int_ctl_test
+ TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_shutdown_test
 diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 8eb57de0b587..f74f31df96d2 100644
+index f74f31df96d2..0036937b1be4 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -1305,6 +1305,23 @@ static inline void kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
- 	GUEST_ASSERT(!ret);
- }
+@@ -192,6 +192,7 @@ struct kvm_x86_cpu_feature {
+ #define X86_FEATURE_PAUSEFILTER         KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 10)
+ #define X86_FEATURE_PFTHRESHOLD         KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 12)
+ #define	X86_FEATURE_VGIF		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 16)
++#define X86_FEATURE_IDLE_HLT		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 30)
+ #define X86_FEATURE_SEV			KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 1)
+ #define X86_FEATURE_SEV_ES		KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 3)
  
+diff --git a/tools/testing/selftests/kvm/x86_64/svm_idle_hlt_test.c b/tools/testing/selftests/kvm/x86_64/svm_idle_hlt_test.c
+new file mode 100644
+index 000000000000..594caac7194b
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86_64/svm_idle_hlt_test.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Execute HLT in an STI interrupt shadow to ensure that a pending IRQ that's
-+ * intended to be a wake event arrives *after* HLT is executed.  Modern CPUs,
-+ * except for a few oddballs that KVM is unlikely to run on, block IRQs for one
-+ * instruction after STI, *if* RFLAGS.IF=0 before STI.  Note, Intel CPUs may
-+ * block other events beyond regular IRQs, e.g. may block NMIs and SMIs too.
++ *  Copyright (C) 2024 Advanced Micro Devices, Inc.
++ *
 + */
-+static inline void safe_halt(void)
++#include <kvm_util.h>
++#include <processor.h>
++#include <test_util.h>
++#include "svm_util.h"
++#include "apic.h"
++
++#define VINTR_VECTOR     0x30
++#define NUM_ITERATIONS   1000
++
++static bool irq_received;
++
++/*
++ * The guest code instruments the scenario where there is a V_INTR pending
++ * event available while hlt instruction is executed. The HLT VM Exit doesn't
++ * occur in above-mentioned scenario if Idle HLT intercept feature is enabled.
++ */
++
++static void guest_code(void)
 +{
-+	asm volatile("sti; hlt");
++	uint32_t icr_val;
++	int i;
++
++	xapic_enable();
++
++	icr_val = (APIC_DEST_SELF | APIC_INT_ASSERT | VINTR_VECTOR);
++
++	for (i = 0; i < NUM_ITERATIONS; i++) {
++		cli();
++		xapic_write_reg(APIC_ICR, icr_val);
++		safe_halt();
++		GUEST_ASSERT(READ_ONCE(irq_received));
++		WRITE_ONCE(irq_received, false);
++	}
++	GUEST_DONE();
 +}
 +
-+static inline void cli(void)
++static void guest_vintr_handler(struct ex_regs *regs)
 +{
-+	asm volatile ("cli");
++	WRITE_ONCE(irq_received, true);
++	xapic_write_reg(APIC_EOI, 0x00);
 +}
 +
- void __vm_xsave_require_permission(uint64_t xfeature, const char *name);
- 
- #define vm_xsave_require_permission(xfeature)	\
++int main(int argc, char *argv[])
++{
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++	struct ucall uc;
++	uint64_t  halt_exits, vintr_exits;
++
++	/* Check the extension for binary stats */
++	TEST_REQUIRE(this_cpu_has(X86_FEATURE_IDLE_HLT));
++	TEST_REQUIRE(kvm_has_cap(KVM_CAP_BINARY_STATS_FD));
++
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++
++	vm_install_exception_handler(vm, VINTR_VECTOR, guest_vintr_handler);
++	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
++
++	vcpu_run(vcpu);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
++
++	halt_exits = vcpu_get_stat(vcpu, HALT_EXITS);
++	vintr_exits = vcpu_get_stat(vcpu, IRQ_WINDOW_EXITS);
++
++	switch (get_ucall(vcpu, &uc)) {
++	case UCALL_ABORT:
++		REPORT_GUEST_ASSERT(uc);
++		/* NOT REACHED */
++	case UCALL_DONE:
++		break;
++
++	default:
++		TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
++	}
++
++	TEST_ASSERT_EQ(halt_exits, 0);
++	pr_debug("Guest executed VINTR followed by halts: %d times.\n"
++		 "The guest exited due to halt: %ld times and number\n"
++		 "of vintr exits: %ld.\n",
++		 NUM_ITERATIONS, halt_exits, vintr_exits);
++
++	kvm_vm_free(vm);
++	return 0;
++}
 -- 
 2.34.1
 
