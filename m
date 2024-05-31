@@ -1,181 +1,171 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8525B171E59
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 17:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8C92E63B;
+	Fri, 31 May 2024 18:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717175796; cv=none; b=QbRnrgN3r75sHHafDE+HpRDvdfEA7YrbExmdOq7e4LPByDrSYnZUPHdMoTRQwy5V9Dc0U872zVhL2Zlnhl/LQoLHel+9MI4lUphGATieghpJYdOYOQK4X+1l/Hwl2uMWdHrk3X0M2gznGk9eC0ubgCYLnC0z39Gt7LN2KdJAn8Y=
+	t=1717178757; cv=none; b=TGSMIYtJHlqMxwe3pts+joSo+UtW+UXTiXbgUwR3a7vWOvEQi7tFoMWZP8dedn6eEDCBmQmAn89iutf7PDbQWPgCKQS3ha293hG/E9Q9vekhSnA0oMaf23yv4hz+0R3lpzAj8ufAQTiFko5VyczI3cwp0sLzzytJakkW32q3HZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717175796; c=relaxed/simple;
-	bh=fuAQuuEeC4zhjI5nb7jBOEpvqbDlF+wRpx5+yKlVgEE=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=kRuqjNTszXh3/GBMqHER6fPRbD+2efH8HBkrBepbjiVtrpwHgX6auBsPaSIoz0YmIrtY5Lujqa84esKI07SUiD2WxEIavvtH3qgwS59VwdCbiRXXNWdwpT90lTQrfoGFonWePZczEhNxLE4vjOoiPU55wSQ74AHVcsS1izC+Gkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=1SCJ64U7; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+	s=arc-20240116; t=1717178757; c=relaxed/simple;
+	bh=Jnh7QyNKun8BwM4RB9OQGdu5Wf0BrMYpllXHlrDsZWQ=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Z1BF/doLSg/WzCff1j1ryKijQ+xSNDsCDWa/a8aZemkj8qVjrJQW7QIJwAObFf4H6nqXi9BfBDIUbVXsYvRARJPbcyEqlRp8zCMMRrTHxxPrqVGWL9XZOa/z4g4AJNX/2/Aulk7VLlu/Khx3Fae31QQxBaSIJHLVrFYGOQxbJ0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0b0H4uHV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zWw66wax; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0b0H4uHV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zWw66wax; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="1SCJ64U7"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-701b0b0be38so2157641b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 10:16:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1717175795; x=1717780595; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kdlvbgx2b65CcKzPiTvvFsIKpo549Z07BH/3fHbM3fo=;
-        b=1SCJ64U7BvCGLZzGzdtQUqUnGXzfnCktTzi6tUDOf7AazQmgOIJG988otmmv3K4ZCk
-         W+6zu8Er3CKDXC79GasjuYlzOpEemQ0Nb/jE/dSmUzbtNQwquwQh/kpJ9SHj+Nt2eAnG
-         fhUvW3CPVkEX5kmWQLYGa1AS7wTzI0zK3dnnGDPn+AlmJH9LIFuBYNJDQeFw2/UuK8Pb
-         tmhQ+x7VnrkWC+I8tKbZGv5RhVBqpbL8Px+3aIYNLxnXNICKhvq1Z5h+9dayKFhDcXLx
-         vuueA9xh17aMiUF6khTiwx6kMF5cgKIVQAJhwc33Adk4Gcw1Mflvtq1bSQKMdFvwcdwZ
-         DubA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717175795; x=1717780595;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Kdlvbgx2b65CcKzPiTvvFsIKpo549Z07BH/3fHbM3fo=;
-        b=bGuuBP4B+hb1eCp8YWgVvZ62v0HlHDXiTY092VHuBtKMAypcXcyBfU05ACxsEiYWJt
-         Xe6bQyIRqpzTruAKR20dFMWk3Na137kCCfCmBDcA0/z813HBljxXAtgZPhAkj8V9/Ndp
-         9fDBeyxhHGtMzGBQExPv5WWM46W7R0CnnXuUNLEiysTL/wD+wyKzE18pcK7Ql5GDzas7
-         AiuvTLtjTo7JbJ4PWhSSgbdOMAXpUj0EGCqCTgF33qrIJ8Q1maojJdSEJy+v5b56YcFH
-         LJQ1LbLwyHfuDcAtaNoXJf1seOfYvbHbo7Km+wDw75tGgai9P/vh1gLlzMQpNDzg3SiS
-         RaIA==
-X-Forwarded-Encrypted: i=1; AJvYcCVWBuQKOR5afD65kdBqExCT3/9YjTJUet++PFxkE22Yh1JCOXAwlSE2U6R/vdtVdKDCH+q/I3yfLzi6eWkmUlWoncmnrZ47bxFhZGYtnMlQ
-X-Gm-Message-State: AOJu0YxD5pM+TmXq5oLsqHpDHuicvTwuNd+E55nqZDM4XY8rTIXPSkSb
-	GQnc9MiVKRb9hKcbbuntlGwAylxiS2pxD7dQOklrNsQwBbH6FOBqTYkqm7xMp/tCj7/mMLaaAoN
-	u
-X-Google-Smtp-Source: AGHT+IFsKU9Nej6j8XH+fxV5QY0hEKlAHWsHtg5LwDuwn//yzNP/jbt8pAS5desi4ZdJdaNpFP7uRg==
-X-Received: by 2002:a05:6a00:2304:b0:6f0:c214:7974 with SMTP id d2e1a72fcca58-702477e9f8amr2489562b3a.12.1717175794673;
-        Fri, 31 May 2024 10:16:34 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70242b055dcsm1658798b3a.172.2024.05.31.10.16.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 May 2024 10:16:34 -0700 (PDT)
-Message-ID: <665a05f2.050a0220.5fe4c.467e@mx.google.com>
-Date: Fri, 31 May 2024 10:16:34 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0b0H4uHV";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zWw66wax";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0b0H4uHV";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zWw66wax"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6535721CDF;
+	Fri, 31 May 2024 18:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717178752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rdPRT5mE0rdQjCqwKaiwjzTSyrTE2NNeScJ+vvQaCOA=;
+	b=0b0H4uHVlmn4PYaYPZ2RiJcGTLn0RThbzuWEnvlyiYM0RALGOFfxWm6m/kWMar0OrwsEgm
+	knB4hmP8xlzt6OfHsTj9JITggfgoFD/sqK/U9ROxUtyg/iO0+IEF59vF1GgCorl7wTfAbC
+	wihc2e2HbrukqIVvJsE26TzdBaou8sw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717178752;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rdPRT5mE0rdQjCqwKaiwjzTSyrTE2NNeScJ+vvQaCOA=;
+	b=zWw66waxNWCeJZGDYERyNFm4OpdmMPOhfUgvP2orQF5Af9CP9smNMVsDbI7yenSZl/+137
+	qVDvUlt8Wgrw+nBg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=0b0H4uHV;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=zWw66wax
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717178752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rdPRT5mE0rdQjCqwKaiwjzTSyrTE2NNeScJ+vvQaCOA=;
+	b=0b0H4uHVlmn4PYaYPZ2RiJcGTLn0RThbzuWEnvlyiYM0RALGOFfxWm6m/kWMar0OrwsEgm
+	knB4hmP8xlzt6OfHsTj9JITggfgoFD/sqK/U9ROxUtyg/iO0+IEF59vF1GgCorl7wTfAbC
+	wihc2e2HbrukqIVvJsE26TzdBaou8sw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717178752;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rdPRT5mE0rdQjCqwKaiwjzTSyrTE2NNeScJ+vvQaCOA=;
+	b=zWw66waxNWCeJZGDYERyNFm4OpdmMPOhfUgvP2orQF5Af9CP9smNMVsDbI7yenSZl/+137
+	qVDvUlt8Wgrw+nBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2A1F6132C2;
+	Fri, 31 May 2024 18:05:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id lAaiCIARWmaqOAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 31 May 2024 18:05:52 +0000
+Date: Fri, 31 May 2024 20:06:14 +0200
+Message-ID: <878qzp97qh.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: testing/selftests/alsa/mixer-test: 10 failures on Dell XPS 13 9360
+In-Reply-To: <21f73368-5db6-49a1-b8b7-9b06e698327a@sirena.org.uk>
+References: <1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de>
+	<87cyp280yw.wl-tiwai@suse.de>
+	<21f73368-5db6-49a1-b8b7-9b06e698327a@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-rc1-9-g0f42bdf59b4e4
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-Subject: kselftest/fixes kselftest-seccomp: 5 runs,
- 4 regressions (v6.10-rc1-9-g0f42bdf59b4e4)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Flag: NO
+X-Spam-Score: -3.51
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 6535721CDF
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
+	DKIM_TRACE(0.00)[suse.de:+]
 
-kselftest/fixes kselftest-seccomp: 5 runs, 4 regressions (v6.10-rc1-9-g0f42=
-bdf59b4e4)
+On Fri, 31 May 2024 18:03:52 +0200,
+Mark Brown wrote:
+> 
+> On Fri, May 31, 2024 at 05:17:43PM +0200, Takashi Iwai wrote:
+> > On Fri, 31 May 2024 07:50:33 +0200,
+> 
+> > >     not ok 5 write_invalid.0.40
+> > >     not ok 201 write_invalid.0.12
+> > >     not ok 208 write_invalid.0.11
+> > >     not ok 264 write_invalid.0.3
+> > >     not ok 271 write_invalid.0.2
+> > >     not ok 278 write_invalid.0.1
+> > >     not ok 285 write_invalid.0.0
+> 
+> > Through a quick look, those are no real "failures".  It'd be more
+> > preferable if the driver returns an error for invalid values, but
+> > currently it's up to drivers how to deal with them, and some accept as
+> > is but with correction of the values internally.  They are shown as
+> > "skips" in the summary above you showed, after all.
+> 
+> I would say these are all bugs, they show the driver not correcting the
+> value and allowing users to read back out of range values that were
+> written.  Even if the driver is accepting out of range values I'd expect
+> it to transform them somehow when storing, the program will accept a
+> mismatched read when testing this case but it will complain if the read
+> value is not valid according to the control's info.
 
-Regressions Summary
--------------------
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-mt8173-elm-hana            | arm64 | lab-collabora | gcc-10   | defconfig+k=
-se...4-chromebook | 2          =
-
-mt8192-asurada-spherion-r0 | arm64 | lab-collabora | gcc-10   | defconfig+k=
-se...4-chromebook | 2          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/v6.=
-10-rc1-9-g0f42bdf59b4e4/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   fixes
-  Describe: v6.10-rc1-9-g0f42bdf59b4e4
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      0f42bdf59b4e428485aa922bef871bfa6cc505e0 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-mt8173-elm-hana            | arm64 | lab-collabora | gcc-10   | defconfig+k=
-se...4-chromebook | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6659f7da3ac2df08547e706f
-
-  Results:     105 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-9-g0=
-f42bdf59b4e4/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabor=
-a/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-9-g0=
-f42bdf59b4e4/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabor=
-a/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/arm64/initrd.cpio.gz =
+Ideally, yeah.  But it's a whack-a-mole game, and my gut feeling is
+that it'd be better to enable the input validation globally, something
+like below.
 
 
+Takashi
 
-  * kselftest-seccomp.seccomp_seccomp_benchmark: https://kernelci.org/test/=
-case/id/6659f7da3ac2df08547e7071
-        new failure (last pass: v6.10-rc1-7-ge8b8c5264d4e) =
+--- a/sound/core/Kconfig
++++ b/sound/core/Kconfig
+@@ -219,7 +219,8 @@ config SND_PCM_XRUN_DEBUG
+ 	  the process or driver which causes the scheduling gaps.
+ 
+ config SND_CTL_INPUT_VALIDATION
+-	bool "Validate input data to control API"
++	bool "Validate input data to control API" if EXPERT
++	default y
+ 	help
+ 	  Say Y to enable the additional validation for the input data to
+ 	  each control element, including the value range checks.
 
-
-  * kselftest-seccomp.seccomp_seccomp_benchmark_per-filter_last_2_diff_per-=
-filter_filters_4: https://kernelci.org/test/case/id/6659f7da3ac2df08547e7076
-        new failure (last pass: v6.10-rc1-7-ge8b8c5264d4e) =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-mt8192-asurada-spherion-r0 | arm64 | lab-collabora | gcc-10   | defconfig+k=
-se...4-chromebook | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6659f7de981c0cffac7e70c8
-
-  Results:     102 PASS, 2 FAIL, 3 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-9-g0=
-f42bdf59b4e4/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabor=
-a/kselftest-seccomp-mt8192-asurada-spherion-r0.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-9-g0=
-f42bdf59b4e4/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabor=
-a/kselftest-seccomp-mt8192-asurada-spherion-r0.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.seccomp_seccomp_benchmark: https://kernelci.org/test/=
-case/id/6659f7de981c0cffac7e70ca
-        new failure (last pass: v6.10-rc1-7-ge8b8c5264d4e) =
-
-
-  * kselftest-seccomp.seccomp_seccomp_benchmark_1_bitmapped_2_bitmapped: ht=
-tps://kernelci.org/test/case/id/6659f7de981c0cffac7e70ce
-        new failure (last pass: v6.10-rc1-7-ge8b8c5264d4e) =
-
- =20
