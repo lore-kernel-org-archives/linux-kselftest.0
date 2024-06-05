@@ -1,128 +1,174 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520DC1607BC
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Jun 2024 22:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDE015ECC6;
+	Wed,  5 Jun 2024 22:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717627015; cv=none; b=KqyRTslXy2kpsRY63FX4ZeVqUrsv8Kqh+Ihk4iQQo/G1cEQr0ISUNM1jcMD02xuV/HGyHg4NvjZ4hAuyFkmMaiK7NuKWfiJebOAAsPZ+QjkTN54EpMYk+EGgGOsvrkjFpAz1eFOwK1JhBx2ZC/l6NWraHqdaDWbhANfBfrJecRs=
+	t=1717627031; cv=none; b=cNGkWxfvHLxDWUMt9FsRjDJ1MVYXpKfyjIwLCfR7wJrpN3jm3Dp1z6AlmkDFYOUPsjxUubvbont2Me7XaxFuZ9dnyO1YzdNm2rmJstLymaOH5qDZECeyAuIr+/T0F0wUG5hUmKtp6d0lbTKZMYXQgOUxfdor/uvZk0lZQIe9RLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717627015; c=relaxed/simple;
-	bh=9eIW5Nk9I4U8j48RPo1MRyDNbVsR5OYHwY3uM3dehXE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=FsGPH6qAHBGvwDmxnfu0B4O973MWbeLOlflN+WD5U2AD5SGZA7lkUnLKlZdIh4n7WKD/QBrWGuX/PSWM7xGWj0+TDgbA+pGdn4dvM9VyOg1jBWuigL74dDcK2xeVfn0INnktO3ufzvgK2YXPRzrj/0hnuxbwHKz8ZzFyvRGPo7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4lbkGThx; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+	s=arc-20240116; t=1717627031; c=relaxed/simple;
+	bh=dVVjuhrnk9rcVfTcckSF8nLr2PRkHx3HB+XsjZZpYsM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=n6022leXRx+Y6o1pZg9tW8/4QNl4WaFqgScRiGnepFfwbNSG17mHWvI6Nsyi2uUkO32oGswqz0ol53Z3OC1Hshwd82wVAVuym8S+k5pX7rZKCEK29C6UPDNOpRrclPIg8DB8gqMPDV/aFWurg0G84Zl2t8AfNF7TQVVP8OZmzyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jFNBiP+0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4lbkGThx"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-62a3dec382eso3617897b3.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Jun 2024 15:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717627013; x=1718231813; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HvR2KzRbeN2y+kQBsoY3woptqhul8uQMwsNjpEueFQI=;
-        b=4lbkGThxkiUpMN/0jwXCXsnJX3PCW4UQENIqDyWnmGotw02/rp5TiIapCC7+pqP/nn
-         EaNCX+m6x1uIQ1OS0qB9q+1feW16DiFlasAh6Yu+A1t143SClI5OL+mny+4YHSZDm/Qz
-         iDlpVVG4c9LjVKyRSX8Zphr352aFBj7rfg9tgukQ50EF97uPyMceZnjz+foFGoMjZsCV
-         65EqqkxAgsg8GyhAlTSNfYY5t4NuHkuuOQEd9Dil8SBn0FUZctsUuoYXr6Y1GTN/9Nyb
-         lmWmhL5eAfB/QsQKpjWkGQ0m2DlZoz7AeNn6QJTjdAVael8nbB5fSWsr0DThu56v1Y0+
-         WW8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717627013; x=1718231813;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HvR2KzRbeN2y+kQBsoY3woptqhul8uQMwsNjpEueFQI=;
-        b=dhQlL6kY3VNu3751vZJGOglrZeMKFLASKMwMuCEiXml/8/WJ/U8/GjQZXwfbGAxlof
-         DphsE2Cx1xiDX39E7odVHmsUmlMPRSyvABQ+MczDdFflhHODwNJDjbfpDcwG7DZWzvw/
-         7GbfYQHmgkX+/yB952Bkqe5I3D8IQnoXsl8lfyO9OdpGHz8g1rGxAS0K2p/XAYX4sEPn
-         E0Edt0ArU1pCruD+LWnIJWNsxVHbAQuDCSfdoZ3rXxAWllkQos7r4QIirzcUMBtYmeqL
-         Btk2oSFrn/yCY7HE4SxRFbnZT1eoZhQmjetisAI6CznN44vvdIwHgQrJf8YwKZB/4UNP
-         yAOA==
-X-Forwarded-Encrypted: i=1; AJvYcCX2QvPXhUgiUA3LQ2XYvEBttZi6z+TreNCb+WD2GGyqtbW86eGyuwUWPGftL6QE+qgJCtEP/9gLDhzo6Dz644u9hz9xlLxES4na22+MK0an
-X-Gm-Message-State: AOJu0YxIxdNArU9QVtlj3JpnZl1vkfZZIRSAOcthls6OpncVq9a6iyD1
-	ITxG2CJD5h9SnYzYBJXwSBUNRvXswUGxhwTl5wxTF8ZlZXqZbu9L9dbxkhZvbmQql6wd4GjKgpe
-	4XQ==
-X-Google-Smtp-Source: AGHT+IHQMSg3BZwEdpTjqj45BkSGSDIqDJ5xpSLfVCjXGbqd16zv34TQGDGB9Qio8PSsr4E5OLx/pSf4zjw=
-X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a05:690c:6413:b0:620:32ea:e1d4 with SMTP id
- 00721157ae682-62cc6f92037mr2991207b3.0.1717627013381; Wed, 05 Jun 2024
- 15:36:53 -0700 (PDT)
-Date: Wed,  5 Jun 2024 22:36:35 +0000
-In-Reply-To: <20240605223637.1374969-1-edliaw@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jFNBiP+0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B20C2BD11;
+	Wed,  5 Jun 2024 22:37:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717627031;
+	bh=dVVjuhrnk9rcVfTcckSF8nLr2PRkHx3HB+XsjZZpYsM=;
+	h=From:Date:Subject:To:Cc:From;
+	b=jFNBiP+0gNWI3mAtVSdDqJoB/4RQB/VGMHi6gTI7OPrtjkTcttXv9KwJ5PMZ9RVTJ
+	 XG6qNJ4pu1qHMIz1TefEqYX1CgK5NE4jIfzOPcR71DSLWVMNNr1IxSzU0zPYH/z0BP
+	 gIONW7IaVGoU1Cv/5vpWo8bYVkQ1A8SeU9g5Dwh21+TqFRmp2e4HDiqBQCPDXH9o0o
+	 xu5DDBZktkrkagHNTtH/PGPP0CxigN0hRcxQyFATU2kbh7zXassKbOnUFRB4Vnr6Jy
+	 zksN1gVNaDfMzFzb0nmV0ANhEOcKDYQ5X7/N8DFjpV74lBTwPm5GXWhYk6ahfxpayA
+	 8nHMkz6Ph1Dxg==
+From: Mark Brown <broonie@kernel.org>
+Date: Wed, 05 Jun 2024 23:36:12 +0100
+Subject: [PATCH] selftests: mm: Make map_fixed_noreplace test names stable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240605223637.1374969-1-edliaw@google.com>
-X-Mailer: git-send-email 2.45.1.467.gbab1589fc0-goog
-Message-ID: <20240605223637.1374969-3-edliaw@google.com>
-Subject: [PATCH v1 2/2] selftests/mm: Guard defines from shm
-From: Edward Liaw <edliaw@google.com>
-To: shuah@kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: cmllamas@google.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240605-kselftest-mm-fixed-noreplace-v1-1-a235db8b9be9@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFvoYGYC/xXMQQqDMBBG4avIrB2IkqTFq4iLEP+0QzVKRkpBv
+ Hvj8oPHO0lRBEpDc1LBV1S2XNG1DcV3yC+wzNXUm94abxx/FEs6oAevKyf5Yea8FexLiGBr8YB
+ z8em7QHWxF9zJvR+n6/oDN+K3yG4AAAA=
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Ryan Roberts <ryan.roberts@arm.com>, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.14-dev-d4707
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4850; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=dVVjuhrnk9rcVfTcckSF8nLr2PRkHx3HB+XsjZZpYsM=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmYOiUCt0+i/NP4Ix1ci7NExxF8e79RLps0+Fa+d71
+ 5yBnE46JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZmDolAAKCRAk1otyXVSH0F56B/
+ 9+XCV+81OEz6Gnn6s5XC8fRlmAChtPCuWw2nbJKMi6EU2jycWSs+/C5eUzRrFLWZ2F+8x4ub6CGsrY
+ j2hSaL0z78nnEkf0dN/BT+Seggg5aJyY1IUjlScKrUTdY0TuZ3l4eUcnJlv7OQcjJmQKDaTOP0uuMw
+ 2qHCOTwF1BagPNuAckJYgZ4c6V9JNNgdq6fN2Rb0d/4RlTuniG7zzafhn4K6KXhJvwuxmdsaxG37E0
+ H4FxxJ3Eap2IClToMNoclf5DizIBQg4eTVPrSmTGS5Xp88b7i2OvxWDerUaxXuDJ3VUUcgxN/v3osU
+ W//sDueyMuBF/tw+G+m8W91t3UOcl8
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-thuge-gen.c defines SHM_HUGE_* macros that are provided by the uapi
-since 4.14. These macros get redefined when compiling with Android's
-bionic because its sys/shm.h will import the uapi definitions.
+KTAP parsers interpret the output of ksft_test_result_*() as being the
+name of the test.  The map_fixed_noreplace test uses a dynamically
+allocated base address for the mmap()s that it tests and currently
+includes this in the test names that it logs so the test names that are
+logged are not stable between runs.  It also uses multiples of PAGE_SIZE
+which mean that runs for kernels with different PAGE_SIZE configurations
+can't be directly compared.  Both these factors cause issues for CI
+systems when interpreting and displaying results.
 
-However if linux/shm.h is included, with glibc, sys/shm.h will clash on
-some struct definitions:
+Fix this by replacing the current test names with fixed strings
+describing the intent of the mappings that are logged, the existing
+messages with the actual addresses and sizes are retained as diagnostic
+prints to aid in debugging.
 
-  /usr/include/linux/shm.h:26:8: error: redefinition of =E2=80=98struct shm=
-id_ds=E2=80=99
-     26 | struct shmid_ds {
-        |        ^~~~~~~~
-  In file included from /usr/include/x86_64-linux-gnu/bits/shm.h:45,
-                   from /usr/include/x86_64-linux-gnu/sys/shm.h:30:
-  /usr/include/x86_64-linux-gnu/bits/types/struct_shmid_ds.h:24:8: note: or=
-iginally defined here
-     24 | struct shmid_ds
-        |        ^~~~~~~~
-
-For now, guard the SHM_HUGE_* defines with ifndef to prevent
-redefinition warnings on Android bionic.
-
-Signed-off-by: Edward Liaw <edliaw@google.com>
+Fixes: 4838cf70e539 ("selftests/mm: map_fixed_noreplace: conform test to TAP format output")
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/mm/thuge-gen.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/testing/selftests/mm/map_fixed_noreplace.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftes=
-ts/mm/thuge-gen.c
-index 034635317935..d50dc71cac32 100644
---- a/tools/testing/selftests/mm/thuge-gen.c
-+++ b/tools/testing/selftests/mm/thuge-gen.c
-@@ -34,10 +34,18 @@
- #endif
-=20
- #define SHM_HUGETLB     04000   /* segment will use huge TLB pages */
-+#ifndef SHM_HUGE_SHIFT
- #define SHM_HUGE_SHIFT  26
-+#endif
-+#ifndef SHM_HUGE_MASK
- #define SHM_HUGE_MASK   0x3f
-+#endif
-+#ifndef SHM_HUGE_2MB
- #define SHM_HUGE_2MB    (21 << SHM_HUGE_SHIFT)
-+#endif
-+#ifndef SHM_HUGE_1GB
- #define SHM_HUGE_1GB    (30 << SHM_HUGE_SHIFT)
-+#endif
-=20
- #define NUM_PAGESIZES   5
- #define NUM_PAGES 4
---=20
-2.45.1.467.gbab1589fc0-goog
+diff --git a/tools/testing/selftests/mm/map_fixed_noreplace.c b/tools/testing/selftests/mm/map_fixed_noreplace.c
+index b74813fdc951..d53de2486080 100644
+--- a/tools/testing/selftests/mm/map_fixed_noreplace.c
++++ b/tools/testing/selftests/mm/map_fixed_noreplace.c
+@@ -67,7 +67,8 @@ int main(void)
+ 		dump_maps();
+ 		ksft_exit_fail_msg("Error: munmap failed!?\n");
+ 	}
+-	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_test_result_pass("mmap() 5*PAGE_SIZE at base\n");
+ 
+ 	addr = base_addr + page_size;
+ 	size = 3 * page_size;
+@@ -76,7 +77,8 @@ int main(void)
+ 		dump_maps();
+ 		ksft_exit_fail_msg("Error: first mmap() failed unexpectedly\n");
+ 	}
+-	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_test_result_pass("mmap() 3*PAGE_SIZE at base+PAGE_SIZE\n");
+ 
+ 	/*
+ 	 * Exact same mapping again:
+@@ -93,7 +95,8 @@ int main(void)
+ 		dump_maps();
+ 		ksft_exit_fail_msg("Error:1: mmap() succeeded when it shouldn't have\n");
+ 	}
+-	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_test_result_pass("mmap() 5*PAGE_SIZE at base\n");
+ 
+ 	/*
+ 	 * Second mapping contained within first:
+@@ -111,7 +114,8 @@ int main(void)
+ 		dump_maps();
+ 		ksft_exit_fail_msg("Error:2: mmap() succeeded when it shouldn't have\n");
+ 	}
+-	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_test_result_pass("mmap() 2*PAGE_SIZE at base+PAGE_SIZE\n");
+ 
+ 	/*
+ 	 * Overlap end of existing mapping:
+@@ -128,7 +132,8 @@ int main(void)
+ 		dump_maps();
+ 		ksft_exit_fail_msg("Error:3: mmap() succeeded when it shouldn't have\n");
+ 	}
+-	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_test_result_pass("mmap() 2*PAGE_SIZE  at base+(3*PAGE_SIZE)\n");
+ 
+ 	/*
+ 	 * Overlap start of existing mapping:
+@@ -145,7 +150,8 @@ int main(void)
+ 		dump_maps();
+ 		ksft_exit_fail_msg("Error:4: mmap() succeeded when it shouldn't have\n");
+ 	}
+-	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_test_result_pass("mmap() 2*PAGE_SIZE bytes at base\n");
+ 
+ 	/*
+ 	 * Adjacent to start of existing mapping:
+@@ -162,7 +168,8 @@ int main(void)
+ 		dump_maps();
+ 		ksft_exit_fail_msg("Error:5: mmap() failed when it shouldn't have\n");
+ 	}
+-	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_test_result_pass("mmap() PAGE_SIZE at base\n");
+ 
+ 	/*
+ 	 * Adjacent to end of existing mapping:
+@@ -179,7 +186,8 @@ int main(void)
+ 		dump_maps();
+ 		ksft_exit_fail_msg("Error:6: mmap() failed when it shouldn't have\n");
+ 	}
+-	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
++	ksft_test_result_pass("mmap() PAGE_SIZE at base+(4*PAGE_SIZE)\n");
+ 
+ 	addr = base_addr;
+ 	size = 5 * page_size;
+
+---
+base-commit: c3f38fa61af77b49866b006939479069cd451173
+change-id: 20240605-kselftest-mm-fixed-noreplace-44e7e55c861a
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
