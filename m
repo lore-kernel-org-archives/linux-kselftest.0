@@ -1,83 +1,194 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0180199B8;
-	Thu,  6 Jun 2024 02:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B6813C913
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Jun 2024 09:05:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717641032; cv=none; b=snlMka764TD4eM5K9AedHWTxEC9WebfvryKQbUW1qOnCFl6KilB5CBYmHUQxX/78dXATDu1oohDL7m9ZDbNdXuvom5iX55ATfXcbN1jUmp9+O0huCyQ6SDkRSDxJ2v3gCUW5VHiy3Qo4HRZjRIsZ6zC9cy0jDzY6xxKaPdyDalI=
+	t=1717664708; cv=none; b=U1pPnK0zkk/zvnlscecHoAY/LvdKurJm20Y8E1fnTk8VkW3vRBqYzl+rD27VFySJaUwYqFh/iv7DUeQKI5wcvubv0wEFJxTuaMP/WGe+2S9Fy7MyMZ1GrqGT2gGo0fHmTGppWUyLOEQ3iTzf9my83USCyC3NO8UDLLWg4Hsp8oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717641032; c=relaxed/simple;
-	bh=3U+iDnACpZRpRUjZPACLMO+CtjRyATslJry5JmeZRAY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=famBVOrNU/YeUz3Tt1mdSsYaq6ZzMKN04vHKf8LPkil7PNpBXvCQwIdEKZVaKQbj11amBC0fzdUtBn6xRJ1Igvi06w9KufdpM5gaeWQYYSO3OeeWUrPWBVd9x/PRxbecRdR/ng+6wbaR3CYMYp7+6WBUWwxb1IToR4P5gHvNrmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAdemrmi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1717664708; c=relaxed/simple;
+	bh=0gjAS+xeIiFVq0XbxUIPmoSznSCJ24z2/5slWqAi/Lw=;
+	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tzH4T5Sk/lI/Ne0+jb2vFpgn3Dp9Z0VE6FM7IcmEWzXRk6hhVCi4M/KuCZJ4WoKA/Lv60xpexsEBsCh4HPd4yrHq+TxM4NYzYJq6xl1tUtl9pIp2qteS2baU5farSdUatFnYb2fJlvdegTbr3JY5T6yyi4TRrMP4gEiEE2ms47w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KoAzRnem; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAdemrmi"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 27EA8C4AF0F;
-	Thu,  6 Jun 2024 02:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717641032;
-	bh=3U+iDnACpZRpRUjZPACLMO+CtjRyATslJry5JmeZRAY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=mAdemrmibkCws598NOoG+9P9gC/N3ztL0ccyPBi4TZeRjA/juzK1boFTkHMaZDWF7
-	 LJLPb+UPWm2iFbFx5nZWXbcGuJwaBmtwd50lDmoOWbRsptWqAKbt1e1bAZoFPjbRk8
-	 0wA52q0cKTUnHWtXUEYDEnN8eiff84axgK6wloABwpKYYD2IS5pn1cflvcd7rNxb7q
-	 6RYkXQ/Yp2cuYrm2WpHx1vQ7tGeOOLeGkUxQNBIN5SxyzWps4qb4XrsJjp7Y26Q1A1
-	 Jz4E7ZQiwpSYJ7cpO8+cLGa9rVUkIAn5RoCjmP7I1Fz0pA3GPl8fZyy5vNGnupdfdL
-	 1c+jQ8KeYDC5g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0CA35D3E997;
-	Thu,  6 Jun 2024 02:30:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KoAzRnem"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1717664704;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+ruboI7zvkXbsrncHAHmtsC+lWDyh3cWZrFiVzasUVM=;
+	b=KoAzRnemLzYwL5FPpnHjCGfNvPIu4RhluEQzEaxaOom/wLM9LDZDYxMwVgL73IcFmI2FCm
+	oxpP9+M2Pgu6Blf83beuTnKS5iOy0Wpw8YZPpnXdvvFNDEo5Lb40aYy466hdt6lKrDY7Jb
+	WB0vu26gn+RRopyc5UKUkb4EX6XE2SM=
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
+ [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-687-mGz4DdYxMv-1rWiOk9jeIQ-1; Thu, 06 Jun 2024 05:05:03 -0400
+X-MC-Unique: mGz4DdYxMv-1rWiOk9jeIQ-1
+Received: by mail-yb1-f198.google.com with SMTP id 3f1490d57ef6-dee902341c0so1128770276.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jun 2024 02:05:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717664703; x=1718269503;
+        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ruboI7zvkXbsrncHAHmtsC+lWDyh3cWZrFiVzasUVM=;
+        b=UkOytNR4hwAOoOxToxhv6qGv86b8dO8bJjsmhvpFCRtjBCoxDNK6OBLUtFCjoH+25c
+         /1sMZ130odAty4RR4mHSRe4Jcnsu7kcQ0B3CxpYHFSKGGeSepkYsPNzn35jP7dgtv9DW
+         xUBj9HF/MNJLdxHV+IwgFVqgsdGlX5i6dAjZMkh5r1+JqISWsBAP+PilE4f6OYz8JgEp
+         4pasgM5xC0pTnkd1UWukoHdiN1hf+bGgUXjHcBZ/7yzoOKRcxlhcXaaAX8yiPHfLBxUd
+         +Vn5as0ey9f4AkwHiGDW0NlPBI6UreagOp3qLvPSnF6G3elPTVlSrBSLt7GyQZLDpojS
+         N3Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKJy43kHTaOf1hRQoC0m5PSbsKrjq+SXobuakoLbRlAFnDEtnF7EB3umG0Exs8G7GnWJitg8LWevJUMyjUscl7g+0ypSdnqKjOubab11+H
+X-Gm-Message-State: AOJu0Yy4ETxJdbqqLet3vbdtqNWW6bC7yY2fK7D4wT6gdJUDF/oSWe69
+	FvDEopDez4tG0/j9ogzT6mhkQtNsWQfAvBQZ6farAUfGWdB5NKu3Z9pyIBsCkAsgWZodDYYAZHf
+	0kCReUTTvdLq53t1iWBjyF+WF7FowFHczyKC+TNWe2jpej8+Wtw7P05pEk2WKtv8vMDkZeROwmE
+	yjillu/BHEc0VHsrQ4BLwV29Vp5rQ7Ie+TAxUwwf1z
+X-Received: by 2002:a05:6902:260c:b0:df9:20a2:227f with SMTP id 3f1490d57ef6-dfacad0c216mr5362585276.55.1717664702754;
+        Thu, 06 Jun 2024 02:05:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH0OUuHz7X7dRHjyo0ZNWBFQUhicRJ5nvBw2LlT1l8R+gnkfcPQkNcyiYasymumWF/5B2+03g0NHTi8OVcdCbE=
+X-Received: by 2002:a05:6902:260c:b0:df9:20a2:227f with SMTP id
+ 3f1490d57ef6-dfacad0c216mr5362567276.55.1717664702375; Thu, 06 Jun 2024
+ 02:05:02 -0700 (PDT)
+Received: from 311643009450 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 6 Jun 2024 09:05:01 +0000
+From: =?UTF-8?Q?Adri=C3=A1n_Moreno?= <amorenoz@redhat.com>
+References: <20240603183121.2305013-1-amorenoz@redhat.com> <f7ta5k126oc.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: hsr: Extend the hsr_redbox.sh test to use
- fixed MAC addresses
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171764103204.23267.6023664663218256417.git-patchwork-notify@kernel.org>
-Date: Thu, 06 Jun 2024 02:30:32 +0000
-References: <20240603093322.3150030-2-lukma@denx.de>
-In-Reply-To: <20240603093322.3150030-2-lukma@denx.de>
-To: Lukasz Majewski <lukma@denx.de>
-Cc: kuba@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
- edumazet@google.com, olteanv@gmail.com, davem@davemloft.net,
- o.rempel@pengutronix.de, Tristram.Ha@microchip.com, bigeasy@linutronix.de,
- r-gunasekaran@ti.com, horms@kernel.org, n.zhandarovich@fintech.ru,
- m-karicheri2@ti.com, Arvid.Brodin@xdin.com, dan.carpenter@linaro.org,
- ricardo@marliere.net, casper.casan@gmail.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, liuhangbin@gmail.com,
- tanggeliang@kylinos.cn, shuah@kernel.org
+In-Reply-To: <f7ta5k126oc.fsf@redhat.com>
+Date: Thu, 6 Jun 2024 09:05:01 +0000
+Message-ID: <CAG=2xmNU4i5LwrfaSBNKODyOaR0OqVdxX3B5xhkrkNQX2v=S3Q@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/2] selftests: openvswitch: fix action formatting
+To: Aaron Conole <aconole@redhat.com>
+Cc: netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	dev@openvswitch.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Simon Horman <horms@verge.net.au>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+On Mon, Jun 03, 2024 at 03:00:03PM GMT, Aaron Conole wrote:
+> Adrian Moreno <amorenoz@redhat.com> writes:
+>
+> > In the action formatting function ("dpstr"), the iteration is made over
+> > the nla_map, so if there are more than one attribute from the same type
+> > we only print the first one.
+> >
+> > Fix this by iterating over the actual attributes.
+> >
+> > Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+> > ---
+> >  .../selftests/net/openvswitch/ovs-dpctl.py    | 48 +++++++++++--------
+> >  1 file changed, 27 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> > index 1dd057afd3fb..b76907ac0092 100644
+> > --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> > +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> > @@ -437,40 +437,46 @@ class ovsactions(nla):
+> >      def dpstr(self, more=False):
+> >          print_str = ""
+> >
+> > -        for field in self.nla_map:
+> > -            if field[1] == "none" or self.get_attr(field[0]) is None:
+> > +        for attr_name, value in self["attrs"]:
+> > +            attr_desc = next(filter(lambda x: x[0] == attr_name, self.nla_map),
+> > +                             None)
+> > +            if not attr_desc:
+> > +                raise ValueError("Unknown attribute: %s" % attr)
+> > +
+> > +            attr_type = attr_desc[1]
+> > +
+> > +            if attr_type == "none":
+>
+> I agree, this is an issue.  BUT I think it might be better to just
+> filter by field type up front.  See:
+>
+> https://github.com/apconole/linux-next-work/commit/7262107de7170d44b6dbf6c5ea6f7e6c0bb71d36#diff-3e72e7405c6bb4e9842bed5f63883ca930387086bb40d4034e92ed83a5decb4bR441
+>
+> That version I think ends up being much easier to follow.  If you want
+> to take it for your series, feel free.  If you disagree, maybe there's
+> something I'm not considering about it.
+>
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+I agree. It's better to check field attribute names first. I found this
+during manual testing of the "emit_sample" series but I ended up not
+needing it for the automated one, so I'm OK waiting for your cleanup
+series.
 
-On Mon,  3 Jun 2024 11:33:22 +0200 you wrote:
-> Fixed MAC addresses help with debugging as last four bytes identify the
-> network namespace.
-> 
-> Moreover, it allows to mimic the real life setup with for example bridge
-> having the same MAC address on each port.
-> 
-> Signed-off-by: Lukasz Majewski <lukma@denx.de>
-> 
-> [...]
+In fact, I also have some patches that try some rework of this part. In
+particular, I tried to unify all attributes under a common base class
+that would handle printing and parsing. That way, most cases would fall
+into "print_str += datum.dpstr(more)" and the "if/elif" block would
+shrink significantly.
 
-Here is the summary with links:
-  - [net-next] selftests: hsr: Extend the hsr_redbox.sh test to use fixed MAC addresses
-    https://git.kernel.org/netdev/net-next/c/955edd872baf
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+> NOTE that version is just a bunch of independent changes that are
+> squashed together.  I have a cleaner version.
+>
+> I can also bundle up the series I have so far and submit, but I didn't
+> want to do that until I got all the pmtu.sh support working.  Maybe it
+> makes sense to send it now though.  Simon, Jakub - wdyt?
+>
+> >                  continue
+> >              if print_str != "":
+> >                  print_str += ","
+> >
+> > -            if field[1] == "uint32":
+> > -                if field[0] == "OVS_ACTION_ATTR_OUTPUT":
+> > -                    print_str += "%d" % int(self.get_attr(field[0]))
+> > -                elif field[0] == "OVS_ACTION_ATTR_RECIRC":
+> > -                    print_str += "recirc(0x%x)" % int(self.get_attr(field[0]))
+> > -                elif field[0] == "OVS_ACTION_ATTR_TRUNC":
+> > -                    print_str += "trunc(%d)" % int(self.get_attr(field[0]))
+> > -                elif field[0] == "OVS_ACTION_ATTR_DROP":
+> > -                    print_str += "drop(%d)" % int(self.get_attr(field[0]))
+> > -            elif field[1] == "flag":
+> > -                if field[0] == "OVS_ACTION_ATTR_CT_CLEAR":
+> > +            if attr_type == "uint32":
+> > +                if attr_name == "OVS_ACTION_ATTR_OUTPUT":
+> > +                    print_str += "%d" % int(value)
+> > +                elif attr_name == "OVS_ACTION_ATTR_RECIRC":
+> > +                    print_str += "recirc(0x%x)" % int(value)
+> > +                elif attr_name == "OVS_ACTION_ATTR_TRUNC":
+> > +                    print_str += "trunc(%d)" % int(value)
+> > +                elif attr_name == "OVS_ACTION_ATTR_DROP":
+> > +                    print_str += "drop(%d)" % int(value)
+> > +            elif attr_type == "flag":
+> > +                if attr_name == "OVS_ACTION_ATTR_CT_CLEAR":
+> >                      print_str += "ct_clear"
+> > -                elif field[0] == "OVS_ACTION_ATTR_POP_VLAN":
+> > +                elif attr_name == "OVS_ACTION_ATTR_POP_VLAN":
+> >                      print_str += "pop_vlan"
+> > -                elif field[0] == "OVS_ACTION_ATTR_POP_ETH":
+> > +                elif attr_name == "OVS_ACTION_ATTR_POP_ETH":
+> >                      print_str += "pop_eth"
+> > -                elif field[0] == "OVS_ACTION_ATTR_POP_NSH":
+> > +                elif attr_name == "OVS_ACTION_ATTR_POP_NSH":
+> >                      print_str += "pop_nsh"
+> > -                elif field[0] == "OVS_ACTION_ATTR_POP_MPLS":
+> > +                elif attr_name == "OVS_ACTION_ATTR_POP_MPLS":
+> >                      print_str += "pop_mpls"
+> >              else:
+> > -                datum = self.get_attr(field[0])
+> > -                if field[0] == "OVS_ACTION_ATTR_CLONE":
+> > +                if attr_name == "OVS_ACTION_ATTR_CLONE":
+> >                      print_str += "clone("
+> > -                    print_str += datum.dpstr(more)
+> > +                    print_str += value.dpstr(more)
+> >                      print_str += ")"
+> >                  else:
+> > -                    print_str += datum.dpstr(more)
+> > +                    print_str += value.dpstr(more)
+> >
+> >          return print_str
+>
 
