@@ -1,125 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B2A1EB2A;
-	Wed, 12 Jun 2024 15:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64AD11DDEB
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 15:52:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718207265; cv=none; b=UNsoko0/78auhNQrD8urD4Ib7rK6/elCCmCstZaFp1PutZF6iRykHAsGVCM/kJQMtnRkL2v/3QigjQduSxdqJsNJUD9xt8W3jesyFZj7Hr78F1dcg/H8i2y1ptjm4HnY3j+W9m/waF8G2xt7TyjnNuAyqQtlrBQ/F3plqa21wH0=
+	t=1718207523; cv=none; b=aPkgyKNZDa00axEAp+U/Zym+59nnSNnFFWup53JAKTixG7mzys9i4cowrRL4eDDD6Bog1yMG8mANDLd5fzZYoudw24iMyEkcYXPae5COV8VrxwBpTJVE7wEWJhW5lcKDP1Xdm1RHDpOrcer/kekOu6MMMtJ7oJMe1nJa8Kybfok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718207265; c=relaxed/simple;
-	bh=RcO8kJK1SPBxidMQCBZS6Nufe2pEKnWn1BExnfdFDhs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H5RBiW4jLym8vj659wwxhgGumRTWDTtjLtvKARwuNZ+bKSnrnMR62SQGWlXoPniqOLLkA0NaAqgFd+KLtl4fmjvhlaLmKmWq+ZrYM/Vu4/V/vBHpWsr54vdG6WxebUjBEVGUJUmSxw+koReJDsrSSwBTT0+7ilvhgYfSnwk1OTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tUUDhFkB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718207523; c=relaxed/simple;
+	bh=N86oabt2fKTMO2uOL8z7pPMGu8O/KQBt+1LpSMDdwSo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=os59lwpDenv710cHjGazGB+7xNithxcLiOCbB8UOyfiL9VtQViL/gNo+vbcn3xkvUDQRY9jDJsTUYRes0xaBoDaJjwHgPxAQkHBdU2ccGAWH6ZgOojJJhLwDXZmowGpOMAY/DNnB+4GuM4mE8f0kBphrHuMxuY4+kTAq9accPlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=hV7y+HxN; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tUUDhFkB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8CCFC116B1;
-	Wed, 12 Jun 2024 15:47:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718207264;
-	bh=RcO8kJK1SPBxidMQCBZS6Nufe2pEKnWn1BExnfdFDhs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tUUDhFkBvtiENrkhGjsuaqjXStFu2y4QmRyEz8Z44+BNeCUMT1FwXpmM/Z+ZWMWEt
-	 xzcTbt93S5t/Z2Gjbj8/IPxqyEriOfVzDPo8HuhM4xgnSUgcbkjoEHG3d2MQTSOFzv
-	 0qw54/7Zv6wsSjSdQQTHNp9M57WuCZdau/mlvGyNsjZNzhUF8fmviXzmsmm/taiwEh
-	 UVHIkfWuUcjER2VhozjXME73U59vBlXDJxWYNfGXzCU6uWRy+oqe9bZwHjAo8SrVfr
-	 B8TqlIFed1ii275iDSfF4yGkhIgvyJBVxzUfGA6GSAus8H08zqOCQJNpZ4tAB3Ft9h
-	 9EyHQ6Et14wWw==
-Message-ID: <12fd227b-5f6a-4929-baaa-7f657933cde6@kernel.org>
-Date: Wed, 12 Jun 2024 09:47:40 -0600
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="hV7y+HxN"
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 45CFFR6J019037
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 08:52:01 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc :
+ content-transfer-encoding : content-type : date : from : in-reply-to :
+ message-id : mime-version : references : subject : to; s=s2048-2021-q4;
+ bh=Dp9jB3/zWqEW0lejCiauS6edrezGeGq1zpJr+Kx+fZI=;
+ b=hV7y+HxNxvW3yl2z+NBnGRGgju03oovha427d0bVPLpvulwd7Dpxq4Z/NgoozRYJOvcR
+ +Xt/4MxiTMlgoUXQAI1wFf+hX0TZ371I6GFpGXgXZYDPeqsTqNJsqQCuXrjkUtZbEZLZ
+ 66KEAGqPhDNDAwHI9Nc2QZmCkD7ILOwWNOvnsnuhKhv38YElYtKTzpjV6iuJ5CQZsYmc
+ hSAus7BVC9RGLNJGgiUuanNri6MFatJb0TvpMAwnG0w+pslM1+mt45/+f+d6xKPDcJnc
+ HxL7cuBYW+KevdR72T9866U/2E5/zvlZetAbPFaqIFQgjRNh8Wm42FYboUK1oU0mTctk Dg== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by m0001303.ppops.net (PPS) with ESMTPS id 3ypm6qhsug-7
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 08:52:01 -0700
+Received: from twshared26916.05.ash9.facebook.com (2620:10d:c0a8:1c::1b) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1544.11; Wed, 12 Jun 2024 15:51:58 +0000
+Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
+	id 06B8FF5EA646; Wed, 12 Jun 2024 08:51:47 -0700 (PDT)
+From: Keith Busch <kbusch@meta.com>
+To: <linux-nvme@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC: <hch@lst.de>, <sagi@grimberg.me>, <paulmck@kernel.org>,
+        <davidgow@google.com>, <akpm@linux-foundation.org>,
+        <venkat88@linux.vnet.ibm.com>, Keith Busch <kbusch@kernel.org>
+Subject: [PATCH 2/2] nvme: fix namespace removal list
+Date: Wed, 12 Jun 2024 08:51:35 -0700
+Message-ID: <20240612155135.3060667-2-kbusch@meta.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240612155135.3060667-1-kbusch@meta.com>
+References: <20240612155135.3060667-1-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-Content-Language: en-US
-To: Jason Gunthorpe <jgg@ziepe.ca>, Mina Almasry <almasrymina@google.com>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
- Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
- <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
- <20240607145247.GG791043@ziepe.ca>
- <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
- <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
- <20240610121625.GI791043@ziepe.ca>
- <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
- <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
- <20240610221500.GN791043@ziepe.ca>
- <CAHS8izNRd=f=jHgrYKKfzgcU3JzkZA1NkZnbQM+hfYd8-0NyBQ@mail.gmail.com>
- <20240612120602.GQ791043@ziepe.ca>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20240612120602.GQ791043@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: WBbuYz6GEOUiDlFKOlon4wDz4bFP6KTa
+X-Proofpoint-ORIG-GUID: WBbuYz6GEOUiDlFKOlon4wDz4bFP6KTa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-12_08,2024-06-12_02,2024-05-17_01
 
-On 6/12/24 6:06 AM, Jason Gunthorpe wrote:
-> On Tue, Jun 11, 2024 at 11:09:15AM -0700, Mina Almasry wrote:
-> 
->> Just curious: in Pavel's effort, io_uring - which is not a device - is
->> trying to share memory with the page_pool, which is also not a device.
->> And Pavel is being asked to wrap the memory in a dmabuf. Is dmabuf
->> going to be the kernel's standard for any memory sharing between any 2
->> components in the future, even when they're not devices?
-> 
-> dmabuf is how we are refcounting non-struct page memory, there is
-> nothing about it that says it has to be MMIO memory, or even that the
-> memory doesn't have struct pages.
-> 
-> All it says is that the memory is alive according to dmabuf
-> refcounting rules. And the importer obviously don't get to touch the
-> underlying folios, if any.
-> 
+From: Keith Busch <kbusch@kernel.org>
 
-In addition, the io_uring developers should be considering the use case
-of device memory. There is no reason for this design to be limited to
-host memory. io_uring should not care (it is not peeking inside the
-memory buffers); it is just memory references.
+This function wants to move a subset of a list from an element to the
+end to another list, so do that with the new list_cut helper instead of
+using the wrong list splice.
 
-One of io_uring's primary benefits is avoiding system calls. io_uring
-works with TCP sockets. Let it work with any dmabuf without concern of
-memory type. The performance benefits the Google crowd sees with system
-call based apps should be even better with io_uring.
+Fixes: be647e2c76b27f4 ("nvme: use srcu for iterating namespace list")
+Reported-by: Venkat Rao Bagalkote <venkat88@linux.vnet.ibm.com>
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.vnet.ibm.com>
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+---
+ drivers/nvme/host/core.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Focus on primitives, building blocks with solid APIs for other
-subsystems to leverage and let them be wired up in ways you cannot
-imagine today.
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index f5d150c62955d..30fec15872b3d 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -3959,9 +3959,10 @@ static void nvme_remove_invalid_namespaces(struct =
+nvme_ctrl *ctrl,
+=20
+ 	mutex_lock(&ctrl->namespaces_lock);
+ 	list_for_each_entry_safe(ns, next, &ctrl->namespaces, list) {
+-		if (ns->head->ns_id > nsid)
+-			list_splice_init_rcu(&ns->list, &rm_list,
+-					     synchronize_rcu);
++		if (ns->head->ns_id > nsid) {
++			list_cut(&rm_list, &ctrl->namespaces, &ns->list);
++			break;
++		}
+ 	}
+ 	mutex_unlock(&ctrl->namespaces_lock);
+ 	synchronize_srcu(&ctrl->srcu);
+--=20
+2.43.0
 
