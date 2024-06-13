@@ -1,46 +1,46 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E17E14B078
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 18:13:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95DA14C585
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 18:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718302432; cv=none; b=oC4TDjNamX1glAjNa1sGVvvPbQx8zDWC7fQg3+UmRqCYSubMrnGkc+wc+0Zx+dj+13zQGnqPOLWTKn2HXKWrCRQBGZ4vD60C07xcK/NW6Wch06kKGoJhdsswEqDp1wK1ZXWMrprnhaIIOV4v3AYsEQuQsYTSn5yHibwpUaCBhSE=
+	t=1718302435; cv=none; b=mx2pI637OOmxSiRQa44NG1faDlKRRbVWKA2UtjUFpOe5RUYJ8Mpy+WNqN78k/yd9d1gQ40PxGcget4HrNuGpWSIZ9YvBG8y8HGZLvmLtDnakoMp2BT8bA32HVMrcYgsW0ove64siB4wies43mZLKK17hQWDUJlvXOPv1rGLWoIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718302432; c=relaxed/simple;
-	bh=WeUUvMuTYRSgPyKm/iOUAlJPOdhkDGDRhrnBQSDIqcE=;
+	s=arc-20240116; t=1718302435; c=relaxed/simple;
+	bh=Qd5u1VNEmmAUNWYDzyFe1yeh0le3RfrFKG3DD/XMoV0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cl7ADquXkBV1lIeczdFejZUSpvsUINEwRd/Ip/N+pN4bMy6K72wI+mcheHF87eYLW3inoA2ZBGGMTZU/rg5gYuCmDXKNdBrBxNWmTWECNmxsfFv8dzLkiqABbpAHMBBGxxfi5k6fjQD8QVU8RZRfARWiWa3LNyiXvszG34dMcSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IHkJx8Qa; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=JWvtacaCWIU1oB7l4ZU/FTmhUsVQ5UHInbBDEV9t3Dlg7wNJI6OS4g1djru8HVWkmHMz8AYvz/kmmzdtpSXF+vh4u9yXOZGcRf19N27wy7GGeF8zfdFxf5QOi8YakkR0xlZc+KjNYI21yVwIZspAKBTZ0ZBm8SadWBB7fB/lG54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Jq06gSyn; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IHkJx8Qa"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Jq06gSyn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718302429;
+	s=mimecast20190719; t=1718302432;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/+oN5Qia0xQLc2p9jcNuDSi9iMOm/4f/4mXdW303HRg=;
-	b=IHkJx8QaN9C1oDWsSgi5T6u0pZ9xlTf9pUuS+bYGiatEPHNx8zZnbB8ezn3AFnLFNJcEG3
-	aFIiTU0Pgu8+kjgQOqn1bV7lx2sLR2XGXzfjbgfS3QzObdYb/U1ETDa45MLOAZK8K9P2H9
-	KbRGYMFS42btmLFyMhqDjoJvlnyvi44=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=L1DTCC+VeXSrnYKaDnRa/SwzX4CVCWfv53BM9LOymus=;
+	b=Jq06gSyn3tLUas+aYdBxQRCrf66JsYRgBHl0vvL2+ZPxtk2EBOd2GcJ1wGrY8OsxBqj4bD
+	1rUFlGrCK2QYXQfsShnAbFfS7wTSt4oIU5wO+KI71zpKbaUyhWOanuruX1TAibSWU2ca37
+	NXwt3lMi2x+quPIKvi+SuLlrQLMXVdo=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-127-YnEWmn9HPSSAjQeqHJjPmg-1; Thu,
- 13 Jun 2024 14:13:42 -0400
-X-MC-Unique: YnEWmn9HPSSAjQeqHJjPmg-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-657-Dgva154XMx6Pw-xFcVdugw-1; Thu,
+ 13 Jun 2024 14:13:49 -0400
+X-MC-Unique: Dgva154XMx6Pw-xFcVdugw-1
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4BBB619560B9;
-	Thu, 13 Jun 2024 18:13:41 +0000 (UTC)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B73E2195609F;
+	Thu, 13 Jun 2024 18:13:47 +0000 (UTC)
 Received: from RHTRH0061144.redhat.com (unknown [10.22.16.41])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0E5B41955E74;
-	Thu, 13 Jun 2024 18:13:37 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id ACDEC19560BF;
+	Thu, 13 Jun 2024 18:13:44 +0000 (UTC)
 From: Aaron Conole <aconole@redhat.com>
 To: netdev@vger.kernel.org
 Cc: dev@openvswitch.org,
@@ -55,9 +55,9 @@ Cc: dev@openvswitch.org,
 	Adrian Moreno <amorenoz@redhat.com>,
 	Stefano Brivio <sbrivio@redhat.com>,
 	Ilya Maximets <i.maximets@ovn.org>
-Subject: [RFC net-next 1/7] selftests: openvswitch: Support explicit tunnel port creation.
-Date: Thu, 13 Jun 2024 14:13:27 -0400
-Message-ID: <20240613181333.984810-2-aconole@redhat.com>
+Subject: [RFC net-next 3/7] selftests: openvswitch: Add set() and set_masked() support.
+Date: Thu, 13 Jun 2024 14:13:29 -0400
+Message-ID: <20240613181333.984810-4-aconole@redhat.com>
 In-Reply-To: <20240613181333.984810-1-aconole@redhat.com>
 References: <20240613181333.984810-1-aconole@redhat.com>
 Precedence: bulk
@@ -69,195 +69,101 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-The OVS module can operate in conjunction with various types of
-tunnel ports.  These are created as either explicit tunnel vport
-types, OR by creating a tunnel interface which acts as an anchor
-for the lightweight tunnel support.
-
-This patch adds the ability to add tunnel ports to an OVS
-datapath for testing various scenarios with tunnel ports.  With
-this addition, the vswitch "plumbing" will at least be able to
-push packets around using the tunnel vports.  Future patches
-will add support for setting required tunnel metadata for lwts
-in the datapath.  The end goal will be to push packets via these
-tunnels, and will be used in an upcoming commit for testing the
-path MTU.
+These will be used in upcoming commits to set specific attributes for
+interacting with tunnels.  Since set() will use the key parsing routine, we
+also make sure to prepend it with an open paren, for the action parsing to
+properly understand it.
 
 Signed-off-by: Aaron Conole <aconole@redhat.com>
 ---
- .../selftests/net/openvswitch/ovs-dpctl.py    | 81 +++++++++++++++++--
- 1 file changed, 75 insertions(+), 6 deletions(-)
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 39 +++++++++++++++++--
+ 1 file changed, 35 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 1dd057afd3fb..56f6bd162d3e 100644
+index 73768f3af6e5..fee64c31d4d4 100644
 --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
 +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -10,6 +10,7 @@ import ipaddress
- import logging
- import multiprocessing
- import re
-+import socket
- import struct
- import sys
- import time
-@@ -29,6 +30,7 @@ try:
-     from pyroute2.netlink.exceptions import NetlinkError
-     from pyroute2.netlink.generic import GenericNetlinkSocket
-     import pyroute2
-+    import pyroute2.iproute
+@@ -284,7 +284,7 @@ class ovsactions(nla):
+         ("OVS_ACTION_ATTR_UNSPEC", "none"),
+         ("OVS_ACTION_ATTR_OUTPUT", "uint32"),
+         ("OVS_ACTION_ATTR_USERSPACE", "userspace"),
+-        ("OVS_ACTION_ATTR_SET", "none"),
++        ("OVS_ACTION_ATTR_SET", "ovskey"),
+         ("OVS_ACTION_ATTR_PUSH_VLAN", "none"),
+         ("OVS_ACTION_ATTR_POP_VLAN", "flag"),
+         ("OVS_ACTION_ATTR_SAMPLE", "none"),
+@@ -292,7 +292,7 @@ class ovsactions(nla):
+         ("OVS_ACTION_ATTR_HASH", "none"),
+         ("OVS_ACTION_ATTR_PUSH_MPLS", "none"),
+         ("OVS_ACTION_ATTR_POP_MPLS", "flag"),
+-        ("OVS_ACTION_ATTR_SET_MASKED", "none"),
++        ("OVS_ACTION_ATTR_SET_MASKED", "ovskey"),
+         ("OVS_ACTION_ATTR_CT", "ctact"),
+         ("OVS_ACTION_ATTR_TRUNC", "uint32"),
+         ("OVS_ACTION_ATTR_PUSH_ETH", "none"),
+@@ -469,6 +469,14 @@ class ovsactions(nla):
+                     print_str += "clone("
+                     print_str += datum.dpstr(more)
+                     print_str += ")"
++                elif field[0] == "OVS_ACTION_ATTR_SET" or \
++                     field[0] == "OVS_ACTION_ATTR_SET_MASKED":
++                    print_str += "set"
++                    if field[0] == "OVS_ACTION_ATTR_SET_MASKED":
++                        print_str += "_masked"
++                    print_str += "("
++                    print_str += datum.dpstr(more)
++                    print_str += ")"
+                 else:
+                     try:
+                         print_str += datum.dpstr(more)
+@@ -547,6 +555,25 @@ class ovsactions(nla):
+                 self["attrs"].append(("OVS_ACTION_ATTR_CLONE", subacts))
+                 actstr = actstr[parsedLen:]
+                 parsed = True
++            elif parse_starts_block(actstr, "set(", False):
++                parencount += 1
++                k = ovskey()
++                actstr = actstr[len("set("):]
++                actstr = k.parse(actstr, None)
++                self["attrs"].append(("OVS_ACTION_ATTR_SET", k))
++                if not actstr.startswith(")"):
++                    actstr = ")" + actstr
++                parsed = True
++            elif parse_starts_block(actstr, "set_masked(", False):
++                parencount += 1
++                k = ovskey()
++                m = ovskey()
++                actstr = actstr[len("set_masked("):]
++                actstr = k.parse(actstr, m)
++                self["attrs"].append(("OVS_ACTION_ATTR_SET_MASKED", [k, m]))
++                if not actstr.startswith(")"):
++                    actstr = ")" + actstr
++                parsed = True
+             elif parse_starts_block(actstr, "ct(", False):
+                 parencount += 1
+                 actstr = actstr[len("ct(") :]
+@@ -1312,7 +1339,7 @@ class ovskey(nla):
+                 mask["attrs"].append([field[0], m])
+             self["attrs"].append([field[0], k])
  
- except ModuleNotFoundError:
-     print("Need to install the python pyroute2 package >= 0.6.")
-@@ -1617,7 +1619,7 @@ class OvsVport(GenericNetlinkSocket):
-             ("OVS_VPORT_ATTR_PORT_NO", "uint32"),
-             ("OVS_VPORT_ATTR_TYPE", "uint32"),
-             ("OVS_VPORT_ATTR_NAME", "asciiz"),
--            ("OVS_VPORT_ATTR_OPTIONS", "none"),
-+            ("OVS_VPORT_ATTR_OPTIONS", "vportopts"),
-             ("OVS_VPORT_ATTR_UPCALL_PID", "array(uint32)"),
-             ("OVS_VPORT_ATTR_STATS", "vportstats"),
-             ("OVS_VPORT_ATTR_PAD", "none"),
-@@ -1625,6 +1627,13 @@ class OvsVport(GenericNetlinkSocket):
-             ("OVS_VPORT_ATTR_NETNSID", "uint32"),
-         )
+-            flowstr = flowstr[strspn(flowstr, "),") :]
++            flowstr = flowstr[strspn(flowstr, "), ") :]
  
-+        class vportopts(nla):
-+            nla_map = (
-+                ("OVS_TUNNEL_ATTR_UNSPEC", "none"),
-+                ("OVS_TUNNEL_ATTR_DST_PORT", "uint16"),
-+                ("OVS_TUNNEL_ATTR_EXTENSION", "none"),
-+            )
-+
-         class vportstats(nla):
-             fields = (
-                 ("rx_packets", "=Q"),
-@@ -1693,7 +1702,7 @@ class OvsVport(GenericNetlinkSocket):
-                 raise ne
-         return reply
+         return flowstr
  
--    def attach(self, dpindex, vport_ifname, ptype):
-+    def attach(self, dpindex, vport_ifname, ptype, dport, lwt):
-         msg = OvsVport.ovs_vport_msg()
- 
-         msg["cmd"] = OVS_VPORT_CMD_NEW
-@@ -1702,12 +1711,43 @@ class OvsVport(GenericNetlinkSocket):
-         msg["dpifindex"] = dpindex
-         port_type = OvsVport.str_to_type(ptype)
- 
--        msg["attrs"].append(["OVS_VPORT_ATTR_TYPE", port_type])
-         msg["attrs"].append(["OVS_VPORT_ATTR_NAME", vport_ifname])
-         msg["attrs"].append(
-             ["OVS_VPORT_ATTR_UPCALL_PID", [self.upcall_packet.epid]]
-         )
- 
-+        TUNNEL_DEFAULTS = [("geneve", 6081),
-+                           ("vxlan", 4798)]
-+
-+        for tnl in TUNNEL_DEFAULTS:
-+            if ptype == tnl[0]:
-+                if not dport:
-+                    dport = tnl[1]
-+
-+                if not lwt:
-+                    vportopt = OvsVport.ovs_vport_msg.vportopts()
-+                    vportopt["attrs"].append(
-+                        ["OVS_TUNNEL_ATTR_DST_PORT", socket.htons(dport)]
-+                    )
-+                    msg["attrs"].append(
-+                        ["OVS_VPORT_ATTR_OPTIONS", vportopt]
-+                    )
+@@ -1898,7 +1925,11 @@ class OvsFlow(GenericNetlinkSocket):
+             ):
+                 print_str += "drop"
+             else:
+-                print_str += actsmsg.dpstr(more)
++                if type(actsmsg) == "list":
++                    for act in actsmsg:
++                        print_str += act.dpstr(more)
 +                else:
-+                    port_type = OvsVport.OVS_VPORT_TYPE_NETDEV
-+                    ipr = pyroute2.iproute.IPRoute()
-+
-+                    if tnl[0] == "geneve":
-+                        ipr.link("add", ifname=vport_ifname, kind=tnl[0],
-+                                 geneve_port=dport,
-+                                 geneve_collect_metadata=True,
-+                                 geneve_udp_zero_csum6_rx=1)
-+                    elif tnl[0] == "vxlan":
-+                        ipr.link("add", ifname=vport_ifname, kind=tnl[0],
-+                                 vxlan_learning=0, vxlan_collect_metadata=1,
-+                                 vxlan_udp_zero_csum6_rx=1, vxlan_port=dport)
-+                break
-+        msg["attrs"].append(["OVS_VPORT_ATTR_TYPE", port_type])
-+
-         try:
-             reply = self.nlm_request(
-                 msg, msg_type=self.prid, msg_flags=NLM_F_REQUEST | NLM_F_ACK
-@@ -2053,12 +2093,19 @@ def print_ovsdp_full(dp_lookup_rep, ifindex, ndb=NDB(), vpl=OvsVport()):
-     for iface in ndb.interfaces:
-         rep = vpl.info(iface.ifname, ifindex)
-         if rep is not None:
-+            opts = ""
-+            vpo = rep.get_attr("OVS_VPORT_ATTR_OPTIONS")
-+            if vpo:
-+                dpo = vpo.get_attr("OVS_TUNNEL_ATTR_DST_PORT")
-+                if dpo:
-+                    opts += " tnl-dport:%s" % socket.ntohs(dpo)
-             print(
--                "  port %d: %s (%s)"
-+                "  port %d: %s (%s%s)"
-                 % (
-                     rep.get_attr("OVS_VPORT_ATTR_PORT_NO"),
-                     rep.get_attr("OVS_VPORT_ATTR_NAME"),
-                     OvsVport.type_to_str(rep.get_attr("OVS_VPORT_ATTR_TYPE")),
-+                    opts,
-                 )
-             )
++                    print_str += actsmsg.dpstr(more)
  
-@@ -2120,12 +2167,30 @@ def main(argv):
-         "--ptype",
-         type=str,
-         default="netdev",
--        choices=["netdev", "internal"],
-+        choices=["netdev", "internal", "geneve", "vxlan"],
-         help="Interface type (default netdev)",
-     )
-+    addifcmd.add_argument(
-+        "-p",
-+        "--dport",
-+        type=int,
-+        default=0,
-+        help="Destination port (0 for default)"
-+    )
-+    addifcmd.add_argument(
-+        "-l",
-+        "--lwt",
-+        type=bool,
-+        default=True,
-+        help="Use LWT infrastructure instead of vport (default true)."
-+    )
-     delifcmd = subparsers.add_parser("del-if")
-     delifcmd.add_argument("dpname", help="Datapath Name")
-     delifcmd.add_argument("delif", help="Interface name for adding")
-+    delifcmd.add_argument("-d",
-+                          "--dellink",
-+                          type=bool, default=False,
-+                          help="Delete the link as well.")
+             return print_str
  
-     dumpflcmd = subparsers.add_parser("dump-flows")
-     dumpflcmd.add_argument("dumpdp", help="Datapath Name")
-@@ -2186,7 +2251,8 @@ def main(argv):
-             print("DP '%s' not found." % args.dpname)
-             return 1
-         dpindex = rep["dpifindex"]
--        rep = ovsvp.attach(rep["dpifindex"], args.addif, args.ptype)
-+        rep = ovsvp.attach(rep["dpifindex"], args.addif, args.ptype,
-+                           args.dport, args.lwt)
-         msg = "vport '%s'" % args.addif
-         if rep and rep["header"]["error"] is None:
-             msg += " added."
-@@ -2207,6 +2273,9 @@ def main(argv):
-             msg += " removed."
-         else:
-             msg += " failed to remove."
-+        if args.dellink:
-+            ipr = pyroute2.iproute.IPRoute()
-+            ipr.link("del", index=ipr.link_lookup(ifname=args.delif)[0])
-     elif hasattr(args, "dumpdp"):
-         rep = ovsdp.info(args.dumpdp, 0)
-         if rep is None:
 -- 
 2.45.1
 
