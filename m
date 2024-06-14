@@ -1,76 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A83F193091;
-	Fri, 14 Jun 2024 10:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8253378C90;
+	Fri, 14 Jun 2024 11:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718361611; cv=none; b=Jf3HYy2icj9VcwGX/R95j2HpqdhwPjJUPNjIZ0q7x/EH9xc4dhw2O12bmzO2jWdvCP1J4LOuWTH0s/s/XzLHrVdwSAgsKLeGa38KqDCngreEHvngg5wyVdzCRyZZ8sNrhegL4sl/0eb/5CxgmYvzVH15KUJx6fRSd4Wq+Eg82j8=
+	t=1718364770; cv=none; b=H3hqs2vynxyi13c3RYPywesp4stv6iNBazTWm/ciAoCrWxT/cfPKwIYWLm+smmEgCrlLE1JQrKYtebRLW/lio2iB9PCBn/CSdyYSGS078iWwCQ8+rNvaOb3mW8zzTMn7xcbxxOtmYNZyJC9lCdg1bpIFAXZBLaaPv+ygwfWa/QA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718361611; c=relaxed/simple;
-	bh=tyNmttcGD7mv/zaQQ53j3wvOf7uHsqj2O50VjgoUkpQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ruvUxFqlDWsjvqNYqwp8M/fn4x74Wpojz2eE0AAJ8uMK46uYB50VcAK3tgUxQxmDC189lqiLuyTHoEaMp7/fpiXNhVUWpSrMIj6tLhkkWHtq3c7YyEp/jgdtUCs9KLEjXOWyIftHGscKYQHP3XWVtOKNvOUpgrLp1B4oPWVE/BU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rcQ+Y7w4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718364770; c=relaxed/simple;
+	bh=NBtEaNmbsTJCymlIquc1Dvbcv407nCNkYKp41aRNGvE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RAsXx3TVuluRlItJ7o2A/VI2yFX+Jxv5JmaCpsU5kjIof1q/fGRiUgMZ1WygvlG67RXjZSGBXvODu6ddxQEWClOccOKv7knA8hqxWHy86/nJt/KXvkMetU7HGR7bcyxRcG2vdSRp6uREsIdmgvWCDg+lXO9+WQ/qD7UMQFyVR/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=rxtRXEBE; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=mJ4LRxTQ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=rxtRXEBE; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=mJ4LRxTQ; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rcQ+Y7w4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7CBC4AF1D;
-	Fri, 14 Jun 2024 10:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718361610;
-	bh=tyNmttcGD7mv/zaQQ53j3wvOf7uHsqj2O50VjgoUkpQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rcQ+Y7w4qf9bivaz88L7K7po5QtSYgk2n2Eeh5TbOPy9BSqXeEDV6ZkNhudlxONrG
-	 Yxjox3pM355owrdGkdRIMih0dPLa1cMd4Wc2k2itoBlgSB8GXtX5/LNLUzYzAI8wkr
-	 yHd/bWXKsLzCd4aEbxK9YTrTzX6t9wYMgkrHKD2V2QDobfbW5zp9AZ+as9ol40L0tq
-	 lahkb3GV2g29hZZGBdnU7zrx2CmwzhsHs+SruSn96MGyOqjfijvHModslg5YJzMPVL
-	 en7Sh5/qd6sbnVlBV/fi9wnGG5rlA7GKtPpjjwiHAZZf1cgnFvXvWTfsenLrLKU5cV
-	 XDEetV5VdyphQ==
-Date: Fri, 14 Jun 2024 11:40:06 +0100
-From: Simon Horman <horms@kernel.org>
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/6] selftests: net: lib: remove ns from list
- after clean-up
-Message-ID: <20240614104006.GC8447@kernel.org>
-References: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-0-e36986faac94@kernel.org>
- <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-2-e36986faac94@kernel.org>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="rxtRXEBE";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="mJ4LRxTQ";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="rxtRXEBE";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="mJ4LRxTQ"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 727E6203F9;
+	Fri, 14 Jun 2024 11:32:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1718364766; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OHfqrYa/9tev/K9EyZaq0Uq+1EvUZ06X32SKQIlbZpo=;
+	b=rxtRXEBE3JaPBn7JCQhg+74yRHKSETDEvAyNqHn5DDe36tqdLbQOh1j534eX9oDWCwZh1q
+	pICdipMedjigW0tl6FVonbClP+v9LAhQmRtwQtKs1CXjBfOlzWcPL9QuTvatOEchizcVCc
+	3cYjgL3In8wjtJ4YW3CmG3xhbdfreUg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1718364766;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OHfqrYa/9tev/K9EyZaq0Uq+1EvUZ06X32SKQIlbZpo=;
+	b=mJ4LRxTQDsKEUyNntf2LbX8m5+oT+UYOHiOgxMZrbz2VVsTzi4jf596/moeR+fVZasDFF7
+	kRYOvDD0oB4MrsBA==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1718364766; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OHfqrYa/9tev/K9EyZaq0Uq+1EvUZ06X32SKQIlbZpo=;
+	b=rxtRXEBE3JaPBn7JCQhg+74yRHKSETDEvAyNqHn5DDe36tqdLbQOh1j534eX9oDWCwZh1q
+	pICdipMedjigW0tl6FVonbClP+v9LAhQmRtwQtKs1CXjBfOlzWcPL9QuTvatOEchizcVCc
+	3cYjgL3In8wjtJ4YW3CmG3xhbdfreUg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1718364766;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OHfqrYa/9tev/K9EyZaq0Uq+1EvUZ06X32SKQIlbZpo=;
+	b=mJ4LRxTQDsKEUyNntf2LbX8m5+oT+UYOHiOgxMZrbz2VVsTzi4jf596/moeR+fVZasDFF7
+	kRYOvDD0oB4MrsBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3B7A713AAF;
+	Fri, 14 Jun 2024 11:32:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id PIIbDV4qbGYfGgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 14 Jun 2024 11:32:46 +0000
+Date: Fri, 14 Jun 2024 13:33:10 +0200
+Message-ID: <87h6dv92tl.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: testing/selftests/alsa/mixer-test: 10 failures on Dell XPS 13 9360
+In-Reply-To: <c9707ade-bd43-419b-8959-0b45d572facd@sirena.org.uk>
+References: <1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de>
+	<87cyp280yw.wl-tiwai@suse.de>
+	<21f73368-5db6-49a1-b8b7-9b06e698327a@sirena.org.uk>
+	<878qzp97qh.wl-tiwai@suse.de>
+	<c9707ade-bd43-419b-8959-0b45d572facd@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-2-e36986faac94@kernel.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -3.30
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_TLS_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
 
-On Fri, Jun 07, 2024 at 06:31:03PM +0200, Matthieu Baerts (NGI0) wrote:
-> Instead of only appending items to the list, removing them when the
-> netns has been deleted.
+On Mon, 03 Jun 2024 13:38:18 +0200,
+Mark Brown wrote:
 > 
-> By doing that, we can make sure 'cleanup_all_ns()' is not trying to
-> remove already deleted netns.
+> On Fri, May 31, 2024 at 08:06:14PM +0200, Takashi Iwai wrote:
+> > Mark Brown wrote:
+> > > On Fri, May 31, 2024 at 05:17:43PM +0200, Takashi Iwai wrote:
+> > > > On Fri, 31 May 2024 07:50:33 +0200,
 > 
-> Reviewed-by: Geliang Tang <geliang@kernel.org>
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> > > I would say these are all bugs, they show the driver not correcting the
+> > > value and allowing users to read back out of range values that were
+> > > written.  Even if the driver is accepting out of range values I'd expect
+> > > it to transform them somehow when storing, the program will accept a
+> > > mismatched read when testing this case but it will complain if the read
+> > > value is not valid according to the control's info.
+> 
+> > Ideally, yeah.  But it's a whack-a-mole game, and my gut feeling is
+> > that it'd be better to enable the input validation globally, something
+> > like below.
+> 
+> Yeah, I mean I tend to think the whole accepting invalid values thing is
+> questionable to start off with so I do think that's a good idea.  That
+> said we probably should still be fixing the drivers as well.
 
-Hi Matthieu,
+OK, I'm going to submit a patch set for addressing those.
 
-I like this, and I am happy to see that it has been accepted.
 
-I do wonder if we can go a step further and use an associative array for
-ns_list (maybe renamed).  I think this would reduce remove_ns_list to
-something like:
-
-	unset ns_list["$item"]
-
-OTOH, perhaps this breaks with older versions of bash that we still
-care about.
-
-...
+Takashi
