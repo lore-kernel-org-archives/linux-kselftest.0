@@ -1,182 +1,199 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2078.outbound.protection.outlook.com [40.107.244.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39CA186E3C
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 23:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718406972; cv=none; b=lEedayDSxU08c6+lSWT9n69NxKdxV5dMwKjs8DPyQSCml/R2HOO5V6ZEF+jlIVuqauhsPwLd9HBbSNekEe+j4Bh67FiRgs+lCRGXutfQWaueO08mglKHQGsdFfVuZrGt65IDKcWproX/212d9FoDhRrsvfwvJkIqK2n+Oj8Yzl4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718406972; c=relaxed/simple;
-	bh=1PXiu3XyrGn6eioRMQi+2p0r/15GuzVsN093zgKL+z0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cRak18Ofc2rigaWnCxgeho+2+5Yqb9SzovV8BmlFF1kOPgOQFmeWQ2lcxi8KdaCaUPUrEk9ILRYzhfIWCg+XZdhDkTcZn1mQHQD/E8ddLLu3heUkvOEAxCLSJxqtBCIUc9G11/nJZ7ethrMNWFIgygpEIq+4yVZ1BsmrnnxeBIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WEIlC0cb; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66CA19D8AF;
+	Fri, 14 Jun 2024 23:31:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.78
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718407873; cv=fail; b=V4TYLTN0dBhXudEvMI6+yiHXJ9wrkG8CJmZaA+aDZMKzPCfY8wbtzi2quxfYAd1IPnlypTjOHqSkZbU/OlKuZUM2T2s5ziWV8DH/Jk5VA1MC13UgCLMwFpznkxoh0eVLZagYDwkVdDhSS/2Ifs+C2IptwSVFm4Hf/1PpGZaAois=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718407873; c=relaxed/simple;
+	bh=lK58vpBfcZSQv3JcPh24mTbHXlmDL5Zm8gqKEelHQvI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=I0x0gWTcPCE8cd11eZmfGPEDuJQDupsTrZelqdZ6ad9oWg7OTwiB6n2JPVH+oV9IxqD8NIuwgZmVqbv8oGAZjM1TYncDSaD4wLxLaZPMIAlAIuv051z44pPXS28S1SnGb8CACWf4AcBrhtFHJR9gxxDuDK6ieIHmHpuJmAPTYWA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=sZTnMhak; arc=fail smtp.client-ip=40.107.244.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WEIlC0cb"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-35f0d6255bdso2398485f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 16:16:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718406969; x=1719011769; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LahH6YvliG7eYlUbvikNbUEjbap7UqWjJYCEVPQs1io=;
-        b=WEIlC0cbjlsU29zG3suUH6LAoVVZBEU9a+RoHqxwLlF9WMXTCvBWjj1O+m4cr+MgF3
-         NSR+KXgyc8tId+UVSbfEIa9SxnD37TvpMnLBEGjDioXbj014iJ6P97MiaV51zK3EE3gi
-         mW4zpXDK3IVxEi7JhHUS8gCaqWE4hcrLMc2Q9sYOonHEgYT01uvld8OA0wIFpokNwGEm
-         lZBuJmyS2RAGZpBRRngt5hMaONIkjxYiyrViMmnv7j/b2rCD4qfyyJHEZFZM2qCp7BHd
-         fXv4ZhJ1cn/uE26Le/5pQG4vfkxEh4lRI2RXkYeihAMRDLHKp5pLVU7EdiGS4UkeNO8m
-         W2nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718406969; x=1719011769;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LahH6YvliG7eYlUbvikNbUEjbap7UqWjJYCEVPQs1io=;
-        b=lPgqE0PP8sooERkNJ8it5tI1p3M+4Wb7cqVpsU/fl6z5kew9J1IJMwcTrAipKJwIkQ
-         mVaNbIffP0kscaEXArM6HhWTLMvkf60hqPvktu8ldnVdvUKDM+TpfHS/vrJKORcM5Lq8
-         n6DPf0jCdie9Zyh3m8gmSmjzqZ8q311uHOP+/pVcyOmG7Yic3+/SF3EPlws9MeYYngzp
-         ChYnpP77l9sn4YYNBzoZE1zNntu9sjkibgZ8trd72Fk1YEe5Nn7XCKwqygNaHL058XNJ
-         r0Cd7/cFCtw3X8R9fxHqfBPUKTADx69XjvE018Ats2qPM1kybeTOMrFe7VDpfwWZ1ewz
-         g+NQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVfbmxbvGeQ2ovbpF8wssIqkzHv/qSnwDlTJArvbws/isR6THyv4CsQxnmrdYi8+TfK+J1mNjWeZcr3gdng+nx3fqr41gOXgQAgBvFp5j40
-X-Gm-Message-State: AOJu0YxxVh+oKtXKTjw3r3OIqa1jaU3wtOCqBLVwT31+kxczU0U68Eqq
-	L+SWHxSOEJajzVXr2YcWRC24wPDF+1bXSwlNcZn8lIHmDWzE8yk/6tZcjD/vqV4DjMi+KMd1FYz
-	vY1sK3p8WI5ZwJDo+sa8n+bo2lAL0IAufN6O5
-X-Google-Smtp-Source: AGHT+IGSGeWdWrHeyLBhi8ahJUOIBOV4p81XB0K8UtbxXZp0W1Hbsh5/A+lYxE2gXbWBKN4sXqq0XRi16MlYhpjbjow=
-X-Received: by 2002:a05:6000:4583:b0:360:8768:8dda with SMTP id
- ffacd0b85a97d-36087688e20mr695294f8f.7.1718406968805; Fri, 14 Jun 2024
- 16:16:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="sZTnMhak"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L78ZkqmYhGGODzGdKgcbCvWMfA0TESxz7QuXNW+lSM9JbOpIr7Kq7U8deybtRXiQ4fFupXnPtyRKnZFXyb4MH7PK+MAdG9542pXyK7GlRForPtP5b902D7/BEh1zFTznEMqLTCAI//GBJ0LZqHhTiWZCpttQGSP3ILza0m47WfMGr+4Ry8S4Y0WcI3DU8Ar5wyS1zeDXX/xN3qwrnYjOAd29g77BDY+PdYF2B4Q8UNXkswebHQpGp+cY5tES1LCN9a7nJl9KHqNx2PxFuDiQHC7w1JshaK5rblJ6iCLnDAnRzqF5+7zuxh4FGvyaRWxNxpq9IZjG25LxF4n6d8xBGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5xmOt1V+qeM2fjYdwMfL4nhE84hrotY5xIDTqf3ElEA=;
+ b=kIxdThfPF0AVP9+r16J+Ye/XNERPDvM5xjC9RQBQA+NTbziNui8MvhhtooiyIQj7cxGb/nOsWzLn22kykqYj6X2e31eCpVmVQ56KhsC0QjL2UTZnct8vh5ccWOvq1UbcSyuEjYG1ugRxeeb1IHDwjyYt38OHzuUQ/ogg8wHQZ9hgBfPDhvH7bbqUA9+8RviBT0Tw47Zh47g0vRMDCl6ZAI3D8ewph7fMZ7GTJjsxahhDpgHY58tyidOrZgMSpCRhcCl1mX4UK4pkoRHfpGwWSiBtiJypkWv6gdi+GQRxfIYAH/8x4pxedZ8/DTrMWjdfc6F++t+QYHTrZeLEzNIwGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5xmOt1V+qeM2fjYdwMfL4nhE84hrotY5xIDTqf3ElEA=;
+ b=sZTnMhakgjGBftFF8/0p54Eocp7ysi9kwP2VPAjS2NaiX8WS3kZvln8965cLEw4xvlPlL5MNcGEpVyeQqxN2k54aTTFzqtyx98LhinIVylSZ1F/JOMAbuBSBsNwPFrnzh5nPEChH4LWMlmSv9w1bSmapQVSVRpdpIZqX/dFP80ch2KxHBpaXQrrKMsg1rVVLAzg7Cdztn/SrppsmhG7H66cy2WPPX/l2aSJxNaYty32w4w5eHF4YzL8e475P8sxSHiwC/MDTLAsazhMsyDJDnNLsgIXa6dUBoj75sKuuLQ4aaIumN/8xUvEwZpVP9hHpvqVeGVIh3Kl206wzkzQ4Bw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by PH7PR12MB6953.namprd12.prod.outlook.com (2603:10b6:510:1ac::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.25; Fri, 14 Jun
+ 2024 23:31:08 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7677.024; Fri, 14 Jun 2024
+ 23:31:08 +0000
+From: John Hubbard <jhubbard@nvidia.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev,
+	John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v3 3/3] selftests/vDSO: remove duplicate compiler invocations from Makefile
+Date: Fri, 14 Jun 2024 16:31:05 -0700
+Message-ID: <20240614233105.265009-4-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240614233105.265009-1-jhubbard@nvidia.com>
+References: <20240614233105.265009-1-jhubbard@nvidia.com>
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR04CA0005.namprd04.prod.outlook.com
+ (2603:10b6:a03:40::18) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240611215544.2105970-1-jiaqiyan@google.com> <20240611215544.2105970-4-jiaqiyan@google.com>
- <9461874d-e2d6-25fc-813c-9c9bb0ad1aec@google.com>
-In-Reply-To: <9461874d-e2d6-25fc-813c-9c9bb0ad1aec@google.com>
-From: Jiaqi Yan <jiaqiyan@google.com>
-Date: Fri, 14 Jun 2024 16:15:56 -0700
-Message-ID: <CACw3F525-4w9N5wSVrbTnSz=g=4SxvXD=dWL9nsf1iQuaYj8OQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] docs: mm: add enable_soft_offline sysctl
-To: David Rientjes <rientjes@google.com>
-Cc: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com, 
-	muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
-	corbet@lwn.net, osalvador@suse.de, duenwen@google.com, fvdl@google.com, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Lance Yang <ioworker0@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|PH7PR12MB6953:EE_
+X-MS-Office365-Filtering-Correlation-Id: aac556d2-4411-442f-84c0-08dc8cca113c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230037|1800799021|366013|7416011|376011;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?yI8Mbe7fditXJKPrE4YkzPUtTLfPqxydVZu1nwz2e1czeiBed1yTRDUlviXu?=
+ =?us-ascii?Q?tf4FNra5wv7LClFWSaT/prV4V93omwtw3iYWHoaCVtavTYUPBH114GWwHqT7?=
+ =?us-ascii?Q?3655uRfhvXr20+SAD6M6mxL+h2Gc2rUKbgSWpdwQ/mqDD0n844YKYA2F2crS?=
+ =?us-ascii?Q?msSh5kyVnHTDKFefLAfKjhhED3MG0JmP2Aw2Fo+48k14LxJ4fq4R8xGaksAF?=
+ =?us-ascii?Q?s5kLtEXVESjDJQGPTKO6RDtSuLJ7XD83PNlyn6ZZpY5kfFa/uNCrUcOWrkOp?=
+ =?us-ascii?Q?8QEZuzrhhIGOHKIWQnKxHag4hFA2frwzzxycglxafYlu07gqP0zMpHL79xGZ?=
+ =?us-ascii?Q?2g2ro7GroyBwjpXOCyhtpRVkxxHqqKMAG35S0ti2GEMyQX6dPDt1EUWRQ8IJ?=
+ =?us-ascii?Q?L3WLL2oEpB1AwKPOSy9ekC9012XK09bpQEtw5lsWq6Muw9hgAwlBjrLNekhY?=
+ =?us-ascii?Q?0LhfcH8flmMp8sdGySzf28LuaPjqLpcKIkqIHEmre18Dc+h6e7skriABruKd?=
+ =?us-ascii?Q?GyCcbGyzCQzC46v1YVGshuYsGhU/XxeJb0LYSm/C5tdziuWDj9XwoDYhItSO?=
+ =?us-ascii?Q?srHDA2/LovDnxeVxz+zwDLjTPo5NF8wrq2hUnLQhbO2pIM2pofyPs2wg+x93?=
+ =?us-ascii?Q?6zpT/qtZ3oKQXL+9d7dtSFIS6QQymSmMtqECqULEW1POwmyc9LnunIUu3YId?=
+ =?us-ascii?Q?539YHNxpq40LTj7WYIDGheSpk1YnqnacK6GuBWLtzWThnBmPCRRkTURFT+Dd?=
+ =?us-ascii?Q?7Clx6j5hWbie66oKv3blXhn4vGnk/WQ45//cG0NjDx7eZvB12AaH5rgUiMCY?=
+ =?us-ascii?Q?syi5NctIRh37eDaYhkgeppQ+uUgsD6CnxCo86bKKcOXd0tTvKY6JDXYZrRDl?=
+ =?us-ascii?Q?cErUjI9JI0e40L4ePo+YglkwYG/gJ3ALtBEBnxGUwHBUGJTPmfzSQngtvxha?=
+ =?us-ascii?Q?Nsq6DaS7q1tE/Zb4Y8bnmRUyVWKK9zV8c2FK0l/QsRNcLFDnk9V1WswCPfRm?=
+ =?us-ascii?Q?LiJpPArtAk4HOC+viE8q4Uut6uoL7ADSCkWq4XUdbgG30wQa2RnHQoUHDqKw?=
+ =?us-ascii?Q?Ut5CCpbbuT9MwfSsmKYRWNMObC3o9zX4igv66TT7wNpSk3Owfa+Jkp+I9S3f?=
+ =?us-ascii?Q?HlR8SmP9OgeDZ4lCfqarVbaHhXRZQdCTHsmpWbFZFFaFuZKOK8yhOZKQ6YLV?=
+ =?us-ascii?Q?eMnhri5+0R5P20i9Eisan4ycNYdrNbG3p4nQ8Pnx7JoYHRVIOTKQw8Kemx+U?=
+ =?us-ascii?Q?izZZ3Dur4DdWG3FIntLEmcnFQ+YzWlp7Oa6whmJOAFLe6cQNhM2/E5JaxIpV?=
+ =?us-ascii?Q?TsUWtceYTqHFnL7/+1X5waXX?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(1800799021)(366013)(7416011)(376011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?3Lx6prSk/fXx71xnxpzV2zXr+f8xAmm1bJRUOswVVAZUawdlfNW2CfNphMy2?=
+ =?us-ascii?Q?gYQCxuVFu9clVZnQbRadpb5bnhiGgRMfJ2LC6ucffU0fpQYx2cUabMAWcho3?=
+ =?us-ascii?Q?GSIoA12wWMD9BzGJfpqibFjnhCNAS9wKvqfVykyCYl8RbiLuw9Vn0AXPTvPj?=
+ =?us-ascii?Q?dFgUPxUy3qWZaBtA/Qh+f24onrzqwwmqkg48sSBHrlr2R/ziow/J5wHheWxF?=
+ =?us-ascii?Q?wQxjNjChha2DCPzKt4HT0QywnU9Tg9JYOwwAP3+twAaBEvFon4HghjEhabVg?=
+ =?us-ascii?Q?pklsY/I3bKy/124mYX6r127uuFd0txZns6HXm4Lr3RzV8PVxr08lTNBX+oYT?=
+ =?us-ascii?Q?ivpAIJnCO/IZgO2YS4TTC9RBgGHpFS5ou1wtWgp885CJXcOQUg8hwRF5rgbg?=
+ =?us-ascii?Q?Wt+HVCXceZd3+GifbrKOJ9kQXidP9029aWL7gC9ThMzlU2WYMXOeUQI6MqDW?=
+ =?us-ascii?Q?PwjIMV2Bgv1/qe435YJxhgrVIAWRcoVnU9VAUCaoAxEnLhxgP5JkfVI8jE2Y?=
+ =?us-ascii?Q?5Q5jR+ITAn3kSYNiEFnUsPjuBi0rtEsqco6sfNMivqu2QxvjUWUGDBqf3k7z?=
+ =?us-ascii?Q?28TYBztloBnh3vkkSe4Fq9UYdz/F4dudGT7Qt11yJYddePT8EzSx7ldbemh6?=
+ =?us-ascii?Q?4bhgl4ilaZknAI1arSi7n0ZJs2u9vO5TcEC9GBNRoENFLlyHdSrA92Ce5jSt?=
+ =?us-ascii?Q?Rssrhx+H7hDLEWShJoS4PvSxF8aT6SDnCSrpborqYhIWyrKLOnqgeM0f0bvs?=
+ =?us-ascii?Q?8VUgMeJk82xEQQ1eh2JPbjh8an5PU5VxF+OUfhLGfUJKKvau7lptHy8LoMSc?=
+ =?us-ascii?Q?Hg40QypUzWFQMaeYVR9AuGwUQOLaxDi+gbpzsOMP3IQEszBHgEYQ3G86/vkW?=
+ =?us-ascii?Q?F6krJRZfRdXja13SWVLkDCPfHxB+81sDbH2WNrT5ZVxgvSzVyz3E1iN/jlxW?=
+ =?us-ascii?Q?74QccFNJkRiOYTc+v/q4fncKz/Z/JupXcndNrIxVZEise48QShsrGVGzJD2P?=
+ =?us-ascii?Q?7mynFagqbdfGs3Y50ckhcIuRd7EGZlKKRqLEus5nr4MbMr/HJXCuoLOTc3am?=
+ =?us-ascii?Q?72zWMZ0k3bxkJIjuivhthtevTHnSClABwiT/7o4kP3+IZb9e7UWMxo5R3yvG?=
+ =?us-ascii?Q?qsHbiRaMeAlJ+k6Oz+SK+frX1P647DKhzybEQNNSSTbfKm5fpIuZsjuO5vIq?=
+ =?us-ascii?Q?SiT17Z4GvNpy7twyF90Z0ZeYfZIOOW7f60Jrdhdp3lyNCZoApaweN9/mBsTr?=
+ =?us-ascii?Q?lisTAQt66INHsiXvZPCgGrmCVrhOh6Voccm7AdGMRSyUNbVOcE1iKNQGjwm8?=
+ =?us-ascii?Q?feZ2/ozgTLqkbhTkmHHFaqEXtnjFxK5rb+guQiYsFarm0Clk/+3Zjn4IpBpm?=
+ =?us-ascii?Q?Z05+/DO3Ws8TZpkYCVoCLlVzeB0dVSKqzka/Zf+wHAGWP4m8b0Nl0+oXBqt0?=
+ =?us-ascii?Q?+ph2L4TDqGvwDFBhsCmAjW0YnlYkClit8sSfmBcZgDzFVRf3bLYa6XE3pQVI?=
+ =?us-ascii?Q?4psxHWEZQYRcmTd3gIO8NCfc5lWZfz8dEVlLABbE2yNFzcJJoqo8NFqKt6js?=
+ =?us-ascii?Q?bcuiSVKjGUzeyhVsMRdE4KWeMjh8hayHgI9xrVrf?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aac556d2-4411-442f-84c0-08dc8cca113c
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2024 23:31:08.0859
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gjBL79TXJx4EFgeG6hy8B07oilDh6gJvI0NVg12AkmKjqA/34Oy8zxEqFWWg7rNY4qMEJE/ry1KhpGtJNC/R5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6953
 
-Thanks for your questions, David!
+The Makefile open-codes compiler invocations that ../lib.mk already
+provides.
 
-On Tue, Jun 11, 2024 at 5:25=E2=80=AFPM David Rientjes <rientjes@google.com=
-> wrote:
->
-> On Tue, 11 Jun 2024, Jiaqi Yan wrote:
->
-> > @@ -267,6 +268,20 @@ used::
-> >  These are informational only.  They do not mean that anything is wrong
-> >  with your system.  To disable them, echo 4 (bit 2) into drop_caches.
-> >
-> > +enable_soft_offline
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +Control whether to soft offline memory pages that have (excessive) cor=
-rectable
-> > +memory errors.  It is your call to choose between reliability (stay aw=
-ay from
-> > +fragile physical memory) vs performance (brought by HugeTLB or transpa=
-rent
-> > +hugepages).
-> > +
->
-> Could you expand upon the relevance of HugeTLB or THP in this
-> documentation?  I understand the need in some cases to soft offline memor=
-y
-> after a number of correctable memory errors, but it's not clear how the
-> performance implications plays into this.  The paragraph below goes into =
-a
+Avoid this by using a Make feature that allows setting per-target
+variables, which in this case are: CFLAGS and LDFLAGS. This approach
+generates the exact same compiler invocations as before, but removes all
+of the code duplication, along with the quirky mangled variable names.
+So now the Makefile is smaller, less unusual, and easier to read.
 
-To be accurate, I should say soft offlining transparent hugepage
-impacts performance, and soft offlining hugetlb hugepage impacts
-capacity. It may be clearer to first explain soft-offline's behaviors
-and implications, so that user knows what is the cost of soft-offline,
-then talks about the behavior of enable_soft_offline:
+The new dependencies are listed after including lib.mk, in order to
+let lib.mk provide the first target ("all:"), and are grouped together
+with their respective source file dependencies, for visual clarity.
 
-  Correctable memory errors are very common on servers. Soft-offline is ker=
-nel's
-  handling for memory pages having (excessive) corrected memory errors.
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ tools/testing/selftests/vDSO/Makefile | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-  For different types of page, soft-offline has different behaviors / costs=
-.
-  - For a raw error page, soft-offline migrates the in-use page's content t=
-o
-    a new raw page.
-  - For a page that is part of a transparent hugepage, soft-offline splits =
-the
-    transparent hugepage into raw pages, then migrates only the raw error p=
-age.
-    As a result, user is transparently backed by 1 less hugepage, impacting
-    memory access performance.
-  - For a page that is part of a HugeTLB hugepage, soft-offline first migra=
-tes
-    the entire HugeTLB hugepage, during which a free hugepage will be consu=
-med
-    as migration target. Then the original hugepage is dissolved into raw
-    pages without compensation, reducing the capacity of the HugeTLB pool b=
-y 1.
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index 209ede5de208..98d8ba2afa00 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -12,8 +12,7 @@ endif
+ TEST_GEN_PROGS += vdso_test_correctness
+ 
+ CFLAGS := -std=gnu99
+-CFLAGS_vdso_standalone_test_x86 := -nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
+-LDFLAGS_vdso_test_correctness := -ldl
++
+ ifeq ($(CONFIG_X86_32),y)
+ LDLIBS += -lgcc_s
+ endif
+@@ -23,12 +22,9 @@ $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
+ $(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
+ $(OUTPUT)/vdso_test_abi: parse_vdso.c vdso_test_abi.c
+ $(OUTPUT)/vdso_test_clock_getres: vdso_test_clock_getres.c
++
+ $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
+-	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
+-		vdso_standalone_test_x86.c parse_vdso.c \
+-		-o $@
++$(OUTPUT)/vdso_standalone_test_x86: CFLAGS +=-nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
++
+ $(OUTPUT)/vdso_test_correctness: vdso_test_correctness.c
+-	$(CC) $(CFLAGS) \
+-		vdso_test_correctness.c \
+-		-o $@ \
+-		$(LDFLAGS_vdso_test_correctness)
++$(OUTPUT)/vdso_test_correctness: LDFLAGS += -ldl
+-- 
+2.45.2
 
-  It is user's call to choose between reliability (staying away from fragil=
-e
-  physical memory) vs performance / capacity implications in transparent an=
-d
-  HugeTLB cases.
-
-> difference in the splitting behavior, are hugepage users the only ones
-> that should be concerned with this?
-
-If the cost of migrating a raw page is negligible, then yes, only
-hugepage users should be concerned and think about should they disable
-soft offline.
-
->
-> > +When setting to 1, kernel attempts to soft offline the page when it th=
-inks
-> > +needed.  For in-use page, page content will be migrated to a new page.=
-  If
-> > +the oringinal hugepage is a HugeTLB hugepage, regardless of in-use or =
-free,
->
-> s/oringinal/original/
-
-To fix in v3.
-
->
-> > +it will be dissolved into raw pages, and the capacity of the HugeTLB p=
-ool
-> > +will reduce by 1.  If the original hugepage is a transparent hugepage,=
- it
-> > +will be split into raw pages.  When setting to 0, kernel won't attempt=
- to
-> > +soft offline the page.  Its default value is 1.
-> >
->
-> This behavior is the same for all architectures?
->
-
-Yes, enable_soft_offline has the same behavior for all architectures,
-and default=3D1.
-
-It may be worth mentioning that setting enable_soft_offline to 0 means:
-- If RAS Correctable Errors Collector is running, its request to soft
-offline pages will be ignored.
-- On ARM, the request to soft offline pages from GHES driver will be ignore=
-d.
-- On PARISC, the request to soft offline pages from Page Deallocation
-Table will be ignored.
-
-I can add these clarifications in v3 if they are valuable.
