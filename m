@@ -1,48 +1,48 @@
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364A7178CE2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B10178CF6;
 	Sun, 16 Jun 2024 07:34:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718523278; cv=none; b=h+0kPgWycQsBZHhuglXvM5PsIOaUaqI8yH1Q4To7qXEkHL2lRa+wlRtSXJ7sZuUAuGnVl8Tyr4uPCfxWsDdljj8+vrrYis+qcGBwRGhF2++1LATyk9J9tgFpXA+dt+j6Asclpa6eZE0pByUwmR8L2J9H6k3B06LOvwlQyFG3gDQ=
+	t=1718523279; cv=none; b=QI5xyor/KgRuG+0Rk0tGYJbv2ZUu7fyYzWU1VWpqsTsysO81rFO9BHS2XbBt95SXjrRDV8dzrov2bUncmhtPKXbVbSUbg9DFVbqdFr/FklJa7hh8e1pQmi94teR2VdfLnxJTAH1cx8hkVaFBuu4srabTSr2pvb7jHT3O6kYf3/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718523278; c=relaxed/simple;
-	bh=ewFCmvWdTHUP5TXobHOgdvphPMgBV6JL4KA/1hdYfoc=;
+	s=arc-20240116; t=1718523279; c=relaxed/simple;
+	bh=QeO5On+GiAI3IpqJmJUkztuf3OYNJlt8aK69Bq+/pkM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J8IVGJLUCS431Q6sZOQm0KxPzdGPW/b+61fb/cNsPeOpSu8oacipD6hbrSnJEy98o1xHzJwZOcZywquezQH9qM+atJIoq5vjtHcCDha8TwQJR3EQFpB3JvzkdYZ7cToWxT6WKpZEQubAVfIRzljQWyT5T/21GR/4ph5opx/ysro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mv8qOk+q; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=gPIKth/H; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mv8qOk+q; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=gPIKth/H; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version; b=gdmmeZZaf4DikcnMHZfbPskkTvlvTuLqozMHUMUpYrFRj1SQCemcltmX05yY742IP4YAn2wsisZ1TeKC0RB1NhxbX1HZ7l1mKZey+99Gfv71tnx6mG/hzfapQVz1gsTus+wb5YwlGYBuBnJs2tPR4mQbHO0JWKgtIjWvZeXMNfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QEaqczgh; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=dQzRtRb2; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QEaqczgh; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=dQzRtRb2; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mv8qOk+q";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="gPIKth/H";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mv8qOk+q";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="gPIKth/H"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QEaqczgh";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="dQzRtRb2";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QEaqczgh";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="dQzRtRb2"
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 3C1413506D;
+	by smtp-out1.suse.de (Postfix) with ESMTPS id B8B853506F;
 	Sun, 16 Jun 2024 07:34:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
 	t=1718523275; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qrkTl4bH7rGV7b1L3DA5zVOqzeTHEo1PLxkVkHx1bOY=;
-	b=mv8qOk+qAEXWyVxD+Prqbw5hMQ/I4ml24EMkSogPvhC/TiMA+amX72JnnV/x+R/8hkLmoT
-	Qhta0rlH5ndHWjeSdnvIAo48TEdS9ZI2m/blMk27IpcWNdhsXRoLQBctcrjffcUi8vuNO1
-	snpdeFrs45HOe+Abz9PkeQfMDeh/hOw=
+	bh=eyjBY4cnsbHVbl3obsodL0KpjflriZ5NqAnoc6bhaTg=;
+	b=QEaqczghH2I5N70VeIhBehD6T5KW49DrK0xGuoUfJRSA3JdyVPGOzja2KvITvUXp1zwC+h
+	SIJIX87av8Pk5MiHamo+nAJJY2aHAa3V+PdMoorxxjvGBRQTZCbhs1mchDAafYpTJT5QEZ
+	+x0ODJ38hfstDh4fyyAPKjskfmCKwhw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
 	s=susede2_ed25519; t=1718523275;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qrkTl4bH7rGV7b1L3DA5zVOqzeTHEo1PLxkVkHx1bOY=;
-	b=gPIKth/H+VIqqi33dw+pggarQ9DhF97auNo7U2tclTjJlx929g5YRVcOZWhMteeAfNeDly
-	R1Li83k6QUgoNPCg==
+	bh=eyjBY4cnsbHVbl3obsodL0KpjflriZ5NqAnoc6bhaTg=;
+	b=dQzRtRb2cUnNZIv60OsTUMBG5reg6kT2PKqFIw+ICyy82CwoskPWFbW+qbCjUbFlPYXe83
+	ELUzaoVDsBDnZ1CA==
 Authentication-Results: smtp-out1.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
@@ -50,29 +50,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qrkTl4bH7rGV7b1L3DA5zVOqzeTHEo1PLxkVkHx1bOY=;
-	b=mv8qOk+qAEXWyVxD+Prqbw5hMQ/I4ml24EMkSogPvhC/TiMA+amX72JnnV/x+R/8hkLmoT
-	Qhta0rlH5ndHWjeSdnvIAo48TEdS9ZI2m/blMk27IpcWNdhsXRoLQBctcrjffcUi8vuNO1
-	snpdeFrs45HOe+Abz9PkeQfMDeh/hOw=
+	bh=eyjBY4cnsbHVbl3obsodL0KpjflriZ5NqAnoc6bhaTg=;
+	b=QEaqczghH2I5N70VeIhBehD6T5KW49DrK0xGuoUfJRSA3JdyVPGOzja2KvITvUXp1zwC+h
+	SIJIX87av8Pk5MiHamo+nAJJY2aHAa3V+PdMoorxxjvGBRQTZCbhs1mchDAafYpTJT5QEZ
+	+x0ODJ38hfstDh4fyyAPKjskfmCKwhw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
 	s=susede2_ed25519; t=1718523275;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qrkTl4bH7rGV7b1L3DA5zVOqzeTHEo1PLxkVkHx1bOY=;
-	b=gPIKth/H+VIqqi33dw+pggarQ9DhF97auNo7U2tclTjJlx929g5YRVcOZWhMteeAfNeDly
-	R1Li83k6QUgoNPCg==
+	bh=eyjBY4cnsbHVbl3obsodL0KpjflriZ5NqAnoc6bhaTg=;
+	b=dQzRtRb2cUnNZIv60OsTUMBG5reg6kT2PKqFIw+ICyy82CwoskPWFbW+qbCjUbFlPYXe83
+	ELUzaoVDsBDnZ1CA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 05D5713ABC;
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 80C8913ABC;
 	Sun, 16 Jun 2024 07:34:35 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id +JUDAIuVbmYVCwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Sun, 16 Jun 2024 07:34:34 +0000
+	id IH8pHouVbmYVCwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Sun, 16 Jun 2024 07:34:35 +0000
 From: Takashi Iwai <tiwai@suse.de>
 To: linux-sound@vger.kernel.org
 Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
@@ -80,9 +80,9 @@ Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
 	Jaroslav Kysela <perex@perex.cz>,
 	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 3/6] ALSA: control: Apply sanity check of input values for user elements
-Date: Sun, 16 Jun 2024 09:34:44 +0200
-Message-ID: <20240616073454.16512-4-tiwai@suse.de>
+Subject: [PATCH v3 5/6] ALSA: chmap: Mark Channel Map controls as volatile
+Date: Sun, 16 Jun 2024 09:34:46 +0200
+Message-ID: <20240616073454.16512-6-tiwai@suse.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240616073454.16512-1-tiwai@suse.de>
 References: <20240616073454.16512-1-tiwai@suse.de>
@@ -94,7 +94,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
+	BAYES_HAM(-3.00)[99.99%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
@@ -117,53 +117,36 @@ X-Spam-Flag: NO
 X-Spam-Score: -2.80
 X-Spam-Level: 
 
-Although we have already a mechanism for sanity checks of input values
-for control writes, it's not applied unless the kconfig
-CONFIG_SND_CTL_INPUT_VALIDATION is set due to the performance reason.
-Nevertheless, it still makes sense to apply the same check for user
-elements despite of its cost, as that's the only way to filter out the
-invalid values; the user controls are handled solely in ALSA core
-code, and there is no corresponding driver, after all.
+The values returned from Playback Channel Map and Capture Channel Map
+controls may vary dynamically depending on the corresponding PCM
+stream.  Mark those as volatile to indicate the values are unstable
+and not suitable for testing.
 
-This patch adds the same input value validation for user control
-elements at its put callback.  The kselftest will be happier with this
-change, as the incorrect values will be bailed out now with errors.
-
-For other normal controls, the check is applied still only when
-CONFIG_SND_CTL_INPUT_VALIDATION is set.
+Note that we may change the driver to return -EINVAL, but this would
+bring other side effects, such as "alsactl restore" would start
+receiving unexpected errors.  So we still keep returning 0 for those
+invalid inputs.
 
 Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
 Closes: https://lore.kernel.org/r/1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de
 Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-Reviewed-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- sound/core/control.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ sound/core/pcm_lib.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/core/control.c b/sound/core/control.c
-index fb0c60044f7b..1dd2337e2930 100644
---- a/sound/core/control.c
-+++ b/sound/core/control.c
-@@ -1480,12 +1480,16 @@ static int snd_ctl_elem_user_get(struct snd_kcontrol *kcontrol,
- static int snd_ctl_elem_user_put(struct snd_kcontrol *kcontrol,
- 				 struct snd_ctl_elem_value *ucontrol)
- {
--	int change;
-+	int err, change;
- 	struct user_element *ue = kcontrol->private_data;
- 	unsigned int size = ue->elem_data_size;
- 	char *dst = ue->elem_data +
- 			snd_ctl_get_ioff(kcontrol, &ucontrol->id) * size;
- 
-+	err = sanity_check_input_values(ue->card, ucontrol, &ue->info, false);
-+	if (err < 0)
-+		return err;
-+
- 	change = memcmp(&ucontrol->value, dst, size) != 0;
- 	if (change)
- 		memcpy(dst, &ucontrol->value, size);
+diff --git a/sound/core/pcm_lib.c b/sound/core/pcm_lib.c
+index 6f73b3c2c205..071c67cbc479 100644
+--- a/sound/core/pcm_lib.c
++++ b/sound/core/pcm_lib.c
+@@ -2556,6 +2556,7 @@ int snd_pcm_add_chmap_ctls(struct snd_pcm *pcm, int stream,
+ 	struct snd_kcontrol_new knew = {
+ 		.iface = SNDRV_CTL_ELEM_IFACE_PCM,
+ 		.access = SNDRV_CTL_ELEM_ACCESS_READ |
++			SNDRV_CTL_ELEM_ACCESS_VOLATILE |
+ 			SNDRV_CTL_ELEM_ACCESS_TLV_READ |
+ 			SNDRV_CTL_ELEM_ACCESS_TLV_CALLBACK,
+ 		.info = pcm_chmap_ctl_info,
 -- 
 2.43.0
 
