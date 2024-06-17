@@ -1,109 +1,72 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9696943AA1
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 15:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F15847A;
+	Mon, 17 Jun 2024 16:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718638993; cv=none; b=LJ6VSegz5aW6n5PEk/AkJYDVUfzhESFUDCJWvAvCYkwZNeC7sbBWaIHtogWTz4p4LJBB/zeOIk0kcTkCCtKSWXIJkdKNNy49fORkx8wpSUjlmn2hfWhyZBR7EqLYE/4DPDxikJNNGd3LRYVrXUQ7b1ON20AXwxYSbIdcxPYTQkk=
+	t=1718641481; cv=none; b=VlMBe4Ac+jIjpCBWWt2NFPLzv/hcCbrTUjS5CCPNfXy6RtveSECL5UCM5zskEOoZ0MawiOMEnxvTRVQ8Z+/Y5YJcJUAfnd/RD7H5Mv8mKg6UBbDLJXcMCQTe5ygFzVNkskIUYHfHJ9aRaxj0xicEuPETN3NFlpRb/BnYhJ7xxWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718638993; c=relaxed/simple;
-	bh=3rpOn7wmB03jGangiSgD+W9gDmbQjsVJU7AA1yKqnss=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q1GOGYPXhfHyJGoPT8uj63GDowY0vXqXtVJ6zpHK+blaisrfAvZSBrEZn0AhTg6ThCy7cLHkQCwOB59/YNeR79rXr8W6twv0gDZxtnR8kgySe4z+LsqthDpHqGrH3uHhLJW07im9Wng2Tg7z69vzdAIeqeYg2u47QvPZumuABoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eOh+e717; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1718641481; c=relaxed/simple;
+	bh=91LV93NxbGXaObbWSRWn/awCE5cjNH9Ay/li5FynBT8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DecOT51qP56eEHg10dAjVLJgRooZs08KNyeltGagM/ehOc/o4NYvozyUvhw2ENg5cNr6IWxgqSGkxIA55SXEZNZNPVs7dEkFvBMPuPOrniip2ORh2xVy2ek6TFRjAwnzjfQ9RwIlod3nYoggVLx2IBiP2Yfa1bxds2GLfbNK/74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=begfLGrf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eOh+e717"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4217d451f69so36445445e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 08:43:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718638990; x=1719243790; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3rpOn7wmB03jGangiSgD+W9gDmbQjsVJU7AA1yKqnss=;
-        b=eOh+e717jlG1mOmois7Rsm8bLMT5d258xR0cqix9IFqquFVdgzVF3hQ8kv+coWUTAo
-         3Wf+KY81p+gCrohlJVQP7JvFoXtfld7/0a5A7Bqh6cut6MldZoh3PG6y6ebjIJnwNBVo
-         xpHLEXRxzqigSKPwtFRbXzbjvZwhmbG9R4Im+X1gYFIh9noNzRLkAAWqZhar8YEBT3Ap
-         HFPc+dZ9LnzDyvGilVDWuPHpT0DkhIYlC7VkZTrbQf2y3dB0gPcGC46WhvCwQNTR2SfY
-         IBo4TM6357LjfsqBqMASmBtPq1OgW343uGmWgTv8iXUT2v85zsvLD06nVOuv7ULCeSCs
-         eelQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718638990; x=1719243790;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3rpOn7wmB03jGangiSgD+W9gDmbQjsVJU7AA1yKqnss=;
-        b=JC2DuHvyDelU+i7bh8kuRdZ+W/3roN8zeS7NtW+ZT+HIIg+eeqZUm2CRoK77nuzhNG
-         CumA+jA5Tqtke8PaxcggAUNPwlFfC7g5CCKILxer8lKRQLivU08a3fOQzFm/1Wc1G3Rc
-         QMwvv8sQpiWykePDr/kWSaMUrbsA+BzWCLBzAS1L2lJXbHL7mHcWjvf8js5XylTRCqzw
-         jIH+uFwxkdncOLHaO1mM1M77lvuuPUIiccqFee3ZlRDPXzvACElGSLWTttgDu7/Qzbhg
-         8eVxDcpGOV1sM1UqKFURo6LIzZxXEpeTU7jaWWR4g2TiWO28G3SAsrw6oNci2G8ut2jg
-         ytSg==
-X-Forwarded-Encrypted: i=1; AJvYcCWUPcxhDzQ8ad3VJjt94pZqDhFYoX2BNpuPF+MRkiy/e8Yohj8TuN4FPQZbk7phLkqggan8b4bAi8pP5f/S4bs8exdGRa480P2xEsbQZKdm
-X-Gm-Message-State: AOJu0YwpOp5H4FHWJqm+pc1CLKp6t/nnDwWheB/M0C0YtPHQ+9JRhzOl
-	fw983M/jub7I5jAH/2IZaZnGTTlpSSgcb9bnoS2SyvyBQyJocTpjot/57+1457D/fyV2PKPkixL
-	ya0HerYR6eUBAOQYhoNq53nXsz3Y+0ouhUtbHU+RY79GoGY6hSw==
-X-Google-Smtp-Source: AGHT+IFBfl3x7/L8nQxM1QvjTlIgn1s5t150VGQVheEXCV7yaZuCdmpleaoWcZ2XwPzZrdhJy5cclsKUbrXdj104+sg=
-X-Received: by 2002:a05:6000:ec2:b0:35f:1cec:3ce with SMTP id
- ffacd0b85a97d-3607a75b68fmr6488848f8f.29.1718638989616; Mon, 17 Jun 2024
- 08:43:09 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="begfLGrf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0164C2BD10;
+	Mon, 17 Jun 2024 16:24:38 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="begfLGrf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1718641477;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=91LV93NxbGXaObbWSRWn/awCE5cjNH9Ay/li5FynBT8=;
+	b=begfLGrfkwnWV142KKUjGxqZ3Zi7AJxslVOx8ShCJGRXAxyr3SAwysUeINd7Hyx0rdXrj+
+	Q7qK7bxNfabF/iLFHzE/YWPJV7syZPK7+ymS/rZ1WzjG7h0sYhn4+eTeJEToIiI4xqKDAz
+	D4cjcA58XiRC2v3cmOImkWi+t0ZWLvk=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4ccbc541 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Mon, 17 Jun 2024 16:24:35 +0000 (UTC)
+Date: Mon, 17 Jun 2024 18:24:26 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+	tglx@linutronix.de, linux-crypto@vger.kernel.org,
+	linux-api@vger.kernel.org, x86@kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+	Carlos O'Donell <carlos@redhat.com>,
+	Florian Weimer <fweimer@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jann Horn <jannh@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	David Hildenbrand <dhildenb@redhat.com>,
+	Samuel Neves <sneves@dei.uc.pt>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v17 5/5] x86: vdso: Wire up getrandom() vDSO
+ implementation
+Message-ID: <ZnBjOjWOoANFwuAx@zx2c4.com>
+References: <20240614190646.2081057-1-Jason@zx2c4.com>
+ <20240614190646.2081057-6-Jason@zx2c4.com>
+ <13483c92-cac5-4a3a-891f-22eb006c533b@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240611215544.2105970-1-jiaqiyan@google.com> <20240611215544.2105970-2-jiaqiyan@google.com>
- <CABzRoyYGY2EgT5wC9o98Vn_auh59poQ-OOnKceCiWQAJrbZoBw@mail.gmail.com>
- <CACw3F5134NmmLNr4zXHV1h0sLMTGcAJLpApQ7Fv_-DtUieD7zw@mail.gmail.com>
- <786a08ff-aa7e-49d5-f589-0a405c7e1a34@huawei.com> <ea8c5e390bd18c532b768dd9eeaa105a@suse.de>
- <8faf45d3-0722-2b9e-f641-9d081aad5a82@huawei.com> <CAK1f24mRaScJgKc7E4riQ6xTc-SVx_PanTJkA3duwpJZVhyxFQ@mail.gmail.com>
-In-Reply-To: <CAK1f24mRaScJgKc7E4riQ6xTc-SVx_PanTJkA3duwpJZVhyxFQ@mail.gmail.com>
-From: Jiaqi Yan <jiaqiyan@google.com>
-Date: Mon, 17 Jun 2024 08:42:56 -0700
-Message-ID: <CACw3F50LRtWh_BhLu9Q5w=sHqrZYCdeFhR8Dqwk9uK13q1r8bg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] mm/memory-failure: userspace controls
- soft-offlining pages
-To: Lance Yang <ioworker0@gmail.com>
-Cc: Miaohe Lin <linmiaohe@huawei.com>, Oscar Salvador <osalvador@suse.de>, nao.horiguchi@gmail.com, 
-	jane.chu@oracle.com, muchun.song@linux.dev, akpm@linux-foundation.org, 
-	shuah@kernel.org, corbet@lwn.net, rientjes@google.com, duenwen@google.com, 
-	fvdl@google.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <13483c92-cac5-4a3a-891f-22eb006c533b@nvidia.com>
 
-On Mon, Jun 17, 2024 at 3:34=E2=80=AFAM Lance Yang <ioworker0@gmail.com> wr=
-ote:
->
-> On Mon, Jun 17, 2024 at 4:16=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com>=
- wrote:
-> >
-> > On 2024/6/17 15:51, Oscar Salvador wrote:
-> > > On 2024-06-17 09:31, Miaohe Lin wrote:
-> > >
-> > >> IMHO, it might not be suitable to use EAGAIN. Because it means
-> > >> "Resource temporarily unavailable" and
-> > >> this can be solved by simply retry later without any further actions
-> > >> taken. But I might be wrong.
-> > >
-> > > We usually use 'EOPNOTSUPP' when we fail due to a setting not being s=
-et.
-> > > EPERM is more for a capability matter.
->
-> Agreed. Let's use 'EOPNOTSUPP' here ;)
+On Fri, Jun 14, 2024 at 06:53:09PM -0700, John Hubbard wrote:
+> I'm adding linux-kselftest to Cc for visibility, and I've also Cc'd you
+> on a related selftests/vDSO series I just now posted [1].
+> be part of TEST_GEN_PROGS. Fixing it requires other changes, though, as
+> I've done in [2].
 
-Thanks Oscar and Lance. Agreed, will do in v3.
+If you can get these into 6.10 soon, I'll rebase atop your fixes so I
+can make this how you like it here.
 
->
-> Thanks,
-> Lance
->
-> >
-> > Thanks Oscar. So we should return EOPNOTSUPP here.
-> >
-> > Thanks.
-> > .
+Jason
