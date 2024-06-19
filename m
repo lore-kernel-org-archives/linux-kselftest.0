@@ -1,49 +1,49 @@
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E68191;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4446193;
 	Wed, 19 Jun 2024 00:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718755535; cv=none; b=JV6F1V2mtuLvZN239cdvl/N2ipLhoJEpItBKksL+2cqI3AJ+iy+WoSvM9Itpc+Yh5I9atlgRnTuy6m+ZyL6uhhRzPAaFgzjO0b0emDQaFSViJizzWqvXErrpf9d/KZd6h0NBo5Wq5Cs6ACVy07fTJ+PcL4RvWgrLs1k2ZeGTfxo=
+	t=1718755535; cv=none; b=AZSZct0KKcuUNndRSBpJfZ4VUBgnOVciR7Z/Ud4obIH8UqiUWPSAEMesNyDjFXHNf3MfuvkpoHkvqlnBgJ1FociiPzzNZTmkCYE2A9Z/ArsNENQxUhEoY7TnJmCRNFXAh4N45tVw5XuIPe04xzinmWwQgZVoynqMC6NpWkRqh0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718755535; c=relaxed/simple;
-	bh=RDA0qEcvJY2mO+lnI56e4nT/ja162SWL44U6M9WUuCs=;
+	bh=3rFLb8JSB4SyXYfQa9wLnefBGieNG3xQZFmGCShvn4Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=kzDOi2MBBKY2WBc+62n8e10wcyEveI6adjUVyxpj3k1cT5xAFc0Uvy9SHmyg6r7ZyH9/oOShE9oz3Xrzd2plhLueXmrEPnfaykRy3KBg4IxEDaXxNNWBvQXfsTJKFiLwNKkLhBYOOfoUd9nzthdirpFwppvtQPYmXw/ubLMvZ6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=licRGVV3; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:CC; b=o0JoOhy7tOnL7luS3PWhdPrX3pPWtJIDy9/GMjvGbFe3fL9fG9fcZ7NkVuWN+ElLfYsko5gXzxk/qmaKbCu+azjvLp+nq5VHdDZvcvJP/i/HnT+5U3Mw+R3eoMoXsk6XS4AuRlbKaaEa+FPmAnV6LFD0d9wksgvD/Q+ho07kfsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=o2j3NCQE; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="licRGVV3"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45ILaNQ0001140;
-	Wed, 19 Jun 2024 00:05:18 GMT
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="o2j3NCQE"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45ILb6Xo000504;
+	Wed, 19 Jun 2024 00:05:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	/OyteV4yM0qUOEafhhbvbTmI9bXZz54sg4qnQFhyy5A=; b=licRGVV3sGtCHq36
-	0d7qxPKp8nHzVyyyjoDtjlEIvyc2Yl9kIh+zg/1vUDXoiMeuH4qrR8zEBbzYvhCQ
-	NUka56yx1u+Ai8QeAN5kLA66MICuH0QcNTBlA5cchSBCmxBCfR9SAatx+pkRTzTm
-	U7JSMQHJjmxKZZ5qhWtr2sjgInmJwV+pwQWrv6eqnmFQWGNJI7kTZqe4CDsTYn+p
-	rO7Fsy2I/oduWoMg66mamclM2wjvvYcWlIzaHJlxeGOKpUs/sDqA8E+tKKKQBQEw
-	sznWTshLaFRzYo2tyLd5eaELSFmOvfjHrcBKRTRdLqyrO51KbVbmiZSfjF94kRxC
-	y12OOQ==
+	iMkszGdm9ae/n7pRpO/rrT8MarQ3LgEe54I6kubPvLI=; b=o2j3NCQEJTFU2hZA
+	IcfJBRdS+w2hLNTSnVEQqnCk6AXpZRPDzzyjWU3587KuuQzZLw5I/0tOLUNVu6UP
+	Rs6j0xFWBjkFJmhUD+PeP0g9pvohDo5Y8d2hN4+BOXp6oLp/9rFH5UWggdClLz25
+	rRhoaL7pj6CoQXuGDGoeGiDlQlUrTPKq5n4fqNiF4XWg7fYW2lZIs0xabEKlei/F
+	fubw4xm7gCPQsE4bGTlJ+UpHrkc22hnsqi5ae6AcKEp8m+Dmg7hgq2ReUMYGqtoV
+	N2eCzPir57qdth9XiRT9nDGlGmmenoIIk2FhV/utsVba60mRmieP4CfYuSeG0BnC
+	WXrfVg==
 Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yuja287fu-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yujag07ba-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Jun 2024 00:05:18 +0000 (GMT)
+	Wed, 19 Jun 2024 00:05:19 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45J05GcX029964
+	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45J05IcW029972
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Jun 2024 00:05:16 GMT
+	Wed, 19 Jun 2024 00:05:18 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 18 Jun 2024 17:05:16 -0700
+ 15.2.1544.9; Tue, 18 Jun 2024 17:05:18 -0700
 From: Elliot Berman <quic_eberman@quicinc.com>
-Date: Tue, 18 Jun 2024 17:05:07 -0700
-Subject: [PATCH RFC 1/5] mm/gup: Move GUP_PIN_COUNTING_BIAS to page_ref.h
+Date: Tue, 18 Jun 2024 17:05:11 -0700
+Subject: [PATCH RFC 5/5] mm/gup_test: Verify GUP grabs same pages twice
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240618-exclusive-gup-v1-1-30472a19c5d1@quicinc.com>
+Message-ID: <20240618-exclusive-gup-v1-5-30472a19c5d1@quicinc.com>
 References: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
 In-Reply-To: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
@@ -62,121 +62,175 @@ CC: <kvm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <pbonzini@redhat.com>,
         Elliot Berman
-	<quic_eberman@quicinc.com>,
-        Fuad Tabba <tabba@google.com>
+	<quic_eberman@quicinc.com>
 X-Mailer: b4 0.13.0
 X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eoEoI_FFBsbRB2SSN34e9igotn1wcWa9
-X-Proofpoint-ORIG-GUID: eoEoI_FFBsbRB2SSN34e9igotn1wcWa9
+X-Proofpoint-GUID: unhDqPMZarSEVc31r4x6VcJKNGdRtYup
+X-Proofpoint-ORIG-GUID: unhDqPMZarSEVc31r4x6VcJKNGdRtYup
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-06-18_06,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=684 suspectscore=0 clxscore=1015 impostorscore=0
- malwarescore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0
- phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406180176
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ clxscore=1015 impostorscore=0 suspectscore=0 adultscore=0 spamscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=880 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
+ definitions=main-2406180176
 
-From: Fuad Tabba <tabba@google.com>
+GUP'ing pages should get the same pages, test it. In case of
+FOLL_EXCLUSIVE, the second pin should fail to get any pages.
 
-No functional change intended.
+Note: this change ought to be refactored to pull out the GUP'ing bits
+that's duplicated between the original and the second GUP.
 
-Signed-off-by: Fuad Tabba <tabba@google.com>
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- include/linux/mm.h       | 32 --------------------------------
- include/linux/page_ref.h | 32 ++++++++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+), 32 deletions(-)
+ mm/gup_test.c                         | 86 +++++++++++++++++++++++++++++++++++
+ mm/gup_test.h                         |  1 +
+ tools/testing/selftests/mm/gup_test.c |  5 +-
+ 3 files changed, 91 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9849dfda44d43..fd0d10b08e7ac 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1580,38 +1580,6 @@ static inline void put_page(struct page *page)
- 	folio_put(folio);
+diff --git a/mm/gup_test.c b/mm/gup_test.c
+index 9c6b8c93e44a7..28cc422b60b78 100644
+--- a/mm/gup_test.c
++++ b/mm/gup_test.c
+@@ -86,6 +86,89 @@ static void verify_exclusive_pinned(unsigned int gup_flags, struct page **pages,
+ 	}
  }
  
--/*
-- * GUP_PIN_COUNTING_BIAS, and the associated functions that use it, overload
-- * the page's refcount so that two separate items are tracked: the original page
-- * reference count, and also a new count of how many pin_user_pages() calls were
-- * made against the page. ("gup-pinned" is another term for the latter).
-- *
-- * With this scheme, pin_user_pages() becomes special: such pages are marked as
-- * distinct from normal pages. As such, the unpin_user_page() call (and its
-- * variants) must be used in order to release gup-pinned pages.
-- *
-- * Choice of value:
-- *
-- * By making GUP_PIN_COUNTING_BIAS a power of two, debugging of page reference
-- * counts with respect to pin_user_pages() and unpin_user_page() becomes
-- * simpler, due to the fact that adding an even power of two to the page
-- * refcount has the effect of using only the upper N bits, for the code that
-- * counts up using the bias value. This means that the lower bits are left for
-- * the exclusive use of the original code that increments and decrements by one
-- * (or at least, by much smaller values than the bias value).
-- *
-- * Of course, once the lower bits overflow into the upper bits (and this is
-- * OK, because subtraction recovers the original values), then visual inspection
-- * no longer suffices to directly view the separate counts. However, for normal
-- * applications that don't have huge page reference counts, this won't be an
-- * issue.
-- *
-- * Locking: the lockless algorithm described in folio_try_get_rcu()
-- * provides safe operation for get_user_pages(), page_mkclean() and
-- * other calls that race to set up page table entries.
-- */
--#define GUP_PIN_COUNTING_BIAS (1U << 10)
--
- void unpin_user_page(struct page *page);
- void unpin_user_pages_dirty_lock(struct page **pages, unsigned long npages,
- 				 bool make_dirty);
-diff --git a/include/linux/page_ref.h b/include/linux/page_ref.h
-index 1acf5bac7f503..e6aeaafb143ca 100644
---- a/include/linux/page_ref.h
-+++ b/include/linux/page_ref.h
-@@ -62,6 +62,38 @@ static inline void __page_ref_unfreeze(struct page *page, int v)
- 
- #endif
- 
-+/*
-+ * GUP_PIN_COUNTING_BIAS, and the associated functions that use it, overload
-+ * the page's refcount so that two separate items are tracked: the original page
-+ * reference count, and also a new count of how many pin_user_pages() calls were
-+ * made against the page. ("gup-pinned" is another term for the latter).
-+ *
-+ * With this scheme, pin_user_pages() becomes special: such pages are marked as
-+ * distinct from normal pages. As such, the unpin_user_page() call (and its
-+ * variants) must be used in order to release gup-pinned pages.
-+ *
-+ * Choice of value:
-+ *
-+ * By making GUP_PIN_COUNTING_BIAS a power of two, debugging of page reference
-+ * counts with respect to pin_user_pages() and unpin_user_page() becomes
-+ * simpler, due to the fact that adding an even power of two to the page
-+ * refcount has the effect of using only the upper N bits, for the code that
-+ * counts up using the bias value. This means that the lower bits are left for
-+ * the exclusive use of the original code that increments and decrements by one
-+ * (or at least, by much smaller values than the bias value).
-+ *
-+ * Of course, once the lower bits overflow into the upper bits (and this is
-+ * OK, because subtraction recovers the original values), then visual inspection
-+ * no longer suffices to directly view the separate counts. However, for normal
-+ * applications that don't have huge page reference counts, this won't be an
-+ * issue.
-+ *
-+ * Locking: the lockless algorithm described in folio_try_get_rcu()
-+ * provides safe operation for get_user_pages(), page_mkclean() and
-+ * other calls that race to set up page table entries.
-+ */
-+#define GUP_PIN_COUNTING_BIAS (1U << 10)
++static int verify_gup_twice(unsigned int cmd, struct gup_test *gup,
++			    struct page **expected_pages,
++			    unsigned long expected_nr_pages)
++{
++	unsigned long i, nr_pages, addr, next;
++	long nr;
++	struct page **pages __free(kfree) = NULL;
++	int ret = 0;
 +
- static inline int page_ref_count(const struct page *page)
++	nr_pages = gup->size / PAGE_SIZE;
++	pages = kvcalloc(nr_pages, sizeof(void *), GFP_KERNEL);
++	if (!pages)
++		return -ENOMEM;
++
++	i = 0;
++	nr = gup->nr_pages_per_call;
++	for (addr = gup->addr; addr < gup->addr + gup->size; addr = next) {
++		if (nr != gup->nr_pages_per_call)
++			break;
++
++		next = addr + nr * PAGE_SIZE;
++		if (next > gup->addr + gup->size) {
++			next = gup->addr + gup->size;
++			nr = (next - addr) / PAGE_SIZE;
++		}
++
++		switch (cmd) {
++		case GUP_FAST_BENCHMARK:
++			nr = get_user_pages_fast(addr, nr, gup->gup_flags,
++						 pages + i);
++			break;
++		case GUP_BASIC_TEST:
++			nr = get_user_pages(addr, nr, gup->gup_flags, pages + i);
++			break;
++		case PIN_FAST_BENCHMARK:
++			nr = pin_user_pages_fast(addr, nr, gup->gup_flags,
++						 pages + i);
++			break;
++		case PIN_BASIC_TEST:
++			nr = pin_user_pages(addr, nr, gup->gup_flags, pages + i);
++			break;
++		case PIN_LONGTERM_BENCHMARK:
++			nr = pin_user_pages(addr, nr,
++					    gup->gup_flags | FOLL_LONGTERM,
++					    pages + i);
++			break;
++		default:
++			pr_err("cmd %d not supported for %s\n", cmd, __func__);
++			return -EINVAL;
++		}
++
++		if (nr <= 0)
++			break;
++		i += nr;
++	}
++
++	nr_pages = i;
++
++	if (gup->gup_flags & FOLL_EXCLUSIVE) {
++		if (WARN(nr_pages,
++			 "Able to acquire exclusive pin twice for %ld of %ld pages",
++			 nr_pages, expected_nr_pages)) {
++			dump_page(pages[0],
++				  "gup_test: verify_gup_twice() test");
++			ret = -EIO;
++		}
++	} else if (nr_pages != expected_nr_pages) {
++		pr_err("%s: Expected %ld pages, got %ld\n", __func__,
++		       expected_nr_pages, nr_pages);
++		ret = -EIO;
++	} else {
++		for (i = 0; i < nr_pages; i++) {
++			if (WARN(pages[i] != expected_pages[i],
++				 "pages[%lu] mismatch\n", i))
++				break;
++		}
++	}
++
++	put_back_pages(cmd, pages, nr_pages, gup->test_flags);
++
++	return ret;
++}
++
+ static void dump_pages_test(struct gup_test *gup, struct page **pages,
+ 			    unsigned long nr_pages)
  {
- 	return atomic_read(&page->_refcount);
+@@ -210,6 +293,9 @@ static int __gup_test_ioctl(unsigned int cmd,
+ 	if (cmd == DUMP_USER_PAGES_TEST)
+ 		dump_pages_test(gup, pages, nr_pages);
+ 
++	if (gup->test_flags & GUP_TEST_FLAG_GUP_TWICE)
++		ret = verify_gup_twice(cmd, gup, pages, nr_pages);
++
+ 	start_time = ktime_get();
+ 
+ 	put_back_pages(cmd, pages, nr_pages, gup->test_flags);
+diff --git a/mm/gup_test.h b/mm/gup_test.h
+index 5b37b54e8bea6..fcd41919b0159 100644
+--- a/mm/gup_test.h
++++ b/mm/gup_test.h
+@@ -17,6 +17,7 @@
+ #define GUP_TEST_MAX_PAGES_TO_DUMP		8
+ 
+ #define GUP_TEST_FLAG_DUMP_PAGES_USE_PIN	0x1
++#define GUP_TEST_FLAG_GUP_TWICE			0x2
+ 
+ struct gup_test {
+ 	__u64 get_delta_usec;
+diff --git a/tools/testing/selftests/mm/gup_test.c b/tools/testing/selftests/mm/gup_test.c
+index bdeaac67ff9aa..b4b10c8338f80 100644
+--- a/tools/testing/selftests/mm/gup_test.c
++++ b/tools/testing/selftests/mm/gup_test.c
+@@ -98,7 +98,7 @@ int main(int argc, char **argv)
+ 	pthread_t *tid;
+ 	char *p;
+ 
+-	while ((opt = getopt(argc, argv, "m:r:n:F:f:abcj:tTLUuwWSHpz")) != -1) {
++	while ((opt = getopt(argc, argv, "m:r:n:F:f:abcj:dtTLUuwWSHpz")) != -1) {
+ 		switch (opt) {
+ 		case 'a':
+ 			cmd = PIN_FAST_BENCHMARK;
+@@ -172,6 +172,9 @@ int main(int argc, char **argv)
+ 			/* fault pages in gup, do not fault in userland */
+ 			touch = 1;
+ 			break;
++		case 'd':
++			gup.test_flags |= GUP_TEST_FLAG_GUP_TWICE;
++			break;
+ 		default:
+ 			ksft_exit_fail_msg("Wrong argument\n");
+ 		}
 
 -- 
 2.34.1
