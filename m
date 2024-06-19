@@ -1,101 +1,135 @@
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-oo1-f67.google.com (mail-oo1-f67.google.com [209.85.161.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D6BE541;
-	Wed, 19 Jun 2024 02:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8BF38F6D
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 02:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718762878; cv=none; b=uJQ9RjntckK/Iqm49+FNGmVlq9o7BslsPMa7pHS/fmKBNZ82MknMXioKCXuuR4XMMXhpIHdZF3DU8/Iz1KMZ+MFGEmayMtSZArYNMHZns+sxd0doo4STD8jQqevyenyV13w5CgfHpmO6MR5gDCjE0Z0PHms3tbTC3hZJEiiugLk=
+	t=1718763334; cv=none; b=UywH0oj6tGhySNDZPod7mR8kuFonPa7oDHT8pDOCyD2vP7tTYLWXc7caFvUc9duszsz21oMEOZGA58U7hUf4U8e6cJvoefCvmPf6A4ht3cZb8QhMIYjcKQAJgid88Rj8TqU+D8ncfGfv5yib1OaiZFSQOfc+W5wHCrrwHHM2uLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718762878; c=relaxed/simple;
-	bh=meFezo5W5aHSV7AeLtOxr2/C/HpnBtJlUo16/5qvthw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Zuwu7d8uSIm6vZO/9wUQ+/b8q4byt8xLTOa8RvXwg2ORgKW8nqfOHPxriCybssIA+yDarIGK49ZpSEnADqR3PQ4XV8jJK2nbXVxjLH1tmjZGbnjV3/i1gHhCRqzgp8mOkVioCRwZv7lKt+J1xDFCR+AJPN2akdjrNazLz9xVSwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from ThinkPad-T480s.. (unknown [121.237.44.152])
-	by APP-05 (Coremail) with SMTP id zQCowACnr+fFO3Jmjn6bEQ--.46102S2;
-	Wed, 19 Jun 2024 10:00:38 +0800 (CST)
-From: zhouquan@iscas.ac.cn
-To: linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: oleg@redhat.com,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	andy.chiu@sifive.com,
-	shuah@kernel.org,
-	charlie@rivosinc.com,
-	zhouquan@iscas.ac.cn
-Subject: [RFC PATCH 0/2] riscv: Expose orig_a0 to userspace for ptrace to set the actual a0
-Date: Wed, 19 Jun 2024 10:00:37 +0800
-Message-Id: <cover.1718693532.git.zhouquan@iscas.ac.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1718763334; c=relaxed/simple;
+	bh=yDXevhT/GKgrWuTv4jr4UCBuNfjT37QYHSdK+LmRSEg=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=N9gkBGWzqY/s0Kl18Gj1UeTAYx7iUPaBOIzcwBduSZ2Bq9aafSKDxwAB5NCejCU0GmkK+x49B2/QJ0CP8V7aMEx4iX5YIKg6oHOnRlVmeD8ZXkOMMuHPKyFgiEzi5+nx9og4WkSwA4Lr2qo8bE2ejXwI2BM3MUTYy2TaK427kp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=NJRotU34; arc=none smtp.client-ip=209.85.161.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="NJRotU34"
+Received: by mail-oo1-f67.google.com with SMTP id 006d021491bc7-5b53bb4bebaso3413747eaf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jun 2024 19:15:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1718763332; x=1719368132; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=1TpSC9tERredVi/Tlsjiaipg4Ko2XUOOBp72KPElI+U=;
+        b=NJRotU34x7qZJlvYrXB32Sz6t2S9IScdnc0lnhv30Q2egmwEfiicNLJv7EmeiZM7T+
+         Y1gS9igyzywo1Rs1HTQYJqb/izsZyL3Ww68SR/xdr1zxG9b3g8ZkoXA5U2jij+bvj1aS
+         hxxddzDoLJAgN9LtfwCHd8E1iCNHZ+BgwW885PAnrnoa9HKE1Je2j6uNFVWhjyEr9giw
+         9/TmQcHJrbzxu9dvvr4vRvrdkTZ3h9916pvcNwHbFrBOODp5Ezez77hxpZ1620lTuCzz
+         Sqllp7WEXyrChxnn5X2zpE7HxMlveaHrJ0jrdHWsOfLj8xfXkpxr7gX7DRqcr7xsmQzZ
+         qpEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718763332; x=1719368132;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1TpSC9tERredVi/Tlsjiaipg4Ko2XUOOBp72KPElI+U=;
+        b=B2kJ51H79I9N1CsDAYDIeOK+DH7jGnjwXGWT1O6baLeEmBjRFjX3MUuT/SFCDKNtqg
+         O/N9/UY9Os9D6KHdn45ddws5z2wx0y6D6jFpFzMZUNY0jTNpksU2ddY3z4+HufvA6QrF
+         +kiYlztNIBy3NXBS+656gNGFWCI8gxyS4zLuMVuh9W5vquV6dlpZOXeQyIIQXCQYp3VR
+         gJif2WTofdTlK1EayPiJC30SzXZgg8LftmFpMircr2/K2SSBGfLtv/kWzoHC1MaswL/z
+         fRFtneAvi0x+vpQXaSDebecvSv12bbD0al1FG93Yx+AjD1hml7J4PllFYfIvHPS9Dui7
+         EvFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXvZ4uHuh4Up6o8TbRLBmFACFnfqCgZbj2B4tF5D0XSBtOqSUWMzQO2vOXkDSkxfhXDK4pdWthpcgG6tPli4IzKxh8h35bE2nxnHXl9Ufb3
+X-Gm-Message-State: AOJu0YysTw35MnBvpf/x1vxmnXKwkoEle6ZzG1WhlEdvQdfcI18AseX+
+	t16IHNAprtJSbMVFIBlv15nV+7DpOagt6paYuihT51utvlykzeuVRWzPRWTufko=
+X-Google-Smtp-Source: AGHT+IEOfSqM2a37ntZNkJnpzit3XtRP/x5q5vPM3aDobUNWKDvLL7AaMKgqqgoOmmv3xxPCG2WWFA==
+X-Received: by 2002:a05:6871:3a29:b0:254:affe:5a06 with SMTP id 586e51a60fabf-25c94d5c601mr1801457fac.54.1718763331748;
+        Tue, 18 Jun 2024 19:15:31 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705cc965228sm9555141b3a.49.2024.06.18.19.15.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jun 2024 19:15:31 -0700 (PDT)
+Message-ID: <66723f43.620a0220.c2133.ba89@mx.google.com>
+Date: Tue, 18 Jun 2024 19:15:31 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowACnr+fFO3Jmjn6bEQ--.46102S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF43Ar1fXryUtFW7Zw4rGrg_yoW8Cw4rpa
-	95KwnYk3W8JFy2ya1xXw4UXr4rAa4fWrW3G3WxZry3ZrW8tryvqr4xKa1Yqr93CayxWryf
-	ZF1Ikr15C3WUZa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-	1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-	7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
-	1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-	628vn2kIc2xKxwAKzVCY07xG64k0F24lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMx
-	C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
-	wI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
-	vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
-	0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-	W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjRpBDUUUUU==
-X-CM-SenderInfo: 52kr31xxdqqxpvfd2hldfou0/1tbiCRANBmZyBxOZHgAAsV
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc1-19-g15a783a493b02
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next kselftest-cpufreq: 6 runs,
+ 1 regressions (v6.10-rc1-19-g15a783a493b02)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-From: Quan Zhou <zhouquan@iscas.ac.cn>
+kselftest/next kselftest-cpufreq: 6 runs, 1 regressions (v6.10-rc1-19-g15a7=
+83a493b02)
 
-Due to the path that modifies a0 in syscall_enter_from_user_mode before the
-actual execution of syscall_handler [1], the kernel currently saves a0 to
-orig_a0 at the entry point of do_trap_ecall_u as an original copy of a0.
-Once the syscall is interrupted and later resumed, the restarted syscall
-will use orig_a0 to continue execution.
+Regressions Summary
+-------------------
 
-The above rules generally apply except for ptrace(PTRACE_SETREGSET,),
-where the kernel will ignore the tracer's setting of tracee/a0 and
-will restart with the tracee's original a0 value. For the current
-kernel implementation of ptrace, projects like CRIU/Proot will
-encounter issues where the a0 setting becomes ineffective when
-performing ptrace(PTRACE_{SET/GET}REGSET,).
-
-Here is a suggested solution, expose orig_a0 to userspace so that ptrace
-can choose whether to set orig_a0 based on the actual scenario. In fact,
-x86/orig_eax and loongArch/orig_a0 have adopted similar solutions.
-
-[1] link: https://lore.kernel.org/lkml/20230403-crisping-animosity-04ed8a45c625@spud/T/
-
-Quan Zhou (2):
-  riscv: Expose orig_a0 in the user_regs_struct structure
-  riscv: selftests: Add a ptrace test to check a0 of restarted syscall
-
- arch/riscv/include/asm/ptrace.h               |   4 +-
- arch/riscv/include/uapi/asm/ptrace.h          |   2 +
- tools/testing/selftests/riscv/Makefile        |   2 +-
- tools/testing/selftests/riscv/abi/.gitignore  |   1 +
- tools/testing/selftests/riscv/abi/Makefile    |  12 ++
- .../riscv/abi/ptrace_restart_syscall.c        | 148 ++++++++++++++++++
- 6 files changed, 166 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/riscv/abi/.gitignore
- create mode 100644 tools/testing/selftests/riscv/abi/Makefile
- create mode 100644 tools/testing/selftests/riscv/abi/ptrace_restart_syscall.c
+platform                   | arch  | lab           | compiler | defconfig  =
+                  | regressions
+---------------------------+-------+---------------+----------+------------=
+------------------+------------
+mt8192-asurada-spherion-r0 | arm64 | lab-collabora | gcc-10   | defconfig+k=
+se...4-chromebook | 1          =
 
 
-base-commit: 6ba59ff4227927d3a8530fc2973b80e94b54d58f
--- 
-2.34.1
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
+0-rc1-19-g15a783a493b02/plan/kselftest-cpufreq/
 
+  Test:     kselftest-cpufreq
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.10-rc1-19-g15a783a493b02
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      15a783a493b021975f3dd12bdd95a7080df0e8cf =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                  | regressions
+---------------------------+-------+---------------+----------+------------=
+------------------+------------
+mt8192-asurada-spherion-r0 | arm64 | lab-collabora | gcc-10   | defconfig+k=
+se...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66723559b061db46617e70c9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.10-rc1-19-g1=
+5a783a493b02/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabor=
+a/kselftest-cpufreq-mt8192-asurada-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.10-rc1-19-g1=
+5a783a493b02/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabor=
+a/kselftest-cpufreq-mt8192-asurada-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
+elftest/20240313.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/66723559b061=
+db46617e70ca
+        failing since 21 days (last pass: v6.9-8287-g31a59b76b978, first fa=
+il: v6.10-rc1) =
+
+ =20
