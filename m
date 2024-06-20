@@ -1,46 +1,46 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183741B3F3D
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 12:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803FA1B47C9
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 12:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718888191; cv=none; b=on5XR/64tI4Iq4RpGk/ItnLTT7yuRwYlMz9EEwGwYijKWP7VgRxeVqiBrVflG4RviPb3Ic6krcq/vcddJLoQn6On6AyjAI+HwOwNXDU0al5iADMh3UlExnG/jwP2ka3LIsRqSd7CAlAP132JgkFAbBqazZa1rOd1iFu69YkRtBs=
+	t=1718888193; cv=none; b=mKblS3XdPOQ83OYpVguBu3fKfmrm0MRr9fHKAPfSim6C/Uyyg3if0CVRUmWooUz3xQXJCepsPjaqGUK/4X9TscUfouD24MF/SOghPfHoUo7wYLnZ5k7QvZfq03aYwXT/wa7xyG2p9gg+wXDtR2w4Ku6exqpzyuXhWrCAqKKGtZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718888191; c=relaxed/simple;
-	bh=DM5Ex803zS7MOxfWJYf5m05LJwFNJsDu1bx7wMEtVz4=;
+	s=arc-20240116; t=1718888193; c=relaxed/simple;
+	bh=ifbXi0vWclSOcaXXTXzonUcMqrXw9l1luGZEeyrYYtA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TisAGbSgrX6oo2gqs5SulzqBNjKX3g16w3NFOS2xekJRKgNetavtrmDM571S2YGL+Up9USkCVdVa06pfD1suiqtAWh+I4TZtTfusOWfAal2p0uGiNfYjebNWmA07KrvFj4WC5sqx3c3ZvSmoubcWbXB6tGiWhc+MlJKvui73UFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QNjTcbFc; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=K1bd6EocUAvhvXe2YU8+xtjm3t9nMWEaGq4XHVOEIvY2GjH9SiFf/SOpyrBmL15dftur1yXFOT9WgLbUNkAHiDFFpM4BOCWAiTugHxLtcKeQwJaBNtlc6oPEkPw6tg0QjSvMV5Trz0yYWQUy/OmfohyxArsOUxJw+9zAlgKT5wA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b7BtzZP6; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QNjTcbFc"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b7BtzZP6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718888189;
+	s=mimecast20190719; t=1718888190;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4KlgFTzGvRQ9KF2HWnCZmoGsdCauwElV+Abi5MawrNg=;
-	b=QNjTcbFciM0KDZy/GR8bSbdWIiDkgKVclOgLJxZrZowsssiyYXq2RAyhpk6eGiCMU57Bju
-	mOzi9oTy564hsMY4e7WkA9mVAZFCAZopiob/k78maUCn/Ry5HTqv7v8Qah3R21LOMiI/vl
-	lun1TLpBd33FEHnHFgkjiU8V7j0tY+s=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+	bh=B3mljIvHUBdg/jnYlVUNYoLL5kGgn67rnJeRuV2tRR4=;
+	b=b7BtzZP6yEmGMqBRt2AhqtXT1EP8YijzNcOd7rfCn0uO2WcdAuzXngnlhMCDcXsmekfbSh
+	Yg/AHzifuBov8OXZ4wcMYTCwNYDB5/PyTSbeWFByUdzXXND9UynNc9WEMjvAdVz/XbMYh7
+	GJblkgYoSOZ2ro/BnKRqw7OtSKUYyeE=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-Zhx9NxpYOn6hONCNaIiG6g-1; Thu,
- 20 Jun 2024 08:56:23 -0400
-X-MC-Unique: Zhx9NxpYOn6hONCNaIiG6g-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-171-cJlVb_5IPa6vClXvd9-xRg-1; Thu,
+ 20 Jun 2024 08:56:28 -0400
+X-MC-Unique: cJlVb_5IPa6vClXvd9-xRg-1
 Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 882BE1955EBA;
-	Thu, 20 Jun 2024 12:56:19 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3782419560B7;
+	Thu, 20 Jun 2024 12:56:26 +0000 (UTC)
 Received: from RHTRH0061144.redhat.com (unknown [10.22.9.58])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7C30C1956087;
-	Thu, 20 Jun 2024 12:56:16 +0000 (UTC)
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0DB4B1956087;
+	Thu, 20 Jun 2024 12:56:22 +0000 (UTC)
 From: Aaron Conole <aconole@redhat.com>
 To: netdev@vger.kernel.org
 Cc: dev@openvswitch.org,
@@ -55,9 +55,9 @@ Cc: dev@openvswitch.org,
 	Stefano Brivio <sbrivio@redhat.com>,
 	=?UTF-8?q?Adri=C3=A1n=20Moreno?= <amorenoz@redhat.com>,
 	Simon Horman <horms@kernel.org>
-Subject: [PATCH v2 net-next 4/7] selftests: openvswitch: Add support for tunnel() key.
-Date: Thu, 20 Jun 2024 08:55:58 -0400
-Message-ID: <20240620125601.15755-5-aconole@redhat.com>
+Subject: [PATCH v2 net-next 6/7] selftests: net: Use the provided dpctl rather than the vswitchd for tests.
+Date: Thu, 20 Jun 2024 08:56:00 -0400
+Message-ID: <20240620125601.15755-7-aconole@redhat.com>
 In-Reply-To: <20240620125601.15755-1-aconole@redhat.com>
 References: <20240620125601.15755-1-aconole@redhat.com>
 Precedence: bulk
@@ -69,215 +69,254 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-This will be used when setting details about the tunnel to use as
-transport.  There is a difference between the ODP format between tunnel():
-the 'key' flag is not actually a flag field, so we don't support it in the
-same way that the vswitchd userspace supports displaying it.
+The current pmtu test infrastucture requires an installed copy of the
+ovs-vswitchd userspace.  This means that any automated or constrained
+environments may not have the requisite tools to run the tests.  However,
+the pmtu tests don't require any special classifier processing.  Indeed
+they are only using the vswitchd in the most basic mode - as a NORMAL
+switch.
 
+However, the ovs-dpctl kernel utility can now program all the needed basic
+flows to allow traffic to traverse the tunnels and provide support for at
+least testing some basic pmtu scenarios.  More complicated flow pipelines
+can be added to the internal ovs test infrastructure, but that is work for
+the future.  For now, enable the most common cases - wide mega flows with
+no other prerequisites.
+
+Enhance the pmtu testing to try testing using the internal utility, first.
+As a fallback, if the internal utility isn't running, then try with the
+ovs-vswitchd userspace tools.
+
+Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
 Signed-off-by: Aaron Conole <aconole@redhat.com>
 ---
- .../selftests/net/openvswitch/ovs-dpctl.py    | 167 +++++++++++++++++-
- 1 file changed, 166 insertions(+), 1 deletion(-)
+v2: Fix a nit in the whitespace
 
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 4c235ff07aeb..2f16df2fb16b 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -709,7 +709,7 @@ class ovskey(nla):
-         ("OVS_KEY_ATTR_ARP", "ovs_key_arp"),
-         ("OVS_KEY_ATTR_ND", "ovs_key_nd"),
-         ("OVS_KEY_ATTR_SKB_MARK", "uint32"),
--        ("OVS_KEY_ATTR_TUNNEL", "none"),
-+        ("OVS_KEY_ATTR_TUNNEL", "ovs_key_tunnel"),
-         ("OVS_KEY_ATTR_SCTP", "ovs_key_sctp"),
-         ("OVS_KEY_ATTR_TCP_FLAGS", "be16"),
-         ("OVS_KEY_ATTR_DP_HASH", "uint32"),
-@@ -1269,6 +1269,163 @@ class ovskey(nla):
-                 init=init,
-             )
+ tools/testing/selftests/net/pmtu.sh | 145 +++++++++++++++++++++++-----
+ 1 file changed, 123 insertions(+), 22 deletions(-)
+
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index cfc84958025a..5175c0c83a23 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -842,25 +842,97 @@ setup_bridge() {
+ 	run_cmd ${ns_a} ip link set veth_A-C master br0
+ }
  
-+    class ovs_key_tunnel(nla):
-+        nla_flags = NLA_F_NESTED
++setup_ovs_via_internal_utility() {
++	type="${1}"
++	a_addr="${2}"
++	b_addr="${3}"
++	dport="${4}"
 +
-+        nla_map = (
-+            ("OVS_TUNNEL_KEY_ATTR_ID", "be64"),
-+            ("OVS_TUNNEL_KEY_ATTR_IPV4_SRC", "ipaddr"),
-+            ("OVS_TUNNEL_KEY_ATTR_IPV4_DST", "ipaddr"),
-+            ("OVS_TUNNEL_KEY_ATTR_TOS", "uint8"),
-+            ("OVS_TUNNEL_KEY_ATTR_TTL", "uint8"),
-+            ("OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT", "flag"),
-+            ("OVS_TUNNEL_KEY_ATTR_CSUM", "flag"),
-+            ("OVS_TUNNEL_KEY_ATTR_OAM", "flag"),
-+            ("OVS_TUNNEL_KEY_ATTR_GENEVE_OPTS", "array(uint32)"),
-+            ("OVS_TUNNEL_KEY_ATTR_TP_SRC", "be16"),
-+            ("OVS_TUNNEL_KEY_ATTR_TP_DST", "be16"),
-+            ("OVS_TUNNEL_KEY_ATTR_VXLAN_OPTS", "none"),
-+            ("OVS_TUNNEL_KEY_ATTR_IPV6_SRC", "ipaddr"),
-+            ("OVS_TUNNEL_KEY_ATTR_IPV6_DST", "ipaddr"),
-+            ("OVS_TUNNEL_KEY_ATTR_PAD", "none"),
-+            ("OVS_TUNNEL_KEY_ATTR_ERSPAN_OPTS", "none"),
-+            ("OVS_TUNNEL_KEY_ATTR_IPV4_INFO_BRIDGE", "flag"),
-+        )
++	run_cmd python3 ./openvswitch/ovs-dpctl.py add-if ovs_br0 ${type}_a -t ${type} || return 1
 +
-+        def parse(self, flowstr, mask=None):
-+            if not flowstr.startswith("tunnel("):
-+                return None, None
++	ports=$(python3 ./openvswitch/ovs-dpctl.py show)
++	br0_port=$(echo "$ports" | grep -E "\sovs_br0" | sed -e 's@port @@' | cut -d: -f1 | xargs)
++	type_a_port=$(echo "$ports" | grep ${type}_a | sed -e 's@port @@' | cut -d: -f1 | xargs)
++	veth_a_port=$(echo "$ports" | grep veth_A | sed -e 's@port @@' | cut -d: -f1 | xargs)
 +
-+            k = ovskey.ovs_key_tunnel()
-+            if mask is not None:
-+                mask = ovskey.ovs_key_tunnel()
++	v4_a_tun="${prefix4}.${a_r1}.1"
++	v4_b_tun="${prefix4}.${b_r1}.1"
 +
-+            flowstr = flowstr[len("tunnel("):]
++	v6_a_tun="${prefix6}:${a_r1}::1"
++	v6_b_tun="${prefix6}:${b_r1}::1"
 +
-+            v6_address = None
++	if [ "${v4_a_tun}" = "${a_addr}" ]; then
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),in_port(${veth_a_port}),eth(),eth_type(0x0800),ipv4()" \
++		    "set(tunnel(tun_id=1,dst=${v4_b_tun},ttl=64,tp_dst=${dport},flags(df|csum))),${type_a_port}"
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),in_port(${veth_a_port}),eth(),eth_type(0x86dd),ipv6()" \
++		    "set(tunnel(tun_id=1,dst=${v4_b_tun},ttl=64,tp_dst=${dport},flags(df|csum))),${type_a_port}"
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),tunnel(tun_id=1,src=${v4_b_tun},dst=${v4_a_tun}),in_port(${type_a_port}),eth(),eth_type(0x0800),ipv4()" \
++		    "${veth_a_port}"
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),tunnel(tun_id=1,src=${v4_b_tun},dst=${v4_a_tun}),in_port(${type_a_port}),eth(),eth_type(0x86dd),ipv6()" \
++		    "${veth_a_port}"
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),tunnel(tun_id=1,src=${v4_b_tun},dst=${v4_a_tun}),in_port(${type_a_port}),eth(),eth_type(0x0806),arp()" \
++		    "${veth_a_port}"
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),in_port(${veth_a_port}),eth(),eth_type(0x0806),arp(sip=${veth4_c_addr},tip=${tunnel4_b_addr})" \
++		    "set(tunnel(tun_id=1,dst=${v4_b_tun},ttl=64,tp_dst=${dport},flags(df|csum))),${type_a_port}"
++	else
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),in_port(${veth_a_port}),eth(),eth_type(0x0800),ipv4()" \
++		    "set(tunnel(tun_id=1,ipv6_dst=${v6_b_tun},ttl=64,tp_dst=${dport},flags(df|csum))),${type_a_port}"
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),in_port(${veth_a_port}),eth(),eth_type(0x86dd),ipv6()" \
++		    "set(tunnel(tun_id=1,ipv6_dst=${v6_b_tun},ttl=64,tp_dst=${dport},flags(df|csum))),${type_a_port}"
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),tunnel(tun_id=1,ipv6_src=${v6_b_tun},ipv6_dst=${v6_a_tun}),in_port(${type_a_port}),eth(),eth_type(0x0800),ipv4()" \
++		    "${veth_a_port}"
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),tunnel(tun_id=1,ipv6_src=${v6_b_tun},ipv6_dst=${v6_a_tun}),in_port(${type_a_port}),eth(),eth_type(0x86dd),ipv6()" \
++		    "${veth_a_port}"
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),tunnel(tun_id=1,ipv6_src=${v6_b_tun},ipv6_dst=${v6_a_tun}),in_port(${type_a_port}),eth(),eth_type(0x0806),arp()" \
++		    "${veth_a_port}"
++		run_cmd python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 \
++		    "recirc_id(0),in_port(${veth_a_port}),eth(),eth_type(0x0806),arp(sip=${veth4_c_addr},tip=${tunnel4_b_addr})" \
++		    "set(tunnel(tun_id=1,ipv6_dst=${v6_b_tun},ttl=64,tp_dst=${dport},flags(df|csum))),${type_a_port}"
++	fi
++}
 +
-+            fields = [
-+                ("tun_id=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_ID",
-+                 0xffffffffffffffff, None, None),
++setup_ovs_via_vswitchd() {
++	type="${1}"
++	b_addr="${2}"
 +
-+                ("src=", r"([0-9a-fA-F\.]+)", str,
-+                 "OVS_TUNNEL_KEY_ATTR_IPV4_SRC", "255.255.255.255", "0.0.0.0",
-+                 False),
-+                ("dst=", r"([0-9a-fA-F\.]+)", str,
-+                 "OVS_TUNNEL_KEY_ATTR_IPV4_DST", "255.255.255.255", "0.0.0.0",
-+                 False),
++	run_cmd ovs-vsctl add-port ovs_br0 ${type}_a -- \
++		set interface ${type}_a type=${type} \
++		options:remote_ip=${b_addr} options:key=1 options:csum=true || return 1
++}
 +
-+                ("ipv6_src=", r"([0-9a-fA-F:]+)", str,
-+                 "OVS_TUNNEL_KEY_ATTR_IPV6_SRC",
-+                 "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", "::", True),
-+                ("ipv6_dst=", r"([0-9a-fA-F:]+)", str,
-+                 "OVS_TUNNEL_KEY_ATTR_IPV6_DST",
-+                 "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", "::", True),
-+
-+                ("tos=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TOS", 255, 0,
-+                 None),
-+                ("ttl=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TTL", 255, 0,
-+                 None),
-+
-+                ("tp_src=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TP_SRC",
-+                 65535, 0, None),
-+                ("tp_dst=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TP_DST",
-+                 65535, 0, None),
-+            ]
-+
-+            forced_include = ["OVS_TUNNEL_KEY_ATTR_TTL"]
-+
-+            for prefix, regex, typ, attr_name, mask_val, default_val, v46_flag in fields:
-+                flowstr, value = parse_extract_field(flowstr, prefix, regex, typ, False)
-+                if not attr_name:
-+                    raise Exception("Bad list value in tunnel fields")
-+
-+                if value is None and attr_name in forced_include:
-+                    value = default_val
-+                    mask_val = default_val
-+
-+                if value is not None:
-+                    if v46_flag is not None:
-+                        if v6_address is None:
-+                            v6_address = v46_flag
-+                        if v46_flag != v6_address:
-+                            raise ValueError("Cannot mix v6 and v4 addresses")
-+                    k["attrs"].append([attr_name, value])
-+                    if mask is not None:
-+                        mask["attrs"].append([attr_name, mask_val])
-+                else:
-+                    if v46_flag is not None:
-+                        if v6_address is None or v46_flag != v6_address:
-+                            continue
-+                    if mask is not None:
-+                        mask["attrs"].append([attr_name, default_val])
-+
-+            if k["attrs"][0][0] != "OVS_TUNNEL_KEY_ATTR_ID":
-+                raise ValueError("Needs a tunid set")
-+
-+            if flowstr.startswith("flags("):
-+                flowstr = flowstr[len("flags("):]
-+                flagspos = flowstr.find(")")
-+                flags = flowstr[:flagspos]
-+                flowstr = flowstr[flagspos + 1:]
-+
-+                flag_attrs = {
-+                    "df": "OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT",
-+                    "csum": "OVS_TUNNEL_KEY_ATTR_CSUM",
-+                    "oam": "OVS_TUNNEL_KEY_ATTR_OAM"
-+                }
-+
-+                for flag in flags.split("|"):
-+                    if flag in flag_attrs:
-+                        k["attrs"].append([flag_attrs[flag], True])
-+                        if mask is not None:
-+                            mask["attrs"].append([flag_attrs[flag], True])
-+
-+            flowstr = flowstr[strspn(flowstr, ", ") :]
-+            return flowstr, k, mask
-+
-+        def dpstr(self, mask=None, more=False):
-+            print_str = "tunnel("
-+
-+            flagsattrs = []
-+            for k in self["attrs"]:
-+                noprint = False
-+                if k[0] == "OVS_TUNNEL_KEY_ATTR_ID":
-+                    print_str += "tun_id=%d" % k[1]
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_IPV4_SRC":
-+                    print_str += "src=%s" % k[1]
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_IPV4_DST":
-+                    print_str += "dst=%s" % k[1]
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_IPV6_SRC":
-+                    print_str += "ipv6_src=%s" % k[1]
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_IPV6_DST":
-+                    print_str += "ipv6_dst=%s" % k[1]
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_TOS":
-+                    print_str += "tos=%d" % k[1]
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_TTL":
-+                    print_str += "ttl=%d" % k[1]
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_TP_SRC":
-+                    print_str += "tp_src=%d" % k[1]
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_TP_DST":
-+                    print_str += "tp_dst=%d" % k[1]
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT":
-+                    noprint = True
-+                    flagsattrs.append("df")
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_CSUM":
-+                    noprint = True
-+                    flagsattrs.append("csum")
-+                elif k[0] == "OVS_TUNNEL_KEY_ATTR_OAM":
-+                    noprint = True
-+                    flagsattrs.append("oam")
-+
-+                if not noprint:
-+                    print_str += ","
-+
-+            if len(flagsattrs):
-+                print_str += "flags(" + "|".join(flagsattrs) + ")"
-+            print_str += ")"
-+            return print_str
-+
-     class ovs_key_mpls(nla):
-         fields = (("lse", ">I"),)
+ setup_ovs_vxlan_or_geneve() {
+ 	type="${1}"
+ 	a_addr="${2}"
+ 	b_addr="${3}"
++	dport="6081"
  
-@@ -1277,6 +1434,7 @@ class ovskey(nla):
-             ("OVS_KEY_ATTR_PRIORITY", "skb_priority", intparse),
-             ("OVS_KEY_ATTR_SKB_MARK", "skb_mark", intparse),
-             ("OVS_KEY_ATTR_RECIRC_ID", "recirc_id", intparse),
-+            ("OVS_KEY_ATTR_TUNNEL", "tunnel", ovskey.ovs_key_tunnel),
-             ("OVS_KEY_ATTR_DP_HASH", "dp_hash", intparse),
-             ("OVS_KEY_ATTR_CT_STATE", "ct_state", parse_ct_state),
-             ("OVS_KEY_ATTR_CT_ZONE", "ct_zone", intparse),
-@@ -1379,6 +1537,13 @@ class ovskey(nla):
-                 lambda x: False,
-                 True,
-             ),
-+            (
-+                "OVS_KEY_ATTR_TUNNEL",
-+                "tunnel",
-+                None,
-+                False,
-+                False,
-+            ),
-             (
-                 "OVS_KEY_ATTR_CT_STATE",
-                 "ct_state",
+ 	if [ "${type}" = "vxlan" ]; then
++		dport="4789"
+ 		opts="${opts} ttl 64 dstport 4789"
+ 		opts_b="local ${b_addr}"
+ 	fi
+ 
+-	run_cmd ovs-vsctl add-port ovs_br0 ${type}_a -- \
+-		set interface ${type}_a type=${type} \
+-		options:remote_ip=${b_addr} options:key=1 options:csum=true || return 1
++	setup_ovs_via_internal_utility "${type}" "${a_addr}" "${b_addr}" \
++				       "${dport}" || \
++	    setup_ovs_via_vswitchd "${type}" "${b_addr}" || return 1
+ 
+ 	run_cmd ${ns_b} ip link add ${type}_b type ${type} id 1 ${opts_b} remote ${a_addr} ${opts} || return 1
+ 
+ 	run_cmd ${ns_b} ip addr add ${tunnel4_b_addr}/${tunnel4_mask} dev ${type}_b
+ 	run_cmd ${ns_b} ip addr add ${tunnel6_b_addr}/${tunnel6_mask} dev ${type}_b
+ 
++	run_cmd ip link set ${type}_a up
+ 	run_cmd ${ns_b} ip link set ${type}_b up
+ }
+ 
+@@ -880,8 +952,24 @@ setup_ovs_vxlan6() {
+ 	setup_ovs_vxlan_or_geneve vxlan  ${prefix6}:${a_r1}::1 ${prefix6}:${b_r1}::1
+ }
+ 
++setup_ovs_br_internal() {
++	run_cmd python3 ./openvswitch/ovs-dpctl.py add-dp ovs_br0 || \
++		return 1
++}
++
++setup_ovs_br_vswitchd() {
++	run_cmd ovs-vsctl add-br ovs_br0 || return 1
++}
++
++setup_ovs_add_if() {
++	ifname="${1}"
++	run_cmd python3 ./openvswitch/ovs-dpctl.py add-if ovs_br0 \
++		"${ifname}" || \
++		run_cmd ovs-vsctl add-port ovs_br0 "${ifname}"
++}
++
+ setup_ovs_bridge() {
+-	run_cmd ovs-vsctl add-br ovs_br0 || return $ksft_skip
++	setup_ovs_br_internal || setup_ovs_br_vswitchd || return $ksft_skip
+ 	run_cmd ip link set ovs_br0 up
+ 
+ 	run_cmd ${ns_c} ip link add veth_C-A type veth peer name veth_A-C
+@@ -891,7 +979,7 @@ setup_ovs_bridge() {
+ 	run_cmd ${ns_c} ip link set veth_C-A up
+ 	run_cmd ${ns_c} ip addr add ${veth4_c_addr}/${veth4_mask} dev veth_C-A
+ 	run_cmd ${ns_c} ip addr add ${veth6_c_addr}/${veth6_mask} dev veth_C-A
+-	run_cmd ovs-vsctl add-port ovs_br0 veth_A-C
++	setup_ovs_add_if veth_A-C
+ 
+ 	# Move veth_A-R1 to init
+ 	run_cmd ${ns_a} ip link set veth_A-R1 netns 1
+@@ -922,6 +1010,18 @@ trace() {
+ 	sleep 1
+ }
+ 
++cleanup_del_ovs_internal() {
++	# squelch the output of the del-if commands since it can be wordy
++	python3 ./openvswitch/ovs-dpctl.py del-if ovs_br0 -d true vxlan_a	>/dev/null	2>&1
++	python3 ./openvswitch/ovs-dpctl.py del-if ovs_br0 -d true geneve_a	>/dev/null	2>&1
++	python3 ./openvswitch/ovs-dpctl.py del-dp ovs_br0			>/dev/null	2>&1
++}
++
++cleanup_del_ovs_vswitchd() {
++	ovs-vsctl --if-exists del-port vxlan_a	2>/dev/null
++	ovs-vsctl --if-exists del-br ovs_br0	2>/dev/null
++}
++
+ cleanup() {
+ 	for pid in ${tcpdump_pids}; do
+ 		kill ${pid}
+@@ -940,10 +1040,10 @@ cleanup() {
+ 
+ 	cleanup_all_ns
+ 
+-	ip link del veth_A-C			2>/dev/null
+-	ip link del veth_A-R1			2>/dev/null
+-	ovs-vsctl --if-exists del-port vxlan_a	2>/dev/null
+-	ovs-vsctl --if-exists del-br ovs_br0	2>/dev/null
++	ip link del veth_A-C		2>/dev/null
++	ip link del veth_A-R1		2>/dev/null
++	cleanup_del_ovs_internal
++	cleanup_del_ovs_vswitchd
+ 	rm -f "$tmpoutfile"
+ }
+ 
+@@ -1397,6 +1497,12 @@ test_pmtu_ipvX_over_ovs_vxlanY_or_geneveY_exception() {
+ 	outer_family=${3}
+ 	ll_mtu=4000
+ 
++	if [ "${type}" = "vxlan" ]; then
++		tun_a="vxlan_sys_4789"
++	elif [ "${type}" = "geneve" ]; then
++		tun_a="genev_sys_6081"
++	fi
++
+ 	if [ ${outer_family} -eq 4 ]; then
+ 		setup namespaces routing ovs_bridge ovs_${type}4 || return $ksft_skip
+ 		#                      IPv4 header   UDP header   VXLAN/GENEVE header   Ethernet header
+@@ -1407,17 +1513,11 @@ test_pmtu_ipvX_over_ovs_vxlanY_or_geneveY_exception() {
+ 		exp_mtu=$((${ll_mtu} - 40          - 8          - 8                   - 14))
+ 	fi
+ 
+-	if [ "${type}" = "vxlan" ]; then
+-		tun_a="vxlan_sys_4789"
+-	elif [ "${type}" = "geneve" ]; then
+-		tun_a="genev_sys_6081"
+-	fi
+-
+-	trace ""        "${tun_a}"  "${ns_b}"  ${type}_b \
+-	      ""        veth_A-R1   "${ns_r1}" veth_R1-A \
+-	      "${ns_b}" veth_B-R1   "${ns_r1}" veth_R1-B \
+-	      ""        ovs_br0     ""         veth-A-C  \
+-	      "${ns_c}" veth_C-A
++	trace ""        ${type}_a    "${ns_b}"  ${type}_b \
++	      ""        veth_A-R1    "${ns_r1}" veth_R1-A \
++	      "${ns_b}" veth_B-R1    "${ns_r1}" veth_R1-B \
++	      ""        ovs_br0      ""         veth-A_C  \
++	      "${ns_c}" veth_C-A     ""         "${tun_a}"
+ 
+ 	if [ ${family} -eq 4 ]; then
+ 		ping=ping
+@@ -1436,8 +1536,9 @@ test_pmtu_ipvX_over_ovs_vxlanY_or_geneveY_exception() {
+ 	mtu "${ns_b}"  veth_B-R1 ${ll_mtu}
+ 	mtu "${ns_r1}" veth_R1-B ${ll_mtu}
+ 
+-	mtu ""        ${tun_a}  $((${ll_mtu} + 1000))
+-	mtu "${ns_b}" ${type}_b $((${ll_mtu} + 1000))
++	mtu ""        ${tun_a}  $((${ll_mtu} + 1000)) 2>/dev/null || \
++		mtu ""        ${type}_a  $((${ll_mtu} + 1000)) 2>/dev/null
++	mtu "${ns_b}" ${type}_b  $((${ll_mtu} + 1000))
+ 
+ 	run_cmd ${ns_c} ${ping} -q -M want -i 0.1 -c 20 -s $((${ll_mtu} + 500)) ${dst} || return 1
+ 
 -- 
 2.45.1
 
