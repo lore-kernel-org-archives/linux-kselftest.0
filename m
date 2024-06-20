@@ -1,167 +1,393 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E8F44C64
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 07:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD15940858;
+	Thu, 20 Jun 2024 07:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718868054; cv=none; b=Wm96WhJ8Y9D/qN0AJWW6Sn0Gotf146Ggx3X7DQ8uv29mSRyb5wROZXnlpL1kQwmbQkQR1Gi3RGcz7aXO7IiFNe2+vby7jn61tfLCiYHnePz0yMRbYry/JoQwB+TtrWZsT7nYX+Zu/UINA/iw3lmyCKj+0x9qVrAWPAgrUpRbmbs=
+	t=1718868356; cv=none; b=YF1jETfT7p/eIRvjZv12NdoQFJaTANDOGAj1S1DVMFZL2OJuwZzaTKiSrd3g55KYOvpQWDJcBVcnqZUtPCQpl+Yqs1lp0tb5J328qT7zlQAkVNlMKXLMCJV8Fe1FLh+f07U6r70lpGc5FUVZe7WgUtPxWxeejdgkizpl6NyzhH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718868054; c=relaxed/simple;
-	bh=EHqC3LT1KS8c9adwJx8kIWsriorYV5wzQurMQbS9GdQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gMRvf+RTfJqUD6N8AuY8B7mfIyNujcfsQWsC6cqx6PvSAO971cwCSOjdzgg4dAiP6fQMoClTBNk5xfyvNwxYNdVkZiw4AkMO3DBa3O4WF1x0IPr4yR9z4+tO4cbH7Ic/Be8VRlWT4mQGQkiONHu+kTdcauS1KF3t5ZRWs0VxJ38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZG8IfG71; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1718868356; c=relaxed/simple;
+	bh=ze55I3bXHSs997gxJnaF+U1nEZpiMDBKOiqIUAcrH/g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wr1sTjfzNSSFh0E3GCG8zkLBu0u6FZNfl7uSpN/m5Rd+ZBRQyBpjIZj/xMqo2YzdnwA4TrU7yyYg/NE9mmA+HfHuK2ZqwZeJNhcIp8JDNjgfNixFJgnnjagreJWELdGHZiSMKQ+rgC45Xjvd1rnIQNmjGa5OuST8voPOXtqb4TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mHfLwKb4; arc=none smtp.client-ip=209.85.221.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZG8IfG71"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718868051;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Xu9euBcpsgyUYVlYjK87ZvCq29S8qX5GGr4uJ9/oh+M=;
-	b=ZG8IfG713ls0fGOSISZKb/Y2+xK98GDtLrOB1SUjsX4UaqjlN3wpS04QabqHUeUGHhWFP2
-	7BrZgFBQyTLjWnxq1GMue++kpKPxePQkt+srUYGetJc/RgTdSFIXjG9R5PAJhZ3m+pRt0g
-	xqbpHkk99eJ5LOXllUHcmK/oPTGvpxg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-324-O5UUnfi3M4m0SCXt-DBgHw-1; Thu, 20 Jun 2024 03:20:46 -0400
-X-MC-Unique: O5UUnfi3M4m0SCXt-DBgHw-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-364be6c2468so223160f8f.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 00:20:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718868045; x=1719472845;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mHfLwKb4"
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-4ecf11df664so156760e0c.2;
+        Thu, 20 Jun 2024 00:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718868353; x=1719473153; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xu9euBcpsgyUYVlYjK87ZvCq29S8qX5GGr4uJ9/oh+M=;
-        b=JKEI75VD5CvaZQriBif8fUdsRBY+l5LMbQupeqQ3uVMiWMTaJEoGNBHwdQ1yMMkUrQ
-         xgWxGhzQiv/bA+MFbZJsrUdm1DutBOoebx7lHUdCAkqYPocm4as56X0pGN1C5U1gfa0M
-         xff3tOtbtziL9cVPC1GbaaCxFEbyWgarniptGc8d1Iy9dIuWyKhXJMKzcDQYJa5bj8xo
-         NerJ1VpkYR+7+1idN+2CJNE1OHsytq++U/h3N1VWwn7GDTx6vr2gXjCXlCsl0Kk77NF7
-         DEngWBLU/2IbPeJXVtJ3QXhrROMZ+UIQ8XDk13QiJY78wyRmnYGzqCdz1H7cc3uPNurX
-         lRUw==
-X-Forwarded-Encrypted: i=1; AJvYcCVM24Wfn4Ul8u82DXN1bJ6cuLGs/uW+BTIBvHjqVluRu1tMRbRYj2elao2eu6BQwjNsFapWmWIwid51fTheZ6nkFK1vIIBK54iz/o6+KgLG
-X-Gm-Message-State: AOJu0YysWq3epGcOOiRl2B3jKqU0TureuhPB9Ar36g4PIG/f0Vd4/dWf
-	FeR17aetMY4GKXEC3L9jqawIrQp7mD/AbLUOkfPcuIeEAwnzBZYNnCpC3s7eIT9/w8hOxgG/BuM
-	8N+G4esy1ezqMPnDPP8yJvm4f74v3LBXFqfBD1isKKxz3hFVlljD5uA24NVMEm+Aykg==
-X-Received: by 2002:a5d:64c5:0:b0:363:7bbf:efcf with SMTP id ffacd0b85a97d-3637bbff08emr3799261f8f.33.1718868045555;
-        Thu, 20 Jun 2024 00:20:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEtTDVELp3/HuRAOkhWEzx1WIXz6tdc0c3RQShTCl5/oPzRDdjgzoB/K+6b2FbkBaK+9kj2tQ==
-X-Received: by 2002:a5d:64c5:0:b0:363:7bbf:efcf with SMTP id ffacd0b85a97d-3637bbff08emr3799245f8f.33.1718868045127;
-        Thu, 20 Jun 2024 00:20:45 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c719:5b00:61af:900f:3aef:3af3? (p200300cbc7195b0061af900f3aef3af3.dip0.t-ipconnect.de. [2003:cb:c719:5b00:61af:900f:3aef:3af3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-365129ceac3sm492865f8f.101.2024.06.20.00.20.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jun 2024 00:20:44 -0700 (PDT)
-Message-ID: <3e185f8d-da63-4a61-9cd1-9804bd972515@redhat.com>
-Date: Thu, 20 Jun 2024 09:20:43 +0200
+        bh=tLXZUXgh5TLk41BARNCX6OxSVAe0KiHJAXDwIUYsvfM=;
+        b=mHfLwKb48nPkWzYbSC+xBs/t7p2ilBBLhmIZuUSDLhhzjEKxdzJCHnFF+rPAP9MMor
+         RDNRtt8PXZg624CHF74wbXwSgV82v94/TlePf50v2mFF2l9q8wqI6QBc1jFQ7rL8OOkQ
+         ZILG0A6Lo7JFPc10BjnhtnpmhofNoObG+2Ta4iKSxCfO6bfU/UmkEDRSM1IxzAAjFgUB
+         WfXlpc7MxW8M6m40jLhH2/0Y1N9bnEAukxfxWMaNzHeaO9smwCCbMOIzMJRMxtQXdBF1
+         jlJ4C7Nvt7t6/TihaAMNIscoJmZOMlt1lKlFrr99KRoZy9do24oKSUyziCdx3LBP6YFL
+         HrQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718868353; x=1719473153;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tLXZUXgh5TLk41BARNCX6OxSVAe0KiHJAXDwIUYsvfM=;
+        b=r6FZFocQhyApsiQfZRkJwTiDQUQqgXf40w1phA0cwv/Oas4FZ2wn4WeD7b5TeU7AYC
+         UXPCAMsVITVIdCa9NChoMIX3Fwku7vaYR6rI4uG/YASKGJjkBA2syHjhI4aOqYGNyZuM
+         20yBOFzhx6h4Wu135NS9QRhY8vq1AVI+bfiqbj0ZAF+VSy2c2i5LAuMmrF9jeeRQe4lK
+         mJFG8P6WgCYzbgznCN8kTr5P4bj+gk8CCxZyhWkqIX3n1NZLQoa5GOBmwdqGIBLqK0vI
+         H677AA4MrKjM9+HXBhMK6+vnEeDVVNv1njHuIl5Wuh4wlE/c7gO7wEnueuVei2T/URDJ
+         1Drw==
+X-Forwarded-Encrypted: i=1; AJvYcCXqaK6Z+wkms0H/Re7yh8MtWm5GKozznHqSFbvVQlZ8amMgEvNc5u+6SUo5RxsNmYdFU1juNOiVQUw96v2qjoZpSeLkb8UYMfUizFA3THxPh2FbNzUz6rpqcgZqhjdPMBM1fKp6jfO85k0aXAcU
+X-Gm-Message-State: AOJu0Yw47m3HxLrSd8eymPVpXWrD+9THmN3Ty3GHxTyiv6e6PvRBocoC
+	GehNIogNIOcLQUxqCMHDbmVo3O4FzVsj1SHNtp5TIU/7nJTcYYYl10ynnfd/KvnRFwcZC95qHP6
+	8EJ7bVpPAXk86koxFow1wUas52u8=
+X-Google-Smtp-Source: AGHT+IHN2NVouyF6JqeqBCeqrXcMyZNL0yaQV7MG+sGA6JKJYMOFXjvPfEm9qp3C2rdb0jOmQdg8s3+6cAe/BJfxWEY=
+X-Received: by 2002:a05:6122:3c88:b0:4eb:12da:14c7 with SMTP id
+ 71dfb90a1353d-4ef276f96b7mr5354704e0c.6.1718868353350; Thu, 20 Jun 2024
+ 00:25:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <20240620002648.75204-1-21cnbao@gmail.com> <87zfrg2xce.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAGsJ_4wS1PbGpfi5oWw4qRgs49kcdyTb42PA+35vBC1oA8Jsbg@mail.gmail.com>
+ <87o77w2nrw.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAGsJ_4zz7FdEubG4DhcCvEfyC2Z-yp8QReh9OYopvhudrZF+6A@mail.gmail.com>
+ <87jzik2kcq.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87jzik2kcq.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From: Barry Song <21cnbao@gmail.com>
+Date: Thu, 20 Jun 2024 19:25:42 +1200
+Message-ID: <CAGsJ_4ynitJ098KyMQ2rDo3XCFKLCs=xZXfSqdcJ_kFNC02t7g@mail.gmail.com>
 Subject: Re: [PATCH] selftests/mm: Introduce a test program to assess swap
  entry allocation for thp_swapout
-To: "Huang, Ying" <ying.huang@intel.com>, Barry Song <21cnbao@gmail.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
- ryan.roberts@arm.com, chrisl@kernel.org, hughd@google.com,
- kaleshsingh@google.com, kasong@tencent.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Barry Song <v-songbaohua@oppo.com>
-References: <20240620002648.75204-1-21cnbao@gmail.com>
- <87zfrg2xce.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Language: en-US
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <87zfrg2xce.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: "Huang, Ying" <ying.huang@intel.com>
+Cc: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org, 
+	ryan.roberts@arm.com, chrisl@kernel.org, david@redhat.com, hughd@google.com, 
+	kaleshsingh@google.com, kasong@tencent.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Barry Song <v-songbaohua@oppo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 20.06.24 03:53, Huang, Ying wrote:
+On Thu, Jun 20, 2024 at 6:36=E2=80=AFPM Huang, Ying <ying.huang@intel.com> =
+wrote:
+>
 > Barry Song <21cnbao@gmail.com> writes:
-> 
->> From: Barry Song <v-songbaohua@oppo.com>
->>
->> Both Ryan and Chris have been utilizing the small test program to aid
->> in debugging and identifying issues with swap entry allocation. While
->> a real or intricate workload might be more suitable for assessing the
->> correctness and effectiveness of the swap allocation policy, a small
->> test program presents a simpler means of understanding the problem and
->> initially verifying the improvements being made.
->>
->> Let's endeavor to integrate it into the self-test suite. Although it
->> presently only accommodates 64KB and 4KB, I'm optimistic that we can
->> expand its capabilities to support multiple sizes and simulate more
->> complex systems in the future as required.
-> 
-> IIUC, this is a performance test program instead of functionality test
-> program.  Does it match the purpose of the kernel selftest?
+>
+> > On Thu, Jun 20, 2024 at 5:22=E2=80=AFPM Huang, Ying <ying.huang@intel.c=
+om> wrote:
+> >>
+> >> Barry Song <21cnbao@gmail.com> writes:
+> >>
+> >> > On Thu, Jun 20, 2024 at 1:55=E2=80=AFPM Huang, Ying <ying.huang@inte=
+l.com> wrote:
+> >> >>
+> >> >> Barry Song <21cnbao@gmail.com> writes:
+> >> >>
+> >> >> > From: Barry Song <v-songbaohua@oppo.com>
+> >> >> >
+> >> >> > Both Ryan and Chris have been utilizing the small test program to=
+ aid
+> >> >> > in debugging and identifying issues with swap entry allocation. W=
+hile
+> >> >> > a real or intricate workload might be more suitable for assessing=
+ the
+> >> >> > correctness and effectiveness of the swap allocation policy, a sm=
+all
+> >> >> > test program presents a simpler means of understanding the proble=
+m and
+> >> >> > initially verifying the improvements being made.
+> >> >> >
+> >> >> > Let's endeavor to integrate it into the self-test suite. Although=
+ it
+> >> >> > presently only accommodates 64KB and 4KB, I'm optimistic that we =
+can
+> >> >> > expand its capabilities to support multiple sizes and simulate mo=
+re
+> >> >> > complex systems in the future as required.
+> >> >>
+> >> >> IIUC, this is a performance test program instead of functionality t=
+est
+> >> >> program.  Does it match the purpose of the kernel selftest?
+> >> >
+> >> > I have a differing perspective. I maintain that the functionality is
+> >> > not functioning
+> >> > as expected. Despite having all the necessary resources for allocati=
+on, failure
+> >> > persists, indicating a lack of functionality.
+> >>
+> >> Is there any user visual functionality issue?
+> >
+> > Definitely not. If a plane can't take off, taking a train and pretendin=
+g
+> > there's no functionality issue isn't a solution.
+>
+> I always think that performance optimization is great work.  However, it
+> is not functionality work.
+>
+> > I have never assigned blame for any mistakes here. On the contrary,
+> > I have 100% appreciation for Ryan's work in at least initiating mTHP
+> > swapout w/o being split.
+> >
+> > It took countless experiments for humans to make airplanes commercially
+> > viable, but the person who created the first flying airplane remains th=
+e
+> > greatest. Similarly, Ryan's efforts, combined with your review of his p=
+atch,
+> > have enabled us to achieve a better goal here. Without your work, we ca=
+n't
+> > get here at all.
+>
+> Thanks!
+>
+> > However, this is never a reason to refuse to acknowledge that this feat=
+ure
+> > is not actually working.
+>
+> It just works for some workloads, not for some others.
+>
+> >>
+> >> >>
+> >> >> > Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+> >> >> > ---
+> >> >> >  tools/testing/selftests/mm/Makefile           |   1 +
+> >> >> >  .../selftests/mm/thp_swap_allocator_test.c    | 192 ++++++++++++=
+++++++
+> >> >> >  2 files changed, 193 insertions(+)
+> >> >> >  create mode 100644 tools/testing/selftests/mm/thp_swap_allocator=
+_test.c
+> >> >> >
+> >> >> > diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/=
+selftests/mm/Makefile
+> >> >> > index e1aa09ddaa3d..64164ad66835 100644
+> >> >> > --- a/tools/testing/selftests/mm/Makefile
+> >> >> > +++ b/tools/testing/selftests/mm/Makefile
+> >> >> > @@ -65,6 +65,7 @@ TEST_GEN_FILES +=3D mseal_test
+> >> >> >  TEST_GEN_FILES +=3D seal_elf
+> >> >> >  TEST_GEN_FILES +=3D on-fault-limit
+> >> >> >  TEST_GEN_FILES +=3D pagemap_ioctl
+> >> >> > +TEST_GEN_FILES +=3D thp_swap_allocator_test
+> >> >> >  TEST_GEN_FILES +=3D thuge-gen
+> >> >> >  TEST_GEN_FILES +=3D transhuge-stress
+> >> >> >  TEST_GEN_FILES +=3D uffd-stress
+> >> >> > diff --git a/tools/testing/selftests/mm/thp_swap_allocator_test.c=
+ b/tools/testing/selftests/mm/thp_swap_allocator_test.c
+> >> >> > new file mode 100644
+> >> >> > index 000000000000..4443a906d0f8
+> >> >> > --- /dev/null
+> >> >> > +++ b/tools/testing/selftests/mm/thp_swap_allocator_test.c
+> >> >> > @@ -0,0 +1,192 @@
+> >> >> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> >> >> > +/*
+> >> >> > + * thp_swap_allocator_test
+> >> >> > + *
+> >> >> > + * The purpose of this test program is helping check if THP swpo=
+ut
+> >> >> > + * can correctly get swap slots to swap out as a whole instead o=
+f
+> >> >> > + * being split. It randomly releases swap entries through madvis=
+e
+> >> >> > + * DONTNEED and do swapout on two memory areas: a memory area fo=
+r
+> >> >> > + * 64KB THP and the other area for small folios. The second memo=
+ry
+> >> >> > + * can be enabled by "-s".
+> >> >> > + * Before running the program, we need to setup a zRAM or simila=
+r
+> >> >> > + * swap device by:
+> >> >> > + *  echo lzo > /sys/block/zram0/comp_algorithm
+> >> >> > + *  echo 64M > /sys/block/zram0/disksize
+> >> >> > + *  echo never > /sys/kernel/mm/transparent_hugepage/hugepages-2=
+048kB/enabled
+> >> >> > + *  echo always > /sys/kernel/mm/transparent_hugepage/hugepages-=
+64kB/enabled
+> >> >> > + *  mkswap /dev/zram0
+> >> >> > + *  swapon /dev/zram0
+> >> >> > + * The expected result should be 0% anon swpout fallback ratio w=
+/ or
+> >> >> > + * w/o "-s".
+> >> >> > + *
+> >> >> > + * Author(s): Barry Song <v-songbaohua@oppo.com>
+> >> >> > + */
+> >> >> > +
+> >> >> > +#define _GNU_SOURCE
+> >> >> > +#include <stdio.h>
+> >> >> > +#include <stdlib.h>
+> >> >> > +#include <unistd.h>
+> >> >> > +#include <string.h>
+> >> >> > +#include <sys/mman.h>
+> >> >> > +#include <errno.h>
+> >> >> > +#include <time.h>
+> >> >> > +
+> >> >> > +#define MEMSIZE_MTHP (60 * 1024 * 1024)
+> >> >> > +#define MEMSIZE_SMALLFOLIO (1 * 1024 * 1024)
+> >> >> > +#define ALIGNMENT_MTHP (64 * 1024)
+> >> >> > +#define ALIGNMENT_SMALLFOLIO (4 * 1024)
+> >> >> > +#define TOTAL_DONTNEED_MTHP (16 * 1024 * 1024)
+> >> >> > +#define TOTAL_DONTNEED_SMALLFOLIO (768 * 1024)
+> >> >> > +#define MTHP_FOLIO_SIZE (64 * 1024)
+> >> >> > +
+> >> >> > +#define SWPOUT_PATH \
+> >> >> > +     "/sys/kernel/mm/transparent_hugepage/hugepages-64kB/stats/s=
+wpout"
+> >> >> > +#define SWPOUT_FALLBACK_PATH \
+> >> >> > +     "/sys/kernel/mm/transparent_hugepage/hugepages-64kB/stats/s=
+wpout_fallback"
+> >> >> > +
+> >> >> > +static void *aligned_alloc_mem(size_t size, size_t alignment)
+> >> >> > +{
+> >> >> > +     void *mem =3D NULL;
+> >> >> > +
+> >> >> > +     if (posix_memalign(&mem, alignment, size) !=3D 0) {
+> >> >> > +             perror("posix_memalign");
+> >> >> > +             return NULL;
+> >> >> > +     }
+> >> >> > +     return mem;
+> >> >> > +}
+> >> >> > +
+> >> >> > +static void random_madvise_dontneed(void *mem, size_t mem_size,
+> >> >> > +             size_t align_size, size_t total_dontneed_size)
+> >> >> > +{
+> >> >> > +     size_t num_pages =3D total_dontneed_size / align_size;
+> >> >> > +     size_t i;
+> >> >> > +     size_t offset;
+> >> >> > +     void *addr;
+> >> >> > +
+> >> >> > +     for (i =3D 0; i < num_pages; ++i) {
+> >> >> > +             offset =3D (rand() % (mem_size / align_size)) * ali=
+gn_size;
+> >> >> > +             addr =3D (char *)mem + offset;
+> >> >> > +             if (madvise(addr, align_size, MADV_DONTNEED) !=3D 0=
+)
+> >> >> > +                     perror("madvise dontneed");
+> >> >>
+> >> >> IIUC, this simulates align_size (generally 64KB) swap-in.  That is,=
+ it
+> >> >> simulate the effect of large size swap-in when it's not available i=
+n
+> >> >> kernel.  If we have large size swap-in in kernel in the future, thi=
+s
+> >> >> becomes unnecessary.
+> >> >>
+> >> >> Additionally, we have not reached the consensus that we should alwa=
+ys
+> >> >> swap-in with swapped-out size.  So, I suspect that this test may no=
+t
+> >> >> reflect real situation in the future.  Although it doesn't reflect
+> >> >> current situation too.
+> >> >
+> >> > Disagree again. releasing the whole mTHP swaps is the best case. Eve=
+n in
+> >> > the best-case scenario, if we fail, it raises concerns for handling =
+potentially
+> >> > more challenging situations.
+> >>
+> >> Repeating sequential anonymous pages writing is the best case.
+> >
+> > I define the best case as the scenario with the least chance of creatin=
+g
+> > fragments within swapfiles for mTHP to swap out. There is no real
+> > difference whether this is done through swapin or madv_dontneed.
+>
+> IMO, swapin is much more important than madv_dontneed.  Because most
+> users use swapin automatically, but few use madv_dontneed by hand.  So,
+> I think swapin/swapout test is much more important than madv_dontneed.
+> I don't like this test case because madv_dontneed isn't typical or
+> basic.
 
-We do have the similar tests at least for ksm (ksm_tests.c) and probably 
-others:
+Disliking DONTNEED isn't a sufficient reason to reject this test program be=
+cause
+no single small program can report swapout counters, swapout fallback count=
+ers,
+and fallback ratios within several minutes for 100 iterations. That's
+precisely why
+we need it, at least initially. We can enhance it further if it lacks
+certain functionalities
+that people desire.
 
-$ git grep -l clock_gettime
-ksm_tests.c
-migration.c
-mremap_test.c
-transhuge-stress.c
+The entire purpose of MADV_DONTNEED is to simulate a scenario where all
+slots are released as a whole, preventing the creation of fragments, which =
+is
+most favorable for swap allocation. I believe there is no difference betwee=
+n
+using MADV_DONTNEED or swapin for this purpose. But I am perfectly fine
+with switching to swapin to replace MADV_DONTNEED in v2.
 
+I will simply replace DONTNEED by swapping in all 16 subpages every time as
+the initial commit, as I anticipate that this approach will yield the
+best test results.
 
-I recall that gup_test.c also measures performance things.
+I anticipate that the optimization process will comprise three steps in tot=
+al.
 
--- 
-Cheers,
+1. If our swapin process doesn't generate fragments(always swapin all subpa=
+ges),
+we achieve a 0% fallback ratio with Chris's and Ryan's current optimization=
+s.
 
-David / dhildenb
+2. With the current optimizations from Chris and Ryan, we achieve a
+fallback ratio
+of less than 50% when generating fragments during swapping in by randomly
+swapping in a portion of subpages.
 
+The positive outcome is that we tested Ryan's V1 on an actual phone that sw=
+aps
+in by small folios at 50% percentage (because we have 50% chance to fallbac=
+k
+while allocating mTHP within do_swap_page()). Despite this, we still achiev=
+ed
+a 0% fallback ratio when using two zRAMs: one for small folios and the othe=
+r for
+large folios. My assumption is that anonymous memory still maintains
+good spatial
+locality, allowing all subpages to eventually be accessed even though they =
+are
+swapped in one by one. So finally fragments are removed sooner or later.
+
+3. We still maintain a 0% fallback ratio with Chris's long-term plan to opt=
+imize
+   swapout, even using non-discontiguous slots. I actually don't find
+it difficult
+   if we can save a swap offset in subpage's field. But obviously
+people don't like
+   this because the trend is to remove subpage's stuff as much as possible =
+:-)
+
+>
+> >>
+> >> > I don't find it hard to incorporate additional features into this te=
+st
+> >> > program to simulate more intricate scenarios.
+> >>
+> >> IMHO, we don't really need this special purpose test.  We can have som=
+e
+> >> more general basic tests, for example, sequential anonymous pages
+> >> writing/reading, random anonymous pages writing/reading, and combinati=
+on
+> >> of them.
+> >
+> > I understand that not all things will be loved by all people. However, =
+before
+> > I sent this patch, Chris mentioned that it has been very helpful for hi=
+m and
+> > strongly suggested that I contribute it to the self-test suite.
+> >
+> > By the way, adding sequential and random anonymous pages for
+> > read/write operations is definitely in my plan. The absence of this fea=
+ture
+> > isn't a convincing reason to disregard it.
+> >
+>
+> [snip]
+>
+> --
+> Best Regards,
+> Huang, Ying
+
+Thanks
+Barry
