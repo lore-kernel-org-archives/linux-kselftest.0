@@ -1,115 +1,108 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBF616F8F4
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 15:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E026C16EC08;
+	Tue, 25 Jun 2024 15:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719328646; cv=none; b=BsriIYLz7D/2Aumt2zLOwHgNYpH1VQ+Z6PVE2eKdOJjRGuLeGG0kohsKCYpbr9gISw8/TatxeLMNK1NQDbQaFR69Do+FPHbdnhbS9EI8B2U5lX4B0rTa3L1pdUa/jsuur0hVNxFBIwKL94AeWa4sDHvoILpGNkq2tPPOsQcifa4=
+	t=1719328914; cv=none; b=tRO7zx+iW4cxuziXU2RDT/Q/IaRLZzL30DdAeqqXG0LuxukJjRCyk40EwGzSrnutNUsRrGumReDk2o2bWmjTFkW+kTm64CuEtyLbHM+jpPdXoME28c7sP1nD0n+qKJxFli/yEwPT/h6LEcJyegu9KRZmAAHoyyrCVLEPt/JTxcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719328646; c=relaxed/simple;
-	bh=tX7m3fbagW+Xu7Gov5fW024aDM7tXtp/CEdtBqu2uo0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qCtj0lQaed+tnjdHJMgl8IV8v6hSIxqfxee3eCktuukL7P6Aws3180tqNirsqq4JCVNoUXJxBZk9r/2cmJceGBwjveAPBGObsamsvkaCf4+ohqxKdsqd4BYyjUk32gLv2btllNQIUkyw5bba+D1yNH+kIwBPf9P9ihaPk+xqxis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JLymxE1w; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1719328914; c=relaxed/simple;
+	bh=7113lzuAwhu5YW/fvVxHMqH6c7oZq1285w6QOgZ+v7g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=KhjHJZQFb16xlMng4GyLDnotUe41ZGQJ6edJXm354YGLAo+Gf4voIuo6r8CW3Y6hsoQbk4qnnZkO88MR2N9/s70LH3hE1/6HOaC7AyIPYjSoCyFRNW6/gW1DyzXbaY68U+D9X7seOG6hcYyBBgqkHeA9140y1jDRbjO7qg27rLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TdoHwJ4/; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JLymxE1w"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719328643;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W1pWUcsCbDz/QzTtn1KclW1Fnze6TwCApU6kqlWKFYE=;
-	b=JLymxE1wVSHTdExhF2C6c1eiIMVuVQdHyaw7SgW2c4NuKfaWgqlOzkUdO86qzRh7xNDTYX
-	1aB1WgHyyW7FKVrrbCC+B/GUXo1DyFBv5nzsUHVfmbe5grWRl/Whhx8Om6y3Nwtkata9BU
-	abRmDa9z4IyGJrPJFoQwGWtTxeD50dU=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-42-gWiis1akMt6uaXVEmPltRA-1; Tue,
- 25 Jun 2024 11:17:20 -0400
-X-MC-Unique: gWiis1akMt6uaXVEmPltRA-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2B8EA19560B2;
-	Tue, 25 Jun 2024 15:17:18 +0000 (UTC)
-Received: from RHTRH0061144 (dhcp-17-72.bos.redhat.com [10.18.17.72])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9C30E1954AC1;
-	Tue, 25 Jun 2024 15:17:15 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>,  netdev@vger.kernel.org,
-  dev@openvswitch.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  Pravin B Shelar <pshelar@ovn.org>,  "David
- S. Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,
-  Shuah Khan <shuah@kernel.org>,  Stefano Brivio <sbrivio@redhat.com>,
-  =?utf-8?Q?Adri=C3=A1n?= Moreno <amorenoz@redhat.com>,  Simon Horman
- <horms@kernel.org>
-Subject: Re: [PATCH v2 net-next 0/7] selftests: net: Switch pmtu.sh to use
- the internal ovs script.
-In-Reply-To: <20240625074145.69fc9d9f@kernel.org> (Jakub Kicinski's message of
-	"Tue, 25 Jun 2024 07:41:45 -0700")
-References: <20240620125601.15755-1-aconole@redhat.com>
-	<20240621180126.3c40d245@kernel.org> <f7ttthjh33w.fsf@redhat.com>
-	<f7tpls6gu3q.fsf@redhat.com>
-	<e4f69335f90aae3f1daa47ba8f69b24ea15ed3b7.camel@redhat.com>
-	<f7th6dhgnvm.fsf@redhat.com> <20240625070654.6a00efef@kernel.org>
-	<f7t1q4lgldr.fsf@redhat.com> <20240625074145.69fc9d9f@kernel.org>
-Date: Tue, 25 Jun 2024 11:17:14 -0400
-Message-ID: <f7tsex1f3wl.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TdoHwJ4/"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-70699b6afddso648809b3a.1;
+        Tue, 25 Jun 2024 08:21:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719328912; x=1719933712; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=udsj8F3Gmu1nPkmB0pulDBxb9TSeq9nck/kC3senj6E=;
+        b=TdoHwJ4/FBz3yo2khF/lQ3dX020WEJ6wAw9EG4s/Ve8iVAsiNWFgru2bRF1PaTx1c+
+         qyk66Dfa2iSoQK3y/hnB4Q79zXD1tsz35cDT2qShQMojPpj3bTPAVNWBYVh0BhGi53Wn
+         1eQ5MFQD8fej094K5uAjXs4Ueq1w6pWGTYfgnenywiajqnQIxfl7olTNeGzhzLp7mHFX
+         M5lIwa38yJziCps0LpZ4yAwK3Eul2gg6tuSpVYqZxUwxw/3AhlYRD9EdR6+vNYirrtU9
+         Ia+xtEWUTmSXGIOnusz38mBtwSwykuzVmXipv7h2JYC/8Dro1tr5c+zZwzyYjJOE5mxX
+         MPdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719328912; x=1719933712;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=udsj8F3Gmu1nPkmB0pulDBxb9TSeq9nck/kC3senj6E=;
+        b=B2afylGNQYNbXZ3w9s7iIrlgU9p4LZJmH2xbDAJ1mXqbTVw0J2a7jcEUcoZ5I0Fqex
+         MJD1po98sNavQbW3OhcXqFWUSgycZqSML0eVL3a1gn6ypI4Has/jsusaSmn6F2enLM4e
+         k/LdPWjha5RsdjQI2S/pPooqOaygywInHtciz62ByoHWwJ9OXDTk2pE5r2aB6k6UG149
+         YAsxwznFqompAVq9DRIJwYT7Iw2Oc/l9iP7yDWEpYfiKWEtkAImrWMEpyG2tVvDMCdYL
+         VmEDKS1lfKYlc73ek09mxgiag2sKlq8z8bqvkGepSUXMeXgHlNqjHUpWY2p1T4yKFVUm
+         4/Dg==
+X-Forwarded-Encrypted: i=1; AJvYcCVCjYYNVXETAk0egRjEYGCoqvmwcWC89T1s7iUWdnLH0bnzt8cFKxOXhCdkfQppYxv0FULiIPwpgbK1crzOKWRhMmKyuqIETQK3E+gRuuHP1+y39iEfI1jMixqsz7C2uQU3+xt34KK7+bW1w+By1jvdAb+3PTkG06glGJDP7J1p3huuHD5ezuz7MiXfbQ==
+X-Gm-Message-State: AOJu0Yxw7BMR7NicMZpB/AC/QV20cCZTktPrb53HkX7IDZ5AMwe2rL3U
+	QZYcgmY0qC3s/52XW20T+JL6KuUgc1HQROCSn586lZqVafPu1suc2efebMUl
+X-Google-Smtp-Source: AGHT+IHq8aYqHC0HMA/+3VF56wT+YmOaj05hwTBl2KQCTVeVodMKv7yIknzEAGprV2NlXt7lE59YVw==
+X-Received: by 2002:a05:6a20:1aa5:b0:1bd:1d0e:90fc with SMTP id adf61e73a8af0-1bd1d0e95d8mr2030571637.1.1719328912110;
+        Tue, 25 Jun 2024 08:21:52 -0700 (PDT)
+Received: from dev0.. ([49.43.162.199])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7068c719371sm3324620b3a.102.2024.06.25.08.21.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jun 2024 08:21:51 -0700 (PDT)
+From: Abhinav Jain <jain.abhinav177@gmail.com>
+To: shuah@kernel.org,
+	akpm@linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: skhan@linuxfoundation.org,
+	jain.abhinav177@gmail.com,
+	javier.carrasco.cruz@gmail.com
+Subject: [PATCH] selftests/proc: fix unused result warning during test compilation
+Date: Tue, 25 Jun 2024 15:21:39 +0000
+Message-Id: <20240625152139.16412-1-jain.abhinav177@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Jakub Kicinski <kuba@kernel.org> writes:
+Check the return value from write function to get rid of the warning
+during test compilation, shared below.
+Tested by compiling after the change, the warning disappears.
 
-> On Tue, 25 Jun 2024 10:14:24 -0400 Aaron Conole wrote:
->> > Sorry for not checking it earlier, looks like the runner was missing
->> > pyroute:
->> >
->> > # python3 ./tools/testing/selftests/net/openvswitch/ovs-dpctl.py
->> > Need to install the python pyroute2 package >=3D 0.6.
->> >
->> > I guess run_cmd counter-productively eats the stderr output ? :(=20=20
->>=20
->> Awesome :)  I will add a patch to ovs-dpctl that will turn the
->> sys.exit(0) into sys.exit(1) - that way it should do the skip.
->>=20
->> When I previously tested, I put an error in the `try` without reading
->> the except being specifically for a ModuleNotFound error.
->>=20
->> I'll make sure pyroute2 isn't installed when I run it again.
->>=20
->> Thanks for your help Jakub and Paolo!
->
-> BTW I popped the v2 back into the queue, so the next run (in 20min)
-> will tell us if that's the only thing we were missing =F0=9F=A4=9E=EF=B8=
-=8F
+proc-empty-vm.c:385:17: warning: ignoring return value of ‘write’
+declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  385 |                 write(1, buf, rv);
 
-:)  I'll wait to post the v3 then.  So far, the only change I have is:
-
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -34,7 +34,7 @@ try:
-=20
- except ModuleNotFoundError:
-     print("Need to install the python pyroute2 package >=3D 0.6.")
--    sys.exit(0)
-+    sys.exit(1)
-=20
-=20
- OVS_DATAPATH_FAMILY =3D "ovs_datapath"
+Signed-off-by: Abhinav Jain <jain.abhinav177@gmail.com>
 ---
+ tools/testing/selftests/proc/proc-empty-vm.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/proc/proc-empty-vm.c b/tools/testing/selftests/proc/proc-empty-vm.c
+index 56198d4ca2bf..510ab4a5330a 100644
+--- a/tools/testing/selftests/proc/proc-empty-vm.c
++++ b/tools/testing/selftests/proc/proc-empty-vm.c
+@@ -382,7 +382,12 @@ static int test_proc_pid_statm(pid_t pid)
+ 	assert(rv >= 0);
+ 	assert(rv <= sizeof(buf));
+ 	if (0) {
+-		write(1, buf, rv);
++		ssize_t bytes_written = write(1, buf, rv);
++
++		if (bytes_written != rv) {
++			perror("write");
++			return EXIT_FAILURE;
++		}
+ 	}
+ 
+ 	const char *p = buf;
+-- 
+2.34.1
 
