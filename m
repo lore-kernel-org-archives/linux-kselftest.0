@@ -1,113 +1,89 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674F616D33B;
-	Tue, 25 Jun 2024 14:51:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8D61BC57;
+	Tue, 25 Jun 2024 14:59:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719327065; cv=none; b=bshVKgYm+gcpbBDjMHOpzgxN4r4yDGUaRL6GJ4sT6tCIn6Zy5AuxKFWGpmCfvZeGzNFYM7O/khx5WR5iJZYQvME8v97GFKK2Y66X1bc1F+1KtdDyvm8MiU5SMRjU56LG6Q3lMyGLrRJGVigwJ6TvVRZSj3mvoJhpRlhWtDuKACE=
+	t=1719327572; cv=none; b=f5XEEPdgcvQn4JMomJkS6dgZY6PiiumwDUoP41stimO2bN0BCxQWLGVmsb7fuKpRjp04ugoIkwehALYWzsJsZnieSMIvaAegdcYfXYjtkyiFpG6esN65jKrI/Xyex6hD7gkkjajRyOyEtuQGusW+ESH5h22a2lexGc4iF6N/hMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719327065; c=relaxed/simple;
-	bh=h7/s1erSrTInKP/WfJXKAlirzQaaLfNgEqTkzmlNeWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tmDV18FeomUYhiNpg9fqyM+OIVAi/7kIX7Dz+/X8TgxYypDPiIfn/pjnW3wwRiJDcx/1+ACMmajnThkeW2mdqIxWPuA2qx/EEYdCHQYc8bfIdJFDTR8o1djwPD212PJLKw2hXgPzolWgl+/U9ykImgwo4TsKP0rVj3i7N5lPmNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4PxwaZp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719327572; c=relaxed/simple;
+	bh=4wYjB3JY0AnTw9nAvS+x7fjoQVoS9QzpjpY/mNtLggw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O1C4q1C9iNAOUTWx9/emcEHSap2TPW/SFp/PQ4mgGEJgfw1k4yZL56uP29swrDjkPg+82F5QIoQuMhL0nIUhMYRQg0nPTi0Fv41PLr4yR9CDviJEzUOqGIeKBPOE+NwzAOaYWxdK/G1HSNldeIkcVHBWEUuHzcjp8onPHXPftJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7NAS6q/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4PxwaZp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C64C32781;
-	Tue, 25 Jun 2024 14:51:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7NAS6q/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7AA9C4AF0B;
+	Tue, 25 Jun 2024 14:59:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719327064;
-	bh=h7/s1erSrTInKP/WfJXKAlirzQaaLfNgEqTkzmlNeWk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G4PxwaZptC/mrLUYem2vzCWclAWJx9yUlEjjlguMsEA9cwvaZ4yPel74R2ZxiLnvR
-	 A2oNPJYNkBWtKFXwwhHJiaCYvXTF85t20gmIgjaqjwc1odeAUqS9bIF2/4hZKUwz3+
-	 6qqo97tDKElp69yt/8DzNYaYXcvGfR9a4QHsztGl/X50GjCD/s+0y+miYPoM0eB+Xi
-	 ev3nMUoY2hiJLqfosv4jiwJwBtFfZRh0wDz2YnKgLyxzrB7w0EEVm8/HHCOh+0QRa7
-	 Uvdv5NSIsVY142FaeawS/1wDcH5JjVEmljs2c60LL5lHTt3YwP/RWL8WfIenQjuzS/
-	 j64abmeLhVVmQ==
-Date: Tue, 25 Jun 2024 15:50:59 +0100
-From: Conor Dooley <conor@kernel.org>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
-	Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-	Charlie Jenkins <charlie@rivosinc.com>
-Subject: Re: [PATCH v7 01/16] dt-bindings: riscv: add Zimop ISA extension
- description
-Message-ID: <20240625-blimp-richly-f5828cbfe6a6@spud>
-References: <20240619113529.676940-1-cleger@rivosinc.com>
- <20240619113529.676940-2-cleger@rivosinc.com>
+	s=k20201202; t=1719327570;
+	bh=4wYjB3JY0AnTw9nAvS+x7fjoQVoS9QzpjpY/mNtLggw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=h7NAS6q/C2ZzBIAYKai5whZiBum489XS/J7zffMQOVU0xDBrGbji0HlKyZbV0brVY
+	 jwHILNhtgojEmdiUQ3GnAfMPUSaUya0+D0cFcjQ9dhbvTuMsGJh4W2x+J7X/9HXZ9V
+	 srBl3VFTN1Ly99vlBTFzJFJzSgq138zPAzzOL2os8e1W4DzrZI1H0QEVZ5ZJR09krK
+	 /Bmyi4o96W3ViZ6cus20bYwYlLEzMNrqNFN4DiYRoFZwN6N3pBDHKz/uOmL4YFYFQX
+	 m3FOmbQnP7K8OC0mOv3dwo1NOo8qb7etGTDcG2HlC0EOZ1X1ih7qXwRSXhT5bSXbyY
+	 CFeH6MEdGgYfg==
+Date: Tue, 25 Jun 2024 07:59:26 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Donald
+ Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Richard
+ Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
+ <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Christian
+ =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Bagas Sanjaya
+ <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, Nikolay
+ Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>
+Subject: Re: [PATCH net-next v13 00/13] Device Memory TCP
+Message-ID: <20240625075926.146d769d@kernel.org>
+In-Reply-To: <CAHS8izO1g5vZodyvKBNyE-Fx7A4EoD70RuDLwXtzE3yvfRw_2g@mail.gmail.com>
+References: <20240625024721.2140656-1-almasrymina@google.com>
+	<CAHS8izO1g5vZodyvKBNyE-Fx7A4EoD70RuDLwXtzE3yvfRw_2g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="9PA0Wx6xMQTCxIcL"
-Content-Disposition: inline
-In-Reply-To: <20240619113529.676940-2-cleger@rivosinc.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Tue, 25 Jun 2024 07:16:00 -0700 Mina Almasry wrote:
+> What happened here is that I sync'd to net-next, ran all the tests
+> including the allmodconfig build which took a few hours, then posted
+> the series. In the meantime 34 patches got merged to net-next, and one
+> of those patches seems to generate a git am failure when I try to use
+> b4 to apply:
 
---9PA0Wx6xMQTCxIcL
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 19, 2024 at 01:35:11PM +0200, Cl=E9ment L=E9ger wrote:
-> Add description for the Zimop (May-Be-Operations) ISA extension which
-> was ratified in commit 58220614a5f of the riscv-isa-manual.
->=20
-> Signed-off-by: Cl=E9ment L=E9ger <cleger@rivosinc.com>
-> Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-> ---
->  Documentation/devicetree/bindings/riscv/extensions.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Do=
-cumentation/devicetree/bindings/riscv/extensions.yaml
-> index cfed80ad5540..e214679ab6da 100644
-> --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
-> @@ -363,6 +363,11 @@ properties:
->              ratified in the 20191213 version of the unprivileged ISA
->              specification.
-> =20
-> +        - const: zimop
-> +          description:
-> +            The standard Zimop extension version 1.0, as ratified in com=
-mit
-> +            58220614a5f ("Zimop is ratified/1.0") of the riscv-isa-manua=
-l.
-> +
->          - const: ztso
->            description:
->              The standard Ztso extension for total store ordering, as rat=
-ified
-> --=20
-> 2.45.2
->=20
-
---9PA0Wx6xMQTCxIcL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZnrZUwAKCRB4tDGHoIJi
-0h+2AQD3yl1OivAnczjSlHzmMNfjOS/06MsBmq0xtbv8bTLpNAD/RzbgHtntHnej
-NyEPsFHW7yXdXAU1j8rFsiMmhti6igo=
-=/o9k
------END PGP SIGNATURE-----
-
---9PA0Wx6xMQTCxIcL--
+Got it, feel free to repost as soon as you can build test the rebased
+version.
