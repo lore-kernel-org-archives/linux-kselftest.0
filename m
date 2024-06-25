@@ -1,35 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F0E18C33A;
-	Tue, 25 Jun 2024 15:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13038172786;
+	Tue, 25 Jun 2024 15:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719327946; cv=none; b=UIBeltFM7Ut5DrDMJQv9AYDmmNHs2UxQ/8cjJtv8puuh4stqa4RIpaKfNSOOM7Ff9n3Fdd1NyKpuctZaazM4RoF1jzG9CYD4bLZazpwg7JkWusHZL6Td9w4DD0fYvqEu1oZA5ANPNfkmKveQO75vAKrqcarZw8IRcO2cc048rTg=
+	t=1719328617; cv=none; b=pP+Bd6jenSqgGPBDLeuHJYaTBYrP04VKXZ4J/POEhCeooEz1eSpMepU3GFgQFZn/NDK3xwUoLoZS4EAYIdATeQIdsoTnLuzTLqD4u1jaCesFkbC2CZEIkUWhk5H3ITyTg7h5PczacoNxRXlpAQCXRkwNdT9Ecn5zR7Y6xm7s6y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719327946; c=relaxed/simple;
-	bh=YYz6vJzvFivBjzQl/oYVfPbzMadH/24Qr7CyuKANnYA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qdTAlybQtuFOWrOGDeb0ebObvd7TIUDScvL77YxPKu7pNfgqjn6iGnrYYrK1DVA7A1/8YVaeY/j1zufyzczS0yf8HBPOuI2cf8SzAiAC9VVHmUPeuXpe/5uVuX0sRj+srYU/XQWkm6FhgiN6yX+5VMPuC31t4Jd/mJ1xGXs+HQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jVtyl15x; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719328617; c=relaxed/simple;
+	bh=UGARZKPk5YbSS64uqg+buewtBHJklTJcopEoDSowNjE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=A7EMXIJ2KbfHBVhJUClbUlz8twgYRbtD8sfOvEo90jcnD0wvZgC/xn/uYvXGbOqUya571TtUH7NCbH9cQdCmcybKvZ7y32Box9qIKVDEZz+8eZC3XkvYeJpfF7WELQolxB0quVdkCejJcimLS216mjTXgUo8aaJHeUcbKKNWh+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I/6F6zkq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jVtyl15x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82489C4AF0E;
-	Tue, 25 Jun 2024 15:05:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I/6F6zkq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD93CC32782;
+	Tue, 25 Jun 2024 15:16:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719327945;
-	bh=YYz6vJzvFivBjzQl/oYVfPbzMadH/24Qr7CyuKANnYA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=jVtyl15xNduiXHKLwIurGiHrq6v7QW9hCqMHsjmjHGlP0n43EqHxggFJBuOuA/T9S
-	 ZwwyUkiuwOsMntBpfak37kJinMzrQiuoJEu+eVqdpPl53d9qQaqzSTyXFPUSpfJI8S
-	 VAlaLDXxrgRW2SWZSmnpBWfuWWfW5qV7AInmNEmiSe/7w9njmux7n7MhF8Y4K9SFGu
-	 jfPg5aq3YLB85H2QbpRCUMv9AtenTAWoE2hZfhOu8HG6Az9/y3XS0hU1LsCINimGX+
-	 JyStWz5ytl/jDITq3/tfE0iCyB9uqOPd4C0JMEB3AKgxRqEQY6tVtdMfaO3zJH+kvI
-	 05DmIU8/cjAag==
-From: Mark Brown <broonie@kernel.org>
-Date: Tue, 25 Jun 2024 15:58:07 +0100
-Subject: [PATCH v9 39/39] kselftest/arm64: Enable GCS for the FP stress
- tests
+	s=k20201202; t=1719328616;
+	bh=UGARZKPk5YbSS64uqg+buewtBHJklTJcopEoDSowNjE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=I/6F6zkqfPrNZhs98ids3A35JkyaGhxXPESrV47EWlxg8lubv1i1ikKbv7ZcmIIRN
+	 DHqOnxP9lWH2qJiukw0h60yG26/nkwWpZ9xHXcR0laNvIqCZamDB/c6ASiN/PMBZ2z
+	 k+D68My8uIpi8DelGI8G7wz4DSXtzB0wzLLXMsvCnn9gopflH5K+f5qTSnsPTl/x8B
+	 oDsL58ubMwlbj6Ig6DKMHohxpndDAJE0E3XC9Xni3Pbs8jqoEkcMsKNdQdzZuGHNHX
+	 qCcOqiWFT8ENbMUhMSZDJZOIL20kvlQNTVNmAdhyCfebkuvWTQvIwTfvhb//IfK3KH
+	 1bSSr1unBGvXA==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+	Tom Zanussi <zanussi@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH 0/3] tracing: Support poll on event hist file
+Date: Wed, 26 Jun 2024 00:16:52 +0900
+Message-Id: <171932861260.584123.15653284949837094747.stgit@devnote2>
+X-Mailer: git-send-email 2.34.1
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,137 +46,79 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240625-arm64-gcs-v9-39-0f634469b8f0@kernel.org>
-References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
-In-Reply-To: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Andrew Morton <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, 
- Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
- Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
- Shuah Khan <shuah@kernel.org>, 
- "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
- Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, 
- Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>
-Cc: "H.J. Lu" <hjl.tools@gmail.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Florian Weimer <fweimer@redhat.com>, Christian Brauner <brauner@kernel.org>, 
- Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
- Ross Burton <ross.burton@arm.com>, linux-arm-kernel@lists.infradead.org, 
- linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.14-dev-d4707
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3151; i=broonie@kernel.org;
- h=from:subject:message-id; bh=YYz6vJzvFivBjzQl/oYVfPbzMadH/24Qr7CyuKANnYA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmetuR2t+0Cqlt/6leQmollofnPNO15qhZxsk4g6Rv
- IV0COeeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZnrbkQAKCRAk1otyXVSH0KUEB/
- 92KBV+o4546rcXH4xXo2EWT+kE5N6xC2oDsBcr7IoWFKdn5b97y2WNrash+T59Yu1XOYrCFFrOrkgm
- RbmFAWHOBbuOXOc35IR+XCSSa2/XJZ7FXZF5j9xA8t5Jm1TA+oALCgCQ/r6V9BCHcym9F1WxusrRH2
- NmGZWONPJFdHa6wI/9n0Ormxp0MUcPFFWh0bQJwB1Ins6vJOcUUYcrUMGUZ83jjhnjAN+zkQ1GjB93
- iQmF3xpdVuac037z9gR/TjRKF03O0O2cYLS2kfLwjfhX3qk2c8+SM4699Wno6d0w34BZDduAiPh+cw
- MG2TnaMeA4ZtK8eaNL8Ppza/o33J+c
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 
-While it's a bit off topic for them the floating point stress tests do give
-us some coverage of context thrashing cases, and also of active signal
-delivery separate to the relatively complicated framework in the actual
-signals tests. Have the tests enable GCS on startup, ignoring failures so
-they continue to work as before on systems without GCS.
+Hi,
 
-Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Here is an RFC patch to support polling on event 'hist' file.
+
+There has been interest in allowing user programs to monitor kernel
+events in real time. Ftrace provides `trace_pipe` interface to wait
+on events in the ring buffer, but it is needed to wait until filling
+up a page with events in the ring buffer. We can also peek the
+`trace` file periodically, but that is inefficient way to monitor
+a randomely happening event.
+
+This patch set allows user to `poll`(or `select`, `epoll`) on event
+histogram interface. As you know each event has its own `hist` file
+which shows histograms generated by trigger action. So user can set
+a new hist trigger on any event you want to monitor, and poll on the
+`hist` file until it is updated.
+
+There are 2 poll events are supported, POLLIN and POLLPRI. POLLIN
+means that there are any readable update on `hist` file and this
+event will be flashed only when you call read(). So, this is
+useful if you want to read the histogram periodically.
+The other POLLPRI event is for monitoring trace event. Like the
+POLLIN, this will be returned when the histogram is updated, but
+you don't need to read() the file and use poll() again.
+
+Note that this waits for histogram update (not event arrival), thus
+you must set a histogram on the event at first.
+
+Here is an example usage:
+
+----
+TRACEFS=/sys/kernel/tracing
+EVENT=$TRACEFS/events/sched/sched_process_free
+
+# setup histogram trigger and enable event
+echo "hist:key=comm" >> $EVENT/trigger
+echo 1 > $EVENT/enable
+
+# Wait for update
+poll $EVENT/hist
+
+# Event arrived.
+echo "process free event is comming"
+tail $TRACEFS/trace
+----
+
+The 'poll' command is in the selftest patch.
+
+You can take this series also from here;
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/log/?h=topic/event-hist-poll
+
+Thank you,
+
 ---
- tools/testing/selftests/arm64/fp/assembler.h   | 15 +++++++++++++++
- tools/testing/selftests/arm64/fp/fpsimd-test.S |  2 ++
- tools/testing/selftests/arm64/fp/sve-test.S    |  2 ++
- tools/testing/selftests/arm64/fp/za-test.S     |  2 ++
- tools/testing/selftests/arm64/fp/zt-test.S     |  2 ++
- 5 files changed, 23 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/fp/assembler.h b/tools/testing/selftests/arm64/fp/assembler.h
-index 9b38a0da407d..1fc46a5642c2 100644
---- a/tools/testing/selftests/arm64/fp/assembler.h
-+++ b/tools/testing/selftests/arm64/fp/assembler.h
-@@ -65,4 +65,19 @@ endfunction
- 	bl	puts
- .endm
- 
-+#define PR_SET_SHADOW_STACK_STATUS      75
-+# define PR_SHADOW_STACK_ENABLE         (1UL << 0)
-+
-+.macro enable_gcs
-+	// Run with GCS
-+	mov	x0, PR_SET_SHADOW_STACK_STATUS
-+	mov	x1, PR_SHADOW_STACK_ENABLE
-+	mov	x2, xzr
-+	mov	x3, xzr
-+	mov	x4, xzr
-+	mov	x5, xzr
-+	mov	x8, #__NR_prctl
-+	svc	#0
-+.endm
-+
- #endif /* ! ASSEMBLER_H */
-diff --git a/tools/testing/selftests/arm64/fp/fpsimd-test.S b/tools/testing/selftests/arm64/fp/fpsimd-test.S
-index 8b960d01ed2e..b16fb7f42e3e 100644
---- a/tools/testing/selftests/arm64/fp/fpsimd-test.S
-+++ b/tools/testing/selftests/arm64/fp/fpsimd-test.S
-@@ -215,6 +215,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
-index fff60e2a25ad..2fb4f0b84476 100644
---- a/tools/testing/selftests/arm64/fp/sve-test.S
-+++ b/tools/testing/selftests/arm64/fp/sve-test.S
-@@ -378,6 +378,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// Irritation signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
-index 095b45531640..b2603aba99de 100644
---- a/tools/testing/selftests/arm64/fp/za-test.S
-+++ b/tools/testing/selftests/arm64/fp/za-test.S
-@@ -231,6 +231,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
-index b5c81e81a379..8d9609a49008 100644
---- a/tools/testing/selftests/arm64/fp/zt-test.S
-+++ b/tools/testing/selftests/arm64/fp/zt-test.S
-@@ -200,6 +200,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
+Masami Hiramatsu (Google) (3):
+      tracing/hist: Add poll(POLLIN) support on hist file
+      tracing/hist: Support POLLPRI event for poll on histogram
+      selftests/tracing: Add hist poll() support test
 
--- 
-2.39.2
 
+ include/linux/trace_events.h                       |    5 +
+ kernel/trace/trace_events.c                        |   18 ++++
+ kernel/trace/trace_events_hist.c                   |  101 +++++++++++++++++++-
+ tools/testing/selftests/ftrace/Makefile            |    3 +
+ tools/testing/selftests/ftrace/poll.c              |   34 +++++++
+ .../ftrace/test.d/trigger/trigger-hist-poll.tc     |   46 +++++++++
+ 6 files changed, 204 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/poll.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
