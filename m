@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9B816F8F4;
-	Tue, 25 Jun 2024 15:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E62E14A091;
+	Tue, 25 Jun 2024 15:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719329564; cv=none; b=KeqZsUuC9n6biFakVuccH3zzUM4wFJmfXu4rc21mb1wIQsbAt7Ki/QrLc+GP9Y496d7m7UKr+/gxSTp1Nye/dGoEtpqFV5Wl9TwYB3/vNpkjCfjqADeFEryMGwL/eBJndD/bv3/+m2msiOy9QsiWS3M+kEQlpUEa+uBSF45Aih0=
+	t=1719330170; cv=none; b=AhO64ETjfNdZppZsFQA53BeyLx3zd20I5bqH0qvJlqL4z+NC8u6uCcS4E1+/TzGZrOaZO/meZqnZYvGeFUVSw1HUuLMLwA9KyzcRnNPZr8vMjkxRAnTkj00DY6YyGGDRhhd8RfLeYB4DC4gEP1vlP4WlgYrn2sMAV/ExrwWcxZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719329564; c=relaxed/simple;
-	bh=cq7+BrMAkAlCHKRvPkqveb4zS9P8Oq4n7IJ0yNZ13PA=;
+	s=arc-20240116; t=1719330170; c=relaxed/simple;
+	bh=K4dsrZ4qjfJdfMkEn89XSrclRqFQcQshy9ANZQe2l24=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r7spLqF54mfYjF06c0IpZPQRa1X0cyK/CKHusbha9/8oyouHp9X9Gezf7vTB1OpGHWxmOAbmBcUHsetpdqswLg4JBifL9SlQ+X6OOUdbPKyMO047U7SttHRKhrJr2pG/MRFvQr2WyGgXI7DtiBYu2sa1zILa8/LUMs4XkVbSNxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EyueiWsa; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=JI5WwT0qg5aXoO5J1FT77KTH8weTWIHrsEEL6Yd4s0nVPFJ6qVuUlPbitIXrFdX/bdUPMgBRqIC7CeW2tfnaM/k9UT4GE/vsXtE4p64/YJvWdTj0YAO1kz/C+OAiNho31mn5Id8WDe13mbVjHeb0V3WAcM3ztAKE9S4bSK0Y7IE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oo2hoIBC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EyueiWsa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C21CC32781;
-	Tue, 25 Jun 2024 15:32:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oo2hoIBC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CC58C32781;
+	Tue, 25 Jun 2024 15:42:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719329564;
-	bh=cq7+BrMAkAlCHKRvPkqveb4zS9P8Oq4n7IJ0yNZ13PA=;
+	s=k20201202; t=1719330169;
+	bh=K4dsrZ4qjfJdfMkEn89XSrclRqFQcQshy9ANZQe2l24=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EyueiWsau1nCa84s90fBc5vKKqSqQjiqhgw7Wk+CtrztedCSmayUtUT0UL4LkYCdF
-	 nE3JOALfmo2hf8qF189ey6hdoUX18x+tv7gss5yDp6rRcXBPhpszAoEtjtxqDH5MVX
-	 7JIdjGcPgZhBv+wmucIQyqbA1ysuYVfMTmBeznITkfq4uqYA2OtjshcfSrgr8OWadX
-	 cdy/xs0ri5JFvn2IRiwopj/jXyj3aFmJ6Ntq10Bz0JuA13Mg1uubLwzH6XaSUIRf05
-	 iB9u96+gWPbtL58BswewyWYzaP8zP3AR2BxvffcWSoguypp/wGAG+HjuQKYKpaMGbi
-	 bYOLVZHrl30EQ==
-Date: Tue, 25 Jun 2024 16:32:36 +0100
+	b=oo2hoIBCbLRYVt3TDK9ScWN9F79pbRgwiai3uNaRLNP0FT8QK18M4e/XTGIvjLWgT
+	 QnZAoDXtZrfWMDBa+qJvI8lvOEpccWGqQB0oShHhEHIgoHwr8ubJkFi0uvLKkO7Fw9
+	 SHfuXTsGBDqVfJEmINC64W2REJA4AW6ER24vuTG1lN2SarMJnKmqmLMNCQjntHGAff
+	 JEF5pDUkPCUM6xDBY2reXCISFTuIK4+yfztRjO6ZKC6q3D9TUPqvCFUY1opVkK8yvD
+	 sLhAFf4abXxjruF3tFw990/KCmUSJ9ebZ9Gi9OxuL3gdm0Yq32t0RMRKtgQJMzHUj+
+	 w3x1B2rCBS9Fg==
+Date: Tue, 25 Jun 2024 16:42:44 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Dev Jain <dev.jain@arm.com>
 Cc: shuah@kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -35,11 +35,11 @@ Cc: shuah@kernel.org, linux-arm-kernel@lists.infradead.org,
 	mark.rutland@arm.com, linux@armlinux.org.uk, suzuki.poulose@arm.com,
 	Anshuman.Khandual@arm.com, aneesh.kumar@kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 9/9] selftests: Add build infrastructure along with
- README
-Message-ID: <8bbcc081-7e0b-4cab-8312-c5a5d60f4d7d@sirena.org.uk>
+Subject: Re: [PATCH v3 3/9] selftests: arm, arm64: Use ifdeffery to pull
+ signal infrastructure
+Message-ID: <9e7157d4-bb3e-4793-ac0d-05cf67ff98d1@sirena.org.uk>
 References: <20240625122408.1439097-1-dev.jain@arm.com>
- <20240625122408.1439097-10-dev.jain@arm.com>
+ <20240625122408.1439097-4-dev.jain@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,88 +47,56 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="UU48VnmcH3/0WAef"
+	protocol="application/pgp-signature"; boundary="NmDW5cKBRO90m6ma"
 Content-Disposition: inline
-In-Reply-To: <20240625122408.1439097-10-dev.jain@arm.com>
+In-Reply-To: <20240625122408.1439097-4-dev.jain@arm.com>
 X-Cookie: Results vary by individual.
 
 
---UU48VnmcH3/0WAef
+--NmDW5cKBRO90m6ma
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 25, 2024 at 05:54:08PM +0530, Dev Jain wrote:
+On Tue, Jun 25, 2024 at 05:54:02PM +0530, Dev Jain wrote:
 
-> Add arm target, individual Makefile targets, and instructions to build the
-> tests, along with .gitignore files. All the Makefiles are similar to
-> selftests/arm64, except abi: use TEST_CUSTOM_PROGS to override the make
-> rule from lib.mk. Also, do not build ptrace_64 if we are running a
-> 32-bit kernel.
+> Use ifdeffery to guard code chunks meant specifically for arm64, in
+> preparation for putting signal tests in selftests/arm.
 
-Also the documentation which could probably go separately.
+I've got to say I don't love this but I'm not sure how much better we
+could do if we want to share the code.  Though one thing that did jump
+out at me was:
 
-> +- This is a series of compatibility tests, wherein the source files are
-> +  built statically into a 32 bit ELF; they should pass on both 32 and 64
-> +  bit kernels. They are not built or run but just skipped completely when
-> +  env-variable ARCH is found to be different than 'arm64' or 'arm' and
-> +  `uname -m` reports other than 'aarch64', 'armv7l' or 'armv8l'.
+> +/* Not used by selftests/arm */
+> +#ifdef __aarch64__
+>  #define __stringify_1(x...)	#x
+>  #define __stringify(x...)	__stringify_1(x)
+> =20
+> @@ -43,6 +45,7 @@ enum {
+>  #define FEAT_SME		(1UL << FSME_BIT)
+>  #define FEAT_SME_FA64		(1UL << FSME_FA64_BIT)
+>  #define FEAT_SME2		(1UL << FSME2_BIT)
+> +#endif
 
-These are just plain old tests for arm, the fact that we can use them to
-test 32 bit mode on a 64 bit host is a nice bonus but the tests are just
-as useful with actual arm hardware.
+There's a lot of ifdefs around feature handling.  Could we reduce the
+ifdeffery by instead of removing all the code just removing the
+definitions of the features and the bit that initialises them based on
+the hwcaps?  In general a stubbing out approach like that tends to be
+cleaner and less fragile.
 
-> +- If building the tests on a 64-bit kernel, please ensure that the kernel is
-> +  built with CONFIG_COMPAT enabled.
-
-Running, not building.
-
-> +- Holding true the above, ARM KSFT tests can be run within the KSelfTest
-> +  framework using standard Linux top-level-makefile targets. Please set
-> +  $(CROSS_COMPILE) to 'arm-linux-gnueabi-' or 'arm-linux-gnueabihf-'.
-
-Or whatever your toolchain is set to!  We should also consider the
-LLVM=1 case here for building with clang (which is even easier as it
-supports all architectures in a single binary).
-
-> +      $ make TARGETS=arm kselftest-clean
-> +      $ make $(CROSS_COMPILE) TARGETS=arm kselftest
-
-> +      or
-
-> +      $ make $(CROSS_COMPILE) -C tools/testing/selftests TARGETS=arm \
-> +		INSTALL_PATH=<your-installation-path> install
-
-> +      or, alternatively, only specific arm/ subtargets can be picked:
-
-> +      $ make $(CROSS_COMPILE) -C tools/testing/selftests TARGETS=arm \
-> +		ARM_SUBTARGETS="signal" INSTALL_PATH=<your-installation-path> \
-> +			install
-
-I would expect the Makefile to have machinery which if we're building
-for arm64 would use CROSS_COMPILE_COMPAT here and force 32 bit builds.
-
-> +# Do not build 64-bit programs if running on a native 32-bit kernel
-> +UNAME_M := $(shell uname -m)
-> +ifneq (,$(filter $(UNAME_M),aarch64 arm64))
-> +TEST_CUSTOM_PROGS := $(OUTPUT)/ptrace_64
-
-Where we're building shouldn't affect what gets run - it is very common
-especially in CI systems to build on one system and then run the tests
-on a completely separate machine.
-
---UU48VnmcH3/0WAef
+--NmDW5cKBRO90m6ma
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ64xMACgkQJNaLcl1U
-h9BY0Af8CGA4C9tw/lNUx4oUt9cjeuXWgxUbAfWEfMpOLIRAscwaks6VQ24BSuax
-Unqbiuj8MKH3pn4A9OSzhvwHlzwcAWy2GXITHPs3V8S10TPpG2sQ+U1DN4dTzu8p
-NyuHp6DtwrNn50tq9dM60WUkZK8zRCv4FmAtm+nRRX0KM3sxr+/afzWlLpW/5XSa
-JcHlPQPelZRzvMF56SpIUs/HuB6a/UDqZ8wjePlgWRSe/NXYCXu4dpSKyPFD3cF9
-5fk0K7xmFVbPk4ZACYnPTHX+CTgwLRKL5eshTxBzFytj8AVgVAGGyxJt0WG90KAt
-FJzqkpIETgGu+D56E4WFAUZRMmWBdQ==
-=OVR4
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ65XMACgkQJNaLcl1U
+h9BkFwf/fcOohh/GWcR99zsvqMCPd/bJM+7iwbrTmUj5Yw/pqBvvvNZq5z6Pfwcw
+QndHLlv3rAeorUyE6ymUGh8JilZavWb+7urAU5ozg0qmSzhUy/CX9qZg+e09Xw5p
+7eIB3F5ffeb0UKn1iDZgOImCr2WxzgS+Zq8ykF67MNITfahwc9t8Nn5wnGTz+ZdX
+XB7hIvm0Fk4XoV6+JyPP56HMsQ+PYNYlO5I3R1/PV6yTNofUWrowdmm0BUxUt8xO
+OyaL3/TvOVzyZ9zNnJliOXdF2av5OeBDM9hjCCXTtNfDDc3u8VBIb4Fc8zZ95H0J
+GkVeJvDv9vcDez7PkN7ApYbaFaI/xA==
+=/ZuD
 -----END PGP SIGNATURE-----
 
---UU48VnmcH3/0WAef--
+--NmDW5cKBRO90m6ma--
