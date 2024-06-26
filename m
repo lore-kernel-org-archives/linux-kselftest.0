@@ -1,28 +1,28 @@
-Received: from cmccmta2.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA506EEDD;
-	Wed, 26 Jun 2024 09:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
+Received: from cmccmta1.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC2EEEDD;
+	Wed, 26 Jun 2024 09:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719395661; cv=none; b=rq088VmPRH51GpGwTdzo3iH0JzWXevbOh9i1V7UKmXWbMvk4cS60Qms0vu2qyUaPNoCl5LmpDe2X38g7GQbF/C1Q+VGUg3MsUjuf2fPRQl2b80hxId1gOoU/xZg3QoTbdYgfkgpPaV/1MCZFTMb+00dWKnjwW2n4nMjLpz+RSPM=
+	t=1719395906; cv=none; b=lKayRNJjfUnm/kKtDkCAZi7SkZ1TquJ3FHyAcrUdaUs39EVO0/fhCYpJNWGI4+jm+vgcL+2A6ZMW7hYpxpfE+/5McUkdwe0tQklI0jgkmEqm1Na5MDPwhCbdb3kZqNoaattyQbinxi/69zqCexpUpSiPsn+5kGXeUWz4bFkubyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719395661; c=relaxed/simple;
-	bh=OnP7ck+3qjAxiEpNKP8kmfe9Stx4BYFEUcWQ8/qetCw=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=n25IjkqsFGBe3k93JSfrbzMj9y8PIY7hS7OuMb6GGyG1PeqKChSmTDKI88z9V9jx1zADAbDn6UC2JLjr+cXcPFgozsT6svLIBQpYCGqHgQeeu2v912U5JkGfKWJiEImgtZl5Sg8Jyp2NMNnv0AhImjrKKBG+LzTIBIabuqc8aBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
+	s=arc-20240116; t=1719395906; c=relaxed/simple;
+	bh=qotvfWwWQxD9CGbaAkECOEU8prfSwAcDV/MSKkja5xY=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=o75OT9dIg5zcpCpiRFE43ZTezdEZn4y+IAZU9zrSeOSRyUvYDLWN5G4zzDbDkUdNzH/+Dn83VkyD5Y/f5tOPRizBfZqUlBRqlGs/vXSP7Fc2vhUziID3ObFyGewaNqUcCxwknpt/I4VgAp6eDB0puLgt6ddpP30b/6zeBin4DxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee5667be5440e0-819a2;
-	Wed, 26 Jun 2024 17:54:12 +0800 (CST)
-X-RM-TRANSID:2ee5667be5440e0-819a2
+	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee2667be63c3c4-0e3ca;
+	Wed, 26 Jun 2024 17:58:20 +0800 (CST)
+X-RM-TRANSID:2ee2667be63c3c4-0e3ca
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from ubuntu.localdomain (unknown[10.54.5.255])
-	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee3667be54232f-a6d7c;
-	Wed, 26 Jun 2024 17:54:12 +0800 (CST)
-X-RM-TRANSID:2ee3667be54232f-a6d7c
+	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea667be63b9e7-a654c;
+	Wed, 26 Jun 2024 17:58:20 +0800 (CST)
+X-RM-TRANSID:2eea667be63b9e7-a654c
 From: Zhu Jun <zhujun2@cmss.chinamobile.com>
 To: ivan.orlov0322@gmail.com
 Cc: broonie@kernel.org,
@@ -33,9 +33,9 @@ Cc: broonie@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	zhujun2@cmss.chinamobile.com
-Subject: [PATCH] selftests/alsa:Replace malloc with calloc
-Date: Wed, 26 Jun 2024 02:54:09 -0700
-Message-Id: <20240626095409.4908-1-zhujun2@cmss.chinamobile.com>
+Subject: [PATCH] selftests/alsa:Add memset to initialize memory
+Date: Wed, 26 Jun 2024 02:58:17 -0700
+Message-Id: <20240626095817.5037-1-zhujun2@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -43,8 +43,7 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 
-Using calloc to handling memory allocation, calloc
-can initialize the allocated memory
+Add memset to initialize the requested memory
 
 Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
 ---
