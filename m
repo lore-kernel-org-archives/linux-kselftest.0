@@ -1,171 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786F818E755;
-	Wed, 26 Jun 2024 13:47:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B210C1684A1
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2024 13:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719409635; cv=none; b=YEGf4G0SDa+C1d2gy5fYZd8yIcziu92VBT6xALJkG/6NiOcjGbxUKRAeG9PQPhdOGnGv4tAYCgnxd5yBAcJkddX/h+ascP3nZnbbAayH4BgpgiQRfsfOCw/1pkTDM5nkW9aK0RDzvpW3xjLfRqFmFrANbi3d0EEg/eLx01L5gOM=
+	t=1719410009; cv=none; b=rss+HLhIDcHDRWrFATA8CNSeXE6oPNC+gmZJyd/vZGCzVE4aK4SmQu31Kj6cSjFIQYwwxhMvGLtxED//JYD5W5anSpZDfXfRs0xESDm+4BmWzoV4m5nMUisGCEUagJKDWGlQLIqVeqSkmUxgQHCXFSlOkxCf+VY9tC97vypJCtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719409635; c=relaxed/simple;
-	bh=coSvairEXZ/UoBj93IfzT1BpGcOK/jnPrORkflCNJ84=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NPqwuL+s//UYPAZ8sBkQ2mDNJw94M/bHi+uageZJGGa+WtL3j5nq6J6H2kvaSdILv75kIcC/7+TD7WUQIYYLe/xi+2BZZJKcs7SzIb+6C55UyeV7uaIt418zdA+5NA6Y9HrzwgG0G1B71NNzWSyi3bps2U7mfDkAdJpF4eGvExI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M7TgyvOq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719410009; c=relaxed/simple;
+	bh=A2o+l3NuRNw2a+iRKsLea/VZp78l6U646vGfevTxLB8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IIbVa/FZY4Ur2AZMwUqog4vla/KmEG13ti35u+sE+7N+Z2I1WOQEMrPEOD9SOFVQuSJzYJDPWQ5Wiui1sWIvOf/kuJyBNrDukyKwlqRTkaieqrCp+xxVDTeRvFj5A1ckAdAMW9sOrD26+JTWsq3joSQGB3UhsS2Rt9KPHNxQRPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hfyZaCQu; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M7TgyvOq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F55BC4AF07;
-	Wed, 26 Jun 2024 13:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719409635;
-	bh=coSvairEXZ/UoBj93IfzT1BpGcOK/jnPrORkflCNJ84=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=M7TgyvOqh+G8JBHZHxNOGoIIsb0OsioBMMg+gOn3TNV2PLOLkJ4AFX/7QXQhW2132
-	 XYagHiEHIDF3QcAPTMADf7q5VPdhGTK7+owjeNWkzBJ1cXERnJ/1h1iykUccDUp4PE
-	 kuD1m9RrzITqb69QiZOIi/HxAY299c+0rPcgtu0J3NNyRRKFeEt6ndbKgLrReKiIKC
-	 wguo+WVHSMkOPKQiq7dWMNaB4ardr+pcIv2Rpi4IsAoT+ONvZ+YBv5mbuX82d2JhHw
-	 KXt2QnVFzV2gGVnLVKrRtAA2ERheboepDnc0EgKd8WTobmRObueqSzVRoAdBmWSofZ
-	 hIdu+Z7T9P6Fg==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 26 Jun 2024 15:46:34 +0200
-Subject: [PATCH HID v2 13/13] selftests/hid: add an infinite loop test for
- hid_bpf_try_input_report
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hfyZaCQu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719410006;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6L/CySx21VlY9lkKLs/UvRv4ham7l6zFWPjNK0vJEd8=;
+	b=hfyZaCQu31XxNRucNB75BPsNsZ4pHuvL1XPzD+fAxuG4XHG0kgjGH0h3JcVosqderAyiiP
+	FTbwhijcSTKJP76Yg8HDJpAoAhvLb6v21Pvo+N3NxqUD4n04FmN9KKBPv6hcP+qXZJwD8t
+	hWToBiERPMkhZGzyNzJL5RePO3VEDbQ=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-574-D1OoD8lSNdW3Vw3LFm7U4Q-1; Wed, 26 Jun 2024 09:53:25 -0400
+X-MC-Unique: D1OoD8lSNdW3Vw3LFm7U4Q-1
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4401522c6bdso16948111cf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2024 06:53:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719410005; x=1720014805;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6L/CySx21VlY9lkKLs/UvRv4ham7l6zFWPjNK0vJEd8=;
+        b=OBwjaPiMIGyH5r27iTIaHkOMoxC/seS5pTocbbwDiswl007Lk0KBe6z+MLjZoG2GR0
+         V9UsWLZ7JjRidTDh32cXv8ns9Mj3Ybh13ZMDYLXhP59G5qjopTEU7KMel3aP+9NXft5M
+         HHupHJ48LWXY8l9A85zvdUZ54OGR6MQLajnN2n6h5ijuFrIlm9ZZKM+Rr1oZxRWvyQG8
+         4ldii10cFEip9rI/YZl3krlw4K3WCB0XltrhS19T+ZxCgolTmMJ6Mg+y0WdBqBBbsYN3
+         7QnH3I1hravOWx7QCIh35vPo5+6/ReL4rlMDNy1Pud/dc4oyECNkAin5l2SiwIWgLykD
+         sHTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUpFNySO5B3tZMi9qhpMeJefUjEavtZRxjYg016kVKkpW5i3l3+QwIKMYmciMARahPp11Emo8gBAS2zIpurBd5bxsC4TuWnGNUYqOBr9Frw
+X-Gm-Message-State: AOJu0YxiBirNFq8I2zok75w8eBqk649uCVGWE7I0nuYpSQVxHytXf/AS
+	kP9g/CgjWvqRf+DOfyRCGfbUIpjlOC2jyAcQut4Nk6yiiLBxpSx/WpmcYlJ3EBOv7pLQLcr3Vka
+	ArEtX02X3znX5xF67nPec0do1kkGUHjxl4EM7O2alFgupmDCz57NPbZGzHRY8/f301g==
+X-Received: by 2002:a05:620a:29c5:b0:79d:53d0:95af with SMTP id af79cd13be357-79d53d098f6mr146859685a.2.1719410004607;
+        Wed, 26 Jun 2024 06:53:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGfg5gp8Vxw/erpGLqvLxIwWQrtznQgrqGbKZUsqsdxrw8Gui1u4uAwFXpio7u+OhtBKCeLlg==
+X-Received: by 2002:a05:620a:29c5:b0:79d:53d0:95af with SMTP id af79cd13be357-79d53d098f6mr146856185a.2.1719410003910;
+        Wed, 26 Jun 2024 06:53:23 -0700 (PDT)
+Received: from x1n (pool-99-254-121-117.cpe.net.cable.rogers.com. [99.254.121.117])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79c082c7433sm137223985a.53.2024.06.26.06.53.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jun 2024 06:53:23 -0700 (PDT)
+Date: Wed, 26 Jun 2024 09:53:20 -0400
+From: Peter Xu <peterx@redhat.com>
+To: Audra Mitchell <audra@redhat.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+	aarcange@redhat.com, akpm@linux-foundation.org,
+	rppt@linux.vnet.ibm.com, shli@fb.com, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, raquini@redhat.com,
+	linux-mm@kvack.org
+Subject: Re: [PATCH v3 3/3] Turn off test_uffdio_wp if
+ CONFIG_PTE_MARKER_UFFD_WP is not configured.
+Message-ID: <ZnwdUJmo7-7tjcB3@x1n>
+References: <20240626130513.120193-1-audra@redhat.com>
+ <20240626130513.120193-3-audra@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240626-hid_hw_req_bpf-v2-13-cfd60fb6c79f@kernel.org>
-References: <20240626-hid_hw_req_bpf-v2-0-cfd60fb6c79f@kernel.org>
-In-Reply-To: <20240626-hid_hw_req_bpf-v2-0-cfd60fb6c79f@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-doc@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1719409602; l=3521;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=coSvairEXZ/UoBj93IfzT1BpGcOK/jnPrORkflCNJ84=;
- b=y3R38nLnIx95jobpAICJH1TPSo58IZ3qiL3BnUPgxNlYvk6mTJ8bIWv2euPxrMe7T3qg3vOGa
- jOkMsJiAcShAU0XVpvS0VDk6ymvazKa9awoDZgpz/V6UVXz4BJjAvYA
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240626130513.120193-3-audra@redhat.com>
 
-We don't want this call to allow an infinite loop in HID-BPF, so let's
-have some tests.
+On Wed, Jun 26, 2024 at 09:05:13AM -0400, Audra Mitchell wrote:
+> If CONFIG_PTE_MARKER_UFFD_WP is disabled, then we turn off three features
+> in userfaultfd_api (UFFD_FEATURE_WP_HUGETLBFS_SHMEM,
+> UFFD_FEATURE_WP_UNPOPULATED, and UFFD_FEATURE_WP_ASYNC). Currently this
+> test always will call uffdio_regsiter with the flag
+> UFFDIO_REGISTER_MODE_WP. However, the kernel ensures in vma_can_userfault
+> that if the feature UFFD_FEATURE_WP_HUGETLBFS_SHMEM is disabled, only
+> allow the VM_UFFD_WP on anonymous vmas, meaning our call to
+> uffdio_regsiter will fail. We still want to be able to run the test even
+> if we have CONFIG_PTE_MARKER_UFFD_WP disabled, so check to see if the
+> feature UFFD_FEATURE_WP_HUGETLBFS_SHMEM has been turned off in the test
+> and if so, disable us from calling uffdio_regsiter with the flag
+> UFFDIO_REGISTER_MODE_WP.
+> 
+> Signed-off-by: Audra Mitchell <audra@redhat.com>
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+Reviewed-by: Peter Xu <peterx@redhat.com>
 
----
-
-no changes in v2
----
- tools/testing/selftests/hid/hid_bpf.c   | 41 +++++++++++++++++++++++++++++++++
- tools/testing/selftests/hid/progs/hid.c | 37 +++++++++++++++++++++++++++++
- 2 files changed, 78 insertions(+)
-
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 36bbad8e0f9f..dc0408a831d0 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -1204,6 +1204,47 @@ TEST_F(hid_bpf, test_multiply_events)
- 	ASSERT_EQ(buf[1], 52);
- }
- 
-+/*
-+ * Call hid_bpf_input_report against the given uhid device,
-+ * check that the program is not making infinite loops.
-+ */
-+TEST_F(hid_bpf, test_hid_infinite_loop_input_report_call)
-+{
-+	const struct test_program progs[] = {
-+		{ .name = "hid_test_infinite_loop_input_report" },
-+	};
-+	__u8 buf[10] = {0};
-+	int err;
-+
-+	LOAD_PROGRAMS(progs);
-+
-+	/* emit hid_hw_output_report from hidraw */
-+	buf[0] = 1; /* report ID */
-+	buf[1] = 2;
-+	buf[2] = 42;
-+
-+	uhid_send_event(_metadata, self->uhid_fd, buf, 6);
-+
-+	/* read the data from hidraw */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(self->hidraw_fd, buf, sizeof(buf));
-+	ASSERT_EQ(err, 6) TH_LOG("read_hidraw");
-+	ASSERT_EQ(buf[0], 1);
-+	ASSERT_EQ(buf[1], 3);
-+
-+	/* read the data from hidraw: hid_bpf_try_input_report should work exactly one time */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(self->hidraw_fd, buf, sizeof(buf));
-+	ASSERT_EQ(err, 6) TH_LOG("read_hidraw");
-+	ASSERT_EQ(buf[0], 1);
-+	ASSERT_EQ(buf[1], 4);
-+
-+	/* read the data from hidraw: there should be none */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(self->hidraw_fd, buf, sizeof(buf));
-+	ASSERT_EQ(err, -1) TH_LOG("read_hidraw");
-+}
-+
- /*
-  * Attach hid_insert{0,1,2} to the given uhid device,
-  * retrieve and open the matching hidraw node,
-diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
-index 46feeb91d1d5..ee9bbbcf751b 100644
---- a/tools/testing/selftests/hid/progs/hid.c
-+++ b/tools/testing/selftests/hid/progs/hid.c
-@@ -561,3 +561,40 @@ SEC(".struct_ops.link")
- struct hid_bpf_ops test_multiply_events = {
- 	.hid_device_event = (void *)hid_test_multiply_events,
- };
-+
-+SEC("?struct_ops/hid_device_event")
-+int BPF_PROG(hid_test_infinite_loop_input_report, struct hid_bpf_ctx *hctx,
-+	     enum hid_report_type report_type, __u64 source)
-+{
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 6 /* size */);
-+	__u8 buf[6];
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/*
-+	 * we have to use an intermediate buffer as hid_bpf_input_report
-+	 * will memset data to \0
-+	 */
-+	__builtin_memcpy(buf, data, sizeof(buf));
-+
-+	/* always forward the request as-is to the device, hid-bpf should prevent
-+	 * infinite loops.
-+	 * the return value is ignored so the event is passing to userspace.
-+	 */
-+
-+	hid_bpf_try_input_report(hctx, report_type, buf, sizeof(buf));
-+
-+	/* each time we process the event, we increment by one data[1]:
-+	 * after each successful call to hid_bpf_try_input_report, buf
-+	 * has been memcopied into data by the kernel.
-+	 */
-+	data[1] += 1;
-+
-+	return 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct hid_bpf_ops test_infinite_loop_input_report = {
-+	.hid_device_event = (void *)hid_test_infinite_loop_input_report,
-+};
+> ---
+>  tools/testing/selftests/mm/uffd-stress.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+> index b9b6d858eab8..3266ae885f75 100644
+> --- a/tools/testing/selftests/mm/uffd-stress.c
+> +++ b/tools/testing/selftests/mm/uffd-stress.c
+> @@ -419,6 +419,9 @@ static void parse_test_type_arg(const char *raw_type)
+>  	test_uffdio_wp = test_uffdio_wp &&
+>  		(features & UFFD_FEATURE_PAGEFAULT_FLAG_WP);
+>  
+> +	if (test_type != TEST_ANON && !(features & UFFD_FEATURE_WP_HUGETLBFS_SHMEM))
+> +		test_uffdio_wp = false;
+> +
+>  	close(uffd);
+>  	uffd = -1;
+>  }
+> -- 
+> 2.44.0
+> 
 
 -- 
-2.44.0
+Peter Xu
 
