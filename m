@@ -1,109 +1,202 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C06E12CD8B;
-	Tue,  2 Jul 2024 10:18:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F83A1586D5;
+	Tue,  2 Jul 2024 10:19:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719915496; cv=none; b=uYH7QIUDZlz+Sn4uz2b2655pC6fa1OEhI1gdVyH9HSdN997PItIt05PJbp+tRZKr1BYXeYf6kM2lg2jRrdFp11Ove9Gjtj9LjFCiXrjPku3udQvrZeyB0EL93iFo9I9h5Oa8SlUj4+UAyU0jzxh/HYPQJmT/zA0mPmNGlU0FmvI=
+	t=1719915575; cv=none; b=ZHsCw2kHaqI9nBFuzRFpC25sbY2UDBsFRzZfnJOgZeKQ6JyfDeM8rX9Slevsal7u2ftYbJPK9xdaubgWtjZ1OcmJ/vlZsTyvhNYZ5YOXgqqdQDV1r68LFAEs8isj89T3UNensb1+W2oF/M/pTT85upcjqFYnRTRs2NOBADysYHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719915496; c=relaxed/simple;
-	bh=BkT4rWQ3OfnksBriWFGbdeSNo8U96033Ydeq12RMW2A=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=E9CBV8yS6v4rxnqXVeUs+DSXNpszEwiRamT+HH7FgNievBa9I4mfHsZ+Hz7z/RofI2r99QFmIj3xpNJ8j6c0Gku/ODu58CM7G1/6/RJfMv/6hxOasGDB+DND702HgCnDzTKSyN1RwR5/W8BqvNWzj5hnrptQ42C/cQzsrBISWHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GNR+DIhe; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GNR+DIhe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1719915493;
-	bh=BkT4rWQ3OfnksBriWFGbdeSNo8U96033Ydeq12RMW2A=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=GNR+DIhea/jWN8FskA19elRIHHjiMWmoKv2chfAkQ9LtF8SzDMI8Fl4vefnD8Gsne
-	 loNCWJ/+iLjARnyOuR0eIGjJqgaWOWk/qS5cTpIzjjdIRj2XuE9KbUPFM31HCEn+H9
-	 uKYXGnhTQrJYjtGwYXOgXhf6mSry5Ktg+N+SU4b1Cwc9vx6qf/YbmIFdoDQvpfyUqJ
-	 khor/Iz2XJG0FbfoZ8Hc179ikdashKh80XAUhgTInWt17STlyqgvZdnJsMrxS5DsWC
-	 OyDn/4Qy3YX0SoM/MRAwMKBVGBOHiUGVqm7KrRbG3HKd7PcinFGtMFXBl0UPGkZzt4
-	 Y5vKb8o9pe45A==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C379C3782194;
-	Tue,  2 Jul 2024 10:18:04 +0000 (UTC)
-Message-ID: <23db41bb-1f3b-4b7b-95ac-960b8775a062@collabora.com>
-Date: Tue, 2 Jul 2024 15:17:59 +0500
+	s=arc-20240116; t=1719915575; c=relaxed/simple;
+	bh=0ajCnf3SAOP6eQuHMw4tQTjVDmgvoTdZApQsPOmIy/8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fadEMSV94xSd2sD7lNbGAuWTP+ddghjaeSEzGEewsoeyNrt1cPGlpXT1rHe7zF1ZDFlNa5YRpEVh/CYNW19xW2S28JxGuaTsU44+IOhM1UwMur8OT4VfOtCrI7iJXX5wajbKrwovAUsIez2NErTEqGsQhgq5TkNlO0YUw66F1ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
+Received: from Atcsqr.andestech.com (localhost [127.0.0.2] (may be forged))
+	by Atcsqr.andestech.com with ESMTP id 4629lobI053789;
+	Tue, 2 Jul 2024 17:47:50 +0800 (+08)
+	(envelope-from peterlin@andestech.com)
+Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
+	by Atcsqr.andestech.com with ESMTPS id 4629kkj0053530
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+	Tue, 2 Jul 2024 17:46:46 +0800 (+08)
+	(envelope-from peterlin@andestech.com)
+Received: from APC323 (10.0.12.98) by ATCPCS34.andestech.com (10.0.1.134) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 2 Jul
+ 2024 17:46:46 +0800
+Date: Tue, 2 Jul 2024 17:46:42 +0800
+From: Yu-Chien Peter Lin <peterlin@andestech.com>
+To: Conor Dooley <conor@kernel.org>
+CC: Samuel Holland <samuel.holland@sifive.com>,
+        Charlie Jenkins
+	<charlie@rivosinc.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
+        <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt
+	<palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Jisheng Zhang
+	<jszhang@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec
+	<jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jonathan
+ Corbet <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>,
+        Guo Ren
+	<guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
+        Andy Chiu
+	<andy.chiu@sifive.com>, Jessica Clarke <jrtc27@jrtc27.com>,
+        <tim609@andestech.com>, <dminus@andestech.com>,
+        <ycliang@andestech.com>
+Subject: Re: [PATCH v3 03/13] riscv: dts: allwinner: Add xtheadvector to the
+ D1/D1s devicetree
+Message-ID: <ZoPMEaq8wKzXhFuA@APC323>
+References: <20240619-xtheadvector-v3-0-bff39eb9668e@rivosinc.com>
+ <20240619-xtheadvector-v3-3-bff39eb9668e@rivosinc.com>
+ <0cc13581-5cc4-4a25-a943-7a896f42da4c@sifive.com>
+ <20240701-prancing-outpost-3cbce791c554@spud>
+ <7ab7d629-6993-4cad-b5b7-62bddfc74a49@sifive.com>
+ <20240701-pyromania-spinster-709a6c8cc460@spud>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH 0/4] selftest: x86: conform tests to TAP format output
-To: Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org
-References: <20240414131807.2253344-1-usama.anjum@collabora.com>
- <dd277b6b-b28e-4860-b285-e89fd5fd3d41@collabora.com>
- <90dc0dfc-4c67-4ea1-b705-0585d6e2ec47@linuxfoundation.org>
- <386da8e3-1559-4ec2-9a66-f5f3f6405a2b@collabora.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <386da8e3-1559-4ec2-9a66-f5f3f6405a2b@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240701-pyromania-spinster-709a6c8cc460@spud>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
+ ATCPCS34.andestech.com (10.0.1.134)
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:Atcsqr.andestech.com 4629lobI053789
 
-On 6/10/24 10:19 AM, Muhammad Usama Anjum wrote:
-> Adding Borislav, Dave and x86 mailing list:
-> 	Please review the series.
-Kind reminder
+Hi Conor,
 
+On Mon, Jul 01, 2024 at 05:31:01PM +0100, Conor Dooley wrote:
+> [EXTERNAL MAIL]
+
+> Date: Mon, 1 Jul 2024 17:31:01 +0100
+> From: Conor Dooley <conor@kernel.org>
+> To: Samuel Holland <samuel.holland@sifive.com>
+> Cc: Charlie Jenkins <charlie@rivosinc.com>,
+>  linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+>  linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+>  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, Conor Dooley
+>  <conor.dooley@microchip.com>, Rob Herring <robh@kernel.org>, Krzysztof
+>  Kozlowski <krzk+dt@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+>  Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+>  Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej
+>  Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
+>  Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Guo Ren
+>  <guoren@kernel.org>, Evan Green <evan@rivosinc.com>, Andy Chiu
+>  <andy.chiu@sifive.com>, Jessica Clarke <jrtc27@jrtc27.com>,
+>  peterlin@andestech.com
+> Subject: Re: [PATCH v3 03/13] riscv: dts: allwinner: Add xtheadvector to
+>  the D1/D1s devicetree
 > 
-> On 6/8/24 1:52 AM, Shuah Khan wrote:
->> On 5/27/24 23:04, Muhammad Usama Anjum wrote:
->>> Kind reminder
->>>
->>> On 4/14/24 6:18 PM, Muhammad Usama Anjum wrote:
->>>> In this series, 4 tests are being conformed to TAP.
->>>>
->>>> Muhammad Usama Anjum (4):
->>>>    selftests: x86: check_initial_reg_state: conform test to TAP format
->>>>      output
->>>>    selftests: x86: corrupt_xstate_header: conform test to TAP format
->>>>      output
->>>>    selftests: fsgsbase_restore: conform test to TAP format output
->>>>    selftests: entry_from_vm86: conform test to TAP format output
->>>>
->>>>   .../selftests/x86/check_initial_reg_state.c   |  24 ++--
->>>>   .../selftests/x86/corrupt_xstate_header.c     |  30 +++--
->>>>   tools/testing/selftests/x86/entry_from_vm86.c | 109 ++++++++--------
->>>>   .../testing/selftests/x86/fsgsbase_restore.c  | 117 +++++++++---------
->>>>   4 files changed, 139 insertions(+), 141 deletions(-)
->>>>
->>>
->>
->> These patches usually go through x86 repo to avoid merge conflicts.
->>
->> I need ack from x86 maintainers to take these. I don't see x86 list
->> cc'ed.
->>
->> Please make sure to include everybody on these threads to get quicker
->> response.
-> It seems like selftests/x86 path is missing from Maintainers file and it
-> causes these issues. I'll look at fixing it.
+> On Mon, Jul 01, 2024 at 11:11:55AM -0500, Samuel Holland wrote:
+> > Hi Conor, Charlie,
+> > 
+> > On 2024-07-01 11:07 AM, Conor Dooley wrote:
+> > > On Mon, Jul 01, 2024 at 10:27:01AM -0500, Samuel Holland wrote:
+> > >> On 2024-06-19 6:57 PM, Charlie Jenkins wrote:
+> > >>> The D1/D1s SoCs support xtheadvector so it can be included in the
+> > >>> devicetree. Also include vlenb for the cpu.
+> > >>>
+> > >>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > >>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > >>> ---
+> > >>>  arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 3 ++-
+> > >>
+> > >> The other C906/C910/C920-based SoCs need devicetree updates as well, although
+> > >> they don't necessarily need to be part of this series:
+> > >>
+> > >>  - sophgo/cv18xx.dtsi
+> > >>  - sophgo/sg2042-cpus.dtsi
+> > >>  - thead/th1520.dtsi
+> > > 
+> > > Yeah, I think I pointed that out before with the same "escape hatch" of
+> > > it not needing to be in the same series.
+> > > 
+> > >>
+> > >>>  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >>>
+> > >>> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > >>> index 64c3c2e6cbe0..6367112e614a 100644
+> > >>> --- a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > >>> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > >>> @@ -27,7 +27,8 @@ cpu0: cpu@0 {
+> > >>>  			riscv,isa = "rv64imafdc";
+> > >>
+> > >> The ISA string should be updated to keep it in sync with riscv,isa-extensions.
+> > > 
+> > > This probably looks like this cos I said that the kernel shouldn't parse
+> > > vendor extensions from "riscv,isa". My rationale was that we have
+> > > basically no control of what a vendor extension means in riscv,isa so 
+> > > we shouldn't parse them from it (so marginally worse than standard
+> > > extensions, where it means what the spec says except when it doesn't).
+> > > 
+> > > Given how we implement the parsing, it also meant we weren't implying
+> > > meanings for vendor extensions ACPI-land, where we also can't ensure the
+> > > meanings or that they remain stable. That change is in a different
+> > > series:
+> > > https://patchwork.kernel.org/project/linux-riscv/patch/20240609-support_vendor_extensions-v2-1-9a43f1fdcbb9@rivosinc.com/
+> > > 
+> > > Although now that I think about it, this might break xandespmu... I
+> > > dunno if the Andes guys switched over to using the new property outside
+> > > of the single dts in the kernel tree using their SoC. We could
+> > > potentially special-case that extension if they haven't - but my
+> > > position on this mostly is that if you want to use vendor extensions you
+> > > should not be using riscv,isa (even if the regex doesn't complain if you
+> > > add them). I'd like to leave the code in the other patch as-is if we can
+> > > help it.
+> > > 
+> > > I added Yu Chien Peter Lin here, maybe they can let us know what they're
+> > > doing.
+> > 
+> > OK, that makes sense to me. Then please ignore my original comment.
 > 
->>
->> thanks,
->> -- Shuah
->>
->>
+> Should the xandespmu thing be an issue, I'd suggest we just do something
+> like the following, in place of the new switch arm added by Charlie:
+> 
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index ec4bff7a827c..bb99b4055ec2 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -628,6 +628,17 @@ static void __init riscv_parse_isa_string(const char *isa, unsigned long *bitmap
+>  		if (unlikely(ext_err))
+>  			continue;
+>  
+> +		if (*ext == 'x' && acpi_disabled) {
+> +			/*
+> +			 * xandespmu predates this "rule", so special case it for
+> +			 * hysterical raisins
+> +			 */
+> +			if (strncasecmp(ext, "xandespmu", ext_end - ext)) {
+> +				pr_warn_once("Vendor extensions are ignored in riscv,isa. Use riscv,isa-extensions instead.");
+> +				break;
+> +			}
+> +		}
+> +
+>  		match_isa_ext(ext, ext_end, bitmap);
+>  	}
+>  }
 > 
 
--- 
-BR,
-Muhammad Usama Anjum
+Thanks for the hands-up!
+We don't use the deprecated riscv,isa to specify xandespmu, so no
+need to address this special case.
+
+Regards,
+Peter Lin
