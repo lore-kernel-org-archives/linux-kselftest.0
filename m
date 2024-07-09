@@ -1,198 +1,262 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8FCF15BB;
-	Tue,  9 Jul 2024 00:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB84924B4A;
+	Tue,  9 Jul 2024 01:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720485184; cv=none; b=e8N7XRYHWchO5a6avN13/FxwtLDvELtcOqfjEgiwSBUZaGr74ZM3nFrUfH6gWBe2sVbHap8n6UuectW3R6diKlrKMp68XC+JUfH+kSZ9E5e3DE4oW1hh1u8VNzIkyrPGGegpck+r02lOuk4t257hc0sTF6KsDd6cSj0UJFjqMs0=
+	t=1720486814; cv=none; b=ZIYyVTlw2zxTxrXr6BXN5pjPcQUuW6MZL8N5rFyXLPWRtj6qaZUwz/UgZuIY3NqTFQOMcHBT+4GXuhWTCGRi6dUFcYPiOh7OjQuVP7V9F8XIdGxjBooBtweTj7evIZmqGVv+OoMn0N6xxeLRV2J9yqd7JI3eLv7BQIyMgT+P7C8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720485184; c=relaxed/simple;
-	bh=k3/zS10JtPOCVxvS3f37FDn+IqhfPWXVJ3N/zYrYDJ0=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=THc5Dqzai8yH825L6ei5UNF2qK/Lnig20QMIyBk8i1mBrJ1JEIsCnwv4VkgNRNOEqBuTzXXxw5OdKGn8hFT6Z7T9Xa+EKpbUyXu0Te+vFkB7HqvmvRHc2wP6ZQ75aOCPWZkTNLIF5S/2I17OpzwBJ3YZ+L7lAtYA+tafqZrYskY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HuaLewx/; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HuaLewx/"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-6eab07ae82bso2348357a12.3;
-        Mon, 08 Jul 2024 17:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720485182; x=1721089982; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gbmTmpGl9LGWIehww80/zM7iEVzfhtY6yCT6eHjeVS8=;
-        b=HuaLewx/eQSod4JtyPVha+62O+HQ2sS4CF1SEKz6LQrfI5GbNGIHyeAb/gPxR2fJ1L
-         tbDcq8Zkbxb6G1OfstfyvO1QEAj9MEzwpcbY3m5zKydrncXCAW2kz4GOOEyOivc9SKH3
-         4x7nrzMF3wlyHBkMmoaRtRMdbl4+LsDvn3SCNngMXNJPBuxlprurI3ll510qGCwGijnW
-         juDjrvQSoluR0r+swHm7h9rM/DHhUvqqEdFrsILCr5JRt+fpAP7GPyfc2iBh99FmaGzi
-         Q2kQAvvikKm+5PyzfSjbFxNpqDUigu2WZMPX7lQnPG1Al6G+P+GTG4V4U62GCmcB8KgN
-         gAnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720485182; x=1721089982;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gbmTmpGl9LGWIehww80/zM7iEVzfhtY6yCT6eHjeVS8=;
-        b=HuqurRBz/0UZk4klxir+9wPzj3FKfotgKbQb0Z1N+eNotVZhFp/n9I/PWVgQu/5b05
-         29RMQstrpfxOQLteM/aEy2NZDZNYTILQfeJMU/fHSGBzdgggXY5uNSozR1d24Dr4+O03
-         9cMHm+/XYsXHt4VMNdhfLk6LzlTrgcGbh6XGa8Jpt1/hgU0uKYcSd2KuAvOLYyO7zbeW
-         8njrEHvBDm3fZ7hqdKJHwd4n/WHOXio4HOfUXOrwBLh48zddKwy+PeLon7/GyY30naRv
-         mBuNVtxW7PoBkdwxd8tVkK9iVLoeaaBYRL7PBW/y0ytXUkaUI0YZsk5gDIg+zFUcNjPJ
-         Gu8A==
-X-Forwarded-Encrypted: i=1; AJvYcCUc26Cy+pNj+h1ROzG3ue4SDHgmyVIALl5n8kGxj9vqxVque5xIQB27vZf0otYjG9dotT/CNkWVZyHZXzBOREF+uCgnMEl4smov9MCzZMDkQkqylEEb3lWT7di5o1qVs4YKgulS07napQzkY7ul5/TotgtooBukC4zSsmMt
-X-Gm-Message-State: AOJu0YzyA6+65eLgjFub7L4RtsIy748kyo5inZiJPyaQQEG3UGOkDkOq
-	x4agzlPeKr2PqQGZrt3EZxzRCi3/qL3vSoxHTGP60u036XR+b5dB
-X-Google-Smtp-Source: AGHT+IERW/eDq4h5+NOdDSAyiBCa54iY/xmob/DozhAnYntCHQ3fG5yPiIkvES8ODeOBUw9oOuq4LA==
-X-Received: by 2002:a05:6a20:918d:b0:1be:c5ab:7388 with SMTP id adf61e73a8af0-1c298220a18mr1216126637.25.1720485181955;
-        Mon, 08 Jul 2024 17:33:01 -0700 (PDT)
-Received: from localhost ([98.97.32.172])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6ac7921sm4363165ad.232.2024.07.08.17.33.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jul 2024 17:33:01 -0700 (PDT)
-Date: Mon, 08 Jul 2024 17:33:00 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Geliang Tang <geliang@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>, 
- David Ahern <dsahern@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Mykola Lysenko <mykolal@fb.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, 
- Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Mykyta Yatsenko <yatsenko@meta.com>, 
- Miao Xu <miaxu@meta.com>, 
- Yuran Pereira <yuran.pereira@hotmail.com>, 
- Huacai Chen <chenhuacai@kernel.org>, 
- Tiezhu Yang <yangtiezhu@loongson.cn>, 
- "D . Wythe" <alibuda@linux.alibaba.com>, 
- netdev@vger.kernel.org, 
- bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Message-ID: <668c853cc8820_d7720867@john.notmuch>
-In-Reply-To: <e3a16eacdc6740658ee02a33489b1b9d4912f378.1719992715.git.tanggeliang@kylinos.cn>
-References: <e3a16eacdc6740658ee02a33489b1b9d4912f378.1719992715.git.tanggeliang@kylinos.cn>
-Subject: RE: [PATCH net v5] skmsg: skip zero length skb in sk_msg_recvmsg
+	s=arc-20240116; t=1720486814; c=relaxed/simple;
+	bh=f8u+3jaw5EtE3CvyeAy6cdqI83Y22LA9WRWr9WpaZis=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CA2L/oodORMgUKlyd1rq6VrBn5ZxwVtWMIoHxvDOyNbjUqj9CrHu6HSJUyEZv3f0pleIKZgJ8iX4GEc6IUnSRr+8r8K/TOpH6z1riNr2X08xwahXjNOD3MPmgebpkQ9sAebKsyqeiKjBQKzJ1Zpw5K5Ct6Re4WJU8ujKYxxLqVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4WJ2bM4G4yz1T5q7;
+	Tue,  9 Jul 2024 08:55:27 +0800 (CST)
+Received: from kwepemd200013.china.huawei.com (unknown [7.221.188.133])
+	by mail.maildlp.com (Postfix) with ESMTPS id 4173F1402E1;
+	Tue,  9 Jul 2024 09:00:08 +0800 (CST)
+Received: from huawei.com (10.67.174.28) by kwepemd200013.china.huawei.com
+ (7.221.188.133) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Tue, 9 Jul
+ 2024 09:00:07 +0800
+From: Liao Chang <liaochang1@huawei.com>
+To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+	<namhyung@kernel.org>, <mark.rutland@arm.com>,
+	<alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+	<irogers@google.com>, <adrian.hunter@intel.com>, <kan.liang@linux.intel.com>,
+	<ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+	<martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+	<sdf@fomichev.me>, <haoluo@google.com>, <mykolal@fb.com>, <shuah@kernel.org>,
+	<liaochang1@huawei.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH 2/2] selftests/bpf: Add uretprobe test for return_instance management
+Date: Tue, 9 Jul 2024 00:51:42 +0000
+Message-ID: <20240709005142.4044530-3-liaochang1@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240709005142.4044530-1-liaochang1@huawei.com>
+References: <20240709005142.4044530-1-liaochang1@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemd200013.china.huawei.com (7.221.188.133)
 
-Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> Run this BPF selftests (./test_progs -t sockmap_basic) on a Loongarch
-> platform, a kernel panic occurs:
-> 
-> '''
-> Oops[#1]:
-> CPU: 22 PID: 2824 Comm: test_progs Tainted: G           OE  6.10.0-rc2+ #18
-> Hardware name: LOONGSON Dabieshan/Loongson-TC542F0, BIOS Loongson-UDK2018
->    ... ...
->    ra: 90000000048bf6c0 sk_msg_recvmsg+0x120/0x560
->   ERA: 9000000004162774 copy_page_to_iter+0x74/0x1c0
->  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
->  PRMD: 0000000c (PPLV0 +PIE +PWE)
->  EUEN: 00000007 (+FPE +SXE +ASXE -BTE)
->  ECFG: 00071c1d (LIE=0,2-4,10-12 VS=7)
-> ESTAT: 00010000 [PIL] (IS= ECode=1 EsubCode=0)
->  BADV: 0000000000000040
->  PRID: 0014c011 (Loongson-64bit, Loongson-3C5000)
-> Modules linked in: bpf_testmod(OE) xt_CHECKSUM xt_MASQUERADE xt_conntrack
-> Process test_progs (pid: 2824, threadinfo=0000000000863a31, task=...)
-> Stack : ...
->         ...
-> Call Trace:
-> [<9000000004162774>] copy_page_to_iter+0x74/0x1c0
-> [<90000000048bf6c0>] sk_msg_recvmsg+0x120/0x560
-> [<90000000049f2b90>] tcp_bpf_recvmsg_parser+0x170/0x4e0
-> [<90000000049aae34>] inet_recvmsg+0x54/0x100
-> [<900000000481ad5c>] sock_recvmsg+0x7c/0xe0
-> [<900000000481e1a8>] __sys_recvfrom+0x108/0x1c0
-> [<900000000481e27c>] sys_recvfrom+0x1c/0x40
-> [<9000000004c076ec>] do_syscall+0x8c/0xc0
-> [<9000000003731da4>] handle_syscall+0xc4/0x160
-> 
-> Code: ...
-> 
-> ---[ end trace 0000000000000000 ]---
-> Kernel panic - not syncing: Fatal exception
-> Kernel relocated by 0x3510000
->  .text @ 0x9000000003710000
->  .data @ 0x9000000004d70000
->  .bss  @ 0x9000000006469400
-> ---[ end Kernel panic - not syncing: Fatal exception ]---
-> '''
-> 
-> This crash happens every time when running sockmap_skb_verdict_shutdown
-> subtest in sockmap_basic.
-> 
-> This crash is because a NULL pointer is passed to page_address() in
-> sk_msg_recvmsg(). Due to the difference implementations depending on the
-> architecture, page_address(NULL) will trigger a panic on Loongarch
-> platform but not on X86 platform. So this bug was hidden on X86 platform
-> for a while, but now it is exposed on Loongarch platform.
-> 
-> The root cause is a zero length skb (skb->len == 0) is put on the queue.
-> 
-> This zero length skb is a TCP FIN packet, which is sent by shutdown(),
-> invoked in test_sockmap_skb_verdict_shutdown():
-> 
-> 	shutdown(p1, SHUT_WR);
-> 
-> In this case, in sk_psock_skb_ingress_enqueue(), num_sge is zero, and no
-> page is put to this sge (see sg_set_page in sg_set_page), but this empty
-> sge is queued into ingress_msg list.
-> 
-> And in sk_msg_recvmsg(), this empty sge is used, and a NULL page is got by
-> sg_page(sge). Pass this NULL page to copy_page_to_iter(), which passes it
-> to kmap_local_page() and to page_address(), then kernel panics.
-> 
-> To solve this, we should skip this zero length skb. So in sk_msg_recvmsg(),
-> if copy is zero, that means it's a zero length skb, skip invoking
-> copy_page_to_iter(). We are using the EFAULT return triggered by
-> copy_page_to_iter to check for is_fin in tcp_bpf.c.
-> 
-> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-> Suggested-by: John Fastabend <john.fastabend@gmail.com>
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
-> v5:
->  - update v5 as John suggested.
->  - skmsg: skip zero length skb in sk_msg_recvmsg
-> 
-> v4:
->  - skmsg: skip empty sge in sk_msg_recvmsg
-> 
-> v3:
->  - skmsg: prevent empty ingress skb from enqueuing
->    
-> v2:
->  - skmsg: null check for sg_page in sk_msg_recvmsg
-> ---
->  net/core/skmsg.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+This patch add three testcases to verify the proper management of
+return_instance data by uretprobes:
 
-I don't have any better ideas so lets use this.
+- uretprobe_longjmp() verifies that longjmp() bypasses the uretprobe BPF
+  program attached to the exit of instrumented function.
 
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+- uretprobe_cleanup_return_instance() verifies that uretprobe reclaim
+  the return_instances data created before a longjmp(), which leads to
+  kernel recount the nested depth of instrumented function.
+
+- uretprobe_reach_nestedness_limit() confirms that the uretprobe doesn't
+  reclaim the return_instances data created before longjmp() and hijack
+  the return address of instrumented function upon the nestedness depth
+  reache the limits (64).
+
+Signed-off-by: Liao Chang <liaochang1@huawei.com>
+---
+ .../bpf/prog_tests/uretprobe_depth.c          | 150 ++++++++++++++++++
+ .../selftests/bpf/progs/uretprobe_depth.c     |  19 +++
+ 2 files changed, 169 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c
+ create mode 100644 tools/testing/selftests/bpf/progs/uretprobe_depth.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c b/tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c
+new file mode 100644
+index 000000000000..ba03b1868e37
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c
+@@ -0,0 +1,150 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++
++#include <unistd.h>
++#include <setjmp.h>
++#include <asm/ptrace.h>
++#include <linux/compiler.h>
++#include <linux/stringify.h>
++#include "uretprobe_depth.skel.h"
++
++#define RETVAL			0xFFFF
++#define JMPVAL			0x4B1D
++#define MAX_URETPROBE_DEPTH	64 // See include/linux/uprobes.h
++#define NR_OMITTED_URETPROBE	16
++static jmp_buf jmp;
++
++unsigned long __uretprobe_longjmp(int nest, int jmpval, int retval)
++{
++	if (nest) {
++		nest = ++retval < MAX_URETPROBE_DEPTH + NR_OMITTED_URETPROBE;
++		return __uretprobe_longjmp(nest, jmpval, retval);
++	}
++
++	if (jmpval == JMPVAL) {
++		longjmp(jmp, jmpval);
++		return 0;
++	} else
++		return retval;
++}
++
++static void uretprobe_longjmp(void)
++{
++	if (setjmp(jmp) == JMPVAL) {
++		__uretprobe_longjmp(0, 0, JMPVAL);
++		return;
++	}
++
++	__uretprobe_longjmp(0, JMPVAL, RETVAL);
++}
++
++static void uretprobe_cleanup_return_instances(void)
++{
++	if (setjmp(jmp) == JMPVAL) {
++		/*
++		 * Cleanup these return instance data created before longjmp
++		 * firstly. Then create 16 new return_instance data from here.
++		 */
++		__uretprobe_longjmp(1, 0, MAX_URETPROBE_DEPTH);
++		return;
++	}
++
++	/* Create 8 return_instance data from here. */
++	__uretprobe_longjmp(1, JMPVAL,
++			    MAX_URETPROBE_DEPTH + NR_OMITTED_URETPROBE / 2);
++}
++
++static void uretprobe_reach_nestedness_limit(void)
++{
++	if (setjmp(jmp) == JMPVAL) {
++		/*
++		 * Due to uretprobe reach to the nestedness limit, it doesn't
++		 * cleanup the return instance created before longjmp.
++		 */
++		__uretprobe_longjmp(1, 0, MAX_URETPROBE_DEPTH);
++		return;
++	}
++
++	/* Create 64 return_instance from here. */
++	__uretprobe_longjmp(1, JMPVAL, 0);
++}
++
++static void test_uretprobe_longjmp(void)
++{
++	struct uretprobe_depth *skel = NULL;
++	int err;
++
++	skel = uretprobe_depth__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "uretprobe_depth__open_and_load"))
++		goto cleanup;
++
++	err = uretprobe_depth__attach(skel);
++	if (!ASSERT_OK(err, "uretprobe_depth__attach"))
++		goto cleanup;
++
++	skel->bss->retval = -1;
++
++	uretprobe_longjmp();
++
++	ASSERT_EQ(skel->bss->retval, JMPVAL, "return value");
++
++cleanup:
++	uretprobe_depth__destroy(skel);
++}
++
++static void test_uretprobe_reach_nestedness_limit(void)
++{
++	struct uretprobe_depth *skel = NULL;
++	int err;
++
++	skel = uretprobe_depth__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "uretprobe_depth__open_and_load"))
++		goto cleanup;
++
++	err = uretprobe_depth__attach(skel);
++	if (!ASSERT_OK(err, "uretprobe_depth__attach"))
++		goto cleanup;
++
++	skel->bss->depth = 0;
++
++	uretprobe_reach_nestedness_limit();
++
++	ASSERT_EQ(skel->bss->depth, 0, "nest depth");
++
++cleanup:
++	uretprobe_depth__destroy(skel);
++}
++
++static void test_uretprobe_cleanup_return_instances(void)
++{
++	struct uretprobe_depth *skel = NULL;
++	int err;
++
++	skel = uretprobe_depth__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "uretprobe_depth__open_and_load"))
++		goto cleanup;
++
++	err = uretprobe_depth__attach(skel);
++	if (!ASSERT_OK(err, "uretprobe_depth__attach"))
++		goto cleanup;
++
++	skel->bss->depth = 0;
++
++	uretprobe_cleanup_return_instances();
++
++	ASSERT_EQ(skel->bss->depth, NR_OMITTED_URETPROBE + 1, "nest depth");
++
++cleanup:
++	uretprobe_depth__destroy(skel);
++}
++
++void test_uretprobe_return_instance(void)
++{
++	if (test__start_subtest("uretprobe_longjmp"))
++		test_uretprobe_longjmp();
++	if (test__start_subtest("uretprobe_cleanup_return_instances"))
++		test_uretprobe_cleanup_return_instances();
++	if (test__start_subtest("uretprobe_reach_nestedness_limit"))
++		test_uretprobe_reach_nestedness_limit();
++}
+diff --git a/tools/testing/selftests/bpf/progs/uretprobe_depth.c b/tools/testing/selftests/bpf/progs/uretprobe_depth.c
+new file mode 100644
+index 000000000000..b71f2de52b5e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/uretprobe_depth.c
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <string.h>
++
++int depth;
++unsigned long retval;
++
++char _license[] SEC("license") = "GPL";
++
++SEC("uretprobe//proc/self/exe:__uretprobe_longjmp")
++int uretprobe(struct pt_regs *ctx)
++{
++	depth++;
++#if defined(__TARGET_ARCH_arm64) || defined(__aarch64__)
++	retval = ctx->regs[0];
++#endif
++	return 0;
++}
+-- 
+2.34.1
+
