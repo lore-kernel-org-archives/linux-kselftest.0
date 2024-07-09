@@ -1,142 +1,161 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2061.outbound.protection.outlook.com [40.107.95.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE71115B116;
-	Tue,  9 Jul 2024 17:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720547103; cv=none; b=ONtKzA+x3yHqlytlwAEDvCIRnrn/e8COO3TzlHqLqKtzG04Cqo2VH3H2A01RA9vO9fJHiIM6DcXDP1PlxVxer53eRjSGEKlO7+vz+vIypShQKARcSpStiKzWpMA/7U078qd/E8l8O6h49qI3Nn2R+yJzD1QJuXBAMh9sn74Hz3E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720547103; c=relaxed/simple;
-	bh=uW2pwfCD2YttDafcEflC65MfG5HeMeAMEQ9t4zeoL9I=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=fNRwlzJyCOJpbVTvALojZdezYOBkXN+7VUSUQo1ssfnirYPw0CqqME8N25DFoJohpOxlOwbpTnCCp/+nEDsMHRw+BpQ2CDfY8AULYiSxABXqAQ3GW8AUQrYX/21jGDT8xhXtsDlkDzg4A5+VZ023A/rkV1SgceF51HrmSM7iGA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=lnFuvy6e; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A581B12C549;
+	Tue,  9 Jul 2024 17:52:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720547536; cv=fail; b=G+19rP1QDJBeJiNfR1w/HnqE/1V02sLlDOqknoPY23bnr+4I9F+356QFeqvijDk2T9iTwkKlGA3G/NEV9QVKsgXGOt5Dh4xPllLjJmHipgCeYFN7DLgMUCInfUF2hwIsfbX+aybX+CGnH0wXvca5/AhugMYzKoEsiYkFB7BzD84=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720547536; c=relaxed/simple;
+	bh=RYFeQXDq5a4SpSU18g8zrw7GB9/95GsOUebeeNtSDds=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CnrJaWr8t+NlUEoIKX8uwOUI+ld7vszbwjE3D/Om5IFq2Ra9+mM3cV5BXfp9AhUBnv4pvwEbnLU1JNDkcpP0Oaq3SAZhGxLAgbt1JosPNKa6rl4X4ePVyUbZjHQF8jhBgjN4B25BllaGmkeQi6X+W3wvkA2olknIrLBn2jVhDcI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=PG1nXvjp; arc=fail smtp.client-ip=40.107.95.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="lnFuvy6e"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=XpJVqSkqCMHi4vFYbD1YivXt6e6jHPNXwLAFd99ctoM=; b=lnFuvy6eh/8y4YIp8Auv5i2jaq
-	/qYPfypDxkTsOGeqDGbIYIn+mjD4n309whiAQ5575bRIk7tsSM9fimg52wvX0nbbiLKev/6rd34bM
-	4YN5TISe16+i+QDbocnmXcSdC3dPFqXwjek2FWo0HdIpSNGO2xa5X+d5mWQ4l5xySGynctHdvjSFR
-	QmbYFUUQ5u5LJkTEI6DWT3eI+17D9FslQun5k/JSbG2x031USQTkQgmswcb1h8/UhG5+krNXINB+r
-	1CS0gUj5b9WF9GJKSWQSEdh0TWoqGdOchbz3AEJ1C1S8is+dVeNzs4R7iQm77qozJ/8fMwwFsWFnH
-	ra3U89AQ==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1sREtL-000Do5-Bz; Tue, 09 Jul 2024 19:44:39 +0200
-Received: from [178.197.248.35] (helo=linux.home)
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1sREtK-000H95-0B;
-	Tue, 09 Jul 2024 19:44:38 +0200
-Subject: Re: [PATCH bpf] selftests/bpf: DENYLIST.aarch64: Remove fexit_sleep
-To: KP Singh <kpsingh@kernel.org>
-Cc: Puranjay Mohan <puranjay@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Manu Bretelle <chantra@meta.com>,
- Florent Revest <revest@google.com>
-References: <20240705145009.32340-1-puranjay@kernel.org>
- <c0ef7ecf-595b-375a-7785-d7bf50040c6b@iogearbox.net>
- <mb61pjzhwvshc.fsf@kernel.org>
- <CACYkzJ7d_u=aRzbubBypSVhnUSjBQnbZjPuGXhqnMzbp0tJm_g@mail.gmail.com>
- <224eeadb-fc5f-baeb-0808-a4f9916afa3c@iogearbox.net>
- <mb61ped836gn7.fsf@kernel.org>
- <d36b0c2e-fdf2-d3b0-46a8-7936e0eda5a8@iogearbox.net>
- <CACYkzJ5E+3xYkNsH7JoVkjabzSwnZZCzzTz5B50qDB7bLYkmMA@mail.gmail.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <890d23f2-636e-12d1-31cc-eb6469f2a9ac@iogearbox.net>
-Date: Tue, 9 Jul 2024 19:44:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="PG1nXvjp"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PZciqU8uxkprvFHUYVogxxMYSFb2W6e2Zbj8qrU0QwvFtws3w74I0zujn/ccd1XYMJ7/wZEgq8ETnEm/ycQJjzgBbHYEm2bxFdZSGtp1H7rfXIsEMhZ3OFbnoOq3haEXnUvFqapgs6J138Qfts1HCBdAN1MKYyOg06erqppR/KrxpKiGCYKk+r82jzSRB1TIqEU6uv7t9EMopo23JG7MAU/42aAv3y9coc4JPLzcPwv7tKameNLhdpVIVsd9wq+R0tmJ8r8+GU40SLbiaeL42pUMqfmx1Fj90Krcy7soKktRXNQ6DdZr+Wf3kSsCWRfSao5ocuagDsXP2p2QPR8HBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pJ3rU7EZMDgqEVm9Zq5kmPmAJI1fRrZ+n7OniIGLPoA=;
+ b=e4lHtBv9bKM+rdx0+Sy3IPXJvdjrC+KHm686IaqBLy+WDVWzd3Vc5xE4Mgv1J+RtiOP2MwirxL5oq0SlaeOaylLELlZQpGgvHr9PYuAQhAuSQ+1aH+hNpNL/9v1CNQoqQlYVHQitsJP8l1r1TsFZoe0aNNSeQWAL2bQIsfP0VgFG3OwG6MeiOVT1XVoKGuLyK+vD9vZE2oS4GNC0bILydFncooz5mpi1WcFR0uMbbbEtZvp8U+Dry/JWHmXzEINe44DOANQFaOSX5oW5UnUTnEkIOy4ZT1t7yo7QgVihgEanMZdid4FeRkM9kUrYZia5s6XdaWeUuoRR1LOaLwHUqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pJ3rU7EZMDgqEVm9Zq5kmPmAJI1fRrZ+n7OniIGLPoA=;
+ b=PG1nXvjpQWLlUW1ERDYd3aj1xiQwyU4AIHSH0sraKoP2dDoWc4hp6SsUkmQu36uTdywhmax2OOoSugWlGZzcFf0Gr7Tcwrxjp+4UgQFhHLce1e+UYx1VRJ5iwKqo94q7bvUZoNPM3aLZl0hCKo2ZGLMFZVjnKVIpGmBs6UsSW24=
+Received: from DM6PR10CA0008.namprd10.prod.outlook.com (2603:10b6:5:60::21) by
+ IA1PR12MB6020.namprd12.prod.outlook.com (2603:10b6:208:3d4::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7741.35; Tue, 9 Jul 2024 17:52:11 +0000
+Received: from DS3PEPF000099DD.namprd04.prod.outlook.com
+ (2603:10b6:5:60:cafe::1e) by DM6PR10CA0008.outlook.office365.com
+ (2603:10b6:5:60::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.19 via Frontend
+ Transport; Tue, 9 Jul 2024 17:52:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS3PEPF000099DD.mail.protection.outlook.com (10.167.17.199) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7762.17 via Frontend Transport; Tue, 9 Jul 2024 17:52:11 +0000
+Received: from chalupa-4a00host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 9 Jul
+ 2024 12:52:08 -0500
+From: Manali Shukla <manali.shukla@amd.com>
+To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
+	<nikunj@amd.com>, <thomas.lendacky@amd.com>, <vkuznets@redhat.com>,
+	<manali.shukla@amd.com>, <bp@alien8.de>, <babu.moger@amd.com>
+Subject: [RFC PATCH v1 1/4] x86/cpufeatures: Add CPUID feature bit for the Bus Lock Threshold
+Date: Tue, 9 Jul 2024 17:51:42 +0000
+Message-ID: <20240709175145.9986-2-manali.shukla@amd.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240709175145.9986-1-manali.shukla@amd.com>
+References: <20240709175145.9986-1-manali.shukla@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CACYkzJ5E+3xYkNsH7JoVkjabzSwnZZCzzTz5B50qDB7bLYkmMA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27331/Tue Jul  9 10:38:11 2024)
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099DD:EE_|IA1PR12MB6020:EE_
+X-MS-Office365-Filtering-Correlation-Id: 18c5ddb7-e852-43ea-9998-08dca03fdbf9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|376014|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?vRFnvnChW07UAq6SSStoGe3qEgsy0HiqJsS7TUX9bbfz/gphUzH0Ds+XKqtC?=
+ =?us-ascii?Q?3wcd2kh9V6YXLdBFWcXY9xELVk1lP3yVT9yOEJbbse9SmcAtVZRPzSS9mBMb?=
+ =?us-ascii?Q?V17rkM59N2TBomTPb7L1SJJCKmCXlkVzEFuKD43ctQCBCyROyCimxDUMCWQA?=
+ =?us-ascii?Q?m+AFXvr/mamgWOfte4QnlXo9uK3OfLzCV4azInKyZhfH1g3giGZ9jx0B15P2?=
+ =?us-ascii?Q?6DOIPHZ7n2VOtwZxc0VLHuwA4SEVguBWeoZxvtshz0znSNmKvHQgvvR+zx+B?=
+ =?us-ascii?Q?oXCaI5DvU8jN/FG2XvURVIazoZB5SoOJLCtu+Q0EATgpYnKgr/qNPv+xmPGT?=
+ =?us-ascii?Q?bzRrZ7G2gIZ0rVJoZiFSdYowxn2jZgNkBlUqGA4BgFY0NUKhXqiAZrVg/Qbg?=
+ =?us-ascii?Q?do83S1kJkBgdOLjyJA5+vbjKqPXlWDmDjM2aElQ/lNVTa6C69ueslfCxt36d?=
+ =?us-ascii?Q?d8RZ8Pp97v2JB3j07iprXxWiuRe0pqycYKR5WH8zGrpz6J9Lg8y//HzDW998?=
+ =?us-ascii?Q?91YblvitsYDoO8lj6Pdnvw6BkMOdDWG7dVhBZ4inKcJDd7DifQV37GgNgT2g?=
+ =?us-ascii?Q?/E3Bp9i+Fg22+ym1qKc0ng0hYyR/QHA9ji8fR0F9eVmit5FmfUC298KG4zke?=
+ =?us-ascii?Q?m9MWzJ9D0WXw6lJye9RbCjPMN6w6fPYWCeglzyjlKZYZi0BGfSJpLedPVzYv?=
+ =?us-ascii?Q?+HGhTqaH89Stoz4p9RX8wW2Kod/TG/i6aopgnWUTk89mH78WEa8EaAQ387ut?=
+ =?us-ascii?Q?jXfV6F0wUA5Nq4eY4LDitSBQMN6dYW2LN9Yzndm7ziOVAkMhGnm28+1zOHyW?=
+ =?us-ascii?Q?h5NcGD9f0AXa5WSLWRndEwyu82PaghaUlaEtA2ALT0opC4jZhQhGX6R38ziP?=
+ =?us-ascii?Q?H3ig7r7rXaA7XfIH1qE4ZsE2BPUdps7ySnDljlLTUyVW0mMcat5s94wX044U?=
+ =?us-ascii?Q?8+PYpNZxHRQvRRXAp8q9ECDfpKEMB1BwQVl9eaE0vGZY1AUwyxiRalOffo0H?=
+ =?us-ascii?Q?a1YZHZnpnoQEK4wYCNiIEA5kaWYrpHdi3P1ix70VdOrT9UdhramcEeDgGrw/?=
+ =?us-ascii?Q?UkOqFBzKmbj2h/dWqjU83Clf+iHVyTIlqQVaRybjsTFkRoTExngTHdeoXCEN?=
+ =?us-ascii?Q?3hVsK/IMAq3KVAkwd9hOP8AlkUKw+NoCC7vrR18ay2qVN8QciVA67HbkIvSg?=
+ =?us-ascii?Q?NmW+rdUCxMe2n5mX0oze5uUHcgc6HZ5q2WV+pnXlTjG/A5A5xjarlySw80BR?=
+ =?us-ascii?Q?2Xe5eN+Yy06n04BwmAdFLjlV4wnS/1nQMkICuT2jhOrQsEWU3av+xtqWf1iI?=
+ =?us-ascii?Q?6oBq4aCixkv8SJYmutS44RWAUETrm4WTrUnu/WxacsOURbjU/jRTwGuh3hBA?=
+ =?us-ascii?Q?WdD2ObmA40LZPsSfkkeUk5X++RRBk2iQ0On/vdZSSHn0+eA8YBh9dlUY7Lc6?=
+ =?us-ascii?Q?mtAqYHZ9lmn69RZrzyDNAiEZHMeHkd+9?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2024 17:52:11.0907
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18c5ddb7-e852-43ea-9998-08dca03fdbf9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS3PEPF000099DD.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6020
 
-On 7/8/24 6:42 PM, KP Singh wrote:
-> On Mon, Jul 8, 2024 at 6:09 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> On 7/8/24 5:35 PM, Puranjay Mohan wrote:
->>> Daniel Borkmann <daniel@iogearbox.net> writes:
->>>> On 7/8/24 5:26 PM, KP Singh wrote:
->>>>> On Mon, Jul 8, 2024 at 5:00 PM Puranjay Mohan <puranjay@kernel.org> wrote:
->>>>>> Daniel Borkmann <daniel@iogearbox.net> writes:
->>>>>>> On 7/5/24 4:50 PM, Puranjay Mohan wrote:
->>>>>>>> fexit_sleep test runs successfully now on the CI so remove it from the
->>>>>>>> deny list.
->>>>>>>
->>>>>>> Do you happen to know which commit fixed it? If yes, might be nice to have it
->>>>>>> documented in the commit message.
->>>>>>
->>>>>> Actually, I never saw this test failing on my local setup and yesterday
->>>>>> I tried running it on the CI where it passed as well. So, I assumed that
->>>>>> this would be fixed by some commit. I am not sure which exact commit
->>>>>> might have fixed this.
->>>>>>
->>>>>> Manu, Martin
->>>>>>
->>>>>> When this was added to the deny list was this failing every time and did
->>>>>> you have some reproducer for this. If there is a reproducer, I can try
->>>>>> fixing it but when ran normally this test never fails for me.
->>>>>
->>>>> I think this never worked until
->>>>> https://lore.kernel.org/lkml/20230405180250.2046566-1-revest@chromium.org/
->>>>> was merged, FTrace direct calls was blocking tracing programs on ARM,
->>>>> since then it has always worked.
->>>>
->>>> Awesome, thanks! I'll add this to the commit desc then when applying.
->>>
->>> The commit that added this to the deny list said:
->>> 31f4f810d533 ("selftests/bpf: Add fexit_sleep to DENYLIST.aarch64")
->>>
->>> ```
->>> It is reported that the fexit_sleep never returns in aarch64.
->>> The remaining tests cannot start.
->>> ```
-> 
-> It may also have something to do with sleepable programs. But I think
-> it's generally in the category of "BPF tracing was catching up with
-> ARM", it has now.
+Malicious guests can cause bus locks to degrade the performance of
+a system. Non-WB(write-back) and misaligned locked
+RMW(read-modify-write) instructions are referred to as "bus locks" and
+require system wide synchronization among all processors to guarantee
+atomicity.  The bus locks may incur significant performance penalties
+for all processors in the system.
 
-Hm, the latest run actually hangs in fexit_sleep (which is the test right after
-fexit_bpf2bpf). So looks like this was too early. It seems some CI runs pass on
-arm64 but others fail:
+The Bus Lock Threshold feature proves beneficial for hypervisors
+seeking to restrict guests' ability to initiate numerous bus locks,
+thereby preventing system slowdowns that affect all tenants.
 
-   https://github.com/kernel-patches/bpf/actions/runs/9859826851/job/27224868398 (fail)
-   https://github.com/kernel-patches/bpf/actions/runs/9859837213/job/27224955045 (pass)
+Presence of the Bus Lock threshold feature is indicated via CPUID
+function 0x8000000A_EDX[29]
 
-Puranjay, do you have a chance to look into this again?
+Signed-off-by: Manali Shukla <manali.shukla@amd.com>
+---
+ arch/x86/include/asm/cpufeatures.h | 1 +
+ 1 file changed, 1 insertion(+)
 
->>> So, if the lack of Ftrace direct calls would be the reason then the
->>> failure would be due to fexit programs not being supported on arm64.
->>>
->>> But this says that the selftest never returns therefore is not related
->>> to ftrace direct call support but another bug?
->>
->> Fwiw, at least it is passing in the BPF CI now.
->>
->> https://github.com/kernel-patches/bpf/actions/runs/9841781347/job/27169610006
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 3c7434329661..10f397873790 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -381,6 +381,7 @@
+ #define X86_FEATURE_V_SPEC_CTRL		(15*32+20) /* Virtual SPEC_CTRL */
+ #define X86_FEATURE_VNMI		(15*32+25) /* Virtual NMI */
+ #define X86_FEATURE_SVME_ADDR_CHK	(15*32+28) /* "" SVME addr check */
++#define X86_FEATURE_BUS_LOCK_THRESHOLD	(15*32+29) /* "" Bus lock threshold */
+ 
+ /* Intel-defined CPU features, CPUID level 0x00000007:0 (ECX), word 16 */
+ #define X86_FEATURE_AVX512VBMI		(16*32+ 1) /* AVX512 Vector Bit Manipulation instructions*/
+
+base-commit: 704ec48fc2fbd4e41ec982662ad5bf1eee33eeb2
+-- 
+2.34.1
 
