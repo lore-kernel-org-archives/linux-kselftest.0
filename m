@@ -1,162 +1,124 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3288118FA18;
-	Wed, 10 Jul 2024 09:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094D21922E4
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 10:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720604272; cv=none; b=PLo50SBl7GDbdtaQdOzXiM4cHk18tIFx7Yu6OiDHpTsAthiAkssr5H5o31beqigHwN5lFY6fRbri3C7+2ArOwfnG705fPXAt9RI8/2CC0zIu1J4OKKBFK3TCZcTq3f96NXWPW2hyI6LuT9nJF1uDWkMih14DupG+KScU52hujXA=
+	t=1720607809; cv=none; b=T8sgotPmYgk5FcdoPstRoFCkXBEtr7qhxiPOlTbAE2uwgkBjAcRSMgOkSIVwqvvl/VvfdZ5lQ2LsEyLgWLYlJQXjwxZLWwsdVQWpkFspI/SPNdoF1smSnEh4057LJ67co4cZEznjjr/Ii5+4b/EEBdPhpAKvTGDmCamvxmOoUGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720604272; c=relaxed/simple;
-	bh=l0InjUn+r9qMZLELw7DvorDCNWscZsq07ZH4vjQNSpo=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=CtPjjvGr1cmp15M4PF439Ob56sWmRj+quTjwHw224CUNDVBvQ5Hnhg4I+gghwor60qUo9bAgXk9WcI0HgGxF2BIhKCUzfgnOYjznsxEkcmWiVfSRJwrdimQMIF+VBNvPjZu54XEjC65zC7Gu0kRA8dLMZJ9TBjjYz6YAJmUulQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=dXBVre5y; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1720607809; c=relaxed/simple;
+	bh=kqLm5P45NxwgK+tmNpa+OcNHo84diEsXJjayzggqo7c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=lXTm0x4Cc0qSf9FxlkBlUePF65A7mq6HDMhCOuySADDg31vXHuQL8bWNIs2KiWZh8XDFekkZGlgOjTw18bA7+Uh+j1fLecFqfcOCg+8Sf5mJ0bYuSPaH3oaG4q72DJmGJ01gEYS8lv4qiOpDRsD2ZHXZfrVOudkG0RCLAHbhRWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VVR1XST+; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="dXBVre5y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1720604269;
-	bh=l0InjUn+r9qMZLELw7DvorDCNWscZsq07ZH4vjQNSpo=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=dXBVre5y+Yvxx3PzpkRSgBvm+9evADx4Ie/OjSZOjTSMNHhYvUWcC4x1oQjt/kjdK
-	 GP4uaFZm1bHDzjIXj9IBZILXkf9a60jxtHP0ynAts7SBBNCnO1VnDvr3Cz7jT5e15R
-	 WDQQwHXswZlCMJtBspdPA5AQG8BG9wYvbXx1ERH5bSZdLwFYvCTdVN3RgVk5C6MtDr
-	 aNu5mIzltQQzPxwfUPLW07s3VVsY2YYc/OcFHY2Fe2vduU/vbilwcF5edI6J9bcLul
-	 rATfWGU0+/40CL45Pzze7vYFTTI5/dcGMpQqsoofO8gcJROBUj96yyf7IWDg1v17qq
-	 Mi+P0N4Fr996Q==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VVR1XST+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720607807;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TbJg6z7j+ZQBtm21UhpDM4r/48rTnLX4yDmOeuhoEeA=;
+	b=VVR1XST+rdjw9tobwwJQ033cdufasHVPYa9Nu3xdB/PPx1ka85QNtdZQl9sWoeHGFWxPXI
+	8EG87AYQDM1j7SW7avkKG9Y+wIKOhs/kf+b8kvGep7nBnrCx+g0A/zHiiZhdVDhcOWTqHh
+	k1hrKLBqt39GM6YIXjLnbvLuW+Z3kJ8=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-186-a07wZjSjMfOCkc_bgrfTiQ-1; Wed,
+ 10 Jul 2024 06:36:41 -0400
+X-MC-Unique: a07wZjSjMfOCkc_bgrfTiQ-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 742213782192;
-	Wed, 10 Jul 2024 09:37:39 +0000 (UTC)
-Message-ID: <f929b8c4-fb66-4724-b2ee-d012a5c20324@collabora.com>
-Date: Wed, 10 Jul 2024 14:37:26 +0500
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 07722196CE01;
+	Wed, 10 Jul 2024 10:36:36 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.45.224.154])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A378D19560AE;
+	Wed, 10 Jul 2024 10:36:24 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
+ <will@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,  Andrew Morton
+ <akpm@linux-foundation.org>,  Marc Zyngier <maz@kernel.org>,  Oliver Upton
+ <oliver.upton@linux.dev>,  James Morse <james.morse@arm.com>,  Suzuki K
+ Poulose <suzuki.poulose@arm.com>,  Arnd Bergmann <arnd@arndb.de>,  Oleg
+ Nesterov <oleg@redhat.com>,  Eric Biederman <ebiederm@xmission.com>,
+  Shuah Khan <shuah@kernel.org>,  "Rick P. Edgecombe"
+ <rick.p.edgecombe@intel.com>,  Deepak Gupta <debug@rivosinc.com>,  Ard
+ Biesheuvel <ardb@kernel.org>,  Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+  Kees Cook <kees@kernel.org>,  "H.J. Lu" <hjl.tools@gmail.com>,  Paul
+ Walmsley <paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>,
+  Albert Ou <aou@eecs.berkeley.edu>,  Christian Brauner
+ <brauner@kernel.org>,  Thiago Jung Bauermann
+ <thiago.bauermann@linaro.org>,  Ross Burton <ross.burton@arm.com>,
+  linux-arm-kernel@lists.infradead.org,  linux-doc@vger.kernel.org,
+  kvmarm@lists.linux.dev,  linux-fsdevel@vger.kernel.org,
+  linux-arch@vger.kernel.org,  linux-mm@kvack.org,
+  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-riscv@lists.infradead.org, "Schimpe, Christina"
+ <christina.schimpe@intel.com>, "Pandey, Sunil K"
+ <sunil.k.pandey@intel.com>
+Subject: Re: [PATCH v9 05/39] arm64/gcs: Document the ABI for Guarded
+ Control Stacks
+In-Reply-To: <20240625-arm64-gcs-v9-5-0f634469b8f0@kernel.org> (Mark Brown's
+	message of "Tue, 25 Jun 2024 15:57:33 +0100")
+References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
+	<20240625-arm64-gcs-v9-5-0f634469b8f0@kernel.org>
+Date: Wed, 10 Jul 2024 12:36:21 +0200
+Message-ID: <87a5iph6u2.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v2] selftests: x86: conform test to TAP format output
-To: "Chang S. Bae" <chang.seok.bae@intel.com>,
- Binbin Wu <binbin.wu@linux.intel.com>, Ingo Molnar <mingo@kernel.org>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20240426101824.2894574-1-usama.anjum@collabora.com>
- <da0f535d-b970-4de5-9dfb-e2cbf62c816b@collabora.com>
- <890460a3-fd09-4f59-ab21-4f5b16256175@collabora.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <890460a3-fd09-4f59-ab21-4f5b16256175@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-This patch brings just readability implements by using kselftests wrappers
-instead of manual pass/fail test cases counting. It has been on mailing
-list from several months now. Please can someone ack or nack?
+* Mark Brown:
 
-On 7/1/24 1:38 PM, Muhammad Usama Anjum wrote:
-> Adding more reviewers. Please review.
-> 
-> On 5/28/24 10:05 AM, Muhammad Usama Anjum wrote:
->> Kind reminder
->>
->> On 4/26/24 3:18 PM, Muhammad Usama Anjum wrote:
->>> Conform the layout, informational and status messages to TAP. No
->>> functional change is intended other than the layout of output messages.
->>>
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> ---
->>> Changes since v1:
->>> - No changes, sending it again as got no response on v1 even after weeks
->>> ---
->>>  tools/testing/selftests/x86/vdso_restorer.c | 29 +++++++++------------
->>>  1 file changed, 12 insertions(+), 17 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/x86/vdso_restorer.c b/tools/testing/selftests/x86/vdso_restorer.c
->>> index fe99f24341554..f621167424a9c 100644
->>> --- a/tools/testing/selftests/x86/vdso_restorer.c
->>> +++ b/tools/testing/selftests/x86/vdso_restorer.c
->>> @@ -21,6 +21,7 @@
->>>  #include <unistd.h>
->>>  #include <syscall.h>
->>>  #include <sys/syscall.h>
->>> +#include "../kselftest.h"
->>>  
->>>  /* Open-code this -- the headers are too messy to easily use them. */
->>>  struct real_sigaction {
->>> @@ -44,17 +45,19 @@ static void handler_without_siginfo(int sig)
->>>  
->>>  int main()
->>>  {
->>> -	int nerrs = 0;
->>>  	struct real_sigaction sa;
->>>  
->>> +	ksft_print_header();
->>> +	ksft_set_plan(2);
->>> +
->>>  	void *vdso = dlopen("linux-vdso.so.1",
->>>  			    RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
->>>  	if (!vdso)
->>>  		vdso = dlopen("linux-gate.so.1",
->>>  			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
->>>  	if (!vdso) {
->>> -		printf("[SKIP]\tFailed to find vDSO.  Tests are not expected to work.\n");
->>> -		return 0;
->>> +		ksft_print_msg("[SKIP]\tFailed to find vDSO. Tests are not expected to work.\n");
->>> +		return KSFT_SKIP;
->>>  	}
->>>  
->>>  	memset(&sa, 0, sizeof(sa));
->>> @@ -62,21 +65,16 @@ int main()
->>>  	sa.flags = SA_SIGINFO;
->>>  	sa.restorer = NULL;	/* request kernel-provided restorer */
->>>  
->>> -	printf("[RUN]\tRaise a signal, SA_SIGINFO, sa.restorer == NULL\n");
->>> +	ksft_print_msg("Raise a signal, SA_SIGINFO, sa.restorer == NULL\n");
->>>  
->>>  	if (syscall(SYS_rt_sigaction, SIGUSR1, &sa, NULL, 8) != 0)
->>>  		err(1, "raw rt_sigaction syscall");
->>>  
->>>  	raise(SIGUSR1);
->>>  
->>> -	if (handler_called) {
->>> -		printf("[OK]\tSA_SIGINFO handler returned successfully\n");
->>> -	} else {
->>> -		printf("[FAIL]\tSA_SIGINFO handler was not called\n");
->>> -		nerrs++;
->>> -	}
->>> +	ksft_test_result(handler_called, "SA_SIGINFO handler returned\n");
->>>  
->>> -	printf("[RUN]\tRaise a signal, !SA_SIGINFO, sa.restorer == NULL\n");
->>> +	ksft_print_msg("Raise a signal, !SA_SIGINFO, sa.restorer == NULL\n");
->>>  
->>>  	sa.flags = 0;
->>>  	sa.handler = handler_without_siginfo;
->>> @@ -86,10 +84,7 @@ int main()
->>>  
->>>  	raise(SIGUSR1);
->>>  
->>> -	if (handler_called) {
->>> -		printf("[OK]\t!SA_SIGINFO handler returned successfully\n");
->>> -	} else {
->>> -		printf("[FAIL]\t!SA_SIGINFO handler was not called\n");
->>> -		nerrs++;
->>> -	}
->>> +	ksft_test_result(handler_called, "SA_SIGINFO handler returned\n");
->>> +
->>> +	ksft_finished();
->>>  }
->>
-> 
 
--- 
-BR,
-Muhammad Usama Anjum
+> +4.  Signal handling
+> +--------------------
+> +
+> +* A new signal frame record gcs_context encodes the current GCS mode and
+> +  pointer for the interrupted context on signal delivery.  This will always
+> +  be present on systems that support GCS.
+> +
+> +* The record contains a flag field which reports the current GCS configuration
+> +  for the interrupted context as PR_GET_SHADOW_STACK_STATUS would.
+> +
+> +* The signal handler is run with the same GCS configuration as the interrupted
+> +  context.
+> +
+> +* When GCS is enabled for the interrupted thread a signal handling specific
+> +  GCS cap token will be written to the GCS, this is an architectural GCS cap
+> +  token with bit 63 set and the token type (bits 0..11) all clear.  The
+> +  GCSPR_EL0 reported in the signal frame will point to this cap token.
+
+How does this marker interfere with Top Byte Ignore (TBI; I hope I got
+the name right)?  The specification currently does not say that only
+addresses pushed to the shadow stack with the top byte cleared, which
+potentially makes the markup ambiguous.  On x86-64, the same issue may
+exist with LAM.  I have not tested yet what happens there.  On AArch64
+and RISC-V, it may be more natural to use the LSB instead of the LSB for
+the mark bit because of its instruction alignment.
+
+We also have a gap on x86-64 for backtrace generation because the
+interrupted instruction address does not end up on the shadow stack.
+This address is potentially quite interesting for backtrace generation.
+I assume it's currently missing because the kernel does not resume
+execution using a regular return instruction.  It would be really useful
+if it could be pushed to the shadow stack, or recoverable from the
+shadow stack in some other way (e.g., the address of the signal context
+could be pushed instead).  That would need some form of marker as well.
+
+Thanks,
+Florian
+
