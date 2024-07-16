@@ -1,108 +1,128 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E4019DF87
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 17:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE71E13CA99;
+	Tue, 16 Jul 2024 17:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721151299; cv=none; b=gOCn31blMUf7K/x0qJWTt5DSdIMA6vAXnNg1oTKjQVwjyGX54LBDCGGUqiVeeolSBISB4q+NcvVZIS4AcZ3gTFKYmlgwTGbyivs6FFmG2/IZenqc6zLtaHh25+xpT2WuwZPu/CCm8ZhyMhILy2eJS9a7NoBDrXxTt+qPw+L+RJU=
+	t=1721152747; cv=none; b=CIH4ywMNQhYawunDHwrKWNlfijoPOV39r0pgV6k1PlWRNklB/WyB4DTv9qn8ABeioeUSP4mAYHtBeW3RwO60DmXa3FXhE7ASEe97dJSBJnVoeEbooede0LutFADcAhGej/1efgUoXAq61O2uK4WC8cvbA6YphBezmSI6YjY/T3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721151299; c=relaxed/simple;
-	bh=3M0QByp5nIuBwkxRifE56E0QWbZdgARiPYYVK/zs0M4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qHVCgpKI7tLjxEQ+SWG9vml2RxLFdJHm+eLhcaGiTDT3TshPqwXOsDURrGbM6cIgrEFd5v1j6aozSrpA/bfMv+uegaI/YNFXyNUkVsNnBmo052VVibjqzo6Ccs+BGcghu8nGTURAxn92FksCwTAfjOQ/4Yc4HD/V2CVFjkAOibs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Eb/zTCU5; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1721152747; c=relaxed/simple;
+	bh=aZoQyJZaXPsI2kwIwZYxpxbHfH9lPGmGaVvVQ/h+Usc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cCsMbV7Yp/PMD+dF6kb7W4tfnofDe55DnxfWJODwOIbMCEEs9K6+obMPJrQCDuXCxuFS/zn80B+C6McsTJMeEud7Q7pXAXf6gX3J0rCvxtUFvl5TQICU04wc5/HEJdmzo53+jefQWZD36YWZEbqinqhXBVPY1/CLeRmBO1VFd6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=elFZMblC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Eb/zTCU5"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2c972018f0fso5087815a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 10:34:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1721151297; x=1721756097; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bzncl9L3e27llWjrAt0uSGnBBcBzotmsp09OvMIhHpc=;
-        b=Eb/zTCU5kPhzS0/bk11Payd+5kyJ5P2aPcU0yqX7V8Y4LtmgT0sDl/yHktUTM0Mb7e
-         z5CaMMry8WZjMr5ZtlxQ87ORckr2HKdH4DQNITPpw9aS71YoA9TgD07EukwUOenFSQpo
-         7sE/rSzawBqGFpZSZo33IEuluLPX35cCdKe/yMWDsQypYBEBvgsBkxJB62ksxnOWSts9
-         9mv2eGtomZymF8HSMD+UFj7wZifkS1l1Fc0HLYVkEQlqKTJsMosmVePzRZhL8EqitXyK
-         tTYiarBJJM/8pKKq28QrQMz57hDBMA2kBG28/SP+ikuUyjJw6ZV/0skeTvjYY9C/Unpv
-         u+ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721151297; x=1721756097;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bzncl9L3e27llWjrAt0uSGnBBcBzotmsp09OvMIhHpc=;
-        b=a4wBaZcJBF4LXOtKKaBjAdUlHUhOjvMp1iAUtD3vmDJ6I2tDpTL4jlnYkaIDZ4n9MV
-         IaoGJOV7RzYkHMPyLF3L7/5qg/Hie41BXtHJwvCLxG+K9F2rmKkhDitrgjzh1UOJRmrr
-         bgDRbdudB/5DC8xCqntUhii8iEcCyC3/BC/nJth6qdd16GTnEJS4niBbM6awazPOox2X
-         a2VmkdldnrXptJfzqoHsYnpVnfR9ilQfTJg6D87dTZozsySv9ylvNWa/QteAOKZv82gH
-         4624adzZCrsJYzI1C/ve+LwkbRYtHTWApJ1LsZg0g3ykC4vHra8KW58/l2fyXwWJ1IMh
-         h+Nw==
-X-Forwarded-Encrypted: i=1; AJvYcCUCx6/AUZ/zWPrpTRRKn3t500J4V56T2GEhfNk/y1LpVP7Fx9JMjEE7QS/XKUp4XxN9nVZJ0oYGf6Nh+5UEKrZD2dmanVlz5tLGcl8Nmnbv
-X-Gm-Message-State: AOJu0Yx8dS0XxGapaabwawMzvJcM7bNFSddLxzuN5/WJVbiuUJPd3EUG
-	6JxISN7B/sQMZqoRWhccC0Cd5S9bLprPmwrfbchexoFyucjySgVsUjWP7qsQfHv9GBaDAnReLpC
-	9Fg==
-X-Google-Smtp-Source: AGHT+IG32VHtdxdaUsDDPJunrvckiTWNO91gPhz+tHm9yc4gkYSQ85JHqlVjFo5Nvdj8OgpwD3v6pjKH7w4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:b96:b0:2c9:ba2b:42ac with SMTP id
- 98e67ed59e1d1-2cb36d483c4mr6722a91.4.1721151297229; Tue, 16 Jul 2024 10:34:57
- -0700 (PDT)
-Date: Tue, 16 Jul 2024 10:34:55 -0700
-In-Reply-To: <20240716160842.GD1482543@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="elFZMblC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE06C116B1;
+	Tue, 16 Jul 2024 17:59:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721152747;
+	bh=aZoQyJZaXPsI2kwIwZYxpxbHfH9lPGmGaVvVQ/h+Usc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=elFZMblC4xXuhengbYo5qIbdwxM3ZlTUasQK9biTysI/46boyJrKlcoZK8uEvH+uK
+	 ZNuKYb/xdoVgBExRwn0C7XEcbsZVZFzDD27HMD8uBlouhpzAvD1VHFAyIuFNhu2+9k
+	 3XJoAhryUWiJbNg2hSt9H8MKJDAGD3coeflx5v5MAvFUrsEZBo6T+5yXNPC/KoVw3a
+	 dwV9Pu4sKvwQ8DOtMpfKWEPXpfabpZboxJqIpYVOAfTFoziL80ZLE145ytuj4TVoKP
+	 8rBtgIwrw6oGSZpZv4Ix3eYZ4yh6pdDoF+EquvWOnbU26o6FXGvOTouJCr6usHGuok
+	 dLUkuKAaueLxg==
+Date: Tue, 16 Jul 2024 10:59:06 -0700
+From: Kees Cook <kees@kernel.org>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Shuah Khan <shuah@kernel.org>, davidgow@google.com,
+	"open list : KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	kunit-dev@googlegroups.com,
+	"kernel@collabora.com" <kernel@collabora.com>
+Subject: Re: Converting kselftest test modules to kunit
+Message-ID: <202407161005.CACE2E355@keescook>
+References: <327831fb-47ab-4555-8f0b-19a8dbcaacd7@collabora.com>
+ <202407150936.C32FE24CA@keescook>
+ <8412a936-b202-4313-b5b4-ce6e72a3392f@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
- <20240712232937.2861788-1-ackerleytng@google.com> <ZpaZtPKrXolEduZH@google.com>
- <20240716160842.GD1482543@nvidia.com>
-Message-ID: <ZpavP3K_xAMiu4kE@google.com>
-Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
-From: Sean Christopherson <seanjc@google.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, quic_eberman@quicinc.com, 
-	akpm@linux-foundation.org, david@redhat.com, kvm@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, maz@kernel.org, 
-	pbonzini@redhat.com, shuah@kernel.org, tabba@google.com, willy@infradead.org, 
-	vannapurve@google.com, hch@infradead.org, rientjes@google.com, 
-	jhubbard@nvidia.com, qperret@google.com, smostafa@google.com, fvdl@google.com, 
-	hughd@google.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8412a936-b202-4313-b5b4-ce6e72a3392f@collabora.com>
 
-On Tue, Jul 16, 2024, Jason Gunthorpe wrote:
-> On Tue, Jul 16, 2024 at 09:03:00AM -0700, Sean Christopherson wrote:
-> 
-> > > + To support huge pages, guest_memfd will take ownership of the hugepages, and
-> > >   provide interested parties (userspace, KVM, iommu) with pages to be used.
-> > >   + guest_memfd will track usage of (sub)pages, for both private and shared
-> > >     memory
-> > >   + Pages will be broken into smaller (probably 4K) chunks at creation time to
-> > >     simplify implementation (as opposed to splitting at runtime when private to
-> > >     shared conversion is requested by the guest)
+On Tue, Jul 16, 2024 at 01:11:14PM +0500, Muhammad Usama Anjum wrote:
+> On 7/15/24 9:40 PM, Kees Cook wrote:
+> > On Mon, Jul 15, 2024 at 03:09:24PM +0500, Muhammad Usama Anjum wrote:
+> >> Hi Kees and All,
+> >>
+> >> There are several tests in kselftest subsystem which load modules to tests
+> >> the internals of the kernel. Most of these test modules are just loaded by
+> >> the kselftest, their status isn't read and reported to the user logs. Hence
+> >> they don't provide benefit of executing those tests.
+> >>
+> >> I've found patches from Kees where he has been converting such kselftests
+> >> to kunit tests [1]. The probable motivation is to move tests output of
+> >> kselftest subsystem which only triggers tests without correctly reporting
+> >> the results. On the other hand, kunit is there to test the kernel's
+> >> internal functions which can't be done by userspace.
+> >>
+> >> Kselftest:	Test user facing APIs from userspace
+> >> Kunit:		Test kernel's internal functions from kernelspace
 > > 
-> > FWIW, I doubt we'll ever release a version with mmap()+guest_memfd support that
-> > shatters pages at creation.  I can see it being an intermediate step, e.g. to
-> > prove correctness and provide a bisection point, but shattering hugepages at
-> > creation would effectively make hugepage support useless.
+> > I would say this is a reasonable guide to how these things should
+> > be separated, yes. That said, much of what was kind of ad-hoc kernel
+> > internals testing that was triggered via kselftests is better done via
+> > KUnit these days, but not everything.
+> I started investigated when I found that kselftest doesn't parse the kernel
+> logs to mark these tests pass/fail. (kselftest/lib is good example of it)
 > 
-> Why? If the private memory retains its contiguity seperately but the
-> struct pages are removed from the vmemmap, what is the downside?
+> > 
+> >> This brings me to conclusion that kselftest which are loading modules to
+> >> test kernelspace should be converted to kunit tests. I've noted several
+> >> such kselftests.
+> > 
+> > I would tend to agree, yes. Which stand out to you? I've mainly been
+> > doing the conversions when I find myself wanting to add new tests, etc.
+> lib
+> 	test_bitmap
+> 	prime_numbers
+> 	test_printf
+> 	test_scanf
 
-Oooh, you're talking about shattering only the host userspace mappings.  Now I
-understand why there was a bit of a disconnect, I was thinking you (hand-wavy
-everyone) were saying that KVM would immediately shatter its own mappings too.
+Yeah, these would be nice to convert.
 
-> As I understand it the point is to give a large contiguous range to
-> the private world and use only 4k pages to give the hypervisor world
-> access to limited amounts of the memory.
+> 	test_strscpy (already converted, need to remove this test)
+
+Yup, converted in bb8d9b742aa7 ("string: Merge strscpy KUnit tests into string_kunit.c")
+
+> lock
+> 	test-ww_mutex module
+> net
+> 	test_blackhole_dev
+
+I don't know these very well, but yeah worth looking into.
+
+> user
+> 	test_user_copy (probably already converted, need to remove this test)
+
+This is done in -next via cf6219ee889f ("usercopy: Convert test_user_copy to KUnit test")
+
+> firmware
+> 	test_firmware
+
+This might not work to convert: there's a userspace half for testing
+firmware loading (see the kselftest side...)
+
+> fpu
+> 	test_fpu
+
+Seems reasonable.
+
+> Most of these modules are found in lib/*.
 > 
-> Is there a reason that not having the shared memory elevated to higher
-> contiguity a deal breaker?
+> Would it be desired to move these to kunit?
 
-Nope.  I'm sure someone will ask for it sooner than later, but definitely not a
-must have.
+Checking with the authors/maintainer is probably the first thing to do;
+check the git history to see who has been working on them.
+
+-- 
+Kees Cook
