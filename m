@@ -1,121 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84889145B18;
-	Thu, 18 Jul 2024 21:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721336716; cv=none; b=l1gayMlIrDAxeRrTQyhuhZRkqvA3EuSD8aldWHdqPcLW9OCJ77SOAJmuwC32Ns2rUcNUs0SGYcpDcQgaDJvDF2J6UaxZ+OXfGk9BI69JYVe3q709TgNgMAiZkwETJCREQORy6r5gwvMThe5qU/hHMnvPvOAwhvisa5//YByE77I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721336716; c=relaxed/simple;
-	bh=h2oJwQU0/OEuEguNkW78XbvG5WSjlncX73XA6xoFusY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X5KI4e8ZNgLnAG4zjR3y8aCTsZp+U1FpEhD44HNyxYUkFdwxtJFi+ME5Oy5pLWjs3X+HYVZK/pDvylBSKMnO9GWaexVu22F5AIqYZTzEjsIu2P2+XK9x1wMHuLXVxuZVuNlLZGt7c1p59VjENyco/ulOy4t1BAYYnMsH0Pe70v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tKU9tb3L; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tKU9tb3L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2510BC4AF10;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1231459F3;
 	Thu, 18 Jul 2024 21:05:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721336716;
-	bh=h2oJwQU0/OEuEguNkW78XbvG5WSjlncX73XA6xoFusY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tKU9tb3LsEO8gMpunAfGrIh7xJrlGzJhcrb1p2+ePoURYORsAfCicT79iir9fk8qm
-	 t9SuPV7XTp+QJXNustkT1nLw6gf6AK8soeFPy6SGlltpKPEX2hYPXPh/rX28Sd3zGV
-	 6T1KAn9VwHeevi6JNHkA8Auo9M075XHX2JPbb/irCjppOFfvcMHCPJWlCt+Zs4n2FJ
-	 DuuYXdxXU494VlJK3GqkhVisCHJeRY2a78ccVIpajTSv+gmBXn0L6hXZJREmjncrdc
-	 d8P3DmFSmycEFtmuGMRE7ZBKGumnjOBDAP1u8braEyAynvCRvvAZLOO+5w0lBLNAIn
-	 n3UsEEYgvlaYA==
-From: Stephen Boyd <sboyd@kernel.org>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	patches@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Daniel Latypov <dlatypov@google.com>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Maxime Ripard <maxime@cerno.tech>,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v8 1/8] of/platform: Allow overlays to create platform devices from the root node
-Date: Thu, 18 Jul 2024 14:05:00 -0700
-Message-ID: <20240718210513.3801024-2-sboyd@kernel.org>
-X-Mailer: git-send-email 2.45.2.1089.g2a221341d9-goog
-In-Reply-To: <20240718210513.3801024-1-sboyd@kernel.org>
-References: <20240718210513.3801024-1-sboyd@kernel.org>
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721336717; cv=none; b=ok1hSxC/U+54NGTEVpMj1VswH7q9DlcgAdR9KZTyobcPzaZnW306X2K5PTLYE6pktRml1U1lizgoKO5kx8EsH0cHu7kVDqWK4h14pDN/OkspdiNoXwxNHlJdONCAZJH12vxcNYbRsfseRVgJypbdUKd8fofASkVf2vIf5BMTOZc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721336717; c=relaxed/simple;
+	bh=1v1jqKjcYUvw8UYOoT13Hp5wiWGbu+/qYozJU++DnG8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=DyG0hOklWTOwbaF2KmITJSqGhlJSwq63LFtSE5ENpviYP/rBdpJUZVP26MLP7IyHmpA+ijTZZ+ssktMOEZIuIQg73SnWWlQ3HgY3PYAx6eaItmAdxHSX8zY/v+MMwvzEA+7F0BlSzgTcwFSHbnUJu9B6sea52otcf1JtrELw5TA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=IpF8rhVB; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="IpF8rhVB"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.17.2/8.17.1) with ESMTPSA id 46IL4dBe3348195
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Thu, 18 Jul 2024 14:04:39 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 46IL4dBe3348195
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2024071601; t=1721336680;
+	bh=4e/wb8Y491QaVr7KpN/BHdZKNSDjapJmexIf6bpg06g=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=IpF8rhVB/mNH993z1cV6s3+O5XiEv99FHyBRcD70bJqvwGanjoCH9jSNBBAh5tZTt
+	 QWu4vTMYC39qTclBHtY3CCbYAiI/flYnkguIOmQN/+0HnIYx//OGkE2VBC9yBJZ1tu
+	 DjksAbQQuG+Lpa/ZSO2W4MoL1zUtIppcThvDo0QbOxwhtjF08vmupD33VLEacjXNpU
+	 Sny+grcdUSrGmBxlD9Pa+1iJHn+sV73Tz4+pzuLxRTMycCSF0QiTAvQtSZzdRWNanA
+	 zZUcpUPCPvAxeeFciSo6FGM0mrAyP//tzIvq0pJjDpdk4rrACoIV30nngdxw0B0yqS
+	 6tA/35Dgcz49g==
+Date: Thu, 18 Jul 2024 14:04:37 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Sean Christopherson <seanjc@google.com>, Xin3 Li <xin3.li@intel.com>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        "xin@zytor.com" <xin@zytor.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_09/25=5D_KVM=3A_VMX=3A_Swit?=
+ =?US-ASCII?Q?ch_FRED_RSP0_between_host_and_guest?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ZpFH86n_YY5ModwK@google.com>
+References: <20240207172646.3981-1-xin3.li@intel.com> <20240207172646.3981-10-xin3.li@intel.com> <ZmoYvcbFBPJ5ARma@google.com> <SA1PR11MB67348BD07CCCF8D52FCAC8FEA8A42@SA1PR11MB6734.namprd11.prod.outlook.com> <ZpFH86n_YY5ModwK@google.com>
+Message-ID: <099D0BF1-BDC6-489F-B780-174AFEE8F491@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-We'd like to apply overlays to the root node in KUnit so we can test
-platform devices created as children of the root node.
+On July 12, 2024 8:12:51 AM PDT, Sean Christopherson <seanjc@google=2Ecom> =
+wrote:
+>On Wed, Jul 10, 2024, Xin3 Li wrote:
+>> > On Wed, Feb 07, 2024, Xin Li wrote:
+>> > > Switch MSR_IA32_FRED_RSP0 between host and guest in
+>> > > vmx_prepare_switch_to_{host,guest}()=2E
+>> > >
+>> > > MSR_IA32_FRED_RSP0 is used during ring 3 event delivery only, thus
+>> > > KVM, running on ring 0, can run safely with guest FRED RSP0, i=2Ee=
+=2E, no
+>> > > need to switch between host/guest FRED RSP0 during VM entry and exi=
+t=2E
+>> > >
+>> > > KVM should switch to host FRED RSP0 before returning to user level,
+>> > > and switch to guest FRED RSP0 before entering guest mode=2E
+>> >=20
+>> > Heh, if only KVM had a framework that was specifically designed for c=
+ontext
+>> > switching MSRs on return to userspace=2E  Translation: please use the
+>> > user_return_msr() APIs=2E
+>>=20
+>> IIUC the user return MSR framework works for MSRs that are per CPU
+>> constants, but like MSR_KERNEL_GS_BASE, MSR_IA32_FRED_RSP0 is a per
+>> *task* constant, thus we can't use it=2E
+>
+>Ah, in that case, the changelog is very misleading and needs to be fixed=
+=2E
+>Alternatively, is the desired RSP0 value tracked anywhere other than the =
+MSR?
+>E=2Eg=2E if it's somewhere in task_struct, then kvm_on_user_return() woul=
+d restore
+>the current task's desired RSP0=2E  Even if we don't get fancy, avoiding =
+the RDMSR
+>to get the current task's value would be nice=2E
 
-On some architectures (powerpc), the root node isn't marked with
-OF_POPULATED_BUS. If an overlay tries to modify the root node on these
-platforms it will fail, while on other platforms, such as ARM, it will
-succeed. This is because the root node is marked with OF_POPULATED_BUS
-by of_platform_default_populate_init() calling
-of_platform_default_populate() with NULL as the first argument.
-
-Loosen the requirement here so that platform devices can be created for
-nodes created as children of the root node via DT overlays even if the
-platform bus wasn't populated for the root node.
-
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-Cc: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-[sboyd@kernel.org: Folded in condition fix]
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/of/platform.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-index 389d4ea6bfc1..86be4dfb9323 100644
---- a/drivers/of/platform.c
-+++ b/drivers/of/platform.c
-@@ -732,11 +732,14 @@ static int of_platform_notify(struct notifier_block *nb,
- 	struct of_reconfig_data *rd = arg;
- 	struct platform_device *pdev_parent, *pdev;
- 	bool children_left;
-+	struct device_node *parent;
- 
- 	switch (of_reconfig_get_state_change(action, rd)) {
- 	case OF_RECONFIG_CHANGE_ADD:
--		/* verify that the parent is a bus */
--		if (!of_node_check_flag(rd->dn->parent, OF_POPULATED_BUS))
-+		parent = rd->dn->parent;
-+		/* verify that the parent is a bus (or the root node) */
-+		if (!of_node_is_root(parent) &&
-+		    !of_node_check_flag(parent, OF_POPULATED_BUS))
- 			return NOTIFY_OK;	/* not for us */
- 
- 		/* already populated? (driver using of_populate manually) */
-@@ -749,7 +752,7 @@ static int of_platform_notify(struct notifier_block *nb,
- 		 */
- 		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
- 		/* pdev_parent may be NULL when no bus platform device */
--		pdev_parent = of_find_device_by_node(rd->dn->parent);
-+		pdev_parent = of_find_device_by_node(parent);
- 		pdev = of_platform_device_create(rd->dn, NULL,
- 				pdev_parent ? &pdev_parent->dev : NULL);
- 		platform_device_put(pdev_parent);
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
-
+Hm, perhaps the right thing to do is to always invoke this function before=
+ a context switch happens if that happens before return to user space?
