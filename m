@@ -1,73 +1,74 @@
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76A94315D
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jul 2024 02:08:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658498F45
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jul 2024 02:13:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721354893; cv=none; b=Y2eTaqM2Bvz6b2gBwmzfWni6ErUfVoNBuxhLOinzF8UUc6chgP3K1tjrD0bR3JKEZ+98SxySHavrEmyEbv4k9QInqWJlgoO3AwPlBD5cSKAdOmG1io/zdYsmxP0u78yPHoic2TuNlMlY0RRDsOeV09NKP2GK7YBjAxGBg65pmwI=
+	t=1721355209; cv=none; b=H7A0RHCIo9hiZyo4B1LbLh77xltM5+uOEqAnMbawGm5Thgylh9nyJonGX/kZyi98VWdIDp0KcE061qzJI3fKojLyXI49z5zTH2eyJY6LbKEP5LO96sHv4b2kpGaiCy49LH/vnaJaKvZaMEoeSnNzfBXC6a2Yc67jmD/yupxRfcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721354893; c=relaxed/simple;
-	bh=VmKDvFgpz/E83Ibzf8dU/pBFko/O1qd4sreAXbduhsc=;
-	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 From:To:Cc:Subject:References:In-Reply-To; b=BSWz+cXSDxmy11fAL3Cn1kZ2TtELm4b42j3PCRSwch6PW+QPEeeoUL8DHyY8aRvkExpTiewkVt3BREzm1ljcXbq7G5eYAFtbtP5JpCOY7tUxFdY6wOiBG/cahlJTSpdeAomfs67O4gdFJjhY1bH4eo9rE7SqknYkmH0d6niqp88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=TOdu95Uj; arc=none smtp.client-ip=209.85.217.41
+	s=arc-20240116; t=1721355209; c=relaxed/simple;
+	bh=kRRp8LD5NDSju3eOBa9wP1KCbXySfixz28vLN27H/7g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G9J9ZA7NWOoPvNDYN7wb2NmC28e4dMBARFGFxsZqfXO8p9OQfe9U9skuRhZXU2HkbJo93UBPNhkS3Mm7EHRpCj66ioqgJ7T6FSjxGwq/YD1nf4Rv6Ka1byv5YhS3M+BsTsDlFcXVjL6B/lRkoN/9ZRXCBvIN+4ZjLebuTyDSsYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=H4ZNR+Eh; arc=none smtp.client-ip=209.85.219.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="TOdu95Uj"
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-48fde3a2b17so413202137.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jul 2024 19:08:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="H4ZNR+Eh"
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e03d49ff259so1550948276.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jul 2024 19:13:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1721354888; x=1721959688; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-disposition:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7WJIAU9I1siplxW26ihrUPrlbSZPb9UDEgIONz1gVMM=;
-        b=TOdu95UjVwn4OZ5EVBmq3u8ej6E779CltdzldQHRbLERFOmqzi/yFkJySUkDo8Q02S
-         MmucwBK1/1SuoKkSRBdsKjSIMKhWdeSiaycI+cPxmECXQfvR2aKbY5BqsDOmsa9reAiT
-         yZ7bvOVdN44uSSjzR3r+AK3FuhKiXFlE7LBF+eoO2hM8dKX3JPrYRO1Tt76HeIppxIJO
-         YL9vaEz9ychYf25oJ7bS2x1fcHAkxjGl+OFJpJnLe10FyE3LnpoKpRsAb+U0+VJFPg7E
-         YO22VimpGBJG0zZfGZkh7vMaKtbE/8Y1Bo6vXm1EeU0MNoLkSYueNMQn4LdZP9hfWwq8
-         qoBw==
+        d=paul-moore.com; s=google; t=1721355206; x=1721960006; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X6xBCyZt4LBr3NtFQ/tQHQNxox1QnJWXPeKeevVBbMo=;
+        b=H4ZNR+EhK/YQfniLDA6xNzaGoijxnVSvkTOCUwTz9DjbWuGXUpzA1CywazFlz/4JSy
+         i9gQouuiqgbtLyjjpK054Cxp8E7jmeT08KthgMkM7Tfax2roODvw5bigaPtStJ5VcqJ/
+         4DsyXyeM9OvjR+UaGK/S/XnKGErDdbb3qKiV7Ug4XkAWt93NO8xLGltO3TFXCIqYzMqY
+         dHIBu94/vZgCanKC+6a50mLnsyV1IdN3EYgsI6E0VIZKS8Z/vYLF9Q9hV0Vb0Hb6gyLr
+         jR6neljtrP0OOiLXGe3DgRbROMNPGwoeO4p3hpbQKL2OXY+PzPRFr9eLO3fBR6hsh2g6
+         e3Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721354888; x=1721959688;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-disposition:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7WJIAU9I1siplxW26ihrUPrlbSZPb9UDEgIONz1gVMM=;
-        b=E7GOdFfz2dz05F4hNR3c5A8rk7VQ2V3F3GMLNqMp23mCF8/kugrNCFVXdXlDLyX0Fj
-         ChBE/U5HaLQ/TmLXNcOPVZFaD/S7FwbzvqJUYfQ+K3ZIZqtlel/0QsTJpUvTHLh1G+98
-         Uz4TXbU+sueDSrYqEgVwtAsayBX5a5QVIM0jTOH0zyWj0U+C4EbB2mBrZ3MprS0tbc+4
-         RRpDYFOSW8+h+MGcBddV7/+hZkt92przd66J2TU8JKTkPn2fimgU9LLtgZsk9GHMlXp/
-         ShSW09LayaQsLjwaF8ztlXUzxRxUv1sGw8qYZsEnygwA4yT+cLl3UezPNig//e34MdjM
-         fZCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUrhcpqQlt1QI3Af73y3EHA5+lmjN/7GV7O2rwDsBJqeeXVhUDoevgs7apfgXxKFgNiImIlKdxLma0Mp4PvvIcxy77/DuU8GfXHb8M/Fsk5
-X-Gm-Message-State: AOJu0YxHD7Dxhqh1mbGk9bmrlwOU8apxX1szRsx2oQ8t0UHhvA2UBb5G
-	5bPFqncBxEFBrbaV/kdeK4S2/KlweMvrZgAv16jjr13z3zzv378/9Ll1kXjkog==
-X-Google-Smtp-Source: AGHT+IEfFmWT5d1hhUBnOOZYB8cD3VARfyIizd2JvZZpXpXUEgCBoIWvB9rnP0zsX/VlF1HVVridVA==
-X-Received: by 2002:a05:6102:5687:b0:48f:c031:3fa9 with SMTP id ada2fe7eead31-4915987763amr8039245137.12.1721354888569;
-        Thu, 18 Jul 2024 19:08:08 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b7acb0a15bsm1723896d6.138.2024.07.18.19.08.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jul 2024 19:08:08 -0700 (PDT)
-Date: Thu, 18 Jul 2024 22:08:07 -0400
-Message-ID: <94a3b82a1e3e1fec77d676fa382105d4@paul-moore.com>
+        d=1e100.net; s=20230601; t=1721355206; x=1721960006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X6xBCyZt4LBr3NtFQ/tQHQNxox1QnJWXPeKeevVBbMo=;
+        b=FAw1NeysAr82equOA0dB+RwOsDN05Ely5UU/gcQtjHAR/61kKh3qlrVoYkjDGIdTie
+         CUmr+DW4/qO/jxeTKntfpUBg4DTiDcHZqdqlI/EpyvjmkiFdP+bnw/gU33J+aSTrVJ1W
+         YjaQPWI45W4GeU7XZ8hbgw5qSfPvioWt5284RYhcKSQFrLXKmN3uPaugjGVKu3MjJejl
+         ecH8Jt1mPgxdHxckEvn0B0uejVFwAnG9/J+8s+HVFQgutz5SlUN0KWgJC4ml2nzPy1D0
+         Bk+kS/1Y2VaaqZPFD+/pckpFV8gkOp7XCTygJKTD7cAKd6mUeseKXbwydnbxelE7dEnz
+         sTXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWWNfIudYJWBnxqok0Wl2ZEuIjmo3PBzb2guG2eCDXarXW0BB7RyOpi5aCA6NVxwXnxqzDE7r76ByLuF3e0Ov25KyQeSBJqlhx8CTaD65dP
+X-Gm-Message-State: AOJu0YwvOLpcDNVHA/rFMyPaHBNqS84yVIM1wQ/NW22z1RQVG4Cnz+U0
+	5OVm+lOYzkIYn0pxF3aEKZsrSvTzUPvB8yez5TmyW/DIBqNDwhnKirNyTHP5SLEdTASBrLYh5i8
+	IHusv57QN/VeL1UTu1EVc+mQFGt4juWNc5+x9
+X-Google-Smtp-Source: AGHT+IHwwjQ8DinlK2wiNjovzG9BbNQIqAzdn4+/PROiJook0A2yi5g37Z7O91pcNOMATN+y4DlCwQYj+RCQbJxAIt0=
+X-Received: by 2002:a05:6902:725:b0:e05:f07f:7d2e with SMTP id
+ 3f1490d57ef6-e0640c4a3acmr4231663276.6.1721355206291; Thu, 18 Jul 2024
+ 19:13:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=utf-8 
-Content-Disposition: inline 
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+References: <20240711111908.3817636-1-xukuohai@huaweicloud.com> <CAHC9VhRohF+36PQbbEUiiiXjnmx-ZCphjOiAV5VTQwCejuejMA@mail.gmail.com>
+In-Reply-To: <CAHC9VhRohF+36PQbbEUiiiXjnmx-ZCphjOiAV5VTQwCejuejMA@mail.gmail.com>
 From: Paul Moore <paul@paul-moore.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org, apparmor@lists.ubuntu.com, selinux@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+Date: Thu, 18 Jul 2024 22:13:15 -0400
+Message-ID: <CAHC9VhQ-NAfLahQ-eomBrjBUT9t3s6OSzzE4nRLy=fj2AmJVqA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 00/20] Add return value range check for BPF LSM
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	selinux@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
 	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
 	Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
@@ -81,171 +82,129 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
 	Trond Myklebust <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, 
 	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
 	Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: Re: [PATCH v4 9/20] lsm: Refactor return value of LSM hook  key_getsecurity
-References: <20240711111908.3817636-10-xukuohai@huaweicloud.com>
-In-Reply-To: <20240711111908.3817636-10-xukuohai@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Jul 11, 2024 Xu Kuohai <xukuohai@huaweicloud.com> wrote:
-> 
-> To be consistent with most LSM hooks, convert the return value of
-> hook key_getsecurity to 0 or a negative error code.
-> 
-> Before:
-> - Hook key_getsecurity returns length of value on success or a
->   negative error code on failure.
-> 
-> After:
-> - Hook key_getsecurity returns 0 on success or a negative error
->   code on failure. An output parameter @len is introduced to hold
->   the length of value on success.
-> 
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> ---
->  include/linux/lsm_hook_defs.h |  3 ++-
->  include/linux/security.h      |  6 ++++--
->  security/keys/keyctl.c        | 11 ++++++++---
->  security/security.c           | 26 +++++++++++++++++++++-----
->  security/selinux/hooks.c      | 11 +++++------
->  security/smack/smack_lsm.c    | 21 +++++++++++----------
->  6 files changed, 51 insertions(+), 27 deletions(-)
+On Fri, Jul 12, 2024 at 5:44=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+> On Thu, Jul 11, 2024 at 7:13=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.c=
+om> wrote:
+> > From: Xu Kuohai <xukuohai@huawei.com>
+> >
+> > LSM BPF prog returning a positive number attached to the hook
+> > file_alloc_security makes kernel panic.
+> >
+> > Here is a panic log:
+> >
+> > [  441.235774] BUG: kernel NULL pointer dereference, address: 000000000=
+00009
+> > [  441.236748] #PF: supervisor write access in kernel mode
+> > [  441.237429] #PF: error_code(0x0002) - not-present page
+> > [  441.238119] PGD 800000000b02f067 P4D 800000000b02f067 PUD b031067 PM=
+D 0
+> > [  441.238990] Oops: 0002 [#1] PREEMPT SMP PTI
+> > [  441.239546] CPU: 0 PID: 347 Comm: loader Not tainted 6.8.0-rc6-gafe0=
+cbf23373 #22
+> > [  441.240496] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), B=
+IOS rel-1.15.0-0-g2dd4b4
+> > [  441.241933] RIP: 0010:alloc_file+0x4b/0x190
+> > [  441.242485] Code: 8b 04 25 c0 3c 1f 00 48 8b b0 30 0c 00 00 e8 9c fe=
+ ff ff 48 3d 00 f0 ff fb
+> > [  441.244820] RSP: 0018:ffffc90000c67c40 EFLAGS: 00010203
+> > [  441.245484] RAX: ffff888006a891a0 RBX: ffffffff8223bd00 RCX: 0000000=
+035b08000
+> > [  441.246391] RDX: ffff88800b95f7b0 RSI: 00000000001fc110 RDI: f089cd0=
+b8088ffff
+> > [  441.247294] RBP: ffffc90000c67c58 R08: 0000000000000001 R09: 0000000=
+000000001
+> > [  441.248209] R10: 0000000000000001 R11: 0000000000000001 R12: 0000000=
+000000001
+> > [  441.249108] R13: ffffc90000c67c78 R14: ffffffff8223bd00 R15: fffffff=
+ffffffff4
+> > [  441.250007] FS:  00000000005f3300(0000) GS:ffff88803ec00000(0000) kn=
+lGS:0000000000000000
+> > [  441.251053] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [  441.251788] CR2: 00000000000001a9 CR3: 000000000bdc4003 CR4: 0000000=
+000170ef0
+> > [  441.252688] Call Trace:
+> > [  441.253011]  <TASK>
+> > [  441.253296]  ? __die+0x24/0x70
+> > [  441.253702]  ? page_fault_oops+0x15b/0x480
+> > [  441.254236]  ? fixup_exception+0x26/0x330
+> > [  441.254750]  ? exc_page_fault+0x6d/0x1c0
+> > [  441.255257]  ? asm_exc_page_fault+0x26/0x30
+> > [  441.255792]  ? alloc_file+0x4b/0x190
+> > [  441.256257]  alloc_file_pseudo+0x9f/0xf0
+> > [  441.256760]  __anon_inode_getfile+0x87/0x190
+> > [  441.257311]  ? lock_release+0x14e/0x3f0
+> > [  441.257808]  bpf_link_prime+0xe8/0x1d0
+> > [  441.258315]  bpf_tracing_prog_attach+0x311/0x570
+> > [  441.258916]  ? __pfx_bpf_lsm_file_alloc_security+0x10/0x10
+> > [  441.259605]  __sys_bpf+0x1bb7/0x2dc0
+> > [  441.260070]  __x64_sys_bpf+0x20/0x30
+> > [  441.260533]  do_syscall_64+0x72/0x140
+> > [  441.261004]  entry_SYSCALL_64_after_hwframe+0x6e/0x76
+> > [  441.261643] RIP: 0033:0x4b0349
+> > [  441.262045] Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00=
+ 48 89 f8 48 89 f7 48 88
+> > [  441.264355] RSP: 002b:00007fff74daee38 EFLAGS: 00000246 ORIG_RAX: 00=
+00000000000141
+> > [  441.265293] RAX: ffffffffffffffda RBX: 00007fff74daef30 RCX: 0000000=
+0004b0349
+> > [  441.266187] RDX: 0000000000000040 RSI: 00007fff74daee50 RDI: 0000000=
+00000001c
+> > [  441.267114] RBP: 000000000000001b R08: 00000000005ef820 R09: 0000000=
+000000000
+> > [  441.268018] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000=
+000000004
+> > [  441.268907] R13: 0000000000000004 R14: 00000000005ef018 R15: 0000000=
+0004004e8
+> >
+> > This is because the filesystem uses IS_ERR to check if the return value
+> > is an error code. If it is not, the filesystem takes the return value
+> > as a file pointer. Since the positive number returned by the BPF prog
+> > is not a real file pointer, this misinterpretation causes a panic.
+> >
+> > Since other LSM modules always return either a negative error code
+> > or a valid pointer, this specific issue only exists in BPF LSM. The
+> > proposed solution is to reject LSM BPF progs returning unexpected
+> > values in the verifier. This patch set adds return value check to
+> > ensure only BPF progs returning expected values are accepted.
+> >
+> > Since each LSM hook has different excepted return values, we need to
+> > know the expected return values for each individual hook to do the
+> > check. Earlier versions of the patch set used LSM hook annotations
+> > to specify the return value range for each hook. Based on Paul's
+> > suggestion, current version gets rid of such annotations and instead
+> > converts hook return values to a common pattern: return 0 on success
+> > and negative error code on failure.
+> >
+> > Basically, LSM hooks are divided into two types: hooks that return a
+> > negative error code and zero or other values, and hooks that do not
+> > return a negative error code. This patch set converts all hooks of the
+> > first type and part of the second type to return 0 on success and a
+> > negative error code on failure (see patches 1-10). For certain hooks,
+> > like ismaclabel and inode_xattr_skipcap, the hook name already imply
+> > that returning 0 or 1 is the best choice, so they are not converted.
+> > There are four unconverted hooks. Except for ismaclabel, which is not
+> > used by BPF LSM, the other three are specified with a BTF ID list to
+> > only return 0 or 1.
+>
+> Thank you for following up on your initial work with this patchset, Xu
+> Kuohai.  It doesn't look like I'm going to be able to finish my review
+> by the end of the day today, so expect that a bit later, but so far I
+> think most of the changes look good and provide a nice improvement :)
 
-...
+You should have my feedback now, let me know if you have any questions.
 
-> diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
-> index 4bc3e9398ee3..e9f857620f28 100644
-> --- a/security/keys/keyctl.c
-> +++ b/security/keys/keyctl.c
-> @@ -1565,6 +1565,7 @@ long keyctl_get_security(key_serial_t keyid,
->  	struct key *key, *instkey;
->  	key_ref_t key_ref;
->  	char *context;
-> +	size_t len;
->  	long ret;
->  
->  	key_ref = lookup_user_key(keyid, KEY_LOOKUP_PARTIAL, KEY_NEED_VIEW);
-> @@ -1586,15 +1587,18 @@ long keyctl_get_security(key_serial_t keyid,
->  	}
->  
->  	key = key_ref_to_ptr(key_ref);
-> -	ret = security_key_getsecurity(key, &context);
-> -	if (ret == 0) {
-> +	ret = security_key_getsecurity(key, &context, &len);
-> +	if (ret < 0)
-> +		goto error;
+One additional comment I might make is that you may either want to
+wait until after v6.11-rc1 is released and I've had a chance to rebase
+the lsm/{dev,next} branches and merge the patchsets which are
+currently queued; there are a few patches queued up which will have an
+impact on this work.  While it's an unstable branch, you can take a
+peek at those queues patches in the lsm/dev-staging branch.
 
-Since there is already an if-else pattern here you might as well stick
-with that, for example:
+https://github.com/LinuxSecurityModule/kernel/blob/main/README.md
 
-  if (ret == 0) {
-    ...
-  } else if (ret > 0) {
-    ...
-  }
-
-... you should probably add a comment that @ret is -ERRNO on failure,
-but it doesn't look like you need an explicit test here since the error
-case will normally fall through to the 'error' label (which you shouldn't
-need anymore either).
-
-> +	if (len == 0) {
->  		/* if no information was returned, give userspace an empty
->  		 * string */
->  		ret = 1;
->  		if (buffer && buflen > 0 &&
->  		    copy_to_user(buffer, "", 1) != 0)
->  			ret = -EFAULT;
-> -	} else if (ret > 0) {
-> +	} else {
-> +		ret = len;
->  		/* return as much data as there's room for */
->  		if (buffer && buflen > 0) {
->  			if (buflen > ret)
-> @@ -1607,6 +1611,7 @@ long keyctl_get_security(key_serial_t keyid,
->  		kfree(context);
->  	}
->  
-> +error:
->  	key_ref_put(key_ref);
->  	return ret;
->  }
-> diff --git a/security/security.c b/security/security.c
-> index 9dd2ae6cf763..2c161101074d 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -5338,19 +5338,35 @@ int security_key_permission(key_ref_t key_ref, const struct cred *cred,
->   * security_key_getsecurity() - Get the key's security label
->   * @key: key
->   * @buffer: security label buffer
-> + * @len: the length of @buffer (including terminating NULL) on success
->   *
->   * Get a textual representation of the security context attached to a key for
->   * the purposes of honouring KEYCTL_GETSECURITY.  This function allocates the
->   * storage for the NUL-terminated string and the caller should free it.
->   *
-> - * Return: Returns the length of @buffer (including terminating NUL) or -ve if
-> - *         an error occurs.  May also return 0 (and a NULL buffer pointer) if
-> - *         there is no security label assigned to the key.
-> + * Return: Returns 0 on success or -ve if an error occurs. May also return 0
-> + *         (and a NULL buffer pointer) if there is no security label assigned
-> + *         to the key.
->   */
-> -int security_key_getsecurity(struct key *key, char **buffer)
-> +int security_key_getsecurity(struct key *key, char **buffer, size_t *len)
->  {
-> +	int rc;
-> +	size_t n = 0;
-> +	struct security_hook_list *hp;
-> +
->  	*buffer = NULL;
-> -	return call_int_hook(key_getsecurity, key, buffer);
-> +
-> +	hlist_for_each_entry(hp, &security_hook_heads.key_getsecurity, list) {
-> +		rc = hp->hook.key_getsecurity(key, buffer, &n);
-> +		if (rc < 0)
-> +			return rc;
-> +		if (n)
-> +			break;
-> +	}
-> +
-> +	*len = n;
-> +
-> +	return 0;
->  }
-
-Help me understand why we can't continue to use the call_int_hook()
-macro here?
-
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 16cd336aab3d..747ec602dec0 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -6737,18 +6737,17 @@ static int selinux_key_permission(key_ref_t key_ref,
->  	return avc_has_perm(sid, ksec->sid, SECCLASS_KEY, perm, NULL);
->  }
->  
-> -static int selinux_key_getsecurity(struct key *key, char **_buffer)
-> +static int selinux_key_getsecurity(struct key *key, char **_buffer,
-> +				   size_t *_len)
->  {
->  	struct key_security_struct *ksec = key->security;
->  	char *context = NULL;
-> -	unsigned len;
-> +	u32 context_len;
-
-Since @len doesn't collide with the parameter, you might as well just
-stick with @len as the local variable name.
-
->  	int rc;
->  
-> -	rc = security_sid_to_context(ksec->sid,
-> -				     &context, &len);
-> -	if (!rc)
-> -		rc = len;
-> +	rc = security_sid_to_context(ksec->sid, &context, &context_len);
->  	*_buffer = context;
-> +	*_len = context_len;
->  	return rc;
->  }
-
---
+--=20
 paul-moore.com
