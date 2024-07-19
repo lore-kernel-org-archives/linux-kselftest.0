@@ -1,60 +1,59 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99AB168D0
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jul 2024 02:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8075433A4
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jul 2024 02:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721354891; cv=none; b=NBR6XBGEEeoqx0pIMo5KiEkhEvVROYO8dQ36cp9nekr6CL5k+xapy2OZoSvF0bxe15JmNAGXNneE3e6ZZbWFMoGXOCGJgkj6jg3F3bizuDlH+svGAACKo2jYEVJ4haOjE6x74CPyif/A4D01tr146ACm1C0xalK7KmntS8cXiCc=
+	t=1721354892; cv=none; b=ai8iiX2xwlQhJFs6aipFCUYoE2O5sxF1VkVxeUyb2WRbtG7h6ccHzsooKVHl7R9YS7wcDG1/tp+H3uuH8seZNvQjfdlVSs0TzIGEtezYNVBKRVBR7kwXDLvvqgNrq9vfTKQbSY9MxLm7GsluaBYwEFGmb6meHK77XrGHsrZZfBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721354891; c=relaxed/simple;
-	bh=K3kRa8M3XjJ6TYCBzNSI7QLaEzBmwYjbaWzmaybCoBA=;
+	s=arc-20240116; t=1721354892; c=relaxed/simple;
+	bh=kBo8FL6v4lVz/HIYMehc0g0++0iYYtFl7umcTgzSiIo=;
 	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 From:To:Cc:Subject:References:In-Reply-To; b=fJz+Ncjt3a0D/+biwUptJqWy+Csyinag56T+dE74vheUZSqi0VV7HkOMpBi4sAbfQAKVny6b5KR0SDXo9bgcKeFrpEN3qMEwTz0wROChlgXOhr9g7UpPPRWfMkXKM71Z52uqgIoZnAFa+qQlxhKmVynYbr3IFxZh6y2T9pZ4Wcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=T/WZXoB/; arc=none smtp.client-ip=209.85.222.176
+	 From:To:Cc:Subject:References:In-Reply-To; b=pq6JWpvWiTZRhGtUMvh3IWbxNCrxMoBa/vkpwj6dWGksuCE/0hFQRqqFaIPnVhmuQmho601qldBqYIjjYc6rwxZgO6gP1iAUNzERf9bbHEnYq86LViEyYuU1/QxTgojPtreMFODqHwz+E7HiyRh4V5BvviQaqASzJhSstwNVkxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=VhX/rPnH; arc=none smtp.client-ip=209.85.160.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="T/WZXoB/"
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-79f178e62d1so64185385a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jul 2024 19:08:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="VhX/rPnH"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-44c2c4ccb7aso8001461cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jul 2024 19:08:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1721354887; x=1721959687; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1721354890; x=1721959690; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-disposition:mime-version:message-id:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=YDBm3QRwilAu+OHaz6Ln5e9Jy4Z5QvQg9nfn3ZsegWg=;
-        b=T/WZXoB/Uk5dXKxdM91e+evI9UA50w4YJkvGfiR+KicDHnrBLsl7spyVjtojoh9j9e
-         iCHR6bD5sAJXIlFsHuWrttE4dC2MAqvT4yuDWQZPVv7gEZ/5uQZ3WDmZk4H48ucmH/t4
-         QwJoSBjQSGvWGH4pP8QEdzEuAKxqiFhgPcNj9zgMfo6F8VfgYoykQIn6mp7KxBuI3AOc
-         2eGFnFm63Pt7h3rk2pAvapCKTcjJtW5agpD0ZP9S2YrFdYKurghIoqCZEPU1+k33JGSy
-         Lsi5Ag1JE2Zy1HnnsldPiHemkZ7W8W/zj+lwSZdOcqks7yVpZ5TlFdzmaXebJ0zB/30y
-         LYcA==
+        bh=rMOlvLeBY7ppQNW0gAgKhdZZMuR5DbNUZUz+dYFqAno=;
+        b=VhX/rPnHXcJzaiKmdcpiaQEnkQ0ABA6leqehCRpwlSmpeBPgKJL+Y/riHp1A8x2S9o
+         P/6F6iBCqhXmLAm+tf1mawxbdeCkGwnns/I+sv27LIzL2gvsdc4DydNbe6sioh8bnap/
+         eeH6NmDPARwu8b48Ph0Q4z2nz3B759sWbk/QLrTVRg3YjbhFgHSf6LlHEa6ZBj6yYcW2
+         05uLMMUgkMIwS+OQNovFc4v5SmvX8bYhMghcQjiB0MgEzOWMBdwafSv6eGn7539QnwiQ
+         nhEHXlsyRSA/LUd4MeeKW25zcjCX0iHvNGfPV6JbsYi9zh8D93iLkz8hByESoI//ZRE1
+         WSkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721354887; x=1721959687;
+        d=1e100.net; s=20230601; t=1721354890; x=1721959690;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-disposition:mime-version:message-id:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YDBm3QRwilAu+OHaz6Ln5e9Jy4Z5QvQg9nfn3ZsegWg=;
-        b=jAZ1fcQiSs7Plqr2BL/SIDCvZcxcamSZzBrh2eduyGyL2SzrHow/VrCaexi6NI8cA4
-         iXbGcubKLAiOjZ9tNG7HTjMsAqXIyxc6hlr3sxgrd3qBU5fCTtnaKH/PJWQfEm/NgAeX
-         bhiIr3DonpykxGOtB6R4ynXqR/JOqIkT5VgLNjGr75rPwnFiQD/7ZaHnNjsNyz8cKLh6
-         o3YPaa/scC1BqK1Epvd9G31f+ZsipLN5zc3Z1AB6nIUTTUcOsrZCLl1S1zT6TCjB+/tz
-         CLJRgdv+I7+Jfh7LrwLwJEmSNtxr5MZismtuQUytNwCgAtK+ftrIBoPwKmYUMPf9xcQz
-         2I9g==
-X-Forwarded-Encrypted: i=1; AJvYcCXLAv8uEVVtLWXZY0V6gpJF7xKqzARwlMS0Bpr1RJx7iJ3pbHPlHCDu+lYnI4fhtWUyQoh8UowcMW2vd22UDvlOk57/P9dVNVsS7k/lBd8I
-X-Gm-Message-State: AOJu0Yw/wp1K6KXoUztnZRNzaDydzD4NxLSoM43g4PWJiRRBMU1HuZGE
-	V23QDXkx4c8L0ywQ3X1dm9V3XWZ4oZQw9Hk8/4dOVAD7jqz2EN2g7hrDyuj3gVaUYPw3HN6sB1O
-	utw==
-X-Google-Smtp-Source: AGHT+IHJXqsEfMvaJ3I4voV7h0JmzEBLz/Y77YU9PWIwttNlLAz95UGh+qmMP8iEzkPgMVaZTYkx+Q==
-X-Received: by 2002:a05:620a:4014:b0:79e:ff47:3307 with SMTP id af79cd13be357-7a1938c1fb6mr351466485a.8.1721354887484;
-        Thu, 18 Jul 2024 19:08:07 -0700 (PDT)
+        bh=rMOlvLeBY7ppQNW0gAgKhdZZMuR5DbNUZUz+dYFqAno=;
+        b=qxS2QZb5IKWY1J1ek/41EBiHdzptOoCLkpZcHF7LnbtrzqXKwOyxT7/ux1laeklcSv
+         76Yi5gerwv2joyCVuncEANz1Jz8sI7rUADbEwDuQMyPQaYYYy4GnXzS1ygIXJwGkhC2V
+         ykEfStiVvJJCI7ol4UsQdYzAQDepTH4uLetW/rRpzYdycBXIFe2e5we7Aa76hL2X6snG
+         vJMdge3Udt4KywaVDSlvCp61uU3AiOouqyUmePIUjl8YCBdSkyD84pM6o4syoDsWM5TI
+         bYkqq6LWAoQZC94I7eAXUSoMsKmhlLeLt5ygs3b3un/q05Hb272WTMvt7BDYRL3MjFHS
+         mTPw==
+X-Forwarded-Encrypted: i=1; AJvYcCUcp1xRDOuogqfick+BU3YRuQHJFZh90ut5YyHFTxLtvrFiq3EYkjOO3Oid05FJH5aZjDfAafD3qndBSxSznmtPXyArcD5T0moRTbJcmw81
+X-Gm-Message-State: AOJu0Yx1tfIE0/iDHgBfJT8IujPq8oCQX1TNBguzP/gfpEFRsLknqsmp
+	PzrrbDtUfLj/7oToH88aJ+R4twNX9wVUnvh0+bBI+g4ecR/julgSlGaoKBvfYA==
+X-Google-Smtp-Source: AGHT+IEBnfC7Z+DraNQAASQJMOLlLlWDrffQUInj80cQBOtE30aHUMisjm3m1RV5kIOe1OrL1A7ytA==
+X-Received: by 2002:a05:622a:4c8:b0:442:198e:cb9 with SMTP id d75a77b69052e-44f96b7c8bdmr46243691cf.27.1721354889692;
+        Thu, 18 Jul 2024 19:08:09 -0700 (PDT)
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a198e9f7ccsm22476985a.0.2024.07.18.19.08.07
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44f9cda2ee1sm1843791cf.73.2024.07.18.19.08.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jul 2024 19:08:07 -0700 (PDT)
-Date: Thu, 18 Jul 2024 22:08:06 -0400
-Message-ID: <35bc63dac544edc75c25b8dc6c8c99d0@paul-moore.com>
+        Thu, 18 Jul 2024 19:08:09 -0700 (PDT)
+Date: Thu, 18 Jul 2024 22:08:08 -0400
+Message-ID: <36836e7b94465fd11d3425166ade3f54@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,36 +81,51 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
 	Trond Myklebust <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, 
 	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
 	Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: Re: [PATCH v4 8/20] lsm: Refactor return value of LSM hook getprocattr
-References: <20240711111908.3817636-9-xukuohai@huaweicloud.com>
-In-Reply-To: <20240711111908.3817636-9-xukuohai@huaweicloud.com>
+Subject: Re: [PATCH v4 10/20] lsm: Refactor return value of LSM hook  audit_rule_match
+References: <20240711111908.3817636-11-xukuohai@huaweicloud.com>
+In-Reply-To: <20240711111908.3817636-11-xukuohai@huaweicloud.com>
 
 On Jul 11, 2024 Xu Kuohai <xukuohai@huaweicloud.com> wrote:
 > 
 > To be consistent with most LSM hooks, convert the return value of
-> hook getprocattr to 0 or a negative error code.
+> hook audit_rule_match to 0 or a negative error code.
 > 
 > Before:
-> - Hook getprocattr returns length of value on success or a negative
->   error code on failure.
+> - Hook audit_rule_match returns 1 if the rule matches, 0 if it not,
+>   and negative error code otherwise.
 > 
 > After:
-> - Hook getprocattr returns 0 on success or a negative error code on
->   failure. An output parameter @len is introduced to hold the
->   length of value on success.
+> - Hook audit_rule_match returns 0 on success or a negative error
+>   code on failure. An output parameter @match is introduced to hold
+>   the match result on success.
 > 
 > Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 > ---
->  fs/proc/base.c                |  5 ++++-
->  include/linux/lsm_hook_defs.h |  2 +-
->  include/linux/security.h      |  5 +++--
->  security/apparmor/lsm.c       |  7 +++++--
->  security/security.c           |  8 +++++---
->  security/selinux/hooks.c      | 16 +++++++++-------
->  security/smack/smack_lsm.c    | 11 ++++++-----
->  7 files changed, 33 insertions(+), 21 deletions(-)
+>  include/linux/lsm_hook_defs.h     |  3 +-
+>  security/apparmor/audit.c         | 22 ++++++-------
+>  security/apparmor/include/audit.h |  2 +-
+>  security/security.c               | 15 ++++++++-
+>  security/selinux/include/audit.h  |  8 +++--
+>  security/selinux/ss/services.c    | 54 +++++++++++++++++--------------
+>  security/smack/smack_lsm.c        | 19 +++++++----
+>  7 files changed, 75 insertions(+), 48 deletions(-)
 
-The patch 07/20 comments also apply here.
+This is another odd hook, and similar to some of the others in this
+patchset, I'm not sure how applicable this would be to a BPF-based
+LSM.  I suspect you could safely block this from a BPF LSM and no one
+would notice or be upset.
+
+However, if we did want to keep this hook for a BPF LSM, I think it
+might be better to encode the "match" results in the return value, just
+sticking with a more conventional 0/errno approach.  What do you think
+about 0:found/ok, -ENOENT:missing/ok, -ERRNO:other/error?  Yes, some
+of the existing LSM audit_match code uses -ENOENT but looking quickly
+at those error conditions it seems that we could consider them
+equivalent to a "missing" or "failed match" result and use -ENOENT for
+both.  If you're really not happy with that overloading, we could use
+something like -ENOMSG:missing/ok instead.
+
+Thoughts?
 
 --
 paul-moore.com
