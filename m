@@ -1,31 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213993F9EC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E613A8E4;
 	Sun, 28 Jul 2024 10:10:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722161421; cv=none; b=teShoJfuUyj0n8oWZbNZw6e4syyF2zeunhcii36v4PDmpm4Ws/k57GtYFxISqxqY1nZQRZxgsgv/xVES9nF1ftRm8wBEkC+JqV57/mmp2GKtyOrgcdRjB1FbeZg6vEMPHwKJJJVJT5d8HC6NXOYDa6b+7Q1+BO8lq1ieGgnvidw=
+	t=1722161422; cv=none; b=YsUIJrny6QucKi9+dq6ntapdtlk1VhgYeV6nAjdo9L1X6qLxFwvikhG8joT92iAe5VIcPskhvuN6xi5ssItKzlVyDQOf6SXQ5mHmZyhfyKYe2qtnRmXRejBljYrljtg/FywOjhUYZUI75cR7sokq2VXJnI1QY8eQajkbL3TpbbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722161421; c=relaxed/simple;
-	bh=WpLErwbIOnDQlI1CEKK7Shd+jxySTINo7VNwEfZYUTg=;
+	s=arc-20240116; t=1722161422; c=relaxed/simple;
+	bh=LYVnkfOk8azVIIqLsIbtUPX96L6ih96CBmHiy7nNCmk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EU6IvCTZIbUOTopcptcZdRrSTF/XxuBnu+ohGg9cLAazlufTUpkOLjLK1OkJ3lpVSga+/K+w97JCd3i/K8pmFlw9VXirnezDU60EfmY13uydGmxGa/9KZpdJsSATyNi/shFT8jz5QGd/++uAdM1lQgIUyRcYMPbrWvVQx6CB4uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=OvVm/KUd; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=YJsoKpJPpbV1aiU2V94EKRof1Z42wT7lLnsc9XrgTdH/JvR8uXM5BR5oJpwBOKpxl+r5J8quMKqSoo1ii3KiEO0o17dKaT67ewKM8Etg15qUPF/oBB3gkzmH2VZSFwF/26k3BHJwKB2N726Bl5ATgCtR6xW2cB8+2JmSfAy0Kos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=eSYczxSC; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="OvVm/KUd"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="eSYczxSC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1722161406;
-	bh=WpLErwbIOnDQlI1CEKK7Shd+jxySTINo7VNwEfZYUTg=;
+	bh=LYVnkfOk8azVIIqLsIbtUPX96L6ih96CBmHiy7nNCmk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=OvVm/KUdBQ0x9DOSKZVHBXxKhOc+HXE118h7CeI6hidvPR8y1oQOI/g3xPGN1ysG8
-	 xlLk621Ay00dHE8oAeXrE7YXOq//GA4xCpE3AN4D/Fis+//RnZHqMzObh6d/Oct27Y
-	 f4EugGqobQRZ9tqgjEp60XjH+Iw7a13q05oGG79I=
+	b=eSYczxSCPTWxLilzT+dTYHsV+ajVKubS7sI497PJRbTsxaAvoSCJM5X/bdg9oHde8
+	 wOzWaEJWu9r22CCDRXEZ6+qgtzP/2Z3Ix8OPOHtOCmkhrZ8sgXocwsEXG0V6VROIEr
+	 6xgZ55A4b+3Fp8LRdd30FBcREu9LlAqc2ysehg3g=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 28 Jul 2024 12:10:03 +0200
-Subject: [PATCH 09/12] selftests/nolibc: add support for LLVM= parameter
+Date: Sun, 28 Jul 2024 12:10:01 +0200
+Subject: [PATCH 07/12] selftests/nolibc: determine $(srctree) first
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,43 +34,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240728-nolibc-llvm-v1-9-bc384269bc35@weissschuh.net>
+Message-Id: <20240728-nolibc-llvm-v1-7-bc384269bc35@weissschuh.net>
 References: <20240728-nolibc-llvm-v1-0-bc384269bc35@weissschuh.net>
 In-Reply-To: <20240728-nolibc-llvm-v1-0-bc384269bc35@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722161405; l=1069;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722161405; l=1396;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=WpLErwbIOnDQlI1CEKK7Shd+jxySTINo7VNwEfZYUTg=;
- b=oQvqhk1sOdBQW1kiH9NRhGOIAHT6fFXMl2hUhZbjSEH4LYFZz9V3Osk6YijFwP9XbKCsJRpmg
- ZQukNU2xlK9BNYw3uAJEFRzj04M/SKCkezapyrvvI9sE9oijHanKQ3/
+ bh=LYVnkfOk8azVIIqLsIbtUPX96L6ih96CBmHiy7nNCmk=;
+ b=XZLm41/WkvS5dnszYTu3j0CUw80qSXYzJZpRjecEctA8YbXWvHery96LrmE6BMVjnyLwC+WSK
+ E3TPY2NM/4YDZAsMG9lJ4Y46pI2gqjul2FsFrk3cCzl/1u8nqFYZyWu
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Makefile.include can modify CC and CFLAGS for usage with clang.
-Make use of it.
+Avoid needing relative includes.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/nolibc/Makefile | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 8000bc3c408b..cdff317c35f2 100644
+index 46dfbb50fae5..803a4e1bbe24 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -155,6 +155,9 @@ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wex
- 		$(CFLAGS_$(XARCH)) $(CFLAGS_STACKPROTECTOR) $(CFLAGS_EXTRA)
- LDFLAGS :=
- 
-+# Modify CFLAGS based on LLVM=
-+include $(srctree)/tools/scripts/Makefile.include
+@@ -1,9 +1,14 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for nolibc tests
+-include ../../../scripts/Makefile.include
+-include ../../../scripts/utilities.mak
++# we're in ".../tools/testing/selftests/nolibc"
++ifeq ($(srctree),)
++srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
++endif
 +
- REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++; print;} /\[SKIPPED\][\r]*$$/{s++} \
- 		END{ printf("\n%3d test(s): %3d passed, %3d skipped, %3d failed => status: ", p+s+f, p, s, f); \
- 		if (f || !p) printf("failure\n"); else if (s) printf("warning\n"); else printf("success\n");; \
++include $(srctree)/tools/scripts/Makefile.include
++include $(srctree)/tools/scripts/utilities.mak
+ # We need this for the "cc-option" macro.
+-include ../../../build/Build.include
++include $(srctree)/tools/build/Build.include
+ 
+ ifneq ($(O),)
+ ifneq ($(call is-absolute,$(O)),y)
+@@ -11,11 +16,6 @@ $(error Only absolute O= parameters are supported)
+ endif
+ endif
+ 
+-# we're in ".../tools/testing/selftests/nolibc"
+-ifeq ($(srctree),)
+-srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
+-endif
+-
+ ifeq ($(ARCH),)
+ include $(srctree)/scripts/subarch.include
+ ARCH = $(SUBARCH)
 
 -- 
 2.45.2
