@@ -1,32 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC93D22EE5;
-	Sun, 28 Jul 2024 10:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37A23716D;
+	Sun, 28 Jul 2024 10:10:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722161418; cv=none; b=Xlcj36oPYmNmKk1fw07ugJbUVrXXcctq1Px3KmOJ91nHq/VCsw6O9oz0C1+mglddvH6080rnq90H4svuJHRaA7gMitCCCwsjMMy+V3dFZ11cTOrBIvX7he/9DlkPh3fzQjB3UPKADBJ1YFG89oCuSIUVyUm1eYhzzZ472SEB4ss=
+	t=1722161420; cv=none; b=EuB0XddgjTl+xP2gvOHxqlDBF+ptBNLe9hPnxuNroW44YKwHcNt+teqH0U4P+s238wNVWY23Idjfp/tdTd6UXjuWcMQMoUfAxPSyZvxwN5JisuSqDg8JruMnVM24dff3vkY9q4C8m3ewhBSwkuAR4sFMXNytr5hI8V+HVVNw6GE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722161418; c=relaxed/simple;
-	bh=zn9iXWwceqvz8uRN8Yt/9Xv1URTnsny/0GYBzVr0zFM=;
+	s=arc-20240116; t=1722161420; c=relaxed/simple;
+	bh=h/BgI+G7ScwU6DQ48y7tlStVhparWhO6ZDGIMqrbJic=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MWqUlSDsSErtRyVZ191dDGZ6eTUbxk/e94LLAulfTfuFZy/9hGprLal6/DU36yREjgvFJNf2uyYyNO0C2xuFtN/3MUvB64Vh7OvLDfFlg5PLRV1taGsS+WWcLItme8JOa/5jbEgON+zlA98cMFZpLNTQJU6q190W8DPlCLIE2EM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=GtBMYezq; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=vEVGj6o31X3MyWxXLnl7jgobF0nAKiGLIMNS0j6n+asa6yXoqDgnEUk36JKZwnsj2WAlbceCkCJ8DOlXBcO1nhUdKat+df9c3tcSYV6raMPKeMVgvzGLGVsHAIeS470rJJm8P2uiFO4w92GrSUlXISuKN8uA+sUhvZ607Mq8tTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=WfvFwjDC; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="GtBMYezq"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="WfvFwjDC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1722161406;
-	bh=zn9iXWwceqvz8uRN8Yt/9Xv1URTnsny/0GYBzVr0zFM=;
+	bh=h/BgI+G7ScwU6DQ48y7tlStVhparWhO6ZDGIMqrbJic=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=GtBMYezq2amqYqZBbBqOjYRUKX0Ewf1NpjYDwaeF2UxTMkQcrbfNqXlvtnWA5jsvU
-	 ZI5HYrMYboqor9lGKNuautEx+9yVMc8ttxyjf7PU9yUx1aYYpxElzo3/zdTuGHT1BW
-	 OAFRZb7qLJWIkpmVZPDrnn+iCIChVLSh0aX6pb8g=
+	b=WfvFwjDCuOFT6qPBwBI5QDXv9OU5+xvjnTUdlY1PZ1D0IzNptdnSEwHd4lZjddMwK
+	 teliQDJpVdXXcYxoCGL/C9+IMr+bfmcB78amTjGsiiMO2b3lrq/l/UvF2gdQcUJEYd
+	 gzlOM9HFL7OQNTSv5CqTAz/I2NjRK3nCCTWZ7LnM=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 28 Jul 2024 12:09:55 +0200
-Subject: [PATCH 01/12] tools/nolibc: use clang-compatible asm syntax in
- arch-arm.h
+Date: Sun, 28 Jul 2024 12:10:02 +0200
+Subject: [PATCH 08/12] selftests/nolibc: setup objtree without
+ Makefile.include
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,44 +35,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240728-nolibc-llvm-v1-1-bc384269bc35@weissschuh.net>
+Message-Id: <20240728-nolibc-llvm-v1-8-bc384269bc35@weissschuh.net>
 References: <20240728-nolibc-llvm-v1-0-bc384269bc35@weissschuh.net>
 In-Reply-To: <20240728-nolibc-llvm-v1-0-bc384269bc35@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722161405; l=1062;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722161405; l=1710;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=zn9iXWwceqvz8uRN8Yt/9Xv1URTnsny/0GYBzVr0zFM=;
- b=enN4XiLb0dsZ/7AxXdEWeQT7gNJKUT0res8jlSd+0S6wH7FcOOQA6jB85VU0RAfhucfHU4X1Y
- qYzUfvUMKy5Cjd2oWe9H6q8OezDnu4OChbD9z8+Lmqmy8jx8BwjLFu4
+ bh=h/BgI+G7ScwU6DQ48y7tlStVhparWhO6ZDGIMqrbJic=;
+ b=QlImsRN3Q2Vy+tVFvto+/SCpb8gpujf9wlvl0kTfCkhm38xgV8n+7uhBkwSonY8KiJOE0si5M
+ z4BYQLdgjGOB4oWIfOCQftp6qY/o4SNy/iDV142DxxHeG0zoPrUkYOs
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The clang assembler rejects the current syntax.
-Switch to a syntax accepted by both GCC and clang.
+Makefile.include has multiple uses. In addition to the setup of various
+variables based on "O=", for which it is used currently, it can also set
+up variables based on "LLVM=".
+Unfortunately using it for both at the same time would require a big
+ugly reshuffling of the nolibc Makefile.
+As we want to use its llvm handling in the future, reimplement its
+objtree := $(O).
+
+While at it, also move "$(objtree) ?= $(srctree)" for consistency.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/arch-arm.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/nolibc/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index cae4afa7c1c7..d1c19d973e55 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -188,8 +188,8 @@
- void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
--		"mov %r0, sp\n"         /* save stack pointer to %r0, as arg1 of _start_c */
--		"and ip, %r0, #-8\n"    /* sp must be 8-byte aligned in the callee        */
-+		"mov r0, sp\n"          /* save stack pointer to %r0, as arg1 of _start_c */
-+		"and ip, r0, #-8\n"     /* sp must be 8-byte aligned in the callee        */
- 		"mov sp, ip\n"
- 		"bl  _start_c\n"        /* transfer to c runtime                          */
- 	);
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 803a4e1bbe24..8000bc3c408b 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -5,7 +5,6 @@ ifeq ($(srctree),)
+ srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
+ endif
+ 
+-include $(srctree)/tools/scripts/Makefile.include
+ include $(srctree)/tools/scripts/utilities.mak
+ # We need this for the "cc-option" macro.
+ include $(srctree)/tools/build/Build.include
+@@ -14,6 +13,9 @@ ifneq ($(O),)
+ ifneq ($(call is-absolute,$(O)),y)
+ $(error Only absolute O= parameters are supported)
+ endif
++objtree := $(O)
++else
++objtree ?= $(srctree)
+ endif
+ 
+ ifeq ($(ARCH),)
+@@ -21,8 +23,6 @@ include $(srctree)/scripts/subarch.include
+ ARCH = $(SUBARCH)
+ endif
+ 
+-objtree ?= $(srctree)
+-
+ # XARCH extends the kernel's ARCH with a few variants of the same
+ # architecture that only differ by the configuration, the toolchain
+ # and the Qemu program used. It is copied as-is into ARCH except for
 
 -- 
 2.45.2
