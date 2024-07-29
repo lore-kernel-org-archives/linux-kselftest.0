@@ -1,128 +1,89 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from m35-116.mailgun.net (m35-116.mailgun.net [69.72.35.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9A67F484;
-	Mon, 29 Jul 2024 20:57:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4771F18D4DF
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jul 2024 21:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.72.35.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722286626; cv=none; b=mN/e6yd0AdZpSchIrhiAEQFqeEi7XDrqctnme8iW0IElC/xkiSu0icnwmF0dNiLuAnTPJ+MQr+M4GUaF30e1Q3hQTHQyvCGJhqeB8xuzNsz2NzRBTE08btUGcA53XwdSDEWVdfEn5+m+Af2Txm3nNgj3y7VuDLvCYBjQZEhYrz4=
+	t=1722288185; cv=none; b=agSw15qMV+NRsKJYUMQZ+xET6b2ty5UvudShB+j0J9Y18+RBLtC0b2/RN8lgksTz3u/26eBWWRSxQ9cM8BOeI/MMIrUAcio36/BhwjWtvXXmFW0KtUyk8tINFyJP41GLN89lTO8M9bjkdQHbIXB0FsC/PBrPUfPfE1bJ7PRfWcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722286626; c=relaxed/simple;
-	bh=POH5VC0jKmddjNyYhRWP+pv1+J5+ngtBmyhj7YazHn0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Zqft7jMsMy91BVDF/KXuv/bv9pyU4J46wHxmY8b9Z7VzQBL2ghNX/T3G/TzAe4S34ktQ0IBgcKmCcK4P9aUcSZ1X0wuVRICQfuyKrQDJDO/u9WiEBL0T3p9fVdepi9pVWRc+MzVQXNT3TqSFVm5mJwJ2D6l7SuBMGTjkcNEj3U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=fMLemItr; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1722288185; c=relaxed/simple;
+	bh=54Ak1+K4R79/npDbs4UtUU9rG6vREN5KRCLxgY0YgX0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=W8t/Pu/tKotMUftc1ane7IYDbfnoUdafyfdR3X2QlgdxghODgF7u2a8Xnfd/xdUFujIA6DMzX87B6RCwdx7szrRrugLn61UR5gTdiGMfqpHfzk6NHOjTHAOhQNi8xUSfz7cYeuJgLZGnX4wuPk3R+IuNUUmx+D8Z10AiTIPM0Yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com; spf=pass smtp.mailfrom=relay.vimeo.com; dkim=pass (1024-bit key) header.d=relay.vimeo.com header.i=@relay.vimeo.com header.b=ffqgKZRz; arc=none smtp.client-ip=69.72.35.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=relay.vimeo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fMLemItr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722286623;
-	bh=POH5VC0jKmddjNyYhRWP+pv1+J5+ngtBmyhj7YazHn0=;
-	h=From:Date:Subject:To:Cc:From;
-	b=fMLemItr3lCb+kVYFqvz2xVvZL5GaTX6+F5Mw59mijXVgkxTcD++HrKQGgEjRgg6Y
-	 Ib5Jw8hO/uo83OU5OSUJ+cjjKicEbWtaT8RYEZFGdby6olbKQODzegCR9Un3/37/ey
-	 woMGj47t796UtZbx4bt30VGfWf4PXQPAC2PBqqenYJC2DHY0tCMRkmyiNNOORWqt7v
-	 yz4J4RqHg/1tUuTkG7watOIxtx2S2cWs+mhlhEXRN8glQrJGx3XukKX2+Vc9JYw5bA
-	 /50FPgQ4bP7yBLMNv7xcpRD81pOkdEjee7N0vxyCwJIU4FSL+k0jySY3JZTuyk4nQ9
-	 4LtYTYeelYEkg==
-Received: from [192.168.1.32] (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5DB783780530;
-	Mon, 29 Jul 2024 20:57:01 +0000 (UTC)
-From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Mon, 29 Jul 2024 16:56:02 -0400
-Subject: [PATCH v2] kselftest: dt: Ignore nodes that have ancestors
- disabled
+	dkim=pass (1024-bit key) header.d=relay.vimeo.com header.i=@relay.vimeo.com header.b="ffqgKZRz"
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=relay.vimeo.com; q=dns/txt; s=mailo; t=1722288182; x=1722295382;
+ h=Content-Transfer-Encoding: MIME-Version: Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
+ bh=a7Ljw3AXkZDzOFLBKFNTY35O0ifJdJ40YsuUE1AtXfE=;
+ b=ffqgKZRzwWe/rjwPkeU0auwsgZE8n2OXANRPo2taxUJDP0teyQ4lDzl9KAoWMQDz6Vi3AkQYEEsFq7Zi8tFTJ4tx4GDVV7Kc3rRIxBKnd4mM1Wi1rHVoow4GSeaC/aqKf/TWK8teWRy6j+WIyIieLSgxGzM/u9FBtrxxp7rjo6c=
+X-Mailgun-Sending-Ip: 69.72.35.116
+X-Mailgun-Sid: WyI5MTQwZiIsImxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmciLCI5ZDJhMWMiXQ==
+Received: from smtp.vimeo.com (215.71.185.35.bc.googleusercontent.com [35.185.71.215])
+ by 1ba2f445e949 with SMTP id 66a80836c423567e51c57d52 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Jul 2024 21:23:02 GMT
+Sender: davidf=vimeo.com@relay.vimeo.com
+Received: from nutau (gke-sre-us-east1-main-c45160e0-ow8k.c.vimeo-core.internal [10.56.27.211])
+	by smtp.vimeo.com (Postfix) with ESMTP id 120CA64FC7;
+	Mon, 29 Jul 2024 21:23:02 +0000 (UTC)
+Received: by nutau (Postfix, from userid 1001)
+	id 5BB66B409D2; Mon, 29 Jul 2024 10:38:00 -0400 (EDT)
+From: David Finkel <davidf@vimeo.com>
+To: Muchun Song <muchun.song@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: core-services@vimeo.com,
+	Jonathan Corbet <corbet@lwn.net>,
+	Michal Hocko <mhocko@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+Subject: [PATCH v6] mm, memcg: cg2 memory{.swap,}.peak write handlers
+Date: Mon, 29 Jul 2024 10:37:41 -0400
+Message-Id: <20240729143743.34236-1-davidf@vimeo.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240729-dt-kselftest-parent-disabled-v2-1-d7a001c4930d@collabora.com>
-X-B4-Tracking: v=1; b=H4sIAOEBqGYC/43NQQ6CMBCF4auYrh1DR0OLK+9hWBQ6yMRKSachG
- sLdrZzA5fcW/1uVUGISdT2sKtHCwnEqwONB9aObHgTsixVWeKlq3YDP8BQKQybJMLtEUwbP4rp
- AHhAtOoN49lirkpgTDfze8/e2eGTJMX32t0X/1j/DiwYNnR2Ms8bYpqpvfQzBdTG5Ux9fqt227
- QsppLRFzAAAAA==
-To: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>, 
- devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.14.0
 
-Filter out nodes that have one of its ancestors disabled as they aren't
-expected to probe.
+This is an updated patchset rebasing onto -torvalds master (post
+6.11-rc1), and addressing comments from Michal and Tejun.
 
-This removes the following false-positive failures on the
-sc7180-trogdor-lazor-limozeen-nots-r5 platform:
+As requested by Tejun and Johannes, I've removed the explicit check for
+the string "reset", so it now allows any non-empty string. (Empty
+strings get filtered before our write handler executes)
 
-/soc@0/geniqup@8c0000/i2c@894000/proximity@28
-/soc@0/geniqup@ac0000/spi@a90000/ec@0
-/soc@0/remoteproc@62400000/glink-edge/apr
-/soc@0/remoteproc@62400000/glink-edge/apr/service@3
-/soc@0/remoteproc@62400000/glink-edge/apr/service@4
-/soc@0/remoteproc@62400000/glink-edge/apr/service@4/clock-controller
-/soc@0/remoteproc@62400000/glink-edge/apr/service@4/dais
-/soc@0/remoteproc@62400000/glink-edge/apr/service@7
-/soc@0/remoteproc@62400000/glink-edge/apr/service@7/dais
-/soc@0/remoteproc@62400000/glink-edge/apr/service@8
-/soc@0/remoteproc@62400000/glink-edge/apr/service@8/routing
-/soc@0/remoteproc@62400000/glink-edge/fastrpc
-/soc@0/remoteproc@62400000/glink-edge/fastrpc/compute-cb@3
-/soc@0/remoteproc@62400000/glink-edge/fastrpc/compute-cb@4
-/soc@0/remoteproc@62400000/glink-edge/fastrpc/compute-cb@5
-/soc@0/spmi@c440000/pmic@0/pon@800/pwrkey
+I've also made several of the field reads and writes atomic with
+{READ,WRITE}_ONCE, and adjusted more of the types to be unsigned.
 
-Fixes: 14571ab1ad21 ("kselftest: Add new test for detecting unprobed Devicetree devices")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
-Changes in v2:
-- Rebased on v6.11-rc1
-- Link to v1: https://lore.kernel.org/r/20240619-dt-kselftest-parent-disabled-v1-1-b8f7a8778906@collabora.com
----
- tools/testing/selftests/dt/test_unprobed_devices.sh | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+Documentation/admin-guide/cgroup-v2.rst          |  22 ++--
+include/linux/cgroup-defs.h                      |   5 +
+include/linux/cgroup.h                           |   3 +
+include/linux/memcontrol.h                       |   5 +
+include/linux/page_counter.h                     |  11 +-
+kernel/cgroup/cgroup-internal.h                  |   2 +
+kernel/cgroup/cgroup.c                           |   7 +
+mm/memcontrol.c                                  | 116 +++++++++++++++--
+mm/page_counter.c                                |  30 +++--
+tools/testing/selftests/cgroup/cgroup_util.c     |  22 ++++
+tools/testing/selftests/cgroup/cgroup_util.h     |   2 +
+tools/testing/selftests/cgroup/test_memcontrol.c | 229 +++++++++++++++++++++++++++++++--
+12 files changed, 419 insertions(+), 35 deletions(-)
 
-diff --git a/tools/testing/selftests/dt/test_unprobed_devices.sh b/tools/testing/selftests/dt/test_unprobed_devices.sh
-index 2d7e70c5ad2d..5e3f42ef249e 100755
---- a/tools/testing/selftests/dt/test_unprobed_devices.sh
-+++ b/tools/testing/selftests/dt/test_unprobed_devices.sh
-@@ -34,8 +34,21 @@ nodes_compatible=$(
- 		# Check if node is available
- 		if [[ -e "${node}"/status ]]; then
- 			status=$(tr -d '\000' < "${node}"/status)
--			[[ "${status}" != "okay" && "${status}" != "ok" ]] && continue
-+			if [[ "${status}" != "okay" && "${status}" != "ok" ]]; then
-+				if [ -n "${disabled_nodes_regex}" ]; then
-+					disabled_nodes_regex="${disabled_nodes_regex}|${node}"
-+				else
-+					disabled_nodes_regex="${node}"
-+				fi
-+				continue
-+			fi
- 		fi
-+
-+		# Ignore this node if one of its ancestors was disabled
-+		if [ -n "${disabled_nodes_regex}" ]; then
-+			echo "${node}" | grep -q -E "${disabled_nodes_regex}" && continue
-+		fi
-+
- 		echo "${node}" | sed -e 's|\/proc\/device-tree||'
- 	done | sort
- 	)
+[1]: https://lore.kernel.org/cgroups/20240724161942.3448841-3-davidf@vimeo.com/T/
 
----
-base-commit: 8400291e289ee6b2bf9779ff1c83a291501f017b
-change-id: 20240619-dt-kselftest-parent-disabled-2282a7223d26
 
-Best regards,
--- 
-Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
