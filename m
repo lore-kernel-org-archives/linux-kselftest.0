@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4A91773D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF2A29CE7;
 	Tue, 30 Jul 2024 02:13:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722305609; cv=none; b=dRDNJScNW70vmvLQkww0qaCgXI8AyQDel3mqUECFGBoW2DwuL9kVgqgerFdW9nHEdmrGLKKg8kWbZ5UG7q+q0h//ZTQb7NPEewicmaNT0/oGeubctuL/nkUbD5lU+ZK8zJCsgKNfb4s7HNUWOIeXHsc+qPooC9irhR/GN4mNN50=
+	t=1722305610; cv=none; b=HexpQc/aLGCBzfAHqg0/kcwkkPNnuEGX5y647Sry2Y0avSIt6i14xN098H7JcYqo/MjwtJ8zgLRYvAZGW+sp3/Zqy2T3K0sYynu4qOttNF0Ec1Om6dtFPIN7zwbxdl94g0dk2DXEt/OEjNFzcsi9gM9JV+PIsFSy/ZM5m6bO368=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722305609; c=relaxed/simple;
-	bh=xKJ531oeNGYJ3rhSQThy26hzbdbPUPpEuw0uOAhhf54=;
+	s=arc-20240116; t=1722305610; c=relaxed/simple;
+	bh=SnvSs1etKWHU2+23pr2G5/54w/XtUgCs9O5keSBEStQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DFF/T8VmcSw10tq1jB3lasLow2QHmJC3OsWEPddTeirB9xwXYuxtz5fmn//z50IVcUG+/D0QSfTCUL52s7m+JJvNMBtq1L3gV+pRuKACZkhNio0L4/6AsHii418bQdx20gPpHCh6ABRgkba7mLGHlHcBC6SxtEavDKWlPMiTolM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gFEd7RV9; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=HQABqgR3ZBhuO7vKzrpYxaWtgqCcvS1bxx3o7BVI6MT3cTUWXYSdY4n+6IqNI/W4a/f+eGLABnyS6p8++lSjuzg1m0DPK6UoK0mc0XsVpYzHQct1Pho7CtaTh9C4kMX9K2prxMKmLqRaCRZ+8vMvYKRq/gRb6p3RDQegoy5mKtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XsP25G4n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gFEd7RV9"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 862E7C4AF0C;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XsP25G4n"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A6851C4AF13;
 	Tue, 30 Jul 2024 02:13:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1722305609;
-	bh=xKJ531oeNGYJ3rhSQThy26hzbdbPUPpEuw0uOAhhf54=;
+	bh=SnvSs1etKWHU2+23pr2G5/54w/XtUgCs9O5keSBEStQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=gFEd7RV9hyUy/cGSO+oPHaQJr8DIDJLQLp6HbUHuHYh+7Yr+DE8u3BOM0IdRpPIb1
-	 mWefD11xppDBWbkJMdPn/J98sqoprR5R59mWWKhhcYL7mIaYymyARg0/tofJTwOB1P
-	 3ow1L3oJKasUIMDmAKz8PxjtICqtfad5AYKaEyvnhaOcJafy+gz5uQrOpfnAbf3WxH
-	 RimBNGzBDGITQogbRvF35SzD34IqBdz8EU+7FDoeFBLQcnQf7soMoeVFvwVhcd2IDO
-	 /8GfAxQKO+GpJU6wIOe20bBKPisdbKMnLqiYj26QLyV11nGHuWa6WayEvxGl8gcft7
-	 ecVfpGVemjpuQ==
+	b=XsP25G4n9BBJlaafuerRxe8CthEZAb5DWL1QCrPfTUKxFP362yGz/oDdK6PwqNvZa
+	 h9g3FjEeDxIUALr0Hkt+6w2bPLqsF17jXO+xdQZLADVfgSMBTXvlL58wmK/apyXQe7
+	 YpCZNK1p52wNjg6+PZOV0OZzTjvB7h7LskinJO6gyMQ28rhbCoXBie9Lyvcn/cueyX
+	 jVpqAnSjBOcjK0pMo7dzCLNEkX0Dhv/T35rw3RpcUIPdFL+7LvmuVrP64onbgelImH
+	 M6pMCM8sgcl9NY9foQba+AE6f5Wpj4IbxXgt005Ty+OOPXUel0x5sXgvVaa7Jkn7qd
+	 B6WnJXDse8iFA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76595C3DA4A;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EDBEC3DA7E;
 	Tue, 30 Jul 2024 02:13:29 +0000 (UTC)
 From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
-Date: Tue, 30 Jul 2024 03:12:16 +0100
-Subject: [PATCH net-next 2/7] selftests/net: Provide test_snprintf() helper
+Date: Tue, 30 Jul 2024 03:12:18 +0100
+Subject: [PATCH net-next 4/7] selftests/net: Don't forget to close nsfd
+ after switch_save_ns()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240730-tcp-ao-selftests-upd-6-12-v1-2-ffd4bf15d638@gmail.com>
+Message-Id: <20240730-tcp-ao-selftests-upd-6-12-v1-4-ffd4bf15d638@gmail.com>
 References: <20240730-tcp-ao-selftests-upd-6-12-v1-0-ffd4bf15d638@gmail.com>
 In-Reply-To: <20240730-tcp-ao-selftests-upd-6-12-v1-0-ffd4bf15d638@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -50,11 +51,11 @@ Cc: Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Dmitry Safonov <0x7f454c46@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722305607; l=1997;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722305607; l=1650;
  i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
- bh=Hn2Bs9Fc12/AgT2T+RfB5ex9Lh+DmQaxL5WEBCBy03c=;
- b=vzbfnONCkUpmAXmtf052TLVJ0Gl9J9VN6abOlydRPRQDr1Itxrv4mqS6HUDMLSqZy3XOPh7jw
- kfNFciSa+TpDSZqlQYQsL0Fb436BuXK7b49538rgEMu3l5OV2WTCf7h
+ bh=BuZdUTS7934qcmF6bxHRsQ9gqgaVwYQtz+0zY8CtODc=;
+ b=CDkZKzvPI2EBsk787oywLx/nF0RKGExokF6JLZ0roP33C5/QydoXyCH2yUaOCAjZ7YJZQtE6V
+ A3dTUzbx2T/AXFQs3mcrKprwnaWuXCYrpC0+mY0TsE808+NGpZYcBVt
 X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
  pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
 X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
@@ -64,87 +65,61 @@ Reply-To: 0x7f454c46@gmail.com
 
 From: Dmitry Safonov <0x7f454c46@gmail.com>
 
-Re-invented std::stringstream :-)
+The switch_save_ns() helper suppose to help switching to another
+namespace for some action and to return back to original namespace.
 
-No need for buffer array - malloc() it.
-It's going to be helpful of path concat printings.
+The fd should be closed.
 
 Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
 ---
- tools/testing/selftests/net/tcp_ao/lib/aolib.h | 56 ++++++++++++++++++++++----
- 1 file changed, 49 insertions(+), 7 deletions(-)
+ tools/testing/selftests/net/tcp_ao/lib/setup.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tcp_ao/lib/aolib.h b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-index fbc7f6111815..fdf44d176e0b 100644
---- a/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-+++ b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-@@ -37,17 +37,59 @@ extern void __test_xfail(const char *buf);
- extern void __test_error(const char *buf);
- extern void __test_skip(const char *buf);
- 
-+static inline char *test_snprintf(const char *fmt, va_list vargs)
-+{
-+	char *ret = NULL;
-+	size_t size = 0;
-+	va_list tmp;
-+	int n = 0;
-+
-+	va_copy(tmp, vargs);
-+	n = vsnprintf(ret, size, fmt, tmp);
-+	if (n < 0)
-+		return NULL;
-+
-+	size = (size_t) n + 1;
-+	ret = malloc(size);
-+	if (ret == NULL)
-+		return NULL;
-+
-+	n = vsnprintf(ret, size, fmt, vargs);
-+	if (n < 0 || n > size - 1) {
-+		free(ret);
-+		return NULL;
-+	}
-+	return ret;
-+}
-+
-+__attribute__((__format__(__printf__, 1, 2)))
-+static inline char *test_sprintf(const char *fmt, ...)
-+{
-+	va_list vargs;
-+	char *ret;
-+
-+	va_start(vargs, fmt);
-+	ret = test_snprintf(fmt, vargs);
-+	va_end(vargs);
-+
-+	return ret;
-+}
-+
- __attribute__((__format__(__printf__, 2, 3)))
- static inline void __test_print(void (*fn)(const char *), const char *fmt, ...)
- {
--#define TEST_MSG_BUFFER_SIZE 4096
--	char buf[TEST_MSG_BUFFER_SIZE];
--	va_list arg;
-+	va_list vargs;
-+	char *msg;
- 
--	va_start(arg, fmt);
--	vsnprintf(buf, sizeof(buf), fmt, arg);
--	va_end(arg);
--	fn(buf);
-+	va_start(vargs, fmt);
-+	msg = test_snprintf(fmt, vargs);
-+	va_end(vargs);
-+
-+	if (!msg)
-+		return;
-+
-+	fn(msg);
-+	free(msg);
+diff --git a/tools/testing/selftests/net/tcp_ao/lib/setup.c b/tools/testing/selftests/net/tcp_ao/lib/setup.c
+index e408b9243b2c..4e6820e7cb86 100644
+--- a/tools/testing/selftests/net/tcp_ao/lib/setup.c
++++ b/tools/testing/selftests/net/tcp_ao/lib/setup.c
+@@ -142,6 +142,13 @@ int switch_save_ns(int new_ns)
+ 	return ret;
  }
  
- #define test_print(fmt, ...)						\
++void switch_close_ns(int fd)
++{
++	if (setns(fd, CLONE_NEWNET))
++		test_error("setns()");
++	close(fd);
++}
++
+ static int nsfd_outside	= -1;
+ static int nsfd_parent	= -1;
+ static int nsfd_child	= -1;
+@@ -296,7 +303,7 @@ static bool is_optmem_namespaced(void)
+ 		int old_ns = switch_save_ns(nsfd_child);
+ 
+ 		optmem_ns = !access(optmem_file, F_OK);
+-		switch_ns(old_ns);
++		switch_close_ns(old_ns);
+ 	}
+ 	return !!optmem_ns;
+ }
+@@ -317,7 +324,7 @@ size_t test_get_optmem(void)
+ 		test_error("can't read from %s", optmem_file);
+ 	fclose(foptmem);
+ 	if (!is_optmem_namespaced())
+-		switch_ns(old_ns);
++		switch_close_ns(old_ns);
+ 	return ret;
+ }
+ 
+@@ -339,7 +346,7 @@ static void __test_set_optmem(size_t new, size_t *old)
+ 		test_error("can't write %zu to %s", new, optmem_file);
+ 	fclose(foptmem);
+ 	if (!is_optmem_namespaced())
+-		switch_ns(old_ns);
++		switch_close_ns(old_ns);
+ }
+ 
+ static void test_revert_optmem(void)
 
 -- 
 2.42.2
