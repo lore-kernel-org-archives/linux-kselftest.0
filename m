@@ -1,144 +1,143 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA94A18A958
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2024 10:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655ED195F22;
+	Tue, 30 Jul 2024 11:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722336708; cv=none; b=ggX4IsALx5wlXn2DMF1MwWT0duG8SKa7J/bX9Ekl5SaRqcPwly9xzrEdxmfGusqdBZp1JIDrsDPxedbLEv2WNOq9KWai+MtpyinQjucbZO0CwWSeLSiDEOBCHyh7Ujdw4eovt3RXaOVjp5QPd1hm6jkYi5ZXbuQQ4S6TwGBE8BM=
+	t=1722340775; cv=none; b=LYlzeiwWu3S5QKZwyYpqAy2mP6Y81+OgGwwep5+ize5aUnFczrETCPZznCJgNRLLIpiUqjsnM6UmFOKXRbqpBs2pCUk524+LVeXFElKxkYKcWhkSOuqKzEnYLeBStDvZ66zL3XaqM2eJcL9TTsYYUU0j2ITSfgVpwRWnbqyvGMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722336708; c=relaxed/simple;
-	bh=NVy6RN9UJ7x5SUNJVs+jH2G33Zl5cTJuJ6ZUmdQRBlM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UCmABGE+T7tn7Gq9YGSp0oOUvPYGPBIAKqOiIXoUHPfTIiifQVZnNjH5e7sq3IcccVHHv5zBMj334iJLw2bpQUu0Mf+bPWm9eZCfFFlryrjjONJBYhh0mmnpMMH2H5815UY/3Ekmzm2HuzPP7ylmFnlO3sWg3RnooId03Y+LCbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Zki5zI4s; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1722340775; c=relaxed/simple;
+	bh=bFng46TywWA1qcwiXCQr+6wwB4FqtiDuuvEwXl3opRU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=MWIzDHexVkclW0m5x6J//ac0FazPEOahYZjibU0F3NtBnlRi7W2DTKlPrd4T49or2CytxSYmab94y0MieG34TtVMzpbnahlkHC66xWyHN9pN1edAft1deA5c2f0op/OQ+3Ugp4vJfq6IcjWjnXRAWVgt87vG+XRGD+GFZUvT91M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=P80rYNQw; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Zki5zI4s"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722336705;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="P80rYNQw"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3588E60009;
+	Tue, 30 Jul 2024 11:59:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1722340766;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+hB8Q6mu68koU2jQoQEu66GSXIlhsKY8wiFrY5lywKE=;
-	b=Zki5zI4snH/j2v7pUZSaksnKZ1BCwwtbxXe/pNCPU9WQP+b0vB6AASEDohwSGqcvdTLZJe
-	wSvSB63Jm4XGuDPxoqfDoFWmVKppRnAYHRM25Bi6kKT+iuHBZHZtAZveTWrHE30NBCtjxZ
-	zftqHJNhxCtUibQ/1mem1lxz39khMhg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-473-Vz2sNfx_Mgi4TOlov6TqvA-1; Tue, 30 Jul 2024 06:51:44 -0400
-X-MC-Unique: Vz2sNfx_Mgi4TOlov6TqvA-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3684636eb06so111197f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2024 03:51:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722336703; x=1722941503;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+hB8Q6mu68koU2jQoQEu66GSXIlhsKY8wiFrY5lywKE=;
-        b=WJLR6Fl68dWCXS0BMg74HEKPVvwY+dsQUIiX+UEGGJ0j26AiKmVSKDDypFJ9ZVlTD9
-         qJ6lRhdpHK6LsvjUJ4LeVJr7M20lUHi8CkeQ7d51aKzKJAY1eoM/K6k+ALYh5+FI+QrS
-         Nfo4n+uFfL7+4Gx7dwVkqHoByFlgduOac1zyVOXOtRtyv12h8X7SqfqCDaK/JyCxFIFr
-         8Uy5SpxUV1WQ76VJo9j2uHNWA1yfy8vfQ2hBt0MutWQN6VTSGm0CLJpxN4Cq6G/RUmSS
-         dALObG+9bIprpBEuPI3jep4yspMSUZbvOM9xLsUH1OPOvsO9XATIYd262OA35BSX+lVa
-         ZSdw==
-X-Forwarded-Encrypted: i=1; AJvYcCXv/IRZIOC9X9eJloKSuIzsH/T1zIgSjrRISdvVvYmCuvwPvEuWrPwbVcNAbXic4gvIqN3+oud8u0uH02pSAAQtQIb4usswPLldSyAFFwVr
-X-Gm-Message-State: AOJu0YzdmJYPNbVt+X3IXOrB2rJWFMn6RTKRLenLylO6cnoNdiIWgNCg
-	yPkhBbq6he5GOOapdOSnD+QiB+8l6Njgvt6NldP20tJU5U4NIxboJ0mXF7JifnFusEiIP0+1ox9
-	hOUkz63MfSmvJ/HhtcwwJ6FjiT6IP8RaVjGfaSMxDOTTsvL+PAQcEuU5mGhPuGlt6uQ==
-X-Received: by 2002:a05:600c:1c2a:b0:426:67e0:3aa with SMTP id 5b1f17b1804b1-4280542e12bmr73159225e9.1.1722336702741;
-        Tue, 30 Jul 2024 03:51:42 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEZaoR6bpS2N4mm+HmZ4X2wXHynNhoxBj3SH6BYXqnLt+gsQ3kywAuClBogEKuCnft44Z7HAg==
-X-Received: by 2002:a05:600c:1c2a:b0:426:67e0:3aa with SMTP id 5b1f17b1804b1-4280542e12bmr73159135e9.1.1722336702196;
-        Tue, 30 Jul 2024 03:51:42 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:1712:4410:9110:ce28:b1de:d919? ([2a0d:3344:1712:4410:9110:ce28:b1de:d919])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4281fd617desm49917915e9.35.2024.07.30.03.51.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jul 2024 03:51:41 -0700 (PDT)
-Message-ID: <8c2835ed-9066-4adb-8f8b-f38416d97849@redhat.com>
-Date: Tue, 30 Jul 2024 12:51:40 +0200
+	bh=hnKLsdQUhtO0HXqkcJaopxOibAnUmKmSBAHLuOVe3/0=;
+	b=P80rYNQw9XW0VIIJ+VZjytrSHFU7k1MaZP6iVQf5HZNJIMyVjaP1qTReR3Z5UvunSnaWRY
+	8yUA5DPzzFnCL67bQ9QWw/gx58mNk18kyzfp2tAXjvPCRb+cDLSFHP8K4YRDSVpplDZBXi
+	dDIdrXUC0qNpGjdQXWW53853YaH6Xp4qp8HADSJN6VYEKgUGWkEoDzw0VsgJXyPf1FEGJy
+	FWsXYkHMY5pjCoq6BP1V0lHqwT9VZfrhl4TG8YvxKBtSef4iZ4RmV9MZX3oMOUVBa6aNay
+	zotpigNKg5kz4PLU4/RbTJNX77NEra70HpSosyuu/BF7VdOUFoWanWHoSklzhQ==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Tue, 30 Jul 2024 13:59:11 +0200
+Subject: [PATCH bpf-next v3 1/3] selftests/bpf: do not disable /dev/null
+ device access in cgroup dev test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 0/7] net/selftests: TCP-AO selftests updates
-To: 0x7f454c46@gmail.com, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240730-convert_dev_cgroup-v3-1-93e573b74357@bootlin.com>
+References: <20240730-convert_dev_cgroup-v3-0-93e573b74357@bootlin.com>
+In-Reply-To: <20240730-convert_dev_cgroup-v3-0-93e573b74357@bootlin.com>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
  Shuah Khan <shuah@kernel.org>
-Cc: Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240730-tcp-ao-selftests-upd-6-12-v1-0-ffd4bf15d638@gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20240730-tcp-ao-selftests-upd-6-12-v1-0-ffd4bf15d638@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.1
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On 7/30/24 04:12, Dmitry Safonov wrote:
-> First 4 patches are more-or-less cleanups/preparations.
-> 
-> Patch 5 was sent to me/contributed off-list by Mohammad, who wants 32-bit
-> kernels to run TCP-AO.
-> 
-> Patch 6 is a workaround/fix for slow VMs. Albeit, I can't reproduce
-> the issue, but I hope it will fix netdev flakes for connect-deny-*
-> tests.
-> 
-> And the biggest change is adding TCP-AO tracepoints to selftests.
-> I think it's a good addition by the following reasons:
-> - The related tracepoints are now tested;
-> - It allows tcp-ao selftests to raise expectations on the kernel
->    behavior - up from the syscalls exit statuses + net counters.
-> - Provides tracepoints usage samples.
-> 
-> As tracepoints are not a stable ABI, any kernel changes done to them
-> will be reflected to the selftests, which also will allow users
-> to see how to change their code. It's quite better than parsing dmesg
-> (what BGP was doing pre-tracepoints, ugh).
-> 
-> Somewhat arguably, the code parses trace_pipe, rather than uses
-> libtraceevent (which any sane user should do). The reason behind that is
-> the same as for rt-netlink macros instead of libmnl: I'm trying
-> to minimize the library dependencies of the selftests. And the
-> performance of formatting text in kernel and parsing it again in a test
-> is not critical.
-> 
-> Current output sample:
->> ok 73 Trace events matched expectations: 13 tcp_hash_md5_required[2] tcp_hash_md5_unexpected[4] tcp_hash_ao_required[3] tcp_ao_key_not_found[4]
-> 
-> Previously, tracepoints selftests were part of kernel tcp tracepoints
-> submission [1], but since then the code was quite changed:
-> - Now generic tracing setup is in lib/ftrace.c, separate from
->    lib/ftrace-tcp.c which utilizes TCP trace points. This separation
->    allows future selftests to trace non-TCP events, i.e. to find out
->    an skb's drop reason, which was useful in the creation of TCP-CLOSE
->    stress-test (not in this patch set, but used in attempt to reproduce
->    the issue from [2]).
-> - Another change is that in the previous submission the trace events
->    where used only to detect unexpected TCP-AO/TCP-MD5 events. In this
->    version the selftests will fail if an expected trace event didn't
->    appear.
->    Let's see how reliable this is on the netdev bot - it obviously passes
->    on my testing, but potentially may require a temporary XFAIL patch
->    if it misbehaves on a slow VM.
+test_dev_cgroup currently loads a small bpf program allowing any access on
+urandom and zero devices, disabling access to any other device. It makes
+migrating this test to test_progs impossible, since this one manipulates
+extensively /dev/null.
 
-It looks like this is not well digested by the CI, e.g.:
+Allow /dev/null manipulation in dev_cgroup program to make its usage in
+test_progs framework possible. Update test_dev_cgroup.c as well to match
+this change while it has not been removed.
 
-https://netdev.bots.linux.dev/flakes.html?tn-needle=tcp-ao
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+ tools/testing/selftests/bpf/progs/dev_cgroup.c |  4 ++--
+ tools/testing/selftests/bpf/test_dev_cgroup.c  | 18 +++++++++---------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-https://netdev-3.bots.linux.dev/vmksft-tcp-ao-dbg/results/705502/8-restore-ipv4/stdout
+diff --git a/tools/testing/selftests/bpf/progs/dev_cgroup.c b/tools/testing/selftests/bpf/progs/dev_cgroup.c
+index 79b54a4fa244..c1dfbd2b56fc 100644
+--- a/tools/testing/selftests/bpf/progs/dev_cgroup.c
++++ b/tools/testing/selftests/bpf/progs/dev_cgroup.c
+@@ -41,14 +41,14 @@ int bpf_prog1(struct bpf_cgroup_dev_ctx *ctx)
+ 	bpf_trace_printk(fmt, sizeof(fmt), ctx->major, ctx->minor);
+ #endif
+ 
+-	/* Allow access to /dev/zero and /dev/random.
++	/* Allow access to /dev/null and /dev/urandom.
+ 	 * Forbid everything else.
+ 	 */
+ 	if (ctx->major != 1 || type != BPF_DEVCG_DEV_CHAR)
+ 		return 0;
+ 
+ 	switch (ctx->minor) {
+-	case 5: /* 1:5 /dev/zero */
++	case 3: /* 1:3 /dev/null */
+ 	case 9: /* 1:9 /dev/urandom */
+ 		return 1;
+ 	}
+diff --git a/tools/testing/selftests/bpf/test_dev_cgroup.c b/tools/testing/selftests/bpf/test_dev_cgroup.c
+index adeaf63cb6fa..33f544f0005a 100644
+--- a/tools/testing/selftests/bpf/test_dev_cgroup.c
++++ b/tools/testing/selftests/bpf/test_dev_cgroup.c
+@@ -54,25 +54,25 @@ int main(int argc, char **argv)
+ 		goto err;
+ 	}
+ 
+-	/* All operations with /dev/zero and and /dev/urandom are allowed,
++	/* All operations with /dev/null and /dev/urandom are allowed,
+ 	 * everything else is forbidden.
+ 	 */
+-	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
+-	assert(system("mknod /tmp/test_dev_cgroup_null c 1 3"));
+-	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
+-
+-	/* /dev/zero is whitelisted */
+ 	assert(system("rm -f /tmp/test_dev_cgroup_zero") == 0);
+-	assert(system("mknod /tmp/test_dev_cgroup_zero c 1 5") == 0);
++	assert(system("mknod /tmp/test_dev_cgroup_zero c 1 5"));
+ 	assert(system("rm -f /tmp/test_dev_cgroup_zero") == 0);
+ 
+-	assert(system("dd if=/dev/urandom of=/dev/zero count=64") == 0);
++	/* /dev/null is whitelisted */
++	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
++	assert(system("mknod /tmp/test_dev_cgroup_null c 1 3") == 0);
++	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
++
++	assert(system("dd if=/dev/urandom of=/dev/null count=64") == 0);
+ 
+ 	/* src is allowed, target is forbidden */
+ 	assert(system("dd if=/dev/urandom of=/dev/full count=64"));
+ 
+ 	/* src is forbidden, target is allowed */
+-	assert(system("dd if=/dev/random of=/dev/zero count=64"));
++	assert(system("dd if=/dev/random of=/dev/null count=64"));
+ 
+ 	error = 0;
+ 	printf("test_dev_cgroup:PASS\n");
 
-BTW wearing for a moment Cato the censor's shoes, I note that patch 1 && 
-2 commit messages are quite more informal and less informative than the 
-average;)
-
-Thanks,
-
-Paolo
+-- 
+2.45.2
 
