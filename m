@@ -1,216 +1,209 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2042.outbound.protection.outlook.com [40.107.237.42])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383C01A8BEF;
-	Wed, 31 Jul 2024 11:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722426258; cv=fail; b=GG4tq7zNtZvsCTMN/Y0Yqhrx8C0nLnRpiuJVUl5jvHkAOxNmeniGseECA6TZMvLjgYnQLmdIP0QjZMSXK2rIfqsyGxCBNXzqkV9gBmaykjGK3yFz4r5aFIyAmpNMIGtVo7NILVDVlgkOvtptoyDweqD2Ndt5+eX86HZHFb9Cenk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722426258; c=relaxed/simple;
-	bh=xUGA+N4gYnaRLYU4kSBqB1P0agoFBpfGyRm3XPwQ7EE=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=JvaoZIkoPkPVUwyVFMSBUjsJb4GsZtCB+nFt9eFQggL50Jx1IhoNMyIFrzkFGpdK3c4b7Tn7Q8pYcTZZwpsn9kuRy1bxbRoGsGDHWnmR2FEr7RaoTjxYyya2I8Sngp1/CPPtWIr5JL+zMHw/RubEoy2IDfeLanHrJkOaqiWL5u8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=b+MpzAOa; arc=fail smtp.client-ip=40.107.237.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320611AD410;
+	Wed, 31 Jul 2024 12:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722428345; cv=none; b=fwAlML+8I4zUt0iXbJNtoGEYwHVE1btFG6HxatnPwHgb1BAvPBK5mD+hD4lQuGR4bggmlxh36NHiZ9qXJnJswf4BmjR5Mv5Sg3AYj+mIViNN7aJRZm+7KFns7cqBuoXu6ZRF+UInqI6dmGjZNcQGL9Ph5IRBvkc2gApLn9Ns5iY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722428345; c=relaxed/simple;
+	bh=haE0bkAkjTNma9KoeUIH55ZMFs3TR6u8xnFiNTqN41A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iMMqalFAr+2jdIlm6+EISAZ670DFRLtDbvzm+J368zh2oGj+Ti7cQtu2VaU34QusYYRwB6vM93TNQPiCGtwP8b/4lzdHhzq3vn1nIK8Fnwjqdb5YlSuxQAsltHrbtZBUOJvpy9/wsG8kkO+poIyuosN6STJJqZpJFk5P6bO7VFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IM936fBh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="b+MpzAOa"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xDI+MMrcaw4m6QRbGElCrWyDGhadbhFlU9v71OKMltUtUp5uPyvIdU2ufkWdR0nA6cmsTD0du5ZC+bQUA3JLXqy7DUaO/bbsbdzY9IxyhlzcO1qyrJJcsSWNd0e+cJrZfJ9vQVYZTB/1YTZHZHkeZdMpcXHcJFsFxMnfFxnAfo9pv/CjrAetuXSqMcueWyjXlGKImxX0XgHd/7eeR0i+CAzavETDbx45TBWtrEF3iZe5Yhr/6On23AViLfMjg9TkemU74bEaSGI1Bfwp8ijpTIRhFiTz/6ar/EqsoxIC/Xn1hSAl0C1wXGCaKMcEihBHJO04OV1QwP9eQQ1swgstMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W4zBiJJFwzeBuse6dtW6SPobXdfICQo2rVCpuHc95ew=;
- b=zLKFBeFbaAsE7mydXCsIK0XEfyDUqbo84DNUsoInlp/KnVXcDu8/E6MmgrXJfJyCJ+mZkzPfQ4pPpp3+oTYCamBMf7t4bqtlmu6F02a4spvQHPnlPPx5vMvbSUU71LvLdQh1bGumf3sF4eRTUKqRx2EgEeQlIUv2hCeyMeN2LhiHI2nCVnHufcaJUO8x8z7e1CsoMDCmqKemH4wZ/o58k+H6qPAL7otTXFSYnT2g58Tb1O2eaYsjYpt+y3GZEXSeqUnVwtvJY905WA2ifCRSl2AA31Jv6iiH7LZ6rgvC8c9wGw5/hxryAzzc7PKwdhLp8ZuUKFzER3pDkfxcR8bvyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W4zBiJJFwzeBuse6dtW6SPobXdfICQo2rVCpuHc95ew=;
- b=b+MpzAOa4ahbKdF9U028HRuc+jakUvK25XlIPOXV9rSxlvztaTJCrKymDZzIQZkW+N3z5DkCOlVT/Q+Eq24CnFQHSnVjKA7xmE6sVGikrUB4C9208gKKNYNCGZM8SoK7/g4rq6tyo0mkjFxnb95ysSegUXTelAmn5sbVeWhapN2aZsxzvDktiBeNjptfT/bl/wrkPJvvHiFtHbnGijhkJfhn6bsC3+acw4quhRIp3L/ojEZso2VNLdZDB9u/+NLudE8W3OtVeGnp8PLkDwW5st+rAJSWzig8O1noxOY6hX8gVo8VsUZGRXnA22+3UvETRqJaHUUWXiuu8g0Kpt6e4w==
-Received: from BYAPR02CA0044.namprd02.prod.outlook.com (2603:10b6:a03:54::21)
- by SJ0PR12MB8167.namprd12.prod.outlook.com (2603:10b6:a03:4e6::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.19; Wed, 31 Jul
- 2024 11:44:13 +0000
-Received: from CO1PEPF000066E7.namprd05.prod.outlook.com
- (2603:10b6:a03:54:cafe::66) by BYAPR02CA0044.outlook.office365.com
- (2603:10b6:a03:54::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.34 via Frontend
- Transport; Wed, 31 Jul 2024 11:44:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1PEPF000066E7.mail.protection.outlook.com (10.167.249.9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7828.19 via Frontend Transport; Wed, 31 Jul 2024 11:44:12 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 31 Jul
- 2024 04:44:02 -0700
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 31 Jul
- 2024 04:43:57 -0700
-References: <20240730223932.3432862-1-sdf@fomichev.me>
-User-agent: mu4e 1.8.14; emacs 29.4
-From: Petr Machata <petrm@nvidia.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-CC: <netdev@vger.kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, "Joe
- Damato" <jdamato@fastly.com>, Petr Machata <petrm@nvidia.com>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 1/2] selftests: net-drv: exercise queue
- stats when the device is down
-Date: Wed, 31 Jul 2024 13:34:58 +0200
-In-Reply-To: <20240730223932.3432862-1-sdf@fomichev.me>
-Message-ID: <87cymt7pmu.fsf@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IM936fBh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36231C116B1;
+	Wed, 31 Jul 2024 12:18:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722428344;
+	bh=haE0bkAkjTNma9KoeUIH55ZMFs3TR6u8xnFiNTqN41A=;
+	h=From:Subject:Date:To:Cc:From;
+	b=IM936fBhwk+tTLadRHgNqYOpdcWh5MEyvwgxR27A8RCD184oJPNHkY88aBNT0i5EO
+	 On3DQdxsx8Xx7PgtMMVIpFgSn7d5w/ny+1cqaivfnh0KtB48SyKUjB4fNz2Iih8Tz/
+	 En3DhjDiYsSvw80ws3m33bfVOVAF0LdB7xHReQ/kEf2jIPTzRVdiyHkWtFm2sJpGT2
+	 tsEvI8tgJyMc8y/4++5igzNVNMna/I2MDWKOM+z1FSRIcMga9upwIn0G9I5ZmsOg7x
+	 6nGKTzzfraoh73CFnS03cF1Jcyd0UnlPpUTYMjZMyA52ZF7lYSvxCH07vGV8lgkvsA
+	 15w8f9vtaBNUg==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH RFT v7 0/9] fork: Support shadow stacks in clone3()
+Date: Wed, 31 Jul 2024 13:14:06 +0100
+Message-Id: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000066E7:EE_|SJ0PR12MB8167:EE_
-X-MS-Office365-Filtering-Correlation-Id: 084c063a-f7d7-4422-ad48-08dcb156193c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?kYUoTNv3NDsd6jsjYqiDARHmKHmU1bNhwhk9a8cyMaI5Ytq/XmHi/ekl8Lc9?=
- =?us-ascii?Q?ukWmigjlBzeuEyzakgzdJV+X5TEXcq/JKYUxI819wyR8pgVkBmy14UCR51sl?=
- =?us-ascii?Q?ZWabn+uGA7QZOJHByl6oeEJ6ic2X1rHiWlZ3aHhiSzEzhUwg4DLK3hDw7CD2?=
- =?us-ascii?Q?f15s+1cwhJLUl5nlRHtzK2l0FOkfeob+I6nwBQtZKatsLZbdTGw7fxzELqu0?=
- =?us-ascii?Q?M+f3PZ3soFa8FZhy2s7QmOHBgYnMBdE7Fy8VZzKRs03EYALznrkG9y5YnNE/?=
- =?us-ascii?Q?GMRJ6fBsb6AVJ56u3MqAYlaTKzWrEFw//176LkwME1TO270vLDxw/Ic68VMd?=
- =?us-ascii?Q?HceASTGP6lbVtB5NUWYcM7PZoyQUVRZZmaOSObCEHcQoFX++y1UNqqZlRJaC?=
- =?us-ascii?Q?IbxoDFgh7SXncvnb6OB60IOITEF1qTlZxeu2QPOUI66+cabs29t6zH+J8gSx?=
- =?us-ascii?Q?bGefVsQZdQLWHKRk+fvy+TMsPgmBBo+dqGptORZGtKzOUtAsUQxrMNLc6TAU?=
- =?us-ascii?Q?I4gksD/BFMRajW4XIDpGTxH+u0dHxdXZzveFKB6XmdqsK/V/7pXqJuQPY311?=
- =?us-ascii?Q?K10qQKKTW5uxcnIK/VH8+Vgd8+S6W/I91sS9mBGIJNgOB3aIfi2GMiICvocP?=
- =?us-ascii?Q?WGr/DZyGPHcgJ8qFbLFwKerHTLvJfM/ZvB62LworOoa+ymvA03p2NdBhkHzC?=
- =?us-ascii?Q?UV/Out0Q9Bg3/oLTFBLxi+GIhNcASZwDSAp/t5uDGwqf7XWs2HHw7QibERtq?=
- =?us-ascii?Q?buEI2Xoc5qLC2b4fISpWlmS2D5GNIu+3PIOgPtmbemzlYu2F9iBX2/O6ndyz?=
- =?us-ascii?Q?KK5skLfDPpmqcirX9V3cODtDkQEpK6cnP69DEeqIJVjtjK/8w2bQiQrKNOI5?=
- =?us-ascii?Q?A72po1wSxqtRQXCKzMXgbgIk+CapOPRaHlOS97NRNIft1lPKUYvqFUgbxRvM?=
- =?us-ascii?Q?uGN6TZPi2pasOP0iicp1tcdDYXoWdKlExquGInVNcPRn321zGKRpafPjkuJF?=
- =?us-ascii?Q?9i7401OP+yb+rO/0VhRzjQiDehZ/zJQC+pNo07eyrWcG/T4Et8aYh15Vu4sB?=
- =?us-ascii?Q?PPXlvscUuP7c+kwv9x6960BkjTHMUba53ErmXUKzyva6rPgp+UhwPZkswgpe?=
- =?us-ascii?Q?C0tyzv+772KnisGVeRAwOgQGUTB0y50b4C6Fc72ibumexKzWCvDJ8igNPPyS?=
- =?us-ascii?Q?lqvh95xLbOx2nlHiasxxJfIQzS8Rm7Qp+L19VhONJFTNasFIAXchMyrqfJPJ?=
- =?us-ascii?Q?D4Hvqhbmsj8L+7RGbcKU4DulLrkPf/V9GT/HMk1hk6mFaw3nn2aVFZBkNNCd?=
- =?us-ascii?Q?Vqk00TVx3v7+kVJfmVDEVH9wTHhZo/IiCNuuCTe4g4HF0IDdIBAQgRqIbIvB?=
- =?us-ascii?Q?7dPwRqZtbl9agEgiea1fnwj4Fpjo64amo8GpSMTylOZcDPbow4PsPBdT59Jy?=
- =?us-ascii?Q?BQbcH4d5XuCvtoJNWPVmaDZAqQBsKfW1?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2024 11:44:12.7072
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 084c063a-f7d7-4422-ad48-08dcb156193c
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000066E7.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8167
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI8qqmYC/3XQTWrDMBAF4KsErasijX6dVVc9QOmudGFJo1gkW
+ EUKbkvw3StcSlLsLN8M8w28C6lYElay311IwSnVlMcWzMOO+KEfD0hTaJkAA8EZ76g/5REFrUM
+ f8iet594fKVdBsgAuKqFJu/woGNPXor6Rl+dX8t6GQ6rnXL6XTxNfVr8oiE104pTRYLUJzDU/s
+ KcjlhFPj7kcFnCCK8K53EagIU5zEa22nCu1QsQNAmwbEQ3pjbMYBELv/QqRt4jdRmRDrAMbI8q
+ ojV4h6g+RDNidTlRDBIDXneosSrdC9BXR94rVDekQjbHC8ei6f8g8zz+udBBXFQIAAA==
+To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
+ Deepak Gupta <debug@rivosinc.com>, Szabolcs Nagy <Szabolcs.Nagy@arm.com>, 
+ "H.J. Lu" <hjl.tools@gmail.com>, Florian Weimer <fweimer@redhat.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, 
+ Daniel Bristot de Oliveira <bristot@redhat.com>, 
+ Valentin Schneider <vschneid@redhat.com>, 
+ Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, jannh@google.com, bsegall@google.com, 
+ linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>, Kees Cook <kees@kernel.org>, 
+ David Hildenbrand <david@redhat.com>
+X-Mailer: b4 0.15-dev-37811
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6461; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=haE0bkAkjTNma9KoeUIH55ZMFs3TR6u8xnFiNTqN41A=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmqiur0rn+NvrwW8ce7kow5H4A0OydmHTew4TdbYW9
+ CaoE4hqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZqorqwAKCRAk1otyXVSH0Fn/B/
+ 9par6lLqb1ncs0dMjWaomQx71+inZazCJXcveymhzUhhQI11VG1h2OhAvPobWD7DmPKESVGoBGvA5y
+ 7GzkWHARcq6Tbi5Glc2AoLqwcZHoYCfA5/JAUuMXDTwsQxjWeoge75QkzCvvUQNMs4xgl/Uau1Lbea
+ 841D1SmSwlv06G223fIGPii6/H1lEPQJDPB1CgYsxIQOr+fMWi4oKmZUeL/4c7xn04Bv3wwyA4uxEi
+ 1e/kfOrpQBKEULRsQtozERE7EPNrY33Z6rhKqRLsqn4Z7euLLxcBbyIy17ew3lnShX+dEyy3l5Y4j8
+ 7pjqQApEd/JzzAPnNVVTrZULBi0PI3
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
+The kernel has recently added support for shadow stacks, currently
+x86 only using their CET feature but both arm64 and RISC-V have
+equivalent features (GCS and Zicfiss respectively), I am actively
+working on GCS[1].  With shadow stacks the hardware maintains an
+additional stack containing only the return addresses for branch
+instructions which is not generally writeable by userspace and ensures
+that any returns are to the recorded addresses.  This provides some
+protection against ROP attacks and making it easier to collect call
+stacks.  These shadow stacks are allocated in the address space of the
+userspace process.
 
-Stanislav Fomichev <sdf@fomichev.me> writes:
+Our API for shadow stacks does not currently offer userspace any
+flexiblity for managing the allocation of shadow stacks for newly
+created threads, instead the kernel allocates a new shadow stack with
+the same size as the normal stack whenever a thread is created with the
+feature enabled.  The stacks allocated in this way are freed by the
+kernel when the thread exits or shadow stacks are disabled for the
+thread.  This lack of flexibility and control isn't ideal, in the vast
+majority of cases the shadow stack will be over allocated and the
+implicit allocation and deallocation is not consistent with other
+interfaces.  As far as I can tell the interface is done in this manner
+mainly because the shadow stack patches were in development since before
+clone3() was implemented.
 
-> Verify that total device stats don't decrease after it has been turned down.
-> Also make sure the device doesn't crash when we access per-queue stats
-> when it's down (in case it tries to access some pointers that are NULL).
->
->   KTAP version 1
->   1..5
->   ok 1 stats.check_pause
->   ok 2 stats.check_fec
->   ok 3 stats.pkt_byte_sum
->   ok 4 stats.qstat_by_ifindex
->   ok 5 stats.check_down
->   # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
->
-> v2:
-> - KTAP output formatting (Jakub)
-> - defer instead of try/finally (Jakub)
-> - disappearing stats is an error (Jakub)
-> - ksft_ge instead of open coding (Jakub)
->
-> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> --
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Joe Damato <jdamato@fastly.com>
-> Cc: Petr Machata <petrm@nvidia.com>
-> Cc: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/drivers/net/stats.py | 25 +++++++++++++++++++-
->  1 file changed, 24 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/drivers/net/stats.py b/tools/testing/selftests/drivers/net/stats.py
-> index 820b8e0a22c6..93f9204f51c4 100755
-> --- a/tools/testing/selftests/drivers/net/stats.py
-> +++ b/tools/testing/selftests/drivers/net/stats.py
-> @@ -5,6 +5,7 @@ from lib.py import ksft_run, ksft_exit, ksft_pr
->  from lib.py import ksft_ge, ksft_eq, ksft_in, ksft_true, ksft_raises, KsftSkipEx, KsftXfailEx
->  from lib.py import EthtoolFamily, NetdevFamily, RtnlFamily, NlError
->  from lib.py import NetDrvEnv
-> +from lib.py import ip, defer
->  
->  ethnl = EthtoolFamily()
->  netfam = NetdevFamily()
-> @@ -133,9 +134,31 @@ rtnl = RtnlFamily()
->      ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.ifindex')
->  
->  
-> +def check_down(cfg) -> None:
-> +    try:
-> +        qstat = netfam.qstats_get({"ifindex": cfg.ifindex}, dump=True)
-> +    except NlError as e:
-> +        if e.error == 95:
+Since clone3() is readily extensible let's add support for specifying a
+shadow stack when creating a new thread or process in a similar manner
+to how the normal stack is specified, keeping the current implicit
+allocation behaviour if one is not specified either with clone3() or
+through the use of clone().  The user must provide a shadow stack
+address and size, this must point to memory mapped for use as a shadow
+stackby map_shadow_stack() with a shadow stack token at the top of the
+stack.
 
-Could you do this as if e.error == errno.ENOTSUP?
+Please note that the x86 portions of this code are build tested only, I
+don't appear to have a system that can run CET avaible to me, I have
+done testing with an integration into my pending work for GCS.  There is
+some possibility that the arm64 implementation may require the use of
+clone3() and explicit userspace allocation of shadow stacks, this is
+still under discussion.
 
-> +            raise KsftSkipEx("qstats not supported by the device")
-> +        raise
-> +
-> +    ip(f"link set dev {cfg.dev['ifname']} down")
-> +    defer(ip, f"link set dev {cfg.dev['ifname']} up")
-> +
-> +    qstat = qstat[0]
+Please further note that the token consumption done by clone3() is not
+currently implemented in an atomic fashion, Rick indicated that he would
+look into fixing this if people are OK with the implementation.
 
-Consider moving the [0] inside the try to make the two qstats_get
-statements obviously the same.
+A new architecture feature Kconfig option for shadow stacks is added as
+here, this was suggested as part of the review comments for the arm64
+GCS series and since we need to detect if shadow stacks are supported it
+seemed sensible to roll it in here.
 
-> +    qstat2 = netfam.qstats_get({"ifindex": cfg.ifindex}, dump=True)[0]
-> +    for k, v in qstat.items():
-> +        ksft_ge(qstat2[k], qstat[k], comment=f"{k} went backwards on device down")
-> +
-> +    # exercise per-queue API to make sure that "device down" state
-> +    # is handled correctly and doesn't crash
-> +    netfam.qstats_get({"ifindex": cfg.ifindex, "scope": "queue"}, dump=True)
-> +
-> +
->  def main() -> None:
->      with NetDrvEnv(__file__) as cfg:
-> -        ksft_run([check_pause, check_fec, pkt_byte_sum, qstat_by_ifindex],
-> +        ksft_run([check_pause, check_fec, pkt_byte_sum, qstat_by_ifindex,
-> +                  check_down],
->                   args=(cfg, ))
->      ksft_exit()
+[1] https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org/
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v7:
+- Rebase onto v6.11-rc1.
+- Typo fixes.
+- Link to v6: https://lore.kernel.org/r/20240623-clone3-shadow-stack-v6-0-9ee7783b1fb9@kernel.org
+
+Changes in v6:
+- Rebase onto v6.10-rc3.
+- Ensure we don't try to free the parent shadow stack in error paths of
+  x86 arch code.
+- Spelling fixes in userspace API document.
+- Additional cleanups and improvements to the clone3() tests to support
+  the shadow stack tests.
+- Link to v5: https://lore.kernel.org/r/20240203-clone3-shadow-stack-v5-0-322c69598e4b@kernel.org
+
+Changes in v5:
+- Rebase onto v6.8-rc2.
+- Rework ABI to have the user allocate the shadow stack memory with
+  map_shadow_stack() and a token.
+- Force inlining of the x86 shadow stack enablement.
+- Move shadow stack enablement out into a shared header for reuse by
+  other tests.
+- Link to v4: https://lore.kernel.org/r/20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org
+
+Changes in v4:
+- Formatting changes.
+- Use a define for minimum shadow stack size and move some basic
+  validation to fork.c.
+- Link to v3: https://lore.kernel.org/r/20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org
+
+Changes in v3:
+- Rebase onto v6.7-rc2.
+- Remove stale shadow_stack in internal kargs.
+- If a shadow stack is specified unconditionally use it regardless of
+  CLONE_ parameters.
+- Force enable shadow stacks in the selftest.
+- Update changelogs for RISC-V feature rename.
+- Link to v2: https://lore.kernel.org/r/20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org
+
+Changes in v2:
+- Rebase onto v6.7-rc1.
+- Remove ability to provide preallocated shadow stack, just specify the
+  desired size.
+- Link to v1: https://lore.kernel.org/r/20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org
+
+---
+Mark Brown (9):
+      Documentation: userspace-api: Add shadow stack API documentation
+      selftests: Provide helper header for shadow stack testing
+      mm: Introduce ARCH_HAS_USER_SHADOW_STACK
+      fork: Add shadow stack support to clone3()
+      selftests/clone3: Remove redundant flushes of output streams
+      selftests/clone3: Factor more of main loop into test_clone3()
+      selftests/clone3: Explicitly handle child exits due to signals
+      selftests/clone3: Allow tests to flag if -E2BIG is a valid error code
+      selftests/clone3: Test shadow stack support
+
+ Documentation/userspace-api/index.rst             |   1 +
+ Documentation/userspace-api/shadow_stack.rst      |  41 ++++
+ arch/x86/Kconfig                                  |   1 +
+ arch/x86/include/asm/shstk.h                      |  11 +-
+ arch/x86/kernel/process.c                         |   2 +-
+ arch/x86/kernel/shstk.c                           | 104 +++++++---
+ fs/proc/task_mmu.c                                |   2 +-
+ include/linux/mm.h                                |   2 +-
+ include/linux/sched/task.h                        |  13 ++
+ include/uapi/linux/sched.h                        |  13 +-
+ kernel/fork.c                                     |  76 ++++++--
+ mm/Kconfig                                        |   6 +
+ tools/testing/selftests/clone3/clone3.c           | 224 ++++++++++++++++++----
+ tools/testing/selftests/clone3/clone3_selftests.h |  40 +++-
+ tools/testing/selftests/ksft_shstk.h              |  63 ++++++
+ 15 files changed, 511 insertions(+), 88 deletions(-)
+---
+base-commit: 8400291e289ee6b2bf9779ff1c83a291501f017b
+change-id: 20231019-clone3-shadow-stack-15d40d2bf536
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
