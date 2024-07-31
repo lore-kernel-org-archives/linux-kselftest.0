@@ -1,372 +1,211 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2076.outbound.protection.outlook.com [40.107.244.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0312E40E;
-	Wed, 31 Jul 2024 12:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722428398; cv=none; b=V6Q+yyf9NW/r2y9QC/O7Dr+/5G6qt/jVWTSNl1rc40I5+t9MhfLVsDdT8uxYCllkU/P0vxguMHJnKCXq8QpY41GD8bZdgJ+WGuMhIG+yRQfikDa/qtATYWyuI7krSpCroep63FcFm8Qhb5X0A/YMJcG6CfvNFBIXmY27VCtLkbY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722428398; c=relaxed/simple;
-	bh=ePficpvEcImrfJYxAgXbKEtc0fEAKvtwRYbBp5UBY5U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=psLeIQtS5CE17txm+XOpubE/2dFpMlkM3VXFiuQ3Kl8fS5Mrc+8iIvqLUqfsxRiCDSIxu+VlrngeE8QwJ/I7ok/sFWmy6dGedmrKioyxlAxvOTVDQ+OUSIX9IC+SdCHW29FXvXoHC1t9MtkVvdef4QKIF/CXQtl3RXEG3Q0T01c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N5z4LPHT; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F62B1AD9C3;
+	Wed, 31 Jul 2024 12:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722430431; cv=fail; b=NBdLxnMc8ZYE8hw8DzF3xaRUgnlwXMImUBl2DZZUhTkNihnXoukXnhVhDsu+gFmtZ06BS39BXo6Qbejb0q6+tEKfVKU5rdndQkOFxsgnKLUVWRk8jIbdYKrzGmXFEr5fWL2aMfJPksZlRUxoViiuCQOXPjkwthuPepU0e+uj/uM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722430431; c=relaxed/simple;
+	bh=Z2J7lZTMKD2Cq0ETM21qGGHl+ZB/IIUWFotKvNrohSQ=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=AnxHs59LY6cnBVEXHpQEJi+jW/yhHkvFUBcx7A/BoyN859Wh6dRiasUO4NDk67IIRxCCgsQIUKF5d+lKbykpCNnU+j4rGCoA30AzuWxBZl091e+9m2uhh1r8Cl7OBaJz9Dfxq5v+Lvtn8sQWTrZdTEIF/PIplpMd0JJ3WHnQcfA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SZAru8Je; arc=fail smtp.client-ip=40.107.244.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N5z4LPHT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BDE8C4AF10;
-	Wed, 31 Jul 2024 12:19:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722428397;
-	bh=ePficpvEcImrfJYxAgXbKEtc0fEAKvtwRYbBp5UBY5U=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=N5z4LPHTw2OgDbdtQeBybzS6XIwOGL1fjR7KFUik5rxyoEBjxaQ3W3drlCakhlZUU
-	 kUlRwucPRuSOirr0e76ZTYIXP5pbKtL4n04J0BrBcMtNHhCRxJHLEBLKHtSBI7jchV
-	 aSdf6/dyLyREZfeQrxyL3caZS11DCrzu1GOUFdOluidelvyqy1JIh0LzqkuYUgtvni
-	 3R4rXU1pRokjBLJ0y6zEvXOuCEseqRnzCighZTdsG0fZRNuCsrv9iXY1Ci1RtN/mPn
-	 flgV9vKEi4QOf+jtQYlEnqoYd76C9KZRg+FGJdQTxBF2q1Y/h3fPBrFsr0MBi4bZsV
-	 P3hhoPeWU+lOw==
-From: Mark Brown <broonie@kernel.org>
-Date: Wed, 31 Jul 2024 13:14:15 +0100
-Subject: [PATCH RFT v7 9/9] selftests/clone3: Test shadow stack support
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SZAru8Je"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZFQ4hv2+2OYqNhTJ+Nyhq0sgQ/aSzQT8YkuG/KcGcqIBvUlhBh+3TLgdVkRGIm6Gy/3fK5h2Nlx8nFYZ+CAp67rEnRz4VNMMnLZtIQcfG86Tr+dFJ6mnGJ58+vOXB9Sfe4ej5+Y7K1CyzoRASeUH6qfxKQeOEBWPSdX1603/YaniO0vW5HYQ2GJISJKHfIPgkVxeoUOeE+F05VlaFC/17HPUEA0mBIOlf9HgTzYGMoF5KmhzzvuFhx2RRVM/nTWhRrLyX55JlggNVtOQ0hbAFl/SdxR1o4H5A8ebGQq3Lm3CymMcDh3YjKBAQEF1wupZkJOugM49zP5SKnAH+3o3Cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CHM3p60sZqBa6CXkydt20imXxmgcU9z0lgFL0SfmenM=;
+ b=JBv8XkdgPPQx3+1dUpHFT9EMafVL37rsMzgcdVTbXcw/bfZHY4wZ+8n3cvqEwXnx+/07/n6rh6RPd/mlxmDR5XVQr7Zc/r40y5rUuUm8rkPA2GDFeY5pW+eAZZzvGqbkI4PEv1PtXnnDb7QPAJyPmSkqlrtD2BYjWQIveG94tsCK2vCNBLS3DibzwSWrdZ1zuppu9dNgszT8dkCwd7GSr5ouIs3iuv3Z2I6+NGXs2cjRXHJeaa3w5hqnv2EvHHzjw4rk6rHpAF/jxNsQwi2QT6HlMco2LcBI2kh1dqaadUSf1nhpu1O1zmNIEnvMhh8lZwkUgEgl+uCTpqPSRyvsuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CHM3p60sZqBa6CXkydt20imXxmgcU9z0lgFL0SfmenM=;
+ b=SZAru8Je1YGILqm4QuctyDNqTjbsmij/jecJ3G2AmvkvbZrQMxzOIw0KJvMR62UqQ6edl5bky8bJ0QpxurzkKJWklGIJVd4nnuIw3e5cHSwCH4Qnwx50XHmpK8ahrYm7myR5Zk6US0mVacngRa9mRgqKHZnVrBVV6vl4pVhDlzhkrySizhG8bwepP9D1cVT3bTdUyAGQyKX2DTrfpjvPfgS8+NW8rjJj9nF1uftT81M8pE6OBBL4QN9yc79Ho9NMkT8876UeVQ6TCDSACt7dvaQo9AAucPHqgeO+1WU1Rj8BsnUdXMq17AQ84JTtBIbE2nUy14TpGTKVdeduu0jb+Q==
+Received: from BLAPR03CA0010.namprd03.prod.outlook.com (2603:10b6:208:32b::15)
+ by CY8PR12MB7540.namprd12.prod.outlook.com (2603:10b6:930:97::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.28; Wed, 31 Jul
+ 2024 12:53:46 +0000
+Received: from BN2PEPF00004FC1.namprd04.prod.outlook.com
+ (2603:10b6:208:32b:cafe::68) by BLAPR03CA0010.outlook.office365.com
+ (2603:10b6:208:32b::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.35 via Frontend
+ Transport; Wed, 31 Jul 2024 12:53:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN2PEPF00004FC1.mail.protection.outlook.com (10.167.243.187) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7828.19 via Frontend Transport; Wed, 31 Jul 2024 12:53:45 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 31 Jul
+ 2024 05:53:33 -0700
+Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 31 Jul
+ 2024 05:53:28 -0700
+References: <20240730223932.3432862-1-sdf@fomichev.me>
+ <20240730223932.3432862-2-sdf@fomichev.me>
+User-agent: mu4e 1.8.14; emacs 29.4
+From: Petr Machata <petrm@nvidia.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+CC: <netdev@vger.kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, "Joe
+ Damato" <jdamato@fastly.com>, Petr Machata <petrm@nvidia.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 2/2] selftests: net: ksft: support marking
+ tests as disruptive
+Date: Wed, 31 Jul 2024 13:55:13 +0200
+In-Reply-To: <20240730223932.3432862-2-sdf@fomichev.me>
+Message-ID: <878qxh7mf4.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240731-clone3-shadow-stack-v7-9-a9532eebfb1d@kernel.org>
-References: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
-In-Reply-To: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
-To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
- Deepak Gupta <debug@rivosinc.com>, Szabolcs Nagy <Szabolcs.Nagy@arm.com>, 
- "H.J. Lu" <hjl.tools@gmail.com>, Florian Weimer <fweimer@redhat.com>, 
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, 
- Daniel Bristot de Oliveira <bristot@redhat.com>, 
- Valentin Schneider <vschneid@redhat.com>, 
- Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, jannh@google.com, bsegall@google.com, 
- linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>, Kees Cook <kees@kernel.org>
-X-Mailer: b4 0.15-dev-37811
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9005; i=broonie@kernel.org;
- h=from:subject:message-id; bh=ePficpvEcImrfJYxAgXbKEtc0fEAKvtwRYbBp5UBY5U=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmqiuyYPhBHao4vXI4T/9r+3pdRhGkDCR1z5IJffA7
- XKBMIBCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZqorsgAKCRAk1otyXVSH0M2bB/
- 9qTutRPtqwO+Sjefyr7BuGVaNCBNpazam00SDX9Wa6x44sUVX5MESm/Mqs9iYAKE3u6NJXkod3gsbl
- vQp/k2ie3jsOa7BMDxbo+gl7RWEZn9GqrfCWtQsKzvh8Rlj5YXpjQWcOKVxYGctLpvYaH/rNEHkBGK
- TUQ/bWlQkwgt7l9LvVkaU2QOYTKc/h4osnWTHmbI6sd9mgspinThJG7DKYHeguNq+ECbvMJipAt1L9
- 59Zl62XFqjmEPjsnEDPiXIr7hFH+fWsXPhLR7FKGVmWtZ3UKLQD2UdkMWniYweuwUwlPYMU+K3Rnx9
- Sqbu/hHkM+pjZLAtCBJ4XYDRNL68XQ
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF00004FC1:EE_|CY8PR12MB7540:EE_
+X-MS-Office365-Filtering-Correlation-Id: 30d0ba62-f2e0-4554-849e-08dcb15fd0b1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?u8DsfwGsKa5MJV06amu/LJnulI4hmn37rzRISJOn3eSGayWcAqWQEOdnkkit?=
+ =?us-ascii?Q?ff1kWm3docDCTDATRUYFNFAgbLJya6LYtzWgnIPsWfx+l1uyChv1O+cfaQOI?=
+ =?us-ascii?Q?RFgEMoATDf78DzWUIXIczKjxdLXs6E5lkdO+UMD4lb3Ou+Rhz+xzBfrfPQrT?=
+ =?us-ascii?Q?oEFf+pfQSN+euGDNGd2rzSo9y6QqpmxCnpMolY4NuRqFrJeEJagLenynp25Q?=
+ =?us-ascii?Q?IM3tZe6D3Osf3cI9eM2eZ9oUjkVvRrc+eHZ2naWyo0cpFAzSbf0uSFItFSTs?=
+ =?us-ascii?Q?cj3cQOmuLwwMQEPAxFzFYC1sADkVr28c6GvK+qDocktUIBokBOmJuSSnpBa3?=
+ =?us-ascii?Q?r149MH9smj+S7O2/IximzNN8tHnr2uDWk2sW06ahRyhK0MFQBPiqm9T8BpMI?=
+ =?us-ascii?Q?zeGPdEv/quwK1t5I4Oq+oEIlozrnzW6R9dl0SH8YAXsAODPDMbmnz6b5eHvL?=
+ =?us-ascii?Q?RC0iEYwXHMZHKjK61CnElluCZcZvDQ2YP5t701m3RRURoJXOI1ataWsTEqc5?=
+ =?us-ascii?Q?iwRX8rVbIEVnbu6v6/Yf50srJhWgxHCSFoIGhdouu/Cz9ARy29FDJipqXKPW?=
+ =?us-ascii?Q?Gvq97c/KhvIRFqvIrHa6HaRQuoBWH2zkJQLJ7wwxjUWlR8sTuWfjb6gPCP1s?=
+ =?us-ascii?Q?M0KJ/M66R1LaF76E7l0ytijIZWnWeLowvVwv3D60WSzwKGehQwgTASBW1Wrc?=
+ =?us-ascii?Q?hSyAfUZ9rbw0wOuQp8oO1I3P4N3FRKvUCRqo6W+WwUW4s+Y4NIo8MUrJXT/J?=
+ =?us-ascii?Q?U9rvovxCRrOXzqlKhj++EBdChPv7kgc+x4nOABVjcsPZVKAtSl3Se3tiZCGc?=
+ =?us-ascii?Q?5WiShzGGyIbRNPTc5RrmbD5dZSq7bqYkJk4cTP1kpEzp2tbTBkhOv2pHK6tu?=
+ =?us-ascii?Q?2qGL/ZTFUsODKBfdA5MZo1PgABJ6bsePP4iRINjG6h7LOV7+kl2a01VD2cNJ?=
+ =?us-ascii?Q?d4fp2xpFifYKXZ/88ag1rl+04eR8WiY1LWV/JMpiDtB3+WQ2vBXfVPOolWHa?=
+ =?us-ascii?Q?PvMqAfzbYbWad6I1ak9WxRvpT5SM7bhAuFey5oeW2441ZxldYqA+OON0G4+M?=
+ =?us-ascii?Q?nWEwHHATCgFvkzY+FdgN536358Xkdm+m/UucqC3y/31AAslX64fY7qKtHQeU?=
+ =?us-ascii?Q?AOkYTr5WuKWDQ3lRhgera23mtizvIq0hlVcKKn25MnmEKL2rYiuKSCZ/Gbo3?=
+ =?us-ascii?Q?PHInKy3ww9G4K+J6lG4pCZ1hyhX6sSgPzT6B4mlrpamHUJN4C1kjk/iMtXYY?=
+ =?us-ascii?Q?eeMJUxMggZLXW7Ri7rguw/hjYSW3+DRJj+FIO8SCIAYRvm8cOpVII5JPzbXN?=
+ =?us-ascii?Q?2DQxG9imSBIgBGTO1qU/cBjlcnwRYw9yR32yoUaAM+AB095zpoYPaQuYKspy?=
+ =?us-ascii?Q?m3gm0xcY3uf9OXeQWi6yyTC3phn2AChkop6JcbdyXpHLKEtYcPjHfdetDuBq?=
+ =?us-ascii?Q?vvFkE2z4qt7dCqpnJrfut+26gYpXujEJ?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2024 12:53:45.9197
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30d0ba62-f2e0-4554-849e-08dcb15fd0b1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN2PEPF00004FC1.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7540
 
-Add basic test coverage for specifying the shadow stack for a newly
-created thread via clone3(), including coverage of the newly extended
-argument structure.  We check that a user specified shadow stack can be
-provided, and that invalid combinations of parameters are rejected.
 
-In order to facilitate testing on systems without userspace shadow stack
-support we manually enable shadow stacks on startup, this is architecture
-specific due to the use of an arch_prctl() on x86. Due to interactions with
-potential userspace locking of features we actually detect support for
-shadow stacks on the running system by attempting to allocate a shadow
-stack page during initialisation using map_shadow_stack(), warning if this
-succeeds when the enable failed.
+Stanislav Fomichev <sdf@fomichev.me> writes:
 
-In order to allow testing of user configured shadow stacks on
-architectures with that feature we need to ensure that we do not return
-from the function where the clone3() syscall is called in the child
-process, doing so would trigger a shadow stack underflow.  To do this we
-use inline assembly rather than the standard syscall wrapper to call
-clone3().  In order to avoid surprises we also use a syscall rather than
-the libc exit() function., this should be overly cautious.
+> Add new @ksft_disruptive decorator to mark the tests that might
+> be disruptive to the system. Depending on how well the previous
+> test works in the CI we might want to disable disruptive tests
+> by default and only let the developers run them manually.
+>
+> KSFT framework runs disruptive tests by default. DISRUPTIVE=False
+> environment (or config file) can be used to disable these tests.
+> ksft_setup should be called by the test cases that want to use
+> new decorator (ksft_setup is only called via NetDrvEnv/NetDrvEpEnv for now).
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/clone3/clone3.c           | 134 +++++++++++++++++++++-
- tools/testing/selftests/clone3/clone3_selftests.h |  38 ++++++
- 2 files changed, 171 insertions(+), 1 deletion(-)
+Is that something that tests would want to genuinely do, manage this
+stuff by hand? I don't really mind having the helper globally
+accessible, but default I'd keep it inside env.py and expect others to
+inherit appropriately.
 
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index 26221661e9ae..81c2e8648e8b 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -3,6 +3,7 @@
- /* Based on Christian Brauner's clone3() example */
- 
- #define _GNU_SOURCE
-+#include <asm/mman.h>
- #include <errno.h>
- #include <inttypes.h>
- #include <linux/types.h>
-@@ -11,6 +12,7 @@
- #include <stdint.h>
- #include <stdio.h>
- #include <stdlib.h>
-+#include <sys/mman.h>
- #include <sys/syscall.h>
- #include <sys/types.h>
- #include <sys/un.h>
-@@ -19,8 +21,12 @@
- #include <sched.h>
- 
- #include "../kselftest.h"
-+#include "../ksft_shstk.h"
- #include "clone3_selftests.h"
- 
-+static bool shadow_stack_supported;
-+static size_t max_supported_args_size;
-+
- enum test_mode {
- 	CLONE3_ARGS_NO_TEST,
- 	CLONE3_ARGS_ALL_0,
-@@ -28,6 +34,10 @@ enum test_mode {
- 	CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG,
- 	CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG,
- 	CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG,
-+	CLONE3_ARGS_SHADOW_STACK,
-+	CLONE3_ARGS_SHADOW_STACK_NO_SIZE,
-+	CLONE3_ARGS_SHADOW_STACK_NO_POINTER,
-+	CLONE3_ARGS_SHADOW_STACK_NO_TOKEN,
- };
- 
- typedef bool (*filter_function)(void);
-@@ -44,6 +54,44 @@ struct test {
- 	filter_function filter;
- };
- 
-+
-+/*
-+ * We check for shadow stack support by attempting to use
-+ * map_shadow_stack() since features may have been locked by the
-+ * dynamic linker resulting in spurious errors when we attempt to
-+ * enable on startup.  We warn if the enable failed.
-+ */
-+static void test_shadow_stack_supported(void)
-+{
-+	long ret;
-+
-+	ret = syscall(__NR_map_shadow_stack, 0, getpagesize(), 0);
-+	if (ret == -1) {
-+		ksft_print_msg("map_shadow_stack() not supported\n");
-+	} else if ((void *)ret == MAP_FAILED) {
-+		ksft_print_msg("Failed to map shadow stack\n");
-+	} else {
-+		ksft_print_msg("Shadow stack supportd\n");
-+		shadow_stack_supported = true;
-+
-+		if (!shadow_stack_enabled)
-+			ksft_print_msg("Mapped but did not enable shadow stack\n");
-+	}
-+}
-+
-+static unsigned long long get_shadow_stack_page(unsigned long flags)
-+{
-+	unsigned long long page;
-+
-+	page = syscall(__NR_map_shadow_stack, 0, getpagesize(), flags);
-+	if ((void *)page == MAP_FAILED) {
-+		ksft_print_msg("map_shadow_stack() failed: %d\n", errno);
-+		return 0;
-+	}
-+
-+	return page;
-+}
-+
- static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- {
- 	struct __clone_args args = {
-@@ -89,6 +137,21 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- 	case CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG:
- 		args.exit_signal = 0x00000000000000f0ULL;
- 		break;
-+	case CLONE3_ARGS_SHADOW_STACK:
-+		/* We need to specify a normal stack too to avoid corruption */
-+		args.shadow_stack = get_shadow_stack_page(SHADOW_STACK_SET_TOKEN);
-+		args.shadow_stack_size = getpagesize();
-+		break;
-+	case CLONE3_ARGS_SHADOW_STACK_NO_POINTER:
-+		args.shadow_stack_size = getpagesize();
-+		break;
-+	case CLONE3_ARGS_SHADOW_STACK_NO_SIZE:
-+		args.shadow_stack = get_shadow_stack_page(SHADOW_STACK_SET_TOKEN);
-+		break;
-+	case CLONE3_ARGS_SHADOW_STACK_NO_TOKEN:
-+		args.shadow_stack = get_shadow_stack_page(0);
-+		args.shadow_stack_size = getpagesize();
-+		break;
- 	}
- 
- 	memcpy(&args_ext.args, &args, sizeof(struct __clone_args));
-@@ -102,7 +165,12 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- 
- 	if (pid == 0) {
- 		ksft_print_msg("I am the child, my PID is %d\n", getpid());
--		_exit(EXIT_SUCCESS);
-+		/*
-+		 * Use a raw syscall to ensure we don't get issues
-+		 * with manually specified shadow stack and exit handlers.
-+		 */
-+		syscall(__NR_exit, EXIT_SUCCESS);
-+		ksft_print_msg("CHILD FAILED TO EXIT PID is %d\n", getpid());
- 	}
- 
- 	ksft_print_msg("I am the parent (%d). My child's pid is %d\n",
-@@ -191,6 +259,26 @@ static bool no_timenamespace(void)
- 	return true;
- }
- 
-+static bool have_shadow_stack(void)
-+{
-+	if (shadow_stack_supported) {
-+		ksft_print_msg("Shadow stack supported\n");
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static bool no_shadow_stack(void)
-+{
-+	if (!shadow_stack_supported) {
-+		ksft_print_msg("Shadow stack not supported\n");
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
- static size_t page_size_plus_8(void)
- {
- 	return getpagesize() + 8;
-@@ -334,6 +422,47 @@ static const struct test tests[] = {
- 		.expected = -EINVAL,
- 		.test_mode = CLONE3_ARGS_NO_TEST,
- 	},
-+	{
-+		.name = "Shadow stack on system with shadow stack",
-+		.size = 0,
-+		.expected = 0,
-+		.e2big_valid = true,
-+		.test_mode = CLONE3_ARGS_SHADOW_STACK,
-+		.filter = no_shadow_stack,
-+	},
-+	{
-+		.name = "Shadow stack with no pointer",
-+		.size = 0,
-+		.expected = -EINVAL,
-+		.e2big_valid = true,
-+		.test_mode = CLONE3_ARGS_SHADOW_STACK_NO_POINTER,
-+	},
-+	{
-+		.name = "Shadow stack with no size",
-+		.size = 0,
-+		.expected = -EINVAL,
-+		.e2big_valid = true,
-+		.test_mode = CLONE3_ARGS_SHADOW_STACK_NO_SIZE,
-+		.filter = no_shadow_stack,
-+	},
-+	{
-+		.name = "Shadow stack with no token",
-+		.flags = CLONE_VM,
-+		.size = 0,
-+		.expected = SIGSEGV,
-+		.e2big_valid = true,
-+		.test_mode = CLONE3_ARGS_SHADOW_STACK_NO_TOKEN,
-+		.filter = no_shadow_stack,
-+	},
-+	{
-+		.name = "Shadow stack on system without shadow stack",
-+		.flags = CLONE_VM,
-+		.size = 0,
-+		.expected = -EINVAL,
-+		.e2big_valid = true,
-+		.test_mode = CLONE3_ARGS_SHADOW_STACK,
-+		.filter = have_shadow_stack,
-+	},
- };
- 
- int main(int argc, char *argv[])
-@@ -341,9 +470,12 @@ int main(int argc, char *argv[])
- 	size_t size;
- 	int i;
- 
-+	enable_shadow_stack();
-+
- 	ksft_print_header();
- 	ksft_set_plan(ARRAY_SIZE(tests));
- 	test_clone3_supported();
-+	test_shadow_stack_supported();
- 
- 	for (i = 0; i < ARRAY_SIZE(tests); i++)
- 		test_clone3(&tests[i]);
-diff --git a/tools/testing/selftests/clone3/clone3_selftests.h b/tools/testing/selftests/clone3/clone3_selftests.h
-index 39b5dcba663c..38d82934668a 100644
---- a/tools/testing/selftests/clone3/clone3_selftests.h
-+++ b/tools/testing/selftests/clone3/clone3_selftests.h
-@@ -31,12 +31,50 @@ struct __clone_args {
- 	__aligned_u64 set_tid;
- 	__aligned_u64 set_tid_size;
- 	__aligned_u64 cgroup;
-+#ifndef CLONE_ARGS_SIZE_VER2
-+#define CLONE_ARGS_SIZE_VER2 88	/* sizeof third published struct */
-+#endif
-+	__aligned_u64 shadow_stack;
-+	__aligned_u64 shadow_stack_size;
-+#ifndef CLONE_ARGS_SIZE_VER3
-+#define CLONE_ARGS_SIZE_VER3 104 /* sizeof fourth published struct */
-+#endif
- };
- 
-+/*
-+ * For architectures with shadow stack support we need to be
-+ * absolutely sure that the clone3() syscall will be inline and not a
-+ * function call so we open code.
-+ */
-+#ifdef __x86_64__
-+static pid_t __always_inline sys_clone3(struct __clone_args *args, size_t size)
-+{
-+	long ret;
-+	register long _num  __asm__ ("rax") = __NR_clone3;
-+	register long _args __asm__ ("rdi") = (long)(args);
-+	register long _size __asm__ ("rsi") = (long)(size);
-+
-+	__asm__ volatile (
-+		"syscall\n"
-+		: "=a"(ret)
-+		: "r"(_args), "r"(_size),
-+		  "0"(_num)
-+		: "rcx", "r11", "memory", "cc"
-+	);
-+
-+	if (ret < 0) {
-+		errno = -ret;
-+		return -1;
-+	}
-+
-+	return ret;
-+}
-+#else
- static pid_t sys_clone3(struct __clone_args *args, size_t size)
- {
- 	return syscall(__NR_clone3, args, size);
- }
-+#endif
- 
- static inline void test_clone3_supported(void)
- {
+> @@ -127,6 +129,36 @@ KSFT_RESULT_ALL = True
+>              KSFT_RESULT = False
+>  
+>  
+> +def ksft_disruptive(func):
+> +    """
+> +    Decorator that marks the test as disruptive (e.g. the test
+> +    that can down the interface). Disruptive tests can be skipped
+> +    by passing DISRUPTIVE=False environment variable.
+> +    """
+> +
+> +    @functools.wraps(func)
+> +    def wrapper(*args, **kwargs):
+> +        if not KSFT_DISRUPTIVE:
+> +            raise KsftSkipEx(f"marked as disruptive")
 
--- 
-2.39.2
+Since this is a skip, it will fail the overall run. But that happened
+because the user themselves set DISRUPTIVE=0 to avoid, um, disruption to
+the system. I think it should either be xfail, or something else
+dedicated that conveys the idea that we didn't run the test, but that's
+fine.
 
+Using xfail for this somehow doesn't seem correct, nothing failed. Maybe
+we need KsftOmitEx, which would basically be an xfail with a more
+appropriate name?
+
+> +def ksft_setup(env):
+> +    """
+> +    Setup test framework global state from the environment.
+> +    """
+> +
+> +    def get_bool(env, name):
+> +        return env.get(name, "").lower() in ["true", "1"]
+
+"yes" should alse be considered, for compatibility with the bash
+selftests.
+
+It's also odd that 0 is false, 1 is true, but 2 is false again. How
+about something like this?
+
+    def get_bool(env, name):
+        value = env.get(name, "").lower()
+        if value in ["yes", "true"]:
+            return True
+        if value in ["no", "false"]:
+            return False
+
+        try:
+            return bool(int(value))
+        except:
+            raise something something invalid value
+
+So that people at least know if they set it to nonsense that it's
+nonsense?
+
+Dunno. The bash selftests just take "yes" and don't care about being
+very user friendly in that regard at all. _load_env_file() likewise
+looks like it just takes strings and doesn't care about the semantics.
+So I don't feel too strongly about this at all. Besides the "yes" bit,
+that should be recognized.
