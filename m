@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668AC39FC1;
-	Wed, 31 Jul 2024 18:32:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BA133CFC;
+	Wed, 31 Jul 2024 18:32:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722450758; cv=none; b=ASOfKtrdlXw6kbwcRatuOMyHt3gWt5fU8qhK7rYzt7D18rBbmxGlMx9iqMFQEs6AmrmTRJASF0t7sT3FJwjJnHNZQzEjpLV/aHu/vWgtTl5u3EaMuWw9DDMfY+ljRrSeo0hUVjonUUinjJdUIb3RHGDJ8YVb9g0VgSap4dERVEE=
+	t=1722450758; cv=none; b=HPod9VXc7lezeZx7Xhqhdcnmt+kxqRLJguj97n61I45ELsNtq9hl+p3ouj0J4b/ifHNSKEl0I5R4H/1AGYOKSZRntC4saLfIMDG9wCZU2Je7JWZThEa54yF9Jy/L2yMu7Ol17gtI4J3WPNJP/oTBfB4NB8BFU/HjBYKw2nA0gGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722450758; c=relaxed/simple;
-	bh=hhma+iAZyJ0RGsjQ1P0DMANEGea+kZjZQTE/CVE9L5E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=F7xuj/N4OfswYjkph7z9umXExqYTHW+ztvl3jEffFmlXbRub5dvhYbyb7nq0CdABJ46eFnZPon9sbqsdMoHumR1tKVGSzlCVNsMDD5CZQbr4XEu9LPIjSYeGeHf4DWwGhBHUFtY8lXv+9r9opa94krsmzauKe7X2J33CfNkJvhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=TWm8mFOb; arc=none smtp.client-ip=159.69.126.157
+	bh=Jx1R63m4/GBsikaaf5rMEZyFIwEDFZJIJSsCyVsCjUM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=e0baOcprXG8hzZWzdNrftH1DzkOZ8gO0KUG8fb/GAUJPvkGLfjVRT+fdv3Y0rdDATV2x6BifMIwpX8V/PgByr8SD3KvptHB37AI9bijZ+FNMKNEPwEUyQRy0ut75bMS7B+wf03CdL+j98i6MLnCp3zGiitEf0p8uECEBDtkfn9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=pglm4eTS; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="TWm8mFOb"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="pglm4eTS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1722450753;
-	bh=hhma+iAZyJ0RGsjQ1P0DMANEGea+kZjZQTE/CVE9L5E=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=TWm8mFObpG0c4uYZgP4QSKRzwyPtZasQS1cVwbPzcYRx++gTyX8DxdZXc0ujEYZM3
-	 C0RrNrnZIQ05TYteQLfk+SXlAtJnwuZQgU3TzvZZenSJJfLR30rJ5NfYKdrOLfxP3w
-	 mv9wQu2xO9gVcph4DbOp8Xzp9JjAox0sAB+XCRUs=
+	bh=Jx1R63m4/GBsikaaf5rMEZyFIwEDFZJIJSsCyVsCjUM=;
+	h=From:Subject:Date:To:Cc:From;
+	b=pglm4eTSgAO+Gf3mELqwTr1QPjIZBfN/dVl2tuWLP1QxqTxgh8qOg3KuyOHJ5BGZ3
+	 nDUKuc7yInIsxVNvKhR+6kVaNbHIgCIxhKKVknCDpfwKUYG3Q1n6jfxTEnGyKE85sP
+	 lOfdPuE1d6/P1K8mkwzrRtNhWVzFXecwjdH35DoU=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 31 Jul 2024 20:32:08 +0200
-Subject: [PATCH 2/2] Revert "selftests: kselftest: Fix build failure with
- NOLIBC"
+Subject: [PATCH 0/2] tools/nolibc: add support for [v]sscanf()
+Date: Wed, 31 Jul 2024 20:32:06 +0200
+Message-Id: <20240731-nolibc-scanf-v1-0-f71bcc4abb9e@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,57 +34,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240731-nolibc-scanf-v1-2-f71bcc4abb9e@weissschuh.net>
-References: <20240731-nolibc-scanf-v1-0-f71bcc4abb9e@weissschuh.net>
-In-Reply-To: <20240731-nolibc-scanf-v1-0-f71bcc4abb9e@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIACaDqmYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDE0MT3bz8nMykZN3i5MS8NN00w5QkM0tjgxSDZDMloJaCotS0zAqwcdG
+ xtbUAemBG4l4AAAA=
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722450752; l=1271;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722450752; l=706;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=hhma+iAZyJ0RGsjQ1P0DMANEGea+kZjZQTE/CVE9L5E=;
- b=v2MyLloAP1yn+Koe9/hLnFmkAkonAkIjcu7OK6IUcxZ/BmDgp7wjgx+9aheaWosKHWY8t/PvO
- XYRUlLt3u6nAmFjjA0CDur3Ti9gMalAt9t8pzU0f8jq+EGbmIUJXkWF
+ bh=Jx1R63m4/GBsikaaf5rMEZyFIwEDFZJIJSsCyVsCjUM=;
+ b=ivAWux8Jg5F7PTeF8oPRndoW4IYYDY3WIT3VTPyRVlpJ1OaxQNMEuefY6NKxECvukXyGBQzgR
+ PlCKau2+SjFCyS5yoQlgrSO0Eep+G6XuyrQjcPMDrElaZr1Plv1on3L
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-This reverts commit 16767502aa990cca2cb7d1372b31d328c4c85b40.
-
-Nolibc gained support for uname(2) and sscanf(3) which are the
-dependencies of ksft_min_kernel_version().
-
-So re-enable support for ksft_min_kernel_version() under nolibc.
+The implementation is limited and only supports numeric arguments.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/kselftest.h | 5 -----
- 1 file changed, 5 deletions(-)
+Thomas Weißschuh (2):
+      tools/nolibc: add support for [v]sscanf()
+      Revert "selftests: kselftest: Fix build failure with NOLIBC"
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index b8967b6e29d5..f0c4f62e2949 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -426,10 +426,6 @@ static inline __noreturn __printf(1, 2) void ksft_exit_skip(const char *msg, ...
- static inline int ksft_min_kernel_version(unsigned int min_major,
- 					  unsigned int min_minor)
- {
--#ifdef NOLIBC
--	ksft_print_msg("NOLIBC: Can't check kernel version: Function not implemented\n");
--	return 0;
--#else
- 	unsigned int major, minor;
- 	struct utsname info;
- 
-@@ -437,7 +433,6 @@ static inline int ksft_min_kernel_version(unsigned int min_major,
- 		ksft_exit_fail_msg("Can't parse kernel version\n");
- 
- 	return major > min_major || (major == min_major && minor >= min_minor);
--#endif
- }
- 
- #endif /* __KSELFTEST_H */
+ tools/include/nolibc/stdio.h                 | 93 ++++++++++++++++++++++++++++
+ tools/testing/selftests/kselftest.h          |  5 --
+ tools/testing/selftests/nolibc/nolibc-test.c | 59 ++++++++++++++++++
+ 3 files changed, 152 insertions(+), 5 deletions(-)
+---
+base-commit: ae1f550efc11eaf1496c431d9c6e784cb49124c5
+change-id: 20240414-nolibc-scanf-f1db6930d0c6
 
+Best regards,
 -- 
-2.46.0
+Thomas Weißschuh <linux@weissschuh.net>
 
