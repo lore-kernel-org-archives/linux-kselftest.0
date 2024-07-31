@@ -1,106 +1,91 @@
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C182032A
-	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 18:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668AC39FC1;
+	Wed, 31 Jul 2024 18:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722449660; cv=none; b=e5E+Rg5e51GgSmHFfeF2OUWGhZq/0563aAQVsrvnf8gjHYJurjAqIS0xyaK2nH/7GdxbAiga2E8rAd8kxls7SDycEAlrX+aTcM2H2a6H3+YquZRySTppQ7QZWjpDhD3kH6mvYGUvsCe22HgLBFatpdEGMsYcjyYjuuJ69dq76e0=
+	t=1722450758; cv=none; b=ASOfKtrdlXw6kbwcRatuOMyHt3gWt5fU8qhK7rYzt7D18rBbmxGlMx9iqMFQEs6AmrmTRJASF0t7sT3FJwjJnHNZQzEjpLV/aHu/vWgtTl5u3EaMuWw9DDMfY+ljRrSeo0hUVjonUUinjJdUIb3RHGDJ8YVb9g0VgSap4dERVEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722449660; c=relaxed/simple;
-	bh=o+obLVrQ5csLF2wGeTp3KnAdR4khlOmzk77O8qwH0jg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BqKFUrRUrKDlzJN9nIsV6THCEfnl4BVDqScOZaLGnStpPDhTXf7xyIzjFSKFOxH8yUVxhVCojHrl4bCapM6wEZhVDbApIvHb76PwtJ008hmTlUg17iE/3hZOz013H+UbCd9+GG6lkjiT+Ap6yxhLy2gOQ5zFkwm2m92wLWCHPo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VRbGUqW1; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1722450758; c=relaxed/simple;
+	bh=hhma+iAZyJ0RGsjQ1P0DMANEGea+kZjZQTE/CVE9L5E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=F7xuj/N4OfswYjkph7z9umXExqYTHW+ztvl3jEffFmlXbRub5dvhYbyb7nq0CdABJ46eFnZPon9sbqsdMoHumR1tKVGSzlCVNsMDD5CZQbr4XEu9LPIjSYeGeHf4DWwGhBHUFtY8lXv+9r9opa94krsmzauKe7X2J33CfNkJvhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=TWm8mFOb; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VRbGUqW1"
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-81f7faff04dso38400839f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 11:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722449657; x=1723054457; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cndA4LS1PO0dhLlbipUiByrOJ6DdKdLCJA7x5MGr9Uw=;
-        b=VRbGUqW1iC8fV/116K6AD9c5MG5vixx0t6EwCUBl7jShiNJoCsg5yNnAl7zoJBn5Cr
-         5PcS+aIpSRn/1TRSHBROUJ8mOFTvp2b/OaBonoFfl/Z16EvDBhKxvYhoUDSp7GGZbZ0z
-         HZOTvyGVm5LrKMoZUZM8Nr7c4ZybdulQUlDsM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722449657; x=1723054457;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cndA4LS1PO0dhLlbipUiByrOJ6DdKdLCJA7x5MGr9Uw=;
-        b=Ousq91nqu0ZXoesJe0yGlw5w9FGmjBIXDIeerYGKjSMI/8sCxxzdQO1h9zk2/H9tLh
-         vjEBb8PmfUgvHTcZU9jEtjJ90YHQLpPwiKwPbc67ljgC/AAmlSOyRbXTLt9dg6rQfRaq
-         K9yVlFcgrurt1ovVThvy+EQCQqs0b6wLAierj3q3JgTMgLJ9ei4N4zSHgY4KEyZjTKHu
-         tw8+MARhcWmUu5hU88Q2NlFlQwTfu6kgMI5XBSo/pESGiMvKFsnqIhBeARgYy42oaWrM
-         Q7/JQly5tyDjkKG+uaAPjtrslORWPUzyPbetptPVye2Fo909gWcmjLo06AdCwlTjWxzO
-         CW6A==
-X-Forwarded-Encrypted: i=1; AJvYcCWPHptCrtYlxqInL5XItkeBjvoJsXtthod29mn5Lx1QAQjQWiTZu2apg79IPWzNQ7Kvrc7TxeJm7M4eZVFINvpopFIa+Pin3TIfTr1KZ4/b
-X-Gm-Message-State: AOJu0Yzehye59YroZkR75qugsNKYegOgEhJ/lt7ktL3o1wl5FTscrn1t
-	yc3oSruu9f/J6yuaxcVxZib5KHLYWrAx58HkLSb7jx0O7Q+gILWXefUlGrSd1vL5brs7tPbvB9o
-	m
-X-Google-Smtp-Source: AGHT+IEYLRmfG+6zYEE37VcIgp/begbK0OdeNCE1ZQ0GgaiIHvcfPhQ8HmkYZPnlxIf3BFx+F9Pf5Q==
-X-Received: by 2002:a05:6602:586:b0:80a:9c66:3842 with SMTP id ca18e2360f4ac-81fcc17995bmr7402539f.3.1722449657018;
-        Wed, 31 Jul 2024 11:14:17 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c29fa983f8sm3328074173.47.2024.07.31.11.14.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jul 2024 11:14:16 -0700 (PDT)
-Message-ID: <257c9106-c33a-46c1-9761-111505309176@linuxfoundation.org>
-Date: Wed, 31 Jul 2024 12:14:16 -0600
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="TWm8mFOb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1722450753;
+	bh=hhma+iAZyJ0RGsjQ1P0DMANEGea+kZjZQTE/CVE9L5E=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=TWm8mFObpG0c4uYZgP4QSKRzwyPtZasQS1cVwbPzcYRx++gTyX8DxdZXc0ujEYZM3
+	 C0RrNrnZIQ05TYteQLfk+SXlAtJnwuZQgU3TzvZZenSJJfLR30rJ5NfYKdrOLfxP3w
+	 mv9wQu2xO9gVcph4DbOp8Xzp9JjAox0sAB+XCRUs=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Wed, 31 Jul 2024 20:32:08 +0200
+Subject: [PATCH 2/2] Revert "selftests: kselftest: Fix build failure with
+ NOLIBC"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MAINTAINERS: Add selftests/x86 entry
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240610052810.1488793-1-usama.anjum@collabora.com>
- <83d0c57a-dd87-42eb-935a-e4104c17a5ed@collabora.com>
- <3518e3ef-3444-419d-94ce-331f4e7fb391@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <3518e3ef-3444-419d-94ce-331f4e7fb391@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240731-nolibc-scanf-v1-2-f71bcc4abb9e@weissschuh.net>
+References: <20240731-nolibc-scanf-v1-0-f71bcc4abb9e@weissschuh.net>
+In-Reply-To: <20240731-nolibc-scanf-v1-0-f71bcc4abb9e@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722450752; l=1271;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=hhma+iAZyJ0RGsjQ1P0DMANEGea+kZjZQTE/CVE9L5E=;
+ b=v2MyLloAP1yn+Koe9/hLnFmkAkonAkIjcu7OK6IUcxZ/BmDgp7wjgx+9aheaWosKHWY8t/PvO
+ XYRUlLt3u6nAmFjjA0CDur3Ti9gMalAt9t8pzU0f8jq+EGbmIUJXkWF
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On 7/31/24 07:42, Muhammad Usama Anjum wrote:
-> Kind reminder
-> 
-> On 7/2/24 3:17 PM, Muhammad Usama Anjum wrote:
->> Kind reminder
+This reverts commit 16767502aa990cca2cb7d1372b31d328c4c85b40.
 
-Top post ???
+Nolibc gained support for uname(2) and sscanf(3) which are the
+dependencies of ksft_min_kernel_version().
 
->>
->> On 6/10/24 10:28 AM, Muhammad Usama Anjum wrote:
->>> There are no maintainers specified for tools/testing/selftests/x86.
->>> Shuah has mentioned [1] that the patches should go through x86 tree or
->>> in special cases directly to Shuah's tree after getting ack-ed from x86
->>> maintainers. Different people have been confused when sending patches as
->>> correct maintainers aren't found by get_maintainer.pl script. Fix
->>> this by adding entry to MAINTAINERS file.
->>>
->>> [1] https://lore.kernel.org/all/90dc0dfc-4c67-4ea1-b705-0585d6e2ec47@linuxfoundation.org
->>>
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> ---
->>>   MAINTAINERS | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
+So re-enable support for ksft_min_kernel_version() under nolibc.
 
-Applied to linux-kselftest next for Linux 6.12-rc1.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/testing/selftests/kselftest.h | 5 -----
+ 1 file changed, 5 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index b8967b6e29d5..f0c4f62e2949 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -426,10 +426,6 @@ static inline __noreturn __printf(1, 2) void ksft_exit_skip(const char *msg, ...
+ static inline int ksft_min_kernel_version(unsigned int min_major,
+ 					  unsigned int min_minor)
+ {
+-#ifdef NOLIBC
+-	ksft_print_msg("NOLIBC: Can't check kernel version: Function not implemented\n");
+-	return 0;
+-#else
+ 	unsigned int major, minor;
+ 	struct utsname info;
+ 
+@@ -437,7 +433,6 @@ static inline int ksft_min_kernel_version(unsigned int min_major,
+ 		ksft_exit_fail_msg("Can't parse kernel version\n");
+ 
+ 	return major > min_major || (major == min_major && minor >= min_minor);
+-#endif
+ }
+ 
+ #endif /* __KSELFTEST_H */
+
+-- 
+2.46.0
 
