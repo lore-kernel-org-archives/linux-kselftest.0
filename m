@@ -1,244 +1,100 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BD7376F1;
-	Wed, 31 Jul 2024 18:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E5C39AD6;
+	Wed, 31 Jul 2024 18:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722450760; cv=none; b=H4spv3XUU4k90/ErbLchYnR4zHQeyk7nQcVqx/Ax/TK9Y2HHNEoT+859+vS1DYvguAuYFhXcZr5oaTJmNurL0oju5BqXxCIOWgQ8a7zrkFj0U/ZI6UCSW8e2N5a7UQlfYDfYzEd5pwXXFW2Gj7oiic+oapdcIcBAaHU6bGSVF7Y=
+	t=1722451234; cv=none; b=OA/FV5+KW+MV/+US5+fDXKjnnwmQzys+AgXR4JaMeCUOHXqaK0UiW028IYGYnWNTJklkeHOyFkqzwbf5v/Wbud5/grm1uVkaEhGM2YgvnPzEn3LSVij7xDAZAEb2MZeMpHLCGZiblw23pqwQ4pUi+TIhg5I2bisB4iqlPTWXJBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722450760; c=relaxed/simple;
-	bh=4M9s9OEh7nIvlxiEHReQEzcVjYytheID7Gh0tJI5QY4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AKvoB10nnyNpPN2/2Oy+d5PK7u5YsNWXEloukY/hzhAUabfgKS4pB+Vk1+WGVz7ePmGQdX0OFHEnZ5fgqaLPxPMRZbKXTxjnJSwDHmJyH0UbWdvV3SATRmlPOqj9MMJTtv+4/quedwXEVxZ4LKtAeIOq4ocRdJLO+s6yb5AYQZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=p/9kJcMx; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1722451234; c=relaxed/simple;
+	bh=YMbgkzE9Uguj0W8kWLYpWhp0aUXlNKCM/aTCLMSKp5E=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=eY1vwoRBZiPW/BB8wbd6jxP+z55VJBinz3CqZK7hQIBs2zMZtP/XG9gaxisMIzAAet0WilO+D8Zm2BbCP7zBQ6BMzcrJN4Dlgygsf0KONftPNNJKA8pyerKusxGxMBja2M095rjAa1o5tJtiHHlBDl4yfmM0XzvmP9talpRpr0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e0AnlpOR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="p/9kJcMx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1722450753;
-	bh=4M9s9OEh7nIvlxiEHReQEzcVjYytheID7Gh0tJI5QY4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=p/9kJcMxLQxNt8HsEiaXyIPhbKM7VB/BGEN+ci/URg2tnOhRL4ZbZO7vH0N68a2ma
-	 7P/cGd+3u2LezKJ+kUH0msrtOhl33hy1thIO89DHRGDEYhHrttib8QV8psrjeyvCcB
-	 e8RM1jMpnWAnN0R9ng3RhFNF/6WqvcU9SDt53PdQ=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 31 Jul 2024 20:32:07 +0200
-Subject: [PATCH 1/2] tools/nolibc: add support for [v]sscanf()
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e0AnlpOR"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F2C4C4AF0B;
+	Wed, 31 Jul 2024 18:40:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722451233;
+	bh=YMbgkzE9Uguj0W8kWLYpWhp0aUXlNKCM/aTCLMSKp5E=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=e0AnlpORGAaOoFcAD5q7JZBJin2cRJZUhRMFtcR7tHXi9Uk2tKazvMoHS1lXwcC4i
+	 /mLCV+fAA/Me6hUQf92YeUd/+GNiAejlUzTwJqMhdxLpK2JRcWpSg3XDYUxgnWsMqW
+	 LanKyiT9IFGfnljkHOMrSZ8ryVpPIKQQvEmghc2KFNCq4O8hPXXH04urHqnuXjEEr/
+	 Aks1dLN62GvdfM7x6+FVszkqnm6/VIKLt+wSBMWNJfbKiK48BhWmJaueTETefv9h6n
+	 vVSunGAGLgldb2dLdIyxKbw+PKFna+zR3WVDo1uVDGg8Ziphmy8+76MkPzyBdBO1Il
+	 GEcIR3/hEvKCw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 31366C4332F;
+	Wed, 31 Jul 2024 18:40:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240731-nolibc-scanf-v1-1-f71bcc4abb9e@weissschuh.net>
-References: <20240731-nolibc-scanf-v1-0-f71bcc4abb9e@weissschuh.net>
-In-Reply-To: <20240731-nolibc-scanf-v1-0-f71bcc4abb9e@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722450752; l=4543;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=4M9s9OEh7nIvlxiEHReQEzcVjYytheID7Gh0tJI5QY4=;
- b=92ALCUV21ClawaK5mx0eDPz91mg1SI/YXhm2pJMHId/NtertpyQXKPTZytzi6Xi9dqlf/sYQJ
- doErh1gDrOnDp+MnbclmhU1q7ZhA7z8sRwIZWcKDM+IKpGqB3r5640Q
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Subject: Re: [PATCH bpf-next v4 0/3] selftests/bpf: convert test_dev_cgroup to
+ test_progs
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172245123319.23492.11789565242662835897.git-patchwork-notify@kernel.org>
+Date: Wed, 31 Jul 2024 18:40:33 +0000
+References: <20240731-convert_dev_cgroup-v4-0-849425d90de6@bootlin.com>
+In-Reply-To: <20240731-convert_dev_cgroup-v4-0-849425d90de6@bootlin.com>
+To: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29_=3Calexis=2Elothore=40bo?=@ci.codeaurora.org,
+	=?utf-8?q?otlin=2Ecom=3E?=@ci.codeaurora.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ shuah@kernel.org, ebpf@linuxfoundation.org, thomas.petazzoni@bootlin.com,
+ alan.maguire@oracle.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
-The implementation is limited and only supports numeric arguments.
+Hello:
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/include/nolibc/stdio.h                 | 93 ++++++++++++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c | 59 ++++++++++++++++++
- 2 files changed, 152 insertions(+)
+This series was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-index c968dbbc4ef8..d63c45c06d8e 100644
---- a/tools/include/nolibc/stdio.h
-+++ b/tools/include/nolibc/stdio.h
-@@ -348,6 +348,99 @@ int printf(const char *fmt, ...)
- 	return ret;
- }
- 
-+static __attribute__((unused))
-+int vsscanf(const char *str, const char *format, va_list args)
-+{
-+	uintmax_t uval;
-+	intmax_t ival;
-+	int base;
-+	char *endptr;
-+	int matches;
-+	int lpref;
-+
-+	matches = 0;
-+
-+	while (1) {
-+		if (*format == '%') {
-+			lpref = 0;
-+			format++;
-+
-+			if (*format == 'l') {
-+				lpref = 1;
-+				format++;
-+				if (*format == 'l') {
-+					lpref = 2;
-+					format++;
-+				}
-+			}
-+
-+			if (*format == '%') {
-+				if ('%' != *str)
-+					goto done;
-+				str++;
-+				format++;
-+				continue;
-+			} else if (*format == 'd') {
-+				ival = strtoll(str, &endptr, 10);
-+				if (lpref == 0)
-+					*va_arg(args, int *) = ival;
-+				else if (lpref == 1)
-+					*va_arg(args, long *) = ival;
-+				else if (lpref == 2)
-+					*va_arg(args, long long *) = ival;
-+			} else if (*format == 'u' || *format == 'x' || *format == 'X') {
-+				base = *format == 'u' ? 10 : 16;
-+				uval = strtoull(str, &endptr, base);
-+				if (lpref == 0)
-+					*va_arg(args, unsigned int *) = uval;
-+				else if (lpref == 1)
-+					*va_arg(args, unsigned long *) = uval;
-+				else if (lpref == 2)
-+					*va_arg(args, unsigned long long *) = uval;
-+			} else if (*format == 'p') {
-+				*va_arg(args, void **) = (void *)strtoul(str, &endptr, 16);
-+			} else {
-+				SET_ERRNO(EILSEQ);
-+				goto done;
-+			}
-+
-+			format++;
-+			str = endptr;
-+			matches++;
-+
-+		} else if (*format == '\0') {
-+			goto done;
-+		} else if (isspace(*format)) {
-+			while (isspace(*format))
-+				format++;
-+			while (isspace(*str))
-+				str++;
-+		} else if (*format == *str) {
-+			format++;
-+			str++;
-+		} else {
-+			if (!matches)
-+				matches = EOF;
-+			goto done;
-+		}
-+	}
-+
-+done:
-+	return matches;
-+}
-+
-+static __attribute__((unused, format(scanf, 2, 3)))
-+int sscanf(const char *str, const char *format, ...)
-+{
-+	va_list args;
-+	int ret;
-+
-+	va_start(args, format);
-+	ret = vsscanf(str, format, args);
-+	va_end(args);
-+	return ret;
-+}
-+
- static __attribute__((unused))
- void perror(const char *msg)
- {
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 093d0512f4c5..addbceb0b276 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1277,6 +1277,64 @@ static int expect_vfprintf(int llen, int c, const char *expected, const char *fm
- 	return ret;
- }
- 
-+static int test_scanf(void)
-+{
-+	unsigned long long ull;
-+	unsigned long ul;
-+	unsigned int u;
-+	long long ll;
-+	long l;
-+	void *p;
-+	int i;
-+
-+	if (sscanf("", "foo") != EOF)
-+		return 1;
-+
-+	if (sscanf("foo", "foo") != 0)
-+		return 2;
-+
-+	if (sscanf("123", "%d", &i) != 1)
-+		return 3;
-+
-+	if (i != 123)
-+		return 4;
-+
-+	if (sscanf("a123b456c0x90", "a%db%uc%p", &i, &u, &p) != 3)
-+		return 5;
-+
-+	if (i != 123)
-+		return 6;
-+
-+	if (u != 456)
-+		return 7;
-+
-+	if (p != (void *)0x90)
-+		return 8;
-+
-+	if (sscanf("a    b1", "a b%d", &i) != 1)
-+		return 9;
-+
-+	if (i != 1)
-+		return 10;
-+
-+	if (sscanf("a%1", "a%%%d", &i) != 1)
-+		return 11;
-+
-+	if (i != 1)
-+		return 12;
-+
-+	if (sscanf("1|2|3|4|5|6",
-+		   "%d|%ld|%lld|%u|%lu|%llu",
-+		   &i, &l, &ll, &u, &ul, &ull) != 6)
-+		return 13;
-+
-+	if (i != 1 || l != 2 || ll != 3 ||
-+	    u != 4 || ul != 5 || ull != 6)
-+		return 14;
-+
-+	return 0;
-+}
-+
- static int run_vfprintf(int min, int max)
- {
- 	int test;
-@@ -1298,6 +1356,7 @@ static int run_vfprintf(int min, int max)
- 		CASE_TEST(char);         EXPECT_VFPRINTF(1, "c", "%c", 'c'); break;
- 		CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); break;
- 		CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void *) 0x1); break;
-+		CASE_TEST(scanf);        EXPECT_ZR(1, test_scanf()); break;
- 		case __LINE__:
- 			return ret; /* must be last */
- 		/* note: do not set any defaults so as to permit holes above */
+On Wed, 31 Jul 2024 08:37:24 +0200 you wrote:
+> Hello,
+> this small series aims to integrate test_dev_cgroup in test_progs so it
+> could be run automatically in CI. The new version brings a few differences
+> with the current one:
+> - test now uses directly syscalls instead of wrapping commandline tools
+>   into system() calls
+> - test_progs manipulates /dev/null (eg: redirecting test logs into it), so
+>   disabling access to it in the bpf program confuses the tests. To fix this,
+>   the first commit modifies the bpf program to allow access to char devices
+>   1:3 (/dev/null), and disable access to char devices 1:5 (/dev/zero)
+> - once test is converted, add a small subtest to also check for device type
+>   interpretation (char or block)
+> - paths used in mknod tests are now in /dev instead of /tmp: due to the CI
+>   runner organisation and mountpoints manipulations, trying to create nodes
+>   in /tmp leads to errors unrelated to the test (ie, mknod calls refused by
+>   kernel, not the bpf program). I don't understand exactly the root cause
+>   at the deepest point (all I see in CI is an -ENXIO error on mknod when trying to
+>   create the node in tmp, and I can not make sense out of it neither
+>   replicate it locally), so I would gladly take inputs from anyone more
+>   educated than me about this.
+> 
+> [...]
 
+Here is the summary with links:
+  - [bpf-next,v4,1/3] selftests/bpf: do not disable /dev/null device access in cgroup dev test
+    https://git.kernel.org/bpf/bpf-next/c/ba6a9018502e
+  - [bpf-next,v4,2/3] selftests/bpf: convert test_dev_cgroup to test_progs
+    https://git.kernel.org/bpf/bpf-next/c/d83d8230e415
+  - [bpf-next,v4,3/3] selftests/bpf: add wrong type test to cgroup dev
+    https://git.kernel.org/bpf/bpf-next/c/84cdbff4a935
+
+You are awesome, thank you!
 -- 
-2.46.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
