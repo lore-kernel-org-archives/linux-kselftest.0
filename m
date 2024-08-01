@@ -1,217 +1,342 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2052.outbound.protection.outlook.com [40.107.92.52])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556BB16EBF7;
-	Thu,  1 Aug 2024 09:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722502924; cv=fail; b=ervGCW1/FOhdv9sP0MqcbFYAW3/nFzv01JBsHAviXBILgZKlRFNkIsWosHbM9s4zpSYpWDfj5yVBzPYWB6lFUe/9kcb5eoVBCJWrS5ZgnBI4K31rs5UNMj9iSzp45ai6tQ2kDuSrNDE3sJWaGcqyzBxPP0J146kifR9Az36WAHw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722502924; c=relaxed/simple;
-	bh=A7ZW//ik4ns7n1ymnrp1nTQV/EYfxdevu/tWg5nujO0=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=brtClGX1Vo0upWkV/j/E+U1QRSxMWlfBvOY9WTHlbrBlzJDzdyQMxwz2yE6HJTz5rtDqOvF30pUG/BxFvSd1ql0cy5IH70cjzxi89scmH2AdZziJnB+9ri6gfpeb11gDcNjfoNgtv4vpaADk9oaDqhiFVBzibXdNoL66hbKSuDc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Lyuw1zC8; arc=fail smtp.client-ip=40.107.92.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88EAB170A04;
+	Thu,  1 Aug 2024 09:08:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722503324; cv=none; b=OB0ut5zGpk5sL9hdI/shTSgoGVTTmB8UW84qLgjujcfA60qzOQld6cEYTTDc0kPE73+YsPwmo8ZHY2tJfnyDY9WZneJ4aH1Yfb5dIcOEMWrFp+mGicy/X4UIYg3BIuegLdeHB+iUwUM+KhJLXPlx/2lcmblSSij/D7A5n74eSrs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722503324; c=relaxed/simple;
+	bh=4TyZcsH3ip6bpQUoaZO0mSxOqLnPd9JC8F0feYRhs20=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NORONaj++9ykXT6NDZxAqnNNWavlS2Q6D1TuJXK8QCYu/uNMInkmrjTeP2IaCX1IAI49tp2KqV5JgZNjSRC04w7cFIGC/qvLLhm+zz8lcyEdyZN1orHO8qX5V54xUAdiMeI4OvnJyoIHaAjiit3fFAO3n2XttkI3NbJcZtLd4is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TPSULcLL; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Lyuw1zC8"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CIDpWhGBMU+yBM3YE/VI4xlJHuKS5PFgYz6uxFYbZlRY00Z2XWQ+IDhi5cAQcE9uEiZvjEWHxM0+SrqafJjzl59JGpPB5xFYbdUCej1N1AayWrnVeM19iDFyUZBNcxXbUOfM3ryWlClXGgJLC7nqbF9IyW25ZP2Jy9sEZfQBxMqMIYJciyMjY+9uuF3adcNl2STm7qR7lVISQaPqa1AumlYLs4Spf4cf5iPCRJEu0koHris+6kHTJgee45MZm5frsD3Ffi5MB574QSyElIyU5t58R1XBnLLp85mAWpvvvOkwpFqr4vwCyNHyJAX3Mz4W7uYMfJtJg2daUkDg4SYyZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wOni/5QJue0yHZi2CJQh3sj9kfSa4xQyROhZaDE1Jfo=;
- b=JJVqDrhgrTxYwkJlObX76Q9EBuis6yHYaTUh8m91spOsMYy1J2xexIx9WzQ1GNESW0kb3f8XCkHs4TXoAios7mEeDMOGIij0CP8JXIuJZ1CN27y800kXC2bF/wNg8Z/lViY6FUs1HXl5vkFcdiMTI20HuqpfrUsZ5prPE7+EhwYbTNUtozCQjns35NloW2xqCGudGkCdsR9yvf8HYxYIEZ99yxcKh5kUcZLZfoKxEml0Xi7pkr9Ft6kVuHmMTuD7BMZtkrmjFkTEJ3d/nLk0bf0WT7e4ZPv/2zwwXAZRygkfW9MdZgA9501lYSz4tSNQVjK5lL8Ds/ItxevTOaZ6Vg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wOni/5QJue0yHZi2CJQh3sj9kfSa4xQyROhZaDE1Jfo=;
- b=Lyuw1zC85GqC8FOzr6Be0BsCHT3dQnfPD9jWNU9Kbdak0UvZBLoWvi6gk/6e/f/OQ5wd4kjIR571nuF7hAf5ppUeDPFb9MkV1PnwiEYALe7uOeSq/ByFWr+cEfBuNLhl6zfN7fcFQvfoAIv/U3WdvDU28U6+qyJY70JWDmZQSt22c1F0Zq3PikrXPrtHEtk56H6HWdAGXTJJnzcNAc1gXdzMbMrVLP9eSO+N4tOAVeIyNhvZ2PUqWchMy1hFJ63eMG5uuoTWa80bmNm30V+9Ng6aX9561PsyjS5ki8u8Ns97ps9GZDg40E18vK4ozpW1j0d3YXFVVKjA1DVDYnFJzw==
-Received: from BN9PR03CA0381.namprd03.prod.outlook.com (2603:10b6:408:f7::26)
- by CYYPR12MB8854.namprd12.prod.outlook.com (2603:10b6:930:b8::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.27; Thu, 1 Aug
- 2024 09:01:58 +0000
-Received: from BN3PEPF0000B074.namprd04.prod.outlook.com
- (2603:10b6:408:f7:cafe::45) by BN9PR03CA0381.outlook.office365.com
- (2603:10b6:408:f7::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.22 via Frontend
- Transport; Thu, 1 Aug 2024 09:01:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN3PEPF0000B074.mail.protection.outlook.com (10.167.243.119) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7828.19 via Frontend Transport; Thu, 1 Aug 2024 09:01:58 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 1 Aug 2024
- 02:01:43 -0700
-Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 1 Aug 2024
- 02:01:39 -0700
-References: <20240730223932.3432862-1-sdf@fomichev.me>
- <20240730223932.3432862-2-sdf@fomichev.me> <878qxh7mf4.fsf@nvidia.com>
- <Zqqi8LhvSn1MXu9B@mini-arch>
-User-agent: mu4e 1.8.14; emacs 29.4
-From: Petr Machata <petrm@nvidia.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-CC: Petr Machata <petrm@nvidia.com>, <netdev@vger.kernel.org>,
-	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Joe Damato
-	<jdamato@fastly.com>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 2/2] selftests: net: ksft: support marking
- tests as disruptive
-Date: Thu, 1 Aug 2024 10:36:18 +0200
-In-Reply-To: <Zqqi8LhvSn1MXu9B@mini-arch>
-Message-ID: <87zfpw62hi.fsf@nvidia.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TPSULcLL"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4717cigJ022519;
+	Thu, 1 Aug 2024 09:08:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=Z
+	dLRS+tuwrZ768re0jWc0dDA6Hr1gYNwXugW2v6VVHg=; b=TPSULcLLbSM9ogSmH
+	MUINEPAdxfjEbWDTFj1ZkjAZcjRiq+wZB78mAoqRlOEuMW9pAfdIpyeB+07jCXVn
+	qSseW2+MAb9UC4bQH3plbdJuwpM0x4VChtfQN5rUUyUaQnTEeM/aEaWNtCWkUAv7
+	eQ+qvtVMFJTg1Fj25mEF02KWWGxC5M7Zk+QuNbJe8PPU/BxkOxo+6XTOFz7X1695
+	s7E+d22DF3mhuLJMkJpHTlwTi9ZZWvEgPslNFJHcUsQily0sIIoAfINLJUg8WfNt
+	ZePlLmt2RSrsMV8xWjm5SHRZJAFc5WIbdrzXlP5wVcfbsG4XGld41EGZsam3AkOL
+	6kR6w==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40qyums30d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Aug 2024 09:08:38 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47198Pgc013216;
+	Thu, 1 Aug 2024 09:08:38 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40qyums309-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Aug 2024 09:08:37 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 47187SRP018811;
+	Thu, 1 Aug 2024 09:08:36 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40nc7q0uu1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Aug 2024 09:08:36 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47198UgA53281040
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 1 Aug 2024 09:08:32 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CF2DB2004B;
+	Thu,  1 Aug 2024 09:08:30 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8C64020043;
+	Thu,  1 Aug 2024 09:08:30 +0000 (GMT)
+Received: from [9.152.224.253] (unknown [9.152.224.253])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  1 Aug 2024 09:08:30 +0000 (GMT)
+Message-ID: <0b323867-a2f8-4bae-9f33-02ecf8362a13@linux.ibm.com>
+Date: Thu, 1 Aug 2024 11:08:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B074:EE_|CYYPR12MB8854:EE_
-X-MS-Office365-Filtering-Correlation-Id: 852dd6c6-a78e-4977-b360-08dcb208999a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?V/UCuos03BX3UlZGT5/lGutLVGm1yrmQrYrCBVbEktO3N2bNrgn5SRDSpIDE?=
- =?us-ascii?Q?at78J/vWfBwx+/GUJ8a6CifhuIDjIQm452MDYmOvovg1X9BXAx2a6ncG2ipb?=
- =?us-ascii?Q?G18g6/+xYZlvqyt4y3BgQo141LFupS55/3hap5hEYD2Wj2FGMPe0tgwhvPKJ?=
- =?us-ascii?Q?hIqgukEJvjh5lNSQGkE0g4lzJwXNcvYEvY7cULDRa3Kdc5nbYs4IbeREiIfA?=
- =?us-ascii?Q?C3cumTzl422XglLXuK0Y8qjN9aM8IPqS6/6bvObdfeBWDSHB8DQtH+awcuQk?=
- =?us-ascii?Q?wVQ0u2QEtlYc/EtJLEjJXxFGbPPCXg1TlpQxn4C1SfCL8ZQxuiVGbKGUHK+n?=
- =?us-ascii?Q?4lWuv8SdqJjzdEH6AKdN0Ezt7XNyrn+N0A2dxruR+zz5pY5eBPt8dODFKH/E?=
- =?us-ascii?Q?IQCvUioZyGefqKfUPHZ9nsl+6bkiSbHdoevV+Y2s6vMOzGfua2DiJRrGPeph?=
- =?us-ascii?Q?+EWa6+mfRHeMMafOs77GkC/oBGf2wzETAuvD5BEuo58eCtQO0RrRSMbuCNB0?=
- =?us-ascii?Q?QB+VnAb+XQf9jC+I3xbjX2Ct6M5PTg5sF9607m4woGlF+uB3hdmz4rRTvJVR?=
- =?us-ascii?Q?e12KIE8N57qv35AoFBt0RtI5pbFJv/SuhoTcwveFj3MZkavxKJwGlfCy55sy?=
- =?us-ascii?Q?ttB9eYHHvxdrV8NuV1uS1vQqK6dOuA5T62iLknNitn1HrOOGTc9xLn6hH2Gu?=
- =?us-ascii?Q?zJ8OcHM3Eqk9V23nNTifHuj4l0D1KWGhBrjPmwcvQIWgVu6WMLxgRGg3BCph?=
- =?us-ascii?Q?K2fR26NF1Hh16XY/q8o7k2vYtDOSSI2uGt/ErkInMrfuKdMU5K8iaFSICAap?=
- =?us-ascii?Q?u6DZAvs45vQtIv6at9sTFBTAp1X2o633gbh9MqiAAoEjR75xreFrIWNKUkKM?=
- =?us-ascii?Q?dgwIdJJ+JGdap36S+kqzCPfJRfVTuIgmJzJmHkPjDzsLBHeFHByIc3vDFqV2?=
- =?us-ascii?Q?D0nmlmPfDXZ8UmGUpDZziaJoyLplY5rENnDHsbcqDY6ksoankF19VYuRS1G/?=
- =?us-ascii?Q?iNwckghVLv1yA3EYVBXeC9cz5mUBYoGOHpA+6ybjvRdteQL7Tu4BQgiQ7tdA?=
- =?us-ascii?Q?SRo4TGID9vrQoPoJ/vWDn4WeFd6dbBl0HU+K6lKi19NF+y5NNk9tOZHh9yHo?=
- =?us-ascii?Q?OKAebWPuIbFU6s4j80yOxuZo4ODR5bUtHWWRuhOvP79UlDGrBB1Sf/zDA5W+?=
- =?us-ascii?Q?hVYxN1FxkW+wnFW/gn9PCvoNCug1Ea2L9ySe2UiBG2kytkbxDUq/86R1YvsK?=
- =?us-ascii?Q?XRGpa1nid+cbSEzSk9C2ViyFiqF/gtlke6yItHImCvJIO35Wxi7vkRj3Hi6D?=
- =?us-ascii?Q?W080zdJE/RA4KGetdaxnzAkBU01LqpYGxPYHu532QSLHqpYQ4Y7Du3Tzv/j2?=
- =?us-ascii?Q?BKEIBV7fuNYZkdGtu4BDSPiqxed3cYl0lHJ35nJe9KN4rBT4ojBeBwnmy92W?=
- =?us-ascii?Q?roEpYhxM1mSM/1Oe36INTF8+gPuGId2j?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2024 09:01:58.4115
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 852dd6c6-a78e-4977-b360-08dcb208999a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B074.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8854
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 07/10] selftests: kvm: s390: Add uc_map_unmap VM test
+ case
+To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+References: <20240730072413.143556-1-schlameuss@linux.ibm.com>
+ <20240730072413.143556-8-schlameuss@linux.ibm.com>
+Content-Language: en-US
+From: Janosch Frank <frankja@linux.ibm.com>
+Autocrypt: addr=frankja@linux.ibm.com; keydata=
+ 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
+In-Reply-To: <20240730072413.143556-8-schlameuss@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: K1DY7TN9CjgcBSvj7SknX8ng-4noPyxf
+X-Proofpoint-ORIG-GUID: nNX-dTe7teGYTde5rg_2w07eNGv6MhZO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-01_06,2024-07-31_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 mlxscore=0 suspectscore=0 phishscore=0
+ adultscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408010053
+
+On 7/30/24 9:24 AM, Christoph Schlameuss wrote:
+> Add a test case verifying basic running and interaction of ucontrol VMs.
+> Fill the segment and page tables for allocated memory and map memory on
+> first access.
+> 
+> * uc_map_unmap
+>    Store and load data to mapped and unmapped memory and use pic segment
+>    translation handling to map memory on access.
+> 
+> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+> ---
+>   .../selftests/kvm/s390x/ucontrol_test.c       | 165 +++++++++++++++++-
+>   1 file changed, 164 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> index 817b1e08559c..b7f760f980fd 100644
+> --- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> +++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> @@ -16,7 +16,13 @@
+>   #include <linux/capability.h>
+>   #include <linux/sizes.h>
+>   
+> +#define UC_PIC_SEGMENT_TRANSLATION 0x10
+
+That's a bit clearer and used by KVM:
+#define PGM_SEGMENT_TRANSLATION		0x10
+
+> +
+>   #define VM_MEM_SIZE (4 * SZ_1M)
+> +#define VM_MEM_EXT_SIZE (2 * SZ_1M)
+> +#define VM_MEM_MAX (VM_MEM_SIZE + VM_MEM_EXT_SIZE)
+> +
+
+[...]
+
+> +	self->pgd = self->base_gpa + SZ_1M; /* set PASCE addr */
+
+Please put the comments on the line above
+
+> +	phd = gpa2hva(self, self->pgd);
+> +	memset(phd, 0xff, PAGES_PER_SEGMENT * PAGE_SIZE);
+> +
+> +	for (si = 0; si < ((VM_MEM_SIZE + VM_MEM_EXT_SIZE) / SZ_1M); si++) {
+> +		/* create ste */
+> +		phd[si] = (self->pgd
+> +			+ (PAGES_PER_SEGMENT * PAGE_SIZE
+> +				* ((VM_MEM_SIZE + VM_MEM_EXT_SIZE) / SZ_1M))
+> +			+ (PAGES_PER_SEGMENT * PAGE_SIZE * si)) & ~0x7fful;
+> +		se_addr = gpa2hva(self, phd[si]);
+> +		memset(se_addr, 0xff, PAGES_PER_SEGMENT * PAGE_SIZE);
+> +		for (pi = 0; pi < (SZ_1M / PAGE_SIZE); pi++) {
+> +			/* create pte */
+> +			((u64 *)se_addr)[pi] = (self->base_gpa
+> +				+ (si * SZ_1M) + (pi * PAGE_SIZE)) & ~0xffful;
+> +		}
+> +	}
+> +	pr_debug("segment table entry %p (0x%lx) --> %p\n",
+> +		 phd, phd[0], gpa2hva(self, (phd[0] & ~0x7fful)));
+> +	print_hex_bytes("st", (u64)phd, 64);
+> +	print_hex_bytes("pt", (u64)gpa2hva(self, phd[0]), 128);
+> +	print_hex_bytes("pt+", (u64)
+> +			gpa2hva(self, phd[0] + (PAGES_PER_SEGMENT * PAGE_SIZE
+> +			* ((VM_MEM_SIZE + VM_MEM_EXT_SIZE) / SZ_1M)) - 0x64), 128);
+> +
+> +	sync_regs->crs[1] = self->pgd | 0x3;	/* PASCE TT=00 for segment table */
+
+Same here
+
+> +	run->kvm_dirty_regs |= KVM_SYNC_CRS;
+> +}
+> +
+> +static void uc_handle_exit_ucontrol(FIXTURE_DATA(uc_kvm) * self)
+> +{
+> +	struct kvm_run *run = self->run;
+> +
+> +	TEST_ASSERT_EQ(KVM_EXIT_S390_UCONTROL, run->exit_reason);
+> +	switch (run->s390_ucontrol.pgm_code) {
+> +	case UC_PIC_SEGMENT_TRANSLATION:
+> +		pr_info("ucontrol pic segment translation 0x%llx\n",
+> +			run->s390_ucontrol.trans_exc_code);
+> +		/* map / make additional memory available */
+> +		struct kvm_s390_ucas_mapping map2 = {
+> +			.user_addr = (u64)gpa2hva(self, run->s390_ucontrol.trans_exc_code),
+> +			.vcpu_addr = run->s390_ucontrol.trans_exc_code,
+> +			.length = VM_MEM_EXT_SIZE,
+> +		};
+> +		pr_info("ucas map %p %p 0x%llx\n",
+> +			(void *)map2.user_addr, (void *)map2.vcpu_addr, map2.length);
+> +		TEST_ASSERT_EQ(0, ioctl(self->vcpu_fd, KVM_S390_UCAS_MAP, &map2));
+> +		break;
+> +	default:
+> +		TEST_FAIL("UNEXPECTED PGM CODE %d", run->s390_ucontrol.pgm_code);
+> +	}
+> +}
+> +
+>   /* verify SIEIC exit
+>    * * reset stop requests
+>    * * fail on codes not expected in the test cases
+> @@ -245,7 +338,11 @@ static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
+>   		break;
+>   	case ICPT_INST:
+>   		/* end execution in caller on intercepted instruction */
+> +		pr_info("sie instruction interception\n");
+
+That should have been part of an earlier patch?
+
+>   		return false;
+> +	case ICPT_OPEREXC:
+> +		/* operation exception */
+> +		TEST_FAIL("sie exception on %.4x%.8x", sie_block->ipa, sie_block->ipb);
+>   	default:
+>   		TEST_FAIL("UNEXPECTED SIEIC CODE %d", run->s390_sieic.icptcode);
+>   	}
+> @@ -258,6 +355,11 @@ static bool uc_handle_exit(FIXTURE_DATA(uc_kvm) * self)
+>   	struct kvm_run *run = self->run;
+>   
+>   	switch (run->exit_reason) {
+> +	case KVM_EXIT_S390_UCONTROL:
+> +		/* check program interruption code */
+> +		/* handle page fault --> ucas map */
+
+Multi-line comments do exist
+
+> +		uc_handle_exit_ucontrol(self);
+> +		break;
+>   	case KVM_EXIT_S390_SIEIC:
+>   		return uc_handle_sieic(self);
+>   	default:
+> @@ -289,6 +391,67 @@ static void uc_assert_diag44(FIXTURE_DATA(uc_kvm) * self)
+>   	TEST_ASSERT_EQ(0x440000, sie_block->ipb);
+>   }
+>   
+> +TEST_F(uc_kvm, uc_map_unmap)
+> +{
+> +	struct kvm_sync_regs *sync_regs = &self->run->s.regs;
+> +	struct kvm_run *run = self->run;
+> +	int rc;
+> +
+> +	init_st_pt(self);
+> +
+> +	/* copy test_mem_asm to code_hva / code_gpa */
+> +	TH_LOG("copy code %p to vm mapped memory %p / %p",
+> +	       &test_mem_asm, (void *)self->code_hva, (void *)self->code_gpa);
+> +	memcpy((void *)self->code_hva, &test_mem_asm, PAGE_SIZE);
+> +
+> +	run->psw_mask = 0x0400000180000000ULL;  /* DAT enabled + 64 bit mode */
+> +	run->psw_addr = self->code_gpa;
 
 
-Stanislav Fomichev <sdf@fomichev.me> writes:
+Please put the comments on the line above
 
-> On 07/31, Petr Machata wrote:
->> 
->> Stanislav Fomichev <sdf@fomichev.me> writes:
->> 
->> > Add new @ksft_disruptive decorator to mark the tests that might
->> > be disruptive to the system. Depending on how well the previous
->> > test works in the CI we might want to disable disruptive tests
->> > by default and only let the developers run them manually.
->> >
->> > KSFT framework runs disruptive tests by default. DISRUPTIVE=False
->> > environment (or config file) can be used to disable these tests.
->> > ksft_setup should be called by the test cases that want to use
->> > new decorator (ksft_setup is only called via NetDrvEnv/NetDrvEpEnv for now).
->> 
->> Is that something that tests would want to genuinely do, manage this
->> stuff by hand? I don't really mind having the helper globally
->> accessible, but default I'd keep it inside env.py and expect others to
->> inherit appropriately.
->
-> Hard to say how well it's gonna work tbh. But at least from
-> what I've seen, large code bases (outside of kernel) usually
-> have some way to attach metadata to the testcase to indicate
-> various things. For example, this is how the timeout
-> can be controlled:
->
-> https://bazel.build/reference/test-encyclopedia#role-test-runner
->
-> So I'd imagine we can eventually have @kstf_short/@ksft_long to
-> control that using similar techniques.
->
-> Regarding keeping it inside env.py: can you expand more on what
-> you mean by having the default in env.py?
+> +
+> +	/* set register content for test_mem_asm to access not mapped memory*/
+> +	sync_regs->gprs[1] = 0x55;
+> +	sync_regs->gprs[5] = self->base_gpa;
+> +	sync_regs->gprs[6] = VM_MEM_SIZE;
+> +	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
+> +
+> +	/* run and expect to fail witch ucontrol pic segment translation */
+> +	ASSERT_EQ(0, uc_run_once(self));
+> +	ASSERT_EQ(1, sync_regs->gprs[0]);
+> +	ASSERT_EQ(KVM_EXIT_S390_UCONTROL, run->exit_reason);
+> +
+> +	ASSERT_EQ(UC_PIC_SEGMENT_TRANSLATION, run->s390_ucontrol.pgm_code);
+> +	ASSERT_EQ(self->base_gpa + VM_MEM_SIZE, run->s390_ucontrol.trans_exc_code);
+> +	/* map / make additional memory available */
+> +	struct kvm_s390_ucas_mapping map2 = {
+> +		.user_addr = (u64)gpa2hva(self, self->base_gpa + VM_MEM_SIZE),
+> +		.vcpu_addr = self->base_gpa + VM_MEM_SIZE,
+> +		.length = VM_MEM_EXT_SIZE,
+> +	};
+> +	TH_LOG("ucas map %p %p 0x%llx",
+> +	       (void *)map2.user_addr, (void *)map2.vcpu_addr, map2.length);
+> +	rc = ioctl(self->vcpu_fd, KVM_S390_UCAS_MAP, &map2);
+> +	ASSERT_EQ(0, rc)
+> +		TH_LOG("ucas map result %d not expected, %s", rc, strerror(errno));
+> +	ASSERT_EQ(0, uc_run_once(self));
+> +	ASSERT_EQ(false, uc_handle_exit(self));
+> +	uc_assert_diag44(self);
+> +
+> +	/* assert registers and memory are in expected state */
+> +	ASSERT_EQ(2, sync_regs->gprs[0]);
+> +	ASSERT_EQ(0x55, sync_regs->gprs[1]);
+> +	ASSERT_EQ(0x55, *(u32 *)gpa2hva(self, self->base_gpa + VM_MEM_SIZE));
+> +
+> +	/* unmap and run loop again */
+> +	TH_LOG("ucas unmap %p %p 0x%llx",
+> +	       (void *)map2.user_addr, (void *)map2.vcpu_addr, map2.length);
+> +	rc = ioctl(self->vcpu_fd, KVM_S390_UCAS_UNMAP, &map2);
+> +	ASSERT_EQ(0, rc)
+> +		TH_LOG("ucas map result %d not expected, %s", rc, strerror(errno));
+> +	ASSERT_EQ(0, uc_run_once(self));
+> +	ASSERT_EQ(3, sync_regs->gprs[0]);
+> +	ASSERT_EQ(KVM_EXIT_S390_UCONTROL, run->exit_reason);
+> +	ASSERT_EQ(true, uc_handle_exit(self));
+> +}
+> +
+>   TEST_F(uc_kvm, uc_gprs)
+>   {
+>   	struct kvm_sync_regs *sync_regs = &self->run->s.regs;
 
-I'm looking into it now and I missed how this is layered. ksft.py is the
-comparatively general piece of code, and env.py is something
-specifically for driver testing. It makes sense for ksft_setup() to be
-where it is, because not-driver tests might want to be marked disruptive
-as well. It also makes sense that env.py invokes the general helper.
-
-All is good.
-
->> > @@ -127,6 +129,36 @@ KSFT_RESULT_ALL = True
->> >              KSFT_RESULT = False
->> >  
->> >  
->> > +def ksft_disruptive(func):
->> > +    """
->> > +    Decorator that marks the test as disruptive (e.g. the test
->> > +    that can down the interface). Disruptive tests can be skipped
->> > +    by passing DISRUPTIVE=False environment variable.
->> > +    """
->> > +
->> > +    @functools.wraps(func)
->> > +    def wrapper(*args, **kwargs):
->> > +        if not KSFT_DISRUPTIVE:
->> > +            raise KsftSkipEx(f"marked as disruptive")
->> 
->> Since this is a skip, it will fail the overall run. But that happened
->> because the user themselves set DISRUPTIVE=0 to avoid, um, disruption to
->> the system. I think it should either be xfail, or something else
->> dedicated that conveys the idea that we didn't run the test, but that's
->> fine.
->> 
->> Using xfail for this somehow doesn't seem correct, nothing failed. Maybe
->> we need KsftOmitEx, which would basically be an xfail with a more
->> appropriate name?
->
-> Are you sure skip will fail the overall run? At least looking at
-> tools/testing/selftests/net/lib/py/ksft.py, both skip and xfail are
-> considered KSFT_RESULT=True. Or am I looking at the wrong place?
-
-You seem to be right about the exit code. This was discussed some time
-ago, that SKIP is considered a sort of a failure. As the person running
-the test you would want to go in and fix whatever configuration issue is
-preventing the test from running. I'm not sure how it works in practice,
-whether people look for skips in the test log explicitly or rely on exit
-codes.
-
-Maybe Jakub can chime in, since he's the one that cajoled me into
-handling this whole SKIP / XFAIL business properly in bash selftests.
