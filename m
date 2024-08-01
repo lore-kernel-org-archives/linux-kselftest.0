@@ -1,131 +1,92 @@
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A003518CC02;
-	Thu,  1 Aug 2024 09:21:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1BC13C8EE;
+	Thu,  1 Aug 2024 09:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722504122; cv=none; b=QEf342O4AqBA7csNIVsxq4RjLj/ae+J0RHFWIx8jeWOTHvs7FPxGEHpG+BYcAB2C1rOGC41SxIcDyGSbYOndun9XBdsCXKT8yBvl7BVfupjkQoRYIVVoxnRkU/ZWN4LfH/lhzeDbS9d/nktaJXcB3s7blZvf0R9hAFiOkQnGPtw=
+	t=1722504629; cv=none; b=ORYcbfBJAfJr8G3ZlH4ao7YqDbpBgVvurwZd3zRnQ9SN+B6JQ0nv5l4QeSRcrjn5dA2G2hjzYl4sYEqln2bTewhdUcuYm0aJpihHZYNTvg5wnsftphfKGMN9iG2+FdIpZuUgi4UHc7SidbCpIu+2UaYg2Tfh49zTNHzoqVVXC1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722504122; c=relaxed/simple;
-	bh=bOHazO1XNo3FPxooGFmMDZ+MXhbTOZyFzvhcpFLZfJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C2MC+Vo/bYZ9ugA4taPkcNnsbuPNoOrCVqJBaKCm/Gd9WNX3C9r5+jeArKznfop5909+CVe9UDc9lV4bNmAAdyfnFmyprht2qLbMRy06jK5QA7RWVSpI5dOwD3OKLDiBrsuzrpR0HRCQn23grqx1PtjPVO6DOinMPD7Vs6uOx3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Djddsdsp; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Djddsdsp"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B27E1C0006;
-	Thu,  1 Aug 2024 09:21:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1722504112;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X4HCIO0dVyT6eaJvZvPYVXNvArOemmorRP26fyTuZAA=;
-	b=DjddsdspWYB0DChHguhWDTHeyQaFSDfUlb8h4Ci/d1q+/Gv2Ka9NUEZj7pj6Wh+NPIeg2G
-	ehGXEQ8YB5iC4OZZ9fLdhEhx8R6jd3J2kVv4kLxf21Yd33bH6k0z3Z+NvZPcKEMtwR7Fma
-	GLfrWAOAEoVvWQsqNennXuIuu48U2wA6/K/7HPsYHvvQ7dRdnsTkeawBqn4Fo89nXAqtAQ
-	Zh5BHyS9GQVG8YbKqJCyI39y5iCQOC3S47bqftkBZjbh4LLAJRd8pjZ4rhUBcFcAMAuqvb
-	1ri/Z7XDBeHTwM/pDbG9NE/j3xpEYL9KUBlY5k5VnjDrpgSNNRbrbnvoaTE4vA==
-Message-ID: <40683bcd-14df-40b6-9110-ce5c61e543af@bootlin.com>
-Date: Thu, 1 Aug 2024 11:21:11 +0200
+	s=arc-20240116; t=1722504629; c=relaxed/simple;
+	bh=/OTW+2gYWzzGtg5eh5Ri6h4zgQIrGeCZb7gtCGgQcJg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G3TbEMR7zhO8+cmWhkwGHCS20i124fcdeZfXLyUB+yVafotxXnghXZ0ZyQ8Aj/4qHIEWhBwmi+JESipFVFyeI34gyN43WGVDXCACLBMabc9HQTXRvhTqeOCC3VO3AGS23Mmi5aPYeq96rwC/0BsFV2YpVvB55xe9GJpBSQGnSk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A013EDA7;
+	Thu,  1 Aug 2024 02:30:52 -0700 (PDT)
+Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 681BB3F5A1;
+	Thu,  1 Aug 2024 02:30:25 -0700 (PDT)
+Date: Thu, 1 Aug 2024 10:30:20 +0100
+From: Joey Gouly <joey.gouly@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: arm64: Correct feature test for S1PIE in
+ get-reg-list
+Message-ID: <20240801093020.GA841418@e124191.cambridge.arm.com>
+References: <20240731-kvm-arm64-fix-s1pie-test-v1-1-a9253f3b7db4@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/4] selftests/bpf: convert test_cgroup_storage
- to test_progs
-To: Alan Maguire <alan.maguire@oracle.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20240731-convert_cgroup_tests-v1-0-14cbc51b6947@bootlin.com>
- <20240731-convert_cgroup_tests-v1-2-14cbc51b6947@bootlin.com>
- <295cb8d1-89cc-4528-b255-f7d815f20a24@oracle.com>
-From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <295cb8d1-89cc-4528-b255-f7d815f20a24@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alexis.lothore@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240731-kvm-arm64-fix-s1pie-test-v1-1-a9253f3b7db4@kernel.org>
 
-On 8/1/24 10:27, Alan Maguire wrote:
-> On 31/07/2024 11:38, Alexis Lothoré (eBPF Foundation) wrote:
->> test_cgroup_storage is currently a standalone program which is not run
->> when executing test_progs.
->>
->> Convert it to the test_progs framework so it can be automatically executed
->> in CI. The conversion led to the following changes:
->> - converted the raw bpf program in the userspace test file into a dedicated
->>   test program in progs/ dir
->> - reduced the scope of cgroup_storage test: the content from this test
->>   overlaps with some other tests already present in test_progs, most
->>   notably netcnt and cgroup_storage_multi*. Those tests already check
->>   extensively local storage, per-cpu local storage, cgroups interaction,
->>   etc. So the new test only keep the part testing that the program return
->>   code (based on map content) properly leads to packet being passed or
->>   dropped.
->>
->> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+On Wed, Jul 31, 2024 at 05:21:13PM +0100, Mark Brown wrote:
+> The ID register for S1PIE is ID_AA64MMFR3_EL1.S1PIE which is bits 11:8 but
+> get-reg-list uses a shift of 4, checking SCTLRX instead. Use a shift of 8
+> instead.
 > 
-> Two small things below, but
+> Fixes: 5f0419a0083b ("KVM: selftests: get-reg-list: add Permission Indirection registers")
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+
+Argh!
+
+Thanks for spotting that.
+
+Reviewed-by: Joey Gouly <joey.gouly@arm.com>
+
+> ---
+>  tools/testing/selftests/kvm/aarch64/get-reg-list.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-
-[...]
-
->> +#define PING_CMD "ping localhost -c 1 -W 1 -q"
+> diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> index 709d7d721760..4abebde78187 100644
+> --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> @@ -32,13 +32,13 @@ static struct feature_id_reg feat_id_regs[] = {
+>  	{
+>  		ARM64_SYS_REG(3, 0, 10, 2, 2),	/* PIRE0_EL1 */
+>  		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
+> -		4,
+> +		8,
+>  		1
+>  	},
+>  	{
+>  		ARM64_SYS_REG(3, 0, 10, 2, 3),	/* PIR_EL1 */
+>  		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
+> -		4,
+> +		8,
+>  		1
+>  	}
+>  };
 > 
-> other tests seem to redirect ping stdout output to /dev/null ; might be
-> worth doing that too.
-
-That's in fact performed automatically by SYS_NOFAIL :)
-
-#define SYS_NOFAIL(fmt, ...)						\
-	({								\
-		char cmd[1024];						\
-		int n;							\
-		n = snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-		if (n < sizeof(cmd) && sizeof(cmd) - n >= sizeof(ALL_TO_DEV_NULL)) \
-			strcat(cmd, ALL_TO_DEV_NULL);			\
-		system(cmd);						\
-	})
-
-[...]
-
->> +{
->> +	__u64 *counter;
->> +
->> +	counter = bpf_get_local_storage(&cgroup_storage, 0);
+> ---
+> base-commit: 8400291e289ee6b2bf9779ff1c83a291501f017b
+> change-id: 20240731-kvm-arm64-fix-s1pie-test-a40b6be58d7b
 > 
-> don't we need a NULL check for counter here? Or does the verifier know
-> bpf_get_local_storage never fails?
-
-Good question. Since the verifier accepted the prog during my tests, I indeed
-assume that the returned pointer is always valid. Amongst all calls to this
-function in progs involved in selftests, I found only one performing a check
-before using the value (lsm_cgroup.c). So I guess it is fine ?
-
-Thanks for the review !
-
-Alexis
-
--- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+> Best regards,
+> -- 
+> Mark Brown <broonie@kernel.org>
+> 
