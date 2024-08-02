@@ -1,269 +1,234 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBB2136341;
-	Fri,  2 Aug 2024 15:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50D71A34A2;
+	Fri,  2 Aug 2024 15:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722613702; cv=none; b=E9Xk8WszZj2wiRd+iEa7/cGSAHj22IybOu8hggluZjZg35KtWiAWdPUF5loGvjJ5EyWNoa9ztZs5/LGGRZXj06RcRN/DgBCEjRF8X9cERlF05SfOewExaFEypEmwDlQR+UrvB8nKW3pSqLPGGCMM43LNUPdAXg9dD5eGn6HsrGk=
+	t=1722614395; cv=none; b=uQxCu/uz12esGszFkwwjtMMQ0kmi5qz5Rgk3U9WQQFKC4QjElaKekBEF+0BvHZphVmPM4cTJjVaWpTDt+abIZswoSQJtas78iAeGPK2luXWr+RK4q9w4Sl//UeSwv4ZONyV115fRThnYoFM4dfaw36+dPBXEFDL8Iz75hjho3Is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722613702; c=relaxed/simple;
-	bh=laWMCHNuzj/wltnWdMcvnIWeUr5J4xYYVvmfO2V8pJc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fiDGr7gFvxb1eMYFvgpKOR8v+ex8KEkOZwcTgjf9xLTJQ0wT7iP1dNRrFGZF64PFQRR1yt5Tbs+ZeYcxknzCrT6Ty199jCbSJW7zMc7CvC9zqZxkYD6zxPzFOz7bpL0L8V+g65Xxh78msSl8qF8rFhgjeyp0Lp5ovnXNvDJXBaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=qquajbMG; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1722614395; c=relaxed/simple;
+	bh=eG+A140w1ErjpAl43ia349biQcK0RFCc7KDSrco8ZHY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XJqW5QXX+FUMKrbY8ZgSVJ8HWW8aX7pcJBiVGRU3vELN7wMF5pNoyTYH1qcxitGSuJC4Xxxpx5vta+lEJ6aeDmgl1/KTpRIE6/o6q+No3gYzUA6Vc06yUpe18ikW+Ksw2voJWjfl91rAWdo74FlsWZMKqGDNt8jNl00wme2/ECM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DHdfbKp1; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="qquajbMG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1722613694;
-	bh=laWMCHNuzj/wltnWdMcvnIWeUr5J4xYYVvmfO2V8pJc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qquajbMGP2Bg8S3BzEO8ua3hM5ge0zHj3AFXbU/AXIuiWBTkkCb2HHyt2238G5oNy
-	 HoPl3mxbEve8z32F8Vnhw60E6faXkfO6Qir+IRpha/GpcNfamssev2GtMjg6KHwfX2
-	 7dAH8J5dNaiLN+vSSvfD08riadDBBHwAIS/wgC6I=
-Date: Fri, 2 Aug 2024 17:48:13 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] tools/nolibc: add support for [v]sscanf()
-Message-ID: <5db920e0-51e8-48d9-b0ae-95479e875fad@t-8ch.de>
-References: <20240731-nolibc-scanf-v1-0-f71bcc4abb9e@weissschuh.net>
- <20240731-nolibc-scanf-v1-1-f71bcc4abb9e@weissschuh.net>
- <3956cee8-1623-42d6-bbc6-71b5abd67759@linuxfoundation.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DHdfbKp1"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 472DWlUo012405;
+	Fri, 2 Aug 2024 15:59:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding; s=pp1; bh=edMEqYZVTsEke
+	kITfsvIm45swzrHWr6uyad1ZetMG5Y=; b=DHdfbKp1QhfR2FH9+Nn60PIIn2sc6
+	NcsIsjxWchC6w/uoGqCxl8mk5H4DESBvPOALGUf7EN2lOFxLhGXWLMaCvDdIK3uT
+	vVI7wJdS9QrLzXBJzCqzBDY/pd8CC1+QypLEr/YgXygwr9fYmq7iysBtLFD/LUml
+	A/gdJ0CSxT0qEkBOp38AN2z5M434J8cPMjSwaS4a9a/DA+1tLfxroCYY0A4ycAG1
+	GLjnELm/j6TuZMRP77vUG5hDjg73qFxjq42ukhi9FmLdJDDaTEZllDPaXugnDaAD
+	1V77JlLF49nvyl013wakQpyRO+jMukSqH1jQDMgJ+Ur33XCuZd+eQziwg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40rwqwrqbh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Aug 2024 15:59:48 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 472Fxlfe006712;
+	Fri, 2 Aug 2024 15:59:47 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40rwqwrqbf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Aug 2024 15:59:47 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 472Ffr2l011155;
+	Fri, 2 Aug 2024 15:59:46 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40ncqn7wc4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Aug 2024 15:59:46 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 472FxfFg15794512
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 2 Aug 2024 15:59:43 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 042862004E;
+	Fri,  2 Aug 2024 15:59:41 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 636E720040;
+	Fri,  2 Aug 2024 15:59:40 +0000 (GMT)
+Received: from darkmoore.ibmuc.com (unknown [9.171.84.102])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  2 Aug 2024 15:59:40 +0000 (GMT)
+From: Christoph Schlameuss <schlameuss@linux.ibm.com>
+To: kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+Subject: [PATCH v4 03/10] selftests: kvm: s390: Add s390x ucontrol test suite with hpage test
+Date: Fri,  2 Aug 2024 17:59:06 +0200
+Message-ID: <20240802155913.261891-4-schlameuss@linux.ibm.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240802155913.261891-1-schlameuss@linux.ibm.com>
+References: <20240802155913.261891-1-schlameuss@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3956cee8-1623-42d6-bbc6-71b5abd67759@linuxfoundation.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: cTKZtXGEmh3Rc7DhEbLHKHlbeUiA5kwZ
+X-Proofpoint-GUID: JV_GFWNdGko8Dgk5DlLWgLzO8k6ZFIwD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-02_11,2024-08-02_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 malwarescore=0 mlxscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 suspectscore=0 bulkscore=0
+ mlxlogscore=999 adultscore=0 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2408020110
 
-On 2024-07-31 17:01:09+0000, Shuah Khan wrote:
-> On 7/31/24 12:32, Thomas Weißschuh wrote:
-> > The implementation is limited and only supports numeric arguments.
-> 
-> I would like to see more information in here. Why is this needed
-> etc. etc.
+Add test suite to validate the s390x architecture specific ucontrol KVM
+interface.
 
-Ack.
+Make use of the selftest test harness.
 
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> >   tools/include/nolibc/stdio.h                 | 93 ++++++++++++++++++++++++++++
-> >   tools/testing/selftests/nolibc/nolibc-test.c | 59 ++++++++++++++++++
-> >   2 files changed, 152 insertions(+)
-> > 
-> > diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-> > index c968dbbc4ef8..d63c45c06d8e 100644
-> > --- a/tools/include/nolibc/stdio.h
-> > +++ b/tools/include/nolibc/stdio.h
-> > @@ -348,6 +348,99 @@ int printf(const char *fmt, ...)
-> >   	return ret;
-> >   }
-> > +static __attribute__((unused))
-> > +int vsscanf(const char *str, const char *format, va_list args)
-> 
-> Is there a reason why you didn't use the same code in lib/vsprintf.c?
-> You could simply duplicate the code here?
+* uc_cap_hpage testcase verifies that a ucontrol VM cannot be run with
+  hugepages.
 
-lib/vsprintf.c is GPL-2.0-only while nolibc is LGPL-2.1 OR MIT,
-so code reuse isn't really possible.
-Furthermore I think the vsprintf.c implements the custom kernel formats,
-while nolibc should use posix ones.
+To allow testing of the ucontrol interface the kernel needs a
+non-default config containing CONFIG_KVM_S390_UCONTROL.
+This config needs to be set to built-in (y) as this cannot be built as
+module.
 
-> With all these libc functionality added, it isn't nolibc looks like :)
+Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+---
+ tools/testing/selftests/kvm/.gitignore        |  1 +
+ tools/testing/selftests/kvm/Makefile          |  1 +
+ tools/testing/selftests/kvm/s390x/config      |  2 +
+ .../selftests/kvm/s390x/ucontrol_test.c       | 76 +++++++++++++++++++
+ 4 files changed, 80 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/s390x/config
+ create mode 100644 tools/testing/selftests/kvm/s390x/ucontrol_test.c
 
-Well :-)
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index 6d9381d60172..f2a30a58cd71 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -5,3 +5,4 @@
+ !*.h
+ !*.S
+ !*.sh
++!config
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 48d32c5aa3eb..b3dc0a5bf0d4 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -186,6 +186,7 @@ TEST_GEN_PROGS_s390x += s390x/tprot
+ TEST_GEN_PROGS_s390x += s390x/cmma_test
+ TEST_GEN_PROGS_s390x += s390x/debug_test
+ TEST_GEN_PROGS_s390x += s390x/shared_zeropage_test
++TEST_GEN_PROGS_s390x += s390x/ucontrol_test
+ TEST_GEN_PROGS_s390x += demand_paging_test
+ TEST_GEN_PROGS_s390x += dirty_log_test
+ TEST_GEN_PROGS_s390x += guest_print_test
+diff --git a/tools/testing/selftests/kvm/s390x/config b/tools/testing/selftests/kvm/s390x/config
+new file mode 100644
+index 000000000000..23270f2d679f
+--- /dev/null
++++ b/tools/testing/selftests/kvm/s390x/config
+@@ -0,0 +1,2 @@
++CONFIG_KVM=y
++CONFIG_KVM_S390_UCONTROL=y
+diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+new file mode 100644
+index 000000000000..cd68e7e37d35
+--- /dev/null
++++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+@@ -0,0 +1,76 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Test code for the s390x kvm ucontrol interface
++ *
++ * Copyright IBM Corp. 2024
++ *
++ * Authors:
++ *  Christoph Schlameuss <schlameuss@linux.ibm.com>
++ */
++#include "kselftest_harness.h"
++#include "kvm_util.h"
++
++#include <linux/capability.h>
++#include <linux/sizes.h>
++
++/* so directly declare capget to check caps without libcap */
++int capget(cap_user_header_t header, cap_user_data_t data);
++
++/**
++ * In order to create user controlled virtual machines on S390,
++ * check KVM_CAP_S390_UCONTROL and use the flag KVM_VM_S390_UCONTROL
++ * as privileged user (SYS_ADMIN).
++ */
++void require_ucontrol_admin(void)
++{
++	struct __user_cap_data_struct data[_LINUX_CAPABILITY_U32S_3];
++	struct __user_cap_header_struct hdr = {
++		.version = _LINUX_CAPABILITY_VERSION_3,
++	};
++	int rc;
++
++	rc = capget(&hdr, data);
++	TEST_ASSERT_EQ(0, rc);
++	TEST_REQUIRE((data->effective & CAP_TO_MASK(CAP_SYS_ADMIN)) > 0);
++
++	TEST_REQUIRE(kvm_has_cap(KVM_CAP_S390_UCONTROL));
++}
++
++/**
++ * Assert HPAGE CAP cannot be enabled on UCONTROL VM
++ */
++TEST(uc_cap_hpage)
++{
++	int rc, kvm_fd, vm_fd, vcpu_fd;
++	struct kvm_enable_cap cap = {
++		.cap = KVM_CAP_S390_HPAGE_1M,
++	};
++
++	require_ucontrol_admin();
++
++	kvm_fd = open_kvm_dev_path_or_exit();
++	vm_fd = ioctl(kvm_fd, KVM_CREATE_VM, KVM_VM_S390_UCONTROL);
++	ASSERT_GE(vm_fd, 0);
++
++	/* assert hpages are not supported on ucontrol vm */
++	rc = ioctl(vm_fd, KVM_CHECK_EXTENSION, KVM_CAP_S390_HPAGE_1M);
++	EXPECT_EQ(0, rc);
++
++	/* Test that KVM_CAP_S390_HPAGE_1M can't be enabled for a ucontrol vm */
++	rc = ioctl(vm_fd, KVM_ENABLE_CAP, cap);
++	EXPECT_EQ(-1, rc);
++	EXPECT_EQ(EINVAL, errno);
++
++	/* assert HPAGE CAP is rejected after vCPU creation */
++	vcpu_fd = ioctl(vm_fd, KVM_CREATE_VCPU, 0);
++	ASSERT_GE(vcpu_fd, 0);
++	rc = ioctl(vm_fd, KVM_ENABLE_CAP, cap);
++	EXPECT_EQ(-1, rc);
++	EXPECT_EQ(EBUSY, errno);
++
++	close(vcpu_fd);
++	close(vm_fd);
++	close(kvm_fd);
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.45.2
 
-The main motivation is to provide kselftests compatibility.
-Maybe Willy disagrees.
-
-> > +{
-> > +	uintmax_t uval;
-> > +	intmax_t ival;
-> > +	int base;
-> > +	char *endptr;
-> > +	int matches;
-> > +	int lpref;
-> > +
-> > +	matches = 0;
-> > +
-> > +	while (1) {
-> > +		if (*format == '%') {
-> > +			lpref = 0;
-> > +			format++;
-> > +
-> > +			if (*format == 'l') {
-> > +				lpref = 1;
-> > +				format++;
-> > +				if (*format == 'l') {
-> > +					lpref = 2;
-> > +					format++;
-> > +				}
-> > +			}
-> > +
-> > +			if (*format == '%') {
-> > +				if ('%' != *str)
-> > +					goto done;
-> > +				str++;
-> > +				format++;
-> > +				continue;
-> > +			} else if (*format == 'd') {
-> > +				ival = strtoll(str, &endptr, 10);
-> > +				if (lpref == 0)
-> > +					*va_arg(args, int *) = ival;
-> > +				else if (lpref == 1)
-> > +					*va_arg(args, long *) = ival;
-> > +				else if (lpref == 2)
-> > +					*va_arg(args, long long *) = ival;
-> > +			} else if (*format == 'u' || *format == 'x' || *format == 'X') {
-> > +				base = *format == 'u' ? 10 : 16;
-> > +				uval = strtoull(str, &endptr, base);
-> > +				if (lpref == 0)
-> > +					*va_arg(args, unsigned int *) = uval;
-> > +				else if (lpref == 1)
-> > +					*va_arg(args, unsigned long *) = uval;
-> > +				else if (lpref == 2)
-> > +					*va_arg(args, unsigned long long *) = uval;
-> > +			} else if (*format == 'p') {
-> > +				*va_arg(args, void **) = (void *)strtoul(str, &endptr, 16);
-> > +			} else {
-> > +				SET_ERRNO(EILSEQ);
-> > +				goto done;
-> > +			}
-> > +
-> > +			format++;
-> > +			str = endptr;
-> > +			matches++;
-> > +
-> > +		} else if (*format == '\0') {
-> > +			goto done;
-> > +		} else if (isspace(*format)) {
-> > +			while (isspace(*format))
-> > +				format++;
-> > +			while (isspace(*str))
-> > +				str++;
-> > +		} else if (*format == *str) {
-> > +			format++;
-> > +			str++;
-> > +		} else {
-> > +			if (!matches)
-> > +				matches = EOF;
-> > +			goto done;
-> > +		}
-> > +	}
-> > +
-> > +done:
-> > +	return matches;
-> > +}
-> > +
-> > +static __attribute__((unused, format(scanf, 2, 3)))
-> > +int sscanf(const char *str, const char *format, ...)
-> > +{
-> > +	va_list args;
-> > +	int ret;
-> > +
-> > +	va_start(args, format);
-> > +	ret = vsscanf(str, format, args);
-> > +	va_end(args);
-> > +	return ret;
-> > +}
-> > +
-> >   static __attribute__((unused))
-> >   void perror(const char *msg)
-> >   {
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index 093d0512f4c5..addbceb0b276 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -1277,6 +1277,64 @@ static int expect_vfprintf(int llen, int c, const char *expected, const char *fm
-> >   	return ret;
-> >   }
-> > +static int test_scanf(void)
-> > +{
-> > +	unsigned long long ull;
-> > +	unsigned long ul;
-> > +	unsigned int u;
-> > +	long long ll;
-> > +	long l;
-> > +	void *p;
-> > +	int i;
-> > +
-> > +	if (sscanf("", "foo") != EOF)
-> > +		return 1;
-> > +
-> > +	if (sscanf("foo", "foo") != 0)
-> > +		return 2;
-> > +
-> > +	if (sscanf("123", "%d", &i) != 1)
-> > +		return 3;
-> > +
-> > +	if (i != 123)
-> > +		return 4;
-> > +
-> > +	if (sscanf("a123b456c0x90", "a%db%uc%p", &i, &u, &p) != 3)
-> > +		return 5;
-> > +
-> > +	if (i != 123)
-> > +		return 6;
-> > +
-> > +	if (u != 456)
-> > +		return 7;
-> > +
-> > +	if (p != (void *)0x90)
-> > +		return 8;
-> > +
-> > +	if (sscanf("a    b1", "a b%d", &i) != 1)
-> > +		return 9;
-> > +
-> > +	if (i != 1)
-> > +		return 10;
-> > +
-> > +	if (sscanf("a%1", "a%%%d", &i) != 1)
-> > +		return 11;
-> > +
-> > +	if (i != 1)
-> > +		return 12;
-> > +
-> > +	if (sscanf("1|2|3|4|5|6",
-> > +		   "%d|%ld|%lld|%u|%lu|%llu",
-> > +		   &i, &l, &ll, &u, &ul, &ull) != 6)
-> > +		return 13;
-> > +
-> > +	if (i != 1 || l != 2 || ll != 3 ||
-> > +	    u != 4 || ul != 5 || ull != 6)
-> > +		return 14;
-> > +
-> > +	return 0;
-> 
-> Can we simplify this code? It is hard to read code with too
-> many conditions. Maybe defining an array test conditions
-> instead of a series ifs.
-
-I tried that and didn't find a way.
-Any pointers are welcome.
-
-> > +
-> > +
-> >   static int run_vfprintf(int min, int max)
-> >   {
-> >   	int test;
-> > @@ -1298,6 +1356,7 @@ static int run_vfprintf(int min, int max)
-> >   		CASE_TEST(char);         EXPECT_VFPRINTF(1, "c", "%c", 'c'); break;
-> >   		CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); break;
-> >   		CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void *) 0x1); break;
-> > +		CASE_TEST(scanf);        EXPECT_ZR(1, test_scanf()); break;
-> >   		case __LINE__:
-> >   			return ret; /* must be last */
-> >   		/* note: do not set any defaults so as to permit holes above */
-> > 
-> 
-> thanks,
-> -- Shuah
