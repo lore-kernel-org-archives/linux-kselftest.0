@@ -1,28 +1,28 @@
 Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DEAC2C6AF;
-	Sat,  3 Aug 2024 09:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77FE823CB;
+	Sat,  3 Aug 2024 10:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722678654; cv=none; b=fGPqwYb60zh5Mn9DntolUX1U0WCJS/zf94YtPKO5ibwsyNqye+k+TeQG8jfohM3393CXznofNJPwT0nxZhs4TXLsW4AJ8Zt3RU48KOQrLtLB2VrsoyE6yNN1B7lw3VYgnFosq6Tf0DyMU5/6zwopdTGG7G7tO1xlTJ/kEMNBf54=
+	t=1722679406; cv=none; b=T60RX+FlNNU/ylozuXKZ3MYA1aT9RyPr2tzgEJ5UICvPjbeITSZkzJDm+az6hfWSrCLRtAXfAtM7PhIqRefoS7ein/jnnNUsnSEtaZFNpbPqMbHnciqJzSClqDmQxQl3dKLd7tfgRH3+i7pQ1PlxSWUbI9gbonxkFgQ5Rbv93s0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722678654; c=relaxed/simple;
-	bh=oHaZDL+kicwIp53ZIcTo6KgpNmfzXztQ4Ut8xnb2aKU=;
+	s=arc-20240116; t=1722679406; c=relaxed/simple;
+	bh=XgHkizURW65cUDWDv0m9inMJ7WqKs0VsoSHsx1KsFrk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XSMPMCP/nNAzcpR3Uu/BcUPqhwdMUn0VmT72NlRajSnkoVPF3+7avBJs4wxDF0SqwqMZ52v9CipP+dG/SIpCtNAJnqh9hSCLZbFfq/wLp2VuSKfwOXVWlOgzHz5+E3JxarnmH6pmhYEK/qysO0LeyjooaInZlz+g3EVA9cB+1u4=
+	 Content-Type:Content-Disposition:In-Reply-To; b=MKb1qkUceIH6IUO6598oRrWJF+PYd+PbNUrKW/hJGWuZPUUqNP4t1j7YJnOqHai3dfL/8XjWysAgX2JmhrOg+GPbkUJMjdT6gBfK+KOepLRxkwe8KkYJqIo4D62RI8CQes/ugJQvlTolR6EVbJNhAA8zSc2QpKcWTIuSVG03uYc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
 Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 4739oiDb029286;
-	Sat, 3 Aug 2024 11:50:44 +0200
-Date: Sat, 3 Aug 2024 11:50:44 +0200
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 473A3IfX029300;
+	Sat, 3 Aug 2024 12:03:18 +0200
+Date: Sat, 3 Aug 2024 12:03:18 +0200
 From: Willy Tarreau <w@1wt.eu>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
 Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 00/12] tools/nolibc: improve LLVM/clang support
-Message-ID: <20240803095044.GF29127@1wt.eu>
-References: <20240728-nolibc-llvm-v1-0-bc384269bc35@weissschuh.net>
+Subject: Re: [PATCH] tools/nolibc: pass argc, argv and envp to constructors
+Message-ID: <20240803100318.GG29127@1wt.eu>
+References: <20240728-nolibc-constructor-args-v1-1-36d0bf5cd4c0@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -32,22 +32,30 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240728-nolibc-llvm-v1-0-bc384269bc35@weissschuh.net>
+In-Reply-To: <20240728-nolibc-constructor-args-v1-1-36d0bf5cd4c0@weissschuh.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sun, Jul 28, 2024 at 12:09:54PM +0200, Thomas Weißschuh wrote:
-> The current support for LLVM and clang in nolibc and its testsuite is
-> very limited.
-> 
-> * Various architectures plain do not compile
-> * The user *has* to specify "-Os" otherwise the program crashes
-> * Cross-compilation of the tests does not work
-> * Using clang is not wired up in run-tests.sh
-> 
-> This series extends this support.
+On Sun, Jul 28, 2024 at 10:34:11PM +0200, Thomas Weißschuh wrote:
+> Mirror glibc behavior for compatibility.
 
-Overall Ack on the whole series once the minor comments are addressed
-or discussed: Acked-by: Willy Tarreau <w@1wt.eu>
+Generally speaking I think you should make a bit longer sentences in
+your commit messages, Thomas. One first reason is to think that during
+reviews the reviewer has to scroll up to find the subject for the context
+this sentence applies to. And doing so quickly encourages to give a little
+bit more background to justify a change. I have a simple principle that
+works reasonably fine for this, which is that a commit subject should
+normally be unique in a project (modulo rare cases, reverts or accidents)
+and that commit message bodies should really always be unique. Here we
+see that it doesn't work ;-)
 
-thanks!
+An example could be something like this:
+
+  Glibc has been passing argc/argv/envp to constructors since version XXX.
+  This is particularly convenient, and missing it can significantly
+  complicate some ports to nolibc. Let's do the same since it's an easy
+  change that comes at no cost.
+
+Anyway I agree with the change, I wasn't aware of this support from glibc,
+so thank you for enlighting me on this one ;-)
+
 Willy
