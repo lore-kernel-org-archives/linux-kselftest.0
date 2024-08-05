@@ -1,132 +1,248 @@
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE2616ABF3
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Aug 2024 21:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C8316D32C
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Aug 2024 21:25:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722892095; cv=none; b=e2Yj7CniPnEiEpKTkDNzNEXepDEtCyOzSeRarsl+aIkxU34QHWDN/g4iY4MWLAlNx6p1XFX3Wty77J/gOUWHMvIykGWLpOi9g+UiOacjUkKW1SdlTpQhY2BCCmGV03uIk+VpcBBHKZ/o4YqHJTLFn9088pWzBsi1HoHFMvWvOs0=
+	t=1722893145; cv=none; b=kYTyKRGJMljMu3DkH8zd5NlFxqVk6SmyBXDEUrDM2f2pX3SUlEDt0UBT/rb6PGjtykddv1xe2s9Eg0wmZk/HBJ0UAlY4IATYuwd/cKeZW1WOtDcIrxwa+2/snvRWXwXn/6z5wEjrninnxhQfj2xFz1LqoRMECnaPWYF1CspEpRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722892095; c=relaxed/simple;
-	bh=1hgE1tHYTzoNT4ZaVAJ9uX7zwlujJ5HbNKj22V8PvTg=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=BE1Iz8rc8MjXOchdoX9ZZ7IhgiWJPzKB9ztv9rgFL0j1a+zxfvenPwiCQMpT3VOaZFQz/gvAvXrGs3BhrxHg6RhKY9tPPhSs1eNWg7F1KPrD6eCeZIrBer7PIlJx+gN88fr3A4HDARYGVNU3jBCiB1ffyu1/MtdhG61k6w66D8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CCOp4SjD; arc=none smtp.client-ip=209.85.166.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1722893145; c=relaxed/simple;
+	bh=c+190kI+AY/IAhgbGQObofaAZdRh142Rm4xb7MN95EI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ibp6HI7kBVmIC/1pXbVLxy4BpR9xWrfD9GWV66vkzCHYyb4QEuZSlS9W5Y07L+/oDYQ/gvvC0LIbHC5ICJGTOYnUpAJV3XhtCOOkQ/iyXYlHbk05AOpy2+pn0SQBKWh+lwddnU/X9A3leDiLna+3aaXbfRKmVwjzYTL2DKK4KMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u2O7QJU6; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CCOp4SjD"
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-81f7faff04dso279439f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Aug 2024 14:08:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u2O7QJU6"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-664916e5b40so3002707b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Aug 2024 14:25:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722892091; x=1723496891; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=RoZN9WiORe0ITjlZlmSzWf3fhNCsHe6Tv0uWDr+78DY=;
-        b=CCOp4SjDrTb9uWQitAer6R3CNc17jeUszVR3sXWB0cnxT0zba7Jjj0s87FJ65y3jYH
-         vvew9mFtNWURCfXuy0qNaEI4VX2t3jmK9z80LCl5R/0//5UkWQ7tCYqNyP5730aBkCtK
-         dziEunfYEHrYOKp1Wrqyr5QRyy9u1SDbhxiRc=
+        d=google.com; s=20230601; t=1722893140; x=1723497940; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=y5Bpc0m/aEJfLhT4Qcu12bpXjCKKzXVcLZXLn3h9UO4=;
+        b=u2O7QJU6oBIBPt8lSf/PI1F6uTMBCRqyijHsMlgxaE3a/T/3B4TR+IsllPFbLq4g16
+         y4svU3615q77wB/dWg3Trnn/CHKq7KELeZs/g8nhmDGl7vMMvm7mRckT8QAGHk9DAQXr
+         lz9iLbevVM8WSekYuVDEMVgKl0cudDMr418ZDQkuNsus9Wb5ewQ8MHEWng05BGwJ08es
+         IW3UC93c7hDw2wd0li8Srg1P+DwW2MQ1gvEG1/6MjNrz7MY4egytXHXYTbbQjrvIk+08
+         cPvMaAhPbnTyK+HLQETzTOiZEN7GAuSsb2aH5t8gAqUrxZ4noRr68HeYnJx1oUueqclX
+         Na9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722892091; x=1723496891;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RoZN9WiORe0ITjlZlmSzWf3fhNCsHe6Tv0uWDr+78DY=;
-        b=UVMu5xj8NvgCEkzdB7M3AJC1Q9/uoiLuShdQAoxnVkWjBR8Hjjri6DQMBdtOPMCRV+
-         YGeShf5bRQ8jpd/9rsapMtf10oUmyVgNZODaHYi9tRxokEVfBT4fSLhax35twltzewlR
-         kLWJD+lzCVUUfDHpoNmFY3la37MUW9rLrdnAlObfMWj++AUrU1RzmOVcWOEGY1FcV+zE
-         2+dI4GqbWF6aUjY6k3vHSZfao2qEKOIChEjxD79IgqvbmvYNy69L79ST+ApiVjf0PTsx
-         1xQXNY+XCJgCDmJgA7vyprh1jAvBIJQ0RMY3nmA5cOMyFTLD182tbrX7HLFqe2azjv4k
-         4Pbw==
-X-Forwarded-Encrypted: i=1; AJvYcCXB3nhYTAXK98aKGd9DRwCXPgD91b10rmjopKqrsg4DWtUd0wUXQ5fCLh3XBHLDsvXDx22Yq1Ivu7tqxgP/LY6V0jF5ZTperTqOuPd7YDxg
-X-Gm-Message-State: AOJu0YyXSDCBDjbIO5WH4dmT3YwAecTwF13dHxsy+J0uIwBXh7AeUbS/
-	kiIqoEv2h3aWIcqy7MuoRFep89b6wIhijfL8LZ50U55Vc7/IIbd3sooQx2g7LyQ=
-X-Google-Smtp-Source: AGHT+IG06IJu0JjiFmVnxTP6Y8qg0xKaMfM6fJWXNb6BQKehWJuVWwjXR3HnoavVyGtfFIUnPoP4fA==
-X-Received: by 2002:a5d:8b0a:0:b0:81f:dccd:844e with SMTP id ca18e2360f4ac-81fdccd8609mr580759839f.0.1722892091241;
-        Mon, 05 Aug 2024 14:08:11 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c8d6a5ad04sm1907722173.178.2024.08.05.14.08.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Aug 2024 14:08:10 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------LlER0KbKGvSKZ6L4wyCWLfpp"
-Message-ID: <732e15a1-f219-45b1-8836-ebd5ca3101cf@linuxfoundation.org>
-Date: Mon, 5 Aug 2024 15:08:10 -0600
+        d=1e100.net; s=20230601; t=1722893140; x=1723497940;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y5Bpc0m/aEJfLhT4Qcu12bpXjCKKzXVcLZXLn3h9UO4=;
+        b=ImiMYbZKHVeK0cwsybMrPxl5AKlEJrlzJ0X46GU6tA8Y10nSV0dYQ2+v3Ac+ug5Xpr
+         7/mj2i9OJqXKTuNDLagR2AG9Hr3cqnSRF2Jkt+nYWHdyXToDMi6tXniHXg54nOAZtxHi
+         MhEzXIOYgoKg8plG0wm6BLSDst7VuGbcSZ8B7bXZRhoRjxyX8rP+4MOQurge2J0gG3f8
+         1/vXZN854o3MmWJfaeAliSpjJrcnMpueh7nEhGI55TrD0v30Z5FV1VJTPDaHFsukCV9q
+         1yMk3vOcDcgE43QXSXHsq95UhraDw3WvOgMPDtnfeSevNw/U65OXNQL69LcXoFwFuP2o
+         i+ig==
+X-Forwarded-Encrypted: i=1; AJvYcCVy75pPN56qmh7Ip9Et7k3zwVZ3OfP6F0IsUqTDQ9KALWNlQ6Q/OwPJwRvxYiY3IGuwefcX2qNmqvgcGwsvIQMNExYRzQ9JF2sn9NC6poCr
+X-Gm-Message-State: AOJu0YzGa9vZkaW0BuKwTvEddudQ4Xuy9R4DVl3XOejFeBLyG5l5iakx
+	mTdtnK3WqoC2ZVNRAhzqH716uqG76z/cy2I/8VVAHIR8uIbuKwW9dazbb0pldLY0Y104DGfKUYf
+	08q+pGga1UTPnCTQ/rRk85A==
+X-Google-Smtp-Source: AGHT+IHsY6pfqrk+/WzJ2nnI4vwRHJqR73nDo9c7pJpf2zTeT7YCxIEs/vi9EhzX5oPWtfGQgq6YowoMDa9OJyTIuA==
+X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
+ (user=almasrymina job=sendgmr) by 2002:a05:690c:5:b0:620:32ea:e1d4 with SMTP
+ id 00721157ae682-68959369ac5mr7413287b3.0.1722893140051; Mon, 05 Aug 2024
+ 14:25:40 -0700 (PDT)
+Date: Mon,  5 Aug 2024 21:25:14 +0000
+In-Reply-To: <20240805212536.2172174-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From: Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest fixes update for Linux 6.11-rc3
+Mime-Version: 1.0
+References: <20240805212536.2172174-1-almasrymina@google.com>
+X-Mailer: git-send-email 2.46.0.rc2.264.g509ed76dc8-goog
+Message-ID: <20240805212536.2172174-2-almasrymina@google.com>
+Subject: [PATCH net-next v18 01/14] netdev: add netdev_rx_queue_restart()
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
+	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, 
+	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
+	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-This is a multi-part message in MIME format.
---------------LlER0KbKGvSKZ6L4wyCWLfpp
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Add netdev_rx_queue_restart(), which resets an rx queue using the
+queue API recently merged[1].
 
-Hi Linus,
+The queue API was merged to enable the core net stack to reset individual
+rx queues to actuate changes in the rx queue's configuration. In later
+patches in this series, we will use netdev_rx_queue_restart() to reset
+rx queues after binding or unbinding dmabuf configuration, which will
+cause reallocation of the page_pool to repopulate its memory using the
+new configuration.
 
-Please pull the kselftest fixes update for Linux 6.11-rc3.
+[1] https://lore.kernel.org/netdev/20240430231420.699177-1-shailend@google.com/T/
 
-This kselftest fixes update consists of a single fix to the conditional
-in ksft.py script which incorrectly flags a test suite failed when there
-are skipped tests in the mix. The logic is fixed to take skipped tests
-into account and report the test as passed.
+Signed-off-by: David Wei <dw@davidwei.uk>
+Signed-off-by: Mina Almasry <almasrymina@google.com>
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 
-diff is attached.
+---
 
-thanks,
--- Shuah
+v18:
+- Add more color to commit message (Xuan Zhuo).
 
-----------------------------------------------------------------
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+v17:
+- Use ASSERT_RTNL() (Jakub).
 
-   Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+v13:
+- Add reviewed-by from Pavel (thanks!)
+- Fixed comment (Pavel)
 
-are available in the Git repository at:
+v11:
+- Fix not checking dev->queue_mgmt_ops (Pavel).
+- Fix ndo_queue_mem_free call that passed the wrong pointer (David).
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-6.11-rc3
+v9: https://lore.kernel.org/all/20240502045410.3524155-4-dw@davidwei.uk/
+(submitted by David).
+- fixed SPDX license identifier (Simon).
+- Rebased on top of merged queue API definition, and changed
+  implementation to match that.
+- Replace rtnl_lock() with rtnl_is_locked() to make it useable from my
+  netlink code where rtnl is already locked.
 
-for you to fetch changes up to 170c966cbe274e664288cfc12ee919d5e706dc50:
+---
+ include/net/netdev_rx_queue.h |  3 ++
+ net/core/Makefile             |  1 +
+ net/core/netdev_rx_queue.c    | 74 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 78 insertions(+)
+ create mode 100644 net/core/netdev_rx_queue.c
 
-   selftests: ksft: Fix finished() helper exit code on skipped tests (2024-07-31 11:38:56 -0600)
+diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
+index aa1716fb0e53c..e78ca52d67fbf 100644
+--- a/include/net/netdev_rx_queue.h
++++ b/include/net/netdev_rx_queue.h
+@@ -54,4 +54,7 @@ get_netdev_rx_queue_index(struct netdev_rx_queue *queue)
+ 	return index;
+ }
+ #endif
++
++int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
++
+ #endif
+diff --git a/net/core/Makefile b/net/core/Makefile
+index 62be9aef25285..f82232b358a2c 100644
+--- a/net/core/Makefile
++++ b/net/core/Makefile
+@@ -19,6 +19,7 @@ obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) += dev_addr_lists_test.o
+ 
+ obj-y += net-sysfs.o
+ obj-y += hotdata.o
++obj-y += netdev_rx_queue.o
+ obj-$(CONFIG_PAGE_POOL) += page_pool.o page_pool_user.o
+ obj-$(CONFIG_PROC_FS) += net-procfs.o
+ obj-$(CONFIG_NET_PKTGEN) += pktgen.o
+diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+new file mode 100644
+index 0000000000000..da11720a59830
+--- /dev/null
++++ b/net/core/netdev_rx_queue.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <linux/netdevice.h>
++#include <net/netdev_queues.h>
++#include <net/netdev_rx_queue.h>
++
++int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq_idx)
++{
++	void *new_mem, *old_mem;
++	int err;
++
++	if (!dev->queue_mgmt_ops || !dev->queue_mgmt_ops->ndo_queue_stop ||
++	    !dev->queue_mgmt_ops->ndo_queue_mem_free ||
++	    !dev->queue_mgmt_ops->ndo_queue_mem_alloc ||
++	    !dev->queue_mgmt_ops->ndo_queue_start)
++		return -EOPNOTSUPP;
++
++	ASSERT_RTNL();
++
++	new_mem = kvzalloc(dev->queue_mgmt_ops->ndo_queue_mem_size, GFP_KERNEL);
++	if (!new_mem)
++		return -ENOMEM;
++
++	old_mem = kvzalloc(dev->queue_mgmt_ops->ndo_queue_mem_size, GFP_KERNEL);
++	if (!old_mem) {
++		err = -ENOMEM;
++		goto err_free_new_mem;
++	}
++
++	err = dev->queue_mgmt_ops->ndo_queue_mem_alloc(dev, new_mem, rxq_idx);
++	if (err)
++		goto err_free_old_mem;
++
++	err = dev->queue_mgmt_ops->ndo_queue_stop(dev, old_mem, rxq_idx);
++	if (err)
++		goto err_free_new_queue_mem;
++
++	err = dev->queue_mgmt_ops->ndo_queue_start(dev, new_mem, rxq_idx);
++	if (err)
++		goto err_start_queue;
++
++	dev->queue_mgmt_ops->ndo_queue_mem_free(dev, old_mem);
++
++	kvfree(old_mem);
++	kvfree(new_mem);
++
++	return 0;
++
++err_start_queue:
++	/* Restarting the queue with old_mem should be successful as we haven't
++	 * changed any of the queue configuration, and there is not much we can
++	 * do to recover from a failure here.
++	 *
++	 * WARN if we fail to recover the old rx queue, and at least free
++	 * old_mem so we don't also leak that.
++	 */
++	if (dev->queue_mgmt_ops->ndo_queue_start(dev, old_mem, rxq_idx)) {
++		WARN(1,
++		     "Failed to restart old queue in error path. RX queue %d may be unhealthy.",
++		     rxq_idx);
++		dev->queue_mgmt_ops->ndo_queue_mem_free(dev, old_mem);
++	}
++
++err_free_new_queue_mem:
++	dev->queue_mgmt_ops->ndo_queue_mem_free(dev, new_mem);
++
++err_free_old_mem:
++	kvfree(old_mem);
++
++err_free_new_mem:
++	kvfree(new_mem);
++
++	return err;
++}
+-- 
+2.46.0.rc2.264.g509ed76dc8-goog
 
-----------------------------------------------------------------
-linux_kselftest-fixes-6.11-rc3
-
-This kselftest fixes update consists of a single fix to the conditional
-in ksft.py script which incorrectly flags a test suite failed when there
-are skipped tests in the mix. The logic is fixed to take skipped tests
-into account and report the test as passed.
-
-----------------------------------------------------------------
-Laura Nao (1):
-       selftests: ksft: Fix finished() helper exit code on skipped tests
-
-  tools/testing/selftests/kselftest/ksft.py | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-----------------------------------------------------------------
---------------LlER0KbKGvSKZ6L4wyCWLfpp
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux_kselftest-fixes-6.11-rc3.diff"
-Content-Disposition: attachment;
- filename="linux_kselftest-fixes-6.11-rc3.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdC9rc2Z0LnB5
-IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L2tzZnQucHkKaW5kZXggY2Q4
-OWZiMmJjMTBlLi5iZjIxNTc5MGE4OWQgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL2tzZWxmdGVzdC9rc2Z0LnB5CisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L2tzZWxmdGVzdC9rc2Z0LnB5CkBAIC03MCw3ICs3MCw3IEBAIGRlZiB0ZXN0X3Jlc3VsdChj
-b25kaXRpb24sIGRlc2NyaXB0aW9uPSIiKToKIAogCiBkZWYgZmluaXNoZWQoKToKLSAgICBp
-ZiBrc2Z0X2NudFsicGFzcyJdID09IGtzZnRfbnVtX3Rlc3RzOgorICAgIGlmIGtzZnRfY250
-WyJwYXNzIl0gKyBrc2Z0X2NudFsic2tpcCJdID09IGtzZnRfbnVtX3Rlc3RzOgogICAgICAg
-ICBleGl0X2NvZGUgPSBLU0ZUX1BBU1MKICAgICBlbHNlOgogICAgICAgICBleGl0X2NvZGUg
-PSBLU0ZUX0ZBSUwK
-
---------------LlER0KbKGvSKZ6L4wyCWLfpp--
