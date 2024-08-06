@@ -1,56 +1,44 @@
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5130238F91
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Aug 2024 16:00:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22F06CDAB;
+	Tue,  6 Aug 2024 17:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722960039; cv=none; b=i38hlAyFDCf/SqPXI1+iRmlF0ZBXryPosVeVVsY9QAd2YF1Y+nBWZCuUglHxiOcGeLCqokDfBkU2s7Xh0FqK3PxPEp5xBx/zFNvLw79YV05PmOxV9Gphzix1JPHP75J1haHLHlgoWyBmCYcbRw42L+NVBwLTj0XGCa5L3Tb0ihI=
+	t=1722964733; cv=none; b=rHY+PAzDked48wBLfQ99P1YkXOW2BQrPGjoxEeH+OEHeO4N5sOb3tHlf5aBIzJo0BV1dxKXL+9A2ZFTKaSiMhF7sfXjNmqREz6470l+7tQaKXf1E376pyXRI8mOBBzTEVeaokOeVpgi3OIAMpW7GZTZ/dMAIbrJnUr90bv61SnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722960039; c=relaxed/simple;
-	bh=G2dFHbwQlABEbn7C/wHN9BFrhR5+2PlXMiREOnZ8MQA=;
+	s=arc-20240116; t=1722964733; c=relaxed/simple;
+	bh=j3DGyvOeNVMM+Y9VVWgxtCrnbBPpGME3Ho2HGmDrCEg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sKI2IG76sDXoYsnPJrerEsn4PF/P5VTz+nKH0WvAoSTWaU1EHinaPQCZ1VYb1By6RpCmn/FtauLecA83AlL1qZrRvpH01DznWHE/b/GtJwNly5SGsqlpwO65VlcKbyV0NwP8I5m64r0Cow8gwekUzrWKm8koIoLhiD9/RIEW3c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VFOJCTf+; arc=none smtp.client-ip=209.85.160.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 In-Reply-To:Content-Type; b=GJ+CccAPMLt0EKh5jCKlyanh0DVpPZbqy+UvcYAXel+TbDvBRzhLk/C/xhFdNpySvmsYjOFSLIn1vEHTlWiDF7JrDq232KSk5WuZQRuQB0cHPHtSW5T6xuSgbFcvgSj/WWrr5wHyVrpEJNSTwExHRwwn4VbQdgB0WO+zOAB1mIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=JR1b56KC; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VFOJCTf+"
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-26456710cfdso170552fac.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Aug 2024 09:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722960036; x=1723564836; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=utkiIdj88F+G+vP4WL7Umx3nVwa48ZRhAzXQxTEoHOE=;
-        b=VFOJCTf+mMXWRUO8LnuRgJQsQucOlijtux8CmADQ/7FiSA1BCOhDgHszV1w4Cpp2wB
-         cBOJQchPQWSj87YwfqsbAzURgmeNzS59l4UcD2T+nqS7fMBVVKoMVVzC1FRf1KI1zmvr
-         8maHH6OKgxm/5jAEbsjUxyHqEM7Vf3/DfI2YE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722960036; x=1723564836;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=utkiIdj88F+G+vP4WL7Umx3nVwa48ZRhAzXQxTEoHOE=;
-        b=VwDgBAcyUfR8nC925JwUChfj6yNZMbPuMbN5e64bkPtoTCMr7y75+QJgPYpJCc7fxV
-         idYwIKvfSQivE0qjJBWvyCiLTtiHh4LcA0BgbNsfKR0KBFV4s6o7bUUFjEPI3DamH73x
-         Ax1BlP1e0EYazOjmyYRqj7EsVikzsQUb4Ep5hPcjHA6mNx64Mnevxs64ELUbT6b1gHeu
-         WljSfuEyCBwLWWB05/CkiEh8geAsnznOxUv8fcw16FeUS+J3Bdis1VqD3Y4wTVIehP3L
-         dTziegV5FpRL2M2W89pXPD+Rvnhb6IkZGg3HKJn5SQKTRfHoZRRykESz7UmfT1A7Zl/3
-         2jIg==
-X-Forwarded-Encrypted: i=1; AJvYcCVa8kp8JuLiZzMvtly+YBmtvp1dlQNbAq0RXcv01wxlb13A3fGFP/u5Y3x2tx0eOFUcozhVbEl28b+nFiXCa5odU5LitG3MP0EQVPboUA7K
-X-Gm-Message-State: AOJu0YyX3U6kikuuave1nJCU64k0twQbNvHoO6HiBiRQIeKnLR3WbH8C
-	OYTO9otzIsF9sqhZrJbr3EgXJdUMAt8oiT6yY4xZ9Mr1xDtZTceBtQyNHMner24=
-X-Google-Smtp-Source: AGHT+IGrBYXn93GiNjPAMz6Efo4Ui0+eYh9UkvImYpLmBkriv1OTC2hCb+Yboc/erVeCc1w6GJHdjw==
-X-Received: by 2002:a05:6871:4d17:b0:268:97cb:f367 with SMTP id 586e51a60fabf-26897cbfc9amr6125173fac.2.1722960036286;
-        Tue, 06 Aug 2024 09:00:36 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2689a629a83sm3286314fac.45.2024.08.06.09.00.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Aug 2024 09:00:35 -0700 (PDT)
-Message-ID: <6a3b2f3c-b733-4f64-a550-2f7dcbaf7cb7@linuxfoundation.org>
-Date: Tue, 6 Aug 2024 10:00:33 -0600
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="JR1b56KC"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1sbNpb-00DnzD-7f; Tue, 06 Aug 2024 19:18:43 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=VnDLyf1CoCKPnIiXg884K4FKs8mkGHdtW7ZAbL3tcYw=; b=JR1b56KCeYNC4kTINMB59OA9bH
+	bFv3oy7D6acjV92lEq1yIBAJQSB77xF9WXvqlrJ4iU7SsNL8fLXhM0w6Hc4RBdveMQwjxKOXG+hH0
+	0hNyZjYPG+iRQjkmcxqRrR46IRwCSNIC2eWruZE76AePwjqJkmzrbDNiAlJszIyb9JYN5KooZYZD3
+	vGsk8aqwAVPi4P3rw4cOiLzQZxyI6rsvYJXCBhnW7Z2mvg77KAaRpS7RuH1fmW2LLQilXL8dzsH6p
+	6ixkUeRDf4YUEJ0qhHryfmcQLazlyocsq5kNziHV2p7dpe18sEohP0RLRxWcJcmboryvCtTl83tF/
+	xi7wwmNw==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1sbNpa-0007Hk-FH; Tue, 06 Aug 2024 19:18:42 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1sbNpV-002PtH-Nf; Tue, 06 Aug 2024 19:18:37 +0200
+Message-ID: <249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
+Date: Tue, 6 Aug 2024 19:18:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,60 +46,78 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: kvm: fix mkdir error when building for
- non-supported arch
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: kernel@collabora.com, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240806121029.1199794-1-usama.anjum@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240806121029.1199794-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
+ fixes
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
+ <87y159yi5m.fsf@cloudflare.com>
+From: Michal Luczaj <mhal@rbox.co>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <87y159yi5m.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/6/24 06:10, Muhammad Usama Anjum wrote:
-> The mkdir generates an error when kvm suite is build for non-supported
-
-built
-unsupported
-
-> architecture such as arm. Fix it by ignoring the error from mkdir.
+On 8/6/24 14:01, Jakub Sitnicki wrote:
+> On Wed, Jul 31, 2024 at 12:01 PM +02, Michal Luczaj wrote:
+>> Series takes care of few bugs and missing features with the aim to improve
+>> the test coverage of sockmap/sockhash.
+>>
+>> Last patch is a create_pair() rewrite making use of
+>> __attribute__((cleanup)) to handle socket fd lifetime.
+>>
+>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>> ---
+>> Changes in v2:
+>> - Rebase on bpf-next (Jakub)
+>> - Use cleanup helpers from kernel's cleanup.h (Jakub)
+>> - Fix subject of patch 3, rephrase patch 4, use correct prefix
+>> - Link to v1: https://lore.kernel.org/r/20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co
+>>
+>> Changes in v1:
+>> - No declarations in function body (Jakub)
+>> - Don't touch output arguments until function succeeds (Jakub)
+>> - Link to v0: https://lore.kernel.org/netdev/027fdb41-ee11-4be0-a493-22f28a1abd7c@rbox.co/
+>>
+>> ---
+>> Michal Luczaj (6):
+>>       selftests/bpf: Support more socket types in create_pair()
+>>       selftests/bpf: Socket pair creation, cleanups
+>>       selftests/bpf: Simplify inet_socketpair() and vsock_socketpair_connectible()
+>>       selftests/bpf: Honour the sotype of af_unix redir tests
+>>       selftests/bpf: Exercise SOCK_STREAM unix_inet_redir_to_connected()
+>>       selftests/bpf: Introduce __attribute__((cleanup)) in create_pair()
+>>
+>>  .../selftests/bpf/prog_tests/sockmap_basic.c       |  28 ++--
+>>  .../selftests/bpf/prog_tests/sockmap_helpers.h     | 149 ++++++++++++++-------
+>>  .../selftests/bpf/prog_tests/sockmap_listen.c      | 117 ++--------------
+>>  3 files changed, 124 insertions(+), 170 deletions(-)
+>> ---
+>> base-commit: 92cc2456e9775dc4333fb4aa430763ae4ac2f2d9
+>> change-id: 20240729-selftest-sockmap-fixes-bcca996e143b
+>>
+>> Best regards,
 > 
-> mkdir: missing operand
-> Try 'mkdir --help' for more information.
-
-Simply suppressing the message isn't a good fix. Can you investigate
-a bit more on why mkdir is failing and the architectures it is failing
-on?
-
-This change simply suppresses the error message and continues - Should
-this error end the build process or not run mkdir to begin with by
-checking why $(sort $(dir $(TEST_GEN_PROGS)))) results in an empty
-string?
-
+> Thanks again for these fixes. For the series:
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->   tools/testing/selftests/kvm/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 48d32c5aa3eb7..8ff46a0a8d1cd 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -317,7 +317,7 @@ $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
->   $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
->   	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
->   
-> -$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
-> +$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))) > /dev/null 2>&1)
->   $(SPLIT_TEST_GEN_OBJ): $(GEN_HDRS)
->   $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
->   $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
+> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+> Tested-by: Jakub Sitnicki <jakub@cloudflare.com>
 
+Great, thanks for the review. With this completed, I guess we can unwind
+the (mail) stack to [1]. Is that ingress-to-local et al. something you
+wanted to take care of yourself or can I give it a try?
 
-thanks,
--- Shuah
+[1] https://lore.kernel.org/netdev/87msmqn9ws.fsf@cloudflare.com/
+
+Also, I've noticed patchwork still lists (besides this one) the old version
+of this series. Am I supposed to tell the bot to disregard it?
+
