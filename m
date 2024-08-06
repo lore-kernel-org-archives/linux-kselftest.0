@@ -1,41 +1,60 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1707816B386
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Aug 2024 07:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2DB1F4FA
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Aug 2024 07:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722928805; cv=none; b=OxEaQU25FgrM4c+WZ2DM5Ri3Qhyn/o+WARg9mzdrMG++REKy7MNyd/utKvnIW5k2NLSZBN7vMaMvkOcDvjaAH5ktHycdgFgxSd4mVcfuNmCi1RDYXq8uKhuHo3aYMdiGI1xD/WDjKB74oFEURtxw/1eckSO5/tGHTZ3L1ee40Ss=
+	t=1722929687; cv=none; b=N9H4R6QVFa8likn8052E1itIFIe1d0IE8ys8kNlv7SutrCrWmKcfs+aGByNs4catq+2V3jXGQEANZ2btjJvTEUi+5fIvw0XY6KqmnWFkKxaphhKkf+5/oIEJy074TAf70J93cycfthW4MDFypblzfAZeD4gFlQsgODD8/SzOraY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722928805; c=relaxed/simple;
-	bh=wVVjp6LHYgO9kRWzJcBV145UyRD4l9vUvYpO5/lvJo0=;
+	s=arc-20240116; t=1722929687; c=relaxed/simple;
+	bh=55gWQtAXMFTTpi7jpzXMXqKEJTXZZmmHsBtPR9LbyxE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nBz6BFF/qAIDl0hyfh9RLsNe9E2Q1icMQrOF6z/RHiCp61yggOGqBnKt6K+aorTPCSfaDk+gSnSZKyHDQPLuQcBMVG0UQshPdBxPf+qwUJ+XzKx6ea94wqMjtXvNaHWxA28SxaMunz92JCJ0H61Q1KOXDYDgYGenYVj0Wtp5364=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WdPDw3G4Jz9sRy;
-	Tue,  6 Aug 2024 08:54:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9C1_uF5rH1in; Tue,  6 Aug 2024 08:54:40 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WdPDw1q2qz9sRs;
-	Tue,  6 Aug 2024 08:54:40 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 1743F8B76C;
-	Tue,  6 Aug 2024 08:54:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 9ed2RUntKXGp; Tue,  6 Aug 2024 08:54:40 +0200 (CEST)
-Received: from [192.168.234.84] (unknown [192.168.234.84])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id B17788B763;
-	Tue,  6 Aug 2024 08:54:39 +0200 (CEST)
-Message-ID: <f4ae0d9e-5d1f-4b5e-92b9-aabb513e3097@csgroup.eu>
-Date: Tue, 6 Aug 2024 08:54:39 +0200
+	 In-Reply-To:Content-Type; b=KpeyGdNK+xLwORPjDrAGrzE0tdcMSB4u9sosdern3b9YV5lZWs8Se3uFtyj10KB/Zvt9TgLKT7caB4Ujm7aYLZd2FBI35dXE6cjln35ctaARScvx8YeDyqWsB14LV1XfrmuVzwOHxKigDA8yrT0+hp48ciuXLhZBaVwqpYOfT9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=FbjRBqio; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="FbjRBqio"
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2f149845d81so4516591fa.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Aug 2024 00:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=6wind.com; s=google; t=1722929684; x=1723534484; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cojje0NgqQhFEUPTcwEliyWCA6eVmhHl0uuQefpE1jk=;
+        b=FbjRBqioc1AL10u2/Qr3e7cVX85tnocqPHOL3DHc56SpC+30wx4ZAmJ0sGKlGKGVoY
+         hX2KTy+ebTIZQeqr/lYAbtaIsNzJRb81g5swaP2jXnvYuFtbBNurpCm5oHN0lUTDvrfV
+         r8/FPM7PPsQPZ2/Kck+n1+lfsgF79xBIPng9Bcu6/MUufEHT0lGJ47pctHoFq1ksRoCm
+         SijuxRQIkP8c+Tb5fyNEl+EknIwv2q5ip8HYWOT/e+tdg6q4XO4XFcOLaRNOVh86DYr/
+         s5mpIbdS4Teo2JvAeXPUgWiPdtxDUpPopjM0bbnIpLd1lwaQY7ZSm5sBEzHIPODs/QWS
+         V9jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722929684; x=1723534484;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cojje0NgqQhFEUPTcwEliyWCA6eVmhHl0uuQefpE1jk=;
+        b=MYCtHUo+32J74gFHkJnEoQRQL1VnkcpG2DXoIxekX9n95gUXJhqhxSSppS6Z+GuUgw
+         dXorzGiO1uzaa8Ebiflv7jE5u2Dtpfb235ttQIf4uyaBDp0RnhdxFhX9hFitS7QMumLj
+         Kdnv80jl7TqFuM0kgFUqwRtm5I+e1muECxwBvBV31P8iMVWfXGeXhUqDzNmOdYFCShhO
+         3Zuym9fE2Gf4hAA9zpm3haxewoNHI5NZ4iF28/UGbtZb1iREzcpJPax06lOMrt0AFNlF
+         cBxhhFrJXKFkII01mh36bi0UruFGY0k1/d+jlz/mkE4I8boe69T+33E5FSpeqSjrd16Y
+         eCnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXXQtDzjH/qrx3Bvb5JhAIjPQZ3iZ8uQsEjTbhfTlGh8vpiKFI2Xb0uVfFhAjaTodHg3xomkvG31DMNoh06ev2wMkuzKAREtAua54n0WA2z
+X-Gm-Message-State: AOJu0YyfNsn5vyPKszMnSV0nBJggz0uCI4d9LgEtuNmiDyQbVHDJULkG
+	qIxCAZH5T8fzjyGPT/ZVJvV9xm4II1sC0IqCBFaH/JyMJ4AR7YU5lEFN2fFQZ4A=
+X-Google-Smtp-Source: AGHT+IEKUUDFBc25n+DfFynKB6ukFiPCNzwQXURUKaLlve+6TgRpyJmxzz/8c7Kqgmg1asqozL2iEA==
+X-Received: by 2002:a2e:97ce:0:b0:2ef:2e6b:4102 with SMTP id 38308e7fff4ca-2f15ab38302mr84697931fa.43.1722929683713;
+        Tue, 06 Aug 2024 00:34:43 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:b41:c160:400c:6f2d:f80c:1b34? ([2a01:e0a:b41:c160:400c:6f2d:f80c:1b34])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4282b8adaadsm229930205e9.12.2024.08.06.00.34.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Aug 2024 00:34:43 -0700 (PDT)
+Message-ID: <3bcdec5a-a93c-45c4-83a1-e941a39cf1fd@6wind.com>
+Date: Tue, 6 Aug 2024 09:34:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,78 +62,72 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftest/powerpc/benchmark: remove requirement libc-dev
-To: Madhavan Srinivasan <maddy@linux.ibm.com>, mpe@ellerman.id.au,
- npiggin@gmail.com, shuah@kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-References: <20240805083008.1300853-1-maddy@linux.ibm.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20240805083008.1300853-1-maddy@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net-next] selftests: forwarding: lib.sh: ignore "Address
+ not found"
+To: Geliang Tang <geliang@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+ Hangbin Liu <liuhangbin@gmail.com>, Benjamin Poirier <bpoirier@nvidia.com>,
+ Ido Schimmel <idosch@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <764585b6852537a93c6fba3260e311b79280267a.1722917654.git.tanggeliang@kylinos.cn>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Content-Language: en-US
+Organization: 6WIND
+In-Reply-To: <764585b6852537a93c6fba3260e311b79280267a.1722917654.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Le 06/08/2024 à 06:20, Geliang Tang a écrit :
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+> 
+> So many "Address not found" messages occur at the end of forwarding tests
+> when using "ip address del" command for an invalid address:
+> 
+> TEST: FDB limits interacting with FDB type local                    [ OK ]
+> Error: ipv4: Address not found.
+> 
+> ... ...
+> TEST: IGMPv3 S,G port entry automatic add to a *,G port             [ OK ]
+> Error: ipv4: Address not found.
+> Error: ipv6: address not found.
+> 
+> ... ...
+> TEST: Isolated port flooding                                        [ OK ]
+> Error: ipv4: Address not found.
+> Error: ipv6: address not found.
+> 
+> ... ...
+> TEST: Externally learned FDB entry - ageing & roaming               [ OK ]
+> Error: ipv4: Address not found.
+> Error: ipv6: address not found.
+> 
+> This patch gnores these messages and redirects them to /dev/null in
+typo: s/gnores/ignores or 'hides'
 
+Nicolas
 
-Le 05/08/2024 à 10:30, Madhavan Srinivasan a écrit :
-> Currently exec-target.c file is linked as static and this
-> post a requirement to install libc dev package to build.
-> Without it, build-breaks when compiling selftest/powerpc/benchmark.
+> __addr_add_del().
 > 
->    CC       exec_target
-> /usr/bin/ld: cannot find -lc: No such file or directory
-> collect2: error: ld returned 1 exit status
-> 
-> exec_target.c is using "syscall" library function which
-> could be replaced with a inline assembly and the same is
-> proposed as a fix here.
-> 
-> Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
-> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 > ---
->   tools/testing/selftests/powerpc/benchmarks/Makefile    |  2 +-
->   .../testing/selftests/powerpc/benchmarks/exec_target.c | 10 ++++++++--
->   2 files changed, 9 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/net/forwarding/lib.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/powerpc/benchmarks/Makefile b/tools/testing/selftests/powerpc/benchmarks/Makefile
-> index 1321922038d0..ca4483c238b9 100644
-> --- a/tools/testing/selftests/powerpc/benchmarks/Makefile
-> +++ b/tools/testing/selftests/powerpc/benchmarks/Makefile
-> @@ -18,4 +18,4 @@ $(OUTPUT)/context_switch: LDLIBS += -lpthread
->   
->   $(OUTPUT)/fork: LDLIBS += -lpthread
->   
-> -$(OUTPUT)/exec_target: CFLAGS += -static -nostartfiles
-> +$(OUTPUT)/exec_target: CFLAGS += -nostartfiles
-> diff --git a/tools/testing/selftests/powerpc/benchmarks/exec_target.c b/tools/testing/selftests/powerpc/benchmarks/exec_target.c
-> index c14b0fc1edde..20027a23b594 100644
-> --- a/tools/testing/selftests/powerpc/benchmarks/exec_target.c
-> +++ b/tools/testing/selftests/powerpc/benchmarks/exec_target.c
-> @@ -7,10 +7,16 @@
->    */
->   
->   #define _GNU_SOURCE
-> -#include <unistd.h>
->   #include <sys/syscall.h>
->   
->   void _start(void)
->   {
-> -	syscall(SYS_exit, 0);
-> +	asm volatile (
-> +		"li %%r0, %[sys_exit];"
-> +		"li %%r3, 0;"
-> +		"sc;"
-> +		:
-> +		: [sys_exit] "i" (SYS_exit)
-> +		: "r0", "r3"
-> +	);
-
-That looks ok because SYS_exit() is not supposed to return, but in the 
-general case you should take a lot more precautions regarding which 
-registers get clobbered when using sc.
-
-Maybe it is worth a comment.
-
-Christophe
-
->   }
+> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+> index ff96bb7535ff..8670b6053cde 100644
+> --- a/tools/testing/selftests/net/forwarding/lib.sh
+> +++ b/tools/testing/selftests/net/forwarding/lib.sh
+> @@ -839,7 +839,7 @@ __addr_add_del()
+>  	array=("${@}")
+>  
+>  	for addrstr in "${array[@]}"; do
+> -		ip address $add_del $addrstr dev $if_name
+> +		ip address $add_del $addrstr dev $if_name &> /dev/null
+>  	done
+>  }
+>  
