@@ -1,89 +1,79 @@
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F941487D5
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Aug 2024 21:34:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6E477F1B;
+	Wed,  7 Aug 2024 21:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723066490; cv=none; b=TquZqckRpemT/EYZOXOOqIUqvW81DdVbWe2CuedNAfwqy31rjc72EXlJ9j03liLrdAufqLS2p8x42SUHSICsa00P4x21nSBk7G/kxznbFMRYHgc04svzrUatOlky/1wS7Q9v7GjXIL01uuFC/uF77bSZyNO34ahYIWPmVYBiUNE=
+	t=1723067521; cv=none; b=TPOfqGXWSr6tMaS7VFYrne9vzk1MMyuzu1xncArANCgzsaYnCzpB5UdDVUrnEw+KO6npddi9nwl7EmZM0f+qw1Ee9TBqcFo1HnLTy9m5cjOtPCQPa+zpwqNPNWoOC1RY0RojqZGLbYpT87WmOGdn8ZY1HGR6z6wUIx3h1D0q9PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723066490; c=relaxed/simple;
-	bh=IfTmzCgemNzO1EeqL3QXq0dVMqNRi+5qQivEFOVJ1VA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BF+2XLdJSFHyzzW94Dx/VIKa6BhAk2LyJsEzqLuAhDJ7vvFm0/rov5fD5mYiT9yhj83xf9QH64oChLcCpwIjZZEnJH4mxbnAywrMFb/UtWddr01OwIh6U1p9XH1RuUXNSho48X9tB+CLC/QeIueV9aUHvIZskFr6JpmyX5earFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mcRL2ecq; arc=none smtp.client-ip=209.85.160.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1723067521; c=relaxed/simple;
+	bh=V6RqjZoNDuMuFSrmOeoNBxIc8QHuAyFjHlyySjNVhEE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Umcp/DEqi2Lyd28kv1HkFLjtbNRk92LvWHFhaz/8duqoRjYcY1cVbBKrhM+vWwCwGnPKo+GyyIuR4yxfe6qDcsqBfqVGAnjrHXD7h3GSzWjciWrLdDmF8GN69vayoudrOeBBYSCPHAhSlLHOubhfViXII59nIqe/yPIlpFm8k70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=qPmPmHWk; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mcRL2ecq"
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-2689e7a941fso264202fac.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Aug 2024 14:34:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1723066488; x=1723671288; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IfTmzCgemNzO1EeqL3QXq0dVMqNRi+5qQivEFOVJ1VA=;
-        b=mcRL2ecq0/dMdPe3hEsVX7V6M5CgVFjU8cSQNOg8q0N4Ha/5rLaIFr3dw42g0QRa0N
-         RTBhG6681NRFKpeF32jzoo+qiEUi7CWCGwCkTwIoo+/xbVM2/OZFd4WRYqozPWHwr+S2
-         Oao5Zu03Z3fHHaJXM28134rS3lrayL8It7k1c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723066488; x=1723671288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IfTmzCgemNzO1EeqL3QXq0dVMqNRi+5qQivEFOVJ1VA=;
-        b=oTn6Nxxd+h5qEIhZF7s5dhiMO78/LmRl8ISL1+UIC37ncU3CjN9jcR9i1xXalpmpt2
-         ABWwV19VOa+aY0sVQNo8GtZ1ylDciBRe7c7rfxOPAJGjXqaNa8QSAPI0mqG2ECg+/vXF
-         1cnn2Z1MVXo8SkC5si+tSpMXqM19UustHTrA3w3bi3kOv9nA+GzWTGSNKWOH0X08exGQ
-         nYpKGIMi6tCKXN/18pIsazhUEQah2Gf1WjKV6pePgGblg+rQ1/JDhCwbgkzFUkhu94Rz
-         orMseN/Vhdmt2yJRPiPFVjiIX2ebJ3V+j7qiZb4wPaYL7oBTRMuOwVLvnNPfLqoT0wy0
-         +mjg==
-X-Forwarded-Encrypted: i=1; AJvYcCVaob7waz2rzg7TxtQzYPvGPc7tbFC0k6YIiQMBh8idotpABPqmS4Q/LHydTNZ08I0AazKFKqeBsYI8cml8n1opTXYj6akk4T0nw0WzqVvW
-X-Gm-Message-State: AOJu0YwqMDnOFbGyngkcSZi9HJ8j13OqdlTlxjxuOcypk1PW0FVnPiP7
-	darhH8iefA07prxpcBGZ+H806lduljBVBIF39G4WaCpUzSMFqb1O09EIPMNXj719pwUQOQitAEt
-	rfACc++v5ZX1AN8uACo2S7CqjqnGl/pieo6gty9hxcVX1IfwioHiR
-X-Google-Smtp-Source: AGHT+IG5ES7X4tgKDJv9g84tk9ALZ7Sp67s0jLTzG1Iz9nJGWu6UaYHks+HxXA4YIPNwg8kjSy39pOHEV1+hFz8rf/M=
-X-Received: by 2002:a05:6870:3051:b0:25e:b732:a913 with SMTP id
- 586e51a60fabf-2689175a388mr24548521fac.0.1723066488042; Wed, 07 Aug 2024
- 14:34:48 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="qPmPmHWk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1723067510;
+	bh=V6RqjZoNDuMuFSrmOeoNBxIc8QHuAyFjHlyySjNVhEE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=qPmPmHWkHV31tYw/01OHVKm8gxaYiHji2m9436HMQ8mxPryC/j9Dt8w+UaWq/6aWV
+	 AiBzzB180dAUOxF7K0zHWO89e2P824YINo/Yn5QRHkRkG6CT3gRcAZtqZF3KCrKGbz
+	 /Phwgb5C0wmC2cA4+N8PPCp+ZdZ15TXTtdN1iX1E=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Wed, 07 Aug 2024 23:51:37 +0200
+Subject: [PATCH v2 01/15] tools/nolibc: arm: use clang-compatible asm
+ syntax
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240807153544.2754247-1-jeffxu@chromium.org> <CAKbZUD2xDdbxOTvR3-P=636jvhG_JPO3h79tgB59dfPmv046hg@mail.gmail.com>
- <CALmYWFvDH=8U8wsaSjMrfCg1__S66SS-9Zo0f826XJDJT7hOSQ@mail.gmail.com> <CAKbZUD0JuEwfd2VnY_Kbv2Mr0g0KN2T2mYCLhPuS8j6PhbCNiQ@mail.gmail.com>
-In-Reply-To: <CAKbZUD0JuEwfd2VnY_Kbv2Mr0g0KN2T2mYCLhPuS8j6PhbCNiQ@mail.gmail.com>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Wed, 7 Aug 2024 14:34:36 -0700
-Message-ID: <CABi2SkVX7nFwPDAQaYWn2Y33OnJRs8NJQv0oW-QJUcSYB8a6tQ@mail.gmail.com>
-Subject: Re: [PATCH v1] selftest mm/mseal: fix test_seal_mremap_move_dontunmap_anyaddr
-To: Pedro Falcato <pedro.falcato@gmail.com>
-Cc: Jeff Xu <jeffxu@google.com>, akpm@linux-foundation.org, willy@infradead.org, 
-	torvalds@linux-foundation.org, Liam.Howlett@oracle.com, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, dave.hansen@intel.com, linux-hardening@vger.kernel.org, 
-	lorenzo.stoakes@oracle.com, mpe@ellerman.id.au, oliver.sang@intel.com, 
-	vbabka@suse.cz
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240807-nolibc-llvm-v2-1-c20f2f5fc7c2@weissschuh.net>
+References: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
+In-Reply-To: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=1062;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=V6RqjZoNDuMuFSrmOeoNBxIc8QHuAyFjHlyySjNVhEE=;
+ b=SglxSo77Hm5XgbvIdgPvPkKhRNORxL92uzEiid5Q4Ms3oJ9cm3F/JWmUpOFQmCjT8xqvRcw7T
+ 18GOTtzoq2aA+P486EUQqwmXfPCClo5NS1n82PTx+bCs9pPN9kyhuEK
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Wed, Aug 7, 2024 at 2:20=E2=80=AFPM Pedro Falcato <pedro.falcato@gmail.c=
-om> wrote:
->
-> On Wed, Aug 7, 2024 at 7:03=E2=80=AFPM Jeff Xu <jeffxu@google.com> wrote:
-> > Do you have any suggestions here ? I can think of two options to choose=
- from:
-> >
-> > 1> use 0xd0000000
-> > 2> allocate a memory then free it, reuse the ptr.
->
-> Personally I'd prefer 2, if you really want to keep the test. It's
-> also a strategy used elsewhere (e.g mremap_dontunmap.c).
->
-V2 is sent with 2.
-Thanks for reporting this.
+The clang assembler rejects the current syntax.
+Switch to a syntax accepted by both GCC and clang.
 
--Jeff
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/include/nolibc/arch-arm.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index cae4afa7c1c7..d1c19d973e55 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -188,8 +188,8 @@
+ void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+-		"mov %r0, sp\n"         /* save stack pointer to %r0, as arg1 of _start_c */
+-		"and ip, %r0, #-8\n"    /* sp must be 8-byte aligned in the callee        */
++		"mov r0, sp\n"          /* save stack pointer to %r0, as arg1 of _start_c */
++		"and ip, r0, #-8\n"     /* sp must be 8-byte aligned in the callee        */
+ 		"mov sp, ip\n"
+ 		"bl  _start_c\n"        /* transfer to c runtime                          */
+ 	);
+
+-- 
+2.46.0
+
