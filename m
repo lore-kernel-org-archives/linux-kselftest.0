@@ -1,118 +1,115 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5277B137905;
-	Wed,  7 Aug 2024 15:45:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CFF2209B;
+	Wed,  7 Aug 2024 16:38:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723045557; cv=none; b=JX3AA7U8QClqlGW6M+fM3HonH5GoIogaoxhbBuGKnkITlcywMzSc0CZGpQ+9kTclxf0EXXGLwTEYIZ9Mx4qyKQUnWmcd9ajsg145hz6SFv18iF34JwqC46WZQxLiopC7ZzlqQdVTzoMRq0X2RpszyxqBcpw2ev2BMmr6Civ4W4g=
+	t=1723048710; cv=none; b=cEYvbpczp3VsFJZCRh0Q1ysfe2HNC7H4o3bMgyVyly+LnObMrxn+N9Rs8uHrJdvGtJvUU/T3qjeVHb/e3S+7tfe+pUtB+myst/H1G8wPf5QPb5vYxBGaCENWBBjblrr7+rZvqvTxggru8XNLBq9wkoDRUIAEhPNEApVm+1nfnBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723045557; c=relaxed/simple;
-	bh=UTJTTwakb0Y4F7S7LSoa6aFHpamUUlndwuz8rJPyuuE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=io++AVFvUxx1QFMfyrIQLT1CApyDHuxLdwcyYjpTeb10k8yYnOijsx4dRbZIzTzgDFeUjLzO+VcWiZuiO1jrTZzPr0Xmsb6/TjnuOWfWRoQZY92K/hCF/lzAEkeOML9odVk6Jl74poFBv5gr9pNZBaUC0Wc61yNUUY/5LQwfWEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=QiDOEZXg; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1723048710; c=relaxed/simple;
+	bh=7UoBEwKBvrQT2AMxf80k+ltND63+oKRLomyxe7Y1++A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tif4CgMWzKNibvrmHeQtUuoPMaLsgdB6KnpQlIczLCF8/Iy/3rSdMTbZoTDc/arrC7tw+917vVAQjBxSB9B+QJx6Hjx2qgdndiBJSEafXYx3XKVen2MbARkWgP66K/6KzjeBWqLThr3UDFoErFuvsfecfAiVEPZ6mQA44rqTzwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kiKz9yac; arc=none smtp.client-ip=209.85.221.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="QiDOEZXg"
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4772P2J0014888;
-	Wed, 7 Aug 2024 15:45:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=pp1; bh=MQSuH22OjStRM
-	MP7ECvV1lS5lhnW+ejlhB0cuzypbEs=; b=QiDOEZXgI+sTtma+y2Bg8J+8Rlr50
-	k8BYG2eiY52Gft0M1STHjW3pO1L4aWqgKgxn6B/Rs0cZ4EUKtidawo0EXdHQELxW
-	d6mY/fc21pljdPavB/t6vavYO31QXGv7j0xZBnZtjDjuHbprc6nZ3oj3/3iBIVWE
-	hWlV8QueSgu/KdU/STnZNv4j22fW1s0bTM7cyiUS10aDwPX6iX6+yMq1bDU1kdwo
-	Xwht4il1CeHXG3+uaqdJa1q3Ozy4VdnAo3+Zz61qb//u7XsYIj/O34AE/mJndF6K
-	dGLNbEwCcSRz6n0pB3mJ9qcybVK6jfgB2I0HZv710+DC3BRPJMIFjbiJg==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40unmk2xyq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 07 Aug 2024 15:45:46 +0000 (GMT)
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 477Fjj1s015156;
-	Wed, 7 Aug 2024 15:45:45 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40unmk2xyh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 07 Aug 2024 15:45:45 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 477EiDnJ024311;
-	Wed, 7 Aug 2024 15:45:44 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40sy90sugv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 07 Aug 2024 15:45:44 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 477FjcXP52494730
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 7 Aug 2024 15:45:40 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A44AA20043;
-	Wed,  7 Aug 2024 15:45:38 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 58D3E2006A;
-	Wed,  7 Aug 2024 15:45:38 +0000 (GMT)
-Received: from darkmoore.boeblingen.de.ibm.com (unknown [9.155.210.150])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  7 Aug 2024 15:45:38 +0000 (GMT)
-From: Christoph Schlameuss <schlameuss@linux.ibm.com>
-To: kvm@vger.kernel.org
-Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nina Schoetterl-Glausch <nsg@linux.ibm.com>, schlameuss@linux.ibm.com
-Subject: [PATCH v5 10/10] s390: Enable KVM_S390_UCONTROL config in debug_defconfig
-Date: Wed,  7 Aug 2024 17:45:12 +0200
-Message-ID: <20240807154512.316936-11-schlameuss@linux.ibm.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240807154512.316936-1-schlameuss@linux.ibm.com>
-References: <20240807154512.316936-1-schlameuss@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kiKz9yac"
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-4f527c0c959so17793e0c.1;
+        Wed, 07 Aug 2024 09:38:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723048707; x=1723653507; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8mgCmD2KAcrYzQNy1uvrHNBnFb3EiB9zFOmW/TFGDZ8=;
+        b=kiKz9yacHSeNozVU3nKAoo/EazPIftDagpxFYFzQle4Ow3OHr59Fnw6oOZ+ZFUe2j3
+         AfBqzag2EFHTLiC/pQhhwEipEcQbgblwrRijpa2X6acnNYQVW1ck0zFWGJKXyLWSjVJF
+         lGt5WDsUDuGiVmI/VYZHHEwjc5HhJl0heZ4Ln13NZ0pIIpDOOqdvAcw8D1yV/fpiZ8QK
+         tQ3Q+MP7ouSBI8kmq6A/Jc4gOt4kVheE2ld/Wblht5j2MRqNl4r9MFEXkuWVK0R4vQar
+         bJrbjS4wOSa3ysAYevwZGxIhQf+AkGGrg7ut3muAUzBi0UPGP4QvCdVhUmyJNj9zoVId
+         xTeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723048707; x=1723653507;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8mgCmD2KAcrYzQNy1uvrHNBnFb3EiB9zFOmW/TFGDZ8=;
+        b=HBe23N8gPVMREHCd75i0ZzhY3mUjch1DO++hrSktCGopZX4wwjS7smsCo8k+F8Y9ZT
+         ifgIVmEW1wzLuIazeJPRaSp/S33gtJfSXmqsfSN5qszDXgxcq1fGN4b5Q+HX/njF+4ac
+         IKCtSOv8G6gUwixjt84qVa6DH3kMSoi8uVfNd5ebNE8Yc36/TTgGbQKifPIGCE4hTF41
+         yiLy8sAfnvae+cQJWbpypGGyEIA888F2RAx7oXI3t2o9lFueYN6zhYb2rsYd/0/k1Mdx
+         c9G1m2sNKlx/tJEQgc/HJkTevLye+v+UKypcTJ2ZEPSV+F+YMzHi/7N6knj6+Vf2ln2L
+         UGFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3jMJiPsdQHtf1GDAdPY7d1PeDeSQyi478MohMQO6T7gfA1Yg1q7py5R71hYlwngncAXd8owdI7sY2rO+KqAedenixlahWyjxwdJl2ym8rcObhMdmu+EdqEC6d8q8HiP/HHv9iM/g+klK+rqSpVbeBCJH1DV8fpW8P2H2xBSSMtV0EppeRJ5exMLbcGSKY
+X-Gm-Message-State: AOJu0YwAutz9oQAi0h9VN1na83hUAhPVOH41b2CaMDGBIKaXTHLNKAE2
+	bsKBvfr1htGlcEv6g7CCSJ46zAWN41yebI2hxngJTGtjn8nOVObosXXUu6RRKPrWnQUeif6APl0
+	KskLz4y2SJRCYjKsKZEVZtX3I2+k=
+X-Google-Smtp-Source: AGHT+IEaPdM7pIWYj7gKtQjNufq1NVzXdVjvhAsj0E+4bsWTLCUCwCLraq7BAD6I5PzYhwVL6S2vmNZdAhIlxFNafD8=
+X-Received: by 2002:a05:6122:1d16:b0:4f2:f1f1:a9f2 with SMTP id
+ 71dfb90a1353d-4f89ff6c61dmr22140799e0c.4.1723048707355; Wed, 07 Aug 2024
+ 09:38:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: JVKTwZNFdsRintbIq4VALojYHZhFSHBi
-X-Proofpoint-GUID: V5Nbv0JJfkKkxs7fKGxtLLR3ByV_fOYN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-07_11,2024-08-07_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=932 impostorscore=0 spamscore=0 mlxscore=0
- adultscore=0 clxscore=1015 phishscore=0 priorityscore=1501 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408070107
+References: <20240807153544.2754247-1-jeffxu@chromium.org>
+In-Reply-To: <20240807153544.2754247-1-jeffxu@chromium.org>
+From: Pedro Falcato <pedro.falcato@gmail.com>
+Date: Wed, 7 Aug 2024 17:38:16 +0100
+Message-ID: <CAKbZUD2xDdbxOTvR3-P=636jvhG_JPO3h79tgB59dfPmv046hg@mail.gmail.com>
+Subject: Re: [PATCH v1] selftest mm/mseal: fix test_seal_mremap_move_dontunmap_anyaddr
+To: jeffxu@chromium.org
+Cc: akpm@linux-foundation.org, willy@infradead.org, 
+	torvalds@linux-foundation.org, Liam.Howlett@oracle.com, jeffxu@google.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, dave.hansen@intel.com, linux-hardening@vger.kernel.org, 
+	lorenzo.stoakes@oracle.com, mpe@ellerman.id.au, oliver.sang@intel.com, 
+	vbabka@suse.cz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-To simplify testing enable UCONTROL KVM by default in debug kernels.
+On Wed, Aug 7, 2024 at 4:35=E2=80=AFPM <jeffxu@chromium.org> wrote:
+<snip>
+>         /* shrink from 4 pages to 2 pages. */
+> -       ret2 =3D mremap(ptr, size, 2 * page_size, 0, 0);
+> +       ret2 =3D sys_mremap(ptr, size, 2 * page_size, 0, 0);
+>         if (seal) {
+> -               FAIL_TEST_IF_FALSE(ret2 =3D=3D MAP_FAILED);
+> +               FAIL_TEST_IF_FALSE(ret2 =3D=3D (void *) MAP_FAILED);
 
-Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
----
- arch/s390/configs/debug_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+MAP_FAILED is already void *
 
-diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
-index ea63a7342f5f..0c989caed19a 100644
---- a/arch/s390/configs/debug_defconfig
-+++ b/arch/s390/configs/debug_defconfig
-@@ -59,6 +59,7 @@ CONFIG_CMM=m
- CONFIG_APPLDATA_BASE=y
- CONFIG_S390_HYPFS_FS=y
- CONFIG_KVM=m
-+CONFIG_KVM_S390_UCONTROL=y
- CONFIG_S390_UNWIND_SELFTEST=m
- CONFIG_S390_KPROBES_SANITY_TEST=m
- CONFIG_S390_MODULES_SANITY_TEST=m
--- 
-2.45.2
+<snip>
+> @@ -1449,18 +1457,16 @@ static void test_seal_mremap_move_dontunmap_anyad=
+dr(bool seal)
+>         }
+>
+>         /*
+> -        * The 0xdeaddead should not have effect on dest addr
+> +        * The 0xdead0000 should not have effect on dest addr
+>          * when MREMAP_DONTUNMAP is set.
+>          */
+> -       ret2 =3D mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_DONTUNMA=
+P,
+> -                       0xdeaddead);
+> +       ret2 =3D sys_mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_DONT=
+UNMAP,
+> +                       (void *) 0xdead0000);
 
+You still didn't explain why this test is actually needed. Why are you
+testing MREMAP_DONTUNMAP's hint system?
+This has nothing to do with mseal, you already test the
+MREMAP_DONTUNMAP and MREMAP_FIXED paths in other tests.
+You also don't know if 0xdead0000 is a valid page (hexagon for
+instance seems to support 256KiB and 1MiB pages, so does ppc32, and
+this is not something that should be hardcoded).
+
+I'm not a fan of just throwing random flags for tests, it should be
+somewhat logical.
+
+--=20
+Pedro
