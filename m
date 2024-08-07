@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FE8155C8E;
-	Wed,  7 Aug 2024 21:52:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F243156649;
+	Wed,  7 Aug 2024 21:52:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723067526; cv=none; b=MrnDajg532Fu9Ma+zw7zydlBGcXFaj01L6QCT4Pdb9qI6X7DPRfXwAeRYvf0Pj3Sx8XTFxJSd3JSOMvwohlpDooKjo7bWCQGsXV6vEtqe1EypKpZGR91b9BL71n5OXBKsw6CV8MKtVgDzv+FF0yUS8CbsYTJS69e4SWm5iRVpOE=
+	t=1723067526; cv=none; b=V7nBDIdVmr+CZ8kwqLuoZw/KABpLwPXx8Fh5Eug8eFUc6ke2Zc8GF3Mo5bqGofGwJA/6T/Rh6ru/zpYUOWz/G8pHrV5vAD11s7sS8ueI/yi03KkEXiwe2wgEjl6nvWRmGuqtRSSAEMUYkeiJ7FQ6ac8c+WQu4BJlO+7YMwvFmYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1723067526; c=relaxed/simple;
-	bh=uPw5miHYcaSsLeE2v10jPbSAr4/8J4GkU5tRfOmmqv8=;
+	bh=CvIO1V+EWLk9gJaEt19CwmObVNz50d2RnPOeITjF7XM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gb/rx4nOWV+hnDTru8VMr6D/M9MINhycR8cR1Y38dplBcPIPO8+tGv81l6nnaeU4EsRdmRphFvVryQdgM+ZjLn5Btrv9hlm7zBswVWvvp6eKi+eMGkagrQVJgH2QXW6/9HDeODpx+XImerAYMiGdqcgyjtiZZA+8EC7ajkZR9iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=YzTqhX+E; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=toxqQxD0Y4EbSasNcdETKiYa4N7/BAyEjqsu4acG6EChcKqgF4dVi9bErATXPdA9pMruBYE1FcTWTTDkV1GgDazUFppOhUSLXFRB4tieGd/93RwOeMjDliXVbq4lvQJ2Ah3UJVBT/yukHghs5uKjjrh5YXFdx7lgHdwbOLiYb0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=K9maKGHJ; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="YzTqhX+E"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="K9maKGHJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1723067510;
-	bh=uPw5miHYcaSsLeE2v10jPbSAr4/8J4GkU5tRfOmmqv8=;
+	s=mail; t=1723067511;
+	bh=CvIO1V+EWLk9gJaEt19CwmObVNz50d2RnPOeITjF7XM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=YzTqhX+EyHLy20A8WG0U25pkwIOoklpR19R1pOzupouvl9KE0AUdT0vhGYNdyqdfL
-	 0zVDoj0FdVcTahQgnDCqby9k8zatM5SfgcTcLP4Lz2iuKo/nPWWAKrrLmztvculOM7
-	 Er02FlMAjCAPhLHQb6jveA4E3xrORTtOFPCTycg4=
+	b=K9maKGHJcx2OjpJtmDvBq6j2d4T5uQwyTbHTd1Zbayec4LbS4GD45fnpMiQCbLKuO
+	 sYMwAy7r+Ah13ar007qrXpawFGWUsz7WL/xLYyZz5WUEkeqcxFId7lfOpfcB7SrOuy
+	 EyIPN4nvQ0FRACGowpfbh7hocCx/L+Q2+0A5jta8=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 07 Aug 2024 23:51:42 +0200
-Subject: [PATCH v2 06/15] tools/nolibc: compiler: use attribute((naked)) if
- available
+Date: Wed, 07 Aug 2024 23:51:46 +0200
+Subject: [PATCH v2 10/15] selftests/nolibc: add support for LLVM= parameter
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,56 +34,79 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240807-nolibc-llvm-v2-6-c20f2f5fc7c2@weissschuh.net>
+Message-Id: <20240807-nolibc-llvm-v2-10-c20f2f5fc7c2@weissschuh.net>
 References: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
 In-Reply-To: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=1484;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=2298;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=uPw5miHYcaSsLeE2v10jPbSAr4/8J4GkU5tRfOmmqv8=;
- b=DKVzOhzwb0h0a9ucmjRw4LStFhFxlBu0FuQ4HwA3b23zXfM/JVxQu6/H5wHkop/4hVO7L0t9y
- bwkXGNDesQDCBNaar2i9MLSjrWYy047uVn1of7sqWP16bmWKQyF3w4G
+ bh=CvIO1V+EWLk9gJaEt19CwmObVNz50d2RnPOeITjF7XM=;
+ b=aIYQwTZfI8AxgslY0Uhi52TonR+hoTgGqjrxXg0Ymu2i831yZFf9wa2ETKbNoLxIUkYh/tAjz
+ wBclZdA6YIVA4OsdAlqjFO/dSo2ftC+OGMdtwe6Z1cQOVi0pnBwAnc5
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The current entrypoint attributes optimize("Os", "omit-frame-pointer")
-are intended to avoid all compiler generated code, like function
-porologue and epilogue.
-This is the exact usecase implemented by the attribute "naked".
+Makefile.include can modify CC and CFLAGS for usage with clang.
+Make use of it.
 
-Unfortunately this is not implemented by GCC for all targets,
-so only use it where available.
-This also provides compatibility with clang, which recognizes the
-"naked" attribute but not the previously used attribute "optimized".
+Makefile.include is currently used to handle the O= variable.
+This is incompatible with the LLVM= handling as for O= it has to be
+included as early as possible, while for LLVM= it needs to be included
+after CFLAGS are set up.
+
+To avoid this incompatibility, switch the O= handling to custom logic.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/include/nolibc/compiler.h | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ tools/testing/selftests/nolibc/Makefile | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/tools/include/nolibc/compiler.h b/tools/include/nolibc/compiler.h
-index 14a854929910..e4cb5cf772ee 100644
---- a/tools/include/nolibc/compiler.h
-+++ b/tools/include/nolibc/compiler.h
-@@ -12,8 +12,13 @@
- #  define __nolibc_has_attribute(attr) 0
- #endif
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 803a4e1bbe24..cdff317c35f2 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -5,7 +5,6 @@ ifeq ($(srctree),)
+ srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
+ endif
  
--#define __nolibc_naked __attribute__((optimize("Os", "omit-frame-pointer")))
--#define __nolibc_naked_epilogue() __builtin_unreachable()
-+#if __nolibc_has_attribute(naked)
-+#  define __nolibc_naked __attribute__((naked))
-+#  define __nolibc_naked_epilogue()
-+#else
-+#  define __nolibc_naked __attribute__((optimize("Os", "omit-frame-pointer")))
-+#  define __nolibc_naked_epilogue() __builtin_unreachable()
-+#endif /* __nolibc_has_attribute(naked) */
+-include $(srctree)/tools/scripts/Makefile.include
+ include $(srctree)/tools/scripts/utilities.mak
+ # We need this for the "cc-option" macro.
+ include $(srctree)/tools/build/Build.include
+@@ -14,6 +13,9 @@ ifneq ($(O),)
+ ifneq ($(call is-absolute,$(O)),y)
+ $(error Only absolute O= parameters are supported)
+ endif
++objtree := $(O)
++else
++objtree ?= $(srctree)
+ endif
  
- #if defined(__SSP__) || defined(__SSP_STRONG__) || defined(__SSP_ALL__) || defined(__SSP_EXPLICIT__)
+ ifeq ($(ARCH),)
+@@ -21,8 +23,6 @@ include $(srctree)/scripts/subarch.include
+ ARCH = $(SUBARCH)
+ endif
  
+-objtree ?= $(srctree)
+-
+ # XARCH extends the kernel's ARCH with a few variants of the same
+ # architecture that only differ by the configuration, the toolchain
+ # and the Qemu program used. It is copied as-is into ARCH except for
+@@ -155,6 +155,9 @@ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wex
+ 		$(CFLAGS_$(XARCH)) $(CFLAGS_STACKPROTECTOR) $(CFLAGS_EXTRA)
+ LDFLAGS :=
+ 
++# Modify CFLAGS based on LLVM=
++include $(srctree)/tools/scripts/Makefile.include
++
+ REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++; print;} /\[SKIPPED\][\r]*$$/{s++} \
+ 		END{ printf("\n%3d test(s): %3d passed, %3d skipped, %3d failed => status: ", p+s+f, p, s, f); \
+ 		if (f || !p) printf("failure\n"); else if (s) printf("warning\n"); else printf("success\n");; \
 
 -- 
 2.46.0
