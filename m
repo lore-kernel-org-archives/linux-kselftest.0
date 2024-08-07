@@ -1,32 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF38155A56;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEE9155A4E;
 	Wed,  7 Aug 2024 21:52:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723067525; cv=none; b=r9qXUgMA+kkNbtCYj555ZxH6c2wKGOgkoa5jxfa2Le8g1ywUiWfzriBlAUVPAuMWbyPwpYl9VnUgxuIC97vktxLsFXU0HAVpnyRv2+npEoNGvtUXbw5Rr5L3Cfc48ivWy5kZkTFPfJ6gkh4A6lWEqBkjIAHqCul0Gw8rjtSPFDw=
+	t=1723067525; cv=none; b=BwX5P8duOg44267MBqz9d6GFUuz5+43X8hBSplqAcMBWlbwzHxIGJ7F3LP7SPIXwLtolshYeY/IXLhIKAm8EGHVo7AxC0uQqWCaoBuRNTdmNLLD7crLONA5COeWib+IxUnWY6bvs2FIjn58RXsnGgne6LaMFic5MCdBiUbT3Qm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1723067525; c=relaxed/simple;
-	bh=oRgMb/2rEclPwfWBKF/mGGZvwsZktVlEyUFTfYwp+Po=;
+	bh=JtLEcuDc7sUI0OHNtKc1zClGfVywsj/5MGDGho6L+CA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VBEumIOjwp0kX55DTL7qaZ+eS7cK8VSbXCCDPufEatP4TAFglnIJFT+o12IK7n/37TsoGxLpDaVBREvBp0j5EIhw+jJaLisSlEyfqQe6rvWjdJfvIdjG0VxRYFzyqDLvvrqrEgA87qm19idf6Bd7gqEwuI90dOTPqrpa7S6an9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=dAkQyPKy; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=da3+TuXSCXlIfqoEoY50JsbRinLvdSTCnWPHGD32XNVMg7FCVUJGvUQJYDn2+6Eq+B9Z6XsvwUUjx44vgH7KCFk6JPK/x6wi8acDXra/ISHlIaGjCFrpHSn+1FqsAVMG3N7rNyS2wc3WtkbwM8QNmdMaO38wjzaMSSj3S8jpSPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Tzqwg2FA; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="dAkQyPKy"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Tzqwg2FA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1723067511;
-	bh=oRgMb/2rEclPwfWBKF/mGGZvwsZktVlEyUFTfYwp+Po=;
+	bh=JtLEcuDc7sUI0OHNtKc1zClGfVywsj/5MGDGho6L+CA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=dAkQyPKy4uwTVzuytsCYWt21hxmOmlF8kx7127JJvxZ7RhnacsTWZ8RlR1nkD2kyv
-	 Ml7pmqB4OOI/Iz4vq3/lBK9nTXDAiaaNwMpW74/+7Uz60drSHPw4FSUOHMVHwSu+Gh
-	 x9dvitXW6zxhiolwzicQV9j2UgGkeWEpyJRM6zLo=
+	b=Tzqwg2FAxUJ3BZb/tDBVlqqS1VhcSEZcuwq6MWSnjRbRI8WjPrLAWEo3lo19RxdI5
+	 e84kKS5jtbGpYEUQWX/8EHdUUppuZgRl9gPNJQhfINUVheDj8rD+9vIV+VOrw+1viS
+	 XiUOG31ct3gWbnj9ViiXYVD+RnIp9xHQFq080IRI=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 07 Aug 2024 23:51:51 +0200
-Subject: [PATCH v2 15/15] selftests/nolibc: run-tests.sh: allow building
- through LLVM
+Date: Wed, 07 Aug 2024 23:51:49 +0200
+Subject: [PATCH v2 13/15] selftests/nolibc: don't use libgcc when building
+ with clang
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,74 +35,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240807-nolibc-llvm-v2-15-c20f2f5fc7c2@weissschuh.net>
+Message-Id: <20240807-nolibc-llvm-v2-13-c20f2f5fc7c2@weissschuh.net>
 References: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
 In-Reply-To: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=1785;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=1797;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=oRgMb/2rEclPwfWBKF/mGGZvwsZktVlEyUFTfYwp+Po=;
- b=V3kzjxBkkhKxs515hjrbUo+Lgi32z8Bw+QSJbS3AbkLsRgF4IaRzPkdKqTU0X83jOANjysvjW
- CGH07nGVaD2Csm/kQQD5DISrRV0H5di503S9Uv4evzBzSoMEF0XX3KM
+ bh=JtLEcuDc7sUI0OHNtKc1zClGfVywsj/5MGDGho6L+CA=;
+ b=lZd+zdKU0xX5jts8qZF/ixTsYcq2SUyAVAuJLSeaEVXLIZT/M7/AgAmGNYusymJlBPqJNthJo
+ FpMu+BanZBxAl0luNOMqjVsan0GHHRLfl/S6mwgkCUQvcVuMxYm/8R+
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The nolibc tests can now be properly built with LLVM.
-Expose this through run-tests.sh.
+The logic in clang to find the libgcc.a from a GCC toolchain for a
+specific ABI does not work reliably and can lead to errors.
+Instead disable libgcc when building with clang, as it's not needed
+anyways.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/nolibc/run-tests.sh | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ tools/testing/selftests/nolibc/Makefile | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
-index 324509b99e2c..e7ecda4ae796 100755
---- a/tools/testing/selftests/nolibc/run-tests.sh
-+++ b/tools/testing/selftests/nolibc/run-tests.sh
-@@ -16,9 +16,10 @@ build_location="$(realpath "${cache_dir}"/nolibc-tests/)"
- perform_download=0
- test_mode=system
- werror=1
-+llvm=
- archs="i386 x86_64 arm64 arm mips32le mips32be ppc ppc64 ppc64le riscv s390 loongarch"
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index b8577086e008..f0ce8264baac 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -157,6 +157,13 @@ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wex
+ 		$(CFLAGS_$(XARCH)) $(CFLAGS_STACKPROTECTOR) $(CFLAGS_EXTRA)
+ LDFLAGS :=
  
--TEMP=$(getopt -o 'j:d:c:b:a:m:peh' -n "$0" -- "$@")
-+TEMP=$(getopt -o 'j:d:c:b:a:m:pelh' -n "$0" -- "$@")
++LIBGCC := -lgcc
++
++ifneq ($(LLVM),)
++# Not needed for clang
++LIBGCC :=
++endif
++
+ # Modify CFLAGS based on LLVM=
+ include $(srctree)/tools/scripts/Makefile.include
  
- eval set -- "$TEMP"
- unset TEMP
-@@ -42,6 +43,7 @@ Options:
-  -b [DIR]       Build location (default: ${build_location})
-  -m [MODE]      Test mode user/system (default: ${test_mode})
-  -e             Disable -Werror
-+ -l             Build with LLVM/clang
- EOF
- }
+@@ -209,11 +216,11 @@ sysroot/$(ARCH)/include:
+ ifneq ($(NOLIBC_SYSROOT),0)
+ nolibc-test: nolibc-test.c nolibc-test-linkage.c sysroot/$(ARCH)/include
+ 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
+-	  -nostdlib -nostdinc -static -Isysroot/$(ARCH)/include nolibc-test.c nolibc-test-linkage.c -lgcc
++	  -nostdlib -nostdinc -static -Isysroot/$(ARCH)/include nolibc-test.c nolibc-test-linkage.c $(LIBGCC)
+ else
+ nolibc-test: nolibc-test.c nolibc-test-linkage.c
+ 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
+-	  -nostdlib -static -include $(srctree)/tools/include/nolibc/nolibc.h nolibc-test.c nolibc-test-linkage.c -lgcc
++	  -nostdlib -static -include $(srctree)/tools/include/nolibc/nolibc.h nolibc-test.c nolibc-test-linkage.c $(LIBGCC)
+ endif
  
-@@ -71,6 +73,9 @@ while true; do
- 		'-e')
- 			werror=0
- 			shift; continue ;;
-+		'-l')
-+			llvm=1
-+			shift; continue ;;
- 		'-h')
- 			print_usage
- 			exit 0
-@@ -143,7 +148,7 @@ test_arch() {
- 	if [ "$werror" -ne 0 ]; then
- 		CFLAGS_EXTRA="$CFLAGS_EXTRA -Werror"
- 	fi
--	MAKE=(make -j"${nproc}" XARCH="${arch}" CROSS_COMPILE="${cross_compile}" O="${build_dir}")
-+	MAKE=(make -j"${nproc}" XARCH="${arch}" CROSS_COMPILE="${cross_compile}" LLVM="${llvm}" O="${build_dir}")
- 
- 	mkdir -p "$build_dir"
- 	if [ "$test_mode" = "system" ] && [ ! -f "${build_dir}/.config" ]; then
+ libc-test: nolibc-test.c nolibc-test-linkage.c
 
 -- 
 2.46.0
