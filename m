@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7024E143726;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71792144D01;
 	Wed,  7 Aug 2024 21:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723067521; cv=none; b=mvSMQojSNBa+4qJiB77cAzVoG7H/EqTEj2j1uYBGbUziufEktPwlCsYrmIJHqSksf7y/7kWRvuUu1nOShOtdTeAR5vuIWfRS//yQ3rB0dSEP/K1g0TMECM6lea+AScvgXzlskniD3+slcbjMTcFvC+yc5GP4mTVLGHEyrL2bcU4=
+	t=1723067521; cv=none; b=knnMIgOWUqi5dvombLXPVePAKG6HA7GqBGCPZQH2V7Izx2l6TgOXAbhwJJrAhGQo6qmFwDK0XClxx1Pt4RrFO2zfJTj0SXJEpYnva6mkr1ZnlP73wg6GsMLjWY7x7E6MJTECNV/4520aEFcckZO7rTIPuU6JPAD6pJZKjmJ8KO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1723067521; c=relaxed/simple;
-	bh=JRCvIrZeKoGVVB+qDpKkq3lkyi1JWg3z/lIZUBJjdYc=;
+	bh=0xwKwk4W4ON043PDHhYy4/zTEWhwuDykJCYQwDWzNPQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T2ZUm0bwYJb1b0le1A2Rv65JYwo/hFpKws8fBPDQsEeYD6jZ2+LOwmSP2g/yT4/LcesU+I3+DbxuSVfl3WXKUWHd9i2BCGquXRMIxIG9YGt9oVJacpMStXZBzs/fZ5kq6mBLq+nhiHQ/t68YX0vaQHy1dtNUz0ff/Yz29AuIKHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=D/bl4Z1Y; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=lbFvO4Mt+lzss6K0aWGYZ0gWhi8VHy0D89xXcvF5oNlmDkSHm53GpvI0a7Uu8RivIJrCsVDJYzw83ctmIOiSXL5taxzGxJ6m7wjzFFuom/u2Qut9FHlwuwlf3n2BaWnqSUi3BfQw41xLwrYsbUt0hSWY/utQUkBAsffiyctFI9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=iQC3gS1g; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="D/bl4Z1Y"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="iQC3gS1g"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1723067510;
-	bh=JRCvIrZeKoGVVB+qDpKkq3lkyi1JWg3z/lIZUBJjdYc=;
+	bh=0xwKwk4W4ON043PDHhYy4/zTEWhwuDykJCYQwDWzNPQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=D/bl4Z1YYcOictd/WxDrOmtc3spGqJk3hzQvdTja+dQio+c2zf2L1eVuHLTHHA3O/
-	 oxYZRpgNXso8s7aOA85XoWr9+p0intCp6jgS7cuesddQGE2VTtlxHCWQaCACSAmDrx
-	 1euZkRBt5gOh+rHis2VvuBwAiJqKzNjEaGEaDH18=
+	b=iQC3gS1gBCZpbFQu2FMqgFKxQ6Fo8bc7wolEfv93c/Y5l9IbGV3IChvQ80bHXAOdY
+	 OL6ruHTS/JHDXQMjSfl1KNnTd5Y+LPkBENT0h8CiGW7xM8eAZq+eFm6nfnJpAahJ5w
+	 JvSvJJzbQxisTrL7Wy+lJeQo1OngrI9RgC4jejZA=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 07 Aug 2024 23:51:40 +0200
-Subject: [PATCH v2 04/15] tools/nolibc: compiler: introduce
- __nolibc_has_attribute()
+Date: Wed, 07 Aug 2024 23:51:38 +0200
+Subject: [PATCH v2 02/15] tools/nolibc: mips: load current function to $t9
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,80 +34,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240807-nolibc-llvm-v2-4-c20f2f5fc7c2@weissschuh.net>
+Message-Id: <20240807-nolibc-llvm-v2-2-c20f2f5fc7c2@weissschuh.net>
 References: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
 In-Reply-To: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=2153;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=1345;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=JRCvIrZeKoGVVB+qDpKkq3lkyi1JWg3z/lIZUBJjdYc=;
- b=/wkLMiuYSIsaYuJj9fz3BErBSruqQeuvNOAEZt+IjrO2AoqL3/w6BTw1s2wbd4chX9JoX//r5
- JdoEqsirtMIBIxyAf7hryQMtbPZSbfKj0WpB0bxiVlkij/+VpfKpvS7
+ bh=0xwKwk4W4ON043PDHhYy4/zTEWhwuDykJCYQwDWzNPQ=;
+ b=xN30aahPcj2gQmFgfOB4sY+Er7K5/CDGgL5RksagY7oNvWXVoDXrYw79rBGWZQ38VG8Z/qaIU
+ cbNrnjfZHjGDN0R4o+37G35Ry70sFoAPTwV7XoMBnJUbJ3hJjhO6rs9
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Recent compilers support __has_attribute() to check if a certain
-compiler attribute is supported.
-Unfortunately we have to first check if __has_attribute is supported in
-the first place and then if a specific attribute is present.
-These two checks can't be folded into a single condition as that would
-lead to errors.
+The MIPS calling convention requires the address of the current function
+to be available in $t9.
+This was not done so far.
 
-Nesting the two conditions like below works, but becomes ugly as soon
-as #else blocks are used as those need to be duplicated for both levels
-of #if.
-
-    #if defined __has_attribute
-    #  if __has_attribute (nonnull)
-    #    define ATTR_NONNULL __attribute__ ((nonnull))
-    #  endif
-    #endif
-
-Introduce a new helper which makes the usage of __has_attribute() nicer
-and migrate the current user to it.
+For GCC this seems to have worked, but when compiled with clang the
+executable segfault instantly.
+Properly load the address of _start_c() into $t9 before calling it.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/compiler.h | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ tools/include/nolibc/arch-mips.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/nolibc/compiler.h b/tools/include/nolibc/compiler.h
-index beddc3665d69..1730d0454a55 100644
---- a/tools/include/nolibc/compiler.h
-+++ b/tools/include/nolibc/compiler.h
-@@ -6,20 +6,22 @@
- #ifndef _NOLIBC_COMPILER_H
- #define _NOLIBC_COMPILER_H
- 
-+#if defined(__has_attribute)
-+#  define __nolibc_has_attribute(attr) __has_attribute(attr)
-+#else
-+#  define __nolibc_has_attribute(attr) 0
-+#endif
-+
- #if defined(__SSP__) || defined(__SSP_STRONG__) || defined(__SSP_ALL__) || defined(__SSP_EXPLICIT__)
- 
- #define _NOLIBC_STACKPROTECTOR
- 
- #endif /* defined(__SSP__) ... */
- 
--#if defined(__has_attribute)
--#  if __has_attribute(no_stack_protector)
--#    define __no_stack_protector __attribute__((no_stack_protector))
--#  else
--#    define __no_stack_protector __attribute__((__optimize__("-fno-stack-protector")))
--#  endif
-+#if __nolibc_has_attribute(no_stack_protector)
-+#  define __no_stack_protector __attribute__((no_stack_protector))
- #else
- #  define __no_stack_protector __attribute__((__optimize__("-fno-stack-protector")))
--#endif /* defined(__has_attribute) */
-+#endif /* __nolibc_has_attribute(no_stack_protector) */
- 
- #endif /* _NOLIBC_COMPILER_H */
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index 62cc50ef3288..a2ee77ed2fbb 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -194,7 +194,9 @@ void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_
+ 		"li    $t0, -8\n"
+ 		"and   $sp, $sp, $t0\n"  /* $sp must be 8-byte aligned                     */
+ 		"addiu $sp, $sp, -16\n"  /* the callee expects to save a0..a3 there        */
+-		"jal   _start_c\n"       /* transfer to c runtime                          */
++		"lui $t9, %hi(_start_c)\n" /* ABI requires current function address in $t9 */
++		"ori $t9, %lo(_start_c)\n"
++		"jalr $t9\n"             /* transfer to c runtime                          */
+ 		" nop\n"                 /* delayed slot                                   */
+ 		".set pop\n"
+ 	);
 
 -- 
 2.46.0
