@@ -1,32 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25BA15535A;
-	Wed,  7 Aug 2024 21:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF38155A56;
+	Wed,  7 Aug 2024 21:52:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723067524; cv=none; b=qXbp+o4crhINrU1+rUTSgbHc8Cj1V+i6Z4JtYaTr6kPg/s6FoWUWMkR1f3rlwGUEvToG3t98aJoAsFXXW8wYfdmCh/cyamSIK7mVzJ6jRKtGcNsymHC5N9taLdUfvBA94K1Oeq7L8QQV6IYH3NcrdHZkFKeeDFqBEOoWeN14o5A=
+	t=1723067525; cv=none; b=r9qXUgMA+kkNbtCYj555ZxH6c2wKGOgkoa5jxfa2Le8g1ywUiWfzriBlAUVPAuMWbyPwpYl9VnUgxuIC97vktxLsFXU0HAVpnyRv2+npEoNGvtUXbw5Rr5L3Cfc48ivWy5kZkTFPfJ6gkh4A6lWEqBkjIAHqCul0Gw8rjtSPFDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723067524; c=relaxed/simple;
-	bh=obIjHsolXNXcLTedUP4pqEyIcSocTNAfNvlGUro4FYo=;
+	s=arc-20240116; t=1723067525; c=relaxed/simple;
+	bh=oRgMb/2rEclPwfWBKF/mGGZvwsZktVlEyUFTfYwp+Po=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=A7bKDRBffSpZQq7AxMCDvrW9lIiXOqzjHPrEkyEy8fJlKeegniWD7LInACKFWjoW1lOaBvY1VMFMLsvFqeg7FGMrYqQAVfhOsCWAFF8VDuYvkDpuMRehG6dQiLTXahYUmNB+oGpZu6RbfbaipqEHmY3Q0fHTF8cumhQGG7x9nKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=fa+dV+c0; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=VBEumIOjwp0kX55DTL7qaZ+eS7cK8VSbXCCDPufEatP4TAFglnIJFT+o12IK7n/37TsoGxLpDaVBREvBp0j5EIhw+jJaLisSlEyfqQe6rvWjdJfvIdjG0VxRYFzyqDLvvrqrEgA87qm19idf6Bd7gqEwuI90dOTPqrpa7S6an9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=dAkQyPKy; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="fa+dV+c0"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="dAkQyPKy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1723067511;
-	bh=obIjHsolXNXcLTedUP4pqEyIcSocTNAfNvlGUro4FYo=;
+	bh=oRgMb/2rEclPwfWBKF/mGGZvwsZktVlEyUFTfYwp+Po=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=fa+dV+c0Tky2ez/aJ5ChRq8pNxGCmZb0wVpBYUwlMtIbW5oJ/X2SytykQY+v6TBXf
-	 gs7iDXV4MuA3Is3ZZNDwlMKh4B2md4D0E+1Ml436co3hvM6YUvttpeVN911ujxx0X3
-	 3hP84CzKzL46sDdAbqeeDy3gnB7+QoJds41MvHqA=
+	b=dAkQyPKy4uwTVzuytsCYWt21hxmOmlF8kx7127JJvxZ7RhnacsTWZ8RlR1nkD2kyv
+	 Ml7pmqB4OOI/Iz4vq3/lBK9nTXDAiaaNwMpW74/+7Uz60drSHPw4FSUOHMVHwSu+Gh
+	 x9dvitXW6zxhiolwzicQV9j2UgGkeWEpyJRM6zLo=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 07 Aug 2024 23:51:44 +0200
-Subject: [PATCH v2 08/15] selftests/nolibc: avoid passing NULL to
- printf("%s")
+Date: Wed, 07 Aug 2024 23:51:51 +0200
+Subject: [PATCH v2 15/15] selftests/nolibc: run-tests.sh: allow building
+ through LLVM
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,7 +35,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240807-nolibc-llvm-v2-8-c20f2f5fc7c2@weissschuh.net>
+Message-Id: <20240807-nolibc-llvm-v2-15-c20f2f5fc7c2@weissschuh.net>
 References: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
 In-Reply-To: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
@@ -43,48 +43,66 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
  Shuah Khan <skhan@linuxfoundation.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=1257;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=1785;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=obIjHsolXNXcLTedUP4pqEyIcSocTNAfNvlGUro4FYo=;
- b=z9Y10TL611sG1brS8Kg1Uktqf7SPz0K9do0wzKH+GkueCbd/6HYsFORmh8DOpKipNc93nyP/C
- ErqGrlIneIcAtWXhpBhaWG7xljH1wYzkIDtjKCQBCwxD9RT0nvEXenG
+ bh=oRgMb/2rEclPwfWBKF/mGGZvwsZktVlEyUFTfYwp+Po=;
+ b=V3kzjxBkkhKxs515hjrbUo+Lgi32z8Bw+QSJbS3AbkLsRgF4IaRzPkdKqTU0X83jOANjysvjW
+ CGH07nGVaD2Csm/kQQD5DISrRV0H5di503S9Uv4evzBzSoMEF0XX3KM
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Clang on higher optimization levels detects that NULL is passed to
-printf("%s") and warns about it.
-While printf() from nolibc gracefully handles that NULL,
-it is undefined behavior as per POSIX, so the warning is reasonable.
-Avoid the warning by transforming NULL into a non-NULL placeholder.
+The nolibc tests can now be properly built with LLVM.
+Expose this through run-tests.sh.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/nolibc/run-tests.sh | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 093d0512f4c5..8cbb51dca0cd 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -542,7 +542,7 @@ int expect_strzr(const char *expr, int llen)
- {
- 	int ret = 0;
+diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
+index 324509b99e2c..e7ecda4ae796 100755
+--- a/tools/testing/selftests/nolibc/run-tests.sh
++++ b/tools/testing/selftests/nolibc/run-tests.sh
+@@ -16,9 +16,10 @@ build_location="$(realpath "${cache_dir}"/nolibc-tests/)"
+ perform_download=0
+ test_mode=system
+ werror=1
++llvm=
+ archs="i386 x86_64 arm64 arm mips32le mips32be ppc ppc64 ppc64le riscv s390 loongarch"
  
--	llen += printf(" = <%s> ", expr);
-+	llen += printf(" = <%s> ", expr ? expr : "(null)");
- 	if (expr) {
- 		ret = 1;
- 		result(llen, FAIL);
-@@ -561,7 +561,7 @@ int expect_strnz(const char *expr, int llen)
- {
- 	int ret = 0;
+-TEMP=$(getopt -o 'j:d:c:b:a:m:peh' -n "$0" -- "$@")
++TEMP=$(getopt -o 'j:d:c:b:a:m:pelh' -n "$0" -- "$@")
  
--	llen += printf(" = <%s> ", expr);
-+	llen += printf(" = <%s> ", expr ? expr : "(null)");
- 	if (!expr) {
- 		ret = 1;
- 		result(llen, FAIL);
+ eval set -- "$TEMP"
+ unset TEMP
+@@ -42,6 +43,7 @@ Options:
+  -b [DIR]       Build location (default: ${build_location})
+  -m [MODE]      Test mode user/system (default: ${test_mode})
+  -e             Disable -Werror
++ -l             Build with LLVM/clang
+ EOF
+ }
+ 
+@@ -71,6 +73,9 @@ while true; do
+ 		'-e')
+ 			werror=0
+ 			shift; continue ;;
++		'-l')
++			llvm=1
++			shift; continue ;;
+ 		'-h')
+ 			print_usage
+ 			exit 0
+@@ -143,7 +148,7 @@ test_arch() {
+ 	if [ "$werror" -ne 0 ]; then
+ 		CFLAGS_EXTRA="$CFLAGS_EXTRA -Werror"
+ 	fi
+-	MAKE=(make -j"${nproc}" XARCH="${arch}" CROSS_COMPILE="${cross_compile}" O="${build_dir}")
++	MAKE=(make -j"${nproc}" XARCH="${arch}" CROSS_COMPILE="${cross_compile}" LLVM="${llvm}" O="${build_dir}")
+ 
+ 	mkdir -p "$build_dir"
+ 	if [ "$test_mode" = "system" ] && [ ! -f "${build_dir}/.config" ]; then
 
 -- 
 2.46.0
