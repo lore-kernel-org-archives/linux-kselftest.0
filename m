@@ -1,80 +1,110 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F1E15A4B0;
-	Wed,  7 Aug 2024 21:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01264D5BD;
+	Wed,  7 Aug 2024 22:03:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723067527; cv=none; b=r5PvLLzEezrcqBfDUV+u1x/imzSBXpZkuj9NiWeWprOgfAK6orHAdzujkwIMZbhyZcDPHvHzjFhkPKOlW4qg7WiPtGH8ACtpc6uvGbHSfXV4dnM0+7fMa2gP2+uPw5Y3ABmBLnAKKz/5B9EiMjOf0slrPqeP9BMIyBK8lM/Iao0=
+	t=1723068211; cv=none; b=Ycl8rDyEllpoJXxX6vPGT4mdeFepCj1WIG5+CYcVm5f7bwAe1/FRMhMOrMPrgiUsMCca+ijsvxnVXI4DRdRfzFEX31ikL98NgCYgB+4rpsp+2yS6FEhtNGnaZhOq81qtHHXow/yoM2ADR8PHrFDbowr069BUKKE4USRalT83DGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723067527; c=relaxed/simple;
-	bh=QNaY7kJFMuM3ZkGNIHxAYKHUdeofTLZIOkuPKOo4EXs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=k4B7rJMp8JfxeC00Rw2nwqO9ULcrCyvlIeNmpW70cWzzb+iuvX7phh71lwGMPOokIWJvzVngwKqMnl/O9xv92aCM8RJ+wKs8Fwua4pikFamS0vBfGcVORUdAkonW3dQ5c4PgBNm6gcmADr33Ciixut/NuXbcQvXugCaWsAjWPxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=q6VIE1wh; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1723068211; c=relaxed/simple;
+	bh=apRbtHOpMOwo9Hq95H+j9Ifiaa3qhuwqc+VapwBrbuY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HVctSOV1cFAWdEc2JU3HWdFb1FnquojAAfUxidfjVqmun9vJuOEwXg11S+5Cr38TWEUqO2BJynNmoGY1foIVRZI+lr+vkAmaO/WcJC8rg+44mn7SKb70ExmiPo+iv9vgjWftx6G24NxcZvn3/aSGJf9nwhk7kgAAkK14Wyh+YRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cnCA1i1k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="q6VIE1wh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1723067511;
-	bh=QNaY7kJFMuM3ZkGNIHxAYKHUdeofTLZIOkuPKOo4EXs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=q6VIE1whSznrFdxsRqK0MYRIhpO4HMdfTemBTUHFdF7ZAPvUPssVvZm8IUtRydZmN
-	 /V8+mAP1CaV5MvWDQLGjg4H8iz8MNCDL/CuM71swEv9VdNIR/6NQrcXjqbCCIEK5BB
-	 nEEIgEMg4dtz5fIcg2OyRyTRwDIZ3JPmIQ7qiqLo=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 07 Aug 2024 23:51:50 +0200
-Subject: [PATCH v2 14/15] selftests/nolibc: use correct clang target for
- s390/powerz
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cnCA1i1k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0568FC32781;
+	Wed,  7 Aug 2024 22:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723068210;
+	bh=apRbtHOpMOwo9Hq95H+j9Ifiaa3qhuwqc+VapwBrbuY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cnCA1i1kifnnzgJ9HyTRIu1WmXkPE4kMXfBiuxZnmrSEKokxbBR4ostuNjIkE5cuP
+	 wDzNdX9ujwbTZtTfOTNmbvGj36DbL/N7JM/T1vxBk5p0vV9w0/RlQbkJ3g6JW5JIL4
+	 ro5eSOpNQZzA5pmRn6bZ6alCN6RaCPJS3xGv03VQhm8OvNY/V8AZxSTr5CIk9YLKkt
+	 wp7OoT6gGScSKiNpAiCucS/vr7D98pP6E0IObQ7HKWYRnMW2zutFWKMWDsyHTMDkMP
+	 HbleBZg0xqXDzWkc4hShMZMherSa0SS7S5mT/TY19jsqLxrI/avzy+ZUy8XAtjIH9g
+	 mv1MXWqYSs6ZQ==
+Date: Wed, 7 Aug 2024 23:03:24 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, jannh@google.com,
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+Subject: Re: [PATCH RFT v7 9/9] selftests/clone3: Test shadow stack support
+Message-ID: <ZrPvLIjW0p8j5C1x@finisterre.sirena.org.uk>
+References: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
+ <20240731-clone3-shadow-stack-v7-9-a9532eebfb1d@kernel.org>
+ <202408052046.00BC7CBC@keescook>
+ <19ee6fc9-94d7-4420-abd3-7cfdf612df0c@sirena.org.uk>
+ <202408062022.34F3558@keescook>
+ <e5e5c0fc-3425-4020-ae7c-4b7fd0f1f263@sirena.org.uk>
+ <202408071221.92B6E385C@keescook>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240807-nolibc-llvm-v2-14-c20f2f5fc7c2@weissschuh.net>
-References: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
-In-Reply-To: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=1173;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=QNaY7kJFMuM3ZkGNIHxAYKHUdeofTLZIOkuPKOo4EXs=;
- b=yRql2CS1JaYly+HZvycEqBSi9NWWl/xm4ctiJUhHLAbiLSO5EWansfaH4XnPb5qdK2HdyKdXm
- 7velTRzdn2NAjC8pEExFKk2dy/nzOrHYMtYoncnWxLtjs2wDReBi3zt
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ovsSsFUoGuk43J7e"
+Content-Disposition: inline
+In-Reply-To: <202408071221.92B6E385C@keescook>
+X-Cookie: Your love life will be... interesting.
 
-The target names between GCC and clang differ for s390.
-While GCC uses "s390", clang uses "powerz".
-This mapping is not handled by tools/scripts/Makefile.include,
-so do it in the nolibc-test Makefile.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/testing/selftests/nolibc/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+--ovsSsFUoGuk43J7e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index f0ce8264baac..8de98ea7af80 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -167,6 +167,9 @@ endif
- # Modify CFLAGS based on LLVM=
- include $(srctree)/tools/scripts/Makefile.include
- 
-+# GCC uses "s390", clang "systemz"
-+CLANG_CROSS_FLAGS := $(subst --target=s390-linux,--target=systemz-linux,$(CLANG_CROSS_FLAGS))
-+
- REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++; print;} /\[SKIPPED\][\r]*$$/{s++} \
- 		END{ printf("\n%3d test(s): %3d passed, %3d skipped, %3d failed => status: ", p+s+f, p, s, f); \
- 		if (f || !p) printf("failure\n"); else if (s) printf("warning\n"); else printf("success\n");; \
+On Wed, Aug 07, 2024 at 12:23:01PM -0700, Kees Cook wrote:
+> On Wed, Aug 07, 2024 at 01:39:27PM +0100, Mark Brown wrote:
 
--- 
-2.46.0
+> >  		size = args->shadow_stack_size;
+> > +		shstk->base = 0;
+> > +		shstk->size = 0;
 
+> Yup, that fixes it!
+
+>   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:1 error:0
+
+> (The skip is "Shadow stack on system without shadow stack")
+
+Excellent, thanks!  It's amazing how many dumb mistakes you can find if
+you actually try running the code :/ .
+
+--ovsSsFUoGuk43J7e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaz7ysACgkQJNaLcl1U
+h9D6nQf471aSpWTp9hbNlp8vMCtiJWKUaAuZ+t0OiPrxl5alZkAidQfo1tJ4gpH6
+OxPxfAinXgzcWFgHMsnjUD1Rfpvqb9jA2Ni7fMoDkNIfeGXCF7ocedEG2SZQAa2L
+04Z2R8i2Tq3AcBLHLSyuX7YTSaK25ZyhLUJWXMZNq+ytNPVTZ2XsfQ1LbQhRdQ4P
+UpL4WPYWnPMJ56UzmoD/NaYS5ED750CNiMJfRSEicCCHuZ3u9nPqTb3DBxDVPNeu
+P3fDaHPsq0ZKqg1LQdxmn2TyZCf/ydyJal0DSDHBF+/QF+jZWZltRUfCqKgOiR5m
+stJBoppOCGUxXbeFnFtS2fsy/o+4
+=Vmt3
+-----END PGP SIGNATURE-----
+
+--ovsSsFUoGuk43J7e--
