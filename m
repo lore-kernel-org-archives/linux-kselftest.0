@@ -1,178 +1,316 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF8B18C910;
-	Thu,  8 Aug 2024 12:38:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C09018C357;
+	Thu,  8 Aug 2024 12:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723120733; cv=none; b=q8yeH86BAM810YEVC8Fdsd28XwDV3QsUwnH7D4Ic4AMzrJZY9/Ps03jvmmwe0EOwD9eYjIoBTa09fe5EKSUHJBK6WIEoBwF/8cLKrqGWspwgG1h59fX3N98uBjBZBT3nXwluuTA0XnF7o1qNBmQ/JY9Af3T1GJzJwfDqw9ILM9A=
+	t=1723120977; cv=none; b=ebBR9/q9kFmdHm0ZJlWfaGdEtLcI2X/EPGBYKZqrgvs438ZOVM5cFk+jjY6L8SXT4dCj33R37T/a+MyW/5qtr6aSpM8rbhtmCpfcPYRqC/LAI5o4PY1ZP2nPEtW++dEnn7HQguR1dmC1Bl/pZTwfQ5TVs0aeWcH2mm78Gs7EQeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723120733; c=relaxed/simple;
-	bh=GcvSFJMKHLhNFNdb66dJFFYuo+iitWi4Lo3O6EpjwWo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BUdvVZ94+OFYXsIU386WYWzle4UU8XzAQuQEZ9lkSPZYrkGeIoihCJ2rCcJjc8KKrHv6HLT5wxAQmkOQlQ/w3GACoRvWBNpeARWEzMV9wJBCSvO/ZtG3q5m0K5h5VrcZ6MKiFbFXAgGCju6zSkYuao1fFQVo3K9hMpNP833aTbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E407FEC;
-	Thu,  8 Aug 2024 05:39:16 -0700 (PDT)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50E703F766;
-	Thu,  8 Aug 2024 05:38:49 -0700 (PDT)
-Message-ID: <6da4f216-594b-4c51-848c-86e281402820@arm.com>
-Date: Thu, 8 Aug 2024 13:38:44 +0100
+	s=arc-20240116; t=1723120977; c=relaxed/simple;
+	bh=ru9hgd1BVGxo/YtGYhYFbme4Oi99DGqI5rek/Z89kb0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=q4KxZb8tA4EC3umDkXZ8+DURHcF7Li0PgtzodiF4VRnnsEBmRiVvYXeTAxQ9rrqIABB/ZrEpAJc43cnCaW0ULJ25Fc2nmEKlX78jdd2/7j6dodhXlrqnGr20/azIQcuBq6DzkpYeKboowyg8V0x3LwJOoP7BmmOhNE3T6yI2+zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WfmrN2xdNzpStK;
+	Thu,  8 Aug 2024 20:41:40 +0800 (CST)
+Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2C4161402CC;
+	Thu,  8 Aug 2024 20:42:52 +0800 (CST)
+Received: from localhost.localdomain (10.90.30.45) by
+ dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 8 Aug 2024 20:42:51 +0800
+From: Yunsheng Lin <linyunsheng@huawei.com>
+To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
+	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>, Andrew
+ Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH net-next v13 01/14] mm: page_frag: add a test module for page_frag
+Date: Thu, 8 Aug 2024 20:37:01 +0800
+Message-ID: <20240808123714.462740-2-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20240808123714.462740-1-linyunsheng@huawei.com>
+References: <20240808123714.462740-1-linyunsheng@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] iommu/dma: Support MSIs through nested domains
-To: "Tian, Kevin" <kevin.tian@intel.com>, Nicolin Chen <nicolinc@nvidia.com>,
- "jgg@nvidia.com" <jgg@nvidia.com>
-Cc: "joro@8bytes.org" <joro@8bytes.org>, "will@kernel.org" <will@kernel.org>,
- "shuah@kernel.org" <shuah@kernel.org>,
- "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <cover.1722644866.git.nicolinc@nvidia.com>
- <b1b8ff9c716f22f524be0313ad12e5c6d10f5bd4.1722644866.git.nicolinc@nvidia.com>
- <BN9PR11MB5276E59FBD67B1119B3E2A858CBF2@BN9PR11MB5276.namprd11.prod.outlook.com>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <BN9PR11MB5276E59FBD67B1119B3E2A858CBF2@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemf200006.china.huawei.com (7.185.36.61)
 
-On 06/08/2024 9:25 am, Tian, Kevin wrote:
->> From: Nicolin Chen <nicolinc@nvidia.com>
->> Sent: Saturday, August 3, 2024 8:32 AM
->>
->> From: Robin Murphy <robin.murphy@arm.com>
->>
->> Currently, iommu-dma is the only place outside of IOMMUFD and drivers
->> which might need to be aware of the stage 2 domain encapsulated within
->> a nested domain. This would be in the legacy-VFIO-style case where we're
-> 
-> why is it a legacy-VFIO-style? We only support nested in IOMMUFD.
+The testing is done by ensuring that the fragment allocated
+from a frag_frag_cache instance is pushed into a ptr_ring
+instance in a kthread binded to a specified cpu, and a kthread
+binded to a specified cpu will pop the fragment from the
+ptr_ring and free the fragment.
 
-Because with proper nesting we ideally shouldn't need the host-managed 
-MSI mess at all, which all stems from the old VFIO paradigm of 
-completely abstracting interrupts from userspace. I'm still hoping 
-IOMMUFD can grow its own interface for efficient MSI passthrough, where 
-the VMM can simply map the physical MSI doorbell into whatever IPA (GPA) 
-it wants it to appear at in the S2 domain, then whatever the guest does 
-with S1 it can program the MSI address into the endpoint accordingly 
-without us having to fiddle with it.
+CC: Alexander Duyck <alexander.duyck@gmail.com>
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+---
+ tools/testing/selftests/mm/Makefile           |   2 +
+ tools/testing/selftests/mm/page_frag/Makefile |  18 ++
+ .../selftests/mm/page_frag/page_frag_test.c   | 170 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   9 +-
+ 4 files changed, 198 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/mm/page_frag/Makefile
+ create mode 100644 tools/testing/selftests/mm/page_frag/page_frag_test.c
 
-FWIW, apart from IOMMUFD, we may also end up wanting something along 
-those lines for Arm CCA (if non-Secure proxying of T=1 MSIs becomes an 
-unavoidable thing).
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 901e0d07765b..e91ed29378fc 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -36,6 +36,8 @@ MAKEFLAGS += --no-builtin-rules
+ CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
+ LDLIBS = -lrt -lpthread -lm
+ 
++TEST_GEN_MODS_DIR := page_frag
++
+ TEST_GEN_FILES = cow
+ TEST_GEN_FILES += compaction_test
+ TEST_GEN_FILES += gup_longterm
+diff --git a/tools/testing/selftests/mm/page_frag/Makefile b/tools/testing/selftests/mm/page_frag/Makefile
+new file mode 100644
+index 000000000000..58dda74d50a3
+--- /dev/null
++++ b/tools/testing/selftests/mm/page_frag/Makefile
+@@ -0,0 +1,18 @@
++PAGE_FRAG_TEST_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
++KDIR ?= $(abspath $(PAGE_FRAG_TEST_DIR)/../../../../..)
++
++ifeq ($(V),1)
++Q =
++else
++Q = @
++endif
++
++MODULES = page_frag_test.ko
++
++obj-m += page_frag_test.o
++
++all:
++	+$(Q)make -C $(KDIR) M=$(PAGE_FRAG_TEST_DIR) modules
++
++clean:
++	+$(Q)make -C $(KDIR) M=$(PAGE_FRAG_TEST_DIR) clean
+diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+new file mode 100644
+index 000000000000..0e803db1ad79
+--- /dev/null
++++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+@@ -0,0 +1,170 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Test module for page_frag cache
++ *
++ * Copyright: linyunsheng@huawei.com
++ */
++
++#include <linux/mm.h>
++#include <linux/module.h>
++#include <linux/cpumask.h>
++#include <linux/completion.h>
++#include <linux/ptr_ring.h>
++#include <linux/kthread.h>
++
++static struct ptr_ring ptr_ring;
++static int nr_objs = 512;
++static atomic_t nthreads;
++static struct completion wait;
++static struct page_frag_cache test_frag;
++
++static int nr_test = 5120000;
++module_param(nr_test, int, 0);
++MODULE_PARM_DESC(nr_test, "number of iterations to test");
++
++static bool test_align;
++module_param(test_align, bool, 0);
++MODULE_PARM_DESC(test_align, "use align API for testing");
++
++static int test_alloc_len = 2048;
++module_param(test_alloc_len, int, 0);
++MODULE_PARM_DESC(test_alloc_len, "alloc len for testing");
++
++static int test_push_cpu;
++module_param(test_push_cpu, int, 0);
++MODULE_PARM_DESC(test_push_cpu, "test cpu for pushing fragment");
++
++static int test_pop_cpu;
++module_param(test_pop_cpu, int, 0);
++MODULE_PARM_DESC(test_pop_cpu, "test cpu for popping fragment");
++
++static int page_frag_pop_thread(void *arg)
++{
++	struct ptr_ring *ring = arg;
++	int nr = nr_test;
++
++	pr_info("page_frag pop test thread begins on cpu %d\n",
++		smp_processor_id());
++
++	while (nr > 0) {
++		void *obj = __ptr_ring_consume(ring);
++
++		if (obj) {
++			nr--;
++			page_frag_free(obj);
++		} else {
++			cond_resched();
++		}
++	}
++
++	if (atomic_dec_and_test(&nthreads))
++		complete(&wait);
++
++	pr_info("page_frag pop test thread exits on cpu %d\n",
++		smp_processor_id());
++
++	return 0;
++}
++
++static int page_frag_push_thread(void *arg)
++{
++	struct ptr_ring *ring = arg;
++	int nr = nr_test;
++
++	pr_info("page_frag push test thread begins on cpu %d\n",
++		smp_processor_id());
++
++	while (nr > 0) {
++		void *va;
++		int ret;
++
++		if (test_align) {
++			va = page_frag_alloc_align(&test_frag, test_alloc_len,
++						   GFP_KERNEL, SMP_CACHE_BYTES);
++
++			WARN_ONCE((unsigned long)va & (SMP_CACHE_BYTES - 1),
++				  "unaligned va returned\n");
++		} else {
++			va = page_frag_alloc(&test_frag, test_alloc_len, GFP_KERNEL);
++		}
++
++		if (!va)
++			continue;
++
++		ret = __ptr_ring_produce(ring, va);
++		if (ret) {
++			page_frag_free(va);
++			cond_resched();
++		} else {
++			nr--;
++		}
++	}
++
++	pr_info("page_frag push test thread exits on cpu %d\n",
++		smp_processor_id());
++
++	if (atomic_dec_and_test(&nthreads))
++		complete(&wait);
++
++	return 0;
++}
++
++static int __init page_frag_test_init(void)
++{
++	struct task_struct *tsk_push, *tsk_pop;
++	ktime_t start;
++	u64 duration;
++	int ret;
++
++	test_frag.va = NULL;
++	atomic_set(&nthreads, 2);
++	init_completion(&wait);
++
++	if (test_alloc_len > PAGE_SIZE || test_alloc_len <= 0 ||
++	    !cpu_active(test_push_cpu) || !cpu_active(test_pop_cpu))
++		return -EINVAL;
++
++	ret = ptr_ring_init(&ptr_ring, nr_objs, GFP_KERNEL);
++	if (ret)
++		return ret;
++
++	tsk_push = kthread_create_on_cpu(page_frag_push_thread, &ptr_ring,
++					 test_push_cpu, "page_frag_push");
++	if (IS_ERR(tsk_push))
++		return PTR_ERR(tsk_push);
++
++	tsk_pop = kthread_create_on_cpu(page_frag_pop_thread, &ptr_ring,
++					test_pop_cpu, "page_frag_pop");
++	if (IS_ERR(tsk_pop)) {
++		kthread_stop(tsk_push);
++		return PTR_ERR(tsk_pop);
++	}
++
++	start = ktime_get();
++	wake_up_process(tsk_push);
++	wake_up_process(tsk_pop);
++
++	pr_info("waiting for test to complete\n");
++	wait_for_completion(&wait);
++
++	duration = (u64)ktime_us_delta(ktime_get(), start);
++	pr_info("%d of iterations for %s testing took: %lluus\n", nr_test,
++		test_align ? "aligned" : "non-aligned", duration);
++
++	ptr_ring_cleanup(&ptr_ring, NULL);
++	page_frag_cache_drain(&test_frag);
++
++	return -EAGAIN;
++}
++
++static void __exit page_frag_test_exit(void)
++{
++}
++
++module_init(page_frag_test_init);
++module_exit(page_frag_test_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Yunsheng Lin <linyunsheng@huawei.com>");
++MODULE_DESCRIPTION("Test module for page_frag");
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 03ac4f2e1cce..3636d984b786 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -75,6 +75,8 @@ separated by spaces:
+ 	read-only VMAs
+ - mdwe
+ 	test prctl(PR_SET_MDWE, ...)
++- page_frag
++	test handling of page fragment allocation and freeing
+ 
+ example: ./run_vmtests.sh -t "hmm mmap ksm"
+ EOF
+@@ -231,7 +233,8 @@ run_test() {
+ 		("$@" 2>&1) | tap_prefix
+ 		local ret=${PIPESTATUS[0]}
+ 		count_total=$(( count_total + 1 ))
+-		if [ $ret -eq 0 ]; then
++		# page_frag_test.ko returns 11(EAGAIN) when insmod'ing to avoid rmmod
++		if [ $ret -eq 0 ] | [ $ret -eq 11 -a ${CATEGORY} == "page_frag" ]; then
+ 			count_pass=$(( count_pass + 1 ))
+ 			echo "[PASS]" | tap_prefix
+ 			echo "ok ${count_total} ${test}" | tap_output
+@@ -453,6 +456,10 @@ CATEGORY="mkdirty" run_test ./mkdirty
+ 
+ CATEGORY="mdwe" run_test ./mdwe_test
+ 
++CATEGORY="page_frag" run_test insmod ./page_frag/page_frag_test.ko
++
++CATEGORY="page_frag" run_test insmod ./page_frag/page_frag_test.ko test_alloc_len=12 test_align=1
++
+ echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}" | tap_prefix
+ echo "1..${count_total}" | tap_output
+ 
+-- 
+2.33.0
 
->> using host-managed MSIs with an identity mapping at stage 1, where it is
->> the underlying stage 2 domain which owns an MSI cookie and holds the
->> corresponding dynamic mappings. Hook up the new op to resolve what we
->> need from a nested domain.
->>
->> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
->> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
->> ---
->>   drivers/iommu/dma-iommu.c | 18 ++++++++++++++++--
->>   include/linux/iommu.h     |  4 ++++
->>   2 files changed, 20 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
->> index 7b1dfa0665df6..05e04934a5f81 100644
->> --- a/drivers/iommu/dma-iommu.c
->> +++ b/drivers/iommu/dma-iommu.c
->> @@ -1799,6 +1799,20 @@ static struct iommu_dma_msi_page
->> *iommu_dma_get_msi_page(struct device *dev,
->>   	return NULL;
->>   }
->>
->> +/*
->> + * Nested domains may not have an MSI cookie or accept mappings, but
->> they may
->> + * be related to a domain which does, so we let them tell us what they need.
->> + */
->> +static struct iommu_domain
->> *iommu_dma_get_msi_mapping_domain(struct device *dev)
->> +{
->> +	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
->> +
->> +	if (domain && domain->type == IOMMU_DOMAIN_NESTED &&
->> +	    domain->ops->get_msi_mapping_domain)
-> 
-> I'm not sure the core should restrict it to the NESTED type. Given
-> there is a new domain ops any type restriction can be handled
-> inside the callback. Anyway the driver should register the op
-> for a domain only when there is a need.
-
-Nested should remain the only case where domains are chained together 
-such that the VFIO MSI cookie may be hiding somewhere else. This is 
-effectively documenting that implementing the callback for any other 
-domain type would be a bad smell. Much like how the mapping-related ops 
-are explicitly short-circuited for non-paging domain types.
-
-Thanks,
-Robin.
-
->> +		domain = domain->ops->get_msi_mapping_domain(domain);
->> +	return domain;
->> +}
->> +
->>   /**
->>    * iommu_dma_prepare_msi() - Map the MSI page in the IOMMU domain
->>    * @desc: MSI descriptor, will store the MSI page
->> @@ -1809,7 +1823,7 @@ static struct iommu_dma_msi_page
->> *iommu_dma_get_msi_page(struct device *dev,
->>   int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr)
->>   {
->>   	struct device *dev = msi_desc_to_dev(desc);
->> -	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
->> +	struct iommu_domain *domain =
->> iommu_dma_get_msi_mapping_domain(dev);
->>   	struct iommu_dma_msi_page *msi_page;
->>   	static DEFINE_MUTEX(msi_prepare_lock); /* see below */
->>
->> @@ -1842,7 +1856,7 @@ int iommu_dma_prepare_msi(struct msi_desc
->> *desc, phys_addr_t msi_addr)
->>   void iommu_dma_compose_msi_msg(struct msi_desc *desc, struct msi_msg
->> *msg)
->>   {
->>   	struct device *dev = msi_desc_to_dev(desc);
->> -	const struct iommu_domain *domain =
->> iommu_get_domain_for_dev(dev);
->> +	const struct iommu_domain *domain =
->> iommu_dma_get_msi_mapping_domain(dev);
->>   	const struct iommu_dma_msi_page *msi_page;
->>
->>   	msi_page = msi_desc_get_iommu_cookie(desc);
->> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
->> index 4d47f2c333118..69ed76f9c3ec4 100644
->> --- a/include/linux/iommu.h
->> +++ b/include/linux/iommu.h
->> @@ -638,6 +638,8 @@ struct iommu_ops {
->>    * @enable_nesting: Enable nesting
->>    * @set_pgtable_quirks: Set io page table quirks (IO_PGTABLE_QUIRK_*)
->>    * @free: Release the domain after use.
->> + * @get_msi_mapping_domain: Return the related iommu_domain that
->> should hold the
->> + *                          MSI cookie and accept mapping(s).
->>    */
->>   struct iommu_domain_ops {
->>   	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
->> @@ -668,6 +670,8 @@ struct iommu_domain_ops {
->>   				  unsigned long quirks);
->>
->>   	void (*free)(struct iommu_domain *domain);
->> +	struct iommu_domain *
->> +		(*get_msi_mapping_domain)(struct iommu_domain
->> *domain);
->>   };
->>
->>   /**
->> --
->> 2.43.0
->>
-> 
