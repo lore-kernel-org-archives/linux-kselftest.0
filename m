@@ -1,148 +1,106 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E88C19AD90;
-	Tue, 13 Aug 2024 16:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CF8370
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2024 16:34:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723566547; cv=none; b=Rmz6p/4vYSIZlVWQRjpeZS86Qt/wnD4mO8Jlc2DszwcS+l+T03Cofo/MMoNQ5OyHlDy8DVI3TY3kyJSuLzuuPdbcalnmlRF8zqQakRHsumkfE78MFxPwJi2QiVuTl2XgR2uHO32zSkHQsLCT9icUMWaJfMnfz/LyMAbPEYG0tQo=
+	t=1723566853; cv=none; b=LYLEkhfn7yKOzqXE+/UQ5/f01WBXTex6aTaJqd2jTG3MdToX+QkIAHDlkPeTDh2mwJS8gXpxTK4SMpwdLV0VnemJZ7mC8nap9w6CkfNEUZt7M7PsjpoYy4nvg8CYTHxFsqduYOOBQ0Mf7bxpRewipxfd+R5BXeIuLudSIgC6lQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723566547; c=relaxed/simple;
-	bh=JGh9VB5dzq5Ts+lVa17EXNj6slFzF9LotVeHXIQDwPM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bOqMHVUyOZty6pPPFA6w6ZfuZwO6KNndJUtZMEEIf5mErhlOp6Zi5qH/g/eptA7YxMvu+IrCXD2tJMyK7DhIMTm0ngd3blthX7T9UmkVEFDdVuEKOjRREDlFPcl9rKf1FelrvFQtFYnnTgXYpFdiwwIif+0aZ7yHJrWuz8TIzEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jy34e68H; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723566853; c=relaxed/simple;
+	bh=s9FhjpgJBV7aZ0bh7A229jvkNpOcRXx9yhDFIcvqw0A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UJRhFq8IMaa2N6tFlcDDWWfCl56OXDqtO/5M5MF3WTNtVTaOptHF61+qmbxKH88iBMYW///7IjyNdj4AtRb4NHENr3BhWRaUydB+XnIlXiW1MbrCtnIF3bWa3KVVuNlM/JZpac0Wnuutr6UdklqSYWAs5SUyU/7NwG44A4ZHAqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Jj60vpv6; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jy34e68H"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5b8c2a611adso6691530a12.1;
-        Tue, 13 Aug 2024 09:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723566544; x=1724171344; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MsbiuRUlmo4RLNQnmGHI8pchnz0f5Sp6onkgIW0DlX4=;
-        b=jy34e68HB7yvy6qkLBKIS1L3FGI2FjTL/vFLQ6dURmeTq22dp7gmp7+QtkxzSxaL/9
-         qm39u4iE14WX5it0/PmNtr6M8CUScX++SuElRySrtgUt61bRWShHIxPmr/EdNEsIjpHr
-         u4t1Cv2TaZMG7qB6v9nDsZlAc4yuFv+ATD5iOXsgJwPNkgks8OodkY63hkHVUi9bH4og
-         zUfvQ5R78DouIO+FBsUIo58e1J8oFgcrz7fvRTmeehOFMd13FZJA9EvqPq07Ah1SYtxA
-         PB+AWce2LviB91Z9rCbQ0dmqa+Mlu+50+kAAfZrVr37eoxSpu96QGE/T1sVrfZvya5Er
-         xcbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723566544; x=1724171344;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MsbiuRUlmo4RLNQnmGHI8pchnz0f5Sp6onkgIW0DlX4=;
-        b=njCcuQhzNiN+47tm1vcVlhK6rEy5jWYdPkQrwgHVBIArQ68aaQGifeNu3a3a1T4J3w
-         aB5p7ncb+Di8mBh+M/66jzH7Uch3Y7fqq0lC2W/d8/lxVL3SRQVYTT11Lup8zqBwxud2
-         46jgGe3cN8S6s89g9X01s2Czd1RdJCjgCIQ1Xg94rrGTh8aRMak47Mc1zRJHRCShDsm8
-         c1DLp6E/6NUhHap5PSTpxktH3bGkHiTVY5/y/viE8CWhl03hc3fuxDskOkxSwmm/Bs1N
-         GQyw6F8nDZGfPjPPOpxiWpnmZCThGYmJKMNMf4lR+/B/O7U6wqEm9i8FaVwbnQQ2uxw6
-         NSag==
-X-Forwarded-Encrypted: i=1; AJvYcCWVw5oI670GNSE06J7JZulLsDamUCPp5YxRSHLgZvWe6z3z/kohebhPWpcrp9z5gE2SkF7Y7fTYVySdChoxZTI3+LD0iX81uoxMjmUQ+1OZJ8227QxnTXKpEzHQ9tKKcx8A3WCUhzsDqF8UiieUepLnZvRpPkmEaTyXq1FjKlh0TJ0ngVof
-X-Gm-Message-State: AOJu0YxOSKbqrPABb+3eAw99tBa1cC9E/N+UB5X1WkoQKbgfhPTDeh1n
-	H9TvXQU1uxR4Nu/zFn9AQk2V1NYVvJUsZ+4N3WvzZr1/ruXJGLrT
-X-Google-Smtp-Source: AGHT+IFhM8MfQy/NKffVoj7J9CoSEpQI9NXHY4jV8akjJkOPDrXqH/6wlV6/772rcL7gJR8l95SVmg==
-X-Received: by 2002:a05:6402:84c:b0:5a2:abcb:c4cf with SMTP id 4fb4d7f45d1cf-5bea1c7f2c7mr31901a12.22.1723566544025;
-        Tue, 13 Aug 2024 09:29:04 -0700 (PDT)
-Received: from localhost (dh207-40-227.xnet.hr. [88.207.40.227])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bd1968af77sm3005390a12.40.2024.08.13.09.29.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 09:29:03 -0700 (PDT)
-From: Mirsad Todorovac <mtodorovac69@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Mirsad Todorovac <mtodorovac69@gmail.com>,
-	Simon Horman <horms@kernel.org>
-Subject: [PATCH v2 1/1] selftests: net: af_unix: convert param to const char* in __recvpair() to fix warning
-Date: Tue, 13 Aug 2024 18:20:06 +0200
-Message-ID: <20240813162004.2464421-3-mtodorovac69@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Jj60vpv6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1723566851;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Nq8/RpUOFyMdFBwvGw/awyKLLWWIuDz647gTnyiHsrc=;
+	b=Jj60vpv6QBFNEErqYdC9Obvgikb2AKtdv+NfLBKiCwdcewqYIqps4FIUANzYM7sv62WBym
+	1Se52Elwuf0+SCsZ2+far6igBbNUlz1k+gVZgqeEKtgQqMZNEWhjWsUULgaPnHkGpys5gN
+	AHPp8J3YjoHQapikwJ5KfySODTH72fc=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-310-g2DMM72jOnSloMrjUOyFGg-1; Tue,
+ 13 Aug 2024 12:34:06 -0400
+X-MC-Unique: g2DMM72jOnSloMrjUOyFGg-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D605F18EA948;
+	Tue, 13 Aug 2024 16:34:01 +0000 (UTC)
+Received: from asgard.redhat.com (unknown [10.45.242.18])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8E0D419560AA;
+	Tue, 13 Aug 2024 16:33:51 +0000 (UTC)
+Date: Tue, 13 Aug 2024 18:33:48 +0200
+From: Eugene Syromiatnikov <esyr@redhat.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Artem Savkov <asavkov@redhat.com>
+Subject: Re: [PATCH v2] selftests: fix relative rpath usage
+Message-ID: <20240813163348.GA30739@asgard.redhat.com>
+References: <20240812165650.GA5102@asgard.redhat.com>
+ <3667e585-ecaa-4664-9e6e-75dc9de928e8@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3667e585-ecaa-4664-9e6e-75dc9de928e8@linuxfoundation.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-GCC 13.2.0 reported warning about (void *) being used as a param where (char *)
-is expected:
+On Mon, Aug 12, 2024 at 05:03:45PM -0600, Shuah Khan wrote:
+> On 8/12/24 10:56, Eugene Syromiatnikov wrote:
+> >The relative RPATH ("./") supplied to linker options in CFLAGS is resolved
+> >relative to current working directory and not the executable directory,
+> >which will lead in incorrect resolution when the test executables are run
+> >from elsewhere.  Changing it to $ORIGIN makes it resolve relative
+> >to the directory in which the executables reside, which is supposedly
+> >the desired behaviour.  This patch also moves these CFLAGS to lib.mk,
+> >so the RPATH is provided for all selftest binaries, which is arguably
+> >a useful default.
+> 
+> Can you elaborate on the erros you would see if this isn't fixed? I understand
+> that check-rpaths tool - howebver I would like to know how it manifests and
 
-In file included from msg_oob.c:14:
-msg_oob.c: In function ‘__recvpair’:
-../../kselftest_harness.h:106:40: warning: format ‘%s’ expects argument of type ‘char *’, \
-						but argument 6 has type ‘const void *’ [-Wformat=]
-  106 |                 fprintf(TH_LOG_STREAM, "# %s:%d:%s:" fmt "\n", \
-      |                                        ^~~~~~~~~~~~~
-../../kselftest_harness.h:101:17: note: in expansion of macro ‘__TH_LOG’
-  101 |                 __TH_LOG(fmt, ##__VA_ARGS__); \
-      |                 ^~~~~~~~
-msg_oob.c:235:17: note: in expansion of macro ‘TH_LOG’
-  235 |                 TH_LOG("Expected:%s", expected_errno ? strerror(expected_errno) : expected_buf);
-      |                 ^~~~~~
-../../kselftest_harness.h:106:40: warning: format ‘%s’ expects argument of type ‘char *’, \
-						but argument 6 has type ‘const void *’ [-Wformat=]
-  106 |                 fprintf(TH_LOG_STREAM, "# %s:%d:%s:" fmt "\n", \
-      |                                        ^~~~~~~~~~~~~
-../../kselftest_harness.h:101:17: note: in expansion of macro ‘__TH_LOG’
-  101 |                 __TH_LOG(fmt, ##__VA_ARGS__); \
-      |                 ^~~~~~~~
-msg_oob.c:259:25: note: in expansion of macro ‘TH_LOG’
-  259 |                 TH_LOG("Expected:%s", expected_errno ? strerror(expected_errno) : expected_buf);
-      |                 ^~~~~~
+One would be unable to execute the test binaries that require additional
+locally built dynamic libraries outside the directories in which they reside:
 
-As Simon suggested, all calls to __recvpair() have char * as expected_buf param, so
-it is safe to change param type from (const void *) to (const char *), which silences
-the warning.
+    [build@builder selftests]$ alsa/mixer-test
+    alsa/mixer-test: error while loading shared libraries: libatest.so: cannot open shared object file: No such file or directory
 
-Fixes: d098d77232c37 ("selftest: af_unix: Add msg_oob.c.")
-Reported-by: Mirsad Todorovac <mtodorovac69@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Suggested-by: Simon Horman <horms@kernel.org>
-Signed-off-by: Mirsad Todorovac <mtodorovac69@gmail.com>
----
-v1 -> v2:
- fixed a typo.
- change funct param type rather than making two casts, as Simon suggested.
- changed Subject: line to reflect the modification.
- minor formatting changes.
+> how would you reproduce this problem while running selftests?
 
-v1:
- initial version to fix the compiler warning.
-
- tools/testing/selftests/net/af_unix/msg_oob.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/af_unix/msg_oob.c b/tools/testing/selftests/net/af_unix/msg_oob.c
-index 16d0c172eaeb..535eb2c3d7d1 100644
---- a/tools/testing/selftests/net/af_unix/msg_oob.c
-+++ b/tools/testing/selftests/net/af_unix/msg_oob.c
-@@ -209,7 +209,7 @@ static void __sendpair(struct __test_metadata *_metadata,
- 
- static void __recvpair(struct __test_metadata *_metadata,
- 		       FIXTURE_DATA(msg_oob) *self,
--		       const void *expected_buf, int expected_len,
-+		       const char *expected_buf, int expected_len,
- 		       int buf_len, int flags)
- {
- 	int i, ret[2], recv_errno[2], expected_errno = 0;
--- 
-2.43.0
+This usually doesn't come up in a regular selftests usage so far, as they
+are usually run via make, and make descends into specific test directories
+to execute make the respective make targets there, triggering the execution
+of the specific test bineries.
 
