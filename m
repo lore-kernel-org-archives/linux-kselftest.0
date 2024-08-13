@@ -1,416 +1,388 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8777199EAC;
-	Tue, 13 Aug 2024 12:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9886E1993A7;
+	Tue, 13 Aug 2024 12:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723550965; cv=none; b=kamvog38eScKAUQJRutpk2PiWYTjMb/JkuJ3Mh9Ym2YmvMxpzi4ro4opi86jm1iKROa+qAiIUGYsB+xY7s9Z1FyWHUo7gnYPAoJGNk0YkqHFL46h8ZiBw4gRl4ppxBu/3y6yHMPlPU4hxaphTx0fqJeukJ4V4ES7IzbKNqERMAc=
+	t=1723553122; cv=none; b=m9GJ/bM7JKMd/oPO4hkcbvZpoyusNto6NGs41bcwEsAJwis9IDluerjGPdzdkOr0qjH9Wo99oLFOV4R/OaKi3zOAAxQg0/5WWM8ICp975XgssuLEXd+UwvRBP/0o+9n2gNXcDK86PGcAuoR4T2tBK41Cq+QAeu/lTvaWGb9L0Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723550965; c=relaxed/simple;
-	bh=d431flfCwo5JfiJIOuZNQ+jUtORnGIbQuMDW0ScCtm8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JBWVPoeAepw7SXLgUCKU9QXeAAJrS9NbhiUtf8tfnAHq8By2gsIfs/MirY4OmRyBfDQaTGJ0+bxNzA3uw6btVp1b1/zsmuKK2ZdpNudujty/Q7KV880eIetiEXTwg4KVP3FT/nNwkR5V6XWO3syCO/V01NxVbjvSFEH38rH62TE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CJIND7GZ; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723553122; c=relaxed/simple;
+	bh=MYYGYRKkXEdbsBw7LOyr3lZWyfCyuPGsB8+wqTE9em8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=iCxQtYUpoV3Yb786S+wB7tNA7CbACxR4Gnf+jcH7kALF9yAMWCj7sFiC3zKnyUbXemo2kfAG2VJGJ/JxS+M4MQkwDxb2sBd7SHzUvPrmT/30QFHI3e6EF4PIzGHyKkBaML/G5XA2a2LqOHbzTs+6FY2SGnKKfClQMPlRWEITiP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Up5llrnF; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CJIND7GZ"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-36830a54b34so177634f8f.0;
-        Tue, 13 Aug 2024 05:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723550962; x=1724155762; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nh5/S5HpIcMewQ8ZsaGFHflrB5SYUJo8r1Ryc6FFp3I=;
-        b=CJIND7GZYAHSakYAIxuK7TxxT7jJGMqWUToBCH+57Zo/KatpxRTsyy6Z00FRo9r/tY
-         QFpiLNTk5h+dkuKKRPLmX1tFW4Dhb0QYjgkpp+Af+O2E1C1+2uPKWP+ABaBzX9IRXpgv
-         LblFADwMmwyf/8gLxbYnRGTGsf5jZdPjNT//qGMMQo+AC35WXXQgEhtVJI1zOqQOM/mo
-         7a/caOrveH8uI4lfatjZcBkW81IHn/qX515x2JiwTfnBjGFl2BmwHXr8/aGnq87+ICV0
-         eDhrn9+ULB6xTuD5FnuNx87lR4ZKWMmdnKAkObJZ+twDjgv0kHznLBWVeIZZ0ivcDzBo
-         Nmlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723550962; x=1724155762;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nh5/S5HpIcMewQ8ZsaGFHflrB5SYUJo8r1Ryc6FFp3I=;
-        b=K492cdmmAdpQBv+D1HxkyBBgx+ohoCqzf0WmMI1pUsYgEZTDd71lM4DroJesJDSdSI
-         eUzAz/pDoXCNVYRHm25Mz2EJIIlxxvhnpxY4JeQNwui6Ba/sN5Mhsn5WZvLbhM7l7jlV
-         GeH2hFVvSOEV4zYXzqrCLhFmCRENfeHcb6yiNjPpuQD7N34sVE/uPu4cZsjo54dmaURc
-         Ei9omhskJY263DacKVhQHakULCFAbTvPi+MBgQ7pTkPSJJhgNK2NQe76dZKJIrFmnvQP
-         IxKIpROI09vljL7f1f/ld64iJ30HOcsG3mBciWNTY+tdOS01g3LPCdsWW785ZW6Mfi+8
-         AUYA==
-X-Forwarded-Encrypted: i=1; AJvYcCWPxxSVhLTTeMPg8PMp4Ke947wRG2pbIJbxoihELtFckwv5yLANPZyrUzNiiZaj23SViXWlzfoPhp2TOtJgjqiR+2ooV2XdRg8S+b0dkXTvJzr+t93WD0lPfD3JUmP9+quDGuOepJ6V1FLIuHhHqnqaIT53T34QPsHjvT5zoccq0kivdpV21akLE0CsIDmBagxT1DGtTYl6/RzqetnpmSnTLxOw+cY=
-X-Gm-Message-State: AOJu0Yyl33A5dFKnSEaxMMmIKH9edDzQA34Z6LoITE3oXMavOaIQfTF7
-	y0sTxaXJlnJPlUNSdEeAZ/M7CIRD+qkBMg7v8dVjnXXbBHYUozZB
-X-Google-Smtp-Source: AGHT+IGlWKm0lXBfHU2WHl9N6+ZqcxebPNvJLurPjr4HSVJZ4cXLC7Fdm3rSVjtrwhZKuMsqYdzFbw==
-X-Received: by 2002:a05:6000:1561:b0:365:da7f:6c13 with SMTP id ffacd0b85a97d-3716fbe0c4fmr868229f8f.2.1723550962074;
-        Tue, 13 Aug 2024 05:09:22 -0700 (PDT)
-Received: from ivan-HLYL-WXX9.. ([2a01:4b00:d20e:7300:6db6:f2bf:8865:5d31])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4e51eb52sm10204590f8f.74.2024.08.13.05.09.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 05:09:21 -0700 (PDT)
-From: Ivan Orlov <ivan.orlov0322@gmail.com>
-To: perex@perex.cz,
-	tiwai@suse.com,
-	corbet@lwn.net,
-	broonie@kernel.org,
-	shuah@kernel.org
-Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	christophe.jaillet@wanadoo.fr,
-	aholzinger@gmx.de
-Subject: [PATCH v5 4/4] selftests: ALSA: Cover userspace-driven timers with test
-Date: Tue, 13 Aug 2024 13:07:01 +0100
-Message-Id: <20240813120701.171743-5-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240813120701.171743-1-ivan.orlov0322@gmail.com>
-References: <20240813120701.171743-1-ivan.orlov0322@gmail.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Up5llrnF"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 02D98C0002;
+	Tue, 13 Aug 2024 12:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1723553111;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9kGz1szDpBn/CZxvhoM0F24cwT9uH/dncdiyqqwOY0g=;
+	b=Up5llrnFFT5KOjBYUiiW1280re1UBSeZAWtQrvojBzSQFeyjv+dvRSW9SPBSoNux9s4I79
+	gRHEpnEpRg87AoWMT5qosN2uURJFkpRduXH1y0weFsNv+sizjBKoXt8/7SdPjsNHZVb2ZK
+	O9DaUo9k+QULLpkY1yQOCVvIPgad+gRQGzo1Ko+k510vhs3tvtsG6TAzHbm97S1raS0hpi
+	viN55dn9E9WhDZaCqFuzOWKZawJczbeoBVdAjCUWVLNsTV/H/hQjIdsSNTJrWS4ydNLIir
+	qPJZHcsa1m4ZOxn046kF/LEYBFjKFHuDTeAMaK9Bsu+QDhVvVTptb++nocnJwA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Tue, 13 Aug 2024 14:45:05 +0200
+Subject: [PATCH bpf-next v4 1/4] selftests/bpf: convert
+ get_current_cgroup_id_user to test_progs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20240813-convert_cgroup_tests-v4-1-a33c03458cf6@bootlin.com>
+References: <20240813-convert_cgroup_tests-v4-0-a33c03458cf6@bootlin.com>
+In-Reply-To: <20240813-convert_cgroup_tests-v4-0-a33c03458cf6@bootlin.com>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.1
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-Add a test for the new functionality of userspace-driven timers and the
-tool which allows us to count timer ticks in a certain time period. The
-test:
+get_current_cgroup_id_user allows testing for bpf_get_current_cgroup_id()
+bpf API but is not integrated into test_progs, and so is not tested
+automatically in CI.
 
-1. Creates a userspace-driven timer with ioctl to /dev/snd/timer
-2. Starts the `global-timer` application to count the ticks of the timer
-from step 1.
-3. Asynchronously triggers the timer multiple times with some interval
-4. Compares the amount of caught ticks with the amount of trigger calls.
+Convert it to the test_progs framework to allow running it automatically.
+The most notable differences with the old test are the following:
+- the new test relies on autoattach instead of manually hooking/enabling
+  the targeted tracepoint through perf_event, which reduces quite a lot the
+  test code size
+- it also accesses bpf prog data through global variables instead of maps
+- sleep duration passed to nanosleep syscall has been reduced to its
+  minimum to not impact overall CI duration (we only care about the syscall
+  being properly triggered, not about the passed duration)
 
-Since we can't include <alsa/asoundlib.h> and <sound/asound.h> in one
-file due to overlapping declarations, I have to split the test into two
-applications: one of them counts the amount of timer ticks in the
-defined time period, and another one is the actual test which creates
-the timer, triggers it periodically and starts the first app to count
-the amount of ticks in a separate thread.
-
-Besides from testing the functionality itself, the test represents a
-sample application showing userspace-driven ALSA timers API.
-
-Also, the timer test includes a test case which tries to create a timer
-with invalid resolution (=0), and NULL as a timer info structure.
-
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-V1 -> V2:
-- Return NULL in the pthreaded function (ticking_func)
-- Process TIMER_NO_EVENT enum in the timer app output processing loop
-V2 -> V3:
-- Add new test case to cover invalid period sizes and frame rates for
-the userspace-driven timers (to test the sanity checks in
-snd_utimer_create)
-V3 -> V4:
-- Use the new structure declarations to define timer info
-- Calculate the timer resolution in userspace from frame rate and
-period size
-- Remove majority of test-cases for invalid timer test as we don't do
-many sanity checks in the kernel anymore
-- Move `global-timer` into the TEST_GEN_PROGS_EXTENDED list as it is
-not a standalone test but an app called from `utimer-test.c`
-- Add test case which tries to pass NULL as a timer info structure for
-the timer creation ioctl
-V4 -> V5:
-- Update the test to use snd_timer_uinfo `fd` field when getting the
-timer file descriptor
+Changes in v3:
+- close leaking cgroup file descriptor
 
- tools/testing/selftests/alsa/Makefile       |   4 +-
- tools/testing/selftests/alsa/global-timer.c |  87 +++++++++++
- tools/testing/selftests/alsa/utimer-test.c  | 164 ++++++++++++++++++++
- 3 files changed, 253 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/alsa/global-timer.c
- create mode 100644 tools/testing/selftests/alsa/utimer-test.c
+Changes in v2:
+- use global variables instead of maps
 
-diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
-index c1ce39874e2b..25be68025290 100644
---- a/tools/testing/selftests/alsa/Makefile
-+++ b/tools/testing/selftests/alsa/Makefile
-@@ -12,9 +12,9 @@ LDLIBS+=-lpthread
+The new test_progs part has been tested in a local qemu environment:
+
+  ./test_progs -a cgroup_get_current_cgroup_id
+  47      cgroup_get_current_cgroup_id:OK
+  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+---
+ tools/testing/selftests/bpf/.gitignore             |   1 -
+ tools/testing/selftests/bpf/Makefile               |   3 +-
+ tools/testing/selftests/bpf/get_cgroup_id_user.c   | 151 ---------------------
+ .../bpf/prog_tests/cgroup_get_current_cgroup_id.c  |  46 +++++++
+ .../selftests/bpf/progs/get_cgroup_id_kern.c       |  26 +---
+ 5 files changed, 51 insertions(+), 176 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index 8f14d8faeb0b..7d4d5d3e0210 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -19,7 +19,6 @@ test_sock
+ urandom_read
+ test_sockmap
+ test_lirc_mode2_user
+-get_cgroup_id_user
+ test_skb_cgroup_id_user
+ test_cgroup_storage
+ test_flow_dissector
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 7e4b107b37b4..7e8f6354c115 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -67,7 +67,7 @@ endif
  
- OVERRIDE_TARGETS = 1
- 
--TEST_GEN_PROGS := mixer-test pcm-test test-pcmtest-driver
-+TEST_GEN_PROGS := mixer-test pcm-test test-pcmtest-driver utimer-test
- 
--TEST_GEN_PROGS_EXTENDED := libatest.so
-+TEST_GEN_PROGS_EXTENDED := libatest.so global-timer
- 
- TEST_FILES := conf.d pcm-test.conf
- 
-diff --git a/tools/testing/selftests/alsa/global-timer.c b/tools/testing/selftests/alsa/global-timer.c
+ # Order correspond to 'make run_tests' order
+ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
+-	test_sock test_sockmap get_cgroup_id_user \
++	test_sock test_sockmap \
+ 	test_cgroup_storage \
+ 	test_tcpnotify_user test_sysctl \
+ 	test_progs-no_alu32
+@@ -295,7 +295,6 @@ $(OUTPUT)/test_skb_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_sock: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELPERS)
+-$(OUTPUT)/get_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_cgroup_storage: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_sock_fields: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_sysctl: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+deleted file mode 100644
+index aefd83ebdcd7..000000000000
+--- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
++++ /dev/null
+@@ -1,151 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-// Copyright (c) 2018 Facebook
+-
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include <errno.h>
+-#include <fcntl.h>
+-#include <syscall.h>
+-#include <unistd.h>
+-#include <linux/perf_event.h>
+-#include <sys/ioctl.h>
+-#include <sys/time.h>
+-#include <sys/types.h>
+-#include <sys/stat.h>
+-
+-#include <linux/bpf.h>
+-#include <bpf/bpf.h>
+-#include <bpf/libbpf.h>
+-
+-#include "cgroup_helpers.h"
+-#include "testing_helpers.h"
+-
+-#define CHECK(condition, tag, format...) ({		\
+-	int __ret = !!(condition);			\
+-	if (__ret) {					\
+-		printf("%s:FAIL:%s ", __func__, tag);	\
+-		printf(format);				\
+-	} else {					\
+-		printf("%s:PASS:%s\n", __func__, tag);	\
+-	}						\
+-	__ret;						\
+-})
+-
+-static int bpf_find_map(const char *test, struct bpf_object *obj,
+-			const char *name)
+-{
+-	struct bpf_map *map;
+-
+-	map = bpf_object__find_map_by_name(obj, name);
+-	if (!map)
+-		return -1;
+-	return bpf_map__fd(map);
+-}
+-
+-#define TEST_CGROUP "/test-bpf-get-cgroup-id/"
+-
+-int main(int argc, char **argv)
+-{
+-	const char *probe_name = "syscalls/sys_enter_nanosleep";
+-	const char *file = "get_cgroup_id_kern.bpf.o";
+-	int err, bytes, efd, prog_fd, pmu_fd;
+-	int cgroup_fd, cgidmap_fd, pidmap_fd;
+-	struct perf_event_attr attr = {};
+-	struct bpf_object *obj;
+-	__u64 kcgid = 0, ucgid;
+-	__u32 key = 0, pid;
+-	int exit_code = 1;
+-	char buf[256];
+-	const struct timespec req = {
+-		.tv_sec = 1,
+-		.tv_nsec = 0,
+-	};
+-
+-	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
+-	if (CHECK(cgroup_fd < 0, "cgroup_setup_and_join", "err %d errno %d\n", cgroup_fd, errno))
+-		return 1;
+-
+-	/* Use libbpf 1.0 API mode */
+-	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+-
+-	err = bpf_prog_test_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+-	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
+-		goto cleanup_cgroup_env;
+-
+-	cgidmap_fd = bpf_find_map(__func__, obj, "cg_ids");
+-	if (CHECK(cgidmap_fd < 0, "bpf_find_map", "err %d errno %d\n",
+-		  cgidmap_fd, errno))
+-		goto close_prog;
+-
+-	pidmap_fd = bpf_find_map(__func__, obj, "pidmap");
+-	if (CHECK(pidmap_fd < 0, "bpf_find_map", "err %d errno %d\n",
+-		  pidmap_fd, errno))
+-		goto close_prog;
+-
+-	pid = getpid();
+-	bpf_map_update_elem(pidmap_fd, &key, &pid, 0);
+-
+-	if (access("/sys/kernel/tracing/trace", F_OK) == 0) {
+-		snprintf(buf, sizeof(buf),
+-			 "/sys/kernel/tracing/events/%s/id", probe_name);
+-	} else {
+-		snprintf(buf, sizeof(buf),
+-			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+-	}
+-	efd = open(buf, O_RDONLY, 0);
+-	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+-		goto close_prog;
+-	bytes = read(efd, buf, sizeof(buf));
+-	close(efd);
+-	if (CHECK(bytes <= 0 || bytes >= sizeof(buf), "read",
+-		  "bytes %d errno %d\n", bytes, errno))
+-		goto close_prog;
+-
+-	attr.config = strtol(buf, NULL, 0);
+-	attr.type = PERF_TYPE_TRACEPOINT;
+-	attr.sample_type = PERF_SAMPLE_RAW;
+-	attr.sample_period = 1;
+-	attr.wakeup_events = 1;
+-
+-	/* attach to this pid so the all bpf invocations will be in the
+-	 * cgroup associated with this pid.
+-	 */
+-	pmu_fd = syscall(__NR_perf_event_open, &attr, getpid(), -1, -1, 0);
+-	if (CHECK(pmu_fd < 0, "perf_event_open", "err %d errno %d\n", pmu_fd,
+-		  errno))
+-		goto close_prog;
+-
+-	err = ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0);
+-	if (CHECK(err, "perf_event_ioc_enable", "err %d errno %d\n", err,
+-		  errno))
+-		goto close_pmu;
+-
+-	err = ioctl(pmu_fd, PERF_EVENT_IOC_SET_BPF, prog_fd);
+-	if (CHECK(err, "perf_event_ioc_set_bpf", "err %d errno %d\n", err,
+-		  errno))
+-		goto close_pmu;
+-
+-	/* trigger some syscalls */
+-	syscall(__NR_nanosleep, &req, NULL);
+-
+-	err = bpf_map_lookup_elem(cgidmap_fd, &key, &kcgid);
+-	if (CHECK(err, "bpf_map_lookup_elem", "err %d errno %d\n", err, errno))
+-		goto close_pmu;
+-
+-	ucgid = get_cgroup_id(TEST_CGROUP);
+-	if (CHECK(kcgid != ucgid, "compare_cgroup_id",
+-		  "kern cgid %llx user cgid %llx", kcgid, ucgid))
+-		goto close_pmu;
+-
+-	exit_code = 0;
+-	printf("%s:PASS\n", argv[0]);
+-
+-close_pmu:
+-	close(pmu_fd);
+-close_prog:
+-	bpf_object__close(obj);
+-cleanup_cgroup_env:
+-	cleanup_cgroup_environment();
+-	return exit_code;
+-}
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_get_current_cgroup_id.c b/tools/testing/selftests/bpf/prog_tests/cgroup_get_current_cgroup_id.c
 new file mode 100644
-index 000000000000..c15ec0ba851a
+index 000000000000..7a1643b03bf3
 --- /dev/null
-+++ b/tools/testing/selftests/alsa/global-timer.c
-@@ -0,0 +1,87 @@
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_get_current_cgroup_id.c
+@@ -0,0 +1,46 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * This tool is used by the utimer test, and it allows us to
-+ * count the ticks of a global timer in a certain time frame
-+ * (which is set by `timeout` parameter).
-+ *
-+ * Author: Ivan Orlov <ivan.orlov0322@gmail.com>
-+ */
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <alsa/asoundlib.h>
-+#include <time.h>
 +
-+static int ticked;
-+static void async_callback(snd_async_handler_t *ahandler)
++#include <sys/stat.h>
++#include <sys/sysmacros.h>
++#include "test_progs.h"
++#include "cgroup_helpers.h"
++#include "get_cgroup_id_kern.skel.h"
++
++#define TEST_CGROUP "/test-bpf-get-cgroup-id/"
++
++void test_cgroup_get_current_cgroup_id(void)
 +{
-+	ticked++;
-+}
-+
-+static char timer_name[64];
-+static void bind_to_timer(int device, int subdevice, int timeout)
-+{
-+	snd_timer_t *handle;
-+	snd_timer_params_t *params;
-+	snd_async_handler_t *ahandler;
-+
-+	time_t end;
-+
-+	sprintf(timer_name, "hw:CLASS=%d,SCLASS=%d,DEV=%d,SUBDEV=%d",
-+		SND_TIMER_CLASS_GLOBAL, SND_TIMER_SCLASS_NONE,
-+		device, subdevice);
-+
-+	snd_timer_params_alloca(&params);
-+
-+	if (snd_timer_open(&handle, timer_name, SND_TIMER_OPEN_NONBLOCK) < 0) {
-+		perror("Can't open the timer");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	snd_timer_params_set_auto_start(params, 1);
-+	snd_timer_params_set_ticks(params, 1);
-+	if (snd_timer_params(handle, params) < 0) {
-+		perror("Can't set timer params");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (snd_async_add_timer_handler(&ahandler, handle, async_callback, NULL) < 0) {
-+		perror("Can't create a handler");
-+		exit(EXIT_FAILURE);
-+	}
-+	end = time(NULL) + timeout;
-+	if (snd_timer_start(handle) < 0) {
-+		perror("Failed to start the timer");
-+		exit(EXIT_FAILURE);
-+	}
-+	printf("Timer has started\n");
-+	while (time(NULL) <= end) {
-+		/*
-+		 * Waiting for the timeout to elapse. Can't use sleep here, as it gets
-+		 * constantly interrupted by the signal from the timer (SIGIO)
-+		 */
-+	}
-+	snd_timer_stop(handle);
-+	snd_timer_close(handle);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int device, subdevice, timeout;
-+
-+	if (argc < 4) {
-+		perror("Usage: %s <device> <subdevice> <timeout>");
-+		return EXIT_FAILURE;
-+	}
-+
-+	setlinebuf(stdout);
-+
-+	device = atoi(argv[1]);
-+	subdevice = atoi(argv[2]);
-+	timeout = atoi(argv[3]);
-+
-+	bind_to_timer(device, subdevice, timeout);
-+
-+	printf("Total ticks count: %d\n", ticked);
-+
-+	return EXIT_SUCCESS;
-+}
-diff --git a/tools/testing/selftests/alsa/utimer-test.c b/tools/testing/selftests/alsa/utimer-test.c
-new file mode 100644
-index 000000000000..32ee3ce57721
---- /dev/null
-+++ b/tools/testing/selftests/alsa/utimer-test.c
-@@ -0,0 +1,164 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * This test covers the functionality of userspace-driven ALSA timers. Such timers
-+ * are purely virtual (so they don't directly depend on the hardware), and they could be
-+ * created and triggered by userspace applications.
-+ *
-+ * Author: Ivan Orlov <ivan.orlov0322@gmail.com>
-+ */
-+#include "../kselftest_harness.h"
-+#include <sound/asound.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <limits.h>
-+#include <sys/ioctl.h>
-+#include <stdlib.h>
-+#include <pthread.h>
-+#include <string.h>
-+
-+#define FRAME_RATE 8000
-+#define PERIOD_SIZE 4410
-+#define UTIMER_DEFAULT_ID -1
-+#define UTIMER_DEFAULT_FD -1
-+#define NANO 1000000000ULL
-+#define TICKS_COUNT 10
-+#define TICKS_RECORDING_DELTA 5
-+#define TIMER_OUTPUT_BUF_LEN 1024
-+#define TIMER_FREQ_SEC 1
-+#define RESULT_PREFIX_LEN strlen("Total ticks count: ")
-+
-+enum timer_app_event {
-+	TIMER_APP_STARTED,
-+	TIMER_APP_RESULT,
-+	TIMER_NO_EVENT,
-+};
-+
-+FIXTURE(timer_f) {
-+	struct snd_timer_uinfo *utimer_info;
-+};
-+
-+FIXTURE_SETUP(timer_f) {
-+	int timer_dev_fd;
-+
-+	if (geteuid())
-+		SKIP(return, "This test needs root to run!");
-+
-+	self->utimer_info = calloc(1, sizeof(*self->utimer_info));
-+	ASSERT_NE(NULL, self->utimer_info);
-+
-+	/* Resolution is the time the period of frames takes in nanoseconds */
-+	self->utimer_info->resolution = (NANO / FRAME_RATE * PERIOD_SIZE);
-+
-+	timer_dev_fd = open("/dev/snd/timer", O_RDONLY);
-+	ASSERT_GE(timer_dev_fd, 0);
-+
-+	ASSERT_EQ(ioctl(timer_dev_fd, SNDRV_TIMER_IOCTL_CREATE, self->utimer_info), 0);
-+	ASSERT_GE(self->utimer_info->fd, 0);
-+
-+	close(timer_dev_fd);
-+}
-+
-+FIXTURE_TEARDOWN(timer_f) {
-+	close(self->utimer_info->fd);
-+	free(self->utimer_info);
-+}
-+
-+static void *ticking_func(void *data)
-+{
-+	int i;
-+	int *fd = (int *)data;
-+
-+	for (i = 0; i < TICKS_COUNT; i++) {
-+		/* Well, trigger the timer! */
-+		ioctl(*fd, SNDRV_TIMER_IOCTL_TRIGGER, NULL);
-+		sleep(TIMER_FREQ_SEC);
-+	}
-+
-+	return NULL;
-+}
-+
-+static enum timer_app_event parse_timer_output(const char *s)
-+{
-+	if (strstr(s, "Timer has started"))
-+		return TIMER_APP_STARTED;
-+	if (strstr(s, "Total ticks count"))
-+		return TIMER_APP_RESULT;
-+
-+	return TIMER_NO_EVENT;
-+}
-+
-+static int parse_timer_result(const char *s)
-+{
-+	char *end;
-+	long d;
-+
-+	d = strtol(s + RESULT_PREFIX_LEN, &end, 10);
-+	if (end == s + RESULT_PREFIX_LEN)
-+		return -1;
-+
-+	return d;
-+}
-+
-+/*
-+ * This test triggers the timer and counts ticks at the same time. The amount
-+ * of the timer trigger calls should be equal to the amount of ticks received.
-+ */
-+TEST_F(timer_f, utimer) {
-+	char command[64];
-+	pthread_t ticking_thread;
-+	int total_ticks = 0;
-+	FILE *rfp;
-+	char *buf = malloc(TIMER_OUTPUT_BUF_LEN);
-+
-+	ASSERT_NE(buf, NULL);
-+
-+	/* The timeout should be the ticks interval * count of ticks + some delta */
-+	sprintf(command, "./global-timer %d %d %d", SNDRV_TIMER_GLOBAL_UDRIVEN,
-+		self->utimer_info->id, TICKS_COUNT * TIMER_FREQ_SEC + TICKS_RECORDING_DELTA);
-+
-+	rfp = popen(command, "r");
-+	while (fgets(buf, TIMER_OUTPUT_BUF_LEN, rfp)) {
-+		buf[TIMER_OUTPUT_BUF_LEN - 1] = 0;
-+		switch (parse_timer_output(buf)) {
-+		case TIMER_APP_STARTED:
-+			/* global-timer waits for timer to trigger, so start the ticking thread */
-+			pthread_create(&ticking_thread, NULL, ticking_func,
-+				       &self->utimer_info->fd);
-+			break;
-+		case TIMER_APP_RESULT:
-+			total_ticks = parse_timer_result(buf);
-+			break;
-+		case TIMER_NO_EVENT:
-+			break;
-+		}
-+	}
-+	pthread_join(ticking_thread, NULL);
-+	ASSERT_EQ(total_ticks, TICKS_COUNT);
-+	pclose(rfp);
-+}
-+
-+TEST(wrong_timers_test) {
-+	int timer_dev_fd;
-+	int utimer_fd;
-+	size_t i;
-+	struct snd_timer_uinfo wrong_timer = {
-+		.resolution = 0,
-+		.id = UTIMER_DEFAULT_ID,
-+		.fd = UTIMER_DEFAULT_FD,
++	struct get_cgroup_id_kern *skel;
++	const struct timespec req = {
++		.tv_sec = 0,
++		.tv_nsec = 1,
 +	};
++	int cgroup_fd;
++	__u64 ucgid;
 +
-+	timer_dev_fd = open("/dev/snd/timer", O_RDONLY);
-+	ASSERT_GE(timer_dev_fd, 0);
++	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
++	if (!ASSERT_OK_FD(cgroup_fd, "cgroup switch"))
++		return;
 +
-+	utimer_fd = ioctl(timer_dev_fd, SNDRV_TIMER_IOCTL_CREATE, &wrong_timer);
-+	ASSERT_LT(utimer_fd, 0);
-+	/* Check that id was not updated */
-+	ASSERT_EQ(wrong_timer.id, UTIMER_DEFAULT_ID);
++	skel = get_cgroup_id_kern__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "load program"))
++		goto cleanup_cgroup;
 +
-+	/* Test the NULL as an argument is processed correctly */
-+	ASSERT_LT(ioctl(timer_dev_fd, SNDRV_TIMER_IOCTL_CREATE, NULL), 0);
++	if (!ASSERT_OK(get_cgroup_id_kern__attach(skel), "attach bpf program"))
++		goto cleanup_progs;
 +
-+	close(timer_dev_fd);
++	skel->bss->expected_pid = getpid();
++	/* trigger the syscall on which is attached the tested prog */
++	if (!ASSERT_OK(syscall(__NR_nanosleep, &req, NULL), "nanosleep"))
++		goto cleanup_progs;
++
++	ucgid = get_cgroup_id(TEST_CGROUP);
++
++	ASSERT_EQ(skel->bss->cg_id, ucgid, "compare cgroup ids");
++
++cleanup_progs:
++	get_cgroup_id_kern__destroy(skel);
++cleanup_cgroup:
++	close(cgroup_fd);
++	cleanup_cgroup_environment();
 +}
-+
-+TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/bpf/progs/get_cgroup_id_kern.c b/tools/testing/selftests/bpf/progs/get_cgroup_id_kern.c
+index 68587b1de34e..30fd504856c7 100644
+--- a/tools/testing/selftests/bpf/progs/get_cgroup_id_kern.c
++++ b/tools/testing/selftests/bpf/progs/get_cgroup_id_kern.c
+@@ -4,34 +4,16 @@
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ 
+-struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__uint(max_entries, 1);
+-	__type(key, __u32);
+-	__type(value, __u64);
+-} cg_ids SEC(".maps");
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__uint(max_entries, 1);
+-	__type(key, __u32);
+-	__type(value, __u32);
+-} pidmap SEC(".maps");
++__u64 cg_id;
++__u64 expected_pid;
+ 
+ SEC("tracepoint/syscalls/sys_enter_nanosleep")
+ int trace(void *ctx)
+ {
+ 	__u32 pid = bpf_get_current_pid_tgid();
+-	__u32 key = 0, *expected_pid;
+-	__u64 *val;
+-
+-	expected_pid = bpf_map_lookup_elem(&pidmap, &key);
+-	if (!expected_pid || *expected_pid != pid)
+-		return 0;
+ 
+-	val = bpf_map_lookup_elem(&cg_ids, &key);
+-	if (val)
+-		*val = bpf_get_current_cgroup_id();
++	if (expected_pid == pid)
++		cg_id = bpf_get_current_cgroup_id();
+ 
+ 	return 0;
+ }
+
 -- 
-2.34.1
+2.46.0
 
