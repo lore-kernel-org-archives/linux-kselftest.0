@@ -1,96 +1,134 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392A41B32A2;
-	Wed, 14 Aug 2024 16:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F135D1BBBC1;
+	Wed, 14 Aug 2024 16:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723652456; cv=none; b=ZZ/oFFtOtNfKCv8q/hk4OYQMB4hdwB84krTbi5FTlrLwskark5TWQ5FLdTa/VWk/A5CZINAALU/uNXEE9dQtPChG+WzmJOW2j9AXOWKyi/eWbGhOGGUt1mnLGiUXagmVGFrIpefWqKOv3IGl2bmbtvBYgrHqPYjNWK5Qzl3ga/Q=
+	t=1723652514; cv=none; b=r3MSCah6bq70dpv42QfWQaocr5iXxMwGHY7ZCl+SspKMpj9h2/AhCotoWBLopAe2P7YyyI+N4ArQ3CBlqbcpIrnDpvl5LGRFYOmZKZ9qTtC56PWe4E8mlo5Yhz1OXH0eef4wiESvy4Qj4/t7xtacTDb1fXicixRJdA15l1vWcjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723652456; c=relaxed/simple;
-	bh=w6DukgVdh/SeaYiuJZwiSsb19olegSRrDqb9Lls4kO0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AM6iB/QAt6fJJEAywv2lzfLB4F4cWFXCPN2IEaFjpfJld3oum15y1j4/bhPPTBLPWfLjpe0R/lh97jI+DrFf/F2ER2amIok4v6Ze/6F2rXf0MdaLKz8b1HE02RHJvI4zvN6x+7361DjTFXulc+2J3i1+7RaiwmOY2aQpJ6cnGHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=sQ5edDfk; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1723652514; c=relaxed/simple;
+	bh=y8gPBkTOEvl5zKXterrWvlJucqFgWO/8eWjzKQnvzD4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MypPMNqIFcx80G15We0GjLvZpIA/0VzUFScWZrw3gD/EgtXRrmBzU9oDXtlApeuBIpgWmgPgT+foK8IAEuIRCon6ICva2hJJsAkI2GktoBfodfNXPrCQdC1Er+O6d/DO6nYfbKe+WEpQ8yfCuzJAQPv165ezRpDtgC8PAOh2saQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q4rPNJ6Z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="sQ5edDfk"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1seGeX-00GwGz-Jl; Wed, 14 Aug 2024 18:15:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=8gEuZoqquS008o2flgsV7w+43AvF3jk+PJRlBs+g2p0=; b=sQ5edDfkRzc9YUM4Nk/REh0Inu
-	f9DlCRgI9C1WcPcuDVa3dOe+fflSCNMCq4Y7cBkeFwBKas6iQCWoBUKkHBV0twXBtYw1a8C3UHYUW
-	uSGqZt80FwF3nFxwMq0F9VaQ4qBJ+SxcTQ6ax1+FHFwp5eTi/rq/j23cx1CZG7z4rv3qFhrh0b5zT
-	S/2zMG6l5YIzOqUXJMlY9IbRiLYBHtCLFY5VMK3Sj9wwd3gPCbC8jtbl3LcpoeGRWlu0Nmxtuk00P
-	ogGYsU8isI2SSBEfsU5PHrczKZbt79pqBDPaF602HapFg9iHTeUTUWxZGq8xlXs6hNa5VzbkmFbRr
-	EmNnS9fA==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1seGeR-0003LT-GH; Wed, 14 Aug 2024 18:15:07 +0200
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1seGeH-00EOaa-Nw; Wed, 14 Aug 2024 18:14:57 +0200
-Message-ID: <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
-Date: Wed, 14 Aug 2024 18:14:56 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q4rPNJ6Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F5CBC4AF09;
+	Wed, 14 Aug 2024 16:21:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723652513;
+	bh=y8gPBkTOEvl5zKXterrWvlJucqFgWO/8eWjzKQnvzD4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q4rPNJ6ZS8/YTjHc/9HkxRU27ouAY0yibwaXXAm+1vcSBPqrepnOKEU4AR3KEhnOt
+	 s58dD84l+9v/yfPZN6YN2ee+5/Ym6lay4t2aiB6H3CiXfg445fDVhup1StlDclBTyN
+	 d6Tf9ZIXcKqcM2L3sfgF+ddNkeVAxqDhU5qIjR7ZPgaAoUWw/E0xVSN5pIIVghvJgH
+	 ao3pIeIoMl3CcpagSZ9IYoUJzDC0aICQgPiBRlV88oVgdcBIHluUExu1ctrkOZWkoE
+	 9l/H09OLwebwQfZ3EaETR7W2P/kahXmTAg0E5aVvsQbbYfL+9JItY7NLBOg8IGqomK
+	 WAZ23R2KyrVjw==
+Date: Wed, 14 Aug 2024 17:21:44 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Dave Martin <Dave.Martin@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v10 24/40] arm64/signal: Expose GCS state in signal frames
+Message-ID: <7433e3d2-996a-45a0-b917-666a340ad109@sirena.org.uk>
+References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
+ <20240801-arm64-gcs-v10-24-699e2bd2190b@kernel.org>
+ <ZrzIv3FWNgJizDc2@e133380.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
- fixes
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
- <87y159yi5m.fsf@cloudflare.com>
- <249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
- <87ttfxy28s.fsf@cloudflare.com>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <87ttfxy28s.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="m4k347TUK5jMfMto"
+Content-Disposition: inline
+In-Reply-To: <ZrzIv3FWNgJizDc2@e133380.arm.com>
+X-Cookie: The second best policy is dishonesty.
 
-On 8/6/24 19:45, Jakub Sitnicki wrote:
-> On Tue, Aug 06, 2024 at 07:18 PM +02, Michal Luczaj wrote:
->> Great, thanks for the review. With this completed, I guess we can unwind
->> the (mail) stack to [1]. Is that ingress-to-local et al. something you
->> wanted to take care of yourself or can I give it a try?
->> [1] https://lore.kernel.org/netdev/87msmqn9ws.fsf@cloudflare.com/
-> 
-> I haven't stated any work on. You're welcome to tackle that.
-> 
-> All I have is a toy test that I've used to generate the redirect matrix.
-> Perhaps it can serve as inspiration:
-> 
-> https://github.com/jsitnicki/sockmap-redir-matrix
 
-All right, please let me know if this is more or less what you meant and
-I'll post the whole series for a review (+patch to purge sockmap_listen of
-redir tests, fix misnomers). Mostly I've just copypasted your code
-(mangling it terribly along the way), so I feel silly claiming the
-authorship. Should I assign you as an author?
+--m4k347TUK5jMfMto
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Note that the patches are based on [2], which has not reached bpf-next
-(patchwork says: "Needs ACK").
+On Wed, Aug 14, 2024 at 04:09:51PM +0100, Dave Martin wrote:
+> On Thu, Aug 01, 2024 at 01:06:51PM +0100, Mark Brown wrote:
 
-[2] [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related fixes
-    https://lore.kernel.org/bpf/20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co/
+> > +	if (add_all || task_gcs_el0_enabled(current)) {
+> > +		err = sigframe_alloc(user, &user->gcs_offset,
+> > +				     sizeof(struct gcs_context));
+> > +		if (err)
+> > +			return err;
+> > +	}
+
+> Who turns on GCS?  I have a concern that if libc is new enough to be
+> built for GCS then the libc startup code will to turn it on, even if
+> the binary stack running on top of libc is old.
+
+It should normally be the dynamic linker which should be looking for
+annotatations in the binaries it's loading before it decides if it's
+going to turn on GCS (and libc doing something similar if it's going to
+dlopen() things in a process with GCS enabled).
+
+> Is there any scenario where it is legitimate for the signal handler to
+> change the shadow stack mode or to return with an altered GCSPR_EL0?
+
+If userspace can rewrite the stack pointer on return (eg, to return to a
+different context as part of userspace threading) then it will need to
+be able to also update GCSPR_EL0 to something consistent otherwise
+attempting to return from the interrupted context isn't going to go
+well.  Changing the mode is a bit more exotic, as it is in general.
+It's as much to provide information to the signal handler as anything
+else.
+
+> Is the guarded stack considered necessary (or at least beneficial) for
+> backtracing, or is the regular stack sufficient?
+
+It's potentially beneficial, being less vulnerable to corruption and
+simpler to parse if all you're interested in is return addresses.
+Profiling in particular was mentioned, grabbing a linear block of memory
+will hopefully be less overhead than chasing down the stack.  The
+regular stack should generally be sufficient though.
+
+--m4k347TUK5jMfMto
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAma82ZcACgkQJNaLcl1U
+h9Dw8Af/XElMBO/KVokIR07KfaB7sgnHeJUwP31NSZhm66aDj1xZVgyEok6vrQOQ
+UAQRifPV98myi1QmsusRk+fCC2OGUG2eLWctGHDghxBwYs5hOCl5kebcUIKzzjNH
+8aqD3GZNX1JLH8PLbzDMVhdLpM4uyKOvZFammGDrnoXjhZaBVSKS0PibtS54TY+R
+HA7tSTIm/+xG4rXkAPJ/vo9YZf+cF1bTp1ccC47oQGzsPJIlPfulipp25A71VIiQ
+9enlRUbkSEEZhQH+UZ2Rkpk1+sMCKUv5uT/m2vNWx1gRkngD8YkNUG2TnE9FQqSE
+01uJahLacQ3yCSaWsm6UnjpUxI3Qng==
+=9afo
+-----END PGP SIGNATURE-----
+
+--m4k347TUK5jMfMto--
