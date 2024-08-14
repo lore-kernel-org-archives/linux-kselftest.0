@@ -1,128 +1,65 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B4E143889
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Aug 2024 10:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E0EF137772;
+	Wed, 14 Aug 2024 10:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723630842; cv=none; b=BbfrJBdND8WP1ZEVwkSfUiDf8Y7xOhOupYMvBfOJplaVq7RWqsqCAdTU7YJWq6/YrbaXecLPet1BxwFmQUBO/0r+lqk21YLc1PYhi92HrNJw2x/GQLakK85/HF/a+I4Womw0dTpltBAeMwWHbKG6RyFa9QWW8otgH2/OpZVd5YU=
+	t=1723632022; cv=none; b=UsElw0p7jh1ypRQLDtS2qAGLZ2gFfCKXrU3mMvz3Qtf+mLwCknhUThDLIWLy4s2LY2KBSguuGeYPZfzoh/3lnBwLee2uBRVJyMBzYuNBjk0f4f0dqlAxRUt+gMEejOmSGC3C9d2FY1trEnX+KRIhXOt6p2M5mBLw/tm6zVp1NAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723630842; c=relaxed/simple;
-	bh=OesaZVG85sa5tJ2CWd0ZRjKD4AAHsYi37iOiX+FHu/A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AZPUteEvINl8hVUb7XoolkbGoSjXaXgEQWcoapO1/KeSC7BSAlVQ5FoR6ig6cfGdQzg0NOtqODftfDXiGPHPMbgYCpbH0cqHwMhZrqDA9UI96Y4QGQdGacQR6icr7PrtPN/Th0hqHvGnHT5LNtqxPvOOpPw+Z8oTzw7x0gBJvdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=az3FJ5Hm; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="az3FJ5Hm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1723630839;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ArvT52QZCzAIBxygYJAvMZW0y/eajEvYt8KDonFX9zk=;
-	b=az3FJ5HmQXer/fpFKdJPs0K2iIhkswSbMm79mIERb+BWPY0+1zHSX2b53LJoQjRtl8g9It
-	3RA/e25JqwMidTz3wkhmqm1QJNP8aMe0ratBtlXXJ2v79MeTmq+skcjPCxBLFlD0e+YICK
-	NtfHZg6f8ASllnxdEHRyBO5TA03uxGI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-148-n3G6aHh-NaKZNh5NHdaT8w-1; Wed, 14 Aug 2024 06:20:38 -0400
-X-MC-Unique: n3G6aHh-NaKZNh5NHdaT8w-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4280b24ec7bso967725e9.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Aug 2024 03:20:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723630837; x=1724235637;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ArvT52QZCzAIBxygYJAvMZW0y/eajEvYt8KDonFX9zk=;
-        b=YzZ3D7VKz+tp4mQ6QvkNFpMrgjUtik2kUsLoVkeMe61F6UwsA0/1QrHs/yzLprqDhv
-         pzmT6oAE4b+i34GwHf7+4g2aR3olQoDj+L5xWg1yzGG2BJDLZu3rqAM+3BiPCbp1l2Dq
-         iDijitD36KPMRgXwlbaSKO6Ig+JouopY4aU5cbBspDim6zfxErG39q7h6ynhfS7EwDfs
-         MQtw5xXvN9JLlCBGX03O7HcWKIls0DM87GOV4ZN+hAYcWjrXYbNoB7gWnum2WAHa+efY
-         diYk2K+PhNAX/3BIzLp427nKLaCpfg8IZfAevE02mVWJcfeaLsWas83ibaCJevwSxGDm
-         HgPA==
-X-Forwarded-Encrypted: i=1; AJvYcCWHw2PdHpB6PmbgGi+RBYbJPUhAXZ+jRNH/HkMJDjwOHJ7dw8ky2EqKhVg+K/ohyb77h+qZV0A8/zSet7Y+pbVGDNdSx1g6L0Y5fG+bgANk
-X-Gm-Message-State: AOJu0Yzd1LhctEICihTwrG1LGNYBepwXM/JmNPFFxTrkhX0q//yigwdP
-	BXTG9ow6OoT4Mw3RQAPltAqErJx5i7DC9LixwHxX93SS/KHD16DaXtDMp1v4Q+rqX9Jih3mCkKA
-	jt43HD+UESm+nG42/oBlv7FWVvTPTLm4wVegpbtRsAsEdAdhxv/rXJLOXVBaWbTtGdA==
-X-Received: by 2002:a05:6000:1a8d:b0:36d:1d66:554f with SMTP id ffacd0b85a97d-371777b426cmr1041935f8f.3.1723630837328;
-        Wed, 14 Aug 2024 03:20:37 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEWUqTtYdG3Z83woA9aA35QcrGb+K5syL0svoCJ4GlfCHLPwm9xo1NeGshX8quWbWdeBH9ywQ==
-X-Received: by 2002:a05:6000:1a8d:b0:36d:1d66:554f with SMTP id ffacd0b85a97d-371777b426cmr1041911f8f.3.1723630836299;
-        Wed, 14 Aug 2024 03:20:36 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:1711:4010:5731:dfd4:b2ed:d824? ([2a0d:3344:1711:4010:5731:dfd4:b2ed:d824])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4c36bea4sm12524894f8f.13.2024.08.14.03.20.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Aug 2024 03:20:35 -0700 (PDT)
-Message-ID: <696bc883-68f5-48f0-bf7e-258b4dc05bcc@redhat.com>
-Date: Wed, 14 Aug 2024 12:20:34 +0200
+	s=arc-20240116; t=1723632022; c=relaxed/simple;
+	bh=yONxehNp5hgxhsnNP+XGe8/9pZ3v1iiUBkf6T/K2+JE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LLVcdTV+/QnjtCdBFDV704GPAjRg/ym96QWeQimKopYhvI9WSs5ddSwJIzCtpRnNMOgoldvzrGS1a+gV9lOWJUVs/5fTLCgd5o7YHrvt8zxDBBsr81/Fso4B7/fPIqSqgoI9hYd+4ZjhSFacFd7xZMwzLq47mKoagswCxFBy8co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 450C0C32786;
+	Wed, 14 Aug 2024 10:40:17 +0000 (UTC)
+Date: Wed, 14 Aug 2024 11:40:14 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	Will Deacon <will@kernel.org>, jannh@google.com,
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
+	Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH RFT v8 1/9] Documentation: userspace-api: Add shadow
+ stack API documentation
+Message-ID: <ZryJjiWbZltfyIH1@arm.com>
+References: <20240808-clone3-shadow-stack-v8-0-0acf37caf14c@kernel.org>
+ <20240808-clone3-shadow-stack-v8-1-0acf37caf14c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 2/2] selftests: udpgro: no need to load xdp for gro
-To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Ignat Korchagin <ignat@cloudflare.com>, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, Yi Chen <yiche@redhat.com>
-References: <20240814075758.163065-1-liuhangbin@gmail.com>
- <20240814075758.163065-3-liuhangbin@gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20240814075758.163065-3-liuhangbin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240808-clone3-shadow-stack-v8-1-0acf37caf14c@kernel.org>
 
-On 8/14/24 09:57, Hangbin Liu wrote:
-> After commit d7db7775ea2e ("net: veth: do not manipulate GRO when using
-> XDP"), there is no need to load XDP program to enable GRO. On the other
-> hand, the current test is failed due to loading the XDP program. e.g.
+On Thu, Aug 08, 2024 at 09:15:22AM +0100, Mark Brown wrote:
+> There are a number of architectures with shadow stack features which we are
+> presenting to userspace with as consistent an API as we can (though there
+> are some architecture specifics). Especially given that there are some
+> important considerations for userspace code interacting directly with the
+> feature let's provide some documentation covering the common aspects.
 > 
->   # selftests: net: udpgro.sh
->   # ipv4
->   #  no GRO                                  ok
->   #  no GRO chk cmsg                         ok
->   #  GRO                                     ./udpgso_bench_rx: recv: bad packet len, got 1472, expected 14720
->   #
->   # failed
-> 
->   [...]
-> 
->   #  bad GRO lookup                          ok
->   #  multiple GRO socks                      ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
->   #
->   # ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
->   #
->   # failed
->   ok 1 selftests: net: udpgro.sh
-> 
-> After fix, all the test passed.
-> 
->   # ./udpgro.sh
->   ipv4
->    no GRO                                  ok
->    [...]
->    multiple GRO socks                      ok
-> 
-> Fixes: d7db7775ea2e ("net: veth: do not manipulate GRO when using XDP")
-> Reported-by: Yi Chen <yiche@redhat.com>
-> Closes: https://issues.redhat.com/browse/RHEL-53858
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-LGTM,
-
-Acked-by: Paolo Abeni <pabeni@redhat.com>
-
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
