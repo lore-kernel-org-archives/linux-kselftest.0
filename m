@@ -1,238 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2087.outbound.protection.outlook.com [40.107.223.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4946C1547D2;
-	Thu, 15 Aug 2024 21:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723757570; cv=none; b=O9Hn+r6N5QJa5IAe8RR10ct/mMHydvTyfdjq/WU1+i/AwcWlZr6uTCF9EbQdndsuXUz4GY0Z70PQ46zx8sIWSRQf9Got9nAuPsOK5mt/okZWBcIqhRVNDoRyY3BErAteouo2c4GRuhduJPPLYokRZHMOdvm8Mzh0RFP5/0iwdgo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723757570; c=relaxed/simple;
-	bh=cXcR0zvXW7/nnmOm/6+n3P/mk7iJt/w5bvYw8TBix4E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sJIQtnyQb4ZpW4OBy/SKrX642o7n8rdx0jV7IoYtqtakadIHPU2rXeBdoDQ5uroBF7KtQwoN7O++cE+8GwqwNIwXc/EvWSrIgXL+KHn7ld7oRacCPNJDDuz+xXLrsb8lXXMFjRnjSD97wM7QBeh1ktnK7beISqq0O4dl16UBw2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X1nw0ja4; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063FB370;
+	Thu, 15 Aug 2024 23:24:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723764258; cv=fail; b=tdwQ0CDmztcZvRuu8eKZXICysFI48dF7yfyTznA2+Fq1GcojHlMCX1HaSyrg1luqvK2I8TsXTjkYdK911KWGzutj33QSApZKjaddY0/xVZWjHX8JURQ3vBWI12MlyAjac3PtiulYnKfXVAvAreaxSa2unMbB9yVQ9/mBf+wcZws=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723764258; c=relaxed/simple;
+	bh=1jM6dEfkoPvBS38Y7JTiu/x0r56Cihk5Q9ATakZZ2o8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=oGA+kdMHqz1Qx5q77o8LWFZMBgDcSSwdS+v/zEVQ3QTAPURv60wMky89JE/fttA3oNSM54Pb9YJJWj3N0xEKvgdL+sN+hn1uWbRzfa0/aRvnZfpfExA3F+I/i313+qzf9Ui8fFSqnmV75/pmo7D3+kymFWLNf6dQb/r+8x2BLN4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=cCmGEDAm; arc=fail smtp.client-ip=40.107.223.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1nw0ja4"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DB233C4AF1C;
-	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723757569;
-	bh=cXcR0zvXW7/nnmOm/6+n3P/mk7iJt/w5bvYw8TBix4E=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=X1nw0ja4++gIYkoK7JKbIKzvoGXbxrB/rW7jnF4vab5jCbZu3lr5u+3XMqBBDREPE
-	 uOY7NcgfBss3rK+nFuErMFX/Ur1WHKQV5jSH8k6vb/SI+mJDj7MgJLfTbV0FfgTowb
-	 YJiHG+u8BQf6Mc9yY9XPXx5ChzS8jZLZLIMdBFiCVjfJmBpvBTxe0qxjGq7FQNL7Fe
-	 acPtSP39lvuWcs+GhZGR7j1aETVuA4Kt57VNVYnY13ibjxjsKou3XdxwddJSObqKiC
-	 jVBQOkIDmAz36i+l2i6SfzaHYa2r8Ma4xcngBwFAPNeCiJL1COqh1lg1muo4gTgVbs
-	 rHtel4r4VULIA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFF33C531DE;
-	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
-From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
-Date: Thu, 15 Aug 2024 22:32:32 +0100
-Subject: [PATCH net-next v3 7/8] selftests/net: Synchronize client/server
- before counters checks
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cCmGEDAm"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UsT5k8Hoel760fAoZ6BxofNaepglJyX9VE8MzKGVESI1vcwMCvODTukQDK65s3PwhMHl2AQpt3bPmQ2mLW/oHxIAPeTRZuAjhJD7xc3SSyVqAywyK86YJDu0SdR7qgQINh0DjCgW+Cw7Fkaf17GLb1NbvTcNHYL9pr8qHvEtIVhzG0kVFQqysRXa6+qi/igX/NCAwNiwSJRe3lT/yg0PJs5xeAZCvqsfiP64h5VW6RcDSSOJ1Ja4/WzV28dkLSU28DRB4c3Ugrm9CEtX9Vsc+RlQyYmfh6HLg5W3n2TBeCbtWAn/S6hx7slBIHuXgXSTHR8qIgwIYbvnnk4u+YH7gA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=roQmdI36FNu6sOH3bdUBZo0TEiXgerMdltnOCpxQZNE=;
+ b=UPHo693o0RtbCeH1K6Qf62PRFx+voVaZ6l1MnZn5kgCWnYcniKKDF/APmuNLk7HZOVvxFbgaQtozMN0IRiKV7uytva3Q6ywb5bCG0ZrjZPPSm1z9GVMUFBW0VHskEk41o3ql4NDpKp/+aMbj+s/WvF2oH1yDnX8sLyNRcKKquzxxST11bnG4uBliWalV3x8og3ErAtX/eDWH7j2l+V74PRnUM/xh5V8X6D55zne32Ta0XMcrJIxVIVfs4gRWd0Mc3xFQrtb1FarelJ/K/i5FgtTqaYQOUWLoZeayB5LULNygGwAvSBC3u0CvZxAE58Mh5zXRGH1Q56AjIYAH4BRtsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=roQmdI36FNu6sOH3bdUBZo0TEiXgerMdltnOCpxQZNE=;
+ b=cCmGEDAmhOgrpOzymoGOe3pH4FUp/ofOCwDNZyspc7qNkAIJGcOvwX++9WePY2gkfUUpOWRgcKeMEWmZSWbpG+ecZ9dk7Fxp5vmX+IT8JbSJyUr+ngQZTLRloQmv+0yu88FK6SVdL4Tmc3qlJsBekfi1MAJ85HizQ7KVKNCYanegmhZoicY8MwnLjQhJ6A3OeaatE6ejwgYLadWo9lBhBcK4bTaxSxQ1LC0ry9RjS4tWwvyG0Z0v89G1wPDFpf1VYl54TSnTjFYbO1LH/1SqIIzaL0HkOumVsl+vN6OnYQAjNBU+biRUOOxW9idrrqi4LWJFOgsrPVGDhDGbyiibew==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB7763.namprd12.prod.outlook.com (2603:10b6:610:145::10)
+ by DM4PR12MB6009.namprd12.prod.outlook.com (2603:10b6:8:69::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.18; Thu, 15 Aug
+ 2024 23:24:07 +0000
+Received: from CH3PR12MB7763.namprd12.prod.outlook.com
+ ([fe80::8b63:dd80:c182:4ce8]) by CH3PR12MB7763.namprd12.prod.outlook.com
+ ([fe80::8b63:dd80:c182:4ce8%3]) with mapi id 15.20.7875.016; Thu, 15 Aug 2024
+ 23:24:07 +0000
+Date: Thu, 15 Aug 2024 20:24:05 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: kevin.tian@intel.com, will@kernel.org, joro@8bytes.org,
+	suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
+	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org,
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 08/16] iommufd/viommu: Add IOMMU_VIOMMU_INVALIDATE
+ ioctl
+Message-ID: <20240815232405.GU2032816@nvidia.com>
+References: <cover.1723061377.git.nicolinc@nvidia.com>
+ <59ad8c075bfa9de7098fd79a30b51d1f53d61a94.1723061378.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59ad8c075bfa9de7098fd79a30b51d1f53d61a94.1723061378.git.nicolinc@nvidia.com>
+X-ClientProxiedBy: BN9P223CA0026.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:408:10b::31) To CH3PR12MB7763.namprd12.prod.outlook.com
+ (2603:10b6:610:145::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240815-tcp-ao-selftests-upd-6-12-v3-7-7bd2e22bb81c@gmail.com>
-References: <20240815-tcp-ao-selftests-upd-6-12-v3-0-7bd2e22bb81c@gmail.com>
-In-Reply-To: <20240815-tcp-ao-selftests-upd-6-12-v3-0-7bd2e22bb81c@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Dmitry Safonov <0x7f454c46@gmail.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723757567; l=7675;
- i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
- bh=ankNPOlIRhBq+DJVzPHQSd6nakZUp4Z55CCoLLWqbTY=;
- b=LhRYrvlCvonKDFRVVisih+fNW8SCIQQxMnTLuFc5rUHjD1j7t+v1qT17clsc18Lse3LBRuutV
- gDFP5OtqxvnAfhVmG1ZSyD1X6bhZxpkhQTTvkpOg+nmPq8Gux/KDyfb
-X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
- pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
-X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
- auth_id=152
-X-Original-From: Dmitry Safonov <0x7f454c46@gmail.com>
-Reply-To: 0x7f454c46@gmail.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB7763:EE_|DM4PR12MB6009:EE_
+X-MS-Office365-Filtering-Correlation-Id: e0a15ad3-c86d-4574-1ae7-08dcbd815c18
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?bxhExlw+kBBt3vlx+9jVu2uXw7wx2Sdw+cMvUUUO1ZZ2AaTNwbnLVG+tPbY6?=
+ =?us-ascii?Q?FsSfSrKhIGilY6tO3zObVJTPCbfxvj2G4wfmMPNIFRYruQ4tBkZci4EUeSzo?=
+ =?us-ascii?Q?RJfRMN0lqn/Ro6W96uNz+cP/ZOXf9LBwvucoKAI5vBwbMdnQkzOjzYuBtvPm?=
+ =?us-ascii?Q?pU3ZXvEFJVhXAD6VhDS3yAvRNyVb54RowQaO9P2dg0pEbvsgJcnR8v5IZNOW?=
+ =?us-ascii?Q?K7WsJjONmc2LP9P+zwKtIkq7bDtPkMP+KeZkqg4fbhmEX1DC+lzpM/X8bYfV?=
+ =?us-ascii?Q?dqpqUzz8aA/NzJg2PiQhGqm09hvYSQSIXIlUAuz8KWWy/Bd6x9rhcvb6NFV0?=
+ =?us-ascii?Q?HfvL21Rc8vCr1O+SCSBpBeFgwD8t0RHc8q9BjE31BGhejsmWfc8ewSiO6snT?=
+ =?us-ascii?Q?Z0AMA2i+z9NcMQN641LhHE0RwA1Cc9FUFuF1TKrXe92c+Fz92sS2XDi8BfcG?=
+ =?us-ascii?Q?u1cMfFKzkisW3hmW9OOqBoPbqfnFbozbEOLLnYc/vopR2GpDcr+b6c8aoKut?=
+ =?us-ascii?Q?nhnMBhlOuIZcVx2e27FcgMamhe8QWc+XbG1QR+CCYiVka1BH+uGbm2Inkd75?=
+ =?us-ascii?Q?TwQxEiYHa4ObDvRvB4rG/r2E3d9sLOt84AX+JDaq6kGFUyYnRN0UyQSTDCTU?=
+ =?us-ascii?Q?UfEHUx4AjQKvbLRDYas9yBfgVn04Zgt8jKDW+2D7Aji/PBudF8oexDBzqMtT?=
+ =?us-ascii?Q?RdALPb922YIrNTfEjrm1YgHrGJtoRRSomAsaMj5LZX1YuJAbzF17z5KeW8sZ?=
+ =?us-ascii?Q?11Jnmk9iNrNAoX58yfaIH2ArNmHuJOlp2OMYd4Ycv3gXvU95ZUyR2Vq2rkFa?=
+ =?us-ascii?Q?PVJC1hDDRgHDDWAMgKT2GO5ObIqxfRZ1yb4nhRAWluhmFgbRaOTlNd0PLp8a?=
+ =?us-ascii?Q?OJrfdA4JHHro3x3DXfvARv/tCDs5VkG3nsEojvUM8LjQ90rcRBI8M3ABVOeZ?=
+ =?us-ascii?Q?a91tdD9tMzN3gEGUwTeTr3M9UVcNFLg1tDmIoCSgPh7KIhlvE5fyzDZJzckt?=
+ =?us-ascii?Q?1P4WO9mMqNTbxB3zwgSCTKWGYQGwsW0p7W5bRYDHZkSyfJe2Zv+UONFwbMc0?=
+ =?us-ascii?Q?TicrGlDstt7rJtd0Tis5OrAFlVgSo0G/ed/L3qZeP0snFxwhbFrl8zvxcwjt?=
+ =?us-ascii?Q?VJgM2DYPUDV6atakqfg0jmDVM3qv+T4XCG5rhPWPDrt3IXxlOIBF10pbHdjk?=
+ =?us-ascii?Q?sUQ2W/DiMZdP/5JraTOQg4OQMVFELtMlNA70AsotERG7ltXB2x7uze1JpES+?=
+ =?us-ascii?Q?1+l2AstgKHndshIHh8Eod6cNUoT0IRut7vzCKRMMxtyHR1x5xhUZ4Fev2n1Z?=
+ =?us-ascii?Q?zTpDZfe9yXg3xHjBn/0bsEYuERGfvpUdgPAXd32mrYJujg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB7763.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Pq/wW7gXRllnBobUrRr3Ehvpav0YnF8IAHojBHRv+UgrnSYiHUBWzd398No5?=
+ =?us-ascii?Q?TZsXErlU/kXzm7h/IpbDyE/2wix5kxxX2sUsdNaWkwxNkoaDoPPuuu+aDB6R?=
+ =?us-ascii?Q?KMPxPJN73KfwPx0HpegWanj4V5V6/cSfe/GjR1vf17VmuY+whbBkPVLb5BBB?=
+ =?us-ascii?Q?nubBsD0U6PcpQFi33POeTy6EittX5jgvr0O8Utepy9djLA6eYGJImD0vYzSh?=
+ =?us-ascii?Q?M+2t58Q4MVAkXi4Tc7Qer7madsMZy6S/qzSqIBMVdxAjIJJhBs58btV3cI8d?=
+ =?us-ascii?Q?q+bybPUG/meiKR+nDMwY/wfu3a5tUDVFaPVlmDBZjtbDFUg7u6hMgxK5wo2r?=
+ =?us-ascii?Q?u+a2bb3B0Vo9wrus0NJHHKhiwbltRpCpNPmsLk2ftxOz/DTMX689x0i8oZ3D?=
+ =?us-ascii?Q?b+2iOIxo61UmGnQIdlgQS9IwMMTWTDlMdZSgoHDDyYKyHT5Miu96ddIbo5I2?=
+ =?us-ascii?Q?YXz8XgIlARASRvgFoNmqFGnH5nHP4AGKd+of3b/LcCsnPL7Y18G+mDjBx7hR?=
+ =?us-ascii?Q?UYcOhCdoayMdsGwPL/KaAbhX3wkjTxobc5hPDJ1Q0w6ayXrcnBxbm21m+baA?=
+ =?us-ascii?Q?rdqLI2o+8m1mOBd99vLlhonCYE/X7sPCx2i3a6Nq04uI5TgUJqabbg8GZtMf?=
+ =?us-ascii?Q?2ol8CgSdm/8pYjZ0vS765YcjySx9APmkHOSBebwKmli7gkiBO1aEePUgTvVx?=
+ =?us-ascii?Q?ck11A2f8jZ8SepzZlw5M1GQamCUkUvFIVD3n27AYlNX+4iPcsy3+lVORbFG3?=
+ =?us-ascii?Q?HAq1+t7baFDPCO46mrbSvJtijHsOOkQliu3rx/sMV/6KkwxfkWfaLBh/+Pb+?=
+ =?us-ascii?Q?vukd3hnRu1WQmuSkepVX3C2L+x6GR7q/dczqpeUwlGvEIbzZT6yEOEcJ8d2X?=
+ =?us-ascii?Q?em0Ux0ZVGziRV/rtiXtYK3J1D6dElAMX6yQRQ7B3kzqY5ocid1+T2H+WCBa4?=
+ =?us-ascii?Q?sp8KnT6Ap4hwgg4A1mGpAmPEuXcflFyBGxVMrHNCK8NBnrGB1zYYg4r10bGs?=
+ =?us-ascii?Q?ZaYM6wSENCkQD1wIwu+Tr6MJPIlo2fub19NA+kH/+A3Ua61CxLUFPC4xInp7?=
+ =?us-ascii?Q?crXu3eqyTqCx7N9NGyvNWJUvWg2LYPUcecVqSvd+XdUoTPAK+hXCPhkj6WJb?=
+ =?us-ascii?Q?8ox2Ykq6IEnhaG0b3x3J+Nqa9EMHOOesLFct80SkvmsaZHoJyr/f1MKHWdx4?=
+ =?us-ascii?Q?D8gXbxF81V3C047LnRv0JxNqPIXDc3FsmdVSxEptePTZf+Gt1ps4kn7kZkVR?=
+ =?us-ascii?Q?5DZx5rUj/Qyd4Lvl2dMCMJvZmJzMkCCIGuM9pZzh1gz4ZgkaX+1xZZPF5IdU?=
+ =?us-ascii?Q?Q1zeUdJi3fX9gy5i/WQNc9wvL5eguyrCdfO7K36TKKk3111JlaMqtkLwnsns?=
+ =?us-ascii?Q?8IiMtg1++S1DcwkXYlji685irUsHYX5KG+uTVRqs2HnSp53mNKghpve39Unu?=
+ =?us-ascii?Q?Fqo/yxq6HJxS3STo4hLeAl9I7bLwMco+wNjQEiG9VooVCa6K+PJkSJwRfHSp?=
+ =?us-ascii?Q?XeyCddGg0gfabeqGon+9BX462sygN2kSP1p4veCytpObAcRDuVEd0fHsYFA6?=
+ =?us-ascii?Q?UqRqUfGWspgLz3TK+NQ=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0a15ad3-c86d-4574-1ae7-08dcbd815c18
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB7763.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 23:24:07.4437
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x0LN+tf16eFx+uTQnAQ/nKAae/irFnkDaT2beEk/pWHliwaoofYGRZ1LPnjRsO8p
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6009
 
-From: Dmitry Safonov <0x7f454c46@gmail.com>
+On Wed, Aug 07, 2024 at 01:10:49PM -0700, Nicolin Chen wrote:
+> @@ -946,4 +947,40 @@ struct iommu_viommu_unset_vdev_id {
+>  	__aligned_u64 vdev_id;
+>  };
+>  #define IOMMU_VIOMMU_UNSET_VDEV_ID _IO(IOMMUFD_TYPE, IOMMUFD_CMD_VIOMMU_UNSET_VDEV_ID)
+> +
+> +/**
+> + * enum iommu_viommu_invalidate_data_type - VIOMMU Cache Invalidate Data Type
+> + * @IOMMU_VIOMMU_INVALIDATE_DATA_ARM_SMMUV3: Invalidation data for ARM SMMUv3
+> + */
+> +enum iommu_viommu_invalidate_data_type {
+> +	IOMMU_VIOMMU_INVALIDATE_DATA_ARM_SMMUV3,
+> +};
 
-On tests that are expecting failure the timeout value is
-TEST_RETRANSMIT_SEC == 1 second. Which is big enough for most of devices
-under tests. But on a particularly slow machine/VM, 1 second might be
-not enough for another thread to be scheduled and attempt to connect().
-It is not a problem for tests that expect connect() to succeed as
-the timeout value for them (TEST_TIMEOUT_SEC) is intentionally bigger.
+=1 here I think. Lets try to avoid 0 for the types..
 
-One obvious way to solve this would be to increase TEST_RETRANSMIT_SEC.
-But as all tests would increase the timeouts, that's going to sum up.
+And this shouldn't be in this patch
 
-But here is less obvious way that keeps timeouts for expected connect()
-failures low: just synchronize the two threads, which will assure that
-before counter checks the other thread got a chance to run and timeout
-on connect(). The expected increase of the related counter for listen()
-socket will yet test the expected failure.
+But also we can probably just use reuse enum iommu_hwpt_invalidate_data_type
+here?
 
-Never happens on my machine, but I suppose the majority of netdev's
-connect-deny-* flakes [1] are caused by this.
+> +struct iommu_viommu_invalidate {
+> +	__u32 size;
+> +	__u32 viommu_id;
+> +	__aligned_u64 data_uptr;
+> +	__u32 data_type;
+> +	__u32 entry_len;
+> +	__u32 entry_num;
+> +	__u32 __reserved;
+> +};
+> +#define IOMMU_VIOMMU_INVALIDATE _IO(IOMMUFD_TYPE, IOMMUFD_CMD_VIOMMU_INVALIDATE)
 
-Fixes:
-> # selftests: net/tcp_ao: connect-deny_ipv6
-> # 1..21
-> # # 462[lib/setup.c:243] rand seed 1720905426
-> # TAP version 13
-> # ok 1 Non-AO server + AO client
-> # not ok 2 Non-AO server + AO client: TCPAOKeyNotFound counter did not increase: 0 <= 0
-> # ok 3 AO server + Non-AO client
-> # ok 4 AO server + Non-AO client: counter TCPAORequired increased 0 => 1
-...
+I wonder if we should use IOMMU_HWPT_INVALIDATE? the hwpt_id can tell
+which mode it is in. The ioctl becomes badly named but these have
+identical arguments.
 
-[1]: https://netdev-3.bots.linux.dev/vmksft-tcp-ao/results/681741/6-connect-deny-ipv6/stdout
-Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
----
- tools/testing/selftests/net/tcp_ao/connect-deny.c | 3 +++
- tools/testing/selftests/net/tcp_ao/restore.c      | 6 ++++--
- tools/testing/selftests/net/tcp_ao/seq-ext.c      | 6 ++++--
- tools/testing/selftests/net/tcp_ao/unsigned-md5.c | 3 +++
- 4 files changed, 14 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/net/tcp_ao/connect-deny.c b/tools/testing/selftests/net/tcp_ao/connect-deny.c
-index 5691f3d00603..166ad4549ef2 100644
---- a/tools/testing/selftests/net/tcp_ao/connect-deny.c
-+++ b/tools/testing/selftests/net/tcp_ao/connect-deny.c
-@@ -71,10 +71,12 @@ static void try_accept(const char *tst_name, unsigned int port, const char *pwd,
- 		}
- 	}
- 
-+	synchronize_threads(); /* before counter checks */
- 	if (pwd && test_get_tcp_ao_counters(lsk, &ao_cnt2))
- 		test_error("test_get_tcp_ao_counters()");
- 
- 	close(lsk);
-+
- 	if (pwd)
- 		test_tcp_ao_counters_cmp(tst_name, &ao_cnt1, &ao_cnt2, cnt_expected);
- 
-@@ -180,6 +182,7 @@ static void try_connect(const char *tst_name, unsigned int port,
- 	timeout = fault(TIMEOUT) ? TEST_RETRANSMIT_SEC : TEST_TIMEOUT_SEC;
- 	ret = _test_connect_socket(sk, this_ip_dest, port, timeout);
- 
-+	synchronize_threads(); /* before counter checks */
- 	if (ret < 0) {
- 		if (fault(KEYREJECT) && ret == -EKEYREJECTED) {
- 			test_ok("%s: connect() was prevented", tst_name);
-diff --git a/tools/testing/selftests/net/tcp_ao/restore.c b/tools/testing/selftests/net/tcp_ao/restore.c
-index 7b91d7fde2bc..f6ea2190f43d 100644
---- a/tools/testing/selftests/net/tcp_ao/restore.c
-+++ b/tools/testing/selftests/net/tcp_ao/restore.c
-@@ -64,6 +64,7 @@ static void try_server_run(const char *tst_name, unsigned int port,
- 		else
- 			test_ok("%s: server alive", tst_name);
- 	}
-+	synchronize_threads(); /* 3: counters checks */
- 	if (test_get_tcp_ao_counters(sk, &ao2))
- 		test_error("test_get_tcp_ao_counters()");
- 	after_cnt = netstat_get_one(cnt_name, NULL);
-@@ -82,7 +83,7 @@ static void try_server_run(const char *tst_name, unsigned int port,
- 	 * Before close() as that will send FIN and move the peer in TCP_CLOSE
- 	 * and that will prevent reading AO counters from the peer's socket.
- 	 */
--	synchronize_threads(); /* 3: verified => closed */
-+	synchronize_threads(); /* 4: verified => closed */
- out:
- 	close(sk);
- }
-@@ -176,6 +177,7 @@ static void test_sk_restore(const char *tst_name, unsigned int server_port,
- 		else
- 			test_ok("%s: post-migrate connection is alive", tst_name);
- 	}
-+	synchronize_threads(); /* 3: counters checks */
- 	if (test_get_tcp_ao_counters(sk, &ao2))
- 		test_error("test_get_tcp_ao_counters()");
- 	after_cnt = netstat_get_one(cnt_name, NULL);
-@@ -189,7 +191,7 @@ static void test_sk_restore(const char *tst_name, unsigned int server_port,
- 		test_ok("%s: counter %s increased %" PRIu64 " => %" PRIu64,
- 			tst_name, cnt_name, before_cnt, after_cnt);
- 	}
--	synchronize_threads(); /* 3: verified => closed */
-+	synchronize_threads(); /* 4: verified => closed */
- 	close(sk);
- }
- 
-diff --git a/tools/testing/selftests/net/tcp_ao/seq-ext.c b/tools/testing/selftests/net/tcp_ao/seq-ext.c
-index 9c7dde7fd776..885866cc193c 100644
---- a/tools/testing/selftests/net/tcp_ao/seq-ext.c
-+++ b/tools/testing/selftests/net/tcp_ao/seq-ext.c
-@@ -116,7 +116,7 @@ static void *server_fn(void *arg)
- 	sk = test_sk_restore(&img, &ao_img, &saddr, this_ip_dest,
- 			     client_new_port, &ao1);
- 
--	synchronize_threads(); /* 5: verify counters during SEQ-number rollover */
-+	synchronize_threads(); /* 5: verify the connection during SEQ-number rollover */
- 	bytes = test_server_run(sk, quota, TEST_TIMEOUT_SEC);
- 	if (bytes != quota) {
- 		if (bytes > 0)
-@@ -127,6 +127,7 @@ static void *server_fn(void *arg)
- 		test_ok("server alive");
- 	}
- 
-+	synchronize_threads(); /* 6: verify counters after SEQ-number rollover */
- 	if (test_get_tcp_ao_counters(sk, &ao2))
- 		test_error("test_get_tcp_ao_counters()");
- 	after_good = netstat_get_one("TCPAOGood", NULL);
-@@ -206,12 +207,13 @@ static void *client_fn(void *arg)
- 	sk = test_sk_restore(&img, &ao_img, &saddr, this_ip_dest,
- 			     test_server_port + 1, &ao1);
- 
--	synchronize_threads(); /* 5: verify counters during SEQ-number rollover */
-+	synchronize_threads(); /* 5: verify the connection during SEQ-number rollover */
- 	if (test_client_verify(sk, msg_len, nr_packets, TEST_TIMEOUT_SEC))
- 		test_fail("post-migrate verify failed");
- 	else
- 		test_ok("post-migrate connection alive");
- 
-+	synchronize_threads(); /* 5: verify counters after SEQ-number rollover */
- 	if (test_get_tcp_ao_counters(sk, &ao2))
- 		test_error("test_get_tcp_ao_counters()");
- 	after_good = netstat_get_one("TCPAOGood", NULL);
-diff --git a/tools/testing/selftests/net/tcp_ao/unsigned-md5.c b/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
-index ec2848036341..02346b58efbd 100644
---- a/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
-+++ b/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
-@@ -70,6 +70,7 @@ static void try_accept(const char *tst_name, unsigned int port,
- 
- 	timeout = fault(TIMEOUT) ? TEST_RETRANSMIT_SEC : TEST_TIMEOUT_SEC;
- 	err = test_wait_fd(lsk, timeout, 0);
-+	synchronize_threads(); /* connect()/accept() timeouts */
- 	if (err == -ETIMEDOUT) {
- 		if (!fault(TIMEOUT))
- 			test_fail("timed out for accept()");
-@@ -283,6 +284,7 @@ static void try_connect(const char *tst_name, unsigned int port,
- 	timeout = fault(TIMEOUT) ? TEST_RETRANSMIT_SEC : TEST_TIMEOUT_SEC;
- 	ret = _test_connect_socket(sk, this_ip_dest, port, timeout);
- 
-+	synchronize_threads(); /* connect()/accept() timeouts */
- 	if (ret < 0) {
- 		if (fault(KEYREJECT) && ret == -EKEYREJECTED)
- 			test_ok("%s: connect() was prevented", tst_name);
-@@ -451,6 +453,7 @@ static void try_to_add(const char *tst_name, unsigned int port,
- 	timeout = fault(TIMEOUT) ? TEST_RETRANSMIT_SEC : TEST_TIMEOUT_SEC;
- 	ret = _test_connect_socket(sk, this_ip_dest, port, timeout);
- 
-+	synchronize_threads(); /* connect()/accept() timeouts */
- 	if (ret <= 0) {
- 		test_error("%s: connect() returned %d", tst_name, ret);
- 		goto out;
-
--- 
-2.42.2
-
-
+Jason
