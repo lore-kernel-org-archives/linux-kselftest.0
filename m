@@ -1,169 +1,197 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2079.outbound.protection.outlook.com [40.107.92.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1838D52F70;
-	Thu, 15 Aug 2024 18:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.79
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723745655; cv=fail; b=RObSX2qszoP7rMTWaE3W3EznB4JIgt9XTHJnYMaOcNelXms94huQ3QYbnu23qfjBmEDS6JKFFWH4bKs4/OC8yVBJlD8/xPO+vzoGKos+4t2DyGUiOnBa5Japxbl/hh6LckvlWh5bmL4LYKBrbAQomw2X55z8rCf0V5MXuxHFfMM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723745655; c=relaxed/simple;
-	bh=z2i8F2mj2rTcjOk/yJElnn3SzOt+0/R3oQDCNAXuu20=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VOM3uCVSg5qDPtHVtXd/byqhaaKbzGpdwvTM01JHloQ2vq0Cr0OZExztBd61l8/+UVahHNWeATejRHjT3ZJCp7tJNnOji88ntcDrFbozxJl+E4HWNs/8VGfFCN/T+frfqquPDkGTE+TLF3hITq4/bFl+PIH2mechW+0Mo8DaVv0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ozTcYWJi; arc=fail smtp.client-ip=40.107.92.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D281537147
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2024 18:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723745828; cv=none; b=FjXT8tI+ZGa8LYRAVqOzWnZtHDmXv7mFYv8XqyomUyarFqM56TfUi2IucvCOb8OskzgdkspYxE+3fY903c0Z02M4SNSQ9y3usc76gQl/R6zY33laT1dNZ7RHZtlKLUN6RiJlZcha9lZE9P7JPV4hN6Z8j5xtbL/brKAkWJyMwIM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723745828; c=relaxed/simple;
+	bh=QM7w3vndpXDCo19LqYkFiF0aa1J4O7C5aYAOahTEwUk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JUF3sYq4TT9jqRC7MfndWywi9wzAGeREjfWxKIuuFr/g6Ur9ZBLKbZMs8NRkFemA1SjX+gA6T+CQ6FaqVXQNiBUPQd3uMghcBME8c6zEq9eDwS1siKFQq/YH5ylj7FxKJsZiVrL8aapb1ZwcewB2JV4bF1zE8O0X7ogw79pftDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Uu2QJBR7; arc=none smtp.client-ip=209.85.160.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ozTcYWJi"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=P5GFHvOBVrTe8f3lLboTscybQ2U8TlxhDDc/hmAuSqsGSQicB/L8Enq9jGSMbmyQRP/VMMOG3MRzlpuCo4QnsdqHV7V0jSAqKnfE/CD2S2+Rv7bLABjRS7MwwqSRVIALHaSNp/l5JROCpzHVAp+4U+LtYyb24QosHOcjfK5Y87Z3AfiWAF6Y8gP5/W6VoeNMLEPADHsIOKvJQUQ1KRG76RHxkst3agRnPRwSU9GgUQBHR2FqNjNwNVW0k75bb4OFKvbxoWSSoRJxuZR115qv180X8sGeQewAqhb91rFknrUteKVjgstW7AxvvY+amKiOI2MRjpFphzlYOmMpE//pMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b5oKJrje8LH8NwvehnGUpKbMcWj3kmAdLgB4XHmt60w=;
- b=ANAZoYdBRDZlV4s8Rgq7OXHSV0EbXMO9tbRMps824WSNkPaaiWNCdNMGfAzvSb86qE+XY0ItMBusRI/u90vTIRvxxZToYMZOym4JXxv93R/qis1ycPYrD0i6PhS/ABlPwuHP34VgZyzedPtl1SthCzXrW6d0RISlU/KPM5j/+c9Q8TrnX5BjG4/ImUeSu5CmMLghPWvaz2pSdXvbDANJdhFELIsSCq76EQCtF3CvlVyFQetiNYQwkGkLZj9cru381E24kVNa0jgmzliKEmURolH1+hfYCBBLqoa3nTTJVBDCSta28yU4bkvCQtCOD7kDTP5FPgmfjM033/w4uAgokQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b5oKJrje8LH8NwvehnGUpKbMcWj3kmAdLgB4XHmt60w=;
- b=ozTcYWJis+RR2nX5BRIu5Grn/l0u4CZsJiiU3Fcbq6A49l+8zdYdO/mXLa/CcdfvODHRiGXld3TSNgpCorOQXNc7Bk/u8tFdJEMmNc3rgSTAoDk/SKXwLPT79iDjlzZFP46XVMt2zR3nSivKT6r2YQoloOnWrMsKPoCG3lb0CoG3irl2Esxq6a8YUE2hK2qOhZR9rYNyhVHRdmwzQsL3KYXI7otIEcInPIr57o9rg6tnSG2xkMiP7A7O2NnbOKv3PrfMybuJLhXzRnq7Mx00I1ieuKM5W7yHaersaBgkTMJHfAHOzDriYRQry4x4pvLgxE/aCMEkTdCa9d+AKK6+/Q==
-Received: from BL0PR0102CA0034.prod.exchangelabs.com (2603:10b6:207:18::47) by
- SA0PR12MB7073.namprd12.prod.outlook.com (2603:10b6:806:2d5::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7875.19; Thu, 15 Aug 2024 18:14:10 +0000
-Received: from BL6PEPF00020E64.namprd04.prod.outlook.com
- (2603:10b6:207:18:cafe::db) by BL0PR0102CA0034.outlook.office365.com
- (2603:10b6:207:18::47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.20 via Frontend
- Transport; Thu, 15 Aug 2024 18:14:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BL6PEPF00020E64.mail.protection.outlook.com (10.167.249.25) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7849.8 via Frontend Transport; Thu, 15 Aug 2024 18:14:09 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 15 Aug
- 2024 11:12:08 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Thu, 15 Aug 2024 11:12:07 -0700
-Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
- Transport; Thu, 15 Aug 2024 11:12:07 -0700
-Date: Thu, 15 Aug 2024 11:12:06 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <kevin.tian@intel.com>, <robin.murphy@arm.com>, <joro@8bytes.org>,
-	<will@kernel.org>, <shuah@kernel.org>, <iommu@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] iommufd: Reorder include files
-Message-ID: <Zr5E9jlQ0HJt0BGE@Asurada-Nvidia>
-References: <cover.1722644866.git.nicolinc@nvidia.com>
- <7524b037cc05afe19db3c18f863253e1d1554fa2.1722644866.git.nicolinc@nvidia.com>
- <20240815175140.GM2032816@nvidia.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Uu2QJBR7"
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-260f1664fdfso778892fac.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2024 11:17:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1723745825; x=1724350625; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WulVhf/lbrXtVuEvrtHRPg80DRz2GQqwnIZEq09+IRc=;
+        b=Uu2QJBR7mBFV2dMvwzQUyb2ZH5PKKfCUxzwsHq8wRKBkHYB4jowOY+uqVwBK730z78
+         E/R0U0zWodhmVKnYVFJu2YXUuyMye1K0GMhAIWrMhsfW4J9kTUSizfL5Nhq/41WFC3QI
+         bjnQTVvLxHEu/SnEMsWDcGfR1aCELW1wfLY8w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723745825; x=1724350625;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WulVhf/lbrXtVuEvrtHRPg80DRz2GQqwnIZEq09+IRc=;
+        b=KkhFEogiB8zzeYmjHzPhYDRkQtdoxpNE5D3zZN8mkujUgXjvP2GbsKXb1UuhRO95xo
+         DV5ZyI2arPuJ+YuFVgrmarF/3nqrJ/zUHvgN3icwIA7bGDL8+IU6w3Cmxez4RXqba8S7
+         Fqd/gosDAExYd0NZEuy5afJnaWfjSwmW/p7bNuFyA5C0cF3Dc3MBd8RMC3GcSwI8XKez
+         GpGp87eezd0SvTVDk+hfZ/DBibJjjTfhOx6RB30/FacWBS+6WSFtJ7l+cl0u+OJu5ZUK
+         kUG04ayNJeCNKQZF8WLlXZxrCHUT34NNwqC56/Us0WYqAOCCAwu814ko2vgkvzo9lli2
+         Klew==
+X-Forwarded-Encrypted: i=1; AJvYcCXRKHsUZzJuUcrkW2FluxYEeA1EjREPRKrR3tB7thkYKKAN6wDKTGps6AKfvTlj5QaqvjdrgOtyUaNNMD0jpoB94xBJd2REKUEYci/iuglV
+X-Gm-Message-State: AOJu0Yyx47q1VL+KA0vASoE+H3fKvnWfQPkfbckICvXXIs3q1pyFAgzy
+	ZbViMYTeOcam+ll12ze2hF90FxAxsbCiFaKsQ4Jo3ziE7l3+LMmhCQ5BS0KVfO/oPO3bpx4smsU
+	lDLc3x50EZhy8fyYtfo64lKYsuK7rIB83PVBp
+X-Google-Smtp-Source: AGHT+IFBzd2labGfip0TWIus/Lddyszo/RVNbmgY3SlorSK9faJ6vZdtzGx4sbNKmzII4n+Xp0V1AtaK3L5PzzXifXs=
+X-Received: by 2002:a05:687c:2bea:b0:270:1cee:ab9 with SMTP id
+ 586e51a60fabf-2701cee16d2mr297534fac.16.1723745824775; Thu, 15 Aug 2024
+ 11:17:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240815175140.GM2032816@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF00020E64:EE_|SA0PR12MB7073:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e0ba3e2-d50f-444e-5ad7-08dcbd560f58
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?f2HSaGKF8Qa2pxu8BlMRrkhu8v6upJSc24xp4O49C0Qz/7Uwv6zwgRf1DPxN?=
- =?us-ascii?Q?zt7TRQpHYfMbfnq/wcXwEbJHlx8tTfmupuHcrG42+NJLF43iuqJDFiOrxJEw?=
- =?us-ascii?Q?HWeb2zYEeEcaiv12PZuKkUBkq6X2pMhZveQi8QDyo3ecMZA4WLRIAqJ2sXAl?=
- =?us-ascii?Q?7G0ZHo4sdzvyZUsGdUARk3CCaD+Ecra3mVgwrbpkFyiI2A1PyKYVE+lMBSSk?=
- =?us-ascii?Q?aOvFHDN/a5GJWxJsPehOqZtfaIIPfrcFO+n5ktHxLEPJmjWIWrhEE20jnv2r?=
- =?us-ascii?Q?URXLtACp/KJtERuwmTY/+pbCZNdNfd0QUJ+s1AmWPiX0bx68m37fXjlBB3ob?=
- =?us-ascii?Q?vybFV7A3a/Cx8+mYsE3UQaAobrtAfBffeu6fZ9D8HKH9qU6mgRb0PBeifh+K?=
- =?us-ascii?Q?FRgjPAujDnXxuuF+RM3zOHaQDCoTMknXfpmrd7KG6fdgucdrbWQtw0ZWm6d+?=
- =?us-ascii?Q?LjRqu9AI9FSFm14x63ZMwcEJQb2xH11QsMtzt7GNea0OHvxLNEAppmjWGy4F?=
- =?us-ascii?Q?INtAvfBCWDg02sEnFvDbbmv24P0yhsn8n3VS4te6mixyVHzsC2B/mFkmlU/7?=
- =?us-ascii?Q?yOcYlHmyre/aV6FIwxL2gIZli0sV1793PLgPVH7xiFemyVBnZ7q6ipKjoGpT?=
- =?us-ascii?Q?QO0wGwXOCm7sFLTOk8xt3IXjIjmUS9gBd5YXTBY8L5B2hVTMmSbzLI10Mwup?=
- =?us-ascii?Q?RJKvd+uqNBn1Gyrmirt/D8X+PyS9aepo8Odx5BmgeMksPPAreJsfAMGtTof5?=
- =?us-ascii?Q?VBPbwdEPhJK3/jE/SuP3sJkuMFwgb9aU8VBK0G+WStMNlOgy53kJebYDnurC?=
- =?us-ascii?Q?teUsREze3VELEOOaxK7uewjco+mZO8Zw3JpO7kPE/vMngTYEgeShwucpxL29?=
- =?us-ascii?Q?tmfQCmqhI5zLAvG/rPHHev5qUSqdA6nBiGMV7iYw3TB4AnGbbWp1I4va5Exq?=
- =?us-ascii?Q?uoJdvW4ej8/5KlgVd+xT84RZO262/B48h9iiglwRkvVR6eKayEr9S3IetJS9?=
- =?us-ascii?Q?tkIbicA+D2MFkbLGYKfhrZSWxSSfVCHyYt0PA9B91sCm/amyJXr5wSPbpLu3?=
- =?us-ascii?Q?CLzcsofghxzgoY7CLCwXP+gt33o2+dI9nz3gSPbPyoVYfrXO0zsKei38y0pi?=
- =?us-ascii?Q?vv5MXzVP1D6Py/GrRpbKNARnVPUfJ/GnGZAuN3yV6VIIzSS75tHUpEzCkUp6?=
- =?us-ascii?Q?U8tVt23Fv/NPXJ/A4s3hGUjrYOwnhxH0o1HKhNNAYfwwR7l0l2JMsJ6VgUAN?=
- =?us-ascii?Q?4DYircQ8bLsKo0HbyXaUAhRFs1sTGC7MAS03w7bO1ASZwnnnCZ+uW8kD1t+C?=
- =?us-ascii?Q?++ic+5Ls/RtcwzygRLLxUx1X5qRiB0DjFzHyeEs7YMxp+vUzfKx2yMiUFkCx?=
- =?us-ascii?Q?OKJdwFDRMpM4H1uslfeTmQX4TI5cp9SBcHDLRRoURb9YYAov/de+mTZThYIv?=
- =?us-ascii?Q?+mV6nJ2ZFGqP2A4nxk4hEpPJAIRS8aoU?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 18:14:09.9866
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e0ba3e2-d50f-444e-5ad7-08dcbd560f58
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF00020E64.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7073
+References: <20240814071424.2655666-1-jeffxu@chromium.org>
+In-Reply-To: <20240814071424.2655666-1-jeffxu@chromium.org>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Thu, 15 Aug 2024 11:16:52 -0700
+Message-ID: <CABi2SkX+3JrDk6b59vgvjb8XAkC7_p3-cSkFHOotra1Yh6dv1Q@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] mremap refactor: check src address for vma
+ boundaries first.
+To: akpm@linux-foundation.org, willy@infradead.org, 
+	torvalds@linux-foundation.org, Liam.Howlett@oracle.com, 
+	pedro.falcato@gmail.com
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, jeffxu@google.com, 
+	lorenzo.stoakes@oracle.com, mpe@ellerman.id.au, oliver.sang@intel.com, 
+	vbabka@suse.cz, keescook@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 15, 2024 at 02:51:40PM -0300, Jason Gunthorpe wrote:
-> On Fri, Aug 02, 2024 at 05:32:02PM -0700, Nicolin Chen wrote:
-> > Reorder include files to alphabetic order to simplify maintenance, and
-> > separate local headers and global headers with a blank line.
-> > 
-> > No functional change intended.
-> > 
-> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> > ---
-> >  drivers/iommu/iommufd/device.c          |  4 ++--
-> >  drivers/iommu/iommufd/fault.c           |  4 ++--
-> >  drivers/iommu/iommufd/io_pagetable.c    |  8 ++++----
-> >  drivers/iommu/iommufd/io_pagetable.h    |  2 +-
-> >  drivers/iommu/iommufd/ioas.c            |  2 +-
-> >  drivers/iommu/iommufd/iommufd_private.h |  9 +++++----
-> >  drivers/iommu/iommufd/iommufd_test.h    |  2 +-
-> >  drivers/iommu/iommufd/iova_bitmap.c     |  2 +-
-> >  drivers/iommu/iommufd/main.c            |  8 ++++----
-> >  drivers/iommu/iommufd/pages.c           | 10 +++++-----
-> >  drivers/iommu/iommufd/selftest.c        |  8 ++++----
-> >  include/linux/iommufd.h                 |  4 ++--
-> >  include/uapi/linux/iommufd.h            |  2 +-
-> >  13 files changed, 33 insertions(+), 32 deletions(-)
-> 
-> I picked this on up to iommufd for-next
+On Wed, Aug 14, 2024 at 12:14=E2=80=AFAM <jeffxu@chromium.org> wrote:
+>
+> From: Jeff Xu <jeffxu@chromium.org>
+>
+> mremap doesn't allow relocate, expand, shrink across VMA boundaries,
+> refactor the code to check src address range before doing anything on
+> the destination, i.e. destination won't be unmapped, if src address
+> failed the boundaries check.
+>
+> This also allows us to remove can_modify_mm from mremap.c, since
+> the src address must be single VMA, can_modify_vma is used.
+>
+> It is likely this will improve the performance on mremap, previously
+> the code does sealing check using can_modify_mm for the src address range=
+,
+> and the new code removed the loop (used by can_modify_mm).
+>
+> In order to verify this patch doesn't regress on mremap, I added tests in
+> mseal_test, the test patch can be applied before mremap refactor patch or
+> checkin independently.
+>
+> Also this patch doesn't change mseal's existing schematic: if sealing fai=
+l,
+> user can expect the src/dst address isn't updated. So this patch can be
+> applied regardless if we decided to go with current out-of-loop approach
+> or in-loop approach currently in discussion.
+>
+> Regarding the perf test report by stress-ng [1] title:
+> 8be7258aad: stress-ng.pagemove.page_remaps_per_sec -4.4% regression
+>
+> The test is using below for testing:
+> stress-ng --timeout 60 --times --verify --metrics --no-rand-seed --pagemo=
+ve 64
+>
+> I can't repro this using ChromeOS, the pagemove test shows large value
+> of stddev and stderr, and can't reasonably refect the performance impact.
+>
+> For example: I write a c program [2] to run the above pagemove test 10 ti=
+mes
+> and calculate the stddev, stderr, for 3 commits:
+>
+> 1> before mseal feature is added:
+> Ops/sec:
+>   Mean     : 3564.40
+>   Std Dev  : 2737.35 (76.80% of Mean)
+>   Std Err  : 865.63 (24.29% of Mean)
+>
+> 2> after mseal feature is added:
+> Ops/sec:
+>   Mean     : 2703.84
+>   Std Dev  : 2085.13 (77.12% of Mean)
+>   Std Err  : 659.38 (24.39% of Mean)
+>
+> 3> after current patch (mremap refactor)
+> Ops/sec:
+>   Mean     : 3603.67
+>   Std Dev  : 2422.22 (67.22% of Mean)
+>   Std Err  : 765.97 (21.26% of Mean)
+>
+> The result shows 21%-24% stderr, this means whatever perf improvment/impa=
+ct
+> there might be won't be measured correctly by this test.
+>
+> This test machine has 32G memory,  Intel(R) Celeron(R) 7305, 5 CPU.
+> And I reboot the machine before each test, and take the first 10 runs wit=
+h
+> run_stress_ng 10
+>
+> (I will run longer duration to see if test still shows large stdDev,StdEr=
+r)
+>
+I took more samples (100 run ), the stddev/stderr is smaller, however
+still not at a range that can reasonably measure the perf improvement
+here.
 
-Thanks! Was hoping for that.
+The tests were taken using the same machine as (10 times run above)
+and exact the same steps: i.e. change to certain kernel commit, reboot
+test device, take the first test result.
 
-> When you get an answer if we can do something else for the MSI lets
-> reconsider that patch, also the 3rd one has a kbuild failure.
+1> Before mseal feature is added:
+Statistics:
+Ops/sec:
+  Mean     : 1733.26
+  Std Dev  : 842.13 (48.59% of Mean)
+  Std Err  : 84.21 (4.86% of Mean)
 
-Yea, let's hold the other patches in this series. I will submit
-another selftest patch, after we have an alternative solution.
+2> After mseal feature is added
+Statistics:
+Ops/sec:
+  Mean     : 1701.53
+  Std Dev  : 1017.29 (59.79% of Mean)
+  Std Err  : 101.73 (5.98% of Mean)
 
-Nicolin
+3> After mremap refactor (this patch)
+Statistics:
+Ops/sec:
+  Mean     : 1097.04
+  Std Dev  : 860.67 (78.45% of Mean)
+  Std Err  : 86.07 (7.85% of Mean)
+
+Summary: even when the stderr is down to 4%-%8 percentage range, the
+stddev is still too big.
+
+Hence, there are other unknown, random variables that impact this test.
+
+-Jeff
+
+> [1] https://lore.kernel.org/lkml/202408041602.caa0372-oliver.sang@intel.c=
+om/
+> [2] https://github.com/peaktocreek/mmperf/blob/main/run_stress_ng.c
+>
+>
+> Jeff Xu (2):
+>   mseal:selftest mremap across VMA boundaries.
+>   mseal: refactor mremap to remove can_modify_mm
+>
+>  mm/internal.h                           |  24 ++
+>  mm/mremap.c                             |  77 +++----
+>  mm/mseal.c                              |  17 --
+>  tools/testing/selftests/mm/mseal_test.c | 293 +++++++++++++++++++++++-
+>  4 files changed, 353 insertions(+), 58 deletions(-)
+>
+> --
+> 2.46.0.76.ge559c4bf1a-goog
+>
