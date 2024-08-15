@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FAA1537A4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6C41537D4;
 	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723757569; cv=none; b=jH7VdJJFFoqWNbEAR5yd60y5nVyASoSMzeMi1eY3U9aiUIq3HxR5D5sgS/aefID0wptdAn+pL022Hh3uNtz39FB8T1YgIUd4fSgXlR4iiQCDW7GnXek3Trza30jKzRwMnRGgfalj88vKIwkijljZJ/XirjcyoYRZO6otKv1ADgA=
+	t=1723757569; cv=none; b=AcuTaRB4x0MHJOpir0JReN9IrYVBnin/puV4YewKDn7uqWtJX3jsHNOrIyagcaXHBwNuOP2iQ1IraVgQIzTbS1qN8w7eb4BULGhfrpWJmf4DetLZ0UFNDaC0LQMa/kF1eJSYAp/MqAFjx4QPFcFCHGLAukeC+gj2LBA4rWDscp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1723757569; c=relaxed/simple;
-	bh=//WNbzYpYU+e2ln5VDiF2W/YrA6HlyMjUvhsSCGFMs8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aabSMyRjZt6twH0e8Nnp/xIcvFlyKH7oDuowj0k+lleUJyhX9mLTcYV9EvzHF8rK2TjwkDIgi2CcT9LvrAyJ2fclTmTQL8U3SDxXm/H2DkbqkHOY2tcYHFsToTiLXAYu9quFM3BC+qwvtMhVPR5kQQnXDpIg93/bv6TZTy8Fkyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qq/oxXOW; arc=none smtp.client-ip=10.30.226.201
+	bh=mi1pDYCuxz1nkrACatRNZAKrs0LHdi2usDp1c4EOazA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=LLjxPhVzguWDtBSIT9MgeHB+qA3B8swqd4XhWRY/EH31JAALmoELkEl7PL8tLH/j0tVYBGvCKHo5dPGNhYhGWUlczy2mRPCU2HHPu3D+CgZmBq4iYXKiRUF4QarkAMEN2PDeRdE3YysAfejGtgKnBdlbA8zVqcmh/gnlYHzkLTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e9ChVQue; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qq/oxXOW"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3113FC32786;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e9ChVQue"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 66DA8C4AF10;
 	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1723757569;
-	bh=//WNbzYpYU+e2ln5VDiF2W/YrA6HlyMjUvhsSCGFMs8=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=qq/oxXOWavPT3+hbtA09RHmrQOnG36JcVAKYJ2j4qibGGPS9V2o/1iidMpnQXOxAR
-	 TKX/u12boEdb9PFovcU7zdF9YucEmdL4TXAH9uNFKeh3XnEpfJR9V1I8WlGMkVVzWS
-	 PAlsN+OpYqkpIBLTKmlNRmgMT4kbjJlop/G7Clb39lVT1E40AXztSi2xmVa2MZHlU1
-	 YCqaxpWf5QKzhFFs2ijhKdtDbY6y69DVkcV7R8k3p8niX5pqy+4DhphAT5aTa7F1pY
-	 XRONg58/Ip2Rolt59N7e1q8CDRmC8iEgAGz0VCr5DT+joDv3knuE1oL1ffED7ebfaz
-	 LAfzP3zG9pVxA==
+	bh=mi1pDYCuxz1nkrACatRNZAKrs0LHdi2usDp1c4EOazA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=e9ChVQuetpurrD++irPRms9f82nKuIv68TiBiakqdGU/AzlbFTtVpkKAzvgg1TFuQ
+	 yZH0/za/Qf6UkN0hbaiotUVt0VMhFH9BeEC1TrFG0V4+Uvgi/S42Hkphz1tAje00Vw
+	 A2+o7PFaimCPkgR4jHzVzCoIwN9MCePtxWLe4srJ5P6Poms0GJtpN7TIXujy8Ls+k3
+	 7eDukoz4VN7q7CdhwrZkW1+eBy9iFz29zHNHfmTcbGrrFl8D4dxnDWmCXCYJAhyCBP
+	 eQS5xohPqskvuOccyZkSf+lPAWdAlLcrZSSnAxyHhvjrP3AMSFCghqG97d6SzRmPjj
+	 0u8k55jz24+Hg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14A8CC3DA7F;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 559D1C531DD;
 	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
 From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
-Subject: [PATCH net-next v3 0/8] net/selftests: TCP-AO selftests updates
-Date: Thu, 15 Aug 2024 22:32:25 +0100
-Message-Id: <20240815-tcp-ao-selftests-upd-6-12-v3-0-7bd2e22bb81c@gmail.com>
+Date: Thu, 15 Aug 2024 22:32:27 +0100
+Subject: [PATCH net-next v3 2/8] selftests/net: Provide test_snprintf()
+ helper
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,10 +41,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOlzvmYC/43OywrCMBAF0F8pWTuaR5+u/A9xkSYTG6hJSWJRp
- P9uLIiuxOVwuefOg0QMFiPZFw8ScLbRepcPsSmIGqQ7I1idb8IpL2kjKCQ1gfQQcTQJY4pwnTT
- UwDiUWmAlZFMaYUjuTwGNva32kThM4PCWyCknvYwIfZBODS/7ne0u0rpXc7Ax+XBfn5rZ2v9jf
- 2ZAwRhd9oZVuhbt4ZzBcav8ZV2d+UdqKf8l8SyJhqquE1XLavYtLcvyBAKYSpk2AQAA
+Message-Id: <20240815-tcp-ao-selftests-upd-6-12-v3-2-7bd2e22bb81c@gmail.com>
+References: <20240815-tcp-ao-selftests-upd-6-12-v3-0-7bd2e22bb81c@gmail.com>
+In-Reply-To: <20240815-tcp-ao-selftests-upd-6-12-v3-0-7bd2e22bb81c@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
@@ -51,11 +51,11 @@ Cc: Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Dmitry Safonov <0x7f454c46@gmail.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723757567; l=5573;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723757567; l=2413;
  i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
- bh=//WNbzYpYU+e2ln5VDiF2W/YrA6HlyMjUvhsSCGFMs8=;
- b=WcN86bjnC908xnl0YKemHzlj5UiSYYu3NmhGQoaipWYAM06enzSuWaHj7dwzlo3yK+1m5bI+G
- IELW8xMHJTHA1YB4sM/6cczcm/xz5bqZq5h9abfycp/0vQUnZN376St
+ bh=8+utKAlqfPj4BJg8ENUdZrxm7vNk3Rr7aXRZIl8U7xQ=;
+ b=RCXSUY+OYpRw6ztdHMQSUvD+mZp3Jj1xrGrmkpODDzznG9HtmrkMPEw7OtEmNnAnP+0PA3lv5
+ fQXipoW1FUrD2TYExlTQEX1s9nSpAO2iBo574j/4Ku8+PrLkcr6u71U
 X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
  pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
 X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
@@ -63,118 +63,97 @@ X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
 X-Original-From: Dmitry Safonov <0x7f454c46@gmail.com>
 Reply-To: 0x7f454c46@gmail.com
 
-First 3 patches are more-or-less cleanups/preparations.
+From: Dmitry Safonov <0x7f454c46@gmail.com>
 
-Patches 4/5 are fixes for netns file descriptors leaks/open.
+Instead of pre-allocating a fixed-sized buffer of TEST_MSG_BUFFER_SIZE
+and printing into it, call vsnprintf() with str = NULL, which will
+return the needed size of the buffer. This hack is documented in
+man 3 vsnprintf.
 
-Patch 6 was sent to me/contributed off-list by Mohammad, who wants 32-bit
-kernels to run TCP-AO.
-
-Patch 7 is a workaround/fix for slow VMs. Albeit, I can't reproduce
-the issue, but I hope it will fix netdev flakes for connect-deny-*
-tests.
-
-And the biggest change is adding TCP-AO tracepoints to selftests.
-I think it's a good addition by the following reasons:
-- The related tracepoints are now tested;
-- It allows tcp-ao selftests to raise expectations on the kernel
-  behavior - up from the syscalls exit statuses + net counters.
-- Provides tracepoints usage samples.
-
-As tracepoints are not a stable ABI, any kernel changes done to them
-will be reflected to the selftests, which also will allow users
-to see how to change their code. It's quite better than parsing dmesg
-(what BGP was doing pre-tracepoints, ugh).
-
-Somewhat arguably, the code parses trace_pipe, rather than uses
-libtraceevent (which any sane user should do). The reason behind that is
-the same as for rt-netlink macros instead of libmnl: I'm trying
-to minimize the library dependencies of the selftests. And the
-performance of formatting text in kernel and parsing it again in a test
-is not critical.
-
-Current output sample:
-> ok 73 Trace events matched expectations: 13 tcp_hash_md5_required[2] tcp_hash_md5_unexpected[4] tcp_hash_ao_required[3] tcp_ao_key_not_found[4]
-
-Previously, tracepoints selftests were part of kernel tcp tracepoints
-submission [1], but since then the code was quite changed:
-- Now generic tracing setup is in lib/ftrace.c, separate from
-  lib/ftrace-tcp.c which utilizes TCP trace points. This separation
-  allows future selftests to trace non-TCP events, i.e. to find out
-  an skb's drop reason, which was useful in the creation of TCP-CLOSE
-  stress-test (not in this patch set, but used in attempt to reproduce
-  the issue from [2]).
-- Another change is that in the previous submission the trace events
-  where used only to detect unexpected TCP-AO/TCP-MD5 events. In this
-  version the selftests will fail if an expected trace event didn't
-  appear.
-  Let's see how reliable this is on the netdev bot - it obviously passes
-  on my testing, but potentially may require a temporary XFAIL patch
-  if it misbehaves on a slow VM.
-
-[1] https://lore.kernel.org/lkml/20240224-tcp-ao-tracepoints-v1-0-15f31b7f30a7@arista.com/
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=33700a0c9b56
+Essentially, in C++ terms, it re-invents std::stringstream, which is
+going to be used to print different tracing paths and formatted strings.
+Use it straight away in __test_print() - which is thread-safe version of
+printing in selftests.
 
 Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
 ---
-Changes in v3:
-- Corrected the selftests printing of tcp header flags, parsed from
-  trace points
-- Fixed an issue with VRF kconfig checks (and tests)
-- Made check for unexpected trace events XFAIL, yet looking into the
-  reason behind the fail
-- Link to v2: https://lore.kernel.org/r/20240802-tcp-ao-selftests-upd-6-12-v2-0-370c99358161@gmail.com
+ tools/testing/selftests/net/tcp_ao/lib/aolib.h | 59 ++++++++++++++++++++++----
+ 1 file changed, 50 insertions(+), 9 deletions(-)
 
-Changes in v2:
-- Fixed two issues with parsing TCP-AO events: the socket state and TCP
-  segment flags. Hopefully, won't fail on netdev.
-- Reword patch 1 & 2 messages to be more informative and at some degree
-  formal (Paolo)
-- Since commit e33a02ed6a4f ("selftests: Add printf attribute to
-  kselftest prints") it's possible to use __printf instead of "raw" gcc
-  attribute - switch using that, as checkpatch suggests.
-- Link to v1: https://lore.kernel.org/r/20240730-tcp-ao-selftests-upd-6-12-v1-0-ffd4bf15d638@gmail.com
+diff --git a/tools/testing/selftests/net/tcp_ao/lib/aolib.h b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
+index fbc7f6111815..60a63419cabb 100644
+--- a/tools/testing/selftests/net/tcp_ao/lib/aolib.h
++++ b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
+@@ -37,17 +37,58 @@ extern void __test_xfail(const char *buf);
+ extern void __test_error(const char *buf);
+ extern void __test_skip(const char *buf);
+ 
+-__attribute__((__format__(__printf__, 2, 3)))
+-static inline void __test_print(void (*fn)(const char *), const char *fmt, ...)
++static inline char *test_snprintf(const char *fmt, va_list vargs)
+ {
+-#define TEST_MSG_BUFFER_SIZE 4096
+-	char buf[TEST_MSG_BUFFER_SIZE];
+-	va_list arg;
++	char *ret = NULL;
++	size_t size = 0;
++	va_list tmp;
++	int n = 0;
+ 
+-	va_start(arg, fmt);
+-	vsnprintf(buf, sizeof(buf), fmt, arg);
+-	va_end(arg);
+-	fn(buf);
++	va_copy(tmp, vargs);
++	n = vsnprintf(ret, size, fmt, tmp);
++	if (n < 0)
++		return NULL;
++
++	size = (size_t) n + 1;
++	ret = malloc(size);
++	if (ret == NULL)
++		return NULL;
++
++	n = vsnprintf(ret, size, fmt, vargs);
++	if (n < 0 || n > size - 1) {
++		free(ret);
++		return NULL;
++	}
++	return ret;
++}
++
++static __printf(1, 2) inline char *test_sprintf(const char *fmt, ...)
++{
++	va_list vargs;
++	char *ret;
++
++	va_start(vargs, fmt);
++	ret = test_snprintf(fmt, vargs);
++	va_end(vargs);
++
++	return ret;
++}
++
++static __printf(2, 3) inline void __test_print(void (*fn)(const char *),
++					       const char *fmt, ...)
++{
++	va_list vargs;
++	char *msg;
++
++	va_start(vargs, fmt);
++	msg = test_snprintf(fmt, vargs);
++	va_end(vargs);
++
++	if (!msg)
++		return;
++
++	fn(msg);
++	free(msg);
+ }
+ 
+ #define test_print(fmt, ...)						\
 
----
-Dmitry Safonov (7):
-      selftests/net: Clean-up double assignment
-      selftests/net: Provide test_snprintf() helper
-      selftests/net: Be consistent in kconfig checks
-      selftests/net: Open /proc/thread-self in open_netns()
-      selftests/net: Don't forget to close nsfd after switch_save_ns()
-      selftests/net: Synchronize client/server before counters checks
-      selftests/net: Add trace events matching to tcp_ao
-
-Mohammad Nassiri (1):
-      selftests/tcp_ao: Fix printing format for uint64_t
-
- tools/testing/selftests/net/tcp_ao/Makefile        |   3 +-
- tools/testing/selftests/net/tcp_ao/bench-lookups.c |   2 +-
- tools/testing/selftests/net/tcp_ao/config          |   1 +
- tools/testing/selftests/net/tcp_ao/connect-deny.c  |  25 +-
- tools/testing/selftests/net/tcp_ao/connect.c       |   6 +-
- tools/testing/selftests/net/tcp_ao/icmps-discard.c |   2 +-
- .../testing/selftests/net/tcp_ao/key-management.c  |  18 +-
- tools/testing/selftests/net/tcp_ao/lib/aolib.h     | 176 ++++++-
- .../testing/selftests/net/tcp_ao/lib/ftrace-tcp.c  | 549 +++++++++++++++++++++
- tools/testing/selftests/net/tcp_ao/lib/ftrace.c    | 466 +++++++++++++++++
- tools/testing/selftests/net/tcp_ao/lib/kconfig.c   |  31 +-
- tools/testing/selftests/net/tcp_ao/lib/setup.c     |  17 +-
- tools/testing/selftests/net/tcp_ao/lib/sock.c      |   1 -
- tools/testing/selftests/net/tcp_ao/lib/utils.c     |  26 +
- tools/testing/selftests/net/tcp_ao/restore.c       |  30 +-
- tools/testing/selftests/net/tcp_ao/rst.c           |   2 +-
- tools/testing/selftests/net/tcp_ao/self-connect.c  |  19 +-
- tools/testing/selftests/net/tcp_ao/seq-ext.c       |  28 +-
- .../selftests/net/tcp_ao/setsockopt-closed.c       |   6 +-
- tools/testing/selftests/net/tcp_ao/unsigned-md5.c  |  35 +-
- 20 files changed, 1376 insertions(+), 67 deletions(-)
----
-base-commit: a9c60712d71ff07197b2982899b9db28ed548ded
-change-id: 20240730-tcp-ao-selftests-upd-6-12-4d3e53a74f3f
-
-Best regards,
 -- 
-Dmitry Safonov <0x7f454c46@gmail.com>
+2.42.2
 
 
