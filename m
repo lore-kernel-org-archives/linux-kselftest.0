@@ -1,176 +1,166 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29905137747
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 20:21:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5147E63C;
+	Sat, 17 Aug 2024 00:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723839681; cv=none; b=Z6egyKYHg1FDtSYc5YuEBJjUckXSZpmHM5J/ydsegpbjP9G67aCh+M5JME55deickSp1+bXAekhY2zaWYwLAJW0hpior+Tgh5g44YMh7fO4IVvjOYornjBPteDxHkfQJfF1qQ/ZeyrDqy2z0oSUkYCJXZWwc95PbmC1Tcn9UqLg=
+	t=1723853924; cv=none; b=pRnHPc4P0q3VNcgqO3dyM6uoE9gI4YVdBU1BIEmGlFsQMR8T3rWVrPQTv+TLEpWyTT4KEoc0iRNYl7ZQysQCJF2pZ75vnx75VTb0hIZwPWTCJQ+xp8Dj33j/D4Ly7gqjyS8V70syKbK6/RqppU6Lt9E7DKZ8cw9EUZSCTVN7Z+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723839681; c=relaxed/simple;
-	bh=RoxnupCzUJOlpAhtqFKUUXI5xaHaw4zPnWSvdo8kXEA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TBMpX0RFFi6JuW6zNQG0Jct/Y28tmHlYQq6H+MIKSQwf2fQFKXYq5PTZBARC2ZDENDCGtXj8KxFMsudALN+xDWDlz4ziBYk7dklYj54I+ziC6nO83DpKnEOPK/+CeJShclbjyIKTi/7+HZjKNl85Kc8h+jQJXnIdSMoTh+YwSCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CJwC2KM/; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1723853924; c=relaxed/simple;
+	bh=wxZ0fURU6BVyD4NMhxsgOZ9Hl4+rpPyQ2k0OfS8AnqM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=UnM4nd0I2jCc6CFpGvO9p7kMV4e4/NGXiRGfYAgtXzIyYxC+8oyfIN8yGZdbfU9zXnsurElDYfj1w5UXUbar+HZ53doTTH8tS9O7WhZos0L3sCe5IAx0wFSl0F+0Y4+yj7bip51Wy7c2dj3CVpB9O6YvLgFf7zDuG+jIpLGEld0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HW1DZvCu; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CJwC2KM/"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2d3e42ef85eso1231779a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 13:21:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HW1DZvCu"
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2f0271b0ae9so31780151fa.1;
+        Fri, 16 Aug 2024 17:18:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723839679; x=1724444479; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ml/zrxgslqXooti6qi/7d+TVeFAnkInp/7O9MVydVgA=;
-        b=CJwC2KM/pqChuCXAri5t/b2G00a9DsJ8SGfE0U09MCDdblJg28GVrPt2dtjdhuN89g
-         /lGSP6MtcMuk1vxKg830TfQQozSiYe+SxDznB7qudGJMD99e1CZOzvjxjlEn+yiM3PN4
-         Uv6HzkiuT1huIyZCXYtzgrwKJqpHWw51CRCjuFLorTsSJw7/7RGh76qiuTLnztkfzAGC
-         b2LOLkchshuAsjwdcuH29BHODhhPxqvh7wN1OzZpEHd3X6VzKiiWwlMvb9VCKaWYFajz
-         NWRbLFCjKj3pPo7QZ1FGOFcLWGjTsKu2WhwD+KyGh7VzdLj3mVmMx5linoGaSflW/CNy
-         FuCQ==
+        d=gmail.com; s=20230601; t=1723853920; x=1724458720; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hQdfB2TJjcHTWcrkMiwvMjty3cwhCh0Z/hQjDmUKSz0=;
+        b=HW1DZvCuqC414z1RfI+ZbC+bqcTgNEqs43Su1ELN4tRlvt+QtI7A/CC64A1ocaLqCI
+         hNXSpJYbxlUI/WUR8s1RFrjJRQM+8sQ/ozDdMMcHwqHispyzVHTWc8V1MgKOi6W2Bdwm
+         h8cwrEx9DVUCC0iQ/6frxnEgAUOPLy8x26rTz16G+WTz0YpDwK/3nCwJoSFNL/N4DZiZ
+         EsIqo56tldqHob/hle86WQIPKeSy077cY99QWA5Co/oMH7JJDd/8JTdFi58E1Jojxdbm
+         MO4HqlAHS0WE9UYAmhrAjWhOFE8xAp+M6MGX3hyO7cOGyf3FmlA/kUWeVl1Zw9UKIUT5
+         33QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723839679; x=1724444479;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ml/zrxgslqXooti6qi/7d+TVeFAnkInp/7O9MVydVgA=;
-        b=K5oOG3j1ECBhW/CqaIoRxU2HXXGbfIducSp/aA424+L61zBxOUtN6zBQapNnpXhCz4
-         smf5tT0gLODpliNttUsYiSFWMLL3zZ7ExS/eV24jTqN4gO1p2ekFwjEBXaQajUKfLm+7
-         KSyCcUTY6+KjtickVhgknYqPAC5TgrxoB3h4Pw5EToylamjY/NsFU3MjxpdKIDfa0tZU
-         4iiWHV9/eaaI1xPoLenUUfIvsVPiio/c+oKi2f4RcedeMaN9VQUSdevyuEPaTv9EOQjV
-         hFbKsAgyH3eXkKFtkXOw+GXc7geSvT3u2nQZfstyYMRgtUs+RBMBvSIgqW9uWvQkAx6H
-         XPpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbWt7g6fuy3ub0+EF/6byDw2uK40sxSYY2KWaTRngqpe3pHP6GILuPHj7U2O99c6gnYz/2CTy4deBf21gLcvTnSZjTs6lv/OW9CwsQVpMJ
-X-Gm-Message-State: AOJu0YydUTrU0fPUxy6M+hq6ElD6uShSODT5j8/c8/o+j8wChs3MYtvW
-	JKNao09zecldAhC700WMbNi3Q6STBiulsr92zIvns1/KUNZSwcE0L23CGs5VIJ35yIJtVGg6hKw
-	Itw==
-X-Google-Smtp-Source: AGHT+IFE7Hb7GuPDt7biLsqGWREW3/8zJ3I3cOi53aNTPw9eNpkaFNskEMqAJ4gAR3ybyxYczKq7LZE55/o=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:ad98:b0:2d3:b7c7:d682 with SMTP id
- 98e67ed59e1d1-2d3dffdb498mr9761a91.3.1723839679171; Fri, 16 Aug 2024 13:21:19
- -0700 (PDT)
-Date: Fri, 16 Aug 2024 13:21:17 -0700
-In-Reply-To: <20240709175145.9986-5-manali.shukla@amd.com>
+        d=1e100.net; s=20230601; t=1723853920; x=1724458720;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hQdfB2TJjcHTWcrkMiwvMjty3cwhCh0Z/hQjDmUKSz0=;
+        b=NJsotI9ZmXlI6ulqxMqo7yQohxaFPRYyw+NQV0RFiaEvEFlt1iFyNsfKWPf2rEIhAe
+         VjOhySfffNKCh1+NGxdlGyqjWltOuMFhiiV+YbbR79U/FAsqjh6VyK1r6g31wofQHtnx
+         biom0iOFq5wqw3GfK6I94HwHOVD+1N9zLOlOoacVLWGkhqAdq2dJZW8xFZcIIVbeV3/C
+         vPxd8ErhdgB8ajKaXeD6m/pylIlKIlkS0ghffpnMgRFtGzSTGvLy1SPSZy6YYJzrUX8N
+         CklEZiFniMNJci6cQKaul6hxWIicgYx+XNNhO1ub7Eoo1/STZUi3sZ9z08731FPnNkUo
+         ptxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXMridDA0Z+VzdWZtwAypltOapFZELx1Ok4b/8Prn54/XQ2C3kDnSA/Wg2TxuPrGCxrpIbyousYvBwni9NjV0IwTBoVgNY4KlzGhTd+TPB7VgHlo6PXPYX3T/cd0duksxPGBjCmpQ2Y1xum6VVo
+X-Gm-Message-State: AOJu0YxlclCdj889+A8STgH6PRIeHJiNw4ovr+QnUT9cIo5qPabmIMO+
+	TmYli/AO7Wls74cJZcn5Bl18zDteRdvx0h6OOnJaYCTIKb74OU1a2L2lCDuC
+X-Google-Smtp-Source: AGHT+IFZ9b78tVtcZPQGq9NYpF0/YwksiknLfMYODd0Q+Kd8EWcZCWbrFfO0fyGveiS9SrzB4Z6g/g==
+X-Received: by 2002:a2e:d01:0:b0:2f1:9248:c325 with SMTP id 38308e7fff4ca-2f3be5f8cecmr29055721fa.31.1723853919102;
+        Fri, 16 Aug 2024 17:18:39 -0700 (PDT)
+Received: from [192.168.1.91] ([2001:818:e92f:6400:96b:aa92:afc0:2d3d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429d781047asm104842055e9.0.2024.08.16.17.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Aug 2024 17:18:38 -0700 (PDT)
+From: Pedro Falcato <pedro.falcato@gmail.com>
+Date: Sat, 17 Aug 2024 01:18:29 +0100
+Subject: [PATCH v3 2/7] mm/munmap: Replace can_modify_mm with
+ can_modify_vma
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240709175145.9986-1-manali.shukla@amd.com> <20240709175145.9986-5-manali.shukla@amd.com>
-Message-ID: <Zr-0vX9rZDY2qSwl@google.com>
-Subject: Re: [RFC PATCH v1 4/4] KVM: selftests: Add bus lock exit test
-From: Sean Christopherson <seanjc@google.com>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
-	shuah@kernel.org, nikunj@amd.com, thomas.lendacky@amd.com, 
-	vkuznets@redhat.com, bp@alien8.de, babu.moger@amd.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240817-mseal-depessimize-v3-2-d8d2e037df30@gmail.com>
+References: <20240817-mseal-depessimize-v3-0-d8d2e037df30@gmail.com>
+In-Reply-To: <20240817-mseal-depessimize-v3-0-d8d2e037df30@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+ Vlastimil Babka <vbabka@suse.cz>, 
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, jeffxu@chromium.org, oliver.sang@intel.com, 
+ torvalds@linux-foundation.org, Michael Ellerman <mpe@ellerman.id.au>, 
+ Kees Cook <kees@kernel.org>, Pedro Falcato <pedro.falcato@gmail.com>
+X-Mailer: b4 0.14.1
 
-On Tue, Jul 09, 2024, Manali Shukla wrote:
-> From: Nikunj A Dadhania <nikunj@amd.com>
-> 
-> Malicious guests can cause bus locks to degrade the performance of
-> a system.  The Bus Lock Threshold feature is beneficial for
-> hypervisors aiming to restrict the ability of the guests to perform
-> excessive bus locks and slow down the system for all the tenants.
-> 
-> Add a test case to verify the Bus Lock Threshold feature for SVM.
-> 
-> [Manali:
->   - The KVM_CAP_X86_BUS_LOCK_EXIT capability is not enabled while
->     vcpus are created, changed the VM and vCPU creation logic to
->     resolve the mentioned issue.
->   - Added nested guest test case for bus lock exit.
->   - massage commit message.
->   - misc cleanups. ]
+We were doing an extra mmap tree traversal just to check if the entire
+range is modifiable. This can be done when we iterate through the VMAs
+instead.
 
-Again, 99% of the changelog is boilerplate that does nothing to help me
-understand what the test actually does.
+Signed-off-by: Pedro Falcato <pedro.falcato@gmail.com>
+---
+ mm/mmap.c | 11 +----------
+ mm/vma.c  | 19 ++++++++++++-------
+ 2 files changed, 13 insertions(+), 17 deletions(-)
 
-> 
-> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
-> Co-developed-by: Manali Shukla <manali.shukla@amd.com>
-> Signed-off-by: Manali Shukla <manali.shukla@amd.com>
-> ---
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../selftests/kvm/x86_64/svm_buslock_test.c   | 114 ++++++++++++++++++
->  2 files changed, 115 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/svm_buslock_test.c
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index ce8ff8e8ce3a..711ec195e386 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -94,6 +94,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/smaller_maxphyaddr_emulation_test
->  TEST_GEN_PROGS_x86_64 += x86_64/smm_test
->  TEST_GEN_PROGS_x86_64 += x86_64/state_test
->  TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
-> +TEST_GEN_PROGS_x86_64 += x86_64/svm_buslock_test
->  TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
->  TEST_GEN_PROGS_x86_64 += x86_64/svm_int_ctl_test
->  TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_shutdown_test
-> diff --git a/tools/testing/selftests/kvm/x86_64/svm_buslock_test.c b/tools/testing/selftests/kvm/x86_64/svm_buslock_test.c
-> new file mode 100644
-> index 000000000000..dcb595999046
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/svm_buslock_test.c
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 3af256bacef3..30ae4cb5cec9 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1740,16 +1740,7 @@ int do_vma_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 		unsigned long start, unsigned long end, struct list_head *uf,
+ 		bool unlock)
+ {
+-	struct mm_struct *mm = vma->vm_mm;
+-
+-	/*
+-	 * Check if memory is sealed, prevent unmapping a sealed VMA.
+-	 * can_modify_mm assumes we have acquired the lock on MM.
+-	 */
+-	if (unlikely(!can_modify_mm(mm, start, end)))
+-		return -EPERM;
+-
+-	return do_vmi_align_munmap(vmi, vma, mm, start, end, uf, unlock);
++	return do_vmi_align_munmap(vmi, vma, vma->vm_mm, start, end, uf, unlock);
+ }
+ 
+ /*
+diff --git a/mm/vma.c b/mm/vma.c
+index 84965f2cd580..5850f7c0949b 100644
+--- a/mm/vma.c
++++ b/mm/vma.c
+@@ -712,6 +712,12 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 		if (end < vma->vm_end && mm->map_count >= sysctl_max_map_count)
+ 			goto map_count_exceeded;
+ 
++		/* Don't bother splitting the VMA if we can't unmap it anyway */
++		if (!can_modify_vma(vma)) {
++			error = -EPERM;
++			goto start_split_failed;
++		}
++
+ 		error = __split_vma(vmi, vma, start, 1);
+ 		if (error)
+ 			goto start_split_failed;
+@@ -723,6 +729,11 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 	 */
+ 	next = vma;
+ 	do {
++		if (!can_modify_vma(next)) {
++			error = -EPERM;
++			goto modify_vma_failed;
++		}
++
+ 		/* Does it split the end? */
+ 		if (next->vm_end > end) {
+ 			error = __split_vma(vmi, next, end, 0);
+@@ -815,6 +826,7 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 	__mt_destroy(&mt_detach);
+ 	return 0;
+ 
++modify_vma_failed:
+ clear_tree_failed:
+ userfaultfd_error:
+ munmap_gather_failed:
+@@ -860,13 +872,6 @@ int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
+ 	if (end == start)
+ 		return -EINVAL;
+ 
+-	/*
+-	 * Check if memory is sealed, prevent unmapping a sealed VMA.
+-	 * can_modify_mm assumes we have acquired the lock on MM.
+-	 */
+-	if (unlikely(!can_modify_mm(mm, start, end)))
+-		return -EPERM;
+-
+ 	/* Find the first overlapping VMA */
+ 	vma = vma_find(vmi, end);
+ 	if (!vma) {
 
-I would *very* strongly prefer to have a bus lock test that is comment to VMX
-and SVM.  For L1, there's no unique behavior.  And for L2, assuming we don't
-support nested bus lock enabling, the only vendor specific bits are launching
-L2.
+-- 
+2.46.0
 
-I.e. writing this so it works on both VMX and SVM should be quite straightforward.
-
-> @@ -0,0 +1,114 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * svm_buslock_test
-> + *
-> + * Copyright (C) 2024 Advanced Micro Devices, Inc.
-> + *
-> + * SVM testing: Buslock exit
-
-Keep the Copyright, ditch everything else.
-
-> + */
-> +
-> +#include "test_util.h"
-> +#include "kvm_util.h"
-> +#include "processor.h"
-> +#include "svm_util.h"
-> +
-> +#define NO_ITERATIONS 100
-
-Heh, NR_ITERATIONS.
-
-> +#define __cacheline_aligned __aligned(128)
-
-Eh, I would just split a page, that's about as future proof as we can get in
-terms of cache line sizes.
-
-> +
-> +struct buslock_test {
-> +	unsigned char pad[126];
-> +	atomic_long_t val;
-> +} __packed;
-> +
-> +struct buslock_test test __cacheline_aligned;
-> +
-> +static __always_inline void buslock_atomic_add(int i, atomic_long_t *v)
-> +{
-> +	asm volatile(LOCK_PREFIX "addl %1,%0"
-> +		     : "+m" (v->counter)
-> +		     : "ir" (i) : "memory");
-> +}
-> +
-> +static void buslock_add(void)
-> +{
-> +	/*
-> +	 * Increment a cache unaligned variable atomically.
-> +	 * This should generate a bus lock exit.
-
-So... this test doesn't actually verify that a bus lock exit occurs.  The userspace
-side will eat an exit if one occurs, but there's literally not a single TEST_ASSERT()
-in here.
