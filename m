@@ -1,60 +1,61 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E217256E;
-	Sat, 17 Aug 2024 00:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E3979CF;
+	Sat, 17 Aug 2024 00:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723853927; cv=none; b=staHvULY4pI8ANXyQ6VLa0atwX3WYLYnr4ovwO1WpUTJXLCMLeU2hheIRw5X+5RJ8wvV0vTMUlufAVtkljHMD2KyMoXGfcZpSiH/p1/fmVV5+4Vjy8VrTHSsW3jNzQTzrYqEZCUtkKfom1sXblvyP2ds4tT0FVqvbM2UNmxQjiQ=
+	t=1723853929; cv=none; b=i71PDR6nAxdZFYMI3VUD1+WUFulsUM6heXB47K7fqtLKZG+rTf1sOJr4Wpx5a3eFzso4kD4oBzc9MqhokQr0tmkTK/aZPHq4tK4CQRfCjnsXlNMlXAFx7A+uKjc+PNeeh9DBr+PzzMk98qvS4MuqJHP9duJ3VaRzDxzuKejy2Cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723853927; c=relaxed/simple;
-	bh=TE42/IB2CccHSiCs8bJa52DZagIXGjgfR8xOnJQNc9o=;
+	s=arc-20240116; t=1723853929; c=relaxed/simple;
+	bh=9qBu9Ek1/IFuCMDXuTD8qKQ1G284lan1qhEPi5YvOgk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RJhNDRgV2Jko3gaqZvecyp8FK+XQsv97a3FVIvCYII9DGFGDmfV+WMFKwEUIZ+bHl8Zd9U+s/m4b/dyIRGYG/Y3+eH6GNT4YmSAOmp6iobhvLu6VWaS3a8Q9UqwKLmHSBKAUw7cvAgE/bNRtOnAveIA1x1oCvodK0tCjO4ZUZGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBTecDV/; arc=none smtp.client-ip=209.85.221.45
+	 In-Reply-To:To:Cc; b=fWCrzEPOID1EPs0l/1iyqlEhndaG4Oub/mj20UEtsaOloMx8gox0nGf8Utq4R0jx+XXpg8ALiA9Wvn4QSjq/gCqszGza6l/fNE21xzRviKxGQTBzSQfaSLrELggB3jZqTeqDcFqW5tJKpVRfHrqix1aLXWSoxc7/N/szEQj7YjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PWKIwrhb; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBTecDV/"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3718ca50fd7so1268663f8f.1;
-        Fri, 16 Aug 2024 17:18:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PWKIwrhb"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3717de33d58so1435268f8f.1;
+        Fri, 16 Aug 2024 17:18:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723853919; x=1724458719; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723853921; x=1724458721; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eE0tAujU+84Fl5Bml9LnGFFfJTwW8AbGe4iKDNDJLPI=;
-        b=ZBTecDV/XPyqei/hvTJTjLs78EWWJMyAAGWFsF99p/Ix+iPfOrt5FHjfr+VIYPI2TI
-         XjRcj746an2AUySyu1i977YCupFK8Eljlnezl7puw8Qi8cVGbgp/OiqcS6C8UMmXJyw7
-         8wfm8ObUmWAk24ZjARTXd0EFf8C3qpjKbR1qA0Emoy+88VopHRNdcLh7pbs8i7TAqS8w
-         CvWXZj6/StVDVBDYe/+4naJ/6PwhlRE7ADzDZRbDeMSmfe7DhM3LwGPiKEKvG/GeehrO
-         cXntLAQycT0KQXnJzkebacjSURyzDMLnZh2+skIYyIjc5bd8+Y2XtluknNlPck21udnN
-         S7/Q==
+        bh=yXNmIj+NcTYxWHoqolJZlZHTThjq2Cli8Ss2fpPQn+g=;
+        b=PWKIwrhbaYS4eGpqJDgVSURDT/CjmsTf/AmtaQgXweQiq8oHjaw8WKYr8BFJCxwUQM
+         qL9/Dko4vir+txUGYfRJFspwNkoLvf/kajssatyeMBPvqJLHzgO+zFmvctgT+7YJX210
+         hoH25456WRser0hnW3EtvBoeATfQJYEdJuTCwOhPJLxRhRUsytTYndReuae6ncUodjmI
+         /7yDpZHiuSOfxZDDyv7Tx+q3sG3eqrfn2sTAKFsyY09wsVGqygWTxuNVxFgRvOILHUEu
+         ELGLsrcoyM8aA/NCRHhqyJOvjwIGU0SYcZtKKSN5nWRiqPlRZLa+3nK6u04pnIGEvmt6
+         1KQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723853919; x=1724458719;
+        d=1e100.net; s=20230601; t=1723853921; x=1724458721;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eE0tAujU+84Fl5Bml9LnGFFfJTwW8AbGe4iKDNDJLPI=;
-        b=Glw2A4N9/SotegNP4pICFJMyYqhxwfzBsd7k2O6YJVcFzibRqeQ42pfEeTrMhBNnl4
-         ewlPVLns9opwYp1qIdAz3lDhY3/UB6L/aPgoQ3eysdTOkKy4YyDJQ1thDopISCoU3fLw
-         +tYiqKbZFPNeK/qXTcWAeHPd+4sEnF1yY8kgsJz8YbJisBmBHyUs6xvyDXoaXL3iyE9u
-         DubAL13IqzGHW3RZdHNRlE8aLGA9n2GAR5pf57EJ6AfwuKpCtrA7x+0iX0a5bzMDVw60
-         4NZDrZx+O8WoeeU/mzTt8a1nfv2TXIff8TI5CdMBmwu4WKSQIVXSDtlwtrWt0lS04R4T
-         7GGw==
-X-Forwarded-Encrypted: i=1; AJvYcCUejgwSQE+uaWocqNMkWPijz3AIN+I2VWmoUmEEKaXk2Tqs+W2mFIzbmDfilK6wmeDdLBTDPClWO6+7tUGWQeClHfnvEfWP7wGOtfSPpFeSjk1UASwOWUbGK/Hd60/vQ2J5rdNE40UZispz942g
-X-Gm-Message-State: AOJu0Yyh1F+Bw218lcffg7dxE6vSNmEdp2hnEWsGp074Ba+jfT34VU7q
-	cKPpuJ0VZzRwmGpFJkbhYnGK1tKIf17LvYmiXOkuuvxzLHgL3hQgDinbK2h9
-X-Google-Smtp-Source: AGHT+IH+rZczV1rucrOJegV86RCCzxDjSfxcW+VweSbEmrGCi5wWUt76859GZxn1s0ipCW3cR+tVCA==
-X-Received: by 2002:a05:6000:a81:b0:368:5bb4:169b with SMTP id ffacd0b85a97d-371943159b6mr2775762f8f.4.1723853917768;
-        Fri, 16 Aug 2024 17:18:37 -0700 (PDT)
+        bh=yXNmIj+NcTYxWHoqolJZlZHTThjq2Cli8Ss2fpPQn+g=;
+        b=feSsnTILYsqhS7sK3pftnCw4F0/tkonyP/Xayo+Oo7cnzwtWZl6DPXOPt5Xu7aVq5z
+         HAatKV1CJK0nOasmUGnIX6pri8pPhkM5M68lEcR6D0TtLMqKExQL53Ru2egaaXZzDa/n
+         q/pnoWhC7vrahLT04su5o/JUqIdNOdaNnayR19Y/TB2/9Xqq9RFcGjl7wH62aM9gXMdG
+         j9t6sbqEg67VS2gZ+a2kLr9gH2ZJ7flb87N02uWBSqnuvAGW/0gbTClln1pcrqHxjSvC
+         QIylR2HsxLWdb/bvo6j8sLaCXFcwPd8nCu/cnQVrDorDJPSijhcqvL8EavS+4Jkdpq27
+         tpDg==
+X-Forwarded-Encrypted: i=1; AJvYcCUm/5ErRIHsPEh43ILABAZZYue7IMgdvPO1/ngWCxUC+jYqep5KJKUZZP7bIVRpd65ksX+nvJfeQ8Umysc=@vger.kernel.org, AJvYcCVpfsZJ31JQopB9VSkuGndBm8YrOwMeOJuT6d9tYkn7IzbU393zF6TNZ24KvOqHX0ObAXXVnHJhVHgUHtxXqw1/@vger.kernel.org
+X-Gm-Message-State: AOJu0YyME82geoBxqaimnL4NvpzLKR5v1nNmWEqWkSj+oOwhVr5A7EN1
+	fkUSGGBMlyUF1ePEssJJpj5J8Lcsn0bUnLuDoo4PKzKI0psW8WnoQv2SIotf
+X-Google-Smtp-Source: AGHT+IFoYlT2c74A++INbVCxGR66uRuw0eMCD6t4X/oZJnDreC1ipLncpJI2gMf0RbWhFUUMPxAr9w==
+X-Received: by 2002:a5d:5a15:0:b0:360:7c4b:58c3 with SMTP id ffacd0b85a97d-371946a0b75mr5498311f8f.54.1723853920474;
+        Fri, 16 Aug 2024 17:18:40 -0700 (PDT)
 Received: from [192.168.1.91] ([2001:818:e92f:6400:96b:aa92:afc0:2d3d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429d781047asm104842055e9.0.2024.08.16.17.18.36
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429d781047asm104842055e9.0.2024.08.16.17.18.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Aug 2024 17:18:37 -0700 (PDT)
+        Fri, 16 Aug 2024 17:18:40 -0700 (PDT)
 From: Pedro Falcato <pedro.falcato@gmail.com>
-Date: Sat, 17 Aug 2024 01:18:28 +0100
-Subject: [PATCH v3 1/7] mm: Move can_modify_vma to mm/vma.h
+Date: Sat, 17 Aug 2024 01:18:30 +0100
+Subject: [PATCH v3 3/7] mm/mprotect: Replace can_modify_mm with
+ can_modify_vma
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,7 +64,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240817-mseal-depessimize-v3-1-d8d2e037df30@gmail.com>
+Message-Id: <20240817-mseal-depessimize-v3-3-d8d2e037df30@gmail.com>
 References: <20240817-mseal-depessimize-v3-0-d8d2e037df30@gmail.com>
 In-Reply-To: <20240817-mseal-depessimize-v3-0-d8d2e037df30@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -76,85 +77,44 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  Kees Cook <kees@kernel.org>, Pedro Falcato <pedro.falcato@gmail.com>
 X-Mailer: b4 0.14.1
 
-Move can_modify_vma to vma.h so it can be inlined properly (with
-the intent to remove can_modify_mm callsites).
+Avoid taking an extra trip down the mmap tree by checking the vmas
+directly. mprotect (per POSIX) tolerates partial failure.
 
 Signed-off-by: Pedro Falcato <pedro.falcato@gmail.com>
 ---
- mm/mseal.c | 17 -----------------
- mm/vma.h   | 28 ++++++++++++++++++++++++++++
- 2 files changed, 28 insertions(+), 17 deletions(-)
+ mm/mprotect.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/mm/mseal.c b/mm/mseal.c
-index 15bba28acc00..2170e2139ca0 100644
---- a/mm/mseal.c
-+++ b/mm/mseal.c
-@@ -16,28 +16,11 @@
- #include <linux/sched.h>
- #include "internal.h"
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 446f8e5f10d9..0c5d6d06107d 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -611,6 +611,9 @@ mprotect_fixup(struct vma_iterator *vmi, struct mmu_gather *tlb,
+ 	unsigned long charged = 0;
+ 	int error;
  
--static inline bool vma_is_sealed(struct vm_area_struct *vma)
--{
--	return (vma->vm_flags & VM_SEALED);
--}
--
- static inline void set_vma_sealed(struct vm_area_struct *vma)
- {
- 	vm_flags_set(vma, VM_SEALED);
- }
++	if (!can_modify_vma(vma))
++		return -EPERM;
++
+ 	if (newflags == oldflags) {
+ 		*pprev = vma;
+ 		return 0;
+@@ -769,15 +772,6 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
+ 		}
+ 	}
  
--/*
-- * check if a vma is sealed for modification.
-- * return true, if modification is allowed.
-- */
--static bool can_modify_vma(struct vm_area_struct *vma)
--{
--	if (unlikely(vma_is_sealed(vma)))
--		return false;
+-	/*
+-	 * checking if memory is sealed.
+-	 * can_modify_mm assumes we have acquired the lock on MM.
+-	 */
+-	if (unlikely(!can_modify_mm(current->mm, start, end))) {
+-		error = -EPERM;
+-		goto out;
+-	}
 -
--	return true;
--}
--
- static bool is_madv_discard(int behavior)
- {
- 	switch (behavior) {
-diff --git a/mm/vma.h b/mm/vma.h
-index 6efdf1768a0a..e979015cc7fc 100644
---- a/mm/vma.h
-+++ b/mm/vma.h
-@@ -361,4 +361,32 @@ struct vm_area_struct *vma_iter_prev_range(struct vma_iterator *vmi)
- 	return mas_prev_range(&vmi->mas, 0);
- }
- 
-+#ifdef CONFIG_64BIT
-+
-+static inline bool vma_is_sealed(struct vm_area_struct *vma)
-+{
-+	return (vma->vm_flags & VM_SEALED);
-+}
-+
-+/*
-+ * check if a vma is sealed for modification.
-+ * return true, if modification is allowed.
-+ */
-+static inline bool can_modify_vma(struct vm_area_struct *vma)
-+{
-+	if (unlikely(vma_is_sealed(vma)))
-+		return false;
-+
-+	return true;
-+}
-+
-+#else
-+
-+static inline bool can_modify_vma(struct vm_area_struct *vma)
-+{
-+	return true;
-+}
-+
-+#endif
-+
- #endif	/* __MM_VMA_H */
+ 	prev = vma_prev(&vmi);
+ 	if (start > vma->vm_start)
+ 		prev = vma;
 
 -- 
 2.46.0
