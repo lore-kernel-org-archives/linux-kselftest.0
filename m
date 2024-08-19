@@ -1,104 +1,104 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3951E2113
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2024 22:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E85B1591FC;
+	Mon, 19 Aug 2024 22:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724107559; cv=none; b=bdanjZaXoeQxtYnFPB/lqo1wvRotZlZUSID8edQZwHYfp4gYRsdJViiRtcXKLu/aO5LhbH/yOcor8q0gjpfLxPZllIU3IafC14RCRNfC2GC+51heAGtlBwsDBXHVqascHAEwUGmT6IsHrO1CqMHR8L3gooFE4StPAGJCoUA5Uys=
+	t=1724107981; cv=none; b=WTjx6jglKxA5EMcFDBvKwFdOr9zHpKrapdYdiU8ao8EK3zLzCneYBohg08+hVf2GKP4+awqfokCiWvGlzKwhwpZ+SBzygKScygvCvJe7hn+HDcnU1HM/wKWIQVH7RWTHvmDbP2mLEz50dHVyUwT/QzxNrYMWIAygT11TQTGXphg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724107559; c=relaxed/simple;
-	bh=5JLeDpzyS9dJhH/m+G5XXy6Q35l9+dEhun5ey8UC8WA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PWY2v2t6mxJjxz4BaR4de/Iy39rdlt7O1otkMVIVrQd54TKwiIPMw+g9huW205QVv6vn65hOaVI0oE8yyDnhcMhvn0D/IcoDfEfJssthonEXAH1jnVtLA7HIncKGbwZ1TNEIPLilOZZ7bG4vHrm1m7g7TGpLMTNGL9IxpbNO944=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=B5p9yOH3; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1724107981; c=relaxed/simple;
+	bh=z8tvJ/r+K51rMUGiQ7v/KfC1hjjU9qrDmdqSPzMw1FI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mizGuU0pMncf4Y9aERIHL8SyGiEHtxD9pF6nJ0iOOgMEYEFbg4Q2taJXtxr5f1pi8/JZiNZ6WJDo1jn0N71wS6n+oxySy0FQCFzgFU+iDueK8yULzrlQpHpQvCaACAX21w+pCh4GjbFD0Iv7M0rQDIjn5Ep21VShPlj2vH1kNqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X+425N8/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="B5p9yOH3"
-Message-ID: <c0788766-e23e-4925-becb-0e2108cb9054@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1724107555;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bqtoHF9mFAXgYmpgH4T8LBRT0yHyAd5RB1vDvwAPyGQ=;
-	b=B5p9yOH3+9MG9S9/5t9H1cDuo0nRcTjGT1+HGJn2vJF443yHg9TW0qGJIoOj3PIdl26bkV
-	cgVF3HomLKZgHDrPtpzL77VbUS8yhCRez8M4P93gUBM5vPXLPysD+KlRCnwS+2q5eK5jMX
-	GUv6kSbGuyEH411ietDD3Kucvxgjh50=
-Date: Mon, 19 Aug 2024 15:45:44 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X+425N8/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64ED0C4AF12;
+	Mon, 19 Aug 2024 22:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724107980;
+	bh=z8tvJ/r+K51rMUGiQ7v/KfC1hjjU9qrDmdqSPzMw1FI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=X+425N8/0Z0g9jYHaBI4EUs6dVJXQlWC758nv9kpCZbKzTDNb6P2p1FPy3r+7duwl
+	 u68IWRgnb7ZJcMUYHFffZJJaJTZr9bP2leFUXp0TPrhzWj73LiizT6k1B46np7glzU
+	 6kCHjT0/sKrazot7Ln9ZOyLLWfEErLTDlhRUia0WS07ZOowAWukzj3LBM4ZhRXBn4t
+	 nO8e1WKgWHjK1k//RopJ63LkktIInRVyYi9Q+cS5CAvyy/hNwl7zTUj4idOxU8s5KN
+	 cUZuIwNxTEg4dS+POUv9Q+Tsy6hoBuKT58z5QH6U5BXP+rLKPZJxm066BR2w0ssGPV
+	 8p8UNW1SqEHtg==
+Date: Mon, 19 Aug 2024 15:52:57 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Taehee Yoo <ap420073@gmail.com>
+Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Richard Henderson
+ <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+ Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Sumit
+ Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason
+ Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend
+ Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>,
+ Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: Re: [PATCH net-next v19 03/13] netdev: support binding dma-buf to
+ netdevice
+Message-ID: <20240819155257.1148e869@kernel.org>
+In-Reply-To: <CAMArcTWWxjsg_zwS6waWkLpyHhwdXDm_NJeVGm_dr+eT5QDZiA@mail.gmail.com>
+References: <20240813211317.3381180-4-almasrymina@google.com>
+	<CAMArcTWWxjsg_zwS6waWkLpyHhwdXDm_NJeVGm_dr+eT5QDZiA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
- fixes
-To: Jakub Sitnicki <jakub@cloudflare.com>, Michal Luczaj <mhal@rbox.co>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
-References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
- <87y159yi5m.fsf@cloudflare.com>
- <249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
- <87ttfxy28s.fsf@cloudflare.com>
- <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
- <871q2o5lyl.fsf@cloudflare.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <871q2o5lyl.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 8/16/24 12:03 PM, Jakub Sitnicki wrote:
-> On Wed, Aug 14, 2024 at 06:14 PM +02, Michal Luczaj wrote:
->> On 8/6/24 19:45, Jakub Sitnicki wrote:
->>> On Tue, Aug 06, 2024 at 07:18 PM +02, Michal Luczaj wrote:
->>>> Great, thanks for the review. With this completed, I guess we can unwind
->>>> the (mail) stack to [1]. Is that ingress-to-local et al. something you
->>>> wanted to take care of yourself or can I give it a try?
->>>> [1] https://lore.kernel.org/netdev/87msmqn9ws.fsf@cloudflare.com/
->>>
->>> I haven't stated any work on. You're welcome to tackle that.
->>>
->>> All I have is a toy test that I've used to generate the redirect matrix.
->>> Perhaps it can serve as inspiration:
->>>
->>> https://github.com/jsitnicki/sockmap-redir-matrix
->>
->> All right, please let me know if this is more or less what you meant and
->> I'll post the whole series for a review (+patch to purge sockmap_listen of
->> redir tests, fix misnomers). Mostly I've just copypasted your code
->> (mangling it terribly along the way), so I feel silly claiming the
->> authorship. Should I assign you as an author?
+On Mon, 19 Aug 2024 00:44:27 +0900 Taehee Yoo wrote:
+> > @@ -9537,6 +9540,10 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+> >                         NL_SET_ERR_MSG(extack, "Native and generic XDP can't be active at the same time");
+> >                         return -EEXIST;
+> >                 }
+> > +               if (dev_get_max_mp_channel(dev) != -1) {
+> > +                       NL_SET_ERR_MSG(extack, "XDP can't be installed on a netdev using memory providers");
+> > +                       return -EINVAL;
+> > +               }  
 > 
-> Don't worry about it. I appreciate the help.
+> Should we consider virtual interfaces like bonding, bridge, etc?
+> Virtual interfaces as an upper interface of physical interfaces can
+> still install XDP prog.
 > 
-> I will take a look at the redirect tests this weekend.
+> # ip link add bond0 type bond
+> # ip link set eth0 master bond0
+> # ip link set bond0 xdp pin /sys/fs/bpf/x/y
+> and
+> # ip link set bond0 xdpgeneric pin /sys/fs/bpf/x/y
 > 
->> Note that the patches are based on [2], which has not reached bpf-next
->> (patchwork says: "Needs ACK").
->>
->> [2] [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related fixes
->>      https://lore.kernel.org/bpf/20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co/
-> 
-> Might have slipped throught the cracks...
-> 
-> 
-> Andrii, Martin,
-> 
-> The patch set still applies cleanly to bpf-next.
-> 
-> Would you be able to a look at this series? Anything we need to do?
+> All virtual interfaces can install generic XDP prog.
+> The bonding interface can install native XDP prog.
 
-will take a look. no need to resend.
-
+Good point. We may need some common helpers to place the checks for XDP.
+They are spread all over the place now.
