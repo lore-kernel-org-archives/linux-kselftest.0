@@ -1,34 +1,57 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A18D83A8D2;
-	Tue, 20 Aug 2024 22:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D5315C13C
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2024 22:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724193035; cv=none; b=GEW823XSQSEkWkgGMwmkbJXQ99a2aYnrNuL6wGo67iNmJ1lN06BHpvef0qDvVOweYmUwv5s6+qEpmHrpAWW+Bwrgh9JeJG7SFd1QVG8ZabiDDE2OlWWI3qXSagxDIdoZ5IOhngcYP4UXeV8vpH5FCdeBCvglQ3lDQzQbriiTIHY=
+	t=1724193631; cv=none; b=rBdq2UU7CiL1P802re0mKalRAmFtTSRHrc3VgCpZ3up2i3pizLxCgPeIMYIZQxEUhVyKWzWG6J9VWuvxrRpWjcYYmF0JCQeTdhFYkdHN8ToIsAVwaDUq3cSkSmxd0/S/PUpk+z1loe5vV+ejDSK5O/9QhVtznxQB9jcSsoVkFdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724193035; c=relaxed/simple;
-	bh=OafcNw8/JtSF8qeW2Gwmej7hjpv13TKhj/26pNitPzI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=vEbV9pdq14jnfKVW61yK9OjyNp9HaTtCp+uzj4zkn9PVzfS/pwKYIwL36+kC8OdwliSrcM4zRHr7JaT5To72t9/tXAFDNd+EIicnyZaPDddD6B1vFXMvS4TwEfPm5orQ8SVc9/Scui0Ad/uLTH+xziEJyDJxf5Zd9VmeT87O1qI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k8CPE58u; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724193631; c=relaxed/simple;
+	bh=o0M+Xl+d1/3U/ge1v9w0WKMEzXXPWf8HHlVyIog7A8c=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=GrBfEUyAX6mPUmvAZShLL8cZiiZTdbVi+jRBlKvAAjZ5R/ZNBjH7oBFE1vhKC7PVXKQFl+wk5yXltO8KyPkD+gFbgQ5V005cLM92Q/z/RDY8ynKdQ1gpr1IDYjbNg/EWuwkfYwhujwB87qxHvk7S66005EI9Bc6NdrGvTNVWIas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=p2CY6igd; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k8CPE58u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B66C4AF10;
-	Tue, 20 Aug 2024 22:30:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724193035;
-	bh=OafcNw8/JtSF8qeW2Gwmej7hjpv13TKhj/26pNitPzI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=k8CPE58u5isYcfdqZ68oo3fAU3jLWOIEN7CCcGHYIO3LFpfKA9h5UNn0Q1k36PlLo
-	 boJ+thl9Y+kW8QQWxBLRSCMmkT1o4pdWDCVjfbbd0Cw5qYlcU8uXUopgzaEAjqp71L
-	 +y+moRhJDSHE795wQyf6i6X5M+7Ll8ozE0vqLTbCIJb2BUA+UtW5Jz+0sCyAwPYDrj
-	 3EveOqwPTseoIOvp7X/ysFiPQ7QIz/gmVqGKXR5AooA4WZtYbhAIqCWw5hy7qrYBWt
-	 wjIsQN3vI82AAvic/XxEvY1G7EwY5zVp81ChWE1Yo63Q6N+HzmL6jAkmJNuDQ6keju
-	 lwOoPsjytRsnQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33F463804CAE;
-	Tue, 20 Aug 2024 22:30:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="p2CY6igd"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-713f3b4c9f7so2056414b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2024 15:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1724193629; x=1724798429; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YhneommDHBjPyuai4Wcp0a/Jk/vH9uUTfkXjXs1iZG8=;
+        b=p2CY6igdnuSLSlQP5WR0VuqGzlWQ+hPxzafoYgikr74WeUQMI9OX6VNGnlR56PCs0Q
+         5YPp/LNuhHoGm7lyuYMr6rRXYpJG8TSFb0aMuanFkv01WYRL/pWRn8abrDy7ss6mAyPO
+         izzTY+T4l9O76k6fABpqAq236P0avwhzgNpEInajwXU1lsLdj+n4QoTNI/4UjF1fNGJ+
+         VcBKhUMiui4Mvx9EJdkvd65qbFepISTXDsfSsvBuHWCPLpY9fSKdjKieiAjOTBzL69dA
+         nnmGcrJnWPf8UWDE51HcsBNxAVvalEhKVuDaybT1uMnO1XMM6XQhO8WEVTEk3Bloc3sy
+         Gg9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724193629; x=1724798429;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YhneommDHBjPyuai4Wcp0a/Jk/vH9uUTfkXjXs1iZG8=;
+        b=dv8EpZEBlX4tklxCqGN7yDKIhARLDqYedRhyo+wcVQKVszk1z/JwegHoAVwx0rcUty
+         yprv9L/qmcB1LAP5+9QQGqiyQZJLBkN3sjHyoE2yTkUj/GkqEb2DvunQ9bfP9fs50aUE
+         Q6zBRgthwfvJf1ctBuGgN+JCGFpxWU19/qHJTe7NMIhmGZlCYpR8pOf2CABSLS3jGuyn
+         bguamvtfXiklHHIjs1rSDAlhhVjP2Xs27nx32nuFAVbAcBkmk3+COPSyzStzKyGJV5OI
+         5XbYh/5rtUSlNCjDOQcTDaofWlz3C8CDvDNPw+IWMartx6tGy9XPjByo9VnmcPk7Mv8Z
+         bGYw==
+X-Forwarded-Encrypted: i=1; AJvYcCUiu1buVhxamtXdZPpbL+14dus6Optow2WEsn7uSvNibfn+qfeY8PIRNTvQV6zX+n3TNnjUH2Vb4AThS6aX4ZQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2DCunLWwCh3x335E+lz+w2oDD7AvVSbLhjv0BGEA59ETQ+ijM
+	VaXib2ctmNJhyXBqr8NGffC661w4b40cU/vB/3YNsmG3sKTEqN8AOcypRcFdVLs=
+X-Google-Smtp-Source: AGHT+IHo7kYaztsqk0Hr53UJE2ECEM+7L9i29iyFPAFds4DqAVoyI+bWhuzHyFlOnhoHfW4YPWC+0w==
+X-Received: by 2002:a05:6a00:3ccb:b0:710:4d4b:1af with SMTP id d2e1a72fcca58-71423769a5bmr645981b3a.7.1724193628880;
+        Tue, 20 Aug 2024 15:40:28 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7c6b6367db7sm9848794a12.88.2024.08.20.15.40.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2024 15:40:28 -0700 (PDT)
+Message-ID: <66c51b5c.630a0220.2c1527.2e0c@mx.google.com>
+Date: Tue, 20 Aug 2024 15:40:28 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -36,46 +59,76 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: net/forwarding: spawn sh inside vrf to
- speed up ping loop
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172419303375.1256151.2518519355159442997.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Aug 2024 22:30:33 +0000
-References: <20240817203659.712085-1-kuba@kernel.org>
-In-Reply-To: <20240817203659.712085-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, shuah@kernel.org, idosch@nvidia.com,
- linux-kselftest@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.11-rc1-13-g41f37c852ac3f
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next kselftest-lib: 1 runs,
+ 1 regressions (v6.11-rc1-13-g41f37c852ac3f)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hello:
+kselftest/next kselftest-lib: 1 runs, 1 regressions (v6.11-rc1-13-g41f37c85=
+2ac3f)
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Regressions Summary
+-------------------
 
-On Sat, 17 Aug 2024 13:36:59 -0700 you wrote:
-> Looking at timestamped output of netdev CI reveals that
-> most of the time in forwarding tests for custom route
-> hashing is spent on a single case, namely the test which
-> uses ping (mausezahn does not support flow labels).
-> 
-> On a non-debug kernel we spend 714 of 730 total test
-> runtime (97%) on this test case. While having flow label
-> support in a traffic gen tool / mausezahn would be best,
-> we can significantly speed up the loop by putting ip vrf exec
-> outside of the iteration.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next] selftests: net/forwarding: spawn sh inside vrf to speed up ping loop
-    https://git.kernel.org/netdev/net-next/c/555e5531635a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+platform                    | arch | lab         | compiler | defconfig    =
+                | regressions
+----------------------------+------+-------------+----------+--------------=
+----------------+------------
+stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
+onfig+kselftest | 1          =
 
 
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
+1-rc1-13-g41f37c852ac3f/plan/kselftest-lib/
+
+  Test:     kselftest-lib
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.11-rc1-13-g41f37c852ac3f
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      41f37c852ac3fbfd072a00281b60dc7ba056be8c =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                    | arch | lab         | compiler | defconfig    =
+                | regressions
+----------------------------+------+-------------+----------+--------------=
+----------------+------------
+stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
+onfig+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66c5140122b4b11599c8685e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+kselftest
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.11-rc1-13-g4=
+1f37c852ac3f/arm/multi_v7_defconfig+kselftest/gcc-12/lab-broonie/kselftest-=
+lib-stm32mp157a-dhcor-avenger96.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.11-rc1-13-g4=
+1f37c852ac3f/arm/multi_v7_defconfig+kselftest/gcc-12/lab-broonie/kselftest-=
+lib-stm32mp157a-dhcor-avenger96.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
+elftest/20240313.0/armhf/initrd.cpio.gz =
+
+
+
+  * kselftest-lib.login: https://kernelci.org/test/case/id/66c5140122b4b115=
+99c8685f
+        failing since 21 days (last pass: v6.10-rc7-29-gdf09b0bb09ea, first=
+ fail: v6.11-rc1) =
+
+ =20
