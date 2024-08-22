@@ -1,169 +1,123 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434251CAA6
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 04:39:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724301577; cv=none; b=snokEXg+b7eaA4+Ck2fqLZngpCGfyKh0wmQPQ3/eOI0U5mjwIxjsI+c5bxoYjMJyiRytNKc6tniUngRt1CatIG8PFxqR4E8estkgVxDEeHi/di3AZTneTnTsh5AIeUNrCbYwlVaD85qHSyQOT2bp1STjVkMKSXLWBeleYWzzC9w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724301577; c=relaxed/simple;
-	bh=si1+5ckOBPzI1ghXUuFTsZOYlXHhTyB/XUwwp/ozvcI=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=e9P2qDvqBDDT+4ooSBTRGhIsbJovrqhmrzTSMb67XdPVjD9ftQNcpazccY6PKgJPkqAIicM6SWTsHVhxeS+WyHCN9zQOrz1CUjwaatgq0M2Rw6tDocN6wpgi/PsKnh1riXmubwOUnJuILOAsYk9Cq1NeUYMPg/8ggk5eCH11Sgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=R0YXP83E; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC21C23776;
+	Thu, 22 Aug 2024 04:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724302147; cv=pass; b=Ly4bDRu16BFB/pGH0/X0uLjjax6iYCqsIszimEXuQ1LEJHhBNbjzRodicjeM5gD4hbzYrahlQFL7t0rCS5xvj60VQepgOxXUSPEMA/uzaSofqceF1yK86FcNqIk/q3U/+2Yq8O/G9KPZ8z33kYt5y+NEAX50ePkxLUqwJZvGU2Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724302147; c=relaxed/simple;
+	bh=5dBVWyMJFOLY6LczPjuoq+vMAPbe8U9BdHH5gN0bJ8k=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=BPFDYkA/pBlVEX9qrr+/wF1qtUJKhKxhVTNAs3uVXlL7mXkCuldmyK4KFr2pw1thI6UOZ7RzsWIOlH9Dxytn1vc6rVhIg7qRfMskM6XhGgta6vksz19qjGjmLei5PlB1uauQHCWRrRAPOBtmp1yI/lu3tZXIGLRxNkknZJw/dBo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=iifGeQpN; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="R0YXP83E"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-	Message-ID:Subject:To:From:Date:Reply-To:Cc:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=AA4WaTEkNjbjrZGfNu4KV2H8PXXj+NYazaOW4bROYjE=; b=R0YXP83Ems8aowdPQLXqMLRTEr
-	UMg28z+t/0ETQKuqxL8mNjw9KyQLxq2PH3M7MQtRJ1lXWGsTD0qGFi6Ru2FNHNFZwz505w4925L33
-	/VDw2NTIup6D+mbmt8Ot482GSUdW86XLKUn9vKTYVtFfJv6p0J1y+h2Vi1GdkRanZwrXo8H6miWoZ
-	TT7mRW8a7eaVptD34V8BBhIYRrjoJ5VXepW8dYdK+hlU5KwOAlP8ttYWVy+e65oqcRN/bb209hoFp
-	LobdO8fZsri+6bnlBQ+pL5Kbt4K9d32OYtoH+7IrIimaxX+T2/5ZiingxDiA2pDnWNR9+7O+4FcId
-	7X1yDzfg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1sgzbg-00000003z5d-32D3
-	for linux-kselftest@vger.kernel.org;
-	Thu, 22 Aug 2024 04:39:32 +0000
-Date: Thu, 22 Aug 2024 05:39:32 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-kselftest@vger.kernel.org
-Subject: [PATCH] test coverage for dup_fd() failure handling in unshare_fd()
-Message-ID: <20240822043932.GT504335@ZenIV>
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="iifGeQpN"
+ARC-Seal: i=1; a=rsa-sha256; t=1724302138; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Qrelygl3WYDKCHc4WIQd8rSlbUULgYfR3lBJN679mWPVp06BUG96AepYbBPJSvWXui/yNeMasbms7sl79IUeI+pcdc2oLEvjbLCAGPO8eMIn127V9qMaqZpvHZk3M7sHXd8GoW8AZQtkyr2dYD6fpgSVZAIeCTM8f3sGp4Vw08w=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1724302138; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=MKVnjeNqhOLvl5ZtR4WUgOtRDwUS8L6JXBA6uB/6hIQ=; 
+	b=Svp00Vupwf8DCI57if1+ura6/PYRO8Q4hbgzCCrbgDTwnc+PoGSIC1XaiM1hfnxvE2wytgs9zCBkY0BspduEV95Y0UbuQaY9/Xm91JEbw8cIK4vXM1YW68EAqt5Jc4Ife3CZt7dCkBFFOZ+00Vqep62RLm3Z+KQCdD9m7zzaNuI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
+	dmarc=pass header.from=<Usama.Anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724302138;
+	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=MKVnjeNqhOLvl5ZtR4WUgOtRDwUS8L6JXBA6uB/6hIQ=;
+	b=iifGeQpNnVlR8y13E/JPYk+rsmesyYRo4eN1uSFAPxCQp7eAKsUp9h+W3uwXBeYm
+	7ddNTjZk1sVcWRKm8p7ADbNoAUTCIQKMvDi/62ADlzm708mA/8Nb0Tl1uVLOYDv/0YV
+	XLQHiw5+nn7VEQ17uJ1Fcr0sLUNvXxg0+BNQbujU=
+Received: by mx.zohomail.com with SMTPS id 172430213644657.83712784848478;
+	Wed, 21 Aug 2024 21:48:56 -0700 (PDT)
+Message-ID: <b24092fa-ed99-4373-a23f-a890969adcd8@collabora.com>
+Date: Thu, 22 Aug 2024 09:48:47 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
+User-Agent: Mozilla Thunderbird
+Cc: Usama.Anjum@collabora.com, linux-kernel@vger.kernel.org,
+ Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>, Fenghua Yu <fenghua.yu@intel.com>
+Subject: Re: [PATCH 1/3] selftests/resctrl: Generalize non-contiguous CAT
+ check
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Shuah Khan <shuah@kernel.org>, Reinette Chatre <reinette.chatre@intel.com>,
+ linux-kselftest@vger.kernel.org
+References: <20240813104515.19152-1-ilpo.jarvinen@linux.intel.com>
+ <20240813104515.19152-2-ilpo.jarvinen@linux.intel.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
+In-Reply-To: <20240813104515.19152-2-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-	At some point there'd been a dumb braino during the dup_fd()
-calling conventions change; caught by smatch and immediately fixed.
-The trouble is, there had been no test coverage for the dup_fd() failure
-handling - neither in kselftests nor in LTP.  Fortunately, it can be
-triggered on stock kernel - ENOMEM would require fault injection, but
-EMFILE can be had with sysctl alone (fs.nr_open).
+On 8/13/24 3:45 PM, Ilpo Järvinen wrote:
+> arch_supports_noncont_cat() checks if vendor is ARCH_AMD and if that is
+> not true, ARCH_INTEL is assumed which might not be true either because
+> get_vendor() can also return zero if neither AMD nor Intel is detected.
+> 
+> Generalize the vendor check using switch/case logic and return false
+> for unknown vendors.
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
---- 
-diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
-index ce262d097269..8e99f87f5d7c 100644
---- a/tools/testing/selftests/core/Makefile
-+++ b/tools/testing/selftests/core/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- CFLAGS += -g $(KHDR_INCLUDES)
- 
--TEST_GEN_PROGS := close_range_test
-+TEST_GEN_PROGS := close_range_test unshare_test
- 
- include ../lib.mk
- 
-diff --git a/tools/testing/selftests/core/unshare_test.c b/tools/testing/selftests/core/unshare_test.c
-new file mode 100644
-index 000000000000..7fec9dfb1b0e
---- /dev/null
-+++ b/tools/testing/selftests/core/unshare_test.c
-@@ -0,0 +1,94 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/kernel.h>
-+#include <limits.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <syscall.h>
-+#include <unistd.h>
-+#include <sys/resource.h>
-+#include <linux/close_range.h>
-+
-+#include "../kselftest_harness.h"
-+#include "../clone3/clone3_selftests.h"
-+
-+TEST(unshare_EMFILE)
-+{
-+	pid_t pid;
-+	int status;
-+	struct __clone_args args = {
-+		.flags = CLONE_FILES,
-+		.exit_signal = SIGCHLD,
-+	};
-+	int fd;
-+	ssize_t n, n2;
-+	static char buf[512], buf2[512];
-+	struct rlimit rlimit;
-+	int nr_open;
-+
-+	fd = open("/proc/sys/fs/nr_open", O_RDWR);
-+	ASSERT_GE(fd, 0);
-+
-+	n = read(fd, buf, sizeof(buf));
-+	ASSERT_GT(n, 0);
-+	ASSERT_EQ(buf[n - 1], '\n');
-+
-+	ASSERT_EQ(sscanf(buf, "%d", &nr_open), 1);
-+
-+	ASSERT_EQ(0, getrlimit(RLIMIT_NOFILE, &rlimit));
-+
-+	/* bump fs.nr_open */
-+	n2 = sprintf(buf2, "%d\n", nr_open + 1024);
-+	lseek(fd, 0, SEEK_SET);
-+	write(fd, buf2, n2);
-+
-+	/* bump ulimit -n */
-+	rlimit.rlim_cur = nr_open + 1024;
-+	rlimit.rlim_max = nr_open + 1024;
-+	EXPECT_EQ(0, setrlimit(RLIMIT_NOFILE, &rlimit)) {
-+		lseek(fd, 0, SEEK_SET);
-+		write(fd, buf, n);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* get a descriptor past the old fs.nr_open */
-+	EXPECT_GE(dup2(2, nr_open + 64), 0) {
-+		lseek(fd, 0, SEEK_SET);
-+		write(fd, buf, n);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* get descriptor table shared */
-+	pid = sys_clone3(&args, sizeof(args));
-+	EXPECT_GE(pid, 0) {
-+		lseek(fd, 0, SEEK_SET);
-+		write(fd, buf, n);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (pid == 0) {
-+		int err;
-+
-+		/* restore fs.nr_open */
-+		lseek(fd, 0, SEEK_SET);
-+		write(fd, buf, n);
-+		/* ... and now unshare(CLONE_FILES) must fail with EMFILE */
-+		err = unshare(CLONE_FILES);
-+		EXPECT_EQ(err, -1)
-+			exit(EXIT_FAILURE);
-+		EXPECT_EQ(errno, EMFILE)
-+			exit(EXIT_FAILURE);
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_EQ(true, WIFEXITED(status));
-+	EXPECT_EQ(0, WEXITSTATUS(status));
-+}
-+
-+TEST_HARNESS_MAIN
+> ---
+>  tools/testing/selftests/resctrl/cat_test.c | 26 +++++++++++++---------
+>  1 file changed, 16 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> index 742782438ca3..51a1cb6aac34 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -292,19 +292,25 @@ static bool arch_supports_noncont_cat(const struct resctrl_test *test)
+>  {
+>  	unsigned int eax, ebx, ecx, edx;
+>  
+> -	/* AMD always supports non-contiguous CBM. */
+> -	if (get_vendor() == ARCH_AMD)
+> +	switch (get_vendor()) {
+> +	case ARCH_AMD:
+> +		/* AMD always supports non-contiguous CBM. */
+>  		return true;
+>  
+> -	/* Intel support for non-contiguous CBM needs to be discovered. */
+> -	if (!strcmp(test->resource, "L3"))
+> -		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
+> -	else if (!strcmp(test->resource, "L2"))
+> -		__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
+> -	else
+> -		return false;
+> +	case ARCH_INTEL:
+> +		/* Intel support for non-contiguous CBM needs to be discovered. */
+> +		if (!strcmp(test->resource, "L3"))
+> +			__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
+> +		else if (!strcmp(test->resource, "L2"))
+> +			__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
+> +		else
+> +			return false;
+> +
+> +		return ((ecx >> 3) & 1);
+>  
+> -	return ((ecx >> 3) & 1);
+> +	default:
+> +		return false;
+> +	}
+>  }
+>  
+>  static int noncont_cat_run_test(const struct resctrl_test *test,
+
+-- 
+BR,
+Muhammad Usama Anjum
+
