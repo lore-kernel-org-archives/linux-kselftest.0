@@ -1,55 +1,74 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8602A1922C9;
-	Fri, 23 Aug 2024 19:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0348F6B;
+	Fri, 23 Aug 2024 19:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724439652; cv=none; b=mgftg2gq4rZ3qDxbcRJBXPbGcgIRU/1btK8j5hKmI9mcgq6F91OHsFImbybpnNAw5jgrrnL4LwXV1Isz4I496KT6o+0Pc2CRseD3p1sf7j0X9oDDExsR9B0D0xO185HldgcmKsej7ejEVMrHhXUiwUZEYmAEx8xVCHygplsL41g=
+	t=1724440115; cv=none; b=hHV+6vfTbz9GO9jzN1+KRB1eKbLWCyuL3/9tLXywoMHejfC9TwqiyrLkzaurdk9d+k8BTdaUxE5dPq83YgGT+Ay9mZokLFCkMW/K4yzkVEimDwF5WYKmyGY4AKlX9AVVEPytIhP8dVZPb+HyYZntmxoO9rh9Tj7rKbc4rXuGbb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724439652; c=relaxed/simple;
-	bh=bs+/EWjAhs966KMUIhRMp9DxjSO6mOM2w5UU/c1zyqw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nzizOklUZ68ygmhyYNroHirw+eU7h9JoVXEUbWikzN5ENqGGRK8/V7sFNDPma0hcNFEgGICmV3qyHv+K9844pOwewla/7fMq1mItLZB71Jx3OazaxbypJburWtJOXQSgkg0E7DtFMh5yY2znb0BHpT1vh17LcyP96SQN+qhIxJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=LetfqUA8; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	s=arc-20240116; t=1724440115; c=relaxed/simple;
+	bh=Qxh0CtKyZd1DnK/0dchijwa1sKES+yUOrUYLIZr/5DU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lXhB5+5Kt61p80yXqq0ZxOleLTmO13/HQW1KV4HYC8SoEWv3MDN4Ul/zIZXHdx7hjok2w394o8PbbmZ2YzUqXQtNQtNqHoBmZvwvjDQaan4kMpiR3Lz1RCOYPpaJ9NT1AGhoAGI/5TMxkoSPvuKeK0jvqRhcpzDeYArAMR+Zoxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DlwpFcoS; arc=none smtp.client-ip=209.85.217.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="LetfqUA8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1724439622;
-	bh=bs+/EWjAhs966KMUIhRMp9DxjSO6mOM2w5UU/c1zyqw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LetfqUA8vTxITbVR+/8Naz3XntQhCRMzTU5f+A9/vXZB7ywf+M4371xDZRebGj6Kw
-	 PeoUfKtj/PVsf02ZnkGYqA39WR2uiDlBZLVAHkAaSo/UTlo3ZJ6vSyFothWxukeKcu
-	 grGKotQMMvFm28c5m+zsomYFihXJQB82CI9Gb4eNND0klPVPYFvk7Uey2KboF8i3uG
-	 fR6rw7RBIlPNCZpHhEDTvwu1oP09tAeB/8c8mCKcZ9klRIobLkPiF3vmfWDOpxSbl6
-	 RccVvUBz6dcP4zu4oi29H69u5gSKYSZUy2j0pjJxoxYT8+0V5KvLGIxOo6wtm5R+LR
-	 6PIYOmY+gN7Lw==
-Received: from thinkos.internal.efficios.com (unknown [IPv6:2606:6d00:100:4000:b243:804e:3bbd:91c9])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4Wr8XQ34Cfz1Hhj;
-	Fri, 23 Aug 2024 15:00:22 -0400 (EDT)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH v1 5/6] selftests/rseq: x86: Implement rseq_load_u32_u32
-Date: Fri, 23 Aug 2024 14:59:45 -0400
-Message-Id: <20240823185946.418340-6-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240823185946.418340-1-mathieu.desnoyers@efficios.com>
-References: <20240823185946.418340-1-mathieu.desnoyers@efficios.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DlwpFcoS"
+Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-498d7a1f734so744530137.0;
+        Fri, 23 Aug 2024 12:08:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724440112; x=1725044912; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+QQf35c5Pp7+9zpkvOPWiJekHVDOIOVDBwe/+zf2lto=;
+        b=DlwpFcoS4rQ/INZ4T7W6UY8Cc8GCr6L6eaHCHPV8qodvYWMrUdgHt0vOvJ+Ched0m8
+         tPg0TXCCoJZmzjpL77iLlpPnl+X+Pne3ivXumANVMn0ysX48HSdVmiRkMC14f8uLZgwq
+         lEkAhwnUhmKgGzf0Obk05+FnoEemw7J5v1PiBj9Hx/ZKdtbVPXRmVmJokVS8Z0LFx+Bx
+         hMtK8qIPqq58vLohSXzhBVXvAlkKNlninWxQCT/wefr/2jkOQ0W6vv6NzY6DUSg/bSwy
+         q9b5H4oaDuDVJjXsjba0gLQlvMwLM1uMf5U+WhLr8AvYp9Y0cur3ySBWIcUJcQZa7n0O
+         Td7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724440112; x=1725044912;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+QQf35c5Pp7+9zpkvOPWiJekHVDOIOVDBwe/+zf2lto=;
+        b=dKlraffE+DmQmMkr1a4puz3YCDx2x/NpVTDTzBxnkKEXcHzmoXv3HIqqYsOEldWsmP
+         Dnr0j2WDUz0qaISeq+nbBhzmi/I4MPkXqO1XAZudj5VmbDa5gsEY2PZksGT3lzan3nvL
+         0h0NFowiDwSibe2eu2I3s0r+9bb8YCxN6Y3Sj2tzNvo4n21VXTodYsPFTlI6HYshT2tR
+         IeiD2I3t/vic2y6oAOm2xwEni99BJQxz2DgaB/rfOCLGs+oywNmBxZy43fmtj/ljjRO8
+         jwf+aToO2JQW8/qD1KDzV6obQzZ9X7Q0bP4BMz1PvryumNKlphpLgKIOUp18YSS2/KsN
+         xdvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVIVq+FXYXXGo3KyyAtDJl2wMn2wI9BBMTZBFF9WkB6gAKemtZb1OBwg1bWQogP3qYj1YD5Nv4UO+utCPiYZHV/@vger.kernel.org, AJvYcCVlcM9NtFHl79A037WGEmFljAvI8A8VWeSKN2iXf0Rei8T56+BajTGDqYSZtUiZbhnf6Dxa8sKy@vger.kernel.org, AJvYcCXAxtIHxHDvaCDYmkMuxdr06roMxSb5YIRVOWIl/DWVZTRZcyH/4NweASBObNDfIRxNuXgRCqDHHeEH02I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzK/+xLLPeZVQLjyFsxqfLUyLAMHQWjyf1AsVRomXUPpyVD9AHn
+	ztDwcJ/UhD1i+ZjjONfeplHPRnShfUJysLn0nk4REvGihkCDy6p+
+X-Google-Smtp-Source: AGHT+IFjLnNiw+FcM23xAbBAxKFeWJFoyLiZ7Kzp9eZ5gVg2H+B+bqEJGz0Jks6EBCP8LNPc91nFEw==
+X-Received: by 2002:a05:6102:6c9:b0:492:9ef9:9d1b with SMTP id ada2fe7eead31-498f46ea98fmr3960629137.22.1724440112406;
+        Fri, 23 Aug 2024 12:08:32 -0700 (PDT)
+Received: from localhost (57-135-107-183.static4.bluestreamfiber.net. [57.135.107.183])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-498e47c5d53sm623968137.13.2024.08.23.12.08.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Aug 2024 12:08:32 -0700 (PDT)
+From: David Hunter <david.hunter.linux@gmail.com>
+To: kuba@kernel.org
+Cc: davem@davemloft.net,
+	david.hunter.linux@gmail.com,
+	edumazet@google.com,
+	javier.carrasco.cruz@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org
+Subject: Re: Re: [PATCH 1/1] Improve missing mods error message and make shell script executable
+Date: Fri, 23 Aug 2024 15:08:28 -0400
+Message-ID: <20240823190828.214443-1-david.hunter.linux@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240821180202.6da48f29@kernel.org>
+References: <20240821180202.6da48f29@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,97 +77,31 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Allow loading a pair of u32 within a rseq critical section. It can be
-used in situations where both rseq_abi()->mm_cid and
-rseq_abi()->node_id need to be sampled atomically with respect to
-preemption, signal delivery and migration.
+> If you say "also" there's a good chance the commit should be split into two..
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/rseq/rseq-x86-bits.h | 43 ++++++++++++++++++++
- tools/testing/selftests/rseq/rseq.h          | 14 +++++++
- 2 files changed, 57 insertions(+)
+I am splitting original patch into 2 separate patches. I forgot to do the reply all command on kernel lore.  Here is the link to version 2 for the improving the missing modules error message:
 
-diff --git a/tools/testing/selftests/rseq/rseq-x86-bits.h b/tools/testing/selftests/rseq/rseq-x86-bits.h
-index 8a9431eec467..fdf5ef398393 100644
---- a/tools/testing/selftests/rseq/rseq-x86-bits.h
-+++ b/tools/testing/selftests/rseq/rseq-x86-bits.h
-@@ -990,4 +990,47 @@ int RSEQ_TEMPLATE_IDENTIFIER(rseq_cmpeqv_trymemcpy_storev)(intptr_t *v, intptr_t
- 
- #endif
- 
-+#if defined(RSEQ_TEMPLATE_CPU_ID_NONE) && defined(RSEQ_TEMPLATE_MO_RELAXED)
-+
-+#define RSEQ_ARCH_HAS_LOAD_U32_U32
-+
-+static inline __attribute__((always_inline))
-+int RSEQ_TEMPLATE_IDENTIFIER(rseq_load_u32_u32)(uint32_t *dst1, uint32_t *src1,
-+		      uint32_t *dst2, uint32_t *src2)
-+{
-+	RSEQ_INJECT_C(9)
-+
-+	__asm__ __volatile__ goto (
-+		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
-+		/* Start rseq by storing table entry pointer into rseq_cs. */
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_ASM_TP_SEGMENT:RSEQ_CS_OFFSET(%[rseq_offset]))
-+		RSEQ_INJECT_ASM(3)
-+		"movl %[src1], %%eax\n\t"
-+		"movl %%eax, %[dst1]\n\t"
-+		"movl %[src2], %%eax\n\t"
-+		"movl %%eax, %[dst2]\n\t"
-+		"2:\n\t"
-+		RSEQ_INJECT_ASM(4)
-+		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
-+		: /* gcc asm goto does not allow outputs */
-+		: [rseq_offset]		"r" (rseq_offset),
-+		  /* final store input */
-+		  [dst1]		"m" (*dst1),
-+		  [src1]		"m" (*src1),
-+		  [dst2]		"m" (*dst2),
-+		  [src2]		"m" (*src2)
-+		: "memory", "cc", "rax"
-+		  RSEQ_INJECT_CLOBBER
-+		: abort
-+	);
-+	rseq_after_asm_goto();
-+	return 0;
-+abort:
-+	rseq_after_asm_goto();
-+	RSEQ_INJECT_FAILED
-+	return -1;
-+}
-+
-+#endif /* defined(RSEQ_TEMPLATE_CPU_ID_NONE) && defined(RSEQ_TEMPLATE_MO_RELAXED) */
-+
- #include "rseq-bits-reset.h"
-diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
-index d7364ea4d201..b6095c2a5da6 100644
---- a/tools/testing/selftests/rseq/rseq.h
-+++ b/tools/testing/selftests/rseq/rseq.h
-@@ -381,4 +381,18 @@ int rseq_cmpeqv_trymemcpy_storev(enum rseq_mo rseq_mo, enum rseq_percpu_mode per
- 	}
- }
- 
-+#ifdef RSEQ_ARCH_HAS_LOAD_U32_U32
-+
-+static inline __attribute__((always_inline))
-+int rseq_load_u32_u32(enum rseq_mo rseq_mo,
-+		      uint32_t *dst1, uint32_t *src1,
-+		      uint32_t *dst2, uint32_t *src2)
-+{
-+	if (rseq_mo != RSEQ_MO_RELAXED)
-+		return -1;
-+	return rseq_load_u32_u32_relaxed(dst1, src1, dst2, src2);
-+}
-+
-+#endif
-+
- #endif  /* RSEQ_H_ */
--- 
-2.39.2
+https://lore.kernel.org/all/20240823054833.144612-1-david.hunter.linux@gmail.com/
+Subject: [PATCH 1/1 V2] Selftests: net: Improve missing modules error message
 
+> Could you clarify how it gets skipped? We use make [...] run_tests in our CI and it does seem to run.
+
+Here is my set up:
+
+$ uname -a 
+
+- Linux dshunter-HP-Laptop-15-dy5xxx 6.11.0-rc2+ #2 SMP PREEMPT_DYNAMIC Tue Aug 20 14:31:34 EDT 2024 x86_64 x86_64 x86_64 GNU/Linux
+
+Steps I took to produce the error:
+	- use git clone to get the mainline source
+	- run make -C tools/testing/selftests
+	- make summary=1 -C tools/testing/selftests TARGETS=net run_tests
+
+Output: 
+# selftests: net: test_ingress_egress_chaining.sh
+# Warning: file test_ingress_egress_chaining.sh is not executable
+
+After running chmod +x on the shell script. The tests were able to be run.
+
+Thanks, 
+David 
