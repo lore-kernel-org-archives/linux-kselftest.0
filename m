@@ -1,165 +1,159 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1A1195;
-	Fri, 23 Aug 2024 22:01:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55F0191F6B;
+	Fri, 23 Aug 2024 22:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724450477; cv=none; b=Tts6HZLrgTPuVNecKVK3rEdEwtnxg+okY1lzAv/Rk/uVw6alQu8n+KHrxCCnR/+r7go9OzjaEFtUd0P2E3WE3BxTIwewcgwtyWUGTmeKg3eYbk3BD7GDiK6BBl1vTOUDB0c79Pqj6DEFGawwZh6AaJ01TorZiK68WhM8UGgIRug=
+	t=1724450719; cv=none; b=Ybi4U/Fs9+nk4MgOrh8fb1Fb/+V3SDxWMKsY5LfOlgfM14fjbQlHz+qsjCGWG0oKpcL+xrR+y85pfGEVW67Necb9+lyNCvu+1NYWUpfYrsahvSlDIKWu+Eik8diTSzhcyDrEQs39HSCKtXw/9QHjzYWlJha6mPztz2E3CGL14JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724450477; c=relaxed/simple;
-	bh=4E2/SMw5ipU2qtwXN1Uwic3Rzbvi3xioIyGpbAx2lVk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EcgypmTIJU0XR7o0nULt7S3/QGG12G6OV8vEQhZx81mjKR7K0cTyMjWUuGRyl7i08hyCJB7QDB92eixgkyvSzJUKQwLGoOh6k0akNFAuZKsuDPzbNsJlTqudtNKFnW4ZXUQRpcxW0qr6ax7oU2GLUsUmL6NtllOjGM1sqYzAp7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJhUw/1q; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724450719; c=relaxed/simple;
+	bh=Onq8ppUUvloA5Glur5TGcQiO25kv2LUNk3hc116TSwU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=OYa/jQLKJQwkJBxHzIsvRMtaDU94qalsg3BC4mmJU6OQoFkjX1WSrxmCB+Dv3OybrK4o2MiXk/Sujv6kxbcEyTWn8WkchTa1qfV7WYNPaWui3lC2exF9G08IEm1MUg2qVr/Uun/BOcs+fIY0656sRecbM+omV9CF/uTljSkD/6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LZegRegq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJhUw/1q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71569C32786;
-	Fri, 23 Aug 2024 22:01:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LZegRegq"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97BDDC4AF09;
+	Fri, 23 Aug 2024 22:05:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724450477;
-	bh=4E2/SMw5ipU2qtwXN1Uwic3Rzbvi3xioIyGpbAx2lVk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DJhUw/1qZ9BDQyGdrwh4ZFy64bp7OwurHPaIZF/8dlHGGMyUg6oD3nsAesh264NNS
-	 FoGyn2Rq2QL39OrogIEFtmo21ioxgFBgEj7Es9kG5Qpgra3wSXqqpYQ1pNK2A8IoYg
-	 Z8fN8zNIL9aOQlXGKDnm0SrmFwR/DdFSAkSXCqRoUqve0c9CIlohY5Kez50qcxZXm+
-	 BBy4p4qNCrGMIXT5+V5RxKrFG95GKkg8ilN9BZLYBhNJwhkvW2QkCMhzkT8j4erCII
-	 zjx/mdrol0O8/FIK5z9vPsPhmzvc3K733r3dtwz1kN8Njo8cs83m645QMmL+XqdHr7
-	 WVHT/FDFTov3Q==
-Date: Fri, 23 Aug 2024 23:01:13 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	Yury Khrustalev <yury.khrustalev@arm.com>,
-	Wilco Dijkstra <wilco.dijkstra@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v11 25/39] arm64/signal: Expose GCS state in signal frames
-Message-ID: <ZskGqU8BSvR01W30@finisterre.sirena.org.uk>
-References: <20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org>
- <20240822-arm64-gcs-v11-25-41b81947ecb5@kernel.org>
- <ZshYTyNbveD7WMyJ@arm.com>
- <ZshjmuYcejbhaSBg@finisterre.sirena.org.uk>
- <Zsixz6Y9xWxqaQaV@arm.com>
+	s=k20201202; t=1724450718;
+	bh=Onq8ppUUvloA5Glur5TGcQiO25kv2LUNk3hc116TSwU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=LZegRegqpqwUmh9q6zGlbbi81wz9FwZmbU9OFsGp/SY6/7sSbxs0YLsQHAOlwMFe1
+	 bktuwPxk8853IFM+iMsN6sj9olWjxafXSQ0PXiEtw150zdmDzqFMPpvMSs4MT6AxEy
+	 WWb2+m23p7X+CrF8gD2XmKlQXuhYODtvrsyU9VBfDMdcmXfKcMCHTA3Kk+b7pi+rwM
+	 P1p9AHyN331Pb/sOxl5a2mpH+U1b/o11u5P13X6C3YA9KLcmX89P+LmCdqkutoaqWP
+	 sSCw2OkC8vuRRkVZ9WjB75D8/VvRDIIbnkOJX6dfcamkwr3FzTS/rvFNvOPQaGhjXk
+	 eXcRqvBU+lCtQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88F10C5472F;
+	Fri, 23 Aug 2024 22:05:18 +0000 (UTC)
+From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
+Date: Fri, 23 Aug 2024 23:04:52 +0100
+Subject: [PATCH net-next v4 2/8] selftests/net: Provide test_snprintf()
+ helper
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="BjuuYVXdnzsl9n3l"
-Content-Disposition: inline
-In-Reply-To: <Zsixz6Y9xWxqaQaV@arm.com>
-X-Cookie: Your love life will be... interesting.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240823-tcp-ao-selftests-upd-6-12-v4-2-05623636fe8c@gmail.com>
+References: <20240823-tcp-ao-selftests-upd-6-12-v4-0-05623636fe8c@gmail.com>
+In-Reply-To: <20240823-tcp-ao-selftests-upd-6-12-v4-0-05623636fe8c@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dmitry Safonov <0x7f454c46@gmail.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724450716; l=2397;
+ i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
+ bh=ZbClr+UedGcW2LCLFSk40qpau3vrKMfVrqON9GVCR4I=;
+ b=1j9g8UMCJET1FNuW5DOcIX47DH4eVx1jpVNyMD+m/L7PeoEyqOPUnxzchmed7UwNaaqnbUCMZ
+ 8rjFC6eCju2BR3gdIK+tdvEGZe7eltefzvIPPhH47le8qAEdnZQr8kj
+X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
+ pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
+X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
+ auth_id=152
+X-Original-From: Dmitry Safonov <0x7f454c46@gmail.com>
+Reply-To: 0x7f454c46@gmail.com
+
+From: Dmitry Safonov <0x7f454c46@gmail.com>
+
+Instead of pre-allocating a fixed-sized buffer of TEST_MSG_BUFFER_SIZE
+and printing into it, call vsnprintf() with str = NULL, which will
+return the needed size of the buffer. This hack is documented in
+man 3 vsnprintf.
+
+Essentially, in C++ terms, it re-invents std::stringstream, which is
+going to be used to print different tracing paths and formatted strings.
+Use it straight away in __test_print() - which is thread-safe version of
+printing in selftests.
+
+Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
+---
+ tools/testing/selftests/net/tcp_ao/lib/aolib.h | 59 ++++++++++++++++++++++----
+ 1 file changed, 50 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/net/tcp_ao/lib/aolib.h b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
+index fbc7f6111815..78466863435f 100644
+--- a/tools/testing/selftests/net/tcp_ao/lib/aolib.h
++++ b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
+@@ -37,17 +37,58 @@ extern void __test_xfail(const char *buf);
+ extern void __test_error(const char *buf);
+ extern void __test_skip(const char *buf);
+ 
+-__attribute__((__format__(__printf__, 2, 3)))
+-static inline void __test_print(void (*fn)(const char *), const char *fmt, ...)
++static inline char *test_snprintf(const char *fmt, va_list vargs)
+ {
+-#define TEST_MSG_BUFFER_SIZE 4096
+-	char buf[TEST_MSG_BUFFER_SIZE];
+-	va_list arg;
++	char *ret = NULL;
++	size_t size = 0;
++	va_list tmp;
++	int n = 0;
+ 
+-	va_start(arg, fmt);
+-	vsnprintf(buf, sizeof(buf), fmt, arg);
+-	va_end(arg);
+-	fn(buf);
++	va_copy(tmp, vargs);
++	n = vsnprintf(ret, size, fmt, tmp);
++	if (n < 0)
++		return NULL;
++
++	size = n + 1;
++	ret = malloc(size);
++	if (!ret)
++		return NULL;
++
++	n = vsnprintf(ret, size, fmt, vargs);
++	if (n < 0 || n > size - 1) {
++		free(ret);
++		return NULL;
++	}
++	return ret;
++}
++
++static __printf(1, 2) inline char *test_sprintf(const char *fmt, ...)
++{
++	va_list vargs;
++	char *ret;
++
++	va_start(vargs, fmt);
++	ret = test_snprintf(fmt, vargs);
++	va_end(vargs);
++
++	return ret;
++}
++
++static __printf(2, 3) inline void __test_print(void (*fn)(const char *),
++					       const char *fmt, ...)
++{
++	va_list vargs;
++	char *msg;
++
++	va_start(vargs, fmt);
++	msg = test_snprintf(fmt, vargs);
++	va_end(vargs);
++
++	if (!msg)
++		return;
++
++	fn(msg);
++	free(msg);
+ }
+ 
+ #define test_print(fmt, ...)						\
+
+-- 
+2.42.2
 
 
---BjuuYVXdnzsl9n3l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Fri, Aug 23, 2024 at 04:59:11PM +0100, Catalin Marinas wrote:
-> On Fri, Aug 23, 2024 at 11:25:30AM +0100, Mark Brown wrote:
-
-> > We could store either the cap token or the interrupted GCSPR_EL0 (the
-> > address below the cap token).  It felt more joined up to go with the cap
-> > token since notionally signal return is consuming the cap token but
-> > either way would work, we could just add an offset when looking at the
-> > pointer.
-
-> In a hypothetical sigaltshadowstack() scenario, would the cap go on the
-> new signal shadow stack or on the old one? I assume on the new one but
-> in sigcontext we'd save the original GCSPR_EL0. In such hypothetical
-> case, the original GCSPR_EL0 would not need 8 subtracted.
-
-I would have put the token on the old stack since that's what we'd be
-returning to.  This raises interesting questions about what happens if
-the reason for the signal is that we just overflowed the normal stack
-(which are among the issues that have got in the way of working out if
-or how we do something with sigaltshadowstack).  I'm not clear what the
-purpose of the token would be on the new stack, the token basically says
-"this is somewhere we can sigreturn to", that's not the case for the
-alternative stack.
-
-> I need to think some more about this. The gcs_restore_signal() function
-> makes sense, it starts with the current GCSPR_EL0 on the signal stack
-> and consumes the token, adds 8 to the shadow stack pointer. The
-> restore_gcs_context() one is confusing as it happens before consuming
-> the cap token and assumes that the GCSPR_EL0 value actually points to
-> the signal stack. If we ever implement an alternative shadow stack, the
-> original GCSPR_EL0 of the interrupted context would be lost. I know it's
-> not planned for now but the principles should be the same. The
-> sigframe.uc should store the interrupted state.
-
-I think the issues you're pointing out here go to the thing with the cap
-token marking a place we can sigreturn to and therefore being on the
-original stack.
-
-> To me the order for sigreturn should be first to consume the cap token,
-> validate it etc. and then restore GCSPR_EL0 to whatever was saved in the
-> sigframe.uc prior to the signal being delivered.
-
-To me what we're doing here is that the signal frame says where
-userspace wants to point GCSPR_EL0 in the returned context, we then go
-and confirm that this is a valid address by looking at it and checking
-for a token.  The token serves to validate what was saved in sigframe.uc
-so that it can't just be pointed at some random address.
-
-> > restore_gcs_context() is loading values from the signal frame in memory
-> > (which will only happen if a GCS context is present) then
-> > gcs_restore_signal() consumes the token at the top of the stack.  The
-> > split is because userspace can skip the restore_X_context() functions
-> > for the optional signal frame elements by removing them from the context
-> > but we want to ensure that we always consume a token.
-
-> I agree we should always consume a token but this should be done from
-> the actual hardware GCSPR_EL0 value on the sigreturn call rather than
-> the one restored from sigframe.uc. The restoring should be the last
-> step.
-
-If we look for a token at the GCSPR_EL0 on sigreturn then it wouldn't be
-valid to call sigreturn() (well, without doing something first to unwind
-the stack which seems hostile and would require code to become GCS aware
-that wouldn't otherwise), if you do a sigreturn from somewhere other
-than the vDSO then you'd have at least the vDSO signal frame left in the
-GCS.  You'd also be able to point GCSPR_EL0 to anywhere since we'd just
-load a value from the signal frame but not do the cap verification.
-
---BjuuYVXdnzsl9n3l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbJBqgACgkQJNaLcl1U
-h9BLswf/SWEpbfZkH/LtOITztzCmYc/9r1ewDv1+OENkYT92eXaB9xbvJoP9TSK7
-9L5zc2aRpMs8ND7Z79oBC2ukkLkNGlZgk50jrxAj/ABNYEwGhWr6WCEURjpJCREV
-waO+TZDL2bO84z/f9ES1W4aKPZfTVfDArJ7orEQM8OgkSdql3wE/D9qqw2FgivU+
-pO4BYgkO67qg2p1/UIlgWEJAQAgYLI60IZkP2g6CawlFdze3kHo5cnIBh0Ou3sxa
-+HfHlY5BIjhQvlSdEx5GfhZuGdRSUlZdYwbbJGKAXt9sB80z6QbAet3BfFUGt83I
-CqP6WBYkc5NW8mLg/8gZCbn3Quh5Xg==
-=fp7z
------END PGP SIGNATURE-----
-
---BjuuYVXdnzsl9n3l--
