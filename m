@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FC2175AB;
-	Tue, 27 Aug 2024 03:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C3114A90;
+	Tue, 27 Aug 2024 03:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724727827; cv=none; b=S8VpXKHJIqNKseYzQ2U5e0VcLlJ6C0dHkGD4n2WH29GSkV02MSyuYRNUDx/vJzj1oFtYpGdenhZRudgj9RAJXg/aLwkCtety9XAvtGT3GXN3reGE3EyE6Q63niX89apTpa4tzM5bMtIQHsxly51Dj4rFG+A1fXRjf24W9OTqKq4=
+	t=1724727827; cv=none; b=s85y+KXtHK5/mM2qmkkLII+dyqY7XtmSftrBBqY6ZN1Zko80qh8KPA2hySzHIHVv70yR1Lnongj7tTkMjcmCuiTBPGFHE4vEsyzuUvdY9P/wyDDUwzHuiBjq07z32QKxhaOk93m81J56fqglOVpAGaj9S9G264paHtC3Ys5KuZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1724727827; c=relaxed/simple;
-	bh=u2NvqBkkbAzeQS7kbk6mVRAqMmq/sCoTqOpDlC8ObH4=;
+	bh=7gL6p1VlDvGym36gs1yc1aMIXOWSsJdQLUDxonxuf5U=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CijCp6gYkeISpWn6sU78eGNVuW3bBYFcbF+jr4S4V6Kipey4VZljk/AoVxAeT+lSS4ftEciz3lKvPc5cUdcbo6ii8eLWHopaGcv1gjWBnLXMJnLeiNtJwSyfO80GC7p11FNBDgab8MmmGOHPv4p4hpt6hevmW8wPZvlRXRUN+c4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OY6a8RPd; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=tXeZvrRh9VYBNZf6rYblzhAH4E78z1ww+YvpRug6hPmsNWRnajG7Jqe7/9MBu1daGgeBdJ0ZGntPiAsO9XprQW8hgw4qmPCtz5xK4T/B1QXlJt/OhJGzq/By00ts6/CT8bT2LxZZXBskyzJJFRmOTeKry+NeKSbaK08vrpb4qeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=paC+r9cp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OY6a8RPd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACFEFC8B7A1;
-	Tue, 27 Aug 2024 03:03:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="paC+r9cp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD5EC8B7B3;
+	Tue, 27 Aug 2024 03:03:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724727826;
-	bh=u2NvqBkkbAzeQS7kbk6mVRAqMmq/sCoTqOpDlC8ObH4=;
+	s=k20201202; t=1724727827;
+	bh=7gL6p1VlDvGym36gs1yc1aMIXOWSsJdQLUDxonxuf5U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OY6a8RPdw9Luuff4EEXqoYQ20kM4cDnSH4oLzMmXmLvcp7zdWOu8f2pmGtUshmUuv
-	 ODo3sVqZm6X73X5o7hQ8YUmy1OKNAMLp3A5fY5MHeMevbNFuX9Z1O3qn8cSV2fm0Zx
-	 uQRc+l8/gyPycbhm0wvQnoAoFPPidRVKgkK4BK36GDyHyMWwyF8M4Ot8b1jnylzVUV
-	 Iep6rJFGZLUVItLG7qQGkwtxQRYOBESzs7U3xlM8lfti/5w++g2Rqnv3Jp2Wn5suQK
-	 CIM1D2b3yHRjAJlqhnHI8kEkEfLjhtDePNiW513jOuqY+gzFW++E3YvzSYjfNQvkMQ
-	 ncPu0O6S/4D4A==
+	b=paC+r9cpn7IVTlF+jU4zauq/8YM7Lb+Cl4FBTEHaY/U6d6YhjE7SlIJiPF33+guWo
+	 IkT34TNvb/6HejK6sBnPS7aH5vxH3yMB+CqN41Wu4brdSMDzPgAoiWOT2/xNM9mPbJ
+	 w+CYIdEazgEn4gdy8sbnlVwL1c3TpbzEe7R3qDaZmveAlBkgQDFKyrmr4P/RiXwpBj
+	 HYI1HCWiwiUoe9tWaA/RCtr/KsiuD2ZC312bAwYckYDCwJKzfDpc5oY3AmNDTry7oY
+	 kXltfkhImupOC6VkkEiVKE0Bfqf/MGqjBxuiTOIQstBDhk9GoxR8xeqNmtxEJyiCHC
+	 DzoJQZlrHb6aA==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -34,9 +34,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/9] selftests/damon: add access_memory_even to .gitignore
-Date: Mon, 26 Aug 2024 20:03:28 -0700
-Message-Id: <20240827030336.7930-2-sj@kernel.org>
+Subject: [PATCH 3/9] selftests/damon: add execute permissions to test scripts
+Date: Mon, 26 Aug 2024 20:03:30 -0700
+Message-Id: <20240827030336.7930-4-sj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240827030336.7930-1-sj@kernel.org>
 References: <20240827030336.7930-1-sj@kernel.org>
@@ -48,24 +48,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-DAMON selftests build access_memory_even, but its not on the .gitignore
-list.  Add it to make 'git status' output cleaner.
+Some test scripts are missing executable permissions.  It causes
+warnings that make the test output unnecessarily verbose.  Add
+executable permissions.
 
-Fixes: commit c94df805c774 ("selftests/damon: implement a program for even-numbered memory regions access")
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- tools/testing/selftests/damon/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+Andrew, please note that this patch is for adding the execution
+permission to the files.  I guess these need a special handling for your
+tooling.
 
-diff --git a/tools/testing/selftests/damon/.gitignore b/tools/testing/selftests/damon/.gitignore
-index e65ef9d9cedc..2ab675fecb6b 100644
---- a/tools/testing/selftests/damon/.gitignore
-+++ b/tools/testing/selftests/damon/.gitignore
-@@ -3,3 +3,4 @@ huge_count_read_write
- debugfs_target_ids_read_before_terminate_race
- debugfs_target_ids_pid_leak
- access_memory
-+access_memory_even
+ tools/testing/selftests/damon/damon_nr_regions.py                 | 0
+ tools/testing/selftests/damon/damos_apply_interval.py             | 0
+ tools/testing/selftests/damon/damos_quota.py                      | 0
+ tools/testing/selftests/damon/damos_quota_goal.py                 | 0
+ tools/testing/selftests/damon/damos_tried_regions.py              | 0
+ tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh      | 0
+ .../damon/debugfs_target_ids_read_before_terminate_race.sh        | 0
+ .../selftests/damon/sysfs_update_schemes_tried_regions_hang.py    | 0
+ .../damon/sysfs_update_schemes_tried_regions_wss_estimation.py    | 0
+ 9 files changed, 0 insertions(+), 0 deletions(-)
+ mode change 100644 => 100755 tools/testing/selftests/damon/damon_nr_regions.py
+ mode change 100644 => 100755 tools/testing/selftests/damon/damos_apply_interval.py
+ mode change 100644 => 100755 tools/testing/selftests/damon/damos_quota.py
+ mode change 100644 => 100755 tools/testing/selftests/damon/damos_quota_goal.py
+ mode change 100644 => 100755 tools/testing/selftests/damon/damos_tried_regions.py
+ mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh
+ mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.sh
+ mode change 100644 => 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
+ mode change 100644 => 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
+
+diff --git a/tools/testing/selftests/damon/damon_nr_regions.py b/tools/testing/selftests/damon/damon_nr_regions.py
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/damos_apply_interval.py b/tools/testing/selftests/damon/damos_apply_interval.py
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/damos_quota.py b/tools/testing/selftests/damon/damos_quota.py
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/damos_quota_goal.py b/tools/testing/selftests/damon/damos_quota_goal.py
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/damos_tried_regions.py b/tools/testing/selftests/damon/damos_tried_regions.py
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh b/tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.sh b/tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.sh
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
+old mode 100644
+new mode 100755
 -- 
 2.39.2
 
