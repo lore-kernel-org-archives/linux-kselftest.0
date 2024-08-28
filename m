@@ -1,126 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C024D108;
-	Wed, 28 Aug 2024 11:18:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CDB15B54E;
+	Wed, 28 Aug 2024 11:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724843921; cv=none; b=Oqgj5/ACQ7Fvv6r7pu3kkW66XXUBu1rjYJJpougXBsixisMN9Tee01pdzgJHwqDV0llaqr4TcBjh+X1nugzuAHbZQddLHJqBSgZciYjW3WAzCrUkMHIJtjRosLTDEqhgf5fr0WTPnCkK29ufnkFSkMnsHLaUQff1hMOTC6zjtP4=
+	t=1724844222; cv=none; b=MLTbXTAKAX1Wan7HFFaipyWuorX3yn0x0TIetB3/jOuuEKQ/ZYHMfylJ2VHbJgOz/bcyQUEj5pmKZ0cmQeLE3h63mtjE+ZfI9I2GyVwa2fZXAN2VLWvBfBUOWJgqfA7uMPtVA2aTFBhEcpJn/3QKz9uS3GsDZM72gEgeklTdd50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724843921; c=relaxed/simple;
-	bh=K4ffkU1d24Lo6Vpr60xC27K+SzTzNldohctsI0B5LAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NvqefsuWo035y194PtUONVMgnmYQJAH3ApfPJuBS5KIXz14Q5YZsoz6upH3K6vGG76QAvoit8P4dmU+R/O/3qu94ODB+6KMJUrG0uO6FVhkVadeIN3IGEknS6btoUUPNZkM2Wo3v2vMX63WD6hR0g+K5AqyYvv9BsFvT5CUSL+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=ie1ZgaJb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724844222; c=relaxed/simple;
+	bh=woMfM9462eOJrwEHB3r89jnJI7ptsCPZp79CgwGCT4I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tUYFnBaPdj0pDWhOKXG8GPBXtKj8rOdf64tRd9oUJzDpWDAIT8FZpjbbNDIGSK/CN5tYejXkuJ17Vb4IlDsDJsCzzHeMVPCJrG363jJDDjRZiC6ntEZmMJxMyAj8hvvQ1fiSdgVhY72fvygWaDsL/bHYS4DUbenglYDPx5c4ZyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mEMkloe8; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=MfN8i1Nh; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0iVyuTYF; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DKNLhB3p; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ie1ZgaJb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F77C98EC1;
-	Wed, 28 Aug 2024 11:18:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ie1ZgaJb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1724843916;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mEMkloe8";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="MfN8i1Nh";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0iVyuTYF";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DKNLhB3p"
+Received: from kitsune.suse.cz (unknown [10.100.12.127])
+	by smtp-out2.suse.de (Postfix) with ESMTP id DDD861FC11;
+	Wed, 28 Aug 2024 11:23:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1724844219; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TaIlxacxM0cvax8nGT0Wo3sn3OzyvoPLEHrLd84XeNU=;
-	b=ie1ZgaJbmdO0NFZiWnbQxMHvES+WVoJwzMG9ptpU3Emt2rn3BokeH+49oxcj4dV6dn2A7R
-	OZIoYXalY4Ws4iv74BUjZGRKqr/jYLeyEjR6fhELEgh04xz8/D5eJuiLFmdCA7UTqCRd8K
-	hMYFoVGZZlHMLnB3FsT4kBzzeg3/4HU=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8e8b7172 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Wed, 28 Aug 2024 11:18:35 +0000 (UTC)
-Date: Wed, 28 Aug 2024 13:18:34 +0200
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Eric Biggers <ebiggers@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
-Message-ID: <Zs8HirKLk-SrwTIu@zx2c4.com>
-References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
- <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu>
- <20240827180819.GB2049@sol.localdomain>
- <20240827225330.GC29862@gate.crashing.org>
+	bh=ZS4TScwxClFiQ42wXyGSbjTyqoV2glgYXGELYPtGsIg=;
+	b=mEMkloe8uBVVT65y8ATG3DiHAAVImkLXI9lDirmuTeKgh2rFDbXKbQPRFjonMoIPKDTOmD
+	v3TnsT8rKiBNZxLlJiyW/bRQFNSAWMrbYgbMYlS8JdV5QHxFTFNk6B0UXz0gygH2M7Q/EE
+	eLVSGdwZrXuyISBg8OcXH87M7K6dBVk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1724844219;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZS4TScwxClFiQ42wXyGSbjTyqoV2glgYXGELYPtGsIg=;
+	b=MfN8i1NhZKFqEHz2fh+F4GZwU/JhkaoOfEUsGv2WkHjuPsMjQA18HArQFTV63SQyTDa9EE
+	uya6Y0L68/ffM2DA==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1724844218; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZS4TScwxClFiQ42wXyGSbjTyqoV2glgYXGELYPtGsIg=;
+	b=0iVyuTYFlBgdulA+mST/oUVSrgTpEQdFdfa8adNsEQ1qNNGQIExpE4mSBwNXGiiktB9P3s
+	REf5AhuwPFq+jB83IMPiJINNZ6FSbZVxkyk3762SO6csfVUOTjpot6HRXpYOV3twir9hPt
+	2POKkYtjuzvJjk7xL+lcIimRDAgx7AA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1724844218;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZS4TScwxClFiQ42wXyGSbjTyqoV2glgYXGELYPtGsIg=;
+	b=DKNLhB3pEiloMcO4Z2CGHXoLoLC99guHQ3I6cj7US3kbnqTTrMSZhUZlZ87tXKKDlSELsH
+	Yx1AzSkpjlfrn9AA==
+From: Michal Suchanek <msuchanek@suse.de>
+To: linux-integrity@vger.kernel.org
+Cc: Michal Suchanek <msuchanek@suse.de>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/2] selftests: tpm2: test_smoke: Run only when TPM2 is avaialable.
+Date: Wed, 28 Aug 2024 13:23:20 +0200
+Message-ID: <1794c9c1d60a34ebae28d3a18b408765e955907b.1724842902.git.msuchanek@suse.de>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <52c629ebbfc8f5218a90fa539f816c8555cb552a.1724842902.git.msuchanek@suse.de>
+References: <52c629ebbfc8f5218a90fa539f816c8555cb552a.1724842902.git.msuchanek@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240827225330.GC29862@gate.crashing.org>
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -6.80
+X-Spamd-Result: default: False [-6.80 / 50.00];
+	REPLY(-4.00)[];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.de,gmx.de,kernel.org,ziepe.ca,vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email];
+	FREEMAIL_ENVRCPT(0.00)[gmx.de]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Tue, Aug 27, 2024 at 05:53:30PM -0500, Segher Boessenkool wrote:
-> On Tue, Aug 27, 2024 at 11:08:19AM -0700, Eric Biggers wrote:
-> > On Thu, Aug 22, 2024 at 09:13:13AM +0200, Christophe Leroy wrote:
-> > > With the current implementation, __cvdso_getrandom_data() calls
-> > > memset(), which is unexpected in the VDSO.
-> > > 
-> > > Rewrite opaque data initialisation to avoid memset().
-> > > 
-> > > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > > ---
-> > >  lib/vdso/getrandom.c | 15 ++++++++++-----
-> > >  1 file changed, 10 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
-> > > index cab153c5f9be..4a56f45141b4 100644
-> > > --- a/lib/vdso/getrandom.c
-> > > +++ b/lib/vdso/getrandom.c
-> > > @@ -4,6 +4,7 @@
-> > >   */
-> > >  
-> > >  #include <linux/minmax.h>
-> > > +#include <linux/array_size.h>
-> > >  #include <vdso/datapage.h>
-> > >  #include <vdso/getrandom.h>
-> > >  #include <vdso/unaligned.h>
-> > > @@ -74,11 +75,15 @@ __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_
-> > >  	u32 counter[2] = { 0 };
-> > >  
-> > >  	if (unlikely(opaque_len == ~0UL && !buffer && !len && !flags)) {
-> > > -		*(struct vgetrandom_opaque_params *)opaque_state = (struct vgetrandom_opaque_params) {
-> > > -			.size_of_opaque_state = sizeof(*state),
-> > > -			.mmap_prot = PROT_READ | PROT_WRITE,
-> > > -			.mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS
-> > > -		};
-> > > +		struct vgetrandom_opaque_params *params = opaque_state;
-> > > +		int i;
-> > > +
-> > > +		params->size_of_opaque_state = sizeof(*state);
-> > > +		params->mmap_prot = PROT_READ | PROT_WRITE;
-> > > +		params->mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS;
-> > > +		for (i = 0; i < ARRAY_SIZE(params->reserved); i++)
-> > > +			params->reserved[i] = 0;
-> > > +
-> > >  		return 0;
-> > >  	}
-> > 
-> > Is there a compiler flag that could be used to disable the generation of calls
-> > to memset?
-> 
-> -fno-tree-loop-distribute-patterns .  But, as always, read up on it, see
-> what it actually does (and how it avoids your problem, and mostly: learn
-> what the actual problem *was*!)
+Since Linux 5.6 tpm_version_major sysfs file is avaialble which gives
+the TPM version.
 
-This might help with various loops, but it doesn't help with the matter
-that this patch fixes, which is struct initialization. I just tried it
-with the arm64 patch to no avail.
+Using this file the test can be skipped on systems with TPM 1.2.
+
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+ tools/testing/selftests/tpm2/test_smoke.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
+index 58af963e5b55..e5e3386077d9 100755
+--- a/tools/testing/selftests/tpm2/test_smoke.sh
++++ b/tools/testing/selftests/tpm2/test_smoke.sh
+@@ -5,5 +5,7 @@
+ ksft_skip=4
+ 
+ [ -e /dev/tpm0 ] || exit $ksft_skip
++read tpm_version < /sys/class/tpm/tpm0/tpm_version_major
++[ "$tpm_version" == 2 ] || exit $ksft_skip
+ 
+ python3 -m unittest -v tpm2_tests.SmokeTest
+-- 
+2.46.0
+
