@@ -1,361 +1,190 @@
 Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D9816087B;
-	Wed, 28 Aug 2024 17:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156EC1A76B9
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2024 17:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724865652; cv=none; b=edkg6RayTTd6wLlyetq0cZF0/fEaCZWDH/+XBczLXfOP8K3iki/AHi4v6rC8GaktnSspkHnI1P02C4ze8VqOD6yU4dDGe0HPM1ljhBSf9CLuKTAcm6agUJLYGsqMojgYMHs9TMO1gXppuxHcF7T/k2+XtGUyx25KznL6ARmssww=
+	t=1724866204; cv=none; b=iA980Uldxg+M3MUc8ZSKKQe7kIVIvVrlRQ/+36eyOXnUNqQRp0FBCSJdH2iPJnXUlUhlegYhO9fbOhD9s7Y247/sOJwg44kuPKKvNyUMww0JAo9FIN7AezebbQDGNqVX/e2qrxwAN80okcFhyXNhJwV6KGisyi+5odfXww0cauw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724865652; c=relaxed/simple;
-	bh=c/Qua5s76cKLpfHdnsedNARDM3wJdP5ZRtt206NmbaE=;
+	s=arc-20240116; t=1724866204; c=relaxed/simple;
+	bh=OmO27VpmrhU31qsKclIqtL8TYK6eYIyOBD8Nc1b6/sY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YaXmd6+lX61MCL5x8T+9ULSFpq399xFNezN7NqZfmwy834tpvMZQypfQ8L5J/YIA8rEiHdKTzZ+gsDubBpH/2G1eHvZeAjgGCiqxs9awQekInZoMZF6y4NNiE7jVn0Ocz4A8RNdcAoY9QrnPsMJCqYZLg1B+grwktyM+PIw7nMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-71423273c62so5133848b3a.0;
-        Wed, 28 Aug 2024 10:20:49 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=bieRYiVBTV5bxO/xI55D+um5kTPFA/Oo12/uz7GJMRu1NUPGQ/o+sdTtbujkWDjraa5FZz9JAkYfvxe1OZWetNxl3y9X3+LJ/h2B7/1HexX59W5fJfBblBWop5Q+rhwkae58C/lPE2zK52HdrmxzfCXZOAYnwPgIe5kGLXLy5hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=TpjlmABV; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="TpjlmABV"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7142a30e3bdso690898b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2024 10:30:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1724866201; x=1725471001; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=izEx2iGerEnX7WB/2Mpvv+y1MVG/tbs1FdX9CKEIcSg=;
+        b=TpjlmABVarE4pTP8IIaQW8r5WIQYE/q3k9AeSj0TQiS4s0FQFCY1jMUcUe0LRUfGFC
+         jPnXTIofU2ZBnLJmLBckW74bTp12Br6sNHp0gkyPrrwI4S61o3Ne15rtg6ZuFYDl2Uk5
+         6k3gPBu8aWLCcsgsVCmn79ZYsuAPuMa2RIRLfnIIV1vh1oWSTQA7Rsz+76jPoT1uIJoq
+         e0+vcl0p569SySs5UL5JHZVcWOX7iYAEc8V+KSYx+FbCIqS/gTcI4W6FleCgt85tNWEu
+         yvvd5LNLTtPOmPM8n8yH9nAENwfZSYvPp3p3mRAZcMK8Ggusd2479ddcaB2HMt330v/p
+         6Xgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724865649; x=1725470449;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M35RzjCmMBey5p0NcAkDWELYYAM+pNeYt2M8t6A7VOk=;
-        b=WAH0YwA88gggaIRw/6EHHkYcDVFILHdB/IKFcY/M7ptwQycsb1E8RtrKHq4XMYkpKQ
-         ycJ6TEIm1V7mpF8ToXPfDfdtZgo5PmxqDNb1TyLLKZMx9K48GAp03VIfVsbNpXRPx2gq
-         Vh06mn6KkPR1G48x2kb3pt/fCTTeDE1shpKjZp9CCahgjcA9RtQraNmETdV9SUq+MRVy
-         weiVGRGKXf6RkoxF7OEM67X9UTykcEwZHlaI1nKHDvoYT2q5/5o17zHDv3P7kFPapfRr
-         X5TvQREMW1VgJ4ew8+ESnAW3legntF3v0ijBKm2GMUY/kFxK76FlBQZwb5MUD2zQ+147
-         RsJg==
-X-Forwarded-Encrypted: i=1; AJvYcCVTmwNd9RBepHqyg0zqvRPhCNrbIVSM9uuUSVXkwoGlNE5AnVXKtAbF4sPFExhDJshCThwXL8naHGFvZScMgFY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuOtH7GXpWoYU4EMhgekEUanu5f+fJH6ZMX7dh7z4854n2xFMg
-	2jVddhXiTdAktkcVIwN+d9Py6YNcKdk9SzKuN9bjnCGXN8+l+du50GrdrFI=
-X-Google-Smtp-Source: AGHT+IGt26VW3r8srrthig5qjLtrZ1ygmd5FQMHA7SF3icN78BxBBmfCYGoIvzlKQwZJ/rvTNil20g==
-X-Received: by 2002:a05:6a00:27a1:b0:70d:2b23:a724 with SMTP id d2e1a72fcca58-715dfc8c96fmr174250b3a.23.1724865649069;
-        Wed, 28 Aug 2024 10:20:49 -0700 (PDT)
-Received: from localhost ([2601:646:9e00:f56e:73b6:7410:eb24:cba4])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-714342558cdsm10322646b3a.84.2024.08.28.10.20.48
+        d=1e100.net; s=20230601; t=1724866201; x=1725471001;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=izEx2iGerEnX7WB/2Mpvv+y1MVG/tbs1FdX9CKEIcSg=;
+        b=PEYjB56R9JxX5Eo0+uURGPdbUBuOWcFOgRjEzpZUCDHNloxd1UT8loCRojkfJuCyLn
+         c4IxwG4fRlxDDcv3mRlWQlefAoDJfGLrtMZBsq0OpquQNWeY1YpdrPN/DXy6oKASeR8F
+         MMVCMzHxHLNSMru9r1dX1+gVuH619z+Sfb+TG33ogqaaPk6C/359PSDXms26EhuSeJ1f
+         3sdd0CXgz1f9RY5Xe3EQ2DOATjVNX17W7PaSGc1oN+l7wM1K3zBUwwMpbyuMJX6AvjZE
+         XgPF1sAy1hufV0h4+goc40HCrUt5aYWnCFFg0XjlIpvYJdecmRIUGWW4x+c+Ro+BQArw
+         ABYg==
+X-Forwarded-Encrypted: i=1; AJvYcCVEXcE0kYvoeXydljzqCcxn80iQelZsW7aEbzlQx6wv9URHtMXl5kLSre8d50w+b9+koMFHBwfev3GStml0Nw0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw619NOEh/5Zn/NrROkq6gLIdw0w2U7yFgvexlkC5hFFAYQEajM
+	u0D1ghU8NL5AYvDQU+o9hkSZiaxyN48Wl3MxR6AFUs03wE0CYRaReF56svoZzGI=
+X-Google-Smtp-Source: AGHT+IHMsuvXLfTW+bLvG1ZAGccaibo4i2N0hBI/JcHNn1qd40DIOjpRRFBts/vAK3nn3l/ntjAfHA==
+X-Received: by 2002:a17:903:1210:b0:1fb:2ebc:d16b with SMTP id d9443c01a7336-204f9bb4194mr38041435ad.7.1724866201061;
+        Wed, 28 Aug 2024 10:30:01 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20385581393sm101427625ad.102.2024.08.28.10.29.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 10:20:48 -0700 (PDT)
-Date: Wed, 28 Aug 2024 10:20:47 -0700
-From: Stanislav Fomichev <sdf@fomichev.me>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-	edumazet@google.com, pabeni@redhat.com, ncardwell@google.com,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org, fw@strlen.de,
-	Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH net-next RFC] selftests/net: integrate packetdrill with
- ksft
-Message-ID: <Zs9cb1j88Y2glBdJ@mini-arch>
-References: <20240827193417.2792223-1-willemdebruijn.kernel@gmail.com>
- <Zs87rhH9e_Lw-icJ@mini-arch>
- <66cf45bbd6a6f_34a7b1294ac@willemb.c.googlers.com.notmuch>
+        Wed, 28 Aug 2024 10:30:00 -0700 (PDT)
+Date: Wed, 28 Aug 2024 10:29:55 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Russell King <linux@armlinux.org.uk>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	linux-mm@kvack.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 07/16] powerpc: mm: Support MAP_BELOW_HINT
+Message-ID: <Zs9ek1Cr1SaQzSqg@ghost>
+References: <20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com>
+ <20240827-patches-below_hint_mmap-v1-7-46ff2eb9022d@rivosinc.com>
+ <a43c52c6-c1ac-4ef3-b511-08f0459bddad@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <66cf45bbd6a6f_34a7b1294ac@willemb.c.googlers.com.notmuch>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a43c52c6-c1ac-4ef3-b511-08f0459bddad@csgroup.eu>
 
-On 08/28, Willem de Bruijn wrote:
-> Stanislav Fomichev wrote:
-> > On 08/27, Willem de Bruijn wrote:
-> > > From: Willem de Bruijn <willemb@google.com>
-> > > 
-> > > Lay the groundwork to import into kselftests the over 150 packetdrill
-> > > TCP/IP conformance tests on github.com/google/packetdrill.
-> > > 
-> > > Florian recently added support for packetdrill tests in nf_conntrack,
-> > > in commit a8a388c2aae49 ("selftests: netfilter: add packetdrill based
-> > > conntrack tests").
-> > > 
-> > > This patch takes a slightly different implementation and reuses the
-> > > ksft python library for its KTAP, ksft, NetNS and other such tooling.
-> > > 
-> > > It also anticipates the large number of testcases, by creating a
-> > > separate kselftest for each feature (directory). It does this by
-> > > copying the template script packetdrill_ksft.py for each directory,
-> > > and putting those in TEST_CUSTOM_PROGS so that kselftests runs each.
-> > > 
-> > > To demonstrate the code with minimal patch size, initially import only
-> > > two features/directories from github. One with a single script, and
-> > > one with two. This was the only reason to pick tcp/inq and tcp/md5.
-> > > 
-> > > Any future imports of packetdrill tests should require no additional
-> > > coding. Just add the tcp/$FEATURE directory with *.pkt files.
-> > > 
-> > > Implementation notes:
-> > > - restore alphabetical order when adding the new directory to
-> > >   tools/testing/selftests/Makefile
-> > > - copied *.pkt files and support verbatim from the github project,
-> > >   except for
-> > >     - update common/defaults.sh path (there are two paths on github)
-> > >     - add SPDX headers
-> > >     - remove one author statement
-> > >     - Acknowledgment: drop an e (checkpatch)
-> > > 
-> > > Tested:
-> > > 	make -C tools/testing/selftests/ \
-> > > 	  TARGETS=net/packetdrill \
-> > > 	  install INSTALL_PATH=$KSFT_INSTALL_PATH
-> > > 
-> > > 	# in virtme-ng
-> > > 	sudo ./run_kselftest.sh -c net/packetdrill
-> > > 	sudo ./run_kselftest.sh -t net/packetdrill:tcp_inq.py
-> > > 
-> > > Result:
-> > > 	kselftest: Running tests in net/packetdrill
-> > > 	TAP version 13
-> > > 	1..2
-> > > 	# timeout set to 45
-> > > 	# selftests: net/packetdrill: tcp_inq.py
-> > > 	# KTAP version 1
-> > > 	# 1..4
-> > > 	# ok 1 tcp_inq.client-v4
-> > > 	# ok 2 tcp_inq.client-v6
-> > > 	# ok 3 tcp_inq.server-v4
-> > > 	# ok 4 tcp_inq.server-v6
-> > > 	# # Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > > 	ok 1 selftests: net/packetdrill: tcp_inq.py
-> > > 	# timeout set to 45
-> > > 	# selftests: net/packetdrill: tcp_md5.py
-> > > 	# KTAP version 1
-> > > 	# 1..2
-> > > 	# ok 1 tcp_md5.md5-only-on-client-ack-v4
-> > > 	# ok 2 tcp_md5.md5-only-on-client-ack-v6
-> > > 	# # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > > 	ok 2 selftests: net/packetdrill: tcp_md5.py
-> > > 
-> > > Signed-off-by: Willem de Bruijn <willemb@google.com>
-> > > 
-> > > ---
-> > > 
-> > > RFC points for discussion
-> > > 
-> > > ksft: the choice for this python framework introduces a dependency on
-> > > the YNL scripts, and some non-obvious code:
-> > > - to include the net/lib dep in tools/testing/selftests/Makefile
-> > > - a boilerplate lib/py/__init__.py that each user of ksft will need
-> > > It seems preferable to me to use ksft.py over reinventing the wheel,
-> > > e.g., to print KTAP output. But perhaps we can make it more obvious
-> > > for future ksft users, and make the dependency on YNL optional.
-> > > 
-> > > kselftest-per-directory: copying packetdrill_ksft.py to create a
-> > > separate script per dir is a bit of a hack. A single script is much
-> > > simpler, optionally with nested KTAP (not supported yet by ksft). But,
-> > > I'm afraid that running time without intermediate output will be very
-> > > long when we integrate all packetdrill scripts.
-> > > 
-> > > nf_conntrack: we can dedup the common.sh.
-> > > 
-> > > *pkt files: which of the 150+ scripts on github are candidates for
-> > > kselftests, all or a subset? To avoid change detector tests. And what
-> > > is the best way to eventually send up to 150 files, 7K LoC.
-> > > ---
-> > >  tools/testing/selftests/Makefile              |  7 +-
-> > >  .../selftests/net/packetdrill/.gitignore      |  1 +
-> > >  .../selftests/net/packetdrill/Makefile        | 28 ++++++
-> > >  .../net/packetdrill/lib/py/__init__.py        | 15 ++++
-> > >  .../net/packetdrill/packetdrill_ksft.py       | 90 +++++++++++++++++++
-> > >  .../net/packetdrill/tcp/common/defaults.sh    | 63 +++++++++++++
-> > >  .../net/packetdrill/tcp/common/set_sysctls.py | 38 ++++++++
-> > >  .../net/packetdrill/tcp/inq/client.pkt        | 51 +++++++++++
-> > >  .../net/packetdrill/tcp/inq/server.pkt        | 51 +++++++++++
-> > >  .../tcp/md5/md5-only-on-client-ack.pkt        | 28 ++++++
-> > >  10 files changed, 369 insertions(+), 3 deletions(-)
-> > >  create mode 100644 tools/testing/selftests/net/packetdrill/.gitignore
-> > >  create mode 100644 tools/testing/selftests/net/packetdrill/Makefile
-> > >  create mode 100644 tools/testing/selftests/net/packetdrill/lib/py/__init__.py
-> > >  create mode 100755 tools/testing/selftests/net/packetdrill/packetdrill_ksft.py
-> > >  create mode 100755 tools/testing/selftests/net/packetdrill/tcp/common/defaults.sh
-> > >  create mode 100755 tools/testing/selftests/net/packetdrill/tcp/common/set_sysctls.py
-> > >  create mode 100644 tools/testing/selftests/net/packetdrill/tcp/inq/client.pkt
-> > >  create mode 100644 tools/testing/selftests/net/packetdrill/tcp/inq/server.pkt
-> > >  create mode 100644 tools/testing/selftests/net/packetdrill/tcp/md5/md5-only-on-client-ack.pkt
-> > > 
-> > > diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> > > index a5f1c0c27dff9..f03d6fee7ac54 100644
-> > > --- a/tools/testing/selftests/Makefile
-> > > +++ b/tools/testing/selftests/Makefile
-> > > @@ -65,10 +65,11 @@ TARGETS += net/af_unix
-> > >  TARGETS += net/forwarding
-> > >  TARGETS += net/hsr
-> > >  TARGETS += net/mptcp
-> > > -TARGETS += net/openvswitch
-> > > -TARGETS += net/tcp_ao
-> > >  TARGETS += net/netfilter
-> > > +TARGETS += net/openvswitch
-> > > +TARGETS += net/packetdrill
-> > >  TARGETS += net/rds
-> > > +TARGETS += net/tcp_ao
-> > >  TARGETS += nsfs
-> > >  TARGETS += perf_events
-> > >  TARGETS += pidfd
-> > > @@ -122,7 +123,7 @@ TARGETS_HOTPLUG = cpu-hotplug
-> > >  TARGETS_HOTPLUG += memory-hotplug
-> > >  
-> > >  # Networking tests want the net/lib target, include it automatically
-> > > -ifneq ($(filter net drivers/net drivers/net/hw,$(TARGETS)),)
-> > > +ifneq ($(filter net net/packetdrill drivers/net drivers/net/hw,$(TARGETS)),)
-> > >  ifeq ($(filter net/lib,$(TARGETS)),)
-> > >  	INSTALL_DEP_TARGETS := net/lib
-> > >  endif
-> > > diff --git a/tools/testing/selftests/net/packetdrill/.gitignore b/tools/testing/selftests/net/packetdrill/.gitignore
-> > > new file mode 100644
-> > > index 0000000000000..a40f1a600eb94
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/net/packetdrill/.gitignore
-> > > @@ -0,0 +1 @@
-> > > +tcp*sh
-> > > diff --git a/tools/testing/selftests/net/packetdrill/Makefile b/tools/testing/selftests/net/packetdrill/Makefile
-> > > new file mode 100644
-> > > index 0000000000000..d94c51098d1f0
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/net/packetdrill/Makefile
-> > > @@ -0,0 +1,28 @@
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +# KSFT includes
-> > > +TEST_INCLUDES := $(wildcard lib/py/*.py ../lib/py/*.py)
-> > > +
-> > > +# Packetdrill support file(s)
-> > > +TEST_INCLUDES += tcp/common/defaults.sh
-> > > +TEST_INCLUDES += tcp/common/set_sysctls.py
-> > > +
-> > > +# Packetdrill scripts: all .pkt in subdirectories
-> > > +TEST_INCLUDES += $(wildcard tcp/**/*.pkt)
-> > > +
-> > > +# Create a separate ksft test for each subdirectory
-> > > +# Running all packetdrill tests in one go will take too long
-> > > +#
-> > > +# For each tcp/$subdir, create a test script tcp_$subdir.py
-> > > +# Exclude tcp/common, which is a helper directory
-> > > +TEST_DIRS := $(wildcard tcp/*)
-> > > +TEST_DIRS := $(filter-out tcp/common, $(TEST_DIRS))
-> > > +TEST_CUSTOM_PROGS := $(foreach dir,$(TEST_DIRS),$(subst /,_,$(dir)).py)
-> > > +
-> > > +$(TEST_CUSTOM_PROGS) : packetdrill_ksft.py
-> > > +	cp $< $@
-> > > +
-> > > +# Needed to generate all TEST_CUSTOM_PROGS
-> > > +all: $(TEST_CUSTOM_PROGS)
-> > > +
-> > > +include ../../lib.mk
-> > > diff --git a/tools/testing/selftests/net/packetdrill/lib/py/__init__.py b/tools/testing/selftests/net/packetdrill/lib/py/__init__.py
-> > > new file mode 100644
-> > > index 0000000000000..51bb6dda43d65
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/net/packetdrill/lib/py/__init__.py
-> > > @@ -0,0 +1,15 @@
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +import pathlib
-> > > +import sys
-> > > +
-> > > +KSFT_DIR = (pathlib.Path(__file__).parent / "../../../..").resolve()
-> > > +
-> > > +try:
-> > > +    sys.path.append(KSFT_DIR.as_posix())
-> > > +    from net.lib.py import *
-> > > +except ModuleNotFoundError as e:
-> > > +    ksft_pr("Failed importing `net` library from kernel sources")
-> > > +    ksft_pr(str(e))
-> > > +    ktap_result(True, comment="SKIP")
-> > > +    sys.exit(4)
-> > > diff --git a/tools/testing/selftests/net/packetdrill/packetdrill_ksft.py b/tools/testing/selftests/net/packetdrill/packetdrill_ksft.py
-> > > new file mode 100755
-> > > index 0000000000000..62572a5b8331c
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/net/packetdrill/packetdrill_ksft.py
-> > > @@ -0,0 +1,90 @@
-> > > +#!/usr/bin/env python3
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +"""Run packetdrill tests in the ksft harness.
-> > > +
-> > > +   Run all packetdrill tests in a subdirectory.
-> > > +   Detect the relevant subdirectory from this script name.
-> > > +   (Because the script cannot be given arguments.)
-> > > +
-> > > +   Run each test, for both IPv4 and IPv6.
-> > > +   Return a separate ksft result for each test case.
-> > > +"""
-> > > +
-> > > +import glob
-> > > +import os
-> > > +import pathlib
-> > > +import shutil
-> > > +
-> > > +from lib.py import cmd, ksft_exit, ksft_run, KsftSkipEx, NetNS
-> > > +
-> > > +
-> > > +def test_func_builder(pktfile_path, ipv4):
-> > > +    """Create a function that can be passed to ksft_run."""
-> > > +
-> > > +    def f():
-> > > +        if ipv4:
-> > > +            args = ("--ip_version=ipv4 "
-> > > +                    "--local_ip=192.168.0.1 "
-> > > +                    "--gateway_ip=192.168.0.1 "
-> > > +                    "--netmask_ip=255.255.0.0 "
-> > > +                    "--remote_ip=192.0.2.1 "
-> > > +                    "-D CMSG_LEVEL_IP=SOL_IP "
-> > > +                    "-D CMSG_TYPE_RECVERR=IP_RECVERR "
-> > > +                    )
-> > > +        else:
-> > > +            args = ("--ip_version=ipv6 --mtu=1520 "
-> > > +                    "--local_ip=fd3d:0a0b:17d6::1 "
-> > > +                    "--gateway_ip=fd3d:0a0b:17d6:8888::1 "
-> > > +                    "--remote_ip=fd3d:fa7b:d17d::1 "
-> > > +                    "-D CMSG_LEVEL_IP=SOL_IPV6 "
-> > > +                    "-D CMSG_TYPE_RECVERR=IPV6_RECVERR"
-> > > +                    )
-> > > +
-> > > +        if not shutil.which("packetdrill"):
-> > > +            raise KsftSkipEx("Cannot find packetdrill")
+On Wed, Aug 28, 2024 at 08:34:49AM +0200, Christophe Leroy wrote:
+> Hi Charlie,
+> 
+> Le 28/08/2024 à 07:49, Charlie Jenkins a écrit :
+> > Add support for MAP_BELOW_HINT to arch_get_mmap_base() and
+> > arch_get_mmap_end().
 > > 
-> > I don't see anything about building the binary itself. Am I missing
-> > something or should we also have some makefile magic to do it?
-> > I'm not sure packetdrill is packaged by the distros... Presumably
-> > we want the existing NIPA runners to run those tests as well?
-> 
-> As Jakub responded.
-> 
-> Indeed importing the whole application into the kernel sources is what
-> stopped me from attempting this before. Florian's nf_conntrack charted
-> the path here.
-
-Thanks both. I was expecting to find some build rules :-) But as long
-as we have this story sorted out, we're good.
- 
-> > > +
-> > > +        netns = NetNS()
-> > > +
-> > > +        # Call packetdrill from the directory hosting the .pkt script,
-> > > +        # because scripts can have relative includes.
-> > > +        savedir = os.getcwd()
-> > > +        os.chdir(os.path.dirname(pktfile_path))
-> > > +        basename = os.path.basename(pktfile_path)
-> > > +        cmd(f"packetdrill {args} {basename}", ns=netns)
-> > > +        os.chdir(savedir)
-> > > +
-> > > +    if ipv4:
-> > > +        f.__name__ = pathlib.Path(pktfile_path).stem + "-v4"
-> > > +    else:
-> > > +        f.__name__ = pathlib.Path(pktfile_path).stem + "-v6"
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > ---
+> >   arch/powerpc/include/asm/task_size_64.h | 36 +++++++++++++++++++++++++++------
+> >   1 file changed, 30 insertions(+), 6 deletions(-)
 > > 
-> > What about dualstack v4-over-v6 mode? Do we want to support that as
-> > well?
+> > diff --git a/arch/powerpc/include/asm/task_size_64.h b/arch/powerpc/include/asm/task_size_64.h
+> > index 239b363841aa..a37a5a81365d 100644
+> > --- a/arch/powerpc/include/asm/task_size_64.h
+> > +++ b/arch/powerpc/include/asm/task_size_64.h
+> > @@ -72,12 +72,36 @@
+> >   #define STACK_TOP_MAX TASK_SIZE_USER64
+> >   #define STACK_TOP (is_32bit_task() ? STACK_TOP_USER32 : STACK_TOP_USER64)
+> > -#define arch_get_mmap_base(addr, len, base, flags) \
+> > -	(((addr) > DEFAULT_MAP_WINDOW) ? (base) + TASK_SIZE - DEFAULT_MAP_WINDOW : (base))
+> > +#define arch_get_mmap_base(addr, len, base, flags)					\
 > 
-> Does it give a sufficient signal? I skipped over it on purpose. But
-> can enable if that is the consensus.
+> This macro looks quite big for a macro, can it be a static inline function
+> instead ? Same for the other macro below.
+> 
 
-Makes sense. Agreed that most of the time v4-over-v6 just exercises
-the same v4 paths so it's not too much value. I'm assuming that the tests
-that care about v4-over-v6 peculiarities can just
-do --ip_version=ipv4-mapped-ipv6 in their .pkt file (similar to
-what gtests/net/tcp/mtu_probe/basic-v6.pkt is doing)? 
+I had overlooked that possibility, I think that's a great solution, I
+will change that.
+
+> > +({											\
+> > +	unsigned long mmap_base;							\
+> > +	typeof(flags) _flags = (flags);							\
+> > +	typeof(addr) _addr = (addr);							\
+> > +	typeof(base) _base = (base);							\
+> > +	typeof(len) _len = (len);							\
+> > +	unsigned long rnd_gap = DEFAULT_MAP_WINDOW - (_base);				\
+> > +	if (_flags & MAP_BELOW_HINT && _addr != 0 && ((_addr + _len) > BIT(VA_BITS - 1)))\
+> > +		mmap_base = (_addr + _len) - rnd_gap;					\
+> > +	else										\
+> > +		mmap_end = ((_addr > DEFAULT_MAP_WINDOW) ?				\
+> > +				_base + TASK_SIZE - DEFAULT_MAP_WINDOW :		\
+> > +				_base);							\
+> > +	mmap_end;									\
+> 
+> mmap_end doesn't exist, did you mean mmap_base ?
+
+Oh whoops, thank you!
+
+- Charlie
+
+> 
+> > +})
+> > -#define arch_get_mmap_end(addr, len, flags) \
+> > -	(((addr) > DEFAULT_MAP_WINDOW) || \
+> > -	 (((flags) & MAP_FIXED) && ((addr) + (len) > DEFAULT_MAP_WINDOW)) ? TASK_SIZE : \
+> > -									    DEFAULT_MAP_WINDOW)
+> > +#define arch_get_mmap_end(addr, len, flags)							\
+> > +({												\
+> > +	unsigned long mmap_end;									\
+> > +	typeof(flags) _flags = (flags);								\
+> > +	typeof(addr) _addr = (addr);								\
+> > +	typeof(len) _len = (len);								\
+> > +	if (_flags & MAP_BELOW_HINT && _addr != 0 && ((_addr + _len) > BIT(VA_BITS - 1)))	\
+> > +		mmap_end = (_addr + _len);							\
+> > +	else											\
+> > +		mmap_end = (((_addr) > DEFAULT_MAP_WINDOW) ||					\
+> > +				(((_flags) & MAP_FIXED) && ((_addr) + (_len) > DEFAULT_MAP_WINDOW))\
+> > +				? TASK_SIZE : DEFAULT_MAP_WINDOW)				\
+> > +	mmap_end;										\
+> > +})
+> >   #endif /* _ASM_POWERPC_TASK_SIZE_64_H */
+> > 
