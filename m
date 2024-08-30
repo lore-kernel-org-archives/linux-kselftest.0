@@ -1,251 +1,149 @@
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E1C15C153;
-	Fri, 30 Aug 2024 11:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C4917ADF8;
+	Fri, 30 Aug 2024 11:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725017106; cv=none; b=MoPo6FRgbfAZXToVEOHTJ3+uSnJi0oMptv5XbVl4rw0fePWBIu6TI4tprsE/EG0hp76ii0jrtvg348+igbjCH6yRjBakejeKCPhJZP9aw1bpJ3MqGXUwx5suL0kSpdKUW5N0lOuREk8907O4wGAdLRN2LZfHwwdKlfseXwcaRx0=
+	t=1725017137; cv=none; b=k3WRlQoLvKAZdKCs0li/6/zLZTpH/dkvWRJjGCAdxoW7Wu4BiVY0N+MRvEVZ7ZLBcwjkbDyt4hTAoER+uCHXo8SkPRmcWKzp5xhsiKL34BiatOpKz6Hv0lpNEH7USzrM08r8hj8hWWN8kPFiIHmSHLdxJ/FHmeRCq+mwXiyabkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725017106; c=relaxed/simple;
-	bh=IUfW2H/bvcutI+nJJf8bITzIrTXLcvdN6Hmuctos/5o=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Wve+yfSFnqbvDhiOXQSMcLHgUYD1dyzsDZqOOXBIS3Lsh8bDelbo7I87AWs/oMug9KFWWQuCUdBuAezlwF0dpdCc1Dgb38j7VM9l6ItjqRjvDWaGx2hveQR2qiSq3GIqFuW6Opi+SZmFrym7aQgRpYI2lWJZHXnpsQ7I4shp5x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4WwG052v3VzQr55;
-	Fri, 30 Aug 2024 19:20:05 +0800 (CST)
-Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6D6CC180100;
-	Fri, 30 Aug 2024 19:24:57 +0800 (CST)
-Received: from localhost.localdomain (10.90.30.45) by
- dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 30 Aug 2024 19:24:57 +0800
-From: Yunsheng Lin <linyunsheng@huawei.com>
-To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
-	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>, Andrew
- Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v16 11/14] mm: page_frag: add testing for the newly added prepare API
-Date: Fri, 30 Aug 2024 19:18:41 +0800
-Message-ID: <20240830111845.1593542-12-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20240830111845.1593542-1-linyunsheng@huawei.com>
-References: <20240830111845.1593542-1-linyunsheng@huawei.com>
+	s=arc-20240116; t=1725017137; c=relaxed/simple;
+	bh=DpoKNE8VO9z3KhuMFEl5oMMY/HQ8tx2ppppVBEBswnQ=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=C3woPTSkZR47EbUetnQumtglrvGpD7H45F57M/d4IX5HG44JpWt00B+vgYwPLcWn+0G5jIt1HgGxhPs9EhwlH4rgx8VCUNxaqpHR5Uxu3vDxeyNFk0IED8pgk1Q1uhlRdMRTnjteBwC7e6zIfD7W6/qGR6nSwHH1iAm3MaCnB/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IlV/X3m9; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IlV/X3m9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725017136; x=1756553136;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=DpoKNE8VO9z3KhuMFEl5oMMY/HQ8tx2ppppVBEBswnQ=;
+  b=IlV/X3m93kbL8HgKlbrd/RuVW64QbrN9QwzwrbiOndRbZ8/1iAKkuaWQ
+   8JCEBY8JeehFin7Ow2ieFzBbYdr2W7eW6lC4Lz+5P1tYuwq2o5MSvGAfs
+   VN7OWZaR4G48as9CWCBPKAHcQcgy17xgSBUDIQo44/pfk0rBMUY0nTXk8
+   h1Z0OnI2O47rjFDynK79uYQ6Tf6hRd4Q6UC6s6Ikmds8VgGsZ2FO+hymg
+   kVVAWfb3xjLXHmeDk+ERgBus5G+7JZZdkhWQTYvNmP8Beo5u63/VEvPQW
+   fWHg2X5WMSjaXaE+MHOhpXSdA1coyUx7EcMioUrb3WqgQN3bycmnjkxSZ
+   w==;
+X-CSE-ConnectionGUID: VdLI0o7ESNGV0r8KYIPLaw==
+X-CSE-MsgGUID: ka3ES/ZxRbOWBp9zbIkGOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="34320751"
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="34320751"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 04:25:35 -0700
+X-CSE-ConnectionGUID: dOcyybsVRTSXe3PofZBwKw==
+X-CSE-MsgGUID: w6ByEIrZS4K3O5JhKGYiAw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="64620172"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.245.174])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 04:25:30 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 30 Aug 2024 14:25:25 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: fenghua.yu@intel.com, shuah@kernel.org, tony.luck@intel.com, 
+    peternewman@google.com, babu.moger@amd.com, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/6] selftests/resctrl: Use cache size to determine
+ "fill_buf" buffer size
+In-Reply-To: <d357189fe0695b2140fc03efde75edc6fa0c88c6.1724970211.git.reinette.chatre@intel.com>
+Message-ID: <4434b263-9049-3d44-6b41-a840b39205cd@linux.intel.com>
+References: <cover.1724970211.git.reinette.chatre@intel.com> <d357189fe0695b2140fc03efde75edc6fa0c88c6.1724970211.git.reinette.chatre@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemf200006.china.huawei.com (7.185.36.61)
+Content-Type: text/plain; charset=US-ASCII
 
-Add testing for the newly added prepare API, for both aligned
-and non-aligned API, also probe API is also tested along with
-prepare API.
+On Thu, 29 Aug 2024, Reinette Chatre wrote:
 
-CC: Alexander Duyck <alexander.duyck@gmail.com>
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
- .../selftests/mm/page_frag/page_frag_test.c   | 66 +++++++++++++++++--
- tools/testing/selftests/mm/run_vmtests.sh     |  4 ++
- tools/testing/selftests/mm/test_page_frag.sh  | 31 +++++++++
- 3 files changed, 96 insertions(+), 5 deletions(-)
+> By default the MBM and MBA tests use the "fill_buf" benchmark to
+> read from a buffer with the goal to measure the memory bandwidth
+> generated by this buffer access.
+> 
+> Care should be taken when sizing the buffer used by the "fill_buf"
+> benchmark. If the buffer is small enough to fit in the cache then
+> it cannot be expected that the benchmark will generate much memory
+> bandwidth. For example, on a system with 320MB L3 cache the existing
+> hardcoded default of 250MB is insufficient.
+> 
+> Use the measured cache size to determine a buffer size that can be
+> expected to trigger memory access while keeping the existing default
+> as minimum that has been appropriate for testing so far.
+> 
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> ---
+>  tools/testing/selftests/resctrl/mba_test.c | 8 +++++++-
+>  tools/testing/selftests/resctrl/mbm_test.c | 8 +++++++-
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+> index 8ad433495f61..cad473b81a64 100644
+> --- a/tools/testing/selftests/resctrl/mba_test.c
+> +++ b/tools/testing/selftests/resctrl/mba_test.c
+> @@ -170,11 +170,17 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+>  		.setup		= mba_setup,
+>  		.measure	= mba_measure,
+>  	};
+> +	unsigned long cache_total_size = 0;
+>  	int ret;
+>  
+>  	remove(RESULT_FILE_NAME);
+>  
+> -	param.fill_buf.buf_size = DEFAULT_SPAN;
+> +	ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	param.fill_buf.buf_size = cache_total_size > DEFAULT_SPAN ?
+> +				  cache_total_size * 2 : DEFAULT_SPAN;
 
-diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
-index e21a22b1d70b..856eacdd1c90 100644
---- a/tools/testing/selftests/mm/page_frag/page_frag_test.c
-+++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
-@@ -27,6 +27,10 @@ static bool test_align;
- module_param(test_align, bool, 0);
- MODULE_PARM_DESC(test_align, "use align API for testing");
- 
-+static bool test_prepare;
-+module_param(test_prepare, bool, 0);
-+MODULE_PARM_DESC(test_prepare, "use prepare API for testing");
-+
- static int test_alloc_len = 2048;
- module_param(test_alloc_len, int, 0);
- MODULE_PARM_DESC(test_alloc_len, "alloc len for testing");
-@@ -67,6 +71,18 @@ static int page_frag_pop_thread(void *arg)
- 	return 0;
- }
- 
-+static void frag_frag_test_commit(struct page_frag_cache *nc,
-+				  struct page_frag *prepare_pfrag,
-+				  struct page_frag *probe_pfrag,
-+				  unsigned int used_sz)
-+{
-+	WARN_ON_ONCE(prepare_pfrag->page != probe_pfrag->page ||
-+		     prepare_pfrag->offset != probe_pfrag->offset ||
-+		     prepare_pfrag->size != probe_pfrag->size);
-+
-+	page_frag_commit(nc, prepare_pfrag, used_sz);
-+}
-+
- static int page_frag_push_thread(void *arg)
- {
- 	struct ptr_ring *ring = arg;
-@@ -80,13 +96,52 @@ static int page_frag_push_thread(void *arg)
- 		int ret;
- 
- 		if (test_align) {
--			va = page_frag_alloc_align(&test_nc, test_alloc_len,
--						   GFP_KERNEL, SMP_CACHE_BYTES);
-+			if (test_prepare) {
-+				struct page_frag prepare_frag, probe_frag;
-+				void *probe_va;
-+
-+				va = page_frag_alloc_refill_prepare_align(&test_nc,
-+									  test_alloc_len,
-+									  &prepare_frag,
-+									  GFP_KERNEL,
-+									  SMP_CACHE_BYTES);
-+
-+				probe_va = __page_frag_alloc_refill_probe_align(&test_nc,
-+										test_alloc_len,
-+										&probe_frag,
-+										-SMP_CACHE_BYTES);
-+				WARN_ON_ONCE(va != probe_va);
-+
-+				if (likely(va))
-+					frag_frag_test_commit(&test_nc, &prepare_frag,
-+							      &probe_frag, test_alloc_len);
-+			} else {
-+				va = page_frag_alloc_align(&test_nc,
-+							   test_alloc_len,
-+							   GFP_KERNEL,
-+							   SMP_CACHE_BYTES);
-+			}
- 
- 			WARN_ONCE((unsigned long)va & (SMP_CACHE_BYTES - 1),
- 				  "unaligned va returned\n");
- 		} else {
--			va = page_frag_alloc(&test_nc, test_alloc_len, GFP_KERNEL);
-+			if (test_prepare) {
-+				struct page_frag prepare_frag, probe_frag;
-+				void *probe_va;
-+
-+				va = page_frag_alloc_refill_prepare(&test_nc, test_alloc_len,
-+								    &prepare_frag, GFP_KERNEL);
-+
-+				probe_va = page_frag_alloc_refill_probe(&test_nc, test_alloc_len,
-+									&probe_frag);
-+
-+				WARN_ON_ONCE(va != probe_va);
-+				if (likely(va))
-+					frag_frag_test_commit(&test_nc, &prepare_frag,
-+							      &probe_frag, test_alloc_len);
-+			} else {
-+				va = page_frag_alloc(&test_nc, test_alloc_len, GFP_KERNEL);
-+			}
- 		}
- 
- 		if (!va)
-@@ -149,8 +204,9 @@ static int __init page_frag_test_init(void)
- 	wait_for_completion(&wait);
- 
- 	duration = (u64)ktime_us_delta(ktime_get(), start);
--	pr_info("%d of iterations for %s testing took: %lluus\n", nr_test,
--		test_align ? "aligned" : "non-aligned", duration);
-+	pr_info("%d of iterations for %s %s API testing took: %lluus\n", nr_test,
-+		test_align ? "aligned" : "non-aligned",
-+		test_prepare ? "prepare" : "alloc", duration);
- 
- 	ptr_ring_cleanup(&ptr_ring, NULL);
- 	page_frag_cache_drain(&test_nc);
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 96fd470b9f51..e4a36231bbea 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -464,6 +464,10 @@ CATEGORY="page_frag" run_test ./test_page_frag.sh aligned
- 
- CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned
- 
-+CATEGORY="page_frag" run_test ./test_page_frag.sh aligned_prepare
-+
-+CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned_prepare
-+
- echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}" | tap_prefix
- echo "1..${count_total}" | tap_output
- 
-diff --git a/tools/testing/selftests/mm/test_page_frag.sh b/tools/testing/selftests/mm/test_page_frag.sh
-index aad55e0ca2cd..753ec4b6fdc3 100755
---- a/tools/testing/selftests/mm/test_page_frag.sh
-+++ b/tools/testing/selftests/mm/test_page_frag.sh
-@@ -32,6 +32,8 @@ ksft_skip=4
- #
- NONALIGNED_PARAM="test_push_cpu=$TEST_CPU_0 test_pop_cpu=$TEST_CPU_1 test_alloc_len=12 nr_test=512000000"
- ALIGNED_PARAM="$NONALIGNED_PARAM test_align=1"
-+NONALIGNED_PREPARE_PARAM="$NONALIGNED_PARAM test_prepare=1"
-+ALIGNED_PREPARE_PARAM="$ALIGNED_PARAM test_prepare=1"
- 
- check_test_requirements()
- {
-@@ -70,6 +72,24 @@ run_aligned_check()
- 	echo "Check the kernel ring buffer to see the summary."
- }
- 
-+run_nonaligned_prepare_check()
-+{
-+	echo "Run performance tests to evaluate how fast nonaligned prepare API is."
-+
-+	insmod $DRIVER $NONALIGNED_PREPARE_PARAM > /dev/null 2>&1
-+	echo "Done."
-+	echo "Ccheck the kernel ring buffer to see the summary."
-+}
-+
-+run_aligned_prepare_check()
-+{
-+	echo "Run performance tests to evaluate how fast aligned prepare API is."
-+
-+	insmod $DRIVER $ALIGNED_PREPARE_PARAM > /dev/null 2>&1
-+	echo "Done."
-+	echo "Check the kernel ring buffer to see the summary."
-+}
-+
- run_smoke_check()
- {
- 	echo "Run smoke test."
-@@ -82,6 +102,7 @@ run_smoke_check()
- usage()
- {
- 	echo -n "Usage: $0 [ aligned ] | [ nonaligned ] | | [ smoke ] | "
-+	echo "[ aligned_prepare ] | [ nonaligned_prepare ] | "
- 	echo "manual parameters"
- 	echo
- 	echo "Valid tests and parameters:"
-@@ -102,6 +123,12 @@ usage()
- 	echo "# Performance testing for aligned alloc API"
- 	echo "$0 aligned"
- 	echo
-+	echo "# Performance testing for nonaligned prepare API"
-+	echo "$0 nonaligned_prepare"
-+	echo
-+	echo "# Performance testing for aligned prepare API"
-+	echo "$0 aligned_prepare"
-+	echo
- 	exit 0
- }
- 
-@@ -155,6 +182,10 @@ function run_test()
- 			run_nonaligned_check
- 		elif [[ "$1" = "aligned" ]]; then
- 			run_aligned_check
-+		elif [[ "$1" = "nonaligned_prepare" ]]; then
-+			run_nonaligned_prepare_check
-+		elif [[ "$1" = "aligned_prepare" ]]; then
-+			run_aligned_prepare_check
- 		else
- 			run_manual_check $@
- 		fi
+Should the check leave a bit of safeguard so that the buf_size is at 
+least 2x (or x1.25 or some other factor)?
+
+In here buf_size immediate jumps from 1x -> 2x when cache_total_size goes 
+from DEFAULT_SPAN to DEFAULT_SPAN+1 (obviously L3 size won't be odd like 
+that but I think you get my point).
+
+Also, user might want to override this as mentioned in my reply to the 
+previous patch.
+
 -- 
-2.33.0
+ i.
+
+>  	param.fill_buf.memflush = 1;
+>  	param.fill_buf.operation = 0;
+>  	param.fill_buf.once = false;
+> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+> index b6883f274c74..734bfa4f42b3 100644
+> --- a/tools/testing/selftests/resctrl/mbm_test.c
+> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+> @@ -138,11 +138,17 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
+>  		.setup		= mbm_setup,
+>  		.measure	= mbm_measure,
+>  	};
+> +	unsigned long cache_total_size = 0;
+>  	int ret;
+>  
+>  	remove(RESULT_FILE_NAME);
+>  
+> -	param.fill_buf.buf_size = DEFAULT_SPAN;
+> +	ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	param.fill_buf.buf_size = cache_total_size > DEFAULT_SPAN ?
+> +				  cache_total_size * 2 : DEFAULT_SPAN;
+>  	param.fill_buf.memflush = 1;
+>  	param.fill_buf.operation = 0;
+>  	param.fill_buf.once = false;
+> 
 
