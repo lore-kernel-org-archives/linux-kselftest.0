@@ -1,415 +1,495 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9225F200138;
-	Mon,  2 Sep 2024 12:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA05200108;
+	Mon,  2 Sep 2024 12:09:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725278711; cv=none; b=QlDnLzBmM/rER1oRTq3HLpcy9kE735nVEchkNc0mn9mGTrByzzPNp+pKNyMLO7kYQXm7beCBBcsHdfR9sz5u22b+8/P+bcovdkVrND4n39W+U1xJXlbm5erbNC1TrmccGrsfSbPIBsp6e8NZuD6axCN3PfuVjAdssUhaM9Krq+0=
+	t=1725278951; cv=none; b=S5PGZtYFK+998pSmh8fxfhNXbS3GS4V11nz4X+pyGsG/6RvCz8L+JtNt3eoaFKBuJ+RsLySKqUfgJINrpjHpc1H2gLqam32CN6hRDJQ9Q4YDxSCCj4dqD3tgkGdc/uZbL/LBxgYap9R3W9Lfr3fXQHbV87oAdybERfF27+rARJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725278711; c=relaxed/simple;
-	bh=cOOZykEmFqkZRyJ1E/vRN/T5sHb1DXPD+zLw58NgmJc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OBZlwS5zCjGdMua46IRrTl0oVwqAhmVBXAsWd7pZbrG8hDYKdqcpjD0qs7+qQfzYcbx5C8TVyOib8ZrqftKRlBhNCsMBxSkf+rCYLBjJgXHdDnkbd/OHokXdcFusdBhaub4sMvTi7VeKNOvXr/Mu+JskIpV0m1kH/aM+XQPnMd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Wy6rM1R4wz9sSY;
-	Mon,  2 Sep 2024 14:04:51 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H2HBx5amsJ9z; Mon,  2 Sep 2024 14:04:51 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Wy6rL4VqZz9sST;
-	Mon,  2 Sep 2024 14:04:50 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 836838B763;
-	Mon,  2 Sep 2024 14:04:50 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 7ZlsiK2UwxjX; Mon,  2 Sep 2024 14:04:50 +0200 (CEST)
-Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.234.167])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7C90F8B76C;
-	Mon,  2 Sep 2024 14:04:49 +0200 (CEST)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org,
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH v4 5/5] powerpc/vdso: Wire up getrandom() vDSO implementation on PPC64
-Date: Mon,  2 Sep 2024 14:04:42 +0200
-Message-ID: <27de70dcc356e56754a03a2887a97597f5e840a4.1725278148.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <cover.1725278148.git.christophe.leroy@csgroup.eu>
-References: <cover.1725278148.git.christophe.leroy@csgroup.eu>
+	s=arc-20240116; t=1725278951; c=relaxed/simple;
+	bh=uvRMweJAaeBgY9UfSQPn1Zsgkg3qkJBjgpOSYukJuDE=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IMSXFXRspedaelHBf5Eg/74jmINITqGSQYN05xgnIaU22CyF146b3VRVX1CAzGm6CQkyHu7neMSwfBOP76PXGhHcsYoetLugSmmAUYlcPMo2dtBS1zWISEVCzaLmDrn0NrCUpalABnhwEcIHF3E9wK6sgjj4AzQ4dXWxry0nCI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Wy6qZ2Ltvz69Mp;
+	Mon,  2 Sep 2024 20:04:10 +0800 (CST)
+Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
+	by mail.maildlp.com (Postfix) with ESMTPS id AE9CD18007C;
+	Mon,  2 Sep 2024 20:09:05 +0800 (CST)
+Received: from localhost.localdomain (10.90.30.45) by
+ dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 2 Sep 2024 20:09:05 +0800
+From: Yunsheng Lin <linyunsheng@huawei.com>
+To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
+	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>, Andrew
+ Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH net-next v17 01/14] mm: page_frag: add a test module for page_frag
+Date: Mon, 2 Sep 2024 20:03:00 +0800
+Message-ID: <20240902120314.508180-2-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20240902120314.508180-1-linyunsheng@huawei.com>
+References: <20240902120314.508180-1-linyunsheng@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725278679; l=9613; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=cOOZykEmFqkZRyJ1E/vRN/T5sHb1DXPD+zLw58NgmJc=; b=iQVBXnbAbleCScAmhC4jQI8rTg2g1n1MPrzXTpClLQc0uELa0PfoAKC764KONLv8nzMGwr0R9 iJ5HnlZ1f9ODzWAZUSyHZvhWNR+2jEWzNVCX7WzFkz1GcvkhH/eVYP1
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemf200006.china.huawei.com (7.185.36.61)
 
-Extend getrandom() vDSO implementation to powerpc64.
+The testing is done by ensuring that the fragment allocated
+from a frag_frag_cache instance is pushed into a ptr_ring
+instance in a kthread binded to a specified cpu, and a kthread
+binded to a specified cpu will pop the fragment from the
+ptr_ring and free the fragment.
 
-Tested on QEMU on both ppc64_defconfig and ppc64le_defconfig.
-
-The results are not precise as it is QEMU on an x86 laptop, but
-no need to be precise to see the benefit.
-
-~ # ./vdso_test_getrandom bench-single
-   vdso: 25000000 times in 4.977777162 seconds
-   libc: 25000000 times in 75.516749981 seconds
-syscall: 25000000 times in 86.842242014 seconds
-
-~ # ./vdso_test_getrandom bench-single
-   vdso: 25000000 times in 6.473814156 seconds
-   libc: 25000000 times in 73.875109463 seconds
-syscall: 25000000 times in 71.805066229 seconds
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+CC: Alexander Duyck <alexander.duyck@gmail.com>
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
-v4:
-- Use __BIG_ENDIAN__ which is defined by GCC instead of CONFIG_CPU_BIG_ENDIAN which is unknown by selftests
-- Implement a cleaner/smaller output copy for little endian instead of keeping compat macro.
+ tools/testing/selftests/mm/Makefile           |   3 +
+ tools/testing/selftests/mm/page_frag/Makefile |  18 ++
+ .../selftests/mm/page_frag/page_frag_test.c   | 170 +++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   8 +
+ tools/testing/selftests/mm/test_page_frag.sh  | 171 ++++++++++++++++++
+ 5 files changed, 370 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/page_frag/Makefile
+ create mode 100644 tools/testing/selftests/mm/page_frag/page_frag_test.c
+ create mode 100755 tools/testing/selftests/mm/test_page_frag.sh
 
-v3: New (split out of previous patch)
----
- arch/powerpc/Kconfig                         |   2 +-
- arch/powerpc/include/asm/mman.h              |   2 +-
- arch/powerpc/kernel/vdso/Makefile            |  11 +-
- arch/powerpc/kernel/vdso/getrandom.S         |  16 +--
- arch/powerpc/kernel/vdso/vgetrandom-chacha.S | 117 ++++++++++++++++++-
- arch/powerpc/kernel/vdso/vgetrandom.c        |   2 -
- 6 files changed, 132 insertions(+), 18 deletions(-)
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 54b270ef18b1..b45452ac4a73 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -311,7 +311,7 @@ config PPC
- 	select SYSCTL_EXCEPTION_TRACE
- 	select THREAD_INFO_IN_TASK
- 	select TRACE_IRQFLAGS_SUPPORT
--	select VDSO_GETRANDOM			if PPC32
-+	select VDSO_GETRANDOM
- 	#
- 	# Please keep this list sorted alphabetically.
- 	#
-diff --git a/arch/powerpc/include/asm/mman.h b/arch/powerpc/include/asm/mman.h
-index 17a77d47ed6d..42a51a993d94 100644
---- a/arch/powerpc/include/asm/mman.h
-+++ b/arch/powerpc/include/asm/mman.h
-@@ -6,7 +6,7 @@
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index cfad627e8d94..e98ec779b2aa 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -36,6 +36,8 @@ MAKEFLAGS += --no-builtin-rules
+ CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
+ LDLIBS = -lrt -lpthread -lm
  
- #include <uapi/asm/mman.h>
- 
--#ifdef CONFIG_PPC64
-+#if defined(CONFIG_PPC64) && !defined(BUILD_VDSO)
- 
- #include <asm/cputable.h>
- #include <linux/mm.h>
-diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
-index af3ba61b022e..56fb1633529a 100644
---- a/arch/powerpc/kernel/vdso/Makefile
-+++ b/arch/powerpc/kernel/vdso/Makefile
-@@ -9,7 +9,7 @@ obj-vdso32 = sigtramp32-32.o gettimeofday-32.o datapage-32.o cacheflush-32.o not
- obj-vdso64 = sigtramp64-64.o gettimeofday-64.o datapage-64.o cacheflush-64.o note-64.o getcpu-64.o
- 
- obj-vdso32 += getrandom-32.o vgetrandom-chacha-32.o
--obj-vdso64 += getrandom-64.o
-+obj-vdso64 += getrandom-64.o vgetrandom-chacha-64.o
- 
- ifneq ($(c-gettimeofday-y),)
-   CFLAGS_vgettimeofday-32.o += -include $(c-gettimeofday-y)
-@@ -22,6 +22,7 @@ endif
- 
- ifneq ($(c-getrandom-y),)
-   CFLAGS_vgetrandom-32.o += -include $(c-getrandom-y)
-+  CFLAGS_vgetrandom-64.o += -include $(c-getrandom-y) $(call cc-option, -ffixed-r30)
- endif
- 
- # Build rules
-@@ -35,10 +36,10 @@ endif
- targets := $(obj-vdso32) vdso32.so.dbg vgettimeofday-32.o vgetrandom-32.o
- targets += crtsavres-32.o
- obj-vdso32 := $(addprefix $(obj)/, $(obj-vdso32))
--targets += $(obj-vdso64) vdso64.so.dbg vgettimeofday-64.o
-+targets += $(obj-vdso64) vdso64.so.dbg vgettimeofday-64.o vgetrandom-64.o
- obj-vdso64 := $(addprefix $(obj)/, $(obj-vdso64))
- 
--ccflags-y := -fno-common -fno-builtin
-+ccflags-y := -fno-common -fno-builtin -DBUILD_VDSO
- ccflags-y += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- ccflags-y += $(call cc-option, -fno-stack-protector)
- ccflags-y += -DDISABLE_BRANCH_PROFILING
-@@ -72,7 +73,7 @@ CPPFLAGS_vdso64.lds += -P -C
- # link rule for the .so file, .lds has to be first
- $(obj)/vdso32.so.dbg: $(obj)/vdso32.lds $(obj-vdso32) $(obj)/vgettimeofday-32.o $(obj)/vgetrandom-32.o $(obj)/crtsavres-32.o FORCE
- 	$(call if_changed,vdso32ld_and_check)
--$(obj)/vdso64.so.dbg: $(obj)/vdso64.lds $(obj-vdso64) $(obj)/vgettimeofday-64.o FORCE
-+$(obj)/vdso64.so.dbg: $(obj)/vdso64.lds $(obj-vdso64) $(obj)/vgettimeofday-64.o $(obj)/vgetrandom-64.o FORCE
- 	$(call if_changed,vdso64ld_and_check)
- 
- # assembly rules for the .S files
-@@ -88,6 +89,8 @@ $(obj-vdso64): %-64.o: %.S FORCE
- 	$(call if_changed_dep,vdso64as)
- $(obj)/vgettimeofday-64.o: %-64.o: %.c FORCE
- 	$(call if_changed_dep,cc_o_c)
-+$(obj)/vgetrandom-64.o: %-64.o: %.c FORCE
-+	$(call if_changed_dep,cc_o_c)
- 
- # Generate VDSO offsets using helper script
- gen-vdso32sym := $(src)/gen_vdso32_offsets.sh
-diff --git a/arch/powerpc/kernel/vdso/getrandom.S b/arch/powerpc/kernel/vdso/getrandom.S
-index 7db51c0635a5..a957cd2b2b03 100644
---- a/arch/powerpc/kernel/vdso/getrandom.S
-+++ b/arch/powerpc/kernel/vdso/getrandom.S
-@@ -5,8 +5,6 @@
-  *
-  * Copyright (C) 2024 Christophe Leroy <christophe.leroy@csgroup.eu>, CS GROUP France
-  */
--#include <linux/errno.h>
--
- #include <asm/processor.h>
- #include <asm/ppc_asm.h>
- #include <asm/vdso.h>
-@@ -29,10 +27,18 @@
-   .cfi_adjust_cfa_offset PPC_MIN_STKFRM
- 	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-   .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
-+#ifdef __powerpc64__
-+	PPC_STL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+  .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
-+#endif
- 	get_datapage	r8
- 	addi		r8, r8, VDSO_RNG_DATA_OFFSET
- 	bl		CFUNC(DOTSYM(\funct))
- 	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-+#ifdef __powerpc64__
-+	PPC_LL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+  .cfi_restore r2
-+#endif
- 	cmpwi		r3, 0
- 	mtlr		r0
- 	addi		r1, r1, 2 * PPC_MIN_STKFRM
-@@ -48,11 +54,5 @@
- 
- 	.text
- V_FUNCTION_BEGIN(__kernel_getrandom)
--#ifdef CONFIG_PPC64
--	li	r3, ENOSYS
--	crset	so
--	blr
--#else
- 	cvdso_call __c_kernel_getrandom
--#endif
- V_FUNCTION_END(__kernel_getrandom)
-diff --git a/arch/powerpc/kernel/vdso/vgetrandom-chacha.S b/arch/powerpc/kernel/vdso/vgetrandom-chacha.S
-index 17a2f586223a..6b334bcef017 100644
---- a/arch/powerpc/kernel/vdso/vgetrandom-chacha.S
-+++ b/arch/powerpc/kernel/vdso/vgetrandom-chacha.S
-@@ -80,14 +80,58 @@
-  */
- SYM_FUNC_START(__arch_chacha20_blocks_nostack)
- #ifdef __powerpc64__
--	blr
-+	std	r5, -216(r1)
++TEST_GEN_MODS_DIR := page_frag
 +
-+	std	r14, -144(r1)
-+	std	r15, -136(r1)
-+	std	r16, -128(r1)
-+	std	r17, -120(r1)
-+	std	r18, -112(r1)
-+	std	r19, -104(r1)
-+	std	r20, -96(r1)
-+	std	r21, -88(r1)
-+	std	r22, -80(r1)
-+	std	r23, -72(r1)
-+	std	r24, -64(r1)
-+	std	r25, -56(r1)
-+	std	r26, -48(r1)
-+	std	r27, -40(r1)
-+	std	r28, -32(r1)
-+	std	r29, -24(r1)
-+	std	r30, -16(r1)
-+	std	r31, -8(r1)
- #else
- 	stwu	r1, -96(r1)
- 	stw	r5, 20(r1)
-+#ifdef __BIG_ENDIAN__
- 	stmw	r14, 24(r1)
-+#else
-+	stw	r14, 24(r1)
-+	stw	r15, 28(r1)
-+	stw	r16, 32(r1)
-+	stw	r17, 36(r1)
-+	stw	r18, 40(r1)
-+	stw	r19, 44(r1)
-+	stw	r20, 48(r1)
-+	stw	r21, 52(r1)
-+	stw	r22, 56(r1)
-+	stw	r23, 60(r1)
-+	stw	r24, 64(r1)
-+	stw	r25, 68(r1)
-+	stw	r26, 72(r1)
-+	stw	r27, 76(r1)
-+	stw	r28, 80(r1)
-+	stw	r29, 84(r1)
-+	stw	r30, 88(r1)
-+	stw	r31, 92(r1)
-+#endif
-+#endif
+ TEST_GEN_FILES = cow
+ TEST_GEN_FILES += compaction_test
+ TEST_GEN_FILES += gup_longterm
+@@ -125,6 +127,7 @@ TEST_FILES += test_hmm.sh
+ TEST_FILES += va_high_addr_switch.sh
+ TEST_FILES += charge_reserved_hugetlb.sh
+ TEST_FILES += hugetlb_reparenting_test.sh
++TEST_FILES += test_page_frag.sh
  
- 	lwz	r14, 0(r5)
- 	lwz	r15, 4(r5)
-+#ifdef __powerpc64__
-+	rldimi	r14, r15, 32, 0
-+#endif
- 	mr	r0, r6
- 	subi	r3, r3, 4
+ # required by charge_reserved_hugetlb.sh
+ TEST_FILES += write_hugetlb_memory.sh
+diff --git a/tools/testing/selftests/mm/page_frag/Makefile b/tools/testing/selftests/mm/page_frag/Makefile
+new file mode 100644
+index 000000000000..58dda74d50a3
+--- /dev/null
++++ b/tools/testing/selftests/mm/page_frag/Makefile
+@@ -0,0 +1,18 @@
++PAGE_FRAG_TEST_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
++KDIR ?= $(abspath $(PAGE_FRAG_TEST_DIR)/../../../../..)
++
++ifeq ($(V),1)
++Q =
++else
++Q = @
++endif
++
++MODULES = page_frag_test.ko
++
++obj-m += page_frag_test.o
++
++all:
++	+$(Q)make -C $(KDIR) M=$(PAGE_FRAG_TEST_DIR) modules
++
++clean:
++	+$(Q)make -C $(KDIR) M=$(PAGE_FRAG_TEST_DIR) clean
+diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+new file mode 100644
+index 000000000000..6d6f31936b10
+--- /dev/null
++++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+@@ -0,0 +1,170 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Test module for page_frag cache
++ *
++ * Copyright (C) 2024 Yunsheng Lin <linyunsheng@huawei.com>
++ */
++
++#include <linux/mm.h>
++#include <linux/module.h>
++#include <linux/cpumask.h>
++#include <linux/completion.h>
++#include <linux/ptr_ring.h>
++#include <linux/kthread.h>
++
++static struct ptr_ring ptr_ring;
++static int nr_objs = 512;
++static atomic_t nthreads;
++static struct completion wait;
++static struct page_frag_cache test_nc;
++
++static int nr_test = 2000000;
++module_param(nr_test, int, 0);
++MODULE_PARM_DESC(nr_test, "number of iterations to test");
++
++static bool test_align;
++module_param(test_align, bool, 0);
++MODULE_PARM_DESC(test_align, "use align API for testing");
++
++static int test_alloc_len = 2048;
++module_param(test_alloc_len, int, 0);
++MODULE_PARM_DESC(test_alloc_len, "alloc len for testing");
++
++static int test_push_cpu;
++module_param(test_push_cpu, int, 0);
++MODULE_PARM_DESC(test_push_cpu, "test cpu for pushing fragment");
++
++static int test_pop_cpu;
++module_param(test_pop_cpu, int, 0);
++MODULE_PARM_DESC(test_pop_cpu, "test cpu for popping fragment");
++
++static int page_frag_pop_thread(void *arg)
++{
++	struct ptr_ring *ring = arg;
++	int nr = nr_test;
++
++	pr_info("page_frag pop test thread begins on cpu %d\n",
++		smp_processor_id());
++
++	while (nr > 0) {
++		void *obj = __ptr_ring_consume(ring);
++
++		if (obj) {
++			nr--;
++			page_frag_free(obj);
++		} else {
++			cond_resched();
++		}
++	}
++
++	if (atomic_dec_and_test(&nthreads))
++		complete(&wait);
++
++	pr_info("page_frag pop test thread exits on cpu %d\n",
++		smp_processor_id());
++
++	return 0;
++}
++
++static int page_frag_push_thread(void *arg)
++{
++	struct ptr_ring *ring = arg;
++	int nr = nr_test;
++
++	pr_info("page_frag push test thread begins on cpu %d\n",
++		smp_processor_id());
++
++	while (nr > 0) {
++		void *va;
++		int ret;
++
++		if (test_align) {
++			va = page_frag_alloc_align(&test_nc, test_alloc_len,
++						   GFP_KERNEL, SMP_CACHE_BYTES);
++
++			WARN_ONCE((unsigned long)va & (SMP_CACHE_BYTES - 1),
++				  "unaligned va returned\n");
++		} else {
++			va = page_frag_alloc(&test_nc, test_alloc_len, GFP_KERNEL);
++		}
++
++		if (!va)
++			continue;
++
++		ret = __ptr_ring_produce(ring, va);
++		if (ret) {
++			page_frag_free(va);
++			cond_resched();
++		} else {
++			nr--;
++		}
++	}
++
++	pr_info("page_frag push test thread exits on cpu %d\n",
++		smp_processor_id());
++
++	if (atomic_dec_and_test(&nthreads))
++		complete(&wait);
++
++	return 0;
++}
++
++static int __init page_frag_test_init(void)
++{
++	struct task_struct *tsk_push, *tsk_pop;
++	ktime_t start;
++	u64 duration;
++	int ret;
++
++	test_nc.va = NULL;
++	atomic_set(&nthreads, 2);
++	init_completion(&wait);
++
++	if (test_alloc_len > PAGE_SIZE || test_alloc_len <= 0 ||
++	    !cpu_active(test_push_cpu) || !cpu_active(test_pop_cpu))
++		return -EINVAL;
++
++	ret = ptr_ring_init(&ptr_ring, nr_objs, GFP_KERNEL);
++	if (ret)
++		return ret;
++
++	tsk_push = kthread_create_on_cpu(page_frag_push_thread, &ptr_ring,
++					 test_push_cpu, "page_frag_push");
++	if (IS_ERR(tsk_push))
++		return PTR_ERR(tsk_push);
++
++	tsk_pop = kthread_create_on_cpu(page_frag_pop_thread, &ptr_ring,
++					test_pop_cpu, "page_frag_pop");
++	if (IS_ERR(tsk_pop)) {
++		kthread_stop(tsk_push);
++		return PTR_ERR(tsk_pop);
++	}
++
++	start = ktime_get();
++	wake_up_process(tsk_push);
++	wake_up_process(tsk_pop);
++
++	pr_info("waiting for test to complete\n");
++	wait_for_completion(&wait);
++
++	duration = (u64)ktime_us_delta(ktime_get(), start);
++	pr_info("%d of iterations for %s testing took: %lluus\n", nr_test,
++		test_align ? "aligned" : "non-aligned", duration);
++
++	ptr_ring_cleanup(&ptr_ring, NULL);
++	page_frag_cache_drain(&test_nc);
++
++	return -EAGAIN;
++}
++
++static void __exit page_frag_test_exit(void)
++{
++}
++
++module_init(page_frag_test_init);
++module_exit(page_frag_test_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Yunsheng Lin <linyunsheng@huawei.com>");
++MODULE_DESCRIPTION("Test module for page_frag");
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 36045edb10de..96fd470b9f51 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -75,6 +75,8 @@ separated by spaces:
+ 	read-only VMAs
+ - mdwe
+ 	test prctl(PR_SET_MDWE, ...)
++- page_frag
++	test handling of page fragment allocation and freeing
  
-@@ -156,6 +200,7 @@ SYM_FUNC_START(__arch_chacha20_blocks_nostack)
- 	add	r28, r28, r14
- 	add	r29, r29, r15
+ example: ./run_vmtests.sh -t "hmm mmap ksm"
+ EOF
+@@ -456,6 +458,12 @@ CATEGORY="mkdirty" run_test ./mkdirty
  
-+#ifdef __BIG_ENDIAN__
- 	stwbrx	r16, r4, r3
- 	addi	r3, r3, 8
- 	stwbrx	r17, 0, r3
-@@ -180,15 +225,42 @@ SYM_FUNC_START(__arch_chacha20_blocks_nostack)
- 	stwbrx	r30, r4, r3
- 	addi	r3, r3, 8
- 	stwbrx	r31, 0, r3
-+#else
-+	stw	r16, 4(r3)
-+	stw	r17, 8(r3)
-+	stw	r18, 12(r3)
-+	stw	r19, 16(r3)
-+	stw	r20, 20(r3)
-+	stw	r21, 24(r3)
-+	stw	r22, 28(r3)
-+	stw	r23, 32(r3)
-+	stw	r24, 36(r3)
-+	stw	r25, 40(r3)
-+	stw	r26, 44(r3)
-+	stw	r27, 48(r3)
-+	stw	r28, 52(r3)
-+	stw	r29, 56(r3)
-+	stw	r30, 60(r3)
-+	stwu	r31, 64(r3)
-+#endif
+ CATEGORY="mdwe" run_test ./mdwe_test
  
- 	subic.	r0, r0, 1	/* subi. can't use r0 as source */
++CATEGORY="page_frag" run_test ./test_page_frag.sh smoke
++
++CATEGORY="page_frag" run_test ./test_page_frag.sh aligned
++
++CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned
++
+ echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}" | tap_prefix
+ echo "1..${count_total}" | tap_output
  
-+#ifdef __powerpc64__
-+	addi	r14, r14, 1
-+	srdi	r15, r14, 32
-+#else
- 	addic	r14, r14, 1
- 	addze	r15, r15
-+#endif
- 
- 	bne	.Lblock
- 
-+#ifdef __powerpc64__
-+	ld	r5, -216(r1)
-+#else
- 	lwz	r5, 20(r1)
-+#endif
- 	stw	r14, 0(r5)
- 	stw	r15, 4(r5)
- 
-@@ -200,8 +272,49 @@ SYM_FUNC_START(__arch_chacha20_blocks_nostack)
- 	li	r11, 0
- 	li	r12, 0
- 
-+#ifdef __powerpc64__
-+	ld	r14, -144(r1)
-+	ld	r15, -136(r1)
-+	ld	r16, -128(r1)
-+	ld	r17, -120(r1)
-+	ld	r18, -112(r1)
-+	ld	r19, -104(r1)
-+	ld	r20, -96(r1)
-+	ld	r21, -88(r1)
-+	ld	r22, -80(r1)
-+	ld	r23, -72(r1)
-+	ld	r24, -64(r1)
-+	ld	r25, -56(r1)
-+	ld	r26, -48(r1)
-+	ld	r27, -40(r1)
-+	ld	r28, -32(r1)
-+	ld	r29, -24(r1)
-+	ld	r30, -16(r1)
-+	ld	r31, -8(r1)
-+#else
-+#ifdef __BIG_ENDIAN__
- 	lmw	r14, 24(r1)
-+#else
-+	lwz	r14, 24(r1)
-+	lwz	r15, 28(r1)
-+	lwz	r16, 32(r1)
-+	lwz	r17, 36(r1)
-+	lwz	r18, 40(r1)
-+	lwz	r19, 44(r1)
-+	lwz	r20, 48(r1)
-+	lwz	r21, 52(r1)
-+	lwz	r22, 56(r1)
-+	lwz	r23, 60(r1)
-+	lwz	r24, 64(r1)
-+	lwz	r25, 68(r1)
-+	lwz	r26, 72(r1)
-+	lwz	r27, 76(r1)
-+	lwz	r28, 80(r1)
-+	lwz	r29, 84(r1)
-+	lwz	r30, 88(r1)
-+	lwz	r31, 92(r1)
-+#endif
- 	addi	r1, r1, 96
--	blr
- #endif
-+	blr
- SYM_FUNC_END(__arch_chacha20_blocks_nostack)
-diff --git a/arch/powerpc/kernel/vdso/vgetrandom.c b/arch/powerpc/kernel/vdso/vgetrandom.c
-index 923330845b2c..5f855d45fb7b 100644
---- a/arch/powerpc/kernel/vdso/vgetrandom.c
-+++ b/arch/powerpc/kernel/vdso/vgetrandom.c
-@@ -7,10 +7,8 @@
- #include <linux/time.h>
- #include <linux/types.h>
- 
--#ifndef CONFIG_PPC64
- ssize_t __c_kernel_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state,
- 			     size_t opaque_len, const struct vdso_rng_data *vd)
- {
- 	return __cvdso_getrandom_data(vd, buffer, len, flags, opaque_state, opaque_len);
- }
--#endif
+diff --git a/tools/testing/selftests/mm/test_page_frag.sh b/tools/testing/selftests/mm/test_page_frag.sh
+new file mode 100755
+index 000000000000..d2b0734a90b5
+--- /dev/null
++++ b/tools/testing/selftests/mm/test_page_frag.sh
+@@ -0,0 +1,171 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (C) 2024 Yunsheng Lin <linyunsheng@huawei.com>
++# Copyright (C) 2018 Uladzislau Rezki (Sony) <urezki@gmail.com>
++#
++# This is a test script for the kernel test driver to test the
++# correctness and performance of page_frag's implementation.
++# Therefore it is just a kernel module loader. You can specify
++# and pass different parameters in order to:
++#     a) analyse performance of page fragment allocations;
++#     b) stressing and stability check of page_frag subsystem.
++
++DRIVER="./page_frag/page_frag_test.ko"
++CPU_LIST=$(grep -m 2 processor /proc/cpuinfo | cut -d ' ' -f 2)
++TEST_CPU_0=$(echo $CPU_LIST | awk '{print $1}')
++
++if [ $(echo $CPU_LIST | wc -w) -gt 1 ]; then
++	TEST_CPU_1=$(echo $CPU_LIST | awk '{print $2}')
++	NR_TEST=100000000
++else
++	TEST_CPU_1=$TEST_CPU_0
++	NR_TEST=1000000
++fi
++
++# 1 if fails
++exitcode=1
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++#
++# Static templates for testing of page_frag APIs.
++# Also it is possible to pass any supported parameters manually.
++#
++SMOKE_PARAM="test_push_cpu=$TEST_CPU_0 test_pop_cpu=$TEST_CPU_1"
++NONALIGNED_PARAM="$SMOKE_PARAM test_alloc_len=75 nr_test=$NR_TEST"
++ALIGNED_PARAM="$NONALIGNED_PARAM test_align=1"
++
++check_test_requirements()
++{
++	uid=$(id -u)
++	if [ $uid -ne 0 ]; then
++		echo "$0: Must be run as root"
++		exit $ksft_skip
++	fi
++
++	if ! which insmod > /dev/null 2>&1; then
++		echo "$0: You need insmod installed"
++		exit $ksft_skip
++	fi
++
++	if [ ! -f $DRIVER ]; then
++		echo "$0: You need to compile page_frag_test module"
++		exit $ksft_skip
++	fi
++}
++
++run_nonaligned_check()
++{
++	echo "Run performance tests to evaluate how fast nonaligned alloc API is."
++
++	insmod $DRIVER $NONALIGNED_PARAM > /dev/null 2>&1
++	echo "Done."
++	echo "Ccheck the kernel ring buffer to see the summary."
++}
++
++run_aligned_check()
++{
++	echo "Run performance tests to evaluate how fast aligned alloc API is."
++
++	insmod $DRIVER $ALIGNED_PARAM > /dev/null 2>&1
++	echo "Done."
++	echo "Check the kernel ring buffer to see the summary."
++}
++
++run_smoke_check()
++{
++	echo "Run smoke test."
++
++	insmod $DRIVER $SMOKE_PARAM > /dev/null 2>&1
++	echo "Done."
++	echo "Check the kernel ring buffer to see the summary."
++}
++
++usage()
++{
++	echo -n "Usage: $0 [ aligned ] | [ nonaligned ] | | [ smoke ] | "
++	echo "manual parameters"
++	echo
++	echo "Valid tests and parameters:"
++	echo
++	modinfo $DRIVER
++	echo
++	echo "Example usage:"
++	echo
++	echo "# Shows help message"
++	echo "$0"
++	echo
++	echo "# Smoke testing"
++	echo "$0 smoke"
++	echo
++	echo "# Performance testing for nonaligned alloc API"
++	echo "$0 nonaligned"
++	echo
++	echo "# Performance testing for aligned alloc API"
++	echo "$0 aligned"
++	echo
++	exit 0
++}
++
++function validate_passed_args()
++{
++	VALID_ARGS=`modinfo $DRIVER | awk '/parm:/ {print $2}' | sed 's/:.*//'`
++
++	#
++	# Something has been passed, check it.
++	#
++	for passed_arg in $@; do
++		key=${passed_arg//=*/}
++		valid=0
++
++		for valid_arg in $VALID_ARGS; do
++			if [[ $key = $valid_arg ]]; then
++				valid=1
++				break
++			fi
++		done
++
++		if [[ $valid -ne 1 ]]; then
++			echo "Error: key is not correct: ${key}"
++			exit $exitcode
++		fi
++	done
++}
++
++function run_manual_check()
++{
++	#
++	# Validate passed parameters. If there is wrong one,
++	# the script exists and does not execute further.
++	#
++	validate_passed_args $@
++
++	echo "Run the test with following parameters: $@"
++	insmod $DRIVER $@ > /dev/null 2>&1
++	echo "Done."
++	echo "Check the kernel ring buffer to see the summary."
++}
++
++function run_test()
++{
++	if [ $# -eq 0 ]; then
++		usage
++	else
++		if [[ "$1" = "smoke" ]]; then
++			run_smoke_check
++		elif [[ "$1" = "nonaligned" ]]; then
++			run_nonaligned_check
++		elif [[ "$1" = "aligned" ]]; then
++			run_aligned_check
++		else
++			run_manual_check $@
++		fi
++	fi
++}
++
++check_test_requirements
++run_test $@
++
++exit 0
 -- 
-2.44.0
+2.33.0
 
