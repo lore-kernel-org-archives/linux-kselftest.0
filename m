@@ -1,340 +1,264 @@
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD727183CCB;
-	Mon,  2 Sep 2024 07:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDD026AC1;
+	Mon,  2 Sep 2024 08:19:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725260896; cv=none; b=nqfXFd5NiGKRrXTigx1b/NUyj1yFQesn0+CCF46hllckKgLRkWp1Bo5nFUn8j72GdI91SgMnkpcnVo7oSxSUwFOUrMKQjQ9p/FT5bYwEq+Fr+A0jEU0eUoZVFkIZoAEPobGu2BpHU+Nlvhz4rZ9WMY5CnvadQf9JYk4Cglj9ORU=
+	t=1725265190; cv=none; b=h/tlDfkN8j6eBSqR6f3Tpan/my3CKftuUhqst2yDRKW9oz/yAaSScUm/WV2lZiK85q6RJ+uOpET5j2WjUf1/EJqw6TkfI1hfohiQ1Ywpt+36MoDasb6xCtZ3w9d3pMHgKtFL+BIbK05gJDKQYv7EDCyNyCfh7OrksbHvTh3A6zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725260896; c=relaxed/simple;
-	bh=E5GQk/KelJd1qt/IfY6sesWBLVH3qxbY3e/WlMrUjtI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SpXgGxsACbuxg0Z9Pe/kmWCRv4Mdim59GX9TLaCQSgVKjiJAlfzwbdt+TPH7L8gvm/rb+TPEen+ECN6xWXzYcAYfNXox3CBX7grzDiDpHBhE10NceXAjBRRNZmYEOzD6zB/Fykx9IiJd8iYHYWR3rISR3D8fJR3HI2++ZcKusbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=vJU7RrP1; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+	s=arc-20240116; t=1725265190; c=relaxed/simple;
+	bh=NeAXS1q4WKKVX+jak6/Xd3iRMjcWAJKAO/hACLL12U4=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oN/4ksBvvzFd8XA8NHFeHxsfxXx7argPhmBkv0smEyJSr9mv4F5weKKJNTJrEUvGf4eeux4IzCtjQm6N6zAg2Oz5VOPoSUmCr0h5rXuMsWX63M0x2dxEaSxA6XAhgxu247Wtw37d+pOvqWt45IY3Zeqpz3bE3D4bJLqlj823uiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EEy03NgF; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="vJU7RrP1"
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Wy0G34DMmz9tQG;
-	Mon,  2 Sep 2024 09:08:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1725260891;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gu0LU3EVifMUIBL0ftvpiUawHEagDLy3T8fvvebqhSU=;
-	b=vJU7RrP1FLbm+JqkFGB+xDEabpxLfq88hkugxECRh4xeGhVDMqraV0vBixoy5MFvxjR46d
-	DHQF9SmClcAldCyRzI5sUNh8c+Hlf8ejdsCxFAj749iGjIygp+3nmTMiy3GyK6JqP55RMA
-	H7a/DK8q1TexGB5H+mksmK1FhwVPU88r2j77+pNsncxln3S92JzEJs+M8WtRSDKSmsydmI
-	ekyzztJS9YV8CtGWW6A0zBCdYGCGRDD5aD0sKrGZ7dq644kD3svksRa2PdKLHZMdN09HXK
-	31/3lcM96dp2t9fXvghMSAK3fxsRjxJSttTngtOZ1kW06QST6SyoG3q2VGBlJQ==
-From: Aleksa Sarai <cyphar@cyphar.com>
-Date: Mon, 02 Sep 2024 17:06:30 +1000
-Subject: [PATCH RFC 8/8] selftests: clone3: add CHECK_FIELDS selftests
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EEy03NgF"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-204d391f53bso26730355ad.2;
+        Mon, 02 Sep 2024 01:19:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725265188; x=1725869988; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iXdqClKjYaw+pwVY+vTn/MWfGep4gvPjiMkUkpvnbGo=;
+        b=EEy03NgF3rcxYX/tElwTh7bzmqCeABZKXMrUJt0N3Ylr8qnjwt3A82UwyUR3fpqYMh
+         p+nVjMHmZoJOYmrzmn9xwbb99sa6wxYzc4CmCuxDUJmEgS2tHisLHM0jWY/zX3Wi8c7h
+         CeaBzTMbisYeV4odBnPMuofnfxJGgqudn2VDH53H8ZsEnEumoA9nl1GN2Ynh4RDb6jlx
+         u+wyxArzWupF6ZfU8YGyN6pzjqyqGK47vZqos91+ELI2XjQjFfWL8qqwIo8lLi0292kk
+         VczMCBgJmQhR+IoTbc+hHOtu1TMeY7YY9a9VfSIGhQROTP2tRMkC7OeZz38tzHf6PeZF
+         a/jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725265188; x=1725869988;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iXdqClKjYaw+pwVY+vTn/MWfGep4gvPjiMkUkpvnbGo=;
+        b=uw8DBWsPhtcaBZ/QbrHTk3b3c0RiN+NqmQNrgj3n14tC6DmGFZaUaQ5qHaTrvOLYiK
+         V+yyRnGqtxjYAJUQ5btMfzDEMmVLT3DGHIwP/PDQxPMs62YaHoVEtzecsVw+tpCMTR4N
+         67N0BIMEs3y0iybsNoDwZOruxuGlsKeFUtii3xZa3OOM5dDaTf7NhG/HGyK/GhzpVExD
+         jtjEt+2uo53nzn+MMUH0A7FXkDpIHSMXSy6DE7hVUFXgDcOFXyPFTH9sj/Errnh1mI5J
+         K/Fqh228SoQTDrmVdtI6RIDR6/pHgV4Uw3NHpxuVrArJbpoA29qp7K4zvjTLYgsem7yX
+         zcrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ2Ba7wtIO4F8bhqJSRKok1yRTufdHGL/UADEoBhL9UkDLdb1TaWyyNefUsZMIiAWzSfuUi5MuU5e0k/yW654=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzr318XZE1QoglTdvjh8mG9vMLEevwwtayo0lfqz0o4N8Dq3Ofk
+	NWvk8HSC/5EpF9ZY0QHWXa/9U7I5E2aDOHYWaRInRYKtJOsAZwnxVlAHNA==
+X-Google-Smtp-Source: AGHT+IH/giKb/R4Rf4M0toLyqXvAKJgvttBxaM/aefkGZ6gAGqOdXVEKlCUvijQxj0axVvyBBSOtzA==
+X-Received: by 2002:a17:902:d4c4:b0:205:43d8:710f with SMTP id d9443c01a7336-20547d03668mr56172615ad.58.1725265187552;
+        Mon, 02 Sep 2024 01:19:47 -0700 (PDT)
+Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20533ed264asm43500755ad.198.2024.09.02.01.19.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2024 01:19:46 -0700 (PDT)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+Date: Mon, 2 Sep 2024 01:19:44 -0700
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Quentin Monnet <qmo@kernel.org>
+Subject: Re: [PATCH bpf-next v4 4/8] libbpf: Support BTF.ext loading and
+ output in either endianness
+Message-ID: <ZtV1IG1XCPUAIzhl@kodidev-ubuntu>
+References: <cover.1724976539.git.tony.ambardar@gmail.com>
+ <8eaba4b675cba9035121121bba6618c9f8f65610.1724976539.git.tony.ambardar@gmail.com>
+ <CAEf4BzZu8yGnjsBcw=8sZd9knzgM2F8fUfrSuhfLNEpGM3p3Og@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240902-extensible-structs-check_fields-v1-8-545e93ede2f2@cyphar.com>
-References: <20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
-In-Reply-To: <20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
- Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Florian Weimer <fweimer@redhat.com>, 
- Arnd Bergmann <arnd@arndb.de>, Mark Rutland <mark.rutland@arm.com>, 
- linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8288; i=cyphar@cyphar.com;
- h=from:subject:message-id; bh=E5GQk/KelJd1qt/IfY6sesWBLVH3qxbY3e/WlMrUjtI=;
- b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMaRdTWHdOZUlIWD++gI7D1Vf8emVzhG+BgcOna09Wrvqr
- 8iclNliHaUsDGJcDLJiiizb/DxDN81ffCX500o2mDmsTCBDGLg4BWAiO6YzMrycrOr7f6uSS/P1
- 64oyi8Jr5DT1gs06mlbqL9dzYZGNOcjwvzJuJ5fYs6zwmA7p6tUbvpl7FDL1Vc7a/b//dqZT1GN
- ZJgA=
-X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
- fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzZu8yGnjsBcw=8sZd9knzgM2F8fUfrSuhfLNEpGM3p3Og@mail.gmail.com>
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- tools/testing/selftests/clone3/.gitignore          |   1 +
- tools/testing/selftests/clone3/Makefile            |   2 +-
- .../testing/selftests/clone3/clone3_check_fields.c | 229 +++++++++++++++++++++
- 3 files changed, 231 insertions(+), 1 deletion(-)
+On Fri, Aug 30, 2024 at 02:14:19PM -0700, Andrii Nakryiko wrote:
+> On Fri, Aug 30, 2024 at 12:30 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
+> >
+> > Support for handling BTF data of either endianness was added in [1], but
+> > did not include BTF.ext data for lack of use cases. Later, support for
+> > static linking [2] provided a use case, but this feature and later ones
+> > were restricted to native-endian usage.
+> >
+> > Add support for BTF.ext handling in either endianness. Convert BTF.ext data
+> > to native endianness when read into memory for further processing, and
+> > support raw data access that restores the original byte-order for output.
+> > Add internal header functions for byte-swapping func, line, and core info
+> > records.
+> >
+> > Add new API functions btf_ext__endianness() and btf_ext__set_endianness()
+> > for query and setting byte-order, as already exist for BTF data.
+> >
+> > [1] 3289959b97ca ("libbpf: Support BTF loading and raw data output in both endianness")
+> > [2] 8fd27bf69b86 ("libbpf: Add BPF static linker BTF and BTF.ext support")
+> >
+> > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+> > ---
+> >  tools/lib/bpf/btf.c             | 192 +++++++++++++++++++++++++++++---
+> >  tools/lib/bpf/btf.h             |   3 +
+> >  tools/lib/bpf/libbpf.map        |   2 +
+> >  tools/lib/bpf/libbpf_internal.h |  33 ++++++
+> >  4 files changed, 214 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> > index f5081de86ee0..064cfe126c09 100644
+> > --- a/tools/lib/bpf/btf.c
+> > +++ b/tools/lib/bpf/btf.c
+> > @@ -3022,25 +3022,102 @@ static int btf_ext_setup_core_relos(struct btf_ext *btf_ext)
+> >         return btf_ext_setup_info(btf_ext, &param);
+> >  }
+> >
+> > -static int btf_ext_parse_hdr(__u8 *data, __u32 data_size)
+> > +/* Swap byte-order of BTF.ext header with any endianness */
+> > +static void btf_ext_bswap_hdr(struct btf_ext *btf_ext, __u32 hdr_len)
+> >  {
+> > -       const struct btf_ext_header *hdr = (struct btf_ext_header *)data;
+> > +       struct btf_ext_header *h = btf_ext->hdr;
+> >
+> > -       if (data_size < offsetofend(struct btf_ext_header, hdr_len) ||
+> > -           data_size < hdr->hdr_len) {
+> > -               pr_debug("BTF.ext header not found\n");
+> > +       h->magic = bswap_16(h->magic);
+> > +       h->hdr_len = bswap_32(h->hdr_len);
+> > +       h->func_info_off = bswap_32(h->func_info_off);
+> > +       h->func_info_len = bswap_32(h->func_info_len);
+> > +       h->line_info_off = bswap_32(h->line_info_off);
+> > +       h->line_info_len = bswap_32(h->line_info_len);
+> > +
+> > +       if (hdr_len < offsetofend(struct btf_ext_header, core_relo_len))
+> > +               return;
+> > +
+> > +       h->core_relo_off = bswap_32(h->core_relo_off);
+> > +       h->core_relo_len = bswap_32(h->core_relo_len);
+> > +}
+> > +
+> > +/* Swap byte-order of a generic info subsection */
+> > +static void info_subsec_bswap(const struct btf_ext_header *hdr, bool native,
+> > +                             __u32 off, __u32 len, anon_info_bswap_fn_t bswap)
+> 
+> ok, so I'm not a fan of this bswap callback, tbh. Also, we don't
+> really enforce that each kind of record has exact size we expect
+> (i.e., bpf_line_info_min and bpf_func_info_min shouldn't be "min" for
+> byte-swapped case, it should be exact).
+> 
+> How about this slight modification: split byte swapping of
+> sections/subsection metadata, so we adjust record size, sec_name_off
+> and num_info separately from adjusting each record.
 
-diff --git a/tools/testing/selftests/clone3/.gitignore b/tools/testing/selftests/clone3/.gitignore
-index 83c0f6246055..4ec3e1ecd273 100644
---- a/tools/testing/selftests/clone3/.gitignore
-+++ b/tools/testing/selftests/clone3/.gitignore
-@@ -3,3 +3,4 @@ clone3
- clone3_clear_sighand
- clone3_set_tid
- clone3_cap_checkpoint_restore
-+clone3_check_fields
-diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
-index 84832c369a2e..d310f2268066 100644
---- a/tools/testing/selftests/clone3/Makefile
-+++ b/tools/testing/selftests/clone3/Makefile
-@@ -3,6 +3,6 @@ CFLAGS += -g -std=gnu99 $(KHDR_INCLUDES)
- LDLIBS += -lcap
- 
- TEST_GEN_PROGS := clone3 clone3_clear_sighand clone3_set_tid \
--	clone3_cap_checkpoint_restore
-+	clone3_cap_checkpoint_restore clone3_check_fields
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/clone3/clone3_check_fields.c b/tools/testing/selftests/clone3/clone3_check_fields.c
-new file mode 100644
-index 000000000000..78b5cbf807a6
---- /dev/null
-+++ b/tools/testing/selftests/clone3/clone3_check_fields.c
-@@ -0,0 +1,229 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Author: Aleksa Sarai <cyphar@cyphar.com>
-+ * Copyright (C) 2024 SUSE LLC
-+ */
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <inttypes.h>
-+#include <linux/types.h>
-+#include <linux/sched.h>
-+#include <stdbool.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
-+#include <sys/un.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <sched.h>
-+
-+#include "../kselftest.h"
-+#include "clone3_selftests.h"
-+
-+#ifndef CHECK_FIELDS
-+#define CHECK_FIELDS (1ULL << 63)
-+#endif
-+
-+#ifndef EEXTSYS_NOOP
-+#define EEXTSYS_NOOP 134
-+#endif
-+
-+struct __clone_args_v0 {
-+	__aligned_u64 flags;
-+	__aligned_u64 pidfd;
-+	__aligned_u64 child_tid;
-+	__aligned_u64 parent_tid;
-+	__aligned_u64 exit_signal;
-+	__aligned_u64 stack;
-+	__aligned_u64 stack_size;
-+	__aligned_u64 tls;
-+};
-+
-+struct __clone_args_v1 {
-+	__aligned_u64 flags;
-+	__aligned_u64 pidfd;
-+	__aligned_u64 child_tid;
-+	__aligned_u64 parent_tid;
-+	__aligned_u64 exit_signal;
-+	__aligned_u64 stack;
-+	__aligned_u64 stack_size;
-+	__aligned_u64 tls;
-+	__aligned_u64 set_tid;
-+	__aligned_u64 set_tid_size;
-+};
-+
-+struct __clone_args_v2 {
-+	__aligned_u64 flags;
-+	__aligned_u64 pidfd;
-+	__aligned_u64 child_tid;
-+	__aligned_u64 parent_tid;
-+	__aligned_u64 exit_signal;
-+	__aligned_u64 stack;
-+	__aligned_u64 stack_size;
-+	__aligned_u64 tls;
-+	__aligned_u64 set_tid;
-+	__aligned_u64 set_tid_size;
-+	__aligned_u64 cgroup;
-+};
-+
-+static int call_clone3(void *clone_args, size_t size)
-+{
-+	int status;
-+	pid_t pid;
-+
-+	pid = sys_clone3(clone_args, size);
-+	if (pid < 0) {
-+		ksft_print_msg("%d (%s) - Failed to create new process\n",
-+			       errno, strerror(errno));
-+		return -errno;
-+	}
-+
-+	if (pid == 0) {
-+		ksft_print_msg("I am the child, my PID is %d\n", getpid());
-+		_exit(EXIT_SUCCESS);
-+	}
-+
-+	ksft_print_msg("I am the parent (%d). My child's pid is %d\n",
-+			getpid(), pid);
-+
-+	if (waitpid(-1, &status, __WALL) < 0) {
-+		ksft_print_msg("waitpid() returned %s\n", strerror(errno));
-+		return -errno;
-+	}
-+	if (!WIFEXITED(status)) {
-+		ksft_print_msg("Child did not exit normally, status 0x%x\n",
-+			       status);
-+		return EXIT_FAILURE;
-+	}
-+	if (WEXITSTATUS(status))
-+		return WEXITSTATUS(status);
-+
-+	return 0;
-+}
-+
-+static bool check(bool *failed, bool pred)
-+{
-+	*failed |= pred;
-+	return pred;
-+}
-+
-+static void test_clone3_check_fields(const char *test_name, size_t struct_size)
-+{
-+	size_t bufsize;
-+	void *buffer;
-+	pid_t pid;
-+	bool failed = false;
-+	void (*resultfn)(const char *msg, ...) = ksft_test_result_pass;
-+
-+	/* Allocate some bytes after clone_args to verify that the . */
-+	bufsize = struct_size + 16;
-+	buffer = malloc(bufsize);
-+	memset(buffer, 0, bufsize);
-+
-+	pid = call_clone3(buffer, CHECK_FIELDS | struct_size);
-+	if (check(&failed, (pid != -EEXTSYS_NOOP)))
-+		ksft_print_msg("clone3(CHECK_FIELDS) returned the wrong error code: %d (%s)\n",
-+			       pid, strerror(-pid));
-+
-+	switch (struct_size) {
-+	case sizeof(struct __clone_args_v2): {
-+		struct __clone_args_v2 *args = buffer;
-+
-+		if (check(&failed, (args->cgroup != 0xFFFFFFFFFFFFFFFF)))
-+			ksft_print_msg("clone3(CHECK_FIELDS) has wrong cgroup field: 0x%.16llx != 0x%.16llx\n",
-+				       args->cgroup, 0xFFFFFFFFFFFFFFFF);
-+
-+		/* fallthrough; */
-+	}
-+	case sizeof(struct __clone_args_v1): {
-+		struct __clone_args_v1 *args = buffer;
-+
-+		if (check(&failed, (args->set_tid != 0xFFFFFFFFFFFFFFFF)))
-+			ksft_print_msg("clone3(CHECK_FIELDS) has wrong set_tid field: 0x%.16llx != 0x%.16llx\n",
-+				       args->set_tid, 0xFFFFFFFFFFFFFFFF);
-+		if (check(&failed, (args->set_tid_size != 0xFFFFFFFFFFFFFFFF)))
-+			ksft_print_msg("clone3(CHECK_FIELDS) has wrong set_tid_size field: 0x%.16llx != 0x%.16llx\n",
-+				       args->set_tid_size, 0xFFFFFFFFFFFFFFFF);
-+
-+		/* fallthrough; */
-+	}
-+	case sizeof(struct __clone_args_v0): {
-+		struct __clone_args_v0 *args = buffer;
-+
-+		if (check(&failed, !(args->flags & CLONE_NEWUSER)))
-+			ksft_print_msg("clone3(CHECK_FIELDS) is missing CLONE_NEWUSER in flags: 0x%.16llx (0x%.16llx)\n",
-+				       args->flags, CLONE_NEWUSER);
-+		if (check(&failed, !(args->flags & CLONE_THREAD)))
-+			ksft_print_msg("clone3(CHECK_FIELDS) is missing CLONE_THREAD in flags: 0x%.16llx (0x%.16llx)\n",
-+				       args->flags, CLONE_THREAD);
-+		/*
-+		 * CLONE_INTO_CGROUP was added in v2, but it will be set even
-+		 * with smaller structure sizes.
-+		 */
-+		if (check(&failed, !(args->flags & CLONE_INTO_CGROUP)))
-+			ksft_print_msg("clone3(CHECK_FIELDS) is missing CLONE_INTO_CGROUP in flags: 0x%.16llx (0x%.16llx)\n",
-+				       args->flags, CLONE_INTO_CGROUP);
-+
-+		if (check(&failed, (args->exit_signal != 0xFF)))
-+			ksft_print_msg("clone3(CHECK_FIELDS) has wrong exit_signal field: 0x%.16llx != 0x%.16llx\n",
-+				       args->exit_signal, 0xFF);
-+
-+		if (check(&failed, (args->stack != 0xFFFFFFFFFFFFFFFF)))
-+			ksft_print_msg("clone3(CHECK_FIELDS) has wrong stack field: 0x%.16llx != 0x%.16llx\n",
-+				       args->stack, 0xFFFFFFFFFFFFFFFF);
-+		if (check(&failed, (args->stack_size != 0xFFFFFFFFFFFFFFFF)))
-+			ksft_print_msg("clone3(CHECK_FIELDS) has wrong stack_size field: 0x%.16llx != 0x%.16llx\n",
-+				       args->stack_size, 0xFFFFFFFFFFFFFFFF);
-+		if (check(&failed, (args->tls != 0xFFFFFFFFFFFFFFFF)))
-+			ksft_print_msg("clone3(CHECK_FIELDS) has wrong tls field: 0x%.16llx != 0x%.16llx\n",
-+				       args->tls, 0xFFFFFFFFFFFFFFFF);
-+
-+		break;
-+	}
-+	default:
-+		fprintf(stderr, "INVALID STRUCTURE SIZE: %d\n", struct_size);
-+		abort();
-+	}
-+
-+	/* Verify that the trailing parts of the buffer are still 0. */
-+	for (size_t i = struct_size; i < bufsize; i++) {
-+		char ch = ((char *)buffer)[i];
-+		if (check(&failed, (ch != '\x00')))
-+			ksft_print_msg("clone3(CHECK_FIELDS) touched a byte outside the size: buffer[%d] = 0x%.2x\n",
-+				       i, ch);
-+	}
-+
-+	if (failed)
-+		resultfn = ksft_test_result_fail;
-+
-+	resultfn("clone3(CHECK_FIELDS) with %s\n", test_name);
-+	free(buffer);
-+}
-+
-+struct check_fields_test {
-+	const char *name;
-+	size_t struct_size;
-+};
-+
-+static struct check_fields_test check_fields_tests[] = {
-+	{"struct v0", sizeof(struct __clone_args_v0)},
-+	{"struct v1", sizeof(struct __clone_args_v1)},
-+	{"struct v2", sizeof(struct __clone_args_v2)},
-+};
-+
-+int main(void)
-+{
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(check_fields_tests));
-+	test_clone3_supported();
-+
-+	for (int i = 0; i < ARRAY_SIZE(check_fields_tests); i++) {
-+		struct check_fields_test *test = &check_fields_tests[i];
-+		test_clone3_check_fields(test->name, test->struct_size);
-+	}
-+
-+	ksft_finished();
-+}
+Hmmm, the bulk of code needed is to parse the metadata, with only 2 lines
+used to go through records. Splitting per above would add unnecessary
+duplication it seems, no?
 
--- 
-2.46.0
+> 
+> Once this swapping is done we:
+> 
+> a) validate record size for each section is expected (according to its
+> type, of course)
 
+This is a good point I overlooked, and needs doing in any case.
+
+> b) we can then use for_each_btf_ext_sec() and for_each_btf_ext_rec()
+> macro (which assume proper in-memory metadata byte order) and then
+> hard-code swapping of each record fields
+
+How easily can we use these macros? Consider the current call chain:
+
+btf_ext__new
+     btf_ext_parse
+          btf_ext_bswap_hdr     (1)
+          btf_ext_bswap_info    (2)
+     btf_ext_setup_func_info
+     btf_ext_setup_line_info
+     btf_ext_setup_core_relos   (3)
+	
+btf_ext__raw_data
+     btf_ext_bswap_info         (4)
+     btf_ext_bswap_hdr
+
+The macros iterate on 'struct btf_ext_info' instances in 'struct btf_ext'
+but these are only set up after (3) it seems and unavailable at (2). I
+suppose they could be used with some sort of kludge but unsure how well
+they'll work.
+
+> 
+> No callbacks.
+> 
+> This has also a benefit of not needing this annoying "bool native"
+> flag when producing raw bytes. We just ensure proper order of
+> operation:
+> 
+> a) swap records
+> b) swap metadata (so just mirrored order from initialization)
+
+How does that work? If we split up btf_ext_bswap_info(), after (1)
+btf_ext->swapped_endian is set and btf_ext->hdr->magic is swapped, so at
+(2) it's not possible to tell the current info data byte order without
+some hinting.
+
+But maybe if we defer setting btf_ext->swapped_endian until after (b) we
+can drop the "bool native" thanks to symmetry breaking. Let me check.
+
+> 
+> WDYT?
+
+Adding a record_size check is definitely needed.
+
+But I have trouble seeing how splitting bswap of info metadata/records
+would yield something simpler and cleaner than the callbacks. What if
+they were passed via a descriptor, as in btf_ext_setup_func_info()? I
+think I need to play around with this a while and see..
+
+It would also help me if you'd elaborate on the drawbacks you see of
+using callbacks, given I see then in other parts of libbpf.
+
+> 
+> pw-bot: cr
+> 
+> > +{
+> > +       __u32 left, i, *rs, rec_size, num_info;
+> > +       struct btf_ext_info_sec *si;
+> > +       void *p;
+> > +
+> > +       if (len == 0)
+> > +               return;
+> > +
+> > +       rs = (void *)hdr + hdr->hdr_len + off;  /* record size */
+> > +       si = (void *)rs + sizeof(__u32);        /* sec info #1 */
+> > +       rec_size = native ? *rs : bswap_32(*rs);
+> > +       *rs = bswap_32(*rs);
+> > +       left = len - sizeof(__u32);
+> > +       while (left > 0) {
+> > +               num_info = native ? si->num_info : bswap_32(si->num_info);
+> > +               si->sec_name_off = bswap_32(si->sec_name_off);
+> > +               si->num_info = bswap_32(si->num_info);
+> > +               left -= offsetof(struct btf_ext_info_sec, data);
+> > +               p = si->data;
+> > +               for (i = 0; i < num_info; i++)  /* list of records */
+> > +                       p += bswap(p);
+> > +               si = p;
+> > +               left -=  rec_size * num_info;
+> 
+> nit: extra space here
+
+Fixed, thanks.
+
+> 
+> > +       }
+> > +}
+> > +
+> 
+> [...]
