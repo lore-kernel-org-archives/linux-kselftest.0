@@ -1,54 +1,38 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DEEEAF6;
-	Mon, 23 Sep 2024 05:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727069943; cv=pass; b=Nuk3SV7Ut+jCNAMlMfWThKs35kaHFgsELy2LzRIELdKczI7CkWIXyP/LFMlfMZsp7vjTDlWUAIpE8K+U2Xj+is22JaiGrN2fXJ+E6/RZf3qXwE6Jywvc5UQRA5v1QewH8SbFZtqSyYcO4jks5/cWzW3bWrLfA95gCBkmm3ZvVhw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727069943; c=relaxed/simple;
-	bh=FJ2ttu3ymdbUtGl8rWp/seAINoEH0qpMdehsWGCuTjQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=avC4cIpIXIW6IFoMx132SzGFRu1QTYB3m49I9Uta5GS6KEippHM12jlDRlcxuwXEJA98LHlnwu/7xwGa1CWZP9CkitO58veoy58Qr+da8xe+yHKi15DaJ/jcJa74wNSlnhowPKyNRewzkHv5/pTYETPklapSfq3WAr8Tw1cTQFE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=H1cBJTb7; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="H1cBJTb7"
-ARC-Seal: i=1; a=rsa-sha256; t=1727069929; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Z/8Bb/arnKe09EnTuqR2Yvj/va37Jm96E7h5HfhDvnFHWLeWUX3aEyA3bmv7XuAtmu+yTAUvBdbHBEk4bKirUgFA2ppPieA7wNn51MiyZ6W7w/gBHfsGoKV6OLBDVVOYvUYrjDdsHODik6gkcE5jxyp8Bsgv9drL+AZS3qw0s7Q=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1727069929; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=PmmGSXySg6IlnsTDXpl7Bn2vkcG7CZ7INIi8sf8r2Gc=; 
-	b=KLqIQfOyyngHtcEMhpmhYAJJ1fE+MY7LL3HVJFgtEcjH1n1FGOcIRtN2J9LJtj1PeLVWmJf/4gRrCytNrlguJYhpcn3mp7N+qiZh4k6YzznjYQEOGWJoL2dqia+QpEXeZOe0ioe+IVGA7rFRV31B7tov560HfTi3PaYrvXEeukM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
-	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1727069929;
-	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=PmmGSXySg6IlnsTDXpl7Bn2vkcG7CZ7INIi8sf8r2Gc=;
-	b=H1cBJTb7AKHnE3gCNfJHz2jCquRTwqs2VdCWE+0d1tVoP7h7X7t+r4/BwlirNSyY
-	1jEXzCmMGz0JujOQsPFHLcKljj8bBccKaCcb6kqBn8yGk13+vfThbIvCiiGZb889Qax
-	oc5lPe+sspNpd2RjZFsHcw6HssV5IE9n+phvD4ds=
-Received: by mx.zohomail.com with SMTPS id 1727069928216470.38431144075696;
-	Sun, 22 Sep 2024 22:38:48 -0700 (PDT)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	David Hildenbrand <david@redhat.com>,
-	John Hubbard <jhubbard@nvidia.com>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	linux-mm@kvack.org,
+Received: from cmccmta2.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D96F628689;
+	Mon, 23 Sep 2024 06:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727074548; cv=none; b=CCHEvTi+pf2qwONztC1SkCapUYjTF0V8eAUgARHHQLZcBAxCrhAzf7VcII4Ul8xim+QNh7GadvH6nTI5Efrf3x9VeSBaFblLtEf3Fp4yogYgBFtz+RaaQG5tladK8mHRrGStsTcuDxyC29lrOpkSMEJVm7bujp9gWLq+EpRmwD0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727074548; c=relaxed/simple;
+	bh=ZDIRqO6WtG6HsS5yy9N8e+xwUiik5Ry/e6KsvBLs3eU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GYBKYiFOiccHp4JOSZm7q/pJmZD/bnn7wcHILgpgnHBv8JyjfwkILX9LKSP/s9g5U5iSIfEbXb/pWePqmziVmtHQ8+o++N+ME567fsDXxcoqb1EwgZ9rMjl3cwsk0Y4niOYlEVJldTu8JtxFqI8t2tL3XJft+nDaXG9bKnUXMnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee666f11032eb5-46778;
+	Mon, 23 Sep 2024 14:52:35 +0800 (CST)
+X-RM-TRANSID:2ee666f11032eb5-46778
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.101])
+	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee166f11022dbd-5453d;
+	Mon, 23 Sep 2024 14:52:35 +0800 (CST)
+X-RM-TRANSID:2ee166f11022dbd-5453d
+From: Ba Jing <bajing@cmss.chinamobile.com>
+To: brauner@kernel.org
+Cc: shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] kselftests: mm: Fix wrong __NR_userfaultfd value
-Date: Mon, 23 Sep 2024 10:38:36 +0500
-Message-Id: <20240923053836.3270393-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
+	Ba Jing <bajing@cmss.chinamobile.com>
+Subject: [PATCH] clone3: clone3_cap_checkpoint_restore: remove unused MAX_PID_NS_LEVEL macro
+Date: Tue,  3 Sep 2024 11:36:28 +0800
+Message-Id: <20240903033628.10306-1-bajing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,50 +40,29 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-grep -rnIF "#define __NR_userfaultfd"
-tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
-arch/x86/include/generated/uapi/asm/unistd_32.h:374:#define
-__NR_userfaultfd 374
-arch/x86/include/generated/uapi/asm/unistd_64.h:327:#define
-__NR_userfaultfd 323
-arch/x86/include/generated/uapi/asm/unistd_x32.h:282:#define
-__NR_userfaultfd (__X32_SYSCALL_BIT + 323)
-arch/arm/include/generated/uapi/asm/unistd-eabi.h:347:#define
-__NR_userfaultfd (__NR_SYSCALL_BASE + 388)
-arch/arm/include/generated/uapi/asm/unistd-oabi.h:359:#define
-__NR_userfaultfd (__NR_SYSCALL_BASE + 388)
-include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+The macro MAX_PID_NS_LEVEL is never referenced in the code, so remove it.
 
-The number is dependent on the architecture. The above data shows that:
-x86	374
-x86_64	323
-
-The value of __NR_userfaultfd was changed to 282 when
-asm-generic/unistd.h was included. It makes the test to fail every time
-as the correct number of this syscall on x86_64 is 323. Fix the header
-to asm/unistd.h.
-
-Fixes: a5c6bc590094 ("selftests/mm: remove local __NR_* definitions")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Signed-off-by: Ba Jing <bajing@cmss.chinamobile.com>
 ---
- tools/testing/selftests/mm/pagemap_ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index fc90af2a97b80..bcc73b4e805c6 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -15,7 +15,7 @@
- #include <sys/ioctl.h>
- #include <sys/stat.h>
- #include <math.h>
--#include <asm-generic/unistd.h>
-+#include <asm/unistd.h>
- #include <pthread.h>
- #include <sys/resource.h>
- #include <assert.h>
+diff --git a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+index 31b56d625655..3c196fa86c99 100644
+--- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
++++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+@@ -27,8 +27,6 @@
+ #include "../kselftest_harness.h"
+ #include "clone3_selftests.h"
+ 
+-#define MAX_PID_NS_LEVEL 32
+-
+ static void child_exit(int ret)
+ {
+ 	fflush(stdout);
 -- 
-2.39.2
+2.33.0
+
+
 
