@@ -1,99 +1,90 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0396433A9;
-	Wed,  4 Sep 2024 04:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22E8433A9;
+	Wed,  4 Sep 2024 05:14:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725425553; cv=none; b=u+O2AAXkD9mFEq2lLfCcc0aqXmqhiziw8eMdZsPRBh6LxqKWIr0WqRNwSRSp9jUVy5le4uChXtMMMKzVGn7b/hTkf9u3rMhC0zkcU6c+GRKOX1R46DJusutR8EqqeEsxDtsDcxn1X+5O5Gp0H1diKT/yRw+cDeEPwriWPkh3pFQ=
+	t=1725426882; cv=none; b=SGiE+d9TUUTbqodrojSjMgpPJQOJ8ninOZpOMC8+zXWADrY3R0NaUHe9G5gJqhBmzScBoqE6iaq2vr1N6ygNrYcdosLwZ4SW2J9v4gpYw6EfTTdBX1zdVszABME8Sdtf/8CrZ1DBez9eLjS/OeQMW74SttnY1iD7HN7AzGbVnzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725425553; c=relaxed/simple;
-	bh=GrzPrCNT7mABBxSbsxg81EhR2Kv/Xk3QPAwQUFHk/tU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O/xM3oRYHT7zjl6e/hnuC4a4EUl+yz+L8vSwSWAyBg3NbsC6ajLb6aCAzHldfZpvPqTD28a1NjbUhLH9g3dLPzLCC/S2xby5qPZLjaExCJ86n3XH/uaVbUPtssvIdeaw3NU6xoUi4tkpSkQ7vlrKYNx930kUUoqiFOkQr2h5kvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0048CFEC;
-	Tue,  3 Sep 2024 21:52:56 -0700 (PDT)
-Received: from [10.162.43.14] (e116581.arm.com [10.162.43.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC2243F73F;
-	Tue,  3 Sep 2024 21:52:24 -0700 (PDT)
-Message-ID: <514713eb-235c-40ee-8c25-f1f3e1ca7f7a@arm.com>
-Date: Wed, 4 Sep 2024 10:22:21 +0530
+	s=arc-20240116; t=1725426882; c=relaxed/simple;
+	bh=W+LForudlZI+mN96e/9989TPERzQNGZMV377nucLBbw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mlZt7096J7rj9JCTLYi/NPpUDWHffPYotwnoOiHLikPi9vrrxwATmZ5PSv++bBKFy+99oXxPKsEfcSPHYrynBOv7oSRR9/f0Uc1a1psdGfRG73cypv+5+SPL8kKr+rUEOhIar5mswswKAGCAcHr6abbelbUOOJ7m7s5vqb8RriQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Vu1ayrFB; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Vu1ayrFB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1725426881; x=1756962881;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=W+LForudlZI+mN96e/9989TPERzQNGZMV377nucLBbw=;
+  b=Vu1ayrFBIq9B/shk2WtveRUn6jVE2H+saxRgibqlGO0iggpgTmoRcHsf
+   zA12PzKHRNpQcrz9UCFlGliMmd2entZMpM8TfqliIKBoBGUlYNDawqthx
+   NgXP3F+Toxn8kyFS9EUzo9qdwmggrdK1PRRkkpoTT2UXdomSSrfI10AhV
+   Jtby2Qrarv56u6DFVQIedu0jV4CmnY68qvmSuwMbxpI7xYk4JJyZYmYzj
+   L9Cw8jN3jStFoZaMGLhV0tfkSmqTL7t5XDE8a7SBPnXUzPFGWavYJTUKT
+   kTYFPGVIFL14cJExgr+La27lkMrRg/JRkEQ1pP+MI8aqrhQvnVYIBvd+9
+   Q==;
+X-CSE-ConnectionGUID: rZTpTODjTH2NWy2Lwmh1ng==
+X-CSE-MsgGUID: eY/IxOhUSuSbszjOt62d2w==
+X-IronPort-AV: E=Sophos;i="6.10,200,1719903600"; 
+   d="scan'208";a="262232897"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Sep 2024 22:14:40 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 3 Sep 2024 22:14:09 -0700
+Received: from nisar-OptiPlex-9020.microchip.com (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Tue, 3 Sep 2024 22:14:05 -0700
+From: Mohan Prasad J <mohan.prasad@microchip.com>
+To: <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>
+CC: <shuah@kernel.org>, <bryan.whitehead@microchip.com>,
+	<mohan.prasad@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<edumazet@google.com>, <pabeni@redhat.com>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <horms@kernel.org>,
+	<brett.creeley@amd.com>, <rosenp@gmail.com>
+Subject: [PATCH net-next 0/3] lan743x: This series of patches are for lan743x driver testing
+Date: Wed, 4 Sep 2024 03:45:46 +0530
+Message-ID: <20240903221549.1215842-1-mohan.prasad@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] selftests: Rename sigaltstack to generic signal
-To: Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org, oleg@redhat.com
-Cc: mingo@kernel.org, tglx@linutronix.de, mark.rutland@arm.com,
- ryan.roberts@arm.com, broonie@kernel.org, suzuki.poulose@arm.com,
- Anshuman.Khandual@arm.com, DeepakKumar.Mishra@arm.com,
- aneesh.kumar@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, sj@kernel.org
-References: <20240822121415.3589190-1-dev.jain@arm.com>
- <20240822121415.3589190-2-dev.jain@arm.com>
- <714f8eb4-b226-48f6-ab0d-75bdfbf83364@linuxfoundation.org>
- <42d0fa4b-eb67-42fd-a8e1-05d159d0d52f@arm.com>
- <806e4be0-4b1f-4818-806f-a844d952d54e@arm.com>
- <fff2b685-a7a5-4260-a293-f2abf55d9ce4@linuxfoundation.org>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <fff2b685-a7a5-4260-a293-f2abf55d9ce4@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
+This series of patches are for testing the lan743x network driver.
+Testing comprises autonegotiation, speed, duplex and throughput checks.
+Tools such as ethtool, iperf3 are used in the testing process.
+Performance test is done for TCP streams at different speeds.
 
-On 9/4/24 03:14, Shuah Khan wrote:
-> On 8/30/24 10:29, Dev Jain wrote:
->>
->> On 8/27/24 17:16, Dev Jain wrote:
->>>
->>> On 8/27/24 17:14, Shuah Khan wrote:
->>>> On 8/22/24 06:14, Dev Jain wrote:
->>>>> Rename sigaltstack to generic signal directory, to allow adding more
->>>>> signal tests in the future.
->>>>
->>>> Sorry - I think I mentioned I don't like this test renamed. Why are 
->>>> you sending
->>>> this rename still included in the patch series?
->>>
->>> I am not renaming the test, just the directory. The directory name
->>> is changed to signal, and I have retained the name of the test -
->>> sas.c.
->>
->> Gentle ping: I guess there was a misunderstanding; in v5, I was
->> also changing the name of the test, to which you objected, and
->> I agreed. But, we need to change the name of the directory since
->> the new test has no relation to the current directory name,
->> "sigaltstack". The patch description explains that the directory
->> should be generically named.
->>
->
-> Right. You are no longer changing the test name. You are still
-> changing the directory name. The problem I mentioned stays the
-> same. Any fixes to the existing tests in this directory can no
-> longer auto applied to stables releases.
+Signed-off-by: Mohan Prasad J <mohan.prasad@microchip.com>
 
-I understand your point, but commit baa489fabd01 (selftests/vm: rename
-selftests/vm to selftests/mm) is also present. That was a lot bigger change;
-sigaltstack contains just one test currently, whose fixes possibly would 
-have
-to be backported, so I guess it should not be that much of a big problem?
+Mohan Prasad J (3):
+  selftests: lan743x: Add testfile for lan743x network driver
+  selftests: lan743x: Add testcase to check speed and duplex state of
+    lan743x
+  selftests: lan743x: Add testcase to check throughput of lan743x
 
->
-> Other than the desire to rename the directory to generic, what
-> other value does this change bring?
+ MAINTAINERS                                   |   2 +
+ tools/testing/selftests/Makefile              |   2 +-
+ .../drivers/net/hw/microchip/lan743x/Makefile |   7 ++
+ .../net/hw/microchip/lan743x/lan743x.py       | 117 ++++++++++++++++++
+ .../hw/microchip/lan743x/lib/py/__init__.py   |  16 +++
+ 5 files changed, 143 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/microchip/lan743x/Makefile
+ create mode 100755 tools/testing/selftests/drivers/net/hw/microchip/lan743x/lan743x.py
+ create mode 100644 tools/testing/selftests/drivers/net/hw/microchip/lan743x/lib/py/__init__.py
 
-Do you have an alternative suggestion as to where I should put my new 
-test then;
-I do not see what is the value of creating another directory to just include
-my test. This will unnecessarily clutter the selftests/ directory with
-directories containing single tests. And, putting this in "sigaltstack" 
-is just
-wrong since this test has no relation with sigaltstack.
+-- 
+2.43.0
 
->
