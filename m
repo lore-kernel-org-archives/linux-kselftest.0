@@ -1,179 +1,166 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2057.outbound.protection.outlook.com [40.107.92.57])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B7019C579;
-	Thu,  5 Sep 2024 17:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725556289; cv=fail; b=il7is1b07uBd3QLFT/mtH+2TofGBHx3M10IGxCI4otmPVze24lKCW2gyRFVkppVM6KiScu5fjEAGcrgs3dkZ0bBZk33HimS0kOSZtvTbPKab2Oe2dh7nqjNSk+fqa+zLnsPLW/We/obyUrqfYI2c/kyce3jugq9CLfWP0p93nwk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725556289; c=relaxed/simple;
-	bh=gZn4RSKs+SLe04lYvzkzPJ5/bDXDVRRr0wMEW55gfp4=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WG4LM7C1L9mUiUnUawRzwdnw5c86nPatLn8OJP9luJX8soyB0z4ev0/M4hdbJ7Jy+li3rEzW/+pZzSNd2gyTE5pIW8wYsx5zBzIP+lYu8ZmcQLpfUGXD6yBvAtCIkeHAk64cNfSGDK+g6Iak0UgLDl1QclOKl9lriSYwL61yKnQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bYa98nvd; arc=fail smtp.client-ip=40.107.92.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD9D19DFB8;
+	Thu,  5 Sep 2024 17:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725556299; cv=none; b=E4/eY2OL129i3KxTv36k5/EHAOCzC3n/Ca29BP2ljo+gNnlAFcPdBbXcYRe5qcsopWnXbeONhL9iEAQwo8DFRn+mEUK+KqKWEuDpuCnUWiiYS8XINjZDAc1NcS4JNpdY4lGfLQYnOqwtj+1CX+7qLDc7zi3KWnTJhwSFsjm1mf4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725556299; c=relaxed/simple;
+	bh=UgUKwC+htmQ64BydR+9gR8Mz2CbId2/rj3nOjpSfpeU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H8Ym/6fV69Ahj2TIEudMvxOBQ5SWaFzsIldfItGMqStFyrT2+x1lPganEo3TzD+D5e8YO1ul6PTZyevJpjitn5SFqX7ij8/PGtjsmykMgS5sEMn8tW8BqsvXymbzB8R+D/HSgllfrgMlizw1wy05RLoGq5NHwSG53CD1ELaWiCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Td++fBf9; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bYa98nvd"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=P8YA0a5TNvNDQD2edXblCPKVx/lrdb2dxe/hwmNAPynIUHBDa0ZC7hrmxezx9+oi9GGXjj57HWcVuaEsbsID1WukhK2kOsWXpF43iNg8RJkPJaTV3718fPwdR7WoFuChkFnCNtPp0o7sTZ9TW3EU1nvwkeU7TA80F1N8Oai4+MEStVtiKwiHhBYC8WjwWM/BunsjsDljvg0BfT2GqXFuEjsL5z+GyJbW4ofKqz9PkKebjqTbHVI46RMlA70vEe9I6OYCCu1cCeFhaR1vqhFn4iR/Sv51Wtro6b+xmtPiB67aoxPhQHY/1dWxTX2ddHH6jryO9iTn2pkQMGcj1yTskA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=opKrAvgpAHXyRX1agPlagW3OOLFdYKMr+5zTk2iTeKw=;
- b=QyEG0yWKoPsxgDH0ri/irce75Dj7MYajZu27DOZG66KppoeRzz7D+ckCdRpBdhmsoJtA40Q0hpXG8tcQ+yc6Y3exL5g9nDVPXwcSHmgHKKN+PwK/BmMDnNgyzIgW0AcemTRa7t8GpoNEwfbnOvDcXbPD81iqW0ovqDIU5am2QvRv18hxrzICClQhfhs9gzcxMQmbspKQESO2bXa9YH92BoZ5kkI2htLgfM9WETYCHSItPM45fes1AMlmSKQYLQiFf8TdpUJhWMuZwNUSUctv7ysXhWxNcmngCAobhmYlvm0uQyRdxk2m8VDGHryE4cA+5cFzp+Zy6Mw/2eG4dnhtAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=opKrAvgpAHXyRX1agPlagW3OOLFdYKMr+5zTk2iTeKw=;
- b=bYa98nvdpMvlKtK0bTmZsLK0L/J3pKTNCEar98hRrrOogKce7ymkDoVOn1DGI6XVJdnuKP5jydpOHLuL+yvfEpeSs4mcxyj95XvmGQDHAQxHyDDSWafQqAAXk6ycz5y6nNubDQr851F/+dglQNn0M+Cn0NwcURJyzZal9llaSGTbwps1nKvI5FPthW61NNNgsQMdsGzFkyd4noXqw/z09ZO5yjsLfiKuwbXA833md/mc6uc66Dlb75BvDbEDLB+JI0HSdR1bREmFXk6x4AtupI44VXPcjN5HJl2+UU5m2t5l7gzATaNWZyLFTv5QEE3DWNtepZ0bt2XOEfstXXKM0Q==
-Received: from CY8PR02CA0012.namprd02.prod.outlook.com (2603:10b6:930:4d::22)
- by SA1PR12MB6948.namprd12.prod.outlook.com (2603:10b6:806:24f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27; Thu, 5 Sep
- 2024 17:11:23 +0000
-Received: from CY4PEPF0000E9D6.namprd05.prod.outlook.com
- (2603:10b6:930:4d:cafe::e1) by CY8PR02CA0012.outlook.office365.com
- (2603:10b6:930:4d::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.26 via Frontend
- Transport; Thu, 5 Sep 2024 17:11:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000E9D6.mail.protection.outlook.com (10.167.241.69) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7918.13 via Frontend Transport; Thu, 5 Sep 2024 17:11:21 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 5 Sep 2024
- 10:11:01 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 5 Sep 2024
- 10:11:00 -0700
-Received: from nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
- Transport; Thu, 5 Sep 2024 10:10:44 -0700
-Date: Thu, 5 Sep 2024 10:10:38 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <kevin.tian@intel.com>, <will@kernel.org>, <joro@8bytes.org>,
-	<suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
-	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>, <shuah@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
-	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<smostafa@google.com>, <yi.l.liu@intel.com>
-Subject: Re: [PATCH v2 02/19] iommufd/viommu: Add IOMMUFD_OBJ_VIOMMU and
- IOMMU_VIOMMU_ALLOC ioctl
-Message-ID: <ZtnmDvhVVKeE4Z/u@nvidia.com>
-References: <cover.1724776335.git.nicolinc@nvidia.com>
- <c6ac7dc5031e96abb4634db504a0bf4a0c82ca66.1724776335.git.nicolinc@nvidia.com>
- <20240905155302.GM1358970@nvidia.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Td++fBf9"
+Received: from [192.168.7.205] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 485H9en23712765
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Thu, 5 Sep 2024 10:09:41 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 485H9en23712765
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2024081601; t=1725556182;
+	bh=UP5S89Q8T/Q5EsxqhRyQ8f9BJnQqaRl+80CV7+1PjiY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Td++fBf985x/z0uESDRnIoaMDjnC8j2FiRd+xXLy9mgYmLI6IS7D9wTqmPYaqaHlR
+	 CA6x65DAFqM/8/iAXlI4b1xOn6nIRFQscrXw96TKLvIsbBXCTRSPGpxTKTZ4Z3HwFo
+	 +fd0hZCtR2Bj4UZwYnuaIcC3UhRgfQkTTpdq7rPVs+lJME38yR3Bi5WwhJ57q/XwJG
+	 KT+7olRlKhg72DbQtiWMwkZgRt196aqOoA4Czaj3FCPe0lpNVOeXIop54h2KOWBeS+
+	 D/gSJtiyZUhaHa/S6CaWMU6BFRndwWJZ2ZqVnqkDiT9LnpSbPHJk5WEnRwRELNIYpr
+	 82B5itYZvyvuA==
+Message-ID: <feefa9d1-f266-414f-bb7b-b770ef0d8ec6@zytor.com>
+Date: Thu, 5 Sep 2024 10:09:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240905155302.GM1358970@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D6:EE_|SA1PR12MB6948:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7466ef78-dfe6-483f-a53d-08dccdcdc3d7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|7416014|376014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?rB22HN+0Dh0xNALzAnnGgyLcujf8ib/SyJiZnUJMv2+zr1LG3h58DDTwzKBm?=
- =?us-ascii?Q?JuK8e+KTv4QBsyUuId+mXvCF/PSOqTaMnm6TKJtWX4R3EGwQ9SvYRU/MU+Yj?=
- =?us-ascii?Q?D7fswUhlRWTQA2Qy6UscOoBCMJYoPJ7p3DZQVPbo7Jhb4+JdzgXTKUVQBKAY?=
- =?us-ascii?Q?gN0UfRB9G9F1XRnbfnGUjiYLqM9KmmR7lxgrQe3WN9KSE/WaL7jmCOrqpmdi?=
- =?us-ascii?Q?zBG53/UwNvn9k8Ifd0a6PMqPrZWuU37KnN/PT7YqT9yQLqPV5q/cg35T01Ce?=
- =?us-ascii?Q?HDRr9Ki/F5X8JQVR9EoNREQqqeaKU4b/HbboUnLN8OgU0Kr3k0ionoD0jNT8?=
- =?us-ascii?Q?m+TiAuzRo659+50gIGV2ZI2d+dhs4tQTT6k6bWcjm1LEmC3N9JvyJO1I4MVl?=
- =?us-ascii?Q?X86aVHYUIYmrGZKATRxyXleKHaBBP8Cq45bLGT4V6rMqIXwyuKXamkNrilAZ?=
- =?us-ascii?Q?dSSgfJZWCAfDDjmdXU+SkB5PtzUKME3GeJIgdSXWbuhPfphyFbexOU9YsNE0?=
- =?us-ascii?Q?JavLtYCEFacHB6FQM0TfGVXSno1AkXCv/guv5fn3RbyfkvhOA+0fB+lBhXEs?=
- =?us-ascii?Q?d5IOqhZNn5ClXItzlqmFGNHr/VkApunqirsG0KhulnTu22vzT2vNmFSPzWf7?=
- =?us-ascii?Q?+YgqJEqQLMfxRaXcDIPi4/NqCJhxvDH6xkgcI2rCuJX8tTXxOYN/AzLliGyx?=
- =?us-ascii?Q?fJn0KQDNj1mEvtdPn2obcHmE1zythLILzNXiQ7Y/pvOtvx+S2zyJv9Ye14ZO?=
- =?us-ascii?Q?yz9i+ksys+up6Vx5FnFtIvkEZ3noQq8ks5dFPg/jQkd11MpmhrcOhWWTPRdk?=
- =?us-ascii?Q?dl6TPqGuvcycawIXTagKuJJMojhlTuMjH0Gq5yPy+T8wAazAZ3YxHQtawOEE?=
- =?us-ascii?Q?R0YTP1RjQtBWs4Zp2tvYQjFQSM5HU+qEl1bx/9XV/mMSpxAJBiOCYTC4+aMq?=
- =?us-ascii?Q?RfsOwLfx0KWs/CncfuS5pJX03emNwm6oNl+lvcOU2YM4qPk8BZvCX4OjRjd7?=
- =?us-ascii?Q?HUKWMh3/1geGUXrRICLGR9HNSg7fXpsmNf83isRB1hARVdbcAY12lWnyjTkr?=
- =?us-ascii?Q?4107ELkO1ua5KqoqnUzl6N9MPu5fHgtYgbgCp9qe3RTj3rVdUjcgg+WiLcIe?=
- =?us-ascii?Q?c8oiHqcZFJ+oIMDNoBwiLx8LDCZMhurCd8qvhRmxEsJaDSshXGLnF28uePmH?=
- =?us-ascii?Q?fF8RxzW1UdiIuM2mg+2coIAorAo52AckwKY3LiqHB02/AGjeDCGFhboAiZgh?=
- =?us-ascii?Q?M11zI4mzitnUbmnrPPfqsNYa6aH+XQa8mRqygFob1AUn3/33tLi8115stA8H?=
- =?us-ascii?Q?wycRxdF9Bv5cp3KsvKkFjXtrYg92cipYJxoJwmjbE+AD33lT0X+2iV/MsxpV?=
- =?us-ascii?Q?vsU8fkzJHUPWUNuRAp4jgrwwLoPwGjwCKUZDWupot1qcHEK71pYVCQ9xYZ0o?=
- =?us-ascii?Q?AyHFRvB9Hgzk5FwvfUJYJdv+tC3t0l1i?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(7416014)(376014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 17:11:21.6041
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7466ef78-dfe6-483f-a53d-08dccdcdc3d7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D6.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6948
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 07/25] KVM: VMX: Set intercept for FRED MSRs
+To: Sean Christopherson <seanjc@google.com>, Chao Gao <chao.gao@intel.com>
+Cc: Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        shuah@kernel.org, vkuznets@redhat.com, peterz@infradead.org,
+        ravi.v.shankar@intel.com
+References: <20240207172646.3981-1-xin3.li@intel.com>
+ <20240207172646.3981-8-xin3.li@intel.com> <ZiJzFsoHR41Sd8lE@chao-email>
+ <ZmoT0jaX_3Ww3Uzu@google.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <ZmoT0jaX_3Ww3Uzu@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 05, 2024 at 12:53:02PM -0300, Jason Gunthorpe wrote:
-> On Tue, Aug 27, 2024 at 09:59:39AM -0700, Nicolin Chen wrote:
-> > +/**
-> > + * struct iommu_viommu_alloc - ioctl(IOMMU_VIOMMU_ALLOC)
-> > + * @size: sizeof(struct iommu_viommu_alloc)
-> > + * @flags: Must be 0
-> > + * @type: Type of the virtual IOMMU. Must be defined in enum iommu_viommu_type
-> > + * @dev_id: The device to allocate this virtual IOMMU for
+On 6/12/2024 2:32 PM, Sean Christopherson wrote:
+> On Fri, Apr 19, 2024, Chao Gao wrote:
+>> On Wed, Feb 07, 2024 at 09:26:27AM -0800, Xin Li wrote:
+>>> Add FRED MSRs to the valid passthrough MSR list and set FRED MSRs intercept
+>>> based on FRED enumeration.
 > 
-> @dev_id: The device's physical IOMMU will be used to back t he vIOMMU
+> This needs a *much* more verbose explanation.  It's pretty darn obvious _what_
+> KVM is doing, but it's not at all clear _why_ KVM is passing through FRED MSRs.
+> E.g. why is FRED_SSP0 not included in the set of passthrough MSRs?
 > 
-> > + * @hwpt_id: ID of a nesting parent HWPT to associate to
+>>> static void vmx_vcpu_config_fred_after_set_cpuid(struct kvm_vcpu *vcpu)
+>>> {
+>>> 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+>>> +	bool fred_enumerated;
+>>>
+>>> 	kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_FRED);
+>>> +	fred_enumerated = guest_can_use(vcpu, X86_FEATURE_FRED);
+>>>
+>>> -	if (guest_can_use(vcpu, X86_FEATURE_FRED)) {
+>>> +	if (fred_enumerated) {
+>>> 		vm_entry_controls_setbit(vmx, VM_ENTRY_LOAD_IA32_FRED);
+>>> 		secondary_vm_exit_controls_setbit(vmx,
+>>> 						  SECONDARY_VM_EXIT_SAVE_IA32_FRED |
+>>> @@ -7788,6 +7793,16 @@ static void vmx_vcpu_config_fred_after_set_cpuid(struct kvm_vcpu *vcpu)
+>>> 						    SECONDARY_VM_EXIT_SAVE_IA32_FRED |
+>>> 						    SECONDARY_VM_EXIT_LOAD_IA32_FRED);
+>>> 	}
+>>> +
+>>> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP0, MSR_TYPE_RW, !fred_enumerated);
+>>> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP1, MSR_TYPE_RW, !fred_enumerated);
+>>> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP2, MSR_TYPE_RW, !fred_enumerated);
+>>> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP3, MSR_TYPE_RW, !fred_enumerated);
+>>> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_STKLVLS, MSR_TYPE_RW, !fred_enumerated);
+>>> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP1, MSR_TYPE_RW, !fred_enumerated);
+>>> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP2, MSR_TYPE_RW, !fred_enumerated);
+>>> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP3, MSR_TYPE_RW, !fred_enumerated);
+>>> +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_CONFIG, MSR_TYPE_RW, !fred_enumerated);
+>>
+>> Use a for-loop here? e.g.,
+>> 	for (i = MSR_IA32_FRED_RSP0; i <= MSR_IA32_FRED_CONFIG; i++)
 > 
-> A nesting parent HWPT that will provide translation for an vIOMMU DMA
->
-> > + * @out_viommu_id: Output virtual IOMMU ID for the allocated object
-> > + *
-> > + * Allocate a virtual IOMMU object that holds a (shared) nesting parent HWPT
-> 
-> Allocate a virtual IOMMU object that represents the underlying
-> physical IOMMU's virtualization support. The vIOMMU object is a
-> security isolated slice of the physical IOMMU HW that is unique to a
-> specific VM. Operations global to the IOMMU are connected to the
-> vIOMMU, such as:
->   - Security namespace for guest owned ID, eg guest controlled cache tags
->   - Virtualization of various platforms IDs like RIDs and others
->   - direct assigned invalidation queues
->   - direct assigned interrupts
->   - non-affiliated event reporting
->   - Delivery of paravirtualized invalidation
+> Hmm, I'd prefer to keep the open coded version.  It's not pretty, but I don't
+> expect this to have much, if any, maintenance cost.  And using a loop makes it
+> harder to both understand _exactly_ what's happening, and to search for relevant
+> code.  E.g. it's quite difficult to see that FRED_SSP0 is still intercepted (see
+> my comment regarding the changelog).
 
-Ack.
 
-Looks like you prefer using "vIOMMU" v.s. "VIOMMU"? I would go
-through all the patches (QEMU including) to keep that aligned.
+I owe you an explanation; I have been thinking about figuring out a way
+to include FRED SSP0 in the FRED KVM patch set...
 
-Thanks
-Nicolin
+MSR_IA32_FRED_SSP0 is an alias of the CET MSR_IA32_PL0_SSP and likely to
+be used in the same way as FRED RSP0, i.e., host FRED SSP0 _should_ be
+restored in arch_exit_to_user_mode_prepare().  However as of today Linux
+has no plan to utilize kernel shadow stack thus no one cares host FRED
+SSP0 (no?).  But lets say anyway it is host's responsibility to manage
+host FRED SSP0, then KVM only needs to take care of guest FRED SSP0
+(just like how KVM should handle guest FRED RSP0) even before the
+supervisor shadow stack feature is advertised to guest.
+
+Another question is should KVM handle userspace request to set/get FRED
+SSP0?  IMO, it should be part of CET state management.
+
+Your suggestion?
+
+Thanks!
+     Xin
+
+
+
+
