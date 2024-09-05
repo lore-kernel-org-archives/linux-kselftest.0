@@ -1,188 +1,273 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2079.outbound.protection.outlook.com [40.107.255.79])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA19199231;
-	Thu,  5 Sep 2024 11:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725534283; cv=none; b=P0O0ns8KP9Py+UfqN4puB6NRmm+gPAejyo5IMdLJE3dRSPjt+sEhDkGMqe6kpVq/2CL3Si0zBLWJtpMPQVL1DVx/7kIuKKi8HlaObcHdJpVoRY7OAqbOfrQQEFBFoCiha76KI92VLIlNB38YVeGIMp8Qs0f2GoxaSIAQSIYVRTM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725534283; c=relaxed/simple;
-	bh=kOCiF8nsosBKqznyU+eG3n+wt+yb6o2N4Y5rEsqvqWY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I25f+5OFcF/KfreP7BmcrlajQPElxdMLcj7DSZNBsmDeNURk34kV7iWAexukmDgCvJPhgUVxoeIa2uyz5LT+wJrXoVwTv1vLJeW81NiC8L5sgk4QE7SxknutF68wxwMsVK3r90riyXGGFOm6bRyrCfMaHkfAq6Rayp23+I5uJXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D1ASrBYN; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22C61991B0;
+	Thu,  5 Sep 2024 11:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.79
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725534347; cv=fail; b=cQgWc0XGyehKSiFq9hIEsESSfAgPCz3XPwNQH7ylT4guHyQOp5UyNRdSlyl51lrdq9FK0z3pPOEPxTjdIh2AsYBQ6EcsuWiqd0NdI7smAlkI2K/9Qt8hjFMITF7VKeA3kB43836AEowog7ZX+XFFLt5tqHZLJS3kMSqqK+tqEVI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725534347; c=relaxed/simple;
+	bh=UE0hOfGsiJ0HwmUYoGQneBeHFZdsY+xZselb7lCoa5M=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=N/bvyXLZ3fogmSRg6CErN2YDGP65BX26Pp8rAYDkwr0GJ/ZJR0xPIEhQSQ4VnlwylQ4yKuTut5CeeNsRYED9crc5UDb9pDU4FZhm3H4/1qotzmXckMxdWwCd9y9UqmKBHXW7IRlrLIdPrGJ1RrrF4m3AS7NU1h8yYC3MQidngXU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=SIKg8tjG; arc=fail smtp.client-ip=40.107.255.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D1ASrBYN"
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3a043496fdeso2081735ab.3;
-        Thu, 05 Sep 2024 04:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725534280; x=1726139080; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mizWkFU32/oNF8sGJhFD1hiaSJOb8XN9+QqQonvqlLs=;
-        b=D1ASrBYNZTcfEgQ2zOeE3IieueYdhgx3zsnGRr4d3W1nOybw6qMeJtmeHt7G1C5nHa
-         99ndNrT84kEhaHOmsx92hgO444lgekxsAhJwgeVFF9oNu1CkyrHHemUH7HaPg83HuE0A
-         EIUU1ZV/40ul0/U/dVL5xbJGa67c7eAZmHuczR3LN9Kg7FEs5D2ZGiKKIdgpHUmLbELP
-         +2uLsAZjLFcCYGjOfWSE+4Jfze/T9gYrzGaQJMSNfWZwC1SjtdXSj82Zo31kZJ4hKpis
-         +FX3BjV7eqHoxUINtzynlo2HAJZY8Ts3ylo4AZJ0Y8PRXJcgmfgoji/Mb+b9Frye+E+7
-         yRCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725534280; x=1726139080;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mizWkFU32/oNF8sGJhFD1hiaSJOb8XN9+QqQonvqlLs=;
-        b=NpY/QdH2Y48HuyuO2bz04O0aBW0DMxydSD+7DkmkhQ4StPJCJu0tWvqrAzFbAV8h7O
-         iaLR4KxUzcYWHMfol9nffOqOs58XIdeGT+alBSfdYJUbO3axvtRb75kNEkvkP3hfB7kr
-         Ptq28ojwR25KNpwGy8jm2bJUS1h8FuS2UOrDzXsLTmRj+8PH6/XkmAG4R6hVMV4xM5T/
-         SgHEPDwXVGXZHi9X97kFpiWKYvVyBYwnpu9eTgdqLwtieMQS09SY/FokRW2l04bvnfdH
-         OQUn6sy+nfUhCsml2ZmQq3lsInSQJDUI8+lPGh+J3oEqjO7qPmzhCyw2nG3ZJruC5Zje
-         XteQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWDznUzoC+8dnqo5lpMqyng9uBjAVKYpZYuduJe+9/u7RbGq2kBRzo4pNeU1xEWTC6UQuxSxr0P@vger.kernel.org, AJvYcCWcLKWjze5E7XxP39WGqqjqYmFPP0zI/EsQT6voaUZJV2+vsSL1mcRTmKvZDZ0OJ1FCyU1XU5o8v++un0OBXzI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCm16eGI3JifAdAugcVnUN04fXtOIIVZe2zN6b4ia3nACuZ9oL
-	sdIabidd6BmXPOAm0xj0rZKMuXpNoip5mKogcM8C+Q9u/NF/Ww5CVunT/XfcTDIiRTjktqanRQE
-	zK+GSYlYrBQKrQZOt260KaoqXRRU=
-X-Google-Smtp-Source: AGHT+IGcychPtnWKEZ7vp+NFPEjIKSRF7cOH85iWFf1X3owut3zhBZ0nYAlt+RQMmvJ32iYHodhff0IThlYFLM7BJpE=
-X-Received: by 2002:a05:6e02:1fc5:b0:39e:6e47:814d with SMTP id
- e9e14a558f8ab-39f378ed22emr261736125ab.2.1725534280587; Thu, 05 Sep 2024
- 04:04:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="SIKg8tjG"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TuVTTgxyyxluYe1BzQEEHx373b23Yq4k4WcyRhQoBpEi0/Ql/P4E0ulGjnbfYy13S+e/gtdgAItRFCkcYPjGKOjKCI41BwMQR+E1wgtjpk9McQjULUkY+aroqfYN6t6XpNxqtIIj636+I+Kqx8bkSTRG936cUPhzyquh8Wh3LQMbwfhYYSgOHJWPbArBji+jgtWx3Gpuq9lRfXfAAUGxEW4X3Xb6Hd5xJgsSuKrWYJ5KfnYnCsUcT2PBYzrOwPO59/y7W4ViIWqiosQqqbZXlu8bE22+fSotgLcoy8rHcANpOVEEXwWrk+lEIKTJia/d3B40QrtyuoGqBRhJ1dxfHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tWVBLqv9LI2cNNAZFZTVPo+c8CxN8doYLzH60UehTGA=;
+ b=fzid1FpXDHkRIoxdPAk32Jv4azmI3yS/82idSgUjnYN8Nt7laDp3Ug6vRR4l0YnJ2fQmg95saXQwqP5wx66lG1JgPr79JRUg1Qq+jIEL6pOvvTZ6g0nnRP34j8m6/mP5pKoY1qil4ovoovRL8NfX5LyZrJQ/aakIzvbAqhhysk2bAqHlX9igaTAJcKTUs2VMjHMiPyCGu2c80kj+leGLnIjSbW+F/LO7Dfolnq+KctG0K5rpftd8y5lnFTtDm/c0FoHTLN3TGPTo6nwujmlzLpA95+h1AwuyrzDc/bQE4N80jgMn2W49f9pwuhq6BOyBkgtuVT8Ocmjj807FI+Vd5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tWVBLqv9LI2cNNAZFZTVPo+c8CxN8doYLzH60UehTGA=;
+ b=SIKg8tjGw/0XtxqRHi3t76eKWU9M8E5BQpuLu+QMxElrFjFZefyOMnSoZ3tK6QQWkmkLovk1yBbjCiZ7E2oKCurWagMAadV19UgmFyOIP2Ja9MK0d6MWYQUKRSVtBIh+g/iDijsfXMH/8bYIR0JJF38EQQNL+Umn342XZGmNxmBlsEuB5ytGQuNwQlk/CLansPfbaTpHw18JM+HFVEAyDRcgorMkWgCGTRBM059xKlqqM1oQRjZHTgbVVPDrCV2ZLkjDLHGxhqt4dhd+bUt6d7q/Yi6uDpF0Atn7+7051qaM22utNylDbwSZhee956CQFKBrXum8938XY796tp87Ww==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from KL1PR0601MB4324.apcprd06.prod.outlook.com (2603:1096:820:73::6)
+ by SEYPR06MB6033.apcprd06.prod.outlook.com (2603:1096:101:d7::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.28; Thu, 5 Sep
+ 2024 11:05:39 +0000
+Received: from KL1PR0601MB4324.apcprd06.prod.outlook.com
+ ([fe80::f8ee:b41e:af25:202]) by KL1PR0601MB4324.apcprd06.prod.outlook.com
+ ([fe80::f8ee:b41e:af25:202%7]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
+ 11:05:39 +0000
+From: Lin Yikai <yikai.lin@vivo.com>
+To: bpf@vger.kernel.org
+Cc: opensource.kernel@vivo.com,
+	yikai.lin@vivo.com,
+	Quentin Monnet <qmo@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Rameez Rehman <rameezrehman408@hotmail.com>,
+	Kui-Feng Lee <thinker.li@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Yuran Pereira <yuran.pereira@hotmail.com>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
+	Jordan Rome <linux@jordanrome.com>,
+	Chuyi Zhou <zhouchuyi@bytedance.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Tony Ambardar <tony.ambardar@gmail.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Abhishek Chauhan <quic_abchauha@quicinc.com>,
+	Geliang Tang <geliang@kernel.org>,
+	Hou Tao <houtao1@huawei.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	"Jose E. Marchesi" <jose.marchesi@oracle.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	David Vernet <void@manifault.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next v1 2/3] bpftool: fix some typos in bpftool
+Date: Thu,  5 Sep 2024 19:03:06 +0800
+Message-Id: <20240905110354.3274546-2-yikai.lin@vivo.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240905110354.3274546-1-yikai.lin@vivo.com>
+References: <20240905110354.3274546-1-yikai.lin@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR01CA0036.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::22) To KL1PR0601MB4324.apcprd06.prod.outlook.com
+ (2603:1096:820:73::6)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240904144446.41274-1-kerneljasonxing@gmail.com> <66d8ce15415ec_163d93294a2@willemb.c.googlers.com.notmuch>
-In-Reply-To: <66d8ce15415ec_163d93294a2@willemb.c.googlers.com.notmuch>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Thu, 5 Sep 2024 19:04:04 +0800
-Message-ID: <CAL+tcoDko2ijPvnBr1=dy4iBfw9wLEyKX0ye4rFngd_q7Zr7eQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] selftests: return failure when timestamps can't
- be parsed
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB4324:EE_|SEYPR06MB6033:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7c68ff6f-a347-4c93-e849-08dccd9aacd6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|366016|7416014|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Qno4N0JtNVVoL0NXOW02L25qQlQyNStBbUZIRnNIakF5ZVpEZ3MyVGxQRFJM?=
+ =?utf-8?B?aUtZZy8xOFcxQlRaMTJiM2dUUWxIZUtwNXlIVTF5N0lKZlpURitTWUFGMnB2?=
+ =?utf-8?B?Q0txRnUwODNrYVM4ZitWNmZicXdTS2VnY0cvekVXbmxTdHp3Nm9lUWpCbWJD?=
+ =?utf-8?B?d2NVMkV6V0dzYkVZVEVwbERtVXNETjVhQXErNkIwM2dMckE2eStPVnBJaXAr?=
+ =?utf-8?B?eC9jY2k3V21PMnRuWFZzeitWNFYvM0NmNXpZTjQrRWNDQlh1WVV5Y0I1NTk2?=
+ =?utf-8?B?ZzVJNlBjVmRuSmYwUUpoVklZajc5VVZjN2htbGczcXlrUWVTUnV4SytCV055?=
+ =?utf-8?B?QjJYM1Z3blpRSm12Ymh6T2VJU1dtd1luVXpLYkUyRDU2eHBuSXRwZkFYYXVs?=
+ =?utf-8?B?VGVXV3FYcDhBd2lza1RSZXUrdjdjc1JhM1FlVno5YlEyRi9TVkNCclpHSkxp?=
+ =?utf-8?B?dHF4aGhDazZoZHVqajRkcVNpajdoWkw0djFnMjlwQ0tMbnJzNi9QUktlQU9Q?=
+ =?utf-8?B?Q2lob0ZieDU0cVNaTFZ5aGZZOVp4Y0FZV09mSGQxa1hUdDNKUjZ1SlVwMGpF?=
+ =?utf-8?B?QlBtelRmbFMzSGE0SXNENExoV2FzWnVjTkw3MUtCRmQ3NFNQSUdKSFhuREFG?=
+ =?utf-8?B?SkdjZ1R5SmQ3R3U3RHlRaGxaMytLajRZWndtRzRidi85c1Ewa2VlbnNNdVND?=
+ =?utf-8?B?YmhjOUUzQjRWYm01QktNYVhMcEVTVXlkZzF6NjRVWmZIalhuV0tWREx4WTNF?=
+ =?utf-8?B?RDgzRmhpM2t2S0g0Q3BxODdZangwcU9Ib2QyWVg3Y01iSWRYVmtmMENZOUpB?=
+ =?utf-8?B?ZmpXblRWc2NTVFkrbWV6Z040UE9NamVkZmNLeVp0Zno0RjhxUTN0c2IyYitJ?=
+ =?utf-8?B?Um0xcTNpc3JQUEhuT0U5WDhmaXlBd0tkaVJCZlgzVVRxM1hRdHpTSmVaRU0y?=
+ =?utf-8?B?aC9IRk1hWDg5bjBNcVg4ZWw2OXBMVk1IdUtEMXZvTk1oazRZNFBwMkt0d2VE?=
+ =?utf-8?B?WEpkNEV5RDhpSHI5OFZrN3ZqWjhxWVZXb1RuVXlGVkF2aHlxcUoxTVRXTTcr?=
+ =?utf-8?B?K1h4eWwvcWhielJmUmN4TEl3UmVMajVlbTJud0VRSmdzaVRUaTVuaDZOT3BD?=
+ =?utf-8?B?SnlaT0NETUppQkVWQ3Y4K2lOWGNQYUJBZ2N0OUMzY1lJUmZWNnM3RWJRemFo?=
+ =?utf-8?B?UmJNaVhSR1BKNzhMZ1NPNHJGNGpvaTk0emJJMVd2YXEwcWtwZnhjbXo5a2Zt?=
+ =?utf-8?B?c0E2NlZJSFJkNFczTXp4MTVQWTBpZ2V5em9nSVZjUnRlWnBvRG1PSlYxRFdr?=
+ =?utf-8?B?UFFHbXFYbHZQNWNtaVRrem4rK1NNRWpMNnhYV3NvQUZJM3JieXBYUFQxNHh1?=
+ =?utf-8?B?U3laNHJUbW5HeWttV2twQlhybEFlK3VwVjZ6cERJRVU2NDN0YnRQTHFWSEkv?=
+ =?utf-8?B?bi9LOXk2WXNWVlBmTjNPQ0FibmtVWVhBMmtqQm11OUZaSXF5Nzh2a0JhdTdV?=
+ =?utf-8?B?eE1ock1LY2NqbGJGWTRYQ3JuRHJwSDRwNUJnV0Mzbk00UWJ6K043dDkyMkwv?=
+ =?utf-8?B?d2c3K1ZXalNKMDEyV0RvZ0ZpTWUvK3FJV1pFQWloeTdOZkN6Sk1MSllRZFVE?=
+ =?utf-8?B?TnR6WitnZ0dlVWEzMkdTZlYyUkJIVUhPT3FLSHlGNWY3dkUyaDRIbXNkYmFJ?=
+ =?utf-8?B?eGJhK1kzczhxMHhYd1Q5UXQvR01OMkJaUzhDMlViOXhzSU40SVV3K2tYU0x4?=
+ =?utf-8?B?T1djQlJzL2EwQitCQzdSQzd5TmZxRWptNDcveHJlT1Z5SlFMdmxjNVhaTXkv?=
+ =?utf-8?B?Mk5PdmU5YndEbDVTQmRwTERjNEtpejEyaW82RmpsL241N2pkbGYzZjRSZ0pP?=
+ =?utf-8?B?M1ZOa3QvbTJURHdtci9NV3prQWwxYlB6TW5FeWZxdmVRK1E9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR0601MB4324.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?emRaaDd6dXE5aEJhcnZ1M3hURFRzTm1xU2FrMU5lSytLQUdhd2pBSTRiRnhE?=
+ =?utf-8?B?UDBIOG83cXRkOEVKanhmU2c1em9iTUFydWJjS1RaOTcyOTE0ZGUvVTlxUjNF?=
+ =?utf-8?B?ODZrU1dNbXF3c2NPS1RTZGVjaEtPK0FQSkErVEdtVjZXT0tDWCs1dVEwY0pl?=
+ =?utf-8?B?U0lKSTVISDFuQmROK0dTMEFzb09KcXVGdFVTTWNlRjZDS095cEExbUFKU2Y2?=
+ =?utf-8?B?NGZhd0x3T2luM3UzS1NqSWllcXVic0oyU1RIYngwNVJudXFLWjhZeTZuNlBG?=
+ =?utf-8?B?N2NIdjJHSlVYSE9iOXhvMk0wWjZCODFCNHdwdXpXa3paQjROWlR2V2tVaGtm?=
+ =?utf-8?B?aEpMYVNsbzBHNERxRDdMQ3l1ZHEwSmJIYm9aTzBnZ3pDNnIxMDZYcEpaTnRS?=
+ =?utf-8?B?ckFXWmg0WThMajdWZ0NpNGNLNWF6Um05cnNndnM4V3BaamtQYm5DTVpHVHlz?=
+ =?utf-8?B?RGNVQU13ZkcxbFNsU1REL21UbmNvU1l2cDlPQm0wVVhYYk5WVk1ndWw1OEkr?=
+ =?utf-8?B?dURJU3QxSWxjcnRYaXJMU0toVHVudkI3VFpCSlVoNFZZbi9qR0N1dTJXSSt1?=
+ =?utf-8?B?cCs1Uk9EcStmckxtclh6b2ZyQjhMbFVaT21JNlM1cHFkZVVzWEJFVHhMVml6?=
+ =?utf-8?B?T3h4NTExOWRRRzFlYWJvT1VFZkZzc1F4c0dKbk55b2x6Z29ZSkc2OXlVczNN?=
+ =?utf-8?B?VWcvTTJXWFg2djRLb2FqaW55TCtZb2MwMFBrQ0FEM2JZemUwZjlHNXdMdWpu?=
+ =?utf-8?B?SFRvd2lHU2tFenVtWTB6Zjh0dEp1K29XVzZ5dzhrbE9EQ1BiZEJRUUtRREJt?=
+ =?utf-8?B?TVFha3dVeFlnSHNXYUZURHZkSzNDUWwrZi9VUkNFYzY5L1JJRmxxeGVlaFQ5?=
+ =?utf-8?B?QWx6ZGZ5azdBdlVKUUFVYjNtVlY2cWZiNzNHclZzN2pjbVFXMHNBVzRUd25J?=
+ =?utf-8?B?WGdjVEx3NTJyY2xVUXpoREIwbzlYQjB3cmlmMkd0MlloRllwL0EvYkhlUnZy?=
+ =?utf-8?B?c1ZocEpNSHRMa0Vwd29qUFduam8yQXFRa2xIMXRITWJ6bFRwZkw4a0F2SUMv?=
+ =?utf-8?B?dzhWUC9MV1A4SHVCZ1ZtTmRKRmZsUzBwaUVEb1pMam04a2phZWsxdVFxTmZl?=
+ =?utf-8?B?OWdBSDRBL1dSMDlhbDg1Y280b3hNK29pbTV6MTNYV1hVTVZVaXpsOFJ2SGJi?=
+ =?utf-8?B?TGd3dkZYSjF0MnlhQitEcHpmUG5sR3J2djN5OE1zNlJaVDdaWWdXUFNROW0w?=
+ =?utf-8?B?Nk1oa0k0Z3pNVlZnaTk3YWFyeWdhdzlvRGVpUVN5ZnoyZzZLV0pGWFRMZjg1?=
+ =?utf-8?B?QnJramcyMDRYTjhtTkg4NEY3S1RuRzhzZHVqUFk2WXhydGgrdFZDdW9BZ0pE?=
+ =?utf-8?B?UU9kVC9oRGM5UGtxWTBKcVJXRHVDVTF5TzRrc1I2bGNSZ05FbmF4OGpNaG1G?=
+ =?utf-8?B?ano3NFRxYW1LQVlKMkFLQ2Z3Z2pZaGo0RDBBWkJmd1Y3V2V0YVJERUhzWWFn?=
+ =?utf-8?B?eHZUSXdvQ0tBU2FZVmtVcVg2c3Zwb2Fnc1JFNXVwR3lFbWROa3ZUeTZNRFd1?=
+ =?utf-8?B?d0pvL3VYNnhhVUtyZ21vNjBQVFk5RExsbjJoWjdydnVSeFBydFV0c1ArZEVX?=
+ =?utf-8?B?Zi93REs4UkVEelNsLzRra0MxZDR3VU9HTndtOXhrR2MrTzNsNWViZkN2dGlQ?=
+ =?utf-8?B?UnU1NUZjQXgvdDd6R2pkOGpJUC9sQWh2OXVjajRDTnh2WFdncVJ3bnNBVDVV?=
+ =?utf-8?B?cStOQjNtQ1hSRm9IL0FSUnJvWk9zRmtSaVBBUnpxSk5yN1dIblVGVHo4RHRC?=
+ =?utf-8?B?d2N0WmlkMWVtY0UxRENvN2h5eERJYzVpNDBOY20rcGR4R0R5WURuWkZvOWlo?=
+ =?utf-8?B?OVN6c090eFZqUlFrRmRncGh5U1NoR21xK2dBYmZhQ0FsUXhwMXQ5SjRMQlZV?=
+ =?utf-8?B?Q3pka3UxYUhEc1RDb0toeHlWb2dzaVlzaFRaOXJNdzJuVFY3Tnh1dHk2SlhI?=
+ =?utf-8?B?S3oyNFRaa2lNeHFxaWFPL0NBRHA2NFJuV3RDMUdiWklaeWJ4NWowOVFDN3Ru?=
+ =?utf-8?B?ck8zTGV4VkdRTGYyNTZ1ZWRtTkZpWU04U0ZyZU9pSGYxYVhyQi9GR3N1enph?=
+ =?utf-8?Q?NXHeRxuCQBFpmshjU4ro8md7X?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c68ff6f-a347-4c93-e849-08dccd9aacd6
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR0601MB4324.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 11:05:39.0077
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VWV03yr2V/RxYmGt88kd/PVxtapqZi2q09EnSoXEMWPGtzbrurKvxVyQHGLKDMzsMxDF8kXS6e6MgHLsBnM0Kw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6033
 
-On Thu, Sep 5, 2024 at 5:16=E2=80=AFAM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > When I was trying to modify the tx timestamping feature, I found that
-> > running "./txtimestamp -4 -C -L 127.0.0.1" didn't reflect the fact
-> > properly.
->
-> Did not reflect what fact? Sorry, I don't entirely follow the issue
-> you raise.
->
-> > In this selftest file, we respectively test three tx generation flags.
-> > With the generation and report flag enabled, we expect that the timesta=
-mp
-> > must be returned to the userspace unless 1) generating the timestamp
-> > fails, 2) reporting the timestamp fails. So we should test if the
-> > timestamps can be read and parsed succuessfuly in txtimestamp.c, or
->
-> typo: successfully
->
-> > else there is a bug in the kernel.
-> >
-> > After adding the check so that running ./txtimestamp will reflect the
-> > result correctly like this if there is an error in kernel:
-> > protocol:     TCP
-> > payload:      10
-> > server port:  9000
-> >
-> > family:       INET
-> > test SND
-> >     USR: 1725458477 s 667997 us (seq=3D0, len=3D0)
-> > Failed to parse timestamps
-> >     USR: 1725458477 s 718128 us (seq=3D0, len=3D0)
-> > Failed to parse timestamps
-> >     USR: 1725458477 s 768273 us (seq=3D0, len=3D0)
-> > Failed to parse timestamps
-> >     USR: 1725458477 s 818416 us (seq=3D0, len=3D0)
-> > Failed to parse timestamps
-> > ...
-> >
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > ---
-> > I'm not sure if I should also check if the cur->tv_sec or cur->tv_nsec
-> > is zero in __print_timestamp(). Could it be valid when either of
-> > them is zero?
->
-> tv_nsec can be zero. tv_sec cannot.
->
-> > ---
-> >  tools/testing/selftests/net/txtimestamp.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/=
-selftests/net/txtimestamp.c
-> > index ec60a16c9307..b69aae840a67 100644
-> > --- a/tools/testing/selftests/net/txtimestamp.c
-> > +++ b/tools/testing/selftests/net/txtimestamp.c
-> > @@ -358,6 +358,10 @@ static void __recv_errmsg_cmsg(struct msghdr *msg,=
- int payload_len)
-> >
-> >       if (batch > 1)
-> >               fprintf(stderr, "batched %d timestamps\n", batch);
-> > +     else if (!batch) {
-> > +             fprintf(stderr, "Failed to parse timestamps\n");
-> > +             test_failed =3D true;
-> > +     }
->
-> nit: if adding braces around one side of a branch, then add to both (all)=
-.
->
-> This is not so much a parsing failure as that no timestamps arrived.
->
-> More importantly, this function gets called also if
-> recvmsg(fd, .., MSG_ERRQUEUE) returned 0:
->
->         if (ret >=3D 0) {
->                 __recv_errmsg_cmsg(&msg, ret);
->
-> That seems counterintuitive, as there is no data. But this was
-> introduced with cfg_loop_nodata (SOF_TIMESTAMPING_OPT_TSONLY). When
-> there may be packets looped, just 0B packets. In those cases we also
-> expect timestamps.
->
-> But, can __recv_errmsg_cmsg now also be called when there truly is
-> nothing on the error queue? It is a non-blocking read, after all.
+Hi, fix some spelling errors in bpftool, the details are as follows:
 
-Today I re-read this paragraph. I think we were just past each other.
+-in file "bpftool-gen.rst"
+	libppf->libbpf
+-in the code comments:
+	ouptut->output
 
-I would like to check that if the reporting timestamp with someone's
-patch applied someday wouldn't work, the txtimestamp should return
-failure to warn the submitter. That is to say, we succeed to generate
-the skb with timestamp but failed to report it like this:
+Signed-off-by: Lin Yikai <yikai.lin@vivo.com>
+---
+ tools/bpf/bpftool/Documentation/bpftool-gen.rst |  2 +-
+ tools/bpf/bpftool/feature.c                     | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 8a5680b4e786..65f7947322cd 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -2274,7 +2274,7 @@ void tcp_recv_timestamp(struct msghdr *msg,
-const struct sock *sk,
-                        }
-                }
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+index c768e6d4ae09..1b426e58a7cd 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+@@ -104,7 +104,7 @@ bpftool gen skeleton *FILE*
+ 
+     - **example__load**.
+       This function creates maps, loads and verifies BPF programs, initializes
+-      global data maps. It corresponds to libppf's **bpf_object__load**\ ()
++      global data maps. It corresponds to libbpf's **bpf_object__load**\ ()
+       API.
+ 
+     - **example__open_and_load** combines **example__open** and
+diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+index c754a428c8c6..4dbc4fcdf473 100644
+--- a/tools/bpf/bpftool/feature.c
++++ b/tools/bpf/bpftool/feature.c
+@@ -196,7 +196,7 @@ static void probe_unprivileged_disabled(void)
+ {
+ 	long res;
+ 
+-	/* No support for C-style ouptut */
++	/* No support for C-style output */
+ 
+ 	res = read_procfs("/proc/sys/kernel/unprivileged_bpf_disabled");
+ 	if (json_output) {
+@@ -225,7 +225,7 @@ static void probe_jit_enable(void)
+ {
+ 	long res;
+ 
+-	/* No support for C-style ouptut */
++	/* No support for C-style output */
+ 
+ 	res = read_procfs("/proc/sys/net/core/bpf_jit_enable");
+ 	if (json_output) {
+@@ -255,7 +255,7 @@ static void probe_jit_harden(void)
+ {
+ 	long res;
+ 
+-	/* No support for C-style ouptut */
++	/* No support for C-style output */
+ 
+ 	res = read_procfs("/proc/sys/net/core/bpf_jit_harden");
+ 	if (json_output) {
+@@ -285,7 +285,7 @@ static void probe_jit_kallsyms(void)
+ {
+ 	long res;
+ 
+-	/* No support for C-style ouptut */
++	/* No support for C-style output */
+ 
+ 	res = read_procfs("/proc/sys/net/core/bpf_jit_kallsyms");
+ 	if (json_output) {
+@@ -311,7 +311,7 @@ static void probe_jit_limit(void)
+ {
+ 	long res;
+ 
+-	/* No support for C-style ouptut */
++	/* No support for C-style output */
+ 
+ 	res = read_procfs("/proc/sys/net/core/bpf_jit_limit");
+ 	if (json_output) {
+-- 
+2.34.1
 
--               if (READ_ONCE(sk->sk_tsflags) & SOF_TIMESTAMPING_SOFTWARE)
-+               if (!(READ_ONCE(sk->sk_tsflags) & SOF_TIMESTAMPING_SOFTWARE=
-))
-                        has_timestamping =3D true;
-                else
-                        tss->ts[0] =3D (struct timespec64) {0};
-
-which I intentionally wrote is used to show one stupid bug as an
-example. The txtimestamp test should spot it :)
-
-Thanks,
-Jason
