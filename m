@@ -1,74 +1,125 @@
-Received: from cmccmta1.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76BC198E83;
-	Thu,  5 Sep 2024 09:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22CA91EBFEC;
+	Thu,  5 Sep 2024 10:32:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725529717; cv=none; b=mLdJOVgJwXvFgOfb1ki51e+64LuMxHRJM9A5RCmGgZyEJt6X5z+bbz4BwpF7ktVm/cDEs2PVxSH0oJJl9TiimmilrGB5Da4hJ6UpEZySDYDiwpi1jEgqFUhOGNTFmH+14oO4TqoPGVy+8l6BduTV0i1SOgi4Vi9QauYYIiJZF2c=
+	t=1725532349; cv=none; b=K9fBZwNS+MJo5x7hsoSjo5v4MOw2EdLc6s3VMfTMvVYt/44QjvOcI3BJF5oejcjPwhFCGrQrT9RBlFQSPMQg/bxJb6j7OaASl8UFE/mNXuOA4IPoyCFXPpDERoER5MnP5a0zazQuMj+ywZ3puOUhfBJJdJiT4gyIyI8oTbKVguk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725529717; c=relaxed/simple;
-	bh=iOzTSNxrXKQoHCTSbHVpN9lWi+BpBzCGa6QFmZ6EgdE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CCKuRy5iEcMNbALcZyKBoHB0HslHYXEVDQIWOx5T9M+ZPArLJJjYF3H8FRkkAFst8YulpKD2m5WDYn8uZhYRQkrIgeoPmweUlNmCTaIxz6C1ACcV2Yl3/KfyoXspp0fY1lGlzN6ydffv4Iv/HrIR6g6Az3zPQH/SdpG+lfQQi/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee466d97e6c604-beef9;
-	Thu, 05 Sep 2024 17:48:29 +0800 (CST)
-X-RM-TRANSID:2ee466d97e6c604-beef9
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[223.108.79.97])
-	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee366d97e6cc49-69812;
-	Thu, 05 Sep 2024 17:48:29 +0800 (CST)
-X-RM-TRANSID:2ee366d97e6cc49-69812
-From: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>
-To: anna-maria@linutronix.de
-Cc: frederic@kernel.org,
-	tglx@linutronix.de,
-	jstultz@google.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	zhang jiao <zhangjiao2@cmss.chinamobile.com>
-Subject: [PATCH] Date: Remove unused macro
-Date: Thu,  5 Sep 2024 16:13:25 +0800
-Message-Id: <20240905081325.47673-1-zhangjiao2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1725532349; c=relaxed/simple;
+	bh=xlNr4tLgdjuXyQS+F30A95mPCNRvaUl7/UIv5aWlG2c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NZF9yd4k0XBCStH1QpZFfd731cAIcLHh3y2jxotMUGO/vvA6yALWtUYM9Q81MHTgRP5YQwADSthbJ4OSo31RJVTrGmjdWDIsDXKlpxDdmDNl2L+//ipQ9MHBkG+llR44VWrs7KnAlLczFP7v2iW61iRFRCw95TM41dt18lg5DAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lxugF+tI; arc=none smtp.client-ip=209.85.166.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lxugF+tI"
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-39fd6a9acb6so1944585ab.0;
+        Thu, 05 Sep 2024 03:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725532347; x=1726137147; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TroQIzNqEjxBCseUHru6LValsIoM+uwDabvjlwAU0aU=;
+        b=lxugF+tIQmFNjQddEmi+zg3mwXX00f4soJcXtTXGuxnbrCnq6a5H8VIY7GTCo29D9G
+         9j6Yck6+9Oh1OIHevn0VT7eBAXk3jhhiIXo/MK64sMsLebG7+gZV7S/leumyS89BSHiN
+         jBLl1X3sDMeGWmitMOYsSPWdzPNLUqxfWvI5kWCxxbMNEwOFcIllxLV3H1tFqltFO/67
+         AI66CgDmBCMsN4WupsnEarFUIexCSN5HW06DrPqvMCYd70T7zYlwZGCxBDlu3o89h8G7
+         XvqTsxCsskxqSn0GzLw9j+OemIP/xT8FkbzK+bBmD7nFkJCIRDHEa5KQV9iQpCTFsF7J
+         eibw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725532347; x=1726137147;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TroQIzNqEjxBCseUHru6LValsIoM+uwDabvjlwAU0aU=;
+        b=ITpLLeCyWHeziUbNXjd+hp/R/IDprb8/Nbxs7VYu0mNGOuhnXY9nE9LkD5yTFxWBFy
+         JLveqmKJ2b9bxvdYZgeOUO7RiuPPwL3GQOh85ydTrJv4MRT+3lL9FPvj6IJretaE3Swd
+         79TpF1aqpzPNfRIQQ13Htiqcrrgzcu+Qv1l+1AVG1IMH3sAEt4ZHNYulARhL255XiPZU
+         FVLYZq8snmQojGmNorVzYKRtyTV076kZ+tkIqDa22kuZ3lM8594O3CuMtDMNpxVoh30m
+         4RfMidmirRVSyM3HA3m9luBbRo+mSf8dj+uKbkNcnbZW/1dhVc827nY2ufjELzRiOF/5
+         hVnA==
+X-Forwarded-Encrypted: i=1; AJvYcCWCcLwvF84oJdTT+NTi+ylmJNvrjUNAeogcE6KfdX0wigUKVoRGSRVXMtgT3I0czCyowmwJwF0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyojIu0mPEh6o6vYZxpvMzX8Baqz6e7XWUTWC5BP6of4iBaje9H
+	KrCVwcU2quRBF52RjPbJ1kf2hOJET6ihtXdS1b2kdP7wP5lEBNaTht50Olg+piR4JSwW2vloOCp
+	SwJDY+0Lb9wVm0E5KIdH+I16BUDY=
+X-Google-Smtp-Source: AGHT+IGsw50fSVhSbmOZK+hG7nhnE6/A/2RRUbvmSjqarB5F8eiBODLZQLQD/odeGv29NKwS3w5U3Bbwzedfk9DBj+k=
+X-Received: by 2002:a05:6e02:1fc2:b0:39d:25d8:43a9 with SMTP id
+ e9e14a558f8ab-39f6a892175mr130716495ab.0.1725532347223; Thu, 05 Sep 2024
+ 03:32:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240905071738.3725-1-kerneljasonxing@gmail.com> <20240905071738.3725-5-kerneljasonxing@gmail.com>
+In-Reply-To: <20240905071738.3725-5-kerneljasonxing@gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 5 Sep 2024 18:31:51 +0800
+Message-ID: <CAL+tcoBQLSeYfK-5F3wFDPNHOkLOGfn=fZiqgCmTLH37frd2aQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 4/4] rxtimestamp.c: add the test for SOF_TIMESTAMPING_OPT_RX_FILTER
+To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, dsahern@kernel.org, willemdebruijn.kernel@gmail.com, 
+	shuah@kernel.org, willemb@google.com
+Cc: linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+On Thu, Sep 5, 2024 at 3:18=E2=80=AFPM Jason Xing <kerneljasonxing@gmail.co=
+m> wrote:
+>
+> From: Jason Xing <kernelxing@tencent.com>
+>
+> Test when we use SOF_TIMESTAMPING_OPT_RX_FILTER with software
+> or hardware report flag. The expected result is no rx timestamp
+> report.
+>
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+>  tools/testing/selftests/net/rxtimestamp.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/tools/testing/selftests/net/rxtimestamp.c b/tools/testing/se=
+lftests/net/rxtimestamp.c
+> index 9eb42570294d..9760abdb6e05 100644
+> --- a/tools/testing/selftests/net/rxtimestamp.c
+> +++ b/tools/testing/selftests/net/rxtimestamp.c
+> @@ -57,6 +57,7 @@ static struct sof_flag sof_flags[] =3D {
+>         SOF_FLAG(SOF_TIMESTAMPING_SOFTWARE),
+>         SOF_FLAG(SOF_TIMESTAMPING_RX_SOFTWARE),
+>         SOF_FLAG(SOF_TIMESTAMPING_RX_HARDWARE),
+> +       SOF_FLAG(SOF_TIMESTAMPING_OPT_RX_FILTER),
 
-This macro NSEC_PER_SEC is never referenced in the code.
-Just remove it.
+Ah.. I missed adding SOF_TIMESTAMPING_RAW_HARDWARE :S
 
-Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
----
- tools/testing/selftests/timers/skew_consistency.c | 2 --
- 1 file changed, 2 deletions(-)
+I'll repost it in 24 hour.
 
-diff --git a/tools/testing/selftests/timers/skew_consistency.c b/tools/testing/selftests/timers/skew_consistency.c
-index c8e6bffe4e0a..83450145fe65 100644
---- a/tools/testing/selftests/timers/skew_consistency.c
-+++ b/tools/testing/selftests/timers/skew_consistency.c
-@@ -36,8 +36,6 @@
- #include <sys/wait.h>
- #include "../kselftest.h"
- 
--#define NSEC_PER_SEC 1000000000LL
--
- int main(int argc, char **argv)
- {
- 	struct timex tx;
--- 
-2.33.0
-
-
-
+>  };
+>
+>  static struct socket_type socket_types[] =3D {
+> @@ -97,6 +98,16 @@ static struct test_case test_cases[] =3D {
+>                         | SOF_TIMESTAMPING_RX_HARDWARE },
+>                 {}
+>         },
+> +       {
+> +               { .so_timestamping =3D SOF_TIMESTAMPING_RAW_HARDWARE
+> +                       | SOF_TIMESTAMPING_OPT_RX_FILTER },
+> +               {}
+> +       },
+> +       {
+> +               { .so_timestamping =3D SOF_TIMESTAMPING_SOFTWARE
+> +                       | SOF_TIMESTAMPING_OPT_RX_FILTER },
+> +               {}
+> +       },
+>         {
+>                 { .so_timestamping =3D SOF_TIMESTAMPING_SOFTWARE
+>                         | SOF_TIMESTAMPING_RX_SOFTWARE },
+> --
+> 2.37.3
+>
