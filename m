@@ -1,91 +1,75 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B531B1EBFEC;
-	Thu,  5 Sep 2024 10:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from cmccmta2.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8357119413B;
+	Thu,  5 Sep 2024 11:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725532577; cv=none; b=jOC86XcGcJ5O4HtMgZK8WW/ocb58+uorG0brTWulkME9awawQp7g8KXXSKfkm4VChrQ8LK3pWybWmzB/jJ89EWX5h32ryGFgGVJVr5NKv87IGyYujpOa3dvXQhwtOYVzYTH11JmTlpxv22crnPTXK31NLeD/8dQEDKBS9dhvlAI=
+	t=1725534164; cv=none; b=HFkh/SeBVBT4ujcWWouMLycupe2PtbYXpH4k9olaJkQZIXYCcbDCt+WqjJKiF18aKrbGjDwxIK+Rwmmj7xteLJ/Azshrgbw5erB+j2LOvSN3kEH7+ajxEge9IHEymYwx8FSCA9tp/LFhanPkQrHys2HZN1Ros/Ztj426kzl24UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725532577; c=relaxed/simple;
-	bh=ZcNd7kTC7a6o7YbVm/VC08zVoaIVFF/QxxTTlIEk7jE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SpKUXYidiaIqpKuYs1HBTMwYZ+BxB4WH8pXAvAKO0/At4H7SuUJyU3SnzRy99luSr1BUPbHjUJ+EvH5E2p7aIrKlD+1Xa1XsB1tE0BlIAERxdMcvf/4kxK3zkRSxgeKblJ0MMuGzPyYTWf4Kvtq7DYCMtYqcbOjkpAwFmwOsO8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBFABFEC;
-	Thu,  5 Sep 2024 03:36:41 -0700 (PDT)
-Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40AB93F73F;
-	Thu,  5 Sep 2024 03:36:11 -0700 (PDT)
-Date: Thu, 5 Sep 2024 11:36:06 +0100
-From: Joey Gouly <joey.gouly@arm.com>
-To: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	linux-arm-kernel@lists.infradead.org, nd@arm.com,
-	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	broonie@kernel.org, christophe.leroy@csgroup.eu,
-	dave.hansen@linux.intel.com, hpa@zytor.com,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
-	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 06/30] arm64: context switch POR_EL0 register
-Message-ID: <20240905103606.GA4063653@e124191.cambridge.arm.com>
-References: <20240823170835.GA1181@willie-the-truck>
- <ZsjXtE7Kg0LQwNAL@arm.com>
- <20240827113803.GB4318@willie-the-truck>
- <ZtYNGBrcE-j35fpw@arm.com>
- <20240903145413.GB3669886@e124191.cambridge.arm.com>
- <20240904102254.GA13280@willie-the-truck>
- <20240904113221.GA3891700@e124191.cambridge.arm.com>
- <20240904114301.GA13550@willie-the-truck>
- <20240904125503.GA3901671@e124191.cambridge.arm.com>
- <20240904161758.GA14323@willie-the-truck>
+	s=arc-20240116; t=1725534164; c=relaxed/simple;
+	bh=qFSEslGlI4eDeIwvChR5MyKFYPOyNbkC0+Gdcoc/IkQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lf9G0RJnhGUtkbEUHYQjs3FZMRL4iLOKPr8zFx8gTGURGbeSDvi42u8sM3QVXS+6iqD4nSs6ycLL9bX4sTyWzP2p8riVy+P28k4cCdQxg+YW3Do+QRTOIf5keEHwudNtC1me/r2LcamFIHaakrhzCDcLVyWICTdNeVlJ7xvrPvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee866d98fcbf66-29f9a;
+	Thu, 05 Sep 2024 19:02:37 +0800 (CST)
+X-RM-TRANSID:2ee866d98fcbf66-29f9a
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.97])
+	by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee966d98fcc31d-6ba6e;
+	Thu, 05 Sep 2024 19:02:37 +0800 (CST)
+X-RM-TRANSID:2ee966d98fcc31d-6ba6e
+From: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>
+To: shuah@kernel.org
+Cc: jstultz@google.com,
+	tglx@linutronix.de,
+	anna-maria@linutronix.de,
+	frederic@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	zhang jiao <zhangjiao2@cmss.chinamobile.com>
+Subject: [PATCH] Date: Remove unused macro
+Date: Thu,  5 Sep 2024 16:52:30 +0800
+Message-Id: <20240905085230.48438-1-zhangjiao2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240904161758.GA14323@willie-the-truck>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 04, 2024 at 05:17:58PM +0100, Will Deacon wrote:
-> On Wed, Sep 04, 2024 at 01:55:03PM +0100, Joey Gouly wrote:
-> > On Wed, Sep 04, 2024 at 12:43:02PM +0100, Will Deacon wrote:
-> > > Right, there's quite a lot I need to do:
-> > > 
-> > > - Uncorrupt your patches
-> > > - Fix the conflict in the kvm selftests
-> > > - Drop the unnecessary ISBs
-> > > - Fix the ESR checking
-> > > - Fix the el2_setup labels
-> > > - Reorder the patches
-> > > - Drop the patch that is already in kvmarm
-> > > 
-> > > Working on it...
-> > 
-> > Sorry! I'm happy to rebase onto some arm64 branch if that will help, just let me know.
-> 
-> Please have a look at for-next/poe (also merged into for-next/core and
-> for-kernelci) and let me know what I got wrong!
+From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
 
-I pulled for-next/poe and ran the test and it works fine. Also looked at the
-diff of my branch against your branch, and it looks fine too.
+This macro NSEC_PER_SEC is never referenced in the code.
+Just remove it.
 
-Thanks for your work to get this merged!
+Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+---
+ tools/testing/selftests/timers/change_skew.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-> 
-> For Marc: I reordered the series so the KVM bits (and deps) are all the
-> beginning, should you need them. The branch is based on a merge of the
-> shared branch you created previously.
-> 
-> Cheers,
-> 
-> Will
-> 
+diff --git a/tools/testing/selftests/timers/change_skew.c b/tools/testing/selftests/timers/change_skew.c
+index 4421cd562c24..18e794a46c23 100644
+--- a/tools/testing/selftests/timers/change_skew.c
++++ b/tools/testing/selftests/timers/change_skew.c
+@@ -30,9 +30,6 @@
+ #include <time.h>
+ #include "../kselftest.h"
+ 
+-#define NSEC_PER_SEC 1000000000LL
+-
+-
+ int change_skew_test(int ppm)
+ {
+ 	struct timex tx;
+-- 
+2.33.0
+
+
+
