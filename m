@@ -1,170 +1,163 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2076.outbound.protection.outlook.com [40.107.93.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2EA748F;
-	Thu,  5 Sep 2024 18:01:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725559318; cv=fail; b=uCnzJ3C6MN39xZgKf3tZb8/8ZCa/6g4fWpPO+z7ulqqMOoUGpoj1SPP65EW5u0hA6mC6NPJRV93KJbly6xyVxHxtQxp3XkuCK8EPi3g74VmQnzcRtU8DwBtBzYinBdunBGX1/SVLFn1bL0YbYbn+qwg74eZbjJ4JkySU7PibaQM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725559318; c=relaxed/simple;
-	bh=jUhbFttIFFS0rU+Wel5GmkmPx3ZIhvFy3tuKlUkfcrc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dRZ3FESAftTsoJSKA24Mb+CSB12+6vRRLTcaIVuRfgL1AdSx7WBK6Cj9EEbtPEGsrHhw6tfobfES1qBBRJlh5A52/7SEZUKuv2DNagi/A2+sqQNT/SlQpjsXvYIwDplgFBRojDSj0mDuwT/RoJC1CXajJqQE5J3CJrec62UB3yI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IoK/9T5E; arc=fail smtp.client-ip=40.107.93.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D76E7464
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Sep 2024 18:02:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725559357; cv=none; b=il2FK3GNTXlhwFTbu64k8uUiqcEBs3+t0oV55eJNLUIGkxJoUQ1y/09wKFEeL1N5Cn/w6pUyvQLa552ILJy+2ZPvVgGM+4pOdtaM2X3DTKuMvr3QqiHROQ4ibd5jvXOPhzTewcdWqllZgVBoFQpiQXRWRI/8nwb0kyxi8xrx1bA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725559357; c=relaxed/simple;
+	bh=c+hUATrufVSIL/JQLMUihzPOI7uEoWoqXiWz7naeVAY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=DrC5OKWGnq4dMGS9Ei+iFB/M8dMaIkE60+b1pCZCR+7KVGW88gtnEmWYwL3fOBz5QEWYA4gJJsL+K90GZVWOnnbgR8hSzznl3SHGLDvnlnyDR5QuImmpNiUO710JK4ROanyVzYXc5cdz5mz2qLDeQR9dMc+Mfzynxwoz6r1TZa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GQQ5DJfv; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IoK/9T5E"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QghAAOANnEYpkPqny1I7njxkUq4tyzzXRlirEEZMyOBVhDdtCPgqtoNVyNmfDBYfE59oIhHR1aQ5j1n6+BYD1EDDpmAwrkOu3LrXMZQzM4+nVVHQLWNMxAhQAZ5mehsbZW+jMAuzEBetzID4TiNMET/s5wxS4Xp4m0vZtfKh3wmsAwgaCZczGX3VHHXJtbnQykehjRWZHYctvzkNf8YJFOD+/08nPAb4t/VFQcQWRtyFHwsZBS0i05NnsiS1V3GHlUKRK4fq/OwlQ0J/q3UuZ/8ZxeEx9r7XNWNZRLZdsxpdFIQXpH+vixjhG8oSUAwcq9aUnSgOpS347MBkjDDPoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WvnZ8fMNifvMU5T96APpDVAqwPlJM8DyRNlHID77DVg=;
- b=kKtCBEcrYyO5XOU5R1ABI8dkNacYhL8cZ4eWbGbnTyDxQYqISXHtJ4q57e7wjjj5j4YjIZCJiAz73e3z95wVJ2Sii5k3OUeD9bKVQVqT+L2odIXUWCQkelqbfEzDM7e80dNxsW2HYnp8peVptdYZn8Pqx3271ZtB7iCsDeGYQPYAOnOVPoAVWvkOmY5KF2CjpdLhj+ovcuSa5u9CkGfVSw+sxU7xW5Ruw5gpNcQrv9sWc8PTgA59WCsr7MQ5rkquc11EIT/A4BoDvTp5BWn5JRczSEWHkbq+yOa3J+9IfbpCni4KDu7HlXe9AjLGnuYHXHFXvTy8rGi5lJ0QLgMhdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WvnZ8fMNifvMU5T96APpDVAqwPlJM8DyRNlHID77DVg=;
- b=IoK/9T5E55ry0WKQrD2NL9bfIvMREWFEKxyEkjoRgN38e6sNdsyp5g4X2GyYCL9xtLLXJ2OVSXh6ByEuwPIaEyrblSBllbfrxQa+QN0rf8U8+LkrHB6y4nPa9UoNQsPbAiWRL9EOWPP4pD9FMFGfK1fvhiTjW/5v85Mxb/111iCTQOQupZdh/i1whLVoJq+7fZurC/rzOwmNZEsr6hN+E4wHQumcgEa0MiuTGLncjAra2LReglUv7Z6Uk+Dbu5mB1iVquDwRnnldy+x/IYhMK+j9KppO3G5+iUqgYuPENEjoOaKh0Tcij5ib+HAWAl2L1w6j4pZMM+CREx6CxI/XGg==
-Received: from BN9PR03CA0698.namprd03.prod.outlook.com (2603:10b6:408:ef::13)
- by SA3PR12MB9089.namprd12.prod.outlook.com (2603:10b6:806:39f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Thu, 5 Sep
- 2024 18:01:52 +0000
-Received: from BN3PEPF0000B06A.namprd21.prod.outlook.com
- (2603:10b6:408:ef:cafe::46) by BN9PR03CA0698.outlook.office365.com
- (2603:10b6:408:ef::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27 via Frontend
- Transport; Thu, 5 Sep 2024 18:01:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN3PEPF0000B06A.mail.protection.outlook.com (10.167.243.69) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7962.2 via Frontend Transport; Thu, 5 Sep 2024 18:01:51 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 5 Sep 2024
- 11:01:29 -0700
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 5 Sep 2024
- 11:01:28 -0700
-Received: from nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
- Transport; Thu, 5 Sep 2024 11:00:55 -0700
-Date: Thu, 5 Sep 2024 11:00:49 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <kevin.tian@intel.com>, <will@kernel.org>, <joro@8bytes.org>,
-	<suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
-	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>, <shuah@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
-	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<smostafa@google.com>, <yi.l.liu@intel.com>
-Subject: Re: [PATCH v2 17/19] iommu/arm-smmu-v3: Add
- arm_smmu_viommu_cache_invalidate
-Message-ID: <Ztnx0c4BpGt6umrM@nvidia.com>
-References: <cover.1724776335.git.nicolinc@nvidia.com>
- <4b61aba3bc6c1cce628d9db44d5b18ea567a8be1.1724776335.git.nicolinc@nvidia.com>
- <20240905162039.GT1358970@nvidia.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GQQ5DJfv"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-20551e2f1f8so11511915ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Sep 2024 11:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1725559355; x=1726164155; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MoGES1YpvJ5nBfBcX7roaXp3pwydYetkTgC+UcIGmPU=;
+        b=GQQ5DJfv97J0NxoELw4SCGFW/pP9GgOm2H3OTpaJPSkg2PDfq4AT5rz/MkVrAO9y5c
+         GorM2IsiIiqlzefBtx2cRUitpjc02T6Me3qqrcnXxLie8B4NrDmWrBSfRmkaqvaNrn1W
+         yoz+lju13ZoPL53Q9caMOSyvU4GISFPvDPNTE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725559355; x=1726164155;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MoGES1YpvJ5nBfBcX7roaXp3pwydYetkTgC+UcIGmPU=;
+        b=lmVPWEKxVIazlb7l2wks6lcDeha8O4cWV+CKDCNCRKloX0Xd6x0HqRuPJQW7nDzKsX
+         1Ffy4Qta9bvuLX9ZhgdW0lOFnykvgBjvE0ztTLdCByyeJkrJIGJ5ZcS+Rh9Xm2WPN0pg
+         pOyk+LMpuNJ6ED+Qqd9Fmsa4hpNzPsRbqk4L4j5TQZr0IS4VNHz++0VZSPl9QcKaTtw5
+         EnotwtkhePjglBIE3SxKTqVecBh/bqv2B4lI9WbPGce1lX6lSFX0bOuLpX4mZQeeQVwz
+         0WUmtVLdgpVMaGo5CDb6WzIj23S6Eup5MeL+KlKUHo+1N6E/nNsNrRk/Od2Y1ZILTEHo
+         3uMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWWaE0avxujvJjkiIQjrxDfOyxf9b/crGrk2xif25yIidX2KrIa7gvdnIOLujVxSj4uPXdL2BDLdXvMv79bfjo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIfGhuWDuTzDPC8ZXBUPQHVJHJMDAcEgvfHL28hZqcWzUFG4tY
+	zbHdc0lV6KnRw8ku2KUn+OB1uqq5uhwJpVtz6WD1M9C/g3xxUm5ahZNRWVRg0H0=
+X-Google-Smtp-Source: AGHT+IHz5NeNHP3/EHb0dJvhP/OuhLXZQ+bmPFUYBO+MeLL43tewTI4Oz91ohUAJCAtuEh1AFicZNA==
+X-Received: by 2002:a17:903:188:b0:202:4047:e419 with SMTP id d9443c01a7336-205841a5f3bmr171050145ad.25.1725559354286;
+        Thu, 05 Sep 2024 11:02:34 -0700 (PDT)
+Received: from shuah-tx13.internal ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ced2ee8e01sm3673555173.172.2024.09.05.11.02.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2024 11:02:33 -0700 (PDT)
+From: Shuah Khan <skhan@linuxfoundation.org>
+To: shuah@kernel.org,
+	fenghua.yu@intel.com,
+	reinette.chatre@intel.com,
+	ilpo.jarvinen@linux.intel.com,
+	usama.anjum@collabora.com
+Cc: Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests:resctrl: Fix build failure on archs without __cpuid_count()
+Date: Thu,  5 Sep 2024 12:02:31 -0600
+Message-Id: <20240905180231.20920-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240905162039.GT1358970@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06A:EE_|SA3PR12MB9089:EE_
-X-MS-Office365-Filtering-Correlation-Id: c57dafd8-c438-4f1f-8f31-08dccdd4d1ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|82310400026|36860700013|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Daw36hTkG2K0ckUUUqiR+UuT4S+EMorgZAJ/CnAMhkxw1Au6Fr8LTP3x+07Z?=
- =?us-ascii?Q?qoahZFJRSfiwQaMA/44U8iw2mXi+VAvGnUXDEP2EodiOZ82XwetWFnxtLQ7i?=
- =?us-ascii?Q?0c1XQpX8sDwnqA1SFCFfrfZDOWxRbBjUOItAzpeLtUCpPnAfQFfi1s+ZNnOn?=
- =?us-ascii?Q?ptD19oZ6YdQNjurryam0g7gaiv/WuUcVvw9o/bXWVXWO7sr79RX4dIfljAMB?=
- =?us-ascii?Q?4RDWLoCi+NzB3W4J/7VaHaNnFw7JL2I9IUwVzUyLuydIoSGirAa3736KAo5L?=
- =?us-ascii?Q?t+Q84tV86gFWXjXhx5XRtbASFvloUFemFzYP8ORWSy2u0A9UboOvug4ZPQZe?=
- =?us-ascii?Q?lWz7rsFQhyYKNEZ6GDDRgzWYG2nbkBQG+wCYe8WvmIK7HA5RP+mPlvBeSqHW?=
- =?us-ascii?Q?q6oXuUVyS7Nw/C0dTUz3o6Q9gHCo277uWUkJ8CDxdmnvX3DB86hkt0P/X9pb?=
- =?us-ascii?Q?N7U2lSvxc24N2TCYUl4vx//SwoxITi18HpMAFij/InIZYxUEJn+u4FeQ5YdM?=
- =?us-ascii?Q?ubIO/yAQQr7DF7JWsK/hWMCrAQpLOtlw9yhq2N5GgNX//E+TEsl9r8GIK2hO?=
- =?us-ascii?Q?pzKxZCEQKl4Sd3N1S+8jW0kcurOodRnVf+3/pXqo8JEdFGDz68u/GKsZW2dI?=
- =?us-ascii?Q?kXj45+XF4LKLyfN68WXi0TU43MdH2vVRu4Rifer0MXuDzXulThGCPzvXtD2G?=
- =?us-ascii?Q?mx2muL6yeQwhxsPZj0u60nD1C0P6InhhK0V5avpVGW38hKJf+S4PeIPYPPHv?=
- =?us-ascii?Q?5VspYke6ShRWRoCUZ1kgSYchaKCkPjqwWeQcmEDd3bggBO2bhVN9V81tQZUi?=
- =?us-ascii?Q?b3bTp0cNAkd0Ysg+YCvLeWHy0jJeqpS/9PFYBdFZqP/RtTroAo+BlKxOGeBQ?=
- =?us-ascii?Q?KgqjSgzo0o+6690kNr/mUS5X43XPNotY77JW3N6J3Ufn5rwVMj+7keuKCHX2?=
- =?us-ascii?Q?SzNJ7eBEWOudE44BpA4pTKqaZvB6gw5JUFezM5qL9O77g7hmaNQ32KlSGYzN?=
- =?us-ascii?Q?vdmNapqQObTLSBdnXOfH3X0rYpT0fJKBiYkmBePWvEWbNv05Ie6pitQ/n56D?=
- =?us-ascii?Q?8qFVc5+11tY8fJGkrnT/VACHisdXkGFsc+oJuBDuKiZuWQCjfQi9lfvAFVlB?=
- =?us-ascii?Q?gegBduExYOku4F9JCIOWDM+6Y6j6DjMYjKy9awcaml+dCKSY1KxtBZVn8+bm?=
- =?us-ascii?Q?qXiyJ9DyesSYlYameqpXaQ8b4qbAQ4AhISqJkOzm67fWJ7ddhjgt6g+rZebU?=
- =?us-ascii?Q?91J0KoPYgPKEEuuCBvezXbF0yqj3OdUmGGLfQI8CsJbd+APxNVESCi4bctuq?=
- =?us-ascii?Q?5Y3Lu7sUB4roEGWSCauyBPK0N0Ei9/aczGgOtCr5tIUj+W7Yk/+cC8KcNVea?=
- =?us-ascii?Q?sWL1934yb014dtToXi0KjC+KQWAIIBZxpVyhX0Z7x3Te1Tf1a+iekL6k66pf?=
- =?us-ascii?Q?OMQDIERYyvI+oI3Yf+Lj6Z8J6RrdqGbl?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 18:01:51.4628
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c57dafd8-c438-4f1f-8f31-08dccdd4d1ce
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B06A.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9089
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 05, 2024 at 01:20:39PM -0300, Jason Gunthorpe wrote:
-> On Tue, Aug 27, 2024 at 09:59:54AM -0700, Nicolin Chen wrote:
-> 
-> > +static int arm_smmu_viommu_cache_invalidate(struct iommufd_viommu *viommu,
-> > +					    struct iommu_user_data_array *array)
-> > +{
-> > +	struct iommu_domain *domain = iommufd_viommu_to_parent_domain(viommu);
-> > +
-> > +	return __arm_smmu_cache_invalidate_user(
-> > +			to_smmu_domain(domain), viommu, array);
-> 
-> I'd like to have the viommu struct directly hold the VMID. The nested
-> parent should be sharable between multiple viommus, it doesn't make
-> any sense that it would hold the vmid.
-> 
-> This is struggling because it is trying too hard to not have the
-> driver allocate the viommu, and I think we should just go ahead and do
-> that. Store the vmid, today copied from the nesting parent in the vmid
-> private struct. No need for iommufd_viommu_to_parent_domain(), just
-> rework the APIs to pass the vmid down not a domain.
+When resctrl is built on architectures without __cpuid_count()
+support, build fails. resctrl uses __cpuid_count() defined in
+kselftest.h.
 
-OK. When I designed all this stuff, we still haven't made mind
-about sharing the s2 domain, i.e. moving the VMID, which might
-need a couple of more patches to achieve.
+Even though the problem is seen while building resctrl on aarch64,
+this error can be seen on any platform that doesn't support CPUID.
 
-I will try making some change for that.
+CPUID is a x86/x86-64 feature and code paths with CPUID asm commands
+will fail to build on all other architectures.
 
-Thanks
-Nicolin
+All others tests call __cpuid_count() do so from x86/x86_64 code paths
+when _i386__ or __x86_64__ are defined. resctrl is an exception.
+
+Fix the problem by defining __cpuid_count() only when __i386__ or
+__x86_64__ are defined in kselftest.h and changing resctrl to call
+__cpuid_count() only when __i386__ or __x86_64__ are defined.
+
+In file included from resctrl.h:24,
+                 from cat_test.c:11:
+In function ‘arch_supports_noncont_cat’,
+    inlined from ‘noncont_cat_run_test’ at cat_test.c:326:6:
+../kselftest.h:74:9: error: impossible constraint in ‘asm’
+   74 |         __asm__ __volatile__ ("cpuid\n\t"                               \
+      |         ^~~~~~~
+cat_test.c:304:17: note: in expansion of macro ‘__cpuid_count’
+  304 |                 __cpuid_count(0x10, 1, eax, ebx, ecx, edx);
+      |                 ^~~~~~~~~~~~~
+../kselftest.h:74:9: error: impossible constraint in ‘asm’
+   74 |         __asm__ __volatile__ ("cpuid\n\t"                               \
+      |         ^~~~~~~
+cat_test.c:306:17: note: in expansion of macro ‘__cpuid_count’
+  306 |                 __cpuid_count(0x10, 2, eax, ebx, ecx, edx);
+
+Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Reported-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/kselftest.h        | 2 ++
+ tools/testing/selftests/resctrl/cat_test.c | 6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index b8967b6e29d5..e195ec156859 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -61,6 +61,7 @@
+ #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+ #endif
+ 
++#if defined(__i386__) || defined(__x86_64__) /* arch */
+ /*
+  * gcc cpuid.h provides __cpuid_count() since v4.4.
+  * Clang/LLVM cpuid.h provides  __cpuid_count() since v3.4.0.
+@@ -75,6 +76,7 @@
+ 			      : "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
+ 			      : "0" (level), "2" (count))
+ #endif
++#endif /* end arch */
+ 
+ /* define kselftest exit codes */
+ #define KSFT_PASS  0
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 742782438ca3..ae3f0fa5390b 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -290,12 +290,12 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
+ 
+ static bool arch_supports_noncont_cat(const struct resctrl_test *test)
+ {
+-	unsigned int eax, ebx, ecx, edx;
+-
+ 	/* AMD always supports non-contiguous CBM. */
+ 	if (get_vendor() == ARCH_AMD)
+ 		return true;
+ 
++#if defined(__i386__) || defined(__x86_64__) /* arch */
++	unsigned int eax, ebx, ecx, edx;
+ 	/* Intel support for non-contiguous CBM needs to be discovered. */
+ 	if (!strcmp(test->resource, "L3"))
+ 		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
+@@ -305,6 +305,8 @@ static bool arch_supports_noncont_cat(const struct resctrl_test *test)
+ 		return false;
+ 
+ 	return ((ecx >> 3) & 1);
++#endif /* end arch */
++	return false;
+ }
+ 
+ static int noncont_cat_run_test(const struct resctrl_test *test,
+-- 
+2.40.1
+
