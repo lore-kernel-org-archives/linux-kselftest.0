@@ -1,155 +1,252 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27721B658;
-	Mon,  9 Sep 2024 05:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C4F1AD3ED
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Sep 2024 05:43:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725858982; cv=none; b=THyS5BXD4oq1V6Qy27Iwbv4tLJeieEDGIf0QRDZ5lXN/ref9laMPqNKBrrLlx4J7zdY8BpMAdBspJA1+0tBHSGQeuj10caTQ4ZXayHEk3ClnUFT77YGxfUV1Ga9wloZHOGVEOaPKtCeSo7MOanRIwE8xiUXpw07/F40N/oNnuU0=
+	t=1725860609; cv=none; b=gGyH4t4xQkEPPhPB75d8VLvZsKr/cgOeTAXAgXBaa5AZ2dQdHvngJ+3oDKJAZKUZKeDLmu58RYhH5Q3ewAKOPgWsFO61//Q2HL604zFXrnOJixlynISQrwANoQNR9GoTcjyebuYxsG1yY/Uv4R5chemI//IOpwy7J5KDNNLgEBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725858982; c=relaxed/simple;
-	bh=WHi3qEgvHncJuLXSyDFGUaCzk2J0MA65m4LBEZKfZNM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PBXUBlx88dBxG4EBi7IfEiAk9o54cLcAN+53BRGL4jFGTerdvcDbMRiW+OttonocnBzlfuM2Or9wGhjpNf3UCOYGIHp3wqcmi5s9NlJIsCcRM67tpWsQJeMoa5e/1+5q1UTy1ivHmpZiiMX8k4ZuK2UJ+QYkVImpL/nIhnex/lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6877FFEC;
-	Sun,  8 Sep 2024 22:16:47 -0700 (PDT)
-Received: from [10.162.43.35] (e116581.arm.com [10.162.43.35])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 501133F73B;
-	Sun,  8 Sep 2024 22:16:14 -0700 (PDT)
-Message-ID: <03c5b10d-b81c-4074-9c27-8ffc8c7fc84a@arm.com>
-Date: Mon, 9 Sep 2024 10:46:05 +0530
+	s=arc-20240116; t=1725860609; c=relaxed/simple;
+	bh=DNA3F85kfwiW9bgsfvLXXO875oSihrq+DpGt530m/B8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=IoYSQWnGht5CLYLayP4IqInr5xNCT3zHS520klQjNEppA9rvjbztuvErfbSYCElEFFn8vZh8Rmntfxcn0bHIbMoX0MUUbNuE1wzVPiYM5xUeiVabZc0VnMd59NTdXiWjbRRbbetLfIxgJo5NESjiXFYJKu+0UAiN1gTpqpH4NWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bhjNMIen; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bhjNMIen"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6d54ab222fcso134229327b3.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Sep 2024 22:43:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1725860604; x=1726465404; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i/PEygQn081YuovQ6b+Ov4J7AW7lnL8H+wq29MS093A=;
+        b=bhjNMIenuk14C2l5V7q6HmUTPR/6a5fI1mLuNOuKhTPL4QFbZJ2hAKOng7I4m73L02
+         dHo+Zen81V06Aijil2ADBN+FROdjz+IeuA3aQGt1ncU0D0V1emng0fAt2+NaiRpEheEo
+         p8kRRkFfRif7SNooNw9eofva7REUSIZrKXRym/sJ5Ko3jToKwvJsM8gFwWXH1uirzcgT
+         mShe2gTJRgNWiabbBO9zBKkzmVgXiZUmgomCqZDYJOsyZ3kbN/vPlb74iaSAddbXRsmV
+         08KuEaD+WIiPe6JeWkXqBgu2GBMEYmI5pCWsFZD3BO7dQnqu8g72LK+qf0OQCG4GMBgX
+         oxNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725860604; x=1726465404;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i/PEygQn081YuovQ6b+Ov4J7AW7lnL8H+wq29MS093A=;
+        b=YGlf0HQUKemFYjH73ANa9aRcJBqA5a9KTRa7J0IVm9PD1tCNGszfsxJT7pkMrcSBXT
+         J2JMTAKik/Fmm4IRI1PRxkDV9sMmuI1Jsvf7KVLTv+IiX+ZVdlYvIdGd6Dhm/Bw5swZm
+         dvjVmkpUPmpPyNf04eVj4hno4Mq8AMPKJF4rAXrRGuQyFBnDhdHqAtInrr6X3LBA0U48
+         e9P0XRJi2JCn00gF6MpxDF37H8sxpXJoMGLo+LGIvhV+bUc0qR357MMUQ+/NgozzdBOC
+         iYzc2482yQiqjtMnXb9KuD2p1/KHilCox7/yZcyAbsW+aRqqe9eCwTdVf5hGzCh42jpK
+         r0/w==
+X-Forwarded-Encrypted: i=1; AJvYcCVBouyZ93co1mUH03+vLHMkoskDbinIYCKu1naN5prqPLZLYF6ONtYFhNOwOBXNVZAxnq7Nm79b3eoZO+7CvDg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoYmyxuVHgz4OOagDDS23ObNa1Ye7rhbyZt4N5qEb8GNsH/9EK
+	M23o09LifJpb1v6sJwOzj1NRX8iHJ0UYrO+uv5pCIoSAsxVLU3Pc4UdNmxff8yG9XHwgoLnhu/K
+	T53jI4pZoTWDLUsPIPZ486g==
+X-Google-Smtp-Source: AGHT+IHY3ZWZM5m6iLmr25lpRxzPgba3UWyYzEPhtrKYdPsv3KEg5Ew5Cd8AVaehz177/KHSxTj8z97y5iwx9jcZ0A==
+X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
+ (user=almasrymina job=sendgmr) by 2002:a05:6902:4d1:b0:e0b:cce3:45c7 with
+ SMTP id 3f1490d57ef6-e1d349e38d5mr18201276.9.1725860604167; Sun, 08 Sep 2024
+ 22:43:24 -0700 (PDT)
+Date: Mon,  9 Sep 2024 05:43:06 +0000
+In-Reply-To: <20240909054318.1809580-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] selftests: Rename sigaltstack to generic signal
-To: Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org, oleg@redhat.com
-Cc: mingo@kernel.org, tglx@linutronix.de, mark.rutland@arm.com,
- ryan.roberts@arm.com, broonie@kernel.org, suzuki.poulose@arm.com,
- Anshuman.Khandual@arm.com, DeepakKumar.Mishra@arm.com,
- aneesh.kumar@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, sj@kernel.org
-References: <20240822121415.3589190-1-dev.jain@arm.com>
- <20240822121415.3589190-2-dev.jain@arm.com>
- <714f8eb4-b226-48f6-ab0d-75bdfbf83364@linuxfoundation.org>
- <42d0fa4b-eb67-42fd-a8e1-05d159d0d52f@arm.com>
- <806e4be0-4b1f-4818-806f-a844d952d54e@arm.com>
- <fff2b685-a7a5-4260-a293-f2abf55d9ce4@linuxfoundation.org>
- <514713eb-235c-40ee-8c25-f1f3e1ca7f7a@arm.com>
- <d5dc1bd9-4473-405f-99fc-192691f41c4f@linuxfoundation.org>
- <0b3af60f-0449-48a1-b228-f26618b9d50a@arm.com>
- <fcdbd8bc-9986-497e-8de4-86d3e619ca73@linuxfoundation.org>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <fcdbd8bc-9986-497e-8de4-86d3e619ca73@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20240909054318.1809580-1-almasrymina@google.com>
+X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
+Message-ID: <20240909054318.1809580-2-almasrymina@google.com>
+Subject: [PATCH net-next v25 01/13] netdev: add netdev_rx_queue_restart()
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
+	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	"=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?=" <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, 
+	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, 
+	David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
+	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
+Add netdev_rx_queue_restart(), which resets an rx queue using the
+queue API recently merged[1].
 
-On 9/7/24 01:29, Shuah Khan wrote:
-> On 9/4/24 23:56, Dev Jain wrote:
->>
->> On 9/4/24 22:35, Shuah Khan wrote:
->>> On 9/3/24 22:52, Dev Jain wrote:
->>>>
->>>> On 9/4/24 03:14, Shuah Khan wrote:
->>>>> On 8/30/24 10:29, Dev Jain wrote:
->>>>>>
->>>>>> On 8/27/24 17:16, Dev Jain wrote:
->>>>>>>
->>>>>>> On 8/27/24 17:14, Shuah Khan wrote:
->>>>>>>> On 8/22/24 06:14, Dev Jain wrote:
->>>>>>>>> Rename sigaltstack to generic signal directory, to allow 
->>>>>>>>> adding more
->>>>>>>>> signal tests in the future.
->>>>>>>>
->>>>>>>> Sorry - I think I mentioned I don't like this test renamed. Why 
->>>>>>>> are you sending
->>>>>>>> this rename still included in the patch series?
->>>>>>>
->>>>>>> I am not renaming the test, just the directory. The directory name
->>>>>>> is changed to signal, and I have retained the name of the test -
->>>>>>> sas.c.
->>>>>>
->>>>>> Gentle ping: I guess there was a misunderstanding; in v5, I was
->>>>>> also changing the name of the test, to which you objected, and
->>>>>> I agreed. But, we need to change the name of the directory since
->>>>>> the new test has no relation to the current directory name,
->>>>>> "sigaltstack". The patch description explains that the directory
->>>>>> should be generically named.
->>>>>>
->>>>>
->>>>> Right. You are no longer changing the test name. You are still
->>>>> changing the directory name. The problem I mentioned stays the
->>>>> same. Any fixes to the existing tests in this directory can no
->>>>> longer auto applied to stables releases.
->>>>
->>>> I understand your point, but commit baa489fabd01 (selftests/vm: rename
->>>> selftests/vm to selftests/mm) is also present. That was a lot 
->>>> bigger change;
->>>> sigaltstack contains just one test currently, whose fixes possibly 
->>>> would have
->>>> to be backported, so I guess it should not be that much of a big 
->>>> problem?
->>>>
->>>>>
->>>
->>> So who does the backports whenevenr something changes? You are adding
->>> work where as the automated process would just work without this
->>> change. It doesn't matter if there is another test that changed
->>> the name.
->>>
->>>>> Other than the desire to rename the directory to generic, what
->>>>> other value does this change bring?
->>>>
->>>> Do you have an alternative suggestion as to where I should put my 
->>>> new test then;
->>>> I do not see what is the value of creating another directory to 
->>>> just include
->>>> my test. This will unnecessarily clutter the selftests/ directory with
->>>> directories containing single tests. And, putting this in 
->>>> "sigaltstack" is just
->>>> wrong since this test has no relation with sigaltstack.
->>>>
->>>
->>> If this new test has no relation to sigaltstack, then why are you 
->>> changing
->>> and renaming the sigaltstack directory?
->>
->> Because the functionality I am testing is of signals, and signals are 
->> a superset
->> of sigaltstack. Still, I can think of a compromise, if semantically 
->> you want to
->> consider the new test as not testing signals, but a specific syscall 
->> "sigaction"
->> and its interaction with blocking of signals, how about naming the 
->> new directory "sigaction"?
->>> Adding a new directory is much better
->>> than going down a path that is more confusing and adding backport 
->>> overhead.
->>>
->
-> Okay - they are related except that you view signalstack as a subset
-> of signals. I saw Mark's response as well saying sigaction isn't
-> a good name for this.
->
-> Rename usually wipe out git history as well based on what have seen
-> in the past.
->
-> My main concern is backports. Considering sigstack hasn't changed
-> 2021 (as Mark's email), let's rename it.
->
-> I am reluctantly agreeing to the rename as it seems to make sense
-> in this case.
+The queue API was merged to enable the core net stack to reset individual
+rx queues to actuate changes in the rx queue's configuration. In later
+patches in this series, we will use netdev_rx_queue_restart() to reset
+rx queues after binding or unbinding dmabuf configuration, which will
+cause reallocation of the page_pool to repopulate its memory using the
+new configuration.
 
-Thanks! I guess there is no update required from my side, and you can
-pull this series?
->
-> thanks,
-> -- Shuah
->
+[1] https://lore.kernel.org/netdev/20240430231420.699177-1-shailend@google.com/T/
+
+Signed-off-by: David Wei <dw@davidwei.uk>
+Signed-off-by: Mina Almasry <almasrymina@google.com>
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+
+---
+
+v18:
+- Add more color to commit message (Xuan Zhuo).
+
+v17:
+- Use ASSERT_RTNL() (Jakub).
+
+v13:
+- Add reviewed-by from Pavel (thanks!)
+- Fixed comment (Pavel)
+
+v11:
+- Fix not checking dev->queue_mgmt_ops (Pavel).
+- Fix ndo_queue_mem_free call that passed the wrong pointer (David).
+
+v9: https://lore.kernel.org/all/20240502045410.3524155-4-dw@davidwei.uk/
+(submitted by David).
+- fixed SPDX license identifier (Simon).
+- Rebased on top of merged queue API definition, and changed
+  implementation to match that.
+- Replace rtnl_lock() with rtnl_is_locked() to make it useable from my
+  netlink code where rtnl is already locked.
+
+---
+ include/net/netdev_rx_queue.h |  3 ++
+ net/core/Makefile             |  1 +
+ net/core/netdev_rx_queue.c    | 74 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 78 insertions(+)
+ create mode 100644 net/core/netdev_rx_queue.c
+
+diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
+index aa1716fb0e53..e78ca52d67fb 100644
+--- a/include/net/netdev_rx_queue.h
++++ b/include/net/netdev_rx_queue.h
+@@ -54,4 +54,7 @@ get_netdev_rx_queue_index(struct netdev_rx_queue *queue)
+ 	return index;
+ }
+ #endif
++
++int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
++
+ #endif
+diff --git a/net/core/Makefile b/net/core/Makefile
+index 62be9aef2528..f82232b358a2 100644
+--- a/net/core/Makefile
++++ b/net/core/Makefile
+@@ -19,6 +19,7 @@ obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) += dev_addr_lists_test.o
+ 
+ obj-y += net-sysfs.o
+ obj-y += hotdata.o
++obj-y += netdev_rx_queue.o
+ obj-$(CONFIG_PAGE_POOL) += page_pool.o page_pool_user.o
+ obj-$(CONFIG_PROC_FS) += net-procfs.o
+ obj-$(CONFIG_NET_PKTGEN) += pktgen.o
+diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+new file mode 100644
+index 000000000000..da11720a5983
+--- /dev/null
++++ b/net/core/netdev_rx_queue.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <linux/netdevice.h>
++#include <net/netdev_queues.h>
++#include <net/netdev_rx_queue.h>
++
++int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq_idx)
++{
++	void *new_mem, *old_mem;
++	int err;
++
++	if (!dev->queue_mgmt_ops || !dev->queue_mgmt_ops->ndo_queue_stop ||
++	    !dev->queue_mgmt_ops->ndo_queue_mem_free ||
++	    !dev->queue_mgmt_ops->ndo_queue_mem_alloc ||
++	    !dev->queue_mgmt_ops->ndo_queue_start)
++		return -EOPNOTSUPP;
++
++	ASSERT_RTNL();
++
++	new_mem = kvzalloc(dev->queue_mgmt_ops->ndo_queue_mem_size, GFP_KERNEL);
++	if (!new_mem)
++		return -ENOMEM;
++
++	old_mem = kvzalloc(dev->queue_mgmt_ops->ndo_queue_mem_size, GFP_KERNEL);
++	if (!old_mem) {
++		err = -ENOMEM;
++		goto err_free_new_mem;
++	}
++
++	err = dev->queue_mgmt_ops->ndo_queue_mem_alloc(dev, new_mem, rxq_idx);
++	if (err)
++		goto err_free_old_mem;
++
++	err = dev->queue_mgmt_ops->ndo_queue_stop(dev, old_mem, rxq_idx);
++	if (err)
++		goto err_free_new_queue_mem;
++
++	err = dev->queue_mgmt_ops->ndo_queue_start(dev, new_mem, rxq_idx);
++	if (err)
++		goto err_start_queue;
++
++	dev->queue_mgmt_ops->ndo_queue_mem_free(dev, old_mem);
++
++	kvfree(old_mem);
++	kvfree(new_mem);
++
++	return 0;
++
++err_start_queue:
++	/* Restarting the queue with old_mem should be successful as we haven't
++	 * changed any of the queue configuration, and there is not much we can
++	 * do to recover from a failure here.
++	 *
++	 * WARN if we fail to recover the old rx queue, and at least free
++	 * old_mem so we don't also leak that.
++	 */
++	if (dev->queue_mgmt_ops->ndo_queue_start(dev, old_mem, rxq_idx)) {
++		WARN(1,
++		     "Failed to restart old queue in error path. RX queue %d may be unhealthy.",
++		     rxq_idx);
++		dev->queue_mgmt_ops->ndo_queue_mem_free(dev, old_mem);
++	}
++
++err_free_new_queue_mem:
++	dev->queue_mgmt_ops->ndo_queue_mem_free(dev, new_mem);
++
++err_free_old_mem:
++	kvfree(old_mem);
++
++err_free_new_mem:
++	kvfree(new_mem);
++
++	return err;
++}
+-- 
+2.46.0.469.g59c65b2a67-goog
+
