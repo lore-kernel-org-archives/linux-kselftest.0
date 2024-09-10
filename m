@@ -1,55 +1,55 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2988B1AC8A8
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 23:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2B01AED2B
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 23:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726011880; cv=none; b=pzvcW37bLFFqD3/UIomzUEuxIcDqLXwmRKHjJAsEHLE8JsMSxBE6mW9jsiCite33FxDtJ3hKAxwzKpPwLn4yC8TpIaH7IRRT22tGQEMpXNPAXixEoWeWaNTCsEEPXnk29KmtZzKiae4qNHpQLNmWsgB/jgVZtmB9fEYeIRg20QY=
+	t=1726011881; cv=none; b=RJGJX5oF9gaRXLAWB2oO8mov2lGYQ6CowzbEs0IdnpaEiAsVFoRoscKpXZ20amcAm1VEp3nMoQ7I4GhE13mSbKZSv0GGM7T97oVtj1yQtYX/Huux+Q4RpoD0z9FmxDYNXgTcv7EjOeZls1xT/2+1+IC4aK3YnHsqXQkVDwb7iiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726011880; c=relaxed/simple;
-	bh=dFKiwdQFdeHeGDHgLUaoks2Iut/fwJ7U/8H5WQn0Ux0=;
+	s=arc-20240116; t=1726011881; c=relaxed/simple;
+	bh=SUyjtMHnKCBirkEyGaCQmRTjwdwC4Zfx5OkiQdo5v1w=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EHzE7uxRD0MIf/3+MtdzLBBDOytqy+xWxKP8d2EGVA3lq21d2ZPOKZ6Va2b2myANFDt/aZUF7a0b0uAehldISnZcegJ1ncHHpqDLqucjfoxngLdbJL61lLWotUsPp5fL+ZOQ4xlbQPyNuHQxoOG/RK97yD0pihChQQWAnn5VA88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tZZ6lDqC; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=OkCosPuiKSFtnhCmURojVlnfgQv6Hbyu4gyw9Gr3TmqPJ4FxcQ9X3hV7sSyleGy+z/S37ItirHufYTGYrKPKN8ddVJcaf939DL5J4b0HSc+A5bX6YKG2EUlYL3rPB/9Gi8ITygHarxduVwWp6zDbf3hCbd68a2UrMKXe4JtSaSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Z/iNgi57; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tZZ6lDqC"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6d3e062dbeeso7481057b3.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 16:44:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Z/iNgi57"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-206f9b1bc52so14575185ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 16:44:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726011875; x=1726616675; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1726011878; x=1726616678; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sKXYIyjsovK+WV8DiI7P/1dY1v3IRDe3dp7/1EItjd0=;
-        b=tZZ6lDqCMDPAbXr0s5fioLQtSNw04aNvJAapoxiKcSHPHFyjnIFq/9NwYKH183unLo
-         6CGMTETbwrPHRPfw4nIJjuuT2O/xIxbGtD2a4BQ75b2TudDhNuuQfcCuOGlhtc51yDot
-         07gZ0/Ild7OtNqopHt3C1wFznh60/BHjAxVzs0k6xvPboz8QH1YrS8T1Q36J8qTsr6kC
-         1lcDuqVGY9+1im4FFwBAOSvzQcTHXVFolL5x2CLwe/7TX9aMCZg02bL5UWl8KXum1v3I
-         cUGr3UDh0Fiy2opvWWMyvjhYSMWoQrdtMt2XnCmWExAPDHuOMR3WfkmDZh/bo/yDvkQz
-         rXrQ==
+        bh=krcbfxFAJP32Bl8ts+LdeAkshb3wdoRz7FQc5et7+e0=;
+        b=Z/iNgi57aLEHJg4BcLMEzaIvu5jOsIROElY/EBtvI6qVdPVdjkFe+bX0uuAZkcTjGU
+         FH/UfqYH4n77GuNM9PL9ejze3Nb2Bu+YECbIR2UEFf9obE5fsigLdRUJCJQjRnN0WxqV
+         7ZfeTMmiNMGQ3kYaLlal/jmJaQAaKKmRrySdMiURWwuUN5nZtewgxDvbo+l15gFbQLH1
+         Kkc5+84prctqRJoHUe0u+dJ4tk0OADpyBx00EgaGsV1k+Li72EM/CqUZbMR+Vy5dXNoN
+         cestXe4N9cN3Aw4GOJAaCUDZNEWVMFxJlAbFHtcDeXqmUGihf8PmU5a2JB5gUg2erJth
+         jsrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726011875; x=1726616675;
+        d=1e100.net; s=20230601; t=1726011878; x=1726616678;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sKXYIyjsovK+WV8DiI7P/1dY1v3IRDe3dp7/1EItjd0=;
-        b=N6X0xCaLE2sJVXBnKx6loErpIsq+MgAF50VCjSh2VFxyhtaw2n0Y81M2FnHaX0asuL
-         CFLTnBEuU22nWWbRr2fmNKDy1U3zmZlSabJTFcvhL+8pRpp/Uf9DYi/M2ZfRJzfba81k
-         S7yHRN/E6rASGjOimx2aQrPs6LnMkhI3KKxM8r6jLR+4gCtKJDUHPC3MAhih5VFtK7Ja
-         dkAVenVUWD0PnYwEGvziI7goN+aN92IhRA7tCA9NDQag3W46uIPuc1dhjYU1/6EYDNv7
-         81A+QG57fBLr3gYFtUgrLzHlt8Z8xecTD4aIFzPhPnsSOv3av5mpkmCYQdyuRYG07G86
-         5LkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJo6wlGA++5TofOlwXEpwnZV3ZAQFUj5WVUysaoU5pcHDiq/VTpmRYF2GaAbp3cF+t69XWa89Lb8yf9ZHCZB4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyb3nQLjor+Ocq/0d8ZE35aRaNXS+RFKYtdb8eSY0kzid1Bj54D
-	ap52krGJGCob+aT2Lz3JzYAKw4BbUK4LiCLY/JkoRlLDjWbQ+mpF45Zhq8PN/M1MjFgEvXcdmMu
-	lsksVRLdLek2keKm1bnXeHA==
-X-Google-Smtp-Source: AGHT+IGUU7n7hwsUDrLro4Wgjoj/bFNd+sQ+f4VxxKGmgg0FjsnP+LmFWcl01bi6YDhQwKnjz58ssMXCFPvnGLCBGA==
+        bh=krcbfxFAJP32Bl8ts+LdeAkshb3wdoRz7FQc5et7+e0=;
+        b=tOaj62JOoHnIRSPaK/T+BQSuVBbFf3G5g4fNWnCY9sYaRUJBZjgMgJIskHuppOjRVM
+         QOSjevFUPfETtca1Ot0p044AFgoOgqBDQDEhVVEWpIoRoGu41vduaw3uxwBwWB2H9fKh
+         c8+j1kz6NPZyS8IezOd20aVp39xmnT7NRVb7tlB9UG1cXfFqDhbLpiWiyL7etrHCLAeu
+         KQR3igPDnQy2shHM4liQXPU+K9ZzljTtm4WafSplebcpeHr5zdHY164aATpTh+HPp/or
+         fv1ISMe0/qbGV4iA4qwUL3sXpo8W3WvvFtQd5wbZ8S8Njl5Oc1V0PESHKRiAM011bFfE
+         sjqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXvybbQ8Vyi4rBBW+5exDEbfapH1vfKNWrnfXhLKttSwXVY6GRTqPpziSrjdGxORCaZ7OrrQzLz/pl2E1jPNPM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyRxCpy0Ow0/JFn8Kcvu53/kpwMnc+u6ms1aQDuHZJHhW+bVFV
+	sNv9Y5rfZ4JIzEHswSNYaNmnWavWaeMiXvpiBXZiuAh1qQIdLN3+M4aaGPjgD1n0P3ROKz2V98L
+	4AUNv16A/d8q7iG8k45HNqw==
+X-Google-Smtp-Source: AGHT+IGzA4nKfM70wloRZKktU8I5wwl9MfYLThvDDzHIgaA6loY/0Smr81sI2GQQVA1zTeWX0Ryp6QAH+KUadLwDFg==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a05:690c:20a0:b0:6db:7f4d:f79f with
- SMTP id 00721157ae682-6db951c4d86mr1153687b3.0.1726011875005; Tue, 10 Sep
- 2024 16:44:35 -0700 (PDT)
-Date: Tue, 10 Sep 2024 23:43:32 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a17:903:1c3:b0:205:71f1:853f with SMTP
+ id d9443c01a7336-207521d6944mr178125ad.5.1726011878156; Tue, 10 Sep 2024
+ 16:44:38 -0700 (PDT)
+Date: Tue, 10 Sep 2024 23:43:34 +0000
 In-Reply-To: <cover.1726009989.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <cover.1726009989.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.46.0.598.g6f2099f65c-goog
-Message-ID: <cc6ae391e557a3be8e72746d42968c2d23d6e8a7.1726009989.git.ackerleytng@google.com>
-Subject: [RFC PATCH 01/39] mm: hugetlb: Simplify logic in dequeue_hugetlb_folio_vma()
+Message-ID: <5a5e998e8f154c28a28dcdab73fb563f658f2f51.1726009989.git.ackerleytng@google.com>
+Subject: [RFC PATCH 03/39] mm: hugetlb: Remove unnecessary check for avoid_reserve
 From: Ackerley Tng <ackerleytng@google.com>
 To: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk, 
 	jgg@nvidia.com, peterx@redhat.com, david@redhat.com, rientjes@google.com, 
@@ -79,140 +79,35 @@ Cc: erdemaktas@google.com, vannapurve@google.com, ackerleytng@google.com,
 	linux-fsdevel@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 
-Replace arguments avoid_reserve and chg in dequeue_hugetlb_folio_vma()
-so dequeue_hugetlb_folio_vma() is more understandable.
-
-The new argument, use_hstate_resv, indicates whether the folio to be
-dequeued should be taken from reservations in hstate.
-
-If use_hstate_resv is true, the folio to be dequeued should be taken
-from reservations in hstate and hence h->resv_huge_pages is
-decremented, and the folio is marked so that the reservation is
-restored.
-
-If use_hstate_resv is false, then a folio needs to be taken from the
-pool and hence there must exist available_huge_pages(h), failing
-which, goto err.
-
-The bool use_hstate_resv can be reused within
-dequeue_hugetlb_folio_vma()'s caller, alloc_hugetlb_folio().
-
-No functional changes are intended.
-
-As proof, the original two if conditions
-
-!vma_has_reserves(vma, chg) && !available_huge_pages(h)
-
-and
-
-avoid_reserve && !available_huge_pages(h)
-
-can be combined into
-
-(avoid_reserve || !vma_has_reserves(vma, chg))
-&& !available_huge_pages(h).
-
-Applying de Morgan's theorem on
-
-avoid_reserve || !vma_has_reserves(vma, chg)
-
-yields
-
-!avoid_reserve && vma_has_reserves(vma, chg),
-
-hence the simplification is correct.
+If avoid_reserve is true, gbl_chg is not used anyway, so there is no
+point in setting gbl_chg.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- mm/hugetlb.c | 33 +++++++++++----------------------
- 1 file changed, 11 insertions(+), 22 deletions(-)
+ mm/hugetlb.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index aaf508be0a2b..af5c6bbc9ff0 100644
+index 597102ed224b..5cf7fb117e9d 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -1280,8 +1280,9 @@ static bool vma_has_reserves(struct vm_area_struct *vma, long chg)
+@@ -3166,16 +3166,6 @@ struct folio *alloc_hugetlb_folio(struct vm_area_struct *vma,
+ 		if (gbl_chg < 0)
+ 			goto out_end_reservation;
+ 
+-		/*
+-		 * Even though there was no reservation in the region/reserve
+-		 * map, there could be reservations associated with the
+-		 * subpool that can be used.  This would be indicated if the
+-		 * return value of hugepage_subpool_get_pages() is zero.
+-		 * However, if avoid_reserve is specified we still avoid even
+-		 * the subpool reservations.
+-		 */
+-		if (avoid_reserve)
+-			gbl_chg = 1;
  	}
  
- 	/*
--	 * Only the process that called mmap() has reserves for
--	 * private mappings.
-+	 * Only the process that called mmap() has reserves for private
-+	 * mappings. A child process with MAP_PRIVATE mappings created by their
-+	 * parent have no page reserves.
- 	 */
- 	if (is_vma_resv_set(vma, HPAGE_RESV_OWNER)) {
- 		/*
-@@ -1393,8 +1394,7 @@ static unsigned long available_huge_pages(struct hstate *h)
- 
- static struct folio *dequeue_hugetlb_folio_vma(struct hstate *h,
- 				struct vm_area_struct *vma,
--				unsigned long address, int avoid_reserve,
--				long chg)
-+				unsigned long address, bool use_hstate_resv)
- {
- 	struct folio *folio = NULL;
- 	struct mempolicy *mpol;
-@@ -1402,16 +1402,7 @@ static struct folio *dequeue_hugetlb_folio_vma(struct hstate *h,
- 	nodemask_t *nodemask;
- 	int nid;
- 
--	/*
--	 * A child process with MAP_PRIVATE mappings created by their parent
--	 * have no page reserves. This check ensures that reservations are
--	 * not "stolen". The child may still get SIGKILLed
--	 */
--	if (!vma_has_reserves(vma, chg) && !available_huge_pages(h))
--		goto err;
--
--	/* If reserves cannot be used, ensure enough pages are in the pool */
--	if (avoid_reserve && !available_huge_pages(h))
-+	if (!use_hstate_resv && !available_huge_pages(h))
- 		goto err;
- 
- 	gfp_mask = htlb_alloc_mask(h);
-@@ -1429,7 +1420,7 @@ static struct folio *dequeue_hugetlb_folio_vma(struct hstate *h,
- 		folio = dequeue_hugetlb_folio_nodemask(h, gfp_mask,
- 							nid, nodemask);
- 
--	if (folio && !avoid_reserve && vma_has_reserves(vma, chg)) {
-+	if (folio && use_hstate_resv) {
- 		folio_set_hugetlb_restore_reserve(folio);
- 		h->resv_huge_pages--;
- 	}
-@@ -3130,6 +3121,7 @@ struct folio *alloc_hugetlb_folio(struct vm_area_struct *vma,
- 	struct mem_cgroup *memcg;
- 	bool deferred_reserve;
- 	gfp_t gfp = htlb_alloc_mask(h) | __GFP_RETRY_MAYFAIL;
-+	bool use_hstate_resv;
- 
- 	memcg = get_mem_cgroup_from_current();
- 	memcg_charge_ret = mem_cgroup_hugetlb_try_charge(memcg, gfp, nr_pages);
-@@ -3190,20 +3182,17 @@ struct folio *alloc_hugetlb_folio(struct vm_area_struct *vma,
- 	if (ret)
- 		goto out_uncharge_cgroup_reservation;
- 
-+	use_hstate_resv = !avoid_reserve && vma_has_reserves(vma, gbl_chg);
-+
- 	spin_lock_irq(&hugetlb_lock);
--	/*
--	 * glb_chg is passed to indicate whether or not a page must be taken
--	 * from the global free pool (global change).  gbl_chg == 0 indicates
--	 * a reservation exists for the allocation.
--	 */
--	folio = dequeue_hugetlb_folio_vma(h, vma, addr, avoid_reserve, gbl_chg);
-+	folio = dequeue_hugetlb_folio_vma(h, vma, addr, use_hstate_resv);
- 	if (!folio) {
- 		spin_unlock_irq(&hugetlb_lock);
- 		folio = alloc_buddy_hugetlb_folio_with_mpol(h, vma, addr);
- 		if (!folio)
- 			goto out_uncharge_cgroup;
- 		spin_lock_irq(&hugetlb_lock);
--		if (!avoid_reserve && vma_has_reserves(vma, gbl_chg)) {
-+		if (use_hstate_resv) {
- 			folio_set_hugetlb_restore_reserve(folio);
- 			h->resv_huge_pages--;
- 		}
+ 	/* If this allocation is not consuming a reservation, charge it now.
 -- 
 2.46.0.598.g6f2099f65c-goog
 
