@@ -1,155 +1,163 @@
-Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77B91B29D2;
-	Tue, 10 Sep 2024 23:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9D51B2ED9
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 23:44:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726011884; cv=none; b=AUjFgVW3jHTuKpFIAyupEUNDty2t3mFBKdSU0rM9yBedoo6HKFlXJ9fLZqtPHWwV0W2mglTnFA0wt4HfRmXjWZimugqRLntQsulkOHRMEaNzCgkptg/kYc85Bml6d7Y6VmXdgk0l5qyn7eLRlhPLyN7ViuXLpVOwpT3FimsRMis=
+	t=1726011885; cv=none; b=QGWEX/NSseZHHLRxtyyoQXa15V0GlIt6ZiJG7RKFtR1V/TYPTOKpDGJTKmi4e6vftIMbPLO7mU4JUBncduwMnyAxsMCKmmnJev9FXGGKtpY9N5vyi4ZM1GPFLjah61UsGswMejLIWvf+LHbcZe4Q3Hq/Ut7l/11+DwDaMrw7tfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726011884; c=relaxed/simple;
-	bh=NJRdyDt4ArtkhmucN0ADGasD7WAmAy2gcQoa3OuTEro=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XOmH1X4Zo2WJp+UqfL/PnvGJFoTY5QOjNjb84uzqu74fuW1t2kU1q9tCtMkMDfRr9BgRJ3dwrIU8DrHPqE8dCUjpO46gBhEy/hwWgLzw1dK8QFU4RMLI0hOPPnmqZ3+IYS9vi6hI9iizjx7KdDv2etK0LykPw+JyLcfboyMFeX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=OIVcS2r1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Inov3oyk; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	s=arc-20240116; t=1726011885; c=relaxed/simple;
+	bh=OQBUOF2Uq6jS4pRXGCaJ5/4GiCZ/0iOxc0vUCCmO+bc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=d0ruVK9QTWWIoO4p2BBDZF0sxDryGw4cvSIiEL9CtRHJ1/4ALQMgrkqpc1rIKcQBPKANELtEEzlXwfLdSXV16CcWWIgEX1XVxqM1OOriYRsNwFV2zktjEEt4CcMgsj8UuXPXYTsZg9VHUGfQTTWjb+nE2ZGZM/pxXSK6CqQVUbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1MOvzuO4; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="OIVcS2r1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Inov3oyk"
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.phl.internal (Postfix) with ESMTP id 0F50313801C0;
-	Tue, 10 Sep 2024 19:44:41 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-12.internal (MEProxy); Tue, 10 Sep 2024 19:44:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1726011881;
-	 x=1726098281; bh=7UKGu1SR/PBsryXACn9wUHAYZcr8DaV+dHj6lNuogFw=; b=
-	OIVcS2r1Aud15229JwgZnwxT3mBmneFNGw0BhwEg1/ITv7i3nkj9/kXakxeYGBkC
-	+TFkwXvg46EHuyOMNZHO2tDpa6U9KuO8c0KEkM45J+KDn9+n04cjh/JEW2gO2cHV
-	tNRdrthYmKSFkRc2ODDNH2kx0+PEPHQSQug0cAuVmhbHPI1Vqmgo3yfwM5zHFNKt
-	0o0ShbyyHWTUVZ3fAPhukxfGwy+Gmicov1d3mpl08YEdmJ+A7WgST11I4ktJUA72
-	SFYnbFovXc/d4aUcPcaTcbT9rHhW1ntVQjhlsWAL8TbfvaGqPINuiQrfTWrfFwR+
-	thh+GO784N1Squpemht2yw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726011881; x=
-	1726098281; bh=7UKGu1SR/PBsryXACn9wUHAYZcr8DaV+dHj6lNuogFw=; b=I
-	nov3oykubRyvFUL238D2FQ/tN8Cz70Iq/eN9jHNgzSMMWVnaRTO6sHZJI9TxhKNf
-	il/5Wk/5Er+Of0inHWAFpdBFJAhL0NxKg8CqHuWcRjAYbip0AA6klGnXpvJUdksy
-	vb5P8IUjixWQAYwPabHaLKXgbHNRTyPWUCAWVZowixT/qXhdKfR5UMtgny2Akdrm
-	1ZrQ236v+tnxs5x0NrLp89xaFU67ErIlqC/YWkOQKpYqUQARWaEKFA+T8PxRWrLl
-	Ccjx8DJxrCoE5CBWbOM7jLFzGzC02ur9oQvEjA49CDAX2fdFKpywfSZYlw9sufVH
-	b/UoTGiPBYx5qKu+aHePQ==
-X-ME-Sender: <xms:6NngZvexNvWHH_w3EwaDDjHw_FDhYxNI-3wIYzE8iOJsetfLaxpgEQ>
-    <xme:6NngZlPM1xWKKKhgyAwcfu2DNPqRJAY27abVucXtgKXf8Pdt3S25RdE8KkR9vJaxi
-    IFEay2iD5x-avcAlw>
-X-ME-Received: <xmr:6NngZojpWHyQrkkKZRu4dk2HBBx1p9ZWopb8PZh4EImW4cR3LGIdUqzucaLJ0onHwU0Ya_sSKmxep215SW7UABGhtuVqE7XTUTU36mGzUPN7tQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejtddgvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnegfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvvefukfhf
-    gggtugfgjgestheksfdttddtjeenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihuse
-    gugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedtgfeuueeukeeikefgieeukeff
-    leetkeekkeeggeffvedtvdejueehueeuleefteenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggprhgt
-    phhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnughrihhird
-    hnrghkrhihihhkohesghhmrghilhdrtghomhdprhgtphhtthhopegrlhgvgigvihdrshht
-    rghrohhvohhithhovhesghhmrghilhdrtghomhdprhgtphhtthhopegvugguhiiikeejse
-    hgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdp
-    rhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhope
-    grshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomh
-    dprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvh
-X-ME-Proxy: <xmx:6NngZg8L71HmBOBoLv1wtNrsHY5RwO7HXkNgYOo5jSZzCxcf1ProMw>
-    <xmx:6NngZrvzzhZi3sYRyo4_ykKOyJiDqdRudCs9NHec39zRWf-mcadWFw>
-    <xmx:6NngZvFkYgBn7Rm9aQExLNG0HO7qsxsBfGPbhu3c38ajtr2FUn_oMA>
-    <xmx:6NngZiMSXw_t2r7Sg_BFpPGXu6vnI83rksuUHcEz-KL0yh8tFXLvsw>
-    <xmx:6dngZkP7UAAdT9-bYkHVmo429bErfwgctEYsJA4oXFvb8R1L2stEdSby>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 Sep 2024 19:44:38 -0400 (EDT)
-Date: Tue, 10 Sep 2024 17:44:36 -0600
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, LKML <linux-kernel@vger.kernel.org>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Kernel Team <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next] bpf: ringbuf: Support consuming
- BPF_MAP_TYPE_RINGBUF from prog
-Message-ID: <rsdwvah5ov3itchsgkwgleihswoycoal5vjbeql2wbqoz5noiz@myk2atnnjaub>
-References: <18a9ddacc99bb95e9802f8ad1e81214433df496c.1725929645.git.dxu@dxuuu.xyz>
- <CAADnVQKyfZ2-qCvmqG8z919ggdOszEjTs04H=cTGOZTi-zhx7Q@mail.gmail.com>
- <CAEf4Bza5Fiw2rZ5T7=zRwVk1Ct1Mgm7Gpa8w+NJVPZf8keY_9Q@mail.gmail.com>
- <vru2zgphyfywjcqikolwotsfun2bgtrnfmwvfls5ra4tznsydr@46w5rq7gqepz>
- <4ec8e15b-c44b-41d7-b337-32d17306d67b@app.fastmail.com>
- <CAEf4BzbHqKD87KTSmFUMokXEaAa70xNs96QqfWBHjFbuE5PL=w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1MOvzuO4"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-718d6ad6105so6971348b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 16:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1726011881; x=1726616681; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P0FEJ4ZKBglbUpSmnWaSSUOycb+KTZhx2f+dpCTvB7Q=;
+        b=1MOvzuO4D+tO/RpFPmleZfo8l7WxdQPP79UsyAYOG9+WcsIbXzUeMAW/aA/2awVfRf
+         9gaxSeDuykpNIYxUAdK4B0YDDWD+qQZ8I7nZnW8MA3IzGlStt4QpCQQyDrBs/VQ78XUg
+         DyIrYJOI9OXI2kyCpRYeXlARiDg7xeeznTLrcDgv8cz4U6V6H/AxmhdSAvaaNuOTrvt8
+         +cLAKSTWnBESsoOdA0BzqKEBihhj5HqSCuNbdVLpyIhJRXUjC4AkZkJ8DpyIMKx8YqTQ
+         2ZlayVvVesxKAbmL9bjVFG/sfpSdsH/WjeCgTTPBAUrSDKeR3MPqJJFPX/rgDtcs0+AQ
+         BM0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726011881; x=1726616681;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P0FEJ4ZKBglbUpSmnWaSSUOycb+KTZhx2f+dpCTvB7Q=;
+        b=N3Luedspb5WjPl2kctizeVcrWoGk71bAuPJnwW4gh79iXFcmnOXnn/RpRwHvLi4a3h
+         E49jIBsgJgdnyXz18KfJw9gF6bR5oLVcFnMnSaBogknDHIubjkMrdPLcX0oEyt3OvP5H
+         F/fULPadBSuj5fN8Il1kIc+RLk6E+yIXz1uP3OLdfTb9g7F9MiaBkRAKWK1GFN7cv82N
+         Zbrkucw8BAM+Zn4m5/KlIxv4zcWWUrbxml45l0WZOKlxVsMR4LrPQvl/AytmAACedums
+         KI9Qaz3n9oAHMqyxnDV6yDl5q6e5Ct9nmC3nLzZ08Ils8vLwgOkmW2IWE8R+laxYfgBp
+         CidQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVv+dUSkwWKIoPiJVWr4pYZK4PIC3IYhaHQhmMuvsARPb38BfEJBaX34qEMUaYuEySVhOOZ6BLgUCibpd94nVc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9y/FGfUojYOXXxEYUTvey0OJ87pZb3Sh2A4VRWBngCPal6dnd
+	GpoMdqen4E26B9mGPI+h4YA8FfTnsWI+uw7EC29wKATrqxnlRvM9qZoQ7pRGtLodKcKg/qA+doP
+	78pTPbkGuGGTebmXQUO0dUQ==
+X-Google-Smtp-Source: AGHT+IHx4+TfNxnFVDcFxBFG2SogMutruOf/RcFp6adNqekz63WzrINlsJVnsUCpFS0h+PHdTGU8HSxvhRc6JvhHRw==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a62:ab02:0:b0:710:9d5e:4b9a with SMTP
+ id d2e1a72fcca58-718d5e04dadmr37747b3a.2.1726011881266; Tue, 10 Sep 2024
+ 16:44:41 -0700 (PDT)
+Date: Tue, 10 Sep 2024 23:43:36 +0000
+In-Reply-To: <cover.1726009989.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzbHqKD87KTSmFUMokXEaAa70xNs96QqfWBHjFbuE5PL=w@mail.gmail.com>
+Mime-Version: 1.0
+References: <cover.1726009989.git.ackerleytng@google.com>
+X-Mailer: git-send-email 2.46.0.598.g6f2099f65c-goog
+Message-ID: <1778a7324a1242fa907981576ebd69716a94d778.1726009989.git.ackerleytng@google.com>
+Subject: [RFC PATCH 05/39] mm: hugetlb: Refactor alloc_buddy_hugetlb_folio_with_mpol()
+ to interpret mempolicy instead of vma
+From: Ackerley Tng <ackerleytng@google.com>
+To: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk, 
+	jgg@nvidia.com, peterx@redhat.com, david@redhat.com, rientjes@google.com, 
+	fvdl@google.com, jthoughton@google.com, seanjc@google.com, 
+	pbonzini@redhat.com, zhiquan1.li@intel.com, fan.du@intel.com, 
+	jun.miao@intel.com, isaku.yamahata@intel.com, muchun.song@linux.dev, 
+	mike.kravetz@oracle.com
+Cc: erdemaktas@google.com, vannapurve@google.com, ackerleytng@google.com, 
+	qperret@google.com, jhubbard@nvidia.com, willy@infradead.org, 
+	shuah@kernel.org, brauner@kernel.org, bfoster@redhat.com, 
+	kent.overstreet@linux.dev, pvorel@suse.cz, rppt@kernel.org, 
+	richard.weiyang@gmail.com, anup@brainfault.org, haibo1.xu@intel.com, 
+	ajones@ventanamicro.com, vkuznets@redhat.com, maciej.wieczor-retman@intel.com, 
+	pgonda@google.com, oliver.upton@linux.dev, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-fsdevel@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Sep 10, 2024 at 03:21:04PM GMT, Andrii Nakryiko wrote:
-> On Tue, Sep 10, 2024 at 3:16 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> >
-> >
-> >
-> > On Tue, Sep 10, 2024, at 2:07 PM, Daniel Xu wrote:
-> > > On Tue, Sep 10, 2024 at 01:41:41PM GMT, Andrii Nakryiko wrote:
-> > >> On Tue, Sep 10, 2024 at 11:36 AM Alexei Starovoitov
-> > [...]
-> > >
-> > >>
-> > >> Also, Daniel, can you please make sure that dynptr we return for each
-> > >> sample is read-only? We shouldn't let consumer BPF program ability to
-> > >> corrupt ringbuf record headers (accidentally or otherwise).
-> > >
-> > > Sure.
-> >
-> > So the sample is not read-only. But I think prog is prevented from messing
-> > with header regardless.
-> >
-> > __bpf_user_ringbuf_peek() returns sample past the header:
-> >
-> >         *sample = (void *)((uintptr_t)rb->data +
-> >                            (uintptr_t)((cons_pos + BPF_RINGBUF_HDR_SZ) & rb->mask));
-> >
-> > dynptr is initialized with the above ptr:
-> >
-> >         bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL, 0, size);
-> >
-> > So I don't think there's a way for the prog to access the header thru the dynptr.
-> >
-> 
-> By "header" I mean 8 bytes that precede each submitted ringbuf record.
-> That header is part of ringbuf data area. Given user space can set
-> consumer_pos to arbitrary value, kernel can return arbitrary part of
-> ringbuf data area, including that 8 byte header. If that data is
-> writable, it's easy to screw up that header and crash another BPF
-> program that reserves/submits a new record. User space can only read
-> data area for BPF ringbuf, and so we rely heavily on a tight control
-> of who can write what into those 8 bytes.
+Reducing dependence on vma avoids the hugetlb-specific assumption of
+where the mempolicy is stored. This will open up other ways of using
+hugetlb.
 
-Ah, ok. I think I understand.
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+---
+ mm/hugetlb.c | 37 +++++++++++++++++++++++--------------
+ 1 file changed, 23 insertions(+), 14 deletions(-)
 
-Given this and your other comments about rb->busy, what about enforcing
-bpf_user_ringbuf_drain() NAND mmap? I think the use cases here are
-different enough where this makes sense.
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 5cf7fb117e9d..2f2bd2444ae2 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -2536,32 +2536,31 @@ static struct folio *alloc_migrate_hugetlb_folio(struct hstate *h, gfp_t gfp_mas
+ }
+ 
+ /*
+- * Use the VMA's mpolicy to allocate a huge page from the buddy.
++ * Allocate a huge page from the buddy allocator, given memory policy, node id
++ * and nodemask.
+  */
+-static
+-struct folio *alloc_buddy_hugetlb_folio_with_mpol(struct hstate *h,
+-		struct vm_area_struct *vma, unsigned long addr)
++static struct folio *alloc_buddy_hugetlb_folio_from_node(struct hstate *h,
++							 struct mempolicy *mpol,
++							 int nid,
++							 nodemask_t *nodemask)
+ {
+-	struct folio *folio = NULL;
+-	struct mempolicy *mpol;
+ 	gfp_t gfp_mask = htlb_alloc_mask(h);
+-	int nid;
+-	nodemask_t *nodemask;
++	struct folio *folio = NULL;
+ 
+-	nid = huge_node(vma, addr, gfp_mask, &mpol, &nodemask);
+ 	if (mpol_is_preferred_many(mpol)) {
+ 		gfp_t gfp = gfp_mask | __GFP_NOWARN;
+ 
+ 		gfp &=  ~(__GFP_DIRECT_RECLAIM | __GFP_NOFAIL);
+ 		folio = alloc_surplus_hugetlb_folio(h, gfp, nid, nodemask);
++	}
+ 
+-		/* Fallback to all nodes if page==NULL */
++	if (!folio) {
++		/* Fallback to all nodes if earlier allocation failed */
+ 		nodemask = NULL;
+-	}
+ 
+-	if (!folio)
+ 		folio = alloc_surplus_hugetlb_folio(h, gfp_mask, nid, nodemask);
+-	mpol_cond_put(mpol);
++	}
++
+ 	return folio;
+ }
+ 
+@@ -3187,8 +3186,18 @@ struct folio *alloc_hugetlb_folio(struct vm_area_struct *vma,
+ 	spin_lock_irq(&hugetlb_lock);
+ 	folio = dequeue_hugetlb_folio_vma(h, vma, addr, use_hstate_resv);
+ 	if (!folio) {
++		struct mempolicy *mpol;
++		nodemask_t *nodemask;
++		pgoff_t ilx;
++		int nid;
++
+ 		spin_unlock_irq(&hugetlb_lock);
+-		folio = alloc_buddy_hugetlb_folio_with_mpol(h, vma, addr);
++
++		mpol = get_vma_policy(vma, addr, hstate_vma(vma)->order, &ilx);
++		nid = policy_node_nodemask(mpol, htlb_alloc_mask(h), ilx, &nodemask);
++		folio = alloc_buddy_hugetlb_folio_from_node(h, mpol, nid, nodemask);
++		mpol_cond_put(mpol);
++
+ 		if (!folio)
+ 			goto out_uncharge_cgroup;
+ 		spin_lock_irq(&hugetlb_lock);
+-- 
+2.46.0.598.g6f2099f65c-goog
+
