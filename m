@@ -1,154 +1,104 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA2D156F33;
-	Wed, 11 Sep 2024 08:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768ED15EFB9;
+	Wed, 11 Sep 2024 08:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726044627; cv=none; b=tgpGJEpD0hXfEdm1cUTCs3eYQfN10iXRq42RBpaOSEckggYpfVOrzlZPm+5zPxw2JduDbOLD4IUVxO/arN8BWbuZOmB1yc/soelHmckQueOPYsuJMRiGrxKPaGwDT+1rmdk5isKRgGeSPoSB35pO0pNVO7wgPmdGBkihudJWtJ8=
+	t=1726044885; cv=none; b=t3/5cETZi0cpTsLR+UJrmRwyCnIu/Lee6IJU/+d5S9bNdkzsizPx6yx5rqalCeuO739sr7cxdFKwAJX4miD5m5K2J2npHqh6CZNysZt3rNL/KoHaTArYIbRANhzK5aF4DfPZjlPFlJK3liZgVe0ktnv6qjl/ebmSaJFNP6siLCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726044627; c=relaxed/simple;
-	bh=xqqFWb8pUZSck80cDB5UnJBV7qaICO2SyYJzYtppgps=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ufwZNIqfNq8jG7Z05ul/QFAjK2HZYQyiYj0Dx7RMEPGXYoXvYx67D/JoOuHbkFt/IniOgCL7GAXNUNE6Z6rGr6mzSMYX78WiQMG7sHV2MtjCeb9kAh0WAN/us3Fv2n5iuMSRerSdiG1jxQmCMswmPeqc1Z22jOVDIFUhefaCSoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=c0eowXZv; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1726044885; c=relaxed/simple;
+	bh=Ia5lmZBVLJrbaO6z3AnbdyZ8EauRGs2je4iFnOPryh4=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Cv/id2FyEAu4Eqj29Qs/ybukB2NyOoVDEww4JdBzVf3L4E28nF/vrOv/qMglWBCYe3Sii6RSjRCXqgb/yZHqcDvn0XV7fhlR+6UNadc86w5DdExxy0HoiVtXsaLa3Cu84W/j+vPJEWyAmAkd8XOm7TvE2gOg2TLbra6TYGzvNDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GnJrQka7; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=j4S315vw; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="c0eowXZv"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48AJH3Ub015231;
-	Wed, 11 Sep 2024 08:50:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=pp1; bh=bYqEhwCFhURvp
-	tA7MNPDfh9ePIuKriDOqBqrpv0ciCU=; b=c0eowXZvobZyNClbQrA2cPdWHSrR9
-	1AxspPyClfUz2zZzK32M+P6Sw1hUMH9g2D7o8MDmkjnhRnkT6C3LLu7rHD3cfMQj
-	UAO5UzTm2nMhdIB/bKlE+tvMrJo2QZOSTYWhaxkVWKrFwVM/j1h7crk68zm6Jk+9
-	DlK/xEA2T8458wz87uUP9kuNV7VSFMljY0CB8WFI93a5VgRCCFuXMHkxH5YUbETn
-	bRPe95XloN3bIg7O7hYvdwNREOUVCWe73lKDNuVq85y2ZBrptHAMGOQIgKQFP1aW
-	Ju9TLy2ry3P8RSLO88neNRb9OgVMa+NAPApWpIYX7DL4gZnPP5hv23V2Q==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41gegwvhqn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Sep 2024 08:50:22 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48B8T4KU013476;
-	Wed, 11 Sep 2024 08:50:22 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 41h3cm81t0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Sep 2024 08:50:21 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48B8oGCY28442930
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 11 Sep 2024 08:50:16 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8767B20040;
-	Wed, 11 Sep 2024 08:50:16 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4A6F72004E;
-	Wed, 11 Sep 2024 08:50:16 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 11 Sep 2024 08:50:16 +0000 (GMT)
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Shuah Khan <shuah@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Jens Remus <jremus@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: [PATCH 1/2] selftests: vDSO: fix ELF hash table entry size for s390x
-Date: Wed, 11 Sep 2024 10:50:14 +0200
-Message-ID: <20240911085015.3581722-2-hca@linux.ibm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240911085015.3581722-1-hca@linux.ibm.com>
-References: <20240911085015.3581722-1-hca@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GnJrQka7";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="j4S315vw"
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1726044882;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SIWotiYC5Y4E+rxhEG44q+nipjMbhXVcKsGP/nRiJ24=;
+	b=GnJrQka7HOInLWqWmsZ6qkHZ0W9Rj5dZZExzd3hvgYSTK0fpI6HL+0e8KjAHudy4kDjpxy
+	MxIz+brSXXuagOpfEkXDNNkCPqTiYMqQyMdXfccDcKB9KUouBqPqqXeBfWK2oP4fISlU1D
+	n7AtQv7jfK6LRL3xox/WnFCE+IqlAe5Nr7QiRLB8dInilr6U+fR3EEC0kioII5QUxv/OrA
+	bfM4Y+wwYlukjtl0dI4jtS6L4NSDu8+9hgWnwvEtB8lvYDpdJ/wNRYat1t5TGQGxPyyKTr
+	nfL+jZkLYyW8//Xd3ldFa7ks7tDPyswjuMy4A0qsev4HdZy8NG4iD90mbry+tA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1726044882;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SIWotiYC5Y4E+rxhEG44q+nipjMbhXVcKsGP/nRiJ24=;
+	b=j4S315vwGFT9faWUP5mefHu/YN3jS/hgY1kW7RTFqW5uO+/pVR6eg/jbfC3j3aPFnwNw84
+	ZxIn8qa5KOliF0Cg==
+To: "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>, Andrew Morton
+ <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, David Gow
+ <davidgow@google.com>, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com
+Subject: Re: [PATCH 3/3] debugobjects: Use hlist_cut_number() to optimize
+ performance and improve readability
+In-Reply-To: <85a8aa26-f135-fdde-fadf-c2b38a563805@huawei.com>
+References: <20240904134152.2141-1-thunder.leizhen@huawei.com>
+ <20240904134152.2141-4-thunder.leizhen@huawei.com> <87jzfkbrgf.ffs@tglx>
+ <5333927d-3f21-b7cc-8c57-6e21f1b4a3e5@huawei.com> <87bk0vbumx.ffs@tglx>
+ <85a8aa26-f135-fdde-fadf-c2b38a563805@huawei.com>
+Date: Wed, 11 Sep 2024 10:54:41 +0200
+Message-ID: <878qvya7u6.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3KAGZWKl-2SUMfzLUqei6YsRUyRxoJjJ
-X-Proofpoint-ORIG-GUID: 3KAGZWKl-2SUMfzLUqei6YsRUyRxoJjJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-10_12,2024-09-09_02,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 bulkscore=0
- adultscore=0 impostorscore=0 clxscore=1015 malwarescore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409110064
+Content-Type: text/plain
 
-From: Jens Remus <jremus@linux.ibm.com>
+On Wed, Sep 11 2024 at 15:44, Leizhen wrote:
+> On 2024/9/10 19:44, Thomas Gleixner wrote:
+>> That minimizes the pool lock contention and the cache foot print. The
+>> global to free pool must have an extra twist to accomodate non-batch
+>> sized drops and to handle the all slots are full case, but that's just a
+>> trivial detail.
+>
+> That's great. I really admire you for completing the refactor in such a
+> short of time.
 
-The vDSO self tests fail on s390x for a vDSO linked with the GNU linker
-ld as follows:
+The trick is to look at it from the data model and not from the
+code. You need to sit down and think about which data model is required
+to achieve what you want. So the goal was batching, right?
 
-  # ./vdso_test_gettimeofday
-  Floating point exception (core dumped)
+That made it clear that the global pools need to be stacks of batches
+and never handle single objects because that makes it complex. As a
+consequence the per cpu pool is the one which does single object
+alloc/free and then either gets a full batch from the global pool or
+drops one into it. The rest is just mechanical.
 
-On s390x the ELF hash table entries are 64 bits instead of 32 bits in
-size (see Glibc sysdeps/unix/sysv/linux/s390/bits/elfclass.h).
+> But I have a few minor comments.
+> 1. When kmem_cache_zalloc() is called to allocate objs for filling,
+>    if less than one batch of objs are allocated, all of them can be
+>    pushed to the local CPU. That's, call pcpu_free() one by one.
 
-Fixes: 40723419f407 ("kselftest: Enable vDSO test on non x86 platforms")
-Reported-by: Heiko Carstens <hca@linux.ibm.com>
-Tested-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Jens Remus <jremus@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
----
- tools/testing/selftests/vDSO/parse_vdso.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+If that's the case then we should actually immediately give them back
+because thats a sign of memory pressure.
 
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index d9ccc5acac18..7dd5668ea8a6 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -36,6 +36,12 @@
- #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
- #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
- 
-+#ifdef __s390x__
-+#define ELF_HASH_ENTRY ELF(Xword)
-+#else
-+#define ELF_HASH_ENTRY ELF(Word)
-+#endif
-+
- static struct vdso_info
- {
- 	bool valid;
-@@ -47,8 +53,8 @@ static struct vdso_info
- 	/* Symbol table */
- 	ELF(Sym) *symtab;
- 	const char *symstrings;
--	ELF(Word) *bucket, *chain;
--	ELF(Word) nbucket, nchain;
-+	ELF_HASH_ENTRY *bucket, *chain;
-+	ELF_HASH_ENTRY nbucket, nchain;
- 
- 	/* Version table */
- 	ELF(Versym) *versym;
-@@ -115,7 +121,7 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
- 	/*
- 	 * Fish out the useful bits of the dynamic table.
- 	 */
--	ELF(Word) *hash = 0;
-+	ELF_HASH_ENTRY *hash = 0;
- 	vdso_info.symstrings = 0;
- 	vdso_info.symtab = 0;
- 	vdso_info.versym = 0;
-@@ -133,7 +139,7 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
- 				 + vdso_info.load_offset);
- 			break;
- 		case DT_HASH:
--			hash = (ELF(Word) *)
-+			hash = (ELF_HASH_ENTRY *)
- 				((uintptr_t)dyn[i].d_un.d_ptr
- 				 + vdso_info.load_offset);
- 			break;
--- 
-2.43.0
+> 2. Member tot_cnt of struct global_pool can be deleted. We can get it
+>    simply and quickly through (slot_idx * ODEBUG_BATCH_SIZE). Avoid
+>    redundant maintenance.
 
+Agreed.
+
+> 3. debug_objects_pool_min_level also needs to be adjusted accordingly,
+>    the number of batches of the min level.
+
+Sure. There are certainly more problems with that code. As I said, it's
+untested and way to big to be reviewed. I'll split it up into more
+manageable bits and pieces.
+
+Thanks,
+
+        tglx
