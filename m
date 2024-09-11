@@ -1,229 +1,204 @@
-Received: from flow4-smtp.messagingengine.com (flow4-smtp.messagingengine.com [103.168.172.139])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBFB39AEB;
-	Wed, 11 Sep 2024 04:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726029822; cv=none; b=R6jy5M62GbZOXHuLgQnLxpI0drWy5EyVgoy97TdmotVkTw2XWJinjHNtqwVQ0lLtsaQ3dAUJ6mBiCdxxy52UuP8NqlCrpv6rXNwrft9zGDQdHCVC13B7SEjIxM978ibcInMTAxWiXXG41kNewvLwq86jUi7+GEeh+GiTmvQOVXo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726029822; c=relaxed/simple;
-	bh=5WJmlUpv4uarehRVhZPvsD4DxEp0exdQL0oR9rX1viQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=BSrlA3C0JUxUSYkcYy1Rt5TyqUBTqQchkps3RiL5R+t/7WuYFYLSrPDIKLIfTyHAPD2idICjV455kzB2N29EWiAkwZr148DNlatECOx762qpzY5jj4rmOEQdBul/ljFCtK+TjMQgSjMlbqep/zWRp7iytSlSxPqrXQ7nmWeEyMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=DEH+eF2a; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LX9q9qim; arc=none smtp.client-ip=103.168.172.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8426A38DE5;
+	Wed, 11 Sep 2024 06:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726035149; cv=fail; b=RQkBtPT+v8BP9P/GKFbw4NrTC8nXwWW8PPGfOZAoa825imtnnCXOjtwXzkEfPzrfPYxNHmCarFpamPim0vb+oPFiWbpycTOEagBEpZeLB/3RK4NpcGHkHmk9jUj2SQlFp1GR03FFYcGzG5hIAof0dSbMZ3nZQgy7RaMS3kjiAVM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726035149; c=relaxed/simple;
+	bh=GSLNzXuF+ecEDWH7lyPtpIIlaRCzQdPAnCKMRzRSm0s=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Uh2MVVVkohhNPH1X0u4ggwcaQRASLveRW7bOqVmaKS85AE8w6h1gxqtNy2mDhbd33tXrsbb82wT5PCH0bSEGW93975VtPA2yiKSPmI56iPfv1gnxjS2kHI3NzLA4wDqlbN6k5QfkmCivLSEamwXWuyZeJMN7WKPJc/hSn/RnXfI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e/UkQpph; arc=fail smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="DEH+eF2a";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LX9q9qim"
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailflow.phl.internal (Postfix) with ESMTP id 2F9A22002F0;
-	Wed, 11 Sep 2024 00:43:39 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-03.internal (MEProxy); Wed, 11 Sep 2024 00:43:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1726029819;
-	 x=1726037019; bh=U9YHIYH7MDBn8W8m5ipffYcdOZHKNXYCU4csAZFBp0E=; b=
-	DEH+eF2apJ98APgQPYNh6XK2m04O63eL+8sF5i84xFMQzIqX/d+dYYEOy+GbalG9
-	RBoxkO+Wb7x6qitIUKJfeuVi/h/wl5tkvofP7pli+zyRRDT9zlxRZ7yDEL799Tkq
-	sjNOJ9y+HDMgiijlJIfLpXFqsQtDVJZ0UTpvZ96ySqIwFcqYPyUKy+MqiuqqPeJf
-	sfgp5vjcA/1UPX74v7G5dTTJo/VxKdi6vo8H3NmYHS3R9aAXYT8aQKiKlxhxw8/a
-	CwnWM5ne6295Mo5HER9qsKzdEzbh4W/VE6DodyQA/352i6exJrDKIo/U0VXlBL8b
-	1jhe26IDKj7xjGuPndO0jw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726029819; x=
-	1726037019; bh=U9YHIYH7MDBn8W8m5ipffYcdOZHKNXYCU4csAZFBp0E=; b=L
-	X9q9qimlwytCr3wy6RA8JWzTHF1PgCsvxU860sGMMA79qsULmzRRCwAFjkMCtXJB
-	+Xmr3JRi7DJEI9BAos8cPR3bXS90IgMJ4tAXw8LB0xLWFTSqOLwdcvYp2+TKSrPQ
-	4kfZm1speIONlYJjI7z0S0kgAk5NT1zayt5xe+gmn1t4Uex0fMCJZ40LOOHlxvw5
-	mDiWbZMW6AqNaXWftwSzHf8CnxF5IOyE3bquDZDGJSe8YGUSc078T08uRmKpVJ+M
-	TlY147lf0miNsRTSq9+BKpBlBizRDuTfsc8+ugJ2fSqkq8nINU3QusnKkFU1+bXQ
-	h0AMY7dG5p3bNeu3i+JBA==
-X-ME-Sender: <xms:-h_hZnVHLkV6mN97PjZRXqceB6Z5mDZ2YJSLeru-OZkHO0vbuMi5Kw>
-    <xme:-h_hZvmmuaYz2KzfoieYhR2XT1nUh2i9uiLgIJEH2U5iZQhBNs1qjtqTnQGdkyz2E
-    2oh9v2febItXn-UyA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejtddgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnegfrhhlucfvnfffucdlfeehmdenucfjughrpefoggffhffvvefk
-    jghfufgtgfesthhqredtredtjeenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugi
-    husegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgleeitefgvefffedufefh
-    ffdtieetgeetgeegheeufeeufeekgfefueffvefhffenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggp
-    rhgtphhtthhopedvuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhihkhholh
-    grlhesfhgsrdgtohhmpdhrtghpthhtohepshgufhesfhhomhhitghhvghvrdhmvgdprhgt
-    phhtthhopegrlhgvgigvihdrshhtrghrohhvohhithhovhesghhmrghilhdrtghomhdprh
-    gtphhtthhopegrnhgurhhiihdrnhgrkhhrhihikhhosehgmhgrihhlrdgtohhmpdhrtghp
-    thhtohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehjohhhnhdrfh
-    grshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehhrgholhhuohesghho
-    ohhglhgvrdgtohhmpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvg
-    htpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:-h_hZjYm_JsKU-SWJKhPpHRf7HWtCOSPBCgDn8nzsSGKcm_vp1fIFQ>
-    <xmx:-h_hZiU1XEdfk4qEEiTkQhBsliDp5bOXeBQ6jnFiE8rl1xpZj55SFQ>
-    <xmx:-h_hZhmjYYpmDMXp2qtu_tZQzOf6Tm1OUPntjnpJnzKBZ_fagGcxUQ>
-    <xmx:-h_hZveDDS4Ebten0B46D8YD2SXxZ72BGY9TvNJrMPJY1BrQkAddgQ>
-    <xmx:-x_hZspB9AnDHwaJNIMKwExFdXvRGlhbATh1-oGx7fGBCDDPhr5WxSF7>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 732FC18A0065; Wed, 11 Sep 2024 00:43:38 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e/UkQpph"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726035147; x=1757571147;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=GSLNzXuF+ecEDWH7lyPtpIIlaRCzQdPAnCKMRzRSm0s=;
+  b=e/UkQpphQ5he5Esymvu1P4hiilS1XrblBVPKS3V0J61Zdv6xHhUE4IAT
+   aUamV79/+aItGSj5871wI1id8AaAOBlywdGYpsRQ4VD0r6MtqTNyLowJ5
+   MzBwFWJQWIezZEL7EBn5DVTOrefsN60HFudYwqD3UeGS6MFd9TJirxLXr
+   0jO4rfi0wkTvRGMa+W6YhQnlDIFYXgwoEq7Ka0S7mC3J6iAUftNjeVz32
+   /U3npm37EzcMIh4thisYRKiRQO0TsOvm45tujTMj7l8jlb6bB0Ma0lmCZ
+   b0VfNvkVc8uhK58wTHbWWia9/fauunZnz0LfIdP5rsFZhqZD4Shr5LH5z
+   w==;
+X-CSE-ConnectionGUID: JzuFsLUCRwuHAIHGyagqDw==
+X-CSE-MsgGUID: 9M17rvI3RNiMcldE8OQVow==
+X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="24691908"
+X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
+   d="scan'208";a="24691908"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 23:12:26 -0700
+X-CSE-ConnectionGUID: 1XbFc5GPRsy5fNl96zuhnQ==
+X-CSE-MsgGUID: Qb8AwiYQTSmTjEJk3C5zyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
+   d="scan'208";a="98083522"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 10 Sep 2024 23:12:25 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 10 Sep 2024 23:12:24 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Tue, 10 Sep 2024 23:12:24 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.44) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 10 Sep 2024 23:12:24 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LL1KBNSbSYKpoGWhj/wBvb27RIuJn0jwMO86I1OFa9ALdk4DKy/WJq/kVwK0brcg5d4PFxfHN1vrt03KFT6ye3mZO8h763mPPC2OObC1U8jj2G4S4MMK8zRBfEjZvYftPDjRNZQo0YWDOMIN7IseKJ4r+RFiEI6PTTVoU23C0WP+EVxAkU9uTR4m4oJeR2x4e7nvADiDDq/wV3bEm/Dn16Pu5wU8lKrpWR1PNagiw8Uj9mHAh9a2f4L5V+gER5veKJAPnvzEZrj0PLPXfbg71O7ELSRwRZR+f/GM+I+9QFeQaEpzTzcdgFGmkoY8rsiYJlxc8y4jQ8afzcxCQYWcyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GSLNzXuF+ecEDWH7lyPtpIIlaRCzQdPAnCKMRzRSm0s=;
+ b=HHNbu/w0Xovj4SGAyynbIdrvLlmcw5Rk3SnhGbfmk5ka+3/kRlEdi6tVHJfTbANBk4xu36lJZYqnmlqHfYS896qQBkES2sbdzsk4Aws3dzOFMGGyfw74ivKYr1tgxgSKN6uGqq5iauulmBROVB2QbwgJ0myMEDFFBWfLCPvpbD0U85uTS2v2DAVukerEJpXdJuJ29kI4hlnLs9rZ+6JSiD6QO7/W+Zj7xg87CXfu8ftZfwS3HnD54Dh545Xz+Mt2JNSIQ9v/oLP1gh4p+9wzIOhySFkoV0hInULNzTv/jbMaay1ORweTO/ZjlMIHXrEJf/V/lvuLRc1g3ZIB4fAQ2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5271.namprd11.prod.outlook.com (2603:10b6:208:31a::21)
+ by LV8PR11MB8509.namprd11.prod.outlook.com (2603:10b6:408:1e6::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.17; Wed, 11 Sep
+ 2024 06:12:21 +0000
+Received: from BL1PR11MB5271.namprd11.prod.outlook.com
+ ([fe80::5616:a124:479a:5f2a]) by BL1PR11MB5271.namprd11.prod.outlook.com
+ ([fe80::5616:a124:479a:5f2a%2]) with mapi id 15.20.7939.022; Wed, 11 Sep 2024
+ 06:12:21 +0000
+From: "Tian, Kevin" <kevin.tian@intel.com>
+To: Nicolin Chen <nicolinc@nvidia.com>, "jgg@nvidia.com" <jgg@nvidia.com>,
+	"will@kernel.org" <will@kernel.org>
+CC: "joro@8bytes.org" <joro@8bytes.org>, "suravee.suthikulpanit@amd.com"
+	<suravee.suthikulpanit@amd.com>, "robin.murphy@arm.com"
+	<robin.murphy@arm.com>, "dwmw2@infradead.org" <dwmw2@infradead.org>,
+	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "iommu@lists.linux.dev"
+	<iommu@lists.linux.dev>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "eric.auger@redhat.com"
+	<eric.auger@redhat.com>, "jean-philippe@linaro.org"
+	<jean-philippe@linaro.org>, "mdf@kernel.org" <mdf@kernel.org>,
+	"mshavit@google.com" <mshavit@google.com>,
+	"shameerali.kolothum.thodi@huawei.com"
+	<shameerali.kolothum.thodi@huawei.com>, "smostafa@google.com"
+	<smostafa@google.com>, "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: RE: [PATCH v2 00/19] iommufd: Add VIOMMU infrastructure (Part-1)
+Thread-Topic: [PATCH v2 00/19] iommufd: Add VIOMMU infrastructure (Part-1)
+Thread-Index: AQHa+KLdGUnDM+C8EEu4QYu86AlEobJSMNBg
+Date: Wed, 11 Sep 2024 06:12:21 +0000
+Message-ID: <BL1PR11MB5271EF54689B9666360A0F188C9B2@BL1PR11MB5271.namprd11.prod.outlook.com>
+References: <cover.1724776335.git.nicolinc@nvidia.com>
+In-Reply-To: <cover.1724776335.git.nicolinc@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5271:EE_|LV8PR11MB8509:EE_
+x-ms-office365-filtering-correlation-id: b11d11ba-c4c7-4d00-b339-08dcd228b25b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?CPH4vZroYymkNIzS5t6R3Cwtb2wOXcatDJ74DgSgVKaw3n8daTbC928ipMEW?=
+ =?us-ascii?Q?0ehhDQm2h1+CqMDYWJ0PkiKTIQn8VHNU5vekg7djk7sY0Sze0uvtvkqhaIGa?=
+ =?us-ascii?Q?sE6jGNUF9X96cheBXypVWdJj4VXKVc/XWPi7HdIODFZFq0ksHbiWEMxFBnsa?=
+ =?us-ascii?Q?H3spMFwOOs1H300dOMO7Dh2UhT2e81yhJaLDdY07x/4dBv+lrNH5yeWc6DfQ?=
+ =?us-ascii?Q?GjQSDINjvy+Al0RXWjTXgU/PI0w4RbS4ltteR1myOEFn6tDqHBie2oyJTyOT?=
+ =?us-ascii?Q?vvaoG/4Y/dNJR7cwEYoDI+Sj/os0YUIXfsM75+0mCVrJfj/SpdYv4xUvu7vz?=
+ =?us-ascii?Q?tIjSArd+PJbxQ+K0yelowXdtGjxRh9p7LI45ujwHwCjtVmYKmtIvSGvg02xe?=
+ =?us-ascii?Q?mOgKaHQdnF1BGhtj8dFP101pMBzQ6K8pnfFWFXi7KQ5ZmyWU41/MBA/I8XVF?=
+ =?us-ascii?Q?Wumf+w7z1aWs98M+S0ZlqL+ZR0eQJ5y3jyYzUsthzmqdDfYhNfzmuBMtM9o5?=
+ =?us-ascii?Q?HWisnOUq3zNhPH+QNRxx5lA+dH2wGDwmBeAbqIBLeolwXLbgpBcuqdYUUrRF?=
+ =?us-ascii?Q?7tqA5tIV/M42a9ca75ptump9LAy7ZkPuafxMwhoECX+nOgrOy/R0DiQ7XUWF?=
+ =?us-ascii?Q?AeIbYAIceL+HIOnARimBFavt6JuRybf8YFgftdrjdvuCfP+2J4UTTX+T/x0t?=
+ =?us-ascii?Q?1mpsSqRtlBHbVpBBAYLBesiDJP2b4+Gr3gwQiGCn8ppL66A9qa0o0icoGZoP?=
+ =?us-ascii?Q?lsJnTw9TzbVws4DC2jFJ9ksmjKxw191kq1hyI8jl+qM2WL2P/f524+u7j2er?=
+ =?us-ascii?Q?eNI92rkMIfBkJV10Zm+X9wBZ6yIDWNkIcgfzheGPS31MRKLGMovAxKDqiL1u?=
+ =?us-ascii?Q?7ZztYxjpTbvL6cyuumQCd+xRhsqx320mM17+pLCrUjMTgZ3Cq9HJOLzAcMdA?=
+ =?us-ascii?Q?anGVFVszos2hTFjsnx6ENpDSCcrZFbYvW9kDjc/KdG2c7ULOiXkdNzItxaN9?=
+ =?us-ascii?Q?gmp8S8PCAzTwKghbpui8CZUpIvFydzyznjyi1xsVdNMEu+yGlBaEwJbljxhA?=
+ =?us-ascii?Q?nRIQ1yxQVubguxXWkXQHtVtNixk6OXB2tNMssAoElR79W9OsbuOSlwBwLiDu?=
+ =?us-ascii?Q?KU2Z7k7+H0EZC4Q2ngnoo6YSnr2b75vf2uA2Nbv5VccL9UZwWTn74haOI4zs?=
+ =?us-ascii?Q?laF3kHMf0fZ2hYzKNR4PbpbAIgsaI+U0iGkUnatw4XEgH4/8sYeQ9UCaQPuD?=
+ =?us-ascii?Q?ae78obAc6lvHTad9y+MV/YWN9H7Vo24kWOEC4QRNepk4ggs5ECo36bm/5QO+?=
+ =?us-ascii?Q?QK2Q3B7RhQuRNsuE2Xxf1yCt3u+7APYLVEnd/EEp7cOV19mqck+S4B6UapO+?=
+ =?us-ascii?Q?HNLJzkdHSyV5Je7Vi8yJt/fyvyMgSjB44s8rNlMAItTImDT1pA=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5271.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZA7N/RgBTShiErSYd29DPGIfejaT/yQqPBwHiw/50578HejJDIcXukFJB+AO?=
+ =?us-ascii?Q?tvPHrpgIRLpL97PsUqKXGbTX99uQ8bjQesPD+slF69Au9y4s/zKVZyO6xTkG?=
+ =?us-ascii?Q?V2oeLf2JzMfisi8Y9xLejaA5BuK3ylPsy7oJA59ELPiIcVJgFeRnblW/Rama?=
+ =?us-ascii?Q?3AkdOTR5bspQD7M4to9VYlR0uV5YH2isrCniwFiFl8LK2EpUT5+YuNtWxUNS?=
+ =?us-ascii?Q?C5ud2lcayeuXWbPU1BcoP2D5gcgqHdeRoT7ZFjMzKWujCwpv0QSj5H9J9rl9?=
+ =?us-ascii?Q?A5VtanhNGSgZ84yV9bbWrLLLP/oRAw8p0Xnj4p1kvl2WcU8oNLYrql/8KNke?=
+ =?us-ascii?Q?BRwl0uGhzQG3GkpPqfMzEbSCfS4CteDxw0I3yE6h+wDEnkM2uJC/6OTTnede?=
+ =?us-ascii?Q?OAIh96PxFV3ssG8pJ5gqMPLxI9LtDH8nsodv5EIrcnlSu9VVciItT41MhWBv?=
+ =?us-ascii?Q?PL+3YkV6EPNCTNnC2E8GaKdWBxxTykC6lKHn/y51O+2bOe98FnpUWA2VoUAZ?=
+ =?us-ascii?Q?8NCEUDJ3QcpQYIgzbjTD3Y4tNcPTjgiHMeM0CiTTJ9BTqRALeGUcYXy9biD4?=
+ =?us-ascii?Q?UzxTI1FZcjaB1KPcpOeiVIOgmbvFr/AQaHlJDabjEtm7ktBpI0iNx3C42fWW?=
+ =?us-ascii?Q?POIt3r3DSE2jdQ2oeh4ZgbyL5E6Y0fsjlnIfVdp1Tpghdi4j9kT1cFcBAcKZ?=
+ =?us-ascii?Q?88YegSCok5GG8RrJ5hFVL05GvgB7+eYR/IYdCICSncoUEQfTE8zufZfEs9kL?=
+ =?us-ascii?Q?EsxgZr5Q7grDXICwNnwr8qSOJyN/PneEoT5Ew88H9b62wFDLmkP0jlil9K+u?=
+ =?us-ascii?Q?xQ8i3TXKW1s3PZSCiEVDYq9oycoykBdppQTNKVWljySHBCnSGfFjguBNauEf?=
+ =?us-ascii?Q?vdfYp7DxS2ntdk/MJ8tsMCyu1U4EGsK6EogAeCN9Wxs3K6qj5PU3IW0e9voy?=
+ =?us-ascii?Q?PUKYgBFnXQu+mGdhcUU0cMbQ4yFvbJYCN2gROWdtxJWy1VUA0hQ8y64pXhnL?=
+ =?us-ascii?Q?p7EsbqgB+5EIG5OW9lxw7RPnkp1sFSGDsWhVP4GQLbf8Iv+2aMbj2p4Uhzj8?=
+ =?us-ascii?Q?JgtbEa6vQK6iNvOnEX5Sz/yRWX4ylSeCzK/d5LarrJXdYZPml5Ue9ivNevqu?=
+ =?us-ascii?Q?babfM/L0x+Lw+xMtgVGEVBVzJn1fwwXzs4PYHSzE8/6Wel+6kI87uYsdtpC/?=
+ =?us-ascii?Q?c4gQm6kqdtXvU3qj5mCa2J62XzGLMg8jxW5wtzqcCq3o6doC+Kws66trCU3j?=
+ =?us-ascii?Q?i4oKgSykSK7tFT3t7DWupH0N2PAa3AbBr459htNk/HKiogfWTO1RB6KUsaO+?=
+ =?us-ascii?Q?tOzFiTmyLrXnAN2DSiMXADGj39WeBY4PgaA4XIDHsnv26w8XzRQz2wxqaFom?=
+ =?us-ascii?Q?b4adtdkw4/2Uy/wI0M8y0wjxSRcIDPlGmA9ilqCyAuO9HUkBBvlp91kd9JR0?=
+ =?us-ascii?Q?yZrkRTrmL7hSk6wkmr18Xok2LtWxP1/V91RI9KlEw7DlnowWU1xcbQDYaB09?=
+ =?us-ascii?Q?FISvXQ3VbXCn6Kry3XCZ0HA6fSkjZbbDkQVJn6wrugoz3vzpz7LXl2UtjO35?=
+ =?us-ascii?Q?cFWz3+tq/zhzHiedfQLLlLrBTDG6Vsmt/zZcl4yQ?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 10 Sep 2024 21:43:18 -0700
-From: "Daniel Xu" <dxu@dxuuu.xyz>
-To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>
-Cc: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- "Eduard Zingerman" <eddyz87@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Alexei Starovoitov" <ast@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>,
- LKML <linux-kernel@vger.kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- "Kernel Team" <kernel-team@meta.com>
-Message-Id: <8a088e49-2b40-4a04-ae16-57cdddde09bc@app.fastmail.com>
-In-Reply-To: 
- <cz7qwrujjiunv3yydkfamfm5mkis5xdy4vg4odwatchjoaoolk@zzithxrzdxkv>
-References: 
- <18a9ddacc99bb95e9802f8ad1e81214433df496c.1725929645.git.dxu@dxuuu.xyz>
- <CAADnVQKyfZ2-qCvmqG8z919ggdOszEjTs04H=cTGOZTi-zhx7Q@mail.gmail.com>
- <CAEf4Bza5Fiw2rZ5T7=zRwVk1Ct1Mgm7Gpa8w+NJVPZf8keY_9Q@mail.gmail.com>
- <vru2zgphyfywjcqikolwotsfun2bgtrnfmwvfls5ra4tznsydr@46w5rq7gqepz>
- <4ec8e15b-c44b-41d7-b337-32d17306d67b@app.fastmail.com>
- <CAEf4BzbHqKD87KTSmFUMokXEaAa70xNs96QqfWBHjFbuE5PL=w@mail.gmail.com>
- <rsdwvah5ov3itchsgkwgleihswoycoal5vjbeql2wbqoz5noiz@myk2atnnjaub>
- <CAEf4BzbKoyja2ErsusUcK8YaS1Rqm0VmBzwsNtQtM1-XHDhD7g@mail.gmail.com>
- <cz7qwrujjiunv3yydkfamfm5mkis5xdy4vg4odwatchjoaoolk@zzithxrzdxkv>
-Subject: Re: [PATCH bpf-next] bpf: ringbuf: Support consuming BPF_MAP_TYPE_RINGBUF from
- prog
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5271.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b11d11ba-c4c7-4d00-b339-08dcd228b25b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2024 06:12:21.2272
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Gfsd6wrqhp76Q4cG6Oem0MsPRUQpjWNA9xiaoIMDCVB/Wv6wiyut+W0jUHPeG6RwZ3czg06K3dpI9z3n0L+biQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR11MB8509
+X-OriginatorOrg: intel.com
 
-[cc Jesper]
-
-On Tue, Sep 10, 2024, at 8:31 PM, Daniel Xu wrote:
-> On Tue, Sep 10, 2024 at 05:39:55PM GMT, Andrii Nakryiko wrote:
->> On Tue, Sep 10, 2024 at 4:44=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wro=
-te:
->> >
->> > On Tue, Sep 10, 2024 at 03:21:04PM GMT, Andrii Nakryiko wrote:
->> > > On Tue, Sep 10, 2024 at 3:16=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz>=
- wrote:
->> > > >
->> > > >
->> > > >
->> > > > On Tue, Sep 10, 2024, at 2:07 PM, Daniel Xu wrote:
->> > > > > On Tue, Sep 10, 2024 at 01:41:41PM GMT, Andrii Nakryiko wrote:
->> > > > >> On Tue, Sep 10, 2024 at 11:36=E2=80=AFAM Alexei Starovoitov
->> > > > [...]
->> > > > >
->> > > > >>
->> > > > >> Also, Daniel, can you please make sure that dynptr we return=
- for each
->> > > > >> sample is read-only? We shouldn't let consumer BPF program a=
-bility to
->> > > > >> corrupt ringbuf record headers (accidentally or otherwise).
->> > > > >
->> > > > > Sure.
->> > > >
->> > > > So the sample is not read-only. But I think prog is prevented f=
-rom messing
->> > > > with header regardless.
->> > > >
->> > > > __bpf_user_ringbuf_peek() returns sample past the header:
->> > > >
->> > > >         *sample =3D (void *)((uintptr_t)rb->data +
->> > > >                            (uintptr_t)((cons_pos + BPF_RINGBUF_=
-HDR_SZ) & rb->mask));
->> > > >
->> > > > dynptr is initialized with the above ptr:
->> > > >
->> > > >         bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL,=
- 0, size);
->> > > >
->> > > > So I don't think there's a way for the prog to access the heade=
-r thru the dynptr.
->> > > >
->> > >
->> > > By "header" I mean 8 bytes that precede each submitted ringbuf re=
-cord.
->> > > That header is part of ringbuf data area. Given user space can set
->> > > consumer_pos to arbitrary value, kernel can return arbitrary part=
- of
->> > > ringbuf data area, including that 8 byte header. If that data is
->> > > writable, it's easy to screw up that header and crash another BPF
->> > > program that reserves/submits a new record. User space can only r=
-ead
->> > > data area for BPF ringbuf, and so we rely heavily on a tight cont=
-rol
->> > > of who can write what into those 8 bytes.
->> >
->> > Ah, ok. I think I understand.
->> >
->> > Given this and your other comments about rb->busy, what about enfor=
-cing
->> > bpf_user_ringbuf_drain() NAND mmap? I think the use cases here are
->> > different enough where this makes sense.
->>=20
->> You mean disabling user-space mmap()? TBH, I'd like to understand the
->> use case first before we make such decisions. Maybe what you need is
->> not really a BPF ringbuf? Can you give us a bit more details on what
->> you are trying to achieve?
->
-> BPF cpumap, under the hood, has one MPSC ring buffer (ptr_ring) for ea=
-ch
-> entry in the cpumap. When a prog redirects to an entry in the cpumap,
-> the machinery queues up the xdp frame onto the destination CPU ptr_rin=
-g.
-> This can occur on any cpu, thus multi-producer. On processing side,
-> there is only the kthread created by the cpumap entry and bound to the
-> specific cpu that is consuming entries. So single consumer.
->
-> Goal is to track the latency overhead added from ptr_ring and the
-> kthread (versus softirq where is less overhead). Ideally we want p50,
-> p90, p95, p99 percentiles.
->
-> To do this, we need to track every single entry enqueue time as well as
-> dequeue time - events that occur in the tail are quite important.
->
-> Since ptr_ring is also a ring buffer, I thought it would be easy,
-> reliable, and fast to just create a "shadow" ring buffer. Every time
-> producer enqueues entries, I'd enqueue the same number of current
-> timestamp onto shadow RB. Same thing on consumer side, except dequeue
-> and calculate timestamp delta.
->
-> I was originally planning on writing my own lockless ring buffer in pu=
-re
-> BPF (b/c spinlocks cannot be used w/ tracepoints yet) but was hoping I
-> could avoid that with this patch.
-
+> From: Nicolin Chen <nicolinc@nvidia.com>
+> Sent: Wednesday, August 28, 2024 1:00 AM
+>=20
 [...]
+> On a multi-IOMMU system, the VIOMMU object can be instanced to the
+> number
+> of vIOMMUs in a guest VM, while holding the same parent HWPT to share
+> the
 
-Alternatively, could add a u64 timestamp to xdp_frame, which makes all
-this tracking inline (and thus more reliable). But I'm not sure how prec=
-ious
-the space in that struct is - I see some references online saying most d=
-rivers
-save 128B headroom. I also see:
+Is there restriction that multiple vIOMMU objects can be only created
+on a multi-IOMMU system?
 
-        #define XDP_PACKET_HEADROOM 256
+> stage-2 IO pagetable. Each VIOMMU then just need to only allocate its own
+> VMID to attach the shared stage-2 IO pagetable to the physical IOMMU:
 
-Could probably amortize the timestamp read by setting it in
-bq_flush_to_queue().
+this reads like 'VMID' is a virtual ID allocated by vIOMMU. But from the
+entire context it actually means the physical 'VMID' allocated on the
+associated physical IOMMU, correct?
