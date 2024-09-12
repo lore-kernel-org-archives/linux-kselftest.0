@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D94E1A7244
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 13:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B951A4E83
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 13:06:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726146418; cv=none; b=oGZAKOLbYHLJVWNLGhjMXFxajRSDnxYN/6Cl4izCzjkJkVC7wABPcmpm5Gwe9Eo3HVmrfk3HCnJWVTOnbbg27WlYToSetnfVFpKqqWEXtVHItquOpEfFnc5YIH5aoHhwSfKhXrxv+6kttrE/McboOyFrH3SyXplkpCYI3KpwfhY=
+	t=1726146421; cv=none; b=L3hOGaiNA7eoYYs+QQZtkTsThu8Pyb1mkQ2faz5U4/XrxD1ExI2rKLXY8v+rREYnXK1Gw5JTKFBWCSg4mtQ5K8yB+Ng134Dz/dhE1mti3Rb2RCvg7CFHU3Pw5fueL2CDocZ0QDZWWBXzwoTJJ1C/hbylH3m3xh8aiqhcIEDiQMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726146418; c=relaxed/simple;
-	bh=4dpbprSguYvAvcEoPZer3MUwMCAsWK11eh3Fv/656oc=;
+	s=arc-20240116; t=1726146421; c=relaxed/simple;
+	bh=BudDgrzpUi9w3UHcUcy5uREfcPNidqfvUxKeTlW+hzw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VmW8wpZC2TTTNe6Qc9psg5Mr/JVd94oHs3TVL7/NH54Kn1i8rcRGtkawkTnEnzjdg2d5wVTxdL5cJOD5FPIDs3BYAVZ+MKner/O5/r+58QT1KDBu3KKB1k3EGxjh2ezu98UJhI0uiCfrIpEYjOO0vN9gDxrcU+NCP4pBGR8Rx5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nlppVJxo; arc=none smtp.client-ip=192.198.163.11
+	 MIME-Version; b=YLwVwMlqfYXW9I/+l+0EMEfgvVBBnPTyb6fV4penRDbMZie6B5kuC1WyJBkvXpfq41txxFAs8C/yCUE6zdBQeTxs6HYpX45k98zw3WqhKbbCM1UxnU9CQC0vK9nAf0/TgJp98SEDm2yi3x/ATwr7jx2abMlPhkYVzdnJ3ZDel1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dGvCM84t; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nlppVJxo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dGvCM84t"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726146417; x=1757682417;
+  t=1726146419; x=1757682419;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=4dpbprSguYvAvcEoPZer3MUwMCAsWK11eh3Fv/656oc=;
-  b=nlppVJxo8Gb/f4QCNeNc4tKMbQnaXEI332DpYK+34FT0guYBnVM3qN6P
-   A1bPC/GUyKGu8IjjMZT0eD2bNEP5kIcGzOcgLFDP+ApUkhWu35SMGVAHN
-   YoqCUr8EYYoAKDLeG8NhMEjUR7dIdYz2hrLt2aXWRAqTH8Kdk3AocNrzd
-   LxyScjC3FLymTEw0skZp+XWG7yQZwKomZln1vNopGxxGhpmQi0MlD/vcW
-   1IPV+cbQneO+n7us4X3VZO6s7WbAh9VaFeSwxKXrdO2Ku2f1WKmaIMs6D
-   nu+VXDZOi5via2GeaHzK2muuDmcqU4K4MjDhbU7kGsfTpxdkWk+CYIUI1
-   g==;
-X-CSE-ConnectionGUID: 3oZ92aDgRJ+5Vg7IyN3VfA==
-X-CSE-MsgGUID: C9RiNu5dRgi2COpJEc8Bmw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="35585686"
+  bh=BudDgrzpUi9w3UHcUcy5uREfcPNidqfvUxKeTlW+hzw=;
+  b=dGvCM84tfUlDLUJFpuhGEthSw8JtFugUQeXckbBDl/E0/pQAgqBB80gf
+   7hgKmVYJ33Y8wqXVH/q/VkrGzzM1AVslzLoDOq3FXfKwq34XfuuhVGzcV
+   Dg6Bpo7ABvNrKgaCVP8/m0zuNBzZz9A+X75nCpDaR+EPVypVTbNEy7rHT
+   hQp+kp0yt6LmAgOAUm5UioSZVFYK+Jt7v3X1rIJ2VtRVY+ACFwG18DZ7M
+   lD48N04ZOsMroXBcjB2DZC7dYloVMKg9LigpDEf9oZI1fB7bYIjz4L8CF
+   VR+qItlkMafhR68lyQNBLWbmNi33wq3LKJbPR5Qb7AvcjXR8eiVS1gD4m
+   Q==;
+X-CSE-ConnectionGUID: xyMKWh+pRmW6H5IVPqf0Gw==
+X-CSE-MsgGUID: FEKHHHEpRNGStJ7TTMIP8A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="35585702"
 X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="35585686"
+   d="scan'208";a="35585702"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 06:06:56 -0700
-X-CSE-ConnectionGUID: dd2GyVCjTOKx3PNxRQwV7w==
-X-CSE-MsgGUID: 6kL129XcQGCcLCmySqwn7w==
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 06:06:58 -0700
+X-CSE-ConnectionGUID: +qFEQsy/Q62xL0ZzVpQLrQ==
+X-CSE-MsgGUID: iACBXHYfRfiRuUVQ2bXtJQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="68211614"
+   d="scan'208";a="68211628"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orviesa007.jf.intel.com with ESMTP; 12 Sep 2024 06:06:56 -0700
+  by orviesa007.jf.intel.com with ESMTP; 12 Sep 2024 06:06:58 -0700
 From: Yi Liu <yi.l.liu@intel.com>
 To: joro@8bytes.org,
 	jgg@nvidia.com,
@@ -57,9 +57,9 @@ Cc: alex.williamson@redhat.com,
 	zhenzhong.duan@intel.com,
 	linux-kselftest@vger.kernel.org,
 	vasant.hegde@amd.com
-Subject: [PATCH 1/3] iommu/arm-smmu-v3: Make smmuv3 blocked domain support PASID
-Date: Thu, 12 Sep 2024 06:06:51 -0700
-Message-Id: <20240912130653.11028-2-yi.l.liu@intel.com>
+Subject: [PATCH 3/3] iommu: Add a wrapper for remove_dev_pasid
+Date: Thu, 12 Sep 2024 06:06:53 -0700
+Message-Id: <20240912130653.11028-4-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240912130653.11028-1-yi.l.liu@intel.com>
 References: <20240912130653.11028-1-yi.l.liu@intel.com>
@@ -71,64 +71,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Jason Gunthorpe <jgg@nvidia.com>
+The iommu drivers are on the way to drop the remove_dev_pasid op by
+extending the blocked_domain to support PASID. However, this cannot be
+done in one shot. So far, the Intel iommu and the ARM SMMUv3 driver have
+supported it, while the AMD iommu driver has not yet. During this
+transition, the IOMMU core needs to support both ways to destroy the
+attachment of device/PASID and domain.
 
-The blocked domain is used to park RID to be blocking DMA state. This
-can be extended to PASID as well. By this, the remove_dev_pasid() op
-of ARM SMMUv3 can be dropped.
-
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/iommu/iommu.c | 30 ++++++++++++++++++++++++------
+ 1 file changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index f7a73b854151..ca768f04f378 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -2933,13 +2933,12 @@ int arm_smmu_set_pasid(struct arm_smmu_master *master,
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index f3f81c04b8fb..b6b44b184004 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -3324,6 +3324,28 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group)
+ }
+ EXPORT_SYMBOL_GPL(iommu_group_dma_owner_claimed);
+ 
++/*
++ * This is only needed in the transition of dropping remove_dev_pasid op
++ * by adding set_dev_pasid op for the blocked domains.
++ */
++static void iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid,
++				   struct iommu_domain *domain)
++{
++	const struct iommu_ops *ops = dev_iommu_ops(dev);
++	struct iommu_domain *blocked_domain = ops->blocked_domain;
++	int ret = 1;
++
++	if (blocked_domain->ops->set_dev_pasid) {
++		ret = blocked_domain->ops->set_dev_pasid(blocked_domain,
++							 dev, pasid, domain);
++	} else if (ops->remove_dev_pasid) {
++		ops->remove_dev_pasid(dev, pasid, domain);
++		ret = 0;
++	}
++
++	WARN_ON(ret);
++}
++
+ static int __iommu_set_group_pasid(struct iommu_domain *domain,
+ 				   struct iommu_group *group, ioasid_t pasid)
+ {
+@@ -3342,11 +3364,9 @@ static int __iommu_set_group_pasid(struct iommu_domain *domain,
+ err_revert:
+ 	last_gdev = device;
+ 	for_each_group_device(group, device) {
+-		const struct iommu_ops *ops = dev_iommu_ops(device->dev);
+-
+ 		if (device == last_gdev)
+ 			break;
+-		ops->remove_dev_pasid(device->dev, pasid, domain);
++		iommu_remove_dev_pasid(device->dev, pasid, domain);
+ 	}
  	return ret;
  }
- 
--static void arm_smmu_remove_dev_pasid(struct device *dev, ioasid_t pasid,
--				      struct iommu_domain *domain)
-+static int arm_smmu_blocking_set_dev_pasid(struct iommu_domain *new_domain,
-+					   struct device *dev, ioasid_t pasid,
-+					   struct iommu_domain *old_domain)
+@@ -3356,11 +3376,9 @@ static void __iommu_remove_group_pasid(struct iommu_group *group,
+ 				       struct iommu_domain *domain)
  {
-+	struct arm_smmu_domain *smmu_domain = to_smmu_domain(old_domain);
- 	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
--	struct arm_smmu_domain *smmu_domain;
--
--	smmu_domain = to_smmu_domain(domain);
+ 	struct group_device *device;
+-	const struct iommu_ops *ops;
  
- 	mutex_lock(&arm_smmu_asid_lock);
- 	arm_smmu_clear_cd(master, pasid);
-@@ -2960,6 +2959,7 @@ static void arm_smmu_remove_dev_pasid(struct device *dev, ioasid_t pasid,
- 		    sid_domain->type == IOMMU_DOMAIN_BLOCKED)
- 			sid_domain->ops->attach_dev(sid_domain, dev);
+ 	for_each_group_device(group, device) {
+-		ops = dev_iommu_ops(device->dev);
+-		ops->remove_dev_pasid(device->dev, pasid, domain);
++		iommu_remove_dev_pasid(device->dev, pasid, domain);
  	}
-+	return 0;
  }
  
- static void arm_smmu_attach_dev_ste(struct iommu_domain *domain,
-@@ -3041,6 +3041,7 @@ static int arm_smmu_attach_dev_blocked(struct iommu_domain *domain,
- 
- static const struct iommu_domain_ops arm_smmu_blocked_ops = {
- 	.attach_dev = arm_smmu_attach_dev_blocked,
-+	.set_dev_pasid = arm_smmu_blocking_set_dev_pasid,
- };
- 
- static struct iommu_domain arm_smmu_blocked_domain = {
-@@ -3483,7 +3484,6 @@ static struct iommu_ops arm_smmu_ops = {
- 	.device_group		= arm_smmu_device_group,
- 	.of_xlate		= arm_smmu_of_xlate,
- 	.get_resv_regions	= arm_smmu_get_resv_regions,
--	.remove_dev_pasid	= arm_smmu_remove_dev_pasid,
- 	.dev_enable_feat	= arm_smmu_dev_enable_feature,
- 	.dev_disable_feat	= arm_smmu_dev_disable_feature,
- 	.page_response		= arm_smmu_page_response,
 -- 
 2.34.1
 
