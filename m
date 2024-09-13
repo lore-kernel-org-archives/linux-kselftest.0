@@ -1,230 +1,328 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DDB1D7E35
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Sep 2024 09:39:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2E21BD4EA;
+	Fri, 13 Sep 2024 09:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726220371; cv=none; b=I9RRcrNUnKyPkoze5JesDjBPxard1UkYG8rpxfY/WMxVoPcALYx0ItWjTV/gkfBGgZDWKb+wgKNtJSD8U0tCrNLX5WWWUnjIiiNpMRH7TKnlOfZfXwLKwUWz/Y5jYp5geazZSTskXGZ/pjGzp2Dfh0L2Ftjwg6YpOaFXYJ7sBZ8=
+	t=1726220424; cv=none; b=OeJ/f91lcAACdRs0RH+Fuzy1eP+CfljrQyYEnJlB3V2N3pyCBCvTYSU55Gsft0yi9rQiOcm7sZWPFlIl2zds0cvi3wGZF0DztIFcie7O3tgK6dw4I/oBgmyHwFE9+6uawFMX+6qwyCVx7yNhV/fE6QRHo42JCrcheAvBSRbgjbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726220371; c=relaxed/simple;
-	bh=14Em+5LUfU07AZhRuhVZlV8I2kuQVcaRcYhuB3emakA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=S7ETqu66pT4vpnvEK/eO9t/CV16AJnq+pz10jyaJ3eRDDMkadxvkjNXK1FeDZFjuotZQ77Iq3cxknHeimk61ArRKprG2//48FM2f9yE+dtFOstzv7Y2Nt3f9pZL1aPeSfKX9lkpLQXWfarN4f7w7CMi38uSZMkKjr1wReLZOYXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=L6C0V1B9; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1726220424; c=relaxed/simple;
+	bh=X4fAQMAelUS9clyaz9OffqdwJw26k8f3MTc5hg05xxU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jjHQB2ixdk+kl4tNCgTKxJ/fpvE7zXBxmntoKNKxqcByEHB7Xhc/NeNhzyvRCL8K9dXbSYsmg6PP2yqvUzgwOqJQe890XgMDMpMz8b0fRzbkF2bpwbl5jaWniBO7i7+ETMNiQ28CgOw7dKTCcg66aW2CyWNTx7Rn5CTvQ1Zqx5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qwc6QOZH; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="L6C0V1B9"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3770320574aso1379358f8f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Sep 2024 02:39:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qwc6QOZH"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7191ee537cbso1449816b3a.2;
+        Fri, 13 Sep 2024 02:40:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1726220366; x=1726825166; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8SPUqN3GZrlcNjwE+u8cOJWfk91PGP0vK3hoXybkak4=;
-        b=L6C0V1B9ThCrvHNddoT3ljveUKthVAwHmpOMbVvijk+yXwYtNmcNyorq7uVlnS/XEh
-         I2YxoCo/5/SqWFzdfSvLSdu1rD+e/6HrZm5O6ClpO3KujnXuAUjUvRghtp4nzfs5MvqA
-         B0XmM0avdW7fy2vNtkvckbZ42nK+93NKL+m9OnCBPR6pEvuSMXzNSI4A3Mp7DfnkZ89Z
-         F9/jV66nd5IGX3oOReLmT3dFnADxYDXr7VneQqkap225cS33dXbNtWDYjV4GUN9Yfr1u
-         nvyspk7NYMTVdKHRKEcg7lMmTzZJO9U55IeFyt2CAIh8EmdwGKc3tfQo3qCBa+ZjVbtZ
-         014g==
+        d=gmail.com; s=20230601; t=1726220422; x=1726825222; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i8ygMJ5LTZc1fQF15LFQbHHeNTeiKVtqwTRi7OzD+wk=;
+        b=Qwc6QOZHmDEwdZK82iThzXGuOUsZEB0AjuFzS4BkY448HCPSFBZsbX/IQigSP4Xeov
+         Pb/FgRfCiQ3YdPOOeQiXLp5AobwInstAtrALciJgS8qYH98ll3Mr9xC+cCUqscZTsB+T
+         CBseYXqgYmeULY+RcBnKunwNxsMv6QdGDTq99sw8McJTgK2fW6EGgVNZu1PGFMEGjJCo
+         QpR2ong6z1NkmMBa5X9IEYaHvCpwsePTjc4marNcsStmhzVt/fUD5VR9co871WPYb6BB
+         guVmCMQmU3iYGhWydccezsk2MdR3AQaCqYp/jqU5Juyn79hw/WY83LpliU7qCmDWEsz5
+         +dAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726220366; x=1726825166;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8SPUqN3GZrlcNjwE+u8cOJWfk91PGP0vK3hoXybkak4=;
-        b=tkKtZjfIeIkSFEhR9bUbmrYKYakIsiRY20wLhwph7g4sUkGAMV1jH+hHwfaK6H4iq+
-         qGAj4sMcrXsaUEb61m+91+RtQcLi9ptwt33vOUrmANHEgx60Mju1l71BV0S4ftDb4G/m
-         y16tCXHu/O1mgLochzBdNQNta65Dd2hCH0+YFMlk8TuyIKElTsLLaeZvpYKsv6TBoJhd
-         kAh8ARL0F/F4CsuHbIKQW4toRLkdrW7C+nNYy273C4HawUy+oq6NNM9hEv7s20GOCX9M
-         qcMgmtHVfutRM8+WonCjGxNBsjicdmIFXD/fFjumlxTKiMmeRMT2qN3auNh2+/9zZfOy
-         VHiA==
-X-Forwarded-Encrypted: i=1; AJvYcCU88C8VMu8SPLnCDodUlS7cjGKqRaZ2NOW+djCROKv0p8EAQNqelWKhYmuokCZEMM8kypzRtpZRk37OLi0OVvE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKt5pYuJjOULGqR+MNZc0ciFcmBQCPF/3TqNycKfs28gDbRQ2W
-	R4GaE1eTfHPE9Rnb2P4jMzDcZpvhxuiIK8USW6qRU986YVgD6iCIyc97r4FA6a4=
-X-Google-Smtp-Source: AGHT+IEP6gH+9G56Ca89xPoHtYf+GM04fd32svCb2j76cjibtD28Ka5SMKWWnsCP22WUeZmsjTzWEA==
-X-Received: by 2002:a05:6000:e09:b0:374:ca92:5e44 with SMTP id ffacd0b85a97d-378c2d121d6mr3535737f8f.32.1726220365954;
-        Fri, 13 Sep 2024 02:39:25 -0700 (PDT)
-Received: from [127.0.1.1] ([2a09:bac5:3802:d2::15:37a])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37895665548sm16474484f8f.34.2024.09.13.02.39.25
+        d=1e100.net; s=20230601; t=1726220422; x=1726825222;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i8ygMJ5LTZc1fQF15LFQbHHeNTeiKVtqwTRi7OzD+wk=;
+        b=DVjyWetG5YjeaeTpxxdz6Qqxg7myZcP3ryXgfxRCFeG8g+GZVhlAHdpvItANaBIurK
+         y891QWxzLp7N210erNiPhAqx6IaB7DFG7HBjRRzgwVx+uagc+u5oSRBjFvtMeQQ1jdbR
+         v0tOT7c5zHuDgBux95kMHdKfcmgJDiO2bC1wuxVMK39Ofv9odl8Jh0Cs5MB50vI5Tmh3
+         EF05phpJ8AFAyvL5QEVs3uLFEAcjBna1552rW0KpoEMkUIr2NGzHvTjFUHhR1x77zcTV
+         kIQxHHdCjqmK0HrtOZjftL8260oZXH+OFjxyVBwNMOK1W5d9Au6Q2k8zMyYujvvDOQbB
+         oBBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV031oU5Sjg0JNPYTxZHtA9AIY668hORH7/0gMKAvZT62bIQ8dPp/dmcpwAdlmmv4K9hvhqczwSy0qbR3rsbbHD@vger.kernel.org, AJvYcCXESektIS0vFZLpY4z0Y9ka4DE/fdb+5u2dS692roDvF6Ox2i22ngUHAX8xTBs2G5fOC68HQ4mQ@vger.kernel.org, AJvYcCXEU4o0nMxJgzm3CKy1aD5LeiskZKa2cG/vp+kSZ+hNgXrnHXmkH77Y0MvnsO9btIdT6WRFRa4B0dNCzeU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnGGVTpDP8SrzHNK2sXkcC2F6nPhvh4CaZqhaZNgqUWjQ2D0oa
+	TINwtWkWC+XjjZuW0Oyvl5IH2OxZ3MZOKZBDDcFv36J5OX5CE9eh
+X-Google-Smtp-Source: AGHT+IGSmMWfT8V1KS8SDbuat+WOLdwEW4lNv0Riu16Ao10Gy0TcpLnW7C1BNh2/GSQSEuiyVal5sw==
+X-Received: by 2002:a05:6a00:1988:b0:718:d573:25b9 with SMTP id d2e1a72fcca58-719260931a7mr7714812b3a.16.1726220421516;
+        Fri, 13 Sep 2024 02:40:21 -0700 (PDT)
+Received: from localhost.localdomain ([159.196.197.79])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-719090d469bsm5738932b3a.210.2024.09.13.02.40.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2024 02:39:25 -0700 (PDT)
-From: Tiago Lam <tiagolam@cloudflare.com>
-Date: Fri, 13 Sep 2024 10:39:20 +0100
-Subject: [RFC PATCH 2/3] ipv6: Run a reverse sk_lookup on sendmsg.
+        Fri, 13 Sep 2024 02:40:21 -0700 (PDT)
+From: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>
+Cc: Jamie Bainbridge <jamie.bainbridge@gmail.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net] selftests: forwarding: Avoid false MDB delete/flush failures
+Date: Fri, 13 Sep 2024 19:40:04 +1000
+Message-Id: <b77ab871df2475df37aa29672c9bbcc33d03e90f.1726220359.git.jamie.bainbridge@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240913-reverse-sk-lookup-v1-2-e721ea003d4c@cloudflare.com>
-References: <20240913-reverse-sk-lookup-v1-0-e721ea003d4c@cloudflare.com>
-In-Reply-To: <20240913-reverse-sk-lookup-v1-0-e721ea003d4c@cloudflare.com>
-To: "David S. Miller" <davem@davemloft.net>, 
- David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Jakub Sitnicki <jakub@cloudflare.com>, Tiago Lam <tiagolam@cloudflare.com>, 
- kernel-team@cloudflare.com
-X-Mailer: b4 0.14.1
+Content-Transfer-Encoding: 8bit
 
-This follows the same rationale provided for the ipv4 counterpart, where
-it now runs a reverse socket lookup when source addresses and/or ports
-are changed, on sendmsg, to check whether egress traffic should be
-allowed to go through or not.
+Running this test on a small system produces different failures every
+test checking deletions, and some flushes. From different test runs:
 
-As with ipv4, the ipv6 sendmsg path is also extended here to support the
-IPV6_ORIGDSTADDR ancilliary message to be able to specify a source
-address/port.
+TEST: Common host entries configuration tests (L2)                [FAIL]
+  Failed to delete L2 host entry
 
-Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Tiago Lam <tiagolam@cloudflare.com>
+TEST: Common port group entries configuration tests (IPv4 (S, G)) [FAIL]
+  IPv4 (S, G) entry with VLAN 10 not deleted when VLAN was not specified
+
+TEST: Common port group entries configuration tests (IPv6 (*, G)) [FAIL]
+  IPv6 (*, G) entry with VLAN 10 not deleted when VLAN was not specified
+
+TEST: Flush tests                                                 [FAIL]
+  Entry not flushed by specified VLAN ID
+
+TEST: Flush tests                                                 [FAIL]
+  IPv6 host entry not flushed by "nopermanent" state
+
+Add a short sleep after deletion and flush to resolve this.
+
+Tested using 25 test runs in a row, resulting in 100% pass OK.
+
+Create a variable just for this test to allow short sleep, the default
+WAIT_TIME of 5 seconds makes the test far longer than necessary.
+
+Fixes: b6d00da08610 ("selftests: forwarding: Add bridge MDB test")
+Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
 ---
- net/ipv6/datagram.c | 76 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- net/ipv6/udp.c      |  8 ++++--
- 2 files changed, 82 insertions(+), 2 deletions(-)
+ .../selftests/net/forwarding/bridge_mdb.sh    | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
-index fff78496803d..4214dda1c320 100644
---- a/net/ipv6/datagram.c
-+++ b/net/ipv6/datagram.c
-@@ -756,6 +756,27 @@ void ip6_datagram_recv_ctl(struct sock *sk, struct msghdr *msg,
- }
- EXPORT_SYMBOL_GPL(ip6_datagram_recv_ctl);
+diff --git a/tools/testing/selftests/net/forwarding/bridge_mdb.sh b/tools/testing/selftests/net/forwarding/bridge_mdb.sh
+index d9d587454d207931a539f59be15cbc63d471888f..b3a2a7bc1824f4c394267b283b89e7a3ae19b0fb 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_mdb.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_mdb.sh
+@@ -30,6 +30,9 @@ ALL_TESTS="
+ 	ctrl_test
+ "
  
-+static inline bool reverse_sk_lookup(struct flowi6 *fl6, struct sock *sk,
-+				     struct in6_addr *saddr, __be16 sport)
-+{
-+	if (static_branch_unlikely(&bpf_sk_lookup_enabled) &&
-+	    (saddr && sport) &&
-+	    (ipv6_addr_cmp(&sk->sk_v6_rcv_saddr, saddr) || inet_sk(sk)->inet_sport != sport)) {
-+		struct sock *sk_egress;
++# time to wait for delete and flush to complete
++: "${SETTLE_DELAY:=0.1}"
 +
-+		bpf_sk_lookup_run_v6(sock_net(sk), IPPROTO_UDP, &fl6->daddr, fl6->fl6_dport,
-+				     saddr, ntohs(sport), 0, &sk_egress);
-+		if (!IS_ERR_OR_NULL(sk_egress) &&
-+		    atomic64_read(&sk_egress->sk_cookie) == atomic64_read(&sk->sk_cookie))
-+			return true;
-+
-+		net_info_ratelimited("No reverse socket lookup match for local addr %pI6:%d remote addr %pI6:%d\n",
-+				     &saddr, ntohs(sport), &fl6->daddr, ntohs(fl6->fl6_dport));
-+	}
-+
-+	return false;
-+}
-+
- int ip6_datagram_send_ctl(struct net *net, struct sock *sk,
- 			  struct msghdr *msg, struct flowi6 *fl6,
- 			  struct ipcm6_cookie *ipc6)
-@@ -844,7 +865,62 @@ int ip6_datagram_send_ctl(struct net *net, struct sock *sk,
+ NUM_NETIFS=4
+ source lib.sh
+ source tc_common.sh
+@@ -152,6 +155,7 @@ cfg_test_host_common()
+ 	check_fail $? "Managed to replace $name host entry"
  
- 			break;
- 		    }
-+		case IPV6_ORIGDSTADDR:
-+			{
-+			struct sockaddr_in6 *sockaddr_in;
-+			struct net_device *dev = NULL;
-+
-+			if (cmsg->cmsg_len < CMSG_LEN(sizeof(struct sockaddr_in6))) {
-+				err = -EINVAL;
-+				goto exit_f;
-+			}
-+
-+			sockaddr_in = (struct sockaddr_in6 *)CMSG_DATA(cmsg);
-+
-+			addr_type = __ipv6_addr_type(&sockaddr_in->sin6_addr);
-+
-+			if (addr_type & IPV6_ADDR_LINKLOCAL)
-+				return -EINVAL;
-+
-+			/* If we're egressing with a different source address and/or port, we
-+			 * perform a reverse socket lookup.  The rationale behind this is that we
-+			 * can allow return UDP traffic that has ingressed through sk_lookup to
-+			 * also egress correctly. In case the reverse lookup fails, we
-+			 * continue with the normal path.
-+			 *
-+			 * The lookup is performed if either source address and/or port changed, and
-+			 * neither is "0".
-+			 */
-+			if (reverse_sk_lookup(fl6, sk, &sockaddr_in->sin6_addr,
-+					      sockaddr_in->sin6_port)) {
-+				/* Override the source port and address to use with the one we
-+				 * got in cmsg and bail early.
-+				 */
-+				fl6->saddr = sockaddr_in->sin6_addr;
-+				fl6->fl6_sport = sockaddr_in->sin6_port;
-+				break;
-+			}
+ 	bridge mdb del dev br0 port br0 grp $grp $state vid 10
++	sleep "$SETTLE_DELAY"
+ 	bridge mdb get dev br0 grp $grp vid 10 &> /dev/null
+ 	check_fail $? "Failed to delete $name host entry"
  
-+			if (addr_type != IPV6_ADDR_ANY) {
-+				int strict = __ipv6_addr_src_scope(addr_type) <= IPV6_ADDR_SCOPE_LINKLOCAL;
-+
-+				if (!ipv6_can_nonlocal_bind(net, inet_sk(sk)) &&
-+				    !ipv6_chk_addr_and_flags(net,
-+							     &sockaddr_in->sin6_addr,
-+							     dev, !strict, 0,
-+							     IFA_F_TENTATIVE) &&
-+				    !ipv6_chk_acast_addr_src(net, dev,
-+							     &sockaddr_in->sin6_addr))
-+					err = -EINVAL;
-+				else
-+					fl6->saddr = sockaddr_in->sin6_addr;
-+			}
-+
-+			if (err)
-+				goto exit_f;
-+
-+			break;
-+			}
- 		case IPV6_FLOWINFO:
- 			if (cmsg->cmsg_len < CMSG_LEN(4)) {
- 				err = -EINVAL;
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 6602a2e9cdb5..6121cbb71ad3 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -1476,6 +1476,12 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+@@ -208,6 +212,7 @@ cfg_test_port_common()
+ 	check_err $? "Failed to replace $name entry"
  
- 	fl6->flowi6_uid = sk->sk_uid;
+ 	bridge mdb del dev br0 port $swp1 $grp_key permanent vid 10
++	sleep "$SETTLE_DELAY"
+ 	bridge mdb get dev br0 $grp_key vid 10 &> /dev/null
+ 	check_fail $? "Failed to delete $name entry"
  
-+	/* We use fl6's daddr and fl6_sport in the reverse sk_lookup done
-+	 * within ip6_datagram_send_ctl() now.
-+	 */
-+	fl6->daddr = *daddr;
-+	fl6->fl6_sport = inet->inet_sport;
-+
- 	if (msg->msg_controllen) {
- 		opt = &opt_space;
- 		memset(opt, 0, sizeof(struct ipv6_txoptions));
-@@ -1511,10 +1517,8 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+@@ -230,6 +235,7 @@ cfg_test_port_common()
+ 	check_err $? "$name entry with VLAN 20 not added when VLAN was not specified"
  
- 	fl6->flowi6_proto = sk->sk_protocol;
- 	fl6->flowi6_mark = ipc6.sockc.mark;
--	fl6->daddr = *daddr;
- 	if (ipv6_addr_any(&fl6->saddr) && !ipv6_addr_any(&np->saddr))
- 		fl6->saddr = np->saddr;
--	fl6->fl6_sport = inet->inet_sport;
+ 	bridge mdb del dev br0 port $swp1 $grp_key permanent
++	sleep "$SETTLE_DELAY"
+ 	bridge mdb get dev br0 $grp_key vid 10 &> /dev/null
+ 	check_fail $? "$name entry with VLAN 10 not deleted when VLAN was not specified"
+ 	bridge mdb get dev br0 $grp_key vid 20 &> /dev/null
+@@ -310,6 +316,7 @@ __cfg_test_port_ip_star_g()
+ 	bridge -d mdb get dev br0 grp $grp src $src1 vid 10 &> /dev/null
+ 	check_err $? "(S, G) entry not created"
+ 	bridge mdb del dev br0 port $swp1 grp $grp vid 10
++	sleep "$SETTLE_DELAY"
+ 	bridge -d mdb get dev br0 grp $grp vid 10 &> /dev/null
+ 	check_fail $? "(*, G) entry not deleted"
+ 	bridge -d mdb get dev br0 grp $grp src $src1 vid 10 &> /dev/null
+@@ -828,6 +835,7 @@ cfg_test_flush()
+ 	bridge mdb add dev br0 port $swp1 grp 239.1.1.8 vid 10 temp
  
- 	if (cgroup_bpf_enabled(CGROUP_UDP6_SENDMSG) && !connected) {
- 		err = BPF_CGROUP_RUN_PROG_UDP6_SENDMSG_LOCK(sk,
-
+ 	bridge mdb flush dev br0
++	sleep "$SETTLE_DELAY"
+ 	num_entries=$(bridge mdb show dev br0 | wc -l)
+ 	[[ $num_entries -eq 0 ]]
+ 	check_err $? 0 "Not all entries flushed after flush all"
+@@ -840,6 +848,7 @@ cfg_test_flush()
+ 	bridge mdb add dev br0 port br0 grp 239.1.1.1 vid 10
+ 
+ 	bridge mdb flush dev br0 port $swp1
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp 239.1.1.1 vid 10 | grep -q "port $swp1"
+ 	check_fail $? "Entry not flushed by specified port"
+@@ -849,11 +858,13 @@ cfg_test_flush()
+ 	check_err $? "Host entry flushed by wrong port"
+ 
+ 	bridge mdb flush dev br0 port br0
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp 239.1.1.1 vid 10 | grep -q "port br0"
+ 	check_fail $? "Host entry not flushed by specified port"
+ 
+ 	bridge mdb flush dev br0
++	sleep "$SETTLE_DELAY"
+ 
+ 	# Check that when flushing by VLAN ID only entries programmed with the
+ 	# specified VLAN ID are flushed and the rest are not.
+@@ -864,6 +875,7 @@ cfg_test_flush()
+ 	bridge mdb add dev br0 port $swp2 grp 239.1.1.1 vid 20
+ 
+ 	bridge mdb flush dev br0 vid 10
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp 239.1.1.1 vid 10 &> /dev/null
+ 	check_fail $? "Entry not flushed by specified VLAN ID"
+@@ -871,6 +883,7 @@ cfg_test_flush()
+ 	check_err $? "Entry flushed by wrong VLAN ID"
+ 
+ 	bridge mdb flush dev br0
++	sleep "$SETTLE_DELAY"
+ 
+ 	# Check that all permanent entries are flushed when "permanent" is
+ 	# specified and that temporary entries are not.
+@@ -879,6 +892,7 @@ cfg_test_flush()
+ 	bridge mdb add dev br0 port $swp2 grp 239.1.1.1 temp vid 10
+ 
+ 	bridge mdb flush dev br0 permanent
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp 239.1.1.1 vid 10 | grep -q "port $swp1"
+ 	check_fail $? "Entry not flushed by \"permanent\" state"
+@@ -886,6 +900,7 @@ cfg_test_flush()
+ 	check_err $? "Entry flushed by wrong state (\"permanent\")"
+ 
+ 	bridge mdb flush dev br0
++	sleep "$SETTLE_DELAY"
+ 
+ 	# Check that all temporary entries are flushed when "nopermanent" is
+ 	# specified and that permanent entries are not.
+@@ -894,6 +909,7 @@ cfg_test_flush()
+ 	bridge mdb add dev br0 port $swp2 grp 239.1.1.1 temp vid 10
+ 
+ 	bridge mdb flush dev br0 nopermanent
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp 239.1.1.1 vid 10 | grep -q "port $swp1"
+ 	check_err $? "Entry flushed by wrong state (\"nopermanent\")"
+@@ -901,6 +917,7 @@ cfg_test_flush()
+ 	check_fail $? "Entry not flushed by \"nopermanent\" state"
+ 
+ 	bridge mdb flush dev br0
++	sleep "$SETTLE_DELAY"
+ 
+ 	# Check that L2 host entries are not flushed when "nopermanent" is
+ 	# specified, but flushed when "permanent" is specified.
+@@ -908,16 +925,19 @@ cfg_test_flush()
+ 	bridge mdb add dev br0 port br0 grp 01:02:03:04:05:06 permanent vid 10
+ 
+ 	bridge mdb flush dev br0 nopermanent
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp 01:02:03:04:05:06 vid 10 &> /dev/null
+ 	check_err $? "L2 host entry flushed by wrong state (\"nopermanent\")"
+ 
+ 	bridge mdb flush dev br0 permanent
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp 01:02:03:04:05:06 vid 10 &> /dev/null
+ 	check_fail $? "L2 host entry not flushed by \"permanent\" state"
+ 
+ 	bridge mdb flush dev br0
++	sleep "$SETTLE_DELAY"
+ 
+ 	# Check that IPv4 host entries are not flushed when "permanent" is
+ 	# specified, but flushed when "nopermanent" is specified.
+@@ -925,16 +945,19 @@ cfg_test_flush()
+ 	bridge mdb add dev br0 port br0 grp 239.1.1.1 temp vid 10
+ 
+ 	bridge mdb flush dev br0 permanent
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp 239.1.1.1 vid 10 &> /dev/null
+ 	check_err $? "IPv4 host entry flushed by wrong state (\"permanent\")"
+ 
+ 	bridge mdb flush dev br0 nopermanent
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp 239.1.1.1 vid 10 &> /dev/null
+ 	check_fail $? "IPv4 host entry not flushed by \"nopermanent\" state"
+ 
+ 	bridge mdb flush dev br0
++	sleep "$SETTLE_DELAY"
+ 
+ 	# Check that IPv6 host entries are not flushed when "permanent" is
+ 	# specified, but flushed when "nopermanent" is specified.
+@@ -942,16 +965,19 @@ cfg_test_flush()
+ 	bridge mdb add dev br0 port br0 grp ff0e::1 temp vid 10
+ 
+ 	bridge mdb flush dev br0 permanent
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp ff0e::1 vid 10 &> /dev/null
+ 	check_err $? "IPv6 host entry flushed by wrong state (\"permanent\")"
+ 
+ 	bridge mdb flush dev br0 nopermanent
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp ff0e::1 vid 10 &> /dev/null
+ 	check_fail $? "IPv6 host entry not flushed by \"nopermanent\" state"
+ 
+ 	bridge mdb flush dev br0
++	sleep "$SETTLE_DELAY"
+ 
+ 	# Check that when flushing by routing protocol only entries programmed
+ 	# with the specified routing protocol are flushed and the rest are not.
+@@ -961,6 +987,7 @@ cfg_test_flush()
+ 	bridge mdb add dev br0 port br0 grp 239.1.1.1 vid 10
+ 
+ 	bridge mdb flush dev br0 proto bgp
++	sleep "$SETTLE_DELAY"
+ 
+ 	bridge mdb get dev br0 grp 239.1.1.1 vid 10 | grep -q "port $swp1"
+ 	check_fail $? "Entry not flushed by specified routing protocol"
+@@ -970,20 +997,25 @@ cfg_test_flush()
+ 	check_err $? "Host entry flushed by wrong routing protocol"
+ 
+ 	bridge mdb flush dev br0
++	sleep "$SETTLE_DELAY"
+ 
+ 	# Test that an error is returned when trying to flush using unsupported
+ 	# parameters.
+ 
+ 	bridge mdb flush dev br0 src_vni 10 &> /dev/null
++	sleep "$SETTLE_DELAY"
+ 	check_fail $? "Managed to flush by source VNI"
+ 
+ 	bridge mdb flush dev br0 dst 198.51.100.1 &> /dev/null
++	sleep "$SETTLE_DELAY"
+ 	check_fail $? "Managed to flush by destination IP"
+ 
+ 	bridge mdb flush dev br0 dst_port 4789 &> /dev/null
++	sleep "$SETTLE_DELAY"
+ 	check_fail $? "Managed to flush by UDP destination port"
+ 
+ 	bridge mdb flush dev br0 vni 10 &> /dev/null
++	sleep "$SETTLE_DELAY"
+ 	check_fail $? "Managed to flush by destination VNI"
+ 
+ 	log_test "Flush tests"
 -- 
-2.34.1
+2.39.2
 
