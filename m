@@ -1,43 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FD3171E76;
-	Sat, 14 Sep 2024 05:26:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1F710E9;
+	Sat, 14 Sep 2024 08:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726291566; cv=none; b=Rvv6NGvRrY1X3wvh/Wp1aI/qdmXYinAJHX4LfQGDSerP1PqMKPNRQZtKxNJz6UTJDyMskL4iaMGD0HVZodMitEHa5il29BLzsl8GGEAbz8//iERqVyHT1+ie9THBpDRVfvp3DmDjYqAX21PtFZISw5VfpJNyQeYDxcf9SczR3rY=
+	t=1726304398; cv=none; b=OSRD5wUSQG2QkfHE6Mu/iX3DJNwvIvAn0E2+52zNG/0hZntrntq2g9o+E9xytw/Q8xmUefQSVCfwim1ol1IHhX0YWk991III6WTFyDJVNC5LaTfrUPThW2gvcerLWulgYNf1Ikv11GUUDnEzUN28IBW5bctPbRtXe4EIocDTEio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726291566; c=relaxed/simple;
-	bh=SptWBzVXVMO961EGzmJjmAEgdxo1I93o+UdFRaq7ucE=;
+	s=arc-20240116; t=1726304398; c=relaxed/simple;
+	bh=Lx4Uayf2bZvoedX3/yhCtCijyNoRRWxNLVzsgVEa+sU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=upYeUFOACZ/x/1x4IsppVElnbdIl3bPEY5Bj9GJScHjM3eZGBz6tJh+bvm7UPg1SKNeBt/Txb69jyssKs0/88S5XY/TNO6tPDHZ4XTzWqXVkxPhvG5iFGwt9khV6AWnqn4m96cBWf1ZXd2PcEbZELSTU+UsVZpEzTOA35f5We1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NTmTbFyc; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=mq/HqeFvCczP+A9g67m8JnMSbrm09xsuxXebZrAmwK7WF0eH43FNf7nR/RUm8yLh+hCqU6Y/9Qi0Xe+fyRT2svXau0FO3LJR6OQJdPBLmAdJb5uuoLKJ7/BwyWnIAbYk7Hvq4yckrcv6mVik48bu/noU4kdQlzV2hPJmYF3M1PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+5Sbrn9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NTmTbFyc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B04DC4CEC0;
-	Sat, 14 Sep 2024 05:26:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+5Sbrn9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7420FC4CEC0;
+	Sat, 14 Sep 2024 08:59:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726291566;
-	bh=SptWBzVXVMO961EGzmJjmAEgdxo1I93o+UdFRaq7ucE=;
+	s=k20201202; t=1726304397;
+	bh=Lx4Uayf2bZvoedX3/yhCtCijyNoRRWxNLVzsgVEa+sU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NTmTbFycChuNMeGaHfPrZmdAbuR5rxnULYrzBMhnfK/wtKHPS/qqAmyyZeXvpq76l
-	 OZDesFb/Fk8aDRwmHVHmxht5iPzLdXFYWxrDuI0SXIYok06vZ306PCyMjzvvqUDf66
-	 jXxrfS9f5Qa/rZ8RsooguQeIAbcuy3+v6JIAd0Er2ICI71PnPiIit071LMRh3rcLDn
-	 MXJRDmnFZSsT6cpRAjBIGeGwuoxk68peuSdB0Rp8SzX7sBu7hcdv274Uu2I5OPc39R
-	 R0jU03EkR3UXdLvoJ19RrVmRogZ13XJGk+U+hEcDgtZ1Qiwf6MugG7PEgY7htLmJXX
-	 0vCmtwSocQ+sw==
-Date: Sat, 14 Sep 2024 07:26:01 +0200
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
-	Peter Hutterer <peter.hutterer@who-t.net>, Vicki Pfau <vi@endrift.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: (subset) [PATCH HID v2 00/11] HID: bpf: add a new hook to
- control hid-generic
-Message-ID: <7al2grhs6qatjmxk2tft6widqfjwnklfljpppufy4ee62cehcy@peo2shxwyk5b>
-References: <20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org>
- <172623473588.1192461.11090201509053454593.b4-ty@kernel.org>
- <etbeblypdylnngwuwjfqkmkduk4iup7uq4c5zkwrssoi6u7jvg@gtf3gpzrloii>
+	b=A+5Sbrn9GRSU609E9s8t5X48RYczSb1qlH6knHFzSwzS/aKA/7aQE3FJFWRO6mbIB
+	 5O11H7pbI/yR4FI/vA+Tr3lR8y7CjA9q6WGW8eFeaouS90j7cnehlB0AzLOIhqKF1D
+	 +oLg8kp2ya62DPCFxVxj3pNstfOGfJVb7SdD9n7LUscORddDftDpfp6OFOGAVLIe8i
+	 bgfusueeOSH3HWZ2/vVPy1/jy+b0Z8qtk4pwwgIC89j0YYtK597GGkjYkEOyJ/9oww
+	 zh5NSo0GjoZlOdGnFWiWzwySzq7l28DndZWwWfDeXvJMr49KlKmi1loaptgdOTpt1+
+	 vdqQqWJSglP0g==
+Date: Sat, 14 Sep 2024 09:59:50 +0100
+From: Simon Horman <horms@kernel.org>
+To: Tiago Lam <tiagolam@cloudflare.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Jakub Sitnicki <jakub@cloudflare.com>, kernel-team@cloudflare.com
+Subject: Re: [RFC PATCH 2/3] ipv6: Run a reverse sk_lookup on sendmsg.
+Message-ID: <20240914085950.GC12935@kernel.org>
+References: <20240913-reverse-sk-lookup-v1-0-e721ea003d4c@cloudflare.com>
+ <20240913-reverse-sk-lookup-v1-2-e721ea003d4c@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,53 +59,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <etbeblypdylnngwuwjfqkmkduk4iup7uq4c5zkwrssoi6u7jvg@gtf3gpzrloii>
+In-Reply-To: <20240913-reverse-sk-lookup-v1-2-e721ea003d4c@cloudflare.com>
 
-On Sep 13 2024, Benjamin Tissoires wrote:
-> On Sep 13 2024, Benjamin Tissoires wrote:
-> > On Tue, 10 Sep 2024 23:43:36 +0900, Benjamin Tissoires wrote:
-> > > This is a slight change from the fundamentals of HID-BPF.
-> > > In theory, HID-BPF is abstract to the kernel itself, and makes
-> > > only changes at the HID level (through report descriptors or
-> > > events emitted to/from the device).
-> > > 
-> > > However, we have seen a few use cases where HID-BPF might interact with
-> > > the running kernel when the target device is already handled by a
-> > > specific device.
-> > > 
-> > > [...]
-> > 
-> > Applied to hid/hid.git (for-6.12/bpf), thanks!
-> > 
-> > [01/11] HID: bpf: move HID-BPF report descriptor fixup earlier
-> >         https://git.kernel.org/hid/hid/c/f10a11b7b599
-> > [02/11] HID: core: save one kmemdup during .probe()
-> >         https://git.kernel.org/hid/hid/c/6941754dbbc7
-> > [03/11] HID: core: remove one more kmemdup on .probe()
-> >         https://git.kernel.org/hid/hid/c/4fe29f36d2a3
-> > [04/11] HID: bpf: allow write access to quirks field in struct hid_device
-> >         https://git.kernel.org/hid/hid/c/b722f588adc6
-> > [05/11] selftests/hid: add dependency on hid_common.h
-> >         https://git.kernel.org/hid/hid/c/3d816765e12e
-> > [06/11] selftests/hid: cleanup C tests by adding a common struct uhid_device
-> >         https://git.kernel.org/hid/hid/c/28023a0f99d1
-> > [07/11] selftests/hid: allow to parametrize bus/vid/pid/rdesc on the test device
-> >         https://git.kernel.org/hid/hid/c/10d3147f9bb1
-> > [08/11] HID: add per device quirk to force bind to hid-generic
-> >         https://git.kernel.org/hid/hid/c/d030f826ea47
-> > [09/11] selftests/hid: add test for assigning a given device to hid-generic
-> >         https://git.kernel.org/hid/hid/c/10929078201f
-> > 
+On Fri, Sep 13, 2024 at 10:39:20AM +0100, Tiago Lam wrote:
+> This follows the same rationale provided for the ipv4 counterpart, where
+> it now runs a reverse socket lookup when source addresses and/or ports
+> are changed, on sendmsg, to check whether egress traffic should be
+> allowed to go through or not.
 > 
-> Just for completeness, I've dropped 10/11 and 11/11 when applying the
-> series because even if they are working it's unclear if the use case is
-> rock solid, like the first one is.
+> As with ipv4, the ipv6 sendmsg path is also extended here to support the
+> IPV6_ORIGDSTADDR ancilliary message to be able to specify a source
+
+Hi Tiago Lam,
+
+Some minor nits from my side.
+
+ancilliary -> ancillary
+
+Likewise in patch 3/3.
+Flagged by checkpatch.pl --codespell
+
+> address/port.
 > 
-> The patches are still on the LKML, so if anyone believes they required
-> it, we can alwasy pull them in later.
+> Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+> Signed-off-by: Tiago Lam <tiagolam@cloudflare.com>
+> ---
+>  net/ipv6/datagram.c | 76 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  net/ipv6/udp.c      |  8 ++++--
+>  2 files changed, 82 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
+> index fff78496803d..4214dda1c320 100644
+> --- a/net/ipv6/datagram.c
+> +++ b/net/ipv6/datagram.c
+> @@ -756,6 +756,27 @@ void ip6_datagram_recv_ctl(struct sock *sk, struct msghdr *msg,
+>  }
+>  EXPORT_SYMBOL_GPL(ip6_datagram_recv_ctl);
+>  
+> +static inline bool reverse_sk_lookup(struct flowi6 *fl6, struct sock *sk,
+> +				     struct in6_addr *saddr, __be16 sport)
+> +{
+> +	if (static_branch_unlikely(&bpf_sk_lookup_enabled) &&
+> +	    (saddr && sport) &&
+> +	    (ipv6_addr_cmp(&sk->sk_v6_rcv_saddr, saddr) || inet_sk(sk)->inet_sport != sport)) {
 
-And I just dropped them from for-next, I had some KASAN issues in the
-testsuite, meaning that something is off in the memory allocation/free.
+Please consider, where it can trivially be achieved, limiting Networking
+code to 80 columns wide.
 
-Cheers,
-Benjamin
+Checkpatch can be run with a flag to check for this.
+
+> +		struct sock *sk_egress;
+> +
+> +		bpf_sk_lookup_run_v6(sock_net(sk), IPPROTO_UDP, &fl6->daddr, fl6->fl6_dport,
+> +				     saddr, ntohs(sport), 0, &sk_egress);
+> +		if (!IS_ERR_OR_NULL(sk_egress) &&
+> +		    atomic64_read(&sk_egress->sk_cookie) == atomic64_read(&sk->sk_cookie))
+> +			return true;
+> +
+> +		net_info_ratelimited("No reverse socket lookup match for local addr %pI6:%d remote addr %pI6:%d\n",
+> +				     &saddr, ntohs(sport), &fl6->daddr, ntohs(fl6->fl6_dport));
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  int ip6_datagram_send_ctl(struct net *net, struct sock *sk,
+>  			  struct msghdr *msg, struct flowi6 *fl6,
+>  			  struct ipcm6_cookie *ipc6)
+
+...
