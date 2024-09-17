@@ -1,112 +1,95 @@
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3EB9155730
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Sep 2024 07:45:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561D3150990;
+	Tue, 17 Sep 2024 09:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726559129; cv=none; b=HW5i4gB0TIy1ByfBDHcuqIdmxFi7NdsOlwqd6kt5+E+R/epGYv04UcyPyzyr3nzTFHyvpI0vp/aJV6oV7VSADDGieybyxx+QtJVWva8Q175cz5W4Bo4YFx2+JmjM9VG2nB8vKqhmGAU1icSLPCkyiZ2g7EDris59w8/OIkDxgRI=
+	t=1726565599; cv=none; b=QS/YWj4WAgMeYaPMmq1oVU38/1L8WuG5Cy8D8otUUJeQxI/0RfH4+Hki3M6zUGfMYr+dwbEzlGDseKtgjgQ8ywJ3s0OYlPlwNLaY60E+bGZgHHzv4e2CJHMtyhXQjH91Qjz5YW6kcn6abkxHu2OmqSRnt/GvfBRCZaxZ+fKqBUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726559129; c=relaxed/simple;
-	bh=h+3PzGTABqpaxtOHDAbZ8agKjW9SrxWhNuFXDsKyIns=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n+xy7evq7smU6JbJuSEi9+KY2NbgSo5/Q7BbHu3T/UnX32/qUGyF8NRws06xGYEpewfcSlcfQ/aBd6MspwAaqOtiPa4QGID7d2qslWrjXj3zhqDuuh0OVn/UD0b5543IODw0atNv0weYLLn0ULbLGaixVIk0ERNryaTXIbogGI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HzncCB9I; arc=none smtp.client-ip=209.85.217.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1726565599; c=relaxed/simple;
+	bh=keMMIiSmAfjl19Ahw9VGjGPC5u687GA4L44+iIF4G68=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VNYOOZZpRJcGYQ3ZteS2Dy6bviCJUPjk/E/7Ogzx2NBs6lIVLbLcfXb+AJV9eeCkfS+xB9t84O46xrOBKuO7Xz5RSkz9/NJgqWitvFEeRvzeEXVKmQo7FCC8f6oxwbrs4vJujdsapl+6FEzvyXl2vL8wQVN0ZbYUNX3qn3i/upc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=uv38flpe; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HzncCB9I"
-Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-49bd27b3507so1649149137.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Sep 2024 00:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726559125; x=1727163925; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sea0zO9yqXzOHNC2U7vb09vPtmzyWkSBwbgBJxMPL7U=;
-        b=HzncCB9IfHGlMRIzMBnbIs+6Pmo3gxkkxJja9AtFaVoxZ+m334vYqyh7DNHjKYnquC
-         ee06YEKrMvkFo9cg+J/CMnkuy1WLmKKXRa6CipP44CuDpsiLuNrG4obFwO3/ZT7uJ+sf
-         FNKR/7SLAV0FhF6NnR+R5lOGQ+1r0fAwZ58V+WeMK9uG120/JTAJJJdXOfMZCRn3jXSO
-         Rf+LZ/ppsEPW3BRV8KvmHEdn1y/Wuw95kb6MbPVHSJoXRFtjYoAz3ZHjmHQ/msJoQXdx
-         /Ig8c4nmsOZyt9FowEShIqL/gQHSQ2GiIj+tszkgEsGXnp95gC04HtwGI7BJRLw0DIE7
-         B/ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726559125; x=1727163925;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sea0zO9yqXzOHNC2U7vb09vPtmzyWkSBwbgBJxMPL7U=;
-        b=s6GAnoDRQ0hnXfESY4iUSB5HcFja3m+A1QilHPIBlE1TwYZMe6vhiFIWDjaMowBAmD
-         6dEqpIXRvTrlrb4N10hKtkVpS6h5J0ZVo6MojXdWcD7s+8g7iU/WAIg2LpXYXaMDIxWl
-         cbdo3zVueS7FI33fLJO98AilYX6HfHl93kxRY0F8b0ffYVfQJRhJatqbNu8pwvePrnzL
-         tGGytizyiXh2a/uKlUB49XQQPd10vbHoi2Cc0G49ZAu3V8LEDRuVi2qf1D+eZd9Xtiz5
-         K5oL2XVXQJ00khpPJD2/vxPk2lkgqlXUJ9d2aAp8Ke6q4OhAh60nNH0z3GSiCkHN2v+M
-         NaNg==
-X-Forwarded-Encrypted: i=1; AJvYcCXgxqkBhdC8GQeUk+X+eNZRc+f/a85PRADIYszrvlbzzy1vY5/q6u6l4KqR+bOIIWv0Z3ltoi6W5njqNq7UNbI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX2/pH166ZeUKG2IM/euHaVLGknd3lrntpA5/PV7O/ZxjlPvrG
-	iW9jGl6GH/y1U9oagNxCFs2jerh5cd2svyqCAIz2G5TaCKBrpS5R7qinGSp6YcTKSQvvPJ/wmoS
-	iEdSfxC4JsQQxij/JvTeqNo4pLKIWwmn9PrF5JA==
-X-Google-Smtp-Source: AGHT+IEX9Fn8uP/lq3FtGxXPDYuASA4m6x9TeKuoaF5tVL8V7HXahk8wjLcJnvuYVKRilqNKDgiamUD2b/2xSH5KiPs=
-X-Received: by 2002:a05:6102:290b:b0:48f:db40:99e9 with SMTP id
- ada2fe7eead31-49d41336d28mr14012209137.0.1726559124782; Tue, 17 Sep 2024
- 00:45:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="uv38flpe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1726565597; x=1758101597;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=keMMIiSmAfjl19Ahw9VGjGPC5u687GA4L44+iIF4G68=;
+  b=uv38flpeHgOpnJ1HUb3CzXN+q5RSQD6wWJTZMvH6ySn3yJ8ei2BcqNEv
+   +Y+dPriKGRS8VIhb+QhzrYspej6hy5F0apbcvTBMK6RLhRkO4Z74UbgFl
+   24Xj+93+G2Im5QXk4FvyHPSbCAfoSj+x5oBqTEoCM3UxwJIrrkekji2n5
+   xoBYKAI1EXzngBf8IG4qo8KPK4iZmsD4po9K966hrvAowlhniCYxQICB5
+   wBuV2+QUUxT33t9Na/H/vuEJx6sLkWykmDwE7iVxo/pnvssYec0KOWjFS
+   WTARLfALkP9HY8Z/RjFrZ0gk39yLSZrcFbzew0COgibYT4RC6P77slBDY
+   w==;
+X-CSE-ConnectionGUID: 6j7NM/cARrCart7pGaXQPQ==
+X-CSE-MsgGUID: SW36Ovf1QzuL+9ypztZ85w==
+X-IronPort-AV: E=Sophos;i="6.10,235,1719903600"; 
+   d="scan'208";a="31767002"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Sep 2024 02:33:16 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 17 Sep 2024 02:32:35 -0700
+Received: from nisar-OptiPlex-9020.microchip.com (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Tue, 17 Sep 2024 02:32:31 -0700
+From: Mohan Prasad J <mohan.prasad@microchip.com>
+To: <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+	<andrew@lunn.ch>
+CC: <edumazet@google.com>, <pabeni@redhat.com>, <shuah@kernel.org>,
+	<mohan.prasad@microchip.com>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <horms@kernel.org>,
+	<brett.creeley@amd.com>, <rosenp@gmail.com>, <UNGLinuxDriver@microchip.com>,
+	<willemb@google.com>
+Subject: [PATCH net-next v2 0/3] nic_basic_tests: Add selftest for doing basic tests of NIC driver
+Date: Tue, 17 Sep 2024 08:04:06 +0530
+Message-ID: <20240917023525.2571082-1-mohan.prasad@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYuaDUCxseqCW8BO0KhLKn6F0VHYaAhu-T9v-MJHzJebcQ@mail.gmail.com>
- <CANiq72kaAd5v+c+A3GHWp9riDtGTrKcCb3kraw2EaZLyp8asSg@mail.gmail.com>
-In-Reply-To: <CANiq72kaAd5v+c+A3GHWp9riDtGTrKcCb3kraw2EaZLyp8asSg@mail.gmail.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 17 Sep 2024 13:15:13 +0530
-Message-ID: <CA+G9fYtghCMk_DiGJ=7pHoLhb=LUS1hXe0F0P5YFYJ-K+aUtcg@mail.gmail.com>
-Subject: Re: rustgcc-kselftest: error: unknown unstable option: `patchable-function-entry`
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: rust-for-linux@vger.kernel.org, open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, Miguel Ojeda <ojeda@kernel.org>, aliceryhl@google.com, 
-	Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Tue, 17 Sept 2024 at 00:53, Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> Hi Naresh,
->
-> On Mon, Sep 16, 2024 at 9:17=E2=80=AFPM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > The x86 rust gcc builds failed on the Linux next-20240917 due to follow=
-ing build
-> > warnings / errors with rustgcc for selftests rust builds.
-> >
-> > First seen on next-20240917
-> >   Good: next-20240913
-> >   BAD:  next-20240917
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Thanks for the report -- this should be already fixed in `rust-next`
-> for tomorrow (requirement changed from `!FINEIBT` to `!CALL_PADDING`),
-> please see https://lore.kernel.org/rust-for-linux/CANiq72=3DB9NmC=3D1eSaO=
-rg7XutjueQsSXGcBQb7dQFPuL0SFjPsA@mail.gmail.com/
->
-> If you can confirm it is, that would be great, thanks! i.e. you will
-> need either to disable `CALL_PADDING` or use a newer Rust compiler
-> version.
+The series of patches are for doing basic tests of NIC driver.
+Test comprises checks for auto-negotiation, speed,
+duplex state and throughput between local NIC and partner.
+Tools such as ethtool, iperf3 are used.
 
-I will try to use the newer Rust Compiler.
+Signed-off-by: Mohan Prasad J <mohan.prasad@microchip.com>
+---
+Changes in v2:
+- Changed the hardcoded implementation of speed, duplex states,
+  throughput to generic values, in order to support all type
+  of NIC drivers.
+- Test executes based on the supported link modes between local
+  NIC driver and partner.
+- Instead of lan743x directory, selftest file is now placed in
+  /selftests/drivers/net/hw.
+---
+Mohan Prasad J (3):
+  selftests: nic_basic_tests: Add selftest file for basic tests of NIC
+  selftests: nic_basic_tests: Add selftest case for speed and duplex
+    state checks
+  selftests: nic_basic_tests: Add selftest case for throughput check
 
->
-> By the way, I think you meant next-202409176, not next-20240917?
- Right, I mean next-20240916.
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ .../drivers/net/hw/nic_basic_tests.py         | 230 ++++++++++++++++++
+ 2 files changed, 231 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/nic_basic_tests.py
 
-- Naresh
+-- 
+2.43.0
 
->
-> Cheers,
-> Miguel
