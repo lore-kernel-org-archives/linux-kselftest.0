@@ -1,105 +1,150 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD147DA76
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2024 11:00:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9B413AA46;
+	Fri, 20 Sep 2024 11:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726830052; cv=none; b=koI6HckaVx1ZiNIDg0UJel4JAuFLd1t9U34//VvlV8d2PbND8p9VkT4S4gG5r6mGHyqx9o50Byzx2W8bbLIR3n5PGT1M9Hlf3eSPU2IIWQVWYU8WvO4yC3m0mF9Z2FNyaZhnON1JUbCUfbwUqhhLDkbb6mnSYfQpidl7DN2NyjY=
+	t=1726833400; cv=none; b=kaSmnAqeF7g+h/tAdudphwgq6Ey9Qs3LOrDeMHtCmNl7byN+mcZJQjLib5ej4kOWop5aYhMNiCj/YfYmu7pCCeuN5UReeQQtqX7RBqWsCJrEK0Q2rIwEKnsjA1NZV08KNnQlhTTD/O/lQENMhjfXImKxih3gmyTBt/2odyXT2KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726830052; c=relaxed/simple;
-	bh=g0N37I9LGHoCW/EB/MezaKfvsqnxjfpMPi0l3+HRHb4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bam5kwX6K3uh7wOUCJv0WTbE1dUgSbeijqs2CFdIIxjuRbK17sfzW7qaZjyxbW7iwVwSYLTDk/dp+MRyEsno0+zB6kXV0CAUHFRIXrc4A9WyDW2SPbMd1Zy9RtpCmkiVi+xUTvGKMpbjAlPNGbAcAIhpC+E7ZY83dTboGzFJVbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JRsjGAzw; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1726833400; c=relaxed/simple;
+	bh=cDdBjlBCj1Lto++dEWfEdAbNi9G8VooGB6uVQjeAY08=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jmPA4A0pyI2n0ueicKMx9l75FbGt0niDPd3YALAKinG0Zmvm7NJovKogioPFXpPYeo/SqrMXl/vHNuowk60tkL52rP3MTAaVHJ8ZRekvETRbLwDSgqE1aNz8R84e/+QVWncv0bnnce7BXUNojyHcyMbyyWBldbDWmQ5JzlJnMls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=e/i9Mayh; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=e/i9Mayh; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JRsjGAzw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1726830050;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pmGGA2GDyqcrfQAaYVDcSgQwWgpfnNZKHmHkpAEFn1c=;
-	b=JRsjGAzwJe/1VX3c4pZXzOdWmhzH4OHvxZitXfx1k1pEgJIPmHD3OmxM2QKjb2jRJKyDE+
-	h5IdKHk1PKtM9r3Qh3HFEp/Q/xuRmN5auvdjyHMZ/3itORaGREQJXaJy6dD3YCHsNwhZTx
-	trze3xaM5wrjaGchdO6fvkbtloRe54w=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-617-onnAB8xDPL6vPHO9OYIQEA-1; Fri,
- 20 Sep 2024 07:00:47 -0400
-X-MC-Unique: onnAB8xDPL6vPHO9OYIQEA-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (unknown [10.30.177.40])
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="e/i9Mayh";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="e/i9Mayh"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6EF7B19300E4;
-	Fri, 20 Sep 2024 11:00:44 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.115])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id B592D195605A;
-	Fri, 20 Sep 2024 11:00:36 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Fri, 20 Sep 2024 13:00:32 +0200 (CEST)
-Date: Fri, 20 Sep 2024 13:00:23 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-Cc: davem@davemloft.net, Liam.Howlett@Oracle.com, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, akpm@linux-foundation.org,
-	axboe@kernel.dk, brauner@kernel.org, mhocko@suse.com,
-	alexjlzheng@tencent.com, willy@infradead.org,
-	michael.christie@oracle.com, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, peili.io@oracle.com,
-	"Eric W. Biederman" <ebiederm@xmission.com>
-Subject: Re: [PATCH net-next 1/2] connector/cn_proc: Handle threads for proc
- connector
-Message-ID: <20240920110022.GA15795@redhat.com>
-References: <20240920000933.185090-1-anjali.k.kulkarni@oracle.com>
- <20240920000933.185090-2-anjali.k.kulkarni@oracle.com>
+	by smtp-out2.suse.de (Postfix) with ESMTPS id C2E5320A65;
+	Fri, 20 Sep 2024 11:56:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1726833395; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7+lg1b9Mb30YANtxNPKYAaBcetces83QSJ9TbQfyUaM=;
+	b=e/i9MayhLnVzCH2t1vNHcah9TNFYxhP6r52T+JN03nHFDbf+kHKvVLfyTEY7I/LW44KNxS
+	6JTItuDF+d7WqdjKa3uQpINR8s1s9qTDO452n756IZJ8iRTSKZJz1fvWTmIBux4EwNWba/
+	Y881BBLfJPjnIHKqXWXTZvP9zApbGiM=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b="e/i9Mayh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1726833395; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7+lg1b9Mb30YANtxNPKYAaBcetces83QSJ9TbQfyUaM=;
+	b=e/i9MayhLnVzCH2t1vNHcah9TNFYxhP6r52T+JN03nHFDbf+kHKvVLfyTEY7I/LW44KNxS
+	6JTItuDF+d7WqdjKa3uQpINR8s1s9qTDO452n756IZJ8iRTSKZJz1fvWTmIBux4EwNWba/
+	Y881BBLfJPjnIHKqXWXTZvP9zApbGiM=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6E35E13AE1;
+	Fri, 20 Sep 2024 11:56:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id gFI9GPNi7WbdHwAAD6G6ig
+	(envelope-from <mvetter@suse.com>); Fri, 20 Sep 2024 11:56:35 +0000
+From: Michael Vetter <mvetter@suse.com>
+To: linux-kselftest@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Michael Vetter <mvetter@suse.com>
+Subject: [PATCH v3 1/3] selftests: livepatch: rename KLP_SYSFS_DIR to SYSFS_KLP_DIR
+Date: Fri, 20 Sep 2024 13:56:29 +0200
+Message-ID: <20240920115631.54142-2-mvetter@suse.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240920115631.54142-1-mvetter@suse.com>
+References: <20240920115631.54142-1-mvetter@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240920000933.185090-2-anjali.k.kulkarni@oracle.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: C2E5320A65
+X-Spam-Level: 
+X-Spamd-Result: default: False [-5.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	DWL_DNSWL_MED(-2.00)[suse.com:dkim];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:dkim,suse.com:mid,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -5.01
+X-Spam-Flag: NO
 
-On 09/19, Anjali Kulkarni wrote:
->
-> @@ -413,6 +416,10 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
->  	if (msg->len == sizeof(*pinput)) {
->  		pinput = (struct proc_input *)msg->data;
->  		mc_op = pinput->mcast_op;
-> +		if (mc_op == PROC_CN_MCAST_NOTIFY) {
-> +			current->exit_code = pinput->uexit_code;
-> +			return;
+This naming makes more sense according to the directory structure.
+Especially when we later add more paths.
 
-...
+Signed-off-by: Michael Vetter <mvetter@suse.com>
+---
+ tools/testing/selftests/livepatch/functions.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> --- a/kernel/exit.c
-> +++ b/kernel/exit.c
-> @@ -821,6 +821,7 @@ void __noreturn do_exit(long code)
->  {
->  	struct task_struct *tsk = current;
->  	int group_dead;
-> +	__u32 uexit_code;
->  
->  	WARN_ON(irqs_disabled());
->  
-> @@ -863,6 +864,8 @@ void __noreturn do_exit(long code)
->  		tty_audit_exit();
->  	audit_free(tsk);
->  
-> +	uexit_code = tsk->exit_code;
-
-I don't think you can use task_struct->exit_code. If this task is ptraced,
-it can be changed/cleared in, say, ptrace_stop() after PROC_CN_MCAST_NOTIFY.
-
-Oleg.
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index fc4c6a016d38..50361fceff06 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -6,7 +6,7 @@
+ 
+ MAX_RETRIES=600
+ RETRY_INTERVAL=".1"	# seconds
+-KLP_SYSFS_DIR="/sys/kernel/livepatch"
++SYSFS_KLP_DIR="/sys/kernel/livepatch"
+ 
+ # Kselftest framework requirement - SKIP code is 4
+ ksft_skip=4
+@@ -322,7 +322,7 @@ function check_sysfs_rights() {
+ 	local rel_path="$1"; shift
+ 	local expected_rights="$1"; shift
+ 
+-	local path="$KLP_SYSFS_DIR/$mod/$rel_path"
++	local path="$SYSFS_KLP_DIR/$mod/$rel_path"
+ 	local rights=$(/bin/stat --format '%A' "$path")
+ 	if test "$rights" != "$expected_rights" ; then
+ 		die "Unexpected access rights of $path: $expected_rights vs. $rights"
+@@ -338,7 +338,7 @@ function check_sysfs_value() {
+ 	local rel_path="$1"; shift
+ 	local expected_value="$1"; shift
+ 
+-	local path="$KLP_SYSFS_DIR/$mod/$rel_path"
++	local path="$SYSFS_KLP_DIR/$mod/$rel_path"
+ 	local value=`cat $path`
+ 	if test "$value" != "$expected_value" ; then
+ 		die "Unexpected value in $path: $expected_value vs. $value"
+-- 
+2.46.0
 
