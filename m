@@ -1,182 +1,316 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749D613B7BD
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 13:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5B82AD25;
+	Mon, 23 Sep 2024 14:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727096977; cv=none; b=FCEng/T3KE6nLpAjDCHRvjBpg7gx9KTnBA/ZvCGhxSEJKXOShCQt/Ljm52Sp112Xb694rw7UNDVH44pTcBUPwzVB5tjXC8/fKmUpB5oJ8fZruLgu0kCpFJR4e+/JyT51yYl8mNas6DOlQUnTMRuVdRSMAaeUZF13QkOpxCIQPbo=
+	t=1727101106; cv=none; b=C1erhxA3Gf57xF8NhDpm3H5RDcyg1SUdxHFje9AH8PlQXsNEx4rZZhbz+juvZvlV8X+Hba+eEOK13A7hHtB+OcDzRU9ViDEpMZDVy9MmkbE/YElPWB/CbIGpA7rjpJrObH/vkfk6Zxm+HAVGwrsleptss4PeIXCY1hEbpGAOvMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727096977; c=relaxed/simple;
-	bh=smBylhCLWUs3r4SgOLnGihzxFt122ylK4943d3CNycY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=jSOP0g+Vktc/8kSdfpCRdhgHTHI4q7Caa+x1YGfTW2iBeehLuN9Bt7Q+lqUPulvMlHR3ZiaExDOYXGBBbdYPnXzLUam3jxH3zeXMa0+ij1E9pw7aZNySt2lAiJavdQu8SOVKCQl1gdMAevvjDltCNg+jynfQvSQcuPqWiWulizQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-12-F9kUYeWRMymPJiBx8nV4uA-1; Mon, 23 Sep 2024 14:09:31 +0100
-X-MC-Unique: F9kUYeWRMymPJiBx8nV4uA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 23 Sep
- 2024 14:08:36 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 23 Sep 2024 14:08:36 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Tiago Lam' <tiagolam@cloudflare.com>, "David S. Miller"
-	<davem@davemloft.net>, David Ahern <dsahern@kernel.org>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>,
-	"KP Singh" <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao
- Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko
-	<mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Jakub
- Sitnicki" <jakub@cloudflare.com>, "kernel-team@cloudflare.com"
-	<kernel-team@cloudflare.com>
-Subject: RE: [RFC PATCH v2 2/3] ipv6: Support setting src port in sendmsg().
-Thread-Topic: [RFC PATCH v2 2/3] ipv6: Support setting src port in sendmsg().
-Thread-Index: AQHbC37mOgyMoKtrJE6wBcqRmpwTjbJlWLTg
-Date: Mon, 23 Sep 2024 13:08:36 +0000
-Message-ID: <855fc71343a149479c7da96438bf9e32@AcuMS.aculab.com>
-References: <20240920-reverse-sk-lookup-v2-0-916a48c47d56@cloudflare.com>
- <20240920-reverse-sk-lookup-v2-2-916a48c47d56@cloudflare.com>
-In-Reply-To: <20240920-reverse-sk-lookup-v2-2-916a48c47d56@cloudflare.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1727101106; c=relaxed/simple;
+	bh=Q0+zGVorf/SYsEEVITpX9CbnXwZ3TbJnOh0nFiHhWbg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BMAsH/vx862sysd6S0MIZXg/RDNAtvP4ETPIT3KZPmTYGYbEO4hcNQWAbV8u6Y8IBw2VxXDynzxEQgPv97eWzSKsgqfL/Or+RIXH+79RDk3n1oEou/FJr+gQK9aSm6upZVhxnMabkiKZdFfR1avDiXRc/5wdxlxqB4WT87AHeIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=SSEG0YbM; arc=none smtp.client-ip=52.119.213.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="SSEG0YbM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1727101105; x=1758637105;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9TOd+JE+xnybFGFEgMSEmA3pS8vQOq0t0XBQSs/NfVc=;
+  b=SSEG0YbMTu56Nfb6aZgjRHGaZ/T2z2oZzOmmQ8ACIRvQ2pNYVEri45BK
+   9VA5yNjlxPkhc1Db+G5FxTeOYa65ofeV/1LoNHI2OUAamm3sHmFHWSWAB
+   WKOysJJOo9kBjcLrZ0SWV3BDZ264xcupkq6CX42gzaw63xqkxL0DdyEoY
+   g=;
+X-IronPort-AV: E=Sophos;i="6.10,251,1719878400"; 
+   d="scan'208";a="27657133"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.43.8.6])
+  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2024 14:18:22 +0000
+Received: from EX19MTAEUA001.ant.amazon.com [10.0.43.254:20965]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.16.194:2525] with esmtp (Farcaster)
+ id ced0b64f-5efc-4ec1-8f59-47278231eddd; Mon, 23 Sep 2024 14:18:21 +0000 (UTC)
+X-Farcaster-Flow-ID: ced0b64f-5efc-4ec1-8f59-47278231eddd
+Received: from EX19D031EUC001.ant.amazon.com (10.252.61.162) by
+ EX19MTAEUA001.ant.amazon.com (10.252.50.192) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Mon, 23 Sep 2024 14:18:20 +0000
+Received: from EX19MTAUEC001.ant.amazon.com (10.252.135.222) by
+ EX19D031EUC001.ant.amazon.com (10.252.61.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Mon, 23 Sep 2024 14:18:20 +0000
+Received: from email-imr-corp-prod-iad-all-1a-93a35fb4.us-east-1.amazon.com
+ (10.43.8.6) by mail-relay.amazon.com (10.252.135.200) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
+ 15.2.1258.34 via Frontend Transport; Mon, 23 Sep 2024 14:18:20 +0000
+Received: from dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com (dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com [10.253.74.38])
+	by email-imr-corp-prod-iad-all-1a-93a35fb4.us-east-1.amazon.com (Postfix) with ESMTPS id 0D8D440596;
+	Mon, 23 Sep 2024 14:18:18 +0000 (UTC)
+From: Ivan Orlov <iorlov@amazon.com>
+To: <hpa@zytor.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+	<mingo@redhat.com>, <pbonzini@redhat.com>, <seanjc@google.com>,
+	<shuah@kernel.org>, <tglx@linutronix.de>
+CC: Ivan Orlov <iorlov@amazon.com>, <jalliste@amazon.com>,
+	<nh-open-source@amazon.com>, <kvm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<x86@kernel.org>
+Subject: [PATCH 4/4] selftests: KVM: Add new test for faulty mmio usage
+Date: Mon, 23 Sep 2024 14:18:10 +0000
+Message-ID: <20240923141810.76331-5-iorlov@amazon.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20240923141810.76331-1-iorlov@amazon.com>
+References: <20240923141810.76331-1-iorlov@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-RnJvbTogVGlhZ28gTGFtIDx0aWFnb2xhbUBjbG91ZGZsYXJlLmNvbT4NCj4gU2VudDogMjAgU2Vw
-dGVtYmVyIDIwMjQgMTg6MDINCj4gDQo+IFRoaXMgZm9sbG93cyB0aGUgc2FtZSByYXRpb25hbGUg
-cHJvdmlkZWQgZm9yIHRoZSBpcHY0IGNvdW50ZXJwYXJ0LCB3aGVyZQ0KPiB0aGUgc2VuZG1zZygp
-IHBhdGggaXMgYWxzbyBleHRlbmRlZCBoZXJlIHRvIHN1cHBvcnQgdGhlIElQVjZfT1JJR0RTVEFE
-RFINCj4gYW5jaWxsYXJ5IG1lc3NhZ2UgdG8gYmUgYWJsZSB0byBzcGVjaWZ5IGEgc291cmNlIGFk
-ZHJlc3MvcG9ydC4gVGhpcw0KPiBhbGxvd3MgdXNlcnMgdG8gY29uZmlndXJlIHRoZSBzb3VyY2Ug
-YWRkcmVzcyBhbmQvb3IgcG9ydCBlZ3Jlc3MgdHJhZmZpYw0KPiBzaG91bGQgYmUgc2VudCBmcm9t
-Lg0KDQpJJ2QgbWlzc2VkIHRoYXQgYmVpbmcgYWRkZWQgLSBjb3VsZCBzYXZlIHVzIHRoZSBob3Jy
-aWQgcHJvYmxlbSBvZiBnZXR0aW5nDQp0aGUgVURQIGNoZWNrc3VtIGNvcnJlY3Qgd2hlbiBzZW5k
-aW5nIFVEUCBvdmVyIGEgcmF3IHNvY2tldC4NCihUaGF0IGlzbid0IGEgcHJvYmxlbSBmb3IgSVB2
-Ni4pDQoNCj4gVG8gbGltaXQgaXRzIHVzYWdlLCBhIHJldmVyc2Ugc29ja2V0IGxvb2t1cCBpcyBw
-ZXJmb3JtZWQgdG8gY2hlY2sgaWYgdGhlDQo+IGNvbmZpZ3VyZWQgZWdyZXNzIHNvdXJjZSBhZGRy
-ZXNzIGFuZC9vciBwb3J0IGhhdmUgYW55IGluZ3Jlc3Mgc2tfbG9va3VwDQo+IG1hdGNoLiBJZiBp
-dCBkb2VzLCB0cmFmZmljIGlzIGFsbG93ZWQgdG8gcHJvY2VlZCwgb3RoZXJ3aXNlIGl0IGZhbGxz
-DQo+IGJhY2sgdG8gdGhlIHJlZ3VsYXIgZWdyZXNzIHBhdGguDQoNCklzIHRoYXQgcmVhbGx5IHVz
-ZWZ1bC9uZWNlc3Nhcnk/DQpUaGUgY2hlY2sgKGJ1dCBub3QgdGhlIGNvbW1pdCBtZXNzYWdlKSBp
-bXBsaWVzIHRoYXQgc29tZSAnYnBmIHRoaW5neScNCmFsc28gbmVlZHMgdG8gYmUgZW5hYmxlZC4N
-CkFueSBjaGVjayB3b3VsZCBuZWVkIHRvIGluY2x1ZGUgdGhlIHRlc3QgdGhhdCB0aGUgcHJvZ3Jh
-bSBzZW5kaW5nIHRoZSBwYWNrZXQNCmhhcyB0aGUgYWJpbGl0eSB0byBzZW5kIGEgcGFja2V0IHRo
-cm91Z2ggdGhlIGluZ3Jlc3Mgc29ja2V0Lg0KQWRkaXRpb25hbGx5IGEgY2hlY2sgZm9yIHRoZSBz
-ZW5kaW5nIHByb2Nlc3MgaGF2aW5nIChJSVJDKSBDQVBfTkVUX0FETUlODQood2hpY2ggd291bGQg
-bGV0IHRoZSBwcm9jZXNzIHNlbmQgdGhlIG1lc3NhZ2UgYnkgb3RoZXIgbWVhbnMpIHdvdWxkIHNh
-dmUgdGhlDQpzbG93IHBhdGguDQoNClRoZSBjb2RlIHdlIGhhdmUgc2VuZHMgYSBsb3Qgb2YgVURQ
-IFJUUCAodHlwaWNhbGx5IDE2MCBieXRlcyBvZiBhdWRpbyBldmVyeSAyMG1zKS4NClRoZXJlIGlz
-IGFjdHVhbGx5IG5vIHJlYXNvbiBmb3IgdGhlcmUgdG8gYmUgYSB2YWxpZCBtYXRjaGluZyBpbmdy
-ZXNzIHBhdGguDQooVGhhdCBjb2RlIHdvdWxkIGJlbmVmaXQgZnJvbSBiZWluZyBhYmxlIHRvIGJp
-bmQgYSBsb3Qgb2YgcG9ydHMgdG8gdGhlIHNhbWUNClVEUCBzb2NrZXQuKQ0KDQoJRGF2aWQNCg0K
-PiANCj4gU3VnZ2VzdGVkLWJ5OiBKYWt1YiBTaXRuaWNraSA8amFrdWJAY2xvdWRmbGFyZS5jb20+
-DQo+IFNpZ25lZC1vZmYtYnk6IFRpYWdvIExhbSA8dGlhZ29sYW1AY2xvdWRmbGFyZS5jb20+DQo+
-IC0tLQ0KPiAgbmV0L2lwdjYvZGF0YWdyYW0uYyB8IDc5ICsrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ICBuZXQvaXB2Ni91ZHAuYyAgICAgIHwg
-IDggKysrKy0tDQo+ICAyIGZpbGVzIGNoYW5nZWQsIDg1IGluc2VydGlvbnMoKyksIDIgZGVsZXRp
-b25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvbmV0L2lwdjYvZGF0YWdyYW0uYyBiL25ldC9pcHY2
-L2RhdGFncmFtLmMNCj4gaW5kZXggZmZmNzg0OTY4MDNkLi4zNjljNjRhNDc4ZWMgMTAwNjQ0DQo+
-IC0tLSBhL25ldC9pcHY2L2RhdGFncmFtLmMNCj4gKysrIGIvbmV0L2lwdjYvZGF0YWdyYW0uYw0K
-PiBAQCAtNzU2LDYgKzc1NiwyOSBAQCB2b2lkIGlwNl9kYXRhZ3JhbV9yZWN2X2N0bChzdHJ1Y3Qg
-c29jayAqc2ssIHN0cnVjdCBtc2doZHIgKm1zZywNCj4gIH0NCj4gIEVYUE9SVF9TWU1CT0xfR1BM
-KGlwNl9kYXRhZ3JhbV9yZWN2X2N0bCk7DQo+IA0KPiArc3RhdGljIGlubGluZSBib29sIHJldmVy
-c2Vfc2tfbG9va3VwKHN0cnVjdCBmbG93aTYgKmZsNiwgc3RydWN0IHNvY2sgKnNrLA0KPiArCQkJ
-CSAgICAgc3RydWN0IGluNl9hZGRyICpzYWRkciwgX19iZTE2IHNwb3J0KQ0KPiArew0KPiArCWlm
-IChzdGF0aWNfYnJhbmNoX3VubGlrZWx5KCZicGZfc2tfbG9va3VwX2VuYWJsZWQpICYmDQo+ICsJ
-ICAgIChzYWRkciAmJiBzcG9ydCkgJiYNCj4gKwkgICAgKGlwdjZfYWRkcl9jbXAoJnNrLT5za192
-Nl9yY3Zfc2FkZHIsIHNhZGRyKSB8fA0KPiArCSAgICBpbmV0X3NrKHNrKS0+aW5ldF9zcG9ydCAh
-PSBzcG9ydCkpIHsNCj4gKwkJc3RydWN0IHNvY2sgKnNrX2VncmVzczsNCj4gKw0KPiArCQlicGZf
-c2tfbG9va3VwX3J1bl92Nihzb2NrX25ldChzayksIElQUFJPVE9fVURQLCAmZmw2LT5kYWRkciwN
-Cj4gKwkJCQkgICAgIGZsNi0+Zmw2X2Rwb3J0LCBzYWRkciwgbnRvaHMoc3BvcnQpLCAwLA0KPiAr
-CQkJCSAgICAgJnNrX2VncmVzcyk7DQo+ICsJCWlmICghSVNfRVJSX09SX05VTEwoc2tfZWdyZXNz
-KSAmJiBza19lZ3Jlc3MgPT0gc2spDQo+ICsJCQlyZXR1cm4gdHJ1ZTsNCj4gKw0KPiArCQluZXRf
-aW5mb19yYXRlbGltaXRlZCgiTm8gcmV2ZXJzZSBzb2NrZXQgbG9va3VwIG1hdGNoIGZvciBsb2Nh
-bCBhZGRyICVwSTY6JWQgcmVtb3RlIGFkZHINCj4gJXBJNjolZFxuIiwNCj4gKwkJCQkgICAgICZz
-YWRkciwgbnRvaHMoc3BvcnQpLCAmZmw2LT5kYWRkciwNCj4gKwkJCQkgICAgIG50b2hzKGZsNi0+
-Zmw2X2Rwb3J0KSk7DQo+ICsJfQ0KPiArDQo+ICsJcmV0dXJuIGZhbHNlOw0KPiArfQ0KPiArDQo+
-ICBpbnQgaXA2X2RhdGFncmFtX3NlbmRfY3RsKHN0cnVjdCBuZXQgKm5ldCwgc3RydWN0IHNvY2sg
-KnNrLA0KPiAgCQkJICBzdHJ1Y3QgbXNnaGRyICptc2csIHN0cnVjdCBmbG93aTYgKmZsNiwNCj4g
-IAkJCSAgc3RydWN0IGlwY202X2Nvb2tpZSAqaXBjNikNCj4gQEAgLTg0NCw3ICs4NjcsNjMgQEAg
-aW50IGlwNl9kYXRhZ3JhbV9zZW5kX2N0bChzdHJ1Y3QgbmV0ICpuZXQsIHN0cnVjdCBzb2NrICpz
-aywNCj4gDQo+ICAJCQlicmVhazsNCj4gIAkJICAgIH0NCj4gKwkJY2FzZSBJUFY2X09SSUdEU1RB
-RERSOg0KPiArCQkJew0KPiArCQkJc3RydWN0IHNvY2thZGRyX2luNiAqc29ja2FkZHJfaW47DQo+
-ICsJCQlzdHJ1Y3QgbmV0X2RldmljZSAqZGV2ID0gTlVMTDsNCj4gKw0KPiArCQkJaWYgKGNtc2ct
-PmNtc2dfbGVuIDwgQ01TR19MRU4oc2l6ZW9mKHN0cnVjdCBzb2NrYWRkcl9pbjYpKSkgew0KPiAr
-CQkJCWVyciA9IC1FSU5WQUw7DQo+ICsJCQkJZ290byBleGl0X2Y7DQo+ICsJCQl9DQo+ICsNCj4g
-KwkJCXNvY2thZGRyX2luID0gKHN0cnVjdCBzb2NrYWRkcl9pbjYgKilDTVNHX0RBVEEoY21zZyk7
-DQo+ICsNCj4gKwkJCWFkZHJfdHlwZSA9IF9faXB2Nl9hZGRyX3R5cGUoJnNvY2thZGRyX2luLT5z
-aW42X2FkZHIpOw0KPiArDQo+ICsJCQlpZiAoYWRkcl90eXBlICYgSVBWNl9BRERSX0xJTktMT0NB
-TCkNCj4gKwkJCQlyZXR1cm4gLUVJTlZBTDsNCj4gKw0KPiArCQkJLyogSWYgd2UncmUgZWdyZXNz
-aW5nIHdpdGggYSBkaWZmZXJlbnQgc291cmNlIGFkZHJlc3MNCj4gKwkJCSAqIGFuZC9vciBwb3J0
-LCB3ZSBwZXJmb3JtIGEgcmV2ZXJzZSBzb2NrZXQgbG9va3VwLiBUaGUNCj4gKwkJCSAqIHJhdGlv
-bmFsZSBiZWhpbmQgdGhpcyBpcyB0aGF0IHdlIGNhbiBhbGxvdyByZXR1cm4NCj4gKwkJCSAqIFVE
-UCB0cmFmZmljIHRoYXQgaGFzIGluZ3Jlc3NlZCB0aHJvdWdoIHNrX2xvb2t1cCB0bw0KPiArCQkJ
-ICogYWxzbyBlZ3Jlc3MgY29ycmVjdGx5LiBJbiBjYXNlIHRoZSByZXZlcnNlIGxvb2t1cA0KPiAr
-CQkJICogZmFpbHMsIHdlIGNvbnRpbnVlIHdpdGggdGhlIG5vcm1hbCBwYXRoLg0KPiArCQkJICoN
-Cj4gKwkJCSAqIFRoZSBsb29rdXAgaXMgcGVyZm9ybWVkIGlmIGVpdGhlciBzb3VyY2UgYWRkcmVz
-cw0KPiArCQkJICogYW5kL29yIHBvcnQgY2hhbmdlZCwgYW5kIG5laXRoZXIgaXMgIjAiLg0KPiAr
-CQkJICovDQo+ICsJCQlpZiAocmV2ZXJzZV9za19sb29rdXAoZmw2LCBzaywgJnNvY2thZGRyX2lu
-LT5zaW42X2FkZHIsDQo+ICsJCQkJCSAgICAgIHNvY2thZGRyX2luLT5zaW42X3BvcnQpKSB7DQo+
-ICsJCQkJLyogT3ZlcnJpZGUgdGhlIHNvdXJjZSBwb3J0IGFuZCBhZGRyZXNzIHRvIHVzZQ0KPiAr
-CQkJCSAqIHdpdGggdGhlIG9uZSB3ZSBnb3QgaW4gY21zZyBhbmQgYmFpbCBlYXJseS4NCj4gKwkJ
-CQkgKi8NCj4gKwkJCQlmbDYtPnNhZGRyID0gc29ja2FkZHJfaW4tPnNpbjZfYWRkcjsNCj4gKwkJ
-CQlmbDYtPmZsNl9zcG9ydCA9IHNvY2thZGRyX2luLT5zaW42X3BvcnQ7DQo+ICsJCQkJYnJlYWs7
-DQo+ICsJCQl9DQo+IA0KPiArCQkJaWYgKGFkZHJfdHlwZSAhPSBJUFY2X0FERFJfQU5ZKSB7DQo+
-ICsJCQkJaW50IHN0cmljdCA9IF9faXB2Nl9hZGRyX3NyY19zY29wZShhZGRyX3R5cGUpIDw9IElQ
-VjZfQUREUl9TQ09QRV9MSU5LTE9DQUw7DQo+ICsNCj4gKwkJCQlpZiAoIWlwdjZfY2FuX25vbmxv
-Y2FsX2JpbmQobmV0LCBpbmV0X3NrKHNrKSkgJiYNCj4gKwkJCQkgICAgIWlwdjZfY2hrX2FkZHJf
-YW5kX2ZsYWdzKG5ldCwNCj4gKwkJCQkJCQkgICAgICZzb2NrYWRkcl9pbi0+c2luNl9hZGRyLA0K
-PiArCQkJCQkJCSAgICAgZGV2LCAhc3RyaWN0LCAwLA0KPiArCQkJCQkJCSAgICAgSUZBX0ZfVEVO
-VEFUSVZFKSAmJg0KPiArCQkJCSAgICAhaXB2Nl9jaGtfYWNhc3RfYWRkcl9zcmMobmV0LCBkZXYs
-DQo+ICsJCQkJCQkJICAgICAmc29ja2FkZHJfaW4tPnNpbjZfYWRkcikpDQo+ICsJCQkJCWVyciA9
-IC1FSU5WQUw7DQo+ICsJCQkJZWxzZQ0KPiArCQkJCQlmbDYtPnNhZGRyID0gc29ja2FkZHJfaW4t
-PnNpbjZfYWRkcjsNCj4gKwkJCX0NCj4gKw0KPiArCQkJaWYgKGVycikNCj4gKwkJCQlnb3RvIGV4
-aXRfZjsNCj4gKw0KPiArCQkJYnJlYWs7DQo+ICsJCQl9DQo+ICAJCWNhc2UgSVBWNl9GTE9XSU5G
-TzoNCj4gIAkJCWlmIChjbXNnLT5jbXNnX2xlbiA8IENNU0dfTEVOKDQpKSB7DQo+ICAJCQkJZXJy
-ID0gLUVJTlZBTDsNCj4gZGlmZiAtLWdpdCBhL25ldC9pcHY2L3VkcC5jIGIvbmV0L2lwdjYvdWRw
-LmMNCj4gaW5kZXggNjYwMmEyZTljZGI1Li42MTIxY2JiNzFhZDMgMTAwNjQ0DQo+IC0tLSBhL25l
-dC9pcHY2L3VkcC5jDQo+ICsrKyBiL25ldC9pcHY2L3VkcC5jDQo+IEBAIC0xNDc2LDYgKzE0NzYs
-MTIgQEAgaW50IHVkcHY2X3NlbmRtc2coc3RydWN0IHNvY2sgKnNrLCBzdHJ1Y3QgbXNnaGRyICpt
-c2csIHNpemVfdCBsZW4pDQo+IA0KPiAgCWZsNi0+Zmxvd2k2X3VpZCA9IHNrLT5za191aWQ7DQo+
-IA0KPiArCS8qIFdlIHVzZSBmbDYncyBkYWRkciBhbmQgZmw2X3Nwb3J0IGluIHRoZSByZXZlcnNl
-IHNrX2xvb2t1cCBkb25lDQo+ICsJICogd2l0aGluIGlwNl9kYXRhZ3JhbV9zZW5kX2N0bCgpIG5v
-dy4NCj4gKwkgKi8NCj4gKwlmbDYtPmRhZGRyID0gKmRhZGRyOw0KPiArCWZsNi0+Zmw2X3Nwb3J0
-ID0gaW5ldC0+aW5ldF9zcG9ydDsNCj4gKw0KPiAgCWlmIChtc2ctPm1zZ19jb250cm9sbGVuKSB7
-DQo+ICAJCW9wdCA9ICZvcHRfc3BhY2U7DQo+ICAJCW1lbXNldChvcHQsIDAsIHNpemVvZihzdHJ1
-Y3QgaXB2Nl90eG9wdGlvbnMpKTsNCj4gQEAgLTE1MTEsMTAgKzE1MTcsOCBAQCBpbnQgdWRwdjZf
-c2VuZG1zZyhzdHJ1Y3Qgc29jayAqc2ssIHN0cnVjdCBtc2doZHIgKm1zZywgc2l6ZV90IGxlbikN
-Cj4gDQo+ICAJZmw2LT5mbG93aTZfcHJvdG8gPSBzay0+c2tfcHJvdG9jb2w7DQo+ICAJZmw2LT5m
-bG93aTZfbWFyayA9IGlwYzYuc29ja2MubWFyazsNCj4gLQlmbDYtPmRhZGRyID0gKmRhZGRyOw0K
-PiAgCWlmIChpcHY2X2FkZHJfYW55KCZmbDYtPnNhZGRyKSAmJiAhaXB2Nl9hZGRyX2FueSgmbnAt
-PnNhZGRyKSkNCj4gIAkJZmw2LT5zYWRkciA9IG5wLT5zYWRkcjsNCj4gLQlmbDYtPmZsNl9zcG9y
-dCA9IGluZXQtPmluZXRfc3BvcnQ7DQo+IA0KPiAgCWlmIChjZ3JvdXBfYnBmX2VuYWJsZWQoQ0dS
-T1VQX1VEUDZfU0VORE1TRykgJiYgIWNvbm5lY3RlZCkgew0KPiAgCQllcnIgPSBCUEZfQ0dST1VQ
-X1JVTl9QUk9HX1VEUDZfU0VORE1TR19MT0NLKHNrLA0KPiANCj4gLS0NCj4gMi4zNC4xDQo+IA0K
-DQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFy
-bSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAo
-V2FsZXMpDQo=
+Implement the test which covers "weird" mmio usage. The test has 4 test
+cases:
+
+1) Guest sets IDT/GDT base to point to an MMIO region. Triple fault and
+shutdown are expected there.
+2) Guest jumps to MMIO address. Fetches from MMIO are not permitted, so
+UD is expected there.
+3) Guest sets an IDT entry to point to MMIO range. MMIO here happens
+after event delivery, so UD is expected.
+4) Guest points the UD IDT entry to MMIO range and causes UD after that.
+We should not go into infinite loop here, as we are constantly putting
+exception info onto the stack and it will eventually overflow.
+
+These test cases depend on previous patches in this patch series.
+
+Signed-off-by: Ivan Orlov <iorlov@amazon.com>
+---
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/x86_64/faulty_mmio.c        | 199 ++++++++++++++++++
+ 2 files changed, 200 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/faulty_mmio.c
+
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 0c4b254ab56b..d9928c54e851 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -129,6 +129,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/amx_test
+ TEST_GEN_PROGS_x86_64 += x86_64/max_vcpuid_cap_test
+ TEST_GEN_PROGS_x86_64 += x86_64/triple_fault_event_test
+ TEST_GEN_PROGS_x86_64 += x86_64/recalc_apic_map_test
++TEST_GEN_PROGS_x86_64 += x86_64/faulty_mmio
+ TEST_GEN_PROGS_x86_64 += access_tracking_perf_test
+ TEST_GEN_PROGS_x86_64 += demand_paging_test
+ TEST_GEN_PROGS_x86_64 += dirty_log_test
+diff --git a/tools/testing/selftests/kvm/x86_64/faulty_mmio.c b/tools/testing/selftests/kvm/x86_64/faulty_mmio.c
+new file mode 100644
+index 000000000000..b83c1d646696
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86_64/faulty_mmio.c
+@@ -0,0 +1,199 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This test covers error processing when doing weird things with MMIO addresses,
++ * i.e. jumping into MMIO range or specifying it as IDT / GDT descriptor base.
++ */
++#include <stdio.h>
++#include "kvm_util.h"
++#include "processor.h"
++#include <stdint.h>
++
++#define MMIO_ADDR 0xDEADBEE000UL
++/* This address is not canonical, so any reference will result in #GP */
++#define GP_ADDR 0xDEADBEEFDEADBEEFULL
++
++enum test_desc_type {
++	TEST_DESC_IDT,
++	TEST_DESC_GDT,
++};
++
++static const struct desc_ptr faulty_desc = {
++	.address = MMIO_ADDR,
++	.size = 0xFFF,
++};
++
++static void faulty_desc_guest_code(enum test_desc_type dtype)
++{
++	if (dtype == TEST_DESC_IDT)
++		__asm__ __volatile__("lidt %0"::"m"(faulty_desc));
++	else
++		__asm__ __volatile__("lgdt %0"::"m"(faulty_desc));
++
++	/* Generate a #GP */
++	*((uint8_t *)GP_ADDR) = 0x1;
++
++	/* We should never reach this point */
++	GUEST_ASSERT(0);
++}
++
++/*
++ * This test tries to point the IDT / GDT descriptor to an MMIO range.
++ * This action should cause a triple fault in guest, as it happens when
++ * your descriptors are messed up on the actual hardware.
++ */
++static void test_faulty_desc(void)
++{
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++	int i;
++
++	enum test_desc_type dtype_tests[] = { TEST_DESC_IDT, TEST_DESC_GDT };
++
++	for (i = 0; i < ARRAY_SIZE(dtype_tests); i++) {
++		vm = vm_create_with_one_vcpu(&vcpu, faulty_desc_guest_code);
++		vcpu_args_set(vcpu, 1, dtype_tests[i]);
++		virt_map(vm, MMIO_ADDR, MMIO_ADDR, 1);
++
++		vcpu_run(vcpu);
++		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_SHUTDOWN);
++		kvm_vm_free(vm);
++	}
++}
++
++static void jump_to_mmio_guest_code(bool write_first)
++{
++	void (*f)(void) = (void *)(MMIO_ADDR);
++
++	if (write_first) {
++		/*
++		 * We get different vmexit codes when accessing the MMIO address for the second
++		 * time with VMX. For the first time it is an EPT violation, for the second -
++		 * EPT misconfig. We need to check that we get #UD in both cases.
++		 */
++		*((char *)MMIO_ADDR) = 0x1;
++	}
++
++	f();
++
++	/* We should never reach this point */
++	GUEST_ASSERT(0);
++}
++
++static void guest_ud_handler(struct ex_regs *regs)
++{
++	GUEST_DONE();
++}
++
++/*
++ * This test tries to jump to an MMIO address. As fetching the instructions
++ * from MMIO is not supported by KVM and doesn't make any practical sense,
++ * KVM should handle it gracefully and inject #UD into guest.
++ */
++static void test_jump_to_mmio(void)
++{
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++	struct kvm_run *run;
++	struct ucall uc;
++	int i;
++
++	bool test_cases_write_first[] = { false, true };
++
++	for (i = 0; i < ARRAY_SIZE(test_cases_write_first); i++) {
++		vm = vm_create_with_one_vcpu(&vcpu, jump_to_mmio_guest_code);
++		virt_map(vm, MMIO_ADDR, MMIO_ADDR, 1);
++		vcpu_args_set(vcpu, 1, test_cases_write_first[i]);
++		vm_install_exception_handler(vm, UD_VECTOR, guest_ud_handler);
++
++		run = vcpu->run;
++
++		vcpu_run(vcpu);
++		if (test_cases_write_first[i] && run->exit_reason == KVM_EXIT_MMIO) {
++			/* Process first MMIO access if required */
++			vcpu_run(vcpu);
++		}
++
++		/* If #UD was injected correctly, our #UD handler will issue UCALL_DONE */
++		TEST_ASSERT_KVM_EXIT_REASON(vcpu, UCALL_EXIT_REASON);
++		TEST_ASSERT(get_ucall(vcpu, &uc) == UCALL_DONE,
++			    "Guest should have gone into #UD handler when jumping to MMIO address, however it didn't happen");
++		kvm_vm_free(vm);
++	}
++}
++
++static void faulty_idte_guest_code(void)
++{
++	/*
++	 * We are triggering #GP here, and as it's IDT entry points to an MMIO range,
++	 * we should get an #UD as instruction fetching from MMIO address is prohibited
++	 */
++	*((uint8_t *)GP_ADDR) = 0x1;
++
++	/* We should never reach this point */
++	GUEST_ASSERT(0);
++}
++
++/*
++ * When IDT entry points to an MMIO address, it should be handled as a jump to MMIO address
++ * and should cause #UD in the guest, as fetches from MMIO are not supported. It should not
++ * cause a triple fault in such a case, so we don't expect KVM_EXIT_SHUTDOWN here.
++ */
++static void test_faulty_idte(void)
++{
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++	struct ucall uc;
++
++	vm = vm_create_with_one_vcpu(&vcpu, faulty_idte_guest_code);
++	virt_map(vm, MMIO_ADDR, MMIO_ADDR, 1);
++
++	/* GP vector points to MMIO range, jumping to it will trigger an #UD */
++	vm_install_exception_handler(vm, GP_VECTOR, (void *)MMIO_ADDR);
++	vm_install_exception_handler(vm, UD_VECTOR, guest_ud_handler);
++
++	vcpu_run(vcpu);
++	/* If we reach #UD handler it will issue UCALL_DONE */
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, UCALL_EXIT_REASON);
++	TEST_ASSERT(get_ucall(vcpu, &uc) == UCALL_DONE,
++		    "Guest should have gone into #UD handler when jumping to MMIO address, however it didn't happen");
++	kvm_vm_free(vm);
++}
++
++static void faulty_ud_idte_guest_code(void)
++{
++	asm("ud2");
++
++	/* We should never reach this point */
++	GUEST_ASSERT(0);
++}
++
++/*
++ * This test checks that we won't hang in the infinite loop if the #UD handler
++ * also causes #UD (as it points to an MMIO address). In this situation, we will
++ * run out of stack eventually, which will cause a triple fault
++ */
++static void test_faulty_ud_handler(void)
++{
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++
++	vm = vm_create_with_one_vcpu(&vcpu, faulty_ud_idte_guest_code);
++	virt_map(vm, MMIO_ADDR, MMIO_ADDR, 1);
++
++	vm_install_exception_handler(vm, UD_VECTOR, (void *)MMIO_ADDR);
++
++	vcpu_run(vcpu);
++	/* #UD caused when jumping to #UD handler should overflow stack causing a triple fault */
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_SHUTDOWN);
++	kvm_vm_free(vm);
++}
++
++int main(void)
++{
++	test_faulty_desc();
++	test_jump_to_mmio();
++	test_faulty_idte();
++	test_faulty_ud_handler();
++
++	return EXIT_SUCCESS;
++}
+-- 
+2.43.0
 
