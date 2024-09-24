@@ -1,100 +1,115 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8091AED4B;
-	Tue, 24 Sep 2024 16:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84C51AC454
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 16:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727193940; cv=none; b=PZ3wnRTAlc/IXBt1b14kyM4YN4WT19fNdwQluRNRw5Ohsy5JmK7CDZlLcGKQWl9SP/zPF95H6ZaYfh6QF2jL7LUOhWtNt1AlvQQfjQPID5vh6+IgOUW1fRVpVRmPwC+bBAl3nADhfRFHZVt7g8VLNXHRli8L6E5J8OJc+JNUfGc=
+	t=1727193949; cv=none; b=gL0xAUGCqkSyED8zQ+qCkUwEiScq8XDlnRybyHo+UCiRkxwULDUjUJisqURtH5kvnaSKQX6BV6VOqGv5Txp7lPvMtlO0EdraCrM2LSN8o9RnwLdyjmQR6Dr+0ENZbn4vNpz6Gz9xRy8mxCT7kzquCNFIVQu8zkh1ib5dgU5zYrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727193940; c=relaxed/simple;
-	bh=+dCD6AZPxHSBa4BNwNlX6ikA85sfYkJhBtLZ/HQ4UUE=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rDftWAfv750EfMX/D0P2SFG5Beg5UpTWBbNMJpmRWwfahCt6Ryn3kf/9fy5NNqBzO2CdZevDPER48QQNLFiJeoWaghSIdnVa13BqKRsM6mObjMITUBoQeIRrtPQnxuL0b+tXtNnzn2XwPPNnk0vRcYyWBxnHfZzZjGZXqwVY7FU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SqrifSr/; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	s=arc-20240116; t=1727193949; c=relaxed/simple;
+	bh=nQQTZtX6roW+dxYDtbGKL2XfIHd9IcnhpKNBQ/mM4sM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O8RHeaKxwAnO/sOb3MdKk3JbdwWBmPja6QSbHRsjeUDR6BW8+pySUda2alyp6laFsqFquRVuuQmgQ8LYPO26MSsOu96QZcgBHCFeM1fo2T/cyr383AGb3gV1yDsKfnmG/pFMKddn33WJV3GJp4U4I/UBGyMHC3VXp6tD7WIicJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=aDsJt7w5; arc=none smtp.client-ip=209.85.166.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SqrifSr/"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
-	Cc:Content-Type:Content-ID:Content-Description;
-	bh=t5+pyUN1sWxxhbIk0LBuAt0+sAfCDv06OwTbegq7gnw=; b=SqrifSr/tEv8jnFCYNFNx3/YmZ
-	Kkt032r9r0wenz0aCjKI1DSvYmf/VUhMQKWHZhOZGDKey+AZF5IH9w7uYNQYYYDtz9ktFu53a0DiH
-	N4mM9zVgKzjsy8vv2Ss1dviOU6xVhBwKDszipzrh2x84rTupqE0ovsIe0WXbAa1I9YkVpAH/y5hj3
-	dwcZeVCsiMrnX5KJQiKnnPoDPmSwo+Fc7JYHYjvIrag0kUAI7ucdyODPXx/hy8YteNLadRfL0IWp4
-	jMLxRo2LW+LlXWmLN60ubf63vV7Gbgf2Lg90RwJPfiOx4nRE/aLE/9qPo3K7LgZZd+RFG0ljYvIAI
-	twADzPSg==;
-Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1st82M-00000001rIZ-318G;
-	Tue, 24 Sep 2024 16:05:15 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1st82K-0000000HMic-2I4e;
-	Tue, 24 Sep 2024 17:05:12 +0100
-From: David Woodhouse <dwmw2@infradead.org>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 5/6] KVM: arm64: nvhe: Pass through PSCI v1.3 SYSTEM_OFF2 call
-Date: Tue, 24 Sep 2024 17:05:11 +0100
-Message-ID: <20240924160512.4138879-5-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240924160512.4138879-1-dwmw2@infradead.org>
-References: <20240924160512.4138879-1-dwmw2@infradead.org>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="aDsJt7w5"
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3a0cdd77dbeso13058285ab.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 09:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1727193947; x=1727798747; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nGgZC++q2AtpmgeIvTiFEAi7y/z7fLmypkiCbl8bJao=;
+        b=aDsJt7w5d9h35SWMTWffR5560CMLtzic7xKjKbV+6bLyx2x5YFD+ADl0PHAepFlIPD
+         J/6aAWRC73ZbjshLOwq0vRZ1+xRR7cK6+aenp6SlwH6/ZS1RyM9e5K9Ql/Stu6xzQTe2
+         2CL5qcS6cIDVXBnL8DYhCISbBb8gZzuLlr9zo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727193947; x=1727798747;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nGgZC++q2AtpmgeIvTiFEAi7y/z7fLmypkiCbl8bJao=;
+        b=BVEMtSXFV5aVTAgHjPT9UwqIeX24tjQmkgmWcqE5B5U9C6jRxRpV0eOpnEmeoDYkZf
+         B6jixSs27j1zvC4EcNGQ9drPrPglNa9WJiTtwcJx2lsUuYkm4wquRsVGJC4W8ct7cOeG
+         cV/Aq5qFO4JcUSyojjgiOSWdRjc4glY68OGILKFqXTRP4/kCUvd5CCYH9XZb+HrJIutB
+         UIOMNR7gIJsjg4tQvWVey7G2ukkB8kw3FyBcR0Th2nDEYE0p/rcbDyldgAPhYkM9MKF6
+         g7+fWojzJIw7dDHnIyPRnHNo8N8aMgaqEu/G8u3is0OxZZ4ZUbu67MHj9o/yC6E6HKUn
+         V8CA==
+X-Forwarded-Encrypted: i=1; AJvYcCWuLDrui9Ixuz9Pj+V2anBemzpnHwrkDspYKVndOvcsVjATEwmB9Pil3+RlUOMB+x2o/vjqkD2rmkPyduDcB+s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyABVQy6PRUeBhMftpcXlpp4njPXzFZ1Z01GeVCim8kClyj8g2o
+	VIB1VVb6pDKRKbada2Fq26sZb7MidBiVgRtbXW+wYs4CMprvBl7GYg/VkhZepOE=
+X-Google-Smtp-Source: AGHT+IG3L22c5EIpJXprkBEjnN4zhBqDpV3boF4+NP3bngxIQ6cQR4CJBuuc7PHkPDw7nlC0RNP3Xg==
+X-Received: by 2002:a05:6e02:194d:b0:3a0:c820:c5f0 with SMTP id e9e14a558f8ab-3a0c9d90ba0mr145533015ab.24.1727193946584;
+        Tue, 24 Sep 2024 09:05:46 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a1a5713af6sm4633385ab.60.2024.09.24.09.05.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Sep 2024 09:05:45 -0700 (PDT)
+Message-ID: <05f24dbb-cfe6-4a75-9382-273c9c734b22@linuxfoundation.org>
+Date: Tue, 24 Sep 2024 10:05:43 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] selftest: rtc: Check if could access /dev/rtc0 before
+ testing
+To: Joseph Jang <jjang@nvidia.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: "shuah@kernel.org" <shuah@kernel.org>,
+ "avagin@google.com" <avagin@google.com>,
+ "amir73il@gmail.com" <amir73il@gmail.com>,
+ "brauner@kernel.org" <brauner@kernel.org>, Matt Ochs <mochs@nvidia.com>,
+ Koba Ko <kobak@nvidia.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240524013807.154338-1-jjang@nvidia.com>
+ <20240524013807.154338-3-jjang@nvidia.com>
+ <202406201937464fc96b1c@mail.local>
+ <8c92ef18-6648-4348-9008-4f646d8b6956@nvidia.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <8c92ef18-6648-4348-9008-4f646d8b6956@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On 9/23/24 23:37, Joseph Jang wrote:
+> Hi Alexandre,
+> 
+> Thank you for looking at the rtc patch.
+> I saw you Acked the [PATCH 2/2], not sure when could we see the patch
+> in kernel master or next branch ?
+> 
+> Thank you,
+> Joseph.
+> 
 
-Pass through the SYSTEM_OFF2 function for hibernation, just like SYSTEM_OFF.
+Please don't top post. It is hard to follow the thread.
 
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- arch/arm64/kvm/hyp/nvhe/psci-relay.c | 2 ++
- 1 file changed, 2 insertions(+)
+> On 2024/6/21 3:37 AM, Alexandre Belloni wrote:
+>> On 23/05/2024 18:38:07-0700, Joseph Jang wrote:
+>>> The rtctest requires the read permission on /dev/rtc0. The rtctest will
+>>> be skipped if the /dev/rtc0 is not readable.
+>>>
+>>> Reviewed-by: Koba Ko <kobak@nvidia.com>
+>>> Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
+>>> Signed-off-by: Joseph Jang <jjang@nvidia.com>
+>>
+>> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/psci-relay.c b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-index dfe8fe0f7eaf..9c2ce1e0e99a 100644
---- a/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-+++ b/arch/arm64/kvm/hyp/nvhe/psci-relay.c
-@@ -265,6 +265,8 @@ static unsigned long psci_1_0_handler(u64 func_id, struct kvm_cpu_context *host_
- 	case PSCI_1_0_FN_PSCI_FEATURES:
- 	case PSCI_1_0_FN_SET_SUSPEND_MODE:
- 	case PSCI_1_1_FN64_SYSTEM_RESET2:
-+	case PSCI_1_3_FN_SYSTEM_OFF2:
-+	case PSCI_1_3_FN64_SYSTEM_OFF2:
- 		return psci_forward(host_ctxt);
- 	case PSCI_1_0_FN64_SYSTEM_SUSPEND:
- 		return psci_system_suspend(func_id, host_ctxt);
--- 
-2.44.0
+Alexandre, I can take this patch through kselftest. Might have
+slipped through my Inbox or the assumption that this will go
+through rtc tree.
 
+thanks,
+-- Shuah
