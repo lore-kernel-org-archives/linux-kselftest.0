@@ -1,57 +1,57 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97668770F5
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 07:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A6E148316
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 07:38:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727163123; cv=none; b=ki97BVJIh4rx7QI2xUPu0E5wdQUYKwBj9g4qlwXyXdp1qgZvGfFsssMRPqP2scIfbT3/HxHnzVKFfCkZSBjO1gTkPBcgeqqDMrQAMQQBFNNbeK6LCKBuCyJK6yJUUQZP409UrqSYB+doefDWWbBZL6P7NvUBErwCyv89YBDBCjg=
+	t=1727163517; cv=none; b=YS1CBpRPQmd187V2v7/fyicCElvza5Dvx7r9btOWMCmW2m5fa5JIIGabWUHs7m35TcZQW5X7efzff18RFausUTL3yGAPZ4P0+arK5EFOOcQBjZfOXBG1tfpyoJdGfjJQGQG4i+xOo0Jo6Tr/8gjP54WFkcVtpICkfBn7ZEQAUI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727163123; c=relaxed/simple;
-	bh=7O+CXPnTSksQhlE1WYFBvfR1OCzLYspV9WTzEf8Dj/k=;
+	s=arc-20240116; t=1727163517; c=relaxed/simple;
+	bh=MDgohN12nsf9M2mRFuJEw+fa/KxZISPlzEO6ManVUSY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qoMR7V7N5EHv6XcdZMUjPnH9zQsXunxc31tS0nMTtFhCShmCCZvKsbU8FeS51kVkjlSDykfhUjSQfN8PLGwZdHtWU1y8cFysico2CCGHH29CP9FrE7j83sym1MhWyyHR3/2yKTxWsn9lTXXRieTju46Fj/Z89i2S96xuZfJFZiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DewFfEuo; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=WbbhXqgk362VgH78XgPWDrRBzaO95ums84yBdHHints+m9/YpZk1806jzsSvlCP9qCQbHyeC4L4UtVD61MKqaMIiAb0oIU+K5dYIxYy1pbyptg/tYjvcKq8ddEgLLP3SbOne7OD7ygkgSf2PqZQEgsPRvVoTOvDqSeLrz6HavAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2F2xhpmz; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DewFfEuo"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e1fea193a4so23260347b3.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 00:32:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2F2xhpmz"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-718d873b1e8so7254435b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 00:38:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727163120; x=1727767920; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1727163516; x=1727768316; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7O+CXPnTSksQhlE1WYFBvfR1OCzLYspV9WTzEf8Dj/k=;
-        b=DewFfEuoC6EeLDf9BKywn1No28EUXDKpulPOBaVAPn/T/OdODyxSRfYi1pKQfF0GuH
-         Caw751PImDuzywSkTQs/lf7qmuKqlIiCQEvGi3JwEdRgF6qkNFw//rzE/aapDV5SSZeC
-         X/802JkJK8M5jDm2NMDjLBdEcKHvA2r6vYw9rWuX9t1AUVSFzkt9kTTPPJe1Vc9sIOGI
-         AnKyr7H3DPvFiXtt7ttLmWg+uW+0Fy+idbqeBnHZlZmQvEGuRGAPXuTGZUtOaUkEf8ct
-         693x2NAi+4e9FavpGfhIzfZlL3nHArWSkliUTpce1zsiRAs53EXFwbAmyAJMaJbp+qFc
-         N8CQ==
+        bh=4ZkYWJqNf6eoiBM6WqGlfzoIuo2kVyjLaKv1M7ETX4c=;
+        b=2F2xhpmzxYNgUcnhbQ9PTCZaxurWsu0umOflsfFz74AbdO5sDj/KY1SKzHcHBIazlr
+         orfjRUrn7AlklQLN98ybwVisBwAfu7uAtgxIREmHdrLvHadkq46bgYQSV1dxogb62hwq
+         bzIsqxt1RP04bcOwhRk7Tgstp1FXdpFKZK3NrtVCKVlhQlILhBhfWPpr7XAOEbKsZZGS
+         taw08TmnTK2+UQZxwGTn5Xl31EzZvUY+5lfHUd6ex/JIAXOCTk0jzFL053l97FgbdXLh
+         nUJigFDo95DEMOyOtnfqG9AkYjMYfE5INpFUBMeDD4e/f6g++dnGX9wSZOn/VkcovRkN
+         p9vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727163120; x=1727767920;
+        d=1e100.net; s=20230601; t=1727163516; x=1727768316;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=7O+CXPnTSksQhlE1WYFBvfR1OCzLYspV9WTzEf8Dj/k=;
-        b=D8jnM0OOQXM6v27r1KBtWwV/vNeeREaL0OR2m0u3+UU6Xu9mpBfmwfSDNsxNSGIAyt
-         HwoBhp6id/ShRk0abxGT5yqO3SwOUMWZnHLmi0Uxe3gtFUgY1toS4XNNUzkxE+YacK9f
-         EAfpEJ+kr0bpu2ZdTiDUGgVS/+jORp0ffXH1/rX9N8E+IDQdK2xk4zFn9738VC3h/5Cd
-         eUYTmL7rMBHjelm4MIxv2jB/e/Ls0Oqgk+LFacOd/4Kfc6AT3BQKvLE8VE6abad4w/SM
-         MFeJla8rmBnPbaxjMLiTtV8bjdZwfE7WDOJc5QkOMb8Qm00hwo5VZ01DoRt5ou6beLoF
-         hsIA==
-X-Forwarded-Encrypted: i=1; AJvYcCU/zzFGJx91o/UvE/juPvO8SE5wIlYJPCr4DeYAHv1n2YgJSvXDXWCzX8RrqjNZ3r+z9MddSEp3BNx8NFlvh14=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0i9yrYB4EWm4zxQN3ditL/viSBI3NRWKrkAh9RDw/PxljPxl3
-	FvJLxiAoOk8jVpL4xA0zLI1B4i0XmYnQJ0Vsd6NNtXOZiJevPWry9H96PVONyaYFTB0qO4fH8YH
-	krw==
-X-Google-Smtp-Source: AGHT+IHIvfFWdiWh91SJhJ3q3oJZ+CokUdqnnzQjcHBfAmTjXSleF3H3xG8poCJJ2BpECc61ov955ihOH6Y=
+        bh=4ZkYWJqNf6eoiBM6WqGlfzoIuo2kVyjLaKv1M7ETX4c=;
+        b=U8gDd4Oy1f+UIL8CMjMOs1iTGZpBnGYiFxE5uTOnuuTlmls24d/OMf787xYd7FaoGL
+         x+7eQH/Jwf8tTBIC2Yu5vUlLwwzCNmK/fPGKiwRn8xxYPStaVEuAZCw4ORCuTZE6REdR
+         U3GdOtHoPkiejzb1W2180TXvhJuL6UupzZNiDEZnNGpciiNFspwZlk5+Yo7HKhirTx9V
+         PtfhcQo2oXfHHmmtcpkk06z7mS39Soq22QISTsAjXoDpChmnDY23g/G5kYVwrlW3lc3d
+         MGhSTmt9Pz+9mkkGi22eHKQuIbL5u6sznOp+xM7E+oZMU/pdtWoUxqdPIcXv/12+mKD3
+         rY0A==
+X-Forwarded-Encrypted: i=1; AJvYcCWwHRdxLPJnyL67Sig/rrHA+rKwONudnMSuKPC49TKX87kNV4rIZzJerIoRj6FxHuOlLBqVlW1L2hBzivDRHzI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywo+Neky3gpTUtTMS82BimeAqreeeP9Rp7/lT5WPb/n/YdlHckh
+	Fw0a4rv8xAd+kFwvNu1p80h7LM9EkuvFQShKCPwJfqUEcyXX1I1GwFXGG6CYx1mptMI9UoLejLi
+	jmQ==
+X-Google-Smtp-Source: AGHT+IGqaVfCjWT7w9L72pzk8ZvtxcHt2q2D2SKW8JkbXsTB6bk6jQAflozKkKgLgVrGHRgS43NAgT8SMao=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a0d:fdc7:0:b0:6dd:bc07:2850 with SMTP id
- 00721157ae682-6dfef028d1amr243517b3.6.1727163120369; Tue, 24 Sep 2024
- 00:32:00 -0700 (PDT)
-Date: Mon, 23 Sep 2024 14:46:17 -0700
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:66d1:b0:717:8e0f:3e5c with SMTP id
+ d2e1a72fcca58-7199caac6b7mr20285b3a.5.1727163515356; Tue, 24 Sep 2024
+ 00:38:35 -0700 (PDT)
+Date: Tue, 24 Sep 2024 00:38:33 -0700
 In-Reply-To: <cb06b33acdad04bef8c9541b4247a36f51cf2d36.camel@amazon.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -61,7 +61,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240923141810.76331-1-iorlov@amazon.com> <ZvGfnARMqZS0mkg-@google.com>
  <cb06b33acdad04bef8c9541b4247a36f51cf2d36.camel@amazon.co.uk>
-Message-ID: <ZvHhqRWW04jmk8TW@google.com>
+Message-ID: <ZvJseVoT7gN_GBG3@google.com>
 Subject: Re: [PATCH 0/4] Process some MMIO-related errors without KVM exit
 From: Sean Christopherson <seanjc@google.com>
 To: Jack Allister <jalliste@amazon.co.uk>
@@ -98,11 +98,10 @@ On Mon, Sep 23, 2024, Jack Allister wrote:
 > > > execution without internal error
 > >=20
 > > No.=C2=A0 This is not architectural behavior.=C2=A0 It's not even remot=
-ely
-> > close to
-> > architectural behavior.=C2=A0 KVM's behavior isn't great, but making up
-> > _guest visible_
-> > behavior is not going to happen.
+ely close to
+> > architectural behavior.=C2=A0 KVM's behavior isn't great, but making up=
+ _guest
+> > visible_ behavior is not going to happen.
 >=20
 > Is this a no to the whole series or from the cover letter?=C2=A0
 
@@ -113,24 +112,76 @@ The whole series.
 e
 > fault (bare metal Cascake Lake Intel).
 
-That happens because the IDT is garbage and/or the CPU is getting master ab=
-ort
-semantics back, not because anything in the x86 architectures says that acc=
-essing
-MMIO during exception vectoring goes straight to shutdown.
+The triple fault occurs because the MMIO read returns garbage, e.g. because=
+ it
+gets back master abort semantics.
 
 > Yes a sane operating system is not really going to be doing setting it's =
 IDT
 > or GDT base to point into an MMIO region, but we've seen occurrences.
+
+Sure, but that doesn't make it architecturally correct to synthesize arbitr=
+ary
+faults.
+
 > Normally when other external things have gone horribly wrong.
 >=20
 > Ivan can clarify as to what's been seen on AMD platforms regarding the
-> infinite loop for patch one. This was also tested on bare metal
-> hardware. Injection of the #UD within patch 2 may be debatable but I
-> believe Ivan has some more data from experiments backing this up.
+> infinite loop for patch one.
 
-I have no problems improving KVM's handling of scenarios that KVM can't emu=
-late,
-but there needs to be reasonable justification for taking on complexity, an=
-d KVM
-must not make up guest visible behavior.
+So it sounds like what you really want to do is not put the vCPU into an in=
+finite
+loop.  Have you tried kvm/next or kvm-x86/next, which has fixes for infinit=
+e
+loops on TDP faults?  Specifically, these commits:
+
+  98a69b96caca3e07aff57ca91fd7cc3a3853871a KVM: x86/mmu: WARN on MMIO cache=
+ hit when emulating write-protected gfn
+  d859b16161c81ee929b7b02a85227b8e3250bc97 KVM: x86/mmu: Detect if unprotec=
+t will do anything based on invalid_list
+  6b3dcabc10911711eba15816d808e2a18f130406 KVM: x86/mmu: Subsume kvm_mmu_un=
+protect_page() into the and_retry() version
+  2876624e1adcd9a3a3ffa8c4fe3bf8dbba969d95 KVM: x86: Rename reexecute_instr=
+uction()=3D>kvm_unprotect_and_retry_on_failure()
+  4df685664bed04794ad72b58d8af1fa4fcc60261 KVM: x86: Update retry protectio=
+n fields when forcing retry on emulation failure
+  dabc4ff70c35756bc107bc5d035d0f0746396a9a KVM: x86: Apply retry protection=
+ to "unprotect on failure" path
+  19ab2c8be070160be70a88027b3b93106fef7b89 KVM: x86: Check EMULTYPE_WRITE_P=
+F_TO_SP before unprotecting gfn
+  620525739521376a65a690df899e1596d56791f8 KVM: x86: Remove manual pfn look=
+up when retrying #PF after failed emulation
+  b299c273c06f005976cdc1b9e9299d492527607e KVM: x86/mmu: Move event re-inje=
+ction unprotect+retry into common path
+  29e495bdf847ac6ad0e0d03e5db39a3ed9f12858 KVM: x86/mmu: Always walk guest =
+PTEs with WRITE access when unprotecting
+  b7e948898e772ac900950c0dac4ca90e905cd0c0 KVM: x86/mmu: Don't try to unpro=
+tect an INVALID_GPA
+  2df354e37c1398a85bb43cbbf1f913eb3f91d035 KVM: x86: Fold retry_instruction=
+() into x86_emulate_instruction()
+  41e6e367d576ce1801dc5c2b106e14cde35e3c80 KVM: x86: Move EMULTYPE_ALLOW_RE=
+TRY_PF to x86_emulate_instruction()
+  dfaae8447c53819749cf3ba10ce24d3c609752e3 KVM: x86/mmu: Try "unprotect for=
+ retry" iff there are indirect SPs
+  01dd4d319207c4cfd51a1c9a1812909e944d8c86 KVM: x86/mmu: Apply retry protec=
+tion to "fast nTDP unprotect" path
+  9c19129e535bfff85bdfcb5a804e19e5aae935b2 KVM: x86: Store gpa as gpa_t, no=
+t unsigned long, when unprotecting for retry
+  019f3f84a40c88b68ca4d455306b92c20733e784 KVM: x86: Get RIP from vCPU stat=
+e when storing it to last_retry_eip
+  c1edcc41c3603c65f34000ae031a20971f4e56f9 KVM: x86: Retry to-be-emulated i=
+nsn in "slow" unprotect path iff sp is zapped
+  2fb2b7877b3a4cac4de070ef92437b38f13559b0 KVM: x86/mmu: Skip emulation on =
+page fault iff 1+ SPs were unprotected
+  989a84c93f592e6b288fb3b96d2eeec827d75bef KVM: x86/mmu: Trigger unprotect =
+logic only on write-protection page faults
+  4ececec19a0914873634ad69bbaca5557c33e855 KVM: x86/mmu: Replace PFERR_NEST=
+ED_GUEST_PAGE with a more descriptive helper
+
+> This was also tested on bare metal hardware. Injection of the #UD within
+> patch 2 may be debatable but I believe Ivan has some more data from
+> experiments backing this up.
+
+Heh, it's not debatable.  Fetching from MMIO is perfectly legal.  Again, an=
+y #UD
+you see on bare metal is all but guaranteed to be due to fetching garbage.
