@@ -1,218 +1,154 @@
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2059.outbound.protection.outlook.com [40.107.102.59])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A314D2E859;
-	Tue, 24 Sep 2024 05:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D51B946C;
+	Tue, 24 Sep 2024 06:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727156291; cv=fail; b=j3iHxEkHeQg84e1wBbc43fKaxP4Xfse/hlnjzvYWFGuEGF/4dj6ix7879jTObkcwHTI0bYdsiWgLcL8ZxuGtYch5b7Vdl/bAOxja8YTN2m0rRL8cE3PtlPZ2PHVx+DfR3nJ64YoOOdnVPoU80HBkv7Eiyt+uoLWo98BrmaJCV2g=
+	t=1727158930; cv=pass; b=suvMf1VWt/oyI0UdRGhQcDRCmt0Nd+53mxbI+P/330ZPjed2L6xk76U9Y2hcQaoe+0sMV+Qz2xJOvPqI+TUnkSxu7tfKLb9E7eR2BRAgD+TwDuX3DDP4waPuz8f+QqfVys2kdsuMCwQoGbJbMx4/ln8qfAuwrehPtrzxIOeEoUI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727156291; c=relaxed/simple;
-	bh=iWeHYOkEHdfZUZRbZzNP5WgYUqYShhIUPKcADkKyDRE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=VpRzS8sdsSSSiVLb2qivAmy9kZuVM+U2yTwqFbEJ3ooLxEGAGluiuc3RUxIYhNUU4xrji0eUwpQNdzVUiEmT+/rcN4hApDX4qhnGedOE4qaOJD+weuC9xM4nQ/Jx277xqgp+9ZKHa7/JSIXuQM3vddb8hTrmJcSs/AhqD/MwIyk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aEibO+SK; arc=fail smtp.client-ip=40.107.102.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1727158930; c=relaxed/simple;
+	bh=HdtYSrtecSW6KcdZdLfXETvs3V785rqJeMBKuUs9Go4=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=eVwisnT3mA2w5JeetKzMVt6u2rLd9mY1APEsYb8ppvjUNceIzAvPwTfXaggmlVoB4EObxd2kEYI9qjQekKUckMVOz95lN2HD+Q7r2OeuxFvdfoOl5MHl8YgzTSsTh2xtxx1iI+EXOSn6zjy1RlnAVQ/scCNlDubHeczV8z4zUZg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=QSZTgU8h; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aEibO+SK"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KJTunqjaA4uhxDPIIeFZVWtnk6aNphbGmOaI5HrtXwRVKtLvjN7oGarsOSs740tLJYu+yzpwUf/7XGpQuW+baa1Ez8mBwKjaXOlRRDDnXtBhjBRWt5Nqi65XXKfLp2IEY+4OBk0A+hg58qzg/DgQobKto0x5DTWg/hG7payY1Tb6Yln45RC+0IXL2PWrC1FFUy05FMryiQQPW/vlIOrZA44Bpx9Gec7vqzyODL8qV1On/VTL2ZEjX/bHCuvZovTBN+4oPo6QYBdtDhw1ZNf1SGmnn35Rm9a4YrEaMILf9l5ut9y0Bkhfqy/uC6LlTQyLlisChkf3MLv+LQLpgCswfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xIkFgwiNWgrY+5tC9pYdxh4q6c/acw9YDpYngqrJ6qI=;
- b=mONgKkbmcb4r6wlLvV5Csr03epjdcBg7O8/3wvbPW9uc3TI+nC8PgUMlPqu/8mE3299Xf8lYzJ/NOS4GL24Gjv/t9W1St8MKZTigx/J5c/AIg+XEBwycg+FitcHBor8+UVGY+2H79qdfm+ZbhF/qiVsikjpgwz43zNqh2nH3VMUh8F3gac46/J8cmugpe4ozPI0Hv7gEB8p+TFbobGte1p5ZFCqgAnQGQMT/gXSyyDjFdiklLo53cxHWW0aCSMua+o2w7sPmsHw5b/M8a3dJsmGpPRPdiXL4zzZYPqIbh3O3JbPE4wDagZycrP8DIxXvXcMfqghne6cW921BrF8OnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xIkFgwiNWgrY+5tC9pYdxh4q6c/acw9YDpYngqrJ6qI=;
- b=aEibO+SKUwJM96mt5zaOQaPVnkqI9BbEJJLz0x44GDvHcKeVyxINZCpI3YTTmIjLaS3wrpy8e812saUl4Fg1hMDgniEU5+TxjuoLNfi1dNAj7T+t8i74Hz+FVCP3jXo7oI7zFRtMpOPlkr/fTwULasGZ9BQexlq7A9Jol96Bu14aPD5z6s+93KVn+Cy6trqPBIklXimyTJUOj0VaSFIKjgv3ozAVhtSvtFzartXMkOLGTsn4I36EDOVyNv5EY2vS+9SFwNeIamfbTSDrG7VJUZekkvB/TbS5vlUpLA3ah4RSWflrBhAsuKCgimIsIf6eq2asCWwr2JDZRtrDnXiWCQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM4PR12MB6399.namprd12.prod.outlook.com (2603:10b6:8:b7::15) by
- DS0PR12MB8368.namprd12.prod.outlook.com (2603:10b6:8:fe::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7982.25; Tue, 24 Sep 2024 05:38:07 +0000
-Received: from DM4PR12MB6399.namprd12.prod.outlook.com
- ([fe80::a909:22d1:b276:7c12]) by DM4PR12MB6399.namprd12.prod.outlook.com
- ([fe80::a909:22d1:b276:7c12%4]) with mapi id 15.20.7982.022; Tue, 24 Sep 2024
- 05:38:06 +0000
-Message-ID: <8c92ef18-6648-4348-9008-4f646d8b6956@nvidia.com>
-Date: Tue, 24 Sep 2024 13:37:58 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftest: rtc: Check if could access /dev/rtc0 before
- testing
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: "shuah@kernel.org" <shuah@kernel.org>,
- "avagin@google.com" <avagin@google.com>,
- "amir73il@gmail.com" <amir73il@gmail.com>,
- "brauner@kernel.org" <brauner@kernel.org>, Matt Ochs <mochs@nvidia.com>,
- Koba Ko <kobak@nvidia.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20240524013807.154338-1-jjang@nvidia.com>
- <20240524013807.154338-3-jjang@nvidia.com>
- <202406201937464fc96b1c@mail.local>
-Content-Language: en-US
-From: Joseph Jang <jjang@nvidia.com>
-In-Reply-To: <202406201937464fc96b1c@mail.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0072.apcprd02.prod.outlook.com
- (2603:1096:4:54::36) To DM4PR12MB6399.namprd12.prod.outlook.com
- (2603:10b6:8:b7::15)
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="QSZTgU8h"
+ARC-Seal: i=1; a=rsa-sha256; t=1727158908; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Ms0eqkyEWOBHewpsfYfTY75zXNRc5wM0z0j1NfgcfRiimacYkJVy0G/nnkBaRAvD5pRxFnaEnkadrrqojvwDc7MIHEuWxWwyVoLtYgY8DP4aR+KIfAduCW5fkDkxaosbmBUo37T6OcJzed+V3xiUvTBDYBHSuXV+cIRuYYu0oHw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1727158908; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Tfl66UbwblneQLJx/PLKt9dtwJSSzUeO9HMjAGRY/J8=; 
+	b=lqfdub1aXAPz5Bf8LWhO99JTjQzeGpXF3pzqWKqNa1qyckTBvhiXtuV2ugMIBAmNavP0g8y0a2GK2JYl/OD8BoWNbCTLL1yMAk3A/mNx7k3lkVm8hvn2Q18R1C75VRws671zDmUIvvpviKUP7VALUiRRSucxFTPc5Xi3V5ROhOI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
+	dmarc=pass header.from=<Usama.Anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1727158908;
+	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=Tfl66UbwblneQLJx/PLKt9dtwJSSzUeO9HMjAGRY/J8=;
+	b=QSZTgU8hAMqypSLnxhJ1EqHzmOV5CuK4zKjeRWcaVtYD2UTTdinP5Q7w9gnoaJwC
+	iNmdiCgSGEVqCeZpeXzEYa2XAZOlj2Yoj5ZkUk39lkCIBUpFOIW3JGQLgXpA5Tq5zfQ
+	3mO5NWp6hGLWCNVnDct4iSCTSz9Wc/twbmyvj9ps=
+Received: by mx.zohomail.com with SMTPS id 1727158906014225.6532248094286;
+	Mon, 23 Sep 2024 23:21:46 -0700 (PDT)
+Message-ID: <109a9f01-0c5c-49f3-b956-91bc789a1c44@collabora.com>
+Date: Tue, 24 Sep 2024 11:21:36 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6399:EE_|DS0PR12MB8368:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7cc41fa0-2429-4d26-6763-08dcdc5b10f8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cUhnemJ4VEg5clhPbXpPT1Y0WDd6UFdZc05NWlZZTkxjTnNoeEJxUXprZmd2?=
- =?utf-8?B?aTcrTzVVSWJCV3R0cytIY0gwQjJoaHVhOXhIUURKM29qMHFFcHFFbzBaU01E?=
- =?utf-8?B?U3hkYXRIV0kvTnBxdVNJY0lrUEdNcE5sZlRYb0R4QngrNHFhZ0piUWlBaVR6?=
- =?utf-8?B?WU9SQVg4T085MngvaThEdGl2a3JhVHh1dkdqZWtQcm5sbjRvb0o4MGU4bVdY?=
- =?utf-8?B?U0hjcG5CK2Jab01iTmUyTWE1NGtBeHo5ZUdXbXI5QnZwa1dYT21Nem96MUow?=
- =?utf-8?B?c2pqOWpMa1Mzam5TRmRMQXlCOUpFNGsxazkxa3MwYmJNRkhXRWd6UmpIbnRJ?=
- =?utf-8?B?WFFZa0NyTlZjekhKbWF0cWI5ZkV5bno1NFFQQjNiU3BhYWIxaUNWNHBhbjRO?=
- =?utf-8?B?QkJ6SEJuM1RGS0g5SFVNQ3JFMElPRXllbUpnaGRweVR2bFBMSU1RSU5CQnFJ?=
- =?utf-8?B?eDdiZUk3U3Ewdkh4RVNhVjVodUNnYlJMaXlHbFRrMm04SWdGOGhDcUxVckU5?=
- =?utf-8?B?MEFZS3FnZ083eElvRENEcWZzM0dXcHlLWWI0bDZQWDdRR3djSGRQbm1iOHU0?=
- =?utf-8?B?bGJlOEZaekNhV2V4TkRSZjRPUjNCVUhIYjRnVlF0ZVlZRHVhdGJlemJhUkpw?=
- =?utf-8?B?V3BmQlFjUXNGTUsxRVMzNm80QTllMldEYzFhN3A2SkZoUmxEbFZqdGpBUHV5?=
- =?utf-8?B?ZHJlamtrNDc0aS9kZmdZd2U3TmpXZWRnd2JoMmhJSjFSNEdRYnc5bmE4NkVK?=
- =?utf-8?B?V3ZDR2ZVMGViRXdzeHhKQVdMaUgwMlVsZjJBYXg3dmNmeGd1VFBja0FtcFI3?=
- =?utf-8?B?S01jM3FvZjJlK1dHNjhiN1l4dy9RSmFmcjRJSXVsRWw5ZlpGYU9lMnlPTXVN?=
- =?utf-8?B?ZUZ4WkJWdFVzdGZzWlM2cGp3d0ErdW5KcW5MY1dQaEVyR3l4VlIxazlwZ0Fx?=
- =?utf-8?B?SHNiK0lmdnNWb2F4SURXMExiTE9LSUVHR3d5bjhDamhYNEVVMnNwQ0dlWndZ?=
- =?utf-8?B?MVFiWWQvc3lXQjVtUFZXQzM3Tm1FYTczL0crNE03VEUyZ2xLZ1V2U3ZKMkE5?=
- =?utf-8?B?UndTVUlWSlFQSitLRk5lenNzYm5KbVI4K2Y5c3RkTGYyK3NGSTNKMGFZN3dM?=
- =?utf-8?B?UVNQT0VhRlBxSWdmTXg0L1dsNzMrdzBnTmRyYXJhcUl4WkZjb3VXNWkzcUlU?=
- =?utf-8?B?QVJ2QU93SXpCK0Z6ZEY0cVA4RUExdnVhK3ovWDdFVkVQblpnQTQwaloxdzZF?=
- =?utf-8?B?RUVGaGh3NDRxcVdQTitsamJHejl5dEhMYjRLcm9CMUs4TVJIYzdlZlhOUHRr?=
- =?utf-8?B?bzd1K09tOEkvK1lFVUthbmorNjFNTlVEeEFrd1JjL1BNN2dWUFJ2SHNsbUFQ?=
- =?utf-8?B?ekY4RjlEUVpTUkxyZ3hGelluOVJGUGx6eFcwcHpISWZjNUJkMExnQklCYkw1?=
- =?utf-8?B?blFYRDhvK2NpRnFHQk85dXBtNzlnSDhRQmtkcitGQTBlNDJlTHNzdmlLTkxs?=
- =?utf-8?B?cXNjOHkwd211R0M5aHRFbGZFTzArTHhSQnBsUnpYRjkwZlpTb3YyTUxFMXAw?=
- =?utf-8?B?Tkc2M0wyZCszZWlHeENOa0ZIM0lkNVNXSXIrSjNFckNtdEwyU3o4a1dTY1Bu?=
- =?utf-8?B?azJFeHFGeENETmtpVzAyWmxVVWNQTTdWWFlvWEU3UmtKcDJvUmphaXpDdm1D?=
- =?utf-8?B?Z2VBUVYvWWJDL3ZvQXRkTXVGOEVCUHQ4cXhiclFIaFdFSklVRzVpbFh3PT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6399.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Z2FJY3haSk1KR04ySFk0S3RrV2JzU1ZMTkx4SEZmaDhFbDR5a3RDQnNkMEhz?=
- =?utf-8?B?YUp2SUUxanR4WU8rNUMyWmhqOWdGcUYvL0RkeWpLMHpzWW5wekVqYTBxTDFv?=
- =?utf-8?B?a3kxejJxbVlSb0w1alJoWVlOKzI5RDMrRWxHcjRCUGZwWGpobENGbjhvZDRz?=
- =?utf-8?B?dnhGQitzN0RJUjUvOXpLT1NUT2drWHFYUld3eldoNmpySGFZUGRBcUE0Ykdz?=
- =?utf-8?B?RGx0VEh0aUp6NTVPWTFldHcxdkVITVVBejhmOWJ6OEpJNnpJMFMvRnZtMHdY?=
- =?utf-8?B?UXRUQitVeDJhTGNMVnRGZzhhaitRZ3g1S05LV0RDRUFYdDhIcWdLMHlJVTBp?=
- =?utf-8?B?TTRCeHFuUEFCZEZVS2RmV3J2aGYxWDBTYkdmOER0VGNocld2RTJWS25VR1RE?=
- =?utf-8?B?VjhtYk85aGwvaTFZZ292dW9VODJHNGpCQUZuR3Q4ZzNlNERWdE9HMWFqb0Fa?=
- =?utf-8?B?OHpQN3k2NW9zMVdocExvc3VVUm9POHN4eDg2bDFvTVUzOTEwdEpKZ2JsQkhz?=
- =?utf-8?B?QThld25TL3lLYzJqOVVTNEpvVTduRzhWc2d2NHo2Sm5XZVNqRWtYOWdaV2tt?=
- =?utf-8?B?MGVXTitEUGFidVg1WklUYllrZmpnV3E1cTlDNDBIMStqTkptQ1lEU1FZNEFT?=
- =?utf-8?B?S3ExYmpTUnV1MVJyV1lySml1Vks1U1hwcVBZWWpTS3ZiUEdpbmVWUi80a2Zz?=
- =?utf-8?B?YktxaWlpNzhmb3owUGJFZFhON3JJcUxFUmpsOGYxMGxVeGhEM0RBRHBYRGdT?=
- =?utf-8?B?ZldkRkVZa1A3V3FRVENkUDFJSzJwYUpueUZtL210aW9sdThBVjZ0RWdQM0pl?=
- =?utf-8?B?Q2hoL3oxaWhtZHMvUUllRkpDamYyMlNNNnlsbjJrRVRMcFYyQjIwVG0xdGFP?=
- =?utf-8?B?M0d3dmtXaU1OUW44enMxa3VRa3BQZmNuaGZZbzdvUXhFb2pLMEwvNGlwbXQ5?=
- =?utf-8?B?WTN1WHVSTmxOTkVuVjFQajZOYVhOY2g4bSs5cnhleEo0WUczZTJTNHJtMHFC?=
- =?utf-8?B?OHVJM1BjN3ZmUEtsSlQrSUlRbnlpL3dhQ2xTamNnYWFQQktiVHdzcnl4a1Y0?=
- =?utf-8?B?aUFwTmVuUWZJUGw0ZkRHN0hBSTRtTDdJYWJ4TTRHaDNMc21LY0c4RzBONXhu?=
- =?utf-8?B?em5JS1I0S3lYd0RHL0xGeEhBSzVaK2VrSVk3OWxlUHBJY1FhdS8yQjNVSmEz?=
- =?utf-8?B?MnExMEV0MUUzVnd1cWtnOUR6SGpramFlUVNWenNWZnRRMnBKYm4xY2dycXc0?=
- =?utf-8?B?UU9XRGt1SlJuVmJSc2YxZ3BFQWMvbmpkRUVYMVVZY0puV0dwUVRFL2tjZFIv?=
- =?utf-8?B?SzdPc3lRTkNCS0lsM3ppZXFwc3VWV2hMOHlUTGxabHRhcmFZL1dmVGNRRGtR?=
- =?utf-8?B?dThxTVNTTkU3VnJVc21lbFZUR2dKU1RLV01zK1N1ZDJ1OHd6VktWcWJnVklh?=
- =?utf-8?B?L3drTFcrRnhST05lakhpTXREMWJzS1BQaEZvYlFWclRYS3R2M3lNWU9UczRw?=
- =?utf-8?B?bHBnTXcxL2lMT0Q0YWdpNFRmTHN2dUVTeVdjZkNManJRZ3UyK0JZWG82MVZL?=
- =?utf-8?B?MXdOMGJjUXk3N1lYOUtqVzJhenFxVVBOZDdKZWZUdDFtUklXQm5DSGJsSEJW?=
- =?utf-8?B?ZDB0VTJKMnNkZTN6REkxRmJVUGM2LzBkRUtGR3pheCszS0hRMHQxQmF1RGJm?=
- =?utf-8?B?ZjVNRTJPbmM4OTBkcEsraFNuSjE1ejhTU25obEFnVXI3TVBjK1lGQjcxeGtu?=
- =?utf-8?B?TnpSeW9GTVBkZlZvWkdPZ0lpSnlGemFXd1FNSUg0TlpxUUwrQkZJb1c5bGg3?=
- =?utf-8?B?ODhBa1lVRmdsbkY5YjhlZmUxZ2k1M2x1cXE0WUNQZkFFOFFBQXczblQ5Wk1w?=
- =?utf-8?B?VmV0SEsvWTlqbk5na05SM3JncGthRjZMVHlzcGxQYkxrbzFyM2s5aDhNZzNW?=
- =?utf-8?B?ZHNuaWIwdldOYnB3SEhKTk5ZR3MyRTlYZjd3RkFjT0FWa2dRMm1raytvR3hZ?=
- =?utf-8?B?SUpPNFF3NU5lbXBFQUZyMlY1YWd3dlFibU9XRDhVTExRUW9HcUovR2crNjRu?=
- =?utf-8?B?Q3hqV014WXB0VGRtWjJsRVhISm9aeXFtUmhZWHF2WlVPQjQwdHd6K0hRTjhx?=
- =?utf-8?Q?ckglvZbvzhyhUu9JhUXO2Xkka?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7cc41fa0-2429-4d26-6763-08dcdc5b10f8
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6399.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2024 05:38:06.5816
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lFlEPQ2JikwBZjf5SEtFg/zvdrFt3SXWhIi7sWZ2iDuFycodbFydvvJsuuWj5gSMRsjIdK0rzvRS/rpWicHB7A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8368
+User-Agent: Mozilla Thunderbird
+Cc: Usama.Anjum@collabora.com, kernel@collabora.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH 1/2] kselftests: mm: Fix wrong __NR_userfaultfd value
+To: Shuah Khan <skhan@linuxfoundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
+ "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+ Andrea Arcangeli <aarcange@redhat.com>, Kim Phillips <kim.phillips@arm.com>
+References: <20240912103151.1520254-1-usama.anjum@collabora.com>
+ <a9ae7dc4-275d-43c3-bf4c-b0090cb6bb12@linuxfoundation.org>
+ <3cb9d266-4d4b-4031-8603-da7fd9e3ad47@collabora.com>
+ <b3caeb96-2f48-4efd-a56c-e91dae891b48@linuxfoundation.org>
+ <0b847784-a95f-4ed5-a0fb-1b7b4023df13@collabora.com>
+ <e2a4d2b4-ca3f-4d21-82d5-b87bc9de9358@linuxfoundation.org>
+ <e4e2095e-3280-4bfc-8129-80b8d00d146d@collabora.com>
+ <db8b758e-9051-4ee0-b0e7-3b54eda0c71b@linuxfoundation.org>
+Content-Language: en-US
+From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
+In-Reply-To: <db8b758e-9051-4ee0-b0e7-3b54eda0c71b@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-Hi Alexandre,
-
-Thank you for looking at the rtc patch.
-I saw you Acked the [PATCH 2/2], not sure when could we see the patch
-in kernel master or next branch ?
-
-Thank you,
-Joseph.
-
-On 2024/6/21 3:37 AM, Alexandre Belloni wrote:
-> On 23/05/2024 18:38:07-0700, Joseph Jang wrote:
->> The rtctest requires the read permission on /dev/rtc0. The rtctest will
->> be skipped if the /dev/rtc0 is not readable.
+On 9/23/24 9:02 PM, Shuah Khan wrote:
+> On 9/22/24 23:35, Muhammad Usama Anjum wrote:
+>> ...
 >>
->> Reviewed-by: Koba Ko <kobak@nvidia.com>
->> Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
->> Signed-off-by: Joseph Jang <jjang@nvidia.com>
-> 
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> 
->> ---
->>   tools/testing/selftests/rtc/rtctest.c | 11 ++++++++++-
->>   1 file changed, 10 insertions(+), 1 deletion(-)
+>>>> grep -rnIF "#define __NR_userfaultfd"
+>>>> tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd
+>>>> 282
+>>>> arch/x86/include/generated/uapi/asm/unistd_32.h:374:#define
+>>>> __NR_userfaultfd 374
+>>>> arch/x86/include/generated/uapi/asm/unistd_64.h:327:#define
+>>>> __NR_userfaultfd 323
+>>>> arch/x86/include/generated/uapi/asm/unistd_x32.h:282:#define
+>>>> __NR_userfaultfd (__X32_SYSCALL_BIT + 323)
+>>>> arch/arm/include/generated/uapi/asm/unistd-eabi.h:347:#define
+>>>> __NR_userfaultfd (__NR_SYSCALL_BASE + 388)
+>>>> arch/arm/include/generated/uapi/asm/unistd-oabi.h:359:#define
+>>>> __NR_userfaultfd (__NR_SYSCALL_BASE + 388)
+>>>> include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+>>>>
+>>>> The number is dependent on the architecture. The above data shows that:
+>>>> x86    374
+>>>> x86_64    323
+>>>
+>>> Correct and the generated header files do the right thing and it is
+>>> good to
+>>> include them as this patch does.
+>>>
+>>> This is a good find and fix. I wish you explained this in your
+>>> changelog.
+>>> Please add more details when you send v2.
+>> I'm sending v2
 >>
->> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
->> index 2b12497eb30d..d104f5326cf4 100644
->> --- a/tools/testing/selftests/rtc/rtctest.c
->> +++ b/tools/testing/selftests/rtc/rtctest.c
->> @@ -483,6 +483,8 @@ __constructor_order_last(void)
->>   
->>   int main(int argc, char **argv)
->>   {
->> +	int ret = -1;
->> +
->>   	switch (argc) {
->>   	case 2:
->>   		rtc_file = argv[1];
->> @@ -494,5 +496,12 @@ int main(int argc, char **argv)
->>   		return 1;
->>   	}
->>   
->> -	return test_harness_run(argc, argv);
->> +	/* Run the test if rtc_file is accessible */
->> +	if (access(rtc_file, R_OK) == 0)
->> +		ret = test_harness_run(argc, argv);
->> +	else
->> +		ksft_exit_skip("[SKIP]: Cannot access rtc file %s - Exiting\n",
->> +						rtc_file);
->> +
->> +	return ret;
->>   }
->> -- 
->> 2.34.1
+>>>
+>>> There could be other issues lurking based on what I found.
+>>>
+>>> The other two files are the problem where they hard code it to 282
+>>> without
+>>> taking the __NR_SYSCALL_BASE for the arch into consideration:
+>>>
+>>> tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+>>> include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+>>>
+>>>>
+>>>> I'm unable to find the history of why it is set to 282 in unistd.h and
+>>>> when this problem happened.
+>>>
+>>> According to git history it is added in the following commit to
+>>> include/uapi/asm-generic/unistd.h:
+>>>
+>>> 09f7298100ea9767324298ab0c7979f6d7463183
+>>> Subject: [PATCH] userfaultfd: register uapi generic syscall (aarch64)
+>>>
+>>> and it is added in the following commit to
+>>> tools/include/uapi/asm-generic/unistd.h
+>>> 34b009cfde2b8ce20a69c7bfd6bad4ce0e7cd970
+>>> Subject: [PATCH] tools include: Grab copies of arm64 dependent unistd.h
+>>> files
+>>>
+>>> I think, the above defines from include/uapi/asm-generic/unistd.h and
+>>> tools/include/uapi/asm-generic/unistd.h should be removed.
+>>>
+>>> Maybe others familiar with userfaultfd can determine the best course of
+>>> action.
+>>> We might have other NR_ defines in these two files that are causing
+>>> problems
+>>> for tests and tools that we haven't uncovered yet.
+>> Added authors of these patches.
 >>
 > 
+> Thank you. Would you be able top follow up on this and send patches
+> to remove these defines if it deemed to be the correct solution?
+Yeah, sure. I'll follow up and fix the issue.
+
+> 
+> thanks,
+> -- Shuah
+> 
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
+
