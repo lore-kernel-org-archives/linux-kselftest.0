@@ -1,149 +1,136 @@
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE87B768FD;
-	Tue, 24 Sep 2024 09:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=72.21.196.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2630319C54C;
+	Tue, 24 Sep 2024 10:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727171670; cv=none; b=SUpqLFzgSgZ95l5FtEULJTSnandrMaDsCNGPYHNW0eh6dmZyEW+hoFQEbZ1ht6xJEqUpNIQk9b1QmqZA3Jl3jbzfX3HvqkjJYSiMKjxbJ3m/S/yIHJIsX8IfiREPoByn4LvZlbn1hCfO4BYaVx5JaAbu3KY/etVDLpUGjPGDSdE=
+	t=1727174426; cv=none; b=RlFMfDg61sWeobes5fdVsI0AXupyD4M5u1vaQU3LYWwTW7m1GE/kSGijjX2ILW70HHPwP7l+PO1ltJqeKCpsAxIxij1y+E71CSem66h7nq20DJc9eUlCSNCmzSvOdzyIe8N27x3Cfge7bfPMGYrDV/JvsbtmZAist2EWiIy7TnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727171670; c=relaxed/simple;
-	bh=Gkrrud4kuXvxvQ6MtiC443Wd3/2RFLqYqDIQsc6zefM=;
-	h=Subject:Date:From:To:CC:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZALwv90ddnTqUZBkw7EEwGhMyMpxHVKLksUUXr32NySWV17zrtRGEN8pGL36XE9/LesaurtuTQatutCn2bcyolIGgoqgGK+lwSSIfP3IEdXxU3bzNPtdB0Kzvq31SaMobbu9Van6CIdJqQuxMnMi3IoKhf5boaSxsxw3zZN2KQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=Xu2XRwxZ; arc=none smtp.client-ip=72.21.196.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1727174426; c=relaxed/simple;
+	bh=/O/J/izwD4c7+6+KkaZ8zeckwL7Y8vx5JOACYI7kk24=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CMVS3czZpit55UA4YihtycGcl8Pm9E/AEKGbPPIDvLpj25NI0YckLJVhlfFO3HomHArIE8j8Qc4IEYWpX5Yy8+zMSKc3DAGxt0VacBu+b37N+aGM5iyTe0T3ge1lD6LzCDteSYGH8WD70KrxwbwCXS4pi2Ykxu67Z21Z8QgbH6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=ZtXgLsXq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=P0NugjZ6; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="Xu2XRwxZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1727171669; x=1758707669;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=K8LrR0vVZyaYFA7OwHUo5vxCOF7p2lb3YoI5XYN1fhE=;
-  b=Xu2XRwxZXG6GyjUuyraR4GiLpFna3N0KrKCPGoTe/0IMmbDNgM+IvqUc
-   6Ep8Dt6k6gRpcynkh/3+vWUlF81HOkl1yaMMLZyAIwC7hyBUKlSMVRtPs
-   bqlRDOicq8eJEZVY9RWtlHMx/AVBFOJbcuTXY8qPfvPoh00Ce3J15OVlh
-   U=;
-X-IronPort-AV: E=Sophos;i="6.10,254,1719878400"; 
-   d="scan'208";a="429947790"
-Subject: Re: [PATCH 0/4] Process some MMIO-related errors without KVM exit
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2024 09:54:26 +0000
-Received: from EX19MTAEUA002.ant.amazon.com [10.0.10.100:46744]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.45.76:2525] with esmtp (Farcaster)
- id bdfbeaad-b03b-481b-a8e4-94c2c0fe622e; Tue, 24 Sep 2024 09:54:25 +0000 (UTC)
-X-Farcaster-Flow-ID: bdfbeaad-b03b-481b-a8e4-94c2c0fe622e
-Received: from EX19D033EUB004.ant.amazon.com (10.252.61.103) by
- EX19MTAEUA002.ant.amazon.com (10.252.50.126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Tue, 24 Sep 2024 09:54:24 +0000
-Received: from EX19MTAUWA001.ant.amazon.com (10.250.64.204) by
- EX19D033EUB004.ant.amazon.com (10.252.61.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Tue, 24 Sep 2024 09:54:24 +0000
-Received: from email-imr-corp-prod-iad-all-1a-f1af3bd3.us-east-1.amazon.com
- (10.25.36.214) by mail-relay.amazon.com (10.250.64.204) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1258.34 via Frontend Transport; Tue, 24 Sep 2024 09:54:23 +0000
-Received: from dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com (dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com [10.253.74.38])
-	by email-imr-corp-prod-iad-all-1a-f1af3bd3.us-east-1.amazon.com (Postfix) with ESMTP id 0F60740359;
-	Tue, 24 Sep 2024 09:54:23 +0000 (UTC)
-Received: by dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com (Postfix, from userid 29210185)
-	id C01BE8A04; Tue, 24 Sep 2024 09:54:22 +0000 (UTC)
-Date: Tue, 24 Sep 2024 09:54:22 +0000
-From: Ivan Orlov <iorlov@amazon.com>
-To: Sean Christopherson <seanjc@google.com>
-CC: Jack Allister <jalliste@amazon.co.uk>, Ivan Orlov <iorlov@amazon.co.uk>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "hpa@zytor.com" <hpa@zytor.com>,
-	"mingo@redhat.com" <mingo@redhat.com>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"nh-open-source@amazon.com" <nh-open-source@amazon.com>, "shuah@kernel.org"
-	<shuah@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>
-Message-ID: <20240924095422.GA66922@dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com>
-References: <20240923141810.76331-1-iorlov@amazon.com>
- <ZvGfnARMqZS0mkg-@google.com>
- <cb06b33acdad04bef8c9541b4247a36f51cf2d36.camel@amazon.co.uk>
- <ZvHhqRWW04jmk8TW@google.com>
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="ZtXgLsXq";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="P0NugjZ6"
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfout.phl.internal (Postfix) with ESMTP id 345A01380468;
+	Tue, 24 Sep 2024 06:40:23 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-07.internal (MEProxy); Tue, 24 Sep 2024 06:40:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm1; t=1727174423; x=1727260823; bh=rCb3GWP7USijz6rPi+ltw
+	nSjH/eSJGnWg3yGDTAWq64=; b=ZtXgLsXqC8COZDnzzYfdkjjM51LmgQQSqfSa4
+	EH/f7nwGsKMnsHrP+UEcDLiuBX94vuyVzDXefSn8wCnw0MTnfo0coNtO23p8C3Jn
+	csLXwo2bnEeRlTGKMLtU7RZxBFjvY6Pt2ykRAOexlVkMunX1fRd1mTt4eG7xQHKF
+	I9PiVtMAV88fMkbA6Gx3XyVpusBqIxSbYR2lkNNryGqh4riCYWGRgmbiYI49l8Mg
+	igXynpgtBIrs94FRZ1KVviZyljD/nRmOcsoGOFZbLDzBruWz1qOf9Q+oAsS9VIbY
+	eKm1PAqTTV0MhEdCqZWyBRYXjilCaI72ctSsk0riSs9rc1lgA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1727174423; x=1727260823; bh=rCb3GWP7USijz6rPi+ltwnSjH/eS
+	JGnWg3yGDTAWq64=; b=P0NugjZ6ua35IkKusoenmwSc2XK8UkM4S5YIhrUuWQ2A
+	/2FQflYGf9MWE31jF2/1Qv5gEXiZiPUCZ8Lnik4tZOGLgzV14jQLPRIjWpc2BrnK
+	pdR80WJKanOzWxcYEBwQR/gzm/Fqrs17MIfvj6YAnzKSW8Sqq1DC4md140HXxkEL
+	Tws/tAMhTD4w4PgfkHU/HmhgNiXGJVSuk6GI8UKM+AO7w2uiahUk8heRY44SqL23
+	NORrJ5SXgH+6SI9uUsvYuPJcuQLGN1/Rr20sXl0A33YdIY5N8gmebqV/4567yIhN
+	oJhdOs3n4Xbi/Kf+W53VOdDUdivrwnWY4A/Tzuk3Aw==
+X-ME-Sender: <xms:FpfyZpCdAd6Tz9253Vp0FrZVXLnQ7SVr3J9tIGNi2XSC8vgLkeGI5A>
+    <xme:FpfyZniS9WLHjkr1kxkB0zeALBDIDRv4BD8L7cxGgQwOKmx5ZnTbPiQyIs8vA9h5r
+    9kXfvvURqgts8si9w>
+X-ME-Received: <xmr:FpfyZkmFJ9IrPhO526N9FgLelrocY1EaG2q-giUZSNNceODWlvsx20qi6dS_4Oo0MeX-dDmLz--R316hWGESOBI6W_wpIHOkHRA9-ulTToOQ6qjoDdTm>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddtvddgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlje
+    dtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghn
+    ihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepvd
+    eggfetgfelhefhueefkeduvdfguedvhfegleejudduffffgfetueduieeikeejnecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguh
+    huuhdrgiihiidpnhgspghrtghpthhtohepiedpmhhouggvpehsmhhtphhouhhtpdhrtghp
+    thhtohepsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuh
+    igqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    eprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihhisehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomh
+X-ME-Proxy: <xmx:FpfyZjzCwm6If8GZOGTKRY8HOOQyTwnG91DGXQkWxuiKf6ZsJX5UFA>
+    <xmx:FpfyZuRfAndwahceP5Hp5kignsNmRs4xezhe3U8YRa5G6F8vdJglfw>
+    <xmx:FpfyZmZIQG3K5kn1Wf54tQc5LkeNui6tciws8BgiE381EHtdqh-q1Q>
+    <xmx:FpfyZvQIEOpX2Q4wXaYtym_iY6sLakx7D8CnQWFu6Qtu3ZUel9gmZw>
+    <xmx:F5fyZtGGUXK0EmDP5hYtXZBQLcg9FOzAl0QhsQaxX2H3WgvmiFviu7Jx>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 24 Sep 2024 06:40:21 -0400 (EDT)
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org
+Cc: kernel-team@meta.com
+Subject: [PATCH bpf-next v3 0/2] Support eliding map lookup nullness
+Date: Tue, 24 Sep 2024 04:40:07 -0600
+Message-ID: <cover.1727174358.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZvHhqRWW04jmk8TW@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 23, 2024 at 02:46:17PM -0700, Sean Christopherson wrote:
- > >
-> > > No.  This is not architectural behavior.  It's not even remotely
-> > > close to
-> > > architectural behavior.  KVM's behavior isn't great, but making up
-> > > _guest visible_
-> > > behavior is not going to happen.
-> >
-> > Is this a no to the whole series or from the cover letter?
-> 
-> The whole series.
-> 
-> > For patch 1 we have observed that if a guest has incorrectly set it's
-> > IDT base to point inside of an MMIO region it will result in a triple
-> > fault (bare metal Cascake Lake Intel).
-> 
-> That happens because the IDT is garbage and/or the CPU is getting master abort
-> semantics back, not because anything in the x86 architectures says that accessing
-> MMIO during exception vectoring goes straight to shutdown.
->
+This patch allows progs to elide a null check on statically known map
+lookup keys. In other words, if the verifier can statically prove that
+the lookup will be in-bounds, allow the prog to drop the null check.
 
-Hi Sean, thank you for the detailed reply.
+This is useful for two reasons:
 
-Yes, I ran the reproducer on my AMD Ryzen 5 once again, and it seems like
-pointing the IDT descriptor base to a framebuffer works perfectly fine,
-without any triple faults, so injecting it into guest is not a correct
-solution.
+1. Large numbers of nullness checks (especially when they cannot fail)
+   unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
+2. It forms a tighter contract between programmer and verifier.
 
-However, I believe KVM should demonstrate consistent behaviour in
-handling MMIO during event delivery on vmx/svm, so either by returning
-an event delivery error in both cases or going into infinite loop in
-both cases. I'm going to test the kvm/next with the commits you
-mentioned, and send a fix if it still hits an infinite loop on SVM.
+For (1), bpftrace is starting to make heavier use of percpu scratch
+maps. As a result, for user scripts with large number of unrolled loops,
+we are starting to hit jump complexity verification errors.  These
+percpu lookups cannot fail anyways, as we only use static key values.
+Eliding nullness probably results in less work for verifier as well.
 
-Also, I reckon as detecting such an issue on the KVM level doesn't
-introduce much complexity, returning a sane error flag would be nice. For
-instance, we could set one of the 'internal.data' elements to identify
-that the problem occured due to MMIO during event delivery
+For (2), percpu scratch maps are often used as a larger stack, as the
+currrent stack is limited to 512 bytes. In these situations, it is
+desirable for the programmer to express: "this lookup should never fail,
+and if it does, it means I messed up the code". By omitting the null
+check, the programmer can "ask" the verifier to double check the logic.
 
-> > Yes a sane operating system is not really going to be doing setting it's IDT
-> > or GDT base to point into an MMIO region, but we've seen occurrences.
-> > Normally when other external things have gone horribly wrong.
-> >
-> > Ivan can clarify as to what's been seen on AMD platforms regarding the
-> > infinite loop for patch one. This was also tested on bare metal
-> > hardware. Injection of the #UD within patch 2 may be debatable but I
-> > believe Ivan has some more data from experiments backing this up.
-> 
-> I have no problems improving KVM's handling of scenarios that KVM can't emulate,
-> but there needs to be reasonable justification for taking on complexity, and KVM
-> must not make up guest visible behavior.
+Changes in v3:
+* Check if stack is (erroneously) growing upwards
+* Mention in commit message why existing tests needed change
 
-Regarding the #UD-related change: the way how I formulated it in the
-cover letter and the patch is confusing, sorry. We are _alredy_ enqueuing
-an #UD when fetching from MMIO, so I believe it is already architecturally
-incorrect (see handle_emulation_failure in arch/x86/kvm/x86.c). However,
-we return an emulation failure after that, and I believe how we do this
-is debatable. I maintain we should either set a flag in emulation_failure.flags
-to indicate that the error happened due to fetch from mmio (to give more
-information to VMM), or we shouldn't return an error at all... Maybe it
-should be KVM_EXIT_MMIO with some flag set? What do you think?
+Changes in v2:
+* Added a check for when R2 is not a ptr to stack
+* Added a check for when stack is uninitialized (no stack slot yet)
+* Updated existing tests to account for null elision
+* Added test case for when R2 can be both const and non-const
 
-Thank you!
+Daniel Xu (2):
+  bpf: verifier: Support eliding map lookup nullness
+  bpf: selftests: verifier: Add nullness elision tests
 
-Kind regards,
-Ivan Orlov
+ kernel/bpf/verifier.c                         |  67 ++++++-
+ tools/testing/selftests/bpf/progs/iters.c     |  14 +-
+ .../selftests/bpf/progs/map_kptr_fail.c       |   2 +-
+ .../bpf/progs/verifier_array_access.c         | 166 ++++++++++++++++++
+ .../selftests/bpf/progs/verifier_map_in_map.c |   2 +-
+ .../testing/selftests/bpf/verifier/map_kptr.c |   2 +-
+ 6 files changed, 242 insertions(+), 11 deletions(-)
+
+-- 
+2.46.0
+
