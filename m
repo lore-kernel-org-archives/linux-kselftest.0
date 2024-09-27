@@ -1,126 +1,135 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F352D18B1A;
-	Fri, 27 Sep 2024 15:51:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8491C172D
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2024 15:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727452293; cv=none; b=Q+L9ch7vygOfQQ35j/iPVyGboDsyVow+bbhwW21mzSa6oYIrWHn346jaDXZeMRPywn5HzQLuz0qYnK1p8exKCtqmexUYmaeW291K3u7xqnZZNOmfo8xl4Jpf4QjHpKuIQ9HodiXDOLgYPghHmRmjSCnzFEWjzBPPtcEFN5+5dlA=
+	t=1727452783; cv=none; b=gWaTKFItTnEJ4olIQz4ONTmWQo+np1unr/GZto7jtVxIsHg3gOOuANxgEl7zpZsjBL3G+VHDIllqRGapZAmniIKSagiJ7p4vO8UuYhiY1vZz0tZCmYvPkDGYGDBxxXPFpP8I/PBCDGHgnUHa3AT86Qw/3bckE7hWeQMH+ehJAm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727452293; c=relaxed/simple;
-	bh=Be+ZGbp3IfAlLZpZF/dmewOvihf2CFmNlZ+Q66KjvMg=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References; b=KcucUGrd0MWBvKtl413CCv8LgmGbjd1cA+yLGVojM6tLByVYnbH4I99mwuECZuyRlKkVmyk77i7Em8044hTKnMECe+R/T1bCY53GCUeygqLKosuDRvfFnFVjv9enetWYgUUEc78tT0v4UcvxdnJKK53g2gqImjXMJ/g88aG5mUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LZzhiuY8; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1727452783; c=relaxed/simple;
+	bh=mNcJxIvrUlKBRWm7kcRpla8DkgOPTgYac1kq5Li84zw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ng4rjGqFiKkEv6SZCzEMkWcY3L6ymkSFKUnKNljBI9ErZUID1TtAIzx931823/VzVIgNiIR3X53ShJ5Fi4nRfAR+Kk67wrgdPjJpYoRcUeaWtj28uzaPYOWf3xCV4xf5XwM/O+QzvJrh6gH6OcQks+VRRLGvUWwyKy1klBzkXQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=id/IfExZ; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LZzhiuY8"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-206aee40676so20053045ad.0;
-        Fri, 27 Sep 2024 08:51:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="id/IfExZ"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4581cec6079so268321cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2024 08:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727452290; x=1728057090; darn=vger.kernel.org;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=siq7XCFpoWz1j+ij/CuNUWO3s9GtQAEeoPcY53GflA8=;
-        b=LZzhiuY8xSsYPUo4JFGcP+NDGY/4nggzmc9BuRVRJ2zE+87Y1oXLSXJ9EgQOuNBL76
-         OfYGNF+FW+TJco0iokhaQotPzyhij0lIsicyi+S9c4m/ieXNHwQCM1Sx7yVxLglTvf8m
-         25BWLlqTpkBQ5gipZCOdY7JGyNYJvBzR5vtZ+vDKLjG0sDaoDIf5qwIOqxrHYhyHu8d8
-         YUlmvwzmHNkmDapr/lj5qGzqUcqJLoxQFgF/THaq73sodHs7gCEog1ALcGeowz1nyd3f
-         EZ7o8btu9W1qh4ops9bFXC/gWGkxTAJzARjEV+b5gEI0waFwCBMgxhxmJ12mR9H5wVMS
-         0bXg==
+        d=google.com; s=20230601; t=1727452781; x=1728057581; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mNcJxIvrUlKBRWm7kcRpla8DkgOPTgYac1kq5Li84zw=;
+        b=id/IfExZIybVGoBSsnSiG7/vQHEuzRHtH/vKaao7WIX1PODdhznLY3KkcVEjQsO98l
+         lWlDESmfBMxT0NGZsuDsqVZpNbKZZFpat5nfgnljzxFcpo8E/Xolcm2XODGe/+7HGTBs
+         EgYWD6ExQ451Qbau8D5SLrkOGEBFbXFv1Ci1bJ/rMpTslpfiNQiKnZPnZxxFTGAZubhS
+         BiwCckdCk5bxc6o62sqxFlxo5WPDkh+mNAx19BwTS27LX87NoMtIAgs+xsZSxGZyJw/v
+         BZKkgrUROdwaR2tx9nyddpZBRNAd0dw2jROIv9kZefSSldmqftJjPBwIhMnCCu4ZfMYX
+         TN7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727452290; x=1728057090;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=siq7XCFpoWz1j+ij/CuNUWO3s9GtQAEeoPcY53GflA8=;
-        b=QoTgnFZNRlx9VJG/vBd4amghvJPxSAVgvRzIHhM+ue0uzo4AMmJTtNh4ZQg/YwKqlE
-         MlhfiiYlwt7DtWngf0ahjDuueOCtugutE9+3LdKZTsZlKR/DhXlCyjM7fWICmxKKsAH4
-         mobEtQsWWoAd1hLuDX5bmDja3lfHU34MKAMXfKVdRyCeeSrVWIOrqmrdSKB9Bdc3xR5f
-         OFigGWKtYC76SO5vdkCdohPu5zGJScrdMGcrguOxpgDHR8Z4CUrW+4evQHODGH4eHx6q
-         ZDgCH+oDiLw5U0wTdQrHOrQoBOvd9Jb2fAa3NA/uz66oxLo0HiO6JI7CiOpMwg3Yoj+O
-         uDYg==
-X-Forwarded-Encrypted: i=1; AJvYcCU+TfDELExEbbitIOqGzMp57paU7y0QoA3C1CZ0r4L2uK2r9Gc8YkV7YIPqyGmO6HJ7Y6q4LPPi+cuyXdWEzjfa@vger.kernel.org, AJvYcCWZ+FIopcZARVctN5VaGfw/3FfHTIADGtjWmfMdbKpdgRrPA66ovywMhsvx+EszPBELYEVGRelRFEuAnhI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJAvm5HttozTt+k73ybKpEkLsw5QG0dq9kEGkudneqCz0W49yo
-	5b9EMfZCBWJ+yQHYg28bGpdD7oPmoOR1TfKWoIIngtmviYo36Eh3Wg8wqw==
-X-Google-Smtp-Source: AGHT+IHYen+9SCB9zAwc+2YM+I/YJeUCIgN9O5oINntyeB1ech4upS2dfT1q+IPsJIFbM8mIsRWLFg==
-X-Received: by 2002:a17:903:11cd:b0:206:96ae:dc57 with SMTP id d9443c01a7336-20b37b912b5mr62267395ad.48.1727452290237;
-        Fri, 27 Sep 2024 08:51:30 -0700 (PDT)
-Received: from dw-tp ([171.76.86.51])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37da2667sm15170095ad.102.2024.09.27.08.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2024 08:51:29 -0700 (PDT)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>, shuah@kernel.org
-Cc: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, zhang jiao <zhangjiao2@cmss.chinamobile.com>
-Subject: Re: [PATCH] selftests/powerpc: Rm the unnecessary remove function.
-In-Reply-To: <20240927043125.8199-1-zhangjiao2@cmss.chinamobile.com>
-Date: Fri, 27 Sep 2024 21:15:41 +0530
-Message-ID: <87h6a1aymy.fsf@gmail.com>
-References: <20240927043125.8199-1-zhangjiao2@cmss.chinamobile.com>
+        d=1e100.net; s=20230601; t=1727452781; x=1728057581;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mNcJxIvrUlKBRWm7kcRpla8DkgOPTgYac1kq5Li84zw=;
+        b=nXPpZ6fO9mdVLVp8/xCCbsQwLBAD7aIhg38bTsmWSjQx1ZCUcPAtO4V5Mscwl4qm3b
+         A246c37URFIOqUqVgjRldQHWG6A3RJmzKjvH6lE1akxNvK0oXkngqy8TMzLPLygweqNB
+         52OUAUu5tshoUp5mzjModlZGfdONrjbqiUAtpv5jdcEUPzmiuOR2KMo//vb3P15uLS84
+         qYTlkU9Z/TrAMQBZZ1M9FsXNEAMz+mxhkVoCPU4yRDfX+5bmQ5f4d+CSnAS7VETmykeZ
+         ZUJ55nhuJdKMjU6R3CozwZNPS47UogaW9/VjY+rEchuRZNH5st//Qaf/SgjUJCEEsIJ0
+         L9Xw==
+X-Forwarded-Encrypted: i=1; AJvYcCXe/kZHog7XziI5UhSL/wn4DzmX4I0HN9B30zfnPvcnHeoPlHiwRBq497J8TIlQiR8RzVSrtuaMPBwnc7xH0/I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaPC1nThtqwLSpeCzUYEqC3JuPr1InJXj+c4/fUagt5bqnFT0L
+	QuHt23q4KHwaaEf7TTe+GwZjvIEV38sOgFohPU6QXEEQEE3iM03n3t9vZ932Q8HvoTy1a7+kMm/
+	lczSYkLnA7e9SwGiAzinau2a5OhuSTbawoA/N
+X-Google-Smtp-Source: AGHT+IFh0GldhtACuS2QaxWHGVDuBc4fpilU9wj8Ngw31fpS/kV2OS2lVOxcZUl6UKTvobIZccHNBjO0lZzjRDP7+Ko=
+X-Received: by 2002:a05:622a:a491:b0:453:58c8:3fd1 with SMTP id
+ d75a77b69052e-45c9feb0724mr3810001cf.0.1727452780668; Fri, 27 Sep 2024
+ 08:59:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <cover.1724776335.git.nicolinc@nvidia.com> <6348cc7a72ce9f2ac0e9caf9737e70177a01eb74.1724776335.git.nicolinc@nvidia.com>
+ <Zva4PJ3FhpMlWxhF@google.com> <20240927140141.GA4568@nvidia.com>
+ <Zva_nFXZgT4MEfDg@google.com> <20240927145808.GB4568@nvidia.com>
+In-Reply-To: <20240927145808.GB4568@nvidia.com>
+From: Mostafa Saleh <smostafa@google.com>
+Date: Fri, 27 Sep 2024 16:59:29 +0100
+Message-ID: <CAFgf54q9j1NjEBxHtf8sqpx5i01PAqwpuwZg-Bt5AOAf-Rwaew@mail.gmail.com>
+Subject: Re: [PATCH v2 06/19] iommufd/viommu: Add IOMMU_VIOMMU_SET/UNSET_VDEV_ID
+ ioctl
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Nicolin Chen <nicolinc@nvidia.com>, kevin.tian@intel.com, will@kernel.org, 
+	joro@8bytes.org, suravee.suthikulpanit@amd.com, robin.murphy@arm.com, 
+	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org, 
+	mshavit@google.com, shameerali.kolothum.thodi@huawei.com, yi.l.liu@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-zhangjiao2 <zhangjiao2@cmss.chinamobile.com> writes:
-
-> From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+On Fri, Sep 27, 2024 at 3:58=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
 >
-> Path is not initialized before use,
-> remove the unnecessary remove function.
+> On Fri, Sep 27, 2024 at 02:22:20PM +0000, Mostafa Saleh wrote:
 >
-> Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
-> ---
->  tools/testing/selftests/powerpc/mm/tlbie_test.c | 1 -
->  1 file changed, 1 deletion(-)
+> > > We don't support multi SID through this interface, at least in this
+> > > version.
+> > >
+> > > To do multi-sid you have to inform the VM of all the different pSIDs
+> > > the device has and then setup the vSID/pSID translation to map them
+> > > all to the HW invalidation logic.
+> >
+> > Why would the VM need to know the pSID?
 >
-> diff --git a/tools/testing/selftests/powerpc/mm/tlbie_test.c b/tools/testing/selftests/powerpc/mm/tlbie_test.c
-> index 48344a74b212..fd1456d16a7d 100644
-> --- a/tools/testing/selftests/powerpc/mm/tlbie_test.c
-> +++ b/tools/testing/selftests/powerpc/mm/tlbie_test.c
-> @@ -314,7 +314,6 @@ static inline void end_verification_log(unsigned int tid, unsigned nr_anamolies)
->  	fclose(f);
->  
->  	if (nr_anamolies == 0) {
-> -		remove(path);
->  		return;
->  	}
+> It doesn't need to know the pSID exactly, but it needs to know all the
+> pSIDs that exist and have them be labeled with vSIDs.
+>
+> With cmdq direct assignment the VM has to issue an ATS invalidation
+> for each and every physical device using its vSID. There is no HW path
+> to handle a 1:N v/p SID relationship.
+>
 
-Nice catch. Indeed the path is uninitialized here. 
+I see, that's for the cmdq assignment.
 
-However, I believe the above "if" block should come after initializing
-the path. The idea is if there were no anamolies noted, then we can
-simply remove the log file and return.
+> > Ah, I thought IOMMUFD would be used instead of VFIO_TYPE1*, which shoul=
+d cover
+> > platform devices (VFIO-platform) or am I missing something?
+>
+> It does work with platform, but AFAIK nobody is interested in that so
+> it hasn't been any focus. Enabling multi-sid nesting, sub stream ids,
+> etc is some additional work I think.
+>
+> But what I mean is the really hard use case for the vSID/pSID mapping
+> is ATS invalidation and you won't use ATS invalidation on platform so
+> multi-sid likely doesn't matter.
+>
+> STE/CD invalidation could possibly be pushed down through the
+> per-domain ioctl and replicated to all domain attachments. We don't
+> have code in the series to do that, but it could work from a uAPI
+> perspective.
+>
+> > If possible, can the UAPI be designed with this in mind, even if not
+> > implemented now?
+>
+> It is reasonable to ask. I think things are extensible enough. I'd
+> imagine we can add a flag 'secondary ID' and then a new field
+> 'secondary ID index' to the vdev operations when someone wants to take
+> this on.
+>
 
-Something like below. Thoughts?
+Makes sense, I can take this when I start doing the pKVM work with
+IOMMUFD, in case it wasn't supported by then.
 
-diff --git a/tools/testing/selftests/powerpc/mm/tlbie_test.c b/tools/testing/selftests/powerpc/mm/tlbie_test.c
-index 48344a74b212..35f0098399cc 100644
---- a/tools/testing/selftests/powerpc/mm/tlbie_test.c
-+++ b/tools/testing/selftests/powerpc/mm/tlbie_test.c
-@@ -313,16 +313,16 @@ static inline void end_verification_log(unsigned int tid, unsigned nr_anamolies)
+Thanks,
+Mostafa
 
-        fclose(f);
-
--       if (nr_anamolies == 0) {
--               remove(path);
--               return;
--       }
--
-        sprintf(logfile, logfilename, tid);
-        strcpy(path, logdir);
-        strcat(path, separator);
-        strcat(path, logfile);
-
-+       if (nr_anamolies == 0) {
-+               remove(path);
-+               return;
-+       }
-+
-        printf("Thread %02d chunk has %d corrupted words. For details check %s\n",
-                tid, nr_anamolies, path);
- }
-
-
--ritesh
+> Jason
