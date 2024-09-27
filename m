@@ -1,134 +1,299 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEF515B118
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2024 21:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F5C14BF8B;
+	Fri, 27 Sep 2024 21:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727473559; cv=none; b=YtJ2RAFSiAmBr5IvYshahuFVYgPy0L/rjhorD8jb8K/paZe1Kq4rZtKXLvJWtAs0UcMc0eyksMNVDXE3nOimRm/IXQhvGxw1u0Y/m1909Bti3EPfYgQpn17b8rk4nIn7d4h01j4Z44KX6ZZjQy/NXfuRGTkmVheB7FKSKiCxZxU=
+	t=1727473664; cv=none; b=Gnt/RyKuheOR2MG0I9eO0D5+ncZAMl6aRQQbvygCNEj+SDmiBb7xW+uYpct/RWFJjXukkgdlZG0xjYABMLqEbTDtqAFU6VbE9BEvP0sU8CZl/+E5cz/69LEoDjFEpapI4ydvVwmlXGIWImROLapOMQwkExgcEJwquYPiHrMmmnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727473559; c=relaxed/simple;
-	bh=UIfvAql8zDAv6kpKKpxf6MFAATNGumaO5pwGhsuA/yY=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=npN6Wu5GTVIHwn3QRrOLyqaYVUTezoB4dSuj7whct9cr/wF8CwhM6WLy7TsmJXCwzDNkrhK+96fCRDMLyEtR/vtP1+8W1mjiJgfGJRRks7m9eUOnZlpzpqqKxHG7G9XHmc+tDTMW+ioVWQR4HGt5BHQ9Pf8ksx/fTDtPekIaNrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=AEExtNH1; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+	s=arc-20240116; t=1727473664; c=relaxed/simple;
+	bh=tMzO2lsBneKl9hDEYNfpRPmt6b2853y7PPtJ2lz5hfY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A8ALdbz5HItKjkUCwtrSj2C3rJljf2CYDrzNC+3AcudM/I93vORhYzuQe8GPoPUiHQ8H4W2oIYn+XR/mQ09O8UkvAGkDs0qXLmnZA1QEfBghsfOttChHE/fzwjeQ0Gy414mR6zKxGV804J6hBfCcuCaywmM0ANA46Ay0WKcBoKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hf8iaDpI; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="AEExtNH1"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7db54269325so1976846a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2024 14:45:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hf8iaDpI"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2059204f448so24789715ad.0;
+        Fri, 27 Sep 2024 14:47:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1727473557; x=1728078357; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=jnRNVLuLMBA85Q2PSshUkRROU7AylxnW/yOtj3p6Qgg=;
-        b=AEExtNH1aaUYs6FIzu4UrLGcAaiY+Jidcpi/IDL25UJpxu4+jdlI+q8MzXOdKMoPT0
-         CfI//DRbZI/FkldoNCTBcirIXF0HX/ucmELfBlmumxnU/WGO0iXRszTzznv+WrScUUTb
-         1RIh3tugvfrr2XKPGIF2YMUhjmD8eYaGC7TjBJ1C1wzdDG1Mgjm72qKTBd6ng8S/N5Nq
-         2WM4pGQxasGWvrKc5CxZomyvo3vM4Z3r681dFv84mVy921W1336MVt1jUrRGoc4Xyi81
-         neXdhYqFCDwfjacFbjgZ63zF7Xcq06Ws2qqEFTRTmbCoPnf4yJ2SSZPF6986UEBGNM+g
-         IFXQ==
+        d=gmail.com; s=20230601; t=1727473661; x=1728078461; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A+ttPIAQLS1mSyjPNXdKJqImDO3MuUBRJJf3XXWrCsg=;
+        b=hf8iaDpITirLxmXuZMotTF9YqNKbhGMBZefk3CNTvS7JxGnVbsxW+ytyyJJ+FN2Bfe
+         x9dihvwmaXtGP0ed7bp4Lve/PM7Q5zM8F5itdzLkkC7bvKvWKZtj9J26SzxRMz3bPa9I
+         AoRDcGobwgKskNKk93FpWITM2KCWZqlJ1aWkV1e23MAh4ebiHt+sZ7F2H0RYQwACMVfU
+         eubB9Q5+GPd0usAbkgTj92Nf2+9Fv0ujCjeiZU4abjQQ3p2gW3j84K1E3vG4k7uRW9jA
+         N8SHKhOADLOh9Qg2ykw2mg8evK45I73Es+oEJNEZ3WnTXmAI3WzlgR2FhwQKzl/uYuA2
+         ut2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727473557; x=1728078357;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jnRNVLuLMBA85Q2PSshUkRROU7AylxnW/yOtj3p6Qgg=;
-        b=NkWkIghtTqhc6drqCrjajbw3VVcmxxCKrBomlsPhawblydu5XIpCnESOsNjLMmq1ir
-         QpkMsBhqs2fX/YunYYfTO+3dVlEr8qKq3dwUm08aXlJv1dpJCga/BjfkZOCdngtT625C
-         CPvNrFOSUaR9gd5cKfpIJs6bXbDM+R6lgmImErGCrrKbiP3mmGH3yOJ+8lj0H9EUTtp6
-         TwYg3P1pYUdGmGxCjJknVZJxO5O77w8dCZKPd91MsI9B3SAotEjroqiCETI3avblMMyS
-         xA7tGTLHVI/saaj1qGrgo9DKllbB9dxXl7tRrj/c/WXz6/ysqn6s4/dKSgIUpdLokgB0
-         SRdA==
-X-Forwarded-Encrypted: i=1; AJvYcCWwPW1XNS3FiZAm/WTC/O1f5Xo4Zgu/VkGcpCCmwcwrgMY8ovn4KHGf9/fItGAGVnHxPXTQ6NiQr5q9rkaOxV0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzQ2CosgIoIIT5GRh0wlam2x4D/9Bde/Y6VFKaqteSX9WYemaQ
-	S4BSCDsTEu1HrTSitnu36tB8/C9DK5DGeMcOId53OdVer0GFnCrZ1zVSGz+aLeU=
-X-Google-Smtp-Source: AGHT+IHRtgYE0Lh+VkVuejQ1YRPcVE6IsaLC5cAawBkIeQ7JSX1f3nwus3qNp70MdBzexBOXiCcfdg==
-X-Received: by 2002:a05:6a21:2d8f:b0:1cf:4679:9b97 with SMTP id adf61e73a8af0-1d4fa77a2edmr6380223637.37.1727473557449;
-        Fri, 27 Sep 2024 14:45:57 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71b26498b26sm2057939b3a.9.2024.09.27.14.45.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2024 14:45:56 -0700 (PDT)
-Message-ID: <66f72794.050a0220.52fa2.c875@mx.google.com>
-Date: Fri, 27 Sep 2024 14:45:56 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1727473661; x=1728078461;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A+ttPIAQLS1mSyjPNXdKJqImDO3MuUBRJJf3XXWrCsg=;
+        b=eR+NafjftOGFUQN0tThQvjTNF6pfKXwcd6B2W09jBldVL/gcqxBnGWPQaTMAAMgu8Z
+         Hv1Hb1BmPBbxWPXV0ujU8YgPYHwRGT3fkz2wCZuuTy3R5dAQvD22kpzryZaJCmrSFPl+
+         PUpCktsrJTvCz/RC1iCelUn5TUwgDWk9bPH4eDmgYHeuZ6Yo1QdvzBxfd25AQ3ZdQaii
+         F+ek0zO+thqM0+Q/mstdN7QaC6QUC6ozZwVxNRwclWKC2KfjADlXssXkU/7x0eZ9pTkd
+         10zUtI0TlH1XnBkfyAIk8meDNnMEKlBlzFdNz+ZTo8czZ/o0kP65lFknIuZMJJspnaVC
+         m99w==
+X-Forwarded-Encrypted: i=1; AJvYcCXqUT4WNd9frWmHlOphzqCJJ4DWsjtrUefdhg3ZOOqJSUj7esQ6Xbq8uDPS5bXieAy77k6UgKlouk8R1TR7qN4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjtzJIDtFj4i4d0/CJ+qQjFIl//KPDRPMHm7xh0NQtE6x9ckAB
+	gQIUVvNiYQru/VkY8YXlr3k6cUNCdrXFaNiU6fLHSGjsUsdVtaV00cDsQ925wvGz8dXIKPSPkSz
+	j6li09U5NUHnQFFrgxF9XWKv0tzI=
+X-Google-Smtp-Source: AGHT+IHsbB6Uo8WJweEk1SI4ElFHp2PIOyNu8OqtL+gU4b/l6dbmlLhoidF5wLZ94jbH4r3UpIoHr8/Ezel+getL4/E=
+X-Received: by 2002:a17:90b:3555:b0:2c9:9658:d704 with SMTP id
+ 98e67ed59e1d1-2e0b8f07960mr4174943a91.40.1727473660300; Fri, 27 Sep 2024
+ 14:47:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <cover.1726475448.git.tony.ambardar@gmail.com> <133407ab20e0dd5c07cab2a6fa7879dee1ffa4bc.1726475448.git.tony.ambardar@gmail.com>
+In-Reply-To: <133407ab20e0dd5c07cab2a6fa7879dee1ffa4bc.1726475448.git.tony.ambardar@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 27 Sep 2024 14:47:27 -0700
+Message-ID: <CAEf4BzbizHEPoQXecYMNz7xEzTZaJcsRVt=yHrdEEZBwO=kNNA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 4/8] libbpf: Support BTF.ext loading and
+ output in either endianness
+To: Tony Ambardar <tony.ambardar@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Ilya Leoshkevich <iii@linux.ibm.com>, Quentin Monnet <qmo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: linux_kselftest-next-6.12-rc1-1-g4b721fcc094e
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next kselftest-lib: 2 runs,
- 1 regressions (linux_kselftest-next-6.12-rc1-1-g4b721fcc094e)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
 
-kselftest/next kselftest-lib: 2 runs, 1 regressions (linux_kselftest-next-6=
-.12-rc1-1-g4b721fcc094e)
+On Mon, Sep 16, 2024 at 1:38=E2=80=AFAM Tony Ambardar <tony.ambardar@gmail.=
+com> wrote:
+>
+> Support for handling BTF data of either endianness was added in [1], but
+> did not include BTF.ext data for lack of use cases. Later, support for
+> static linking [2] provided a use case, but this feature and later ones
+> were restricted to native-endian usage.
+>
+> Add support for BTF.ext handling in either endianness. Convert BTF.ext da=
+ta
+> to native endianness when read into memory for further processing, and
+> support raw data access that restores the original byte-order for output.
+> Add internal header functions for byte-swapping func, line, and core info
+> records.
+>
+> Add new API functions btf_ext__endianness() and btf_ext__set_endianness()
+> for query and setting byte-order, as already exist for BTF data.
+>
+> [1] 3289959b97ca ("libbpf: Support BTF loading and raw data output in bot=
+h endianness")
+> [2] 8fd27bf69b86 ("libbpf: Add BPF static linker BTF and BTF.ext support"=
+)
+>
+> Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+> ---
+>  tools/lib/bpf/btf.c             | 280 +++++++++++++++++++++++++-------
+>  tools/lib/bpf/btf.h             |   3 +
+>  tools/lib/bpf/libbpf.map        |   2 +
+>  tools/lib/bpf/libbpf_internal.h |  30 ++++
+>  4 files changed, 258 insertions(+), 57 deletions(-)
+>
 
-Regressions Summary
--------------------
+[...]
 
-platform                    | arch | lab         | compiler | defconfig    =
-                | regressions
-----------------------------+------+-------------+----------+--------------=
-----------------+------------
-stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
-onfig+kselftest | 1          =
+>
+> -       /* The record size needs to meet the minimum standard */
+> -       record_size =3D *(__u32 *)info;
+> +       /* The record size needs to meet either the minimum standard or, =
+when
+> +        * handling non-native endianness data, the exact standard so as
+> +        * to allow safe byte-swapping.
+> +        */
+> +       record_size =3D is_native ? *(__u32 *)info : bswap_32(*(__u32 *)i=
+nfo);
+>         if (record_size < ext_sec->min_rec_size ||
+> +           (!is_native && record_size !=3D ext_sec->rec_size) ||
+
+ok, so the way you define min_rec_size and rec_size is actually
+broken. bpf_func_info, bpf_line_info, and now also bpf_core_relo all
+come from kernel UAPI header, and it could happen that libbpf is
+compiled against newest definitions of them without actually
+"knowing"/supporting those newer and bigger struct definitions. So
+assuming that sizeof(struct bpf_line_info) is a correct expected
+record size is wrong.
+
+As it is right now, min_rec_size is *the* rec_size, so I removed that
+part and updated this check to record_size !=3D ext_sec->min_rec_size.
+If we ever extend .BTF.ext records, we'll need to add a bit more code
+to accomodate for that.
+
+>             record_size & 0x03) {
+>                 pr_debug("%s section in .BTF.ext has invalid record size =
+%u\n",
+>                          ext_sec->desc, record_size);
+> @@ -2956,7 +2968,7 @@ static int btf_ext_setup_info(struct btf_ext *btf_e=
+xt,
+>                         return -EINVAL;
+>                 }
+>
+> -               num_records =3D sinfo->num_info;
+> +               num_records =3D is_native ? sinfo->num_info : bswap_32(si=
+nfo->num_info);
+>                 if (num_records =3D=3D 0) {
+>                         pr_debug("%s section has incorrect num_records in=
+ .BTF.ext\n",
+>                              ext_sec->desc);
+> @@ -2984,64 +2996,160 @@ static int btf_ext_setup_info(struct btf_ext *bt=
+f_ext,
+>         return 0;
+>  }
+>
+> -static int btf_ext_setup_func_info(struct btf_ext *btf_ext)
+> +/* Parse all info secs in the BTF.ext info data */
+> +static int btf_ext_parse_info(struct btf_ext *btf_ext, bool is_native)
+>  {
+> -       struct btf_ext_sec_setup_param param =3D {
+> +       struct btf_ext_sec_info_param func_info =3D {
+>                 .off =3D btf_ext->hdr->func_info_off,
+>                 .len =3D btf_ext->hdr->func_info_len,
+>                 .min_rec_size =3D sizeof(struct bpf_func_info_min),
+> +               .rec_size =3D sizeof(struct bpf_func_info),
+>                 .ext_info =3D &btf_ext->func_info,
+>                 .desc =3D "func_info"
+>         };
+> -
+> -       return btf_ext_setup_info(btf_ext, &param);
+> -}
+> -
+> -static int btf_ext_setup_line_info(struct btf_ext *btf_ext)
+> -{
+> -       struct btf_ext_sec_setup_param param =3D {
+> +       struct btf_ext_sec_info_param line_info =3D {
+>                 .off =3D btf_ext->hdr->line_info_off,
+>                 .len =3D btf_ext->hdr->line_info_len,
+>                 .min_rec_size =3D sizeof(struct bpf_line_info_min),
+> +               .rec_size =3D sizeof(struct bpf_line_info),
+>                 .ext_info =3D &btf_ext->line_info,
+>                 .desc =3D "line_info",
+>         };
+> -
+> -       return btf_ext_setup_info(btf_ext, &param);
+> -}
+> -
+> -static int btf_ext_setup_core_relos(struct btf_ext *btf_ext)
+> -{
+> -       struct btf_ext_sec_setup_param param =3D {
+> +       struct btf_ext_sec_info_param core_relo =3D {
+>                 .off =3D btf_ext->hdr->core_relo_off,
+>                 .len =3D btf_ext->hdr->core_relo_len,
+>                 .min_rec_size =3D sizeof(struct bpf_core_relo),
+> +               .rec_size =3D sizeof(struct bpf_core_relo),
+>                 .ext_info =3D &btf_ext->core_relo_info,
+>                 .desc =3D "core_relo",
+>         };
+
+[...]
+
+>
+> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> index 4e349ad79ee6..47ee8f6ac489 100644
+> --- a/tools/lib/bpf/btf.h
+> +++ b/tools/lib/bpf/btf.h
+> @@ -167,6 +167,9 @@ LIBBPF_API const char *btf__str_by_offset(const struc=
+t btf *btf, __u32 offset);
+>  LIBBPF_API struct btf_ext *btf_ext__new(const __u8 *data, __u32 size);
+>  LIBBPF_API void btf_ext__free(struct btf_ext *btf_ext);
+>  LIBBPF_API const void *btf_ext__raw_data(const struct btf_ext *btf_ext, =
+__u32 *size);
+> +LIBBPF_API enum btf_endianness btf_ext__endianness(const struct btf_ext =
+*btf_ext);
+> +LIBBPF_API int btf_ext__set_endianness(struct btf_ext *btf_ext,
+> +                                      enum btf_endianness endian);
+>
+>  LIBBPF_API int btf__find_str(struct btf *btf, const char *s);
+>  LIBBPF_API int btf__add_str(struct btf *btf, const char *s);
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 0096e483f7eb..f40ccc2946e7 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -421,6 +421,8 @@ LIBBPF_1.5.0 {
+>         global:
+>                 btf__distill_base;
+>                 btf__relocate;
+> +               btf_ext__endianness;
+> +               btf_ext__set_endianness;
+>                 bpf_map__autoattach;
+>                 bpf_map__set_autoattach;
+>                 bpf_object__token_fd;
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+> index 8cda511a1982..1307753b49b3 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
+
+missing #include <byteswap.h> in libbpf_internal.h, you added too late
+(in the next patch). I moved that include into this patch/commit to
+not break bisectability, please be careful about things like that
+
+> @@ -484,6 +484,8 @@ struct btf_ext {
+>                 struct btf_ext_header *hdr;
+>                 void *data;
+>         };
+> +       void *data_swapped;
+> +       bool swapped_endian;
+>         struct btf_ext_info func_info;
+>         struct btf_ext_info line_info;
+>         struct btf_ext_info core_relo_info;
+> @@ -511,6 +513,34 @@ struct bpf_line_info_min {
+>         __u32   line_col;
+>  };
+>
+> +/* Functions to byte-swap info records */
+> +
+> +typedef void (*info_rec_bswap_fn)(void *);
+> +
+> +static inline void bpf_func_info_bswap(struct bpf_func_info *i)
+> +{
+> +       i->insn_off =3D bswap_32(i->insn_off);
+> +       i->type_id =3D bswap_32(i->type_id);
+> +}
+> +
+> +static inline void bpf_line_info_bswap(struct bpf_line_info *i)
+> +{
+> +       i->insn_off =3D bswap_32(i->insn_off);
+> +       i->file_name_off =3D bswap_32(i->file_name_off);
+> +       i->line_off =3D bswap_32(i->line_off);
+> +       i->line_col =3D bswap_32(i->line_col);
+> +}
+> +
+> +static inline void bpf_core_relo_bswap(struct bpf_core_relo *i)
+> +{
+> +       _Static_assert(sizeof(i->kind) =3D=3D sizeof(__u32),
+> +                      "enum bpf_core_relo_kind is not 32-bit\n");
+
+Do we need the endline in _Static_assert() messages? And generally I
+think this is a bit too paranoid to check that that enum is backed by
+u32, I just dropped the assertion. This is part of kernel UAPI, it
+shouldn't change.
 
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/linu=
-x_kselftest-next-6.12-rc1-1-g4b721fcc094e/plan/kselftest-lib/
-
-  Test:     kselftest-lib
-  Tree:     kselftest
-  Branch:   next
-  Describe: linux_kselftest-next-6.12-rc1-1-g4b721fcc094e
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      4b721fcc094e9eb6dd4702df8d79ab11e120833d =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                    | arch | lab         | compiler | defconfig    =
-                | regressions
-----------------------------+------+-------------+----------+--------------=
-----------------+------------
-stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
-onfig+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66f71aaef3b0ef5235c8685f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//kselftest/next/linux_kselftest=
--next-6.12-rc1-1-g4b721fcc094e/arm/multi_v7_defconfig+kselftest/gcc-12/lab-=
-broonie/kselftest-lib-stm32mp157a-dhcor-avenger96.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/linux_kselftest=
--next-6.12-rc1-1-g4b721fcc094e/arm/multi_v7_defconfig+kselftest/gcc-12/lab-=
-broonie/kselftest-lib-stm32mp157a-dhcor-avenger96.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/armhf/initrd.cpio.gz =
-
-
-
-  * kselftest-lib.login: https://kernelci.org/test/case/id/66f71aaef3b0ef52=
-35c86860
-        failing since 59 days (last pass: v6.10-rc7-29-gdf09b0bb09ea, first=
- fail: v6.11-rc1) =
-
- =20
+> +       i->insn_off =3D bswap_32(i->insn_off);
+> +       i->type_id =3D bswap_32(i->type_id);
+> +       i->access_str_off =3D bswap_32(i->access_str_off);
+> +       i->kind =3D bswap_32(i->kind);
+> +}
+> +
+>  enum btf_field_iter_kind {
+>         BTF_FIELD_ITER_IDS,
+>         BTF_FIELD_ITER_STRS,
+> --
+> 2.34.1
+>
