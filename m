@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5C68F6D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C60F5FDA7;
 	Sun, 29 Sep 2024 21:47:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727646471; cv=none; b=klK2cGRhsO0GbgBxNL6RNjSiiSFFVchfIT5NEg3nDBxZ3VUhqU/h+QKRYjLlF8NHGlQ1lDxUHQN5EYYoAbBC9bliXVLK6NxVANLEicE2wtRxE5b3OAHIJzznx+XMvIKJ42ZXAqXGMj50/HVKKFQ6xLGI+KcDLWnKt8N98RKgxRg=
+	t=1727646471; cv=none; b=KE5O+o2oH5liRq1gFzUE9VFsd7Xi+Nv8xjSjyn0wIMfZVGzqGG1RXoxzwgLiDJCARNiliG/+EeMk5OK9CMhMTOMxLVzhDh7KZZfEHSP/+YIVi/hiZnxVmV+O7JmtL2UiViFYt8dl/oyCygsTpYvyyS6Dh/bqIEkXuJvHEr7QWIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1727646471; c=relaxed/simple;
-	bh=AsJHVK60vM8HIohq226Spe/+cd3HPgDderr8uqmDSfI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ezTb06sAqVKM74da9lVsuuv5bpS/JLi2UkAXUnBEWLNJt73b0DY9O+WKtnZOdijqRlS8ab7vl9gfv6JFq4/LcebRudeqyoUOVRhGS2iusx4kUVO1Wc4Bdau81Mt93+XYjf/w56PofURc96rjeIP650TKxdxKJ3erfpNLYVfdthA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=t2wM1fTZ; arc=none smtp.client-ip=159.69.126.157
+	bh=QdlZBa0RkbDHGXHRwfBzodC7B0WksXLt0gUgoIRDxcI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dg9pi+QhUYXYe4lZ3NJrSgO+7iWuC1In1ZIehnMP0372ttV9lh0hfwxQNOJaWUIhwRsEk9dFp0T9y/vFSNtp6Ooqe+QTGUVIFG4j9L5jsYXg+TRh6FldUuiaY2jq4nCiOZ4Sm8Shq+HIx4uysojf1yIKvb7YYVEEEv0umM5U6aQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=IEx6r+98; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="t2wM1fTZ"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="IEx6r+98"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1727646464;
-	bh=AsJHVK60vM8HIohq226Spe/+cd3HPgDderr8uqmDSfI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=t2wM1fTZQ8XyCHHB1mjswvdHmpzfvgE8zsOWWVY3nfBKUD2dupTWJ+BpGZYD0ISxS
-	 j90iwDzQ2qneKpnAAj722vOFJi3BI6CkuFnHurf1AseuisAjHPXUK9yJ3eZI7IeUoh
-	 YB4+O8taWU9VlDRBLH91aFmq9oDnq2CcdRigVw6I=
+	bh=QdlZBa0RkbDHGXHRwfBzodC7B0WksXLt0gUgoIRDxcI=;
+	h=From:Subject:Date:To:Cc:From;
+	b=IEx6r+98+MS9YiZUrGuRvDqGY9nsRS/x2pI0iaKmENL08sp/G6uRxZtGoK5eqA3si
+	 ocwYEaPXqZuGd4SNklQjPhqvUWAPRbyc+OmdjAd+HL2jCux9bWOKCEZ6/F+afvkYJD
+	 s7GaMEnERJYsG2PT9cac6dNsEHCp+YUksI0Snkjk=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 29 Sep 2024 23:47:38 +0200
-Subject: [PATCH 3/5] selftests/nolibc: add support to use standalone
- kernels for tests
+Subject: [PATCH 0/5] csky: add shutdown and nolibc support
+Date: Sun, 29 Sep 2024 23:47:35 +0200
+Message-Id: <20240929-nolibc-csky-v1-0-bb28031a73b0@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,63 +34,56 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240929-nolibc-csky-v1-3-bb28031a73b0@weissschuh.net>
-References: <20240929-nolibc-csky-v1-0-bb28031a73b0@weissschuh.net>
-In-Reply-To: <20240929-nolibc-csky-v1-0-bb28031a73b0@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAPfK+WYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSyML3bz8nMykZN3k4uxK3dS0NENDAxMLI9MUIyWgjoKi1LTMCrBp0bG
+ 1tQBvG6UkXQAAAA==
+X-Change-ID: 20240928-nolibc-csky-eff1104825d2
 To: Guo Ren <guoren@kernel.org>, Willy Tarreau <w@1wt.eu>, 
  Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1727646464; l=1908;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727646464; l=1470;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=AsJHVK60vM8HIohq226Spe/+cd3HPgDderr8uqmDSfI=;
- b=/1nN18yVpzqP1spFIXxEEJQ5Xk851s6rB1sfm2gFycmVazAio5dOkV22+Mh06qAZbrsnz9By5
- v2PGey+KgNuCHGoHABCGSwNc73oWn1FVWOX96eYWofSVXpU0qZfKSBw
+ bh=QdlZBa0RkbDHGXHRwfBzodC7B0WksXLt0gUgoIRDxcI=;
+ b=8Xtziw6rjVTxDK3ArFAIxoJgvx9yshYqhu3ZlXPAzTf/fg3Zd/lEj93vxITqFAnAdH1Ex/2br
+ yHxmBxBQHFbD+IRk5xhY1gTGKr8Id9daolYy1GKVsQcD4kz3b8nXDFH
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Not all architectures support loading an initramfs through qemu.
-One example is csky for which support is going to be added.
-By allowing to build the initramfs into the kernel itself this issue can
-be avoided.
+This series adds support for the C-SKY architecture to nolibc.
+It is hard to find a usable C-SKY userspace and compiler, so having
+support in nolibc provides an easy way to perform tests there.
+
+The nolibc test suite requires system power off support in QEMU,
+so a driver for that is added, too.
+I'm not sure who is responsible for drivers/virt/ and can take the
+driver.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/Makefile | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+Thomas Weißschuh (5):
+      drivers/virt: introduce csky_exit system poweroff driver
+      tools/nolibc: provide a fallback for lseek through llseek
+      selftests/nolibc: add support to use standalone kernels for tests
+      tools/nolibc: add csky support
+      selftests/nolibc: skip test for getppid() on csky
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 8de98ea7af8071caa0597aa7b86d91a2d1d50e68..e8278924cf28f17144044e69724df1d4fde141a3 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -265,14 +265,21 @@ kernel:
- kernel-standalone: initramfs
- 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs < /dev/null
- 
-+ifeq ($(QEMU_RUN_STANDALONE_$(XARCH)),)
-+RUN_DEPS = kernel initramfs.cpio
-+QEMU_INITRD = -initrd initramfs.cpio
-+else
-+RUN_DEPS = kernel-standalone
-+endif
-+
- # run the tests after building the kernel
--run: kernel initramfs.cpio
--	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-+run: $(RUN_DEPS)
-+	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(IMAGE)" $(QEMU_INITRD) -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
- 
- # re-run the tests from an existing kernel
- rerun:
--	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-+	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(IMAGE)" $(QEMU_INITRD) -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
- 
- # report with existing test log
+ drivers/virt/Kconfig                         |  11 ++
+ drivers/virt/Makefile                        |   1 +
+ drivers/virt/csky_exit.c                     |  57 ++++++++++
+ tools/include/nolibc/arch-csky.h             | 161 +++++++++++++++++++++++++++
+ tools/include/nolibc/arch.h                  |   2 +
+ tools/include/nolibc/sys.h                   |   8 ++
+ tools/testing/selftests/nolibc/Makefile      |  21 +++-
+ tools/testing/selftests/nolibc/nolibc-test.c |   9 +-
+ 8 files changed, 265 insertions(+), 5 deletions(-)
+---
+base-commit: e7ed343658792771cf1b868df061661b7bcc5cef
+change-id: 20240928-nolibc-csky-eff1104825d2
 
+Best regards,
 -- 
-2.46.2
+Thomas Weißschuh <linux@weissschuh.net>
 
