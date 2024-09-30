@@ -1,118 +1,151 @@
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477C7126C07;
-	Mon, 30 Sep 2024 12:18:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D016126C07;
+	Mon, 30 Sep 2024 12:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727698685; cv=none; b=oeNupfRvXHoxYFzqZI8jIuurxSeCBvvTD6TV+BcLc8Pxy+gEpQ6hwR+u3MglpqkQBAt8J8pJWnvuUZDy6/ODFbVnWOdlBTpzpfpVmxIOVCsa//mpX9BzcWktOM6UUwP5V082zii1DqbmOlgkq0V0Vasiep8yfad0y1kB1vcOc/0=
+	t=1727699678; cv=none; b=Uzme+17lFmrAKz9cUit73Dpzye/K7oKqUz+Z/n8mQhB/heGiA+OL+QDZcNJj2Zxm1caUyVQCjPPguj0PrM/1yqnQLCgWtRKc/9ThJ0ry9mkixAVQsojtg5r6Pq3xXveWuGshRlCCGv1eSd9ZCS2UkasYJEWmqhEOb9+iv/p0JKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727698685; c=relaxed/simple;
-	bh=nARtyQ3hnnf2/6HQgnQE4fXFmRnW83fu2o6KdmjKjRE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jvW0OSKrTOE6VgSSNtk21DQFCkVpmjf5QGfV3cMicGtnQwUdrDmG29OqdGaUbmrwtA/5VKR3LxOGTNESrps+iJWKNg8mw4pNlmSqWQSqIEuXFFzmNJFxCrlXuVtK9Dx4KexVZPJkrMuIedtHPzaJgILLRzRd2RVPD28XC9yoNEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hc+PwfI0; arc=none smtp.client-ip=209.85.166.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1727699678; c=relaxed/simple;
+	bh=QIG50gsAuDNEdAD4sYdmyP9U9mIQ+FPqmqNXI/RmpE4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lxGNdQrzOMtAUz3STMFmu0VA7yd2QbT+eGGeT8lQgKYSFx2AMQREf962LioA5Q/D8/B+35AabfCAjxp5gvQDsUA6q+7eyRnu4r3JP96ocSF7wpjtjeSdR7vXPjNKSBB6aaX3q+gBIslEKY90o7V5Tw3ZtPOCnNbbr/BgGd3wi7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XX55u6TP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hc+PwfI0"
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3a1a412638fso18242915ab.1;
-        Mon, 30 Sep 2024 05:18:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727698683; x=1728303483; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nARtyQ3hnnf2/6HQgnQE4fXFmRnW83fu2o6KdmjKjRE=;
-        b=hc+PwfI05FjiJcbgDBdTYFrgSgOQEUEQZhSgxamcd4a9gHjD7CO/O+b7E1rrlY1eCK
-         hQmDLFVgF8ICFDI0KfpP/vz4uS1gdO8O2vKf/idIW+Ii4ooHVVvSUhbWVw6PBdvyUp4Z
-         yMhZf7pJjXloQ4ad5oXwAf9/GmEjK4YbuJzk6EPrFOKk0087E9WLIaWygdIYVqtJtC86
-         IgL6iK1be72rSu+TVPoEuESAPdM8VmjcpTXf2xBhGKjTLx9E6BWw2+zG70VBlrmcc+xl
-         JmceDYxm6zNS7YJ5ZqYzoaDk+TNtuDpbLdLfIqE9/G0Piu/ddbdVRdZ2PfK62BktPg1V
-         yzVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727698683; x=1728303483;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nARtyQ3hnnf2/6HQgnQE4fXFmRnW83fu2o6KdmjKjRE=;
-        b=I4Cw99Wq8qTuQDbZ04vZR4j0oRV2whBlvvhLaAs8hiMY+iV1VQx8S1TYThMmYb3PHM
-         Zk5JSTVLZW1RHsc0yB0SqQKgtqmKLLjG/hJ8MthP8IWpGfYQtXgDhKJuqejhQergiLnz
-         /T9ZAznXtcTXbFODmkTLKTwqsz3QwwoAO7VCb36Y+ndNI9vN5M9780F8QonHkYT0s+Hq
-         NanV+a1jVSf3SOHFJKehoV2mKqKOOSYtNp9sa4pA4jiE1Izj5uehXfH/JNs3FhN5OzDw
-         12QVNNclNbYWAwW1SvD0eLsg45sVQv82vNzyxyexlJV53cvGEbuKvRsdp5b53ZcYsAg4
-         BEdg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxMbrBNXclCHeUR6x8n6UPxPaKhAj+E1C7A2/MY+eBk04z4AyINx3B1FEdLDrhfb1bPS5Rw7Sl@vger.kernel.org, AJvYcCWm+QysrMqu2Cm76iyPjGzah6DU4G4DyBL3zEJv39aUV1lhstngP2QlyUWitQkn/A+t6AEVQJ6v+Lw87frtXJ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8zQzjNiEtvxEUWczdzXdY6/nVMR7K6X+L3E/Lv94UdrOCcS0v
-	P2NfuUKfWWcQOI8QeVab7LLlOQ2iXpH+1L+vtzVHJVlveckz0TyKWZsdAEeY/YNV/1Tl84RLGpP
-	CaWYeelQ/8qY2S4afQkgG7JpeORY=
-X-Google-Smtp-Source: AGHT+IEaaGr7Re3bIehKL9jHSLAfnQVSKDyD6kka44+n1NEG25X720Rccoi9gAeAbhfOLUHFFNqaj8cDfAPZ8VtYwX4=
-X-Received: by 2002:a05:6e02:12ee:b0:3a3:445d:f711 with SMTP id
- e9e14a558f8ab-3a344fc8ff7mr122101905ab.0.1727698681990; Mon, 30 Sep 2024
- 05:18:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XX55u6TP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580A2C4CEC7;
+	Mon, 30 Sep 2024 12:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727699678;
+	bh=QIG50gsAuDNEdAD4sYdmyP9U9mIQ+FPqmqNXI/RmpE4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XX55u6TPb7v1ucI75GB0Fgvo0jazhfo5ge0LACwOmkf8sLGc2lCqH/17jcSJMT1Yg
+	 /vqJ2u1yN8ATiSCDVLNWzAl+2ydsx2NA96Qx0ujDXI+D4OZ7xAuAkguamoiN1CmyOL
+	 x1FJ6m1igOWyLxm8kcss9g2XRsBAwKO26K3znpgxiHbO+lel1ADtgU4jvg7JWkUA9h
+	 1cH/WDYN6fP6cfCj4bCtVBgGugFFXwpZDCE53i0qkc8dz9xV72mPzpRJ3QOH/A4Wwm
+	 xd/tnsbhTs/kzncbTOSqqGq/+gL4H0vrcbakHA4Hv+HqNYu67QPKXmAvl4pAF8wyk1
+	 qrvNtXUe8m99w==
+Date: Mon, 30 Sep 2024 14:34:33 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Florian Weimer <fweimer@redhat.com>, 
+	Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/3] introduce PIDFD_SELF
+Message-ID: <20240930-verbiegen-zinspolitik-cafb730c3c84@brauner>
+References: <cover.1727644404.git.lorenzo.stoakes@oracle.com>
+ <87ttdxl9ch.fsf@oldenburg.str.redhat.com>
+ <42df57ac-d89c-4111-a04d-290dd2197573@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240930092416.80830-1-kerneljasonxing@gmail.com>
- <20240930092416.80830-3-kerneljasonxing@gmail.com> <66fa808374566_17948d2947c@willemb.c.googlers.com.notmuch>
- <CAL+tcoD+Xn0s01ZqfaTRcUOLU7HfLx06FcWKabTcenCXPnXoQQ@mail.gmail.com> <66fa91864f534_17d4532943a@willemb.c.googlers.com.notmuch>
-In-Reply-To: <66fa91864f534_17d4532943a@willemb.c.googlers.com.notmuch>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Mon, 30 Sep 2024 20:17:25 +0800
-Message-ID: <CAL+tcoBD-pHjGPOY9-N94cbNTE=EX+2riUMSk+n-57rtyFPEQQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/3] net-timestamp: add OPT_ID_TCP test in selftests
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org, willemb@google.com, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <42df57ac-d89c-4111-a04d-290dd2197573@lucifer.local>
 
-On Mon, Sep 30, 2024 at 7:54=E2=80=AFPM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> Jason Xing wrote:
-> > On Mon, Sep 30, 2024 at 6:42=E2=80=AFPM Willem de Bruijn
-> > <willemdebruijn.kernel@gmail.com> wrote:
-> > >
-> > > Jason Xing wrote:
-> > > > From: Jason Xing <kernelxing@tencent.com>
-> > > >
-> > > > Introduce a test for SOF_TIMESTAMPING_OPT_ID_TCP for TCP proto so
-> > > > that we can get aware of whether using write_seq as an initial key
-> > > > value works as expected.
-> > >
-> > > Does the test behave different with this flag set?
-> > >
+On Mon, Sep 30, 2024 at 11:39:49AM GMT, Lorenzo Stoakes wrote:
+> On Mon, Sep 30, 2024 at 12:33:18PM GMT, Florian Weimer wrote:
+> > * Lorenzo Stoakes:
 > >
-> > Sorry, my mistake, the last email is not open to the mailing list. So
-> > I copy that here.
+> > > If you wish to utilise a pidfd interface to refer to the current process
+> > > (from the point of view of userland - from the kernel point of view - the
+> > > thread group leader), it is rather cumbersome, requiring something like:
+> > >
+> > > 	int pidfd = pidfd_open(getpid(), 0);
+> > >
+> > > 	...
+> > >
+> > > 	close(pidfd);
+> > >
+> > > Or the equivalent call opening /proc/self. It is more convenient to use a
+> > > sentinel value to indicate to an interface that accepts a pidfd that we
+> > > simply wish to refer to the current process.
 > >
-> > Not that much, only at the very beginning, this new test will use
-> > write_seq directly.
->
-> The kernel will act differently. But the test does not detect this.
+> > The descriptor will refer to the current thread, not process, right?
+> 
+> No it refers to the current process (i.e. thread group leader from kernel
+> perspective). Unless you specify PIDFD_THREAD, this is the same if you did the above.
+> 
+> >
+> > The distinction matters for pidfd_getfd if a process contains multiple
+> > threads with different file descriptor tables, and probably for
+> > pidfd_send_signal as well.
+> 
+> You mean if you did a strange set of flags to clone()? Otherwise these are
+> shared right?
+> 
+> Again, we are explicitly looking at process not thread from userland
+> perspective. A PIDFD_SELF_THREAD might be possible, but this series doesn't try
+> to implement that.
 
-No, it will not cover this.
+Florian raises a good point. Currently we have:
 
->
-> > I once thought and wondered if I need to setsockopt() when one or two
-> > sendmsg() are already done, then we check the behaviour of subsequent
-> > sendmsg() calls. Then I changed my mind because it's a bit complex. Do
-> > you think it's a good way to test?
->
-> Packetdrill is more suitable for deterministically testing such subtle
-> differences.
->
-> I have a packetdrill test for OPT_ID with and without OPT_ID_TCP. It
-> is not public yet. As part of upstreaming our packetdrill tests, this
-> will eventually also be available.
+(1) int pidfd_tgid = pidfd_open(getpid(), 0);
+(2) int pidfd_thread = pidfd_open(getpid(), PIDFD_THREAD);
 
-Good to hear that. Now I think I will drop this patch.
+and this instructs:
 
-Thanks,
-Jason
+pidfd_send_signal()
+pidfd_getfd()
+
+to do different things. For pidfd_send_signal() it's whether the
+operation has thread-group scope or thread-scope for pidfd_send_signal()
+and for pidfd_getfd() it determines the fdtable to use.
+
+The thing is that if you pass:
+
+pidfd_getfd(PDIFD_SELF)
+
+and you have:
+
+TGID
+
+T1 {
+    clone(CLONE_THREAD)
+    unshare(CLONE_FILES)
+}
+
+T2 {
+    clone(CLONE_THREAD)
+    unshare(CLONE_FILES)
+}
+
+You have 3 threads in the same thread-group that all have distinct file
+descriptor tables from each other.
+
+So if T1 did:
+
+pidfd_getfd(PIDFD_SELF, ...)
+
+and we mirror the PIDTYPE_TGID behavior then T1 will very likely expect
+to get the fd from its file descriptor table. IOW, its reasonable to
+expect that T1 is interested in their very own resource, not someone
+else's even if it is the thread-group leader.
+
+But what T1 will get in reality is an fd from TGID's file descriptor
+table (and similar for T2).
+
+Iirc, yes that confusion exists already with /proc/self. But the
+question is whether we should add the same confusion to the pidfd api or
+whether we make PIDFD_SELF actually mean PIDTYPE_PID aka the actual
+calling thread.
+
+My thinking is that if you have the reasonable suspicion that you're
+multi-threaded and that you're interested in the thread-group resource
+then you should be using:
+
+int pidfd = pidfd_open(getpid(), 0)
+
+and hand that thread-group leader pidfd around since you're interested
+in another thread. But if you're really just interested in your own
+resource then pidfd_open(getpid(), 0) makes no sense and you would want
+PIDFD_SELF.
+
+Thoughts?
