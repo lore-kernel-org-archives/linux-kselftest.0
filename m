@@ -1,58 +1,58 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F2D152E02;
-	Mon, 30 Sep 2024 10:42:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAA4B65C;
+	Mon, 30 Sep 2024 10:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727692935; cv=none; b=NpqZO5wk5+T8XytlMp/wknsAnpsWPb7LkGasj5/Y1PX2nJ6QkKkb5oAYZFzgPoUvxzAF9IWnYhmPX/nq3XiYt/YU/ntufFvXvY5qkCHr26UWPyqb3WfveQBEcbS/QNBFfnZ+fgnlMSlMUVTEe0hpXCVoN+UnG3J5sFO1RShVfDQ=
+	t=1727693238; cv=none; b=hFhGFFg/pWwtrsz1ORzaXfBJC+UTV3/0wzoVEb3G/Zi8so1Ato5g8ahG7UkSz/WLV0jPf/RG+lVYXkvH3zvHGygommwSf9hu7o6vG/jx7+05hiB0ilahsl/cBWwLgadGUgg8wPZjnPg12fVsAoSEQ4DiA+QcmUN7fDJZ7bljgyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727692935; c=relaxed/simple;
-	bh=ctuclsZKzXbjCrUI0bjwLy0V5pzv2OPfxtLnt+IOIlw=;
+	s=arc-20240116; t=1727693238; c=relaxed/simple;
+	bh=RD1va17Jbt35EjrjWUXzLXlmHcwbjcyl7NEwzPsMWNA=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=XvRyIT6ALI8q4sXjGYhHsI2DXlyJFxlsThrIDSMZMQ2/oj6Xd1x8wgHZgHV7w5iEzWIkrcFuy3TlalZgyFmAhXQaFMe6dYWDNWgAT02xZuNZmcNtUWI1inA4cpfNiiWdd8mW4ef95qnVkhkWTK9WzS8zel+lL+beWFQMFwUbxyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZmQaaN83; arc=none smtp.client-ip=209.85.160.179
+	 Mime-Version:Content-Type; b=Hh842Zgexy5nQa8HhvsjY3tec9H3zhHw/iC5lnSWDrFiv6+/C1/lStF/TR1FcChMQq7xqHacN7Ii7NKma10oLeuiXS2Z1VIyUxo2mV4aYfH4Yumz1gLPZPxxniJjKojB1z1SN0zAUFF5Ex5GotTnSmy9f4WXhWuqO/m1dcMTE+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zh82Jfa5; arc=none smtp.client-ip=209.85.219.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZmQaaN83"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4582a0b438aso33947311cf.0;
-        Mon, 30 Sep 2024 03:42:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zh82Jfa5"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6cb2f344dbbso34586586d6.3;
+        Mon, 30 Sep 2024 03:47:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727692932; x=1728297732; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727693236; x=1728298036; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=my2lIyuIcvRttarQMt2UalGLjpHwIfPU09pYlufrVlw=;
-        b=ZmQaaN83QA2/4RjHrgf7X7Ctn+QEUddUujEeHIQefxG5XQ/eYXlYVF/NcFYBOqxYsH
-         VIjGpzwoaqkaHCbIZUpQGYTUJTTfuvpyEyCW/xTMlvfGUUi35vwoRp9MnUbJyW8DeUUF
-         zyyqPCtg/7nCLcsC5oEi0PiEzRciso/iMlkr0Z+woPb+69P9P7p9luEP6jhAFa8cCjao
-         TI1kENjebvAeVaRADhWFAVXFH9V3XB1/CUZcGaxS1cVpuorfgep/CdveDUkPXD6QYl4k
-         P10WtVwzex0ADOdjoKe83PvvgBuJhzMdbU7PODf+6JI5IVjvN2j9IJvUA7TUsbBBhMZg
-         b8Sw==
+        bh=0u94IHt1BLB5zdPjjPogMXga2C6UPzIkgbNKBiUgS04=;
+        b=Zh82Jfa5ggLGVMBsJBMzQ/XRGSvVy8p7LSUbghf2jzNaWvgDVeyLRc3TjNBhUxymep
+         9Mw+km/xKQNPR8jSz3kEv0Ex08cDrXzWaAhIFGFni/JwIlWbXnD7KjRkGagvOjvq+H70
+         Zw+zE50vJdWfZSTHRzPqpwzW/A5qzHJ2Y3N4r9F/dSkyB3WsBX6o0CwvuiLWtux4Qo73
+         6AGn/+Kj7SdxfF9VTb/F4iwupdbiSGzwp0UnPdLupIi0qGl2516xBNygybxtMWzQq0hZ
+         7dIAucq1hBNxOSVMtVPL7h69mywC221rtP40Oxc5qg4jjGsmx11oqxoqr4tvzRCmeH0S
+         w9UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727692932; x=1728297732;
+        d=1e100.net; s=20230601; t=1727693236; x=1728298036;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=my2lIyuIcvRttarQMt2UalGLjpHwIfPU09pYlufrVlw=;
-        b=h+GPfl5IMSB5kEbFh9bTlIyu6Nj9CSbuaWODIuueo49ZnH0ME24lTYmJfJelVwG+Ec
-         rhqyVktjumPcyuGsTFKbhAGvC97lrb8zVyL1un8F48doryGK5lEhdMaaaZWkZ4luFs0+
-         nmnsdaVRTlzZUpWXh6rnO3fPv0Sy6cyPAsWSr79Xm24B2W9dhx1CFoX27Pt1dXQRhNep
-         MTzaufTqu1RzhwT98OSriniOM03lVh/ivpYoMKaAEs+bFN8ep1Tz7k5McAlcfNxMAwyH
-         0h7M5U25mEq3RmYO16Ez4I1gNpErX8oTVleK+Trhbr6gED5xGlI58HfDuLO9ghhyXO82
-         n+CQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXs3PF7C0LPc+x//m1PplAc8bcYrrtghntdmeasOiugnpkduC47jXkfbe9OKboXu+xrfecQsTg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZKbNdbDorVKbB65K9/X8tQDsBYuBZFydedf3/uT6eSKRgr1w4
-	objERiB5D3R+8Q95teCcFWgiMUex5IUsu9O2gLlJqTUGHdsxEYDz
-X-Google-Smtp-Source: AGHT+IHYNmJu18YfrA8WHU+3ro8YWd6kwZl732+3K8hGbpSw7SZv2D8RmEoa/BIo3FQY3WaFFaP1FA==
-X-Received: by 2002:ac8:7c45:0:b0:456:8b5e:bcf3 with SMTP id d75a77b69052e-45c9f2a75ddmr184989521cf.52.1727692932475;
-        Mon, 30 Sep 2024 03:42:12 -0700 (PDT)
+        bh=0u94IHt1BLB5zdPjjPogMXga2C6UPzIkgbNKBiUgS04=;
+        b=ZXVzql6qCzfgpA0PeBqFWDarQbs6InUJAwI6OX363RqyHzWepGYq/zpH0mFakiPIW7
+         tDNVI44/T1GOlReqwgQX32euh7aaSkyO0uV6eTnqMbGr50zPTRw8+LdCrmxKSPmLsIDH
+         2pfPxDbGxQZJmGJvDklbDUYgyfGKSppVKrIzUIM5VEDedhZT1JQhfgLUd6yfEWgJDzP/
+         vAI3c/JcpSwtdnhW2N1rLG86J9ATVdoqTvxr9sylhY+MMMAzPh04AO6pfyGQf0hstCRm
+         5faRUo+db7EF1j6ETD+FfFrMhqfopRawtqSZ3vl4zl+WmCVhad3SunzhROOjY9AGMKnT
+         sE1w==
+X-Forwarded-Encrypted: i=1; AJvYcCUNBHRP8hDjxexItVdYpUn4APda4kdKmWbzfig9ieuC99SOg8cIxHkTl5x/FiFpHrCjCim42e4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxIYCGTFbQ15R7OFjI2zDTA+bxlfHa6Gh97vAIQDP99PB0dapn
+	0E8EjCQrQ79JzJlYWoF5W/Xbc+HhcwSDqgO/aAI0xcTMynUZDXJz
+X-Google-Smtp-Source: AGHT+IHLxcd9YdUCiWafl31MLlzf/keOW+AiZwpG/h9Yzn2AEuQrFaNWUYBqeU5aKr3f7tXidT7KSg==
+X-Received: by 2002:a05:6214:5d82:b0:6cb:3a7b:96be with SMTP id 6a1803df08f44-6cb3b480d6emr212707976d6.0.1727693235859;
+        Mon, 30 Sep 2024 03:47:15 -0700 (PDT)
 Received: from localhost (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45c9f28d527sm35470861cf.1.2024.09.30.03.42.11
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cb3b5ff612sm38833316d6.9.2024.09.30.03.47.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 03:42:11 -0700 (PDT)
-Date: Mon, 30 Sep 2024 06:42:11 -0400
+        Mon, 30 Sep 2024 03:47:15 -0700 (PDT)
+Date: Mon, 30 Sep 2024 06:47:14 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Jason Xing <kerneljasonxing@gmail.com>, 
  davem@davemloft.net, 
@@ -66,12 +66,12 @@ To: Jason Xing <kerneljasonxing@gmail.com>,
 Cc: linux-kselftest@vger.kernel.org, 
  netdev@vger.kernel.org, 
  Jason Xing <kernelxing@tencent.com>
-Message-ID: <66fa808374566_17948d2947c@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240930092416.80830-3-kerneljasonxing@gmail.com>
+Message-ID: <66fa81b2ddf10_17948d294bb@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240930092416.80830-4-kerneljasonxing@gmail.com>
 References: <20240930092416.80830-1-kerneljasonxing@gmail.com>
- <20240930092416.80830-3-kerneljasonxing@gmail.com>
-Subject: Re: [PATCH net-next 2/3] net-timestamp: add OPT_ID_TCP test in
- selftests
+ <20240930092416.80830-4-kerneljasonxing@gmail.com>
+Subject: Re: [PATCH net-next 3/3] net-timestamp: namespacify the
+ sysctl_tstamp_allow_data
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,37 +85,70 @@ Content-Transfer-Encoding: 7bit
 Jason Xing wrote:
 > From: Jason Xing <kernelxing@tencent.com>
 > 
-> Introduce a test for SOF_TIMESTAMPING_OPT_ID_TCP for TCP proto so
-> that we can get aware of whether using write_seq as an initial key
-> value works as expected.
-
-Does the test behave different with this flag set?
-
+> Let it be tuned in per netns by admins.
 > 
 > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+
++1 on the idea
+
 > ---
->  tools/testing/selftests/net/txtimestamp.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  include/net/netns/core.h   |  1 +
+>  include/net/sock.h         |  2 --
+
+also remove the static global from sock.c
+
+>  net/core/net_namespace.c   |  1 +
+>  net/core/skbuff.c          |  2 +-
+>  net/core/sysctl_net_core.c | 18 +++++++++---------
+>  5 files changed, 12 insertions(+), 12 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/selftests/net/txtimestamp.c
-> index d626f22f9550..5f5de79d0e51 100644
-> --- a/tools/testing/selftests/net/txtimestamp.c
-> +++ b/tools/testing/selftests/net/txtimestamp.c
-> @@ -893,6 +893,12 @@ static void do_main(int family)
->  		do_test(family, SOF_TIMESTAMPING_TX_SCHED |
->  				SOF_TIMESTAMPING_TX_SOFTWARE |
->  				SOF_TIMESTAMPING_TX_ACK);
-> +
-> +		fprintf(stderr, "\ntest ENQ + SND + ACK with tcp tskey setting\n");
-> +		do_test(family, SOF_TIMESTAMPING_TX_SCHED |
-> +				SOF_TIMESTAMPING_TX_SOFTWARE |
-> +				SOF_TIMESTAMPING_TX_ACK |
-> +				SOF_TIMESTAMPING_OPT_ID_TCP);
->  	}
+> diff --git a/include/net/netns/core.h b/include/net/netns/core.h
+> index 78214f1b43a2..ef8b3105c632 100644
+> --- a/include/net/netns/core.h
+> +++ b/include/net/netns/core.h
+> @@ -23,6 +23,7 @@ struct netns_core {
+>  #if IS_ENABLED(CONFIG_RPS) && IS_ENABLED(CONFIG_SYSCTL)
+>  	struct cpumask *rps_default_mask;
+>  #endif
+> +	int	sysctl_tstamp_allow_data;
+>  };
+>  
+>  #endif
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index c58ca8dd561b..4f31be0fd671 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -2808,8 +2808,6 @@ void sk_get_meminfo(const struct sock *sk, u32 *meminfo);
+>  extern __u32 sysctl_wmem_max;
+>  extern __u32 sysctl_rmem_max;
+>  
+> -extern int sysctl_tstamp_allow_data;
+> -
+>  extern __u32 sysctl_wmem_default;
+>  extern __u32 sysctl_rmem_default;
+>  
+> diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
+> index e39479f1c9a4..e78c01912c64 100644
+> --- a/net/core/net_namespace.c
+> +++ b/net/core/net_namespace.c
+> @@ -317,6 +317,7 @@ static __net_init void preinit_net_sysctl(struct net *net)
+>  	 */
+>  	net->core.sysctl_optmem_max = 128 * 1024;
+>  	net->core.sysctl_txrehash = SOCK_TXREHASH_ENABLED;
+> +	net->core.sysctl_tstamp_allow_data = 1;
 >  }
 >  
-> -- 
-> 2.37.3
-> 
+>  /* init code that must occur even if setup_net() is not called. */
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 74149dc4ee31..ad727d924f73 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -5506,7 +5506,7 @@ static bool skb_may_tx_timestamp(struct sock *sk, bool tsonly)
+>  {
+>  	bool ret;
+>  
+> -	if (likely(READ_ONCE(sysctl_tstamp_allow_data) || tsonly))
+> +	if (likely(READ_ONCE(sock_net(sk)->core.sysctl_tstamp_allow_data) || tsonly))
+>  		return true;
 
-
+Let's switch order of the tests here too
