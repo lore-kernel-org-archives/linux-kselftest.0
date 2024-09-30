@@ -1,128 +1,146 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E9319C540;
-	Mon, 30 Sep 2024 12:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5AA18990E;
+	Mon, 30 Sep 2024 12:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727699858; cv=none; b=E3F403grfAK8tgcx/5xKEnpnqX17PU0/JIUl03P1j8h04k7Pl4faxKlWeFhUPdIbWCsZZa46Jltn1wBanQXigg3vrhR0WU3Y/wNwDuQF8uirh5j0vJDv0cP6r6MchOQ7FKpxkozHPdVzRQiCtY8PUgS7iZ3spww7zexqyU+qMWQ=
+	t=1727700186; cv=none; b=tr+B2R/pUXsqb/ytJvWd+poBTtoSu90fc4ezbSAHB+xBOdxy3eb0WhKUhekgjQ8k8LEsi0VMWLUz7lL6VCRwCQXbiaGokM5QBlIl0jgIN+75jqWm5q8tmoDbfmLMCUoEtr+R3HpMb4ECo6InsENyj2BzrcT/eLU7mzVqCRa7flo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727699858; c=relaxed/simple;
-	bh=tjQh285Zc+G9Xm9tSEh9EovHMoX5eFJh64k3SUZLibA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G4rfGi60NkD1xzyK6DIIPc6/BErFrnKyU+A3mxCgQxUsG5+dip96qkCUf5BlDVrWHeS6K5iM6fcZScuwLH7asWkG/ohFBPbUxM9t3oIxwJ6X+5QaqZW7MsJuePGpSznA6vKmiK1plGYdZCAVQ47vUIIebnvDkumgnLaICPpljTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hxnBRV00; arc=none smtp.client-ip=209.85.128.46
+	s=arc-20240116; t=1727700186; c=relaxed/simple;
+	bh=gEzfPaK0TpvnVynQ506A9D0uyk+SyDbxtCqzyu9DbDw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HFA+GcwA6a9fGK/eyRTsG7waT4qq7g6oWdVFvK/1EM6kv1DauztgbJwiXGJ4s6Iwu6oS56Sv1oDq7mec3sZKh+POR93RtVLRbX6z5Si+GpXMTBehldmEmtvR2U/7tU9Vn7mCtMCMSp9uzESLq7dI5zSt8RzL/8vu9MaWt0VbeLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PrAiO2Hs; arc=none smtp.client-ip=209.85.166.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hxnBRV00"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-42cb1e623d1so40078205e9.0;
-        Mon, 30 Sep 2024 05:37:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PrAiO2Hs"
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3a34ccc6a9aso5835055ab.1;
+        Mon, 30 Sep 2024 05:43:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727699855; x=1728304655; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1727700184; x=1728304984; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b0+j8HZP1cVf+QQUDZOhjhaodRPqf5Kzd1FP1uUxc6s=;
-        b=hxnBRV00bnxZXi7Rt/x9shr35Na6wfQFg6KGQ0BKdbZMu1QmH0hK9/BbFBcPmyRoaz
-         52vH59w8qCudS2ywsuv8w2RQoUYoUJKiNnYWr+EPUK/1kzGeXSbxvg5l7sofO4FAb8WF
-         YHGfYL3WGJZBeWYTckyDgubwrUfsFS0l3U8AnSliNJjHEhTVEYjb0WoFdDdElUiiOq3L
-         5kqGL4qrmtA0maWRLc6nhEZVO/N5Xz3zPg09s+zEtkfC+a4AjvLaFlB/gKwzyKv9VM+i
-         esz4GQADaYl/0EMDgE9oHgR8iZzwz++cisocuuA7Yf6HzQMtep/NGTJINZ+ky1ddqKH3
-         SLrA==
+        bh=38/U6EdWtSaSJAwey3tZ/dl54aPcoLZSVUhkiWNOg6M=;
+        b=PrAiO2HsNfQyFOn4di3hkZqUjIWT4bgdv9ePvtyqpwmiyVasySe/y9NGn7rZ83nfUL
+         APIqv/h1/tmhrLfqD4m6RhfJuZyZ+ngH4ub++LQSDVguMD2iRpo6cTAyL/YC3AjA+HLR
+         ePt7jkpcKQNRy91TjyEOq/7fZYvuhHWo9Jw/OXGnbOUAQ0k3LWIKYg0oJA8A2HNfJV5K
+         p2VMuZ559AciKthM3vp1XhkR3i2fslgzetp9UZl0H+Kiiiq/HBaah/jr3LVEe5ZuWnrx
+         tcXsZkqcYR1kAa+TH8l9Q/7eXK9iyWsbwqf+fxa1H3vB8oeitGceItI+XC4IC3ZJ67hu
+         0fEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727699855; x=1728304655;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1727700184; x=1728304984;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b0+j8HZP1cVf+QQUDZOhjhaodRPqf5Kzd1FP1uUxc6s=;
-        b=oSyPut9FuQas8DjUzcB5Jah6nQkUtEnyJGAFIlPbfa4Rj1LS1HvV5BHWxP1BV9dqn5
-         W7cirkmoYKFjEqfm8CEj+ypaeBAIALHvnEqb1PlmaFacH5ZWv3XNNhCbj6nR1KTENRm6
-         JpTV85j0lDj0Z4ViJ3+HlA6SGv9GPGvJjvqZ8syCAVTV2krmAAXklbo1X4c3nKo/nuUD
-         4I0PjHekzoDQ+vbjupLW36//sGIdX7QWo6sPV8HVGmNQkZSfzuEEoq4EI7MQm8kziCBW
-         y1XOuaQa7QDqa+zzB5zq0tSFMsnb7BlUBtYEet19Mv0VqOOnO1aT8xabW1xYSkn9LfX/
-         7lyA==
-X-Forwarded-Encrypted: i=1; AJvYcCVTmTdMSqKQfVcW2NFXxvVQVfYwRZJKqb7HC/WKq2RLYl0KM/HZnL6U4Nw2LI9TzJbTP28Dyftkcl5ktXaw@vger.kernel.org, AJvYcCW+nPqAS7cuqRtNVZ3oEnstIe0YaKHTu0DeWkQ4ylY4Q2YaWLVNaIVp2OYLxVUi64oRmJz/jKjCAPbEHVvWIZ/i@vger.kernel.org, AJvYcCWEnDkBif+Go5iJjgmpQiOSFlkClzTlryEevms1oE9MNtOHivmE92JuU8tQ5XgG1WckgA8=@vger.kernel.org, AJvYcCWhg9unkSKmoeLmQOKoUwmzZ5RD9d7dq26qh+WBsksqH2RNxCzu8KZPNgwiaSQA8yv4UO2cuXOEpfq851p2wA==@vger.kernel.org, AJvYcCX9rPe8uIcDtSo8DUpRMkRtZkTrvEHNqeajV7YriZL5krAEoQyyTAsXi36tRvwrSiul7NcSePs8CaDgsiw=@vger.kernel.org, AJvYcCXCkzqDm8SwT4dH0raMw25FTCUZ2H20qpvZJOvwCt1wkRCGwvofsvKtA7b83Okm2Oc/mIAhfdiCGr0lMA==@vger.kernel.org, AJvYcCXkgjl9JnvujxsgZ9qps1idZlxQOqxvU+BzkuB1yaGXdafH35nxWdcyD7NhoFA4wqMKY+FtH1CeGwi8U+2f@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywx3TVSIeS0ug+XqYcbDj+nKdwk5TB4HedOdNnmfOB/MlN6Qz1i
-	+ctSDSpZbnWN//UDVqzTbXjw4/QfitjYNavztYGa8MI16c6rod/KxU2fiMl0YAY=
-X-Google-Smtp-Source: AGHT+IHdC1cyaWvS05r5143QqcQIcUYzzrxVQfsNi8sq552bi8Bx4Z/Dm3LJ5ZgNcGYz44ssbU9Czw==
-X-Received: by 2002:a05:600c:1da6:b0:42c:b187:bde9 with SMTP id 5b1f17b1804b1-42f584a2dd7mr90988995e9.30.1727699855019;
-        Mon, 30 Sep 2024 05:37:35 -0700 (PDT)
-Received: from fedora.iskraemeco.si ([193.77.86.250])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e96a52308sm149011355e9.43.2024.09.30.05.37.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 05:37:34 -0700 (PDT)
-From: Uros Bizjak <ubizjak@gmail.com>
-To: x86@kernel.org,
-	linux-crypto@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org,
-	linux-mtd@lists.infradead.org,
-	linux-fscrypt@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org
-Cc: Uros Bizjak <ubizjak@gmail.com>,
-	"Theodore Ts'o" <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [PATCH v3 19/19] prandom: Include <linux/percpu.h> in <linux/prandom.h>
-Date: Mon, 30 Sep 2024 14:33:30 +0200
-Message-ID: <20240930123702.803617-20-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20240930123702.803617-1-ubizjak@gmail.com>
-References: <20240930123702.803617-1-ubizjak@gmail.com>
+        bh=38/U6EdWtSaSJAwey3tZ/dl54aPcoLZSVUhkiWNOg6M=;
+        b=HFlIn8hhxjaxtWkk9fyFHZBuXa2spO71+xEHKDeJCRulGq1cXhbIDt1u6BjRtqJq2e
+         3n0qIN/itH+KqSqKqTqcETby3cpDK3rPNgsaHzxz3S3EIqGUypRh8pzL9uutKdcNgqRE
+         LP/CMo9f00xbWtve8EHofK+IlnzMhppP8Jha94BeLvioszXVoyPLU3HnApeJqT2Bx0dL
+         Fs85x1dR1HVri2e0Z6YYY0GDtgo5ppmeEqDZeVJB+lY2LjMgUtJsK42suyY1YdsUlUpT
+         QW5Z4703hdbwtRgXdw6huR/+4y+wHRMb0V2kBuFXUXgtEzZQw1pqDwOg2Ad9t4e8te9R
+         wzMA==
+X-Forwarded-Encrypted: i=1; AJvYcCV5GT9dyI2BpszhwTHsKdDFuwMtiLHT/ag86mAJiuBnLP7ftf3IibE9YTUiebAHdx/wLe9mUtwtzXTS7VJ1kxQ=@vger.kernel.org, AJvYcCVTawuz1NCVi+iiLR5fK6dJDlj9LIJ/S2fZI3JpchXBfeewDQRsWdyM2BmPad2/vbsRUQIx9q1x@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgvzOEM0MqN+3bi72Td6Uq8vFsCKCqNbev/atztLSxUNUgH8FE
+	mb+J97N9xVUae9SO6DyXLhIVASt1i+lbZjhHlY/84HjzemzenMHdRNnlE/+/9BWQfXeaDrZ2Knc
+	o4zzEAZUTbRqLRouO/cIqal9DZac=
+X-Google-Smtp-Source: AGHT+IF0nZM6lTJMpefZD4qIC7brprKUBxnG0KYje/r7g2JEFhUbqi9ibaTSFcqgKSSenlYPLf1qosLveRUqUohqWtY=
+X-Received: by 2002:a05:6e02:1a6e:b0:3a0:8c5f:90d8 with SMTP id
+ e9e14a558f8ab-3a34515ad44mr90780505ab.6.1727700184285; Mon, 30 Sep 2024
+ 05:43:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240930092416.80830-1-kerneljasonxing@gmail.com>
+ <20240930092416.80830-2-kerneljasonxing@gmail.com> <66fa7fe46392e_17948d294bb@willemb.c.googlers.com.notmuch>
+ <CAL+tcoC+VEs1UusEKKVhutw+e=uyEqoaBhRTUV1G4HakM3JVYQ@mail.gmail.com> <66fa904185c3_17cd892948a@willemb.c.googlers.com.notmuch>
+In-Reply-To: <66fa904185c3_17cd892948a@willemb.c.googlers.com.notmuch>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Mon, 30 Sep 2024 20:42:27 +0800
+Message-ID: <CAL+tcoBMXtQ_TbjKmO5CazL5zu1dDBBB+enckkM9+0ojF3qutQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/3] net-timestamp: add strict check when setting
+ tx flags
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org, willemb@google.com, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-<linux/percpu.h> include was removed from <linux/prandom.h>
-in d9f29deb7fe8 ("prandom: Remove unused include") because
-this inclusion broke arm64 due to a circular dependency
-on include files.
+On Mon, Sep 30, 2024 at 7:49=E2=80=AFPM Willem de Bruijn
+<willemdebruijn.kernel@gmail.com> wrote:
+>
+> Jason Xing wrote:
+> > On Mon, Sep 30, 2024 at 6:39=E2=80=AFPM Willem de Bruijn
+> > <willemdebruijn.kernel@gmail.com> wrote:
+> > >
+> > > Jason Xing wrote:
+> > > > From: Jason Xing <kernelxing@tencent.com>
+> > > >
+> > > > Even though this case is unlikely to happen, we have to avoid such
+> > > > a case occurring at an earlier point: the sk_rmem_alloc could get
+> > > > increased because of inserting more and more skbs into the errqueue
+> > > > when calling __skb_complete_tx_timestamp(). This bad case would sto=
+p
+> > > > the socket transmitting soon.
+> > >
+> > > It is up to the application to read from the error queue frequently
+> > > enough and/or increase SO_RCVBUF.
+> >
+> > Sure thing. If we test it without setting SOF_TIMESTAMPING_SOFTWARE on
+> > the loopback, it will soon stop. That's the reason why I tried to add
+> > the restriction just in case.
+>
+> I don't follow at all.
+>
+> That bit does not affect the core issue: that the application is not
+> clearing its error queue quickly enough.
+>
+> > >
+> > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > > > ---
+> > > >  net/core/sock.c | 4 ++++
+> > > >  1 file changed, 4 insertions(+)
+> > > >
+> > > > diff --git a/net/core/sock.c b/net/core/sock.c
+> > > > index fe87f9bd8f16..4bddd6f62e4f 100644
+> > > > --- a/net/core/sock.c
+> > > > +++ b/net/core/sock.c
+> > > > @@ -905,6 +905,10 @@ int sock_set_timestamping(struct sock *sk, int=
+ optname,
+> > > >       if (val & ~SOF_TIMESTAMPING_MASK)
+> > > >               return -EINVAL;
+> > > >
+> > > > +     if (val & SOF_TIMESTAMPING_TX_RECORD_MASK &&
+> > > > +         !(val & SOF_TIMESTAMPING_SOFTWARE))
+> > > > +             return -EINVAL;
+> > > > +
+> > >
+> > > This breaks hardware timestamping
+> >
+> > Yes, and sorry about that. I'll fix this.
+>
+> As is I don't understand the purpose of this patch. Please do not
+> just resubmit with a change, but explain the problem and suggested
+> solution first.
+>
 
-__percpu tag is defined in include/linux/compiler_types.h, so there
-is currently no direct need for the inclusion of <linux/percpu.h>.
-However, in [1] we would like to repurpose __percpu tag as a named
-address space qualifier, where __percpu macro uses defines from
-<linux/percpu.h>.
+I will drop this patch because I just tested with my program in the
+local machine and found there is one mistake I made about calculating
+the diff between those two . Sorry for the noise.
 
-The circular dependency was removed in ddd8e37ebaa1 ("random: Do not
-include <linux/prandom.h> in <linux/random.h>") and it cleared
-the path for the inclusion of <linux/percpu.h> in <linux/prandom.h>.
+Well, I only need to send a V2 patch of patch [3/3] in the next few days.
 
-This patch is basically a revert of d9f29deb7fe8
-("prandom: Remove unused include").
+BTW, please allow me to ask one question unrelated to this patch
+again. I do wonder: if we batch the recv skbs from the errqueue when
+calling tcp_recvmsg() -> inet_recv_error(), it could break users,
+right?
 
-[1] https://lore.kernel.org/lkml/20240812115945.484051-4-ubizjak@gmail.com/
-
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: "Theodore Ts'o" <tytso@mit.edu>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>
----
- include/linux/prandom.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/include/linux/prandom.h b/include/linux/prandom.h
-index f7f1e5251c67..f2ed5b72b3d6 100644
---- a/include/linux/prandom.h
-+++ b/include/linux/prandom.h
-@@ -10,6 +10,7 @@
- 
- #include <linux/types.h>
- #include <linux/once.h>
-+#include <linux/percpu.h>
- #include <linux/random.h>
- 
- struct rnd_state {
--- 
-2.46.2
-
+Thanks,
+Jason
