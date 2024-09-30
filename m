@@ -1,197 +1,184 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDDA40862;
-	Mon, 30 Sep 2024 08:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727683397; cv=fail; b=uSRBulJr0E/fs9spKKCFEfKM05q31KzZ2+Q2U1PRcdEZvgFfivDVwldoB8uRPcC5Kia5zT0FmeG4OiHAA3s8j7rX6ukyg1DKy1z85Py8Gxx7tKf3a/4mdOit+77Aka/PHTzxJdvNHdgRyBjS/YgxSOeEwW57v1f1eqBpjow9m8g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727683397; c=relaxed/simple;
-	bh=6cRO7ACpfIY+iGXdtxvvJ1RmMS2bNZFv5RKp87PsAjc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=CpEIb/5Wiij0RtwfA+yjkLWwIHoO2VF7C+0EnrV7rMrEXEjCqHGJsdEI7YRXXy8SgkWB0Iscfr4DVa5W3rkmxwyFt+BRsFnpTo0qEnfh2+/k2y87Xxv0W0IRBpvPBh5jASFfjv/65KkugbLN4R0zlfoV+gZw4Bzjs6jEOxzZwpQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TE1p3UVu; arc=fail smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F7F3FB0E;
+	Mon, 30 Sep 2024 08:37:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727685473; cv=none; b=hKAQeaSGN198P00D7gRBdhDeBuKNgchHD0r/RlxrxjZwJngRqc/e7ZlmB4buunYBJqUcpRV8lEsW9a5krojuuWIv7upFJZOxYooUHLuu31SEocDnj+uuOX6vVVOHyLyAg2vbR9uWtntWh4TpBd4mKUrBX+a7VGZa2tr32Y9U+oY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727685473; c=relaxed/simple;
+	bh=TBIV+URHv1FdKGYyHeQbsxrBmZ+Bh312UVwmuZfY2NE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ahcyxjYttcI4vzEyitFlZUNpjDq44Z2qjOOIhf6LiwdT8wCyrZ9SQDafdU6wxRJaXb4zbyRP4u04PnDRD6NfYwOrrL4MmA/66dBXgTNuaXlHAM8H253xaWQQNBPJ6r69Toph6rKuF5+WQG1hSD/9ubx/2kv5zaIqdmX2qg3A3ZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=VQFPm0ln; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=0z87cj0H; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=VQFPm0ln; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=0z87cj0H; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TE1p3UVu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727683396; x=1759219396;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=6cRO7ACpfIY+iGXdtxvvJ1RmMS2bNZFv5RKp87PsAjc=;
-  b=TE1p3UVuEvQf8n4KOWQ247skSWQACLCAH2pE+BNSQ1sNIUiazwSDT2Ej
-   wigLFKK4I9EOIIvB3C5mGkeusQHj85W3A8e1gN5NXD9E7+Xfi8YnPWvlc
-   Kxum+C8XWcy6jd+Uugh+p5LNic/bi7sRExJRJQnp/Y33l3AKBVkZjNrIg
-   LoWIpMN99EwIEhQXaYPNInd71BlU8fbti6xKgC7Kzd6IOTH5qwV9f1Dw3
-   0gbG574qJoCg5YcpSephzfTuDyeztxeYMMIHtbvvj/4ixgZ2jE0Ixs7CA
-   EI1I1uqle2ZIFB7nYfjkGsMnbV102R4wMPG73NJk2FvHJrpOKi10sxBNL
-   g==;
-X-CSE-ConnectionGUID: bS6JxGcBRAC4Zon+goQ3gQ==
-X-CSE-MsgGUID: fjpqReXTSwaiCiQGQ0/VoA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11210"; a="44274954"
-X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="44274954"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 01:03:15 -0700
-X-CSE-ConnectionGUID: jfXJlAeNQuyfMSBrXt0MJg==
-X-CSE-MsgGUID: 77hidakgTqyh5FQ0xK5YPw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="77293470"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 30 Sep 2024 01:03:15 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Mon, 30 Sep 2024 01:03:14 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Mon, 30 Sep 2024 01:03:14 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Mon, 30 Sep 2024 01:03:14 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 30 Sep 2024 01:03:14 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EwauLeOZ+Lz4l8eFRbDXneCF4wwRpb+HAdtpMSxooQrkOpPRsx1UBLLU5T/CpKScl6+fgulIzLNIUAe6/PKEnVcQi5+eLZTBll+JG/hGjScyDnCVKq4JpewtLGTf++wlDAvcuL3372nkh9Dh4gqT34wMi+LSHl6/wqTguvDfr0/4hlal5FxsclNU3SQaHvHy/vi3CJUPBVDVgChF/rAFK1UrzXe5o99lztcxte/2JLt4KtNyaAEwozI899lslqw+kaYHe7RNf7eGQ3/tONJbCwGj7kP2NjHuGCL+lNhLaLJ0/wdTOavpFL3kTZ3j/L8KiF/DhUY6cQi3hBvwIreDCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6cRO7ACpfIY+iGXdtxvvJ1RmMS2bNZFv5RKp87PsAjc=;
- b=VCX1WNI8VJBh0wwg5+qVWwYJJn5io4rzByCnocruaYteasRFLG6Shgkjmb4OAgTyHVsaPpYGiS0k8A7+jYCWxU1L4rOfUUGIjgDCpP8NNAVSA4gyk2J7PJQ9A/3CPt5YO5ysKM6o55jDHFdOE5SNw0Ikp6u7AC8i6rmj3gPZxD1oTrT/g9kYTQ640wSyeZxqMxmEGRlzbazYo2B4JyiBIcythH4ZoskDo52b/QxfjPfRXx8BINtrgxUglW9v6nMdPyQXqlgobjRV7Mbs6V6zfoRBEkb+lF0n5jdIrEtzsGmeeWGj+3tg5mXyaw/ZaoyNeHqzTMT8QBLMMrgplMkfhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by CY5PR11MB6536.namprd11.prod.outlook.com (2603:10b6:930:40::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.26; Mon, 30 Sep
- 2024 08:03:09 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1%6]) with mapi id 15.20.8005.024; Mon, 30 Sep 2024
- 08:03:09 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: "Liu, Yi L" <yi.l.liu@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
-	"jgg@nvidia.com" <jgg@nvidia.com>, "baolu.lu@linux.intel.com"
-	<baolu.lu@linux.intel.com>
-CC: "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-	"eric.auger@redhat.com" <eric.auger@redhat.com>, "nicolinc@nvidia.com"
-	<nicolinc@nvidia.com>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, "Duan, Zhenzhong"
-	<zhenzhong.duan@intel.com>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "vasant.hegde@amd.com"
-	<vasant.hegde@amd.com>
-Subject: RE: [PATCH v3 4/4] iommufd: Extend IOMMU_GET_HW_INFO to report PASID
- capability
-Thread-Topic: [PATCH v3 4/4] iommufd: Extend IOMMU_GET_HW_INFO to report PASID
- capability
-Thread-Index: AQHbBRYrZYVr2aQ12EC4Mt6ZadMIerJwFB4g
-Date: Mon, 30 Sep 2024 08:03:09 +0000
-Message-ID: <BN9PR11MB52761D0961E0D8BFA679F2308C762@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20240912131729.14951-1-yi.l.liu@intel.com>
- <20240912131729.14951-5-yi.l.liu@intel.com>
-In-Reply-To: <20240912131729.14951-5-yi.l.liu@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CY5PR11MB6536:EE_
-x-ms-office365-filtering-correlation-id: 020518f5-9188-4581-d287-08dce1265313
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?1YYGjzxx03ccBUWoYQTO0XyPkUsTNleCxbfMpSeALogXNBELNuqolVQT44Vq?=
- =?us-ascii?Q?hs6/oVKc8EnDt+80f3ETSZ8TZPAro5aXrZhCn31LhtKfG7INWUOwUJmtjFUP?=
- =?us-ascii?Q?c67V4VZ2XXkkErL9qiwyUYvbORVK4Iwe1cgbWpx4hNrpNg806olnS60cAdZ5?=
- =?us-ascii?Q?uErAKjdnQoPEoxf1QIZlStu/qO+fTP9yfY5jbAOHJnkzWf7rANZQZH551HRA?=
- =?us-ascii?Q?0H9KAq5uS3edkIRfel6dV0z4AvjNHhztlC6+IVx82JWhPDuvKuVyM6r/FNQf?=
- =?us-ascii?Q?zCCC8MlovYxlKw21ua4M+9ix447UgEpacKRU3fYFnQIj5HrnT4bq16i/qYoe?=
- =?us-ascii?Q?fcn9WXZt8r+NXjxR+6Hs9kp8DLODgKQxeQpWG/SNr2qvEdSKXOEFtCxL558E?=
- =?us-ascii?Q?Nxp6P7Y+nrynB1PfDjxba71TnT6tT9INWbVZluQ7MZe/yzzQ677e/+Zl3gvJ?=
- =?us-ascii?Q?Zc2ZDewB8/0YBCMbNDcfvEhhy5Hb4f78uzl4XbKftzC7OsUcZ9yJ88qJ13fI?=
- =?us-ascii?Q?4l2qoBelVfK6giU4C6IKkcKlpHyfKbHDqg7/Xt6dRHPkuO7Fa3g6vroHEvdB?=
- =?us-ascii?Q?YVCNrGjm3AjnChnLPo9BlKvD9vVFzgOjUScCqice2rBbfdwY0h24Mn/p02RY?=
- =?us-ascii?Q?MbamLUyQ+G33rAfRdhHevKO8Ad0da85bfb/GZ2DuRnW0gCKg4/9w/5hUQUfa?=
- =?us-ascii?Q?OPGDsmivJNOQovNrRyVAay33PzCQ4O4ueKPJVx9yqCrDHvbqKCJqCC5DFOaG?=
- =?us-ascii?Q?wBQnQI0IBricUjx/2QeTGzpdb5Z+wwTiArFlYE86mS0BkO4YXahQbq84IUNk?=
- =?us-ascii?Q?deMWLv9DALIlIRyhEUACydN96OZxfsUvI+wPOGOkHqVyv5/nJ/bfMNbVy8rW?=
- =?us-ascii?Q?dcG0CY1pL+Azxh5LUSI2rMTGGqhpy2kd8sSmj+NLCvzzUXOjd7AX7dZgPpkb?=
- =?us-ascii?Q?dCbA0JG2ZwFt33ECDdI5En/zsH5dREf6GSAPS2hGGVdm9q4WN8n1vVMGfgF5?=
- =?us-ascii?Q?otXRJh4OFkkyewgt6HnH8q1C5JhEkc9B+wPqCjhqdEFtb3ozpQ2TvE36Vkd+?=
- =?us-ascii?Q?guk46eIvIhZfCLruufdNw/f1rcBNWJDK29wV0dgQo0M3qNICVBZyQ1BK6/B2?=
- =?us-ascii?Q?XZokGJlk+Ug+k79RLH+a2GDdxIagAoPGJPjKtVeQLNxvfqc7B6vrZe1shPXK?=
- =?us-ascii?Q?UiBiQcrTlQHgCPQbWMEComQIl67iVglz9kKpcE6cQIxQqgyXUlWOi6dj3H43?=
- =?us-ascii?Q?SiYpXG7HScpqs1I4eG4KI2anlTe8pJHSt5Ij6bP+Rbsul9+5HnYTXwx94DLg?=
- =?us-ascii?Q?k9LSWlLGA18PQVpkG9Qp9EtepG5iUON7S2j9KHlkkB/xVw=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vyLecmorfvS5fLj7Fa1ghNbvGV7uFpHd/7Z/YVmVM7QaAFzbMgvz4LspOjL4?=
- =?us-ascii?Q?1C+LJz+Fh/6ZwUsO+tv1qGcyefZNSVZ9PTKbsieErS6ppyVQ5qWaQXLMgwlu?=
- =?us-ascii?Q?vBOlWAXBh3BnJ/WfGnWjcI0eX5xTuE9+eQow1RXZNzgGKjpteeVQuizbAgRr?=
- =?us-ascii?Q?oNh1eHpghihIDoDvTQkrMtoHb7vC3xM0SjopQzJSVhotQoOHiXTBFDmcA5/j?=
- =?us-ascii?Q?sTbPzQ0x3nGN1mpIR+kTwE+hVJjwH7fSTowv2HuuZQHpfKqhCapfW4SkHalF?=
- =?us-ascii?Q?wo7c/A84VWsK7suCiUesUSMcMcqCxXWyxYOKwb4i9n2a32KgB1xDny7ZdxIa?=
- =?us-ascii?Q?ciM0Sk5LctDMfQAK7vAaQUTgmaRnfZy5BXz0mwj5Oebnb2/Tl/OWx24uwVFj?=
- =?us-ascii?Q?Ut7pvrqnbs/zETw4koBWjiViJyKI7LbZC7B9HgWvKoAGBvCfaLXppcMtyYnc?=
- =?us-ascii?Q?CPtvCKQX4vch78eAHH7HciUGMwQubD3dgMT40m3wFEg6tuGT/+VgZ6WN2sC7?=
- =?us-ascii?Q?X50CWh9KtaGf0nDZ2YmNtfszFmCNDl0CBLKAm6/fdRYcF2iybEDPmcMLFB8n?=
- =?us-ascii?Q?e5lkdkAanMAiGIWY88uKuUGRaUNCtfLh0U3UzNlxfO7RWBwLsT72jy8UPRjK?=
- =?us-ascii?Q?JdQ/VJdEXRlmRUptiWtUjYNS9nK4WNUkum2q33lxH92X8IWFg80p+UtlCif1?=
- =?us-ascii?Q?c2ESR7Y0dLHc+X5nmoKQMZwjCOKiwckQZET4ZFv47abRbwv0LHUNQ4HEs8o7?=
- =?us-ascii?Q?96QdHzjy6r4GC4DbC1Uu3zWEwLKm8n3/UNe9tccHhwhKHVebhzd4Tn7pKZj/?=
- =?us-ascii?Q?mbZuW1MEi7r3sbp6XYXnaYAnWbR7dFaGOV+Y1pLMW3UAE5ZhquODmkFUGigG?=
- =?us-ascii?Q?646LbKSwuhiQvLzCHqX06YAaNhdsv2qAml7Wm12BbWEmeex8aHSRC/0q4Cs2?=
- =?us-ascii?Q?GmqVIr1zyy0FKVZ6zeLgnlhLxeSgw4pA1zpZBuG/aMN1NFe4VnrRf8Pev4ES?=
- =?us-ascii?Q?/japu4XGatg4RaJmKKCz0pGH7QotB9n1cSKkCbJQJvzS8PWIFKU1KeY+b+2i?=
- =?us-ascii?Q?Rit0Tk3FDbwjZu6ug8g5ZRxegfPqJ2zUCEfcNk2jB+x2EL6PkuHK7cOAwx4c?=
- =?us-ascii?Q?iq73B3NUYQ3XipCMYOFYmWzc3Tx0tPev/IvTCtJp07DjzIEBdXUXrrwpkUpl?=
- =?us-ascii?Q?ljq4yKRGd1lWGzDv9lsLly38FX6LJ3caM5gNcS2MGs8MGU4wg5nVKGa3CifZ?=
- =?us-ascii?Q?Xv4zYYE39BBbMIAtzLRnBKeDUZqbL3EWCUMict/QpT65IA1TJRZdLAydcpe+?=
- =?us-ascii?Q?Z6/GFjuHTIn1ZgzGfzdEVAzdpZ3NoKPBvaZKE5+6yd3Z9IYUgQDRXtxWIPrg?=
- =?us-ascii?Q?+xDqRmLYKyYAjbsXKRnKV9h5YvgwNg3j7uC59Kk85OTMD0aYTPz1pVWt4EtE?=
- =?us-ascii?Q?5glEMvCmJa0UwvIPu21m92ds7wS90Ky+DSe2EpRGJQayM5wjcDDiCGTvJ2qm?=
- =?us-ascii?Q?h8DFIASYP6k9u73xJ5hKQVzhqmfaWHhCVdZLkN/wCcv2a11hYjYU6sS/a4cW?=
- =?us-ascii?Q?QFApNWPMchCF0VpupZ6KXwQVIjCk/AYdmoVzLcSK?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="VQFPm0ln";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="0z87cj0H";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="VQFPm0ln";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="0z87cj0H"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id C3C12216F2;
+	Mon, 30 Sep 2024 08:37:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1727685469; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9F9YjQEJflSAgogUDfRl6vMT3iaVqscBAMrkCSe/tcs=;
+	b=VQFPm0ln6EMEIhg8R38aZrROCVV2HGVsPuwbHO8RDlizDB07NcaGx8vXZPsKxVwME7r3Ni
+	P/Y/QX6tnm8LZTv9raekzHSoF+sOsYVdfy2ONzsgWjG5r4tMAkc8n9dThDXfdTJDpxBw/q
+	PpuanjAKQhzpFrYYw+/pfxiX/5t8n34=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1727685469;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9F9YjQEJflSAgogUDfRl6vMT3iaVqscBAMrkCSe/tcs=;
+	b=0z87cj0H9kLzyWbQVNC++Suat0IJlmeoJ21/v5rDr8ZxQfP9TrdMubu7WJ2gKQckAXn53C
+	fsyiLbKVgL721NAw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=VQFPm0ln;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=0z87cj0H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1727685469; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9F9YjQEJflSAgogUDfRl6vMT3iaVqscBAMrkCSe/tcs=;
+	b=VQFPm0ln6EMEIhg8R38aZrROCVV2HGVsPuwbHO8RDlizDB07NcaGx8vXZPsKxVwME7r3Ni
+	P/Y/QX6tnm8LZTv9raekzHSoF+sOsYVdfy2ONzsgWjG5r4tMAkc8n9dThDXfdTJDpxBw/q
+	PpuanjAKQhzpFrYYw+/pfxiX/5t8n34=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1727685469;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9F9YjQEJflSAgogUDfRl6vMT3iaVqscBAMrkCSe/tcs=;
+	b=0z87cj0H9kLzyWbQVNC++Suat0IJlmeoJ21/v5rDr8ZxQfP9TrdMubu7WJ2gKQckAXn53C
+	fsyiLbKVgL721NAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9FF0113A8B;
+	Mon, 30 Sep 2024 08:37:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id /VG/Jl1j+mYhHwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 30 Sep 2024 08:37:49 +0000
+From: Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH slab hotfixes 0/2] slub kunit tests fixes for 6.12
+Date: Mon, 30 Sep 2024 10:37:15 +0200
+Message-Id: <20240930-b4-slub-kunit-fix-v1-0-32ca9dbbbc11@suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 020518f5-9188-4581-d287-08dce1265313
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2024 08:03:09.8231
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qxnXahRNHRaLGqyMLrZpVTF/8E/wtCNzMg3zPpXcttitq6wa9q6136SuZyiQD9tSEaVZ1MNbOWg9bcXSaD9fXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6536
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADtj+mYC/yWMQQqEMAwAv1JyNtB2y4p+RTy0GjUoVRoVQfz7F
+ vc4AzM3CCUmgVrdkOhk4TVmMIWCbvJxJOQ+M1htna4+GoNDWY6A8xF5x4Ev/A7Bu950pnQWcrc
+ lyvp9NiCLD2pa979pn+cHOcUlinIAAAA=
+X-Change-ID: 20240930-b4-slub-kunit-fix-6fba4d1c1742
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Christoph Lameter <cl@linux.com>, David Rientjes <rientjes@google.com>, 
+ Roman Gushchin <roman.gushchin@linux.dev>, 
+ Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-kernel@vger.kernel.org, 
+ linux-mm@kvack.org, Vlastimil Babka <vbabka@suse.cz>
+Cc: kernel test robot <oliver.sang@intel.com>, 
+ Guenter Roeck <linux@roeck-us.net>, "Paul E. McKenney" <paulmck@kernel.org>, 
+ Boqun Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, 
+ rcu@vger.kernel.org, David Gow <davidgow@google.com>, 
+ Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, Brendan Higgins <brendan.higgins@linux.dev>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1584; i=vbabka@suse.cz;
+ h=from:subject:message-id; bh=TBIV+URHv1FdKGYyHeQbsxrBmZ+Bh312UVwmuZfY2NE=;
+ b=owEBbQGS/pANAwAIAbvgsHXSRYiaAcsmYgBm+mNTZ364+mQdK/3uDVoTN9uln0OvX42XSvP/v
+ S8tG4oiwAuJATMEAAEIAB0WIQR7u8hBFZkjSJZITfG74LB10kWImgUCZvpjUwAKCRC74LB10kWI
+ mtNgCACdBeyDV9q9gDZB2VB6AwRjsZDMJ2nVbWsEajf1tYbUlKQki1FMk4qKFmRIFA0FO47Yyc/
+ 36p3Ub+mQeobJ8xBFXJDJJDmyQZYp1W3btfFsJizHuVrKoQV33F4vInTnSLBgps6ES4Qq7mAAEm
+ 8XEJJeoO9mxwCqkn3d3GQE99zE2tb221YmQm8W0CvE7YYFMN4w0hrPoXpVaukLgfAlX7P3PJtjB
+ yHgdogMlBWBlLqg7N9W1q+CEANohsrG8FtaZRzPOQZF3nS2kn1vu8il3IKZoy9wQ3zg0QpaQslZ
+ RqP0CyjbWWLhXZUqrXzkt8eBgBCXEo1LBwqCyaS2yEfCvfVa
+X-Developer-Key: i=vbabka@suse.cz; a=openpgp;
+ fpr=A940D434992C2E8E99103D50224FA7E7CC82A664
+X-Rspamd-Queue-Id: C3C12216F2
+X-Spam-Score: -3.01
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	TAGGED_RCPT(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[intel.com,roeck-us.net,kernel.org,gmail.com,vger.kernel.org,google.com,googlegroups.com,linux.dev];
+	FREEMAIL_TO(0.00)[linux-foundation.org,linux.com,google.com,linux.dev,gmail.com,vger.kernel.org,kvack.org,suse.cz];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-> From: Liu, Yi L <yi.l.liu@intel.com>
-> Sent: Thursday, September 12, 2024 9:17 PM
->=20
-> PASID usage requires PASID support in both device and IOMMU. Since the
-> iommu drivers always enable the PASID capability for the device if it
-> is supported, so it is reasonable to extend the IOMMU_GET_HW_INFO to
-> report the PASID capability to userspace.
->=20
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+The SLUB changes for 6.12 included new kunit tests that resulted in
+noisy warnings, which we normally suppress, and a boot lockup in some
+configurations in case the kunit tests are built-in.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+The warnings are addressed in Patch 1.
+
+The lockups I couldn't reproduce, but inspecting boot initialization
+order makes me suspect the tests (which call few RCU operations) are
+being executed a bit too early before RCU finishes initialization.
+Moving the exection later seems to do the trick, so I'd like to ask
+kunit folks to ack this change (Patch 2). If RCU folks have any
+insights, it would be welcome too.
+
+So these are now fixes for 4e1c44b3db79 ("kunit, slub: add
+test_kfree_rcu() and test_leak_destroy()")
+Once sent as a full patch, I also want to include comment fixes from
+Ulad for kvfree_rcu_queue_batch():
+https://lore.kernel.org/all/CA%2BKHdyV%3D0dpJX_v_tcuTQ-_ree-Yb9ch3F_HqfT4YnH8%3DzyWng@mail.gmail.com/
+
+The plan is to take the fixes via slab tree for a 6.12 rcX.
+
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+---
+Vlastimil Babka (2):
+      mm, slab: suppress warnings in test_leak_destroy kunit test
+      kunit: move call to kunit_run_all_tests() after rcu_end_inkernel_boot()
+
+ init/main.c      | 4 ++--
+ lib/slub_kunit.c | 4 ++--
+ mm/slab.h        | 6 ++++++
+ mm/slab_common.c | 5 +++--
+ mm/slub.c        | 5 +++--
+ 5 files changed, 16 insertions(+), 8 deletions(-)
+---
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+change-id: 20240930-b4-slub-kunit-fix-6fba4d1c1742
+
+Best regards,
+-- 
+Vlastimil Babka <vbabka@suse.cz>
+
