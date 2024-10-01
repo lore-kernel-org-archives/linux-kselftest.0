@@ -1,242 +1,249 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D89E1D0950;
-	Tue,  1 Oct 2024 23:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727823798; cv=fail; b=tJ0qnMdIqAZNEZVlWSaUAetM0SdWF6IaN+apBf1cA1bufaK789gDPndosufb30jnCJCkA7ZxDPMtbQ7sdXTqdQfbnEeW5nw04Ya1rpyEO9OBAEg+tsFCnImUvFjiaFAWkyZtsqf0BQuB2599e7WljTPNc2C8NQSXlYA7Gsz5qUQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727823798; c=relaxed/simple;
-	bh=0lU0ASYvqVIyLbTwikj9lUOps/sahKtk3nCP2zxjTWY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=JVWpXmDyXKtCKughPCQrDS30Bo3c6XeUbazCykkpsBg+hTMYvmAL1zArXaag3WqQbHAPXlhSDC67Fiis/7K4/c8mQjKFCUxNnz9eVVBdzBWCH55dNiVAQElQNxIuoGvgp06hWg+mE4qssezUEIdbC3DpsI6TVn0qPGwWVZqqiBQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IzIRNOE6; arc=fail smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D651CF5C9;
+	Tue,  1 Oct 2024 23:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727823807; cv=none; b=a0JA6orm5cqEXzQ/Q1TVSLcnwZ3o+JJBfArO/RAt+AIFJI2ePeCmcrSIv7nqIWVatkSaen4PzSPG6svoKpHtr5CBmQLQDV1XXGeT8fkZHO8GlwUqGlKm6ycNcgVrCvBm9EANAG6gORkkMwYzjMNgJHFVcp41phWllkI8RWPaEQc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727823807; c=relaxed/simple;
+	bh=gMNU4N2r9J/DtCxCWsOgJ88QFKSaRk78Dab/E2WA3Cw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=DO3qDTmXBKjnXeTmeD9aFq5VsVGZHa9a8khZAcPgFNkS05WqpB/G/6Zkxggb+ZS8JXRkZQWdocIq44t3h2DOSRTpkao43KMCosi2skyFAZHf1eH2rvEFH0jX4a+RNOBWNhUdWfE0VXQFwA1sFSapTUO+V0qTF1apjEVG0OvPr9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KqCfPYUW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IzIRNOE6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727823797; x=1759359797;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=0lU0ASYvqVIyLbTwikj9lUOps/sahKtk3nCP2zxjTWY=;
-  b=IzIRNOE6uiXj2L5VjJpwzZL0iQVXVmwWRNoiKUfqx32+0MTlbaueelq9
-   xloJljpkg55nS9GhWRjJMne4XBzJYps6zo6lEoQx9Zzes0IvtvD694hz+
-   OKAdbgJ8L5D7o9GjLAFaN4egVKLwSQKrPxQl3noaRFueYhFu1C7h7p2hc
-   kRzsOrV3CQ+T6udeBvPhmXb3IRvlFg4eaGc2E6ug/7N///m43TAj8nz1E
-   aNQVeWsqWgAU9g5uNyspoRAzZzEAeN//iBgp63s5D1SCpIVNOmJxv/eJv
-   QcEBBq6ykB0Qw2SnfXwl7eYcuGyVrXZtweWtiKtrfMR9VjUQkEdMyrBE+
-   Q==;
-X-CSE-ConnectionGUID: lzQEyQIwRhWE0EOkyleojA==
-X-CSE-MsgGUID: Ve4teC/OSUewxpV0+Fm4Mg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11212"; a="44508847"
-X-IronPort-AV: E=Sophos;i="6.11,169,1725346800"; 
-   d="scan'208";a="44508847"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 16:03:14 -0700
-X-CSE-ConnectionGUID: 0B40wu2gTpiKjXS1Pyl2ug==
-X-CSE-MsgGUID: OjqIWYE7RJKorIjyoGQpXw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,169,1725346800"; 
-   d="scan'208";a="73484524"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 01 Oct 2024 16:03:13 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 1 Oct 2024 16:03:13 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 1 Oct 2024 16:03:13 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Tue, 1 Oct 2024 16:03:13 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.45) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 1 Oct 2024 16:03:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=s6cypxNMjSk+29nRRt7e2UNBatie76smsVRk5WfuQdJHOoycxCthJeOr4ULgTevQYlW8TmOF36H6fJ5Ut7UT0ykUQlpJGOCAgEeFqYI6igS7seFkG296UyUTXCcuhDEF5WDAjqp0pKukVCItY8+sVuhoYb/hwmWSaoc9R3/Kea6Ia18eOpW5+mfEDmNEgre9c5DrStHa7Kf+Qz83v7nj0qiANquCW5fBpzFC/11xMxr395/Xb0+H8JXjo3/IaOiUjMU0w621gK2XySSg0aT2EA5hEY7+vHVYbHp7v1iDg8h5hZWBpVBQxaYbyL599E1zb7unx0M5LFvDnfChPILSaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0lU0ASYvqVIyLbTwikj9lUOps/sahKtk3nCP2zxjTWY=;
- b=vz/aN4JSbcjiiU+MZk+Ck9pJzAd3Dt0RQjZxUb+ZXKEs6wlm0hm8QBtv6ENT6j0on4O9LcoJZ2mIC6bPFc+ZOLew6xhmQvagF9KGNwjxvGuq5wF43ECMeMXrzfehiIz5NHkY1JgTN79wVJtctuXol2IWs46ZtY7XLD1+KVIcjL/aTdLS5ghvysJPsbzoPf0Mj7QVnNASTKPVXneq15ahGGIuc2x19rwzRSfUc/VHTt0qak1G34ArmgO60DaP4vyRo4C6ffOatCh4DyrQ5Qhfn2+9va1l4XJpxtmg1PC5V0UZWIhYEsIXelIg/+/5ow3A8iYkpfdEjbDHiANJUwd7GQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
- by DS0PR11MB7215.namprd11.prod.outlook.com (2603:10b6:8:13a::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.15; Tue, 1 Oct
- 2024 23:03:10 +0000
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::edb2:a242:e0b8:5ac9]) by MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::edb2:a242:e0b8:5ac9%5]) with mapi id 15.20.8005.026; Tue, 1 Oct 2024
- 23:03:10 +0000
-From: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To: "broonie@kernel.org" <broonie@kernel.org>, "brauner@kernel.org"
-	<brauner@kernel.org>
-CC: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>, "shuah@kernel.org"
-	<shuah@kernel.org>, "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>, "mgorman@suse.de"
-	<mgorman@suse.de>, "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>, "rostedt@goodmis.org"
-	<rostedt@goodmis.org>, "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "fweimer@redhat.com"
-	<fweimer@redhat.com>, "vschneid@redhat.com" <vschneid@redhat.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "kees@kernel.org"
-	<kees@kernel.org>, "will@kernel.org" <will@kernel.org>, "hpa@zytor.com"
-	<hpa@zytor.com>, "jannh@google.com" <jannh@google.com>,
-	"peterz@infradead.org" <peterz@infradead.org>, "yury.khrustalev@arm.com"
-	<yury.khrustalev@arm.com>, "bp@alien8.de" <bp@alien8.de>,
-	"wilco.dijkstra@arm.com" <wilco.dijkstra@arm.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"bsegall@google.com" <bsegall@google.com>, "juri.lelli@redhat.com"
-	<juri.lelli@redhat.com>, "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH RFT v9 4/8] fork: Add shadow stack support to clone3()
-Thread-Topic: [PATCH RFT v9 4/8] fork: Add shadow stack support to clone3()
-Thread-Index: AQHa8m26gF70aSw9iE+4TuW+hH2kDLIwrUEAgAAg74CAAAZZAIAABi0AgAAX+ICAALiNgIAANM8AgAAYugCAOZcagIAAbUIAgAZGuACAACdJAIAAXC2A
-Date: Tue, 1 Oct 2024 23:03:10 +0000
-Message-ID: <0999160fd5282ac129aab300b667af35d7251582.camel@intel.com>
-References: <cc2e7d86-c890-4cb1-8cad-1cfaa9f53dc8@sirena.org.uk>
-	 <82be9ec6e43a018add8d9bbc6ba67feee676f32e.camel@intel.com>
-	 <5643761f-cc38-4e41-9ddd-f0a1934f8724@sirena.org.uk>
-	 <9f022aa4cd3e2dc82d0c963e9d2bf5c7ddd5b92a.camel@intel.com>
-	 <77bc051d-b2c9-4e3a-b956-be8879048e20@sirena.org.uk>
-	 <5464b915b52bf3b91ec70201736479a5347838af.camel@intel.com>
-	 <158190d9-a4a6-4647-84e8-f4ae036d984b@sirena.org.uk>
-	 <20240927-springen-fortpflanzen-34a303373088@brauner>
-	 <727524e9109022632250ab0485f5ecc1c1900092.camel@intel.com>
-	 <20241001-atheismus-stetig-4f6f3001715c@brauner>
-	 <6bf15851-03fe-40cd-b95c-f7e2ca40ac54@sirena.org.uk>
-In-Reply-To: <6bf15851-03fe-40cd-b95c-f7e2ca40ac54@sirena.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.44.4-0ubuntu2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|DS0PR11MB7215:EE_
-x-ms-office365-filtering-correlation-id: d2122295-c513-4670-8626-08dce26d3834
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info: =?utf-8?B?VVZzaUNvWTlmZ2VhWTlUcDRVUkovSEVxNC9JUHBhWm40cEhXZzZENjlPYkJO?=
- =?utf-8?B?QUR1U3ptQm5NS2FicWo2ZTJRTWJJaExsMUFYVm5jWkNTQWhQRU9ZU3BnU0g0?=
- =?utf-8?B?VkM1elZtNFRRZzRReXFZV2IrZGd3VExLdXl6dktkWTFGdkZtZUZ1d2dzUGtw?=
- =?utf-8?B?U002SlltRks5OE9TWUdwZCtYSHJmQitGMmdwYzZaR083Uis0eHRKdGxIR3RR?=
- =?utf-8?B?UmtBS29ORU83WE8rcHFIbnVaWUFraFFpUTk5V2N2WUhDSzhRb3oyM1pSeHUx?=
- =?utf-8?B?V3ZzQ0V1VUw0WlVReGd3UEd4dUZRNzgzSEFPL0ROVjdRTnFiVEI4WThtcXFM?=
- =?utf-8?B?TkdCc0Q0aGt4UVRsRDlid2FIeERhaGllaFBUZ2JuZzhJcDhKbVBiZDc4MEE4?=
- =?utf-8?B?T2dsa20rWjhaVXBLUWR0Ty9CWFpmSVZKeitpU3NscU1lL2hTR1Y3RmtvYnNj?=
- =?utf-8?B?T1llZnAzQVBjUWUzYlJ1ODBURkJFV003V0Z4VFdYeUpWZnliOTBaTUlhT0pT?=
- =?utf-8?B?a25zYjVvd3FRN0hDMFJ1cS9Qb0d6aUorM1BJVFpGVGtOTldSN29qNE5UMHgv?=
- =?utf-8?B?c1JDL3NUT0xpamJHR2hRMGVDdHdhVFBudXRGcWZCNGowbzRkOHB0Skk4bW94?=
- =?utf-8?B?VmdOVzdMOTQrdGNEb0J6N1YrNDBRVHhNelpuL1hJbFo0dWN0ZUVoNEkrUDE4?=
- =?utf-8?B?OHpiMXkxU1FhRFVQMzdBL0JUVzFUbDdtS2FuOEdMYzdHRmZoMTMxMHcyZ09i?=
- =?utf-8?B?L3JYMWlzYW1UV2E2bGovOEFBOVFURG5SV3lTYVRPTFNiaHJHaUJqOFlFTUox?=
- =?utf-8?B?cEp6M1g3SUhBWEdaWFhPTDQ3ZHdUMHgwUWdqaDZ3TjY3ejdQV3lzVm1sMUVn?=
- =?utf-8?B?VnltMDZUVzRqKzRtSVFVZzhqVzVycFRnS21tK0g2NUs1UGlMOWU0bnBJU2JG?=
- =?utf-8?B?cUpOWk8wUUo4cndTVEQ3TlBDdjVPTSs0bXdCRVBBa1lpOGJobHF1WCtOVlFj?=
- =?utf-8?B?MDhuS0VEQ2JUUnRiN3ZxQlJXSUZRc0xsWDBXWjdjUVRXdTRIVi9aYkFZQk1r?=
- =?utf-8?B?TmJwQkMyd25kRUxIRVZHOHd6cnVTK1owa2hGaVhtejJFR3JsTlhRSWZTSGYw?=
- =?utf-8?B?K3hLSFBIWjNKMm0xOE9wUlUyTzVNWFlQa2N2RnpYbWtzRXI5VmtNa0RLWVc4?=
- =?utf-8?B?L1M4YXdTTDBwYnltQ3cwY0dhWmh4RnkvaXRzNEZjY3Y5NXN3cG9jMU5JQVdo?=
- =?utf-8?B?cmZndUxjS2xWV1pZZEthOW9Rb081aGVFZHhxM3JQUUZOaFJ5ZUNNcTZXWllo?=
- =?utf-8?B?VWVmV2JYbHUvL0tyUFdhbWtScGZIZ3FUMnVHeHdaN2ZNY0UrS1htVXNLVGRy?=
- =?utf-8?B?NmRRYnoxUTh1ekNxNHFNR0prMHB2cldPZkczQ0Q3eVNwdWFaMVlOUWxxck0w?=
- =?utf-8?B?S1RLMkxFTkFibmpaL1N6SXE0bjV4T1FET2MxRGdXNU1HNVc4QTFJZk93QmZL?=
- =?utf-8?B?U3dMcW5PQzlHS3ZLOUt3SEp0RXM3SkJ5UDkxckFvODJWNSsxZnp3WThWMDhn?=
- =?utf-8?B?UVo2dElkeGRwV2QzYWE0ejBBVHZXcnUzakcweTNJRHM2TUhIa0RIMWFtaHpZ?=
- =?utf-8?B?Ykx3MlVzdmt5SWNkTEIrU210ZEFaY3hBSGZPYk5hdFBZLytSbXZmMEhSa3lm?=
- =?utf-8?B?UWQ2RmRSNXJBZTh3dk5BT0VKQzZNWUt1UkxKelBoUkJBM2VVQ3hOZS9ObnFs?=
- =?utf-8?B?amFoS1N3SEVZODlNK05sRFZ4MllXaUVZM2JqZDREVDZKdTR2OGFvZ0FsU1kr?=
- =?utf-8?B?dmVqYSsxbzRKVTBIUkZBQT09?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?R2NEL1k5K2VIVEpkdGJJWnQvQXJBR0l5ek5zaENXKytscFhHWUdLQlQ3M3R0?=
- =?utf-8?B?bENQNlNLZzFUUlJrbEpENzhscnBOSWtMcEpSME9wRHRSYnhRNG9Sdmo5ZkZv?=
- =?utf-8?B?UmtubjB0ZGNwam9oeGZUZFd2ZWoxT1FqazF0UzBCM1daUHBFczlabzdXamtn?=
- =?utf-8?B?ajRBalJDL200RWVIdDBUNnhJVG14UXBmbnFHZFJxRVc4Qy9laVlTcWJmbW5R?=
- =?utf-8?B?WTUwNitnWHF4VUxRRUlKWkhTVkRCRnFUOEhiUnFMM1JnZWUvL0VvNlZycDIw?=
- =?utf-8?B?N2dGQzh3MkFWQjVkZjhuazV5U0F4T3RCNnRUMnZIbkh3b1p5alBzdlZQQTha?=
- =?utf-8?B?V1JPK3grRjJMQ2VCZHArMm9Wd2Rjc1k3Si9hWjdmRWtLcE5zMXcrOTc2UmVw?=
- =?utf-8?B?bjlJNHYzTGxxcytYaytJUlpVMkNtZ3hGbXQ5bFJ4VE1VWTIrSEg4MDAwYk5k?=
- =?utf-8?B?UE5OSThxKzJuOFdDaWJhdjF5ZmV1TTdJTC93MTVORVgySHVTR1lYNEpVamE2?=
- =?utf-8?B?dGYyWWlCdlVhOStTVHZvMndvR0RESm1NSldEcmhza3A0VHhxVUo5ZTFvcWdQ?=
- =?utf-8?B?SW1HakxtN0pzdzNIUWJRL3hBaVE4VkZPb3RTYnhpWlVZYVFCeERiT0hPcFlD?=
- =?utf-8?B?Q2d1WCtNTXJLbnFpTWJ6SnJLNytkVWhhTUpFd0x0MU1ya2xKejlYNUY0dmt4?=
- =?utf-8?B?UVpCN3I4ODI1UXVZMzBPOVlPVUtCTHlHdXgyZ2EwYVVoZGMyZEZ2NlFQM1JN?=
- =?utf-8?B?OXRGdHVSTnM4NXk5Y3RHR1NERkpxaUFvL1lYT1NUUkQ2Qi9OTzNlSkdod0tv?=
- =?utf-8?B?OXU1dzlISTRjVUhwRDl1Unpsb2g4dm9hdmJwa2k4VDRTa0xacll6UkZsK3Y2?=
- =?utf-8?B?MnA4bmUxak9sMDllbkJmT2UvSUhwL2w4VXcwV1UwQVRDT2lTbmFFOUN6V243?=
- =?utf-8?B?MmQ2a1N3UnQ4T2F5MlV4T1hWSk0zM043TU1TZGF2S0QxZ0tHbys1cmd0M1Zt?=
- =?utf-8?B?SzJpb3pGeHkyQ1BKWEpOeHZHVWJHR1VYZmM4YmR6QmNTUnNyTDQvRGlLbWxC?=
- =?utf-8?B?OFFhWlJJb3ArUUo0dUFuY2I1YThmWThtN1lOMDU0MW9OTnVMQm8rZVUyOC9L?=
- =?utf-8?B?a1dDNk02cU1KRkNhVzlxSERTdjNkclMzZGhQL3VoejJITDdGMzVNTEZEMnpB?=
- =?utf-8?B?SGZEYUNUeldRK1JPMkJOTlk3Y0tJaDFEd3k2ZXVOVllqQk9SczJOQjB3cXZV?=
- =?utf-8?B?Qy9PbDZWSTB0SFZ1MjZMaHFPTUljTlgvZTJ5OUZ5ZXRpY1V4VS83OVZ5dFVO?=
- =?utf-8?B?RGQ4STI1U1BQQVhDK291czR3bnJWaEs2SzhURWkrbitXUFczbkNXdnFqbU1X?=
- =?utf-8?B?VFJWRFZVZlQ4WnZpQUtidDhHUlBHeitLVkZJYStvQ0JEQm5vZ2dUUkM0SUx6?=
- =?utf-8?B?SFd1aEtUSWF3REdsQXhKVXZkT3NKUXZRUlNGSnplbkw0b2xIcWJFdUp4T1gy?=
- =?utf-8?B?NjhQWEhpVmI1VUtJQVN6ZTZNVUU5RWhHUlptRkt6VTM1NVhuU0t5Mi9TV1V6?=
- =?utf-8?B?YUpTendweklwYTR2L3MwbXhtSFRmRWVIL29KdkxrYWtKbklhZ2RYRSsvbDcx?=
- =?utf-8?B?akJNeXYxMk92N0pvSTdwN0tCOGJFUStiK3lYNWh1eHVxU1A5dUdEOHl4L2hM?=
- =?utf-8?B?Wjk1RXJxaDBvNyt1YncxUGxZZXc4TWc2ektyYUNBWWIwS20xbWtGWnhUUC9F?=
- =?utf-8?B?eVNZWUlVVmtjWm5oK3NLaTdQS24vd0tkRlV3M0JHRlIzQjVOWjZEUDMxQXRC?=
- =?utf-8?B?NnI5azRINGJhQ2NqZTE4eDZxbUxUSVRpT1F4Zlh6ZzAvWGFST1JPV0tEVXRa?=
- =?utf-8?B?c2JwSDJweGdnMkY4b3dXVTg4Sjl4YU4zend2T3VvSTFLc3Nablp2K21TaUxW?=
- =?utf-8?B?NlJ4Z1N3WUFtNDZDbFBtYm12R21hZytJWUtGWmdPVXNJK081Z2tOKzQxbXNV?=
- =?utf-8?B?c3ZjMGNPNVRqeEZiOHdqQWNLUWI2SGF0eDZNY3E2Q2ZIU2R6LzVUQXl3YnBO?=
- =?utf-8?B?cCt2VUlybWprRGRRZC8xTlgvNVBtMzd6VmFqSGtmdmpySVp4UElmQmZCSkh1?=
- =?utf-8?B?WXAvMmlnOFJZdDhpWUlSbU5qdUNvSHBIamxteUhrajgycE1jWGJ3cVVZbWxQ?=
- =?utf-8?B?c0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A2E641ADEB678F40B1DD0D0C2A2E3882@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KqCfPYUW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E7BC4AF09;
+	Tue,  1 Oct 2024 23:03:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727823807;
+	bh=gMNU4N2r9J/DtCxCWsOgJ88QFKSaRk78Dab/E2WA3Cw=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=KqCfPYUW5zTqS/k4vJAO/lTJw2NGaBj73+Z6ckTKhj6zWABvPNxmswNeR/7oUe4hI
+	 rr4R62lcBW5McUNQRyaNpq5CpA0fk9cs6m8DYft9pE8NrbZRhQHdIY9kKd4nO7IXFN
+	 7g5dXbG8hXcPprDp2llw6ginwNm3qmNewWeqgt8tRw0JFNlJ6/jnQYuuYrvR4Tfyy0
+	 krMaRLDwG67x8hAaiLw0bXhrQ/RINPPp09Z+OLRR2033N70ZrZ2oDWWoPXcVpfN/j8
+	 Wb3UcF7CFxt5GIzYEcp2MBhO7R3/IjKnT/YGrcwXGtgaiGerHFs6MsOEtp44icNnXD
+	 9HhQHjzYORtSg==
+From: Mark Brown <broonie@kernel.org>
+Date: Tue, 01 Oct 2024 23:58:58 +0100
+Subject: [PATCH v13 19/40] arm64/traps: Handle GCS exceptions
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2122295-c513-4670-8626-08dce26d3834
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2024 23:03:10.1669
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4aUdivJ59Y836FKdLAKIo0YsJ0xr3DETwN9yn/KZcUyFoCGHKVf2mOWS+xX1p9scPsFUiiWvavwj2yAv64FRq0MCkygdkuq6b98I2uMT0MU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7215
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241001-arm64-gcs-v13-19-222b78d87eee@kernel.org>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+In-Reply-To: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Andrew Morton <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, 
+ Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
+ Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, 
+ Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>
+Cc: "H.J. Lu" <hjl.tools@gmail.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Florian Weimer <fweimer@redhat.com>, Christian Brauner <brauner@kernel.org>, 
+ Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
+ Ross Burton <ross.burton@arm.com>, David Spickett <david.spickett@arm.com>, 
+ Yury Khrustalev <yury.khrustalev@arm.com>, 
+ Wilco Dijkstra <wilco.dijkstra@arm.com>, 
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+ kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-99b12
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6161; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=gMNU4N2r9J/DtCxCWsOgJ88QFKSaRk78Dab/E2WA3Cw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBm/H7SsPpp0sak4YBdEYHnTAxj5FmkgTt2Icjl0/+7
+ aP9DIfqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZvx+0gAKCRAk1otyXVSH0BcHB/
+ 4+ntAaj6fQXmq38J+L4bMK5w0PmGcCYD/npfDUTtoDOgb0mBbJH9vZ9bT0+B6mAwyIjP7zeu4VDTmj
+ Aw4dYimJXbknHQ44l/CZAlILm/cfU8/s61fi2S4cExXqeWjLPyvyWHGMjOP66uhOyViuXcR9n+ljQC
+ pq6fTS7qkc0Ng9hXD3xrqowwpQFnTgS2c1mzTBoV1htNVzU7EoI4FgJ04Sz146+B1jp3zyvviPFjCD
+ yRwn0AP+28WccpNJyTCc8Tba2UIpUECViSga38G8EasrnRdu1iWGaYXo3AVHx+/tFWj2F03PhfCojw
+ sasg+KKqCS3IvRQFxb63V156TJKIm0
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-T24gVHVlLCAyMDI0LTEwLTAxIGF0IDE4OjMzICswMTAwLCBNYXJrIEJyb3duIHdyb3RlOg0KPiA+
-ID4gQSBzaGFkb3cgc3RhY2sgc2l6ZSBpcyBtb3JlIHN5bW1ldHJpYyBvbiB0aGUgc3VyZmFjZSwg
-YnV0IEknbSBub3Qgc3VyZSBpdA0KPiA+ID4gd2lsbA0KPiA+ID4gYmUgZWFzaWVyIGZvciB1c2Vy
-c3BhY2UgdG8gaGFuZGxlLiBTbyBJIHRoaW5rIHdlIHNob3VsZCBqdXN0IGhhdmUgYQ0KPiA+ID4g
-cG9pbnRlciB0bw0KPiA+ID4gdGhlIHRva2VuLiBCdXQgaXQgd2lsbCBiZSBhIHVzYWJsZSBpbXBs
-ZW1lbnRhdGlvbiBlaXRoZXIgd2F5Lg0KPiANCj4gTXkgc3VzcGljaW9uIHdvdWxkIGJlIHRoYXQg
-aWYgd2UncmUgZG9pbmcgdGhlIHBpdm90IHRvIGEgcHJldmlvdXNseSB1c2VkDQo+IHNoYWRvdyBz
-dGFjayB3ZSdkIGFsc28gYmUgcGl2b3RpbmcgdGhlIHJlZ3VsYXIgc3RhY2sgYWxvbmcgd2l0aCBp
-dCB3aGljaA0KPiB3b3VsZCBmYWNlIHNpbWlsYXIgaXNzdWVzIHdpdGggaGF2aW5nIGFuIHVudXN1
-YWwgbWV0aG9kIGZvciBzcGVjaWZ5aW5nDQo+IHRoZSBzdGFjayB0b3Agc28gSSBkb24ndCBrbm93
-IGhvdyBtdWNoIHdlJ3JlIHJlYWxseSB3aW5uaW5nLg0KDQpJJ20gbm90IHNvIHN1cmUuIFRoZSB0
-aGluZyBpcyBhIHJlZ3VsYXIgc3RhY2sgY2FuIGJlIHJlLXVzZWQgaW4gZnVsbCAtIGp1c3Qgc2V0
-DQp0aGUgUlNQIHRvIHRoZSBlbmQgYW5kIHRha2UgYWR2YW50YWdlIG9mIHRoZSB3aG9sZSBzdGFj
-ay4gQSBzaGFkb3cgc3RhY2sgY2FuDQpvbmx5IGJlIHVzZWQgd2hlcmUgdGhlcmUgaXMgYSB0b2tl
-bi4NCg0KPiDCoCBMaWtlIHdlDQo+IGJvdGgga2VlcCBzYXlpbmcgZWl0aGVyIG9mIHRoZSBpbnRl
-cmZhY2VzIHdvcmtzIHRob3VnaCwgaXQncyBqdXN0IGENCj4gdGFzdGUgcXVlc3Rpb24gd2l0aCBi
-b3RoIGhhdmluZyBkb3duc2lkZXMuDQoNCkZhaXIgZW5vdWdoLg0K
+A new exception code is defined for GCS specific faults other than
+standard load/store faults, for example GCS token validation failures,
+add handling for this. These faults are reported to userspace as
+segfaults with code SEGV_CPERR (protection error), mirroring the
+reporting for x86 shadow stack errors.
+
+GCS faults due to memory load/store operations generate data aborts with
+a flag set, these will be handled separately as part of the data abort
+handling.
+
+Since we do not currently enable GCS for EL1 we should not get any faults
+there but while we're at it we wire things up there, treating any GCS
+fault as fatal.
+
+Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm64/include/asm/esr.h       | 28 +++++++++++++++++++++++++++-
+ arch/arm64/include/asm/exception.h |  2 ++
+ arch/arm64/kernel/entry-common.c   | 23 +++++++++++++++++++++++
+ arch/arm64/kernel/traps.c          | 11 +++++++++++
+ 4 files changed, 63 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
+index da6d2c1c0b03..d1b1a33f9a8b 100644
+--- a/arch/arm64/include/asm/esr.h
++++ b/arch/arm64/include/asm/esr.h
+@@ -51,7 +51,8 @@
+ #define ESR_ELx_EC_FP_EXC32	UL(0x28)
+ /* Unallocated EC: 0x29 - 0x2B */
+ #define ESR_ELx_EC_FP_EXC64	UL(0x2C)
+-/* Unallocated EC: 0x2D - 0x2E */
++#define ESR_ELx_EC_GCS		UL(0x2D)
++/* Unallocated EC:  0x2E */
+ #define ESR_ELx_EC_SERROR	UL(0x2F)
+ #define ESR_ELx_EC_BREAKPT_LOW	UL(0x30)
+ #define ESR_ELx_EC_BREAKPT_CUR	UL(0x31)
+@@ -386,6 +387,31 @@
+ #define ESR_ELx_MOPS_ISS_SRCREG(esr)	(((esr) & (UL(0x1f) << 5)) >> 5)
+ #define ESR_ELx_MOPS_ISS_SIZEREG(esr)	(((esr) & (UL(0x1f) << 0)) >> 0)
+ 
++/* ISS field definitions for GCS */
++#define ESR_ELx_ExType_SHIFT	(20)
++#define ESR_ELx_ExType_MASK		GENMASK(23, 20)
++#define ESR_ELx_Raddr_SHIFT		(10)
++#define ESR_ELx_Raddr_MASK		GENMASK(14, 10)
++#define ESR_ELx_Rn_SHIFT		(5)
++#define ESR_ELx_Rn_MASK			GENMASK(9, 5)
++#define ESR_ELx_Rvalue_SHIFT		5
++#define ESR_ELx_Rvalue_MASK		GENMASK(9, 5)
++#define ESR_ELx_IT_SHIFT		(0)
++#define ESR_ELx_IT_MASK			GENMASK(4, 0)
++
++#define ESR_ELx_ExType_DATA_CHECK	0
++#define ESR_ELx_ExType_EXLOCK		1
++#define ESR_ELx_ExType_STR		2
++
++#define ESR_ELx_IT_RET			0
++#define ESR_ELx_IT_GCSPOPM		1
++#define ESR_ELx_IT_RET_KEYA		2
++#define ESR_ELx_IT_RET_KEYB		3
++#define ESR_ELx_IT_GCSSS1		4
++#define ESR_ELx_IT_GCSSS2		5
++#define ESR_ELx_IT_GCSPOPCX		6
++#define ESR_ELx_IT_GCSPOPX		7
++
+ #ifndef __ASSEMBLY__
+ #include <asm/types.h>
+ 
+diff --git a/arch/arm64/include/asm/exception.h b/arch/arm64/include/asm/exception.h
+index f296662590c7..674518464718 100644
+--- a/arch/arm64/include/asm/exception.h
++++ b/arch/arm64/include/asm/exception.h
+@@ -57,6 +57,8 @@ void do_el0_undef(struct pt_regs *regs, unsigned long esr);
+ void do_el1_undef(struct pt_regs *regs, unsigned long esr);
+ void do_el0_bti(struct pt_regs *regs);
+ void do_el1_bti(struct pt_regs *regs, unsigned long esr);
++void do_el0_gcs(struct pt_regs *regs, unsigned long esr);
++void do_el1_gcs(struct pt_regs *regs, unsigned long esr);
+ void do_debug_exception(unsigned long addr_if_watchpoint, unsigned long esr,
+ 			struct pt_regs *regs);
+ void do_fpsimd_acc(unsigned long esr, struct pt_regs *regs);
+diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+index 3fcd9d080bf2..fe74813009bd 100644
+--- a/arch/arm64/kernel/entry-common.c
++++ b/arch/arm64/kernel/entry-common.c
+@@ -463,6 +463,15 @@ static void noinstr el1_bti(struct pt_regs *regs, unsigned long esr)
+ 	exit_to_kernel_mode(regs);
+ }
+ 
++static void noinstr el1_gcs(struct pt_regs *regs, unsigned long esr)
++{
++	enter_from_kernel_mode(regs);
++	local_daif_inherit(regs);
++	do_el1_gcs(regs, esr);
++	local_daif_mask();
++	exit_to_kernel_mode(regs);
++}
++
+ static void noinstr el1_dbg(struct pt_regs *regs, unsigned long esr)
+ {
+ 	unsigned long far = read_sysreg(far_el1);
+@@ -505,6 +514,9 @@ asmlinkage void noinstr el1h_64_sync_handler(struct pt_regs *regs)
+ 	case ESR_ELx_EC_BTI:
+ 		el1_bti(regs, esr);
+ 		break;
++	case ESR_ELx_EC_GCS:
++		el1_gcs(regs, esr);
++		break;
+ 	case ESR_ELx_EC_BREAKPT_CUR:
+ 	case ESR_ELx_EC_SOFTSTP_CUR:
+ 	case ESR_ELx_EC_WATCHPT_CUR:
+@@ -684,6 +696,14 @@ static void noinstr el0_mops(struct pt_regs *regs, unsigned long esr)
+ 	exit_to_user_mode(regs);
+ }
+ 
++static void noinstr el0_gcs(struct pt_regs *regs, unsigned long esr)
++{
++	enter_from_user_mode(regs);
++	local_daif_restore(DAIF_PROCCTX);
++	do_el0_gcs(regs, esr);
++	exit_to_user_mode(regs);
++}
++
+ static void noinstr el0_inv(struct pt_regs *regs, unsigned long esr)
+ {
+ 	enter_from_user_mode(regs);
+@@ -766,6 +786,9 @@ asmlinkage void noinstr el0t_64_sync_handler(struct pt_regs *regs)
+ 	case ESR_ELx_EC_MOPS:
+ 		el0_mops(regs, esr);
+ 		break;
++	case ESR_ELx_EC_GCS:
++		el0_gcs(regs, esr);
++		break;
+ 	case ESR_ELx_EC_BREAKPT_LOW:
+ 	case ESR_ELx_EC_SOFTSTP_LOW:
+ 	case ESR_ELx_EC_WATCHPT_LOW:
+diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+index 563cbce11126..fdbcf047108c 100644
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+@@ -506,6 +506,16 @@ void do_el1_bti(struct pt_regs *regs, unsigned long esr)
+ 	die("Oops - BTI", regs, esr);
+ }
+ 
++void do_el0_gcs(struct pt_regs *regs, unsigned long esr)
++{
++	force_signal_inject(SIGSEGV, SEGV_CPERR, regs->pc, 0);
++}
++
++void do_el1_gcs(struct pt_regs *regs, unsigned long esr)
++{
++	die("Oops - GCS", regs, esr);
++}
++
+ void do_el0_fpac(struct pt_regs *regs, unsigned long esr)
+ {
+ 	force_signal_inject(SIGILL, ILL_ILLOPN, regs->pc, esr);
+@@ -852,6 +862,7 @@ static const char *esr_class_str[] = {
+ 	[ESR_ELx_EC_MOPS]		= "MOPS",
+ 	[ESR_ELx_EC_FP_EXC32]		= "FP (AArch32)",
+ 	[ESR_ELx_EC_FP_EXC64]		= "FP (AArch64)",
++	[ESR_ELx_EC_GCS]		= "Guarded Control Stack",
+ 	[ESR_ELx_EC_SERROR]		= "SError",
+ 	[ESR_ELx_EC_BREAKPT_LOW]	= "Breakpoint (lower EL)",
+ 	[ESR_ELx_EC_BREAKPT_CUR]	= "Breakpoint (current EL)",
+
+-- 
+2.39.2
+
