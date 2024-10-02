@@ -1,93 +1,119 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C1D1D0B88;
-	Wed,  2 Oct 2024 15:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47B41940B0;
+	Wed,  2 Oct 2024 15:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727882979; cv=none; b=DIYe+RlYsmTHYtelAhlDHt7MeBFgMZFHxSEDctJkTTyjvlmIctkjyVPjU7m7J1w30K8ERcrwcvFP8+VEr8EK3w1DE+mQHLJvRUlo+LNPv3hNpRCZov4NJAuQ6Q8N2YEzgii9ks85ykTMbJmcfVwlKTBMLzPz2vOraBIngToKeTM=
+	t=1727884529; cv=none; b=BFPWknSNz0C56zeMhAWndvH3DZSPm2aEK4v9QU9Dq89fdXYPOMuqhW3PQBA2cBhleMtc79U7Nb9ynC3eXlGRp2vnqce8AyMaU+1aWdqTstilldZEsEBnG6kL+ZilMt39sXE20FZ7GTxR9xuW8s7BpNVbkdG/5Z8OZ4sO1IgdRKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727882979; c=relaxed/simple;
-	bh=KcWe2p4//ReZ22XPDI1sSHKXLXNrSm/uqNaJ3zBqUb0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sBSqicNgzt48+slbrx5v5GhvvakfevrhirR12FdkYIL9S3QyQEQEkpp/io0/or5Zwu/gh5Va3d62LpiF+tDpHF19CCVB6xjNMoVB32c01snOd8uKAABETpY4xw1ysixRuhResZNQMPCEijFUKbT+lysHSsu9O18opoDDdm2KptI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hSaUd6ho; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1727884529; c=relaxed/simple;
+	bh=27HUeDVHXOs+OLA9bA8uKhz/MQrgdafn0/iAATWL0mM=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BSqb7psb5hJOtY4wAztllP3xLFEOxLzysKVuyaLSvUA/xwhHrgSt4pOdG4ok2wM7w2YVsajBkzeu67SJzgQKyrGhT8equzW91kMPGRI3uS5LED/2CzApd8ej9aH+KNA/Ly8XZHkUIbOmsC+SKrfhj6GW9GSY8EyWiFBG+cA8SaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k9RkyEgh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hSaUd6ho"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71b8d10e990so3428469b3a.3;
-        Wed, 02 Oct 2024 08:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727882977; x=1728487777; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nge7JqBO8y1Nt32fqYmbMoUQ5ZDhat8l9e47yakT2j0=;
-        b=hSaUd6hoeKb/iKjdod/KZ21ZwjTwRfPWemuFs+qJsKxhsa2zGhXFvGlvyd1EOZSj4S
-         BnTj1S4Ns76mN6S/LlxN7wR7PgMPnmAJW0NTalPuqcY/rlWLK4qu3sl7z5FC/oAlGDTD
-         Gq8qifhce+RMCZ0QCw+N6imOhayvQEp8T1K6rhAc4rwdOM50hzt2wXuZn++8F0Hxi8BJ
-         RgT51K2fLjghgFSbM8TkM2c2XNGBpRy1rFGKWDnig6QbO42CqfBC2+a0nZTTj63ros6H
-         LieSUDK7ipqQ1r3pdx62UKx+WvgInJZn2IHVKfIp4zjFGQDQmTjM97Bv738SezWj9d/y
-         KPvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727882977; x=1728487777;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nge7JqBO8y1Nt32fqYmbMoUQ5ZDhat8l9e47yakT2j0=;
-        b=mbK2gtLtklTJIz14MWdmPQcW3Pwunb3PDV3QEjls6G64IMSE7RGGQ5Zc2nqryUAsh/
-         zNt/LDVqXA6OeFK/+ibGkzCgQm/hIYiCpmGkIQNpL/um7Q1XCpekiZn2qyS+pPEMeDxg
-         t7F7svu89Ro9RWux3kh8DEZf16rEBSO8ZQZnNgOvRmZCVN7d7WUVzVcBQE9zv51VOiCO
-         F3ikitFCfWlKhJYO7KRdMZXXKOYCh4fvUSGhjKhwnx9gqzZFHls0cnFV6sG5cY3SSvZq
-         qiGXQnlR0/ZNZ54iUy8lkggikfKgWcDUsZ4knPsc/0DA8hiYSQx8t/e/nI2Suiej6IA0
-         UnJw==
-X-Forwarded-Encrypted: i=1; AJvYcCVSOJDgEUIzHh5YwbX/mONeILiJMoEM3RWVLsE29wZeChz3iN1wZ/c/I3h72CIY5a2AyjeGHALhOSs8i08=@vger.kernel.org, AJvYcCXebdquRlbteI6Ehe9U1hm5Qab+fQP0bfO2M9g28U8yXKzGyXgoFcxxqVw8Z2rXyZ7MuqoB+z37/iYw47j/3b4G@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcV4qmZjIj6Gi3395LMKekZFiE9dPClDYpqQnD73Pm3ZCz7ikt
-	aSUKC5oM3TeYonZxAUBkqv9wgH1yoKtpxlPorsumkAkvfG9ctCCZ
-X-Google-Smtp-Source: AGHT+IGajUHlPqJ18foTX/9BkGVtb9utfYvyvBixhhmmnEWfIo9T2x2Yw+FWPf1rfVrxvjY3E73qog==
-X-Received: by 2002:a05:6a00:13a1:b0:717:88eb:824d with SMTP id d2e1a72fcca58-71dc5c78135mr6106100b3a.7.1727882977213;
-        Wed, 02 Oct 2024 08:29:37 -0700 (PDT)
-Received: from purva-IdeaPad-Gaming-3-15IHU6.lan ([2409:40c0:23f:2448:4ee3:a2dd:4021:3733])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71b265166e2sm9872830b3a.131.2024.10.02.08.29.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 08:29:36 -0700 (PDT)
-From: SurajSonawane2415 <surajsonawane0215@gmail.com>
-To: shuah@kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k9RkyEgh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79667C4CEC2;
+	Wed,  2 Oct 2024 15:55:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727884529;
+	bh=27HUeDVHXOs+OLA9bA8uKhz/MQrgdafn0/iAATWL0mM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=k9RkyEgh+Y/YS87nAPF1Ao6uiCfC2Ka09hloc087gdGHJXHVDYXjBmR2ceETg9ni6
+	 deks86zaFNOb6z1/RiWcTXvOF0U/JLOW08+SpteRcOBc5nPa3btIZx+FKc8OiNN7e+
+	 FEG/zba/f2YQ1sA2bH3Qf0Z5Uaro4RI1sXzvYN+fyrehRew3uav87f7UIuG26TbRhf
+	 SHQvJ+naVNRRTRSJjCOOekaQRb5r/ZRFkTQWCmGQOBDzHBWS9b9AJAbC35w5zYjD/x
+	 A1nX477cbgft4pfSE+Rw4NrdL8NdIF2MVohLnxdgNDdBRy1nbrrn5eOA9cIL3jvekY
+	 d3ZSOc2PuCwsA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1sw1hG-00H6P0-9r;
+	Wed, 02 Oct 2024 16:55:26 +0100
+Date: Wed, 02 Oct 2024 16:55:25 +0100
+Message-ID: <86a5fm7b4i.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: SurajSonawane2415 <surajsonawane0215@gmail.com>
-Subject: [PATCH] selftests/vdso: Add linux/sched.h to fix CLONE_NEWTIME build error
-Date: Wed,  2 Oct 2024 20:58:49 +0530
-Message-Id: <20241002152849.111841-1-surajsonawane0215@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 16/40] KVM: arm64: Manage GCS access and registers for guests
+In-Reply-To: <86bk0373nq.wl-maz@kernel.org>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+	<20241001-arm64-gcs-v13-16-222b78d87eee@kernel.org>
+	<86bk0373nq.wl-maz@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, akpm@linux-foundation.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, arnd@arndb.de, oleg@redhat.com, ebiederm@xmission.com, shuah@kernel.org, rick.p.edgecombe@intel.com, debug@rivosinc.com, ardb@kernel.org, Szabolcs.Nagy@arm.com, kees@kernel.org, hjl.tools@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, fweimer@redhat.com, brauner@kernel.org, thiago.bauermann@linaro.org, ross.burton@arm.com, david.spickett@arm.com, yury.khrustalev@arm.com, wilco.dijkstra@arm.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Fix build error in vdso_test_getrandom.c due to missing CLONE_NEWTIME.
-Include linux/sched.h to define CLONE_NEWTIME.
-Ensure successful compilation by resolving the missing header issue.
+On Wed, 02 Oct 2024 01:24:25 +0100,
+Marc Zyngier <maz@kernel.org> wrote:
+> 
+> On Tue, 01 Oct 2024 23:58:55 +0100,
+> Mark Brown <broonie@kernel.org> wrote:
+> 
+> > @@ -4714,6 +4735,10 @@ void kvm_calculate_traps(struct kvm_vcpu *vcpu)
+> >  		kvm->arch.fgu[HFGxTR_GROUP] |= (HFGxTR_EL2_nPOR_EL1 |
+> >  						HFGxTR_EL2_nPOR_EL0);
+> >  
+> > +	if (!kvm_has_gcs(kvm))
+> > +		kvm->arch.fgu[HFGxTR_GROUP] |= (HFGxTR_EL2_nGCS_EL0 |
+> > +						HFGxTR_EL2_nGCS_EL1);
+> > +
+> 
+> Why are you still allowing the GCS instructions when GCS isn't
+> enabled?
 
-Signed-off-by: SurajSonawane2415 <surajsonawane0215@gmail.com>
----
- tools/testing/selftests/vDSO/vdso_test_getrandom.c | 1 +
- 1 file changed, 1 insertion(+)
+Scratch that, they are NOPs when GCS isn't enabled, so there shouldn't
+be any need for extra traps.
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-index 72a1d9b43..3f2a4dbf8 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-@@ -22,6 +22,7 @@
- #include <linux/random.h>
- #include <linux/compiler.h>
- #include <linux/ptrace.h>
-+#include <linux/sched.h>
- 
- #include "../kselftest.h"
- #include "parse_vdso.h"
+	M.
+
 -- 
-2.34.1
-
+Without deviation from the norm, progress is not possible.
