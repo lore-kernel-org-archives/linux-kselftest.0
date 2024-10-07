@@ -1,94 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DD21E49E;
-	Mon,  7 Oct 2024 14:45:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B30F1DDC9
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Oct 2024 15:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728312334; cv=none; b=G/jsy8qcw2LZd84uUQ9dC08TWNwll4Lg0N1+NFk8AHMthDJe8ORBs+OcgbybPmQaPUQtmmVSXjHC4nc9URXYYa5IoDNBONfd4au5dPexb+KkDCujkPxCUunh5sv6GK5JXACyK7SkrsnhG8/K4InfL55bti7YvIXYm2t2xVZo2EE=
+	t=1728313281; cv=none; b=GiPpPuBPj63mcoUocSd2WMmh3Bl66ysnhE4HjFgbkR8wtleou5GjpoEJUojcs7DYOqatlaRlvDx/s3aKKk1/LzqeMz0S0L8YEjla6t3kwsE/KmH+8JqSpLfQ0cs0Nl1ypc8/GxEs7iVQJ6834yiaUmAJt7Xw/FJSNh/6BwFcH20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728312334; c=relaxed/simple;
-	bh=3FB+fM1SR/GBiOLKvg963NUMpjWXq1ClTwQgLNpRUjs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BdE7DWhTm/RKXjfpzEyc9ARgtNldzQkM15atN07IMUaYhdEGaECrL3VOlnDIhGzx6NfH7HeHe+tr5/9JtOM7RgXVxQiUDiCMqFjAv/JONXeLGVo38u/yOf7/MFjuLxXPFOPtx0eS6XLMA7tJuuVngFPxrjFwDn2o8HJMv8dEC+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SJgyKYyi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728313281; c=relaxed/simple;
+	bh=9lGMjsL9YvR2b5UZp7IaSLPOgsW7pqd2+sFOluaC1UI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Pv9BfdFYmxEvZmWKED9LwQ8r5RIdhIq7u1htBukjBkLEfBbHzdaAFMJR2d9N0ihCvknrtapNpTHlrUsvsvbMWWcg+/BV6pn3/PK1IfCmRa4v2VVYgpB2RDcNWHr4zbusS47TBsYW9DaxQ+IJkqaG//cgbd+/l/t7CAAV8ta09s0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=A6VBUdpR; arc=none smtp.client-ip=209.85.167.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SJgyKYyi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8EBCC4CEC6;
-	Mon,  7 Oct 2024 14:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728312333;
-	bh=3FB+fM1SR/GBiOLKvg963NUMpjWXq1ClTwQgLNpRUjs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SJgyKYyi6E6PdkP2KFIApIt1zGeY44HkEypv1U0uHgtenil12+iN0S09ZXgJZRCKE
-	 pggRteEFcZ5N39BBicIygOlg7ulAJZXGCQzY0nDlsCB3FKK+RojoMO49mRq/ZXgpzv
-	 Qv55RWc0k00hQjSORbrH0W+Ry/bvL+T19NW4Ntpuw6mv7CApwGtz4T9t1NVheik3I8
-	 rD/chLiY4YSiDJuEEpBBTxFMbdlJmweWoxgjHw6rj7fA+/l0FREY78hgDdaLI/5QkF
-	 DHmUaiBg4J2+Y4GBc3ceYC1PMCqkbWvJaVQL7qcHPgueLjZIhOYAH1rLdyJi+vlgHx
-	 kUc95jN2jT22A==
-Date: Mon, 7 Oct 2024 15:45:12 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Dev Jain <dev.jain@arm.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
-	oleg@redhat.com, mingo@kernel.org, tglx@linutronix.de,
-	mark.rutland@arm.com, ryan.roberts@arm.com, suzuki.poulose@arm.com,
-	Anshuman.Khandual@arm.com, DeepakKumar.Mishra@arm.com,
-	aneesh.kumar@kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, sj@kernel.org, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org
-Subject: Re: [PATCH v6 1/2] selftests: Rename sigaltstack to generic signal
-Message-ID: <ZwPz-MXhbJMY6-ZU@finisterre.sirena.org.uk>
-References: <806e4be0-4b1f-4818-806f-a844d952d54e@arm.com>
- <fff2b685-a7a5-4260-a293-f2abf55d9ce4@linuxfoundation.org>
- <514713eb-235c-40ee-8c25-f1f3e1ca7f7a@arm.com>
- <d5dc1bd9-4473-405f-99fc-192691f41c4f@linuxfoundation.org>
- <0b3af60f-0449-48a1-b228-f26618b9d50a@arm.com>
- <fcdbd8bc-9986-497e-8de4-86d3e619ca73@linuxfoundation.org>
- <03c5b10d-b81c-4074-9c27-8ffc8c7fc84a@arm.com>
- <cb2f88e0-8e31-43a0-a5ea-03f0ab05417e@linuxfoundation.org>
- <e497c022-549f-4adf-83f8-8f8c54d7c998@arm.com>
- <5400ac3c-f730-4ede-a35a-7d9cc79bf997@arm.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="A6VBUdpR"
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3e03ffc29b5so344965b6e.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Oct 2024 08:01:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1728313279; x=1728918079; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9lGMjsL9YvR2b5UZp7IaSLPOgsW7pqd2+sFOluaC1UI=;
+        b=A6VBUdpRet3ACFD/FPEGj3vJYbLsWtmYKDf/aFQMSsUM7R/gGugI/yGTHpGtbKxVLr
+         aMF3sTvV2Nt2MR0DuIgaU12MHzHN7uQI/GFKCINnB0pH/6lcCk0N98cu2sE8PfZrl7PR
+         fQ+EEsMc7g0xO6diVe26L6oSfqjLxNZSkQV4U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728313279; x=1728918079;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9lGMjsL9YvR2b5UZp7IaSLPOgsW7pqd2+sFOluaC1UI=;
+        b=OXOW8EAQZU26WQ1vSf9tuxH/NTjuoMtxHzFVWEiVzX0XKnvpbpK8TOK3qKAbD83bSM
+         FF7lOUhhcCJMzbSqGMgkWnvdQzYkHpguDfQvHIXUK8Al8z2otoa8LPVEh4kqNeJIuDe1
+         6S67Mw2E43nb6uJVRt79uFAG7kVah59lrIPakozK/XnPULuMFtbFVCxlTAm5u+ERo1a5
+         Cgz/NnnjCQrB0MlOj/A81FbX0bY9uxAAYKhkx7UVfL8dPPef2aHZDaOlF9wBUAl6aD1F
+         ItS4g6WrTwnhgFVYS2cjN1v3PBLzcqi7j35PF7KCAlCM1xHX+aeq0dWD2ptdMxYzfbXA
+         JG4g==
+X-Forwarded-Encrypted: i=1; AJvYcCVdc3uMBaHFOahmbYSYVKWVGmU/+wEQnoSmpJxrH34teD00nb6NcCdN4XZTvwz1BUwbgjzmkptbOdMRUGMH6NQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAR9gqWVuf7W4dL/FS9FE8HamGBr2sZclyfovD3WKZRiMMGBT8
+	vbSiTDbD50/DTdV1I5pemxXiGLkhzduauD1HMjF/HlAO8XLwMGt/T7f3w1NnACKVLBofeq4TTzP
+	n0dFPw8etQudBEGU9PwUKrn1Wl7I7RVqYL+SrJEAxkomcC5Y7jA==
+X-Google-Smtp-Source: AGHT+IEMgEtMkPMuigjIyri58XNpbb/jhG0K3/t0P5EIDskUDPqzyw/E5ZxVQMR+NVn6DfogZxiFeyS63OQiwPyJRj4=
+X-Received: by 2002:a05:6870:64a0:b0:268:bd85:ff9a with SMTP id
+ 586e51a60fabf-287c1d38686mr1975731fac.3.1728313279521; Mon, 07 Oct 2024
+ 08:01:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zI1WmKFLB9+n5Rbe"
-Content-Disposition: inline
-In-Reply-To: <5400ac3c-f730-4ede-a35a-7d9cc79bf997@arm.com>
-X-Cookie: Editing is a rewording activity.
+References: <20241001002628.2239032-1-jeffxu@chromium.org> <20241001002628.2239032-2-jeffxu@chromium.org>
+ <4544a4b3-d5b6-4f6b-b3d5-6c309eb8fa9d@infradead.org> <CABi2SkUhcEY7KxuRX3edOHJZbo2kZOZfa0sWrcG2_T0rnvHCWQ@mail.gmail.com>
+ <78f05735-cca3-491e-b2d6-c673427efa07@infradead.org>
+In-Reply-To: <78f05735-cca3-491e-b2d6-c673427efa07@infradead.org>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Mon, 7 Oct 2024 08:01:00 -0700
+Message-ID: <CABi2SkVQLW_hCmOA3is3nyG9nMjCQ9ZaFJ1tgG3=5M9_83+9Rw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] mseal: update mseal.rst
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: akpm@linux-foundation.org, keescook@chromium.org, corbet@lwn.net, 
+	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, jannh@google.com, 
+	sroettger@google.com, pedro.falcato@gmail.com, 
+	linux-hardening@vger.kernel.org, willy@infradead.org, 
+	gregkh@linuxfoundation.org, torvalds@linux-foundation.org, 
+	deraadt@openbsd.org, usama.anjum@collabora.com, surenb@google.com, 
+	merimus@google.com, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, 
+	enh@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Randy
+
+On Fri, Oct 4, 2024 at 4:52=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org>=
+ wrote:
+>
+>
+>
+> On 10/4/24 9:52 AM, Jeff Xu wrote:
+> >> above is not a sentence but I don't know how to fix it.
+> >>
+> > Would below work ?
+> >
+> > Certain destructive madvise behaviors, specifically MADV_DONTNEED,
+> > MADV_FREE, MADV_DONTNEED_LOCKED, MADV_FREE, MADV_DONTFORK,
+> > MADV_WIPEONFORK, can pose risks when applied to anonymous memory by
+> > threads without write permissions. These behaviors have the potential
+> > to modify region contents by discarding pages, effectively performing
+> > a memset(0) operation on the anonymous memory.
+>
+> Yes, that works.
+> Or at least it explains the problem, like Theo said.
+>
+I updated with :
+
+Certain destructive madvise behaviors, specifically MADV_DONTNEED,
+MADV_FREE, MADV_DONTNEED_LOCKED, and MADV_WIPEONFORK, can introduce
+risks when applied to anonymous memory by threads lacking write
+permissions. Consequently, these operations are prohibited under such
+conditions. The aforementioned behaviors have the potential to modify
+region contents by discarding pages, effectively performing a
+memset(0) operation on the anonymous memory.
+
+Thanks
+-Jeff
 
 
---zI1WmKFLB9+n5Rbe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Oct 07, 2024 at 10:07:24AM +0530, Dev Jain wrote:
-> On 9/16/24 09:28, Dev Jain wrote:
-
-> > Gentle ping, adding all x86 maintainers and the x86 list, in case they
-> > missed.
-
-> Gentle ping
-
-Given that this was posted prior to the merge window you should probably
-resend it at this point.
-
---zI1WmKFLB9+n5Rbe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcD8/gACgkQJNaLcl1U
-h9Ddrgf/ecjm5cqThpdVO55ZcWo1Tl68da7MT8BBf2KnrlBHpFW2DgVjvVt5//Rw
-UcXrkPb/CFPPs8buUCeMSuj23bgcT0557mL45gETXpkZ+favSEItVl7ypm7Ty5zE
-HjOpfdvAvmYwBiqAbM2lNQBCMe6VnIuKR/czVd5Ir+VG7M+D/xn875ZdPB+/J04q
-I87Hl7jhVvh0UeniDGNtHUSMefM1Wn9HIMhiiGbA6IlrarG1hQGtPYwlpfnP8Daq
-9hNSO29t/CJ7XvWQOaZE9Rvd+VzBqVKvSmRNGF3x/rAGpkYVioJELxznPlAEVnp7
-qcD0nYKoX370q1qULPMpJzySnGXhnQ==
-=3dxY
------END PGP SIGNATURE-----
-
---zI1WmKFLB9+n5Rbe--
+> Thanks.
+> --
+> ~Randy
