@@ -1,52 +1,52 @@
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910BB1D6195
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Oct 2024 15:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A0F1D54DC
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Oct 2024 15:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728313303; cv=none; b=faUIz9A/GaB5N1X24YrVpzPAZsEs3r2Vt1N+sgI53ud0qhX0VrRmpvBI90okEcvuu29n3+iFMzltcheqesDkoDcveg+zp85IdMKuL95odxxHw/icEDuVKH2ScuIn614K5pRG1Nc0AMgKpIgrb5MGPBeWKXWQ973vFg8JMCTmgt4=
+	t=1728313416; cv=none; b=FkY9CJFXZZm3HFzAlh1Q69xtExI1qAep4/eDziLFPXRnZNdzLFlsLMtmI9Vt6pJNucuHS7/E01sH6I8Ycvo010o9iDhTBLsdpycFGDrVjQJKDAmMYZD+kQV6jdQSPhdzc5xEjWbZpI7BBJKA05PWnqCZJStdmyset6bc6ckl/Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728313303; c=relaxed/simple;
-	bh=Of3fTbfTUadI91Km6QSnlfHzLgvPLsVxjWD+yFvOV4w=;
+	s=arc-20240116; t=1728313416; c=relaxed/simple;
+	bh=UoZJgnOU+cpZzaO1kTH0rbuTDby7trtHXlUaN8PNeeU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sc53graPrVVxDUVswoYyPf+v4UyzRc/1bDYi8hF+1yBXCOuMh4MRf/+KIA3RHAOqTBP2qzUV+FyQkfe1sdZQGUgA/NnDynBDx4+wMrKgCnuhNn6D1EGM8tz31sqlpdBpx/EsJNQ+KpKmDNylzh5Of+rzqhU7C4Iw6dW8fR/px+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EbmcZEOL; arc=none smtp.client-ip=209.85.167.172
+	 To:Cc:Content-Type; b=AUViM9AfSPhuxg8+P3EgGmUKBjiGLJutxo+3lZ5hNFvaAq3RuP9hKxfKrED22HpOSAccwY3ZHKznZvvroUQLc5Q/6ATv/pbjfjkg0HuxzFTA4KnWLvuXewrNwI214SPA2lbO6t+lf6Jq6tM0TunRcYUfEwmOGcgRvIqyj2pL2pQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Fe8RzgCv; arc=none smtp.client-ip=209.85.210.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EbmcZEOL"
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3e04ea9d715so370266b6e.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Oct 2024 08:01:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Fe8RzgCv"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-710edf880d5so255861a34.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Oct 2024 08:03:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1728313300; x=1728918100; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1728313413; x=1728918213; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5jAAFMBYKppMdRXJchSLw0rc6C6JnyAPVbXk9thx1g8=;
-        b=EbmcZEOLkHkClCAbOYu8+03DhEprBSh0oBirzogOJ0A79plhggIYNMNGQDU1es/WmM
-         QjTbSj4NLpG62tnDOS+XnDqAzMe+S/6Fcqrl3Skgr6uZ6lx28qXNICQTDr2uc9xO8CBv
-         VuYXc6fqgONntYqwSuiqzXhrEwu7VbEbowREI=
+        bh=XnMYpMSi30pRgprxZcWHtApA7E1/LbOK6iJZCnWy7fY=;
+        b=Fe8RzgCvKb9YEG/FNP5YtFDQGyGm7iKeq/kXDFCi4ndhGE38v8B7u/Wckt0WUkOC5i
+         7AJdoAtpZ7/ruO/vBTTkog4h9IuFHhV9shvvcKpKWCzPdmV2VO7xUb7ifpFaq2U25mtH
+         A4Xs83THGfHP5HP5jMt/nbNqPC+ckadE0QOnw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728313300; x=1728918100;
+        d=1e100.net; s=20230601; t=1728313413; x=1728918213;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5jAAFMBYKppMdRXJchSLw0rc6C6JnyAPVbXk9thx1g8=;
-        b=cKP2wmicSN0qDAC4BJMHpEKPA791w5k7u0RczIkX0UCAiMUO7CMyV6LHpQlTg/rjkm
-         Uxjxp1hIBI0hlYgldi7IAbaBdz4sJ5PGxJBMD2z1HukCuo8A5fpNAFXtW0URmsWKm29K
-         E7QBLFgMhN6PUVhx3ikzac9BXn27gSHozdf0fzfKnSC/eSgRyyL+8FH2tECYgoO9UpoI
-         1/aYU/EAVBmQwkde8TcdVAFVY4uNXGs5V6c8p0z2I0FilA6enlRDbYwEX2YL0ETIGcGY
-         X/RvD8uf+uU0Je7uJfN/NOfqO9vTBKMS9zoK1pWPHnMhPlxul98qcEGsrNhDjcr7Eoru
-         GOkg==
-X-Forwarded-Encrypted: i=1; AJvYcCWsyy9Pb6vSBKqmo20wOQHYarhOoupnvuQzS6uBBsMFH3rC+sKF8SybZOIKpyDamVJmFal7G0nA5Mt93kIp1OI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7Jdg9LVbkkjNOVEumtEvNQVYXui9xhM7SQw57/iAVZwKKGn3P
-	lM9DPyMLm4M86TMntgVW8MLFjAw9E+0W60hNFSNSTfo5W/rljXtY8sHBWzef3XRVFssmX0Z2fuQ
-	Xsm/AIQQm8k7bhluTAWxapyQlgzDWTRNwp4p5
-X-Google-Smtp-Source: AGHT+IFFTDkuljTZSSM+i7nA189OSRbRxsZF42ePZcfZwT24kjDKYTZ7AaE+3X0QfQ9LOodahDeCiX/tICNJikALAHw=
-X-Received: by 2002:a05:6870:d201:b0:27b:9f8b:7e49 with SMTP id
- 586e51a60fabf-287c22913fdmr2397442fac.11.1728313300572; Mon, 07 Oct 2024
- 08:01:40 -0700 (PDT)
+        bh=XnMYpMSi30pRgprxZcWHtApA7E1/LbOK6iJZCnWy7fY=;
+        b=mf7yDnWwOd04qzUUzMddDwPzAW0pPeZVQE0VCUmIgkdgZh/Rhyg8Br+vCMyUFJuHpT
+         fooi4I3L5nawfVp7qyFQLV1tOfSFQuhDYMEIw9RwhpIhk68W2T+P09E7ix8Nt8iMBQgY
+         S/y7oKhBKVTjjSPRACcqWmXFYHFnm0K+NTZ4ZGVQCWyuMsr7/8TmFVwILr6J2oYRNHM+
+         f+phrbelag04U6j/9rgY1k7/5vgVr8CXcg1l2L6eq6ZOzraL6zDNSpBmig8fWiXEyr8H
+         A2pyWg85XJHAo40GW5kEGR0E21RU336fogd7V/N0/Jw0Wv4NsOB/0x+ziMZFPAzX+pZQ
+         sZ3g==
+X-Forwarded-Encrypted: i=1; AJvYcCXkRaKJgwnocsXrqKaZDRfvhxl9UbvdvpGnpAPs5RSek+T+cEEGDVYfJdmiNzD49x6SbW4KtTm0cdy5c5dWwCA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVv+jzWDex9D1LC+WEd6CPnPWDSYWxq3la0oLT/gMIj9hIY+7B
+	hvv1ymUfen6xrx115jZgGkgWksSH47PQ0HJnCiSax1LxXJqkHb6oXXuuPPeTd4r40vXSkz298Ma
+	PQg8kU8yRIXkSErBEfgehDmnUJRIcK/SmlidX
+X-Google-Smtp-Source: AGHT+IHoAnc3BjGBILjnmbLFo2ofO9yLKDc28NITtzSSbSlwUCHw83CVP6hL/oqAJSRlAtNEV3l5YeF2ABjLV48sw9s=
+X-Received: by 2002:a05:6870:8a2a:b0:260:e5e1:2411 with SMTP id
+ 586e51a60fabf-287c1e57f76mr2249422fac.6.1728313413483; Mon, 07 Oct 2024
+ 08:03:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,11 +55,11 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20241001002628.2239032-1-jeffxu@chromium.org> <20241001002628.2239032-2-jeffxu@chromium.org>
  <4544a4b3-d5b6-4f6b-b3d5-6c309eb8fa9d@infradead.org> <CABi2SkUhcEY7KxuRX3edOHJZbo2kZOZfa0sWrcG2_T0rnvHCWQ@mail.gmail.com>
- <51463.1728069102@cvs.openbsd.org>
-In-Reply-To: <51463.1728069102@cvs.openbsd.org>
+ <78f05735-cca3-491e-b2d6-c673427efa07@infradead.org> <15868.1728090271@cvs.openbsd.org>
+In-Reply-To: <15868.1728090271@cvs.openbsd.org>
 From: Jeff Xu <jeffxu@chromium.org>
-Date: Mon, 7 Oct 2024 08:00:00 -0700
-Message-ID: <CABi2SkXW9atWJLCDQboKwLoXCX7w9sgs7H3Wm4U2soG4cFLosw@mail.gmail.com>
+Date: Mon, 7 Oct 2024 08:02:00 -0700
+Message-ID: <CABi2SkWOz8fX1M6Jx0Xh1y-866Zsn6fweK9-ZB30PRkPPgdgEQ@mail.gmail.com>
 Subject: Re: [PATCH v2 1/1] mseal: update mseal.rst
 To: Theo de Raadt <deraadt@openbsd.org>
 Cc: Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org, keescook@chromium.org, 
@@ -75,48 +75,52 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi Theo
 
-On Fri, Oct 4, 2024 at 12:11=E2=80=AFPM Theo de Raadt <deraadt@openbsd.org>=
- wrote:
+On Fri, Oct 4, 2024 at 6:04=E2=80=AFPM Theo de Raadt <deraadt@openbsd.org> =
+wrote:
 >
-> Jeff Xu <jeffxu@chromium.org> wrote:
+> Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> > > > +   replacement with a new mapping with new set of attributes, or c=
-an
-> > > > +   overwrite the existing mapping with another mapping.
-> > > > +
-> > > > +   mprotect and pkey_mprotect are blocked because they changes the
-> > > > +   protection bits (RWX) of the mapping.
-> > > > +
-> > > > +   Some destructive madvise behaviors (MADV_DONTNEED, MADV_FREE,> =
-+   MADV_DONTNEED_LOCKED, MADV_FREE, MADV_DONTFORK, MADV_WIPEONFORK)
-> > > > +   for anonymous memory, when users don't have write permission to=
- the
-> > > > +   memory. Those behaviors can alter region contents by discarding=
- pages,
+> > On 10/4/24 9:52 AM, Jeff Xu wrote:
+> > >> above is not a sentence but I don't know how to fix it.
+> > >>
+> > > Would below work ?
 > > >
-> > > above is not a sentence but I don't know how to fix it.
-> > >
-> > Would below work ?
+> > > Certain destructive madvise behaviors, specifically MADV_DONTNEED,
+> > > MADV_FREE, MADV_DONTNEED_LOCKED, MADV_FREE, MADV_DONTFORK,
+> > > MADV_WIPEONFORK, can pose risks when applied to anonymous memory by
+> > > threads without write permissions. These behaviors have the potential
+> > > to modify region contents by discarding pages, effectively performing
+> > > a memset(0) operation on the anonymous memory.
 > >
-> > Certain destructive madvise behaviors, specifically MADV_DONTNEED,
-> > MADV_FREE, MADV_DONTNEED_LOCKED, MADV_FREE, MADV_DONTFORK,
-> > MADV_WIPEONFORK, can pose risks when applied to anonymous memory by
-> > threads without write permissions. These behaviors have the potential
-> > to modify region contents by discarding pages, effectively performing
-> > a memset(0) operation on the anonymous memory.
+> > Yes, that works.
+> > Or at least it explains the problem, like Theo said.
 >
+> In OpenBSD, mimmutable() solves this problem (in later code iterations).
 >
-> In OpenBSD, mimmutable blocks all those madvise() operations.
+> In Linux, does mseal() solve the problem or not?  The statement doesn't
+> answer this question.  It only explains the problem.
 >
+> If it doesn't solve the problem, that's pretty surprising (weaker than
+> mimmutable).
 >
-> I don't understand the sentence supplied above.  Is it saying that
-> mseal() solves that problem, or that mseal() does not solve that
-> problem.
+> During development I wrote a fake little program which placed an 'int =3D
+> 1' resided into a zone of readonly memory (.data), and then imagined "an
+> attacker gets enough control to perform an madvise(), but only had
+> enough control, and has to return to normal control flow immediately".
+> The madvise() operations was able to trash the int, altering the
+> program's later behaviour.  So I researched the matter more, and adapted
+> mimmutable() to block ALL system-call variations similar to 'write to a
+> not-permitted region'.
 >
-Yes. The mseal solved the problem, I will modify the sentence to clarify th=
-at.
-thanks
+> So the question remains:  Does mseal() block such a (rare) pattern or not=
+.
 
-> I would hope it solves that problem.  But the sentence explains the
-> problem without taking a position on what to do.
+Apology  for delay.
+Yes, mseal does block such patterns.
+
+Thanks
+-Jeff
+
+> The sentence doesn't indicate that mseal() has a response to the stated
+> problem.
 >
