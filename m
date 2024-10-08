@@ -1,40 +1,39 @@
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA04185945;
-	Tue,  8 Oct 2024 09:48:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6151779B1;
+	Tue,  8 Oct 2024 10:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728380886; cv=none; b=Ik//HkLzdhPuCNtvM2M1xTcTD154k7WrikJizza6HjGbSdbx491oNteDEVXHAephfCnfY8dQH2YXSKame8BLJmz3FGFgohFdZo/cCtuX0czXxl+pt08136pgBZqO2jxv6/fAdAoVqA/KOnAEIryQOBRkFFBnMrkG2XYMQl3WW0E=
+	t=1728383361; cv=none; b=oMtbhElgEXwWr8hwNnv0QzSWYM7xeZXdzBFmCZArpvxlty5DnSJlVT6+f6KfM69V4V9Fh5ymyQG4gDzZW8VJL8yceB6anGMkv0m/IzdSIL3s6rbW/wbTCbn+WvF7go6EmcTbcwCNmtKDRI6FWuqnH/lPvl8pm13O1V2t44TBDdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728380886; c=relaxed/simple;
-	bh=s+Rv6mTewyGFPCZFQD2z3tBcFwHoCLecdHLKBqL4sGk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=s6rfn1pcASoj40Fd7YqZ8zRvpK1RISP1B7L+8KYLmwgxKYQEjPFn0D3nUEFqIalYP+/Su7XW3IlqwbFhaTcB4BrzH3PhpVKPJWZhINaU7pXGwNmQihdwuflk30U8zEGeZeLR2oVcPhDO+VPpw5EGPplO2H0fVeYL5o5Fgyrs/vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from ubt.. (unknown [210.73.53.31])
-	by APP-01 (Coremail) with SMTP id qwCowAAH7nxf_gRnEkoDBQ--.54511S3;
-	Tue, 08 Oct 2024 17:41:52 +0800 (CST)
-From: Chunyan Zhang <zhangchunyan@iscas.ac.cn>
-To: Palmer Dabbelt <palmer@dabbelt.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Chunyan Zhang <zhang.lyra@gmail.com>
-Subject: [PATCH V2 1/4] riscv: Remove unused GENERATING_ASM_OFFSETS
-Date: Tue,  8 Oct 2024 17:41:38 +0800
-Message-Id: <20241008094141.549248-2-zhangchunyan@iscas.ac.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241008094141.549248-1-zhangchunyan@iscas.ac.cn>
-References: <20241008094141.549248-1-zhangchunyan@iscas.ac.cn>
+	s=arc-20240116; t=1728383361; c=relaxed/simple;
+	bh=cSxMEZo4dYqlh8/0TzamPzyRZ/MF1/XyyCo33WuItSA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jg2+HnM6YVdo4YsZRAgD4C+AFqG7knppwvpCuDoRHs2wttNFwJoP11ThE3pToLwAFg7X3xuxJaSuTuQ1wHbUGlCFodGAyzANUPx+MqJTlzfXCRRbuUgmAbawSna6J8eQ8BPmdBC1aU7TZRb0K6QiH2oE68eXat8CMBpgG6pOI7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XNC021ryRz6J6rb;
+	Tue,  8 Oct 2024 18:28:02 +0800 (CST)
+Received: from frapeml500005.china.huawei.com (unknown [7.182.85.13])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6BF411402C6;
+	Tue,  8 Oct 2024 18:29:16 +0800 (CST)
+Received: from china (10.200.201.82) by frapeml500005.china.huawei.com
+ (7.182.85.13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 8 Oct
+ 2024 12:29:10 +0200
+From: Gur Stavi <gur.stavi@huawei.com>
+To: Gur Stavi <gur.stavi@huawei.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH net-next v02 0/2] net: af_packet: allow joining a fanout when link is down
+Date: Tue, 8 Oct 2024 13:27:57 +0300
+Message-ID: <cover.1728382839.git.gur.stavi@huawei.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,56 +41,46 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qwCowAAH7nxf_gRnEkoDBQ--.54511S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFW5Cr1xXF47KFy7Zr4DXFb_yoWkZrb_Cw
-	4xWas8GryrJF4F9ay7Awn3KFs0yw1rtFyFqF4fCF95uFnIvry0kws3t3Z5Jwn7Gr17Ja93
-	Aa97JFZIvr1j9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb9kYjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I
-	6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7
-	IE14v26r18M28IrcIa0xkI8VCY1x0267AKxVW8JVW5JwA2ocxC64kIII0Yj41l84x0c7CE
-	w4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6x
-	kF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv
-	6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
-	02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE
-	4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7
-	CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCa
-	FVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-	Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j
-	6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
-	0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
-	cSsGvfC2KfnxnUUI43ZEXa7IU0AsqJUUUUU==
-X-CM-SenderInfo: x2kd0wxfkx051dq6x2xfdvhtffof0/1tbiBwwEB2cExpL0xAAAsP
+Content-Type: text/plain
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ frapeml500005.china.huawei.com (7.182.85.13)
 
-The macro is not used in the current version of kernel, it looks like
-can be removed to avoid a build warning:
+PACKET socket can retain its fanout membership through link down and up
+and leave a fanout while closed regardless of link state.
+However, socket was forbidden from joining a fanout while it was not
+RUNNING.
 
-../arch/riscv/kernel/asm-offsets.c: At top level:
-../arch/riscv/kernel/asm-offsets.c:7: warning: macro "GENERATING_ASM_OFFSETS" is not used [-Wunused-macros]
-    7 | #define GENERATING_ASM_OFFSETS
+This patch allows PACKET socket to join a fanout while not RUNNING.
+Selftest psock_fanout is extended to test this scenario.
+This is the only test that was performed.
 
-Fixes: 9639a44394b9 ("RISC-V: Provide a cleaner raw_smp_processor_id()")
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-Tested-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-Signed-off-by: Chunyan Zhang <zhangchunyan@iscas.ac.cn>
----
-V1: https://lore.kernel.org/lkml/20240816101912.1049329-1-zhangchunyan@iscas.ac.cn/T/
----
- arch/riscv/kernel/asm-offsets.c | 2 --
- 1 file changed, 2 deletions(-)
+This scenario was identified while studying DPDK pmd_af_packet_drv.
+Since sockets are only created during initialization, there is no reason
+to fail the initialization if a single link is temporarily down.
 
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index e94180ba432f..c2f3129a8e5c 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -4,8 +4,6 @@
-  * Copyright (C) 2017 SiFive
-  */
- 
--#define GENERATING_ASM_OFFSETS
--
- #include <linux/kbuild.h>
- #include <linux/mm.h>
- #include <linux/sched.h>
+I hope it is not considered as breaking user space and that applications
+are not designed to expect this failure.
+
+
+Changes:
+
+V02:
+* psock_fanout: use explicit loopback up/down instead of toggle.
+* psock_fanout: don't try to restore loopback state on failure.
+* Rephrase commit message about "leaving a fanout".
+
+V01: https://lore.kernel.org/netdev/cover.1728303615.git.gur.stavi@huawei.com/
+
+Gur Stavi (2):
+  af_packet: allow fanout_add when socket is not RUNNING
+  selftests: net/psock_fanout: socket joins fanout when link is down
+
+ net/packet/af_packet.c                     | 10 +++---
+ tools/testing/selftests/net/psock_fanout.c | 42 ++++++++++++++++++++--
+ 2 files changed, 44 insertions(+), 8 deletions(-)
+
+
+base-commit: f95b4725e796b12e5f347a0d161e1d3843142aa8
 -- 
-2.34.1
+2.45.2
 
