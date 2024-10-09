@@ -1,22 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C63F2F46;
-	Wed,  9 Oct 2024 05:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 301F62F46;
+	Wed,  9 Oct 2024 05:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728450886; cv=none; b=jNXyyAKRU6cYHxoK2Xs81fm01uUnZNNy0juyxcHUFJWlN2g7advT/uE0zyK99CX2hGXY+o0FHYS/gNJXzRPuWikvM3r9PjcKrGJMOJ31EeknooKD5VGeSFNW7wQfx77h0wDwTXG7q6jsiBNMrqgrH59O1Ay06Vho7c5LulDRrIM=
+	t=1728450893; cv=none; b=pbamKvN3MHHO1kZoApy0DHiNY4E30K2y1UHAzWqYGzkHWmxGvpZYsSTKMQn69JtTSyQAIxI6zro6/2ICftN1kQJ3MgFdXBmnYEUjvC5HQdgWrNiFD2DNoA6vD6w5ULH75T7tnt8UlXHdbSF97hH4YzWnIIZwd11bqPRFpe0A6b4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728450886; c=relaxed/simple;
-	bh=3Ki/9I5DuL/abGyhYfOoLWRfZH0OJCMKk1fVz5xIM9c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GBznIAPzDMPUPWhKgc2qmKXxWFLIb2ylWs6AIp70wdxPHUg9TqfettumpMc9Gys29MahbwHrg5Gz6TNJ7h1sbul7HPZ4XqceyavjAUx3P0HThAN1gF1D9Qr3OfIioHGXH0bEiU3NuLT/0ZomDdt84Fwg0H2oXHAoNX/WgrhlewI=
+	s=arc-20240116; t=1728450893; c=relaxed/simple;
+	bh=seFO9TIQA80Rk3vfTWOTemUdTrJGdSJnXUw8WYFJSEQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=X8ShBhKb3DMpnuY7aHqMtCZNFjQgOj4MkAS5nLMKlVQSPbawM0WPICsNPrlt82w40vFk6EjE3l/Knp4vgI20YSEA5Xz0T1XhIoFy8kZSmYLGeM8p41Un8IHmuhxXEDnwOwUtmx1NLzC6Nsv6EaDF5+0cettxkVmMe+OG3lnxVy8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C60DFEC;
-	Tue,  8 Oct 2024 22:15:06 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DA03FEC;
+	Tue,  8 Oct 2024 22:15:20 -0700 (PDT)
 Received: from e116581.blr.arm.com (e116581.arm.com [10.162.42.17])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B33EF3F64C;
-	Tue,  8 Oct 2024 22:14:30 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5566F3F64C;
+	Tue,  8 Oct 2024 22:14:44 -0700 (PDT)
 From: Dev Jain <dev.jain@arm.com>
 To: shuah@kernel.org,
 	oleg@redhat.com
@@ -36,10 +37,12 @@ Cc: mingo@kernel.org,
 	sj@kernel.org,
 	skhan@linuxfoundation.org,
 	Dev Jain <dev.jain@arm.com>
-Subject: [RESEND] [PATCH v6 0/2] Add test to distinguish between thread's signal mask and ucontext_t
-Date: Wed,  9 Oct 2024 10:44:22 +0530
-Message-Id: <20241009051424.333380-1-dev.jain@arm.com>
+Subject: [RESEND] [PATCH v6 2/2] selftests: Add a test mangling with uc_sigmask
+Date: Wed,  9 Oct 2024 10:44:24 +0530
+Message-Id: <20241009051424.333380-3-dev.jain@arm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241009051424.333380-1-dev.jain@arm.com>
+References: <20241009051424.333380-1-dev.jain@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,7 +51,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series is motivated by the following observation:
+The test is motivated by the following observation:
 
 Raise a signal, jump to signal handler. The ucontext_t structure dumped
 by kernel to userspace has a uc_sigmask field having the mask of blocked
@@ -101,59 +104,237 @@ Assuming that the above is indeed the intended behaviour, because it
 semantically makes sense, since the signals blocked using sigaction()
 remain blocked only till the execution of the handler, and not in the
 context present before jumping to the handler (but nothing can be
-confirmed from the man-pages), the series introduces a test for
-mangling with uc_sigmask. I will send a separate series to fix the
-man-pages.
+confirmed from the man-pages), this patch introduces a test for
+mangling with uc_sigmask.
 
-The proposed selftest has been tested out on Aarch32, Aarch64 and x86_64.
+The test asserts the relation between blocked signal, delivered signal,
+and ucontext. The ucontext is mangled with, by adding a signal mask to
+it; on return from the handler, the thread must block the corresponding
+signal.
 
-v5->v6:
- - Drop renaming of sas.c
- - Include the explanation from the cover letter in the changelog
-   for the second patch
+In the test description, I have also described signal delivery and blockage,
+for ease of understanding what the test does.
 
-v4->v5:
- - Remove a redundant print statement
-
-v3->v4:
- - Allocate sigsets as automatic variables to avoid malloc()
-
-v2->v3:
- - ucontext describes current state -> ucontext describes interrupted context
- - Add a comment for blockage of USR2 even after return from handler
- - Describe blockage of signals in a better way
-
-v1->v2:
- - Replace all occurrences of SIGPIPE with SIGSEGV
- - Fixed a mismatch between code comment and ksft log
- - Add a testcase: Raise the same signal again; it must not be queued
- - Remove unneeded <assert.h>, <unistd.h>
- - Give a detailed test description in the comments; also describe the
-   exact meaning of delivered and blocked
- - Handle errors for all libc functions/syscalls
- - Mention tests in Makefile and .gitignore in alphabetical order
-
-v1:
- - https://lore.kernel.org/all/20240607122319.768640-1-dev.jain@arm.com/
-
-
-Dev Jain (2):
-  selftests: Rename sigaltstack to generic signal
-  selftests: Add a test mangling with uc_sigmask
-
- tools/testing/selftests/Makefile              |   2 +-
- .../{sigaltstack => signal}/.gitignore        |   1 +
- .../{sigaltstack => signal}/Makefile          |   3 +-
- .../current_stack_pointer.h                   |   0
+Signed-off-by: Dev Jain <dev.jain@arm.com>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/signal/.gitignore     |   1 +
+ tools/testing/selftests/signal/Makefile       |   3 +-
  .../selftests/signal/mangle_uc_sigmask.c      | 184 ++++++++++++++++++
- .../selftests/{sigaltstack => signal}/sas.c   |   0
- 6 files changed, 188 insertions(+), 2 deletions(-)
- rename tools/testing/selftests/{sigaltstack => signal}/.gitignore (70%)
- rename tools/testing/selftests/{sigaltstack => signal}/Makefile (56%)
- rename tools/testing/selftests/{sigaltstack => signal}/current_stack_pointer.h (100%)
+ 3 files changed, 187 insertions(+), 1 deletion(-)
  create mode 100644 tools/testing/selftests/signal/mangle_uc_sigmask.c
- rename tools/testing/selftests/{sigaltstack => signal}/sas.c (100%)
 
+diff --git a/tools/testing/selftests/signal/.gitignore b/tools/testing/selftests/signal/.gitignore
+index 50a19a8888ce..3f339865a3b6 100644
+--- a/tools/testing/selftests/signal/.gitignore
++++ b/tools/testing/selftests/signal/.gitignore
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++mangle_uc_sigmask
+ sas
+diff --git a/tools/testing/selftests/signal/Makefile b/tools/testing/selftests/signal/Makefile
+index 3e96d5d47036..e0bf7058d19c 100644
+--- a/tools/testing/selftests/signal/Makefile
++++ b/tools/testing/selftests/signal/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ CFLAGS = -Wall
+-TEST_GEN_PROGS = sas
++TEST_GEN_PROGS = mangle_uc_sigmask
++TEST_GEN_PROGS += sas
+ 
+ include ../lib.mk
+ 
+diff --git a/tools/testing/selftests/signal/mangle_uc_sigmask.c b/tools/testing/selftests/signal/mangle_uc_sigmask.c
+new file mode 100644
+index 000000000000..b79ab92178a8
+--- /dev/null
++++ b/tools/testing/selftests/signal/mangle_uc_sigmask.c
+@@ -0,0 +1,184 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2024 ARM Ltd.
++ *
++ * Author: Dev Jain <dev.jain@arm.com>
++ *
++ * Test describing a clear distinction between signal states - delivered and
++ * blocked, and their relation with ucontext.
++ *
++ * A process can request blocking of a signal by masking it into its set of
++ * blocked signals; such a signal, when sent to the process by the kernel,
++ * will get blocked by the process and it may later unblock it and take an
++ * action. At that point, the signal will be delivered.
++ *
++ * We test the following functionalities of the kernel:
++ *
++ * ucontext_t describes the interrupted context of the thread; this implies
++ * that, in case of registering a handler and catching the corresponding
++ * signal, that state is before what was jumping into the handler.
++ *
++ * The thread's mask of blocked signals can be permanently changed, i.e, not
++ * just during the execution of the handler, by mangling with uc_sigmask
++ * from inside the handler.
++ *
++ * Assume that we block the set of signals, S1, by sigaction(), and say, the
++ * signal for which the handler was installed, is S2. When S2 is sent to the
++ * program, it will be considered "delivered", since we will act on the
++ * signal and jump to the handler. Any instances of S1 or S2 raised, while the
++ * program is executing inside the handler, will be blocked; they will be
++ * delivered immediately upon termination of the handler.
++ *
++ * For standard signals (also see real-time signals in the man page), multiple
++ * blocked instances of the same signal are not queued; such a signal will
++ * be delivered just once.
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <signal.h>
++#include <ucontext.h>
++
++#include "../kselftest.h"
++
++void handler_verify_ucontext(int signo, siginfo_t *info, void *uc)
++{
++	int ret;
++
++	/* Kernel dumps ucontext with USR2 blocked */
++	ret = sigismember(&(((ucontext_t *)uc)->uc_sigmask), SIGUSR2);
++	ksft_test_result(ret == 1, "USR2 blocked in ucontext\n");
++
++	/*
++	 * USR2 is blocked; can be delivered neither here, nor after
++	 * exit from handler
++	 */
++	if (raise(SIGUSR2))
++		ksft_exit_fail_perror("raise");
++}
++
++void handler_segv(int signo, siginfo_t *info, void *uc)
++{
++	/*
++	 * Three cases possible:
++	 * 1. Program already terminated due to segmentation fault.
++	 * 2. SEGV was blocked even after returning from handler_usr.
++	 * 3. SEGV was delivered on returning from handler_usr.
++	 * The last option must happen.
++	 */
++	ksft_test_result_pass("SEGV delivered\n");
++}
++
++static int cnt;
++
++void handler_usr(int signo, siginfo_t *info, void *uc)
++{
++	int ret;
++
++	/*
++	 * Break out of infinite recursion caused by raise(SIGUSR1) invoked
++	 * from inside the handler
++	 */
++	++cnt;
++	if (cnt > 1)
++		return;
++
++	/* SEGV blocked during handler execution, delivered on return */
++	if (raise(SIGSEGV))
++		ksft_exit_fail_perror("raise");
++
++	ksft_print_msg("SEGV bypassed successfully\n");
++
++	/*
++	 * Signal responsible for handler invocation is blocked by default;
++	 * delivered on return, leading to recursion
++	 */
++	if (raise(SIGUSR1))
++		ksft_exit_fail_perror("raise");
++
++	ksft_test_result(cnt == 1,
++			 "USR1 is blocked, cannot invoke handler right now\n");
++
++	/* Raise USR1 again; only one instance must be delivered upon exit */
++	if (raise(SIGUSR1))
++		ksft_exit_fail_perror("raise");
++
++	/* SEGV has been blocked in sa_mask, but ucontext is empty */
++	ret = sigismember(&(((ucontext_t *)uc)->uc_sigmask), SIGSEGV);
++	ksft_test_result(ret == 0, "SEGV not blocked in ucontext\n");
++
++	/* USR1 has been blocked, but ucontext is empty */
++	ret = sigismember(&(((ucontext_t *)uc)->uc_sigmask), SIGUSR1);
++	ksft_test_result(ret == 0, "USR1 not blocked in ucontext\n");
++
++	/*
++	 * Mangle ucontext; this will be copied back into &current->blocked
++	 * on return from the handler.
++	 */
++	if (sigaddset(&((ucontext_t *)uc)->uc_sigmask, SIGUSR2))
++		ksft_exit_fail_perror("sigaddset");
++}
++
++int main(int argc, char *argv[])
++{
++	struct sigaction act, act2;
++	sigset_t set, oldset;
++
++	ksft_print_header();
++	ksft_set_plan(7);
++
++	act.sa_flags = SA_SIGINFO;
++	act.sa_sigaction = &handler_usr;
++
++	/* Add SEGV to blocked mask */
++	if (sigemptyset(&act.sa_mask) || sigaddset(&act.sa_mask, SIGSEGV)
++	    || (sigismember(&act.sa_mask, SIGSEGV) != 1))
++		ksft_exit_fail_msg("Cannot add SEGV to blocked mask\n");
++
++	if (sigaction(SIGUSR1, &act, NULL))
++		ksft_exit_fail_perror("Cannot install handler");
++
++	act2.sa_flags = SA_SIGINFO;
++	act2.sa_sigaction = &handler_segv;
++
++	if (sigaction(SIGSEGV, &act2, NULL))
++		ksft_exit_fail_perror("Cannot install handler");
++
++	/* Invoke handler */
++	if (raise(SIGUSR1))
++		ksft_exit_fail_perror("raise");
++
++	/* USR1 must not be queued */
++	ksft_test_result(cnt == 2, "handler invoked only twice\n");
++
++	/* Mangled ucontext implies USR2 is blocked for current thread */
++	if (raise(SIGUSR2))
++		ksft_exit_fail_perror("raise");
++
++	ksft_print_msg("USR2 bypassed successfully\n");
++
++	act.sa_sigaction = &handler_verify_ucontext;
++	if (sigaction(SIGUSR1, &act, NULL))
++		ksft_exit_fail_perror("Cannot install handler");
++
++	if (raise(SIGUSR1))
++		ksft_exit_fail_perror("raise");
++
++	/*
++	 * Raising USR2 in handler_verify_ucontext is redundant since it
++	 * is blocked
++	 */
++	ksft_print_msg("USR2 still blocked on return from handler\n");
++
++	/* Confirm USR2 blockage by sigprocmask() too */
++	if (sigemptyset(&set))
++		ksft_exit_fail_perror("sigemptyset");
++
++	if (sigprocmask(SIG_BLOCK, &set, &oldset))
++		ksft_exit_fail_perror("sigprocmask");
++
++	ksft_test_result(sigismember(&oldset, SIGUSR2) == 1,
++			 "USR2 present in &current->blocked\n");
++
++	ksft_finished();
++}
 -- 
 2.30.2
 
