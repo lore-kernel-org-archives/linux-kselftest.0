@@ -1,44 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C2617625C;
-	Mon, 14 Oct 2024 11:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F64176AAD;
+	Mon, 14 Oct 2024 11:36:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728905820; cv=none; b=Gc06AUYidRxFE/3iUXuY4ZnAmWXhgb5bBPhOJvQs3qXkdQsFIu0YWTyialxvuZLdFClDwoF85WHXqiwzAdDf06SSfbP4PphnsATfxYvIm3dFF/v6/OMyQwkLqzrspV4unNcaY+zyHlFszWa24rGACK5yvzq97zdxOpFu2JJu0vk=
+	t=1728905821; cv=none; b=NU2Rkstr/PMArzTzRuU5njgefyDZFt/trS1JVNaaXu5hIXMHLEsQgzEUDNEhN7oUMcsgxMv4SZAlhzMABLbiB79XN/7aBt+ad89vUJVf6fVNPmWkRMlTvEH34uKNytcHi82hC322toqQQ3WBZVjHF/HxK/djFP595I6Ge2XpldU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728905820; c=relaxed/simple;
-	bh=7Nms4lbsG1RIG8SZCNhD6F8zd6Nt+1g5CiHRVpPSbW0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=O/u00De/Qos+sCogA2pxjUQooUeK3PwHDt/HC6tUZaIqmKE2KJkeD/BfM2eTDSZ97URpHQN1DqTqC8SMtkydNYRYvjp4yk2OXM7u6hSS0mKdGrot0G25MxSYZPP48Mufn81Yss7tA/VoNOrtL2/GxUxY2x8xs5eAYw27EvEbkNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Ffpxrkea; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Ky4KtFHP; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1728905821; c=relaxed/simple;
+	bh=iV9iYcnvXEvBIGYtw1XBB2r0gTapDMBeog8rfya7C0o=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=iy477pPA84nb2J3NTPhM+eF8Wlv69HtYVkmQs34UiPtVVNJHSy1BwCr6bVHFjk/GnTUMr8oE3UprHRezDxNk791Ojq7m4ZVdL9yxOkWf1QOH86uipdJeadGqvX4RMNeLOeI/1Iyw+4IEwcyOzRifgMac4FNs4bewpqCr+CZ3gAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=e4CTyyOx; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Zg14PZAl; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Ffpxrkea";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Ky4KtFHP"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="e4CTyyOx";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Zg14PZAl"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1728905814;
+	s=2020; t=1728905816;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=LoMnRrbVjbkfV1Eo64m7st7itWx/XgeEhQAuuphZYG4=;
-	b=Ffpxrkeafpt6ceJ4AmgJ1sco1OBzP6ZREKcgrSOZcp1vPBgILBN/RzKzShMUwDvuW6QP6j
-	kNh1vKG9IrQNaknojpt8ZYmHUos0MilzSizUnJ0XNcUqtbIvkgN4zWzAke6J3QHLuCX32s
-	/eBOTn8urIMgg/eKDDgcR5o//6+vniIz6V+evgIAVyVuIZnXj3u9xNxvZFtwjhYYNYiVVA
-	IUKa2vbSwgxY+sCrUY7Ek9010FtQyHfT5l7eiOhWW8NsiT3qeBHUKydIgkJyweKiE4q98W
-	R/8ztdQdrLr5/4jyJNAvIq7OOsUXEgV15qy9P7HHH73YDr2YFt2/VuwnMwvmoQ==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GLsVtAZb2EYpxmn9symEBJzk9S6QfVhcbYEMjgcfIsg=;
+	b=e4CTyyOxYILPG30h7pyThAUs8wD14RA0jZPAGrDei0jOty3abXFwa3AbDtsH5+pbP9MN+J
+	5Mlnl3UO2PNYTVtvJlfiSJqJgvOPYq7TDEQLDU/K0qsa42msfKyG3w4LVG6arYrZzH/IrG
+	KF2QvMOGdyGyz7JKsRju6a2YahsQv5lwwdxXok3wOYdrpq8gtqvn1396EmmlXafUNCw4/g
+	ZkqwDpSkFGNXvdylwH6mMjiZiGWEvzoFKO7/vT+rTEZFxiQOWnZTaOjenwy/rOXq92YNM1
+	7O7/KRdotpPYTdM/Ssxp8kn4zewI2/x2gL9di4nTsMR54KHhQfGMakVw5hv3qQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1728905814;
+	s=2020e; t=1728905816;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=LoMnRrbVjbkfV1Eo64m7st7itWx/XgeEhQAuuphZYG4=;
-	b=Ky4KtFHPc1Y0/5HFsWN2pSgYMuEpV0tf5nHiTAvSkGcCCp6GzcwmcvrXNqeQ3m4OkpAgNG
-	9dpTn3JGfVG7HrBA==
-Subject: [PATCH 0/4] kunit: Add support for LoongArch
-Date: Mon, 14 Oct 2024 13:36:41 +0200
-Message-Id: <20241014-kunit-loongarch-v1-0-1699b2ad6099@linutronix.de>
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GLsVtAZb2EYpxmn9symEBJzk9S6QfVhcbYEMjgcfIsg=;
+	b=Zg14PZAlJEQcDEen6OHbhXImV/XxL1LGb2tNHCVB9g3JtdLOjgV5KwECbFsjohAmVMyGts
+	D4dBHaj5SMX+bDCA==
+Date: Mon, 14 Oct 2024 13:36:44 +0200
+Subject: [PATCH 3/4] kunit: tool: Allow overriding the shutdown mode from
+ qemu config
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,10 +50,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAEkCDWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxNDA0MT3ezSvMwS3Zz8/Lz0xKLkDF1Li0TTJHNTs1QLQwsloK6CotS0zAq
- widGxtbUACAH64mEAAAA=
-X-Change-ID: 20241014-kunit-loongarch-98a5b756e818
+Message-Id: <20241014-kunit-loongarch-v1-3-1699b2ad6099@linutronix.de>
+References: <20241014-kunit-loongarch-v1-0-1699b2ad6099@linutronix.de>
+In-Reply-To: <20241014-kunit-loongarch-v1-0-1699b2ad6099@linutronix.de>
 To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>, 
  Brendan Higgins <brendan.higgins@linux.dev>, 
@@ -58,54 +60,40 @@ To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
 Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1728905811; l=1828;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1728905811; l=1298;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=7Nms4lbsG1RIG8SZCNhD6F8zd6Nt+1g5CiHRVpPSbW0=;
- b=/rg0fQwXJ1NxfQwt/3KNv/yBl5ajYq6g+gynF3n92s7siw03GrxQ/mCSPAO+l6Keg51p/3Ip6
- KJIdbg6s8lMCLksS+XEJXVYVZqkcOCilAyAEMvPKfk7Q+oaLaMUfSbG
+ bh=iV9iYcnvXEvBIGYtw1XBB2r0gTapDMBeog8rfya7C0o=;
+ b=RSxObr6NF8M25HxJfwEBRbSNlGHQZpyR+R6RVKYbEeiHcGbJOEzHt2uPWVZk0Kfd0cNnEvyMH
+ DrroxlD65g+AUZOqsRA84e8zEx/BlWQnwvnAYAOT0sybIrB0hExU1Dt
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Enable LoongArch support in kunit.
-
-Example:
-
-	$ ./tools/testing/kunit/kunit.py run --arch=loongarch --cross_compile=$CROSS_COMPILE
-	[13:32:45] Configuring KUnit Kernel ...
-	[13:32:45] Building KUnit Kernel ...
-	Populating config with:
-	$ make ARCH=loongarch olddefconfig CROSS_COMPILE=$CROSS_COMPILE
-	Building with:
-	$ make all compile_commands.json ARCH=loongarch --jobs=8 CROSS_COMPILE=$CROSS_COMPILE
-	[13:32:48] Starting KUnit Kernel (1/1)...
-	[13:32:48] ============================================================
-	Running tests with:
-	$ qemu-system-loongarch64 -nodefaults -m 1024 -kernel .kunit/arch/loongarch/boot/vmlinux.elf -append 'kunit.enable=1 console=ttyS0 kunit_shutdown=poweroff' -no-reboot -nographic -serial stdio -machine virt -device pvpanic-pci -cpu max
-
-	...
-
-	[13:33:14] ============================================================
-	[13:33:14] Testing complete. Ran 493 tests: passed: 453, skipped: 40
-	[13:33:14] Elapsed time: 28.862s total, 0.002s configuring, 2.526s building, 26.302s running
-	
+Not all platforms support machine reboot.
+If it a proper reboot is not supported the machine will hang.
+Allow the QEMU configuration to override the necessary shutdown mode for
+the specific system under test.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
-Thomas Weißschuh (4):
-      LoongArch: Don't crash in stack_top() for tasks without vDSO
-      kunit: qemu_configs: add LoongArch config
-      kunit: tool: Allow overriding the shutdown mode from qemu config
-      kunit: qemu_configs: loongarch: Enable shutdown
+ tools/testing/kunit/kunit_kernel.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- arch/loongarch/kernel/process.c               | 16 +++++++++-------
- tools/testing/kunit/kunit_kernel.py           |  4 +++-
- tools/testing/kunit/qemu_configs/loongarch.py | 19 +++++++++++++++++++
- 3 files changed, 31 insertions(+), 8 deletions(-)
----
-base-commit: 6485cf5ea253d40d507cd71253c9568c5470cd27
-change-id: 20241014-kunit-loongarch-98a5b756e818
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 61931c4926fd6645f2c62dd13f9842a432ec4167..e76d7894b6c5195ece49f0d8c7ac35130df428a9 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -105,7 +105,9 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+ 		self._kconfig = qemu_arch_params.kconfig
+ 		self._qemu_arch = qemu_arch_params.qemu_arch
+ 		self._kernel_path = qemu_arch_params.kernel_path
+-		self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
++		self._kernel_command_line = qemu_arch_params.kernel_command_line
++		if 'kunit_shutdown=' not in self._kernel_command_line:
++			self._kernel_command_line += ' kunit_shutdown=reboot'
+ 		self._extra_qemu_params = qemu_arch_params.extra_qemu_params
+ 		self._serial = qemu_arch_params.serial
+ 
 
-Best regards,
 -- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+2.47.0
 
