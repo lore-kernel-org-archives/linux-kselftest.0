@@ -1,55 +1,57 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F371B1CC893
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 20:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69734216A11
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 20:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729110501; cv=none; b=KqmF7nV4/rwoqoyoZdXfqFv5gBDklMHCrx2rcu2VeJVHkpj2dze9fkCaq7ARi1fCZ2cbAo0bYfzuSW1C7z05gnyYAVngnnz1f9GveWvCxkHqKRtOIEHJ3FFwd59NWehDrK44Vpzo5JBy7qdQVdVhIzMBrnPEByoqzO5xp2003PU=
+	t=1729110502; cv=none; b=NsPG222Sy7aapzHGCrw7N8iUu3BR2F9/7EAkLOFG40XS1oeEEFVmpYN9OwhCeVGxVrDJJ9n96plyWn2N7p3tKDQGs5LdwnW6wXxizHHRgOxc4t+LjnEZn3scM4/qcR/EhzKwNeXs48bu3cLXD9eBU6QiTIqCyiZQDzq+QBsf9Ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729110501; c=relaxed/simple;
-	bh=/IaAt73yOV50Rg9XD7tq6+9kh5Tx32oTfZJbG3X6LJ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DMZ4RYknqIz+vMPKLRWXTRa7Ex19yoGpzpyVYsk03AESNBxvuXxtcvkoBQDVU5c4xRIj+SWhBUNnvSFyI7Zcv6zpeVYfSoQi0QNR4cBylfdrVQyoExp4QTIIatzNpST08z9ghq3xRt2yZffRTwD9JtmZW0foHLcPC7eymDQb+/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=meQwn5kZ; arc=none smtp.client-ip=209.85.216.46
+	s=arc-20240116; t=1729110502; c=relaxed/simple;
+	bh=OXtwgpX1p78eIzz35BpZxxK9L/PdXgpGUs52e85uLCo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nI2Q+wRRZEhZs4+jBoO6Azyd3L+hWJMUdTkiKYXqvhTPvQE1ooS5phCyj33K484U/lR7Y/P/1w24rpiEcxeIEnxR63izKnBlghjr65rU1iSFqnnFwaBdAfFr/rs+W7fYng00y/Q3uKNFM1YZMjiPMHrLkkCabcZpGGBv8Mnu4Tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=G+sN4Fqs; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="meQwn5kZ"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e30db524c2so171936a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 13:28:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="G+sN4Fqs"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2e28b75dbd6so173631a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 13:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1729110497; x=1729715297; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hEUhwJlktvJ9XLTxaEULHD6mXOGpKAbrtbb51ie7J44=;
-        b=meQwn5kZPL4gTadyOGW6RP6T65gU/A6KbUonATaxVe7fd1ynAebBSu+ilB0tss0YAR
-         Me2BV5lKtZg+T9ej/zWdXtVVCIOo5EiZ3m4tAzKATCL2r/rLpB1LPkqJS63FRhwr19HF
-         vDoASh3XP7zXiJ4aSiGVvR6Sdrn8Alm0AF4jn0nacm4NwvZowOYWYs6tXb99V2TB7Mw3
-         07OpsbaXCiWZot+Sd+1h3F1H+De/zQL79tzUHzooUOQScZXxBypTIgxg3P3CVc/uPXg3
-         0TEaZBURykg3Kdg6JLN7V8T1oFDLmTnE1LQIKOygYYiEfPalX3Np/Ry+o22eqyV5S6Ll
-         ljuA==
+        d=sifive.com; s=google; t=1729110501; x=1729715301; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6UwuohaBpRoU5PwojE5+Gkdri+a8AExwGUOzfsduKVM=;
+        b=G+sN4FqsxkHrmO6xPSaI6OwKIJARb9IWkg4iW0znyY8WRCcpQi519mDxAehsJZGuM1
+         v9+SJUbL9JrEiFwpQjtEA1B/DIQ26qBNT2yAGZTbIlmdBASmJEdzKllEtyYJ6a8pwnIj
+         dX2uYPs0geavcphePV7b4g/EECR2pHP3tboIF1rS6sOhyDyqiodXs5KJqHlwHR9D47V/
+         bE2jSTnIOZKs/dYwLBPDDF2SXr2MxukSUuvH1GC0lqhWe6vIHB4yWXirxXJ8HYpHJ8h1
+         CawAh5dafgE06KTfE/b3sFpx8lE8iBP5xPw+iDmfmJt5BNKAKmGHxFKRBYEbWeLcYsIK
+         vnBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729110497; x=1729715297;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hEUhwJlktvJ9XLTxaEULHD6mXOGpKAbrtbb51ie7J44=;
-        b=ASxYPuhf4iYotwapP2/xYXD8jZoE3XEkEcTXs31NnICMZpIKqIMtK/WroemPBkHej5
-         k8FIKkDIWdBzXmYDKZnQQhlwJSOcDhhLbTtYLL7Y4PNcxHJvTcURvYy6+8VcjrwcgH3X
-         6Wbjq1gcArtPNTN0cR/TIdc14CsZOpDZHMcu1GRy+1WWI0KSpbSwVJu5FJwKSwY1pPkd
-         /57x1KsTZcmT+K8De58a0EAEfJl1fSXaPvQUMUztgxB55tf3A74h+3NoidGbk+3W4a03
-         Ie92g+8KD0T+6nynrk+tN86TVV983yV+PtYgpkb7wGoipzLDw3iwd1LBt5dT3bTnSCuY
-         X4Xw==
-X-Forwarded-Encrypted: i=1; AJvYcCXr0Uwd86omXtGnoTCzFy1OdG1IfHWPmi1Erbet8Q0NVtb/hl+NW/3ixJEE4cW6PQXO078xkgpr+ZhIhzTv3Zc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxK7k4uEjqj9aJknbiPghnIMZz47VAUqJZbJyJe5wB3oDIt0WAX
-	nj5BvTeR15v3Te0igLmhXEKncsJvLqOivo72aQcgaCg2QLlnXs98oB9Wmdxn6xM=
-X-Google-Smtp-Source: AGHT+IGllzymcOAYJ4F9gGwGiLHbUJdPlvukCb/zqDKpUvzRbezJlnGn7CSqgSzw6TP5Nt2/LjKHnQ==
-X-Received: by 2002:a17:90b:4b8b:b0:2e2:9077:a3b4 with SMTP id 98e67ed59e1d1-2e3151b8a44mr21167547a91.7.1729110497313;
-        Wed, 16 Oct 2024 13:28:17 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729110501; x=1729715301;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6UwuohaBpRoU5PwojE5+Gkdri+a8AExwGUOzfsduKVM=;
+        b=sY345Ozy4LGYO12X4FdFw/PjhGmIwOxvEiK+zImoBKNzvtrbqZESwvnwJXP7JZqkZD
+         0vZgOtBtG81APAy+SWM2abr8mBP1G88wUsgc6fzgAzwRuiCQdPz7E0vHbQ+fHhg+nIBt
+         e2uJRZSduDHKsQssAeRmEYGK033SZso2gwkvwdgIEfKQm7guNyMLumzIydzY2L2kq7Km
+         ijADf1yPK3+2a+wKZIUkyKlgttMdt94jXokZKra2Rt+vQegHnEOvXf80o0sPkBK3CdNx
+         iNfZdUUTNsHaqtO4pcRbtNvfqgJsq7q0E/dmj9kwuW5zIINoDxd7G8ndvMoWclxeE35J
+         CilQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5+wNwJeGz3bcYCNQLUiHZqAc5qguiZkWMyWg+Q7IKqvZfjwIw0w8HBndY9b6k/uHo5/5a40i0fERhHXdenq4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yygb+dN3sEISgg0K57wEW7KC5qIuGUnIJ9bMHmjTiUYv5K0Xtpd
+	uoujWIE0HPNEB1dbgj6iE2YbSw8nwZewd8byGwOCd6AvPKvSyjsiqpgApPBMC/I=
+X-Google-Smtp-Source: AGHT+IErL2Sdr8ec9Qw+ve0FvDLKKtrRKua+qTZ3t0Y1FVqURXGPbdbwTPYS3WSCoIo51bNOUX9RUA==
+X-Received: by 2002:a17:90b:802:b0:2e1:ce7b:6069 with SMTP id 98e67ed59e1d1-2e31538f1camr20096245a91.33.1729110500826;
+        Wed, 16 Oct 2024 13:28:20 -0700 (PDT)
 Received: from sw06.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e3e08f8f89sm228613a91.38.2024.10.16.13.28.15
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e3e08f8f89sm228613a91.38.2024.10.16.13.28.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2024 13:28:16 -0700 (PDT)
+        Wed, 16 Oct 2024 13:28:20 -0700 (PDT)
 From: Samuel Holland <samuel.holland@sifive.com>
 To: Palmer Dabbelt <palmer@dabbelt.com>,
 	linux-riscv@lists.infradead.org
@@ -71,10 +73,12 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Charlie Jenkins <charlie@rivosinc.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Samuel Holland <samuel.holland@sifive.com>
-Subject: [PATCH v5 00/10] riscv: Userspace pointer masking and tagged address ABI
-Date: Wed, 16 Oct 2024 13:27:41 -0700
-Message-ID: <20241016202814.4061541-1-samuel.holland@sifive.com>
+Subject: [PATCH v5 02/10] riscv: Add ISA extension parsing for pointer masking
+Date: Wed, 16 Oct 2024 13:27:43 -0700
+Message-ID: <20241016202814.4061541-3-samuel.holland@sifive.com>
 X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20241016202814.4061541-1-samuel.holland@sifive.com>
+References: <20241016202814.4061541-1-samuel.holland@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,126 +87,74 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RISC-V defines three extensions for pointer masking[1]:
- - Smmpm: configured in M-mode, affects M-mode
- - Smnpm: configured in M-mode, affects the next lower mode (S or U-mode)
- - Ssnpm: configured in S-mode, affects the next lower mode (VS, VU, or U-mode)
+The RISC-V Pointer Masking specification defines three extensions:
+Smmpm, Smnpm, and Ssnpm. Add support for parsing each of them. The
+specific extension which provides pointer masking support to userspace
+(Supm) depends on the kernel's privilege mode, so provide a macro to
+abstract this selection.
 
-This series adds support for configuring Smnpm or Ssnpm (depending on
-which privilege mode the kernel is running in) to allow pointer masking
-in userspace (VU or U-mode), extending the PR_SET_TAGGED_ADDR_CTRL API
-from arm64. Unlike arm64 TBI, userspace pointer masking is not enabled
-by default on RISC-V. Additionally, the tag width (referred to as PMLEN)
-is variable, so userspace needs to ask the kernel for a specific tag
-width, which is interpreted as a lower bound on the number of tag bits.
+Smmpm implies the existence of the mseccfg CSR. As it is the only user
+of this CSR so far, there is no need for an Xlinuxmseccfg extension.
 
-This series also adds support for a tagged address ABI similar to arm64
-and x86. Since accesses from the kernel to user memory use the kernel's
-pointer masking configuration, not the user's, the kernel must untag
-user pointers in software before dereferencing them. And since the tag
-width is variable, as with LAM on x86, it must be kept the same across
-all threads in a process so untagged_addr_remote() can work.
-
-[1]: https://github.com/riscv/riscv-j-extension/raw/d70011dde6c2/zjpm-spec.pdf
+Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
+Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 ---
-This series depends on the per-thread envcfg series in riscv/for-next.
 
-This series can be tested in QEMU by applying a patch set[2].
-
-KASAN_SW_TAGS using pointer masking is an independent patch series[3].
-
-[2]: https://lore.kernel.org/qemu-devel/20240511101053.1875596-1-me@deliversmonkey.space/
-[3]: https://lore.kernel.org/linux-riscv/20240814085618.968833-1-samuel.holland@sifive.com/
-
-Changes in v5:
- - Update pointer masking spec version to 1.0 and state to ratified
- - Document how PR_[SG]ET_TAGGED_ADDR_CTRL are used on RISC-V
- - Document that the RISC-V tagged address ABI is the same as AArch64
- - Rename "pm" selftests directory to "abi" to be more generic
- - Fix -Wparentheses warnings
- - Fix order of operations when writing via the tagged pointer
- - Update pointer masking spec version to 1.0 in hwprobe documentation
-
-Changes in v4:
- - Switch IS_ENABLED back to #ifdef to fix riscv32 build
- - Combine __untagged_addr() and __untagged_addr_remote()
+(no changes since v3)
 
 Changes in v3:
- - Note in the commit message that the ISA extension spec is frozen
  - Rebase on riscv/for-next (ISA extension list conflicts)
  - Remove RISCV_ISA_EXT_SxPM, which was not used anywhere
- - Use shifts instead of large numbers in ENVCFG_PMM* macro definitions
- - Rename CONFIG_RISCV_ISA_POINTER_MASKING to CONFIG_RISCV_ISA_SUPM,
-   since it only controls the userspace part of pointer masking
- - Use IS_ENABLED instead of #ifdef when possible
- - Use an enum for the supported PMLEN values
- - Simplify the logic in set_tagged_addr_ctrl()
- - Use IS_ENABLED instead of #ifdef when possible
- - Implement mm_untag_mask()
- - Remove pmlen from struct thread_info (now only in mm_context_t)
 
 Changes in v2:
- - Drop patch 4 ("riscv: Define is_compat_thread()"), as an equivalent
-   patch was already applied
- - Move patch 5 ("riscv: Split per-CPU and per-thread envcfg bits") to a
-   different series[3]
- - Update pointer masking specification version reference
  - Provide macros for the extension affecting the kernel and userspace
- - Use the correct name for the hstatus.HUPMM field
- - Rebase on riscv/linux.git for-next
- - Add and use the envcfg_update_bits() helper function
- - Inline flush_tagged_addr_state()
- - Implement untagged_addr_remote()
- - Restrict PMLEN changes once a process is multithreaded
- - Rename "tags" directory to "pm" to avoid .gitignore rules
- - Add .gitignore file to ignore the compiled selftest binary
- - Write to a pipe to force dereferencing the user pointer
- - Handle SIGSEGV in the child process to reduce dmesg noise
- - Export Supm via hwprobe
- - Export Smnpm and Ssnpm to KVM guests
 
-Samuel Holland (10):
-  dt-bindings: riscv: Add pointer masking ISA extensions
-  riscv: Add ISA extension parsing for pointer masking
-  riscv: Add CSR definitions for pointer masking
-  riscv: Add support for userspace pointer masking
-  riscv: Add support for the tagged address ABI
-  riscv: Allow ptrace control of the tagged address ABI
-  riscv: selftests: Add a pointer masking test
-  riscv: hwprobe: Export the Supm ISA extension
-  RISC-V: KVM: Allow Smnpm and Ssnpm extensions for guests
-  KVM: riscv: selftests: Add Smnpm and Ssnpm to get-reg-list test
+ arch/riscv/include/asm/hwcap.h | 5 +++++
+ arch/riscv/kernel/cpufeature.c | 3 +++
+ 2 files changed, 8 insertions(+)
 
- Documentation/arch/riscv/hwprobe.rst          |   3 +
- Documentation/arch/riscv/uabi.rst             |  16 +
- .../devicetree/bindings/riscv/extensions.yaml |  18 +
- arch/riscv/Kconfig                            |  11 +
- arch/riscv/include/asm/csr.h                  |  16 +
- arch/riscv/include/asm/hwcap.h                |   5 +
- arch/riscv/include/asm/mmu.h                  |   7 +
- arch/riscv/include/asm/mmu_context.h          |  13 +
- arch/riscv/include/asm/processor.h            |   8 +
- arch/riscv/include/asm/switch_to.h            |  11 +
- arch/riscv/include/asm/uaccess.h              |  43 ++-
- arch/riscv/include/uapi/asm/hwprobe.h         |   1 +
- arch/riscv/include/uapi/asm/kvm.h             |   2 +
- arch/riscv/kernel/cpufeature.c                |   3 +
- arch/riscv/kernel/process.c                   | 154 ++++++++
- arch/riscv/kernel/ptrace.c                    |  42 +++
- arch/riscv/kernel/sys_hwprobe.c               |   3 +
- arch/riscv/kvm/vcpu_onereg.c                  |   4 +
- include/uapi/linux/elf.h                      |   1 +
- include/uapi/linux/prctl.h                    |   5 +-
- .../selftests/kvm/riscv/get-reg-list.c        |   8 +
- tools/testing/selftests/riscv/Makefile        |   2 +-
- tools/testing/selftests/riscv/abi/.gitignore  |   1 +
- tools/testing/selftests/riscv/abi/Makefile    |  10 +
- .../selftests/riscv/abi/pointer_masking.c     | 332 ++++++++++++++++++
- 25 files changed, 712 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/riscv/abi/.gitignore
- create mode 100644 tools/testing/selftests/riscv/abi/Makefile
- create mode 100644 tools/testing/selftests/riscv/abi/pointer_masking.c
-
+diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+index 46d9de54179e..8608883da453 100644
+--- a/arch/riscv/include/asm/hwcap.h
++++ b/arch/riscv/include/asm/hwcap.h
+@@ -93,6 +93,9 @@
+ #define RISCV_ISA_EXT_ZCMOP		84
+ #define RISCV_ISA_EXT_ZAWRS		85
+ #define RISCV_ISA_EXT_SVVPTC		86
++#define RISCV_ISA_EXT_SMMPM		87
++#define RISCV_ISA_EXT_SMNPM		88
++#define RISCV_ISA_EXT_SSNPM		89
+ 
+ #define RISCV_ISA_EXT_XLINUXENVCFG	127
+ 
+@@ -101,8 +104,10 @@
+ 
+ #ifdef CONFIG_RISCV_M_MODE
+ #define RISCV_ISA_EXT_SxAIA		RISCV_ISA_EXT_SMAIA
++#define RISCV_ISA_EXT_SUPM		RISCV_ISA_EXT_SMNPM
+ #else
+ #define RISCV_ISA_EXT_SxAIA		RISCV_ISA_EXT_SSAIA
++#define RISCV_ISA_EXT_SUPM		RISCV_ISA_EXT_SSNPM
+ #endif
+ 
+ #endif /* _ASM_RISCV_HWCAP_H */
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index b3a057c36996..94596bca464e 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -377,9 +377,12 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+ 	__RISCV_ISA_EXT_BUNDLE(zvksg, riscv_zvksg_bundled_exts),
+ 	__RISCV_ISA_EXT_DATA(zvkt, RISCV_ISA_EXT_ZVKT),
+ 	__RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
++	__RISCV_ISA_EXT_DATA(smmpm, RISCV_ISA_EXT_SMMPM),
++	__RISCV_ISA_EXT_SUPERSET(smnpm, RISCV_ISA_EXT_SMNPM, riscv_xlinuxenvcfg_exts),
+ 	__RISCV_ISA_EXT_DATA(smstateen, RISCV_ISA_EXT_SMSTATEEN),
+ 	__RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
+ 	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
++	__RISCV_ISA_EXT_SUPERSET(ssnpm, RISCV_ISA_EXT_SSNPM, riscv_xlinuxenvcfg_exts),
+ 	__RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
+ 	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+ 	__RISCV_ISA_EXT_DATA(svnapot, RISCV_ISA_EXT_SVNAPOT),
 -- 
 2.45.1
 
