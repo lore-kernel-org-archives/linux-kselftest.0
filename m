@@ -1,357 +1,660 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFA61D2F6D;
-	Wed, 16 Oct 2024 22:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729116420; cv=fail; b=Ke3jkJON1Dju+hU26GGgNeSHRecHGLSrISFNZoYMsQLX+0gMdYTPCVXzqp0KNcJsK/5kgoX956WwyF3k0NglSGKsnIuWrscdceXUrtILAvx+jJVNhhBU+sZT8AqH7HYtnPZOMkTN2oXc4fSJ3CZqYi3LbLjYSUiqp7qY13RN/l4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729116420; c=relaxed/simple;
-	bh=imrDaHNkyb5WUFi8M/MJuYu/VC82k0LrJDOyMxgN/ok=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Q4+/8B9O0d6cBm+9DEvuo5/RaWjwKc5JLxjn3xGc8HffbakjSO3ypQtz0KPxFFoTBl60+GRyRZ6Dc34k73/0EznDETU5q2OgLowIL31NqRYt0mlc/TcQtv4ObgIhImRQpnQMfmFzih1Ew9J4rTXnQi8HPj415vIugw2mTRO7cQc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=oZ/T2jSb; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Y2f8r6Z8; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233E81D31B5;
+	Wed, 16 Oct 2024 22:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729116448; cv=none; b=Zb/KRmVGDdfnLHzhKN+q9A/57skoGW5rBwuhwwiIPyBPyr18FpoTKTom7awOUC+ArIAEDBvAdYKfAhj01FiRz+UHKQ8BUD1Uj7Hu1FqDl5Wb6bHwpdqLnVVOV28ol5WJ8GAhsWsVpaTxhFyXdi9Rkb2obtgJSl+pxiMUXR/J8uw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729116448; c=relaxed/simple;
+	bh=TgwjfdGBjoJ0s3JdZIkqfVaOwmY2uXNqi09pbGCi+x4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=iy7SVKw0qzkUpehgW2ffzjvs0IsSSORFJ64nVgYb5n8kUypT6jRVwaAVB9TstEm78OTB1TknydH8FAydo7zg87Jl5oD4VnQ3VFovGPrAEgMn4yHjmpFOeYzvlqx1gQP3KncSN/H3YoTaNOqiuXargn3yLvmXqO5UJN0k/9RYAdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=McziRhC9; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="oZ/T2jSb";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Y2f8r6Z8"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49GL0DsQ018393;
-	Wed, 16 Oct 2024 22:06:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=SckD3105PLI+Vi8km0vhKlichl+mc20QGn+lFsrWdOo=; b=
-	oZ/T2jSbd7nR5QhDVgKrQfI7pFW/YLG3XWZTMQAm5IaVGHP5XYJvWu8UaEELceE5
-	GT4DFfXsZIM7YuNcpZNofiPIzIqChroEXwhEn0152aVhwjX1Qrn6alFYUBPNNPqW
-	zHPZdpZMh6+hKC2LDKDn1MghtH08xHJQNzwtby593UCcfetLLO7VJVLzf3WdG5X/
-	kW4jvpiMQ/Gglt8kcJb80BNmVtPQEDYlvakf3hkVush3wtetkBNxt1E3ApUwTGEV
-	m5cruZuKwmcMvAlgNzP2UC+MKnftAgbWy8dp2WyJVBZjOTShkFSOn0SxaJRoGH+Z
-	Lx0MpGChMLo78HjI9SQm6Q==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427gq7n1d3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Oct 2024 22:06:43 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49GKLUSP027322;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="McziRhC9"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49GKtdS0031385;
 	Wed, 16 Oct 2024 22:06:41 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2044.outbound.protection.outlook.com [104.47.55.44])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjg0xw3-1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2023-11-20; bh=jDsm7
+	V/uXVNXQm/pz1ucI+wEyQ/hZKxhyhegSKNiW+A=; b=McziRhC9gM5q2zjbHOyPk
+	BcE3ZzqQjezRLHhrgs+RN8NnJQX5VbNK4AMWSjKyD92Lfk8zq+4mbyt2lj5VqRWP
+	R2HfCrvHdDV3wpflt26LnJzfHfvyyXLn6hq84DmP0/BU2OQc5MT9N16RUixsud04
+	esGzV+TnnRZy2oigK3nVlcrMDgXJM0bKdwKqm5Wb+7u3bk1y+wN5KLzUOY9YyO6k
+	NHaUtm8hbJEl5NiCZpdhrr6QcS3yA8IgeJMl2ichlqLBDkPMuMbIdw+zFGlXYoMY
+	M9Vwsl8LUEMScenZ/HjSGu43TRfdG5UzlvbgdoQ+1OrKG4K50Y9HlXS4r3oEGcAM
+	Q==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427fw2n41x-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Oct 2024 22:06:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vpX2VP1uBJe7FATzQqUiZr6GOXXWWDQ2TPJX3rqNMw17oX8Wwa0XtZ0typzXodT3LzC3amzmOEaMO2V+KeaLgoJyMzNSagOzlCc19l6lmMV/ym7sI/Azw7auhdo6AAnwIOkK8qssYU26zcDTHOnSTzoTZ/yvtgOw2UTViR71Yvc38gucGHAFGBowLf3R7VH3q3NokaFk5WlMGIhWibMMjyXkFEfaK5syIBw3vw4O9j00FysUU43I3v+iUp+MfSDJvTs79ncSRTHORD+AndgLZ7AG8DhxLn4sxgrI4OLLhqY12aukVqG1BbDiubJLqwIvonD3D8LIbLBVoyikB9bDwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SckD3105PLI+Vi8km0vhKlichl+mc20QGn+lFsrWdOo=;
- b=JvPzqBuHwW5mWTNQhI+fn7h/obJHvjeVd/qO1NtVUFF+JIlDpH1SPe9IzHldlmQjxyi8GyNeJSeIt8X/UQDJCAyqpLPwCm1DblYXK4WLT37hPZwZkfn0bUs6bh284d5+G7shLTGk4XIBHeB5+J1hpCD2YXwpFFXMQzxXbXp3iXiyBzgV2/+0fUlpFJdYeAmvSPB1HkG2MlqG3FetC7qYyfvkdwMuw9sVHsc8jjMqVWSEajpHY8r1o5mYm5+X2Kue062HAiUsfShYHs7BUepm+L2x+HU/Spfo0MCxn1hiXUbNNmLmlQBSPRKQ12Lt9l0VtvgxzpkJxi7IvE48nKZAVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SckD3105PLI+Vi8km0vhKlichl+mc20QGn+lFsrWdOo=;
- b=Y2f8r6Z8FWxTcg/8UdC6iTNXxXbuKu6bWou7tRMBhEDnhkmKc2IbhoB+5VPzq+eti+Li6lJeaPCRLs7DkSSFh3Zx3VVlaTYfYWWrq9DL02hQa2Az89iekJq6RE6CIJ9HLjn4Y7n6cuz8K3k5oI6HOjFJ2NnvaVZpAhUq99BK2hQ=
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
- by MN6PR10MB7997.namprd10.prod.outlook.com (2603:10b6:208:500::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Wed, 16 Oct
- 2024 22:06:38 +0000
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8069.016; Wed, 16 Oct 2024
- 22:06:38 +0000
-Date: Wed, 16 Oct 2024 23:06:34 +0100
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>
-Subject: Re: [PATCH v3 3/3] selftests: pidfd: add tests for PIDFD_SELF_*
-Message-ID: <a6133831-3fc3-49aa-83c6-f9aeef3713c9@lucifer.local>
-References: <cover.1729073310.git.lorenzo.stoakes@oracle.com>
- <c083817403f98ae45a70e01f3f1873ec1ba6c215.1729073310.git.lorenzo.stoakes@oracle.com>
- <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
-X-ClientProxiedBy: LO4P123CA0403.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:189::12) To SJ0PR10MB5613.namprd10.prod.outlook.com
- (2603:10b6:a03:3d0::5)
+	Wed, 16 Oct 2024 22:06:41 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49GLPSV1011131;
+	Wed, 16 Oct 2024 22:06:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjfrmcx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 16 Oct 2024 22:06:40 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49GM6bGu027856;
+	Wed, 16 Oct 2024 22:06:39 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjfrmap-2;
+	Wed, 16 Oct 2024 22:06:39 +0000
+From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To: davem@davemloft.net, Liam.Howlett@Oracle.com
+Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        vschneid@redhat.com, jiri@resnulli.us, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, akpm@linux-foundation.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, anjali.k.kulkarni@oracle.com,
+        peili.io@oracle.com
+Subject: [PATCH net-next v3 1/3] connector/cn_proc: Add hash table for threads
+Date: Wed, 16 Oct 2024 15:06:32 -0700
+Message-ID: <20241016220634.1469153-2-anjali.k.kulkarni@oracle.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20241016220634.1469153-1-anjali.k.kulkarni@oracle.com>
+References: <20241016220634.1469153-1-anjali.k.kulkarni@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|MN6PR10MB7997:EE_
-X-MS-Office365-Filtering-Correlation-Id: 64050caa-5899-41de-b382-08dcee2ece85
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|10070799003|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bUFmMW94RFI5bSttQVNPd2FHa0h1S1QzQkZocUt5OHlkeTdldi9Da3MzNmtN?=
- =?utf-8?B?MTk0OFh1VzB5V2JBbFc0SFNzY3dxaXY5R0oxOWY4YmNEdkJ5UGQ0ZVpLYXEr?=
- =?utf-8?B?eUllUWpubEhteXZ0dHF3MU1pWTRNOVIwWDE2aEc5b29HSFdOcU1Eb095cmRw?=
- =?utf-8?B?bWI3QU1GZFlzenJsN0ZGWW1wY1hEWElzTGpHSS8xak9EaU1OQ0lnbkFDOEJ1?=
- =?utf-8?B?ZU1VVkNYY3FEZGhQYk0yWUszTmxodTBFMmtFanpHVjc4aXMxYzg3aUFKSlJF?=
- =?utf-8?B?R3BPM2dqUUhsOFd6dnlBbXZNaWJjUm5tVGl6VURDUFUxZDdRbTIzZVp2dXdU?=
- =?utf-8?B?ekZZZjV5ODVhcmZpanptanlWS2ZqMytPYkg5Wk5IaysvdVB5ZmdjRTd4T0U5?=
- =?utf-8?B?YlNuZS9USHVqN0ZqMGFFMXNTUGtIZ0FsWC9FODZ0SUVzdlZzYXlOenpjaThV?=
- =?utf-8?B?eTdaSS9IMGViczV6R0hQNGlMamVoS3Fhd0xZMFcyejgyNUZuUHB1QW4weW1p?=
- =?utf-8?B?QVFadkk5diszdUt4ZW1BRlc0UW9MUDZWdWZRNUZWTThHTURXNk9mS2RrQkdT?=
- =?utf-8?B?aERRRXFPWUFkaWk4dDhFV3lNRXRIVVIzOC9qOXJhdnpTTEwxMlgxWUZKWjYr?=
- =?utf-8?B?bDRmZzNSVXE0bitsTmFRUzkvVnllRHFMYXh3VmtIZlUxVUY3MXd0VWNKOVBH?=
- =?utf-8?B?WjlmOWFQcmtEaCtKdE9kZm9rQkxTVE9PQzAzTmF1Q0VwQVQzSlBDVG85WXBI?=
- =?utf-8?B?ZE1SeXhkdG9PY2kvZVZUdGtTdUdEc3dLTWpKdElVOGRnczJWRVNYUHk4Y3kz?=
- =?utf-8?B?M3RkVHRWWGljRTNvRWpXdmMxR0plb3d4VDlVRVBDam81MVgvdHBkSURwWUdH?=
- =?utf-8?B?UWY0ekZkc0puSmdUNUIvak5iYkVKdjN0NnBiZ0hCQTQvNS9pNDJRYktkc1pZ?=
- =?utf-8?B?b0V2a1VFbEYxcmV4MWYxL3RkVlJzTWlZK1NNZW9MMy85SnJDMzl5blJzUlB0?=
- =?utf-8?B?Y1BOY0U0T2J1TmtMUnlua3NnZmJOdDNSME9IOWVsbTlmTEt3VkpZVkozMWU4?=
- =?utf-8?B?K25FanZaU3NkQjVTU2VoVUk4a1VmOEpMM3pRZE1rWnZtV0s5RHRWSmhFVkFK?=
- =?utf-8?B?cG1qWkEybm9zZEJ6Nm4zaEpxZHNUR1FCUUYxdGowL2NRMGVaWFU0bU82dUxQ?=
- =?utf-8?B?KytLME1CaEFNSnZoUEZZdS8yeVNlelhLcmFLV2lJNzYwR2VOQ21IZ2ZySFo3?=
- =?utf-8?B?eC9DN0hwSzduY3lZdnVmblJGRldJcjhLZnN0WHVveTdIYVZuTFBmOWZJRU55?=
- =?utf-8?B?c3FtSFNmME1WSER1c3pPK3hWeEtDdFIwbDNqSjdiRTVaYnQxU2hhcnArbWpB?=
- =?utf-8?B?cnBkYjZaUHRqbU94QmszNFFZYzlVQnRIMEMxcVF6dmU5RytITXJ4OVhnVk40?=
- =?utf-8?B?SUw1UFJyeDJvNVF3eEtXejlhYUVrNUt0SGRUUi80N0MxQ2hWNGJuYTZ6SVpJ?=
- =?utf-8?B?dTlvakNCRlJFak1ZbkhLd2lNa1loRUxWOHUvbklOWnl0elNVbzl1bGFROXg2?=
- =?utf-8?B?akRwS2hxVEZIUmxRdy9Dek9WWlB3RTNhdU43N1cvVnRIUUJIWFoxYnZwY2lD?=
- =?utf-8?B?NjVXakczNStZSmtpamlEdlpBdzQ1WjdYOFlIZXJDYXNZL0x6bjJOUXpqblRi?=
- =?utf-8?B?bGN0b3VCVUZ6QXlVc011TFJBNjRkZVBiVUdXd0pTN1JLR21FQlBBSHBLNUpS?=
- =?utf-8?Q?tCXpvwV65vCkCBPQHUnLJe7r86QBgRkAF6Ot5j6?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(10070799003)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dXVIY0NESEtYbldYM1VYUElNYXBFbnhBTUZLZzFXV21jMFNIM3ErbmFTU0dP?=
- =?utf-8?B?aklqaVdyRnpvV1hLTTBWemdjbFdOWWhuVWc3RE11YmV3ZjJkR2NaTGVIemF6?=
- =?utf-8?B?akdOUzZzRGpZTUI4UnlVVUNWQzRycmdYWlFSZTdHYTFKRHNsY2MxaHFOc0J0?=
- =?utf-8?B?TVBxclk4YWFJeUZxSHVZTnF5RDFEOFNOSGRlKzY3L3pJQXYxNkgvVnJTQStv?=
- =?utf-8?B?NG1LNDRYdEEyNDluOXZtWHY3a2hyNC9CQlpycTJxWXhjdkJPSDA2VUs5aTMz?=
- =?utf-8?B?QStkR3Z3MTZDTE9abE1CV0Z1YjZwZ2FvbHVxK2xiVFh4NU5lVG8xTkVNSnE3?=
- =?utf-8?B?U1hyRy9GSFFKVkN1RXJ5cTZzZFlxOVRpczZ6dStnN25XTkt0OG43aXhtZkZl?=
- =?utf-8?B?VGNvRVd0Q1NzaW5acWFkVm0zeWp1b1ZVaHFNaklBNlpDbno1ZGN3SjlnWWVh?=
- =?utf-8?B?Q0l5VkxSSEVhREZZZnluNGxVbjhQcWFwTnBsdEwzZW1MTnBObC9DTWphOEp1?=
- =?utf-8?B?enN2dy85NjJ3NDFFZU9WalFOdEFFT0NCREh5VjBmTitJTUpxSTRhVmx0Y0xG?=
- =?utf-8?B?SlZMV0JRZEpRNGhIa3VRc1c1aXYrNnY2emtiYXlHaWJmdW1HTk1xMEJEL2xX?=
- =?utf-8?B?RGdoa0d6SmFBVmhmTWZsbG85RDdOMGlPNUxhdjhSTERTaGw5dmc2N1JvNDcr?=
- =?utf-8?B?cWZFVldseUVYamlWVGdEK2Z4K3FnWHNOUGZRQ0ZjR05XRXdJSmhpd0F2MXBl?=
- =?utf-8?B?citZcVV6V2dldTl6V1QxYlVIRzg2ZXJQS1VXajdpallYTnRKRHFLYlZXTTdo?=
- =?utf-8?B?cVM2a2RwZzV5UDJ0bUpzcXRqNDNoeTM4bU8rRXBWbkRWZE10aXpIM2Z3RlN6?=
- =?utf-8?B?WmFwQ3NNMWU4aHBldEJWR3AwbXIwOXhJUEFSeTFUU3RUam8wcUJjcWV2VjRl?=
- =?utf-8?B?dCtwdXFVVk1pTVR6QTNXRzRKa1lOMmsxQjM3bXltR0ZNNS8rMndDYVExSWt4?=
- =?utf-8?B?UXpqTlc4SjE2SnBzRzJpWWMzU3VMNFNNUVp5TVRYQm8yRTBIdVdUa015bytK?=
- =?utf-8?B?RlgrTUlJMk1QMDB6Z2tNSnRneUgvOUJnS3p1dE9oYnlVVXliNWtURTBoajZR?=
- =?utf-8?B?SFIwR3pmbUNrRFdyNGtsWmlDVGdZU3JsR0xEaUFyeXMrVDFwM1hhNXZwbThP?=
- =?utf-8?B?cUlVeU1Lbk5sSmU0MjZicktna2Fzam9EdXVyUzc5ZG41ZXUvTm5YTzY2RWl2?=
- =?utf-8?B?enNaN0l4WWJ6VEZQcUsvZ3o5bXp2WTBuZGw4TlpxMGM4WThaY0V6eXg2Qldy?=
- =?utf-8?B?aXY3emJwSkphTVZhU3dXK1AwTW5qTS82MkhraFlXRmUzbE5qazhkaEg5SEha?=
- =?utf-8?B?YTlzTEZVQ0tOWDIxN2pMbmRDaUhYcS9PQk82MUo0U1M1bkY3eEIvbHlaWWZk?=
- =?utf-8?B?eFZFelFJd2pwZXpPWUU0YzBEM2hoR21CemJuendaa05ib0ZPMmJKTGx0d0VB?=
- =?utf-8?B?UkdPdHZLQlozcU5xTHdEQlk4QWtIYVJ2cFRaWEJtTVMzY1ZkbWRSbGFFMnY3?=
- =?utf-8?B?NExvR2tabVQzTzdLTEExZjJuOWdGOW01TXJRdjhna2xyUVVOM0JvSWkxL2pV?=
- =?utf-8?B?OXBoS1hIdUh3N0xLVXZnZHJZbGZtRnFEYTk4dXpIYWZ6QnRtWnc0YTdjWVlC?=
- =?utf-8?B?a3YwcXg2dWdJUG5rNUt5MGx1Z0JUcERhckhmcU15cW5rV0g5N3paMiswV0hH?=
- =?utf-8?B?MXNkOG1XTllhdXdYYjR6cE0vUkFCNzg1NDArKzZZeDFVdTNhZGpDQmt2Z2dh?=
- =?utf-8?B?a2Q1WjkzU3NIdTFCYk1ndVBlUXUyRzhWUWhuZWxDT09UZXl0a2FhQ0ZkV1l5?=
- =?utf-8?B?dndpM1ZNbHMyM2dnRUNzZXR1WGFYNUtQck5aN0lsMkVyUUMwNndLRWM2Q2ZQ?=
- =?utf-8?B?NlJ1Y2NXbzZOTFMyVFpFbEdwN0ZSNUVJUnpwZGFuS2JwMUZRTkM3d3dGZVVz?=
- =?utf-8?B?Vjl6bFFDMnlOU3dHU2JydEVoSDh6VHIyeno5em5kUHVkbVY3ZzBiWjVRcjdO?=
- =?utf-8?B?bUppOFF1ckFhT3d3UDRVNnlZQ24wdkFFRkV5Vkd3aWpOTHUzVlBWQnJSTTk3?=
- =?utf-8?B?ZUdpSjBUYnBBZTZjNmpOaXpKaVVWazVyRzFEQ1dEUWdiM1BTSHpjUmdYRkI3?=
- =?utf-8?B?VjJHdWhEVGlGM3B1eUlaVm1KSmJRZWgwRlNmVUdNbG4xVUp1ZnhwZEtLS28z?=
- =?utf-8?B?UllVeHlvQXkxazNydllncysyUWRRPT0=?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	Q8W25yamMjkEcMa5e8B71UXjL7byG73L5Xemp4IO4uyndIe8UnSUHC6p0/R0Yc+zY7F0fdMBlAnZemFKgsVpwoRo4FSFNEhWx3cEQtYnMbw5jPaEllw/4KJYhrVhKaDsHy8r/rWlR2WIaHRyyGfdtC8k+uzZxx+VO6TjJIEtvccnIx5VOW399qM70ZAyPdiJRaOqr+RV3qB0+ed8AFhYBYCgiVBcQwoVtIf7LPh8c0TqUs+/Ai3OXpQSsOEMrfLqMoIU1OEsnEa9H1DNGl8LLKkjuT/QbXCaYy/3kUC1+yJm/CbifZntgw0H3rPbDZ5Wn6NH6TBruuzB2c05fTrnYkXR6sJ05FkljI2NxbRuP6djGCauQ12zfBxhyPfareg7SzIy/x0/GO6/MaufKc4SoGnrorB0fr67+wAJdtIGeAUFJwQPj+ZWAwpGkfhDXmvI3oZ48Gz+Cnx90pUZL7aS80lJlRiHCfiU2UuIqdyRvkxc1D8mP/Hdv6q99GNyLN6+TC6j8ZrCIsaxsw8XvA85e8YgcQhFFNaCPkA/Xcco7lydYQiZramFrZsJapj58V1jV1lfFEJgmLdoXAssJ0Rq97gAsRbJVvXh8R+cx2ZS+0g=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64050caa-5899-41de-b382-08dcee2ece85
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 22:06:38.1711
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: shwjo0wGOvbz4QfDWI2CqrUHKa78G3757V86CXIiVG7Dp9NT+En6e0KGPGLeDmQgb9jX6NdqjuQV1BsZJu7tthgqbTaVgbKxCfVOvZ9OXak=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR10MB7997
+Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-16_17,2024-10-16_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- spamscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ adultscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2409260000 definitions=main-2410160140
-X-Proofpoint-ORIG-GUID: nvy3nKaQ8a92NNvyyuLWY8vNxEsuUoQ3
-X-Proofpoint-GUID: nvy3nKaQ8a92NNvyyuLWY8vNxEsuUoQ3
+X-Proofpoint-GUID: n9DuoyLgsChv-gqZJvVR0auVZZtEtZVZ
+X-Proofpoint-ORIG-GUID: n9DuoyLgsChv-gqZJvVR0auVZZtEtZVZ
 
-On Wed, Oct 16, 2024 at 02:00:27PM -0600, Shuah Khan wrote:
-> On 10/16/24 04:20, Lorenzo Stoakes wrote:
-> > Add tests to assert that PIDFD_SELF_* correctly refers to the current
-> > thread and process.
-> >
-> > This is only practically meaningful to pidfd_send_signal() and
-> > pidfd_getfd(), but also explicitly test that we disallow this feature for
-> > setns() where it would make no sense.
-> >
-> > We cannot reasonably wait on ourself using waitid(P_PIDFD, ...) so while in
-> > theory PIDFD_SELF_* would work here, we'd be left blocked if we tried it.
-> >
-> > We defer testing of mm-specific functionality which uses pidfd, namely
-> > process_madvise() and process_mrelease() to mm testing (though note the
-> > latter can not be sensibly tested as it would require the testing process
-> > to be dying).
-> >
-> > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> > ---
-> >   tools/testing/selftests/pidfd/pidfd.h         |   8 +
-> >   .../selftests/pidfd/pidfd_getfd_test.c        | 141 ++++++++++++++++++
-> >   .../selftests/pidfd/pidfd_setns_test.c        |  11 ++
-> >   tools/testing/selftests/pidfd/pidfd_test.c    |  76 ++++++++--
-> >   4 files changed, 224 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
-> > index 88d6830ee004..1640b711889b 100644
-> > --- a/tools/testing/selftests/pidfd/pidfd.h
-> > +++ b/tools/testing/selftests/pidfd/pidfd.h
-> > @@ -50,6 +50,14 @@
-> >   #define PIDFD_NONBLOCK O_NONBLOCK
-> >   #endif
-> > +/* System header file may not have this available. */
-> > +#ifndef PIDFD_SELF_THREAD
-> > +#define PIDFD_SELF_THREAD -100
-> > +#endif
-> > +#ifndef PIDFD_SELF_THREAD_GROUP
-> > +#define PIDFD_SELF_THREAD_GROUP -200
-> > +#endif
-> > +
->
-> As mentioned in my response to v1 patch:
->
-> kselftest has dependency on "make headers" and tests include
-> headers from linux/ directory
+Add a new type PROC_CN_MCAST_NOTIFY to proc connector API, which allows a
+thread to notify the kernel that is going to exit with a non-zero exit
+code and specify the exit code in it. When thread exits in the kernel,
+it will send this exit code as a proc filter notification to any
+listening process.
+Exiting thread can call this either when it wants to call pthread_exit()
+with non-zero value or from signal handler.
 
-Right but that assumes you install the kernel headers on the build system,
-which is quite a painful thing to have to do when you are quickly iterating
-on a qemu setup.
+Add a new file cn_hash.c which implements a hash table storing the exit
+codes of abnormally exiting threads, received by the system call above.
+The key used for the hash table is the pid of the thread, so when the
+thread actually exits, we lookup it's pid in the hash table and retrieve
+the exit code sent by user. If the exit code in struct task is 0, we
+then replace it with the user supplied non-zero exit code.
 
-This is a use case I use all the time so not at all theoretical.
+cn_hash.c implements the hash table add, delete, lookup operations.
+mutex_lock() and mutex_unlock() operations are used to safeguard the
+integrity of the hash table while adding or deleting elements.
+connector.c has the API calls, called from cn_proc.c, as well as calls
+to allocate, initialize and free the hash table.
 
-Unfortunately this seems broken on my system anyway :( - see below.
+Add a new flag in PF_* flags of task_struct - EXIT_NOTIFY. This flag is
+set when user sends the exit code via PROC_CN_MCAST_NOTIFY. While
+exiting, this flag is checked and the hash table add or delete calls
+are only made if this flag is set.
 
->
-> These local make it difficult to maintain these tests in the
-> longer term. Somebody has to go clean these up later.
+A refcount field hrefcnt is added in struct cn_hash_dev, to keep track
+of number of threads which have added an entry in hash table. Before
+freeing the struct cn_hash_dev, this value must be 0.
+This refcnt check is added in case CONFIG_CONNECTOR is compiled as a
+module. In that case, when unloading the module, we need to make sure
+no hash entries are still present in the hdev table.
 
-I don't agree, tests have to be maintained alongside the core code, and if
-these values change (seems unlikely) then the tests will fail and can
-easily be updated.
+Copy the task's name (task->comm) into the exit event notification.
+This will allow applications to filter on the name further using
+userspace filtering like ebpf.
 
-This was the approach already taken in this file with other linux
-header-defined values, so we'll also be breaking the precendence.
+Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+---
+ drivers/connector/Makefile    |   2 +-
+ drivers/connector/cn_hash.c   | 181 ++++++++++++++++++++++++++++++++++
+ drivers/connector/cn_proc.c   |  62 +++++++++++-
+ drivers/connector/connector.c |  63 +++++++++++-
+ include/linux/connector.h     |  31 ++++++
+ include/linux/sched.h         |   2 +-
+ include/uapi/linux/cn_proc.h  |   5 +-
+ 7 files changed, 338 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/connector/cn_hash.c
 
->
-> The import will be fine and you can control that with -I flag in
-> the makefile. Remove these and try to get including linux/pidfd.h
-> working.
+diff --git a/drivers/connector/Makefile b/drivers/connector/Makefile
+index 1bf67d3df97d..cb1dcdf067ad 100644
+--- a/drivers/connector/Makefile
++++ b/drivers/connector/Makefile
+@@ -2,4 +2,4 @@
+ obj-$(CONFIG_CONNECTOR)		+= cn.o
+ obj-$(CONFIG_PROC_EVENTS)	+= cn_proc.o
+ 
+-cn-y				+= cn_queue.o connector.o
++cn-y				+= cn_hash.o cn_queue.o connector.o
+diff --git a/drivers/connector/cn_hash.c b/drivers/connector/cn_hash.c
+new file mode 100644
+index 000000000000..a079e9bcea6d
+--- /dev/null
++++ b/drivers/connector/cn_hash.c
+@@ -0,0 +1,181 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
++ *
++ * Copyright (c) 2024 Oracle and/or its affiliates.
++ */
++
++#include <linux/kernel.h>
++#include <linux/init.h>
++#include <linux/connector.h>
++#include <linux/mutex.h>
++#include <linux/pid_namespace.h>
++
++#include <linux/cn_proc.h>
++
++struct cn_hash_dev *cn_hash_alloc_dev(const char *name)
++{
++	struct cn_hash_dev *hdev;
++
++	hdev = kzalloc(sizeof(*hdev), GFP_KERNEL);
++	if (!hdev)
++		return NULL;
++
++	snprintf(hdev->name, sizeof(hdev->name), "%s", name);
++	atomic_set(&hdev->hrefcnt, 0);
++	mutex_init(&hdev->uexit_hash_lock);
++	hash_init(hdev->uexit_pid_htable);
++	return hdev;
++}
++
++void cn_hash_free_dev(struct cn_hash_dev *hdev)
++{
++	struct uexit_pid_hnode *hnode;
++	struct hlist_node *tmp;
++	int bucket;
++
++	pr_debug("%s: Freeing entire hdev %p\n", __func__, hdev);
++
++	mutex_lock(&hdev->uexit_hash_lock);
++	hash_for_each_safe(hdev->uexit_pid_htable, bucket, tmp,
++			hnode, uexit_pid_hlist) {
++		hash_del(&hnode->uexit_pid_hlist);
++		pr_debug("%s: Freeing node for pid %d\n",
++				__func__, hnode->pid);
++		kfree(hnode);
++	}
++
++	mutex_unlock(&hdev->uexit_hash_lock);
++	mutex_destroy(&hdev->uexit_hash_lock);
++
++	/*
++	 * This refcnt check is added in case CONFIG_CONNECTOR is
++	 * compiled with =m as a module. In that case, when unloading
++	 * the module, we need to make sure no hash entries are still
++	 * present in the hdev table.
++	 */
++	while (atomic_read(&hdev->hrefcnt)) {
++		pr_info("Waiting for %s to become free: refcnt=%d\n",
++				hdev->name, atomic_read(&hdev->hrefcnt));
++		msleep(1000);
++	}
++
++	kfree(hdev);
++	hdev = NULL;
++}
++
++static struct uexit_pid_hnode *cn_hash_alloc_elem(__u32 uexit_code, pid_t pid)
++{
++	struct uexit_pid_hnode *elem;
++
++	elem = kzalloc(sizeof(*elem), GFP_KERNEL);
++	if (!elem)
++		return NULL;
++
++	INIT_HLIST_NODE(&elem->uexit_pid_hlist);
++	elem->uexit_code = uexit_code;
++	elem->pid = pid;
++	return elem;
++}
++
++static inline void cn_hash_free_elem(struct uexit_pid_hnode *elem)
++{
++	kfree(elem);
++}
++
++int cn_hash_add_elem(struct cn_hash_dev *hdev, __u32 uexit_code, pid_t pid)
++{
++	struct uexit_pid_hnode *elem, *hnode;
++
++	elem = cn_hash_alloc_elem(uexit_code, pid);
++	if (!elem) {
++		pr_err("%s: cn_hash_alloc_elem() returned NULL pid %d\n",
++				__func__, pid);
++		return -ENOMEM;
++	}
++
++	mutex_lock(&hdev->uexit_hash_lock);
++	/*
++	 * Check if an entry for the same pid already exists
++	 */
++	hash_for_each_possible(hdev->uexit_pid_htable,
++				hnode, uexit_pid_hlist, pid) {
++		if (hnode->pid == pid) {
++			mutex_unlock(&hdev->uexit_hash_lock);
++			cn_hash_free_elem(elem);
++			pr_debug("%s: pid %d already exists in hash table\n",
++				__func__, pid);
++			return -EEXIST;
++		}
++	}
++
++	hash_add(hdev->uexit_pid_htable, &elem->uexit_pid_hlist, pid);
++	mutex_unlock(&hdev->uexit_hash_lock);
++
++	atomic_inc(&hdev->hrefcnt);
++
++	pr_debug("%s: After hash_add of pid %d elem %p hrefcnt %d\n",
++			__func__, pid, elem, atomic_read(&hdev->hrefcnt));
++	return 0;
++}
++
++int cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid)
++{
++	struct uexit_pid_hnode *hnode;
++	struct hlist_node *tmp;
++	int excde;
++
++	mutex_lock(&hdev->uexit_hash_lock);
++	hash_for_each_possible_safe(hdev->uexit_pid_htable,
++				hnode, tmp, uexit_pid_hlist, pid) {
++		if (hnode->pid == pid) {
++			excde = hnode->uexit_code;
++			hash_del(&hnode->uexit_pid_hlist);
++			mutex_unlock(&hdev->uexit_hash_lock);
++			kfree(hnode);
++			atomic_dec(&hdev->hrefcnt);
++			pr_debug("%s: After hash_del of pid %d, found exit code %u hrefcnt %d\n",
++					__func__, pid, excde,
++					atomic_read(&hdev->hrefcnt));
++			return excde;
++		}
++	}
++
++	mutex_unlock(&hdev->uexit_hash_lock);
++	pr_err("%s: pid %d not found in hash table\n",
++			__func__, pid);
++	return -EINVAL;
++}
++
++int cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid)
++{
++	struct uexit_pid_hnode *hnode;
++	__u32 excde;
++
++	mutex_lock(&hdev->uexit_hash_lock);
++	hash_for_each_possible(hdev->uexit_pid_htable,
++				hnode, uexit_pid_hlist, pid) {
++		if (hnode->pid == pid) {
++			excde = hnode->uexit_code;
++			mutex_unlock(&hdev->uexit_hash_lock);
++			pr_debug("%s: Found exit code %u for pid %d\n",
++					__func__, excde, pid);
++			return excde;
++		}
++	}
++
++	mutex_unlock(&hdev->uexit_hash_lock);
++	pr_debug("%s: pid %d not found in hash table\n",
++			__func__, pid);
++	return -EINVAL;
++}
++
++bool cn_hash_table_empty(struct cn_hash_dev *hdev)
++{
++	bool is_empty;
++
++	is_empty = hash_empty(hdev->uexit_pid_htable);
++	pr_debug("Hash table is %s\n", (is_empty ? "empty" : "not empty"));
++
++	return is_empty;
++}
+diff --git a/drivers/connector/cn_proc.c b/drivers/connector/cn_proc.c
+index 44b19e696176..0632a70a89a0 100644
+--- a/drivers/connector/cn_proc.c
++++ b/drivers/connector/cn_proc.c
+@@ -69,6 +69,8 @@ static int cn_filter(struct sock *dsk, struct sk_buff *skb, void *data)
+ 	if ((__u32)val == PROC_EVENT_ALL)
+ 		return 0;
+ 
++	pr_debug("%s: val %lx, what %x\n", __func__, val, what);
++
+ 	/*
+ 	 * Drop packet if we have to report only non-zero exit status
+ 	 * (PROC_EVENT_NONZERO_EXIT) and exit status is 0
+@@ -326,9 +328,15 @@ void proc_exit_connector(struct task_struct *task)
+ 	struct proc_event *ev;
+ 	struct task_struct *parent;
+ 	__u8 buffer[CN_PROC_MSG_SIZE] __aligned(8);
++	int uexit_code;
+ 
+-	if (atomic_read(&proc_event_num_listeners) < 1)
++	if (atomic_read(&proc_event_num_listeners) < 1) {
++		if (likely(!(task->flags & PF_EXIT_NOTIFY)))
++			return;
++
++		cn_del_get_exval(task->pid);
+ 		return;
++	}
+ 
+ 	msg = buffer_to_cn_msg(buffer);
+ 	ev = (struct proc_event *)msg->data;
+@@ -337,7 +345,26 @@ void proc_exit_connector(struct task_struct *task)
+ 	ev->what = PROC_EVENT_EXIT;
+ 	ev->event_data.exit.process_pid = task->pid;
+ 	ev->event_data.exit.process_tgid = task->tgid;
+-	ev->event_data.exit.exit_code = task->exit_code;
++	if (unlikely(task->flags & PF_EXIT_NOTIFY)) {
++		task->flags &= ~PF_EXIT_NOTIFY;
++
++		uexit_code = cn_del_get_exval(task->pid);
++		if (uexit_code <= 0) {
++			pr_debug("%s: err %d returning task's exit code %u\n",
++					uexit_code, __func__,
++					task->exit_code);
++			ev->event_data.exit.exit_code = task->exit_code;
++		} else {
++			ev->event_data.exit.exit_code = uexit_code;
++			pr_debug("%s: Reset PF_EXIT_NOTIFY & retrieved exit code %u from hash table, pid %d\n",
++					__func__,
++					ev->event_data.exit.exit_code,
++					task->pid);
++		}
++	} else {
++		ev->event_data.exit.exit_code = task->exit_code;
++	}
++
+ 	ev->event_data.exit.exit_signal = task->exit_signal;
+ 
+ 	rcu_read_lock();
+@@ -348,6 +375,13 @@ void proc_exit_connector(struct task_struct *task)
+ 	}
+ 	rcu_read_unlock();
+ 
++	/*
++	 * Copy task name in the packet. This will allow applications
++	 * to filter on the name further using userspace filtering like
++	 * ebpf
++	 */
++	get_task_comm(ev->event_data.exit.comm, task);
++
+ 	memcpy(&msg->id, &cn_proc_event_id, sizeof(msg->id));
+ 	msg->ack = 0; /* not used */
+ 	msg->len = sizeof(*ev);
+@@ -413,6 +447,13 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
+ 	if (msg->len == sizeof(*pinput)) {
+ 		pinput = (struct proc_input *)msg->data;
+ 		mc_op = pinput->mcast_op;
++		if (mc_op == PROC_CN_MCAST_NOTIFY) {
++			pr_debug("%s: Received PROC_CN_MCAST_NOTIFY, pid %d\n",
++					__func__, current->pid);
++			current->flags |= PF_EXIT_NOTIFY;
++			err = cn_add_elem(pinput->uexit_code, current->pid);
++			return;
++		}
+ 		ev_type = pinput->event_type;
+ 	} else if (msg->len == sizeof(mc_op)) {
+ 		mc_op = *((enum proc_cn_mcast_op *)msg->data);
+@@ -432,6 +473,8 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
+ 			sk->sk_user_data = kzalloc(sizeof(struct proc_input),
+ 						   GFP_KERNEL);
+ 			if (sk->sk_user_data == NULL) {
++				pr_err("%s: ENOMEM for sk_user_data, pid %d\n",
++						__func__, current->pid);
+ 				err = ENOMEM;
+ 				goto out;
+ 			}
+@@ -442,21 +485,32 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
+ 		}
+ 		((struct proc_input *)(sk->sk_user_data))->event_type =
+ 			ev_type;
++		pr_debug("%s: sk: %p pid: %d event_type: %x\n",
++				__func__, sk, current->pid, ev_type);
+ 		((struct proc_input *)(sk->sk_user_data))->mcast_op = mc_op;
+ 	}
+ 
+ 	switch (mc_op) {
+ 	case PROC_CN_MCAST_LISTEN:
+-		if (initial || (prev_mc_op != PROC_CN_MCAST_LISTEN))
++		if (initial || (prev_mc_op != PROC_CN_MCAST_LISTEN)) {
+ 			atomic_inc(&proc_event_num_listeners);
++			pr_debug("%s: PROC_CN_MCAST_LISTEN pid %d: Incremented listeners to %d\n",
++					__func__, current->pid,
++					atomic_read(&proc_event_num_listeners));
++		}
+ 		break;
+ 	case PROC_CN_MCAST_IGNORE:
+-		if (!initial && (prev_mc_op != PROC_CN_MCAST_IGNORE))
++		if (!initial && (prev_mc_op != PROC_CN_MCAST_IGNORE)) {
+ 			atomic_dec(&proc_event_num_listeners);
++			pr_debug("%s: PROC_CN_MCAST_IGNORE pid %d: Decremented listeners to %d\n",
++					__func__, current->pid,
++					atomic_read(&proc_event_num_listeners));
++		}
+ 		((struct proc_input *)(sk->sk_user_data))->event_type =
+ 			PROC_EVENT_NONE;
+ 		break;
+ 	default:
++		pr_warn("%s: Invalid value for mc_op %d\n", __func__, mc_op);
+ 		err = EINVAL;
+ 		break;
+ 	}
+diff --git a/drivers/connector/connector.c b/drivers/connector/connector.c
+index 4028e8eeba82..c1c0dcec53c0 100644
+--- a/drivers/connector/connector.c
++++ b/drivers/connector/connector.c
+@@ -271,6 +271,50 @@ static int __maybe_unused cn_proc_show(struct seq_file *m, void *v)
+ 	return 0;
+ }
+ 
++int cn_del_get_exval(pid_t pid)
++{
++	struct cn_dev *dev = &cdev;
++
++	if (!cn_already_initialized)
++		return 0;
++
++	return cn_hash_del_get_exval(dev->hdev, pid);
++}
++EXPORT_SYMBOL_GPL(cn_del_get_exval);
++
++int cn_add_elem(__u32 uexit_code, pid_t pid)
++{
++	struct cn_dev *dev = &cdev;
++
++	if (!cn_already_initialized)
++		return 0;
++
++	return cn_hash_add_elem(dev->hdev, uexit_code, pid);
++}
++EXPORT_SYMBOL_GPL(cn_add_elem);
++
++int cn_get_exval(pid_t pid)
++{
++	struct cn_dev *dev = &cdev;
++
++	if (!cn_already_initialized)
++		return 0;
++
++	return cn_hash_get_exval(dev->hdev, pid);
++}
++EXPORT_SYMBOL_GPL(cn_get_exval);
++
++bool cn_table_empty(void)
++{
++	struct cn_dev *dev = &cdev;
++
++	if (!cn_already_initialized)
++		return 0;
++
++	return cn_hash_table_empty(dev->hdev);
++}
++EXPORT_SYMBOL_GPL(cn_table_empty);
++
+ static int cn_init(void)
+ {
+ 	struct cn_dev *dev = &cdev;
+@@ -283,15 +327,31 @@ static int cn_init(void)
+ 	};
+ 
+ 	dev->nls = netlink_kernel_create(&init_net, NETLINK_CONNECTOR, &cfg);
+-	if (!dev->nls)
++	if (!dev->nls) {
++		pr_err("%s: netlink_kernel_create failed, connector not initialized\n",
++				__func__);
+ 		return -EIO;
++	}
+ 
+ 	dev->cbdev = cn_queue_alloc_dev("cqueue", dev->nls);
+ 	if (!dev->cbdev) {
++		pr_err("%s: Allocation of dev->cbdev failed, connector not initialized\n",
++				__func__);
+ 		netlink_kernel_release(dev->nls);
+ 		return -EINVAL;
+ 	}
+ 
++	dev->hdev = cn_hash_alloc_dev("pid hash table");
++	if (!dev->hdev) {
++		pr_err("%s: Allocation of dev->hdev failed, connector not initialized\n",
++				__func__);
++		netlink_kernel_release(dev->nls);
++		cn_queue_free_dev(dev->cbdev);
++		return -ENOMEM;
++	}
++
++	pr_debug("Connector initialized, allocated hdev %p\n", dev->hdev);
++
+ 	cn_already_initialized = 1;
+ 
+ 	proc_create_single("connector", S_IRUGO, init_net.proc_net, cn_proc_show);
+@@ -308,6 +368,7 @@ static void cn_fini(void)
+ 	remove_proc_entry("connector", init_net.proc_net);
+ 
+ 	cn_queue_free_dev(dev->cbdev);
++	cn_hash_free_dev(dev->hdev);
+ 	netlink_kernel_release(dev->nls);
+ }
+ 
+diff --git a/include/linux/connector.h b/include/linux/connector.h
+index 70bc1160f3d8..5384e4bb98e8 100644
+--- a/include/linux/connector.h
++++ b/include/linux/connector.h
+@@ -18,6 +18,8 @@
+ #include <uapi/linux/connector.h>
+ 
+ #define CN_CBQ_NAMELEN		32
++#define HASHT_NAMELEN		32
++#define PID_HASH_TABLE_BITS	10
+ 
+ struct cn_queue_dev {
+ 	atomic_t refcnt;
+@@ -45,6 +47,19 @@ struct cn_callback_entry {
+ 	u32 seq, group;
+ };
+ 
++struct uexit_pid_hnode {
++	__u32 uexit_code;
++	pid_t pid;
++	struct hlist_node uexit_pid_hlist;
++};
++
++struct cn_hash_dev {
++	atomic_t hrefcnt;
++	unsigned char name[HASHT_NAMELEN];
++	struct mutex uexit_hash_lock;
++	DECLARE_HASHTABLE(uexit_pid_htable, PID_HASH_TABLE_BITS);
++};
++
+ struct cn_dev {
+ 	struct cb_id id;
+ 
+@@ -52,6 +67,7 @@ struct cn_dev {
+ 	struct sock *nls;
+ 
+ 	struct cn_queue_dev *cbdev;
++	struct cn_hash_dev *hdev;
+ };
+ 
+ /**
+@@ -137,4 +153,19 @@ void cn_queue_free_dev(struct cn_queue_dev *dev);
+ 
+ int cn_cb_equal(const struct cb_id *, const struct cb_id *);
+ 
++struct cn_hash_dev *cn_hash_alloc_dev(const char *name);
++void cn_hash_free_dev(struct cn_hash_dev *hdev);
++struct uexit_pid_hnode *cn_hash_find_pid_node(struct cn_hash_dev *hdev,
++						pid_t pid);
++int cn_hash_add_elem(struct cn_hash_dev *hdev, __u32 uexit_code, pid_t pid);
++int cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid);
++int cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid);
++
++int cn_add_elem(__u32 uexit_code, pid_t pid);
++int cn_del_get_exval(pid_t pid);
++int cn_get_exval(pid_t pid);
++
++bool cn_table_empty(void);
++bool cn_hash_table_empty(struct cn_hash_dev *hdev);
++
+ #endif				/* __CONNECTOR_H */
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index e6ee4258169a..a2339ae6208b 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1673,7 +1673,7 @@ extern struct pid *cad_pid;
+ #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
+ #define PF_USER_WORKER		0x00004000	/* Kernel thread cloned from userspace thread */
+ #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
+-#define PF__HOLE__00010000	0x00010000
++#define PF_EXIT_NOTIFY		0x00010000	/* This thread has sent an exit value to be sent as a notification to listening processes */
+ #define PF_KSWAPD		0x00020000	/* I am kswapd */
+ #define PF_MEMALLOC_NOFS	0x00040000	/* All allocations inherit GFP_NOFS. See memalloc_nfs_save() */
+ #define PF_MEMALLOC_NOIO	0x00080000	/* All allocations inherit GFP_NOIO. See memalloc_noio_save() */
+diff --git a/include/uapi/linux/cn_proc.h b/include/uapi/linux/cn_proc.h
+index 18e3745b86cd..e0ddb2e2c069 100644
+--- a/include/uapi/linux/cn_proc.h
++++ b/include/uapi/linux/cn_proc.h
+@@ -27,7 +27,8 @@
+  */
+ enum proc_cn_mcast_op {
+ 	PROC_CN_MCAST_LISTEN = 1,
+-	PROC_CN_MCAST_IGNORE = 2
++	PROC_CN_MCAST_IGNORE = 2,
++	PROC_CN_MCAST_NOTIFY = 3
+ };
+ 
+ #define PROC_EVENT_ALL (PROC_EVENT_FORK | PROC_EVENT_EXEC | PROC_EVENT_UID |  \
+@@ -65,6 +66,7 @@ enum proc_cn_event {
+ struct proc_input {
+ 	enum proc_cn_mcast_op mcast_op;
+ 	enum proc_cn_event event_type;
++	__u32 uexit_code;
+ };
+ 
+ static inline enum proc_cn_event valid_event(enum proc_cn_event ev_type)
+@@ -151,6 +153,7 @@ struct proc_event {
+ 			__u32 exit_code, exit_signal;
+ 			__kernel_pid_t parent_pid;
+ 			__kernel_pid_t parent_tgid;
++			char           comm[16];
+ 		} exit;
+ 
+ 	} event_data;
+-- 
+2.46.0
 
-I just tried this and it's not fine :) it immediately broke the build as
-pidfd.h imports linux/fcntl.h which conflicts horribly with system headers
-on my machine.
-
-For instance f_owner_ex gets redefined among others and fails the build e..g:
-
-/usr/include/asm-generic/fcntl.h:155:8: error: redefinition of ‘struct f_owner_ex’
-  155 | struct f_owner_ex {
-      |        ^~~~~~~~~~
-In file included from /usr/include/bits/fcntl.h:61,
-                 from /usr/include/fcntl.h:35,
-                 from pidfd_test.c:6:
-/usr/include/bits/fcntl-linux.h:274:8: note: originally defined here
-  274 | struct f_owner_ex
-      |        ^~~~~~~~~~
-
-It seems only one other test tries to do this as far as I can tell (I only
-did a quick grep), so it's not at all standard it seems.
-
-This issue occurred even when I used make headers_install to create
-sanitised user headers and added them to the include path.
-
-A quick google suggests linux/fcntl.h (imported by this pidfd.h uapi
-header) and system fcntl.h is a known thing. Slightly bizarre...
-
-I tried removing the <fcntl.h> include and that resulted in <sys/mount.h>
-conflicting:
-
-In file included from /usr/include/fcntl.h:35,
-                 from /usr/include/sys/mount.h:24,
-                 from pidfd.h:17,
-                 from pidfd_test.c:22:
-/usr/include/bits/fcntl.h:35:8: error: redefinition of ‘struct flock’
-   35 | struct flock
-      |        ^~~~~
-In file included from /tmp/hdr/include/asm/fcntl.h:1,
-                 from /tmp/hdr/include/linux/fcntl.h:5,
-                 from /tmp/hdr/include/linux/pidfd.h:7,
-                 from pidfd.h:6:
-/usr/include/asm-generic/fcntl.h:195:8: note: originally defined here
-  195 | struct flock {
-      |        ^~~~~
-
-So I don't think I can actually work around this, at least on my system,
-and I can't really sensibly submit a patch that I can't run on my own
-machine :)
-
-I may be missing something here.
-
->
-> Please revise this patch to include the header file and remove
-> these local defines.
-
-I'm a little stuck because of the above, but I _could_ do the following in
-the test pidfd.h header.:
-
-#define _LINUX_FCNTL_H
-#include "../../../../include/uapi/linux/pidfd.h"
-#undef _LINUX_FCNTL_H
-
-Which prevents the problematic linux/fcntl.h header from being included and
-includes the right header.
-
-But I'm not sure this is hugely better than what we already have
-maintinability-wise? Either way if something changes to break it it'll
-break the test build.
-
-Let me know if this is what you want me to do. Otherwise I'm not sure how
-to proceed - this header just seems broken at least on my system (arch
-linux at 6.11.1).
-
-An aside:
-
-The existing code already taken the approach I take (this is partly why I
-did it), I think it'd be out of the scope of my series to change that, for
-instance in pidfd.h:
-
-#ifndef PIDFD_NONBLOCK
-#define PIDFD_NONBLOCK O_NONBLOCK
-#endif
-
-Alongside a number of other defines. So those will have to stay at least
-for now for being out of scope, but obviously if people would prefer to
-move the whole thing that can be followed up later.
-
->
-> thanks,
-> -- Shuah
