@@ -1,51 +1,51 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815BA184D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DEE1E00B4;
 	Thu, 17 Oct 2024 18:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729188908; cv=none; b=PcYWHQT3+1RTeWmORTjJJYIQJ23I6crUzixo6gCoHyl+0JOZOFRn5HJm88GxZup9cafKy9trt1ZpBW6ZX+oKdms91Cm+7IdyImoxaPf+M4nJ234eOAbjmrvs2OZZTz810O0VGFy7oJBeuoF9xzdp2tK1FlTeH17mX1HPUYrawH8=
+	t=1729188909; cv=none; b=isjE0UkloYWfQkeZJ+YTXaq5ScSjbGSHjk4PKEE+Ytc/ozk/zcwxECEAn8gR5BmlK7TZ9cOwihEdZkF0+ciz/mLigaoM5Hfi6U9dVGXmwAGBL0/vw0rbvJj52pcmXFtfKHmAX7+QWfMVe6G5ZNkmQ0/I/xQZkTHRVLgXoiiYaNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729188908; c=relaxed/simple;
-	bh=vDAAHZj4bDD9eVgphWG10z6ugAaqL/dtWRy/SMZS16E=;
+	s=arc-20240116; t=1729188909; c=relaxed/simple;
+	bh=aZCEb4HVkB3wGHwkjYeJWmd9qbQgxmK4jBNO4ShlEsA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oNhyNYeFexc0fflJSLNf9HySge6ZxubDrFwo1HasK35wSpCnB3qfQ3qWZmChWA9RymeyDroJagHLSdrNb5DFXRK3Y5h/ZokvLvAU/Ht4QQmuHe6WlLaIDkEw8LqQbZSqrQLJBvzTSS1c3naJOi+TIgJY2i+BGU4koChCfCioSbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=G0F8h98F; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=WuDzcZEigL+bjSbs4VU5aUJ6EatYSLVyWxH68QL6XsleN9yg+b054JmPIruZI6Kn7rk5Z3wh1FF19zaANRXl9CYQQytaOMKT0460T6swJ6Cmt0UJWY+kDatKNg0RS0DtJltF+KJg0uy7XqwGGu/ES97WG3RPFfrh/pmjS6HvYz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=bVLpjTOL; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="G0F8h98F"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49HFBooB002190;
-	Thu, 17 Oct 2024 18:14:49 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bVLpjTOL"
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49HFBnMM019214;
+	Thu, 17 Oct 2024 18:14:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=cnhe9
-	VSX2bLWjmOVKj7JINYA/sD/CFH1T1PVnqlW+DQ=; b=G0F8h98FBHrjhwZomSUzA
-	Dzen/xLKtAtbKrOa0fBr01GSIlqLqdDGSbb0PnNsUF1zJ+5/gSuPQIuGMBiCCfUY
-	RCKSreO4gB5zomB2V+QnkGHdWzc9qJXKKnIWaBne7/QnJ1Mp5FxrJaXvchMolm5U
-	g/vRyOkPwdG15jFfo6HmbZG+p3liYRQtvQCNk09Ps8ll0zAxuoyd7G+UgNrgYwlK
-	pgbN63iRmorxFGG7pTxBwrBTZl4JscrjOFa4t8OQQTpaE62tzGp/nm3zzFXLJQfA
-	1SJPkbasBlVIp7jQIFBjH/vQNaANSt9vvy+vh3HdtWd/kIsLymEkt8YW0kjzHdP4
-	w==
+	:mime-version:references:subject:to; s=corp-2023-11-20; bh=2tIEY
+	zaIWRkL0RSUIPP+imMN/uuZa42vYFAx5lioNMg=; b=bVLpjTOLt+DTO4hXYgQJ0
+	t3angwtnT8SF65MW9haR4zAFesOv7bgMdYKK+j/LOk+pZvZ4DWYSbK4Y2Rjp1lB2
+	/9cw6+9jwOgbrofsiLZi4AhXTHUl0wa8F8WiGXEAM83jMcqx0vgnYyeJzL9n92/X
+	z19ayT6yINLrVcxYi/ncOqcI3jT/XJ4VvCoqSV77qfLgJR1GG7fgMRqZbg0w1mem
+	NhZjw5M2sYudnycXX16D6Qw31lGpNyzPQRkdE3cijKZAFa24q/GRsu8TDZwkBx1D
+	jSxEYtcjFJjyiVl3Yy6ViSUjOYFjTdaE4gA+I/738Pb7eAnC4F2a6xqcIpANV1+I
+	Q==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427fw2q855-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427h5cqgnv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 18:14:49 +0000 (GMT)
+	Thu, 17 Oct 2024 18:14:44 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49HHG2ja010433;
-	Thu, 17 Oct 2024 18:14:48 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49HGnYi8010979;
+	Thu, 17 Oct 2024 18:14:43 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjgxky5-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjgxktd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 18:14:48 +0000
+	Thu, 17 Oct 2024 18:14:43 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49HIA0bR039328;
-	Thu, 17 Oct 2024 18:14:47 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49HIA0bN039328;
+	Thu, 17 Oct 2024 18:14:42 GMT
 Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjgxkpk-4;
-	Thu, 17 Oct 2024 18:14:47 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjgxkpk-2;
+	Thu, 17 Oct 2024 18:14:42 +0000
 From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 To: davem@davemloft.net, Liam.Howlett@Oracle.com
 Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mingo@redhat.com,
@@ -56,9 +56,9 @@ Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mingo@redhat.com,
         netdev@vger.kernel.org, akpm@linux-foundation.org, shuah@kernel.org,
         linux-kselftest@vger.kernel.org, anjali.k.kulkarni@oracle.com,
         peili.io@oracle.com
-Subject: [PATCH net-next v5 3/3] connector/cn_proc: Selftest for threads
-Date: Thu, 17 Oct 2024 11:14:36 -0700
-Message-ID: <20241017181436.2047508-4-anjali.k.kulkarni@oracle.com>
+Subject: [PATCH net-next v5 1/3] connector/cn_proc: Add hash table for threads
+Date: Thu, 17 Oct 2024 11:14:34 -0700
+Message-ID: <20241017181436.2047508-2-anjali.k.kulkarni@oracle.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20241017181436.2047508-1-anjali.k.kulkarni@oracle.com>
 References: <20241017181436.2047508-1-anjali.k.kulkarni@oracle.com>
@@ -76,156 +76,74 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malw
  adultscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
  mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2409260000 definitions=main-2410170124
-X-Proofpoint-GUID: Gjt0vaJlCE-tGrJTbaOALzMQUoi8E-E6
-X-Proofpoint-ORIG-GUID: Gjt0vaJlCE-tGrJTbaOALzMQUoi8E-E6
+X-Proofpoint-ORIG-GUID: f0Di68fmBg-AXWfPkg8Fj91ouZyEX8wL
+X-Proofpoint-GUID: f0Di68fmBg-AXWfPkg8Fj91ouZyEX8wL
 
-Test to check if setting PROC_CN_MCAST_NOTIFY in proc connector API, allows
-a thread's non-zero exit status to be returned to proc_filter.
+Add a new type PROC_CN_MCAST_NOTIFY to proc connector API, which allows a
+thread to notify the kernel that is going to exit with a non-zero exit
+code and specify the exit code in it. When thread exits in the kernel,
+it will send this exit code as a proc filter notification to any
+listening process.
+Exiting thread can call this either when it wants to call pthread_exit()
+with non-zero value or from signal handler.
 
-The threads.c program creates 2 child threads. 1st thread handles signal
-SIGSEGV, and 2nd thread needs to indicate some error condition (value 1)
-to the kernel, instead of using pthread_exit() with 1.
+Add a new file cn_hash.c which implements a hash table storing the exit
+codes of abnormally exiting threads, received by the system call above.
+The key used for the hash table is the pid of the thread, so when the
+thread actually exits, we lookup it's pid in the hash table and retrieve
+the exit code sent by user. If the exit code in struct task is 0, we
+then replace it with the user supplied non-zero exit code.
 
-In both cases, child sends notify_netlink_thread_exit(exit_code) to kernel,
-to let kernel know it has exited abnormally with exit_code.
+cn_hash.c implements the hash table add, delete, lookup operations.
+mutex_lock() and mutex_unlock() operations are used to safeguard the
+integrity of the hash table while adding or deleting elements.
+connector.c has the API calls, called from cn_proc.c, as well as calls
+to allocate, initialize and free the hash table.
 
-Compile:
-    make thread
-    make proc_filter
-Run:
-    ./threads
+Add a new flag in PF_* flags of task_struct - EXIT_NOTIFY. This flag is
+set when user sends the exit code via PROC_CN_MCAST_NOTIFY. While
+exiting, this flag is checked and the hash table add or delete calls
+are only made if this flag is set.
+
+A refcount field hrefcnt is added in struct cn_hash_dev, to keep track
+of number of threads which have added an entry in hash table. Before
+freeing the struct cn_hash_dev, this value must be 0.
+This refcnt check is added in case CONFIG_CONNECTOR is compiled as a
+module. In that case, when unloading the module, we need to make sure
+no hash entries are still present in the hdev table.
+
+Copy the task's name (task->comm) into the exit event notification.
+This will allow applications to filter on the name further using
+userspace filtering like ebpf.
 
 Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 ---
- tools/testing/selftests/connector/Makefile    |  23 +-
- .../testing/selftests/connector/proc_filter.c |  34 ++-
- tools/testing/selftests/connector/thread.c    | 232 ++++++++++++++++++
- .../selftests/connector/thread_filter.c       |  96 ++++++++
- 4 files changed, 378 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/connector/thread.c
- create mode 100644 tools/testing/selftests/connector/thread_filter.c
+ drivers/connector/Makefile    |   2 +-
+ drivers/connector/cn_hash.c   | 181 ++++++++++++++++++++++++++++++++++
+ drivers/connector/cn_proc.c   |  62 +++++++++++-
+ drivers/connector/connector.c |  63 +++++++++++-
+ include/linux/connector.h     |  31 ++++++
+ include/linux/sched.h         |   2 +-
+ include/uapi/linux/cn_proc.h  |   5 +-
+ 7 files changed, 338 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/connector/cn_hash.c
 
-diff --git a/tools/testing/selftests/connector/Makefile b/tools/testing/selftests/connector/Makefile
-index 92188b9bac5c..bf335826bc3b 100644
---- a/tools/testing/selftests/connector/Makefile
-+++ b/tools/testing/selftests/connector/Makefile
-@@ -1,5 +1,26 @@
- # SPDX-License-Identifier: GPL-2.0
--CFLAGS += -Wall $(KHDR_INCLUDES)
-+KERNEL="../../../.."
-+
-+CFLAGS += -Wall $(KHDR_INCLUDES) -I $(KERNEL)/include/uapi -I $(KERNEL)/include
-+
-+proc_filter: proc_filter.o
-+	cc proc_filter.o -o proc_filter
-+
-+proc_filter.o: proc_filter.c
-+	cc -c proc_filter.c -o proc_filter.o $(CFLAGS)
-+
-+thread: thread.o thread_filter.o
-+	cc thread.o thread_filter.o -o thread
-+
-+thread.o: thread.c $(DEPS)
-+		cc -c thread.c -o thread.o $(CFLAGS)
-+
-+thread_filter.o: thread_filter.c
-+		cc -c thread_filter.c -o thread_filter.o $(CFLAGS)
-+
-+define EXTRA_CLEAN
-+	rm *.o thread
-+endef
+diff --git a/drivers/connector/Makefile b/drivers/connector/Makefile
+index 1bf67d3df97d..cb1dcdf067ad 100644
+--- a/drivers/connector/Makefile
++++ b/drivers/connector/Makefile
+@@ -2,4 +2,4 @@
+ obj-$(CONFIG_CONNECTOR)		+= cn.o
+ obj-$(CONFIG_PROC_EVENTS)	+= cn_proc.o
  
- TEST_GEN_PROGS = proc_filter
- 
-diff --git a/tools/testing/selftests/connector/proc_filter.c b/tools/testing/selftests/connector/proc_filter.c
-index 4a825b997666..5bf992deb792 100644
---- a/tools/testing/selftests/connector/proc_filter.c
-+++ b/tools/testing/selftests/connector/proc_filter.c
-@@ -1,4 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-+ *
-+ * Copyright (c) 2024 Oracle and/or its affiliates.
-+ */
- 
- #include <sys/types.h>
- #include <sys/epoll.h>
-@@ -28,6 +33,7 @@
- volatile static int interrupted;
- static int nl_sock, ret_errno, tcount;
- static struct epoll_event evn;
-+FILE *file;
- 
- static int filter;
- 
-@@ -37,6 +43,8 @@ static int filter;
- #define Printf ksft_print_msg
- #endif
- 
-+#define EXIT_LOG
-+
- int send_message(void *pinp)
- {
- 	char buff[NL_MESSAGE_SIZE];
-@@ -146,6 +154,12 @@ int handle_packet(char *buff, int fd, struct proc_event *event)
- 		tcount++;
- 		switch (event->what) {
- 		case PROC_EVENT_EXIT:
-+#ifdef EXIT_LOG
-+			fprintf(file, "pid %d tgid %d code %d\n",
-+				event->event_data.exit.process_pid,
-+				event->event_data.exit.process_tgid,
-+				event->event_data.exit.exit_code);
-+#endif
- 			Printf("Exit process %d (tgid %d) with code %d, signal %d\n",
- 			       event->event_data.exit.process_pid,
- 			       event->event_data.exit.process_tgid,
-@@ -279,17 +293,24 @@ int main(int argc, char *argv[])
- 		exit(1);
- 	}
- 
-+#ifdef EXIT_LOG
-+	file = fopen("exit.log", "w");
-+	if (file == NULL) {
-+		perror("Error opening file exit.log");
-+		close(nl_sock);
-+		close(epoll_fd);
-+		exit(1);
-+	}
-+#endif
-+
- 	while (!interrupted) {
- 		err = handle_events(epoll_fd, &proc_ev);
- 		if (err < 0) {
- 			if (ret_errno == EINTR)
- 				continue;
--			if (err == -2)
--				close(nl_sock);
--			if (err == -3) {
--				close(nl_sock);
--				close(epoll_fd);
--			}
-+			close(nl_sock);
-+			close(epoll_fd);
-+			fclose(file);
- 			exit(1);
- 		}
- 	}
-@@ -304,6 +325,7 @@ int main(int argc, char *argv[])
- 
- 	close(epoll_fd);
- 	close(nl_sock);
-+	fclose(file);
- 
- 	printf("Done total count: %d\n", tcount);
- 	exit(0);
-diff --git a/tools/testing/selftests/connector/thread.c b/tools/testing/selftests/connector/thread.c
+-cn-y				+= cn_queue.o connector.o
++cn-y				+= cn_hash.o cn_queue.o connector.o
+diff --git a/drivers/connector/cn_hash.c b/drivers/connector/cn_hash.c
 new file mode 100644
-index 000000000000..70c475ce3176
+index 000000000000..a079e9bcea6d
 --- /dev/null
-+++ b/tools/testing/selftests/connector/thread.c
-@@ -0,0 +1,232 @@
++++ b/drivers/connector/cn_hash.c
+@@ -0,0 +1,181 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
@@ -233,333 +151,510 @@ index 000000000000..70c475ce3176
 + * Copyright (c) 2024 Oracle and/or its affiliates.
 + */
 +
-+#include <pthread.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <stdlib.h>
-+#include <signal.h>
-+
-+/*
-+ * This code tests a thread exit notification when thread exits abnormally.
-+ * Normally, when a thread exits abnormally, the kernel is not aware of the
-+ * exit code. This is usually only conveyed from child to parent via the
-+ * pthread_exit() and pthread_join() calls. Sometimes, however, a parent
-+ * process cannot monitor all child processes via pthread_join(), particularly
-+ * when there is a huge amount of child processes. In this case, the parent
-+ * has created the child with PTHREAD_CREATE_DETACHED attribute.
-+ * To fix this problem, either when child wants to convey non-zero exit via
-+ * pthread_exit() or in a signal handler, the child can notify the kernel's
-+ * connector module it's exit status via a netlink call with new type
-+ * PROC_CN_MCAST_NOTIFY. (Implemented in the thread_filter.c file).
-+ * This will send the exit code from the child to the kernel, which the kernel
-+ * can later return to proc_filter program when the child actually exits.
-+ * Compile:
-+ *	make thread
-+ *	make proc_filter
-+ * Run:
-+ *	./threads
-+ */
-+
-+extern int notify_netlink_thread_exit(unsigned int exit_code);
-+
-+static void sigsegvh(int sig)
-+{
-+	unsigned int exit_code = (unsigned int) sig;
-+	/*
-+	 * Send any non-zero value to get a notification. Here we are
-+	 * sending the signal number for SIGSEGV which is 11
-+	 */
-+	notify_netlink_thread_exit(exit_code);
-+}
-+
-+void *threadc1(void *ptr)
-+{
-+	signal(SIGSEGV, sigsegvh);
-+
-+	*(int *)ptr = gettid();
-+
-+	printf("Child 1 thread id %d, handling SIGSEGV\n", gettid());
-+	sleep(10);
-+	pthread_exit(NULL);
-+}
-+
-+void *threadc2(void *ptr)
-+{
-+	int exit_val = 1;
-+
-+	*(int *)ptr = gettid();
-+
-+	printf("Child 2 thread id %d, wants to exit with value %d\n",
-+			gettid(), exit_val);
-+	sleep(2);
-+	notify_netlink_thread_exit(exit_val);
-+	pthread_exit(NULL);
-+}
-+
-+static void verify_exit_status(int tid1, int tid2)
-+{
-+	int found1 = 0, found2 = 0;
-+	int pid, tgid, exit_code;
-+	size_t size = 1024;
-+	FILE *file;
-+	char *data;
-+	int ret;
-+
-+	data = malloc(size * sizeof(char));
-+	if (data == NULL) {
-+		perror("malloc for data failed");
-+		exit(1);
-+	}
-+
-+	file = fopen("exit.log", "r");
-+	if (file == NULL) {
-+		perror("fopen of exit.log failed");
-+		free(data);
-+		exit(1);
-+	}
-+
-+	while (getline(&data, &size, file) != -1) {
-+		ret = sscanf(data, "pid %d tgid %d code %d",
-+				&pid, &tgid, &exit_code);
-+		if (ret != 3) {
-+			perror("sscanf error");
-+			free(data);
-+			fclose(file);
-+			exit(1);
-+		}
-+
-+		if (tgid != getpid())
-+			continue;
-+
-+		if (pid == tid1) {
-+			if (exit_code == 11) {
-+				printf("Successful notification of SIGSEGV, tid %d\n",
-+						pid);
-+			} else {
-+				printf("Failure SIGSEGV tid %d, exit code %d\n",
-+					       pid, exit_code);
-+			}
-+			found1 = 1;
-+		} else if (pid == tid2) {
-+			if (exit_code == 1) {
-+				printf("Successful notification of thread exit tid %d\n",
-+						pid);
-+			} else {
-+				printf("Failure thread exit tid %d, exit code %d\n",
-+					       pid, exit_code);
-+			}
-+			found2 = 1;
-+		}
-+	}
-+
-+	if (!found1)
-+		printf("tid %d not present in exit.log file\n", tid1);
-+
-+	if (!found2)
-+		printf("tid %d not present in exit.log file\n", tid2);
-+
-+	fclose(file);
-+	free(data);
-+}
-+
-+static inline void init_threads(pthread_attr_t *attr)
-+{
-+	int ret;
-+
-+	ret = pthread_attr_init(attr);
-+	if (ret != 0) {
-+		perror("pthread_attr_init failed");
-+		exit(ret);
-+	}
-+
-+	ret = pthread_attr_setdetachstate(attr, PTHREAD_CREATE_DETACHED);
-+	if (ret != 0) {
-+		perror("pthread_attr_setdetachstate failed");
-+		exit(ret);
-+	}
-+}
-+
-+static inline void destroy_thread_attr(pthread_attr_t *attr)
-+{
-+	int ret;
-+
-+	ret = pthread_attr_destroy(attr);
-+	if (ret != 0) {
-+		perror("pthread_attr_destroy failed");
-+		exit(ret);
-+	}
-+}
-+
-+
-+static inline pid_t start_proc_filter(void)
-+{
-+	pid_t proc_filter = 0;
-+
-+	proc_filter = fork();
-+	if (proc_filter == -1) {
-+		perror("fork()");
-+		exit(1);
-+	}
-+
-+	if (proc_filter == 0) {
-+		char* arr[] = {"proc_filter", "-f", NULL};
-+		execv("./proc_filter", arr);
-+	}
-+	sleep(1);
-+	return proc_filter;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	pthread_t thread1, thread2;
-+	pthread_attr_t attr1, attr2;
-+	int tid1, tid2, ret;
-+	pid_t proc_filter_pid;
-+
-+	proc_filter_pid = start_proc_filter();
-+
-+	init_threads(&attr1);
-+	ret = pthread_create(&thread1, &attr1, *threadc1, &tid1);
-+	if (ret != 0) {
-+		perror("pthread_create failed");
-+		exit(ret);
-+	}
-+
-+	init_threads(&attr2);
-+	ret = pthread_create(&thread2, &attr2, *threadc2, &tid2);
-+	if (ret != 0) {
-+		perror("pthread_create failed");
-+		exit(ret);
-+	}
-+
-+	sleep(1);
-+
-+	/* Send SIGSEGV to tid1 */
-+	kill(tid1, SIGSEGV);
-+
-+	/*
-+	 * Wait for children to exit or be killed and for exit.log to
-+	 * be generated by ./proc_filter
-+	 */
-+	sleep(2);
-+
-+	/*
-+	 * Kill proc_filter to get exit.log
-+	 */
-+	kill(proc_filter_pid, SIGINT);
-+
-+	/* Required to allow kill to be processed */
-+	sleep(1);
-+
-+	verify_exit_status(tid1, tid2);
-+
-+	destroy_thread_attr(&attr1);
-+	destroy_thread_attr(&attr2);
-+
-+	exit(0);
-+}
-diff --git a/tools/testing/selftests/connector/thread_filter.c b/tools/testing/selftests/connector/thread_filter.c
-new file mode 100644
-index 000000000000..3da740aa7537
---- /dev/null
-+++ b/tools/testing/selftests/connector/thread_filter.c
-@@ -0,0 +1,96 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-+ *
-+ * Copyright (c) 2024 Oracle and/or its affiliates.
-+ */
-+
-+#include <sys/types.h>
-+#include <sys/epoll.h>
-+#include <sys/socket.h>
-+#include <linux/netlink.h>
++#include <linux/kernel.h>
++#include <linux/init.h>
 +#include <linux/connector.h>
++#include <linux/mutex.h>
++#include <linux/pid_namespace.h>
++
 +#include <linux/cn_proc.h>
 +
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <strings.h>
-+#include <errno.h>
-+#include <signal.h>
-+#include <string.h>
-+
-+#define NL_MESSAGE_SIZE (sizeof(struct nlmsghdr) + sizeof(struct cn_msg) + \
-+			sizeof(struct proc_input))
-+
-+/*
-+ * Send PROC_CN_MCAST_NOTIFY type notification to the connector code in kernel.
-+ * This will send the exit_code specified by user to the connector layer, so
-+ * it can send a notification for that event to any listening process
-+ */
-+int send_message(int nl_sock, unsigned int exit_code)
++struct cn_hash_dev *cn_hash_alloc_dev(const char *name)
 +{
-+	char buff[NL_MESSAGE_SIZE];
-+	struct nlmsghdr *hdr;
-+	struct cn_msg *msg;
++	struct cn_hash_dev *hdev;
 +
-+	hdr = (struct nlmsghdr *)buff;
-+	hdr->nlmsg_len = NL_MESSAGE_SIZE;
-+	hdr->nlmsg_type = NLMSG_DONE;
-+	hdr->nlmsg_flags = 0;
-+	hdr->nlmsg_seq = 0;
-+	hdr->nlmsg_pid = getpid();
++	hdev = kzalloc(sizeof(*hdev), GFP_KERNEL);
++	if (!hdev)
++		return NULL;
 +
-+	msg = (struct cn_msg *)NLMSG_DATA(hdr);
-+	msg->id.idx = CN_IDX_PROC;
-+	msg->id.val = CN_VAL_PROC;
-+	msg->seq = 0;
-+	msg->ack = 0;
-+	msg->flags = 0;
++	snprintf(hdev->name, sizeof(hdev->name), "%s", name);
++	atomic_set(&hdev->hrefcnt, 0);
++	mutex_init(&hdev->uexit_hash_lock);
++	hash_init(hdev->uexit_pid_htable);
++	return hdev;
++}
 +
-+	msg->len = sizeof(struct proc_input);
-+	((struct proc_input *)msg->data)->mcast_op =
-+		PROC_CN_MCAST_NOTIFY;
-+	((struct proc_input *)msg->data)->uexit_code = exit_code;
++void cn_hash_free_dev(struct cn_hash_dev *hdev)
++{
++	struct uexit_pid_hnode *hnode;
++	struct hlist_node *tmp;
++	int bucket;
 +
-+	if (send(nl_sock, hdr, hdr->nlmsg_len, 0) == -1) {
-+		perror("send failed");
-+		return -errno;
++	pr_debug("%s: Freeing entire hdev %p\n", __func__, hdev);
++
++	mutex_lock(&hdev->uexit_hash_lock);
++	hash_for_each_safe(hdev->uexit_pid_htable, bucket, tmp,
++			hnode, uexit_pid_hlist) {
++		hash_del(&hnode->uexit_pid_hlist);
++		pr_debug("%s: Freeing node for pid %d\n",
++				__func__, hnode->pid);
++		kfree(hnode);
 +	}
++
++	mutex_unlock(&hdev->uexit_hash_lock);
++	mutex_destroy(&hdev->uexit_hash_lock);
++
++	/*
++	 * This refcnt check is added in case CONFIG_CONNECTOR is
++	 * compiled with =m as a module. In that case, when unloading
++	 * the module, we need to make sure no hash entries are still
++	 * present in the hdev table.
++	 */
++	while (atomic_read(&hdev->hrefcnt)) {
++		pr_info("Waiting for %s to become free: refcnt=%d\n",
++				hdev->name, atomic_read(&hdev->hrefcnt));
++		msleep(1000);
++	}
++
++	kfree(hdev);
++	hdev = NULL;
++}
++
++static struct uexit_pid_hnode *cn_hash_alloc_elem(__u32 uexit_code, pid_t pid)
++{
++	struct uexit_pid_hnode *elem;
++
++	elem = kzalloc(sizeof(*elem), GFP_KERNEL);
++	if (!elem)
++		return NULL;
++
++	INIT_HLIST_NODE(&elem->uexit_pid_hlist);
++	elem->uexit_code = uexit_code;
++	elem->pid = pid;
++	return elem;
++}
++
++static inline void cn_hash_free_elem(struct uexit_pid_hnode *elem)
++{
++	kfree(elem);
++}
++
++int cn_hash_add_elem(struct cn_hash_dev *hdev, __u32 uexit_code, pid_t pid)
++{
++	struct uexit_pid_hnode *elem, *hnode;
++
++	elem = cn_hash_alloc_elem(uexit_code, pid);
++	if (!elem) {
++		pr_err("%s: cn_hash_alloc_elem() returned NULL pid %d\n",
++				__func__, pid);
++		return -ENOMEM;
++	}
++
++	mutex_lock(&hdev->uexit_hash_lock);
++	/*
++	 * Check if an entry for the same pid already exists
++	 */
++	hash_for_each_possible(hdev->uexit_pid_htable,
++				hnode, uexit_pid_hlist, pid) {
++		if (hnode->pid == pid) {
++			mutex_unlock(&hdev->uexit_hash_lock);
++			cn_hash_free_elem(elem);
++			pr_debug("%s: pid %d already exists in hash table\n",
++				__func__, pid);
++			return -EEXIST;
++		}
++	}
++
++	hash_add(hdev->uexit_pid_htable, &elem->uexit_pid_hlist, pid);
++	mutex_unlock(&hdev->uexit_hash_lock);
++
++	atomic_inc(&hdev->hrefcnt);
++
++	pr_debug("%s: After hash_add of pid %d elem %p hrefcnt %d\n",
++			__func__, pid, elem, atomic_read(&hdev->hrefcnt));
 +	return 0;
 +}
 +
-+int notify_netlink_thread_exit(unsigned int exit_code)
++int cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid)
 +{
-+	struct sockaddr_nl sa_nl;
-+	int err = 0;
-+	int nl_sock;
++	struct uexit_pid_hnode *hnode;
++	struct hlist_node *tmp;
++	int excde;
 +
-+	nl_sock = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_CONNECTOR);
-+
-+	if (nl_sock == -1) {
-+		perror("socket failed");
-+		return -errno;
++	mutex_lock(&hdev->uexit_hash_lock);
++	hash_for_each_possible_safe(hdev->uexit_pid_htable,
++				hnode, tmp, uexit_pid_hlist, pid) {
++		if (hnode->pid == pid) {
++			excde = hnode->uexit_code;
++			hash_del(&hnode->uexit_pid_hlist);
++			mutex_unlock(&hdev->uexit_hash_lock);
++			kfree(hnode);
++			atomic_dec(&hdev->hrefcnt);
++			pr_debug("%s: After hash_del of pid %d, found exit code %u hrefcnt %d\n",
++					__func__, pid, excde,
++					atomic_read(&hdev->hrefcnt));
++			return excde;
++		}
 +	}
 +
-+	bzero(&sa_nl, sizeof(sa_nl));
-+	sa_nl.nl_family = AF_NETLINK;
-+	sa_nl.nl_groups = CN_IDX_PROC;
-+	sa_nl.nl_pid    = gettid();
-+
-+	if (bind(nl_sock, (struct sockaddr *)&sa_nl, sizeof(sa_nl)) == -1) {
-+		perror("bind failed");
-+		close(nl_sock);
-+		return -errno;
-+	}
-+
-+	err = send_message(nl_sock, exit_code);
-+
-+	close(nl_sock);
-+
-+	if (err < 0)
-+		return err;
-+
-+	return 0;
++	mutex_unlock(&hdev->uexit_hash_lock);
++	pr_err("%s: pid %d not found in hash table\n",
++			__func__, pid);
++	return -EINVAL;
 +}
++
++int cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid)
++{
++	struct uexit_pid_hnode *hnode;
++	__u32 excde;
++
++	mutex_lock(&hdev->uexit_hash_lock);
++	hash_for_each_possible(hdev->uexit_pid_htable,
++				hnode, uexit_pid_hlist, pid) {
++		if (hnode->pid == pid) {
++			excde = hnode->uexit_code;
++			mutex_unlock(&hdev->uexit_hash_lock);
++			pr_debug("%s: Found exit code %u for pid %d\n",
++					__func__, excde, pid);
++			return excde;
++		}
++	}
++
++	mutex_unlock(&hdev->uexit_hash_lock);
++	pr_debug("%s: pid %d not found in hash table\n",
++			__func__, pid);
++	return -EINVAL;
++}
++
++bool cn_hash_table_empty(struct cn_hash_dev *hdev)
++{
++	bool is_empty;
++
++	is_empty = hash_empty(hdev->uexit_pid_htable);
++	pr_debug("Hash table is %s\n", (is_empty ? "empty" : "not empty"));
++
++	return is_empty;
++}
+diff --git a/drivers/connector/cn_proc.c b/drivers/connector/cn_proc.c
+index 44b19e696176..101f1fba5ad9 100644
+--- a/drivers/connector/cn_proc.c
++++ b/drivers/connector/cn_proc.c
+@@ -69,6 +69,8 @@ static int cn_filter(struct sock *dsk, struct sk_buff *skb, void *data)
+ 	if ((__u32)val == PROC_EVENT_ALL)
+ 		return 0;
+ 
++	pr_debug("%s: val %lx, what %x\n", __func__, val, what);
++
+ 	/*
+ 	 * Drop packet if we have to report only non-zero exit status
+ 	 * (PROC_EVENT_NONZERO_EXIT) and exit status is 0
+@@ -326,9 +328,15 @@ void proc_exit_connector(struct task_struct *task)
+ 	struct proc_event *ev;
+ 	struct task_struct *parent;
+ 	__u8 buffer[CN_PROC_MSG_SIZE] __aligned(8);
++	int uexit_code;
+ 
+-	if (atomic_read(&proc_event_num_listeners) < 1)
++	if (atomic_read(&proc_event_num_listeners) < 1) {
++		if (likely(!(task->flags & PF_EXIT_NOTIFY)))
++			return;
++
++		cn_del_get_exval(task->pid);
+ 		return;
++	}
+ 
+ 	msg = buffer_to_cn_msg(buffer);
+ 	ev = (struct proc_event *)msg->data;
+@@ -337,7 +345,26 @@ void proc_exit_connector(struct task_struct *task)
+ 	ev->what = PROC_EVENT_EXIT;
+ 	ev->event_data.exit.process_pid = task->pid;
+ 	ev->event_data.exit.process_tgid = task->tgid;
+-	ev->event_data.exit.exit_code = task->exit_code;
++	if (unlikely(task->flags & PF_EXIT_NOTIFY)) {
++		task->flags &= ~PF_EXIT_NOTIFY;
++
++		uexit_code = cn_del_get_exval(task->pid);
++		if (uexit_code <= 0) {
++			pr_debug("%s: err %d returning task's exit code %u\n",
++					__func__, uexit_code,
++					task->exit_code);
++			ev->event_data.exit.exit_code = task->exit_code;
++		} else {
++			ev->event_data.exit.exit_code = uexit_code;
++			pr_debug("%s: Reset PF_EXIT_NOTIFY & retrieved exit code %u from hash table, pid %d\n",
++					__func__,
++					ev->event_data.exit.exit_code,
++					task->pid);
++		}
++	} else {
++		ev->event_data.exit.exit_code = task->exit_code;
++	}
++
+ 	ev->event_data.exit.exit_signal = task->exit_signal;
+ 
+ 	rcu_read_lock();
+@@ -348,6 +375,13 @@ void proc_exit_connector(struct task_struct *task)
+ 	}
+ 	rcu_read_unlock();
+ 
++	/*
++	 * Copy task name in the packet. This will allow applications
++	 * to filter on the name further using userspace filtering like
++	 * ebpf
++	 */
++	get_task_comm(ev->event_data.exit.comm, task);
++
+ 	memcpy(&msg->id, &cn_proc_event_id, sizeof(msg->id));
+ 	msg->ack = 0; /* not used */
+ 	msg->len = sizeof(*ev);
+@@ -413,6 +447,13 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
+ 	if (msg->len == sizeof(*pinput)) {
+ 		pinput = (struct proc_input *)msg->data;
+ 		mc_op = pinput->mcast_op;
++		if (mc_op == PROC_CN_MCAST_NOTIFY) {
++			pr_debug("%s: Received PROC_CN_MCAST_NOTIFY, pid %d\n",
++					__func__, current->pid);
++			current->flags |= PF_EXIT_NOTIFY;
++			err = cn_add_elem(pinput->uexit_code, current->pid);
++			return;
++		}
+ 		ev_type = pinput->event_type;
+ 	} else if (msg->len == sizeof(mc_op)) {
+ 		mc_op = *((enum proc_cn_mcast_op *)msg->data);
+@@ -432,6 +473,8 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
+ 			sk->sk_user_data = kzalloc(sizeof(struct proc_input),
+ 						   GFP_KERNEL);
+ 			if (sk->sk_user_data == NULL) {
++				pr_err("%s: ENOMEM for sk_user_data, pid %d\n",
++						__func__, current->pid);
+ 				err = ENOMEM;
+ 				goto out;
+ 			}
+@@ -442,21 +485,32 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
+ 		}
+ 		((struct proc_input *)(sk->sk_user_data))->event_type =
+ 			ev_type;
++		pr_debug("%s: sk: %p pid: %d event_type: %x\n",
++				__func__, sk, current->pid, ev_type);
+ 		((struct proc_input *)(sk->sk_user_data))->mcast_op = mc_op;
+ 	}
+ 
+ 	switch (mc_op) {
+ 	case PROC_CN_MCAST_LISTEN:
+-		if (initial || (prev_mc_op != PROC_CN_MCAST_LISTEN))
++		if (initial || (prev_mc_op != PROC_CN_MCAST_LISTEN)) {
+ 			atomic_inc(&proc_event_num_listeners);
++			pr_debug("%s: PROC_CN_MCAST_LISTEN pid %d: Incremented listeners to %d\n",
++					__func__, current->pid,
++					atomic_read(&proc_event_num_listeners));
++		}
+ 		break;
+ 	case PROC_CN_MCAST_IGNORE:
+-		if (!initial && (prev_mc_op != PROC_CN_MCAST_IGNORE))
++		if (!initial && (prev_mc_op != PROC_CN_MCAST_IGNORE)) {
+ 			atomic_dec(&proc_event_num_listeners);
++			pr_debug("%s: PROC_CN_MCAST_IGNORE pid %d: Decremented listeners to %d\n",
++					__func__, current->pid,
++					atomic_read(&proc_event_num_listeners));
++		}
+ 		((struct proc_input *)(sk->sk_user_data))->event_type =
+ 			PROC_EVENT_NONE;
+ 		break;
+ 	default:
++		pr_warn("%s: Invalid value for mc_op %d\n", __func__, mc_op);
+ 		err = EINVAL;
+ 		break;
+ 	}
+diff --git a/drivers/connector/connector.c b/drivers/connector/connector.c
+index 4028e8eeba82..c1c0dcec53c0 100644
+--- a/drivers/connector/connector.c
++++ b/drivers/connector/connector.c
+@@ -271,6 +271,50 @@ static int __maybe_unused cn_proc_show(struct seq_file *m, void *v)
+ 	return 0;
+ }
+ 
++int cn_del_get_exval(pid_t pid)
++{
++	struct cn_dev *dev = &cdev;
++
++	if (!cn_already_initialized)
++		return 0;
++
++	return cn_hash_del_get_exval(dev->hdev, pid);
++}
++EXPORT_SYMBOL_GPL(cn_del_get_exval);
++
++int cn_add_elem(__u32 uexit_code, pid_t pid)
++{
++	struct cn_dev *dev = &cdev;
++
++	if (!cn_already_initialized)
++		return 0;
++
++	return cn_hash_add_elem(dev->hdev, uexit_code, pid);
++}
++EXPORT_SYMBOL_GPL(cn_add_elem);
++
++int cn_get_exval(pid_t pid)
++{
++	struct cn_dev *dev = &cdev;
++
++	if (!cn_already_initialized)
++		return 0;
++
++	return cn_hash_get_exval(dev->hdev, pid);
++}
++EXPORT_SYMBOL_GPL(cn_get_exval);
++
++bool cn_table_empty(void)
++{
++	struct cn_dev *dev = &cdev;
++
++	if (!cn_already_initialized)
++		return 0;
++
++	return cn_hash_table_empty(dev->hdev);
++}
++EXPORT_SYMBOL_GPL(cn_table_empty);
++
+ static int cn_init(void)
+ {
+ 	struct cn_dev *dev = &cdev;
+@@ -283,15 +327,31 @@ static int cn_init(void)
+ 	};
+ 
+ 	dev->nls = netlink_kernel_create(&init_net, NETLINK_CONNECTOR, &cfg);
+-	if (!dev->nls)
++	if (!dev->nls) {
++		pr_err("%s: netlink_kernel_create failed, connector not initialized\n",
++				__func__);
+ 		return -EIO;
++	}
+ 
+ 	dev->cbdev = cn_queue_alloc_dev("cqueue", dev->nls);
+ 	if (!dev->cbdev) {
++		pr_err("%s: Allocation of dev->cbdev failed, connector not initialized\n",
++				__func__);
+ 		netlink_kernel_release(dev->nls);
+ 		return -EINVAL;
+ 	}
+ 
++	dev->hdev = cn_hash_alloc_dev("pid hash table");
++	if (!dev->hdev) {
++		pr_err("%s: Allocation of dev->hdev failed, connector not initialized\n",
++				__func__);
++		netlink_kernel_release(dev->nls);
++		cn_queue_free_dev(dev->cbdev);
++		return -ENOMEM;
++	}
++
++	pr_debug("Connector initialized, allocated hdev %p\n", dev->hdev);
++
+ 	cn_already_initialized = 1;
+ 
+ 	proc_create_single("connector", S_IRUGO, init_net.proc_net, cn_proc_show);
+@@ -308,6 +368,7 @@ static void cn_fini(void)
+ 	remove_proc_entry("connector", init_net.proc_net);
+ 
+ 	cn_queue_free_dev(dev->cbdev);
++	cn_hash_free_dev(dev->hdev);
+ 	netlink_kernel_release(dev->nls);
+ }
+ 
+diff --git a/include/linux/connector.h b/include/linux/connector.h
+index 70bc1160f3d8..5384e4bb98e8 100644
+--- a/include/linux/connector.h
++++ b/include/linux/connector.h
+@@ -18,6 +18,8 @@
+ #include <uapi/linux/connector.h>
+ 
+ #define CN_CBQ_NAMELEN		32
++#define HASHT_NAMELEN		32
++#define PID_HASH_TABLE_BITS	10
+ 
+ struct cn_queue_dev {
+ 	atomic_t refcnt;
+@@ -45,6 +47,19 @@ struct cn_callback_entry {
+ 	u32 seq, group;
+ };
+ 
++struct uexit_pid_hnode {
++	__u32 uexit_code;
++	pid_t pid;
++	struct hlist_node uexit_pid_hlist;
++};
++
++struct cn_hash_dev {
++	atomic_t hrefcnt;
++	unsigned char name[HASHT_NAMELEN];
++	struct mutex uexit_hash_lock;
++	DECLARE_HASHTABLE(uexit_pid_htable, PID_HASH_TABLE_BITS);
++};
++
+ struct cn_dev {
+ 	struct cb_id id;
+ 
+@@ -52,6 +67,7 @@ struct cn_dev {
+ 	struct sock *nls;
+ 
+ 	struct cn_queue_dev *cbdev;
++	struct cn_hash_dev *hdev;
+ };
+ 
+ /**
+@@ -137,4 +153,19 @@ void cn_queue_free_dev(struct cn_queue_dev *dev);
+ 
+ int cn_cb_equal(const struct cb_id *, const struct cb_id *);
+ 
++struct cn_hash_dev *cn_hash_alloc_dev(const char *name);
++void cn_hash_free_dev(struct cn_hash_dev *hdev);
++struct uexit_pid_hnode *cn_hash_find_pid_node(struct cn_hash_dev *hdev,
++						pid_t pid);
++int cn_hash_add_elem(struct cn_hash_dev *hdev, __u32 uexit_code, pid_t pid);
++int cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid);
++int cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid);
++
++int cn_add_elem(__u32 uexit_code, pid_t pid);
++int cn_del_get_exval(pid_t pid);
++int cn_get_exval(pid_t pid);
++
++bool cn_table_empty(void);
++bool cn_hash_table_empty(struct cn_hash_dev *hdev);
++
+ #endif				/* __CONNECTOR_H */
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index e6ee4258169a..a2339ae6208b 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1673,7 +1673,7 @@ extern struct pid *cad_pid;
+ #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
+ #define PF_USER_WORKER		0x00004000	/* Kernel thread cloned from userspace thread */
+ #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
+-#define PF__HOLE__00010000	0x00010000
++#define PF_EXIT_NOTIFY		0x00010000	/* This thread has sent an exit value to be sent as a notification to listening processes */
+ #define PF_KSWAPD		0x00020000	/* I am kswapd */
+ #define PF_MEMALLOC_NOFS	0x00040000	/* All allocations inherit GFP_NOFS. See memalloc_nfs_save() */
+ #define PF_MEMALLOC_NOIO	0x00080000	/* All allocations inherit GFP_NOIO. See memalloc_noio_save() */
+diff --git a/include/uapi/linux/cn_proc.h b/include/uapi/linux/cn_proc.h
+index 18e3745b86cd..e0ddb2e2c069 100644
+--- a/include/uapi/linux/cn_proc.h
++++ b/include/uapi/linux/cn_proc.h
+@@ -27,7 +27,8 @@
+  */
+ enum proc_cn_mcast_op {
+ 	PROC_CN_MCAST_LISTEN = 1,
+-	PROC_CN_MCAST_IGNORE = 2
++	PROC_CN_MCAST_IGNORE = 2,
++	PROC_CN_MCAST_NOTIFY = 3
+ };
+ 
+ #define PROC_EVENT_ALL (PROC_EVENT_FORK | PROC_EVENT_EXEC | PROC_EVENT_UID |  \
+@@ -65,6 +66,7 @@ enum proc_cn_event {
+ struct proc_input {
+ 	enum proc_cn_mcast_op mcast_op;
+ 	enum proc_cn_event event_type;
++	__u32 uexit_code;
+ };
+ 
+ static inline enum proc_cn_event valid_event(enum proc_cn_event ev_type)
+@@ -151,6 +153,7 @@ struct proc_event {
+ 			__u32 exit_code, exit_signal;
+ 			__kernel_pid_t parent_pid;
+ 			__kernel_pid_t parent_tgid;
++			char           comm[16];
+ 		} exit;
+ 
+ 	} event_data;
 -- 
 2.46.0
 
