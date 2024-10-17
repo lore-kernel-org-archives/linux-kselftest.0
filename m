@@ -1,324 +1,346 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B981D63E6;
-	Thu, 17 Oct 2024 08:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729155560; cv=none; b=L9G815aUT2xrkY/SXtMORI9+r+wRDSi5VsdmD39U/v7+rrfEUAzX8EGynVFamUbDAu4GmuwDxNzPGDylln+sEH/S/V3WkXeA23UpXtxpNI6nJHvA6dMQbsGgBkseVS4M8ZLVP2V467zRanUNyf0hl67BaJdqWzt4JhCHs9fUS0o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729155560; c=relaxed/simple;
-	bh=gJhvlJnq8dFTPHfGW9ESvjuesnJAYBifZP+PHZbxdKI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S0rcf/QhtQxYheiIFVpgsZ3b9sN6JfK42yfiDOG6uB7TNHLZZWM0DcFRfHlYygM6ekiD811+v72M4JHcoDKSQqH5d6l/dYQ+2K0f7ulQ0AKuYl1sxQyd3KSn/gIhrl8fR6RIGniqH3i57TWRuZaPP7jUT2K0rBdLTEoumcTsH08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=QN3IC5bq; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B771D2B0F;
+	Thu, 17 Oct 2024 09:46:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729158406; cv=fail; b=i7P/0zwAi/qLZ2Lad/jd4hT41no7VdQ7KQOD4EszRxsO+GQrNr5s6iTJPBLthjqyUVhQ6Z2scX5xAdT79GNuLV/ESRehmFJceE39dhHenbwiSOyJkMSLCZHFxbortXIMe2AHHfdSPW0mno605AasM9lQK6dzpUTL3N0Jjn6RnFc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729158406; c=relaxed/simple;
+	bh=AnIQ5Fyv+RZYZLgaaUxhKOrAIBzBsKQQBQIsvgqaITE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=XiNNHzh3yulqZ1Ps1VkmzrfSJy1HooJwVtLmjZJtk7qdJt0GlmsYiNKo8P0AzmxC6iHC4Ch2+hLnzU2TUprjCwCvCX/ZoKghy8BAk7nKfVxwQ4ibQlR8PClWPl/IxFRb3DrypaQcQ1rJlcBVie4Ol87A47adSSqV4VwLZguUU4Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=m7o/uGqd; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=GioODUlR; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="QN3IC5bq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
-	Content-Type; bh=MEcogBKGnF5OFql5xBOOEvBxjmUMJdyno0Kir1D6Xqw=;
-	b=QN3IC5bqPAqiRYtxxuhtRfUdYTyZF1v/RihQUUPSAigVmPf8rXFvGsC3xbM9xr
-	z9VMJWoRmG7hmMaPygAvI01ip3dgvqk4x0vfGWQc6EFc9DejmRpBGdmbvw/l0RVn
-	zv/3PfKef1aEnIvkmfiKRMwq1hHeBdZgTLHCV6Ojd6lbs=
-Received: from [10.42.12.92] (unknown [111.48.69.246])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgCnNyzJ0RBnQOslAg--.55500S2;
-	Thu, 17 Oct 2024 16:58:51 +0800 (CST)
-Message-ID: <43d6a661-b28a-4318-977c-66a4e7593aea@163.com>
-Date: Thu, 17 Oct 2024 16:58:49 +0800
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="m7o/uGqd";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="GioODUlR"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49H9Mb6c017399;
+	Thu, 17 Oct 2024 09:46:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=DaUZkKOjs/QdRJo14Y
+	d0aNxKpYIC8Blz22hqqtMgDMA=; b=m7o/uGqd7nLq8F/xz5ocaxT37pIqSrmLkL
+	dmod5icFbADe20M3siM5Yb2Ik7f54lNtoR9VLQVkLcy0T8m//CZzx9gSKvqN7MTO
+	yrPScK7JfgPg9yDdmMi+0y1TN8srL/EGfu7hs3ctBWFAl30Xpurt3F7DPnkjrNXP
+	tQh2FDD1xh6ZEWIB/1JhNgjgLr+s5NrEuQvRzf9vwkX5z70lN5WI279I3lGFhrTp
+	p1JB0vNTupKrXUGXf6rHEAiLyCVzpN46dnzGLY3v9j5nucTc60KCUrQUlojovEcV
+	ewqlhtGIphqAV0uSEoWVjhRYaHht12hhmHXmbyOe5AlGcaLrqiUg==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427fw2p1qa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 17 Oct 2024 09:46:17 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49H8GFmG011105;
+	Thu, 17 Oct 2024 09:46:16 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjgadw6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 17 Oct 2024 09:46:16 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=i8p/TL0qsJjUxkE2ofzvvoLgWkhdPtq59lXPgjtR9i1cT2PiqSkacSkWEuHcdQ/Uj3w0aZg8THSBw3P0juaE5vmwEKkGYD7wzMhYeHfLZzQkgVMwktCHztTC81piTBlb8ne+L/DEPeF1hOJF4FJ/Oo3EJnwJani+r0j1liSnhmw1U1SyqzCdrDOb9J9hX1MKf4LZh4GwVkKCGrsviLNTfaaU+CKz5OkEAzWk0BQDOVSwDrMaTetsFKWVeh7j8M+qzOz1b+MtCWAu7LozC9ENLlZGsdSnYjjLwetU2IER3+INz/DWuvR55bQ66/+s+CNQ/HQ1LaTKHYjZocS2vtM8Mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DaUZkKOjs/QdRJo14Yd0aNxKpYIC8Blz22hqqtMgDMA=;
+ b=yRVxcdly8kGGW63bHdCYBuEYk+Z5CDcfm3JI1sGz8/BwlWjq8A8GALUtakYIA/Eyv4p1ex7F+cSf0HAZHUG3AzzXrgvhIz2mv73hC3WKgGmQ7NHFQ3YBmEJmeHOtT0IN9bP+HuNHgTX6NjSPCzlgVHsnyiLGn7045fUledjgC4+uh0UZaKV+oochenulVdl8UqkLFE90yUJ+tuVu6DbRzazMyuUYDI0c5n+vAV5D+7UP7xwHE650oj1q8Z8yHBYOgq0Ktv7RtLOqTNo9EN2XHZDpn01sdW6iyOuc4XV1yQcg78G+Fc2msUNC4mSmOkGvqMtbDFebImkh0byMzdQTsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DaUZkKOjs/QdRJo14Yd0aNxKpYIC8Blz22hqqtMgDMA=;
+ b=GioODUlRfTKkZpWTbDzNr4/BmENLYkNV7mhd444KEgE2yWsPxieEiT6EWeYhiYkIljSs51P8Jengc2HvqPNAxrf6XxTZndoYuELLYvsVLWNRo2M+OOzDgdmsIIM5+rtswYN449GoagbsltQFI0zB3J5qGMjfWnFGdtGX/YwnQ20=
+Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
+ by CO1PR10MB4516.namprd10.prod.outlook.com (2603:10b6:303:6e::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Thu, 17 Oct
+ 2024 09:46:14 +0000
+Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
+ ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
+ ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8069.016; Thu, 17 Oct 2024
+ 09:46:14 +0000
+Date: Thu, 17 Oct 2024 10:46:10 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: jeffxu@chromium.org
+Cc: akpm@linux-foundation.org, keescook@chromium.org,
+        torvalds@linux-foundation.org, usama.anjum@collabora.com,
+        corbet@lwn.net, Liam.Howlett@oracle.com, jeffxu@google.com,
+        jorgelo@chromium.org, groeck@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com, sroettger@google.com,
+        pedro.falcato@gmail.com, linux-hardening@vger.kernel.org,
+        willy@infradead.org, gregkh@linuxfoundation.org, deraadt@openbsd.org,
+        surenb@google.com, merimus@google.com, rdunlap@infradead.org
+Subject: Re: [PATCH] munmap sealed memory cause memory to split (bug)
+Message-ID: <ac11e4c4-a1df-4d39-b7d1-ed9ebd65cd16@lucifer.local>
+References: <20241017022627.3112811-1-jeffxu@chromium.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241017022627.3112811-1-jeffxu@chromium.org>
+X-ClientProxiedBy: LO4P123CA0627.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:294::15) To SJ0PR10MB5613.namprd10.prod.outlook.com
+ (2603:10b6:a03:3d0::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: clone3: Use the capget and capset syscall
- directly
-Content-Language: en-US
-To: Shuah Khan <skhan@linuxfoundation.org>, brauner@kernel.org,
- shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- zhouyuhang <zhouyuhang@kylinos.cn>
-References: <20241015105955.126994-1-zhouyuhang1010@163.com>
- <806bee31-d740-49c9-abe0-06820cfa7395@linuxfoundation.org>
- <dea6d512-64c7-4ec1-a99d-6796e434c9a4@163.com>
- <a0944037-e90a-4884-b12f-284b373a0d63@linuxfoundation.org>
-From: zhouyuhang <zhouyuhang1010@163.com>
-In-Reply-To: <a0944037-e90a-4884-b12f-284b373a0d63@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgCnNyzJ0RBnQOslAg--.55500S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxtF18GF45Zr4kJF1kWrW3Wrg_yoWfZw1Upa
-	48CF4YkFs5Xr1xGFyIvwsI9Fn2yFW8XF1xXr1UJ34jvrnI9rn7tF40yFyj9F10939xuw4F
-	va18KFWfuF98AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jafOrUUUUU=
-X-CM-SenderInfo: 52kr35xxkd0warqriqqrwthudrp/1tbiLxF6JmcQO6uaSAABsW
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|CO1PR10MB4516:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1cb07e3-4ad0-48bd-f969-08dcee908a5a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?GzRgFNHkCT+h/5V30hAD8vlNQV8FVVhZwNVabxiIPFlisSG4vnFHCK3XClA8?=
+ =?us-ascii?Q?RSXjHwqOtzplKudsW3UTwejN/YMqPg3MQJTq13JJyMDJ+lM7PUIP/Co0Y9Kd?=
+ =?us-ascii?Q?tPXh3c4txAL/967y4JYAIrSRS+hOaRWOB6RVd2LgpUPFEUIbQEdxq4w2hSVJ?=
+ =?us-ascii?Q?6vjZaIaAj3fao5mAscrTiCIVwPurGBdxBxg/GRQrg7zlGSz7a/L6ny4SIo3a?=
+ =?us-ascii?Q?3AuBPbyGpvZVvw1fR6W5cMoD7MHndfQieyiqiw1C5U2Z2aqMK1+4FS9zPs9k?=
+ =?us-ascii?Q?jDIDwaOk2lpHY9W+ta3SoWQchb14NJii2D0rjAj64rHKuPSrDE0WrkXAdd9z?=
+ =?us-ascii?Q?C1zFG/KjaIfLyi42YWl1iXm0DqXDDzoKhggMBQexx68qex0M8clPubVpnmIm?=
+ =?us-ascii?Q?9hfeOpxVCxum9E/uJb5DapOM/YQJEQr1VlTQCo6VNyOBk6bPfRNySdeaCQGT?=
+ =?us-ascii?Q?Vw70iTk1qyK15HdpSpKti8+RHdjcgwp07UOvI27APgMHhb97b5RuHBvBLQCw?=
+ =?us-ascii?Q?AjAhdc++XV439ep9SxrPZ2+0YUvklz4G+FNG6Q9mJeQzSsxkkqbZm/RfNiZm?=
+ =?us-ascii?Q?DGN6puCfwd4RcMn1sA0ancN5CegMcaq10ev9pnT6T4m/YZNfWhtFKwlwMm7Z?=
+ =?us-ascii?Q?osCKBA9viMiNEVqi0xmRa3ARRunEIIKEh7LMIfQWOqlVtwpBJKVdcUICEBtD?=
+ =?us-ascii?Q?Om6FKmmC9jyczRX/NIXuJMkomQ/RSjZsyrmFoqkytXVycJDEWn/c8ea5ZH+6?=
+ =?us-ascii?Q?5gvE7JHZiT5VUsFEZoQu0guPgyuX1D859Y6f2nUSERstM8SsrLA0ciF44xK2?=
+ =?us-ascii?Q?intizZ43b8eJOnC36BkCHPJTyW4/09yPf423c5ytNVqdfAiqFUr9MP9WB34m?=
+ =?us-ascii?Q?XZ3cFSxheK+4oG7ykLdvtA7CSne0XSRR5qqB4fi1BQP+nRCAowFyCX3cW2hJ?=
+ =?us-ascii?Q?JKQMMviNtJTZMbSdEU6OH/a2bm0AuDydaqxepQ7dDYi2n79gUt9dJHwOYiLo?=
+ =?us-ascii?Q?inldOo36bzjt6jVDRVjnOlW/qevvT1JO8FCQKA+hhX5iyouxRIt4oF45vdkY?=
+ =?us-ascii?Q?LdSMouj/IyRib2YscGBJw8sAxq0DqIDUhZ+xzPSJZkEBjcCo6jjVOpWhAfRO?=
+ =?us-ascii?Q?pqOAvuipjcpKIvjbuPSnzi22qM2USilx3V7Pb96m5Yi/gWA/oueY8E3qVPLe?=
+ =?us-ascii?Q?lpw6BKTZfzYipFM+LgKgJcJ3mqOpoaws+YhJOODlYXO9kuoH6k5XX0lyK0hq?=
+ =?us-ascii?Q?Czl42xJ3+rDR2tiot8kL9kAwfEFTuOVycuYHWozzzeqgl1YQjaaX7IQ1pH0h?=
+ =?us-ascii?Q?EVws6j/NigEVzu99GnOMA7SL?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?O7VVbbFi5KDrJh7WZ3CWmkIDDuPxF3DhaYYsYnh2cCEV5Jw20SksVLNvWJdr?=
+ =?us-ascii?Q?87/pkdwz5gFnzHCnQVUwtFxXDE86pAD0/UMRwZirdlal9BVfhzKbdWfg8T67?=
+ =?us-ascii?Q?obUL8Akk6FSP4r4rvw1QGh3YX9B9TlVm94CgY8lCseWb9jt8pvU8GOHl6c2Y?=
+ =?us-ascii?Q?hQeff6mojq9J2uh+NQLQCZbLUy42trrCwv6eyC0lHhdkjyuIohVkDC6CHB9j?=
+ =?us-ascii?Q?UixBVeWheInlKARQxNPQgvHcdCKcj/Y/Ls425yIVaPXiOte7keimGCLGoeI2?=
+ =?us-ascii?Q?g4V/GAJsOUgwbRWcv09BrteLlzg0uNZ0JXqIA3c0M0vYJTuNiwMHzK0cRo/K?=
+ =?us-ascii?Q?iebEHY+60dowg7eym5hJpMo/zpaITnS+QvsxQ1P4vX2eDku1Ri1GaZ8ReOPX?=
+ =?us-ascii?Q?uUATcS1hODj7c5xD8uMxBz0RkO8mdinsFnkbSSYxQM+eO6JupIRG3iJHlhLD?=
+ =?us-ascii?Q?J9npvBBTvkXu2t4xZFWhntSS9iP6wWfJqHvqUZAd38DU4d0j8YkmJg2ZdCMU?=
+ =?us-ascii?Q?9mNiFn+g186WF3TAoEXz5kpjwyuLDn6GekMDq/3gJCMKOE6Cus3775RTeKds?=
+ =?us-ascii?Q?i0KaEsdRpz3Wkey8tQp1xBu4rGIFCvxK6KxWB31W+eqEtaNglg6o4HszJALr?=
+ =?us-ascii?Q?2IsCSDUbbyfdl+i0U2BrxqVzClRG4j84Qt01w0Zoz0PR7yCz5EETvXfVsvZd?=
+ =?us-ascii?Q?V1xFPKfG7KSuiFLBflb84eou//5xvj5icUCrI+5NXQNGaImOrU58mct9mKcu?=
+ =?us-ascii?Q?sbXKU14KawMHjck7dc7/zcAZvyhQrxFBLu47CvLqrgMsoR7/lwI2qB3q9h/d?=
+ =?us-ascii?Q?eitz6li5p2rZf9RTBQJD7UXbBL6+ELrEsbPqsFNIGlzI4tWG631HWuPA1pNh?=
+ =?us-ascii?Q?2AGpmAvKQdJNFU/hMq1SKWatndqNlewvRyp5ryfTFsFD0I1x/N+1q7UV/c/9?=
+ =?us-ascii?Q?ajE9DChmwuf008rlF1DgozH4Z+sQJordXPEUSgOQlhyaSt2MfazygIXCD3Cx?=
+ =?us-ascii?Q?EcWTq3z7eK+sIjZly0tALc91qDtwwlrJB72W5lhQRsCWTZSw5sEoS4hnkqLB?=
+ =?us-ascii?Q?QKe082NmdYlk+Zr9HgPGlbm60PBJYox2RleypumhYCRV2TfNvPDE8+HYHxfc?=
+ =?us-ascii?Q?TPcSsSen4h+x/s/JIfgzQ0xqkAO07D0g1S+4+UWcVDOKw6/ZqWbxsW0zGz2j?=
+ =?us-ascii?Q?31u4QhKnWVmqiYh8nF+LMrinsvk8lGxxQhyRDDm+/EFobxVuxjLXDjN3S27p?=
+ =?us-ascii?Q?LkkQb2fVDjdjgRJotcxNUhzH6daCxisdTVg7b9q/TUKJ8HcQ1CNMNR70BAgH?=
+ =?us-ascii?Q?v22Jbjz9IqCJTzbiIxkq66AiNm++2Uoa3DJHN17msCuoSi3hl0rGIst+mqeM?=
+ =?us-ascii?Q?QwFPkaomA9aF8ZHO3TLyS6tmsWJmfhpLj/vXm/jk9Maiq11QR79FC7oGwLZX?=
+ =?us-ascii?Q?VbCqpT9FTaSM0+qOF39KcIHktPUODfNtD90z1IMFRINENKIVmnwnbkBmwcYC?=
+ =?us-ascii?Q?/Ow3wQnzulGgmT2c0N78S5A3VsH/WFgTdtWQ/+OPdeHUrm0wGVJ8I1Si6WVQ?=
+ =?us-ascii?Q?tEy760/+7wBYOXth2NOztyKBK+Pw8BgbrUACZ0lQa/32navhmwHwRdsXG8cS?=
+ =?us-ascii?Q?lQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	bu2yNHpwbs9XyjC1R0dRHjnnP58hPRdo+vaNhVTYTe9bGO2EXf+esMw8Y6dQmzbBrPyqNsXjpMzA+1lb2PhtQtrHjlp2HAQnUYvZwTjZLGZ0F1mfTG6HgIeQQJDk6ETiJRRU13g/P33pZJ5p3EooUpEDzhjSXBWhM6nXnk6by26yINvsM3H5zATwmRPgFPU5ft+lD7/2rHTQ5SoiU5/fYs5hgsIU9ez5b90l3SKpcHrh9M//QR0zXHEerGFRe4stuHGC94cIAI9FrYFiZ1cn+jssgR/vxWw8wJ4dZn5ACMOb7nruJiHjmN6Ez1wgqZeIqO9AH+Jqp2D3O52N+exCUzysS0OJAypVJtiKorR+hOzw+vN8uQIMsDg2C5cplnaeLaAsCD6+48Fv215PBotVfUgKgEO8paARLbIq47WfsrQKj0O01lIbj4u0AZTbMQSyK7/DTgZkVye1YSJtGR+LR1LpJPI8EsUl6Qow7hTsIg3bQCDIqTClyXUAm7tNmMqm9obBrM8gUUxwDlHuI9MEiOCoOxme+srXivybByWZCt28zvxVaOSqzTkp4r0PQqlD+OofEiAurvBKwwAra3mHzzs/NPz3xtUjQtkfK8zCHy0=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1cb07e3-4ad0-48bd-f969-08dcee908a5a
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 09:46:14.4792
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fP+FOwpjBZBYSmkXCsVJTUs4x9DT2A4I6K+dAnP3vr7B09VLoFyrOa94eZyFsIc0uTIAJKobZOQSCJWmC0hwGqYSmOUKGFOMtt1svQg2SKA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4516
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-17_09,2024-10-17_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ adultscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410170066
+X-Proofpoint-GUID: cbCJvCUBFglz9VYxG9SjIYGjrdga9746
+X-Proofpoint-ORIG-GUID: cbCJvCUBFglz9VYxG9SjIYGjrdga9746
+
+Another thing about etiquette - sending a barely coherent _failing_ test
+with basically zero explanation as a... patch is NOT how to interact with
+the upstream community.
+
+The sensible, respectful and workable way of doing this is to send
+something like a [DISCUSSION] or something and say 'hey guys I think I
+found a bug' with an explanation and a test patch attached.
+
+A lot of your problems with the community could be resolved by being more
+polite, respectful and taking a step back and breathing and _communicating_
+with us who are here to try to help fix problems.
+
+We are all _extremely_ busy, I am ill today also, so taking the time to try
+to explain problems patiently instead of firing off barely documented
+patches is far more likely to get you good results.
+
+Also you fail to actually say what the problem is, what fails, where yoru
+test fails etc.
+
+Anyway, let's try to decode (please take this as input as to how you should
+try to communicate these things):
 
 
+So we start with a VMA like this:
 
-在 2024/10/17 07:10, Shuah Khan 写道:
-> On 10/16/24 03:18, zhouyuhang wrote:
->>
->>
->> 在 2024/10/15 23:31, Shuah Khan 写道:
->>> On 10/15/24 04:59, zhouyuhang wrote:
->>>> From: zhouyuhang <zhouyuhang@kylinos.cn>
->>>>
->>>> The libcap commit aca076443591 ("Make cap_t operations thread safe.")
->>>> added a __u8 mutex at the beginning of the struct _cap_struct, it 
->>>> changes
->>>> the offset of the members in the structure that breaks the assumption
->>>> made in the "struct libcap" definition in 
->>>> clone3_cap_checkpoint_restore.c.
->>>> This will make the test fail. So use the capget and capset syscall
->>>> directly and remove the libcap library dependency like the
->>>> commit 663af70aabb7 ("bpf: selftests: Add helpers to directly use
->>>> the capget and capset syscall") does.
->>>>
->>>> Signed-off-by: zhouyuhang <zhouyuhang@kylinos.cn>
->>>> ---
->>>>   tools/testing/selftests/clone3/Makefile       |  1 -
->>>>   .../clone3/clone3_cap_checkpoint_restore.c    | 53 
->>>> ++++++++-----------
->>>>   .../selftests/clone3/clone3_cap_helpers.h     | 23 ++++++++
->>>>   3 files changed, 44 insertions(+), 33 deletions(-)
->>>>   create mode 100644 
->>>> tools/testing/selftests/clone3/clone3_cap_helpers.h
->>>>
->>>> diff --git a/tools/testing/selftests/clone3/Makefile 
->>>> b/tools/testing/selftests/clone3/Makefile
->>>> index 84832c369a2e..59d26e8da8d2 100644
->>>> --- a/tools/testing/selftests/clone3/Makefile
->>>> +++ b/tools/testing/selftests/clone3/Makefile
->>>> @@ -1,6 +1,5 @@
->>>>   # SPDX-License-Identifier: GPL-2.0
->>>>   CFLAGS += -g -std=gnu99 $(KHDR_INCLUDES)
->>>> -LDLIBS += -lcap
->>>>     TEST_GEN_PROGS := clone3 clone3_clear_sighand clone3_set_tid \
->>>>       clone3_cap_checkpoint_restore
->>>> diff --git 
->>>> a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c 
->>>> b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
->>>> index 3c196fa86c99..242088eeec88 100644
->>>> --- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
->>>> +++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
->>>> @@ -15,7 +15,6 @@
->>>>   #include <stdio.h>
->>>>   #include <stdlib.h>
->>>>   #include <stdbool.h>
->>>> -#include <sys/capability.h>
->>>>   #include <sys/prctl.h>
->>>>   #include <sys/syscall.h>
->>>>   #include <sys/types.h>
->>>> @@ -26,6 +25,7 @@
->>>>     #include "../kselftest_harness.h"
->>>>   #include "clone3_selftests.h"
->>>> +#include "clone3_cap_helpers.h"
->>>>     static void child_exit(int ret)
->>>>   {
->>>> @@ -87,47 +87,36 @@ static int test_clone3_set_tid(struct 
->>>> __test_metadata *_metadata,
->>>>       return ret;
->>>>   }
->>>>   -struct libcap {
->>>> -    struct __user_cap_header_struct hdr;
->>>> -    struct __user_cap_data_struct data[2];
->>>> -};
->>>> -
->>>>   static int set_capability(void)
->>>>   {
->>>> -    cap_value_t cap_values[] = { CAP_SETUID, CAP_SETGID };
->>>> -    struct libcap *cap;
->>>> -    int ret = -1;
->>>> -    cap_t caps;
->>>> -
->>>> -    caps = cap_get_proc();
->>>> -    if (!caps) {
->>>> -        perror("cap_get_proc");
->>>> +    struct __user_cap_data_struct data[2];
->>>> +    struct __user_cap_header_struct hdr = {
->>>> +        .version = _LINUX_CAPABILITY_VERSION_3,
->>>> +    };
->>>> +    __u32 cap0 = 1 << CAP_SETUID | 1 << CAP_SETGID;
->>>> +    __u32 cap1 = 1 << (CAP_CHECKPOINT_RESTORE - 32);
->>>> +    int ret;
->>>> +
->>>> +    ret = capget(&hdr, data);
->>>> +    if (ret) {
->>>> +        perror("capget");
->>>>           return -1;
->>>>       }
->>>>         /* Drop all capabilities */
->>>> -    if (cap_clear(caps)) {
->>>> -        perror("cap_clear");
->>>> -        goto out;
->>>> -    }
->>>> +    memset(&data, 0, sizeof(data));
->>>>   -    cap_set_flag(caps, CAP_EFFECTIVE, 2, cap_values, CAP_SET);
->>>> -    cap_set_flag(caps, CAP_PERMITTED, 2, cap_values, CAP_SET);
->>>> +    data[0].effective |= cap0;
->>>> +    data[0].permitted |= cap0;
->>>>   -    cap = (struct libcap *) caps;
->>>> +    data[1].effective |= cap1;
->>>> +    data[1].permitted |= cap1;
->>>>   -    /* 40 -> CAP_CHECKPOINT_RESTORE */
->>>> -    cap->data[1].effective |= 1 << (40 - 32);
->>>> -    cap->data[1].permitted |= 1 << (40 - 32);
->>>> -
->>>> -    if (cap_set_proc(caps)) {
->>>> -        perror("cap_set_proc");
->>>> -        goto out;
->>>> +    ret = capset(&hdr, data);
->>>> +    if (ret) {
->>>> +        perror("capset");
->>>> +        return -1;
->>>>       }
->>>> -    ret = 0;
->>>> -out:
->>>> -    if (cap_free(caps))
->>>> -        perror("cap_free");
->>>>       return ret;
->>>>   }
->>>>   diff --git a/tools/testing/selftests/clone3/clone3_cap_helpers.h 
->>>> b/tools/testing/selftests/clone3/clone3_cap_helpers.h
->>>> new file mode 100644
->>>> index 000000000000..3fa59ef68fb8
->>>> --- /dev/null
->>>> +++ b/tools/testing/selftests/clone3/clone3_cap_helpers.h
->>>> @@ -0,0 +1,23 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>> +#ifndef __CLONE3_CAP_HELPERS_H
->>>> +#define __CLONE3_CAP_HELPERS_H
->>>> +
->>>> +#include <linux/capability.h>
->>>> +
->>>> +/*
->>>> + * Compatible with older version
->>>> + * header file without defined
->>>> + * CAP_CHECKPOINT_RESTORE.
->>>> + */
->>>> +#ifndef CAP_CHECKPOINT_RESTORE
->>>> +#define CAP_CHECKPOINT_RESTORE 40
->>>> +#endif
->>>> +
->>>> +/*
->>>> + * Removed the libcap library dependency.
->>>> + * So declare them here directly.
->>>> + */
->>>> +int capget(cap_user_header_t header, cap_user_data_t data);
->>>> +int capset(cap_user_header_t header, const cap_user_data_t data);
->>>
->>> Sorry you haven't addressed my comments on your v1 yet.
->>>
->>> I repeat that this is not the right direction to define system
->>> calls locally.
->>>
->>
->> I got it. I am willing to modify the code so that syscalls are not 
->> defined in local files,
->> but this would require including sys/capability.h which would not 
->> remove the
->> dependency on the libcap library. So, should we directly use syscalls 
->> or use the
->> libcap library function in the "set_capability" function, or do you 
->> have a better way.
->> I'd like to refer to your advice.
->>
->>> Try this:
->>>
->>> Run make headers in the kernel repo.
->>> Build without making any changes.
->>> Then add you changes and add linux/capability.h to include files
->>>
->>> Tell me what happens.
->>>
->>> thanks,
->>> -- Shuah
->>
->> I tried this, here are my steps.
->>
->> Firstly, I ran 'make headers' in the kernel repo and it was successful.
->> Then I wasn't quite sure which path you were referring to as' build ',
+012345678901
+xxxxxxxxxxxx
+
+We then seal the middle, starting at offset 4:
+
+012345678901
+xxxx****xxxx
+
+This sets the VM_SEALED flag in the middle and splits VMAs resulting in 3
+VMAs.
+
+We then attempt to unmap 4 pages from offset 2, but this fails, as
+expected.
+
+012345678901
+xxxx****xxxx
+  |--| fail
+
+We then attempt to unmap 4 pages from offset 6, but this fails, as
+expected.
+
+012345678901
+xxxx****xxxx
+      |--| fail
+
+At each stage we should observe 4 VMAs.
+
+Are you suggesting there is a larger unexpected split? Where? Under what
+circumstances?
+
+Let's figure out if there's a problem here _together_.
+
+On Thu, Oct 17, 2024 at 02:26:27AM +0000, jeffxu@chromium.org wrote:
+> From: Jeff Xu <jeffxu@google.com>
 >
-> Sorry if what I said wasn't clear:
+> It appears there is a regression on the latest mm,
+> when munmap sealed memory, it can cause unexpected VMA split.
+> E.g. repro use this test.
+> ---
+>  tools/testing/selftests/mm/mseal_test.c | 76 +++++++++++++++++++++++++
+>  1 file changed, 76 insertions(+)
 >
-> - This test depends on libcap and yes you will have to install it.
-> - Run ake headers in the kernel repo.
-> - Build the test without your patch (changes)
-> - If you don't have libcap, the test build will fail
-> - Install libcap
-> - Build and run.
+> diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+> index fa74dbe4a684..0af33e13b606 100644
+> --- a/tools/testing/selftests/mm/mseal_test.c
+> +++ b/tools/testing/selftests/mm/mseal_test.c
+> @@ -1969,6 +1969,79 @@ static void test_madvise_filebacked_was_writable(bool seal)
+>  	REPORT_TEST_PASS();
+>  }
 >
-> Looks like you have done the above. Now:
+> +static void test_munmap_free_multiple_ranges_with_split(bool seal)
+> +{
+> +	void *ptr;
+> +	unsigned long page_size = getpagesize();
+> +	unsigned long size = 12 * page_size;
+> +	int ret;
+> +	int prot;
+> +
+> +	setup_single_address(size, &ptr);
+> +	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
+> +
+> +	/* seal the middle 4 page */
+> +	if (seal) {
+> +		ret = sys_mseal(ptr + 4 * page_size, 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(!ret);
+> +
+> +		size = get_vma_size(ptr, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +
+> +		size = get_vma_size(ptr +  4 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +
+> +		size = get_vma_size(ptr +  8 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +	}
+> +
+> +	/* munmap 4  pages from the third page */
+> +	ret = sys_munmap(ptr + 2 * page_size, 4 * page_size);
+> +	if (seal) {
+> +		FAIL_TEST_IF_FALSE(ret);
+> +		FAIL_TEST_IF_FALSE(errno == EPERM);
+> +
+> +		size = get_vma_size(ptr, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +
+> +		size = get_vma_size(ptr +  4 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +
+> +		size = get_vma_size(ptr +  8 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +	} else
+> +		FAIL_TEST_IF_FALSE(!ret);
+> +
+> +	/* munmap 4 pages from the sealed page */
+> +	ret = sys_munmap(ptr + 6 * page_size, 4 * page_size);
+> +	if (seal) {
+> +		FAIL_TEST_IF_FALSE(ret);
+> +		FAIL_TEST_IF_FALSE(errno == EPERM);
+> +
+> +		size = get_vma_size(ptr + 4 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+
+This is repeated below, presumably you mean to do size = get_vma_size(ptr,
+&prot) here?
+
+> +
+> +		size = get_vma_size(ptr +  4 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +
+> +		size = get_vma_size(ptr +  8 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +	} else
+> +		FAIL_TEST_IF_FALSE(!ret);
+> +
+> +	REPORT_TEST_PASS();
+> +}
+> +
+> +
+>  int main(int argc, char **argv)
+>  {
+>  	bool test_seal = seal_support();
+> @@ -2099,5 +2172,8 @@ int main(int argc, char **argv)
+>  	test_madvise_filebacked_was_writable(false);
+>  	test_madvise_filebacked_was_writable(true);
 >
-> - Add your patch without the local capget() and capset()
->   and without removing
-
-It will generate the following warning but can be compiled successfully,
-because my patch only includes linux/capability.h and removes the local 
-capget() and capset().
-
-CC       clone3_cap_checkpoint_restore
-clone3_cap_checkpoint_restore.c: In function ‘set_capability’:
-clone3_cap_checkpoint_restore.c:105:8: warning: implicit declaration of 
-function ‘capget’ [-Wimplicit-function-declaration]
-105 |  ret = capget(&hdr, data);
-|        ^~~~~~
-clone3_cap_checkpoint_restore.c:120:8: warning: implicit declaration of 
-function ‘capset’ [-Wimplicit-function-declaration]
-120 |  ret = capset(&hdr, data);
-
+> +	test_munmap_free_multiple_ranges_with_split(false);
+> +	test_munmap_free_multiple_ranges_with_split(true);
+> +
+>  	ksft_finished();
+>  }
+> --
+> 2.47.0.rc1.288.g06298d1525-goog
 >
->> so I compiled and installed libcap, and also compiled test, all of 
->> which were successful.
->
-> Why do you need to compile libcap? Is it because this latest
-> change isn't available to install from the distro you are using?
-
-No, I just didn't fully understand the path you were referring to as 
-"build",
-so I compiled libcap as well, which wasn't really necessary.
-
->
->> Afterwards, I applied my patch and the test was successfully built 
->> and running.
->> I guess what you're trying to express may be that these system calls 
->> have already
->> been defined in sys/capability, and those defined in the local file 
->> are duplicated with it.
->
-> Correct. You don't need the local defines and in fact you should not
-> define them locally.
->
->> So I included sys/capability.h and linux/capability.h and defined the 
->> system calls in the test,
->> but there were no errors.
->
-> Please don't define system calls locally. What happens if you don't?
-
-I know it can be successfully compiled without any warnings.
-Because I added sys/capability.h here, which was not included earlier.
-
-What I want to express is that I tested that defining them again in the
-local file would not cause compilation errors, but I know this is 
-incorrect,
-so I will remove them and modify the test to make it pass.
-
-Let's go back to this code.
-I think there may be the following solutions to modify this code on the 
-basis of removing local system calls:
-
-1. Includes linux/capability.h, using capget and capset, but this will 
-result in compilation warnings.
-2. Includes sys/capability.h, using capget and capset.
-3. Includes sys/capability.h, using libcap library functions.
-
-I tend to use capget and capset, By doing so, test may not need to be 
-maintained again in the future.
-Which of the above solutions do you think is better, and I will refer to 
-your suggestions to modify the code and resend the patch.
-
->
-> thanks,
-> -- Shuah
-
