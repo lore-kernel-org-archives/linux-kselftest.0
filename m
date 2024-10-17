@@ -1,346 +1,227 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2074.outbound.protection.outlook.com [40.107.243.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B771D2B0F;
-	Thu, 17 Oct 2024 09:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81ADE1D6DD1;
+	Thu, 17 Oct 2024 09:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.74
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729158406; cv=fail; b=i7P/0zwAi/qLZ2Lad/jd4hT41no7VdQ7KQOD4EszRxsO+GQrNr5s6iTJPBLthjqyUVhQ6Z2scX5xAdT79GNuLV/ESRehmFJceE39dhHenbwiSOyJkMSLCZHFxbortXIMe2AHHfdSPW0mno605AasM9lQK6dzpUTL3N0Jjn6RnFc=
+	t=1729158433; cv=fail; b=euV1ao20e9f81ExJLqHiQXzyKijOdsMf1kmul+CqvppVpcOkyyucTH2gBPSM8/QwT9oBySMD0DxTSfinegDK9nwVRUxx8EL/1e6noGcOG6wGq4omsErUP+mzqT+r4hLoT1sS1OXs+KauHxZtSo+rMl3//Ro4ToBJsqDRW34wQuc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729158406; c=relaxed/simple;
-	bh=AnIQ5Fyv+RZYZLgaaUxhKOrAIBzBsKQQBQIsvgqaITE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=XiNNHzh3yulqZ1Ps1VkmzrfSJy1HooJwVtLmjZJtk7qdJt0GlmsYiNKo8P0AzmxC6iHC4Ch2+hLnzU2TUprjCwCvCX/ZoKghy8BAk7nKfVxwQ4ibQlR8PClWPl/IxFRb3DrypaQcQ1rJlcBVie4Ol87A47adSSqV4VwLZguUU4Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=m7o/uGqd; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=GioODUlR; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1729158433; c=relaxed/simple;
+	bh=b3xf5P2pCNXQvZysfgNNxHcBUXG9uRp9LoQGr8u8Rao=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NgdLwzU3wD/4w1XuJPAL2BTFuD3+OhJVt8b+2Cff4+/WP3sEdh5QDUMmPIXnPiKbc2gM32qpTljaiJ6lR3IB4A9far9VbIk4g12mO5NlTd4U5s389W46ySsvN3YmDUGDdiRp5BjjqT4cyt1RFZ1aeHDRgfkTFma6vGUMAf9iqcM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uMeb5V1P; arc=fail smtp.client-ip=40.107.243.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="m7o/uGqd";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="GioODUlR"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49H9Mb6c017399;
-	Thu, 17 Oct 2024 09:46:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=DaUZkKOjs/QdRJo14Y
-	d0aNxKpYIC8Blz22hqqtMgDMA=; b=m7o/uGqd7nLq8F/xz5ocaxT37pIqSrmLkL
-	dmod5icFbADe20M3siM5Yb2Ik7f54lNtoR9VLQVkLcy0T8m//CZzx9gSKvqN7MTO
-	yrPScK7JfgPg9yDdmMi+0y1TN8srL/EGfu7hs3ctBWFAl30Xpurt3F7DPnkjrNXP
-	tQh2FDD1xh6ZEWIB/1JhNgjgLr+s5NrEuQvRzf9vwkX5z70lN5WI279I3lGFhrTp
-	p1JB0vNTupKrXUGXf6rHEAiLyCVzpN46dnzGLY3v9j5nucTc60KCUrQUlojovEcV
-	ewqlhtGIphqAV0uSEoWVjhRYaHht12hhmHXmbyOe5AlGcaLrqiUg==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427fw2p1qa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 09:46:17 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49H8GFmG011105;
-	Thu, 17 Oct 2024 09:46:16 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjgadw6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 09:46:16 +0000
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uMeb5V1P"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=i8p/TL0qsJjUxkE2ofzvvoLgWkhdPtq59lXPgjtR9i1cT2PiqSkacSkWEuHcdQ/Uj3w0aZg8THSBw3P0juaE5vmwEKkGYD7wzMhYeHfLZzQkgVMwktCHztTC81piTBlb8ne+L/DEPeF1hOJF4FJ/Oo3EJnwJani+r0j1liSnhmw1U1SyqzCdrDOb9J9hX1MKf4LZh4GwVkKCGrsviLNTfaaU+CKz5OkEAzWk0BQDOVSwDrMaTetsFKWVeh7j8M+qzOz1b+MtCWAu7LozC9ENLlZGsdSnYjjLwetU2IER3+INz/DWuvR55bQ66/+s+CNQ/HQ1LaTKHYjZocS2vtM8Mg==
+ b=ejkTRNqZk2G0c3ro10uNzSC7d/9biEpP87lf+RaIE+RXNI6yN+yZ+Gi/eFcR72/vTu44l/Mr2CtCHvh5OF5+WZClphT4Olt6mg+f7RHL/BUegcy7QLolOUejalW0LzQqwggkquXBe3wv2NWbKYnITNtuQt28DRBxuzJHXxuLK1UycXK8RqKUROXz+fznhfqTH/hnr2XHx50iNGGRwIutMxgoPktHZf/XLSkGfVRCHFlF29EC2SB/Uz2NhiTCkNViYSbhZYPA2JZode3q7/RB7pdHo7D79ntP57gI3zhhmw1/V1A1yBD0T0bIuX3fTXRlAQ7jpTgFs+iqAjdY7xzQTQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DaUZkKOjs/QdRJo14Yd0aNxKpYIC8Blz22hqqtMgDMA=;
- b=yRVxcdly8kGGW63bHdCYBuEYk+Z5CDcfm3JI1sGz8/BwlWjq8A8GALUtakYIA/Eyv4p1ex7F+cSf0HAZHUG3AzzXrgvhIz2mv73hC3WKgGmQ7NHFQ3YBmEJmeHOtT0IN9bP+HuNHgTX6NjSPCzlgVHsnyiLGn7045fUledjgC4+uh0UZaKV+oochenulVdl8UqkLFE90yUJ+tuVu6DbRzazMyuUYDI0c5n+vAV5D+7UP7xwHE650oj1q8Z8yHBYOgq0Ktv7RtLOqTNo9EN2XHZDpn01sdW6iyOuc4XV1yQcg78G+Fc2msUNC4mSmOkGvqMtbDFebImkh0byMzdQTsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ bh=3kUa5X4xhY+Gu2J8Jij+sJKNEuql2LIobzjTcPF6vUQ=;
+ b=QbO7TKFIj0CpUE9qGyBes83JCWubiHMdiYzZH1cuQ+UjoIYsCyMdN7KkX2EZ+dFdlyArNv5/8nQ4bgk+BzlecmPs9ZhlXZfTp1lj+t2gYZkgY/XFUgP7lxLnqWGl3FXhTeqnj903EZiEuAKql3bmt1FXkb4jmdFmK7ipgBT6oUVvYRShmCHiz8Gyn1CtGR58rlcQ0nAW8jmCPJiIvPMaCVbyvPF1A4VpoX1U7BD9o/jemHTeodFLHQT7qTPw48M4rndCYigkoqusUEWkE/ss6vhIRPzy93e+GxgPYUELz50ggGiFL0FRW5bQgwUYTW5XloZ9uSmjlcuudE+OFj+1sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DaUZkKOjs/QdRJo14Yd0aNxKpYIC8Blz22hqqtMgDMA=;
- b=GioODUlRfTKkZpWTbDzNr4/BmENLYkNV7mhd444KEgE2yWsPxieEiT6EWeYhiYkIljSs51P8Jengc2HvqPNAxrf6XxTZndoYuELLYvsVLWNRo2M+OOzDgdmsIIM5+rtswYN449GoagbsltQFI0zB3J5qGMjfWnFGdtGX/YwnQ20=
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
- by CO1PR10MB4516.namprd10.prod.outlook.com (2603:10b6:303:6e::19) with
+ bh=3kUa5X4xhY+Gu2J8Jij+sJKNEuql2LIobzjTcPF6vUQ=;
+ b=uMeb5V1PqG+wwq2dSzg7SgmdXUVn4kFqZbvjC631uG3uWFisgjNPiTRcQfVBuFb5tCrIoUHy8IHR7+EHd6ssutfG9qrTL+qcvHboCvRBwZ0qz75HY+qtxWcIzYvcwdYVbW06sNRsrJxqJCg+PgPqsnyi/DA83sXRXDQgz6XEOnJVB/gYXs/RdpRCNbH44M68a7/g119YYjv8YNVgLZX4bAeGeYnpMLaMeXclDbFLyZ3HMOr2QojAp4EwCXssEHTXXLkOI5JW1e2QBVBuNRiSWqT9d4Px1nJzqkNAq9H47IBtpmOPJWBWgbLARrUOrkRe+L1oFxx3WpECpoasJvCeVw==
+Received: from SA9PR13CA0170.namprd13.prod.outlook.com (2603:10b6:806:28::25)
+ by BY5PR12MB4132.namprd12.prod.outlook.com (2603:10b6:a03:209::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Thu, 17 Oct
- 2024 09:46:14 +0000
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8069.016; Thu, 17 Oct 2024
- 09:46:14 +0000
-Date: Thu, 17 Oct 2024 10:46:10 +0100
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: jeffxu@chromium.org
-Cc: akpm@linux-foundation.org, keescook@chromium.org,
-        torvalds@linux-foundation.org, usama.anjum@collabora.com,
-        corbet@lwn.net, Liam.Howlett@oracle.com, jeffxu@google.com,
-        jorgelo@chromium.org, groeck@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com, sroettger@google.com,
-        pedro.falcato@gmail.com, linux-hardening@vger.kernel.org,
-        willy@infradead.org, gregkh@linuxfoundation.org, deraadt@openbsd.org,
-        surenb@google.com, merimus@google.com, rdunlap@infradead.org
-Subject: Re: [PATCH] munmap sealed memory cause memory to split (bug)
-Message-ID: <ac11e4c4-a1df-4d39-b7d1-ed9ebd65cd16@lucifer.local>
-References: <20241017022627.3112811-1-jeffxu@chromium.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241017022627.3112811-1-jeffxu@chromium.org>
-X-ClientProxiedBy: LO4P123CA0627.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:294::15) To SJ0PR10MB5613.namprd10.prod.outlook.com
- (2603:10b6:a03:3d0::5)
+ 2024 09:47:05 +0000
+Received: from SN1PEPF0002636C.namprd02.prod.outlook.com
+ (2603:10b6:806:28:cafe::20) by SA9PR13CA0170.outlook.office365.com
+ (2603:10b6:806:28::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18 via Frontend
+ Transport; Thu, 17 Oct 2024 09:47:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SN1PEPF0002636C.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8069.17 via Frontend Transport; Thu, 17 Oct 2024 09:47:04 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 17 Oct
+ 2024 02:46:53 -0700
+Received: from fedora.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 17 Oct
+ 2024 02:46:47 -0700
+From: Petr Machata <petrm@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, <netdev@vger.kernel.org>
+CC: <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+	"Benjamin Poirier" <bpoirier@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>,
+	"Vladimir Oltean" <vladimir.oltean@nxp.com>, Ido Schimmel
+	<idosch@nvidia.com>, "Przemek Kitszel" <przemyslaw.kitszel@intel.com>, Petr
+ Machata <petrm@nvidia.com>, Willem de Bruijn <willemb@google.com>,
+	<mlxsw@nvidia.com>
+Subject: [PATCH net-next v2 00/10] selftests: net: Introduce deferred commands
+Date: Thu, 17 Oct 2024 11:45:42 +0200
+Message-ID: <cover.1729157566.git.petrm@nvidia.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|CO1PR10MB4516:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1cb07e3-4ad0-48bd-f969-08dcee908a5a
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002636C:EE_|BY5PR12MB4132:EE_
+X-MS-Office365-Filtering-Correlation-Id: 84002106-a26b-4555-cf09-08dcee90a81b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|7416014|376014|82310400026;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?GzRgFNHkCT+h/5V30hAD8vlNQV8FVVhZwNVabxiIPFlisSG4vnFHCK3XClA8?=
- =?us-ascii?Q?RSXjHwqOtzplKudsW3UTwejN/YMqPg3MQJTq13JJyMDJ+lM7PUIP/Co0Y9Kd?=
- =?us-ascii?Q?tPXh3c4txAL/967y4JYAIrSRS+hOaRWOB6RVd2LgpUPFEUIbQEdxq4w2hSVJ?=
- =?us-ascii?Q?6vjZaIaAj3fao5mAscrTiCIVwPurGBdxBxg/GRQrg7zlGSz7a/L6ny4SIo3a?=
- =?us-ascii?Q?3AuBPbyGpvZVvw1fR6W5cMoD7MHndfQieyiqiw1C5U2Z2aqMK1+4FS9zPs9k?=
- =?us-ascii?Q?jDIDwaOk2lpHY9W+ta3SoWQchb14NJii2D0rjAj64rHKuPSrDE0WrkXAdd9z?=
- =?us-ascii?Q?C1zFG/KjaIfLyi42YWl1iXm0DqXDDzoKhggMBQexx68qex0M8clPubVpnmIm?=
- =?us-ascii?Q?9hfeOpxVCxum9E/uJb5DapOM/YQJEQr1VlTQCo6VNyOBk6bPfRNySdeaCQGT?=
- =?us-ascii?Q?Vw70iTk1qyK15HdpSpKti8+RHdjcgwp07UOvI27APgMHhb97b5RuHBvBLQCw?=
- =?us-ascii?Q?AjAhdc++XV439ep9SxrPZ2+0YUvklz4G+FNG6Q9mJeQzSsxkkqbZm/RfNiZm?=
- =?us-ascii?Q?DGN6puCfwd4RcMn1sA0ancN5CegMcaq10ev9pnT6T4m/YZNfWhtFKwlwMm7Z?=
- =?us-ascii?Q?osCKBA9viMiNEVqi0xmRa3ARRunEIIKEh7LMIfQWOqlVtwpBJKVdcUICEBtD?=
- =?us-ascii?Q?Om6FKmmC9jyczRX/NIXuJMkomQ/RSjZsyrmFoqkytXVycJDEWn/c8ea5ZH+6?=
- =?us-ascii?Q?5gvE7JHZiT5VUsFEZoQu0guPgyuX1D859Y6f2nUSERstM8SsrLA0ciF44xK2?=
- =?us-ascii?Q?intizZ43b8eJOnC36BkCHPJTyW4/09yPf423c5ytNVqdfAiqFUr9MP9WB34m?=
- =?us-ascii?Q?XZ3cFSxheK+4oG7ykLdvtA7CSne0XSRR5qqB4fi1BQP+nRCAowFyCX3cW2hJ?=
- =?us-ascii?Q?JKQMMviNtJTZMbSdEU6OH/a2bm0AuDydaqxepQ7dDYi2n79gUt9dJHwOYiLo?=
- =?us-ascii?Q?inldOo36bzjt6jVDRVjnOlW/qevvT1JO8FCQKA+hhX5iyouxRIt4oF45vdkY?=
- =?us-ascii?Q?LdSMouj/IyRib2YscGBJw8sAxq0DqIDUhZ+xzPSJZkEBjcCo6jjVOpWhAfRO?=
- =?us-ascii?Q?pqOAvuipjcpKIvjbuPSnzi22qM2USilx3V7Pb96m5Yi/gWA/oueY8E3qVPLe?=
- =?us-ascii?Q?lpw6BKTZfzYipFM+LgKgJcJ3mqOpoaws+YhJOODlYXO9kuoH6k5XX0lyK0hq?=
- =?us-ascii?Q?Czl42xJ3+rDR2tiot8kL9kAwfEFTuOVycuYHWozzzeqgl1YQjaaX7IQ1pH0h?=
- =?us-ascii?Q?EVws6j/NigEVzu99GnOMA7SL?=
+	=?us-ascii?Q?JTh7Fo4XcSu2N7+aso3M6K3NXx0wGp8Lvl3yj2L6H836u2JrR/kaqri+xb0D?=
+ =?us-ascii?Q?gTLkx8QQOOzONHbSoHR7TNUN9yW7GHmH0VWWOMjRZ91fvnSoakl/Y2kXh6uY?=
+ =?us-ascii?Q?umUUllom39i2KRDn2EU0adNqyx1ArOJ4qZDZSoS6n5xfJ1zNpq3PvUGx9LV1?=
+ =?us-ascii?Q?+bz7Pd8+G4PpljxGgBwW/2sONpfHI6CH84ym59H+uSLiYyPq4ZPj2Ne5flY7?=
+ =?us-ascii?Q?Ctf0cy4PC7yPzvonj1NGF3wemITbN0pELxCcWIq3TKeXtI4MKrCTEcjSs4GN?=
+ =?us-ascii?Q?sbG2O969n3SQdf2APJwRjpfBvo+6YQ1Tww2yBOxhuyrLkPG/gyvnkoidMUGF?=
+ =?us-ascii?Q?4t52rOUlndtwQ0Gdby3JgJpC6iBmKbxULve6OAcC4H8Kriq6gc2D+XmkNXgZ?=
+ =?us-ascii?Q?i7eqrTBE9NVJh97QiggM2Lx62JxRctbNftMDmNijd4ut9j0fWel6lVBP0BbG?=
+ =?us-ascii?Q?Vfe+3CybGazC/RmebhhnRY4LLXO8lWTgN/9h1Pd+/ik87L8S/kmh5gT+O8Al?=
+ =?us-ascii?Q?Z+E2uwKGPnnOXHgEonNAP0zvhzvGNmhVsfCRXsZwMAPehY83Xc6O7nmaEYg4?=
+ =?us-ascii?Q?06nwx5R8d1SdOzfXzEF6700PwtCty+cQVm3zoxTt1cRp4Bu9GJhPhISPjaI7?=
+ =?us-ascii?Q?b3qgi2weQGvNL8MpSRVuK83+0KrUit9tgVF1S508kFxQiuiZDJ6nI8wFU66S?=
+ =?us-ascii?Q?mvtAI9VIO2a9XJD+3r50zWvc6FK2pPXT2OcEExSfwmxxrpN9Tj8wmIkREU/V?=
+ =?us-ascii?Q?vbQoWr5BC/4DFmzEhsLumSSDyqoM1RuyGojeXDbEqm6WiPmZ/YjgVjIt7E6f?=
+ =?us-ascii?Q?LtkgdAtLnkKhFAnm0FbvM+YkNH/wJjjM5mkXG1wAlLBj+6vil0zLF12dhVkl?=
+ =?us-ascii?Q?NApRmhdKRtLugHbMGgnTM4DeaWcpDUAtuqw/JFdH0EzZSxgKuK5kBCzJe2Qc?=
+ =?us-ascii?Q?eCPBTM3u0w3OF3mVhDQAkeakMVA8F9Nqy4kAuzEt1/YquKZrE4G6+EIofsjO?=
+ =?us-ascii?Q?I4Zc9HylNL5M0hZEsYp0Fy9gmJjK70O6H/Cylkm2/maf8eflJiBtQsU3IC9p?=
+ =?us-ascii?Q?q0iFm2sZlJi23XuC/ISHG4fdek53rVZUBJVpNmUn63zeMxdkQBlwjTgb+rhu?=
+ =?us-ascii?Q?Iug4LRBIQGF7GNLSo9Zq9fxHA5rgHD3VyMKf8KR3otXgalSvN7yVCgi0ds9B?=
+ =?us-ascii?Q?I6p4Nk5iqEzYalVL2lo5Cg/RxTntsserbzlftiO6xCQYve+jtqLBcylv8mS8?=
+ =?us-ascii?Q?pXu6AuksCarF7dxUiRrMtvmr0pVA8l1xHFzWxqcsLCPkdu2RYDTCeMu5c2L7?=
+ =?us-ascii?Q?b5SLEcpA4Ae5Rp0pw712uP9V0rLWf7EgkP7bmdaKhptvL66FZCaO4OG6PO6q?=
+ =?us-ascii?Q?BCiAbPOR0D5AqDrL/u0Utw7BWRwWmMz9NS1o1kPGQewZ3CcF6g=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?O7VVbbFi5KDrJh7WZ3CWmkIDDuPxF3DhaYYsYnh2cCEV5Jw20SksVLNvWJdr?=
- =?us-ascii?Q?87/pkdwz5gFnzHCnQVUwtFxXDE86pAD0/UMRwZirdlal9BVfhzKbdWfg8T67?=
- =?us-ascii?Q?obUL8Akk6FSP4r4rvw1QGh3YX9B9TlVm94CgY8lCseWb9jt8pvU8GOHl6c2Y?=
- =?us-ascii?Q?hQeff6mojq9J2uh+NQLQCZbLUy42trrCwv6eyC0lHhdkjyuIohVkDC6CHB9j?=
- =?us-ascii?Q?UixBVeWheInlKARQxNPQgvHcdCKcj/Y/Ls425yIVaPXiOte7keimGCLGoeI2?=
- =?us-ascii?Q?g4V/GAJsOUgwbRWcv09BrteLlzg0uNZ0JXqIA3c0M0vYJTuNiwMHzK0cRo/K?=
- =?us-ascii?Q?iebEHY+60dowg7eym5hJpMo/zpaITnS+QvsxQ1P4vX2eDku1Ri1GaZ8ReOPX?=
- =?us-ascii?Q?uUATcS1hODj7c5xD8uMxBz0RkO8mdinsFnkbSSYxQM+eO6JupIRG3iJHlhLD?=
- =?us-ascii?Q?J9npvBBTvkXu2t4xZFWhntSS9iP6wWfJqHvqUZAd38DU4d0j8YkmJg2ZdCMU?=
- =?us-ascii?Q?9mNiFn+g186WF3TAoEXz5kpjwyuLDn6GekMDq/3gJCMKOE6Cus3775RTeKds?=
- =?us-ascii?Q?i0KaEsdRpz3Wkey8tQp1xBu4rGIFCvxK6KxWB31W+eqEtaNglg6o4HszJALr?=
- =?us-ascii?Q?2IsCSDUbbyfdl+i0U2BrxqVzClRG4j84Qt01w0Zoz0PR7yCz5EETvXfVsvZd?=
- =?us-ascii?Q?V1xFPKfG7KSuiFLBflb84eou//5xvj5icUCrI+5NXQNGaImOrU58mct9mKcu?=
- =?us-ascii?Q?sbXKU14KawMHjck7dc7/zcAZvyhQrxFBLu47CvLqrgMsoR7/lwI2qB3q9h/d?=
- =?us-ascii?Q?eitz6li5p2rZf9RTBQJD7UXbBL6+ELrEsbPqsFNIGlzI4tWG631HWuPA1pNh?=
- =?us-ascii?Q?2AGpmAvKQdJNFU/hMq1SKWatndqNlewvRyp5ryfTFsFD0I1x/N+1q7UV/c/9?=
- =?us-ascii?Q?ajE9DChmwuf008rlF1DgozH4Z+sQJordXPEUSgOQlhyaSt2MfazygIXCD3Cx?=
- =?us-ascii?Q?EcWTq3z7eK+sIjZly0tALc91qDtwwlrJB72W5lhQRsCWTZSw5sEoS4hnkqLB?=
- =?us-ascii?Q?QKe082NmdYlk+Zr9HgPGlbm60PBJYox2RleypumhYCRV2TfNvPDE8+HYHxfc?=
- =?us-ascii?Q?TPcSsSen4h+x/s/JIfgzQ0xqkAO07D0g1S+4+UWcVDOKw6/ZqWbxsW0zGz2j?=
- =?us-ascii?Q?31u4QhKnWVmqiYh8nF+LMrinsvk8lGxxQhyRDDm+/EFobxVuxjLXDjN3S27p?=
- =?us-ascii?Q?LkkQb2fVDjdjgRJotcxNUhzH6daCxisdTVg7b9q/TUKJ8HcQ1CNMNR70BAgH?=
- =?us-ascii?Q?v22Jbjz9IqCJTzbiIxkq66AiNm++2Uoa3DJHN17msCuoSi3hl0rGIst+mqeM?=
- =?us-ascii?Q?QwFPkaomA9aF8ZHO3TLyS6tmsWJmfhpLj/vXm/jk9Maiq11QR79FC7oGwLZX?=
- =?us-ascii?Q?VbCqpT9FTaSM0+qOF39KcIHktPUODfNtD90z1IMFRINENKIVmnwnbkBmwcYC?=
- =?us-ascii?Q?/Ow3wQnzulGgmT2c0N78S5A3VsH/WFgTdtWQ/+OPdeHUrm0wGVJ8I1Si6WVQ?=
- =?us-ascii?Q?tEy760/+7wBYOXth2NOztyKBK+Pw8BgbrUACZ0lQa/32navhmwHwRdsXG8cS?=
- =?us-ascii?Q?lQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	bu2yNHpwbs9XyjC1R0dRHjnnP58hPRdo+vaNhVTYTe9bGO2EXf+esMw8Y6dQmzbBrPyqNsXjpMzA+1lb2PhtQtrHjlp2HAQnUYvZwTjZLGZ0F1mfTG6HgIeQQJDk6ETiJRRU13g/P33pZJ5p3EooUpEDzhjSXBWhM6nXnk6by26yINvsM3H5zATwmRPgFPU5ft+lD7/2rHTQ5SoiU5/fYs5hgsIU9ez5b90l3SKpcHrh9M//QR0zXHEerGFRe4stuHGC94cIAI9FrYFiZ1cn+jssgR/vxWw8wJ4dZn5ACMOb7nruJiHjmN6Ez1wgqZeIqO9AH+Jqp2D3O52N+exCUzysS0OJAypVJtiKorR+hOzw+vN8uQIMsDg2C5cplnaeLaAsCD6+48Fv215PBotVfUgKgEO8paARLbIq47WfsrQKj0O01lIbj4u0AZTbMQSyK7/DTgZkVye1YSJtGR+LR1LpJPI8EsUl6Qow7hTsIg3bQCDIqTClyXUAm7tNmMqm9obBrM8gUUxwDlHuI9MEiOCoOxme+srXivybByWZCt28zvxVaOSqzTkp4r0PQqlD+OofEiAurvBKwwAra3mHzzs/NPz3xtUjQtkfK8zCHy0=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1cb07e3-4ad0-48bd-f969-08dcee908a5a
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 09:46:14.4792
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(7416014)(376014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 09:47:04.1457
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fP+FOwpjBZBYSmkXCsVJTUs4x9DT2A4I6K+dAnP3vr7B09VLoFyrOa94eZyFsIc0uTIAJKobZOQSCJWmC0hwGqYSmOUKGFOMtt1svQg2SKA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4516
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-17_09,2024-10-17_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
- adultscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410170066
-X-Proofpoint-GUID: cbCJvCUBFglz9VYxG9SjIYGjrdga9746
-X-Proofpoint-ORIG-GUID: cbCJvCUBFglz9VYxG9SjIYGjrdga9746
+X-MS-Exchange-CrossTenant-Network-Message-Id: 84002106-a26b-4555-cf09-08dcee90a81b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF0002636C.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4132
 
-Another thing about etiquette - sending a barely coherent _failing_ test
-with basically zero explanation as a... patch is NOT how to interact with
-the upstream community.
+Recently, a defer helper was added to Python selftests. The idea is to keep
+cleanup commands close to their dirtying counterparts, thereby making it
+more transparent what is cleaning up what, making it harder to miss a
+cleanup, and make the whole cleanup business exception safe. All these
+benefits are applicable to bash as well, exception safety can be
+interpreted in terms of safety vs. a SIGINT.
 
-The sensible, respectful and workable way of doing this is to send
-something like a [DISCUSSION] or something and say 'hey guys I think I
-found a bug' with an explanation and a test patch attached.
+This patchset therefore introduces a framework of several helpers that
+serve to schedule cleanups in bash selftests.
 
-A lot of your problems with the community could be resolved by being more
-polite, respectful and taking a step back and breathing and _communicating_
-with us who are here to try to help fix problems.
+- Patch #1 has more details about the primitives being introduced.
+  Patch #2 adds a fallback cleanup() function to lib.sh, because ideally
+  selftests wouldn't need to introduce a dedicated cleanup function at all.
 
-We are all _extremely_ busy, I am ill today also, so taking the time to try
-to explain problems patiently instead of firing off barely documented
-patches is far more likely to get you good results.
+- Patch #3 adds a parameter to stop_traffic(), which makes it possible to
+  start other background processes after the traffic is started without
+  confusing the cleanup.
 
-Also you fail to actually say what the problem is, what fails, where yoru
-test fails etc.
+- Patches #4 to #10 convert a number of selftests.
 
-Anyway, let's try to decode (please take this as input as to how you should
-try to communicate these things):
+  The goal was to convert all tests that use start_traffic / stop_traffic
+  to the defer framework. Leftover traffic generators are a particularly
+  painful sort of a missed cleanup. Normal unfinished cleanups can usually
+  be cleaned up simply by rerunning the test and interrupting it early to
+  let the cleanups run again / in full. This does not work with
+  stop_traffic, because it is only issued at the end of the test case that
+  starts the traffic. At the same time, leftover traffic generators
+  influence follow-up test runs, and are hard to notice.
 
+  The tests were however converted whole-sale, not just their traffic bits.
+  Thus they form a proof of concept of the defer framework.
 
-So we start with a VMA like this:
+v2:
+- Patch #1:
+    - In __defer__schedule(), use ndefers in place of
+      ${__DEFER__NJOBS[$ndefers_key]}
+- Patch #4:
+    - Defer stop_traffic including the sleep. The sleep is actually
+      necessary and v1 was wrong in that it had the sleep prior to the
+      stop_traffic invocation.
 
-012345678901
-xxxxxxxxxxxx
+v1 (from the RFC):
+- Patch #1:
+    - Added the priority defer track
+    - Dropped defer_scoped_fn, added in_defer_scope
+    - Extracted to a separate independent module
+- Patch #2:
+    - Moved this bit to a separate patch
+- Patch #3:
+    - New patch
+- Patch #4 (RED):
+    - Squashed the individual RED-related patches into one
+    - Converted the SW datapath RED selftest as well
+- Patch #5 (TBF):
+    - Fully converted the selftest, not just stop_traffic
+- Patches #6, #7, #8, #9, #10:
+    - New patch
 
-We then seal the middle, starting at offset 4:
+Petr Machata (10):
+  selftests: net: lib: Introduce deferred commands
+  selftests: forwarding: Add a fallback cleanup()
+  selftests: forwarding: lib: Allow passing PID to stop_traffic()
+  selftests: RED: Use defer for test cleanup
+  selftests: TBF: Use defer for test cleanup
+  selftests: ETS: Use defer for test cleanup
+  selftests: mlxsw: qos_mc_aware: Use defer for test cleanup
+  selftests: mlxsw: qos_ets_strict: Use defer for test cleanup
+  selftests: mlxsw: qos_max_descriptors: Use defer for test cleanup
+  selftests: mlxsw: devlink_trap_police: Use defer for test cleanup
 
-012345678901
-xxxx****xxxx
+ .../drivers/net/mlxsw/devlink_trap_policer.sh |  85 ++++----
+ .../drivers/net/mlxsw/qos_ets_strict.sh       | 167 ++++++++--------
+ .../drivers/net/mlxsw/qos_max_descriptors.sh  | 118 ++++-------
+ .../drivers/net/mlxsw/qos_mc_aware.sh         | 146 +++++++-------
+ .../selftests/drivers/net/mlxsw/sch_ets.sh    |  26 ++-
+ .../drivers/net/mlxsw/sch_red_core.sh         | 185 +++++++++---------
+ .../drivers/net/mlxsw/sch_red_ets.sh          |  24 +--
+ .../drivers/net/mlxsw/sch_red_root.sh         |  18 +-
+ tools/testing/selftests/net/forwarding/lib.sh |  13 +-
+ .../selftests/net/forwarding/sch_ets.sh       |   7 +-
+ .../selftests/net/forwarding/sch_ets_core.sh  |  81 +++-----
+ .../selftests/net/forwarding/sch_ets_tests.sh |  14 +-
+ .../selftests/net/forwarding/sch_red.sh       | 103 ++++------
+ .../selftests/net/forwarding/sch_tbf_core.sh  |  91 +++------
+ .../net/forwarding/sch_tbf_etsprio.sh         |   7 +-
+ .../selftests/net/forwarding/sch_tbf_root.sh  |   3 +-
+ tools/testing/selftests/net/lib.sh            |   3 +
+ tools/testing/selftests/net/lib/Makefile      |   2 +-
+ tools/testing/selftests/net/lib/sh/defer.sh   | 115 +++++++++++
+ 19 files changed, 595 insertions(+), 613 deletions(-)
+ create mode 100644 tools/testing/selftests/net/lib/sh/defer.sh
 
-This sets the VM_SEALED flag in the middle and splits VMAs resulting in 3
-VMAs.
+-- 
+2.45.0
 
-We then attempt to unmap 4 pages from offset 2, but this fails, as
-expected.
-
-012345678901
-xxxx****xxxx
-  |--| fail
-
-We then attempt to unmap 4 pages from offset 6, but this fails, as
-expected.
-
-012345678901
-xxxx****xxxx
-      |--| fail
-
-At each stage we should observe 4 VMAs.
-
-Are you suggesting there is a larger unexpected split? Where? Under what
-circumstances?
-
-Let's figure out if there's a problem here _together_.
-
-On Thu, Oct 17, 2024 at 02:26:27AM +0000, jeffxu@chromium.org wrote:
-> From: Jeff Xu <jeffxu@google.com>
->
-> It appears there is a regression on the latest mm,
-> when munmap sealed memory, it can cause unexpected VMA split.
-> E.g. repro use this test.
-> ---
->  tools/testing/selftests/mm/mseal_test.c | 76 +++++++++++++++++++++++++
->  1 file changed, 76 insertions(+)
->
-> diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
-> index fa74dbe4a684..0af33e13b606 100644
-> --- a/tools/testing/selftests/mm/mseal_test.c
-> +++ b/tools/testing/selftests/mm/mseal_test.c
-> @@ -1969,6 +1969,79 @@ static void test_madvise_filebacked_was_writable(bool seal)
->  	REPORT_TEST_PASS();
->  }
->
-> +static void test_munmap_free_multiple_ranges_with_split(bool seal)
-> +{
-> +	void *ptr;
-> +	unsigned long page_size = getpagesize();
-> +	unsigned long size = 12 * page_size;
-> +	int ret;
-> +	int prot;
-> +
-> +	setup_single_address(size, &ptr);
-> +	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
-> +
-> +	/* seal the middle 4 page */
-> +	if (seal) {
-> +		ret = sys_mseal(ptr + 4 * page_size, 4 * page_size);
-> +		FAIL_TEST_IF_FALSE(!ret);
-> +
-> +		size = get_vma_size(ptr, &prot);
-> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
-> +		FAIL_TEST_IF_FALSE(prot == 4);
-> +
-> +		size = get_vma_size(ptr +  4 * page_size, &prot);
-> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
-> +		FAIL_TEST_IF_FALSE(prot == 4);
-> +
-> +		size = get_vma_size(ptr +  8 * page_size, &prot);
-> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
-> +		FAIL_TEST_IF_FALSE(prot == 4);
-> +	}
-> +
-> +	/* munmap 4  pages from the third page */
-> +	ret = sys_munmap(ptr + 2 * page_size, 4 * page_size);
-> +	if (seal) {
-> +		FAIL_TEST_IF_FALSE(ret);
-> +		FAIL_TEST_IF_FALSE(errno == EPERM);
-> +
-> +		size = get_vma_size(ptr, &prot);
-> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
-> +		FAIL_TEST_IF_FALSE(prot == 4);
-> +
-> +		size = get_vma_size(ptr +  4 * page_size, &prot);
-> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
-> +		FAIL_TEST_IF_FALSE(prot == 4);
-> +
-> +		size = get_vma_size(ptr +  8 * page_size, &prot);
-> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
-> +		FAIL_TEST_IF_FALSE(prot == 4);
-> +	} else
-> +		FAIL_TEST_IF_FALSE(!ret);
-> +
-> +	/* munmap 4 pages from the sealed page */
-> +	ret = sys_munmap(ptr + 6 * page_size, 4 * page_size);
-> +	if (seal) {
-> +		FAIL_TEST_IF_FALSE(ret);
-> +		FAIL_TEST_IF_FALSE(errno == EPERM);
-> +
-> +		size = get_vma_size(ptr + 4 * page_size, &prot);
-> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
-> +		FAIL_TEST_IF_FALSE(prot == 4);
-
-This is repeated below, presumably you mean to do size = get_vma_size(ptr,
-&prot) here?
-
-> +
-> +		size = get_vma_size(ptr +  4 * page_size, &prot);
-> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
-> +		FAIL_TEST_IF_FALSE(prot == 4);
-> +
-> +		size = get_vma_size(ptr +  8 * page_size, &prot);
-> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
-> +		FAIL_TEST_IF_FALSE(prot == 4);
-> +	} else
-> +		FAIL_TEST_IF_FALSE(!ret);
-> +
-> +	REPORT_TEST_PASS();
-> +}
-> +
-> +
->  int main(int argc, char **argv)
->  {
->  	bool test_seal = seal_support();
-> @@ -2099,5 +2172,8 @@ int main(int argc, char **argv)
->  	test_madvise_filebacked_was_writable(false);
->  	test_madvise_filebacked_was_writable(true);
->
-> +	test_munmap_free_multiple_ranges_with_split(false);
-> +	test_munmap_free_multiple_ranges_with_split(true);
-> +
->  	ksft_finished();
->  }
-> --
-> 2.47.0.rc1.288.g06298d1525-goog
->
