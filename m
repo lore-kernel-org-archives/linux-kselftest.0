@@ -1,46 +1,46 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D72014F136;
-	Fri, 18 Oct 2024 02:22:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC1A17B505;
+	Fri, 18 Oct 2024 02:22:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729218160; cv=none; b=X4ZmOUemESxpH+H2dE84WEW6tlZ3G63cq97YfSbg+NLvisA4tVCaA71dQEDCNLKDW/z0fwnwfCxdubAmSr7v3/9t+Cg5w6vfAiFvVAGEa+ZFDnrLAX5eebHJjTVSZLcV9WU+GViXqm52Lopmddns2eOn5yupm+tLp97FUFc/Rh8=
+	t=1729218161; cv=none; b=kq6nMSi+fZr8iBeFhqJT/MVmjRFsQ7h4+4yiKLPNg4haYfWUTQSErw3CwpL9uhckDgTKamZr78P2mndxxYJ1wty1O0nivs6p5cBfmTjspCj4vfN3xKMqEoognTzd13sRa5Aa8X5kfIJhWM0+Pre7y0luOg2Q57RoNUBmQk6exS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729218160; c=relaxed/simple;
-	bh=RQwgwAvH1yN3WgCkSsFG9U5A6uInT75JDIW0Wm5kvAI=;
+	s=arc-20240116; t=1729218161; c=relaxed/simple;
+	bh=grJ4cRTsHWngr55kCknBb9PxXbOJjDYnItK5kuxBfjY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BTrnkrptwETctMGJuj1aL4w8edVwG8NTxNtGdlOb3T+v/rVzzE/cpQO97VPiYw2abMK2yL/Emy/JBkJLNp7V75R2cuGmfr9Hsgu5bc0irt6XRZHldQcGLgscTWnIG9bdy2rpVDoSUvK54UYwxJ1w9tyzpnwXTMWJIOMON61rr00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=fail smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C2Y08xqy; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version:Content-Type; b=X24dyMDQPou9zCpqCFOHWH6mUXee9ZGK2rYZ/fEIyidPPkLEO7LWSUUCa5XiXyuJOKE0aRVCmmaCPL+tcJbSsWiRw0EtVFSBzgmvsODxS+DVkKoaNFgFoKR3X1L/pDr2G+pMUaon9Z0lD/VE5Svncv5tuFvTCvoLrbRLJ44ULQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dcVabV6h; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C2Y08xqy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dcVabV6h"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729218159; x=1760754159;
+  t=1729218160; x=1760754160;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RQwgwAvH1yN3WgCkSsFG9U5A6uInT75JDIW0Wm5kvAI=;
-  b=C2Y08xqy8wVF+zc05OlsLN1KdhynfZFccQnzVTReoDKGohzUt6PEEfTp
-   WoeXsTbuxqenQ6sTkw0adT7SSphQQb3OJBiVRTcfGxzEXchPUfDsqmtaW
-   GBgrOMflRQTVZUgk/kgAGVph/2E+Ob5pvm95S5oB8B0FFCIJRFDxfJ/pL
-   tCO2d9BY0/miNj3KzMnu+M8Y/id/FYZOQsujgnBfVQ+55hrTpXBb7hOWH
-   MLqQWx7jNdKDUod3dxmZXK+VfJ7aVF1DErPcaXsVUnxpWjOoBHE8xBdkp
-   6+84km4a7QkET9daz4OpLIh+HFVxmkABY3TGyyPwTgLnL2J4yovKWxYd0
-   g==;
-X-CSE-ConnectionGUID: jODhIKreRj+e9Y+Lg3t5xw==
-X-CSE-MsgGUID: 9GfiYav+QsGFm5aGsCk6mg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="54149673"
+  bh=grJ4cRTsHWngr55kCknBb9PxXbOJjDYnItK5kuxBfjY=;
+  b=dcVabV6hzQGdDxxEQjuzYBLE9NtUvmMk41nyfCsLuEyMJu+/IZsqj01Q
+   E00+KbTqMPAGwkrMQ7qqtzNOWV2ohHiemeAYhNIBplziwF2Pz9vHmx2MS
+   3qDqcDKE6o1FTMiFnDIf67xool9UZqDdWxcFEiyrAO4WpX2ap6bxJInrN
+   2frI0eAtz0YwoOWuiFsGpODtYkjw27PZl/BXB1pvRRvDeb9Tt3bypPBHC
+   kgMJuCgmpTGkaVkDtYep/T6udvUS30NnxGV4ahRsRPNPxKYvFx4kYf+D1
+   ZqUQp/m2TGIgjzWmDHogz/y4uRa/4Nz7kGT58L/9gZ5S3/ASdALHV40B7
+   Q==;
+X-CSE-ConnectionGUID: YAqdUpf9Rm2bmIwWN9UbUA==
+X-CSE-MsgGUID: LVr6YLvkSzK1QrzaxFIiSQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="54149688"
 X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
-   d="scan'208";a="54149673"
+   d="scan'208";a="54149688"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 19:22:37 -0700
-X-CSE-ConnectionGUID: KZhemtkoQjeZ7UzJNcRgeA==
-X-CSE-MsgGUID: seUgJXrCRw+kT529DcBUNw==
+X-CSE-ConnectionGUID: i6obbGvASnKAf/vjFOjfuQ==
+X-CSE-MsgGUID: 7l+1HKJBSHu7Sa2cyq6XpA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
-   d="scan'208";a="78697701"
+   d="scan'208";a="78697708"
 Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
   by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 19:22:36 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
@@ -54,9 +54,9 @@ Cc: maciej.wieczor-retman@intel.com,
 	reinette.chatre@intel.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V3 02/15] selftests/resctrl: Print accurate buffer size as part of MBM results
-Date: Thu, 17 Oct 2024 19:33:17 -0700
-Message-ID: <f7c200b42bf514e587e88e5be6e866fa797eed66.1729218182.git.reinette.chatre@intel.com>
+Subject: [PATCH V3 04/15] selftests/resctrl: Protect against array overrun during iMC config parsing
+Date: Thu, 17 Oct 2024 19:33:19 -0700
+Message-ID: <ff4b8631bc2a8c091f469b37c0b502fdd6bef476.1729218182.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.46.2
 In-Reply-To: <cover.1729218182.git.reinette.chatre@intel.com>
 References: <cover.1729218182.git.reinette.chatre@intel.com>
@@ -66,86 +66,65 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-By default the MBM test uses the "fill_buf" benchmark to keep reading
-from a buffer with size DEFAULT_SPAN while measuring memory bandwidth.
-User space can provide an alternate benchmark or amend the size of
-the buffer "fill_buf" should use.
+The MBM and MBA tests need to discover the event and umask with which to
+configure the performance event used to measure read memory bandwidth.
+This is done by parsing the
+/sys/bus/event_source/devices/uncore_imc_<imc instance>/events/cas_count_read
+file for each iMC instance that contains the formatted
+output: "event=<event>,umask=<umask>"
 
-Analysis of the MBM measurements do not require that a buffer be used
-and thus do not require knowing the size of the buffer if it was used
-during testing. Even so, the buffer size is printed as informational
-as part of the MBM test results. What is printed as buffer size is
-hardcoded as DEFAULT_SPAN, even if the test relied on another benchmark
-(that may or may not use a buffer) or if user space amended the buffer
-size.
+Parsing of cas_count_read contents is done by initializing an array of
+MAX_TOKENS elements with tokens (deliminated by "=,") from this file.
+Remove the unnecessary append of a delimiter to the string needing to be
+parsed. Per the strtok() man page: "delimiter bytes at the start or end of
+the string are ignored". This has no impact on the token placement within
+the array.
 
-Ensure that accurate buffer size is printed when using "fill_buf"
-benchmark and omit the buffer size information if another benchmark
-is used.
+After initialization, the actual event and umask is determined by
+parsing the tokens directly following the "event" and "umask" tokens
+respectively.
 
-Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
+Iterating through the array up to index "i < MAX_TOKENS" but then
+accessing index "i + 1" risks array overrun during the final iteration.
+Avoid array overrun by ensuring that the index used within for
+loop will always be valid.
+
+Fixes: 1d3f08687d76 ("selftests/resctrl: Read memory bandwidth from perf IMC counter and from resctrl file system")
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-Backporting is not recommended. Backporting this fix will be
-a challenge with all the refactoring done since then. This issue
-does not impact default tests and there is no sign that
-folks run these tests with anything but the defaults. This issue is
-also minor since it does not impact actual test runs or results,
-just the information printed during a test run.
-
 Changes since V2:
-- Make user input checks more robust. (Ilpo)
+- Rephrase changelog. (Ilpo)
+- Add Ilpo's Reviewed-by tag.
 
 Changes since V1:
 - New patch.
 ---
- tools/testing/selftests/resctrl/mbm_test.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ tools/testing/selftests/resctrl/resctrl_val.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 6b5a3b52d861..36ae29a03784 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -40,7 +40,8 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
- 	ksft_print_msg("%s Check MBM diff within %d%%\n",
- 		       ret ? "Fail:" : "Pass:", MAX_DIFF_PERCENT);
- 	ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
--	ksft_print_msg("Span (MB): %zu\n", span / MB);
-+	if (span)
-+		ksft_print_msg("Span (MB): %zu\n", span / MB);
- 	ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
- 	ksft_print_msg("avg_bw_resc: %lu\n", avg_bw_resc);
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 70e8e31f5d1a..e88d5ca30517 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -83,13 +83,12 @@ static void get_event_and_umask(char *cas_count_cfg, int count, bool op)
+ 	char *token[MAX_TOKENS];
+ 	int i = 0;
  
-@@ -138,15 +139,26 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
- 		.setup		= mbm_setup,
- 		.measure	= mbm_measure,
- 	};
-+	char *endptr = NULL;
-+	size_t span = 0;
- 	int ret;
+-	strcat(cas_count_cfg, ",");
+ 	token[0] = strtok(cas_count_cfg, "=,");
  
- 	remove(RESULT_FILE_NAME);
+ 	for (i = 1; i < MAX_TOKENS; i++)
+ 		token[i] = strtok(NULL, "=,");
  
-+	if (uparams->benchmark_cmd[0] && strcmp(uparams->benchmark_cmd[0], "fill_buf") == 0) {
-+		if (uparams->benchmark_cmd[1]) {
-+			errno = 0;
-+			span = strtoul(uparams->benchmark_cmd[1], &endptr, 10);
-+			if (errno || *endptr != '\0')
-+				return -errno;
-+		}
-+	}
-+
- 	ret = resctrl_val(test, uparams, uparams->benchmark_cmd, &param);
- 	if (ret)
- 		return ret;
- 
--	ret = check_results(DEFAULT_SPAN);
-+	ret = check_results(span);
- 	if (ret && (get_vendor() == ARCH_INTEL))
- 		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
- 
+-	for (i = 0; i < MAX_TOKENS; i++) {
++	for (i = 0; i < MAX_TOKENS - 1; i++) {
+ 		if (!token[i])
+ 			break;
+ 		if (strcmp(token[i], "event") == 0) {
 -- 
 2.46.2
 
