@@ -1,191 +1,165 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6AC18C327
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 07:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19DE183CB0
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 08:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729237859; cv=none; b=uwXjwa+hGJ+Gp79EqRBIODp2i4MtLz9VwozhK/O5pi1hIyruUw9Yq9/HfELA05lGAW/r+rpoZvUtjV/ZXPvGStbT+zNpWi73/oVXrIR3Z2yP/MRyXmvo9uTiNTA6zF9ilMEoRIkaNl3EiNJ7KBNVPO5KJaaq3KBrCBXWbmt3sug=
+	t=1729239330; cv=none; b=llguEJEDrzSEyV9/3pz5l1jS/OUEI23kBJD9qP6xMca9yfNMjA+2R5W7eFQ61Yt0sP10tIRAXFocWCTuMVBuF4iaoISmXq+aFiVi97GuE55DZ62VAf6D3Ovt9XXLMVXXEIU4CbKWP1eTUjb6ETA+Bm8bnTtk6OXDXndIC7JyyXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729237859; c=relaxed/simple;
-	bh=IWyg8rYth6GF9gle2dn8NkB4boettdMwzDy8yLRiIUg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QmASyEL9qaWrErewkeRoLHlVlxg5xuk7vx9DzevHcLSamg6Gul51Ao6rvyaYINMiwiJFwKegcaQ5HKL9GyZH9axZn3KeBl/9n6gkftoVMSo73q6sJdqm0nfObta8pvOnm556cSlvM6xczZHyHPm+oRJrT0yzdVaUQ6NMn1gR6Kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BpMAK0Ac; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1729239330; c=relaxed/simple;
+	bh=RyCuiX7Z7beQNgjkYjzS1E6I9EFHABI+uLFOdorHDUA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=REATReWz1SjdFQl2w+Sl9/3tTYWcDSlTOLcQnhbzWEcUM7tyofjr8/uAopvkadAebgVNIdG1Z7eVhrjsW2vyuKTzqyBR54PDihXpymPPrfLsmRkAtD8fcJ+iG5uGf2bR8Bq6q65EK2XNwZvu2wsQWPiozWB8cJfgQoCEMItS5IM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SurcIdm6; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BpMAK0Ac"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SurcIdm6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729237856;
+	s=mimecast20190719; t=1729239327;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=fiBOtxNCTMFmvCJm7g5mabgUWliIuWBhC7qyOb4ZSNY=;
-	b=BpMAK0AcJaKyjvmE6RHbtEgLQbuzD2kdAWrC9kWrL3gWpyhLGZOmtlRy9u9nOBaSD/llS1
-	y6uvAZdoS0UtIbnJ22i9B7MQ5fOUImdkTt8B0p3icx4E/Cki2Fzt1QERX/P1PD9DMm/fIK
-	P2Z5gVhDGR3jYoqsxBBvzm3uLAa8kKk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	 in-reply-to:in-reply-to:references:references;
+	bh=yr2YuJLh1oBlVb3LAJ7sYOHk9wkq05eBctRIWz59ZDw=;
+	b=SurcIdm6DneiQRILf//r8UdHEP4CM454HX008sS8QK7o6BpWI7H+8FNQAsrvYseJG+QLiL
+	+O4fKlJQvKWjZs4HNeC9aOG1BF/CkiXu0cswQOGWW6aXUbEWHIErQ0On57ZhFFlSmjOLhe
+	OTUDlk6sAwmo3qamnQ31COJdyiQXMIU=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-246-iEMQThMZOB-hv13OX3TgMw-1; Fri, 18 Oct 2024 03:50:52 -0400
-X-MC-Unique: iEMQThMZOB-hv13OX3TgMw-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4315af466d9so9935165e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 00:50:52 -0700 (PDT)
+ us-mta-692-jZZA-Qq4PeSRD7q_zGjNcA-1; Fri, 18 Oct 2024 04:15:25 -0400
+X-MC-Unique: jZZA-Qq4PeSRD7q_zGjNcA-1
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-7ea9acf089bso1436118a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 01:15:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729237851; x=1729842651;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fiBOtxNCTMFmvCJm7g5mabgUWliIuWBhC7qyOb4ZSNY=;
-        b=isbduPz8Liod0ujXWBTB0/nNtePNZcOYYLfiJRl3zN5Duk7ZHNt9WZ+rETQSRelmuI
-         x/5fF8/ORfrIk246srsfzoDKTy0VVmJlKfq5yT4Gg/dDojO+UpgSDhvghy/G3tGy0vqw
-         2hPsN+Q96FqwjlSuJYKKbp0RWVXfJK/P2ldpS0Ch8JsV2u4lJN8+aXijFvcTP8kvvzF7
-         WEwfPf3hbx8hcx2f38HOznrfVwMvZqhOkgYOywYBH+a5nblHys31lDkBsdhmprDrPgEN
-         Je1/QkOw6kiZfl6MvTrKRc5fc1VyXYQRZVtARYQkm7EPvvX5usTMR5pc+L07wrtvFSGn
-         Dq4g==
-X-Forwarded-Encrypted: i=1; AJvYcCVrpt5NVNMkKyTVl07DKHEqgGKXjZaqVexYmH+KJiOAN3KFRaUcf7IYANroicwW2hIUWl5PUG5HUFPdtH2/0JM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjSljRbowYT8adbXZMYluhAp0X7J9Av+Ru+ZqXzpzrUrnGOtke
-	m7XR5U3SbME73h+pyZoUkEzuiSR3TcRWmlVe7InNWwBBdnCeyVSFQCDmNveLEEfkFdzIxLsa3vU
-	K4vVzltqMiHGFW7riuOcJC+QjtdufeT0YETmu91O9DRh/It0jE28XNaycPCkRv3FDTQ==
-X-Received: by 2002:a05:600c:3592:b0:431:586e:7e7 with SMTP id 5b1f17b1804b1-43161634f28mr9752645e9.1.1729237851128;
-        Fri, 18 Oct 2024 00:50:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEupPpvNMDHtMfaFPMq3ZQBPO4U1Pfe/C/Hylkp0d9xmyO65Fx30HzchvYa6qX1bU+Dwtp9Kw==
-X-Received: by 2002:a05:600c:3592:b0:431:586e:7e7 with SMTP id 5b1f17b1804b1-43161634f28mr9752345e9.1.1729237850657;
-        Fri, 18 Oct 2024 00:50:50 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:2400:68a3:92e0:906f:b69d? (p200300cbc707240068a392e0906fb69d.dip0.t-ipconnect.de. [2003:cb:c707:2400:68a3:92e0:906f:b69d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316067dbedsm19713015e9.7.2024.10.18.00.50.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Oct 2024 00:50:50 -0700 (PDT)
-Message-ID: <257d5578-f256-49cf-affe-6255ff224ed0@redhat.com>
-Date: Fri, 18 Oct 2024 09:50:47 +0200
+        d=1e100.net; s=20230601; t=1729239324; x=1729844124;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yr2YuJLh1oBlVb3LAJ7sYOHk9wkq05eBctRIWz59ZDw=;
+        b=Ml7nwadK4j6Ej2PYuSh8i+GGqtqrDuscSn4HONMCA6WEmRN++KhU0l1Ypj1yQPabes
+         Gx2Ut0IWnSU5k9moRQCdCun3Wa+ORuGT7VcjNwVPw1RN9RLB9ReKW3XQIApG2s9UBJY0
+         VGR6yOzlQJq288J2RCleZLqTlC5F51CovJvjlnE7oNRoNHeG/FkXOyii0E+Jl0c3/lko
+         iPhdE/BNZBX+dVvGWgSvc7pQHBX/G0b567GsV3VFlo63GrBNyx92ppEQ/InPHwHG8frd
+         k4tyVTKDU+09PoJgsrdXrKL8E20/JNePTV5XM3o0ZUsWRXQdo9Nlnl9ItI15+kWRIGbP
+         XJaA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOF/Gw54mYJTSiW6EDOy7CGxCdOobNm7UAT788QpDy83aURgEeCckgpaExktXxCrums+MvxrwPpYMNLiz6d08=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0OwngIp3c0NmeidvCJaKHl0Ph/zDMLW0mfQH2cUgcQDUKKLGx
+	HVcMQLxJDbk6eGZIrgtaWj0uEwVvhOzM4SMl7YyMfySJxdt++hAmz0r51Be0FJDfjNI3Cs0lwS3
+	ZbfKIhFRMazSaBpKkv2pW4iVn+radWpO/HzRgBl6Wrl9nD8MWRqPMh4k8Ev5j96g84Sd59UVZt7
+	YBxdoO+3XK7IZqvGf+PXOXVfRuEzfT1I2fy7O64McR
+X-Received: by 2002:a05:6a21:178a:b0:1d8:aa1d:b30c with SMTP id adf61e73a8af0-1d92c9f8becmr2035164637.1.1729239324399;
+        Fri, 18 Oct 2024 01:15:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGLD3LtPmdn3YgZFunCmr4YCke9ZeVKhkDNBtOgm6i/o4DVa5u2WpwUUag2e6tVVnOKvDE1CSmiKahP3Ex3VII=
+X-Received: by 2002:a05:6a21:178a:b0:1d8:aa1d:b30c with SMTP id
+ adf61e73a8af0-1d92c9f8becmr2035126637.1.1729239323920; Fri, 18 Oct 2024
+ 01:15:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 26/39] KVM: guest_memfd: Track faultability within a
- struct kvm_gmem_private
-To: Patrick Roy <roypat@amazon.co.uk>, Jason Gunthorpe <jgg@nvidia.com>,
- Peter Xu <peterx@redhat.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, tabba@google.com,
- quic_eberman@quicinc.com, rientjes@google.com, fvdl@google.com,
- jthoughton@google.com, seanjc@google.com, pbonzini@redhat.com,
- zhiquan1.li@intel.com, fan.du@intel.com, jun.miao@intel.com,
- isaku.yamahata@intel.com, muchun.song@linux.dev, erdemaktas@google.com,
- vannapurve@google.com, qperret@google.com, jhubbard@nvidia.com,
- willy@infradead.org, shuah@kernel.org, brauner@kernel.org,
- bfoster@redhat.com, kent.overstreet@linux.dev, pvorel@suse.cz,
- rppt@kernel.org, richard.weiyang@gmail.com, anup@brainfault.org,
- haibo1.xu@intel.com, ajones@ventanamicro.com, vkuznets@redhat.com,
- maciej.wieczor-retman@intel.com, pgonda@google.com, oliver.upton@linux.dev,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <1d243dde-2ddf-4875-890d-e6bb47931e40@redhat.com>
- <ZxAfET87vwVwuUfJ@x1n> <20241016225157.GQ3559746@nvidia.com>
- <ZxBRC-v9w7xS0xgk@x1n> <20241016235424.GU3559746@nvidia.com>
- <ZxEmFY1FcrRtylJW@x1n> <20241017164713.GF3559746@nvidia.com>
- <ZxFD3kYfKY0b-qFz@x1n> <20241017171010.GK3559746@nvidia.com>
- <ZxFhTtEs2Mz7Dj-O@x1n> <20241017191829.GA3559746@nvidia.com>
- <2686a5ae-e1e5-48d6-ae4b-31face5284ca@amazon.co.uk>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <2686a5ae-e1e5-48d6-ae4b-31face5284ca@amazon.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241008-rss-v5-0-f3cf68df005d@daynix.com> <20241008-rss-v5-7-f3cf68df005d@daynix.com>
+ <CACGkMEsPNTr3zcstsQGoOiQdCFQ+6EG6cSGiZzNxONsH9Xm=Aw@mail.gmail.com> <4bc7dfaa-a7cd-41f4-a917-e71b5c7241f7@daynix.com>
+In-Reply-To: <4bc7dfaa-a7cd-41f4-a917-e71b5c7241f7@daynix.com>
+From: Jason Wang <jasowang@redhat.com>
+Date: Fri, 18 Oct 2024 16:15:12 +0800
+Message-ID: <CACGkMEtt7a4+gadQt2=3zz+MCUtueuWj+zwaHR_gXCvLg=0PcQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v5 07/10] tun: Introduce virtio-net RSS
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
+	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
+	Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 18.10.24 09:15, Patrick Roy wrote:
-> 
-> 
-> On Thu, 2024-10-17 at 20:18 +0100, Jason Gunthorpe wrote:
->> On Thu, Oct 17, 2024 at 03:11:10PM -0400, Peter Xu wrote:
->>> On Thu, Oct 17, 2024 at 02:10:10PM -0300, Jason Gunthorpe wrote:
->>>>> If so, maybe that's a non-issue for non-CoCo, where the VM object /
->>>>> gmemfd object (when created) can have a flag marking that it's
->>>>> always shared and can never be converted to private for any page
->>>>> within.
->>>>
->>>> What is non-CoCo? Does it include the private/shared concept?
->>>
->>> I used that to represent the possible gmemfd use cases outside confidential
->>> computing.
->>>
->>> So the private/shared things should still be around as fundamental property
->>> of gmemfd, but it should be always shared and no convertion needed for the
->>> whole lifecycle of the gmemfd when marked !CoCo.
->>
->> But what does private mean in this context?
->>
->> Is it just like a bit of additional hypervisor security that the page
->> is not mapped anyplace except the KVM stage 2 and the hypervisor can
->> cause it to become mapped/shared at any time? But the guest has no
->> idea about this?
->>
->> Jason
-> 
-> Yes, this is pretty much exactly what I'm after when I say "non-CoCo".
+On Sat, Oct 12, 2024 at 6:29=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix=
+.com> wrote:
+>
+> On 2024/10/09 17:14, Jason Wang wrote:
+> > On Tue, Oct 8, 2024 at 2:55=E2=80=AFPM Akihiko Odaki <akihiko.odaki@day=
+nix.com> wrote:
+> >>
+> >> RSS is a receive steering algorithm that can be negotiated to use with
+> >> virtio_net. Conventionally the hash calculation was done by the VMM.
+> >> However, computing the hash after the queue was chosen defeats the
+> >> purpose of RSS.
+> >>
+> >> Another approach is to use eBPF steering program. This approach has
+> >> another downside: it cannot report the calculated hash due to the
+> >> restrictive nature of eBPF steering program.
+> >>
+> >> Introduce the code to perform RSS to the kernel in order to overcome
+> >> thse challenges. An alternative solution is to extend the eBPF steerin=
+g
+> >> program so that it will be able to report to the userspace, but I didn=
+'t
+> >> opt for it because extending the current mechanism of eBPF steering
+> >> program as is because it relies on legacy context rewriting, and
+> >> introducing kfunc-based eBPF will result in non-UAPI dependency while
+> >> the other relevant virtualization APIs such as KVM and vhost_net are
+> >> UAPIs.
+> >>
+> >> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> >> ---
+> >>   drivers/net/tap.c           | 11 +++++-
+> >>   drivers/net/tun.c           | 57 ++++++++++++++++++++-------
+> >>   drivers/net/tun_vnet.h      | 96 +++++++++++++++++++++++++++++++++++=
+++++++----
+> >>   include/linux/if_tap.h      |  4 +-
+> >>   include/uapi/linux/if_tun.h | 27 +++++++++++++
+> >>   5 files changed, 169 insertions(+), 26 deletions(-)
+> >>
 
-It's likely not what Peter meant, though.
+[...]
 
-I think there are three scenarios:
+> >> diff --git a/include/uapi/linux/if_tun.h b/include/uapi/linux/if_tun.h
+> >> index d11e79b4e0dc..4887f97500a8 100644
+> >> --- a/include/uapi/linux/if_tun.h
+> >> +++ b/include/uapi/linux/if_tun.h
+> >> @@ -75,6 +75,14 @@
+> >>    *
+> >>    * The argument is a pointer to &struct tun_vnet_hash.
+> >>    *
+> >> + * The argument is a pointer to the compound of the following in orde=
+r if
+> >> + * %TUN_VNET_HASH_RSS is set:
+> >> + *
+> >> + * 1. &struct tun_vnet_hash
+> >> + * 2. &struct tun_vnet_hash_rss
+> >> + * 3. Indirection table
+> >> + * 4. Key
+> >> + *
+> >
+> > Let's try not modify uAPI. We can introduce new ioctl if necessary.
+>
+> 2, 3, and 4 are new additions. Adding a separate ioctl for them means we
+> need to call two ioctls to configure RSS and it is hard to design the
+> interactions with them.
+>
+> For example, if we set TUN_VNET_HASH_RSS with TUNSETVNETHASH before
+> setting struct tun_vnet_hash_rss with another ioctl, tuntap will enable
+> RSS with undefined parameters. Setting struct tun_vnet_hash_rss with
+> TUN_VNET_HASH_RSS unset also sounds unreasnoable.
+>
+> Letting the new ioctl set TUN_VNET_HASH_RSS does not help either.
+> TUNSETVNETHASH still sets the bitmask of allowed hash types so RSS will
+> depend on two ioctls.
 
-(a) Secure CoCo VMs: private is protected by HW
-(b) Semi-secured non-CoCo VMs: private is removed from the directmap
-(c) Non-CoCo VMs: only shared memory
+I meant let's avoid introducing an ioctl with function 1 in one patch,
+and adding 2,3,4 in exactly the same ioctl in the following. It breaks
+the uABI consistency and bisection.
 
-Does that match what you have in mind? Are there other cases?
+We can add all in one patch.
 
--- 
-Cheers,
-
-David / dhildenb
+Thanks
 
