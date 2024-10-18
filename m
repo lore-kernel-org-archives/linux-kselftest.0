@@ -1,46 +1,46 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930B7188713;
-	Fri, 18 Oct 2024 02:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A72C188A3A;
+	Fri, 18 Oct 2024 02:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729218168; cv=none; b=ikgFeelbP3NEsTLQZywAnxYa0cxfRHXcXuq5PLsMuhVC6J6MWQXqu9DJDDwISZjhB3lgcDyH8iLqRfj7uTCP9p41w7GSczrBv1nU2DETJQgRYPeRAxXW7NVylf6j0XQafV4bzD/zs5lJwzOk2Sa+4UrwEYns7vJY88DcOm9Cw4Y=
+	t=1729218170; cv=none; b=cKowjsNuZTAeBRLcFZzqBJcAh52iDMv+/rwUZSjGuGXpS6/omVCCaqr9L7PuSNdYuEYOf1+CVwcUAAA+QbqrvdJHtjeKmi8QuTeVU98Hz+1afkOaj8+rAv6tiEuRh9wpEhEYG68Jbz+akwJLAMcXMPNNPuB0HpGuixpSaNA8+2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729218168; c=relaxed/simple;
-	bh=vSW/xY/u5gQfdaq8Fb5zDhVy9K06adJcO87Sfqnguxo=;
+	s=arc-20240116; t=1729218170; c=relaxed/simple;
+	bh=tI6VohGtESZrrT4HRmtXRzYBMdb1L8lF9wfiL0/qAqs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hs7PBlF8hW6aFPgqA1QeSsaSAgo3i/8vLbtt7x8zMrv2AWZUjIvEEcFz4vLw8xQkLdTZ5pmZkpln+laIQdvBybUbt6dW+5WVysvfi1Q/K+Yq6F7qPZ6nLQdM7iknQ2fr/ive7zD02ZookfFweNeEWZKbRVBW8q7HN7tJ4EjDAWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g/CshZ4c; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version:Content-Type; b=n54ULumjBNuHVjE6JBF31b4+aVK5jT+7zDhRPRSPM9iAiTOl/JXJ2ZGftYRIWFXKg8BQxyCTOB1nt4Y63owt5e3gSRY9PD5Ee5vZtVB1J6P6Dp64VcZXWier808xheGsDcvI4Z8mSkeYB60kb9Y8K9RPSDConekjAh+Z/eRVjcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I5m/kEn+; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g/CshZ4c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I5m/kEn+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729218167; x=1760754167;
+  t=1729218168; x=1760754168;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=vSW/xY/u5gQfdaq8Fb5zDhVy9K06adJcO87Sfqnguxo=;
-  b=g/CshZ4cwTEiw8Yg6zaoWUhizohWTbcUIAtTMzH3KJdQ2koaE4DLgsez
-   m1k6zOjET1vzqk/qtnhAGx/aXTHL9iHru698I1TV9Cu60J75I9Kk5iaeH
-   xPxPVQTk0a04nHIGF5P9X5/tMKy2+Fv+OZc4eTKhBQK+Wr0p40YxXShjo
-   LZ9NNXqrMAqxUcXrfflwVdSiTx+acn97vH6xZ8Q3nCjcVjeZWVOe2JXk7
-   sxAML0oUw8aM9vDKArWWcJXoffkIadrRweoEI+QNLJlj3w7c3SWU3O8T6
-   ufMINBXwC8qG3jPn6a2/26Ymc5N+YY0MuhlT37FBUPt/EoajW5+bCigFY
-   w==;
-X-CSE-ConnectionGUID: 7SUFslUgQ+WDRNjgtydD6A==
-X-CSE-MsgGUID: 0wOlB5wiRoKzEV7vs00uWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="54149721"
+  bh=tI6VohGtESZrrT4HRmtXRzYBMdb1L8lF9wfiL0/qAqs=;
+  b=I5m/kEn+YKUi7HDpEf8nHLXmqThrNhzVG3V7XdhkYjznuNycsnk/nyTk
+   g1iJNfjZFK5klg76Krsa24ZHYQrmuI9BA3eQpX8ImYS0Dxrw+hHYAaNcE
+   e1aoN4qtfc11a0MSn9Jj5Nu7NdLhoTQCG23zJ/uJxEfxySPqigtzJ/coq
+   vyq11M5W1ZXJ22KuFqBb46cvV0zvPWyoor6e5OJPeRXape4FG7eWyrTbX
+   UTD2vCEA/yvYR7/wcDWghsyEQx1L4ldRCQ3pbHJE5q7AD0FTS6wu8P7lf
+   Oh+bivJWyC13Y7N23aslh70trjw+F4kkqkkghVsD5gRIi9cXKJ+iSPqXE
+   Q==;
+X-CSE-ConnectionGUID: jC8tIDWGSTaJCWf0TGfBLQ==
+X-CSE-MsgGUID: 6XWkp42QRWWrvxgEXM4Pig==
+X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="54149722"
 X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
-   d="scan'208";a="54149721"
+   d="scan'208";a="54149722"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 19:22:38 -0700
-X-CSE-ConnectionGUID: MvDR+WAaTJKdlQAxE7Q/xw==
-X-CSE-MsgGUID: snqS7aexSLuXEefTbLjNCQ==
+X-CSE-ConnectionGUID: GrBDgQ+GRG6SZMN4ZY7MLQ==
+X-CSE-MsgGUID: gJquDY6pSuixK+ky74CPTQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
-   d="scan'208";a="78697738"
+   d="scan'208";a="78697744"
 Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
   by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 19:22:37 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
@@ -54,9 +54,9 @@ Cc: maciej.wieczor-retman@intel.com,
 	reinette.chatre@intel.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V3 13/15] selftests/resctrl: Do not compare performance counters and resctrl at low bandwidth
-Date: Thu, 17 Oct 2024 19:33:28 -0700
-Message-ID: <c755b3ed590ea89c095f8890d17113fe25a4c2c2.1729218182.git.reinette.chatre@intel.com>
+Subject: [PATCH V3 15/15] selftests/resctrl: Replace magic constants used as array size
+Date: Thu, 17 Oct 2024 19:33:30 -0700
+Message-ID: <4d4887b0359bfd4094871f34aa8b06e2efee6043.1729218182.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.46.2
 In-Reply-To: <cover.1729218182.git.reinette.chatre@intel.com>
 References: <cover.1729218182.git.reinette.chatre@intel.com>
@@ -69,87 +69,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The MBA test incrementally throttles memory bandwidth, each time
-followed by a comparison between the memory bandwidth observed
-by the performance counters and resctrl respectively.
+The Memory Bandwidth Allocation (MBA) test iterates through all possible
+MBA allocations, from 10% (ALLOCATION_MIN) to 100% (ALLOCATION_MAX) with
+increments of 10% (ALLOCATION_STEP) at each iteration. During each
+iteration the test measures the actual memory bandwidth NUM_OF_RUNS times
+to determine the impact of MBA on actual memory bandwidth.
 
-While a comparison between performance counters and resctrl is
-generally appropriate, they do not have an identical view of
-memory bandwidth. For example RAS features or memory performance
-features that generate memory traffic may drive accesses that are
-counted differently by performance counters and MBM respectively,
-for instance generating "overhead" traffic which is not counted
-against any specific RMID. As a ratio, this different view of memory
-bandwidth becomes more apparent at low memory bandwidths.
+After the MBA test completes all the memory bandwidth measurements are
+parsed into an array. One array for resctrl Memory Bandwidth Monitoring
+(MBM) measurements and one array for the Integrated Memory Controller
+(iMC) measurements. Each array has a hardcoded size of 1024 that is
+large enough to hold the current test data, but this hardcoded value makes
+the implementation difficult to understand. It will not be clear that this
+array needs to be reconsidered if any of the test parameters are changed.
 
-It is not practical to enable/disable the various features that
-may generate memory bandwidth to give performance counters and
-resctrl an identical view. Instead, do not compare performance
-counters and resctrl view of memory bandwidth when the memory
-bandwidth is low.
+Replace the magic constant as array size with the test parameters the
+array size depends on.
 
-Bandwidth throttling behaves differently across platforms
-so it is not appropriate to drop measurement data simply based
-on the throttling level. Instead, use a threshold of 750MiB
-that has been observed to support adequate comparison between
-performance counters and resctrl.
-
+Reported-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Closes: https://lore.kernel.org/all/45af2a8c-517d-8f0d-137d-ad0f3f6a3c68@linux.intel.com/
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
 Changes since V2:
-- Add Ilpo's Reviewed-by tag.
-
-Changes since V1:
-- Fix code alignment and spacing.
-- Modify flow to use "continue" instead of "break" now that
-  earlier changes decreases throttling.
-- Expand comment of define to elaborate causes of discrepancy
-  between performance counters and MBM.
+- New patch.
 ---
- tools/testing/selftests/resctrl/mba_test.c |  7 +++++++
- tools/testing/selftests/resctrl/resctrl.h  | 10 ++++++++++
- 2 files changed, 17 insertions(+)
+ tools/testing/selftests/resctrl/mba_test.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index bf37f3555660..5b4f0aa7a3a4 100644
+index 4e6645b172e3..536d9089d2f6 100644
 --- a/tools/testing/selftests/resctrl/mba_test.c
 +++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -98,6 +98,13 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+@@ -127,8 +127,9 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
  
- 		avg_bw_imc = sum_bw_imc / (NUM_OF_RUNS - 1);
- 		avg_bw_resc = sum_bw_resc / (NUM_OF_RUNS - 1);
-+		if (avg_bw_imc < THROTTLE_THRESHOLD || avg_bw_resc < THROTTLE_THRESHOLD) {
-+			ksft_print_msg("Bandwidth below threshold (%d MiB). Dropping results from MBA schemata %u.\n",
-+				       THROTTLE_THRESHOLD,
-+				       ALLOCATION_MIN + ALLOCATION_STEP * allocation);
-+			continue;
-+		}
-+
- 		avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
- 		avg_diff_per = (int)(avg_diff * 100);
+ static int check_results(void)
+ {
++	unsigned long bw_resc[NUM_OF_RUNS * ALLOCATION_MAX / ALLOCATION_STEP];
++	unsigned long bw_imc[NUM_OF_RUNS * ALLOCATION_MAX / ALLOCATION_STEP];
+ 	char *token_array[8], output[] = RESULT_FILE_NAME, temp[512];
+-	unsigned long bw_imc[1024], bw_resc[1024];
+ 	int runs;
+ 	FILE *fp;
  
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index a553fe975938..dab1953fc7a0 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -43,6 +43,16 @@
- 
- #define MINIMUM_SPAN		(250 * MB)
- 
-+/*
-+ * Memory bandwidth (in MiB) below which the bandwidth comparisons
-+ * between iMC and resctrl are considered unreliable. For example RAS
-+ * features or memory performance features that generate memory traffic
-+ * may drive accesses that are counted differently by performance counters
-+ * and MBM respectively, for instance generating "overhead" traffic which
-+ * is not counted against any specific RMID.
-+ */
-+#define THROTTLE_THRESHOLD	750
-+
- /*
-  * fill_buf_param:	"fill_buf" benchmark parameters
-  * @buf_size:		Size (in bytes) of buffer used in benchmark.
 -- 
 2.46.2
 
