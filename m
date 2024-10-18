@@ -1,74 +1,99 @@
-Received: from cmccmta2.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B5D17E00F;
-	Fri, 18 Oct 2024 10:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63EE1204087
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 10:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.139.111.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729247484; cv=none; b=VUCTS3YDY6ED8W+R5sPPol9ghUwuCEg9cDk1fX/fpxYVim+htlJuPEuURttLJX5KOI9GkVBqh2zekIg8I09TkQYkAKHmZoxLo6iI6vFzrOGycG19+RFphKNSLGGCrNfsJ95qt+xbjb5Cj8QemqlcbOZXlL2hefeFKdTcWTKspY0=
+	t=1729248973; cv=none; b=XVvtHx9aVB/fmjD3hKi14/fH9NGubeWBIRjj+eJYIPPqmEbellhtX4dHna8wMNLccejAngjsQ/Dh2205yl9fq+E9mPoKKZ+ahXAnmv9JEGbyobs9tr3vUxpf54mu78dr0bXIDrM3hETL0S9O9Rl7FbxBxKwy5ntu/1sNVmfHIu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729247484; c=relaxed/simple;
-	bh=F4lC1c2kAZMH8MMrkN8RjfUFNB4yZlPMmlBqvwDtmLE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=M7VblzsVX4UBcyVvIvqswywO+dVg64SeUaN1PuMF1DkDTncRMdzjf1YNxrw+pnNVH2vrYX7AG2V5B8KcbRUsriUGJT7B7OrongUIcD0n7BHLMFt5/TKEwj1pomaQezCSY1uBNjZ6f3KF5GDl1iJ7wo7pSKid7IeWtCe9Sir29J8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee6671238efd80-10647;
-	Fri, 18 Oct 2024 18:31:13 +0800 (CST)
-X-RM-TRANSID:2ee6671238efd80-10647
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain.localdomain (unknown[10.55.1.69])
-	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee6671238ef74d-c700c;
-	Fri, 18 Oct 2024 18:31:12 +0800 (CST)
-X-RM-TRANSID:2ee6671238ef74d-c700c
-From: Liu Jing <liujing@cmss.chinamobile.com>
-To: davem@davemloft.net
-Cc: edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	0x7f454c46@gmail.com,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Liu Jing <liujing@cmss.chinamobile.com>,
-	Liu Jing <liujing_yewu@cmss.chinamobile.com>
-Subject: [PATCH] selftests/net: Add missing va_end in test_snprintf
-Date: Thu, 17 Oct 2024 15:52:51 +0800
-Message-Id: <20241017075251.127762-1-liujing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.27.0
+	s=arc-20240116; t=1729248973; c=relaxed/simple;
+	bh=aJG+Ja2ZNr4mHW6ZV8ImBlNkGhYf60iO1OTwLhQu1HM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Q1Q/ZqSJ9mwyNSUO5oitOR72sjmWAPquIbM0WOUO9Dgn/tgfZFGFU0Xbs9JYLdmSGWSVBs1AHKi6fpcrqbWWbP229kJCObqtvW/hD4PXm9XT+iLV2LHkFHvvTPhFIUqi5AjUX4CSdUdmUm1RIS8PViNZJaXBG7WOTb2WjFY3Og0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=none smtp.mailfrom=queasysnail.net; arc=none smtp.client-ip=205.139.111.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=queasysnail.net
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-182-x-zVYiU6ONGlk7XkK1l39w-1; Fri,
+ 18 Oct 2024 06:56:06 -0400
+X-MC-Unique: x-zVYiU6ONGlk7XkK1l39w-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8B1641955EA8;
+	Fri, 18 Oct 2024 10:56:04 +0000 (UTC)
+Received: from hog.localdomain (unknown [10.39.192.7])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E9C4F300019D;
+	Fri, 18 Oct 2024 10:56:01 +0000 (UTC)
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: netdev@vger.kernel.org
+Cc: Sabrina Dubroca <sd@queasysnail.net>,
+	Boris Pismenny <borisp@nvidia.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: tls: add a selftest for wrapping rec_seq
+Date: Fri, 18 Oct 2024 12:55:58 +0200
+Message-ID: <20775fcfd0371422921ee60a42de170c0398ac10.1729244987.git.sd@queasysnail.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: queasysnail.net
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
 
-There is no va_end after va_copy, just add it.
+Set the initial rec_seq to 0xffffffffffffffff so that it wraps
+immediately. The send() call should fail with EBADMSG.
 
-Signed-off-by: Liu Jing <liujing_yewu@cmss.chinamobile.com>
-Signed-off-by: Liu Jing <liujing@cmss.chinamobile.com>
+A bug in this code was fixed in commit cfaa80c91f6f ("net/tls: do not
+free tls_rec on async operation in bpf_exec_tx_verdict()").
+
+Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
 ---
- tools/testing/selftests/net/tcp_ao/lib/aolib.h | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/net/tls.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/tools/testing/selftests/net/tcp_ao/lib/aolib.h b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-index db44e77428dd..5db2f65cddc4 100644
---- a/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-+++ b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-@@ -46,6 +46,7 @@ static inline char *test_snprintf(const char *fmt, va_list vargs)
- 
- 	va_copy(tmp, vargs);
- 	n = vsnprintf(ret, size, fmt, tmp);
-+	va_end(tmp);
- 	if (n < 0)
- 		return NULL;
- 
--- 
-2.27.0
-
-
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/ne=
+t/tls.c
+index f27a12d2a2c9..1a706d03bb6b 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -266,6 +266,25 @@ TEST_F(tls_basic, bad_cipher)
+ =09EXPECT_EQ(setsockopt(self->fd, SOL_TLS, TLS_TX, &tls12, sizeof(struct t=
+ls12_crypto_info_aes_gcm_128)), -1);
+ }
+=20
++TEST_F(tls_basic, recseq_wrap)
++{
++=09struct tls_crypto_info_keys tls12;
++=09char const *test_str =3D "test_read";
++=09int send_len =3D 10;
++
++=09if (self->notls)
++=09=09SKIP(return, "no TLS support");
++
++=09tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_128, &tls12);
++=09memset(&tls12.aes128.rec_seq, 0xff, sizeof(tls12.aes128.rec_seq));
++
++=09ASSERT_EQ(setsockopt(self->fd, SOL_TLS, TLS_TX, &tls12, tls12.len), 0);
++=09ASSERT_EQ(setsockopt(self->cfd, SOL_TLS, TLS_RX, &tls12, tls12.len), 0)=
+;
++
++=09EXPECT_EQ(send(self->fd, test_str, send_len, 0), -1);
++=09EXPECT_EQ(errno, EBADMSG);
++}
++
+ FIXTURE(tls)
+ {
+ =09int fd, cfd;
+--=20
+2.47.0
 
