@@ -1,46 +1,46 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02FB5185B77;
-	Fri, 18 Oct 2024 02:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B4B188012;
+	Fri, 18 Oct 2024 02:22:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729218166; cv=none; b=VjWGrQ83vV0jpdtjyNQUtSBF6ptaKstwS/PR8V1bD+o7GCFBovCTdFbdjpdaHEbPtd8LxvcXKWi3ubO7PQ+0Jhho3T2L8Kzx3iqxu82cQ/xqZc0hshHMwGC+ypzXVbtVH49XyTfBFuTNyO8zegqWWf9h8pob9xx2xBckMa5sN1M=
+	t=1729218167; cv=none; b=V4OwmjKr5+oAkR9aasX4ebfnxHEtdZbX4Axs46jkpUpjvvFqOXPpoSvHyzhp0eOAggbzWO/6exUPLidFq2sApaQ+9jw+lkqSkbHveBqwomG/hJMqHBGksQrJkNEgsj2oJ+A/nLAta1DxTT1jJTlH2s3+KnhdH3FpkCNBMij28Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729218166; c=relaxed/simple;
-	bh=BxenALi9lbp+uZ/HDmyPQsYWfN57ff8IwoXFhqnFVN8=;
+	s=arc-20240116; t=1729218167; c=relaxed/simple;
+	bh=LF2o/Era7xSNvAB0Kk818hm/mieubwe/KElr/Vt+Yrg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L+H1WIgD8+5OiB3W7q+e8INZcCu8COxyU/juAKgjTdRhkP6qY19MoxrwI7ABTh3OxL5iq09dYgiUi31mBZ7qlvqQboO7jRX1YGLMjNK7k67ewNMybmHzjc/OMAbIDhUDEAbxm/bhAGUQo0M5eQkGbxamEf5O2kKGBiM1catd/mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fFwpUIH+; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=UZmgtcbK1aH9s6gf2SH4eY5t5mSfakUTAvbqWrEkmXtWrJsS7nQeEWbEb2oITIC7ICZ1p1IWWUDXD38DKzd/aUdou0DyUknON2p9HJROZbnOZ/CpWx55D00ZSL9cpRJD4RwcUwPp9DqNrrgE2RvIyxuNHmzxp7iVGsxZO8vHnnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bssk2wt/; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fFwpUIH+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bssk2wt/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729218164; x=1760754164;
+  t=1729218166; x=1760754166;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BxenALi9lbp+uZ/HDmyPQsYWfN57ff8IwoXFhqnFVN8=;
-  b=fFwpUIH+0jJ3960FXyd/p+XTR+VpwYhIu3UC46FYYzQX1vhkMuJ4D5NT
-   YHl1sqAhftl50c4NqRe3l27ULEnHjabpwqG4nwnTr87S7QQgEnA1FRYby
-   rjn5ymXEkO8gPHJPGWueZUnZsJe1mogCKEm5rsY4Rp3rHq8fxHrrjHBiF
-   3lCHPS6tQFKtTNERetFk6JmGyXy0HFCVO1WO3ou0A9AgXXpknQSw4SJKw
-   /LDhMAMUfGdJdD1zeWkFijVKlvYjUQYZdW1gKlaw+PRXnizdve2CEckwE
-   nEuBtBrEwpZbQH3aeHL+k74qBIWSQhHEqOYS3Swuip5b9ySB/du9yWh4E
-   g==;
-X-CSE-ConnectionGUID: vRHn9lUfTEevpeAnroavHQ==
-X-CSE-MsgGUID: F8YDIFVqQ0SKoe5d43yy9g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="54149715"
+  bh=LF2o/Era7xSNvAB0Kk818hm/mieubwe/KElr/Vt+Yrg=;
+  b=Bssk2wt/5+BBZC2m6G1Qpwvqiz86nvl9nmbfCvXIVJ7/gO+o8er+0Gzt
+   9ArzQLaIgRzYAipBAefPmh8AorQvjLIOMzip6FtwCmOQkvQ8bmsxJoAEi
+   wT+b0uGdX3rhY1YrTtp+MtO7BlLPojqLlMsKXfCL/ysvZcyeEPzmSMXU8
+   n5dTNBua7HsQ249S1aTzVOtqRcmh9SXbWLJI5a1tEx7gi2oi7vf4pvjVU
+   fHaVUD8YyXFwUsW7qp0AvdldbxYVDI7aR1vpNQnK2IBpOv4JQoziGybK9
+   8G9b+GiAjfUd0cJS/8/DGmuuz6DFkonVWJ02eh9er3gUKoP34JTHU297w
+   A==;
+X-CSE-ConnectionGUID: l+ZA4yaURSqE7EuYrKq1Cg==
+X-CSE-MsgGUID: LBolW/dIQYaM9WY1mqeNUA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="54149720"
 X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
-   d="scan'208";a="54149715"
+   d="scan'208";a="54149720"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 19:22:38 -0700
-X-CSE-ConnectionGUID: 55SoTL6DRqCGJdgX6LuRbA==
-X-CSE-MsgGUID: 606baLEtSqGY+mOamLz7Eg==
+X-CSE-ConnectionGUID: 7SRKs+ZNRDmg0VmC5TZpjw==
+X-CSE-MsgGUID: KLZW7h8zS5SbNpsazrYVrA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
-   d="scan'208";a="78697728"
+   d="scan'208";a="78697734"
 Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
   by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 19:22:37 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
@@ -54,9 +54,9 @@ Cc: maciej.wieczor-retman@intel.com,
 	reinette.chatre@intel.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V3 10/15] selftests/resctrl: Make benchmark parameter passing robust
-Date: Thu, 17 Oct 2024 19:33:25 -0700
-Message-ID: <ae8f92a2de3cf509aa9ffebe3d08019999318dc1.1729218182.git.reinette.chatre@intel.com>
+Subject: [PATCH V3 12/15] selftests/resctrl: Use cache size to determine "fill_buf" buffer size
+Date: Thu, 17 Oct 2024 19:33:27 -0700
+Message-ID: <388c93423d9a071f5877f3edb4f55ef64bf384bc.1729218182.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.46.2
 In-Reply-To: <cover.1729218182.git.reinette.chatre@intel.com>
 References: <cover.1729218182.git.reinette.chatre@intel.com>
@@ -68,583 +68,130 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The benchmark used during the CMT, MBM, and MBA tests can be provided by
-the user via (-b) parameter, if not provided the default "fill_buf"
-benchmark is used. The user is additionally able to override
-any of the "fill_buf" default parameters when running the tests with
-"-b fill_buf <fill_buf parameters>".
+By default the MBM and MBA tests use the "fill_buf" benchmark to
+read from a buffer with the goal to measure the memory bandwidth
+generated by this buffer access.
 
-The "fill_buf" parameters are managed as an array of strings. Using an
-array of strings is complex because it requires transformations to/from
-strings at every producer and consumer. This is made worse for the
-individual tests where the default benchmark parameters values may not
-be appropriate and additional data wrangling is required. For example,
-the CMT test duplicates the entire array of strings in order to replace
-one of the parameters.
+Care should be taken when sizing the buffer used by the "fill_buf"
+benchmark. If the buffer is small enough to fit in the cache then
+it cannot be expected that the benchmark will generate much memory
+bandwidth. For example, on a system with 320MB L3 cache the existing
+hardcoded default of 250MB is insufficient.
 
-More issues appear when combining the usage of an array of strings with
-the use case of user overriding default parameters by specifying
-"-b fill_buf <parameters>". This use case is fragile with opportunities
-to trigger a SIGSEGV because of opportunities for NULL pointers to exist
-in the array of strings. For example, by running below (thus by specifying
-"fill_buf" should be used but all parameters are NULL):
-	$ sudo resctrl_tests -t mbm -b fill_buf
-
-Replace the "array of strings" parameters used for "fill_buf" with
-new struct fill_buf_param that contains the "fill_buf" parameters that
-can be used directly without transformations to/from strings. Two
-instances of struct fill_buf_param may exist at any point in time:
-	* If the user provides new parameters to "fill_buf", the
-	  user parameter structure (struct user_params) will point to a
-	  fully initialized and immutable struct fill_buf_param
-	  containing the user provided parameters.
-	* If "fill_buf" is the benchmark that should be used by a test,
-	  then the test parameter structure (struct resctrl_val_param)
-	  will point to a fully initialized struct fill_buf_param. The
-	  latter may contain (a) the user provided parameters verbatim,
-	  (b) user provided parameters adjusted to be appropriate for
-	  the test, or (c) the default parameters for "fill_buf" that
-	  is appropriate for the test if the user did not provide
-	  "fill_buf" parameters nor an alternate benchmark.
-
-The existing behavior of CMT test is to use test defined value for the
-buffer size even if the user provides another value via command line.
-This behavior is maintained since the test requires that the buffer size
-matches the size of the cache allocated, and the amount of cache
-allocated can instead be changed by the user with the "-n" command line
-parameter.
+Use the measured cache size to determine a buffer size that can be
+expected to trigger memory access while keeping the existing default
+as minimum, now renamed to MINIMUM_SPAN, that has been appropriate for
+testing so far.
 
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
 Changes since V2:
-- Use empty initializers. (Ilpo)
-- Let memflush be bool instead of int. (Ilpo)
-- Make user input checks more robust. (Ilpo)
-- Assign values as part of local variable definition. (Ilpo)
+- Move duplicate code into helper. (Ilpo)
+- Rename DEFAULT_SPAN to MINIMUM_SPAN to reflect its new purpose. (Ilpo)
+- Do _not_ add Ilpo's Reviewed-by tag ... the patch changed too much.
 
 Changes since V1:
-- Maintain original behavior where user can override "fill_buf"
-  parameters via command line ... but only those that can actually
-  be changed. (Ilpo)
-- Fix parsing issues associated with original behavior to ensure
-  any parameter is valid before any attempt to use it.
-- Move patch earlier in series to highlight that this fixes existing
-  issues.
-- Make struct fill_buf_param dynamic to support user provided
-  parameters as well as test specific parameters.
-- Rewrite changelog.
+- Ensure buffer is at least double L3 cache size. (Ilpo)
+- Support user override of default buffer size. (Ilpo)
 ---
- tools/testing/selftests/resctrl/cmt_test.c    |  32 ++----
- tools/testing/selftests/resctrl/fill_buf.c    |   4 +-
- tools/testing/selftests/resctrl/mba_test.c    |  13 ++-
- tools/testing/selftests/resctrl/mbm_test.c    |  22 ++--
- tools/testing/selftests/resctrl/resctrl.h     |  59 +++++++---
- .../testing/selftests/resctrl/resctrl_tests.c | 103 ++++++++++++++----
- tools/testing/selftests/resctrl/resctrl_val.c |  41 ++++---
- 7 files changed, 178 insertions(+), 96 deletions(-)
+ tools/testing/selftests/resctrl/fill_buf.c      | 13 +++++++++++++
+ tools/testing/selftests/resctrl/mba_test.c      |  7 ++++++-
+ tools/testing/selftests/resctrl/mbm_test.c      |  7 ++++++-
+ tools/testing/selftests/resctrl/resctrl.h       |  3 ++-
+ tools/testing/selftests/resctrl/resctrl_tests.c |  2 +-
+ 5 files changed, 28 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 0c045080d808..4c3cf2c25a38 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -116,15 +116,13 @@ static void cmt_test_cleanup(void)
- 
- static int cmt_run_test(const struct resctrl_test *test, const struct user_params *uparams)
- {
--	const char * const *cmd = uparams->benchmark_cmd;
--	const char *new_cmd[BENCHMARK_ARGS];
-+	struct fill_buf_param fill_buf = {};
- 	unsigned long cache_total_size = 0;
- 	int n = uparams->bits ? : 5;
- 	unsigned long long_mask;
--	char *span_str = NULL;
- 	int count_of_bits;
- 	size_t span;
--	int ret, i;
-+	int ret;
- 
- 	ret = get_full_cbm("L3", &long_mask);
- 	if (ret)
-@@ -155,32 +153,26 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 
- 	span = cache_portion_size(cache_total_size, param.mask, long_mask);
- 
--	if (strcmp(cmd[0], "fill_buf") == 0) {
--		/* Duplicate the command to be able to replace span in it */
--		for (i = 0; uparams->benchmark_cmd[i]; i++)
--			new_cmd[i] = uparams->benchmark_cmd[i];
--		new_cmd[i] = NULL;
--
--		ret = asprintf(&span_str, "%zu", span);
--		if (ret < 0)
--			return -1;
--		new_cmd[1] = span_str;
--		cmd = new_cmd;
-+	if (uparams->fill_buf) {
-+		fill_buf.buf_size = span;
-+		fill_buf.memflush = uparams->fill_buf->memflush;
-+		param.fill_buf = &fill_buf;
-+	} else if (!uparams->benchmark_cmd[0]) {
-+		fill_buf.buf_size = span;
-+		fill_buf.memflush = true;
-+		param.fill_buf = &fill_buf;
- 	}
- 
- 	remove(RESULT_FILE_NAME);
- 
--	ret = resctrl_val(test, uparams, cmd, &param);
-+	ret = resctrl_val(test, uparams, &param);
- 	if (ret)
--		goto out;
-+		return ret;
- 
- 	ret = check_results(&param, span, n);
- 	if (ret && (get_vendor() == ARCH_INTEL))
- 		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
- 
--out:
--	free(span_str);
--
- 	return ret;
- }
- 
 diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-index e4f1cea317f1..39545f9369e8 100644
+index 380cc35f10c6..19a01a52dc1a 100644
 --- a/tools/testing/selftests/resctrl/fill_buf.c
 +++ b/tools/testing/selftests/resctrl/fill_buf.c
-@@ -102,7 +102,7 @@ void fill_cache_read(unsigned char *buf, size_t buf_size, bool once)
- 	*value_sink = ret;
- }
+@@ -129,3 +129,16 @@ unsigned char *alloc_buffer(size_t buf_size, bool memflush)
  
--unsigned char *alloc_buffer(size_t buf_size, int memflush)
-+unsigned char *alloc_buffer(size_t buf_size, bool memflush)
- {
- 	void *buf = NULL;
- 	uint64_t *p64;
-@@ -130,7 +130,7 @@ unsigned char *alloc_buffer(size_t buf_size, int memflush)
  	return buf;
  }
- 
--int run_fill_buf(size_t buf_size, int memflush)
-+int run_fill_buf(size_t buf_size, bool memflush)
- {
- 	unsigned char *buf;
- 
++
++ssize_t get_fill_buf_size(int cpu_no, const char *cache_type)
++{
++	unsigned long cache_total_size = 0;
++	int ret;
++
++	ret = get_cache_size(cpu_no, cache_type, &cache_total_size);
++	if (ret)
++		return ret;
++
++	return cache_total_size * 2 > MINIMUM_SPAN ?
++			cache_total_size * 2 : MINIMUM_SPAN;
++}
 diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index be0ead73e55d..74d95c460bd0 100644
+index 74d95c460bd0..bf37f3555660 100644
 --- a/tools/testing/selftests/resctrl/mba_test.c
 +++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -172,11 +172,22 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
- 		.setup		= mba_setup,
- 		.measure	= mba_measure,
- 	};
-+	struct fill_buf_param fill_buf = {};
- 	int ret;
- 
- 	remove(RESULT_FILE_NAME);
- 
--	ret = resctrl_val(test, uparams, uparams->benchmark_cmd, &param);
-+	if (uparams->fill_buf) {
-+		fill_buf.buf_size = uparams->fill_buf->buf_size;
-+		fill_buf.memflush = uparams->fill_buf->memflush;
-+		param.fill_buf = &fill_buf;
-+	} else if (!uparams->benchmark_cmd[0]) {
-+		fill_buf.buf_size = DEFAULT_SPAN;
-+		fill_buf.memflush = true;
-+		param.fill_buf = &fill_buf;
-+	}
+@@ -182,7 +182,12 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+ 		fill_buf.memflush = uparams->fill_buf->memflush;
+ 		param.fill_buf = &fill_buf;
+ 	} else if (!uparams->benchmark_cmd[0]) {
+-		fill_buf.buf_size = DEFAULT_SPAN;
++		ssize_t buf_size;
 +
-+	ret = resctrl_val(test, uparams, &param);
- 	if (ret)
- 		return ret;
- 
++		buf_size = get_fill_buf_size(uparams->cpu, "L3");
++		if (buf_size < 0)
++			return buf_size;
++		fill_buf.buf_size = buf_size;
+ 		fill_buf.memflush = true;
+ 		param.fill_buf = &fill_buf;
+ 	}
 diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index f516a2da1163..72261413c868 100644
+index 72261413c868..4224f8ce3538 100644
 --- a/tools/testing/selftests/resctrl/mbm_test.c
 +++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -139,26 +139,26 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
- 		.setup		= mbm_setup,
- 		.measure	= mbm_measure,
- 	};
--	char *endptr = NULL;
--	size_t span = 0;
-+	struct fill_buf_param fill_buf = {};
- 	int ret;
- 
- 	remove(RESULT_FILE_NAME);
- 
--	if (uparams->benchmark_cmd[0] && strcmp(uparams->benchmark_cmd[0], "fill_buf") == 0) {
--		if (uparams->benchmark_cmd[1]) {
--			errno = 0;
--			span = strtoul(uparams->benchmark_cmd[1], &endptr, 10);
--			if (errno || *endptr != '\0')
--				return -errno;
--		}
-+	if (uparams->fill_buf) {
-+		fill_buf.buf_size = uparams->fill_buf->buf_size;
-+		fill_buf.memflush = uparams->fill_buf->memflush;
-+		param.fill_buf = &fill_buf;
-+	} else if (!uparams->benchmark_cmd[0]) {
-+		fill_buf.buf_size = DEFAULT_SPAN;
-+		fill_buf.memflush = true;
-+		param.fill_buf = &fill_buf;
+@@ -149,7 +149,12 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
+ 		fill_buf.memflush = uparams->fill_buf->memflush;
+ 		param.fill_buf = &fill_buf;
+ 	} else if (!uparams->benchmark_cmd[0]) {
+-		fill_buf.buf_size = DEFAULT_SPAN;
++		ssize_t buf_size;
++
++		buf_size = get_fill_buf_size(uparams->cpu, "L3");
++		if (buf_size < 0)
++			return buf_size;
++		fill_buf.buf_size = buf_size;
+ 		fill_buf.memflush = true;
+ 		param.fill_buf = &fill_buf;
  	}
- 
--	ret = resctrl_val(test, uparams, uparams->benchmark_cmd, &param);
-+	ret = resctrl_val(test, uparams, &param);
- 	if (ret)
- 		return ret;
- 
--	ret = check_results(span);
-+	ret = check_results(param.fill_buf ? param.fill_buf->buf_size : 0);
- 	if (ret && (get_vendor() == ARCH_INTEL))
- 		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
- 
 diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 82801245e4c1..c9336f9c2cae 100644
+index 032cd9ebd761..a553fe975938 100644
 --- a/tools/testing/selftests/resctrl/resctrl.h
 +++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -43,16 +43,36 @@
+@@ -41,7 +41,7 @@
  
- #define DEFAULT_SPAN		(250 * MB)
+ #define BENCHMARK_ARGS		64
  
-+/*
-+ * fill_buf_param:	"fill_buf" benchmark parameters
-+ * @buf_size:		Size (in bytes) of buffer used in benchmark.
-+ *			"fill_buf" allocates and initializes buffer of
-+ *			@buf_size. User can change value via command line.
-+ * @memflush:		If false the buffer will not be flushed after
-+ *			allocation and initialization, otherwise the
-+ *			buffer will be flushed. User can change value via
-+ *			command line (via integers with 0 interpreted as
-+ *			false and anything else as true).
-+ */
-+struct fill_buf_param {
-+	size_t		buf_size;
-+	bool		memflush;
-+};
-+
- /*
-  * user_params:		User supplied parameters
-  * @cpu:		CPU number to which the benchmark will be bound to
-  * @bits:		Number of bits used for cache allocation size
-  * @benchmark_cmd:	Benchmark command to run during (some of the) tests
-+ * @fill_buf:		Pointer to user provided parameters for "fill_buf",
-+ *			NULL if user did not provide parameters and test
-+ *			specific defaults should be used.
-  */
- struct user_params {
- 	int cpu;
- 	int bits;
- 	const char *benchmark_cmd[BENCHMARK_ARGS];
-+	const struct fill_buf_param *fill_buf;
- };
+-#define DEFAULT_SPAN		(250 * MB)
++#define MINIMUM_SPAN		(250 * MB)
  
  /*
-@@ -87,21 +107,29 @@ struct resctrl_test {
-  * @init:		Callback function to initialize test environment
-  * @setup:		Callback function to setup per test run environment
-  * @measure:		Callback that performs the measurement (a single test)
-+ * @fill_buf:		Parameters for default "fill_buf" benchmark.
-+ *			Initialized with user provided parameters, possibly
-+ *			adapted to be relevant to the test. If user does
-+ *			not provide parameters for "fill_buf" nor a
-+ *			replacement benchmark then initialized with defaults
-+ *			appropriate for test. NULL if user provided
-+ *			benchmark.
-  */
- struct resctrl_val_param {
--	const char	*ctrlgrp;
--	const char	*mongrp;
--	char		filename[64];
--	unsigned long	mask;
--	int		num_of_runs;
--	int		(*init)(const struct resctrl_val_param *param,
--				int domain_id);
--	int		(*setup)(const struct resctrl_test *test,
--				 const struct user_params *uparams,
--				 struct resctrl_val_param *param);
--	int		(*measure)(const struct user_params *uparams,
--				   struct resctrl_val_param *param,
--				   pid_t bm_pid);
-+	const char		*ctrlgrp;
-+	const char		*mongrp;
-+	char			filename[64];
-+	unsigned long		mask;
-+	int			num_of_runs;
-+	int			(*init)(const struct resctrl_val_param *param,
-+					int domain_id);
-+	int			(*setup)(const struct resctrl_test *test,
-+					 const struct user_params *uparams,
-+					 struct resctrl_val_param *param);
-+	int			(*measure)(const struct user_params *uparams,
-+					   struct resctrl_val_param *param,
-+					   pid_t bm_pid);
-+	struct fill_buf_param	*fill_buf;
- };
- 
- struct perf_event_read {
-@@ -138,10 +166,10 @@ int write_schemata(const char *ctrlgrp, char *schemata, int cpu_no,
- int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp, const char *mongrp);
- int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
- 		    int group_fd, unsigned long flags);
--unsigned char *alloc_buffer(size_t buf_size, int memflush);
-+unsigned char *alloc_buffer(size_t buf_size, bool memflush);
+  * fill_buf_param:	"fill_buf" benchmark parameters
+@@ -169,6 +169,7 @@ int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
+ unsigned char *alloc_buffer(size_t buf_size, bool memflush);
  void mem_flush(unsigned char *buf, size_t buf_size);
  void fill_cache_read(unsigned char *buf, size_t buf_size, bool once);
--int run_fill_buf(size_t buf_size, int memflush);
-+int run_fill_buf(size_t buf_size, bool memflush);
++ssize_t get_fill_buf_size(int cpu_no, const char *cache_type);
  int initialize_read_mem_bw_imc(void);
  int measure_read_mem_bw(const struct user_params *uparams,
  			struct resctrl_val_param *param, pid_t bm_pid);
-@@ -149,7 +177,6 @@ void initialize_mem_bw_resctrl(const struct resctrl_val_param *param,
- 			       int domain_id);
- int resctrl_val(const struct resctrl_test *test,
- 		const struct user_params *uparams,
--		const char * const *benchmark_cmd,
- 		struct resctrl_val_param *param);
- unsigned long create_bit_mask(unsigned int start, unsigned int len);
- unsigned int count_contiguous_bits(unsigned long val, unsigned int *start);
 diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 0f91c475b255..88768f4d4961 100644
+index 88768f4d4961..790f4eb7871a 100644
 --- a/tools/testing/selftests/resctrl/resctrl_tests.c
 +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -148,6 +148,78 @@ static void run_single_test(const struct resctrl_test *test, const struct user_p
- 	test_cleanup(test);
- }
- 
-+/*
-+ * Allocate and initialize a struct fill_buf_param with user provided
-+ * (via "-b fill_buf <fill_buf parameters>") parameters.
-+ *
-+ * Use defaults (that may not be appropriate for all tests) for any
-+ * fill_buf parameters omitted by the user.
-+ *
-+ * Historically it may have been possible for user space to provide
-+ * additional parameters, "operation" ("read" vs "write") in
-+ * benchmark_cmd[3] and "once" (run "once" or until terminated) in
-+ * benchmark_cmd[4]. Changing these parameters have never been
-+ * supported with the default of "read" operation and running until
-+ * terminated built into the tests. Any unsupported values for
-+ * (original) "fill_buf" parameters are treated as failure.
-+ *
-+ * Return: On failure, forcibly exits the test on any parsing failure,
-+ *         returns NULL if no parsing needed (user did not actually provide
-+ *         "-b fill_buf").
-+ *         On success, returns pointer to newly allocated and fully
-+ *         initialized struct fill_buf_param that caller must free.
-+ */
-+static struct fill_buf_param *alloc_fill_buf_param(struct user_params *uparams)
-+{
-+	struct fill_buf_param *fill_param = NULL;
-+	char *endptr = NULL;
-+
-+	if (!uparams->benchmark_cmd[0] || strcmp(uparams->benchmark_cmd[0], "fill_buf"))
-+		return NULL;
-+
-+	fill_param = malloc(sizeof(*fill_param));
-+	if (!fill_param)
-+		ksft_exit_skip("Unable to allocate memory for fill_buf parameters.\n");
-+
-+	if (uparams->benchmark_cmd[1]) {
-+		errno = 0;
-+		fill_param->buf_size = strtoul(uparams->benchmark_cmd[1], &endptr, 10);
-+		if (errno || *endptr != '\0') {
-+			free(fill_param);
-+			ksft_exit_skip("Unable to parse benchmark buffer size.\n");
-+		}
-+	} else {
-+		fill_param->buf_size = DEFAULT_SPAN;
-+	}
-+
-+	if (uparams->benchmark_cmd[2]) {
-+		errno = 0;
-+		fill_param->memflush = strtol(uparams->benchmark_cmd[2], &endptr, 10) != 0;
-+		if (errno || *endptr != '\0') {
-+			free(fill_param);
-+			ksft_exit_skip("Unable to parse benchmark memflush parameter.\n");
-+		}
-+	} else {
-+		fill_param->memflush = true;
-+	}
-+
-+	if (uparams->benchmark_cmd[3]) {
-+		if (strcmp(uparams->benchmark_cmd[3], "0")) {
-+			free(fill_param);
-+			ksft_exit_skip("Only read operations supported.\n");
-+		}
-+	}
-+
-+	if (uparams->benchmark_cmd[4]) {
-+		if (strcmp(uparams->benchmark_cmd[4], "false")) {
-+			free(fill_param);
-+			ksft_exit_skip("fill_buf is required to run until termination.\n");
-+		}
-+	}
-+
-+	return fill_param;
-+}
-+
- static void init_user_params(struct user_params *uparams)
- {
- 	memset(uparams, 0, sizeof(*uparams));
-@@ -158,11 +230,11 @@ static void init_user_params(struct user_params *uparams)
- 
- int main(int argc, char **argv)
- {
-+	struct fill_buf_param *fill_param = NULL;
- 	int tests = ARRAY_SIZE(resctrl_tests);
- 	bool test_param_seen = false;
- 	struct user_params uparams;
--	char *span_str = NULL;
--	int ret, c, i;
-+	int c, i;
- 
- 	init_user_params(&uparams);
- 
-@@ -239,6 +311,10 @@ int main(int argc, char **argv)
- 	}
- last_arg:
- 
-+	fill_param = alloc_fill_buf_param(&uparams);
-+	if (fill_param)
-+		uparams.fill_buf = fill_param;
-+
- 	ksft_print_header();
- 
- 	/*
-@@ -257,32 +333,11 @@ int main(int argc, char **argv)
- 
- 	filter_dmesg();
- 
--	if (!uparams.benchmark_cmd[0]) {
--		/* If no benchmark is given by "-b" argument, use fill_buf. */
--		uparams.benchmark_cmd[0] = "fill_buf";
--		ret = asprintf(&span_str, "%u", DEFAULT_SPAN);
--		if (ret < 0)
--			ksft_exit_fail_msg("Out of memory!\n");
--		uparams.benchmark_cmd[1] = span_str;
--		uparams.benchmark_cmd[2] = "1";
--		/*
--		 * Third parameter was previously used for "operation"
--		 * (read/write) of which only (now default) "read"/"0"
--		 * works.
--		 * Fourth parameter was previously used to indicate
--		 * how long "fill_buf" should run for, with "false"
--		 * ("fill_buf" will keep running until terminated)
--		 * the only option that works.
--		 */
--		uparams.benchmark_cmd[3] = NULL;
--		uparams.benchmark_cmd[4] = NULL;
--	}
--
- 	ksft_set_plan(tests);
- 
- 	for (i = 0; i < ARRAY_SIZE(resctrl_tests); i++)
- 		run_single_test(resctrl_tests[i], &uparams);
- 
--	free(span_str);
-+	free(fill_param);
- 	ksft_finished();
- }
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index c4ebf70a46ef..00b3808d3bca 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -535,6 +535,11 @@ int measure_read_mem_bw(const struct user_params *uparams,
- 	return ret;
- }
- 
-+struct benchmark_info {
-+	const struct user_params *uparams;
-+	struct resctrl_val_param *param;
-+};
-+
- /*
-  * run_benchmark - Run a specified benchmark or fill_buf (default benchmark)
-  *		   in specified signal. Direct benchmark stdio to /dev/null.
-@@ -544,12 +549,11 @@ int measure_read_mem_bw(const struct user_params *uparams,
-  */
- static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- {
--	char **benchmark_cmd;
--	int ret, memflush;
--	size_t span;
-+	struct benchmark_info *benchmark_info = info->si_ptr;
-+	const struct user_params *uparams = benchmark_info->uparams;
-+	struct resctrl_val_param *param = benchmark_info->param;
- 	FILE *fp;
--
--	benchmark_cmd = info->si_ptr;
-+	int ret;
- 
- 	/*
- 	 * Direct stdio of child to /dev/null, so that only parent writes to
-@@ -561,16 +565,13 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- 		parent_exit(ppid);
+@@ -189,7 +189,7 @@ static struct fill_buf_param *alloc_fill_buf_param(struct user_params *uparams)
+ 			ksft_exit_skip("Unable to parse benchmark buffer size.\n");
+ 		}
+ 	} else {
+-		fill_param->buf_size = DEFAULT_SPAN;
++		fill_param->buf_size = MINIMUM_SPAN;
  	}
  
--	if (strcmp(benchmark_cmd[0], "fill_buf") == 0) {
--		/* Execute default fill_buf benchmark */
--		span = strtoul(benchmark_cmd[1], NULL, 10);
--		memflush =  atoi(benchmark_cmd[2]);
--
--		if (run_fill_buf(span, memflush))
-+	if (param->fill_buf) {
-+		if (run_fill_buf(param->fill_buf->buf_size,
-+				 param->fill_buf->memflush))
- 			fprintf(stderr, "Error in running fill buffer\n");
--	} else {
-+	} else if (uparams->benchmark_cmd[0]) {
- 		/* Execute specified benchmark */
--		ret = execvp(benchmark_cmd[0], benchmark_cmd);
-+		ret = execvp(uparams->benchmark_cmd[0], (char **)uparams->benchmark_cmd);
- 		if (ret)
- 			ksft_perror("execvp");
- 	}
-@@ -585,16 +586,15 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
-  *			the benchmark
-  * @test:		test information structure
-  * @uparams:		user supplied parameters
-- * @benchmark_cmd:	benchmark command and its arguments
-  * @param:		parameters passed to resctrl_val()
-  *
-  * Return:		0 when the test was run, < 0 on error.
-  */
- int resctrl_val(const struct resctrl_test *test,
- 		const struct user_params *uparams,
--		const char * const *benchmark_cmd,
- 		struct resctrl_val_param *param)
- {
-+	struct benchmark_info benchmark_info;
- 	struct sigaction sigact;
- 	int ret = 0, pipefd[2];
- 	char pipe_message = 0;
-@@ -610,6 +610,9 @@ int resctrl_val(const struct resctrl_test *test,
- 		return ret;
- 	}
- 
-+	benchmark_info.uparams = uparams;
-+	benchmark_info.param = param;
-+
- 	/*
- 	 * If benchmark wasn't successfully started by child, then child should
- 	 * kill parent, so save parent's pid
-@@ -671,13 +674,7 @@ int resctrl_val(const struct resctrl_test *test,
- 
- 	ksft_print_msg("Benchmark PID: %d\n", (int)bm_pid);
- 
--	/*
--	 * The cast removes constness but nothing mutates benchmark_cmd within
--	 * the context of this process. At the receiving process, it becomes
--	 * argv, which is mutable, on exec() but that's after fork() so it
--	 * doesn't matter for the process running the tests.
--	 */
--	value.sival_ptr = (void *)benchmark_cmd;
-+	value.sival_ptr = (void *)&benchmark_info;
- 
- 	/* Taskset benchmark to specified cpu */
- 	ret = taskset_benchmark(bm_pid, uparams->cpu, NULL);
+ 	if (uparams->benchmark_cmd[2]) {
 -- 
 2.46.2
 
