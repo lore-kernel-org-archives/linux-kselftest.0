@@ -1,121 +1,64 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCAD18DF86;
-	Sat, 19 Oct 2024 17:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DF479D2;
+	Sat, 19 Oct 2024 18:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729358732; cv=none; b=GPrlsSeFkoW4UkSmph93GhShvV/IK4IqKMdeKFzTCHktiXWJoGYVTe+TLnKw8LZmcgm7EtMvOvoLPlncU3Xu0QQE7yKvhSbwemnyINN9wgC/QLZIR57YBF5LsKZKdXm+ZHzG2l8iDI1seBGcA2Ck3AxovWyqjPD8TxaPRWAcKKM=
+	t=1729361848; cv=none; b=Ja10Qp/Kf79dJVOZOU4X2tacIBvO0So+TKkz6KMZRItTVRyGOcXBE/NqaWGXUR81Kr7Ej120gA02u+pt8qVXxvQLyCE8AXoOux1VP3RUOi7obc3Cz+949cTcnb4fs309rf5QiziU1OqyYt/hdsRNPURHWbBZTBIdZ1mW9R9sM24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729358732; c=relaxed/simple;
-	bh=GAwiRUme3l79armWjPCTT1xL7TWZdYQrkokP+tBs6xQ=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UMe+MaBYhTq0cS7pdGkcB13FCWnS5rayQSaIkPQxzJmWEGgwP01HUHk1frK5xxAJwH/5umw7ju1XPULe6rIb24e3vBw//uwTUWAt0+5I6gihsbkW5BXjtrB4ZPUxz4BaOiR0+xtIhVFe5qTqz0GtnwNRl0CW/umh9pPjZk9oUK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XzGlFbWx; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	s=arc-20240116; t=1729361848; c=relaxed/simple;
+	bh=OjfRNG+8+VXyvc/ydeEaopvwIQezxqX7F7mkQOYQPa4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AsvLS6EvIT2Rl3SsLdQps2dlrSmVpEfHnRlF3EG0VJjIgB6bysehNzqnhcG72q1539827zTkATOpcbX9kpKw7jlI1YLOrO9D0SYZSSXMG5WFeju37OamA/Sf4oD0V3wWTtwFMlUKNkAR2FLtTwwbrRj9+JZ5pGSqCf67lkzDqYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KL1/g2JU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XzGlFbWx"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
-	Cc:Content-Type:Content-ID:Content-Description;
-	bh=dgOa7g3zajQLpd5LE62QUGty2o4u6sxV9PdYHjxAfec=; b=XzGlFbWx89wH/Hwr4VFywS7iRy
-	UkBHnYBAN0gqrQSfLligxN8doifFp8nQM/JkfDAiuCDUs9nTloQXWsEENhsW591tkwqZS1smmDjxq
-	IE4baRNi425eXqxZk1Euqd3gQMxGNG9UREgt+rsiQZleSd2JYkbNFguG27JA0WKqeNQVcYcu+JS33
-	nc+SPrbSqpVJvHn5tAhhAoNAO2J8T5wNKdBwtPakGmscIp7xNkEqDk6Yp95y2/vvVkiglssnEcrUl
-	9Zyv+p/yON8qkZOpAs0fNzdILJPpjWG7V7eesdNM6WUfCk3DPStY7VxUnUeKi0wZcPjfmQ7UI2ABm
-	EaDMZKJQ==;
-Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t2DCM-00000007ZXd-32pz;
-	Sat, 19 Oct 2024 17:25:07 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1t2DCI-00000009TKb-3CtK;
-	Sat, 19 Oct 2024 18:25:02 +0100
-From: David Woodhouse <dwmw2@infradead.org>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Francesco Lavra <francescolavra.fl@gmail.com>,
-	Miguel Luis <miguel.luis@oracle.com>
-Subject: [PATCH v6 1/6] firmware/psci: Add definitions for PSCI v1.3 specification
-Date: Sat, 19 Oct 2024 18:15:42 +0100
-Message-ID: <20241019172459.2241939-2-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20241019172459.2241939-1-dwmw2@infradead.org>
-References: <20241019172459.2241939-1-dwmw2@infradead.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KL1/g2JU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F01C4CEC5;
+	Sat, 19 Oct 2024 18:17:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729361847;
+	bh=OjfRNG+8+VXyvc/ydeEaopvwIQezxqX7F7mkQOYQPa4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KL1/g2JU6oOG/pSe8bdjey/XWgdJf6llUp3HVG0C/QbMTZ3p3gNDb2u6+oipbtOQF
+	 6XxUzQRe2u/OHmNAylz7Zk7RAUXNjQQuLzSl8llJroTUvXCyFxKuS7b8hrdLX4dnfU
+	 6IrNnt3grvQrREPFUE63HASAVc6a8a7BoI3Tk9vLtLzt/MHm+8pIxgPS5/FY/4iC4h
+	 lJ2DeOgkXjKS93fTrxEYOAO4Y1J7H70xLt27X51E2az8JUppYBm2uQy3v/sH1ErNHX
+	 8N0jTPj3VVAAPH19fkqaOu9cI5WWjDFS02az2dutth/jWNwjx11qAfniFrNc4f3kqY
+	 62AlMCxUN5suw==
+Date: Sat, 19 Oct 2024 19:17:23 +0100
+From: Simon Horman <horms@kernel.org>
+To: Karan Sanghavi <karansanghvi98@gmail.com>
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Anup <anupnewsmail@gmail.com>
+Subject: Re: [PATCH] selftests: tc-testing: Fixed typo error
+Message-ID: <20241019181723.GV1697@kernel.org>
+References: <20241019-multiple_spell_error-v1-1-facff43b5610@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241019-multiple_spell_error-v1-1-facff43b5610@gmail.com>
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On Sat, Oct 19, 2024 at 11:52:21AM +0000, Karan Sanghavi wrote:
+> Corrected the multiple and different typo errors in json files
+> 
+> - "diffferent" is corrected to "different".
+> - "muliple" and "miltiple" is corrected to "multiple".
+> 
+> Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
 
-The v1.3 PSCI spec (https://developer.arm.com/documentation/den0022) adds
-the SYSTEM_OFF2 function. Add definitions for it and its hibernation type
-parameter.
+Thanks,
 
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- include/uapi/linux/psci.h | 5 +++++
- 1 file changed, 5 insertions(+)
+This addresses all the spelling errors in these files that
+I see flagged by codespell.
 
-diff --git a/include/uapi/linux/psci.h b/include/uapi/linux/psci.h
-index 42a40ad3fb62..81759ff385e6 100644
---- a/include/uapi/linux/psci.h
-+++ b/include/uapi/linux/psci.h
-@@ -59,6 +59,7 @@
- #define PSCI_1_1_FN_SYSTEM_RESET2		PSCI_0_2_FN(18)
- #define PSCI_1_1_FN_MEM_PROTECT			PSCI_0_2_FN(19)
- #define PSCI_1_1_FN_MEM_PROTECT_CHECK_RANGE	PSCI_0_2_FN(20)
-+#define PSCI_1_3_FN_SYSTEM_OFF2			PSCI_0_2_FN(21)
- 
- #define PSCI_1_0_FN64_CPU_DEFAULT_SUSPEND	PSCI_0_2_FN64(12)
- #define PSCI_1_0_FN64_NODE_HW_STATE		PSCI_0_2_FN64(13)
-@@ -68,6 +69,7 @@
- 
- #define PSCI_1_1_FN64_SYSTEM_RESET2		PSCI_0_2_FN64(18)
- #define PSCI_1_1_FN64_MEM_PROTECT_CHECK_RANGE	PSCI_0_2_FN64(20)
-+#define PSCI_1_3_FN64_SYSTEM_OFF2		PSCI_0_2_FN64(21)
- 
- /* PSCI v0.2 power state encoding for CPU_SUSPEND function */
- #define PSCI_0_2_POWER_STATE_ID_MASK		0xffff
-@@ -100,6 +102,9 @@
- #define PSCI_1_1_RESET_TYPE_SYSTEM_WARM_RESET	0
- #define PSCI_1_1_RESET_TYPE_VENDOR_START	0x80000000U
- 
-+/* PSCI v1.3 hibernate type for SYSTEM_OFF2 */
-+#define PSCI_1_3_OFF_TYPE_HIBERNATE_OFF		BIT(0)
-+
- /* PSCI version decoding (independent of PSCI version) */
- #define PSCI_VERSION_MAJOR_SHIFT		16
- #define PSCI_VERSION_MINOR_MASK			\
--- 
-2.44.0
-
+Reviewed-by: Simon Horman <horms@kernel.org>
