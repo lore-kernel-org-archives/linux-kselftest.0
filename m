@@ -1,480 +1,375 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2046.outbound.protection.outlook.com [40.107.94.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE01416191B;
-	Thu, 24 Oct 2024 05:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729746992; cv=none; b=h6sNMbCmpJQ7aKVu9rXKAS694gasonTBiBlbBpTtaZQIkLBE7agsa8QdnsNZp6QD3HnOG/V70UEiIBC39yCgHtLRUzOds6v0uOhaF+Vjd32CjcZpgO6B1bnnTHmMwelkpy7ie2mWoa20ZbOsv2BIC3UUiGa0Na0eVH+AD4pBLGE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729746992; c=relaxed/simple;
-	bh=b7KYyoBgE218B+MIC+ckMSWqZ2L1w+EmcKBzKPhmGKE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CzAQ2a9MdQQvKQaxl8wU9NMhrItaboiiBgxFTWxhQAOQ3ii9tQ4Pwtpd5TqanWbPyu9LP5CjPOuHDtEWSlw/HkiyF4+oR184NNa+2P3ihAYpyRApkP/Bys4aZaZ4c6j6Oyp0HNpEHo+S0BnWVfDELODMcTIKOECjpo4TOtIRDmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BParNCL3; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24D018A6BD;
+	Thu, 24 Oct 2024 07:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729754784; cv=fail; b=BvBoqAJSNIMX81p0B51aBxsNOMHRMKJ/sYECSXxQI7K1zZymRpKlcaJVhSJZDtl1wJXS6hxucQlifVPj3djA6hInelU5MmrEeyUA7k6L0OaBIxOzVo5romSXhhMhn/iGAckwlJyWIPMGBmiA19Y25sweqJaPxsvSV1nj4dymyvo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729754784; c=relaxed/simple;
+	bh=EcZMlmPt6miVG5PFTqeOGb8LOWdcXRGSCentWZ9gTwU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Rs65wylHf5qSbFK1goCnr1AGGZmaZfy+t7VTWE21epoCmLf44cM7FN7Hx1VBpA72kO6sVqtv8BQjaDGSZ0FdZCxn17g3+GtgVskDslzNQPD7kS+I80Rx9i3f1ibCFHI0xDFGgGbpQL/0aJ3UB/ztf77CEIfMA2k79nX6e/KOQ4M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=o2kcGPQd; arc=fail smtp.client-ip=40.107.94.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BParNCL3"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49O40GYQ027510;
-	Thu, 24 Oct 2024 05:16:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=DAdAfcYlMsCwuT6+h2lZCbJEehf4W+XKhHDc9Q4/F
-	ok=; b=BParNCL35LaZOJc2/2HijhMrSyrYQNcWYOAQDoZN/WqDdI+kvYAMgQsBf
-	zeg2o7Oy36IWwft/UwPgPMZVAU9V7w2/iPuEtum8csCUCz3Dt8T0Mkf/7yQp07j3
-	WToSAUwVxdon2fdMg2/I745n/w8mnwjVlCoKiE5oQfURQtnC9EAUWCn29vaWfa4u
-	Ts0QGBf6zux9CmYo6AwdnJWMImMyn4gPjMI2PQXwlYyLLzVhnvVbwmGqANOJO4x/
-	MkPb1HCbjh8V1BpBuXj8gttw95k8Iqcq1vUkRjXjVIaNGhuzVsuHZeAFINXrpwuZ
-	CxLup1uDbnip883VW1S58WzmV0DNw==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42emaexk7e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 05:16:21 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49O2ixrY006862;
-	Thu, 24 Oct 2024 05:16:21 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42emjcxp22-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 05:16:21 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49O5GJEW50856436
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 24 Oct 2024 05:16:19 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2974C20043;
-	Thu, 24 Oct 2024 05:16:19 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F3F6B20040;
-	Thu, 24 Oct 2024 05:16:17 +0000 (GMT)
-Received: from vishalc-ibm.in.ibm.com (unknown [9.109.245.217])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 24 Oct 2024 05:16:17 +0000 (GMT)
-From: Vishal Chourasia <vishalc@linux.ibm.com>
-To: linux-kselftest@vger.kernel.org
-Cc: tj@kernel.org, linux-kernel@vger.kernel.org,
-        Vishal Chourasia <vishalc@linux.ibm.com>
-Subject: [PATCH] sched_ext: Fix function pointer type mismatches in BPF selftests
-Date: Thu, 24 Oct 2024 10:46:09 +0530
-Message-ID: <20241024051608.358683-2-vishalc@linux.ibm.com>
-X-Mailer: git-send-email 2.47.0
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="o2kcGPQd"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=k/Wwtleo6laTXnbWOGZBgqZViUOAheTJuBgv4efQ9wVmkyKt3suam9mDv+DwJNykRplpm7EeTxFs/D+1UcmgehUwyNm+MuxnDewr3r6K4L2TRaK37Mlzmh98o2GOKY8YY/udp6fbY3v4hXfR7RyJZ4ynhxvx8VOt85MdVt8thmB7Mukd7u2NHp6JPmAkSK4apTvHJ4eo+zntpf9BSk5maYCVLLrTbr2AI7f230Ebn6KcYlWckRd2aRQDZvsYkH59CbyCuSmJH4leT+vEdQqL9YuU9RRrTTXzZ4s5n7G0a4wAd4deDtFjcAOII6FDxIPx57QcwjTyNX6ud7f3sgYw0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EcZMlmPt6miVG5PFTqeOGb8LOWdcXRGSCentWZ9gTwU=;
+ b=j/oB8ZEgHTuNdJ01yOzaIynhVosu5ppmlrnuHYfrdfj3AnRqyAR5BT7MupTFIGLAxCWWUl/KYeU5omWcf6BoSTE5wKJcSjrg/QyNGjibf/IwhcdawOG6UDZ1n7+Yc03SBdVNRN0koBXI4OR6TL9vPWqxvpNX+D+lK4rSexNYNhLQJOTwFdLLPF4u1dShfU1TBeISVfxngXdnSioSTKKeJyrWXJB+Q01ZH3ZwRUQYh8bz1vryMY7pTGSQNzS30++FugB0G8TRXvudWP2CmJ9tDABRaJ4ZZMK1Jb/yQmVmVu+6cdHKvr49FfKXzwyqr1il2GrRm+bdhWkiFN5X81DZYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EcZMlmPt6miVG5PFTqeOGb8LOWdcXRGSCentWZ9gTwU=;
+ b=o2kcGPQdfRlnif5qO1wrN6DJMGSEYcvhCZfqerk0MnqLIjad82NpMu3MiS3MeN1WijGx/RLQHLAcpLZiHj+4BQg8Fr109xuVZxSrn8CCVRVy3XZoFbmcJb+gbtvoNa6lbQycaKAO9t8qN1DWdu//uBgPQHyAVirufdoktyZfl3OYF6DbZIPMOBdpHMnCXcu+BUSzYeLyDkfEJOlDTEBGcadhc5Ak7oBq7PcnMPw0TSanmwPcq6yOtUsQuZAbXq06vFjHZouU8JBg1W1MCH3cMk0Hf4sDcOdVg16Y0miHigyJJ2olMrLljrVoBUIm47a8V171wHcB2gqywAn+89U5/w==
+Received: from DS0PR11MB8050.namprd11.prod.outlook.com (2603:10b6:8:117::5) by
+ PH0PR11MB5927.namprd11.prod.outlook.com (2603:10b6:510:14e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.28; Thu, 24 Oct
+ 2024 07:26:18 +0000
+Received: from DS0PR11MB8050.namprd11.prod.outlook.com
+ ([fe80::bcc7:4a98:f4cb:b3bb]) by DS0PR11MB8050.namprd11.prod.outlook.com
+ ([fe80::bcc7:4a98:f4cb:b3bb%6]) with mapi id 15.20.8093.018; Thu, 24 Oct 2024
+ 07:26:18 +0000
+From: <Mohan.Prasad@microchip.com>
+To: <pabeni@redhat.com>, <netdev@vger.kernel.org>
+CC: <davem@davemloft.net>, <kuba@kernel.org>, <andrew@lunn.ch>,
+	<edumazet@google.com>, <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <horms@kernel.org>,
+	<brett.creeley@amd.com>, <rosenp@gmail.com>, <UNGLinuxDriver@microchip.com>,
+	<willemb@google.com>, <petrm@nvidia.com>
+Subject: RE: [PATCH net-next v3 1/3] selftests: nic_link_layer: Add link layer
+ selftest for NIC driver
+Thread-Topic: [PATCH net-next v3 1/3] selftests: nic_link_layer: Add link
+ layer selftest for NIC driver
+Thread-Index: AQHbIE+u2HO0Jm/IOkKJu76OLoKBHbKSlquAgALxtZA=
+Date: Thu, 24 Oct 2024 07:26:18 +0000
+Message-ID:
+ <DS0PR11MB8050F500D3422F8D06DB374B834E2@DS0PR11MB8050.namprd11.prod.outlook.com>
+References: <20241016215014.401476-1-mohan.prasad@microchip.com>
+ <20241016215014.401476-2-mohan.prasad@microchip.com>
+ <c1890a67-6cc5-4f37-bc33-5fd49b6839c5@redhat.com>
+In-Reply-To: <c1890a67-6cc5-4f37-bc33-5fd49b6839c5@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS0PR11MB8050:EE_|PH0PR11MB5927:EE_
+x-ms-office365-filtering-correlation-id: 2f37ddd3-be98-4400-c9e4-08dcf3fd26bc
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8050.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|376014|366016|7416014|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?MCtER0hyeFdNTk1iN1NvNWYweEQxRTg4T3RNN1pkK1dpUlI2cjU3SzFYK1FK?=
+ =?utf-8?B?WUcxSXgvUDRKazFCa1lQY3FvK1NvdDg0RU9jMmliMWZDQ2FJWkRYb3pkWGZi?=
+ =?utf-8?B?T1REV2ZLZW1hVnNIVmV1S3krZjEwWmxCQXhpU1ZnM0JyRmlTV2hubEtEdmxF?=
+ =?utf-8?B?Y1I3eGlLSVZrK2pEL3dNRCtPT01SYTNiRG5TYVlJNkxUTzM2VHJubUs2enZr?=
+ =?utf-8?B?cHMwbVRSY1FHVDdhYnZMMU92NWdPYkN6ajZzZzZLakRDMk45L1VzU2Z3Qmx5?=
+ =?utf-8?B?b2JLeEhTeEJWYmtNeWlFT29QZkE0RWFZWWl2SlQyTENIZTR0SVQ5SFRWVnk3?=
+ =?utf-8?B?U0JtdDN1aEVjVVVVRnFtYUtwQjZDR1hFVjBxVnpFNkVhTkhmamRQT2tUVXUv?=
+ =?utf-8?B?S0t2dHV5MGxnQXhiTjl3RFgwaDZldm9ScVpEOGt3VFJlczNLUUV6MU5HQnE3?=
+ =?utf-8?B?eUM0NlZDdzN4d2ZxUWdmNkFscTRreFlEb1YwV3NsNTVuYWlKd0psMHRKZkFU?=
+ =?utf-8?B?d1RkWGg4RUp2eTJkNnU4dE5UMWxuWDJYTkVhb3hDV0ExVHZiYmdaTFdZOUd6?=
+ =?utf-8?B?K0kwazEyRDl3NEVicnBPNGpVUGhaaUJBUHBsTG1CSFBobnlxQllWeS9lTEVs?=
+ =?utf-8?B?YlRDaWxQR2hOaXNkOUVPeGlidGVnSGhPVUM4ZDJkc0xqRGxETXZWWXhpRFJz?=
+ =?utf-8?B?aHJTditsY0pLL3VuYzl2VGxvS0dQRS9kZW15R244bzZPelE0STNsWG5nQk5l?=
+ =?utf-8?B?MndrQkg1UzcwWTlVQjhkMGhwdUpzbjN2UmpwRURSOGVoUHFUbHQyMXM3UTkx?=
+ =?utf-8?B?WUhTSFhqYVlpWnRnZlNMYTZvZjJwMXZCSFJNUHZ6dWNSbXBwT0RMblFlNUto?=
+ =?utf-8?B?Z1lkODhvT3ZoTGFLWHlQUDN0cEhPSEZSeGlyNFNEUHJKTkRvVTI1YUpudTRG?=
+ =?utf-8?B?VXpLSVQzM2V0QVQvVjdDb3NrVFc2Nlp2ZzhtcXExcWlmZy82RERoNFJ2L0hh?=
+ =?utf-8?B?dEo4SFFTUXpZcEdQaDR4OXJJWXJneWdHZkNHcmRBR2p2eVZXMzNCK1c1TnpY?=
+ =?utf-8?B?RXo3ZnppSE9BdEVLeGFmdUdQV1RlMzM5RzNxRUZPUnJYUlJaLzFoZG1SRFl6?=
+ =?utf-8?B?N2UwSi9wajFhVTRZNHg0ZGxiUEo0c1p4WENydzVISkZ5dUZsSGc3ZFY4UE9F?=
+ =?utf-8?B?SnJFVmFZaG9WOEhkdEh5QnFzRklZQ3J3YjR4bGtTbUV5bi80TTZQL2hNOE1J?=
+ =?utf-8?B?cXA0U3dHL1lubWozK3JCMTRza2VmYkpBaDk0WDV3aVJsRUwrRVkxallwT2ZU?=
+ =?utf-8?B?Yml2Szg1OWJiWFRnTks3dmpKcmNxQ3lQdkFhZENORDRsUDhXZXIrQWhEaGI4?=
+ =?utf-8?B?Z0JYTjFiSU5jTXROcm05RXowaWlvUkVENWN0UjIrZWt0cGdvYjF6N3UrM2VD?=
+ =?utf-8?B?bE5mQVE0c24xZkU0blpDUjVrQkNZcndPSk5oWWRDTkRWSUxwTUR5eUVVTUM0?=
+ =?utf-8?B?bk5WUGlGRGdoVmZzUlV0UVFyUG1UTHFhMVEvaDYweWMyNlZiSVErY21BRHFq?=
+ =?utf-8?B?emJxeVVsODhiOEdLam9hNURVb3FNTkI4OCs5L1BTT0pWR2E3a0ZSMG4weUJQ?=
+ =?utf-8?B?dW11TG5CZTVnUVJRMXVGZndKbmxDR1BNNmpaa1ArS1liMlcvQmk5bEJRanls?=
+ =?utf-8?B?SnRGZzZpM2daU1J3Ylp5UGdwMmx6UkdwaTgrYitiaVUxcER3TUc5OG5DVGJv?=
+ =?utf-8?B?ZVpGZGI5RlhZNFB0SE1KeEQ2MHZxUUVDYUlUdExzNHpBZkpRTHMyMDhSWEJk?=
+ =?utf-8?Q?/JWQnQYAIcLy2yIS8UaAmRGpqtBX1Cdj6G6vE=3D?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?OGVwVk8renRUQ0ZFVDUrNjE4MFdQbGliWDd1eWtNRGlHOHA5Qi9GL3QxTnZU?=
+ =?utf-8?B?UHVUMEI3NGdjL2xGamlUS1QwQ1BOYkRIOHNvL2l0THhMS3RvdXJkMDhtTWhX?=
+ =?utf-8?B?R2FBa0o2SU40V3NIaW8yZWpFeXIzeDlTenNlY3U2dmZjVEVmcUkxY0M0dFhK?=
+ =?utf-8?B?cHhmTlk3YlIxd3hWdlZ4YTZKK2hPckdneWo2bzdZclhPbnBJcFRuQkJjNENj?=
+ =?utf-8?B?VDBUbTkvTStQMkVodFNIZnp3YzhFSy81VVVhR2xka2hNK1JKVmZMaWdjbUQ1?=
+ =?utf-8?B?UGd6RngvaWNUbUorQnVNdnBBa2NuOFFyTWF3dC9xZTAxSmRVY3F5VlNwNzg4?=
+ =?utf-8?B?OTlBYThDdmlNd0ZuUTQzVEJFTkJITUdDbS9aaytIU0I4NFhpOHpPWGdYMnZS?=
+ =?utf-8?B?OTVvbWpDWDBzVENhL3FMNkh6eWZWVkpPWVRLK3l2NmVVNFphTTlHY0NSV1Vh?=
+ =?utf-8?B?bnFMSDU5ZUJDMmJ6c0dZSjZ5S1JwT0IzNHVyWE01S1pDUk5teUdDOGZHbkRj?=
+ =?utf-8?B?M1VJYm50dW9uZW1wZmdCQkxCa2twcFgzbkFxV0pwV0pyU0IxL3pHZi9BSEtL?=
+ =?utf-8?B?RVVVdXBiZU42Q0I3LzhVcGs3VlRVRUxNd0E1dUVvVGhqSmdsQWpmclZSZUZT?=
+ =?utf-8?B?ZXdYdUxTY3hLbnJ5WS9Za3REVTF5SjZTVTR3dzRVaFN1VXhhUXI2cFJmaXRK?=
+ =?utf-8?B?MnAxMjlZcU1qTWhIdzNVQXBZOFE2Tk4wK3dVNzBoTng0NnBEV0JwTks1ZGVF?=
+ =?utf-8?B?UzJRMC95d3A2ajhFYmJ2bzBGVmFZWGRGUzRJd3BRR2RvYVJFT2tlM1VVemZF?=
+ =?utf-8?B?dW9YUmpYQzFINElNYWJHRVhWRWdxbkRtVmpkdkgyQVVOMEtKbEN4Y05BUEFB?=
+ =?utf-8?B?R2EzOG9aTG5QNXIzUlVIakxwN0ZhYngrbzdMSnNuSmI5WEp0M3Q0YlZEdmFp?=
+ =?utf-8?B?dWZ1ejU3MzNEUnJZbDNGd0RTYUtPcTRGODhldUgycURXYUg2bmFaVi9BQS8v?=
+ =?utf-8?B?dzFRNldpSnNnZ3hVbkRYQ09kVzEyRVJOaTFvUXBZa2c0QXpYQ25EN0M5eUhI?=
+ =?utf-8?B?amVLOWh4dVVBTGxBWG9YT2pCQ0RIc2dpcE1CWDhxb3VraTRSb3JWamFDKzFO?=
+ =?utf-8?B?RllsUnF2c2ErOVBUMmFaK0dYMTNFZzVNVGtmMTVQUjBXRDlEdmllWERxNFRU?=
+ =?utf-8?B?VW1MaVdYMko5bkxmQ296QVNMR2pqMitPVzY1RXlLMmdRcTFKQmU2SHQyWFhE?=
+ =?utf-8?B?M1hacnMrNGo5ZVBWV3ZhTEQ5Z3lVZnNMTWovdC96TFAxZ2lqK0xCb0RHRUxG?=
+ =?utf-8?B?WW0rSWEwMnM2SWNPZHpXQzl1SkNjR3Z1bkN0bDVOTXJmQ25VQmpKV2NQbU9N?=
+ =?utf-8?B?MkFVZXNSMExYUnU5dmg1Z0swR1A5RzJEZ2Y0M2NXSmc4NzZtRkh4OUMwYWEx?=
+ =?utf-8?B?WWUvb3pkNVJ2N3B3K3hVM2lNcVFZc1pmekcrMCtpbTF4bDRQZnZIMHROMC9u?=
+ =?utf-8?B?UUJaNXM3R3dyaGQveHpheDc3YkZ5SUVRNGxBZHNLVkp5b0NldmFHR3J0TTVW?=
+ =?utf-8?B?S2xpL2JRNkF2cXBONERNcHk2QjFvdTU3c3BMRHJkYUpvdDhhYjFNTUt5eTda?=
+ =?utf-8?B?cmRwb1RHM2UzT0UzcGIzbnRWNWpBZzhPLzR2blArcmN0YURNdm96UmxDQnBa?=
+ =?utf-8?B?b011elN6UFhxdmRTU1R1Uy9VRGRROVBVbVdJczRFbWcxbHJSazZtcVJNMmR6?=
+ =?utf-8?B?dXU0N08zU28yUkxUZUxkQXJkL3NCc1NNeEE2TUVPNlZwVWNHeU14Z3Z0amhx?=
+ =?utf-8?B?R3hlcmJtRHVTV0dzdEg5VXlPTG9RbjgwQVVhb05qMDJJRmx1emR0czhUS0NQ?=
+ =?utf-8?B?UHNhSk5CU3hMSkM2RElUcDBCdEo5bm9Rd01scUJSVU8ybjBUdk5NN29OMU5D?=
+ =?utf-8?B?b0tJamhSWDhGa1NvUlhUV3JpWUU2aWhnSW1vdVZjaTNiK1hUbkJ5WHBPeFcw?=
+ =?utf-8?B?eE5zaVA4cmFFUENPa2x1SUtVREVPYnlYSEFKeFhBajBiUkZPNHNBK3VlbVVP?=
+ =?utf-8?B?RitPUDREV0g0UzQ0K3NSVGFLR2x1SUtQemV6VkxUNjA5WkVxTzVIVDVsb3Az?=
+ =?utf-8?Q?tsM1S9ERU/tKUBFFsfmy+FdSL?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GdAHNn_rJdpMr_I2k5MmbnZkJ25-LYid
-X-Proofpoint-ORIG-GUID: GdAHNn_rJdpMr_I2k5MmbnZkJ25-LYid
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 mlxscore=0 mlxlogscore=937
- priorityscore=1501 suspectscore=0 clxscore=1015 impostorscore=0
- bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410240034
+X-OriginatorOrg: microchip.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8050.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f37ddd3-be98-4400-c9e4-08dcf3fd26bc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2024 07:26:18.1433
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: B2s4Ti/KyYKSu2cBDtk3oTJYmD3U0un1a8/SJdTp3yO6JbGU92YiWUxCyP5UvVRfWMh/+iJJETLFYPt09RvbAuG7yL/Iy5o0vaqOCe56Aws=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5927
 
-Fix incompatible function pointer type warnings in sched_ext BPF selftests by
-explicitly casting the function pointers when initializing struct_ops.
-This addresses multiple -Wincompatible-function-pointer-types warnings from the
-clang compiler where function signatures didn't match exactly.
-
-The void * cast ensures the compiler accepts the function pointer
-assignment despite minor type differences in the parameters.
-
-Signed-off-by: Vishal Chourasia <vishalc@linux.ibm.com>
----
- .../selftests/sched_ext/create_dsq.bpf.c      |  6 +-
- .../sched_ext/ddsp_bogus_dsq_fail.bpf.c       |  4 +-
- .../sched_ext/ddsp_vtimelocal_fail.bpf.c      |  4 +-
- .../selftests/sched_ext/dsp_local_on.bpf.c    |  8 +--
- .../sched_ext/enq_select_cpu_fails.bpf.c      |  4 +-
- tools/testing/selftests/sched_ext/exit.bpf.c  | 14 ++---
- .../testing/selftests/sched_ext/hotplug.bpf.c |  8 +--
- .../sched_ext/init_enable_count.bpf.c         |  8 +--
- .../testing/selftests/sched_ext/maximal.bpf.c | 58 +++++++++----------
- .../selftests/sched_ext/maybe_null.bpf.c      |  6 +-
- .../sched_ext/maybe_null_fail_dsp.bpf.c       |  4 +-
- .../sched_ext/maybe_null_fail_yld.bpf.c       |  4 +-
- .../selftests/sched_ext/prog_run.bpf.c        |  2 +-
- .../selftests/sched_ext/select_cpu_dfl.bpf.c  |  2 +-
- .../sched_ext/select_cpu_dfl_nodispatch.bpf.c |  6 +-
- .../sched_ext/select_cpu_dispatch.bpf.c       |  2 +-
- .../select_cpu_dispatch_bad_dsq.bpf.c         |  4 +-
- .../select_cpu_dispatch_dbl_dsp.bpf.c         |  4 +-
- .../sched_ext/select_cpu_vtime.bpf.c          | 12 ++--
- 19 files changed, 80 insertions(+), 80 deletions(-)
-
-diff --git a/tools/testing/selftests/sched_ext/create_dsq.bpf.c b/tools/testing/selftests/sched_ext/create_dsq.bpf.c
-index 23f79ed343f02..2cfc4ffd60e28 100644
---- a/tools/testing/selftests/sched_ext/create_dsq.bpf.c
-+++ b/tools/testing/selftests/sched_ext/create_dsq.bpf.c
-@@ -51,8 +51,8 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(create_dsq_init)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops create_dsq_ops = {
--	.init_task		= create_dsq_init_task,
--	.exit_task		= create_dsq_exit_task,
--	.init			= create_dsq_init,
-+	.init_task		= (void *) create_dsq_init_task,
-+	.exit_task		= (void *) create_dsq_exit_task,
-+	.init			= (void *) create_dsq_init,
- 	.name			= "create_dsq",
- };
-diff --git a/tools/testing/selftests/sched_ext/ddsp_bogus_dsq_fail.bpf.c b/tools/testing/selftests/sched_ext/ddsp_bogus_dsq_fail.bpf.c
-index e97ad41d354ad..37d9bf6fb7458 100644
---- a/tools/testing/selftests/sched_ext/ddsp_bogus_dsq_fail.bpf.c
-+++ b/tools/testing/selftests/sched_ext/ddsp_bogus_dsq_fail.bpf.c
-@@ -35,8 +35,8 @@ void BPF_STRUCT_OPS(ddsp_bogus_dsq_fail_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops ddsp_bogus_dsq_fail_ops = {
--	.select_cpu		= ddsp_bogus_dsq_fail_select_cpu,
--	.exit			= ddsp_bogus_dsq_fail_exit,
-+	.select_cpu		= (void *) ddsp_bogus_dsq_fail_select_cpu,
-+	.exit			= (void *) ddsp_bogus_dsq_fail_exit,
- 	.name			= "ddsp_bogus_dsq_fail",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/ddsp_vtimelocal_fail.bpf.c b/tools/testing/selftests/sched_ext/ddsp_vtimelocal_fail.bpf.c
-index dde7e7dafbfbc..dffc97d9cdf14 100644
---- a/tools/testing/selftests/sched_ext/ddsp_vtimelocal_fail.bpf.c
-+++ b/tools/testing/selftests/sched_ext/ddsp_vtimelocal_fail.bpf.c
-@@ -32,8 +32,8 @@ void BPF_STRUCT_OPS(ddsp_vtimelocal_fail_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops ddsp_vtimelocal_fail_ops = {
--	.select_cpu		= ddsp_vtimelocal_fail_select_cpu,
--	.exit			= ddsp_vtimelocal_fail_exit,
-+	.select_cpu		= (void *) ddsp_vtimelocal_fail_select_cpu,
-+	.exit			= (void *) ddsp_vtimelocal_fail_exit,
- 	.name			= "ddsp_vtimelocal_fail",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/dsp_local_on.bpf.c b/tools/testing/selftests/sched_ext/dsp_local_on.bpf.c
-index efb4672decb41..6a7db1502c29e 100644
---- a/tools/testing/selftests/sched_ext/dsp_local_on.bpf.c
-+++ b/tools/testing/selftests/sched_ext/dsp_local_on.bpf.c
-@@ -56,10 +56,10 @@ void BPF_STRUCT_OPS(dsp_local_on_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops dsp_local_on_ops = {
--	.select_cpu		= dsp_local_on_select_cpu,
--	.enqueue		= dsp_local_on_enqueue,
--	.dispatch		= dsp_local_on_dispatch,
--	.exit			= dsp_local_on_exit,
-+	.select_cpu		= (void *) dsp_local_on_select_cpu,
-+	.enqueue		= (void *) dsp_local_on_enqueue,
-+	.dispatch		= (void *) dsp_local_on_dispatch,
-+	.exit			= (void *) dsp_local_on_exit,
- 	.name			= "dsp_local_on",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c b/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c
-index b3dfc1033cd6a..1efb50d61040a 100644
---- a/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c
-+++ b/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c
-@@ -36,8 +36,8 @@ void BPF_STRUCT_OPS(enq_select_cpu_fails_enqueue, struct task_struct *p,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops enq_select_cpu_fails_ops = {
--	.select_cpu		= enq_select_cpu_fails_select_cpu,
--	.enqueue		= enq_select_cpu_fails_enqueue,
-+	.select_cpu		= (void *) enq_select_cpu_fails_select_cpu,
-+	.enqueue		= (void *) enq_select_cpu_fails_enqueue,
- 	.name			= "enq_select_cpu_fails",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/exit.bpf.c b/tools/testing/selftests/sched_ext/exit.bpf.c
-index ae12ddaac921b..bf79ccd55f8f0 100644
---- a/tools/testing/selftests/sched_ext/exit.bpf.c
-+++ b/tools/testing/selftests/sched_ext/exit.bpf.c
-@@ -72,13 +72,13 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(exit_init)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops exit_ops = {
--	.select_cpu		= exit_select_cpu,
--	.enqueue		= exit_enqueue,
--	.dispatch		= exit_dispatch,
--	.init_task		= exit_init_task,
--	.enable			= exit_enable,
--	.exit			= exit_exit,
--	.init			= exit_init,
-+	.select_cpu		= (void *) exit_select_cpu,
-+	.enqueue		= (void *) exit_enqueue,
-+	.dispatch		= (void *) exit_dispatch,
-+	.init_task		= (void *) exit_init_task,
-+	.enable			= (void *) exit_enable,
-+	.exit			= (void *) exit_exit,
-+	.init			= (void *) exit_init,
- 	.name			= "exit",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/hotplug.bpf.c b/tools/testing/selftests/sched_ext/hotplug.bpf.c
-index 8f2601db39f37..6c9f25c9bf53e 100644
---- a/tools/testing/selftests/sched_ext/hotplug.bpf.c
-+++ b/tools/testing/selftests/sched_ext/hotplug.bpf.c
-@@ -46,16 +46,16 @@ void BPF_STRUCT_OPS_SLEEPABLE(hotplug_cpu_offline, s32 cpu)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops hotplug_cb_ops = {
--	.cpu_online		= hotplug_cpu_online,
--	.cpu_offline		= hotplug_cpu_offline,
--	.exit			= hotplug_exit,
-+	.cpu_online		= (void *) hotplug_cpu_online,
-+	.cpu_offline		= (void *) hotplug_cpu_offline,
-+	.exit			= (void *) hotplug_exit,
- 	.name			= "hotplug_cbs",
- 	.timeout_ms		= 1000U,
- };
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops hotplug_nocb_ops = {
--	.exit			= hotplug_exit,
-+	.exit			= (void *) hotplug_exit,
- 	.name			= "hotplug_nocbs",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/init_enable_count.bpf.c b/tools/testing/selftests/sched_ext/init_enable_count.bpf.c
-index 47ea89a626c37..5eb9edb1837dc 100644
---- a/tools/testing/selftests/sched_ext/init_enable_count.bpf.c
-+++ b/tools/testing/selftests/sched_ext/init_enable_count.bpf.c
-@@ -45,9 +45,9 @@ void BPF_STRUCT_OPS(cnt_disable, struct task_struct *p)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops init_enable_count_ops = {
--	.init_task	= cnt_init_task,
--	.exit_task	= cnt_exit_task,
--	.enable		= cnt_enable,
--	.disable	= cnt_disable,
-+	.init_task	= (void *) cnt_init_task,
-+	.exit_task	= (void *) cnt_exit_task,
-+	.enable		= (void *) cnt_enable,
-+	.disable	= (void *) cnt_disable,
- 	.name		= "init_enable_count",
- };
-diff --git a/tools/testing/selftests/sched_ext/maximal.bpf.c b/tools/testing/selftests/sched_ext/maximal.bpf.c
-index 00bfa9cb95d38..4d4cd8d966dba 100644
---- a/tools/testing/selftests/sched_ext/maximal.bpf.c
-+++ b/tools/testing/selftests/sched_ext/maximal.bpf.c
-@@ -131,34 +131,34 @@ void BPF_STRUCT_OPS(maximal_exit, struct scx_exit_info *info)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops maximal_ops = {
--	.select_cpu		= maximal_select_cpu,
--	.enqueue		= maximal_enqueue,
--	.dequeue		= maximal_dequeue,
--	.dispatch		= maximal_dispatch,
--	.runnable		= maximal_runnable,
--	.running		= maximal_running,
--	.stopping		= maximal_stopping,
--	.quiescent		= maximal_quiescent,
--	.yield			= maximal_yield,
--	.core_sched_before	= maximal_core_sched_before,
--	.set_weight		= maximal_set_weight,
--	.set_cpumask		= maximal_set_cpumask,
--	.update_idle		= maximal_update_idle,
--	.cpu_acquire		= maximal_cpu_acquire,
--	.cpu_release		= maximal_cpu_release,
--	.cpu_online		= maximal_cpu_online,
--	.cpu_offline		= maximal_cpu_offline,
--	.init_task		= maximal_init_task,
--	.enable			= maximal_enable,
--	.exit_task		= maximal_exit_task,
--	.disable		= maximal_disable,
--	.cgroup_init		= maximal_cgroup_init,
--	.cgroup_exit		= maximal_cgroup_exit,
--	.cgroup_prep_move	= maximal_cgroup_prep_move,
--	.cgroup_move		= maximal_cgroup_move,
--	.cgroup_cancel_move	= maximal_cgroup_cancel_move,
--	.cgroup_set_weight	= maximal_cgroup_set_weight,
--	.init			= maximal_init,
--	.exit			= maximal_exit,
-+	.select_cpu		= (void *) maximal_select_cpu,
-+	.enqueue		= (void *) maximal_enqueue,
-+	.dequeue		= (void *) maximal_dequeue,
-+	.dispatch		= (void *) maximal_dispatch,
-+	.runnable		= (void *) maximal_runnable,
-+	.running		= (void *) maximal_running,
-+	.stopping		= (void *) maximal_stopping,
-+	.quiescent		= (void *) maximal_quiescent,
-+	.yield			= (void *) maximal_yield,
-+	.core_sched_before	= (void *) maximal_core_sched_before,
-+	.set_weight		= (void *) maximal_set_weight,
-+	.set_cpumask		= (void *) maximal_set_cpumask,
-+	.update_idle		= (void *) maximal_update_idle,
-+	.cpu_acquire		= (void *) maximal_cpu_acquire,
-+	.cpu_release		= (void *) maximal_cpu_release,
-+	.cpu_online		= (void *) maximal_cpu_online,
-+	.cpu_offline		= (void *) maximal_cpu_offline,
-+	.init_task		= (void *) maximal_init_task,
-+	.enable			= (void *) maximal_enable,
-+	.exit_task		= (void *) maximal_exit_task,
-+	.disable		= (void *) maximal_disable,
-+	.cgroup_init		= (void *) maximal_cgroup_init,
-+	.cgroup_exit		= (void *) maximal_cgroup_exit,
-+	.cgroup_prep_move	= (void *) maximal_cgroup_prep_move,
-+	.cgroup_move		= (void *) maximal_cgroup_move,
-+	.cgroup_cancel_move	= (void *) maximal_cgroup_cancel_move,
-+	.cgroup_set_weight	= (void *) maximal_cgroup_set_weight,
-+	.init			= (void *) maximal_init,
-+	.exit			= (void *) maximal_exit,
- 	.name			= "maximal",
- };
-diff --git a/tools/testing/selftests/sched_ext/maybe_null.bpf.c b/tools/testing/selftests/sched_ext/maybe_null.bpf.c
-index 27d0f386acfb1..cf4ae870cd4e5 100644
---- a/tools/testing/selftests/sched_ext/maybe_null.bpf.c
-+++ b/tools/testing/selftests/sched_ext/maybe_null.bpf.c
-@@ -29,8 +29,8 @@ bool BPF_STRUCT_OPS(maybe_null_success_yield, struct task_struct *from,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops maybe_null_success = {
--	.dispatch               = maybe_null_success_dispatch,
--	.yield			= maybe_null_success_yield,
--	.enable			= maybe_null_running,
-+	.dispatch               = (void *) maybe_null_success_dispatch,
-+	.yield			= (void *) maybe_null_success_yield,
-+	.enable			= (void *) maybe_null_running,
- 	.name			= "minimal",
- };
-diff --git a/tools/testing/selftests/sched_ext/maybe_null_fail_dsp.bpf.c b/tools/testing/selftests/sched_ext/maybe_null_fail_dsp.bpf.c
-index c0641050271d3..ec724d7b33d18 100644
---- a/tools/testing/selftests/sched_ext/maybe_null_fail_dsp.bpf.c
-+++ b/tools/testing/selftests/sched_ext/maybe_null_fail_dsp.bpf.c
-@@ -19,7 +19,7 @@ void BPF_STRUCT_OPS(maybe_null_fail_dispatch, s32 cpu, struct task_struct *p)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops maybe_null_fail = {
--	.dispatch               = maybe_null_fail_dispatch,
--	.enable			= maybe_null_running,
-+	.dispatch               = (void *) maybe_null_fail_dispatch,
-+	.enable			= (void *) maybe_null_running,
- 	.name			= "maybe_null_fail_dispatch",
- };
-diff --git a/tools/testing/selftests/sched_ext/maybe_null_fail_yld.bpf.c b/tools/testing/selftests/sched_ext/maybe_null_fail_yld.bpf.c
-index 3c1740028e3b9..e6552cace020e 100644
---- a/tools/testing/selftests/sched_ext/maybe_null_fail_yld.bpf.c
-+++ b/tools/testing/selftests/sched_ext/maybe_null_fail_yld.bpf.c
-@@ -22,7 +22,7 @@ bool BPF_STRUCT_OPS(maybe_null_fail_yield, struct task_struct *from,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops maybe_null_fail = {
--	.yield			= maybe_null_fail_yield,
--	.enable			= maybe_null_running,
-+	.yield			= (void *) maybe_null_fail_yield,
-+	.enable			= (void *) maybe_null_running,
- 	.name			= "maybe_null_fail_yield",
- };
-diff --git a/tools/testing/selftests/sched_ext/prog_run.bpf.c b/tools/testing/selftests/sched_ext/prog_run.bpf.c
-index 6a4d7c48e3f22..00c267626a68f 100644
---- a/tools/testing/selftests/sched_ext/prog_run.bpf.c
-+++ b/tools/testing/selftests/sched_ext/prog_run.bpf.c
-@@ -28,6 +28,6 @@ void BPF_STRUCT_OPS(prog_run_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops prog_run_ops = {
--	.exit			= prog_run_exit,
-+	.exit			= (void *) prog_run_exit,
- 	.name			= "prog_run",
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dfl.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dfl.bpf.c
-index 2ed2991afafe3..f171ac4709706 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dfl.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dfl.bpf.c
-@@ -35,6 +35,6 @@ void BPF_STRUCT_OPS(select_cpu_dfl_enqueue, struct task_struct *p,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_dfl_ops = {
--	.enqueue		= select_cpu_dfl_enqueue,
-+	.enqueue		= (void *) select_cpu_dfl_enqueue,
- 	.name			= "select_cpu_dfl",
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c
-index 4bb5abb2d3690..9efdbb7da9288 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c
-@@ -82,8 +82,8 @@ s32 BPF_STRUCT_OPS(select_cpu_dfl_nodispatch_init_task,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_dfl_nodispatch_ops = {
--	.select_cpu		= select_cpu_dfl_nodispatch_select_cpu,
--	.enqueue		= select_cpu_dfl_nodispatch_enqueue,
--	.init_task		= select_cpu_dfl_nodispatch_init_task,
-+	.select_cpu		= (void *) select_cpu_dfl_nodispatch_select_cpu,
-+	.enqueue		= (void *) select_cpu_dfl_nodispatch_enqueue,
-+	.init_task		= (void *) select_cpu_dfl_nodispatch_init_task,
- 	.name			= "select_cpu_dfl_nodispatch",
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dispatch.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dispatch.bpf.c
-index f0b96a4a04b2c..59bfc4f36167a 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dispatch.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dispatch.bpf.c
-@@ -35,7 +35,7 @@ s32 BPF_STRUCT_OPS(select_cpu_dispatch_select_cpu, struct task_struct *p,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_dispatch_ops = {
--	.select_cpu		= select_cpu_dispatch_select_cpu,
-+	.select_cpu		= (void *) select_cpu_dispatch_select_cpu,
- 	.name			= "select_cpu_dispatch",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dispatch_bad_dsq.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dispatch_bad_dsq.bpf.c
-index 7b42ddce0f56c..3bbd5fcdfb18e 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dispatch_bad_dsq.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dispatch_bad_dsq.bpf.c
-@@ -30,8 +30,8 @@ void BPF_STRUCT_OPS(select_cpu_dispatch_bad_dsq_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_dispatch_bad_dsq_ops = {
--	.select_cpu		= select_cpu_dispatch_bad_dsq_select_cpu,
--	.exit			= select_cpu_dispatch_bad_dsq_exit,
-+	.select_cpu		= (void *) select_cpu_dispatch_bad_dsq_select_cpu,
-+	.exit			= (void *) select_cpu_dispatch_bad_dsq_exit,
- 	.name			= "select_cpu_dispatch_bad_dsq",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dispatch_dbl_dsp.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dispatch_dbl_dsp.bpf.c
-index 653e3dc0b4dc8..0fda57fe0ecfa 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dispatch_dbl_dsp.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dispatch_dbl_dsp.bpf.c
-@@ -31,8 +31,8 @@ void BPF_STRUCT_OPS(select_cpu_dispatch_dbl_dsp_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_dispatch_dbl_dsp_ops = {
--	.select_cpu		= select_cpu_dispatch_dbl_dsp_select_cpu,
--	.exit			= select_cpu_dispatch_dbl_dsp_exit,
-+	.select_cpu		= (void *) select_cpu_dispatch_dbl_dsp_select_cpu,
-+	.exit			= (void *) select_cpu_dispatch_dbl_dsp_exit,
- 	.name			= "select_cpu_dispatch_dbl_dsp",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_vtime.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_vtime.bpf.c
-index 7f3ebf4fc2ead..e6c67bcf5e6e3 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_vtime.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_vtime.bpf.c
-@@ -81,12 +81,12 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(select_cpu_vtime_init)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_vtime_ops = {
--	.select_cpu		= select_cpu_vtime_select_cpu,
--	.dispatch		= select_cpu_vtime_dispatch,
--	.running		= select_cpu_vtime_running,
--	.stopping		= select_cpu_vtime_stopping,
--	.enable			= select_cpu_vtime_enable,
--	.init			= select_cpu_vtime_init,
-+	.select_cpu		= (void *) select_cpu_vtime_select_cpu,
-+	.dispatch		= (void *) select_cpu_vtime_dispatch,
-+	.running		= (void *) select_cpu_vtime_running,
-+	.stopping		= (void *) select_cpu_vtime_stopping,
-+	.enable			= (void *) select_cpu_vtime_enable,
-+	.init			= (void *) select_cpu_vtime_init,
- 	.name			= "select_cpu_vtime",
- 	.timeout_ms		= 1000U,
- };
--- 
-2.47.0
-
+SGVsbG8gUGFvbG8sDQoNClRoYW5rIHlvdSBmb3IgdGhlIHJldmlldyBjb21tZW50cy4NCg0KPiA+
+IEFkZCBzZWxmdGVzdCBmaWxlIGZvciB0aGUgbGluayBsYXllciB0ZXN0cyBvZiBhIE5JQyBkcml2
+ZXIuDQo+ID4gVGVzdCBmb3IgYXV0by1uZWdvdGlhdGlvbiBpcyBhZGRlZC4NCj4gPiBBZGQgTGlu
+a0NvbmZpZyBjbGFzcyBmb3IgY2hhbmdpbmcgbGluayBsYXllciBjb25maWdzLg0KPiA+IFNlbGZ0
+ZXN0IG1ha2VzIHVzZSBvZiBrc2Z0IG1vZHVsZXMgYW5kIGV0aHRvb2wuDQo+ID4gSW5jbHVkZSBz
+ZWxmdGVzdCBmaWxlIGluIHRoZSBNYWtlZmlsZS4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IE1v
+aGFuIFByYXNhZCBKIDxtb2hhbi5wcmFzYWRAbWljcm9jaGlwLmNvbT4NCj4gPiAtLS0NCj4gPiAg
+Li4uL3Rlc3Rpbmcvc2VsZnRlc3RzL2RyaXZlcnMvbmV0L2h3L01ha2VmaWxlIHwgICAxICsNCj4g
+PiAgLi4uL2RyaXZlcnMvbmV0L2h3L2xpYi9weS9fX2luaXRfXy5weSAgICAgICAgIHwgICAxICsN
+Cj4gPiAgLi4uL2RyaXZlcnMvbmV0L2h3L2xpYi9weS9saW5rY29uZmlnLnB5ICAgICAgIHwgMjIw
+ICsrKysrKysrKysrKysrKysrKw0KPiA+ICAuLi4vZHJpdmVycy9uZXQvaHcvbmljX2xpbmtfbGF5
+ZXIucHkgICAgICAgICAgfCAgODQgKysrKysrKw0KPiA+ICA0IGZpbGVzIGNoYW5nZWQsIDMwNiBp
+bnNlcnRpb25zKCspDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiA+IHRvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzL2RyaXZlcnMvbmV0L2h3L2xpYi9weS9saW5rY29uZmlnLnB5DQo+ID4gIGNyZWF0
+ZSBtb2RlIDEwMDY0NA0KPiA+IHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2RyaXZlcnMvbmV0L2h3
+L25pY19saW5rX2xheWVyLnB5DQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9z
+ZWxmdGVzdHMvZHJpdmVycy9uZXQvaHcvTWFrZWZpbGUNCj4gPiBiL3Rvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzL2RyaXZlcnMvbmV0L2h3L01ha2VmaWxlDQo+ID4gaW5kZXggYzlmMmY0OGZjLi4wZGFj
+NDBjNGUgMTAwNjQ0DQo+ID4gLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZHJpdmVycy9u
+ZXQvaHcvTWFrZWZpbGUNCj4gPiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9kcml2ZXJz
+L25ldC9ody9NYWtlZmlsZQ0KPiA+IEBAIC0xMCw2ICsxMCw3IEBAIFRFU1RfUFJPR1MgPSBcDQo+
+ID4gICAgICAgaHdfc3RhdHNfbDMuc2ggXA0KPiA+ICAgICAgIGh3X3N0YXRzX2wzX2dyZS5zaCBc
+DQo+ID4gICAgICAgbG9vcGJhY2suc2ggXA0KPiA+ICsgICAgIG5pY19saW5rX2xheWVyLnB5IFwN
+Cj4gPiAgICAgICBwcF9hbGxvY19mYWlsLnB5IFwNCj4gPiAgICAgICByc3NfY3R4LnB5IFwNCj4g
+PiAgICAgICAjDQo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2RyaXZl
+cnMvbmV0L2h3L2xpYi9weS9fX2luaXRfXy5weQ0KPiA+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMvZHJpdmVycy9uZXQvaHcvbGliL3B5L19faW5pdF9fLnB5DQo+ID4gaW5kZXggYjU4Mjg4NTc4
+Li4zOTk3ODlhOTYgMTAwNjQ0DQo+ID4gLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZHJp
+dmVycy9uZXQvaHcvbGliL3B5L19faW5pdF9fLnB5DQo+ID4gKysrIGIvdG9vbHMvdGVzdGluZy9z
+ZWxmdGVzdHMvZHJpdmVycy9uZXQvaHcvbGliL3B5L19faW5pdF9fLnB5DQo+ID4gQEAgLTksNiAr
+OSw3IEBAIHRyeToNCj4gPiAgICAgIHN5cy5wYXRoLmFwcGVuZChLU0ZUX0RJUi5hc19wb3NpeCgp
+KQ0KPiA+ICAgICAgZnJvbSBuZXQubGliLnB5IGltcG9ydCAqDQo+ID4gICAgICBmcm9tIGRyaXZl
+cnMubmV0LmxpYi5weSBpbXBvcnQgKg0KPiA+ICsgICAgZnJvbSAubGlua2NvbmZpZyBpbXBvcnQg
+TGlua0NvbmZpZw0KPiA+ICBleGNlcHQgTW9kdWxlTm90Rm91bmRFcnJvciBhcyBlOg0KPiA+ICAg
+ICAga3NmdF9wcigiRmFpbGVkIGltcG9ydGluZyBgbmV0YCBsaWJyYXJ5IGZyb20ga2VybmVsIHNv
+dXJjZXMiKQ0KPiA+ICAgICAga3NmdF9wcihzdHIoZSkpDQo+ID4gZGlmZiAtLWdpdA0KPiA+IGEv
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZHJpdmVycy9uZXQvaHcvbGliL3B5L2xpbmtjb25maWcu
+cHkNCj4gPiBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2RyaXZlcnMvbmV0L2h3L2xpYi9weS9s
+aW5rY29uZmlnLnB5DQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAw
+MDAuLjg2Y2JmMTBhMw0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi90b29scy90ZXN0aW5n
+L3NlbGZ0ZXN0cy9kcml2ZXJzL25ldC9ody9saWIvcHkvbGlua2NvbmZpZy5weQ0KPiA+IEBAIC0w
+LDAgKzEsMjIwIEBADQo+ID4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4g
+PiArDQo+ID4gK2Zyb20gbGliLnB5IGltcG9ydCBjbWQNCj4gPiArZnJvbSBsaWIucHkgaW1wb3J0
+IGV0aHRvb2wNCj4gPiArZnJvbSBsaWIucHkgaW1wb3J0IGtzZnRfcHIsIGtzZnRfZXENCj4gPiAr
+aW1wb3J0IHJlDQo+ID4gK2ltcG9ydCB0aW1lDQo+ID4gK2ltcG9ydCBqc29uDQo+ID4gKw0KPiA+
+ICsjVGhlIExpbmtDb25maWcgY2xhc3MgaXMgaW1wbGVtZW50ZWQgdG8gaGFuZGxlIHRoZSBsaW5r
+IGxheWVyDQo+IGNvbmZpZ3VyYXRpb25zLg0KPiA+ICsjUmVxdWlyZWQgbWluaW11bSBldGh0b29s
+IHZlcnNpb24gaXMgNi4xMCAjVGhlIGV0aHRvb2wgYW5kIGlwIHdvdWxkDQo+ID4gK3JlcXVpcmUg
+YXV0aGVudGljYXRpb24gdG8gbWFrZSBjaGFuZ2VzLCBzbyBiZXR0ZXIgIyB0byBjaGVjayB0aGVt
+IGZvcg0KPiA+ICtzdWRvIHByaXZpbGVnZXMgZm9yIGludGVycnVwdGlvbiBmcmVlIHRlc3Rpbmcu
+DQo+ID4gKw0KPiA+ICtjbGFzcyBMaW5rQ29uZmlnOg0KPiA+ICsgICAgIiIiQ2xhc3MgZm9yIGhh
+bmRsaW5nIHRoZSBsaW5rIGxheWVyIGNvbmZpZ3VyYXRpb25zIiIiDQo+ID4gKyAgICBkZWYgX19p
+bml0X18oc2VsZiwgY2ZnKToNCj4gPiArICAgICAgICBzZWxmLmNmZyA9IGNmZw0KPiA+ICsgICAg
+ICAgIHNlbGYucGFydG5lcl9uZXRpZiA9IHNlbGYuZ2V0X3BhcnRuZXJfbmV0aWZfbmFtZSgpDQo+
+ID4gKw0KPiA+ICsgICAgICAgICIiIkdldCB0aGUgaW5pdGlhbCBsaW5rIGNvbmZpZ3VyYXRpb24g
+b2YgbG9jYWwgaW50ZXJmYWNlIiIiDQo+ID4gKyAgICAgICAgc2VsZi5jb21tb25fbGlua19tb2Rl
+cyA9IHNlbGYuZ2V0X2NvbW1vbl9saW5rX21vZGVzKCkNCj4gPiArDQo+ID4gKyAgICBkZWYgZ2V0
+X3BhcnRuZXJfbmV0aWZfbmFtZShzZWxmKToNCj4gDQo+IFlvdSBzaG91bGQgdXNlIHR5cGUgaGlu
+dHMgZm9yIGJvdGggdGhlIGFyZ3VtZW50cyBhbmQgdGhlIHJldHVybiB0eXBlLg0KDQpJIHdpbGwg
+dXBkYXRlIHRoZSB0eXBlIGhpbnRzIHdoZXJldmVyIGFwcGxpY2FibGUsIHlvdSBjYW4gZmluZCBp
+dCBpbiB0aGUgbmV4dCByZXZpc2lvbi4NCg0KPiANCj4gPiArICAgICAgICBwYXJ0bmVyX25ldGlm
+ID0gTm9uZQ0KPiA+ICsgICAgICAgIHRyeToNCj4gPiArICAgICAgICAgICAgIiIiR2V0IHBhcnRu
+ZXIgaW50ZXJmYWNlIG5hbWUiIiINCj4gPiArICAgICAgICAgICAgcGFydG5lcl9jbWQgPSBmImlw
+IC1vIC1mIGluZXQgYWRkciBzaG93IHwgZ3JlcA0KPiAne3NlbGYuY2ZnLnJlbW90ZV9hZGRyfScg
+IiArICJ8IGF3ayAne3ByaW50ICQyfSciDQo+IA0KPiBJdCdzIGJldHRlciBpZiB5b3UgdXNlIGpz
+b24gb3V0cHV0IGV2ZW4gaGVyZQ0KDQpJIHdpbGwgdXBkYXRlIGl0IGZvciBqc29uIG91dHB1dCwg
+eW91IGNhbiBmaW5kIGl0IGluIG5leHQgdmVyc2lvbi4NCg0KPiANCj4gWy4uLl0NCj4gPiArICAg
+IGRlZiByZXNldF9pbnRlcmZhY2Uoc2VsZiwgbG9jYWw9VHJ1ZSwgcmVtb3RlPVRydWUpOg0KPiA+
+ICsgICAgICAgIGtzZnRfcHIoIlJlc2V0dGluZyBpbnRlcmZhY2VzIGluIGxvY2FsIGFuZCByZW1v
+dGUiKQ0KPiA+ICsgICAgICAgIGlmIHJlbW90ZToNCj4gPiArICAgICAgICAgICAgaWYgc2VsZi5w
+YXJ0bmVyX25ldGlmIGlzIG5vdCBOb25lOg0KPiA+ICsgICAgICAgICAgICAgICAgaWZuYW1lID0g
+c2VsZi5wYXJ0bmVyX25ldGlmDQo+ID4gKyAgICAgICAgICAgICAgICBsaW5rX3VwX2NtZCA9IGYi
+c3VkbyBpcCBsaW5rIHNldCB1cCB7aWZuYW1lfSINCj4gPiArICAgICAgICAgICAgICAgIGxpbmtf
+ZG93bl9jbWQgPSBmInN1ZG8gaXAgbGluayBzZXQgZG93biB7aWZuYW1lfSINCj4gPiArICAgICAg
+ICAgICAgICAgIHJlc2V0X2NtZCA9IGYie2xpbmtfZG93bl9jbWR9ICYmIHNsZWVwIDUgJiYge2xp
+bmtfdXBfY21kfSINCj4gPiArICAgICAgICAgICAgICAgIHRyeToNCj4gPiArICAgICAgICAgICAg
+ICAgICAgICBjbWQoZiJ7cmVzZXRfY21kfSIsIGhvc3Q9c2VsZi5jZmcucmVtb3RlKQ0KPiA+ICsg
+ICAgICAgICAgICAgICAgZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOg0KPiA+ICsgICAgICAgICAgICAg
+ICAgICAgIGtzZnRfcHIoIkNoZWNrIHN1ZG8gcGVybWlzc2lvbiBmb3IgaXAgY29tbWFuZCIpDQo+
+ID4gKyAgICAgICAgICAgICAgICAgICAga3NmdF9wcihmIlVuZXhwZWN0ZWQgZXJyb3Igb2NjdXJy
+ZWQ6IHtlfSIpDQo+IA0KPiBQbGVhc2UsIGRvbid0IHVzZSBzdWRvLCBqdXN0IHJ1biB0aGUgY29t
+bWFuZCBkaXJlY3RseS4gVGhlIHNlbGZ0ZXN0cyBzaG91bGQgYmUNCj4gZXhlY3V0ZWQgb25seSBi
+eSBwcml2aWxlZ2VkIHVzZXJzLg0KDQpUaGUgc3VkbyB3aWxsIGJlIHJlbW92ZWQgaW4gdGhlIG5l
+eHQgcmV2aXNpb24uDQoNCj4gDQo+IFsuLi5dDQo+ID4gKyAgICBkZWYgY2hlY2tfYXV0b25lZ19z
+dXBwb3J0ZWQoc2VsZiwgcmVtb3RlPUZhbHNlKToNCj4gPiArICAgICAgICBpZiByZW1vdGU9PUZh
+bHNlOg0KPiA+ICsgICAgICAgICAgICBsb2NhbF9hdXRvbmVnID0gc2VsZi5nZXRfZXRodG9vbF9m
+aWVsZCgic3VwcG9ydHMtYXV0by1uZWdvdGlhdGlvbiIpDQo+ID4gKyAgICAgICAgICAgIGlmIGxv
+Y2FsX2F1dG9uZWcgaXMgTm9uZToNCj4gPiArICAgICAgICAgICAgICAgIGtzZnRfcHIoZiJVbmFi
+bGUgdG8gZmV0Y2ggYXV0by1uZWdvdGlhdGlvbiBzdGF0dXMgZm9yIGludGVyZmFjZQ0KPiB7c2Vs
+Zi5jZmcuaWZuYW1lfSIpDQo+ID4gKyAgICAgICAgICAgICIiIlJldHVybiBhdXRvbmVnIHN0YXR1
+cyBvZiB0aGUgbG9jYWwgaW50ZXJmYWNlIiIiDQo+ID4gKyAgICAgICAgICAgIHN0YXR1cyA9IFRy
+dWUgaWYgbG9jYWxfYXV0b25lZyA9PSBUcnVlIGVsc2UgRmFsc2UNCj4gPiArICAgICAgICAgICAg
+cmV0dXJuIHN0YXR1cw0KPiANCj4gT3V0IG9mIHNoZWVyIGlnbm9yYW5jZSwgaW4ndA0KPiANCj4g
+ICAgICAgICAgICAgICAgIHJldHVybiBsb2NhbF9hdXRvbmVnDQo+IA0KPiBlbm91Z2g/DQoNClRo
+aXMgd2lsbCBiZSB1cGRhdGVkIHRvIHJldHVybiBqdXN0IHRoZSBsb2NhbF9hdXRvbmVnLg0KDQo+
+IA0KPiANCj4gPiArICAgICAgICBlbHNlOg0KPiA+ICsgICAgICAgICAgICAiIiJDaGVjayByZW1v
+dGUgYXV0by1uZWdvdGlhdGlvbiBzdXBwb3J0IHN0YXR1cyIiIg0KPiA+ICsgICAgICAgICAgICBw
+YXJ0bmVyX2F1dG9uZWcgPSBGYWxzZQ0KPiA+ICsgICAgICAgICAgICBpZiBzZWxmLnBhcnRuZXJf
+bmV0aWYgaXMgbm90IE5vbmU6DQo+ID4gKyAgICAgICAgICAgICAgICBwYXJ0bmVyX2F1dG9uZWcg
+PSBzZWxmLmdldF9ldGh0b29sX2ZpZWxkKCJzdXBwb3J0cy1hdXRvLQ0KPiBuZWdvdGlhdGlvbiIs
+IHJlbW90ZT1UcnVlKQ0KPiA+ICsgICAgICAgICAgICAgICAgaWYgcGFydG5lcl9hdXRvbmVnIGlz
+IE5vbmU6DQo+ID4gKyAgICAgICAgICAgICAgICAgICAga3NmdF9wcihmIlVuYWJsZSB0byBmZXRj
+aCBhdXRvLW5lZ290aWF0aW9uIHN0YXR1cyBmb3IgaW50ZXJmYWNlDQo+IHtwYXJ0bmVyX25ldGlm
+fSIpDQo+ID4gKyAgICAgICAgICAgIHN0YXR1cyA9IFRydWUgaWYgcGFydG5lcl9hdXRvbmVnIGlz
+IFRydWUgZWxzZSBGYWxzZQ0KPiA+ICsgICAgICAgICAgICByZXR1cm4gc3RhdHVzDQo+ID4gKw0K
+PiA+ICsgICAgZGVmIGdldF9jb21tb25fbGlua19tb2RlcyhzZWxmKToNCj4gPiArICAgICAgICBj
+b21tb25fbGlua19tb2RlcyA9IE5vbmUNCj4gPiArICAgICAgICAiIiJQb3B1bGF0ZSBjb21tb24g
+bGluayBtb2RlcyIiIg0KPiA+ICsgICAgICAgIGxpbmtfbW9kZXMgPSBzZWxmLmdldF9ldGh0b29s
+X2ZpZWxkKCJzdXBwb3J0ZWQtbGluay1tb2RlcyIpDQo+ID4gKyAgICAgICAgcGFydG5lcl9saW5r
+X21vZGVzID0gc2VsZi5nZXRfZXRodG9vbF9maWVsZCgibGluay1wYXJ0bmVyLWFkdmVydGlzZWQt
+DQo+IGxpbmstbW9kZXMiKQ0KPiA+ICsgICAgICAgIGlmIGxpbmtfbW9kZXMgaXMgTm9uZToNCj4g
+PiArICAgICAgICAgICAgcmFpc2UgRXhjZXB0aW9uKGYiTGluayBtb2RlcyBub3QgYXZhaWxhYmxl
+IGZvciB7c2VsZi5jZmcuaWZuYW1lfSIpDQo+ID4gKyAgICAgICAgaWYgcGFydG5lcl9saW5rX21v
+ZGVzIGlzIE5vbmU6DQo+ID4gKyAgICAgICAgICAgIHJhaXNlIEV4Y2VwdGlvbihmIlBhcnRuZXIg
+bGluayBtb2RlcyBub3QgYXZhaWxhYmxlIGZvcg0KPiB7c2VsZi5jZmcuaWZuYW1lfSIpDQo+ID4g
+KyAgICAgICAgY29tbW9uX2xpbmtfbW9kZXMgPSBzZXQobGlua19tb2RlcykgYW5kIHNldChwYXJ0
+bmVyX2xpbmtfbW9kZXMpDQo+ID4gKyAgICAgICAgcmV0dXJuIGNvbW1vbl9saW5rX21vZGVzDQo+
+ID4gKw0KPiA+ICsgICAgZGVmIGdldF9zcGVlZF9kdXBsZXhfdmFsdWVzKHNlbGYsIGxpbmtfbW9k
+ZXMpOg0KPiA+ICsgICAgICAgIHNwZWVkID0gW10NCj4gPiArICAgICAgICBkdXBsZXggPSBbXQ0K
+PiA+ICsgICAgICAgICIiIkNoZWNrIHRoZSBsaW5rIG1vZGVzIiIiDQo+ID4gKyAgICAgICAgZm9y
+IGRhdGEgaW4gbGlua19tb2RlczoNCj4gPiArICAgICAgICAgICAgcGFydHMgPSBkYXRhLnNwbGl0
+KCcvJykNCj4gPiArICAgICAgICAgICAgc3BlZWRfdmFsdWUgPSByZS5tYXRjaChyJ1xkKycsIHBh
+cnRzWzBdKQ0KPiA+ICsgICAgICAgICAgICBpZiBzcGVlZF92YWx1ZToNCj4gPiArICAgICAgICAg
+ICAgICAgIHNwZWVkLmFwcGVuZChzcGVlZF92YWx1ZS5ncm91cCgpKQ0KPiA+ICsgICAgICAgICAg
+ICBlbHNlOg0KPiA+ICsgICAgICAgICAgICAgICAga3NmdF9wcihmIk5vIHNwZWVkIHZhbHVlIGZv
+dW5kIGZvciBpbnRlcmZhY2Uge3NlbGYuaWZuYW1lfSIpDQo+ID4gKyAgICAgICAgICAgICAgICBy
+ZXR1cm4gTm9uZSwgTm9uZQ0KPiA+ICsgICAgICAgICAgICBkdXBsZXguYXBwZW5kKHBhcnRzWzFd
+Lmxvd2VyKCkpDQo+ID4gKyAgICAgICAgcmV0dXJuIHNwZWVkLCBkdXBsZXgNCj4gPiArDQo+ID4g
+KyAgICBkZWYgZ2V0X2V0aHRvb2xfZmllbGQoc2VsZiwgZmllbGQ6IHN0ciwgcmVtb3RlPUZhbHNl
+KToNCj4gPiArICAgICAgICBwcm9jZXNzID0gTm9uZQ0KPiA+ICsgICAgICAgIGlmIHJlbW90ZSA9
+PSBGYWxzZToNCj4gPiArICAgICAgICAgICAgIiIiR2V0IHRoZSBldGh0b29sIGZpZWxkIHZhbHVl
+IGZvciB0aGUgbG9jYWwgaW50ZXJmYWNlIiIiDQo+ID4gKyAgICAgICAgICAgIGlmbmFtZSA9IHNl
+bGYuY2ZnLmlmbmFtZQ0KPiA+ICsgICAgICAgICAgICB0cnk6DQo+ID4gKyAgICAgICAgICAgICAg
+ICBwcm9jZXNzID0gZXRodG9vbChmIi0tanNvbiB7aWZuYW1lfSIpDQo+ID4gKyAgICAgICAgICAg
+IGV4Y2VwdCBFeGNlcHRpb24gYXMgZToNCj4gPiArICAgICAgICAgICAgICAgIGtzZnRfcHIoIlJl
+cXVpcmVkIG1pbmltdW0gZXRodG9vbCB2ZXJzaW9uIGlzIDYuMTAiKQ0KPiA+ICsgICAgICAgICAg
+ICAgICAga3NmdF9wcihmIlVuZXhwZWN0ZWQgZXJyb3Igb2NjdXJyZWQ6IHtlfSIpDQo+ID4gKyAg
+ICAgICAgZWxzZToNCj4gPiArICAgICAgICAgICAgIiIiR2V0IHRoZSBldGh0b29sIGZpZWxkIHZh
+bHVlIGZvciB0aGUgcmVtb3RlIGludGVyZmFjZSIiIg0KPiA+ICsgICAgICAgICAgICByZW1vdGUg
+PSBUcnVlDQo+ID4gKyAgICAgICAgICAgIGlmbmFtZSA9IHNlbGYucGFydG5lcl9uZXRpZg0KPiA+
+ICsgICAgICAgICAgICBzZWxmLmNmZy5yZXF1aXJlX2NtZCgiZXRodG9vbCIsIHJlbW90ZSkNCj4g
+PiArICAgICAgICAgICAgY29tbWFuZCA9IGYiZXRodG9vbCAtLWpzb24ge2lmbmFtZX0iDQo+ID4g
+KyAgICAgICAgICAgIHRyeToNCj4gPiArICAgICAgICAgICAgICAgIHByb2Nlc3MgPSBjbWQoY29t
+bWFuZCwgaG9zdD1zZWxmLmNmZy5yZW1vdGUpDQo+ID4gKyAgICAgICAgICAgIGV4Y2VwdCBFeGNl
+cHRpb24gYXMgZToNCj4gPiArICAgICAgICAgICAgICAgIGtzZnRfcHIoIlJlcXVpcmVkIG1pbmlt
+dW0gZXRodG9vbCB2ZXJzaW9uIGlzIDYuMTAiKQ0KPiA+ICsgICAgICAgICAgICAgICAga3NmdF9w
+cigiVW5leHBlY3RlZCBlcnJvciBvY2N1cnJlZDoge2V9IikNCj4gPiArICAgICAgICBpZiBwcm9j
+ZXNzIGlzIE5vbmUgb3IgcHJvY2Vzcy5yZXQgIT0gMDoNCj4gPiArICAgICAgICAgICAgcHJpbnQo
+ZiJFcnJvciB3aGlsZSBnZXR0aW5nIHRoZSBldGh0b29sIGNvbnRlbnQgZm9yIGludGVyZmFjZSB7
+aWZuYW1lfS4NCj4gUmVxdWlyZWQgbWluaW11bSBldGh0b29sIHZlcnNpb24gaXMgNi4xMCIpDQo+
+ID4gKyAgICAgICAgICAgIHJldHVybiBOb25lDQo+ID4gKyAgICAgICAgb3V0cHV0ID0ganNvbi5s
+b2Fkcyhwcm9jZXNzLnN0ZG91dCkNCj4gPiArICAgICAgICBqc29uX2RhdGEgPSBvdXRwdXRbMF0N
+Cj4gPiArICAgICAgICAiIiJDaGVjayBpZiB0aGUgZmllbGQgZXhpc3QgaW4gdGhlIGpzb24gZGF0
+YSIiIg0KPiA+ICsgICAgICAgIGlmIGZpZWxkIG5vdCBpbiBqc29uX2RhdGE6DQo+ID4gKyAgICAg
+ICAgICAgIHJhaXNlIEV4Y2VwdGlvbihmIkZpZWxkIHtmaWVsZH0gZG9lcyBub3QgZXhpc3QgaW4g
+dGhlIG91dHB1dCBvZg0KPiBpbnRlcmZhY2Uge2pzb25fZGF0YVsiaWZuYW1lIl19IikNCj4gPiAr
+ICAgICAgICAgICAgcmV0dXJuIE5vbmUNCj4gPiArICAgICAgICByZXR1cm4ganNvbl9kYXRhW2Zp
+ZWxkXQ0KPiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9kcml2ZXJzL25l
+dC9ody9uaWNfbGlua19sYXllci5weQ0KPiA+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZHJp
+dmVycy9uZXQvaHcvbmljX2xpbmtfbGF5ZXIucHkNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0K
+PiA+IGluZGV4IDAwMDAwMDAwMC4uZmIwNDZlZmJlDQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsr
+KyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2RyaXZlcnMvbmV0L2h3L25pY19saW5rX2xheWVy
+LnB5DQo+ID4gQEAgLTAsMCArMSw4NCBAQA0KPiA+ICsjIS91c3IvYmluL2VudiBweXRob24zDQo+
+ID4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4gPiArDQo+ID4gKyNJbnRy
+b2R1Y3Rpb246DQo+ID4gKyNUaGlzIGZpbGUgaGFzIGJhc2ljIGxpbmsgbGF5ZXIgdGVzdHMgZm9y
+IGdlbmVyaWMgTklDIGRyaXZlcnMuDQo+ID4gKyNUaGUgdGVzdCBjb21wcmlzZXMgb2YgYXV0by1u
+ZWdvdGlhdGlvbiwgc3BlZWQgYW5kIGR1cGxleCBjaGVja3MuDQo+ID4gKyMNCj4gPiArI1NldHVw
+Og0KPiA+ICsjQ29ubmVjdCB0aGUgRFVUIFBDIHdpdGggTklDIGNhcmQgdG8gcGFydG5lciBwYyBi
+YWNrIHZpYSBldGhlcm5ldA0KPiA+ICttZWRpdW0gb2YgeW91ciBjaG9pY2UoUko0NSwgVDEpICMN
+Cj4gPiArIyAgICAgICAgRFVUIFBDICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIFBhcnRuZXIgUEMNCj4gPiArI+KUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkA0KPiDilIzilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilJANCj4gPiArI+KUgiAgICAgICAgICAgICAgICAgICAgICAg4pSC
+ICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAg4pSC
+DQo+ID4gKyPilIIgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAg
+ICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgg0KPiA+ICsj4pSCICAgICAgICAg
+ICDilIzilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAgICAgICAgICAgICAgICAg
+ICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICDilIINCj4gPiArI+KUgiAgICAg
+ICAgICAg4pSCRFVUIE5JQyAgICDilIIgICAgICAgICBFdGggICAgICAgICAgICAg4pSCICAgICAg
+ICAgICAgICAgICAgICAgICAgICDilIINCj4gPiArI+KUgiAgICAgICAgICAg4pSCSW50ZXJmYWNl
+IOKUgOKUvOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUvOKUgCAgICBhbnkgZXRoIEludGVyZmFjZQ0KPiDi
+lIINCj4gPiArI+KUgiAgICAgICAgICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSYICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAg
+ICAg4pSCDQo+ID4gKyPilIIgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAg
+ICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgg0KPiA+ICsj4pSCICAg
+ICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAg
+ICAgICAgICAgICAgICAgICAgICDilIINCj4gPiArI+KUlOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmA0KPiDilJTi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilJgNCj4gPiArIw0KPiA+ICsjQ29uZmlndXJhdGlvbnM6DQo+
+ID4gKyNUbyBwcmV2ZW50IGludGVycnVwdGlvbnMsIEFkZCBldGh0b29sLCBpcCB0byB0aGUgc3Vk
+b2VycyBsaXN0IGluIHJlbW90ZSBQQw0KPiBhbmQgZ2V0IHRoZSBzc2gga2V5IGZyb20gcmVtb3Rl
+Lg0KPiA+ICsjUmVxdWlyZWQgbWluaW11bSBldGh0b29sIHZlcnNpb24gaXMgNi4xMCAjQ2hhbmdl
+IHRoZSBiZWxvdw0KPiA+ICtjb25maWd1cmF0aW9uIGJhc2VkIG9uIHlvdXIgaHcgbmVlZHMuDQo+
+ID4gKyMgIiIiRGVmYXVsdCB2YWx1ZXMiIiINCj4gPiArdGltZV9kZWxheSA9IDggI3RpbWUgdGFr
+ZW4gdG8gd2FpdCBmb3IgdHJhbnNpdGlvbnMgdG8gaGFwcGVuLCBpbiBzZWNvbmRzLg0KPiA+ICt0
+ZXN0X2R1cmF0aW9uID0gMTAgICNwZXJmb3JtYW5jZSB0ZXN0IGR1cmF0aW9uIGZvciB0aGUgdGhy
+b3VnaHB1dCBjaGVjaywNCj4gaW4gc2Vjb25kcy4NCj4gDQo+IEl0IHdvdWxkIGJlIHByb2JhYmx5
+IHVzZWZ1bCB0byBhbGxvdyB0aGUgdXNlciBvdmVycmlkaW5nIHRoZSBhYm92ZSB2YWx1ZXMgdmlh
+DQo+IGVudiB2YXJpYWJsZXMgYW5kL29yIGNvbW1hbmQgbGluZSBhcmd1bWVudHMuDQoNClRoaXMg
+c2hhbGwgYmUgY2hhbmdlZCB0byB0YWtlIHZhcmlhYmxlcyBmcm9tIGVudiB2YXJpYWJsZXMgb3Ig
+Y29tbWFuZCBsaW5lIGFyZ3VtZW50cywgZ2l2ZW4gdGhhdCwgY29tbWFuZCBsaW5lIGFyZ3VtZW50
+cyBnaXZlbiBtb3JlIHByaW9yaXR5Lg0KDQo+IA0KPiAndGVzdF9kdXJhdGlvbicgZGVjbGFyYXRp
+b24gc2hvdWxkIHByb2JhYmx5IG1vdmVkIHRvIGEgbGF0ZXIgcGF0Y2gsIHdoZXJlIGl0J3MNCj4g
+dXNlZC4NCg0KVGhpcyB3aWxsIGJlIG1vdmVkIHRvIGxhdGVyIHBhdGNoIHdoZXJlIGl0IGlzIHVz
+ZWQuDQpZb3Ugc2hhbGwgZmluZCBhbGwgdGhlIGNoYW5nZXMgaW4gdGhlIG5leHQgcmV2aXNpb24u
+DQoNClRoYW5rcywNCk1vaGFuIFByYXNhZCBKDQo=
