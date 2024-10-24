@@ -1,101 +1,198 @@
-Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E318C1B6D02;
-	Thu, 24 Oct 2024 10:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65A31AC42B;
+	Thu, 24 Oct 2024 10:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729765171; cv=none; b=hU2jwIpyBzmS6AzXJ0lkUcLPwZH80yDf0je55jbrhJtmP48wHvhHuoxbwzQ7gL5dqKUwgzsDgOfbCNM7egQGhSRHrreMSotpbo7yrp0E9fQH0y6oRnM856lQiePKHZ2B9gRUwyfbDqhV/oLgpXW+w77s+4OIDqN1X854uxe7inI=
+	t=1729765892; cv=none; b=cWaMqlFNNla0MiDPIhKSMxRzhSUk6/BsYgSIR0CnWPLzzgH+7urmZQTHftGvoGC8B1D/nFMDWEhCvybY+asPwQkzmSKEbCRq3Rqk28Zm4lO3/pc8Dy29U2Isq62tAZi6WQm2aA0E7zysqEHyQooCum+Uom66dEYcEP2Ev2ok1hM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729765171; c=relaxed/simple;
-	bh=UHPnd/RmwWjsz87iqUWh3lvKcTiUAtDVmPgtNadMkMs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rkQrIZ7PSuIxYQjzkkpZI3pM4/jE8jeZYg/sGWj1N41mKWbTChQ5aRmIYZWWh7d0piCmzuKZ1IMnKDkNVQw12Iazrrrx0UEZi6oPw28x1O1GPRqL86ruSbCC6FC0I/z9yWT/Je8AtT/eaCylArRCp7VPtKOfPlGpVWeutUHVqgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=Y+rwlMVZ; arc=none smtp.client-ip=52.119.213.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1729765892; c=relaxed/simple;
+	bh=1e9EMzbOkCe8QeLgo321fC6JIOrshzvFhDmjxlTYQHU=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Gi+gbUbf1cZT46SqWp8EI1f93GSGeoav0P3qf5LHsx9amVNwXDeU+GtGrxcvugZYng3Sf/xSJSRguido2Xu9eJBNF+/1Bih3vIepKqVf6bJ0O1K90neKy3z/5ieoVYECe9Lk4rJZj5H8m5L6jnUad52y/+AAhWP8eIBfOMK0RK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=eohmtpwF; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="Y+rwlMVZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1729765169; x=1761301169;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=UHPnd/RmwWjsz87iqUWh3lvKcTiUAtDVmPgtNadMkMs=;
-  b=Y+rwlMVZdjDOswsb5x+RDdbTJu09KpBuoRGfCUcODwf5nopyH0KPsPb+
-   cpaCAj+0ZgAxXDlQaGVZqiQitLBKmWcmQ7YxZvh5Pn2Mrtb1tRnX8OrKm
-   onL2USoOdidJ9Rp5stkgwAQAhau1So0mDf+ydgB3LM0sadZGLy/IToM2L
-   I=;
-X-IronPort-AV: E=Sophos;i="6.11,228,1725321600"; 
-   d="scan'208";a="36013059"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 10:19:24 +0000
-Received: from EX19MTAEUB001.ant.amazon.com [10.0.43.254:63417]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.44.110:2525] with esmtp (Farcaster)
- id b9aa5347-db27-4b20-bf53-5bf1446bd54e; Thu, 24 Oct 2024 10:19:23 +0000 (UTC)
-X-Farcaster-Flow-ID: b9aa5347-db27-4b20-bf53-5bf1446bd54e
-Received: from EX19D015EUB004.ant.amazon.com (10.252.51.13) by
- EX19MTAEUB001.ant.amazon.com (10.252.51.26) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Thu, 24 Oct 2024 10:19:23 +0000
-Received: from EX19D014EUC004.ant.amazon.com (10.252.51.182) by
- EX19D015EUB004.ant.amazon.com (10.252.51.13) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Thu, 24 Oct 2024 10:19:22 +0000
-Received: from EX19D014EUC004.ant.amazon.com ([fe80::76dd:4020:4ff2:1e41]) by
- EX19D014EUC004.ant.amazon.com ([fe80::76dd:4020:4ff2:1e41%3]) with mapi id
- 15.02.1258.034; Thu, 24 Oct 2024 10:19:22 +0000
-From: "Gowans, James" <jgowans@amazon.com>
-To: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "pbonzini@redhat.com"
-	<pbonzini@redhat.com>, "shuah@kernel.org" <shuah@kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Roy, Patrick"
-	<roypat@amazon.co.uk>
-CC: "ackerleytng@google.com" <ackerleytng@google.com>, "Graf (AWS), Alexander"
-	<graf@amazon.de>, "chao.p.peng@linux.intel.com"
-	<chao.p.peng@linux.intel.com>, "seanjc@google.com" <seanjc@google.com>
-Subject: Re: [PATCH] kvm: selftest: fix noop test in guest_memfd_test.c
-Thread-Topic: [PATCH] kvm: selftest: fix noop test in guest_memfd_test.c
-Thread-Index: AQHbJfutSS0K4laRpUevt9XxbaVMKbKVsGYA
-Date: Thu, 24 Oct 2024 10:19:22 +0000
-Message-ID: <97a527916663b2f87c5ed2046637c2a8b27eb629.camel@amazon.com>
-References: <20241024095956.3668818-1-roypat@amazon.co.uk>
-In-Reply-To: <20241024095956.3668818-1-roypat@amazon.co.uk>
-Accept-Language: en-ZA, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <137BD64EF82DB74CAC60C77CF5DEDF88@amazon.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="eohmtpwF"
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 49OAV2Dv105576;
+	Thu, 24 Oct 2024 05:31:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1729765862;
+	bh=F0r9YfXt8Uj1SHwj4YtWmhPuFbfRsQj+MfokUz9rqAs=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=eohmtpwFdE849Xn6RLdgdudJNx9EGCo0TfRQGu5ufN6XRRyqd3Ic41OplhGmMjsyy
+	 uDF+9HOZpBtuwpp6CYRk4Tv2LwmS3NuGBptE5uthBP01+1h33GLQpieeeUJtk5079h
+	 45aLLRZ8DLYy/NhvHY1MKHtaQn140R21ANnTJuFY=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 49OAV2a9002479
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 24 Oct 2024 05:31:02 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 24
+ Oct 2024 05:31:01 -0500
+Received: from fllvsmtp7.itg.ti.com (10.64.40.31) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 24 Oct 2024 05:31:01 -0500
+Received: from lelv0854.itg.ti.com (lelv0854.itg.ti.com [10.181.64.140])
+	by fllvsmtp7.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49OAV1vA000544;
+	Thu, 24 Oct 2024 05:31:01 -0500
+Received: from localhost (danish-tpc.dhcp.ti.com [10.24.69.25])
+	by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 49OAV1G5024597;
+	Thu, 24 Oct 2024 05:31:01 -0500
+From: MD Danish Anwar <danishanwar@ti.com>
+To: <geliang@kernel.org>, <liuhangbin@gmail.com>, <dan.carpenter@linaro.org>,
+        <jiri@resnulli.us>, <n.zhandarovich@fintech.ru>,
+        <aleksander.lobakin@intel.com>, <lukma@denx.de>, <horms@kernel.org>,
+        <jan.kiszka@siemens.com>, <diogo.ivo@siemens.com>, <shuah@kernel.org>,
+        <pabeni@redhat.com>, <kuba@kernel.org>, <edumazet@google.com>,
+        <davem@davemloft.net>, <andrew+netdev@lunn.ch>
+CC: <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <srk@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros
+	<rogerq@kernel.org>, <danishanwar@ti.com>,
+        <m-malladi@ti.com>
+Subject: [PATCH net-next v2 2/4] net: hsr: Add VLAN CTAG filter support
+Date: Thu, 24 Oct 2024 16:00:54 +0530
+Message-ID: <20241024103056.3201071-3-danishanwar@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241024103056.3201071-1-danishanwar@ti.com>
+References: <20241024103056.3201071-1-danishanwar@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-T24gVGh1LCAyMDI0LTEwLTI0IGF0IDEwOjU5ICswMTAwLCBQYXRyaWNrIFJveSB3cm90ZToNCj4g
-VGhlIGxvb3AgaW4gdGVzdF9jcmVhdGVfZ3Vlc3RfbWVtZmRfaW52YWxpZCB0aGF0IGlzIHN1cHBv
-c2VkIHRvIHRlc3QNCj4gdGhhdCBub3RoaW5nIGlzIGFjY2VwdGVkIGFzIGEgdmFsaWQgZmxhZyB0
-byBLVk1fQ1JFQVRFX0dVRVNUX01FTUZEIHdhcw0KPiBpbml0aWFsaXppbmcgYGZsYWdgIGFzIDAg
-aW5zdGVhZCBvZiBCSVQoMCkuIFRoaXMgY2F1c2VkIHRoZSBsb29wIHRvDQo+IGltbWVkaWF0ZWx5
-IGV4aXQgaW5zdGVhZCBvZiBpdGVyYXRpbmcgb3ZlciBCSVQoMCksIEJJVCgxKSwgLi4uIC4NCj4g
-DQo+IEZpeGVzOiA4YTg5ZWZkNDM0MjMgKCJLVk06IHNlbGZ0ZXN0czogQWRkIGJhc2ljIHNlbGZ0
-ZXN0IGZvciBndWVzdF9tZW1mZCgpIikNCj4gU2lnbmVkLW9mZi1ieTogUGF0cmljayBSb3kgPHJv
-eXBhdEBhbWF6b24uY28udWs+DQo+IC0tLQ0KPiAgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3Zt
-L2d1ZXN0X21lbWZkX3Rlc3QuYyB8IDIgKy0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlv
-bigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL2t2bS9ndWVzdF9tZW1mZF90ZXN0LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9r
-dm0vZ3Vlc3RfbWVtZmRfdGVzdC5jDQo+IGluZGV4IGJhMGM4ZTk5NjAzNTguLmNlNjg3ZjhkMjQ4
-ZmMgMTAwNjQ0DQo+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2t2bS9ndWVzdF9tZW1m
-ZF90ZXN0LmMNCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3ZtL2d1ZXN0X21lbWZk
-X3Rlc3QuYw0KPiBAQCAtMTM0LDcgKzEzNCw3IEBAIHN0YXRpYyB2b2lkIHRlc3RfY3JlYXRlX2d1
-ZXN0X21lbWZkX2ludmFsaWQoc3RydWN0IGt2bV92bSAqdm0pDQo+ICAJCQkgICAgc2l6ZSk7DQo+
-ICAJfQ0KPiAgDQo+IC0JZm9yIChmbGFnID0gMDsgZmxhZzsgZmxhZyA8PD0gMSkgew0KPiArCWZv
-ciAoZmxhZyA9IEJJVCgwKTsgZmxhZzsgZmxhZyA8PD0gMSkgew0KPiAgCQlmZCA9IF9fdm1fY3Jl
-YXRlX2d1ZXN0X21lbWZkKHZtLCBwYWdlX3NpemUsIGZsYWcpOw0KPiAgCQlURVNUX0FTU0VSVChm
-ZCA9PSAtMSAmJiBlcnJubyA9PSBFSU5WQUwsDQo+ICAJCQkgICAgImd1ZXN0X21lbWZkKCkgd2l0
-aCBmbGFnICcweCVseCcgc2hvdWxkIGZhaWwgd2l0aCBFSU5WQUwiLA0KDQpSZXZpZXdlZC1ieTog
-SmFtZXMgR293YW5zIDxqZ293YW5zQGFtYXpvbi5jb20+DQo=
+From: Murali Karicheri <m-karicheri2@ti.com>
+
+This patch adds support for VLAN ctag based filtering at slave devices.
+The slave ethernet device may be capable of filtering ethernet packets
+based on VLAN ID. This requires that when the VLAN interface is created
+over an HSR/PRP interface, it passes the VID information to the
+associated slave ethernet devices so that it updates the hardware
+filters to filter ethernet frames based on VID. This patch adds the
+required functions to propagate the vid information to the slave
+devices.
+
+Signed-off-by: Murali Karicheri <m-karicheri2@ti.com>
+Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+---
+ net/hsr/hsr_device.c | 71 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 70 insertions(+), 1 deletion(-)
+
+diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+index 0ca47ebb01d3..ff586bdc2bde 100644
+--- a/net/hsr/hsr_device.c
++++ b/net/hsr/hsr_device.c
+@@ -515,6 +515,68 @@ static void hsr_change_rx_flags(struct net_device *dev, int change)
+ 	}
+ }
+ 
++static int hsr_ndo_vlan_rx_add_vid(struct net_device *dev,
++				   __be16 proto, u16 vid)
++{
++	struct hsr_port *port;
++	struct hsr_priv *hsr;
++	int ret = 0;
++
++	hsr = netdev_priv(dev);
++
++	hsr_for_each_port(hsr, port) {
++		if (port->type == HSR_PT_MASTER)
++			continue;
++
++		ret = vlan_vid_add(port->dev, proto, vid);
++		switch (port->type) {
++		case HSR_PT_SLAVE_A:
++			if (ret) {
++				netdev_err(dev, "add vid failed for Slave-A\n");
++				return ret;
++			}
++			break;
++
++		case HSR_PT_SLAVE_B:
++			if (ret) {
++				/* clean up Slave-A */
++				netdev_err(dev, "add vid failed for Slave-B\n");
++				vlan_vid_del(port->dev, proto, vid);
++				return ret;
++			}
++			break;
++		default:
++			break;
++		}
++	}
++
++	return 0;
++}
++
++static int hsr_ndo_vlan_rx_kill_vid(struct net_device *dev,
++				    __be16 proto, u16 vid)
++{
++	struct hsr_port *port;
++	struct hsr_priv *hsr;
++
++	hsr = netdev_priv(dev);
++
++	hsr_for_each_port(hsr, port) {
++		if (port->type == HSR_PT_MASTER)
++			continue;
++		switch (port->type) {
++		case HSR_PT_SLAVE_A:
++		case HSR_PT_SLAVE_B:
++			vlan_vid_del(port->dev, proto, vid);
++			break;
++		default:
++			break;
++		}
++	}
++
++	return 0;
++}
++
+ static const struct net_device_ops hsr_device_ops = {
+ 	.ndo_change_mtu = hsr_dev_change_mtu,
+ 	.ndo_open = hsr_dev_open,
+@@ -523,6 +585,8 @@ static const struct net_device_ops hsr_device_ops = {
+ 	.ndo_change_rx_flags = hsr_change_rx_flags,
+ 	.ndo_fix_features = hsr_fix_features,
+ 	.ndo_set_rx_mode = hsr_set_rx_mode,
++	.ndo_vlan_rx_add_vid = hsr_ndo_vlan_rx_add_vid,
++	.ndo_vlan_rx_kill_vid = hsr_ndo_vlan_rx_kill_vid,
+ };
+ 
+ static const struct device_type hsr_type = {
+@@ -569,7 +633,8 @@ void hsr_dev_setup(struct net_device *dev)
+ 
+ 	dev->hw_features = NETIF_F_SG | NETIF_F_FRAGLIST | NETIF_F_HIGHDMA |
+ 			   NETIF_F_GSO_MASK | NETIF_F_HW_CSUM |
+-			   NETIF_F_HW_VLAN_CTAG_TX;
++			   NETIF_F_HW_VLAN_CTAG_TX |
++			   NETIF_F_HW_VLAN_CTAG_FILTER;
+ 
+ 	dev->features = dev->hw_features;
+ }
+@@ -647,6 +712,10 @@ int hsr_dev_finalize(struct net_device *hsr_dev, struct net_device *slave[2],
+ 	    (slave[1]->features & NETIF_F_HW_HSR_FWD))
+ 		hsr->fwd_offloaded = true;
+ 
++	if ((slave[0]->features & NETIF_F_HW_VLAN_CTAG_FILTER) &&
++	    (slave[1]->features & NETIF_F_HW_VLAN_CTAG_FILTER))
++		hsr_dev->features |= NETIF_F_HW_VLAN_CTAG_FILTER;
++
+ 	res = register_netdevice(hsr_dev);
+ 	if (res)
+ 		goto err_unregister;
+-- 
+2.34.1
+
