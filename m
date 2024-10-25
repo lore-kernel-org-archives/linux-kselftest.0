@@ -1,64 +1,66 @@
-Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
+Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BCA6126F1E;
-	Fri, 25 Oct 2024 01:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6788522B644;
+	Fri, 25 Oct 2024 01:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.139.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729820387; cv=none; b=np8WyGUqr+7e9Dz4uC3Zt/yD2Cp3IltYzoj5UJI/uy8oqDbXFdejYDvjN07ZjdD4lRRBtT6WYKNmm4YI8sXSTqeCV6YQULhO8QR+eXuirHLlrv3ySRHEn90YBHH/iSAnjfFWsVJNtoJ/pWa8oOB72TeO/ZTMyACsA2iIp0qIfPY=
+	t=1729820389; cv=none; b=mg4dhnZai3mTretoPx/8gAfQMxIIw/z+tdpUK4WU0lMV9JoaSKpo0y4MvW/sG8BIrqQopjB43VdodnWw5QbCBqXizQujl0Cmt5OzKDLQgEDSXzhT5/8Ja2XK0kgQ1RUtLZ+UxzeND5kaa6bZLZUxEW6RqqpxOu6tDXHCpQYO06s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729820387; c=relaxed/simple;
-	bh=clBOSjedp2N1ph2FzLIRMDS9aed5xZ5ns0BqIhi+dhk=;
+	s=arc-20240116; t=1729820389; c=relaxed/simple;
+	bh=jyqhRjmJYUC4dlrzZbnwcaBJiIpqnBNzCBrurqjVkFw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aQfDYozNhQjAy9GRjwXU45cT1VnANKiXGzuWhtoPk1JbRRPJcFZgt4g/CZgrcpmva+jLgE20c0O8M+ebTBXv3jfnzzVFuJLR2T7Sp/Svx/N9n6ZI7+dClb5dhINqfCckKkdaKCIJkrWa3uzkFeYRIOF2IHskukNlbBSyDK0SSWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=ZYTIaxIg; arc=none smtp.client-ip=207.54.90.47
+	 MIME-Version; b=dXKHWtmMCZt/j987HBOPuFz1a/BZfVNXOUY6Km8RYAJlB88jciVcjA2iM9E8mdVuHA242RL/BqF4mvkqClOqx+h5j/jXMuolohNWteGLVJRjJRCvCorAtszYI+jluA4iSxluCSkWMxQwnlPCbepTUi1wHN60ct3tuqMhXhvL0EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=s8SS9Yrc; arc=none smtp.client-ip=68.232.139.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="ZYTIaxIg"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="s8SS9Yrc"
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1729820386; x=1761356386;
+  t=1729820388; x=1761356388;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=clBOSjedp2N1ph2FzLIRMDS9aed5xZ5ns0BqIhi+dhk=;
-  b=ZYTIaxIgtW+3p9IjQlpNmK/n6RBAHomg/j+uUC7iqdAbLxBjTr80y2nE
-   ebcyJ943vufKEgcB4pJmmbMcuBGKxRcWsUc6yxNfE7xVJeyRQ6/cJK8VT
-   AYIEb67bKz+aYA3JKBP0SjB/YJ4MrjEesQbDV9XuKoewAagJoj9Uex2cn
-   ANIB08aDGifTTVNWo1SU5gK5Oi30Yf0umu0yypcjR0dU8+cXi0NfP/w4y
-   ytpNYXzGqozLpwc1ILv5JqrrbCP6fYvBJuPAjA+9IOztvso7GoU8PzBqy
-   ADskf+7RHeDKSoTKgp61G3uqtBX6EQj5ImGMGWksx+MMPJcN7vk5tpYu8
+  bh=jyqhRjmJYUC4dlrzZbnwcaBJiIpqnBNzCBrurqjVkFw=;
+  b=s8SS9YrcQ7wO3LOju2FMNXbjWCQefS7/d9eakavYcVH7y5CQrowRoIT3
+   qNRkdF1w5mTlRF2Bbr194a4OLinCmABgQ0Gtt2Q4WZ6Jo+zbqdVjgUGl1
+   Am3HS9XXsG/UhfXk74WLX2muimYSMQ+PKwIN7O2DOlDC1ftY0jMlF7144
+   TyXdqtzax3ij9o2OuC5sIDToo952pl26EFUlxjR0YSrbVQMf1WHtpV/us
+   65xfCQ8Vkh0Xs6KUYahLZ510Vmppez1g0pzbgOO1B2V5JvW7ffjzWGQe5
+   QSb/RdiA5DmUklXBFxB7VLpDoXED8edhRwWR+ESYIPUHs5fNnL6iML/RH
    g==;
-X-CSE-ConnectionGUID: 4HMJosXCTX623enSUGqaag==
-X-CSE-MsgGUID: VPy8KG02STSzXq8jhSveAw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="177903124"
+X-CSE-ConnectionGUID: CA8vzYT3SVySnH5uzc4ZIw==
+X-CSE-MsgGUID: FsSvR9yvSVapvhdFuTKYdg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="180136537"
 X-IronPort-AV: E=Sophos;i="6.11,230,1725289200"; 
-   d="scan'208";a="177903124"
-Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
-  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 10:39:37 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-	by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id B7C8DD9231;
-	Fri, 25 Oct 2024 10:39:34 +0900 (JST)
-Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 04893D4BCF;
-	Fri, 25 Oct 2024 10:39:34 +0900 (JST)
+   d="scan'208";a="180136537"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 10:39:39 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+	by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 234DADB3C7;
+	Fri, 25 Oct 2024 10:39:37 +0900 (JST)
+Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
+	by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 6A507D968B;
+	Fri, 25 Oct 2024 10:39:36 +0900 (JST)
 Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 8BF822007955B;
-	Fri, 25 Oct 2024 10:39:33 +0900 (JST)
+	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id EF3CF70BC6;
+	Fri, 25 Oct 2024 10:39:35 +0900 (JST)
 Received: from iaas-rdma.. (unknown [10.167.135.44])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id B3AF11A01E9;
-	Fri, 25 Oct 2024 09:39:32 +0800 (CST)
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id 462531A01E9;
+	Fri, 25 Oct 2024 09:39:35 +0800 (CST)
 From: Li Zhijian <lizhijian@fujitsu.com>
 To: linux-kselftest@vger.kernel.org
 Cc: shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
 	Li Zhijian <lizhijian@fujitsu.com>,
-	Donet Tom <donettom@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-mm@kvack.org
-Subject: [PATCH for-next 3/7] selftests/mm: Add a few missing gitignore files
-Date: Fri, 25 Oct 2024 09:40:06 +0800
-Message-ID: <20241025014010.6533-3-lizhijian@fujitsu.com>
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Subject: [PATCH for-next 7/7] selftests/net: Fix ./ns-XXXXXX not cleanup
+Date: Fri, 25 Oct 2024 09:40:10 +0800
+Message-ID: <20241025014010.6533-7-lizhijian@fujitsu.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20241025014010.6533-1-lizhijian@fujitsu.com>
 References: <20241025014010.6533-1-lizhijian@fujitsu.com>
@@ -73,28 +75,31 @@ X-TM-AS-GCONF: 00
 X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28752.003
 X-TM-AS-User-Approved-Sender: Yes
 X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28752.003
-X-TMASE-Result: 10--3.030200-10.000000
-X-TMASE-MatchedRID: 4r2MyAYFTnchiKpapiFQUqoXHZz/dXlxTJDl9FKHbrk/gf7afIrQU36y
-	x7OFE28QV89FgO/U4vBeAZpJlX3ct6Mqw1MrQ3Xs0e7jfBjhB8cZiTLIQu4YpBHfiujuTbedvwU
-	evDt+uW5fZPFUbFYJwYfC35p6xeSXkfRhdidsajMURSScn+QSXpjDMT0TyDk5+gtHj7OwNO2i5u
-	/VvsFaHSd2vyUnDz4JkO2UjekG25xI53UIApNFK5GQ2iAz3Ucg4Zhpm6HhbMcR6GmhRmVDqk8Cx
-	IyKDhMjukwxcQ4oWwYB7pNEs+ty6oaT7FRqp0wPAcQrAfBh69vBRLFeH6OJSCTDD+DBjuEw
+X-TMASE-Result: 10--1.620900-10.000000
+X-TMASE-MatchedRID: 6n1zk+md1nW+AcfZRlRvHuOnF2j8nBWbn5nfR7I2dFNlmPP/XnGELrmK
+	lv3K7lvCloSrM+MzMAEa/Rm8RmNZp6s4CIwqUsM8rMZ+BqQt2NrJ5SXtoJPLyFcZNuxCoduSsaY
+	IF6sQsQ7Nbuq5jiJ+bEqGW42c0HkYPCIyO+XnL284hD0Y/Y/a78E5XPQnBzGXq8KsbROd9VSD3F
+	7iC1Qm2idrKX/gwnicYx6ZNoOmH25g/HvJ1232Mp4CIKY/Hg3AaZGo0EeYG95UMLUJu4leYyq2r
+	l3dzGQ1tyaKchQkyE45QtN9xzZW3ugJcSBd3qZSUzqf3+iknU+bV/bRlWl7V3ed4oqRsBtzx8E/
+	iqf5nIPM85RmE6LnSrhZsTzrx0WohLvAid2uj0YVxRB/din+uJ07T8ZSLiAVvR84/OmB1wQp4n8
+	eQBnwiw==
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-Compiled binary files should be added to .gitignore
-'git status' complains:
-   Untracked files:
-   (use "git add <file>..." to include in what will be committed)
-         mm/hugetlb_dio
-         mm/pkey_sighandler_tests_32
-         mm/pkey_sighandler_tests_64
+```
+readonly STATS="$(mktemp -p /tmp ns-XXXXXX)"
+readonly BASE=`basename $STATS`
+```
+It could be a mistake to write to $BASE rather than $STATS, where $STATS
+is used to save the NSTAT_HISTORY and it will be cleaned up before exit.
 
-Cc: Donet Tom <donettom@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 ---
-Cc: linux-mm@kvack.org
+Cc: netdev@vger.kernel.org
+
 ---
 Hello,
 Cover letter is here.
@@ -102,23 +107,26 @@ Cover letter is here.
 This patch set aims to make 'git status' clear after 'make' and 'make
 run_tests' for kselftests.
 ---
-V2:
-  split as seperate patch from a small one [0]
-  [0] https://lore.kernel.org/linux-kselftest/20241015010817.453539-1-lizhijian@fujitsu.com/
+V2: nothing change
 ---
- tools/testing/selftests/mm/.gitignore | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/net/veth.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index da030b43e43b..2ac11b7fcb26 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -51,3 +51,5 @@ hugetlb_madv_vs_map
- mseal_test
- seal_elf
- droppable
-+hugetlb_dio
-+pkey_sighandler_tests*
+diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
+index 4f1edbafb946..457312ef135a 100755
+--- a/tools/testing/selftests/net/veth.sh
++++ b/tools/testing/selftests/net/veth.sh
+@@ -46,8 +46,8 @@ create_ns() {
+ 		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V4$ns/24
+ 		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V6$ns/64 nodad
+ 	done
+-	echo "#kernel" > $BASE
+-	chmod go-rw $BASE
++	echo "#kernel" > $STATS
++	chmod go-rw $STATS
+ }
+ 
+ __chk_flag() {
 -- 
 2.44.0
 
