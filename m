@@ -1,60 +1,64 @@
-Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
+Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59AB13C807;
-	Fri, 25 Oct 2024 01:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.36.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95154879B;
+	Fri, 25 Oct 2024 01:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.61.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729820409; cv=none; b=uuNYkRpj3kjtRKFh9kgc+l2X1lGa+DLIijfSYjVTWSbNw/g4iT/b4zN4S5KRHfITnJc1S0ldbqew/nFooS+zBIecMC4QR9PE1iJ4qeB60t6nBVUcZsEig41Q+8UFt00keLW72JkjHSpi3j2dwkIsaEOmPfuAS2allF8XxudgCnk=
+	t=1729820450; cv=none; b=M96x5+28/onGGCy33A2eBI2ahPug9ce+A0lo2wxwTHrWYk4MwI6J6QsOV/M6oJYIa2yeqKysZ56B5HIPoPzc2xRYkK65R//gL2JMNEO/P0mdSctx0QNAR6CNvFmXgkEI5AeR9amDTHxXVZHO6b/SdhCt+1mmlWTzmlPMrojM6ZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729820409; c=relaxed/simple;
-	bh=654YXOvVil3Euww5pKDgv0JcyWBr1+LQI/p2Mq/PP/8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HA71vRAyif2208xHMQXBBmwm0KYs1bmSNWZUYuOTArZJB5wttlxjOCto9A9YkKnWb+BI12yWVn2D4RPN6ixJZlJUtfdmwQVGoC9rpLJULTPNwxwLXMYY3nnAlCMJFjJpWUUEALYqmVK+ldJiBXKi2BcJj4u/4CsmY7lM5SWGvIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=lwvq1DJm; arc=none smtp.client-ip=139.138.36.225
+	s=arc-20240116; t=1729820450; c=relaxed/simple;
+	bh=s8VhV7YOekzg0qBmxC5N32OUoYZeoSaXeWcxaVdUzU4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=es07vXm92qY75sfNffhJb7G+Q+671efsIZvKSa4PgSVfdx4JtJZqyBPFwno9YLcqheUhnh0ZN80Fi1JMurR41kmNbCycm+/ALf6vd+Ucn/Yx13vd5v934wF39BGlA5QAWwRrU9xqoKWoXOwrV5ll4KeXcpurh7eeJ0RSG2FAAGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=IkdWrafR; arc=none smtp.client-ip=139.138.61.252
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="lwvq1DJm"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="IkdWrafR"
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1729820407; x=1761356407;
+  t=1729820448; x=1761356448;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=654YXOvVil3Euww5pKDgv0JcyWBr1+LQI/p2Mq/PP/8=;
-  b=lwvq1DJmuXhPOT0HI9PAS7Pr0kBJmt3UkmRp2oeM5Vin4VVxKLeLiUpo
-   aAHTE5wYUR/fOjMpx53VN6Stayl17Utz9tF6MydOxoYDUxKaUToodns7f
-   xSCdCOjP3QRAyf8Ks5Jjs2yUj8ITxRG0d9fXUdBrxiUlGpPogBgAZRU66
-   nH7Sab53OFGXA1QPzJA5lrWP5QbzIfLriuK93/9ZdEQR+CEfgplS+HLJr
-   0S1FjXg/QF83PV+S10Lzs9PBxq05sbObrIk76DEzxZdmzpcGEhXiBg1Na
-   waG9rSg3X2nxKy3eNZVWsASQtqZEmlr8L7764x/ZD8xf7jy7DaUD06uoJ
-   w==;
-X-CSE-ConnectionGUID: GOyUv8r9SPi4NbADffMEoQ==
-X-CSE-MsgGUID: O1b4NVXJQZm6tFDhRfmDLg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="165295778"
+  bh=s8VhV7YOekzg0qBmxC5N32OUoYZeoSaXeWcxaVdUzU4=;
+  b=IkdWrafRftwK3gA39aZiMh20YqFiS1rp7B+H+Xht9PtSckEFtCavsSZ4
+   zaz6wVQ8GG5QMEabXUaliV6pEMXIlumAKBOt/rbZVwFXOpcfRM9ginLII
+   hzQvSj8TnBLrO3g78E8lRCKshfqOw+Fgo5ETX9z5hUBwWnXMg6WX/5SMZ
+   RtLztncIAT2hnqtVKjczQzC8zqRxI07ke0HSAT1F9Ad6zH1KgDk4eBTYi
+   +3gnkdlU22A7itBHDGseZT4CQqDq9JUvOJTCR5wOQs8xhUR1nwa/gAalA
+   Z8ufNfyvV1bIOKg0i+sq6EbbX99Os2PNy02rfCa9gLOoPtaI4Z+t/fmRN
+   g==;
+X-CSE-ConnectionGUID: 9PYzxuvnS02zEur0U08f6A==
+X-CSE-MsgGUID: SrApEPCjTGyGSMST7X6mMQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="156807491"
 X-IronPort-AV: E=Sophos;i="6.11,230,1725289200"; 
-   d="scan'208";a="165295778"
-Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
-  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 10:38:55 +0900
-Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
-	by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 3EE2FCC152;
-	Fri, 25 Oct 2024 10:38:53 +0900 (JST)
-Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 63905D5013;
-	Fri, 25 Oct 2024 10:38:52 +0900 (JST)
+   d="scan'208";a="156807491"
+Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
+  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 10:39:35 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+	by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 7C0286C9CB;
+	Fri, 25 Oct 2024 10:39:33 +0900 (JST)
+Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
+	by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id AD930103E2;
+	Fri, 25 Oct 2024 10:39:32 +0900 (JST)
 Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id EBC3320071A06;
-	Fri, 25 Oct 2024 10:38:51 +0900 (JST)
+	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 2E79170BC6;
+	Fri, 25 Oct 2024 10:39:32 +0900 (JST)
 Received: from iaas-rdma.. (unknown [10.167.135.44])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 5CF191A000B;
-	Fri, 25 Oct 2024 09:38:51 +0800 (CST)
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id 5F98E1A01E9;
+	Fri, 25 Oct 2024 09:39:31 +0800 (CST)
 From: Li Zhijian <lizhijian@fujitsu.com>
 To: linux-kselftest@vger.kernel.org
 Cc: shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
-	Li Zhijian <lizhijian@fujitsu.com>
-Subject: [PATCH for-next 1/3] selftests/watchdog: add count parameter for watchdog-test
-Date: Fri, 25 Oct 2024 09:39:31 +0800
-Message-ID: <20241025013933.6516-1-lizhijian@fujitsu.com>
+	Li Zhijian <lizhijian@fujitsu.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	linux-sound@vger.kernel.org
+Subject: [PATCH for-next 1/7] selftests/alsa: Add a few missing gitignore files
+Date: Fri, 25 Oct 2024 09:40:04 +0800
+Message-ID: <20241025014010.6533-1-lizhijian@fujitsu.com>
 X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -67,103 +71,54 @@ X-TM-AS-GCONF: 00
 X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28752.003
 X-TM-AS-User-Approved-Sender: Yes
 X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28752.003
-X-TMASE-Result: 10-2.222800-10.000000
-X-TMASE-MatchedRID: Kkkx1MdXpTzySUS2aTJPt6qHmm/V4M/PNYERielKfYX+Aw16GgqpO4xj
-	ZK20axcml2GUABdhPswYdpOYDB3YU/t1xYHpY/PCZXF1SJUAUOAkPki1Yfh9IlQuGn5b9r2Zegt
-	0aF43NdcMI2dvwKu82tH/OWESXaHnrL+gHLQ9jwn0hv/rD7WVZHh8J8VFDfTIzAdJD7JeNMOLcY
-	4IaAaI5iJiCpji5j3MJsa2Z1JGRPDR6RKL7TRTbhF4zyLyne+ATJDl9FKHbrkwAYdq1VTXowzbM
-	QAfPhMUD/OFpcSAvwt2a8dgHy0BPpmXURexwsOZlXePXNM4FjOiNCtus+nPOsfASe7knCttB82G
-	yGpZHXu27qf8B6e0g4Ay6p60ZV62fJ5/bZ6npdjGVuWouVipcsEjzginPrvIy/G5i9qoEvVK3Zk
-	bMcfUPlORukGQ8Sf4QFRYfcbPnszysA5ID5qdCN0ImZe79YchhtKgqFgRxGM9KJnm0nW3ihFltG
-	xCTkwFQHVA+r1vGdZmQDEDCMiuswfP8fSSIvISoYC0cwOOST0=
+X-TMASE-Result: 10--3.123200-10.000000
+X-TMASE-MatchedRID: 54gb2yeIOXQhiKpapiFQUqoXHZz/dXlxTJDl9FKHbrnBsf5qt44jZ0/m
+	RGqrA8qmt51G676eQJPtDFjbdjEntA8rYO92b9Nm4aN9Pi1E3hczNsXWBvGVBswHSQ+yXjTDr7f
+	LNf2RfSt3yadK9iyoPuaffHI8kAminajGxrJsU4OeAiCmPx4NwGmRqNBHmBveafSbrzwSjfwqtq
+	5d3cxkNZdacNh8njm7zp+PP9TR1iEPsxq987sSn0i++CMiQi/k9qPpshOt6bu5Li8SIkl1u73HO
+	iflqur/Dn6CZ0LqGmt/1G6b11sj9O4zq2MCCj3QFcUQf3Yp/ridO0/GUi4gFb0fOPzpgdcEKeJ/
+	HkAZ8Is=
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-Currently, watchdog-test keep running until it gets a SIGINT. However,
-when watchdog-test is executed from the kselftests framework, where it
-launches test via timeout which will send SIGTERM in time up. This could
-lead to
-1. watchdog haven't stop, a watchdog reset is triggered to reboot the OS
-   in silent.
-2. kselftests gets an timeout exit code, and judge watchdog-test as
-  'not ok'
+Compiled binary files should be added to .gitignore
 
-This patch is prepare to fix above 2 issues
+'git status' complains:
+Untracked files:
+(use "git add <file>..." to include in what will be committed)
+     alsa/global-timer
+     alsa/utimer-test
 
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: Shuah Khan <shuah@kernel.org>
 Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 ---
-Hey,
+Cc: linux-sound@vger.kernel.org
+---
+Hello,
 Cover letter is here.
 
-It's notice that a OS reboot was triggerred after ran the watchdog-test
-in kselftests framwork 'make run_tests', that's because watchdog-test
-didn't stop feeding the watchdog after enable it.
-
-In addition, current watchdog-test didn't adapt to the kselftests
-framework which launchs the test with /usr/bin/timeout and no timeout
-is expected.
+This patch set aims to make 'git status' clear after 'make' and 'make
+run_tests' for kselftests.
 ---
- tools/testing/selftests/watchdog/watchdog-test.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+V2:
+   split as a separate patch from a small one [0]
+   [0] https://lore.kernel.org/linux-kselftest/20241015010817.453539-1-lizhijian@fujitsu.com/
+---
+ tools/testing/selftests/alsa/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index bc71cbca0dde..2f8fd2670897 100644
---- a/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -27,7 +27,7 @@
- 
- int fd;
- const char v = 'V';
--static const char sopts[] = "bdehp:st:Tn:NLf:i";
-+static const char sopts[] = "bdehp:st:Tn:NLf:c:i";
- static const struct option lopts[] = {
- 	{"bootstatus",          no_argument, NULL, 'b'},
- 	{"disable",             no_argument, NULL, 'd'},
-@@ -42,6 +42,7 @@ static const struct option lopts[] = {
- 	{"gettimeleft",		no_argument, NULL, 'L'},
- 	{"file",          required_argument, NULL, 'f'},
- 	{"info",		no_argument, NULL, 'i'},
-+	{"count",         required_argument, NULL, 'c'},
- 	{NULL,                  no_argument, NULL, 0x0}
- };
- 
-@@ -95,6 +96,7 @@ static void usage(char *progname)
- 	printf(" -n, --pretimeout=T\tSet the pretimeout to T seconds\n");
- 	printf(" -N, --getpretimeout\tGet the pretimeout\n");
- 	printf(" -L, --gettimeleft\tGet the time left until timer expires\n");
-+	printf(" -c, --count\tStop after feeding the watchdog count times\n");
- 	printf("\n");
- 	printf("Parameters are parsed left-to-right in real-time.\n");
- 	printf("Example: %s -d -t 10 -p 5 -e\n", progname);
-@@ -174,7 +176,7 @@ int main(int argc, char *argv[])
- 	unsigned int ping_rate = DEFAULT_PING_RATE;
- 	int ret;
- 	int c;
--	int oneshot = 0;
-+	int oneshot = 0, stop = 1, count = 0;
- 	char *file = "/dev/watchdog";
- 	struct watchdog_info info;
- 	int temperature;
-@@ -307,6 +309,9 @@ int main(int argc, char *argv[])
- 			else
- 				printf("WDIOC_GETTIMELEFT error '%s'\n", strerror(errno));
- 			break;
-+		case 'c':
-+			stop = 0;
-+			count = strtoul(optarg, NULL, 0);
- 		case 'f':
- 			/* Handled above */
- 			break;
-@@ -336,8 +341,8 @@ int main(int argc, char *argv[])
- 
- 	signal(SIGINT, term);
- 
--	while (1) {
--		keep_alive();
-+	while (stop || count--) {
-+		exit_code = keep_alive();
- 		sleep(ping_rate);
- 	}
- end:
+diff --git a/tools/testing/selftests/alsa/.gitignore b/tools/testing/selftests/alsa/.gitignore
+index 12dc3fcd3456..1407fd24a97b 100644
+--- a/tools/testing/selftests/alsa/.gitignore
++++ b/tools/testing/selftests/alsa/.gitignore
+@@ -1,3 +1,5 @@
+ mixer-test
+ pcm-test
+ test-pcmtest-driver
++global-timer
++utimer-test
 -- 
 2.44.0
 
