@@ -1,187 +1,97 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A0C2038DE;
-	Mon, 28 Oct 2024 21:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00CB18FC67
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 22:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730152495; cv=none; b=uIDlH+0kk5FKzj0Ci9qdywD6aWH+VmYvlo2vvDNGCsX6DiZV3v8IxbHcEGU+0ziKjYx6lyZ5sKSa5ec2gJgMNo7jy4WC6gCn/2ufjD2bjxkjmKhb5EILExzzm7wr4DwfdhHu8vGuJIHDEa4p4XZ1oZ+8Q48TmFQoIY3FUQdMJQI=
+	t=1730153109; cv=none; b=GnDyvLi57/aoSLVMQBf7WINB02gFEkw3lwz1NS3rUZqOxOlm1OsdyDzxf+L12/MGT783tRVeZ/N2UIdCPJq6Ejq4Ok34cH/kD74oP5yfdZdFfzwgnOns2Qp+ZgHxI0r5MsC72Dwi26zIvEKYon8wn5NYp1oxzHzCkB23Y2vUM0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730152495; c=relaxed/simple;
-	bh=iKoO5F5vZf5IP84eXhvSQeuy1fLwS0yU4UnnlVf1K/E=;
-	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=N09Vdh5A6uyR15hziTz5qpeoNRaEzvX76xk1SOn5OIG+ZYfaVin1EfPcY1hiwyxMxvZFV1ylRTdNBIkNuqFdJWAfDlR+nzEcf5j6PGRsxqCXRb7pkO1Pzg02mjd8+PXpxqZJEl/KMShLQJt13DrxbXaQGtWA1TahQ2SRtVJJDkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=mJX3zQBG; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1730153109; c=relaxed/simple;
+	bh=0hoHck181vRn1NSr2f2PwuVWiPIZTgKgLGSUOf4IQxI=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=pxCu55TTd86gvZkhDNid4+34vw85TgpdBBkriO0DbMYV/Cv5Z67vVWNMiYLw9KqjxOEBFodzp4StyU6MJg5MqOvLe6YZjNPpChIVDJbrHdCkHFx49rHBYyb6Yjj1nhFJos8o9OoHKBTUrMCCRCCV/KE5i9Hc6hza3U/cSgmiews=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L1iUXEXX; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="mJX3zQBG"
-Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [40.64.70.95])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 80036211F5FE;
-	Mon, 28 Oct 2024 14:54:52 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 80036211F5FE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1730152492;
-	bh=zc+ZWSTdJbJ1KMumAS3CGewM5edd8U/JCF3ameY+J4c=;
-	h=Subject:From:To:Cc:Date:From;
-	b=mJX3zQBG7BkAQVyVhFykb779YdpEz0fuOOZJmK7735VYB97yn52cyVnoUKP9HKLpB
-	 yNriw7p6iNm2HGlrxa2k9QZP5OzQN2v1SUeazaItS2a4XGfOYNnv/eP70Nf5491IcM
-	 40heyq0HLc6PPXAJYXy0aOhplk3E0+TAJssJcRTU=
-Subject: [PATCH v2] kunit: Introduce autorun option
-From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-To: brendan.higgins@linux.dev, davidgow@google.com
-Cc: rmoar@google.com, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Date: Mon, 28 Oct 2024 21:54:52 +0000
-Message-ID: 
- <173015245931.4747.16419517391658830640.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-User-Agent: StGit/0.19
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L1iUXEXX"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e370139342so87993817b3.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 15:05:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730153106; x=1730757906; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oWhquCb49LKi5H2UYgYKpnhN10davrTJtCE6vqtRvG0=;
+        b=L1iUXEXX23c7s4SOJfwXncF8st+C577cU7wbrxCeM0rC6RBqgRRNhucnuFc6Fuls2B
+         nhYB5LkBne2C/+b9lkOfOC2gMVwbN+ER4p9Fu2gvNOAtjD/lpSIAz1Uy9nYcHaSWrwW0
+         md+SXybpg2NVcb+/fVbjipXe2zNG+di/HB+7NpmvEgVMaTwi3m1OLuR5zNq5SjqhPIQ/
+         ERpIrF0pjUCVrD7WsQFMPRIQWpzckSWjV+rko9e+2wFnQr4NdM6PxlaykQKOx9bRzX50
+         SwcP7KBOhXLVLacbTK/75uG+I29BMVSpNOTYGcXxJhTJ7KqBi0+VubR9VDHDtxlQcM2R
+         a4sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730153106; x=1730757906;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oWhquCb49LKi5H2UYgYKpnhN10davrTJtCE6vqtRvG0=;
+        b=JX2HTt2vMJGwoW7Gnp85DJhweaNa4VrU4gA/oA/hGtU3NoTeWvApI420eMmwhiJ1Tg
+         oeY0ZJbTvKzOmqJjU+xcZLUbpn/ASVEILwn/gceC2WxxiqOdWPrjnk5KdQaxHTAWwmf6
+         r/BgUpc8b28Df9emHJ/lgf10cEy7sWnqnkNoUvrTXxzIvsI0RU2GfrVHZFKn64NUNAAY
+         rQgrbL7YVmtvZ1GtoycAz3t2iEy2uCoqVmgVCa6r8oCmCuOEeO4Ni142hghdnhYytohc
+         uAczIUF6QhxLFm7Xf0hpivbL+f5hZ8QDt3B+jRkKXEIx1YxHAb2njK0NrVdJBPp2WDIQ
+         QsWA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrmEeOm514oFlaPxKpeXlRTTvdJJcCFhSd7U4kJn72ksUfqfWy+kQ/hhko4uvIRIIxew7kOq7JIYKlH06gOQU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2YJ8EbOUxg/fb9F3uCVBYz1lhAwallpk/eLGmAzRMTCYy5iRI
+	rHVx8NgEicieCKChD8QhK6BsAnm+KE8ev9v9IIbOi+xZpmf5HUIoomhYKa31EgMGYki9Pp1OCd+
+	XvqweyRG2VUx/UCWjYd7OyA==
+X-Google-Smtp-Source: AGHT+IEAnCfdVLBm6ktQBhqpFyGMf87tkH/Lnfvvyg2A06ArHO+JMopPeHeJSfmCQLpmkvHXVSBQbL+oME5hPCmQMQ==
+X-Received: from kalesh.mtv.corp.google.com ([2a00:79e0:2e3f:8:dd17:1d2c:7822:7fdf])
+ (user=kaleshsingh job=sendgmr) by 2002:a05:6902:521:b0:e29:7dd4:a945 with
+ SMTP id 3f1490d57ef6-e308784b3c3mr25736276.2.1730153106526; Mon, 28 Oct 2024
+ 15:05:06 -0700 (PDT)
+Date: Mon, 28 Oct 2024 14:43:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.0.163.g1226f6d8fa-goog
+Message-ID: <20241028214550.2099923-1-kaleshsingh@google.com>
+Subject: [PATCH 0/3] Tracefs gid mount option fixes
+From: Kalesh Singh <kaleshsingh@google.com>
+To: dhowells@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org
+Cc: surenb@google.com, jyescas@google.com, kernel-team@android.com, 
+	android-mm@google.com, Kalesh Singh <kaleshsingh@google.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>, 
+	Ali Zahraee <ahzahraee@gmail.com>, Eric Sandeen <sandeen@redhat.com>, 
+	Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The new option controls tests run on boot or module load. With the new
-debugfs "run" dentry allowing to run tests on demand, an ability to disable
-automatic tests run becomes a useful option in case of intrusive tests.
+Hi all,
 
-The option is set to true by default to preserve the existent behavior. It
-can be overridden by either the corresponding module option or by the
-corresponding config build option.
+This series is based on v6.12-rc4. It fixes an issue with the  tracefs
+gid mount option. Adds test case to prevent future breakages and updates
+the tracefs readme to document the expected behavior of this option.
 
-Signed-off-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
----
- include/kunit/test.h |    4 +++-
- lib/kunit/Kconfig    |   12 ++++++++++++
- lib/kunit/debugfs.c  |    2 +-
- lib/kunit/executor.c |   21 +++++++++++++++++++--
- lib/kunit/test.c     |    6 ++++--
- 5 files changed, 39 insertions(+), 6 deletions(-)
+Thanks,
+Kalesh
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 34b71e42fb10..58dbab60f853 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -312,6 +312,7 @@ static inline void kunit_set_failure(struct kunit *test)
- }
- 
- bool kunit_enabled(void);
-+bool kunit_autorun(void);
- const char *kunit_action(void);
- const char *kunit_filter_glob(void);
- char *kunit_filter(void);
-@@ -334,7 +335,8 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 		    int *err);
- void kunit_free_suite_set(struct kunit_suite_set suite_set);
- 
--int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites);
-+int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites,
-+			     bool run_tests);
- 
- void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
- 
-diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-index 34d7242d526d..a97897edd964 100644
---- a/lib/kunit/Kconfig
-+++ b/lib/kunit/Kconfig
-@@ -81,4 +81,16 @@ config KUNIT_DEFAULT_ENABLED
- 	  In most cases this should be left as Y. Only if additional opt-in
- 	  behavior is needed should this be set to N.
- 
-+config KUNIT_AUTORUN_ENABLED
-+	bool "Default value of kunit.autorun"
-+	default y
-+	help
-+	  Sets the default value of kunit.autorun. If set to N then KUnit
-+	  tests will not run after initialization unless kunit.autorun=1 is
-+	  passed to the kernel command line. The test can still be run manually
-+	  via debugfs interface.
-+
-+	  In most cases this should be left as Y. Only if additional opt-in
-+	  behavior is needed should this be set to N.
-+
- endif # KUNIT
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index d548750a325a..9df064f40d98 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -145,7 +145,7 @@ static ssize_t debugfs_run(struct file *file,
- 	struct inode *f_inode = file->f_inode;
- 	struct kunit_suite *suite = (struct kunit_suite *) f_inode->i_private;
- 
--	__kunit_test_suites_init(&suite, 1);
-+	__kunit_test_suites_init(&suite, 1, true);
- 
- 	return count;
- }
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 34b7b6833df3..3f39955cb0f1 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -29,6 +29,22 @@ const char *kunit_action(void)
- 	return action_param;
- }
- 
-+/*
-+ * Run KUnit tests after initialization
-+ */
-+#ifdef CONFIG_KUNIT_AUTORUN_ENABLED
-+static bool autorun_param = true;
-+#else
-+static bool autorun_param;
-+#endif
-+module_param_named(autorun, autorun_param, bool, 0);
-+MODULE_PARM_DESC(autorun, "Run KUnit tests after initialization");
-+
-+bool kunit_autorun(void)
-+{
-+	return autorun_param;
-+}
-+
- static char *filter_glob_param;
- static char *filter_param;
- static char *filter_action_param;
-@@ -260,13 +276,14 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- void kunit_exec_run_tests(struct kunit_suite_set *suite_set, bool builtin)
- {
- 	size_t num_suites = suite_set->end - suite_set->start;
-+	bool autorun = kunit_autorun();
- 
--	if (builtin || num_suites) {
-+	if (autorun && (builtin || num_suites)) {
- 		pr_info("KTAP version 1\n");
- 		pr_info("1..%zu\n", num_suites);
- 	}
- 
--	__kunit_test_suites_init(suite_set->start, num_suites);
-+	__kunit_test_suites_init(suite_set->start, num_suites, autorun);
- }
- 
- void kunit_exec_list_tests(struct kunit_suite_set *suite_set, bool include_attr)
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 089c832e3cdb..146d1b48a096 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -708,7 +708,8 @@ bool kunit_enabled(void)
- 	return enable_param;
- }
- 
--int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites)
-+int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites,
-+			     bool run_tests)
- {
- 	unsigned int i;
- 
-@@ -731,7 +732,8 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
- 
- 	for (i = 0; i < num_suites; i++) {
- 		kunit_init_suite(suites[i]);
--		kunit_run_tests(suites[i]);
-+		if (run_tests)
-+			kunit_run_tests(suites[i]);
- 	}
- 
- 	static_branch_dec(&kunit_running);
+Kalesh Singh (3):
+  tracing: Document tracefs gid mount option
+  tracing/selftests: Add tracefs mount options test
+  tracing: Fix tracefs gid mount option
 
+ fs/tracefs/inode.c                            |  12 ++-
+ kernel/trace/trace.c                          |   4 +
+ .../ftrace/test.d/00basic/mount_options.tc    | 101 ++++++++++++++++++
+ .../ftrace/test.d/00basic/test_ownership.tc   |  16 +--
+ .../testing/selftests/ftrace/test.d/functions |  25 +++++
+ 5 files changed, 142 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/mount_options.tc
+
+
+base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
+--
+2.47.0.163.g1226f6d8fa-goog
 
