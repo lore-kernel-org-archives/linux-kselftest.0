@@ -1,60 +1,60 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B717207A3B
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 10:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D474D208223
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 10:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730198906; cv=none; b=GoZE/PwAwUhcRv7KFmyqaOoRyvh3pFBHK74gLklKaJUVp4KTc0a0/nJExsX/ZowawAPiGIIqXs9nOO2ah6gp1nFYm/kmiNsLyRmfG0yIpQ7ga8ObRGj2pYdoGDRUXHDdV0p+t9sfF2V8cEUmDCUK4I8cP/bs9AH5b7xRG8lg0q0=
+	t=1730198907; cv=none; b=WWoUG4qlF7ggwiMQkeCHZhjXs71OsdJI28WecFs+AogNt1iHM/l9oNMzuBsQ678Ti4Azk6KM/ieQdVK3orCItmWu4UZc5ql74Uaj3VNM0fB5Ni1GbVJmAsscERgQ2qAsWRprNMruh1HBXl8lFptnPpTGQ/c+O9uYp9CyXYiySTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730198906; c=relaxed/simple;
-	bh=J8d4iPCACFjh4RPZ73470DF9BW2jmMoUHGooQOibiPM=;
+	s=arc-20240116; t=1730198907; c=relaxed/simple;
+	bh=EM1n5XLP46bbcYieB0EmGrRjiLgTqXNxQB8X9Bg+dYo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OzLXbmxa/L8zyx747GxEl0omhozMiiCttlxWobaMX1Q4VIzWt9PwmLzng5q80Ojbo/K3NRP6yIy5HOdWTXI1Z38lq4uRkYYWbZ/zGpu6usJsz/DgnO3uhCk+PQ0vWX/tzCifGT85ZjOZF/GbtMmD7+qiLPpMgO93yNOoPF+OQAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=dwiZZxft; arc=none smtp.client-ip=209.85.167.44
+	 In-Reply-To:To:Cc; b=uzMr9cqor2wReru3BIaxgGReQcOHeNVH+ad4BfEsiiaYr2FvMpkn6zTtoC1itJl79Wb4VrTePXqNoahFyrYFwLFPDAcolnLPHwSJtTZ1bQif2blDivjcjggn6BRBHqk9KPyMbmR+1vDVGVQ4Tbt5FhywpuA9nc45GGPqs1/L3X0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=ceiB7muN; arc=none smtp.client-ip=209.85.208.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="dwiZZxft"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-53a097aa3daso4620527e87.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 03:48:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="ceiB7muN"
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2fb584a8f81so48530441fa.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 03:48:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1730198898; x=1730803698; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1730198901; x=1730803701; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=68t+4emiJOMGD7jO3lAM+Og+n+MVyNlVZH1VmphoocY=;
-        b=dwiZZxftmdwcJHmMhGBs4Zn4O8ymuX2oukW6f62zMcIC47JpyVfTt49ErC4ssbKLGN
-         qT8W44eeW6CR9m0TRheiRRfIL6O1O3ReFSFPhAJpZs0uQUYOuLDHV6/CFtOGVNhMxCSH
-         voczJ96sFic4cbvh47U/Vd2IvSSCYGntfiaKRr5mlecISeDc//gCX8WTFnIqcPzn5XoA
-         3jKZbnJhjLMFFvSc2uNJ+6J4/ndlZFevbLViQkYPqia9n1O8eerapDU62ezfpEEG8bdh
-         OKyfZVvL8tJLi3x3x6o2Tnf7uovwexf84i//oW39rGJGlJuzoEnUx0h1+PbwlRegtfqJ
-         S0pg==
+        bh=8HuX1GHq5pWI7tPD2JZWNHEsgeBv5B6S2VikoBpUMoI=;
+        b=ceiB7muNaTHgqTNfAUzcmT0NjdWtIRZVijT3r+Xfeusrw1Qd/tTSMEHXL95NM65yb8
+         qRQ8D20AMhZt4eo7j4nNyempQYaC0+c2z5+/QzD63qTDz4GN8ondrjO6bmNiYDj5dhIl
+         uveAClw4HVf9i/ygAg2Gk4v9IwxKaf7wFmQMLIvt64gdWlkawxL/Jl0zzdinEyIxgk2K
+         g61Aa8qVNFjiNO1Cohz/SLQu1B6wiG4RmmaKAgSmwZ1NR8VfLHafw5zTmiCuelsxiA8F
+         vLKE8mByywU6okgdhC8PHLdiwS1/CY6S9sBSuAiA/gJp/wPNybF6hglQ0uyhX4G44TPq
+         7hug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730198898; x=1730803698;
+        d=1e100.net; s=20230601; t=1730198901; x=1730803701;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=68t+4emiJOMGD7jO3lAM+Og+n+MVyNlVZH1VmphoocY=;
-        b=EBoPR9KaojYvlS5Py2WL1jCkh2a/+Y61EeDc0dyId/brzrO74puZxKwC4YiBrrnxSq
-         HoaYwnCiqHRxN5T/xtKAqd3OvLV2T1wqpVYnzbGD1X0pp/Srz1bm4lnLA5ykzq7akU+g
-         2ZQpQfUUvA8jiKYSws4+aB8tUqrtdDhit4/6X3GrKlm7D6eo/J0QYsul+TM+Q6+wHdk5
-         DksZYTy6PcfXj3vQZpaakmC0DXrsXgLjrhtdXKA5wQpXNQZnEJuLPP7CCZkG/aafROpd
-         j/+7yDw/7ZW7YTxswk4kZHhIBgpsYV1LnuRL7qDNOmc13m7f8R4eQENoaZGQjRQ38U7D
-         DmBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVsYqIlziOVNJk2oGQ2qocW2jY8+gm76I3+R1K9LPi3mI65mXEsLBCszM81IpIeHZkm2IcuCwb6KOrbZVlv4y8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywg6+IxB2lrzQIOupfBTiVBHWQA0i15jQsTh8DxxeCgGn6M5zd8
-	pOxc++4lSYPcuc0TwTnB4t8E1+ZRKtwou6xXZdn7wpA7rTbnLVOUtb927SYqb/8=
-X-Google-Smtp-Source: AGHT+IEIlX61Bk7CmB1hWO28Ai/NM9PRoZy/ErPg9ezxtaWHGSWjDrL19+HDSInUYPgClQA3Io2dGw==
-X-Received: by 2002:a05:6512:2807:b0:530:aa09:b6bf with SMTP id 2adb3069b0e04-53b348dd422mr5431327e87.24.1730198898099;
-        Tue, 29 Oct 2024 03:48:18 -0700 (PDT)
+        bh=8HuX1GHq5pWI7tPD2JZWNHEsgeBv5B6S2VikoBpUMoI=;
+        b=XRVraWG+11ic41HziDLY73wr6hSV8YILUNFPMEENdR6mZ4L9GY1dBjtgVXuASoKXmA
+         fIBxI6zABDsaR+nPLpooraz/V/hbLYlM5hpdpUIMV8a9jb+Muc8/burPHaQUkeSPfUF2
+         kklLFaGVYLvk0Xlu2yJ/YfZHU6blaj8jiTKQKCxWwZ96jEJZ+3sxYl49f8mZhOX459Sc
+         416y7EsEDgwHEbWNQgeHK0Mv4DPK5/ZUgAUMMasPdCjMYd2F9LllA2azaL10WoEmUIEw
+         pidaC6Q4rV1r1zhE9I+NTd8b/xIghkrDtZkG1sjOaBMIwcMaL0RsxHtpf5RZL5MbZTm5
+         T6Sw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVMAMjGNNBuXCtQz5ZNbidI8kXThjWzE2k85rItAIKcffgYJXWyw/2G+4EhRgUjkiUGuavWSQG1/shQlRhgPY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyv4v5qfoknbsSY5m75BT1PQFWULwSxYyqUDQKnLysGp5XdjYJZ
+	0TbdwFfA6KmPty3KDjqew9gp+Wy1qSjloyqeiM2WBrXlKCrVz3TKr/IjphNxUMk=
+X-Google-Smtp-Source: AGHT+IE0pYlhSUaTN/QmBQxp5C5y8evJdYUSslFxQ9uxOougBniFAhHsPr90aCl6rGQJqGfCCKJgxw==
+X-Received: by 2002:a2e:701:0:b0:2f7:7ef7:7434 with SMTP id 38308e7fff4ca-2fcbe095e65mr43431271fa.37.1730198900594;
+        Tue, 29 Oct 2024 03:48:20 -0700 (PDT)
 Received: from serenity.mandelbit.com ([2001:67c:2fbc:1:3dcf:a6cb:47af:d9f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431934be328sm141124785e9.0.2024.10.29.03.48.16
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431934be328sm141124785e9.0.2024.10.29.03.48.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2024 03:48:17 -0700 (PDT)
+        Tue, 29 Oct 2024 03:48:20 -0700 (PDT)
 From: Antonio Quartulli <antonio@openvpn.net>
-Date: Tue, 29 Oct 2024 11:47:28 +0100
-Subject: [PATCH net-next v11 15/23] ovpn: implement keepalive mechanism
+Date: Tue, 29 Oct 2024 11:47:30 +0100
+Subject: [PATCH net-next v11 17/23] ovpn: add support for peer floating
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241029-b4-ovpn-v11-15-de4698c73a25@openvpn.net>
+Message-Id: <20241029-b4-ovpn-v11-17-de4698c73a25@openvpn.net>
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
 In-Reply-To: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
 To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -74,468 +74,230 @@ To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=14945; i=antonio@openvpn.net;
- h=from:subject:message-id; bh=J8d4iPCACFjh4RPZ73470DF9BW2jmMoUHGooQOibiPM=;
- b=owEBbQGS/pANAwAIAQtw5TqgONWHAcsmYgBnIL1rZgKK6LxlaYs+ayb0axvJztUcIY1mQuzLR
- wnYiUcOTjqJATMEAAEIAB0WIQSZq9xs+NQS5N5fwPwLcOU6oDjVhwUCZyC9awAKCRALcOU6oDjV
- h133B/9dLifv+7NesN+Sp5XdDpz/3ubaowB8lB8a/S7YcD1MNm0K2JHNvr4J6CIW2xK1bF4s7iQ
- xX1BLlqhJB9ykjs7w0C0DaT4UipJEuTR2DJ4XR2yVGDfjNhXWwrXvF3hgB/RsvcYK0BK5syLpjJ
- ymAQ7Wl6HOXQRpUBcDyjmaP5ifD8VoPSEWYvcYx9vva1C7RbKVts+5CfqjfHYdYFxEZmKD5ZzJh
- LjxxGwiMf/RbRzPuPJkaLvGTbcgaR2ZS+pOFoMjQErP0eZNyFLmrPAOG5ZQOmxyXDoHJPIMBdOI
- ZzuKTVr1hAmv+f5LAeFjPn7+67ZGcgjxuimV5Bnr1eufjpgv
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6844; i=antonio@openvpn.net;
+ h=from:subject:message-id; bh=EM1n5XLP46bbcYieB0EmGrRjiLgTqXNxQB8X9Bg+dYo=;
+ b=owEBbQGS/pANAwAIAQtw5TqgONWHAcsmYgBnIL1sl6QOnfFcdHksfhI53f+23XDOT5mhNfLV1
+ ppML4GrjoqJATMEAAEIAB0WIQSZq9xs+NQS5N5fwPwLcOU6oDjVhwUCZyC9bAAKCRALcOU6oDjV
+ h/xlCACY/bgEK0XxuXg1IsxPO6ZuGwhPaYIs8TujPsDIgH09rNMSxPHAUvfSRnpa/gU5B8yyW4t
+ cYZyzXnAMttnP7Ia8kacaex/0E/8hmnKbsaVKiQrck3HvkKOWvMpqgqlcWT3Vbwr8Y53BLM9447
+ 92IqxKCQlIdYSV0OO2SbKCRnH+O9xMfbwhYsDE8S1JAMYwRooM/kMZzig7SU2JAdDfsNIU0jouv
+ LZzA4U4syPMu++7I9Vb4a1fArz1FYj0Qyo/ulLMy152hy/uISYMeIDCxXvX+hAiIQk0ztHEdJdM
+ plZISfYuQIIq+WaZzX7pdVuvXyaAxodjA7bxlM18ANDFpR10
 X-Developer-Key: i=antonio@openvpn.net; a=openpgp;
  fpr=CABDA1282017C267219885C748F0CCB68F59D14C
 
-OpenVPN supports configuring a periodic keepalive packet.
-message to allow the remote endpoint detect link failures.
+A peer connected via UDP may change its IP address without reconnecting
+(float).
 
-This change implements the keepalive sending and timer expiring logic.
+Add support for detecting and updating the new peer IP/port in case of
+floating.
 
 Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
 ---
- drivers/net/ovpn/io.c         |  77 +++++++++++++++++
- drivers/net/ovpn/io.h         |   5 ++
- drivers/net/ovpn/main.c       |   3 +
- drivers/net/ovpn/ovpnstruct.h |   2 +
- drivers/net/ovpn/peer.c       | 188 ++++++++++++++++++++++++++++++++++++++++++
- drivers/net/ovpn/peer.h       |  15 ++++
- drivers/net/ovpn/proto.h      |   2 -
- 7 files changed, 290 insertions(+), 2 deletions(-)
+ drivers/net/ovpn/bind.c |  10 ++--
+ drivers/net/ovpn/io.c   |   9 ++++
+ drivers/net/ovpn/peer.c | 129 ++++++++++++++++++++++++++++++++++++++++++++++--
+ drivers/net/ovpn/peer.h |   2 +
+ 4 files changed, 139 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/net/ovpn/bind.c b/drivers/net/ovpn/bind.c
+index b4d2ccec2ceddf43bc445b489cc62a578ef0ad0a..d17d078c5730bf4336dc87f45cdba3f6b8cad770 100644
+--- a/drivers/net/ovpn/bind.c
++++ b/drivers/net/ovpn/bind.c
+@@ -47,12 +47,8 @@ struct ovpn_bind *ovpn_bind_from_sockaddr(const struct sockaddr_storage *ss)
+  * @new: the new bind to assign
+  */
+ void ovpn_bind_reset(struct ovpn_peer *peer, struct ovpn_bind *new)
++	__must_hold(&peer->lock)
+ {
+-	struct ovpn_bind *old;
+-
+-	spin_lock_bh(&peer->lock);
+-	old = rcu_replace_pointer(peer->bind, new, true);
+-	spin_unlock_bh(&peer->lock);
+-
+-	kfree_rcu(old, rcu);
++	kfree_rcu(rcu_replace_pointer(peer->bind, new,
++				      lockdep_is_held(&peer->lock)), rcu);
+ }
 diff --git a/drivers/net/ovpn/io.c b/drivers/net/ovpn/io.c
-index deda19ab87391f86964ba43088b7847d22420eee..63c140138bf98e5d1df79a2565b666d86513323d 100644
+index 63c140138bf98e5d1df79a2565b666d86513323d..0e8a6f2c76bc7b2ccc287ad1187cf50f033bf261 100644
 --- a/drivers/net/ovpn/io.c
 +++ b/drivers/net/ovpn/io.c
-@@ -27,6 +27,33 @@
- #include "skb.h"
- #include "socket.h"
+@@ -135,6 +135,15 @@ void ovpn_decrypt_post(void *data, int ret)
+ 	/* keep track of last received authenticated packet for keepalive */
+ 	peer->last_recv = ktime_get_real_seconds();
  
-+const unsigned char ovpn_keepalive_message[OVPN_KEEPALIVE_SIZE] = {
-+	0x2a, 0x18, 0x7b, 0xf3, 0x64, 0x1e, 0xb4, 0xcb,
-+	0x07, 0xed, 0x2d, 0x0a, 0x98, 0x1f, 0xc7, 0x48
-+};
-+
-+/**
-+ * ovpn_is_keepalive - check if skb contains a keepalive message
-+ * @skb: packet to check
-+ *
-+ * Assumes that the first byte of skb->data is defined.
-+ *
-+ * Return: true if skb contains a keepalive or false otherwise
-+ */
-+static bool ovpn_is_keepalive(struct sk_buff *skb)
-+{
-+	if (*skb->data != ovpn_keepalive_message[0])
-+		return false;
-+
-+	if (skb->len != OVPN_KEEPALIVE_SIZE)
-+		return false;
-+
-+	if (!pskb_may_pull(skb, OVPN_KEEPALIVE_SIZE))
-+		return false;
-+
-+	return !memcmp(skb->data, ovpn_keepalive_message, OVPN_KEEPALIVE_SIZE);
-+}
-+
- /* Called after decrypt to write the IP packet to the device.
-  * This method is expected to manage/free the skb.
-  */
-@@ -105,6 +132,9 @@ void ovpn_decrypt_post(void *data, int ret)
- 		goto drop;
- 	}
- 
-+	/* keep track of last received authenticated packet for keepalive */
-+	peer->last_recv = ktime_get_real_seconds();
++	if (peer->sock->sock->sk->sk_protocol == IPPROTO_UDP) {
++		/* check if this peer changed it's IP address and update
++		 * state
++		 */
++		ovpn_peer_float(peer, skb);
++		/* update source endpoint for this peer */
++		ovpn_peer_update_local_endpoint(peer, skb);
++	}
 +
  	/* point to encapsulated IP packet */
  	__skb_pull(skb, payload_offset);
  
-@@ -121,6 +151,12 @@ void ovpn_decrypt_post(void *data, int ret)
- 			goto drop;
- 		}
- 
-+		if (ovpn_is_keepalive(skb)) {
-+			net_dbg_ratelimited("%s: ping received from peer %u\n",
-+					    peer->ovpn->dev->name, peer->id);
-+			goto drop;
-+		}
-+
- 		net_info_ratelimited("%s: unsupported protocol received from peer %u\n",
- 				     peer->ovpn->dev->name, peer->id);
- 		goto drop;
-@@ -221,6 +257,10 @@ void ovpn_encrypt_post(void *data, int ret)
- 		/* no transport configured yet */
- 		goto err;
- 	}
-+
-+	/* keep track of last sent packet for keepalive */
-+	peer->last_sent = ktime_get_real_seconds();
-+
- 	/* skb passed down the stack - don't free it */
- 	skb = NULL;
- err:
-@@ -361,3 +401,40 @@ netdev_tx_t ovpn_net_xmit(struct sk_buff *skb, struct net_device *dev)
- 	kfree_skb_list(skb);
- 	return NET_XMIT_DROP;
- }
-+
-+/**
-+ * ovpn_xmit_special - encrypt and transmit an out-of-band message to peer
-+ * @peer: peer to send the message to
-+ * @data: message content
-+ * @len: message length
-+ *
-+ * Assumes that caller holds a reference to peer
-+ */
-+void ovpn_xmit_special(struct ovpn_peer *peer, const void *data,
-+		       const unsigned int len)
-+{
-+	struct ovpn_struct *ovpn;
-+	struct sk_buff *skb;
-+
-+	ovpn = peer->ovpn;
-+	if (unlikely(!ovpn))
-+		return;
-+
-+	skb = alloc_skb(256 + len, GFP_ATOMIC);
-+	if (unlikely(!skb))
-+		return;
-+
-+	skb_reserve(skb, 128);
-+	skb->priority = TC_PRIO_BESTEFFORT;
-+	__skb_put_data(skb, data, len);
-+
-+	/* increase reference counter when passing peer to sending queue */
-+	if (!ovpn_peer_hold(peer)) {
-+		netdev_dbg(ovpn->dev, "%s: cannot hold peer reference for sending special packet\n",
-+			   __func__);
-+		kfree_skb(skb);
-+		return;
-+	}
-+
-+	ovpn_send(ovpn, skb, peer);
-+}
-diff --git a/drivers/net/ovpn/io.h b/drivers/net/ovpn/io.h
-index ad81dd86924689309b3299573575a1705eddaf99..eb224114152c29f42aadf026212e8d278006b490 100644
---- a/drivers/net/ovpn/io.h
-+++ b/drivers/net/ovpn/io.h
-@@ -10,9 +10,14 @@
- #ifndef _NET_OVPN_OVPN_H_
- #define _NET_OVPN_OVPN_H_
- 
-+#define OVPN_KEEPALIVE_SIZE 16
-+extern const unsigned char ovpn_keepalive_message[OVPN_KEEPALIVE_SIZE];
-+
- netdev_tx_t ovpn_net_xmit(struct sk_buff *skb, struct net_device *dev);
- 
- void ovpn_recv(struct ovpn_peer *peer, struct sk_buff *skb);
-+void ovpn_xmit_special(struct ovpn_peer *peer, const void *data,
-+		       const unsigned int len);
- 
- void ovpn_encrypt_post(void *data, int ret);
- void ovpn_decrypt_post(void *data, int ret);
-diff --git a/drivers/net/ovpn/main.c b/drivers/net/ovpn/main.c
-index c7453127ab640d7268c1ce919a87cc5419fac9ee..1bd563e3f16f49dd01c897fbe79cbd90f4b8e9aa 100644
---- a/drivers/net/ovpn/main.c
-+++ b/drivers/net/ovpn/main.c
-@@ -191,6 +191,7 @@ static int ovpn_newlink(struct net *src_net, struct net_device *dev,
- 	ovpn->dev = dev;
- 	ovpn->mode = mode;
- 	spin_lock_init(&ovpn->lock);
-+	INIT_DELAYED_WORK(&ovpn->keepalive_work, ovpn_peer_keepalive_work);
- 
- 	err = ovpn_mp_alloc(ovpn);
- 	if (err < 0)
-@@ -244,6 +245,8 @@ static int ovpn_netdev_notifier_call(struct notifier_block *nb,
- 		netif_carrier_off(dev);
- 		ovpn->registered = false;
- 
-+		cancel_delayed_work_sync(&ovpn->keepalive_work);
-+
- 		switch (ovpn->mode) {
- 		case OVPN_MODE_P2P:
- 			ovpn_peer_release_p2p(ovpn);
-diff --git a/drivers/net/ovpn/ovpnstruct.h b/drivers/net/ovpn/ovpnstruct.h
-index 12ed5e22c2108c9f143d1984048eb40c887cac63..4ac00d550ecb9f84c6c132dd2bdc0a3fc0ab342c 100644
---- a/drivers/net/ovpn/ovpnstruct.h
-+++ b/drivers/net/ovpn/ovpnstruct.h
-@@ -43,6 +43,7 @@ struct ovpn_peer_collection {
-  * @peer: in P2P mode, this is the only remote peer
-  * @dev_list: entry for the module wide device list
-  * @gro_cells: pointer to the Generic Receive Offload cell
-+ * @keepalive_work: struct used to schedule keepalive periodic job
-  */
- struct ovpn_struct {
- 	struct net_device *dev;
-@@ -54,6 +55,7 @@ struct ovpn_struct {
- 	struct ovpn_peer __rcu *peer;
- 	struct list_head dev_list;
- 	struct gro_cells gro_cells;
-+	struct delayed_work keepalive_work;
- };
- 
- #endif /* _NET_OVPN_OVPNSTRUCT_H_ */
 diff --git a/drivers/net/ovpn/peer.c b/drivers/net/ovpn/peer.c
-index c7dc9032c2b55fd42befc1f3e7a0eca893a96576..e8a42212af391916b5321e729f7e8a864d0a541f 100644
+index 3f67d200e283213fcb732d10f9edeb53e0a0e9ee..da6215bbb643592e4567e61e4b4976d367ed109c 100644
 --- a/drivers/net/ovpn/peer.c
 +++ b/drivers/net/ovpn/peer.c
-@@ -22,6 +22,34 @@
- #include "peer.h"
- #include "socket.h"
+@@ -94,6 +94,131 @@ struct ovpn_peer *ovpn_peer_new(struct ovpn_struct *ovpn, u32 id)
+ 	return peer;
+ }
  
 +/**
-+ * ovpn_peer_keepalive_set - configure keepalive values for peer
-+ * @peer: the peer to configure
-+ * @interval: outgoing keepalive interval
-+ * @timeout: incoming keepalive timeout
++ * ovpn_peer_reset_sockaddr - recreate binding for peer
++ * @peer: peer to recreate the binding for
++ * @ss: sockaddr to use as remote endpoint for the binding
++ * @local_ip: local IP for the binding
++ *
++ * Return: 0 on success or a negative error code otherwise
 + */
-+void ovpn_peer_keepalive_set(struct ovpn_peer *peer, u32 interval, u32 timeout)
++static int ovpn_peer_reset_sockaddr(struct ovpn_peer *peer,
++				    const struct sockaddr_storage *ss,
++				    const u8 *local_ip)
++	__must_hold(&peer->lock)
 +{
-+	time64_t now = ktime_get_real_seconds();
++	struct ovpn_bind *bind;
++	size_t ip_len;
 +
-+	netdev_dbg(peer->ovpn->dev,
-+		   "%s: scheduling keepalive for peer %u: interval=%u timeout=%u\n",
-+		   __func__, peer->id, interval, timeout);
++	/* create new ovpn_bind object */
++	bind = ovpn_bind_from_sockaddr(ss);
++	if (IS_ERR(bind))
++		return PTR_ERR(bind);
 +
-+	peer->keepalive_interval = interval;
-+	peer->last_sent = now;
-+	peer->keepalive_xmit_exp = now + interval;
++	if (local_ip) {
++		if (ss->ss_family == AF_INET) {
++			ip_len = sizeof(struct in_addr);
++		} else if (ss->ss_family == AF_INET6) {
++			ip_len = sizeof(struct in6_addr);
++		} else {
++			netdev_dbg(peer->ovpn->dev, "%s: invalid family for remote endpoint\n",
++				   __func__);
++			kfree(bind);
++			return -EINVAL;
++		}
 +
-+	peer->keepalive_timeout = timeout;
-+	peer->last_recv = now;
-+	peer->keepalive_recv_exp = now + timeout;
-+
-+	/* now that interval and timeout have been changed, kick
-+	 * off the worker so that the next delay can be recomputed
-+	 */
-+	mod_delayed_work(system_wq, &peer->ovpn->keepalive_work, 0);
-+}
-+
- /**
-  * ovpn_peer_new - allocate and initialize a new peer object
-  * @ovpn: the openvpn instance inside which the peer should be created
-@@ -815,6 +843,19 @@ int ovpn_peer_del(struct ovpn_peer *peer, enum ovpn_del_peer_reason reason)
- 	}
- }
- 
-+static int ovpn_peer_del_nolock(struct ovpn_peer *peer,
-+				enum ovpn_del_peer_reason reason)
-+{
-+	switch (peer->ovpn->mode) {
-+	case OVPN_MODE_MP:
-+		return ovpn_peer_del_mp(peer, reason);
-+	case OVPN_MODE_P2P:
-+		return ovpn_peer_del_p2p(peer, reason);
-+	default:
-+		return -EOPNOTSUPP;
++		memcpy(&bind->local, local_ip, ip_len);
 +	}
++
++	/* set binding */
++	ovpn_bind_reset(peer, bind);
++
++	return 0;
 +}
 +
- /**
-  * ovpn_peers_free - free all peers in the instance
-  * @ovpn: the instance whose peers should be released
-@@ -830,3 +871,150 @@ void ovpn_peers_free(struct ovpn_struct *ovpn)
- 		ovpn_peer_unhash(peer, OVPN_DEL_PEER_REASON_TEARDOWN);
- 	spin_unlock_bh(&ovpn->peers->lock);
- }
++#define ovpn_get_hash_head(_tbl, _key, _key_len) ({		\
++	typeof(_tbl) *__tbl = &(_tbl);				\
++	(&(*__tbl)[jhash(_key, _key_len, 0) % HASH_SIZE(*__tbl)]); }) \
 +
-+static time64_t ovpn_peer_keepalive_work_single(struct ovpn_peer *peer,
-+						time64_t now)
++/**
++ * ovpn_peer_float - update remote endpoint for peer
++ * @peer: peer to update the remote endpoint for
++ * @skb: incoming packet to retrieve the source address (remote) from
++ */
++void ovpn_peer_float(struct ovpn_peer *peer, struct sk_buff *skb)
 +{
-+	time64_t next_run1, next_run2, delta;
-+	unsigned long timeout, interval;
-+	bool expired;
++	struct hlist_nulls_head *nhead;
++	struct sockaddr_storage ss;
++	const u8 *local_ip = NULL;
++	struct sockaddr_in6 *sa6;
++	struct sockaddr_in *sa;
++	struct ovpn_bind *bind;
++	sa_family_t family;
++	size_t salen;
++
++	rcu_read_lock();
++	bind = rcu_dereference(peer->bind);
++	if (unlikely(!bind)) {
++		rcu_read_unlock();
++		return;
++	}
 +
 +	spin_lock_bh(&peer->lock);
-+	/* we expect both timers to be configured at the same time,
-+	 * therefore bail out if either is not set
-+	 */
-+	if (!peer->keepalive_timeout || !peer->keepalive_interval) {
-+		spin_unlock_bh(&peer->lock);
-+		return 0;
++	if (likely(ovpn_bind_skb_src_match(bind, skb)))
++		goto unlock;
++
++	family = skb_protocol_to_family(skb);
++
++	if (bind->remote.in4.sin_family == family)
++		local_ip = (u8 *)&bind->local;
++
++	switch (family) {
++	case AF_INET:
++		sa = (struct sockaddr_in *)&ss;
++		sa->sin_family = AF_INET;
++		sa->sin_addr.s_addr = ip_hdr(skb)->saddr;
++		sa->sin_port = udp_hdr(skb)->source;
++		salen = sizeof(*sa);
++		break;
++	case AF_INET6:
++		sa6 = (struct sockaddr_in6 *)&ss;
++		sa6->sin6_family = AF_INET6;
++		sa6->sin6_addr = ipv6_hdr(skb)->saddr;
++		sa6->sin6_port = udp_hdr(skb)->source;
++		sa6->sin6_scope_id = ipv6_iface_scope_id(&ipv6_hdr(skb)->saddr,
++							 skb->skb_iif);
++		salen = sizeof(*sa6);
++		break;
++	default:
++		goto unlock;
 +	}
 +
-+	/* check for peer timeout */
-+	expired = false;
-+	timeout = peer->keepalive_timeout;
-+	delta = now - peer->last_recv;
-+	if (delta < timeout) {
-+		peer->keepalive_recv_exp = now + timeout - delta;
-+		next_run1 = peer->keepalive_recv_exp;
-+	} else if (peer->keepalive_recv_exp > now) {
-+		next_run1 = peer->keepalive_recv_exp;
-+	} else {
-+		expired = true;
-+	}
-+
-+	if (expired) {
-+		/* peer is dead -> kill it and move on */
-+		spin_unlock_bh(&peer->lock);
-+		netdev_dbg(peer->ovpn->dev, "peer %u expired\n",
-+			   peer->id);
-+		ovpn_peer_del_nolock(peer, OVPN_DEL_PEER_REASON_EXPIRED);
-+		return 0;
-+	}
-+
-+	/* check for peer keepalive */
-+	expired = false;
-+	interval = peer->keepalive_interval;
-+	delta = now - peer->last_sent;
-+	if (delta < interval) {
-+		peer->keepalive_xmit_exp = now + interval - delta;
-+		next_run2 = peer->keepalive_xmit_exp;
-+	} else if (peer->keepalive_xmit_exp > now) {
-+		next_run2 = peer->keepalive_xmit_exp;
-+	} else {
-+		expired = true;
-+		next_run2 = now + interval;
-+	}
++	netdev_dbg(peer->ovpn->dev, "%s: peer %d floated to %pIScp", __func__,
++		   peer->id, &ss);
++	ovpn_peer_reset_sockaddr(peer, (struct sockaddr_storage *)&ss,
++				 local_ip);
 +	spin_unlock_bh(&peer->lock);
++	rcu_read_unlock();
 +
-+	if (expired) {
-+		/* a keepalive packet is required */
-+		netdev_dbg(peer->ovpn->dev,
-+			   "sending keepalive to peer %u\n",
-+			   peer->id);
-+		ovpn_xmit_special(peer, ovpn_keepalive_message,
-+				  sizeof(ovpn_keepalive_message));
++	/* rehashing is required only in MP mode as P2P has one peer
++	 * only and thus there is no hashtable
++	 */
++	if (peer->ovpn->mode == OVPN_MODE_MP) {
++		spin_lock_bh(&peer->ovpn->peers->lock);
++		/* remove old hashing */
++		hlist_nulls_del_init_rcu(&peer->hash_entry_transp_addr);
++		/* re-add with new transport address */
++		nhead = ovpn_get_hash_head(peer->ovpn->peers->by_transp_addr,
++					   &ss, salen);
++		hlist_nulls_add_head_rcu(&peer->hash_entry_transp_addr, nhead);
++		spin_unlock_bh(&peer->ovpn->peers->lock);
 +	}
-+
-+	if (next_run1 < next_run2)
-+		return next_run1;
-+
-+	return next_run2;
++	return;
++unlock:
++	spin_unlock_bh(&peer->lock);
++	rcu_read_unlock();
 +}
 +
-+static time64_t ovpn_peer_keepalive_work_mp(struct ovpn_struct *ovpn,
-+					    time64_t now)
-+{
-+	time64_t tmp_next_run, next_run = 0;
-+	struct hlist_node *tmp;
-+	struct ovpn_peer *peer;
-+	int bkt;
-+
-+	spin_lock_bh(&ovpn->peers->lock);
-+	hash_for_each_safe(ovpn->peers->by_id, bkt, tmp, peer, hash_entry_id) {
-+		tmp_next_run = ovpn_peer_keepalive_work_single(peer, now);
-+		if (!tmp_next_run)
-+			continue;
-+
-+		/* the next worker run will be scheduled based on the shortest
-+		 * required interval across all peers
-+		 */
-+		if (!next_run || tmp_next_run < next_run)
-+			next_run = tmp_next_run;
-+	}
-+	spin_unlock_bh(&ovpn->peers->lock);
-+
-+	return next_run;
-+}
-+
-+static time64_t ovpn_peer_keepalive_work_p2p(struct ovpn_struct *ovpn,
-+					     time64_t now)
-+{
-+	struct ovpn_peer *peer;
-+	time64_t next_run = 0;
-+
-+	spin_lock_bh(&ovpn->lock);
-+	peer = rcu_dereference_protected(ovpn->peer,
-+					 lockdep_is_held(&ovpn->lock));
-+	if (peer)
-+		next_run = ovpn_peer_keepalive_work_single(peer, now);
-+	spin_unlock_bh(&ovpn->lock);
-+
-+	return next_run;
-+}
-+
-+/**
-+ * ovpn_peer_keepalive_work - run keepalive logic on each known peer
-+ * @work: pointer to the work member of the related ovpn object
-+ *
-+ * Each peer has two timers (if configured):
-+ * 1. peer timeout: when no data is received for a certain interval,
-+ *    the peer is considered dead and it gets killed.
-+ * 2. peer keepalive: when no data is sent to a certain peer for a
-+ *    certain interval, a special 'keepalive' packet is explicitly sent.
-+ *
-+ * This function iterates across the whole peer collection while
-+ * checking the timers described above.
-+ */
-+void ovpn_peer_keepalive_work(struct work_struct *work)
-+{
-+	struct ovpn_struct *ovpn = container_of(work, struct ovpn_struct,
-+						keepalive_work.work);
-+	time64_t next_run = 0, now = ktime_get_real_seconds();
-+
-+	switch (ovpn->mode) {
-+	case OVPN_MODE_MP:
-+		next_run = ovpn_peer_keepalive_work_mp(ovpn, now);
-+		break;
-+	case OVPN_MODE_P2P:
-+		next_run = ovpn_peer_keepalive_work_p2p(ovpn, now);
-+		break;
-+	}
-+
-+	/* prevent rearming if the interface is being destroyed */
-+	if (next_run > 0 && ovpn->registered) {
-+		netdev_dbg(ovpn->dev,
-+			   "scheduling keepalive work: now=%llu next_run=%llu delta=%llu\n",
-+			   next_run, now, next_run - now);
-+		schedule_delayed_work(&ovpn->keepalive_work,
-+				      (next_run - now) * HZ);
-+	}
-+}
+ static void ovpn_peer_release(struct ovpn_peer *peer)
+ {
+ 	if (peer->sock)
+@@ -186,10 +311,6 @@ static struct in6_addr ovpn_nexthop_from_skb6(struct sk_buff *skb)
+ 	return rt->rt6i_gateway;
+ }
+ 
+-#define ovpn_get_hash_head(_tbl, _key, _key_len) ({		\
+-	typeof(_tbl) *__tbl = &(_tbl);				\
+-	(&(*__tbl)[jhash(_key, _key_len, 0) % HASH_SIZE(*__tbl)]); }) \
+-
+ /**
+  * ovpn_peer_get_by_vpn_addr4 - retrieve peer by its VPN IPv4 address
+  * @ovpn: the openvpn instance to search
 diff --git a/drivers/net/ovpn/peer.h b/drivers/net/ovpn/peer.h
-index 942b90c84a0fb9e6fbb96f6df7f7842a9f738caf..952927ae78a3ab753aaf2c6cc6f77121bdac34be 100644
+index 1a8638d266b11a4a80ee2f088394d47a7798c3af..940cea5372ec0375cfe3e673154a1e0248978409 100644
 --- a/drivers/net/ovpn/peer.h
 +++ b/drivers/net/ovpn/peer.h
-@@ -43,6 +43,12 @@
-  * @crypto: the crypto configuration (ciphers, keys, etc..)
-  * @dst_cache: cache for dst_entry used to send to peer
-  * @bind: remote peer binding
-+ * @keepalive_interval: seconds after which a new keepalive should be sent
-+ * @keepalive_xmit_exp: future timestamp when next keepalive should be sent
-+ * @last_sent: timestamp of the last successfully sent packet
-+ * @keepalive_timeout: seconds after which an inactive peer is considered dead
-+ * @keepalive_recv_exp: future timestamp when the peer should expire
-+ * @last_recv: timestamp of the last authenticated received packet
-  * @halt: true if ovpn_peer_mark_delete was called
-  * @vpn_stats: per-peer in-VPN TX/RX stays
-  * @link_stats: per-peer link/transport TX/RX stats
-@@ -91,6 +97,12 @@ struct ovpn_peer {
- 	struct ovpn_crypto_state crypto;
- 	struct dst_cache dst_cache;
- 	struct ovpn_bind __rcu *bind;
-+	unsigned long keepalive_interval;
-+	unsigned long keepalive_xmit_exp;
-+	time64_t last_sent;
-+	unsigned long keepalive_timeout;
-+	unsigned long keepalive_recv_exp;
-+	time64_t last_recv;
- 	bool halt;
- 	struct ovpn_peer_stats vpn_stats;
- 	struct ovpn_peer_stats link_stats;
-@@ -137,4 +149,7 @@ struct ovpn_peer *ovpn_peer_get_by_dst(struct ovpn_struct *ovpn,
- bool ovpn_peer_check_by_src(struct ovpn_struct *ovpn, struct sk_buff *skb,
- 			    struct ovpn_peer *peer);
+@@ -155,4 +155,6 @@ void ovpn_peer_keepalive_work(struct work_struct *work);
+ void ovpn_peer_update_local_endpoint(struct ovpn_peer *peer,
+ 				     struct sk_buff *skb);
  
-+void ovpn_peer_keepalive_set(struct ovpn_peer *peer, u32 interval, u32 timeout);
-+void ovpn_peer_keepalive_work(struct work_struct *work);
++void ovpn_peer_float(struct ovpn_peer *peer, struct sk_buff *skb);
 +
  #endif /* _NET_OVPN_OVPNPEER_H_ */
-diff --git a/drivers/net/ovpn/proto.h b/drivers/net/ovpn/proto.h
-index 32af6b8e574381fb719a1b3b9de3ae1071cc4846..0de8bafadc89ebb85ce40de95ef394588738a4ad 100644
---- a/drivers/net/ovpn/proto.h
-+++ b/drivers/net/ovpn/proto.h
-@@ -35,8 +35,6 @@
- #define OVPN_OP_SIZE_V2	4
- #define OVPN_PEER_ID_MASK 0x00FFFFFF
- #define OVPN_PEER_ID_UNDEF 0x00FFFFFF
--/* first byte of keepalive message */
--#define OVPN_KEEPALIVE_FIRST_BYTE 0x2a
- /* first byte of exit message */
- #define OVPN_EXPLICIT_EXIT_NOTIFY_FIRST_BYTE 0x28
- 
 
 -- 
 2.45.2
