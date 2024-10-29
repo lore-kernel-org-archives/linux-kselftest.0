@@ -1,59 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B161206E8C;
-	Tue, 29 Oct 2024 13:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6078C2064FD;
+	Tue, 29 Oct 2024 13:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730206838; cv=none; b=or6tiFwYudcDa5MG7R8hukFYcDki+AYu8Hl/Ly001ndd29ktDwz4b7k24offRjTrOXl5ZzojAdvG0V0bUpTKc+2PNNM00NhlADLHxjb6pnfpEoRR7gN3/39Jm3T0D5rAbrUar47RKiVJz0CMvZOee37AD+9aB0zEpjUjbIic3no=
+	t=1730206844; cv=none; b=FOoUWhfuGymB7oEP45kZA4dRDvRPPgy6V96xxsHKxehC/Mz6MIK86ueD8rxynPenPDxCd1uxoA7LRb4yYAuJo+eymQJ9MJE37dmrvLMN6uP9UGAVMkHc08p8F+RZeIoE2SSueSpwZPM5XAoIim9OnQ1cNZhqO8Pzb8mxURcjOIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730206838; c=relaxed/simple;
-	bh=RUMe2xQABUL7QJVzkwZ4Ta3TTqJblnli7IkzrqTsDqw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sqg/5MEycpsQBzio3dSefagU3swisvPC90NDWA4Onr9UhN6BwfIJqe7yp7FeSyS+mZMQYKi0QOSAIvLlsufwwaHCPHDdR4vuSSjuZFfiVrIwsmEhNoAlA++F97nZzAA212V220lbjX8NjsH82VNz29dGJ7FU6BBSnkEcVYccwI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SwuZzV7o; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1730206844; c=relaxed/simple;
+	bh=NlGCxJtvSDZcc48LjMfcWH/FamyvO+HfkSx5n+s2kdU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rer6/cLIO6kqUJfb4BfXLDp5FO38ED4eOwJOgOZV/eUV6kg6zoG4YzjTSBBRQMutXE43wtkGdcC25yYSDtxCJ+tEvTHGv9rSs0+tdCpud/tRuW81d+9gk3MtQSUuTsZ+tnDQkkGwGvQAl8RN8tQC7Eovx2Sd5zR4cbHbUDBpP+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F2W0luUt; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SwuZzV7o"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F2W0luUt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730206837; x=1761742837;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=RUMe2xQABUL7QJVzkwZ4Ta3TTqJblnli7IkzrqTsDqw=;
-  b=SwuZzV7oPHOLyloJXnAl+j+r6cZOGGk5bu9WOHHdGT0G/qxLRRCZLWN4
-   cW2HSg1DHoRK6Py2CSbl5ctfFDukg78udh+nIE23m7m9sEkej6202rwMr
-   uyZdNFNUsQAysxr50H7eSNSTnjC6ltPlyacYPVlwi5QBFSAsvk14YzzNe
-   RRCcYZFRA1J70DP9sbHNRcsFX0EoGFWP4bEIKXSHdGmVjg8oJh9PtiUUo
-   BreIhfuV0rOphzKeTbgB55vt0gGlnfYAV0VRTyoqdzs+UWkStHaVHBUVe
-   EZBu5CTTGp1lq6+woBh+PT/9OSVntmlguPGS6X0lftsBFDjMNZdedCRt2
-   Q==;
-X-CSE-ConnectionGUID: uyuT8/J0RiOtdmHdnv0+Xw==
-X-CSE-MsgGUID: P+ukmyBOQk6x9IlEX6qJ5Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="40428580"
+  t=1730206842; x=1761742842;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=NlGCxJtvSDZcc48LjMfcWH/FamyvO+HfkSx5n+s2kdU=;
+  b=F2W0luUty4KmqxGZDEXYlpk6U2AhwvV4po4nKMWZFlD2Am4mqzC7cJV9
+   4ZzFM9WQfiRQiQxp6GLdgOwqgUToelvkcKXR/8jrK2o5t8a+MMlfh7ldY
+   WKa5W2eRGk0O9lUADf5nUoga1uRbH3PIJdz1ozVUfxPw+YZiOOBQUkwOo
+   aPLICJANa124xgnvdoFiaQ8epJ0L6jpKfWdqdEWWEEmJu9tnMCB02+5ZO
+   zXlA1YFP585fMxwQR4jl00u+K0sl2LgwapnhiBIcDzE2+ZWYd3yiONzFn
+   SSN8tQff1XYnb+pleBuhko5CU3/Vn1aoj+EGGnE9vgJ/pKVkjLKQbH8nq
+   w==;
+X-CSE-ConnectionGUID: sr/955+dSge1mj5SNmNEIQ==
+X-CSE-MsgGUID: 9jamUg4vSp2F0pqMwuvxVg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="29952539"
 X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="40428580"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 06:00:35 -0700
-X-CSE-ConnectionGUID: F13pfMQ0Sl+6v0uThLRDDA==
-X-CSE-MsgGUID: Q0kxC1l1QlSNV4hjI2nI5A==
+   d="scan'208";a="29952539"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 06:00:42 -0700
+X-CSE-ConnectionGUID: 6FcZ6JbZQwSsHJ8aGw+Ttg==
+X-CSE-MsgGUID: +4YvNJWcTcedKOOGoxlxJg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="112764395"
+   d="scan'208";a="81584713"
 Received: from oandoniu-mobl3.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.244.38])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 06:00:15 -0700
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 06:00:39 -0700
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: fenghua.yu@intel.com,
 	reinette.chatre@intel.com,
 	shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	ilpo.jarvinen@linux.intel.com,
 	tony.luck@intel.com
-Subject: [PATCH v5 0/2] selftests/resctrl: SNC kernel support discovery
-Date: Tue, 29 Oct 2024 14:00:04 +0100
-Message-ID: <cover.1730206468.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v5 2/2] selftests/resctrl: Adjust SNC support messages
+Date: Tue, 29 Oct 2024 14:00:29 +0100
+Message-ID: <adeb1b7d2998bba69d1a57e38300f83e646ee849.1730206468.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.46.2
+In-Reply-To: <cover.1730206468.git.maciej.wieczor-retman@intel.com>
+References: <cover.1730206468.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,73 +65,180 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changes v5:
-- Tests are skipped if snc_unreliable was set.
-- Moved resctrlfs.c changes from patch 2/2 to 1/2.
-- Removed CAT changes since it's not impacted by SNC in the selftest.
-- Updated various comments.
-- Fixed a bunch of minor issues pointed out in the review.
+Resctrl selftest prints a message on test failure that Sub-Numa
+Clustering (SNC) could be enabled and points the user to check their BIOS
+settings. No actual check is performed before printing that message so
+it is not very accurate in pinpointing a problem.
 
-Changes v4:
-- Printing SNC warnings at the start of every test.
-- Printing SNC warnings at the end of every relevant test.
-- Remove global snc_mode variable, consolidate snc detection functions
-  into one.
-- Correct minor mistakes.
+Figuring out if SNC is enabled is only one part of the problem, the
+others being whether the detected SNC mode is reliable and whether the
+kernel supports SNC in resctrl.
 
-Changes v3:
-- Reworked patch 2.
-- Changed minor things in patch 1 like function name and made
-  corrections to the patch message.
+When there is SNC support for kernel's resctrl subsystem and SNC is
+enabled then sub node files are created for each node in the resctrlfs.
+The sub node files exist in each regular node's L3 monitoring directory.
+The reliable path to check for existence of sub node files is
+/sys/fs/resctrl/mon_data/mon_L3_00/mon_sub_L3_00.
 
-Changes v2:
-- Removed patches 2 and 3 since now this part will be supported by the
-  kernel.
+To check if SNC detection is reliable one can check the
+/sys/devices/system/cpu/offline file. If it's empty, it means all cores
+are operational and the ratio should be calculated correctly. If it has
+any contents, it means the detected SNC mode can't be trusted and should
+be disabled.
 
-Sub-Numa Clustering (SNC) allows splitting CPU cores, caches and memory
-into multiple NUMA nodes. When enabled, NUMA-aware applications can
-achieve better performance on bigger server platforms.
+Add helpers for all operations mentioned above.
 
-SNC support in the kernel was merged into x86/cache [1]. With SNC enabled
-and kernel support in place all the tests will function normally (aside
-from effective cache size). There might be a problem when SNC is enabled
-but the system is still using an older kernel version without SNC
-support. Currently the only message displayed in that situation is a
-guess that SNC might be enabled and is causing issues. That message also
-is displayed whenever the test fails on an Intel platform.
+Detect SNC mode once and let other tests inherit that information.
 
-Add a mechanism to discover kernel support for SNC which will add more
-meaning and certainty to the error message.
+Add messages to alert the user when SNC detection could return incorrect
+results. Correct old messages to account for kernel support of SNC in
+resctrl.
 
-Add runtime SNC mode detection and verify how reliable that information
-is.
+Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+---
+Changelog v5:
+- Move all resctrlfs.c code from this patch to 1/2. (Reinette)
+- Remove kernel support check and error message from CAT since it can't
+  be happen.
+- Remove snc checks in CAT since snc doesn't affect it here.
+- Skip MBM, MBA and CMT tests if snc is unreliable.
 
-Series was tested on Ice Lake server platforms with SNC disabled, SNC-2
-and SNC-4. The tests were also ran with and without kernel support for
-SNC.
+Changelog v4:
+- Change messages at the end of tests and at the start of
+  run_single_test. (Reinette)
+- Add messages at the end of CAT since it can also fail due to enabled
+  SNC + lack of kernel support.
+- Remove snc_mode global variable. (Reinette)
+- Fix wrong description of snc_kernel_support(). (Reinette)
+- Move call to cpus_offline_empty() into snc_nodes_per_l3_cache() so the
+  whole detection flow is in one place as discussed. (Reinette)
 
-Series applies cleanly on kselftest/next.
+Changelog v3:
+- Change snc_ways() to snc_nodes_per_l3_cache(). (Reinette)
+- Add printing the discovered SNC mode. (Reinette)
+- Change method of kernel support discovery from cache sizes to
+  existance of sub node files.
+- Check if SNC detection is unreliable.
+- Move SNC detection to only the first run_single_test() instead on
+  error at the end of test runs.
+- Add global value to remind user at the end of relevant tests if SNC
+  detection was found to be unreliable.
+- Redo the patch message after the changes.
 
-[1] https://lore.kernel.org/all/20240628215619.76401-1-tony.luck@intel.com/
+Changelog v2:
+- Move snc_ways() checks from individual tests into
+  snc_kernel_support().
+- Write better comment for snc_kernel_support().
 
-Previous versions of this series:
-[v1] https://lore.kernel.org/all/cover.1709721159.git.maciej.wieczor-retman@intel.com/
-[v2] https://lore.kernel.org/all/cover.1715769576.git.maciej.wieczor-retman@intel.com/
-[v3] https://lore.kernel.org/all/cover.1719842207.git.maciej.wieczor-retman@intel.com/
-[v4] https://lore.kernel.org/all/cover.1720774981.git.maciej.wieczor-retman@intel.com/
+ tools/testing/selftests/resctrl/cmt_test.c |  8 ++++++--
+ tools/testing/selftests/resctrl/mba_test.c |  8 +++++++-
+ tools/testing/selftests/resctrl/mbm_test.c | 10 +++++++---
+ tools/testing/selftests/resctrl/resctrl.h  |  3 +++
+ 4 files changed, 23 insertions(+), 6 deletions(-)
 
-Maciej Wieczor-Retman (2):
-  selftests/resctrl: Adjust effective L3 cache size with SNC enabled
-  selftests/resctrl: Adjust SNC support messages
-
- tools/testing/selftests/resctrl/cmt_test.c    |   8 +-
- tools/testing/selftests/resctrl/mba_test.c    |   8 +-
- tools/testing/selftests/resctrl/mbm_test.c    |  10 +-
- tools/testing/selftests/resctrl/resctrl.h     |   7 +
- .../testing/selftests/resctrl/resctrl_tests.c |   8 +-
- tools/testing/selftests/resctrl/resctrlfs.c   | 132 ++++++++++++++++++
- 6 files changed, 166 insertions(+), 7 deletions(-)
-
+diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+index 0c045080d808..1470bd64d158 100644
+--- a/tools/testing/selftests/resctrl/cmt_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -133,6 +133,10 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
+ 	ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
+ 	if (ret)
+ 		return ret;
++
++	if ((get_vendor() == ARCH_INTEL) && snc_unreliable)
++		ksft_exit_skip("Sub-NUMA Clustering could not be detected properly. Skipping...\n");
++
+ 	ksft_print_msg("Cache size :%lu\n", cache_total_size);
+ 
+ 	count_of_bits = count_bits(long_mask);
+@@ -175,8 +179,8 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
+ 		goto out;
+ 
+ 	ret = check_results(&param, span, n);
+-	if (ret && (get_vendor() == ARCH_INTEL))
+-		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
++	if (ret && (get_vendor() == ARCH_INTEL) && !snc_kernel_support())
++		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled on the system.\n");
+ 
+ out:
+ 	free(span_str);
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index ab8496a4925b..8f4e198da047 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -170,15 +170,21 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+ 		.setup		= mba_setup,
+ 		.measure	= mba_measure,
+ 	};
+-	int ret;
++	int ret, snc_support;
+ 
+ 	remove(RESULT_FILE_NAME);
+ 
++	snc_support = snc_kernel_support();
++	if ((get_vendor() == ARCH_INTEL) && snc_unreliable)
++		ksft_exit_skip("Sub-NUMA Clustering could not be detected properly. Skipping...\n");
++
+ 	ret = resctrl_val(test, uparams, uparams->benchmark_cmd, &param);
+ 	if (ret)
+ 		return ret;
+ 
+ 	ret = check_results();
++	if (ret && (get_vendor() == ARCH_INTEL) && !snc_support)
++		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled on the system.\n");
+ 
+ 	return ret;
+ }
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 6b5a3b52d861..a68f70589b91 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -138,17 +138,21 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
+ 		.setup		= mbm_setup,
+ 		.measure	= mbm_measure,
+ 	};
+-	int ret;
++	int ret, snc_support;
+ 
+ 	remove(RESULT_FILE_NAME);
+ 
++	snc_support = snc_kernel_support();
++	if ((get_vendor() == ARCH_INTEL) && snc_unreliable)
++		ksft_exit_skip("Sub-NUMA Clustering could not be detected properly. Skipping...\n");
++
+ 	ret = resctrl_val(test, uparams, uparams->benchmark_cmd, &param);
+ 	if (ret)
+ 		return ret;
+ 
+ 	ret = check_results(DEFAULT_SPAN);
+-	if (ret && (get_vendor() == ARCH_INTEL))
+-		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
++	if (ret && (get_vendor() == ARCH_INTEL) && !snc_support)
++		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled on the system.\n");
+ 
+ 	return ret;
+ }
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 851b37c9c38a..488bdca01e4f 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -121,6 +121,8 @@ struct perf_event_read {
+  */
+ extern volatile int *value_sink;
+ 
++extern int snc_unreliable;
++
+ extern char llc_occup_path[1024];
+ 
+ int snc_nodes_per_l3_cache(void);
+@@ -167,6 +169,7 @@ void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+ int signal_handler_register(const struct resctrl_test *test);
+ void signal_handler_unregister(void);
+ unsigned int count_bits(unsigned long n);
++int snc_kernel_support(void);
+ 
+ void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config);
+ void perf_event_initialize_read_format(struct perf_event_read *pe_read);
 -- 
 2.46.2
 
