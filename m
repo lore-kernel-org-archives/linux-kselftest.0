@@ -1,259 +1,325 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A879632;
-	Tue, 29 Oct 2024 12:39:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730205552; cv=fail; b=WTmIGHfCJsCieApbzQQN2bg2JOgDJYjHb/HQE5CW7/iTVp9wVl8UdNUikI8XAP59UCgyuhuLTzDGw7DLMwQNk3oTi+za5GwvpDAodVH7wvnbJC5a+YEhTY4VvkOz0UTEh/1BRTXKcreIbRulQmfANGXeUHhxnOZHb5UQk2j3ZXE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730205552; c=relaxed/simple;
-	bh=bi9J8woanA1BtN8bIKLbx6T+0PEio1MkEHJA+iQAUPE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=OPZsy78oH6umRw0el5Y2Q748iaJ+VAW9TL0/669e2SZRRFCpA4xcyqCnz8L+Kib1p6M7BngR/ZNR0iibUkZvyasQ7TtdVpt1Z/iPHcoqRnqQVvv+aFocYz7ixbOyi2zYG0ZJb57co6YV+ulNiQSeS3Ua4kIczdR16mBLLB6Q8XI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=NRsuoNeB; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Lu/vsvNO; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4830C206060;
+	Tue, 29 Oct 2024 13:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730206832; cv=none; b=q1fS7/dlN3l3C+X0D6wWfMvtatPBZAbisI5NyO1eti8iHyowcHDpltma/itV2aBu9ysTQt7b5k8LAbpmRvU+CfIosVodfqGatsEmyGMcl4SLJrIGZ3k+WnVRV8nY/gR4/MM9OBzt2B++RzBXj1qXmhgDf/TTlbrEwNrxKAFWTxk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730206832; c=relaxed/simple;
+	bh=+HHj6G0f2BQQwdnwye133T9EZjZFFbrl8cBEAvNykjY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sY8BAzhe5U3KkQQLSfx/SNHaN3QbwY/pARFBUgpznRJuZUNDqOSRiy/C8WwYRKB/vQyq7ePcTKZVZZ1J+n5uQFjboDxiLYqzd96CdQHk5/xPgVcY/1fvN9DtJTx3xg7W38yHoo8MWVi/0Xh9NrPzGl8PalP0XJ+Sp3T6ygkRC/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NZlKiDfP; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="NRsuoNeB";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Lu/vsvNO"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49TCbuev003918;
-	Tue, 29 Oct 2024 12:39:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=xNllIHyBU1yE6D3n0w
-	03jKFgecyULQc+F6pUtVaPFuc=; b=NRsuoNeBbtEv/WBpr1T4xMN44Uq4TE47GL
-	Und/IyOmXGFwA+auaq62BrDpQSlty+WWGSdrtjccfZrs05CEv1EJd6Okwfujxxsm
-	Eg0dHKbwuLCS0RwHXeEOdjUxYDOv65ocTWTJXdcxQ5eAcnxq9nKJ5OYpvi90xvIy
-	bYF0WdKeunx4nmYTV4OR1MyAX5KrWgmVr5BVs4CsFwCNtq/ifC26B+9UvDcUCjQH
-	UawtGGB7IRdU6mAYe/UbM8Nr0+OWqcpsCRZO7Ba+98ut0KxC5XFjk8zR/5bBMVeb
-	Z8o8pAlHNiD4ytFLHdQfmuGOzKrb1SUvx7Y6ll/Ec4onPpGNF1Tw==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42grc1w8hq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 29 Oct 2024 12:39:00 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49TCFXFv004746;
-	Tue, 29 Oct 2024 12:38:59 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42jb2u6peu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 29 Oct 2024 12:38:59 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=d23KcK+Cx/UgxSIPZ3tKscdKHLbGgh94tBtG+n4FX1FpyI32aE7B9ebe/t1H8ZBQvJ4iGeGYlK6XHXDKIe6puiAknDoiO+eUswt7dmTAVC7OgM4t1b0SmDmySDrDf4wh4nJJlHoKuUK5avI++PlMvnqPANNgegNvElnQreZxJpfaMzPlwokERoQaH40ZbxjjdUXnDaEpabDrecivOwCxNRUpl36JzDXa53R+rYtW/rdquQgyBBKYp5ABpEsKs6dJS2a/hGT0TFDNhngI134SMFJzBptUOhGNenZVH2BmJhcw8fgijbp4LPtqGj1XkbcNSwOOITilch7ep7iy36hPuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xNllIHyBU1yE6D3n0w03jKFgecyULQc+F6pUtVaPFuc=;
- b=tF/Hz6V/n5m53QT7ANVgYi2XiaPrgtqHBnNIrMCPoGwpjZ5IvD56UP8eRdNGrIEwWx/BiNa6AllDzP0ErSCYWo4+TF9W+DIrRDEi6axDLMAVmhLXhfB8vRwd5GeLnLa9/tz3QR7lwkimkyGtMUOIRG7GZYZhniVBz2zsJFKiTDacx5U5yBOe/48D6lb4j+GwbyPfLImhkGnPIOaNwlPzr8E92zuZcRZcP02GDu0AS6kM1WvUDeMexZ49KveLkAun5+PrN9zUBuXoGw/S4ZSJSamHLxO0Vxm4VlsXSzFI41zL8gQXJ14+Tdjggos/4zPmADvnlLH0vw0Fyt2eUDOtUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xNllIHyBU1yE6D3n0w03jKFgecyULQc+F6pUtVaPFuc=;
- b=Lu/vsvNOjTzgbIBYdEEd/nbcCmQCJwijjEePg68n+xFyBYN0RWn5uJgXfNTIeXzD5rlOl+nef/7oPP0xwYJSBTNnAZOZ/NHsSR8qIEB5k9FHzmua6L4F1L87S1jCe6zcapol5TejWCU/IMFjkSV7tYqCbXLnn1R1GZIrue6Mhcw=
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
- by BLAPR10MB4881.namprd10.prod.outlook.com (2603:10b6:208:327::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.20; Tue, 29 Oct
- 2024 12:38:56 +0000
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9%6]) with mapi id 15.20.8093.027; Tue, 29 Oct 2024
- 12:38:55 +0000
-Date: Tue, 29 Oct 2024 12:38:52 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/arm64: Use ksft_perror() to log MTE failures
-Message-ID: <afd390fe-6701-43c1-adad-550da27cd7e1@lucifer.local>
-References: <20241029-arm64-mte-test-logging-v1-1-a128e732e36e@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241029-arm64-mte-test-logging-v1-1-a128e732e36e@kernel.org>
-X-ClientProxiedBy: LO4P123CA0430.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18b::21) To BYAPR10MB3366.namprd10.prod.outlook.com
- (2603:10b6:a03:14f::25)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NZlKiDfP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730206829; x=1761742829;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+HHj6G0f2BQQwdnwye133T9EZjZFFbrl8cBEAvNykjY=;
+  b=NZlKiDfPskguUtbYwiJciAzyO7Q91L/6gyIKJkn5NC1QhyrlZSfWmzSu
+   QxACEOu21WtrHFWZmV6z0hEZ8AouYXqp55YuDGKSaeABGN7XAzqGQ9d+5
+   CS6RomZvsdXK1DRqqjU87F6JdTZt3A8jffNgVf696/+yHmJF2F8/wTCgw
+   hni0T4BgtTMa1mggQHFx8/CuIwZ6KfQ6XKnNureVpM8NPYKXO5u+Jw3ym
+   mKL5o7hqWB7O7CPweWOXt/vtkx96X6PDY9oUlKJj97sR3/YsQmv0l0TIr
+   /+Px9SzyjKat7iXwrZ35x3PRrqt+Ixt/E2jcc2DXP4nrOZZ/TeiLQTWAp
+   g==;
+X-CSE-ConnectionGUID: 7AEAcKzVRKmY7sbJEB1Vvg==
+X-CSE-MsgGUID: b2I/TZihT46Ur43rUPZuwQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="29952475"
+X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
+   d="scan'208";a="29952475"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 06:00:29 -0700
+X-CSE-ConnectionGUID: 9F8Xxb86SHSsaTKA/2EMew==
+X-CSE-MsgGUID: Ttw3OeNNQKi56/GuCbG1pQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
+   d="scan'208";a="81584675"
+Received: from oandoniu-mobl3.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.244.38])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 06:00:26 -0700
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To: fenghua.yu@intel.com,
+	reinette.chatre@intel.com,
+	shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ilpo.jarvinen@linux.intel.com,
+	tony.luck@intel.com
+Subject: [PATCH v5 1/2] selftests/resctrl: Adjust effective L3 cache size with SNC enabled
+Date: Tue, 29 Oct 2024 14:00:18 +0100
+Message-ID: <06c8f3e64b8e59e031fc16a919373a0dfaa9516a.1730206468.git.maciej.wieczor-retman@intel.com>
+X-Mailer: git-send-email 2.46.2
+In-Reply-To: <cover.1730206468.git.maciej.wieczor-retman@intel.com>
+References: <cover.1730206468.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|BLAPR10MB4881:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b57c69c-3644-46c9-8652-08dcf816a6df
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?9/dhVtAwG6ACZLfVtKE0ZHQlJ+hm6JGbqFRLmKkK1aDnXXi0HJJbjkUxn6zN?=
- =?us-ascii?Q?MKypI11q70biJkf3r5sKzGeXB9dSn7nPbowWpAt9Odm9QULuQKUVCBFbuLR2?=
- =?us-ascii?Q?JBUj2LCFry2zA8BJhuU3J8TCugBMwvg6APvwZbA2kWaLqgLgFoBfcFNeF/ab?=
- =?us-ascii?Q?qioJVAUrsx42Zb85tZAQbMXGJ7/StNHQoUSaiazIx9qrr4u1b0zC6fvNT8UG?=
- =?us-ascii?Q?hohUjltH6lb2TOTwOB5sv3pLwPrGKfQa+IWGP3+OwyDg6if81L29O+2sqLhc?=
- =?us-ascii?Q?A0HQ+C5VwlvX+sxXihkfvpybgN3sU4GzZUoVZ0BRzzMQ8fISEk/NiJFK9oW0?=
- =?us-ascii?Q?JewiIkiKt1AwYA1YE8t4nI8qc6ezhLvb8aizM7usnOkZmkJXIaP4CyYSETIJ?=
- =?us-ascii?Q?aobb4sUXfkX+76w/oVWRNz0SNL4e+osE69UU6ReirSri8Sd4rpFvBdXuy6MH?=
- =?us-ascii?Q?rG4bizRT3M4IyrtXoc9Ju4FXiXo038k+vCC+vvJzGt6enAdXzsL3hxpIcd7e?=
- =?us-ascii?Q?4yHEAEM51tYhXkVT4xuPu3D3zpof3vIAVOVSahYrWAGYa8QXuEfRUcKuVOnO?=
- =?us-ascii?Q?66Qd6a3f12MD4iCGxDoV97mIEcvNhhaI/sVDje0kuIx3HcynWHJW1Henajhk?=
- =?us-ascii?Q?2d3lpp8dqgOVuuXa0hgAyxekMy/S7lsQYDGeMUCRmDcI6XVvjkWjjwbcmj/l?=
- =?us-ascii?Q?4jfnY2lOMlXB2vNAy4/lubpWuk1B+mNrFclY6Yc0nlvo6adFZrZrnh3s+suj?=
- =?us-ascii?Q?yERErltKuf8IM/F7EaRURtT+MMv2zo42/OWRZyBMD9WL0Yae+AhlJejCg49R?=
- =?us-ascii?Q?a10xHLaLVCejwiTyyHWR574WgGonj9XeTBUfPzp1AdN993BUvXIP0/JBYz3L?=
- =?us-ascii?Q?HoCEheog9MMsB0o+EB8YtHX/uT0B4fbXr6Ss9NVkHj7B7vuFbdcDRqMQZBUZ?=
- =?us-ascii?Q?f47YyJtmrDdxpBMw5/oZWTDc0p1ZmYJnumxbFZ3XVyfYFZAOt2mVQcEpXBUI?=
- =?us-ascii?Q?oGsjG8O8O46R0t7vjZMAjDSorwKRfZMqvo0VfVqWXXvB6t4Pkcft1ACR0xRZ?=
- =?us-ascii?Q?QvwzTtYc2BHWwisrgGkjftKWevEJPxYeS858B/6bM/2PigEKFZ48jssdl2db?=
- =?us-ascii?Q?rJhr4zJ5BdpmkdhA1VqRuzHh7dQHEGFo4vietuXJCdWY5UVOPPcoY8Y3+8uS?=
- =?us-ascii?Q?XyMK3sSx8RcRzdaDSWq0FG7iGu4EhiH7urw4AODRDtvbBLFrAdqIPOYuhmku?=
- =?us-ascii?Q?LfX1B2SHkrK9MMBf5bfiG/XTxv97k4ozXpzq1vcMsAODJpCn/AQ0XY6CIKlI?=
- =?us-ascii?Q?vsd9XGHo9R11mMknTeygslSz?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?b8CwtPvTBfcGvznIpXUoGbqM/fD8szYlHdHg5PSyjHC8cDWuJldUXfn0zZxr?=
- =?us-ascii?Q?Y/xZDN3EwhsqBBhg1ySo9iwPPUNKr5QSdmO9djmMeFxwtgQRZn5RuvytWtaD?=
- =?us-ascii?Q?BLCm8GfNswF4dzrPCv7P0kNWX1gSiqLeqIfEnZHlyrlnuhwCE02SCNocrCoN?=
- =?us-ascii?Q?/tWvP/lmEzc+qdY5Unc548Ky72ibV0ekysewN8PIj3KllFHeugtJLmxxUG6V?=
- =?us-ascii?Q?31w/2Zf4goyJq+e9VAPb5vIFeEb2/6qwrCcDpWu9Q/ZU1N+1ssqgWOSmuH9e?=
- =?us-ascii?Q?Qpk562hCvjg1I/eEgWYQHQzB55CkC27Ew8ZKI7arsYgvAr8BMrhGY3MgRc8o?=
- =?us-ascii?Q?mbYrm1+Kntt3RjD6PgJSDk5ht+Z+FjplAvU+3mHdwPFzTNJYVeAgu0BhOOpV?=
- =?us-ascii?Q?xMCG+2g0f2oXyfVNZTqgjmXJKk4o0Yh1ji/EFI1aUQy9QQXiNEwqJgXMwbbS?=
- =?us-ascii?Q?90wJY1xak1jYg0kZBtsHoNiyzT0p82BqQA/NoesMMuNQZwOw6wMI2BsRYNbv?=
- =?us-ascii?Q?cNKxsJIsGpSjKB9rBUJ+mRLF1q/iuXKm7JCRzupjASDItOgQ4pXnDjV0BTjK?=
- =?us-ascii?Q?M7byV/a2alnoysD4wC8n2ZQm/R271nf7zv28wJRGpufEbMKx8V0yh5ApjWaQ?=
- =?us-ascii?Q?l/SnXqtFO1FINDvIUOCvhy02Zvl9MoGY5yrCHImxra23uNMz6ttycxUsqg6f?=
- =?us-ascii?Q?G6QvWc9v0/j0pnBW8xjloIOVXBmz3ilj/9dAKABVE8R3ejbi6rfQuY3xNmM4?=
- =?us-ascii?Q?bKyoei0y9k8ydHJ1Q3SX6W7Vq+HzVPwe6EleQsB7NZ6Z0etmmRnz6i1N4Pis?=
- =?us-ascii?Q?cSi2cjoDqhyrgw2yAMp2bXUcg9OwhrDRMDc5assS0k0ddFNqkSKD2jCLppKz?=
- =?us-ascii?Q?ZcCKb6ijNoAHydtdX8LKewNHISGcDza0B0ugd3yh9hWMct8rv7hrXZid2278?=
- =?us-ascii?Q?qcuTlbsXDb2/hSH5R3bnTsG0W1Xp1usio09i8w1A+kcRtnk3aDKHnVQkcOYb?=
- =?us-ascii?Q?oa7418nnxw8ilnA1VXu/5uemCcTdxpOiQ5juI0TvDRfOFq+Iwk9lRrK9lc/y?=
- =?us-ascii?Q?oWgIkDmKRmwBVYPEw+1u4mdeea0bVy5EptnaYZcoFPbKGeehoBg6lsM5Y2xv?=
- =?us-ascii?Q?NjzXawM9J7cdImMt22avUCzzUZGO8gHzaoDwxqp/YO6aoeTfCUzYIGPQEbUi?=
- =?us-ascii?Q?CowCIePcSBfja2GJ8rv3VyxbONqDMqpzY0VY3xG3svvE+A6JT9t6ANepHlrW?=
- =?us-ascii?Q?QVa7H2SPJuu0IydhfwuRSMlKWXd2zLGiOowrQWGrUsqMHnz4oiuxtJztjs4d?=
- =?us-ascii?Q?BOFlD1GngALNBlRUMfeOixlm9lmwcQEChPpq0n2png6qFBnrG/BUg+PtxqB7?=
- =?us-ascii?Q?iBy0RYdHNnYPSivb6dWrfUQ27qALqsOQiDTvfueu9Q/SInp29obVBsWPA54N?=
- =?us-ascii?Q?cxytYIgEPJwbXQ5griL9HWgAunp7VheVhZ01eKUwyfvNhn9/dqArgWXJrpbq?=
- =?us-ascii?Q?5/IMVwJMxDPjwICBbHfsJJW8Dc+McAPoSq0fuv1VNUqvRoBHpAjxZzZj+Dmb?=
- =?us-ascii?Q?SN1r7kK4SCaPVHKi7jcyeobfFR0ZYdWQVdwtRrh0TmdaxS2VfMrvvzhz+Kew?=
- =?us-ascii?Q?lA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	ymGgwtVEyX23xVpfiYg+36YZRtpDRpOLc21cY2TUa4C3w6ltqTIlc8sMBMHAG5LHSJE3+NGEDiuE0/UoV0VXMuEeSpkH35jbolzb3TBRO0EbxFZIi8W2pPPSoZTthSASW93VmcQGr0UbVkNjKdwlEHUj84SGxlwF26vEt/XgL+bBylF6USEYUyfxak4xuCV9FuUJXgHutYTI6BPLJZTsqIwVvdgD7RNe3aJGTvQ/yz+r4iMidTpUewtvdgsk86TvRpqnmiVq5So5AA98HuyPiEQvBK5TSyjvToXxCz0SAvQvQ85oIAoMNBk7mtOlL4y+zSwCyCS3JT7j74uZtfTaUZu4K0v1AfE9IWURoP51cjgxN2icx2S4SAq3pdw3MJroAebowPn52bCPuhDoCFBjcwfKO9M7QTzJXFh4/GvpoBCvm9Oi5s5doIRCCzMWnjc08BcTGiMLBlh8+nfpYhbu9PHVW+9N7IZ/4LlhwIiuZBd4bpvS1qVSS4jPEoMtl4Q9Y/N5UQ+o1gON1BhcnzS5xXMJCuJ1P1eIfptxbndIEFrwhs2jQMJx8KmSjPfvQ/2VcOGoUmUmT7isqTOsxu8zSGfOI+zw5YUFH4iNtmDkZWk=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b57c69c-3644-46c9-8652-08dcf816a6df
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Oct 2024 12:38:55.5605
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 08oPVzsZ7Fd2NQCAhABESe0GU6islMrd4+I4a/hXb2AzcnOFf3B7dmGVN2Gl6Pw+ks4s9evmtB6FRVFWH6esj8/lC76bm2WwBq0jGXETecw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4881
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-29_08,2024-10-29_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 bulkscore=0
- adultscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
- definitions=main-2410290097
-X-Proofpoint-GUID: ThVFpzwDBdyuc7o0v567O-3Fpsy9H-8t
-X-Proofpoint-ORIG-GUID: ThVFpzwDBdyuc7o0v567O-3Fpsy9H-8t
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 29, 2024 at 12:34:21PM +0000, Mark Brown wrote:
-> The logging in the allocation helpers variously uses ksft_print_msg() with
-> very intermittent logging of errno and perror() (which won't produce KTAP
-> conformant output) when logging the result of API calls that set errno.
-> Standardise on using the ksft_perror() helper in these cases so that more
-> information is available should the tests fail.
->
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+Sub-NUMA Cluster divides CPUs sharing an L3 cache into separate NUMA
+nodes. Systems may support splitting into either two, three or four
+nodes.
 
-Thanks very much for this! LGTM!
+When SNC mode is enabled the effective amount of L3 cache available
+for allocation is divided by the number of nodes per L3.
 
-Acked-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Detect which SNC mode is active by comparing the number of CPUs
+that share a cache with CPU0, with the number of CPUs on node0.
 
-> ---
->  tools/testing/selftests/arm64/mte/mte_common_util.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
-> index 00ffd34c66d301ee7d5c99e6b8d9d5d944520b7f..46958b58801e90ceb79be76f57c7f72b50d43b3c 100644
-> --- a/tools/testing/selftests/arm64/mte/mte_common_util.c
-> +++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
-> @@ -150,13 +150,13 @@ static void *__mte_allocate_memory_range(size_t size, int mem_type, int mapping,
->  		map_flag |= MAP_PRIVATE;
->  	ptr = mmap(NULL, entire_size, prot_flag, map_flag, fd, 0);
->  	if (ptr == MAP_FAILED) {
-> -		ksft_print_msg("FAIL: mmap allocation\n");
-> +		ksft_perror("mmap()");
->  		return NULL;
->  	}
->  	if (mem_type == USE_MPROTECT) {
->  		if (mprotect(ptr, entire_size, prot_flag | PROT_MTE)) {
-> +			ksft_perror("mprotect(PROT_MTE)");
->  			munmap(ptr, size);
-> -			ksft_print_msg("FAIL: mprotect PROT_MTE property\n");
->  			return NULL;
->  		}
->  	}
-> @@ -190,13 +190,13 @@ void *mte_allocate_file_memory(size_t size, int mem_type, int mapping, bool tags
->  	lseek(fd, 0, SEEK_SET);
->  	for (index = INIT_BUFFER_SIZE; index < size; index += INIT_BUFFER_SIZE) {
->  		if (write(fd, buffer, INIT_BUFFER_SIZE) != INIT_BUFFER_SIZE) {
-> -			perror("initialising buffer");
-> +			ksft_perror("initialising buffer");
->  			return NULL;
->  		}
->  	}
->  	index -= INIT_BUFFER_SIZE;
->  	if (write(fd, buffer, size - index) != size - index) {
-> -		perror("initialising buffer");
-> +		ksft_perror("initialising buffer");
->  		return NULL;
->  	}
->  	return __mte_allocate_memory_range(size, mem_type, mapping, 0, 0, tags, fd);
-> @@ -217,12 +217,12 @@ void *mte_allocate_file_memory_tag_range(size_t size, int mem_type, int mapping,
->  	lseek(fd, 0, SEEK_SET);
->  	for (index = INIT_BUFFER_SIZE; index < map_size; index += INIT_BUFFER_SIZE)
->  		if (write(fd, buffer, INIT_BUFFER_SIZE) != INIT_BUFFER_SIZE) {
-> -			perror("initialising buffer");
-> +			ksft_perror("initialising buffer");
->  			return NULL;
->  		}
->  	index -= INIT_BUFFER_SIZE;
->  	if (write(fd, buffer, map_size - index) != map_size - index) {
-> -		perror("initialising buffer");
-> +		ksft_perror("initialising buffer");
->  		return NULL;
->  	}
->  	return __mte_allocate_memory_range(size, mem_type, mapping, range_before,
-> @@ -359,7 +359,7 @@ int create_temp_file(void)
->  	/* Create a file in the tmpfs filesystem */
->  	fd = mkstemp(&filename[0]);
->  	if (fd == -1) {
-> -		perror(filename);
-> +		ksft_perror(filename);
->  		ksft_print_msg("FAIL: Unable to open temporary file\n");
->  		return 0;
->  	}
->
-> ---
-> base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
-> change-id: 20241028-arm64-mte-test-logging-6c6e737b1c62
->
-> Best regards,
-> --
-> Mark Brown <broonie@kernel.org>
->
+Co-developed-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+---
+Changelog v5:
+- Set snc_mode to 1 at the start of if(!snc_mode) block.
+- Move all resctrlfs.c code from patch 2/2 to this one. (Reinette)
+- Fix Co-developed-by tag.
+- Update SNC discovery comments for the case where it gets disabled by
+  being unreliable.
+- Remove exclamation mark from ksft_perror() and add full file path
+  instead of "offline CPUs file".
+- bit map -> bitmap.
+- Remove unnecessary empty line.
+
+Changelog v4:
+- Make returned value a static local variable so the function only runs
+  the logic once. (Reinette)
+
+Changelog v3:
+- Add comparison between present and online cpus to test if the
+  calculated SNC mode is credible. (Reinette)
+- Added comment to cache size modification to better explain why it is
+  needed there. (Reinette)
+- Fix facts in patch message. (Reinette)
+- Change snc_ways() to snc_nodes_per_l3_cache(). (Reinette)
+
+ tools/testing/selftests/resctrl/resctrl.h     |   4 +
+ .../testing/selftests/resctrl/resctrl_tests.c |   8 +-
+ tools/testing/selftests/resctrl/resctrlfs.c   | 132 ++++++++++++++++++
+ 3 files changed, 143 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 2dda56084588..851b37c9c38a 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -11,6 +11,7 @@
+ #include <signal.h>
+ #include <dirent.h>
+ #include <stdbool.h>
++#include <ctype.h>
+ #include <sys/stat.h>
+ #include <sys/ioctl.h>
+ #include <sys/mount.h>
+@@ -43,6 +44,8 @@
+ 
+ #define DEFAULT_SPAN		(250 * MB)
+ 
++#define MAX_SNC		4
++
+ /*
+  * user_params:		User supplied parameters
+  * @cpu:		CPU number to which the benchmark will be bound to
+@@ -120,6 +123,7 @@ extern volatile int *value_sink;
+ 
+ extern char llc_occup_path[1024];
+ 
++int snc_nodes_per_l3_cache(void);
+ int get_vendor(void);
+ bool check_resctrlfs_support(void);
+ int filter_dmesg(void);
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index ecbb7605a981..4b84d6199a36 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -118,11 +118,17 @@ static bool test_vendor_specific_check(const struct resctrl_test *test)
+ 
+ static void run_single_test(const struct resctrl_test *test, const struct user_params *uparams)
+ {
+-	int ret;
++	int ret, snc_mode;
+ 
+ 	if (test->disabled)
+ 		return;
+ 
++	snc_mode = snc_nodes_per_l3_cache();
++	if (snc_mode > 1)
++		ksft_print_msg("SNC-%d mode discovered.\n", snc_mode);
++	else if (snc_unreliable)
++		ksft_print_msg("SNC detection unreliable due to offline CPUs. Test results may not be accurate if SNC enabled.\n");
++
+ 	if (!test_vendor_specific_check(test)) {
+ 		ksft_test_result_skip("Hardware does not support %s\n", test->name);
+ 		return;
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 250c320349a7..d6384f404d95 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -13,6 +13,8 @@
+ 
+ #include "resctrl.h"
+ 
++int snc_unreliable;
++
+ static int find_resctrl_mount(char *buffer)
+ {
+ 	FILE *mounts;
+@@ -156,6 +158,93 @@ int get_domain_id(const char *resource, int cpu_no, int *domain_id)
+ 	return 0;
+ }
+ 
++/*
++ * Count number of CPUs in a /sys bitmap
++ */
++static unsigned int count_sys_bitmap_bits(char *name)
++{
++	FILE *fp = fopen(name, "r");
++	int count = 0, c;
++
++	if (!fp)
++		return 0;
++
++	while ((c = fgetc(fp)) != EOF) {
++		if (!isxdigit(c))
++			continue;
++		switch (c) {
++		case 'f':
++			count++;
++		case '7': case 'b': case 'd': case 'e':
++			count++;
++		case '3': case '5': case '6': case '9': case 'a': case 'c':
++			count++;
++		case '1': case '2': case '4': case '8':
++			count++;
++		}
++	}
++	fclose(fp);
++
++	return count;
++}
++
++static bool cpus_offline_empty(void)
++{
++	char offline_cpus_str[64];
++	FILE *fp;
++
++	fp = fopen("/sys/devices/system/cpu/offline", "r");
++	if (fscanf(fp, "%s", offline_cpus_str) < 0) {
++		if (!errno) {
++			fclose(fp);
++			return 1;
++		}
++		ksft_perror("Could not read /sys/devices/system/cpu/offline");
++	}
++
++	fclose(fp);
++
++	return 0;
++}
++
++/*
++ * Detect SNC by comparing #CPUs in node0 with #CPUs sharing LLC with CPU0.
++ * If some CPUs are offline the numbers may not be exact multiples of each
++ * other. Any offline CPUs on node0 will be also gone from shared_cpu_map of
++ * CPU0 but offline CPUs from other nodes will only make the cache_cpus value
++ * lower. Still try to get the ratio right by preventing the second possibility.
++ */
++int snc_nodes_per_l3_cache(void)
++{
++	int node_cpus, cache_cpus, i;
++	static int snc_mode;
++
++	if (!snc_mode) {
++		snc_mode = 1;
++		if (!cpus_offline_empty()) {
++			ksft_print_msg("Runtime SNC detection unreliable due to offline CPUs.\n");
++			ksft_print_msg("Setting SNC mode to disabled.\n");
++			snc_unreliable = 1;
++			return snc_mode;
++		}
++		node_cpus = count_sys_bitmap_bits("/sys/devices/system/node/node0/cpumap");
++		cache_cpus = count_sys_bitmap_bits("/sys/devices/system/cpu/cpu0/cache/index3/shared_cpu_map");
++
++		if (!node_cpus || !cache_cpus) {
++			ksft_print_msg("Could not determine Sub-NUMA Cluster mode.\n");
++			return 1;
++		}
++		for (i = 1; i <= MAX_SNC ; i++) {
++			if (i * node_cpus >= cache_cpus) {
++				snc_mode = i;
++				break;
++			}
++		}
++	}
++
++	return snc_mode;
++}
++
+ /*
+  * get_cache_size - Get cache size for a specified CPU
+  * @cpu_no:	CPU number
+@@ -211,6 +300,17 @@ int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size
+ 			break;
+ 	}
+ 
++	/*
++	 * The amount of cache represented by each bit in the masks
++	 * in the schemata file is reduced by a factor equal to SNC
++	 * nodes per L3 cache.
++	 * E.g. on a SNC-2 system with a 100MB L3 cache a test that
++	 * allocates memory from its local SNC node (default behavior
++	 * without using libnuma) will only see 50 MB llc_occupancy
++	 * with a fully populated L3 mask in the schemata file.
++	 */
++	if (cache_num == 3)
++		*cache_size /= snc_nodes_per_l3_cache();
+ 	return 0;
+ }
+ 
+@@ -869,3 +969,35 @@ unsigned int count_bits(unsigned long n)
+ 
+ 	return count;
+ }
++
++/**
++ * snc_kernel_support - Check for existence of mon_sub_L3_00 file that indicates
++ * SNC resctrl support on the kernel side.
++ *
++ * Return: 0 if not supported, 1 if SNC is disabled or SNC discovery is
++ * unreliable or SNC is both enabled and supported.
++ */
++int snc_kernel_support(void)
++{
++	char node_path[PATH_MAX];
++	struct stat statbuf;
++	int ret;
++
++	ret = snc_nodes_per_l3_cache();
++	/*
++	 * If SNC is disabled then its kernel support isn't important. If SNC
++	 * got disabled because the discovery process was unreliable the
++	 * snc_unreliable variable was set. It can be used to verify the SNC
++	 * discovery reliability elsewhere in the selftest.
++	 */
++	if (ret == 1)
++		return ret;
++
++	snprintf(node_path, sizeof(node_path), "%s/%s/%s", RESCTRL_PATH, "mon_data",
++		 "mon_L3_00/mon_sub_L3_00");
++
++	if (!stat(node_path, &statbuf))
++		return 1;
++
++	return 0;
++}
+-- 
+2.46.2
+
