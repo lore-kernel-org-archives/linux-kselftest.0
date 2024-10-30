@@ -1,167 +1,202 @@
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2041.outbound.protection.outlook.com [40.107.244.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55964D8A7;
-	Wed, 30 Oct 2024 12:53:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730292839; cv=fail; b=Rs73pL9ecbCuvAWF4bfsWSMgNn6Doip9g6fLi3SHgwvyH8Et9BetU4QuZQY87CktPDwmLJOAkuNN8GKihE/0B+RooQhdGliJ5Btn7KE3Cjh2wRW+z8sbHwOxargbfpSjqHNemvoZWsG5OFPR2YEj6stlWZKWNSRsX3KIPgGuMT8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730292839; c=relaxed/simple;
-	bh=rselkik4rAkkzHIYbnzx4hIEpwEgnvyqpHNL72KfueQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=u6+/0z60aSYoxLgyoG007u44Js0oK87rcJAT0dOKB80EPobYq+B9NqhxnoptiCky0RoYrw9+87kWZzt/LLH8dcqDwPD0XXBqvm2SwiMEK+OzY793MuxsCcW3zhYgQpzGWqz/VRbphjurnIgXL9IbLPRwX8ANCCb8cLs8btL2UtI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=VfHs1BcU; arc=fail smtp.client-ip=40.107.244.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702331E32D8
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 13:44:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730295853; cv=none; b=TOzVWOcN8y3qQbnjTlOSnZVI7DtTBCI6U+jb79Kbfxpfa4e/9BV1VmNcU+Pyvva8Fupg0y68zI2im4uSXn25NdJLyiWStDCr51NBctRFtV9AAlMmR+Epv1EnZ68HN6mfEva0U6s3kYVjgVTdjKvrDXShI8LnVuMOQHUSdavbu7k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730295853; c=relaxed/simple;
+	bh=nUon+G46zP2CSR3tR1gbd+JLlhnCUVcpuNgOZP3VoGA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tEBpfWjfUgSkm4rtOCnXMm90tb5f/NaNCmvn0Se8LJATQIcec4Ee9wrDuOG8FN/dystNU9kZ/m1l65TwcgAGoAUQcV+MUZ7X7vt30mquqPTBpdHsc3c3dOu1ugl/QPIZZvTHiM07asyruRwxtMb6fqhYqwDoi4n6fPejxrlG5R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RqWFGFnC; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="VfHs1BcU"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bPjxDcD4Z12YZhqpKV2feghEiFIT6Asql1v/v4FuG+PyI0D7cGDblLvHcanhFIoYPs4h2sxGxJ/utIugOab2Q9F5kEHc0FNfmBD2LbM+ADvpNdvD4khQGKAp9yacQpemtLQvujfMAIcbhfbZ2M2SAWCXevNia2wIgLc59HuAXHVPpawPwJlBFp0CHr1axuiuIsdHKfaM0Gx5SLqEt9hyHki1pek/jOWslOt6OBUX2s1xrtCm8iwHkeQ4192FL19SUFzcryLzNbp6T9rQyeOb077qzIR2q0jVasj62d388gll1eYJzSeXmTPTDg1w1/vIcJMQHi0VP2I1DvvN6LSH5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z7jMS/Sye2J6foGcBIQ+sMuHOn11xR2LQVxRHlUx4PE=;
- b=xaRDnoKqCmkSgF06OqHwpwSi43iNuQblVBmuJPTEHvFgJZ3k4CBUZglfhDqrAd/lAQXnqp6a1/XXGdajg2BPsbL08EqTl5y2mDVo03PUXRBbYyOw+0yji+6pIIP/epN9aElKb40vRbmiFPgf1j2sWhV/E6+8LYpeCZvOHuEa1S/OLZdrfTQvEIig+AaK/uqWrcYtUpOdKYEwxdI9oo6T0wrAlh/oC8mLYzqJA4VQ7s4W7f6CEVaSxxW5RF23/vbIdoMpGOQWeTfzlSOoqrKjGJT5GdK3XUSYk2yGypxrWtMPhtU8umDD+t+xQKcbrhVlhzuWvut5f+Ab6cv1eVgB0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z7jMS/Sye2J6foGcBIQ+sMuHOn11xR2LQVxRHlUx4PE=;
- b=VfHs1BcU8xut1LBxioNdeRZJw6/89C1t33E3zZYost0FGMv7KrYFkesLNYiLGs+8hlQe2b82uVHjmq5ADom48jrhTLBDrurvLcLOkcwsaeT3Hs1TD930cLA04ZpOvm47tktF5I1CoPN7pPN5xLnDPpqqH3eygfqm3QfSzLsODfkaaEEoetq4DXDnbWF+NhK7Ddlc0FXqpoNxTeYJfGz3yUUn8cmIAcN/UpsH+PtwUYj0G97Ylas/WN+vznnWne3ZcZKgIJ16LeXe01YEWbz9e8gNW0A6EC+9VRpOvsDhe0Rx9Ueo58cGLzSheH6gBDpo+lI6GwV88BYCNEByhKkQ4w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by DM4PR12MB5939.namprd12.prod.outlook.com (2603:10b6:8:6a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.32; Wed, 30 Oct
- 2024 12:53:50 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8093.018; Wed, 30 Oct 2024
- 12:53:50 +0000
-Date: Wed, 30 Oct 2024 09:53:49 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, will@kernel.org, joro@8bytes.org,
-	suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, eric.auger@redhat.com,
-	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
-	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
-	yi.l.liu@intel.com, aik@amd.com, zhangfei.gao@linaro.org,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v5 03/13] iommufd: Add iommufd_verify_unfinalized_object
-Message-ID: <20241030125349.GE6956@nvidia.com>
-References: <cover.1729897352.git.nicolinc@nvidia.com>
- <e99946ea0128370349373c94339d465397946137.1729897352.git.nicolinc@nvidia.com>
- <20241029144907.GB209124@nvidia.com>
- <ZyEKvcpgUsS1nCEg@Asurada-Nvidia>
- <20241029185558.GZ6956@nvidia.com>
- <ZyGwemWwixBA+VIh@Asurada-Nvidia>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZyGwemWwixBA+VIh@Asurada-Nvidia>
-X-ClientProxiedBy: BN9PR03CA0688.namprd03.prod.outlook.com
- (2603:10b6:408:10e::33) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RqWFGFnC"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6e5cec98cceso55579917b3.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 06:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730295850; x=1730900650; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gohomfedkfXRjVspcTaXGu7eMc1O0Uh2mGX5FqgSJHQ=;
+        b=RqWFGFnCkjuCq/zBZgBQl5cpsDezLzaAHlo8CfL1yC6JNOXtpNnnnwYS+sp1XrkaQE
+         vD2c2u3O5RkqsZGimsGKt/ZSK8ehx2xs2fStOgP8ZWBQB6mmsfJZ+a7uZn7iOM5vnSoA
+         F8bJe6GsjJFJyRFfdER1KemW8EzyGv39MNA1qrJJkhstV1uG16U/a646TB0DkAZfZgfW
+         xSqKf07MkUAgB8bNjoUbn8h9FowyQI6utU7Pqu/LzasIX5sKd2vIOc9HftwtVq9v48kn
+         H4zR4q0XlUFIFKRD5OJ+Gc3FK6f4pYvAdbOzhf13t8NlDxIa27/K+v2Ezp+mogz3bkr1
+         CqHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730295850; x=1730900650;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gohomfedkfXRjVspcTaXGu7eMc1O0Uh2mGX5FqgSJHQ=;
+        b=cTWWf5ViI10TPWM7v24gvPMwUM4rDxEcj8tJ6NMxwcyNKo83mawWTnk0pc/D4Z+pIZ
+         I8pkS2K7otTBs8Uo7ULg60swWFdZ4z+6ZoTbLxvjFsuj9LL2u6V5dFrF8FEZLO6rU48l
+         iSOWJ0yjfMOrn1iLM4H5U9LlXiApJWqOODosPppSTh5pIV5Pr7Ok3cWWiFEiKaVqT408
+         wtkz3BGWg4nky55Inkc5uAnQ+vk5lnPZzB+Pqq5jZO1pXl8R/eI9ps09yIHmRlv32osN
+         /cl/GZJv6Og4l2Th6ygWVvemUuJHnzgmHeun5JyU4U6TV1HdHbZwbNQWFmzRR+8rL33H
+         +/jg==
+X-Forwarded-Encrypted: i=1; AJvYcCVtJGzSyX9gr+XHEyZ6QGCdQGNEw+h9vyEgT4Jmx6sLB84N8ouUifMjVtxViXYVkFY6zeQeM6TmbuexxG+TbQA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhKKk5M+W9TRk4toyrbgYMGYSy1OAUrVWXbPB6lp02IvjtAlUs
+	Dh6QeHQKAIdNo/tbTYvIwMATOrq+vKgqboK+n/C6Yl5VemBMDtj2
+X-Google-Smtp-Source: AGHT+IFpXFYXK4s+dOnVRg7C2fehk9sad2Yniq1DKN9iBPyfplZXUV1i/apuQDy41OL24kqCCBUiWw==
+X-Received: by 2002:a05:690c:f87:b0:6e3:2e4b:ad9a with SMTP id 00721157ae682-6e9d895d649mr170300547b3.12.1730295850206;
+        Wed, 30 Oct 2024 06:44:10 -0700 (PDT)
+Received: from x13.. ([157.23.249.72])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e9c6c19d42sm24600357b3.71.2024.10.30.06.44.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2024 06:44:09 -0700 (PDT)
+From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+To: brendan.higgins@linux.dev,
+	davidgow@google.com
+Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	skhan@linuxfoundation.org,
+	ricardo@marliere.net,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	andriy.shevchenko@linux.intel.com
+Subject: [PATCH v3] lib/math: Add int_sqrt test suite
+Date: Wed, 30 Oct 2024 09:43:53 -0400
+Message-ID: <20241030134355.14294-1-luis.hernandez093@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|DM4PR12MB5939:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd187a9b-7c16-4479-98cd-08dcf8e1e6dd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?xBh4nWzVJp+WwOZDSWroGb9TvPGFUuBr2qHrjXjL/UR4iSaTEv96eregCza7?=
- =?us-ascii?Q?5EasNADPcgwnHezZCpI6CYv8q/sPTSr1a+u80RS96bApu8TFVh0+DD1aQXIO?=
- =?us-ascii?Q?cE75yVixq6l5a6haDajR9db8cIJDPWoY6Tct1Ok4WObh7H6zxpiURZw9xgeh?=
- =?us-ascii?Q?1az9TTJPEOz/nNi6O302pNQBoMfs/3FJWkdcgooD39Fg5HXe6KBTymzFqdK9?=
- =?us-ascii?Q?D5Q8CF4s1n73miE6692fqLGTxiY+t53tdyZ930J4nKq7QVW7VSiomF6gqPuL?=
- =?us-ascii?Q?uaOgLw3HFwwfCN9JE7n2WrjTyTtteUTJ1o7636JUv7kkPr+SWH6D7Kr6DSxA?=
- =?us-ascii?Q?HG/GRObGFKjUBNlHmCZDvk+9Kzvn8QomyBvh8CwEv6yQQr6/1dI5GtCJ8YPL?=
- =?us-ascii?Q?VOUqt588BbtpuUHrBLmysNPFkTWgB8QdqeDxKh//VgLIyqDbRAS7EgWIPrrO?=
- =?us-ascii?Q?2QzZE47XGuUyJRJttfBjYQ+2zK0e4cFn8ax4M272T3jLQzgDUL8fVonQUspX?=
- =?us-ascii?Q?qogSFeP8kF6UQD0c2ktbhsCkLTvBoOyD1oFWpQCUtMiHiKsKHkgkiPlhpD/D?=
- =?us-ascii?Q?qlcFpIPEiSpzNqRUpYU64ImfJxVw6GYcwjadEXjinQXKTMitziGfCJgo2uDl?=
- =?us-ascii?Q?jf28fDGHJCf5yrYsLeXtKXRNORBM52wor62KYSv70ogpo1mu3Xs5c5JdTvX+?=
- =?us-ascii?Q?SpaYezLvop7D6TpjbtKrRaZkDij0bv0+bFf4Q+kpcIjKSIUTdi95csmfOdCs?=
- =?us-ascii?Q?ISNR0KhTbBOvuhAEIiFw1Dwm05HltW5QmtQS/FDSY7C7rnML6r34thcVqU3Q?=
- =?us-ascii?Q?K0JFicRL81ncJIczP7hO2MKYyUbPHqMVnHxR05XQSeD0IdTYPvBMQORiSkXv?=
- =?us-ascii?Q?6vFTqhepF4Aap6k2vo8gH90Vv/jmffo8AuR87WJuTUTndgG3cqvmh8MtXbgH?=
- =?us-ascii?Q?D1FibdxRzWSsmY+khlsRUgjUxOoK+zkB/uPlgBxR92m77bJ1hfROVbb6aX3g?=
- =?us-ascii?Q?ziYr/xTnPCVaCq5uYibk++HvYSOrZk419zGGLNpBKYY6o9+ukeuop7dETePf?=
- =?us-ascii?Q?X4H7G4L4nuiVAoPmP1ObhvyF1V8mXNojNQC6aGs+dyC65wCxbK11iaQ+j+Ya?=
- =?us-ascii?Q?oUhChjEOYL7OlMoRFEI/NfykUpX7muAV3JzQtOrbgIuhuvmUloKLgZts4Agx?=
- =?us-ascii?Q?BXq2cq907HlrclvC7NJeGwGrvDM0ZE798OcOD//amoK27EKJAnJrXa3ydM2Q?=
- =?us-ascii?Q?NMrKL5elAf1nvT0EUO8C4dGRdhcJf4JZV9tuaQSyEFCjEA9MtZN/xmgInI/W?=
- =?us-ascii?Q?rAcOk7NOdeovf/q+PySQDoPn?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?z2oRU32Qrsg+jRUquULAjhUSU5zC80L6UaYcRxQVZvcfiFWaQij0Ni6mbm4e?=
- =?us-ascii?Q?ckK2dnlKvRdto2oZgkBZUtzd1w25C6+dJWJEeOZbFq4aXw4L1ptFp726Pl81?=
- =?us-ascii?Q?fmI8oMp3mmE/coMSoMTMNpXwUJbDFwWSUmRzbgSK8STaHpj3riDo/10ZPVUv?=
- =?us-ascii?Q?TlnGdoey2KOFWXLSRPnL14Bj0M814aSAOFc673xCDAhqkYpY9dbAr/8uZr71?=
- =?us-ascii?Q?AyTyXkqYo8DeZriTa+H/l2iVEXQQobgkCdP0RsXJj4+SMmbTpwPeSYC3tTuP?=
- =?us-ascii?Q?mz5dKnjqMpTLwIUf4fH7fH5SXTcwj4+bvVqwvni5WbmkleZjjC4BJM14qsoH?=
- =?us-ascii?Q?07nZnc1GCLASFS0cCsWBk2gOnkVlyzm0Te0XIOcC/h3YMgehPVeSx1ugqWnB?=
- =?us-ascii?Q?XDtzjLNsc6mQyIM14lsJijQHmOH3iNUMOuAoPLgrt2PvUKKUXtUFji52aR6f?=
- =?us-ascii?Q?JDAoaXPYYH3ao9+UEjcQEtPcvm+6rs2a7DoSuuWTF9EPmqXwQW5tPHntLcp4?=
- =?us-ascii?Q?/pO9ReO0oMDf6UTgixaiUd3b0zRRYSxJPZJB3rr/BpoksIxAMou8xfftbdPk?=
- =?us-ascii?Q?2QbRdyJWy2UYWeSTByFUDxlSYlJf3ojZriO27XQ/ILOvwBCplmQvJn/VRITB?=
- =?us-ascii?Q?3hhr9A8/xzelzjcOel2dbkfb2Wb/IvPhNApujJFlAOc2Ac456oIsMFWffPo+?=
- =?us-ascii?Q?vrNr+0KivtciM/m3WU25aEqpsoyxuJzDvNPNshvRyR+S+8ebYBsJNOhJziwj?=
- =?us-ascii?Q?/2DWwLF/wW0/gbxZhKPiMLApfaXHcKPIkijbvDRlgJVbT0Ap+s6icwdcFLMD?=
- =?us-ascii?Q?UUd+OAX3CNWRemISDlJAk9dd+T6KcdW5E432UByiyR2sJ70c/4V7kYPownws?=
- =?us-ascii?Q?DVG2ZzBQtJl48dWKqmy0igh9b/KUFNUm2ovVAahiDIH68JAOYwlKTEsL0v06?=
- =?us-ascii?Q?PiiOz44tZk5KK7AQWRzuqYK4Llth7IlccRVDoYS4H7iBdEYEgJwIyDJTozow?=
- =?us-ascii?Q?62ssz2a+itxzGUN/8DSsBFkdOZEtZ5E6sgfkgulj8CNkdGw2VYvrPOtp/o4P?=
- =?us-ascii?Q?+Y3G+xeTyMiAd79KLVGHRkDG0/gmSYT1wmn1Q+E2v4rWppNMx/QCa4it8tRs?=
- =?us-ascii?Q?RslL2VSHBAAci8bU1WODUkbeiy6C2uY1t6wF+IyabQGBRSLP6O3R2wKmw0/J?=
- =?us-ascii?Q?qiA/XsnI7nOUMlGg585s99lSgAs3fFA66G0hu4RkFZfm3YOAlYEnWU+NmCTk?=
- =?us-ascii?Q?Ms/QMKL/w8Vqevsirwg9srhnPELhKDeDvKLaQ4LWjVPBpFZq97SfF+r70W3E?=
- =?us-ascii?Q?xaIgzSjzeTmHnh9Wz/uXpG1Al6nlSfB8Esh3hOmurwukW9li8ICuChXOv45N?=
- =?us-ascii?Q?hvAaMGIVohbXgrSehTCpUoq4898JZxnDDic8uEz+Bh7KCt1T8sP0111fppAJ?=
- =?us-ascii?Q?1qgCgfVTr87/WnWwdt3wLVm7I4rN8akM8EbEpUWfnUTOiZ5llO0nR4tmhzTq?=
- =?us-ascii?Q?2NMDE8CfEagZmGODUJDnOd7fbB4V9UEQfWYoOZ+zJVNDpjXrTBTDh6thSaIb?=
- =?us-ascii?Q?SgAgaCkTBzAwQ/c2CJD+rHY6qGe/7d2Zwv4ohwSg?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd187a9b-7c16-4479-98cd-08dcf8e1e6dd
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2024 12:53:50.6159
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M+rIB0nIXIdG0L0Q4CT/TmXJMAbzddawMBdpkMD8+ig2kwKmCVjXR0GDJOi6PgN8
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5939
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 29, 2024 at 09:05:14PM -0700, Nicolin Chen wrote:
-> On Tue, Oct 29, 2024 at 03:55:58PM -0300, Jason Gunthorpe wrote:
-> > On Tue, Oct 29, 2024 at 09:18:05AM -0700, Nicolin Chen wrote:
-> > > I think we'd need the same change in iommufd_object_abort() too.
-> > 
-> > Makes sense
-> 
-> I found xa_cmpxchg() does xas_result to its returning value, which
-> turns XA_ZERO_ENTRY into NULL failing our intended verifications.
+Adds test suite for integer based square root function.
 
-Oh.. that is annoying, you can't actually tell if cmpxchg failed :\
-NULL means success if it was XA_ZERO_ENTRY and failure of it was not
-populated! Hmm, I might ask Matthew about this
+The test suite is designed to verify the correctness of the int_sqrt()
+math library function.
 
-Your version looks OK
+Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+---
+Changes in v2
+  - Add new line at the end of int_sqrt_kunit.c
+  - Add explicit header includes for MODULE_* macros, strscpy, and ULONG_MAX 
 
-Jason
+Changes in v3
+  - Remove unnecesary new line after Kconfig entry for INT_SQRT_KUNIT_TEST
+  - Correct int_sqrt instances with int_sqrt() in commit message and kconfig
+entry desc
+  - Fix limits.h header include path
+---
+ lib/Kconfig.debug               | 15 ++++++++++
+ lib/math/Makefile               |  1 +
+ lib/math/tests/Makefile         |  1 +
+ lib/math/tests/int_sqrt_kunit.c | 51 +++++++++++++++++++++++++++++++++
+ 4 files changed, 68 insertions(+)
+ create mode 100644 lib/math/tests/int_sqrt_kunit.c
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 7312ae7c3cc5..c83f5dc9bb48 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2993,6 +2993,21 @@ config TEST_OBJPOOL
+ 
+ 	  If unsure, say N.
+ 
++config INT_SQRT_KUNIT_TEST
++	tristate "Integer square root test test" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  This option enables the KUnit test suite for the int_sqrt() function,
++	  which performs square root calculation. The test suite checks
++	  various scenarios, including edge cases, to ensure correctness.
++
++	  Enabling this option will include tests that check various scenarios
++	  and edge cases to ensure the accuracy and reliability of the square root
++	  function.
++
++	  If unsure, say N
++
+ endif # RUNTIME_TESTING_MENU
+ 
+ config ARCH_USE_MEMTEST
+diff --git a/lib/math/Makefile b/lib/math/Makefile
+index 3ef11305f8d2..25bcb968b369 100644
+--- a/lib/math/Makefile
++++ b/lib/math/Makefile
+@@ -9,3 +9,4 @@ obj-$(CONFIG_INT_POW_TEST)  += tests/int_pow_kunit.o
+ obj-$(CONFIG_TEST_DIV64)	+= test_div64.o
+ obj-$(CONFIG_TEST_MULDIV64)	+= test_mul_u64_u64_div_u64.o
+ obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational-test.o
++obj-y  += tests/
+diff --git a/lib/math/tests/Makefile b/lib/math/tests/Makefile
+index 6a169123320a..e1a79f093b2d 100644
+--- a/lib/math/tests/Makefile
++++ b/lib/math/tests/Makefile
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+ obj-$(CONFIG_INT_POW_TEST) += int_pow_kunit.o
++obj-$(CONFIG_INT_SQRT_KUNIT_TEST) += int_sqrt_kunit.o
+diff --git a/lib/math/tests/int_sqrt_kunit.c b/lib/math/tests/int_sqrt_kunit.c
+new file mode 100644
+index 000000000000..3590142d2012
+--- /dev/null
++++ b/lib/math/tests/int_sqrt_kunit.c
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <kunit/test.h>
++#include <linux/limits.h>
++#include <linux/math.h>
++#include <linux/module.h>
++#include <linux/string.h>
++
++struct test_case_params {
++	unsigned long x;
++	unsigned long expected_result;
++	const char *name;
++};
++
++static const struct test_case_params params[] = {
++	{ 0, 0, "edge-case: square root of 0" },
++	{ 4, 2, "perfect square: square root of 4" },
++	{ 81, 9, "perfect square: square root of 9" },
++	{ 2, 1, "non-perfect square: square root of 2" },
++	{ 5, 2, "non-perfect square: square root of 5"},
++	{ ULONG_MAX, 4294967295, "large input"},
++};
++
++static void get_desc(const struct test_case_params *tc, char *desc)
++{
++	strscpy(desc, tc->name, KUNIT_PARAM_DESC_SIZE);
++}
++
++KUNIT_ARRAY_PARAM(int_sqrt, params, get_desc);
++
++static void int_sqrt_test(struct kunit *test)
++{
++	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
++
++	KUNIT_EXPECT_EQ(test, tc->expected_result, int_sqrt(tc->x));
++}
++
++static struct kunit_case math_int_sqrt_test_cases[] = {
++	KUNIT_CASE_PARAM(int_sqrt_test, int_sqrt_gen_params),
++	{}
++};
++
++static struct kunit_suite int_sqrt_test_suite = {
++	.name = "math-int_sqrt",
++	.test_cases = math_int_sqrt_test_cases,
++};
++
++kunit_test_suites(&int_sqrt_test_suite);
++
++MODULE_DESCRIPTION("math.int_sqrt KUnit test suite");
++MODULE_LICENSE("GPL");
+-- 
+2.47.0
+
