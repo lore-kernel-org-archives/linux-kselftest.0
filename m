@@ -1,76 +1,71 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516431F4737;
-	Wed, 30 Oct 2024 15:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1F31F4737;
+	Wed, 30 Oct 2024 15:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730300822; cv=none; b=JM/oFXC2z7ib7gBEQ+LaNQ56xwKOgGg3YjhRL6N08tpwVEOtBJZliazX2wNNwDmG/+A+PGyHnVlH1wXPRvlbN9bPMZfu96GLUTEG7tOi9mwP2NvC6hPW3lJ3pt+kxRMwUsqtDBAPQLTj2QA2SNQuwhflJTNzdxOYQUc/pU3gx5g=
+	t=1730301185; cv=none; b=lr555mueiV2dcXUl/qbtNOCS6tiiKJJtJhuF1dXQHqvbb3DjT5b9LxstCb9DL1HvVCVL+9OiR1hjCWCqwcVRFR9Tyodu6uR+g3ONb+sKqR227NY/fN0swdlZxu3qf39Yn8YQmMN+AVuKedKqwYufQCY/S06LbNIhCYW/f/h84uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730300822; c=relaxed/simple;
-	bh=voi/WMWGAYJexGuW4J0qxHijwgOTwDVYv2O9Z9zK46s=;
+	s=arc-20240116; t=1730301185; c=relaxed/simple;
+	bh=RNKNkA+2ttAQAEtrEr7Oe6nLWaGzj+yskaJCrJZgZjU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rWE9PizQZ6xnT9apn+gnMFU6ZE0+CP9lpWQT1cylZfzN3zUJ85iAXP7ZOFL+wjisdVBaqZCx/ZoH3aOKAKzctz5LSElMOO+KXjRAAf6nCYg1OXrD8fr3qf8TBYE33l+D+Ocjz1OumTL2Zd3cFrWZ0D35MEz76VpAyW4VLy2Oq2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cyKqntCY; arc=none smtp.client-ip=209.85.210.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=dPHj94dlc86WKd52jw71amh+YTVQsGNIlpNmDKAO9kF2abT0f8qOvPnsem5OMyWVXWUM25e7GWnohkhmvgX0OE/dg0dZiIDPFP0zeJ1OmTiV9eItZrdCoIRcrgZ6Rq+Ei/Wd5BAo1whsxfAT5TJUXJOkcdsqIA8kskNvlAtgOsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gfh/MMEB; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cyKqntCY"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-71e61b47c6cso5500439b3a.2;
-        Wed, 30 Oct 2024 08:07:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gfh/MMEB"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2e2bd0e2c4fso5484405a91.3;
+        Wed, 30 Oct 2024 08:13:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730300820; x=1730905620; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730301183; x=1730905983; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=MB84HWvBH3NxPapEB0SefI1X/ByDzD9jXGtFhi1lXmQ=;
-        b=cyKqntCYqWa4Wuv75ghJh3/5k5omadFPBjrnJxLOjzbe05Z3dIfNDIB1Mvkcxdojma
-         3Xym7OAJwAEiV28ywilcldB6vdAqhFGcGj1j43P6HT/MI+SmaTMBmjazdkkPlZC0U1xH
-         aMj9w76fLpuEZhKQ5spEKOs3rP3daTJ0vHdSQWNm4WdFMUj/7nvfMsTr9LNOSWD068FH
-         Aw9pES6+TC1dxBJn8xkFkwDZH4CC9hwDx53mTwWIA/xl11W8ubgdf+KQSbNFs/nV5bc0
-         vtiVvSuYE0DUgxLKhXAWu6dJ029WCdmR1g0L+pYNu1dIWi05zKhqfZ5otUgMczR140y0
-         XBOQ==
+        bh=WZrpf2YEVXVi1ylfAwlcjfSMS6TdCMEyz7I5Rss6TC8=;
+        b=gfh/MMEBT/Ropas4ETwrTY9Z/sDWMm4fzXHReQZ/rvZiAaoI4IRF9DNJJowVduVqla
+         Z38+vOtRI90kMC7qFnk/jP7pzvewvGw8gQGJUz95qlh1o3v4KBmHK0wwgqcEzwzJ0p5/
+         /HHcJAYMQHCQdNCn92rk5TL4U/dftIyiJz/rwbSUgv0kNSl8vygLxMQdq/cJaoAYLbE4
+         7NJXTL/QIrKxPatM4D5EHBA3zZNRCaxAajH8RHP5OUsLaWjfh8EF0tjdMbLNqp1gf7Qq
+         k4qX+YPP+hQolz4xk6qkjvck0sHTXmmoTavZYoLXdXsQ9G9gRdQUKRoeRel2SlANHsDF
+         tPFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730300820; x=1730905620;
+        d=1e100.net; s=20230601; t=1730301183; x=1730905983;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MB84HWvBH3NxPapEB0SefI1X/ByDzD9jXGtFhi1lXmQ=;
-        b=Z+IkyylVhvvzkWlGLQPOsvzSZHGWPeth90IPoJGLsE9P8DBLnLLvkuEeEfHYy9rPKQ
-         knlo2S5msTH3/w88GzhArz8ou7ms+bqqw3OAPVq5dNbD7bJooUd9RZUqCEBxRoi8gECJ
-         PRubGiGrVhVk9g1hlw4Al9PUoudN5kDMduDckGlOvQoJRhtpxF5mTRlTQ/K0MsZOvtIk
-         nVeKHU+anxXbb9htvxmyX36m0TetKsW3fhIolbwNsOd7ORY0UCEfdAjiV1m+9iU7mOyh
-         ROxgrc3wxc6YpjuMduqhR3E5MJAJnY5kTOUs4TK5sOY4dcL2fZoJYx8jvSwKek0cOhqg
-         J59Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU/Ok/PZDmOgKfwyf2sfsNsv+pugL+D7HpAjcEsIdey7ITwiPw+sB5JYw6Xn8gwbus7dOOBHkl5DB3jiZh2wf2G@vger.kernel.org, AJvYcCWZW/1IHF7OO6/rsw8ssdaC9J1YHicvXa3x8ByaMh0JRZ5FIb1B/Fku4i2zEwFAvgTm3VlRovW05wSQnYc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv2mzWKdVS6DRIcLArLHmas5JBJF3XqSl0okL7ol0RLZ10kTy9
-	I7RuccRJF7lsZAieXw1sO1t9Vx3lntNqx6+L3Mihn9bYjrK2QzQ=
-X-Google-Smtp-Source: AGHT+IHWQsFYQ+/1CjBOC2KuLnSgq+FLfdQk+eaCTU+JoZgp3d066RPg8EvTg7d1ZDBQIPuOzRDRIQ==
-X-Received: by 2002:a05:6a00:3929:b0:71e:2a0:b0d0 with SMTP id d2e1a72fcca58-72062fd4b4bmr22516404b3a.13.1730300819407;
-        Wed, 30 Oct 2024 08:06:59 -0700 (PDT)
+        bh=WZrpf2YEVXVi1ylfAwlcjfSMS6TdCMEyz7I5Rss6TC8=;
+        b=wTXs1YhSRUOZ9QgKWjc0Ae/kQJUH3ZWZG4uR9v9qLRL1tz1xl/B56qJlHD0zEtVSvt
+         ubkNI+n5mKUaK800dp5+97A4MpnoeZXB0U0rO29l27I63ehBj6L4ZnoaGE52Vby8OK0n
+         Gv0y1Dtc4t8gH0BC7+/BWyxWXqFUtkvXQEqhfcupg0iHx9TQcqC/EUa5wMrqPFAy0s64
+         ILSgI+JRtByOrd3dfGXvoqzuFUZPQSPeh/NVMK5TgnOYwLrh58QlOZzDrANWrBzlBYkS
+         X0eKhtyJHTcDj+L/+uR6A/YeKYQXX+k5aEOztn5Ppa9CZgkwgD7+BSIglvjOn6Vc8R8w
+         PBgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW920EKopsScnD8deFKhQtKQ38txeylfI857hOEgtzTA80hdaPEBGqBgU5xh13pgP1Xc1rndVCS@vger.kernel.org, AJvYcCWgv8lgT6D6CWZTnZzHOmg1pqZubCUEI9Ey/+v6bTjRkOTVN6lqQyrn6LTjMH06puePU+jyB3VKeQJxfR0=@vger.kernel.org, AJvYcCXfdfZnGm2x0S+hzo+gtrSgc6LTZHEt42+ya+6Df9bP5U1sI7jW+t9sAUj0i+0aGIJ6kdizBad26lBsYuAz6A5v@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/riEjSgGrK0/g4f/Owb2nYjVa/4gHRsbjyvQ0bQTv4PwmimAc
+	kxXzYo/vacKWugP527i2Ty1BMofcT5ImI7fiVgI9nnCl4sVmMGg=
+X-Google-Smtp-Source: AGHT+IEWN/FKVv3b78SqmWOIr0ZImsElU8WqdYGBFfwTLQkrXEFi4uz+9nfGgKmg9BHiIMFjBxterQ==
+X-Received: by 2002:a17:90a:f2d8:b0:2e2:7f8f:3ad7 with SMTP id 98e67ed59e1d1-2e8f0f52f4bmr17997710a91.7.1730301182856;
+        Wed, 30 Oct 2024 08:13:02 -0700 (PDT)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057a1fc16sm9393619b3a.161.2024.10.30.08.06.58
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e92fa1cb3bsm1840127a91.10.2024.10.30.08.13.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2024 08:06:59 -0700 (PDT)
-Date: Wed, 30 Oct 2024 08:06:58 -0700
+        Wed, 30 Oct 2024 08:13:02 -0700 (PDT)
+Date: Wed, 30 Oct 2024 08:13:01 -0700
 From: Stanislav Fomichev <stfomichev@gmail.com>
 To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Shuah Khan <shuah@kernel.org>, Yi Lai <yi1.lai@linux.intel.com>
-Subject: Re: [PATCH net-next v1 6/7] net: fix SO_DEVMEM_DONTNEED looping too
- long
-Message-ID: <ZyJLkn3uM1Qz6NZn@mini-arch>
-References: <20241029205524.1306364-1-almasrymina@google.com>
- <20241029205524.1306364-2-almasrymina@google.com>
- <ZyJDxK5stZ_RF71O@mini-arch>
- <CAHS8izNKbQHFAHm2Sz=bwwO_A0S_dOLNDff7GTSM=tJiJD2m0A@mail.gmail.com>
+Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch,
+	shuah@kernel.org, horms@kernel.org, willemb@google.com,
+	petrm@nvidia.com
+Subject: Re: [PATCH net-next v6 00/12] selftests: ncdevmem: Add ncdevmem to
+ ksft
+Message-ID: <ZyJM_dVs1_ys3bFX@mini-arch>
+References: <20241030142722.2901744-1-sdf@fomichev.me>
+ <CAHS8izOBp4yXBg-nOSouD+A7gOGs9MPmdFc9_hB8=Ni0QdeZHg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,134 +75,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHS8izNKbQHFAHm2Sz=bwwO_A0S_dOLNDff7GTSM=tJiJD2m0A@mail.gmail.com>
+In-Reply-To: <CAHS8izOBp4yXBg-nOSouD+A7gOGs9MPmdFc9_hB8=Ni0QdeZHg@mail.gmail.com>
 
 On 10/30, Mina Almasry wrote:
-> On Wed, Oct 30, 2024 at 7:33 AM Stanislav Fomichev <stfomichev@gmail.com> wrote:
+> On Wed, Oct 30, 2024 at 7:27 AM Stanislav Fomichev <sdf@fomichev.me> wrote:
 > >
-> > On 10/29, Mina Almasry wrote:
-> > > Check we're going to free a reasonable number of frags in token_count
-> > > before starting the loop, to prevent looping too long.
-> > >
-> > > Also minor code cleanups:
-> > > - Flip checks to reduce indentation.
-> > > - Use sizeof(*tokens) everywhere for consistentcy.
-> > >
-> > > Cc: Yi Lai <yi1.lai@linux.intel.com>
-> > >
-> > > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> > >
-> > > ---
-> > >  net/core/sock.c | 46 ++++++++++++++++++++++++++++------------------
-> > >  1 file changed, 28 insertions(+), 18 deletions(-)
-> > >
-> > > diff --git a/net/core/sock.c b/net/core/sock.c
-> > > index 7f398bd07fb7..8603b8d87f2e 100644
-> > > --- a/net/core/sock.c
-> > > +++ b/net/core/sock.c
-> > > @@ -1047,11 +1047,12 @@ static int sock_reserve_memory(struct sock *sk, int bytes)
-> > >
-> > >  #ifdef CONFIG_PAGE_POOL
-> > >
-> > > -/* This is the number of tokens that the user can SO_DEVMEM_DONTNEED in
-> > > +/* This is the number of frags that the user can SO_DEVMEM_DONTNEED in
-> > >   * 1 syscall. The limit exists to limit the amount of memory the kernel
-> > > - * allocates to copy these tokens.
-> > > + * allocates to copy these tokens, and to prevent looping over the frags for
-> > > + * too long.
-> > >   */
-> > > -#define MAX_DONTNEED_TOKENS 128
-> > > +#define MAX_DONTNEED_FRAGS 1024
-> > >
-> > >  static noinline_for_stack int
-> > >  sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
-> > > @@ -1059,43 +1060,52 @@ sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
-> > >       unsigned int num_tokens, i, j, k, netmem_num = 0;
-> > >       struct dmabuf_token *tokens;
-> > >       netmem_ref netmems[16];
-> > > +     u64 num_frags = 0;
-> > >       int ret = 0;
-> > >
-> > >       if (!sk_is_tcp(sk))
-> > >               return -EBADF;
-> > >
-> > > -     if (optlen % sizeof(struct dmabuf_token) ||
-> > > -         optlen > sizeof(*tokens) * MAX_DONTNEED_TOKENS)
-> > > +     if (optlen % sizeof(*tokens) ||
-> > > +         optlen > sizeof(*tokens) * MAX_DONTNEED_FRAGS)
-> > >               return -EINVAL;
-> > >
-> > > -     tokens = kvmalloc_array(optlen, sizeof(*tokens), GFP_KERNEL);
-> > > +     num_tokens = optlen / sizeof(*tokens);
-> > > +     tokens = kvmalloc_array(num_tokens, sizeof(*tokens), GFP_KERNEL);
-> > >       if (!tokens)
-> > >               return -ENOMEM;
-> > >
-> > > -     num_tokens = optlen / sizeof(struct dmabuf_token);
-> > >       if (copy_from_sockptr(tokens, optval, optlen)) {
-> > >               kvfree(tokens);
-> > >               return -EFAULT;
-> > >       }
-> > >
-> > > +     for (i = 0; i < num_tokens; i++) {
-> > > +             num_frags += tokens[i].token_count;
-> > > +             if (num_frags > MAX_DONTNEED_FRAGS) {
-> > > +                     kvfree(tokens);
-> > > +                     return -E2BIG;
-> > > +             }
-> > > +     }
-> > > +
-> > >       xa_lock_bh(&sk->sk_user_frags);
-> > >       for (i = 0; i < num_tokens; i++) {
-> > >               for (j = 0; j < tokens[i].token_count; j++) {
-> > >                       netmem_ref netmem = (__force netmem_ref)__xa_erase(
-> > >                               &sk->sk_user_frags, tokens[i].token_start + j);
-> > >
-> > > -                     if (netmem &&
-> > > -                         !WARN_ON_ONCE(!netmem_is_net_iov(netmem))) {
-> > > -                             netmems[netmem_num++] = netmem;
-> > > -                             if (netmem_num == ARRAY_SIZE(netmems)) {
-> > > -                                     xa_unlock_bh(&sk->sk_user_frags);
-> > > -                                     for (k = 0; k < netmem_num; k++)
-> > > -                                             WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
-> > > -                                     netmem_num = 0;
-> > > -                                     xa_lock_bh(&sk->sk_user_frags);
-> > > -                             }
-> > > -                             ret++;
+> > The goal of the series is to simplify and make it possible to use
+> > ncdevmem in an automated way from the ksft python wrapper.
 > >
-> > [..]
+> > ncdevmem is slowly mutated into a state where it uses stdout
+> > to print the payload and the python wrapper is added to
+> > make sure the arrived payload matches the expected one.
 > >
-> > > +                     if (!netmem || WARN_ON_ONCE(!netmem_is_net_iov(netmem)))
-> > > +                             continue;
+> > v6:
+> > - fix compilation issue in 'Unify error handling' patch (Jakub)
 > >
-> > Any reason we are not returning explicit error to the callers here?
-> > That probably needs some mechanism to signal which particular one failed
-> > so the users can restart?
 > 
-> Only because I can't think of a simple way to return an array of frags
-> failed to DONTNEED to the user.
+> Since I saw a compilation failures on a couple of iterations I
+> cherry-picked this locally and tested compilation. I'm seeing this:
 
-I'd expect the call to return as soon as it hits the invalid frag
-entry (plus the number of entries that it successfully refilled up to
-the invalid one). But too late I guess.
+Are you cherry picking the whole series or just this patch? It looks
+too broken.
 
-> Also, this error should be extremely rare or never hit really. I don't
-> know how we end up not finding a netmem here or the netmem is page.
-> The only way is if the user is malicious (messing with the token ids
-> passed to the kernel) or if a kernel bug is happening.
+> sudo CFLAGS="-static" make -C ./tools/testing/selftests/drivers/net/hw
+> TARGETS=ncdevmem 2>&1
+> make: Entering directory
+> '/usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/drivers/net/hw'
+>   CC       ncdevmem
+> In file included from ncdevmem.c:63:
+> /usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/../../../tools/net/ynl/generated/ethtool-user.h:23:43:
+> warning: ‘enum ethtool_header_flags’ declared inside parameter list
+> will not be visible outside of this definition or declaration
+>    23 | const char *ethtool_header_flags_str(enum ethtool_header_flags value);
+>       |                                           ^~~~~~~~~~~~~~~~~~~~
+> /usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/../../../tools/net/ynl/generated/ethtool-user.h:25:41:
+> warning: ‘enum ethtool_module_fw_flash_status’ declared inside
+> parameter list will not be visible outside of this definition or
+> declaration
+>    25 | ethtool_module_fw_flash_status_str(enum
+> ethtool_module_fw_flash_status value);
+>       |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> /usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/../../../tools/net/ynl/generated/ethtool-user.h:6766:45:
+> error: field ‘status’ has incomplete type
+>  6766 |         enum ethtool_module_fw_flash_status status;
+>       |                                             ^~~~~~
 
-I do hit this error with 1500 mtu, so it would've been nice to
-understand which particular token triggered that. It might be
-something buggy on the driver side, I need to investigate. (it's
-super low prio because 1500)
+This has been fixed via '#include <linux/ethtool_netlink.h>'
 
-> Also, the information is useless to the user. If the user sees 'frag
-> 128 failed to free'. There is nothing really the user can do to
-> recover at runtime. Only usefulness that could come is for the user to
-> log the error. We already WARN_ON_ONCE on the error the user would not
-> be able to trigger.
+> ncdevmem.c: In function ‘do_server’:
+> ncdevmem.c:517:37: error: storage size of ‘token’ isn’t known
+>   517 |                 struct dmabuf_token token;
 
-I'm thinking from the pow of user application. It might have bugs as
-well and try to refill something that should not have been refilled.
-Having info about which particular token has failed (even just for
-the logging purposes) might have been nice.
+And this, and the rest, don't make sense at all?
+
+I'll double check on my side.
