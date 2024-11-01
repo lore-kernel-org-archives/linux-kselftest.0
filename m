@@ -1,84 +1,69 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54B6168DA
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Nov 2024 20:15:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7589E1CCEF8
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 Nov 2024 21:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730492134; cv=none; b=dVrplkrcnDgjVb5eXAjI+h8sbI5FHlzeBhZ7psHuEedbzlMxhKz1z92gBMoSyZjgpv2NWN148UNAITOp+XXbCJ78WCv2iSsjW9Fl8ZYkb9H+HtMQQC/CVQFsi2EgzOlN1QeuIaOreBmfvfX8V0nxeFZ1Wl8WhYMOwZGYtG4XNgQ=
+	t=1730494901; cv=none; b=FIDf+wsSmN/Ol8gUxHqtZ/dLpW8kzV1m3OVRTZTPH/AgNye8myhfIC+MNRwd112ENIHbYfopbs9a9vDhesJlgUTlyma4a6eqRAU/spD2OfCHbVIF6+2xFcX3BaT2ngtJ5HLdIwcGV0VP/bRbNwCraenLznLX6wsoP6+QeXtabVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730492134; c=relaxed/simple;
-	bh=KojzClBS51NXZHtfP/ssEPl81S3kAgFdoobwtV9/FUM=;
+	s=arc-20240116; t=1730494901; c=relaxed/simple;
+	bh=7WUOsbtapu1VrdSJ94c4nil6RKKgZVcwbVqFxzdBsY8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PaKMIbIc3YUSrmebuGzcrOMtCyrbs/dRaIee3PgqbFizPPHBFTpliMqkOkFzoN9oMBQIYv54EVJZ19rPF2S8FOjttjtzLTxZM6Od9Zm8u1rfxAZhJ+xQWYedW8CcXpLwAlVDuKoeoJqg38pL15vTMjkoMYLxgLXuxu86z2AT5xQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=VkE7DZG7; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=L3Q7tJWujHpptA81cfkCl68ZKs2Ykv85e/OT8W2l8VEgoxP/cslVPOAqHwDm/GL6z60PbXRqF0EmgJEsK77KzB0upzwT+4HxzfePJ5FPkazq/m6IbrvmYFqBW6bGGT1FVJF8qVlSIKHV7KyM2dEpcPQ4pEB/Zjd5uauT/WSwQOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lpDhkeL5; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="VkE7DZG7"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7205b6f51f3so2076044b3a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Nov 2024 13:15:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lpDhkeL5"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5c95a962c2bso3050316a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Nov 2024 14:01:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1730492132; x=1731096932; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4rOWj5wq1SGCaCslB1TWBLOjmfXZ4GP9FgmX1YHf/NE=;
-        b=VkE7DZG7bce/7rzDqfgjd5v6gbe0xL3pHMErjgPQSgLnHfYJ8Twqdt7N0w7x9p/GxC
-         yeF3Cb0VSlusfkQEcgIl/EQpQ7Oyg8peMEhOkOCqig36yMlaZDpzlOOyzKUaqKQzSJck
-         ZShtvq9BGrYanVAb179nR+AfPE59ZQGhXkgE8=
+        d=gmail.com; s=20230601; t=1730494898; x=1731099698; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ULQS1Fh0p2h2tCv5f59FuL6fz9MzVkqUARVb0MPWMFw=;
+        b=lpDhkeL50Rf81h4YgWY/ereumJ0m2dJrYvkD1tGKQ9tcP85kcSAGhJdkXUZW53/3mS
+         B8MpdHVpkxJWdyXDwDAYAP5yL+l047V9bcDRi2fP2bD8Rcpu15jR7+AeTs7Y5ClaHpCO
+         EpVbOIl0l5xq1tlVxs//kadMc/c/Msg/Qn+cDA4sM8E0lvSwaIOvhoxsGF9L9hxgvhPW
+         UifOBVc6VNPw3RTfiiF6wfanrENg7Cux79GIGGpgiqB9w/ea417gTwVu9NwwTBBfvuPB
+         T3EErQYJuMzHV64OTG7KjQneMNbfobTvx99mTQlLNSdL09bKIWtQROcsQg1E5xTPtbA2
+         amQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730492132; x=1731096932;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4rOWj5wq1SGCaCslB1TWBLOjmfXZ4GP9FgmX1YHf/NE=;
-        b=NtIejIUH8tMkg8P1LnfngUEiyi5Vg0rbQUvZPXA4geQX3ZpWOoOwt1er6wtaVgaJBt
-         up9VB7ykgS7wICVP4ZEqRUjUq8ouexB7dRBetjQW7TkZ2vMxKpE+Gh7dzt8M/lSjd9YI
-         I9Mg6UiXh7/tHOSWzem5XaqbEaVQqQ3K/jQl10BdkDpYoidPoeaj2E4gDHPbFD686hp2
-         Bi1LvusKUuZCEz1EHYEUBlV0kJxRtiBjVGHvDG3rClQ73FkwLpMRZ9yAsBVzXopfoWgF
-         tgT3ME7UEcvKBHZCqxFwWSj+uh6NcacfP07aM2papwgUDNvP5wGhsv6qM4rAWSazmblP
-         EqAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXDOPaEgjLYwnQTWPTSn3FwZ54P7lhzLRUeDLRGDvPGByiGW9kEuggv3ATzQ99KLjHjhAUbDKfby7R+25IT3ig=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtiGLtCgt5ojfmUI6X+d7B43X8JkgBGx6u1mKhlennfkzS3+Ls
-	PhCNOl2HsY2cUscEMwBX++gPAAb8RqW+5lFMtEvVNGS9++fomTeRdcetUqPEEIg=
-X-Google-Smtp-Source: AGHT+IGLQMQLNv4xaq8DqBOYiAGWYiXP+moKivQ5tFF9FFk0WRRRqQkt0/6YXC6frC7khIREMn44nQ==
-X-Received: by 2002:a17:90b:2e42:b0:2e9:4967:244 with SMTP id 98e67ed59e1d1-2e94c2e4c29mr6924981a91.24.1730492131974;
-        Fri, 01 Nov 2024 13:15:31 -0700 (PDT)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e92fa2603fsm5316018a91.17.2024.11.01.13.15.29
+        d=1e100.net; s=20230601; t=1730494898; x=1731099698;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ULQS1Fh0p2h2tCv5f59FuL6fz9MzVkqUARVb0MPWMFw=;
+        b=DKQQmVyWODTixnYGgXQMy2Oy+T7x7iCPbxBgTzi7m1s+Q4ObJ/EEFYx3qvucfGST2d
+         UXf8wzKvywY1PmpzqiR7J1YZyl22DTxFJ1b9rg8LsjdQ7zC0TlYHIb0uNrXRP1H5nOeP
+         wtNbut3o8cpvV56iNM81TIUgP9XgVHTBS+RaRIm+asC4kCOhs67/PwhRd7TZo0KPXb41
+         T/cIZmgf0GUApQuf8oT3nb/G+u8br9P3L6Lns0YUWgBj4/TAnysbmtSLgjhXCBLWJ8HR
+         +RD+Xe4pip8Dr5/FloJFw4MIfnje/18WNOq4F2FsIaW0Ks5DC+4sCXLS0XLFqOwHX2m9
+         /GAA==
+X-Forwarded-Encrypted: i=1; AJvYcCWzNyHuvKIv5cy44z6gmtHtVEdpOBZIAbW/1XybEgIldTsLKaLMNqKWWxG5YaaV8DFR0gWSnkmIIjixiMP7G+U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzB2eLoQ0f7Kzjz5w7F3YHXW3dIT9UlNR9q4nzIIl3OtaU0+7Eg
+	PfUbxfb3FgPrL7+SDH80XCnssOSziqfg50ZeaI1le/h89XTHG++e
+X-Google-Smtp-Source: AGHT+IFEApOF1Lo9/TyFpjCDhKN18ERbosd95+bzaI7jVQFZEZIKNnx9duFu7BhgRLy0vnlUL6vm9g==
+X-Received: by 2002:a17:907:8693:b0:a9a:e6:a031 with SMTP id a640c23a62f3a-a9e50ba22d9mr665890566b.59.1730494896037;
+        Fri, 01 Nov 2024 14:01:36 -0700 (PDT)
+Received: from x13 (185-180-222-125.hosted-by-worldstream.net. [185.180.222.125])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e564e8e6esm229051166b.94.2024.11.01.14.01.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 13:15:31 -0700 (PDT)
-Date: Fri, 1 Nov 2024 13:15:28 -0700
-From: Joe Damato <jdamato@fastly.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, pabeni@redhat.com, namangulati@google.com,
-	edumazet@google.com, amritha.nambiar@intel.com,
-	sridhar.samudrala@intel.com, sdf@fomichev.me, peter@typeblog.net,
-	m2shafiei@uwaterloo.ca, bjorn@rivosinc.com, hch@infradead.org,
-	willy@infradead.org, willemdebruijn.kernel@gmail.com,
-	skhawaja@google.com, Martin Karsten <mkarsten@uwaterloo.ca>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v3 6/7] selftests: net: Add busy_poll_test
-Message-ID: <ZyU24Kogy3HlzNqx@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	pabeni@redhat.com, namangulati@google.com, edumazet@google.com,
-	amritha.nambiar@intel.com, sridhar.samudrala@intel.com,
-	sdf@fomichev.me, peter@typeblog.net, m2shafiei@uwaterloo.ca,
-	bjorn@rivosinc.com, hch@infradead.org, willy@infradead.org,
-	willemdebruijn.kernel@gmail.com, skhawaja@google.com,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20241101004846.32532-1-jdamato@fastly.com>
- <20241101004846.32532-7-jdamato@fastly.com>
- <20241101063426.2e1423a8@kernel.org>
+        Fri, 01 Nov 2024 14:01:35 -0700 (PDT)
+Date: Fri, 1 Nov 2024 17:01:28 -0400
+From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, brendan.higgins@linux.dev,
+	davidgow@google.com, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, ricardo@marliere.net,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	andriy.shevchenko@linux.intel.com
+Subject: Re: [PATCH v3] lib/math: Add int_sqrt test suite
+Message-ID: <ZyVBqEgX-z3flsDT@x13>
+References: <20241030134355.14294-1-luis.hernandez093@gmail.com>
+ <c213dbcb-35de-4afd-9d4b-f42f6a9e3de6@linuxfoundation.org>
+ <20241031173941.3487ccbfd7421d81d9b0cb97@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,74 +72,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241101063426.2e1423a8@kernel.org>
+In-Reply-To: <20241031173941.3487ccbfd7421d81d9b0cb97@linux-foundation.org>
 
-On Fri, Nov 01, 2024 at 06:34:26AM -0700, Jakub Kicinski wrote:
-> On Fri,  1 Nov 2024 00:48:33 +0000 Joe Damato wrote:
-> > +	ip netns exec nscl nc -N 192.168.1.1 48675 < $tmp_file
+On Thu, Oct 31, 2024 at 05:39:41PM -0700, Andrew Morton wrote:
+> > > --- a/lib/math/Makefile
+> > > +++ b/lib/math/Makefile
+> > > @@ -9,3 +9,4 @@ obj-$(CONFIG_INT_POW_TEST)  += tests/int_pow_kunit.o
+> > >   obj-$(CONFIG_TEST_DIV64)	+= test_div64.o
+> > >   obj-$(CONFIG_TEST_MULDIV64)	+= test_mul_u64_u64_div_u64.o
+> > >   obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational-test.o
+> > > +obj-y  += tests/
 > 
-> Thanks a lot for adding the test.
-
-Thanks for the review.
-
-> Could you replace nc with socat or
-> a similar tool? There are multiple incompatible implementations of
-> netcat packaged by various distros, we get:
+> What's this change about?  It seems somewhat unrelated to adding a
+> single test.  I mean, there's an unrelated test listed in
+> lib/math/tests/Makefile so what change does this patch have upon that
+> one?
 > 
-> # selftests: net: busy_poll_test.sh
-> # nc: invalid option -- 'N'
-> # Ncat: Try `--help' or man(1) ncat for more information, usage options and help. QUITTING.
-> 
-> nc is a known PITA.
 
-OK, I've replaced with socat for the v4 I am working on. I've also
-added some additional documentation to the FAQ in the cover letter
-and the kernel documentation to help answer Sridhar's question
-because it may be a question others have as well.
+Hello Andrew, I apologize about the late response. I made this change in
+order to try and stay aligned with this previous patch moving all
+lib/math/ kunit tests into lib/math/tests/: https://lore.kernel.org/all/20241005222446.10471-1-luis.hernandez093@gmail.com/
 
-> > +	# set the suspend parameter for the server via its IFIDX
-> > +
-> > +	DUMP_CMD="${YNL_PATH} --spec ${SPEC_PATH} --dump napi-get --json=\"{\\\"ifindex\\\": ${NSIM_DEV_1_IFIDX}}\" --output-json"
-> > +	NSIM_DEV_1_NAPIID=$(ip netns exec nssv bash -c "$DUMP_CMD")
-> > +	NSIM_DEV_1_NAPIID=$(echo $NSIM_DEV_1_NAPIID | jq '.[] | .id')
-> > +
-> > +	SUSPEND_CMD="${YNL_PATH} --spec ${SPEC_PATH} --do napi-set --json=\"{\\\"id\\\": ${NSIM_DEV_1_NAPIID}, \\\"irq-suspend-timeout\\\": 20000000, \\\"gro-flush-timeout\\\": 50000, \\\"defer-hard-irqs\\\": 100}\""
-> > +	NSIM_DEV_1_SETCONFIG=$(ip netns exec nssv bash -c "$SUSPEND_CMD")
-> 
-> Can you try to run this test in installed mode?
-> 
-> https://docs.kernel.org/dev-tools/kselftest.html#install-selftests
-> 
-> IIRC YNL moves around when we install, you'd either need to do
-> autodetection of the path (see tools/testing/selftests/net/lib/py/ynl.py
-> and if you go down this route please move the helper which exports the
-> YNL variables to lib.sh so other tests can reuse); or teach the C code
-> to do the setup, you can link against YNL fairly easily (look at where
-> ncdevmem is added in the Makefile, it uses YNL)
+From my understanding, kbuild wouldn't pick up the entry if it
+was just specified in lib/math/tests/Makefile without a reference to it in
+it's parent lib/math/Makefile. I didn't want to this
+patch to end up in a situation where it would introduce an explicit
+object entry in lib/math/Makefile pointing to 
+obj-$(CONFIG_INT_SQRT_KUNIT_TEST) += tests/int_sqrt_kunit.o
+as is the case in mainline at the moment: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/math/Makefile?h=v6.12-rc5#n8
+This would in a sense introduce a regression in the organization of
+the Makefile in lib/math/.
 
-I think I'm going to go the C route.
+I apologize for not adding the reasoning behind the change in the
+original patch.
 
-Just to make sure I'm following how to do this properly:
-  - I've added busy_poller to YNL_GEN_FILES (and removed it from
-    TEST_GEN_FILES)
-  - It still needs to be run via the script (which sets up netdevsim
-    etc), so I am leaving that script (busy_poll_test.sh) in
-    TEST_PROGS. busy_poller is not intended to be run on its own for
-    selftest purposes.
+Best,
 
-I am not sure if YNL_GEN_FILES are expected to run standalone when
-invoked or if this will work as I expect it to (busy_poll_test.sh is
-run):
-
-  [...]
-  TEST_PROGS += busy_poll_test.sh
-  
-  # YNL files, must be before "include ..lib.mk"
-  YNL_GEN_FILES := ncdevmem busy_poller
-  [...]
-
-Doing the above: I am hoping that busy_poll_test.sh will be run
-(which will use busy_poller) and that busy_poller won't be run on
-its own.
-
-Thanks for the guidance.
+Felipe
