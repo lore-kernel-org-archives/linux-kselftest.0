@@ -1,116 +1,114 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B811719CC02;
-	Fri,  1 Nov 2024 12:05:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730462717; cv=pass; b=VcQisreRKtcyrTCiCUCE9W+DW0uTBHpFc4NHEE791XhZjl44fmE9IcOI6Zpp77yqD9mX1DV8ims3UiMyxO91PrHojJb8fAvrwj4TgEFR5m5Nioh6d7YkxGQDjFHZE9+WT2hMazoqCw+5cuXJwcdlxwaqwayr20K2KCDxs1pAOiE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730462717; c=relaxed/simple;
-	bh=pb795XVY7Sp+qLhUbQk6MrXNjqEpUOfM6y7ZI3gevHA=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=T+P7lc+kSwXH0+EsqxQ3QeDuxNVTeBNzoj12hOSgog+TCgCNev/sSXq1p0j83NCn6qvSlFCyzRwYFdxAr/7/KPYGnHQWkiJyT+OIeu8sM+d5zINirUGafg1K26q+G1YYkZMzZ5qbr0u+uH1HcMANJkqvBGul+o2/yZ2aydHiFLE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=HBWA42gI; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8733EC13C;
+	Fri,  1 Nov 2024 12:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730464232; cv=none; b=GtTPeYG1qWyCEBpw8za6cNToI3XrkGbJgm/igw0OzKmMcO/H63t/UQva7pvfGmstAWlSi1OUCLXZ3FroukGczE6sQ99LyUuEmPdhFKcReAV6rs0+DccReN3hEDivEmnnfNPpCkHDvPtdqsZ8pK8oEvuDIcskWjHyZ8DGVN0L8mo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730464232; c=relaxed/simple;
+	bh=7TcBxOnka1nVz+YB3rkflphZbI2fzT7QcPJP71YAV2o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Km8ONNJrpKmBKdPe7jmuYfV2nnn9NsOOEGRju6aP5Q9EVsExq2MX9jbu2CCsJfxsuhM7m+OW0PVsTg5oFsmdCc8fm6vF13j965xEaTg0lgH5bOl4AvjlKeYbdjosTSyiTtoACxLV+icQUfn/nLh9i0hZC0UY+j81/ZQZWyNcY9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OHQ0KNd9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="HBWA42gI"
-ARC-Seal: i=1; a=rsa-sha256; t=1730462681; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=EK3LpHZfnTpGyfXurU1xjh1Z2ukDCE/4TYlfbRj3jelnAcwy1yPeaTL16fUIPqoNzwTwjuvcYhAAoc/sI2Qo4QsTbHsEJkUytoYz6aYwwVFhh1SQOhGNkYTL80Z2rgMVdZ0yZnECAYtnCXtYUZK0GtQz2Uu2hxCtj4zkHN2fQMs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1730462681; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=/NMi3pGigRmlDzj0TOeS5jZ0ve4nP+ZwL2yz0+HO+fQ=; 
-	b=HnQY1B8nKe8laGMa+/u4t5ms0w1FequDIDXiPhhPdWCG8zXI3pKqITck3MCcm/Ih20Xeq1KYa1I/U+x6P5EsXmCIxC4Bhs0SU2G/5kesX5N3HBxSfRDtlqKkPeMpaRaub2foZuyDAQsq6KlzojbRTiC7/ldvDKouMF3vJJvOzoM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1730462681;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=/NMi3pGigRmlDzj0TOeS5jZ0ve4nP+ZwL2yz0+HO+fQ=;
-	b=HBWA42gISrcL6C+foXidrBwRXThCQcXWGJBbL92XEK2DsW9Z+eAqKCvMVcl+n/O7
-	i3mIjx5aav4uABK+8HAElYvSnhjhtpXPVMlXxr12rcw+HSyAIZofpXYQG0itAsvVIAD
-	oEgo6pDHf7ulXUQBuQQ7F1KDZZeMFtoGau8t9AcU=
-Received: by mx.zohomail.com with SMTPS id 173046267927518.196252159989967;
-	Fri, 1 Nov 2024 05:04:39 -0700 (PDT)
-Message-ID: <a2a9995c-deed-4545-bf65-9ce7a811609a@collabora.com>
-Date: Fri, 1 Nov 2024 17:04:25 +0500
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OHQ0KNd9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288AEC4CECD;
+	Fri,  1 Nov 2024 12:30:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730464232;
+	bh=7TcBxOnka1nVz+YB3rkflphZbI2fzT7QcPJP71YAV2o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OHQ0KNd9iULqrLiO/PvS7RwbhdGoK30GLmYzCTnH200RvPYgDNvEBdQOo75bAkTib
+	 r2tAIks3iV2FwflGonEKA0XOzsdLXdtCxu+eRtI63/i9Ro4l8fY1PQ0UgFiaNCuWUN
+	 hvSLEMvII8fQBMoO/OGqePdZsTQqfK076wzfhHgehQdJrruutapBhfKPpHKRt/lGa8
+	 208Zd67neipOlFi6QBpz3pmufbr7cDmZhmEJwiFibU8dhBSCdQ3E/MbnQttMZE+dVt
+	 Ob5CRfxRGuMhj26vqrNY9EUAUZcdfXuxkVGgtzGXQjO5WFHLPdTjeRtXuXHcNZZ+Wr
+	 YR5IBlM2C9rnw==
+Date: Fri, 1 Nov 2024 12:30:23 +0000
+From: Mark Brown <broonie@kernel.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"mgorman@suse.de" <mgorman@suse.de>,
+	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"vschneid@redhat.com" <vschneid@redhat.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"bsegall@google.com" <bsegall@google.com>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+	"yury.khrustalev@arm.com" <yury.khrustalev@arm.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+	"jannh@google.com" <jannh@google.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"wilco.dijkstra@arm.com" <wilco.dijkstra@arm.com>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+	"kees@kernel.org" <kees@kernel.org>
+Subject: Re: [PATCH RFT v12 0/8] fork: Support shadow stacks in clone3()
+Message-ID: <eca3edc3-1a2d-475c-a866-ea25d6bd9756@sirena.org.uk>
+References: <20241031-clone3-shadow-stack-v12-0-7183eb8bee17@kernel.org>
+ <fe6cc8010b2b35aaa2629c4c5e972dc1c90c43c3.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com, Shuah Khan <shuah@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v1 1/2] selftests/x86/syscall: fix coccinelle WARNING
- recommending the use of ARRAY_SIZE()
-To: Mirsad Todorovac <mtodorovac69@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241101111523.1293193-2-mtodorovac69@gmail.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <20241101111523.1293193-2-mtodorovac69@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="WzOkb7e6YaToc7v5"
+Content-Disposition: inline
+In-Reply-To: <fe6cc8010b2b35aaa2629c4c5e972dc1c90c43c3.camel@intel.com>
+X-Cookie: We read to say that we have read.
 
-On 11/1/24 4:15 PM, Mirsad Todorovac wrote:
-> Coccinelle gives WARNING recommending the use of ARRAY_SIZE() macro definition
-> to improve the code readability:
-> 
-> ./tools/testing/selftests/x86/syscall_numbering.c:316:35-36: WARNING: Use ARRAY_SIZE
-> 
-> Fixes: 15c82d98a0f78 ("selftests/x86/syscall: Update and extend syscall_numbering_64")
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Mirsad Todorovac <mtodorovac69@gmail.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-> ---
->  v1: initial version.
-> 
->  tools/testing/selftests/x86/syscall_numbering.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/x86/syscall_numbering.c b/tools/testing/selftests/x86/syscall_numbering.c
-> index 991591718bb0..41c42b7b54a6 100644
-> --- a/tools/testing/selftests/x86/syscall_numbering.c
-> +++ b/tools/testing/selftests/x86/syscall_numbering.c
-> @@ -25,6 +25,7 @@
->  #include <sys/mman.h>
->  
->  #include <linux/ptrace.h>
-> +#include "../kselftest.h"
->  
->  /* Common system call numbers */
->  #define SYS_READ	  0
-> @@ -313,7 +314,7 @@ static void test_syscall_numbering(void)
->  	 * The MSB is supposed to be ignored, so we loop over a few
->  	 * to test that out.
->  	 */
-> -	for (size_t i = 0; i < sizeof(msbs)/sizeof(msbs[0]); i++) {
-> +	for (size_t i = 0; i < ARRAY_SIZE(msbs); i++) {
->  		int msb = msbs[i];
->  		run("Checking system calls with msb = %d (0x%x)\n",
->  		    msb, msb);
+--WzOkb7e6YaToc7v5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-BR,
-Muhammad Usama Anjum
+On Thu, Oct 31, 2024 at 09:06:09PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2024-10-31 at 19:25 +0000, Mark Brown wrote:
 
+> > base-commit: d17cd7b7cc92d37ee8b2df8f975fc859a261f4dc
+
+> Where can I find this base commit?
+
+Ah, that's still my branch from when I posted what's now applied in the
+arm64 tree, this is the same code:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/gcs
+
+Sorry, I didn't rebase after the GCS code landed.  Applied branch here:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git clone3-shadow-stack
+
+--WzOkb7e6YaToc7v5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmckyd4ACgkQJNaLcl1U
+h9A/zwf9EQ28AczCH5D/BrYuZ+sphQDinPIhh020kD+hncKxKb5/pHR7YqjDCDow
+UiD2dUHuEOH5kbS8eLAYdYA2PdUmBGq3HJv1s96OqN56WrNWWQYeGPnGZjSrfW6T
+jlKlDOCm15m67oaRAKOMXaXPxKkFQumKUjk4N5GRorlMnPhUo7RACgyg/xFcKneX
+keakD5gzrSCMbabGnmtg5tumG1qOkrwG/nZL1of4f0Q8nHPLFDxfrjMSV8THAlwY
+kTZlIm6xV3MCo1ZmCJu8k+tohHH6Yft1eCjCw3Pxz8eiWiiFSlcl1Ie8n7/w3o/H
+CDR56lJwb2Lbmrftd8mIz8eVW4btfA==
+=SCG2
+-----END PGP SIGNATURE-----
+
+--WzOkb7e6YaToc7v5--
