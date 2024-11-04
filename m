@@ -1,208 +1,138 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B82224F0;
-	Mon,  4 Nov 2024 18:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1681C2309;
+	Mon,  4 Nov 2024 18:14:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730743772; cv=none; b=sV8hcmy5E6QSXEuS+sx9/ah6m0OYTBvHI55xUpLi5b1DaMujpGD2x3tP7E4/ON12XEPcdj9PsNWfj8cDp1UNibXmRcdrY43n6Hp6upLs6eQRCZ6cgM1qdpGvqby1whdXBDIfFQVQ/hLTrH7evYsuNAY2AQxQB7Ch2PT8n1apVj0=
+	t=1730744074; cv=none; b=QVM9ihnDQS5hdu94cJxTuCCIvB1h1IQP6hnIpm7SK4Tpof1BRtcQRoY2waUxlVOqkjHVEXyioNfymTsRtAKW8JLafGd/EWOKsQSDPbu9KOZk5zMzhHcrP6uatEadw9feuiJsAyXb+I94/DMpetlzch+I7R0TbEjDTwphtcZU88Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730743772; c=relaxed/simple;
-	bh=s9H92zsAkMOcwJ+GffO4YFN2D7ey7rDZ6UDXCRDq4gc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=df2UuEapeqqfnrJp6tqJRJtIC5sZRE0JSbaNfEGa24I55/VdTW6syr6P1atdxA8m3c3bvEIdSvCtz3SDpRluiPZxszcl7BZBiuqa9NAdXFwqAmiYVmSHH6slpe0ekMdEXHGx967xTI2/M7ylgttu3ExX+h0EVixB6nlgmHF3Zzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Vr2XwHJ5; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Vr2XwHJ5"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4Hc53b028263;
-	Mon, 4 Nov 2024 18:08:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=w468gW
-	nUBKcn6hvtsmUCHLK0zLOaHwww1ug2caMPJVE=; b=Vr2XwHJ51SOgi3qkNLCQeM
-	009uYlpkYpIMofj19L3JM4V8HLxyIGiMazvXDTRcP00ka4gH1ZmCevoeRJdYlCl2
-	/CegRbEpKH1+AvPbsgB1LWwB0Olsct3do8s6GI/Hsuvwhv4JN59Uq/ih0Xf2080H
-	7lVAO5OYyxpqzOiQvBu0AmP/hs1vPVrbebnqegVJb4tDa3ncMP3ScQbSW0xDWBiv
-	WswWpsUHZwITk8HTAqV+Yp6c6IsE+ae3g4HI5t0FybhwpdcBpTiL6z8AWHtpkG9W
-	kZt2qcXjC3OIofbKe8LLA1KU8QkpR1bIOlKVMtjwIbfl62sFfvCS091wYjeYabdA
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42q2uer77v-13
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Nov 2024 18:08:45 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4GNdLB024235;
-	Mon, 4 Nov 2024 17:36:29 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42nxsxyhgq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Nov 2024 17:36:29 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A4HaRgQ20775284
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 4 Nov 2024 17:36:27 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5920F20043;
-	Mon,  4 Nov 2024 17:36:27 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CCA9520040;
-	Mon,  4 Nov 2024 17:36:24 +0000 (GMT)
-Received: from [9.43.42.65] (unknown [9.43.42.65])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  4 Nov 2024 17:36:24 +0000 (GMT)
-Message-ID: <f7e8243a-a4c8-44ce-ad03-7d232df461ed@linux.ibm.com>
-Date: Mon, 4 Nov 2024 23:06:23 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/ftrace: update kprobe syntax error test for
- ppc64le
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu
- <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        "Naveen N. Rao"
- <naveen@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-References: <20241101191925.1550493-1-hbathini@linux.ibm.com>
- <20241101205948.GW29862@gate.crashing.org>
- <1916cb5c-cb3d-427c-bcf0-2c1b905fd6d1@linux.ibm.com>
- <20241104094431.GY29862@gate.crashing.org>
- <245fed6f-5fb4-4925-ba0a-fb2f32e650d0@linux.ibm.com>
- <20241104103615.GZ29862@gate.crashing.org>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <20241104103615.GZ29862@gate.crashing.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: lq2A1vmdafXCqy7dc8Y1uUEaoTXCzInZ
-X-Proofpoint-ORIG-GUID: lq2A1vmdafXCqy7dc8Y1uUEaoTXCzInZ
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1730744074; c=relaxed/simple;
+	bh=aVxP0jcxO9fNti9CoyzA2eVeDe1PDDS/i8L1u30o3LE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JOgc3KnjCT9UUbZMlLbv7bBFsKUMirejmPcknhz/BXz98tQZxDcg8YAdpbieenuaKL/tTGH5GK+ts6yFVsY0Hl9K5Edqopy+JbLkkUHNb6pRAYe2AFzHckCoHqAnt9MYp5kJEva12LbVKz1WbXs/OXCq3mjzCPHpHClaX3DS3HI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7ae3d7222d4so3238762a12.3;
+        Mon, 04 Nov 2024 10:14:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730744071; x=1731348871;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IAIq1Ui2j9QsUZ4JYb3Wemxk3lhTCIGOK6mHtuKExIM=;
+        b=vMoDHGdl3qB9tkFPjT5wUqOuE/TDgdn6D1T7hwgzFCjgZTPbYpcz6UOyLrnDXzwQF3
+         ycjdPahGuuQvP5t2rcJd+FlQJX4rmaMb2we2ZVrlBm06CLgZQVmrN3dJb6ZKMQqWvvce
+         8YcBfIbGs1CrmxJH+6n6ALAAGBmEs47ZI8kFO/Yvy59BYiW9AgiZ0Q70+xVYmRi7cROG
+         1b6RhItBeEDkJ15MqIBDE+rO7yZg6zidXFOkHEyS8KYxRX6ozuyMo0V1vnLBb/FBybf6
+         OOJEFSqVyupPMJjixuEFuEEgjylmmNUymD4EL55VCqkM6AgFfekHYFhqq9jTx+FtStmC
+         p+XA==
+X-Forwarded-Encrypted: i=1; AJvYcCU5Z0BDMdNYMKQeG3+gx3kX6QvpN4JNR8557Fkm1hXeU5CzxMyTB4RMw8VG6pnE9CK+I+gT4JrSeMCqH+g=@vger.kernel.org, AJvYcCVTOBumGPZhasFnPiQwIKi4FGgdLcvFuMjqsKy86Xxuv9lRggqWrfiHIK6D3MrKb8Z4xm3GtB+Ts7EzKFelu5yd@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEHgDnnzKU9zDvz/zJGasZw3QWO2x72QcmXfGsqxw1ViXwQWoE
+	r9BzovvDe2B3GzxKdoulDwNcM5DpaWDTtCBgE0O1DJCPimtZ/vdIpvuh
+X-Google-Smtp-Source: AGHT+IHhN4/EXQ7OS1e/nJAXih/1yqXdu9y3W8NeMwURhM7GYyj7osYLIyn05QRlDWosG5NQnQ9Otg==
+X-Received: by 2002:a17:90b:4a42:b0:2e2:b922:492 with SMTP id 98e67ed59e1d1-2e93c174626mr20471167a91.17.1730744071208;
+        Mon, 04 Nov 2024 10:14:31 -0800 (PST)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e92fbdfc1asm10217617a91.41.2024.11.04.10.14.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2024 10:14:30 -0800 (PST)
+From: Stanislav Fomichev <sdf@fomichev.me>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	andrew+netdev@lunn.ch,
+	shuah@kernel.org,
+	horms@kernel.org,
+	almasrymina@google.com,
+	sdf@fomichev.me,
+	willemb@google.com,
+	petrm@nvidia.com
+Subject: [PATCH net-next v7 00/12] selftests: ncdevmem: Add ncdevmem to ksft
+Date: Mon,  4 Nov 2024 10:14:18 -0800
+Message-ID: <20241104181430.228682-1-sdf@fomichev.me>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 clxscore=1015 adultscore=0 mlxscore=0 phishscore=0
- impostorscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411040149
+Content-Transfer-Encoding: 8bit
 
-Hi Segher,
+The goal of the series is to simplify and make it possible to use
+ncdevmem in an automated way from the ksft python wrapper.
 
-On 04/11/24 4:06 pm, Segher Boessenkool wrote:
-> Hi!
-> 
-> On Mon, Nov 04, 2024 at 03:40:26PM +0530, Hari Bathini wrote:
->> On 04/11/24 3:14 pm, Segher Boessenkool wrote:
->>> On Mon, Nov 04, 2024 at 02:51:57PM +0530, Hari Bathini wrote:
->>>> On 02/11/24 2:29 am, Segher Boessenkool wrote:
->>>>> On Sat, Nov 02, 2024 at 12:49:25AM +0530, Hari Bathini wrote:
->>>>>> For ppc64le, depending on the kernel configuration used, offset 16
->>>>> >from function start address can also be considered function entry.
->>>>>> Update the test case to accommodate such configurations.
->>>>>
->>>>> (This is true for all ELfv2, not just LE.  For the kernel that is about
->>>>> the same).
->>>>>
->>>>> The LEP and GEP can differ by zero, one, two, four, eight, or sixteen
->>>>> insns (where an insn is four bytes).  Four insns is common, yes, but
->>>>> maybe you can support all?  See the function symbol's st_other field
->>>>> to see what the offset is:
->>>>> 0, 1: zero insns, zero bytes
->>>>> N = 2..6: 1 << (N-2) insns, i.e. 1<<N bytes
->>>>> 7: reserved
->>>>>
->>>>> (This is the top 3 bits of st_other, the other bits have other meanings).
->>>>>
->>>>> Four insns is common, yes, but by no means the only possibility.
->>>>
->>>> Hi Segher,
->>>>
->>>> Querying for function arguments is supported on kprobes only at function
->>>> entry. This is a negative test case where the offset is intentionally
->>>> set beyond function entry while querying for function arguments.
->>>> I guess, simply setting the offset to 20 (vfs_read is anyway
->>>> going to be beyond 5 instructions) instead of 8 for powerpc would
->>>> make all platforms and ABI variants happy?
->>>
->>> I have no idea.  What is this "offset" anyway?
->>
->> offset (in bytes) from function start address..
-> 
-> But what is there?
-> 
->>> This is just the ELFv2 ABI.  No platform can make up its own thing at
->>> all (well, none decided to be gratuitously incompatible, so far).  And
->>> there are no "ABI variants"!
->>
->> The test case applies for ABIv1 & ABIv2. All ppc32 & ppc64 platforms..
-> 
-> Hrm.  So you allow essentially random entry points on other ABIs to
-> work?
-> 
->>> You're just making assumptions here that are based on nothing else but
->>> observations of what is done most of the time.  That might work for a
->>> while -- maybe a long while even! -- but it can easily break down.
->>
->> Hmmm.. I understand that you want the test case to read st_other field
->> but would you rather suggest an offset of 64?
-> 
-> I have no idea what "offset" means here.
-> 
->> Is a GEP of 8/16 instructions going to be true anytime soon or is it
->> true already for some cases? The reason I ask that is some kprobe/ftrace
->> code in the kernel might need a bit of re-look if that is the case.
-> 
-> An entry point has no instructions at all.  Oh, you mean the code at
-> the GEP.
-> 
-> The LEP can already be all the allowed distances after the GEP.  And
-> the .localentry GAS directive already supports all those distances
-> always.  Not a lot of code written in assembler does use that, and
-> certainly GCC does not use a lot of the freedom it has here, but it
-> could (and so could assembler programmers).  Typically people will want
-> to make the code here as short as possible, and there are restrictions
-> on what is *allowed* to be done here anyway (ld, the link editor, can
-> change this code after all!), so it is not too likely you will ever see
-> big code at the GEP often, but times change, etc.
+ncdevmem is slowly mutated into a state where it uses stdout
+to print the payload and the python wrapper is added to
+make sure the arrived payload matches the expected one.
 
-Seems like a bit of misunderstanding there. Function entry here intends
-to mean the actual start of function code (function prologue) - after
-GEP and function profiling sequence (mflr r0; bl mcount).
+v7:
+- fix validation (Mina)
+- add support for working with non ::ffff-prefixed addresses (Mina)
 
-Function arguments can be accessed with kprobe only while setting a
-probe at an address the kernel treats as function start address.
-Note that the test case pass criteria here is setting probe to fail by
-providing an address (sym+offset) beyond the function start address.
+v6:
+- fix compilation issue in 'Unify error handling' patch (Jakub)
 
-And in this specific test case (with "vfs_read+8", where vfs_read is
-the symbol and '8' is the offset), the test case was failing on powerpc
-because setting the probe at 'sym+8' was succeeding, as anywhere between
-'sym' to 'sym+16' is treated as function start address on powerpc:
+v5:
+- properly handle errors from inet_pton() and socket() (Paolo)
+- remove unneeded import from python selftest (Paolo)
 
-  
-https://github.com/torvalds/linux/blob/master/arch/powerpc/kernel/kprobes.c#L108
+v4:
+- keep usage example with validation (Mina)
+- fix compilation issue in one patch (s/start_queues/start_queue/)
 
+v3:
+- keep and refine the comment about ncdevmem invocation (Mina)
+- add the comment about not enforcing exit status for ntuple reset (Mina)
+- make configure_headersplit more robust (Mina)
+- use num_queues/2 in selftest and let the users override it (Mina)
+- remove memory_provider.memcpy_to_device (Mina)
+- keep ksft as is (don't use -v validate flags): we are gonna
+  need a --debug-disable flag to make it less chatty; otherwise
+  it times out when sending too much data; so leaving it as
+  a separate follow up
 
-So, the fix here essentially is to provide an address that is at least
-an insn or two beyond function start address. As GEP is 8 bytes and
-function profile sequence is 8 bytes, sym+20 is beyond function start
-address on ppc64le. In fact, sym+20 should work for other platforms
-too as sym+20 not treated as function start address on any platform
-on powerpc as of today, and that is all the test case cares about...
+v2:
+- don't remove validation (Mina)
+- keep 5-tuple flow steering but use it only when -c is provided (Mina)
+- remove separate flag for probing (Mina)
+- move ncdevmem under drivers/net/hw, not drivers/net (Jakub)
 
-Thanks
-Hari
+Cc: Mina Almasry <almasrymina@google.com>
+
+Stanislav Fomichev (12):
+  selftests: ncdevmem: Redirect all non-payload output to stderr
+  selftests: ncdevmem: Separate out dmabuf provider
+  selftests: ncdevmem: Unify error handling
+  selftests: ncdevmem: Make client_ip optional
+  selftests: ncdevmem: Remove default arguments
+  selftests: ncdevmem: Switch to AF_INET6
+  selftests: ncdevmem: Properly reset flow steering
+  selftests: ncdevmem: Use YNL to enable TCP header split
+  selftests: ncdevmem: Remove hard-coded queue numbers
+  selftests: ncdevmem: Run selftest when none of the -s or -c has been
+    provided
+  selftests: ncdevmem: Move ncdevmem under drivers/net/hw
+  selftests: ncdevmem: Add automated test
+
+ .../selftests/drivers/net/hw/.gitignore       |   1 +
+ .../testing/selftests/drivers/net/hw/Makefile |   9 +
+ .../selftests/drivers/net/hw/devmem.py        |  45 +
+ .../selftests/drivers/net/hw/ncdevmem.c       | 786 ++++++++++++++++++
+ tools/testing/selftests/net/.gitignore        |   1 -
+ tools/testing/selftests/net/Makefile          |   8 -
+ tools/testing/selftests/net/ncdevmem.c        | 570 -------------
+ 7 files changed, 841 insertions(+), 579 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/.gitignore
+ create mode 100755 tools/testing/selftests/drivers/net/hw/devmem.py
+ create mode 100644 tools/testing/selftests/drivers/net/hw/ncdevmem.c
+ delete mode 100644 tools/testing/selftests/net/ncdevmem.c
+
+-- 
+2.47.0
+
