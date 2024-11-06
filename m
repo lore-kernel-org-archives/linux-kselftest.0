@@ -1,142 +1,155 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76A818FC79;
-	Wed,  6 Nov 2024 09:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005B0183CD6;
+	Wed,  6 Nov 2024 09:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730884415; cv=none; b=ujbq8zbWbE1NFrNuBKRd9fY2vFtokhSogPTFB/7kia9Vmw4BFC9WhfbWlq1G2WQ3vehZLK5ge5GfDxYo6Td06AZgVxj5xpUbuNqcnO4ZKKy0b+HrTszAC/GsIEVCpQ/ApKOhuFfv2jewmDoRpglcuPS5D4A9QCxpemUlLksnZmQ=
+	t=1730884665; cv=none; b=jCk8pqAnz9BsysjeBGjVWKc0vQeBAE4B1tEOR/KGk9FQnm0ifpbsgV3R43KZbx5c5KXrvPT9ujAjLI5DsegcumfAtVPD5s5O3DNLIG3LdI7EIKC92TF5owF6gWRLyBdrL08xnDoo4REdSgd9nBtonzrAWFluVi76esU/2Zl1slo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730884415; c=relaxed/simple;
-	bh=94jLYejycYOf9QVMSkq6kFYUacAS7FhoLpY6HToocEw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DGr75ng4HdGndexjHLGaMt7wmvZO9RcjbztR7DtefOFRmlUCb7ljJYdbG1698HshOiZrTgLGqdQrWjqcGxTI5HmzrCxVbF8Mm2O36gxqyhV1Aj6yGUifMTtdH6Uixg6yOnFYfUGCPDsuN/v2hLMuB7A0FWDOP9Ez1a9L3WLJ5RE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aT9IYe8Q; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=6QHqFyb3; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aT9IYe8Q; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=6QHqFyb3; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1730884665; c=relaxed/simple;
+	bh=dIAxm1szg0eXxoUrHaRJyEkFiqNB1EbdiqdWK0Q3L7Q=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ctbqCFbbB/3a2AyWMvwsTXqyXsNSxPP8b2vzu7Z6Ua0YoO4QrIB0EeeKjVoXJbEdRcfv3ELekJbfclJMofiEKpkX+iUUP53ecx8+IOengvf1XFwAa6TJWaN4RZJJcB119KhPS7dXwpXmmID2Xn1RQdKnVmNZuRq4/rAxmCiPuPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=fVEYmXbl; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aT9IYe8Q";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="6QHqFyb3";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aT9IYe8Q";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="6QHqFyb3"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 03D2421BEB;
-	Wed,  6 Nov 2024 09:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1730884412; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=55cWaEw1ej/FBoRaobaIvMtc2C188kjtfQDLtG0KL54=;
-	b=aT9IYe8QVUwwtCjLPdxhkcA3l0hG5I4m3Eek8AwTy86/3FhF14Bt1z3cmhZR6Sd4Lpx95+
-	bQZXLyDI5UpMvO4SkxI+JrscO+wFLQtz4xiDfILLzjVGf46Q5BtnHaoarnxsTIfBjGMsP1
-	aHtW7RfGjnNkWej9b4m8vpI/q5oepbg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1730884412;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=55cWaEw1ej/FBoRaobaIvMtc2C188kjtfQDLtG0KL54=;
-	b=6QHqFyb3xAlEL1Td6VbzIC6zu85WfgaWwUSNU0u1+j0FMRJeNwA/tdEf4tDuiVzJIriMD8
-	S8yWQgWYVPx+msCg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1730884412; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=55cWaEw1ej/FBoRaobaIvMtc2C188kjtfQDLtG0KL54=;
-	b=aT9IYe8QVUwwtCjLPdxhkcA3l0hG5I4m3Eek8AwTy86/3FhF14Bt1z3cmhZR6Sd4Lpx95+
-	bQZXLyDI5UpMvO4SkxI+JrscO+wFLQtz4xiDfILLzjVGf46Q5BtnHaoarnxsTIfBjGMsP1
-	aHtW7RfGjnNkWej9b4m8vpI/q5oepbg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1730884412;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=55cWaEw1ej/FBoRaobaIvMtc2C188kjtfQDLtG0KL54=;
-	b=6QHqFyb3xAlEL1Td6VbzIC6zu85WfgaWwUSNU0u1+j0FMRJeNwA/tdEf4tDuiVzJIriMD8
-	S8yWQgWYVPx+msCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3AE0A13736;
-	Wed,  6 Nov 2024 09:13:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id VgjBNzgzK2fgTQAAD6G6ig
-	(envelope-from <ddiss@suse.de>); Wed, 06 Nov 2024 09:13:28 +0000
-Date: Wed, 6 Nov 2024 20:13:19 +1100
-From: David Disseldorp <ddiss@suse.de>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-fsdevel@vger.kernel.org, oe-kbuild-all@lists.linux.dev, Al Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
- kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/9] initramfs_test: kunit tests for initramfs
- unpacking
-Message-ID: <20241106201319.1241bc4c.ddiss@suse.de>
-In-Reply-To: <202411060625.exdzruA8-lkp@intel.com>
-References: <20241104141750.16119-3-ddiss@suse.de>
-	<202411060625.exdzruA8-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="fVEYmXbl"
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4A69HFOL110698;
+	Wed, 6 Nov 2024 03:17:15 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1730884635;
+	bh=7pYI8kQhzLjk8qhIVY25r6ky5/FBxidxa1N2CUq2AxI=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=fVEYmXbltt8Xc7Xm+CpIDL0w0E6bHBXl6InclwWRsf4S6VZdDZB1W+IN1JfI5utqJ
+	 +uiqSYH1wxPcCA31bc9T2sJYI1pr/qM5+JTU+K+Urs6qF+A7iz7SmRWp9T+8M5sp0M
+	 jyR8yG2HS7/v6NlLg9nf1WtP1mGHYL5fcIw2Ndf0=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4A69HFVt016164
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 6 Nov 2024 03:17:15 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 6
+ Nov 2024 03:17:15 -0600
+Received: from fllvsmtp7.itg.ti.com (10.64.40.31) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 6 Nov 2024 03:17:15 -0600
+Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
+	by fllvsmtp7.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4A69HFic081211;
+	Wed, 6 Nov 2024 03:17:15 -0600
+Received: from localhost (danish-tpc.dhcp.ti.com [10.24.69.25])
+	by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 4A69HEcK020781;
+	Wed, 6 Nov 2024 03:17:14 -0600
+From: MD Danish Anwar <danishanwar@ti.com>
+To: <geliang@kernel.org>, <liuhangbin@gmail.com>, <jiri@resnulli.us>,
+        <w-kwok2@ti.com>, <aleksander.lobakin@intel.com>, <lukma@denx.de>,
+        <jan.kiszka@siemens.com>, <diogo.ivo@siemens.com>, <shuah@kernel.org>,
+        <horms@kernel.org>, <pabeni@redhat.com>, <kuba@kernel.org>,
+        <edumazet@google.com>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>
+CC: <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <srk@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros
+	<rogerq@kernel.org>, <danishanwar@ti.com>
+Subject: [PATCH net-next v3 1/4] net: hsr: Add VLAN support
+Date: Wed, 6 Nov 2024 14:47:07 +0530
+Message-ID: <20241106091710.3308519-2-danishanwar@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241106091710.3308519-1-danishanwar@ti.com>
+References: <20241106091710.3308519-1-danishanwar@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -3.30
-X-Spam-Flag: NO
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-[adding kunit lists to cc, see lore link below for context]
+From: WingMan Kwok <w-kwok2@ti.com>
 
-https://lore.kernel.org/linux-fsdevel/20241104141750.16119-3-ddiss@suse.de/
+Add support for creating VLAN interfaces over HSR/PRP interface.
 
-On Wed, 6 Nov 2024 07:04:21 +0800, kernel test robot wrote:
-...
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x0 (section: .data) -> initramfs_test_extract (section: .init.text)
-> >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x30 (section: .data) -> initramfs_test_fname_overrun (section: .init.text)
-> >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x60 (section: .data) -> initramfs_test_data (section: .init.text)
-> >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x90 (section: .data) -> initramfs_test_csum (section: .init.text)
-> >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0xc0 (section: .data) -> initramfs_test_hardlink (section: .init.text)
-> >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0xf0 (section: .data) -> initramfs_test_many (section: .init.text)  
+Signed-off-by: WingMan Kwok <w-kwok2@ti.com>
+Signed-off-by: Murali Karicheri <m-karicheri2@ti.com>
+Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+---
+ net/hsr/hsr_device.c  |  5 -----
+ net/hsr/hsr_forward.c | 19 ++++++++++++++-----
+ 2 files changed, 14 insertions(+), 10 deletions(-)
 
-If I understand correctly, the kunit_case initramfs_test_cases[]
-members can't be flagged __initdata, as they need to be present
-post-init for results queries via debugfs.
+diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+index ebdfd5b64e17..0ca47ebb01d3 100644
+--- a/net/hsr/hsr_device.c
++++ b/net/hsr/hsr_device.c
+@@ -572,11 +572,6 @@ void hsr_dev_setup(struct net_device *dev)
+ 			   NETIF_F_HW_VLAN_CTAG_TX;
+ 
+ 	dev->features = dev->hw_features;
+-
+-	/* VLAN on top of HSR needs testing and probably some work on
+-	 * hsr_header_create() etc.
+-	 */
+-	dev->features |= NETIF_F_VLAN_CHALLENGED;
+ }
+ 
+ /* Return true if dev is a HSR master; return false otherwise.
+diff --git a/net/hsr/hsr_forward.c b/net/hsr/hsr_forward.c
+index b38060246e62..aa6acebc7c1e 100644
+--- a/net/hsr/hsr_forward.c
++++ b/net/hsr/hsr_forward.c
+@@ -280,6 +280,7 @@ static struct sk_buff *hsr_fill_tag(struct sk_buff *skb,
+ 				    struct hsr_port *port, u8 proto_version)
+ {
+ 	struct hsr_ethhdr *hsr_ethhdr;
++	unsigned char *pc;
+ 	int lsdu_size;
+ 
+ 	/* pad to minimum packet size which is 60 + 6 (HSR tag) */
+@@ -290,7 +291,18 @@ static struct sk_buff *hsr_fill_tag(struct sk_buff *skb,
+ 	if (frame->is_vlan)
+ 		lsdu_size -= 4;
+ 
+-	hsr_ethhdr = (struct hsr_ethhdr *)skb_mac_header(skb);
++	pc = skb_mac_header(skb);
++	if (frame->is_vlan)
++		/* This 4-byte shift (size of a vlan tag) does not
++		 * mean that the ethhdr starts there. But rather it
++		 * provides the proper environment for accessing
++		 * the fields, such as hsr_tag etc., just like
++		 * when the vlan tag is not there. This is because
++		 * the hsr tag is after the vlan tag.
++		 */
++		hsr_ethhdr = (struct hsr_ethhdr *)(pc + VLAN_HLEN);
++	else
++		hsr_ethhdr = (struct hsr_ethhdr *)pc;
+ 
+ 	hsr_set_path_id(hsr_ethhdr, port);
+ 	set_hsr_tag_LSDU_size(&hsr_ethhdr->hsr_tag, lsdu_size);
+@@ -368,7 +380,7 @@ struct sk_buff *prp_create_tagged_frame(struct hsr_frame_info *frame,
+ 		return skb_clone(frame->skb_std, GFP_ATOMIC);
+ 	}
+ 
+-	skb = skb_copy_expand(frame->skb_std, 0,
++	skb = skb_copy_expand(frame->skb_std, skb_headroom(frame->skb_std),
+ 			      skb_tailroom(frame->skb_std) + HSR_HLEN,
+ 			      GFP_ATOMIC);
+ 	return prp_fill_rct(skb, frame, port);
+@@ -690,9 +702,6 @@ static int fill_frame_info(struct hsr_frame_info *frame,
+ 	if (frame->is_vlan) {
+ 		vlan_hdr = (struct hsr_vlan_ethhdr *)ethhdr;
+ 		proto = vlan_hdr->vlanhdr.h_vlan_encapsulated_proto;
+-		/* FIXME: */
+-		netdev_warn_once(skb->dev, "VLAN not yet supported");
+-		return -EINVAL;
+ 	}
+ 
+ 	frame->is_from_san = false;
+-- 
+2.34.1
 
-The remaining -Wimplicit-function-declaration reports are all valid.
-I'll fix them in v3.
-
-Thanks, David
