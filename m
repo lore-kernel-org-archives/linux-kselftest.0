@@ -1,97 +1,138 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB1328F1;
-	Thu,  7 Nov 2024 14:12:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA8928F1;
+	Thu,  7 Nov 2024 14:13:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730988722; cv=none; b=sDbBDxKtHU5U2Mx2cpgkyz34L2vLGYxtx0OIcualDBLab2Mu3nIuTweJ5nSGdqzYs6lpTAqXpRcWgJ0WxFMkIY/Y6pW18Uwx64T8s0+tkR1dnKSRg3Akm/T2mowhCNaM5zAtTqMQWnKVvVgNSJ2ONekNrkHf2zHxO7AAbvIkXdQ=
+	t=1730988813; cv=none; b=KYV1aRzjY9LydMRzBJcLv9XCe32j+FJOWEYFhdgO8Hu363RS1dZRr8R02VPaumcEmsKvoAfx9431BK5UkocmfJAbPQfxB4/A+XSX3kkXOispVYbkLa7L390RvtH30cQguBvlJuOGn2el30d8f9ka2KEMLcV920cOO97oFKpNWNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730988722; c=relaxed/simple;
-	bh=uhbUtE9i1AyZBoS14bUm/Sz+IXR+OgXGcf4IyZU5vYQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EPElYADhKDj0k87QyUg7OpJeGGvWj2knAaRq/oVtnQO9Z3yuSn1+CbAqPhcMY8Oy0nw1S+QDaDlXDibdY+PpRo933LQwGLFx50+PFMUPCJminrHUxjTRUeqH60fokJfHuxl06vu7zvCy9sw+KpqwniWwZ6yHtcSsUuqG7MImCQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fk8kwpiP; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1730988813; c=relaxed/simple;
+	bh=sJ935eMUUjHWOSYwNX6SnA/FJrgaus3gC1OXryikwFE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lTwPNtPGccFPMv5ohhFn1KtgyzdRF3yy/CI+mXujcQxVD+N2yd6o3daK7i27i5wZMOr41fnv+p/gTCO0LxyK6NVsbkM5m7IeM6l+LNnQjkUkBv0P2sqvHwSB+16n3p7lAcnVRqW1B5HVOZ4In4C7+ipoYZs4Yo49t1Y47WMEYYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=C8OtgBkg; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fk8kwpiP"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37d6a2aa748so620730f8f.1;
-        Thu, 07 Nov 2024 06:12:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730988719; x=1731593519; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uhbUtE9i1AyZBoS14bUm/Sz+IXR+OgXGcf4IyZU5vYQ=;
-        b=Fk8kwpiPC6MAV+tbVWJv8asz0H+lwNWkLRTykVDTTjeMhMHcL5FgaXqZB6CpOquucS
-         9c7a31bKTJra/4nlltt6JZpGSb+a8veIWObuu7kM2fkG8YDEWtYBjQnJ87hQsuBrzS0S
-         FKjA8w0ltff9FqcbxCmN9AfHYqw/jU6JLBfMq/dbp+rUg8Ut8bL3SFIaXRwHEiJmaYsH
-         IJWEcK8iQZDI2PS+5akpEi5+oRraMYeStIXBwZKmL1SzF3OwAYPU+3TIM3J0L4FreeaU
-         s/xArgnD4w4eqKBjtzyOlOyEOP5YHL4QPApr0oCwPWozhSmLa1ngY8fGamKEgEH0jOFr
-         LHxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730988719; x=1731593519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uhbUtE9i1AyZBoS14bUm/Sz+IXR+OgXGcf4IyZU5vYQ=;
-        b=r8zgNf24RFftqXmVbzUx/ahqPBTuU4S8qZdP3qSeYnlC2DZ280Heuouj/AhMVnNO/c
-         oDE2hbVJLQlwU2Sip0Bkshngk2xwk/9gNmUXntmhXu0pmc/HLEeJ93YIDdh/C7BEljBv
-         Ovvz5+QI4tTo+2KbaShlK2V5V6ldtCjZCRueuyPSwrz+oJ6sB59f1qhyA9nbd4erbrZy
-         S2PQthSEtk/0fl4afGyNwbua4pgohOAGFNMWrDp8oiiGwJhUCTLRBsznskq2dds5vema
-         gEeDY918rSFwCYac3MYdw/Iq0f1EL+QkbX6kyFyzicTVI+cWLEyxLez4HwXb6PFI/eUW
-         sNaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWktucdx5jRJ2aUGZNlOdHGyDMev/ZR186x75+rSkstY4JRlQKWJ/NG+EtT3a+6kOZqRumAF5chxUVrtOAYnvg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTsYIIMlrTZ555nsjq6LnfTYnkl9uaE9/tDPFSLUtY6n+KikIN
-	8pzi/O800utmaOeTHMyn2SaNnUHpyPavoySCNYJmAe0IZF+JadRjVc81ksBke53JBf1gS37marx
-	0PpjYOHf2nQPyF7J5V981nXwHYs4=
-X-Google-Smtp-Source: AGHT+IEXCGr4lM7xLIA8M7+HqoyUFdYEzQ3DCLnst6/U6/FQQrrnZXD3oAiWu1HQXkAPeiRSqXxq/yamqJYBwTeu18w=
-X-Received: by 2002:a5d:64cc:0:b0:374:bd48:fae9 with SMTP id
- ffacd0b85a97d-381c7a4c99bmr19286392f8f.20.1730988719073; Thu, 07 Nov 2024
- 06:11:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="C8OtgBkg"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7E9v9V031401;
+	Thu, 7 Nov 2024 14:10:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=RarTLkoppdvcghdSF
+	0/FsQRpTX7IClGqjn7xbgrGp1U=; b=C8OtgBkg0h6Nyzx8UUqID8repUkG8M1SS
+	L19+/cFln4011u8W+wHLFXRwcsXyuzYHgGO8UrETYHoycKRkFjUKWANs0QkiFpnz
+	BLSSsnKc605TzRlxO8EeZ05Dq9seMDy7xh3E4Uzheaz0Y9p90rNMWEr5R7YKpcIR
+	bFHySkSU054TPt4+EXi2zsUOiqv58ILtOfIxhJaAqVQKcsxTdNi/aGReKatdCOkn
+	pPEcXikJpmy1+jZ1VVNUTF0U0A5a+jPfWK4uCwI3NDW02pMN4eNBvpV7edr/UtGJ
+	1N3Q3IGlcTHFWNqyfuMmTN93TJU5KgkInWKlABkPFQmTqnQ7t8WyA==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42rxmrr4kw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Nov 2024 14:10:39 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7DqQrg012243;
+	Thu, 7 Nov 2024 14:10:38 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 42p14108dv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Nov 2024 14:10:38 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A7EAYkw57213188
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 Nov 2024 14:10:34 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BCC1920040;
+	Thu,  7 Nov 2024 14:10:34 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9A18C2004B;
+	Thu,  7 Nov 2024 14:10:34 +0000 (GMT)
+Received: from darkmoore.boeblingen.de.ibm.com (unknown [9.152.222.253])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  7 Nov 2024 14:10:34 +0000 (GMT)
+From: Christoph Schlameuss <schlameuss@linux.ibm.com>
+To: kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>, schlameuss@linux.ibm.com
+Subject: [PATCH v7 4/5] selftests: kvm: s390: Fix whitespace confusion in ucontrol test
+Date: Thu,  7 Nov 2024 15:10:23 +0100
+Message-ID: <20241107141024.238916-5-schlameuss@linux.ibm.com>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241107141024.238916-1-schlameuss@linux.ibm.com>
+References: <20241107141024.238916-1-schlameuss@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241107133004.7469-1-shaw.leon@gmail.com> <20241107133004.7469-6-shaw.leon@gmail.com>
- <CANn89iLvC0H+eb1q1c9X6M1Cr296oLTWYyBhqTAyGW_BusHA_A@mail.gmail.com>
-In-Reply-To: <CANn89iLvC0H+eb1q1c9X6M1Cr296oLTWYyBhqTAyGW_BusHA_A@mail.gmail.com>
-From: Xiao Liang <shaw.leon@gmail.com>
-Date: Thu, 7 Nov 2024 22:11:24 +0800
-Message-ID: <CABAhCOS8WUqOsPCzQFcgeJbz-mkEV92OVXaH3E1tFe7=HRiuGg@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 5/8] net: ip_gre: Add netns_atomic module parameter
-To: Eric Dumazet <edumazet@google.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Jakub Kicinski <kuba@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Ido Schimmel <idosch@nvidia.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>, 
-	Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Pirko <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ZNmuBy7E-XX0djP_BbmUvuP_3j3reAuN
+X-Proofpoint-GUID: ZNmuBy7E-XX0djP_BbmUvuP_3j3reAuN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 clxscore=1015 mlxscore=0 mlxlogscore=867 lowpriorityscore=0
+ phishscore=0 impostorscore=0 bulkscore=0 suspectscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411070110
 
-On Thu, Nov 7, 2024 at 9:37=E2=80=AFPM Eric Dumazet <edumazet@google.com> w=
-rote:
->
-> On Thu, Nov 7, 2024 at 2:30=E2=80=AFPM Xiao Liang <shaw.leon@gmail.com> w=
-rote:
-> >
-> > If set to true, create device in target netns (when different from
-> > link-netns) without netns change, and use current netns as link-netns
-> > if not specified explicitly.
-> >
->
-> Sorry, module parameters are not going to fly.
+Checkpatch thinks that we're doing a multiplication but we're obviously
+not. Fix 4 instances where we adhered to wrong checkpatch advice.
 
-Sorry, I didn't know that.
+Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+---
+ tools/testing/selftests/kvm/s390x/ucontrol_test.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> Instead, add new rtnetlink attributes ?
+diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+index 68d17b1ab128..71e76337d9dc 100644
+--- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
++++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+@@ -369,7 +369,7 @@ static bool uc_handle_insn_ic(FIXTURE_DATA(uc_kvm) *self)
+  * * fail on codes not expected in the test cases
+  * Returns if interception is handled / execution can be continued
+  */
+-static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
++static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) *self)
+ {
+ 	struct kvm_s390_sie_block *sie_block = self->sie_block;
+ 	struct kvm_run *run = self->run;
+@@ -397,7 +397,7 @@ static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
+ }
+ 
+ /* verify VM state on exit */
+-static bool uc_handle_exit(FIXTURE_DATA(uc_kvm) * self)
++static bool uc_handle_exit(FIXTURE_DATA(uc_kvm) *self)
+ {
+ 	struct kvm_run *run = self->run;
+ 
+@@ -417,7 +417,7 @@ static bool uc_handle_exit(FIXTURE_DATA(uc_kvm) * self)
+ }
+ 
+ /* run the VM until interrupted */
+-static int uc_run_once(FIXTURE_DATA(uc_kvm) * self)
++static int uc_run_once(FIXTURE_DATA(uc_kvm) *self)
+ {
+ 	int rc;
+ 
+@@ -428,7 +428,7 @@ static int uc_run_once(FIXTURE_DATA(uc_kvm) * self)
+ 	return rc;
+ }
+ 
+-static void uc_assert_diag44(FIXTURE_DATA(uc_kvm) * self)
++static void uc_assert_diag44(FIXTURE_DATA(uc_kvm) *self)
+ {
+ 	struct kvm_s390_sie_block *sie_block = self->sie_block;
+ 
+-- 
+2.47.0
 
-It is to control driver behavior at rtnl_ops registration time. I
-think rtnetlink
-attributes are too late for that, maybe? Can't think of a way other than
-module parameters or register separate ops. Any suggestions?
