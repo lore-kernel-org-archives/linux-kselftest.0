@@ -1,112 +1,74 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC34D212EFC;
-	Thu,  7 Nov 2024 14:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6B1168BD;
+	Thu,  7 Nov 2024 14:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730988819; cv=none; b=ExazhsUarq/aLmSV4wxma0HmzUZLsB8VO08cvIX481jEZZWRguvJxzNgC+QqzN0W9Q9po4CXA70w2VNkspkPeRuiNL0dCAAZWkTtqF7jPzdu4yFVn3OF9/+rKOSIycYQ40vW1me7iVngHuucFf6fFihSN0mzvkH1nGQkDxYCOGs=
+	t=1730989975; cv=none; b=UdlsMG7vX+9ONPatAUcromAR5Lg3/KlaMfUrIR40eBSkK2C98KZgrHoEj2Btz2iXYyqPDpxe86+0xxI5KJqqyb0a8y78QKOU2OiowNioWayEwTr+bSytHvJ/3KSHNF3+m8rV3gje2EUn+hzzrEgytLHlHBnLOqei7de5yEpAG54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730988819; c=relaxed/simple;
-	bh=0Akm99fiUjDLQWjgdtQxgIzIU4uZqg4GICm+FUUmUrM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DWfFF2MHgPRMYSzn/Mxj5CW6Vj4INFrV/hNSXvIMNSwg4UK7LBmcAqc7aS/iOya3RGv1hWer++fXBvn2ByHFeOdNg1QtKI71R9oFlTRxQ29dN4QLYqTidg2uRlH0s+BhixTMpgmhJw3d2eVVZ+J70gFjgyirxEDxGo0T1NdWJL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cJw0WTWn; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1730989975; c=relaxed/simple;
+	bh=DvkB/sbaZRLhctzLM3g42ELdV1YVsM1roN6Nkn42Otk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CT2J3HmfQfN9boOX03eMFhez5H5Q9AEcFZH1WFhgAO9fpi2GG6ZQCZz2ElZfYcJlIXrtKfDdHJVuAOCpzOVB4j6XLpoBkvbKOzMDnqLWJTrqrWwnA6LZgRnfqU3qEznA6MfzpYW7f3rZpkE7UlICoiFydtJDRmD/ppWFqybwiLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U4CBsTDQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cJw0WTWn"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7E9ujb031318;
-	Thu, 7 Nov 2024 14:10:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=XCx6W3n9SVzNXJdyU
-	8z+Gfygwq4oHLz88kpgVI2eLc0=; b=cJw0WTWnTuldImspDCWPMNnD86tjqP+JC
-	WE36T9fI+vTc0dVNNIh24SBT9waA/YuOohV9DD2P1A5Hs2fwC2AIOf2x+iOaJPqI
-	RsM68eHsNVkDAbqY4SNfuJaABtq+HmRg++TvCKYrcQ1BSDfaptzaivVK2HIjlFLf
-	3nhCcMJnThw1gKKIC1cxUD0QK6Sg1oI1lFPv3Pecn4/n1VF0fyy88RApV4N2XOgu
-	7g0JYGuOlwdpVMhMDOVZtoUEj78OupYlkhY7WUpVxs+4v1ucJmNtGOZMD56zdh/G
-	OdU4WT3DLQtElcpkQAhcfzmgc/5xZSJxgg94POQddmAGcu2PrJMuA==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42rxmrr4m0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Nov 2024 14:10:39 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7CdeHF024242;
-	Thu, 7 Nov 2024 14:10:38 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42nxsyydvu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Nov 2024 14:10:38 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A7EAZRV47186370
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 7 Nov 2024 14:10:35 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ED8B720040;
-	Thu,  7 Nov 2024 14:10:34 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C0F3720049;
-	Thu,  7 Nov 2024 14:10:34 +0000 (GMT)
-Received: from darkmoore.boeblingen.de.ibm.com (unknown [9.152.222.253])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  7 Nov 2024 14:10:34 +0000 (GMT)
-From: Christoph Schlameuss <schlameuss@linux.ibm.com>
-To: kvm@vger.kernel.org
-Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>, schlameuss@linux.ibm.com
-Subject: [PATCH v7 5/5] selftests: kvm: s390: correct IP.b length in uc_handle_sieic debug output
-Date: Thu,  7 Nov 2024 15:10:24 +0100
-Message-ID: <20241107141024.238916-6-schlameuss@linux.ibm.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241107141024.238916-1-schlameuss@linux.ibm.com>
-References: <20241107141024.238916-1-schlameuss@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4CBsTDQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 741A2C4CED0;
+	Thu,  7 Nov 2024 14:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730989974;
+	bh=DvkB/sbaZRLhctzLM3g42ELdV1YVsM1roN6Nkn42Otk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=U4CBsTDQ4hYvaI45hMbB3EXSH3dlqUr6xzbauezqLMIv2EjJw2wUIbhj3OxDDleYr
+	 hANQijAsuTpmNiWH6OgW5jL6xMn1sIIGSxnLpBEdkY3dxzZvNjNBomWPqWFTI+wm1y
+	 lVGfbDt9mGsg/gRd3glbvUvFxYiUMWbzPkLZ98Tc6j2IN4qi/FogRRbMFtsetjQkKY
+	 O5RDoiGnWCWbbvfoalTOWLG0oknV/MXE6lMXKBxa6HVXd6bibkTplyCbzJA2xcRea3
+	 jTwCbtezdRkCxiwGbT7KjQFWBfVgX4Le4KMAXouiFJnWo3cGFGmW71fFNmauzMoT7/
+	 m/voWpidyFxnQ==
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6cbcc2bd7fcso6243596d6.1;
+        Thu, 07 Nov 2024 06:32:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU2WwE8TvqjMEkBE2KymHyxhnjHg2IqdFXpXLPiuzeCntvs0tCe12k6PHiJvOXvlIJzU3o=@vger.kernel.org, AJvYcCUbAL/fGfNNpfLzNpuJMnvgDXSIQzYSJjhBKV8pg3dBapGNQY3wBYXcT74EXUfQi5JpDpWRuACCaP28omPxWWX2@vger.kernel.org, AJvYcCV+JFfC6b67m61OVK63G0o8unn/H4NctW+q7wNqrpzAdrKeduC1qax6LOyktIGkEvjpCQenrL4FrCqhubN1@vger.kernel.org, AJvYcCVjwANMpRBTJ03sB6q471BtfyENGcHhJRTUhRm1RGN5O2dE3wN23pOFhtJ2vB2mlNN11+JsAZ04@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIQ+fkWgJZQmEoiRjzyDIGayE1v104RltmjHDACzH6xn8OE5bp
+	XpAEdcptU44iPPOBdnTFCG4bGQ3Iuxe0B3YonjyeuNDjVQPel50/eOmRM+RhQIQ/FFHT4Bu+c/o
+	p57gHUSqN1aL4sUSMh0eaWeqIGHU=
+X-Google-Smtp-Source: AGHT+IHUCLtFQ8IuQTRLh1fcgLhAN5eLbq9UIfP6whxl0V14vWJHVvz6l3hhBZU79uygYdnjqGmoYxDIzrGp2K4+w/k=
+X-Received: by 2002:a05:6214:4198:b0:6cb:ef22:6274 with SMTP id
+ 6a1803df08f44-6d39cf9cdcemr1411926d6.3.1730989973620; Thu, 07 Nov 2024
+ 06:32:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: izty_Qe93jeS9L-krbVGxPLrytEKAD27
-X-Proofpoint-GUID: izty_Qe93jeS9L-krbVGxPLrytEKAD27
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 clxscore=1015 mlxscore=0 mlxlogscore=620 lowpriorityscore=0
- phishscore=0 impostorscore=0 bulkscore=0 suspectscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411070110
+References: <20240927131355.350918-1-bjorn@kernel.org> <172835823300.66789.3704854116445399222.git-patchwork-notify@kernel.org>
+ <87bjyvpa6h.fsf@all.your.base.are.belong.to.us> <CAEf4BzZbq9OwSGi4pdb5_q8YkErfFiQFKYXg3g1rjpdejafx+Q@mail.gmail.com>
+In-Reply-To: <CAEf4BzZbq9OwSGi4pdb5_q8YkErfFiQFKYXg3g1rjpdejafx+Q@mail.gmail.com>
+From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Date: Thu, 7 Nov 2024 15:32:42 +0100
+X-Gmail-Original-Message-ID: <CAJ+HfNjiuhOyw2r9+e=CRMXrq_NjP5Sq4oT1tc_vhTZ_HkY7zQ@mail.gmail.com>
+Message-ID: <CAJ+HfNjiuhOyw2r9+e=CRMXrq_NjP5Sq4oT1tc_vhTZ_HkY7zQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] libbpf: Add missing per-arch include path
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: patchwork-bot+netdevbpf@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
+	mykolal@fb.com, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	bjorn@rivosinc.com, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	charlie@rivosinc.com, Andreas Schwab <schwab@suse.de>, Anand Moon <linux.amoon@gmail.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The length of the interrupt parameters (IP) are:
-a: 2 bytes
-b: 4 bytes
+On Wed, 6 Nov 2024 at 23:04, Andrii Nakryiko <andrii.nakryiko@gmail.com> wr=
+ote:
+> I'm sorry, but unfortunately it's too late now to move those patches
+> as it's now been more than a month since they landed. For the future,
+> please let us know ASAP if you think patches were misrouted. I think
+> we are stuck with the need to do a stable backport for these, sorry.
 
-Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
----
- tools/testing/selftests/kvm/s390x/ucontrol_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yeah, realize that it's really late. Thanks for getting back, and
+noted for the future.
 
-diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-index 71e76337d9dc..549021ada4d2 100644
---- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-+++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-@@ -375,7 +375,7 @@ static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) *self)
- 	struct kvm_run *run = self->run;
- 
- 	/* check SIE interception code */
--	pr_info("sieic: 0x%.2x 0x%.4x 0x%.4x\n",
-+	pr_info("sieic: 0x%.2x 0x%.4x 0x%.8x\n",
- 		run->s390_sieic.icptcode,
- 		run->s390_sieic.ipa,
- 		run->s390_sieic.ipb);
--- 
-2.47.0
-
+Cheers,
+Bj=C3=B6rn
