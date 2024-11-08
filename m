@@ -1,190 +1,298 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C2C1CFEC0;
-	Fri,  8 Nov 2024 09:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9D21D0B8A;
+	Fri,  8 Nov 2024 09:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731056475; cv=none; b=p8Fkzp38drZLAGiZkogkwpVtGkATVsg5V/WGCaWxGHJhfLIQsxruF4IreSczqs8ta9otmI9Yq+WX7Jit0aYkMXH9SElcykdjQdlDTslFL03Fch9eeT35w5/YDi7D6XLRQv0xqvQcSsR3uisogVqEZx5inqNS7Z7IEeHWH1ZSBrM=
+	t=1731057419; cv=none; b=ODhL1RvHq82+NlnPUTBbKIQzM+d5sf5I/d5Gxl/4tB4mGnwzO9G/qLO/OxplkePQKDYoumycQ3uUs72jTkvadWZeVhpeSgE56V4RNBzAahXNJm//JWABMghOyWTBYqMLSUG0yFgFdHqYrBZsj79J3om6t/Qrb9Gcj7RPT3sEFTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731056475; c=relaxed/simple;
-	bh=r7dhSFhEQTew+9UGW/kckZn/abgjeJ3S6PdMpu3oaMQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lX8Fd6nkACaq1myDaMjze7HKa9iZ7g6QAld68W4D+o2DWBUy3cHQhtaWp2YkQPw83yXtNFOmLFaelwfRpPx2ONEjJZ7wrzcL58Jvkh6aFVlLH+gbNziKSr/5R3C4Sy8xz+lwd+yqpAj8yKqdbavyWLRokoOJzPhfdXZmR/MnHT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rlysotjo; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731057419; c=relaxed/simple;
+	bh=fJLEPWOkCvP1z3IZrZstjDvjQxvdBwlSAqrPMvkxiR8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VV8Mwb2g74aXOM6Y/MhOpCZzYdbQRWIxtemDMkLkPSG8YbJTuu7GDElwWhwcnmDcZQx7Rws5NP0l3eGFEJ3YDhePygJ1uLnxiw2bdu7I5LspoRcatcJn7tdf4ExcsPc8gFnTsd5QUhxrbyQN5nVwWEMHrIQ+i5u61KYmALFHEzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LvFdkqRf; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rlysotjo"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20cd76c513cso17959285ad.3;
-        Fri, 08 Nov 2024 01:01:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731056473; x=1731661273; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B6cfQLZyY3ukfMaKhn8AcRbL5Ti2ytAzkKnIriORiIs=;
-        b=Rlysotjoj6eHIsovMngZ6xkAvzX7h/i4Rmd2dEiyt2JC9avqPq82dDml8cGmEpLFwR
-         opn1i+GxlRPjrdaVYo4J9tQq3zgvRx74ghBmi8l2Ds1tf6UY5462cjTp58YsNuRa/wxU
-         B0IbVCg4P9TStPGv+IncMrllC/mmBmBEmyU3GLe85wio4Z+ddsbFCmm0D0P6OKbmdFb0
-         4ryKUA544HN5LsTXaJy1AN/YOgMi6hABjIybgN7g4LUaoSaDygBz8qmqI/6dnS6m5P61
-         GH0rDodchf7SHUdMixsUo7zyRC1jB9b9eKg4wYKzroo2k8P9ERbVbDtwTbYHBdVovnCv
-         M6Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731056473; x=1731661273;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B6cfQLZyY3ukfMaKhn8AcRbL5Ti2ytAzkKnIriORiIs=;
-        b=EyK58+2v6fZHDrJsG19kzWJkE4r1WtOdb6fyq7yOOK3QMKzHjucYeTfVzsvYFG0cdm
-         kXW3MR7f0ztXkdzcL9WmekhPhWmOdD1v7q6tv7NBAacrXDc2687pRQvJxTIky+e6jRlA
-         0ItMCxAWeNOgrRaR7Hy+jIGXAk2PTYR+gjPaco1iBLp0MbFjxZEhQqbLcLkQ1Q3Fo5HN
-         //kcKh4mnmO50JCQlbAbkGutEvCtjqTFCqHW6dRteurPACTgUWBoFsiSqmMr/U5DTJS1
-         Lh96wYmriRQBPQJpP0b/GMVnLA0sBj84w6fuNPl12LfCAOcQkh4DAnCECntcdUjDYgr6
-         xtgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+hbD+WYFeOPWSWQsxQslC7ut7Zz3NPMjwdRKkUTEfWsSpiGgzez/I3uHNE5MFeBEZ9PjAkwljvC4=@vger.kernel.org, AJvYcCUD+zVYkM29b3pu/uaSB4h9ukz7tlOqAgN+Y+mu5/Q2d1N7ZQkLjT1dVS35+kFDPrjqxRFh4IXY75VAwuSz@vger.kernel.org, AJvYcCV/cLkshYUSkOGTrVbdSS5kcQ5HHhMp/0gG9Z+t1pU1kyRjxTGF6wt/lg8SYJzHQR+l/yfMM0oJAtU6hudAptBV@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdNyqoyKNtbbNBsSMKOe1n0c+CeqgTtrmAnT7ylkM0YxskvlQv
-	cp3eWijwD8EFsdEPBgirvhqmL+DvZHLWMmFYP4VBEs3FAbSLIZXQ
-X-Google-Smtp-Source: AGHT+IFAKsAR11eiAB06tJVCWRmKkiTYy+qwV59/n1Yu3J0B6yv38u/J2j1MdEsTHqkgJx1Aehln/A==
-X-Received: by 2002:a17:903:298c:b0:20c:ee32:759f with SMTP id d9443c01a7336-211835d8bc0mr26836995ad.39.1731056473362;
-        Fri, 08 Nov 2024 01:01:13 -0800 (PST)
-Received: from archie.me ([103.124.138.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177ddf0f5sm25712355ad.79.2024.11.08.01.01.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2024 01:01:12 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id 63F6841E4B82; Fri, 08 Nov 2024 16:01:10 +0700 (WIB)
-Date: Fri, 8 Nov 2024 16:01:10 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, joro@8bytes.org,
-	suravee.suthikulpanit@amd.com, will@kernel.org,
-	robin.murphy@arm.com, dwmw2@infradead.org, shuah@kernel.org,
-	iommu@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	baolu.lu@linux.intel.com, eric.auger@redhat.com,
-	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
-	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
-	yi.l.liu@intel.com, aik@amd.com, zhangfei.gao@linaro.org,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v7 13/13] Documentation: userspace-api: iommufd: Update
- vIOMMU
-Message-ID: <Zy3TVlLKAg8QM9yP@archie.me>
-References: <cover.1730836219.git.nicolinc@nvidia.com>
- <7e4302064e0d02137c1b1e139342affc0485ed3f.1730836219.git.nicolinc@nvidia.com>
- <ZywQP3_TpdttuCy8@archie.me>
- <ZywZcSidYCWkJgrw@Asurada-Nvidia>
- <ZywyEUmL4HvM8B9v@archie.me>
- <Zyw8OUTLrG3Yx+Yx@Asurada-Nvidia>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LvFdkqRf"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A889uVO020745;
+	Fri, 8 Nov 2024 09:16:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=BabBlwg3HFRgOZHlb
+	LgtwxjDSS4kHfDhWBZRVYlpFrQ=; b=LvFdkqRf+u8unTuE84rPcGEDs2/z0rUxT
+	D8FS7whpHvI+WPL4Ss0PPSF2zmjyryrBSbJ19CoGNxak3qWPrxbNg7nwF0vOGmBJ
+	KRP1iIBjWdX1kjPVAXU5k6AAvmHGJfA3M3z9A3hG5fu+zx+07TpE2WjH/q4nCPLJ
+	3BsemZig2Bof4uX2YxqBPAmywuGMzErm4uUdNX1SaPTvpNNRrUrCdoFqFN2dwTsG
+	nUoC1Da6N8CH+6d2Vo9233ZZz9Z1Y81+WBrART7E3QFfvFBpwd5LHo1HPQUfRkXb
+	1Zv9Cq8bIemD9qaDWwpcI/AOpUhhzR5rzRBwk1K0fpSZ82Jzv5W0g==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42sew0g7sj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Nov 2024 09:16:52 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7NjEIY019625;
+	Fri, 8 Nov 2024 09:16:52 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 42p0mj9upq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Nov 2024 09:16:52 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A89GmHr33555106
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 8 Nov 2024 09:16:48 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 880472004B;
+	Fri,  8 Nov 2024 09:16:48 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D89CE20049;
+	Fri,  8 Nov 2024 09:16:47 +0000 (GMT)
+Received: from darkmoore.ibmuc.com (unknown [9.179.25.81])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  8 Nov 2024 09:16:47 +0000 (GMT)
+From: Christoph Schlameuss <schlameuss@linux.ibm.com>
+To: kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>, schlameuss@linux.ibm.com
+Subject: [PATCH v7 2/5] selftests: kvm: s390: Add uc_skey VM test case
+Date: Fri,  8 Nov 2024 10:16:20 +0100
+Message-ID: <20241108091620.289406-1-schlameuss@linux.ibm.com>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241107141024.238916-3-schlameuss@linux.ibm.com>
+References: <20241107141024.238916-3-schlameuss@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="1FskY10utNP/LXKg"
-Content-Disposition: inline
-In-Reply-To: <Zyw8OUTLrG3Yx+Yx@Asurada-Nvidia>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: N723-qSEUFLPuwgD73VD3S4k0pZZ7BVt
+X-Proofpoint-ORIG-GUID: N723-qSEUFLPuwgD73VD3S4k0pZZ7BVt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 mlxscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
+ mlxlogscore=989 malwarescore=0 phishscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411080074
 
+Add a test case manipulating s390 storage keys from within the ucontrol
+VM.
 
---1FskY10utNP/LXKg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Storage key instruction (ISKE, SSKE and RRBE) intercepts and
+Keyless-subset facility are disabled on first use, where the skeys are
+setup by KVM in non ucontrol VMs.
 
-On Wed, Nov 06, 2024 at 08:04:09PM -0800, Nicolin Chen wrote:
-> On Thu, Nov 07, 2024 at 10:20:49AM +0700, Bagas Sanjaya wrote:
-> > On Wed, Nov 06, 2024 at 05:35:45PM -0800, Nicolin Chen wrote:
-> > > On Thu, Nov 07, 2024 at 07:56:31AM +0700, Bagas Sanjaya wrote:
-> > > > On Tue, Nov 05, 2024 at 12:04:29PM -0800, Nicolin Chen wrote:
-> > > > > With the introduction of the new object and its infrastructure, u=
-pdate the
-> > > > > doc to reflect that and add a new graph.
-> > > > >=20
-> > > > > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> > > > > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> > > > > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> > > > > ---
-> > > > >  Documentation/userspace-api/iommufd.rst | 69 +++++++++++++++++++=
-+++++-
-> > > > >  1 file changed, 68 insertions(+), 1 deletion(-)
-> > > > >=20
-> > > > > diff --git a/Documentation/userspace-api/iommufd.rst b/Documentat=
-ion/userspace-api/iommufd.rst
-> > > > > index 2deba93bf159..a8b7766c2849 100644
-> > > > > --- a/Documentation/userspace-api/iommufd.rst
-> > > > > +++ b/Documentation/userspace-api/iommufd.rst
-> > > > > @@ -63,6 +63,37 @@ Following IOMMUFD objects are exposed to users=
-pace:
-> > > > >    space usually has mappings from guest-level I/O virtual addres=
-ses to guest-
-> > > > >    level physical addresses.
-> > > > > =20
-> > > > > +- IOMMUFD_OBJ_VIOMMU, representing a slice of the physical IOMMU=
- instance,
-> > > > > +  passed to or shared with a VM. It may be some HW-accelerated v=
-irtualization
-> > > > > +  features and some SW resources used by the VM. For examples:
-> > > > > +  * Security namespace for guest owned ID, e.g. guest-controlled=
- cache tags
-> > > > > +  * Non-device-affiliated event reporting, e.g. invalidation que=
-ue errors
-> > > > > +  * Access to a sharable nesting parent pagetable across physica=
-l IOMMUs
-> > > > > +  * Virtualization of various platforms IDs, e.g. RIDs and others
-> > > > > +  * Delivery of paravirtualized invalidation
-> > > > > +  * Direct assigned invalidation queues
-> > > > > +  * Direct assigned interrupts
-> > > >=20
-> > > > The bullet list above is outputted in htmldocs build as long-runnin=
-g paragraph
-> > > > instead.
-> > >=20
-> > > Oh, I overlooked this list.
-> > >=20
-> > > Would the following change be okay?
-> > >=20
-> > > -------------------------------------------------
-> > > diff --git a/Documentation/userspace-api/iommufd.rst b/Documentation/=
-userspace-api/iommufd.rst
-> > > index 0ef22b3ca30b..011cbc71b6f5 100644
-> > > --- a/Documentation/userspace-api/iommufd.rst
-> > > +++ b/Documentation/userspace-api/iommufd.rst
-> > > @@ -68,2 +68,3 @@ Following IOMMUFD objects are exposed to userspace:
-> > >    features and some SW resources used by the VM. For examples:
-> > > +
-> > >    * Security namespace for guest owned ID, e.g. guest-controlled cac=
-he tags
-> > > @@ -75,2 +76,3 @@ Following IOMMUFD objects are exposed to userspace:
-> > >    * Direct assigned interrupts
-> > > +
-> > >    Such a vIOMMU object generally has the access to a nesting parent =
-pagetable
-> > > -------------------------------------------------
-> > >=20
-> > > The outputted html is showing a list with this.
-> >=20
-> > Yup, that's right!
->=20
-> Thank you! Would it be possible for you to give a Reviewed-by,
-> given the condition of squashing this diff?
+Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+---
 
-Alright, here it goes...
+Resending this part as I did slightly mess up the rebase.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ .../selftests/kvm/include/s390x/processor.h   |   6 +
+ .../selftests/kvm/s390x/ucontrol_test.c       | 145 +++++++++++++++++-
+ 2 files changed, 149 insertions(+), 2 deletions(-)
 
---=20
-An old man doll... just what I always wanted! - Clara
+diff --git a/tools/testing/selftests/kvm/include/s390x/processor.h b/tools/testing/selftests/kvm/include/s390x/processor.h
+index 481bd2fd6a32..33fef6fd9617 100644
+--- a/tools/testing/selftests/kvm/include/s390x/processor.h
++++ b/tools/testing/selftests/kvm/include/s390x/processor.h
+@@ -32,4 +32,10 @@ static inline void cpu_relax(void)
+ 	barrier();
+ }
+ 
++/* Get the instruction length */
++static inline int insn_length(unsigned char code)
++{
++	return ((((int)code + 64) >> 7) + 1) << 1;
++}
++
+ #endif
+diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+index 3e649b12a0b9..ad95087cc74c 100644
+--- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
++++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+@@ -79,6 +79,33 @@ asm("test_mem_asm:\n"
+ 	"	j	0b\n"
+ );
+ 
++/* Test program manipulating storage keys */
++extern char test_skey_asm[];
++asm("test_skey_asm:\n"
++	"xgr	%r0, %r0\n"
++
++	"0:\n"
++	"	ahi	%r0,1\n"
++	"	st	%r1,0(%r5,%r6)\n"
++
++	"	iske	%r1,%r6\n"
++	"	ahi	%r0,1\n"
++	"	diag	0,0,0x44\n"
++
++	"	sske	%r1,%r6\n"
++	"	xgr	%r1,%r1\n"
++	"	iske	%r1,%r6\n"
++	"	ahi	%r0,1\n"
++	"	diag	0,0,0x44\n"
++
++	"	rrbe	%r1,%r6\n"
++	"	iske	%r1,%r6\n"
++	"	ahi	%r0,1\n"
++	"	diag	0,0,0x44\n"
++
++	"	j	0b\n"
++);
++
+ FIXTURE(uc_kvm)
+ {
+ 	struct kvm_s390_sie_block *sie_block;
+@@ -298,8 +325,50 @@ static void uc_handle_exit_ucontrol(FIXTURE_DATA(uc_kvm) *self)
+ 	}
+ }
+ 
+-/* verify SIEIC exit
++/*
++ * Handle the SIEIC exit
+  * * fail on codes not expected in the test cases
++ * Returns if interception is handled / execution can be continued
++ */
++static void uc_skey_enable(FIXTURE_DATA(uc_kvm) *self)
++{
++	struct kvm_s390_sie_block *sie_block = self->sie_block;
++
++	/* disable KSS */
++	sie_block->cpuflags &= ~CPUSTAT_KSS;
++	/* disable skey inst interception */
++	sie_block->ictl &= ~(ICTL_ISKE | ICTL_SSKE | ICTL_RRBE);
++}
++
++/*
++ * Handle the instruction intercept
++ * Returns if interception is handled / execution can be continued
++ */
++static bool uc_handle_insn_ic(FIXTURE_DATA(uc_kvm) *self)
++{
++	struct kvm_s390_sie_block *sie_block = self->sie_block;
++	int ilen = insn_length(sie_block->ipa >> 8);
++	struct kvm_run *run = self->run;
++
++	switch (run->s390_sieic.ipa) {
++	case 0xB229: /* ISKE */
++	case 0xB22b: /* SSKE */
++	case 0xB22a: /* RRBE */
++		uc_skey_enable(self);
++
++		/* rewind to reexecute intercepted instruction */
++		run->psw_addr = run->psw_addr - ilen;
++		pr_info("rewind guest addr to 0x%.16llx\n", run->psw_addr);
++		return true;
++	default:
++		return false;
++	}
++}
++
++/*
++ * Handle the SIEIC exit
++ * * fail on codes not expected in the test cases
++ * Returns if interception is handled / execution can be continued
+  */
+ static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
+ {
+@@ -315,7 +384,10 @@ static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
+ 	case ICPT_INST:
+ 		/* end execution in caller on intercepted instruction */
+ 		pr_info("sie instruction interception\n");
+-		return false;
++		return uc_handle_insn_ic(self);
++	case ICPT_KSS:
++		uc_skey_enable(self);
++		return true;
+ 	case ICPT_OPEREXC:
+ 		/* operation exception */
+ 		TEST_FAIL("sie exception on %.4x%.8x", sie_block->ipa, sie_block->ipb);
+@@ -472,4 +544,73 @@ TEST_F(uc_kvm, uc_gprs)
+ 	ASSERT_EQ(1, sync_regs->gprs[0]);
+ }
+ 
++TEST_F(uc_kvm, uc_skey)
++{
++	struct kvm_s390_sie_block *sie_block = self->sie_block;
++	struct kvm_sync_regs *sync_regs = &self->run->s.regs;
++	u64 test_vaddr = VM_MEM_SIZE - (SZ_1M / 2);
++	struct kvm_run *run = self->run;
++	const u8 skeyvalue = 0x34;
++
++	/* copy test_skey_asm to code_hva / code_gpa */
++	TH_LOG("copy code %p to vm mapped memory %p / %p",
++	       &test_skey_asm, (void *)self->code_hva, (void *)self->code_gpa);
++	memcpy((void *)self->code_hva, &test_skey_asm, PAGE_SIZE);
++
++	/* set register content for test_skey_asm to access not mapped memory */
++	sync_regs->gprs[1] = skeyvalue;
++	sync_regs->gprs[5] = self->base_gpa;
++	sync_regs->gprs[6] = test_vaddr;
++	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
++
++	/* DAT disabled + 64 bit mode */
++	run->psw_mask = 0x0000000180000000ULL;
++	run->psw_addr = self->code_gpa;
++
++	ASSERT_EQ(0, uc_run_once(self));
++	ASSERT_EQ(true, uc_handle_exit(self));
++	ASSERT_EQ(1, sync_regs->gprs[0]);
++
++	/* ISKE */
++	ASSERT_EQ(0, uc_run_once(self));
++
++	/*
++	 * Bail out and skip the test after uc_skey_enable was executed but iske
++	 * is still intercepted. Instructions are not handled by the kernel.
++	 * Thus there is no need to test this here.
++	 */
++	TEST_ASSERT_EQ(0, sie_block->cpuflags & CPUSTAT_KSS);
++	TEST_ASSERT_EQ(0, sie_block->ictl & (ICTL_ISKE | ICTL_SSKE | ICTL_RRBE));
++	TEST_ASSERT_EQ(KVM_EXIT_S390_SIEIC, self->run->exit_reason);
++	TEST_ASSERT_EQ(ICPT_INST, sie_block->icptcode);
++	TEST_REQUIRE(sie_block->ipa != 0xb229);
++
++	/* ISKE contd. */
++	ASSERT_EQ(false, uc_handle_exit(self));
++	ASSERT_EQ(2, sync_regs->gprs[0]);
++	/* assert initial skey (ACC = 0, R & C = 1) */
++	ASSERT_EQ(0x06, sync_regs->gprs[1]);
++	uc_assert_diag44(self);
++
++	/* SSKE + ISKE */
++	sync_regs->gprs[1] = skeyvalue;
++	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
++	ASSERT_EQ(0, uc_run_once(self));
++	ASSERT_EQ(false, uc_handle_exit(self));
++	ASSERT_EQ(3, sync_regs->gprs[0]);
++	ASSERT_EQ(skeyvalue, sync_regs->gprs[1]);
++	uc_assert_diag44(self);
++
++	/* RRBE + ISKE */
++	sync_regs->gprs[1] = skeyvalue;
++	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
++	ASSERT_EQ(0, uc_run_once(self));
++	ASSERT_EQ(false, uc_handle_exit(self));
++	ASSERT_EQ(4, sync_regs->gprs[0]);
++	/* assert R reset but rest of skey unchanged */
++	ASSERT_EQ(skeyvalue & 0xfa, sync_regs->gprs[1]);
++	ASSERT_EQ(0, sync_regs->gprs[1] & 0x04);
++	uc_assert_diag44(self);
++}
++
+ TEST_HARNESS_MAIN
+-- 
+2.47.0
 
---1FskY10utNP/LXKg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZy3TVgAKCRD2uYlJVVFO
-owxHAQDaL5k6OGmeg6OIUkQWv58q/7TdrLW4R+pXT2qiFeOTVgEAxgUGl1Wm834W
-z966YlZs2fScS9LRewetFnpFHRzY7gU=
-=wjrM
------END PGP SIGNATURE-----
-
---1FskY10utNP/LXKg--
