@@ -1,97 +1,152 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38DF114B96E;
-	Sun, 10 Nov 2024 08:28:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4366A13C82E;
+	Sun, 10 Nov 2024 11:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731227302; cv=none; b=AroEu+kVgqG9oqjDXtDT1qd0JYEsNqCXJEeHprCOxZYpTu7+CUb1EREw/eBJwCLaZaB1v2f7bn2PMIvXxShVeK32imt4zFU+2VkccoSwXgYUK7GjWHwKWez9ObIHwLKhAWZCjohRZmCnFFzt0cTWgGSgofnH3h1a/6fEmuKb2jI=
+	t=1731238130; cv=none; b=c+zhV7g1L+2sDeXqhyb0MtDTyswtyV7QgM3WF/b2HhfX2LNZgfdBW51BIsUJRxBqST5WutnFJZ/GQrmAKDnDilptzl/uYH5ONvR42NLDPIA3iiskkPG7kU5i+WuBROESdJvclhbAoq10KWDtmALDvLf7gec4NjmJixvWgKPROqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731227302; c=relaxed/simple;
-	bh=npwNU/+kTkMYOInPRZ5Taty5zOdr26g5+W8368VaIWk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S3ixGlkGhUXIF3qgm5F7fOMOA7zgEkXlQGj0BbR4BYo006zm0kDKPtAenSOstY4vu21NNOHabCkzIjOH86t6IphF/9v63ULM124C94nybxqNSFUY2YEswqMh2rUCHESWBB02ZwB0S79OTqE7SPs4XkzYIdadAOsv452JekBwhu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=dj8h395J; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1731238130; c=relaxed/simple;
+	bh=2065ZepCc8TmmwTzDyEJlb10FhFkTwoAsEpqw2WZ010=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fEFaaRDEaNNhdkNKkyEmtRa02oCqri+NnTdqHveMKUFUkfRa3lHuQQYCDzsg55wQPAwEmqaUFKMYCnjY71dqf6Z4o5lDYFvLkgvbvgsBB8scS3N+zvCL/gHHOQ2cs1NUlSKdh+wzyakqfB4irnO4j5hcgOorbzVmFCqqPHKHlFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org; spf=none smtp.mailfrom=idosch.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=f2q4eROq; arc=none smtp.client-ip=202.12.124.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=idosch.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="dj8h395J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=Pvdr3
-	PrZmxeneufgxTf3r/s5KDkayI7dD4sj9/OZOUY=; b=dj8h395JuZ0wnssstEkaX
-	DwMVlVXbTFJZNk8Ou8T6lXKQS54pxHWvqbAaiMh15dNUW/8oLKO25CFdYzQsOGSe
-	XH0R0d6WUSCIVecQW8Dym0wxnvnOfkyGscWeOnhlVq6JGSNCEdJLTxjkSiuSD4If
-	FHa2A17jb6IcUZKTu5fvAU=
-Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3_zwRbjBnO5BvEQ--.51752S2;
-	Sun, 10 Nov 2024 16:26:02 +0800 (CST)
-From: Jiayuan Chen <mrpre@163.com>
-To: martin.lau@linux.dev,
-	edumazet@google.com,
-	jakub@cloudflare.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	horms@kernel.org,
-	daniel@iogearbox.net
-Cc: mykolal@fb.com,
-	ast@kernel.org,
-	kpsingh@kernel.org,
-	jolsa@kernel.org,
-	eddyz87@gmail.com,
-	shuah@kernel.org,
-	sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org,
-	haoluo@google.com,
-	song@kernel.org,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	mhal@rbox.co,
-	yonghong.song@linux.dev,
-	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v3 0/2] bpf: fix recursive lock and add test
-Date: Sun, 10 Nov 2024 16:24:50 +0800
-Message-ID: <20241110082452.40415-1-mrpre@163.com>
-X-Mailer: git-send-email 2.43.5
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="f2q4eROq"
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 094092540105;
+	Sun, 10 Nov 2024 06:28:47 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Sun, 10 Nov 2024 06:28:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1731238126; x=1731324526; bh=7taAjRSS2x+xLAe/qHIkb1U6ykRJGqjh1dk
+	T+5MQurM=; b=f2q4eROqBjCEAG3rcap/B6ffM4ntI786WtDxHYS1RTlugh4pDom
+	BY3jr7/U/KX+uf44JhPS6rHI9Lnk1CC28fD8JJsYS9lRfyjIvgVNbr/HMr30NdkW
+	ZX6wdTh9jHRNak4tx8CmNm24lj6Dn+qcOu61Sot11wgCygskUGr/AXFeMmZJXhWN
+	Nx1kJbDLy7THadO/mtgPc6WhkIDYwSevKPRihpujaCuXm35v0B8BGwt+DpTjGE9G
+	uax8NMU9xWZzA/NDCYiEpoppkiCjUlbKOzq4OkjppxIweVb76Jq+zzCckK+ZgjHp
+	MXXXkvGjiNHd49vYeQAVNR5xDdLEXnRkzDw==
+X-ME-Sender: <xms:7ZgwZ1kNQnSEcCrYhmXeJeFfhpAAFfAg7udihNyGnyriqQvDrdz8JA>
+    <xme:7ZgwZw3BH5xJbV7dKiPu5I8HF1Cf1PVErhTTm_qtUr0EFXdxnc63o49VcxEj-lAR-
+    kbxH5ccaUTMyVE>
+X-ME-Received: <xmr:7ZgwZ7o4UzbNxrKE3BCQxC32FlIRIeM41eEHgfIPA_9CnJKdthzz0f9HB5z5>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddruddtgddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuf
+    fkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgthhhimhhmvghluceo
+    ihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvghrnhepvddufeevke
+    ehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeggefhnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughosh
+    gthhdrohhrghdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprhgt
+    phhtthhopeguvghlihhrrghnsehvvghrughitghtrdhgghdprhgtphhtthhopehnvghtug
+    gvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegushgrhhgvrhhnsehk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvg
+    htpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthho
+    pehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihes
+    rhgvughhrghtrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:7ZgwZ1mvwcL5ck5qwIrjBiDrnDKYurUPQV-Sg8qaOnuloLOjXocO0g>
+    <xmx:7ZgwZz1jUQBztB4CKlIWC8QH-p42Yb0DLY7xIDA9c5oaeRcQCAWehw>
+    <xmx:7ZgwZ0ur8iRzSXK6nqJFxzoUe8TilOUwYViPoKk2LMq0T04Ugqmfcw>
+    <xmx:7ZgwZ3Xi-SZQE1TY06w_w7XvIhjB6IfVQ9lbYp9RYR3qVqbFTAAfbQ>
+    <xmx:7pgwZ8s-ex9ihCvfWApkrZvICBfophayKV_0hI2wR3wtOdnriXGPUE3l>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 10 Nov 2024 06:28:45 -0500 (EST)
+Date: Sun, 10 Nov 2024 13:28:42 +0200
+From: Ido Schimmel <idosch@idosch.org>
+To: Vladimir Vdovin <deliran@verdict.gg>
+Cc: netdev@vger.kernel.org, dsahern@kernel.org, davem@davemloft.net,
+	edumazet@google.com, linux-kselftest@vger.kernel.org,
+	kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+	horms@kernel.org, gnault@redhat.com
+Subject: Re: [PATCH net-next v10] net: ipv4: Cache pmtu for all packet paths
+ if multipath enabled
+Message-ID: <ZzCY6kD4G2BVDNQs@shredder>
+References: <20241108093427.317942-1-deliran@verdict.gg>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3_zwRbjBnO5BvEQ--.51752S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWruw4rWF1fKFyDXr4xZr4DCFg_yoWfuFg_ur
-	Wjq34kJ347JF4YyFyUXan5CFy093y8t348AFyUtr129w47ZrW5XF4kWr9Yy34UXa1xA3y2
-	qF15urZ2vwsrXjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRXXo2UUUUUU==
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDw6Tp2cwXFTwuwAAsh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241108093427.317942-1-deliran@verdict.gg>
 
-1. fix recursive lock when ebpf prog return SK_PASS.
-2. add selftest to reproduce recursive lock.
+On Fri, Nov 08, 2024 at 09:34:24AM +0000, Vladimir Vdovin wrote:
+> Check number of paths by fib_info_num_path(),
+> and update_or_create_fnhe() for every path.
+> Problem is that pmtu is cached only for the oif
+> that has received icmp message "need to frag",
+> other oifs will still try to use "default" iface mtu.
+> 
+> An example topology showing the problem:
+> 
+>                     |  host1
+>                 +---------+
+>                 |  dummy0 | 10.179.20.18/32  mtu9000
+>                 +---------+
+>         +-----------+----------------+
+>     +---------+                     +---------+
+>     | ens17f0 |  10.179.2.141/31    | ens17f1 |  10.179.2.13/31
+>     +---------+                     +---------+
+>         |    (all here have mtu 9000)    |
+>     +------+                         +------+
+>     | ro1  |  10.179.2.140/31        | ro2  |  10.179.2.12/31
+>     +------+                         +------+
+>         |                                |
+> ---------+------------+-------------------+------
+>                         |
+>                     +-----+
+>                     | ro3 | 10.10.10.10  mtu1500
+>                     +-----+
+>                         |
+>     ========================================
+>                 some networks
+>     ========================================
+>                         |
+>                     +-----+
+>                     | eth0| 10.10.30.30  mtu9000
+>                     +-----+
+>                         |  host2
+> 
+> host1 have enabled multipath and
+> sysctl net.ipv4.fib_multipath_hash_policy = 1:
+> 
+> default proto static src 10.179.20.18
+>         nexthop via 10.179.2.12 dev ens17f1 weight 1
+>         nexthop via 10.179.2.140 dev ens17f0 weight 1
+> 
+> When host1 tries to do pmtud from 10.179.20.18/32 to host2,
+> host1 receives at ens17f1 iface an icmp packet from ro3 that ro3 mtu=1500.
+> And host1 caches it in nexthop exceptions cache.
+> 
+> Problem is that it is cached only for the iface that has received icmp,
+> and there is no way that ro3 will send icmp msg to host1 via another path.
+> 
+> Host1 now have this routes to host2:
+> 
+> ip r g 10.10.30.30 sport 30000 dport 443
+> 10.10.30.30 via 10.179.2.12 dev ens17f1 src 10.179.20.18 uid 0
+>     cache expires 521sec mtu 1500
+> 
+> ip r g 10.10.30.30 sport 30033 dport 443
+> 10.10.30.30 via 10.179.2.140 dev ens17f0 src 10.179.20.18 uid 0
+>     cache
+> 
+> So when host1 tries again to reach host2 with mtu>1500,
+> if packet flow is lucky enough to be hashed with oif=ens17f1 its ok,
+> if oif=ens17f0 it blackholes and still gets icmp msgs from ro3 to ens17f1,
+> until lucky day when ro3 will send it through another flow to ens17f0.
+> 
+> Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
 
-Note that if just the selftest merged without first
-patch, the test case will definitely fail, because the
-issue of deadlock is inevitable.
-
----
-v2->v3: fix line length reported by patchwork.
-        (max_line_length is set to 80 in patchwork but default is 100 in kernel tree)
-v1->v2: 1.inspired by martin.lau to add selftest to reproduce the issue.
-        2. follow the community rules for patch.
-        v1: https://lore.kernel.org/bpf/55fc6114-7e64-4b65-86d2-92cfd1e9e92f@linux.dev/T/#u
----
-
-Jiayuan Chen (2):
-  bpf: fix recursive lock when verdict program return SK_PASS
-  selftests/bpf: Add some tests with sockmap SK_PASS
-
- net/core/skmsg.c                              |  4 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 54 +++++++++++++++++++
- .../bpf/progs/test_sockmap_pass_prog.c        |  2 +-
- 3 files changed, 57 insertions(+), 3 deletions(-)
-
--- 
-2.43.5
-
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
