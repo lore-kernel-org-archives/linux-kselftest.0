@@ -1,34 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31665204030;
-	Tue, 12 Nov 2024 16:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4FE6203713
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 16:10:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731427680; cv=none; b=Dyd9LwJQkhrGExCqdhjj2hTM9E6vpnrlUEFSV9OmKDajQzjFEeqY+RVqQ4wgPBojctnpxguEJ8kavFgUwNy+ZuN5ZrrK7ozYLQUI4OYoQAqnlpLlXpQ+mRQFD/54JFimRoQgOMeW+8CxSGT2fEaljmHwFOEDrUOQtzYDfiLyxso=
+	t=1731427852; cv=none; b=WhLNAPwHHbUki1x4Wd7EK8qL71F3k/PXlt0jed/tLX15eHD1ZZIfmnZHZMll6nDwQBLU1zE/c+9Ana5/oA4OOulOiyiY9WALvQYIRhNqf3weEVjZWa9KIEymVLkMoOmSygAKfZOPY+55CBLw0RHIwEiGf1i3tmvlu3JCysmGb3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731427680; c=relaxed/simple;
-	bh=ffTj3kRTOE0f0O48739mq2dU1kEUXCSv5rOuZW6yEGg=;
+	s=arc-20240116; t=1731427852; c=relaxed/simple;
+	bh=PPPTmhzefUOxRaG1VF5NgtHtMmt/Ur6Ur/KQr9CWeYw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FvfjbG16zabnZ3UlZ6/jGnCcOPj5/yP6MhWgSne8s8TWlgCEFptd6QRpoDmx4I4kHM+MUi7BZGCMZiXu6eGFgOCFqWV7RZNg47VzEoR9xqYTB/E5QJ6Jukzsu8oYElKeY/WmJi5rBtG/EZ99AwmjG4DTVUjUWrjCZXhroi1yNCw=
+	 MIME-Version:Content-Type; b=OiOWZEveySmqLZvJErJaSs1obGzfS1mIjyc1N/8blZpu3OqP87r2FFQi26O/RY4VQaw3kRJg0iK49G86OZQwE+U3Tfl9xQWwFXPwYDouoWwvdVAO83/HOQYIvzQkOa1G+VeJ0jMFc3NP9o4Wu1KCzZNgUJBG6JY1f5aJH2gEHVs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2262C4CED0;
-	Tue, 12 Nov 2024 16:07:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A27C4CECD;
+	Tue, 12 Nov 2024 16:10:49 +0000 (UTC)
 From: Catalin Marinas <catalin.marinas@arm.com>
-To: Will Deacon <will@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
+To: linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
 	Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: (subset) [PATCH 0/4] kselftest/arm64: Fix compilation warnings/errors in the arm64 tests
-Date: Tue, 12 Nov 2024 16:07:36 +0000
-Message-Id: <173142698241.893467.3612331724915508204.b4-ty@arm.com>
+Cc: Will Deacon <will@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Kevin Brodsky <kevin.brodsky@arm.com>
+Subject: Re: [PATCH] selftests/mm: Fix unused function warning for aarch64_write_signal_pkey()
+Date: Tue, 12 Nov 2024 16:10:47 +0000
+Message-Id: <173142783788.896701.6743208962860703144.b4-ty@arm.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241108134920.1233992-1-catalin.marinas@arm.com>
-References: <20241108134920.1233992-1-catalin.marinas@arm.com>
+In-Reply-To: <20241108110549.1185923-1-catalin.marinas@arm.com>
+References: <20241108110549.1185923-1-catalin.marinas@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,25 +37,24 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Fri, 08 Nov 2024 13:49:16 +0000, Catalin Marinas wrote:
-> It looks like people started ignoring the compiler warnings (or even
-> errors) when building the arm64-specific kselftests. The first three
-> patches are printf() arguments adjustment. The last one adds
-> ".arch_extension sme", otherwise they fail to build (with my toolchain
-> versions at least).
+On Fri, 08 Nov 2024 11:05:49 +0000, Catalin Marinas wrote:
+> Since commit 49f59573e9e0 ("selftests/mm: Enable pkey_sighandler_tests
+> on arm64"), pkey_sighandler_tests.c (which includes pkey-arm64.h via
+> pkey-helpers.h) ends up compiled for arm64. Since it doesn't use
+> aarch64_write_signal_pkey(), the compiler warns:
 > 
-> Note for future kselftest contributors - try to keep them warning-free.
+> In file included from pkey-helpers.h:106,
+>                  from pkey_sighandler_tests.c:31:
+> pkey-arm64.h:130:13: warning: ‘aarch64_write_signal_pkey’ defined but not used [-Wunused-function]
+>   130 | static void aarch64_write_signal_pkey(ucontext_t *uctxt, u64 pkey)
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~
 > 
 > [...]
 
-Applied to arm64 (for-next/kselftest), thanks!
+Applied to arm64 (for-next/pkey-signal), thanks!
 
-[1/4] kselftest/arm64: Fix printf() compiler warnings in the arm64 fp tests
-      https://git.kernel.org/arm64/c/b6bd50dd3b56
-[2/4] kselftest/arm64: Fix printf() warning in the arm64 MTE prctl() test
-      https://git.kernel.org/arm64/c/0cc6b94a445c
-[3/4] kselftest/arm64: Fix printf() compiler warnings in the arm64 syscall-abi.c tests
-      https://git.kernel.org/arm64/c/694e2803fece
+[1/1] selftests/mm: Fix unused function warning for aarch64_write_signal_pkey()
+      https://git.kernel.org/arm64/c/929bbc16abfb
 
 -- 
 Catalin
