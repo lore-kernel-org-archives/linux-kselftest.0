@@ -1,86 +1,58 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3893D433CB;
-	Tue, 12 Nov 2024 13:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3E615444E;
+	Tue, 12 Nov 2024 13:26:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731417926; cv=none; b=ivs9yb3eqqyb9s5LuENS28ay5oS9BEhSONAytGpsdMLN9CyY2g27jib9F+mi5mRxHLuF5GZkESj6hrFT9yi0JWGB+s9LUNfonSyirk5HeNZdS6HNa/A+ty4HMk3VXUkzrXMAICl4eNqFO2gGUOqeq6mknj935hpt6oNw6+YNMZ4=
+	t=1731418020; cv=none; b=uAIS7fmH7bGQIKqrWG6xWPz6WmiNvYlRaItShwUMeJOPjR99pX6CouDSBqmikiXnxkh+MN2tXquUiEitG61kcjXhjKlxmWN6yFainjQyf3EJ+QHGfUFTmhknINorn+2WQP79EcLgjasz536+7QyWR9AVkMK+qSgtpRDDsGQVy0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731417926; c=relaxed/simple;
-	bh=fhzf1jcZSTAtYRSI99xDL2bTyDAMziFUtoPEDRFBo7s=;
+	s=arc-20240116; t=1731418020; c=relaxed/simple;
+	bh=KxBO7TK2j7CBcq2xRoLJlH6ltVnB5weCo12QHsW60WA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QEIUCBs6QTrBKCtusxlzFjcfEgJD0p6osOMyAwF7LeR3lgpB0bEGx0PLewaH1d5aUMqJxopsI9Xi4oOdxKpEHTJEeliNrCPkc+8U83z5YffOBiB6E3V8elxmAsqovbRZsiHVbEKkyCdyIcZzajxHNNUWo1edoRcdEq8o6/509ME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WledquTp; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WledquTp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AEEEC4CECD;
-	Tue, 12 Nov 2024 13:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731417925;
-	bh=fhzf1jcZSTAtYRSI99xDL2bTyDAMziFUtoPEDRFBo7s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WledquTpOzLCn8K1NSvc85m+6IeY7VJhhVTy/4QavsGdoUpzWXffMrNOyd7G6SUfv
-	 9/SXctGeD+w+dGadzhJjYM3Dx4g2DeAiR22gAAKrDHKuMKh/OuXXm8xgxILV32PeSS
-	 v/2h0/icCFAULxX0nwa9PhD+WgIed4gjgyfoKuHYiTuYC22ZIH3jMldHVNNtz2PCTb
-	 qffJQpbIwEoVu3HstbEdOrKqVAiVs1v3PCB8wfT/CKU76RQMJ15xOVe4E/dxBpQ+J5
-	 +nh+XS4A+fD2HdiByuYeQK7efVov589w+Y4CMl8H3YmHw+ezsgyhLPptYQEshJOUpI
-	 osulbbKHU6LcQ==
-Date: Tue, 12 Nov 2024 13:25:22 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E4rJmpAIWcuqqadCTvJe6R1rRMqHZBapxGnLMldAOC6ZQkf1UW1Mn56OsY+s5fonto9Xm+OdhcgzqhGTrAy/CTE5ezHgbvlvpGuYUNi6cSkYkQYy6Q2413uIfNTasYnaUBCzK/QgRdsJwCkPEVf0YD44u4fqOf5XXYe434hv4ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADA9625E3;
+	Tue, 12 Nov 2024 05:27:26 -0800 (PST)
+Received: from arm.com (RQ4T19M611.cambridge.arm.com [10.1.30.79])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F62A3F66E;
+	Tue, 12 Nov 2024 05:26:55 -0800 (PST)
+Date: Tue, 12 Nov 2024 13:26:52 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
 Cc: Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/arm64: Check that SVCR is 0 in signal handlers
-Message-ID: <ZzNXQtbk1NWN6F7f@finisterre.sirena.org.uk>
-References: <20241106-arm64-fpmr-signal-test-v1-1-31fa34ce58fe@kernel.org>
- <ZzM8RrD248eSW5bG@arm.com>
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] kselftest/arm64: Add FPMR coverage to fp-ptrace
+Message-ID: <ZzNXnJ3Jc45CctCs@arm.com>
+References: <20241112-arm64-fp-ptrace-fpmr-v2-0-250b57c61254@kernel.org>
+ <20241112-arm64-fp-ptrace-fpmr-v2-3-250b57c61254@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l9TdSVVGcv9oOszk"
-Content-Disposition: inline
-In-Reply-To: <ZzM8RrD248eSW5bG@arm.com>
-X-Cookie: Editing is a rewording activity.
-
-
---l9TdSVVGcv9oOszk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241112-arm64-fp-ptrace-fpmr-v2-3-250b57c61254@kernel.org>
 
-On Tue, Nov 12, 2024 at 11:30:14AM +0000, Catalin Marinas wrote:
-> On Wed, Nov 06, 2024 at 05:07:51PM +0000, Mark Brown wrote:
+On Tue, Nov 12, 2024 at 01:08:16PM +0000, Mark Brown wrote:
+> +	// This has to come after we set PSTATE.SM
+> +check_fpmr_in:
+> +	tbz	x0, #HAVE_FPMR_SHIFT, wait_for_writes
+> +	adrp	x7, fpmr_in
+> +	ldr	x7, [x7, :lo12:fpmr_in]
+> +	msr	FPMR, x7
 
-> > +		fprintf(stderr, "Unexpected SVCR %llx\n", get_svcr());
-> > +		return 1;
-> > +	}
+Did this build for you? I may not have a new enough assembler.
 
-> I think I'll change both printf specifiers to %lx here since in the libc
-> I have installed, uin64_t is an unsigned long (the kernel defines it as
-> unsigned long long). Both gcc and clang complain but the compiler
-> shouldn't matter since the headers come with glibc.
+fp-ptrace-asm.S:149:6: error: expected writable system register or pstate
+ msr FPMR, x7
 
-Makes sense.  I do wish the compilers were more consistent with
-including these warnings :(
+I changed it to REG_FPMR locally.
 
---l9TdSVVGcv9oOszk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmczVzYACgkQJNaLcl1U
-h9ARyAf/ccxPjV6NvV0HX+NR8V0IrCkIUFYkF+JnPeCHw79ymsk9scQ+8HkDFvXA
-OUzbd+d42XjQN4bMm6FK8NF0Be4syfkOUmP5EUx2x4aWMjghJZIpH53hORjDYH8m
-ej9HimaSZlhkVUFEFsYeTgLH/NC0WbGKyW1KlnLpZ3oAZNzXNsRTM+vfKvkijvYn
-nH4NcBHjA/p9duc9XDitUZISNE6sKMAZT0h8dOp6an2S4gSHLx2wLH5//Mbvinja
-NpOzppfqHNEXN2DpGjvgLzEs6fQjRaRXnfno6QOBg6DTO+Qg40ExFexA2YwW43nY
-d0PnQEXkJ4bwC6IVbirTiegjMLaLzA==
-=q9Xo
------END PGP SIGNATURE-----
-
---l9TdSVVGcv9oOszk--
+-- 
+Catalin
