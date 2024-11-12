@@ -1,77 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A8E214431;
-	Tue, 12 Nov 2024 18:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5977E215C62;
+	Tue, 12 Nov 2024 18:28:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731434638; cv=none; b=ZqbmSJdQgCEoa2jsg8sMiYctpvY6rUko9XAayPa9DODuYu0pbQZx2H9eHBnXhZ3x9N4qhfNf9RCuv0FGXXFUMTky17g08ABs37WOeSBx6XAAbz0Fqsmlm/48XtpiN2BPQbr8mfPjpgc+jetcPvMrVW7YU2o9lAKJApHRIpQ9ju8=
+	t=1731436110; cv=none; b=rMWI3ui2pEZHLrRgyevF+iJPgBuf/hoELVgi+tvdiNPsJReH6dP8t91uY/xs4M5KW9pKMJbHdLWW9wg3bB/LXAe2JoVqSC7Rj+o9r2nQJzhzoX08BdPaWaZMeciumEu0m0FcM0PvYeBI8xO2ZNNFmbzjhR8mFDkW1mM1/Ded0L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731434638; c=relaxed/simple;
-	bh=kqF92FnpSa2OXbqzYAFWSrZYSfupDZ8zTDehmduwQM0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ece+b9jv7dgRW3NJ9NrVwY0y3ZysVQmcOD2uGqVgpTRYa7Jctgveurj4fMbnOBgvi6kGKi/H+8S1k+Wz1R0Xr5nXfAJa4R57eJg3XEIK96rVx3e/Pt7SS5NFEWW6PDJGEzGJMEvV2Cfg7YSOG9l6exgF6/XsaSs1+hd8euhzzU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kLOottUA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731436110; c=relaxed/simple;
+	bh=dZbDMAUdLbxNNQpgzzFwvZxHCF4K+0N0LYW0Z3+EY0s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=V29F/a8cQZxEv2mgwYlh7fxMVniid6AupbbcBbx2dp8ZoaUDX8Ypb7U4DKBVSVmyyfPWRsPfXzf87vvUze9uIclmt1iTuV1XlmSp2t8OUEu+bhnyxNUCQk5O2mfnOD3LobWQ5WbLBxJVBkoF6YCEFz8yuXVVvFgJJQrGWO3yY9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mZBUXlNi; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLOottUA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD84CC4CECD;
-	Tue, 12 Nov 2024 18:03:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731434638;
-	bh=kqF92FnpSa2OXbqzYAFWSrZYSfupDZ8zTDehmduwQM0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kLOottUAHgXyuaS5FZ7OFzdzu2OTg/oAzzpsqUYRe679Go3sEJL3g7LL3TvuXKQuk
-	 kJLtqwgjzF4IRoHXQ/ovpRcMp9KVydXxhdY+BDVMmeAUTwui5EJbJh+73Q9Dk/bSsT
-	 L3K5KjlKOKuIXuyz1MsPurXFFMgUBf0liqQJjIf4FpHhxhw+Tq6XoerTiuWe59eA7b
-	 7aNPWrwpUH9saLrfUwsTao0yghQeqUECpbPEDYKdUKDkxj8J2lKO4knfMx1mIv7Fg3
-	 BuGXXqqCkzwQI3PqJ/NXxmQu9skJgUekwOpP/ePQyLJiTqmtxXjwe96kUeZAhD3O+R
-	 8Z2SQdJHdisEw==
-Date: Tue, 12 Nov 2024 18:03:51 +0000
-From: Conor Dooley <conor@kernel.org>
-To: h1k0n <ybzjyhk@gmail.com>
-Cc: charlie@rivosinc.com, ajones@ventanamicro.com, andy.chiu@sifive.com,
-	aou@eecs.berkeley.edu, conor.dooley@microchip.com, corbet@lwn.net,
-	devicetree@vger.kernel.org, evan@rivosinc.com, guoren@kernel.org,
-	jernej.skrabec@gmail.com, jrtc27@jrtc27.com, jszhang@kernel.org,
-	krzk+dt@kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	palmer@dabbelt.com, paul.walmsley@sifive.com, robh@kernel.org,
-	samuel.holland@sifive.com, samuel@sholland.org, shuah@kernel.org,
-	wens@csie.org
-Subject: Re: D1 vlenb
-Message-ID: <20241112-blooming-reheat-d9a23401f6d6@spud>
-References: <20240911-xtheadvector-v10-3-8d3930091246@rivosinc.com>
- <20241112021227.357-1-ybzjyhk@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mZBUXlNi"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-20cbcd71012so70323285ad.3;
+        Tue, 12 Nov 2024 10:28:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731436109; x=1732040909; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xG9BoyCsOgxLRKpKuSPK8dWttGY6kTRBEqiurMHDglI=;
+        b=mZBUXlNiXG9VAyShu8T4KJKSDJ0GbgNl2Cgn7lXugS4vOTh5/DwHgQLSsf0v7qDKVg
+         zlRroOVun1522qoRgt3vRhAaJkhc86vFeXGBzsQARH8NLNDjPupbrN8Y1ng73gGIMyDM
+         attsVvbaoEP0l+CX/apuGKsSaQL0cR5JaCZD7JvbqHppYxMBYAV2vjRZ4Zo6YmHqcWKv
+         6WTpcEwALHJ9lmsFH7w61NQlUX8L8Io2cfuHRrXAzN1MsfRO0DJ1WD0zggD6FxmYsrlT
+         QUScJWC5pRgQf8+/+7EQc2dhx+NQToUW4woncKargqSfWVR8vwWgLfgK2TdLYzYtgDod
+         T7bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731436109; x=1732040909;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xG9BoyCsOgxLRKpKuSPK8dWttGY6kTRBEqiurMHDglI=;
+        b=WhGkYch9PujtkycaC1l5XvCJ39NoSNjRHrQ2bP+Gmf9gISphG39whs/eTMXjgXIsaq
+         oK5cUHh6LqaIdToAQYJJo7KDegitxrphpbQCjVhbk4htphdQ2xpkzYwXUwY6S9mxd4ol
+         aULsw3IQswmBJJ7j6WG3JpuC00WcnUNJRz6hyyPHd2F2DdQRyr8EZqArSFrIBrO0Zozt
+         wltZZ87RJBu1OFkqcHq289v6rPDxMhuDiSF1lFy4Q40YwOmjsjhL9vtlgwI96FxnSq7c
+         BtEIdnz8Ptwx/y9TDz6DB4ipdW0HZn1jk10T4PCYXUZL7+gxT0bKsJaIDRW7Wyw726aQ
+         /JHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnkmEWRzX1WXAm5F5QA/rSc9x070YYp7hkaWGOxs2VieiIdhCWJO3o+70e9co6m4eCb2bCrHehKaYN1pAgRn2KlxoIYhT7@vger.kernel.org, AJvYcCVGqpirpiFpaEvDr/q8N/GEqEo/4g/L54znbNLOqfaohjssRzSj0iCX2wzGOIm2WMIknPhP0ZRf5tzWjTI=@vger.kernel.org, AJvYcCXeHHpe0X9sDm47tVTGKyAOGe3E5QzisR2AqngNB4XwgHIq7Yj99uMOhk5odfqlaIqLaC1fgHJXxrs1/B27MSUr@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa/IVPszVRnPBbMv4xImT2nUbuUy74+foV6QgAY11GR48sbr3a
+	vuxlGsEru8Yx4OVeVMz5grFRTYvVHdMd8sV4PCLodqI+bW+6N8lQx6fMtj5F
+X-Google-Smtp-Source: AGHT+IFuSJadtnFgM9MFW1vjwXlMMm8dIwqjw4ui+YdL0RTBFsiyLLHYGSeNc9iQfcZUC+POAvX7qA==
+X-Received: by 2002:a17:902:f686:b0:206:c486:4c4c with SMTP id d9443c01a7336-211835c16b1mr192400855ad.57.1731436108568;
+        Tue, 12 Nov 2024 10:28:28 -0800 (PST)
+Received: from localhost.localdomain ([2409:40c1:5f:8acf:74ef:bde5:4fe9:96c6])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177ddf7e1sm97092525ad.106.2024.11.12.10.28.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2024 10:28:28 -0800 (PST)
+From: Amit Vadhavana <av2082000@gmail.com>
+To: paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	casey@schaufler-ca.com,
+	shuah@kernel.org
+Cc: ricardo@marliere.net,
+	av2082000@gmail.com,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linux.dev,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: lsm: Refactor `flags_overset_lsm_set_self_attr` test
+Date: Tue, 12 Nov 2024 23:58:10 +0530
+Message-Id: <20241112182810.24761-1-av2082000@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="3sbg3BDZLVHaW7eG"
-Content-Disposition: inline
-In-Reply-To: <20241112021227.357-1-ybzjyhk@gmail.com>
+Content-Transfer-Encoding: 8bit
 
+- Remove unnecessary `tctx` variable, use `ctx` directly.
+- Simplified code with no functional changes.
 
---3sbg3BDZLVHaW7eG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Amit Vadhavana <av2082000@gmail.com>
+---
+ tools/testing/selftests/lsm/lsm_set_self_attr_test.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-On Tue, Nov 12, 2024 at 10:12:26AM +0800, h1k0n wrote:
+diff --git a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
+index 66dec47e3ca3..732e89fe99c0 100644
+--- a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
++++ b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
+@@ -56,16 +56,15 @@ TEST(flags_zero_lsm_set_self_attr)
+ TEST(flags_overset_lsm_set_self_attr)
+ {
+ 	const long page_size = sysconf(_SC_PAGESIZE);
+-	char *ctx = calloc(page_size, 1);
++	struct lsm_ctx *ctx = calloc(page_size, 1);
+ 	__u32 size = page_size;
+-	struct lsm_ctx *tctx = (struct lsm_ctx *)ctx;
+ 
+ 	ASSERT_NE(NULL, ctx);
+ 	if (attr_lsm_count()) {
+-		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, tctx, &size,
++		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size,
+ 					       0));
+ 	}
+-	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT | LSM_ATTR_PREV, tctx,
++	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT | LSM_ATTR_PREV, ctx,
+ 					size, 0));
+ 
+ 	free(ctx);
+-- 
+2.25.1
 
-This message is entirely empty FYI
-
---3sbg3BDZLVHaW7eG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZzOYhwAKCRB4tDGHoIJi
-0hjfAQCqq2U6n0j4CEI1t2O0Z7i8ABrvQx9u4Yq+TaBYhwtgLAEArAZcyVMA30do
-BQbGW+93CZzpOrFMDM6b5Zs06UPQUgE=
-=yLsb
------END PGP SIGNATURE-----
-
---3sbg3BDZLVHaW7eG--
