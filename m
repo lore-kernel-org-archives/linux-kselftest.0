@@ -1,60 +1,60 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9AC20262A
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 15:39:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068852022CF
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 15:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731426000; cv=none; b=lqDR7/bhxBzSKE/UtTmN0TIdpe/XVfDJ3I7VRdU0pYQI/whd1uaADv2+vIHX4XO7oqJvKrxRhAMNVPbtDyejQwuYKyDKqxL/5oaTo6KaG5g/KWxifDr7BPY8WDvvngXmmCjwY+20IqSB3PrzxWZ5EuBe83bPUGn7pJur3Eo/zVU=
+	t=1731426230; cv=none; b=XlPj36D+etdKVBGSsWQvv2WOiU3s+dZmks5iTYoxE3ofdEA9Wjfy60c+OsReQHE1i45NFamG4oGbD2ymLxU+pI+DRlGjFn6lmam6tQ6zm8LEUVXJvnsZljUX4LQp9zk5xGuPM86yaXiTUqQsiibEoRah/aWgGK228A7DhoLvZR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731426000; c=relaxed/simple;
-	bh=lSn9tZqbXXMm4ytAopoRf2rbmRp9OS2LoZx9rzlMOSE=;
+	s=arc-20240116; t=1731426230; c=relaxed/simple;
+	bh=sugKUR1x6AisW4skOVA3ZjQCFFcMRgfFJpnbc5pgqRc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FgGOIPlyaEvy7UaVdXQ8PjFax08/N6JeVadFco/lCnLsivUPZCgv1h6MnKMxm3U9Aa57FNr3VQKa5bUVA77uTXAaspilFvK5k4CdxcpRMmj0V4/4Q1i09eXB38axWL0A2EHlQzG6XMuXRLtyGDMf5AP43596972COoJTNN8SNDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=LNDR2sPw; arc=none smtp.client-ip=209.85.218.42
+	 In-Reply-To:Content-Type; b=QG6UbKuSh82DUvwAdlDrVJBnUdnsjB6IAczNJKA11GHQ8U/RLoynYnIWy0K0cJjTu3qJIcyJDkZZnUL9iZqIzuPM3V/mfRZu7oBn7fJPO8IN/2dfy1yqeI1R7ItW+tlY7hs1GfwiNl42cFv50MtnxGuq0owJq47O0tckqkZ3lZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Ps90XVo+; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="LNDR2sPw"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a9a2209bd7fso978632266b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 07:39:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Ps90XVo+"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5c937b5169cso2494418a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 07:43:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1731425996; x=1732030796; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1731426226; x=1732031026; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=tkqstsrPp4KySdsvdodgkejaPTUdxNGqUhtM7D3Jo5A=;
-        b=LNDR2sPwvCuVp+/9rgigDnzZ9RLW+z9jU4Pr/pOVGRL89BPe0cSL7SqkEX5lqp4Ije
-         gsExYuYoI7UR5ftGdc+jemBt7MB44wGRF8wV5kQx1mTv4SUXDa650BN1tnjUH/xQ5/sB
-         +afpsnhU6eRBjwp5J9jA8pzVJqVFDKypQSV7xFQt2eBdGDVoGHHLhsaFJx5xEh3Pn30U
-         LRlqbjQwER0VgsqGDcNnyAwVD5w5H+K3vzrGFw+XRCiMYbjX9igMBTm3BDQK2Wdd4MuM
-         4lONrY9wgEkzikkYKuBZGtWzxUg+IWydNrtHc/dRtTM5rp5t12Aoy/yQCzKGDHhKQJuj
-         Rx7Q==
+        bh=8FjR/IXLb5vtI7LPCkZUeh9a8brNlsLs1nKW+B8ZeXc=;
+        b=Ps90XVo+t2KmLOgFV/0jzOWxEm52L2OZgBoSUGhE6MJkngQClGvA1ApBfqL8mIAExG
+         y7GueizeTt5kAaNOEgwjB3uvprtzW3fwYDpcH/ms5uozhL2MzOqcDdJ5QKe6hSuDM/ty
+         PSm3D9casrO98JpJNhuGLDYu1JGEoJ1E8T0slayxLIVqeJP+HxiBFy0zMUFwGm0+W1PN
+         cCHBKrxNMZ7xcKsnimDu2gtFyPLsERKU/y2DhX8W31mo5tPlw8ocFDfgM7tcQ6rl4tQu
+         ye8JGhA8iKDY91JsH8O2IYsgXpRPP38EyGxVACGVcCFJaDpUqZa5lOkaaBRDN609EB13
+         GbEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731425996; x=1732030796;
+        d=1e100.net; s=20230601; t=1731426226; x=1732031026;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tkqstsrPp4KySdsvdodgkejaPTUdxNGqUhtM7D3Jo5A=;
-        b=ZGFpRPKN8f8uUuhwJNceWd2NVTL+beauMjaGUGcKY/yBkIXs4fp5Nsur4z/c94cQfo
-         IinJjb7OFH5JCL7wKCu98lALQo6IefaVpxCq37GImJwzXlA09FwakHXd8/I03Zxkg57+
-         dzrmVYNFMl5tSygs4v3cC84ESqbHmVt4GDhHjTyJ4UfGpRhEz96xTZQbu/hutDEGXXcD
-         GMaFnWRlR6td5JRd1A7EN3nSJfXWY2A+dQDwuUnAeVfdfX32c4keaxieqvs87nZ/TcaG
-         /8rE9hKPlhQRWwYVlpkpQ+QPiU3ACYyROYa80D3qMmIqS4U5Ry/XufLab3TdQC64+1Bt
-         qv/w==
-X-Forwarded-Encrypted: i=1; AJvYcCUAozZioiaGkRSllOxUnJa2EbrH88wmPQHA7ZTAq4s3Yz+ESmvtXVHTwmt+duz+yDW6RBcPR3qbmQgW6MsYDnI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3c+KTa8MZg3+A2AjM8Fv8KeEzyBeZNJKFNKRR/Ftpu4U0mBjD
-	vbxmY/QQEoD857zB3rF3mHBZM+K+EAPyftaaKhqvMEv2kV7Fa/I8vsu20pDUC3Q=
-X-Google-Smtp-Source: AGHT+IHevdpcDT+9UCMSKbtTe0SiY9drSWARd9dhjS8G5D91gUBoqMjSSVFPcqZZ7ncLNNwGkLrisQ==
-X-Received: by 2002:a17:906:f597:b0:a9a:13dd:2734 with SMTP id a640c23a62f3a-a9eeff44839mr1773883266b.36.1731425996131;
-        Tue, 12 Nov 2024 07:39:56 -0800 (PST)
+        bh=8FjR/IXLb5vtI7LPCkZUeh9a8brNlsLs1nKW+B8ZeXc=;
+        b=QjOyd6yBGUPeEReNIAnkiX5JVoyUCm4Ia5Eo7FqijPeMOVdpaY5WzAMe6XuUkeb8wE
+         cKi7tzm8EsrQ6+5FtfcVHJYe0H+O4OKQf6ykZZzKkKGfToiwx/I2gPKcPkDobJDIeakg
+         Lc6XwHMZxNhbjAEz4pme2GMalc4xobmxGKCL0Rlu3qma/Y02Vs00A8TOieqq5nzVlDg6
+         Djt84I86SODt2NjDi8Drf5oO3Ym2rehl/GszJQbNNyMASxRlBaeSh9pcsJ/FarFr5/Sf
+         Dd59A8/GgrUWx7hsqMDq15Uw7j4izZ3rnVRcrAPd6ZZEAaf/uvRP2V11fDFst/PI5RoO
+         nXcA==
+X-Forwarded-Encrypted: i=1; AJvYcCXTEtbLliheLzsvrxDUgg43aqr+cvEnrf5YmiSGK7XkMOlfDjyS16rJxnjnGK7C/zSTldwjEUE37Y10wYN3jvs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeKwa9fS6dsbZzaTmK1cQ3OLmXxlyo7VFgQiPNOvypfcGJfazZ
+	H4WHfov/6s2ehprAbkytjTcrLccaC19NOrKYQOjgVu0FmmVJ1azEs5ZAU2DAhLY=
+X-Google-Smtp-Source: AGHT+IGQPjVckld30sw712EyVfRtKY34CfCHYQtIVY+84TH6Fted4MlGcMFRQCkafp+/3JEJyW1jbw==
+X-Received: by 2002:a05:6402:27c7:b0:5ce:df98:ea7d with SMTP id 4fb4d7f45d1cf-5cf096f5c1amr17884562a12.8.1731426226420;
+        Tue, 12 Nov 2024 07:43:46 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:e829:c484:5241:93b2? ([2001:67c:2fbc:1:e829:c484:5241:93b2])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0a4a988sm728455166b.59.2024.11.12.07.39.55
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cf03c4ec9fsm6129828a12.61.2024.11.12.07.43.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Nov 2024 07:39:55 -0800 (PST)
-Message-ID: <8ed53007-cc7c-4747-a690-f27915f2be8d@openvpn.net>
-Date: Tue, 12 Nov 2024 16:40:19 +0100
+        Tue, 12 Nov 2024 07:43:45 -0800 (PST)
+Message-ID: <816d8b43-8c19-4a4c-9e37-98a3415848b5@openvpn.net>
+Date: Tue, 12 Nov 2024 16:44:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,8 +62,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 19/23] ovpn: implement key add/get/del/swap
- via netlink
+Subject: Re: [PATCH net-next v11 20/23] ovpn: kill key and notify userspace in
+ case of IV exhaustion
 To: Sabrina Dubroca <sd@queasysnail.net>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
@@ -71,7 +71,7 @@ Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-19-de4698c73a25@openvpn.net> <ZynwjJNz6kLa4p7x@hog>
+ <20241029-b4-ovpn-v11-20-de4698c73a25@openvpn.net> <Zyn0aYyPVaaQJg3r@hog>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -114,161 +114,46 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <ZynwjJNz6kLa4p7x@hog>
+In-Reply-To: <Zyn0aYyPVaaQJg3r@hog>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 05/11/2024 11:16, Sabrina Dubroca wrote:
-> 2024-10-29, 11:47:32 +0100, Antonio Quartulli wrote:
->> This change introduces the netlink commands needed to add, get, delete
->> and swap keys for a specific peer.
->>
->> Userspace is expected to use these commands to create, inspect (non
->> sensible data only), destroy and rotate session keys for a specific
-> 
-> nit: s/sensible/sensitive/
-> 
->> +int ovpn_crypto_config_get(struct ovpn_crypto_state *cs,
->> +			   enum ovpn_key_slot slot,
->> +			   struct ovpn_key_config *keyconf)
+On 05/11/2024 11:33, Sabrina Dubroca wrote:
+> 2024-10-29, 11:47:33 +0100, Antonio Quartulli wrote:
+>> +int ovpn_nl_key_swap_notify(struct ovpn_peer *peer, u8 key_id)
 >> +{
 > [...]
 >> +
->> +	rcu_read_lock();
->> +	ks = rcu_dereference(cs->slots[idx]);
->> +	if (!ks || (ks && !ovpn_crypto_key_slot_hold(ks))) {
->> +		rcu_read_unlock();
->> +		return -ENOENT;
->> +	}
->> +	rcu_read_unlock();
+>> +	nla_nest_end(msg, k_attr);
+>> +	genlmsg_end(msg, hdr);
+>> +
+>> +	genlmsg_multicast_netns(&ovpn_nl_family, dev_net(peer->ovpn->dev), msg,
+>> +				0, OVPN_NLGRP_PEERS, GFP_ATOMIC);
+>> +
 > 
-> You could stay under rcu_read_lock a little bit longer and avoid
-> taking a reference just to release it immediately.
+> Is openvpn meant to support moving the device to a different netns? In
+> that case I'm not sure the netns the ovpn netdevice is in is the right
+> one, the userspace client will be in the encap socket's netns instead
+> of the netdevice's?
+> 
+> (same thing in the next patch)
 
-ACK.
+Well, moving between netns's may not be among the most common use cases, 
+but I can see people doing all kind of weird things, if not forbidden.
 
-> 
->> +	keyconf->cipher_alg = ovpn_aead_crypto_alg(ks);
->> +	keyconf->key_id = ks->key_id;
->> +
->> +	ovpn_crypto_key_slot_put(ks);
->> +
->> +	return 0;
->> +}
-> 
-> 
-> [...]
->>   int ovpn_nl_key_get_doit(struct sk_buff *skb, struct genl_info *info)
->>   {
-> [...]
->> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_KEYCONF], attrs,
->> +			      OVPN_A_KEYCONF_PEER_ID))
->> +		return -EINVAL;
->> +
->> +	peer_id = nla_get_u32(attrs[OVPN_A_KEYCONF_PEER_ID]);
->> +
->> +	peer = ovpn_peer_get_by_id(ovpn, peer_id);
->> +	if (!peer) {
->> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
->> +				       "cannot find peer with id %u", 0);
-> 
->                                                                         peer_id?
-> 
->> +		return -ENOENT;
->> +	}
->> +
->> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_KEYCONF], attrs,
->> +			      OVPN_A_KEYCONF_SLOT))
->> +		return -EINVAL;
-> 
-> Move this check before ovpn_peer_get_by_id? We're leaking a reference
-> on the peer.
+Hence, I would not assume the netdevice to always stay in the same netns 
+all time long.
 
-ACK
+This said, what you say assumes that the userspace process won't change 
+netns after having added the peer.
+I think we can live with that.
 
-> 
-> 
->> +
->> +	slot = nla_get_u32(attrs[OVPN_A_KEYCONF_SLOT]);
->> +
->> +	ret = ovpn_crypto_config_get(&peer->crypto, slot, &keyconf);
->> +	if (ret < 0) {
->> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
->> +				       "cannot extract key from slot %u for peer %u",
->> +				       slot, peer_id);
->> +		goto err;
->> +	}
->> +
->> +	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
->> +	if (!msg) {
->> +		ret = -ENOMEM;
->> +		goto err;
->> +	}
->> +
->> +	ret = ovpn_nl_send_key(msg, info, peer->id, slot, &keyconf,
->> +			       info->snd_portid, info->snd_seq, 0);
-> 
-> info->snd_portid and info->snd_seq can be extracted from info directly
-> in ovpn_nl_send_key since there's no other caller, and flags=0 can be
-> skipped as well.
+I will change this call to use the sock's netns then.
 
-I tried to keep the signature similar to send_peer, but indeed they can 
-both be simplified.
-
-> 
->> +	if (ret < 0) {
->> +		nlmsg_free(msg);
->> +		goto err;
->> +	}
->> +
->> +	ret = genlmsg_reply(msg, info);
->> +err:
->> +	ovpn_peer_put(peer);
->> +	return ret;
->>   }
-> 
-> 
-> 
-> [...]
->>   int ovpn_nl_key_del_doit(struct sk_buff *skb, struct genl_info *info)
->>   {
->> -	return -EOPNOTSUPP;
->> +	struct nlattr *attrs[OVPN_A_KEYCONF_MAX + 1];
->> +	struct ovpn_struct *ovpn = info->user_ptr[0];
->> +	enum ovpn_key_slot slot;
->> +	struct ovpn_peer *peer;
->> +	u32 peer_id;
->> +	int ret;
->> +
->> +	if (GENL_REQ_ATTR_CHECK(info, OVPN_A_KEYCONF))
->> +		return -EINVAL;
->> +
->> +	ret = nla_parse_nested(attrs, OVPN_A_KEYCONF_MAX,
->> +			       info->attrs[OVPN_A_KEYCONF],
->> +			       ovpn_keyconf_nl_policy, info->extack);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_KEYCONF], attrs,
->> +			      OVPN_A_KEYCONF_PEER_ID))
->> +		return -EINVAL;
->> +
->> +	if (ret)
->> +		return ret;
-> 
-> leftover?
-
-very likely.
-
-Thanks a lot
+Thanks a lot!
 
 Regards,
 
-> 
-> 
->> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_KEYCONF], attrs,
->> +			      OVPN_A_KEYCONF_SLOT))
->> +		return -EINVAL;
 > 
 
 -- 
