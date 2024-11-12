@@ -1,254 +1,319 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365C6136358;
-	Tue, 12 Nov 2024 13:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731417037; cv=fail; b=Mic3ZEDnhf869c2VFC76k6caQXKWrDHu35X76nUm4YadXBK8hrq8qcq2VR9HKTqUYmi/I0JnnDjM3D+4MBjFlPTPN3d+xFFgfF04mxao/wH6jZAfbjbkJ5RaMUDrcN61QJCHEG8fylEtH4SV5VBoRcGoKI1VJ3MuphxNTbi0CsM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731417037; c=relaxed/simple;
-	bh=NcNrG8rmcLFBTs1HZq+Ww+oXf07b8AfxzyeXcgbzjko=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=sEWquj8EEcIFsNVjFwPmIcjstVoj1pd3zuFEGTuGhVf0wL/KLpNaQ/Te/eERi6TJVDBydkGeLcfwIGLNZ3dC8rz3+LZlBsZ+oTEi2AaF1nVqg2Fkm+vHUSw4c2UnTrw316xjIX7MWLpiLhInXjLffVuDmPvFn7L7ecJSdgMDMTU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=msYB+OHY; arc=fail smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12261EF01
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 13:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731417627; cv=none; b=IRC+ZMiSrzXmRrHhK4BL2R7CQ71qWCAR6BPl2gU1v8WbUKWglun2wuqR+gDSJTYigBd9EJ9z5QUDgAB/0QasVF9mvjax9tTrIY4RLF0a4CElz0jzXLmJgLP0rPfc3uKfWNsQlp/X23kJp92YukhE3L8rM+idLxrs15yC8QC2ckw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731417627; c=relaxed/simple;
+	bh=4uQQKVnJVNkYxj3Jf3V9uXYx3Kw1s6pIzZwwAp0Wiaw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hlOtRCq9pTtVYGZ0cuxTnRTJnQwOjABU05zha310O6B4jpwZajEfop2CONfnYcwmXIBclqJuJKoIQsol5Geh0rwXkc51E/6x/wKKGz4jWTh8qxyHVlCAypBipxCOQX46uSO+gknOeoOfPAzgdUmJ7OPEgidycgJBhbyOES/RzO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=R1fGFGwp; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="msYB+OHY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731417036; x=1762953036;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=NcNrG8rmcLFBTs1HZq+Ww+oXf07b8AfxzyeXcgbzjko=;
-  b=msYB+OHYyvczD9AT9BpZfqpt4gfp5VlmMqzvTkMpDn7x2TrM3XlE6Vlq
-   AKjI43NA7c/IpL4uh9n3vRk60xgBF8DB7GB9krqvJJafkivVbLPLzZ8rU
-   bmAWPuSS3/2iS/qKA9z939EBBCIneIy18kFIrhGsZZwMUbptRrxvb1XK4
-   liwpb9cP29nDsrni8yLVx3GQPHiryuc+NaslcxwOBqTjZkyjfAofnDSmg
-   DGYVtiW52qncxb10YS8lrVWFS0vdffEAN2IfW4FUD7oUn2VyzMkS2W7xn
-   I8TsOIUSjcLX0GQfRh4gtb0KQVQF+QzeX+JVKDsUWgiP1auB75DFrooLQ
-   Q==;
-X-CSE-ConnectionGUID: nUL9nqQhRl2e88km1CQ+Dg==
-X-CSE-MsgGUID: izXEsmkhT8mSyDHRltJ41w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11253"; a="35181213"
-X-IronPort-AV: E=Sophos;i="6.12,148,1728975600"; 
-   d="scan'208";a="35181213"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 05:10:33 -0800
-X-CSE-ConnectionGUID: zZBcXR/qQOieJpHggFqbwA==
-X-CSE-MsgGUID: qkvldZOjRQyJdHlZ8OPmQg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,148,1728975600"; 
-   d="scan'208";a="92532550"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orviesa004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 12 Nov 2024 05:10:33 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 12 Nov 2024 05:10:32 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Tue, 12 Nov 2024 05:10:32 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.171)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 12 Nov 2024 05:10:31 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TZLNTi+JJRIrXXjOd/yYja9Mp6IGbT3qypMwUXd1urbsXV8mO480tnS3fzTtmjK2LS69AItWQJhB0KyPvIw3Dq+cEp1Hyc0xwmJ32N+Zu1J1X68R76z5Wv6e2gYKQim3PE5H8Wgr56uQtf7ZcXFLgGU16GRtZTU3NwJFe0S0MqDi3glu9Ad+XdxkkS6QWLqLrG5y6LOBmtIuYCbiacNvJT8OldTp0dJu+CMN5aXt1A+I9FXuE1DPB//emLbPZcQ6mtPs/C6cztqjQCFmYCwcuNpZbsZEOx8aVnPOA49VL6aPk1F+FipiRmSmveRItXOtgS9Uz0CeolAkGxruAuJkSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mfapXwFotbGhMxBIhosnly+1H023C1qFrYjJhPCKJkQ=;
- b=ZKs5dfnI8JjSAmNWMUUd51PSW6uO9sIZ6Iw07hBFrLimw3MuXxVS43sXjNC2eVinmooguia8cR/L/Db49tbyh8CkP6pBpSqlWNwhBVJdVOLFTX4Z2t7tV70xh5w0docPe+yrmXxRh9eprbQdkXALZYCEryL0OAobAxNjovIh23IHECEur8OGQSviuQOl3pTJjTsTpexmOB3zkBpTfdP8COSEsyCoWAhojsbKq6o3YnaKx/SgEhfP4rgrrf/+lw1xoxOjVvohuyy1wx3qO3tuK4W2C96j4o6d84mtx0A5mgiMcwmuSIJc8v/aEaMhzk1oPeZEZlNlUWor+wowZisuxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by SA1PR11MB7699.namprd11.prod.outlook.com (2603:10b6:806:338::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.17; Tue, 12 Nov
- 2024 13:10:29 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::d244:15cd:1060:941a]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::d244:15cd:1060:941a%5]) with mapi id 15.20.8158.013; Tue, 12 Nov 2024
- 13:10:29 +0000
-Message-ID: <f0c45d5b-b8cd-4f75-a9d7-21808f18583d@intel.com>
-Date: Tue, 12 Nov 2024 21:15:02 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 13/13] Documentation: userspace-api: iommufd: Update
- vIOMMU
-To: Nicolin Chen <nicolinc@nvidia.com>, <jgg@nvidia.com>,
-	<kevin.tian@intel.com>, <corbet@lwn.net>
-CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>, <will@kernel.org>,
-	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <shuah@kernel.org>,
-	<iommu@lists.linux.dev>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<baolu.lu@linux.intel.com>, <eric.auger@redhat.com>,
-	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>, <aik@amd.com>,
-	<zhangfei.gao@linaro.org>, <patches@lists.linux.dev>
-References: <cover.1730836219.git.nicolinc@nvidia.com>
- <7e4302064e0d02137c1b1e139342affc0485ed3f.1730836219.git.nicolinc@nvidia.com>
-Content-Language: en-US
-From: Yi Liu <yi.l.liu@intel.com>
-In-Reply-To: <7e4302064e0d02137c1b1e139342affc0485ed3f.1730836219.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0083.apcprd02.prod.outlook.com
- (2603:1096:4:90::23) To DS0PR11MB7529.namprd11.prod.outlook.com
- (2603:10b6:8:141::20)
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="R1fGFGwp"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a99f3a5a44cso751365966b.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 05:20:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1731417622; x=1732022422; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=A1t9Ib/aPHDdfQvoVKx/Fp+uYeREslGX9huBdxy8D5w=;
+        b=R1fGFGwpLwBuY22360zqHCFEnrtfk2hrVbS8OpLp+AYP9e1SySpJPTZcqrWxCqjgQ/
+         CtHDSrQDdNVPvhM5cgIaKBv7pEJ+ceYEGN73V32Wfbw2LSEYL8GXVKLgTd2f1dTVKjlb
+         7cJP/UpEaUm9iCVWwOeaRM/5blXj5ML6D/5rnW7T5ihfPCRHQkLa84+kpZzgs72NaKPl
+         qZreU/NfePX9GRTF1xtg/hOZG6UftZ/8/l5Vht+eGmpS7GH7ZcDslLA3jJQgN+GRvURF
+         pEaJfvO7RiXhmdLWXoAntXxo4lxPwlL9XW+SFeCoI2TUk/hVty3Sokumt1vFjrzV5x3t
+         GT1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731417622; x=1732022422;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A1t9Ib/aPHDdfQvoVKx/Fp+uYeREslGX9huBdxy8D5w=;
+        b=rk0quRm5wJXcYrHWKCJ17u14KP5ntw8g1wUFnYOYH0J0neNlAv40RPzMVbwRZzs1er
+         wMEo8nSbpWuCZIReaeJLWYMM71DvgV9pKy7Ndy2puQKmRBDYsKucxXKnc7Xfu7qUd3Bj
+         xO4tkeRBd/h0sOwzK2Q4cj4h7hcHN/TP8gf0HxWVgvxDGYX2W9HseVPQ0DlAe84SHD8u
+         D5XXDtvfmQ3r616E8ozbK+6l68jZ16NGMUVmUNhScoX6o+CxfjmRqinWY/jE/gQW1Rj4
+         dRjrF1akCg9N6KtYDHw9dLATuNCKSK3fEpgPLS3DvMgKxJY1yse+ra5DoLMV6CIlp4hk
+         /QJA==
+X-Forwarded-Encrypted: i=1; AJvYcCVRxAq3LI7lCYuy2KLofsp9GGY/zoEXYyulgPjDk6E68+m8qZqRSk9iiMIxw/QoVJZy2/0aHuxWEc06QLhhYzI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyxy1E1P7XAr3YdPYYUPlR6yc6TAuySiyXl+WAk6Un1xIW26FkX
+	S3HY1PWpbEjU8aePIUu6AjVRq9VTPT7fipYUGGEKtr/uWlRuRATuAMr2ydWGISA=
+X-Google-Smtp-Source: AGHT+IHxDEAm5J4fyPiYBfUUcx8JGUKH/71W41+JakmzEd92mmK3cHWQHCGpTj47KLde3aEZt1tLWg==
+X-Received: by 2002:a17:907:72c8:b0:a9a:1739:91e9 with SMTP id a640c23a62f3a-a9eefeebe72mr1631965066b.24.1731417622152;
+        Tue, 12 Nov 2024 05:20:22 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:e829:c484:5241:93b2? ([2001:67c:2fbc:1:e829:c484:5241:93b2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0dc5112sm718813966b.112.2024.11.12.05.20.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Nov 2024 05:20:21 -0800 (PST)
+Message-ID: <189dbeea-127a-47e8-84f8-c8cf1cc03536@openvpn.net>
+Date: Tue, 12 Nov 2024 14:20:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|SA1PR11MB7699:EE_
-X-MS-Office365-Filtering-Correlation-Id: e94bb2b7-7080-4b21-a2be-08dd031b6116
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?RjI5ZnpGc3VDM2hYdGk1NmJlWTUvVVBpeTAwY1R6bVZML2NFUktBenVQUkZD?=
- =?utf-8?B?RHJ1WWNaemxPckg1ZlF5SVBnU1h6Q2x5aXJkNUE1K0JZdzd3b0JXbjhTaFNk?=
- =?utf-8?B?dDJQbUVBeW1kMmN5d0psQjZlZm42SzNiREozdm94LzdzQUNLM2kyV0dLK0RR?=
- =?utf-8?B?RjcrUnBEZkJ3R3NUU2ZPczlIcFQ0ZGtiYUYwM3pHS3NNc012cDhxUjdHQkxU?=
- =?utf-8?B?OEdhaHhnVGZNMFUvdUNOQ0NZVURMU0trbXp6V2tKRURPRFB6MndqMGRCWmdx?=
- =?utf-8?B?WHpudTZ3WXg2d1l5ZUF5UXhsOXg0REZhdWczSXJHV1JrTStHYjVYTEN5R1VK?=
- =?utf-8?B?NFhoVXNpck1wWmgzWEszTXRzeGhDYUt5OVJlZFhtTE5kbXdjamVXRFV4Sks1?=
- =?utf-8?B?dHppdWVlSmY4UEFDQ2haVWlvVzFlSExYODlIRVBYdldRRTVUMEc1bSticGdl?=
- =?utf-8?B?L0gvcG1tZ2JoQW41V3pCUmx3eW5XT2h3SWlhOEtlbjF2a3RBbEI3MDFadFFY?=
- =?utf-8?B?MVovbHN2VHVEMnp5Z3EyMURnanlQeXZDQzAzN2t4N2xjQmQ1ODAxNGNkQlNj?=
- =?utf-8?B?aDRGNERZMjdVVFp3bll4ckFXbkZXOHdUbEFOWCtaazlkZVFOVDJta1BCVDNv?=
- =?utf-8?B?U25DQ0pQSXE4UGhWR0pEalpQWVE1R2pxTE5Hbnc5MEExQXl3Y1dUUHZ4SlVL?=
- =?utf-8?B?UDZKb05YclFUd1NhaTIrVWs4NndRKzVkVzM4Q3FaZUxhRnA1Q0VObERNZXVD?=
- =?utf-8?B?RGwxRldGZmJEdHFPQmxVSkkzNGVyMXVvOStYODlaN1kyc0Q0b0E1ejU4SlU2?=
- =?utf-8?B?UlJOOFFQaGNlOE1hWVYwQmtRdnk4VlhkK2hCSWN1RVhVM1VyenFFelUxb25F?=
- =?utf-8?B?MXlRc2JwUHJKV2gyZ3ZxYTUyYVV3dURFMDBURTlRTUs5N2hjbVJGdTdGM3lZ?=
- =?utf-8?B?dHBXVGdWL1FHUzI5WmM2R0Y3QU9pQlppam5aWWJyMGE0RmxvYlduTFNhTWRj?=
- =?utf-8?B?R0pveEl0dEkwb1haLzZJT1VSbFVBK3haa3BZUEI2UmJ0M3NKZGM3azBud2lO?=
- =?utf-8?B?RGxKcU9VMjB3VGo5dStxMzZNNEpYempGOGJZZy90cDNsWGd0UDlkblpGMWFR?=
- =?utf-8?B?eExQR0xuR3JXS1FxNkFocEhLM1RLbW1sYzBYOGZ1dVNOR2l0d0tUdXZ1ZnRH?=
- =?utf-8?B?eEwwZ2ZNV1VTY2VCUUluWS9HU0hHbzJsTDN6eVRoeGNhM2RKdVN4SXlJZmw4?=
- =?utf-8?B?eXo0UWlWck1FdDFWNmhuRG82eHQzUFVUWHFtbk41MVVFZmN2K0w5Yi9iR1V3?=
- =?utf-8?B?OERUUkEzc1Y0MUp2R2k0QklDb0NUN1VHWkovdERkclFMdit3ZkYrT1VncWN3?=
- =?utf-8?B?R2NKei9UUmpHRlk0ck81WGZCK1JzeEFoRnE4WmNoUEU0azVyL0FtOHp3RGZC?=
- =?utf-8?B?OWhpRkxzQkZqa3NvNmh3Rk5LR2JKMDAwMmxweVkyNjFCdWFRYUZrS3U0NzZi?=
- =?utf-8?B?SnA1c29IazBtRVlvYitFYkRDaFJtUDFFdVVhRGt3dE5nQUMrVGgvclRWZmhC?=
- =?utf-8?B?U2tZQXVyLzk2U2pZUnUrZ2djWFBXeHNLQi9sQmZiNDhYaXVxSzB0SFFSa1JE?=
- =?utf-8?B?OXVKWjRJUkZyRzlzRHRhL0tFWEh4VXBuVGJhelArdXF3WVhiN3ZianRBWmNm?=
- =?utf-8?B?OWFIYlMzNjRPWUZWTWRUMlRUaU5aZmlSMXI2d3A4bW45R05pT21rWTFKRnkw?=
- =?utf-8?Q?2/icYIsqqLZgZz//j0kQXESR3XuxTn2q8OceY8e?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NjRoL0dXZHowZXZjTFJnOVJIZFRhcGpPK0ZrOGxSRW9sYzJtNmdVUVJCci9u?=
- =?utf-8?B?d0tmSW5XeUNIMUZlOTFvcnpsYXB5TXNsNkw2TE5pdUw1LzN1UmIyOUs0TkR2?=
- =?utf-8?B?N0ZsR1Y0aDFwcUdEdmhYU0JoUnFJVmhLUEsrSjhsTTEwaWtlcEdrVGUrc3Jr?=
- =?utf-8?B?L29iYk8wM0pYdGJUR05WMm5iejUyQlh4UkluNG0yWUJsOXZKTkhDdnNVb0ts?=
- =?utf-8?B?dzZaRkdSNHd4dzNmZlRuT05RZXFmOXR0WWxCeGlONFdKNWt6d1N1N3pVellT?=
- =?utf-8?B?NzNXRzl1YTZ3R0Z4ZDMzV0p5MzVoek9EV3FkZVZ5Tklaa3lRVzBLaXdZSW11?=
- =?utf-8?B?M1BuWXRwU3ZBVGFhNUhNSmxXdGxIZXM0bHVJSFBlQWNwTW9BSUQzKzhHazJp?=
- =?utf-8?B?cE4xeEw5Rk5oWnExRHZqZmpJNHI5a2laZnl3dVNpeUJzaGdOWG1ibURWN1ZP?=
- =?utf-8?B?NmNVbHd3eEZucGtERmdQYzFSd1Fia3ZNZzFRekQ5NHllU1lFSlE4VkQ3eTVO?=
- =?utf-8?B?dmd3WkdTMWpZQ0V0N2o0SUh0UldhaGpaVVlpVTl4L0tkT1hrY2xwa2xnNW5E?=
- =?utf-8?B?cTM2VDVjOUlaT0dYU3NaUy9XQTNIU2o0WjFVME03ZGtTcmZ2N05IRGlNcXRv?=
- =?utf-8?B?SFZLZ1A5VjFCWjQyeEhySXJpRDdPU0ZDNDEzKzZZdkt2QnNRRGhCcjdydzNq?=
- =?utf-8?B?MDAzUEhkT1I2TGlObm43MWNLMnVSbjVlMmJZdUY2YjV0aTZDSWRnSERBdU94?=
- =?utf-8?B?Tm5NUjcrWmtYa3RrOGRGVGNxb3pTN0prSzQvK1krODYwdFVjL3VzdDZacXcx?=
- =?utf-8?B?MVZRSjd5bmdGWEoxUXdwWGczekFYYkNTejNvejRKRFNjRTRldEFZTVhPcVFF?=
- =?utf-8?B?SGFld3hSV0F3Zk5Ob2JncGRSems4cExoY0ZvTmNZNW1idm1FNy9vbCsvczFl?=
- =?utf-8?B?UC9sMTExOUdMc2U3SDl6Rk5LQ09xVkFvQVRWbHRKVFQ1a2JpRDlacnprRzhz?=
- =?utf-8?B?cGI4L2ZXR1djblBTQno4WnZRdC9KY0NPckx1dU5lSm4wNXVvM0xGNjU1UmtZ?=
- =?utf-8?B?WWhTUjNKaGZZTlFRcVNpRUsza3ZBemw4Mi9ncVFuK2hMSlVUdE9zUnl0NWRk?=
- =?utf-8?B?eDQvbWQzay8rcEZRMG1zdVNjcWk2RG1kUCsyaGJCWnE3dVVnYlo3bFB1Nk5T?=
- =?utf-8?B?UmVqa1BFdEMzMzVSRWsxZ2d1dzVTYzNxNnlZT3k4VHBJOVdXN2cwWFZrMUlS?=
- =?utf-8?B?NjNObDJ1cVR0cEhtRkhEMytXVFJrOWliVXIyckVSTGtCQ29jWjRXUzFaR1lL?=
- =?utf-8?B?bjVBMVFnVDZRbitDam9tNW54WkNjd2c4cC9FUUxMOTE4K3VMdjQxSW85cFNp?=
- =?utf-8?B?R1l2bFJKNVhSUytCOVVKTE1mWnVYM2FSQytNMW9LMkxTbTBUMElESnFERTB1?=
- =?utf-8?B?bGMxaDN4RVVIUjFWbUtVL2F5WER6TUtpZmlpR0IvSytUbHJadm15WjJMRzBI?=
- =?utf-8?B?NGhFTzlQenhqVllXUlJkK3pxMEowZnJNMEY1TlM0WHJTbjJSbHE0d1RjbmJq?=
- =?utf-8?B?NEF1d0RRN1ltL3IrRVVialB4VWdtcnpmTy8xYk1ReTB2SkwyNW85eXdQMGdK?=
- =?utf-8?B?YnJrVTZzcTFTVGo3d1NBYmFFR2Z3QmJUMGdWRVd6VXNoMzFYTlYzMllhQUli?=
- =?utf-8?B?TUJDcFA0N3U5MVVmeHVVVkVHK3dLZ21jb1c2WE4wc0hrUHQrRG5vVGtuOC9R?=
- =?utf-8?B?UXdyNzZPQ1hvQjJWeGhmZ0trd3M4dVlUWHh6cmptY3ZyOE5VZHF3K3FaUTlx?=
- =?utf-8?B?aVdZaGlaSXJvaGFQb0V5bHJaY0cxTEZTSnhrTGtoYVZQR0hFRjNabkkwcGhx?=
- =?utf-8?B?UW5GamZhSm1malkzQmFCS2JNeDNMT0h6V0hFODlKWUJQbzFrOWtJclREZW9m?=
- =?utf-8?B?QlBFeWJPWmRsUGZMbVFQL0lOZTh3TFBRd3VGckdFbHNTRHJpWE9oZTBjZVpm?=
- =?utf-8?B?ZXBZanRYR2xWaDZjZTNydDFzR2VJazNneTBEb0N2RTQ3c0FSc3QwRno2TXho?=
- =?utf-8?B?akRmYzlzV1Z2L210eGVhOHlMQXlpNnpRTkZPM0I4WkpRY2g1SklwSy9wS2tq?=
- =?utf-8?Q?qbNwOEC8jlxM+tnvVU4XAMXWi?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e94bb2b7-7080-4b21-a2be-08dd031b6116
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2024 13:10:29.1990
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OOmhJjMGbNW+aRWyV85+s5yOXVFsvML4uw4DoQXZr7N2w7QQAaXCRjwqiFwKUf3cscJdnW25iQ0k6h80+w3c8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB7699
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v11 15/23] ovpn: implement keepalive mechanism
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+ Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-15-de4698c73a25@openvpn.net> <ZypfnyfToF1b6YAZ@hog>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <ZypfnyfToF1b6YAZ@hog>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2024/11/6 04:04, Nicolin Chen wrote:
->   
->   The diagrams below show relationships between user-visible objects and kernel
-> @@ -101,6 +132,28 @@ creating the objects and links::
->              |------------>|iommu_domain|<----|iommu_domain|<----|device|
->                            |____________|     |____________|     |______|
->   
-> +  _______________________________________________________________________
-> + |                      iommufd (with vIOMMU)                            |
-> + |                                                                       |
-> + |                             [5]                                       |
-> + |                        _____________                                  |
-> + |                       |             |                                 |
-> + |      |----------------|    vIOMMU   |                                 |
-> + |      |                |             |                                 |
-> + |      |                |             |                                 |
-> + |      |      [1]       |             |          [4]             [2]    |
-> + |      |     ______     |             |     _____________     ________  |
-> + |      |    |      |    |     [3]     |    |             |   |        | |
-> + |      |    | IOAS |<---|(HWPT_PAGING)|<---| HWPT_NESTED |<--| DEVICE | |
-> + |      |    |______|    |_____________|    |_____________|   |________| |
-> + |      |        |              |                  |               |     |
-> + |______|________|______________|__________________|_______________|_____|
-> +        |        |              |                  |               |
-> +  ______v_____   |        ______v_____       ______v_____       ___v__
-> + |   struct   |  |  PFN  |  (paging)  |     |  (nested)  |     |struct|
-> + |iommu_device|  |------>|iommu_domain|<----|iommu_domain|<----|device|
-> + |____________|   storage|____________|     |____________|     |______|
-> +
->   1. IOMMUFD_OBJ_IOAS is created via the IOMMU_IOAS_ALLOC uAPI. An iommufd can
->      hold multiple IOAS objects. IOAS is the most generic object and does not
->      expose interfaces that are specific to single IOMMU drivers. All operations
-> @@ -132,7 +185,8 @@ creating the objects and links::
->        flag is set.
->   
->   4. IOMMUFD_OBJ_HWPT_NESTED can be only manually created via the IOMMU_HWPT_ALLOC
-> -   uAPI, provided an hwpt_id via @pt_id to associate the new HWPT_NESTED object
-> +   uAPI, provided an hwpt_id or a viommu_id of a vIOMMU object encapsulating a
-> +   nesting parent HWPT_PAGING via @pt_id to associate the new HWPT_NESTED object
->      to the corresponding HWPT_PAGING object. The associating HWPT_PAGING object
->      must be a nesting parent manually allocated via the same uAPI previously with
->      an IOMMU_HWPT_ALLOC_NEST_PARENT flag, otherwise the allocation will fail. The
-> @@ -149,6 +203,18 @@ creating the objects and links::
->         created via the same IOMMU_HWPT_ALLOC uAPI. The difference is at the type
->         of the object passed in via the @pt_id field of struct iommufd_hwpt_alloc.
->   
-> +5. IOMMUFD_OBJ_VIOMMU can be only manually created via the IOMMU_VIOMMU_ALLOC
-> +   uAPI, provided a dev_id (for the device's physical IOMMU to back the vIOMMU)
-> +   and an hwpt_id (to associate the vIOMMU to a nesting parent HWPT_PAGING). The
-> +   iommufd core will link the vIOMMU object to the struct iommu_device that the
-> +   struct device is behind. 
+On 05/11/2024 19:10, Sabrina Dubroca wrote:
+> 2024-10-29, 11:47:28 +0100, Antonio Quartulli wrote:
+>> @@ -105,6 +132,9 @@ void ovpn_decrypt_post(void *data, int ret)
+>>   		goto drop;
+>>   	}
+>>   
+>> +	/* keep track of last received authenticated packet for keepalive */
+>> +	peer->last_recv = ktime_get_real_seconds();
+> 
+> It doesn't look like we're locking the peer here so that should be a
+> WRITE_ONCE() (and READ_ONCE(peer->last_recv) for all reads).
 
-It looks to be reasonable to share the viommu_obj between devices behind 
-the same physical IOMMU. This design seems no enforcement for it. So it's
-all up to userspace from what I got. :)
+Is that because last_recv is 64 bit long (and might be more than one 
+word on certain architectures)?
+
+I don't remember having to do so for reading/writing 32 bit long integers.
+
+I presume we need a WRITE_ONCE also upon initialization in 
+ovpn_peer_keepalive_set() right?
+We still want to coordinate that with other reads/writes.
+
+> 
+>> +
+>>   	/* point to encapsulated IP packet */
+>>   	__skb_pull(skb, payload_offset);
+>>   
+>> @@ -121,6 +151,12 @@ void ovpn_decrypt_post(void *data, int ret)
+>>   			goto drop;
+>>   		}
+>>   
+>> +		if (ovpn_is_keepalive(skb)) {
+>> +			net_dbg_ratelimited("%s: ping received from peer %u\n",
+>> +					    peer->ovpn->dev->name, peer->id);
+>> +			goto drop;
+> 
+> To help with debugging connectivity issues, maybe keepalives shouldn't
+> be counted as drops? (consume_skb instead of kfree_skb, and not
+> incrementing rx_dropped)
+> The packet was successfully received and did all it had to do.
+
+you're absolutely right. Will change that.
+
+> 
+>> +		}
+>> +
+>>   		net_info_ratelimited("%s: unsupported protocol received from peer %u\n",
+>>   				     peer->ovpn->dev->name, peer->id);
+>>   		goto drop;
+>> @@ -221,6 +257,10 @@ void ovpn_encrypt_post(void *data, int ret)
+>>   		/* no transport configured yet */
+>>   		goto err;
+>>   	}
+>> +
+>> +	/* keep track of last sent packet for keepalive */
+>> +	peer->last_sent = ktime_get_real_seconds();
+> 
+> And another WRITE_ONCE() here (also paired with READ_ONCE() on the
+> read side).
+
+Yap
+
+> 
+> 
+>> +static int ovpn_peer_del_nolock(struct ovpn_peer *peer,
+>> +				enum ovpn_del_peer_reason reason)
+>> +{
+>> +	switch (peer->ovpn->mode) {
+>> +	case OVPN_MODE_MP:
+> 
+> I think it would be nice to add
+> 
+>      lockdep_assert_held(&peer->ovpn->peers->lock);
+> 
+>> +		return ovpn_peer_del_mp(peer, reason);
+>> +	case OVPN_MODE_P2P:
+> 
+> and here
+> 
+>      lockdep_assert_held(&peer->ovpn->lock);
+
+Yeah, good idea.
+__must_hold() can't work here, so lockdep_assert_held is definitely the 
+way to go.
+
+> 
+> (I had to check that ovpn_peer_del_nolock is indeed called with those
+> locks held since they're taken by ovpn_peer_keepalive_work_{mp,p2p},
+> adding these assertions would make it clear that ovpn_peer_del_nolock
+> is not an unsafe version of ovpn_peer_del)
+
+Right, it makes sense.
+
+> 
+>> +		return ovpn_peer_del_p2p(peer, reason);
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +}
+>> +
+>>   /**
+>>    * ovpn_peers_free - free all peers in the instance
+>>    * @ovpn: the instance whose peers should be released
+>> @@ -830,3 +871,150 @@ void ovpn_peers_free(struct ovpn_struct *ovpn)
+>>   		ovpn_peer_unhash(peer, OVPN_DEL_PEER_REASON_TEARDOWN);
+>>   	spin_unlock_bh(&ovpn->peers->lock);
+>>   }
+>> +
+>> +static time64_t ovpn_peer_keepalive_work_single(struct ovpn_peer *peer,
+>> +						time64_t now)
+>> +{
+>> +	time64_t next_run1, next_run2, delta;
+>> +	unsigned long timeout, interval;
+>> +	bool expired;
+>> +
+>> +	spin_lock_bh(&peer->lock);
+>> +	/* we expect both timers to be configured at the same time,
+>> +	 * therefore bail out if either is not set
+>> +	 */
+>> +	if (!peer->keepalive_timeout || !peer->keepalive_interval) {
+>> +		spin_unlock_bh(&peer->lock);
+>> +		return 0;
+>> +	}
+>> +
+>> +	/* check for peer timeout */
+>> +	expired = false;
+>> +	timeout = peer->keepalive_timeout;
+>> +	delta = now - peer->last_recv;
+> 
+> I'm not sure that's always > 0 if we finish decrypting a packet just
+> as the workqueue starts:
+> 
+>    ovpn_peer_keepalive_work
+>      now = ...
+> 
+>                                         ovpn_decrypt_post
+>                                           peer->last_recv = ...
+> 
+>    ovpn_peer_keepalive_work_single
+>      delta: now < peer->last_recv
+> 
+
+Yeah, there is nothing preventing this from happening...but is this 
+truly a problem? The math should still work, no?
+
+However:
+
+> 
+> 
+>> +	if (delta < timeout) {
+>> +		peer->keepalive_recv_exp = now + timeout - delta;
+> 
+> I'd shorten that to
+> 
+>      peer->keepalive_recv_exp = peer->last_recv + timeout;
+> 
+> it's a bit more readable to my eyes and avoids risks of wrapping
+> values.
+> 
+> So I'd probably get rid of delta and go with:
+> 
+>      last_recv = READ_ONCE(peer->last_recv)
+>      if (now < last_recv + timeout) {
+>      	peer->keepalive_recv_exp = last_recv + timeout;
+>      	next_run1 = peer->keepalive_recv_exp;
+>      } else if ...
+> 
+>> +		next_run1 = peer->keepalive_recv_exp;
+>> +	} else if (peer->keepalive_recv_exp > now) {
+>> +		next_run1 = peer->keepalive_recv_exp;
+>> +	} else {
+>> +		expired = true;
+>> +	}
+
+I agree this is simpler to read and gets rid of some extra operations.
+
+[note: I took inspiration from nat_keepalive_work_single() - it could be 
+simplified as well I guess]
+
+> 
+> [...]
+>> +	/* check for peer keepalive */
+>> +	expired = false;
+>> +	interval = peer->keepalive_interval;
+>> +	delta = now - peer->last_sent;
+>> +	if (delta < interval) {
+>> +		peer->keepalive_xmit_exp = now + interval - delta;
+>> +		next_run2 = peer->keepalive_xmit_exp;
+> 
+> and same here
+
+Yeah, will change both. Thanks!
+
+
+Regards,
+
 
 -- 
-Regards,
-Yi Liu
+Antonio Quartulli
+OpenVPN Inc.
+
