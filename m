@@ -1,60 +1,60 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE2B202641;
-	Wed, 13 Nov 2024 17:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC4C1494DD;
+	Wed, 13 Nov 2024 17:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731520022; cv=none; b=gzL1IXKrAf564tdXMxCMbi22U7V8uKm2DFTosi6Nace+lrwlLA+ncvHXFL3nDyOddiws4qQftowLwEQ0edZWRzxIg1OWrl1O0xJF0xyfeN/J5BWGPmiIp6IvbnDTQ4qKsOyeCEzCt/BFr2r4Lk610wLQQr8LaS7ekXvvgZ2PVYw=
+	t=1731520244; cv=none; b=bw8BMOXP50JbkbKUmvOMuTHEq58MznlspaZwyETybnYzaBAkhVM8vCUviyHYWxbxyxbT9k08phlvqGNZPPsM6bTw5KQhaL3aH//QKBei31nmeffAzAam1VHeZY+JNDPhYXM4g93M7bpUH6VpuTWN7+k/supLSiPXpVBKv5QgbpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731520022; c=relaxed/simple;
-	bh=TdopnMjVf6e1oyxe85x8iupGX8z8YRMU4vXP7J6L3S4=;
+	s=arc-20240116; t=1731520244; c=relaxed/simple;
+	bh=uiKubqfzMx2s2ufqjwwokbGZLNA7OAammJ1+n+A7QOU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c9/VLmXzobF1QbEw8sQ83sje/diEdQoeXE+vhrllpZLjcoP4owg/6iWWYxDfTZ15H+KZOvezaC2xyDwehFQTUwYpZP8soIPVqWJyKHnls0J5rO4FD4TR+h80aXrBE3uHWlOlHuDP1HGayKl5I4v7hG8TLEk4CRXj6Qo6iqHoWng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fh7hERuu; arc=none smtp.client-ip=209.85.214.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=S4wEheLwopjldi5SVqvweDTOA9fRoG9l/m/i6kjyt7MiA9cGUy0MAgm1lJDi4o0PBd+lkJ6iC1WkWuUu6/ogqg0UywRVySWQKGujKH6F3IXZMv2brEYiFCuiCIziWLlC1J3jeNvrpQbupr1enwM/96xDgv+epsqlEyFf+Up2Kng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UduD5eqB; arc=none smtp.client-ip=209.85.160.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fh7hERuu"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-20c70abba48so71130295ad.0;
-        Wed, 13 Nov 2024 09:47:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UduD5eqB"
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-27b7a1480bdso3045797fac.2;
+        Wed, 13 Nov 2024 09:50:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731520020; x=1732124820; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731520242; x=1732125042; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=TdopnMjVf6e1oyxe85x8iupGX8z8YRMU4vXP7J6L3S4=;
-        b=fh7hERuuYiau3EJYl26hXLm27R0dk1O4ZwKDMjHwRBO17xfBwNxCEJ5X/w3gm4/HxU
-         jqDHPfqa5buvWLONdwQaa16/fPCPb4H572afO4fzUwdgAUdD8mM12Fn0xzHOeKjYJkBi
-         gd89fCYBbxOj8P0fLfcaS6cqbc1rTci8YOX9WQ2ArtVEZHUwpvEdXwR9DNPGx+vSsxPw
-         7ItXebeT67Iab6DuTxdJS2wmVVaUe+g8SLTCBGo1mWPzVU/1hmCbQwzXGqGgsozAi2op
-         QjdD11xf2DQGZmTiSpoVnp3p2rPEFV9v5SXSNGU5ZccYDdc4kkoNieB3KeBescKrAE+Z
-         O6pg==
+        bh=YASkwPLR6DW5p2wms4wC0dIzAVnPt7gYAm9iZK3s/7I=;
+        b=UduD5eqBeJ+6baCuhkC8BRTmJNiyyE+qomPUYNFGxR4zeKQXFVedoumV58k+Lijex5
+         qJeRdlkO/MEbxZ3EfXcVjIX4c83jSVGZ0rwbc3cfzSEOTgZIeYFHBpby5UDNh4zbIee+
+         rmH5Esn87gYOVmD9OYWNORakKCr7/1xk8KR9FTnAvAWayOCmbY0lSBp9gX9Jp3HVhnBn
+         XNKgiE6zuzxHcMh0j5Wl6rUt4QXbY0s5JHUlKkTuB2ssmSo5OWNZo5fNLmca0n0KexR3
+         i+Tk5JOOwkuHME0DzRv8y9xKqzdtXnYqP0g4e67hnETrGLxw7XGxiBKIv+D9BI5PL4Ty
+         THVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731520020; x=1732124820;
+        d=1e100.net; s=20230601; t=1731520242; x=1732125042;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TdopnMjVf6e1oyxe85x8iupGX8z8YRMU4vXP7J6L3S4=;
-        b=WjtboUsumHyLCc9h9mACnPl7D41Vzu4AHOPppUKNG7m+HnQwLHr5UjWJzYW7dBYeN2
-         YVFlCHOlmJj9bir9J54Z5VUxHid/lJ/odKDN08tIuYmNKzsefY4+qZ+1LKZst6xpOoUO
-         dViAd1pwPNTqOo0k3znoCOh2eu1AnVmMn1ZYholBc5PnqS6nua4dYABH7KISOKMfmuIW
-         5XYkHPECdUtxSWd0CTbnZF39ihzchDrGzjChwUkdoTJWSbAfFEPjcEVmdpddEb8Q27o7
-         apc8zkSB4Kf9x7YlRomllQ71GEXNMXxdQ4jdwxk0Yqf6w9JUQqrtkz33vIn4oFQD8wn2
-         F9Yg==
-X-Forwarded-Encrypted: i=1; AJvYcCVTuivlI+O4WwrV6zxlQ+OGmhi8fdIy7a7Acug7/OxmLbKqtcMQGEdcDmqtTmRXWUaX6Hfnfo5Cg+5X2QJEWmM3@vger.kernel.org, AJvYcCW6uQ5MNpQd9P5LNNMUB6YwE/m4SA2O+SEQwJ9TIyavmtOrrpCU5+AJYYmcSLzyqZnUVQs=@vger.kernel.org, AJvYcCXpGHf/8OW+m2KTPEr0u2hqWnZufz1la7h9kJPHKtbMLCIssp6XDDaB4LEWPD0gmi9AoSoPrBqltrd66FUf@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnmACXgqMpshLNX0URaKVISFbu1oWHLzTPVs5Ix9cnMAS4XeuX
-	LqbjIiGclIdH95jbBxkVSDap7he797b1TsCFViOb0je9QkbqfNs=
-X-Google-Smtp-Source: AGHT+IFDSSAN8qtbqTUOdypFJgOKjXPRRSQT8QpCWMn0rJrf7Dr0W7xeGjgtY83HAyv4wx20T/RxXA==
-X-Received: by 2002:a17:903:40d1:b0:20c:a189:c006 with SMTP id d9443c01a7336-21183d55546mr282351525ad.45.1731520020065;
-        Wed, 13 Nov 2024 09:47:00 -0800 (PST)
+        bh=YASkwPLR6DW5p2wms4wC0dIzAVnPt7gYAm9iZK3s/7I=;
+        b=q3CSWkRvNxtRh88sZkWkh4Uf1wquFpPTTkPqT0Y+M/gXN9KXiKm1hk4hbY8PEcQkVe
+         UtGXrmdCbKUgFfEx5Gg+A6574klHQF6/S8fdNLOYqLulQfypAowwflaAU9cuFbGGBpWt
+         juZOoTySA+iieviFI53opu2b+uESVUqBcysl+xNMo1+juea2K8PDkte1tf6KBoA0SeM3
+         tgr0gLH94dMsE+VBi0TiMH3oztF6js79jr7jGvv+HlWG3L15JYc5r7q2i0F6n84PwJ0i
+         64JNtrH+2ZtICuF85+uk7U+MHDMY5uk6F7sw2Prh/FZBE93RfBWTd8bYzpL3yWf/Vwzu
+         w8LQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUNiYowKewwyL+vX2tZGE/xHRFpO+DxHOfhArtuZWj0LsQmU7lNQFsKQwP0loj9A261vm4=@vger.kernel.org, AJvYcCUhqj53Yc8m2dOoW7+j+r5XwGMN4Y/NHP2J5NsUDLbJWUmYgp4pjtCwBmQo3xaAyG5NRCD4D90ztVHszXxnPtZk@vger.kernel.org, AJvYcCWQ5JikswZMc/a8//Q/E/AjEszvkhEv5BXGsnlUT0qC81rUmged1znq+AyMoINxhZZocf3p86UYFGFlfcf6@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywsj/wBJpw0dX58ZLPUtHtmMYvU/dqNTzxHM0gq9OdtF7fqORnm
+	iuepqe5OKFWiqfazx+3Fg375OVI/T4wMxNpZ0pyJlHQOKvkWE5g=
+X-Google-Smtp-Source: AGHT+IEF01O6Epfp5F3V8NpoD+BiSaq7bs1bUg4f5F/1e1isXwK/aJccWC+w6jieFf72m8LLen0VTA==
+X-Received: by 2002:a05:6870:3310:b0:287:32f7:ef42 with SMTP id 586e51a60fabf-295e8d51845mr3982170fac.16.1731520240475;
+        Wed, 13 Nov 2024 09:50:40 -0800 (PST)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e44807sm113065235ad.155.2024.11.13.09.46.59
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f643e9asm12674863a12.59.2024.11.13.09.50.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 09:46:59 -0800 (PST)
-Date: Wed, 13 Nov 2024 09:46:59 -0800
+        Wed, 13 Nov 2024 09:50:40 -0800 (PST)
+Date: Wed, 13 Nov 2024 09:50:39 -0800
 From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Alexis =?utf-8?Q?Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+To: Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Mykola Lysenko <mykolal@fb.com>,
@@ -70,11 +70,12 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Bastien Curutchet <bastien.curutchet@bootlin.com>,
 	Petar Penkov <ppenkov@google.com>, bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 06/10] selftests/bpf: add gre packets testing to
- flow_dissector
-Message-ID: <ZzTmE81yt5TXlfWj@mini-arch>
+Subject: Re: [PATCH bpf-next 07/10] selftests/bpf: migrate flow_dissector
+ namespace exclusivity test
+Message-ID: <ZzTm7wKsOLuI5w20@mini-arch>
 References: <20241113-flow_dissector-v1-0-27c4df0592dc@bootlin.com>
- <20241113-flow_dissector-v1-6-27c4df0592dc@bootlin.com>
+ <20241113-flow_dissector-v1-7-27c4df0592dc@bootlin.com>
+ <4f68d104-b96d-4726-a94d-1123765393c6@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,13 +85,27 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241113-flow_dissector-v1-6-27c4df0592dc@bootlin.com>
+In-Reply-To: <4f68d104-b96d-4726-a94d-1123765393c6@bootlin.com>
 
-On 11/13, Alexis Lothoré (eBPF Foundation) wrote:
-> The bpf_flow program is able to handle GRE headers in IP packets. Add a
-> few test data input simulating those GRE packets, with 2 different
-> cases:
-> - parse GRE and the encapsulated packet
-> - parse GRE only
+On 11/13, Alexis Lothoré wrote:
+> On 11/13/24 14:53, Alexis Lothoré (eBPF Foundation) wrote:
+> 
+> [...]
+> 
+> > +	ns = open_netns(TEST_NS);
+> > +	bpf_prog_detach2(prog_fd, 0, BPF_FLOW_DISSECTOR);
+> > +	close_netns(ns);
+> 
+> I would like to mention that I initially planned to directly delete the
+> namespace to perform the test cleanup, assuming it would be enough to consider
+> any non-root namespace flow_dissector to be removed. However I observed that it
+> made other tests dealing with flow_dissector starting to fail with -EEXIST,
+> despite all those tests being marked as "serial". I started examining this,
+> suspecting a real issue (a race between namespace deletion and flow dissector
+> attachment check, or a ns refcount issue) but before going further: is my
+> assumption right ? Should a mere namespace deletion be indeed enough to remove
+> the corresponding bpf flow dissector ? Or am I missing something ? If so I'll
+> keep examining this.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Don't think that's expected. Removing a namespace with an attached
+dissector program should (in theory) clearly detach it.
