@@ -1,123 +1,131 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDE01E0E13
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 17:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D6E1F80C8;
+	Wed, 13 Nov 2024 17:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731517700; cv=none; b=MtaGBp/OWSJC/2Stj1zllG+LwRz6lkGMQvj/mZ1u/GXzO+3owDOPG/7wd1EjaZnSEpyJD946UPppt2foyXyF+FONFx9DGftH9cCZnRRBe5wu3g9qDPpaQpf9p6tzA9PfeCi9GBHA6StEpiEMd6NFdifIQ1S0gw3vZrrl+O9GQLI=
+	t=1731519067; cv=none; b=bUkYhxA94VgXKS5ajPPNPXvciObCy8r16OxlJs7hnzxk+I4b0Mm01ob6Gbx+ySxSfuF8LKmwsknnDonctYw5Ync49X4fb8L0PNf7aN3n9NGZrx4+UlwyrZou9PZyy4KR0P7Y+rLFm1EwWZu9XT8CjW2hmXe0VZVlUkEQ1muHBTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731517700; c=relaxed/simple;
-	bh=MwTDjeCUUuvtEqRz3jfVu5/q3d7xdDWCUuJsQkbpCU4=;
+	s=arc-20240116; t=1731519067; c=relaxed/simple;
+	bh=wM2LIeZuwho5MTyajMgsnq+6TqtS6xgt18ptAgYsbK4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V0BOeKPBB/++qRNYwvAOZsAiqcR/pGKuwaB/7Bz9ZiCtz8WfckSSGUrREPjqQudFw0TsyFDoUl0Jwc6IlToH1kinb4jxgTjnBHM3ynq5OGXrX7PTPhOREoSlAddsQuBf7v7Vw+u0Y4ZaCZ0Ym20my2T2DemJ+d3vCw8ZddmnqXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QfrnQqoI; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=oDpbV4EzaAdZP5jWvrvMAMlwnCPd/6zIO/Z70nHQOJX4hlMvIV9mOBckbcgdfI49cEUQfTVHfaaINujeFPQU6cCUvPqL1ruXNOK+8jnWsmNCnjC59f08K31cfcRzhoZ3wojydjqy9VCizQ2QZCiQEela0s7MQbnQhkT4xkjl4UI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j1ULK3OI; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QfrnQqoI"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-aa1e51ce601so352298666b.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 09:08:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j1ULK3OI"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7eae96e6624so4995675a12.2;
+        Wed, 13 Nov 2024 09:31:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731517697; x=1732122497; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o9rL7o/PvlGWFQw5XVVoTFVbdNmHL9RGbywRCyJvRDw=;
-        b=QfrnQqoInwCYfsdcua1c8ggRL0Dg37DcQy5iHDfHfFk7yamWnxoUiywrhe3mwj3d+q
-         hkH1yN2DZdS0GvnOlC/GvWW0+lI3iTkajVrFNGhpbYhUVmLt/wxC9UNRq6D7GYdRZwmg
-         8JYIbQj/f8OuRlu+m7NMwmPG2Vn1BGfL3WWmJfSsnh9P6KNJanIVE4Nf/Ze/NcJyGNHN
-         XpcvCpaDl9tA5NMjxrq0RtAJ4bpOETW/n7G69edtOjNKqQ7AmYN2WKyy/7xnXsQweoqM
-         TtkcjhcVmX6sL6DZnc9IYNe+j+VC+m96bF8h82M1uXgNhoRGWI70T1U16APTsoyKcC6d
-         hQoQ==
+        d=gmail.com; s=20230601; t=1731519065; x=1732123865; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2SnJeBCneJsNVP3wKudY4HbBDGuh/E7PxPQpfhhhdww=;
+        b=j1ULK3OIEIztYmlek6g1rr9STWSI+Wm1dZnWpmo1aNinNK9kvQ5S3TymP5MUVaMEeY
+         n4DkR24sJ2s5vmbUWefGB3XzGM32vDdgwtMyuxv0iY4JVsf323m+YcXJZ1+ePX8vWYKp
+         kryKX62rQXULCZu2bH2JeshSa8PpponEdZsii1AbRmddPEYEcnQQCsUaLfOl2PJQFNF2
+         rGaYk6zIGZprLn3X/wGFgPpTDjVPabsXF2z3XfpYJbwKUj9yXV0JyJP1nNdZvHcKtJqN
+         iNi2fHrZluIhj9xKd6XSvY0c3oiAvzNht2Ib0WBgFBADnQSMkgoCy+nn1Qvg7Kp0ejcw
+         A9XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731517697; x=1732122497;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o9rL7o/PvlGWFQw5XVVoTFVbdNmHL9RGbywRCyJvRDw=;
-        b=s7vF+7JTmleJwOMmTc25BW2Xpf612GkS86r+WEvp/gbZ61ZtxsmjX3XHeNNFR06eL0
-         s0NhxYbcAAcUZ9oq0wb5aHad7AuzTLLNM2Q6hl1EAr243og6CwvQ73suaDwPsaUIYEYG
-         Qvs/zzVA3i5VIlhqZ6Se8PQGnCnv+1WAN2qcuMzFAwFVsEJ9Q4AE0pRJJApPzT1c3Q1a
-         S75wN4vabBCXOwWtljeoS4qPlnKD9HB7zR7Sf7BTJLoav8piElc/kke9+H0LznUusngH
-         vVaMPf2BHsmqpe5rdpsg7EV/m/IwGsC55hKFp5cH8qvUTdnD0AfNLszei0swAFLkGlDd
-         LxyA==
-X-Forwarded-Encrypted: i=1; AJvYcCUmCiEGqyrL+c/FrsLliMSLsbMjztPEHDD/G3S3QVzt1Oq07xoGwjSSqbXSO7kQ94iaLc8Pl5GmsvE3i7tTKi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp3jZHv5AtWRiy8QEp01IgNKWZqh/2JJsmN9TeGagBnh3dGIn+
-	St3JcsxmnHm1ra77Q5kBLSuXG8SMBjdTnqydfVpcnq0BRbtnzE/qjDB3TCSoyv8=
-X-Google-Smtp-Source: AGHT+IFHDCrNqllb0ktO340z3QbZiHkoWYqo0nZOFt2gofDRgTZmVfkFehiSYjXNelnICUHjddaKaw==
-X-Received: by 2002:a17:906:3406:b0:aa1:dd58:aeb6 with SMTP id a640c23a62f3a-aa1dd58b0damr578341566b.57.1731517696816;
-        Wed, 13 Nov 2024 09:08:16 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0a4c3f5sm895702066b.76.2024.11.13.09.08.15
+        d=1e100.net; s=20230601; t=1731519065; x=1732123865;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2SnJeBCneJsNVP3wKudY4HbBDGuh/E7PxPQpfhhhdww=;
+        b=Czs4Gkx3XYnM5SS8KnfEEet+o2Wv1O2fc/Tt1Xc29SGDc36X5g8ko6AVP1yMBwfCBZ
+         ph/ou5hwNtYWvo2l6UTFxfnov4jRTowva4HvSTMt6nvi2baVQkwr0f56cycqiCYJMKDl
+         DRFeJEnrFeorGoMrGQW8dDREyjMMLHNzUck42XW4rZEAVb3gBS9WUmzQ3SJaLBpAEDIp
+         Pxm62L+peM3XdZXY1xGipYT4U6xyZsFF7vmNvEaU3s3MZ4zxQDbu0naGywW7dGMzt3XU
+         KWBjEexA0xR1c6hgFjrFP4VLaFr77IJg1AqujzyNRofHmrWk3shdwXU+vn7acc/twLMX
+         YvJA==
+X-Forwarded-Encrypted: i=1; AJvYcCWzvK8uJKMM8YsLttSgtBt4qGvjmp6ImfKm4W5frvjpifv0iDvAGsRMzgMG1KmLbl5SBJM=@vger.kernel.org, AJvYcCXTI9NMjicnJXJUSmA74n8TWfg/KLS5nxzqUe0+0s37rYMjZYMmyvsZhcN3VbPX8HuvCDiwOVUbauTLkO52Juje@vger.kernel.org, AJvYcCXx3Tc3mapMg7h5L3gb5zBEtuJDgOek+bbnRWtYV/75T4uc2xzo8+B38rZCZlGcKIfLxJkAXttfwYEXe56I@vger.kernel.org
+X-Gm-Message-State: AOJu0YzD1oOBXZ8oopGfi7g5lpTZS27qe/GEDBbdIV82H0nmpiQz0y5m
+	okw/QqrbL0xODa2zo5F8F9rYWALYipE9fNe9sAxu4qGhuROlSNU=
+X-Google-Smtp-Source: AGHT+IG9PteFS9WiKoGXgKwgDAw8HaSTb1BxroQtjfOr0tK6g0cn2Yzke9177Wjn0cpTZ7sCdN3xng==
+X-Received: by 2002:a05:6a21:7886:b0:1dc:5e5:ea65 with SMTP id adf61e73a8af0-1dc22b60950mr30420141637.34.1731519065222;
+        Wed, 13 Nov 2024 09:31:05 -0800 (PST)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f5df334sm12738452a12.34.2024.11.13.09.31.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 09:08:16 -0800 (PST)
-Date: Wed, 13 Nov 2024 20:08:12 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Matthieu Baerts <matttbe@kernel.org>,
-	Greg KH <gregkh@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: Linux Kernel Functional Testing <lkft@linaro.org>,
-	Kernel Selftests <linux-kselftest@vger.kernel.org>,
-	Netdev <netdev@vger.kernel.org>,
-	Linux Kernel <linux-kernel@vger.kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Ido Schimmel <idosch@nvidia.com>, stable@vger.kernel.org
-Subject: Re: LKFT CI: improving Networking selftests results when validating
- stable kernels
-Message-ID: <1bda012e-817a-45be-82e2-03ac78c58034@stanley.mountain>
-References: <ff870428-6375-4125-83bd-fc960b3c109b@kernel.org>
+        Wed, 13 Nov 2024 09:31:04 -0800 (PST)
+Date: Wed, 13 Nov 2024 09:31:04 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Alexis =?utf-8?Q?Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, ebpf@linuxfoundation.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	Petar Penkov <ppenkov@google.com>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 01/10] selftests/bpf: add a macro to compare raw
+ memory
+Message-ID: <ZzTiWBLaUDex4ieA@mini-arch>
+References: <20241113-flow_dissector-v1-0-27c4df0592dc@bootlin.com>
+ <20241113-flow_dissector-v1-1-27c4df0592dc@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ff870428-6375-4125-83bd-fc960b3c109b@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241113-flow_dissector-v1-1-27c4df0592dc@bootlin.com>
 
-On Fri, Nov 08, 2024 at 07:21:59PM +0100, Matthieu Baerts wrote:
-> KSelftests from the same version
-> --------------------------------
+On 11/13, Alexis Lothoré (eBPF Foundation) wrote:
+> We sometimes need to compare whole structures in an assert. It is
+> possible to use the existing macros on each field, but when the whole
+> structure has to be checked, it is more convenient to simply compare the
+> whole structure memory
 > 
-> According to the doc [2], kselftests should support all previous kernel
-> versions. The LKFT CI is then using the kselftests from the last stable
-> release to validate all stable versions. Even if there are good reasons
-> to do that, we would like to ask for an opt-out for this policy for the
-> networking tests: this is hard to maintain with the increased
-> complexity, hard to validate on all stable kernels before applying
-> patches, and hard to put in place in some situations. As a result, many
-> tests are failing on older kernels, and it looks like it is a lot of
-> work to support older kernels, and to maintain this.
+> Add a dedicated assert macro, ASSERT_MEMEQ, to allow bare memory
+> comparision
 > 
-> Many networking tests are validating the internal behaviour that is not
-> exposed to the userspace. A typical example: some tests look at the raw
-> packets being exchanged during a test, and this behaviour can change
-> without modifying how the userspace is interacting with the kernel. The
-> kernel could expose capabilities, but that's not something that seems
-> natural to put in place for internal behaviours that are not exposed to
-> end users. Maybe workarounds could be used, e.g. looking at kernel
-> symbols, etc. Nut that doesn't always work, increase the complexity, and
-> often "false positive" issue will be noticed only after a patch hits
-> stable, and will cause a bunch of tests to be ignored.
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> ---
+>  tools/testing/selftests/bpf/test_progs.h | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
 > 
-> Regarding fixes, ideally they will come with a new or modified test that
-> can also be backported. So the coverage can continue to grow in stable
-> versions too.
-> 
-> Do you think that from the kernel v6.12 (or before?), the LKFT CI could
-> run the networking kselftests from the version that is being validated,
-> and not from a newer one? So validating the selftests from v6.12.1 on a
-> v6.12.1, and not the ones from a future v6.16.y on a v6.12.42.
-> 
+> diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+> index 74de33ae37e56c90646cd1e0bb58ed7e3f345ec0..bdde741543836991398daacfe5423e6af8ef9151 100644
+> --- a/tools/testing/selftests/bpf/test_progs.h
+> +++ b/tools/testing/selftests/bpf/test_progs.h
+> @@ -186,6 +186,19 @@ void test__skip(void);
+>  void test__fail(void);
+>  int test__join_cgroup(const char *path);
 
-These kinds of decisions are something that Greg and Shuah need to decide on.
+[..]
+ 
+> +#define DUMP_BUFFER(name, buf, len)						\
+> +	({									\
+> +		fprintf(stdout, "%s:\n", name);					\
+> +		for (int i = 0; i < len; i++) {					\
+> +			if (i && !(i % 16))					\
+> +				fprintf(stdout, "\n");				\
+> +			if (i && !(i % 8) && (i % 16))				\
+> +				fprintf(stdout, "\t");				\
+> +			fprintf(stdout, "%02X ", ((uint8_t *)(buf))[i]);	\
+> +		}								\
+> +		fprintf(stdout, "\n");						\
+> +	})
 
-You would still need some way to automatically detect that kselftest is running
-on an old kernel and disable the networking checks.  Otherwise when random
-people on the internet try to run selftests they would run into issues.
+nit: should we rewrite this as a real function?
 
-regards,
-dan carpenter
-
+void hexdump(const char *prefix, void *buf, size_t len)
+{
+..
+}
