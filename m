@@ -1,78 +1,77 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2048.outbound.protection.outlook.com [40.107.243.48])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2062.outbound.protection.outlook.com [40.107.236.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823BD1DF250;
-	Wed, 13 Nov 2024 12:15:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B99200C82;
+	Wed, 13 Nov 2024 12:15:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.62
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731500111; cv=fail; b=KaXTrF879/AgJ2Yj+i0ziOVh+PFePIO1bFEASn5S3NVBT7OShcTbKGE/m0CbnWYBb7xTA9jfVetMF6pJkKSQxeFGFI9BPRPc9Og7YKTeX9sl7vx/kGgTKMshf1VYg7fPj6cOvNFcXT7Aktt0pG0FR2mtK9eghe3+7cYscUN5mfY=
+	t=1731500115; cv=fail; b=W4ydxxVOI5bw/bEa+dbE4X82oeO37K/WANyBnjgelw9yLoMQ+i2z6sH48O9H46iKspHSsJXci6dHoHrjp/G9MZc2Hd1sBOrdX0PJDdyg2z4Z7RISoN5ep6UTa0ulZ6kjnnosUuBS7l+ykNoc+1xPyGX+j+WJf/QWDXU3IERzCtY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731500111; c=relaxed/simple;
-	bh=8r8X3nrCuFP8Bs7mNdqs+K2MxN/JzZOKLK2LqlVWIrY=;
+	s=arc-20240116; t=1731500115; c=relaxed/simple;
+	bh=TpoovN4UHPj7yAx6FOh4cHmawX9HwZ/W7T5mretRXec=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LvRfXsTDxVWznL145DY2yh6Ghq1v+wdc4iMi5Xhjm4tKvpicysQxlmAHkFTG8H7bWnCtPdlBWzfqfj17CeD6fTp/enJoaPi76UiAl06MrAc0dA+wBqmwtudq01DBRhJGVuqWPK3ZatOkQYz0bOaBO/MLq3SNEx/L/CcRW9HoiGM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ZByUSOHm; arc=fail smtp.client-ip=40.107.243.48
+	 MIME-Version:Content-Type; b=r1z1IsMUFINJmpeWWnUCeNP7vxUh0yS2eipRXouyTtQ1Y7U0MSgeW+nseP0og2iqys0WzR+9DDezsvA+7TMkY3PuMA77iU6FfPd5CDinGRV07Lv3M6Uh6bAvYyLCzcWYRJi5WFCao0+7SXXZ7FMBXgrEG6tw8wSAcmrq3PpgPlo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=FJAdNuC2; arc=fail smtp.client-ip=40.107.236.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ZByUSOHm"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="FJAdNuC2"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y+3suuIgOG7jdjUCb4aA1POnnhRG+yx5krcWrStws0vzVrYUzJH086QeOdHWclh+6tKdM0Z37rsjFxvuQzQBt8EV1KKLlw4N/V4bDhSndqdv34bwTq1g2HApSa/8THwwt5bVOQ866hW5h8u3BwOnGnKIyvAfAsEcxHsd1WfHVJ7TUgF8TrjLtmt9CNK5zIW5UJwIdrB6prY6u5SEAwLhR42lvaWRqqe1oMvW+B8AtW/3AMXo7E/EqQNmMZuftSp1K1jp+KXImb+MQrqWxmxp9odSJWadxrRniCc2o8rp4gzu5nfERsAvqIPEtJiOb0JlNTv0yzUjtq6cnm/FiFtzWw==
+ b=gVd/wDxvYuGYpM2Iv1XwS8HwpYllXAyXdP48TAmjDaZwQ/Wn1kEacjk77jNL0GeAy9wzAHJwljqW5OFmDQdw7AEG7okJnczIcgQgJgqNkJPIn4Cyppfj48plP9ndQDW9HqVXa7CZ5GCxM+CVAbgu+rmF4j3V+tiS+l839J4D9FgjD8sDaCHw88ig5TgTEia2UHJMluBSCdj6vX0SC4ddd50dM+AFXv7s7yWjlicQ1m8ERbMcm5Poocpi4NxqHIXunVmqo6jrP0yefEyZ8HE8ETh9bJtjbtNM/p3dovECF3bb3b/IioRa1IC2TNYjGigHMJW41bRL/qpZ+2tphSUhVg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C5bGs9IifR70SQiam0gYQvSBFf7mfCNBW6Ux+kLEW0o=;
- b=bxoEfx7b3E/lTdhapW905L5GpvULIFm1k+QcAHV0twpgGRRQx6LJV4u2guoIBeK2Lx7q1pKyD3YL5yjAi8yNuagBeKaRAx9rcLJDCrFJRdVC4Mb6c2XQ44Wf9aB6J8gBVtVeOAiRMCWcE8yG8xuMZjfXAs8ZMti89nXZQUWSy7FlodU10AeLw80EOzLlZKkx2uWJnRbFE37eXpx5OauozMQ3pxVRADeD6S7mt62voxDUlo639KwPpEhvDG17CXRD7j7P6nOsmZiJlVOd1me4w3M6zaZblnSGQpBuDsqLDtcBvdiYbOQ9UNjlBxcfDtTUJZINZ6TezVXPJbC5/gi1Ug==
+ bh=exRrZch1YnXkWBCKYEzsFf99k5cEwGMkBlSWs2QbSDI=;
+ b=mJfDD7Hz6Lil3uhLGdNfTCXd/WfgaPkmFMEoF+4uWZo8d3NxGmW66ONao0v2E09W2LGbqGObDNS7Dy8zZkkriUEh2Il5AvULY+2Mfrhr103KkzbL6QHr3C8FQAv7lNIb2PYqVuenfHf/dRtvmtWZ2DVPCPO6iCno95xmmu1PMWVuEkq5lBhS/16KoSdOIvl71gXizZj09yoDrmePMRujUVoFfbbeiSSIYn3I9Bdk4Bvt+8GYV8NleILITpDUU8MQ7a00GJZdB7vRbVFHGTDo3+z6JOhFJlreTgGBlRf/HAn8E3MQi9i92t5fA/3uiqbCpHRPdKZ2F0QfPsC4F4y9HA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=davemloft.net smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C5bGs9IifR70SQiam0gYQvSBFf7mfCNBW6Ux+kLEW0o=;
- b=ZByUSOHm8HKSZPcBuUiRp0+hmqKZQR8IyFkF+NwU6QalosNOOnXARKsyQPy6XvjiDj8uUmyS11h7RiFjU6m0nVy8Ny6GIODKhzA7igjwPJ+OW6S5E7DmKpcCLO6LLgYRsZAHaonS1uODlHNzFDxhUOxodheH0YEne7gqOrNMtLk=
-Received: from SJ0PR03CA0238.namprd03.prod.outlook.com (2603:10b6:a03:39f::33)
- by MW6PR12MB8959.namprd12.prod.outlook.com (2603:10b6:303:23c::18) with
+ bh=exRrZch1YnXkWBCKYEzsFf99k5cEwGMkBlSWs2QbSDI=;
+ b=FJAdNuC29F/GO4cCeBPsKc/o3nceoO+bJBBTseSfT2DIPlh58fpvOHqC5dnpVLgcWm5Q3YJITgfApMy/SlHyGGmc6C572kyKzGh9SZoQZ1LQsixA/biFRzvCVXa8eXfJ9P43IYVcYSeun7TDyn6qLHUQQhxS2CFImfAm6skXQTY=
+Received: from BL1PR13CA0145.namprd13.prod.outlook.com (2603:10b6:208:2bb::30)
+ by BY5PR12MB4177.namprd12.prod.outlook.com (2603:10b6:a03:201::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.17; Wed, 13 Nov
- 2024 12:15:06 +0000
-Received: from SJ1PEPF0000231B.namprd03.prod.outlook.com
- (2603:10b6:a03:39f:cafe::30) by SJ0PR03CA0238.outlook.office365.com
- (2603:10b6:a03:39f::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.28 via Frontend
- Transport; Wed, 13 Nov 2024 12:15:06 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.28; Wed, 13 Nov
+ 2024 12:15:09 +0000
+Received: from BL6PEPF0001AB77.namprd02.prod.outlook.com
+ (2603:10b6:208:2bb:cafe::dd) by BL1PR13CA0145.outlook.office365.com
+ (2603:10b6:208:2bb::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.15 via Frontend
+ Transport; Wed, 13 Nov 2024 12:15:09 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SJ1PEPF0000231B.mail.protection.outlook.com (10.167.242.232) with Microsoft
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BL6PEPF0001AB77.mail.protection.outlook.com (10.167.242.170) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8158.14 via Frontend Transport; Wed, 13 Nov 2024 12:15:06 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.8158.14 via Frontend Transport; Wed, 13 Nov 2024 12:15:08 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 13 Nov
- 2024 06:15:04 -0600
+ 2024 06:15:07 -0600
 Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
  (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 13 Nov
- 2024 06:15:04 -0600
+ 2024 06:15:07 -0600
 Received: from xcbecree42x.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39 via Frontend
- Transport; Wed, 13 Nov 2024 06:15:03 -0600
+ Transport; Wed, 13 Nov 2024 06:15:06 -0600
 From: <edward.cree@amd.com>
 To: <davem@davemloft.net>, <kuba@kernel.org>, <edumazet@google.com>,
 	<pabeni@redhat.com>
 CC: Edward Cree <ecree.xilinx@gmail.com>, <netdev@vger.kernel.org>,
-	<habetsm.xilinx@gmail.com>, <linux-net-drivers@amd.com>, <horms@kernel.org>,
-	<andrew+netdev@lunn.ch>, <shuah@kernel.org>,
+	<horms@kernel.org>, <andrew+netdev@lunn.ch>, <shuah@kernel.org>,
 	<linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next 3/5] selftest: include dst-ip in ethtool ntuple rules
-Date: Wed, 13 Nov 2024 12:13:11 +0000
-Message-ID: <8e5d23c8f21310c23c080cc7bcd31b76f8fd3096.1731499022.git.ecree.xilinx@gmail.com>
+Subject: [PATCH net-next 5/5] selftest: extend test_rss_context_queue_reconfigure for action addition
+Date: Wed, 13 Nov 2024 12:13:13 +0000
+Message-ID: <58276b800ab78c0a79c1918046ccae7fe45ba802.1731499022.git.ecree.xilinx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <cover.1731499021.git.ecree.xilinx@gmail.com>
 References: <cover.1731499021.git.ecree.xilinx@gmail.com>
@@ -88,121 +87,102 @@ Received-SPF: None (SATLEXMB05.amd.com: edward.cree@amd.com does not designate
  permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF0000231B:EE_|MW6PR12MB8959:EE_
-X-MS-Office365-Filtering-Correlation-Id: d5a1ef86-4431-4495-592d-08dd03dccf63
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB77:EE_|BY5PR12MB4177:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb2cc6f2-606d-4741-97c5-08dd03dcd0c7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|82310400026|36860700013|1800799024;
+	BCL:0;ARA:13230040|36860700013|376014|82310400026|7416014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?X63lvwI0QMeTpqOL4qKsvsUI5fUuIn7jffwRPXfW+r1wDjwN+uEmx3QVfWsh?=
- =?us-ascii?Q?IumPxqKI33DoMhzF2PmsijDrQ1iq+uLjrbevc2VM1bu67G1pusy0bR/oklwh?=
- =?us-ascii?Q?51sIwmkECc6mlsMRV73vm1q5NQnZZa9U3tJmZoifIs0an67A6NwkpUnhxtAC?=
- =?us-ascii?Q?JHoffT5wj82NHzm5GnY/UNjbXHK1Ut2eK5sg2KBMztJvLH/QpHs4uFIVOwUe?=
- =?us-ascii?Q?SSb5/ar33RHMAQ0/r7nSr1Po6nX2VKk2mWhzIe5vBgme/yHwHGXLxoI07qBZ?=
- =?us-ascii?Q?DaLYIfySqxDrXtUM9A4wvOXwymK430VtsHG/fOvByDHYFLj87NXd15q6gaoO?=
- =?us-ascii?Q?7MAoyPa09dg5ql3SxHXWUIV6kSe86vS1GVayIZojiEuly/EsArHZN4haaZx0?=
- =?us-ascii?Q?F+A6P87/a1C1DbKHu+WxSI075+lz15ktvTSpw5/xer+kTKsCo6qMbSMF7I+t?=
- =?us-ascii?Q?ggvV+nK49O9KMsT5c1FVOmyQlDft6u2fAqoVzby/Xwc0zpAk1vDUcR5jQWAW?=
- =?us-ascii?Q?qY33I8FkuKUuFTzo3LjGuofwmjM1btx/bWWfjlWpVpGUzTv4bSmt1n0mAl1I?=
- =?us-ascii?Q?0bQzFKfIOoBod4eaordXw2VNEIxBLgiJK2Mo64IG0/R7i3yiYnaCmU05LK+J?=
- =?us-ascii?Q?d8+DIFg3zMDSFkQRRHpl+uRIbAcVFqcs7Ez1j7hNg/DLqLUASk0JO45bDUMX?=
- =?us-ascii?Q?CFnKQxiHrXKxeL9n1vPtIhi2D9VYCeisp1C6qssXASmwb3j8MevQWQUptHIp?=
- =?us-ascii?Q?Xpb59O1blf52AQvysG26WgHRdB3Y/AYB4Rl6u6qpnbeK1KpbkSlojtNZKdDp?=
- =?us-ascii?Q?P08PxUHPVID/h8aALWCk9QKjsPmosHkMMJk3YkM+1j46mrodym/FWORY4E6h?=
- =?us-ascii?Q?AvIiC+q6x8/wTqAAZuJt+vpRB5ZhKo+iAgVnC0Fn+VeNrMopGKFjTOGAwt3p?=
- =?us-ascii?Q?+c+PXbe8q1i4vdiJ+Fma8/alS+PiaGdMK8FmVGf6Y/YrZSm/+tinm/eIweuO?=
- =?us-ascii?Q?80CwwUi287gdBxBvGh2zeWtczxw2QCY72xgnIzWC5ulCl/sTW5AWi6d5NnMs?=
- =?us-ascii?Q?W8UNQy3wy9/yEjZoGAcCh0a3fMBg3hfIBttu/nT1UwkQg6ZYJ9rv7KmgJ2iM?=
- =?us-ascii?Q?isZVL63abcqpw7feGgBIygl/cTURjvfGhBZsJkj1YilRiwQICi76B8V4hTal?=
- =?us-ascii?Q?8MkcV8ZWeWkduVGSeYPRxg0dAs0ZdqUPMaV8/OnWYpttsOAkmQl4B+Qc/BVj?=
- =?us-ascii?Q?6Y61LPj2AUSs2uAWi5YYfVoWNgQLhnHWFfAn6sWECYAvCRf/DmgpYnIMK0Nw?=
- =?us-ascii?Q?iqumCIkDnuCGYDNCzkERFYVMbH9KTqtn7cw5is60BS/GjNC1tEPgpQukXVrC?=
- =?us-ascii?Q?u0xh47s1o7cSla2WnSKrtIIhywSoa0s9A3/3VyYLnDE+OAwnFQ=3D=3D?=
+	=?us-ascii?Q?AOfAaDmiUk4aELSPOC+JYNiAb0ouAF+EdeyokcUhtYVz3J5YNbC946W7cGMi?=
+ =?us-ascii?Q?9xfxnsONpaBNTbslAJxaBPg1jx13cJ270SFMxBGELURwASyFYK8lK1KA49WC?=
+ =?us-ascii?Q?Y/23AT4xuTkPkGSJTD7MYX1xbRN+dycqklxqxdhSmY/SC+75mrrVBli7Nh+W?=
+ =?us-ascii?Q?J2Nr2TNMJT6JY4wAVGdwqWMI0E/pWBsGga9CXZ3eXbdqnNYipguZQSC9f9GW?=
+ =?us-ascii?Q?7+1GZLRBdLsvRtbqJfVi0uMKoRaQS9egk4vbI8+HOI2j4Q5LuPA1VwB4joQl?=
+ =?us-ascii?Q?wGmzo92XuIo7k8aeGNFeoVdo6zd88soe932/pDjYnm0/B/SzP/qXap2PFyrc?=
+ =?us-ascii?Q?eym4S8qkN3IgiJVZRnJAL4I37IaeFiyO1FgUdueAvJVZq1eNDTgukgU4XnFs?=
+ =?us-ascii?Q?XOgLbc++S+69cRy0r62SK8TbvOLcnmLkv9SVw0jwjZeDCDB93nvXRfV0dUBX?=
+ =?us-ascii?Q?4Q5paLJepTeGB6wv05knnvkeVgiArPON9niii6fiOjd6abpCA1aVosRxC8DO?=
+ =?us-ascii?Q?BDtYF44TB6aZXZ+OYIfN3M5xvXIjkS6tn+M1rGEgCqR3mSBXj96Pbz17Delk?=
+ =?us-ascii?Q?ondWRcmS60tGesVARjT/fgXzy2OKP7uujTdru/pOozWgbz1/jiJVXZfF+U7o?=
+ =?us-ascii?Q?pz0xVi2y04AgVTwHJOkc2KfpBrQD506IFyoAqlgNESARmQN6x89DaPWBk/MM?=
+ =?us-ascii?Q?i/X5drCxcQBzK1U+KED4pcWDy3sexC70KBhhyh9Nivcv40JREbiZdPuPudxa?=
+ =?us-ascii?Q?w+zkQsVaR0iIoOuIyamc9KD1dGUlR9iG5VRuzxZzs9DnniT0SA4kHwN16ZXm?=
+ =?us-ascii?Q?LGZWO8yvkBaEDR6upUboi9PKPzZxcSe+V5FHbHjv/HnxB+q3rMkkgfamD7gd?=
+ =?us-ascii?Q?AV2R4UQCyu9u8HGbqAuSjq8PiykC70QwJ+gxWLKjWZOLKNK2eDSpYAyVzN6v?=
+ =?us-ascii?Q?Ip8+uXhA+ZGeKPwq4/BFiG/63eFn+FgP6Hyo2FyZUWn4v8Fq7pGX56WsxoqZ?=
+ =?us-ascii?Q?9wf+j0RMTPwE7WKEHAcEU8BznINGjftUKtLR+3O6l4SuOlrLifTc1J+YrwIS?=
+ =?us-ascii?Q?kjo6HoOD9nxW/GQOOXaWXat1WhDxKVNnnGSXfgxIaAf22ixYis74XdMFXk8+?=
+ =?us-ascii?Q?WIcm9k1VS1uTBdNJR5DrYjuMRM+TgMiC6eZhf0lQcNqs1fq/msfMm6sh9LOq?=
+ =?us-ascii?Q?CzoQVVwRxqqOPWnuYPwTjL6Bk0qF5n+UPbZlKTih9V2KutskCRQKvj3WwKii?=
+ =?us-ascii?Q?parLdYm6Zbz1thkXGdpcSNt4k3hV1ISyTMfCcZWHEWb+aMUVZagFLZ40j0Nl?=
+ =?us-ascii?Q?rTSeaV/E5euFSQro4kjQ/3lz/m/sAF+30owe3Fx8qeOH33F1fND2pvnoEnkT?=
+ =?us-ascii?Q?N5CrLgdo7+fpiS/J57qFdCBKdJy27sMGazctHdPaGVbipH77vw=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(7416014)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2024 12:15:06.1686
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2024 12:15:08.5033
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5a1ef86-4431-4495-592d-08dd03dccf63
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb2cc6f2-606d-4741-97c5-08dd03dcd0c7
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF0000231B.namprd03.prod.outlook.com
+	BL6PEPF0001AB77.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8959
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4177
 
 From: Edward Cree <ecree.xilinx@gmail.com>
 
-sfc hardware does not support filters with only ipproto + dst-port;
- adding dst-ip to the flow spec allows the rss_ctx test to be run on
- these devices.
+The combination of ntuple action (ring_cookie) and RSS context can
+ cause an ntuple rule to target a higher queue than appears in any
+ RSS indirection table or directly in the ntuple rule, since the two
+ numbers are added together.  Verify the logic that prevents reducing
+ the queue count in this case.
 
 Signed-off-by: Edward Cree <ecree.xilinx@gmail.com>
 ---
-I'm not sure if this change will break the test for other drivers that
-perhaps support the old filter but not the new one.  If so we might
-need to add an option to cfg to control this choice.
+I'm not able to run this selftest myself, because sfc doesn't support
+ethtool set-channels (-L).  If someone else can verify that it works
+on their hardware that would be much appreciated.
 
- tools/testing/selftests/drivers/net/hw/rss_ctx.py | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ .../selftests/drivers/net/hw/rss_ctx.py       | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
 diff --git a/tools/testing/selftests/drivers/net/hw/rss_ctx.py b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-index 29995586993c..fb61dae20fd8 100755
+index 8f62dc29bd26..0b49ce7ae678 100755
 --- a/tools/testing/selftests/drivers/net/hw/rss_ctx.py
 +++ b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-@@ -215,7 +215,7 @@ def test_rss_queue_reconfigure(cfg, main_ctx=True):
-         defer(ethtool, f"-X {cfg.ifname} default")
+@@ -238,6 +238,32 @@ def test_rss_queue_reconfigure(cfg, main_ctx=True):
      else:
-         other_key = 'noise'
--        flow = f"flow-type tcp{cfg.addr_ipver} dst-port {port} context {ctx_id}"
-+        flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {port} context {ctx_id}"
-         ntuple = ethtool_create(cfg, "-N", flow)
-         defer(ethtool, f"-N {cfg.ifname} delete {ntuple}")
+         raise Exception(f"Driver didn't prevent us from deactivating a used queue (context {ctx_id})")
  
-@@ -429,7 +429,7 @@ def test_rss_context(cfg, ctx_cnt=1, create_with_cfg=None):
-         ksft_eq(max(data['rss-indirection-table']), 2 + i * 2 + 1, "Unexpected context cfg: " + str(data))
++    if not main_ctx:
++        ethtool(f"-L {cfg.ifname} combined 4")
++        flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {port} context {ctx_id} action 1"
++        try:
++            # this targets queue 4, which doesn't exist
++            ntuple2 = ethtool_create(cfg, "-N", flow)
++        except CmdExitFailure:
++            pass
++        else:
++            raise Exception(f"Driver didn't prevent us from targeting a nonexistent queue (context {ctx_id})")
++        # change the table to target queues 0 and 2
++        ethtool(f"-X {cfg.ifname} {ctx_ref} weight 1 0 1 0")
++        # ntuple rule therefore targets queues 1 and 3
++        ntuple2 = ethtool_create(cfg, "-N", flow)
++        # should replace existing filter
++        ksft_eq(ntuple, ntuple2)
++        _send_traffic_check(cfg, port, ctx_ref, { 'target': (1, 3),
++                                                  'noise' : (0, 2) })
++        # Setting queue count to 3 should fail, queue 3 is used
++        try:
++            ethtool(f"-L {cfg.ifname} combined 3")
++        except CmdExitFailure:
++            pass
++        else:
++            raise Exception(f"Driver didn't prevent us from deactivating a used queue (context {ctx_id})")
++
  
-         ports.append(rand_port())
--        flow = f"flow-type tcp{cfg.addr_ipver} dst-port {ports[i]} context {ctx_id}"
-+        flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {ports[i]} context {ctx_id}"
-         ntuple = ethtool_create(cfg, "-N", flow)
-         defer(ethtool, f"-N {cfg.ifname} delete {ntuple}")
- 
-@@ -516,7 +516,7 @@ def test_rss_context_out_of_order(cfg, ctx_cnt=4):
-         ctx.append(defer(ethtool, f"-X {cfg.ifname} context {ctx_id} delete"))
- 
-         ports.append(rand_port())
--        flow = f"flow-type tcp{cfg.addr_ipver} dst-port {ports[i]} context {ctx_id}"
-+        flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {ports[i]} context {ctx_id}"
-         ntuple_id = ethtool_create(cfg, "-N", flow)
-         ntuple.append(defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}"))
- 
-@@ -569,7 +569,7 @@ def test_rss_context_overlap(cfg, other_ctx=0):
- 
-     port = rand_port()
-     if other_ctx:
--        flow = f"flow-type tcp{cfg.addr_ipver} dst-port {port} context {other_ctx}"
-+        flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {port} context {other_ctx}"
-         ntuple_id = ethtool_create(cfg, "-N", flow)
-         ntuple = defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}")
- 
-@@ -587,7 +587,7 @@ def test_rss_context_overlap(cfg, other_ctx=0):
-     # Now create a rule for context 1 and make sure traffic goes to a subset
-     if other_ctx:
-         ntuple.exec()
--    flow = f"flow-type tcp{cfg.addr_ipver} dst-port {port} context {ctx_id}"
-+    flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {port} context {ctx_id}"
-     ntuple_id = ethtool_create(cfg, "-N", flow)
-     defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}")
- 
-@@ -620,7 +620,7 @@ def test_delete_rss_context_busy(cfg):
- 
-     # utilize context from ntuple filter
-     port = rand_port()
--    flow = f"flow-type tcp{cfg.addr_ipver} dst-port {port} context {ctx_id}"
-+    flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {port} context {ctx_id}"
-     ntuple_id = ethtool_create(cfg, "-N", flow)
-     defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}")
- 
+ def test_rss_resize(cfg):
+     """Test resizing of the RSS table.
