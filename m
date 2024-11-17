@@ -1,63 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD12A78C76;
-	Tue, 19 Nov 2024 02:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from cmccmta2.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 278AD33F7;
+	Tue, 19 Nov 2024 02:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731983716; cv=none; b=MVrBzBfxGwpkFB2p9x/MNplIdrmmhAlcvykzTEV/1TaO4ZOGFfptUAhaFVChH6QerVU5sUxQM14gxRN1d0shu4KCYbqbhNP3CjJWV0O1rSywvJ1AkRCFW4OnnwRyRJF6GatbnX3VC06gUlRtnTHiWl0VvdYaCE13sS7H9/TjGSQ=
+	t=1731984425; cv=none; b=VX9zzWeib73T2h5HjCF33asUwru7VxlG9xVLfZznwikTfKQ/MuFi91MlX0tS7cA4M+UKSbrk7gtM6MhNWqQPd1AOw1BoHyCnNsIUgfk6YbYlFVtRopKir0F1LFWXEBziIuYIAKvJIleqtwfxVh/9zRAmA8KFY0T54I9JnjXdndg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731983716; c=relaxed/simple;
-	bh=1GoX5IhsH8FcKHG+6blRbHEVULqXKn7EekxL9MIkGcY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=owUUJuwhva9Toke8ibEBHlyHy5t5xZ9MlBqRA0M+7Gbxx2uq8jdCQ5oQ0ONFPsqwgkMq6jk6EbVuW3xeUALtoYDJxtgc0iBiwnQMFShJm8pGPvVsB2DfrqD/5t5clMxF0tSOxlI9WoZknVP2F7D/K4TzjCOzDJPyyVvmP+OxotA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QWi6g7Xj; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QWi6g7Xj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE73C4CECC;
-	Tue, 19 Nov 2024 02:35:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731983716;
-	bh=1GoX5IhsH8FcKHG+6blRbHEVULqXKn7EekxL9MIkGcY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QWi6g7XjppUoNmrHz6q2GJ0f3w6TCROAQ9i8Hp/l0HZUYnQNUO7LwRi4a+u9aor94
-	 aszSjJYd31LOP8n59qK+32uMYFH9w/8SHv+UvqulaE7zahLZILqNrSQu2adKyZpm1u
-	 K9SSEWBqF4JFaTlAC9mwYXrCGCRdRfDZgyIJ3tqxCnrXeE3AHX1GmqV5SV4agYaC3K
-	 qmSH/LjY7PVmHRYXwQYrHc6P6vYstBJdeaGUmskMj7OCqdiYbxCUHa07TDYQAMgwWv
-	 RgnXDcR2ZC1om6Z3ZB7y69IzVW3R0jNyF8jFM4yw3cItIhQsuyPvQubwRFpuvL0XHF
-	 +DruudrtZySSQ==
-Date: Mon, 18 Nov 2024 18:35:14 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, max@kutsevol.com, thepacketgeek@gmail.com,
- vlad.wing@gmail.com, davej@codemonkey.org.uk
-Subject: Re: [PATCH net-next 4/4] netconsole: selftest: Validate CPU number
- auto-population in userdata
-Message-ID: <20241118183514.112db8b9@kernel.org>
-In-Reply-To: <20241113-netcon_cpu-v1-4-d187bf7c0321@debian.org>
-References: <20241113-netcon_cpu-v1-0-d187bf7c0321@debian.org>
-	<20241113-netcon_cpu-v1-4-d187bf7c0321@debian.org>
+	s=arc-20240116; t=1731984425; c=relaxed/simple;
+	bh=l7EGQCVzS8e+Cm9uLnOIk+DQliZX4oyPru3AsAUlqBU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mZyATknYAylfGvaMhqKh6KTpdqlTykxbMwnYEoM0akTGgPx+m75DhktF2pRBb+1JDRjYyx8sAdELNS06ICzKzWvcEFPuA9pENpzeHExEEHQ/KTw9DrKjJASsKxlqdwNk7Fcy+M0oPuOBWShZmAnPFvP7BVpxfjsI7hPO5U+Mdio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee8673bfc2197e-819c9;
+	Tue, 19 Nov 2024 10:46:59 +0800 (CST)
+X-RM-TRANSID:2ee8673bfc2197e-819c9
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.101])
+	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee6673bfc163b6-0b1a5;
+	Tue, 19 Nov 2024 10:46:59 +0800 (CST)
+X-RM-TRANSID:2ee6673bfc163b6-0b1a5
+From: guanjing <guanjing@cmss.chinamobile.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	dxu@dxuuu.xyz,
+	antony.antony@secunet.com,
+	cupertino.miranda@oracle.com,
+	asavkov@redhat.com
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	guanjing <guanjing@cmss.chinamobile.com>
+Subject: [PATCH v1] selftests/bpf: fix application of sizeof to pointer
+Date: Sun, 17 Nov 2024 11:18:38 +0800
+Message-Id: <20241117031838.161576-1-guanjing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, 13 Nov 2024 07:10:55 -0800 Breno Leitao wrote:
-> +	if ! grep -q "cpu=[0-9]\+" "${TMPFILENAME}"; then
-> +		echo "FAIL: 'cpu=' not found in ${TMPFILENAME}" >&2
-> +		cat "${TMPFILENAME}" >&2
-> +		exit "${ksft_fail}"
-> +	fi
+sizeof when applied to a pointer typed expression gives the size of
+the pointer.
 
-Could we try to do something like pick a 'random' CPU ID from sysfs,
-taskset the write / echo, and match that the incoming message has the
-expected CPU ID, not just any?
+tools/testing/selftests/bpf/progs/test_tunnel_kern.c:678:41-47: ERROR: application of sizeof to pointer
+
+The proper fix in this particular case is to code sizeof(*gopt)
+instead of sizeof(gopt).
+
+This issue was detected with the help of Coccinelle.
+
+Fixes: 5ddafcc377f9 ("selftests/bpf: Fix a few tests for GCC related warnings.")
+Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
+---
+ tools/testing/selftests/bpf/progs/test_tunnel_kern.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+index 32127f1cd687..3a437cdc5c15 100644
+--- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+@@ -675,7 +675,7 @@ int ip6geneve_set_tunnel(struct __sk_buff *skb)
+ 	gopt->length = 2; /* 4-byte multiple */
+ 	*(int *) &gopt->opt_data = bpf_htonl(0xfeedbeef);
+ 
+-	ret = bpf_skb_set_tunnel_opt(skb, gopt, sizeof(gopt));
++	ret = bpf_skb_set_tunnel_opt(skb, gopt, sizeof(*gopt));
+ 	if (ret < 0) {
+ 		log_err(ret);
+ 		return TC_ACT_SHOT;
+-- 
+2.33.0
+
+
+
