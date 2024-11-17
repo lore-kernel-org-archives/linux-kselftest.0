@@ -1,98 +1,75 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20BDF33E1;
-	Sun, 17 Nov 2024 06:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731824794; cv=pass; b=BUQkoZfvN8QplMH6GkLl5CbKNCVrDeI2j+iBdnUButS5Hjgr7WHhxVUhNqJyap89GihuFWQfsseDmQkXosqGRxFGvoChEZh/TnHpByocybe89XXb62nbK+01iV+GEiiuORLQ7L6MGPRNPFg+1z59Ph1gOYyAfnPlv8X6Y9zdRi0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731824794; c=relaxed/simple;
-	bh=YMPx2AXDqKjUxOi+5jt+Q+U8XxjW1e4C/lY32y+3znw=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=AfIYccXoE5WPE7ewvJH8THSHFCkuRUe5Fg6GDhhU899H56uwh86pM7aE357FjFPztpiKcyOJtmYmDbZhhLN7qkquKxsZoTD6NZEA6jHr3u6eXcQ5bXjfh0fxxaSMikIMmEGYGJinIdzZpxBHzwMjXVeHsZenxcMpclQE3kVR4EE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=QvmqafI0; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6A119DF95
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 Nov 2024 12:25:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731846334; cv=none; b=C9EwtNoUWjkVcUb3k3rF5CAAwO6qwWaMEpOJLN1Rmb5VxuTpTZUlOi26TFrcIHa0rd3gBp4/mlF5CQPgY6TuwjVICUMqsqTEl4kGWbt27YkEPLwLVh2vRNrPMdgZClK64HiagYrMnNk26vi5eE6DWX/fUAoGdGdBXiO7wOmbmEE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731846334; c=relaxed/simple;
+	bh=aIE+Omebybd47Zmb8GWakGh9XtOGA3iHrZQrJgCbR34=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Xbc91vv0PPqAFShTYq8H9pvAMoAmEFDf3E94+L3xStF+oU+zryKTZIZFV3sISWeBtCCYRzeqH2RaUYFWSaktzFB3H+8XVf5j3MarqEmjCBcMU3qKPm6SY4gDoSixNZWIxelv5ednKiDtj+EUlM/tPfKjcqgByyXucOT+RC1ns8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=q2vt/Rw/; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="QvmqafI0"
-ARC-Seal: i=1; a=rsa-sha256; t=1731824731; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=D4Aq/DVwh/E3mUk0AG0S5Rkccm2R3LfyRqCNmZHkrj0S2rjwM2OjXq44H+KuqulSX/LziacyOF5ZL64p2FStQbwkvTL5r4cZSsDNojeOW5WAG7qU0KV9StgNmRjHI7wwy3m2QZM5CbVvsF3uwdbKFSAkPGNTwdrVGwI4aIp3/4o=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1731824731; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=eNkA+jOGDoBF1DzR74xP3oYFLSKLz/pv/89Q3x7ZaZI=; 
-	b=GW6kKq2tzjR8S0/4u4ILXKTcaxwWNzh6CLdEPIbc0vrXOjYmZfV7OFDr/Kl0xCLRYhAIQKLDyQX61f9iXTtOha2ABKyPKG59YYQgHQmlf/QgHMWOzLpEpcRgR3X9KhqZefdV39iZNnOwYug7fojg1OlGAOx9s0ZSOX5Oq60BzUk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1731824731;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=eNkA+jOGDoBF1DzR74xP3oYFLSKLz/pv/89Q3x7ZaZI=;
-	b=QvmqafI0vODLG/AZyo9Iogi0eBuzYZ8EM7yRdBOgl/S0MMA50m9aTBr2XfjOmhAW
-	WeJhKDIQAiptxJiyQc28GcLpkpxBIOGMgiL7lPelj9yzTw2EV1LNM+dTXJy9E9dursR
-	b2bEtyISmG6frMJ8xpzhCn1NlPPWmEzhGzvB7TSg=
-Received: by mx.zohomail.com with SMTPS id 1731824729720682.8589924584546;
-	Sat, 16 Nov 2024 22:25:29 -0800 (PST)
-Message-ID: <9868242c-ce91-421c-8f55-1185a66657ce@collabora.com>
-Date: Sun, 17 Nov 2024 11:25:13 +0500
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="q2vt/Rw/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1731846328;
+	bh=uRzVzixg7Mdrf8EHXUktOJebAXNU4c5koSYvpP+Je94=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=q2vt/Rw/H042E51ndsAlxlFUiH2elh52Ixzt3p4JWijdzEuUa4aiC0hS9q2RjCCVE
+	 n2LNOdSzJ/B81JVUxH82moV88IHik4ksZPzTJgqjIeUYz7HG9lyMJt0om1gaMhEnVp
+	 RctwJwdgt+XyRKidEroGn1RUBEesbw+PloaqiEqdLmdZMAfV5DGPKDEFqygOkVgOOu
+	 y5aqKfNvxqSJBgFojBwovxXy1FWaJlkJ2vJcA3lzgHx88mw/tHwZWzxRExJucO5c05
+	 JHq7fHFbHW5/UKFlINQpBHimUVBuwxpARRrK9sEeXZgb6BC8wIQp6wnbXhcQCSxSyg
+	 9CstAHYe4Ov3w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xrqj36rNrz4xfH;
+	Sun, 17 Nov 2024 23:25:27 +1100 (AEDT)
+From: Michael Ellerman <patch-notifications@ellerman.id.au>
+To: linuxppc-dev@lists.ozlabs.org, Michael Ellerman <mpe@ellerman.id.au>
+Cc: linux-kselftest@vger.kernel.org
+In-Reply-To: <20241106130453.1741013-1-mpe@ellerman.id.au>
+References: <20241106130453.1741013-1-mpe@ellerman.id.au>
+Subject: Re: [PATCH 1/5] selftests/powerpc: Lower run time of count_stcx_fail test
+Message-Id: <173184539745.890800.18144294267684223790.b4-ty@ellerman.id.au>
+Date: Sun, 17 Nov 2024 23:09:57 +1100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com
-Subject: Re: [RFCv1 6/6] selftests/page_detective: Introduce self tests for
- Page Detective
-To: Pasha Tatashin <pasha.tatashin@soleen.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-doc@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, akpm@linux-foundation.org, corbet@lwn.net,
- derek.kiernan@amd.com, dragan.cvetic@amd.com, arnd@arndb.de,
- gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
- jack@suse.cz, tj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
- roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev,
- Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, vbabka@suse.cz,
- jannh@google.com, shuah@kernel.org, vegard.nossum@oracle.com,
- vattunuru@marvell.com, schalla@marvell.com, david@redhat.com,
- willy@infradead.org, osalvador@suse.de, andrii@kernel.org,
- ryan.roberts@arm.com, peterx@redhat.com, oleg@redhat.com,
- tandersen@netflix.com, rientjes@google.com, gthelen@google.com
-References: <20241116175922.3265872-1-pasha.tatashin@soleen.com>
- <20241116175922.3265872-7-pasha.tatashin@soleen.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <20241116175922.3265872-7-pasha.tatashin@soleen.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
 
-On 11/16/24 10:59 PM, Pasha Tatashin wrote:
-> Add self tests for Page Detective, it contains testing of several memory
-> types, and also some negative/bad input tests.
+On Thu, 07 Nov 2024 00:04:49 +1100, Michael Ellerman wrote:
+> The count_stcx_fail test runs for close to or just over 2 minutes, which
+> means it sometimes times out.
 > 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
->  MAINTAINERS                                   |   1 +
->  tools/testing/selftests/Makefile              |   1 +
->  .../selftests/page_detective/.gitignore       |   1 +
-No need to add a new directory. Please just add the tests in 
-selftests/mm/ directory.
+> That's overkill for a test that just demonstrates some PMU counters
+> are working. Drop the 64 billion instruction case, to lower the runtime
+> to ~30s.
+> 
+> [...]
 
->  .../testing/selftests/page_detective/Makefile |   7 +
->  tools/testing/selftests/page_detective/config |   4 +
->  .../page_detective/page_detective_test.c      | 727 ++++++++++++++++++
->  6 files changed, 741 insertions(+)
->  create mode 100644 tools/testing/selftests/page_detective/.gitignore
->  create mode 100644 tools/testing/selftests/page_detective/Makefile
->  create mode 100644 tools/testing/selftests/page_detective/config
->  create mode 100644 tools/testing/selftests/page_detective/page_detective_test.c
+Applied to powerpc/next.
 
--- 
-BR,
-Muhammad Usama Anjum
+[1/5] selftests/powerpc: Lower run time of count_stcx_fail test
+      https://git.kernel.org/powerpc/c/3b9bde403aafa55dcbe7dc250b95af917610f139
+[2/5] selftests/powerpc: Give all tests 2 minutes timeout
+      https://git.kernel.org/powerpc/c/5543d595954eefb3a6faa18a6dc7b1b3d6022052
+[3/5] selftests/powerpc: Fix 32-bit BE build errors on Ubuntu 24.04
+      https://git.kernel.org/powerpc/c/d5f578f90a34d85f1cabd4c27af1b2d9fbffe64b
+[4/5] selftests/powerpc: Return errors from all tests
+      https://git.kernel.org/powerpc/c/c6a75555b4b2643365a007b7162a670d69aa28fe
+[5/5] selftests/powerpc: Detect taint change in mitigation patching test
+      https://git.kernel.org/powerpc/c/a8a54a65cac4f8202df36f925b6746328802d05f
 
+cheers
