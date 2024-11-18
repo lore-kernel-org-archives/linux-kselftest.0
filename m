@@ -1,101 +1,127 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EC9C2F2;
-	Mon, 18 Nov 2024 01:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8BE9139D;
+	Mon, 18 Nov 2024 03:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731892805; cv=none; b=b/B20KO0A9BFWUcSLWueZ9uTGuzgk01koz2iRzBLPNK/0uqiCJUf8JzjuQVtOfYCg6qN30Kfu9zQewdL/QamKuhx5PKgCFJNQZ3wjGSyYIbNy07jcf2d0HBMkVXmbeOd/Ke1RhA3sVsj4chpXmOjPX9S8X3fwnjtq8gm5l5qnek=
+	t=1731899444; cv=none; b=rZv7y3oIJUBTFMrB41BaX73GRvgVi8JKLqowWkYd4ywb2GAMDwRt8bN8plFjaF3M+E4rogUWG0LpVLckDFfaekyw03DNx5oOElq2UWcrIX2U5ZlzFS4Bj8M8NSgRfF4GUw0U3pmIP9V+ldnDCxhbIYLF2tziJBx8f0o9V03w2Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731892805; c=relaxed/simple;
-	bh=7m6ySIhLBBRzLq9/jBuW03io/LurkIwAx0Tvz70c4ag=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AGCSc2zyMvQnUGq2JKUn0P8ZzCADC6MXe1w9SR/NYLAebj8yT7Z7N/UEGGA4zYtx70SXy1uI3uBB1lCurOoM7F1MC0EaTk5ggqoftmDLw5RPWFrHrm1yQB0gPvi+0XSUQchLxOe/0fWgrwJJ+GjZHuJQPK3kUSx6xp1XmFHzy8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cAIYygd+; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731899444; c=relaxed/simple;
+	bh=s/HE862Ebjc4x9QSbLryT2tjzrtXi+x51IAifw3w0tQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gLw7P0NaSkoizdVw4qUBoXX/95wE8bVBJirbRxClk/J6PwKFrZbojswjJx5Q3e1whC87DBuFw0Cby1WbFea0wg2Z3X/OGvEz919eRuTOMwcm0NUSAKVTm1oFtuAhsyPWM7hEBibLganCO9+zD2rIsasws9LNTWHEsWmdy2UzVrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=O8x9f828; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cAIYygd+"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2110a622d76so31564865ad.3;
-        Sun, 17 Nov 2024 17:20:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731892803; x=1732497603; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WLZ4j+0JUQhKuRCNLddjQ5xW+03k8o1dg2/JeNfFHJU=;
-        b=cAIYygd+KtRRVkw/vrnDxZOOyXuJzH2aVsHyw9m4x8eVgEQU7fiV8SygHMMaP8BYri
-         cwa7aaQW4S/48O5tZtoTIqBpDKroE0qZEOZTIjsgKMC/dXvg6tLpwVhaJanhdOn65IpG
-         WghMeGgd5rOiwldZgs6DDfgNJgXPYeDb8ROnkjwhnMowBBAA/htSHXC2q197HWdkqNc0
-         RGnu2eU1eW2cezHcGcSSY11bKC3tava0abpYNLDXthpOVe+p218eHLLFNmSfHY7BPnai
-         vodVqZDvRaacfA4HymNJWfzlN2e9Bl15uHsA7+I+cO9oCSpqniSFBvpXFF6MD10tzi5V
-         KMMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731892803; x=1732497603;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WLZ4j+0JUQhKuRCNLddjQ5xW+03k8o1dg2/JeNfFHJU=;
-        b=I4XgvHT0Z0NT3JfCvbGCXLIKjzEddzBC31xgZZeb92vIqMKHjqJpTeg3FdhUdefu6Q
-         Y5tcwgJXCtUL+Szlruwp+uM1cY9ACBZMD+kqJUFr4IuTKujXNG7KeL/hjefmRKuGPjgm
-         cioosURtL+uBr9CXxpvsiBzjcYkU7OrWWWxfM58HQeApEoSttKymMg6uMHCJFtbCtxgi
-         PsOOYXb27nh2YUuI/Hfh1vzlgYhRkO4jJdhdcvWczi3tFS2eDsQZonX+adhld9bwaQAA
-         dj623lia8ro8MXjyrK3kOyZaoZ4zZsdli+DE8HU1s2IlFZhEu0DhW8cmHZZOA9ff2c4D
-         K6Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCWawjwa1K5+coGrAIpoxne+RFZj7JEna6ogn2Ugx6B2eGBKsCYZO8Q94wxfuvtnkbY5obF0hklUA9cvSVVfpvOe@vger.kernel.org, AJvYcCXtFEXitfIbEECd3g4zGJ2CrymXaeG7akiKNtpPJq51lj2g6TNkvkKFaK4f82UEVHZhfitsHu2Lsbg8KZY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/049fbhdqJzPV8MkJyc+YOwpw+YBJHbFP4u2oIr1xeRsDV5L5
-	hzxfbW1Xxq6/65KdittlzXBQRARZRcsVH5tPphcEmUPDn61WkPRD
-X-Google-Smtp-Source: AGHT+IGhiPGHhKmnXPU7h0WAB1XDX4Fg4zXTJHpboU0k/C710xRReeYMO/J3EgZ7Bi/CiHe6T3iK0w==
-X-Received: by 2002:a17:902:ce92:b0:212:b2b:6f1d with SMTP id d9443c01a7336-2120b2b759dmr66546715ad.32.1731892803413;
-        Sun, 17 Nov 2024 17:20:03 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211fe7244b0sm23679655ad.198.2024.11.17.17.19.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Nov 2024 17:20:02 -0800 (PST)
-Date: Mon, 18 Nov 2024 01:19:55 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Sam Edwards <cfsworks@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 2/2] selftests/rtnetlink.sh: add mngtempaddr test
-Message-ID: <ZzqWOysS6fdqjtpZ@fedora>
-References: <20241113125152.752778-1-liuhangbin@gmail.com>
- <20241113125152.752778-3-liuhangbin@gmail.com>
- <20241113115612.1717575a@kernel.org>
- <ZzVZoe_N4_h4qWVP@fedora>
- <20241113184312.7a33a83d@kernel.org>
- <ZzWyk9QHb9qseMYO@fedora>
- <20241114071340.2b4929a4@kernel.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="O8x9f828"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=0mQMe
+	EqbIH1W/gwL+X7sQKXQSByBBidMVZJPmvHc5LI=; b=O8x9f828FIf+pdv0PSFbN
+	s8pEPtPhcfMbA51V1bFjHNef+ia4TnUEtja5wognArgPz3J1woE4HTKRBg+G2c+I
+	ZkpdHrdt1GIi6/Nixe3OM/Bm1ROEk9mL3NKe2rQHpxzFfvzZQmUjuyiRmLeaavzZ
+	qai+/Lfot0YZ38+y4QvPgI=
+Received: from localhost.localdomain (unknown [47.252.33.72])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wDnTyXirzpnA_TwCQ--.780S3;
+	Mon, 18 Nov 2024 11:09:50 +0800 (CST)
+From: Jiayuan Chen <mrpre@163.com>
+To: martin.lau@linux.dev,
+	edumazet@google.com,
+	jakub@cloudflare.com,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	horms@kernel.org,
+	daniel@iogearbox.net
+Cc: mykolal@fb.com,
+	ast@kernel.org,
+	kpsingh@kernel.org,
+	jolsa@kernel.org,
+	eddyz87@gmail.com,
+	shuah@kernel.org,
+	sdf@fomichev.me,
+	linux-kselftest@vger.kernel.org,
+	haoluo@google.com,
+	song@kernel.org,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	mhal@rbox.co,
+	yonghong.song@linux.dev,
+	Jiayuan Chen <mrpre@163.com>,
+	Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
+Subject: [PATCH bpf v4 1/2] bpf: fix recursive lock when verdict program return SK_PASS
+Date: Mon, 18 Nov 2024 11:09:09 +0800
+Message-ID: <20241118030910.36230-2-mrpre@163.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241118030910.36230-1-mrpre@163.com>
+References: <20241118030910.36230-1-mrpre@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241114071340.2b4929a4@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDnTyXirzpnA_TwCQ--.780S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KrWkAr1DXF4Duw48JF4fKrg_yoW8Aw1Dpa
+	4ku3y5GF9rZr18Z3s3KF97Xr1jgw1vgay2gr1ruw1fZrn0gry5urZ5KFy2vF4YvrsrKF98
+	Zr4jqFsrtw17XaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_WrX_UUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWwWbp2c6rkc3iAAAsp
 
-On Thu, Nov 14, 2024 at 07:13:40AM -0800, Jakub Kicinski wrote:
-> > I will modify the test with Sam's suggestions and see if it could pass.
-> 
-> The other option is that some other test doesn't clean up after itself,
-> since we reuse VMs. We have a script in NIPA to map things:
-> contest/cithreadmap
-> 
-> Looks like we run rtnetlink.sh after pmtu.sh, I wonder if pmtu.sh is to
-> blame:
-> 
-> Thread3-VM0
-> 	 4-pmtu-sh/
-> 	 5-rtnetlink-sh/
-> 	....
+When the stream_verdict program returns SK_PASS, it places the received skb
+into its own receive queue, but a recursive lock eventually occurs, leading
+to an operating system deadlock. This issue has been present since v6.9.
 
-I can't see how the pmtu test affects the dummy interface test in
-a single namespace... I may add some debug info in the next version.
+'''
+sk_psock_strp_data_ready
+    write_lock_bh(&sk->sk_callback_lock)
+    strp_data_ready
+      strp_read_sock
+        read_sock -> tcp_read_sock
+          strp_recv
+            cb.rcv_msg -> sk_psock_strp_read
+              # now stream_verdict return SK_PASS without peer sock assign
+              __SK_PASS = sk_psock_map_verd(SK_PASS, NULL)
+              sk_psock_verdict_apply
+                sk_psock_skb_ingress_self
+                  sk_psock_skb_ingress_enqueue
+                    sk_psock_data_ready
+                      read_lock_bh(&sk->sk_callback_lock) <= dead lock
 
-Thanks
-Hangbin
+'''
+
+This topic has been discussed before, but it has not been fixed.
+Previous discussion:
+https://lore.kernel.org/all/6684a5864ec86_403d20898@john.notmuch
+
+Fixes: 6648e613226e ("bpf, skmsg: Fix NULL pointer dereference in sk_psock_skb_ingress_enqueue")
+Reported-by: Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
+Signed-off-by: Jiayuan Chen <mrpre@163.com>
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+---
+ net/core/skmsg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index b1dcbd3be89e..e90fbab703b2 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -1117,9 +1117,9 @@ static void sk_psock_strp_data_ready(struct sock *sk)
+ 		if (tls_sw_has_ctx_rx(sk)) {
+ 			psock->saved_data_ready(sk);
+ 		} else {
+-			write_lock_bh(&sk->sk_callback_lock);
++			read_lock_bh(&sk->sk_callback_lock);
+ 			strp_data_ready(&psock->strp);
+-			write_unlock_bh(&sk->sk_callback_lock);
++			read_unlock_bh(&sk->sk_callback_lock);
+ 		}
+ 	}
+ 	rcu_read_unlock();
+-- 
+2.43.5
+
