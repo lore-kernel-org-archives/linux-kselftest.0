@@ -1,45 +1,45 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B3417BA3
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 21:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C322A150981
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 21:05:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731963933; cv=none; b=pwLq38RZrPg7LMiDQMUnl1s5nVc5Rau7vUObzJ8BQzIuvw+XYlMw7sDShr6hNBpBFpEFk0NYMvU4mBjInacxRpOk4S30k5bS0nAbSaTyTBJrklWSZd7RSPPFpb4I1spbAamMa4PyCPk0fLPJgLje7OUYISifnpm6HX4pnQSqRO4=
+	t=1731963933; cv=none; b=HTR0OLP1Y/2iR6YiAt8ART0rMXN1l6CCOn4CY3sGRTJ9eh8FDlZZmHOR++0FKiqehfvf9GSPHEQLxEg5kaDNCuHtyJDIJUFHY9cT2cFJ9rCq5IQiEhMXwuTSi6uALab/l4AFSWg20ajQZYsOwF9ZpR7ntx9WRjMcivU01oIksu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731963933; c=relaxed/simple;
-	bh=HRwRGhetPBMzrx45PazriPu+7lTX6gtWD6dSKBj34NY=;
+	bh=yxgSfg68f3OHumg7gYdyISrFvbP1dKO8ppUKrFr+3rw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bzPGeWWtIqW0gtqxm/lMRn/mXb/AAtodm4H5IgAU+4mj5aiaoiuQ+OUavh/2gqXBii5vZfQMEKtGTpdNYQlL+rBhZWXwLhkx4vcnzNGrSTIEgPv48b3UxR/fuuY+/IGgRnDa4st2j4ro7DqhhjH4yeVWORw1Hr1QfrDzT+ryVww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=fi55r38Y; arc=none smtp.client-ip=185.226.149.38
+	 In-Reply-To:To:Cc; b=qrPmSUdQs4mCE+VkYIFEJRYZd0r541Nl2X8vdVUa34gGnu6bnR9VprNxktCjopsHaiI7LBFTlpuGtIwfGLaTE8zBA1x+Kvz+/WSboFtLMFKKIByVy2lg1+5VGXdce7tdLszIee/u2gMmBCywr6eKo7Ddrvt49l9PvhCkbWRyspk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=qrB0wB8g; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="fi55r38Y"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="qrB0wB8g"
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1tD8vq-000075-Or; Mon, 18 Nov 2024 22:05:14 +0100
+	id 1tD8vr-00HaW6-Jr; Mon, 18 Nov 2024 22:05:15 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=pPN/BWurefmC6LQUpb6rfp0E4vot5oX/Lls6hWFCJiw=; b=fi55r38YhN8BHRFZxQ4ikCHEAu
-	E+iIWx6h1jPPZzhtyTqY/993Jw/258ACOZj6+HGpnK1Icg1e9zuFbazC+k/XC6Uw9VfCE29UV+DEj
-	Ds5ltpy+4qvGYKMhnp1yMtQx4ibprBWXYNy4kAZNNQ9l8kDiyunUgul35r8V6dgqS/YSOzopgtPtx
-	aiQakNIZCtixYtfyQHmY2C7xakBAbKZuTT5A67mDRZTudomtUamQQ0goF+XNGU7k1AImI2aFJDtUk
-	0PaqRynQbRdiKwWxslz1m7JO15HPGPwwTO475NsVfGU5Uf9bF7hXp62KkL+nI4dQzW/oyIe2HA/MS
-	VHmSYfyQ==;
+	bh=v8a/IYagFmlBSqn1ewjBjt5G7sUJDzk9cHncBbjifAU=; b=qrB0wB8gkOs7/xpmeXJ+R/+w4u
+	WuRlm+VFEShffrDV7tzrVxJp3UvIOW7NRthD+adZQX/dsowACyTK+LdZSeSFTkPvqaxt0HGf0LsLq
+	QuDjCkI8hs6T8o1GWJaDMMbfaI0hu2GT/i/Z5OofdzGOh0BTg3xKacoLNIcQ8s1I9QbtiyuLPwl6N
+	fhG9py2NDi9AMwZlNJBWA39Z8d8g8pXbTa3pQETLk4g2+i9DaZ6F5enHMMo59HemK7HxSynYYhDcf
+	Fp8B9l/3aCKrRP9g8zSSYensN86G5K3x2N0G88IPU9Ply6uRtoRXOBaaJ9qGi4QnxMWFIZb3YS+tW
+	x2V+efRA==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1tD8vp-0007d4-72; Mon, 18 Nov 2024 22:05:13 +0100
+	id 1tD8vr-0007dA-3J; Mon, 18 Nov 2024 22:05:15 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1tD8vh-00DME4-7C; Mon, 18 Nov 2024 22:05:05 +0100
+	id 1tD8vf-00DME4-0r; Mon, 18 Nov 2024 22:05:03 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Mon, 18 Nov 2024 22:03:43 +0100
-Subject: [PATCH bpf 3/4] bpf, vsock: Invoke proto::close on close()
+Date: Mon, 18 Nov 2024 22:03:41 +0100
+Subject: [PATCH bpf 1/4] bpf, vsock: Fix poll() missing a queue
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,7 +48,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241118-vsock-bpf-poll-close-v1-3-f1b9669cacdc@rbox.co>
+Message-Id: <20241118-vsock-bpf-poll-close-v1-1-f1b9669cacdc@rbox.co>
 References: <20241118-vsock-bpf-poll-close-v1-0-f1b9669cacdc@rbox.co>
 In-Reply-To: <20241118-vsock-bpf-poll-close-v1-0-f1b9669cacdc@rbox.co>
 To: Stefano Garzarella <sgarzare@redhat.com>, 
@@ -69,128 +69,29 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-vsock defines a BPF callback to be invoked when close() is called. However,
-this callback is never actually executed. As a result, a closed vsock
-socket is not automatically removed from the sockmap/sockhash.
-
-Introduce a dummy vsock_close() and make vsock_release() call proto::close.
-
-Note: changes in __vsock_release() look messy, but it's only due to indent
-level reduction and variables xmas tree reorder.
+When a verdict program simply passes a packet without redirection, sk_msg
+is enqueued on sk_psock::ingress_msg. Add a missing check to poll().
 
 Fixes: 634f1a7110b4 ("vsock: support sockmap")
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/vmw_vsock/af_vsock.c | 67 +++++++++++++++++++++++++++++-------------------
- 1 file changed, 40 insertions(+), 27 deletions(-)
+ net/vmw_vsock/af_vsock.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 919da8edd03c838cbcdbf1618425da6c5ec2df1a..b52b798aa4c2926c3f233aad6cd31b4056f6fee2 100644
+index dfd29160fe11c4675f872c1ee123d65b2da0dae6..919da8edd03c838cbcdbf1618425da6c5ec2df1a 100644
 --- a/net/vmw_vsock/af_vsock.c
 +++ b/net/vmw_vsock/af_vsock.c
-@@ -117,12 +117,14 @@
- static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr);
- static void vsock_sk_destruct(struct sock *sk);
- static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
-+static void vsock_close(struct sock *sk, long timeout);
- 
- /* Protocol family. */
- struct proto vsock_proto = {
- 	.name = "AF_VSOCK",
- 	.owner = THIS_MODULE,
- 	.obj_size = sizeof(struct vsock_sock),
-+	.close = vsock_close,
- #ifdef CONFIG_BPF_SYSCALL
- 	.psock_update_sk_prot = vsock_bpf_update_proto,
- #endif
-@@ -797,39 +799,37 @@ static bool sock_type_connectible(u16 type)
- 
- static void __vsock_release(struct sock *sk, int level)
- {
--	if (sk) {
--		struct sock *pending;
--		struct vsock_sock *vsk;
--
--		vsk = vsock_sk(sk);
--		pending = NULL;	/* Compiler warning. */
-+	struct vsock_sock *vsk;
-+	struct sock *pending;
- 
--		/* When "level" is SINGLE_DEPTH_NESTING, use the nested
--		 * version to avoid the warning "possible recursive locking
--		 * detected". When "level" is 0, lock_sock_nested(sk, level)
--		 * is the same as lock_sock(sk).
--		 */
--		lock_sock_nested(sk, level);
-+	vsk = vsock_sk(sk);
-+	pending = NULL;	/* Compiler warning. */
- 
--		if (vsk->transport)
--			vsk->transport->release(vsk);
--		else if (sock_type_connectible(sk->sk_type))
--			vsock_remove_sock(vsk);
-+	/* When "level" is SINGLE_DEPTH_NESTING, use the nested
-+	 * version to avoid the warning "possible recursive locking
-+	 * detected". When "level" is 0, lock_sock_nested(sk, level)
-+	 * is the same as lock_sock(sk).
-+	 */
-+	lock_sock_nested(sk, level);
- 
--		sock_orphan(sk);
--		sk->sk_shutdown = SHUTDOWN_MASK;
-+	if (vsk->transport)
-+		vsk->transport->release(vsk);
-+	else if (sock_type_connectible(sk->sk_type))
-+		vsock_remove_sock(vsk);
- 
--		skb_queue_purge(&sk->sk_receive_queue);
-+	sock_orphan(sk);
-+	sk->sk_shutdown = SHUTDOWN_MASK;
- 
--		/* Clean up any sockets that never were accepted. */
--		while ((pending = vsock_dequeue_accept(sk)) != NULL) {
--			__vsock_release(pending, SINGLE_DEPTH_NESTING);
--			sock_put(pending);
--		}
-+	skb_queue_purge(&sk->sk_receive_queue);
- 
--		release_sock(sk);
--		sock_put(sk);
-+	/* Clean up any sockets that never were accepted. */
-+	while ((pending = vsock_dequeue_accept(sk)) != NULL) {
-+		__vsock_release(pending, SINGLE_DEPTH_NESTING);
-+		sock_put(pending);
+@@ -1054,6 +1054,9 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
+ 		mask |= EPOLLRDHUP;
  	}
-+
-+	release_sock(sk);
-+	sock_put(sk);
- }
  
- static void vsock_sk_destruct(struct sock *sk)
-@@ -901,9 +901,22 @@ void vsock_data_ready(struct sock *sk)
- }
- EXPORT_SYMBOL_GPL(vsock_data_ready);
- 
-+/* Dummy callback required by sockmap.
-+ * See unconditional call of saved_close() in sock_map_close().
-+ */
-+static void vsock_close(struct sock *sk, long timeout)
-+{
-+}
++	if (sk_is_readable(sk))
++		mask |= EPOLLIN | EPOLLRDNORM;
 +
- static int vsock_release(struct socket *sock)
- {
--	__vsock_release(sock->sk, 0);
-+	struct sock *sk = sock->sk;
-+
-+	if (!sk)
-+		return 0;
-+
-+	sk->sk_prot->close(sk, 0);
-+	__vsock_release(sk, 0);
- 	sock->sk = NULL;
- 	sock->state = SS_FREE;
- 
+ 	if (sock->type == SOCK_DGRAM) {
+ 		/* For datagram sockets we can read if there is something in
+ 		 * the queue and write as long as the socket isn't shutdown for
 
 -- 
 2.46.2
