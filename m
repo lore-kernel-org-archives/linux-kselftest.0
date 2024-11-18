@@ -1,71 +1,78 @@
-Received: from cmccmta2.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF5FE54652;
-	Mon, 18 Nov 2024 06:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FB413E02A;
+	Mon, 18 Nov 2024 06:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731911138; cv=none; b=q7yycTATm+OmvMELSeDD7aZPBt3HxuV2cb+9MHCMqVqjo96lcbq9SIeAAOCqthTb3oKDfn7D9aeZw5O4iHnxuzQjkycmL0yYQ8r+M5bb1W4Yya1PSw+LTFJ6Hv4QR03Hj7aoqCZYC/bkrbrqS5C7bpIzWL7n75bgYtQLHLliiZg=
+	t=1731912556; cv=none; b=S2GsuxAhzcDWHXfpX5aNYDbz9jFG2IHwF6CL/aMQPGK5bNOgw4MbzxA70/8BlNU9pgamNTmBqozTkIGzG9gOdnX0+g59zOQL42trd5Rm2/wb0Mr0yvqUJXuFRxR2cPaIySn0rQBQ7MwyAgLPxehZ4YCjlswcXcS6abV56REk+Gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731911138; c=relaxed/simple;
-	bh=eYvTGSmwc/HG7pTWakworhP5mMe7YU+guEWVku/y6no=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HswH7CiV3uvKLVUL5vHJNrYrVeWwNlXM092duvhmhQV6Wol0v7Ao1GDLkJE4i6MLa3OfEqbyokmnt7FFCpjogCLuGcvZ/ur91LQQPXNaNrfxh9CtG1pcablV1fCGbwjS36lJo+pF63UAsW69yaJ9KW3YqPU7ZeBIodfPT+B+7oU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee6673addd61fb-0cacc;
-	Mon, 18 Nov 2024 14:25:27 +0800 (CST)
-X-RM-TRANSID:2ee6673addd61fb-0cacc
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[223.108.79.101])
-	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee8673addc9ddf-b0623;
-	Mon, 18 Nov 2024 14:25:27 +0800 (CST)
-X-RM-TRANSID:2ee8673addc9ddf-b0623
-From: Ba Jing <bajing@cmss.chinamobile.com>
-To: mic@digikod.net
-Cc: gnoack@google.com,
-	shuah@kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ba Jing <bajing@cmss.chinamobile.com>
-Subject: [PATCH] landlock: ptrace_test: remove unused macros
-Date: Mon, 18 Nov 2024 12:24:07 +0800
-Message-Id: <20241118042407.12900-1-bajing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1731912556; c=relaxed/simple;
+	bh=yAlKL7tLdFlqEx9jAqU45Vxr3I/VG8+qut4fJ+rU68c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ctl/CqBqruXYVTL8DUUzQoA7ZEemrQJpSqOKNZH880cucA0itHRvtb/4kGHntFijFghY4j2cJWV8zyifJGr7uoUDRu3WohUrQ1TZeJesyxS0AcwFUy1HihenMYdspQd8SfvWLCDDztTPjEpU7NWLfCS84dqVYAR1Kbh2NsgQB00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NBMWwnSa; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NBMWwnSa"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=kOlSN2LA06OzE6644+n7itNYM1OkhAQ52vQl+1dtIKs=; b=NBMWwnSaPc/9xDibTvknY6r0iC
+	Hh7I8oTd1dZMPrFyEml6PB6AAOMNeNm0SWS4OaudwOPvvxcwKW29PqOGaqP0UyZJQyLlNLqRcxDP2
+	Pzz/1ibDFKeQrNAnU//VVjsfQ6gG6AXU7rZLEl5aJ4FZcOym5IUGTbcGqe+b50FbizTFXfUp9Cqa4
+	EqmkJKs7fVlO61ReuTOb7xuZ8i+ryTxh2bcY/qKXxHerJIBsWU6MUqaX0h4SUnsPtkWbZx542lRmD
+	QPphpmKYXVAgY4orJZX4F4S6txiPCoeNm75Y1bJiiCsCB4M2stquegy5NHLRZY106VxQm5ZNiS1HL
+	CJe7scig==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1tCvZL-00000008Ysl-04P5;
+	Mon, 18 Nov 2024 06:49:07 +0000
+Date: Sun, 17 Nov 2024 22:49:06 -0800
+From: Christoph Hellwig <hch@infradead.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	akpm@linux-foundation.org, corbet@lwn.net, derek.kiernan@amd.com,
+	dragan.cvetic@amd.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+	tj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+	roman.gushchin@linux.dev, shakeel.butt@linux.dev,
+	muchun.song@linux.dev, Liam.Howlett@oracle.com,
+	lorenzo.stoakes@oracle.com, vbabka@suse.cz, jannh@google.com,
+	shuah@kernel.org, vegard.nossum@oracle.com, vattunuru@marvell.com,
+	schalla@marvell.com, david@redhat.com, willy@infradead.org,
+	osalvador@suse.de, usama.anjum@collabora.com, andrii@kernel.org,
+	ryan.roberts@arm.com, peterx@redhat.com, oleg@redhat.com,
+	tandersen@netflix.com, rientjes@google.com, gthelen@google.com
+Subject: Re: [RFCv1 2/6] pagewalk: Add a page table walker for init_mm page
+ table
+Message-ID: <ZzrjYtoC3G0Yl8pM@infradead.org>
+References: <20241116175922.3265872-1-pasha.tatashin@soleen.com>
+ <20241116175922.3265872-3-pasha.tatashin@soleen.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241116175922.3265872-3-pasha.tatashin@soleen.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-After reviewing the code, it was found that these macros are never
-referenced in the code. Just remove them.
+On Sat, Nov 16, 2024 at 05:59:18PM +0000, Pasha Tatashin wrote:
+>  	} while (start = next, start < end);
+>  	return err;
+>  }
+> +EXPORT_SYMBOL_GPL(walk_page_range);
 
-Signed-off-by: Ba Jing <bajing@cmss.chinamobile.com>
----
- tools/testing/selftests/landlock/ptrace_test.c | 2 --
- 1 file changed, 2 deletions(-)
+Umm, no.  We really should not expose all these page table detail
+to modules.
 
-diff --git a/tools/testing/selftests/landlock/ptrace_test.c b/tools/testing/selftests/landlock/ptrace_test.c
-index a19db4d0b3bd..8f31b673ff2d 100644
---- a/tools/testing/selftests/landlock/ptrace_test.c
-+++ b/tools/testing/selftests/landlock/ptrace_test.c
-@@ -22,8 +22,6 @@
- /* Copied from security/yama/yama_lsm.c */
- #define YAMA_SCOPE_DISABLED 0
- #define YAMA_SCOPE_RELATIONAL 1
--#define YAMA_SCOPE_CAPABILITY 2
--#define YAMA_SCOPE_NO_ATTACH 3
- 
- static void create_domain(struct __test_metadata *const _metadata)
- {
--- 
-2.33.0
+> +EXPORT_SYMBOL_GPL(walk_page_range_kernel);
 
-
+Even more so here.
 
