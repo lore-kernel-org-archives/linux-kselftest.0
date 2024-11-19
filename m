@@ -1,55 +1,35 @@
-Received: from cmccmta2.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 278AD33F7;
-	Tue, 19 Nov 2024 02:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA401A28C;
+	Tue, 19 Nov 2024 03:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731984425; cv=none; b=VX9zzWeib73T2h5HjCF33asUwru7VxlG9xVLfZznwikTfKQ/MuFi91MlX0tS7cA4M+UKSbrk7gtM6MhNWqQPd1AOw1BoHyCnNsIUgfk6YbYlFVtRopKir0F1LFWXEBziIuYIAKvJIleqtwfxVh/9zRAmA8KFY0T54I9JnjXdndg=
+	t=1731985228; cv=none; b=t1YogcqmEBdh5JdNhmlGxDPAnLT8mCmWfUfhuAhdf1AzVEvygUEO+zNyL7cr3/8qkiUiXY4+EKx+YegWdtIjLUKK/azrhVIGYS6kc2vAq7XO3GssOKzbrU4pYmm2NQ1NLxZitdIRwk1sO/CaC9ftaWqNoRR+Vvsi+ZSEEYayl9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731984425; c=relaxed/simple;
-	bh=l7EGQCVzS8e+Cm9uLnOIk+DQliZX4oyPru3AsAUlqBU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mZyATknYAylfGvaMhqKh6KTpdqlTykxbMwnYEoM0akTGgPx+m75DhktF2pRBb+1JDRjYyx8sAdELNS06ICzKzWvcEFPuA9pENpzeHExEEHQ/KTw9DrKjJASsKxlqdwNk7Fcy+M0oPuOBWShZmAnPFvP7BVpxfjsI7hPO5U+Mdio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee8673bfc2197e-819c9;
-	Tue, 19 Nov 2024 10:46:59 +0800 (CST)
-X-RM-TRANSID:2ee8673bfc2197e-819c9
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[223.108.79.101])
-	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee6673bfc163b6-0b1a5;
-	Tue, 19 Nov 2024 10:46:59 +0800 (CST)
-X-RM-TRANSID:2ee6673bfc163b6-0b1a5
-From: guanjing <guanjing@cmss.chinamobile.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	mykolal@fb.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	dxu@dxuuu.xyz,
-	antony.antony@secunet.com,
-	cupertino.miranda@oracle.com,
-	asavkov@redhat.com
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	guanjing <guanjing@cmss.chinamobile.com>
-Subject: [PATCH v1] selftests/bpf: fix application of sizeof to pointer
-Date: Sun, 17 Nov 2024 11:18:38 +0800
-Message-Id: <20241117031838.161576-1-guanjing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1731985228; c=relaxed/simple;
+	bh=/Mvt36S/RdlWwZDHxJ+uh+u0ea1LA9OjZPho7cXNQ2M=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=OyJqqQVMcne4MbOmGunsW30hURkBLuJ+oQX3Rffiua4z5/SdpOtTySXzWPv4AJ0nyIkhRGZOvfiLzuRUPIA4k/qQ+FKPcSeypt6M5GgeuAavlqv26JajLuRUAkRq8o2UutrNCxGOy7N8y9aa1J95BZBo/ovsoA3meHlvbToQty4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cORlJbS6; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cORlJbS6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B33C4CECC;
+	Tue, 19 Nov 2024 03:00:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731985227;
+	bh=/Mvt36S/RdlWwZDHxJ+uh+u0ea1LA9OjZPho7cXNQ2M=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=cORlJbS6EfHdS5/8c87oBeUZ+DOlNEwWOw36y8Qyjox+yhwGrX4FpT/Gy3PpaqTL8
+	 EenTVTfLFSdPaDpuJbaAqp2pTrK3/IXoN+fK+PC8oV/KsY7o4+wNA21LyiWDWrl/r6
+	 E2F/5B195ea1IPwmHJdVE3+l63AQ130eCMXHf4IJ3O+NpmLxQMYiN8fttjrNPvwVsg
+	 MMReT+QPp3FlYksurZYmMy1GED1qtS3Y0AGBmc/oxLMdclsa3FLkLKR5lPYiyW0t87
+	 rECsNgGsLFThKPbQvtTHY0ZWS3OWX69x1PlpauhlbpfpCJ3OaM1mRSDiaiROrb9aVR
+	 x9qTP9yvntIGg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAF1F3809A80;
+	Tue, 19 Nov 2024 03:00:39 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,38 +37,39 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: net: netlink-dumps: validation checks
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173198523877.84991.11510166168893200267.git-patchwork-notify@kernel.org>
+Date: Tue, 19 Nov 2024 03:00:38 +0000
+References: <20241115003248.733862-1-kuba@kernel.org>
+In-Reply-To: <20241115003248.733862-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, linux-kselftest@vger.kernel.org
 
-sizeof when applied to a pointer typed expression gives the size of
-the pointer.
+Hello:
 
-tools/testing/selftests/bpf/progs/test_tunnel_kern.c:678:41-47: ERROR: application of sizeof to pointer
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-The proper fix in this particular case is to code sizeof(*gopt)
-instead of sizeof(gopt).
+On Thu, 14 Nov 2024 16:32:48 -0800 you wrote:
+> The sanity checks are going to get silently cast to unsigned
+> and always pass. Cast the sizeof to signed size.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: linux-kselftest@vger.kernel.org
+> 
+> [...]
 
-This issue was detected with the help of Coccinelle.
+Here is the summary with links:
+  - [net-next] selftests: net: netlink-dumps: validation checks
+    https://git.kernel.org/netdev/net-next/c/357c52ff860b
 
-Fixes: 5ddafcc377f9 ("selftests/bpf: Fix a few tests for GCC related warnings.")
-Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
----
- tools/testing/selftests/bpf/progs/test_tunnel_kern.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index 32127f1cd687..3a437cdc5c15 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -675,7 +675,7 @@ int ip6geneve_set_tunnel(struct __sk_buff *skb)
- 	gopt->length = 2; /* 4-byte multiple */
- 	*(int *) &gopt->opt_data = bpf_htonl(0xfeedbeef);
- 
--	ret = bpf_skb_set_tunnel_opt(skb, gopt, sizeof(gopt));
-+	ret = bpf_skb_set_tunnel_opt(skb, gopt, sizeof(*gopt));
- 	if (ret < 0) {
- 		log_err(ret);
- 		return TC_ACT_SHOT;
+You are awesome, thank you!
 -- 
-2.33.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
