@@ -1,84 +1,93 @@
-Received: from cmccmta2.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90571925B3;
-	Tue, 19 Nov 2024 09:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
+Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A21C199EA3;
+	Tue, 19 Nov 2024 09:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732009018; cv=none; b=NMjMqrJzhQTg1Vj3QKzH47KqPk88vPkkNWFYVxvaFwNj5MYjjm8fYiNJ6Ezgm95A6fpQI4AvmbirHoYRf/Ux/RuPWmvYOyMcCM6uZp0/TzhOo+QtFK+dRLAiWKwm4M0sB7GAdZtTL9u3uz7Okg8Ts9rNvwz6Un8HxqM6GoD9TT4=
+	t=1732009636; cv=none; b=EAf6FAvEiOCyn9WPq8+hGK63kU1Sd5h9IVgb7IG2nih09Lz8SX2a+z1/gG9ry0jCOubdOYyPMgoP4Zpg/fslVdOG0jQDZ1PSQ592LyDDNNfdLltoQcxYXhhfWfqC8AyWaVWKvjBo3yd0T0Ra/yE5qiuE6/s2q8CuCwha/UEP/AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732009018; c=relaxed/simple;
-	bh=52/0Yw7upQLX+DkYnXMAKU3T9jvRn9MiFFYrwKplFjs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OG15doHaTZ8jOLTsib+5vHYr54LyfdpXkOI0T8V74PYp9/i2cyKYgwHsxU+7UxC0pTWtfhVgW9lXy0DhMNDZakciv0M2XXZ3R3GOlDCeRVtLuk01yPq87wPGuXbYNXAsZSFUz7IaON9UvgXw4spkQ+IuwJlYYXpunGO0tBoTRhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee8673c5c2d300-8634b;
-	Tue, 19 Nov 2024 17:36:46 +0800 (CST)
-X-RM-TRANSID:2ee8673c5c2d300-8634b
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[223.108.79.101])
-	by rmsmtp-syy-appsvr04-12004 (RichMail) with SMTP id 2ee4673c5c2657d-04a4e;
-	Tue, 19 Nov 2024 17:36:46 +0800 (CST)
-X-RM-TRANSID:2ee4673c5c2657d-04a4e
-From: guanjing <guanjing@cmss.chinamobile.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	mykolal@fb.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	guanjing <guanjing@cmss.chinamobile.com>
-Subject: [PATCH v1] selftests/bpf: Fix unnecessary conversion to bool in 'run_subtest'
-Date: Sun, 17 Nov 2024 18:28:57 +0800
-Message-Id: <20241117102857.198803-1-guanjing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1732009636; c=relaxed/simple;
+	bh=RA/1auJJGfEixGvdSgcliQSdUHQ7nyHvegV3fNo4swM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gg0Qc4S18NmtXJeFINntBxUBqWNHigB0f8KnsDW9gGilbp//3vpkT0+02rgovCSU4nVUeZwN5mfeb3/2LczzMrRpsMS1OL3cJbKyAQ4rRnOjcWJWQndxSANmtFXy3A3NcO5ERkqTbvFZKELfznrfcX2c7o3T0bJrFne37tCONl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=PmVceOx/; arc=none smtp.client-ip=178.154.239.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="PmVceOx/"
+Received: from mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net [IPv6:2a02:6b8:c07:179a:0:640:3367:0])
+	by forward500b.mail.yandex.net (Yandex) with ESMTPS id 5C0D660EA9;
+	Tue, 19 Nov 2024 12:47:05 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 1lNdxsoOjeA0-tHAwjN3l;
+	Tue, 19 Nov 2024 12:47:04 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+	t=1732009624; bh=RA/1auJJGfEixGvdSgcliQSdUHQ7nyHvegV3fNo4swM=;
+	h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+	b=PmVceOx/7Zp7de8bOqZqbmmCYoD9o/LKYON2CXzDuKKqD89jFWtPPLBaXFTdqENy3
+	 ZS1bhpO9ttZM9JWhsSHpvSwbaEPa7P72RUT4zWUcx5Pdcsns665cp93Pnc3ZWVwzwo
+	 ooEycwEf6PlRAPx5zquTKUWwxEydpNb4KHSAqRmw=
+Authentication-Results: mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <4251c4f5-3523-474a-9ada-59ac462f33fd@yandex.ru>
+Date: Tue, 19 Nov 2024 12:47:01 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3] af_unix: pass pidfd flags via SCM_PIDFD cmsg
+Content-Language: en-US
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: almasrymina@google.com, asml.silence@gmail.com, axboe@kernel.dk,
+ brauner@kernel.org, cyphar@cyphar.com, davem@davemloft.net,
+ edumazet@google.com, gouhao@uniontech.com, horms@kernel.org,
+ kees@kernel.org, krisman@suse.de, kuba@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, mhal@rbox.co,
+ netdev@vger.kernel.org, oleg@redhat.com, pabeni@redhat.com,
+ quic_abchauha@quicinc.com, shuah@kernel.org, tandersen@netflix.com,
+ viro@zeniv.linux.org.uk, willemb@google.com
+References: <20241116101120.323174-1-stsp2@yandex.ru>
+ <20241118175452.54045-1-kuniyu@amazon.com>
+From: stsp <stsp2@yandex.ru>
+In-Reply-To: <20241118175452.54045-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Fixes the following coccicheck:
+18.11.2024 20:54, Kuniyuki Iwashima пишет:
+> From: Stas Sergeev <stsp2@yandex.ru>
+> Date: Sat, 16 Nov 2024 13:11:20 +0300
+>> Currently SCM_PIDFD cmsg cannot be sent via unix socket
+>> (returns -EINVAL) and SO_PASSPIDFD doesn't support flags.
+>> The created pidfd always has flags set to 0.
+>>
+>> This patch implements SCM_PIDFD cmsg in AF_UNIX socket, which
+>> can be used to send flags to SO_PASSPIDFD-enabled recipient.
+>>
+>> Self-test is added for the propagation of PIDFD_NONBLOCK flag.
+>>
+>> This is mainly needed for the future extensions, like eg this one:
+>> https://lore.kernel.org/lkml/8288a08e-448b-43c2-82dc-59f87d0d9072@yandex.ru/T/#me1237e46deba8574b77834b7704e63559ffef9cb
+>> where it was suggested to try solving the supplementary groups
+>> problem with pidfd.
+>>
+>> Changes in v3: specify target tree in patch subject
+> It seems you missed other feedback, especially __scm_recv_common()
+> needs a small change.
 
-tools/testing/selftests/bpf/test_loader.c:1033:64-69: WARNING: conversion to bool not needed here
+Yes, sorry. :( Too long quotes.
+And what's worse, I've just found this
+and many other lkml e-mails in spam.
+I was under deep impression that no
+one replies to me.
 
-Fixes: 80a4129fcf20 ("selftests/bpf: Add unit tests for bpf_arena_alloc/free_pages")
-Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
----
- tools/testing/selftests/bpf/test_loader.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sigh. E-mail sucks. Or just me.
 
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 3e9b009580d4..400f56f81272 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -1030,7 +1030,7 @@ void run_subtest(struct test_loader *tester,
- 		}
- 
- 		do_prog_test_run(bpf_program__fd(tprog), &retval,
--				 bpf_program__type(tprog) == BPF_PROG_TYPE_SYSCALL ? true : false);
-+				 bpf_program__type(tprog) == BPF_PROG_TYPE_SYSCALL);
- 		if (retval != subspec->retval && subspec->retval != POINTER_VALUE) {
- 			PRINT_FAIL("Unexpected retval: %d != %d\n", retval, subspec->retval);
- 			goto tobj_cleanup;
--- 
-2.33.0
+> net-next is closed during the merge window for v6.13-rc1, so please
+> post v4 after Dec 2nd.
+> https://lore.kernel.org/netdev/20241118071654.695bb1a2@kernel.org/
 
-
+Ok, thank you!
 
