@@ -1,109 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC15F193;
-	Wed, 20 Nov 2024 00:05:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03F4158D79;
+	Wed, 20 Nov 2024 07:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732061136; cv=none; b=F7kX5P7NQAnkk/Nb8fs5/PVJzf1aHedSQE+gJRlNUf0HDXnbsaGXuk3HO01GcvQXWgZt6GAnkDle6ZDxh0rguadKNSs8Qryt+Ikp9cNmLbO/Ud8gTPp8pW3mGGHH7eMSc2yfMqUDWRK2BVcS9ZX6XwOwJD1iMFbX/i3C4jf0vfw=
+	t=1732088613; cv=none; b=SeGoKzGuuhrl95/iim75EV7SCdfj89AuVcqglUPBxDbFtCG69wybcvIMiqVIbSRohnqH1+V5S89wrYqu68R5TG1/QA961dhjlGPEbCm823+HxvjjYshDvassGHJ4wVFovDGWkE6Gvn22gOHOSbzaCa4rNxLv3ILa2pcmVuH6BMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732061136; c=relaxed/simple;
-	bh=NMnFX7XK6VdRPzGtpSRTKyvI+/r1fqrGrX48X5BBDWA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H3mjApGchXntPaTsiTun9YAMNpumBS37zjZbuy1gasVvNZcszphDac8Vce2dDoI5/6AoTrXWSwrcjfFt6XmC9QZtj2rXO7rrf6J6NBGMYd9S33A90Ma9C8QFMRaGGzP0wz0InFDoZzMm2+Whwp9ofP1fMertercYWT8znrmLmFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eksPcppY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732088613; c=relaxed/simple;
+	bh=nY1ABuW5bsvP34Tc/ZBG35W0W3ziUMfwf8JaBTNVBqk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Rlzjx/ICyaGribqKE85iJTTTMDhkKCG/+LCINyvsR7SiCTWnvnyap0d+93CltQddcicxS2WvV6uJnS62syzKyEiEiAI7YDcCajQIDRQwKHTsedY0RZT3SDNefZGNmwaisjNYbs9Yv6y0/Vu8duRrjiGDQ6lcNKRG4HE3EzYXLtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=naIQ+pK/; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eksPcppY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 492F7C4CECF;
-	Wed, 20 Nov 2024 00:05:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732061136;
-	bh=NMnFX7XK6VdRPzGtpSRTKyvI+/r1fqrGrX48X5BBDWA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eksPcppYzPeSt6INt9TwqRvZ4lhbHTxdkTT3HfOrf73uMrdgSEcCiaBLbjbuEr7KW
-	 KTtf0X/Xm113UupXPcdgtWqsbZTElfC3SS6AjmXWs7Njc7ceshzOwUlnMhh2jsa5hH
-	 5OHCR/v0n3tWuWAQrg1DkVk8tW7PRGoTeRmRwkCdgz5FoLEnCrEjA+x4MkVxOrYs9g
-	 tX6BNjcLJDxuXETMH5s7gDSEqB5HHNJFSx81pxD01l1XlEm7xGdkg4yKrWRdZOitj5
-	 tSMfXDjRII5KS06JqDQP80Djvc0pHpcI447DDFOp/8729SCiqKnXDMrLwR5jZhA/7C
-	 VKL7upp0zVLyg==
-Date: Tue, 19 Nov 2024 16:05:32 -0800
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
-	x86@kernel.org, rcu@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Lorenzo Stoakes <lstoakes@gmail.com>,
-	Jason Baron <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Juerg Haefliger <juerg.haefliger@canonical.com>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Nadav Amit <namit@vmware.com>, Dan Carpenter <error27@gmail.com>,
-	Chuang Wang <nashuiliang@gmail.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Petr Mladek <pmladek@suse.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-	Julian Pidancet <julian.pidancet@oracle.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v3 06/15] jump_label: Add forceful jump label type
-Message-ID: <20241120000532.maqzgsn7m34lti6u@jpoimboe>
-References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-7-vschneid@redhat.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="naIQ+pK/"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B8985240004;
+	Wed, 20 Nov 2024 07:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1732088608;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5t7U3zj6C7oj9CfjNAnX9OzAUYLiCf7cJ4qumLlNgoU=;
+	b=naIQ+pK/3LTilZec2zX0pGsX2qvwxnaa64/kdqYJCatna3EHlSlx3QDHeIqz6OPKGOMgDZ
+	JMqAX4sO2ITAhgHlROSgDMgH0SI4Dhb/9Pxhs3BAkb/VaIzyvy5BrC5JXqEvoY8x09gB4x
+	Xp9qvnUzi5olJRhbU9y80e/raN5hKDThm0BltWZ3Q68LyiUg58ZeFhcZ5shtoAyEQ8X3mt
+	5MKPRrfrZ4q5lqUnB7BxmTi0VSR1/Y+y3N8TpdeVBh3V5BHW/V3Bxxd41rLdBHXIdn91XQ
+	XMB4S4ZUgYHfRIx0vIisqM7FTOmbkedewBH9DKpbe6+zknyAb11eS5Zy2nBMIQ==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Wed, 20 Nov 2024 08:43:11 +0100
+Subject: [PATCH bpf-next v3 01/14] selftests/bpf: add a macro to compare
+ raw memory
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241119153502.41361-7-vschneid@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20241120-flow_dissector-v3-1-45b46494f937@bootlin.com>
+References: <20241120-flow_dissector-v3-0-45b46494f937@bootlin.com>
+In-Reply-To: <20241120-flow_dissector-v3-0-45b46494f937@bootlin.com>
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On Tue, Nov 19, 2024 at 04:34:53PM +0100, Valentin Schneider wrote:
-> +++ b/include/linux/jump_label.h
-> @@ -200,7 +200,8 @@ struct module;
->  #define JUMP_TYPE_FALSE		0UL
->  #define JUMP_TYPE_TRUE		1UL
->  #define JUMP_TYPE_LINKED	2UL
-> -#define JUMP_TYPE_MASK		3UL
-> +#define JUMP_TYPE_FORCEFUL      4UL
-> +#define JUMP_TYPE_MASK		7UL
+We sometimes need to compare whole structures in an assert. It is
+possible to use the existing macros on each field, but when the whole
+structure has to be checked, it is more convenient to simply compare the
+whole structure memory
 
-Hm, I don't think we can (ab)use this pointer bit on 32-bit arches, as
-the address could be 4 byte aligned?
+Add a dedicated assert macro, ASSERT_MEMEQ, to allow bare memory
+comparision
+The output generated by this new macro looks like the following:
+[...]
+run_tests_skb_less:FAIL:returned flow keys unexpected memory mismatch
+actual:
+	00 00 00 00 00 00 00 00 	00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 	00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 	00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00
+expected:
+	0E 00 3E 00 DD 86 01 01 	00 06 86 DD 50 00 90 1F
+	00 00 00 00 00 00 00 00 	00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 	00 00 00 00 00 00 00 00
+	01 00 00 00 00 00 00 00
+[...]
+
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v3:
+- none
+
+Changes in v2:
+- replace DUMP_BUFFER with a real function
+- make this function take a prefix
+- add formatting example in the commit message
+---
+ tools/testing/selftests/bpf/test_progs.c | 15 +++++++++++++++
+ tools/testing/selftests/bpf/test_progs.h | 15 +++++++++++++++
+ 2 files changed, 30 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 6088d8222d5905c3df6e6ebfb095c6bc5bf22399..c9e745d49493e594b55d79ac26061b0466f9a039 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1282,6 +1282,21 @@ void crash_handler(int signum)
+ 	backtrace_symbols_fd(bt, sz, STDERR_FILENO);
+ }
+ 
++void hexdump(const char *prefix, const void *buf, size_t len)
++{
++	for (int i = 0; i < len; i++) {
++		if (!(i % 16)) {
++			if (i)
++				fprintf(stdout, "\n");
++			fprintf(stdout, "%s", prefix);
++		}
++		if (i && !(i % 8) && (i % 16))
++			fprintf(stdout, "\t");
++		fprintf(stdout, "%02X ", ((uint8_t *)(buf))[i]);
++	}
++	fprintf(stdout, "\n");
++}
++
+ static void sigint_handler(int signum)
+ {
+ 	int i;
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 74de33ae37e56c90646cd1e0bb58ed7e3f345ec0..404d0d4915d54fe15f6c33dbabdb58cccc3b2781 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -185,6 +185,7 @@ void test__end_subtest(void);
+ void test__skip(void);
+ void test__fail(void);
+ int test__join_cgroup(const char *path);
++void hexdump(const char *prefix, const void *buf, size_t len);
+ 
+ #define PRINT_FAIL(format...)                                                  \
+ 	({                                                                     \
+@@ -344,6 +345,20 @@ int test__join_cgroup(const char *path);
+ 	___ok;								\
+ })
+ 
++#define ASSERT_MEMEQ(actual, expected, len, name) ({			\
++	static int duration = 0;					\
++	const void *__act = actual;					\
++	const void *__exp = expected;					\
++	int __len = len;						\
++	bool ___ok = memcmp(__act, __exp, __len) == 0;			\
++	CHECK(!___ok, (name), "unexpected memory mismatch\n");		\
++	fprintf(stdout, "actual:\n");					\
++	hexdump("\t", __act, __len);					\
++	fprintf(stdout, "expected:\n");					\
++	hexdump("\t", __exp, __len);					\
++	___ok;								\
++})
++
+ #define ASSERT_OK(res, name) ({						\
+ 	static int duration = 0;					\
+ 	long long ___res = (res);					\
 
 -- 
-Josh
+2.47.0
+
