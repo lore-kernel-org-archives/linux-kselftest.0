@@ -1,127 +1,160 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09F11D12F9;
-	Thu, 21 Nov 2024 11:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828049474
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 11:12:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732187545; cv=none; b=fy6YIfi87JWiwPnbY4Ausizuw5mb/9iTbVpm8LXfeP+I756jVyJg/U+PU54SHV5yxSJamSRuR5Fsie3lG3bkreIMRtHm026b74iVpngQXbxDBcVqNo+PjvqJn4zDqcYfxI91wWEpN4km9m8CCoJLM5PqoTakbgEgYIXZg7nA+Nc=
+	t=1732187554; cv=none; b=IQgn5QaO00I6vsZKgTCV6b/Pc8Sg3ig1IX3eVB9HELDrpFdkrS42viVooZXROQ7Mi8pHJDySCbBus73XDzJvfkbgdPJQ27/bK1Nl/HQkOKwbIW18MGgZsX03dwtHD9hM4wI4TloZmOqeHig0GKXc+yvrJyDlZWg8kPTbcXsqh5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732187545; c=relaxed/simple;
-	bh=46rZ8pT6LBDo++XU0X4+ubvk4/TsYvCXkojRMgrCm2I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FURfCPbmDZFgieMSS7iDo1dmSjHpuAfrLPC7iH8YTI3SOVlspiwFOmZj/z8Xoq4XmuavEo143DHWsQjJtFnnA5NXO/3fKUFevl9GaAJ1TDwD8jjpbLgFY7MOZBWFsZBOHIUJej9Jj9+6vUu65CnjgyAXp7G1UAZULLBL7PYGKyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZnnDDvKB; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1732187554; c=relaxed/simple;
+	bh=xNxTv9EmQivtywSeSyU7TTAQ2BE6SPdTXU2ukLe3Xeo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=e5+xxk/p7Oer0xSOR+VibjLuoPXUbu1oua66bglZ+4LCZEFfL/VVbsL697KyLkLBCKTnknXIslrjGOEc7xlyTbvuvw9O7z6wYRGDeV15MWdygTBfd+KhhwKujx256i2IqjYQ5UBGkx1HHil3p7RrDiUR+1AGXfOdpywye6Ov8aI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZOCFJ551; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZnnDDvKB"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=7u6hZNi/XuzFou5ujdfwghsus0DK9jsxshgCxjL09s4=; b=ZnnDDvKBvItXFztIL1wgf8XTMK
-	ewcwZjNRWSYrjZH+rZT6o49FOe/kRo9OZGytGd+voz+HNGUcuH+PP2GaYPZHs4m/S9nn234JQU+s0
-	jcVN8NhToLe9FCA+qM5KpNzoUaPZLKtrF3vHdq2UtRbclGSqWbGDeyTL/5pPoGHMpsaTGnJ6Ar+wJ
-	2CDFUxa1pB5WeOoE/5nHHErJ8ykxvkEDM06/dAOiCtOt+bGYezuZWGNQI8o2HOKhnZqVGCA34MRgT
-	P2M6Z3Vn21k+nDAjOFXWjNQOUddBYU3AChzpcJxfmgAg0CxIN4kwolN9vrfeY3nk6x7i3pwoH4jPE
-	4WMvU03g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tE56i-00000006J1a-2zVQ;
-	Thu, 21 Nov 2024 11:12:22 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 8D85C30068B; Thu, 21 Nov 2024 12:12:21 +0100 (CET)
-Date: Thu, 21 Nov 2024 12:12:21 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
-	x86@kernel.org, rcu@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZOCFJ551"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1732187550;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OguGIC+UK9KIfqIm01474ZxDlRYYb/Skb7YJ5uXjK70=;
+	b=ZOCFJ551iJ3juuDetBDEzQ35KuXadEyN9xyV1rJSesxk72Um4Lq25KkY7U/UgvuHxCHaBo
+	k8YYN2/WCHsDJ4zWr6KEfWdv9m/d57IrJyJc+5Sb6ubLAfK/yyUPr+XzhvoXW+0GdZUXQX
+	LbPeVoIVbRnihP4T4aemfiDsK7QoxR8=
+From: George Guo <dongtai.guo@linux.dev>
+To: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	shuah@kernel.org
+Cc: live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Lorenzo Stoakes <lstoakes@gmail.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Juerg Haefliger <juerg.haefliger@canonical.com>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Nadav Amit <namit@vmware.com>, Dan Carpenter <error27@gmail.com>,
-	Chuang Wang <nashuiliang@gmail.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Petr Mladek <pmladek@suse.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-	Julian Pidancet <julian.pidancet@oracle.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>,
-	Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [RFC PATCH v3 13/15] context_tracking,x86: Add infrastructure to
- defer kernel TLBI
-Message-ID: <20241121111221.GE24774@noisy.programming.kicks-ass.net>
-References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-14-vschneid@redhat.com>
- <20241120152216.GM19989@noisy.programming.kicks-ass.net>
- <20241120153221.GM38972@noisy.programming.kicks-ass.net>
- <xhsmhldxdhl7b.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	linux-kernel@vger.kernel.org,
+	George Guo <dongtai.guo@linux.dev>,
+	George Guo <guodongtai@kylinos.cn>
+Subject: [PATCH livepatch/master v1 2/6] selftests/livepatch: fix test-ftrace.sh execution error
+Date: Thu, 21 Nov 2024 19:11:31 +0800
+Message-Id: <20241121111135.2125391-2-dongtai.guo@linux.dev>
+In-Reply-To: <20241121111135.2125391-1-dongtai.guo@linux.dev>
+References: <20241121111135.2125391-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhldxdhl7b.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Nov 20, 2024 at 06:24:56PM +0100, Valentin Schneider wrote:
+The script test-ftrace.sh fails with the following error:
+$ sudo ./test-ftrace.sh
+TEST: livepatch interaction with ftrace_enabled sysctl ... not ok
 
-> > Oh gawd, just having looked at xen_write_cr3() this might not be
-> > entirely trivial to mark noinstr :/
-> 
-> ... I hadn't even seen that.
-> 
-> AIUI the CR3 RMW is not "enough" if we have PGE enabled, because then
-> global pages aren't flushed.
-> 
-> The question becomes: what is held in global pages and do we care about
-> that when it comes to vmalloc()? I'm starting to think no, but this is x86,
-> I don't know what surprises are waiting for me.
-> 
-> I see e.g. ds_clear_cea() clears PTEs that can have the _PAGE_GLOBAL flag,
-> and it correctly uses the non-deferrable flush_tlb_kernel_range().
+- expected
++ result
+ livepatch: kernel.ftrace_enabled = 0
+ % insmod test_modules/test_klp_livepatch.ko
+ livepatch: enabling patch 'test_klp_livepatch'
+-livepatch: 'test_klp_livepatch': initializing patching transition
+-livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
++transition: 'test_klp_livepatch': initializing patching transition
+ livepatch: failed to patch object 'vmlinux'
+ livepatch: failed to enable patch 'test_klp_livepatch'
+-livepatch: 'test_klp_livepatch': canceling patching transition, going to unpatch
+-livepatch: 'test_klp_livepatch': completing unpatching transition
+-livepatch: 'test_klp_livepatch': unpatching complete
++transition: 'test_klp_livepatch': canceling patching transition, going to unpatch
++transition: 'test_klp_livepatch': completing unpatching transition
++transition: 'test_klp_livepatch': unpatching complete
+ insmod: ERROR: could not insert module test_modules/test_klp_livepatch.ko: Device or resource busy
+ livepatch: kernel.ftrace_enabled = 1
+ % insmod test_modules/test_klp_livepatch.ko
+ livepatch: enabling patch 'test_klp_livepatch'
+-livepatch: 'test_klp_livepatch': initializing patching transition
+-livepatch: 'test_klp_livepatch': starting patching transition
+-livepatch: 'test_klp_livepatch': completing patching transition
+-livepatch: 'test_klp_livepatch': patching complete
++transition: 'test_klp_livepatch': initializing patching transition
++transition: 'test_klp_livepatch': starting patching transition
++transition: 'test_klp_livepatch': completing patching transition
++transition: 'test_klp_livepatch': patching complete
+ livepatch: sysctl: setting key "kernel.ftrace_enabled": Device or resource busy
+ % echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
+-livepatch: 'test_klp_livepatch': initializing unpatching transition
+-livepatch: 'test_klp_livepatch': starting unpatching transition
+-livepatch: 'test_klp_livepatch': completing unpatching transition
+-livepatch: 'test_klp_livepatch': unpatching complete
++transition: 'test_klp_livepatch': initializing unpatching transition
++transition: 'test_klp_livepatch': starting unpatching transition
++transition: 'test_klp_livepatch': completing unpatching transition
++transition: 'test_klp_livepatch': unpatching complete
+ % rmmod test_klp_livepatch
 
+ERROR: livepatch kselftest(s) failed
 
-I always forget what we use global pages for, dhansen might know, but
-let me try and have a look.
+The issue arises due to a mismatch in expected log output during livepatch
+transition. Specifically, the logs previously contained "livepatch:" but have
+now been updated to "transition:". This results in test failures when comparing
+the output with the expected values.
 
-I *think* we only have GLOBAL on kernel text, and that only sometimes.
+This patch updates the expected test output to reflect the new log format.
+
+Signed-off-by: George Guo <guodongtai@kylinos.cn>
+---
+ .../selftests/livepatch/test-ftrace.sh        | 25 +++++++++----------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
+
+diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+index 730218bce99c..04561e433e05 100755
+--- a/tools/testing/selftests/livepatch/test-ftrace.sh
++++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+@@ -37,27 +37,26 @@ unload_lp $MOD_LIVEPATCH
+ check_result "livepatch: kernel.ftrace_enabled = 0
+ % insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
+-livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ livepatch: failed to patch object 'vmlinux'
+ livepatch: failed to enable patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
++transition: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': unpatching complete
+ insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
+ livepatch: kernel.ftrace_enabled = 1
+ % insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
+-livepatch: '$MOD_LIVEPATCH': patching complete
++transition: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': completing patching transition
++transition: '$MOD_LIVEPATCH': patching complete
+ livepatch: sysctl: setting key \"kernel.ftrace_enabled\": Device or resource busy
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': initializing unpatching transition
++transition: '$MOD_LIVEPATCH': starting unpatching transition
++transition: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH"
+ 
+ 
+-- 
+2.39.2
+
