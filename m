@@ -1,292 +1,362 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74644205E0C;
-	Mon,  2 Dec 2024 14:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907A2204F78
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Dec 2024 15:07:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733149883; cv=none; b=brsKwAY2Bi8aKgCe/QFzFBkn9aEbJehNppDy+kqULg8o3k1pdVPmFVmY07+GqQRP6CsdYPOmiYZFVMJT7ncWs4RtOJ+4qAsb/1HKRhhj001EJMCVFd72/T7XKFoZCRmiUySEQBV5suz2TDyZRamcCYONas86CshIUQdOo4uhGzk=
+	t=1733152074; cv=none; b=THYsFzZJLzW0nKmHy4wzZbPId2cZPg3hSR3loUOVowbPTeUijCRDC0fsAlerlCEKZ4yOOwPv8QeDIPytpn6VG3GRcSnGJF7OOZTMN1NLqxO1eFr3bY5Wkh6RHAlS2dyK54ludcDjL1hF1bnPKTqa63aKJbODvXgyV+eFXDRRP2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733149883; c=relaxed/simple;
-	bh=ZtGu6SK5aFdAysupqz7NhzQdEnEBx5d8JsncaclV628=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cFDGZyg4ejqhroyWC8YaByzXn2O3/TFbWXxHupd2Qz7n2szaIpN/eTIOtBAaNfFnhEwGZ7YEG7aVV6N+Vnvh55UGfzry9vkUT9unz/HRyYwEPO90egAreoHDNvPP9PDorWMygFxnTIx8ohWn6ZMDbhpvkgiirJ58kGhIcJl4yZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BPfnKFDv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733152074; c=relaxed/simple;
+	bh=Gm3qMOOrhFS5KbClvr5Vuxn/Cz6BoXOHLi0W7qkVsCo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=MBv+qn+x8fbyq4sGX/3CfYEshRwFDWbT3jQHW0mZEV4/PogsrulGwN1Kymtif+8qtvAUIg/aegPf1Go7CgMx0wRd5k0Jv0e1H6RqrlSjo5kaJBG9Nk3S+y9JiK9p2iShnJ3keLhRc028TfcC1r9idzsWIofvJXXph3JZZvZ58Gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Y+z13LD/; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BPfnKFDv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E961C4CED2;
-	Mon,  2 Dec 2024 14:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733149883;
-	bh=ZtGu6SK5aFdAysupqz7NhzQdEnEBx5d8JsncaclV628=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BPfnKFDvxZ8vA6jFBhYtrwkOi+RmM6F3HfRS7e8R+fjzPQ0G6pX7hqSlqjNexBJdP
-	 kLhua83Sb3v8k1JGVAU+kmGvQCH0YgzOhObmI11ZJ0Pw3n64slRqA70YrowK54qM+K
-	 eWnyxl4kVUdhxevMp7hLqFu2qr9vP5NLdKYkzxainIXOpjvSEXjHAiJvr8/mwCQnvO
-	 FlCRqDqOZpK0ho/hECjl7tdWFM8F2UVs6p/fpGfILPJJvO86FnPUnTCrpSRjgpfEo3
-	 AM1L0ijv+lSidizSMfnMlgLjsZDsz9EPwFsoiUgp+T7llYXsihPCE8FRO81T2UeH/Y
-	 tXtmDr6i2/z0w==
-Date: Mon, 2 Dec 2024 15:31:13 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Oleg Nesterov <oleg@redhat.com>, 
-	Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
-	Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>, 
-	John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v6 2/5] pidfd: add PIDFD_SELF_* sentinels to refer to own
- thread/process
-Message-ID: <20241202-wahrnehmen-mitten-e330cbd1eaf0@brauner>
-References: <cover.1729926229.git.lorenzo.stoakes@oracle.com>
- <8eceec08eb64b744b24bf2aa09d4535e77e1ba47.1729926229.git.lorenzo.stoakes@oracle.com>
- <20241028-gesoffen-drehmoment-5314faba9731@brauner>
- <c96df57a-fa1b-4301-9556-94a6b8c93a31@lucifer.local>
- <b8f4664c-b8f0-46ca-b9a3-8d73e398b5ca@lucifer.local>
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Y+z13LD/"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-385e0e224cbso1789034f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Dec 2024 07:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1733152071; x=1733756871; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=giwDlU+R5dTUnBam3akNI1X1xsvwSGinfbQy4l6MDTM=;
+        b=Y+z13LD/VovdnW/rPQ5NACFtImBSif7q8HXj0gLL5BPOZ27272D6r8YDibf2g70Jxd
+         gBUGY6k+7biNmye3w9wUxJR5pJT1sMpLAiepn928LjLWpf8OXztdJkY39Opu+5IAhFDS
+         EPZWt7xt8pKx9w6Zd85I5TDmy7CpwfEZ8lZUT5InatB68F8rvSLWBhmUr38IrrVrJYBX
+         IqNo3I2AkDSbGYUiN43NA9BGb8hb21T8rwO8+npBti3Kk04WbJ9tI0PhFAGcafGmkSl0
+         Hy8wHU7C7pccxHS3yWB8E91QB7sa48V+jGNlOdhNC5i3FHOZ7aIvh2XnDzSVhTL9SVWO
+         CdcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733152071; x=1733756871;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=giwDlU+R5dTUnBam3akNI1X1xsvwSGinfbQy4l6MDTM=;
+        b=kU4BVe9C+QgY3AYAv0wuMxsHD7auo2cm7DG+hiT4DU2hTBFhknKvGqB8qGCJNWj64I
+         l1keLtBYwAUjd/F7hc6vhcMP7HPEWZ/l5lI7NOu92GinrWcGu8/J/xY0adVJeDQCNuHT
+         z/zmRdCxvr6XGPwYSuOVspiGZzJ9B4VGRQ3heYp/AWR+9kimQubYVZyK45QBODbMRJEI
+         jegrqRdNlpKREKdIA7TQQf+RgPJO+EYHZyIaRiUgoftdheERckWqQ5CQCM2eDBQmRD9m
+         +MIeAFw/YiFQuRf9kMSYQdjAvdny/fGZpiQ3BOWUS88mLI3ZcmJhH5fUPBciyp4QvnA4
+         IDgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXYnMif6jJFteHXOEjWWtInCpJfTQxU8skQOHOKU3cVSSBrwZ0DCq7YRTGuIZ4hosmzbyvwgE/ZRpH+GnwdSXc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvAHoAnRQFMXFF0HBPfMuqQOxQGUc7yzzzg9Xe2mEGMwBUuKL5
+	OYv+9eqSsbl33R03SVa1sw7b9YsoFvwZew+9axoOyAUSVhLSZH88hk/0QGZWFsE=
+X-Gm-Gg: ASbGncs1jQgRxGf2sTKpj+41K1Iu1iW50z9gyoKxTBaXFNlYP6l/pXSdYqYjKt6LAL9
+	d4Aqtbl/gTkwikhFwWe1ToJQ2yR6wE+MPj+iISmyqj6OsJQ6ArlmmuONmP7aIkbsKFQ3CldvP0/
+	fFagKYANIUR5/CIkAUakCrWGFtvR/X8wXpdm9+B151E4Wqft24IP4SvRZC8IlytSuJy8rI1jZAb
+	Vpbg6MVMKhLeXcYxn8qt5r5CF05njuj3bdr2//oWno9zZDcjEoyzDDPyoAL
+X-Google-Smtp-Source: AGHT+IGSYmMmUceAaB98cMz6fSPd8hROL8mEZRHb1C+MfYB6TGRvzFggjUkbg1OSqPqAqKO3Zl1q/Q==
+X-Received: by 2002:a05:6000:4024:b0:385:e968:f189 with SMTP id ffacd0b85a97d-385e968f21amr5853832f8f.51.1733152068919;
+        Mon, 02 Dec 2024 07:07:48 -0800 (PST)
+Received: from serenity.mandelbit.com ([2001:67c:2fbc:1:5d0b:f507:fa8:3b2e])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385e8a47032sm6570395f8f.51.2024.12.02.07.07.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Dec 2024 07:07:48 -0800 (PST)
+From: Antonio Quartulli <antonio@openvpn.net>
+Date: Mon, 02 Dec 2024 16:07:19 +0100
+Subject: [PATCH net-next v12 01/22] net: introduce OpenVPN Data Channel
+ Offload (ovpn)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b8f4664c-b8f0-46ca-b9a3-8d73e398b5ca@lucifer.local>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241202-b4-ovpn-v12-1-239ff733bf97@openvpn.net>
+References: <20241202-b4-ovpn-v12-0-239ff733bf97@openvpn.net>
+In-Reply-To: <20241202-b4-ovpn-v12-0-239ff733bf97@openvpn.net>
+To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>, 
+ Antonio Quartulli <antonio@openvpn.net>, Shuah Khan <shuah@kernel.org>, 
+ donald.hunter@gmail.com, sd@queasysnail.net, ryazanov.s.a@gmail.com, 
+ Andrew Lunn <andrew@lunn.ch>
+Cc: Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ steffen.klassert@secunet.com, antony.antony@secunet.com
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8900; i=antonio@openvpn.net;
+ h=from:subject:message-id; bh=Gm3qMOOrhFS5KbClvr5Vuxn/Cz6BoXOHLi0W7qkVsCo=;
+ b=owEBbQGS/pANAwAIAQtw5TqgONWHAcsmYgBnTc1lrm7Opb533epcWFROSe3yzLnBzibVWer1z
+ rxhXfJsYTWJATMEAAEIAB0WIQSZq9xs+NQS5N5fwPwLcOU6oDjVhwUCZ03NZQAKCRALcOU6oDjV
+ hw42CACjz7AJEN8EoJLea4mBcqtDYSzZD39kuQmehBqvSV9+KcTaQ1vmQpjVwgvKIWTx+j7vm3B
+ 6AZku9vNl0jdtQwWU5I3el00rnOaxJKVowrUIh0ZowlDzW8A6Aap138RHNVjqNBVds3SEwjkbAj
+ vNS9Fw3d42ZWMO2EmbFStu+ekRM3/9caZ9ch+Z8s71nWxf3jcHm1eAhgzGpXJpSVTPI3LMyg9dR
+ SegzQWaioqOnVxqbfROrNoY92gt0G+g6siR/7JsfXfKYyE+v6Va43X2SP5DCOhCx2+qT/gufwRs
+ tX3H4eXOYMKB2nQ0hNmPJADHtfOle5X37hfcK1i8X8QiDOsr
+X-Developer-Key: i=antonio@openvpn.net; a=openpgp;
+ fpr=CABDA1282017C267219885C748F0CCB68F59D14C
 
-On Wed, Oct 30, 2024 at 04:37:37PM +0000, Lorenzo Stoakes wrote:
-> On Mon, Oct 28, 2024 at 04:06:07PM +0000, Lorenzo Stoakes wrote:
-> > I guess I'll try to adapt that and respin a v7 when I get a chance.
-> 
-> Hm looking at this draft patch, it seems like a total rework of pidfd's
-> across the board right (now all pidfd's will need to be converted to
-> pid_fd)? Correct me if I'm wrong.
-> 
-> If only for the signal case, it seems like overkill to define a whole
-> pid_fd and to use this CLASS() wrapper just for this one instance.
-> 
-> If the intent is to convert _all_ pidfd's to use this type, it feels really
-> out of scope for this series and I think we'd probably instead want to go
-> off and do that as a separate series and put this on hold until that is
-> done.
-> 
-> If instead you mean that we ought to do something like this just for the
-> signal case, it feels like it'd be quite a bit of extra abstraction just
-> used in this one case but nowhere else, I think if you did an abstraction
-> like this it would _have_ to be across the board right?
-> 
-> I agree that the issue is with this one signal case that pins only the fd
-> (rather than this pid) where this 'pinning' doesn't _necessary_ mess around
-> with reference counts.
-> 
-> So we definitely must address this, but the issue you had with the first
-> approach was that I think (correct me if I'm wrong) I was passing a pointer
-> to a struct fd which is not permitted right?
-> 
-> Could we pass the struct fd by value to avoid this? I think we'd have to
-> unfortunately special-case this and probably duplicate some code which is a
-> pity as I liked the idea of abstracting everything to one place, but we can
-> obviously do that.
-> 
-> So I guess to TL;DR it, the options are:
-> 
-> 1. Implement pid_fd everywhere, in which case I will leave off on
->    this series and I guess, if I have time I could look at trying to
->    implement that or perhaps you'd prefer to?
-> 
-> 2. We are good for the sake of this series to special-case a pidfd_to_pid()
->    implementation (used only by the pidfd_send_signal() syscall)
-> 
-> 3. Something else, or I am misunderstanding your point :)
-> 
-> Let me know how you want me to proceed on this as we're at v6 already and I
-> want to be _really_ sure I'm doing what you want here.
+OpenVPN is a userspace software existing since around 2005 that allows
+users to create secure tunnels.
 
-I don't think we get away with abstracting it in one place without this
-ending up a pretty janky api. I need to go back and think about calling
-conventions for all this stuff. For now I think I'm fine with something
-like the below that abstracts the api to handle mm/ cleanly and then a
-special-case for pidfd_send_signal():
+So far OpenVPN has implemented all operations in userspace, which
+implies several back and forth between kernel and user land in order to
+process packets (encapsulate/decapsulate, encrypt/decrypt, rerouting..).
 
-diff --git a/kernel/pid.c b/kernel/pid.c
-index 6131543e7c09..c1857c44d1a3 100644
---- a/kernel/pid.c
-+++ b/kernel/pid.c
-@@ -564,15 +564,29 @@ struct pid *pidfd_get_pid(unsigned int fd, unsigned int *flags)
-  */
- struct task_struct *pidfd_get_task(int pidfd, unsigned int *flags)
- {
--       unsigned int f_flags;
-+       unsigned int f_flags = 0;
-        struct pid *pid;
-        struct task_struct *task;
-+       enum pid_type type;
+With `ovpn` we intend to move the fast path (data channel) entirely
+in kernel space and thus improve user measured throughput over the
+tunnel.
 
--       pid = pidfd_get_pid(pidfd, &f_flags);
--       if (IS_ERR(pid))
--               return ERR_CAST(pid);
-+       switch (pidfd) {
-+       case PIDFD_SELF_THREAD:
-+               type = PIDTYPE_PID;
-+               pid = get_task_pid(current, type);
-+               break;
-+       case PIDFD_SELF_THREAD_GROUP:
-+               type = PIDTYPE_TGID;
-+               pid = get_task_pid(current, type);
-+               break;
-+       default:
-+               pid = pidfd_get_pid(pidfd, &f_flags);
-+               if (IS_ERR(pid))
-+                       return ERR_CAST(pid);
-+               type = PIDTYPE_TGID;
-+               break;
-+       }
+`ovpn` is implemented as a simple virtual network device driver, that
+can be manipulated by means of the standard RTNL APIs. A device of kind
+`ovpn` allows only IPv4/6 traffic and can be of type:
+* P2P (peer-to-peer): any packet sent over the interface will be
+  encapsulated and transmitted to the other side (typical OpenVPN
+  client or peer-to-peer behaviour);
+* P2MP (point-to-multipoint): packets sent over the interface are
+  transmitted to peers based on existing routes (typical OpenVPN
+  server behaviour).
 
--       task = get_pid_task(pid, PIDTYPE_TGID);
-+       task = get_pid_task(pid, type);
-        put_pid(pid);
-        if (!task)
-                return ERR_PTR(-ESRCH);
+After the interface has been created, OpenVPN in userspace can
+configure it using a new Netlink API. Specifically it is possible
+to manage peers and their keys.
 
-That would get you support for PIDFD_SELF_THREAD and
-PIDFD_SELF_THREAD_GROUP for process_madvise() and process_mrelease().
+The OpenVPN control channel is multiplexed over the same transport
+socket by means of OP codes. Anything that is not DATA_V2 (OpenVPN
+OP code for data traffic) is sent to userspace and handled there.
+This way the `ovpn` codebase is kept as compact as possible while
+focusing on handling data traffic only (fast path).
 
-And for pidfd_send_signal() we could just open code this for now:
+Any OpenVPN control feature (like cipher negotiation, TLS handshake,
+rekeying, etc.) is still fully handled by the userspace process.
 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 989b1cc9116a..a2e4e3a5ee42 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -3990,6 +3990,45 @@ static struct pid *pidfd_to_pid(const struct file *file)
- 	(PIDFD_SIGNAL_THREAD | PIDFD_SIGNAL_THREAD_GROUP | \
- 	 PIDFD_SIGNAL_PROCESS_GROUP)
+When userspace establishes a new connection with a peer, it first
+performs the handshake and then passes the socket to the `ovpn` kernel
+module, which takes ownership. From this moment on `ovpn` will handle
+data traffic for the new peer.
+When control packets are received on the link, they are forwarded to
+userspace through the same transport socket they were received on, as
+userspace is still listening to them.
+
+Some events (like peer deletion) are sent to a Netlink multicast group.
+
+Although it wasn't easy to convince the community, `ovpn` implements
+only a limited number of the data-channel features supported by the
+userspace program.
+
+Each feature that made it to `ovpn` was attentively vetted to
+avoid carrying too much legacy along with us (and to give a clear cut to
+old and probalby-not-so-useful features).
+
+Notably, only encryption using AEAD ciphers (specifically
+ChaCha20Poly1305 and AES-GCM) was implemented. Supporting any other
+cipher out there was not deemed useful.
+
+Both UDP and TCP sockets are supported.
+
+As explained above, in case of P2MP mode, OpenVPN will use the main system
+routing table to decide which packet goes to which peer. This implies
+that no routing table was re-implemented in the `ovpn` kernel module.
+
+This kernel module can be enabled by selecting the CONFIG_OVPN entry
+in the networking drivers section.
+
+NOTE: this first patch introduces the very basic framework only.
+Features are then added patch by patch, however, although each patch
+will compile and possibly not break at runtime, only after having
+applied the full set it is expected to see the ovpn module fully working.
+
+Cc: steffen.klassert@secunet.com
+Cc: antony.antony@secunet.com
+Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+---
+ MAINTAINERS               |   8 ++++
+ drivers/net/Kconfig       |   7 +++
+ drivers/net/Makefile      |   1 +
+ drivers/net/ovpn/Makefile |  10 +++++
+ drivers/net/ovpn/main.c   | 112 ++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 138 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0456a33ef65792bacb5d305a6384d245844fb743..6de1767f7cc80a571e0ab6e9f4dfe5650eb704d4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17472,6 +17472,14 @@ F:	arch/openrisc/
+ F:	drivers/irqchip/irq-ompic.c
+ F:	drivers/irqchip/irq-or1k-*
  
-+static int do_pidfd_send_signal(struct pid *pid, int sig, enum pid_type type,
-+				siginfo_t __user *info, unsigned int flags)
++OPENVPN DATA CHANNEL OFFLOAD
++M:	Antonio Quartulli <antonio@openvpn.net>
++L:	openvpn-devel@lists.sourceforge.net (subscribers-only)
++L:	netdev@vger.kernel.org
++S:	Supported
++T:	git https://github.com/OpenVPN/linux-kernel-ovpn.git
++F:	drivers/net/ovpn/
++
+ OPENVSWITCH
+ M:	Pravin B Shelar <pshelar@ovn.org>
+ L:	netdev@vger.kernel.org
+diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+index 1fd5acdc73c6af0e1a861867039c3624fc618e25..a7c5c166f9ced748d73843f81efb802072e15434 100644
+--- a/drivers/net/Kconfig
++++ b/drivers/net/Kconfig
+@@ -115,6 +115,13 @@ config WIREGUARD_DEBUG
+ 
+ 	  Say N here unless you know what you're doing.
+ 
++config OVPN
++	tristate "OpenVPN data channel offload"
++	depends on NET && INET
++	help
++	  This module enhances the performance of the OpenVPN userspace software
++	  by offloading the data channel processing to kernelspace.
++
+ config EQUALIZER
+ 	tristate "EQL (serial line load balancing) support"
+ 	help
+diff --git a/drivers/net/Makefile b/drivers/net/Makefile
+index 13743d0e83b5fde479e9b30ad736be402d880dee..5152b3330e28da7eaec821018a26c973bb33ce0c 100644
+--- a/drivers/net/Makefile
++++ b/drivers/net/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_IPVLAN) += ipvlan/
+ obj-$(CONFIG_IPVTAP) += ipvlan/
+ obj-$(CONFIG_DUMMY) += dummy.o
+ obj-$(CONFIG_WIREGUARD) += wireguard/
++obj-$(CONFIG_OVPN) += ovpn/
+ obj-$(CONFIG_EQUALIZER) += eql.o
+ obj-$(CONFIG_IFB) += ifb.o
+ obj-$(CONFIG_MACSEC) += macsec.o
+diff --git a/drivers/net/ovpn/Makefile b/drivers/net/ovpn/Makefile
+new file mode 100644
+index 0000000000000000000000000000000000000000..ae19cf445b29367da680e226f06a341c42c892c2
+--- /dev/null
++++ b/drivers/net/ovpn/Makefile
+@@ -0,0 +1,10 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# ovpn -- OpenVPN data channel offload in kernel space
++#
++# Copyright (C) 2020-2024 OpenVPN, Inc.
++#
++# Author:	Antonio Quartulli <antonio@openvpn.net>
++
++obj-$(CONFIG_OVPN) := ovpn.o
++ovpn-y += main.o
+diff --git a/drivers/net/ovpn/main.c b/drivers/net/ovpn/main.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..72c56e73771cdece22e50645b29c79962f06caf3
+--- /dev/null
++++ b/drivers/net/ovpn/main.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0
++/*  OpenVPN data channel offload
++ *
++ *  Copyright (C) 2020-2024 OpenVPN, Inc.
++ *
++ *  Author:	Antonio Quartulli <antonio@openvpn.net>
++ *		James Yonan <james@openvpn.net>
++ */
++
++#include <linux/module.h>
++#include <linux/netdevice.h>
++#include <net/rtnetlink.h>
++
++static const struct net_device_ops ovpn_netdev_ops = {
++};
++
++/**
++ * ovpn_dev_is_valid - check if the netdevice is of type 'ovpn'
++ * @dev: the interface to check
++ *
++ * Return: whether the netdevice is of type 'ovpn'
++ */
++static bool ovpn_dev_is_valid(const struct net_device *dev)
 +{
-+	kernel_siginfo_t kinfo;
-+
-+	switch (flags) {
-+	case PIDFD_SIGNAL_THREAD:
-+		type = PIDTYPE_PID;
-+		break;
-+	case PIDFD_SIGNAL_THREAD_GROUP:
-+		type = PIDTYPE_TGID;
-+		break;
-+	case PIDFD_SIGNAL_PROCESS_GROUP:
-+		type = PIDTYPE_PGID;
-+		break;
-+	}
-+
-+	if (info) {
-+		int ret = copy_siginfo_from_user_any(&kinfo, info);
-+		if (unlikely(ret))
-+			return ret;
-+
-+		if (unlikely(sig != kinfo.si_signo))
-+			return -EINVAL;
-+
-+		/* Only allow sending arbitrary signals to yourself. */
-+		if ((task_pid(current) != pid || type > PIDTYPE_TGID) &&
-+		    (kinfo.si_code >= 0 || kinfo.si_code == SI_TKILL))
-+			return -EPERM;
-+	} else {
-+		prepare_kill_siginfo(sig, &kinfo, type);
-+	}
-+
-+	if (type == PIDTYPE_PGID)
-+		return kill_pgrp_info(sig, &kinfo, pid);
-+
-+	return kill_pid_info_type(sig, &kinfo, pid, type);
++	return dev->netdev_ops == &ovpn_netdev_ops;
 +}
 +
- /**
-  * sys_pidfd_send_signal - Signal a process through a pidfd
-  * @pidfd:  file descriptor of the process
-@@ -4009,7 +4048,6 @@ SYSCALL_DEFINE4(pidfd_send_signal, int, pidfd, int, sig,
- {
- 	int ret;
- 	struct pid *pid;
--	kernel_siginfo_t kinfo;
- 	enum pid_type type;
- 
- 	/* Enforce flags be set to 0 until we add an extension. */
-@@ -4021,56 +4059,39 @@ SYSCALL_DEFINE4(pidfd_send_signal, int, pidfd, int, sig,
- 		return -EINVAL;
- 
- 	CLASS(fd, f)(pidfd);
--	if (fd_empty(f))
--		return -EBADF;
- 
--	/* Is this a pidfd? */
--	pid = pidfd_to_pid(fd_file(f));
--	if (IS_ERR(pid))
--		return PTR_ERR(pid);
-+	switch (pidfd) {
-+	case PIDFD_SELF_THREAD:
-+		pid = get_task_pid(current, PIDTYPE_PID);
-+		type = PIDTYPE_PID;
++static int ovpn_newlink(struct net *src_net, struct net_device *dev,
++			struct nlattr *tb[], struct nlattr *data[],
++			struct netlink_ext_ack *extack)
++{
++	return -EOPNOTSUPP;
++}
++
++static struct rtnl_link_ops ovpn_link_ops = {
++	.kind = "ovpn",
++	.netns_refund = false,
++	.newlink = ovpn_newlink,
++	.dellink = unregister_netdevice_queue,
++};
++
++static int ovpn_netdev_notifier_call(struct notifier_block *nb,
++				     unsigned long state, void *ptr)
++{
++	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
++
++	if (!ovpn_dev_is_valid(dev))
++		return NOTIFY_DONE;
++
++	switch (state) {
++	case NETDEV_REGISTER:
++		/* add device to internal list for later destruction upon
++		 * unregistration
++		 */
 +		break;
-+	case PIDFD_SELF_THREAD_GROUP:
-+		pid = get_task_pid(current, PIDTYPE_TGID);
-+		type = PIDTYPE_TGID;
++	case NETDEV_UNREGISTER:
++		/* can be delivered multiple times, so check registered flag,
++		 * then destroy the interface
++		 */
 +		break;
++	case NETDEV_POST_INIT:
++	case NETDEV_GOING_DOWN:
++	case NETDEV_DOWN:
++	case NETDEV_UP:
++	case NETDEV_PRE_UP:
 +	default:
-+		if (fd_empty(f))
-+			return -EBADF;
- 
--	if (!access_pidfd_pidns(pid))
--		return -EINVAL;
-+		/* Is this a pidfd? */
-+		pid = pidfd_to_pid(fd_file(f));
-+		if (IS_ERR(pid))
-+			return PTR_ERR(pid);
- 
--	switch (flags) {
--	case 0:
-+		if (!access_pidfd_pidns(pid))
-+			return -EINVAL;
- 		/* Infer scope from the type of pidfd. */
- 		if (fd_file(f)->f_flags & PIDFD_THREAD)
- 			type = PIDTYPE_PID;
- 		else
- 			type = PIDTYPE_TGID;
- 		break;
--	case PIDFD_SIGNAL_THREAD:
--		type = PIDTYPE_PID;
--		break;
--	case PIDFD_SIGNAL_THREAD_GROUP:
--		type = PIDTYPE_TGID;
--		break;
--	case PIDFD_SIGNAL_PROCESS_GROUP:
--		type = PIDTYPE_PGID;
--		break;
- 	}
- 
--	if (info) {
--		ret = copy_siginfo_from_user_any(&kinfo, info);
--		if (unlikely(ret))
--			return ret;
--
--		if (unlikely(sig != kinfo.si_signo))
--			return -EINVAL;
--
--		/* Only allow sending arbitrary signals to yourself. */
--		if ((task_pid(current) != pid || type > PIDTYPE_TGID) &&
--		    (kinfo.si_code >= 0 || kinfo.si_code == SI_TKILL))
--			return -EPERM;
--	} else {
--		prepare_kill_siginfo(sig, &kinfo, type);
--	}
--
--	if (type == PIDTYPE_PGID)
--		return kill_pgrp_info(sig, &kinfo, pid);
--	else
--		return kill_pid_info_type(sig, &kinfo, pid, type);
-+	ret = do_pidfd_send_signal(pid, sig, type, info, flags);
-+	if (fd_empty(f))
-+		put_pid(pid);
-+	return ret;
- }
- 
- static int
++		return NOTIFY_DONE;
++	}
++
++	return NOTIFY_OK;
++}
++
++static struct notifier_block ovpn_netdev_notifier = {
++	.notifier_call = ovpn_netdev_notifier_call,
++};
++
++static int __init ovpn_init(void)
++{
++	int err = register_netdevice_notifier(&ovpn_netdev_notifier);
++
++	if (err) {
++		pr_err("ovpn: can't register netdevice notifier: %d\n", err);
++		return err;
++	}
++
++	err = rtnl_link_register(&ovpn_link_ops);
++	if (err) {
++		pr_err("ovpn: can't register rtnl link ops: %d\n", err);
++		goto unreg_netdev;
++	}
++
++	return 0;
++
++unreg_netdev:
++	unregister_netdevice_notifier(&ovpn_netdev_notifier);
++	return err;
++}
++
++static __exit void ovpn_cleanup(void)
++{
++	rtnl_link_unregister(&ovpn_link_ops);
++	unregister_netdevice_notifier(&ovpn_netdev_notifier);
++
++	rcu_barrier();
++}
++
++module_init(ovpn_init);
++module_exit(ovpn_cleanup);
++
++MODULE_DESCRIPTION("OpenVPN data channel offload (ovpn)");
++MODULE_AUTHOR("(C) 2020-2024 OpenVPN, Inc.");
++MODULE_LICENSE("GPL");
+
+-- 
+2.45.2
+
