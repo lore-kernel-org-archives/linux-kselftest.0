@@ -1,301 +1,199 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2087.outbound.protection.outlook.com [40.107.236.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D1E1EBFFB
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Dec 2024 12:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733230513; cv=none; b=EdMIykZYeR/IGgA23nIWOGKyCb58IeLLxt5gR3nU/HsxG0jDL/aoT2J6QEVwtk+GuYSEbFdSNGkWUz+CRc1zpyNufVl6jUUokALgsXl1oLDT742iPDK5ggO6PFtU92gnWxZNdsZ+b8iLDX//vP64TRY2HBGZio/gvGVDBtEiCoc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733230513; c=relaxed/simple;
-	bh=xJ4R0fDe5PkCqV7jZ4w+az2L3kxVQVOPc8NpcoJPooE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ROiCDsH3fZo7yyZjpw4H/7DdSvlfh5ZMzVNCFoYy9CUCuNlVYqgID2ymCYovaEoqti27MsZgf2yAgC5BcyF8zWa05weL6eOKRVikuLes7TKr4a8TvwnqiMBiuZIMze0EkeVsNED7l8vAMjnld7fBqNf/zU/sL6+9I1LaEw7CUBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=T3Ayc+wD; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBEF1F7561;
+	Tue,  3 Dec 2024 14:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733236459; cv=fail; b=op+P5Ya0FapDmWs+Nxko2aQDWwTegYVlXsGdpUfKkflM1m4epTwHhHpn6aTkkdTEPdgRBWBy0/QeYCDDNRU6j2m1hoZRAaccPU975kJjT5crNvMvH1tXoHNqgNdnskfvA5fpPx4/xjC1hijuv1+axmV0YdAMhIILr74VRkvSZvk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733236459; c=relaxed/simple;
+	bh=cVfKjVqLaxBjvU8xsYDqwvrVmkq7fEKbZK6IxdezcGo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rxdw5q+Wj2ac1LmzHB13z+tu9zgUz0yAQrPR/pRdU17AGIYdCyhm4D70NCWaadldWzAs96U9GTy4JsqzTOMHGzQEqXkhQn9l7IE2MW3oehLTchTKt1Jt7V2+tIjXW1lDC+V0XXvtFEE2ap4QWOToVbpcZPpH1C5S+FNsnLVelTA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CqYGXnWQ; arc=fail smtp.client-ip=40.107.236.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="T3Ayc+wD"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aa5ec8d6f64so77444766b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2024 04:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1733230509; x=1733835309; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aHILDQFXZNWmnBoZHrlTEDnKUcbN4skUfD9kORV0Rxw=;
-        b=T3Ayc+wDHS8oXy2w2Ix62gBmm55RUj95/VHf/dcl6SjjWw6dbmafJZnFjyYWZORaIN
-         U3GNhwf72Ib6NDbZDrqQ1qTIznBapOXnb44hXS2mCA41MyoBpmyalR97nCLXxxBCH11f
-         7ylKB8sEqufYJPBlvte5+Y5culi/LSQ7B/81s1W0wQHX4AjDBh9EDGGuaGbGavu4ju+o
-         jBvOXTeAobYBUJLGjefp+Aoy0va7/EZgtchmkMhwoITnRNWgMSDBw3eoaDUOkFAJAUWQ
-         QNDtuEEsS3M7zeEAL/kDRW6FfbNmonApp2Ss0BMw0Owyh0FF4EvJY9KlmF97h3jx28yN
-         yxRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733230509; x=1733835309;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aHILDQFXZNWmnBoZHrlTEDnKUcbN4skUfD9kORV0Rxw=;
-        b=ixOEg8rNmdqINhGMRyaKHhpQ20CK6v9q5XyJA6l3FGWig7EImJ8OoamIqjh4wtxcBn
-         9pdrp8aDgnqSEcYaJDcpShkfTlPYTKr9yrbTP9jNVsZfqmYmbp9bT66XN1LALm6YINcj
-         X7nhzKBHUsstRwK/eQAVtURC8fqbQKQvd57i+iCdDmxEZRcBFPY8jKsRd2u13yerR8kF
-         BdUeC1/x6zLCbH7bJOFwnRchmLkH34Y/ukNdrhHKD4gJ1vMBVbzjexSgZFjQGOqtyyB5
-         kATpb3EbRUg3O34EoTIonnojBLqTxmoa4S5RHozcv37/NcaZpKi4BVXzj5o6vL7vRYSJ
-         J7qw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0/vrHnaXT137KrFHezsALaWDKqbA77Yxj8zOtMR3FDMDNl6Xsip8n++JmqDPugGoe3TAxY0AlMjx2CyfXoS8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQ6YkiZjQFav/DngHoBq8TqcktWLrULamyltHdylh/bSfe4INj
-	U83xPzFsKIfex/WC5+KcJrq4t7j3x4HiIfzKjyShkAltpnVt44SG7FjHjs2fo4U=
-X-Gm-Gg: ASbGncvFjYu/Wd+tkkjq7+2wVf2Ufy/1fVtMCYnBbw3NeeyQRSB4nnmfNK7B9OlU6L0
-	j0rDYu/Zar0mgb8vmg/i/85gZZtCyI3R2nL/XJj2lRA1TOgtPSICRbiFYwSDM+gBZGW//qNzQ3W
-	05g1ZPrU2+st0hKsfg1zsKejdXGE6vssF/kWFsGrOqGrnwf+Z3Ptw7Mg2ScY75WgdIDQfwb3gXB
-	Q0P9quKO/iyKBYgiBRp8SJDyZxnrZ4irbojX3C6Y1diRThAAP9UEaGezWxSfBAZucI1/sJIjDkW
-	vG8RaetIOr/Fc2h53yY/oKg5+F35913ylzg=
-X-Google-Smtp-Source: AGHT+IGekZlGXSXB9uvq/WKox/qwoGRSQFTd/XXdhj+W5cxmME+Tkf15rQ0BhZmI5BozveUjcxzWTA==
-X-Received: by 2002:a05:6402:234a:b0:5d0:ed92:cdf6 with SMTP id 4fb4d7f45d1cf-5d10cb5c778mr2754267a12.19.1733230508565;
-        Tue, 03 Dec 2024 04:55:08 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5997d55fdsm607288366b.55.2024.12.03.04.55.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 04:55:08 -0800 (PST)
-Date: Tue, 3 Dec 2024 13:55:07 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Celeste Liu <uwu@coelacanthus.name>
-Cc: Oleg Nesterov <oleg@redhat.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Eric Biederman <ebiederm@xmission.com>, 
-	Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexandre Ghiti <alex@ghiti.fr>, 
-	"Dmitry V. Levin" <ldv@strace.io>, Andrea Bolognani <abologna@redhat.com>, 
-	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ron Economos <re@w6rz.net>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Quan Zhou <zhouquan@iscas.ac.cn>, 
-	Felix Yan <felixonmars@archlinux.org>, Ruizhe Pan <c141028@gmail.com>, 
-	Shiqi Zhang <shiqi@isrc.iscas.ac.cn>, Guo Ren <guoren@kernel.org>, Yao Zi <ziyao@disroot.org>, 
-	Han Gao <gaohan@iscas.ac.cn>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, stable@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] riscv: selftests: Add a ptrace test to verify
- syscall parameter modification
-Message-ID: <20241203-55c76715e16422ddaf8d7edf@orel>
-References: <20241203-riscv-new-regset-v2-0-d37da8c0cba6@coelacanthus.name>
- <20241203-riscv-new-regset-v2-2-d37da8c0cba6@coelacanthus.name>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CqYGXnWQ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yp3ldFOG5Ihqli8QOJG4ISdOcYhxz255cLk6V+K93PtAOdikAZgRxT0YGkaKVaCOLLbtaOMKfmqfLZtgA34m3BvDiWRzAQCdyYxik3O6YWVjNAQpk+d+uTi4jwv7D0CXo+4sGCyBDV1E2ZcfdzujjeAEhSdomvNuiXSF6o/nrb3aer8hpmB4/di4SEKUjueOhCS4iwjQZl5GqQtcIHEiI3bIvjQceJO7lWI5rMYNrS6etQY4m5ZbmXt64uvOCYqVFfY+Q6FurgZSJloRupIzzwZtzYMsMVx8HPiU8KHO4NdhBUlg2EHYU5DVBtHKpKS7aMtQcPzL9hyXNTYs3mVeVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DVqdvTshHxNki3bZ3TKLjG68UTcnAHsRVq2A6Gcb6kI=;
+ b=bZEYb9NB2krTMgvmxQTdu+Kb5oY/RaBGvUJtLvyC2hemTdoe90QbrKrRS+eo7/SpdV+wLV9BCylLgVUBzn7W5TnfOqWCFEEvs3BBwy5ytLqgxF7nCRaODMF8mXmYGDDO1RAo0AjF5lzE1r8Brq0LXEriSQXoySLXf96B6bViGyTdeaZ4k8AEyMj0s7QOUcv+X1y16muQ+kwxgLXYOshE3bt4aYh6iLEKnvMHfW01YlIqq7z+UKXK4HTUjofkq5+jOFUqwGpvXB/R/gq0OW7xX9AME++oyHchyvZxePohdM0sIbwgR1aWyjvc9hvPB42GImLovPsfHlyZcdtMVEFoYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DVqdvTshHxNki3bZ3TKLjG68UTcnAHsRVq2A6Gcb6kI=;
+ b=CqYGXnWQ3Ms+ZIjAFCoaourT+pqfcCBlw3eY1+zw+e2UXcPWU6/Uj9rwSeJ8X0dmzazqOMHjz0Bh80e/d0j/tyR/MjmU2AUaxPtGkWc4G1AMKoUQQJi8Kat4BMi5eJ6B9q56MWVszg9RQxxDgRGOq8U9mqRYU8sRAz2okFu08FIzMADui7F6ToATSmxueuYzPQ2mbS5tX6HEiRPveNE52M/Jy1DNwasoJujLRJ5ByxU7e41b+j3GjFIIx0uYTcNAo4fYzPUqgaja0i3rLhLHMIAz5g59b8WB3gzKkmrQ4O7ocaXeZ21azM+iC5GNSdkVdTsFso4Arjx5Wi3Xjo6Yaw==
+Received: from SJ0PR03CA0081.namprd03.prod.outlook.com (2603:10b6:a03:331::26)
+ by MW3PR12MB4348.namprd12.prod.outlook.com (2603:10b6:303:5f::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.19; Tue, 3 Dec
+ 2024 14:34:13 +0000
+Received: from SJ1PEPF000023D0.namprd02.prod.outlook.com
+ (2603:10b6:a03:331:cafe::e3) by SJ0PR03CA0081.outlook.office365.com
+ (2603:10b6:a03:331::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8207.19 via Frontend Transport; Tue,
+ 3 Dec 2024 14:34:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ1PEPF000023D0.mail.protection.outlook.com (10.167.244.4) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8230.7 via Frontend Transport; Tue, 3 Dec 2024 14:34:12 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 3 Dec 2024
+ 06:34:01 -0800
+Received: from localhost.localdomain (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 3 Dec 2024
+ 06:33:55 -0800
+From: Petr Machata <petrm@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, <netdev@vger.kernel.org>
+CC: Simon Horman <horms@kernel.org>, Ido Schimmel <idosch@nvidia.com>, "Petr
+ Machata" <petrm@nvidia.com>, <mlxsw@nvidia.com>, Shuah Khan
+	<shuah@kernel.org>, Benjamin Poirier <bpoirier@nvidia.com>, Hangbin Liu
+	<liuhangbin@gmail.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH net-next v1 09/11] selftests: net: lib: Rename ip_link_master() to ip_link_set_master()
+Date: Tue, 3 Dec 2024 15:30:35 +0100
+Message-ID: <ceef47b660a3e89a5fc4ab07ae7d6296e0553251.1733235367.git.petrm@nvidia.com>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <cover.1733235367.git.petrm@nvidia.com>
+References: <cover.1733235367.git.petrm@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241203-riscv-new-regset-v2-2-d37da8c0cba6@coelacanthus.name>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D0:EE_|MW3PR12MB4348:EE_
+X-MS-Office365-Filtering-Correlation-Id: c20b1ae8-d97c-4f40-cfea-08dd13a78e75
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|36860700013|82310400026|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?uCeKIVrP0Op7T+/FeGIBPEibBlgeN3x26+huP8LDDedseHDSw30miEHpdO2g?=
+ =?us-ascii?Q?AF8CDNZdp1fYOLdWjLyGTVTANYerrE0g3DuF0MGoBPvYyda151P8sQug4Dag?=
+ =?us-ascii?Q?NM5yUC65yuCUXePDFbqEIK9hxCj/btSqgzmY2OTxm0tvo6F7A+5j6w3/rZLq?=
+ =?us-ascii?Q?yiP2SIThOp26/JPgObn/9KP1+Dxbnhjh1sllnAqsH4Er1q80riVmlN1REHC0?=
+ =?us-ascii?Q?+EOiirW2xPFnYE02fjQjVBWAXxkgwG6vHC+xEgWIa+VzARph08G+j/3i5Z85?=
+ =?us-ascii?Q?W80+kXfVTvVlX2uF23wLralAZqbNXSFS7KlSPANLpY0d3NzSGmUh+m8/O11B?=
+ =?us-ascii?Q?ebOI07o4cGBKGAGWXYq3oYDHrn7YClIQKJ+nJE5o+W4T+gJkM3vicPUYfL3W?=
+ =?us-ascii?Q?FOFbqAlqs6TcG34HoG4QowcHVfurKR8oudeYvP5PNw6VRFBdOL5fia3qY4Qf?=
+ =?us-ascii?Q?whpFO1XbPabS0XYR4ffLK/BM1nRqCaNVshEIQbL3u8NZ36GN2k7kTH7aDeHA?=
+ =?us-ascii?Q?NjVbhQIZNGN+IjaR1WQZ/M3NFyEMvrypgdblBu6S6HwZ5lztjWv3znBg5TVA?=
+ =?us-ascii?Q?60KGQGeX/bM3UMHV8aMsveMZFFSt3BE7YhX2CrZALjvfXlrPN3sBm5+sF2X8?=
+ =?us-ascii?Q?RSSS0QiLqyBatrirgGLh/9JIk8lMCW6fsbH7NhqjnxPh3qTNGa9idHy/3TPM?=
+ =?us-ascii?Q?xF0bTkjTYIx91wyFH0ejTX5ui9zz/lNGEeOyXY/9DQ9A/v8tEeI68r+Js+Nb?=
+ =?us-ascii?Q?XOpJE2i4TD2BA9U+nxJb91o0rLshKz+Di7gyaZ9lwTWUbLCm8Ow29oqFlU2X?=
+ =?us-ascii?Q?+pn5rRHJBXQvz5lfUN/qXkffqUxFuN904uSJX/Q4yeIsrF/GtjKqdtfPkSoG?=
+ =?us-ascii?Q?GX5NmZ/GRbqnbmFBlaqf/dswUdQgTSH78fPVPxIvpNyHOq344/QlzYJ5xpR6?=
+ =?us-ascii?Q?0K1ChFvrrBoVQ+5RI1s3a+bEb6jUxQIh7fRLEjkw0NTOepKT8MtHrDyBwY+r?=
+ =?us-ascii?Q?OCIeXIVXsPL8J0ZLccav3h2J16sMOZKMWtU3HCPivaynLfSJz4sg9YPKbsyc?=
+ =?us-ascii?Q?VrO68OdWu2IHn+usn7SqTd6BpDuyU0nIM+e/o8Rd6q37CLXjGxGHonwLHTB9?=
+ =?us-ascii?Q?SsRnOTdfTLnis124Iww0sisFtLwZZxWjbf4/CyYX0SXgJswJ+VyrJCvjbSAr?=
+ =?us-ascii?Q?bqelQo/+lzplEqgdzJrKpWlGxLSEZjhLoCBZLH7LTss3SiaYXwVCox0+/49x?=
+ =?us-ascii?Q?KNB2cw7niW/zQ7WB7hsL8GS3B37gXrGy1/6BY8Efd/8AwsLFiScCN5fFUKC4?=
+ =?us-ascii?Q?0owooWr9+2TeccjHofBVUe8N4oodLZZioshv1qM6RwxMAxCMhXSJgPmJn9bq?=
+ =?us-ascii?Q?c7Pun0L+Ti5u2VgaEZumh6Dni0cHzR9f6ed/evJuDpEB5tOKNTCZXP18sK11?=
+ =?us-ascii?Q?wTPWpFlDGZClIZQS6kbSKizPZBx8GjnJ?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(36860700013)(82310400026)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2024 14:34:12.5467
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c20b1ae8-d97c-4f40-cfea-08dd13a78e75
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF000023D0.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4348
 
-On Tue, Dec 03, 2024 at 05:30:05PM +0800, Celeste Liu wrote:
-> From: Charlie Jenkins <charlie@rivosinc.com>
-> 
-> This test checks that orig_a0 allows a syscall argument to be modified,
-> and that changing a0 does not change the syscall argument.
-> 
-> Cc: stable@vger.kernel.org
-> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> Co-developed-by: Celeste Liu <uwu@coelacanthus.name>
-> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  tools/testing/selftests/riscv/abi/.gitignore |   1 +
->  tools/testing/selftests/riscv/abi/Makefile   |   5 +-
->  tools/testing/selftests/riscv/abi/ptrace.c   | 134 +++++++++++++++++++++++++++
->  3 files changed, 139 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/riscv/abi/.gitignore b/tools/testing/selftests/riscv/abi/.gitignore
-> index b38358f91c4d2240ae64892871d9ca98bda1ae58..378c605919a3b3d58eec2701eb7af430cfe315d6 100644
-> --- a/tools/testing/selftests/riscv/abi/.gitignore
-> +++ b/tools/testing/selftests/riscv/abi/.gitignore
-> @@ -1 +1,2 @@
->  pointer_masking
-> +ptrace
-> diff --git a/tools/testing/selftests/riscv/abi/Makefile b/tools/testing/selftests/riscv/abi/Makefile
-> index ed82ff9c664e7eb3f760cbab81fb957ff72579c5..3f74d059dfdcbce4d45d8ff618781ccea1419061 100644
-> --- a/tools/testing/selftests/riscv/abi/Makefile
-> +++ b/tools/testing/selftests/riscv/abi/Makefile
-> @@ -2,9 +2,12 @@
->  
->  CFLAGS += -I$(top_srcdir)/tools/include
->  
-> -TEST_GEN_PROGS := pointer_masking
-> +TEST_GEN_PROGS := pointer_masking ptrace
->  
->  include ../../lib.mk
->  
->  $(OUTPUT)/pointer_masking: pointer_masking.c
->  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> +
-> +$(OUTPUT)/ptrace: ptrace.c
-> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..d192764b428d1f1c442f3957c6fedeb01a48d556
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
-> @@ -0,0 +1,134 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <fcntl.h>
-> +#include <signal.h>
-> +#include <errno.h>
-> +#include <sys/types.h>
-> +#include <sys/ptrace.h>
-> +#include <sys/stat.h>
-> +#include <sys/user.h>
-> +#include <sys/wait.h>
-> +#include <sys/uio.h>
-> +#include <linux/elf.h>
-> +#include <linux/unistd.h>
-> +#include <asm/ptrace.h>
-> +
-> +#include "../../kselftest_harness.h"
-> +
-> +#define ORIG_A0_MODIFY      0x01
-> +#define A0_MODIFY           0x02
-> +#define A0_OLD              0x03
-> +#define A0_NEW              0x04
+Let's have a verb in that function name to make it clearer what's going on.
 
-Shouldn't A0_OLD and A0_NEW set more bits, since 3 and 4 aren't very
-unique (we could have those values by accident)? And should we include
-setting bits over 31 for 64-bit targets?
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+---
 
-> +
-> +#define perr_and_exit(fmt, ...)						\
-> +	({								\
-> +		char buf[256];						\
-> +		snprintf(buf, sizeof(buf), "%s:%d:" fmt ": %m\n",	\
-> +			__func__, __LINE__, ##__VA_ARGS__);		\
-> +		perror(buf);						\
-> +		exit(-1);						\
-> +	})
+Notes:
+CC: Shuah Khan <shuah@kernel.org>
+CC: Benjamin Poirier <bpoirier@nvidia.com>
+CC: Hangbin Liu <liuhangbin@gmail.com>
+CC: Vladimir Oltean <vladimir.oltean@nxp.com>
+CC: linux-kselftest@vger.kernel.org
 
-Can we use e.g. ksft_exit_fail_perror() instead? I'd prefer we try to
-consolidate testing/selftests/riscv/* tests on a common format for
-errors and exit codes and we're already using other kselftest stuff.
+ tools/testing/selftests/net/fdb_notify.sh | 6 +++---
+ tools/testing/selftests/net/lib.sh        | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> +
-> +static inline void resume_and_wait_tracee(pid_t pid, int flag)
-> +{
-> +	int status;
-> +
-> +	if (ptrace(flag, pid, 0, 0))
-> +		perr_and_exit("failed to resume the tracee %d\n", pid);
-> +
-> +	if (waitpid(pid, &status, 0) != pid)
-> +		perr_and_exit("failed to wait for the tracee %d\n", pid);
-> +}
-> +
-> +static void ptrace_test(int opt, int *result)
-> +{
-> +	int status;
-> +	pid_t pid;
-> +	struct user_regs_struct regs;
-> +	struct iovec iov = {
-> +		.iov_base = &regs,
-> +		.iov_len = sizeof(regs),
-> +	};
-> +
-> +	unsigned long orig_a0;
-> +	struct iovec a0_iov = {
-> +		.iov_base = &orig_a0,
-> +		.iov_len = sizeof(orig_a0),
-> +	};
-> +
-> +	pid = fork();
-> +	if (pid == 0) {
-> +		/* Mark oneself being traced */
-> +		long val = ptrace(PTRACE_TRACEME, 0, 0, 0);
-> +
-> +		if (val)
-> +			perr_and_exit("failed to request for tracer to trace me: %ld\n", val);
-> +
-> +		kill(getpid(), SIGSTOP);
-> +
-> +		/* Perform exit syscall that will be intercepted */
-> +		exit(A0_OLD);
-> +	}
-> +
-> +	if (pid < 0)
-> +		exit(1);
+diff --git a/tools/testing/selftests/net/fdb_notify.sh b/tools/testing/selftests/net/fdb_notify.sh
+index c03151e7791c..c159230c9b62 100755
+--- a/tools/testing/selftests/net/fdb_notify.sh
++++ b/tools/testing/selftests/net/fdb_notify.sh
+@@ -49,7 +49,7 @@ test_dup_vxlan_self()
+ {
+ 	ip_link_add br up type bridge vlan_filtering 1
+ 	ip_link_add vx up type vxlan id 2000 dstport 4789
+-	ip_link_master vx br
++	ip_link_set_master vx br
+ 
+ 	do_test_dup add "vxlan" dev vx self dst 192.0.2.1
+ 	do_test_dup del "vxlan" dev vx self dst 192.0.2.1
+@@ -59,7 +59,7 @@ test_dup_vxlan_master()
+ {
+ 	ip_link_add br up type bridge vlan_filtering 1
+ 	ip_link_add vx up type vxlan id 2000 dstport 4789
+-	ip_link_master vx br
++	ip_link_set_master vx br
+ 
+ 	do_test_dup add "vxlan master" dev vx master
+ 	do_test_dup del "vxlan master" dev vx master
+@@ -79,7 +79,7 @@ test_dup_macvlan_master()
+ 	ip_link_add br up type bridge vlan_filtering 1
+ 	ip_link_add dd up type dummy
+ 	ip_link_add mv up link dd type macvlan mode passthru
+-	ip_link_master mv br
++	ip_link_set_master mv br
+ 
+ 	do_test_dup add "macvlan master" dev mv self
+ 	do_test_dup del "macvlan master" dev mv self
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index 8994fec1c38f..5ea6537acd2b 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -451,7 +451,7 @@ ip_link_add()
+ 	defer ip link del dev "$name"
+ }
+ 
+-ip_link_master()
++ip_link_set_master()
+ {
+ 	local member=$1; shift
+ 	local master=$1; shift
+-- 
+2.47.0
 
-This unexpected error condition deserves a message, so I'd use
-ksft_exit_fail_perror() here.
-
-> +
-> +	if (waitpid(pid, &status, 0) != pid)
-> +		perr_and_exit("failed to wait for the tracee %d\n", pid);
-> +
-> +	/* Stop at the entry point of the syscall */
-> +	resume_and_wait_tracee(pid, PTRACE_SYSCALL);
-> +
-> +	/* Check tracee regs before the syscall */
-> +	if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
-> +		perr_and_exit("failed to get tracee registers\n");
-> +	if (ptrace(PTRACE_GETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
-> +		perr_and_exit("failed to get tracee registers\n");
-> +	if (orig_a0 != A0_OLD)
-> +		perr_and_exit("unexpected orig_a0: 0x%lx\n", orig_a0);
-> +
-> +	/* Modify a0/orig_a0 for the syscall */
-> +	switch (opt) {
-> +	case A0_MODIFY:
-> +		regs.a0 = A0_NEW;
-> +		break;
-> +	case ORIG_A0_MODIFY:
-> +		orig_a0 = A0_NEW;
-> +		break;
-> +	}
-> +
-> +	if (ptrace(PTRACE_SETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
-> +		perr_and_exit("failed to set tracee registers\n");
-> +
-> +	/* Resume the tracee */
-> +	ptrace(PTRACE_CONT, pid, 0, 0);
-> +	if (waitpid(pid, &status, 0) != pid)
-> +		perr_and_exit("failed to wait for the tracee\n");
-> +
-> +	*result = WEXITSTATUS(status);
-> +}
-> +
-> +TEST(ptrace_modify_a0)
-> +{
-> +	int result;
-> +
-> +	ptrace_test(A0_MODIFY, &result);
-> +
-> +	/* The modification of a0 cannot affect the first argument of the syscall */
-> +	EXPECT_EQ(A0_OLD, result);
-
-What about checking that we actually set regs.a0 to A0_NEW? We'd need
-A0_NEW to be more unique than 4, though.
-
-> +}
-> +
-> +TEST(ptrace_modify_orig_a0)
-> +{
-> +	int result;
-> +
-> +	ptrace_test(ORIG_A0_MODIFY, &result);
-> +
-> +	/* Only modify orig_a0 to change the first argument of the syscall */
-
-If we run ptrace_modify_a0 first then we've already set regs.a0 to A0_NEW
-and can't check with this test that we don't set it to A0_NEW. We should
-probably have two different test values, one for regs.a0 and one for
-orig_a0 and ensure on both tests that we aren't writing both.
-
-> +	EXPECT_EQ(A0_NEW, result);
-> +}
-> +
-> +TEST_HARNESS_MAIN
-> 
-> -- 
-> 2.47.0
->
-
-Thanks,
-drew
