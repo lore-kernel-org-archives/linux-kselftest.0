@@ -1,141 +1,146 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C083D1EF0AE;
-	Tue,  3 Dec 2024 15:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D3881ADA;
+	Tue,  3 Dec 2024 16:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733239283; cv=none; b=gjl9YOos7gQQ0ULCgjDXPr7gRJUN9nbLMjCJTndQNGq41x+Ess0tUj5ZLQ6fkNmjQ/6X6rrmdCFCd1G5117QnqevJmLpOV3EVMApnEhN3NNFNrPMyH1voMgHvQchGaT7xFa0CVfebB5KlbiuhBH1r5Qhxdk3wnUNXcm8OyDkc7c=
+	t=1733242207; cv=none; b=i8HZ/K6NhJtlyUx4aWs4nJACHw6JGxU43SVqbf7fpUOWHSK4CFstd1DX2yRdqIzcOLBQpRvmHJFpNlBMHE8JJ8txKvLh51Z538a6G94hB8VGbsW9O98WBdjpx1lTB6Fjy3vGxnpVZsfiqkOr5IbAFv/J5qusUgddtdibWjRbj7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733239283; c=relaxed/simple;
-	bh=t8yscXsYjfpe/1tcoMvCTfOcyi3GhvMr0P2NT0AZHzk=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=NDOTvpYXolAMvRnkODBz9ftwwnokmEUXpBuxvbS6IPchbs0U0sR4z9KRDZh/rmdwxf/ZXpmwy8Y8dJmgBcQh6PItk6N1sWvXmKL05ECSuivB7CmsRwJsKfORn82a+b655/pAmfOrRttyoy0MOtUPi0bQ6xNSa5vpkxJjDaG56TY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l041LLGt; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733242207; c=relaxed/simple;
+	bh=8pAHF54ui4zA+Mj4UHdwG1hk0crm6ZJaVaOSy/hclf8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cLI0F0NAGSi6w0ObWhy4BBk1tQZhxSuHv/06BOSWtxau0RU1T5jZujo2PBZ9gcFU+YNIxp78jFwOMZpEll+w9JzFvAi6zN7zQw62RHjTezXAPVr2QKW+Knt7MVCobUr2Xa5VwKHt41om1bgKGWrpOIp+qoTb6XWMqsyYAOVhZSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=CpNww9DN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XxWEPaY3; arc=none smtp.client-ip=103.168.172.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l041LLGt"
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-466966d8dbaso45712501cf.3;
-        Tue, 03 Dec 2024 07:21:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733239280; x=1733844080; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VqsVHmCOaWiBo6waU1R1vraLU/LK0vRFjavrsVUjZLY=;
-        b=l041LLGtQ09D5k9YVBUQuBVvQ8Q6hMoDvDvrGkEdSwkOK8gnKxMD+RTAhmJ8ioGzNS
-         5Iyt9SRcV/JXbqOP96OJGr/UmP5yyTMfsTcJ4Y2xhovpEDW0UErs1gfmgOJC8iUQulan
-         46EP+dxFoM6ZxrL4s5ILxNK/q4tkEUMXTwI7a3K8qhPo6Tzwbmyy8vaKHgPRwI/P3yT/
-         wJXLQulArcn+0E7DskiJCzgdBidYcFVBlA4Py9q2t9ecekhde5Tmy2GVu5wjJ024984M
-         aExkXDxAYhlVvLN06Mzn4H6Jx6YXZHh2I4H0ORIOrkq3IqW3xOgb8BcSjQhD5Qspx4ww
-         ZWOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733239280; x=1733844080;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VqsVHmCOaWiBo6waU1R1vraLU/LK0vRFjavrsVUjZLY=;
-        b=Mexig+DofDUwVTNGN5G8TKshCoajvQvlzcTIFdpDoEbN33+Wpg18Vo4EjbuGXBgIPT
-         3vjRi5E+nnChK9BxdD/WPn6Vlhi/l+YS/cysywCoOF7B3eewDxrcZ4AFhOYaqYXsDgmn
-         aDnIJC7DVrjca0+ooIBQBHLcQr3+maPSI6mPsz1QKeDM/A0YrHAGF3Shps5x7kTOhyUS
-         PFEzmLCLYTURr1lWz7Mr9ZBs47aJjJS/zLdU2NFI+MuUYpFnwJ888vseEkUXy2qO/qeT
-         6oh1ulpQBG84l1gtynB1YVpgigHv/vJCS+1ahx6JI3uZeSt1MseiOy885khYFjYoInLU
-         E83A==
-X-Forwarded-Encrypted: i=1; AJvYcCU5/P+d2WqQgIndwYFoJ8P7ueJ3gqAsO4EYkOgUZIiBgGkAz3rIoipftKar3dD6vhir9iWKTA89@vger.kernel.org, AJvYcCU80hH145bh54fJjVz7ibwQjl/A3ljRFZUdpc5Um6lKDU6LmKFhHmgNGaU5PJSvy2QtfBZtEXAPvAHR5C0O@vger.kernel.org, AJvYcCUKttrQNS2eaPFdJms1IDmY383EE8A1oYSfiAYiiBPTo2mk/LUlfNK3I3/4WRQI9kelh0lM6bs1AUPU@vger.kernel.org, AJvYcCXVNEr2WK+l//1EZ3cnMT2kdAOyvXOClKQwSqHr1HVU3xrwI5Tri7yuYU7vmdpDiBav72p3B0pp7It5+W8m2PIo@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJXIx7Lac+uUo0BHx1Y7QYQU+cyKJqzhpLoFTtuRJEHGDia/HD
-	7grfsPBoHcpBQKHvoxL5aZu0f/tzA9KcxeVHA8H+tofJm/8mylx0
-X-Gm-Gg: ASbGnctU6OSh2uWgz/+vqPFd/lfrqgFGKwu1qQCcyQBAt/qwSUS1rY1T38X/WL55aAj
-	NTxAV4AkeHFbwxuf4KQFdNbldy4lUcIFd0MUHHRqpXoUCtm0IDiLqvsg+ImbOHB1EnO0LAkQfs2
-	D4Bf1p66L5BKUn2gf2wMuYtcc7XPFj6Zc61wRLs4iIP3zYHzccBIAci5QPvuSQVzGFdHavXQ9Px
-	7iyMuNjSta+9Xdoru903ZmR8lL6saX76ZI89RD9MYRx9JenK3jjOtkuNTUUiwKgYLhrQRF+u1Y7
-	tGFft1DxPj6jQkfvJOGf1w==
-X-Google-Smtp-Source: AGHT+IGPHit5+V6UhQpAx4/BlJFXSsgH9I6LPVgBePoc1CSG05dOym+Yqu7WxRzxJcebBY0CylhigA==
-X-Received: by 2002:ad4:5b8f:0:b0:6d8:99cf:d2e3 with SMTP id 6a1803df08f44-6d8b737d8d2mr41162076d6.22.1733239280369;
-        Tue, 03 Dec 2024 07:21:20 -0800 (PST)
-Received: from localhost (250.4.48.34.bc.googleusercontent.com. [34.48.4.250])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d875195da6sm61747786d6.57.2024.12.03.07.21.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 07:21:19 -0800 (PST)
-Date: Tue, 03 Dec 2024 10:21:19 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Kenjiro Nakayama <nakayamakenjiro@gmail.com>, 
- Pablo Neira Ayuso <pablo@netfilter.org>, 
- Jozsef Kadlecsik <kadlec@netfilter.org>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Andrea Parri <parri.andrea@gmail.com>, 
- Will Deacon <will@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, 
- Boqun Feng <boqun.feng@gmail.com>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- David Howells <dhowells@redhat.com>, 
- Jade Alglave <j.alglave@ucl.ac.uk>, 
- Luc Maranget <luc.maranget@inria.fr>, 
- "Paul E. McKenney" <paulmck@kernel.org>, 
- Akira Yokosawa <akiyks@gmail.com>, 
- Daniel Lustig <dlustig@nvidia.com>, 
- Joel Fernandes <joel@joelfernandes.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netfilter-devel@vger.kernel.org, 
- coreteam@netfilter.org, 
- linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, 
- linux-arch@vger.kernel.org, 
- lkmm@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, 
- Kenjiro Nakayama <nakayamakenjiro@gmail.com>
-Message-ID: <674f21ef3048c_19a62294c6@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20241202232129.7139-1-nakayamakenjiro@gmail.com>
-References: <20241202232129.7139-1-nakayamakenjiro@gmail.com>
-Subject: Re: [PATCH] selftests/net: call sendmmsg via udpgso_bench.sh
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="CpNww9DN";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XxWEPaY3"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id A812311400E2;
+	Tue,  3 Dec 2024 11:10:02 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Tue, 03 Dec 2024 11:10:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1733242202; x=
+	1733328602; bh=RzGwZAu9mlE2QMETXgnsEf6IwW4zhq+aCq4xASv7ZF0=; b=C
+	pNww9DNQEYeNcbr5JjoNABjeIQu8wjz7pzrXiEjruKGHKH4FPUoNwVtbegy0j1dx
+	WFPe/onNZCH1omZXzQz4HebBWtMxxWvLJJJ+/dieLUrt00RFxGL4KgCrX+cjusxl
+	Pp4IjyX5BeZNl8cPjaOJpSg6HanXOaI8WbeEV/63ppFIzvHW0I7ZX5M79r/4THK0
+	hJTmdFr1UhHO77RGbHEvcX+/cnGtAs31kYD9O5Uhr0xgmuOjUhMhtFHh0DRvP33w
+	eGJKXeKBavXx/jAqM01aSg3lazYa1riVmQwie9OTbjg9/PeRnkf6e7TObJw8eGSX
+	wq/Cfss5OWCPwvYPyFaCw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1733242202; x=1733328602; bh=RzGwZAu9mlE2QMETXgnsEf6IwW4zhq+aCq4
+	xASv7ZF0=; b=XxWEPaY3aeEbK65xYQJpEiZtof3I/2R+fwVMqHU8snwA+BI0t82
+	G0/iZN4M4xMHeg6aYb2Cx0PM5L3V//q1pufcrvQ39ArW47ZspdVttN1szeCwQ8ZC
+	pSoq0fRHb4MlMUeJuNLK0wOkI5Xn2VhPH4+Ez1IZbP4W8jpLgHRCwQh9hGPIZIpw
+	dFRcXS80cxwL6KnuHkPYoSy7ivNX4v16npE4kbYTw7jYzKW/sKq/9ssCEHfkWpOZ
+	Urd6IZ7qt7ANX98E4gHxd36ykdd7Jx6VI4NtYVPQMj24E2VElNRPkd54dX2MA3oo
+	yR41jJFgMWANRX6R+i4GrS9KmDIlxn4Iuug==
+X-ME-Sender: <xms:Wi1PZ-RKs4CV2dw3pvOjr_LldADvLKDNiUPa1QGnEaG0LvbmgqQCig>
+    <xme:Wi1PZzzXxeub_8Y584N2KxRhDk0IlQ_j7Famvf9jBEkWBzlaajckMMxPyeDtREN5F
+    -7f6f7cvJfFomGf01E>
+X-ME-Received: <xmr:Wi1PZ73kTI23uaUr2ChYGeHx1PL3OnP-79Wo7xPQlZ7J-fuOPq64jHvVYbtr>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrieefgdehiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecu
+    hfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrih
+    hlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeeg
+    teehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghr
+    tghpthhtohepuddvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtohhnih
+    hosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdr
+    tghomhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
+    gtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdprhgtphhtthho
+    pehhohhrmhhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnh
+    gvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgv
+    lhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrg
+    iivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdho
+    rhhg
+X-ME-Proxy: <xmx:Wi1PZ6CeXkjHU0kiZODljeL8K3ck430Gsw6JoM-Yne3hJGHXq3e9PA>
+    <xmx:Wi1PZ3gOkQpD9mPhOUWKU6u8_GjayXo2glBqcNDxwDk1ejwueXEVZg>
+    <xmx:Wi1PZ2qVSbqD-ihe2WyAr7JNcVMUlKoRDOFVkZ_dFCMZcVTyqaG2xw>
+    <xmx:Wi1PZ6hr54nRYZZRC9QasRt7lCwtH8XDjqe9l-Y1B7AlZVv1tjj8NQ>
+    <xmx:Wi1PZwamZUEZq7Cv_d0iaWEHK60RkI3DAuxLV2jjMWcmU8CQO3ogzfYD>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 Dec 2024 11:10:01 -0500 (EST)
+Date: Tue, 3 Dec 2024 17:09:59 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+	ryazanov.s.a@gmail.com, Simon Horman <horms@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH net-next v12 13/22] ovpn: implement peer lookup logic
+Message-ID: <Z08tV5vQe2S4iawi@hog>
+References: <20241202-b4-ovpn-v12-0-239ff733bf97@openvpn.net>
+ <20241202-b4-ovpn-v12-13-239ff733bf97@openvpn.net>
+ <5052453b-edd8-44e2-8df7-00ea439805ad@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5052453b-edd8-44e2-8df7-00ea439805ad@openvpn.net>
 
-Kenjiro Nakayama wrote:
-> Currently, sendmmsg is implemented in udpgso_bench_tx.c,
-> but it is not called by any test script.
+2024-12-03, 15:58:17 +0100, Antonio Quartulli wrote:
+> On 02/12/2024 16:07, Antonio Quartulli wrote:
+> [...]
+> > +#define ovpn_get_hash_slot(_key, _key_len, _tbl) ({	\
+> > +	typeof(_tbl) *__tbl = &(_tbl);			\
+> > +	jhash(_key, _key_len, 0) % HASH_SIZE(*__tbl);	\
+> > +})
+> > +
+> > +#define ovpn_get_hash_head(_tbl, _key, _key_len) ({		\
+> > +	typeof(_tbl) *__tbl = &(_tbl);				\
+> > +	&(*__tbl)[ovpn_get_hash_slot(_key, _key_len, *__tbl)];	\
+> > +})
 > 
-> This patch adds a test for sendmmsg in udpgso_bench.sh.
-> This allows for basic API testing and benchmarking
-> comparisons with GSO.
-
-The change looks fine to me, but the commit is missing your
-Signed-off-by.
-
-Also, if resubmitting, please mark [PATCH net-next v2].
-
-> ---
->  tools/testing/selftests/net/udpgso_bench.sh | 3 +++
->  1 file changed, 3 insertions(+)
+> clang a reporting various warnings like this:
 > 
-> diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
-> index 640bc43452fa..88fa1d53ba2b 100755
-> --- a/tools/testing/selftests/net/udpgso_bench.sh
-> +++ b/tools/testing/selftests/net/udpgso_bench.sh
-> @@ -92,6 +92,9 @@ run_udp() {
->  	echo "udp"
->  	run_in_netns ${args}
->  
-> +	echo "udp sendmmsg"
-> +	run_in_netns ${args} -m
-> +
->  	echo "udp gso"
->  	run_in_netns ${args} -S 0
->  
-> -- 
-> 2.39.3 (Apple Git-146)
+> ../drivers/net/ovpn/peer.c:406:9: warning: variable '__tbl' is uninitialized
+> when used within its own initialization [-Wuninitialized]
+>   406 |         head = ovpn_get_hash_head(ovpn->peers->by_id, &peer_id,
+>       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   407 |                                   sizeof(peer_id));
+>       |                                   ~~~~~~~~~~~~~~~~
+> ../drivers/net/ovpn/peer.c:179:48: note: expanded from macro
+> 'ovpn_get_hash_head'
+>   179 |         &(*__tbl)[ovpn_get_hash_slot(_key, _key_len, *__tbl)];  \
+>       |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+> ../drivers/net/ovpn/peer.c:173:26: note: expanded from macro
+> 'ovpn_get_hash_slot'
+>   173 |         typeof(_tbl) *__tbl = &(_tbl);                  \
+>       |                       ~~~~~     ^~~~
 > 
+> Anybody willing to help me understand this issue?
+> 
+> I have troubles figuring out how __tbl is being used uninitialized.
+> I wonder if the parameters naming is fooling clang (or me) somehow.
 
+Not really a solution to this specific issue, but do you actually need
+ovpn_get_hash_slot as a separate macro? AFAICT all users could also be
+converted to ovpn_get_hash_head, then you can merge ovpn_get_hash_slot
+into ovpn_get_hash_head and maybe clang won't get confused?
 
+No guarantee that this fixes anything (except saving one or two lines
+in a few functions).
+
+-- 
+Sabrina
