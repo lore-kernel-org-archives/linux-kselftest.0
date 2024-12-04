@@ -1,51 +1,52 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB3820C495;
-	Wed,  4 Dec 2024 16:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE461B85EC;
+	Wed,  4 Dec 2024 16:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733330459; cv=none; b=t5CGZQppXwfT0SbJ2I0OXBcZ0bjj+J5VcSaJ2CzVKInGVWb1+MZDWiDSzoVLAjDDUQesVowGYYuluB3kG5+SUFXndePsPfOFm9ySFJVFOibu8CQ1neAEW3rUV1+ayyrF4A7w7OcTFsdbzoXGJrkVba8WjnBpw1mufPyUGr331d8=
+	t=1733330460; cv=none; b=npKHh7GulsNgiGr1KWgQwY2lyiWGjhtWxYsrZniUS3qgHdOmsEz53fUmgiAVlVFXHIW4xsL5FPNWzf8n+IEKa6UEC1PiBK1z+AhxBL5G5E2u8Rhen/rll3urMOqHfNP2rjeRsWMwgJyhWbWKOSe3xcx5b8GdLRT7/7QSSWv5uyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733330459; c=relaxed/simple;
-	bh=Xha4eXVpUaFOpIZM+gMqYJIFFrsc90xcYMs1JxfcFNE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MoyfHomeXdOXjt67YX7qxUYkClaZ9P6Cf68heZxW2FgAJ4uhIgIfvc7eY2rSu1aFTf1Z0J1a3KxWCG25X8rhTDG89n3IEtISaba3W1cINCI9/ScRned/Ct54qOrf6FAOFt5dA3YB6OaIsmTbz0Q/OqyFI03zVAIQxAvIP1aWogE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.42
+	s=arc-20240116; t=1733330460; c=relaxed/simple;
+	bh=ovxjdhKZTZJF3bNoyUUKDjDyDyhf1uuMTZmUa6QGS+4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=gEIreUO5PUxX+7vjrln1MK0M5PNnAtteg3EacB0LQz7s7kTH19uqJB3JJb4xXLhsETzQTAw8IPzpeZER0jOaida6O66rJizPvhxOVRgxxaGzFD90LaodZoZHo8Pu+yJqO2mef4CzRABZ/xhlk8G9r3rvbNfADR8y6QFur8WbLVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5d10f713ef0so2015931a12.0;
-        Wed, 04 Dec 2024 08:40:57 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aa55da18f89so1044156766b.0;
+        Wed, 04 Dec 2024 08:40:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733330456; x=1733935256;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=56y0WHQygoJxKLz73cSLHjJUjh4rvdzp/ejobPicFUg=;
-        b=PsiesYc7aKIU2qG1oIYWUchaVgCLSQ8UpLZcl9oB8qyFvbTEfDkfK2quOc6IAMPHfP
-         p91gybTKN05GnZ2B4evrMQO3fTsr0neWiwP2oRCe0Gj27qPbif+IKs6nwD956l4TkmT1
-         xueJZ/YqYZHCZNwC8RwX8iCNPXsE5YlW6K/Ko8+ukOVD7r0woLuK978XAll3TcHgMHAj
-         LMllSui5olKwhXB2p/G0PDUj+kmeK9E73VAhZciN/KGAqVu7f7zfWYdYW83Xogndz1wx
-         B3yLCTkTXezjrj2iW0WwT4TWg09UH6lTR7HQnq4sVWslsydyfY5r2pFvPE4HIrZYNxcu
-         idpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV6TLyT4QFwM6ZpP5pCZ9Gab3SFdLJ+IQXaascXKzwKgt13bO55iaEHzJumxqdM5g7zEeDeFdlh6wJfXPT06g7O@vger.kernel.org, AJvYcCXM2XhclioTbRH8ADcqFljN3XVr6MOv+jVj06ymj5aWlA8bTZINtU34mXgvYRLSK1mgaLuHp5EQ1+yl6c8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/x6PbnGmfM1Yiq0b4eDsDFOD5z5+ihM9j11cCIxFWlKMh/juh
-	Jfaky1TlVGPlZYKHsQtvZGwJGqhfTRL1NoAF+QVqUGskqBX/l2kh
-X-Gm-Gg: ASbGncv9fPpnOG0QlEc9gthx76bL+nTq4b53cMrpwAtDHt0VAjrtgJ3+kgVQ3WDcywS
-	l+2gm+MUS1TriWlegHGeWaA3iTEWptpagridpVYU66oYFw+yKCybTQyGQOt59xV5/XQOM4cIYih
-	0DNXrGkvo9B9Gn1uDg4Whwb8yfHkCJwJOdzlsslyn+h669ZDEBujKMc4DlCB0SVDpesQd1xG+6J
-	vWdJMTCBiGMXLArp9S2WAGAK1niikJZLgZjnpn2keNLYTOx6gwC+gMscphiYJykcdfUfSYaQFmN
-	HA==
-X-Google-Smtp-Source: AGHT+IE/4y75vrQKRWn94IKE1t5FTBozjTLCOJzSNbJakBWdOec61xjF2X3+LosHYQPVGiQVRTK3Ig==
-X-Received: by 2002:a17:907:96a5:b0:aa5:b1e3:c819 with SMTP id a640c23a62f3a-aa6219df3dbmr2002766b.22.1733330455562;
-        Wed, 04 Dec 2024 08:40:55 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733330457; x=1733935257;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eGKhXWb7HtZIOVQHIFExLTvViIJYYv0F3Lwy/m15R3M=;
+        b=wH/Fu6IDYtAyrWkG+ILgRtwer3VElxH7sW9jg2N+2stFXVdDL/aWrfZiUD5GCkPbW9
+         HZnmxXXZxpJSHTZ4NBeJ7bnpbcRBe+l7ONeK3L6QUk0Rn38u3wZ3o6k0HkA2FXDdnlHR
+         D5UqjsXtWzE6LFrgCWIoDghPYn84PLOeWf7UkB5ysYOinwd8vXrKFMJEtnItFHchof+n
+         ci3HOsJp2pfYZDN4sadwdHQgYuYL8+xZiqyQ7dB2UD63G62+097+3MiKvkFBD5TQ2imX
+         hRqW8axvcVsDF0udUCPlolFlIZxYlklM+Wwlh7Q5FdWZe0hKKRs+bnHAYhpfmaShrQKG
+         qPxA==
+X-Forwarded-Encrypted: i=1; AJvYcCUUiuoFXE41ud84AJCUmWPkE3I4MQKBG0Y7CGC5Z0oX0ALNesDyWHVYmsk9UU2gwlkGvYjxyam363m4FHlMK/JK@vger.kernel.org, AJvYcCV26EGSOPS5dl3WThzoQQNFYq/hYhY1imVsO76XawHQ86aLqDoijNyIwVTQ+7eosswLOQFJ7jalzQtiiPw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqNhO/npUKkaljiTYAlzeUUN4mewYNAqJlegaUtMdetTj2Fx4R
+	qo1lgPziXLkrDITVvLocZN2z6kAlmVXfmwkLTu4xFK9qLG7zb/PnVz3/cQ==
+X-Gm-Gg: ASbGnctUU+2FDlLnFM7ldrJ4RSmTBoh2WSSb5wCCSMhE/Vzwew2SkgfOFV/MVp/HJ4R
+	m5zr65vUP1jEcMyC4Sip6zelGHXSKQYFgbOOHKYeuxWZYaLh5eMd1BrAmCsd088sZMofh89AGyS
+	1HZeNmilmBkPCOHKzvD13WaeZoqWufmmXbykI7T61YFQAXkDondNQ8BrOPWCYwmHp17v/JdfiPj
+	fF7bgYaGmLafqK+42CqUMjxZfOmt95+lElSZahF/l8YwW7Giz0Gwhokr843HsQqx6PTEUiIyIvo
+	CA==
+X-Google-Smtp-Source: AGHT+IGoMCilSf/5FCw7ftvtOv25fdXS12WGiCb7ddKIIZZQguO8hPB3cVK/S6ZqT15PetPGh7lhtA==
+X-Received: by 2002:a17:907:780d:b0:a9a:1585:dd3b with SMTP id a640c23a62f3a-aa5f7d4d219mr570414066b.21.1733330457195;
+        Wed, 04 Dec 2024 08:40:57 -0800 (PST)
 Received: from localhost (fwdproxy-lla-009.fbsv.net. [2a03:2880:30ff:9::face:b00c])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa599903e6esm750284966b.136.2024.12.04.08.40.54
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5996c2c44sm762955666b.29.2024.12.04.08.40.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 08:40:54 -0800 (PST)
+        Wed, 04 Dec 2024 08:40:56 -0800 (PST)
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next 0/4] netconsole: selftest for userdata overflow
-Date: Wed, 04 Dec 2024 08:40:41 -0800
-Message-Id: <20241204-netcons_overflow_test-v1-0-a85a8d0ace21@debian.org>
+Date: Wed, 04 Dec 2024 08:40:42 -0800
+Subject: [PATCH net-next 1/4] netconsole: Warn if MAX_USERDATA_ITEMS limit
+ is exceeded
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,10 +55,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAmGUGcC/x3MUQqDMBAFwKuE923AxIiQq5Qioi81UDYlG6wg3
- r3QOcBcUNZMRTQXKo+suQiicZ3Bui/yos0booHvfXC+D1bY1iI6l4M1vct3btRmuaRpGDeXpjC
- gM/hUpnz+3weEzQrPhud9/wD/O/MXcQAAAA==
-X-Change-ID: 20241204-netcons_overflow_test-eaf735d1f743
+Message-Id: <20241204-netcons_overflow_test-v1-1-a85a8d0ace21@debian.org>
+References: <20241204-netcons_overflow_test-v1-0-a85a8d0ace21@debian.org>
+In-Reply-To: <20241204-netcons_overflow_test-v1-0-a85a8d0ace21@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -65,53 +65,51 @@ To: Andrew Lunn <andrew+netdev@lunn.ch>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1366; i=leitao@debian.org;
- h=from:subject:message-id; bh=Xha4eXVpUaFOpIZM+gMqYJIFFrsc90xcYMs1JxfcFNE=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnUIYVTNJQ0KQooFmpNx3rm2ve1UgJhkNfTq79k
- 6GFNUeqUv+JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ1CGFQAKCRA1o5Of/Hh3
- bc/jD/9CB9oMeRkYz4rS8DfVThzwQZCbvxMF9ydzrVpsBXmzp15m1oYmva5S7iMV2vLKahH7Td6
- JGlbmsSBxUW9I61rMf60FgLiErDztJbSzOodnOLN8UI2mnBXj59y+pFm83FBJJx5NqqtR1DMsmp
- g416wKHbrY1qwHq2kEz44tIet8Lq4szXktNG4v+eZn3zTMmUavyemAZXpOaV80r6Zk4nkNykxjT
- V7kehNxplTdUxRYtyO4ugo+MZZCbn9+91WK+oC1LJquVYtFr5wOq3sVfNpmgWMtd4kpWtN07qxS
- FJegYHo2HcuwoPqR+Y5vX9ITeYXajrpYvc0bVKk/FnWEMeCjQq65ia5TEcJ5TJwCCWG1kTUA5v2
- NR7LC2OSfks4/Ajd44cGj8EIp4tCXIMb+Ixln/hD7dw4sL93jM8THlD4lAXYXYIxjP6/WLjxgE8
- oW+zg+AYLM5gbnc3sq5kKRKH2or7tBJY68wYNM9lwSt+pbU3WINTnp67mvFH7F8ZCzutzHRNeY2
- K+gbzDLxd74f7kbs7lLuDPZRLtE5cXvOpJgoEcAXx4q/Jxrlm7tykgHCvkYBe+4JzTvHGpE4g7M
- ZhmbFmLFQtobIzWvI8IRnFEu3gwyezVRDBnm8r0BZGg2C+6UrekSPuObL8POgI5xeUTl+nUkMuA
- EvfXkWEey/2xavQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=987; i=leitao@debian.org;
+ h=from:subject:message-id; bh=ovxjdhKZTZJF3bNoyUUKDjDyDyhf1uuMTZmUa6QGS+4=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnUIYVs0kjByuqSoxAk0AiC4ZBu+mV7D9Kr2Y9q
+ 7JqHzAbaQ2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ1CGFQAKCRA1o5Of/Hh3
+ bUkAEAClfKd1/z37QRE3JG+vQupkR9Vd1UrGnL9LaUSIA3qsKw3iFb5WWQelksTT62587/NQt0V
+ N1am6K0jlfl0ux9Vs0nGk/sxsyfgiWZG359/87I6NLH+M2iccbCcE8s24M831Imkhb98jhtYvHH
+ e4oeFgi1g6WXVdYtA4z0SsCb0+d28AI8jME0h3Cn2BwD/wzZLasFTTqd1ybQMexS5Nv9Ww58gCC
+ ryMqs7bvoCecBheWtHro0qqwdwJ2m3562vufIGJGg1rD4yL7vBawlLfspfq7ulYRGzrYqcZH8D/
+ m4IgoJksgEMz4uLr/m0GE7/4Uzk+lsifvxJjdessPKC2SWtbJo01OsDrv+wWMvDtSJMZQ2wnvuk
+ wTwUhvtVg8JutXgkAkzLRqSZ7mOP77YWNgXrj0vs5cdpmvwavDCziDiGiN1PvIVtVlG4Skzv65T
+ iUH6V735PiKWe7NXi3VCDyx0PWRINTcg51GEXr3oNZ71Gngr9DdCWpeouy2x+TY7e6K2SOX0pZw
+ mmwcM/B4cL/yHgzWACkUmRWdU5QPJ4bLG0yuvd4CFu5wdcPQFAT9HR6c1kx4OM5rT8hliH17UOP
+ qSRh7InGo3Z4YGA3sUL/YORURv23GDMoh+zW/BrHLq7xTIqSwvzMKQhp8kfHVOSZGYOOInu99cQ
+ mZYZpftASXUQJiA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Implement comprehensive testing for netconsole userdata entry handling,
-demonstrating correct behavior when creating maximum entries and
-preventing unauthorized overflow.
+netconsole configfs helpers doesn't allow the creation of more than
+MAX_USERDATA_ITEMS items.
 
-Refactor existing test infrastructure to support modular, reusable
-helper functions that validate strict entry limit enforcement.
+Add a warning when netconsole userdata update function attempts sees
+more than MAX_USERDATA_ITEMS entries.
 
-Also, add a warning if update_userdata() sees more than
-MAX_USERDATA_ITEMS entries. This shouldn't happen and it is a bug that
-shouldn't be silently ignored.
+Replace silent ignore mechanism with WARN_ON_ONCE() to highlight
+potential misuse during development and debugging.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Breno Leitao (4):
-      netconsole: Warn if MAX_USERDATA_ITEMS limit is exceeded
-      netconsole: selftest: Split the helpers from the selftest
-      netconsole: selftest: Delete all userdata keys
-      netconsole: selftest: verify userdata entry limit
+ drivers/net/netconsole.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- MAINTAINERS                                        |   3 +-
- drivers/net/netconsole.c                           |   2 +-
- .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 225 +++++++++++++++++++++
- .../testing/selftests/drivers/net/netcons_basic.sh | 218 +-------------------
- .../selftests/drivers/net/netcons_overflow.sh      |  67 ++++++
- 5 files changed, 296 insertions(+), 219 deletions(-)
----
-base-commit: bb18265c3aba92b91a1355609769f3e967b65dee
-change-id: 20241204-netcons_overflow_test-eaf735d1f743
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index 4ea44a2f48f7b1f9059d275f0f0edc40cc1997f0..8b9dd4842f3e516c7eaa08205a45092e64417440 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -705,7 +705,7 @@ static void update_userdata(struct netconsole_target *nt)
+ 		struct userdatum *udm_item;
+ 		struct config_item *item;
+ 
+-		if (child_count >= MAX_USERDATA_ITEMS)
++		if (WARN_ON_ONCE(child_count >= MAX_USERDATA_ITEMS))
+ 			break;
+ 		child_count++;
+ 
 
-Best regards,
 -- 
-Breno Leitao <leitao@debian.org>
+2.43.5
 
