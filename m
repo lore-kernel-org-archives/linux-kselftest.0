@@ -1,23 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22746216E24;
-	Mon,  9 Dec 2024 09:50:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 715C8216E33;
+	Mon,  9 Dec 2024 09:50:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733737854; cv=none; b=Lj3JvDMZAxuqwGK8/nxJap4mzGr/TENnu7NGAjsaoSrEbqxvDXzCrgGetZWMbqHSZ3vjQ/pIjZU+aip3VGDZX/G1fKcNoIifYBugnm8m90EwxpS0NWi8d7kSEakN3cYMFuRYo6ftnvHdMytSsoccWSEQ10D/JqrF8CmSa1EhjRU=
+	t=1733737855; cv=none; b=Mmy9gJGve/EowFIWIRuLT0cx5Rc0GBC1P/ELW0kvlipXgKNAyQcJ9Ahn11kjDXl5+oA7L9XgNaCtMZBgqjUjr8dXt+oEDYVnM+rdP17meuN24bQ5V5znGOP2ZYSzbyXAYTLExmzJmqyhWgZFJPRvJGoJ1UzsEELpauaxesLuwno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733737854; c=relaxed/simple;
-	bh=No2G2MlkIqJPjup1+11Pz23i437KcGkyXnPUa6UJJWs=;
+	s=arc-20240116; t=1733737855; c=relaxed/simple;
+	bh=OTGf8VEEawHsSwgCO/QNszJeSLWzUA2hrxo/Kg8O+pI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IRrYLT2S7ALjVt9y1jq76HLh8OZw/k+wvI5BT2wCfhxcngcedxSM4X90Y1Rp32LRFj9xw8BEiifL7cEIW5bWeYCaC4206lrbrhhjAkZIHzmOeulYtumqCfZgwdDavXKRrj3cYhba8w0QPSFgSzQHrODz2atok64C6403+uOmMAo=
+	 MIME-Version; b=mzZ0b46EC9nLuOIAK4cT8uOt7fLGzvVcd0CWp0Urffagw6XjUjh0aZVfiHmEoteALgnK94/ZgzUOBKZXVQM60Txg+yrcftMZtGv+z+fnAUzrok21uxI7fy6eeypbItT8PZu4pdVXR8nw05aBDQstsmDd/pbFhml/IWuoWx5vEs8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89FB5113E;
-	Mon,  9 Dec 2024 01:51:16 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 20D711650;
+	Mon,  9 Dec 2024 01:51:21 -0800 (PST)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 80A133F720;
-	Mon,  9 Dec 2024 01:50:46 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 173E63F720;
+	Mon,  9 Dec 2024 01:50:50 -0800 (PST)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org
 Cc: linux-kernel@vger.kernel.org,
@@ -33,9 +33,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH 04/14] selftests/mm: Fix -Warray-bounds warnings in pkey_sighandler_tests
-Date: Mon,  9 Dec 2024 09:50:09 +0000
-Message-ID: <20241209095019.1732120-5-kevin.brodsky@arm.com>
+Subject: [PATCH 06/14] selftests/mm: Remove unused pkey helpers
+Date: Mon,  9 Dec 2024 09:50:11 +0000
+Message-ID: <20241209095019.1732120-7-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241209095019.1732120-1-kevin.brodsky@arm.com>
 References: <20241209095019.1732120-1-kevin.brodsky@arm.com>
@@ -47,71 +47,134 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-GCC doesn't like dereferencing a pointer set to 0x1 (when building
-at -O2):
-
-pkey_sighandler_tests.c:166:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds=]
-  166 |         *(int *) (0x1) = 1;
-      |         ^~~~~~~~~~~~~~
-cc1: note: source object is likely at address zero
-
-Using NULL instead seems to make it happy. This should make no
-difference in practice (SIGSEGV with SEGV_MAPERR will be the outcome
-regardless), we just need to update the expected si_addr.
+Commit 5f23f6d082a9 ("x86/pkeys: Add self-tests") introduced a
+number of helpers and functions that don't seem to have ever been
+used. Let's remove them.
 
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- tools/testing/selftests/mm/pkey_sighandler_tests.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ tools/testing/selftests/mm/pkey-helpers.h    | 34 --------------------
+ tools/testing/selftests/mm/protection_keys.c | 34 --------------------
+ 2 files changed, 68 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index c593a426341c..e7b91794f184 100644
---- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
-+++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -163,7 +163,7 @@ static void *thread_segv_with_pkey0_disabled(void *ptr)
- 	__write_pkey_reg(pkey_reg_restrictive_default());
+diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+index f7cfe163b0ff..472febd992eb 100644
+--- a/tools/testing/selftests/mm/pkey-helpers.h
++++ b/tools/testing/selftests/mm/pkey-helpers.h
+@@ -26,9 +26,7 @@
+ #ifndef DEBUG_LEVEL
+ #define DEBUG_LEVEL 0
+ #endif
+-#define DPRINT_IN_SIGNAL_BUF_SIZE 4096
+ extern int dprint_in_signal;
+-extern char dprint_in_signal_buffer[DPRINT_IN_SIGNAL_BUF_SIZE];
  
- 	/* Segfault (with SEGV_MAPERR) */
--	*(int *) (0x1) = 1;
-+	*(int *)NULL = 1;
- 	return NULL;
+ extern int test_nr;
+ extern int iteration_nr;
+@@ -171,38 +169,6 @@ static inline void write_pkey_reg(u64 pkey_reg)
+ 			pkey_reg, __read_pkey_reg());
  }
  
-@@ -179,7 +179,6 @@ static void *thread_segv_pkuerr_stack(void *ptr)
- static void *thread_segv_maperr_ptr(void *ptr)
+-/*
+- * These are technically racy. since something could
+- * change PKEY register between the read and the write.
+- */
+-static inline void __pkey_access_allow(int pkey, int do_allow)
+-{
+-	u64 pkey_reg = read_pkey_reg();
+-	int bit = pkey * 2;
+-
+-	if (do_allow)
+-		pkey_reg &= (1<<bit);
+-	else
+-		pkey_reg |= (1<<bit);
+-
+-	dprintf4("pkey_reg now: %016llx\n", read_pkey_reg());
+-	write_pkey_reg(pkey_reg);
+-}
+-
+-static inline void __pkey_write_allow(int pkey, int do_allow_write)
+-{
+-	u64 pkey_reg = read_pkey_reg();
+-	int bit = pkey * 2 + 1;
+-
+-	if (do_allow_write)
+-		pkey_reg &= (1<<bit);
+-	else
+-		pkey_reg |= (1<<bit);
+-
+-	write_pkey_reg(pkey_reg);
+-	dprintf4("pkey_reg now: %016llx\n", read_pkey_reg());
+-}
+-
+ #define ALIGN_UP(x, align_to)	(((x) + ((align_to)-1)) & ~((align_to)-1))
+ #define ALIGN_DOWN(x, align_to) ((x) & ~((align_to)-1))
+ #define ALIGN_PTR_UP(p, ptr_align_to)	\
+diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+index 4990f7ab4cb7..fcbebc4490b4 100644
+--- a/tools/testing/selftests/mm/protection_keys.c
++++ b/tools/testing/selftests/mm/protection_keys.c
+@@ -53,7 +53,6 @@ int test_nr;
+ 
+ u64 shadow_pkey_reg;
+ int dprint_in_signal;
+-char dprint_in_signal_buffer[DPRINT_IN_SIGNAL_BUF_SIZE];
+ 
+ void cat_into_file(char *str, char *file)
  {
- 	stack_t *stack = ptr;
--	int *bad = (int *)1;
- 	u64 pkey_reg;
- 
- 	/*
-@@ -195,7 +194,7 @@ static void *thread_segv_maperr_ptr(void *ptr)
- 	__write_pkey_reg(pkey_reg);
- 
- 	/* Segfault */
--	*bad = 1;
-+	*(int *)NULL = 1;
- 	syscall_raw(SYS_exit, 0, 0, 0, 0, 0, 0);
- 	return NULL;
- }
-@@ -234,7 +233,7 @@ static void test_sigsegv_handler_with_pkey0_disabled(void)
- 
- 	ksft_test_result(siginfo.si_signo == SIGSEGV &&
- 			 siginfo.si_code == SEGV_MAPERR &&
--			 siginfo.si_addr == (void *)1,
-+			 siginfo.si_addr == NULL,
- 			 "%s\n", __func__);
+@@ -397,12 +396,6 @@ void signal_handler(int signum, siginfo_t *si, void *vucontext)
+ 	dprint_in_signal = 0;
  }
  
-@@ -349,7 +348,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
- 
- 	ksft_test_result(siginfo.si_signo == SIGSEGV &&
- 			 siginfo.si_code == SEGV_MAPERR &&
--			 siginfo.si_addr == (void *)1,
-+			 siginfo.si_addr == NULL,
- 			 "%s\n", __func__);
+-int wait_all_children(void)
+-{
+-	int status;
+-	return waitpid(-1, &status, 0);
+-}
+-
+ void sig_chld(int x)
+ {
+ 	dprint_in_signal = 1;
+@@ -817,39 +810,12 @@ void *malloc_pkey_hugetlb(long size, int prot, u16 pkey)
+ 	return ptr;
  }
  
+-void *malloc_pkey_mmap_dax(long size, int prot, u16 pkey)
+-{
+-	void *ptr;
+-	int fd;
+-
+-	dprintf1("doing %s(size=%ld, prot=0x%x, pkey=%d)\n", __func__,
+-			size, prot, pkey);
+-	pkey_assert(pkey < NR_PKEYS);
+-	fd = open("/dax/foo", O_RDWR);
+-	pkey_assert(fd >= 0);
+-
+-	ptr = mmap(0, size, prot, MAP_SHARED, fd, 0);
+-	pkey_assert(ptr != (void *)-1);
+-
+-	mprotect_pkey(ptr, size, prot, pkey);
+-
+-	record_pkey_malloc(ptr, size, prot);
+-
+-	dprintf1("mmap()'d for pkey %d @ %p\n", pkey, ptr);
+-	close(fd);
+-	return ptr;
+-}
+-
+ void *(*pkey_malloc[])(long size, int prot, u16 pkey) = {
+ 
+ 	malloc_pkey_with_mprotect,
+ 	malloc_pkey_with_mprotect_subpage,
+ 	malloc_pkey_anon_huge,
+ 	malloc_pkey_hugetlb
+-/* can not do direct with the pkey_mprotect() API:
+-	malloc_pkey_mmap_direct,
+-	malloc_pkey_mmap_dax,
+-*/
+ };
+ 
+ void *malloc_pkey(long size, int prot, u16 pkey)
 -- 
 2.47.0
 
