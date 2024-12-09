@@ -1,23 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE6D121661A;
-	Mon,  9 Dec 2024 09:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5785421571F;
+	Mon,  9 Dec 2024 09:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733737848; cv=none; b=Yw9VnyOCSkR0z4vn1tNGxelFax1rPnDBdUN9sMrI3ArdTyLdtFA3aBeKaQMj/0W6YQ2AeSslOg+ag8W5MSYWxoddjyAMOUCInJWGl3VGeo10RBHU55CTLEDxEO385O1A1FoJGEEoNsybGhZLx86dRU7bxMJ551oWfROid6IUCUc=
+	t=1733737853; cv=none; b=j70fB+suOOj8c9HnNMYwnGiHTfe1bsWxEngJCZT8nBDWkvq6/d5gllFqgEKboywwp5khuVONodbeiU+zXpwJ1o0dCXuYxWJZG6XvO3WZXZ0Wxeo5JjMZIbj+GN5z0CpHWq9SFRycS0FAQMo3f67vZYZgHyzwbhOD/lGsHiX4c+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733737848; c=relaxed/simple;
-	bh=wIpvmlCCeJJ3mu0DitBcMqePPrjK9lMxA+PwJdrL3wk=;
+	s=arc-20240116; t=1733737853; c=relaxed/simple;
+	bh=K2iVTYpscgvT7NY/pb7DCGLxdnqWe+rf0iSHLzC5vac=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=igv92vTzuih0lQF/sxwTlx25lHi55eSIfcFBD3OaYu3Mc+64lrwpuwCkHQYC2kaDo+aGYWbA/VIXj0MPPm6xKay56tVMiL1FkRpDuRndiVPi4sj1D1lVGl7YQ0kQ8xy7JA1ffqbfDOP2H+Cf9m4KMTr/yzpkpG8VadxUBMGlT1I=
+	 MIME-Version; b=l+DFEr1SiRl4w9tVSyCwyqqOjruBwukIFx8HzTynDcyD+vJhwSCYGquAiF+pDbnijsYxeGlc4aWeHEwdOp3gVx+L30P+4BJHKqecugHT7XtU3oAe1QcRRExSwQrMgRvAfzUmxdH7RWVOiOcK2x2GSJ/ioOmJbsbKymP+teBCBcg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 44BAB143D;
-	Mon,  9 Dec 2024 01:51:14 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF86E143D;
+	Mon,  9 Dec 2024 01:51:18 -0800 (PST)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B6F33F720;
-	Mon,  9 Dec 2024 01:50:44 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C5A5E3F720;
+	Mon,  9 Dec 2024 01:50:48 -0800 (PST)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org
 Cc: linux-kernel@vger.kernel.org,
@@ -33,9 +33,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH 03/14] selftests/mm: Fix strncpy() length
-Date: Mon,  9 Dec 2024 09:50:08 +0000
-Message-ID: <20241209095019.1732120-4-kevin.brodsky@arm.com>
+Subject: [PATCH 05/14] selftests/mm: Build with -O2
+Date: Mon,  9 Dec 2024 09:50:10 +0000
+Message-ID: <20241209095019.1732120-6-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241209095019.1732120-1-kevin.brodsky@arm.com>
 References: <20241209095019.1732120-1-kevin.brodsky@arm.com>
@@ -47,28 +47,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-GCC complains (with -O2) that the length is equal to the destination
-size, which is indeed invalid. Subtract 1 from the size of the array
-to leave room for '\0'.
+The mm kselftests are currently built with no optimisation (-O0).
+It's unclear why, and besides being obviously suboptimal, this also
+prevents the pkeys tests from working as intended. Let's build all
+the tests with -O2.
 
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- tools/testing/selftests/mm/write_to_hugetlbfs.c | 2 +-
+ tools/testing/selftests/mm/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/write_to_hugetlbfs.c b/tools/testing/selftests/mm/write_to_hugetlbfs.c
-index 1289d311efd7..34c91f7e6128 100644
---- a/tools/testing/selftests/mm/write_to_hugetlbfs.c
-+++ b/tools/testing/selftests/mm/write_to_hugetlbfs.c
-@@ -89,7 +89,7 @@ int main(int argc, char **argv)
- 			size = atoi(optarg);
- 			break;
- 		case 'p':
--			strncpy(path, optarg, sizeof(path));
-+			strncpy(path, optarg, sizeof(path) - 1);
- 			break;
- 		case 'm':
- 			if (atoi(optarg) >= MAX_METHOD) {
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 3de23ea4663f..814b17a43385 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -33,7 +33,7 @@ endif
+ # LDLIBS.
+ MAKEFLAGS += --no-builtin-rules
+ 
+-CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
++CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
+ LDLIBS = -lrt -lpthread -lm
+ 
+ KDIR ?= /lib/modules/$(shell uname -r)/build
 -- 
 2.47.0
 
