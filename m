@@ -1,57 +1,66 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26281A4F09;
-	Mon,  9 Dec 2024 18:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733770621; cv=pass; b=W34GeqpiXSjjoRbNyVXdDpZmOv+rHRGOEV5G0ahpHOpGdUvxJO5cVpA9h/HLClPDuQS9T2D53oCdBzMPD43+aRF40OKZx/gHmdNgcyWc7w/VbjQr/9r4yJ+ufN4x5ChRk/CndtThlVEE538nrwN9Ct1+AMQMZUM0ivnpB4OOYG8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733770621; c=relaxed/simple;
-	bh=6mdN1fbVqo2QWHmtlXQA3EN2b/wbW7NAaFcG1t76tgQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=c305NqJH5E6JaEchCCPm+OlbJIUAsCBPPpJnTN73lqUH3cCzglJD7K+2/gzN2F9KzU5NkYixED79uCHvCD837XWc+vhAHGAF21pGoxXH+yJwtGsKkZqXL2O1ryft1nOn1FHBTJ9MFlXTCk/KzkTmXy64edS9joDtjx0x6XYlBXw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=jU/hGAvy; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE1919924A;
+	Mon,  9 Dec 2024 18:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733770776; cv=none; b=XLHR+pqKaj5ljSrbdhOyckdQDoTAmV1KhQWDQu7dVO4REqRA3KNXDjc4GYqql+CqbiR0yW4kUTLGt6Af3jetzkrqc3jevdWODt+JzVw9FHk1fFODqd9zsoWrWf6B0WHPUbxyWmlniNCGn21d1edQcARsz2voiTQOSFWUyMJvmpI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733770776; c=relaxed/simple;
+	bh=JvVmg1UN/TaLoMpuByeMdl8BxvJCfzEncRZ/E8RvE98=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=of5tjisw8r8dVl9gPgBdFML+WrAApJ2d5977YmaXR8Kws2ePgbAfrU+TVUZFqaQUXIwWQt0Y2uP54+Yr027IrPGuNfwGzkH5BMjkEIXUL9DhyPVoAv5SkefRhZeY8YFoXhJ7KtuBHjK9mb2YUNMDJZoV6LjcBFOKNTUhVGJP9Yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=rA7/pcdf; arc=none smtp.client-ip=4.36.192.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="jU/hGAvy"
-ARC-Seal: i=1; a=rsa-sha256; t=1733770601; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=J1b3J2MBW2s5pQ0sdLlOCraSJOvBRS+BSy9kqQYqjxN+1EcmZg167vj5AuBVGCPcbFQ564GuHMeZdryOYu8K4Fm+QIDerIvXarTBobsJ6O9c7XzUqjX80muDWw56L3RJK19MhjbyDDrip6ZCL1IA4UsDk5fMIreZrs0+MYOrqlI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1733770601; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=RP+RJMd3ZtnBxFIpa2C1GgSta2qA552hwg7OkTPrM7M=; 
-	b=VyH0pYocNjSUNPgcx7XMBTuiHBAL6FkyuZ13qc7m1+t4/DL5fgw+TGWlWhnLvXTysKfjSxrJYpkCJZVkd7a+mT1GyB1sM2qTeCoHqM6e7NTEqglU4ntXpLPhBpNY83g709UTPR7DvAfX5+lDm9Yu7qaatuhungnhPMBzb0AJCdw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
-	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1733770601;
-	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=RP+RJMd3ZtnBxFIpa2C1GgSta2qA552hwg7OkTPrM7M=;
-	b=jU/hGAvyJw7K4UuMi0PGCYaLQ+l0fjDgYZBaWrtSIITwIbuxJhjJi6IxRtZjyTdq
-	Mzs3ojJ3fpUmWNUmhTo6Vq00fAB7nZrW+wSYfP1/VnqBWFsdR/QPZaM4eo6aHB2hPAG
-	HbkC2jp24YrGzCI+ESxIRt27Em++BUkMKgj9Qq8E=
-Received: by mx.zohomail.com with SMTPS id 1733770599930283.09919285178967;
-	Mon, 9 Dec 2024 10:56:39 -0800 (PST)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	David Hildenbrand <david@redhat.com>,
-	linux-mm@kvack.org,
+	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="rA7/pcdf"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=codeweavers.com; s=s1; h=Content-Transfer-Encoding:MIME-Version:References:
+	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=lYFNZhuVigdg2tLeh5rrT9NNlUPQrUYIEI4aFbYYiYM=; b=rA7/pcdf7JqQnRIh8dUJHkjn/P
+	Bw6feVBUSrl7BwEL+d0iQwrLI0aI/aipgMX9tKpRjiiU2fAGs+uUBoVjUTNacfRx83l2w3TtT/THe
+	niS9MaqX1E7OnIZrseT3jlutDzr+GTUDWI+vSZZXJ5+vN8RNMxLNtYxeqN0JXbTyda0quNr1W8D0z
+	m+XhiCLhVSGhMPzN8YsTCDojuOCThiI9knix98jxdI29kQBf1Ju/jF4CfXyUGywdvPzWGgUUNCDGi
+	VEeB+mnKB0/NKIeLI4vdkhs+Dkb+kRtZy+pYMJfOaN7e3hMPR+EcS4S/ITTN9Mic40haWInDwcKoM
+	avd6TTSA==;
+Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
+	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <zfigura@codeweavers.com>)
+	id 1tKiyd-001Gd5-28;
+	Mon, 09 Dec 2024 12:59:27 -0600
+From: Elizabeth Figura <zfigura@codeweavers.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	wine-devel@winehq.org,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Arkadiusz Hiler <ahiler@codeweavers.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com
-Subject: [PATCH 4/4] selftests/mm: mremap_test: Remove unused variable and type mismatches
-Date: Mon,  9 Dec 2024 23:56:24 +0500
-Message-Id: <20241209185624.2245158-5-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241209185624.2245158-1-usama.anjum@collabora.com>
-References: <20241209185624.2245158-1-usama.anjum@collabora.com>
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Elizabeth Figura <zfigura@codeweavers.com>
+Subject: [PATCH v6 17/28] selftests: ntsync: Add some tests for NTSYNC_IOC_WAIT_ALL.
+Date: Mon,  9 Dec 2024 12:58:53 -0600
+Message-ID: <20241209185904.507350-18-zfigura@codeweavers.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241209185904.507350-1-zfigura@codeweavers.com>
+References: <20241209185904.507350-1-zfigura@codeweavers.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,83 +68,141 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-Remove unused variable and fix type mismatches.
+Test basic synchronous functionality of NTSYNC_IOC_WAIT_ALL, and when objects
+are considered simultaneously signaled.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
 ---
- tools/testing/selftests/mm/mremap_test.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ .../testing/selftests/drivers/ntsync/ntsync.c | 99 ++++++++++++++++++-
+ 1 file changed, 97 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 5a3a9bcba6404..d207a52f2b5be 100644
---- a/tools/testing/selftests/mm/mremap_test.c
-+++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -34,7 +34,7 @@ struct config {
- 	unsigned long long dest_alignment;
- 	unsigned long long region_size;
- 	int overlapping;
--	int dest_preamble_size;
-+	unsigned int dest_preamble_size;
- };
+diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
+index 40ad8cbd3138..c0f372167557 100644
+--- a/tools/testing/selftests/drivers/ntsync/ntsync.c
++++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
+@@ -73,7 +73,8 @@ static int unlock_mutex(int mutex, __u32 owner, __u32 *count)
+ 	return ret;
+ }
  
- struct test {
-@@ -328,7 +328,7 @@ static void mremap_move_within_range(unsigned int pattern_seed, char *rand_addr)
+-static int wait_any(int fd, __u32 count, const int *objs, __u32 owner, __u32 *index)
++static int wait_objs(int fd, unsigned long request, __u32 count,
++		     const int *objs, __u32 owner, __u32 *index)
  {
- 	char *test_name = "mremap mremap move within range";
- 	void *src, *dest;
--	int i, success = 1;
-+	unsigned int i, success = 1;
+ 	struct ntsync_wait_args args = {0};
+ 	struct timespec timeout;
+@@ -86,11 +87,21 @@ static int wait_any(int fd, __u32 count, const int *objs, __u32 owner, __u32 *in
+ 	args.objs = (uintptr_t)objs;
+ 	args.owner = owner;
+ 	args.index = 0xdeadbeef;
+-	ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &args);
++	ret = ioctl(fd, request, &args);
+ 	*index = args.index;
+ 	return ret;
+ }
  
- 	size_t size = SIZE_MB(20);
- 	void *ptr = mmap(NULL, size, PROT_READ | PROT_WRITE,
-@@ -569,7 +569,7 @@ static void mremap_move_1mb_from_start(unsigned int pattern_seed,
++static int wait_any(int fd, __u32 count, const int *objs, __u32 owner, __u32 *index)
++{
++	return wait_objs(fd, NTSYNC_IOC_WAIT_ANY, count, objs, owner, index);
++}
++
++static int wait_all(int fd, __u32 count, const int *objs, __u32 owner, __u32 *index)
++{
++	return wait_objs(fd, NTSYNC_IOC_WAIT_ALL, count, objs, owner, index);
++}
++
+ TEST(semaphore_state)
  {
- 	char *test_name = "mremap move 1mb from start at 1MB+256KB aligned src";
- 	void *src = NULL, *dest = NULL;
--	int i, success = 1;
-+	unsigned int i, success = 1;
+ 	struct ntsync_sem_args sem_args;
+@@ -461,4 +472,88 @@ TEST(test_wait_any)
+ 	close(fd);
+ }
  
- 	/* Config to reuse get_source_mapping() to do an aligned mmap. */
- 	struct config c = {
-@@ -636,7 +636,7 @@ static void mremap_move_1mb_from_start(unsigned int pattern_seed,
- 
- static void run_mremap_test_case(struct test test_case, int *failures,
- 				 unsigned int threshold_mb,
--				 unsigned int pattern_seed, char *rand_addr)
-+				 char *rand_addr)
- {
- 	long long remap_time = remap_region(test_case.config, threshold_mb,
- 					    rand_addr);
-@@ -708,7 +708,8 @@ static int parse_args(int argc, char **argv, unsigned int *threshold_mb,
- int main(int argc, char **argv)
- {
- 	int failures = 0;
--	int i, run_perf_tests;
-+	unsigned int i;
-+	int run_perf_tests;
- 	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
- 
- 	/* hard-coded test configs */
-@@ -831,7 +832,7 @@ int main(int argc, char **argv)
- 
- 	for (i = 0; i < ARRAY_SIZE(test_cases); i++)
- 		run_mremap_test_case(test_cases[i], &failures, threshold_mb,
--				     pattern_seed, rand_addr);
-+				     rand_addr);
- 
- 	maps_fp = fopen("/proc/self/maps", "r");
- 
-@@ -853,7 +854,7 @@ int main(int argc, char **argv)
- 		 "mremap HAVE_MOVE_PMD/PUD optimization time comparison for 1GB region:");
- 		for (i = 0; i < ARRAY_SIZE(perf_test_cases); i++)
- 			run_mremap_test_case(perf_test_cases[i], &failures,
--					     threshold_mb, pattern_seed,
-+					     threshold_mb,
- 					     rand_addr);
- 	}
- 
++TEST(test_wait_all)
++{
++	struct ntsync_mutex_args mutex_args = {0};
++	struct ntsync_sem_args sem_args = {0};
++	__u32 owner, index, count;
++	int objs[2], fd, ret;
++
++	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
++	ASSERT_LE(0, fd);
++
++	sem_args.count = 2;
++	sem_args.max = 3;
++	sem_args.sem = 0xdeadbeef;
++	ret = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
++	EXPECT_EQ(0, ret);
++	EXPECT_NE(0xdeadbeef, sem_args.sem);
++
++	mutex_args.owner = 0;
++	mutex_args.count = 0;
++	mutex_args.mutex = 0xdeadbeef;
++	ret = ioctl(fd, NTSYNC_IOC_CREATE_MUTEX, &mutex_args);
++	EXPECT_EQ(0, ret);
++	EXPECT_NE(0xdeadbeef, mutex_args.mutex);
++
++	objs[0] = sem_args.sem;
++	objs[1] = mutex_args.mutex;
++
++	ret = wait_all(fd, 2, objs, 123, &index);
++	EXPECT_EQ(0, ret);
++	EXPECT_EQ(0, index);
++	check_sem_state(sem_args.sem, 1, 3);
++	check_mutex_state(mutex_args.mutex, 1, 123);
++
++	ret = wait_all(fd, 2, objs, 456, &index);
++	EXPECT_EQ(-1, ret);
++	EXPECT_EQ(ETIMEDOUT, errno);
++	check_sem_state(sem_args.sem, 1, 3);
++	check_mutex_state(mutex_args.mutex, 1, 123);
++
++	ret = wait_all(fd, 2, objs, 123, &index);
++	EXPECT_EQ(0, ret);
++	EXPECT_EQ(0, index);
++	check_sem_state(sem_args.sem, 0, 3);
++	check_mutex_state(mutex_args.mutex, 2, 123);
++
++	ret = wait_all(fd, 2, objs, 123, &index);
++	EXPECT_EQ(-1, ret);
++	EXPECT_EQ(ETIMEDOUT, errno);
++	check_sem_state(sem_args.sem, 0, 3);
++	check_mutex_state(mutex_args.mutex, 2, 123);
++
++	count = 3;
++	ret = post_sem(sem_args.sem, &count);
++	EXPECT_EQ(0, ret);
++	EXPECT_EQ(0, count);
++
++	ret = wait_all(fd, 2, objs, 123, &index);
++	EXPECT_EQ(0, ret);
++	EXPECT_EQ(0, index);
++	check_sem_state(sem_args.sem, 2, 3);
++	check_mutex_state(mutex_args.mutex, 3, 123);
++
++	owner = 123;
++	ret = ioctl(mutex_args.mutex, NTSYNC_IOC_MUTEX_KILL, &owner);
++	EXPECT_EQ(0, ret);
++
++	ret = wait_all(fd, 2, objs, 123, &index);
++	EXPECT_EQ(-1, ret);
++	EXPECT_EQ(EOWNERDEAD, errno);
++	check_sem_state(sem_args.sem, 1, 3);
++	check_mutex_state(mutex_args.mutex, 1, 123);
++
++	/* test waiting on the same object twice */
++	objs[0] = objs[1] = sem_args.sem;
++	ret = wait_all(fd, 2, objs, 123, &index);
++	EXPECT_EQ(-1, ret);
++	EXPECT_EQ(EINVAL, errno);
++
++	close(sem_args.sem);
++	close(mutex_args.mutex);
++
++	close(fd);
++}
++
+ TEST_HARNESS_MAIN
 -- 
-2.39.5
+2.45.2
 
