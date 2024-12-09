@@ -1,23 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5785421571F;
-	Mon,  9 Dec 2024 09:50:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22746216E24;
+	Mon,  9 Dec 2024 09:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733737853; cv=none; b=j70fB+suOOj8c9HnNMYwnGiHTfe1bsWxEngJCZT8nBDWkvq6/d5gllFqgEKboywwp5khuVONodbeiU+zXpwJ1o0dCXuYxWJZG6XvO3WZXZ0Wxeo5JjMZIbj+GN5z0CpHWq9SFRycS0FAQMo3f67vZYZgHyzwbhOD/lGsHiX4c+I=
+	t=1733737854; cv=none; b=Lj3JvDMZAxuqwGK8/nxJap4mzGr/TENnu7NGAjsaoSrEbqxvDXzCrgGetZWMbqHSZ3vjQ/pIjZU+aip3VGDZX/G1fKcNoIifYBugnm8m90EwxpS0NWi8d7kSEakN3cYMFuRYo6ftnvHdMytSsoccWSEQ10D/JqrF8CmSa1EhjRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733737853; c=relaxed/simple;
-	bh=K2iVTYpscgvT7NY/pb7DCGLxdnqWe+rf0iSHLzC5vac=;
+	s=arc-20240116; t=1733737854; c=relaxed/simple;
+	bh=No2G2MlkIqJPjup1+11Pz23i437KcGkyXnPUa6UJJWs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l+DFEr1SiRl4w9tVSyCwyqqOjruBwukIFx8HzTynDcyD+vJhwSCYGquAiF+pDbnijsYxeGlc4aWeHEwdOp3gVx+L30P+4BJHKqecugHT7XtU3oAe1QcRRExSwQrMgRvAfzUmxdH7RWVOiOcK2x2GSJ/ioOmJbsbKymP+teBCBcg=
+	 MIME-Version; b=IRrYLT2S7ALjVt9y1jq76HLh8OZw/k+wvI5BT2wCfhxcngcedxSM4X90Y1Rp32LRFj9xw8BEiifL7cEIW5bWeYCaC4206lrbrhhjAkZIHzmOeulYtumqCfZgwdDavXKRrj3cYhba8w0QPSFgSzQHrODz2atok64C6403+uOmMAo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF86E143D;
-	Mon,  9 Dec 2024 01:51:18 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89FB5113E;
+	Mon,  9 Dec 2024 01:51:16 -0800 (PST)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C5A5E3F720;
-	Mon,  9 Dec 2024 01:50:48 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 80A133F720;
+	Mon,  9 Dec 2024 01:50:46 -0800 (PST)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org
 Cc: linux-kernel@vger.kernel.org,
@@ -33,9 +33,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH 05/14] selftests/mm: Build with -O2
-Date: Mon,  9 Dec 2024 09:50:10 +0000
-Message-ID: <20241209095019.1732120-6-kevin.brodsky@arm.com>
+Subject: [PATCH 04/14] selftests/mm: Fix -Warray-bounds warnings in pkey_sighandler_tests
+Date: Mon,  9 Dec 2024 09:50:09 +0000
+Message-ID: <20241209095019.1732120-5-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241209095019.1732120-1-kevin.brodsky@arm.com>
 References: <20241209095019.1732120-1-kevin.brodsky@arm.com>
@@ -47,29 +47,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The mm kselftests are currently built with no optimisation (-O0).
-It's unclear why, and besides being obviously suboptimal, this also
-prevents the pkeys tests from working as intended. Let's build all
-the tests with -O2.
+GCC doesn't like dereferencing a pointer set to 0x1 (when building
+at -O2):
+
+pkey_sighandler_tests.c:166:9: warning: array subscript 0 is outside array bounds of 'int[0]' [-Warray-bounds=]
+  166 |         *(int *) (0x1) = 1;
+      |         ^~~~~~~~~~~~~~
+cc1: note: source object is likely at address zero
+
+Using NULL instead seems to make it happy. This should make no
+difference in practice (SIGSEGV with SEGV_MAPERR will be the outcome
+regardless), we just need to update the expected si_addr.
 
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- tools/testing/selftests/mm/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/mm/pkey_sighandler_tests.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 3de23ea4663f..814b17a43385 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -33,7 +33,7 @@ endif
- # LDLIBS.
- MAKEFLAGS += --no-builtin-rules
+diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+index c593a426341c..e7b91794f184 100644
+--- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
++++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+@@ -163,7 +163,7 @@ static void *thread_segv_with_pkey0_disabled(void *ptr)
+ 	__write_pkey_reg(pkey_reg_restrictive_default());
  
--CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
-+CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
- LDLIBS = -lrt -lpthread -lm
+ 	/* Segfault (with SEGV_MAPERR) */
+-	*(int *) (0x1) = 1;
++	*(int *)NULL = 1;
+ 	return NULL;
+ }
  
- KDIR ?= /lib/modules/$(shell uname -r)/build
+@@ -179,7 +179,6 @@ static void *thread_segv_pkuerr_stack(void *ptr)
+ static void *thread_segv_maperr_ptr(void *ptr)
+ {
+ 	stack_t *stack = ptr;
+-	int *bad = (int *)1;
+ 	u64 pkey_reg;
+ 
+ 	/*
+@@ -195,7 +194,7 @@ static void *thread_segv_maperr_ptr(void *ptr)
+ 	__write_pkey_reg(pkey_reg);
+ 
+ 	/* Segfault */
+-	*bad = 1;
++	*(int *)NULL = 1;
+ 	syscall_raw(SYS_exit, 0, 0, 0, 0, 0, 0);
+ 	return NULL;
+ }
+@@ -234,7 +233,7 @@ static void test_sigsegv_handler_with_pkey0_disabled(void)
+ 
+ 	ksft_test_result(siginfo.si_signo == SIGSEGV &&
+ 			 siginfo.si_code == SEGV_MAPERR &&
+-			 siginfo.si_addr == (void *)1,
++			 siginfo.si_addr == NULL,
+ 			 "%s\n", __func__);
+ }
+ 
+@@ -349,7 +348,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
+ 
+ 	ksft_test_result(siginfo.si_signo == SIGSEGV &&
+ 			 siginfo.si_code == SEGV_MAPERR &&
+-			 siginfo.si_addr == (void *)1,
++			 siginfo.si_addr == NULL,
+ 			 "%s\n", __func__);
+ }
+ 
 -- 
 2.47.0
 
