@@ -1,177 +1,364 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8651D555;
-	Mon,  9 Dec 2024 06:57:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079A0215708
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Dec 2024 08:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733727479; cv=none; b=X5QMKanswM7uSYEBiJL7jooQTbW7e1L9uG6TZ6eZ1P22VMrpKcK9T8SSzwtZsBjLB6yCkZEycnxV5M/ST+HEChyD4ylUCFjrWtYbv8ibcoAVdhMpqSOwT+S15TwoC55aAADnug2hCEIn+dhFZOgyFLw+69bnZCiIR78TkpmI0/0=
+	t=1733734384; cv=none; b=KDUIUBydqSNt2J46cimt/guxu5O3dTOAzxC2vjtXFGn1x0DBPaiNjfbaexTEwj1V/BbbwvFbvhsSkGTh9QeeTC9IcjUQQf5BSwayVOp/qtz6Gafmio2t8Ou+wOMH+0OkJ/hjGKCjVWSVlJYsHCN48AEK5TgH0759Foyy9dIXKA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733727479; c=relaxed/simple;
-	bh=qe6Udq2O6ylQ7lKCDT+058J/wzrj9nl+5v4NIjILIzw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VM/HelCmyOaLm9umBGkIM8O5IftiEfnfGwgDVUbr+iuQmZ2zcaiTq9lLhjyDKasGMXOVhDfrg7I/NC+urfMnrBJ/SPDAtCa9ehhFBnTYz2KAF24GmLoZrgvzXThkzO8KzI0ZrJFI/RcM6qC38gqfRvlVDsU9txwyuFpp2481/E8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BK+mrXeb; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1733734384; c=relaxed/simple;
+	bh=5Mo7kUsSthjf2pTKVTWYhiDzbVmrYuPCk/LZcuF8sJw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Vl19WF43akw9Xn36AX3vH1jyv9dWSHb3WghR6RZEl9M+o67yJxkwc8kvPsZgo8GMrgiLp5JagEfcGk14BgKg/jc659GInkYTFhy0n+1v8OPW1Pu8PXY1YrpFqigjrn7hs87R2Jgs/JpGr7rJqgDxehV1zcRn7vOQwNYlLqosoNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=f7lb3JCy; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BK+mrXeb"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B8MotJN008466;
-	Mon, 9 Dec 2024 06:57:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=6vMnIg568BJtA4W/JJ6yBSKxv2h8U/loKiehbM+EH
-	Z0=; b=BK+mrXebLKo32XdeUVs2F6OhU0s3/LflbVT0YrqOzjnu2cAnV15xXgd/1
-	4/e0UeW+HBzx8CQvDqKsjKk1IuzGpBq8pBldtdA9D5ZUik2pwJVIuqf9fAHpDK6E
-	HRwfxyd3/iTjNcW3o+6y3bAVmRKDW0HpsEnBfmTT82W/ofYXU4+Vop6pTbu7mhKj
-	u9ha03SxsTMOhxmsYkxVxUOImrEzJG5vgIhVpvh0bGld0kYyOTRVLu8Ga5gbpx1F
-	KikVS/lwdOaQhTj8bko8L469TwunhVlNiDt1x62hFSYsIA/uD6jf0gq9Udv5FwBP
-	bHd+pE28v2Jnd+6LCcxILNHhwIj6Q==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ce0x6vxb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Dec 2024 06:57:28 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4B96m85K005033;
-	Mon, 9 Dec 2024 06:57:27 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ce0x6vx7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Dec 2024 06:57:27 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4B96HbH5032496;
-	Mon, 9 Dec 2024 06:57:26 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43d1pmwcqh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Dec 2024 06:57:26 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4B96vOVP50856424
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 9 Dec 2024 06:57:24 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7A3192004B;
-	Mon,  9 Dec 2024 06:57:24 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 87B0C2004E;
-	Mon,  9 Dec 2024 06:57:21 +0000 (GMT)
-Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.in.ibm.com (unknown [9.109.219.153])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  9 Dec 2024 06:57:21 +0000 (GMT)
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: ast@kernel.org, hbathini@linux.ibm.com, andrii@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
-        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
-Subject: [PATCH] selftests/bpf: Fix fill_link_info selftest on powerpc
-Date: Mon,  9 Dec 2024 12:27:20 +0530
-Message-ID: <20241209065720.234344-1-skb99@linux.ibm.com>
-X-Mailer: git-send-email 2.43.5
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="f7lb3JCy"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-434a766b475so39918905e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Dec 2024 00:53:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1733734380; x=1734339180; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cu6sYC1wFJqKW6IeUOOvDtfl64yeLylD4eKp3jSs1OQ=;
+        b=f7lb3JCy6K5QZnAVBrFzbxPXgAeqdJoCybgsc+RIeOC09o4nZF7XWyBHgEjJontxvZ
+         Izk8+8Doouk6qROTe32nHIQwb8y/l8xPKJGN7YBW0NGCEAzCp+sLSfqDzQTpCCgIVGpo
+         ta6Wo0iF4OStETD/RVT9yXfmP8FLOiZB53XAXGPU8H+06MpLwM0Ud2rQmug2TQgaetip
+         FrQ8BUEvJ6GzZDYGQHGhz3zDg2vYoB0BKg8BN2IY8S286JesQrzPrdM1LDLO0SbHUL5u
+         auJFfz+1RBUJpeIHjLveXjH8ld1aSQ6uzed6qR6qGWDCDkrhWhvo7JaOoo5cHdd4cim/
+         bp4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733734380; x=1734339180;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cu6sYC1wFJqKW6IeUOOvDtfl64yeLylD4eKp3jSs1OQ=;
+        b=wkYlYYL3ENYdd4S0OSupiyor0im8sE9BKdbeIRRvetGN/3+8OQ9eNm02c5NvIzamaE
+         vKWAaHU6VQGm6SqVSAUFjekBIvG+Yd3Vpg2ys1CXmNT3B/P9NVvVtRh+tyYsaTiEEQcn
+         SU0N5KWqKqKZfznO/gUKs2Fog+J08giRJid/8nAWuY5pWNVKdayj0W9p0zMUMUMjv4cU
+         eKp5n2mGPXL+Wpx8l6nvICiACscyH07a6Mm6PpAJlz1HA2G1uiOa96QU68kTfitfvQAP
+         nao/dbeBdrvQz3R68lea8ILaVZkk9kDiGDTpi+ureoj+OopFGySQUY6hdllHL0qdtZjQ
+         OKAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUXfv6IR14C6Np61kPh9zGem43dp3PwBF4ptFXFHjxoGMh6Fs6EO9W78nXfnOuCG2MxA1sy9h7Rx3m7S/FBQrg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7X6HAgYOK7RBvc0kT2V7Ypn5Wp1j8L6dGe2CpiI5vBD60gwzZ
+	qEP11CBI7JyW+1YNHwGa5d127wCP4kwE7u+KEO8vTFiFMwyJPdAXgqpgqZ61wkmJAYTZ0C6pYNn
+	U
+X-Gm-Gg: ASbGncsK9x0HHXO+Km1EavoVP9Sa2hy1SBsE4tDbONgu6hQe6d0mD5kLpejpxui6c+v
+	kshc/MFekd8Fb15Asr1oomVb9p25cavcsk4vxJDtKHnUevHp+ymb4DKazJzprHENgoKVLuPfZ1g
+	L+HjaLHdmqBczozPEgq3rvZW+USERP2GY0pa7FGEy9Lo0Tg+cInfWM+wndF6m13uBfnh8PPU+aJ
+	oWRy+FAjx+50Ci+2JGTlWw/Kikntj5cXO9yCXuJlAk/GNAAXkyQET/fdhoe
+X-Google-Smtp-Source: AGHT+IE3rEGH7cMPYOS0vBAgAgcbdOApg9Imz+cpYZ6XTXWPxRU/afdOHjaMFTHQiDSiu1dljGhnpg==
+X-Received: by 2002:a05:6000:709:b0:381:b68f:d14b with SMTP id ffacd0b85a97d-3862b3e7e9emr9230779f8f.45.1733734380016;
+        Mon, 09 Dec 2024 00:53:00 -0800 (PST)
+Received: from serenity.mandelbit.com ([2001:67c:2fbc:1:c60f:6f50:7258:1f7])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38621fbbea8sm12439844f8f.97.2024.12.09.00.52.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2024 00:52:59 -0800 (PST)
+From: Antonio Quartulli <antonio@openvpn.net>
+Date: Mon, 09 Dec 2024 09:53:10 +0100
+Subject: [PATCH net-next v14 01/22] net: introduce OpenVPN Data Channel
+ Offload (ovpn)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: EndXjGVOXSlKrwYrWNmh4Rw4xjAVbk-f
-X-Proofpoint-ORIG-GUID: oXQiw0sbMxZ9FHQllso9ETUFqqmEUX7S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 clxscore=1015 impostorscore=0 mlxscore=0 mlxlogscore=857
- priorityscore=1501 malwarescore=0 adultscore=0 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412090051
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241209-b4-ovpn-v14-1-ea243cf16417@openvpn.net>
+References: <20241209-b4-ovpn-v14-0-ea243cf16417@openvpn.net>
+In-Reply-To: <20241209-b4-ovpn-v14-0-ea243cf16417@openvpn.net>
+To: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Donald Hunter <donald.hunter@gmail.com>, 
+ Antonio Quartulli <antonio@openvpn.net>, Shuah Khan <shuah@kernel.org>, 
+ sd@queasysnail.net, ryazanov.s.a@gmail.com, 
+ Andrew Lunn <andrew+netdev@lunn.ch>
+Cc: Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, steffen.klassert@secunet.com, 
+ antony.antony@secunet.com
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8900; i=antonio@openvpn.net;
+ h=from:subject:message-id; bh=5Mo7kUsSthjf2pTKVTWYhiDzbVmrYuPCk/LZcuF8sJw=;
+ b=owEBbQGS/pANAwAIAQtw5TqgONWHAcsmYgBnVrASBasV6l3PqujfgzG+HCTQRgvTJYnRGJ1gG
+ 2+qkPvOHyOJATMEAAEIAB0WIQSZq9xs+NQS5N5fwPwLcOU6oDjVhwUCZ1awEgAKCRALcOU6oDjV
+ h6X6B/oDBlFHU/KDWaPAe+dehmHJI41naew7AZw8EEFn1GvDgV82LWe0hO1FgnjU55RyuadXf6x
+ wKeF5fNqUgtvcdXD23OGKoSS9PHk1s5HiWw5mEyVCO9eBPR7vy14O6Uc2P4vEm66bkxLYMGNLIm
+ 5CTbs6MHh7RKNdItRTcVgJxg2Xy6M9XnzEXSjleQo5ugxarR7b7IaKicslVpsmiOWQ3Gv9Fb8yc
+ VuQfMn7gEpgae6HIagCxXvuF94Ug0yf6SD6m30FkbsszXbezjBUAeZ3dROKjLzkn9AYNET2t35y
+ 1FTmUgxbsDwxNYIM95E+IZM8DawBlr5K+DsN9Gba9ClGGv0X
+X-Developer-Key: i=antonio@openvpn.net; a=openpgp;
+ fpr=CABDA1282017C267219885C748F0CCB68F59D14C
 
-With CONFIG_KPROBES_ON_FTRACE enabled on powerpc, ftrace_location_range
-returns ftrace location for bpf_fentry_test1 at offset of 4 bytes from
-function entry. This is because branch to _mcount function is at offset
-of 4 bytes in function profile sequence.
+OpenVPN is a userspace software existing since around 2005 that allows
+users to create secure tunnels.
 
-To fix this, add entry_offset of 4 bytes while verifying the address for
-kprobe entry address of bpf_fentry_test1 in verify_perf_link_info in
-selftest, when CONFIG_KPROBES_ON_FTRACE is enabled.
+So far OpenVPN has implemented all operations in userspace, which
+implies several back and forth between kernel and user land in order to
+process packets (encapsulate/decapsulate, encrypt/decrypt, rerouting..).
 
-Disassemble of bpf_fentry_test1:
+With `ovpn` we intend to move the fast path (data channel) entirely
+in kernel space and thus improve user measured throughput over the
+tunnel.
 
-c000000000e4b080 <bpf_fentry_test1>:
-c000000000e4b080:       a6 02 08 7c     mflr    r0
-c000000000e4b084:       b9 e2 22 4b     bl      c00000000007933c <_mcount>
-c000000000e4b088:       01 00 63 38     addi    r3,r3,1
-c000000000e4b08c:       b4 07 63 7c     extsw   r3,r3
-c000000000e4b090:       20 00 80 4e     blr
+`ovpn` is implemented as a simple virtual network device driver, that
+can be manipulated by means of the standard RTNL APIs. A device of kind
+`ovpn` allows only IPv4/6 traffic and can be of type:
+* P2P (peer-to-peer): any packet sent over the interface will be
+  encapsulated and transmitted to the other side (typical OpenVPN
+  client or peer-to-peer behaviour);
+* P2MP (point-to-multipoint): packets sent over the interface are
+  transmitted to peers based on existing routes (typical OpenVPN
+  server behaviour).
 
-When CONFIG_PPC_FTRACE_OUT_OF_LINE [1] is enabled, these function profile
-sequence is moved out of line with an unconditional branch at offset 0.
-So, the test works without altering the offset for
-'CONFIG_KPROBES_ON_FTRACE && CONFIG_PPC_FTRACE_OUT_OF_LINE' case.
+After the interface has been created, OpenVPN in userspace can
+configure it using a new Netlink API. Specifically it is possible
+to manage peers and their keys.
 
-Disassemble of bpf_fentry_test1:
+The OpenVPN control channel is multiplexed over the same transport
+socket by means of OP codes. Anything that is not DATA_V2 (OpenVPN
+OP code for data traffic) is sent to userspace and handled there.
+This way the `ovpn` codebase is kept as compact as possible while
+focusing on handling data traffic only (fast path).
 
-c000000000f95190 <bpf_fentry_test1>:
-c000000000f95190:       00 00 00 60     nop
-c000000000f95194:       01 00 63 38     addi    r3,r3,1
-c000000000f95198:       b4 07 63 7c     extsw   r3,r3
-c000000000f9519c:       20 00 80 4e     blr
+Any OpenVPN control feature (like cipher negotiation, TLS handshake,
+rekeying, etc.) is still fully handled by the userspace process.
 
-[1] https://lore.kernel.org/all/20241030070850.1361304-13-hbathini@linux.ibm.com/
+When userspace establishes a new connection with a peer, it first
+performs the handshake and then passes the socket to the `ovpn` kernel
+module, which takes ownership. From this moment on `ovpn` will handle
+data traffic for the new peer.
+When control packets are received on the link, they are forwarded to
+userspace through the same transport socket they were received on, as
+userspace is still listening to them.
 
-Fixes: 23cf7aa539dc ("selftests/bpf: Add selftest for fill_link_info")
-Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+Some events (like peer deletion) are sent to a Netlink multicast group.
+
+Although it wasn't easy to convince the community, `ovpn` implements
+only a limited number of the data-channel features supported by the
+userspace program.
+
+Each feature that made it to `ovpn` was attentively vetted to
+avoid carrying too much legacy along with us (and to give a clear cut to
+old and probalby-not-so-useful features).
+
+Notably, only encryption using AEAD ciphers (specifically
+ChaCha20Poly1305 and AES-GCM) was implemented. Supporting any other
+cipher out there was not deemed useful.
+
+Both UDP and TCP sockets are supported.
+
+As explained above, in case of P2MP mode, OpenVPN will use the main system
+routing table to decide which packet goes to which peer. This implies
+that no routing table was re-implemented in the `ovpn` kernel module.
+
+This kernel module can be enabled by selecting the CONFIG_OVPN entry
+in the networking drivers section.
+
+NOTE: this first patch introduces the very basic framework only.
+Features are then added patch by patch, however, although each patch
+will compile and possibly not break at runtime, only after having
+applied the full set it is expected to see the ovpn module fully working.
+
+Cc: steffen.klassert@secunet.com
+Cc: antony.antony@secunet.com
+Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
 ---
- .../selftests/bpf/prog_tests/fill_link_info.c       |  4 ++++
- .../selftests/bpf/progs/test_fill_link_info.c       | 13 ++++++++++---
- 2 files changed, 14 insertions(+), 3 deletions(-)
+ MAINTAINERS               |   8 ++++
+ drivers/net/Kconfig       |   7 +++
+ drivers/net/Makefile      |   1 +
+ drivers/net/ovpn/Makefile |  10 +++++
+ drivers/net/ovpn/main.c   | 112 ++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 138 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-index d50cbd804..e59af2aa6 100644
---- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-@@ -171,6 +171,10 @@ static void test_kprobe_fill_link_info(struct test_fill_link_info *skel,
- 		/* See also arch_adjust_kprobe_addr(). */
- 		if (skel->kconfig->CONFIG_X86_KERNEL_IBT)
- 			entry_offset = 4;
-+		if (skel->kconfig->CONFIG_PPC64 &&
-+		    skel->kconfig->CONFIG_KPROBES_ON_FTRACE &&
-+		    !skel->kconfig->CONFIG_PPC_FTRACE_OUT_OF_LINE)
-+			entry_offset = 4;
- 		err = verify_perf_link_info(link_fd, type, kprobe_addr, 0, entry_offset);
- 		ASSERT_OK(err, "verify_perf_link_info");
- 	} else {
-diff --git a/tools/testing/selftests/bpf/progs/test_fill_link_info.c b/tools/testing/selftests/bpf/progs/test_fill_link_info.c
-index 6afa83475..fac33a14f 100644
---- a/tools/testing/selftests/bpf/progs/test_fill_link_info.c
-+++ b/tools/testing/selftests/bpf/progs/test_fill_link_info.c
-@@ -6,13 +6,20 @@
- #include <stdbool.h>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 79756f2100e001177191b129c48cf49e90173a68..6126b7a37839f977750cb594d202a47e318191db 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17547,6 +17547,14 @@ F:	arch/openrisc/
+ F:	drivers/irqchip/irq-ompic.c
+ F:	drivers/irqchip/irq-or1k-*
  
- extern bool CONFIG_X86_KERNEL_IBT __kconfig __weak;
-+extern bool CONFIG_PPC_FTRACE_OUT_OF_LINE __kconfig __weak;
-+extern bool CONFIG_KPROBES_ON_FTRACE __kconfig __weak;
-+extern bool CONFIG_PPC64 __kconfig __weak;
++OPENVPN DATA CHANNEL OFFLOAD
++M:	Antonio Quartulli <antonio@openvpn.net>
++L:	openvpn-devel@lists.sourceforge.net (subscribers-only)
++L:	netdev@vger.kernel.org
++S:	Supported
++T:	git https://github.com/OpenVPN/linux-kernel-ovpn.git
++F:	drivers/net/ovpn/
++
+ OPENVSWITCH
+ M:	Pravin B Shelar <pshelar@ovn.org>
+ L:	netdev@vger.kernel.org
+diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+index 1fd5acdc73c6af0e1a861867039c3624fc618e25..a7c5c166f9ced748d73843f81efb802072e15434 100644
+--- a/drivers/net/Kconfig
++++ b/drivers/net/Kconfig
+@@ -115,6 +115,13 @@ config WIREGUARD_DEBUG
  
--/* This function is here to have CONFIG_X86_KERNEL_IBT
-- * used and added to object BTF.
-+/* This function is here to have CONFIG_X86_KERNEL_IBT,
-+ * CONFIG_PPC_FTRACE_OUT_OF_LINE, CONFIG_KPROBES_ON_FTRACE,
-+ * CONFIG_PPC6 used and added to object BTF.
-  */
- int unused(void)
- {
--	return CONFIG_X86_KERNEL_IBT ? 0 : 1;
-+	return CONFIG_X86_KERNEL_IBT ||
-+			CONFIG_PPC_FTRACE_OUT_OF_LINE ||
-+			CONFIG_KPROBES_ON_FTRACE ||
-+			CONFIG_PPC64 ? 0 : 1;
- }
+ 	  Say N here unless you know what you're doing.
  
- SEC("kprobe")
++config OVPN
++	tristate "OpenVPN data channel offload"
++	depends on NET && INET
++	help
++	  This module enhances the performance of the OpenVPN userspace software
++	  by offloading the data channel processing to kernelspace.
++
+ config EQUALIZER
+ 	tristate "EQL (serial line load balancing) support"
+ 	help
+diff --git a/drivers/net/Makefile b/drivers/net/Makefile
+index 13743d0e83b5fde479e9b30ad736be402d880dee..5152b3330e28da7eaec821018a26c973bb33ce0c 100644
+--- a/drivers/net/Makefile
++++ b/drivers/net/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_IPVLAN) += ipvlan/
+ obj-$(CONFIG_IPVTAP) += ipvlan/
+ obj-$(CONFIG_DUMMY) += dummy.o
+ obj-$(CONFIG_WIREGUARD) += wireguard/
++obj-$(CONFIG_OVPN) += ovpn/
+ obj-$(CONFIG_EQUALIZER) += eql.o
+ obj-$(CONFIG_IFB) += ifb.o
+ obj-$(CONFIG_MACSEC) += macsec.o
+diff --git a/drivers/net/ovpn/Makefile b/drivers/net/ovpn/Makefile
+new file mode 100644
+index 0000000000000000000000000000000000000000..ae19cf445b29367da680e226f06a341c42c892c2
+--- /dev/null
++++ b/drivers/net/ovpn/Makefile
+@@ -0,0 +1,10 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# ovpn -- OpenVPN data channel offload in kernel space
++#
++# Copyright (C) 2020-2024 OpenVPN, Inc.
++#
++# Author:	Antonio Quartulli <antonio@openvpn.net>
++
++obj-$(CONFIG_OVPN) := ovpn.o
++ovpn-y += main.o
+diff --git a/drivers/net/ovpn/main.c b/drivers/net/ovpn/main.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..72c56e73771cdece22e50645b29c79962f06caf3
+--- /dev/null
++++ b/drivers/net/ovpn/main.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0
++/*  OpenVPN data channel offload
++ *
++ *  Copyright (C) 2020-2024 OpenVPN, Inc.
++ *
++ *  Author:	Antonio Quartulli <antonio@openvpn.net>
++ *		James Yonan <james@openvpn.net>
++ */
++
++#include <linux/module.h>
++#include <linux/netdevice.h>
++#include <net/rtnetlink.h>
++
++static const struct net_device_ops ovpn_netdev_ops = {
++};
++
++/**
++ * ovpn_dev_is_valid - check if the netdevice is of type 'ovpn'
++ * @dev: the interface to check
++ *
++ * Return: whether the netdevice is of type 'ovpn'
++ */
++static bool ovpn_dev_is_valid(const struct net_device *dev)
++{
++	return dev->netdev_ops == &ovpn_netdev_ops;
++}
++
++static int ovpn_newlink(struct net *src_net, struct net_device *dev,
++			struct nlattr *tb[], struct nlattr *data[],
++			struct netlink_ext_ack *extack)
++{
++	return -EOPNOTSUPP;
++}
++
++static struct rtnl_link_ops ovpn_link_ops = {
++	.kind = "ovpn",
++	.netns_refund = false,
++	.newlink = ovpn_newlink,
++	.dellink = unregister_netdevice_queue,
++};
++
++static int ovpn_netdev_notifier_call(struct notifier_block *nb,
++				     unsigned long state, void *ptr)
++{
++	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
++
++	if (!ovpn_dev_is_valid(dev))
++		return NOTIFY_DONE;
++
++	switch (state) {
++	case NETDEV_REGISTER:
++		/* add device to internal list for later destruction upon
++		 * unregistration
++		 */
++		break;
++	case NETDEV_UNREGISTER:
++		/* can be delivered multiple times, so check registered flag,
++		 * then destroy the interface
++		 */
++		break;
++	case NETDEV_POST_INIT:
++	case NETDEV_GOING_DOWN:
++	case NETDEV_DOWN:
++	case NETDEV_UP:
++	case NETDEV_PRE_UP:
++	default:
++		return NOTIFY_DONE;
++	}
++
++	return NOTIFY_OK;
++}
++
++static struct notifier_block ovpn_netdev_notifier = {
++	.notifier_call = ovpn_netdev_notifier_call,
++};
++
++static int __init ovpn_init(void)
++{
++	int err = register_netdevice_notifier(&ovpn_netdev_notifier);
++
++	if (err) {
++		pr_err("ovpn: can't register netdevice notifier: %d\n", err);
++		return err;
++	}
++
++	err = rtnl_link_register(&ovpn_link_ops);
++	if (err) {
++		pr_err("ovpn: can't register rtnl link ops: %d\n", err);
++		goto unreg_netdev;
++	}
++
++	return 0;
++
++unreg_netdev:
++	unregister_netdevice_notifier(&ovpn_netdev_notifier);
++	return err;
++}
++
++static __exit void ovpn_cleanup(void)
++{
++	rtnl_link_unregister(&ovpn_link_ops);
++	unregister_netdevice_notifier(&ovpn_netdev_notifier);
++
++	rcu_barrier();
++}
++
++module_init(ovpn_init);
++module_exit(ovpn_cleanup);
++
++MODULE_DESCRIPTION("OpenVPN data channel offload (ovpn)");
++MODULE_AUTHOR("(C) 2020-2024 OpenVPN, Inc.");
++MODULE_LICENSE("GPL");
+
 -- 
 2.45.2
 
