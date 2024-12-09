@@ -1,149 +1,106 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD15233157;
-	Mon,  9 Dec 2024 14:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432B71A238D;
+	Mon,  9 Dec 2024 14:04:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733753028; cv=none; b=sLNXim2TsGIGmtO94p9rs5aTowGjlLY1MLMQaSVgTnl9jwA3zw6DLHKx7Obffc9H85Q7Pb7PrOzyWLJWrVGlxtDlkyPCA3WAV/rRIWkEL1LUc95JuTK2EFpg2G2G6Rcl2tQOdL3i/XXlJcbmT3ECaQu0DsAmo+M6T2KwvB/1v7w=
+	t=1733753063; cv=none; b=gxAHqIADBOg74f4UFDwlhdXpI8kSqDRqH78BrLcGHPXpatA/IR7TmsZtRlYj8Q3LOEIQQXuNdm/qdEAMK7PmcGNWvZ/UU7xdUV2puOy8IteZTeiBfbdZjKCem6GJWcAOgNrSCeK7cgMohjEguXySJ+ETqoTvyTpw/zmb+Pq8VDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733753028; c=relaxed/simple;
-	bh=P+WesIXJWgwaVpGsZha80KW/I6PB+JZFQ4FU6cAXIU8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ArIedKRp2/Tyx/EaNAnqPi968LZTfezty9TyO9fKGmP6zYosBgUeRkRmDEXa11BP4bL9oydIPw/WG2zQwOXeeKloc+3pjm7rp4aGXn3wDOZI8zxSVlYqpdFKM8ws5Qgx3ilVdxef1XBzRq3dQ7oC7o9uA4dEL2/Io8i+mXt/Msg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bt18EpZh; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1733753063; c=relaxed/simple;
+	bh=Blh9M++NexbuUr8YjiL5Frn5yP0TgePe9v6IIz6PckE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YqoDOATOPfeJRCFvzOMT0dbO3RY1neL5xSBMHLnow1CMytxhg1S/s8ME3IEmjQ69krWIiEDWhoVxCgk91ga8jwQqAH9K7NULo+7eJdiTtr75woAU62lUpzqdxyjoKU8el3oMzikoioB7VGd/OJz5PRmgOzFEG5bNBvSIsX6xATc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e9NKN6As; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bt18EpZh"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20cf3e36a76so37998125ad.0;
-        Mon, 09 Dec 2024 06:03:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e9NKN6As"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5d3e6f6cf69so2819488a12.1;
+        Mon, 09 Dec 2024 06:04:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733753027; x=1734357827; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1733753060; x=1734357860; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gu2pXduYtokx49vUkdKLIncKvOPJKtJoZQ/PcO8iW+o=;
-        b=bt18EpZhbkmSZPipXdriXLve96flDYGauM4qfigG3cNVYzbTxBXTMv952cm1GBEMV0
-         2gUTOJVmeCzMal8tqKpXhzEsenw9Qqmb0pbcenlOvaLmp0qd+M4OxT2FYZ7JkJ2spg54
-         8yc/BIVbZNVTVcopnX+snSW9BRr+L/WbWCYLJqlaH28PUGmQ8/XUOkWIlIzCv/pf/HxD
-         y43a5SIrullzd5gPQ9GZgGwnaC23srEYaNuEpCpgdWmPErrvQL1zLEprmcPtxkl5eyC0
-         hsCBFNwiDJ7/3BShMqoTjYDDTm8aHWnvCcEBwYPhhxKTVAansN+gk7e+x242/DV5bfny
-         Tl0w==
+        bh=fRIB2nsp6XQvGTjRfj9gLmtwiHmX0VmfSp+/67N6bk4=;
+        b=e9NKN6Ash4BbhXwu05ZtZiH0myEAyZkuR14Yw0JrWIausskjZ/lHJcGV0DVyUvfCgg
+         y2JKhoaI3p/qifMiYEqx537nW+JoT3owQC+mMT0GPMCkmOxuwSHF9XU0jvoZ+GaBcwAk
+         wWTKNr2KvgW4i8R15fugP5W/s0McTJpY7hZsMdUlGE9olAzbyxrqEVF41TrELl96alae
+         Q8G5kGjdiBCuFFqE4F+SDRGZdcgZ0Yluj5by8RM62wbXr0gqXwtwL6VjKlcntVxsRAL6
+         WEAzKkTjqcAPhV4jMCEqo1yoOP0iizCEcmVdDwbBbaVRNccvydEtv5pNC5cf6pHqbQ7Y
+         lDSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733753027; x=1734357827;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1733753060; x=1734357860;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gu2pXduYtokx49vUkdKLIncKvOPJKtJoZQ/PcO8iW+o=;
-        b=WaRVeMi6rTxfZpD8KD6VMtfgJdyTaB6prZUX0iXmL02U4bg71rEWswh/0HwkMGYQw4
-         BDXLoJljMl5q+Ddre6Vh9beT/7wq1Rcf/sxxuMKeQHKk1GRtiCA6lWcmfwSN9XCJ+yUx
-         4rMsVwMvIHqAx/5Iiwk902FMfILFwQpPZYxRjFzq7LrYOnO6OMwMF0auaEgwu4/trEuC
-         EOMvO8FkOAgxcBFcGAgw4/5MtoKrVoHsyC5jtH6pm9sM5s4hvOvjiwA6TRtw7y5GEFJM
-         gKf1MjfrdQ/fDP0vF1mXNntIi947jD5ioySVOU9SBmDv4Bafc+7+JS+hz5cNih+zZdV/
-         NT4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU39ku/KKGyrX2XoVF/R5Ev9Hc0vJNFDlioVs8r9JZIRW5ClGYtdav2P79FGBkpSXRFurQ36TwWZpPN@vger.kernel.org, AJvYcCU5NvZPLg9Cfyzfu9hp1vjjZHSGNUsB7YMtVOqx71ZAV0dZeTUs98Vmvkvk7n+xYko0zWthzH9u27YiVQ==@vger.kernel.org, AJvYcCUX6A6vFfbC2ALAO2GuSIyDFqO9WBJMppBspVO9MbxyyeOZ1VFzGrkI8qoWqsaT8y3C6vM=@vger.kernel.org, AJvYcCUaG7UauKrwGX36zYp/PPfF77Kl4K9lMTKD4HXA3b+/MGDi9/qhfZJ7+MiZuE2K08VAMoKRY2/vAZ068Q==@vger.kernel.org, AJvYcCV1nkhu1teABx+bL6JIWi06PRePQz1AwQoab+ZwJL4p9UPXaOCnfGhlIQyFyOdKmp7TakzuBE6PSGOrbxC9g0M=@vger.kernel.org, AJvYcCVEhymsflfj29gWjgc4cjy8gDbagOp82LQuWCqgFTzArQhO74hCvtU/W4RoUJ9vI1kxtK9MPR+jn8KHuD7rR7vX@vger.kernel.org, AJvYcCVd0LvoF7VzMx51RHtire/P6AO8sg3tqvsK4ngNk3yObwNN3maYVraZt1Rb+Sjl8cT39eDad3PHUdoF7oCv@vger.kernel.org, AJvYcCWnPNACnb8LyuGqXX0khAAYkNGwGPlyWesKBfcsGU06h9YLQCI485/9XfGM2cHlEGND+vbqUZ+L3Ulu@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEKuKEBtpZMtvgFgl+FrmLZ4nujePKV7WEk2xZmQ+czajoM+jM
-	4qhL4/zoYYlI5fHh3y6Zg3BWsiOMimdJxVXdVo5+YZrcN4hxZLp1HC2iuabL8PM=
-X-Gm-Gg: ASbGnctj+KjhjJt+WH4VuqRvl/ULkouF7ZNUQIgs2cyFntEhY5r9EP0sNQUM/UtIeOS
-	cUvqwhKdZpUbrq1LtixO2hdVAEOXjbv0X81p+QbRx0VOgJkkiQhDvmXkEmpMhEEYASjg+b6n4EU
-	mk49DuHTSkdT82ztMy9iXhLfntGJ5EFyzayD4aRPcjuPFD/LrFUYLv2bhLd5Yx9OgKsxMabKb5T
-	cNmDFtJfSMTwnOQyfLqDCzgpADmHK0+CBTH+DMg1GlSrNw=
-X-Google-Smtp-Source: AGHT+IFvuzKQIZf1qkxZ4+Ci/Eeds3C/nB8ZqihF0Bnr/4C7RYL2k3LJsI5chnoI4Z2JG+UfbiRHQQ==
-X-Received: by 2002:a17:902:e5c5:b0:216:393b:23d4 with SMTP id d9443c01a7336-21669f993b4mr7567455ad.11.1733753026559;
-        Mon, 09 Dec 2024 06:03:46 -0800 (PST)
-Received: from nova-ws.. ([103.167.140.11])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-216221db645sm49605645ad.46.2024.12.09.06.02.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Dec 2024 06:03:45 -0800 (PST)
-From: Xiao Liang <shaw.leon@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	linux-rdma@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	osmocom-net-gprs@lists.osmocom.org,
-	bpf@vger.kernel.org,
-	linux-ppp@vger.kernel.org,
-	wireguard@lists.zx2c4.com,
-	linux-wireless@vger.kernel.org,
-	b.a.t.m.a.n@lists.open-mesh.org,
-	bridge@lists.linux.dev,
-	linux-wpan@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v5 2/5] rtnetlink: Lookup device in target netns when creating link
-Date: Mon,  9 Dec 2024 22:01:48 +0800
-Message-ID: <20241209140151.231257-3-shaw.leon@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241209140151.231257-1-shaw.leon@gmail.com>
-References: <20241209140151.231257-1-shaw.leon@gmail.com>
+        bh=fRIB2nsp6XQvGTjRfj9gLmtwiHmX0VmfSp+/67N6bk4=;
+        b=cv5F+9TNqui5j79m7ZoXCI4rDrFfIL+eWQV24je8OhnEkzXzld823E/nbYKz2fE2Ag
+         I8CXYrPWharOvUqh+/ZiWBZEspRURMC4Kle+bDLsh9Rje041roGByUmnvmNz5uhJ7M4m
+         FcIuofoSAqBV+2JFUCV6/hOM0yxr5eWxbwq6euQ4OQNx79Xaa6H288OLuGeAS1PEf4Rr
+         uWyvlzK6+mqNITDQy4stdlXAfapI+Qquceh6JH7Df1xUuu7SHPJ2nciyScyPNpZj+ytX
+         pAwS52iev8m9KPQl6UR1qkBx0J5UJRizqiKcYUb1E9+JSKJeQfTxQ4Z1JgQtg6t2S3av
+         8DvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV7NmQ2zgoZ7D/cbpes7wNUPNuLKZtERE6uzsKr/9iqDvIk4S87NiRJGBH0YgXRB1eF0/DQ5ky3wIeWXIydkRfU@vger.kernel.org, AJvYcCWYx/e75fjA4Wqu/GMVAYnO5BU9j0Zv3BG53aTl8U+7yIAilJbFHYp7DXfpfZDkVmCF1PUVky9d6Dnbj+c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YziFxAr5Gmhk/OeWmpF9+1BcMvZfbrGHfCNtErpGsXzxMfgshoB
+	OVE5i/hOxID+H3IKa5aMgm+JHa7AlG/M+/St3dTuWbaKl91tw+cyTAjkQVetyH7YWw+UDtI+JIR
+	y/y1lDzkBfvnnZu3+hdYOb5NP5d8=
+X-Gm-Gg: ASbGncs9YJYUOXkh+HvXSZbWQGmmwHZs0qQUQhWRjL1n4oX/iNITng8ZSbwoLGE8QkZ
+	PoCq6KwsevX9jdCD8a6qoho+9SkNqeX4=
+X-Google-Smtp-Source: AGHT+IF6X/kzxH3Ns+wbjh/5Xo1lmvVUUhvP4Yyf7YNVCDvPnVicgmfDSkqPzdtR5TSI3rJCAqzK2xJLJuc/ivp5hCk=
+X-Received: by 2002:a05:6402:11d3:b0:5d2:2768:4f10 with SMTP id
+ 4fb4d7f45d1cf-5d3be6fc21amr11979842a12.17.1733753060004; Mon, 09 Dec 2024
+ 06:04:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241209105237.10498-1-o451686892@gmail.com> <3279e669-1ee2-4792-9e10-8b40928de6b4@sirena.org.uk>
+ <CAHk0Hov5k37=MtTBLWTj+Dwm4EXE0xGJS1Uc8xgyLtJxusqsww@mail.gmail.com>
+ <c05f6ad8-2dc1-4ddb-b9c1-b2cddfe78819@sirena.org.uk> <CAHk0HotQ-=s+-FHh8pAOg10ivcRwqChG735qgDvuQd=4B1QQNA@mail.gmail.com>
+ <678a223f-c4c7-4752-84b0-609acaa33ad6@sirena.org.uk>
+In-Reply-To: <678a223f-c4c7-4752-84b0-609acaa33ad6@sirena.org.uk>
+From: Weizhao Ouyang <o451686892@gmail.com>
+Date: Mon, 9 Dec 2024 22:04:08 +0800
+Message-ID: <CAHk0Hour4i92j70+C-x7BNGFoLhDEYW-1prU=R6rAX9T9T7auA@mail.gmail.com>
+Subject: Re: [PATCH] kselftest/arm64: abi: fix SVCR detection
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When creating link, lookup for existing device in target net namespace
-instead of current one.
-For example, two links created by:
+On Mon, Dec 9, 2024 at 9:51=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
+e:
+>
+> On Mon, Dec 09, 2024 at 09:26:01PM +0800, Weizhao Ouyang wrote:
+>
+> > > If we don't have SME we should be skipping over all the SME code and
+> > > never even looking at the value of SVCR.  Looking at the current vers=
+ion
+> > > of the code it does that, it branches to check_sve_in if SME is not
+> > > enabled.
+>
+> > Yes we should skip it, this is just a minor tweak based on the
+> > current implementation, after all, we manually passed its value by
+> > svcr_in.
+>
+> It's a fairly trivial tweak to make...  in any case, it looks like we
+> also need the same change in the save path.
 
-  # ip link add dummy1 type dummy
-  # ip link add netns ns1 dummy1 type dummy
+Yeah. I have encountered this issue with both QEMU and FVP. I can
+help to add a check_sve_in similar to the fp testcase for the abi
+testcase.
 
-should have no conflict since they are in different namespaces.
+BR,
+Weizhao
 
-Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
----
- net/core/rtnetlink.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index ab5f201bf0ab..7855f81c917b 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -3851,20 +3851,26 @@ static int __rtnl_newlink(struct sk_buff *skb, struct nlmsghdr *nlh,
- {
- 	struct nlattr ** const tb = tbs->tb;
- 	struct net *net = sock_net(skb->sk);
-+	struct net *device_net;
- 	struct net_device *dev;
- 	struct ifinfomsg *ifm;
- 	bool link_specified;
- 
-+	/* When creating, lookup for existing device in target net namespace */
-+	device_net = (nlh->nlmsg_flags & NLM_F_CREATE) &&
-+		     (nlh->nlmsg_flags & NLM_F_EXCL) ?
-+		     tgt_net : net;
-+
- 	ifm = nlmsg_data(nlh);
- 	if (ifm->ifi_index > 0) {
- 		link_specified = true;
--		dev = __dev_get_by_index(net, ifm->ifi_index);
-+		dev = __dev_get_by_index(device_net, ifm->ifi_index);
- 	} else if (ifm->ifi_index < 0) {
- 		NL_SET_ERR_MSG(extack, "ifindex can't be negative");
- 		return -EINVAL;
- 	} else if (tb[IFLA_IFNAME] || tb[IFLA_ALT_IFNAME]) {
- 		link_specified = true;
--		dev = rtnl_dev_get(net, tb);
-+		dev = rtnl_dev_get(device_net, tb);
- 	} else {
- 		link_specified = false;
- 		dev = NULL;
--- 
-2.47.1
-
+>
+> > Which latest code version are you referring to? I think check_sve_in
+> > is in fp testcase, not in the abi testcase. (checked the -next tree)
+>
+> Ah, yes sorry.
