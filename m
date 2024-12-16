@@ -1,164 +1,197 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2061.outbound.protection.outlook.com [40.107.94.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250B91C5F01
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 11:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734347044; cv=none; b=DhrNJtYhz6siy2T5wDoJ/JWCuzkoiHNJNCpNFszAxUxD9WNx9NwAs78Zi4/DBb8RgXDzV0Y0M5o0rbS0KdZN52SDQ5CfYYzBYoldsrVK0pkRe5rgQ7OGgKXFLaAuPJyO1QEnRwvHSA9oG4hbuQ8X1fuMxApanQMevIo6BN5RwTw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734347044; c=relaxed/simple;
-	bh=S2OVesPPUfaLh56CfyznLDIQlxZOw94gkrloQEe3NGk=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References; b=NHtHn8ZocJaPITwlZIWFoFK4prcJ6gwsSKOIglYSSgoU4J2vUkPTPea8rRZnH9j7nA3xaC6vMokg41WPjGzIa8gKOjbsm2r2iyUy5NJL1JYtqaAXgnvZt9aDZvBnsBbfMc9cHZxDw6e/IposlN5O+SXdT84mb+KIUyNtmiJiMoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hRgZXaed; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1D0A937;
+	Mon, 16 Dec 2024 11:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734347196; cv=fail; b=m/fFl/okZJ5Ne06RjBD54oOw+U859q+kJC5ghYdi/5Vry+CkvtquPSC/tUNCms6pImyspTs1mUCGqWbKbcZ9DpAgKRnlkh5Vu++HFigG5b6zO1f6TL79XQp3ZU18VuTKOaGvVdV22FRdUJuxUr4cS3KutSBt0VDTZNWBsDZYblE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734347196; c=relaxed/simple;
+	bh=I4kQaw3a8LK2WhyzOdN3SM8hWwzRxbjfQ8STkENERJ0=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=JnrmOYMZ2PaXpP9eiT1HNWSV3gVyGh12SQj6SKq7OvOeUcthzQFwZt49jLEdelGVk/0pnOq+n/6HLhYBvwy0BvlK5OZa8dptJkvzuOefCgPTqc3fgs6wtdfwMLi/hJOVzFwPWeW/rbxqJMzHeLYhtLhKP1zjW7PZLrwm3ZZnQ1o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=utvvkf/o; arc=fail smtp.client-ip=40.107.94.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hRgZXaed"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2f1459b6f84so2598194a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 03:04:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734347042; x=1734951842; darn=vger.kernel.org;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gnyomrbbH71hy5x29CyLw5kngPIRQhxtjeFPjHZ4daA=;
-        b=hRgZXaedpxUyxgI4PTKXpNzNB9hDRsKgg7d9sPz17BMhSUHqBkyT9WaZODLupPYM5v
-         YmzVYlOy7TywA0LD7sv6QKwwNVm3CCvpe+7MiAgvEYimITlGhY3zULpec7DvNXmjazYN
-         nJTBr7nm2u3kA44NaB6G5PyMvH+N2H7gzy/VGlz74EGn6UzNjLPKE+V0Ek959oTnrao+
-         X9OFgPaxFErYBN299e+CRSl0QB5GvnEInsfEr+Z+5QuOVs4me/q0NEGioP0WU8r0REFD
-         +94F7fFTNGBmgqWhYUJDhAH4ThlTijJKIpIhiU07yAXW/l+ZMEjZbu8vhlFKVNsutIBe
-         9CFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734347042; x=1734951842;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gnyomrbbH71hy5x29CyLw5kngPIRQhxtjeFPjHZ4daA=;
-        b=Hp2iZw4DDqIqjyJ7FIjl3PXUlyDHmwK3+Q6dxPQXxdC3+TQgTwvCbJlSqUhPZsqQwX
-         Q+9NgXG45FkMNgD9udCPmlnJYpeP2GaKtlX1qfw/bGKAhZdbCidgebdM8ctKfRSNb9aJ
-         eNKLkJfsvU68xKYbRWe+2pOQlBl4rvIlcEH87tIFmOSo80dNqojaO6j7b0BaaLdvNi+h
-         VDtkkIpJvTLV9ldWhUlwpVIJcMA90lpVAaSYtMwkvFwanIVtK+pJl2uyLvyGuG9HzZ2Y
-         xKlK2T8LUPsWILxWefk2vVgqBCzehw2j6ZilKzhC/XgPzXtH8N3IteZKPWWmiRzNCTmM
-         CbBw==
-X-Forwarded-Encrypted: i=1; AJvYcCV/4HFDNcbjXAyDEwJ3RGJBbm8CF7ySOjJCXHoJh0rz6OW6FD8iym/oIhK2e2giA4Jcda0Sc2YePz7+jN69tbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOgdwgz75bYsC9OXHo2Y76Gwd9Z7Bgm1bmT3ebAMkOgJnP6ge2
-	AAEADjEuW64YMpBtkOc83kioYiyPtUU8TQKZHGBpegzw24vsugb2
-X-Gm-Gg: ASbGnctnAfD9t6IlHpdxlEYNlin/7JEuutfkz6LT3+Hk7alI+0V2dnUQHjlwHbQCXkc
-	3XV8doEwtCrfwJtISuuEbMxW+wKxH/jvbROJJd7+6Q8v5+UDlIfk7Ud49NJr9cdeC6L3UM6go2J
-	vtLNpH2KRlgxwRO1GY3hJTn29odQwCsur2COqvly1yC+4Mr8RCvY1v9z2Rce7fg6bdCKO6msRme
-	1ppd2YPo0mGqN/s8D3dsKc3kGVoWIp6PgU1JJpGBSFr7qEgKw==
-X-Google-Smtp-Source: AGHT+IHv/dKmYY49IAGHVjgEthrBcbNdF2QQcOvVyzK3tdGCnz0JYSPwnkBeaAuUqwtxjbmP0WyFLg==
-X-Received: by 2002:a17:90b:3902:b0:2ee:c91a:ad05 with SMTP id 98e67ed59e1d1-2f28fa55be2mr16492998a91.3.1734347042392;
-        Mon, 16 Dec 2024 03:04:02 -0800 (PST)
-Received: from dw-tp ([49.205.218.89])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f2a1e7e348sm4404198a91.8.2024.12.16.03.03.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2024 03:04:01 -0800 (PST)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: Madhavan Srinivasan <maddy@linux.ibm.com>, mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu, naveen@kernel.org, shuah@kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, Madhavan Srinivasan <maddy@linux.ibm.com>
-Subject: Re: [PATCH 3/3] selftest/powerpc/ptrace: Cleanup duplicate macro definitions
-In-Reply-To: <20241209151418.348085-3-maddy@linux.ibm.com>
-Date: Mon, 16 Dec 2024 16:27:03 +0530
-Message-ID: <87ldwf520w.fsf@gmail.com>
-References: <20241209151418.348085-1-maddy@linux.ibm.com> <20241209151418.348085-3-maddy@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="utvvkf/o"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hlU9xLUNHbFOd5Kwxm8IFP1hjqQUx50wgrwsXzHNPk071jsW8LB2tY2KqutsM2apadmSE5XgoY82Ij8flOzz5aoeHr7L9URZrH8yh48yEEfS5KJcc8POChd7sBKKPgR/uBrzoDV9VsWo9R93aYAJxQsB67BVXJQ/ZSZfYSKJ41XbZXYcoxhzLhCY1Lhtnzeglzf8BDfaOb+kgBRejI7riB5Otrp/pjDqIXmhcQR+T8mkcPVSILf5k+DVmPNc2tZMF7lear0tRCESGULX9C0WtTkoTTpKU640CfMiyOFwaS0ZoPuuZAOS9t23v5DnwFTJFxkUrpz3vSukSSviba204w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OsazjDhQS3m0K80OhpqEguTDU8s2/9ozFIHcD3WqPMo=;
+ b=u2VqvU7GaBh0bkY8hOybXuLJowCSYYO0TEMQV6Wsl0+lsxflAMvhy8CfW+VjyzcWkf77TCtHr/VxpOME7JWDcGtZ+XMyZINcB17OytdoeYQM6E36A/4BaEwLEDR/61sZ9j5drabWYe3IeBTxfbrTjtrHlCaiY8Zi7yHsPiob4BjjIQBYJRu80g/0G1yABSdaa6GCWoRaQ+yeBh1+ccE0AOkAVCUJH14L3Vu9jWaL1R89C6WzgvRgjtRYYyM76DX9GCdwEKh0wymEPCIrHbkX4zzgYu7SdkYLRcKtN1AEV52hw4OJb/ysOcGjqFjpN78ujoFKFvx17DJwnGEBCjhk2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OsazjDhQS3m0K80OhpqEguTDU8s2/9ozFIHcD3WqPMo=;
+ b=utvvkf/onGDQFx0VQDAjQ/3USpJ8ovZ3tP+BHbjGlL5ZaFy3GkLQxUtiM83GF3ji67E+CCy8MhWL64S4BT4v8xOS+qlcEHaRUOamqrrk8rN/On3GHAgRI3t3Y0dKzrpvxxmAYMKdOx57JqeFTCDcyLU954CGnn9ePlC1kf+hDC18zTwskVdvtrkCvbsOW/NhEcCydUvG0d5rwoh/tgXLljVedM/RXDlFwMreLvSDeFdS3LIjyUVFd0Q+b5oxBJYxQMLJGX2fzDXGxQjO2DTybE2zX8PovVx9nalXG9Kjnf66w3vKsP8zTBDgr/LpNYDewVxfbFVUja0b7WnF+x7bKA==
+Received: from SJ0PR03CA0050.namprd03.prod.outlook.com (2603:10b6:a03:33e::25)
+ by BL1PR12MB5897.namprd12.prod.outlook.com (2603:10b6:208:395::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.22; Mon, 16 Dec
+ 2024 11:06:31 +0000
+Received: from SJ5PEPF000001C9.namprd05.prod.outlook.com
+ (2603:10b6:a03:33e:cafe::c5) by SJ0PR03CA0050.outlook.office365.com
+ (2603:10b6:a03:33e::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8251.21 via Frontend Transport; Mon,
+ 16 Dec 2024 11:06:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SJ5PEPF000001C9.mail.protection.outlook.com (10.167.242.37) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8251.15 via Frontend Transport; Mon, 16 Dec 2024 11:06:30 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 16 Dec
+ 2024 03:06:19 -0800
+Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 16 Dec
+ 2024 03:06:15 -0800
+References: <20241213152244.3080955-1-kuba@kernel.org>
+ <20241213152244.3080955-6-kuba@kernel.org>
+User-agent: mu4e 1.8.14; emacs 29.4
+From: Petr Machata <petrm@nvidia.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
+	<pabeni@redhat.com>, <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net 5/5] selftests: net-drv: stats: sanity check netlink
+ dumps
+Date: Mon, 16 Dec 2024 11:53:58 +0100
+In-Reply-To: <20241213152244.3080955-6-kuba@kernel.org>
+Message-ID: <877c7zvqe4.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001C9:EE_|BL1PR12MB5897:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b7c1366-d23e-4f01-5a1e-08dd1dc1b1ec
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?EtnLwWCzxCJPnghgYYjHmTNchkIbp4BAdlnZHHoJAH4OZxB9ILoFtNqiPhan?=
+ =?us-ascii?Q?RYZWpTKRKbGCAo8vmTm9huxVph+NQM4IdLrmMdW4HWlipaW1406l59JsjGRp?=
+ =?us-ascii?Q?fni+IbzqMJ4SLHKYvq8/gIly19Wp3EMUzs3UmTiF5nb5/eoDcynyK6tSBCZJ?=
+ =?us-ascii?Q?+VJR4A7zEc6L9vGjHeqmFMqAUojJB/R1Qj6L1JLbEepwr+07854DMX1mkZm1?=
+ =?us-ascii?Q?NadyxzfGMbyQYDvUEz04PzelV+tJihe65rLhII07hULKZF8DlN8p67CuXVe2?=
+ =?us-ascii?Q?DNAAEodknUHNn9BkZkWYyY8cQLu+8/Y6rKNDSfano+AQfHUTZIAab3fVYML7?=
+ =?us-ascii?Q?hGBUrvEtmYJfwmQ6hqAHjZzTrZ7EyuJsXEEjNEq7AcSRWxYQevrjSNbtt71t?=
+ =?us-ascii?Q?gJHHT11TG3beCM2uhC19KaizYkmHEnb9DZJ00MYPuxjdXFdc5BldHU/UpHO9?=
+ =?us-ascii?Q?XJmheYp+fKGtb9hZGah0WxzReTfulxp+dcd00oDqd8e7+VnANIXutwo+y186?=
+ =?us-ascii?Q?sDnb8B6rlJW7QuBnvlZkcLcgAhDhsbgH7QXSAU70a1EGgxx+aj3X+NxhenF6?=
+ =?us-ascii?Q?dIxumXOgpuGs1n5e6eqXqX1OPoPADI/W1sDf5IWhQUxfNxsJDEBOtI5/wW6b?=
+ =?us-ascii?Q?KcvSQBBjX/IPrmXFqm2GTSWlFQdgy5GT+LZgq3Dr9NGoiBoEoA4g9e3EmAnE?=
+ =?us-ascii?Q?xc6ZnDJJL5hut4+/3Gdn3AoEmjSr/OqVCa2s/kXhIZjD/+MWTlIYnV+JeRsc?=
+ =?us-ascii?Q?Bp2uwDVD146c986pvRGSvMn5qzG+LiU1NMtiqFawB0laDQ0A+iZ4eZiEKnEQ?=
+ =?us-ascii?Q?rAH1pEPnd0NV+IZL1n0+5qH0w1b+W4n8Jylk8gJsBIAmJjYeUAf6r5DNyRQ2?=
+ =?us-ascii?Q?MmSorg7NbE+gHxZ/dE578SSG7FdhUa4LzX/QmGuOCSEMe8t1xmwXERmR6x5J?=
+ =?us-ascii?Q?ogMNRLjFd5uYDyrTCDpsbXADenxkbMI1KPIllYjeFCja6uT1Ckcn7leBU9av?=
+ =?us-ascii?Q?ziuBS8kymTkrBrE76Tpm0rWva81N02Sb3i8MIfJhX443ELLagnr3ONKAIrNL?=
+ =?us-ascii?Q?mB7dtRN8LnJomocV68dQSvORmoMmsrwDcEqpbIUu0CwuYJHzWJ4jbG1NVis9?=
+ =?us-ascii?Q?M1VadxAtfT39EbZy6BOnQBRf17qXZyVat+V4K9q89ZJXigb1TXp7AdQNJI1I?=
+ =?us-ascii?Q?cI1ck8YEEPElPpBJOPd9hrPqDl7oZdT8ut/OhBUJsyzsd0ejL7LhZTOB05y5?=
+ =?us-ascii?Q?VgKMr0qIC7nuokmxQMuqGJT08TbHwrWi3nJMW9cl525Ciq5h2I8CWYmPEglq?=
+ =?us-ascii?Q?qzGiRG517MnCCcLj7H5Q+O+GN+rv1KMOP0X5UB/T+crWr+6PLtSzk/BibJ4U?=
+ =?us-ascii?Q?apwP96K3+8L0Dm5RPL6+LrYULf55ROd7QAqZq/DRlJ5TbdPUkbOaBAFWOaxe?=
+ =?us-ascii?Q?aWvmCuKOaJy7h2106j6A6an5knaYd523nFrKzUg/d1uXAJSJQWAc5k4CYZM1?=
+ =?us-ascii?Q?v6MqeanbzlrBjBA=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2024 11:06:30.6178
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b7c1366-d23e-4f01-5a1e-08dd1dc1b1ec
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001C9.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5897
 
-Madhavan Srinivasan <maddy@linux.ibm.com> writes:
 
-> Both core-pkey.c and ptrace-pkey.c tests have similar macro
-> definitions, move them to "pkeys.h" and remove the macro
-> definitions from the C file.
+Jakub Kicinski <kuba@kernel.org> writes:
+
+> Sanity check netlink dumps, to make sure dumps don't have
+> repeated entries or gaps in IDs.
 >
-> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
->  tools/testing/selftests/powerpc/include/pkeys.h      | 8 ++++++++
->  tools/testing/selftests/powerpc/ptrace/core-pkey.c   | 8 --------
->  tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c | 8 --------
->  3 files changed, 8 insertions(+), 16 deletions(-)
+> CC: shuah@kernel.org
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/drivers/net/stats.py | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/powerpc/include/pkeys.h b/tools/testing/selftests/powerpc/include/pkeys.h
-> index 51729d9a7111..3a0129467de6 100644
-> --- a/tools/testing/selftests/powerpc/include/pkeys.h
-> +++ b/tools/testing/selftests/powerpc/include/pkeys.h
-> @@ -35,10 +35,18 @@
->  #define __NR_pkey_alloc		384
->  #define __NR_pkey_free		385
+> diff --git a/tools/testing/selftests/drivers/net/stats.py b/tools/testing/selftests/drivers/net/stats.py
+> index 63e3c045a3b2..031ac9def6c0 100755
+> --- a/tools/testing/selftests/drivers/net/stats.py
+> +++ b/tools/testing/selftests/drivers/net/stats.py
+> @@ -110,6 +110,23 @@ rtnl = RtnlFamily()
+>              ksft_ge(triple[1][key], triple[0][key], comment="bad key: " + key)
+>              ksft_ge(triple[2][key], triple[1][key], comment="bad key: " + key)
 >  
-> +#ifndef NT_PPC_PKEY
-> +#define NT_PPC_PKEY		0x110
-> +#endif
+> +    # Sanity check the dumps
+> +    queues = NetdevFamily(recv_size=4096).qstats_get({"scope": "queue"}, dump=True)
+> +    # Reformat the output into {ifindex: {rx: [id, id, ...], tx: [id, id, ...]}}
+> +    parsed = {}
+> +    for entry in queues:
+> +        ifindex = entry["ifindex"]
+> +        if ifindex not in parsed:
+> +            parsed[ifindex] = {"rx":[], "tx": []}
+> +        parsed[ifindex][entry["queue-type"]].append(entry['queue-id'])
+
+BTW setdefault() exists for exactly these add-unless-already-exists
+scenarios:
+
+        parsed_entry = parsed.setdefault(ifindex, {"rx":[], "tx": []})
+        parsed_entry[entry["queue-type"]].append(entry['queue-id'])
+
+Sometimes this can be used to inline the whole expression, such as
+mydict.setdefault(key, []).append(value), but that would be unwieldy here.
+
+Anyway, consider rewriting, but it's a nit, it's readable just fine as is.
+
+Reviewed-by: Petr Machata <petrm@nvidia.com>
+
+> +    # Now, validate
+> +    for ifindex, queues in parsed.items():
+> +        for qtype in ['rx', 'tx']:
+> +            ksft_eq(len(queues[qtype]), len(set(queues[qtype])),
+> +                    comment="repeated queue keys")
+> +            ksft_eq(len(queues[qtype]), max(queues[qtype]) + 1,
+> +                    comment="missing queue keys")
 > +
->  #define PKEY_BITS_PER_PKEY	2
->  #define NR_PKEYS		32
->  #define PKEY_BITS_MASK		((1UL << PKEY_BITS_PER_PKEY) - 1)
+>      # Test invalid dumps
+>      # 0 is invalid
+>      with ksft_raises(NlError) as cm:
+> @@ -158,7 +175,7 @@ rtnl = RtnlFamily()
 >  
-> +#define AMR_BITS_PER_PKEY 2
-> +#define PKEY_REG_BITS (sizeof(u64) * 8)
-> +#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
-> +
->  inline unsigned long pkeyreg_get(void)
->  {
->  	return mfspr(SPRN_AMR);
-> diff --git a/tools/testing/selftests/powerpc/ptrace/core-pkey.c b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-> index 31c9bf6d95db..f8ff05e5bf6e 100644
-> --- a/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-> +++ b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-> @@ -18,18 +18,10 @@
->  #include "child.h"
->  #include "pkeys.h"
 >  
-> -#ifndef NT_PPC_PKEY
-> -#define NT_PPC_PKEY		0x110
-> -#endif
-> -
->  #ifndef PKEY_DISABLE_EXECUTE
->  #define PKEY_DISABLE_EXECUTE	0x4
->  #endif
-
-We could remove this as well right. Since pkeys.h already has this
-permission defines i.e.
-PKEY_DISABLE_[ACCESS|WRITE|EXECUTE] 
-
->  
-> -#define AMR_BITS_PER_PKEY 2
-> -#define PKEY_REG_BITS (sizeof(u64) * 8)
-> -#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
-> -
->  #define CORE_FILE_LIMIT	(5 * 1024 * 1024)	/* 5 MB should be enough */
->  
->  static const char core_pattern_file[] = "/proc/sys/kernel/core_pattern";
-> diff --git a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-> index 6893ed096457..5d528d0ea9d1 100644
-> --- a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-> +++ b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-> @@ -9,18 +9,10 @@
->  #include "child.h"
->  #include "pkeys.h"
->  
-> -#ifndef NT_PPC_PKEY
-> -#define NT_PPC_PKEY		0x110
-> -#endif
-> -
->  #ifndef PKEY_DISABLE_EXECUTE
->  #define PKEY_DISABLE_EXECUTE	0x4
->  #endif
->  
-
-Same here. This can be cleaned up, no? Since pkeys already has this defined.
-
-
--ritesh
-
-> -#define AMR_BITS_PER_PKEY 2
-> -#define PKEY_REG_BITS (sizeof(u64) * 8)
-> -#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
-> -
->  static const char user_read[] = "[User Read (Running)]";
->  static const char user_write[] = "[User Write (Running)]";
->  static const char ptrace_read_running[] = "[Ptrace Read (Running)]";
-> -- 
-> 2.47.0
+>  def main() -> None:
+> -    with NetDrvEnv(__file__) as cfg:
+> +    with NetDrvEnv(__file__, queue_count=100) as cfg:
+>          ksft_run([check_pause, check_fec, pkt_byte_sum, qstat_by_ifindex,
+>                    check_down],
+>                   args=(cfg, ))
