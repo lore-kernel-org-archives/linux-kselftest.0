@@ -1,197 +1,258 @@
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2061.outbound.protection.outlook.com [40.107.94.61])
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1D0A937;
-	Mon, 16 Dec 2024 11:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734347196; cv=fail; b=m/fFl/okZJ5Ne06RjBD54oOw+U859q+kJC5ghYdi/5Vry+CkvtquPSC/tUNCms6pImyspTs1mUCGqWbKbcZ9DpAgKRnlkh5Vu++HFigG5b6zO1f6TL79XQp3ZU18VuTKOaGvVdV22FRdUJuxUr4cS3KutSBt0VDTZNWBsDZYblE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734347196; c=relaxed/simple;
-	bh=I4kQaw3a8LK2WhyzOdN3SM8hWwzRxbjfQ8STkENERJ0=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=JnrmOYMZ2PaXpP9eiT1HNWSV3gVyGh12SQj6SKq7OvOeUcthzQFwZt49jLEdelGVk/0pnOq+n/6HLhYBvwy0BvlK5OZa8dptJkvzuOefCgPTqc3fgs6wtdfwMLi/hJOVzFwPWeW/rbxqJMzHeLYhtLhKP1zjW7PZLrwm3ZZnQ1o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=utvvkf/o; arc=fail smtp.client-ip=40.107.94.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8FC0203D7F;
+	Mon, 16 Dec 2024 11:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734347403; cv=none; b=PAHhMQF8fU/qok4P9Ai+v0icu+/J+PL5UMR4GNlPZ4E0zHoFV2mDb/WnG7hDX9s/xCyAJucJoLYMqzfyR8ck9cV0bp7afYW0uuuiVVhGelyQCAfCFqTydPnf4E1lv9W4/rpDvpdUBDSTUPIvsR3s1FcIK+n5g0OnFw9DwQsH/EQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734347403; c=relaxed/simple;
+	bh=xn95Pi4umwEL5V6TEFqfsF5iwXrY6u8D2aQGSHcBbdE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rL8gH0KTiJ6gE8p07EFTCXJIfyIQL52J5OS3inFO43r3kvc6V8sahkv6lU2BOu+1smMsGlfGKJQUOxryh6OPhVUNmZFhXFT0spHt0xpH1I4RIlNWLx5eI1h/jhz3cHUTR4pDyEBaKnTM88BiBJWnYovpOi2QQ3H0oZvg1SzzOTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=RTlmaYDF; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RjpzLea7; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="utvvkf/o"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hlU9xLUNHbFOd5Kwxm8IFP1hjqQUx50wgrwsXzHNPk071jsW8LB2tY2KqutsM2apadmSE5XgoY82Ij8flOzz5aoeHr7L9URZrH8yh48yEEfS5KJcc8POChd7sBKKPgR/uBrzoDV9VsWo9R93aYAJxQsB67BVXJQ/ZSZfYSKJ41XbZXYcoxhzLhCY1Lhtnzeglzf8BDfaOb+kgBRejI7riB5Otrp/pjDqIXmhcQR+T8mkcPVSILf5k+DVmPNc2tZMF7lear0tRCESGULX9C0WtTkoTTpKU640CfMiyOFwaS0ZoPuuZAOS9t23v5DnwFTJFxkUrpz3vSukSSviba204w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OsazjDhQS3m0K80OhpqEguTDU8s2/9ozFIHcD3WqPMo=;
- b=u2VqvU7GaBh0bkY8hOybXuLJowCSYYO0TEMQV6Wsl0+lsxflAMvhy8CfW+VjyzcWkf77TCtHr/VxpOME7JWDcGtZ+XMyZINcB17OytdoeYQM6E36A/4BaEwLEDR/61sZ9j5drabWYe3IeBTxfbrTjtrHlCaiY8Zi7yHsPiob4BjjIQBYJRu80g/0G1yABSdaa6GCWoRaQ+yeBh1+ccE0AOkAVCUJH14L3Vu9jWaL1R89C6WzgvRgjtRYYyM76DX9GCdwEKh0wymEPCIrHbkX4zzgYu7SdkYLRcKtN1AEV52hw4OJb/ysOcGjqFjpN78ujoFKFvx17DJwnGEBCjhk2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OsazjDhQS3m0K80OhpqEguTDU8s2/9ozFIHcD3WqPMo=;
- b=utvvkf/onGDQFx0VQDAjQ/3USpJ8ovZ3tP+BHbjGlL5ZaFy3GkLQxUtiM83GF3ji67E+CCy8MhWL64S4BT4v8xOS+qlcEHaRUOamqrrk8rN/On3GHAgRI3t3Y0dKzrpvxxmAYMKdOx57JqeFTCDcyLU954CGnn9ePlC1kf+hDC18zTwskVdvtrkCvbsOW/NhEcCydUvG0d5rwoh/tgXLljVedM/RXDlFwMreLvSDeFdS3LIjyUVFd0Q+b5oxBJYxQMLJGX2fzDXGxQjO2DTybE2zX8PovVx9nalXG9Kjnf66w3vKsP8zTBDgr/LpNYDewVxfbFVUja0b7WnF+x7bKA==
-Received: from SJ0PR03CA0050.namprd03.prod.outlook.com (2603:10b6:a03:33e::25)
- by BL1PR12MB5897.namprd12.prod.outlook.com (2603:10b6:208:395::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.22; Mon, 16 Dec
- 2024 11:06:31 +0000
-Received: from SJ5PEPF000001C9.namprd05.prod.outlook.com
- (2603:10b6:a03:33e:cafe::c5) by SJ0PR03CA0050.outlook.office365.com
- (2603:10b6:a03:33e::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8251.21 via Frontend Transport; Mon,
- 16 Dec 2024 11:06:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ5PEPF000001C9.mail.protection.outlook.com (10.167.242.37) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8251.15 via Frontend Transport; Mon, 16 Dec 2024 11:06:30 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 16 Dec
- 2024 03:06:19 -0800
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 16 Dec
- 2024 03:06:15 -0800
-References: <20241213152244.3080955-1-kuba@kernel.org>
- <20241213152244.3080955-6-kuba@kernel.org>
-User-agent: mu4e 1.8.14; emacs 29.4
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net 5/5] selftests: net-drv: stats: sanity check netlink
- dumps
-Date: Mon, 16 Dec 2024 11:53:58 +0100
-In-Reply-To: <20241213152244.3080955-6-kuba@kernel.org>
-Message-ID: <877c7zvqe4.fsf@nvidia.com>
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="RTlmaYDF";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RjpzLea7"
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfout.phl.internal (Postfix) with ESMTP id CE0E313838F6;
+	Mon, 16 Dec 2024 06:09:57 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-12.internal (MEProxy); Mon, 16 Dec 2024 06:09:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1734347397; x=
+	1734433797; bh=ScOq+swQzHKW0GAW9g0fDYWS5GmMw3Ms2ywzxyyuIZ8=; b=R
+	TlmaYDF8bHiHa1upgTGd64ZNqHtz7JYzrB5plbvPx557SvTAFFlzXjHynQkbqn6P
+	lWLWbWWoXyHEbyJmYeaepWbr0JYij0PEiZFd2IWv2dEBAuKdYKe5YgX5nuGmIA0s
+	CkkYUpa9HhEQ4UV7JJpFEkIQ/318AFrK8SBZ+3AvUa0hIMUcAXC9Um8SpVbIg9rt
+	clUSR9K4KiCWcJkDKO7Js++NOOwC7H4RsrEolrf3mJmHrZEeLLN18UiZaxbN4aaB
+	CQ6ycKEwOKBZQ4IRJrXKkh/D4J3kRwiOLYlnQuctdn+gUvGOLDMT54heeNSAHEXn
+	mphhY2vT7Uqeq7trUlJhw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1734347397; x=1734433797; bh=ScOq+swQzHKW0GAW9g0fDYWS5GmMw3Ms2yw
+	zxyyuIZ8=; b=RjpzLea7xVwGsrWp66aQvY6fMFRRKzDEq8zPSjc3PfyVFNZYuYB
+	kS9GSJECA95Vzg8fYIcpEDJThXuW82wBvsdTFsrpx29XoHQ5WMizC/aVupZ2sUSa
+	OYnQlbqsu7Sq5Z041jyXsW5iyqIKDjXRNiDdtON4ak1odS/CZhIOgeqQDWnlIdG1
+	HOY99mSc4TF5Jaqm+87HGsSxmbNDRxWdjZd3gpTiDAPkp5uty+VXh3zTFI5bAiA/
+	ZSJ0vgl2Q3vRCSHWKLwspGE2t1Huu7/z7Uw6J2JtiNpIoKnTWwJJ7wgdqcA5b3tO
+	gaeD5saDgMXEV53RSqzb3os/8TK6WvJPD0Q==
+X-ME-Sender: <xms:hQpgZ-vQDKU4jzgdouM_9L7o5_hQjLnXO37wwZlLVPdjVxuxvHRYUA>
+    <xme:hQpgZzcywnSuh5Ugm8KSwxJkI33JhiJyB4eEki-WoRKDMRm8WADFihTF0AxDd75tL
+    EYorYyexXFAXl31H2c>
+X-ME-Received: <xmr:hQpgZ5wj4SMCDnl-yYJ7tzp_350RAMpRy9tS0mQxnlWdhFMhX9YXwUXtAw4W>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrleefgddvgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecu
+    hfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrih
+    hlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeeg
+    teehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghr
+    tghpthhtohepudegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtohhnih
+    hosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomh
+    dprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgrsggv
+    nhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhunhhtvghrse
+    hgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpthhtoh
+    eprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthh
+X-ME-Proxy: <xmx:hQpgZ5O9je3oFbYEZX4Ggm67R2SV680KnPR16lCKsuGi9uuCMbD2yA>
+    <xmx:hQpgZ--Nc_coUJ7r8yXyPOtiNiQnOTK6dVg_KnNIqRlT7dSqDgh0IA>
+    <xmx:hQpgZxXF8shc7m8X3pDwOw1a-Jntm-CdETg8_CsFczuJ5hlCJ4h4zw>
+    <xmx:hQpgZ3dZaAQMkH95u55RY5bcLJHpaUgRWItm33KJlIT1jcXSMoZhqg>
+    <xmx:hQpgZyWgcFMQvCPAKNZc6dJZm0Y600eTPaYCZEWmi8o7ToTRei_Wc3_h>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 16 Dec 2024 06:09:56 -0500 (EST)
+Date: Mon, 16 Dec 2024 12:09:55 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
+	willemdebruijn.kernel@gmail.com
+Subject: Re: [PATCH net-next v15 06/22] ovpn: introduce the ovpn_socket object
+Message-ID: <Z2AKg6ntLd94anHv@hog>
+References: <20241211-b4-ovpn-v15-0-314e2cad0618@openvpn.net>
+ <20241211-b4-ovpn-v15-6-314e2cad0618@openvpn.net>
+ <Z1sNEgQLMzZua3mS@hog>
+ <fa19f3a8-c273-4d2c-a10e-e9bda2375365@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001C9:EE_|BL1PR12MB5897:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4b7c1366-d23e-4f01-5a1e-08dd1dc1b1ec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?EtnLwWCzxCJPnghgYYjHmTNchkIbp4BAdlnZHHoJAH4OZxB9ILoFtNqiPhan?=
- =?us-ascii?Q?RYZWpTKRKbGCAo8vmTm9huxVph+NQM4IdLrmMdW4HWlipaW1406l59JsjGRp?=
- =?us-ascii?Q?fni+IbzqMJ4SLHKYvq8/gIly19Wp3EMUzs3UmTiF5nb5/eoDcynyK6tSBCZJ?=
- =?us-ascii?Q?+VJR4A7zEc6L9vGjHeqmFMqAUojJB/R1Qj6L1JLbEepwr+07854DMX1mkZm1?=
- =?us-ascii?Q?NadyxzfGMbyQYDvUEz04PzelV+tJihe65rLhII07hULKZF8DlN8p67CuXVe2?=
- =?us-ascii?Q?DNAAEodknUHNn9BkZkWYyY8cQLu+8/Y6rKNDSfano+AQfHUTZIAab3fVYML7?=
- =?us-ascii?Q?hGBUrvEtmYJfwmQ6hqAHjZzTrZ7EyuJsXEEjNEq7AcSRWxYQevrjSNbtt71t?=
- =?us-ascii?Q?gJHHT11TG3beCM2uhC19KaizYkmHEnb9DZJ00MYPuxjdXFdc5BldHU/UpHO9?=
- =?us-ascii?Q?XJmheYp+fKGtb9hZGah0WxzReTfulxp+dcd00oDqd8e7+VnANIXutwo+y186?=
- =?us-ascii?Q?sDnb8B6rlJW7QuBnvlZkcLcgAhDhsbgH7QXSAU70a1EGgxx+aj3X+NxhenF6?=
- =?us-ascii?Q?dIxumXOgpuGs1n5e6eqXqX1OPoPADI/W1sDf5IWhQUxfNxsJDEBOtI5/wW6b?=
- =?us-ascii?Q?KcvSQBBjX/IPrmXFqm2GTSWlFQdgy5GT+LZgq3Dr9NGoiBoEoA4g9e3EmAnE?=
- =?us-ascii?Q?xc6ZnDJJL5hut4+/3Gdn3AoEmjSr/OqVCa2s/kXhIZjD/+MWTlIYnV+JeRsc?=
- =?us-ascii?Q?Bp2uwDVD146c986pvRGSvMn5qzG+LiU1NMtiqFawB0laDQ0A+iZ4eZiEKnEQ?=
- =?us-ascii?Q?rAH1pEPnd0NV+IZL1n0+5qH0w1b+W4n8Jylk8gJsBIAmJjYeUAf6r5DNyRQ2?=
- =?us-ascii?Q?MmSorg7NbE+gHxZ/dE578SSG7FdhUa4LzX/QmGuOCSEMe8t1xmwXERmR6x5J?=
- =?us-ascii?Q?ogMNRLjFd5uYDyrTCDpsbXADenxkbMI1KPIllYjeFCja6uT1Ckcn7leBU9av?=
- =?us-ascii?Q?ziuBS8kymTkrBrE76Tpm0rWva81N02Sb3i8MIfJhX443ELLagnr3ONKAIrNL?=
- =?us-ascii?Q?mB7dtRN8LnJomocV68dQSvORmoMmsrwDcEqpbIUu0CwuYJHzWJ4jbG1NVis9?=
- =?us-ascii?Q?M1VadxAtfT39EbZy6BOnQBRf17qXZyVat+V4K9q89ZJXigb1TXp7AdQNJI1I?=
- =?us-ascii?Q?cI1ck8YEEPElPpBJOPd9hrPqDl7oZdT8ut/OhBUJsyzsd0ejL7LhZTOB05y5?=
- =?us-ascii?Q?VgKMr0qIC7nuokmxQMuqGJT08TbHwrWi3nJMW9cl525Ciq5h2I8CWYmPEglq?=
- =?us-ascii?Q?qzGiRG517MnCCcLj7H5Q+O+GN+rv1KMOP0X5UB/T+crWr+6PLtSzk/BibJ4U?=
- =?us-ascii?Q?apwP96K3+8L0Dm5RPL6+LrYULf55ROd7QAqZq/DRlJ5TbdPUkbOaBAFWOaxe?=
- =?us-ascii?Q?aWvmCuKOaJy7h2106j6A6an5knaYd523nFrKzUg/d1uXAJSJQWAc5k4CYZM1?=
- =?us-ascii?Q?v6MqeanbzlrBjBA=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2024 11:06:30.6178
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b7c1366-d23e-4f01-5a1e-08dd1dc1b1ec
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001C9.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5897
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fa19f3a8-c273-4d2c-a10e-e9bda2375365@openvpn.net>
+
+2024-12-12, 23:46:11 +0100, Antonio Quartulli wrote:
+> On 12/12/2024 17:19, Sabrina Dubroca wrote:
+> > 2024-12-11, 22:15:10 +0100, Antonio Quartulli wrote:
+> > > +static struct ovpn_socket *ovpn_socket_get(struct socket *sock)
+> > > +{
+> > > +	struct ovpn_socket *ovpn_sock;
+> > > +
+> > > +	rcu_read_lock();
+> > > +	ovpn_sock = rcu_dereference_sk_user_data(sock->sk);
+> > > +	if (WARN_ON(!ovpn_socket_hold(ovpn_sock)))
+> > 
+> > Could we hit this situation when we're removing the last peer (so
+> > detaching its socket) just as we're adding a new one? ovpn_socket_new
+> > finds the socket already attached and goes through the EALREADY path,
+> > but the refcount has already dropped to 0?
+> > 
+> 
+> hm good point.
+> 
+> > Then we'd also return NULL from ovpn_socket_new [1], which I don't
+> > think is handled well by the caller (at least the netdev_dbg call at
+> > the end of ovpn_nl_peer_modify, maybe other spots too).
+> > 
+> > (I guess it's not an issue you would see with the existing userspace
+> > if it's single-threaded)
+> 
+> The TCP patch 11/22 will convert the socket release routine to a scheduled
+> worker.
+
+Oh right, I forgot about that.
+
+> This means we can have the following flow:
+> 1) userspace deletes a peer -> peer drops its reference to the ovpn_socket
+> 2) ovpn_socket refcnt may hit 0 -> cleanup/detach work is scheduled, but not
+> yet executed
+> 3) userspace adds a new peer -> attach returns -EALREADY but refcnt is 0
+> 
+> So not so impossible, even with a single-threaded userspace software.
+
+True, that seems possible.
+
+> > [...]
+> > > +struct ovpn_socket *ovpn_socket_new(struct socket *sock, struct ovpn_peer *peer)
+> > > +{
+> > > +	struct ovpn_socket *ovpn_sock;
+> > > +	int ret;
+> > > +
+> > > +	ret = ovpn_socket_attach(sock, peer);
+> > > +	if (ret < 0 && ret != -EALREADY)
+> > > +		return ERR_PTR(ret);
+> > > +
+> > > +	/* if this socket is already owned by this interface, just increase the
+> > > +	 * refcounter and use it as expected.
+> > > +	 *
+> > > +	 * Since UDP sockets can be used to talk to multiple remote endpoints,
+> > > +	 * openvpn normally instantiates only one socket and shares it among all
+> > > +	 * its peers. For this reason, when we find out that a socket is already
+> > > +	 * used for some other peer in *this* instance, we can happily increase
+> > > +	 * its refcounter and use it normally.
+> > > +	 */
+> > > +	if (ret == -EALREADY) {
+> > > +		/* caller is expected to increase the sock refcounter before
+> > > +		 * passing it to this function. For this reason we drop it if
+> > > +		 * not needed, like when this socket is already owned.
+> > > +		 */
+> > > +		ovpn_sock = ovpn_socket_get(sock);
+> > > +		sockfd_put(sock);
+> > 
+> > [1] so we would need to add
+> > 
+> >      if (!ovpn_sock)
+> >          return -EAGAIN;
+> 
+> I am not sure returning -EAGAIN is the right move at this point.
+> We don't know when the scheduled worker will execute, so we don't know when
+> to try again.
+
+Right.
+
+> Maybe we should call cancel_sync_work(&ovpn_sock->work) inside
+> ovpn_socket_get()?
+> So the latter will return NULL only when it is sure that the socket has been
+> detached.
+> 
+> At that point we can skip the following return and continue along the "new
+> socket" path.
+> 
+> What do you think?
+
+The work may not have been scheduled yet? (small window between the
+last kref_put and schedule_work)
+
+Maybe a completion [Documentation/scheduler/completion.rst] would
+solve it (but it makes things even more complex, unfortunately):
+
+ - at the end of ovpn_socket_detach: complete(&ovpn_sock->detached);
+ - in ovpn_socket_new when handling EALREADY: wait_for_completion(&ovpn_sock->detached);
+ - in ovpn_socket_new for the new socket: init_completion(&ovpn_sock->detached);
+
+but ovpn_sock could be gone immediately after complete(). Maybe
+something with completion_done() before the kfree_rcu in
+ovpn_socket_detach? I'm not that familiar with the completion API.
 
 
-Jakub Kicinski <kuba@kernel.org> writes:
+> However, this makes we wonder: what happens if we have two racing PEER_NEW
+> with the same non-yet-attached UDP socket?
 
-> Sanity check netlink dumps, to make sure dumps don't have
-> repeated entries or gaps in IDs.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: shuah@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/drivers/net/stats.py | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/drivers/net/stats.py b/tools/testing/selftests/drivers/net/stats.py
-> index 63e3c045a3b2..031ac9def6c0 100755
-> --- a/tools/testing/selftests/drivers/net/stats.py
-> +++ b/tools/testing/selftests/drivers/net/stats.py
-> @@ -110,6 +110,23 @@ rtnl = RtnlFamily()
->              ksft_ge(triple[1][key], triple[0][key], comment="bad key: " + key)
->              ksft_ge(triple[2][key], triple[1][key], comment="bad key: " + key)
->  
-> +    # Sanity check the dumps
-> +    queues = NetdevFamily(recv_size=4096).qstats_get({"scope": "queue"}, dump=True)
-> +    # Reformat the output into {ifindex: {rx: [id, id, ...], tx: [id, id, ...]}}
-> +    parsed = {}
-> +    for entry in queues:
-> +        ifindex = entry["ifindex"]
-> +        if ifindex not in parsed:
-> +            parsed[ifindex] = {"rx":[], "tx": []}
-> +        parsed[ifindex][entry["queue-type"]].append(entry['queue-id'])
+mhmm, I remember noticing that, but it seems I never mentioned it in
+my reviews. Sorry.
 
-BTW setdefault() exists for exactly these add-unless-already-exists
-scenarios:
+> Maybe we should lock the socket in ovpn_udp_socket_attach() when checking
+> its user-data and setting it (in order to make the test-and-set atomic)?
 
-        parsed_entry = parsed.setdefault(ifindex, {"rx":[], "tx": []})
-        parsed_entry[entry["queue-type"]].append(entry['queue-id'])
+I'd use the lock to protect all of ovpn_socket_new.
+ovpn_tcp_socket_attach locks the socket but after doing the initial
+checks, so 2 callers could both see sock->sk->sk_user_data == NULL and
+do the full attach. And I don't think unlocking before
+rcu_assign_sk_user_data is safe for either UDP or TCP.
 
-Sometimes this can be used to inline the whole expression, such as
-mydict.setdefault(key, []).append(value), but that would be unwieldy here.
+> I am specifically talking about this in udp.c:
+> 
+> 345         /* make sure no pre-existing encapsulation handler exists */
+> 346         rcu_read_lock();
+> 347         old_data = rcu_dereference_sk_user_data(sock->sk);
+> 348         if (!old_data) {
+> 349                 /* socket is currently unused - we can take it */
+> 350                 rcu_read_unlock();
+> 351                 setup_udp_tunnel_sock(sock_net(sock->sk), sock, &cfg);
+> 352                 return 0;
+> 353         }
+> 
+> We will end up returning 0 in both contexts and thus allocate two
+> ovpn_sockets instead of re-using the first one we allocated.
+> 
+> Does it make sense?
 
-Anyway, consider rewriting, but it's a nit, it's readable just fine as is.
+Yes.
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
+[...]
+> > [I have some more nits/typos here and there but I worry the
+> > maintainers will get "slightly" annoyed if I make you repost 22
+> > patches once again :) -- if that's all I find in the next few days,
+> > everyone might be happier if I stash them and we get them fixed after
+> > merging?]
+> 
+> If we have to rework this socket attaching part, it may be worth throwing in
+> those typ0 fixes too :)
 
-> +    # Now, validate
-> +    for ifindex, queues in parsed.items():
-> +        for qtype in ['rx', 'tx']:
-> +            ksft_eq(len(queues[qtype]), len(set(queues[qtype])),
-> +                    comment="repeated queue keys")
-> +            ksft_eq(len(queues[qtype]), max(queues[qtype]) + 1,
-> +                    comment="missing queue keys")
-> +
->      # Test invalid dumps
->      # 0 is invalid
->      with ksft_raises(NlError) as cm:
-> @@ -158,7 +175,7 @@ rtnl = RtnlFamily()
->  
->  
->  def main() -> None:
-> -    with NetDrvEnv(__file__) as cfg:
-> +    with NetDrvEnv(__file__, queue_count=100) as cfg:
->          ksft_run([check_pause, check_fec, pkt_byte_sum, qstat_by_ifindex,
->                    check_down],
->                   args=(cfg, ))
+ACK, I'll send them out.
+
+> Thanks a lot.
+
+Thanks again for your patience.
+
+-- 
+Sabrina
