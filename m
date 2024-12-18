@@ -1,65 +1,65 @@
 Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FFB1F9A98
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 18:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8FF1F0E21
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 18:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734546232; cv=none; b=Q211Ee64kJbjFuWU53QepO/7B/kPpU4uf7oRjs88oozUEAwJ7JgKpjWTG/3eFNu1PyfOT58bNob+R6jQlPwixkq/9fDjktHRLA9EJFFeziUJ4my8oBPFCxtPMuOspca0xPciHwO7fxCRiyheI2GatimIJtYuqNX3GZt17AT4ro8=
+	t=1734547246; cv=none; b=a986ELH0B2JvmWAx67tPyE8XnXqCtQ72dbARuWb/L1JJh7r2njj3TP7VeN779h1PxECCOIk+0ducXiSvZjP37CBsxMGXDHuEe4NRFzQfZ2a8bVT+PVe/s0zWffIGvszqt9zla5MCCq9OUlT64NXctkbBH81NkPeEkki8dkSJ+fM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734546232; c=relaxed/simple;
-	bh=EeR9KqIYhEJFkzMfRCbIc/g9z9lvZXqPbiNegt1dWew=;
+	s=arc-20240116; t=1734547246; c=relaxed/simple;
+	bh=bFJEEE+0gBHYRNKBl9xpKnRhkLk0RNkVZrYyI7MVqYI=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=hQsjMIKiNnR26wxI++c1J4plDb4I8FBQL19bNqHKyzQMsloa5L9se/1UGZpcTwV42HwP0c61x+5L3wpXii7dXdcJ/C6SsHf1HMiHsfURyAHW3UUzl0RncUggy4LKtpPYJHd6iKnm695DXtPT78rUZwgbgPMOtCROtgve/rZgJAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VT3zVTqs; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=NkZvEEZr+u7DKLJEfVim+S9IsHPmYql6MWipzjhMoAYbfNSEEsWzvb/f6EKUJn6wkI9uZeJ/P+YO09hfpTYzE9fokN9Gy3WhUtINpGje38B/htjRGj828yltQvGxmqR84/wSEhvLt7UUXUq1lYZXpst4rYcooxBGaA4yfg3BD58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qvWBAcMk; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VT3zVTqs"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-216717543b7so63835ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 10:23:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qvWBAcMk"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-21650d4612eso33055ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 10:40:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1734546230; x=1735151030; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1734547244; x=1735152044; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RmkzlEVKsyHe3S3v/tp8qCiCvai6YjJH4HUuQciU4ok=;
-        b=VT3zVTqsp6V+pixCx2+Fwq4ZE8IYt5AqHpI3LaiR1HlYWaI8ROG5zVweTrzDov2vEl
-         p5Dw2NaePB3vydd99a+fyqd0cdty4wnu2r9WBZATW7MgVqgNHg7ErkTcgfklq6iQPmPW
-         Og5JfC3dyf3X0QwCvGXWIGjjCGT2OSuFPnyxxCIYNhonRldsjA908dzBDt3Khu6I6Q/5
-         bT2WpSqGcn+zRA+vjc/UQE428/c1x3k4PXZeVI07o2EqutlBrSvY9P8y4jEAmcIihWBL
-         b0cKFDQoDfUpqIG2Ys74lyhn4E8wJRrIKdYc1MQcD0+tlLogkLITAtQQSgY/R5jDtiQ4
-         6mFw==
+        bh=OzieiW8Tf7T8nD4mz7EFI6MUCvAAA+a8HPwLq2IuP/k=;
+        b=qvWBAcMkgA6/J2ocwmUyblpMJLg2moHy5nvQekPiSY3hYSkISExir4No+RJH4lxheW
+         Xna1UF360R94MfcZI2h28dUinH0BN+zqsztHK+dK1QSF0pihsjtuTfrp1QxGUSDhBYtx
+         2VEHYKZRj+8T82+Gzwnm9PnAH3/lO8DTXHKxkIuoaz4U8vXes5O71VetuQGpwplsOEWz
+         4sb+6E6O3RSPNJ7vZDFpL5WptfYwfqRAGFfuRcDrPJ6Qu69rhP3mPJ9xeE0rMhTYvudh
+         4ieo/2WlO2TK9LbCNeGOB/MntFCLQG/0W0TUrxPwOT+BXJebwezmHXp8lXJoZ6Gz8NTb
+         oGxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734546230; x=1735151030;
+        d=1e100.net; s=20230601; t=1734547244; x=1735152044;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RmkzlEVKsyHe3S3v/tp8qCiCvai6YjJH4HUuQciU4ok=;
-        b=BlRDVUpODD/emSovT9aWPPU+nm9c+gUDxZxKLDiFG2XKMDMX8uHyr0wuPz+82wt9R5
-         TQleo+tcZlL9Qh8BO5Vmsn3VjZLDpv4MZ6Y6MxWxLNdq7nn7/PUwqnBDX7Q4hhxckI7F
-         uTeQt2uShe7eK0VVNJD5935Xrweg7M0Xmvru5v4yCwKziKb7bpgkd19QOS2IJ0RY8zw0
-         hAeUfG+7oX+EGfPscm/d3sy4+IWn/uMtbiAdsSNZnjIKI3TqrMufP5rU5qRsjbVCXhvJ
-         nh5K+7V4YgcSi5YORnubTky4EWr1pYzZulJ2sxRBTqdPFnX3sg4AUjsUNwv/85vnj/5v
-         zfgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXrCmSWSgVKwY/imOF/+4PhDgdSXhK1dtRE8AB8sRZwYucpK9NjtBN0mR75kBOOt6fmPzohS2vX+w+r9StnQxQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycnUfT6nXU0wBlQPzv6mUXOaYKF123xXY3CT9dp2l5LSRRj0L0
-	J+zAlMjtDbK0VwgwU5KDKSq2/jK+JzfqCB+oD9CFxYc5ynzWnXf4mA/XL3WDw+QsivLTkgsev+A
-	fSw==
-X-Google-Smtp-Source: AGHT+IHZ/azbCeXLSE2Q4wDj7TyAPz+scx9lnjO+Wu2rIQp2gHgfQHL40ooMY9toxGXzQou8xzhloeGtppg=
-X-Received: from pgdm11.prod.google.com ([2002:a63:8c0b:0:b0:7fd:3f0e:ce05])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ef4e:b0:216:1357:8df8
- with SMTP id d9443c01a7336-219d96d21d1mr8914495ad.43.1734546230384; Wed, 18
- Dec 2024 10:23:50 -0800 (PST)
-Date: Wed, 18 Dec 2024 10:23:49 -0800
-In-Reply-To: <20241217181458.68690-3-iorlov@amazon.com>
+        bh=OzieiW8Tf7T8nD4mz7EFI6MUCvAAA+a8HPwLq2IuP/k=;
+        b=KzwlFv9B0R/v+kCt4cAhCyqm+VL5XlF2iH/nhrosQ62QIANTsKgnWT2V2ZOK2iOE13
+         cRDg4vUb/V2/amJ9sjR+mcBL2FKeUY6vcfzpo+kFFE5IYaVJTt8KNonnzi0LCEDwcOTz
+         Kbl4575sunAQGW4J/KzUD4Tq/+4wS7mByds0t9Zm2+cXqhc3uHmySoZd+Z2N+8AxxydW
+         udkLiulbSMutzbItmXQENZ+Yg5ZFXTzTyWFKEcU9jI2QGu6xmeib2+m7csupAYtisNNu
+         7hGcniUKe3ttiBOdxdWrCiPz2Xes7GnN2A0anflaDBYh4w3qdnkDOtQuW58Gc1Z6C4ZK
+         s/lA==
+X-Forwarded-Encrypted: i=1; AJvYcCX+5l/z9CB5+IbxbnArsJ5QpdmpYTFzYVYjDyq9/Vkg5gswY2s9+32FfbCgk9N1GMuu6POSfSBLGLQ+pDDbZ/w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4nUKOyZh46ELt079gUq5OpUX+oLX+pOXbGeAAow1/TnfhJ+ru
+	k0grm9io/SeOus5DPoE4J3PnA07+oO2XU6ZxaQ6dmMTZOXssR2eNPzq5xRz5UeO91nsqp+vsXDY
+	9Rg==
+X-Google-Smtp-Source: AGHT+IGk6ZAVDZ0yAen+YI2vSFSw8kQboYKmNe7QWGMy5RhwOJRv4IMWSpKWYTEXY2oprjVAkemGMkREYuM=
+X-Received: from pjbsz14.prod.google.com ([2002:a17:90b:2d4e:b0:2ef:8d43:14d8])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:54c5:b0:2ea:b564:4b31
+ with SMTP id 98e67ed59e1d1-2f443d0574dmr430684a91.19.1734547243906; Wed, 18
+ Dec 2024 10:40:43 -0800 (PST)
+Date: Wed, 18 Dec 2024 10:40:42 -0800
+In-Reply-To: <20241217181458.68690-6-iorlov@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20241217181458.68690-1-iorlov@amazon.com> <20241217181458.68690-3-iorlov@amazon.com>
-Message-ID: <Z2MTNcV_MK_myHPh@google.com>
-Subject: Re: [PATCH v3 2/7] KVM: x86: Add emulation status for unhandleable vectoring
+References: <20241217181458.68690-1-iorlov@amazon.com> <20241217181458.68690-6-iorlov@amazon.com>
+Message-ID: <Z2MXKkNb-aSLK2z7@google.com>
+Subject: Re: [PATCH v3 5/7] KVM: SVM: Handle vectoring error in check_emulate_instruction
 From: Sean Christopherson <seanjc@google.com>
 To: Ivan Orlov <iorlov@amazon.com>
 Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com, 
@@ -70,60 +70,46 @@ Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com,
 Content-Type: text/plain; charset="us-ascii"
 
 On Tue, Dec 17, 2024, Ivan Orlov wrote:
-> Add emulation status for unhandleable vectoring, i.e. when KVM can't
-> emulate an instruction during vectoring. Such a situation can occur
-> if guest sets the IDT descriptor base to point to MMIO region, and
-> triggers an exception after that.
-> 
-> Exit to userspace with event delivery error when KVM can't emulate
-> an instruction when vectoring an event.
+> Detect unhandleable vectoring in check_emulate_instruction to prevent
+> infinite loop on SVM and eliminate the difference in how intercepted #PF
+> during vectoring is handled on SVM and VMX.
 > 
 > Signed-off-by: Ivan Orlov <iorlov@amazon.com>
 > ---
 > V1 -> V2:
-> - This patch wasn't included in V1.
+> - Detect the unhandleable vectoring error in svm_check_emulate_instruction
+> instead of handling it in the common MMU code (which is specific for
+> cached MMIO)
 > V2 -> V3:
-> - Make new X86EMUL_ code more generic to allow using it for any type
-> of unhandleable vectoring
+> - Use more generic function to check if emulation is allowed when
+> vectoring
 > 
->  arch/x86/kvm/kvm_emulate.h | 2 ++
->  arch/x86/kvm/x86.c         | 5 +++++
->  2 files changed, 7 insertions(+)
+>  arch/x86/kvm/svm/svm.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
-> index 10495fffb890..5bcf50ffc3de 100644
-> --- a/arch/x86/kvm/kvm_emulate.h
-> +++ b/arch/x86/kvm/kvm_emulate.h
-> @@ -88,6 +88,8 @@ struct x86_instruction_info {
->  #define X86EMUL_CMPXCHG_FAILED  4 /* cmpxchg did not see expected value */
->  #define X86EMUL_IO_NEEDED       5 /* IO is needed to complete emulation */
->  #define X86EMUL_INTERCEPTED     6 /* Intercepted by nested VMCB/VMCS */
-> +/* Vectroing can't be emulated */
-
-Typo.  I think it's also worth elaborating a bit, e.g.
-
-/* Emulation during event vectoring is unsupported */
-
-> +#define X86EMUL_UNHANDLEABLE_VECTORING	7
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index dd15cc635655..e89c6fc2c4e6 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4802,6 +4802,12 @@ static int svm_check_emulate_instruction(struct kvm_vcpu *vcpu, int emul_type,
+>  	bool smep, smap, is_user;
+>  	u64 error_code;
 >  
->  /* x86-specific emulation flags */
->  #define X86EMUL_F_WRITE			BIT(0)
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 7ce9cdb66f19..849a6fc364b3 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -9107,6 +9107,11 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  		if (r == X86EMUL_RETRY_INSTR || r == X86EMUL_PROPAGATE_FAULT)
->  			return 1;
->  
-> +		if (r == X86EMUL_UNHANDLEABLE_VECTORING) {
-> +			kvm_prepare_event_vectoring_exit(vcpu, cr2_or_gpa);
-> +			return 0;
-> +		}
+> +	/* Check that emulation is possible during event vectoring */
+> +	if ((to_svm(vcpu)->vmcb->control.exit_int_info &
+> +	    SVM_EXITINTINFO_TYPE_MASK) &&
+
+Let this poke out.  Alternatively, and probably preferably, capture "svm" locally
+and it fits nicely on one line (there's an existing user of to_svm() in this
+helper).  My objection to a local variable was specifically about a local
+"is_event_vectoring", not about local variables in general.
+
+> +	    !kvm_can_emulate_event_vectoring(emul_type))
+> +		return X86EMUL_UNHANDLEABLE_VECTORING;
 > +
->  		WARN_ON_ONCE(r != X86EMUL_UNHANDLEABLE);
->  		return handle_emulation_failure(vcpu, emulation_type);
->  	}
+>  	/* Emulation is always possible when KVM has access to all guest state. */
+>  	if (!sev_guest(vcpu->kvm))
+>  		return X86EMUL_CONTINUE;
 > -- 
 > 2.43.0
 > 
