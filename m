@@ -1,108 +1,135 @@
-Received: from mail-qv1-f74.google.com (mail-qv1-f74.google.com [209.85.219.74])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C561A23A4
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 18:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3202A1FBE8B;
+	Wed, 18 Dec 2024 19:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734547584; cv=none; b=EoMYxptniQVUoDnTq7kSRghZklitwo+BAbbD96qsqP2XFJLqcNGiwYFC0TexOiN/4w0wj/SivYmCJUZpDpAkl+7z9NArULLMtN/vu/F/xTG4BmhHJqES1aLPMqrUlpqhGSRntrehnlK7fCJl/haey2t8xqWIRneu1I+mYHQqPi4=
+	t=1734551022; cv=none; b=bsnGbxol9IWrZ9wLkuGpKkF1KC3+kwAlHAqOPgMhk/KDu3KgVe7M5TG1TgST1dhwDeZxKvxms4I49w6lCGGuHo0045FOBI/0C7NnuUmMYrEEX/KJPXlnK95+HqJM1TlTyBEnCr1hC9b6ZOUg0RfmhqwQh0oNC/BU47CpHzABVVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734547584; c=relaxed/simple;
-	bh=54aEEBZXu5l8G8dSNrScl0HgsJCU88tBZMrBdnnGc+M=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=HzXwkK+5DPE/Pf+2VVVuc7NEOlb40cDHhC1FJWTkHmNRBDl3LkZuHRweoNq1Ee8pPw6LuzDmoTKSNU/ISnNt3MK33CQp9no8WYav2iNQEorAjDYMTW7IUCO3vUjIPnSnO4Hbo97aefk7Gc2yQADCtRxi95TrzipEf0BLg+glqmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GW1RvqA9; arc=none smtp.client-ip=209.85.219.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1734551022; c=relaxed/simple;
+	bh=l7S33bHbPv12y5MB/1TViiOYMzTYdR78PVLDT5uOyFE=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=cFHS9/akHrqFbij3hWidyZ8YLFiEcwNT0EvrjFbM2F3iqvKbt7zoKYCe17fNVoGhdpQm9QU0kt430eJiHbWITYjBdMFDuyPERKH4L/5xrWnrnYA9V6Ld0aV/8uYQrEMLY92a5y4lQNJXUga6WVZ5SBI2jiWN5OIeLLI0Di6ZQPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mZK6MbXx; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GW1RvqA9"
-Received: by mail-qv1-f74.google.com with SMTP id 6a1803df08f44-6d87d6c09baso101792716d6.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 10:46:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mZK6MbXx"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7b6ea711805so674202185a.1;
+        Wed, 18 Dec 2024 11:43:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1734547582; x=1735152382; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ThSbZiShkgu5e03SVywCH9ZkF+kD7172meNNyMCsukQ=;
-        b=GW1RvqA9cxFsIXcoTi218BN8O7AmZiHZErTlgeE7U2HJOuxSYW+f6vEDjB4D5WI1R1
-         zFL7GiQmBWxwdMd2kRjWFDQdbDXv0cUy7rG7gkhWUUCwZ7mUUErK23Zpl0P4bSjrbnDD
-         Q6i7lEiiUQ/3AzEHaDYLoE5aZBERYPAtBjHDhzetqRyw893fIk15UmzBFswkhEIsqQ4A
-         Fvau1Xm16cfL1xkFsZYNmPAUo9zbL3ObagMa31OlC7UzqCmuBbQ3BhYmM+GhVb1oYETg
-         sjyzHIpyLeupjx7iRTjifncyLAX8un9sKeYtudsLvBD4+8F2PqtIF2xbB8THrMlvQ6lJ
-         TD6w==
+        d=gmail.com; s=20230601; t=1734551020; x=1735155820; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qxHIHcJISlyh3hvAawthVoj9sM8ECvEnIfpSQ48jers=;
+        b=mZK6MbXxsnaIsxHkd5Sf/SBrerM0aZY+cBQA+ZAl28drlPO+qr8EANV87+P4K1Msd6
+         WRin/9TPyJw0d6LBJlFPWaDiz5DhigcNKdGOE+vTiyZTLUoxTRx0JiZiqOAusQwglNz7
+         xLFBPXKqr6OAa8La1lnG3VBCm/+AJi4sB995RINLAfn+jL/VSiKtlZ0qxL0JVcckEErF
+         fFr02nw/2lYur6n+plu5f8X2+4En37RRz0VHrjIIV3msDJKKsiNW6L4SYxD7P9aFhe5D
+         RKbOdzm0n5tY9Y1Rfgsy1TV3EsEKpKk/db/3SrbGzuQov1RwR69qifBaHEa8J6DcszH3
+         fEXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734547582; x=1735152382;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ThSbZiShkgu5e03SVywCH9ZkF+kD7172meNNyMCsukQ=;
-        b=QdLyyloJvejpRO/mOn8Trd5crPpnH3lhZkJeNTzyuWKBe4XrdNMOl92PIKIi5R2d1K
-         weh6JY2qkmXBq1aaebDhy1dywS0KWpLKwuLKydE33P0J3GuydQk2VZNcxsku67wz4seB
-         cCPNqdlsUle17JRbQyn1RsEWN9MfSSBPtEs3fWT7YukXWr+8wrG31XT4jyOtgR1dUtFp
-         8bDSeB+uzxLQV5G6DxQqp8GfuP+cGBsb2i8ywsK9OVBLHSLEy0yvvPMgZsRLT6gPsGPt
-         KTpK35XzOsHv8QEhAnETbr/95h9BEbnqw6ePHLSLSPXiQ1l1HA0d/gq6gbOmS3KfsSH0
-         g2Kg==
-X-Forwarded-Encrypted: i=1; AJvYcCVknD8nzPR6iEl1IlXxSIJsChdfsrMGzgKVjdLlEexfaPhmBKg8DF8GOcNUxGGz6C5npEk5OYjbz+bI3qSOMTE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwQIekTY3zKhYBdWW2yvW6z0pe7P2qdYnH7ktWebH+dfY77DX7
-	gckgGIfT4QSmjK65EtqqO20LJPY4+PINV6ny1m3PAHPizvnhjpFzBm+sliSeHQHpNbxKAlyEQuw
-	nCA==
-X-Google-Smtp-Source: AGHT+IGexWYaZ1SI4kjhNWXK7opgvllRMgRXEQRWmGX9yzNrM6pDTH6/xNiTrW2iL7iCndhz2fxMorhYmOU=
-X-Received: from pjuw4.prod.google.com ([2002:a17:90a:d604:b0:2da:5868:311c])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:270a:b0:2f2:a664:df33
- with SMTP id 98e67ed59e1d1-2f2e91ad917mr5094136a91.1.1734547152868; Wed, 18
- Dec 2024 10:39:12 -0800 (PST)
-Date: Wed, 18 Dec 2024 10:39:11 -0800
-In-Reply-To: <20241217181458.68690-5-iorlov@amazon.com>
+        d=1e100.net; s=20230601; t=1734551020; x=1735155820;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qxHIHcJISlyh3hvAawthVoj9sM8ECvEnIfpSQ48jers=;
+        b=XLGkZVdGZo1AqVN88hjTsyVHWwj4Vn+94KgnXGQ2CmLI/gBKe9DBqPwCogU0fMTmzV
+         KPpxx/v8s2iW8AV0p/M9WabgZHO6Kpf0p5pEQUXfkFipzw6IQd4Vyace9w6drYLaZ2R9
+         E3B3VLrwq5PSq62lfFx8JdFgUCSFwSt0VCY1wG6mG+DeuAUVj9UzDiGpelSE/OfEtVN4
+         PPpyKE8kmvwUEY1WKKVV5tw9SZKa6fuaHs7w2cZnyx6cKBM6LBIlk4amPP8LGmuwxuvB
+         msAdboTN4QRfS19zYHXGgydtz6R7BoDngjzZPLlpR3A1Qilyp67FxJMh+JuGvzEdlACo
+         gjEg==
+X-Forwarded-Encrypted: i=1; AJvYcCWsRBl9x4IauV9eHQYClRP4WdDc+JJ/8aADoCR8ku/zZ5f51CJ0oo1/WmBW17dLSqpEs2T3EBEi/XNb2Rck5ME=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyepdqGvkxT3Khnz40PL1PNLfBme1Vb+fS+qGgLqnfsstgpX0ev
+	kwKf8Jn8+I7SvLlyfFBKPUo0F89jomac854wHP4WjHgV6ibmcsSw
+X-Gm-Gg: ASbGncv1q5G29c8YJwyDXNYlTUhOEu8rOtcibjQuSKJtBH9ZevqvsMnvU7Iyn6sDPDm
+	RPt4rk7Wzu+dS5FOswiCncMKEE3nBVcELvNLF7XN8J5zTCDFfHuQQ56QSSvH++X7253RQ6MG/Yn
+	aMs2ZKdUcfOzVEl193QmbqOeDtOtZyJnazMBZD4KhD10h+uu98EpEzOZJRmesKFV4VlStEMvAVc
+	9QaNO3gAlRkE2Z1oBJVkCHq8CzGyAR0eeCN1YNLJ9/HzdsxXtrofxCsNff55EXV1PxaxoAch3hp
+	sZ1faiw0Rps6pG1MLwgD6KCv0pLmb5+SAA==
+X-Google-Smtp-Source: AGHT+IH/ecVVUVKtNKqq2lfFmmL8wMcCOOUq88vGvAYCM8VR8V5fbanjnDzTzGYCMzE3Nk4vcffkqA==
+X-Received: by 2002:a05:620a:28c3:b0:7b6:cb3c:d523 with SMTP id af79cd13be357-7b9aa9a9c54mr76745085a.46.1734551020131;
+        Wed, 18 Dec 2024 11:43:40 -0800 (PST)
+Received: from localhost (96.206.236.35.bc.googleusercontent.com. [35.236.206.96])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-467b2cbe7f2sm53947831cf.45.2024.12.18.11.43.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2024 11:43:37 -0800 (PST)
+Date: Wed, 18 Dec 2024 14:43:37 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ Soham Chakradeo <sohamch.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ linux-kselftest@vger.kernel.org, 
+ Soham Chakradeo <sohamch@google.com>, 
+ Willem de Bruijn <willemb@google.com>
+Message-ID: <676325e9c736_15b53229460@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20241218100013.0c698629@kernel.org>
+References: <20241217185203.297935-1-sohamch.kernel@gmail.com>
+ <20241218100013.0c698629@kernel.org>
+Subject: Re: [PATCH net-next 0/4] selftests/net: packetdrill: import multiple
+ tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20241217181458.68690-1-iorlov@amazon.com> <20241217181458.68690-5-iorlov@amazon.com>
-Message-ID: <Z2MWzyoq8c2FfJnM@google.com>
-Subject: Re: [PATCH v3 4/7] KVM: VMX: Handle vectoring error in check_emulate_instruction
-From: Sean Christopherson <seanjc@google.com>
-To: Ivan Orlov <iorlov@amazon.com>
-Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com, 
-	pbonzini@redhat.com, shuah@kernel.org, tglx@linutronix.de, hpa@zytor.com, 
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, x86@kernel.org, dwmw@amazon.co.uk, 
-	pdurrant@amazon.co.uk, jalliste@amazon.co.uk
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 17, 2024, Ivan Orlov wrote:
-> Move unhandleable vmexit during vectoring error detection
-> into check_emulate_instruction. Implement the function which prohibits
-> the emulation if EMULTYPE_PF is set when vectoring, otherwise such a
-> situation may occur:
+Jakub Kicinski wrote:
+> On Tue, 17 Dec 2024 18:51:57 +0000 Soham Chakradeo wrote:
+> > Import tests for the following features (folder names in brackets):
+> > ECN (ecn) : RFC 3168
+> > Close (close) : RFC 9293
+> > TCP_INFO (tcp_info) : RFC 9293
+> > Fast recovery (fast_recovery) : RFC 5681
+> > Timestamping (timestamping) : RFC 1323
+> > Nagle (nagle) : RFC 896
+> > Selective Acknowledgments (sack) : RFC 2018
+> > Recent Timestamp (ts_recent) : RFC 1323
+> > Send file (sendfile)
+> > Syscall bad arg (syscall_bad_arg)
+> > Validate (validate)
+> > Blocking (blocking)
+> > Splice (splice)
+> > End of record (eor)
+> > Limited transmit (limited_transmit)
+> 
+> Excellent, thanks for adding all these! I will merge the patches
+> momentarily but I do see a number of flakes on our VMs with debug
+> configs enabled:
+> https://netdev.bots.linux.dev/flakes.html?min-flip=0&tn-needle=packetdrill-dbg
+> 
+> In the 7 runs so far we got 2 flakes on:
+> 
+>  tcp-timestamping-client-only-last-byte-pkt
+>  tcp-fast-recovery-prr-ss-ack-below-snd-una-cubic-pkt
+>  tcp-timestamping-server-pkt
+> 
+> 1 flake on:
+> 
+>  tcp-timestamping-partial-pkt
+>  tcp-eor-no-coalesce-retrans-pkt
+> 
+> LMK if you can't find the outputs, they should be there within a couple
+> of clicks.
+> 
+> I'll set these cases to be ignored for now, but would be great if we
+> could find the way for them to be less time sensitive, perhaps?
 
-I definitely think it's worth explaining that moving the detection covers new
-emulation cases, and also calling out that handle_ept_misconfig() consults
-vmx_check_emulate_instruction(), i.e. that moving the detection shouldn't
-affect KVM's overall handlng of EPT Misconfig.
+Yes, let's get a bit more data how flaky they are and investigate.
 
---
+Hopefully it's just tuning. Worst case we could back out these few
+tests (temporarily) to avoid polluting the dash.
 
-Move handling of emulation during event vectoring, which KVM doesn't
-support, into VMX's check_emulate_instruction(), so that KVM detects
-all unsupported emulation, not just cached emulated MMIO (EPT misconfig).
-E.g. on emulated MMIO that isn't cached (EPT Violation) or occurs with
-legacy shadow paging (#PF).
+We did not observe this on our end during repeated debug runs.
 
-Rejecting emulation on other sources of emulation also fixes a largely
-theoretical flaw (thanks to the "unprotect and retry" logic), where KVM
-could incorrectly inject a #DF:
 
-  1. CPU executes an instruction and hits a #GP
-  2. While vectoring the #GP, a shadow #PF occurs
-  3. On the #PF VM-Exit, KVM re-injects #GP
-  4. KVM emulates because of the write-protected page
-  5. KVM "successfully" emulates and also detects the #GP
-  6. KVM synthesizes a #GP, and since #GP has already been injected,
-     incorrectly escalates to a #DF.
-
-Fix the comment about EMULTYPE_PF as this flag doesn't necessarily
-mean MMIO anymore: it can also be set due to the write protection
-violation.
-
-Note, handle_ept_misconfig() checks vmx_check_emulate_instruction() before
-attempting emulation of any kind.
