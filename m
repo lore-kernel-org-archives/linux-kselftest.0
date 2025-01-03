@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CFD1FC7C8;
-	Fri,  3 Jan 2025 17:17:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556871FC0FA;
+	Fri,  3 Jan 2025 17:18:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735924676; cv=none; b=hc9l90IrY6blt52Iu+6B1qqTxeERujMhk2tgFGbeW9FKm8cU4RC0Mu0HaLbhhLSeEvYTrli4l+T1hhK+nBDmkXwB3XhktbDTOylUkaDcVxDNb5n/Az/Ibzd5CWQH4x23pCApW/qLSISJ71mKLWfYOZl98xEnvFCLa0g/28OKvRg=
+	t=1735924685; cv=none; b=KLNmLXLwtep/au+MZP3q9m2uUxnL7by5zLe4kZtcn5dwYAjCjH/29PFO7inm0HqjyC9aAVFTi9qI3jMy0l636DN7i+HCBExHOHAg6JDMjkxOg8GRzJ21252k256V/acUO9XaCl2tsl7ceWPabtfNtBL3VSxHXJF0P5GVMJdtZ/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735924676; c=relaxed/simple;
-	bh=bLsg9Nmdz7tReG5pnUnO25339owtfT9ldR3GR65JQPI=;
+	s=arc-20240116; t=1735924685; c=relaxed/simple;
+	bh=SqCjzWuL9FY9OVHCuPhbiYvaKmVxKTYgjqxCFqz1ytI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IBJtznSr5wWSYaNc3wH+DvYb7ChMwwnG41WW7gDiAoRvZ/CuCBbiyfRRVd7gesRT73hxBmoblOKxxaNyqguFyVnEh0hwuAfp/D1A0V0OwdRoALxB/WnDRrfF2gEyc8QuYhEOHrA/K261tTDegypU1oMRllCGkKrOrnJvtpHFITc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HzpOfCHb; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=pxDSitA38H3QWOwy6emytZc4KR9VJk98g23hZbX4N08h3EeidTCSVSVEVa8ckUIU6cCmHeJQCpH0+bV1AIGrdNrX7jE8r0znopZC7C4Nr6eEtzECGW+/z6FoauVYWZbBHRA2QpEwL8di44gMw6G9wkyBpbxM2S1X9zJp+sjZ+Wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btpj1l4D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzpOfCHb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09504C4CECE;
-	Fri,  3 Jan 2025 17:17:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btpj1l4D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A331AC4CECE;
+	Fri,  3 Jan 2025 17:18:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735924676;
-	bh=bLsg9Nmdz7tReG5pnUnO25339owtfT9ldR3GR65JQPI=;
+	s=k20201202; t=1735924684;
+	bh=SqCjzWuL9FY9OVHCuPhbiYvaKmVxKTYgjqxCFqz1ytI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HzpOfCHbuAHR3zTU5toBXqJNFvkmrS340YRMs71cbyLKmvhMyd54qRgE16zhwgNiR
-	 zpvr/1cLQTzEu+scq3wH8vxdMLhksinpIeKvGjDLt5QvaxLg6vkwH/x7HCR3gRhM98
-	 qQu/wrQWOVOrridsgxN542+5R9rQkUzqT2v0EpDlnKIh5PyevnAXAuoq9/9VvmMkK5
-	 i1DhhwS7vFINBjQh7FJClrzTE7niALGB20XKCMmDBnDlqkVf292D9JjI/u7eaH3EcO
-	 IKTFPQEpGpYN2k1fVOmbsVjjEq4ChZV3v/fJwq97ce16sHUG0bmnLJMaVVgPtl50GP
-	 zcw56gco/WrDw==
+	b=btpj1l4Dw0lF+zMuDN6WGqtK3vb9fMChTb3mkkmDSqRtX+TEPX+Io2sB0seNxWqPO
+	 5yLlt3G56fmdVmzysxpjTNfgnBtnJ6Yqv1DUvKpyWajjcznGx6dx2K98BUDhl7714f
+	 AQ/SIWGo6IL2XK8B1bMvxEtB+n4zLCFV+GHQwD9ePrapLtwNuiijyQH+mD0pSvvPJG
+	 FF+i62PG/HaMTT5cy+D2MEZ0j5nhTkYrc45nO5H6+GsrbRQndJK99Tbg+Q85vET8BB
+	 H9UfVDn1kSWu+jZq0dMWi+AvjtC+z2b2TPJ8YMBIxzGTVjIsj/xTfOOwawnvz5K5Cu
+	 QlA+YntrgKwxQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -38,12 +38,12 @@ Cc: Li Zhijian <lizhijian@fujitsu.com>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-sound@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 4/4] selftests/alsa: Fix circular dependency involving global-timer
-Date: Fri,  3 Jan 2025 12:17:45 -0500
-Message-Id: <20250103171746.492127-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 3/3] selftests/alsa: Fix circular dependency involving global-timer
+Date: Fri,  3 Jan 2025 12:17:56 -0500
+Message-Id: <20250103171756.492191-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250103171746.492127-1-sashal@kernel.org>
-References: <20250103171746.492127-1-sashal@kernel.org>
+In-Reply-To: <20250103171756.492191-1-sashal@kernel.org>
+References: <20250103171756.492191-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.8
+X-stable-base: Linux 6.6.69
 Content-Transfer-Encoding: 8bit
 
 From: Li Zhijian <lizhijian@fujitsu.com>
@@ -89,10 +89,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
-index 944279160fed..8dab90ad22bb 100644
+index 5af9ba8a4645..140c7f821727 100644
 --- a/tools/testing/selftests/alsa/Makefile
 +++ b/tools/testing/selftests/alsa/Makefile
-@@ -27,5 +27,5 @@ include ../lib.mk
+@@ -23,5 +23,5 @@ include ../lib.mk
  $(OUTPUT)/libatest.so: conf.c alsa-local.h
  	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
  
