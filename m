@@ -1,94 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6CA1E377F;
-	Tue,  7 Jan 2025 15:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AD91F239C;
+	Tue,  7 Jan 2025 15:14:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736262810; cv=none; b=UyyY/vjek2VExchkNh6VJCvTqJ6puIb5G/CelxOyGRBwhzAU9b12QpdmFDT5Xg3Sz2pHJH3LY4DUaG9aXCtdi6ZNA0NWtW9kSfBMDbL+9Vvu6NosXroeo4WKBGbtsUcgINwjX/ij5EQkYiy5QKen2eOWze2w2ZNNtSZ4rpp48wk=
+	t=1736262900; cv=none; b=XzhJ3/ypkNV/80e98shoASDzaO6BHt0S1kgfw7iHlXFgW/U6nO4R6IKGjEYxd51tzTGXvI7+YZphMrvw9kdBF9Yxmtx0M2IyTMlMakBsoS7qeglVKaV9varOat1pFObnjCsOb2pzBN1Y/vPQ3cw7Z2Dm44JnTJwlh42cILyrplw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736262810; c=relaxed/simple;
-	bh=KlzauW3PgDKVIWbsqXawXo+ipjiNK9vtMAkDOh4G9u0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dPBs5TH2dRnWydVy1YmMbso+MDkBw4U+ydmgl2vSg/cVUNGczDAKyyDaNsIvMPDdb7KtyTdwvOFVG+YtOg9M1qzMqQRQxv2CLsNzGQZHAt5hQXELlp96bAm6iT6+fZ8zTY4OHqHLyWqHnV28FWIWHwdEf9f0hMX/42ymGcpyQaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iqI8oUkr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736262900; c=relaxed/simple;
+	bh=pkeSpzoPWHY8BsliSFSfbcQRoHvGqOoQKWjNi/5v8ic=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=m/CKF42VP7LyFyk6sfYZ+LzSGFmqOw842TSOA6ECOm3NKo4QwIej8N81psELJe7yulsP1fmDT2OUdOiO+9vZBoNyktcnBfm7w+3HTuHIIsi6pUaAk7MOHGDdvMo41pxtJPetqqrg39+0chGC/k7cDNaEnv1+y+873z9WlrYwxy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xEDYdNyQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gvC+B3rW; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iqI8oUkr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B28C4CED6;
-	Tue,  7 Jan 2025 15:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736262810;
-	bh=KlzauW3PgDKVIWbsqXawXo+ipjiNK9vtMAkDOh4G9u0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iqI8oUkrsXt02ErcpWwCjOZ0+kwUPWOHvsmYw1hBh1mh2dbvvPVZ2Wan01b2RdMmq
-	 Bw12CenQBYNbPpk04NSbiV5xzljPk2/wp7zk8S8ftSdWoxjXND1+v4YblHl6k5MH++
-	 uNHKKh5lkGKTiLC++MtN7FoSCbfohmK1LakO9YkIpUsKb9wONt2LAlg9ChpZUQeCgC
-	 gSTbiGy0gG/sFw3mPAOPbR2+B5pA6Axb3g0W5e0pQzVNJzKT9fnPA6kZCDwLAs5hes
-	 77se1IHjYOYnoA4b3g75FNPn3IB0wloW5wxPW75rT1h/yQj2DgpMdq/V3o4HdF6Rzj
-	 HviMJNifgFAPA==
-Date: Tue, 7 Jan 2025 15:13:24 +0000
-From: Will Deacon <will@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 5/9] arm64/sysreg: Update ID_AA64SMFR0_EL1 to DDI0601
- 2024-09
-Message-ID: <20250107151323.GA7368@willie-the-truck>
-References: <20241211-arm64-2024-dpisa-v4-0-0fd403876df2@kernel.org>
- <20241211-arm64-2024-dpisa-v4-5-0fd403876df2@kernel.org>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xEDYdNyQ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gvC+B3rW"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1736262894;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8MKnoaEM2eqbdSEIwek8NUSxcpZg/joWFCsMXcOwV8g=;
+	b=xEDYdNyQFc4yS3PKefVEYJImsRrGchl4NLvK5u9X9qhOqvFW0G8VLPI78Rjead8YUOib7I
+	Cp8hXOE3hKfi3pGrlSwNvoMarO0cVNB/hlBoNDcidAlhPn8zfBVPZMEumYRVKnJG6v7r69
+	/sbhJ9/tTdWWjHy1D9E9Z67acXtbk0Vkpa6xtZwN35JQF/OTHRjXiLsszzHJrESKwQFzPA
+	q+diYTEMhS26YnqaIgw+K0ZgP+4dbsJ68AuO0J5YuIfuwT7Qw6M6ifzRdko4FroLMVxl0n
+	vGVrRQt5L8ZAA1neAL/nD3gHTMdNEWDFagGE5zt1sgYCSdOluSJtGwYEODQd4g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1736262894;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8MKnoaEM2eqbdSEIwek8NUSxcpZg/joWFCsMXcOwV8g=;
+	b=gvC+B3rWXyc/qxMwaqaSZObNNe1xvWwv3/CKHVVFYl2ybnP1xfbZCjm2f7hlL4ynU0ItoI
+	bCMQv5vsaVEyHVBw==
+Date: Tue, 07 Jan 2025 16:14:45 +0100
+Subject: [PATCH 1/3] selftests/mm: virtual_address_range: Fix error when
+ CommitLimit < 1GiB
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241211-arm64-2024-dpisa-v4-5-0fd403876df2@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250107-virtual_address_range-tests-v1-1-3834a2fb47fe@linutronix.de>
+References: <20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.de>
+In-Reply-To: <20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.de>
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>, Dev Jain <dev.jain@arm.com>, 
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ stable@vger.kernel.org
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736262892; l=1691;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=pkeSpzoPWHY8BsliSFSfbcQRoHvGqOoQKWjNi/5v8ic=;
+ b=Q7U4tGUxDzcEKeBChx8jtgkcq7Wge8kBvCoqMUZT2oi/Qti7jPY0onQ2kqHsunfb2jqdfU1hz
+ sAu/mvAzojZDkvqBTlCrLkZo2WWSwciE2YoG/u+CTP/BwDRiXqX58/F
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Wed, Dec 11, 2024 at 01:02:50AM +0000, Mark Brown wrote:
-> DDI0601 2024-09 introduces SME 2.2 as well as a few new optional features,
-> update sysreg to reflect the changes in ID_AA64SMFR0_EL1 enumerating them.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/tools/sysreg | 32 +++++++++++++++++++++++++++++++-
->  1 file changed, 31 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-> index c792bd3b0afbb5fb7e438a4d760d9f2d15621eee..d78b12c59658b480739ae797f5ea2c2f14d8d765 100644
-> --- a/arch/arm64/tools/sysreg
-> +++ b/arch/arm64/tools/sysreg
-> @@ -1105,6 +1105,7 @@ UnsignedEnum	59:56	SMEver
->  	0b0000	SME
->  	0b0001	SME2
->  	0b0010	SME2p1
-> +	0b0011	SME2p2
->  	0b0000	IMP
->  EndEnum
->  UnsignedEnum	55:52	I16I64
-> @@ -1169,7 +1170,36 @@ UnsignedEnum	28	SF8DP2
->  	0b0	NI
->  	0b1	IMP
->  EndEnum
-> -Res0	27:0
-> +UnsignedEnum	27	SF8MM8
-> +	0b0	NI
-> +	0b1	IMP
-> +EndEnum
-> +UnsignedEnum	26	SF8MM4
-> +	0b0	NI
-> +	0b1	IMP
-> +EndEnum
+If not enough physical memory is available the kernel may fail mmap();
+see __vm_enough_memory() and vm_commit_limit().
+In that case the logic in validate_complete_va_space() does not make
+sense and will even incorrectly fail.
+Instead skip the test if no mmap() succeeded.
 
-afaict, bits 27 and 26 are still RES0 in all the documentation I can
-find...
+Fixes: 010409649885 ("selftests/mm: confirm VA exhaustion without reliance on correctness of mmap()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
-Will
+---
+The logic in __vm_enough_memory() seems weird.
+It describes itself as "Check that a process has enough memory to
+allocate a new virtual mapping", however it never checks the current
+memory usage of the process.
+So it only disallows large mappings. But many small mappings taking the
+same amount of memory are allowed; and then even automatically merged
+into one big mapping.
+---
+ tools/testing/selftests/mm/virtual_address_range.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
+index 2a2b69e91950a37999f606847c9c8328d79890c2..d7bf8094d8bcd4bc96e2db4dc3fcb41968def859 100644
+--- a/tools/testing/selftests/mm/virtual_address_range.c
++++ b/tools/testing/selftests/mm/virtual_address_range.c
+@@ -178,6 +178,12 @@ int main(int argc, char *argv[])
+ 		validate_addr(ptr[i], 0);
+ 	}
+ 	lchunks = i;
++
++	if (!lchunks) {
++		ksft_test_result_skip("Not enough memory for a single chunk\n");
++		ksft_finished();
++	}
++
+ 	hptr = (char **) calloc(NR_CHUNKS_HIGH, sizeof(char *));
+ 	if (hptr == NULL) {
+ 		ksft_test_result_skip("Memory constraint not fulfilled\n");
+
+-- 
+2.47.1
+
