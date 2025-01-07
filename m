@@ -1,126 +1,107 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6541F2C51;
-	Tue,  7 Jan 2025 15:14:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA9A81F37A6;
+	Tue,  7 Jan 2025 15:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736262901; cv=none; b=dAZYu0LAVLyvS1G7PuY0WI1ehOdr8aSjBxEXAP2Bs9+qgEvMAcFs23U1yAihSvO6nLqiT/vOBfNFxu3YJMQ7YTs7Ffp4OmvRXtePTfbDRuDAVwcTeasa6v8SrLFTaGDugIolnMCl4K5uNoVb0RvYCI+2e71xyWPRVN1CiKkBcD4=
+	t=1736263600; cv=none; b=ev7VZlkr9jKqqQy/mcTuY4UukWe22TktAAedXMLWSgKJEhdR7zkp4g4YAmq7aebFTQh+NSg+hDEKEySS7tFGNUFOj7R4TCVQlSR97k/GwbCcpzaoD3aG5JQtidGI2khNuNjWznkcLl2VN182Fe/5pVmwpb8ThHbVRVVx5QvtZWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736262901; c=relaxed/simple;
-	bh=JV1EmwhzZN8rbAZfsKr/X1cMrrhDBFJbY8LiCwcvoc8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cPeZlUyMNNtHFLzAUujNZa78wfCrz8vushfj+eqY4ANQeZ0VjEZKDiNc+0c9WoG3WfCc3XCWl/HCCkMRJKXK9jjGdgFESokjdJuTrRmZ60dISAe2pC0+nLO27a0UQg+UxUfYecGPcLFqO6aapgqtXAP7aGRaV36h1YsS2XIyUas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=a9oDTS+H; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MlKdOtsV; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1736263600; c=relaxed/simple;
+	bh=XLhFtGuCY7Ucnc0+mL9iU40HruI6bI2yyylWOOmbdBY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BhDB1tkn1mflr2H/cEHBt97lpMCEqNwDzidJhGf5JFGgL+buVdcVnz6vpirjnFP6iomNB9E0oIXJCjgn2nhqclunxi0Iww7IkjtpEMG/aYi/fgRk59ucmWoIOViWdABnwJKLnxhEnKcCL7l2GyC8fmzLGXWLostFnxfaTn5BF3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tNClHMxv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="a9oDTS+H";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MlKdOtsV"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736262895;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xr/B0xvK7sGkfKbzNUSoXapb4RwCqM0VBcWsRspXohE=;
-	b=a9oDTS+H17gco4eQ8kGhsCqsv9PlMnDDDlrs5LYGf2TxvF6Hc5SBP64YFNV0nppAvZUusn
-	M/G7DF0KH/LcmAEI1xWxZL+QNzgVlBsgjstoBDXG+O5kcLjbzcxJ73XRFUfad5bU/BSlXo
-	A7Y1TLhJxAJJJUB1Cu+ZmF8o4HPSLIsSPIGcqtN8vDA3eYzeCZSbOkqrbjlbcq4O2qsS/n
-	7bsoJ93HjH1DQiw0HcpeuRycJzpZhiOC/HLEyk8byYgd9q0UkBKXyK2nM17peGau2Mh0ah
-	0BAgqvWbeo6MZ37fDRAIoWa1XTY/LDxATu4Oigy2pzOK7TSbTD+y5AJX8XyKGw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736262895;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xr/B0xvK7sGkfKbzNUSoXapb4RwCqM0VBcWsRspXohE=;
-	b=MlKdOtsVGTXjDdT5TITCXHSRGRiOVe9EHCVyyPc/IRYFURbCmmQ3GfZsh8mk9woFCpH0+G
-	JprG5Ns6Ac7MHGDQ==
-Date: Tue, 07 Jan 2025 16:14:46 +0100
-Subject: [PATCH 2/3] selftests/mm: virtual_address_range: Avoid reading
- VVAR mappings
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tNClHMxv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07739C4CED6;
+	Tue,  7 Jan 2025 15:26:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736263599;
+	bh=XLhFtGuCY7Ucnc0+mL9iU40HruI6bI2yyylWOOmbdBY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tNClHMxv6p/dLY5+H6IrLV2GgRuM3AJ/jXNOKbmh33jnrWRFFQTJRzGLC7ksuXZVr
+	 JrlJdHSYeddVvb2snAryytnQjmfznMiFcphfrjgxlkW0pa54qHmm9+ThhTd9PkCyuC
+	 DVF4cOdR4Vmgj6qG1I3IMwUkw5ueHEEZd5vZoU7TCDjToaHxX7vAMvMwlgNJ4yKEY6
+	 5G6Av0R9yKRrRBIQF9QEx7XhWVNDsGd2jD5RTXNjInIuyjIHhlBh6sYnc7844RBc4e
+	 3RTjNz891V50dItetB3/UFc6WIu/IjqkjjZIfJebKUq4PuAopbtQEeIFsS4dSFy38n
+	 4D1v16/V6aZog==
+Date: Tue, 7 Jan 2025 15:26:34 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Will Deacon <will@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 5/9] arm64/sysreg: Update ID_AA64SMFR0_EL1 to DDI0601
+ 2024-09
+Message-ID: <9e93418d-ef66-42bb-b276-9f92da2596fa@sirena.org.uk>
+References: <20241211-arm64-2024-dpisa-v4-0-0fd403876df2@kernel.org>
+ <20241211-arm64-2024-dpisa-v4-5-0fd403876df2@kernel.org>
+ <20250107151323.GA7368@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250107-virtual_address_range-tests-v1-2-3834a2fb47fe@linutronix.de>
-References: <20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.de>
-In-Reply-To: <20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.de>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Shuah Khan <shuah@kernel.org>, Dev Jain <dev.jain@arm.com>, 
- Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1736262892; l=2470;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=JV1EmwhzZN8rbAZfsKr/X1cMrrhDBFJbY8LiCwcvoc8=;
- b=UWmnjc1iTVSO0yiJVv6/4RPN2Sb/xWnNUD78AugJktpFzXZZymMS0+1ZQxMl27beVnu+e+YDZ
- 8Nc8ASPkmPSCTTatBfxeZhgcl4WR/ohvWgXLmHZ4bc0wTeHWOo89/b8
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="WU010yCTaQZA793v"
+Content-Disposition: inline
+In-Reply-To: <20250107151323.GA7368@willie-the-truck>
+X-Cookie: PIZZA!!
 
-The virtual_address_range selftest reads from the start of each mapping
-listed in /proc/self/maps.
-However not all mappings are valid to be arbitrarily accessed.
-For example the vvar data used for virtual clocks on x86 can only be
-accessed if 1) the kernel configuration enables virtual clocks and 2)
-the hypervisor provided the data for it, which can only determined by
-the VDSO code itself.
-Since commit e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
-the virtual clock data was split out into its own mapping, triggering
-faulting accesses by virtual_address_range.
 
-Skip the various vvar mappings in virtual_address_range to avoid errors.
+--WU010yCTaQZA793v
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fixes: e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
-Fixes: 010409649885 ("selftests/mm: confirm VA exhaustion without reliance on correctness of mmap()")
-Cc: stable@vger.kernel.org
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202412271148.2656e485-lkp@intel.com
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- tools/testing/selftests/mm/virtual_address_range.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+On Tue, Jan 07, 2025 at 03:13:24PM +0000, Will Deacon wrote:
+> On Wed, Dec 11, 2024 at 01:02:50AM +0000, Mark Brown wrote:
 
-diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-index d7bf8094d8bcd4bc96e2db4dc3fcb41968def859..484f82c7b7c871f82a7d9ec6d6c649f2ab1eb0cd 100644
---- a/tools/testing/selftests/mm/virtual_address_range.c
-+++ b/tools/testing/selftests/mm/virtual_address_range.c
-@@ -116,10 +116,11 @@ static int validate_complete_va_space(void)
- 
- 	prev_end_addr = 0;
- 	while (fgets(line, sizeof(line), file)) {
-+		int path_offset = 0;
- 		unsigned long hop;
- 
--		if (sscanf(line, "%lx-%lx %s[rwxp-]",
--			   &start_addr, &end_addr, prot) != 3)
-+		if (sscanf(line, "%lx-%lx %4s %*s %*s %*s %n",
-+			   &start_addr, &end_addr, prot, &path_offset) != 3)
- 			ksft_exit_fail_msg("cannot parse /proc/self/maps\n");
- 
- 		/* end of userspace mappings; ignore vsyscall mapping */
-@@ -135,6 +136,10 @@ static int validate_complete_va_space(void)
- 		if (prot[0] != 'r')
- 			continue;
- 
-+		/* Only the VDSO can know if a VVAR mapping is really readable */
-+		if (path_offset && !strncmp(line + path_offset, "[vvar", 5))
-+			continue;
-+
- 		/*
- 		 * Confirm whether MAP_CHUNK_SIZE chunk can be found or not.
- 		 * If write succeeds, no need to check MAP_CHUNK_SIZE - 1
+> > -Res0	27:0
+> > +UnsignedEnum	27	SF8MM8
+> > +	0b0	NI
+> > +	0b1	IMP
+> > +EndEnum
+> > +UnsignedEnum	26	SF8MM4
+> > +	0b0	NI
+> > +	0b1	IMP
+> > +EndEnum
 
--- 
-2.47.1
+> afaict, bits 27 and 26 are still RES0 in all the documentation I can
+> find...
 
+They're in the 2024-09 XML release here:
+
+   https://developer.arm.com/documentation/ddi0601/2024-09/AArch64-Registers/ID-AA64SMFR0-EL1--SME-Feature-ID-Register-0?lang=en
+
+which was current at the time the series was sent but I see that they've
+been removed in the 2024-12 release which came out later, right at the
+end of last year:
+
+   https://developer.arm.com/documentation/ddi0601/2024-12/AArch64-Registers/ID-AA64SMFR0-EL1--SME-Feature-ID-Register-0?lang=en
+
+so we should just remove these.  I'll respin (or should I do it
+incrementally to save on re-review of the rest of it?).
+
+--WU010yCTaQZA793v
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmd9R6kACgkQJNaLcl1U
+h9D72Af+M48CMQ4TIZD35lakuJUDfvdH5F0JSqhHzYmkjf4C8IuujOjIMolmgRbc
+ZVBjkcuQj6Q89kTchmXRgQ5msV9oDWEZht9yXHpg26dRcRYxIBI0dOC/knLGJSji
+HMA4+I+lxNv0GU+nAW7nnNjkqZ8NmsSP9YPGmp/cSDtShgg3yUiNE1jwh5PWwK+D
+5qKhNoowGtcoILJg6EqRooDviDutHZmmgfH+MxnoV5jnxhQWWeQgeNXs/lP3615F
+M91mZMSCYmGzlqvdkWBq8byLYqBbqBLeceJ/xVOcVzrIc7HsMXVPBiCsp+D+4HmK
+uohnU4LbTo4AJZv5QR0/BH/Cisw7PA==
+=lqNc
+-----END PGP SIGNATURE-----
+
+--WU010yCTaQZA793v--
