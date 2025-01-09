@@ -1,87 +1,167 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6FF1AA1F6;
-	Thu,  9 Jan 2025 17:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736444431; cv=pass; b=UkvmUcdk3omrcLhM9QLhNj/scPT9ypd2C2LeiRRySpTo96cItsWaQ9EwW1tgpqsmcYA6pRRy7sUP+K1a0AqHISqevzL8T1OqacLW4BDcbK/SvyNMIzQHJHW1PLHSKLgtKuLntGwN9F8OLGzZR+c5PuxRuy3sX4JcHlZPsGV0v+4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736444431; c=relaxed/simple;
-	bh=2Pl7z8Zu6hb69EWu+GAANcb6zW3oiCy8MY8Xswaj5PY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AaG7P0B4vW+6OrY+sngWZZhT16tKLpcJMFeYEZm2gmtg65QNZNJp1R4hjPadP5py/Z6qatfU+X9A5o38AlktWAfNuh7ps5UJN7WFc7DaFTft9s7tUpJVObTMzMga6j/EC2hCamrkmD2QYZri1x8fB8KPL9SfuL+fbXjWw7IWGhw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=IGHq1TWY; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE0318EFD4;
+	Thu,  9 Jan 2025 17:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736444536; cv=none; b=JdKwpDdp8jRjHMhSNynob/eDXtQzLRD6ONBOtMzAH+xqh2b2aRy4hnPL4M/X4KlEKz1g6WhfknzGGx4EzrsINM18NpQRpA6Rhe+rYZH0M7RX+n20xWaI0GGYY3EIB05nM9JmxouqKLapNl1rN6Y4ZbJc/PLY14i7a24XuBSFWBc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736444536; c=relaxed/simple;
+	bh=Us90W3iK3EMl2dQQtMx3D2gQ07vdM1nJz7lej6pS6zQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ejC320jbTgUEMePXs6M7ETu7IA+KqPX5u5nh2t3MUAq6dhgIE0HKwXXlaO0Rvd2UlnI14ROi7EwIu/W/r2kz/uameKw7je+J5kfHn5ffn2CugzZs13BUAqjG4qSHEVGWBek5PVf75I70Z2Ti3KPCiejaaKezT0Ybt+tuyAcYOuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZOtnMP/o; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="IGHq1TWY"
-ARC-Seal: i=1; a=rsa-sha256; t=1736444414; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=PBKPPCDCtFUSbvwEA+dM30ZUlOyg8CGjCb4bNH+l3Z9tj457RqYurRZYPqgFRgFQER9IeW1bXjTI6p+qUkE5tcdh+6ur5L5HD9UVvCPTfQo5lE9q+YFPqEAwAGZraoQo3rlVp2er/Ss425w5Igj+T4JCNkiVdy1t8nG+SxVJook=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1736444414; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=xbevEof0duXdPukRg64fWg8r3pNNC6hhoZocH1wOXRU=; 
-	b=T8NTH9UVPUu8OimEOPe/GCeUgjKd1VM1wL/zIzSZh7mGKGVbqPm/oN1P7w+vm449XhxwbpOhJo5i7TtdF187f1AwLSEOfu0FpZoTIiLQ1yYN/tYzRpWzSuSxQDg1N9wAg85LWrZJFkX3IToiX5yNY5EC8Z7bgo/BVXJuk0s9oOE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
-	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1736444414;
-	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=xbevEof0duXdPukRg64fWg8r3pNNC6hhoZocH1wOXRU=;
-	b=IGHq1TWYopiUOIH2rYweRqWsO3Le0EKf3rjrw1rcvNjecylNL8KffSRkrTjoMBrU
-	XSirTpC4sqxpEaQR7dZWm57+mY7GZ3V5rC6zVpzTJeUm+VV8WU8eHfQH4Na1xUnU2Dv
-	dOGbVqRhnTVb7hrTdvxAnIuT6bxw0Oid88fjB8aU=
-Received: by mx.zohomail.com with SMTPS id 173644441288525.56642632894159;
-	Thu, 9 Jan 2025 09:40:12 -0800 (PST)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZOtnMP/o"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB4C7C4CED2;
+	Thu,  9 Jan 2025 17:42:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736444535;
+	bh=Us90W3iK3EMl2dQQtMx3D2gQ07vdM1nJz7lej6pS6zQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZOtnMP/oO3McloFa5SLz+G9ZVljZBA0nqYnJaei5CtAsRQhUdXICmBBb/nCFIIgov
+	 Inkg4DhWFNFEgtWp5hQ3yBG+MHE4r8a0tD2weniDe8QvaLDeQ2LYPoAGL0X1/ei+to
+	 6caOnkcawbG8Ps6CmvKVNkRbDMNiDJV7F9Hg/5P5T58hWAdlJ4otKcGr979EjvLxar
+	 pW2sAFYQwV8ZasIygrNkuafNhH2NA6dIHdCLMjW3CnxjWZngK9fQhenpvVUCEdwXS/
+	 6SRMru53hhYFyN924zPkl/leMURMaRI+eP6ZQ2Ki++wT+ojM9RYQteepsOvOzf6Rjk
+	 PZipONnIClKGw==
+Date: Thu, 9 Jan 2025 09:42:12 -0800
+From: Kees Cook <kees@kernel.org>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
 	Shuah Khan <shuah@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	=?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com
-Subject: [PATCH 16/16] selftests/mm: Makefile: Add the compiler flags
-Date: Thu,  9 Jan 2025 22:38:42 +0500
-Message-Id: <20250109173842.1142376-17-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250109173842.1142376-1-usama.anjum@collabora.com>
+	=?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, kernel@collabora.com
+Subject: Re: [PATCH 01/16] selftests/mm: remove argc and argv unused
+ parameters
+Message-ID: <202501090941.5289E7444B@keescook>
 References: <20250109173842.1142376-1-usama.anjum@collabora.com>
+ <20250109173842.1142376-2-usama.anjum@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+In-Reply-To: <20250109173842.1142376-2-usama.anjum@collabora.com>
 
-Add the compiler flags to catch warnings during development.
+On Thu, Jan 09, 2025 at 10:38:27PM +0500, Muhammad Usama Anjum wrote:
+> Remove the following warnings by removing unused argc and argv
+> parameters:
+> In function ‘main’:
+>   warning: unused parameter ‘argc’ [-Wunused-parameter]
+>     158 | int main(int argc, char *argv[])
+>         |          ~~~~^~~~
+>   warning: unused parameter ‘argv’ [-Wunused-parameter]
+>     158 | int main(int argc, char *argv[])
+>         |                    ~~~~~~^~~~~~
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  tools/testing/selftests/mm/compaction_test.c       | 2 +-
+>  tools/testing/selftests/mm/cow.c                   | 2 +-
+>  tools/testing/selftests/mm/droppable.c             | 2 +-
+>  tools/testing/selftests/mm/gup_longterm.c          | 2 +-
+>  tools/testing/selftests/mm/hugepage-vmemmap.c      | 2 +-
+>  tools/testing/selftests/mm/hugetlb-madvise.c       | 2 +-
+>  tools/testing/selftests/mm/hugetlb-soft-offline.c  | 2 +-
+>  tools/testing/selftests/mm/madv_populate.c         | 2 +-
+>  tools/testing/selftests/mm/map_populate.c          | 2 +-
+>  tools/testing/selftests/mm/memfd_secret.c          | 2 +-
+>  tools/testing/selftests/mm/mlock-random-test.c     | 2 +-
+>  tools/testing/selftests/mm/mlock2-tests.c          | 2 +-
+>  tools/testing/selftests/mm/on-fault-limit.c        | 2 +-
+>  tools/testing/selftests/mm/pkey_sighandler_tests.c | 2 +-
+>  tools/testing/selftests/mm/soft-dirty.c            | 2 +-
+>  tools/testing/selftests/mm/uffd-wp-mremap.c        | 2 +-
+>  tools/testing/selftests/mm/virtual_address_range.c | 2 +-
+>  17 files changed, 17 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
+> index 2c3a0eb6b22d3..8d23b698ce9db 100644
+> --- a/tools/testing/selftests/mm/compaction_test.c
+> +++ b/tools/testing/selftests/mm/compaction_test.c
+> @@ -194,7 +194,7 @@ int set_zero_hugepages(unsigned long *initial_nr_hugepages)
+>  	return ret;
+>  }
+>  
+> -int main(int argc, char **argv)
+> +int main(void)
+>  {
+>  	struct rlimit lim;
+>  	struct map_list *list = NULL, *entry;
+> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+> index 1238e1c5aae15..ea00c85c76caa 100644
+> --- a/tools/testing/selftests/mm/cow.c
+> +++ b/tools/testing/selftests/mm/cow.c
+> @@ -1769,7 +1769,7 @@ static int tests_per_non_anon_test_case(void)
+>  	return tests;
+>  }
+>  
+> -int main(int argc, char **argv)
+> +int main(void)
+>  {
+>  	int err;
+>  	struct thp_settings default_settings;
+> diff --git a/tools/testing/selftests/mm/droppable.c b/tools/testing/selftests/mm/droppable.c
+> index f3d9ecf96890a..90ea6377810c5 100644
+> --- a/tools/testing/selftests/mm/droppable.c
+> +++ b/tools/testing/selftests/mm/droppable.c
+> @@ -15,7 +15,7 @@
+>  
+>  #include "../kselftest.h"
+>  
+> -int main(int argc, char *argv[])
+> +int main(void)
+>  {
+>  	size_t alloc_size = 134217728;
+>  	size_t page_size = getpagesize();
+> diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+> index 9423ad439a614..03a31dcb57577 100644
+> --- a/tools/testing/selftests/mm/gup_longterm.c
+> +++ b/tools/testing/selftests/mm/gup_longterm.c
+> @@ -444,7 +444,7 @@ static int tests_per_test_case(void)
+>  	return 3 + nr_hugetlbsizes;
+>  }
+>  
+> -int main(int argc, char **argv)
+> +int main(void)
+>  {
+>  	int i, err;
+>  
+> diff --git a/tools/testing/selftests/mm/hugepage-vmemmap.c b/tools/testing/selftests/mm/hugepage-vmemmap.c
+> index df366a4d1b92d..23e97e552057d 100644
+> --- a/tools/testing/selftests/mm/hugepage-vmemmap.c
+> +++ b/tools/testing/selftests/mm/hugepage-vmemmap.c
+> @@ -87,7 +87,7 @@ static int check_page_flags(unsigned long pfn)
+>  	return 0;
+>  }
+>  
+> -int main(int argc, char **argv)
+> +int main(void)
+>  {
+>  	void *addr;
+>  	unsigned long pfn;
+> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+> index e74107185324f..43f16c12c8e9a 100644
+> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
+> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+> @@ -58,7 +58,7 @@ void read_fault_pages(void *addr, unsigned long nr_pages)
+>  	}
+>  }
+>  
+> -int main(int argc, char **argv)
+> +int main(int __attribute__((unused)) argc, char **argv)
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/mm/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+Can we add a macro in kselftest.h for "__unused" like the kernel already
+does? Then instead of removing args, we can just mark them, like you're
+doing here.
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 63ce39d024bb5..006ed2e8df87e 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -34,6 +34,7 @@ endif
- MAKEFLAGS += --no-builtin-rules
- 
- CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
-+CFLAGS += -Wunreachable-code -Wunused -Wunused-parameter -Wunused-function -Wunused-variable
- LDLIBS = -lrt -lpthread -lm
- 
- # Some distributions (such as Ubuntu) configure GCC so that _FORTIFY_SOURCE is
 -- 
-2.39.5
-
+Kees Cook
