@@ -1,89 +1,72 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3C42343AE
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 08:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F1D19341F;
+	Mon, 13 Jan 2025 08:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736757472; cv=none; b=BySoDhuGM4eutbYvk7CuK1JOoNgUnhCfiwkr9PqL4Xx2zAuEmTgMRp2qi6flEf5Z5t7VC5UYZ6EUllCMdLQwXhMb1TE3h1T4hKtkwxyfXxR1aa0s+1hA2N+zgQSNugCOLi4HkJw7PTnUNtZPDCo4rd52PbY0wqy/wPr7nQDwVuk=
+	t=1736758399; cv=none; b=mtzqHkySdXz8TGfLDrmpUWvgKy69oj/iDel/mfJyzsHEAq+U5Ql377NhOGnC9/+0SiCv1xQZh2yM6TCLl8KmFyjQYJolIRSk59y9PPztGF66Huvq1NrVPjAHgfYrupAB9jy732B28bTALhY4mrsRC3TBwrA89yH+2BF6XuSumO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736757472; c=relaxed/simple;
-	bh=kpZZDmzk+pA7qUikHydnQ184ytU7CciUWTlCG7kR63U=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=e09ybS9W/nBc3hIJZE16BgbVjtKKlRRpiClA/ODu9P2G+jUKidArOfBgJrmnfoJQX4XUqPjh2m9IV6z+7qGUkhrImqSVySMi7Yn9ejXUByVJsaFRDXTwFqo2+RdOiq0gz/1vuBCB9wP1rmo0SylaQ4MsL2yhwcsRXj9AEC0n7iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=K/ceXTjK; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="K/ceXTjK"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-216634dd574so44241625ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 00:37:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1736757471; x=1737362271; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qMJOsZFUuGMCCNl6Ap7/zKUJmvdFBz7dQyyFwX4yhfU=;
-        b=K/ceXTjKYjf0qJWYIfPnAiPfXSoWgYOfJKCRhVPUTO52v5Xu12ipEfGfbrwByqoSdh
-         VKTG4IaHw1xKfIKU5yuJKYUnQ1vAx7ZFOARRsxPu8Q8DTA61YxUa50VVH5XzE5tUAtjX
-         ekzMdJ2UVCNGiEtZjn9JJ+3pHJsmSJewdArni+GX762ExGT56AWjOr9WY9yf+6mT4mz2
-         n8glp6EzruBvCUHK7g+hhi25enN0ccuVkLtI5uE7fYI2STZGz+U5dZIKZHUjYchx0FJ2
-         avqGJDizFlY95vb/0Rlxav3qxEfZr6CumxRYWkCaQ9Nk2J9UcZZR2elh3fYu6dOYind4
-         11kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736757471; x=1737362271;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qMJOsZFUuGMCCNl6Ap7/zKUJmvdFBz7dQyyFwX4yhfU=;
-        b=QL9MzL6EJ4VZ4tu8tjjxky4yE+xzllG0XZIf4EW8gwyrwxo5WLEJJul4t/QBY72mK0
-         v2w5WM70QH8GzcSMFYgHA0USyEHYQ3tRzRvjqVVFjpRFc5u/peGAUGiFy2QOLiVey3IO
-         g1tNytIQ/rS2qLwqGO87mtnLP4Mffw+v6yHROMVP5cKFxAfB0grRkLdeVK9HACqnXET1
-         1lgIQmxYtC9tMg3HpFFbTOqbNPs+B+IVXLGS/O4kxBml51hH1M8egBGHAS/sDWdAjIMe
-         NkElpdwa4A1EdT59+w2PnWyVJdzpx+GmcWeTBwQsDiTmyKG09bq1XyaLlzbfsw14BmYE
-         UPFA==
-X-Forwarded-Encrypted: i=1; AJvYcCUnJMKQ04XgHDizf03NShoUigHAYdCjC1acP83WcL4JUyaKbp91NRe8mZzqujREnNvrqujnnZ5T+7F5UcY1RpA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzDMOH+cUjpGbt7/TJkEH+tIq3TphXNhoyInPANjHez7Fmr/Ki
-	s5yl+3OB1X4LkAGxe9IlCecX/yYG8DwNWWSbAzl5Ry7kAiWeHHNacF0cdg/LU+A=
-X-Gm-Gg: ASbGncsNzgVenGwM0GuErtjv8Cl6TvNcR+dDH0l1xLLGfbrPtymH51h9h3izJVG/wKu
-	HYinsJ2WdpONcc98CxdRyip2eRB+FbU5UxjNAZzBnomisHklepqT3ZV/B2HVGP2UaC6wU2Vs5wr
-	jf+88n50GYJgnONMXdZL81wiSVDIRmWy9f3Y5vSH5Jy3bNDWY47f3w4dNTwrqL1yP4Oa5fqY9H2
-	8pEcy1s0U7mWeIsbJjk1jK4egcdrPxbLhrqQDNChFXA1Cy3qxgbePdG9THGqlQHsE1AzlRTyILU
-	LGUSCLfwzPfhc+s=
-X-Google-Smtp-Source: AGHT+IFLYk6bgrJ0SOLLV8CBQcEe8+QaPJ84+VNsdagEBMamy215GoqGCmwUbo8FjSJ9Sz2cJj2tMw==
-X-Received: by 2002:a05:6a20:7344:b0:1e6:8f10:8ba2 with SMTP id adf61e73a8af0-1e88cf7f796mr31344708637.9.1736757470676;
-        Mon, 13 Jan 2025 00:37:50 -0800 (PST)
-Received: from L6YN4KR4K9.bytedance.net ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a317a07ceedsm6427433a12.6.2025.01.13.00.37.44
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 13 Jan 2025 00:37:50 -0800 (PST)
-From: Yunhui Cui <cuiyunhui@bytedance.com>
-To: ajones@ventanamicro.com,
-	alexghiti@rivosinc.com,
-	andybnac@gmail.com,
-	aou@eecs.berkeley.edu,
-	charlie@rivosinc.com,
-	cleger@rivosinc.com,
-	conor.dooley@microchip.com,
-	conor@kernel.org,
-	corbet@lwn.net,
-	cuiyunhui@bytedance.com,
-	evan@rivosinc.com,
-	jesse@rivosinc.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1736758399; c=relaxed/simple;
+	bh=+kYpJ/KVCG2w+X4rMMgBTQbw+Rnog2FhHOywqZR6VLc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=u5DppW6r0IU+2S3sBnbRVtuiWzq0q/ZKST29XXNVILeGx2rTt8i31rKH0R+U2Fq1iZZlyZTTHTi9rF2DBkOVZpzUapwykwMfhVN8Pw8gVvyC6D+MBcRkhlDYdPTUXpzU4LrvUI2VuaOlwtXPVsSECJ2U7SLm/nx6i59K8zfpxiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: c7e4e5c4d18b11efa216b1d71e6e1362-20250113
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
+	HR_FROM_NAME, HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER
+	HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_T1, AMN_GOOD, AMN_C_TI, AMN_C_BU
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:3b6df243-79cf-496c-9ad1-556d10a3544e,IP:15,
+	URL:0,TC:0,Content:0,EDM:-30,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:-24
+X-CID-INFO: VERSION:1.1.45,REQID:3b6df243-79cf-496c-9ad1-556d10a3544e,IP:15,UR
+	L:0,TC:0,Content:0,EDM:-30,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-24
+X-CID-META: VersionHash:6493067,CLOUDID:ef8c3a63588174d54e3754e1ba308b18,BulkI
+	D:2501131652574KZ42GSN,BulkQuantity:0,Recheck:0,SF:17|19|24|38|45|66|78|81
+	|82|102,TC:nil,Content:0|50,EDM:2,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:
+	nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,AR
+	C:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: c7e4e5c4d18b11efa216b1d71e6e1362-20250113
+X-User: liucong2@kylinos.cn
+Received: from liucong.. [(116.128.244.171)] by mailgw.kylinos.cn
+	(envelope-from <liucong2@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 989990396; Mon, 13 Jan 2025 16:52:55 +0800
+From: Cong Liu <liucong2@kylinos.cn>
+To: Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	"'David S . Miller'" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Cong Liu <liucong2@kylinos.cn>,
+	netdev@vger.kernel.org,
+	mptcp@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	palmer@dabbelt.com,
-	paul.walmsley@sifive.com,
-	samuel.holland@sifive.com,
-	shuah@kernel.org
-Subject: [PATCH v3 3/3] RISC-V: selftests: Add TEST_ZICBOM into CBO tests
-Date: Mon, 13 Jan 2025 16:36:35 +0800
-Message-Id: <20250113083635.73826-3-cuiyunhui@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20250113083635.73826-1-cuiyunhui@bytedance.com>
-References: <20250113083635.73826-1-cuiyunhui@bytedance.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 2/3] selftests: mptcp: Fix input fd lifecycle in reconnection loop
+Date: Mon, 13 Jan 2025 16:52:27 +0800
+Message-ID: <20250113085228.121778-3-liucong2@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250113085228.121778-1-liucong2@kylinos.cn>
+References: <20250113085228.121778-1-liucong2@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,118 +75,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add test for Zicbom and its block size into CBO tests, when
-Zicbom is present, test that cbo.clean/flush may be issued and works.
-As the software can't verify the clean/flush functions, we just judged
-that cbo.clean/flush isn't executed illegally.
+When both cfg_input and cfg_sockopt_types.mptfo are set, the input file
+descriptor (fd_in) is opened before the reconnection loop but closed
+within the loop. However, when mptfo is enabled, the descriptor is not
+reopened in the loop, causing subsequent iterations to use an invalid
+file descriptor.
 
-Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+Move the file open operation into the loop to ensure fd_in is always
+valid when needed, regardless of mptfo setting.
+
+Signed-off-by: Cong Liu <liucong2@kylinos.cn>
 ---
- tools/testing/selftests/riscv/hwprobe/cbo.c | 49 ++++++++++++++++++---
- 1 file changed, 43 insertions(+), 6 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_connect.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/riscv/hwprobe/cbo.c b/tools/testing/selftests/riscv/hwprobe/cbo.c
-index a40541bb7c7d..b63e23f95e08 100644
---- a/tools/testing/selftests/riscv/hwprobe/cbo.c
-+++ b/tools/testing/selftests/riscv/hwprobe/cbo.c
-@@ -81,6 +81,30 @@ static bool is_power_of_2(__u64 n)
- 	return n != 0 && (n & (n - 1)) == 0;
- }
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+index 31f4c5618569..4d4ea4627daa 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+@@ -1247,12 +1247,6 @@ int main_loop(void)
+ 	struct addrinfo *peer;
+ 	struct wstate winfo;
  
-+static void test_zicbom(void *arg)
-+{
-+	struct riscv_hwprobe pair = {
-+		.key = RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE,
-+	};
-+	cpu_set_t *cpus = (cpu_set_t *)arg;
-+	__u64 block_size;
-+	long rc;
-+
-+	rc = riscv_hwprobe(&pair, 1, sizeof(cpu_set_t), (unsigned long *)cpus, 0);
-+	block_size = pair.value;
-+	ksft_test_result(rc == 0 && pair.key == RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE &&
-+			 is_power_of_2(block_size), "Zicbom block size\n");
-+	ksft_print_msg("Zicbom block size: %llu\n", block_size);
-+
-+	illegal_insn = false;
-+	cbo_clean(&mem[block_size]);
-+	ksft_test_result(!illegal_insn, "cbo.clean\n");
-+
-+	illegal_insn = false;
-+	cbo_flush(&mem[block_size]);
-+	ksft_test_result(!illegal_insn, "cbo.flush\n");
-+}
-+
- static void test_zicboz(void *arg)
- {
- 	struct riscv_hwprobe pair = {
-@@ -129,7 +153,7 @@ static void test_zicboz(void *arg)
- 	ksft_test_result_pass("cbo.zero check\n");
- }
+-	if (cfg_input && cfg_sockopt_types.mptfo) {
+-		fd_in = open(cfg_input, O_RDONLY);
+-		if (fd_in < 0)
+-			xerror("can't open %s:%d", cfg_input, errno);
+-	}
+-
+ 	memset(&winfo, 0, sizeof(winfo));
+ 	fd = sock_connect_mptcp(cfg_host, cfg_port, cfg_sock_proto, &peer, fd_in, &winfo);
+ 	if (fd < 0)
+@@ -1270,7 +1264,7 @@ int main_loop(void)
+ 	if (cfg_cmsg_types.cmsg_enabled)
+ 		apply_cmsg_types(fd, &cfg_cmsg_types);
  
--static void check_no_zicboz_cpus(cpu_set_t *cpus)
-+static void check_no_zicbo_cpus(cpu_set_t *cpus, __u64 cbo)
- {
- 	struct riscv_hwprobe pair = {
- 		.key = RISCV_HWPROBE_KEY_IMA_EXT_0,
-@@ -137,6 +161,7 @@ static void check_no_zicboz_cpus(cpu_set_t *cpus)
- 	cpu_set_t one_cpu;
- 	int i = 0, c = 0;
- 	long rc;
-+	char *cbostr;
- 
- 	while (i++ < CPU_COUNT(cpus)) {
- 		while (!CPU_ISSET(c, cpus))
-@@ -148,10 +173,13 @@ static void check_no_zicboz_cpus(cpu_set_t *cpus)
- 		rc = riscv_hwprobe(&pair, 1, sizeof(cpu_set_t), (unsigned long *)&one_cpu, 0);
- 		assert(rc == 0 && pair.key == RISCV_HWPROBE_KEY_IMA_EXT_0);
- 
--		if (pair.value & RISCV_HWPROBE_EXT_ZICBOZ)
--			ksft_exit_fail_msg("Zicboz is only present on a subset of harts.\n"
--					   "Use taskset to select a set of harts where Zicboz\n"
--					   "presence (present or not) is consistent for each hart\n");
-+		cbostr = cbo == RISCV_HWPROBE_EXT_ZICBOZ ? "Zicboz" : "Zicbom";
-+
-+		if (pair.value & cbo)
-+			ksft_exit_fail_msg("%s is only present on a subset of harts.\n"
-+					   "Use taskset to select a set of harts where %s\n"
-+					   "presence (present or not) is consistent for each hart\n",
-+					   cbostr, cbostr);
- 		++c;
- 	}
- }
-@@ -159,6 +187,7 @@ static void check_no_zicboz_cpus(cpu_set_t *cpus)
- enum {
- 	TEST_ZICBOZ,
- 	TEST_NO_ZICBOZ,
-+	TEST_ZICBOM,
- 	TEST_NO_ZICBOM,
- };
- 
-@@ -169,6 +198,7 @@ static struct test_info {
- } tests[] = {
- 	[TEST_ZICBOZ]		= { .nr_tests = 3, test_zicboz },
- 	[TEST_NO_ZICBOZ]	= { .nr_tests = 1, test_no_zicboz },
-+	[TEST_ZICBOM]		= { .nr_tests = 3, test_zicbom },
- 	[TEST_NO_ZICBOM]	= { .nr_tests = 3, test_no_zicbom },
- };
- 
-@@ -206,7 +236,14 @@ int main(int argc, char **argv)
- 		tests[TEST_ZICBOZ].enabled = true;
- 		tests[TEST_NO_ZICBOZ].enabled = false;
- 	} else {
--		check_no_zicboz_cpus(&cpus);
-+		check_no_zicbo_cpus(&cpus, RISCV_HWPROBE_EXT_ZICBOZ);
-+	}
-+
-+	if (pair.value & RISCV_HWPROBE_EXT_ZICBOM) {
-+		tests[TEST_ZICBOM].enabled = true;
-+		tests[TEST_NO_ZICBOM].enabled = false;
-+	} else {
-+		check_no_zicbo_cpus(&cpus, RISCV_HWPROBE_EXT_ZICBOM);
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(tests); ++i)
+-	if (cfg_input && !cfg_sockopt_types.mptfo) {
++	if (cfg_input) {
+ 		fd_in = open(cfg_input, O_RDONLY);
+ 		if (fd_in < 0)
+ 			xerror("can't open %s:%d", cfg_input, errno);
 -- 
-2.39.2
+2.43.0
 
