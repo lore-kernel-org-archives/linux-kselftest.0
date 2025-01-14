@@ -1,424 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E3B1FC7D4
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 18:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDEBA20CCC2;
+	Tue, 14 Jan 2025 18:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736877804; cv=none; b=QBPeMPBRIxMeqxyMKBjQsKmUfvRicP4fp+VYT/PVEAC2r7hR5jDWUacoAMFkAdlK94ADjxdUWe9sLULLTjiDjIPG5u7+5yeRLhI1qCFQnJHy/NxQX4nxpuVRFyPG5pqW2pGJOeNnT1WT3KqoqizZ7a4jFQcMcdoJ1LwnxeUmgNs=
+	t=1736877804; cv=none; b=BfnrP4vTKCJ7Ax/+u0q07XASRQqM6gCROqdR4tGEfQ6lMPAlPO5gDYiSVZDRGWjVuLz79gp6QD7vylpWJm5Z1zudYGcSLUcCxAWBqUcMJLZB9aE/MW9N/KEUwzXN4WUT67srPlGBMRZ7yLW+mXCilLCdrTMSJzhfkYb87mbdhVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736877804; c=relaxed/simple;
-	bh=fSVKY5EuMPh/Z2F2yDud9PfGMc+uopWM8hczjgz3S5M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dU9wkqpSboAtSZiKJOf4VY9ym7bnlXbKUJhVb1W1Cph1ygMQeRubXWH1mELZPFT3bn4taju78oFxAFL038D6LQ2QvsfO9FznPVcaoxNtCdyZ9g6tNCovhBre2HAKXZ8IxiuSEGTPR3snKM5scHvov6CBVUM5MsCCmuB/juA3NlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IGXT1+kR; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	bh=1Vx6MDob7DYZ0cYhjz+3te+cEC2Fukkfaa1zFfoLMDE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CFvu2u4Tp6Sx2v8lweo3hac0mICcCsbGlwoF+0A/gVxL22vJjFHZ8dk+3DvTZSuiYzafR/4ydYJWeytJJuT5rShPQhXypXWlNo6HYq2Q/ZwMjc2U9wU6wFyGAkn+SHuGeokW6vwB/sdYs/FbJ3Fam+Gw9ZXQvkVEJV59DtCrglw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XymEbIfq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IGXT1+kR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736877801;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gOYbvMechf4Tk3QrOwIKHHFKhIz7g8W0C2CEkfk0nCI=;
-	b=IGXT1+kRC8bpT6C1YhEFAU2/gBjuGYVCILc36df0WEKPJgz+A/IV9z52g/95hruNV/O0cc
-	InzOlC9xePFIi3Phg3L8Q6iL/oC1vGQJ+84qGBjq9JGFCOP798ko3FnDMo6DFbW/6d6IUW
-	WgnMM8iRzD3LQmq/MS8oAbBuJIzMcy4=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-25-Kq2Q4fXhOu2lJRR6wkpJZw-1; Tue,
- 14 Jan 2025 13:03:20 -0500
-X-MC-Unique: Kq2Q4fXhOu2lJRR6wkpJZw-1
-X-Mimecast-MFC-AGG-ID: Kq2Q4fXhOu2lJRR6wkpJZw
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A57A91956054;
-	Tue, 14 Jan 2025 18:03:16 +0000 (UTC)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.39.192.55])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C6D619560B7;
-	Tue, 14 Jan 2025 18:02:54 +0000 (UTC)
-From: Valentin Schneider <vschneid@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	virtualization@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	loongarch@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	xen-devel@lists.xenproject.org,
-	kvm@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	rcu@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-	Juergen Gross <jgross@suse.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Jason Baron <jbaron@akamai.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Clark Williams <williams@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Tomas Glozar <tglozar@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Kees Cook <kees@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christoph Hellwig <hch@infradead.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Rong Xu <xur@google.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Yosry Ahmed <yosryahmed@google.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Jinghao Jia <jinghao7@illinois.edu>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v4 25/30] context_tracking,x86: Defer kernel text patching IPIs
-Date: Tue, 14 Jan 2025 18:51:38 +0100
-Message-ID: <20250114175143.81438-26-vschneid@redhat.com>
-In-Reply-To: <20250114175143.81438-1-vschneid@redhat.com>
-References: <20250114175143.81438-1-vschneid@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XymEbIfq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A058C4CEDD;
+	Tue, 14 Jan 2025 18:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736877804;
+	bh=1Vx6MDob7DYZ0cYhjz+3te+cEC2Fukkfaa1zFfoLMDE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=XymEbIfqgixbf8aS9k+1ttVB6CvnrQF4azha8iCptATWYrbeaG90Dv6eA1mKLADmt
+	 JbsPRwyJErUhdgEHybfW8y6godYPENZgCunjMjyObEc5xw7xxabN7v+DJ239vuKLKx
+	 J038TBaRzeaf3aVCOzMxMwuOnPxy5NTNq7SG2bjE96m7245gMAsjEQ9kbSSkdrFQWH
+	 2koT1XlKzL5bPtUoyXKMnCGLk/cTWMWlBmVHIOWGQeIuX8ElgMsFIPvFT4WZNSCPJ/
+	 ZLF9MenIYhF1ySoAJMAYkimyN5X9oe6niVh0Y6nhEdYfl4NzoWRxPp40PcwArcZ8CT
+	 e2qM8CLHaU3hQ==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 0/6] mptcp: selftests: more debug in case of
+ errors
+Date: Tue, 14 Jan 2025 19:03:10 +0100
+Message-Id: <20250114-net-next-mptcp-st-more-debug-err-v1-0-2ffb16a6cf35@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAN6mhmcC/zWNsQrDMAxEfyVorsBKmqW/Ujq4yTnVUMfIbgmE/
+ HtEocPBveHd7VRhikq3bifDV6uu2UEuHU2vmBewzs7Uh34MIlfOaJ6t8bu0qXD1shp4xvOzMMx
+ 4SEOSGGWMEshniiHp9ru409+mx3GcAApNQ3wAAAA=
+X-Change-ID: 20250114-net-next-mptcp-st-more-debug-err-3f3f1aa15a10
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1521; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=1Vx6MDob7DYZ0cYhjz+3te+cEC2Fukkfaa1zFfoLMDE=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnhqboEWD42bX/epxILilDBKHu3xMoh5VocUrOy
+ Cg+67+WQa6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ4am6AAKCRD2t4JPQmmg
+ c944D/9xP4y9lK1kwrhR1FmweCzgSRXl1LKSCx9xXpP/FDtLLzdo205/rFizMLFW7lv2/Pp1Upi
+ q0jdOGUUgcltJHvoRil14tXHKiw4yGuewFIduCvqZBPr5RwqvXYMy196XwKzMKQat6hu59T61n8
+ FfiWpCE5jeSUCghO93SqLnKKeHf1lhQ0cgeo1wni1Al5X+AE7QLfyFWOK0YcjdoVVwwWVbG045I
+ 35/18ZLbrXFFB6zOxODh3MGgef1kGPs7y1NI/7q/X9rAkbIOEIFKHTOvotkWPg40pLtAyPSQAdT
+ lIYgAKieN01AijVPsYVbaaH23bkXjKJ57wwIrG6Oq9yrVoOOFv0rP9IMAO9fKkLpzZljsrluR6j
+ cKr+aYhf/tIh895wF7wB4iTTnQLD0Xv+gxs5W+KYmkmqgVLF0XA6J3u8GEePkKmi0zCy5WM8IL8
+ qnax36Kr7+e+tVaRJilwKH2oyJzNljX85vm8/3GjwFFB3rF1uak2v7q+QB7YHTgG45+LgWBlZqy
+ x5L2dUU3kygojQBlYDabRdJNxWtn4lai0c8A0TSxpnxdbDsIP4U3lHTaczzhxd8xcFxoHA6eIdB
+ 85cQSemozPEkqEG9WkRopSO5GFAZMpt1U+xHxAwrudhjbSqC1Sn+N0F//oF4/zwtFX3jH49Km2s
+ 6/YGoJrKS1OPsMA==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-text_poke_bp_batch() sends IPIs to all online CPUs to synchronize
-them vs the newly patched instruction. CPUs that are executing in userspace
-do not need this synchronization to happen immediately, and this is
-actually harmful interference for NOHZ_FULL CPUs.
+Here are just a bunch of small improvements for the MPTCP selftests:
 
-As the synchronization IPIs are sent using a blocking call, returning from
-text_poke_bp_batch() implies all CPUs will observe the patched
-instruction(s), and this should be preserved even if the IPI is deferred.
-In other words, to safely defer this synchronization, any kernel
-instruction leading to the execution of the deferred instruction
-sync (ct_work_flush()) must *not* be mutable (patchable) at runtime.
+Patch 1: Unify errors messages in simult_flows: print MIB and 'ss -Me'.
 
-This means we must pay attention to mutable instructions in the early entry
-code:
-- alternatives
-- static keys
-- static calls
-- all sorts of probes (kprobes/ftrace/bpf/???)
+Patch 2: Unify errors messages in sockopt: print MIB.
 
-The early entry code leading to ct_work_flush() is noinstr, which gets rid
-of the probes.
+Patch 3: Move common code to print debug info to mptcp_lib.sh.
 
-Alternatives are safe, because it's boot-time patching (before SMP is
-even brought up) which is before any IPI deferral can happen.
+Patch 4: Use 'ss' with '-m' in case of errors.
 
-This leaves us with static keys and static calls.
+Patch 5: Remove an unused variable.
 
-Any static key used in early entry code should be only forever-enabled at
-boot time, IOW __ro_after_init (pretty much like alternatives). Exceptions
-are explicitly marked as allowed in .noinstr and will always generate an
-IPI when flipped.
+Patch 6: Print only the size instead of size + filename again.
 
-The same applies to static calls - they should be only updated at boot
-time, or manually marked as an exception.
-
-Objtool is now able to point at static keys/calls that don't respect this,
-and all static keys/calls used in early entry code have now been verified
-as behaving appropriately.
-
-Leverage the new context_tracking infrastructure to defer sync_core() IPIs
-to a target CPU's next kernel entry.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- arch/x86/include/asm/context_tracking_work.h |  6 ++--
- arch/x86/include/asm/text-patching.h         |  1 +
- arch/x86/kernel/alternative.c                | 38 ++++++++++++++++----
- arch/x86/kernel/kprobes/core.c               |  4 +--
- arch/x86/kernel/kprobes/opt.c                |  4 +--
- arch/x86/kernel/module.c                     |  2 +-
- include/asm-generic/sections.h               | 15 ++++++++
- include/linux/context_tracking_work.h        |  4 +--
- 8 files changed, 59 insertions(+), 15 deletions(-)
+Geliang Tang (1):
+      selftests: mptcp: sockopt: save nstat infos
 
-diff --git a/arch/x86/include/asm/context_tracking_work.h b/arch/x86/include/asm/context_tracking_work.h
-index 5f3b2d0977235..485b32881fde5 100644
---- a/arch/x86/include/asm/context_tracking_work.h
-+++ b/arch/x86/include/asm/context_tracking_work.h
-@@ -2,11 +2,13 @@
- #ifndef _ASM_X86_CONTEXT_TRACKING_WORK_H
- #define _ASM_X86_CONTEXT_TRACKING_WORK_H
- 
-+#include <asm/sync_core.h>
-+
- static __always_inline void arch_context_tracking_work(enum ct_work work)
- {
- 	switch (work) {
--	case CT_WORK_n:
--		// Do work...
-+	case CT_WORK_SYNC:
-+		sync_core();
- 		break;
- 	case CT_WORK_MAX:
- 		WARN_ON_ONCE(true);
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index ab9e143ec9fea..9dfa46f721c1d 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -33,6 +33,7 @@ extern void apply_relocation(u8 *buf, const u8 * const instr, size_t instrlen, u
-  */
- extern void *text_poke(void *addr, const void *opcode, size_t len);
- extern void text_poke_sync(void);
-+extern void text_poke_sync_deferrable(void);
- extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
- extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
- #define text_poke_copy text_poke_copy
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 243843e44e89d..633deea8a89cb 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -18,6 +18,7 @@
- #include <linux/mmu_context.h>
- #include <linux/bsearch.h>
- #include <linux/sync_core.h>
-+#include <linux/context_tracking.h>
- #include <asm/text-patching.h>
- #include <asm/alternative.h>
- #include <asm/sections.h>
-@@ -2109,9 +2110,24 @@ static void do_sync_core(void *info)
- 	sync_core();
- }
- 
-+static bool do_sync_core_defer_cond(int cpu, void *info)
-+{
-+	return !ct_set_cpu_work(cpu, CT_WORK_SYNC);
-+}
-+
-+static void __text_poke_sync(smp_cond_func_t cond_func)
-+{
-+	on_each_cpu_cond(cond_func, do_sync_core, NULL, 1);
-+}
-+
- void text_poke_sync(void)
- {
--	on_each_cpu(do_sync_core, NULL, 1);
-+	__text_poke_sync(NULL);
-+}
-+
-+void text_poke_sync_deferrable(void)
-+{
-+	__text_poke_sync(do_sync_core_defer_cond);
- }
- 
- /*
-@@ -2282,6 +2298,7 @@ static int tp_vec_nr;
-  */
- static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries)
- {
-+	smp_cond_func_t cond = do_sync_core_defer_cond;
- 	unsigned char int3 = INT3_INSN_OPCODE;
- 	unsigned int i;
- 	int do_sync;
-@@ -2317,11 +2334,20 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	 * First step: add a int3 trap to the address that will be patched.
- 	 */
- 	for (i = 0; i < nr_entries; i++) {
--		tp[i].old = *(u8 *)text_poke_addr(&tp[i]);
--		text_poke(text_poke_addr(&tp[i]), &int3, INT3_INSN_SIZE);
-+		void *addr = text_poke_addr(&tp[i]);
-+
-+		/*
-+		 * There's no safe way to defer IPIs for patching text in
-+		 * .noinstr, record whether there is at least one such poke.
-+		 */
-+		if (is_kernel_noinstr_text((unsigned long)addr))
-+			cond = NULL;
-+
-+		tp[i].old = *((u8 *)addr);
-+		text_poke(addr, &int3, INT3_INSN_SIZE);
- 	}
- 
--	text_poke_sync();
-+	__text_poke_sync(cond);
- 
- 	/*
- 	 * Second step: update all but the first byte of the patched range.
-@@ -2383,7 +2409,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 		 * not necessary and we'd be safe even without it. But
- 		 * better safe than sorry (plus there's not only Intel).
- 		 */
--		text_poke_sync();
-+		__text_poke_sync(cond);
- 	}
- 
- 	/*
-@@ -2404,7 +2430,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	}
- 
- 	if (do_sync)
--		text_poke_sync();
-+		__text_poke_sync(cond);
- 
- 	/*
- 	 * Remove and wait for refs to be zero.
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 72e6a45e7ec24..c2fd2578fd5fc 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -817,7 +817,7 @@ void arch_arm_kprobe(struct kprobe *p)
- 	u8 int3 = INT3_INSN_OPCODE;
- 
- 	text_poke(p->addr, &int3, 1);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 	perf_event_text_poke(p->addr, &p->opcode, 1, &int3, 1);
- }
- 
-@@ -827,7 +827,7 @@ void arch_disarm_kprobe(struct kprobe *p)
- 
- 	perf_event_text_poke(p->addr, &int3, 1, &p->opcode, 1);
- 	text_poke(p->addr, &p->opcode, 1);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- }
- 
- void arch_remove_kprobe(struct kprobe *p)
-diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-index 36d6809c6c9e1..b2ce4d9c3ba56 100644
---- a/arch/x86/kernel/kprobes/opt.c
-+++ b/arch/x86/kernel/kprobes/opt.c
-@@ -513,11 +513,11 @@ void arch_unoptimize_kprobe(struct optimized_kprobe *op)
- 	       JMP32_INSN_SIZE - INT3_INSN_SIZE);
- 
- 	text_poke(addr, new, INT3_INSN_SIZE);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 	text_poke(addr + INT3_INSN_SIZE,
- 		  new + INT3_INSN_SIZE,
- 		  JMP32_INSN_SIZE - INT3_INSN_SIZE);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 
- 	perf_event_text_poke(op->kp.addr, old, JMP32_INSN_SIZE, new, JMP32_INSN_SIZE);
- }
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index 8984abd91c001..acc810150b76c 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -194,7 +194,7 @@ static int write_relocate_add(Elf64_Shdr *sechdrs,
- 				   write, apply);
- 
- 	if (!early) {
--		text_poke_sync();
-+		text_poke_sync_deferrable();
- 		mutex_unlock(&text_mutex);
- 	}
- 
-diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
-index c768de6f19a9a..1b3ba3084fd2f 100644
---- a/include/asm-generic/sections.h
-+++ b/include/asm-generic/sections.h
-@@ -199,6 +199,21 @@ static inline bool is_kernel_inittext(unsigned long addr)
- 	       addr < (unsigned long)_einittext;
- }
- 
-+
-+/**
-+ * is_kernel_noinstr_text - checks if the pointer address is located in the
-+ *                    .noinstr section
-+ *
-+ * @addr: address to check
-+ *
-+ * Returns: true if the address is located in .noinstr, false otherwise.
-+ */
-+static inline bool is_kernel_noinstr_text(unsigned long addr)
-+{
-+	return addr >= (unsigned long)__noinstr_text_start &&
-+	       addr < (unsigned long)__noinstr_text_end;
-+}
-+
- /**
-  * __is_kernel_text - checks if the pointer address is located in the
-  *                    .text section
-diff --git a/include/linux/context_tracking_work.h b/include/linux/context_tracking_work.h
-index c68245f8d77c5..931ade1dcbcc2 100644
---- a/include/linux/context_tracking_work.h
-+++ b/include/linux/context_tracking_work.h
-@@ -5,12 +5,12 @@
- #include <linux/bitops.h>
- 
- enum {
--	CT_WORK_n_OFFSET,
-+	CT_WORK_SYNC,
- 	CT_WORK_MAX_OFFSET
- };
- 
- enum ct_work {
--	CT_WORK_n        = BIT(CT_WORK_n_OFFSET),
-+	CT_WORK_SYNC     = BIT(CT_WORK_SYNC_OFFSET),
- 	CT_WORK_MAX      = BIT(CT_WORK_MAX_OFFSET)
- };
- 
+Matthieu Baerts (NGI0) (5):
+      selftests: mptcp: simult_flows: unify errors msgs
+      selftests: mptcp: move stats info in case of errors to lib.sh
+      selftests: mptcp: add -m with ss in case of errors
+      selftests: mptcp: connect: remove unused variable
+      selftests: mptcp: connect: better display the files size
+
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh | 13 ++++---------
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    |  9 ++-------
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     | 21 +++++++++++++++++++++
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh | 17 ++++++++++++-----
+ tools/testing/selftests/net/mptcp/simult_flows.sh  | 21 ++++++++++++++-------
+ 5 files changed, 53 insertions(+), 28 deletions(-)
+---
+base-commit: 9c7ad35632297edc08d0f2c7b599137e9fb5f9ff
+change-id: 20250114-net-next-mptcp-st-more-debug-err-3f3f1aa15a10
+
+Best regards,
 -- 
-2.43.0
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
