@@ -1,45 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE14B1607B4;
-	Tue, 14 Jan 2025 16:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54FF15C15C;
+	Tue, 14 Jan 2025 16:07:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736870834; cv=none; b=mx+h5glRiSW0Y3iui7nNkd+ZyfT2uXGPRmJ/9Vt3m1tUUDTdcu7Pp36STywkHWQHIcLeQ2DmrfGQEgN3/oaL5Z3KIewOoon6O4Yjgaqo/Ry0bUao2Zn52c0sk4dgZbiZwMth6q4xFPMwfimxf/cU/zZOSu9fXLoZBSRws1M+PIM=
+	t=1736870834; cv=none; b=jW4aqQcRztbWYLbzm27wpu1dgplswZY5B7Q8eHZh8EmA20QbzQmLm7T6rvBLXBZY1cCI5dTnVG1fak+xwraxgJ/FvF4oi51G2S/CFDmyJHMQtuDNeLyJPU26XZhD9aIFn2ag8bYaaojkM7JZJhuzeIjxY68Q5dNY65DLBsd1TiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736870834; c=relaxed/simple;
-	bh=jY1f7K/6+plS20TimE67aTBJCu8JXlgGF6WROI3pbDA=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jX1tuJoOTzSIhbbSvjYVKb4zVE8Xl5OrOxZ19NDjepoUfoVvE1RLdV9mveiwz+BIhN/nRCOuSytoMjdEERIMVPazb5Jf58uN6tqil3HIbygSJBpr5eWgq0Qb9Za1gYc1w989aa/i3FyqCI7P3Y4I5JQLepKUpGEieAanXKBHE+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=z/tZ0aXh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ztssdGuy; arc=none smtp.client-ip=193.142.43.55
+	bh=gR157o96GOD5Fi5AXkbUAbIHuV8f9whd7ZV2AeOIVu8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=TSsk6oTowIKFtPyuYq0IMIrnZKxhkxidtOSPBmnjiKc0LBK5yR4qMDefp0fmwbeztvTxk8UJrroOKfdSO9gDj6A2lfd1gnwIje8EVS8dGf6J0QBpH/QMt9MIZFvqWoJfNO376HyqJ9LiVIuANVLyRpQV5cltFhQ6AJH/q+iaZ20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TYd+3SM/; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TN14Vn5s; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="z/tZ0aXh";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ztssdGuy"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TYd+3SM/";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TN14Vn5s"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736870828;
+	s=2020; t=1736870831;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=MZHG5cplY7kOQjkYg0UFJ5wapfsIw4i4b0LWQfZHuc0=;
-	b=z/tZ0aXh81J5YpaGd5ITORbmkhACMbvm9HjmELE72REQgA9EuMIPrhab4GCllreSpB4v1b
-	gkCURpauuSfcRlmdhyL0THDvMnip9FQ7hdE+ZCk7m9gGo7LQF/z4ZJCZZvlS+0D13yfEkb
-	B/mdHoSPx4KTyXh9oLbiFNk+SNycm7No3IEN2B83ysq3zBBVylaLDlyHPAhNUXxhjRODnZ
-	6AVSYW1WKyro9YFgApTYR97wWdvShAk5fDRCwg/dVuIT2v/dm1Stko3Vj6/nEcdU09TQ+l
-	6wWh6ggTrwvZ6Akm21udLjnEzhyk+HCTOkCqHZRdzkorC2LK5cDbta3R09fQTA==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jc6lPJWBXfz2WyOhO1yRIjUxMkwiFWRg7L1C1Eo7ZW8=;
+	b=TYd+3SM/Zzv8AeGJDtkHtFw5Zc07ZYkaqucBnYDTJBEwsbwaWlXHvqvHWkDlu72h3Z6Wd1
+	TmTfIV0GaDhM/tD898JAabg9DEIa43vvV8rhJfw4ELBS27eASXQVxqVX7R5qvadW1uZ3SJ
+	7ClAvHdSkHaoJYIiNYtUJL8a2ifV/z52TGJyCJx+gFdqPZUIy20DhrWGVzN58UuoTMRhF6
+	aCS4pVMfvt1vT7yD1Y1F6+MtAEQmRktdAuc1vpPaerfqKk890qiemIJa7domNDepp1pdvU
+	A8IafqZZmYsoTwklNjujlNr9NLKnGF8LOKGgvr9OZZJi+8rGx/R2VCR7vvxq3Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736870828;
+	s=2020e; t=1736870831;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=MZHG5cplY7kOQjkYg0UFJ5wapfsIw4i4b0LWQfZHuc0=;
-	b=ztssdGuyzyl7d4DYVeWXjNihOQFdu2SjfKrasg1ASUPcTFghF9jWeyEFxKRD0W1HvMlt04
-	TPAJyyDUib5Bc3Cw==
-Subject: [PATCH v4 0/4] selftests/mm: virtual_address_range: Reduce memory
- usage and avoid VM_IO access
-Date: Tue, 14 Jan 2025 17:06:44 +0100
-Message-Id: <20250114-virtual_address_range-tests-v4-0-6fd7269934a5@linutronix.de>
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jc6lPJWBXfz2WyOhO1yRIjUxMkwiFWRg7L1C1Eo7ZW8=;
+	b=TN14Vn5silJWC6WJq8XDyL63P8p11yF1750ISYCYPkpibeDxk2BH0U6KeJuuQECo7vLBzn
+	x7BU9R0ToQjc6rAg==
+Date: Tue, 14 Jan 2025 17:06:47 +0100
+Subject: [PATCH v4 3/4] selftests/mm: vm_util: Split up /proc/self/smaps
+ parsing
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,74 +50,117 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAJSLhmcC/43OSwqDMBCA4atI1k2JSXy0q96jFIlmUgdESxKDR
- bx7oyspRbr8h+GbmYkDi+DINZmJhYAOhz6GPCWkaVX/BIo6NuGMZyxlBQ1o/ai6SmltwbnKbks
- enHf0kpVSFHlu1KUgUXhZMDht+v0Ru0XnB/vejoV0nf7nhpQyKkohFTe1LAzcOuxHb4cep7MGs
- tqB77yUHXs8ejznitdGNEKzX57Ye+LYE9EzUpWQ1/E70N/esiwf9N1sCGoBAAA=
-X-Change-ID: 20250107-virtual_address_range-tests-95843766fa97
+Message-Id: <20250114-virtual_address_range-tests-v4-3-6fd7269934a5@linutronix.de>
+References: <20250114-virtual_address_range-tests-v4-0-6fd7269934a5@linutronix.de>
+In-Reply-To: <20250114-virtual_address_range-tests-v4-0-6fd7269934a5@linutronix.de>
 To: Andrew Morton <akpm@linux-foundation.org>, 
  Shuah Khan <shuah@kernel.org>, Dev Jain <dev.jain@arm.com>, 
  Thomas Gleixner <tglx@linutronix.de>, David Hildenbrand <david@redhat.com>, 
  Anshuman Khandual <khandual@linux.vnet.ibm.com>
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- kernel test robot <oliver.sang@intel.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1736870827; l=2074;
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736870827; l=2915;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=jY1f7K/6+plS20TimE67aTBJCu8JXlgGF6WROI3pbDA=;
- b=5vgoHzJPyXAxCnx8bc1uNJMRsMHv/BNIZaNt9xqWXYnLMcD57iCcg37uUu6Nb+pKkTYM44AeG
- 93quzhF3k6MCS4B6B4JoWonxhqon0Nnwg477bWYyDzhSIgAdptnxqUc
+ bh=gR157o96GOD5Fi5AXkbUAbIHuV8f9whd7ZV2AeOIVu8=;
+ b=w4OIeFsyazqsWCb42afv7zGrsXsPmDhiUXiU0G/0S+jHi5uqcgpHGFHrnJlu+GKmwp+XkwCiX
+ TMob5JaYSQdDteTjGBmt3vMUIt6mJRqhvM03Tv7+D6ZfV2KKG4mQuPX
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The selftest started failing since commit e93d2521b27f
-("x86/vdso: Split virtual clock pages into dedicated mapping")
-was merged. While debugging I stumbled upon some memory usage
-optimizations.
+Upcoming changes want to reuse the /proc/self/smaps parsing logic to
+parse the VmFlags field.
+As that works differently from the currently parsed HugePage counters,
+split up the logic so common functionality can be shared.
 
-With these test now runs on a VM with only 60MiB of memory.
+While reworking this code, also use the correct sscanf placeholder for
+the "uint64_t thp" variable.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Acked-by: David Hildenbrand <david@redhat.com>
 ---
-Changes in v4:
-- Pick up review tags
-- Correct Fixes: of patch 1
-- Drop git rebase commit message artifacts
-- Replace strtok_r() with strspn() and strcspn()
-- Avoid uninitialized read on error in __get_smap_entry()
-- Link to v3: https://lore.kernel.org/r/20250113-virtual_address_range-tests-v3-0-f4a8e6b7feed@linutronix.de
+ tools/testing/selftests/mm/vm_util.c | 42 +++++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 13 deletions(-)
 
-Changes in v3:
-- Pick up review tags
-- Fix naming around PR_SET_VMA_ANON_NAME helper functions
-- Skip selftest if PR_SET_VMA_ANON_NAME is not supported
-- Check for VM_IO instead of [vvar name prefix
-- Link to v2: https://lore.kernel.org/r/20250110-virtual_address_range-tests-v2-0-262a2bf3c3d0@linutronix.de
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index d8d0cf04bb57fd22bd7748fffec6a23c3103e35c..a450ab353f8e710a6bfce347bc3a7309920c70f5 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -2,6 +2,7 @@
+ #include <string.h>
+ #include <fcntl.h>
+ #include <dirent.h>
++#include <inttypes.h>
+ #include <sys/ioctl.h>
+ #include <linux/userfaultfd.h>
+ #include <linux/fs.h>
+@@ -193,13 +194,11 @@ unsigned long rss_anon(void)
+ 	return rss_anon;
+ }
+ 
+-bool __check_huge(void *addr, char *pattern, int nr_hpages,
+-		  uint64_t hpage_size)
++char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
+ {
+-	uint64_t thp = -1;
+ 	int ret;
+ 	FILE *fp;
+-	char buffer[MAX_LINE_LENGTH];
++	char *entry = NULL;
+ 	char addr_pattern[MAX_LINE_LENGTH];
+ 
+ 	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
+@@ -211,23 +210,40 @@ bool __check_huge(void *addr, char *pattern, int nr_hpages,
+ 	if (!fp)
+ 		ksft_exit_fail_msg("%s: Failed to open file %s\n", __func__, SMAP_FILE_PATH);
+ 
+-	if (!check_for_pattern(fp, addr_pattern, buffer, sizeof(buffer)))
++	if (!check_for_pattern(fp, addr_pattern, buf, len))
+ 		goto err_out;
+ 
+-	/*
+-	 * Fetch the pattern in the same block and check the number of
+-	 * hugepages.
+-	 */
+-	if (!check_for_pattern(fp, pattern, buffer, sizeof(buffer)))
++	/* Fetch the pattern in the same block */
++	if (!check_for_pattern(fp, pattern, buf, len))
+ 		goto err_out;
+ 
+-	snprintf(addr_pattern, MAX_LINE_LENGTH, "%s%%9ld kB", pattern);
++	/* Trim trailing newline */
++	entry = strchr(buf, '\n');
++	if (entry)
++		*entry = '\0';
+ 
+-	if (sscanf(buffer, addr_pattern, &thp) != 1)
+-		ksft_exit_fail_msg("Reading smap error\n");
++	entry = buf + strlen(pattern);
+ 
+ err_out:
+ 	fclose(fp);
++	return entry;
++}
++
++bool __check_huge(void *addr, char *pattern, int nr_hpages,
++		  uint64_t hpage_size)
++{
++	char buffer[MAX_LINE_LENGTH];
++	uint64_t thp = -1;
++	char *entry;
++
++	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
++	if (!entry)
++		goto err_out;
++
++	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
++		ksft_exit_fail_msg("Reading smap error\n");
++
++err_out:
+ 	return thp == (nr_hpages * (hpage_size >> 10));
+ }
+ 
 
-Changes in v2:
-- Drop /dev/null usage
-- Avoid overcommit restrictions by dropping PROT_WRITE
-- Avoid high memory usage due to PTEs
-- Link to v1: https://lore.kernel.org/r/20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.de
-
----
-Thomas Weißschuh (4):
-      selftests/mm: virtual_address_range: mmap() without PROT_WRITE
-      selftests/mm: virtual_address_range: Unmap chunks after validation
-      selftests/mm: vm_util: Split up /proc/self/smaps parsing
-      selftests/mm: virtual_address_range: Avoid reading from VM_IO mappings
-
- tools/testing/selftests/mm/config                  |  1 +
- tools/testing/selftests/mm/virtual_address_range.c | 41 ++++++++++++--
- tools/testing/selftests/mm/vm_util.c               | 66 +++++++++++++++++-----
- tools/testing/selftests/mm/vm_util.h               |  1 +
- 4 files changed, 92 insertions(+), 17 deletions(-)
----
-base-commit: 3043cb9a517b707c12a3f5879f4970c97bfeb3fb
-change-id: 20250107-virtual_address_range-tests-95843766fa97
-
-Best regards,
 -- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+2.47.1
 
