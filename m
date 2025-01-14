@@ -1,105 +1,365 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8BE204596;
-	Tue, 14 Jan 2025 18:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C86A22618D
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 18:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736877825; cv=none; b=pCicZFcV13mvpA+na8tA5j61csdixSAWWq5V+TpMw7aG9QtB/U714JyEHLzR6gmmcwOOsHv/pyQFSxZsDAvB3aQFdkukjUvHTZySbKPWaEzPHISAWhuOjKwy1GRRfSyMERU61Ro8WVvdqJAPJrrGzkS+xsUMv7nJtMSW0SwgPJY=
+	t=1736877830; cv=none; b=Z54i60vvDzXSwXu8w197L/TlUKEZct15WYYTHBnqUWk6O5BQUeJ7olBNa5Gq3Vz3Jc7lepJALb7ZzsWz05kBUpsrlXSNfHKM6QiXw3tV50296xA7HtwaOxzdj5q34ur20tMBIkg9uJlna07rG1e8A++i++tvgOq6AOIcHEuJauk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736877825; c=relaxed/simple;
-	bh=9RqV9VOitD/yl/LHt5lao8q+RDNxnzlzwsxYtUPKLBE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cnXPBERsGoKhDSwn/9l7SKW9iMUozpeIZR7/TJltqx09g5BV2d70Iyj+WDYXt3LLGbkkKGOWKf5oNxLZOwQ6QIUDzZPT2GRDNrZNv+drKuqrwHDI2H3ctHBKOP7+WTKzk+rIoV0+OpLDwg1pyIT8nXIqS3WNC0TSwiyKuNwWQ40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=No77RFiw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736877830; c=relaxed/simple;
+	bh=BjhL1mvVgbiyUP5EFcXboLt0cmy2uCP8vakiLKoCaCg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IwOj33UaC5N8DWJWbpYDBK0FZrElq5D/l8cJLw+YNeIVydQVavvEtPPJdyY+zeswwqlG2/wUYSHaG/ZManapAKZLCWVi7Lt1s3EBebzSAmXxclGA5pxNHqntTNmR+07w/XKCku0K+Q+L/gFo0nvuQ1tORycufP2SKVN9WXlDa+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DNZqEs2Y; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="No77RFiw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED01BC4CEE3;
-	Tue, 14 Jan 2025 18:03:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736877824;
-	bh=9RqV9VOitD/yl/LHt5lao8q+RDNxnzlzwsxYtUPKLBE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=No77RFiw/FlcF6wxAtqZY//+k75F9ZdyWrcHTfrXozl24vTz2sa8eE6l4EQWBbmN0
-	 4sD772CxwUXFxCnzZhm2akLObQqZZqVPdBmNtdV0UXWt/u98lYZDAKZiGenZopX26a
-	 aiHeud+cldMs0fE8Dzc8BFEe0Q7z9is5ku9oxheq83qSvh5zyEfZSO0zz3QDy1mFm6
-	 ejCJ7G8zybwZ90pDTkgW8vkB7ZLmOoYBbudjdptMCeP08+7UbBjsvUmUDkMtxK9QAm
-	 F/5aP3yUoII75VfMl0NTC9HcM0Glk6M/LLpwWa3Ivh99OQi6voP+OBtQVVRN+4hm2A
-	 o0un+CI5dihBw==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Tue, 14 Jan 2025 19:03:16 +0100
-Subject: [PATCH net-next 6/6] selftests: mptcp: connect: better display the
- files size
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DNZqEs2Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736877825;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=le8UIdWvg/w/MVcf7PTpfkO3a8bfCjcr6cLgmw3M858=;
+	b=DNZqEs2YY90KWegLtUNMKTwGRPETPz7uCY9w/Jl4tAw8gybvD7b4bi/cWIqw/SuBJbNp7i
+	yVj1xOiIOjCmvBJAvMr3WjQO/v0r9DOwvBiK8rQUtX2Sy+QytQV4Nst4RLwqpYrvj7rvxO
+	Uv0Gq9b9D4k9p6dc95qGs2pBbe0XxHM=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-412-RjogcdnCPlS1FV6yZ4Sprw-1; Tue,
+ 14 Jan 2025 13:03:43 -0500
+X-MC-Unique: RjogcdnCPlS1FV6yZ4Sprw-1
+X-Mimecast-MFC-AGG-ID: RjogcdnCPlS1FV6yZ4Sprw
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3C8EC19560B3;
+	Tue, 14 Jan 2025 18:03:39 +0000 (UTC)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.39.192.55])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2905C195608A;
+	Tue, 14 Jan 2025 18:03:16 +0000 (UTC)
+From: Valentin Schneider <vschneid@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	virtualization@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	linux-perf-users@vger.kernel.org,
+	xen-devel@lists.xenproject.org,
+	kvm@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	rcu@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Juergen Gross <jgross@suse.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Jason Baron <jbaron@akamai.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Clark Williams <williams@redhat.com>,
+	Yair Podemsky <ypodemsk@redhat.com>,
+	Tomas Glozar <tglozar@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Kees Cook <kees@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christoph Hellwig <hch@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Rong Xu <xur@google.com>,
+	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Yosry Ahmed <yosryahmed@google.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Jinghao Jia <jinghao7@illinois.edu>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: [PATCH v4 26/30] x86,tlb: Make __flush_tlb_global() noinstr-compliant
+Date: Tue, 14 Jan 2025 18:51:39 +0100
+Message-ID: <20250114175143.81438-27-vschneid@redhat.com>
+In-Reply-To: <20250114175143.81438-1-vschneid@redhat.com>
+References: <20250114175143.81438-1-vschneid@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250114-net-next-mptcp-st-more-debug-err-v1-6-2ffb16a6cf35@kernel.org>
-References: <20250114-net-next-mptcp-st-more-debug-err-v1-0-2ffb16a6cf35@kernel.org>
-In-Reply-To: <20250114-net-next-mptcp-st-more-debug-err-v1-0-2ffb16a6cf35@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1451; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=9RqV9VOitD/yl/LHt5lao8q+RDNxnzlzwsxYtUPKLBE=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnhqbohA5xIeuKa7zqzxe8lDHpqG3pwXCmqbw65
- EYg/R7m6CqJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ4am6AAKCRD2t4JPQmmg
- c5R1D/9tpJLn7hvzFt2nGluKO3ejHZEPXUDJP0D+z1+IOPNK1Jv05RTqcKhBHDoyyxJZQnjfWSf
- 0qZYy8NgmpMR7GwPYwJn1KVGCo/VLMHT24CgUq7r+FOUUg+Q036c+Vnw6N7L18ed75kaK5Ug9sN
- LKClD6vnBncvbTAM6BWPX/hO1XqTX+TvN6mkqJiUzCHxQ0gefPe0K3IkNewrwD9SFOyNdPtFf6V
- Pb1ABc+s4b9gkjyzVJ68Ikrkfq4chbKpNqPKMCdd+gMnSh69r0e33BkzwszuGH90OJXzJ4XqFrI
- 87WwbD5VW4lH9O4PNLLETR6nXQgCxAKYwGYzz4Fq0HwKfVa6upRI9DYbFz10ISgtYgQk37RfDWj
- tbOZajlwAUw+Ug1HwJ+QQgI7kqOG/03Eq0JzbyiQcHy0xZ9biFppO19V7FqWDhy7X6/hLBltYAX
- jETr1f94y8zl7NlZ49VVFvjVHiobzXfbkw6J1hG64D6HqEeFSi+lLAjk/M5VYBUp7zltr0JSA9t
- tlISgOr3Z6pfQrQUrbu0UhxP69qx++fhPUvO35mtKUFUrzuxQArIYBCkWJmJE5CiOHltf2YKBax
- orJ392Pc+tzqyWoeHH9YdzUx35huR/q+/TUyHvVEJ2UwYydNJtbY72h/CsbT6v4HmMSfAhzjsT3
- hxi7xrQIQt31www==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-'du' will print the name of the file, which was already displayed
-before, e.g.
+From: Peter Zijlstra <peterz@infradead.org>
 
-  Created /tmp/tmp.UOyy0ghfmQ (size 4703740/tmp/tmp.UOyy0ghfmQ) containing data sent by client
-  Created /tmp/tmp.xq3zvFinGo (size 1391724/tmp/tmp.xq3zvFinGo) containing data sent by server
+Later patches will require issuing a __flush_tlb_all() from noinstr code.
+This requires making both __flush_tlb_local() and __flush_tlb_global()
+noinstr-compliant.
 
-'stat' can be used instead, to display this instead:
+For __flush_tlb_global(), both native_flush_tlb_global() and xen_flush_tlb()
+need to be made noinstr.
 
-  Created /tmp/tmp.UOyy0ghfmQ (size 4703740 B) containing data sent by client
-  Created /tmp/tmp.xq3zvFinGo (size 1391724 B) containing data sent by server
+Forgo using __native_flush_tlb_global() / native_write_cr4() and have the
+ASM directly inlined in the native function. For the Xen stuff,
+__always_inline a handful of helpers.
 
-So easier to spot the file sizes.
-
-Reviewed-by: Geliang Tang <geliang@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Not-signed-off-by: Peter Zijlstra <peterz@infradead.org>
+[Changelog faff]
+Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- tools/testing/selftests/net/mptcp/mptcp_connect.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/invpcid.h       | 13 ++++++-------
+ arch/x86/include/asm/paravirt.h      |  2 +-
+ arch/x86/include/asm/xen/hypercall.h | 11 +++++++++--
+ arch/x86/mm/tlb.c                    | 15 +++++++++++----
+ arch/x86/xen/mmu_pv.c                | 10 +++++-----
+ arch/x86/xen/xen-ops.h               | 12 ++++++++----
+ 6 files changed, 40 insertions(+), 23 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-index e508d356fcdaebbfb95750bba0fa834a8463e32a..5e3c56253274a1f938d2ed9986c4290fcea8b96b 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-@@ -582,7 +582,7 @@ make_file()
- 	mptcp_lib_make_file $name 1024 $ksize
- 	dd if=/dev/urandom conv=notrunc of="$name" oflag=append bs=1 count=$rem 2> /dev/null
+diff --git a/arch/x86/include/asm/invpcid.h b/arch/x86/include/asm/invpcid.h
+index 734482afbf81d..ff26136fcd9c6 100644
+--- a/arch/x86/include/asm/invpcid.h
++++ b/arch/x86/include/asm/invpcid.h
+@@ -2,7 +2,7 @@
+ #ifndef _ASM_X86_INVPCID
+ #define _ASM_X86_INVPCID
  
--	echo "Created $name (size $(du -b "$name")) containing data sent by $who"
-+	echo "Created $name (size $(stat -c "%s" "$name") B) containing data sent by $who"
+-static inline void __invpcid(unsigned long pcid, unsigned long addr,
++static __always_inline void __invpcid(unsigned long pcid, unsigned long addr,
+ 			     unsigned long type)
+ {
+ 	struct { u64 d[2]; } desc = { { pcid, addr } };
+@@ -13,7 +13,7 @@ static inline void __invpcid(unsigned long pcid, unsigned long addr,
+ 	 * mappings, we don't want the compiler to reorder any subsequent
+ 	 * memory accesses before the TLB flush.
+ 	 */
+-	asm volatile("invpcid %[desc], %[type]"
++	asm_inline volatile("invpcid %[desc], %[type]"
+ 		     :: [desc] "m" (desc), [type] "r" (type) : "memory");
  }
  
- run_tests_lo()
-
+@@ -23,26 +23,25 @@ static inline void __invpcid(unsigned long pcid, unsigned long addr,
+ #define INVPCID_TYPE_ALL_NON_GLOBAL	3
+ 
+ /* Flush all mappings for a given pcid and addr, not including globals. */
+-static inline void invpcid_flush_one(unsigned long pcid,
+-				     unsigned long addr)
++static __always_inline void invpcid_flush_one(unsigned long pcid, unsigned long addr)
+ {
+ 	__invpcid(pcid, addr, INVPCID_TYPE_INDIV_ADDR);
+ }
+ 
+ /* Flush all mappings for a given PCID, not including globals. */
+-static inline void invpcid_flush_single_context(unsigned long pcid)
++static __always_inline void invpcid_flush_single_context(unsigned long pcid)
+ {
+ 	__invpcid(pcid, 0, INVPCID_TYPE_SINGLE_CTXT);
+ }
+ 
+ /* Flush all mappings, including globals, for all PCIDs. */
+-static inline void invpcid_flush_all(void)
++static __always_inline void invpcid_flush_all(void)
+ {
+ 	__invpcid(0, 0, INVPCID_TYPE_ALL_INCL_GLOBAL);
+ }
+ 
+ /* Flush all mappings for all PCIDs except globals. */
+-static inline void invpcid_flush_all_nonglobals(void)
++static __always_inline void invpcid_flush_all_nonglobals(void)
+ {
+ 	__invpcid(0, 0, INVPCID_TYPE_ALL_NON_GLOBAL);
+ }
+diff --git a/arch/x86/include/asm/paravirt.h b/arch/x86/include/asm/paravirt.h
+index d4eb9e1d61b8e..b3daee3d46677 100644
+--- a/arch/x86/include/asm/paravirt.h
++++ b/arch/x86/include/asm/paravirt.h
+@@ -75,7 +75,7 @@ static inline void __flush_tlb_local(void)
+ 	PVOP_VCALL0(mmu.flush_tlb_user);
+ }
+ 
+-static inline void __flush_tlb_global(void)
++static __always_inline void __flush_tlb_global(void)
+ {
+ 	PVOP_VCALL0(mmu.flush_tlb_kernel);
+ }
+diff --git a/arch/x86/include/asm/xen/hypercall.h b/arch/x86/include/asm/xen/hypercall.h
+index 97771b9d33af3..291e9f8006f62 100644
+--- a/arch/x86/include/asm/xen/hypercall.h
++++ b/arch/x86/include/asm/xen/hypercall.h
+@@ -365,8 +365,8 @@ MULTI_mmu_update(struct multicall_entry *mcl, struct mmu_update *req,
+ 	trace_xen_mc_entry(mcl, 4);
+ }
+ 
+-static inline void
+-MULTI_mmuext_op(struct multicall_entry *mcl, struct mmuext_op *op, int count,
++static __always_inline void
++__MULTI_mmuext_op(struct multicall_entry *mcl, struct mmuext_op *op, int count,
+ 		int *success_count, domid_t domid)
+ {
+ 	mcl->op = __HYPERVISOR_mmuext_op;
+@@ -374,6 +374,13 @@ MULTI_mmuext_op(struct multicall_entry *mcl, struct mmuext_op *op, int count,
+ 	mcl->args[1] = count;
+ 	mcl->args[2] = (unsigned long)success_count;
+ 	mcl->args[3] = domid;
++}
++
++static inline void
++MULTI_mmuext_op(struct multicall_entry *mcl, struct mmuext_op *op, int count,
++		int *success_count, domid_t domid)
++{
++	__MULTI_mmuext_op(mcl, op, count, success_count, domid);
+ 
+ 	trace_xen_mc_entry(mcl, 4);
+ }
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index a2becb85bea79..2d2ab3e221f0c 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -1169,9 +1169,10 @@ void flush_tlb_one_user(unsigned long addr)
+ /*
+  * Flush everything
+  */
+-STATIC_NOPV void native_flush_tlb_global(void)
++STATIC_NOPV noinstr void native_flush_tlb_global(void)
+ {
+ 	unsigned long flags;
++	unsigned long cr4;
+ 
+ 	if (static_cpu_has(X86_FEATURE_INVPCID)) {
+ 		/*
+@@ -1190,9 +1191,15 @@ STATIC_NOPV void native_flush_tlb_global(void)
+ 	 * be called from deep inside debugging code.)
+ 	 */
+ 	raw_local_irq_save(flags);
+-
+-	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
+-
++	cr4 = this_cpu_read(cpu_tlbstate.cr4);
++	asm volatile("mov %0,%%cr4": : "r" (cr4 ^ X86_CR4_PGE) : "memory");
++	asm volatile("mov %0,%%cr4": : "r" (cr4) : "memory");
++	/*
++	 * In lieu of not having the pinning crap, hard fail if CR4 doesn't
++	 * match the expected value. This ensures that anybody doing dodgy gets
++	 * the fallthrough check.
++	 */
++	BUG_ON(cr4 != this_cpu_read(cpu_tlbstate.cr4));
+ 	raw_local_irq_restore(flags);
+ }
+ 
+diff --git a/arch/x86/xen/mmu_pv.c b/arch/x86/xen/mmu_pv.c
+index 55a4996d0c04f..4eb265eb867af 100644
+--- a/arch/x86/xen/mmu_pv.c
++++ b/arch/x86/xen/mmu_pv.c
+@@ -1231,22 +1231,22 @@ static noinstr void xen_write_cr2(unsigned long cr2)
+ 	this_cpu_read(xen_vcpu)->arch.cr2 = cr2;
+ }
+ 
+-static noinline void xen_flush_tlb(void)
++static noinline noinstr void xen_flush_tlb(void)
+ {
+ 	struct mmuext_op *op;
+ 	struct multicall_space mcs;
+ 
+-	preempt_disable();
++	preempt_disable_notrace();
+ 
+ 	mcs = xen_mc_entry(sizeof(*op));
+ 
+ 	op = mcs.args;
+ 	op->cmd = MMUEXT_TLB_FLUSH_LOCAL;
+-	MULTI_mmuext_op(mcs.mc, op, 1, NULL, DOMID_SELF);
++	__MULTI_mmuext_op(mcs.mc, op, 1, NULL, DOMID_SELF);
+ 
+-	xen_mc_issue(XEN_LAZY_MMU);
++	__xen_mc_issue(XEN_LAZY_MMU);
+ 
+-	preempt_enable();
++	preempt_enable_notrace();
+ }
+ 
+ static void xen_flush_tlb_one_user(unsigned long addr)
+diff --git a/arch/x86/xen/xen-ops.h b/arch/x86/xen/xen-ops.h
+index 63c13a2ccf556..effb1a54afbd1 100644
+--- a/arch/x86/xen/xen-ops.h
++++ b/arch/x86/xen/xen-ops.h
+@@ -235,15 +235,19 @@ static inline struct multicall_space xen_mc_entry(size_t args)
+ void xen_mc_flush(void);
+ 
+ /* Issue a multicall if we're not in a lazy mode */
+-static inline void xen_mc_issue(unsigned mode)
++static __always_inline void __xen_mc_issue(unsigned mode)
+ {
+-	trace_xen_mc_issue(mode);
+-
+ 	if ((xen_get_lazy_mode() & mode) == 0)
+ 		xen_mc_flush();
+ 
+ 	/* restore flags saved in xen_mc_batch */
+-	local_irq_restore(this_cpu_read(xen_mc_irq_flags));
++	raw_local_irq_restore(this_cpu_read(xen_mc_irq_flags));
++}
++
++static inline void xen_mc_issue(unsigned mode)
++{
++	trace_xen_mc_issue(mode);
++	__xen_mc_issue(mode);
+ }
+ 
+ /* Set up a callback to be called when the current batch is flushed */
 -- 
-2.47.1
+2.43.0
 
