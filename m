@@ -1,114 +1,186 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8ACE1A83F4;
-	Tue, 21 Jan 2025 05:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C0919E819
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 05:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737437097; cv=none; b=Hb1hRuMC+u6XIRyaPMFRPdQKwaTmb/kcJ+3qNT7GS6A4YiU0JrJuRDjzORmgdFSN3yqQD/vpVdmWqlGcVSrl09ZDckASqbuvmiSbOnibzEegITmdjbQMRo1b7HAkE1nQuvzITYPgPDHVvSIK8tMhHw6EOa7uejzY6hQ7OnLOoEQ=
+	t=1737437242; cv=none; b=GD28hXhOAeI0SM6+cZ9haNK7DFb6g8bBlE19pAhts3oVxIwGTZZQDKgdElwogUgqVUm401DFE5Qf/VUHc4BoiVUqm5Ra1BrqeOFr+eZi5lf86ydS+hwxvybGzFm55FqKJ8NyQYPaM2l7JPg1b5jZzpx3uzCe1DH6FWT1klvQwCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737437097; c=relaxed/simple;
-	bh=q076FPLcnVELFIvGJ7vQmIAhrhGv9ZUwuu3/eGXujeA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ximhs53ZB4HYw1JRgtb/NPTiQwAmGZZ3uLVai6YeBZ3umhRuvgszpcw1G9xBvLCk88v95XUqe6hqKuEQxqDx9X9cO9Y7E9gGdkD/DQc7jpQ+VGRc3k5qWcCl7NCk7hd6LThpq3Cm7ahgcP7jGxk9H+sxb/M1RLZLkrozpUVnqtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ADQEK8uJ; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1737437242; c=relaxed/simple;
+	bh=17jdquf1O8HrGT7YX1JbIULVdHRHHmmF5bL1fyAoM9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dsILnkahU/7BDDVDf8e3GFobFzaA3HXc4CwDFzBlH5UlRkHvQySgkO9Fs4Ow2sEF9YYU0mZ7wqOgUeY1CJ18LtcoJhi6Uq4cQK+gUPVm5w8vMY//TDZPgUbtYg5+h95SNUzxYfQeWK96lt10+zExEprOQeklgVSt/mIyIHfcGCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=CjFGBInK; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ADQEK8uJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=2MNTx
-	I21IGNG+45HZA+umvOyB944fvSncQ36kJVgirg=; b=ADQEK8uJlnnMR/kIvl0OH
-	DsIeHYomgQmF9cA4amOhGwKvjTejvsBUvVo5NlZJGR6bFHbXVaY+larlxNYus8bo
-	EUi+AAd6GzuBT1YDeIXdAqCfmdYeARwB+mBr/T/7o0+40KS8y+bq/yn6A+kYMKpf
-	GULyi+6FUsXtFJAFtsOPCA=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wBHwYeaK49nTErMHA--.41409S5;
-	Tue, 21 Jan 2025 13:08:24 +0800 (CST)
-From: Jiayuan Chen <mrpre@163.com>
-To: bpf@vger.kernel.org,
-	jakub@cloudflare.com,
-	john.fastabend@gmail.com
-Cc: netdev@vger.kernel.org,
-	martin.lau@linux.dev,
-	ast@kernel.org,
-	edumazet@google.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-kernel@vger.kernel.org,
-	song@kernel.org,
-	andrii@kernel.org,
-	mhal@rbox.co,
-	yonghong.song@linux.dev,
-	daniel@iogearbox.net,
-	xiyou.wangcong@gmail.com,
-	horms@kernel.org,
-	corbet@lwn.net,
-	eddyz87@gmail.com,
-	cong.wang@bytedance.com,
-	shuah@kernel.org,
-	mykolal@fb.com,
-	jolsa@kernel.org,
-	haoluo@google.com,
-	sdf@fomichev.me,
-	kpsingh@kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v8 3/5] bpf: disable non stream socket for strparser
-Date: Tue, 21 Jan 2025 13:07:05 +0800
-Message-ID: <20250121050707.55523-4-mrpre@163.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250121050707.55523-1-mrpre@163.com>
-References: <20250121050707.55523-1-mrpre@163.com>
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="CjFGBInK"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21670dce0a7so108254485ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 21:27:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1737437239; x=1738042039; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KuNe0V4SlZE9V8OcN/E4qhh/fBRX/xaiMcicz54Ypbc=;
+        b=CjFGBInKFSGtYLOCcEjqY8Bn27ymGEWz+08u6G22zDw2Yn46EzpuW8ioqpYyPZvdeS
+         PL+f0F6rwFmgOXeE9ks7WFaFgX4+4jqLcP+1tXkSMwOk6FpTjJAKFo92DNqefY3itE9+
+         qbnj3cTHBa9mkhch49YxEGenvFajWjpC9wKhOMRN3mg/GEgEzHW1NMt6WQtygK1yl0jT
+         KjHFTzfudxO69pYWMqpeW11YwD/40z4r8JDENBd7cuW9R3f36CPPLMIkEr4ygsBwUqlR
+         phRItPEggnf264dj8xCT/GRiNq1mVtuFb0Mb53x9B/h1AiTanITyn+rEfGqJ8n2DFfkY
+         P4jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737437239; x=1738042039;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KuNe0V4SlZE9V8OcN/E4qhh/fBRX/xaiMcicz54Ypbc=;
+        b=SOK+mMiQYCNI5MI8ukqzq4BDgzqQJ+q+HOHV/OVlm+IbiThdvZCGkWEWVxpO3UT2eX
+         BEQ4HzpuLAdMWNVyzr//DRjRnZhulS2YmdRSHKC9LUPPoXRLMmPwmvDkPz6yr+HnLb9C
+         SoAHDVZpzl5uUAfmF6ok8yr32yJIBXPfNyJcAlxIMG1i4CiXXA5RXSj0AogpTaLXpyFY
+         mMAEEG49UsG9trnFo1O2PEOt3QiuQPbH+Hs3OfEjI4HEuz/6HIrs4CAaxKS6SBQpwUHM
+         xQTV5IaMUgkEPcC9qfEU9/Chm62lQEThBAf2N5cZU25A+ogZ7sr+5Fn3DbsG7wGneQeO
+         DoyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUtYdJUOxwvEN+heigrAJ9CT7SrZSw4045PC8nDdNGXLQAtOKUBs8iaXGRdYB4+4Sr6cVSbrnpzSPv3PzqinaI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFaRXymAew0n6/l1x9n/f00ImFi1a+n36Qp2caO8ATF55IG/5W
+	OyKU/L39ZGEAvqM1D6lXdcoUzDDFA6/ZP7DIr2k4xgFiS75bStLGSfBkcswu7ck=
+X-Gm-Gg: ASbGnctsah8lYSaE4QZ5RxyaglwtKAcPFDNfPyp8hIjVGTZ6xsixENOYZjrlAZI1E4A
+	2wsYf3OD/5hmQ4FWNdsYozRNuXW4tSMoedxke/yUNbPchVZcbEP8lBXbrq7eiMUyH0MqPNsgKDt
+	QtS1KCpyrykVSXGCPPDyMV9mc9KMYxhukjBevZAxvX9CeAPoA6By/IrvprnHRqAX2QSRh6tT00t
+	73zT5KB+GBfC5P/tIy80uPecq17clyFJWFL2Q7IRYrWqI+FoEZQ6ZdmUTfAUfi+HDapwqHRd6Xb
+	FrHh
+X-Google-Smtp-Source: AGHT+IF8AscE6lKE6K9gAMAkVavPAuy5ImBZTIR2UjEzttP05cs28ECPVkex5+WoyQz221rWXZqSKQ==
+X-Received: by 2002:a17:902:f7ce:b0:215:773a:c168 with SMTP id d9443c01a7336-21c352de425mr241247485ad.1.1737437239066;
+        Mon, 20 Jan 2025 21:27:19 -0800 (PST)
+Received: from [157.82.203.37] ([157.82.203.37])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a9bdf0b4503sm6710167a12.67.2025.01.20.21.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jan 2025 21:27:18 -0800 (PST)
+Message-ID: <92675e51-cbaf-4905-8cf8-dff741a26db9@daynix.com>
+Date: Tue, 21 Jan 2025 14:27:12 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v3 9/9] tap: Use tun's vnet-related code
+To: Willem de Bruijn <willemb@google.com>, Jason Wang <jasowang@redhat.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
+ Yuri Benditovich <yuri.benditovich@daynix.com>,
+ Andrew Melnychenko <andrew@daynix.com>,
+ Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
+ devel@daynix.com
+References: <20250116-tun-v3-0-c6b2871e97f7@daynix.com>
+ <20250116-tun-v3-9-c6b2871e97f7@daynix.com>
+ <678a21a9388ae_3e503c294f4@willemb.c.googlers.com.notmuch>
+ <51f0c6ba-21bc-4fef-a906-5d83ab29b7ff@daynix.com>
+ <CACGkMEuPXDWHErCCdEUB7+Q0NxsAjpSH9uTvOxzuBvNeyw7_Hg@mail.gmail.com>
+ <CA+FuTSec1z7-8nNNc1ZXkzekDrFHPnvYKFf8PNZg89VuwhoWSw@mail.gmail.com>
+Content-Language: en-US
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <CA+FuTSec1z7-8nNNc1ZXkzekDrFHPnvYKFf8PNZg89VuwhoWSw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBHwYeaK49nTErMHA--.41409S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AF18CF1DArW3Kw17uw4rZrb_yoW8JFyfp3
-	s5uw4xuFZrXr4Iv398Xan0gr109wn5KayUGF1fCa4ayw4qgr15WrWrGFyavF1jkr43WFy5
-	Zr4UG345Cw47XaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRMrWrUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDw3bp2ePKApFRQABs1
 
-Currently, only TCP supports strparser, but sockmap doesn't intercept
-non-TCP to attach strparser. For example, with UDP, although the
-read/write handlers are replaced, strparser is not executed due to the
-lack of read_sock operation.
+On 2025/01/20 20:19, Willem de Bruijn wrote:
+> On Mon, Jan 20, 2025 at 1:37 AM Jason Wang <jasowang@redhat.com> wrote:
+>>
+>> On Fri, Jan 17, 2025 at 6:35 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>
+>>> On 2025/01/17 18:23, Willem de Bruijn wrote:
+>>>> Akihiko Odaki wrote:
+>>>>> tun and tap implements the same vnet-related features so reuse the code.
+>>>>>
+>>>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>>>>> ---
+>>>>>    drivers/net/Kconfig    |   1 +
+>>>>>    drivers/net/Makefile   |   6 +-
+>>>>>    drivers/net/tap.c      | 152 +++++--------------------------------------------
+>>>>>    drivers/net/tun_vnet.c |   5 ++
+>>>>>    4 files changed, 24 insertions(+), 140 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+>>>>> index 1fd5acdc73c6..c420418473fc 100644
+>>>>> --- a/drivers/net/Kconfig
+>>>>> +++ b/drivers/net/Kconfig
+>>>>> @@ -395,6 +395,7 @@ config TUN
+>>>>>       tristate "Universal TUN/TAP device driver support"
+>>>>>       depends on INET
+>>>>>       select CRC32
+>>>>> +    select TAP
+>>>>>       help
+>>>>>         TUN/TAP provides packet reception and transmission for user space
+>>>>>         programs.  It can be viewed as a simple Point-to-Point or Ethernet
+>>>>> diff --git a/drivers/net/Makefile b/drivers/net/Makefile
+>>>>> index bb8eb3053772..2275309a97ee 100644
+>>>>> --- a/drivers/net/Makefile
+>>>>> +++ b/drivers/net/Makefile
+>>>>> @@ -29,9 +29,9 @@ obj-y += mdio/
+>>>>>    obj-y += pcs/
+>>>>>    obj-$(CONFIG_RIONET) += rionet.o
+>>>>>    obj-$(CONFIG_NET_TEAM) += team/
+>>>>> -obj-$(CONFIG_TUN) += tun-drv.o
+>>>>> -tun-drv-y := tun.o tun_vnet.o
+>>>>> -obj-$(CONFIG_TAP) += tap.o
+>>>>> +obj-$(CONFIG_TUN) += tun.o
+>>>>
+>>>> Is reversing the previous changes to tun.ko intentional?
+>>>>
+>>>> Perhaps the previous approach with a new CONFIG_TUN_VNET is preferable
+>>>> over this. In particular over making TUN select TAP, a new dependency.
+>>>
+>>> Jason, you also commented about CONFIG_TUN_VNET for the previous
+>>> version. Do you prefer the old approach, or the new one? (Or if you have
+>>> another idea, please tell me.)
+>>
+>> Ideally, if we can make TUN select TAP that would be better. But there
+>> are some subtle differences in the multi queue implementation. We will
+>> end up with some useless code for TUN unless we can unify the multi
+>> queue logic. It might not be worth it to change the TUN's multi queue
+>> logic so having a new file seems to be better.
+> 
+> +1 on deduplicating further. But this series is complex enough. Let's not
+> expand that.
+> 
+> The latest approach with a separate .o file may have some performance
+> cost by converting likely inlined code into real function calls.
+> Another option is to move it all into tun_vnet.h. That also resolves
+> the Makefile issues.
 
-Furthermore, in udp_bpf_recvmsg(), it checks whether psock has data, and
-if not, it falls back to the native UDP read interface, making
-UDP + strparser appear to read correctly. According to it's commit
-history, the behavior is unexpected.
+I measured the size difference between the latest inlining approaches. 
+The numbers may vary depending on the system configuration of course, 
+but they should be useful for reference.
 
-Moreover, since UDP lacks the concept of streams, we intercept it
-directly.
+The below shows sizes when having a separate module: 106496 bytes in total
 
-Signed-off-by: Jiayuan Chen <mrpre@163.com>
----
- net/core/sock_map.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+# lsmod
+Module                  Size  Used by
+tap                    28672  0
+tun                    61440  0
+tun_vnet               16384  2 tun,tap
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index f1b9b3958792..3b0f59d9b4db 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -303,7 +303,10 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
- 
- 	write_lock_bh(&sk->sk_callback_lock);
- 	if (stream_parser && stream_verdict && !psock->saved_data_ready) {
--		ret = sk_psock_init_strp(sk, psock);
-+		if (sk_is_tcp(sk))
-+			ret = sk_psock_init_strp(sk, psock);
-+		else
-+			ret = -EOPNOTSUPP;
- 		if (ret) {
- 			write_unlock_bh(&sk->sk_callback_lock);
- 			sk_psock_put(sk, psock);
--- 
-2.43.5
+The below shows sizes when inlining: 102400 bytes in total
 
+# lsmod
+Module                  Size  Used by
+tap                    32768  0
+tun                    69632  0
+
+So having a separate module costs 4096 bytes more.
+
+These two approaches should have similar tendency for run-time and 
+compile-time performance; the code is so trivial that the overhead of 
+having one additional module is dominant.
+
+The only downside of having all in tun_vnet.h is that it will expose its 
+internal macros and functions, which I think tolerable.
