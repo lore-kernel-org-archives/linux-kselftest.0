@@ -1,223 +1,955 @@
-Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C31B1F0E3D;
-	Tue, 21 Jan 2025 09:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701EE1EF094;
+	Tue, 21 Jan 2025 09:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737453555; cv=none; b=WeLziWOvf0VK4Y0nsbB0kDuJZC5/qgM7Vtuv5wlFmByLkLNO35E1IssxlT4XWqOgZ8HoRqSO6MAMpPjbqKm67LEVzBcM2a0iMnQ9HZGyAZiForb6LkmwD+A07uCJvtkG+1URSINk3cf/FD2qfgOkTwm8NgFVM6RnluEtyFMQVIc=
+	t=1737453559; cv=none; b=GYLUcOvsYU1gyfQWQ9qYApV4WwshRURmt+nt85l2BKd0qkywVY1h+JygwX/xiioZ4R/cMY2JUfz5IZTcjyK9yLAxHRiPtnonFg2qqfZi8hWPJvfhf6MkELVi5nTQrsKfsl8E20j9clKBOMauUbQXX41gncJNTBtbQEldHKHiq8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737453555; c=relaxed/simple;
-	bh=LVKqpiduUEiIE0WCvdEPHjeLOf0relobPkqN9nmrAhU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S8nDMmm9qtO3DDamtYoL5i4PkOy6Fk5adxregtIoGnwsQPl/HfVzEu4sj0RGSlvuxwOIz25Eys3A/Rxgp/4cvcbg08kjSbEI1iaPDKzyIuc7Stp8PPt2kdqqSR//C0nt/Bt0FLFGaiUQtC3jJMr53Dgpgt6m2gdTtRTJbDD3SSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=gvnMzFxu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IHCv/cn/; arc=none smtp.client-ip=202.12.124.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1737453559; c=relaxed/simple;
+	bh=5WcbMLleT0o3eKZQNgsMEVrIOTvbPCyMPrwQ3+fNd90=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XlB6gEtJXRRJI+On4u5G2Us8xkVwts4GAu+5YQ2T5Ga+Fa2zLH2fXVNR/5BzcyyvsoJCl/DKly4MCrCoI3eIsJX5J7Rp8NA6ts043Ap4Q9vC3ih9o5p6XzcN4tqsy97JHBGi3tDqH4YplWLY148JFKc0k7wH5PeUZZ6GFUWuFkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uUfl5aZw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="gvnMzFxu";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IHCv/cn/"
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 29F2625401A9;
-	Tue, 21 Jan 2025 04:59:11 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Tue, 21 Jan 2025 04:59:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
-	 t=1737453551; x=1737539951; bh=RyXroQptzAiQEwzDVd4c7B8jEu30/OGL
-	RPXRANdcL1M=; b=gvnMzFxuSuHChMmdQBlXUfoOQaB0YMQEbxuiw4ROnBx3v/Wj
-	EnX+O427nZkIUXWm+hJcLxlEQIwon4c9a3b6x9QAw5oCqeuoeoePf//6iDdJIDQf
-	yZ6jHRoyEybJ8yL1GAoKZyB8m17tGTKkEW8hq4ndOv8fLxuSz1c3GcI8PBPhGf7l
-	YDQnEVJflmxxlEQX+YDe5MGnXE3ptlPl9QYzlDN7IDmEkoYyWf25f+7Hd6vERt+T
-	7V9SYF4qjw3xo337YDptG2XJ1EC7zaxar2Dk7ZYCzckKvt6sZzT98g4rEc2iEXdx
-	SrknjXfeU4ye4+vwdKeXtKn59wz08t9KgIwYJA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1737453551; x=
-	1737539951; bh=RyXroQptzAiQEwzDVd4c7B8jEu30/OGLRPXRANdcL1M=; b=I
-	HCv/cn/CyWI/WoObyKGR66dxRTyaySztEGsbAQOs/toaGSjCqsNh/XE4OUD9s0sz
-	gzlgNHCJpC9YhtVv15XcYt5f/4p1xlLlD81C8RxoWEH5K8DcNUTR71/9OIoYETEN
-	4jt1H3oxBPzZhAxIVXJ6ylTdFXv4PuPeBRTVSi/WMmdao6QX+IyQdQ2S5X8GXTjP
-	IYXbK9vgNfyBNtGlR3ARy+3KrIVpVJMkRCXf2IwFK6uEKWeRkq6ex7HQQ/rSZOSJ
-	ejZ9BHckNiGxSEO1mIfO8rhKxHJco+Fds8ZuW/T3NKJIYIFvj/j3vO0j0LTdKWF+
-	bXx7SEgsRsSvmpb09AUZQ==
-X-ME-Sender: <xms:7m-PZ2h8PJb5qfUL_9FzNlQOmdDU5RBC7yHX34VWbWRTojai0xeISw>
-    <xme:7m-PZ3CEXHc6awYrg36B7TiTi0cmG0Zm6SYsRgcgGeOm4NtLI-9TuLRvSDTALkiE-
-    4n4w7bvz7o1wdwYS7I>
-X-ME-Received: <xmr:7m-PZ-FbASDVpKbYeR3uI6oOgKMjrLWgX_81Qi8q_viUbwTNRnYUVWeFhp0O>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejuddguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdej
-    necuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnh
-    grihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeevuddvtdevheetkedvieeugeehieev
-    jeekteefgfeffeefjefgvdeftdelueefgeenucffohhmrghinhepkhgvrhhnvghlrdhorh
-    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgu
-    sehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopedufedpmhhouggvpe
-    hsmhhtphhouhhtpdhrtghpthhtoheprghnthhonhhiohesohhpvghnvhhpnhdrnhgvthdp
-    rhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdprhgtphhtth
-    hopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughu
-    mhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthht
-    ohepughonhgrlhgurdhhuhhnthgvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshh
-    hurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhgvfidonhgvthguvghv
-    sehluhhnnhdrtghh
-X-ME-Proxy: <xmx:7m-PZ_Swb-8OamiMetuIbv7Oa32NFIc-r8bCGMYNkZ2Orp9rkPVkzQ>
-    <xmx:7m-PZzxUvUBCAXakg2DBO9md2yRK-lt6jNT2xT8uYmEXD3632sksKg>
-    <xmx:7m-PZ95hgdrJ0QJtvBs0H55vYdyaWaWVN8hjJ_C6-v9eZKdPSHlDkA>
-    <xmx:7m-PZwyxSXZqay0m2EQ_XZjdYe7-R1z0flKVR7LA1DTkNWl9El5J6g>
-    <xmx:7m-PZ7gAau3uUsd9XYpDFj6pQ3DQpNTQpdP4FurA_PiDHMzIFRa44uM0>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Jan 2025 04:59:10 -0500 (EST)
-Date: Tue, 21 Jan 2025 10:59:08 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: ryazanov.s.a@gmail.com, netdev@vger.kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH net-next v18 20/25] ovpn: implement peer
- add/get/dump/delete via netlink
-Message-ID: <Z49v7Ah4nUPMVgMM@hog>
-References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
- <20250113-b4-ovpn-v18-20-1f00db9c2bd6@openvpn.net>
- <Z4pDpqN2hCc-7DGt@hog>
- <f5507529-e61c-4b81-ab93-4ea6c8df46e9@openvpn.net>
- <Z4qPjuK3_fQUYLJi@hog>
- <33710520-5f4f-4d33-a28d-99dc64afc9c3@openvpn.net>
- <Z44gwl2d8ThTshzQ@hog>
- <94e44fdb-314c-41b0-8091-cff5789735b2@openvpn.net>
- <4238ae90-9d3f-4c6a-b540-bea3c2e1addc@openvpn.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uUfl5aZw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37764C4CEDF;
+	Tue, 21 Jan 2025 09:59:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737453558;
+	bh=5WcbMLleT0o3eKZQNgsMEVrIOTvbPCyMPrwQ3+fNd90=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=uUfl5aZwJkv4bPwVXoadqbBIIS5lvUI7KcPtUwUKK4cEvXatWnIzauTmEEUUv7FDv
+	 fuWMJOZQ4lyQoglUEWoGLrrL52mzXJfLrXExmwwOW6EJauBkxR2aYPVEDE76eEPmxm
+	 U/7ya68zv6IATYW9VuP8f5yeGlo0+66kQMD5PzVuU06iUCEyi5AIQsy5GooBzdU+qZ
+	 aHT2lvM2/XOXOCrA2NsDkaVWK9Fu/OWUxlGZJ/mddlmyf68a5BmckqKl9jJxj3Jzho
+	 QVn8OZPoMGwY4esTj3Ja+qBh47vjaUgwYxC8Q6NHs4LrgK7jzglw6QItjL3XqCf9UH
+	 ijzCeOsR/+5sQ==
+From: Mike Rapoport <rppt@kernel.org>
+To: x86@kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Daniel Thompson <danielt@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Gow <davidgow@google.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jason Wessel <jason.wessel@windriver.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Rae Moar <rmoar@google.com>,
+	Richard Weinberger <richard@nod.at>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	kgdb-bugreport@lists.sourceforge.net,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	live-patching@vger.kernel.org
+Subject: [PATCH v2 08/10] Revert "x86/module: prepare module loading for ROX allocations of text"
+Date: Tue, 21 Jan 2025 11:57:37 +0200
+Message-ID: <20250121095739.986006-9-rppt@kernel.org>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250121095739.986006-1-rppt@kernel.org>
+References: <20250121095739.986006-1-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4238ae90-9d3f-4c6a-b540-bea3c2e1addc@openvpn.net>
 
-2025-01-20, 22:20:40 +0100, Antonio Quartulli wrote:
-> On 20/01/2025 11:45, Antonio Quartulli wrote:
-> [...]
-> > > > > > > I'm not sure what this (and the peer flushing on NETDEV_DOWN) is
-> > > > > > > trying to accomplish. Is it a problem to keep peers
-> > > > > > > when the netdevice
-> > > > > > > is down?
-> > > > > > 
-> > > > > > This is the result of my discussion with Sergey that
-> > > > > > started in v23 5/23:
-> > > > > > 
-> > > > > > https://lore.kernel.org/r/netdev/20241029-b4-ovpn-v11-5-
-> > > > > > de4698c73a25@openvpn.net/
-> > > > > > 
-> > > > > > The idea was to match operational state with actual
-> > > > > > connectivity to peer(s).
-> > > > > > 
-> > > > > > Originally I wanted to simply kee the carrier always on,
-> > > > > > but after further
-> > > > > > discussion (including the meaning of the openvpn option
-> > > > > > --persist- tun) we
-> > > > > > agreed on following the logic where an UP device has a
-> > > > > > peer connected (logic
-> > > > > > is slightly different between MP and P2P).
-> > > > > > 
-> > > > > > I am not extremely happy with the resulting complexity,
-> > > > > > but it seemed to be
-> > > > > > blocker for Sergey.
-> > > > > 
-> > > > > [after re-reading that discussion with Sergey]
-> > > > > 
-> > > > > I don't understand why "admin does 'ip link set tun0 down'" means "we
-> > > > > should get rid of all peers. For me the carrier situation goes the
-> > > > > other way: no peer, no carrier (as if I unplugged the cable from my
-> > > > > ethernet card), and it's independent of what the user does (ip link
-> > > > > set XXX up/down). You have that with netif_carrier_{on,off}, but
-> > > > > flushing peers when the admin does "ip link set tun0 down" is separate
-> > > > > IMO.
-> > > > 
-> > > > The reasoning was "the user is asking the VPN to go down - it should be
-> > > > assumed that from that moment on no VPN traffic whatsoever
-> > > > should flow in
-> > > > either direction".
-> > > > Similarly to when you bring an Eth interface dwn - the phy link
-> > > > goes down as
-> > > > well.
-> > > > 
-> > > > Does it make sense?
-> > > 
-> > > I'm not sure. If I turn the ovpn interface down for a second, the
-> > > peers are removed. Will they come back when I bring the interface back
-> > > up?  That'd have to be done by userspace (which could also watch for
-> > > the DOWN events and tell the kernel to flush the peers) - but some of
-> > > the peers could have timed out in the meantime.
-> > > 
-> > > If I set the VPN interface down, I expect no packets flowing through
-> > > that interface (dropping the peers isn't necessary for that), but all
-> > > non-data (key exchange etc sent by openvpn's userspace) should still
-> > > go through, and IMO peer keepalive fits in that "non-data" category.
-> > 
-> > This was my original thought too and my original proposal followed this
-> > idea :-)
-> > 
-> > However Sergey had a strong opinion about "the user expect no traffic
-> > whatsoever".
-> > 
-> > I'd be happy about going again with your proposed approach, but I need
-> > to be sure that on the next revision nobody will come asking to revert
-> > this logic again :(
-> > 
-> > > 
-> > > 
-> > > What does openvpn currently do if I do
-> > >      ip link set tun0 down ; sleep 5 ; ip link set tun0 up
-> > > with a tuntap interface?
-> > 
-> > I think nothing happens, because userspace doesn't monitor the netdev
-> > status. Therefore, unless tun closed the socket (which I think it does
-> > only when the interface is destroyed), userspace does not even realize
-> > that the interface went down.
-> 
-> What does IPsec do in this case? Does it keep connections open and
-> keepalives flowing?
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-I don't think IPsec is a good comparison, because it can be used
-without any interface at all (and without UDP/TCP encap sockets), and
-they're not strongly tied to packet processing. If an interface is
-used, the implementation will send the packets through it, otherwise
-it's perfectly happy to send packets back and forth without it.
+The module code does not create a writable copy of the executable memory
+anymore so there is no need to handle it in module relocation and
+alternatives patching.
 
-MACsec is a bit more similar (all crypto state is bound to the macsec
-netdevice -- but no socket and no keepalive), and here the key
-exchange packets all flow directly through the real interface (eth0 or
-whatever), without worrying about the state of the macsec device
-(although I guess the userspace taking care of key exchange is free to
-stop sending when the admin turns the link down).
+This reverts commit 9bfc4824fd4836c16bb44f922bfaffba5da3e4f3.
 
-> One counter example we have in the kernel are 802.11 interfaces.
-> Any 802.11 interface must be brought up before you can possibly establish a
-> WiFi link. If you bring the interface down the link is closed and no 802.11
-> control packets flow anymore.
-> 
-> However, 802.11 is different as we are controlling a "physical behaviour",
-> while in ovpn (like other tunneling modules) we are controlling a "virtual
-> behaviour".
+Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+---
+ arch/um/kernel/um_arch.c           |  11 +-
+ arch/x86/entry/vdso/vma.c          |   3 +-
+ arch/x86/include/asm/alternative.h |  14 +--
+ arch/x86/kernel/alternative.c      | 181 ++++++++++++-----------------
+ arch/x86/kernel/ftrace.c           |  30 +++--
+ arch/x86/kernel/module.c           |  45 +++----
+ 6 files changed, 117 insertions(+), 167 deletions(-)
 
-Agree, 802.11 is a bit special.
-
-(I see you already answered my previous message, but since I've
-written all this anyway... :))
-
+diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
+index 8037a967225d..d2cc2c69a8c4 100644
+--- a/arch/um/kernel/um_arch.c
++++ b/arch/um/kernel/um_arch.c
+@@ -440,25 +440,24 @@ void __init arch_cpu_finalize_init(void)
+ 	os_check_bugs();
+ }
+ 
+-void apply_seal_endbr(s32 *start, s32 *end, struct module *mod)
++void apply_seal_endbr(s32 *start, s32 *end)
+ {
+ }
+ 
+-void apply_retpolines(s32 *start, s32 *end, struct module *mod)
++void apply_retpolines(s32 *start, s32 *end)
+ {
+ }
+ 
+-void apply_returns(s32 *start, s32 *end, struct module *mod)
++void apply_returns(s32 *start, s32 *end)
+ {
+ }
+ 
+ void apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+-		   s32 *start_cfi, s32 *end_cfi, struct module *mod)
++		   s32 *start_cfi, s32 *end_cfi)
+ {
+ }
+ 
+-void apply_alternatives(struct alt_instr *start, struct alt_instr *end,
+-			struct module *mod)
++void apply_alternatives(struct alt_instr *start, struct alt_instr *end)
+ {
+ }
+ 
+diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
+index 39e6efc1a9ca..bfc7cabf4017 100644
+--- a/arch/x86/entry/vdso/vma.c
++++ b/arch/x86/entry/vdso/vma.c
+@@ -48,8 +48,7 @@ int __init init_vdso_image(const struct vdso_image *image)
+ 
+ 	apply_alternatives((struct alt_instr *)(image->data + image->alt),
+ 			   (struct alt_instr *)(image->data + image->alt +
+-						image->alt_len),
+-			   NULL);
++						image->alt_len));
+ 
+ 	return 0;
+ }
+diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
+index dc03a647776d..ca9ae606aab9 100644
+--- a/arch/x86/include/asm/alternative.h
++++ b/arch/x86/include/asm/alternative.h
+@@ -96,16 +96,16 @@ extern struct alt_instr __alt_instructions[], __alt_instructions_end[];
+  * instructions were patched in already:
+  */
+ extern int alternatives_patched;
+-struct module;
+ 
+ extern void alternative_instructions(void);
+-extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end,
+-			       struct module *mod);
+-extern void apply_retpolines(s32 *start, s32 *end, struct module *mod);
+-extern void apply_returns(s32 *start, s32 *end, struct module *mod);
+-extern void apply_seal_endbr(s32 *start, s32 *end, struct module *mod);
++extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
++extern void apply_retpolines(s32 *start, s32 *end);
++extern void apply_returns(s32 *start, s32 *end);
++extern void apply_seal_endbr(s32 *start, s32 *end);
+ extern void apply_fineibt(s32 *start_retpoline, s32 *end_retpoine,
+-			  s32 *start_cfi, s32 *end_cfi, struct module *mod);
++			  s32 *start_cfi, s32 *end_cfi);
++
++struct module;
+ 
+ struct callthunk_sites {
+ 	s32				*call_start, *call_end;
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 243843e44e89..d17518ca19b8 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -392,10 +392,8 @@ EXPORT_SYMBOL(BUG_func);
+  * Rewrite the "call BUG_func" replacement to point to the target of the
+  * indirect pv_ops call "call *disp(%ip)".
+  */
+-static int alt_replace_call(u8 *instr, u8 *insn_buff, struct alt_instr *a,
+-			    struct module *mod)
++static int alt_replace_call(u8 *instr, u8 *insn_buff, struct alt_instr *a)
+ {
+-	u8 *wr_instr = module_writable_address(mod, instr);
+ 	void *target, *bug = &BUG_func;
+ 	s32 disp;
+ 
+@@ -405,14 +403,14 @@ static int alt_replace_call(u8 *instr, u8 *insn_buff, struct alt_instr *a,
+ 	}
+ 
+ 	if (a->instrlen != 6 ||
+-	    wr_instr[0] != CALL_RIP_REL_OPCODE ||
+-	    wr_instr[1] != CALL_RIP_REL_MODRM) {
++	    instr[0] != CALL_RIP_REL_OPCODE ||
++	    instr[1] != CALL_RIP_REL_MODRM) {
+ 		pr_err("ALT_FLAG_DIRECT_CALL set for unrecognized indirect call\n");
+ 		BUG();
+ 	}
+ 
+ 	/* Skip CALL_RIP_REL_OPCODE and CALL_RIP_REL_MODRM */
+-	disp = *(s32 *)(wr_instr + 2);
++	disp = *(s32 *)(instr + 2);
+ #ifdef CONFIG_X86_64
+ 	/* ff 15 00 00 00 00   call   *0x0(%rip) */
+ 	/* target address is stored at "next instruction + disp". */
+@@ -450,8 +448,7 @@ static inline u8 * instr_va(struct alt_instr *i)
+  * to refetch changed I$ lines.
+  */
+ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
+-						  struct alt_instr *end,
+-						  struct module *mod)
++						  struct alt_instr *end)
+ {
+ 	u8 insn_buff[MAX_PATCH_LEN];
+ 	u8 *instr, *replacement;
+@@ -480,7 +477,6 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
+ 	 */
+ 	for (a = start; a < end; a++) {
+ 		int insn_buff_sz = 0;
+-		u8 *wr_instr, *wr_replacement;
+ 
+ 		/*
+ 		 * In case of nested ALTERNATIVE()s the outer alternative might
+@@ -494,11 +490,7 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
+ 		}
+ 
+ 		instr = instr_va(a);
+-		wr_instr = module_writable_address(mod, instr);
+-
+ 		replacement = (u8 *)&a->repl_offset + a->repl_offset;
+-		wr_replacement = module_writable_address(mod, replacement);
+-
+ 		BUG_ON(a->instrlen > sizeof(insn_buff));
+ 		BUG_ON(a->cpuid >= (NCAPINTS + NBUGINTS) * 32);
+ 
+@@ -509,9 +501,9 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
+ 		 *   patch if feature is *NOT* present.
+ 		 */
+ 		if (!boot_cpu_has(a->cpuid) == !(a->flags & ALT_FLAG_NOT)) {
+-			memcpy(insn_buff, wr_instr, a->instrlen);
++			memcpy(insn_buff, instr, a->instrlen);
+ 			optimize_nops(instr, insn_buff, a->instrlen);
+-			text_poke_early(wr_instr, insn_buff, a->instrlen);
++			text_poke_early(instr, insn_buff, a->instrlen);
+ 			continue;
+ 		}
+ 
+@@ -521,12 +513,11 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
+ 			instr, instr, a->instrlen,
+ 			replacement, a->replacementlen, a->flags);
+ 
+-		memcpy(insn_buff, wr_replacement, a->replacementlen);
++		memcpy(insn_buff, replacement, a->replacementlen);
+ 		insn_buff_sz = a->replacementlen;
+ 
+ 		if (a->flags & ALT_FLAG_DIRECT_CALL) {
+-			insn_buff_sz = alt_replace_call(instr, insn_buff, a,
+-							mod);
++			insn_buff_sz = alt_replace_call(instr, insn_buff, a);
+ 			if (insn_buff_sz < 0)
+ 				continue;
+ 		}
+@@ -536,11 +527,11 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
+ 
+ 		apply_relocation(insn_buff, instr, a->instrlen, replacement, a->replacementlen);
+ 
+-		DUMP_BYTES(ALT, wr_instr, a->instrlen, "%px:   old_insn: ", instr);
++		DUMP_BYTES(ALT, instr, a->instrlen, "%px:   old_insn: ", instr);
+ 		DUMP_BYTES(ALT, replacement, a->replacementlen, "%px:   rpl_insn: ", replacement);
+ 		DUMP_BYTES(ALT, insn_buff, insn_buff_sz, "%px: final_insn: ", instr);
+ 
+-		text_poke_early(wr_instr, insn_buff, insn_buff_sz);
++		text_poke_early(instr, insn_buff, insn_buff_sz);
+ 	}
+ 
+ 	kasan_enable_current();
+@@ -731,20 +722,18 @@ static int patch_retpoline(void *addr, struct insn *insn, u8 *bytes)
+ /*
+  * Generated by 'objtool --retpoline'.
+  */
+-void __init_or_module noinline apply_retpolines(s32 *start, s32 *end,
+-						struct module *mod)
++void __init_or_module noinline apply_retpolines(s32 *start, s32 *end)
+ {
+ 	s32 *s;
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
+ 		struct insn insn;
+ 		int len, ret;
+ 		u8 bytes[16];
+ 		u8 op1, op2;
+ 
+-		ret = insn_decode_kernel(&insn, wr_addr);
++		ret = insn_decode_kernel(&insn, addr);
+ 		if (WARN_ON_ONCE(ret < 0))
+ 			continue;
+ 
+@@ -772,9 +761,9 @@ void __init_or_module noinline apply_retpolines(s32 *start, s32 *end,
+ 		len = patch_retpoline(addr, &insn, bytes);
+ 		if (len == insn.length) {
+ 			optimize_nops(addr, bytes, len);
+-			DUMP_BYTES(RETPOLINE, ((u8*)wr_addr),  len, "%px: orig: ", addr);
++			DUMP_BYTES(RETPOLINE, ((u8*)addr),  len, "%px: orig: ", addr);
+ 			DUMP_BYTES(RETPOLINE, ((u8*)bytes), len, "%px: repl: ", addr);
+-			text_poke_early(wr_addr, bytes, len);
++			text_poke_early(addr, bytes, len);
+ 		}
+ 	}
+ }
+@@ -810,8 +799,7 @@ static int patch_return(void *addr, struct insn *insn, u8 *bytes)
+ 	return i;
+ }
+ 
+-void __init_or_module noinline apply_returns(s32 *start, s32 *end,
+-					     struct module *mod)
++void __init_or_module noinline apply_returns(s32 *start, s32 *end)
+ {
+ 	s32 *s;
+ 
+@@ -820,13 +808,12 @@ void __init_or_module noinline apply_returns(s32 *start, s32 *end,
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *dest = NULL, *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
+ 		struct insn insn;
+ 		int len, ret;
+ 		u8 bytes[16];
+ 		u8 op;
+ 
+-		ret = insn_decode_kernel(&insn, wr_addr);
++		ret = insn_decode_kernel(&insn, addr);
+ 		if (WARN_ON_ONCE(ret < 0))
+ 			continue;
+ 
+@@ -846,35 +833,32 @@ void __init_or_module noinline apply_returns(s32 *start, s32 *end,
+ 
+ 		len = patch_return(addr, &insn, bytes);
+ 		if (len == insn.length) {
+-			DUMP_BYTES(RET, ((u8*)wr_addr),  len, "%px: orig: ", addr);
++			DUMP_BYTES(RET, ((u8*)addr),  len, "%px: orig: ", addr);
+ 			DUMP_BYTES(RET, ((u8*)bytes), len, "%px: repl: ", addr);
+-			text_poke_early(wr_addr, bytes, len);
++			text_poke_early(addr, bytes, len);
+ 		}
+ 	}
+ }
+ #else
+-void __init_or_module noinline apply_returns(s32 *start, s32 *end,
+-					     struct module *mod) { }
++void __init_or_module noinline apply_returns(s32 *start, s32 *end) { }
+ #endif /* CONFIG_MITIGATION_RETHUNK */
+ 
+ #else /* !CONFIG_MITIGATION_RETPOLINE || !CONFIG_OBJTOOL */
+ 
+-void __init_or_module noinline apply_retpolines(s32 *start, s32 *end,
+-						struct module *mod) { }
+-void __init_or_module noinline apply_returns(s32 *start, s32 *end,
+-					     struct module *mod) { }
++void __init_or_module noinline apply_retpolines(s32 *start, s32 *end) { }
++void __init_or_module noinline apply_returns(s32 *start, s32 *end) { }
+ 
+ #endif /* CONFIG_MITIGATION_RETPOLINE && CONFIG_OBJTOOL */
+ 
+ #ifdef CONFIG_X86_KERNEL_IBT
+ 
+-static void poison_cfi(void *addr, void *wr_addr);
++static void poison_cfi(void *addr);
+ 
+-static void __init_or_module poison_endbr(void *addr, void *wr_addr, bool warn)
++static void __init_or_module poison_endbr(void *addr, bool warn)
+ {
+ 	u32 endbr, poison = gen_endbr_poison();
+ 
+-	if (WARN_ON_ONCE(get_kernel_nofault(endbr, wr_addr)))
++	if (WARN_ON_ONCE(get_kernel_nofault(endbr, addr)))
+ 		return;
+ 
+ 	if (!is_endbr(endbr)) {
+@@ -889,7 +873,7 @@ static void __init_or_module poison_endbr(void *addr, void *wr_addr, bool warn)
+ 	 */
+ 	DUMP_BYTES(ENDBR, ((u8*)addr), 4, "%px: orig: ", addr);
+ 	DUMP_BYTES(ENDBR, ((u8*)&poison), 4, "%px: repl: ", addr);
+-	text_poke_early(wr_addr, &poison, 4);
++	text_poke_early(addr, &poison, 4);
+ }
+ 
+ /*
+@@ -898,23 +882,22 @@ static void __init_or_module poison_endbr(void *addr, void *wr_addr, bool warn)
+  * Seal the functions for indirect calls by clobbering the ENDBR instructions
+  * and the kCFI hash value.
+  */
+-void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end, struct module *mod)
++void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end)
+ {
+ 	s32 *s;
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
+ 
+-		poison_endbr(addr, wr_addr, true);
++		poison_endbr(addr, true);
+ 		if (IS_ENABLED(CONFIG_FINEIBT))
+-			poison_cfi(addr - 16, wr_addr - 16);
++			poison_cfi(addr - 16);
+ 	}
+ }
+ 
+ #else
+ 
+-void __init_or_module apply_seal_endbr(s32 *start, s32 *end, struct module *mod) { }
++void __init_or_module apply_seal_endbr(s32 *start, s32 *end) { }
+ 
+ #endif /* CONFIG_X86_KERNEL_IBT */
+ 
+@@ -1136,7 +1119,7 @@ static u32 decode_caller_hash(void *addr)
+ }
+ 
+ /* .retpoline_sites */
+-static int cfi_disable_callers(s32 *start, s32 *end, struct module *mod)
++static int cfi_disable_callers(s32 *start, s32 *end)
+ {
+ 	/*
+ 	 * Disable kCFI by patching in a JMP.d8, this leaves the hash immediate
+@@ -1148,23 +1131,20 @@ static int cfi_disable_callers(s32 *start, s32 *end, struct module *mod)
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		wr_addr = module_writable_address(mod, addr);
+-		hash = decode_caller_hash(wr_addr);
+-
++		hash = decode_caller_hash(addr);
+ 		if (!hash) /* nocfi callers */
+ 			continue;
+ 
+-		text_poke_early(wr_addr, jmp, 2);
++		text_poke_early(addr, jmp, 2);
+ 	}
+ 
+ 	return 0;
+ }
+ 
+-static int cfi_enable_callers(s32 *start, s32 *end, struct module *mod)
++static int cfi_enable_callers(s32 *start, s32 *end)
+ {
+ 	/*
+ 	 * Re-enable kCFI, undo what cfi_disable_callers() did.
+@@ -1174,115 +1154,106 @@ static int cfi_enable_callers(s32 *start, s32 *end, struct module *mod)
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		wr_addr = module_writable_address(mod, addr);
+-		hash = decode_caller_hash(wr_addr);
++		hash = decode_caller_hash(addr);
+ 		if (!hash) /* nocfi callers */
+ 			continue;
+ 
+-		text_poke_early(wr_addr, mov, 2);
++		text_poke_early(addr, mov, 2);
+ 	}
+ 
+ 	return 0;
+ }
+ 
+ /* .cfi_sites */
+-static int cfi_rand_preamble(s32 *start, s32 *end, struct module *mod)
++static int cfi_rand_preamble(s32 *start, s32 *end)
+ {
+ 	s32 *s;
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
+ 		u32 hash;
+ 
+-		hash = decode_preamble_hash(wr_addr);
++		hash = decode_preamble_hash(addr);
+ 		if (WARN(!hash, "no CFI hash found at: %pS %px %*ph\n",
+ 			 addr, addr, 5, addr))
+ 			return -EINVAL;
+ 
+ 		hash = cfi_rehash(hash);
+-		text_poke_early(wr_addr + 1, &hash, 4);
++		text_poke_early(addr + 1, &hash, 4);
+ 	}
+ 
+ 	return 0;
+ }
+ 
+-static int cfi_rewrite_preamble(s32 *start, s32 *end, struct module *mod)
++static int cfi_rewrite_preamble(s32 *start, s32 *end)
+ {
+ 	s32 *s;
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
+ 		u32 hash;
+ 
+-		hash = decode_preamble_hash(wr_addr);
++		hash = decode_preamble_hash(addr);
+ 		if (WARN(!hash, "no CFI hash found at: %pS %px %*ph\n",
+ 			 addr, addr, 5, addr))
+ 			return -EINVAL;
+ 
+-		text_poke_early(wr_addr, fineibt_preamble_start, fineibt_preamble_size);
+-		WARN_ON(*(u32 *)(wr_addr + fineibt_preamble_hash) != 0x12345678);
+-		text_poke_early(wr_addr + fineibt_preamble_hash, &hash, 4);
++		text_poke_early(addr, fineibt_preamble_start, fineibt_preamble_size);
++		WARN_ON(*(u32 *)(addr + fineibt_preamble_hash) != 0x12345678);
++		text_poke_early(addr + fineibt_preamble_hash, &hash, 4);
+ 	}
+ 
+ 	return 0;
+ }
+ 
+-static void cfi_rewrite_endbr(s32 *start, s32 *end, struct module *mod)
++static void cfi_rewrite_endbr(s32 *start, s32 *end)
+ {
+ 	s32 *s;
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
+ 
+-		poison_endbr(addr + 16, wr_addr + 16, false);
++		poison_endbr(addr+16, false);
+ 	}
+ }
+ 
+ /* .retpoline_sites */
+-static int cfi_rand_callers(s32 *start, s32 *end, struct module *mod)
++static int cfi_rand_callers(s32 *start, s32 *end)
+ {
+ 	s32 *s;
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		wr_addr = module_writable_address(mod, addr);
+-		hash = decode_caller_hash(wr_addr);
++		hash = decode_caller_hash(addr);
+ 		if (hash) {
+ 			hash = -cfi_rehash(hash);
+-			text_poke_early(wr_addr + 2, &hash, 4);
++			text_poke_early(addr + 2, &hash, 4);
+ 		}
+ 	}
+ 
+ 	return 0;
+ }
+ 
+-static int cfi_rewrite_callers(s32 *start, s32 *end, struct module *mod)
++static int cfi_rewrite_callers(s32 *start, s32 *end)
+ {
+ 	s32 *s;
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		wr_addr = module_writable_address(mod, addr);
+-		hash = decode_caller_hash(wr_addr);
++		hash = decode_caller_hash(addr);
+ 		if (hash) {
+-			text_poke_early(wr_addr, fineibt_caller_start, fineibt_caller_size);
+-			WARN_ON(*(u32 *)(wr_addr + fineibt_caller_hash) != 0x12345678);
+-			text_poke_early(wr_addr + fineibt_caller_hash, &hash, 4);
++			text_poke_early(addr, fineibt_caller_start, fineibt_caller_size);
++			WARN_ON(*(u32 *)(addr + fineibt_caller_hash) != 0x12345678);
++			text_poke_early(addr + fineibt_caller_hash, &hash, 4);
+ 		}
+ 		/* rely on apply_retpolines() */
+ 	}
+@@ -1291,9 +1262,8 @@ static int cfi_rewrite_callers(s32 *start, s32 *end, struct module *mod)
+ }
+ 
+ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+-			    s32 *start_cfi, s32 *end_cfi, struct module *mod)
++			    s32 *start_cfi, s32 *end_cfi, bool builtin)
+ {
+-	bool builtin = mod ? false : true;
+ 	int ret;
+ 
+ 	if (WARN_ONCE(fineibt_preamble_size != 16,
+@@ -1311,7 +1281,7 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+ 	 * rewrite them. This disables all CFI. If this succeeds but any of the
+ 	 * later stages fails, we're without CFI.
+ 	 */
+-	ret = cfi_disable_callers(start_retpoline, end_retpoline, mod);
++	ret = cfi_disable_callers(start_retpoline, end_retpoline);
+ 	if (ret)
+ 		goto err;
+ 
+@@ -1322,11 +1292,11 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+ 			cfi_bpf_subprog_hash = cfi_rehash(cfi_bpf_subprog_hash);
+ 		}
+ 
+-		ret = cfi_rand_preamble(start_cfi, end_cfi, mod);
++		ret = cfi_rand_preamble(start_cfi, end_cfi);
+ 		if (ret)
+ 			goto err;
+ 
+-		ret = cfi_rand_callers(start_retpoline, end_retpoline, mod);
++		ret = cfi_rand_callers(start_retpoline, end_retpoline);
+ 		if (ret)
+ 			goto err;
+ 	}
+@@ -1338,7 +1308,7 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+ 		return;
+ 
+ 	case CFI_KCFI:
+-		ret = cfi_enable_callers(start_retpoline, end_retpoline, mod);
++		ret = cfi_enable_callers(start_retpoline, end_retpoline);
+ 		if (ret)
+ 			goto err;
+ 
+@@ -1348,17 +1318,17 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+ 
+ 	case CFI_FINEIBT:
+ 		/* place the FineIBT preamble at func()-16 */
+-		ret = cfi_rewrite_preamble(start_cfi, end_cfi, mod);
++		ret = cfi_rewrite_preamble(start_cfi, end_cfi);
+ 		if (ret)
+ 			goto err;
+ 
+ 		/* rewrite the callers to target func()-16 */
+-		ret = cfi_rewrite_callers(start_retpoline, end_retpoline, mod);
++		ret = cfi_rewrite_callers(start_retpoline, end_retpoline);
+ 		if (ret)
+ 			goto err;
+ 
+ 		/* now that nobody targets func()+0, remove ENDBR there */
+-		cfi_rewrite_endbr(start_cfi, end_cfi, mod);
++		cfi_rewrite_endbr(start_cfi, end_cfi);
+ 
+ 		if (builtin)
+ 			pr_info("Using FineIBT CFI\n");
+@@ -1377,7 +1347,7 @@ static inline void poison_hash(void *addr)
+ 	*(u32 *)addr = 0;
+ }
+ 
+-static void poison_cfi(void *addr, void *wr_addr)
++static void poison_cfi(void *addr)
+ {
+ 	switch (cfi_mode) {
+ 	case CFI_FINEIBT:
+@@ -1389,8 +1359,8 @@ static void poison_cfi(void *addr, void *wr_addr)
+ 		 *	ud2
+ 		 * 1:	nop
+ 		 */
+-		poison_endbr(addr, wr_addr, false);
+-		poison_hash(wr_addr + fineibt_preamble_hash);
++		poison_endbr(addr, false);
++		poison_hash(addr + fineibt_preamble_hash);
+ 		break;
+ 
+ 	case CFI_KCFI:
+@@ -1399,7 +1369,7 @@ static void poison_cfi(void *addr, void *wr_addr)
+ 		 *	movl	$0, %eax
+ 		 *	.skip	11, 0x90
+ 		 */
+-		poison_hash(wr_addr + 1);
++		poison_hash(addr + 1);
+ 		break;
+ 
+ 	default:
+@@ -1410,21 +1380,22 @@ static void poison_cfi(void *addr, void *wr_addr)
+ #else
+ 
+ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+-			    s32 *start_cfi, s32 *end_cfi, struct module *mod)
++			    s32 *start_cfi, s32 *end_cfi, bool builtin)
+ {
+ }
+ 
+ #ifdef CONFIG_X86_KERNEL_IBT
+-static void poison_cfi(void *addr, void *wr_addr) { }
++static void poison_cfi(void *addr) { }
+ #endif
+ 
+ #endif
+ 
+ void apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+-		   s32 *start_cfi, s32 *end_cfi, struct module *mod)
++		   s32 *start_cfi, s32 *end_cfi)
+ {
+ 	return __apply_fineibt(start_retpoline, end_retpoline,
+-			       start_cfi, end_cfi, mod);
++			       start_cfi, end_cfi,
++			       /* .builtin = */ false);
+ }
+ 
+ #ifdef CONFIG_SMP
+@@ -1721,16 +1692,16 @@ void __init alternative_instructions(void)
+ 	paravirt_set_cap();
+ 
+ 	__apply_fineibt(__retpoline_sites, __retpoline_sites_end,
+-			__cfi_sites, __cfi_sites_end, NULL);
++			__cfi_sites, __cfi_sites_end, true);
+ 
+ 	/*
+ 	 * Rewrite the retpolines, must be done before alternatives since
+ 	 * those can rewrite the retpoline thunks.
+ 	 */
+-	apply_retpolines(__retpoline_sites, __retpoline_sites_end, NULL);
+-	apply_returns(__return_sites, __return_sites_end, NULL);
++	apply_retpolines(__retpoline_sites, __retpoline_sites_end);
++	apply_returns(__return_sites, __return_sites_end);
+ 
+-	apply_alternatives(__alt_instructions, __alt_instructions_end, NULL);
++	apply_alternatives(__alt_instructions, __alt_instructions_end);
+ 
+ 	/*
+ 	 * Now all calls are established. Apply the call thunks if
+@@ -1741,7 +1712,7 @@ void __init alternative_instructions(void)
+ 	/*
+ 	 * Seal all functions that do not have their address taken.
+ 	 */
+-	apply_seal_endbr(__ibt_endbr_seal, __ibt_endbr_seal_end, NULL);
++	apply_seal_endbr(__ibt_endbr_seal, __ibt_endbr_seal_end);
+ 
+ #ifdef CONFIG_SMP
+ 	/* Patch to UP if other cpus not imminent. */
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 4dd0ad6c94d6..adb09f78edb2 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -118,13 +118,10 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+ 		return ret;
+ 
+ 	/* replace the text with the new text */
+-	if (ftrace_poke_late) {
++	if (ftrace_poke_late)
+ 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+-	} else {
+-		mutex_lock(&text_mutex);
+-		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+-		mutex_unlock(&text_mutex);
+-	}
++	else
++		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+ 	return 0;
+ }
+ 
+@@ -321,7 +318,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 	unsigned const char op_ref[] = { 0x48, 0x8b, 0x15 };
+ 	unsigned const char retq[] = { RET_INSN_OPCODE, INT3_INSN_OPCODE };
+ 	union ftrace_op_code_union op_ptr;
+-	void *ret;
++	int ret;
+ 
+ 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
+ 		start_offset = (unsigned long)ftrace_regs_caller;
+@@ -352,15 +349,15 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 	npages = DIV_ROUND_UP(*tramp_size, PAGE_SIZE);
+ 
+ 	/* Copy ftrace_caller onto the trampoline memory */
+-	ret = text_poke_copy(trampoline, (void *)start_offset, size);
+-	if (WARN_ON(!ret))
++	ret = copy_from_kernel_nofault(trampoline, (void *)start_offset, size);
++	if (WARN_ON(ret < 0))
+ 		goto fail;
+ 
+ 	ip = trampoline + size;
+ 	if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
+ 		__text_gen_insn(ip, JMP32_INSN_OPCODE, ip, x86_return_thunk, JMP32_INSN_SIZE);
+ 	else
+-		text_poke_copy(ip, retq, sizeof(retq));
++		memcpy(ip, retq, sizeof(retq));
+ 
+ 	/* No need to test direct calls on created trampolines */
+ 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
+@@ -368,7 +365,8 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 		ip = trampoline + (jmp_offset - start_offset);
+ 		if (WARN_ON(*(char *)ip != 0x75))
+ 			goto fail;
+-		if (!text_poke_copy(ip, x86_nops[2], 2))
++		ret = copy_from_kernel_nofault(ip, x86_nops[2], 2);
++		if (ret < 0)
+ 			goto fail;
+ 	}
+ 
+@@ -381,7 +379,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 	 */
+ 
+ 	ptr = (unsigned long *)(trampoline + size + RET_SIZE);
+-	text_poke_copy(ptr, &ops, sizeof(unsigned long));
++	*ptr = (unsigned long)ops;
+ 
+ 	op_offset -= start_offset;
+ 	memcpy(&op_ptr, trampoline + op_offset, OP_REF_SIZE);
+@@ -397,7 +395,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 	op_ptr.offset = offset;
+ 
+ 	/* put in the new offset to the ftrace_ops */
+-	text_poke_copy(trampoline + op_offset, &op_ptr, OP_REF_SIZE);
++	memcpy(trampoline + op_offset, &op_ptr, OP_REF_SIZE);
+ 
+ 	/* put in the call to the function */
+ 	mutex_lock(&text_mutex);
+@@ -407,9 +405,9 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 	 * the depth accounting before the call already.
+ 	 */
+ 	dest = ftrace_ops_get_func(ops);
+-	text_poke_copy_locked(trampoline + call_offset,
+-	      text_gen_insn(CALL_INSN_OPCODE, trampoline + call_offset, dest),
+-	      CALL_INSN_SIZE, false);
++	memcpy(trampoline + call_offset,
++	       text_gen_insn(CALL_INSN_OPCODE, trampoline + call_offset, dest),
++	       CALL_INSN_SIZE);
+ 	mutex_unlock(&text_mutex);
+ 
+ 	/* ALLOC_TRAMP flags lets us know we created it */
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index 8984abd91c00..837450b6e882 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -146,21 +146,18 @@ static int __write_relocate_add(Elf64_Shdr *sechdrs,
+ 		}
+ 
+ 		if (apply) {
+-			void *wr_loc = module_writable_address(me, loc);
+-
+-			if (memcmp(wr_loc, &zero, size)) {
++			if (memcmp(loc, &zero, size)) {
+ 				pr_err("x86/modules: Invalid relocation target, existing value is nonzero for type %d, loc %p, val %Lx\n",
+ 				       (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
+ 				return -ENOEXEC;
+ 			}
+-			write(wr_loc, &val, size);
++			write(loc, &val, size);
+ 		} else {
+ 			if (memcmp(loc, &val, size)) {
+ 				pr_warn("x86/modules: Invalid relocation target, existing value does not match expected value for type %d, loc %p, val %Lx\n",
+ 					(int)ELF64_R_TYPE(rel[i].r_info), loc, val);
+ 				return -ENOEXEC;
+ 			}
+-			/* FIXME: needs care for ROX module allocations */
+ 			write(loc, &zero, size);
+ 		}
+ 	}
+@@ -227,7 +224,7 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 		    const Elf_Shdr *sechdrs,
+ 		    struct module *me)
+ {
+-	const Elf_Shdr *s, *alt = NULL,
++	const Elf_Shdr *s, *alt = NULL, *locks = NULL,
+ 		*orc = NULL, *orc_ip = NULL,
+ 		*retpolines = NULL, *returns = NULL, *ibt_endbr = NULL,
+ 		*calls = NULL, *cfi = NULL;
+@@ -236,6 +233,8 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 	for (s = sechdrs; s < sechdrs + hdr->e_shnum; s++) {
+ 		if (!strcmp(".altinstructions", secstrings + s->sh_name))
+ 			alt = s;
++		if (!strcmp(".smp_locks", secstrings + s->sh_name))
++			locks = s;
+ 		if (!strcmp(".orc_unwind", secstrings + s->sh_name))
+ 			orc = s;
+ 		if (!strcmp(".orc_unwind_ip", secstrings + s->sh_name))
+@@ -266,20 +265,20 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 			csize = cfi->sh_size;
+ 		}
+ 
+-		apply_fineibt(rseg, rseg + rsize, cseg, cseg + csize, me);
++		apply_fineibt(rseg, rseg + rsize, cseg, cseg + csize);
+ 	}
+ 	if (retpolines) {
+ 		void *rseg = (void *)retpolines->sh_addr;
+-		apply_retpolines(rseg, rseg + retpolines->sh_size, me);
++		apply_retpolines(rseg, rseg + retpolines->sh_size);
+ 	}
+ 	if (returns) {
+ 		void *rseg = (void *)returns->sh_addr;
+-		apply_returns(rseg, rseg + returns->sh_size, me);
++		apply_returns(rseg, rseg + returns->sh_size);
+ 	}
+ 	if (alt) {
+ 		/* patch .altinstructions */
+ 		void *aseg = (void *)alt->sh_addr;
+-		apply_alternatives(aseg, aseg + alt->sh_size, me);
++		apply_alternatives(aseg, aseg + alt->sh_size);
+ 	}
+ 	if (calls || alt) {
+ 		struct callthunk_sites cs = {};
+@@ -298,28 +297,8 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 	}
+ 	if (ibt_endbr) {
+ 		void *iseg = (void *)ibt_endbr->sh_addr;
+-		apply_seal_endbr(iseg, iseg + ibt_endbr->sh_size, me);
++		apply_seal_endbr(iseg, iseg + ibt_endbr->sh_size);
+ 	}
+-
+-	if (orc && orc_ip)
+-		unwind_module_init(me, (void *)orc_ip->sh_addr, orc_ip->sh_size,
+-				   (void *)orc->sh_addr, orc->sh_size);
+-
+-	return 0;
+-}
+-
+-int module_post_finalize(const Elf_Ehdr *hdr,
+-			 const Elf_Shdr *sechdrs,
+-			 struct module *me)
+-{
+-	const Elf_Shdr *s, *locks = NULL;
+-	char *secstrings = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
+-
+-	for (s = sechdrs; s < sechdrs + hdr->e_shnum; s++) {
+-		if (!strcmp(".smp_locks", secstrings + s->sh_name))
+-			locks = s;
+-	}
+-
+ 	if (locks) {
+ 		void *lseg = (void *)locks->sh_addr;
+ 		void *text = me->mem[MOD_TEXT].base;
+@@ -329,6 +308,10 @@ int module_post_finalize(const Elf_Ehdr *hdr,
+ 					    text, text_end);
+ 	}
+ 
++	if (orc && orc_ip)
++		unwind_module_init(me, (void *)orc_ip->sh_addr, orc_ip->sh_size,
++				   (void *)orc->sh_addr, orc->sh_size);
++
+ 	return 0;
+ }
+ 
 -- 
-Sabrina
+2.45.2
+
