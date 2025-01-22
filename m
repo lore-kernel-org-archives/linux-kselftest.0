@@ -1,31 +1,31 @@
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BDBF9FE;
-	Wed, 22 Jan 2025 06:32:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20CC11B0F1E;
+	Wed, 22 Jan 2025 06:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737527543; cv=none; b=QmfnfUUeWNQv8wzBPUBMOv9pPY8DPWOlC0LUSoI93QR5LJ4alrfomogP4d5XjMG1H+DqggRmbNthGGbDpG1vOI2Tbott3U4AnvMGPEuQLPfG6t2VIsJEYIyu3PjpoaxWHxgz8ty74a8pGu4+QQz35yO9nrskC61A7ANdPmpjae0=
+	t=1737528437; cv=none; b=IJ4fJv15EcVaCRymU6+2o8Gi0fFAOV6xgwvXbAxgwzCa7mt2Efjha6KSMPySY2SahoU0mB+YgvT1pHhjPgzfw/KtBqMT/MMavV7J/mDUrMOrQ/ZQooMrpHCuk1ZC9EgzhpXrZM3Ly1xprDZFU27UyP6Obe66kkag4jukyhymyFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737527543; c=relaxed/simple;
-	bh=MuHHKULVvu+jpV6iSLqJiQjYGJdlWYs0iJnZGdItftA=;
+	s=arc-20240116; t=1737528437; c=relaxed/simple;
+	bh=hFUXKiiQ1x1vkuqDJpsOVL2cZoyb+yhyKKlxXRN0Xgw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K1W+E09imCIg9lcssCeOdD++z1n08YSAdMOGodUx/ZKxhzwur7A8AI4m9P8uPUv4sdatlEY7jzeDAB47JRAaUB97KrdhUISRpfeTokZgpBQ0wC7T9jTJ+VYQw2rr4R0FvpAJJ2PJihbmqNBNp48gT7qo657loWFbWTx2vc6TpHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=XKEHulR5; arc=none smtp.client-ip=115.124.30.131
+	 In-Reply-To:Content-Type; b=nVxEEO8bcvVYEUkbfYByMp8JuuZnaNETcmVaL837qMEhYPGZ223Ej2C/mPkkdsBdhA5uVyjcG3eGziREiG1fPxF2/3IuSP90/s7xKNcdaNWx0P21deubQAUXnYHL6Aky2nGEyIPyqSqOJ5BCkBWmXOLLypQBt95+4625Yx0wsE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=sPkwIaxR; arc=none smtp.client-ip=115.124.30.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="XKEHulR5"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="sPkwIaxR"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1737527531; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=Nh3Emg3EEMHyq0FczvMV27qF7dWzF6PzFwLWVJM/rnA=;
-	b=XKEHulR5UjZoIIr6OxIncg/x+WzzCLYZO6zsl+3LWo4TTrYXG7OKr+/r3sRssMKCu/lVvqxoFEPm5pN7mTQ7ClvSJzV+NbUsAF7SR0CpEIChSRf6K/ZZhwkm1hjmMLS3csuTD+8ieKjGpkoXPGPkjxv/tqZxz6LA6lTJL+bgD6A=
-Received: from 30.74.144.123(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WO7Z32P_1737527528 cluster:ay36)
+	t=1737528427; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=Yj/kRrfdeQuFUnIqHOTSK2NEbqA0lq2zs119rYyDO1k=;
+	b=sPkwIaxRgHVFTUue0xXg19BtWA8p3faUM3rIOpTsiLP/sDGThUosIY/L9c/+gpDJ+ZwvHI8MIBnteJXC5glYUqOa/iNQUYtdK2HngzTpyKKCJG+0uFyFiMj6TahiHWg7QJwLW0WQp76QB8jDVUeq5j/kdzMztKky50fXE93PcHs=
+Received: from 30.74.144.123(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WO7Ulvn_1737528425 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Wed, 22 Jan 2025 14:32:09 +0800
-Message-ID: <d1a5f942-0c43-475d-854a-9e4a34d04556@linux.alibaba.com>
-Date: Wed, 22 Jan 2025 14:32:07 +0800
+          Wed, 22 Jan 2025 14:47:05 +0800
+Message-ID: <b556f0c9-9190-4834-8586-02a71337ee9d@linux.alibaba.com>
+Date: Wed, 22 Jan 2025 14:47:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -33,8 +33,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 01/10] selftests/mm: make file-backed THP split work by
- setting force option
+Subject: Re: [PATCH v5 03/10] selftests/mm: test splitting file-backed THP to
+ any lower order.
 To: Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org,
  Andrew Morton <akpm@linux-foundation.org>,
  "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
@@ -46,117 +46,111 @@ Cc: Ryan Roberts <ryan.roberts@arm.com>, Hugh Dickins <hughd@google.com>,
  John Hubbard <jhubbard@nvidia.com>, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250116211042.741543-1-ziy@nvidia.com>
- <20250116211042.741543-2-ziy@nvidia.com>
+ <20250116211042.741543-4-ziy@nvidia.com>
 From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20250116211042.741543-2-ziy@nvidia.com>
+In-Reply-To: <20250116211042.741543-4-ziy@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 2025/1/17 05:10, Zi Yan wrote:
-> Commit acd7ccb284b8 ("mm: shmem: add large folio support for tmpfs")
-> changes huge=always to allocate THP/mTHP based on write size and
-> split_huge_page_test does not write PMD size data, so file-back THP is not
-> created during the test.
+> Now split_huge_page*() supports shmem THP split to any lower order.
+> Test it.
 > 
-> Set /sys/kernel/mm/transparent_hugepage/shmem_enabled to "force" to force
-> THP allocation.
+> The test now reads file content out after split to check if the split
+> corrupts the file data.
 > 
 > Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
->   .../selftests/mm/split_huge_page_test.c       | 47 +++++++++++++++++--
->   1 file changed, 43 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> index 3f353f3d070f..eccaa347140b 100644
-> --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> @@ -264,15 +264,46 @@ void split_pte_mapped_thp(void)
->   void split_file_backed_thp(void)
->   {
->   	int status;
-> -	int fd;
-> -	ssize_t num_written;
-> +	int fd, shmem_sysctl_fd;
-> +	ssize_t num_written, num_read;
->   	char tmpfs_template[] = "/tmp/thp_split_XXXXXX";
->   	const char *tmpfs_loc = mkdtemp(tmpfs_template);
-> -	char testfile[INPUT_MAX];
-> +	char testfile[INPUT_MAX], sysctl_buf[INPUT_MAX] = {0};
->   	uint64_t pgoff_start = 0, pgoff_end = 1024;
-> +	const char *shmem_sysctl = "/sys/kernel/mm/transparent_hugepage/shmem_enabled";
-> +	char *opt1, *opt2;
->   
->   	ksft_print_msg("Please enable pr_debug in split_huge_pages_in_file() for more info.\n");
->   
-> +	shmem_sysctl_fd = open(shmem_sysctl, O_RDWR);
-> +	if (shmem_sysctl_fd == -1) {
-> +		ksft_perror("cannot open shmem sysctl");
-> +		goto out;
-> +	}
-> +
-> +	num_read = read(shmem_sysctl_fd, sysctl_buf, INPUT_MAX);
-> +	if (num_read < 1) {
-> +		ksft_perror("Failed to read shmem sysctl");
 
-You should close() shmem_sysctl_fd before returning.
-
-> +		goto out;
-> +	}
-> +
-> +	opt1 = strchr(sysctl_buf, '[');
-> +	opt2 = strchr(sysctl_buf, ']');
-> +	if (!opt1 || !opt2) {
-
-Ditto.
-
-> +		ksft_perror("cannot read shmem sysctl config");
-> +		goto out;
-> +	}
-> +
-> +	/* get existing shmem sysctl config into sysctl_buf */
-> +	strncpy(sysctl_buf, opt1 + 1, opt2 - opt1 - 1);
-> +	memset(sysctl_buf + (opt2 - opt1 - 1), 0, INPUT_MAX);
-> +
-> +	num_written = write(shmem_sysctl_fd, "force", sizeof("force"));
-> +	if (num_written < 1) {
-> +		ksft_perror("Fail to write force to shmem sysctl");
-> +		goto out;
-> +	}
-> +
->   	status = mount("tmpfs", tmpfs_loc, "tmpfs", 0, "huge=always,size=4m");
->   
->   	if (status)
-> @@ -317,13 +348,21 @@ void split_file_backed_thp(void)
->   	if (status)
->   		ksft_exit_fail_msg("cannot remove tmp dir: %s\n", strerror(errno));
->   
-> +	num_written = write(shmem_sysctl_fd, sysctl_buf, strlen(sysctl_buf) + 1);
-> +	if (num_written < 1)
-> +		ksft_perror("Fail to restore shmem sysctl");
-> +
->   	ksft_print_msg("Please check dmesg for more information\n");
-> -	ksft_test_result_pass("File-backed THP split test done\n");
-> +	ksft_test_result_pass("File-backed THP split to order %d test done\n", order);
-
-Seems the patch set split has issues. No 'order' variable in this patch.
-
-Anyway, I've fixed these issues in my local tree, and it works well. If 
-you fix them in the next version, please feel free to add:
+LGTM.
 Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-
->   	return;
->   
->   cleanup:
-> +	num_written = write(shmem_sysctl_fd, sysctl_buf, strlen(sysctl_buf) + 1);
-> +	if (num_written < 1)
-> +		ksft_perror("Fail to restore shmem sysctl");
->   	umount(tmpfs_loc);
->   	rmdir(tmpfs_loc);
-> +out:
->   	ksft_exit_fail_msg("Error occurred\n");
+> ---
+>   .../selftests/mm/split_huge_page_test.c       | 30 ++++++++++++++-----
+>   1 file changed, 23 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index eccaa347140b..766c1f3a1d78 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -261,14 +261,16 @@ void split_pte_mapped_thp(void)
+>   	close(kpageflags_fd);
 >   }
 >   
+> -void split_file_backed_thp(void)
+> +void split_file_backed_thp(int order)
+>   {
+>   	int status;
+>   	int fd, shmem_sysctl_fd;
+>   	ssize_t num_written, num_read;
+>   	char tmpfs_template[] = "/tmp/thp_split_XXXXXX";
+>   	const char *tmpfs_loc = mkdtemp(tmpfs_template);
+> -	char testfile[INPUT_MAX], sysctl_buf[INPUT_MAX] = {0};
+> +	char testfile[INPUT_MAX];
+> +	char sysctl_buf[INPUT_MAX] = {0};
+> +	char file_buf[INPUT_MAX] = {0};
+>   	uint64_t pgoff_start = 0, pgoff_end = 1024;
+>   	const char *shmem_sysctl = "/sys/kernel/mm/transparent_hugepage/shmem_enabled";
+>   	char *opt1, *opt2;
+> @@ -314,7 +316,7 @@ void split_file_backed_thp(void)
+>   		ksft_exit_fail_msg("Fail to create file-backed THP split testing file\n");
+>   	}
+>   
+> -	fd = open(testfile, O_CREAT|O_WRONLY, 0664);
+> +	fd = open(testfile, O_CREAT|O_RDWR, 0664);
+>   	if (fd == -1) {
+>   		ksft_perror("Cannot open testing file");
+>   		goto cleanup;
+> @@ -322,7 +324,6 @@ void split_file_backed_thp(void)
+>   
+>   	/* write something to the file, so a file-backed THP can be allocated */
+>   	num_written = write(fd, tmpfs_loc, strlen(tmpfs_loc) + 1);
+> -	close(fd);
+>   
+>   	if (num_written < 1) {
+>   		ksft_perror("Fail to write data to testing file");
+> @@ -330,8 +331,22 @@ void split_file_backed_thp(void)
+>   	}
+>   
+>   	/* split the file-backed THP */
+> -	write_debugfs(PATH_FMT, testfile, pgoff_start, pgoff_end, 0);
+> +	write_debugfs(PATH_FMT, testfile, pgoff_start, pgoff_end, order);
+> +
+> +	/* check file content after split */
+> +	num_read = lseek(fd, 0, SEEK_SET);
+> +	if (num_read == -1) {
+> +		ksft_perror("Cannot lseek file");
+> +		goto cleanup;
+> +	}
+>   
+> +	num_read = read(fd, file_buf, num_written);
+> +	if (num_read < 1 || strncmp(file_buf, tmpfs_loc, num_read)) {
+> +		ksft_print_msg("File content changed, origin: %s, now: %s\n", tmpfs_loc, file_buf);
+> +		goto cleanup;
+> +	}
+> +
+> +	close(fd);
+>   	status = unlink(testfile);
+>   	if (status) {
+>   		ksft_perror("Cannot remove testing file");
+> @@ -520,7 +535,7 @@ int main(int argc, char **argv)
+>   	if (argc > 1)
+>   		optional_xfs_path = argv[1];
+>   
+> -	ksft_set_plan(1+8+2+9);
+> +	ksft_set_plan(1+8+1+9+9);
+>   
+>   	pagesize = getpagesize();
+>   	pageshift = ffs(pagesize) - 1;
+> @@ -537,7 +552,8 @@ int main(int argc, char **argv)
+>   			split_pmd_thp_to_order(i);
+>   
+>   	split_pte_mapped_thp();
+> -	split_file_backed_thp();
+> +	for (i = 0; i < 9; i++)
+> +		split_file_backed_thp(i);
+>   
+>   	created_tmp = prepare_thp_fs(optional_xfs_path, fs_loc_template,
+>   			&fs_loc);
