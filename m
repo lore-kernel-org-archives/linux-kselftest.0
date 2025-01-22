@@ -1,148 +1,94 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D840420FA9C;
-	Wed, 22 Jan 2025 18:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0F021576C;
+	Wed, 22 Jan 2025 18:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737571092; cv=none; b=Q0yJJDnLqgz2OPIerQFOIgJckmuvNKror8MDIc92w7V02lg7k40jOxeTe+PCAHuteLrcp67mCfWSQIjpd+6yohgCjvv+2A/SYwVWqIx1Fn4BUvc7h99e9X/uUcQpWEQU/wlqWPpT/Bu9Q+ZsiR9gRx7uWA49iO6tIQsDplY8GCE=
+	t=1737571324; cv=none; b=kr5JYASP4SLsiKnBsK6jN5tjmQMmWvfLyX0GHjZ8TRhf5LLBr0RnfyVot9S7qsIeZyOw+ceJaQu8kjXBH9ns5VufYAbJ+doi4OlcainQ2NIwp0u74jTA38NDdAZG8Ule+1lFrU7sUSRAGd5MmFumSJ1tCcXqNuS+exNcrArfJ/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737571092; c=relaxed/simple;
-	bh=UsW6dFnKhaemqjbzDn4FQ1Ys8eg1VzUhk4uRja24jJg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QdGrUl8QKpyRsJ4qT8OjqtPbWfXmTeYXVQpMF44beCP25/aPpDuSEu0cuDR856GHmMzSi02WJFge1MrwNtujBkGZVV058r6zjvFS8aedlMVKfakO8/eYgs+beDDpgH11BeP1Wockq0Pr2TxkZdC3YshdoQk5I0G0pjj8tdSJG+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JhRisKd8; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1737571324; c=relaxed/simple;
+	bh=9GeYmwk11CHz23eY62uR618gIEclqpJRQ3rArk0tRVw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=rINqWHtcaU74i89muvEp1vMGJ/c2F+PkRvuyxI7u5z4frXGmK6GwBb9GYW9bb19ZRIgTDkp9zNLsdXGepOr71NBqfY+vDZrNiE5mCE4CzK+xKtNMTvpmTRbRXlQ57IjQBGEpRUnX+la1tld0yswlJOpwhx9Z8VnSiX0FYzyCA1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Qupcj2YC; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JhRisKd8"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50MDFMEv002717;
-	Wed, 22 Jan 2025 18:37:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=6YaKnAKHb9JWYzTRJt/INcyPojCHVKwdCnG7gWV3k
-	NI=; b=JhRisKd8Kp/C82YnwaUZBUn1U1mQapPHZ0ScSMMlkl+7e2r1tgfSpCdjo
-	nMMLkvszt+9csYFReFm8AKpFC05rH957YOfeTvt7JaHVCwtESRhJOR+T4gBDDqE3
-	BlOnMqpkhacC9u3qR/TgdinIm7vvtDQusatLaesmEL9IOzoue88aVMIk4rtvRxLc
-	Pwovn3yDeWcw6QsH7MqgT4/0EZPA0VsmsMtPSpNkfh04NPgV0qhiA40g9Wv6EaIR
-	aHlw+KGK7n3VTk5vnKkftsq9GNx2NFdAfN7fA2fWyfXF2NAGVHBVUHdnqorGoriO
-	en7Uw5vVb6Es5WjP9YdFv6DPPgp/g==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44aqgym79t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 18:37:31 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50MIZh0S010420;
-	Wed, 22 Jan 2025 18:37:30 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44aqgym79n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 18:37:30 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50MGrJbm019287;
-	Wed, 22 Jan 2025 18:37:30 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 448pmshyqt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 18:37:30 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50MIbSE255509436
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 22 Jan 2025 18:37:28 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4FE932004E;
-	Wed, 22 Jan 2025 18:37:28 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8DC022004D;
-	Wed, 22 Jan 2025 18:37:23 +0000 (GMT)
-Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.ibm.com.com (unknown [9.43.24.222])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 22 Jan 2025 18:37:23 +0000 (GMT)
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: ast@kernel.org, hbathini@linux.ibm.com, andrii@kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-        edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
-        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-        kpsingh@kernel.org
-Subject: [PATCH] bpf: Fix mix-up of 4096 and page size.
-Date: Thu, 23 Jan 2025 00:07:20 +0530
-Message-ID: <20250122183720.1411176-1-skb99@linux.ibm.com>
-X-Mailer: git-send-email 2.43.5
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Qupcj2YC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1737571320;
+	bh=9GeYmwk11CHz23eY62uR618gIEclqpJRQ3rArk0tRVw=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=Qupcj2YC5B6P1xeCDcwn30bbTx4TkBA15l2oJj2RPbzW3b3WnxXeBJv9ls4Mfhq0P
+	 KZcaB4WOq49rjfYUuMOWRnBa0iGo9F7TTJd77LNQHhPrKHXuDV2LZpC5rYk6NaFNag
+	 OxXHMxpEntV/xx7y+u3vuDUjIMv+c0fUpky11bc0=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Wed, 22 Jan 2025 19:41:47 +0100
+Subject: [PATCH 4/5] selftests/nolibc: execute defconfig before other
+ targets
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: eNmxWv_rYL7kuZ1_SjbPNZr0lpltiFQW
-X-Proofpoint-ORIG-GUID: _iPiVWzVRZgy4W6mo6hAClJGjHx6zskT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-22_08,2025-01-22_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- phishscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=999
- impostorscore=0 lowpriorityscore=0 adultscore=0 spamscore=0 suspectscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501220132
+Message-Id: <20250122-nolibc-config-v1-4-a697db968b49@weissschuh.net>
+References: <20250122-nolibc-config-v1-0-a697db968b49@weissschuh.net>
+In-Reply-To: <20250122-nolibc-config-v1-0-a697db968b49@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737571320; l=1613;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=9GeYmwk11CHz23eY62uR618gIEclqpJRQ3rArk0tRVw=;
+ b=Qvg+YT6uq1ydThNZf7zdp6qrSWMq4rfqLqzrUfP0co9gn/xE7UtcSruDnYxaX06E7wTDyw4M6
+ xJKClTwFKwJCIwEuubOeYkypK0mjHMnUL2TfkCXTd+zd1TrYmmUwxY3
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-For platforms on powerpc architecture with a default page size greater
-than 4096, there was an inconsistency in fragment size calculation.
-This caused the BPF selftest xdp_adjust_tail/xdp_adjust_frags_tail_grow
-to fail on powerpc.
+Some targets use the test kernel configuration.
+Executing defconfig in the same make invocation as those targets results
+in errors as the configuration may be in an inconsistent state during
+reconfiguration.
+Avoid this by introducing ordering dependencies between the defconfig
+and some other targets.
 
-The issue occurred because the fragment buffer size in
-bpf_prog_test_run_xdp() was set to 4096, while the actual data size in
-the fragment within the shared skb was checked against PAGE_SIZE
-(65536 on powerpc) in min_t, causing it to exceed 4096 and be set
-accordingly. This discrepancy led to an overflow when
-bpf_xdp_frags_increase_tail() checked for tailroom, as skb_frag_size(frag)
-could be greater than rxq->frag_size (when PAGE_SIZE > 4096).
-
-This commit updates the page size references to 4096 to ensure consistency
-and prevent overflow issues in fragment size calculations.
-
-Fixes: 1c1949982524 ("bpf: introduce frags support to bpf_prog_test_run_xdp()")
-Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- net/bpf/test_run.c | 6 +++---
+ tools/testing/selftests/nolibc/Makefile | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 501ec4249..eb5476184 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -124,7 +124,7 @@ struct xdp_test_data {
-  * must be updated accordingly this gets changed, otherwise BPF selftests
-  * will fail.
-  */
--#define TEST_XDP_FRAME_SIZE (PAGE_SIZE - sizeof(struct xdp_page_head))
-+#define TEST_XDP_FRAME_SIZE (4096 - sizeof(struct xdp_page_head))
- #define TEST_XDP_MAX_BATCH 256
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index d3afb71b4c6b7fc51b89f034c826692e76122864..b74fa74e5ce296f032bec76ce9b3f5a3debe2b40 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -217,7 +217,7 @@ all: run
  
- static void xdp_test_run_init_page(netmem_ref netmem, void *arg)
-@@ -660,7 +660,7 @@ static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
- 	void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
- 	void *data;
+ sysroot: sysroot/$(ARCH)/include
  
--	if (size < ETH_HLEN || size > PAGE_SIZE - headroom - tailroom)
-+	if (size < ETH_HLEN || size > 4096 - headroom - tailroom)
- 		return ERR_PTR(-EINVAL);
+-sysroot/$(ARCH)/include:
++sysroot/$(ARCH)/include: | defconfig
+ 	$(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
+ 	$(QUIET_MKDIR)mkdir -p sysroot
+ 	$(Q)$(MAKE) -C $(srctree) outputmakefile
+@@ -263,10 +263,10 @@ initramfs: nolibc-test
+ defconfig:
+ 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(DEFCONFIG)
  
- 	if (user_size > size)
-@@ -1297,7 +1297,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 			frag = &sinfo->frags[sinfo->nr_frags++];
+-kernel:
++kernel: | defconfig
+ 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) < /dev/null
  
- 			data_len = min_t(u32, kattr->test.data_size_in - size,
--					 PAGE_SIZE);
-+					 4096);
- 			skb_frag_fill_page_desc(frag, page, 0, data_len);
+-kernel-standalone: initramfs
++kernel-standalone: initramfs | defconfig
+ 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs < /dev/null
  
- 			if (copy_from_user(page_address(page), data_in + size,
+ # run the tests after building the kernel
+
 -- 
-2.43.5
+2.48.1
 
