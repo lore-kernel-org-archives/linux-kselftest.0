@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A3B201100;
-	Thu, 23 Jan 2025 07:38:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930E820B7EE;
+	Thu, 23 Jan 2025 07:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737617926; cv=none; b=jb9ELQtZ8BKx+tg+tr6g1ZJCTJlIRSQg6tAXVUR6ns063n5nIomR5rbRiaDDbYZ+MGvb5PGpE0nLx18TAioOdpR6lsV3Pp9L4pwbC+kguYdU+E1baYP2xH9syMKsG9oFXezMxTMawdYjP7FVjHaoKpVw6OoDQA/vqdrlRFJfATk=
+	t=1737617927; cv=none; b=oY2XDd6T6bigNL+iKb8CBi/VvuBHCn2arArbLyuI9pKUpaxslKkhpcOZ/xUgrb5aMDYlhR9tUpsyjwQ1+Q5OD0LPdBsV6olCKceU0sdRutFEwRSqxHpfqX008BGgRlY0OmLi4Vwg+6oJqfrhIzY/bjAPOZYbVwCWHif8w/4lP6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737617926; c=relaxed/simple;
-	bh=BDZSegwL8V6HPgs4dSD3q/X+eWbMIZMmdPM0w5xABVU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Hqtbf6b9FtIpqlZSTAcX7sOUtZesl9V0f1ZcM/g0Ic3veqfh6E25ZfK7KbC9+ciwqhrJJQRu9LW9d3NPFOYg1UKfE2JspoxEDeykLzidf4sJcSrORDANtUzVxTfvDCOYreVBHyFsG+G8QPHHxwxyHIA3EqXiUvu78yNtlnB73F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=M6HLJaOM; arc=none smtp.client-ip=159.69.126.157
+	s=arc-20240116; t=1737617927; c=relaxed/simple;
+	bh=yOnX0FgFgCBauRdniu/luUgUK6bKzG+/jixgAfNPI50=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=q3+gAjiTUJ+ua7E9w7LgaDstvIdIsufnq4MhWsxGlKYfdif4mdrVTBC5uViNKRbbucMZFtWD6QlYIUbo1A28Fn2Tnv5XOHQ5jUdnxo+op28SS6ruv2U6wyJvObtXQUhqsv1WpWXqs6jKSBo979otHHYkWeuidmpKLA6TpLUIJ2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=fdhoS1nm; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="M6HLJaOM"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="fdhoS1nm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1737617921;
-	bh=BDZSegwL8V6HPgs4dSD3q/X+eWbMIZMmdPM0w5xABVU=;
-	h=From:Subject:Date:To:Cc:From;
-	b=M6HLJaOMSviyRYcbo6jPbOukuFOrpqmhkoe/hk5XJkz9dZbwfglVjOQyweumNDQDq
-	 WFvST3gwouCWe4QIpkMX4sy87RrLKQwA9bJ+6cJs3zCudGPhZNEUqnkJwQG5umLVMq
-	 X+C+m3+AZxtoWoXxM0Zotw+7lT3LWUI/FaVvXoZ0=
+	bh=yOnX0FgFgCBauRdniu/luUgUK6bKzG+/jixgAfNPI50=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=fdhoS1nmZfFxvT+Jdb647NmhVwOUnbWTeoJGXWVB5gJUQIS/5yAjk/6nOG60Ely+h
+	 qhubgWL8WeLpah5Zcdyvhui9d8nl6w9l8s3JBtMdXpUqfzTnBfZJ3Ut/sHf5BVXuTp
+	 oGdpsXzOL8BXD/9H1xIKlZvdK4VezD6vN2zqQOXE=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 0/5] selftests/nolibc: test kernel configuration
- cleanups
-Date: Thu, 23 Jan 2025 08:37:36 +0100
-Message-Id: <20250123-nolibc-config-v2-0-5701c35995d6@weissschuh.net>
+Date: Thu, 23 Jan 2025 08:37:38 +0100
+Subject: [PATCH v2 2/5] selftests/nolibc: drop call to prepare target
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,48 +34,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAMDxkWcC/3XMQQ7CIBCF4as0sxZTqKK48h6mi0KnZRIDhqmoa
- bi72L3L/yXvW4ExETJcmhUSZmKKoYbaNeD8EGYUNNYG1apjK5USId7JOuFimGgWo+4MSi2VMx3
- UzyPhRO/Nu/W1PfES02fjs/yt/6QsRSsGbU6jNfpsD+b6QmJm559+H3CBvpTyBQnWSQmvAAAA
-X-Change-ID: 20250122-nolibc-config-d639e1612c93
+Message-Id: <20250123-nolibc-config-v2-2-5701c35995d6@weissschuh.net>
+References: <20250123-nolibc-config-v2-0-5701c35995d6@weissschuh.net>
+In-Reply-To: <20250123-nolibc-config-v2-0-5701c35995d6@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737617921; l=1026;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737617921; l=1035;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=BDZSegwL8V6HPgs4dSD3q/X+eWbMIZMmdPM0w5xABVU=;
- b=TujjqVDz7mHVuxqA5RPae4m2fBZy/hxD+vuNrmOKa4LTGpf6e4jg1JU01/ANg5UpTGpUVrUmi
- V5wStvw0hKYCjBI/NZyrxtUFEgF/Rw2eLEddap8xq+d0JZiya3bKcrm
+ bh=yOnX0FgFgCBauRdniu/luUgUK6bKzG+/jixgAfNPI50=;
+ b=3c3uXajMzIEqHCg6W0c2KbmDdcMvWn+p61TmFTJg3H1DTmZ3W6Gsms5EHmTICryzj8FYmRdTM
+ JR/6W1zh6nsCGAtoHkJiv1tCQ99IOWcc1GZOmKncQqVaU7vYiCm/UQ6
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-A few cleanups and optimizations for the management of the kernel
-configuration.
+The "prepare" target does not need to be run manually.
+kbuild knows when to use it on its own and the target is not even
+documented.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Changes in v2:
-- Rebase on current torvalds/master
-- Call "make defconfig" separately
-- Link to v1: https://lore.kernel.org/r/20250122-nolibc-config-v1-0-a697db968b49@weissschuh.net
+ tools/testing/selftests/nolibc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
----
-Thomas Weißschuh (5):
-      selftests/nolibc: drop custom EXTRACONFIG functionality
-      selftests/nolibc: drop call to prepare target
-      selftests/nolibc: drop call to mrproper target
-      selftests/nolibc: execute defconfig before other targets
-      selftests/nolibc: always keep test kernel configuration up to date
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index ba044c8a042ce345ff90bdd35569de4b5acd117d..464165e3d9175d283ec0ed14765df29427b6de38 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -261,7 +261,7 @@ initramfs: nolibc-test
+ 	$(Q)cp nolibc-test initramfs/init
+ 
+ defconfig:
+-	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
++	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG)
+ 
+ kernel:
+ 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) < /dev/null
 
- tools/testing/selftests/nolibc/Makefile     | 17 +++++------------
- tools/testing/selftests/nolibc/run-tests.sh |  7 +++----
- 2 files changed, 8 insertions(+), 16 deletions(-)
----
-base-commit: 21266b8df5224c4f677acf9f353eecc9094731f0
-change-id: 20250122-nolibc-config-d639e1612c93
-
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.48.1
 
