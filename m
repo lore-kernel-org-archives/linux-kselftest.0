@@ -1,91 +1,81 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFE91ADC85;
-	Thu, 23 Jan 2025 20:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E6316EC19;
+	Thu, 23 Jan 2025 21:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737663093; cv=none; b=gjzqqpqhX2c05YzzlFJYee8xOQ5mRhYgWqGf0VJVw0WGWOu00PvujEkKF71gv422vCQmvR4WY+DC+SGV20lqCgsPXRZrNbc+mI0YNCrA1a0ehgyaObIBegI6tv+M3/UhTlYExQpjDH0J1EOF+l5HO44vonoVGUKmRRPT0mO8mTQ=
+	t=1737667847; cv=none; b=ZnX9GkpbjeUSrEKVabfrpIcbqMe+6S5Xii9Hf8/V5Uq4Msv7VnHW0NDp7lTOs+0nYCZRhsMZ/PP1TpVUWBxdg0Hn9zIGcONFi1k1SvKAq4xCLVVMAtEiIesBOLkl66RTiuuq5F3492VmPywGqc/wXF25SIKuVBHt4YLzZRFYKRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737663093; c=relaxed/simple;
-	bh=spnsUo7shJpfgJZ7NTyaOqYn6sFVn0aKxfiAKaNimHY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uXS7dIWKf+uJLfS8I2iLupFElbvAfyWXCHv1l87cKclVg3OuEwcKK1oaN6zStCsG41dfQ6ShcaoLE9hkPc+KOFW2X0GmkPuT1KjjQNr1bGr+BhR5c+Af539fW3ooVl/qIYbuEkAJ1RlRtFbyTJOnBtvEu3qW3tmb0XNh7uf8+EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=lV1PeQYg; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1737667847; c=relaxed/simple;
+	bh=929SbkPZ1rHZGzLzkzfyL8bQgeP/Kh91Wpz1dFourKM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=oqAR+PCfHk4zc2e7BOX1aanWJpl2VV9zpLcPNG4/snA2RdK1Lg3CSqCNJEMNEN4zbF7Er+kq5oZ03vDpvswq/86T6f+kDc5t4PHKdBxRgOE+QUUwyYJy1oGzvf+xuxraUqZUXRzvpY65yUaKMRslTDSG7quIoDR83HJIQwcvBEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ma4Qyk7m; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="lV1PeQYg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1737663088;
-	bh=spnsUo7shJpfgJZ7NTyaOqYn6sFVn0aKxfiAKaNimHY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=lV1PeQYgnjec8omHBBQZFquKXLY616XCV20/JLlTwa+9BoF79JLDQSFwKIuhbIZJn
-	 +5NO7jNhTJrVJ9u1MDkuJv8wdDJ8dqDZVVGorrOXZC2oWsvpIq+rGRvq5O9grD1uTE
-	 p2oxU7bfhqH+2//MoC4mE8myDhIMljXUu9B42FNs=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Thu, 23 Jan 2025 21:10:43 +0100
-Subject: [PATCH 2/3] selftests/nolibc: ignore -Wmissing-prototypes
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ma4Qyk7m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2D00C4CED3;
+	Thu, 23 Jan 2025 21:30:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737667846;
+	bh=929SbkPZ1rHZGzLzkzfyL8bQgeP/Kh91Wpz1dFourKM=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=ma4Qyk7mEhcwihmS3b+DFhOCXJEno6SD0X4g8jNX14SQHHum/jftVXnUCHAxXyJtj
+	 9SCAboLAP8ky3xalfX1MbyKuArL+iM3esKuGwRSrPAj1qCmgkCadWn5cTMndCiG/N1
+	 RomQpgO5gpQOVLLUNtM5AIFSKhHWhrOUwVYrG4aVlhwu4lRAOVQDuNhTw84HqZTrQS
+	 s68Ut3F0dPYC5upgmdHekKp+ta38/e+bzO7J+CV3WCyD1RlM1k21fS5czBOV6e3IEu
+	 UdqLHrUXpiwCWTFe33OduOL4KpBZ9aBUrqPmvzthFGqUnxzooQoE8UIgTWiFdIHwf0
+	 lRL//4PJcktsA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250123-nolibc-prototype-v1-2-e1afc5c1999a@weissschuh.net>
-References: <20250123-nolibc-prototype-v1-0-e1afc5c1999a@weissschuh.net>
-In-Reply-To: <20250123-nolibc-prototype-v1-0-e1afc5c1999a@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737663088; l=1256;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=spnsUo7shJpfgJZ7NTyaOqYn6sFVn0aKxfiAKaNimHY=;
- b=m7EmfQMJA0dxL338zOoCpCg0MlGmKLF98alMNzqsXp542ikV4HdW9mekHmEL4xESIkMNne3kQ
- kee4QPVKwRYCCgRNzXWBEdKv5SdZzt2j2PAgz5xlPEgvfTwWLZC0/s2
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 23 Jan 2025 23:30:40 +0200
+Message-Id: <D79RU9MHGKJ8.1HG89ZJS4Q5FC@kernel.org>
+Cc: <linuxtv-ci@linuxtv.org>, <dave.pigott@collabora.com>,
+ <mripard@kernel.org>, <linux-kernel@vger.kernel.org>,
+ <dri-devel@lists.freedesktop.org>, <linux-kselftest@vger.kernel.org>,
+ <gustavo.padovan@collabora.com>, <pawiecz@collabora.com>,
+ <spbnick@gmail.com>, <tales.aparecida@gmail.com>,
+ <workflows@vger.kernel.org>, <skhan@linuxfoundation.org>,
+ <kunit-dev@googlegroups.com>, <nfraprado@collabora.com>,
+ <davidgow@google.com>, <cocci@inria.fr>, <Julia.Lawall@inria.fr>,
+ <laura.nao@collabora.com>, <kernel@collabora.com>,
+ <torvalds@linuxfoundation.org>, <gregkh@linuxfoundation.org>,
+ <daniels@collabora.com>, <helen.koike@collabora.com>,
+ <shreeya.patel@collabora.com>, <denys.f@collabora.com>,
+ <nicolas.dufresne@collabora.com>, <louis.chauvet@bootlin.com>,
+ <hamohammed.sa@gmail.com>, <melissa.srw@gmail.com>, <simona@ffwll.ch>,
+ <airlied@gmail.com>, <Tim.Bird@sony.com>,
+ <laurent.pinchart@ideasonboard.com>, <broonie@kernel.org>,
+ <leobras.c@gmail.com>, <groeck@google.com>, <rdunlap@infradead.org>,
+ <geert@linux-m68k.org>, <michel.daenzer@mailbox.org>, <sakari.ailus@iki.fi>
+Subject: Re: [PATCH v2 0/5] kci-gitlab: Introducing GitLab-CI Pipeline for
+ Kernel Testing
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Vignesh Raman" <vignesh.raman@collabora.com>,
+ <kernelci@lists.linux.dev>
+X-Mailer: aerc 0.18.2
+References: <20250123135342.1468787-1-vignesh.raman@collabora.com>
+In-Reply-To: <20250123135342.1468787-1-vignesh.raman@collabora.com>
 
-To make sure nolibc itself is compatible with -Wmissing-prototypes the
-compiler flag should be enabled when building nolibc-test.
-However some of its functions are non-static to ease debugging [0],
-triggering the compiler warning.
+On Thu Jan 23, 2025 at 3:53 PM EET, Vignesh Raman wrote:
+> We are working towards creating a generic, upstream GitLab-CI pipeline
+> (kci-gitlab) that will replace DRM-CI [1]. The proposed GitLab-CI pipelin=
+e
+> is designed with a distributed infrastructure model, making it possible
+> to run on any gitLab instance. We plan to leverage KernelCI [2] as the
+> backend, utilizing its hardware, rootfs, test plans, and KCIDB [3]
+> integration.
 
-Disable the warning inside nolibc-test while still enabling it for
-nolibc itself.
+Why can't you keep the next version of your great pipeline outside the
+kernel tree?
 
-[0] https://lore.kernel.org/lkml/ZMjM0UPRAqoC+goY@1wt.eu/
+If there is a legit motivation for doing that, why it needs to be bound
+to Gitlab? Why can't you make script callable from any CI?
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-
----
-It's a bit iffy, but I only see three possibilities:
-1) Make the functions static
-2) Use #pragma
-3) Add dummy prototypes
-
-1) was NACK-ed before, so I used 2)
----
- tools/testing/selftests/nolibc/nolibc-test.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 0e0e3b48a8c3a6802c6989954b6f3a7c7258db43..f162793b162f9b1ec687098b9094a6d247a53e99 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -43,6 +43,8 @@
- #endif
- #endif
- 
-+#pragma GCC diagnostic ignored "-Wmissing-prototypes"
-+
- #include "nolibc-test-linkage.h"
- 
- /* for the type of int_fast16_t and int_fast32_t, musl differs from glibc and nolibc */
-
--- 
-2.48.1
-
+BR, Jarkko
