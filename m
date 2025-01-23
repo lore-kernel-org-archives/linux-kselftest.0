@@ -1,94 +1,95 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCEF520B816;
-	Thu, 23 Jan 2025 07:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803F0202C2B
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2025 08:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737617929; cv=none; b=pf5EDFpYMoxqjL4Z2fSLQwt36s/xyJo/lv/jGP44S6wA/BvcbUrU9r33ueCNc6QLC830uUd/UvdBSMWDm9ZkMvy8/yC7XLBiMtW1cZQWyZPU0YJ1R57OLlnMIhMNuxG/GMl1/wUK3usTuZuXa/tAjK4ZwJRAvEH1dX106k6c6hU=
+	t=1737621397; cv=none; b=eDM5f3827PQME5xHXcKQPbrecg2fF7B8csx7wZ/rQRcwXUOuoUnQyKpro8fwSwuRwv8q1Jtb4bLdCSSgy1XLS9pp+fssxzpTuRa/lz4foRARsAS55OUmpo6dx4A8AOn8bg/1taNRBm5cO9ck/U3qDqGC0c2ysveUgl0JZ3zs4eQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737617929; c=relaxed/simple;
-	bh=9GeYmwk11CHz23eY62uR618gIEclqpJRQ3rArk0tRVw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=q4VIWj6V8p4Vksna/xnEce7LAsKsRf6Sr6rpTyQHzt+TB46LeqvASA66/Z5Wrg8LF2f0TuLF6+NvYRdg+Dq5rqywmChP4wHGHXdNtwxn47zMOYI2CFIUYvxNsYUlyfOSY2sZUjt3yEJMVURYfBF8xymMWaUBCzcdXXqzTao9+JU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=KTcAVjbg; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1737621397; c=relaxed/simple;
+	bh=tPDXxQmFO3rFL3PwHMqD4NyKg88jquh3GkuYyRPqN/U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=abA1P5wrZG/26y3c0BVTJbEvZyTlRy3zi2sKeR+CUlYm0r1SgWcINGNpIHu9sPtuvAJyOFB3SY41sJnf9VZsCx4HTXNbvLTAgf12Hnl4W+Kuo7BNhDhy1IAA+nhGZZTo1rExVqlOI4K6lmA41nrs8Qdkr6BvsEfX2EfhjDwAkck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EIl6bktW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="KTcAVjbg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1737617921;
-	bh=9GeYmwk11CHz23eY62uR618gIEclqpJRQ3rArk0tRVw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=KTcAVjbgfCMLhPGVPLb0PcQE0gRrZy1lX1hITR8wN8wU9JGU8XGs1Dch+ZPhQZ3zg
-	 7sq59r0++zLTJ09mWjz7u58NXiCBJA5UlkRcEjXZVhQKIXFIAlXGeUwMgOfh+fimKL
-	 dLVAqBdzMBFy2aaPXhCloqhzMnIjbady2Nk+TRsQ=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Thu, 23 Jan 2025 08:37:40 +0100
-Subject: [PATCH v2 4/5] selftests/nolibc: execute defconfig before other
- targets
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EIl6bktW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737621394;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=U9ex3Sx0fENYs3g5O+SN/OczFe9ryb1KuaGlSbCbQ7I=;
+	b=EIl6bktW9Oxp3XmXtpJNER3ODVYlKDdxVm6AHrVGr+OPqTB9RJyfdSbtmRQninVOb0vtG6
+	TiAnzKHOHO/eYI3GFTNoH5rUC9bkuQEVld5hoAxVS4wS/jw5eBYiLcITjp318qpP9rYJRq
+	c0quOEnc7ZPlN/gTvCUxCaLOvkQYzc0=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-261-DjiGA2y8OJGldjzScybEVA-1; Thu,
+ 23 Jan 2025 03:36:32 -0500
+X-MC-Unique: DjiGA2y8OJGldjzScybEVA-1
+X-Mimecast-MFC-AGG-ID: DjiGA2y8OJGldjzScybEVA
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8F3641955DC0;
+	Thu, 23 Jan 2025 08:36:30 +0000 (UTC)
+Received: from t14s.redhat.com (unknown [10.39.192.62])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 043451955F1B;
+	Thu, 23 Jan 2025 08:36:27 +0000 (UTC)
+From: Jan Stancek <jstancek@redhat.com>
+To: matttbe@kernel.org,
+	martineau@kernel.org,
+	eliang@kernel.org
+Cc: netdev@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	haliu@redhat.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests: mptcp: extend CFLAGS to keep options from environment
+Date: Thu, 23 Jan 2025 09:35:42 +0100
+Message-ID: <7abc701da9df39c2d6cd15bc3cf9e6cee445cb96.1737621162.git.jstancek@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250123-nolibc-config-v2-4-5701c35995d6@weissschuh.net>
-References: <20250123-nolibc-config-v2-0-5701c35995d6@weissschuh.net>
-In-Reply-To: <20250123-nolibc-config-v2-0-5701c35995d6@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737617921; l=1613;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=9GeYmwk11CHz23eY62uR618gIEclqpJRQ3rArk0tRVw=;
- b=3jh+uc6/t4zBWyVo2jlfXrohcWlTxbsrzxuMdAoQuotCCKzwDVU2rOGcXiVfDKvA2UJYPgjYJ
- h1fJ08NhxYbDKY+iRdXzTMoJbFSH+VcMCIMdols73jP57cfK8mLZEul
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Some targets use the test kernel configuration.
-Executing defconfig in the same make invocation as those targets results
-in errors as the configuration may be in an inconsistent state during
-reconfiguration.
-Avoid this by introducing ordering dependencies between the defconfig
-and some other targets.
+Package build environments like Fedora rpmbuild introduced hardening
+options (e.g. -pie -Wl,-z,now) by passing a -spec option to CFLAGS
+and LDFLAGS.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+mptcp Makefile currently overrides CFLAGS but not LDFLAGS, which leads
+to a mismatch and build failure, for example:
+  make[1]: *** [../../lib.mk:222: tools/testing/selftests/net/mptcp/mptcp_sockopt] Error 1
+  /usr/bin/ld: /tmp/ccqyMVdb.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIE
+  /usr/bin/ld: failed to set dynamic section sizes: bad value
+  collect2: error: ld returned 1 exit status
+
+Signed-off-by: Jan Stancek <jstancek@redhat.com>
 ---
- tools/testing/selftests/nolibc/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/net/mptcp/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index d3afb71b4c6b7fc51b89f034c826692e76122864..b74fa74e5ce296f032bec76ce9b3f5a3debe2b40 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -217,7 +217,7 @@ all: run
+diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
+index 8e3fc05a5397..9706bc73809f 100644
+--- a/tools/testing/selftests/net/mptcp/Makefile
++++ b/tools/testing/selftests/net/mptcp/Makefile
+@@ -2,7 +2,7 @@
  
- sysroot: sysroot/$(ARCH)/include
+ top_srcdir = ../../../../..
  
--sysroot/$(ARCH)/include:
-+sysroot/$(ARCH)/include: | defconfig
- 	$(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
- 	$(QUIET_MKDIR)mkdir -p sysroot
- 	$(Q)$(MAKE) -C $(srctree) outputmakefile
-@@ -263,10 +263,10 @@ initramfs: nolibc-test
- defconfig:
- 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(DEFCONFIG)
+-CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
++CFLAGS +=  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
  
--kernel:
-+kernel: | defconfig
- 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) < /dev/null
- 
--kernel-standalone: initramfs
-+kernel-standalone: initramfs | defconfig
- 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs < /dev/null
- 
- # run the tests after building the kernel
-
+ TEST_PROGS := mptcp_connect.sh pm_netlink.sh mptcp_join.sh diag.sh \
+ 	      simult_flows.sh mptcp_sockopt.sh userspace_pm.sh
 -- 
-2.48.1
+2.43.0
 
