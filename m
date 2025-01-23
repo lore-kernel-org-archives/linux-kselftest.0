@@ -1,32 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515C520B20C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5163920B7ED;
 	Thu, 23 Jan 2025 07:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737617926; cv=none; b=ECs+wIA8EA5tPFVJdXbyjEmdOmtNYSGqmPTgSsgZiFO3FJVYztnqr2pKjykTSrWpMVd3fPJQFZZM9dHkWk9JK26g2S7/3TDMvcUsZgb+ATBQk7ghpHcNuVKOWh16B1xaHjMC/71bkXg4F05Ef1eUz8wt/21Rf8knNhY4AWq6qjE=
+	t=1737617926; cv=none; b=DqD9Yclci5PDrgM69kYUPFl78ObvpvfeKvSiYVklSgKL/XyJk11Yw3AJX6FUIS0TAShwBgfVKvjaBJGZiibb2b6l8VdLhn0jYMIgcG5S2I/UqwXKxk8WnncFkOaSxTNatq64S2U5LcLNe9kq7qQZh95nU5G73I3UDPUx8JulIOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1737617926; c=relaxed/simple;
-	bh=9MQKEZ+KYBbKL921eHv4MEZPDGOiiotIz3Y9gDktJ+Y=;
+	bh=+CRDay+53YjmjDUoZr23NQjukGzwcpQV4L/S0QarAVc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=N6bJJDe2V9z3r0Xefcme0PKhSke/CARrSbwTPiO7D5uC/fOaIrDLaNPkrTCQZlnQiM43AfGjPWehwAbAOzfUu+uXqaDBbQBhsHOha+I5j3nVeh7ic9NvEdAP+qtUGfDynmHA67HB/FbE+6E/k6IqNxssLiuRGrv6u34v7Ir6ca4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=i1kRCOHZ; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=uYwO/9vhTJ6abHj3fP4muHxhAnevH1KXXu8w6oTTWvNlRCe5t04lJMg5stF7XjPGFe/VLK++m6O30dEGlJayNUhp7vFDCbiIT6zna5sybgahShwm7kaUSwNsY/QP0pOS+liow0fd4ofyAW0oeLu1fp1/v22HDZmmApxJcwpUh/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=GfmjJ+LR; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="i1kRCOHZ"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="GfmjJ+LR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1737617922;
-	bh=9MQKEZ+KYBbKL921eHv4MEZPDGOiiotIz3Y9gDktJ+Y=;
+	s=mail; t=1737617921;
+	bh=+CRDay+53YjmjDUoZr23NQjukGzwcpQV4L/S0QarAVc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=i1kRCOHZ3xM8WzO8hLKyxQEclOG7VI/PWk1ALSsOJIZEB+5y4S4lRNfOyL2lx0bKJ
-	 yTi1v4RQEwUcFs0W++aJCiE2MrFB2oawpHE3v0dQSTamH1Hl1NWukiFbf1RRqKS1DZ
-	 GMZHVo/bA0o8KIQgFR2PSnpomn/0EB7MPPW5yeLs=
+	b=GfmjJ+LRO26YcxShVTAzX2avf7gFXZN9OBhafKLV30HaLhdAtwPua7gMJ1zFYyeg+
+	 rNr3CSqHfi3QZVhlJleiGijs1b/JHiCmFQocddNXSNQ7vsRQMi+kkDcBaJSRsRNyUG
+	 JPd0fm8+KXDE07p7WDGt9xHu3z3zPA83u4oKWsaQ=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Thu, 23 Jan 2025 08:37:41 +0100
-Subject: [PATCH v2 5/5] selftests/nolibc: always keep test kernel
- configuration up to date
+Date: Thu, 23 Jan 2025 08:37:37 +0100
+Subject: [PATCH v2 1/5] selftests/nolibc: drop custom EXTRACONFIG
+ functionality
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,58 +35,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250123-nolibc-config-v2-5-5701c35995d6@weissschuh.net>
+Message-Id: <20250123-nolibc-config-v2-1-5701c35995d6@weissschuh.net>
 References: <20250123-nolibc-config-v2-0-5701c35995d6@weissschuh.net>
 In-Reply-To: <20250123-nolibc-config-v2-0-5701c35995d6@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737617921; l=1394;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737617921; l=1920;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=9MQKEZ+KYBbKL921eHv4MEZPDGOiiotIz3Y9gDktJ+Y=;
- b=hARrXcoey0594PQiIvLMgPcqgy0PUuC8pd9Znkgk5uSkvG1MMf4RfPaB+eMjyc1cu+OVrBXn0
- 4RBvWEHM9niD/rlGSYX5H8lwQ5TpDYQYqzcf72NWj4ukLTnLi8cWRgJ
+ bh=+CRDay+53YjmjDUoZr23NQjukGzwcpQV4L/S0QarAVc=;
+ b=pXBfScCXbhj5BbPfc4tm1oCLMUvgcCrzA1sCxbH5neHMfbJd/5UjXc6JwJHR02Loo7GkVIi6Y
+ e3uK/NR3IgKALWLlemhYX95l+5o2ehijsHRhq2MSsGIidtpSvtNhpcn
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Avoid using a stale test kernel configuration by always synchronizing
-it to the current source tree.
-kbuild is smart enough to avoid spurious rebuilds.
-
-Shuffle the code around a bit to keep all the commands with side-effects
-together.
+kbuild already contains logic to merge predefines snippets into a
+defconfig file. This already works nicely with the current "defconfig"
+target. Make use of the snippet and drop the custom logic.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/run-tests.sh | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ tools/testing/selftests/nolibc/Makefile | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
-index 9c5160c5388122deeeb59ecfced7633000d69b10..bc4e92b4f1b98278a0a72345a5cd67f1a429b6a2 100755
---- a/tools/testing/selftests/nolibc/run-tests.sh
-+++ b/tools/testing/selftests/nolibc/run-tests.sh
-@@ -157,10 +157,6 @@ test_arch() {
- 	fi
- 	MAKE=(make -j"${nproc}" XARCH="${arch}" CROSS_COMPILE="${cross_compile}" LLVM="${llvm}" O="${build_dir}")
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 7d14a7c0cb62608f328b251495264517d333db2e..ba044c8a042ce345ff90bdd35569de4b5acd117d 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -82,7 +82,7 @@ DEFCONFIG_x86        = defconfig
+ DEFCONFIG_arm64      = defconfig
+ DEFCONFIG_arm        = multi_v7_defconfig
+ DEFCONFIG_mips32le   = malta_defconfig
+-DEFCONFIG_mips32be   = malta_defconfig
++DEFCONFIG_mips32be   = malta_defconfig generic/eb.config
+ DEFCONFIG_ppc        = pmac32_defconfig
+ DEFCONFIG_ppc64      = powernv_be_defconfig
+ DEFCONFIG_ppc64le    = powernv_defconfig
+@@ -93,9 +93,6 @@ DEFCONFIG_s390       = defconfig
+ DEFCONFIG_loongarch  = defconfig
+ DEFCONFIG            = $(DEFCONFIG_$(XARCH))
  
--	mkdir -p "$build_dir"
--	if [ "$test_mode" = "system" ] && [ ! -f "${build_dir}/.config" ]; then
--		swallow_output "${MAKE[@]}" defconfig
+-EXTRACONFIG_mips32be = -d CONFIG_CPU_LITTLE_ENDIAN -e CONFIG_CPU_BIG_ENDIAN
+-EXTRACONFIG           = $(EXTRACONFIG_$(XARCH))
+-
+ # optional tests to run (default = all)
+ TEST =
+ 
+@@ -265,10 +262,6 @@ initramfs: nolibc-test
+ 
+ defconfig:
+ 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+-	$(Q)if [ -n "$(EXTRACONFIG)" ]; then \
+-		$(srctree)/scripts/config --file $(objtree)/.config $(EXTRACONFIG); \
+-		$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) olddefconfig < /dev/null; \
 -	fi
- 	case "$test_mode" in
- 		'system')
- 			test_target=run
-@@ -173,6 +169,9 @@ test_arch() {
- 			exit 1
- 	esac
- 	printf '%-15s' "$arch:"
-+
-+	mkdir -p "$build_dir"
-+	swallow_output "${MAKE[@]}" defconfig
- 	swallow_output "${MAKE[@]}" CFLAGS_EXTRA="$CFLAGS_EXTRA" "$test_target" V=1
- 	cp run.out run.out."${arch}"
- 	"${MAKE[@]}" report | grep passed
+ 
+ kernel:
+ 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) < /dev/null
 
 -- 
 2.48.1
