@@ -1,172 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8812080CD;
-	Sat, 25 Jan 2025 08:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193031E480;
+	Sat, 25 Jan 2025 08:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737793828; cv=none; b=WJf73CmCfoXEIY8Qq90ZWxNlN3qnnFpJYJzxhfQQ2mDKdxGnhX8RLBUwGrvAHt8dsCzRUHv25gdf3Brhzfp0z6lqsupyEFCI9yo8m/UGhVsV7dnMc6kdn1Sy1cXAMciT1khlnuaI8z5x5lZSF30JsIo4qT/5Ow4K4L5hjwPWCes=
+	t=1737795529; cv=none; b=J/Er5AHVA+WzipE7wRRpuyx3iiRxsOlRQfbvE3UVJmojxkRctcDDlF55fPnr0zMSz8Ss5px9lzOIXtZdH959EYynWthsmHPsrQ6unrjFUh0DRq7iU7FV2bdRIgAg4sKJcvUPbkf/tcxyw/IZ20Cp8o9RCJNtFJ8s/tIOfADuaxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737793828; c=relaxed/simple;
-	bh=qK9Zcz+XRzuDr8brWcnUUV33yoq3f8IlQjYGMYirx9Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BA8cbX4XsF0yTQpB1ckzc+OmxfmzjvUn+LuYcwWM1VuOG17bZfwAy6T5y9lqX0/v+LyAUqZCwrTBzb89+QQXfqBfgSqqwrpYnStYPK3qkrBqXw2QVWajfbYVH12CkfWFjn51aTSeWKOef02BIquCPh8v8C9aif+xYjmP2bcUkwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AQyAdmPv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737795529; c=relaxed/simple;
+	bh=TFLJTGQH+IfghEQHwQQQY305r9PjDiYbPFl+QY0G8IM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uxt4cTAD6xK35XhyBKi7ZhR/A7k/MOTCdFzYUqHhrhLSIltR+2Ln9II0D/VPl2QlepGOpH1FdJvGxFUpFM+l+nB55IBEA2wSB7Rd3x64+BS07bw4/FLkKdnAnGBt0Z6qylSnKf0UMVnZyXWj9raqWW4Az2kryxSUyS/QQxMif7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B1/0iT90; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AQyAdmPv"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7AC5FC4CEE3;
-	Sat, 25 Jan 2025 08:30:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737793828;
-	bh=qK9Zcz+XRzuDr8brWcnUUV33yoq3f8IlQjYGMYirx9Q=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=AQyAdmPvLoaFsnnrKFxRTdWOfbrKydHo5QgcU8Pnytbn413UsNIPaH1fAkkUXHVt+
-	 qw0YSIjIL9JkkAxN5XpjIRwrU6p7WZPmsUcWBqNwQMhTUl+gj6tNrvlln5BJoPhLo8
-	 H55qowC3ociwCh4G5rN15RG/Kn4YPMF2c6V4OIYo1sCnHkNnlloxktr9nUuFv0+QMb
-	 gMFHIMauZVax1bT2a6pjoMB9tTUJdgycPr6dVp1Ag2zr01KNTrC1c6ipgmgUnbLr06
-	 GzizsFnupKrPeujp0LodA4y+R/dwEvMVaYAHwJmjT1TyWFIUIhQ4EafGKwAMeKQurK
-	 70cI2mIujZzvw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7232CC0218E;
-	Sat, 25 Jan 2025 08:30:28 +0000 (UTC)
-From: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>
-Date: Sat, 25 Jan 2025 16:29:53 +0800
-Subject: [PATCH bpf-next v2 6/7] selftests/bpf: probe_read_user_dynptr test
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B1/0iT90"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4361c705434so20061025e9.3;
+        Sat, 25 Jan 2025 00:58:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737795525; x=1738400325; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lmwGPPNzlJtZJRego8Mf9GW0LIkhJZd2o2VD3LR/nh0=;
+        b=B1/0iT90/KZw/gYnr1vrwyXLLG3cX0YDWoBDg7VDuDoxplAIbdf3gOUK7vL/JzWvmh
+         kTlJHZVJz24IxpXa4cxnAm3Tv6iHg0U/qkDXORjtcBLyYsRXSU1+xh+AEszdUIKQlXDe
+         4ZWWlbKjZCM+dWpBHXI5k7lcFhCRj6MjjKPmh4cLtzu074lLR7+32EmTiCVKlWHl5q3e
+         gxuaslm84xqAe83cC7rUnSiHNHY2wYHzgOzPnW16SZtVbhh9cvPbR6bjhawB5FFYU99i
+         4SNQWyDCBopof2aqwK8iwDkZz/nsRytbDipJnLeTRamZxdIv23vJEaROKFwA9jY8wvep
+         ff/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737795525; x=1738400325;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmwGPPNzlJtZJRego8Mf9GW0LIkhJZd2o2VD3LR/nh0=;
+        b=A1PFHmq3BAlOOvWRZsiq2WVFxjZqLCknApIARLzfqGcRMBZQb0XN2Yu+bU38BvTpM5
+         c+Swv2lN5Cn/3XRFvEfsSNgWAFcfMm+8t9YyE0NRFB0hP7u026Gn36WOlOO4ZDQvbxqH
+         o1cwsWXMCzFjNdoLgoxJhXrEX9dUyUSo73n8ag/tutnUgOWqH2Ml3xZNx/RAN6VFXkrQ
+         2ZW1m00oLfxsMD7Vaev7qAzZRiBVt3kqjjCQehNUyt5tEni3PrHgOMzAmAMtgGrqmTdc
+         zxAdmkklLOikO0ptiPPMSK7LkKavnbFpGd17qFXMf5mjgcvAWh4nBiPqa7AGpZo74YkE
+         l+LQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV4hlghrB7qPQS/30NX+YFEQipgaqlB4TECPYhvTeZ6rQig7/TZlTz9I0Zd8JmjpC3FDFoTd0WpxV3pj1E=@vger.kernel.org, AJvYcCVs0bsXC/vzPQVfjuO5tC0AyIITkUEF4H5+/lk+9/i5mL4I+UYkffsYfZFeFgaTWapVVXy31woUltxNscY+KSkH@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8eyUirOvsgqwxaF4iXx++YPJ9Bnore6JwTzC9WKwoZ3Aga6x/
+	/F1aHcyRUXMWa5xQ6ZsTvctq+98S2AJuIa+egBzqHXiH6BuoCMxE
+X-Gm-Gg: ASbGncuM3QYl5lZ94XXIq30l72P1BG7eWSs4/oZskjlzGoLpRydkyu4WvdecLpc7Oj8
+	naYmdiUsznWNqbg35kcjZ9Kt99hubVSFI7dEFrfAmIvRQ423/BC1APUe0yqWc9YczCXrxj2T/MB
+	X3HDp7T9ZzVe8R6rsxZsDWoYcjVIwV9X8UR/mBaNVKq4HmPaE01HCfAT80ZPukzr+WjXokQmwLa
+	TGjyIViNV5NhtWAIYiKtEQkdEzb+uOJX/HtD91fPXwPK5ecXtyfa6Z44KCDyfkxxyX+YAwnRHHR
+	N0CoWk0XhPq09EK1Dcfiaw==
+X-Google-Smtp-Source: AGHT+IEkPmayOMbCgrecuRx9ckGS5dq3Zg+z1tS6+pEg63yu93KOXX9JemlG6tTnhvFbmGOVqkBuQA==
+X-Received: by 2002:a05:600c:510c:b0:434:a1e7:27b0 with SMTP id 5b1f17b1804b1-438913ccd4amr387244395e9.11.1737795525059;
+        Sat, 25 Jan 2025 00:58:45 -0800 (PST)
+Received: from [192.168.1.14] ([197.63.236.210])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438bd54c0ecsm54661695e9.30.2025.01.25.00.58.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jan 2025 00:58:44 -0800 (PST)
+Message-ID: <518c6b84-63f0-4192-89a1-af0e8000318c@gmail.com>
+Date: Sat, 25 Jan 2025 10:58:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests: tpm2: create a dedicated .gitignore
+To: Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de, jgg@ziepe.ca,
+ shuah@kernel.org
+Cc: linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250122065021.91814-1-khaledelnaggarlinux@gmail.com>
+ <D79CVJJBY9KX.23K6C7S5BU8AV@kernel.org>
+ <d7c0995d-5159-47a8-9193-d9d29fdfeea0@gmail.com>
+ <D7AG8K6T8KRI.LZFD4J6OFGGZ@kernel.org>
+ <D7AGBYQ5T2P2.3L3HM84HUCS1V@kernel.org>
+Content-Language: en-US
+From: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+In-Reply-To: <D7AGBYQ5T2P2.3L3HM84HUCS1V@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250125-bpf_dynptr_probe-v2-6-c42c87f97afe@outlook.com>
-References: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com>
-In-Reply-To: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
- Levi Zim <rsworktech@outlook.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2767;
- i=rsworktech@outlook.com; h=from:subject:message-id;
- bh=a7T0+YDmmVckpfX1xozTGLaOH/fP9fHtnj0E/W62eQI=;
- b=owEBbQKS/ZANAwAIAW87mNQvxsnYAcsmYgBnlKEfAOcRNdu0889uV0dS4IR7bhsKGqAOyiYfH
- IuRPqRtSruJAjMEAAEIAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCZ5ShHwAKCRBvO5jUL8bJ
- 2OwKEADCDlStXX4FB6YLwyDfvgHougx4GtOI9uKC7Xm0hR+/+jabe4ha6gPfYGCPe+ua6r4Q58K
- tp59EWI0nq+4mwQmdQiwJVqfRE1K909Lif9ddMqOajq5PPj9+zSxhi9IgIe9DVdyScFdk7QJtj9
- venxOJAK7tNVOIHYkxkbk4SZFLF5omg2wwDSuM5L5kQGZqZ3GkeY9z0AO6V7IkcwsEE2dwCTAtB
- jjkyYYIsyxWZYIOew/N3iSpUUcPmvz8uE9zK7sFbxfbN/4OOMSBKoSoNB+O/X69utwo+FxSpbWx
- 2juI9ZNbmi6GyxvnaqenZ7EQO/ifiyWLPmseJRxW1fqBBh+6VL+bduT9xmYxmD9ER928IjhaKWT
- 1ZAdvGdanTxA1W0D4A42FRLabXMthbH2076UoWW/yGYUbBUOZLO6g52Gx+0L6qVh62YrKOgP4Mf
- VziqS5+hGRpq0WWZs/HDAP9TSVGpncJXcl4dnKVsiZ2bNeTfaHnn+u/Phy6UYCPH4HXhxD5FJPm
- rI4lMJ/GPwPmcSocLqLqBhP+Yn6NeBE14g9G+4ErIw0si5OoY23TZSyyXl5J6XNHt9Db3b/Yc/d
- g/Xi06j4u4qvqhyjFKnCbIpY12BiavQR2ve8gAPOdQOPVCXSQ8RBFMfGWaywI4HCEJpCPlIBJJ/
- gZd4JQF/LTg81Rg==
-X-Developer-Key: i=rsworktech@outlook.com; a=openpgp;
- fpr=17AADD6726DDC58B8EE5881757670CCFA42CCF0A
-X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/default with
- auth_id=219
-X-Original-From: Levi Zim <rsworktech@outlook.com>
-Reply-To: rsworktech@outlook.com
 
-From: Levi Zim <rsworktech@outlook.com>
+On 1/24/25 6:42 PM, Jarkko Sakkinen wrote:
 
-This patch adds a test for probe_read_user_dynptr helper,
-which tests reading variable length of user memory into a ringbuf
-backed dynptr.
+> Shortest ever commit message tutorial:
+> 
+> 1. Problem
+> 2. Motivation
+> 3. Solution with explanation how it will map on addressing the problem.
+> 
+> Do this for every possible commit and you will get it right 99%
+> of time. I can admit that even today I don't always get this myself
+> fully right but I try my best ;-) That does not mean you could not
+> do better than me.
+> 
+> And generally, depending on subsystem tho, people usually feel more
+> confortable with "imperative form" rather than "science paper" form.
+> 
+> BR, Jarkko
 
-Signed-off-by: Levi Zim <rsworktech@outlook.com>
----
- tools/testing/selftests/bpf/prog_tests/dynptr.c    |  2 ++
- tools/testing/selftests/bpf/progs/dynptr_success.c | 36 +++++++++++++++++++++-
- 2 files changed, 37 insertions(+), 1 deletion(-)
+Ah great, thank you for the review the tutorial.
+Hopefully, I will do better in v3 :)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-index d9a25c2873b6ed4219e063845b1caf978a7016fd..a5a61a4c570d803bfca2af3f1a3b7d5eb0b8197f 100644
---- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -32,6 +32,7 @@ static struct {
- 	{"test_dynptr_skb_strcmp", SETUP_SKB_PROG},
- 	{"test_dynptr_skb_tp_btf", SETUP_SKB_PROG_TP},
- 	{"test_probe_read_kernel_dynptr", SETUP_RINGBUF},
-+	{"test_probe_read_user_dynptr", SETUP_RINGBUF},
- };
- 
- static int ringbuf_cb(void *ctx, void *data, size_t len)
-@@ -61,6 +62,7 @@ static void verify_success(const char *prog_name, enum test_setup_type setup_typ
- 		return;
- 
- 	skel->bss->pid = getpid();
-+	skel->bss->user_ptr = (void *)&skel->data->test_buf;
- 	skel->data->test_buf.length = 8;
- 
- 	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
-index 64c698f83a37bfe924db93d36982a0a1c8defe62..5317860290dccb0862b6a0b94bb6f738c8d92835 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_success.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
-@@ -576,7 +576,7 @@ struct {
- } test_buf = {
- 	.length = 0,
- 	.buf = "0123456789abcdef",
--};
-+}, *user_ptr;
- 
- SEC("?tp/syscalls/sys_enter_nanosleep")
- int test_probe_read_kernel_dynptr(void *ctx)
-@@ -605,3 +605,37 @@ int test_probe_read_kernel_dynptr(void *ctx)
- 	bpf_ringbuf_submit_dynptr(&ptr, 0);
- 	return 0;
- }
-+
-+SEC("?tp/syscalls/sys_enter_nanosleep")
-+int test_probe_read_user_dynptr(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	int copy_len;
-+
-+	if (bpf_get_current_pid_tgid() >> 32 != pid)
-+		return 0;
-+
-+	err = bpf_probe_read_user(&copy_len, sizeof(copy_len), &user_ptr->length);
-+	if (err < 0 || copy_len < 0) {
-+		err = 1;
-+		return 1;
-+	}
-+
-+	if (copy_len > MAX_BUFFER_LEN)
-+		copy_len = MAX_BUFFER_LEN;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, copy_len, 0, &ptr);
-+
-+	if (-E2BIG != bpf_probe_read_user_dynptr(&ptr, 0, MAX_BUFFER_LEN + 1,
-+		&user_ptr->buf, 0)) {
-+		err = 2;
-+		goto cleanup;
-+	}
-+
-+	err = bpf_probe_read_user_dynptr(&ptr, 0, copy_len,
-+		&user_ptr->buf, 0);
-+
-+cleanup:
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+	return 0;
-+}
-
--- 
-2.48.1
-
-
+Many thanks,
+Khaled
