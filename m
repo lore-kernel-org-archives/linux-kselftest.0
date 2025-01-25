@@ -1,210 +1,225 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C371DC9B2;
-	Fri, 24 Jan 2025 21:12:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737753162; cv=none; b=n/ITesgsYrIrza8rzoGmnh7jvZeJRT35LknQqIb4Y3BrGX1gjf7mWRedqyqx6VmDlrX/vLGG0mOdl8vkCTY9FGuTe0T55uV4+uZzgOGVA+q/SkY/HAbz6C92fPfrC1jYoawcLS4qATiPsXC1s8EmtI34298xo4K+SKLf8sfBQ/4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737753162; c=relaxed/simple;
-	bh=ZtvH8clksU9XxC9iXGNlAeXJsw3fmV7yXstdOZSLnAU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Y/5gS++S38JcGD7lUrb9vjEoIRkNtvQjCs0TPRAZbvahwvUrW4klFnlmiDyS9kJavSUxLGh7buuSnHEJB8RifG77X7KrXPWNgz3CdV87Z1T/W2fcJWlcVZw1w7u87ZolQcQQAbw1+/DkrenZqWNkG1Le0Lo3DP63YIfw163VcUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bdwn3F60; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783BD4414;
+	Sat, 25 Jan 2025 00:31:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737765073; cv=fail; b=ogdCry5EluJveBN+3SJXZFYz1V+5lTF+azfljHlnqPAzZ49YcNuU45e2s+wwTD+FVpmrS7GYPY4tzS9qOEwwUm/se4+7blopZYZyzUZ0llp/QWydF/CkqIZeLSxA+SUvn6BJnGbYrDKBd1xGUKpsSnll+qLGBBjhJqsMhs1C4Io=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737765073; c=relaxed/simple;
+	bh=nHWHL3N60edVJLwI+c7tX0IQSUeLlVBhSUGgbcnnhU0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=W1k/Kz1aVh0APCwp9FDrAUf2MCugtRDvSQAbIjBRQhXssVxIWDqF5q2fGGCJ3KK/h3Tx/hJZSlEkQHd77jhkOLOVIRn8l7bVkNoCohEFUHLMKQKjMQCIDEr1BeWiLdfI4bXrOOGVYhuv6iz5QMprq6Zr/FOSNGAWBhnnsfmxFY4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NGHn5cKs; arc=fail smtp.client-ip=40.107.243.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bdwn3F60"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2163b0c09afso49799755ad.0;
-        Fri, 24 Jan 2025 13:12:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737753159; x=1738357959; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nGzkSXXrA7jYqSv+MBWBhKjKjIZTADsGXE7oxPj/cDg=;
-        b=bdwn3F60wF3vdnmEavB5HU7OkuldrWLjXPn7cZJF+pLzgr8FF6ioVxR9fL9dT7HQuo
-         eUme77tpYRrDDO0YpV7QXatKq7BBQ6esefkW10y5viqdYNGsGs/cG1QpumC5EVpy4+qa
-         HXuYGZ/unc+IRp3cSaLIunungD8loP1dlbMzkmJc4DZh+m1KzKXvS4VoLRpJ1g3lONKW
-         mI8GpTeYvvtLu5QUhIYVOP1zw3S/l7+M4JDOKhyl72Au+SOO82rHnrHr2eZW6mj7RDLh
-         OD847IWeMBFt1kYudhfWOp5/3a9D5T6OwiuwnGUxHsJkWe/fWVsaTWxc8JCkdeSpiTpL
-         wKDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737753159; x=1738357959;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nGzkSXXrA7jYqSv+MBWBhKjKjIZTADsGXE7oxPj/cDg=;
-        b=V4cOCGVGfRs3AFzYIBGsULkyjLYEepsfQePKPpnbs87XuuML2QUwa02kqiLWmpSMHP
-         QJvQL5qsLORJ9/pcjJItiw2HEy6zKI70dpU0UgIl/w2pjt2d7XixxCyiW/36Q387KQSn
-         UcDYnmUti8S7Lj+i8oAU+IaemUIXL+F2YWMe9mg+DZAQDmB4zVntm+xnwSpG8R/csxu6
-         Pc8/XKKD5ZDr5yz1nL9BeHtTzK1UwmP0IbTNp38Aj9BaQVNwg5DrMgbGrSedzS7pZRpP
-         cl50W1WymeCKJddQyM5of1QyqmB4gqyKJMYU3bzaXPOZg6EMWcB6oVibGBJGo8G+DjEG
-         w3oQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+eKcJAvuMveJ4VPTBGIZ0bEhM5i9zHkXJxcTUv/vDDIS02wFWq3w4hpHFVP3ocFfOW7LXDdntNYX7@vger.kernel.org, AJvYcCVwn6AFvmmojRtAL8a8M5KCtIg7H6+QV9n8BzLCXHLVnw7Ch7CdsuGNdesNPkB6rduHPwqYfUIi/LvuzGU=@vger.kernel.org, AJvYcCWTHLqxy6de8bvIsbTnYjt4RnE0igbPV4h+fsfHcsDDKwJYA7DNF00E2Cbo5XYqfkOdGLpc3H6JPg47XqH8yIWc@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9M0HMQTdoZgFR2KU+4cH7Q+upPn/HFdqrusqoZuhPLLhlq4Yd
-	iobuf7wfNK+CiW5/36bmSey5fx7N19aclvrmoi4e/L1R6LhqlWcY
-X-Gm-Gg: ASbGncvUjqN9TK+/fJU4NjR7QoHvF6CBOyR3poSknxn0KJLZIYSfXrRNqUc4Aye2kLE
-	47Pc7JgrSfCiql1epFQgXgggyjtu3eHVSRHWkayqL5TpIGzGFi/IOltew9Bwmqan8qB/+ixxhQk
-	9ouX7qDObPXgHZTCPt5cuoE6B9wBxpL/wXggHcqvd27i+IyFoafg3Pc7KqhWUBiaeO/7TfHcwtw
-	mD27XT5Bz9HjlUdx+gDsvcks0b6cKw+JYdtsgxaPi3sspcqxbyvvLSaXN+y3BR/jvKL2xVz8No7
-	ae11UuDQfvqBpM0uSRyaJs9rwttzwbp9IJw/z7+KIuRiZ8AhyHM=
-X-Google-Smtp-Source: AGHT+IGQunDQe7Ga5HOHK7oamtTMzDBL11HRtkIJFu1joG/eqDIl8j9Lzcy6B1FtF7LxRuD9eZKMmQ==
-X-Received: by 2002:a05:6a20:a11d:b0:1d9:aa1:23e3 with SMTP id adf61e73a8af0-1eb215901d5mr59465264637.32.1737753157707;
-        Fri, 24 Jan 2025 13:12:37 -0800 (PST)
-Received: from ?IPv6:2804:1b3:a801:16c4:2e00:3d86:8f34:c7fb? ([2804:1b3:a801:16c4:2e00:3d86:8f34:c7fb])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ac495d5531bsm2099472a12.47.2025.01.24.13.12.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 13:12:37 -0800 (PST)
-Message-ID: <bd37528d1c704951cb86a751a5c81e4c76962f51.camel@gmail.com>
-Subject: Re: [PATCH v2 0/5] kci-gitlab: Introducing GitLab-CI Pipeline for
- Kernel Testing
-From: Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras.c@gmail.com>
-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>, Laurent Pinchart
-	 <laurent.pinchart@ideasonboard.com>, Mauro Carvalho Chehab
-	 <mchehab+huawei@kernel.org>
-Cc: Vignesh Raman <vignesh.raman@collabora.com>, kernelci@lists.linux.dev, 
-	linuxtv-ci@linuxtv.org, dave.pigott@collabora.com, mripard@kernel.org, 
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-kselftest@vger.kernel.org, pawiecz@collabora.com, 
-	tales.aparecida@gmail.com, workflows@vger.kernel.org,
- kunit-dev@googlegroups.com, 	nfraprado@collabora.com, davidgow@google.com,
- cocci@inria.fr, 	Julia.Lawall@inria.fr, kernel@collabora.com,
- torvalds@linuxfoundation.org, 	gregkh@linuxfoundation.org,
- daniels@collabora.com, shreeya.patel@collabora.com, 	denys.f@collabora.com,
- louis.chauvet@bootlin.com, hamohammed.sa@gmail.com, 	melissa.srw@gmail.com,
- simona@ffwll.ch, airlied@gmail.com, Tim.Bird@sony.com, 	broonie@kernel.org,
- groeck@google.com, rdunlap@infradead.org, geert@linux-m68k.org, 
-	michel.daenzer@mailbox.org, sakari.ailus@iki.fi, jarkko@kernel.org
-Date: Fri, 24 Jan 2025 18:12:24 -0300
-In-Reply-To: <f1c73327073c98ade56dfeabf629e2f9cd7d1663.camel@collabora.com>
-References: <20250123135342.1468787-1-vignesh.raman@collabora.com>
-		 <f779c9af4133629f724e366241fab7421d13d227.camel@gmail.com>
-		 <20250124081250.GA24731@pendragon.ideasonboard.com>
-		 <20250124135203.040d0852@foz.lan>
-		 <20250124130021.GA6853@pendragon.ideasonboard.com>
-	 <f1c73327073c98ade56dfeabf629e2f9cd7d1663.camel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NGHn5cKs"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WUKRQTMAPxSHmh81axheBiItvCzV4Xs7I0xsG6eXWbX8at3EJHr5eI678m8ldEc9QhSHcnGOGol1G5YbKXYrzhz8x9aYTGQmMhH+52w12UM8bK625/R+S/CdD2VwOr1QDUh4LgBscvvOckadCBv0LlEA1/8Jk2jFeDvGj0TFonNNYrq1ZqQ9FmvHgzL2kk+0dFQrKFrkjoy19u3UiJQSduB0uUEPjO120+Uo0po1BHKJ7dBDEdyvG4yJoZX1UsEC7uLYYKg5zDhtvxXvT+HQIArT7h13KvfA28/p6rrXLzFnzoUYvsfxJ0EHVa18yH8QyTesHOyULx1h51OYqAgotA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6kBvxlHxD0rht59Ejz1JUb2WPgVPcywQt7tRWPoQiy8=;
+ b=xY8m3Bq6zbFQhXjB6i5mUhcYdCVn2EId5RQGhUUnShSnXzhwpikYXcxZIYmVsxZSoDOo0aOb2i1AuWg+J+zl0Qu6MAexIXXlzLTMBQ6JYx1kajdt4BKLA6V/bhs9wwMQ17HJLMEAgYF41mI8CQXT3nW0kX0Deo9q8QZQ2PRZ+O151+bgPPYKd5Nxa2pRDsivY7mEWzRaS+fNH4bwPoJVYMjAbzQSjWYkKbK2FhIEuVL/giGFU9jOfY8tZbXpejcTmsK5emSwRyIbC3c/MpzA+rA7/bege4gjgo4uTTrXYCF4NhlPNHoQYfIUt8BuZGCAVqQsrn6tso4ZvSwNIzkUug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6kBvxlHxD0rht59Ejz1JUb2WPgVPcywQt7tRWPoQiy8=;
+ b=NGHn5cKs7pI9uJKqiYtVn49C1/mHjzmoP8W3DrBi9QPy0zSlEl86RPvDbQ8zCVdU0u0Bog1rgcXTYvgGI4+2rJTUaiUb41vomYhrgwvvdEL3TdtGj8sOmFCsJicOHj58P6PMV/mWXnIHDiJWbmo7VowsWQPzrYer3e7INoom+VJmMtXvE9IiXbu0fmsiie85CecUNdR4BZsYTGkQeLyKg9mAr+ybxr6R6qtOQ2u3uRi14uK5RTVFNIkRVq00U0Wg0NM/3sRP1dsoujUjFSSJHeDxyiOsCVdUcHuINfRj4K+3xGcinH1WY7pKXezYbhOxI4JI137Xta+YvcswaTkk6w==
+Received: from MW4PR04CA0033.namprd04.prod.outlook.com (2603:10b6:303:6a::8)
+ by DS7PR12MB5983.namprd12.prod.outlook.com (2603:10b6:8:7e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.21; Sat, 25 Jan
+ 2025 00:31:08 +0000
+Received: from SJ5PEPF00000206.namprd05.prod.outlook.com
+ (2603:10b6:303:6a:cafe::df) by MW4PR04CA0033.outlook.office365.com
+ (2603:10b6:303:6a::8) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8377.19 via Frontend Transport; Sat,
+ 25 Jan 2025 00:31:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SJ5PEPF00000206.mail.protection.outlook.com (10.167.244.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8377.8 via Frontend Transport; Sat, 25 Jan 2025 00:31:07 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 24 Jan
+ 2025 16:30:54 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Fri, 24 Jan 2025 16:30:53 -0800
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Fri, 24 Jan 2025 16:30:52 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
+	<will@kernel.org>
+CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
+	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
+	<shuah@kernel.org>, <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
+	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
+	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <patches@lists.linux.dev>
+Subject: [PATCH v6 01/14] iommufd/fault: Move two fault functions out of the header
+Date: Fri, 24 Jan 2025 16:30:30 -0800
+Message-ID: <d47fb648e36a6a5f04e0d98d02fa71e47c4a77e8.1737754129.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1737754129.git.nicolinc@nvidia.com>
+References: <cover.1737754129.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF00000206:EE_|DS7PR12MB5983:EE_
+X-MS-Office365-Filtering-Correlation-Id: 83e46a2b-8f23-46e0-3579-08dd3cd78f44
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?bNhjurGHZktGPER9hWmHw8GBZa+tJyV1bWbsvrQWwSz1f5QzzYYBnhEMF2SY?=
+ =?us-ascii?Q?y8F6zKktgvGtei8SPhFq1ysNyOLk56qbF41zyvgYvaavKR8UMZjMZI/dKhHH?=
+ =?us-ascii?Q?cOWeg5eDHX9OgTmPNBdA+DaR7rKXJYXynW/HaxfHBokuBzUK+ONltSx4XBtN?=
+ =?us-ascii?Q?HzI9/2PHGzz+8u/j0fwMtYbFXnizfk40762NPI5u9ESvfYolVxzgjP9X5WNb?=
+ =?us-ascii?Q?q42r1HYKbwifBpMYG6aehVLxGGQosIVorhD9430Na3L3u28mXbBiLewgqFWq?=
+ =?us-ascii?Q?ZgLPXj8bfaQhu7tTDG+VHk3XR8tAZ7TbZ3G6S3vgOM3RHNMUSZulg71LQljb?=
+ =?us-ascii?Q?7eHkBN3Nqzv71HRc33zdhyivjHkPMb3y0ZDcqKI3n2/vMGPOhgO5b4kfxY7D?=
+ =?us-ascii?Q?B6DHIwtmutAh8vLeHJcsdsXOYazwVAM2oJHa5GjF/kYS9xh8DEtTE9WquOcr?=
+ =?us-ascii?Q?oh9YjRNP7xMQkilU2JH9cnxMZvcYk60vcjKXmZGWWkkUdQ7/rcl/6rHICh6B?=
+ =?us-ascii?Q?o2YnDNYSn07h2xkeBr+5hrnklKG1QUVMiYe6XGARaYps1RWN7nXNYWYWmkKV?=
+ =?us-ascii?Q?ZxDJ4HE3LJ+EAaYhvwQa2cd93PDE1cwFw63lPefTF1maHgFRITQzkVI+Di8F?=
+ =?us-ascii?Q?/WIC1w5BbCTRdkTKL//WV7YLeWr0RgSnpo5VagEn+zI4pkYXhhzUpBRDMbi9?=
+ =?us-ascii?Q?hl6V6ynWTo007mLgocvSxtUbx2K6ww9iJHmuMz57jLjabncus86bOaw2UPA/?=
+ =?us-ascii?Q?Vip5qGbCyaj4CoJRyQEKUtzpmN+vGPNHffyNip6sWCWjOHwqpFf//Afq4ppg?=
+ =?us-ascii?Q?TwJnIWHnJipQAP+CIk6Ne3pT/BTF+qHoADh1dcNdjcKbtiwYGbR0OFNRpXop?=
+ =?us-ascii?Q?3knfgZtm8w/CBScjyKdqzcSVmbq5p4rTIJoiDrf1pScMWv6cE7h6xviLfyHM?=
+ =?us-ascii?Q?7rGUgu0dAwS2NfEQ6PQBPkywiQG+OFkuuguLTOZubJW4wSi7WO6/a9Ek1qI3?=
+ =?us-ascii?Q?loGoJDk0cRHgmc3RL/hm6w+teHNj0I135Hy66kiLaWFLdkebP/AqebEqxx8V?=
+ =?us-ascii?Q?a7uH7EdoWca1AsfXjnkOsFtsFpcpGBxMoJGoVFr+T19jAa3hvSaxtS34vpXo?=
+ =?us-ascii?Q?fC8bxGsNxokQ5i7zxdA2gK0wbm36oz/XcIXtkitDtVw5iFMzasuVILzuNi0S?=
+ =?us-ascii?Q?JnAJ5/8XbWCJT/cevJBFsyuboLa+4JgxVmke+zSKSthUO149plfqLpP2EUKy?=
+ =?us-ascii?Q?GOqG6rcQezAc1Ks72VASQ8zltZEEx6iF0VJwwVTcTcF2xDE62ZuOmlRGPR4P?=
+ =?us-ascii?Q?y1HioO+xq3M5Oe9quVrljIUnqJM4aQhz/G3QZugNX6QtsjTXfFaw76g6Njmd?=
+ =?us-ascii?Q?xw4o7hNiDNI4hLFabQ3KEKjZLSQxMxzZ9VvUAWUocsnfEuX2m7giwvtmGOO4?=
+ =?us-ascii?Q?dyHAIlEjFUp1SlIbiy5oss9095RmImfJ2nEny/cbh+xQIc+gz484IaflCr9t?=
+ =?us-ascii?Q?Ic8aFcMW2TjEEjg=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2025 00:31:07.5413
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83e46a2b-8f23-46e0-3579-08dd3cd78f44
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF00000206.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5983
 
-On Fri, 2025-01-24 at 10:45 -0500, Nicolas Dufresne wrote:
-> Le vendredi 24 janvier 2025 =C3=A0 15:00 +0200, Laurent Pinchart a =C3=A9=
-crit=C2=A0:
-> > On Fri, Jan 24, 2025 at 01:52:03PM +0100, Mauro Carvalho Chehab wrote:
-> > > Em Fri, 24 Jan 2025 10:12:50 +0200 Laurent Pinchart escreveu:
-> > >=20
-> > > > > It's been a few years since I first thought on finding a good way=
- of helping
-> > > > > kernel developers testing their patches, while making use of the =
-free runner
-> > > > > minutes Gitlab offers. It can greatly simplify the testing for pe=
-ople who are
-> > > > > new to kernel development, or students trying to understand it be=
-tter.
-> > > > >=20
-> > > > > And this patchset allows that to happen :)
-> > > > >=20
-> > > > > Actually, I spoke to Helen last year, and to enable it to run on =
-the free
-> > > > > Gitlab-CI runners, there is a small extra patch which is needed:
-> > > > >=20
-> > > > > https://lore.kernel.org/all/20240327013055.139494-2-leobras@redha=
-t.com/ =20
-> > >=20
-> > > Sounds interesting!
-> > >=20
-> > > > Gitlab as an open-source software project (the community edition) i=
-s one
-> > > > thing, but can we please avoid advertising specific proprietary ser=
-vices
-> > > > in the kernel documentation ?
-> > >=20
-> > > Every time Gitlab is mentioned, the brand of the company that
-> > > developed it and has been providing proprietary services is also
-> > > advertised. If you're not happy with that, you should move to use
-> > > a git forge developed by some open source community.
-> >=20
-> > I'm fine mentioning the gitlab community edition, I'm not fine
-> > advertising gitlab.com SaaS in the kernel source tree.
+There is no need to keep them in the header. The vEVENTQ version of these
+two functions will turn out to be a different implementation and will not
+share with this fault version. Thus, move them out of the header.
 
-Hello Laurent,
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+---
+ drivers/iommu/iommufd/iommufd_private.h | 25 -------------------------
+ drivers/iommu/iommufd/fault.c           | 25 +++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 25 deletions(-)
 
-I see your point, and I see no issue on removing the two last lines of CI_T=
-AGS
-documentation.
-
-I just added this information on documentation because the default runner u=
-sed
-for the Free Tier of Gitlab does not work for this CI, as it needs more
-resources to run. This information can be added on some other place, but at=
- the
-time I thought it would be ok to let it be there.=C2=A0
-This other runner I mentioned in the patch is also available on the Free Ti=
-er
-(free as in beer).
-
-I would like to make it clear that I have no connection/affiliation to Gitl=
-ab,
-other than a free account in their system, which I use for some CI. I have =
-no
-interest on advertising anything from them.
-
-My only objective is to make it easier to hobbyists/beginners to use those
-available free minutes to test some change before sending the patch, if the=
-y
-think that's valuable.
-
->=20
-> I've just looked attentively, the intention is just to explain you may ne=
-ed to
-> set gitlab variable in your project fork in order to select correctly siz=
-ed
-> sized runners in your own instance.
-
-That's correct
-
->  Its is not strictly about commercial gitlab.com instance.=C2=A0
-
-Exactly, the change is about being able to choose the runner you want.
-
-> The default only works with the original project used
-> instance (which is not gitlab.com as far as I know), but the comment refe=
-r to
-> companies that will choose gitlab.com internally to reduce their IT cost.
-
-Correct.
-Companies can benefit on that, but my focus was on hobbyist (or begginers) =
-who
-may want to test their patches on free CI before sending them to the ML.
-
->=20
-> Its quite a stretch to call this "advertisement", that makes it looks ver=
-y
-> dramatic. I personally believe its quite ahead of most other gitlab CI to=
- take
-> into consideration running these pipelines on foreign (to the project)
-> instances.
->=20
-> Nicolas
-
-Thank you!
-Leo
-
->=20
-> >=20
-> > > The way I see, the best would be if the CI integration could work
-> > > with more than one type of forge and being able to use any
-> > > free Git??b-CI runners that would be available for developers to
-> > > use, as this would allow testing more subsystems with CI, thus
-> > > increasing code quality.
-> >=20
->=20
+diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+index 0b1bafc7fd99..034df9b256f4 100644
+--- a/drivers/iommu/iommufd/iommufd_private.h
++++ b/drivers/iommu/iommufd/iommufd_private.h
+@@ -451,31 +451,6 @@ struct iommufd_fault {
+ 	struct wait_queue_head wait_queue;
+ };
+ 
+-/* Fetch the first node out of the fault->deliver list */
+-static inline struct iopf_group *
+-iommufd_fault_deliver_fetch(struct iommufd_fault *fault)
+-{
+-	struct list_head *list = &fault->deliver;
+-	struct iopf_group *group = NULL;
+-
+-	spin_lock(&fault->lock);
+-	if (!list_empty(list)) {
+-		group = list_first_entry(list, struct iopf_group, node);
+-		list_del(&group->node);
+-	}
+-	spin_unlock(&fault->lock);
+-	return group;
+-}
+-
+-/* Restore a node back to the head of the fault->deliver list */
+-static inline void iommufd_fault_deliver_restore(struct iommufd_fault *fault,
+-						 struct iopf_group *group)
+-{
+-	spin_lock(&fault->lock);
+-	list_add(&group->node, &fault->deliver);
+-	spin_unlock(&fault->lock);
+-}
+-
+ struct iommufd_attach_handle {
+ 	struct iommu_attach_handle handle;
+ 	struct iommufd_device *idev;
+diff --git a/drivers/iommu/iommufd/fault.c b/drivers/iommu/iommufd/fault.c
+index d9a937450e55..e89d27bb9548 100644
+--- a/drivers/iommu/iommufd/fault.c
++++ b/drivers/iommu/iommufd/fault.c
+@@ -258,6 +258,31 @@ static void iommufd_compose_fault_message(struct iommu_fault *fault,
+ 	hwpt_fault->cookie = cookie;
+ }
+ 
++/* Fetch the first node out of the fault->deliver list */
++static struct iopf_group *
++iommufd_fault_deliver_fetch(struct iommufd_fault *fault)
++{
++	struct list_head *list = &fault->deliver;
++	struct iopf_group *group = NULL;
++
++	spin_lock(&fault->lock);
++	if (!list_empty(list)) {
++		group = list_first_entry(list, struct iopf_group, node);
++		list_del(&group->node);
++	}
++	spin_unlock(&fault->lock);
++	return group;
++}
++
++/* Restore a node back to the head of the fault->deliver list */
++static void iommufd_fault_deliver_restore(struct iommufd_fault *fault,
++					  struct iopf_group *group)
++{
++	spin_lock(&fault->lock);
++	list_add(&group->node, &fault->deliver);
++	spin_unlock(&fault->lock);
++}
++
+ static ssize_t iommufd_fault_fops_read(struct file *filep, char __user *buf,
+ 				       size_t count, loff_t *ppos)
+ {
+-- 
+2.43.0
 
