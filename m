@@ -1,132 +1,106 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FCE1FFC55
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Feb 2025 16:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6ABA35956;
+	Mon,  3 Feb 2025 17:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738601367; cv=none; b=hB2CrWDeAfhdAsiPAXVFvMd2hKxubdh8GL5/xrDZYUP+R4OTtcvEjGnUqwlNl6ZZ7cliccFMHWaTeVuIkV15l4ExU5T8CrLRn+j8z0d3cvxio5vrTCbcieDgcS7qbcjOUIAS4bEqDnbJXfYFXmWDxK/tkxsj2iJ8c/YAXDYhhvI=
+	t=1738602152; cv=none; b=rWxsBpv0N4G58aeLGNjJdvEGOIcVuMDF3pJTLR42o60fZ7nG2tnhPGCB8lLVkUoEFPRhNZ/l8dMcBjdtOlR75msoiCFDZxIUPnwYzV6yydNOfsZa0LipNvRMva39h6H/mSpn/kdrcvuZDrBAPOVKWUvlF0wV/HyL+OPibyjGJ64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738601367; c=relaxed/simple;
-	bh=+UyR62zTgCr1lGwsuyjbDBvoQJqiSJUA2EWl/uEDU10=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XV6wVLIra8w39w9l0Fd630RO5jinh8d7kQPIzvXW9MKL/bvds8kyHw/Y4ehSWsZnbES4IdaUrJ+3+6Slq6kHfmL91m4KGAAYizOJWNoP66JdmQMcdmIgrSNkjGd0HwHhYYp2z5sa7wUtUlA7mg+YdAHfc/XjoFZcP+39Fh8a+Pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hdVwDtVy; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1738602152; c=relaxed/simple;
+	bh=n9mHnyQBpGX2PaXbfmTEexmi6lJrevaHr9yjIEWDFnQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nRa6oCinwnYXmFlHdr2732syc+G9C+o+zvHH2F9pX2sJeNOgpuphDUeCFSb4raIphRSI54JcydK3R4iEbK1cl9neT8mj6EVatyLkOEPE5T75BYonLbJzfaB8qv2P8jJdWcdFT58YeD3egxJEGjusOSzAnJMF9j7UZo/2bXns2Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=pgDvH1Tu; arc=none smtp.client-ip=212.227.15.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hdVwDtVy"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-216634dd574so54144125ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2025 08:49:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738601365; x=1739206165; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xddVJAtP16YTUeYljd46EP8hHDLsfmX6IxpdykZZ3ws=;
-        b=hdVwDtVy+mopd6CSzSaA7ieBaDawSATD7GDdz6QLXHWs0cMTL8Ez3EFgxPRgGW8SqW
-         +WnoEK5Aelf0J0+pHZgcOjZoDqOFvoyPci5YFSvTvdKQMmaMDMLJipnvhuln1CPU8Ifi
-         MYY9B9G06EFixjmi7weQ0oxj0fjUFOnLTTacY71N8kzjjzP3f2P8g8RUB4j9tjHz5jxZ
-         /2hZXyRTjO4bl1lDDRPMYGx3ukRl1B2gHpZ6de8PylLnmsRomksHKNmC5UMnVuTzckft
-         WzFets3MDihIRL+udQYneFsjPnSDTpWUeSU2AWmDwU4Wa7aTdWS4reaO7NDomgQvflDd
-         Aqnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738601365; x=1739206165;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xddVJAtP16YTUeYljd46EP8hHDLsfmX6IxpdykZZ3ws=;
-        b=jBIzvt1/uqScFkJw9aXL5YyLnfWClPBdqZ5yx/xLtEfsVovHuFZNEfpfGYBdCQiZTr
-         WpPdFKBsGS1C/zioc4lTu0VPlrEX9DmYkipzhz+lcsTcqGfuvwkOS7V0IBY4AFzUvSyF
-         7nUSzalNhL924wDLgv+6rnpR/4ncS60oJMUdcZDusoytg1T924Xqrzw4JWZo9MaNi/3D
-         Qu2iPyh5UAmIEPYjQF3fL724knzYbgJ48h2nMEzXjGtq6JTXHSnBXX4/6TKnT0wjcPsa
-         Fid2n7fPNt7KX+og3eKvDpjMWpyHUusi1VXh2x6Scg15XlVwUHIV+GFxKxrKq+zQykiK
-         4w2A==
-X-Forwarded-Encrypted: i=1; AJvYcCVaSTBgMAvDxjWSn8tGqvcc9hCBRhPkpegnTH0V1ILgjAfk8smdG4YhcK9PS3jL6V3kFVJvroEtaStVsbwsuDo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6P++58qd+vRlnSO8TWu+vSs2k/9zbA4Pkp8tdq/sSX9FUorXM
-	pnNWGhLLMwHxtgHMnCUhdQJXVxIFw7I69Oz3dK3Pt+tY+SyRjqvN1SyTRHMQzwB5UYFxWexzC4U
-	=
-X-Gm-Gg: ASbGncvvoRI/c6yuJGLAPGTDsCgOkNHi5Y3sUY2dsg+0Dg8whJZ959XpwLbO67mDBsu
-	MREsBwXdsvN9XzzKXxwYG0ufNL5Xb5ZKJQTzacOeqz5QmzG9d0rPNQMIaUWpEVh5/URl+h5k+rh
-	6Q4SmNYYsh8ef/UZqsuvn27vm/e4ufUX/jtOhS8X4ZUOnbkG9h1RNEAV8ilI2oSErGrR/1Y5GuZ
-	DphfORm4YOebxh6ep6Wd4jtEAK9L82sLcQtEZANG2OeNA/Awuc3sUsN4LzyWmEnrQxmA+DX2m+B
-	0UXAN4Wieh9YwHOyW77mWwBLjA==
-X-Google-Smtp-Source: AGHT+IF2HYH7tkkxi/7uRTkKqdlCtvWmxGsmA8l7XQB4XkL8zo4HNy1c2T8FM6N7NBKlOO2+px++7A==
-X-Received: by 2002:a17:902:ced0:b0:216:5448:22a4 with SMTP id d9443c01a7336-21dd7c56007mr398076005ad.10.1738601365325;
-        Mon, 03 Feb 2025 08:49:25 -0800 (PST)
-Received: from thinkpad ([120.60.129.34])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21de331fabdsm78765805ad.221.2025.02.03.08.49.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2025 08:49:24 -0800 (PST)
-Date: Mon, 3 Feb 2025 22:19:21 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: bhelgaas@google.com, kw@linux.com, linux-pci@vger.kernel.org,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests: pci_endpoint: Skip disabled BARs
-Message-ID: <20250203164921.elqigp5cuqz4dg3p@thinkpad>
-References: <20250123120147.3603409-3-cassel@kernel.org>
- <20250123120147.3603409-4-cassel@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="pgDvH1Tu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1738602148; x=1739206948; i=ps.report@gmx.net;
+	bh=n9mHnyQBpGX2PaXbfmTEexmi6lJrevaHr9yjIEWDFnQ=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=pgDvH1TuUxllvsKVdkXZTdaKPqZRFRa9XC5iiGld+0vJSN727IsNUX3bA9wzBm35
+	 i+1Wj0bUJFOuv5KplpBxPPlanV/C46f//JbPtDtopmaDw97BexFB26H2+BaLI6o/j
+	 vWS8vGc6OuPQxfj4a30mlLLrtf3HzZCggzSE7H6SxuM5BUfQriWJeZLpCkX7ffYoz
+	 DgBzJgIu1OOb6sWf1Jkn/ijxSXTkCZoV67N+jx9ntYgp/378KmyZZ7fWOpT82dMCE
+	 8DuZc7Kngen2n4tOjv3kzL9g69/6uOGKiredlUaJpG6ML9SZXMdGaVM3LbKAMmBwY
+	 2LDkuogDs+PeKNVIJw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([82.135.81.54]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MUosN-1tny8T2yZ7-00N4O9; Mon, 03
+ Feb 2025 18:02:28 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Nam Cao <namcao@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Artem Chernyshev <artem.chernyshev@red-soft.ru>,
+	Peter Seiderer <ps.report@gmx.net>
+Subject: [PATCH net-next v3 02/10] net: pktgen: enable 'param=value' parsing
+Date: Mon,  3 Feb 2025 18:01:53 +0100
+Message-ID: <20250203170201.1661703-3-ps.report@gmx.net>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250203170201.1661703-1-ps.report@gmx.net>
+References: <20250203170201.1661703-1-ps.report@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250123120147.3603409-4-cassel@kernel.org>
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:hnOIbvEvZwfC4iEQwmqOb+GBzBpX1aSLGc3bBjMTaPMVmqEC5EF
+ Amr0j3WMkFWM4KcYo7b4aJ6FqDLW4kbL+oWrkYYP/wb0yncOhpzZHO/Kxft9bTsKi1qf3/f
+ gK0PDaNe7k5+/ZWp/Q82iC4/FY+G9Ry33LsAmm1oZ2U+CYq8MPRkL+WGEsrceLIS60dfFW5
+ i1t3qzocxo1YiGODaFgFg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:ZDaTkaW5IDE=;mmWaM3WnQ+io3fxvUf9tt1Pb35e
+ RosCDt9wDZ/RX36lrhYte9ZX7+Y1pPN/E1BM86BoQpo4AEEYG93bZPBV31E6gJ+kTzLnE9AYn
+ symL5S6K2EtDLHuTKfQ5efVkS0fB7mI/kCDQjam+qOYef5PexTnBSyJg1OoAipYGUzqE+GsPa
+ tLf5KBwNkfubwMCTT+yXDU2YXLEXC80f6RQtsT8zFkvQy3EfNfJdFKxj93InctVoVj9US1ZZc
+ iAHpDsLH05kvKaETcgvpOUf2NH/n8VbU7f7S/zcy8kBYD454y4vMAcLphiVn6uz1kTNua+G3C
+ HGwU6oqrzCVCTmDaYaAXDa+H623hqWgXi+GbOf60n9NAHwcxihbx9Nbeg6pWXDkYWEDYkOxJ1
+ qUIzvdrN9WlqB8VSYZNOYPJ2Wp+VpW1Krw9FnLwd+ht7CT6qx9Mtm0u28XYI4OU3/Q+Ur10ZF
+ L7AqcM97KDUTuT5whK+lVwGKaxgr8r8evK2s4eFs7TOecOO4HOaqF1SRp6aUSCEnQOA8XPZlk
+ SJeUg9x5EAqDwkK2weL3U2c+e+x7VJKRnh53Hd93BjJYdJ9bWYFHTkHoDouMie0iVan7sxheK
+ YX+/FrMlUf48fGqXL9bPs1Q6FH4J7T+UD42warPl965pog3RrW7zotgsotQQvK79ulTUD1ORK
+ cDOnQiy+mldub76ZTDBmbeUFUBhubWC1Ryg1ChvraO+AFUyJzlssvLdPjthUIfdvYvVDsrbvn
+ 7uf2SsqFbs6C2Hr2v2DCNc0PyJe59dlmVOCuGfM98i/fi72e0lrhIk2mpVQT7QclWaj9wRhHR
+ 9R+N1ddfW5Nfm+HHUUuFGeCzzJ3ntbGaUKOzgVPTnZ3TASeI+4tTszHcpqI5ZItULVFlbHHao
+ hZAF25kvt4YQi4fI++F1Uo+p2AKWKsgQWopTfA8F3/HVr25NVlOz6r4r0LD19am5Fg0PATwdG
+ G+ByfrQa+eiBXaurO4vePwX+KSXjRgJh1OCeXBhe65JHgeRlkWeqJcWAwgOUcE1+/kP20iEjP
+ arFWXBh+bxWFBgtIPQFzfNOYZIH4LQ3LNZCoEWr58m3u6YH8lH+VdMtkZVSDFNsOG3+hSpcH9
+ k4tb/InStxWIFkH0m1bYsx33ojPHPX8Ik59EJEmFI+P0DowsIb9We1Axls/7OuC7vZjkZI8Kb
+ bWlUzQ93NFFhGgVRP2t7icwKH4ypChcvTLSR6TGljeVNyQaOleRDm/ZmMmpS/e3mWTxOqyeey
+ ++b7i/c0wQ9XJU4auotwsZHcVci1xLAtzZotuSBhu+9hp4G3AT7cMW4QtEY+jhibTtrNASxi6
+ Wy4Qzt7GwbQGiyy9rp5UJ2aN0oGpd8OeWmQkmcEzmVpC0Y=
 
-On Thu, Jan 23, 2025 at 01:01:49PM +0100, Niklas Cassel wrote:
-> Currently BARs that have been disabled by the endpoint controller driver
-> will result in a test FAIL.
-> 
-> Returning FAIL for a BAR that is disabled seems overly pessimistic.
-> 
-> There are EPC that disables one or more BARs intentionally.
-> 
-> One reason for this is that there are certain EPCs that are hardwired to
-> expose internal PCIe controller registers over a certain BAR, so the EPC
-> driver disables such a BAR, such that the host will not overwrite random
-> registers during testing.
-> 
-> Such a BAR will be disabled by the EPC driver's init function, and the
-> BAR will be marked as BAR_RESERVED, such that it will be unavailable to
-> endpoint function drivers.
-> 
-> Let's return FAIL only for BARs that are actually enabled and failed the
-> test, and let's return skip for BARs that are not even enabled.
-> 
-> Signed-off-by: Niklas Cassel <cassel@kernel.org>
-
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-I was thinking about doing something similar since some of the BAR tests are
-failing on my Qcom setup. And you beat me to it :)
-
-- Mani
-
-> ---
->  tools/testing/selftests/pci_endpoint/pci_endpoint_test.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> index c267b822c108..576c590b277b 100644
-> --- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> +++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> @@ -65,6 +65,8 @@ TEST_F(pci_ep_bar, BAR_TEST)
->  	int ret;
->  
->  	pci_ep_ioctl(PCITEST_BAR, variant->barno);
-> +	if (ret == -ENODATA)
-> +		SKIP(return, "BAR is disabled");
->  	EXPECT_FALSE(ret) TH_LOG("Test failed for BAR%d", variant->barno);
->  }
->  
-> -- 
-> 2.48.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+RW5hYmxlIGFkZGl0aW9uYWwgdG8gJ3Bhcm0gdmFsdWUnIHRoZSAncGFyYW09dmFsdWUnIHBhcnNp
+bmcgKG90aGVyd2lzZQpza2lwcGluZyAnPScgaW4gY291bnRfdHJhaWxfY2hhcnMoKSBpcyB1c2Vs
+ZXNzKS4KClRlc3RlZCB3aXRoOgoKCSQgZWNobyAibWluX3BrdF9zaXplIDk5OSIgPiAvcHJvYy9u
+ZXQvcGt0Z2VuL2xvXEAwCgkkIGVjaG8gIm1pbl9wa3Rfc2l6ZT05OTkiID4gL3Byb2MvbmV0L3Br
+dGdlbi9sb1xAMAoJJCBlY2hvICJtaW5fcGt0X3NpemUgPTk5OSIgPiAvcHJvYy9uZXQvcGt0Z2Vu
+L2xvXEAwCgkkIGVjaG8gIm1pbl9wa3Rfc2l6ZT0gOTk5IiA+IC9wcm9jL25ldC9wa3RnZW4vbG9c
+QDAKCSQgZWNobyAibWluX3BrdF9zaXplID0gOTk5IiA+IC9wcm9jL25ldC9wa3RnZW4vbG9cQDAK
+ClNpZ25lZC1vZmYtYnk6IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KLS0tCkNo
+YW5nZXMgdjIgLT4gdjM6CiAgLSBubyBjaGFuZ2VzCgpDaGFuZ2VzIHYxIC0+IHYyOgogIC0gbm8g
+Y2hhbmdlcwotLS0KIG5ldC9jb3JlL3BrdGdlbi5jIHwgMSArCiAxIGZpbGUgY2hhbmdlZCwgMSBp
+bnNlcnRpb24oKykKCmRpZmYgLS1naXQgYS9uZXQvY29yZS9wa3RnZW4uYyBiL25ldC9jb3JlL3Br
+dGdlbi5jCmluZGV4IDQ5NmFhMTY3NzNlNy4uNGY4ZWM2YzliZWQ0IDEwMDY0NAotLS0gYS9uZXQv
+Y29yZS9wa3RnZW4uYworKysgYi9uZXQvY29yZS9wa3RnZW4uYwpAQCAtODIzLDYgKzgyMyw3IEBA
+IHN0YXRpYyBpbnQgc3Rybl9sZW4oY29uc3QgY2hhciBfX3VzZXIgKiB1c2VyX2J1ZmZlciwgdW5z
+aWduZWQgaW50IG1heGxlbikKIAkJY2FzZSAnXHInOgogCQljYXNlICdcdCc6CiAJCWNhc2UgJyAn
+OgorCQljYXNlICc9JzoKIAkJCWdvdG8gZG9uZV9zdHI7CiAJCWRlZmF1bHQ6CiAJCQlicmVhazsK
+LS0gCjIuNDguMQoK
