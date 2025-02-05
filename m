@@ -1,28 +1,28 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BD11519BF;
-	Wed,  5 Feb 2025 15:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FAEB1607B7;
+	Wed,  5 Feb 2025 15:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738768050; cv=none; b=JKb8LApsd2f9LGHQiVHJtu1WN2uneGh+dVuIxDPPW70bzKJIE/d7fP2JbYY5Vr27B1Js15sCngvA2M6xwQN5mEQGZpde/TPNvPH2JnO72b16HBGyx/v6F0BSsT+VjGGWG/C5+hSzy1N7h5n5ijb4eGGDJ/fKqE1Ns8LbxluJfnc=
+	t=1738768521; cv=none; b=Ms7foagddH5Q8zLWwuszg9TJrMJyb7ZLxkZA5nUme54DZA+w5UFzg10igVKHmWBqCDah5FL6PqyfqV5jfeOIaUUSnK//304qqvbrKNZaNxs+vEKjipHqj8/xrhsWw3PVQJ3nO0arYzJhrrDXf+gPeWBgrv3PDVJ8hY8jagIpqeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738768050; c=relaxed/simple;
-	bh=SKYl9ovbwvQOQg7dSysQRrAU4fkMD45oHcfHrlnMGQ0=;
+	s=arc-20240116; t=1738768521; c=relaxed/simple;
+	bh=hFRNwc+yb3gXXTSRUdlu2btQf1s2Y+RpMFmE8fcgT5E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=csgBQRkj/rhwq0YJrSjpeGxDdf4k0Gmls6zkBfE+8x3WLk4oFmHwPovxuB2i/KATCykXw8F4rZjQcCrIhtlA5UoZ6G2fCB4c2YpBoOSgx8DVLdjMQsDUvniTK5KbZL0Bn9K4UZEpXUu9EyqaIa+4UDdNPyCTnu5pynecCr+sCUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wL8YHWfN; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=t4PbdlDr1Z0zWplcziXqap8gDoIzcpumk2OaB97yT9OvimmpJg8ObTnd4PTpngWykeHV16rRBwmkdkJNHJl283fRAG91UjKQTp2NqDSD+fMlKfGDZVQJpW2ysYaLHGfGBvO5+W11VhlR5IOSglJtW8F2Q79jDM61zu73NFt49Fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=F0avVyEl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wL8YHWfN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95369C4CED1;
-	Wed,  5 Feb 2025 15:07:29 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="F0avVyEl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87176C4CED1;
+	Wed,  5 Feb 2025 15:15:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738768050;
-	bh=SKYl9ovbwvQOQg7dSysQRrAU4fkMD45oHcfHrlnMGQ0=;
+	s=korg; t=1738768521;
+	bh=hFRNwc+yb3gXXTSRUdlu2btQf1s2Y+RpMFmE8fcgT5E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=wL8YHWfNJ2pfqHfBZkk7SKd0uysVK+zbY1UGCUqgLD5nJzsr7yn3NHC+nS7OrSGnk
-	 GJlmg9u6w4LcDm8bmBHzo+3KXX2Lmu4EXYtCjsLjewBgI9Pd12OC7pdzDptU1mRzDl
-	 x0eSsEYUOUsZ/5zIpEwBSO2BWRG2J85JWU68LgxY=
+	b=F0avVyElnRpZ+QWrIeR3KnyMFC8iD11gWfC65eXH7nqVn+2c6Xzi6mWA3D+HuBUGI
+	 rQ25o1jgkbqI28/68tAhpBfxidunG8TS7pVeccHxayHyJgYmEdJadwhslxcrhDnn89
+	 LeKlTtfLXHowan+TMSLGvh6uy351mK9gmqJdohr8=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Florian Weimer <fweimer@redhat.com>,
 	Michael Jeanson <mjeanson@efficios.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 6.12 546/590] selftests/rseq: Fix handling of glibc without rseq support
-Date: Wed,  5 Feb 2025 14:45:01 +0100
-Message-ID: <20250205134516.160256480@linuxfoundation.org>
+Subject: [PATCH 6.13 580/623] selftests/rseq: Fix handling of glibc without rseq support
+Date: Wed,  5 Feb 2025 14:45:22 +0100
+Message-ID: <20250205134518.409977197@linuxfoundation.org>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250205134455.220373560@linuxfoundation.org>
-References: <20250205134455.220373560@linuxfoundation.org>
+In-Reply-To: <20250205134456.221272033@linuxfoundation.org>
+References: <20250205134456.221272033@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -54,7 +54,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.12-stable review patch.  If anyone has any objections, please let me know.
+6.13-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
