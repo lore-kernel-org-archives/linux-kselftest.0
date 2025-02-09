@@ -1,261 +1,112 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7B91E283C;
-	Sun,  9 Feb 2025 20:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1304E243398;
+	Sun,  9 Feb 2025 23:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739132849; cv=none; b=WTSKbdWacmfx/fXm0li/9fsvUAwt6ZpeYFpTZ4CIvgI1UrD9KDJ3IOCc5X+qqGE/H5k4y0LGO6nu7mXs4xRPSTdEul0mkTG+YGJwFuVLe8wqEJs7vlQU/dpyV+jF6BbmZIyjGkerWa9bQH25DL7wxOXoLaJadDFvdkMT5XWe/do=
+	t=1739144872; cv=none; b=sTm3zYI6I0ZrDBG3NLCR93TdrHo+biVoART97eGlD+BUoLK98IA3O+Oscp/q6ytTYLFoX0LmSaaGPxiwbmK3k41TY8v+u6jao55XsHWrg/W0LuFaLNb8349JOHxms7ZYXG4O75e9ZIKu5GAGg6HbVJLlN6udWGQoPPaGBeVY+5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739132849; c=relaxed/simple;
-	bh=+QUeG+bKiljNl7Cap2FGBbyuKBrPpyf/B7O4/k1S14s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=D3zasbUw+0b4K4Z0AMNz6E17IK49LtBFZGfr65XhJcuqZxURwzSr2oSozBGlUG4DgpFReDo/8FOyHhirE9b3gc3mi7eIdI1WFK70+eupBAg3ww6xNosuXzejQAwtRI/AfRrhbzQt77GrtSyxktBEGjwLw59avV7r1jTL9Ksn8IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=WpjMvFAy; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1739144872; c=relaxed/simple;
+	bh=K5FQS1s/N4NX8Q6lrgoCVP7sT/sJtb8Ma3K8r2bhXZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IVjBkhQI/uRTFJeUTk7JXZQBWelhKSpxhCMZYfxfKHiU/ni/TCResS+t3zyQ3T2zBjTF0UdXOdw1VCSDzsThkL4IhJWLKUtyWU1dpCka/eLbOXbbcPvCs2PENHQaVUq8AxQT77Wp2ReCA3Nbwq66cYIkAzUOw7jwQMQEJ+Fd95c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=R1vAGGAU; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="WpjMvFAy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1739132837;
-	bh=+QUeG+bKiljNl7Cap2FGBbyuKBrPpyf/B7O4/k1S14s=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=WpjMvFAy1zmNWCtPzAaFDAWBqiDiuLUcRVKWMgk4Bw7UU/UAg93sl3fzD0CjhhaDe
-	 z+bZLSJbq+vtlB5plRFs9r/3FAVuwEz2YCQDv3dc+rOvus416yiWsxWBp0uDJyJpHf
-	 J7J+B4sKcT4BEO5KuggZrX+RG3wIIefFaYq+m3w4=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 09 Feb 2025 21:27:12 +0100
-Subject: [PATCH v2 1/2] tools/nolibc: add support for [v]sscanf()
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="R1vAGGAU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1739144868;
+	bh=K5FQS1s/N4NX8Q6lrgoCVP7sT/sJtb8Ma3K8r2bhXZs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=R1vAGGAUfGv+5bOipOemqmM5ASiBVagx4KlUly21yX88sATK64KsEfbEXNsdI4qv1
+	 G3RLNzWzpHghPecgbSg4myII0wMIsBGBQvahjZDWI9wW31Qzn4qh6cPg6QBjyfQKLZ
+	 l4QWC0gHYN/n64cchniE4X85BSIYdjpmxcxSrMG8Dt7I+3StLuyJabveeQHmLCNYEY
+	 ZWzSthmugEC1Xb/AGePa5XDA5cEhdKb0QweLyFiEuVPZSMISi4KiLqFCEM9TYM3vWJ
+	 4AgMAMr8vHjC8/jrYA2wwQArHKJzt5LsjSqsKUxQtECPaS1UrF8gQSC6fjGwX+/3Za
+	 MOKVxlf7/sILQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Yrksb30ZMz4wbn;
+	Mon, 10 Feb 2025 10:47:47 +1100 (AEDT)
+Date: Mon, 10 Feb 2025 10:47:46 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Kees Cook <kees@kernel.org>, David Gow <davidgow@google.com>, Andrew
+ Morton <akpm@linux-foundation.org>, Brendan Higgins
+ <brendanhiggins@google.com>, Rae Moar <rmoar@google.com>, "open list:KERNEL
+ SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, KUnit Development
+ <kunit-dev@googlegroups.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/6] KUnit test moves / renames
+Message-ID: <20250210104746.49eb1dd8@canb.auug.org.au>
+In-Reply-To: <CAKRRn-cFvCOay-J6BEsGjcB309_k-4rr9u=yKU7BCmiW-OcVcA@mail.gmail.com>
+References: <20241011072509.3068328-2-davidgow@google.com>
+	<e67664ac-dd20-40f3-9bee-0785d428ecce@linuxfoundation.org>
+	<202502081313.054EB7B@keescook>
+	<CAKRRn-cFvCOay-J6BEsGjcB309_k-4rr9u=yKU7BCmiW-OcVcA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250209-nolibc-scanf-v2-1-c29dea32f1cd@weissschuh.net>
-References: <20250209-nolibc-scanf-v2-0-c29dea32f1cd@weissschuh.net>
-In-Reply-To: <20250209-nolibc-scanf-v2-0-c29dea32f1cd@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739132836; l=5306;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=+QUeG+bKiljNl7Cap2FGBbyuKBrPpyf/B7O4/k1S14s=;
- b=/qNf9OS9H7TXvjGCJSGtCMUcZET0S3+z3KO3ntyfjNvcgzhuXZmlXnfpoT6EnobRfBJM4QU5h
- Lcgyc/eOtuQDuDBJeFvarmtryL7WfLFBTVptBNYBKJ1PfRuvDtjlAsr
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: multipart/signed; boundary="Sig_/XAgsktbiHLJXsFjxvxAWmIR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-These functions are used often, also in selftests.
-sscanf() itself is also used by kselftest.h itself.
+--Sig_/XAgsktbiHLJXsFjxvxAWmIR
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-The implementation is limited and only supports numeric arguments.
+Hi all,
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/include/nolibc/stdio.h                 | 98 ++++++++++++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c | 68 +++++++++++++++++++
- 2 files changed, 166 insertions(+)
+On Mon, 10 Feb 2025 04:43:28 +0530 Shuah Khan <skhan@linuxfoundation.org> w=
+rote:
+>
+> On Sun, Feb 9, 2025, 2:44=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+>=20
+> > On Fri, Oct 11, 2024 at 07:53:43AM -0600, Shuah Khan wrote: =20
+> > > On 10/11/24 01:25, David Gow wrote: =20
+> > > > As discussed in [1], the KUnit test naming scheme has changed to av=
+oid
+> > > > name conflicts (and tab-completion woes) with the files being teste=
+d.
+> > > > These renames and moves have caused a nasty set of merge conflicts,=
+ so
+> > > > this series collates and rebases them all to be applied via
+> > > > mm-nonmm-unstable alongside any lib/ changes[2].
+> >
+> > Shall I carry this in the hardening tree? I didn't see it land in the
+> > merge window, and I still don't see it in -next?
+> > =20
+>=20
+> My thinking was that this series would go through Andrew's tree to avoid
+> conflicts. Please take it through yours.
 
-diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-index 3892034198dd566d21a5cc0a9f67cf097d428393..a403351dbf6098ac8292b9589ed8a054b4c5669f 100644
---- a/tools/include/nolibc/stdio.h
-+++ b/tools/include/nolibc/stdio.h
-@@ -349,6 +349,104 @@ int printf(const char *fmt, ...)
- 	return ret;
- }
- 
-+static __attribute__((unused))
-+int vsscanf(const char *str, const char *format, va_list args)
-+{
-+	uintmax_t uval;
-+	intmax_t ival;
-+	int base;
-+	char *endptr;
-+	int matches;
-+	int lpref;
-+
-+	matches = 0;
-+
-+	while (1) {
-+		if (*format == '%') {
-+			/* start of pattern */
-+			lpref = 0;
-+			format++;
-+
-+			if (*format == 'l') {
-+				/* same as in printf() */
-+				lpref = 1;
-+				format++;
-+				if (*format == 'l') {
-+					lpref = 2;
-+					format++;
-+				}
-+			}
-+
-+			if (*format == '%') {
-+				/* literal % */
-+				if ('%' != *str)
-+					goto done;
-+				str++;
-+				format++;
-+				continue;
-+			} else if (*format == 'd') {
-+				ival = strtoll(str, &endptr, 10);
-+				if (lpref == 0)
-+					*va_arg(args, int *) = ival;
-+				else if (lpref == 1)
-+					*va_arg(args, long *) = ival;
-+				else if (lpref == 2)
-+					*va_arg(args, long long *) = ival;
-+			} else if (*format == 'u' || *format == 'x' || *format == 'X') {
-+				base = *format == 'u' ? 10 : 16;
-+				uval = strtoull(str, &endptr, base);
-+				if (lpref == 0)
-+					*va_arg(args, unsigned int *) = uval;
-+				else if (lpref == 1)
-+					*va_arg(args, unsigned long *) = uval;
-+				else if (lpref == 2)
-+					*va_arg(args, unsigned long long *) = uval;
-+			} else if (*format == 'p') {
-+				*va_arg(args, void **) = (void *)strtoul(str, &endptr, 16);
-+			} else {
-+				SET_ERRNO(EILSEQ);
-+				goto done;
-+			}
-+
-+			format++;
-+			str = endptr;
-+			matches++;
-+
-+		} else if (*format == '\0') {
-+			goto done;
-+		} else if (isspace(*format)) {
-+			/* skip spaces in format and str */
-+			while (isspace(*format))
-+				format++;
-+			while (isspace(*str))
-+				str++;
-+		} else if (*format == *str) {
-+			/* literal match */
-+			format++;
-+			str++;
-+		} else {
-+			if (!matches)
-+				matches = EOF;
-+			goto done;
-+		}
-+	}
-+
-+done:
-+	return matches;
-+}
-+
-+static __attribute__((unused, format(scanf, 2, 3)))
-+int sscanf(const char *str, const char *format, ...)
-+{
-+	va_list args;
-+	int ret;
-+
-+	va_start(args, format);
-+	ret = vsscanf(str, format, args);
-+	va_end(args);
-+	return ret;
-+}
-+
- static __attribute__((unused))
- void perror(const char *msg)
- {
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 798fbdcd3ff8c36b514feb3fa1c7b8d7701cccd7..81e942c7d1684a7dd59af0b05c8330378532ecc1 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1325,6 +1325,73 @@ static int expect_vfprintf(int llen, int c, const char *expected, const char *fm
- 	return ret;
- }
- 
-+static int test_scanf(void)
-+{
-+	unsigned long long ull;
-+	unsigned long ul;
-+	unsigned int u;
-+	long long ll;
-+	long l;
-+	void *p;
-+	int i;
-+
-+	/* return __LINE__ to point to the specific failure */
-+
-+	/* test EOF */
-+	if (sscanf("", "foo") != EOF)
-+		return __LINE__;
-+
-+	/* test simple literal without placeholder */
-+	if (sscanf("foo", "foo") != 0)
-+		return __LINE__;
-+
-+	/* test single placeholder */
-+	if (sscanf("123", "%d", &i) != 1)
-+		return __LINE__;
-+
-+	if (i != 123)
-+		return __LINE__;
-+
-+	/* test multiple place holders and separators */
-+	if (sscanf("a123b456c0x90", "a%db%uc%p", &i, &u, &p) != 3)
-+		return __LINE__;
-+
-+	if (i != 123)
-+		return __LINE__;
-+
-+	if (u != 456)
-+		return __LINE__;
-+
-+	if (p != (void *)0x90)
-+		return __LINE__;
-+
-+	/* test space handling */
-+	if (sscanf("a    b1", "a b%d", &i) != 1)
-+		return __LINE__;
-+
-+	if (i != 1)
-+		return __LINE__;
-+
-+	/* test literal percent */
-+	if (sscanf("a%1", "a%%%d", &i) != 1)
-+		return __LINE__;
-+
-+	if (i != 1)
-+		return __LINE__;
-+
-+	/* test stdint.h types */
-+	if (sscanf("1|2|3|4|5|6",
-+		   "%d|%ld|%lld|%u|%lu|%llu",
-+		   &i, &l, &ll, &u, &ul, &ull) != 6)
-+		return __LINE__;
-+
-+	if (i != 1 || l != 2 || ll != 3 ||
-+	    u != 4 || ul != 5 || ull != 6)
-+		return __LINE__;
-+
-+	return 0;
-+}
-+
- static int run_vfprintf(int min, int max)
- {
- 	int test;
-@@ -1346,6 +1413,7 @@ static int run_vfprintf(int min, int max)
- 		CASE_TEST(char);         EXPECT_VFPRINTF(1, "c", "%c", 'c'); break;
- 		CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); break;
- 		CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void *) 0x1); break;
-+		CASE_TEST(scanf);        EXPECT_ZR(1, test_scanf()); break;
- 		case __LINE__:
- 			return ret; /* must be last */
- 		/* note: do not set any defaults so as to permit holes above */
+If they have been rebased onto mm-nonmm-unstable, then they really need
+to go through Andrew' tree (since mm-nonmm-unstable gets rebased often).
 
--- 
-2.48.1
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/XAgsktbiHLJXsFjxvxAWmIR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmepPqIACgkQAVBC80lX
+0GxW2ggAnwfBviD12QDuHVGG/lhfYRwqjkWuY+NJWx0vno0ruHyUnCk074vsx7lt
+dphIgSzh5euPaBc+7UxWD8yK83Odmt+dyoRgr/YzrnE+btFCapkQxal4dFnzyQf5
+H5Y6lw6Gfck5kUXbLBAZLiZ35ZPeig122kB2s5I8z227Ts4esEUJyS0sYJIqW0rA
+WPPzKghBVwSmzpFuHcDdqB1tfbubEIUgiSi+slgAVKP2zAgB3GxvbTKpQUOxymuf
+Gst07XYrYxa7PDfGye2jpcTeGgmJ0IMJQlAfE8xuwtAB2FAWEodIUA+E6QL8sxz8
+KQPK6OjjFkZm67Hmtmoe7uWaospVWg==
+=GkLC
+-----END PGP SIGNATURE-----
+
+--Sig_/XAgsktbiHLJXsFjxvxAWmIR--
