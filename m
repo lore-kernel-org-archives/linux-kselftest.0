@@ -1,188 +1,202 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D7225A328
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 21:36:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA0D264604;
+	Mon, 10 Feb 2025 22:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739223388; cv=none; b=MJkqQswWqoHpY5nuetB6Ll4vig7bD+qWJW6j6Ly16Z/G1ZrpNUkjW+6wzJ5MxHl+oABJekdlwnXDy1+TMcIQf2d86XaRFAsisarzKrg4H+IGFYLTzeTpim0NxgnAo8VhC2xOJpKzBpIOPI5ywX8wkrto2w+w2afLm2zKJytA1Ws=
+	t=1739224950; cv=none; b=V2LlCHxUnHlEonDpd3p4sK0ZNxHiYxwvKphifr26992fwsQfCUr7xOi8wDqKpz4X5MsOPDBok0NL0awhOdsAeam4RWBwMrNhkB+xUdE6Sa2EQB4xlqytPChq7LF7xfFTc+gVkYObGaf8U/f3HMpzHJQ2D4kuDKYe2x4GCatxy/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739223388; c=relaxed/simple;
-	bh=nJOyXdzbrLGYaga0Be2fMzo02Kjc7RMA0U06eJZe1ts=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f7QKGcDfATYdqFRUN5AqCF/smBPVAk6WNzOE5P0ozsHaTdPl1y0LVleb9YSNHQ9tmpep4/4VKciKmfoFv3MudtXXrcb1PPEyIwHhOdvy5Xob37nrw/dLKKj73PPYusZ5fqOzZwoHcOQiCYoG78OdjhZ0TL7cnkK3DL98H2IshFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=KIJxLqrM; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	s=arc-20240116; t=1739224950; c=relaxed/simple;
+	bh=IvwKPNJpJVwbUYvgwowiE2ATlTHTfHicL75MLIgFv14=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B+N1h3zEQLGI42AETc3/xXEYjRgQ4dpbiWWmsx92/1iOH9Nq9VHJqMB8FmQCNw5yi6IqOGd7LX0NUCCMXmhhZkOS9qvTGOqJ5WeHGzs/gNwtQ852n5qaoayZEBX3yNo3ina7IfCYni0mNDM8cif/EcCz0D7wfZCrruAD870w0+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LiRjGkxF; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="KIJxLqrM"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-38dcc6bfbccso1956253f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 13:36:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LiRjGkxF"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5450abbdce0so1667238e87.3;
+        Mon, 10 Feb 2025 14:02:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1739223383; x=1739828183; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1739224947; x=1739829747; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YLemH8ynfgSfPvc/FNbZdwEa9OOsaEqx6lRijihbbR8=;
-        b=KIJxLqrMBAv+1YPlGqnLgt9JUYyCRZ83WTXGcGkamWz4BTBTo9jm6zacyxC8L2EOGb
-         DWst1w4FFQNY3HWlsVJe6aosuorUdosWblK1wujx9QcpA9A02hJzBUVTIvNRa54irLmy
-         W0hmtfHqY2uS5uCtJ3mhCq/zLtGnwpLrpovU269AEY+bAyP/xLdVSr0uXGOhQalpwEY6
-         P7u34R3vFyRidCZqr/rlnPGiE6ibaIyFKXSX/jwDKdr8SBdbu2cMYBQErYLZgw23nE1k
-         gYbr6HSkqEEku1SJSsIY3V53VMnIm6ZFyFVn0ylZw44AMn2ZU8sVbbR+yb9dRZecWGo2
-         Tgtg==
+        bh=gKBtxPY73vUN0je5NCWLQ8BOv+4GXPrXFhu2CsOugcw=;
+        b=LiRjGkxFD0TiFAZVXED2O6bezaasv0+o1hNOs2o9yJIw6y1BFVwU+vc9VqONjYzNRc
+         BeYL3UXOK4hTbC1/UkDW688WXHs7ZQLeJjqdy6Bc5pfKS+x0uCcmn3EqQeBdKBIZZmFd
+         GOOQZCx8TzHxvNQsNm32ZDWNFR5yWoA9IaZAlwYUQGfeZ6GmKfU1Jdq7INmcK98sDiYf
+         RyzQHuJESuBaNBWtiUE7wOcsG6JdTtEIx+ygFSt9xeCinaQXOq/EcSqjfVWwgFy9f0q5
+         0waEpibFe+NuMmsDqMPrHUPkepCRPmsEFAfcdWj5aR4d7Yntmjcd+18HdxuNFFqDhJbz
+         dQpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739223383; x=1739828183;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1739224947; x=1739829747;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YLemH8ynfgSfPvc/FNbZdwEa9OOsaEqx6lRijihbbR8=;
-        b=CgNamOhFvzYCPvz63qPBm0GN/KfD1DlbwvRd2mTwCmTm34nlJf9SzV/O9UY+LGWUB7
-         6S7O56/QJVhlqdBPpNpHbsKVZDcmYQM54RlQv9zfuLekqIYZl0VZL+yMRUXh4FPW+Ske
-         pScsiuKXH+sC/1RQzrYwUeMraktVzFJLkSmW0bR4IqHS7arDbW/ZNm5ByqizZKBwUFnh
-         kroNLSsAhesPfZlvlL0FnOjkRChIxDI5LMTCt5gjFt+lZ7D66JQf/a8l0PKMvpbQx1+v
-         QHsfoz9BPa6B9I3k3nCGmAhyNlt8RJGHmNKJvY5LwCN04syix/BiKQZlqr/NIpKIvzhu
-         tm8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUlbEiaN0TZctZ6h4CFvOfJggu+uUzycz/2wmoOvWGXt8tDfZzWkpWroPVHyaFZgf57xGUzRmMC5QhyOSFXra4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcjPx9HAoLIQHr3qMVjzzq6pzs50KyDjCZDRNWeSjYtvleDCKF
-	7atPEHv2CO/Lt5GzHa/ciZZTBQM+26MOG+5U2QfE2hsRZ4fYEqQY0Rz2WuJZkQQ=
-X-Gm-Gg: ASbGncvgF2Anso1CxWy/OrGWiKgBq1/LYW47vlAZdFQ/lFNESEHpg0R0oIuzTRAD+Pa
-	iM+z2IVWV1hxvRqJbhyJkJ5AM8mjHwOKGAN2NKtOu8CejckuWRHd6dJRSLJ1bilP1tUgifgC1nF
-	Bbq26UxfloUWYanm9chPgTtBV9FmblXscO+cop0GQ2huU6yBaxlDpt/a4Dfse4quuqfsI3cxqj1
-	lkSV/R4eiAZ5J2zaCYo+u1uWZQKwHLs0qHaaDuyU4l0aJ6vOv0oN4yZRdSot8q5l0unG2oTBLWr
-	oCSKgxJJQFAV9NLb
-X-Google-Smtp-Source: AGHT+IH2dlYi1O5kUCZJxtYlgHXa+ws9BLhvD6mC+8NX+JeSXuC2kr9vlNuO+zXUNjOhcWWHcNo08w==
-X-Received: by 2002:adf:efc4:0:b0:38a:4b8b:c57a with SMTP id ffacd0b85a97d-38dc93509damr12435434f8f.44.1739223383507;
-        Mon, 10 Feb 2025 13:36:23 -0800 (PST)
-Received: from carbon-x1.. ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4394376118esm47541515e9.40.2025.02.10.13.36.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 13:36:22 -0800 (PST)
-From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org
-Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
-	Samuel Holland <samuel.holland@sifive.com>
-Subject: [PATCH v2 15/15] RISC-V: KVM: add support for SBI_FWFT_MISALIGNED_DELEG
-Date: Mon, 10 Feb 2025 22:35:48 +0100
-Message-ID: <20250210213549.1867704-16-cleger@rivosinc.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250210213549.1867704-1-cleger@rivosinc.com>
-References: <20250210213549.1867704-1-cleger@rivosinc.com>
+        bh=gKBtxPY73vUN0je5NCWLQ8BOv+4GXPrXFhu2CsOugcw=;
+        b=W8ouMTdq5mwP7ISa/WLO8+LGLwh2ACKPdGltW5p4u4BD0UdxP55lGTPxxaURgl8uSx
+         wyI4wpwtnOttVgyMxPulynxsva33Kv+LsqeQXSYR/Rd5ShopKMmughEzccM79OV/T9tm
+         RoBBS2XI6PDGHOf/FkQTD6L6vj1lAgWiXZtx86kZL/p/x6PsqYp9JmB+MFpF+J62kwpQ
+         qYAb9pnEU5Rnz/QJJaEGOhnWK9miOBFUAzvUplN3TEZlq+xO0WE87qoK0k0FlVKS77fu
+         AkIUm9ZH3t8QUZsNxR1X6omTPnBenTK08CNQrhWT5WEHwFuoGd9fXiGOR9MfVCo1mCqm
+         i7kQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQm317RA5IPHlC0M0njt0CNuXn8TENCUk2CvElKSjbCEN2k54M8hZe3FSfyMZoZufliHlRUe8J3grHEZSuI8Nk@vger.kernel.org, AJvYcCWRa2lwn83ISSN8JH7TB4HK5l9evqiaba8g7DwYo5dQNUdXIFAxCnm1epOSkc+UCiLgJwKNlfe3iPn1FxY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3a28VXq5wDp6Wpg271rT9v24Rtq0mytWYkuJLZLt3jQ7rH2En
+	PCRT4OPWzdkUmwacr6oO+upB05NSh2Pz++3wY69uKbNXtUkmXaJ/i+mKbO6xUsg0mYTJFnDt8m9
+	RwH+278aXrfFErW1RHe1MhRu4UqE=
+X-Gm-Gg: ASbGncsy64Tl6T7PuE5C4i650FsKhTT1N0dPIiyIpSLJd2f805Gf1VhfPmLP2rU24Jv
+	9VRhf2vhfMCba3ck8hhnqy9d0byl/AL2oYkofLLxum9pz9ZTO7lj11WEG9usi5bMNxU+ApM7K3l
+	/q72aAntqbmlV8
+X-Google-Smtp-Source: AGHT+IFXntGT+FjS//GtLsBee13n1feXxAcsDFdmGK/9Zc8xT57kBWrr/KSN97XqSWCXZ4WJpptogalCw+FV21qYtDM=
+X-Received: by 2002:a2e:a5c8:0:b0:307:e498:1269 with SMTP id
+ 38308e7fff4ca-308f83eafa5mr5428921fa.37.1739224946736; Mon, 10 Feb 2025
+ 14:02:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com>
+ <Z6eaDuXnT_rjVSNS@thinkpad> <CAMuHMdUsq_39kgBa8oanXeTzv44HuhS1e5MK7K2jxkVXQ7uWdw@mail.gmail.com>
+ <bd71c705-5f57-4067-b200-fd80b98ddbc9@nvidia.com> <Z6pfomw-3LuWoQQo@thinkpad>
+In-Reply-To: <Z6pfomw-3LuWoQQo@thinkpad>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 10 Feb 2025 17:01:50 -0500
+X-Gm-Features: AWEUYZkKe8CssbPTeBnqdSPds-hBj-nYrF2armsMtC2A_9bwIn2Ly57bR0J6s5k
+Message-ID: <CAJ-ks9nCsCfuayotpqgNytHAZ758w2oSU58dEDMXwQRU7vqisQ@mail.gmail.com>
+Subject: Re: distro support for CONFIG_KUNIT: [PATCH 0/3] bitmap: convert
+ self-test to KUnit
+To: Yury Norov <yury.norov@gmail.com>
+Cc: John Hubbard <jhubbard@nvidia.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	David Gow <davidgow@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-kselftest@vger.kernel.org, Brad Figg <bfigg@nvidia.com>, 
+	David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@suse.com>, Jason Gunthorpe <jgg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SBI_FWFT_MISALIGNED_DELEG needs hedeleg to be modified to delegate
-misaligned load/store exceptions. Save and restore it during CPU
-load/put.
+On Mon, Feb 10, 2025 at 3:20=E2=80=AFPM Yury Norov <yury.norov@gmail.com> w=
+rote:
+>
+> On Mon, Feb 10, 2025 at 11:35:48AM -0800, John Hubbard wrote:
+> > On 2/9/25 11:54 PM, Geert Uytterhoeven wrote:
+> > > On Sat, 8 Feb 2025 at 18:53, Yury Norov <yury.norov@gmail.com> wrote:
+> > > > On Fri, Feb 07, 2025 at 03:14:01PM -0500, Tamir Duberstein wrote:
+> > > > > On 7/27/24 12:35 AM, Shuah Khan wrote:
+> > ...
+> > > > > The crux of the argument seems to be that the config help text is=
+ taken
+> > > > > to describe the author's intent with the fragment "at boot". I th=
+ink
+> > >
+> > > IMO, "at boot" is a misnomer, as most tests can be either builtin
+> > > or modular.
+> >
+> > Right.
+> >
+> > >
+> > > > KUNIT is disabled in defconfig, at least on x86_64. It is also disa=
+bled
+> > > > on my Ubuntu 24.04 machine. If I take your patches, I'll be unable =
+to
+> >
+> > OK so I just bought a shiny new test machine, and installed one of the
+> > big name distros on it, hoping they've moved ahead and bought into the =
+kunit
+> > story...
+> >
+> > $ grep KUNIT /boot/config-6.8.0-52-generic
+> > # CONFIG_KUNIT is not set
+> >
+> > ...gagghh! No such luck. One more data point, in support of Yuri's comp=
+laint. :)
+> >
+> > >
+> > > I think distros should start setting CONFIG_KUNIT=3Dm.
+> >
+> > Yes they should! kunit really does have important advantages for many u=
+se
+> > cases, including bitmaps here, and "CONFIG_KUNIT is not set" is the mai=
+n
+> > obstacle.
+>
+> Hi John, Geert, Tamir,
+>
+> Can you please explain in details which advantages KUNIT brings to
+> the test_bitmap.c, find_bit_benchmark.c and other low-level tests?
 
-Signed-off-by: Clément Léger <cleger@rivosinc.com>
----
- arch/riscv/kvm/vcpu.c          |  3 +++
- arch/riscv/kvm/vcpu_sbi_fwft.c | 39 ++++++++++++++++++++++++++++++++++
- 2 files changed, 42 insertions(+)
+I can try, but I'm not the expert, and David Gow can probably elaborate fur=
+ther.
 
-diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-index 542747e2c7f5..d98e379945c3 100644
---- a/arch/riscv/kvm/vcpu.c
-+++ b/arch/riscv/kvm/vcpu.c
-@@ -646,6 +646,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
- {
- 	void *nsh;
- 	struct kvm_vcpu_csr *csr = &vcpu->arch.guest_csr;
-+	struct kvm_vcpu_config *cfg = &vcpu->arch.cfg;
- 
- 	vcpu->cpu = -1;
- 
-@@ -671,6 +672,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
- 		csr->vstval = nacl_csr_read(nsh, CSR_VSTVAL);
- 		csr->hvip = nacl_csr_read(nsh, CSR_HVIP);
- 		csr->vsatp = nacl_csr_read(nsh, CSR_VSATP);
-+		cfg->hedeleg = nacl_csr_read(nsh, CSR_HEDELEG);
- 	} else {
- 		csr->vsstatus = csr_read(CSR_VSSTATUS);
- 		csr->vsie = csr_read(CSR_VSIE);
-@@ -681,6 +683,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
- 		csr->vstval = csr_read(CSR_VSTVAL);
- 		csr->hvip = csr_read(CSR_HVIP);
- 		csr->vsatp = csr_read(CSR_VSATP);
-+		cfg->hedeleg = csr_read(CSR_HEDELEG);
- 	}
- }
- 
-diff --git a/arch/riscv/kvm/vcpu_sbi_fwft.c b/arch/riscv/kvm/vcpu_sbi_fwft.c
-index fe608bf16558..235a46d553d4 100644
---- a/arch/riscv/kvm/vcpu_sbi_fwft.c
-+++ b/arch/riscv/kvm/vcpu_sbi_fwft.c
-@@ -14,6 +14,8 @@
- #include <asm/kvm_vcpu_sbi.h>
- #include <asm/kvm_vcpu_sbi_fwft.h>
- 
-+#define MIS_DELEG (1UL << EXC_LOAD_MISALIGNED | 1UL << EXC_STORE_MISALIGNED)
-+
- static const enum sbi_fwft_feature_t kvm_fwft_defined_features[] = {
- 	SBI_FWFT_MISALIGNED_EXC_DELEG,
- 	SBI_FWFT_LANDING_PAD,
-@@ -35,7 +37,44 @@ static bool kvm_fwft_is_defined_feature(enum sbi_fwft_feature_t feature)
- 	return false;
- }
- 
-+static bool kvm_sbi_fwft_misaligned_delegation_supported(struct kvm_vcpu *vcpu)
-+{
-+	if (!misaligned_traps_can_delegate())
-+		return false;
-+
-+	return true;
-+}
-+
-+static int kvm_sbi_fwft_set_misaligned_delegation(struct kvm_vcpu *vcpu,
-+					struct kvm_sbi_fwft_config *conf,
-+					unsigned long value)
-+{
-+	if (value == 1)
-+		csr_set(CSR_HEDELEG, MIS_DELEG);
-+	else if (value == 0)
-+		csr_clear(CSR_HEDELEG, MIS_DELEG);
-+	else
-+		return SBI_ERR_INVALID_PARAM;
-+
-+	return SBI_SUCCESS;
-+}
-+
-+static int kvm_sbi_fwft_get_misaligned_delegation(struct kvm_vcpu *vcpu,
-+					struct kvm_sbi_fwft_config *conf,
-+					unsigned long *value)
-+{
-+	*value = (csr_read(CSR_HEDELEG) & MIS_DELEG) != 0;
-+
-+	return SBI_SUCCESS;
-+}
-+
- static const struct kvm_sbi_fwft_feature features[] = {
-+	{
-+		.id = SBI_FWFT_MISALIGNED_EXC_DELEG,
-+		.supported = kvm_sbi_fwft_misaligned_delegation_supported,
-+		.set = kvm_sbi_fwft_set_misaligned_delegation,
-+		.get = kvm_sbi_fwft_get_misaligned_delegation,
-+	},
- };
- 
- static struct kvm_sbi_fwft_config *
--- 
-2.47.2
+As I understand it the main benefit of KUnit is standardization and
+speed (and standardization _is_ speed). KUnit makes it very easy for
+me, a person who has not previously contributed to any of the bitmap
+code, to run those tests, and it requires zero configuration, it all
+just works. It's basically just `tools/testing/kunit/kunit.py run
+bitmap`, and I get the test results in a human-readable format. The
+same benefit applies on the author side: test facilities are
+standardized, so once you get to know the tools, all the tests start
+to look the same: you can jump in and contribute without having to
+first learn the so-called local "testing framework".
 
+The important part is that this all applies to ~all other tests
+written in KUnit. I can even run them *all* trivially:
+`tools/testing/kunit/kunit.py run`.
+
+Anecdotally I've also noticed there are bots running those KUnit tests
+e.g. see https://lore.kernel.org/all/20250207-blackholedev-kunit-convert-v1=
+-1-8ef0dc1ff881@gmail.com/
+where a test I converted was immediately flagged by a robot as having
+dubious type coercion.
+
+None of these are must-haves, they are just (to me) a nice way to make
+the kernel more approachable for new contributors.
+
+As for pure benchmarks like
+find_bit_benchmark.c and
+test_bitmap.c::`test_bitmap_{read,write}_perf` specifically: I believe
+the benefits are super limited or even negative: AFAIK KUnit is
+designed to generally suppress output (in the userspace reporter, not
+in the kernel) unless a test fails, so I wouldn't hurry to use it for
+these.
+
+> I'm not strongly against moving under KUNIT's hat, but I do:
+>  - respect commitment of my contributors, so I don't want to wipe git
+>    history for no serious reason;
+>  - respect time of my testers, so no extra dependencies;
+>  - respect time of reviewers.
+
+These are valid concerns. Certainly the testing case is the most
+compelling and folks are clearly interested in lowering those
+barriers. I don't have any influence in this area, but I am grateful
+to John for starting the conversation.
+
+As I mentioned in the previous thread: I think we could keep
+`test_bitmap_{read,write}_perf` in test_bitmap.c and get the best of
+both worlds. WDYT?
+
+> Tamir,
+>
+> If it comes to v2, can you please begin your series with an exhaustive
+> and clear answer to the following questions:
+>  - What do the tests miss now?
+>  - What do _you_ need from the tests? Describe your test scenario.
+>  - How exactly KUNIT helps you testing bitmaps and friends better?
+>  - Is there a way to meet your needs with a less invasive approach,
+>    particularly without run-time dependencies?
+
+Hopefully I've answered these above. I can include some of it in a v2,
+but perhaps the general pitch for KUnit is better placed in
+documentation or slides from a conference?
+
+Cheers.
+
+Tamir
