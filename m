@@ -1,223 +1,179 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B8B26BD9C
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 16:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39781256C62
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 16:08:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739290017; cv=none; b=QtKtW0/GI9PAF0Aj58hdsuErUumuovB7VE13Mq49ORjEAlLcSA0IIeyHEe0WFRW4E1IyGNCS+3b/UdxkjTw32QKrEYOjHuiQ/iKYWd34xxvVpzXZvO8CoxT0Pj7r/jZ0al23WYNeLMNzb99GKtt908VfUgR9K4dc/DQSEx2psY4=
+	t=1739290139; cv=none; b=oLn26HBIoUJnNPnFb1/cHC/amCOGpPbhq8XPLw9MGVdyVzkjAxnJpzvEt+p0vspzFhSdgeYlGBO8u08hCjimpYT6pOreyVlLTGzzoANqUWn1qIEHzZ8O5ht9TiKQFJ4n2Rjcjg14c5WmaIxqD3UXqNqG9poXR7m+kn9y9PECgXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739290017; c=relaxed/simple;
-	bh=mQddwpdZ0Ihot9AmhVTSHKXOJUyVr2HF5eoyzuLjFVo=;
+	s=arc-20240116; t=1739290139; c=relaxed/simple;
+	bh=fM6tMWdfzkcGZeMu8sbljrtpDaDJ3qlk57x3dLx9yP0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GsSZeTjc2LXqx/l/NBPTHZL0F0QZDYFux+wqaJRpqkDylx3EFC7gsztqFuyGSY0Krom7kxY/YZD54JIQF93Gc3NIzzsMTyMbyy6GfZPUnEMeth3YEEHcm3HiyBUxjvzIPKZagsYg/6gmUP4Qss1Ifqb1+KKR+DR8dfL2gp5LqGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YYXaCR1m; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=MW/1bgskuuLgbYl244r0/zqCAuQhkqpDe9QldKiF6LMFUfBfXi5nyaKV+wmz8MUZDDkmL3ejoSa/SzLDLFZGlY4jZYEUGuQCTaPPxcV1+Lf1oolGWHLLHfC2LNeh6Irkch382GF3QJTTpx2+rf3D9uMYRjDnp4gG658vWqn4W+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=WbvhyPoO; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YYXaCR1m"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ab7b80326cdso444740366b.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 08:06:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="WbvhyPoO"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21f48ebaadfso97202025ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 08:08:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1739290013; x=1739894813; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1739290137; x=1739894937; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=1vf46oZeFoxOqLO50umpDez6jA5n/W8mYrcU/vkha/U=;
-        b=YYXaCR1mcMyyy5FF9nMMSju/+INv7XuVwb6bPRDRKco8NyKe4VhQ047HIzdVuXfWU0
-         u3k3S11tG86JpOgHkKfCreNZwuQGidkHz9OcdAR+fcx4skWcE6jZWcJIShuCHO1aP4Ip
-         7ZdmFXyhhzr/AvDCUNoYjEJXya89oAieUeW+5mUCdU0zCua3RG9sFt7f3d0spkk7JJj2
-         h7Z2Ac1bfRQYIg3DtQDUNAI0aZQpQ0LNthrzRt2Xw3Q/Hm9AD2+vM3CNu7ozMuI5b93k
-         bzdFLrIWQ3PFestQPJgs5CKFpHOofFVH+8G9X9x9tHJKHsWf9NeQBP8lwOoAzMvWxmpd
-         JcWA==
+        bh=fM6tMWdfzkcGZeMu8sbljrtpDaDJ3qlk57x3dLx9yP0=;
+        b=WbvhyPoOd8+NMwZF8CceWzOycvAh3Q+L392GU10F3kxDn02jm8VShALm4dUgGNeGEc
+         grEuKSSQc9kNH7zmS1+WJDJ313tT3mblokyumTKJPVHHEk0pnpXKPTvzmTjzZlJxl2zS
+         9RzP2KrlmBso2ayhPvfBnN+slR2SCTIYsHAXqMZyDzmVruWpVSyLnmgZVPVrJWackW7r
+         80PQdoDnjwROc6ha38BISS6tEmY1EzbI1t8kg2zr5viHLswgVX/YjKeMR3Du6HZ2GxAz
+         tJ41Y9hZTjJ6oFol1IVoZomrwy1cnL1HEHg0A4sZeU50ebvdus6QSclkpBKaSF4DyGWv
+         pNKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739290013; x=1739894813;
+        d=1e100.net; s=20230601; t=1739290137; x=1739894937;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1vf46oZeFoxOqLO50umpDez6jA5n/W8mYrcU/vkha/U=;
-        b=dPR4UUCJtydg1j+OTTjIQL/EYkRvPKlyfoGr92/mgUzzLuIp1Qsjd2G2td7YK+JdwI
-         7GN6GR8p1ca4nJ/DdLSDhgeBVKQV/B09bc8AVEzJS3Ydpsu/16Ald5HlvWfPeVKgp+qE
-         0aSfjIcaKFC6eKRR3aTJ0n9IyaQfZ+j5v+VRyrNH4xar2lHLDLRFHe3UGwmNAqaDmcFt
-         y+FFQ1ou7MZ6i6KEQI3uffCHKE7u5/gD1Ry/JkLdQJE/yZmKGJBslruskNUtRh7y+kD8
-         3nphAxC+kNfHD867aBur2/N8kOuO10j2DrU4L3gkumu90vvLbhCEh7FGzexYLAlV0T6L
-         CbsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXUkdwjR3iJRcIDjpkl+970d9XpEqOl0DbTCvqUq7EpNXNQsppb4SLMBDkpppLDVPklZGOP76HD7U10fk+ZEys=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/XevuDdvVtdquegsj+Udwy9gvRNhuNi29irCoix031LOVDFha
-	0r1ksw2wQcP6zFFAZeXP1ma4EBDH+q6VPsvaiL9d1FS3lRVPG63UGnati0lsPik=
-X-Gm-Gg: ASbGncsXAtPrLkljq37+gRxN3Jvulwza++8Hz/irn9YVNx31hGnKaJe7Pf3IsMP6beD
-	Qj0oYWEcR7iqfhuX2LSFGYlm01SOgBrE7iDSetaWdc+PDV3YokaHR/6RS+9IwbszjhDHPqXt1TQ
-	pOPz51/hPEIoFZsFM/ulRp98D2FjHdrDld7gmSF/ztY3SMz9b7bbPe2qFWRIKBtJK5G+Kq3tH2l
-	e9HuLuHcnNYK1GhhzcXx8g1K8UQNiysRjdYdiJHZF9MKF5hFMN5cFd4upEatANZAh3aHO22dn+7
-	mnyKRINz27RB82lx1g==
-X-Google-Smtp-Source: AGHT+IGT0MfU9kXWXFZFDn3uHAWY6yl48r2PjzXtjG90l6qIEwpY73PJqLOJImHmqtLgQt0wfSLUCw==
-X-Received: by 2002:a17:907:7f23:b0:ab7:e73a:f2c8 with SMTP id a640c23a62f3a-ab7e73af6d3mr242630566b.26.1739290013326;
-        Tue, 11 Feb 2025 08:06:53 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7ca66cc36sm342984566b.155.2025.02.11.08.06.52
+        bh=fM6tMWdfzkcGZeMu8sbljrtpDaDJ3qlk57x3dLx9yP0=;
+        b=EZYREtnJesXAicoZ+udSyIKKcBhw7b/9PQqv+g+f166wbKZr53tYXFla0NNscqNMeT
+         s6BKke4QKj0iq4mhUtQ86MF6uCfFZGJejfzcIyZsXmPd5MfyjXIgTcHZlchEhKKSmwxD
+         l6z4ygLNI4Uov7Z45T4KuPVzE8Nyqo5drz67K8b85uiR49gSAvnAwSxbm2tofCcWHSC1
+         QySlAfVnVkgUrqc2IFqPmxP+grgbQaCgXk/7JCgEk8Bbq9Z1MK0CJPLz3Olkl/JN7w90
+         HCP01MYGYEOqHp54/5G0MiBgyK80L6l8jb1pXm+vWUMm8GOjO3tj0vC+RwJAc/eOjQIK
+         nM6g==
+X-Forwarded-Encrypted: i=1; AJvYcCUHpFgSVKWucHIew92nAxTOZjh1x/+M4Tab5O42HRQfHVxTUs1Qy4J1rKq+H9H2EZwHwNHkfBXD/P/bWZtnXJU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkUqMzyuee5sk4741nLutZbn+LjYeH3fzK3d2YJORREFa+wxdM
+	rPNXPFP2LvCTfcjF+09dhCmYSTsaechQ+W5iOfzVbXiKYXCF8J6aJJj21/yS1n8=
+X-Gm-Gg: ASbGncv33K6iE+q2jvZoWn+5iwZPhltUZp9cR7uFvqWnCoSEuAOzIcfwuADJa1Xfgnw
+	yA9yRJAvLPQI5Q0BMZVj6mrRCt9/flrlAtop2ezEjGawG00UlLAbzSKbFZAo/R5Jo7ppwwAo75L
+	5NQ0F3NNevECF48K7NK79UfQcGC/rVPlZlG+OWlfo47DLBwPOi28nYNfh1XvRxoIKCR+EB/6ky7
+	Ay8FPiYY0P1+9xoLMlgFf3kFqlDnGyxlS6LznnJ0nm+kLPelnMsUWjA/7oD/I62njTD3f4AoD+0
+	LMAd/jBmzLWdUT/cTdAL4PHAZw==
+X-Google-Smtp-Source: AGHT+IFZ7zG8kNq32XbGzHizA+/obYPBTcZQNtVCcsm+yZBTBiOP0hgDR8QeXXdRboljfbChEW5/qA==
+X-Received: by 2002:a05:6a20:6f9c:b0:1e1:c054:4c58 with SMTP id adf61e73a8af0-1ee03a22be8mr33720540637.2.1739290137163;
+        Tue, 11 Feb 2025 08:08:57 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-730887b0fa8sm4433085b3a.8.2025.02.11.08.08.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 08:06:52 -0800 (PST)
-Date: Tue, 11 Feb 2025 17:06:50 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: David Gow <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] scanf: convert self-test to KUnit
-Message-ID: <Z6t1midEnp5q1Uja@pathway.suse.cz>
-References: <20250210-scanf-kunit-convert-v6-0-4d583d07f92d@gmail.com>
- <20250210-scanf-kunit-convert-v6-1-4d583d07f92d@gmail.com>
- <Z6s2eqh0jkYHntUL@pathway.suse.cz>
- <CAJ-ks9n5=FYiFdmzWCkkACzX6oEVs=Z261_ZAKVq3tkqgJoSCQ@mail.gmail.com>
+        Tue, 11 Feb 2025 08:08:56 -0800 (PST)
+Date: Tue, 11 Feb 2025 08:08:54 -0800
+From: Deepak Gupta <debug@rivosinc.com>
+To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	Samuel Holland <samuel.holland@sifive.com>
+Subject: Re: [PATCH v2 14/15] RISC-V: KVM: add support for FWFT SBI extension
+Message-ID: <Z6t2FsP91rUNv64D@debug.ba.rivosinc.com>
+References: <20250210213549.1867704-1-cleger@rivosinc.com>
+ <20250210213549.1867704-15-cleger@rivosinc.com>
+ <Z6rjkk5JlMlqbl2j@debug.ba.rivosinc.com>
+ <a8af5d3a-e739-4f65-9e2d-d92978be9a3d@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJ-ks9n5=FYiFdmzWCkkACzX6oEVs=Z261_ZAKVq3tkqgJoSCQ@mail.gmail.com>
+In-Reply-To: <a8af5d3a-e739-4f65-9e2d-d92978be9a3d@rivosinc.com>
 
-On Tue 2025-02-11 06:45:07, Tamir Duberstein wrote:
-> On Tue, Feb 11, 2025 at 6:37â€¯AM Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > On Mon 2025-02-10 13:13:48, Tamir Duberstein wrote:
-> > > Convert the scanf() self-test to a KUnit test.
-> > >
-> > > In the interest of keeping the patch reasonably-sized this doesn't
-> > > refactor the tests into proper parameterized tests - it's all one big
-> > > test case.
-> > >
-> > > Acked-by: Petr Mladek <pmladek@suse.com>
-> >
-> > Please, remove this. The patchset has changed a lot and it is not
-> > longer true.
-> 
-> Will do.
-> 
-> >
-> > > --- a/lib/test_scanf.c
-> > > +++ b/lib/scanf_kunit.c
-> > > @@ -15,67 +13,49 @@
-> > [...]
-> > >  #define _check_numbers_template(arg_fmt, expect, str, fmt, n_args, ap)               \
-> > >  do {                                                                         \
-> > > -     pr_debug("\"%s\", \"%s\" ->\n", str, fmt);                              \
-> > > +     kunit_printk(KERN_DEBUG, test, "\"%s\", \"%s\" ->", str, fmt);  \
-> >
-> > The switch from pr_debug() to kunit_printk() causes printing huge
-> > amount of messages even when the test passes.
-> 
-> I'm not able to reproduce this.
+On Tue, Feb 11, 2025 at 11:31:28AM +0100, Clément Léger wrote:
+>
+>
+>On 11/02/2025 06:43, Deepak Gupta wrote:
+>>> +static int kvm_sbi_fwft_get(struct kvm_vcpu *vcpu, unsigned long
+>>> feature,
+>>> +                unsigned long *value)
+>>> +{
+>>> +    int ret;
+>>> +    struct kvm_sbi_fwft_config *conf;
+>>> +
+>>> +    ret = kvm_fwft_get_feature(vcpu, feature, &conf);
+>>> +    if (ret)
+>>> +        return ret;
+>>> +
+>>> +    return conf->feature->get(vcpu, conf, value);
+>>> +}
+>>> +
+>>> +static int kvm_sbi_ext_fwft_handler(struct kvm_vcpu *vcpu, struct
+>>> kvm_run *run,
+>>> +                    struct kvm_vcpu_sbi_return *retdata)
+>>> +{
+>>> +    int ret = 0;
+>>> +    struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+>>> +    unsigned long funcid = cp->a6;
+>>> +
+>>> +    switch (funcid) {
+>>> +    case SBI_EXT_FWFT_SET:
+>>> +        ret = kvm_sbi_fwft_set(vcpu, cp->a0, cp->a1, cp->a2);
+>>> +        break;
+>>> +    case SBI_EXT_FWFT_GET:
+>>> +        ret = kvm_sbi_fwft_get(vcpu, cp->a0, &retdata->out_val);
+>>> +        break;
+>>> +    default:
+>>> +        ret = SBI_ERR_NOT_SUPPORTED;
+>>> +        break;
+>>> +    }
+>>> +
+>>> +    retdata->err_val = ret;
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int kvm_sbi_ext_fwft_init(struct kvm_vcpu *vcpu)
+>>> +{
+>>> +    struct kvm_sbi_fwft *fwft = vcpu_to_fwft(vcpu);
+>>> +    const struct kvm_sbi_fwft_feature *feature;
+>>> +    struct kvm_sbi_fwft_config *conf;
+>>> +    int i;
+>>> +
+>>> +    fwft->configs = kcalloc(ARRAY_SIZE(features), sizeof(struct
+>>> kvm_sbi_fwft_config),
+>>> +                GFP_KERNEL);
+>> nit:
+>>
+>> I understand that in next patch you grow the static array`features`. But
+>> in this patch
+>> `ARRAY_SIZE(features)` evaluates to 0, thus kcalloc will be returning a
+>> pointer
+>> to some slab block (IIRC, kcalloc will not return NULL if size
+>> eventually evals to 0)
+>>
+>> This probably won't result in some bad stuff. But still there is a
+>> pointer in
+>> fwft->configs which is pointing to some random stuff if `features` turns
+>> out to be
+>> empty.
+>>
+>> Let me know if I got that right or missing something.
+>
+>So I actually searched into the kmalloc code to see what hapopens with a
+>zero size allocation and it actually return ZERO_SIZE_PTR:
+>
+>/*
+> * ZERO_SIZE_PTR will be returned for zero sized kmalloc requests.
+> *
+> * Dereferencing ZERO_SIZE_PTR will lead to a distinct access fault.
+> *
+> * ZERO_SIZE_PTR can be passed to kfree though in the same way that NULL
+>can.
+> * Both make kfree a no-op.
+> */
+>
+>Which seems like it's not really random and will fault if accessed. I
+>think that's enough for that commit (which will be bisectable if needed
+>then).
+>
 
-It is because the loglevel filtering, see below.
+Awesome. Thanks for looking into it.
 
-> pr_debug expands to printk(KERN_DEBUG,
-> ...) which is also what kunit_printk(KERN_DEBUG, ...) expands to. Can
-> you help me understand how you're testing?
-
-It is more complicated, see the following in include/linux/printk.h:
-
-<paste>
-/* If you are writing a driver, please use dev_dbg instead */
-#if defined(CONFIG_DYNAMIC_DEBUG) || \
-	(defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODULE))
-#include <linux/dynamic_debug.h>
-
-/**
- * pr_debug - Print a debug-level message conditionally
- * @fmt: format string
- * @...: arguments for the format string
- *
- * This macro expands to dynamic_pr_debug() if CONFIG_DYNAMIC_DEBUG is
- * set. Otherwise, if DEBUG is defined, it's equivalent to a printk with
- * KERN_DEBUG loglevel. If DEBUG is not defined it does nothing.
- *
- * It uses pr_fmt() to generate the format string (dynamic_pr_debug() uses
- * pr_fmt() internally).
- */
-#define pr_debug(fmt, ...)			\
-	dynamic_pr_debug(fmt, ##__VA_ARGS__)
-#elif defined(DEBUG)
-#define pr_debug(fmt, ...) \
-	printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-#else
-#define pr_debug(fmt, ...) \
-	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-#endif
-</paste>
-
-
-It would be nice to define it the other way around. But it would
-require reworking the macro trickery which might be tricky ;-)
-
-
-> > [ 5780.664377] KTAP version 1
-> > [ 5780.664891] 1..1
-> > [ 5780.665376]     KTAP version 1
-> > [ 5780.665765]     # Subtest: scanf
-> > [ 5780.666104]     # module: scanf_kunit
-> > [ 5780.666112]     1..10
-> > [ 5780.667354]     # numbers_simple: "0", "%llu" ->
-> > [ 5780.667371]     # numbers_simple:    0
-> > [ 5780.667923]     # numbers_simple: "0", "%llu" ->
-> > [ 5780.668321]     # numbers_simple:    0
-> > [ 5780.668803]     # numbers_simple: "1", "%llu" ->
-> > [ 5780.669175]     # numbers_simple:    1
-> > [ 5780.669624]     # numbers_simple: "18446744073709551615", "%llu" ->
-> >
-> > [... skipping 7500+ lines ...]
-> >
-> > [ 5783.157777]     # test_simple_strtol: simple_strtol("0x7fffffffffffffff", 0) -> 0x7fffffffffffffff
-> > [ 5783.158229]     # test_simple_strtol: simple_strtol("0x8000000000000001", 0) -> 0x8000000000000001
-> > [ 5783.158683]     # test_simple_strtol: simple_strtol("0x8000000000000000", 0) -> 0x8000000000000000
-> > [ 5783.159131]     # test_simple_strtol: simple_strtol("0x8000000000000000", 0) -> 0x8000000000000000
-> > [ 5783.159586]     # test_simple_strtol: simple_strtol("0x8000000000000001", 0) -> 0x8000000000000001
-> > [ 5783.160048]     # test_simple_strtol: simple_strtol("0x7fffffffffffffff", 0) -> 0x7fffffffffffffff
-> > [ 5783.160506]     # test_simple_strtol: simple_strtol("0xfffffffffffffffe", 0) -> 0xfffffffffffffffe
-> > [ 5783.160957]     # test_simple_strtol: simple_strtol("0x2", 0) -> 0x2
-> > [ 5783.161467]     # test_simple_strtol: simple_strtol("0xffffffffffffffff", 0) -> 0xffffffffffffffff
-> > [ 5783.161806]     # test_simple_strtol: simple_strtol("0x1", 0) -> 0x1
-> > [ 5783.162564]     ok 10 test_simple_strtol
-> > [ 5783.163145] # scanf: pass:10 fail:0 skip:0 total:10
-> > [ 5783.163537] # Totals: pass:22 fail:0 skip:0 total:22
-> > [ 5783.164052] ok 1 scanf
-
-I saw the above messages using "dmesg".
-
-They can also be seen in /sys/kernel/debug/kunit/scanf/results
-when CONFIG_KUNIT_DEBUGFS is enabled.
-
-
-> If you use one of the kunit userspace helpers, you will only see the
-> output when the test fails. Having said that, in my local testing I
-> don't see the KERN_DEBUG prints locally. I had to run with
-> ignore_loglevel to see them at all.
-
-Yeah, KERN_DEBUG are for the least important messages. Consoles usually
-do not print them to do not scare normal users and also historically
-because of slow serial consoles.
-
-Anyway, they are always stored into the internal log buffer. So that
-they can be seen by "dmesg" even when they were filtered on the
-console.
-
-BTW: The log buffer has a limited size. The oldest messages get lost
-     when are too many of them. Which is another reason to do not
-     print the debug messages by default.
-
-
-Best Regards,
-Petr
-
-PS: You are sending new revisions too fast. It is hard to follow.
-    I personally prefer to send one revision per week at maximum.
-    It gives people chance to find time for the review and provide
-    some feedback.
+>Clément
