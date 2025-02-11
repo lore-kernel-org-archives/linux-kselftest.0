@@ -1,243 +1,204 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1380D253B5B;
-	Tue, 11 Feb 2025 16:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01CB254B0F
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 16:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739290163; cv=none; b=LMEXttQ3/otHTQ6XOtHWgvRk6gXC3Fn1YvSnAs4i0e/R/P0sEXKA5sxaQ5IENroOq/CNwAq9zRSFIdgvJKozOl95gj1dSOWR2m/dokjB6/V70wiLDWH17HbQ3OIBIyNnP2W9Hmj5pB4yJZNzU+jWExUp7o3Q4OXgos1uWdOLixw=
+	t=1739290199; cv=none; b=awg74DyFh/OUSuCSWuemdmzAHZKToQQBMqfWsP90BwdVmjEOoQyw72mOnwQfeGuwdVs/elGBaOrOLRTARKCRwESb3wd700lSDojbxVKsZM+/4IV5VryCXij+KlAhNiagO7HOJeMCLMDEuyztSvj67lZSc7ri2nX5dbjnb6wBPfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739290163; c=relaxed/simple;
-	bh=uVTzjIRuB9GzXG4XoIgIaoGzN7vXHDZUswRWlY2NEy4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jX7Bee137n6097FOTpAc0rAsBB/VX8cN3ngSQ/JI4rRL68ydG1Tm3ipZBO1zICjCeEjlce24Z25p4ByCikcq6RomnN3ejoccsFlJNH7bWlnqV6Bebr8OCinLJ8e+Lfuq4KQgGX+7ikE8tRSaQq9Wg9bJkudaLDZaqohr20tI7qQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P1m2MHhL; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739290199; c=relaxed/simple;
+	bh=8XsCTn2SryIUrEwNpM26f2V1tVQ1i22m7UgmNeeQpq0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Hlnz1htTvH+To6WeZCmM2SKiw8Xuy9t2T4/06rsLTR5lQHa2S/nFtyyWZBZlj4D/9O7VS8xuhgQxIMw5NnZWT3VuqZm1TUw6ZeFh3xM0JESbLZCkDpLXEUbW3GIFP7yYcUhnJIBSvsCvGGz+/H1bDN8UHl25innlgFG/zm5W/XU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fA3qzVxh; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P1m2MHhL"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-308f53aef4fso15672481fa.0;
-        Tue, 11 Feb 2025 08:09:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739290158; x=1739894958; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wggzSEy/aJABx2YwMPxa320+4QSUVeDKPBn2O/Cn2QA=;
-        b=P1m2MHhLK+KA5b1snqa6S97SHBdJ+b9iFRLTxFOCe2kzehm/GBhio8lu0Tk7UmLA3g
-         4H584xWqZbYG3lZTE9g0xKhG4QJLELdqjL+rUMBDgzx1Y44Pdp7Ao6z9tdk0MNVwQX8h
-         GZOmwjol4zUxUsWBWz9pvUhfFtJ9yICTOL6pqj5jgquByaV6c6qCDH9IblKLbZoWXZK5
-         xdlN9HY9thtBKNEkUlqysUIK+Xj/VaNnAOaNNsa6d67KasD6pjIcoyhMi2Ok0SrloYJr
-         rv9HSehUQAEEPQMDC6CeXkm7LI12ILoyBmXzFXq5UfGQgeb9zfCDEMl5KKWZX36reJ7L
-         ZS+g==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fA3qzVxh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739290196;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cqBw0fvuK6HvmV212DNXANVYi4ije8UDstIz77BqBKI=;
+	b=fA3qzVxhZJANrGgZg33N0GUr2U0438VEMc+KaHyn1wTzBUZYIf9Hw58WC+7BbMl1Cyna5z
+	EG0wYVPkN3YDHxdtRNqDSQ97jnaSzmYd/yLonNhfKzOb3rMhsgEM2IC2jMd4BaAiCFCuEE
+	c52l3/+/MuQohXiTSceKeQ2FR6y3XJ8=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-348-zbuHOpYQPOqF2sliARi9kw-1; Tue, 11 Feb 2025 11:09:55 -0500
+X-MC-Unique: zbuHOpYQPOqF2sliARi9kw-1
+X-Mimecast-MFC-AGG-ID: zbuHOpYQPOqF2sliARi9kw
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-38dd533dad0so2017808f8f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 08:09:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739290158; x=1739894958;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1739290194; x=1739894994;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wggzSEy/aJABx2YwMPxa320+4QSUVeDKPBn2O/Cn2QA=;
-        b=tzXfZh1scm+jm9b8WVbCOQqJBB47DoCGCFlx61ijnQ9c+2qH9hL1w+Z9rFOcHyNDZC
-         VWCX2bGSzIp2RRjIjkltFTKSkDpxTjM1OZ8JvlfaCOMyFb4yqOaMFYFGm6UHJxEbuSIb
-         yOwVm0klfhyLVtescuOEtsCsiphISSENFE/lx67Q9IlksCq9weXoVKr8bn464cRO1OzJ
-         a5eNp676TMjiZcu0+KjjyOQj/jat6stPkAMGIn+h4YHEPf+CKJDujKU1Js8IPeOlBZ24
-         Gu0/OG8kCllZ/GOp+3vOS2OKEpe1DYoIGeveuHOhOVv8rzCBaJfTj134rn5vtJ98tV2t
-         iL9w==
-X-Forwarded-Encrypted: i=1; AJvYcCXGUd/uxdTtegQXMWldDkWMg9zJm9gdEoUCXC5xA6s79qqDaSmebsE3iD0+7I4zuV/DUIh5vYejcUIOQps=@vger.kernel.org, AJvYcCXa0XKlbrYVI8SGj/e0QlxYqh+bJ/ZOfD2jt8DpGlJrQM6yFSld6I8eJLGOsMhO6+IU6/WlTEV/LNWxuHpw5RTd@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOUgXAtxqkjn9FhCj7tTftZZDJWRadLJ9Iv08kOSMvbf5DN6Vm
-	QHTHLBDVk7gRYrVZrWQ1lTnoc8WeE/0z8M7FNokk7FmZ7r7TveqEJHxy7aFdwfQta7HdobUzpkB
-	hjrxd8rqnoWIbAsZJUIZ6y1uSQNQ=
-X-Gm-Gg: ASbGnctL1ED0Q6ZuWcxd6L9ktYXUgcwGw3w3K8zs97sCn0U0AXCQt1fllgdKLrCn6ZZ
-	U394DkUt28Ecvunsdad3xIXZaNepXBVSnvhXDoQQkNgy/c8dHQ1zh4E5jTPOH3hwQBnXhaZ9mU4
-	tQm6Z+5cqDdNC9
-X-Google-Smtp-Source: AGHT+IHFVQLBAyPQTyyGR//j4uHAGjTQ5GxjwodV0fAUgmgKdj2iAj9aD1VIq/iVdt/2jb0A0EOk5OdrUMFGBHDzO3Y=
-X-Received: by 2002:a05:651c:4ca:b0:302:3e14:34c8 with SMTP id
- 38308e7fff4ca-3090367d768mr484011fa.22.1739290157836; Tue, 11 Feb 2025
- 08:09:17 -0800 (PST)
+        bh=cqBw0fvuK6HvmV212DNXANVYi4ije8UDstIz77BqBKI=;
+        b=NZ/mB5LnMNsZDBuExk3fQEQe2A3y+ChhNUWpdEO7leOnrfXMYp4cw3EH/rZj6/nnlw
+         9w8dR7z77WcchWg1mtBbDfppTeOyfaRTcrc6/LL77xLHA1ET0MAVBL7u0fZUPA+baa65
+         OVNwG4L9VQw0G2vibyzHXQwzLpDhjlEYOiwQM0hLcUDPJaWB5BIVaE/gvNmp4ix9QyV+
+         /b2z4+/kP+SXqmKinSUk0PC7pbeajgXukLeufn2A3TmvqAPktZOsl4c5Kw3AMqUzbjNq
+         /6PRztQDuny/BV+41VaFxstMgDu0IKq/ENXZYAEszrVALr4dXJmYDdxnvB60Uc+qiubi
+         mIBg==
+X-Forwarded-Encrypted: i=1; AJvYcCVcvoQtOvRNmEbxKrYQ++GGdNrUbhwTQYFXd2nw6imRBpw/xLYtCGeLd0eKOUklxm3jG72I06wxDBEDQ8wfV64=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRnBV6v2gZEjNo3ui/7EKIWLu1LkIyHiT+J/Zb1zXu8o2TiTAN
+	PE/PNXQHIb3KB0hQ4xBisl6zPBN1heCKqNPifJIIomd89cjPkw81hfcDva9Gz+pSU3iyLJnpO/q
+	PnY8m4zWRGkAAEKdJ9knp2TFfWhiO7oxcFbzk+hd1R7wmYX3P+7okn1G4wUbtq6vniQ==
+X-Gm-Gg: ASbGncsLDCPIvNJQcUI68LrnC5dW65kUpQdVulWchqLuA7Qh+VRkkVIZBRbUPFcwkLs
+	A3Nimah2pEFvn7TVN5d7/Haw7WxYx6aSIWRGTLf3DrA967dp7jxAsqKNgGN4gnOdU6Bcq89uDYj
+	5i7iW+SMayLDhPrPs8IwBVB5CdQusXQuDZVY5zbL+1Vma/ObKTIZzAArIrZ49OPmVZxO/2uwUry
+	aSWrovMW8E2vNIEDqxQK/S/1OrP///LqiqvUmxO2lsKi6Q0QAKYIvSfsU8gPa7pfubJTDDmasGS
+	yj1P9Xm7gxwsAj80ssugPaAUpuc3wWW+EzHVDPjbKV5QKpId2DZIKO01sqfgofS75Q==
+X-Received: by 2002:adf:b60f:0:b0:38d:b113:eb8 with SMTP id ffacd0b85a97d-38de918b920mr304840f8f.20.1739290193758;
+        Tue, 11 Feb 2025 08:09:53 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHK1ASMUo9/0VqOa8FhznHehFcHh+h1fB2eK6UH8SCGRKzMX4fpRgybDSM9A1NmLLMyPAzxtg==
+X-Received: by 2002:adf:b60f:0:b0:38d:b113:eb8 with SMTP id ffacd0b85a97d-38de918b920mr304770f8f.20.1739290193306;
+        Tue, 11 Feb 2025 08:09:53 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbde1dfaesm15387623f8f.90.2025.02.11.08.09.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Feb 2025 08:09:52 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, virtualization@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+ xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+ linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski
+ <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Jason
+ Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard
+ Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>,
+ Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
+ Tomas Glozar <tglozar@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Christoph
+ Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+ Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>,
+ Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
+ flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+In-Reply-To: <Z6tYnOEBkOlT_ehp@J2N7QTR9R3>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-30-vschneid@redhat.com>
+ <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
+ <xhsmh34hhh37q.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez3H8OVP1GxBLdmFgusvT1gQhwu2SiXbgi8T9uuCYVK52w@mail.gmail.com>
+ <xhsmh5xlhk5p2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez1EAATYcX520Nnw=P8XtUDSr5pe+qGH1YVNk3xN2LE05g@mail.gmail.com>
+ <xhsmh34gkk3ls.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <Z6tYnOEBkOlT_ehp@J2N7QTR9R3>
+Date: Tue, 11 Feb 2025 17:09:49 +0100
+Message-ID: <xhsmhwmdwihte.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250210-scanf-kunit-convert-v6-0-4d583d07f92d@gmail.com>
- <20250210-scanf-kunit-convert-v6-1-4d583d07f92d@gmail.com>
- <Z6s2eqh0jkYHntUL@pathway.suse.cz> <CAJ-ks9n5=FYiFdmzWCkkACzX6oEVs=Z261_ZAKVq3tkqgJoSCQ@mail.gmail.com>
- <Z6t1midEnp5q1Uja@pathway.suse.cz>
-In-Reply-To: <Z6t1midEnp5q1Uja@pathway.suse.cz>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Tue, 11 Feb 2025 11:08:41 -0500
-X-Gm-Features: AWEUYZlP_2LcAvmdFxSHIsCa9qgpWAAhuNMrrrfcnF-G8nwCR-qUJGTiah2VvrE
-Message-ID: <CAJ-ks9=Tu4onRXhcSguD8ku1g6ROROhY36iozbOfN7Z1+Smghw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] scanf: convert self-test to KUnit
-To: Petr Mladek <pmladek@suse.com>
-Cc: David Gow <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 11, 2025 at 11:06=E2=80=AFAM Petr Mladek <pmladek@suse.com> wro=
-te:
+On 11/02/25 14:03, Mark Rutland wrote:
+> On Tue, Feb 11, 2025 at 02:33:51PM +0100, Valentin Schneider wrote:
+>> On 10/02/25 23:08, Jann Horn wrote:
+>> > 2. It's wrong to assume that TLB entries are only populated for
+>> > addresses you access - thanks to speculative execution, you have to
+>> > assume that the CPU might be populating random TLB entries all over
+>> > the place.
+>>
+>> Gotta love speculation. Now it is supposed to be limited to genuinely
+>> accessible data & code, right? Say theoretically we have a full TLBi as
+>> literally the last thing before doing the return-to-userspace, speculati=
+on
+>> should be limited to executing maybe bits of the return-from-userspace
+>> code?
 >
-> On Tue 2025-02-11 06:45:07, Tamir Duberstein wrote:
-> > On Tue, Feb 11, 2025 at 6:37=E2=80=AFAM Petr Mladek <pmladek@suse.com> =
-wrote:
-> > >
-> > > On Mon 2025-02-10 13:13:48, Tamir Duberstein wrote:
-> > > > Convert the scanf() self-test to a KUnit test.
-> > > >
-> > > > In the interest of keeping the patch reasonably-sized this doesn't
-> > > > refactor the tests into proper parameterized tests - it's all one b=
-ig
-> > > > test case.
-> > > >
-> > > > Acked-by: Petr Mladek <pmladek@suse.com>
-> > >
-> > > Please, remove this. The patchset has changed a lot and it is not
-> > > longer true.
-> >
-> > Will do.
-> >
-> > >
-> > > > --- a/lib/test_scanf.c
-> > > > +++ b/lib/scanf_kunit.c
-> > > > @@ -15,67 +13,49 @@
-> > > [...]
-> > > >  #define _check_numbers_template(arg_fmt, expect, str, fmt, n_args,=
- ap)               \
-> > > >  do {                                                              =
-           \
-> > > > -     pr_debug("\"%s\", \"%s\" ->\n", str, fmt);                   =
-           \
-> > > > +     kunit_printk(KERN_DEBUG, test, "\"%s\", \"%s\" ->", str, fmt)=
-;  \
-> > >
-> > > The switch from pr_debug() to kunit_printk() causes printing huge
-> > > amount of messages even when the test passes.
-> >
-> > I'm not able to reproduce this.
+> I think it's easier to ignore speculation entirely, and just assume that
+> the MMU can arbitrarily fill TLB entries from any page table entries
+> which are valid/accessible in the active page tables. Hardware
+> prefetchers can do that regardless of the specific path of speculative
+> execution.
 >
-> It is because the loglevel filtering, see below.
+> Thus TLB fills are not limited to VAs which would be used on that
+> return-to-userspace path.
 >
-> > pr_debug expands to printk(KERN_DEBUG,
-> > ...) which is also what kunit_printk(KERN_DEBUG, ...) expands to. Can
-> > you help me understand how you're testing?
+>> Furthermore, I would hope that once a CPU is executing in userspace, it's
+>> not going to populate the TLB with kernel address translations - AIUI the
+>> whole vulnerability mitigation debacle was about preventing this sort of
+>> thing.
 >
-> It is more complicated, see the following in include/linux/printk.h:
+> The CPU can definitely do that; the vulnerability mitigations are all
+> about what userspace can observe rather than what the CPU can do in the
+> background. Additionally, there are features like SPE and TRBE that use
+> kernel addresses while the CPU is executing userspace instructions.
 >
-> <paste>
-> /* If you are writing a driver, please use dev_dbg instead */
-> #if defined(CONFIG_DYNAMIC_DEBUG) || \
->         (defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODU=
-LE))
-> #include <linux/dynamic_debug.h>
+> The latest ARM Architecture Reference Manual (ARM DDI 0487 L.a) is fairly=
+ clear
+> about that in section D8.16 "Translation Lookaside Buff", where it says
+> (among other things):
 >
-> /**
->  * pr_debug - Print a debug-level message conditionally
->  * @fmt: format string
->  * @...: arguments for the format string
->  *
->  * This macro expands to dynamic_pr_debug() if CONFIG_DYNAMIC_DEBUG is
->  * set. Otherwise, if DEBUG is defined, it's equivalent to a printk with
->  * KERN_DEBUG loglevel. If DEBUG is not defined it does nothing.
->  *
->  * It uses pr_fmt() to generate the format string (dynamic_pr_debug() use=
-s
->  * pr_fmt() internally).
->  */
-> #define pr_debug(fmt, ...)                      \
->         dynamic_pr_debug(fmt, ##__VA_ARGS__)
-> #elif defined(DEBUG)
-> #define pr_debug(fmt, ...) \
->         printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-> #else
-> #define pr_debug(fmt, ...) \
->         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-> #endif
-> </paste>
+>   When address translation is enabled, if a translation table entry
+>   meets all of the following requirements, then that translation table
+>   entry is permitted to be cached in a TLB or intermediate TLB caching
+>   structure at any time:
+>   =E2=80=A2 The translation table entry itself does not generate a Transl=
+ation
+>     fault, an Address size fault, or an Access flag fault.
+>   =E2=80=A2 The translation table entry is not from a translation regime
+>     configured by an Exception level that is lower than the current
+>     Exception level.
 >
+> Here "permitted to be cached in a TLB" also implies that the HW is
+> allowed to fetch the translation tabl entry (which is what ARM call page
+> table entries).
 >
-> It would be nice to define it the other way around. But it would
-> require reworking the macro trickery which might be tricky ;-)
->
->
-> > > [ 5780.664377] KTAP version 1
-> > > [ 5780.664891] 1..1
-> > > [ 5780.665376]     KTAP version 1
-> > > [ 5780.665765]     # Subtest: scanf
-> > > [ 5780.666104]     # module: scanf_kunit
-> > > [ 5780.666112]     1..10
-> > > [ 5780.667354]     # numbers_simple: "0", "%llu" ->
-> > > [ 5780.667371]     # numbers_simple:    0
-> > > [ 5780.667923]     # numbers_simple: "0", "%llu" ->
-> > > [ 5780.668321]     # numbers_simple:    0
-> > > [ 5780.668803]     # numbers_simple: "1", "%llu" ->
-> > > [ 5780.669175]     # numbers_simple:    1
-> > > [ 5780.669624]     # numbers_simple: "18446744073709551615", "%llu" -=
->
-> > >
-> > > [... skipping 7500+ lines ...]
-> > >
-> > > [ 5783.157777]     # test_simple_strtol: simple_strtol("0x7ffffffffff=
-fffff", 0) -> 0x7fffffffffffffff
-> > > [ 5783.158229]     # test_simple_strtol: simple_strtol("0x80000000000=
-00001", 0) -> 0x8000000000000001
-> > > [ 5783.158683]     # test_simple_strtol: simple_strtol("0x80000000000=
-00000", 0) -> 0x8000000000000000
-> > > [ 5783.159131]     # test_simple_strtol: simple_strtol("0x80000000000=
-00000", 0) -> 0x8000000000000000
-> > > [ 5783.159586]     # test_simple_strtol: simple_strtol("0x80000000000=
-00001", 0) -> 0x8000000000000001
-> > > [ 5783.160048]     # test_simple_strtol: simple_strtol("0x7ffffffffff=
-fffff", 0) -> 0x7fffffffffffffff
-> > > [ 5783.160506]     # test_simple_strtol: simple_strtol("0xfffffffffff=
-ffffe", 0) -> 0xfffffffffffffffe
-> > > [ 5783.160957]     # test_simple_strtol: simple_strtol("0x2", 0) -> 0=
-x2
-> > > [ 5783.161467]     # test_simple_strtol: simple_strtol("0xfffffffffff=
-fffff", 0) -> 0xffffffffffffffff
-> > > [ 5783.161806]     # test_simple_strtol: simple_strtol("0x1", 0) -> 0=
-x1
-> > > [ 5783.162564]     ok 10 test_simple_strtol
-> > > [ 5783.163145] # scanf: pass:10 fail:0 skip:0 total:10
-> > > [ 5783.163537] # Totals: pass:22 fail:0 skip:0 total:22
-> > > [ 5783.164052] ok 1 scanf
->
-> I saw the above messages using "dmesg".
->
-> They can also be seen in /sys/kernel/debug/kunit/scanf/results
-> when CONFIG_KUNIT_DEBUGFS is enabled.
->
->
-> > If you use one of the kunit userspace helpers, you will only see the
-> > output when the test fails. Having said that, in my local testing I
-> > don't see the KERN_DEBUG prints locally. I had to run with
-> > ignore_loglevel to see them at all.
->
-> Yeah, KERN_DEBUG are for the least important messages. Consoles usually
-> do not print them to do not scare normal users and also historically
-> because of slow serial consoles.
->
-> Anyway, they are always stored into the internal log buffer. So that
-> they can be seen by "dmesg" even when they were filtered on the
-> console.
->
-> BTW: The log buffer has a limited size. The oldest messages get lost
->      when are too many of them. Which is another reason to do not
->      print the debug messages by default.
->
->
-> Best Regards,
-> Petr
->
-> PS: You are sending new revisions too fast. It is hard to follow.
->     I personally prefer to send one revision per week at maximum.
->     It gives people chance to find time for the review and provide
->     some feedback.
 
-Thanks, I'll reduce the frequency. Apologies for the noise!
+That's actually fairly clear all things considered, thanks for the
+education and for fishing out the relevant DDI section!
 
-I think all this is addressed in v7.
+> The PDF can be found at:
+>
+>   https://developer.arm.com/documentation/ddi0487/la/?lang=3Den
+>
+> Mark.
+
