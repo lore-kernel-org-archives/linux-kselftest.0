@@ -1,105 +1,219 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D48128819;
-	Tue, 11 Feb 2025 07:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4DD1EDA35
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 07:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739259094; cv=none; b=AKfhVBG+iEER95zwnTGy2oFPtYZ/JNDf0e3WkLJOm2AO7AN071kiDGOnM8JI1StvxkwpTCRdwu8vt4HsDHyuBWAVUnQCMsrVN/iNsBbOPo5JKlu5z2kqGBnnPBn84fLkNwBQp2RQQzFYxqs7YuFXmO4RFO4ung76kzz7UEvFeJA=
+	t=1739260330; cv=none; b=WtP02E7Iu7lBUAyQ1cmSbDMXN2v5QngVmH++Mgqau1micLQCSiyYSEiP233eGAvXK8SSb1xziIRb9vBJLxtfTnwm0mqBtiQnCQemBpQieWc4G6uit4ZOasAUNbZusW7VXUhk4q6dqkNhCYypylWywA60WYv1HdaeKyBdYAaWfEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739259094; c=relaxed/simple;
-	bh=fNXHZD0w81zVXb5WMwE53i1fejXnfLGbij1wF8RDOLY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wttk61aKgwNvgpElNfy2n130mvgmkfmDeDx+ILKRvjf+jGPOgETdulLUGa3sWFe1Nl4E89cqA+01UmdDcdqQbKuCnv4OXK26kw2L97DY7L+ahyTcDnpRPB55M7daf1kL3nXkW7heSlMf6VYpfc1PLbXaUizI0f8E8EkhgrJ3JZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Eqomc+Ec; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739260330; c=relaxed/simple;
+	bh=IfXNB6uWV0hdA8hswijf+VMKa/9ob7rFSJJkcz0StNI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GYshTrxEPd7gjj2am9nlI+lKuQqKryzoBTLNhUWU8q4BaWNOBar/GA0dvOlp+5wHerkstD5qooyMuxwVdbErK2FTAz+SJFN+3nX6DuCAWjIxKYS+fWWgvb7S3yir/YQsjfZ6JqN6ZyC6DbS4T7f8Igit3HxNtguoglloO0H8Qdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0pO6/GHp; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eqomc+Ec"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21f6a47d617so45973025ad.2;
-        Mon, 10 Feb 2025 23:31:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0pO6/GHp"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6e44af3dacbso46593096d6.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 23:52:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739259092; x=1739863892; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hTH7Pm5uOLfD5YPyyOM3Aj+5Tf2V89zBjuGRtkm1M5Q=;
-        b=Eqomc+Ec4f8HzCKQSOY8u4l+px0Wwu4fov2gr5J5FyXOpZjdV1hcurW9gRxYcn6i+U
-         Y7gT/rX4RdIjEPbZUX+OZ++tGN6BotVN33ljT/mSXxL9VUFAKtSEFJUu33dATCdLSdzl
-         /fQuYVqAw6ro7tvbz/CtilCn5k8PA4czy4QiaE08UMKQluxaCVW6zZLV0QLjOm9zVcau
-         ECw44SZmFvdcLA+W6CG4lTlTeQKvsQP6zzIx43YjIiW79CSvvlyli+hSzAeqRN8Rkd83
-         t2ypM7HQT8WSyXww4ysdSefCOEtWO1uSp/3adXwl23wPZc++kv4fvveM/Gua+BsULS5s
-         EkRg==
+        d=google.com; s=20230601; t=1739260327; x=1739865127; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GGlY+bkOqi5PuH8Y5QlLfcyvBOm3ntepb1OfPBLEDLQ=;
+        b=0pO6/GHp4ElP3WYWgVfsLPJsSotG98kw3nCtnjPALNImA5UiBj4wOAIQs/ZduzlV7z
+         EEMcVUX7jmSmuQWEZmdWuD16fATEBViXj4laBikvuEpdZ6v5AfnOkw+RBPyqlxYJUIS1
+         PgRfwQyjQEt/RgFq71vvaj71+bMLQTnB6b/CjFQNzxWLyJfeDt9TJZUhoYnk6DURw5DX
+         3gELJwJnydJXijYSMBKhMgTDc3QRq8zTQjui8o08W2cRt+pRAZhvawRX+Zd/MF3Sr4ZC
+         Gz9hIHQLPfLTuLoPvJ1tDZuuwAcHE8m1ySTXwivu8u3vHy5nGY31dsOojXxPnr9F54/g
+         gyxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739259092; x=1739863892;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hTH7Pm5uOLfD5YPyyOM3Aj+5Tf2V89zBjuGRtkm1M5Q=;
-        b=EJfMfM0eBYB98D53Ncx0/+sR1Bt66k53STmuvRl5hKaIB0LIw510TgYaHDz4Ae2wOd
-         0gUpVKvm7d2BdrPQca30Y2n6JwF+N6vjGsi6Di0FDRfgb2AY6AAMJfUmgdOfnybbcjPY
-         1lzYxZoo+2KjzH1rQzA0LdWzPeR1bb8YmVn5X6RW98xKIMdg6ts5i0R2MOj87v9bpkvV
-         m6TeQ0RLyYu+QXwtO65xNptlw9dTq0O0CcMpTEs6PTSprJRpV1CkTBEyAgG3Ud4QSryh
-         dhG9Jdtr5l8ImUGQJVjEs5EjcyXDkbr+doOF8C37q4NbWhDskMHgbMyLK5todE72RIiU
-         lTtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU9xa/k+gaKGa6DNkFAfSfRM04lTlgCrKJopkl0Ped2GSgj/WtgQWSkpkACwNuNWPctwN2CwZoJBHaM2/WFfdBB@vger.kernel.org, AJvYcCX+l3XX/3/uJs3SO4xxIacAbJRp+VELcgv8n7rniPxNu1Y+dtTFQBVUrP/I9tv4NarPRWyXLq4U/GgJg6c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEsAXhBDooK6ywbeLqRVy6bV/K2NRHWMUa+CWXoiaj6N3Kh+l0
-	E05VM310/AJPsTFDREhxm50KsEP2QO4YWh3XwKPWkRlg8eDdNoEzzaZE/oWff14=
-X-Gm-Gg: ASbGncs1vDO56IGWigpPbEcHRMuCYDp7vG+QnuPE0VO/AHMP3geG9MhVckl+6oMuY+Y
-	l6PbFrzQk6dmKmriKFD/2otzPbZX2vkZYRr3Rx3zSDS0C9jUs6hvOTjUJyPjjyB8ch4Mf4TWM3h
-	D1gnPsh5tVMjkNMonv4YiA9GtrYEqlxwSdBdsFlXQjYTTYwdrWSncIbYCH71T0anvAPOcyXjzxW
-	wsb1EpP1XrOesU/1ZDblXuXSTy56K6uvrewedADmaL8s4yjo9zd4Q87FlcMCyFq0uHMOPZ8Lm/d
-	4QbgfIBytuvGcgG4odKI
-X-Google-Smtp-Source: AGHT+IGs30M56X5gAKQnZAxB9fHIUoYBdvgrpgSZIn7PFxqdfYyq2SNPZej4vAjy56zlwVX1mmBcEw==
-X-Received: by 2002:a17:902:c94c:b0:21f:4c65:6290 with SMTP id d9443c01a7336-21f4e6a0641mr305340305ad.1.1739259092134;
-        Mon, 10 Feb 2025 23:31:32 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3687e68bsm89975435ad.169.2025.02.10.23.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 23:31:30 -0800 (PST)
-Date: Tue, 11 Feb 2025 07:31:23 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Jay Vosburgh <jv@jvosburgh.net>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
-	Boris Pismenny <borisp@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 net 0/2] bonding: fix incorrect mac address setting
-Message-ID: <Z6r8y1U4C_s1-3jV@fedora>
-References: <20250207092920.543458-1-liuhangbin@gmail.com>
- <Z6b67YBbERi5v9gt@fedora>
+        d=1e100.net; s=20230601; t=1739260327; x=1739865127;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GGlY+bkOqi5PuH8Y5QlLfcyvBOm3ntepb1OfPBLEDLQ=;
+        b=WtOKaXeSv1SVO5c7x5KJJNAjsCq28t0SBVxMczhWhE9CNE9R5eloiJqhKMD/OKVhaj
+         SCParonnemqw64xLdL2kmoQ0Nf/1ajwA2TcHk8wLckL6Cn5JRMcjOm9yXBvw7s+smxrO
+         QH08ROlVHt6UQZB4WUMkFQhAhoJS9aNuM3fy7rDpk+Kr3Klv124oF7Ye8JYCP4KfHal9
+         vbpMoGte56exGAcy6arkKpF3f1yX+ZYZXk733TNORobTX2qAOe7mLhGdZuq9TsiamvbE
+         y8YhS6uGydGiOPcL93tMpld9uC3X5t/oDLMMxRuN6DDPXbs4eRWgtqs3unBN5J5NLly0
+         laDg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTNH7GhoEeuls4DgdAHDkm9z5KrR4/ImV12Phg26OoTYBiwRdpVuaNNdEhnX/CMGBDfMXvXtLG6Wp74sQTmxE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydKqhCPl69adgSbRyCtX44Nm6TqYEO7Eqy9Cr85Fbj+mj8Zu99
+	Khwgv7YC+NLqEOFu7mO69WavDnkUoBwIvC2eJ+dEDxPvPAu7q01Cfw1ZpnEJsdEdMAvbPrWIWlx
+	ZJcj7EwclWvxj2lNeftu0UL+WzMeDsYqApJJq
+X-Gm-Gg: ASbGncvxP1RbcyEVtdnAT2LWrShVFJH5BkDUnyzbJWiZsg8o54xEWpwwVZRCKCDm0MW
+	fwPYyD/h4vaAn86bfC527jRvsqJ7Ij19pTZSfqm712ExeiAPTPGEpMOp8Tsq3alMwMGHaGoBu2A
+	==
+X-Google-Smtp-Source: AGHT+IE+yl3wzsSo4TpLqGm9Gq/Dy5uTEQZDUK/aRLj2hBWjOAdHfNwEQlC5XSZs9d0yBjJfceuKCl3XGV5VgLhlK/8=
+X-Received: by 2002:ad4:5c6e:0:b0:6e2:481b:7cd9 with SMTP id
+ 6a1803df08f44-6e467861abdmr47390546d6.25.1739260326988; Mon, 10 Feb 2025
+ 23:52:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z6b67YBbERi5v9gt@fedora>
+References: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com>
+ <Z6eaDuXnT_rjVSNS@thinkpad> <CAMuHMdUsq_39kgBa8oanXeTzv44HuhS1e5MK7K2jxkVXQ7uWdw@mail.gmail.com>
+ <bd71c705-5f57-4067-b200-fd80b98ddbc9@nvidia.com> <Z6pfomw-3LuWoQQo@thinkpad>
+In-Reply-To: <Z6pfomw-3LuWoQQo@thinkpad>
+From: David Gow <davidgow@google.com>
+Date: Tue, 11 Feb 2025 15:51:54 +0800
+X-Gm-Features: AWEUYZn44yeG9ZBzJSy3v2t1KbtFDEG3Fr63XU8HKrdi1hGCI11-cYXsuiSVW6Q
+Message-ID: <CABVgOS=KZrM2dWyp1HzVS0zh7vquLxmTY2T2Ti53DQADrW+sJg@mail.gmail.com>
+Subject: Re: distro support for CONFIG_KUNIT: [PATCH 0/3] bitmap: convert
+ self-test to KUnit
+To: Yury Norov <yury.norov@gmail.com>
+Cc: John Hubbard <jhubbard@nvidia.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Tamir Duberstein <tamird@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-kselftest@vger.kernel.org, Brad Figg <bfigg@nvidia.com>, 
+	David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@suse.com>, Jason Gunthorpe <jgg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jay,
-On Sat, Feb 08, 2025 at 06:34:21AM +0000, Hangbin Liu wrote:
-> Please hold on this patch. Our QE reported that with bare NIC, the
-> backup NIC can't receive the NS messages even after joining the multicast
-> MAC group. But after remove the backup NIC from bond, the NIC interface
-> could receive the NS message.
-> 
-> This is weird, it looks the backup NIC dropped the NS message somewhere,
-> even using tcpdump (the NIC will be in promisc mode) I can't capture the
-> NS message on backup slave.
-> 
-> I need to debug more.
+On Tue, 11 Feb 2025 at 04:20, Yury Norov <yury.norov@gmail.com> wrote:
+>
+> On Mon, Feb 10, 2025 at 11:35:48AM -0800, John Hubbard wrote:
+> > On 2/9/25 11:54 PM, Geert Uytterhoeven wrote:
+> > > On Sat, 8 Feb 2025 at 18:53, Yury Norov <yury.norov@gmail.com> wrote:
+> > > > On Fri, Feb 07, 2025 at 03:14:01PM -0500, Tamir Duberstein wrote:
+> > > > > On 7/27/24 12:35 AM, Shuah Khan wrote:
+> > ...
+> > > > > The crux of the argument seems to be that the config help text is taken
+> > > > > to describe the author's intent with the fragment "at boot". I think
+> > >
+> > > IMO, "at boot" is a misnomer, as most tests can be either builtin
+> > > or modular.
+> >
+> > Right.
+> >
+> > >
+> > > > KUNIT is disabled in defconfig, at least on x86_64. It is also disabled
+> > > > on my Ubuntu 24.04 machine. If I take your patches, I'll be unable to
+> >
+> > OK so I just bought a shiny new test machine, and installed one of the
+> > big name distros on it, hoping they've moved ahead and bought into the kunit
+> > story...
+> >
+> > $ grep KUNIT /boot/config-6.8.0-52-generic
+> > # CONFIG_KUNIT is not set
+> >
+> > ...gagghh! No such luck. One more data point, in support of Yuri's complaint. :)
+> >
+> > >
+> > > I think distros should start setting CONFIG_KUNIT=m.
+> >
+> > Yes they should! kunit really does have important advantages for many use
+> > cases, including bitmaps here, and "CONFIG_KUNIT is not set" is the main
+> > obstacle.
+>
+> Hi John, Geert, Tamir,
+>
+> Can you please explain in details which advantages KUNIT brings to
+> the test_bitmap.c, find_bit_benchmark.c and other low-level tests?
+>
 
-After debug, I find it's a driver issue. The issue exists with ice dirver NIC.
-I tried with a mlx5 NIC and the patch works good for me.
+First, I'd agree with Tamir and others who've pointed out that KUnit
+is not really intended for benchmarks, so I definitely don't want to
+oversell it for find_bit_benchmark.c and others (though it has been
+used for benchmarks in a few cases, it's not perfect).
 
-So I think you can start review this patch when you have time. I will debug
-the ice driver later.
+The main advantages of KUnit are that:
+- it's already used for a bunch of lib/ tests (so quite familiar to a
+number of contributors/users),
+- tests can be run at boot without needing any userspace at all (if built-in),
+- KUnit tests are already being automatically run as regression tests,
+and it's relatively easy to run "all tests" associated with a config
+- there's a whole bunch of tooling which automates configuring,
+building, and running a kernel with these tests, across several
+architectures
+  (e.g., passing --arch arm64 or --arch m68k to automatically build
+and run the tests in QEMU for those architectures)
+- there's tooling to nicely print, format, and summarise the results
+of any number of suites.
+- and, as a result of the above, it's very quick and easy to run a
+test (or whole bunch of tests) in an isolated environment.
 
-Thanks
-Hangbin
+KUnit also has very few runtime dependencies from a developer
+point-of-view (python, optionally QEMU).
+
+It is, however, less focused on the "debug a running system" case,
+hence the requirement for CONFIG_KUNIT to be enabled, and the tooling
+largely being focused on the "run all of the tests in UML or a VM"
+case.
+
+> I'm not strongly against moving under KUNIT's hat, but I do:
+>  - respect commitment of my contributors, so I don't want to wipe git
+>    history for no serious reason;
+
+It should be possible to preserve the git history during a port,
+though it admittedly will have a bunch of porting changes which make
+it more difficult to navigate with git blame. But it should at least
+be better than a total wipe.
+
+>  - respect time of my testers, so no extra dependencies;
+
+I think KUnit is a bit of a mixed bag here. In many cases, KUnit tests
+can be run pretty quickly, either because the tester's environment
+already has CONFIG_KUNIT enabled, or possibly under some kind of
+virtualization with the tooling (either QEMU, or on x86,
+User-Mode-Linux). But, as mentioned above, I'd not consider it ideal
+for performance testing.
+
+I am very sympathetic to not wanting to add a dependency here. I think
+KUnit is a pretty minimal dependency as far as they go (it selects
+CONFIG_GLOB and nothing else, needs no userspace, and even the tooling
+only really requires python on top of the basic toolchain), but it's
+definitely a further dependency for the
+'test-the-currently-running-kernel' use-case.
+
+>  - respect time of reviewers.
+
+This is an area where I think KUnit could be an advantage, as it'd be
+easy for reviewers to simply run
+./tools/testing/kunit/kunit.py run bitmap
+as a spot check on the code. And if they want to test on other
+architectures, the --arch option can be used to do so quickly.
+(And, of course, it can still be loaded as a module (or even built-in)
+on a physical system or other VM, albeit with the requirement for
+CONFIG_KUNIT.)
+
+
+
+As for distros enabling CONFIG_KUNIT by default, as mentioned, my
+understanding is that the Fedora/Red Hat distros are doing it, as are
+some branches of Android, but I doubt anyone else is. This makes
+sense: enabling CONFIG_KUNIT isn't free (though the overhead should be
+very low if no test is running, just a few static branches and an
+extra check in the module loader), and there's always been some
+reticence (which I've shared) in enabling test features on production
+kernels. So it's definitely something I was recommending against a few
+years ago.
+
+However, we've definitely made sure that CONFIG_KUNIT is less
+invasive, with things like hooks being kept behind static branches,
+and made the decision to have _running_ a test taint the kernel, so it
+should be relatively safe to just have the framework enabled (and even
+safe to have it loaded), and pretty obvious when a test is run. We've
+also got a bunch of extra options to disable running tests
+automatically when they're built-in/loaded, both at runtime and
+compile time.
+
+So I'd definitely be happy with other distros choosing to enable
+CONFIG_KUNIT by default now: I think it's much safer than it was, and
+you won't be going against the grain. But equally, I'd understand
+having it disabled in production: the cost, while very small, is
+nonzero.
+
+Cheers,
+-- David
