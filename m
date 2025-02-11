@@ -1,100 +1,102 @@
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.avm.de (mail.avm.de [212.42.244.94])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD571E9B39;
-	Tue, 11 Feb 2025 07:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784F91E9B39;
+	Tue, 11 Feb 2025 07:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739260370; cv=none; b=GuLyC2JrteW+dHyVfwoF87ZEuzrQMnnY/HktkrW9O5UKnDcxjhOc0en2nsbMMKuzU1ox856DVJZQK5a1AJUqi9TJSEVpXPUzwA8W1AZve/bPL4rDlmpnv5aesTXyGtdZCTrE+MJpm+o7cOGSJecVekqxh733g/1fd3TmKL/7QQI=
+	t=1739260486; cv=none; b=rPdto4FgQqc3ZAlqIxrpEoMxKbDRnqd7Vs47YZhHO5ZKOyQz+BV7YQOaamoOMHJRCWWIblbpFK6MPhMHm5HP8mupH65kpWDbY68vIYox9ewR978q5APG/lRUmSKvp2tCw+yJoQUH/QN3XntDp6LG0PEGGP58yMocGPnaRIOxVMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739260370; c=relaxed/simple;
-	bh=2FiwY+x4GGYE7ozcjCNXBgyPvVhL9yzMg38BGRbpZDk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PQWnE7IqOHh6aF0iPNLnHXvXi24TIyy6yLT1ZosdYiXPQRxdhJuOmlFccTokNw0uUWp1Pcdp5q52j3wFDSSylLyLpUBohw2DaTDJCxhVAo0Sp2ECaF14SO2/nP07Y24iEG8pQtb8JQJ3ThtkLDTdB6Kr2th64JSuwxY+iLcAlsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZXVdZJNb; arc=none smtp.client-ip=209.85.166.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739260486; c=relaxed/simple;
+	bh=zeYqsmy3zOjGEu/ZNTX027ncYMz1t9krEA8HwArBA2s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Io0h64a5JYKdRKOxz8pFQiZDjdrJdre3hyCydgJHRy6lKLJzPrInZ0sQz9R95k1wqd7M6kG3+NgqoSkGQB5qnaDDDNmAdlF7UDde0nqeCgPZHXpfrhp1uhfrhiEUwCSgupBqliisF6T3L8bTbtSy0/OCKKSTK+b9obfhjplEBYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de; spf=pass smtp.mailfrom=avm.de; dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b=cjWTWyqX; arc=none smtp.client-ip=212.42.244.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZXVdZJNb"
-Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-3d03d2bd7d2so53399075ab.0;
-        Mon, 10 Feb 2025 23:52:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739260368; x=1739865168; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EyEJstYWIX8JPmw+qk0ND4qW6t7HyV1qVikO+FNreek=;
-        b=ZXVdZJNbjhXCWmvf3qDRzHigH4Z8B3bBCu2q+AjrH0XcYujUzp+2vJ2e92zmm2jRtg
-         kygnxuahP9Ivm3wB/QIhkjtf4yiDwNyyA1CllKyZsWIbVvO/Hw/L/Kaa0FnbETBZ8yxk
-         Mx9a+kA/AZnpnvYQGg3dSXg5xPwdDpzXGFmpAsIky06L5NRPWsUkgKJCsEMJ+X8SuFPM
-         KpcnA4xY2P3Jya5LEX271mOL0lQofZIhCIwPFTgECv84ieedDirpzeJqqNstev/F55Q/
-         wNeKi9DxOB2wzDJfPNKHzAnyShZsp27vml3PQp3TOTAHysWVUw+13ypYM/EaGOyVOccX
-         pkuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739260368; x=1739865168;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EyEJstYWIX8JPmw+qk0ND4qW6t7HyV1qVikO+FNreek=;
-        b=HggJwSWDt/G1sX/6WPxbcR4EHti1+f4JtcUuNfq5+/lVfKFy9QlikJVWbKnGMBHJdp
-         gW4Cc4EtrxyIrfJJ4Ea96fCrNINuoYgfT2PCOpKmJRkX4xWN1SZ8AlZ7r3pvuE4ixjW+
-         7hYNKXc6kI9i/6o1RI/+ccXiKkTRo6Xv8EJNbuT0sYjPm47gxbjcyYuDu9sUu+TA89Sz
-         odMtnKrLBTe3hXWcLlZQrLZAcJsRfgx2oUZd1VsCaP9UsbDDaCkGj/NiPHhzAX+zVBoU
-         l9Q7+snPQdfEbkLgdkzHXOBUT6NpkWd3lB/Kt6h7QTwe471atqm5QNgAHRRoAFlmzYVH
-         bfzg==
-X-Forwarded-Encrypted: i=1; AJvYcCUukqdUDK4QaWxktbev2Oa1EClci3DAealOul2WKnhpk2/e2TE014whZq+i4MJWRZ2GsmBSR9q9BmiphauqqcU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzC1ysIk/7A/iXVCsWegVuq98Ac+EEff17wf3Zu4gGk47KVV+A
-	/JEO+MM2YvxBCsOmvpujl0PNVs9zPvNezatGbrndCSu7XYPmubjicYVdsvChwj2N4xORskEkaE+
-	xa884syaK2ZXXlYG1GhEoj7q9EKs=
-X-Gm-Gg: ASbGncsodiJpGPSM95CTMM5npdYi1rKU5NXRQgGM9SYTjqshdmv3up2lZJ8LjkLOcX8
-	jePqc84UHB/nJjOeiiIBoO1aX1aUczcHWcybV1qyOK/63VJe3JujH/IGrKjDGNOqAWfG04WhL
-X-Google-Smtp-Source: AGHT+IEfaGfrD1rUjB9s+MqSahYI/ZJk/Sk5Hm66Oc8ZSWk7aGbN+bgGcczuBQHroZqGZAL3JDRgpYDJ/PhEOSURd8E=
-X-Received: by 2002:a05:6e02:3421:b0:3d0:3851:c3cc with SMTP id
- e9e14a558f8ab-3d13df2249bmr147795145ab.16.1739260368306; Mon, 10 Feb 2025
- 23:52:48 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b="cjWTWyqX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+	t=1739260113; bh=zeYqsmy3zOjGEu/ZNTX027ncYMz1t9krEA8HwArBA2s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cjWTWyqXIm4qG5RQ+weSzjFX/zpNVo8yMker3i+OKmCeYtRqnn+7lR7PDR4xtcLW0
+	 fgpJMjw3322dNPiI0TdLAgFpg2H24nQSlnDEjSVVb6CXD/OppknmJ3i/yaCyA8vVfU
+	 u/IoC1SHMD2fFL6gnuYn+ltvhT6e2PVlLJFUoLPE=
+Received: from [2001:bf0:244:244::71] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.52.1)
+	(envelope-from <n.schier@avm.de>)
+	id 67ab00d1-714a-7f0000032729-7f00000187f2-1
+	for <multiple-recipients>; Tue, 11 Feb 2025 08:48:33 +0100
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [IPv6:2001:bf0:244:244::71])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Tue, 11 Feb 2025 08:48:33 +0100 (CET)
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+	by mail-auth.avm.de (Postfix) with ESMTPA id B249C80230;
+	Tue, 11 Feb 2025 08:48:32 +0100 (CET)
+Received: from l-nschier-z2.ads.avm.de (unknown [IPv6:fde4:4c1b:acd5:7792::1])
+	by buildd.core.avm.de (Postfix) with ESMTP id A293E181681;
+	Tue, 11 Feb 2025 08:48:32 +0100 (CET)
+Received: from nicolas by l-nschier-z2.ads.avm.de with local (Exim 4.98)
+	(envelope-from <n.schier@avm.de>)
+	id 1thl0S-00000004hMe-1bBr;
+	Tue, 11 Feb 2025 08:48:32 +0100
+Date: Tue, 11 Feb 2025 08:48:32 +0100
+From: Nicolas Schier <n.schier@avm.de>
+To: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Cc: linux-kbuild@vger.kernel.org, linux-um@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Richard Weinberger <richard@nod.at>,
+	Nicolas Schier <nicolas@fjasle.eu>
+Subject: Re: [PATCH v1] kbuild: Allow building of samples with UML
+Message-ID: <20250211-holistic-gentle-moth-c90edb@l-nschier-z2>
+References: <20241218115126.264342-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204023946.16031-1-kerneljasonxing@gmail.com>
-In-Reply-To: <20250204023946.16031-1-kerneljasonxing@gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Tue, 11 Feb 2025 15:52:10 +0800
-X-Gm-Features: AWEUYZkRY_S1KhVsCI89OwVfX8y4TlmjzzQ5bw4gokp7zFxwq6X8HHUP_MaQ7jc
-Message-ID: <CAL+tcoAAm_7sxhF7_-GBHmeF7jMtRjMGYqNuz_H4xH9mz4xLjw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 0/2] selftests: fix two small compilation errors
-To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	mykolal@fb.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241218115126.264342-1-mic@digikod.net>
+X-purgate-ID: 149429::1739260113-C7F3ACDC-FBB69494/0/0
+X-purgate-type: clean
+X-purgate-size: 1114
+X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
 
-Hi Maintainers from bpf,
+On Wed, Dec 18, 2024 at 12:51:23PM +0100, Mickaël Salaün wrote:
+> It's useful to build samples/* with UML and the only blocker is the
+> artificial incompatibility with CONFIG_HEADERS_INSTALL.
+> 
+> Allow the headers_install target with ARCH=um, which then allow building
+> samples (and tests using them) with UML too:
+> 
+>   printf 'CONFIG_SAMPLES=y\nCONFIG_HEADERS_INSTALL=y\nCONFIG_SAMPLE_LANDLOCK=y\n' >.config
+>   make ARCH=um olddefconfig headers_install
+>   make ARCH=um samples/landlock/
+> 
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nicolas Schier <nicolas@fjasle.eu>
+> Cc: Richard Weinberger <richard@nod.at>
+> Fixes: 1b620d539ccc ("kbuild: disable header exports for UML in a straightforward way")
+> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> ---
+>  Makefile          | 1 -
+>  lib/Kconfig.debug | 1 -
+>  2 files changed, 2 deletions(-)
+> 
 
-On Tue, Feb 4, 2025 at 10:39=E2=80=AFAM Jason Xing <kerneljasonxing@gmail.c=
-om> wrote:
->
-> Fix them separately in each patch.
+Thanks, looks good to me.
 
-I'd like to know if it's possible to merge the series because it does
-harm to some old distro with only updating the kernel?
-
-Thanks,
-Jason
-
->
-> Jason Xing (2):
->   bpf: changes_pkt_data: correct the 'main' error
->   bpf: sockopt_sk: fix 'undeclared' definition error
->
->  .../selftests/bpf/prog_tests/changes_pkt_data.c      | 12 ++++++------
->  tools/testing/selftests/bpf/prog_tests/sockopt_sk.c  |  2 +-
->  2 files changed, 7 insertions(+), 7 deletions(-)
->
-> --
-> 2.43.5
->
+Reviewed-by: Nicolas Schier <n.schier@avm.de>
