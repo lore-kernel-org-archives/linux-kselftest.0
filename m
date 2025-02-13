@@ -1,279 +1,803 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC929242932;
-	Thu, 13 Feb 2025 11:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B857227EB6;
+	Thu, 13 Feb 2025 11:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739445593; cv=none; b=VQ4sc20qL4DxoeQE8cO6NZZQeLU4pJz0ZgZt8uXSAM1TajhDfC7cMYmztYl0rW3ylqJJppHX/DMkA1tMgzii5owezu76/2n0/xA1+QEhwXC1hHChkt/CBMe7v60IbtCZUZE6xpAaEISY6eIKhLg69As5S3bXRA7pWYdvni3f6Io=
+	t=1739446828; cv=none; b=di7AIfRAwbdNxPCZWpwX99fSi5Uhh4Qj98UUS5HKdFQE9cgm39+2YI9QPCbK1+SoufuWM0ki1OAmSFW4I9lvWrdHjfqpoZANp5rGW26z5aOTVS8dRLPxeELPLBFFOwaKZ9k5mmnJdnhax5G1sYqlgXqX/zb+7vLnKhcvg0hjZhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739445593; c=relaxed/simple;
-	bh=9uuNd+3GB1+s/Ck5oO4hLGm+v5ubjOuu0ksS9ejQBNs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mi+uDzt1S6C9JmiiI29vWO5tnFnwQSXrdhi9GHKYJL+7Fh81FNmnKC/RKKRvBEfeRo/q+vMugeMrFGrClYWQlsxT/aFlTvTTHodJTQR8lvzj29lYJ1bcL2LQpOJI0/LuBLo6T9Q4x8A/ANiIbaRfN/krbfAUdWOQE6vVdz+3ZjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=TBZRDG/F; arc=none smtp.client-ip=212.227.15.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+	s=arc-20240116; t=1739446828; c=relaxed/simple;
+	bh=sMIyI+Y7zHI12V/91kZeFPHPRSLPCwvgHb4ikhg5e/4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HuMozn9Nvq0gwGxPJLG7o6+DnkL89i6Nd3oTC42djmknLZTtt3ohzKtCNShfHx6osBcayaoNknbWnywADe6swax2Il5iN+qyt+SlxKHP+Vdp06Rn40v+tFFUu9V1oN7N8FcDuL3HLPsqRAFs4/kCJR7XmdCoVuv5/v6DensV8e0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j3dCh9ol; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="TBZRDG/F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1739445567; x=1740050367; i=ps.report@gmx.net;
-	bh=9uuNd+3GB1+s/Ck5oO4hLGm+v5ubjOuu0ksS9ejQBNs=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=TBZRDG/FU0Dd4edOMyPZ+IfPz2xRYwX40eJqSzlOBXPLNCpof4UyIQ7/T//7VrGt
-	 SEK+moDh96OhXlQqkvAZ4G7TTFDZQFVTQF1p7cgtdpGM+tt970HS0znfzn/Q3pACV
-	 kOmDga7MT3x7Dhqs7IODF5uJ8H2n0SO0h2bT2RqSpgvN5wbbvp24k+n/ZCgZkjwf2
-	 XIFTOjSnPtYeao5w020W/NUuIHIaXzieyjO4iR1Si0HU+LEovLV5fUAgydDvZSNGn
-	 Lhh7GikTJ2amgk0u1eT71q/Jvb3KQjG4xsRJkoi8yI5AKX9TnUhEdVkWpgt8SL++O
-	 tp84Dydk7x3OTtkXig==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([82.135.81.197]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M2wGs-1tfEvb2j9w-006yzf; Thu, 13
- Feb 2025 12:19:27 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Seiderer <ps.report@gmx.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Artem Chernyshev <artem.chernyshev@red-soft.ru>,
-	Nam Cao <namcao@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>
-Subject: [PATCH net-next v5 7/8] net: pktgen: remove all superfluous index assignements
-Date: Thu, 13 Feb 2025 12:19:19 +0100
-Message-ID: <20250213111920.1439021-8-ps.report@gmx.net>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250213111920.1439021-1-ps.report@gmx.net>
-References: <20250213111920.1439021-1-ps.report@gmx.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j3dCh9ol"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6ddcff5a823so5640806d6.0;
+        Thu, 13 Feb 2025 03:40:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739446825; x=1740051625; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y5zVpHvgcAH0BMNWi0umNfs9y03Pl5HnIl5IWMmbPx8=;
+        b=j3dCh9olYAOjsh2FTeoYcSHMrJUwCGvLVtayu8qJDxlcFhVPnkKxcGIyF+Rj8U7tjh
+         tGmV53wu6wXJDZiO3ieIDoRPj2RyXjpJHy0RQLjlMCZW5CZfh8VBBuRS8YKi8a/EEUps
+         2V0OZ254zRV+txLfpLzb1Ko35vEQ6kgZ37HgYEfdspWvFzKKzUJoc3jHW+2asQWiDP1t
+         aLaCle4tHIiK2N1ciEA8V2sJ5geMcowJZjUiSZ38OLphFx/KBZhj/mejDtCtF8Rr3kPT
+         lHI2JY+5QaFPOd0hxI6j1VEmQrvybF2NSTd2LR5FSVP2VOLs16kbB5NA/DkMn1djKJI+
+         Aetw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739446825; x=1740051625;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y5zVpHvgcAH0BMNWi0umNfs9y03Pl5HnIl5IWMmbPx8=;
+        b=C0zhI3albn4cmHrrpabFhbNFVJM0jNfl9ojSumRk1ImzCqZYnN4FIvJdxCLdagECzl
+         0KeAXyjmIhKVkJ/rX6fjM+Up/2+roTA+nFujSB0W0UfhC4THThk1S7TyAsRWx3rTw/oN
+         +pCwK/adiaChpJ1be3YxmQnRAh75XMSPIcj/sXHWjibBkiwr/i9kJqJjnBpIdJQLXHk+
+         kixoF/EAHai5Qcfy6JsuREZx3K87H5CHmCkhrvTpyLYtVp5q71kJVx3722O9UvqJ1p1u
+         D7THEeEehHzNlyKY3g3cHs4uolrywaCMr5xG5ibr3eAHeYHm3fjITehoU+ABWw6XCP7u
+         1Tqw==
+X-Forwarded-Encrypted: i=1; AJvYcCX6Zuni2Ss0FWx72IyP/Wq2k6QSkvloqXeHgxBc3e9qoFtJWujgqRuLAPBTGgHvxQ302ulm8RQ8XN68JM2z2qhQ@vger.kernel.org, AJvYcCXh+d7Ev20fLsTCtM5xb7lkhMVlRZw5cgEUs4pEVV0YAIBe1YwV6+/ClPAPWIKf5KNQAcFjx8tP4wc+ytk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzumlfvsUKu1oCvlSW6rzNT48VVFuEUpIRo4if7lTLk2Y34YMCd
+	oF1dHrM4A4cWx8caxMBOjQFT/Ry7W7PMKXP7r2CI6fLfDbh8VaED4jd8xWV7
+X-Gm-Gg: ASbGnctLUCgJztRFkJwiKVV0Jv4VZMeT2UUjtTzdm+E1I5bvPipEc7SWkB1CvDxHoRQ
+	XF5cZo8acE05IwZCxY1ZmGankuwj5YHLe3GAYdF5MAEe06NvKutpMb5hRLIB4uTT0jydmqs1Ofr
+	ObESGYuOcljVJrOPTRQ6gsIVScxucg1e34rUUvRU+3ZHTq3MDqqJgeG6bCzjXEEmupw2Q9ZP/m0
+	Zz/eVWnw2oXFcTQxryrUyPKecK2xt/KNv9ILkMdxygfoOKpuAgYiLwh8kFYp/7rxQxaKLWFDENl
+	/4wcXWGRvF7esX1BZ1GkrFLT7CiVuyyHQF1tUJKlNvm7Nmic1TWPBon5gdPulWiBJALaIC9Shb4
+	ZKVD5WqFvyIW/fb06F566GKQ8pM9qom37xlLZqA==
+X-Google-Smtp-Source: AGHT+IGf1bX4a7Es+lXjI1hcAy6qtKyVIGi/uC7Xiqi36vHFtFlgUzBa7LPxaJk6IBFBvzhdDnpOig==
+X-Received: by 2002:a05:6214:d65:b0:6e4:29f8:3abd with SMTP id 6a1803df08f44-6e46edc2727mr103628696d6.28.1739446825120;
+        Thu, 13 Feb 2025 03:40:25 -0800 (PST)
+Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2600:4041:5be7:7c00:c8d8:9808:e9c7:ed5b])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65d78640fsm8159806d6.48.2025.02.13.03.40.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2025 03:40:24 -0800 (PST)
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Thu, 13 Feb 2025 06:40:20 -0500
+Subject: [PATCH v2] ww_mutex: convert self-test to KUnit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:vgUEgNqAatG/XR1nP5KVaQnazr37N5sLpoB+44LlcguynB0/xZk
- xTDi+3eNeKMPZgUTQAqxiwXkXV6C48nb+OpG5mVXJzdP7jY0efdE8AftqGtQ1ao8yIDO1++
- iWxdGXGzVRjcbksf5O9B/SfpUEt/nVAmtS04bI6GZZNNd+xTiN0M9QHxUkDTM5uNm4K9MZe
- WWOq5k6GhVHc2i8UpGkIA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:FcH4IGXayf8=;FoGcasg0FZKe6gwAuzvYfL2dbSe
- nIdX+32GMTUMsxyt7w+frcz9J/VqsLZ44Z+ItkTTouB1Taz0+PIXDUO88Bye5XazkmLQIUJks
- QMiasMhoRZEiQeS+61M+q+lEsTCRPlA7nnU5065mqr8IRd43p/bSVSluXAmFArQaV0TL2W//a
- HncM97jSrsz1606BWRni2+oW0eqwZcOn8/MA+lagjVP1a2VuyKCxSRKd3cFoQCRx9jjULShAf
- b9bWYjNQqxmOX7mQwgjatstvxvlWCKedkvvZY/GtApnY16EYOEQgtEuwhQGn6MsRsqV5Gc3Xr
- tyUQyuSxK9bUJCqfkjPe39PB/obgdk4mpN6kK1072qDXF6Xg/IyDAt3YRimAK2QUUxUltVKr9
- Ao/1LTNO7tGlW2SZWWBI0qluGJn2wtpr1Mjs4C4t9E/a3Dn0sGEpfbbJ33B7gmtoGVrRDcTZX
- gQBZWXr6BY/JlokRoOzogFBjJMl3PbhdbrhnlU7A6oO4MonGu2Kzp7lS+Utt8M+fWBkKE0T5G
- HsD0yuh01uFgblkk1SWJXXlYzG9ZZDzLYm7sq+EsB2sPuWnpu9kaHfQHLxRXFTdVC2XqvgcVW
- MC8o4s8Wu7a3PEh07gWf9MZG9t3C6iyTDE3FPapg36nQFngQwt+o5Bl9im29EYsZoyJx4uZzT
- M+WNiQyPmpNhMpxvqdhdMHM8mrNfI9zfnXeMjVEVV0GSTC8tSGOtDQ5hYdEt5NEjy9Nif6BVc
- BHiHRSdCvd0ldgPBqff8qIL4wkpPOq50GXlWaDCoVhBpxGkcS8tstHTjIPob+1GKHQA4b+QLC
- YCVCagQtU5cRDtb0IspqrxlcOT296UeaHiKHjV2ld4AVLDQAUQDRJyiIGUsZF2GGvWtNZ4rDH
- 93/swLHPXCbElP8Oaq2W8oM0uhf9LASDGNgapxbrmh3CMfuG+d3N+Qb5WxbGJJ60ERP1UP2dE
- E4tqa9w5lWZ/lZHMQKBDJpVVOyD65xWF8lDiEAeT0PhvZiMRvuyfECyaeUFZAKYV/9HXR/8tg
- IvDTk9p91MbQX3raeTDyDr6cwHxNF4//vgw1S8do72vMGDsybqpQa/xuzeSIzwGEh2sHlUInp
- LX6wSubYZtEucTSI2LAPrBWoRqdXWRD2RAJOV8Ivlw94DSO4kumBfNVsZMpFW80uvHHqWRjss
- lIsDDjR0Fpu4xTd3RhY98AYAbZ0uP5ZAOrOG4UHWXcrwnuuI7YdzmzoCOrstkn/wg6iJ2a7w2
- HY+EHbyI8GCnwRenEpCbODJps4OQ0zUpjE2clmZmaL+y1sHQSr9b6R4ZRBX8yyvAvXAE/vunm
- dM8xschpplX8feFXNMiWvu6ljmVvJp02H8Dlu+pTORpp+74BanCTJILf5YvYl13kYx/A9oHJ/
- 5hwrO3OAmvm+Cbag2B+NDsxSp4rqgCQAI1RXG3ECMjI9hnP6IBAK/9/Por
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACParWcC/3WNQQ6CMBBFr0K6dkw7UYuuvIchpuIAE6U1bSkYw
+ t2txK3L95P/3iwCeaYgTsUsPCUO7GwG3BSi7oxtCfieWaDEvURZwjhe+yHSBI/BcoTa2UQ+glb
+ lDo02hxuhyOeXp4anVXypMnccovPvtZPUd/0plfynTAoUHDU2uasarejc9oaf29r1olqW5QOkG
+ HwcvAAAAA==
+X-Change-ID: 20250208-ww_mutex-kunit-convert-71842a7a6be2
+To: David Gow <davidgow@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+ Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+ Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
 
-UmVtb3ZlIGFsbCBzdXBlcmZsdW91cyBpbmRleCAoJ2kgKz0gbGVuJykgYXNzaWduZW1lbnRzICh2
-YWx1ZSBub3QgdXNlZAphZnRlcndhcmRzKS4KClNpZ25lZC1vZmYtYnk6IFBldGVyIFNlaWRlcmVy
-IDxwcy5yZXBvcnRAZ214Lm5ldD4KLS0tCkNoYW5nZXMgdjQgLT4gdjUKICAtIG5ldyBwYXRjaCAo
-c3VnZ2VzdGVkIGJ5IFNpbW9uIEhvcm1hbikKLS0tCiBuZXQvY29yZS9wa3RnZW4uYyB8IDUyICsr
-KysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAxIGZpbGUgY2hh
-bmdlZCwgNiBpbnNlcnRpb25zKCspLCA0NiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9uZXQv
-Y29yZS9wa3RnZW4uYyBiL25ldC9jb3JlL3BrdGdlbi5jCmluZGV4IDFhMGNmZmYyZjNkNy4uYmMw
-MTAyMGZhMDNjIDEwMDY0NAotLS0gYS9uZXQvY29yZS9wa3RnZW4uYworKysgYi9uZXQvY29yZS9w
-a3RnZW4uYwpAQCAtMTA0MCw3ICsxMDQwLDYgQEAgc3RhdGljIHNzaXplX3QgcGt0Z2VuX2lmX3dy
-aXRlKHN0cnVjdCBmaWxlICpmaWxlLAogCQlpZiAobGVuIDwgMCkKIAkJCXJldHVybiBsZW47CiAK
-LQkJaSArPSBsZW47CiAJCWlmICh2YWx1ZSA8IDE0ICsgMjAgKyA4KQogCQkJdmFsdWUgPSAxNCAr
-IDIwICsgODsKIAkJaWYgKHZhbHVlICE9IHBrdF9kZXYtPm1pbl9wa3Rfc2l6ZSkgewpAQCAtMTA1
-OCw3ICsxMDU3LDYgQEAgc3RhdGljIHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxl
-ICpmaWxlLAogCQlpZiAobGVuIDwgMCkKIAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJ
-CWlmICh2YWx1ZSA8IDE0ICsgMjAgKyA4KQogCQkJdmFsdWUgPSAxNCArIDIwICsgODsKIAkJaWYg
-KHZhbHVlICE9IHBrdF9kZXYtPm1heF9wa3Rfc2l6ZSkgewpAQCAtMTA3OCw3ICsxMDc2LDYgQEAg
-c3RhdGljIHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxlLAogCQlpZiAo
-bGVuIDwgMCkKIAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJCWlmICh2YWx1ZSA8IDE0
-ICsgMjAgKyA4KQogCQkJdmFsdWUgPSAxNCArIDIwICsgODsKIAkJaWYgKHZhbHVlICE9IHBrdF9k
-ZXYtPm1pbl9wa3Rfc2l6ZSkgewpAQCAtMTEwMSw3ICsxMDk4LDYgQEAgc3RhdGljIHNzaXplX3Qg
-cGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxlLAogCiAJCWZpbGxfaW1peF9kaXN0cmli
-dXRpb24ocGt0X2Rldik7CiAKLQkJaSArPSBsZW47CiAJCXJldHVybiBjb3VudDsKIAl9CiAKQEAg
-LTExMTEsNyArMTEwNyw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3Qg
-ZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVuOwogCi0JCWkgKz0gbGVu
-OwogCQlkZWJ1ZyA9IHZhbHVlOwogCQlzcHJpbnRmKHBnX3Jlc3VsdCwgIk9LOiBkZWJ1Zz0ldSIs
-IGRlYnVnKTsKIAkJcmV0dXJuIGNvdW50OwpAQCAtMTEyMyw3ICsxMTE4LDYgQEAgc3RhdGljIHNz
-aXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxlLAogCQlpZiAobGVuIDwgMCkK
-IAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJCXBrdF9kZXYtPm5mcmFncyA9IHZhbHVl
-OwogCQlzcHJpbnRmKHBnX3Jlc3VsdCwgIk9LOiBmcmFncz0lZCIsIHBrdF9kZXYtPm5mcmFncyk7
-CiAJCXJldHVybiBjb3VudDsKQEAgLTExMzQsNyArMTEyOCw2IEBAIHN0YXRpYyBzc2l6ZV90IHBr
-dGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1
-cm4gbGVuOwogCi0JCWkgKz0gbGVuOwogCQlpZiAodmFsdWUgPT0gMHg3RkZGRkZGRikKIAkJCXBr
-dF9kZXYtPmRlbGF5ID0gVUxMT05HX01BWDsKIAkJZWxzZQpAQCAtMTE1MCw3ICsxMTQzLDYgQEAg
-c3RhdGljIHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxlLAogCQlpZiAo
-bGVuIDwgMCkKIAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJCWlmICghdmFsdWUpCiAJ
-CQlyZXR1cm4gLUVJTlZBTDsKIAkJcGt0X2Rldi0+ZGVsYXkgPSBwa3RfZGV2LT5taW5fcGt0X3Np
-emUqOCpOU0VDX1BFUl9VU0VDL3ZhbHVlOwpAQCAtMTE2Niw3ICsxMTU4LDYgQEAgc3RhdGljIHNz
-aXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxlLAogCQlpZiAobGVuIDwgMCkK
-IAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJCWlmICghdmFsdWUpCiAJCQlyZXR1cm4g
-LUVJTlZBTDsKIAkJcGt0X2Rldi0+ZGVsYXkgPSBOU0VDX1BFUl9TRUMvdmFsdWU7CkBAIC0xMTgy
-LDcgKzExNzMsNiBAQCBzdGF0aWMgc3NpemVfdCBwa3RnZW5faWZfd3JpdGUoc3RydWN0IGZpbGUg
-KmZpbGUsCiAJCWlmIChsZW4gPCAwKQogCQkJcmV0dXJuIGxlbjsKIAotCQlpICs9IGxlbjsKIAkJ
-aWYgKHZhbHVlICE9IHBrdF9kZXYtPnVkcF9zcmNfbWluKSB7CiAJCQlwa3RfZGV2LT51ZHBfc3Jj
-X21pbiA9IHZhbHVlOwogCQkJcGt0X2Rldi0+Y3VyX3VkcF9zcmMgPSB2YWx1ZTsKQEAgLTExOTYs
-NyArMTE4Niw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAq
-ZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVuOwogCi0JCWkgKz0gbGVuOwogCQlp
-ZiAodmFsdWUgIT0gcGt0X2Rldi0+dWRwX2RzdF9taW4pIHsKIAkJCXBrdF9kZXYtPnVkcF9kc3Rf
-bWluID0gdmFsdWU7CiAJCQlwa3RfZGV2LT5jdXJfdWRwX2RzdCA9IHZhbHVlOwpAQCAtMTIxMCw3
-ICsxMTk5LDYgQEAgc3RhdGljIHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpm
-aWxlLAogCQlpZiAobGVuIDwgMCkKIAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJCWlm
-ICh2YWx1ZSAhPSBwa3RfZGV2LT51ZHBfc3JjX21heCkgewogCQkJcGt0X2Rldi0+dWRwX3NyY19t
-YXggPSB2YWx1ZTsKIAkJCXBrdF9kZXYtPmN1cl91ZHBfc3JjID0gdmFsdWU7CkBAIC0xMjI0LDcg
-KzEyMTIsNiBAQCBzdGF0aWMgc3NpemVfdCBwa3RnZW5faWZfd3JpdGUoc3RydWN0IGZpbGUgKmZp
-bGUsCiAJCWlmIChsZW4gPCAwKQogCQkJcmV0dXJuIGxlbjsKIAotCQlpICs9IGxlbjsKIAkJaWYg
-KHZhbHVlICE9IHBrdF9kZXYtPnVkcF9kc3RfbWF4KSB7CiAJCQlwa3RfZGV2LT51ZHBfZHN0X21h
-eCA9IHZhbHVlOwogCQkJcGt0X2Rldi0+Y3VyX3VkcF9kc3QgPSB2YWx1ZTsKQEAgLTEyNDgsNyAr
-MTIzNSw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmls
-ZSwKIAkJCQkgICEocGt0X2Rldi0+ZmxhZ3MgJiBGX1NIQVJFRCkpKQogCQkJcmV0dXJuIC1FSU5W
-QUw7CiAKLQkJaSArPSBsZW47CiAJCXBrdF9kZXYtPmNsb25lX3NrYiA9IHZhbHVlOwogCiAJCXNw
-cmludGYocGdfcmVzdWx0LCAiT0s6IGNsb25lX3NrYj0lZCIsIHBrdF9kZXYtPmNsb25lX3NrYik7
-CkBAIC0xMjYwLDcgKzEyNDYsNiBAQCBzdGF0aWMgc3NpemVfdCBwa3RnZW5faWZfd3JpdGUoc3Ry
-dWN0IGZpbGUgKmZpbGUsCiAJCWlmIChsZW4gPCAwKQogCQkJcmV0dXJuIGxlbjsKIAotCQlpICs9
-IGxlbjsKIAkJcGt0X2Rldi0+Y291bnQgPSB2YWx1ZTsKIAkJc3ByaW50ZihwZ19yZXN1bHQsICJP
-SzogY291bnQ9JWxsdSIsCiAJCQkodW5zaWduZWQgbG9uZyBsb25nKXBrdF9kZXYtPmNvdW50KTsK
-QEAgLTEyNzIsNyArMTI1Nyw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1
-Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVuOwogCi0JCWkgKz0g
-bGVuOwogCQlpZiAocGt0X2Rldi0+c3JjX21hY19jb3VudCAhPSB2YWx1ZSkgewogCQkJcGt0X2Rl
-di0+c3JjX21hY19jb3VudCA9IHZhbHVlOwogCQkJcGt0X2Rldi0+Y3VyX3NyY19tYWNfb2Zmc2V0
-ID0gMDsKQEAgLTEyODcsNyArMTI3MSw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0
-ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVuOwogCi0J
-CWkgKz0gbGVuOwogCQlpZiAocGt0X2Rldi0+ZHN0X21hY19jb3VudCAhPSB2YWx1ZSkgewogCQkJ
-cGt0X2Rldi0+ZHN0X21hY19jb3VudCA9IHZhbHVlOwogCQkJcGt0X2Rldi0+Y3VyX2RzdF9tYWNf
-b2Zmc2V0ID0gMDsKQEAgLTEzMDIsNyArMTI4NSw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9p
-Zl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVu
-OwogCi0JCWkgKz0gbGVuOwogCQlpZiAoKHZhbHVlID4gMSkgJiYKIAkJICAgICgocGt0X2Rldi0+
-eG1pdF9tb2RlID09IE1fUVVFVUVfWE1JVCkgfHwKIAkJICAgICAoKHBrdF9kZXYtPnhtaXRfbW9k
-ZSA9PSBNX1NUQVJUX1hNSVQpICYmCkBAIC0xMzIyLDggKzEzMDQsNiBAQCBzdGF0aWMgc3NpemVf
-dCBwa3RnZW5faWZfd3JpdGUoc3RydWN0IGZpbGUgKmZpbGUsCiAJCWlmIChsZW4gPCAwKQogCQkJ
-cmV0dXJuIGxlbjsKIAotCQlpICs9IGxlbjsKLQogCQlpZiAobm9kZV9wb3NzaWJsZSh2YWx1ZSkp
-IHsKIAkJCXBrdF9kZXYtPm5vZGUgPSB2YWx1ZTsKIAkJCXNwcmludGYocGdfcmVzdWx0LCAiT0s6
-IG5vZGU9JWQiLCBwa3RfZGV2LT5ub2RlKTsKQEAgLTEzNDcsNyArMTMyNyw2IEBAIHN0YXRpYyBz
-c2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJbWVtc2V0KGYsIDAs
-IHNpemVvZihmKSk7CiAJCWlmIChjb3B5X2Zyb21fdXNlcihmLCAmdXNlcl9idWZmZXJbaV0sIGxl
-bikpCiAJCQlyZXR1cm4gLUVGQVVMVDsKLQkJaSArPSBsZW47CiAKIAkJaWYgKHN0cmNtcChmLCAi
-c3RhcnRfeG1pdCIpID09IDApIHsKIAkJCXBrdF9kZXYtPnhtaXRfbW9kZSA9IE1fU1RBUlRfWE1J
-VDsKQEAgLTEzODgsNyArMTM2Nyw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShz
-dHJ1Y3QgZmlsZSAqZmlsZSwKIAkJbWVtc2V0KGYsIDAsIDMyKTsKIAkJaWYgKGNvcHlfZnJvbV91
-c2VyKGYsICZ1c2VyX2J1ZmZlcltpXSwgbGVuKSkKIAkJCXJldHVybiAtRUZBVUxUOwotCQlpICs9
-IGxlbjsKIAogCQlmbGFnID0gcGt0Z2VuX3JlYWRfZmxhZyhmLCAmZGlzYWJsZSk7CiAJCWlmIChm
-bGFnKSB7CkBAIC0xNDQ2LDcgKzE0MjQsNyBAQCBzdGF0aWMgc3NpemVfdCBwa3RnZW5faWZfd3Jp
-dGUoc3RydWN0IGZpbGUgKmZpbGUsCiAJCX0KIAkJaWYgKGRlYnVnKQogCQkJcHJfZGVidWcoImRz
-dF9taW4gc2V0IHRvOiAlc1xuIiwgcGt0X2Rldi0+ZHN0X21pbik7Ci0JCWkgKz0gbGVuOworCiAJ
-CXNwcmludGYocGdfcmVzdWx0LCAiT0s6IGRzdF9taW49JXMiLCBwa3RfZGV2LT5kc3RfbWluKTsK
-IAkJcmV0dXJuIGNvdW50OwogCX0KQEAgLTE0NjcsNyArMTQ0NSw3IEBAIHN0YXRpYyBzc2l6ZV90
-IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJfQogCQlpZiAoZGVidWcpCiAJ
-CQlwcl9kZWJ1ZygiZHN0X21heCBzZXQgdG86ICVzXG4iLCBwa3RfZGV2LT5kc3RfbWF4KTsKLQkJ
-aSArPSBsZW47CisKIAkJc3ByaW50ZihwZ19yZXN1bHQsICJPSzogZHN0X21heD0lcyIsIHBrdF9k
-ZXYtPmRzdF9tYXgpOwogCQlyZXR1cm4gY291bnQ7CiAJfQpAQCAtMTQ5MSw3ICsxNDY5LDYgQEAg
-c3RhdGljIHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxlLAogCQlpZiAo
-ZGVidWcpCiAJCQlwcl9kZWJ1ZygiZHN0NiBzZXQgdG86ICVzXG4iLCBidWYpOwogCi0JCWkgKz0g
-bGVuOwogCQlzcHJpbnRmKHBnX3Jlc3VsdCwgIk9LOiBkc3Q2PSVzIiwgYnVmKTsKIAkJcmV0dXJu
-IGNvdW50OwogCX0KQEAgLTE1MTQsNyArMTQ5MSw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9p
-Zl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGRlYnVnKQogCQkJcHJfZGVidWcoImRz
-dDZfbWluIHNldCB0bzogJXNcbiIsIGJ1Zik7CiAKLQkJaSArPSBsZW47CiAJCXNwcmludGYocGdf
-cmVzdWx0LCAiT0s6IGRzdDZfbWluPSVzIiwgYnVmKTsKIAkJcmV0dXJuIGNvdW50OwogCX0KQEAg
-LTE1MzYsNyArMTUxMiw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3Qg
-ZmlsZSAqZmlsZSwKIAkJaWYgKGRlYnVnKQogCQkJcHJfZGVidWcoImRzdDZfbWF4IHNldCB0bzog
-JXNcbiIsIGJ1Zik7CiAKLQkJaSArPSBsZW47CiAJCXNwcmludGYocGdfcmVzdWx0LCAiT0s6IGRz
-dDZfbWF4PSVzIiwgYnVmKTsKIAkJcmV0dXJuIGNvdW50OwogCX0KQEAgLTE1NjAsNyArMTUzNSw2
-IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJ
-aWYgKGRlYnVnKQogCQkJcHJfZGVidWcoInNyYzYgc2V0IHRvOiAlc1xuIiwgYnVmKTsKIAotCQlp
-ICs9IGxlbjsKIAkJc3ByaW50ZihwZ19yZXN1bHQsICJPSzogc3JjNj0lcyIsIGJ1Zik7CiAJCXJl
-dHVybiBjb3VudDsKIAl9CkBAIC0xNTgxLDcgKzE1NTUsNyBAQCBzdGF0aWMgc3NpemVfdCBwa3Rn
-ZW5faWZfd3JpdGUoc3RydWN0IGZpbGUgKmZpbGUsCiAJCX0KIAkJaWYgKGRlYnVnKQogCQkJcHJf
-ZGVidWcoInNyY19taW4gc2V0IHRvOiAlc1xuIiwgcGt0X2Rldi0+c3JjX21pbik7Ci0JCWkgKz0g
-bGVuOworCiAJCXNwcmludGYocGdfcmVzdWx0LCAiT0s6IHNyY19taW49JXMiLCBwa3RfZGV2LT5z
-cmNfbWluKTsKIAkJcmV0dXJuIGNvdW50OwogCX0KQEAgLTE2MDIsNyArMTU3Niw3IEBAIHN0YXRp
-YyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJfQogCQlpZiAo
-ZGVidWcpCiAJCQlwcl9kZWJ1Zygic3JjX21heCBzZXQgdG86ICVzXG4iLCBwa3RfZGV2LT5zcmNf
-bWF4KTsKLQkJaSArPSBsZW47CisKIAkJc3ByaW50ZihwZ19yZXN1bHQsICJPSzogc3JjX21heD0l
-cyIsIHBrdF9kZXYtPnNyY19tYXgpOwogCQlyZXR1cm4gY291bnQ7CiAJfQpAQCAtMTY1NSw3ICsx
-NjI5LDYgQEAgc3RhdGljIHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxl
-LAogCQlpZiAobGVuIDwgMCkKIAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJCWlmICh2
-YWx1ZSA+IE1BWF9DRkxPV1MpCiAJCQl2YWx1ZSA9IE1BWF9DRkxPV1M7CiAKQEAgLTE2NzAsNyAr
-MTY0Myw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmls
-ZSwKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVuOwogCi0JCWkgKz0gbGVuOwogCQlwa3Rf
-ZGV2LT5zcGkgPSB2YWx1ZTsKIAkJc3ByaW50ZihwZ19yZXN1bHQsICJPSzogc3BpPSV1IiwgcGt0
-X2Rldi0+c3BpKTsKIAkJcmV0dXJuIGNvdW50OwpAQCAtMTY4Miw3ICsxNjU0LDYgQEAgc3RhdGlj
-IHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxlLAogCQlpZiAobGVuIDwg
-MCkKIAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJCXBrdF9kZXYtPmxmbG93ID0gdmFs
-dWU7CiAJCXNwcmludGYocGdfcmVzdWx0LCAiT0s6IGZsb3dsZW49JXUiLCBwa3RfZGV2LT5sZmxv
-dyk7CiAJCXJldHVybiBjb3VudDsKQEAgLTE2OTQsNyArMTY2NSw2IEBAIHN0YXRpYyBzc2l6ZV90
-IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJCQly
-ZXR1cm4gbGVuOwogCi0JCWkgKz0gbGVuOwogCQlwa3RfZGV2LT5xdWV1ZV9tYXBfbWluID0gdmFs
-dWU7CiAJCXNwcmludGYocGdfcmVzdWx0LCAiT0s6IHF1ZXVlX21hcF9taW49JXUiLCBwa3RfZGV2
-LT5xdWV1ZV9tYXBfbWluKTsKIAkJcmV0dXJuIGNvdW50OwpAQCAtMTcwNiw3ICsxNjc2LDYgQEAg
-c3RhdGljIHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxlLAogCQlpZiAo
-bGVuIDwgMCkKIAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJCXBrdF9kZXYtPnF1ZXVl
-X21hcF9tYXggPSB2YWx1ZTsKIAkJc3ByaW50ZihwZ19yZXN1bHQsICJPSzogcXVldWVfbWFwX21h
-eD0ldSIsIHBrdF9kZXYtPnF1ZXVlX21hcF9tYXgpOwogCQlyZXR1cm4gY291bnQ7CkBAIC0xNzE5
-LDcgKzE2ODgsNyBAQCBzdGF0aWMgc3NpemVfdCBwa3RnZW5faWZfd3JpdGUoc3RydWN0IGZpbGUg
-KmZpbGUsCiAJCWxlbiA9IGdldF9sYWJlbHMoJnVzZXJfYnVmZmVyW2ldLCBtYXgsIHBrdF9kZXYp
-OwogCQlpZiAobGVuIDwgMCkKIAkJCXJldHVybiBsZW47Ci0JCWkgKz0gbGVuOworCiAJCWNudCA9
-IHNwcmludGYocGdfcmVzdWx0LCAiT0s6IG1wbHM9Iik7CiAJCWZvciAobiA9IDA7IG4gPCBwa3Rf
-ZGV2LT5ucl9sYWJlbHM7IG4rKykKIAkJCWNudCArPSBzcHJpbnRmKHBnX3Jlc3VsdCArIGNudCwK
-QEAgLTE3NDIsNyArMTcxMSw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1
-Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVuOwogCi0JCWkgKz0g
-bGVuOwogCQlpZiAodmFsdWUgPD0gNDA5NSkgewogCQkJcGt0X2Rldi0+dmxhbl9pZCA9IHZhbHVl
-OyAgLyogdHVybiBvbiBWTEFOICovCiAKQEAgLTE3NzAsNyArMTczOCw2IEBAIHN0YXRpYyBzc2l6
-ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJ
-CQlyZXR1cm4gbGVuOwogCi0JCWkgKz0gbGVuOwogCQlpZiAoKHZhbHVlIDw9IDcpICYmIChwa3Rf
-ZGV2LT52bGFuX2lkICE9IDB4ZmZmZikpIHsKIAkJCXBrdF9kZXYtPnZsYW5fcCA9IHZhbHVlOwog
-CQkJc3ByaW50ZihwZ19yZXN1bHQsICJPSzogdmxhbl9wPSV1IiwgcGt0X2Rldi0+dmxhbl9wKTsK
-QEAgLTE3ODYsNyArMTc1Myw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1
-Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVuOwogCi0JCWkgKz0g
-bGVuOwogCQlpZiAoKHZhbHVlIDw9IDEpICYmIChwa3RfZGV2LT52bGFuX2lkICE9IDB4ZmZmZikp
-IHsKIAkJCXBrdF9kZXYtPnZsYW5fY2ZpID0gdmFsdWU7CiAJCQlzcHJpbnRmKHBnX3Jlc3VsdCwg
-Ik9LOiB2bGFuX2NmaT0ldSIsIHBrdF9kZXYtPnZsYW5fY2ZpKTsKQEAgLTE4MDIsNyArMTc2OCw2
-IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJ
-aWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVuOwogCi0JCWkgKz0gbGVuOwogCQlpZiAoKHZhbHVl
-IDw9IDQwOTUpICYmICgocGt0X2Rldi0+dmxhbl9pZCAhPSAweGZmZmYpKSkgewogCQkJcGt0X2Rl
-di0+c3ZsYW5faWQgPSB2YWx1ZTsgIC8qIHR1cm4gb24gU1ZMQU4gKi8KIApAQCAtMTgzMCw3ICsx
-Nzk1LDYgQEAgc3RhdGljIHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxl
-LAogCQlpZiAobGVuIDwgMCkKIAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJCWlmICgo
-dmFsdWUgPD0gNykgJiYgKHBrdF9kZXYtPnN2bGFuX2lkICE9IDB4ZmZmZikpIHsKIAkJCXBrdF9k
-ZXYtPnN2bGFuX3AgPSB2YWx1ZTsKIAkJCXNwcmludGYocGdfcmVzdWx0LCAiT0s6IHN2bGFuX3A9
-JXUiLCBwa3RfZGV2LT5zdmxhbl9wKTsKQEAgLTE4NDYsNyArMTgxMCw2IEBAIHN0YXRpYyBzc2l6
-ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJ
-CQlyZXR1cm4gbGVuOwogCi0JCWkgKz0gbGVuOwogCQlpZiAoKHZhbHVlIDw9IDEpICYmIChwa3Rf
-ZGV2LT5zdmxhbl9pZCAhPSAweGZmZmYpKSB7CiAJCQlwa3RfZGV2LT5zdmxhbl9jZmkgPSB2YWx1
-ZTsKIAkJCXNwcmludGYocGdfcmVzdWx0LCAiT0s6IHN2bGFuX2NmaT0ldSIsIHBrdF9kZXYtPnN2
-bGFuX2NmaSk7CkBAIC0xODY0LDcgKzE4MjcsNiBAQCBzdGF0aWMgc3NpemVfdCBwa3RnZW5faWZf
-d3JpdGUoc3RydWN0IGZpbGUgKmZpbGUsCiAJCWlmIChsZW4gPCAwKQogCQkJcmV0dXJuIGxlbjsK
-IAotCQlpICs9IGxlbjsKIAkJaWYgKGxlbiA9PSAyKSB7CiAJCQlwa3RfZGV2LT50b3MgPSB0bXBf
-dmFsdWU7CiAJCQlzcHJpbnRmKHBnX3Jlc3VsdCwgIk9LOiB0b3M9MHglMDJ4IiwgcGt0X2Rldi0+
-dG9zKTsKQEAgLTE4ODIsNyArMTg0NCw2IEBAIHN0YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0
-ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVuOwogCi0J
-CWkgKz0gbGVuOwogCQlpZiAobGVuID09IDIpIHsKIAkJCXBrdF9kZXYtPnRyYWZmaWNfY2xhc3Mg
-PSB0bXBfdmFsdWU7CiAJCQlzcHJpbnRmKHBnX3Jlc3VsdCwgIk9LOiB0cmFmZmljX2NsYXNzPTB4
-JTAyeCIsIHBrdF9kZXYtPnRyYWZmaWNfY2xhc3MpOwpAQCAtMTg5OCw3ICsxODU5LDYgQEAgc3Rh
-dGljIHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxlLAogCQlpZiAobGVu
-IDwgMCkKIAkJCXJldHVybiBsZW47CiAKLQkJaSArPSBsZW47CiAJCXBrdF9kZXYtPnNrYl9wcmlv
-cml0eSA9IHZhbHVlOwogCQlzcHJpbnRmKHBnX3Jlc3VsdCwgIk9LOiBza2JfcHJpb3JpdHk9JWki
-LAogCQkJcGt0X2Rldi0+c2tiX3ByaW9yaXR5KTsKQEAgLTIwMTUsNyArMTk3NSw3IEBAIHN0YXRp
-YyBzc2l6ZV90IHBrdGdlbl90aHJlYWRfd3JpdGUoc3RydWN0IGZpbGUgKmZpbGUsCiAJCX0KIAkJ
-aWYgKGNvcHlfZnJvbV91c2VyKGYsICZ1c2VyX2J1ZmZlcltpXSwgbGVuKSkKIAkJCXJldHVybiAt
-RUZBVUxUOwotCQlpICs9IGxlbjsKKwogCQltdXRleF9sb2NrKCZwa3RnZW5fdGhyZWFkX2xvY2sp
-OwogCQlyZXQgPSBwa3RnZW5fYWRkX2RldmljZSh0LCBmKTsKIAkJbXV0ZXhfdW5sb2NrKCZwa3Rn
-ZW5fdGhyZWFkX2xvY2spOwotLSAKMi40OC4xCgo=
+Convert this unit test to a KUnit test. This allows the test to benefit
+from the KUnit tooling. Note that care is taken to avoid test-ending
+assertions in worker threads, which is unsafe in KUnit (and wasn't done
+before this change either).
+
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+I tested this using:
+$ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 ww_mutex
+
+; [12:48:16] ================== ww_mutex (5 subtests) ===================
+; [12:48:16] ======================= test_mutex  ========================
+; [12:48:16] [PASSED] flags=0
+; [12:48:16] [PASSED] flags=1
+; [12:48:16] [PASSED] flags=2
+; [12:48:16] [PASSED] flags=3
+; [12:48:16] [PASSED] flags=4
+; [12:48:17] [PASSED] flags=5
+; [12:48:17] [PASSED] flags=6
+; [12:48:17] [PASSED] flags=7
+; [12:48:17] =================== [PASSED] test_mutex ====================
+; [12:48:17] ========================= test_aa  =========================
+; [12:48:17] [PASSED] lock
+; [12:48:17] [PASSED] trylock
+; [12:48:17] ===================== [PASSED] test_aa =====================
+; [12:48:17] ======================== test_abba  ========================
+; [12:48:17] [PASSED] trylock=0,resolve=0
+; [12:48:17] [PASSED] trylock=1,resolve=1
+; [12:48:17] [PASSED] trylock=0,resolve=0
+; [12:48:17] [PASSED] trylock=1,resolve=1
+; [12:48:17] ==================== [PASSED] test_abba ====================
+; [12:48:17] ======================= test_cycle  ========================
+; [12:48:17] [PASSED] nthreads=2
+; [12:48:17] =================== [PASSED] test_cycle ====================
+; [12:48:21] ========================= stress  ==========================
+; [12:48:21] [PASSED] nlocks=16,nthreads_per_cpu=2,flags=1
+; [12:48:23] [PASSED] nlocks=16,nthreads_per_cpu=2,flags=2
+; [12:48:23] [PASSED] nlocks=2046,nthreads_per_cpu=3,flags=7
+; [12:48:23] ===================== [PASSED] stress ======================
+; [12:48:23] ==================== [PASSED] ww_mutex =====================
+; [12:48:23] ============================================================
+; [12:48:23] Testing complete. Ran 18 tests: passed: 18
+---
+Changes in v2:
+- Avoid KUNIT_ASSERT_* in non-main thread. (David Gow)
+- Include rationale and details in the commit message. (Boqun Feng)
+- Introduce test_abba_param to avoid odd-looking bit shifting. (Dan
+  Carpenter)
+- Rebase on linux-next.
+- Move the test to tests/ per KUnit style guide.
+- Link to v1: https://lore.kernel.org/r/20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e@gmail.com
+---
+ kernel/locking/Makefile                            |   3 +-
+ kernel/locking/tests/Makefile                      |   3 +
+ .../{test-ww_mutex.c => tests/ww_mutex_kunit.c}    | 319 +++++++++++----------
+ lib/Kconfig.debug                                  |  12 +-
+ tools/testing/selftests/locking/ww_mutex.sh        |  19 --
+ 5 files changed, 176 insertions(+), 180 deletions(-)
+
+diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
+index 0db4093d17b8..b5fa68d18823 100644
+--- a/kernel/locking/Makefile
++++ b/kernel/locking/Makefile
+@@ -30,5 +30,6 @@ obj-$(CONFIG_DEBUG_SPINLOCK) += spinlock.o
+ obj-$(CONFIG_DEBUG_SPINLOCK) += spinlock_debug.o
+ obj-$(CONFIG_QUEUED_RWLOCKS) += qrwlock.o
+ obj-$(CONFIG_LOCK_TORTURE_TEST) += locktorture.o
+-obj-$(CONFIG_WW_MUTEX_SELFTEST) += test-ww_mutex.o
+ obj-$(CONFIG_LOCK_EVENT_COUNTS) += lock_events.o
++
++obj-y += tests/
+diff --git a/kernel/locking/tests/Makefile b/kernel/locking/tests/Makefile
+new file mode 100644
+index 000000000000..8ddde822c793
+--- /dev/null
++++ b/kernel/locking/tests/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++obj-$(CONFIG_WW_MUTEX_KUNIT_TEST) += ww_mutex_kunit.o
+diff --git a/kernel/locking/test-ww_mutex.c b/kernel/locking/tests/ww_mutex_kunit.c
+similarity index 66%
+rename from kernel/locking/test-ww_mutex.c
+rename to kernel/locking/tests/ww_mutex_kunit.c
+index bcb1b9fea588..a8d412231735 100644
+--- a/kernel/locking/test-ww_mutex.c
++++ b/kernel/locking/tests/ww_mutex_kunit.c
+@@ -3,10 +3,10 @@
+  * Module-based API test facility for ww_mutexes
+  */
+ 
+-#include <linux/kernel.h>
+-
++#include <kunit/test.h>
+ #include <linux/completion.h>
+ #include <linux/delay.h>
++#include <linux/kernel.h>
+ #include <linux/kthread.h>
+ #include <linux/module.h>
+ #include <linux/prandom.h>
+@@ -54,12 +54,39 @@ static void test_mutex_work(struct work_struct *work)
+ 	ww_mutex_unlock(&mtx->mutex);
+ }
+ 
+-static int __test_mutex(unsigned int flags)
++static const unsigned int *gen_range(
++	unsigned int *storage,
++	const unsigned int min,
++	const unsigned int max,
++	const int *prev)
++{
++	if (prev != NULL) {
++		if (*prev >= max)
++			return NULL;
++		*storage = *prev + 1;
++	} else {
++		*storage = min;
++	}
++	return storage;
++}
++
++static const void *test_mutex_gen_params(const void *prev, char *desc)
++{
++	static unsigned int storage;
++	const unsigned int *next = gen_range(&storage, 0, __TEST_MTX_LAST - 1, prev);
++
++	if (next != NULL)
++		snprintf(desc, KUNIT_PARAM_DESC_SIZE, "flags=%x", *next);
++	return next;
++}
++
++static void test_mutex(struct kunit *test)
+ {
+ #define TIMEOUT (HZ / 16)
++	const unsigned int *param = test->param_value;
++	const unsigned int flags = *param;
+ 	struct test_mutex mtx;
+ 	struct ww_acquire_ctx ctx;
+-	int ret;
+ 
+ 	ww_mutex_init(&mtx.mutex, &ww_class);
+ 	if (flags & TEST_MTX_CTX)
+@@ -79,53 +106,42 @@ static int __test_mutex(unsigned int flags)
+ 	if (flags & TEST_MTX_SPIN) {
+ 		unsigned long timeout = jiffies + TIMEOUT;
+ 
+-		ret = 0;
+ 		do {
+ 			if (completion_done(&mtx.done)) {
+-				ret = -EINVAL;
++				KUNIT_FAIL(test, "mutual exclusion failure");
+ 				break;
+ 			}
+ 			cond_resched();
+ 		} while (time_before(jiffies, timeout));
+ 	} else {
+-		ret = wait_for_completion_timeout(&mtx.done, TIMEOUT);
++		KUNIT_EXPECT_EQ(test, wait_for_completion_timeout(&mtx.done, TIMEOUT), 0);
+ 	}
+ 	ww_mutex_unlock(&mtx.mutex);
+ 	if (flags & TEST_MTX_CTX)
+ 		ww_acquire_fini(&ctx);
+ 
+-	if (ret) {
+-		pr_err("%s(flags=%x): mutual exclusion failure\n",
+-		       __func__, flags);
+-		ret = -EINVAL;
+-	}
+-
+ 	flush_work(&mtx.work);
+ 	destroy_work_on_stack(&mtx.work);
+-	return ret;
+ #undef TIMEOUT
+ }
+ 
+-static int test_mutex(void)
++static const void *test_aa_gen_params(const void *prev, char *desc)
+ {
+-	int ret;
+-	int i;
+-
+-	for (i = 0; i < __TEST_MTX_LAST; i++) {
+-		ret = __test_mutex(i);
+-		if (ret)
+-			return ret;
+-	}
++	static unsigned int storage;
++	const unsigned int *next = gen_range(&storage, 0, 1, prev);
+ 
+-	return 0;
++	if (next != NULL)
++		snprintf(desc, KUNIT_PARAM_DESC_SIZE, *next ? "trylock" : "lock");
++	return next;
+ }
+ 
+-static int test_aa(bool trylock)
++static void test_aa(struct kunit *test)
+ {
++	const unsigned int *param = test->param_value;
++	const bool trylock = *param;
+ 	struct ww_mutex mutex;
+ 	struct ww_acquire_ctx ctx;
+ 	int ret;
+-	const char *from = trylock ? "trylock" : "lock";
+ 
+ 	ww_mutex_init(&mutex, &ww_class);
+ 	ww_acquire_init(&ctx, &ww_class);
+@@ -133,46 +149,42 @@ static int test_aa(bool trylock)
+ 	if (!trylock) {
+ 		ret = ww_mutex_lock(&mutex, &ctx);
+ 		if (ret) {
+-			pr_err("%s: initial lock failed!\n", __func__);
++			KUNIT_FAIL(test, "initial lock failed, ret=%d", ret);
+ 			goto out;
+ 		}
+ 	} else {
+ 		ret = !ww_mutex_trylock(&mutex, &ctx);
+ 		if (ret) {
+-			pr_err("%s: initial trylock failed!\n", __func__);
++			KUNIT_FAIL(test, "initial trylock failed, ret=%d", ret);
+ 			goto out;
+ 		}
+ 	}
+ 
+-	if (ww_mutex_trylock(&mutex, NULL))  {
+-		pr_err("%s: trylocked itself without context from %s!\n", __func__, from);
++	ret = ww_mutex_trylock(&mutex, NULL);
++	if (ret)  {
++		KUNIT_FAIL(test, "trylocked itself without context, ret=%d", ret);
+ 		ww_mutex_unlock(&mutex);
+-		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+-	if (ww_mutex_trylock(&mutex, &ctx))  {
+-		pr_err("%s: trylocked itself with context from %s!\n", __func__, from);
++	ret = ww_mutex_trylock(&mutex, &ctx);
++	if (ret) {
++		KUNIT_FAIL(test, "trylocked itself with context, ret=%d", ret);
+ 		ww_mutex_unlock(&mutex);
+-		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+ 	ret = ww_mutex_lock(&mutex, &ctx);
+ 	if (ret != -EALREADY) {
+-		pr_err("%s: missed deadlock for recursing, ret=%d from %s\n",
+-		       __func__, ret, from);
++		KUNIT_FAIL(test, "missed deadlock for recursing, ret=%d", ret);
+ 		if (!ret)
+ 			ww_mutex_unlock(&mutex);
+-		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+ 	ww_mutex_unlock(&mutex);
+-	ret = 0;
+ out:
+ 	ww_acquire_fini(&ctx);
+-	return ret;
+ }
+ 
+ struct test_abba {
+@@ -217,11 +229,36 @@ static void test_abba_work(struct work_struct *work)
+ 	abba->result = err;
+ }
+ 
+-static int test_abba(bool trylock, bool resolve)
++union test_abba_param {
++	unsigned int value;
++	struct {
++		unsigned int trylock : 1;
++		unsigned int resolve : 1;
++	};
++};
++
++static const void *test_abba_gen_params(const void *prev, char *desc)
+ {
++	static unsigned int storage;
++	const unsigned int *next = gen_range(&storage, 0b00, 0b11, prev);
++
++	if (next != NULL) {
++		const union test_abba_param param = { .value = *next };
++
++		snprintf(desc, KUNIT_PARAM_DESC_SIZE, "trylock=%d,resolve=%d",
++			 param.trylock, param.resolve);
++	}
++	return next;
++}
++
++static void test_abba(struct kunit *test)
++{
++	const union test_abba_param *param = test->param_value;
++	const bool trylock = param->trylock;
++	const bool resolve = param->resolve;
+ 	struct test_abba abba;
+ 	struct ww_acquire_ctx ctx;
+-	int err, ret;
++	int err;
+ 
+ 	ww_mutex_init(&abba.a_mutex, &ww_class);
+ 	ww_mutex_init(&abba.b_mutex, &ww_class);
+@@ -259,21 +296,17 @@ static int test_abba(bool trylock, bool resolve)
+ 	flush_work(&abba.work);
+ 	destroy_work_on_stack(&abba.work);
+ 
+-	ret = 0;
+ 	if (resolve) {
+ 		if (err || abba.result) {
+-			pr_err("%s: failed to resolve ABBA deadlock, A err=%d, B err=%d\n",
+-			       __func__, err, abba.result);
+-			ret = -EINVAL;
++			KUNIT_FAIL(test, "failed to resolve ABBA deadlock, A err=%d, B err=%d",
++				   err, abba.result);
+ 		}
+ 	} else {
+ 		if (err != -EDEADLK && abba.result != -EDEADLK) {
+-			pr_err("%s: missed ABBA deadlock, A err=%d, B err=%d\n",
+-			       __func__, err, abba.result);
+-			ret = -EINVAL;
++			KUNIT_FAIL(test, "missed ABBA deadlock, A err=%d, B err=%d",
++				   err, abba.result);
+ 		}
+ 	}
+-	return ret;
+ }
+ 
+ struct test_cycle {
+@@ -314,15 +347,25 @@ static void test_cycle_work(struct work_struct *work)
+ 	cycle->result = err ?: erra;
+ }
+ 
+-static int __test_cycle(unsigned int nthreads)
++static const void *test_cycle_gen_params(const void *prev, char *desc)
+ {
++	static unsigned int storage;
++	const unsigned int *next = gen_range(&storage, 2, num_online_cpus(), prev);
++
++	if (next != NULL)
++		snprintf(desc, KUNIT_PARAM_DESC_SIZE, "nthreads=%d", *next);
++	return next;
++}
++
++static void test_cycle(struct kunit *test)
++{
++	const unsigned int *param = test->param_value;
++	const unsigned int nthreads = *param;
+ 	struct test_cycle *cycles;
+ 	unsigned int n, last = nthreads - 1;
+-	int ret;
+ 
+-	cycles = kmalloc_array(nthreads, sizeof(*cycles), GFP_KERNEL);
+-	if (!cycles)
+-		return -ENOMEM;
++	cycles = kunit_kmalloc_array(test, nthreads, sizeof(*cycles), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, cycles);
+ 
+ 	for (n = 0; n < nthreads; n++) {
+ 		struct test_cycle *cycle = &cycles[n];
+@@ -348,41 +391,24 @@ static int __test_cycle(unsigned int nthreads)
+ 
+ 	flush_workqueue(wq);
+ 
+-	ret = 0;
+ 	for (n = 0; n < nthreads; n++) {
+ 		struct test_cycle *cycle = &cycles[n];
+ 
+ 		if (!cycle->result)
+ 			continue;
+ 
+-		pr_err("cyclic deadlock not resolved, ret[%d/%d] = %d\n",
+-		       n, nthreads, cycle->result);
+-		ret = -EINVAL;
++		KUNIT_FAIL(test, "cyclic deadlock not resolved, ret[%d/%d] = %d",
++			   n, nthreads, cycle->result);
+ 		break;
+ 	}
+ 
+ 	for (n = 0; n < nthreads; n++)
+ 		ww_mutex_destroy(&cycles[n].a_mutex);
+-	kfree(cycles);
+-	return ret;
+-}
+-
+-static int test_cycle(unsigned int ncpus)
+-{
+-	unsigned int n;
+-	int ret;
+-
+-	for (n = 2; n <= ncpus + 1; n++) {
+-		ret = __test_cycle(n);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	return 0;
+ }
+ 
+ struct stress {
+ 	struct work_struct work;
++	struct kunit *test;
+ 	struct ww_mutex *locks;
+ 	unsigned long timeout;
+ 	int nlocks;
+@@ -401,12 +427,12 @@ static inline u32 prandom_u32_below(u32 ceil)
+ 	return ret;
+ }
+ 
+-static int *get_random_order(int count)
++static int *get_random_order(struct kunit *test, int count)
+ {
+ 	int *order;
+ 	int n, r;
+ 
+-	order = kmalloc_array(count, sizeof(*order), GFP_KERNEL);
++	order = kunit_kmalloc_array(test, count, sizeof(*order), GFP_KERNEL);
+ 	if (!order)
+ 		return order;
+ 
+@@ -435,7 +461,8 @@ static void stress_inorder_work(struct work_struct *work)
+ 	struct ww_acquire_ctx ctx;
+ 	int *order;
+ 
+-	order = get_random_order(nlocks);
++	order = get_random_order(stress->test, nlocks);
++	KUNIT_EXPECT_NOT_NULL(stress->test, order);
+ 	if (!order)
+ 		return;
+ 
+@@ -472,13 +499,10 @@ static void stress_inorder_work(struct work_struct *work)
+ 
+ 		ww_acquire_fini(&ctx);
+ 		if (err) {
+-			pr_err_once("stress (%s) failed with %d\n",
+-				    __func__, err);
++			KUNIT_FAIL(stress->test, "lock[%d] failed, err=%d", n, err);
+ 			break;
+ 		}
+ 	} while (!time_after(jiffies, stress->timeout));
+-
+-	kfree(order);
+ }
+ 
+ struct reorder_lock {
+@@ -495,19 +519,19 @@ static void stress_reorder_work(struct work_struct *work)
+ 	int *order;
+ 	int n, err;
+ 
+-	order = get_random_order(stress->nlocks);
++	order = get_random_order(stress->test, stress->nlocks);
++	KUNIT_EXPECT_NOT_NULL(stress->test, order);
+ 	if (!order)
+ 		return;
+ 
+ 	for (n = 0; n < stress->nlocks; n++) {
+-		ll = kmalloc(sizeof(*ll), GFP_KERNEL);
++		ll = kunit_kmalloc(stress->test, sizeof(*ll), GFP_KERNEL);
++		KUNIT_EXPECT_NOT_NULL(stress->test, ll);
+ 		if (!ll)
+-			goto out;
+-
++			return;
+ 		ll->lock = &stress->locks[order[n]];
+ 		list_add(&ll->link, &locks);
+ 	}
+-	kfree(order);
+ 	order = NULL;
+ 
+ 	do {
+@@ -523,8 +547,7 @@ static void stress_reorder_work(struct work_struct *work)
+ 				ww_mutex_unlock(ln->lock);
+ 
+ 			if (err != -EDEADLK) {
+-				pr_err_once("stress (%s) failed with %d\n",
+-					    __func__, err);
++				KUNIT_FAIL(stress->test, "lock failed, err=%d", err);
+ 				break;
+ 			}
+ 
+@@ -538,11 +561,6 @@ static void stress_reorder_work(struct work_struct *work)
+ 
+ 		ww_acquire_fini(&ctx);
+ 	} while (!time_after(jiffies, stress->timeout));
+-
+-out:
+-	list_for_each_entry_safe(ll, ln, &locks, link)
+-		kfree(ll);
+-	kfree(order);
+ }
+ 
+ static void stress_one_work(struct work_struct *work)
+@@ -558,8 +576,7 @@ static void stress_one_work(struct work_struct *work)
+ 			dummy_load(stress);
+ 			ww_mutex_unlock(lock);
+ 		} else {
+-			pr_err_once("stress (%s) failed with %d\n",
+-				    __func__, err);
++			KUNIT_FAIL(stress->test, "lock failed, err=%d", err);
+ 			break;
+ 		}
+ 	} while (!time_after(jiffies, stress->timeout));
+@@ -570,22 +587,41 @@ static void stress_one_work(struct work_struct *work)
+ #define STRESS_ONE BIT(2)
+ #define STRESS_ALL (STRESS_INORDER | STRESS_REORDER | STRESS_ONE)
+ 
+-static int stress(int nlocks, int nthreads, unsigned int flags)
++struct stress_case {
++	int nlocks;
++	int nthreads_per_cpu;
++	unsigned int flags;
++};
++
++static const struct stress_case stress_cases[] = {
++	{ 16, 2, STRESS_INORDER },
++	{ 16, 2, STRESS_REORDER },
++	{ 2046, hweight32(STRESS_ALL), STRESS_ALL },
++};
++
++static void stress_case_to_desc(const struct stress_case *param, char *desc)
+ {
++	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "nlocks=%d,nthreads_per_cpu=%d,flags=%x",
++		 param->nlocks, param->nthreads_per_cpu, param->flags);
++}
++
++KUNIT_ARRAY_PARAM(stress_cases, stress_cases, stress_case_to_desc);
++
++static void stress(struct kunit *test)
++{
++	const struct stress_case *param = test->param_value;
++	const int nlocks = param->nlocks;
++	int nthreads = param->nthreads_per_cpu * num_online_cpus();
++	const unsigned int flags = param->flags;
+ 	struct ww_mutex *locks;
+ 	struct stress *stress_array;
+ 	int n, count;
+ 
+-	locks = kmalloc_array(nlocks, sizeof(*locks), GFP_KERNEL);
+-	if (!locks)
+-		return -ENOMEM;
++	locks = kunit_kmalloc_array(test, nlocks, sizeof(*locks), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, locks);
+ 
+-	stress_array = kmalloc_array(nthreads, sizeof(*stress_array),
+-				     GFP_KERNEL);
+-	if (!stress_array) {
+-		kfree(locks);
+-		return -ENOMEM;
+-	}
++	stress_array = kunit_kmalloc_array(test, nthreads, sizeof(*stress_array), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, stress_array);
+ 
+ 	for (n = 0; n < nlocks; n++)
+ 		ww_mutex_init(&locks[n], &ww_class);
+@@ -617,6 +653,7 @@ static int stress(int nlocks, int nthreads, unsigned int flags)
+ 		stress = &stress_array[count++];
+ 
+ 		INIT_WORK(&stress->work, fn);
++		stress->test = test;
+ 		stress->locks = locks;
+ 		stress->nlocks = nlocks;
+ 		stress->timeout = jiffies + 2*HZ;
+@@ -629,70 +666,42 @@ static int stress(int nlocks, int nthreads, unsigned int flags)
+ 
+ 	for (n = 0; n < nlocks; n++)
+ 		ww_mutex_destroy(&locks[n]);
+-	kfree(stress_array);
+-	kfree(locks);
+-
+-	return 0;
+ }
+ 
+-static int __init test_ww_mutex_init(void)
++static int ww_mutex_suite_init(struct kunit_suite *suite)
+ {
+-	int ncpus = num_online_cpus();
+-	int ret, i;
+-
+-	printk(KERN_INFO "Beginning ww mutex selftests\n");
+-
+-	prandom_seed_state(&rng, get_random_u64());
+-
+ 	wq = alloc_workqueue("test-ww_mutex", WQ_UNBOUND, 0);
+ 	if (!wq)
+ 		return -ENOMEM;
+ 
+-	ret = test_mutex();
+-	if (ret)
+-		return ret;
+-
+-	ret = test_aa(false);
+-	if (ret)
+-		return ret;
+-
+-	ret = test_aa(true);
+-	if (ret)
+-		return ret;
+-
+-	for (i = 0; i < 4; i++) {
+-		ret = test_abba(i & 1, i & 2);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	ret = test_cycle(ncpus);
+-	if (ret)
+-		return ret;
+-
+-	ret = stress(16, 2*ncpus, STRESS_INORDER);
+-	if (ret)
+-		return ret;
+-
+-	ret = stress(16, 2*ncpus, STRESS_REORDER);
+-	if (ret)
+-		return ret;
+-
+-	ret = stress(2046, hweight32(STRESS_ALL)*ncpus, STRESS_ALL);
+-	if (ret)
+-		return ret;
++	prandom_seed_state(&rng, get_random_u64());
+ 
+-	printk(KERN_INFO "All ww mutex selftests passed\n");
+ 	return 0;
+ }
+ 
+-static void __exit test_ww_mutex_exit(void)
++static void ww_mutex_suite_exit(struct kunit_suite *suite)
+ {
+-	destroy_workqueue(wq);
++	if (wq)
++		destroy_workqueue(wq);
+ }
+ 
+-module_init(test_ww_mutex_init);
+-module_exit(test_ww_mutex_exit);
++static struct kunit_case ww_mutex_cases[] = {
++	KUNIT_CASE_PARAM(test_mutex, test_mutex_gen_params),
++	KUNIT_CASE_PARAM(test_aa, test_aa_gen_params),
++	KUNIT_CASE_PARAM(test_abba, test_abba_gen_params),
++	KUNIT_CASE_PARAM(test_cycle, test_cycle_gen_params),
++	KUNIT_CASE_PARAM_ATTR(stress, stress_cases_gen_params, {.speed = KUNIT_SPEED_SLOW}),
++	{},
++};
++
++static struct kunit_suite ww_mutex_suite = {
++	.name = "ww_mutex",
++	.suite_init = ww_mutex_suite_init,
++	.suite_exit = ww_mutex_suite_exit,
++	.test_cases = ww_mutex_cases,
++};
++
++kunit_test_suite(ww_mutex_suite);
+ 
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Intel Corporation");
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 85b95d645b10..2c9da8647eaf 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1595,16 +1595,18 @@ config LOCK_TORTURE_TEST
+ 	  Say M if you want these torture tests to build as a module.
+ 	  Say N if you are unsure.
+ 
+-config WW_MUTEX_SELFTEST
+-	tristate "Wait/wound mutex selftests"
++config WW_MUTEX_KUNIT_TEST
++	tristate "KUnit test for wait/wound mutex" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+-	  This option provides a kernel module that runs tests on the
+-	  on the struct ww_mutex locking API.
++	  This option provides a KUnit test that exercises the struct
++	  ww_mutex locking API.
+ 
+ 	  It is recommended to enable DEBUG_WW_MUTEX_SLOWPATH in conjunction
+ 	  with this test harness.
+ 
+-	  Say M if you want these self tests to build as a module.
++	  Say M if you want these tests to build as a module.
+ 	  Say N if you are unsure.
+ 
+ config SCF_TORTURE_TEST
+diff --git a/tools/testing/selftests/locking/ww_mutex.sh b/tools/testing/selftests/locking/ww_mutex.sh
+deleted file mode 100755
+index 91e4ac7566af..000000000000
+--- a/tools/testing/selftests/locking/ww_mutex.sh
++++ /dev/null
+@@ -1,19 +0,0 @@
+-#!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0
+-
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
+-
+-# Runs API tests for struct ww_mutex (Wait/Wound mutexes)
+-if ! /sbin/modprobe -q -n test-ww_mutex; then
+-	echo "ww_mutex: module test-ww_mutex is not found [SKIP]"
+-	exit $ksft_skip
+-fi
+-
+-if /sbin/modprobe -q test-ww_mutex; then
+-       /sbin/modprobe -q -r test-ww_mutex
+-       echo "locking/ww_mutex: ok"
+-else
+-       echo "locking/ww_mutex: [FAIL]"
+-       exit 1
+-fi
+
+---
+base-commit: 7b7a883c7f4de1ee5040bd1c32aabaafde54d209
+change-id: 20250208-ww_mutex-kunit-convert-71842a7a6be2
+
+Best regards,
+-- 
+Tamir Duberstein <tamird@gmail.com>
+
