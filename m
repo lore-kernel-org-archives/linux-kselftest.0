@@ -1,369 +1,221 @@
-Received: from mail-il1-f201.google.com (mail-il1-f201.google.com [209.85.166.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9509C2661A2
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 18:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739469926; cv=none; b=kXIZNDulM2Y52cJdzGGH/hZJV5FAEyKvDwgmFWrE9F0HRaYaRw6z10I9fkxEOnZnQPyPIDqN7o12LTPqdZ9q5R2gPcXG9SSqZWh+pU9OK/UrTkopQFBk5ShzwoVpN4Uyx75KFMyVNiVYwdYMVfEbevwy4K1P9Zzyfm0FxH2B8sk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739469926; c=relaxed/simple;
-	bh=84RlBgtnS+vuV+iG35a3aP9MsFf/F5xe9TXE8WhKGd0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Ry28KGV2xlDVpjUSj84jcAsIHefpICNWWFW2eRejzyuMGEMWVEkc7a66iQTHu/2I84d6FZP0jDKf5B78rqpZ0vPWR6QnUlUWxD8MJS6qol680SIiIzW9VQp/Erh5piZj1tz6sTB0JOIawbIOuMLuMauYLBCHIySOCIa2RmfAlLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2LAPH5rg; arc=none smtp.client-ip=209.85.166.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1084514AD20;
+	Thu, 13 Feb 2025 18:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739470752; cv=fail; b=mky1XgnM0YFi86KpwTEUDLh63yHQZZzsgRfQgNhlcRtGKHQ8H3fhiqiFyglZM6nQZpRJbxRzaAjrFFThDCH4mzIUobsCTvIObxrKS666VC0EGAKVijvaTnnzX4eo8r0TNhDwqMvFPVU8+Zz8o/onIjvwP8i9OVtHs7v0ANHkGrI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739470752; c=relaxed/simple;
+	bh=6r2uEJu8qQhggqq3BPKN5xN2QcI6X1zL+A+QFLZOSWo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HeQMTlQeG+8UHWmh1yUZc9jY3gZKfRUmC/rbv46XzyDL0O/5/rxGQ7e94Xo4pAj0cdXuqg613495X+ZlmXtvSWdRH/xLoQR43X3jSdhzPWmj01CkuaFOeBe8qFZUeZXqB0e7HfnGJzO67Ftcqif+9ux3gepWlT3vcipF2R8GV3g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Z3+1UFOO; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ASpps0Lt; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2LAPH5rg"
-Received: by mail-il1-f201.google.com with SMTP id e9e14a558f8ab-3ce843b51c3so21042865ab.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 10:05:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Z3+1UFOO";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ASpps0Lt"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51DGfXfA027454;
+	Thu, 13 Feb 2025 18:18:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=FHZT+6B4eEEKrQiJVYaY3M5f4NGJfj97nMnc72SUNSs=; b=
+	Z3+1UFOOfbAwSOTXLxytzwEVKOCclXLIARrPuYWV2Ah8knubqg5k1Cq8jWdgQaiy
+	HZCHEh8Bctxwv6ISVNI+uRUcd+eEzqxl0zLA0sMjCbxhTw5tgbtEvVEaODRtdVYV
+	cOXs4S2XhpACyMoMVEU5BEeApQBmP+l0kwJTsyDDuHPDEVCc7FAiEM5ND5ydshYE
+	i6Vn07PhdOxiW8hycyraJu6g/IOp9wzFtFYNF//N7zlk5HVyyb3JFIp+2A27Kpm7
+	KgaTPDbDE7VddCOYLekYpnNIdsvXo9mSZv/NmKnjxv+IHIU6hsGeIb/21tJZhMtG
+	u2OxkrYvI16p/D8x7hmoVQ==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44p0qaj5br-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 13 Feb 2025 18:18:51 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51DHG2W0005110;
+	Thu, 13 Feb 2025 18:18:50 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2176.outbound.protection.outlook.com [104.47.58.176])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44nwqc2ahq-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 13 Feb 2025 18:18:50 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VBatCQxL7+oZZZ8VOuZBN7K1ALSOhr1TGZHenJHRfiRSzjhydAntEH++Ut4Bo924PEGGA2o3ofXQTI+94mwLKcZCVWOwkzo620SjhC5iLv2snlSczQYMHowLi9oYiTs782jqETbqy4cATSsnE8jBHNyTtDmxpoaj19RR7fBS3P7AQbEUGy6j/OeBIB4i4idmBA1W9ZlT4aRrlC5+IxQagrwT0pQfead851cBNvnmAZ5ZdxY8BNF8LHpjPkKTWkC2fzu4EPW4UisVVt8H1zsAp1040n9XGgxyGIqB/qc7CF9kMz+krTVsS9IswO+GbMBfqrw15DAALpHfWHB2Kx40nQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FHZT+6B4eEEKrQiJVYaY3M5f4NGJfj97nMnc72SUNSs=;
+ b=dJoG1MmDKdLsU17WjHJMJLLWuAPqpof1iUekQkwvRf7UVzGi+NU8NFqgBiVTyu2aYQJKlJdOjl4fSpyMavFDz35li7yCYDfPEtmCmYeFm3+4gwQZRfDYT93/isfVeMbIbILQ4dv//qeN0P3IVDvNf6ns68xIYvMI1Y4E4wH6IUe2n7JZVfcWuRFq3O+r0R1PNAg+LSoZVO3stj+6Pkxkw9gi6KUGEyfaOy/K8Eg7CCX6y3zyYX8ilmTaKH2rYz/1x/6YuO/G/7goOwEE0SgrVrPpEZVU7VqRU97GmB22nmvCYRzBHEbdtbdDCOUohlIxmV2gHHcVo1ck9TdX375I2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739469922; x=1740074722; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f9KLmBjf90Z0uIASDlFj3XafjAFYWcbGrlTVzUIs7VY=;
-        b=2LAPH5rgMpcvAGPmGWeqlIROVXKDaYXqwQUJvZL9NnfUxG+UPhzhBmozbrBn3UHZtx
-         AUHA+6+m91QKlZIMuAYbKapmRZLvyFEE+8cRs3JlwfLU82UG4nTvWO8wTizBRx8VIYi7
-         jGfBK3yWQnweKxyVIHBEHH7nFdgYAe75Bqo8uLpRlaBfDvGCeGzS791SYvcbjS9/UU3A
-         LFA22iYDTuszIQENmA42JDJ7tPHcd/+CvFRmAI+PDdjQiKeVzX0UiBbPu3m3V6b+N3mW
-         /n86O3XX5pK5a+HDyxQg+I85VKTH3IrvlsBajjHV828/kDwq/ixJYHiNxksHkfcwjaff
-         G9yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739469922; x=1740074722;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f9KLmBjf90Z0uIASDlFj3XafjAFYWcbGrlTVzUIs7VY=;
-        b=nWaAhsguu6zwMfiwFuIj0CJgS6LVsUKlFWmFj1tSo48jq4kFVM4rQOww6H6oC/MyEH
-         b47MwYoM1k3MsgfmoMNg3itD7+zfT9sUgg3RbJFjxo/b2lsXin4DMBAsVWTcb2hxfNmp
-         nrksEvhgC3ck1/5/VDU2eOOLciCPjEkI4+EH2gJZ01q5RVazsPYzIHLGUv3/bw3ChLSk
-         RjR172KF8gj9wDH2rBpEGlfW+f3Bmi/myZIj5rJGm3blyfyeXxd9rZUGsPoSg936D3eI
-         jBIG4W2cTwYSn9o4wLG7LpB2Kblh4OluSzhjtCtn18OeAejoQTs+6Qvr7mE46uYd1QkN
-         26XA==
-X-Forwarded-Encrypted: i=1; AJvYcCUljw4ntmdAoqZaCJveBHJTuybvUboHWNVTIaniSNb249Yj8oxrIW5LRf/qntFDPOhX+eG1WZNsrcjH1EwODDo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvE3Naq7sPB569HtuG84x/SO7LfqnUqUu0oLmzxpmdfsKTETLg
-	cW8U2nmI3ORFqPSn/hyjkHIkGepVqWYfoN7yAEW/0GIwdnsZoKe39taAkGwCPfxIai3zZpV1omj
-	tDFJNqI2PE4/51NLcuTekXw==
-X-Google-Smtp-Source: AGHT+IFOX1vUVdJCj9kRtDkk9NCSOqJOF59p9XSifugpzzzEKLIcvKkGJ/Ch/Cuf3eRpHm0BvV6OvaYxmNmzHBElFQ==
-X-Received: from ilbcc4.prod.google.com ([2002:a05:6e02:984:b0:3ce:6c1f:c124])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6e02:b29:b0:3d0:4a82:3f43 with SMTP id e9e14a558f8ab-3d17be03903mr77141805ab.5.1739469922144;
- Thu, 13 Feb 2025 10:05:22 -0800 (PST)
-Date: Thu, 13 Feb 2025 18:03:16 +0000
-In-Reply-To: <20250213180317.3205285-1-coltonlewis@google.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FHZT+6B4eEEKrQiJVYaY3M5f4NGJfj97nMnc72SUNSs=;
+ b=ASpps0LtcwjwmIIuRAMPIE+yrxYIeNF3Ib/Lnzubr0t2wYcOAvguuRsFztGStgK4dy+avNY31InCQl+Bad7o8uG5ybbh8/RcIDvWQowMSkfHg6sO25tQlj46eDM60w6AbTOyImI05DAoGN4F0v02aWoj4HlX1oOaJ4XeBnfleuA=
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
+ by PH8PR10MB6387.namprd10.prod.outlook.com (2603:10b6:510:1c2::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.13; Thu, 13 Feb
+ 2025 18:18:34 +0000
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9%4]) with mapi id 15.20.8398.025; Thu, 13 Feb 2025
+ 18:18:34 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Suren Baghdasaryan <surenb@google.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
+        John Hubbard <jhubbard@nvidia.com>, Juan Yescas <jyescas@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>
+Subject: [PATCH 1/4] mm: allow guard regions in file-backed and read-only mappings
+Date: Thu, 13 Feb 2025 18:17:00 +0000
+Message-ID: <d885cb259174736c2830a5dfe07f81b214ef3faa.1739469950.git.lorenzo.stoakes@oracle.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <cover.1739469950.git.lorenzo.stoakes@oracle.com>
+References: <cover.1739469950.git.lorenzo.stoakes@oracle.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0471.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a8::8) To BYAPR10MB3366.namprd10.prod.outlook.com
+ (2603:10b6:a03:14f::25)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250213180317.3205285-1-coltonlewis@google.com>
-X-Mailer: git-send-email 2.48.1.601.g30ceb7b040-goog
-Message-ID: <20250213180317.3205285-8-coltonlewis@google.com>
-Subject: [RFC PATCH v3 7/8] perf: arm_pmuv3: Keep out of guest counter partition
-From: Colton Lewis <coltonlewis@google.com>
-To: kvm@vger.kernel.org
-Cc: Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Colton Lewis <coltonlewis@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|PH8PR10MB6387:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7215fc94-5150-4998-be5e-08dd4c5ad405
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?njc/wCA/B41T4d6Dx/3/hojGtuBfzMbiLE+MZ+h3tgT3hvfChiaK79Cjo17r?=
+ =?us-ascii?Q?kmvjocHYxMw3JFbTFo51fJ62Oy1hRh0ttZE0b2qLhvbLcBDOv9YTnZQMrmFA?=
+ =?us-ascii?Q?cjv8d7p78bmAMQbXEFOZe3BAzQGeYQtOjFlMAMj8CgT8DQRLSDnl7HQx+CpY?=
+ =?us-ascii?Q?wV693I/Qmw35ViHDSgVmWc4kDRQckVNGfbXlh/VNyXATNl+VtSbSy4nacQ8h?=
+ =?us-ascii?Q?UzhUJsGoCnR6iAJCMLIX2aNPpiPfRm02DXtUw2ysGY9XJ7+M3eX0Pr/OZo/E?=
+ =?us-ascii?Q?x8hlilxnSC5JyjoRmvS8rA3UFXA5vIFY67EFYuSkIsRI2kj/ktv16PYfdpux?=
+ =?us-ascii?Q?udkb6/LetWGsSLhwtftzE1HW1GhPH5PteEKp4zcuLQEZBfcD13WzBGSHdIYj?=
+ =?us-ascii?Q?Pq5CXmi7T5GqLz9oKXUa5jI6GDMR9AIhkjBzI7235edpJpumUUWmr/8l0hkj?=
+ =?us-ascii?Q?PQ464sKf3mK/LbLXyT5QNMotvq2cNA9+S74eY6Dlpv9YB/RCYhTZxVGb6VTl?=
+ =?us-ascii?Q?tbPo2ox44AkvYRYRA72XUSRkuRjD638rF21Bh9xc7hoq0rp6cNWj3DL7ATEy?=
+ =?us-ascii?Q?pSv84fPvZoIgAQ7zmOJ22eFOS0qup79X6W5AyT/vbe0wzRsbFu6Romi4w+oE?=
+ =?us-ascii?Q?X0gUL4NQS3Fx0Q9wBUEBCJk+CLrBNM0MqHF4PFt5WmPVYgkMD4wwrNMnRVDW?=
+ =?us-ascii?Q?yd+uBMwxrpnZbiZCtJRiaE3axQrvaX2slpAZwXNZgWIrTG/YjQEzPh3PrjWL?=
+ =?us-ascii?Q?mdvaaMK04jm+lzuwUcaJgdve9M1njwYsvvY+pbJ/mg+QELd6GfnMWZpcF6qu?=
+ =?us-ascii?Q?+CZxnUC2jZ9ZUcpk7xeZhHL8okEfQswETIqemjL6O65Vqxj4+QpS6WIaof9e?=
+ =?us-ascii?Q?Ajhs9CnXB2ttAUmVDo6xaUKAADZY7faV4o1KwfOEPRAFwJpc5JePmBmTxWVj?=
+ =?us-ascii?Q?FwaGSnfK+DNuULfWMr5Os9C2KOzqs52EXEou/Ud4Ts4eGW/nRt6ttzm43Cde?=
+ =?us-ascii?Q?HyMkaRoiApBakJAwxs6U8WvndqpGemqeR3akEhvklwwWxgzo3SjBzSgHFs3l?=
+ =?us-ascii?Q?SFqEG0fBy6mc6VzcNXpG15KydUJFUekn/Jm8Ot5kjSR2xVXc74hokPBqbROp?=
+ =?us-ascii?Q?jyO+Gxh5MAd1cXS82BaTG+0tV5fbD9FtFP3JFFhSg3QpnJrWKI/13Q+P8Ucr?=
+ =?us-ascii?Q?sJUoNB3lmZw25grx+ytQXATE6z8UhhMsKM1QsBw5rNME2U8r/0tvcaH9a3Tt?=
+ =?us-ascii?Q?5FwYdkI1hIzz2GCFCvYQ89xH+rKfyFgXuGlrJrHqzAIQy/g7L+l4/RZXwFZE?=
+ =?us-ascii?Q?BucmCJywsK+gFEBo/kkzxTg8heW4FRk6e8uCijrl2FERwmItFhxWGWgXWOOJ?=
+ =?us-ascii?Q?uLKEdOfprSNnPYsWwi7C/tgS9JCN?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?K+DAUquBEiy1J2SJ9+Usfo8iFwxXynbZUyNC2RhbzYXnNiOeN1Dx709IG8tq?=
+ =?us-ascii?Q?EjLoKRLd+PMj5oprIUkxTqOCifqNUsi+ahVCS8hqnmf9inm1OXriz+ucDwGg?=
+ =?us-ascii?Q?u5bsWhH22VLl1tidtfk1LJnAfAnwXXECKWDANbsEj0sjCPfDkZq5XXufZaVD?=
+ =?us-ascii?Q?rI+JDZPfXIevppo/+6u6eqHQo00JhdDztDVOXR5/nOi5SJqKswEzB853QU1H?=
+ =?us-ascii?Q?qg4iHxgwkb4tW8OhnNN44t+ZkDSAfb/6sRr/YZQmnG4QY0ALwx4iLPIub1DG?=
+ =?us-ascii?Q?C5h6egn7cN//Re6ANGnBD4GdauLZdfQOxbrmjnwiSuneyRdBqVFoGJVsYcPS?=
+ =?us-ascii?Q?kDgvg3Y3tC/Vut/L+Qi7EzQK/f85ALAtbqpVZPnPH7/TM+v51mwOxbLJSUdz?=
+ =?us-ascii?Q?b83JwkZOlObrqG8fXs9Eq8xpsyGVTyGT9mSoEoOlS+3Td/RncvbHi3T48N8/?=
+ =?us-ascii?Q?9iDp54O/G/R2lw/IOgK7eVsZvKurXqO3m8XEVVdq5BJdZgUHJTQw4MbNpD5b?=
+ =?us-ascii?Q?HlG26M8bUtn469/9XqGMobfSeIBW8RvFqmaiEhG9ge95wLiuDkBhn5kVJIN1?=
+ =?us-ascii?Q?K75I4NSX6cJ/MQTtIUGuUKSKZAiz9eexrBIVyqZebW1NzxDDFuTLKZ4fLl3L?=
+ =?us-ascii?Q?pzUpzqZJfXIR/1FZ/qGMoL5KSPHULq8Z9lNeBuNO0Yv6tM6pJxluQNkg3is+?=
+ =?us-ascii?Q?sqTquqV+48HinINpkCv3a099S7KqR3FkyMUW7LexIp+35JPgBWUV7zs4Cdo7?=
+ =?us-ascii?Q?w3Zd7ap8iHuv5zoxgnXmBqYmK0VUMR8RsTxrNX4ZDxIVvJOoR33e3VbqsA+t?=
+ =?us-ascii?Q?URMG/UmS7KTVs5AgcmADORL1BiuKkVUCvAlhLqjkcok3VNwPJBX2S5TZ08Qw?=
+ =?us-ascii?Q?gQHdBzUkYDXN7FOl4AyWYSbOcURkYXzWcXdv2/RPf4x9jLQDG9n3VlfJWIPi?=
+ =?us-ascii?Q?4zvDp8QkmXPKrU59no5RnMQyuYcx7UpJA+KZQ1ll5j+5A0sqF3OGSRUnltfx?=
+ =?us-ascii?Q?S3kZ+DJtPlz0AHU1vdjqQmnEPan1yDugh4F2BOEKXcCcKGAdOqFykgZV1LlI?=
+ =?us-ascii?Q?j1YvTc8jBAHM7tStaTfTliZEpxs+mxSjxHw4LOmVtACxQPUI6UuI0Iw7Z0TL?=
+ =?us-ascii?Q?2fwHqVo5QcrjxvCXRchRaYnaeO1JNzVBOs+5rVU42DO//LbensnygC412jAR?=
+ =?us-ascii?Q?2a8DynbmWWbx8FKnLw+/0E32uL3MG5RIaauCIRYUceKRadcDlKPZj2KYozaL?=
+ =?us-ascii?Q?VYB9QYcJfQ4WKK/AjpDGIWRzJzRuq3jJKlhySwAAZ3z9FG6BhgfPtO20ossL?=
+ =?us-ascii?Q?6Na5l7AVC5j4VnYLSJsFvo3yQf4NO1iugCFUwxtqDZdYUlyKguT7A2HQ3gf9?=
+ =?us-ascii?Q?N3fDnASxLvTDSGLaudgov50Zaz61PplkxjQ6h3ixfxY1BUfaCUkdKyozgW08?=
+ =?us-ascii?Q?rJ3eZdi/oacl9m8Y8dX9y7Gi3/lk/PV2geTvnNHHzpSF6u9TSzF/fxXyHY13?=
+ =?us-ascii?Q?+tDANiSPuztt5TxgzJ+jOuldido3ixxZ+WB3IOHpVyu7j1fdR1g4rjnEoK5y?=
+ =?us-ascii?Q?CiO+nsqk0fNxdexCCG8HC8L0zPJTL3VkLHU1B1XpS28kNnwnaY2G2e8uldar?=
+ =?us-ascii?Q?tw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	iDkLaITbsPDYWfIzFRQmzBMAx937h1Bz4S465H7dAaSgmHLiyM1kpMZViQUbf9652wQWfI5EwBImbpUhoddFNkQMFxAplCpYR1EMPVK995UgMm4NZp0DUUYPQvwlh+E66Ey3sS/xck6fcQDvQpXukNY319TguyHFhjSVPYiAvODcNUz1+wJcaO9y2t++lG6BIL0Lfm4Do2xh056XnFAG5PVglENPwuN5KhOP+SYrQUVusEjm8D8ACGpvYNSy0dkj6J3dUwls3ztCNB3OWVxPYlzUSYhUVEyzHUf53DWBKgWqdss4jtlBFEutLnMGmmmJQN5GxNLta4PwZF16z+6RhpU0z/vd/kv1V6UEQ1ncnEdecT9ubyEL7sCYozSht+cOl2gvvNBR8ks8bpniQzhMNH9pb8VTuHhQGnYKb+c28y9VVJr0KEGJHjqEGS+XfWbHBk6rDD7Tu6cbx0A6iOFUgIQPYBQfAA0793RDIkj+g0Y7JzxK6wCqoJjr8zZJrbJMQZ9DogCitx/zV9Bw3CiSJ2ghE/2ATdgu9J6yd3JjXv5xg9CKmpZT38PoXuwUnWst4HNYuhoGBlCj+JbFjKX4ns1WFoo3l+vtqqDMJ8XZbWg=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7215fc94-5150-4998-be5e-08dd4c5ad405
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2025 18:18:34.5440
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HkJKjk56lXAZkWO0V5KXQ2XdPKPJQEPDXtRIt3rBkknLcqJ8Y6dDrug4bkeEcLRgbsSfCqqvWJoqWscoskXw3xoOBSIsFTnhH2UzvwvJwnI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6387
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-13_07,2025-02-13_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ adultscore=0 mlxscore=0 phishscore=0 suspectscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2501170000 definitions=main-2502130130
+X-Proofpoint-GUID: d_cKQjRQc-1B66vucJnoXWFu0EIkOkpF
+X-Proofpoint-ORIG-GUID: d_cKQjRQc-1B66vucJnoXWFu0EIkOkpF
 
-If the PMU is partitioned, keep the driver out of the guest counter
-partition and only use the host counter partition. Partitioning is
-defined by the MDCR_EL2.HPMN register field and saved in
-cpu_pmu->hpmn. The range 0..HPMN-1 is accessible by EL1 and EL0 while
-HPMN..PMCR.N is reserved for EL2.
+There is no reason to disallow guard regions in file-backed mappings -
+readahead and fault-around both function correctly in the presence of PTE
+markers, equally other operations relating to memory-mapped files function
+correctly.
 
-Define some macros that take HPMN as an argument and construct
-mutually exclusive bitmaps for testing which partition a particular
-counter is in. Note that despite their different position in the
-bitmap, the cycle and instruction counters are always in the guest
-partition.
+Additionally, read-only mappings if introducing guard-regions, only
+restrict the mapping further, which means there is no violation of any
+access rights by permitting this to be so.
 
-Signed-off-by: Colton Lewis <coltonlewis@google.com>
+Removing this restriction allows for read-only mapped files (such as
+executable files) correctly which would otherwise not be permitted.
+
+Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 ---
- arch/arm/include/asm/arm_pmuv3.h |  2 +
- arch/arm64/include/asm/kvm_pmu.h |  5 +++
- arch/arm64/kvm/pmu-part.c        | 16 +++++++
- drivers/perf/arm_pmuv3.c         | 73 +++++++++++++++++++++++++++-----
- include/linux/perf/arm_pmuv3.h   |  8 ++++
- 5 files changed, 94 insertions(+), 10 deletions(-)
+ mm/madvise.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
-index 2ec0e5e83fc9..dadd4ddf51af 100644
---- a/arch/arm/include/asm/arm_pmuv3.h
-+++ b/arch/arm/include/asm/arm_pmuv3.h
-@@ -227,6 +227,8 @@ static inline bool kvm_set_pmuserenr(u64 val)
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 6ecead476a80..e01e93e179a8 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -1051,13 +1051,7 @@ static bool is_valid_guard_vma(struct vm_area_struct *vma, bool allow_locked)
+ 	if (!allow_locked)
+ 		disallowed |= VM_LOCKED;
+ 
+-	if (!vma_is_anonymous(vma))
+-		return false;
+-
+-	if ((vma->vm_flags & (VM_MAYWRITE | disallowed)) != VM_MAYWRITE)
+-		return false;
+-
+-	return true;
++	return !(vma->vm_flags & disallowed);
  }
  
- static inline void kvm_vcpu_pmu_resync_el0(void) {}
-+static inline void kvm_pmu_host_counters_enable(void) {}
-+static inline void kvm_pmu_host_counters_disable(void) {}
- 
- /* PMU Version in DFR Register */
- #define ARMV8_PMU_DFR_VER_NI        0
-diff --git a/arch/arm64/include/asm/kvm_pmu.h b/arch/arm64/include/asm/kvm_pmu.h
-index 174b7f376d95..8f25754fde47 100644
---- a/arch/arm64/include/asm/kvm_pmu.h
-+++ b/arch/arm64/include/asm/kvm_pmu.h
-@@ -25,6 +25,8 @@ void kvm_host_pmu_init(struct arm_pmu *pmu);
- u8 kvm_pmu_get_reserved_counters(void);
- u8 kvm_pmu_hpmn(u8 nr_counters);
- void kvm_pmu_partition(struct arm_pmu *pmu);
-+void kvm_pmu_host_counters_enable(void);
-+void kvm_pmu_host_counters_disable(void);
- 
- #else
- 
-@@ -37,6 +39,9 @@ static inline bool kvm_set_pmuserenr(u64 val)
- static inline void kvm_vcpu_pmu_resync_el0(void) {}
- static inline void kvm_host_pmu_init(struct arm_pmu *pmu) {}
- 
-+static inline void kvm_pmu_host_counters_enable(void) {}
-+static inline void kvm_pmu_host_counters_disable(void) {}
-+
- #endif
- 
- #endif
-diff --git a/arch/arm64/kvm/pmu-part.c b/arch/arm64/kvm/pmu-part.c
-index e74fecc67e37..51da65c678f9 100644
---- a/arch/arm64/kvm/pmu-part.c
-+++ b/arch/arm64/kvm/pmu-part.c
-@@ -45,3 +45,19 @@ void kvm_pmu_partition(struct arm_pmu *pmu)
- 		pmu->partitioned = false;
- 	}
- }
-+
-+void kvm_pmu_host_counters_enable(void)
-+{
-+	u64 mdcr = read_sysreg(mdcr_el2);
-+
-+	mdcr |= MDCR_EL2_HPME;
-+	write_sysreg(mdcr, mdcr_el2);
-+}
-+
-+void kvm_pmu_host_counters_disable(void)
-+{
-+	u64 mdcr = read_sysreg(mdcr_el2);
-+
-+	mdcr &= ~MDCR_EL2_HPME;
-+	write_sysreg(mdcr, mdcr_el2);
-+}
-diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-index 0e360feb3432..442dcff56d5b 100644
---- a/drivers/perf/arm_pmuv3.c
-+++ b/drivers/perf/arm_pmuv3.c
-@@ -730,15 +730,19 @@ static void armv8pmu_disable_event_irq(struct perf_event *event)
- 	armv8pmu_disable_intens(BIT(event->hw.idx));
- }
- 
--static u64 armv8pmu_getreset_flags(void)
-+static u64 armv8pmu_getreset_flags(struct arm_pmu *cpu_pmu)
- {
- 	u64 value;
- 
- 	/* Read */
- 	value = read_pmovsclr();
- 
-+	if (cpu_pmu->partitioned)
-+		value &= ARMV8_PMU_HOST_CNT_PART(cpu_pmu->hpmn);
-+	else
-+		value &= ARMV8_PMU_OVERFLOWED_MASK;
-+
- 	/* Write to clear flags */
--	value &= ARMV8_PMU_OVERFLOWED_MASK;
- 	write_pmovsclr(value);
- 
- 	return value;
-@@ -765,6 +769,18 @@ static void armv8pmu_disable_user_access(void)
- 	update_pmuserenr(0);
- }
- 
-+static bool armv8pmu_is_guest_part(struct arm_pmu *cpu_pmu, u8 idx)
-+{
-+	return cpu_pmu->partitioned &&
-+		(BIT(idx) & ARMV8_PMU_GUEST_CNT_PART(cpu_pmu->hpmn));
-+}
-+
-+static bool armv8pmu_is_host_part(struct arm_pmu *cpu_pmu, u8 idx)
-+{
-+	return !cpu_pmu->partitioned ||
-+		(BIT(idx) & ARMV8_PMU_HOST_CNT_PART(cpu_pmu->hpmn));
-+}
-+
- static void armv8pmu_enable_user_access(struct arm_pmu *cpu_pmu)
- {
- 	int i;
-@@ -773,6 +789,8 @@ static void armv8pmu_enable_user_access(struct arm_pmu *cpu_pmu)
- 	if (is_pmuv3p9(cpu_pmu->pmuver)) {
- 		u64 mask = 0;
- 		for_each_set_bit(i, cpuc->used_mask, ARMPMU_MAX_HWEVENTS) {
-+			if (armv8pmu_is_guest_part(cpu_pmu, i))
-+				continue;
- 			if (armv8pmu_event_has_user_read(cpuc->events[i]))
- 				mask |= BIT(i);
- 		}
-@@ -781,6 +799,8 @@ static void armv8pmu_enable_user_access(struct arm_pmu *cpu_pmu)
- 		/* Clear any unused counters to avoid leaking their contents */
- 		for_each_andnot_bit(i, cpu_pmu->cntr_mask, cpuc->used_mask,
- 				    ARMPMU_MAX_HWEVENTS) {
-+			if (armv8pmu_is_guest_part(cpu_pmu, i))
-+				continue;
- 			if (i == ARMV8_PMU_CYCLE_IDX)
- 				write_pmccntr(0);
- 			else if (i == ARMV8_PMU_INSTR_IDX)
-@@ -825,8 +845,10 @@ static void armv8pmu_start(struct arm_pmu *cpu_pmu)
- 	else
- 		armv8pmu_disable_user_access();
- 
--	/* Enable all counters */
--	armv8pmu_pmcr_write(armv8pmu_pmcr_read() | ARMV8_PMU_PMCR_E);
-+	if (cpu_pmu->partitioned)
-+		kvm_pmu_host_counters_enable();
-+	else
-+		armv8pmu_pmcr_write(armv8pmu_pmcr_read() | ARMV8_PMU_PMCR_E);
- 
- 	kvm_vcpu_pmu_resync_el0();
- }
-@@ -834,7 +856,10 @@ static void armv8pmu_start(struct arm_pmu *cpu_pmu)
- static void armv8pmu_stop(struct arm_pmu *cpu_pmu)
- {
- 	/* Disable all counters */
--	armv8pmu_pmcr_write(armv8pmu_pmcr_read() & ~ARMV8_PMU_PMCR_E);
-+	if (cpu_pmu->partitioned)
-+		kvm_pmu_host_counters_disable();
-+	else
-+		armv8pmu_pmcr_write(armv8pmu_pmcr_read() & ~ARMV8_PMU_PMCR_E);
- }
- 
- static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
-@@ -848,7 +873,7 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
- 	/*
- 	 * Get and reset the IRQ flags
- 	 */
--	pmovsr = armv8pmu_getreset_flags();
-+	pmovsr = armv8pmu_getreset_flags(cpu_pmu);
- 
- 	/*
- 	 * Did an overflow occur?
-@@ -906,6 +931,8 @@ static int armv8pmu_get_single_idx(struct pmu_hw_events *cpuc,
- 	int idx;
- 
- 	for_each_set_bit(idx, cpu_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
-+		if (armv8pmu_is_guest_part(cpu_pmu, idx))
-+			continue;
- 		if (!test_and_set_bit(idx, cpuc->used_mask))
- 			return idx;
- 	}
-@@ -922,6 +949,8 @@ static int armv8pmu_get_chain_idx(struct pmu_hw_events *cpuc,
- 	 * the lower idx must be even.
- 	 */
- 	for_each_set_bit(idx, cpu_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
-+		if (armv8pmu_is_guest_part(cpu_pmu, idx))
-+			continue;
- 		if (!(idx & 0x1))
- 			continue;
- 		if (!test_and_set_bit(idx, cpuc->used_mask)) {
-@@ -944,6 +973,7 @@ static int armv8pmu_get_event_idx(struct pmu_hw_events *cpuc,
- 
- 	/* Always prefer to place a cycle counter into the cycle counter. */
- 	if ((evtype == ARMV8_PMUV3_PERFCTR_CPU_CYCLES) &&
-+	    !cpu_pmu->partitioned &&
- 	    !armv8pmu_event_get_threshold(&event->attr)) {
- 		if (!test_and_set_bit(ARMV8_PMU_CYCLE_IDX, cpuc->used_mask))
- 			return ARMV8_PMU_CYCLE_IDX;
-@@ -959,6 +989,7 @@ static int armv8pmu_get_event_idx(struct pmu_hw_events *cpuc,
- 	 * may not know how to handle it.
- 	 */
- 	if ((evtype == ARMV8_PMUV3_PERFCTR_INST_RETIRED) &&
-+	    !cpu_pmu->partitioned &&
- 	    !armv8pmu_event_get_threshold(&event->attr) &&
- 	    test_bit(ARMV8_PMU_INSTR_IDX, cpu_pmu->cntr_mask) &&
- 	    !armv8pmu_event_want_user_access(event)) {
-@@ -970,7 +1001,7 @@ static int armv8pmu_get_event_idx(struct pmu_hw_events *cpuc,
- 	 * Otherwise use events counters
- 	 */
- 	if (armv8pmu_event_is_chained(event))
--		return	armv8pmu_get_chain_idx(cpuc, cpu_pmu);
-+		return armv8pmu_get_chain_idx(cpuc, cpu_pmu);
- 	else
- 		return armv8pmu_get_single_idx(cpuc, cpu_pmu);
- }
-@@ -1062,6 +1093,16 @@ static int armv8pmu_set_event_filter(struct hw_perf_event *event,
- 	return 0;
- }
- 
-+static void armv8pmu_reset_host_counters(struct arm_pmu *cpu_pmu)
-+{
-+	int idx;
-+
-+	for_each_set_bit(idx, cpu_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
-+		if (armv8pmu_is_host_part(cpu_pmu, idx))
-+			armv8pmu_write_evcntr(idx, 0);
-+	}
-+}
-+
- static void armv8pmu_reset(void *info)
- {
- 	struct arm_pmu *cpu_pmu = (struct arm_pmu *)info;
-@@ -1069,6 +1110,9 @@ static void armv8pmu_reset(void *info)
- 
- 	bitmap_to_arr64(&mask, cpu_pmu->cntr_mask, ARMPMU_MAX_HWEVENTS);
- 
-+	if (cpu_pmu->partitioned)
-+		mask &= ARMV8_PMU_HOST_CNT_PART(cpu_pmu->hpmn);
-+
- 	/* The counter and interrupt enable registers are unknown at reset. */
- 	armv8pmu_disable_counter(mask);
- 	armv8pmu_disable_intens(mask);
-@@ -1076,11 +1120,20 @@ static void armv8pmu_reset(void *info)
- 	/* Clear the counters we flip at guest entry/exit */
- 	kvm_clr_pmu_events(mask);
- 
-+
-+	pmcr = ARMV8_PMU_PMCR_LC;
-+
- 	/*
--	 * Initialize & Reset PMNC. Request overflow interrupt for
--	 * 64 bit cycle counter but cheat in armv8pmu_write_counter().
-+	 * Initialize & Reset PMNC. Request overflow interrupt for 64
-+	 * bit cycle counter but cheat in armv8pmu_write_counter().
-+	 *
-+	 * When partitioned, there is no single bit to reset only the
-+	 * host counters. so reset them individually.
- 	 */
--	pmcr = ARMV8_PMU_PMCR_P | ARMV8_PMU_PMCR_C | ARMV8_PMU_PMCR_LC;
-+	if (cpu_pmu->partitioned)
-+		armv8pmu_reset_host_counters(cpu_pmu);
-+	else
-+		pmcr = ARMV8_PMU_PMCR_P | ARMV8_PMU_PMCR_C;
- 
- 	/* Enable long event counter support where available */
- 	if (armv8pmu_has_long_event(cpu_pmu))
-diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
-index c2448477c37f..3a5eac11e54d 100644
---- a/include/linux/perf/arm_pmuv3.h
-+++ b/include/linux/perf/arm_pmuv3.h
-@@ -240,6 +240,14 @@
- #define ARMV8_PMU_OVSR_F		ARMV8_PMU_CNT_MASK_F
- /* Mask for writable bits is both P and C fields */
- #define ARMV8_PMU_OVERFLOWED_MASK	ARMV8_PMU_CNT_MASK_ALL
-+
-+/* Masks for guest and host counter partitions */
-+#define ARMV8_PMU_HPMN_CNT_MASK(N)	GENMASK((N) - 1, 0)
-+#define ARMV8_PMU_GUEST_CNT_PART(N)	(ARMV8_PMU_HPMN_CNT_MASK(N) | \
-+					 ARMV8_PMU_CNT_MASK_C | \
-+					 ARMV8_PMU_CNT_MASK_F)
-+#define ARMV8_PMU_HOST_CNT_PART(N)	(ARMV8_PMU_CNT_MASK_ALL & \
-+					 ~ARMV8_PMU_GUEST_CNT_PART(N))
- /*
-  * PMXEVTYPER: Event selection reg
-  */
+ static bool is_guard_pte_marker(pte_t ptent)
 -- 
-2.48.1.601.g30ceb7b040-goog
+2.48.1
 
