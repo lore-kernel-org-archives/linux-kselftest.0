@@ -1,110 +1,220 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D252244C7C;
-	Thu, 13 Feb 2025 15:43:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB4126B085
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 15:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739461384; cv=none; b=NG0gcgeLZ/MTmYNNDapcJ3BC4rs9Az7gnLTNXDBmbmegTwLEl3SwzgSPyUBw6j4Mue8M082j9EMeIdviaKn9xF+C8NozsPGtiWMDIabfpRBJzCGtAJZegijSnoNSMC/W22bed5Tt+cQkKjMj5kLkVQv9k7Xcx44h6wbLEoyjD4Y=
+	t=1739461399; cv=none; b=tUA/MUJ5eTAA7gJANkxz3QUYxfORpp+is7VftgLGslbn4S4HzMml9LrGZQa2CaY6SL9hvpermEIKivzv2fHR5isjwZ/1LTgdh4IfsgU0IllDUVu1qEahj6tahXVLw+xt4MeMsiyxnMUND9qglg4yFc2za4SWxqT1HvtKQSH4xPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739461384; c=relaxed/simple;
-	bh=icdXS8p68rQCTSX1pWN2XJTVSdUQQv7nxWrTiZumR+I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rEFczMHcE2SvWd8XM00iwwC1pVrE+LX/FYWKYb19toLd/mvcD6G3ujookLX2jWL83ZmmWbCmFReJuVHc4KQ1t+1dbfAMN2PRWGn/v1zPHS5kiJfD/sv6l+Jcyx0GA5rlOjv/MmBFpJ+nOcNhlG0KZ6FWaUCpeMs300mhv6KIDl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TlpsxLIr; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739461399; c=relaxed/simple;
+	bh=uLiZ1rCqYfK/j8eSgyeV2MyQP8gfHxF6rrcTwqcvaaA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tpaUgE1xtl083a2I/b0Njuu4h8Emme7+R0/U3MZzQW18HYH9DnoKvkRQG55KLT18TDyjwMN0S5vY1MiF8WT3ZCiP+PoCWLoYv3zwF4oRZRtm7p3rcyMm8rvmdcg77ASUeL9t2/IBm6CSS65qZv63YK8c4ZmRsBnGAS/zv6ph7xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g2Ly/3Ov; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TlpsxLIr"
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-308e92c3779so22416831fa.0;
-        Thu, 13 Feb 2025 07:43:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739461381; x=1740066181; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=icdXS8p68rQCTSX1pWN2XJTVSdUQQv7nxWrTiZumR+I=;
-        b=TlpsxLIrrgBESXlf9I/9quwZWdX1v8juRima9tktAFQ41xaGjBvWF1oiENGm4lvAuJ
-         kak/RU2cab/nw6y9SLrepFMsPB9oLg/TOCWTzn6DfcuNKeC4UNT05hxWJRt6wgnQs12V
-         ilf+HTCeSDVMphqSSJKAkqWbkIZpKOSoEnkTyGutd0SI/e79bMAsiEnhJtAlDm11OISn
-         E5fY4UHmhEK8Azwud+NkYOvO/V6l8VqcrOdt+NXcVppu4ttXvHOrs4DIhMUhRdlGSZRO
-         UtF9FguirYu6QgUn+NAsbO9wNHA5SuBCZnfQOE+HF3487KpOrM4qwRr4mEibWaORZ/CB
-         vkzQ==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g2Ly/3Ov"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739461396;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yzI2r5nmEeXgT2ts1VutUTn2sHSIfm7BIbhjPpBpcIA=;
+	b=g2Ly/3OvR6mtGYXlVfLToj0OYk3cMlr9GTC/GXMZUO9jtSJFoVp8uRZjpymLRfs8yPUZqj
+	bY4dfTlxXY0e5Yc/WmFyArx+0UG2ZNuMHOikJ7gbGtp7nV3/fV1r4rtTXlNoxef5hCKhIT
+	NSuNFf0QN2svZVLLqSZ7UBHgclMMDZw=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-350-lB_Oe8P5Mt61K3j0Ro2Q9A-1; Thu, 13 Feb 2025 10:43:15 -0500
+X-MC-Unique: lB_Oe8P5Mt61K3j0Ro2Q9A-1
+X-Mimecast-MFC-AGG-ID: lB_Oe8P5Mt61K3j0Ro2Q9A_1739461394
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-ab7f0964bc3so110282566b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 07:43:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739461381; x=1740066181;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=icdXS8p68rQCTSX1pWN2XJTVSdUQQv7nxWrTiZumR+I=;
-        b=aMe568B/Zhz9KCo1KCFRmUqWRISpFc78YkhjguSHzP2F1vfWSSeSiu4FMM2plsGX22
-         Id8YGyZg15fqFbP7C74lOAbda3LYeF85y24ZZtM+qh1lQTHwCxy25I2J7o1c5HcjnDbd
-         3dCl0XlRGBboYaLrKsocLu7aCn59tFgrdnrvXssSxAcDWbWd4cMHvs+UjOmfs9C3KYpE
-         9lGKbyl4aYOmw9t9v+OgSTKh0ME9VA7IYkRz7CigMM6iwu/cWBobhUyypsBFN4nwDi8c
-         ExH6zIZpaG/wAOYCwBwtsWPJ3r9X0Aj8v2ZrbDybF3KRlBV/eWmhFKKLgYgchZEqDaXT
-         M1uw==
-X-Forwarded-Encrypted: i=1; AJvYcCVUyGJBpnS3cyErYnnnm/A6mdGX9M6buQBo8nn52uNYS/3ZP1neNHyjhjljIGUHkItf664gGU78DFT8YRDjza0O@vger.kernel.org, AJvYcCW2OnojACqhIibj7G9ZKdktt3X+ymwMIXrLM8KIYQkiHkKQYmemY3QccHaCrvui+5M2LwsQ1fCMv1wqev0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnYHNdPV2uuD0QpeWZ9prUlZQdhqSfbACQHSx6xF1XagP6suZX
-	jSIo2JQQCFc+4nlRqIZeILVZW6UCG3gGHeQVtBHkng4HNfU1gg+pDuxr2oO2QJYwp1wX2MF+67T
-	jEfQq5ZI1Hy6VRetCOWBy8oDmSz4=
-X-Gm-Gg: ASbGncvn7Qrm3IZFVdSFn1rPKqDH5vrteQBzVzc4eYJyCG5AkH6oLgWfR2RKp2ac7jo
-	JPKW9AoxBlX68pkLxp8NscoivwKLGKl4xVrggHG49P3bWWvD5P0KdpAyWNr86sPK2hyZgKkWwGj
-	pzdiB66WYC7yOM
-X-Google-Smtp-Source: AGHT+IH1DgGXOv9U05OxLJT05mfmUcX32MdUYL+UbmMo6S6W1PrqB+heOS5OeNphPyVdKvsISm/TxAN5RBatuANrYoM=
-X-Received: by 2002:a2e:8887:0:b0:300:17a3:7af9 with SMTP id
- 38308e7fff4ca-3090f3bee24mr10560491fa.19.1739461380591; Thu, 13 Feb 2025
- 07:43:00 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739461394; x=1740066194;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yzI2r5nmEeXgT2ts1VutUTn2sHSIfm7BIbhjPpBpcIA=;
+        b=e5wk44XsDMG+2iE8+Sp2FAf/swbybCAU6++edR03R/dw6Brt7Kl4k3LVd2d0Xrq6FG
+         klR5his4EG+farksOPV9U+xHZ1knWe0ac/JziBbxV8wv5b5Q5m9/+/SLN6U8X/63kUpM
+         2adHkS3NWUVNbTRwe556zIIwh182eAPFXy0hDHYqdxtegJvAzl5d5bFTbR/8o01eiZPD
+         14neDmme+GUd/eoaj5w7YIKxHZBKHq8TZe1KFl97b6DG2YLyL/51eKgREs8J3SJTEySv
+         EzbCzIby47mRZ39N1OzzB9/MucGa4l0JIVvta2wJD6LPYnMTuNXQw5xIANIoo/C9vP2l
+         UdIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWjk6KMB8XOIZSCD9dUhPPkL3BEhahonJi2o4mvtcW3D9o9Zzf+/5hNd1hB21ewJX3J9IRSKXF3fmYYw/sxOXE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJRDGp/PYdLxg7zSO2uXYazxRAvRGMCzaillk8yq08j5yk5gCr
+	LHU6MROwS7/tBLbn29UPMoRD4yM9wk7awgzSxRc2bKE194X6kFGpfqTToMB5abEgGC87CzOjmYJ
+	NzWar4vgeYmY1kpWPc3SJHqS+R3ylZVP9IK6UohgeUmHKI3yFz3y8d9szdFN1P1WzSg==
+X-Gm-Gg: ASbGncs/d7kvMxMzNm13kPbKJukvr/9HLqzu3ry+tc5GHMQABMCAg4AEObg9EAQXZj+
+	OiK8N1mwocK+NffI7KFF+mLGoyv1Coe7eZfw+SQX7Rbpw2puYO1+e1/F9umpcQGz1ZoERk8ftjn
+	xeckE3IpTZkSJw49yFRSk7MwbNPvaFEugbIjRa1rlIVQ4yR+mtYCww99sbzizcSc9XlRh0VAyCS
+	bIb5iMsxoK0FX3l+3Axqf2BDXSSzsr0XngX7mbzYsMtmzeWJUbE1iYsoJL5RYvZTEyieoVwgg==
+X-Received: by 2002:a17:907:96ac:b0:ab7:cd83:98b6 with SMTP id a640c23a62f3a-ab7f336d4dcmr727680166b.6.1739461393901;
+        Thu, 13 Feb 2025 07:43:13 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGMjEK63T1Hvw2DRYuMNZ0QhIbCttTcpsK+feVhTHyAb3Qwlg1NW7Q7NJFwB80xOR6TDebhgw==
+X-Received: by 2002:a17:907:96ac:b0:ab7:cd83:98b6 with SMTP id a640c23a62f3a-ab7f336d4dcmr727676966b.6.1739461393478;
+        Thu, 13 Feb 2025 07:43:13 -0800 (PST)
+Received: from redhat.com ([2a02:14f:171:92b6:64de:62a8:325e:4f1d])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aba53376abbsm153403066b.93.2025.02.13.07.43.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2025 07:43:12 -0800 (PST)
+Date: Thu, 13 Feb 2025 10:43:07 -0500
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Jason Wang <jasowang@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+	linux-kselftest@vger.kernel.org,
+	Yuri Benditovich <yuri.benditovich@daynix.com>,
+	Andrew Melnychenko <andrew@daynix.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	gur.stavi@huawei.com, devel@daynix.com
+Subject: Re: [PATCH net-next] tun: Pad virtio headers
+Message-ID: <20250213103636-mutt-send-email-mst@kernel.org>
+References: <20250213-buffers-v1-1-ec4a0821957a@daynix.com>
+ <20250213020702-mutt-send-email-mst@kernel.org>
+ <0fa16c0e-8002-4320-b7d3-d3d36f80008c@daynix.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com> <20250213115951.GF28068@noisy.programming.kicks-ass.net>
-In-Reply-To: <20250213115951.GF28068@noisy.programming.kicks-ass.net>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Thu, 13 Feb 2025 10:42:24 -0500
-X-Gm-Features: AWEUYZnmsQRxlJial_Srfud0qxhtqGpvdrhg2T7ZQYxl10OhVwKIEsBPtxdK_Kw
-Message-ID: <CAJ-ks9mzYWSvVD=PCvCBohXg77BdFODq4ePMNstkL+70tkU5RA@mail.gmail.com>
-Subject: Re: [PATCH v2] ww_mutex: convert self-test to KUnit
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: David Gow <davidgow@google.com>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0fa16c0e-8002-4320-b7d3-d3d36f80008c@daynix.com>
 
-On Thu, Feb 13, 2025 at 6:59=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Thu, Feb 13, 2025 at 06:40:20AM -0500, Tamir Duberstein wrote:
-> > Convert this unit test to a KUnit test. This allows the test to benefit
-> > from the KUnit tooling. Note that care is taken to avoid test-ending
-> > assertions in worker threads, which is unsafe in KUnit (and wasn't done
-> > before this change either).
->
-> So this was something simple, and now I need to know how to operate this
-> kunit nonsense :-(
->
-> How is that an improvement?
+On Thu, Feb 13, 2025 at 06:23:55PM +0900, Akihiko Odaki wrote:
+> On 2025/02/13 16:18, Michael S. Tsirkin wrote:
+> > 
+> > Commit log needs some work.
+> > 
+> > So my understanding is, this patch does not do much functionally,
+> > but makes adding the hash feature easier. OK.
+> > 
+> > On Thu, Feb 13, 2025 at 03:54:06PM +0900, Akihiko Odaki wrote:
+> > > tun used to simply advance iov_iter when it needs to pad virtio header,
+> > > which leaves the garbage in the buffer as is. This is especially
+> > > problematic
+> > 
+> > I think you mean "this will become especially problematic"
+> > 
+> > > when tun starts to allow enabling the hash reporting
+> > > feature; even if the feature is enabled, the packet may lack a hash
+> > > value and may contain a hole in the virtio header because the packet
+> > > arrived before the feature gets enabled or does not contain the
+> > > header fields to be hashed. If the hole is not filled with zero, it is
+> > > impossible to tell if the packet lacks a hash value.
+> > > 
+> > > In theory, a user of tun can fill the buffer with zero before calling
+> > > read() to avoid such a problem, but leaving the garbage in the buffer is
+> > > awkward anyway so fill the buffer in tun.
+> > 
+> > 
+> > What is missing here is description of what the patch does.
+> > I think it is
+> > "Replace advancing the iterator with writing zeros".
+> > 
+> > There could be performance cost to the dirtying extra cache lines, though.
+> > Could you try checking that please?
+> 
+> It will not dirty extra cache lines; an explanation follows later. Because
+> of that, any benchmark are likely to show only noises, but if you have an
+> idea of workloads that should be tested, please tell me.
 
-Hi Peter,
-
-David enumerated some of the benefits of KUnit in another
-thread: https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLxmTY2T2=
-Ti53DQADrW+sJg@mail.gmail.com/.
-
-My personal reason for preferring KUnit is that it's much easier to
-run from userspace; the tooling takes care of building, starting the
-VM, running the tests, and producing a human-friendly report.
-
-Anecdotally I've seen evidence that e.g. Intel's 0-day runs all KUnit
-tests but not all kselftests
-(e.g. https://lore.kernel.org/all/202502090223.qCYMBjWT-lkp@intel.com/).
+pktgen usually
 
 
 
-Tamir
+> > 
+> > I think we should mention the risks of the patch, too.
+> > Maybe:
+> > 
+> > 	Also in theory, a user might have initialized the buffer
+> > 	to some non-zero value, expecting tun to skip writing it.
+> > 	As this was never a documented feature, this seems unlikely.
+> > >
+> > > 
+> > > The specification also says the device MUST set num_buffers to 1 when
+> > > the field is present so set it when the specified header size is big
+> > > enough to contain the field.
+> > 
+> > This part I dislike. tun has no idea what the number of buffers is.
+> > Why 1 specifically?
+> 
+> That's a valid point. I rewrote the commit log to clarify, but perhaps we
+> can drop the code to set the num_buffers as "[PATCH] vhost/net: Set
+> num_buffers for virtio 1.0" already landed.
+
+
+I think I'd prefer that second option. it allows userspace
+to reliably detect the new behaviour, by setting the value
+to != 0.
+
+
+> 
+> Below is the rewritten commit log, which incorporates your suggestions and
+> is extended to cover the performance implication and reason the num_buffers
+> initialization:
+> 
+> tun simply advances iov_iter when it needs to pad virtio header,
+> which leaves the garbage in the buffer as is. This will become
+> especially problematic when tun starts to allow enabling the hash
+> reporting feature; even if the feature is enabled, the packet may lack a
+> hash value and may contain a hole in the virtio header because the
+> packet arrived before the feature gets enabled or does not contain the
+> header fields to be hashed. If the hole is not filled with zero, it is
+> impossible to tell if the packet lacks a hash value.
+> 
+> In theory, a user of tun can fill the buffer with zero before calling
+> read() to avoid such a problem, but leaving the garbage in the buffer is
+> awkward anyway so replace advancing the iterator with writing zeros.
+> 
+> A user might have initialized the buffer to some non-zero value,
+> expecting tun to skip writing it. As this was never a documented
+> feature, this seems unlikely. Neither is there a non-zero value that can
+> be determined and set before receiving the packet; the only exception
+> is the num_buffers field, which is expected to be 1 for version 1 when
+> VIRTIO_NET_F_HASH_REPORT is not negotiated.
+
+you need mergeable buffers instead i presume.
+
+> This field is specifically
+> set to 1 instead of 0.
+> 
+> The overhead of filling the hole in the header is negligible as the
+> entire header is already placed on the cache when a header size defined
+
+
+what does this mean?
+
+> in the current specification is used even if the cache line is small
+> (16 bytes for example).
+> 
+> Below are the header sizes possible with the current specification:
+> a) 10 bytes if the legacy interface is used
+> b) 12 bytes if the modern interface is used
+> c) 20 bytes if VIRTIO_NET_F_HASH_REPORT is negotiated
+> 
+> a) and b) obviously fit in a cache line. c) uses one extra cache line,
+> but the cache line also contains the first 12 bytes of the packet so
+> it is always placed on the cache.
+
+
+Hmm. But it could be clean so shared. write makes it dirty and so
+not shared.
+
+-- 
+MST
+
