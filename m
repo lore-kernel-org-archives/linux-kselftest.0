@@ -1,100 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DC01A9B27;
-	Wed, 19 Feb 2025 05:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5101A3141
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 05:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739941750; cv=none; b=YP83wG92TcXUvO4E+EjB2NxJFn5LonjIhjkJFRSqiUL4z9LEiMcnODd5L6/XTY98bsM4bQ9ThbAdMKo6qWY6/DiDBDC2tGPEVWjtw1iDwIGwzekli2iNujSt4wqyUqJW2hA3+h/T3dVJNNxTwZzeKFsYRQ0vNX53qlIr2uP8c88=
+	t=1739942473; cv=none; b=swyQqzdV98a+Rq2jJWxZ0AuUrwKGTeLaOD9FKHUIrCZZLFJjWmMG3G0h1QM3kwwA4sGanji/fJp6e8T9rWb0Qgii/a/Q4DiMKN/hA/XqdLbLcVUB3zLojRsE/cAMeyuzEVydT0LaprSGcRrmEZSMIocEP8MbudwAGKasfyta0oc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739941750; c=relaxed/simple;
-	bh=6h8ecIB9RE8NEbkQcevOEnAlX8Vq8sQghBewctetbT8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FFK6MVVFuuFmBHNqJTqxGPUCV8fpBjjqrsztBwBYL7Wwm+UVyMhZcyifkDxOCuh93tPtYGIlSJ7VZmUyZTNJ4JOTzyy/mmO/900uwzVf8JeU6+ohxq7WYKICWQSCUOpEAX2asnO7bCT8UCQgDfS6VmB/N+ij6Cn6NKRKA83MUhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1/cei//h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739942473; c=relaxed/simple;
+	bh=PHQllqooUbMhiArXFPoJ4xf7aQfgAm477RV7+h4hC6k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qVc5Lz2+NkKSR3Dj6nkqxz2/y8dfIe4UFsv8CUaE2aDRVdmN/3Po6omMs7TkCOl4BoeiGPGiQLJlLATg8CTaBmQAYunGmcX5b1vyfbfBbLH33IeRzxro67E0UOuCcqXb9JmgkkTArxFX5lKMKaoxVLoR1XI/ZAqZsKYll2PpqAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ppAEBHcw; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1/cei//h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F9BC4CED1;
-	Wed, 19 Feb 2025 05:09:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739941749;
-	bh=6h8ecIB9RE8NEbkQcevOEnAlX8Vq8sQghBewctetbT8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1/cei//hPMxHqiGfMQsCIA1WAdFeWmLId42G5QRlkcGD06Wu3GP4q5F8IwWrX/K14
-	 4Ih+EFNXu2kpfU7tGWjzWXBgk5pyRkbuRxxuujV9lT0FQNyLkR94UQIYRGKHygdkBs
-	 jfOXdgQJakaJtw2enzxTVPTd5pmOsNbj4VaOaFDg=
-Date: Wed, 19 Feb 2025 06:09:07 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Yifei Liu <yifei.l.liu@oracle.com>
-Cc: "shuah@kernel.org" <shuah@kernel.org>,
-	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [External] : Re: [PATCH v2 Linux-6.12.y Linux-6.13.y 1/1]
- selftests/mm: build with -O2
-Message-ID: <2025021935-blandness-celibacy-5fea@gregkh>
-References: <20250204214723.1991309-1-yifei.l.liu@oracle.com>
- <2025020544-preview-worshiper-8539@gregkh>
- <C8A5840D-B312-40DC-A75D-3BA14614F8C4@oracle.com>
- <2025021143-limes-babble-e137@gregkh>
- <1D84255C-D49A-4056-9299-B1E6099154DE@oracle.com>
- <4FF4FFA8-1385-452D-9B44-D791B664D4E8@oracle.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ppAEBHcw"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1739942469;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ng683JyK1h4LyOkLDNWozrztNxPIVIkoqqjCDrkgTXU=;
+	b=ppAEBHcwJaxwkdYAlQZcN15UbSCuCebLNl/nOqkifuaQ+FPzp0Jd5H3+5Mos9CWY8pCqr4
+	X5gZSVr1rKcMMWnlWVxWkphEQreM6Kb458+dbi9PwbAjxrxNE7+rl4cAFFumEcEhYCbQ6j
+	iSVGSm2j1bZZJV1WdRAWYC0bfm60ZHM=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: borisp@nvidia.com,
+	john.fastabend@gmail.com,
+	kuba@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	viro@zeniv.linux.org.uk,
+	mrpre@163.com,
+	Jiayuan Chen <jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v2 1/2] bpf: fix ktls panic with sockmap
+Date: Wed, 19 Feb 2025 13:20:14 +0800
+Message-ID: <20250219052015.274405-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20250219052015.274405-1-jiayuan.chen@linux.dev>
+References: <20250219052015.274405-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4FF4FFA8-1385-452D-9B44-D791B664D4E8@oracle.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Feb 19, 2025 at 02:13:29AM +0000, Yifei Liu wrote:
-> 
-> 
-> > On Feb 11, 2025, at 4:33 PM, Yifei Liu <yifei.l.liu@oracle.com> wrote:
-> > 
-> > 
-> > 
-> >> On Feb 10, 2025, at 10:24 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >> 
-> >> A: https://urldefense.com/v3/__http://en.wikipedia.org/wiki/Top_post__;!!ACWV5N9M2RV99hQ!I6O0EcBYMun5zy7pK39ZG9aJYrbv3Uy7IaJYl-fKOXJfmImBbzfXDFfOWeYY2o1JutHPBoAoI_b7xJQyjQ5nnfgv$ 
-> >> Q: Were do I find info about this thing called top-posting?
-> >> A: Because it messes up the order in which people normally read text.
-> >> Q: Why is top-posting such a bad thing?
-> >> A: Top-posting.
-> >> Q: What is the most annoying thing in e-mail?
-> >> 
-> >> A: No.
-> >> Q: Should I include quotations after my reply?
-> >> 
-> > Hi Greg,
-> > Sorry for the top-posting. I will not do that any more. 
-> >> https://urldefense.com/v3/__http://daringfireball.net/2007/07/on_top__;!!ACWV5N9M2RV99hQ!I6O0EcBYMun5zy7pK39ZG9aJYrbv3Uy7IaJYl-fKOXJfmImBbzfXDFfOWeYY2o1JutHPBoAoI_b7xJQyjanSNOhz$
-> >> 
-> >> On Mon, Feb 10, 2025 at 06:43:49PM +0000, Yifei Liu wrote:
-> >>> Hi Greg, 
-> >>> Yes, looks we only need this for linux-6.12.y. Maybe we could use the v1 version which does not include the linux-6.13.y tag. Or I can send a v3 with the linux-6.12.y only.
-> >> 
-> >> As you know, we can't take patches for only older kernels and not newer
-> >> ones.  Please submit them for all relevant branches, AND test your
-> >> patches before you submit them so that they don't fail on our side, as
-> >> that just wastes our energy :(
-> > For this patch, I believe it failed to apply to linux-6.13 due to another same patch applied before it. Commit d9eb5a1e76f5 ("selftests/mm: build with -O2”) goes into linux-6.13 with tag v6.13.2, last week’s tag. I checked the queue-6.12 and do not see this patch yet for v6.12. I think we still need this for v6.12. About the patch, it fixes a build issue for selftest/mm, which is bacported to v6.12. Thus this patch should only be backported to v6.12.
-> > 
-> > I tested it on my device and it works fine and solved the failure of selftest.
-> > 
-> Hi Greg, 
-> 
-> I checked the v6.12.16 tag released last Friday. It does not contain this patch. It looks we will not see the same situation we have for v6.13 like I mentioned above and it’s safe to include this in v6.12. 
+[ 2172.936997] ------------[ cut here ]------------
+[ 2172.936999] kernel BUG at lib/iov_iter.c:629!
+......
+[ 2172.944996] PKRU: 55555554
+[ 2172.945155] Call Trace:
+[ 2172.945299]  <TASK>
+[ 2172.945428]  ? die+0x36/0x90
+[ 2172.945601]  ? do_trap+0xdd/0x100
+[ 2172.945795]  ? iov_iter_revert+0x178/0x180
+[ 2172.946031]  ? iov_iter_revert+0x178/0x180
+[ 2172.946267]  ? do_error_trap+0x7d/0x110
+[ 2172.946499]  ? iov_iter_revert+0x178/0x180
+[ 2172.946736]  ? exc_invalid_op+0x50/0x70
+[ 2172.946961]  ? iov_iter_revert+0x178/0x180
+[ 2172.947197]  ? asm_exc_invalid_op+0x1a/0x20
+[ 2172.947446]  ? iov_iter_revert+0x178/0x180
+[ 2172.947683]  ? iov_iter_revert+0x5c/0x180
+[ 2172.947913]  tls_sw_sendmsg_locked.isra.0+0x794/0x840
+[ 2172.948206]  tls_sw_sendmsg+0x52/0x80
+[ 2172.948420]  ? inet_sendmsg+0x1f/0x70
+[ 2172.948634]  __sys_sendto+0x1cd/0x200
+[ 2172.948848]  ? find_held_lock+0x2b/0x80
+[ 2172.949072]  ? syscall_trace_enter+0x140/0x270
+[ 2172.949330]  ? __lock_release.isra.0+0x5e/0x170
+[ 2172.949595]  ? find_held_lock+0x2b/0x80
+[ 2172.949817]  ? syscall_trace_enter+0x140/0x270
+[ 2172.950211]  ? lockdep_hardirqs_on_prepare+0xda/0x190
+[ 2172.950632]  ? ktime_get_coarse_real_ts64+0xc2/0xd0
+[ 2172.951036]  __x64_sys_sendto+0x24/0x30
+[ 2172.951382]  do_syscall_64+0x90/0x170
+......
 
-I don't know what "this patch" is here, sorry, I have no context.
+After calling bpf_exec_tx_verdict(), the size of msg_pl->sg may increase,
+e.g., when the BPF program executes bpf_msg_push_data().
 
-> I could resend a v3 with all the linux-6.13.y tags removed if you want. 
+If the BPF program sets cork_bytes and sg.size is smaller than cork_bytes,
+it will return -ENOSPC and attempt to roll back to the non-zero copy
+logic. However, during rollback, msg->msg_iter is reset, but since
+msg_pl->sg.size has been increased, subsequent executions will exceed the
+actual size of msg_iter.
+'''
+iov_iter_revert(&msg->msg_iter, msg_pl->sg.size - orig_size);
+'''
 
-Whatever needs to be applied, yes, please resend it properly.
+The changes in this commit are based on the following considerations:
 
-thanks,
+1. When cork_bytes is set, rolling back to non-zero copy logic is
+pointless and can directly go to zero-copy logic.
 
-greg k-h
+2. We can not calculate the correct number of bytes to revert msg_iter.
+
+Assume the original data is "abcdefgh" (8 bytes), and after 3 pushes
+by the BPF program, it becomes 11-byte data: "abc?de?fgh?".
+Then, we set cork_bytes to 6, which means the first 6 bytes have been
+processed, and the remaining 5 bytes "?fgh?" will be cached until the
+length meets the cork_bytes requirement.
+
+However, some data in "?fgh?" is not within 'sg->msg_iter'
+(but in msg_pl instead), especially the data "?" we pushed.
+
+So it doesn't seem as simple as just reverting through an offset of
+msg_iter.
+
+3. For non-TLS sockets in tcp_bpf_sendmsg, when a "cork" situation occurs,
+the user-space send() doesn't return an error, and the returned length is
+the same as the input length parameter, even if some data is cached.
+
+Additionally, I saw that the current non-zero-copy logic for handling
+corking is written as:
+'''
+line 1177
+else if (ret != -EAGAIN) {
+	if (ret == -ENOSPC)
+		ret = 0;
+	goto send_end;
+'''
+
+So it's ok to just return 'copied' without error when a "cork" situation
+occurs.
+
+Fixes: fcb14cb1bdac ("new iov_iter flavour - ITER_UBUF")
+Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ net/tls/tls_sw.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 914d4e1516a3..f3d7d19482da 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -1120,9 +1120,13 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+ 					num_async++;
+ 				else if (ret == -ENOMEM)
+ 					goto wait_for_memory;
+-				else if (ctx->open_rec && ret == -ENOSPC)
++				else if (ctx->open_rec && ret == -ENOSPC) {
++					if (msg_pl->cork_bytes) {
++						ret = 0;
++						goto send_end;
++					}
+ 					goto rollback_iter;
+-				else if (ret != -EAGAIN)
++				} else if (ret != -EAGAIN)
+ 					goto send_end;
+ 			}
+ 			continue;
+-- 
+2.47.1
+
