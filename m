@@ -1,24 +1,25 @@
 Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29AD4205E2F;
-	Sat, 22 Feb 2025 10:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA144202C3D;
+	Sat, 22 Feb 2025 10:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740219885; cv=none; b=GTDTbL9aDbQn7mH12V07XOcC9hV/g1evVeGmRCdS6MX0mepOOpixcjD0SoQPYB2mlKddfKLkHcNZMZ1EDPPIUwiejndV4eHE/N7UJ5IbXLaICS7v+bpBlWWsiRyv/S7XwoeOGYC9GjLQfy2iZf6oX4bwtMZ227VjHI0ninLT1fw=
+	t=1740220000; cv=none; b=Hvz1pTDs0FtUcTYeGjtDAOmUqfgMmrZDFpfIKKwB9j83oh83SurnXdiMPs1jM4wSX9fSs1R2PlTnOMeM/CqXJbm6TrjQdPnorMqs4aThK11ppwmUQvgtbdhN69IQrUe+Bjsf1hJ1+kerIGVNleWcL4GR/liPR0zB34opcKlxMYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740219885; c=relaxed/simple;
-	bh=q002xTAonhKK9lzADPJJAP3eRqDllXsdNS3CGjJMB8w=;
+	s=arc-20240116; t=1740220000; c=relaxed/simple;
+	bh=j5WzgqN4kOuCrsD8hHzHoKIHNrX5mXdR54X+4uHZzHU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dPcW0C5RfLQ5dolDx3Zl5fBUfIlJoRzV56X6GI5azQMyN+wWRZpGc1qM6R/7XNLa0TVh9EfqddmWPyk4/P6hb2fadOVTGU3uSyv5IK/Z5kMgYeeQ1BQQS1Qq39L4EMqZ276g9eQTSScbwg6iPbRTqzX5kNUg8r43UZNfQ4o/hBw=
+	 Content-Type:Content-Disposition:In-Reply-To; b=X3wBZw20zfPXcsM6l8WleDM8L9V5CcQEsvX063LIEawEa1VZbDCroGGyI1etcdWwS/yV8cWUp5b2MYjj89Dp6xLDNeGYn3TGF9b8aPG2XHmb5J3OlPOPoZdIpXPftddb9mFo8yUXQW2adKTlTsSuyDicMGuNQ4njToLKWjBg7TE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
 Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 51MAOQHv014812;
-	Sat, 22 Feb 2025 11:24:26 +0100
-Date: Sat, 22 Feb 2025 11:24:26 +0100
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 51MAQQUb014866;
+	Sat, 22 Feb 2025 11:26:26 +0100
+Date: Sat, 22 Feb 2025 11:26:26 +0100
 From: Willy Tarreau <w@1wt.eu>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
         Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Bill Wendling <morbo@google.com>,
@@ -28,11 +29,14 @@ Cc: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: Re: [PATCH 13/16] selftests: vDSO: parse_vdso: Make compatible with
+Subject: Re: [PATCH 00/16] selftests: vDSO: parse_vdso: Make compatible with
  nolibc
-Message-ID: <20250222102426.GA13708@1wt.eu>
+Message-ID: <20250222102626.GB13708@1wt.eu>
 References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
- <20250203-parse_vdso-nolibc-v1-13-9cb6268d77be@linutronix.de>
+ <cd1147a8-25ba-47d2-a59a-0a686469a808@csgroup.eu>
+ <20250203143640-70c59c53-af45-40cb-9a52-6395b3fdd263@linutronix.de>
+ <937c99b3-3837-4510-be65-4eca3b280ce2@csgroup.eu>
+ <20250203165859-8af1246b-6dd8-468a-8e05-68c7b0cad304@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,25 +46,29 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250203-parse_vdso-nolibc-v1-13-9cb6268d77be@linutronix.de>
+In-Reply-To: <20250203165859-8af1246b-6dd8-468a-8e05-68c7b0cad304@linutronix.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Feb 03, 2025 at 10:05:14AM +0100, Thomas Weißschuh wrote:
-> nolibc does not provide this header, instead its definitions are
-> available unconditionally.
+On Mon, Feb 03, 2025 at 05:14:37PM +0100, Thomas Weißschuh wrote:
+> On Mon, Feb 03, 2025 at 04:43:22PM +0100, Christophe Leroy wrote:
+> <snip>
+> 
+> > Do you have any plan to get it work with nolibc for all test programs in
+> > selftests/vDSO, not only the standalone x86 test ?
+> 
+> Not directly as next step. I am focussing on some other work which will
+> integrate (vDSO) selftests with nolibc slightly differently.
+> However if you have interest in converting the tests now, that would be
+> great and will also be useful for my future changes.
+> The current issues I see:
+> * Missing architecture support in nolibc (should be fairly easy to implement)
+> * Missing kselftest_harness.h support in nolibc (I'm working on that)
+> * Maybe some users want to stick with their regular libc
+>   (Nothing should prevent that, but the mechanism may need some discussion)
 
-Please think about reminding which one you're talking about so that a
-simple "git log" shows what header you're talking about (limits.h)
-without requiring to also see the patch itself.
-
-BTW, I think that limits.h is common enough that we could probably
-provide it as well with nolibc to ease porting (and the current patch
-is a good example of this). Maybe it could simply start by including
-stdint.h to provide the various limits we rely on. I remember that in
-the early days of nolibc-test we had to exclude it as well for nolibc.
-
-What do you think? The less we need to patch programs to insert #ifndef
-NOLIBC, the better.
+BTW, I wanted to thank you for this work. Originally when I started with
+nolibc, I thought the vdso was out of reach due to the many missing
+definitions. Turns out you were braver than me ;-)
 
 Cheers,
 Willy
