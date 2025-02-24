@@ -1,231 +1,194 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx-rz-1.rrze.uni-erlangen.de (mx-rz-1.rrze.uni-erlangen.de [131.188.11.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 781B253BE
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Feb 2025 20:36:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCAA25A359;
+	Mon, 24 Feb 2025 20:37:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740429370; cv=none; b=XHGirKGnbTXkAlvWVpxfhwRcrwyOE/jKSV5FbVwMl9eXJqEDnpgQLinGJ0oD4uruqwFD0ckErW3O4QuKa6GtHy1mo+WNww9IjVeTJZx34PMVFcXd076vF0/eqKGkwCtwbXZOwvuXYXmt8afg8rd/qqrcYjD3QpqDyO87rHvovpQ=
+	t=1740429481; cv=none; b=Rofwe0Q94diiOLiWU3z/aRp66awIpDHmhtS28OZP+Zjl/ssWFkTP++R2UisdW0o+x4nV7FZxjulqJSSOo1cjC59JhMlG+BKrGVCAXMdfYgspC7NBwo6QGRuGuoe6EETQsMitbMwTaqj8dTD4BdV+h43+DXilK7nymyGdG4Q78uI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740429370; c=relaxed/simple;
-	bh=YWwIwoWgUGkN4PS5fEaN8sQ1nwKBXMww2irPZZb2dRI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J4LzJOWS5sfXfv0MJqp3XSbOhRtXRB7A4bjsaYCL5ECW19VAT7vHC+C0Zir38rP3pFXUoBYI4fAlHwCWQgDIQr9wTz34pQdTuz9ZS7K2yazO1x0/jBSKs8gUjEbF7ArStjTK/wJQC9TGmTSeGjv2h6YCNEH/HpAaw4yCm2zq9DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HtbTaoUL; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1740429481; c=relaxed/simple;
+	bh=FLCDMUK4i/z/Ua8ga5kkGdpo/wCS9V0hc9fimsti8QY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=d03sfkH3aUg1Nh2PNMwQstcqOV+CCm69h5+ZqsDlUIUo0Ptoo2tl1jWDCucQTTX4gimbCoxkmDczLLNALhOMLTBYkN8e+gtc+EHKm0gngNvbmdtf3QaFzrXJL1CWXIn1rIgKDJRy2BJnARHctf/KQ7KN9N+3f2Hn5XFGiX1KV9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=fOxu1qXI; arc=none smtp.client-ip=131.188.11.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HtbTaoUL"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2212222d4cdso38065ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Feb 2025 12:36:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740429368; x=1741034168; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7cKiypGlQlNh3QGjj5r76b5/2a735Mu54ttXf9R8rE4=;
-        b=HtbTaoULzOzWKTGZmu3uvK/Uoqgrw9471cjunT2GGpyfr0qTojMFwoL9lwf8rnvbwF
-         Bxoychs9srz5mclUjOXktkx174pAXyGZB+wFte2xLeMZJaAQtYLZx7Tda3rB76/j9byu
-         u5C/eZLWLtjzzRD5yDMMcu8xCpZRjdmireI77h6PS34y6F5c2zpyU/3L21b3NWIqZi5q
-         FVoEvBHiSXFx3b/io/5MdaeNt1LbEgVHQ1zb9ZW6Ag9jAVxNVfdAs2IWDsVWr38y5lJN
-         hq8gzewN2mJBSDiBOuEbxMxLjM6Rku8JrDNDmgIQ4/DTvYEzq8YcLV5wM4XaJjza0rjs
-         6fog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740429368; x=1741034168;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7cKiypGlQlNh3QGjj5r76b5/2a735Mu54ttXf9R8rE4=;
-        b=FkbIlV7vNLax/Vw+7rnpJQc24OXsLf8Et17Bb13KqGtMhHjr9hMMEfYyIMwsVYql5c
-         TfWfe7kBmz6Fr4NVnqe22mpukIfVb7Qn4oNJV54+B+YdRhiJ7c63KfBfVBHWlGKvmL6D
-         Cn71DX+e0Qfzx7W45VjYj1SWTO4jC620Ipiw7xutAH+yPJTwX1XTPUBQXJi6GDxXQIkN
-         3azP/tIHLMAc9mvajoINnpV02sSGo5Epi6fN0Cp879l5+FsUlb5Qeg5VQC8PNQxwm5r6
-         9g6DzurIhz/k51mt0mOo3xGh2wjFuFbddsT43O0Hz43xjI/I4hhkYhMFQeC2cEEwS44F
-         wATg==
-X-Forwarded-Encrypted: i=1; AJvYcCWWyCYN1erXI0j71lcHLZesPNQLs0g1UIy7608qeFviN7DJQj+652mo41b6FoMGVMYqt1h6zliej+SEeM+JWtI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTqufC19HFmzeR/Aej7E7N1gaP93AfhmnBE+5ADlTugs/sgwnZ
-	8yWMXp2lLuQ0G9m05HiGeeCesh6kO+oEipm8mSp0+3pTCTxs0XikcsuU7K9OaQ==
-X-Gm-Gg: ASbGncsYzvRKvOB6UnStBDxF2R5tFiRxHREgT1kkWUhPz1aFAT07JxusbtZnKaExtsi
-	3B6hR2EX5xScltRPZ2SWetyiiMjdWIsZz+Hm4F4CVhVOp7BwlbpZqT2yRwwX+cMwe7lo+2CqexU
-	HuAPHMeOMc56xBgBo23+H1/+XqNrElkzl4143ZLdMT+iAfVC2o+bUGNGBGr/lEeltBxqLmFcz9W
-	qD9vRdMdHvFUp/sJSVlka/EX6M+JE1nXHsj29cv13MtVlGLMa107BflC3Lb8MLuiR41dLXyltT7
-	QoTInrKwecnEBSLdM4F8NKk/j8V1rliZXxMlQUMOdyXp2XJp4rbIZ4r9SnzVLsU=
-X-Google-Smtp-Source: AGHT+IHaH843HTFlex9kiZqcHpRgOavmlHObIcSN9r1RcQ8QKdI50gtE2lb4j2DGqAQRh59wKV6n8g==
-X-Received: by 2002:a17:902:ec90:b0:216:607d:c867 with SMTP id d9443c01a7336-22307aabb1cmr843455ad.29.1740429367405;
-        Mon, 24 Feb 2025 12:36:07 -0800 (PST)
-Received: from google.com (169.224.198.35.bc.googleusercontent.com. [35.198.224.169])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fe6a43cb81sm101015a91.38.2025.02.24.12.36.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2025 12:36:06 -0800 (PST)
-Date: Mon, 24 Feb 2025 20:35:56 +0000
-From: Pranjal Shrivastava <praan@google.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
-	joro@8bytes.org, suravee.suthikulpanit@amd.com,
-	robin.murphy@arm.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
-	shuah@kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org,
-	mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
-	smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v7 12/14] iommu/arm-smmu-v3: Introduce struct
- arm_smmu_vmaster
-Message-ID: <Z7zYLBLZGKim-5UL@google.com>
-References: <cover.1740238876.git.nicolinc@nvidia.com>
- <be799951a817557ac093ac3e18d02a631306aa35.1740238876.git.nicolinc@nvidia.com>
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="fOxu1qXI"
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-rz-1.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4Z1sxY6QrJz8sjf;
+	Mon, 24 Feb 2025 21:37:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
+	t=1740429474; bh=UA+X6mmVUTj+Fwy2eA0enXAYeNRDahzcxnhY2l62vxg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
+	 Subject;
+	b=fOxu1qXIDDJ7OxnH9V4Rd9zBejolTzZGr7/1mmYmxJHP0MTpwO5bzQ3iUKYn6puUY
+	 1kKJx7c96Cj2O9jlsjqCxs82GuMeH9ZyH7bWQCUI9Yk//1gubDZAiVqQAeSetUd08C
+	 4XjwTqdyeUbV/rzcH92zwVe8YeExDMhnoSiSAC4ftnFWCITRTi2271O9GgJEoebHAJ
+	 C+Nj0/Ku56dySKBhegP7mtZN8BWCVvo2vqeKTbnHnf2lLWNPA3wdFTbzW9hR+0tWrF
+	 j/CVz/hfMMOhXV8/9AXBdNhL+jcDHt2pu5JB9BT3eZ7tspt3il/jWGYm9i0XuOccN7
+	 OJsdiG5XIoDVA==
+X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 2001:9e8:362e:e00:55a6:11d5:2473:17a9
+Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:362e:e00:55a6:11d5:2473:17a9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: U2FsdGVkX18cE53wlyYjOUljqa4wuvt/kwPDr4UAD6I=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4Z1sxV5pgkz8slY;
+	Mon, 24 Feb 2025 21:37:50 +0100 (CET)
+From: Luis Gerhorst <luis.gerhorst@fau.de>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Luis Gerhorst <luis.gerhorst@fau.de>,
+	Henriette Herzog <henriette.herzog@rub.de>,
+	Cupertino Miranda <cupertino.miranda@oracle.com>,
+	Matan Shachnai <m.shachnai@gmail.com>,
+	Dimitar Kanaliev <dimitar.kanaliev@siteground.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Daniel Xu <dxu@dxuuu.xyz>,
+	bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Maximilian Ott <ott@cs.fau.de>,
+	Milan Stephan <milan.stephan@fau.de>
+Subject: [RFC PATCH 1/9] bpf/arm64: Unset bypass_spec_v4() instead of ignoring BPF_NOSPEC
+Date: Mon, 24 Feb 2025 21:36:11 +0100
+Message-ID: <20250224203619.594724-2-luis.gerhorst@fau.de>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250224203619.594724-1-luis.gerhorst@fau.de>
+References: <20250224203619.594724-1-luis.gerhorst@fau.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be799951a817557ac093ac3e18d02a631306aa35.1740238876.git.nicolinc@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-oN sAt, Feb 22, 2025 at 07:54:09AM -0800, Nicolin Chen wrote:
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-> index 5aa2e7af58b4..364d8469a480 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-> @@ -85,6 +85,59 @@ static void arm_smmu_make_nested_domain_ste(
->  	}
->  }
->  
-> +int arm_smmu_attach_prepare_vmaster(struct arm_smmu_attach_state *state,
-> +				    struct iommu_domain *domain)
-> +{
-> +	struct arm_smmu_nested_domain *nested_domain;
-> +	struct arm_smmu_vmaster *vmaster;
-> +	unsigned long vsid;
-> +	int ret;
-> +
-> +	iommu_group_mutex_assert(state->master->dev);
-> +
-> +	if (domain->type != IOMMU_DOMAIN_NESTED)
-> +		return 0;
-> +	nested_domain = to_smmu_nested_domain(domain);
-> +
-> +	/* Skip invalid vSTE */
-> +	if (!(nested_domain->ste[0] & cpu_to_le64(STRTAB_STE_0_V)))
-> +		return 0;
-> +
-> +	ret = iommufd_viommu_get_vdev_id(&nested_domain->vsmmu->core,
-> +					 state->master->dev, &vsid);
-> +	if (ret)
-> +		return ret;
-> +
-> +	vmaster = kzalloc(sizeof(*vmaster), GFP_KERNEL);
-> +	if (!vmaster)
-> +		return -ENOMEM;
-> +	vmaster->vsmmu = nested_domain->vsmmu;
-> +	vmaster->vsid = vsid;
-> +	state->vmaster = vmaster;
-> +
-> +	return 0;
-> +}
-> +
-> +void arm_smmu_attach_commit_vmaster(struct arm_smmu_attach_state *state)
-> +{
-> +	struct arm_smmu_master *master = state->master;
-> +
-> +	mutex_lock(&master->smmu->streams_mutex);
-> +	if (state->vmaster != master->vmaster) {
-> +		kfree(master->vmaster);
-> +		master->vmaster = state->vmaster;
-> +	}
+This changes the semantics of BPF_NOSPEC to always insert a speculation
+barrier. If this is not needed on some architecture, bypass_spec_v4()
+should instead return true.
 
-Does this condition suggest that we might end up calling
-`arm_smmu_attach_prepare_vmaster()` multiple times before __actually__
-commiting to a vmaster?
+Consequently, sanitize_stack_spill is renamed to nospec_result.
 
-> +	mutex_unlock(&master->smmu->streams_mutex);
-> +}
-> +
-> +void arm_smmu_master_clear_vmaster(struct arm_smmu_master *master)
-> +{
-> +	mutex_lock(&master->smmu->streams_mutex);
-> +	kfree(master->vmaster);
-> +	master->vmaster = NULL;
-> +	mutex_unlock(&master->smmu->streams_mutex);
-> +}
-> +
->  static int arm_smmu_attach_dev_nested(struct iommu_domain *domain,
->  				      struct device *dev)
->  {
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> index 358072b4e293..9e50bcee69d1 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> @@ -2803,6 +2803,7 @@ int arm_smmu_attach_prepare(struct arm_smmu_attach_state *state,
->  	struct arm_smmu_domain *smmu_domain =
->  		to_smmu_domain_devices(new_domain);
->  	unsigned long flags;
-> +	int ret;
->  
->  	/*
->  	 * arm_smmu_share_asid() must not see two domains pointing to the same
-> @@ -2832,9 +2833,15 @@ int arm_smmu_attach_prepare(struct arm_smmu_attach_state *state,
->  	}
->  
->  	if (smmu_domain) {
-> +		ret = arm_smmu_attach_prepare_vmaster(state, new_domain);
+This later allows us to rely on BPF_NOSPEC from v4 to reduce complexity
+of Spectre v1 verification.
 
-IMO, this adds a little confusion for folks not using iommufd.
+Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
+Acked-by: Henriette Herzog <henriette.herzog@rub.de>
+Cc: Maximilian Ott <ott@cs.fau.de>
+Cc: Milan Stephan <milan.stephan@fau.de>
+---
+ arch/arm64/net/bpf_jit_comp.c | 10 +---------
+ include/linux/bpf.h           | 14 +++++++++++++-
+ include/linux/bpf_verifier.h  |  2 +-
+ kernel/bpf/verifier.c         |  4 ++--
+ 4 files changed, 17 insertions(+), 13 deletions(-)
 
-I guess it'd be cleaner if we invoke this below within the:
-`if (new_domain->type == IOMMU_DOMAIN_NESTED)` condition instead of
-simply returning from the function if the new_domain->type isn't NESTED.
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 8446848edddb..18370a45e8f2 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1508,15 +1508,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 
+ 	/* speculation barrier */
+ 	case BPF_ST | BPF_NOSPEC:
+-		/*
+-		 * Nothing required here.
+-		 *
+-		 * In case of arm64, we rely on the firmware mitigation of
+-		 * Speculative Store Bypass as controlled via the ssbd kernel
+-		 * parameter. Whenever the mitigation is enabled, it works
+-		 * for all of the kernel code with no need to provide any
+-		 * additional instructions.
+-		 */
++		/* TODO: emit(A64_SB) */
+ 		break;
+ 
+ 	/* ST: *(size *)(dst + off) = imm */
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f3f50e29d639..bd2a2c5f519e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2423,7 +2423,19 @@ static inline bool bpf_bypass_spec_v1(const struct bpf_token *token)
+ 
+ static inline bool bpf_bypass_spec_v4(const struct bpf_token *token)
+ {
+-	return cpu_mitigations_off() || bpf_token_capable(token, CAP_PERFMON);
++#ifdef ARM64
++	/* In case of arm64, we rely on the firmware mitigation of Speculative
++	 * Store Bypass as controlled via the ssbd kernel parameter. Whenever
++	 * the mitigation is enabled, it works for all of the kernel code with
++	 * no need to provide any additional instructions. Therefore, skip
++	 * inserting nospec insns against Spectre v4 if arm64
++	 * spectre_v4_mitigations_on/dynamic() is true.
++	 */
++	bool spec_v4 = arm64_get_spectre_v4_state() == SPECTRE_VULNERABLE;
++#else
++	bool spec_v4 = true;
++#endif
++	return !spec_v4 || cpu_mitigations_off() || bpf_token_capable(token, CAP_PERFMON);
+ }
+ 
+ int bpf_map_new_fd(struct bpf_map *map, int flags);
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 32c23f2a3086..2af09d75c7cd 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -561,7 +561,7 @@ struct bpf_insn_aux_data {
+ 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
+ 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+ 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
+-	bool sanitize_stack_spill; /* subject to Spectre v4 sanitation */
++	bool nospec_result; /* ensure following insns from executing speculatively */
+ 	bool zext_dst; /* this insn zero extends dst reg */
+ 	bool needs_zext; /* alu op needs to clear upper bits */
+ 	bool storage_get_func_atomic; /* bpf_*_storage_get() with atomic memory alloc */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 60611df77957..5be3bd38f540 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4904,7 +4904,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 		}
+ 
+ 		if (sanitize)
+-			env->insn_aux_data[insn_idx].sanitize_stack_spill = true;
++			env->insn_aux_data[insn_idx].nospec_result = true;
+ 	}
+ 
+ 	err = destroy_if_dynptr_stack_slot(env, state, spi);
+@@ -20445,7 +20445,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 		}
+ 
+ 		if (type == BPF_WRITE &&
+-		    env->insn_aux_data[i + delta].sanitize_stack_spill) {
++		    env->insn_aux_data[i + delta].nospec_result) {
+ 			struct bpf_insn patch[] = {
+ 				*insn,
+ 				BPF_ST_NOSPEC(),
+-- 
+2.48.1
 
-> +		if (ret)
-> +			return ret;
-> +
->  		master_domain = kzalloc(sizeof(*master_domain), GFP_KERNEL);
-> -		if (!master_domain)
-> +		if (!master_domain) {
-> +			kfree(state->vmaster);
->  			return -ENOMEM;
-> +		}
->  		master_domain->master = master;
->  		master_domain->ssid = state->ssid;
->  		if (new_domain->type == IOMMU_DOMAIN_NESTED)
-> @@ -2861,6 +2868,7 @@ int arm_smmu_attach_prepare(struct arm_smmu_attach_state *state,
->  			spin_unlock_irqrestore(&smmu_domain->devices_lock,
->  					       flags);
->  			kfree(master_domain);
-> +			kfree(state->vmaster);
->  			return -EINVAL;
->  		}
->  
-> @@ -2893,6 +2901,8 @@ void arm_smmu_attach_commit(struct arm_smmu_attach_state *state)
->  
->  	lockdep_assert_held(&arm_smmu_asid_lock);
->  
-> +	arm_smmu_attach_commit_vmaster(state);
-> +
->  	if (state->ats_enabled && !master->ats_enabled) {
->  		arm_smmu_enable_ats(master);
->  	} else if (state->ats_enabled && master->ats_enabled) {
-> @@ -3162,6 +3172,7 @@ static int arm_smmu_attach_dev_identity(struct iommu_domain *domain,
->  	struct arm_smmu_ste ste;
->  	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
->  
-> +	arm_smmu_master_clear_vmaster(master);
->  	arm_smmu_make_bypass_ste(master->smmu, &ste);
->  	arm_smmu_attach_dev_ste(domain, dev, &ste, STRTAB_STE_1_S1DSS_BYPASS);
->  	return 0;
-> @@ -3180,7 +3191,9 @@ static int arm_smmu_attach_dev_blocked(struct iommu_domain *domain,
->  					struct device *dev)
->  {
->  	struct arm_smmu_ste ste;
-> +	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
->  
-> +	arm_smmu_master_clear_vmaster(master);
->  	arm_smmu_make_abort_ste(&ste);
->  	arm_smmu_attach_dev_ste(domain, dev, &ste,
->  				STRTAB_STE_1_S1DSS_TERMINATE);
-> 
-
-Thanks,
-Praan
