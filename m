@@ -1,559 +1,244 @@
-Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2087.outbound.protection.outlook.com [40.107.237.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7B9263F57;
-	Mon, 24 Feb 2025 20:57:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.22
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740430665; cv=none; b=n6Hp2ovCCa2esDKI9U9aBK0MKjIfymjgC2hmTExRMlKwaedxMn8iX/HCJv8y/KctY2QXxESssdly5cvYn9vUCpO3wjPbc4h/vfQ6axXwCw29dDKCEkvS3B73dG0qsvjJ9yWQgVcvg5JsrzgDRRo8xqZhSAkSSD5ZU5E3qNzVouk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740430665; c=relaxed/simple;
-	bh=to/48DNPW3gCzRBhAfMnQUvviygMbEx4KoLPC/ytuYM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O8XbupW8aRcfD2LlI6QnNYQyoMC1gZFwFXVwncoYeQQ7hEENgNtg25BcDRfcnpslRbLq8+6BkG9ys+lgKT81Bzk9cY+WJPJWFnJq/8yZHGs0Los5QcPj17UqZ91Sa+gJlA0OGw60glZIPppIAJlPcaUUdV49qcINIka1+uUxmh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=AXu0HTTT; arc=none smtp.client-ip=131.188.11.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922822571B2;
+	Mon, 24 Feb 2025 21:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740432545; cv=fail; b=D2rzGW4W/ERmV4DaaT9PRJ03Ru9J+aJldyyowX3hwD5VVCQiSPevasq9V9dxf9cYea6SkOZkF+GOD9KSyA5INr3jP17RLxnvhbzf2jqloHQUEU/pF9gNl6zkBITaxG6c3TGTvASbirOmzmHafvbUW9t4BFWOxeqdeJP1VIQ0tpI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740432545; c=relaxed/simple;
+	bh=iiHaHi5dqptjZrBrk5tPfwn66aYQS5LNw2EQRhd2gRQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=UiUKNYM8/2Fw/uzAuw9xUbd5ovxW0crg8eJB7ST6cpwiUz/A/yn0XELGmqBGR9Xbzzbps3BGxepBaGD83GI4YO45QCxcQ1S6IAJhqoy3j4AvpWWkB5dhtrzC5xSxXAQuta3+Vz0+7bqq2oabQYNWXfnLIvuX4h6c3rJUKK8ZIcM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=PespLxNB; arc=fail smtp.client-ip=40.107.237.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="AXu0HTTT"
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4Z1t9K596dz1xvD;
-	Mon, 24 Feb 2025 21:48:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1740430085; bh=g/QslQRd7T/eMz2UV3zj/05aMr89MUrVwbYpFn8MyEk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
-	 Subject;
-	b=AXu0HTTTvt92ADDSomCGmy6tE+1vGSEEhq9YZ9yGQGMpTecfSuypFtuQD31ESAYqd
-	 TCp4/2GWnAXdX30c94yC3RnVxk57YoFhXvLtdqXDfprTXmo2DrXU/S9uT/Zqa6ieCi
-	 nzh7j5WRTUMXkQQ0/Z5rHrmiNgQ3wYnmkPtG93qzkjhDilXFetHnIpXU91FYLTTWJ8
-	 KVXtq0+kPt51HAIhmUPv/FoD+nQhIe7+37cVw7+W/BYZpas3EU97YPbUn+4C5lFD8c
-	 9/ZEijPffF2VFrPlSumdi7iGzsRRQNIc7/8hEGVQLyhnjeJ1hd7sDYHBeqRGmEknEL
-	 9dCXJIpM0Xc4w==
-X-Virus-Scanned: amavisd-new at boeck2.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2001:9e8:362e:e00:55a6:11d5:2473:17a9
-Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:362e:e00:55a6:11d5:2473:17a9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX1/Gixsbac+DBJZG0+bMYw0cqG0a5yzPrYU=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4Z1t9F3pp3z1xsg;
-	Mon, 24 Feb 2025 21:48:01 +0100 (CET)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Luis Gerhorst <luis.gerhorst@fau.de>,
-	Henriette Herzog <henriette.herzog@rub.de>,
-	Cupertino Miranda <cupertino.miranda@oracle.com>,
-	Matan Shachnai <m.shachnai@gmail.com>,
-	Dimitar Kanaliev <dimitar.kanaliev@siteground.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Daniel Xu <dxu@dxuuu.xyz>,
-	bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Maximilian Ott <ott@cs.fau.de>,
-	Milan Stephan <milan.stephan@fau.de>
-Subject: [RFC PATCH 5/9] bpf: Fall back to nospec if v1 verification fails
-Date: Mon, 24 Feb 2025 21:47:44 +0100
-Message-ID: <20250224204744.599963-1-luis.gerhorst@fau.de>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250224203619.594724-1-luis.gerhorst@fau.de>
-References: <20250224203619.594724-1-luis.gerhorst@fau.de>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="PespLxNB"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JhUzDG2DyxsZCVG60sp6UhBomyopb/pMxDuHsc69p6nt+kFDADs4O4BHyIOxXRkJkQ2l3QH0AAJOzsUgp+xQQw9YGX1wSnyLUPpehnOm0P2VKp31Y+0KUVEGWB45mSSLY3PfKZ4BezMlh/ytOLZ7/NzsYz0maORIrjPZZcjsdygg3DvkNkUgXzR2Om/kbZzaBCJtbGsZDvfYebMTYpxzgooBP1dTNVft3XsckV2Hi8KUr63jFViIbtLwKm4MqhUSZTHecKTwFj/+3NLc/PWhsZVguNt4/exCzYQgDXaDwLObKoGCgUBZszDEJ7Dz6u3YrFPIcyYOovRRvnJYEddW7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6HKl5x7sgGUI0Ckr98jtpMbkcJZBmVf5YSuCrbzRrMk=;
+ b=xXAevV8PjFxFwU+N3aRMUD/WAfWdzpFX1VpJOm/SJlYBb2xrMrjZ9CA+/Ienk3hoUr8a+ycZc6IoKzBkeGNB2qPgvKicbl2p5XllaaSPvBUstQWVDeftP3m0iN7ICOeMTD5pjpAbohsiFxLGO+N/LQtvltOXOpJkPOs74vQD77lPW4DC8g1AzUkuITotWCfvx4x8fp+BQ1Hk/x5ohQXnWgkqTY7EeTfgeYt/JrOWZdnCPF6O0oUZMbNBjtgM39XWMpOUMyiIRFcatgwhmoX5GxGwGFTy/X6ebsUZ16jNgl6wgE0iz41lAmjSXOprZQXQjOS8eNpwVkWc9TEKRcTnHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6HKl5x7sgGUI0Ckr98jtpMbkcJZBmVf5YSuCrbzRrMk=;
+ b=PespLxNBI6Aq9FRJxX2pfU41LxV4LfIIThdWcfQbRNY2m+gYnxn9BU7h/+W3mCP6BTucE5NGnoRykyJkKcFCl0MtYuUf2tTTz8ys7HImB+P53Ive6EgfTAwQq/GvhT2+sOV8L1mish6+34G4nsJuDSKJ2qYGAB7mvzk42IW8xdc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5070.namprd12.prod.outlook.com (2603:10b6:5:389::22)
+ by DS0PR12MB8344.namprd12.prod.outlook.com (2603:10b6:8:fe::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8466.20; Mon, 24 Feb 2025 21:28:56 +0000
+Received: from DM4PR12MB5070.namprd12.prod.outlook.com
+ ([fe80::20a9:919e:fd6b:5a6e]) by DM4PR12MB5070.namprd12.prod.outlook.com
+ ([fe80::20a9:919e:fd6b:5a6e%7]) with mapi id 15.20.8466.020; Mon, 24 Feb 2025
+ 21:28:54 +0000
+Message-ID: <88fc49a9-d801-5d8f-f156-28fa06910cd6@amd.com>
+Date: Mon, 24 Feb 2025 15:28:52 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v7 01/10] KVM: SEV: Disable SEV-SNP support on
+ initialization failure
+Content-Language: en-US
+To: "Pratik R. Sampat" <prsampat@amd.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+ shuah@kernel.org, pgonda@google.com, ashish.kalra@amd.com, nikunj@amd.com,
+ pankaj.gupta@amd.com, michael.roth@amd.com, sraithal@amd.com
+References: <20250221210200.244405-1-prsampat@amd.com>
+ <20250221210200.244405-2-prsampat@amd.com>
+From: Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20250221210200.244405-2-prsampat@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN7PR04CA0070.namprd04.prod.outlook.com
+ (2603:10b6:806:121::15) To DM4PR12MB5070.namprd12.prod.outlook.com
+ (2603:10b6:5:389::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5070:EE_|DS0PR12MB8344:EE_
+X-MS-Office365-Filtering-Correlation-Id: a0f50310-a7a7-4678-22fb-08dd551a3d91
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Si9hek9JMWVRUEY5KytBVktvaG5XT1RpcUYyZmhhZk1JcDMrbmx3MEZ2dXpE?=
+ =?utf-8?B?aHJSZkswWitDYUZyMlpsWGJlREFNT2hvSHphZStGZloxYnZKWkZ6RVpkRW5J?=
+ =?utf-8?B?UjUyeXE5SkpxNy93SEhLRE5EV3ZmbWJONnJzZVMxVFhqWThPVnY0bEFlTHhS?=
+ =?utf-8?B?Q2Z6blZINTZXTlZpODNsVE9kOU5sTXlGaXBwL21WV2ljRERmZmxiS0FIRklL?=
+ =?utf-8?B?N0h4aXBlR0VUc3BJQWZYaWJNWUt2VDJZVkpvaWx0cXlxS2VGUlUzbC8wcFNr?=
+ =?utf-8?B?OFE4Y3hmb3BaUzNXSXJFVzhGVWdVTVpxSHpHVWFGVGFYTGZ6M0VXc0pWd3pJ?=
+ =?utf-8?B?M01veXRBM1RYVFVsaVN0WXFleC9pM1Bva2VScVpEaGFQdGNwa2FGdE9aQ1A4?=
+ =?utf-8?B?L2tiRUNPOXQzZHRXNjNBY0pHUC9zYXVvVUlsaUlCT1l6YkZUdms5OFZzRlNy?=
+ =?utf-8?B?MGoxTnBlQTRJbHBNU0Vab2hoS2NDTzlWcWNpcU01NW5GZytOVWZxUyt1VmNa?=
+ =?utf-8?B?U2luMXpmOERIU0QycTNuQVNDM3hyN2ErZTJEYytIckJTNmQ4Z3BTU2hZNm8z?=
+ =?utf-8?B?VzNNM3RvOW5nUENuUWEybmFVVXpXRkM0c1lPb3liTkk2YW9CSFIzQ1UyMk5M?=
+ =?utf-8?B?aFdNcGkza2VXSlZlaHFOYm53SzduWjh2ZS8wazRuUTlXQ2xFTWQvTUpTa2xJ?=
+ =?utf-8?B?Y0VpVkhWdEg0ZEZPMFlMb29Cd043UUJLVXFBZ1RpeUJNdFllVmhRRTE0RGVi?=
+ =?utf-8?B?VGEyVW5HZ0FJR1ZVWjNIMDRzTFMwVVpDdTBGV0tacTUyNjhZTC9tTk10UXp6?=
+ =?utf-8?B?Z0lSSENlOFdVWnlld3Y4NnEzU0d2RVJHU3BZczhoWWNIcmdCQ2s4OUZHNEY2?=
+ =?utf-8?B?a1I1S09jQ3lKN084RHQ5akNJY0o5cnFaRkFpdlpEWFMvY2JQVzl2UEtlVGJC?=
+ =?utf-8?B?SWkyUGhTRnYrbW45cVl2MTAyYkxLNXB4SUpOMUxxa21sYmlJOXhvU3VveUFl?=
+ =?utf-8?B?VUQwTHdUTERtQ1NlSHdwR3RXY09NWVdkUEFpa2FpODBkZm54TEVwQmpPSzM5?=
+ =?utf-8?B?RElQeXpaWTc2SGVzOGkvMkdicys2TXJDMUlqZ2FmU0xma3ZicTIvOUFzRHlN?=
+ =?utf-8?B?VUlNNlROZXhpNzhubXFZbGNzWkl1cGpmNWJwUGUxcjJlcEZKQ0RSSENQRVls?=
+ =?utf-8?B?SkFwU3REWGdHY0FLRDltUVdUenhVemFhMjBLQmJuSHQrY2pVMU5lOExoVFpw?=
+ =?utf-8?B?MGZuMzM5enFIS3B0aFlUSTR4cnRCUklKaFp4N0dWMXlwTDZCNXk2NTNJY3g5?=
+ =?utf-8?B?b3NtN0RyK25udHQ4K1BaY05IMm5QcGFMMXhoZ0J6dVVCaVJyc29RcEJGeCs4?=
+ =?utf-8?B?RjdTK2ZzWms0QlR4NXZLeGoxZEZjcUtKZkd2ZnZFd0ZqenY4OHZ2ZmN4Q05h?=
+ =?utf-8?B?clN2cVUyWk81bjErWDNZclduZW9TOWhBWVRaaEZGMVAwUGxxRUFSaTdyWWRq?=
+ =?utf-8?B?TVBKcnBFTFhjUjhGM04yeGVNcnVtR1A2YUtCM2VPMWdNVDVXcU5HejdxYWZD?=
+ =?utf-8?B?M3pqUzhwTCtwc3lIVkZHSzNidjJNRkxzaTBGYTljUFcwOGVCSUI5TzdhRzNX?=
+ =?utf-8?B?OWFzUFV0YnJXVHhzeVhaK2xuOU54SlprOTZldXdwd1o0L0ZPekxXWkhzZGtU?=
+ =?utf-8?B?ajErRHpIKzB2SjNyblJWbW5kRUJWNi96T3QzYysvUXFFYkpzNnpETlVjTTZR?=
+ =?utf-8?B?OW56ZWFBTW02SmRRbnhOVHJxenZVRXBnR1ZMKzB6TlZ3VllSMVRQRUxUdDhw?=
+ =?utf-8?B?RjUxVk1PZk5PdGpBR1hNZndkUXI5ZGRROW45Q3FHUW9KQXc2Z0tBMUhuZTRS?=
+ =?utf-8?Q?Vi6J0ulK7kNY4?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5070.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bW5rQ3lCbTV6UHBGT1I3UWhtMXFYOTFPNnEyd2hrd0ZXdUJRYUNxb21oYkFu?=
+ =?utf-8?B?UlBBdjF3MG9yWGg3bG9NNnIzcHZjYWV5dFhzYnUzN0FwNjdMeWFOdU5qMHBY?=
+ =?utf-8?B?Qk1DQis3bWs1UlkrQ3ZkNm53Vmw3UjJNL0I0T0RhOHBLb3YvQ0JTM09DdjNj?=
+ =?utf-8?B?VkFMZ3dlWDN4WWpFRTNtVTYrT3EySndCdjJPdE0wRFNkUytISTdBKzJHVHBu?=
+ =?utf-8?B?cU5LTnpqQVZoYi9QY2lxZVp3cjJQcXI0QUxXdHBRanB1VXE1M0RFR1NwUFV5?=
+ =?utf-8?B?bHgrd0V0WjBYVVBsSWxIdk1JaW5tR0xBTVVxbjdld2RxbnRZdldaV1M1ek9u?=
+ =?utf-8?B?VTlKWGF2U1J3RmZwc25VYnJMbHAvMlR4bDZtWTJtOTAyTVZRQ3dEWEd4c2k2?=
+ =?utf-8?B?ME5vQXQwKzJoUVFSSnJsblhYbURpYjJtL2dZY2k0L2xuVGIzb0ZTNFpMbXVh?=
+ =?utf-8?B?NE1GLzhKSkVnNitvV2F0dU85T2l3YloxYW1kL3hKK1BTa2o0U3Y2TlpxSDNE?=
+ =?utf-8?B?MUFyKzlqcEEyLzF4L2NMaDJSK05rWlhIRkxvYWxJb0ZzYjluQzhaVXB5ZVYw?=
+ =?utf-8?B?ajRNOTZBM2lMNU83MXBvQ1AwdzJGVFk1cTF0ZnJSM29TdVU0d3ZrM1ljOG1a?=
+ =?utf-8?B?VDZwRi8rREpqQy9wY2k5MzNUdXlxQjZqZ0tscG9neHNUYnYyQ2xNMWFHOFNk?=
+ =?utf-8?B?UkhVUUsxODFsUDJYNFFkTjNWUlFDWkVWWHRmc25NZ1N3L1VhdWZZOHB4bnpI?=
+ =?utf-8?B?dGVKZ0tHdFhZQjMxTk1DdEM3bTJNekNDekJOVFFYKzd6Wlo1MHh2VHhhVFNH?=
+ =?utf-8?B?T2lHbkM1cXIvR3dEajd3TnVjTVVlMWsrcVdTQytORktNempFdWJ1VGhYdXdT?=
+ =?utf-8?B?Z3dYWG5aakkrWTFZM2FyVmlkV3drUmxpMC9QeTVidGJ1elVNcThYWU9PcjFM?=
+ =?utf-8?B?dk54ZDJIb3V5T05lWUNRSm9lVTN1WlNTdlN4ME5acDR1ejlDazZ6cWNaMjZB?=
+ =?utf-8?B?UHNBNXJWeG5yeE9sdk9MREt0Z3ZFcDFaWE1DT2NicWtqZTg2ajB1YWZhbUdt?=
+ =?utf-8?B?VEhqZU9VWTJHWm54eUdaMk9IRWphakJQbnptL2JCMUxvR0U3S0V3K3dOb2RR?=
+ =?utf-8?B?NjVUNFd3aGRQci9DVzN4SlI4NVIxTHpxUjFBRW9LZU5hRlpuNG9CN3FLNG5r?=
+ =?utf-8?B?SVBZaHpseXdPcU5NTWJkSnlCMzNLK3IyRkYvNnYrUEljQnpJQktxTVdmTmdP?=
+ =?utf-8?B?VG9NTGhUYWpVbUUyaUxJa0NwNDBkbmh2U3B2bnRiblJsWXIyWEsrcXlBMkdr?=
+ =?utf-8?B?UFhWdzFVK2pRb0EvWmlyMkVWM3FJRHF2NVorT2d6djE0b1F6M2tOZldBTm00?=
+ =?utf-8?B?UmVEbXcxMXM1REgxVTRvRnJ4ek15M0tlL0pNVUticUgraXZKN1FMdUFKaWtj?=
+ =?utf-8?B?RDNBaVN6cmZib0thRXVrdldUOFhESmZvM0pxTE9TdnRCa2pnbmllN0ZuMmEx?=
+ =?utf-8?B?VXV4aFFPRXJHT2U1RWwyWVk3YXBCQzNpRmk1NnRjSG1adGhFOFI5QTdsYTVh?=
+ =?utf-8?B?U1pmanEvTTNMZ1pRU3U1dFNjemNJc3EvdjEyZDhXMEI2YnV4UzhnY1R4WWZr?=
+ =?utf-8?B?VXR0YlJnZ2VCN0p5UlFnRjdzaUxyeHdqYlVHLzVLMlAzeWFza2FjbEdOY3RV?=
+ =?utf-8?B?c3NRdWFLWnJzNitJWUpFZ3ZsSCt4d29BZHV5WHJ0UHhMcEZ0TnRNbTZYdklw?=
+ =?utf-8?B?TEhxeHcrOVJsYXpKa3NJZitDV2J6TlBvbStaN0pRSThQM0wxcEpCQ0Myenp5?=
+ =?utf-8?B?S0V6eHd0Q0xDSXZNNHc5WkNtbUR4MDl6TExwVmpsNzZuQTUwRXpDeHo5aDFC?=
+ =?utf-8?B?S1grMVNiaWorMEZoWjMreFVMaWg2NFVsbkxoM3c5d3p2SkswcHhrU3hpRFVO?=
+ =?utf-8?B?dzNSSTdWc1RoaUhYNk9sNkpUdnRYUmwwM29SeXdkVWMxR3pqV05aRGtNL3J6?=
+ =?utf-8?B?VUNielhlZERuNmhub2xuRnA3NjRIK2VHci9ZNjBUbXpxckRGbUNGL0oxN09R?=
+ =?utf-8?B?VklvMnZWMDdmd2lsUWNhWWFzVmNRS2hrNEZiSFZzYnJVRTA0OHhma2dJQ2d5?=
+ =?utf-8?Q?xPmCUSOMD5Fjqqcyszi0rUBvr?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0f50310-a7a7-4678-22fb-08dd551a3d91
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5070.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2025 21:28:54.8811
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WachUw2quuYa7nTlnNj4JFjH865XeitNIXoz3bbkTC9/ZZJhlqPGG7SciUBo63z8N5oeXdhECaEb69qCn67qcQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8344
 
-This implements the core of the series and causes the verifier to fall
-back to mitigating Spectre v1 using speculation barriers. The approach
-was presented at LPC'24:
-  https://lpc.events/event/18/contributions/1954/ ("Mitigating
-  Spectre-PHT using Speculation Barriers in Linux eBPF")
-and RAID'24:
-  https://arxiv.org/pdf/2405.00078 ("VeriFence: Lightweight and Precise
-  Spectre Defenses for Untrusted Linux Kernel Extensions")
+On 2/21/25 15:01, Pratik R. Sampat wrote:
+> During platform init, SNP initialization may fail for several reasons,
+> such as firmware command failures and incompatible versions. However,
+> the KVM capability may continue to advertise support for it. Export this
+> information to KVM and withdraw SEV-SNP support if has not been
+> successfully initialized.
 
-In the tests, some are now successful where we previously had a
-false-positive (i.e., rejection). Change them to reflect where the
-nospec should be inserted (as comment) and modify the error message if
-the nospec is able to mitigate a problem that previously shadowed
-another problem.
+Hmmm... rather than creating a new API, can you just issue an
+SNP_PLATFORM_STATUS command and see if the SNP is not in the UNINIT state?
 
-Briefly went through all the occurrences of EPERM, EINVAL, and EACCESS
-in the verifier in order to validate that catching them like this makes
-sense.
+Thanks,
+Tom
 
-Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
-Acked-by: Henriette Herzog <henriette.herzog@rub.de>
-Cc: Maximilian Ott <ott@cs.fau.de>
-Cc: Milan Stephan <milan.stephan@fau.de>
----
- include/linux/bpf_verifier.h                  |  1 +
- kernel/bpf/core.c                             | 17 ++--
- kernel/bpf/verifier.c                         | 77 ++++++++++++++++---
- .../selftests/bpf/progs/verifier_and.c        |  3 +-
- .../selftests/bpf/progs/verifier_bounds.c     | 30 ++++----
- .../selftests/bpf/progs/verifier_movsx.c      |  6 +-
- .../selftests/bpf/progs/verifier_unpriv.c     |  3 +-
- .../bpf/progs/verifier_value_ptr_arith.c      | 11 ++-
- 8 files changed, 108 insertions(+), 40 deletions(-)
-
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 2af09d75c7cd..7c289e3bf18d 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -561,6 +561,7 @@ struct bpf_insn_aux_data {
- 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
- 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
- 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
-+	bool nospec; /* do not execute this instruction speculatively */
- 	bool nospec_result; /* ensure following insns from executing speculatively */
- 	bool zext_dst; /* this insn zero extends dst reg */
- 	bool needs_zext; /* alu op needs to clear upper bits */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index da729cbbaeb9..d2971bc8e5c7 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2099,14 +2099,15 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- #undef COND_JMP
- 	/* ST, STX and LDX*/
- 	ST_NOSPEC:
--		/* Speculation barrier for mitigating Speculative Store Bypass.
--		 * In case of arm64, we rely on the firmware mitigation as
--		 * controlled via the ssbd kernel parameter. Whenever the
--		 * mitigation is enabled, it works for all of the kernel code
--		 * with no need to provide any additional instructions here.
--		 * In case of x86, we use 'lfence' insn for mitigation. We
--		 * reuse preexisting logic from Spectre v1 mitigation that
--		 * happens to produce the required code on x86 for v4 as well.
-+		/* Speculation barrier for mitigating Speculative Store Bypass,
-+		 * Bounds-Check Bypass, and Type Confusion. In case of arm64, we
-+		 * rely on the firmware mitigation as controlled via the ssbd
-+		 * kernel parameter. Whenever the mitigation is enabled, it
-+		 * works for all of the kernel code with no need to provide any
-+		 * additional instructions here. In case of x86, we use 'lfence'
-+		 * insn for mitigation. We reuse preexisting logic from Spectre
-+		 * v1 mitigation that happens to produce the required code on
-+		 * x86 for v4 as well.
- 		 */
- 		barrier_nospec();
- 		CONT;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 03e27b012af3..aee49f8da0c1 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1914,6 +1914,17 @@ static int pop_stack(struct bpf_verifier_env *env, int *prev_insn_idx,
- 	return 0;
- }
- 
-+static bool error_recoverable_with_nospec(int err)
-+{
-+	/* Should only return true for non-fatal errors that are allowed to
-+	 * occur during speculative verification. For these we can insert a
-+	 * nospec and the program might still be accepted. Do not include
-+	 * something like ENOMEM because it is likely to re-occur for the next
-+	 * architectural path once it has been recovered-from in all speculative
-+	 * paths. */
-+	return err == -EPERM || err == -EACCES || err == -EINVAL;
-+}
-+
- static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
- 					     int insn_idx, int prev_insn_idx,
- 					     bool speculative)
-@@ -19252,16 +19263,7 @@ static int do_check(struct bpf_verifier_env *env)
- 					else
- 						verbose(env, "%d: safe\n", env->insn_idx);
- 				}
--				err = process_bpf_exit(env, &prev_insn_idx, pop_log,
--						       &do_print_state);
--				if (err == CHECK_NEXT_INSN) {
--					continue;
--				} else if (err == ALL_PATHS_CHECKED) {
--					break;
--				} else if (err) {
--					WARN_ON_ONCE(err > 0);
--					return err;
--				}
-+				goto nospec_or_safe_state_found;
- 			}
- 		}
- 
-@@ -19315,17 +19317,47 @@ static int do_check(struct bpf_verifier_env *env)
- 		sanitize_mark_insn_seen(env);
- 		prev_insn_idx = env->insn_idx;
- 
-+		if (state->speculative && cur_aux(env)->nospec) {
-+			/* Reduce verification complexity by only simulating
-+			 * speculative paths until we reach a nospec.
-+			 */
-+			goto nospec_or_safe_state_found;
-+		}
-+
- 		err = do_check_insn(env, insn, pop_log, &do_print_state, regs, state,
- 				    &prev_insn_idx);
- 		if (err == CHECK_NEXT_INSN) {
- 			continue;
- 		} else if (err == ALL_PATHS_CHECKED) {
- 			break;
-+		} else if (error_recoverable_with_nospec(err) && state->speculative) {
-+			WARN_ON_ONCE(env->bypass_spec_v1);
-+			WARN_ON_ONCE(env->cur_state != state);
-+
-+			/* Prevent this speculative path from ever reaching the
-+			 * insn that would have been unsafe to execute.
-+			 */
-+			cur_aux(env)->nospec = true;
-+
-+			goto nospec_or_safe_state_found;
- 		} else if (err) {
- 			WARN_ON_ONCE(err > 0);
- 			return err;
- 		}
- 
-+		if (state->speculative && cur_aux(env)->nospec_result) {
-+			/* Reduce verification complexity by stopping spec.
-+			 * verification when nospec is encountered.
-+			 */
-+nospec_or_safe_state_found:
-+			err = process_bpf_exit(env, &prev_insn_idx, pop_log, &do_print_state);
-+			if (err == CHECK_NEXT_INSN)
-+				continue;
-+			else if (err == ALL_PATHS_CHECKED)
-+				break;
-+			return err;
-+		}
-+
- 		env->insn_idx++;
- 	}
- 
-@@ -20447,6 +20479,28 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 		bpf_convert_ctx_access_t convert_ctx_access;
- 		u8 mode;
- 
-+		if (env->insn_aux_data[i + delta].nospec) {
-+			struct bpf_insn patch[] = {
-+				BPF_ST_NOSPEC(),
-+				*insn,
-+			};
-+
-+			cnt = ARRAY_SIZE(patch);
-+			new_prog = bpf_patch_insn_data(env, i + delta, patch, cnt);
-+			if (!new_prog)
-+				return -ENOMEM;
-+
-+			delta    += cnt - 1;
-+			env->prog = new_prog;
-+			insn      = new_prog->insnsi + i + delta;
-+			/* This can not be easily merged with the
-+			 * nospec_result-case, because an insn may require a
-+			 * nospec before and after itself. Therefore also do not
-+			 * 'continue' here but potentially apply further
-+			 * patching to insn. *insn should equal patch[1] now.
-+			 */
-+		}
-+
- 		if (insn->code == (BPF_LDX | BPF_MEM | BPF_B) ||
- 		    insn->code == (BPF_LDX | BPF_MEM | BPF_H) ||
- 		    insn->code == (BPF_LDX | BPF_MEM | BPF_W) ||
-@@ -20495,6 +20549,9 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 
- 		if (type == BPF_WRITE &&
- 		    env->insn_aux_data[i + delta].nospec_result) {
-+			/* nospec_result is only used to mitigate Spectre v4 and
-+			 * to limit verification-time for Spectre v1.
-+			 */
- 			struct bpf_insn patch[] = {
- 				*insn,
- 				BPF_ST_NOSPEC(),
-diff --git a/tools/testing/selftests/bpf/progs/verifier_and.c b/tools/testing/selftests/bpf/progs/verifier_and.c
-index e97e518516b6..98bafce6d8f3 100644
---- a/tools/testing/selftests/bpf/progs/verifier_and.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_and.c
-@@ -85,7 +85,7 @@ l0_%=:	r0 = r0;					\
- 
- SEC("socket")
- __description("check known subreg with unknown reg")
--__success __failure_unpriv __msg_unpriv("R1 !read_ok")
-+__success __success_unpriv
- __retval(0)
- __naked void known_subreg_with_unknown_reg(void)
- {
-@@ -96,6 +96,7 @@ __naked void known_subreg_with_unknown_reg(void)
- 	r0 &= 0xFFFF1234;				\
- 	/* Upper bits are unknown but AND above masks out 1 zero'ing lower bits */\
- 	if w0 < 1 goto l0_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R1 !read_ok'`) */\
- 	r1 = *(u32*)(r1 + 512);				\
- l0_%=:	r0 = 0;						\
- 	exit;						\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 0eb33bb801b5..0488ef05a7a4 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -620,7 +620,7 @@ l1_%=:	exit;						\
- 
- SEC("socket")
- __description("bounds check mixed 32bit and 64bit arithmetic. test1")
--__success __failure_unpriv __msg_unpriv("R0 invalid mem access 'scalar'")
-+__success __success_unpriv
- __retval(0)
- __naked void _32bit_and_64bit_arithmetic_test1(void)
- {
-@@ -636,6 +636,7 @@ __naked void _32bit_and_64bit_arithmetic_test1(void)
- 	if w1 > 2 goto l0_%=;				\
- 	goto l1_%=;					\
- l0_%=:	/* invalid ldx if bounds are lost above */	\
-+	/* unpriv: nospec (inserted to prevent `R0 invalid mem access 'scalar'`) */\
- 	r0 = *(u64*)(r0 - 1);				\
- l1_%=:	exit;						\
- "	::: __clobber_all);
-@@ -643,7 +644,7 @@ l1_%=:	exit;						\
- 
- SEC("socket")
- __description("bounds check mixed 32bit and 64bit arithmetic. test2")
--__success __failure_unpriv __msg_unpriv("R0 invalid mem access 'scalar'")
-+__success __success_unpriv
- __retval(0)
- __naked void _32bit_and_64bit_arithmetic_test2(void)
- {
-@@ -660,6 +661,7 @@ __naked void _32bit_and_64bit_arithmetic_test2(void)
- 	if r1 > r2 goto l0_%=;				\
- 	goto l1_%=;					\
- l0_%=:	/* invalid ldx if bounds are lost above */	\
-+	/* unpriv: nospec (inserted to prevent `R0 invalid mem access 'scalar'`) */\
- 	r0 = *(u64*)(r0 - 1);				\
- l1_%=:	exit;						\
- "	::: __clobber_all);
-@@ -691,8 +693,7 @@ l0_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("bounds check for reg = 0, reg xor 1")
--__success __failure_unpriv
--__msg_unpriv("R0 min value is outside of the allowed memory range")
-+__success __success_unpriv
- __retval(0)
- __naked void reg_0_reg_xor_1(void)
- {
-@@ -708,6 +709,7 @@ __naked void reg_0_reg_xor_1(void)
- l0_%=:	r1 = 0;						\
- 	r1 ^= 1;					\
- 	if r1 != 0 goto l1_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R0 min value is outside of the allowed memory range`) */\
- 	r0 = *(u64*)(r0 + 8);				\
- l1_%=:	r0 = 0;						\
- 	exit;						\
-@@ -719,8 +721,7 @@ l1_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("bounds check for reg32 = 0, reg32 xor 1")
--__success __failure_unpriv
--__msg_unpriv("R0 min value is outside of the allowed memory range")
-+__success __success_unpriv
- __retval(0)
- __naked void reg32_0_reg32_xor_1(void)
- {
-@@ -736,6 +737,7 @@ __naked void reg32_0_reg32_xor_1(void)
- l0_%=:	w1 = 0;						\
- 	w1 ^= 1;					\
- 	if w1 != 0 goto l1_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R0 min value is outside of the allowed memory range`) */\
- 	r0 = *(u64*)(r0 + 8);				\
- l1_%=:	r0 = 0;						\
- 	exit;						\
-@@ -747,8 +749,7 @@ l1_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("bounds check for reg = 2, reg xor 3")
--__success __failure_unpriv
--__msg_unpriv("R0 min value is outside of the allowed memory range")
-+__success __success_unpriv
- __retval(0)
- __naked void reg_2_reg_xor_3(void)
- {
-@@ -764,6 +765,7 @@ __naked void reg_2_reg_xor_3(void)
- l0_%=:	r1 = 2;						\
- 	r1 ^= 3;					\
- 	if r1 > 0 goto l1_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R0 min value is outside of the allowed memory range`) */\
- 	r0 = *(u64*)(r0 + 8);				\
- l1_%=:	r0 = 0;						\
- 	exit;						\
-@@ -829,8 +831,7 @@ l1_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("bounds check for reg > 0, reg xor 3")
--__success __failure_unpriv
--__msg_unpriv("R0 min value is outside of the allowed memory range")
-+__success __success_unpriv
- __retval(0)
- __naked void reg_0_reg_xor_3(void)
- {
-@@ -843,7 +844,8 @@ __naked void reg_0_reg_xor_3(void)
- 	call %[bpf_map_lookup_elem];			\
- 	if r0 != 0 goto l0_%=;				\
- 	exit;						\
--l0_%=:	r1 = *(u64*)(r0 + 0);				\
-+l0_%=:	/* unpriv: nospec (inserted to prevent `R0 min value is outside of the allowed memory range`) */\
-+	r1 = *(u64*)(r0 + 0);				\
- 	if r1 <= 0 goto l1_%=;				\
- 	r1 ^= 3;					\
- 	if r1 >= 0 goto l1_%=;				\
-@@ -858,8 +860,7 @@ l1_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("bounds check for reg32 > 0, reg32 xor 3")
--__success __failure_unpriv
--__msg_unpriv("R0 min value is outside of the allowed memory range")
-+__success __success_unpriv
- __retval(0)
- __naked void reg32_0_reg32_xor_3(void)
- {
-@@ -872,7 +873,8 @@ __naked void reg32_0_reg32_xor_3(void)
- 	call %[bpf_map_lookup_elem];			\
- 	if r0 != 0 goto l0_%=;				\
- 	exit;						\
--l0_%=:	r1 = *(u64*)(r0 + 0);				\
-+l0_%=:	/* unpriv: nospec (inserted to prevent `R0 min value is outside of the allowed memory range`) */\
-+	r1 = *(u64*)(r0 + 0);				\
- 	if w1 <= 0 goto l1_%=;				\
- 	w1 ^= 3;					\
- 	if w1 >= 0 goto l1_%=;				\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-index 994bbc346d25..5de9bcbe7425 100644
---- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-@@ -245,7 +245,7 @@ l0_%=:							\
- SEC("socket")
- __description("MOV32SX, S8, var_off not u32_max, positive after s8 extension")
- __success __retval(0)
--__failure_unpriv __msg_unpriv("frame pointer is read only")
-+__success_unpriv
- __naked void mov64sx_s32_varoff_2(void)
- {
- 	asm volatile ("					\
-@@ -257,6 +257,7 @@ __naked void mov64sx_s32_varoff_2(void)
- 	w0 = 0;						\
- 	exit;						\
- l0_%=:							\
-+	/* nospec (inserted to prevent `frame pointer is read only`) */\
- 	r10 = 1;					\
- 	exit;						\
- "	:
-@@ -267,7 +268,7 @@ l0_%=:							\
- SEC("socket")
- __description("MOV32SX, S8, var_off not u32_max, negative after s8 extension")
- __success __retval(0)
--__failure_unpriv __msg_unpriv("frame pointer is read only")
-+__success_unpriv
- __naked void mov64sx_s32_varoff_3(void)
- {
- 	asm volatile ("					\
-@@ -280,6 +281,7 @@ __naked void mov64sx_s32_varoff_3(void)
- 	w0 = 0;						\
- 	exit;						\
- l0_%=:							\
-+	/* nospec (inserted to prevent `frame pointer is read only`) */\
- 	r10 = 1;					\
- 	exit;						\
- "	:
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index a4a5e2071604..af35365558ce 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -572,7 +572,7 @@ l0_%=:	exit;						\
- 
- SEC("socket")
- __description("alu32: mov u32 const")
--__success __failure_unpriv __msg_unpriv("R7 invalid mem access 'scalar'")
-+__success __success_unpriv
- __retval(0)
- __naked void alu32_mov_u32_const(void)
- {
-@@ -581,6 +581,7 @@ __naked void alu32_mov_u32_const(void)
- 	w7 &= 1;					\
- 	w0 = w7;					\
- 	if r0 == 0 goto l0_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R7 invalid mem access 'scalar'`) */\
- 	r0 = *(u64*)(r7 + 0);				\
- l0_%=:	exit;						\
- "	::: __clobber_all);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-index 5ba6e53571c8..01a238e3047e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-@@ -398,7 +398,7 @@ l2_%=:	r0 = 1;						\
- 
- SEC("socket")
- __description("map access: mixing value pointer and scalar, 1")
--__success __failure_unpriv __msg_unpriv("R2 pointer comparison prohibited")
-+__success __failure_unpriv __msg_unpriv("R2 tried to add from different maps, paths or scalars, pointer arithmetic with it prohibited for !root")
- __retval(0)
- __naked void value_pointer_and_scalar_1(void)
- {
-@@ -433,6 +433,7 @@ l2_%=:	/* common instruction */			\
- l3_%=:	/* branch B */					\
- 	r0 = 0x13371337;				\
- 	/* verifier follows fall-through */		\
-+	/* unpriv: nospec (inserted to prevent `R2 pointer comparison prohibited`) */\
- 	if r2 != 0x100000 goto l4_%=;			\
- 	r0 = 0;						\
- 	exit;						\
-@@ -450,7 +451,7 @@ l4_%=:	/* fake-dead code; targeted from branch A to	\
- 
- SEC("socket")
- __description("map access: mixing value pointer and scalar, 2")
--__success __failure_unpriv __msg_unpriv("R0 invalid mem access 'scalar'")
-+__success __failure_unpriv __msg_unpriv("R2 tried to add from different maps, paths or scalars, pointer arithmetic with it prohibited for !root")
- __retval(0)
- __naked void value_pointer_and_scalar_2(void)
- {
-@@ -466,6 +467,7 @@ __naked void value_pointer_and_scalar_2(void)
- 	if r0 != 0 goto l0_%=;				\
- 	exit;						\
- l0_%=:	/* load some number from the map into r1 */	\
-+	/* unpriv: nospec (inserted to prevent `R0 invalid mem access 'scalar'`) */\
- 	r1 = *(u8*)(r0 + 0);				\
- 	/* depending on r1, branch: */			\
- 	if r1 == 0 goto l1_%=;				\
-@@ -1296,11 +1298,12 @@ l0_%=:	r0 = 1;						\
- 
- SEC("socket")
- __description("map access: value_ptr -= unknown scalar, 2")
--__success __failure_unpriv
--__msg_unpriv("R0 pointer arithmetic of map value goes out of range")
-+__success __success_unpriv
- __retval(1)
- __naked void value_ptr_unknown_scalar_2_2(void)
- {
-+	/* unpriv: nospec inserted by verifier to mitigate 'R0 pointer
-+	 * arithmetic of map value goes out of range'. */
- 	asm volatile ("					\
- 	r1 = 0;						\
- 	*(u64*)(r10 - 8) = r1;				\
--- 
-2.48.1
-
+> 
+> Fixes: 1dfe571c12cf ("KVM: SEV: Add initial SEV-SNP support")
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Pratik R. Sampat <prsampat@amd.com>
+> ---
+> v6..v7:
+> 
+> * Replace FW version check with sev->snp_initialized (Sean)
+> ---
+>  arch/x86/kvm/svm/sev.c       | 4 +++-
+>  drivers/crypto/ccp/sev-dev.c | 8 ++++++++
+>  include/linux/psp-sev.h      | 3 +++
+>  3 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 0dbb25442ec1..87b5d63a5817 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -3050,7 +3050,9 @@ void __init sev_hardware_setup(void)
+>  	sev_es_asid_count = min_sev_asid - 1;
+>  	WARN_ON_ONCE(misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count));
+>  	sev_es_supported = true;
+> -	sev_snp_supported = sev_snp_enabled && cc_platform_has(CC_ATTR_HOST_SEV_SNP);
+> +	sev_snp_supported = (sev_snp_enabled &&
+> +			    cc_platform_has(CC_ATTR_HOST_SEV_SNP) &&
+> +			    snp_initialized());
+>  
+>  out:
+>  	if (boot_cpu_has(X86_FEATURE_SEV))
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index 2e87ca0e292a..8d2cf8552bc2 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -1352,6 +1352,14 @@ int sev_platform_init(struct sev_platform_init_args *args)
+>  }
+>  EXPORT_SYMBOL_GPL(sev_platform_init);
+>  
+> +bool snp_initialized(void)
+> +{
+> +	struct sev_device *sev = psp_master->sev_data;
+> +
+> +	return sev->snp_initialized;
+> +}
+> +EXPORT_SYMBOL_GPL(snp_initialized);
+> +
+>  static int __sev_platform_shutdown_locked(int *error)
+>  {
+>  	struct psp_device *psp = psp_master;
+> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+> index f3cad182d4ef..d34068c87a28 100644
+> --- a/include/linux/psp-sev.h
+> +++ b/include/linux/psp-sev.h
+> @@ -954,6 +954,7 @@ int sev_do_cmd(int cmd, void *data, int *psp_ret);
+>  void *psp_copy_user_blob(u64 uaddr, u32 len);
+>  void *snp_alloc_firmware_page(gfp_t mask);
+>  void snp_free_firmware_page(void *addr);
+> +bool snp_initialized(void);
+>  
+>  #else	/* !CONFIG_CRYPTO_DEV_SP_PSP */
+>  
+> @@ -988,6 +989,8 @@ static inline void *snp_alloc_firmware_page(gfp_t mask)
+>  
+>  static inline void snp_free_firmware_page(void *addr) { }
+>  
+> +static inline bool snp_initialized(void) { return false; }
+> +
+>  #endif	/* CONFIG_CRYPTO_DEV_SP_PSP */
+>  
+>  #endif	/* __PSP_SEV_H__ */
