@@ -1,353 +1,211 @@
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2074.outbound.protection.outlook.com [40.107.223.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E6B2139D3;
-	Tue, 25 Feb 2025 17:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740504405; cv=fail; b=bspUW4qFwbnZvz0J8ZaUKs4nwfltFBJpbK2WL0GIILc2AfdAY9mQH/VtgCF1jgTCldZB9UytSizEomdNt1qCdVVCPjvPVVepMz5Hl+8khArkMdMtD9vp5JEfWTQjJBTi4ZqgOOBPmbFL/U5tqeQwuIkiFqreVNRaBoSbnSboBiE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740504405; c=relaxed/simple;
-	bh=cgInUe35cBgvIE4sw8nivpBdUIUU+w0MeFCroJ3fJIM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BTp0pO4wVicLS7qoWk19CT9mmjipzi9jSE7jG8Wrz/k5M2k0UCFOU6vg06vR0JauoWDqDnIaFbMmEQMvrZ1kN1q4RFPdcWC8MaXXHXW5vONCkUZu8aZVcQGh24FUWNAZPbP2s1vdthnmwKMT4m7u46sJdePan5WD6HuP97UK+Fc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GsS0oH1d; arc=fail smtp.client-ip=40.107.223.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A4E19922F
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 17:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740505318; cv=none; b=kUMgzdxHgfhJu2DM1CXZXJBgxQAIk3yWh2xXN5HPYdfXnnkYhvqi1tJbvD8/CpEVy62Fcr6cXCXziS41KFYwzxYl6qhciSFY+YcMh6Am1zbjVac2GzlMIzgjRU0MQ04MIqUPSeg2UVynxSx8ZX4skI9Yulzn0eyhcduIOJK3ck4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740505318; c=relaxed/simple;
+	bh=iCX+nG23CjC2fxQmPixSN8EXGqI2yLXhnVoBGQ220Lk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IZsFEeGBBUmHjS9YTdY8ZPpJpsTAlP9rfMG2qC1WIIwqjyihgJvz4pkz5oNpNEKIPMkUV6GXjfpK+XhoPKuAr2mdvQTOwvrFY180WRM2ete02Vj4Q8jdOjcT2AfuhMsBrajbHV0tdxgCMUe8SFkqVSNWaXD3o9sUzS1iJlYYfVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fhpO8Rmx; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GsS0oH1d"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sBv+diO7hraGBPBOvXphsPBOoTipSIMYUIC9BmzMfi7QK+vGm/naa3IEJ5w8ngeyDJ/hV2inTnhXC9+hoYmKiFquu8YAqI9wEA6BmN6Ny6b15ypG4RCkDYO99kRf7pUE4mLzqub9ghOxGuzPEG4cUaWAhW4iQ3lbKhOa3bpv2lZknlGim8Mqsb22m2y8N5pgujUK++oDRCkDzb07bObT6GRCNpspY6J3ne/CDVRYIi/bMJRznnW4ONFmeEy0UQaH/poXp3gJv6khuYdVECF3vmlmbzJBhbptg2A1VN+7VfShNiM6/o5kEdy/I1cuWzhM4BIOQ8+7Lqeh4AfNUIDwXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k/zP9+ZDIHhvoSltwO3MofaBc1N//2OzhSQVlOKkmc0=;
- b=wv4ya+ah1APAcZhLgIDSns4ffglZvt8meVwMjXNw1bUGVNxl3y1W0nxi05JjBGMfyNly3/5+e62ZrcP9QMkKacbYVnrk4Ey3/4QF+fPP7lVTZcWLNYYv+vHEVilTUg0+YaMPZg34ZjYEAEgsaYDKe8521mspFET4Or+AhH4mcj8VVotT1yqNgn752JzOzhWkN22t+c4m/f5M83FLuEdsg1Y+7XUg3KxDEJ21umWIQ13JjHL5rTbKJapZ5PxsPkvf5tQLFjyJZ0S5P1cyLLzzpd8Ju7p7nlyfDn6BaPOox0EP85/xkjbQmDq18phDljNFqSyPsDyadMru/kU/jllg7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k/zP9+ZDIHhvoSltwO3MofaBc1N//2OzhSQVlOKkmc0=;
- b=GsS0oH1d+jJWJHMxyc42Ec4XwtZzB0jTh55NqiDPvJeJEjrZfQmXps1IUImrNofju3+oVkDokuZYnf3mgLgW8TBy7acFVAjj6awGQVuoucKlWaB027I81+qXxvKb+SSeGznbbAW7F2fsSFSxlx29vG52AfPhCKkPbLA8Z3SIzIK6MtxvFdLQKJa4sm1QCd8SazD/tRMrqIJ2F/UfKftT6YJ3zLKdRcwqMEkpBeKz9DM+6AHWs7TqNIQahcbgntH0QMYgk7PFwXcU67aX4GXLxQHTdCVSZgkv/EfHMpJUeETeOTb0lfTvmqrjm9c0xZG52e7Y9FrSQeJ+RyAxG7Jo0Q==
-Received: from BN1PR10CA0021.namprd10.prod.outlook.com (2603:10b6:408:e0::26)
- by SN7PR12MB7324.namprd12.prod.outlook.com (2603:10b6:806:29b::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.20; Tue, 25 Feb
- 2025 17:26:36 +0000
-Received: from BL6PEPF00020E64.namprd04.prod.outlook.com
- (2603:10b6:408:e0:cafe::76) by BN1PR10CA0021.outlook.office365.com
- (2603:10b6:408:e0::26) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.17 via Frontend Transport; Tue,
- 25 Feb 2025 17:26:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL6PEPF00020E64.mail.protection.outlook.com (10.167.249.25) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8489.16 via Frontend Transport; Tue, 25 Feb 2025 17:26:36 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 25 Feb
- 2025 09:26:12 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Tue, 25 Feb
- 2025 09:26:11 -0800
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
- Transport; Tue, 25 Feb 2025 09:26:10 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
-	<will@kernel.org>
-CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
-	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
-	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
-	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
-	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <praan@google.com>,
-	<patches@lists.linux.dev>
-Subject: [PATCH v8 13/14] iommu/arm-smmu-v3: Report events that belong to devices attached to vIOMMU
-Date: Tue, 25 Feb 2025 09:25:41 -0800
-Message-ID: <7f6813dc2b62f5f396ac3172dc2a7d9bf3b47536.1740504232.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1740504232.git.nicolinc@nvidia.com>
-References: <cover.1740504232.git.nicolinc@nvidia.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fhpO8Rmx"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2212222d4cdso3515ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 09:41:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740505315; x=1741110115; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vqjq5AFXxwlxfq4VPVA6M5Ee2CpyweWj+2y/hfe9AzE=;
+        b=fhpO8RmxBeBGKT/5ZKbYywJBbdjJlmt3ng8Wjc4s/xgU+uY7xS01nlIK/TUBh6YfxA
+         dMg04rKf1e6n12Aq9NXmheY6VKIokCil6E/Cn6Dt1d0bsyOlT8ODB/9XEAm4JcQPT3ZB
+         Dhto1cUSl6rI9dZly5XAVVQSDEkOlMNtfNbF1AxgMbSmatvMLQR7mpKdD+6Mq4hv+D/6
+         Rktp688V8SegHs1CqB2RF1hNZjq2TgXtIQt6bAXicdTVTn4MHN42Ds++qsKdCkYASL2E
+         q0s7RUrtkkIkdmIabrI68/KioDWhOPMPpFp2Ig6fRmct79NFZedPvxpDISLltrLfgb91
+         c9+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740505315; x=1741110115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vqjq5AFXxwlxfq4VPVA6M5Ee2CpyweWj+2y/hfe9AzE=;
+        b=IZ0auumMIKUvwnk/VEDJc7qQ2xbB9EBT879N9oLiP8aObK5mLKHk8UZfh6UawXoWlP
+         5O3c7pwXBvN61qJ76/Vr3eCdbrY1a2/pTGwa8IDfBEbeajBLTpv6rf46YMxY4oWOfePp
+         A9jq//BX7+W93cllT53eolOL/0Y+DIuITWjKpn0fB9K1h2OBt5Ye7HrIQITauSl8Dt1j
+         8/3sOB+5vhuCduhQaeIUJnix/AWYoEOe9249utOnKxeMDtgzy1vy6DA00p/QQlqnCuFH
+         TeBVU061jLRSDalv1q11zPogWGZqPAhoswQ+3XRwGCDJZhT5Wx0uzmqLTOdE9e3od7TM
+         pLow==
+X-Forwarded-Encrypted: i=1; AJvYcCUyU1drr59ZEAKyqxmk0sLq8ghK3Auo5PUgUfWuOnijI0mk2cPBEtyk2Eu/soXBdnEcU3yVJ3pZx0nl1pbx1lE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKALG398g8rPj0WzTnM2IiyTtMWYRhY4IjqOVXQowIIUAdhYqM
+	fcdmXwuK2GQWbqffMa5KjOfMzP5qWCOgu3tJWvSIOXSNSixAlUc+Iub4sjK24iEvIxr0ArnyM7X
+	zzYe6xd+AwyTykdYWuHguDmfISF4NEKTXK+Up
+X-Gm-Gg: ASbGncs04BWAHzxMcoN51b0WEPpJm4t60xpcDzTTPFQTl423oYMbPyyOQZIfdFNiJN6
+	azwEXvMkSAfRMxQKhKGsa5eIKDa1HO9xNd/kGoHJwebvHpQeW3Bx3KkbgXvF6Ae8Dkmp9GtK7l2
+	VzO7pPxz0=
+X-Google-Smtp-Source: AGHT+IHPa/zeMhv5rS+FoFIXRfGiR3W5Ojq1INXwGU+EkhH1BWbASSdZ3ThN+JgVulgi4m91g+jKNlJGa8ARq6KoZcI=
+X-Received: by 2002:a17:902:d50a:b0:21f:3e29:9cd4 with SMTP id
+ d9443c01a7336-22307a98cbcmr3805795ad.20.1740505314655; Tue, 25 Feb 2025
+ 09:41:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF00020E64:EE_|SN7PR12MB7324:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd689844-5399-49a5-9cd9-08dd55c18e68
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?MJrUKJPCQRX8yclc8VJE/938I66yZSz6AjZ0mnxbv+lGgg+nAUBI3MGyngBX?=
- =?us-ascii?Q?0XfL/LUiZW1+WMFSs5OM9oLHkhUBCqhGQuxhYgAq3XK8tHWfYBiPpIhhzjIc?=
- =?us-ascii?Q?Dv4neq9NL45Xy2Qh4LTvsdMT/2+BwjKu0mbI/0XXdueIYVGRS2jDRSP6XrOC?=
- =?us-ascii?Q?10HA9wVMe7C5iJiE90MhL0r1rngDiZNiXB/oCN/d/BkxusBg2Y/vQvdbpmDk?=
- =?us-ascii?Q?+jxIvQnjaLm2T8jGxdamqLGUn7zDtON7fBInK6Be42XrhEedg8v7Hmu21b/g?=
- =?us-ascii?Q?ACevAJnozSy8uc9/f6jvaE9yOqfnNwwg+Y1La/1MNhs60by0PcLiHMGpl5dp?=
- =?us-ascii?Q?9o0jeZ+JjuLIrzIhUcnayOMKZ+lUGjD8RdaZv5BP3pksrszvin/8Wj5jbbc5?=
- =?us-ascii?Q?sZjF4wJnM1ucG5p1ONpW/hQHSgxkC14Tw29/2p6FF22hI4N2pa/dV2iIoAX5?=
- =?us-ascii?Q?vSztKkdxmoJUbl5wL1PTX5hRVirw3kUX/urvOgPTTdFfxmj3yo1K5u/5Rsfq?=
- =?us-ascii?Q?DHnjMzD9Pq644b8hkh2BjwbqEQdVXIFyj4P0OPOYFdSm+404tL4kztMBpfz4?=
- =?us-ascii?Q?CwGtgnJCfxcPKz+9yCv/1ucgK4kXGHYykLfkBfUm0YWjItp3Pfi45XhnitUx?=
- =?us-ascii?Q?/7ad3rQyJhKmhtAmIQZc45aTLVTe2pL5J5ifLA3nKVJP0lsksSC53zNA9iLN?=
- =?us-ascii?Q?YVo3tN81H7i+Vwqa8lGH+Y+5TPpnP6SQ06b1uR+JUGr/PNwEn3zOMEzWUolR?=
- =?us-ascii?Q?zQKkYLOiX7XXOMY83LTWiejJvmnm3Q+RHkGf+q+U53C38cfPI6fMLcq7u9Gd?=
- =?us-ascii?Q?YeHiArVYfJlxXgZ2YYroIe3R5Hy0ZDaODzWs1xy3pEHGS1YOuF6A88r+MTwf?=
- =?us-ascii?Q?6VtOqSEYEi+COO6cH/IOfYmOWRQ+YFdtr0Yojv+VGb78PE6dRYzQvoeBxkab?=
- =?us-ascii?Q?FYXq/rnGWHksR3wU6PyRF29GgHf1yGkWXANjfcya5XhFm2FjgAzEBb1jed2E?=
- =?us-ascii?Q?F/4aFDWGt+SDuBHU01FgI7hP4jiz9DcLpX3WwndlC04s2PjS/08MzC2DVnj7?=
- =?us-ascii?Q?JG+3cy2gwVF9rWVH9ODRV59d2qzkRIWz5YiLpGYEA/rQ4UtrQpytRI0jFFBK?=
- =?us-ascii?Q?P8G8MKH6nP61n2gz5Q+TEYn8/1VwxfE5kDX15GF1pqo36iUbp/KMjadcqX7B?=
- =?us-ascii?Q?HY9ZVaJiDBsCQHKNeZpVvcbRloxQ9p9ccXfEH771aEek4pGzwAVN5pKa6Zf3?=
- =?us-ascii?Q?fzjIpaMlR1cs++2vWEEnTeAALsxb9+dRcKulTpouednsInToIU+9qiAs8tcR?=
- =?us-ascii?Q?zpEF+831dBCOSKjW/6ABjpewFdw4MGIp9TX+4ffoOKCnI13ABlUWuNWytF4j?=
- =?us-ascii?Q?t0Pewerw6YY72KG1HHTbjm3Up6YMqR9LjDSiZQup7cOh3xTk05oDdJTiA1Dy?=
- =?us-ascii?Q?gQG2UNCd+UdKKt4lBzW13bCwSrr6rWthT1kBuvVTeOOWRi4y81Y4x8El3rAM?=
- =?us-ascii?Q?vg/7RxSKN3c4P1A=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2025 17:26:36.0873
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd689844-5399-49a5-9cd9-08dd55c18e68
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF00020E64.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7324
+References: <20250222191517.743530-1-almasrymina@google.com>
+ <20250222191517.743530-4-almasrymina@google.com> <a814c41a-40f9-4632-a5bb-ad3da5911fb6@redhat.com>
+In-Reply-To: <a814c41a-40f9-4632-a5bb-ad3da5911fb6@redhat.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 25 Feb 2025 09:41:41 -0800
+X-Gm-Features: AWEUYZlYYSHH7_9N4ByWFALTxxtUrWQmHLefEElJbkJw4zmyNRZgN3GST52xcig
+Message-ID: <CAHS8izNfNJLrMtdR0je3DsXDAvP2Hs8HfKf5Jq7_kQJsVUbrzg@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 3/9] net: devmem: Implement TX path
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, virtualization@lists.linux.dev, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Jeroen de Borst <jeroendb@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn <willemb@google.com>, David Ahern <dsahern@kernel.org>, 
+	Neal Cardwell <ncardwell@google.com>, Stefan Hajnoczi <stefanha@redhat.com>, 
+	Stefano Garzarella <sgarzare@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk, 
+	Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>, 
+	Pedro Tammela <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Aside from the IOPF framework, iommufd provides an additional pathway to
-report hardware events, via the vEVENTQ of vIOMMU infrastructure.
+On Tue, Feb 25, 2025 at 5:04=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
+te:
+>
+> On 2/22/25 8:15 PM, Mina Almasry wrote:
+> [...]
+> > @@ -119,6 +122,13 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dm=
+abuf_binding *binding)
+> >       unsigned long xa_idx;
+> >       unsigned int rxq_idx;
+> >
+> > +     xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+> > +
+> > +     /* Ensure no tx net_devmem_lookup_dmabuf() are in flight after th=
+e
+> > +      * erase.
+> > +      */
+> > +     synchronize_net();
+>
+> Is the above statement always true? can the dmabuf being stuck in some
+> qdisc? or even some local socket due to redirect?
+>
 
-Define an iommu_vevent_arm_smmuv3 uAPI structure, and report stage-1 events
-in the threaded IRQ handler. Also, add another four event record types that
-can be forwarded to a VM.
+Yes, we could have have netmems in the TX path in the qdisc or waiting
+for retransmits that still have references to the dmabuf, and that's
+fine here I think.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Pranjal Shrivastavat <praan@google.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  7 +++
- include/uapi/linux/iommufd.h                  | 23 +++++++
- .../arm/arm-smmu-v3/arm-smmu-v3-iommufd.c     | 17 ++++++
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   | 60 +++++++++++--------
- 4 files changed, 82 insertions(+), 25 deletions(-)
+What is happening here is that tcp_sendmsg_locked() will look for a
+binding in net_devmem_dmabuf_bindings with binding->id =3D=3D
+sockc.dmabuf_id, and then grab a reference on it.
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-index 36961a3579f2..f3c5c49bf131 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-@@ -1066,6 +1066,7 @@ int arm_smmu_attach_prepare_vmaster(struct arm_smmu_attach_state *state,
- 				    struct arm_smmu_nested_domain *nested_domain);
- void arm_smmu_attach_commit_vmaster(struct arm_smmu_attach_state *state);
- void arm_smmu_master_clear_vmaster(struct arm_smmu_master *master);
-+int arm_vmaster_report_event(struct arm_smmu_vmaster *vmaster, u64 *evt);
- #else
- #define arm_smmu_hw_info NULL
- #define arm_vsmmu_alloc NULL
-@@ -1086,6 +1087,12 @@ static inline void
- arm_smmu_master_clear_vmaster(struct arm_smmu_master *master)
- {
- }
-+
-+static inline int arm_vmaster_report_event(struct arm_smmu_vmaster *vmaster,
-+					   u64 *evt)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif /* CONFIG_ARM_SMMU_V3_IOMMUFD */
- 
- #endif /* _ARM_SMMU_V3_H */
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index 2ade4839880d..5fc7e27804b7 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -1054,9 +1054,32 @@ struct iommufd_vevent_header {
- /**
-  * enum iommu_veventq_type - Virtual Event Queue Type
-  * @IOMMU_VEVENTQ_TYPE_DEFAULT: Reserved for future use
-+ * @IOMMU_VEVENTQ_TYPE_ARM_SMMUV3: ARM SMMUv3 Virtual Event Queue
-  */
- enum iommu_veventq_type {
- 	IOMMU_VEVENTQ_TYPE_DEFAULT = 0,
-+	IOMMU_VEVENTQ_TYPE_ARM_SMMUV3 = 1,
-+};
-+
-+/**
-+ * struct iommu_vevent_arm_smmuv3 - ARM SMMUv3 Virtual Event
-+ *                                  (IOMMU_VEVENTQ_TYPE_ARM_SMMUV3)
-+ * @evt: 256-bit ARM SMMUv3 Event record, little-endian.
-+ *       Reported event records: (Refer to "7.3 Event records" in SMMUv3 HW Spec)
-+ *       - 0x04 C_BAD_STE
-+ *       - 0x06 F_STREAM_DISABLED
-+ *       - 0x08 C_BAD_SUBSTREAMID
-+ *       - 0x0a C_BAD_CD
-+ *       - 0x10 F_TRANSLATION
-+ *       - 0x11 F_ADDR_SIZE
-+ *       - 0x12 F_ACCESS
-+ *       - 0x13 F_PERMISSION
-+ *
-+ * StreamID field reports a virtual device ID. To receive a virtual event for a
-+ * device, a vDEVICE must be allocated via IOMMU_VDEVICE_ALLOC.
-+ */
-+struct iommu_vevent_arm_smmuv3 {
-+	__aligned_le64 evt[4];
- };
- 
- /**
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-index 6b712b1ab429..649e3aa39a48 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-@@ -437,4 +437,21 @@ struct iommufd_viommu *arm_vsmmu_alloc(struct device *dev,
- 	return &vsmmu->core;
- }
- 
-+int arm_vmaster_report_event(struct arm_smmu_vmaster *vmaster, u64 *evt)
-+{
-+	struct iommu_vevent_arm_smmuv3 vevt;
-+	int i;
-+
-+	lockdep_assert_held(&vmaster->vsmmu->smmu->streams_mutex);
-+
-+	vevt.evt[0] = cpu_to_le64((evt[0] & ~EVTQ_0_SID) |
-+				  FIELD_PREP(EVTQ_0_SID, vmaster->vsid));
-+	for (i = 1; i < EVTQ_ENT_DWORDS; i++)
-+		vevt.evt[i] = cpu_to_le64(evt[i]);
-+
-+	return iommufd_viommu_report_event(&vmaster->vsmmu->core,
-+					   IOMMU_VEVENTQ_TYPE_ARM_SMMUV3, &vevt,
-+					   sizeof(vevt));
-+}
-+
- MODULE_IMPORT_NS("IOMMUFD");
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 964d2cf27d3d..22aa5c8d1e9d 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -1813,8 +1813,8 @@ static void arm_smmu_decode_event(struct arm_smmu_device *smmu, u64 *raw,
- 	mutex_unlock(&smmu->streams_mutex);
- }
- 
--static int arm_smmu_handle_event(struct arm_smmu_device *smmu,
--			       struct arm_smmu_event *event)
-+static int arm_smmu_handle_event(struct arm_smmu_device *smmu, u64 *evt,
-+				 struct arm_smmu_event *event)
- {
- 	int ret = 0;
- 	u32 perm = 0;
-@@ -1823,6 +1823,10 @@ static int arm_smmu_handle_event(struct arm_smmu_device *smmu,
- 	struct iommu_fault *flt = &fault_evt.fault;
- 
- 	switch (event->id) {
-+	case EVT_ID_BAD_STE_CONFIG:
-+	case EVT_ID_STREAM_DISABLED_FAULT:
-+	case EVT_ID_BAD_SUBSTREAMID_CONFIG:
-+	case EVT_ID_BAD_CD_CONFIG:
- 	case EVT_ID_TRANSLATION_FAULT:
- 	case EVT_ID_ADDR_SIZE_FAULT:
- 	case EVT_ID_ACCESS_FAULT:
-@@ -1832,31 +1836,30 @@ static int arm_smmu_handle_event(struct arm_smmu_device *smmu,
- 		return -EOPNOTSUPP;
- 	}
- 
--	if (!event->stall)
--		return -EOPNOTSUPP;
--
--	if (event->read)
--		perm |= IOMMU_FAULT_PERM_READ;
--	else
--		perm |= IOMMU_FAULT_PERM_WRITE;
-+	if (event->stall) {
-+		if (event->read)
-+			perm |= IOMMU_FAULT_PERM_READ;
-+		else
-+			perm |= IOMMU_FAULT_PERM_WRITE;
- 
--	if (event->instruction)
--		perm |= IOMMU_FAULT_PERM_EXEC;
-+		if (event->instruction)
-+			perm |= IOMMU_FAULT_PERM_EXEC;
- 
--	if (event->privileged)
--		perm |= IOMMU_FAULT_PERM_PRIV;
-+		if (event->privileged)
-+			perm |= IOMMU_FAULT_PERM_PRIV;
- 
--	flt->type = IOMMU_FAULT_PAGE_REQ;
--	flt->prm = (struct iommu_fault_page_request) {
--		.flags = IOMMU_FAULT_PAGE_REQUEST_LAST_PAGE,
--		.grpid = event->stag,
--		.perm = perm,
--		.addr = event->iova,
--	};
-+		flt->type = IOMMU_FAULT_PAGE_REQ;
-+		flt->prm = (struct iommu_fault_page_request){
-+			.flags = IOMMU_FAULT_PAGE_REQUEST_LAST_PAGE,
-+			.grpid = event->stag,
-+			.perm = perm,
-+			.addr = event->iova,
-+		};
- 
--	if (event->ssv) {
--		flt->prm.flags |= IOMMU_FAULT_PAGE_REQUEST_PASID_VALID;
--		flt->prm.pasid = event->ssid;
-+		if (event->ssv) {
-+			flt->prm.flags |= IOMMU_FAULT_PAGE_REQUEST_PASID_VALID;
-+			flt->prm.pasid = event->ssid;
-+		}
- 	}
- 
- 	mutex_lock(&smmu->streams_mutex);
-@@ -1866,7 +1869,14 @@ static int arm_smmu_handle_event(struct arm_smmu_device *smmu,
- 		goto out_unlock;
- 	}
- 
--	ret = iommu_report_device_fault(master->dev, &fault_evt);
-+	if (event->stall) {
-+		ret = iommu_report_device_fault(master->dev, &fault_evt);
-+	} else {
-+		if (master->vmaster && !event->s2)
-+			ret = arm_vmaster_report_event(master->vmaster, evt);
-+		else
-+			ret = -EOPNOTSUPP; /* Unhandled events should be pinned */
-+	}
- out_unlock:
- 	mutex_unlock(&smmu->streams_mutex);
- 	return ret;
-@@ -1944,7 +1954,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
- 	do {
- 		while (!queue_remove_raw(q, evt)) {
- 			arm_smmu_decode_event(smmu, evt, &event);
--			if (arm_smmu_handle_event(smmu, &event))
-+			if (arm_smmu_handle_event(smmu, evt, &event))
- 				arm_smmu_dump_event(smmu, evt, &event, &rs);
- 
- 			put_device(event.dev);
--- 
-2.43.0
+In parallel, net_devmem_unbind_dmabuf will remove the binding from
+net_devmem_dmabuf_bindings, and then drop its refcount (which may be
+the last one if the 'get' in tcp_sendmsg_locked has not yet executed,
+triggering the binding to be freed).
 
+I need to make sure the lookup + get of the dmabuf in
+net_devmem_lookup_dmabuf() doesn't race with the erase + put in
+net_devmem_unbind_dmabuf() in a way that causes UAF, and I use
+rcu_read_lock for that coupled with synchronize_net().
+
+Note that net_devmem_dmabuf_binding_put() won't free the dmabuf unless
+we put the last ref, so any netmems stuck in retransmit paths or qdisc
+will still pin the underlying dmabuf.
+
+Let me know if you still see an issue here.
+
+
+> > @@ -252,13 +261,23 @@ net_devmem_bind_dmabuf(struct net_device *dev, un=
+signed int dmabuf_fd,
+> >        * binding can be much more flexible than that. We may be able to
+> >        * allocate MTU sized chunks here. Leave that for future work...
+> >        */
+> > -     binding->chunk_pool =3D
+> > -             gen_pool_create(PAGE_SHIFT, dev_to_node(&dev->dev));
+> > +     binding->chunk_pool =3D gen_pool_create(PAGE_SHIFT,
+> > +                                           dev_to_node(&dev->dev));
+> >       if (!binding->chunk_pool) {
+> >               err =3D -ENOMEM;
+> >               goto err_unmap;
+> >       }
+> >
+> > +     if (direction =3D=3D DMA_TO_DEVICE) {
+> > +             binding->tx_vec =3D kvmalloc_array(dmabuf->size / PAGE_SI=
+ZE,
+> > +                                              sizeof(struct net_iov *)=
+,
+> > +                                              GFP_KERNEL);
+> > +             if (!binding->tx_vec) {
+> > +                     err =3D -ENOMEM;
+> > +                     goto err_free_chunks;
+>
+> Possibly my comment on v3 has been lost:
+>
+> """
+> It looks like the later error paths (in the for_each_sgtable_dma_sg()
+> loop) could happen even for 'direction =3D=3D DMA_TO_DEVICE', so I guess =
+an
+> additional error label is needed to clean tx_vec on such paths.
+> """
+>
+
+I think I fixed the issue pointed to in v3, but please correct me if I
+missed anything. I added kvfree(), but we don't really need an
+additional error label.
+
+If we hit any of the error paths conditions in
+for_each_sgtable_dma_sg, we will `goto err_free_chunks;`, which will
+free all the genpool chunks, destroy the gen pool, then do
+`kvfree(binding->tx_vec);` to free the memory allocated for tx_vec.
+
+> [...]
+> > @@ -1071,6 +1072,16 @@ int tcp_sendmsg_locked(struct sock *sk, struct m=
+sghdr *msg, size_t size)
+> >
+> >       flags =3D msg->msg_flags;
+> >
+> > +     sockc =3D (struct sockcm_cookie){ .tsflags =3D READ_ONCE(sk->sk_t=
+sflags),
+> > +                                     .dmabuf_id =3D 0 };
+> > +     if (msg->msg_controllen) {
+> > +             err =3D sock_cmsg_send(sk, msg, &sockc);
+> > +             if (unlikely(err)) {
+> > +                     err =3D -EINVAL;
+> > +                     goto out_err;
+> > +             }
+> > +     }
+>
+> I'm unsure how much that would be a problem, but it looks like that
+> unblocking sendmsg(MSG_FASTOPEN) with bad msg argument will start to
+> fail on top of this patch, while they should be successful (EINPROGRESS)
+> before.
+>
+
+Thanks for catching indeed. I guess what I can do here is record that
+the cmsg is invalid, then process up to MSG_FASTOPEN, and return
+EINVAL after that.
+
+Although that complicates this already complicated function a bit. Let
+me know if you have a better/different solution in mind.
+
+--
+Thanks,
+Mina
