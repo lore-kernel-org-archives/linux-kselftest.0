@@ -1,177 +1,109 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A86192D9A
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 17:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7584E19340B;
+	Tue, 25 Feb 2025 17:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740503312; cv=none; b=oRgMuAG/G34DveSLx4yv+hbhZdYqE2I558lI3L/FC2ezD/UDOtghP7jztReQPxteS4U1cXMg0w8BhMoE1GBiJtdI7a3qWUVhpbjQaMai9bvED8Aj3yusNbBEmUB4zpCF1N/GIKQdYTtb1+RrDxhvDaC9SYaLznxGLz7TpU0OGQE=
+	t=1740503349; cv=none; b=cONAly95fxOqNEOOZU8DkExMisxTsNI3dxIL8XWRb3k8Ddq+flfZdLDOG6N3++BuNVXGWjNZQdHghB7se9Zrx7CoE+Dc5s8Q1KcgUXvToxahEN19zRZXRMvJOvL6dhEexP2+2kwA/tOHzugX/2QaYRH2dPUuR5kZOop9/vAr2Ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740503312; c=relaxed/simple;
-	bh=SS9kgyaImj6RHK5LJn7d2R6kJ3V1FoRJ0mFcyFKs1aQ=;
+	s=arc-20240116; t=1740503349; c=relaxed/simple;
+	bh=lV70D+fEACCSNM/jT2P9vf+mSVZCldNuJXWNwFQvsBg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bhvmZitxB+QFVdyo8BNlG811EkGctHUzfEe1NvjybagD55BcdeM6CjijyxZlY+7NtBSmENYvShUiaDFKE7cMDjq2T7WSTpfFNCAIiiXWkM5G2W6/QAAxj/L7oFEaO97zFR12CLksWWk3TVxC5DzIcRAs1ZRDp2AqKG/q06+5Yow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1+90Mwc2; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=PG+WwHAYnRRHm2UlkLENjwRH36XRZQ+u89BHtn1Ad/6qK6QKIFGI4F+ChHHqId/ZHpRwkH6F+ctlwsm6bBdoDPmr/PpvosgJsUtVsZj5/KkMNedG7RXxBpXk9aY5LYGbz0UuPPF0ydMZyjm8I7G2WkCSqe80hs5vMPgCM6eDZfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=fs5S5rdz; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1+90Mwc2"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2212222d4cdso177745ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 09:08:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740503309; x=1741108109; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1QM6kau2iQ4j6ZEaDdmG4fMZZFTf4UoSv3ypQuKbFJw=;
-        b=1+90Mwc2tBTehc48eAdUaVeASRqHpq6148FESDI3wonZcgPuiM8ddmoGqsMMpOOGWF
-         RwHdsMJL/7i0ZPXQzGm1EnbMF/WPCBqHcKcSHykx7E6VhAgejGNnmm8aD76BADryfK52
-         rDwA/mLwrT/Xv6W7jwP3T0qYWMf6NY3BEdyQRVKYinPBktKurSCW+RYXr4K0g//SjNT2
-         V/6qieZycgjxgyBjkYvto6mxcEM5kRgn+QG2LSluWa9LuJcuejeOlWlAQMnP4oB+dx19
-         6uklvoKdzZp3m4PV/YTtO9fJ9Kn2ziOW4/OPm36Qil/8SSnyQkFFWeuN7++7MVESIf+9
-         KoZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740503309; x=1741108109;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1QM6kau2iQ4j6ZEaDdmG4fMZZFTf4UoSv3ypQuKbFJw=;
-        b=qWyTpFxWpLKLsnCI7nboo0yRhHb7gwviWCVnzAo3myNC71XXTyNYL83vRgyGyvpL8s
-         synWt9XqdY2xAYhKs66j+Vi+cFgeU3C+yfba4DgD9/u+WgwTojlGVKzKGGOLp0Kfst71
-         KWJeVHKkmp9TJkvWLqy80wgDT3VLLRPkjpKuSU0YxsfpyYOhuqMETaLhrHL4uGZNfi5M
-         vWcwrtGEEAcxZjDGLLbMDPA4T2aamwsjSZM+teUmHMBpsP1M5Q+GH3RF45tpVDdtcb7C
-         T6t3PR4zT50Esfc4XG6vWs+Oey453bglJBPlTZZpHObLhNBeX1KVYIiaydwhOWO1jAxl
-         EaVw==
-X-Forwarded-Encrypted: i=1; AJvYcCV05uR6UB5d93dzCm5wV56ABjGicqnFPQjMM4/sk7dVnm6O7w8PWYp9h4bnJ3tkzTT2hLZGKJqW1qfbB3KYZYw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzmozfVLZ1RcwcQi70V+BEOnoxtiDCPWblkzZV+Brc6steseYK
-	eHJ8FoxcbRk3l78b2gutmIGaO0wT9EKBSTN2MVFOfTlL5HW+vFgg/8m2dMCztQ==
-X-Gm-Gg: ASbGnctbTdCb5BfduvW2klvLIEmDZgGnboUQxGqmIJQg3gbpPy8bWz4tOLTjBP1ofWC
-	tkg+gWJ7HIYFKg6bVlSPwVvTQTX+E4tgzToAJXTGKjs1LXp00DZ/vhIkWu9WpWzfAk8xp1buaPb
-	InDpMYOx1wXaXBHQzQqyegc96FHRCZAu19f4zk598ahpiykxVpXGnm0AOecuZA+YVkij8uZ/kMr
-	zYlXI3xAv0zy1lg59QWDwxS4jnQbNAHBYeBPz9Z88/+Mo+f1kw1XLPYLfMyXB8fp0rpWIf3BhVe
-	0rmfB04QT093uJ6dV4IYt3FftuTXD0NQ/Q2YD5pkwUkPuDUSZ+N2sMWl6Y5KCSA=
-X-Google-Smtp-Source: AGHT+IHxrabWDtym7s/ddOkqBHoBfq1ZqP6yAIbeWpN90fX7xeP+90KuPUzmekpH3adGkKddVDiEdg==
-X-Received: by 2002:a17:902:ec90:b0:216:607d:c867 with SMTP id d9443c01a7336-22307aabb1cmr3599065ad.29.1740503308535;
-        Tue, 25 Feb 2025 09:08:28 -0800 (PST)
-Received: from google.com (169.224.198.35.bc.googleusercontent.com. [35.198.224.169])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a7f9ae8sm1757069b3a.120.2025.02.25.09.08.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 09:08:27 -0800 (PST)
-Date: Tue, 25 Feb 2025 17:08:16 +0000
-From: Pranjal Shrivastava <praan@google.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, kevin.tian@intel.com, corbet@lwn.net,
-	will@kernel.org, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-	robin.murphy@arm.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
-	shuah@kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org,
-	mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
-	smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v7 12/14] iommu/arm-smmu-v3: Introduce struct
- arm_smmu_vmaster
-Message-ID: <Z735AMlhP29YEndU@google.com>
-References: <cover.1740238876.git.nicolinc@nvidia.com>
- <be799951a817557ac093ac3e18d02a631306aa35.1740238876.git.nicolinc@nvidia.com>
- <Z7zYLBLZGKim-5UL@google.com>
- <Z7zlH74/orq9HF7Q@Asurada-Nvidia>
- <Z7zqdrQn7Q8yXfcn@google.com>
- <Z7zxsbJsOFp41Dzd@Asurada-Nvidia>
- <Z70EnQ5CXacc4ysT@Asurada-Nvidia>
- <20250225160225.GA593877@nvidia.com>
- <Z73yt4r0iDFwbty2@Asurada-Nvidia>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="fs5S5rdz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1740503338;
+	bh=lV70D+fEACCSNM/jT2P9vf+mSVZCldNuJXWNwFQvsBg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fs5S5rdzLfGAcAuosUMrKU3yI2FmgCyeo8Lim/UNW5MLNsRu+Umc5wNaFRstTGNEZ
+	 9h+St42jOXvUx/LqH+zzjqLRlNhGVJLXkoqMiTS67EFdPG+dcmvRT0b2wJ+oX0SvEM
+	 E3p9e5+9Jqt0jgaXlIMssAwp5DKCUGyNOd7OpIxY=
+Date: Tue, 25 Feb 2025 10:37:24 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: only run constructor tests on nolibc
+Message-ID: <b36e1946-fda8-4893-b081-7ac9b4933947@t-8ch.de>
+References: <20250212-nolibc-test-constructor-v1-1-c963875b3da4@weissschuh.net>
+ <20250216093940.GA2192@1wt.eu>
+ <670b08a4-9bc5-4700-94bb-272fda5c59d7@t-8ch.de>
+ <20250222093851.GA13258@1wt.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Z73yt4r0iDFwbty2@Asurada-Nvidia>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250222093851.GA13258@1wt.eu>
 
-On Tue, Feb 25, 2025 at 08:41:27AM -0800, Nicolin Chen wrote:
-> On Tue, Feb 25, 2025 at 12:02:25PM -0400, Jason Gunthorpe wrote:
-> > On Mon, Feb 24, 2025 at 03:45:33PM -0800, Nicolin Chen wrote:
+Hi Willy,
+
+On 2025-02-22 10:38:51+0100, Willy Tarreau wrote:
+> On Mon, Feb 17, 2025 at 10:24:11PM +0100, Thomas Weißschuh wrote:
+> > On 2025-02-16 10:39:40+0100, Willy Tarreau wrote:
+> > > On Wed, Feb 12, 2025 at 07:01:01PM +0100, Thomas Weißschuh wrote:
+> > > > The nolibc testsuite can be run against other libcs to test for
+> > > > interoperability. Some aspects of the constructor execution are not
+> > > > standardized and musl does not provide all tested feature, for one it
+> > > > does not provide arguments to the constructors, anymore?
+> > > >
+> > > > Skip the constructor tests on non-nolibc configurations.
+> > > 
+> > > I'm not much surprised, I've always avoided arguments in my use of
+> > > constructors due to a lack of portability. However the patch disables
+> > > all constructors tests, while I'm seeing that the linkage_test version
+> > > does not make use of arguments, though there is an implied expectation
+> > > that they're executed in declaration order, which is not granted.
 > > 
-> > > --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-> > > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-> > > @@ -95,8 +95,6 @@ int arm_smmu_attach_prepare_vmaster(struct arm_smmu_attach_state *state,
-> > >  
-> > >  	iommu_group_mutex_assert(state->master->dev);
-> > >  
-> > > -	if (domain->type != IOMMU_DOMAIN_NESTED)
-> > > -		return 0;
-> > >  	nested_domain = to_smmu_nested_domain(domain);
-> > >  
-> > >  	/* Skip invalid vSTE */
-> > > @@ -122,19 +120,9 @@ void arm_smmu_attach_commit_vmaster(struct arm_smmu_attach_state *state)
-> > >  {
-> > >  	struct arm_smmu_master *master = state->master;
-> > >  
-> > > -	mutex_lock(&master->smmu->streams_mutex);
-> > > -	if (state->vmaster != master->vmaster) {
-> > > -		kfree(master->vmaster);
-> > > -		master->vmaster = state->vmaster;
-> > > -	}
-> > > -	mutex_unlock(&master->smmu->streams_mutex);
-> > > -}
-> > > -
-> > > -void arm_smmu_master_clear_vmaster(struct arm_smmu_master *master)
-> > > -{
-> > >  	mutex_lock(&master->smmu->streams_mutex);
-> > >  	kfree(master->vmaster);
-> > > -	master->vmaster = NULL;
-> > > +	master->vmaster = state->vmaster;
-> > >  	mutex_unlock(&master->smmu->streams_mutex);
-> > >  }
-> > 
-> > I'd leave the clear_vmaster just for clarity. Commit should not be
-> > unpaired with prepare in the other functions.
-> > 
-> > It looks fine with this on top too
-> > 
-> > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> > The tests are written specifically to test for execution order.
+> > While we can not rely on the order for other libcs, the idea was to
+> > expect a given order for the nolibc implementation.
 > 
-> Ack. I added it back and a #ifdef to the vmaster: 
+> OK.
 > 
-> +void arm_smmu_master_clear_vmaster(struct arm_smmu_master *master)
-> +{
-> +       struct arm_smmu_attach_state state = { .master = master };
-> +
-> +       arm_smmu_attach_commit_vmaster(&state);
-> +}
-> [...]
-> @@ -824,6 +829,9 @@ struct arm_smmu_master {
->         struct arm_smmu_device          *smmu;
->         struct device                   *dev;
->         struct arm_smmu_stream          *streams;
-> +#ifdef CONFIG_ARM_SMMU_V3_IOMMUFD
-> +       struct arm_smmu_vmaster         *vmaster; /* use smmu->streams_mutex */
-> +#endif
->         /* Locked by the iommu core using the group mutex */
->         struct arm_smmu_ctx_desc_cfg    cd_table;
->         unsigned int                    num_streams;
-> @@ -972,6 +980,9 @@ struct arm_smmu_attach_state {
->         bool disable_ats;
->         ioasid_t ssid;
->         /* Resulting state */
-> +#ifdef CONFIG_ARM_SMMU_V3_IOMMUFD
-> +       struct arm_smmu_vmaster *vmaster;
-> +#endif
->         bool ats_enabled;
->  };
+> > > I'm wondering if we shouldn't make the tests more robust:
+> > >   1) explicitly set linkage_test_constructor_test_value to zero in the
+> > >      declaration, because here it's not set so we have no guarantee
+> > >      (we're not in the kernel)
+> > 
+> > Ack.
+> > 
+> > >   2) only add values to check for cumulated values (e.g. |1 in const1,
+> > >      |2 in const2) and verify that the result is properly 3
+> > 
+> > This would stop validating the order.
 > 
+> That was my purpose but OK I got it. Then there's another option which
+> preserves the order and even gives history:
+> 
+>   __attribute__((constructor))
+>   static void constructor1(void)
+>   {
+>       constructor_test_value = constructor_test_value * 0x10 + 1;
+>   }
+> 
+>   __attribute__((constructor))
+>   static void constructor2(void)
+>   {
+>       constructor_test_value = constructor_test_value * 0x10 + 2;
+>   }
+>  
+> Then if executed in the right order, you'll find 0x12. If both
+> are executed in any order, it will always be >= 0x10. If only one
+> is executed, it will be < 0x10, and if none is executed, it's 0.
 
-Umm.. I'm not too sure how I feel about these #ifdefs _between_ a struct
-definition. Given that currently, the arm_smmu_v3.h file doesn't have
-such `#ifdef CONFIG`s between structs. I'd say, in case
-CONFIG_ARM_SMMU_V3_IOMMUFD is turned off, we can simply leave the
-vmaster ptr NULL?
+Sounds good! Do you want to write a patch?
+It should also add the missing zero-initializion of
+constructor_test_value.
 
 
--Praan
-
-
-
+Thomas
