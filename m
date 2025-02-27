@@ -1,89 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442FF198823;
-	Thu, 27 Feb 2025 16:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C325F14F9F4;
+	Thu, 27 Feb 2025 16:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740673200; cv=none; b=Fc7La2vdDInJ1yxx42zbBF/mMyS90P+uq+JVUbU+mJ254wmEt5UW3N9EKCPa+GYAIXoMxcRLBMF9pHTvrRcE7CWJYcA9QIVksIl5x2DiYUtLoxzrQe1nVHoso7AlOEAss2C50OuWueWkhxXJuvT2AqdFoCK7WXh3PK7Q6BE4dEw=
+	t=1740673221; cv=none; b=lRgHIRzuXhyTsCQRv7Esi77Kmk3vjxrOWUyaPKni8nTkHubVS+mrUZDG+teGzXjRyG2AcfnPi0sDh5HFOoU+lc9v55PdMow6IW6h6PpkbIQ2GsDOuVh9rcIXGjtJFCWCOko4sFoaBMVTFDUo9R3wQ6d95b19oawybzyPfUJFLqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740673200; c=relaxed/simple;
-	bh=y/2Nr36NXLKaDCoN5EX8Qk/6K0dQTdt6rNcVkgwm6DI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=mogavSuZky0wVMMD0zmk88A8OXsTOIeoGWprEQkiTOoOJuTap6pFzT08HjwlkLaEQuO7pjV6+ijhXTcrGRm7o+yS9KpiALwoQe6ZKFUFsGg7AzzyjQaGFaQXEb7qTwdrXQkVq3EY7PeqlqlMJo0X3MmuYdGcndnr9s9xc46mv8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CMtq2638; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740673221; c=relaxed/simple;
+	bh=DgwvWH5GwoJzRBwoaio+BR7mjvVFocdG/vb2dbwbaVQ=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=StGlX26BjvslY26EHyMt5EBlln2DmTUzH6W2VFDfsi43s4XLq4lUwnOIVcBodamM5oOjY8/uzmHIdEgTrGxf8DUneSUHVyAI6nMYPY4VRR3uNv38i6YCOdp5bZtCm/D4zdE7jfsxlhWCdrAvwkLlPRLxmTnoeuYxNqst84WcaQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EZAfu6kP; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CMtq2638"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B89D2C4CEDD;
-	Thu, 27 Feb 2025 16:19:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740673199;
-	bh=y/2Nr36NXLKaDCoN5EX8Qk/6K0dQTdt6rNcVkgwm6DI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=CMtq2638oo+hngEcmTw3lpKtE1Ao9udiTyUaYD9Fk5U1zOMK5CPffOxsoWZomLbN6
-	 MIGAVVskGyLKqBo0tlL+PFtDfie2igvMcG6T/n+tflYep44X8yx4EAQc9gXHmkAq8Q
-	 muFLchyyZzpgQ9CFlfGwsv5Ls5xC6rywQk6DGTT4qDBPczWu3stHax7JUH0svMuHQV
-	 am+raCymkOcyWstED+Aoa2XGsZuUyjvH6xhtJ+iUWMrDdRsHHTLwUAIGg5kdyS/F4t
-	 utQ1WTHBeN5Ev7tFujrhHS0fKDvTgwEezxL6klihaZx7r8hsP2aJjXa9DKiPYoz7kP
-	 +zEqm9zUpo6Ng==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB3FA380AACB;
-	Thu, 27 Feb 2025 16:20:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EZAfu6kP"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7c0a1677aebso98558185a.0;
+        Thu, 27 Feb 2025 08:20:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740673216; x=1741278016; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kud2WTj0tBJQm/quENmNnvzX0zOrrRqm8oCK5LnQrRo=;
+        b=EZAfu6kPR/GalouOJYURJ/mTRHuT12fwt5BlYiG20D7ynH9QMvK3wH+kGAYOCFV/FH
+         qPIYMD5TL8lqERDHybcCehHYM8Gf7Kk5iNWY1PQgvC8Rj4ssgvhfRSGOGyMHT1IkMHFz
+         kmYY6ri+T5yq60Agu7tk05IpbIX570KH8TTOPfjF4LAHYxSAI4BSn8AlnUP5jJZnlgmz
+         C1L7c2L0t03p24ClSl06HBn3FQ1Ja4yAK942gfsdAwh87aHqVrk4xNj4HmbYtfElPvv+
+         l7cyBV8y+GB+FGSz5OARTKntfUex/MG4QkizSPIewtv23vWMi4ib20fQ/1xP8VLBUZzG
+         YdHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740673216; x=1741278016;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kud2WTj0tBJQm/quENmNnvzX0zOrrRqm8oCK5LnQrRo=;
+        b=A001u2KaThibFwbkMzFABLNza2Mp6s3AC0ILJc6JhU69h0aO8GqPULCL3bNMMdQR/R
+         0Dkdu0Q3vycsL4BnFeTqbIF1cXFKV82yMquDNtb9G/1xWH5bp5NrJqiVgxK1vQlc2Qnt
+         dHhrwYQ5j786BYAKpUVlqx7yBnc+b3X8yDJdgnDtfunWUHnkIebiSlOzFwYOUKDLuVyn
+         CLUwk7cabc7yMs2zlVblvUFqw6he9muUWsgfcAyrRqT8lGGPR+JlMFVGxh/S81aolgy2
+         9RnlNBhFO5gwe+my96H/x7isqcpdcMKEMP3Q6rdz8kFR0TCLFsAcCz6ngDDdzey6jj0i
+         QIUw==
+X-Forwarded-Encrypted: i=1; AJvYcCWImDQrh0c2TyebdnPvFB/bqIOKbwMqPaejHvfSTIdm97l4O1J+Dwv9OoTK09IxF9Pg04E40kEt3RQr3xJDI4wU@vger.kernel.org, AJvYcCWQtey8uoQhaN08oq9yGFLTLbPzJkgQ0kT1I/PnKqCcxpuu58q5cExt+PBiiJwayJe25h/CY3IABas4JPA=@vger.kernel.org, AJvYcCXTHh3oENDAeyHwfxOxFL/BRZvAXQJJhjp7UTIOQelJTpGQgWqRjNFEIew9Cq2sQgGUs/GGeDg4@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsEBohCxTV3JBjT3eGpzjN/q6QUNs8rK0jdWhXd9tI1HaSTYS0
+	2DE2hkGAWVWJfO0zBm1clsLk9SvupjxiqzaaRn02j05hci7lmxIi
+X-Gm-Gg: ASbGnctFeVnIAw9iJ3WZQJzWa8gSzvz2GD9F9j2SYG4l0MQCs7UjvMZ7lI00CDo03QZ
+	gZ0cD4iF76M60x2Fk45docDOV0/JuWTTLDCx7O2MjISn2XeBK99TaLdUfGymkXp3HQDNOGYG0X8
+	ZscAsMm4xQ4e/VtJ6BJZ8gyECjUMtd+I40tQIVlWDH6jBms94gYADVYeaC2dsEnUDOHfqXW+8JE
+	8SMH8zrZHbaYTRzlKhq0SYyfrK8YdzdpOW3oJnPcS20/0iuniCAsumzZst7iGOmNx+8QeuS1k+x
+	DUUeO7qWJ7BpPm40tgrhn+UQuSRdYZSvHSb/tUKYW7pYoC2ncq3bcV2fLWij7r8Oi4Biz3yIY3Y
+	Z8Cs=
+X-Google-Smtp-Source: AGHT+IGBGJt+BS/B9DlQEfd0TOQEvOOUThsrHKjQzgxY8ef6swWxy7jzq9cuvtIaZrC+8g5iCm/ksQ==
+X-Received: by 2002:a05:6214:5193:b0:6e6:6048:f42c with SMTP id 6a1803df08f44-6e8a0cd3f2emr482526d6.8.1740673216471;
+        Thu, 27 Feb 2025 08:20:16 -0800 (PST)
+Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8976534c0sm11395106d6.40.2025.02.27.08.20.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2025 08:20:16 -0800 (PST)
+Date: Thu, 27 Feb 2025 11:20:15 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Kevin Krakauer <krakauer@google.com>, 
+ netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ linux-kernel@vger.kernel.org, 
+ Kevin Krakauer <krakauer@google.com>
+Message-ID: <67c090bf9db73_37f929294ec@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250226192725.621969-2-krakauer@google.com>
+References: <20250226192725.621969-1-krakauer@google.com>
+ <20250226192725.621969-2-krakauer@google.com>
+Subject: Re: [PATCH v2 1/3] selftests/net: have `gro.sh -t` return a correct
+ exit code
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v1 0/3] Optimize bpf selftest to increase CI success
- rate
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174067323175.1484560.1369764651554494631.git-patchwork-notify@kernel.org>
-Date: Thu, 27 Feb 2025 16:20:31 +0000
-References: <20250227142646.59711-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20250227142646.59711-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, john.fastabend@gmail.com, davem@davemloft.net,
- kuba@kernel.org, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
- ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, hawk@kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, mrpre@163.com
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Thu, 27 Feb 2025 22:26:43 +0800 you wrote:
-> 1. Optimized some static bound port selftests to avoid port occupation
-> when running test_progs -j.
-> 2. Optimized the retry logic for test_maps.
+Kevin Krakauer wrote:
+> Modify gro.sh to return a useful exit code when the -t flag is used. It
+> formerly returned 0 no matter what.
 > 
-> Some Failed CI:
-> https://github.com/kernel-patches/bpf/actions/runs/13275542359/job/37064974076
-> https://github.com/kernel-patches/bpf/actions/runs/13549227497/job/37868926343
-> https://github.com/kernel-patches/bpf/actions/runs/13548089029/job/37865812030
-> https://github.com/kernel-patches/bpf/actions/runs/13553536268/job/37883329296
-> (Perhaps it's due to the large number of pull requests requiring CI runs?)
+> Tested: Ran `gro.sh -t large` and verified that test failures return 1.
+> Signed-off-by: Kevin Krakauer <krakauer@google.com>
+
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+
+> ---
+>  tools/testing/selftests/net/gro.sh | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> [...]
+> diff --git a/tools/testing/selftests/net/gro.sh b/tools/testing/selftests/net/gro.sh
+> index 02c21ff4ca81..aabd6e5480b8 100755
+> --- a/tools/testing/selftests/net/gro.sh
+> +++ b/tools/testing/selftests/net/gro.sh
+> @@ -100,5 +100,6 @@ trap cleanup EXIT
+>  if [[ "${test}" == "all" ]]; then
+>    run_all_tests
+>  else
+> -  run_test "${proto}" "${test}"
+> +  exit_code=$(run_test "${proto}" "${test}")
+> +  exit $exit_code
+>  fi;
 
-Here is the summary with links:
-  - [bpf-next,v1,1/3] selftests/bpf: Allow auto port binding for cgroup connect
-    https://git.kernel.org/bpf/bpf-next/c/27e3162a0364
-  - [bpf-next,v1,2/3] selftests/bpf: Allow auto port binding for bpf nf
-    https://git.kernel.org/bpf/bpf-next/c/dbe7d46ed109
-  - [bpf-next,v1,3/3] selftests/bpf: Fixes for test_maps test
-    https://git.kernel.org/bpf/bpf-next/c/09de329523c8
+This is due to run_test ending with echo ${exit_code}, which itself
+always succeeds. Rather than the actual exit_code of the process it
+ran, right?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+It looks a bit odd, but this is always how run_all_tests uses
+run_test.
