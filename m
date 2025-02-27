@@ -1,99 +1,73 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5F21B042C;
-	Thu, 27 Feb 2025 16:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69308F40;
+	Thu, 27 Feb 2025 16:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740673231; cv=none; b=Bbsna7Q0FlKYmJLkH38/YVZzhkJXWXEAcYW/qVaxZySS/LG6ZXWhdcuzr3IsNlzCEkhpPfUtHnkkA3NPGYOgS2ULFGIeHn8IzWOdbF7Gra73Q4UTSrpQJMK+JMo/GAhp56zwXBmwr+X4rN2BZFuy/goEWFi9uBhTshUXkCvB37I=
+	t=1740673305; cv=none; b=khhJE10ShYJlKjdu3E7uGMjC+HGL18tQkbsLbzc5v06kwkdKrNvNvdlVk+S4uWg6xCKxP8jzDTMQJaoPtajbEl79J+yRNaQTAIBAMRt9+tcQy1VWbEXoGubjyG8rdAg1ajqGyBn2QUfPqPki/ikNLhjGHAA46vFHGFUWVXVcRsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740673231; c=relaxed/simple;
-	bh=rooEJYteRIHmTiGiFviyd+aMAzewENGwoNbS5c06yDU=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=A0kKdD5nJoDMEh8Xeenz9gnPqo6t2imSdQ5c1yBJzSGYdTS9220EpnRla6WLhumOyOjtWV94k4VQ9Z2kI6jsq3obOexZ5HYS1kGlpgyv5bfF6QsPm0EkhECQxVEO4FLo705IiNta1koXUNW/S1/xO9laR/HkvIsnPpOGh0LvT9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TzPa8+MX; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740673305; c=relaxed/simple;
+	bh=sQlGGH25GF/utpCa8TrdW+aJYJDmWgb1GYvuLn4jCAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XVn0mxhFfqFe7SiphAp3KAeDwyGDWkcujW/dfgF7G12mZavzjfcSk3sACj9kSRJIlkN7RfvkSidMtzfnI2uu4XTGx4guJKTaed/nHtUsDmvIr+B4k6luxK6HqjdXe7YqhqM/4HQFIJt3lDWvJb+W4IDQHFr3VXUAaaWrko5TSOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8RDKIiO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TzPa8+MX"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7c0ade6036aso205966985a.0;
-        Thu, 27 Feb 2025 08:20:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740673229; x=1741278029; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EZrrM0ptNXZ2w8KFlRqcTDnRKrUP4WAgT64SUQXk3lc=;
-        b=TzPa8+MXmFBu5cZf3gRL3Q4LbTQx4Z4oe5yUPiH1gE+KsJysso3768DVoIqEb2DXGg
-         jWMbzMUebQkGnrncnJbbNb1KjHT80GYLKhjx+VA6mMYmBiYZpjS0v9710rc9W+iQOAgw
-         sqSGs/T3HkfmsbRxuLnsph1GbTOR18fWRIgmBA6DV7vg4hrdWkjRvrKZLye0pj1sD7Es
-         CQn8Zta11wPkhOIvQLx5w6CtZkSWgw/x0Ltx84HK4c2bySDifsxR/fCQ97j/5aFmGW9P
-         1REkGiHZYUE8IaFyPlEhuqhqFYXIOWGoOh5Wo6/THNOtq0YeDirXz5XFbISp1F+1Bzgt
-         rikQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740673229; x=1741278029;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EZrrM0ptNXZ2w8KFlRqcTDnRKrUP4WAgT64SUQXk3lc=;
-        b=StLN4DUg1ImEEUciIoa68wgDd++iLfxv/iEX7gdPkpxSBVC8Ts36nWfX8tv5KU50ye
-         Y+riPhJJYSktUaAECcMcbh95Vwpf05EcLemjpVvexBIkDVbgYeAF2N0lh/jh8FB5BE6N
-         ev4VmnD1SdC784DNu8s3Dg5hRtrq9rrE/9lmS1iTk9VdN54Xb37wsfulrg5bzS3yZjYu
-         Db9jEzeE9JF7cqMbIv66rNZjWknbdSFsqpJ8AYmciJTHDNmqKfe3ScrdbA7iOqFfCN73
-         jqGbpC3D2NTXY5wKAD97JeDjvcbA3ao4VAZGjcBXmANGyd3sQQNLahISzFsR6wP/qvrg
-         KJ2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUIui1jkH7p8fVmtSCBNIx5uCpwDbypRMhKCVaIAV1hkBrvdsO+lgsfzg32GvLQybgRcc275bMc@vger.kernel.org, AJvYcCUJjXwRQRLbJ6qmEDA6ZcFNoz769y3IKjah2+r1OATPoXLHcObI3Cp76ZpTw4lLDXU+dDQp3WY0BVcHEos=@vger.kernel.org, AJvYcCWHOSIwUQfENPeCN8YEDX1Y+GEU73FjmbBHdNus3egjpMH9d6uSqQmiLIgEmmyBnMXh5qZXn8rChavlBafqOWS9@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKmY+/Zi4bps0T6QySLPcOphLS43hSn9A1MwQ6UvnK1AG5OThc
-	DkJndxNtClEfTmMmmWssImbbq4JZkuLm/BEwkSec60Jk9x4gvGWY
-X-Gm-Gg: ASbGncu/T6Hx3W82O7P5kdVq3tD0nKrrP+cHe/Uly8EQYllTm6OeLJ9vEnXrdVKkea+
-	15ALcvO7QKMhaLIt11s9OAZO3SEg/XcCfCAb5BKnPQpgo/BwbjbZgmZ8kshNFSd9NQ4Xdu4qhiU
-	to7zU6YDGNSJH/87PdxfasXwkJvmbAgUY3t98IJ0VBwrw+a0uhJawy9cpX8dwIl/ljgwK6fKZ8q
-	ro5kYc/WZnYfuscN4ZIF6ZfcUb+VlE9FXr2syE8DGot9772ZZJ0dOlZ2uM7kf/+fN2W3C+/xRZe
-	8oGM9zCepvsHrvl57G0/wYO8vH2fL8hlGAm+H0ktS6O68loVNXfZwLmSo1KawNBOjPT4L6n/8sY
-	2UhM=
-X-Google-Smtp-Source: AGHT+IH56NbDkPEiTqE1fNGFonxYrJTWAvsmYVrJEdkF4m5HA5JbvrgU7zCjOs/KbisdUPWX0+cmew==
-X-Received: by 2002:a05:620a:4146:b0:7be:513c:3371 with SMTP id af79cd13be357-7c39bc26d00mr8211185a.14.1740673228740;
-        Thu, 27 Feb 2025 08:20:28 -0800 (PST)
-Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c378d9f8f0sm121993585a.89.2025.02.27.08.20.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 08:20:28 -0800 (PST)
-Date: Thu, 27 Feb 2025 11:20:27 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Kevin Krakauer <krakauer@google.com>, 
- netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- linux-kernel@vger.kernel.org, 
- Kevin Krakauer <krakauer@google.com>
-Message-ID: <67c090cbd65f4_37f9292946@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250226192725.621969-3-krakauer@google.com>
-References: <20250226192725.621969-1-krakauer@google.com>
- <20250226192725.621969-3-krakauer@google.com>
-Subject: Re: [PATCH v2 2/3] selftests/net: only print passing message in GRO
- tests when tests pass
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8RDKIiO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 560E8C4CEDD;
+	Thu, 27 Feb 2025 16:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740673303;
+	bh=sQlGGH25GF/utpCa8TrdW+aJYJDmWgb1GYvuLn4jCAs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=j8RDKIiOyCSaYuBH82JphMKE2yS4OtBZVgpEa4tsNDfprl+ZiQ4F6hQ0colXqNNG5
+	 aNnHt6cPHK4gffZEMubVgqAJwCq24wsNqo+oza643jKiTF2+k1b/jk1V4xrP5Zv7Ws
+	 6cPWvWs59d/erzBLa5Z5wK/OL8akFXlGoGV5NCFwR8/KPRczckOzN0JSFL1zS0OXa8
+	 +Wl6KCYZyYuWfPUAXrc+TDQHtxHq2PCbWbozMauTar4/6HpPelyIeTv/WB/lfkjp8I
+	 /o70+GI34UHbh5p7pxKkYny8PDcEfU++Equ10mKQncWS7n0OIKf7PQjYA/YQV3L3eY
+	 Vq6Gn/Cs9PIcg==
+Date: Thu, 27 Feb 2025 08:21:41 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, sd@queasysnail.net, ryazanov.s.a@gmail.com, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Xiao Liang
+ <shaw.leon@gmail.com>, Andrew Morton <akpm@linux-foundation.org>,
+ steffen.klassert@secunet.com, antony.antony@secunet.com,
+ willemdebruijn.kernel@gmail.com, David Ahern <dsahern@kernel.org>, Andrew
+ Lunn <andrew@lunn.ch>, Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH net-next v20 00/25] Introducing OpenVPN Data Channel
+ Offload
+Message-ID: <20250227082141.3513de3d@kernel.org>
+In-Reply-To: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
+References: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Kevin Krakauer wrote:
-> gro.c:main no longer erroneously claims a test passes when running as a
-> sender.
-> 
-> Tested: Ran `gro.sh -t large` to verify the sender no longer prints a
-> status.
-> 
-> Signed-off-by: Kevin Krakauer <krakauer@google.com>
+On Thu, 27 Feb 2025 02:21:25 +0100 Antonio Quartulli wrote:
+> After some time of struggle trying to fix all hidden bugs that Sabrina
+> has found...here is v20!
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+> Please note that some patches were already reviewed/tested by a few
+> people. These patches have retained the tags as they have hardly been
+> touched.
+> (Due to the amount of changes applied to the kselftest scripts, I dropped
+> the Reviewed-by Shuah Khan tag on that specific patch)
+> 
+> The latest code can also be found at:
+> 
+> https://github.com/OpenVPN/ovpn-net-next
+
+coccicheck has a new nitpick:
+
+drivers/net/ovpn/netlink.c:439:11-59: WARNING avoid newline at end of message in NL_SET_ERR_MSG_FMT_MOD
+-- 
+pw-bot: cr
