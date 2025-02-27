@@ -1,117 +1,115 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE67523315A;
-	Thu, 27 Feb 2025 13:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C15C342C0B;
+	Thu, 27 Feb 2025 13:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740663832; cv=none; b=ce9ngD1M/+FwfQ0hmryeNOcidCsoxJOPV1Xsj19s2vCtZHbpKAmJRZAopwNAs7blceI35nB4NxJHDlAZ9yJs5Kf3PLYdlk0PeUq2EBFEzrL2bfJKNGWRB7ecHCPxx09rJV+YizWA5FluKKcJTEVQNX0PJzBYiIimZfq/uthn+tE=
+	t=1740664580; cv=none; b=l+XRr9zDeqDfLE1im4ZBWTj3Prm+D+zuOxvleheiPODFXlbCJTW7EY+anJjb/UgxqQnoASBonoN+gX9Rbi8Iwuz4gUzCY2YJ/GB0BF1uOZJsmyfLEzENgvm9Skp0vHh8+/CR86OvEHEZyjbc3avo9B4oIOGaqNrTI/5WjXv+/eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740663832; c=relaxed/simple;
-	bh=EnaYxEWNVhiFd2VwNTO/O1KVXGEdkXwFWZgqg0p8524=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QaYM0Ev6TzIamFBEQWove9z4pESDfP2AKjeiKpZhZTFgn43ekfjt1ovEys1HMUZ/q+HstnKuwuTVUIx0poPotRzS9X1eAMLJrJAbwRXlVSCC+tJp9GSeFkg0WrxzehwzHIR98aq0aise2sU0bTeRkh3070elAPdeSfzXmk22QcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=LCHhE1yp; arc=none smtp.client-ip=212.227.15.19
+	s=arc-20240116; t=1740664580; c=relaxed/simple;
+	bh=6YhuMD+fZp15NlYpzOupLk0ws9PYq1Voacu06J0Qh2E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZJ7XB+kbbUJgS/1hKR3nT31ppXc9gJe72U40Obio5zGWusCLbqU58c0CW+u8V1yoZm7prb1cYhPZ/gKpVQB3FBFbq//UxgqH5U1ya2o6MV3UKqM7RygCAUI9qUrQK7Kpf+e8l0Lg8O1s1CokX53Rzy7GuEKix1+06WdaKdxFZso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=lvjC/kcM; arc=none smtp.client-ip=212.227.17.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="LCHhE1yp"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="lvjC/kcM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1740663816; x=1741268616; i=ps.report@gmx.net;
-	bh=R5lsuEL3fy+5WqWDG/oNetmCKrc6oS9esNqoBlre/so=;
-	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	s=s31663417; t=1740664574; x=1741269374; i=ps.report@gmx.net;
+	bh=6YhuMD+fZp15NlYpzOupLk0ws9PYq1Voacu06J0Qh2E=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=LCHhE1ypB0Y/4QiWnOiNTpNKaQpFrxF/zOeH9BKO9Nlyd3W9qnvqqpqywV9ZBSjA
-	 vcs+DljMpHsjNPNWAOSTiiBrH1WxBEOFg4Ung0RRz849Wah8oEyONRvuNSOhIGCd7
-	 BfXsvgh58EEJPvo9hSCOS4OCqoOB9YASbKV6dAhwC6lP8sMJpO/4Lshj8LI271QAU
-	 NsLXVU9+DWB4rzQIhcF4Ad6btJeVd0yUsEEZZZkxqpU8ELbb1mr53Oy9gD23bc6WJ
-	 xE5Zsd21jH5RfI+5I6BZoxXhIdWnc8Rn2y7kuD6xXHT/i75us/cTIPe85uYT30Poh
-	 xYfltYFv5yIojOKPbg==
+	b=lvjC/kcMwpbAjEwFKs6zxoDbniNDyzxr2fMTAjgACe4M2sLwLpeIZqz+Vh1i0Kd3
+	 QZDkSN2v02WgKemDU+fzjokJsAq/gqaNk1TN9fVJ1gwuost+JH1miiLvdLyj0bzJg
+	 4+FGYYHGWvl8Loxhj5zOkNHIEdHus3F2oxsPFvQHJJlKBcxdIfqzyx24rYeSdR31H
+	 i1O6VRBjr4T0yEmkaPrT4CO1RcuCy3X06kMqVzoEyGE94405DzhscKOiACiDf5g0V
+	 P+VA5YXdg45852VJH2R8iEl6ff8ftj316uYQmycqTpbMuby47KqNh6VQmNM8O9iGW
+	 hv11P2bqUEMMRZ2kuQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([82.135.81.151]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIdeR-1u2CVx3LCH-00CzJU; Thu, 27
- Feb 2025 14:43:36 +0100
-Date: Thu, 27 Feb 2025 14:43:35 +0100
+Received: from localhost.fritz.box ([82.135.81.151]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M4b1y-1tpIGO2kkw-00F2NT; Thu, 27
+ Feb 2025 14:56:14 +0100
 From: Peter Seiderer <ps.report@gmx.net>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Simon
- Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Thomas Gleixner
- <tglx@linutronix.de>, Artem Chernyshev <artem.chernyshev@red-soft.ru>,
- Frederic Weisbecker <frederic@kernel.org>, Nam Cao <namcao@linutronix.de>
-Subject: Re: [PATCH net-next v7 6/8] net: pktgen: fix mpls reset parsing
-Message-ID: <20250227144335.6e3af335@gmx.net>
-In-Reply-To: <02e13783-1f87-46a7-9396-96bf17e36a9f@redhat.com>
-References: <20250224092242.13192-1-ps.report@gmx.net>
-	<20250224092242.13192-7-ps.report@gmx.net>
-	<02e13783-1f87-46a7-9396-96bf17e36a9f@redhat.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-suse-linux-gnu)
+To: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Seiderer <ps.report@gmx.net>,
+	Fedor Pchelkin <pchelkin@ispras.ru>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nam Cao <namcao@linutronix.de>
+Subject: [PATCH net-next v8 3/8] net: pktgen: remove some superfluous variable initializing
+Date: Thu, 27 Feb 2025 14:55:59 +0100
+Message-ID: <20250227135604.40024-4-ps.report@gmx.net>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250227135604.40024-1-ps.report@gmx.net>
+References: <20250227135604.40024-1-ps.report@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+Ztxo+GrUJYyVZhX+OnkbPgV2ht0yZ5uRxFD7snG/hFp5of1rre
- jatBeqzu2XfW0vjdWweSwBDvOkVExDh7nl24N6pzNIuP3YMnm5mOsCQiTgHZpYwrVU8bxOt
- 6R9avd1lAsoKIxpTae8I1JUohvRDLIgJpSYIjvqt5Di75kgSbuIhkxpihrzgZpFK0sskQRH
- 09kSpT9nrinD3xh8X/9zQ==
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:EUIXcxlKZnX2/p/4jMa01w1aUMFkC6XFDOrlNn91juwz9cofZ1D
+ gdl+8BnZhZSL7RY7CLN+Nd0YMid9W2/nCUqQVplpJLb5OrGd+8dtXL5epnohYroihgkaKg1
+ t3rTbfGAsFQ9lhcpoXdAg0kEmTN2UuF6jzigv8r4XElyHQPDVuUnB0a0cafoQ8WuY3c6uAA
+ LrZG087Ui2F3evhbo51cg==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:22gMgeXLusM=;QEzdzt+ltYk8UIsghpU4FNh1kxs
- QVFuVJa4x6bzDcOW7AYh23h2owGM1tQPg9uNWNOIybZOyKJTKZkZxV68j2IBLyhvZd93AlJcW
- yQsedKkMqowh0V6u3lBwM0yKyvEXnbi1GKMNiV2gbVBJ3zHd4gABLuyeOewcSj4oFGgzFSy/d
- lM33E7QY6IjIY5jKnUIv8kSHPAMqeBuSsUJJbTjsl9FteqWXDZglsgWYHjWvLzPHFeuwnVG4S
- kfe6jbEmcXccq70sJwVUOZKryH+9ZfL2d8AxiHIqQFWdrzb3QZaU4CreGuZzmkblrpcTiFkN/
- fa3FaXqCvkotD3PCf7g54EyXdBYuikdcAsFyAE4qGjzhggpbcCYOyGB5UwPyhFmsIwshyJiZO
- uJGPah6/7WC5rntpF+jwsgBw5eUcFEoGvfE2AWtsDPPWEvI75kCNWmL3ea4SkIDCLpAcEKetK
- aDDSvMypLoQhRLP3MlxiXB4KUfZpeGD3w4DjhWu652qV6j+ufPqT8rTEIGzHNeHlor8wbkPaW
- IRVNa9esf0CAThhZf1VxC62Bl6j2HSNmlG76Q2XqWmMA5lrTeOzG2cxmX+mb9e05TA9OpHtGW
- qgtGt4JbZBjir4k8HVyQ1l8FlyngONwV0nWU+qKEjvN1uBYJrJwYQFFESE33iIcRlnXeYRBix
- J8ZuIoaIqsQ8yvuaj+n0OXLSAydAbm58M4eqT5BQAX5Br6o8D9O06+QERauEn7ZfOIPc105x2
- K34DTSYbnoBD+O+BpM43PVLH3ICYULeNQy6t6RBUVppOGYHU03omFURlpUmVIkj51F0KTFd5k
- HTbE6HZ3DqA/gvEXO6TdEzUnUdoCes6R32Y8utfYOGMPTfm70cafALKOFtOihcwxHXODGiFgS
- ToCfQObqERzxBlteDf+F318lI679ibBsnsIYZjRr4d4R3/EKVttMIHbnDKH3PCy7AbwzGhLHU
- nne8PYAp9DDGB7WUYOSH6cMBXFqWQZHZrKzZNXEa2Fbn+G5Gkn13Fy235mlhy3clYG9nHARtU
- Rhn3ksG2RJ/+5KsU/hhRnuQaClZTXh4JkXxGExoV57ZmkKZW+4nLS4r3/ycLkJd6/tr/zNy8p
- I664AryV0JdqMdaczyR24gEKObpdFw8LIuBPqtwO73XvcU9mSFcICmTCSZtQzB+1N2/WLWK9q
- PwdQXzODfdOq1SIYShBioDcRLDTd5y9HncTOIXepR8VKYREPNvRi1BdrDKixYrCAyzjuY0O1g
- SLg6vh/XG9MlugYwtaDSQqF6MYHYIK1F683MPAq+wSlYXQcjiXX0wpIU4zX5yICAHkuTVx3J9
- WCd1UV7nQD9cZXlqY4rIfsc4qE7HmJOt6wOuZc5KQswK/SQc4CR0lDYGYRP4hqQB6E1AYQ1BE
- c6AgnTl44jEUGC19FzzzM7UziLpB0Y7ZJsetd4OyxJC3zPfg9mdnO1dZAJ
+UI-OutboundReport: notjunk:1;M01:P0:BkUoI9KaCRo=;zxEJzEjODqPk70w6cvO33JrWQcy
+ +uwZeqZcivYV+bv/UsbgHHAA8uoiQ591PDaNJDMoNCwgTJcKaHsBPfte+5qjeosZVtmLVOqiG
+ B1nc53mQiT+K3nOOnbhrv0pBpHBVnadmshZCUdzI/xVafImlc2KnqmDqHSGN6OvcZiO8Fsnvd
+ 5RnQRxJh8Nnx2KV1rKymbd53tzxvmjvZCiDGHf9FLtAeL1tf3GeG2OlJJy4bZQjL69jqPe6KX
+ cvhxdm52OJvmVRStSLVaZ1rcXQvVfmtaXoOD3O2ETLw2pqFgF+tf21mwmcMOW9z0HJUqogY29
+ Uw0Oi8cC7IpybW5c727OgeJOnqH/Euh7RZnr9Mqyefyj2QGJl8oisfohUpHm7A9n/ctmHT8D8
+ DkV19xvdFP/BSASFBm9Ai9P551C7F3uZH/PLS1P2APjLNB5O11ITAOrRoJcGM8WwHD064rCeh
+ F64l9PuNa/ZlrETMtoN6qhn3aDKokefL3PI1VbcCHtWBQ1X3S4YQmSmGxHYv9YOj3hFeERv4+
+ 5cbEaPi5VSF/CqOXZWT4/k6MxDNbssr7kTW/YiLq+g2Zlb5kFBj0h4m8ZM4lC2/Y94PC+cMiG
+ dLC9YcsylsGj8yhtjsfOQQ26jsxV4qGBXyYqU9z/PBlkZRxh3tOrBUyB4+f3Epxq3FnHIbCAx
+ YmtGIs4BlHKncKmf8OsQARFC0oyvQH9y6gmhM49jGbExWq9TGlvaRvVkACi6XqHqIFg8w260r
+ MOEsGoA0dIBkKt7zYDdrWcETP6BdkkIUrtoivvlegBkku0/JVGIE7aR/Hs2D3oPIA60FBj2hV
+ broGDqpORyIq5WI9LKQyxD3qxuhVma77nKEMm8bLo+LIGCKdtCat7r6JGwNRVlI/Dzh89Fc9o
+ 6/aWvBfmbP2M5YjxEkaFVZtHIUK9STMNHySjwDKSpS4BnpY88SkcHUFOIcLMVEmfbmgAeVUKC
+ q3Iq8DGMmlMSI3sAaT0HrqL9jo2RIQ4Hnk28AWgg0RqvX6+Ypr6QPw+rL1prw7owqLFfW01kR
+ zoPs+oJJm7SeQPeBdMbSlwrZ5MFAh/lCcJg2cbpaIC4NeXFx0im6wS8ySd8agZPLzlorNyC6Y
+ pk6xsZ6yVhBBOrVamQYz64c8NqOukajFYUhpulbulpq1TTeSXDiA9J9BIJSk6QRor5Wc2eymA
+ sGVuZJ5WqbS+2j/ys5u2ViKTcfbESrnHf7KT8i051UjsJEdBXSN8s8U3i61ocBTaUvJibjRjs
+ R23p/UAmjdGtWVdsrzNkVHJNNVBxchgLS21Mg5/KLchdf8RCFOlw0zVFYyiz5SpvcTMIjs6A/
+ Ikkkn0yfjhDUbaRVV5nV3faMwzx7fXFiR7jFWUPe2TShJFxRmoFUHMsdT5Ch8L83NR6dsvObg
+ JhDP7Xc015Ag5F7OIRohnwtf4dYMXw/aVBDStBNkzNi3jjDdGFkj090ChZ
 
-On Thu, 27 Feb 2025 11:19:33 +0100, Paolo Abeni <pabeni@redhat.com> wrote:
-
-> On 2/24/25 10:22 AM, Peter Seiderer wrote:
-> > diff --git a/net/core/pktgen.c b/net/core/pktgen.c
-> > index ae5e81e62733..bb13a4591709 100644
-> > --- a/net/core/pktgen.c
-> > +++ b/net/core/pktgen.c
-> > @@ -915,8 +915,13 @@ static ssize_t get_labels(const char __user *buff=
-er,
-> >
-> >  		max =3D min(8, maxlen - i);
-> >  		len =3D hex32_arg(&buffer[i], max, &tmp);
-> > -		if (len <=3D 0)
-> > +		if (len < 0)
-> >  			return len;
-> > +
-> > +		// return empty list in case of invalid input and/or zero value
->
-> I'm sorry for nit picking, but C-99 comments should be avoided
-
-O.k., will change on next patch iteration, thanks for review!
-
-Regards,
-Peter
-
->
-> Thanks,
->
-> Paolo
->
-
+UmVtb3ZlIHNvbWUgc3VwZXJmbHVvdXMgdmFyaWFibGUgaW5pdGlhbGl6aW5nIGJlZm9yZSBoZXgz
+Ml9hcmcgY2FsbCAoYXMgdGhlCnNhbWUgaW5pdCBpcyBkb25lIGhlcmUgYWxyZWFkeSkuCgpTaWdu
+ZWQtb2ZmLWJ5OiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+ClJldmlld2VkLWJ5
+OiBTaW1vbiBIb3JtYW4gPGhvcm1zQGtlcm5lbC5vcmc+Ci0tLQpDaGFuZ2VzIHY3IC0+IHY4CiAg
+LSByZWJhc2VkIG9uIGFjdHVhbCBuZXQtbmV4dC9tYWluCiAgLSBubyBjaGFuZ2VzCgpDaGFuZ2Vz
+IHY2IC0+IHY3CiAgLSByZWJhc2VkIG9uIGFjdHVhbCBuZXQtbmV4dC9tYWluCiAgLSBubyBjaGFu
+Z2VzCgpDaGFuZ2VzIHY1IC0+IHY2CiAgLSBhZGp1c3QgdG8gZHJvcHBlZCBwYXRjaCAnbmV0OiBw
+a3RnZW46IHVzZSBkZWZpbmVzIGZvciB0aGUgdmFyaW91cwogICAgZGVjL2hleCBudW1iZXIgcGFy
+c2luZyBkaWdpdHMgbGVuZ3RocycKCkNoYW5nZXMgdjQgLT4gdjUKICAtIHNwbGl0IHVwIHBhdGNo
+c2V0IGludG8gcGFydCBpL2lpIChzdWdnZXN0ZWQgYnkgU2ltb24gSG9ybWFuKQogIC0gYWRkIHJl
+di1ieSBTaW1vbiBIb3JtYW4KCkNoYW5nZXMgdjMgLT4gdjQKICAtIG5ldyBwYXRjaCAoZmFjdG9y
+ZWQgb3V0IG9mIHBhdGNoICduZXQ6IHBrdGdlbjogZml4IGFjY2VzcyBvdXRzaWRlIG9mIHVzZXIK
+ICAgIGdpdmVuIGJ1ZmZlciBpbiBwa3RnZW5faWZfd3JpdGUoKScpCi0tLQogbmV0L2NvcmUvcGt0
+Z2VuLmMgfCA0ICsrLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRp
+b25zKC0pCgpkaWZmIC0tZ2l0IGEvbmV0L2NvcmUvcGt0Z2VuLmMgYi9uZXQvY29yZS9wa3RnZW4u
+YwppbmRleCA5YTVmYzEyOThiZDMuLmI2NzhiMjhkZWRhZSAxMDA2NDQKLS0tIGEvbmV0L2NvcmUv
+cGt0Z2VuLmMKKysrIGIvbmV0L2NvcmUvcGt0Z2VuLmMKQEAgLTE3ODUsNyArMTc4NSw3IEBAIHN0
+YXRpYyBzc2l6ZV90IHBrdGdlbl9pZl93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwKIAl9CiAKIAlp
+ZiAoIXN0cmNtcChuYW1lLCAidG9zIikpIHsKLQkJX191MzIgdG1wX3ZhbHVlID0gMDsKKwkJX191
+MzIgdG1wX3ZhbHVlOwogCQlsZW4gPSBoZXgzMl9hcmcoJnVzZXJfYnVmZmVyW2ldLCAyLCAmdG1w
+X3ZhbHVlKTsKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVuOwpAQCAtMTgwMSw3ICsxODAx
+LDcgQEAgc3RhdGljIHNzaXplX3QgcGt0Z2VuX2lmX3dyaXRlKHN0cnVjdCBmaWxlICpmaWxlLAog
+CX0KIAogCWlmICghc3RyY21wKG5hbWUsICJ0cmFmZmljX2NsYXNzIikpIHsKLQkJX191MzIgdG1w
+X3ZhbHVlID0gMDsKKwkJX191MzIgdG1wX3ZhbHVlOwogCQlsZW4gPSBoZXgzMl9hcmcoJnVzZXJf
+YnVmZmVyW2ldLCAyLCAmdG1wX3ZhbHVlKTsKIAkJaWYgKGxlbiA8IDApCiAJCQlyZXR1cm4gbGVu
+OwotLSAKMi40OC4xCgo=
