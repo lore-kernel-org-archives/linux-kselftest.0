@@ -1,130 +1,123 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789B8232364;
-	Thu, 27 Feb 2025 13:56:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C8C17BA6;
+	Thu, 27 Feb 2025 14:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740664606; cv=none; b=CWewBK9/1gOdMbkUHuHblxBoqsyMqGUmfubvGE+ztovb4fu934K4mtBB4cb+VdG1rW+a9N8qEvTxov5QarMLkBflqqM8TUZixSBBmg+YvPBvvvmwpms8dPOgNPt7JQ84WVBImCAEud8tVpi/ktBHIQ1FaFMxD+9bwHRQ0KrcmZs=
+	t=1740665316; cv=none; b=d7woGY6S0FJ7pAsOwPXtVl9Btsb4tvBqtaqm8q2n8mD6Hab27gt7AM2bzJgSgxeQ0bzpkB7xAzb72983iqXCURZC/oD5BG9K/qZxPfih5UuvzwY5kOEEmlr5w3yL3GPvTtF0zRoutMFuc+a2bX/LlLpEnlkJBA1JEPG3xLJTLVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740664606; c=relaxed/simple;
-	bh=U55Wfaml+iLmuDzRSmhF6XHXxgqauTNIupr+1KWPRZk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cJtqATs50LjAn9XGY7YBr9EzI1Sa208yI2FryKB6laFqXit5yq2wYJFVD7EoGZJesuuzkcpJ/NSjtyfgwBDfJBinoCINSNZiOZG3bCPaataL47BGwFx5Ypa29gQLfv2tcO2vxMBoU0vD4YsYW5tJre/rpCXdVksO0ANPyAfe6vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=sbP/y1Hc; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+	s=arc-20240116; t=1740665316; c=relaxed/simple;
+	bh=gJt/cFfZaH6Og4HX/5kUVO/gZHEEtlmW+8JOgkIHyxA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=c+QWwySepANb6gpi0nDV0Ckwc/RgujnocrW/fZgCBSuQTYRe9YtQg5arOAjyDo5S9R3vnAWwhZt9NwneVmWKRujD6JU1BLiV08IhNSZYqxWoBZri2teepXPsLZJ6ulsN6bhRG2vN7UY2NTC9akLJ3HsokCXeQWhbVmi6HMoUcd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HIaGtyJj; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="sbP/y1Hc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1740664576; x=1741269376; i=ps.report@gmx.net;
-	bh=U55Wfaml+iLmuDzRSmhF6XHXxgqauTNIupr+1KWPRZk=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=sbP/y1HctdaY8Nyn4Uj1Kx3Hpt1Ful3MvpliXfrPzCnncEqeMmBGchyUtAhfRsnb
-	 I2z0VnLKXfPzPM2YX5f71UTMm/EHMlsozLped3ZSRRNBJiozSy6r88s5yxsfTrEoH
-	 2trK96horOzs4+B5AQfxmGS091MrxysLIlq26zAjb0MzcVFileL+brqIK5H+w9OE1
-	 XnDyJX5kR1Fwlt+jaJbNA6MABwn21EQneQmMGg7WMTodHrFaOiVB2oc3j0ZoVvfRN
-	 C24gwFlzSzm89ZDZ5oJkIHKauMn/PyvLYP/EbyqVd8+bbbLmZYrCzpzPpLeVYuoSa
-	 wOMX1sO9jWpiLgYkwA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([82.135.81.151]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MOiDX-1teVfc47Dz-00UlyI; Thu, 27
- Feb 2025 14:56:16 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Seiderer <ps.report@gmx.net>,
-	Fedor Pchelkin <pchelkin@ispras.ru>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nam Cao <namcao@linutronix.de>
-Subject: [PATCH net-next v8 6/8] net: pktgen: fix mpls reset parsing
-Date: Thu, 27 Feb 2025 14:56:02 +0100
-Message-ID: <20250227135604.40024-7-ps.report@gmx.net>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250227135604.40024-1-ps.report@gmx.net>
-References: <20250227135604.40024-1-ps.report@gmx.net>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HIaGtyJj"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D07644170;
+	Thu, 27 Feb 2025 14:08:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1740665310;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=A24/2SZcuFtlVpRIfutvUh+D2wAns2FOkWmIRd/eu00=;
+	b=HIaGtyJjCcdFHCsdHuTqqIwZ5469kZcxDprgdjd1XVJj9GagN++Yzw+l2Y1ZVLt/7Jim0L
+	qsm7Fs/sNe8uv6rHR6eAWlqdxlUTU25UhfPyWh69QBoYK7Pr3IK027/wpm+J7xn2ANpcYz
+	NaJw2EICUzBOUKjw5Zo4FA5XnZys5VXW9MUSIIIkeL/f+LEEE/oBbzcDLCN/Rx77asfAly
+	yK/1u/V+r5vugk8T+3m9SDFUJ1tv/EvOS4kcYdAC6Z+TaX1L7hRJanpHd+ajYtMSFvbwcE
+	+0K5jRwXRzWspBsjJT9eGDQ4vwRXeHnDlkDxHzKVsE51vtovX0F3p6A7BABvvw==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Thu, 27 Feb 2025 15:08:23 +0100
+Subject: [PATCH] bpf/selftests: test_select_reuseport_kern: remove unused
+ header
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:qXH4O+ui+hIs/MVWTwQuygtjseriezg+brhpV1ZDBDiz3fuL7Wl
- wYa5VCSKSkYbDBCwgBCjz6XYP8ui5EnBFVXhQVcB8jNdAuqroAP6BwSwmIfFF7zZiDSlFG6
- Yp75Vp7EoLYljsBAeWbj/ZBtVyT8HBqQx/WuIDWfI6OD0fLIC0m5HmIYxuwrl2l+AVq1APn
- M6xYHprMtAoH8MRbUr/HQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ONC9ffTbhzc=;KaLBZ5Z2xVz2txuGiXrKGFlbIZK
- SIl7YKx4TqQ//onW/OXIJlvA8SvDInNHsBK/fAniAJHFt2RePoLNvAHt9J9jiCmSxv7w4Enu2
- XwDXj0a19gBsw0ECL+Ay1rXgY+SSEmZ7O+EsoUekm4Kz7ZhlN9u/geuylwKLKymg2s4c2Tq+8
- njAyd0fwyXPkk3EM/jSYdD9vlLr8Fr0JP8FB/VCaattrYSFTt/DQQYb5bHUnglh4quQtNF6WU
- mVHR4lq1Bd/UuvO/FRUleFvcrfEkGaGfIUyammSTR1JWfAnnVtuzvMcr/Kz7WAoV51dDiqFsD
- xzgjfArV7Y5Dgk4GF//JyLh/y9mFllBXxDF1NjBOaDJQWGI+fKjMkuBU2q8a4Cl87mXJg7qtB
- bVCFZcpnCDHHWVyOJIaji2m78tujD6mxX/+jx4L01X07b0g+QLB9rRwUaZJfoYDDdeJ55jD/V
- 6x1+iahhWjlCya0zSDx3aX9GFiYXgBLxZ3bt/Bv1pgu3blNIquLLAxgWjxDcJfL8GinNg/F4j
- cB5UkgtDWibQL6f09xD+AHhywJi4eugNgMni9DF78cpz3LPCTTntn1bxBXu1WhRtgm6UteHiY
- v7Kv7VDucDpZlxE3bvF99HqCb9uD47I0tGdf0dgL9bJct86CIqHmWIG0jmV2v2rpgkUP5XWt6
- my1o8Obxm8qfTIP78ikVUAOKtHI7zNnuqG8iUilioXOe5vnFMQhR48QJduQezDqaKh6NhgjPW
- uXBCpBNmTtkggrtx6lTI7QTJ7QddywGt8Tdz+d0JNV4hyDoPooEMe0zK7zvbMPBGIZBw10Gbj
- HqAJEBf9VyDZHhtCCMC0CHzQjuS1NuR9nkZHtLxHuK7jht2V00pSjX+yc8q/5KYrjJTHyH+X3
- xfT31ElIRHBdZ1HHOWzYvG762aLv2YtOQaneh7UczKTcEYeGyNtsCDVJxi+k39W9b8mCq2vm0
- mH2CXrEK/jWc70SvnwsBMoTKNU0ovBI0iqFh+opGPtdQMa7/AdCZsslYvDYiMvPz/LYO7PNkG
- QYUJePss2rL6yATr0we8gzgj8rJcivGshVC1HMIxvPu1yvCBt+8hnCuoBJffsSsBf/+gtMJGM
- 5GWoOkXLaMOyrxZI1FcgD+fQvukKo+81LyYDP2gLEJUrO5i6mW/mVo8YAZoKdwvT66VyvjQyI
- drEuOFNlO1zLQn3Ge5mIwzWipSI/fCm4gyhXNofZP0BVdkZEvNezGv1vZ3qKiuAeiT1f9iYCN
- Bhh1Qor0qssSGKd+0MNklhLkNnV0C5VLjIoPDbKvvjlYya5pOWCZPExA4e0mFCyn6A0nYwj3w
- W0JAGQsaedXaFFKwIqRvTXwtT4sWjDobIboss57qNSCgt0/HlU2iSbHnQT+QPubvhr8yexTg6
- 3FRZtt7VWNu+1PbYBO4i0XDSPNIYNr6NS/QFc06CHi9kyt5BxE0Z+jeMn2
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250227-remove_wrong_header-v1-1-bc94eb4e2f73@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIANZxwGcC/x3MSwqAMAxF0a1IxhZq8IdbERGxT83AVlJQQdy7x
+ eEZ3PtQhAoiddlDilOiBJ9Q5BnN2+RXGHHJxJYry9wYxR5OjJcGv44bJgc1lh23ratLtiWl8lA
+ scv/XfnjfDwMl6ORlAAAA
+X-Change-ID: 20250227-remove_wrong_header-02d288d64204
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekjeeiiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkffvvefosehtkeertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrroculdgvuefrhfcuhfhouhhnuggrthhiohhnmdcuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepueehfeevfeeggfegueeuueehveevteefjeduieeigeefgffhiedvleeuhffhhfelnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrvddungdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddupdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdprhgtphhtthhopegurghnihgvlhesihhoghgvr
+ ghrsghogidrnhgvthdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpthhtohepvggsphhfsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepmhihkhholhgrlhesfhgsrdgtohhm
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-Rml4IG1wbHMgbGlzdCByZXNldCBwYXJzaW5nIHRvIHdvcmsgYXMgZGVzY3JpYmUgaW4KRG9jdW1l
-bnRhdGlvbi9uZXR3b3JraW5nL3BrdGdlbi5yc3Q6CgogIHBnc2V0ICJtcGxzIDAiICAgIHR1cm4g
-b2ZmIG1wbHMgKG9yIGFueSBpbnZhbGlkIGFyZ3VtZW50IHdvcmtzIHRvbyEpCgotIGJlZm9yZSB0
-aGUgcGF0Y2gKCgkkIGVjaG8gIm1wbHMgMDAwMDAwMDEsMDAwMDAwMDIiID4gL3Byb2MvbmV0L3Br
-dGdlbi9sb1xAMAoJJCBncmVwIG1wbHMgL3Byb2MvbmV0L3BrdGdlbi9sb1xAMAoJICAgICBtcGxz
-OiAwMDAwMDAwMSwgMDAwMDAwMDIKCVJlc3VsdDogT0s6IG1wbHM9MDAwMDAwMDEsMDAwMDAwMDIK
-CgkkIGVjaG8gIm1wbHMgMDAwMDAwMDEsMDAwMDAwMDIiID4gL3Byb2MvbmV0L3BrdGdlbi9sb1xA
-MAoJJCBlY2hvICJtcGxzIDAiID4gL3Byb2MvbmV0L3BrdGdlbi9sb1xAMAoJJCBncmVwIG1wbHMg
-L3Byb2MvbmV0L3BrdGdlbi9sb1xAMAoJICAgICBtcGxzOiAwMDAwMDAwMAoJUmVzdWx0OiBPSzog
-bXBscz0wMDAwMDAwMAoKCSQgZWNobyAibXBscyAwMDAwMDAwMSwwMDAwMDAwMiIgPiAvcHJvYy9u
-ZXQvcGt0Z2VuL2xvXEAwCgkkIGVjaG8gIm1wbHMgaW52YWxpZCIgPiAvcHJvYy9uZXQvcGt0Z2Vu
-L2xvXEAwCgkkIGdyZXAgbXBscyAvcHJvYy9uZXQvcGt0Z2VuL2xvXEAwCglSZXN1bHQ6IE9LOiBt
-cGxzPQoKLSBhZnRlciB0aGUgcGF0Y2gKCgkkIGVjaG8gIm1wbHMgMDAwMDAwMDEsMDAwMDAwMDIi
-ID4gL3Byb2MvbmV0L3BrdGdlbi9sb1xAMAoJJCBncmVwIG1wbHMgL3Byb2MvbmV0L3BrdGdlbi9s
-b1xAMAoJICAgICBtcGxzOiAwMDAwMDAwMSwgMDAwMDAwMDIKCVJlc3VsdDogT0s6IG1wbHM9MDAw
-MDAwMDEsMDAwMDAwMDIKCgkkIGVjaG8gIm1wbHMgMDAwMDAwMDEsMDAwMDAwMDIiID4gL3Byb2Mv
-bmV0L3BrdGdlbi9sb1xAMAoJJCBlY2hvICJtcGxzIDAiID4gL3Byb2MvbmV0L3BrdGdlbi9sb1xA
-MAoJJCBncmVwIG1wbHMgL3Byb2MvbmV0L3BrdGdlbi9sb1xAMAoJUmVzdWx0OiBPSzogbXBscz0K
-CgkkIGVjaG8gIm1wbHMgMDAwMDAwMDEsMDAwMDAwMDIiID4gL3Byb2MvbmV0L3BrdGdlbi9sb1xA
-MAoJJCBlY2hvICJtcGxzIGludmFsaWQiID4gL3Byb2MvbmV0L3BrdGdlbi9sb1xAMAoJJCBncmVw
-IG1wbHMgL3Byb2MvbmV0L3BrdGdlbi9sb1xAMAoJUmVzdWx0OiBPSzogbXBscz0KClNpZ25lZC1v
-ZmYtYnk6IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KUmV2aWV3ZWQtYnk6IFNp
-bW9uIEhvcm1hbiA8aG9ybXNAa2VybmVsLm9yZz4KLS0tCkNoYW5nZXMgdjcgLT4gdjgKICAtIHJl
-YmFzZWQgb24gYWN0dWFsIG5ldC1uZXh0L21haW4KICAtIGZpeCBjOTkgY29tbWVudCAoc3VnZ2Vz
-dGVkIGJ5IFBhb2xvIEFiZW5pKQoKQ2hhbmdlcyB2NiAtPiB2NwogIC0gcmViYXNlZCBvbiBhY3R1
-YWwgbmV0LW5leHQvbWFpbgogIC0gbm8gY2hhbmdlcwoKQ2hhbmdlcyB2NSAtPiB2NgogIC0gbm8g
-Y2hhbmdlcwoKQ2hhbmdlcyB2NCAtPiB2NQogIC0gc3BsaXQgdXAgcGF0Y2hzZXQgaW50byBwYXJ0
-IGkvaWkgKHN1Z2dlc3RlZCBieSBTaW1vbiBIb3JtYW4pCgpDaGFuZ2VzIHYzIC0+IHY0CiAgLSBh
-ZGQgcmV2LWJ5IFNpbW9uIEhvcm1hbgoKQ2hhbmdlcyB2MiAtPiB2MzoKICAtIG5ldyBwYXRjaAot
-LS0KIG5ldC9jb3JlL3BrdGdlbi5jIHwgNyArKysrKystCiAxIGZpbGUgY2hhbmdlZCwgNiBpbnNl
-cnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvbmV0L2NvcmUvcGt0Z2VuLmMg
-Yi9uZXQvY29yZS9wa3RnZW4uYwppbmRleCBmNGY5YzlkODM2OTQuLmM2MDRhNjhmMjg0MCAxMDA2
-NDQKLS0tIGEvbmV0L2NvcmUvcGt0Z2VuLmMKKysrIGIvbmV0L2NvcmUvcGt0Z2VuLmMKQEAgLTkx
-Myw4ICs5MTMsMTMgQEAgc3RhdGljIHNzaXplX3QgZ2V0X2xhYmVscyhjb25zdCBjaGFyIF9fdXNl
-ciAqYnVmZmVyLAogCiAJCW1heCA9IG1pbig4LCBtYXhsZW4gLSBpKTsKIAkJbGVuID0gaGV4MzJf
-YXJnKCZidWZmZXJbaV0sIG1heCwgJnRtcCk7Ci0JCWlmIChsZW4gPD0gMCkKKwkJaWYgKGxlbiA8
-IDApCiAJCQlyZXR1cm4gbGVuOworCisJCS8qIHJldHVybiBlbXB0eSBsaXN0IGluIGNhc2Ugb2Yg
-aW52YWxpZCBpbnB1dCBvciB6ZXJvIHZhbHVlICovCisJCWlmIChsZW4gPT0gMCB8fCB0bXAgPT0g
-MCkKKwkJCXJldHVybiBtYXhsZW47CisKIAkJcGt0X2Rldi0+bGFiZWxzW25dID0gaHRvbmwodG1w
-KTsKIAkJaWYgKHBrdF9kZXYtPmxhYmVsc1tuXSAmIE1QTFNfU1RBQ0tfQk9UVE9NKQogCQkJcGt0
-X2Rldi0+ZmxhZ3MgfD0gRl9NUExTX1JORDsKLS0gCjIuNDguMQoK
+test_select_reuseport_kern.c is currently including <stdlib.h>, but it
+does not use any definition from there.
+
+Remove stdlib.h inclusion from test_select_reuseport_kern.c
+
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+I stumbled upon this specific header include while trying to build selftests on
+the current bpf-next_base branch, which ended with this error:
+
+[...]
+  CLNG-BPF [test_progs-cpuv4] test_select_reuseport_kern.bpf.o
+In file included from progs/test_select_reuseport_kern.c:4:
+/usr/include/bits/floatn.h:83:52: error: unsupported machine mode
+'__TC__'
+   83 | typedef _Complex float __cfloat128 __attribute__ ((__mode__
+(__TC__)));
+      |                                                    ^
+/usr/include/bits/floatn.h:97:9: error: __float128 is not supported on
+this target
+   97 | typedef __float128 _Float128;
+
+The exact error (unknown TC mode) is likely rather due to some issues in
+my local build, in which I am actually cross-compiling selftests  (for
+ARM64 from a x86_64 host, but not through vmtests.sh), and I still have
+to sort out some other issues. But I guess it is not really right anyway
+to include stdlib.h from an ebpf program, especially if it is not used,
+so I am still proposing this small change.
+---
+ tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
+index 5eb25c6ad75b1a9c61f22e978d817d3dc88b3a2f..a5be3267dbb01372c84bb468e3a48eae69ac5329 100644
+--- a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
+@@ -1,7 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2018 Facebook */
+ 
+-#include <stdlib.h>
+ #include <linux/in.h>
+ #include <linux/ip.h>
+ #include <linux/ipv6.h>
+
+---
+base-commit: 072c40912477ebac2ef98cd0b1532ba9bebda20a
+change-id: 20250227-remove_wrong_header-02d288d64204
+
+Best regards,
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
