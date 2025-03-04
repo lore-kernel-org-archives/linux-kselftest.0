@@ -1,95 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B583E25F98D;
-	Tue,  4 Mar 2025 14:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7381D29DB83;
+	Tue,  4 Mar 2025 16:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741099800; cv=none; b=WAy4rAaCfMy1mBQTC5dFhM5cd1h1quYwIAlGqqkk8EjypyUr27mO1UNC2Y5T2gC/RFcZA7eqEpjFpcDZOUOrV9k0kphBHOKt1sbkGM71AqBt0UE83L1eaL/hnJv76+xdKF+n9lVXfM8V0XwxOhqDfc555nPCZuZlI9CG2eljwZg=
+	t=1741104671; cv=none; b=GdqCnIHwF+tGKdtpHZOLLc7VmQEsDYd7UkHcA19CoXmvrcdzAJyq0NQYcgmeWY6zXb+7EmWC9fk4c2Y8H6cuVpFXKorMja5ZqHCfPGRopDOaasY1v6o1p1i3v/7bVunHT6a0l9FxkavGxZP+JAml7b7wi4j5BgNayK7aQnGtHcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741099800; c=relaxed/simple;
-	bh=iHjkyEOwAJNsi2EtZYCaCGQOASUoDIn5YqQ9oOR4Y/U=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=uqVBk9caYvpJYUr393NcWDS9uOi7Di+l9nqO3bJg4y0CRemWGJdPo2q+pwhieAygVbOkF+tl1N+9zW6bczwp+ZGVu030xU1N1pEsSucwRdqL1ayS0KH/LCOl4x6WciP2qC6MF07obWpCmq62/K1Cy+ERpR+LlBMIsfD6TSAxbYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qZLWl/t3; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qZLWl/t3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2095AC4CEE5;
-	Tue,  4 Mar 2025 14:50:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741099800;
-	bh=iHjkyEOwAJNsi2EtZYCaCGQOASUoDIn5YqQ9oOR4Y/U=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=qZLWl/t3sC0XsH8r7kXYJJPQzrVYn59BsW3dT+Jh8xz3AxJekxgByK1yF8AlThyNC
-	 aXZ6YZ9m8a8Xx6oJd+a64woIcZe354w1tGK0kePdOsIBwOm3CdrjSmuvg0djNZrVHs
-	 PVZTGWAOoZZznhfK121kU38QalZy99CRIZxkZIB56k3+syrgfswPpIELunW7wOD3e/
-	 imxOT/B4fDSMvK8llM76GIDF8RF8c/9wRyi2wbGS1PRP5AzGRnYOazb/dd0RtRWgZR
-	 YeVum9qo19qpbm5nBGJUoYVq+nMrWeJpHoSwv7cPZ7bXU8dc8mvdlf6bLLvVQLgj3d
-	 ShoSESDHynL4w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D89380AA7F;
-	Tue,  4 Mar 2025 14:50:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1741104671; c=relaxed/simple;
+	bh=Q5OfRyL0oHBW1Tz9ez/ZaLR+7hn1+yu8saErb1C2CCw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ucC1SXYzZtf6XG58ox1tajIPtt3u/SWB6vNDA2JNo8BFQQk92VKhdkz7TDixd54xAMLVkcvMSLMlZsQYJuUx4lxNN0dOgmW7K4MgqWYsKy6I1hzj54r0tEUCuYuGzVi0JlpVEBGDacTWV7PQmLyLRqUxlEDmGQ5dsIGmCq+cF50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 157ECC4CEE5;
+	Tue,  4 Mar 2025 16:11:06 +0000 (UTC)
+Date: Tue, 4 Mar 2025 11:12:01 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
+ <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung
+ Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers
+ <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, Quentin
+ Monnet <qmo@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina
+ <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] tools: Remove redundant quiet setup
+Message-ID: <20250304111201.59ed8cc3@gandalf.local.home>
+In-Reply-To: <20250213-quiet_tools-v3-2-07de4482a581@rivosinc.com>
+References: <20250213-quiet_tools-v3-0-07de4482a581@rivosinc.com>
+	<20250213-quiet_tools-v3-2-07de4482a581@rivosinc.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/8] netconsole: Add taskname sysdata support
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174109983302.170664.16431215519500952572.git-patchwork-notify@kernel.org>
-Date: Tue, 04 Mar 2025 14:50:33 +0000
-References: <20250228-netcons_current-v2-0-f53ff79a0db2@debian.org>
-In-Reply-To: <20250228-netcons_current-v2-0-f53ff79a0db2@debian.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
- shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@meta.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Thu, 13 Feb 2025 13:06:22 -0800
+Charlie Jenkins <charlie@rivosinc.com> wrote:
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Fri, 28 Feb 2025 04:50:16 -0800 you wrote:
-> This patchset introduces a new feature to the netconsole extradata
-> subsystem that enables the inclusion of the current task's name in the
-> sysdata output of netconsole messages.
+> diff --git a/tools/tracing/latency/Makefile b/tools/tracing/latency/Makefile
+> index 6518b03e05c71b4fa84498f9628adf81a38c9f56..257a56b1899f23837de533353e9c2cebdb6035bd 100644
+> --- a/tools/tracing/latency/Makefile
+> +++ b/tools/tracing/latency/Makefile
+> @@ -37,12 +37,6 @@ FEATURE_TESTS	+= libtracefs
+>  FEATURE_DISPLAY	:= libtraceevent
+>  FEATURE_DISPLAY	+= libtracefs
+>  
+> -ifeq ($(V),1)
+> -  Q 		=
+> -else
+> -  Q 		= @
+> -endif
+> -
+>  all: $(LATENCY-COLLECTOR)
+>  
+>  include $(srctree)/tools/build/Makefile.include
+> diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+> index 8b5101457c70b48e9c720f1ba53293f1307c15a2..0b61208db604ec0754024c3007db6b2fe74a613c 100644
+> --- a/tools/tracing/rtla/Makefile
+> +++ b/tools/tracing/rtla/Makefile
+> @@ -37,12 +37,6 @@ FEATURE_DISPLAY	:= libtraceevent
+>  FEATURE_DISPLAY	+= libtracefs
+>  FEATURE_DISPLAY	+= libcpupower
+>  
+> -ifeq ($(V),1)
+> -  Q		=
+> -else
+> -  Q		= @
+> -endif
+> -
+>  all: $(RTLA)
+>  
+>  include $(srctree)/tools/build/Makefile.include
+> diff --git a/tools/verification/rv/Makefile b/tools/verification/rv/Makefile
+> index 411d62b3d8eb93abf85526ad33cafd783df86bc1..5b898360ba4818b12e8a16c27bd88c75d0076fb9 100644
+> --- a/tools/verification/rv/Makefile
+> +++ b/tools/verification/rv/Makefile
+> @@ -35,12 +35,6 @@ FEATURE_TESTS	+= libtracefs
+>  FEATURE_DISPLAY	:= libtraceevent
+>  FEATURE_DISPLAY	+= libtracefs
+>  
+> -ifeq ($(V),1)
+> -  Q		=
+> -else
+> -  Q		= @
+> -endif
+> -
+>  all: $(RV)
+>  
+>  include $(srctree)/tools/build/Makefile.include
 > 
-> This enhancement is particularly valuable for large-scale deployments,
-> such as Meta's, where netconsole collects messages from millions of
-> servers and stores them in a data warehouse for analysis. Engineers
-> often rely on these messages to investigate issues and assess kernel
-> health.
-> 
-> [...]
 
-Here is the summary with links:
-  - [net-next,v2,1/8] netconsole: prefix CPU_NR sysdata feature with SYSDATA_
-    https://git.kernel.org/netdev/net-next/c/8a683295c226
-  - [net-next,v2,2/8] netconsole: Make boolean comparison consistent
-    https://git.kernel.org/netdev/net-next/c/efb878fbe8d1
-  - [net-next,v2,3/8] netconsole: refactor CPU number formatting into separate function
-    https://git.kernel.org/netdev/net-next/c/4d989521a93b
-  - [net-next,v2,4/8] netconsole: add taskname to extradata entry count
-    https://git.kernel.org/netdev/net-next/c/33e4b29f2b3b
-  - [net-next,v2,5/8] netconsole: add configfs controls for taskname sysdata feature
-    https://git.kernel.org/netdev/net-next/c/09e877590bc2
-  - [net-next,v2,6/8] netconsole: add task name to extra data fields
-    https://git.kernel.org/netdev/net-next/c/dd30ae533242
-  - [net-next,v2,7/8] netconsole: docs: document the task name feature
-    https://git.kernel.org/netdev/net-next/c/7010b619830f
-  - [net-next,v2,8/8] netconsole: selftest: add task name append testing
-    https://git.kernel.org/netdev/net-next/c/d7a2522426e8
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+-- Steve
