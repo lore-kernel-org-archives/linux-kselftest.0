@@ -1,87 +1,87 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9201F4264
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 06:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A431F4739
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 06:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741068644; cv=none; b=q6uPBm34Z3uEHcXoCIl6kiS+Up++Wn34oGhj2QNpL9pg+XPxbEAPvscgIOGOE8ucyzWFnV2bItz1eVgxjncdmdHE/eeKe6gETqwG2hiI8GBXFxTssjX5mLIAuk7sv6vhBG4fbF/cUZrPiQTHeRgYEU0olqpaCr2qj47qI/0cFsU=
+	t=1741068647; cv=none; b=hmnn5hZsOctC5yjmZsSMrRzcgvev3sUyedMhLfG2R1QNZi8FfFaJL7IWTMgWAcs6DAfYdv6cs1yhP57OQsyo2YZGR0ZmqtKaH83X2mEXHe4SwuRL/V5FnvUsRSwLoN6xEGkQjnDBOPsvNcSCvE6nkrEp/x5951HvFvXrjwfADsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741068644; c=relaxed/simple;
-	bh=vaMZZsDlsC0OXX4/YW6sLIRZcTjRr82/f+FZADYuu2Q=;
+	s=arc-20240116; t=1741068647; c=relaxed/simple;
+	bh=IB8jHhAB3o1fuo+OyxgWuE+tj+u7wr+4MpHd1P5eJr8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CMQeFm7Ay8nFld6A2G4ngAhK80fQFj/bYbwbWQtqRC0tGtTxrIfseIKoni9ZUPize9HsPNUjO1ejoFOi3+cMFcz6ia3mXU6HgAXR1mISTBgGhH7WK4POO/ejZfkBeMt3jufttsGNgx1FBxKVQr428zFcNsDxXEJhwxn0wwLfxaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=OOCpJR2n; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=JqeCvHki; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=OOCpJR2n; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=JqeCvHki; arc=none smtp.client-ip=195.135.223.131
+	 MIME-Version; b=PRIaaucwrHhIVUwC6rRqWQHk+XwmDeWcc3pzupLex9qChU6msFoEzEszk5MEdK3ysPnNru/lgkk2SNpfSKBcQit2G3zYPz8kDqEXHLqilwY5wjt7hXf81YdHNUwI/Zb/WOKNFljBHcBzqkterwBpmTM5g8+nHhWclq7ZHd624cY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=qGxCwn8L; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KWX/VljQ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=qGxCwn8L; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KWX/VljQ; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="OOCpJR2n";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="JqeCvHki";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="OOCpJR2n";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="JqeCvHki"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="qGxCwn8L";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KWX/VljQ";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="qGxCwn8L";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KWX/VljQ"
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 379731F393;
-	Tue,  4 Mar 2025 06:10:36 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id E913C2118C;
+	Tue,  4 Mar 2025 06:10:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1741068636; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1741068643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=tR4Otz75vEf5Pg16S0hLDPNqprTjRsnE7GGU4lnD1HQ=;
-	b=OOCpJR2nmSJtftVzcaEyMip7boqeOW1eVBaizdgbiLqj4sS7/Gbhh3UJZbkXb32rsEEUkq
-	qzibKlJyLDgixHkpwtntoB4fUK/5siNTtSK13ADaD7PYtNHft5vIwaH70k5jbcYyR80MTr
-	9xviYZkM00FVGKBvlmpORToL+AFXmUY=
+	bh=oJruo/PUqbsUiEslLAkM0UfjgrJI2RP7fQOA1xVkfsI=;
+	b=qGxCwn8L6u3o7Fhdc5g8irlcVqopuOvVnFBjNhdCu6YpP8b+XadRp0KegpJC5Hx0VVGkqD
+	hCNSUqUIxOdTuju8KshZJTdbGUcRd0fjJMxTcUIMW8G8BCnZJ75g1GBzg/Pzk0StXhhPOz
+	n+BBeecKXIG2sXVVaz4SQAZA10Ry5p0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1741068636;
+	s=susede2_ed25519; t=1741068643;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=tR4Otz75vEf5Pg16S0hLDPNqprTjRsnE7GGU4lnD1HQ=;
-	b=JqeCvHkigRCzmQ98WhsXxl24N8k/8OOSHJmip0MKN+bAcDXeLc+revbLAhz6OsomAhPrWh
-	5qpwIll0zxCdvkCw==
-Authentication-Results: smtp-out2.suse.de;
+	bh=oJruo/PUqbsUiEslLAkM0UfjgrJI2RP7fQOA1xVkfsI=;
+	b=KWX/VljQ7bb33TWk1lGI7Q/NmF7VksIj0f5qsYPx8ySd3ZWgNCVVbL/3/YVbaItj+5i+rN
+	3BgLhYWGdgOwa9Dw==
+Authentication-Results: smtp-out1.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1741068636; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1741068643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=tR4Otz75vEf5Pg16S0hLDPNqprTjRsnE7GGU4lnD1HQ=;
-	b=OOCpJR2nmSJtftVzcaEyMip7boqeOW1eVBaizdgbiLqj4sS7/Gbhh3UJZbkXb32rsEEUkq
-	qzibKlJyLDgixHkpwtntoB4fUK/5siNTtSK13ADaD7PYtNHft5vIwaH70k5jbcYyR80MTr
-	9xviYZkM00FVGKBvlmpORToL+AFXmUY=
+	bh=oJruo/PUqbsUiEslLAkM0UfjgrJI2RP7fQOA1xVkfsI=;
+	b=qGxCwn8L6u3o7Fhdc5g8irlcVqopuOvVnFBjNhdCu6YpP8b+XadRp0KegpJC5Hx0VVGkqD
+	hCNSUqUIxOdTuju8KshZJTdbGUcRd0fjJMxTcUIMW8G8BCnZJ75g1GBzg/Pzk0StXhhPOz
+	n+BBeecKXIG2sXVVaz4SQAZA10Ry5p0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1741068636;
+	s=susede2_ed25519; t=1741068643;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=tR4Otz75vEf5Pg16S0hLDPNqprTjRsnE7GGU4lnD1HQ=;
-	b=JqeCvHkigRCzmQ98WhsXxl24N8k/8OOSHJmip0MKN+bAcDXeLc+revbLAhz6OsomAhPrWh
-	5qpwIll0zxCdvkCw==
+	bh=oJruo/PUqbsUiEslLAkM0UfjgrJI2RP7fQOA1xVkfsI=;
+	b=KWX/VljQ7bb33TWk1lGI7Q/NmF7VksIj0f5qsYPx8ySd3ZWgNCVVbL/3/YVbaItj+5i+rN
+	3BgLhYWGdgOwa9Dw==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 31C961393C;
-	Tue,  4 Mar 2025 06:10:33 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E3FCE1393C;
+	Tue,  4 Mar 2025 06:10:41 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id iNe5NlmZxmfADQAAD6G6ig
-	(envelope-from <ddiss@suse.de>); Tue, 04 Mar 2025 06:10:33 +0000
+	id QPSuJmGZxmfADQAAD6G6ig
+	(envelope-from <ddiss@suse.de>); Tue, 04 Mar 2025 06:10:41 +0000
 From: David Disseldorp <ddiss@suse.de>
 To: linux-fsdevel@vger.kernel.org
 Cc: linux-kselftest@vger.kernel.org,
 	Al Viro <viro@zeniv.linux.org.uk>,
 	Christian Brauner <brauner@kernel.org>,
 	David Disseldorp <ddiss@suse.de>
-Subject: [PATCH v4 1/8] init: add initramfs_internal.h
-Date: Tue,  4 Mar 2025 16:57:44 +1100
-Message-ID: <20250304061020.9815-2-ddiss@suse.de>
+Subject: [PATCH v4 4/8] initramfs: avoid memcpy for hex header fields
+Date: Tue,  4 Mar 2025 16:57:47 +1100
+Message-ID: <20250304061020.9815-5-ddiss@suse.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250304061020.9815-1-ddiss@suse.de>
 References: <20250304061020.9815-1-ddiss@suse.de>
@@ -92,10 +92,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
+X-Spam-Score: -6.80
 X-Spamd-Result: default: False [-6.80 / 50.00];
 	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
+	BAYES_HAM(-3.00)[99.99%];
 	MID_CONTAINS_FROM(1.00)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	R_MISSING_CHARSET(0.50)[];
@@ -110,84 +110,45 @@ X-Spamd-Result: default: False [-6.80 / 50.00];
 	FROM_EQ_ENVFROM(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo];
 	RCVD_COUNT_TWO(0.00)[2];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	RCVD_TLS_ALL(0.00)[]
-X-Spam-Score: -6.80
 X-Spam-Flag: NO
+X-Spam-Level: 
 
-The new header only exports a single unpack function and a CPIO_HDRLEN
-constant for future test use.
+newc/crc cpio headers contain a bunch of 8-character hexadecimal fields
+which we convert via simple_strtoul(), following memcpy() into a
+zero-terminated stack buffer. The new simple_strntoul() helper allows us
+to pass in max_chars=8 to avoid zero-termination and memcpy().
 
 Signed-off-by: David Disseldorp <ddiss@suse.de>
 ---
- init/initramfs.c          | 16 +++++++++++++---
- init/initramfs_internal.h |  8 ++++++++
- 2 files changed, 21 insertions(+), 3 deletions(-)
- create mode 100644 init/initramfs_internal.h
+ init/initramfs.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/init/initramfs.c b/init/initramfs.c
-index b2f7583bb1f5c..002e83ae12ac7 100644
+index 002e83ae12ac7..6dd3b02c15d7e 100644
 --- a/init/initramfs.c
 +++ b/init/initramfs.c
-@@ -20,6 +20,7 @@
- #include <linux/security.h>
- 
- #include "do_mounts.h"
-+#include "initramfs_internal.h"
- 
- static __initdata bool csum_present;
- static __initdata u32 io_csum;
-@@ -256,7 +257,7 @@ static __initdata char *header_buf, *symlink_buf, *name_buf;
- 
- static int __init do_start(void)
+@@ -189,14 +189,11 @@ static __initdata u32 hdr_csum;
+ static void __init parse_header(char *s)
  {
--	read_into(header_buf, 110, GotHeader);
-+	read_into(header_buf, CPIO_HDRLEN, GotHeader);
- 	return 0;
- }
+ 	unsigned long parsed[13];
+-	char buf[9];
+ 	int i;
  
-@@ -497,14 +498,23 @@ static unsigned long my_inptr __initdata; /* index of next byte to be processed
- 
- #include <linux/decompress/generic.h>
- 
--static char * __init unpack_to_rootfs(char *buf, unsigned long len)
-+/**
-+ * unpack_to_rootfs - decompress and extract an initramfs archive
-+ * @buf: input initramfs archive to extract
-+ * @len: length of initramfs data to process
-+ *
-+ * Returns: NULL for success or an error message string
-+ *
-+ * This symbol shouldn't be used externally. It's available for unit tests.
-+ */
-+char * __init unpack_to_rootfs(char *buf, unsigned long len)
- {
- 	long written;
- 	decompress_fn decompress;
- 	const char *compress_name;
- 	static __initdata char msg_buf[64];
- 
--	header_buf = kmalloc(110, GFP_KERNEL);
-+	header_buf = kmalloc(CPIO_HDRLEN, GFP_KERNEL);
- 	symlink_buf = kmalloc(PATH_MAX + N_ALIGN(PATH_MAX) + 1, GFP_KERNEL);
- 	name_buf = kmalloc(N_ALIGN(PATH_MAX), GFP_KERNEL);
- 
-diff --git a/init/initramfs_internal.h b/init/initramfs_internal.h
-new file mode 100644
-index 0000000000000..233dad16b0a00
---- /dev/null
-+++ b/init/initramfs_internal.h
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#ifndef __INITRAMFS_INTERNAL_H__
-+#define __INITRAMFS_INTERNAL_H__
+-	buf[8] = '\0';
+-	for (i = 0, s += 6; i < 13; i++, s += 8) {
+-		memcpy(buf, s, 8);
+-		parsed[i] = simple_strtoul(buf, NULL, 16);
+-	}
++	for (i = 0, s += 6; i < 13; i++, s += 8)
++		parsed[i] = simple_strntoul(s, NULL, 16, 8);
 +
-+char *unpack_to_rootfs(char *buf, unsigned long len);
-+#define CPIO_HDRLEN 110
-+
-+#endif
+ 	ino = parsed[0];
+ 	mode = parsed[1];
+ 	uid = parsed[2];
 -- 
 2.43.0
 
