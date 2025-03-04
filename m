@@ -1,47 +1,46 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A09C1F582E;
-	Tue,  4 Mar 2025 07:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7AB1F868F;
+	Tue,  4 Mar 2025 07:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741072273; cv=none; b=fxFdQX3xit2MaJAD3+MTeSUxB3DTJy8Ivyc5G1AZ8c2KjweNE8SIYAB43Rjx+uscxpARtlB+EALrXBt2HYz273NRRIPJAFwEE33uNjn9h3uuK6W5hjHjI7ABEQGiB0gADNStxrVZk3pEXv74s9iKFeeMZX4y5cA7xXSKt/8Ng/k=
+	t=1741072275; cv=none; b=RH/GJXL0Bhgfq/o3garjjbvJ2K3e529tGJrZd+OCn4hjBHOQYAofvH1Z88iKDWA4cNDE9erUf0yRwo/vVpQ2MzU5Yoq+C/Ln7KN5Zb7RTbic6NKc73XbZNZG4+QsUCtpD+FRGSZHFE8PHqTqTdtyAWuaXWahVKrtwxktn1nX9CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741072273; c=relaxed/simple;
-	bh=lQCsvZCManznXxoRZlWYV8bAc51DQHK993lH7lMNVP4=;
+	s=arc-20240116; t=1741072275; c=relaxed/simple;
+	bh=IACp9TxeVkwNqbYPVDzgsOU/Szw5RWhqCAzuE/yKFGQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZNtBlm0LOF8zthOTOGad0SZCiQ+tzbQSD3MyHBBMf5ISJbdn7Tc2jACBGdzd0XCesjz8HExZ+t0m+VWIL1VXLSO4EbuVACc01xcw12Ysk8czfDMFyzFGs8HWov8OtGphyiGyuE8+LH9Ff+/ObCb+GjaNLUeqGhPnttmI5zbtUvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Wg+W04RF; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=t7P3hdN4; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=P9io0+Qz3RJWj/Q7KVYdTT3JZxodIS2o4flAvRLw/oFVBAC0nXLFjg5w8Lp7nycq9KOFeKuG5AoZbsXt2Rxj5EP4UJuphH32IPb5RmU1ogQyscwYJ+295Y6OX99u/DFxQj/3INJiHX9p17aHMloQSCFbe1Co/sJFIg6At51Xad4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=PG03UypC; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yelIy5aU; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Wg+W04RF";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="t7P3hdN4"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="PG03UypC";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yelIy5aU"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1741072269;
+	s=2020; t=1741072271;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Yj4b/kgrOFJpYcVPs/RiGzf4gMX/wtv+L2rD6A41LIA=;
-	b=Wg+W04RFCCO8oBuTxtysBUkKB4Vlcumz37pCR4nyYTZooWNSHv+++9IgHC1HfYEZVIKcuz
-	2+6kOzdt1e8DphdkGQkNk385utpFjckEM89KEKAkOlsySnqgD+Y9TX7IHj/6c1NI8M2Yoc
-	6g41qbwM4ontveJPDqJyz1OOsLHqxDDhjRgUDY4SbbGFOUO30GgW/EqQDk5HvmrIJvkOtU
-	2rStaGbprHPAC8SRdpsMflhqYErTHxm0IUMtZgoCbEog7upNfFfe+mPbKWC/9zcus0uWOX
-	mspw19iVm/K+d0r29ttoKWvrPd+OcHnR1ngWlcia07JgWSx49XgmSCqmvTSDIw==
+	bh=jhA1n9boo1l4ht8vtjGqbzX8VsaxQaGO+nCB1t8DBJE=;
+	b=PG03UypCdgNgMOIaO/icx5Ydy7m4nXDAgq4WLd78Fzii9NP3J3oO/3qKYygGCdz3lutAnY
+	E8eKODnMXUhEH/8kVcbrixXd3FQwAz+ZuwrjWKtuhdgY0mKkX1zcpUz95Q8MnbqTkYzLHi
+	ByfTemms01XzuDiGm3mtFalpv0RBuSCH+Mw/eJUfB/hgYImIQWmsdn1neZMfCs5tVZTwAT
+	VV+GT6KA7Jsm7nJjoFuaCTNCS6CrJuPRlu7MoP4HO75EQkd99jGfmiA2DMllRvmJszvuxF
+	l7tPvWSdeyveK3TIaVna4fNCY44fHMfeeqN9d3bhURlJM7Ug3VCoougil6weBA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1741072269;
+	s=2020e; t=1741072271;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Yj4b/kgrOFJpYcVPs/RiGzf4gMX/wtv+L2rD6A41LIA=;
-	b=t7P3hdN4iqqmyqomeu9rIzLC4pniY7vHmZIGuxO8WAJXl74OHrxUaOCN1tGgd/fHcqAA9q
-	5bYTPlS1YlMvxmCQ==
-Date: Tue, 04 Mar 2025 08:10:34 +0100
-Subject: [PATCH 04/32] selftests: harness: Mark functions without
- prototypes static
+	bh=jhA1n9boo1l4ht8vtjGqbzX8VsaxQaGO+nCB1t8DBJE=;
+	b=yelIy5aUjEbrtex6I3V1polmWxU+krBfKWHujUfpiOz3yMWfQ62YVjphjLODCg0tlLIy7V
+	0XvUVSlrnQErpKAA==
+Date: Tue, 04 Mar 2025 08:10:36 +0100
+Subject: [PATCH 06/32] selftests: harness: Guard includes on nolibc
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,7 +49,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-nolibc-kselftest-harness-v1-4-adca7cd231e2@linutronix.de>
+Message-Id: <20250304-nolibc-kselftest-harness-v1-6-adca7cd231e2@linutronix.de>
 References: <20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de>
 In-Reply-To: <20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de>
 To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
@@ -58,70 +57,56 @@ To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741072266; l=2245;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741072266; l=1190;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=lQCsvZCManznXxoRZlWYV8bAc51DQHK993lH7lMNVP4=;
- b=AdGVo2qpD/O1qq/5xAVF5qKmBYZkYTfKSHBAOy6RXNR/f833VVfx0np5LA9eSmdL7VvqSkoEj
- IEQtncUXrj7CgyL4F5RjuVFdmEH7wLTgcitkOogG2GJsxiTfxx/mBk1
+ bh=IACp9TxeVkwNqbYPVDzgsOU/Szw5RWhqCAzuE/yKFGQ=;
+ b=nu/DeSbYTqvdwxssPGxt59mfA8eu/cOzgcmAI9WFImF7GWGYi6/N+PAiHagppT/nii5Ok2iVJ
+ LGLJnti7EFnB8vKOo7V4hpNSUcrtaU6ympDwU9EB3rGF7uB/rrMllk/
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-With -Wmissing-prototypes the compiler will warn about non-static
-functions which don't have a prototype defined.
-As they are not used from a different compilation unit they don't need to
-be defined globally.
+Nolibc doesn't provide all normal header files.
 
-Avoid the issue by marking the functions static.
+Don't try to include these non-existent header files, as the symbols are
+available unconditionally anyways.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/kselftest_harness.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ tools/testing/selftests/kselftest_harness.h | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 2b350ed60b2bf1cbede8e3a9b4ac5fe716900144..5822bc0b86a3c623fd34830fb8b541b27672a00b 100644
+index 222a4f51a8d704c41597e09a241ad887ef787139..6659c10f4d8fc7c750bc5e8a36ebcbcacda5de60 100644
 --- a/tools/testing/selftests/kselftest_harness.h
 +++ b/tools/testing/selftests/kselftest_harness.h
-@@ -258,7 +258,7 @@
-  * A bare "return;" statement may be used to return early.
-  */
- #define FIXTURE_SETUP(fixture_name) \
--	void fixture_name##_setup( \
-+	static void fixture_name##_setup( \
- 		struct __test_metadata __attribute__((unused)) *_metadata, \
- 		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
- 		const FIXTURE_VARIANT(fixture_name) \
-@@ -307,7 +307,7 @@
- 	__FIXTURE_TEARDOWN(fixture_name)
+@@ -53,19 +53,23 @@
+ #ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
+ #endif
+-#include <asm/types.h>
+-#include <ctype.h>
+-#include <errno.h>
++
+ #include <stdbool.h>
+ #include <stdint.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <unistd.h>
++
++#ifndef NOLIBC
++#include <asm/types.h>
++#include <ctype.h>
++#include <errno.h>
+ #include <sys/mman.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
+-#include <unistd.h>
+ #include <setjmp.h>
++#endif
  
- #define __FIXTURE_TEARDOWN(fixture_name) \
--	void fixture_name##_teardown( \
-+	static void fixture_name##_teardown( \
- 		struct __test_metadata __attribute__((unused)) *_metadata, \
- 		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
- 		const FIXTURE_VARIANT(fixture_name) \
-@@ -987,7 +987,7 @@ static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
- 	kill(-(t->pid), SIGKILL);
- }
+ #include "kselftest.h"
  
--void __wait_for_test(struct __test_metadata *t)
-+static void __wait_for_test(struct __test_metadata *t)
- {
- 	struct sigaction action = {
- 		.sa_sigaction = __timeout_handler,
-@@ -1205,9 +1205,9 @@ static bool test_enabled(int argc, char **argv,
- 	return !has_positive;
- }
- 
--void __run_test(struct __fixture_metadata *f,
--		struct __fixture_variant_metadata *variant,
--		struct __test_metadata *t)
-+static void __run_test(struct __fixture_metadata *f,
-+		       struct __fixture_variant_metadata *variant,
-+		       struct __test_metadata *t)
- {
- 	struct __test_xfail *xfail;
- 	char test_name[1024];
 
 -- 
 2.48.1
