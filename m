@@ -1,58 +1,60 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BE81172A
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Mar 2025 00:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5C54CB5B
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Mar 2025 00:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741738888; cv=none; b=XJKbDlr/kGHDUJGpf8qEmPVfVfA7ppvPskxDGC9dGeGsBm1SrE2osSLrVzw6oCUPueK5j8AcT2TI7ESYLMWz6vPkQerq2/rtxQbdo38n/m6thFmTBLMkwKt6TNh0tP4zx47MA/3MZLb5bMAdM81toHnNksZw2aUa7Zsy0C7FwRw=
+	t=1741738889; cv=none; b=k7aUMYtl19wB0DHZg/bdGCeZr9W3+t7nH9QuawsGjUwdugx9Ui9MN5Ywft4+gtmEjkWxb2t488EUre/OVigs5htAbU6vAUtpWoQjPTmaDQ3ubVfmfQhafjNLhwx0gJ3cbdhXgDkSEljHt2hoYdnKrczZPHnEK171FqfVqzOrWn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741738888; c=relaxed/simple;
-	bh=H5++SEOlYVvHKWlmzOVPPdCy7O19bFEfJFTgn0kXp6U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fX7Loc+6zB+robZblHD+TG+Tm5ekm/1tOOIiibBvClqiU7lqqj4ZtOhUiV/WGbGGehJedwKVIPi5nLIjxYgHUxM5rE04Ezk8FmlDjsB7887bRpDJ68+WSzmZ/lpuEFpFIS7uZ9OBGmIA9ndZ2V6VQ3Yy6VKIj2GA9CxavLPIWrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YOouwTYm; arc=none smtp.client-ip=209.85.208.53
+	s=arc-20240116; t=1741738889; c=relaxed/simple;
+	bh=e608xdJeqBKKdGNq0v7LWmeQ6DQjWhBH7FxgELGlglQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DWO+wsBjMPSzCehm+OOCbWkz0rLrB4M02hP7DSC6bAnUeEvnnupCFycmWjB/gJmxSZBdJiq7+ad2bv3C/DhFyISOcQggp+nhUG1qqcapQisi0TUeG6ME92k8yrDej78PLNZUWatT9SHp26C33jm+XSAul69W5cZiv8s3AVaxV3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=CXH1yE2/; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YOouwTYm"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e616736458so576504a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 17:21:24 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CXH1yE2/"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e4d18a2c51so736676a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 17:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1741738883; x=1742343683; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HxhTVWfKMvwlygUn42tfW0inla3um9pm5PRUxvke0sk=;
-        b=YOouwTYmElHEvDj3gkv9FMjcMJdW2j5KeLo5+lYVNsjbiPKl0EM7sFYbpvWXLzoBeW
-         sm4bsJ6vDDil6mRIYFFkylR9sO2w1plR7RHp62o5JnNS2R8gujZRPMScPbwqg/LYh+80
-         K10BSAPW32Z8bMCF6WBRSlNZLp3DKqTruk18Q=
+        d=chromium.org; s=google; t=1741738886; x=1742343686; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K5xe36OxoXeIkbizVHSnBn4NRndqdFCX6+LlkAnxrvI=;
+        b=CXH1yE2/Yl07OH3aRArU2m+/IjBVe/+zr9zByRPaEbjedAoCDIfGAh0DoVSWOCofmb
+         a4NdZsHY6r3NhHdFvW/0bGXNQOgQWNrJcT7Z8+tp5RRoDmSXJM+z4jeZRM7DfdY6JWnr
+         EahK7rbvE1eD2tdj7kNS1WzhO4SfxplcYj89w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741738883; x=1742343683;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HxhTVWfKMvwlygUn42tfW0inla3um9pm5PRUxvke0sk=;
-        b=rca7I/dDw2+f9baHYXGmqLTXWlXLf4YBWb4ob+BdnVUR14kZDfVxz/tNWY50I6Ai8P
-         XiyquOVrZUFGv/ljeFDtxX2W/DaavvHY3cdNniQOZpidy0DNpm+45kxXrXoj45MKWAXL
-         r54f7jrXlk5qsgEt7Io19CNpkfugufWVXI/N/+/wYlEvWp0K3GOdKyLfBBB1YCKXbVRa
-         rYntMEih4k10oapnZndVG8yNpcCvEZ8fHK0dEpaPq0JwCqCWO5K4N7wK/orV5xEYL+PJ
-         86eWhUHtX0Ck8uMMy52EVg/Ga5/5pNpTHukF0ZQh63S5FKqbpir0BLH0Siei5PrNIsjh
-         kdtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV0NWCjIqRsnxWNv1/uz+i+zFVhML/KeWxZGv3p6t7hxtb4RGUmNb48JAIB9lREOUlZezBEgQmhajBQLC/FlTc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsmahbBCM+4xEqE50d9fFQR2bbtq29p+9W9Z+HPm1tAxdklIXX
-	08C/1XQAC4XGjMOp6hFKMFkHmelELiZ1IKo82vLOmUHZ9+bj+D0f1B7fzvV2bA==
-X-Gm-Gg: ASbGncteTDUukOuHk8m+5I8coq2XFicH62nBREWlf5XWqcgEf1dQUdwFAeAp3/P0N78
-	MYnrID+Tws7LMEGf0DWtx3Qju4LbcbLJ7I+AUhxVc8htd81WyXCdCV8V9iP4s1v5hBB/XejJw+Y
-	VI7Py3wgkFjL7DUyehWtae12cXtb+h71Cp+cKklINNU2Zjd8uWTN9JrmH3noDWN+w1rz7AcHTJM
-	jZPPU6jlnNP0P66j4awZ1tdh3J4bcOljW35eFJCDnFFWXcZxYXufynHFQFqyw8m8UzPYKt3jxQY
-	pHOsqX29x4O3dQ+8C3cSDI4BtJDI7JcBLC2q98uvLOyFD3tgkoW5Hn+Sctud5747ICg8oWX4yBi
-	szS28gb7B5ZI=
-X-Google-Smtp-Source: AGHT+IFtgvPPWm2btr1Xtn33I57TNFhVpEuzGkQix5y9M7OehAhXbs7W3QjpSSzY3kDwK7gNa2Zc0g==
-X-Received: by 2002:a05:6402:270d:b0:5e0:8b75:5470 with SMTP id 4fb4d7f45d1cf-5e75f2b404emr3051425a12.5.1741738882887;
-        Tue, 11 Mar 2025 17:21:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1741738886; x=1742343686;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K5xe36OxoXeIkbizVHSnBn4NRndqdFCX6+LlkAnxrvI=;
+        b=ijngtNk4p3uH5TlmTNeAQBlG5dNvxohvhi9MSHNVZmYE5sDQL8TnAiODzGyJZa6dHG
+         wkElLnL3ImuMbV5oz8jY+0bOOJGiyQ2IWNQkVYPr9/xqBB1x/rkuNJlnaKWc3h4deDu+
+         0vM1O3QzOyop40sLMKsonzgFhvZsGZIo/8Akol3s4Dm7/xopoQmycMFg9wnmeNUEcL62
+         82vY0jfymfkzDYUDrjfhSjm9VgES8GkvavrthcttFo3/uiJR5o7/VxCWdO7uDr/VSDau
+         YK3bA5tWjqGD5uEssHgDPkODxFWxnATtB2i9Kfi1vqavdACToiwJ3Fhr/FjmXB7d6nzF
+         HwrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWcQI92K52xzvfFfmlA3KZI4jFVV0LVCJjzhfxYUdChw/L90pRjzq6qk92GQPSTi+21aConbD10HGdD49ToVIQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZnkOMLRE6NZUCAjXlg0GQmlIqvJRY97gtpxjTX5ft1ZnF5uUQ
+	R/a9wds4jjDK7GPDHbwC7LYPFb54LJxwQzrsTJ/kW5CYl6i9mn70AjtuA3Lhdg==
+X-Gm-Gg: ASbGncuBIUHhxZacOvvLVxCWCKLSSDj8h/ZPcjRgfusRI6N/y7s5U+cm9QZBWPdmjI7
+	9F/xaqRFxETC6hmYps62QUpwPCITIA3bhuBvk2iPA91glfFmBm+ZDVXZi0Z8jRD5uhGVv1QXa4C
+	lzOi8j3YpOLb65xj9vclIeSinEakSVFtmaMLA2zbgWadvBpS4P6sj0ptLFcD+KD6ya79YP1vl7p
+	PIJxtvEtHSdMv7QK/heOJL1DfN3yuPMs2JlH1CP7v88ANsRe+o4Os2hj0jq3IadpJHRSt3lzCMg
+	0l06luVEYN6ZdXpDUph4/XXk1CZb1fPlTvb3Xl6+xGEgH0/PYDwvxmMxnos7ktR+9WCkQopesZQ
+	S
+X-Google-Smtp-Source: AGHT+IHtp8ouTXVsgTp2SJJgz2rGEBY4ebI7QJXVPc63NR9EJfuX37UqlqudFu1bAKoYDI0sugwhXA==
+X-Received: by 2002:a17:907:6ea1:b0:abf:6b30:7a83 with SMTP id a640c23a62f3a-ac2b9ef11e6mr297381266b.13.1741738886472;
+        Tue, 11 Mar 2025 17:21:26 -0700 (PDT)
 Received: from cfish.c.googlers.com.com (40.162.204.35.bc.googleusercontent.com. [35.204.162.40])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e5c7669fd0sm8846503a12.51.2025.03.11.17.21.21
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e5c7669fd0sm8846503a12.51.2025.03.11.17.21.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Mar 2025 17:21:21 -0700 (PDT)
+        Tue, 11 Mar 2025 17:21:25 -0700 (PDT)
 From: jeffxu@chromium.org
 To: akpm@linux-foundation.org,
 	vbabka@suse.cz,
@@ -70,10 +72,12 @@ Cc: linux-kernel@vger.kernel.org,
 	rdunlap@infradead.org,
 	jannh@google.com,
 	Jeff Xu <jeffxu@chromium.org>
-Subject: [RFC PATCH v1 0/2] mseal: allow noop mprotect
-Date: Wed, 12 Mar 2025 00:21:15 +0000
-Message-ID: <20250312002117.2556240-1-jeffxu@google.com>
+Subject: [RFC PATCH v1 2/2] mseal: allow noop mprotect
+Date: Wed, 12 Mar 2025 00:21:17 +0000
+Message-ID: <20250312002117.2556240-3-jeffxu@google.com>
 X-Mailer: git-send-email 2.49.0.rc0.332.g42c0ae87b1-goog
+In-Reply-To: <20250312002117.2556240-1-jeffxu@google.com>
+References: <20250312002117.2556240-1-jeffxu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,26 +102,36 @@ attribute of VMA remains the same as the old one. Relaxing this avoids unnecessa
 impacts for applications that want to seal a particular mapping. Doing this also
 has no security impact.
 
-The mseal_test is also modified by this patch to adapt to the new
-semantic. Please note, mseal_test is currently undergoing refactoring,
-and eventually will be replaced with a new memory sealing selftest.
-In this patch, I only make a minimum change to make it pass. I considered
-adding a new testcase in mseal_test to cover this new behavior, however, the
-existing mseal_test is using wrong patterns and won’t pass the review.
-Such a new test is better to be added in the new refactored memory sealing tests.
-The refactoring is currently pending review [2].
-
 [1] https://lore.kernel.org/all/20240817-mseal-depessimize-v3-0-d8d2e037df30@gmail.com/
-[2] https://lore.kernel.org/all/20241211053311.245636-1-jeffxu@google.com/
 
-Jeff Xu (2):
-  selftests/mm: mseal_test: avoid using no-op mprotect
-  mseal: allow noop mprotect
+Fixes: 4a2dd02b0916 ("mm/mprotect: replace can_modify_mm with can_modify_vma")
+Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+---
+ mm/mprotect.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- mm/mprotect.c                           | 6 +++---
- tools/testing/selftests/mm/mseal_test.c | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 516b1d847e2c..a24d23967aa5 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -613,14 +613,14 @@ mprotect_fixup(struct vma_iterator *vmi, struct mmu_gather *tlb,
+ 	unsigned long charged = 0;
+ 	int error;
+ 
+-	if (!can_modify_vma(vma))
+-		return -EPERM;
+-
+ 	if (newflags == oldflags) {
+ 		*pprev = vma;
+ 		return 0;
+ 	}
+ 
++	if (!can_modify_vma(vma))
++		return -EPERM;
++
+ 	/*
+ 	 * Do PROT_NONE PFN permission checks here when we can still
+ 	 * bail out without undoing a lot of state. This is a rather
 -- 
 2.49.0.rc0.332.g42c0ae87b1-goog
 
