@@ -1,135 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673B4264F90;
-	Thu, 13 Mar 2025 10:23:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D169F1FBC87
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 10:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741861420; cv=none; b=fmuj7WADfgisvEa8FJQiiYJiHKaHeB0evISfjIdKxDNXON8zAo33gLiCkdY3oRA74uNN8T0NCQ127DiXfM3qBLT6BW3vZX6p+wh7bs3xHclJzA3YjYlj6bPpAeBL1HoRSl9VOaiBc0GA7CBplIvX/W6sj8q2Ug6VRoqIT7ZsgnM=
+	t=1741862873; cv=none; b=kh68GZxDI2FGE+PtfPvzINPGg8T18DNQK3jEDWvligBq3EkFQHLoZtXVMBYONXWPgTaTEUilIpL1yP4HTlk4bZOs+4tPyATR+FeacuXsFVlVK/hQVtyLED+Ke2UpO58D6d095qdFh9p5pQTMe2ZICji4PZ74pj1POFR8BTSIc0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741861420; c=relaxed/simple;
-	bh=3F984dgkxbY6fPkXv+6fJCMjPaWNvKS7SFLAjQ5BVr4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ad105awX4dWhv+fE91musVaqga7Mu2SRXc/AJPW/wFvspvE+R6WL+R1YuemNru+S0y79VgaWxZ0zb5gHl1Sgq+mWefpSd5I4E2XKg9qEpsl2gctJEmv1icYi9O8vNyM/fAt7hKB8/qHcJUah9sxs3EVd7f+YJwvCJpmjnO9oAcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fnmz/Ive; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741862873; c=relaxed/simple;
+	bh=flFI4F9iJbigAdLeH1msK0WPNSRRKGt+NPtx2Z0lY7g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PlIrFjfWnLkz+8s8wf759x+Lh7yjGQylNUDLbvwHYH6K8KksJt+HMJrArbgNfa+fOf/VpEDro/dq/chF2nbM/gead1eY/nJQuz396zpDXXhoAIG75udCvUBMFdOJu6vcBXzJCeyj2gsOR5kyLqpUtkp9XunFIRLr/fThavbfwUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J82pn6a9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fnmz/Ive"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2DFCC4CEE3;
-	Thu, 13 Mar 2025 10:23:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741861419;
-	bh=3F984dgkxbY6fPkXv+6fJCMjPaWNvKS7SFLAjQ5BVr4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=fnmz/IvenKzyDaTbcaqWf4f8uu+jh6px4VUuCIEptlCm2OeaDysjT3zmIb3b0Z3wE
-	 1yu5TRA8yMXGqQkPLEvs2P74ul2Fu83l5BJ0Ty4PnLaXPCAWpoUbJF/M6E7N2U+egd
-	 LByaippAqOHi7557T4pj1nemmRTCWQ9IU1LmAKEup2myWtHfFFv6JXMu6E5gR+eT2f
-	 w3TeteCXXOyxAZcwS4fYZuORHmVibqCeqsnjLtWJKu6QY4hAVbE3PqhLINxtI8pE/M
-	 9MYdmR4OYJxJd8LgX0TalbgG6rTQR+qAzIKIExva5vqsi8Tt62+x2SJNbaqopUHErn
-	 87OMlU4OsUzcg==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Thu, 13 Mar 2025 11:21:01 +0100
-Subject: [PATCH net-next 12/12] selftests: mptcp: add pm sysctl mapping
- tests
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J82pn6a9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741862870;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mKlH8svYGZq8nS9wIHoOZaP2tIWMcEGLEEAOkrVCTz8=;
+	b=J82pn6a9BqLAFjIB07wt6XutQpavmvmdhT1GYoD1EsY6/V2YBy054F2CC35+Fpp9sFQhAP
+	YjcW7mJUeGbeCNUs2nqLInIJbfgq5U9+c/itscgRhfpsa7StOn5g+DEkT9zrbGLs/Y0OyV
+	onGN+fMkBqI9gsHWi+9yBPM55yr+Ipw=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-624-1nQXIUobPBegWIkdoh9CMg-1; Thu, 13 Mar 2025 06:47:49 -0400
+X-MC-Unique: 1nQXIUobPBegWIkdoh9CMg-1
+X-Mimecast-MFC-AGG-ID: 1nQXIUobPBegWIkdoh9CMg_1741862868
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43d025a52c2so4119825e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 03:47:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741862868; x=1742467668;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mKlH8svYGZq8nS9wIHoOZaP2tIWMcEGLEEAOkrVCTz8=;
+        b=W18jqpBGrrSSLgkUeLRZ80YGo5n6EyXB/cTZw6IrkQsi/g6I8bMLEsiaemQkFxka2J
+         SglAucNnvScPe6S7SGxA3xYRH/ZvO/Goodfc0g7VHRH1h/IQmHoLdIbw1LjQHS+RY4GY
+         Fxk5DTJsNvaa1r/c6x0V5/6L0OyoSpDdQZ4Wj+nDaZkw2itJPHFgpCxnHsYwI0596/TH
+         zXobKeW5/4qPrMxbCS9o7ojDIk1QACikV2rqhxv411ivelQ+YGDEsqb9mIcKl/FTHIEz
+         rwAn2riwN8pWh3p0akYMCG4B+wE0fElPFOhcqPZ1zhkm69h8bPZSSFX7YF+kOm1jjXHN
+         m2sQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAeQXplEr694cIAbH9KqxwCg4hrR9dInXg3W5t++Au5+11nQmf5f7CKAv0DTV8qta7SbYG905IVQBfl4Sb4Bw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBJfDV4XF+IMpUSrmfEGncLJxxc1ZEHqD3GXb/+T5t48GVJrzg
+	sRBmhWr8ml7hO8nZKSe8T8LycdtsgxtHwkJp7fz9OVhiiuyebzddu/wZhstp+1p7COT/3HA1gyG
+	LWGdP+aFt5hKTz/aHfGPoiVI7EA1ipZzXuWzLlPHPmhiWZLdPLNShUAzkjyjjJW0vvg==
+X-Gm-Gg: ASbGncvTY+DChteNLh9Fxh1X4GFhHhb2yLMGSKsEGOCS0/VQ/42ZBEu2wIrlPD8w1uz
+	69EzqXW9SI8svHGJpvLaHVi86z4v5A4sJehG9YYVhdU1+fDQQOkcRYKrJJxuhqVmpv7YoOHgEl9
+	1A/WkcDEoBNNUTsKKnwMDx1flo7uWoV8b8hpVtvAKJfIbtmHMBEuXmsITRf3rM3AZ/IVt8UznAD
+	mKGiYhMrw8HPM6F0pSI4Fht9gfo07oZK63XletR/VnfV73xfnOaTdrTQ3eHR0q0SzdsPDJgmSfC
+	B98cuc7fBincJoWl5lfZQUi+6I4YKpTnn0DfS7BI
+X-Received: by 2002:a05:600c:524c:b0:43d:563:6fef with SMTP id 5b1f17b1804b1-43d05637140mr66351165e9.21.1741862868059;
+        Thu, 13 Mar 2025 03:47:48 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFuof90DCs7eJ3JwItRCIRpwATmH/3XNmF4IhoW7PyjbpLbTIbp4p7z1rZXGN+i2daYNGVW0g==
+X-Received: by 2002:a05:600c:524c:b0:43d:563:6fef with SMTP id 5b1f17b1804b1-43d05637140mr66350925e9.21.1741862867674;
+        Thu, 13 Mar 2025 03:47:47 -0700 (PDT)
+Received: from [192.168.88.253] (146-241-6-87.dyn.eolo.it. [146.241.6.87])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d04004240sm38333535e9.3.2025.03.13.03.47.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Mar 2025 03:47:47 -0700 (PDT)
+Message-ID: <87e8bde7-b05e-4a1b-bcef-f6bb3a12315a@redhat.com>
+Date: Thu, 13 Mar 2025 11:47:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 2/9] net: add get_netmem/put_netmem support
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-kselftest@vger.kernel.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn
+ <willemb@google.com>, David Ahern <dsahern@kernel.org>,
+ Neal Cardwell <ncardwell@google.com>, Stefan Hajnoczi <stefanha@redhat.com>,
+ Stefano Garzarella <sgarzare@redhat.com>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
+ <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, sdf@fomichev.me,
+ asml.silence@gmail.com, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>,
+ Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
+ <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
+References: <20250308214045.1160445-1-almasrymina@google.com>
+ <20250308214045.1160445-3-almasrymina@google.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250308214045.1160445-3-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250313-net-next-mptcp-pm-ops-intro-v1-12-f4e4a88efc50@kernel.org>
-References: <20250313-net-next-mptcp-pm-ops-intro-v1-0-f4e4a88efc50@kernel.org>
-In-Reply-To: <20250313-net-next-mptcp-pm-ops-intro-v1-0-f4e4a88efc50@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2235; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=Tc4PpQ+Y/jnprgu+15f2z73L06rmBn9s1LlWpDmpj4I=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBn0rGbRH937aT7yKRBus6q5SgVNpqGBqg2hpW9t
- CbZC9NalcCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ9KxmwAKCRD2t4JPQmmg
- c5SUD/9Sy+sMpYkhdzaJ4ijw9HCSPkKvL7xPzQB1qvLOh0PkXQlZf2gBvQ8KXhqOJg2P9TtUkJm
- xVW37RogFdsV3ByxlQD0Bib9rUGWIFIj6C8LXi1MBglQdo5xPlYkZzhcWWyXSOMGDANfEKzw4DZ
- j8R4N2rlwwzmbuFNBxR87Nk+Tet4kvHHL6YMG/ts3voh1PT1QyR7se27NrMAIFaqdWVbqAXLZsX
- yF4SlNVYo7Oz7+bZTWywLpT9dZbGkMHV+x0YC8+C1bh/sLT0jtF/tCxUkZLXIjcVNdeg5JRuHq8
- +Yz/5L+XqeocpGfhjp+df4ZGgujez+IlcnlT3YBg00s0Opi/HGY5ELlXYyYKZkJhiNjj7NdVgNW
- f2ARUlaFf1x/yYoLwyR7GzOIfnVhzKiGtmn3c42+iOicAgf311JfFdodVCaPbtrazNTjQTtEiSr
- qZREkGGiOaBcEoA3Z+Wk1TZokBdvtdGHx70LLvspqKZqjzS7QARsc+BAbLqbin/lV9+zGZafmvQ
- /0Ujw1PTSqbNJHWgpWXlGrpO+lFXg9xwOn4/4gpdqxVw9y7+6v5+A+ildw0nSfzpgRsfHekyoUj
- HNLLx9jwaEEARmKat34yC+0/B7TlcAlVsZFWK/PB8IOv6xtJrJs3K1RDJSvtFQ2WTijat9K5jzp
- KkS9TRXHDUJTB8w==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On 3/8/25 10:40 PM, Mina Almasry wrote:
+> Currently net_iovs support only pp ref counts, and do not support a
+> page ref equivalent.
+> 
+> This is fine for the RX path as net_iovs are used exclusively with the
+> pp and only pp refcounting is needed there. The TX path however does not
+> use pp ref counts, thus, support for get_page/put_page equivalent is
+> needed for netmem.
+> 
+> Support get_netmem/put_netmem. Check the type of the netmem before
+> passing it to page or net_iov specific code to obtain a page ref
+> equivalent.
+> 
+> For dmabuf net_iovs, we obtain a ref on the underlying binding. This
+> ensures the entire binding doesn't disappear until all the net_iovs have
+> been put_netmem'ed. We do not need to track the refcount of individual
+> dmabuf net_iovs as we don't allocate/free them from a pool similar to
+> what the buddy allocator does for pages.
+> 
+> This code is written to be extensible by other net_iov implementers.
+> get_netmem/put_netmem will check the type of the netmem and route it to
+> the correct helper:
+> 
+> pages -> [get|put]_page()
+> dmabuf net_iovs -> net_devmem_[get|put]_net_iov()
+> new net_iovs ->	new helpers
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> 
+> ---
+> 
+> v5: https://lore.kernel.org/netdev/20250227041209.2031104-2-almasrymina@google.com/
+> 
+> - Updated to check that the net_iov is devmem before calling
+>   net_devmem_put_net_iov().
+> 
+> - Jakub requested that callers of __skb_frag_ref()/skb_page_unref be
+>   inspected to make sure that they generate / anticipate skbs with the
+>   correct pp_recycle and unreadable setting:
+> 
+> skb_page_unref
+> ==============
+> 
+> - callers that are unreachable for unreadable skbs:
+> 
+> gro_pull_from_frag0, skb_copy_ubufs, __pskb_pull_tail
 
-This patch checks if the newly added net.mptcp.path_manager is mapped
-successfully from or to the old net.mptcp.pm_type in userspace_pm.sh.
+Why `__pskb_pull_tail` is not reachable? it's called by __pskb_trim(),
+via skb_condense().
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
- tools/testing/selftests/net/mptcp/userspace_pm.sh | 30 ++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index 3651f73451cf8b07d4492c60da45e88aabc44b7a..333064b0b5ac03ae003417d2070f3c08f94743ed 100755
---- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
-+++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -117,7 +117,36 @@ cleanup()
- trap cleanup EXIT
- 
- # Create and configure network namespaces for testing
-+print_title "Init"
- mptcp_lib_ns_init ns1 ns2
-+
-+# check path_manager and pm_type sysctl mapping
-+if [ -f /proc/sys/net/mptcp/path_manager ]; then
-+	ip netns exec "$ns1" sysctl -q net.mptcp.path_manager=userspace
-+	pm_type="$(ip netns exec "$ns1" sysctl -n net.mptcp.pm_type)"
-+	if [ "${pm_type}" != "1" ]; then
-+		test_fail "unexpected pm_type: ${pm_type}"
-+		mptcp_lib_result_print_all_tap
-+		exit ${KSFT_FAIL}
-+	fi
-+
-+	ip netns exec "$ns1" sysctl -q net.mptcp.path_manager=error 2>/dev/null
-+	pm_type="$(ip netns exec "$ns1" sysctl -n net.mptcp.pm_type)"
-+	if [ "${pm_type}" != "1" ]; then
-+		test_fail "unexpected pm_type after error: ${pm_type}"
-+		mptcp_lib_result_print_all_tap
-+		exit ${KSFT_FAIL}
-+	fi
-+
-+	ip netns exec "$ns1" sysctl -q net.mptcp.pm_type=0
-+	pm_name="$(ip netns exec "$ns1" sysctl -n net.mptcp.path_manager)"
-+	if [ "${pm_name}" != "kernel" ]; then
-+		test_fail "unexpected path-manager: ${pm_name}"
-+		mptcp_lib_result_print_all_tap
-+		exit ${KSFT_FAIL}
-+	fi
-+fi
-+
- for i in "$ns1" "$ns2" ;do
- 	ip netns exec "$i" sysctl -q net.mptcp.pm_type=1
- done
-@@ -152,7 +181,6 @@ mptcp_lib_events "${ns1}" "${server_evts}" server_evts_pid
- sleep 0.5
- mptcp_lib_subtests_last_ts_reset
- 
--print_title "Init"
- print_test "Created network namespaces ns1, ns2"
- test_pass
- 
-
--- 
-2.48.1
+/P
 
