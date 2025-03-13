@@ -1,69 +1,69 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F00126A0D6
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 11:44:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9979726A1D9
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 11:45:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741866297; cv=none; b=GvL3dknSjTc6mE0kTjZUrYXFjOMwO7iGvxU+4WZ7DXdAHN317N72GFZh6TFqkVb/k8Jhv7RowG9CcjEoOTGANNhgyTnFC8ioskVaY3PhA8bASDEJgzet4W3wOFlgnY+i3+2OGojAIDpsC8a6b1D4qTkR8gQb+6SfbcDKp7P/Uks=
+	t=1741866302; cv=none; b=mkiel+K464+sBKyi4yN4OgK0Zl7/bSoEkqgpkPtr2GnuR1BV9cRThWIXga9xHqHP1hbWCo02Q1TDc3huRJ2spJsXtZkSoE/6KYYAs39/FzBIkCXrvYvj+rlkVWG1qEoV6G5wF4humFubGtPtHdGD2OF/7mWs77sT88A6LT2WXms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741866297; c=relaxed/simple;
-	bh=J4X8YZO4x00QVWpFsvAbnTlhyYgUvXZEkg17s47TCi0=;
+	s=arc-20240116; t=1741866302; c=relaxed/simple;
+	bh=LkqKUNYGs/ePGkjxR4/GakhMBC+dOQkDGsyg7Jru2eY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-type; b=iFT5hsfzHmOVPSgG3fKbnFOEsfhyf0mpLTGYs2m9gHM+3ONIlltF/OVb/NQ+zLzVs5WnIpJeUVrFZubHYTX7xRQTBCGRk1tLBLr7WbRETkJQQ7I1xUkvZvrhfBZrRyiAJl0qoiBMCyJwEqKdL8jLgsSAwCSaJUS1+6u6kC2xlLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JhFfb65d; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-type; b=u5elRDUPXyOavbAjjdY5CmW6J1SGPSDFZCtqk8I2oQBH+sztD/j76cpqoIZLbOOfUZg3Zm0KdQ/+wSREb3bAt3QCEe3zNl+SWy/xkguz3Ivgex7+EGKiG82rzgS4eIs+ksnkBu723qG69r88019B20VnkZ9harCqWexumtBfAik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XHapybat; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JhFfb65d"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XHapybat"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741866294;
+	s=mimecast20190719; t=1741866299;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=EdALik7flTFVSWTVblU8JKKGGV2JCoENkhxrfjNtUxw=;
-	b=JhFfb65dbLIFuTOsmZM5CyAKYRE/nYHwuuMUhfMFJXL71ecgONeVT5sCU0JRbnXWD4mjRw
-	lvGo4rzE2KKAHaAR6Sjbaw7cgLxcwbzmlOQn3InlGswLBFVfjH5CFHvADo36gSWlI307hK
-	tLxIwCyVHTjMXtBBhaYy7bzTtx3Zz7w=
+	bh=Td98jnkcLGUCy3vrjbMOv35ZA5bivtUA493Q3YOVPt4=;
+	b=XHapybat4/xBhr9chJgwWGv1+sqJgQmRaaI4h42Hfvagggh8fcnrDoEh/l9TaGr+d1tt4Y
+	diQxWc726WHIifX16OquWAye8RL81p75VK3Et4ahOITZdsuwZ+C6WPQub/UmhkZMmWxEHg
+	Dtg/IjpPi5JfCirirFe0yN43xPUKwFI=
 Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
  [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-681-ak8MDxy-Pd6CPWyVqCNVcw-1; Thu, 13 Mar 2025 07:44:53 -0400
-X-MC-Unique: ak8MDxy-Pd6CPWyVqCNVcw-1
-X-Mimecast-MFC-AGG-ID: ak8MDxy-Pd6CPWyVqCNVcw_1741866292
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-391425471d6so306827f8f.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 04:44:52 -0700 (PDT)
+ us-mta-26-qZnji8VwMB-jmD9RY952Iw-1; Thu, 13 Mar 2025 07:44:58 -0400
+X-MC-Unique: qZnji8VwMB-jmD9RY952Iw-1
+X-Mimecast-MFC-AGG-ID: qZnji8VwMB-jmD9RY952Iw_1741866297
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3913b2d355fso345483f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 04:44:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741866291; x=1742471091;
+        d=1e100.net; s=20230601; t=1741866296; x=1742471096;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EdALik7flTFVSWTVblU8JKKGGV2JCoENkhxrfjNtUxw=;
-        b=LK2wXz+sh67y/89JiZqxc4j8bibLbWx/0vQYom/7QmI/Bo5XFq8XM6D2lGxC0rFyNt
-         QHWcHavfKsEIm5/ZsijfZqnaaLaOG/pzjTPMQA4upi5JAzViRQ8U0FQR6EFIaf2j1DgH
-         /L1IdeAqafag/J48buTq7EUzQ2a6puoGZklBYz/kK8nxx5VQV99dFuwZXIm/ZYwncouq
-         iLmt0PNoKkIFYyLu4A4T+7ovVblv6W0jZnNYgnt5JlfSVFcoaNYtDrG/w3H6EVSZeB7i
-         KO1PK/1gPyWZs9M16XUdAP8fTlE92aQ/usJbIhOGeokMWmSSeFBtO5JWbSEgc/bdKQ9s
-         sjfQ==
-X-Gm-Message-State: AOJu0YzbJgie/cR4QRLiXPUDIBqwgiX70IlbV7EB8/b0ulbRlLqW2mf/
-	2vidS6HiY/f8nEbaYJLMT9gZKfxiLCMOqXbP+orvUaz2oL4o4O2kYbG+PBc3Tv6bpYu76jtViv5
-	8jLwMTwN3UuTLT0I0m2DLPQWOUdJ8BDvLarMLMCb3tRnbu3HSl2Bihb4vQd57Or8J05SBHBEL7N
-	rxBo1Rz2R0lurRmndgk86Adfzbw+AVnkiPqpBx4txDDIueZP04C+kM
-X-Gm-Gg: ASbGnct8PpdRxY0hSpWGTnH5pSGZpfmOKcP6tmJgPPRgzOJED7/o2KREMeaX6dfAN8E
-	YxSLZFQ12fBtRhSCqXI1KG3i6L4zDuPjO+rOKYDuoUBRMFXI/ZiZrEUXQT0rAJ7s7aM0V7Z4EHa
-	bh+dwoGkJZhKo8BG92+GVtt2xmyII4xKtsmMmv4A3uqIZtjosNpZ9/V4PWtyzc091ZY/7r0e1eb
-	UFRtyAyke1WIAriTqQmpb2UKbV6lOZDnADzsHiHNLmPvQOzvDZVWQ+yBWt7Lz0K6GljBaYtX50C
-	eWczWTKIYOp1fDHN+mY5
-X-Received: by 2002:a5d:64a4:0:b0:391:a74:d7dc with SMTP id ffacd0b85a97d-39132db7543mr19148462f8f.50.1741866291607;
-        Thu, 13 Mar 2025 04:44:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFc68icOs2UFLsGvYM02K+KaAXrxdUkEYYl5CYIXnV4BsTbvYwzMB6bzWlvY18H1nYSqaV5qQ==
-X-Received: by 2002:a5d:64a4:0:b0:391:a74:d7dc with SMTP id ffacd0b85a97d-39132db7543mr19148405f8f.50.1741866291178;
-        Thu, 13 Mar 2025 04:44:51 -0700 (PDT)
+        bh=Td98jnkcLGUCy3vrjbMOv35ZA5bivtUA493Q3YOVPt4=;
+        b=eTnfgpd7tVklX1GQvK1HHH2YHt0rz/8Ve7OxB8rLY9xwH4mC8Gg0Xrs5r/9oWtTQ4K
+         bzaT5U+Wkqs4cCVflJYayHN0OP8oR+iGXK7CwV43tUV2yHKDtGoTu3WNOr8fQA+I0FoC
+         JRJD4Ol5DeK19qztS13wc6q2ESRj1/s9+Fs3mriWljlOexYi4lQs56VslJMzxt5uOXWv
+         Qpn/Nsmmp71+H8PUvkl/2OVuV4FknkXFBUkXF8iLzN7a1TuJsatP8qaUhCFrCZdkmA00
+         Wa31ND0oan9RmHLtBp9NIrNlQV8BjuJ5oO5aBRSYqsCYW6OQ3Ql8biYUjBdcXulC3WRD
+         p0ZQ==
+X-Gm-Message-State: AOJu0YzegDx28TL6e55aQ1gkVDGukdFbKHMDU6SrTIS3og7AkN0pVQkH
+	+YbvfUSWhZi4HFdWWgX64h1V7d3g0NPiuJz5955haFRGwJ4VU7V+rhiam+tyilfPBVdinKb6KGE
+	i5CR0Ji/gMOV3N0FcyGg/TIEU2pqfRaiHehfxl4oluFMXHlNOMbCcAhAH4SSPJLR722PgG9+ksk
+	FQaUgFrVrTdODVSXs3Q/L0Mx7hVjLh+o+wc0mWdgNaDHCzHRP7JKFx
+X-Gm-Gg: ASbGncs5e9uiTKr41psuEGBPN8Wydj5vhaDx94E+Z3VflNv1jmOnrWYzfqBh5tWOk5g
+	LyuN6E0XhHATcZLtttHbvTgWTKERKj9J+JxnLwFt0qRgfLsNhXbYUlG84aHu2/19jjoDPwebZux
+	Qb5OEO3GKs8zjh895Ss1Nrqz8OxolzkD14OUKlX98e3EUQh+oSOl428Plqmb0TcMCP8FzsujzRJ
+	6nw+A1n8IF63qqmb7FOHCNt+GipErKNs1Dd2L8XcNdpzjIFRrMDADPZtHYEagA+HTSa9NgFrhfo
+	ko0j/ZItEnkxP1R2Owre
+X-Received: by 2002:a5d:64a8:0:b0:391:23e7:968d with SMTP id ffacd0b85a97d-39132db703cmr17836151f8f.47.1741866296182;
+        Thu, 13 Mar 2025 04:44:56 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEyU2ePtAFWyqCZMakOsiK4/iIhrDziNVQawXJEAak4gPJli8tipIq38M0q9zksW0XKC08fAA==
+X-Received: by 2002:a5d:64a8:0:b0:391:23e7:968d with SMTP id ffacd0b85a97d-39132db703cmr17836093f8f.47.1741866295677;
+        Thu, 13 Mar 2025 04:44:55 -0700 (PDT)
 Received: from lab.hqhome163.com ([81.57.75.210])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43d188b754asm17844115e9.14.2025.03.13.04.44.49
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43d188b754asm17844115e9.14.2025.03.13.04.44.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Mar 2025 04:44:50 -0700 (PDT)
+        Thu, 13 Mar 2025 04:44:54 -0700 (PDT)
 From: Alessandro Carminati <acarmina@redhat.com>
 To: linux-kselftest@vger.kernel.org
 Cc: David Airlie <airlied@gmail.com>,
@@ -98,14 +98,14 @@ Cc: David Airlie <airlied@gmail.com>,
 	linux-sh@vger.kernel.org,
 	loongarch@lists.linux.dev,
 	x86@kernel.org,
-	Linux Kernel Functional Testing <lkft@linaro.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Simon Horman <horms@kernel.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
 	Alessandro Carminati <acarmina@redhat.com>
-Subject: [PATCH v4 10/14] s390: Add support for suppressing warning backtraces
-Date: Thu, 13 Mar 2025 11:43:25 +0000
-Message-Id: <20250313114329.284104-11-acarmina@redhat.com>
+Subject: [PATCH v4 12/14] sh: Move defines needed for suppressing warning backtraces
+Date: Thu, 13 Mar 2025 11:43:27 +0000
+Message-Id: <20250313114329.284104-13-acarmina@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250313114329.284104-1-acarmina@redhat.com>
 References: <20250313114329.284104-1-acarmina@redhat.com>
@@ -120,63 +120,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Guenter Roeck <linux@roeck-us.net>
 
-Add name of functions triggering warning backtraces to the __bug_table
-object section to enable support for suppressing WARNING backtraces.
+Declaring the defines needed for suppressing warning inside
+'#ifdef CONFIG_DEBUG_BUGVERBOSE' results in a kerneldoc warning.
 
-To limit image size impact, the pointer to the function name is only added
-to the __bug_table section if both CONFIG_KUNIT_SUPPRESS_BACKTRACE and
-CONFIG_DEBUG_BUGVERBOSE are enabled. Otherwise, the __func__ assembly
-parameter is replaced with a (dummy) NULL parameter to avoid an image size
-increase due to unused __func__ entries (this is necessary because
-__func__ is not a define but a virtual variable).
+.../bug.h:29: warning: expecting prototype for _EMIT_BUG_ENTRY().
+	Prototype was for HAVE_BUG_FUNCTION() instead
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Move the defines above the kerneldoc entry for _EMIT_BUG_ENTRY
+to make kerneldoc happy.
+
+Reported-by: Simon Horman <horms@kernel.org>
+Cc: Simon Horman <horms@kernel.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
 ---
- arch/s390/include/asm/bug.h | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ arch/sh/include/asm/bug.h | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/arch/s390/include/asm/bug.h b/arch/s390/include/asm/bug.h
-index c500d45fb465..44d4e9f24ae0 100644
---- a/arch/s390/include/asm/bug.h
-+++ b/arch/s390/include/asm/bug.h
-@@ -8,6 +8,15 @@
+diff --git a/arch/sh/include/asm/bug.h b/arch/sh/include/asm/bug.h
+index 470ce6567d20..bf4947d51d69 100644
+--- a/arch/sh/include/asm/bug.h
++++ b/arch/sh/include/asm/bug.h
+@@ -11,6 +11,15 @@
+ #define HAVE_ARCH_BUG
+ #define HAVE_ARCH_WARN_ON
  
- #ifdef CONFIG_DEBUG_BUGVERBOSE
- 
++#ifdef CONFIG_DEBUG_BUGVERBOSE
 +#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
 +# define HAVE_BUG_FUNCTION
-+# define __BUG_FUNC_PTR	"	.long	%0-.\n"
-+# define __BUG_FUNC	__func__
++# define __BUG_FUNC_PTR	"\t.long %O2\n"
 +#else
 +# define __BUG_FUNC_PTR
-+# define __BUG_FUNC	NULL
 +#endif /* CONFIG_KUNIT_SUPPRESS_BACKTRACE */
++#endif /* CONFIG_DEBUG_BUGVERBOSE */
 +
- #define __EMIT_BUG(x) do {					\
- 	asm_inline volatile(					\
- 		"0:	mc	0,0\n"				\
-@@ -17,10 +26,12 @@
- 		".section __bug_table,\"aw\"\n"			\
- 		"2:	.long	0b-.\n"				\
- 		"	.long	1b-.\n"				\
--		"	.short	%0,%1\n"			\
--		"	.org	2b+%2\n"			\
-+		__BUG_FUNC_PTR					\
-+		"	.short	%1,%2\n"			\
-+		"	.org	2b+%3\n"			\
- 		".previous\n"					\
--		: : "i" (__LINE__),				\
-+		: : "i" (__BUG_FUNC),				\
-+		    "i" (__LINE__),				\
- 		    "i" (x),					\
- 		    "i" (sizeof(struct bug_entry)));		\
- } while (0)
+ /**
+  * _EMIT_BUG_ENTRY
+  * %1 - __FILE__
+@@ -25,13 +34,6 @@
+  */
+ #ifdef CONFIG_DEBUG_BUGVERBOSE
+ 
+-#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
+-# define HAVE_BUG_FUNCTION
+-# define __BUG_FUNC_PTR	"\t.long %O2\n"
+-#else
+-# define __BUG_FUNC_PTR
+-#endif /* CONFIG_KUNIT_SUPPRESS_BACKTRACE */
+-
+ #define _EMIT_BUG_ENTRY				\
+ 	"\t.pushsection __bug_table,\"aw\"\n"	\
+ 	"2:\t.long 1b, %O1\n"			\
 -- 
 2.34.1
 
