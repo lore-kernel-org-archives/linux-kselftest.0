@@ -1,19 +1,19 @@
 Received: from mail.nfschina.com (unknown [42.101.60.213])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 260EB193073;
-	Fri, 14 Mar 2025 07:15:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 2EC1117D2;
+	Fri, 14 Mar 2025 07:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741936515; cv=none; b=oeUjOhyAn5rSAxUjNVzrglbz8WMN5B3U4m9Z3WfFgDwOQC3nTRXd94XQ49UbvYCx1GAg1uTjrL1xoz+Vqrv245UOUy6fM9xN3xrSSXNKYzZVsbAD3dbdtp0dYc3LDY3psKcP9Ao3IxaYWb3Dp3zIw4Ob99XcEkamTsvjorOY/a4=
+	t=1741936520; cv=none; b=HpE9yAbj9RxQt8HKLdLkVppfM1Sihkilz/XTaSpgy7QS10EQj3W89c2Jr81+ibtO6fbh4wbvPmN96emdLbHfmMZLoAz0vXvWDbQFJwLOhvOax406H+OAs9HIwwCIjts9i5/2OowqZTGIGko4M0ZH039IQMCpF6F/S3NTX6X0ahw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741936515; c=relaxed/simple;
-	bh=901H3qnhq05EWF+lSoGZ+w8eo28I5pFtX3w8xPFOlkE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version; b=dtTeMxCyQvAWDqrW5wP4aXCCHKdmKQjdhpx2gRF/Hlt6K8qqKCUrPtfcY31r5yofR/f8vV2O672M0aG03lyiouJRuXeBU8hSLoDuubFl5KflWTJw01ECO35gTO7rEx/uyBXYpXMRZeI2gd1VVOhtTWSI+DTnVoLIx6KJiLlc5ow=
+	s=arc-20240116; t=1741936520; c=relaxed/simple;
+	bh=nYhJZCbhlaC0rSuAhobyC5FkT87b9GIVB4HH4O/O72o=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version; b=fGPbuyf4rPOUySFVKrfutVLfLj941U1PefNXHJPcMINVl30eh+X2qjJFY2Hq3h2bU88n1nD8eTnfdhG7C7o/dLOrDuWv3/DDQ0g4e70wya9re59bSv6AK+CviqZ/H5Ao3Gus3TdpPAnT/MzhFTyaVNXPpOiXHEt3RZ4nxUiqBdk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
 Received: from longsh.shanghai.nfschina.local (unknown [180.167.10.98])
-	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id BB23F6068097E;
-	Fri, 14 Mar 2025 15:15:09 +0800 (CST)
+	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id A2D6960680974;
+	Fri, 14 Mar 2025 15:15:08 +0800 (CST)
 X-MD-Sfrom: suhui@nfschina.com
 X-MD-SrcIP: 180.167.10.98
 From: Su Hui <suhui@nfschina.com>
@@ -24,9 +24,9 @@ Cc: Su Hui <suhui@nfschina.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-janitors@vger.kernel.org
-Subject: [PATCH 3/4] selftests: ntsync: update config
-Date: Fri, 14 Mar 2025 15:14:53 +0800
-Message-Id: <20250314071454.201697-4-suhui@nfschina.com>
+Subject: [PATCH 1/4] selftests: ntsync: fix the wrong condition in wake_all
+Date: Fri, 14 Mar 2025 15:14:51 +0800
+Message-Id: <20250314071454.201697-2-suhui@nfschina.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20250314071454.201697-1-suhui@nfschina.com>
 Precedence: bulk
@@ -37,21 +37,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ntsync should be tested when CONFIG_NTSYNC is setting rather than
-CONFIG_WINESYNC, correct this.
+When  'manual=false' and  'signaled=true', then expected value when using
+NTSYNC_IOC_CREATE_EVENT should be greater than zero. Fix this typo error.
 
 Signed-off-by: Su Hui <suhui@nfschina.com>
 ---
- tools/testing/selftests/drivers/ntsync/config | 2 +-
+ tools/testing/selftests/drivers/ntsync/ntsync.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/ntsync/config b/tools/testing/selftests/drivers/ntsync/config
-index 60539c826d06..0aa68de147af 100644
---- a/tools/testing/selftests/drivers/ntsync/config
-+++ b/tools/testing/selftests/drivers/ntsync/config
-@@ -1 +1 @@
--CONFIG_WINESYNC=y
-+CONFIG_NTSYNC=y
+diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
+index 3aad311574c4..bfb6fad653d0 100644
+--- a/tools/testing/selftests/drivers/ntsync/ntsync.c
++++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
+@@ -968,7 +968,7 @@ TEST(wake_all)
+ 	auto_event_args.manual = false;
+ 	auto_event_args.signaled = true;
+ 	objs[3] = ioctl(fd, NTSYNC_IOC_CREATE_EVENT, &auto_event_args);
+-	EXPECT_EQ(0, objs[3]);
++	EXPECT_LE(0, objs[3]);
+ 
+ 	wait_args.timeout = get_abs_timeout(1000);
+ 	wait_args.objs = (uintptr_t)objs;
 -- 
 2.30.2
 
