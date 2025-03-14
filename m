@@ -1,119 +1,76 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121021A317D;
-	Fri, 14 Mar 2025 22:00:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E94E262BE;
+	Fri, 14 Mar 2025 22:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741989635; cv=none; b=S9hVMM67H1oFHswGhkLy9RoVhCdvTd4EjTrm0KRfeZTBS+Yp921HRyidosRJoGnhr6TLjRlLnAkd2qF6BwruHviVrsOSgKtX0BbVIRqDhW7gOP4vIBEZtRCAmcpfk8QKHdoRHckkR9IgV3/eDx0Txhcc3hpWZqzogkR7nSQ6l+0=
+	t=1741990367; cv=none; b=YJF2iQUfEwtSaVEiEQyHVNP1DuUh7M3qhDO6UGMcVjnnlMD9Z/WMgMRPGdTl0uqR9iTAvN3hSIH4X8xApiGcP/cf3F/j5L9dMtIioLbMoqERVNHFh89Za2lq2HhV30rFt1bFyrYGgi4OUoPWn7ydG5lZhk9WjSb+DJdaQ33zo0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741989635; c=relaxed/simple;
-	bh=C0kd9aKABRj1QAtLOroFspun/9OddRjZbQKvrKafBuY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P5mpvQ03u513eqjPoAejueIlIN1gUkI3fszizLYcPrjvfjfv4yL6x8KsJBOi/ud2r0jeZd28rEIr6oJHY6CoWaYemlNkOscMUEX/2m2EFirR36lzLPFwTSCeWNE2CMIPZM3eyp38spqtAqaJ5nPIMb1R17TeSB9pOI7Y640g0/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=adP6xDqC; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741990367; c=relaxed/simple;
+	bh=/qa9kng7AEMh41uBI0t8y0IwvHlZ8twjI0KXzYEPMXc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=spoizmVVeWyMhyFVfy4DdggNMgC5fSeCDw5xkuC4jX5d8CCyQD0Vp7Ec6+tb7QUoClIZg+hEgd0AbQ2PQ8OtWb0j1K2AusSphD1Tcak98gzVdvvxn50C+MLz/1IE45MG0aTV0+QsK9Gp5mqe6F5xjH8v6QK9h8dWfBZo1VQ+5DA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=bnRCVJJ5; arc=none smtp.client-ip=4.36.192.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="adP6xDqC"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-22403c99457so6142405ad.3;
-        Fri, 14 Mar 2025 15:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741989632; x=1742594432; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C0kd9aKABRj1QAtLOroFspun/9OddRjZbQKvrKafBuY=;
-        b=adP6xDqCZUW7MI0v01FOX/i0qU/lWjv2duJT/Nfhh1Z0jdMmAWXejFYfMlth2U8V/I
-         OrYSlwAL2wKRsT/wVZoqoCfwZdehhSgMP2uB/ZePyx5VXYfMHkNxkYfoL7XRoIUxAyho
-         W/wlgWqq5LISSXJJBX/3Xl6W8kqg0RGg+7aQ6jHRAM+1Eq2mMxofVL04vbDwf7vrx/sW
-         1zCDnMWyOole63nlTa30ieg8RF4lK5OkOmlggbUi/GyAUezIwCfp+vBr30OYyiXU8kSu
-         hf0IuEdBPULrHT+VtvInBS0uOUVz6969QWaZEZOxc8GhQ4ZzXk2pSuW7kQCWVH++t1nO
-         1jkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741989632; x=1742594432;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C0kd9aKABRj1QAtLOroFspun/9OddRjZbQKvrKafBuY=;
-        b=URoi9kT6497PsP7dlh3bi6V0fRZ0PbwRjWujMGeNwXe7RbPY5Xi2o1bayVoCr0EcnQ
-         mxk28UQ2X/JLqdKLQBxpGC3WcWAtCLj3RwNzOpmwsowMo+kdLkJ8J0oW/XsY493z17Lx
-         fEmDCeqE4iIdSnkS/Cz8ynsIg1FUnH4rlcRCM26P2onKss+v0h680X/s9Pn8xi/qADb/
-         WFOPJFdGgLYWP1yQfEKBvrnhy4NtKYCcvUC8eAAHA8eOWeIPqFIVKRwPrQJc+tfZgkMR
-         xoA4ObSJ1SAWvFDVFRvQguwalvAD0ObgGNncOYAGHQ+c/YoViYQGTjP/wZbjNYpP2bfo
-         MVeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU9lLgI08nJFM8+A8eShJLPZOrJ8nWAJeOCj0nnfpUEsVBILr85cA0j05KVE1zIEj4mcr7K+A2lpbpI3J8=@vger.kernel.org, AJvYcCUb9NkHXwmEgMytp5I/mW/M+vz8Yl5/xdQIBxXDbHfbgdqvpNP+L/DzpX8SypjUTTR+2m5MjlqxenNf5VCt@vger.kernel.org, AJvYcCVXvNa39NiFcWf1yBjC8v8Lkqv1dkKn92szPOvuuTiy6/I0Y0nvhwGu7M8csQYlHRtp3jBH9UeDnSAN1Rm41ZoG@vger.kernel.org, AJvYcCVjCpnTmdS5H3MiC1BDR7+FiCdeWS3fy2qZGkfEGjYLA+rSgRwfecW9lKPxO0dD08rg5uxhhC6PovQq@vger.kernel.org, AJvYcCWIln/36lfXItxGnLbxMUnm7JPUAFDH0GtFPDRnSb5OhpZBCoGrrFBFRZLjAnjxgX2nROWpEL4DqL+62C1d@vger.kernel.org, AJvYcCX8y5gPsG0UIgDDISsX2mdpNtecKC9MTaNI/7t6HCoQBCO1YQfwCffX41/nqWmyMDZW2uEu7dnDkMWZmyQcK/g=@vger.kernel.org, AJvYcCXVwbdK3JN0gUPdDb3fTWGusiBN/iNuLaCnEYnuaVZj961NI9ug+8xMQIr+f5qyVAUPlzHtWcMMEORN@vger.kernel.org
-X-Gm-Message-State: AOJu0YySgq1Omh/qb2o8OjQ0ehlyCdlJdD/mJAfHSa//AzDEi82U+phg
-	Mq55DOqWfkJv/OjObNunpsTzpBulkwAIEJCcJD/YPHAd88qG+aLpUd4wE6f+rN+PcJmGlhOzu3f
-	276JKkucT22Pq4Zuzr3WwqukDQ1o7KVK204IU2Q==
-X-Gm-Gg: ASbGncvBJstUcwzGGJCZ2Y6qCjgcNiQX7bojcBxr6m+xK0WsHUhpK/ou987eD7hrWQ2
-	pSN624js3Dz6Sb1co3jHE0gLw5x7kEi6JQggDnw7kmqZayIAD2yYabu9UcaCbrYD5qR9ytUuWRJ
-	BHj9zAlIujM5PzJGdmfKOhc/vqcg==
-X-Google-Smtp-Source: AGHT+IGIUg/02s/2JHqPXRDH7/TVhuII4i8lcqJu/RWFW/EJed7lRFJjAAKliqw8+h54oGAl7/TlDjGvEyNR+aIcAyI=
-X-Received: by 2002:a17:903:24f:b0:21f:1365:8bcf with SMTP id
- d9443c01a7336-225e0acca8cmr22208805ad.10.1741989632152; Fri, 14 Mar 2025
- 15:00:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="bnRCVJJ5"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=codeweavers.com; s=s1; h=Content-Type:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=ntFKTtOQJdL6wYgl+WU5UTRlb+59U34o/MnPIn+k7dg=; b=bnRCVJJ5ErzAY6MIfV6eJ0sZhe
+	CDgkdgzH5W1X5KTOFrUbaHgu57lZq3S2Hsci5pE8fGGk2+emJkbn7rXqqkjMN1DsUJVaAnx4JPnB3
+	uYOp7fcUW2jIRasmSK3wpn5GYbOB/tMwit5Y0eQsNRM4sK+2rrzH3Es409bC2BFKV78w9SBnTWbae
+	tCvPmJzE67L6H4e7lNWjD8OH57RN8FsJVyO9mCE4UNVL2E2d8y57sQIHb+RE2VtWN09Rmi3XO3WBs
+	M5ZLv7MZ5hg1jNe8OVPT3N5RLYuG8dFjLWNSNX3tJgOxDjx8am4Gq2o5/VAa4nt1QWNv+1awLt5J/
+	CKe5PRsw==;
+Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.localnet)
+	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <zfigura@codeweavers.com>)
+	id 1ttDGm-00EMt7-13;
+	Fri, 14 Mar 2025 17:12:44 -0500
+From: Elizabeth Figura <zfigura@codeweavers.com>
+To: shuah@kernel.org, Su Hui <suhui@nfschina.com>
+Cc: Su Hui <suhui@nfschina.com>, wine-devel@winehq.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 3/4] selftests: ntsync: update config
+Date: Fri, 14 Mar 2025 17:12:44 -0500
+Message-ID: <2267427.72vocr9iq0@camazotz>
+In-Reply-To: <20250314071454.201697-4-suhui@nfschina.com>
+References: <20250314071454.201697-4-suhui@nfschina.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250314-ptr-as-ptr-v3-0-e7ba61048f4a@gmail.com>
- <20250314-ptr-as-ptr-v3-6-e7ba61048f4a@gmail.com> <D8G9LZCS7ETL.9UPPQ73CAUQM@proton.me>
-In-Reply-To: <D8G9LZCS7ETL.9UPPQ73CAUQM@proton.me>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 14 Mar 2025 23:00:20 +0100
-X-Gm-Features: AQ5f1JpGXNTQUt_9OGK-niix7_yVJl6KGktSOGjR233jaFdbDnqZxcfMo88tqPc
-Message-ID: <CANiq72=JCgdmd+h4_2VguOO9kxdx3OuTqUmpLix3mTLLHLKbZw@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] rust: use strict provenance APIs
-To: Benno Lossin <benno.lossin@proton.me>
-Cc: Tamir Duberstein <tamird@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, Mar 14, 2025 at 9:18=E2=80=AFPM Benno Lossin <benno.lossin@proton.m=
-e> wrote:
->
-> I don't know when we'll be bumping the minimum version. IIRC 1.85.0 is
-> going to be in debian trixie, so eventually we could bump it to that,
-> but I'm not sure what the time frame will be for that.
->
-> Maybe we can salvage this effort by gating both the lint and the
-> unstable features on the versions where it works? @Miguel, what's your
-> opinion?
->
-> We could even make it simple, requiring 1.84 and not bothering with the
-> older versions.
+On Friday, 14 March 2025 02:14:53 CDT Su Hui wrote:
+> ntsync should be tested when CONFIG_NTSYNC is setting rather than
+> CONFIG_WINESYNC, correct this.
+> 
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+> ---
+>  tools/testing/selftests/drivers/ntsync/config | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/drivers/ntsync/config b/tools/testing/selftests/drivers/ntsync/config
+> index 60539c826d06..0aa68de147af 100644
+> --- a/tools/testing/selftests/drivers/ntsync/config
+> +++ b/tools/testing/selftests/drivers/ntsync/config
+> @@ -1 +1 @@
+> -CONFIG_WINESYNC=y
+> +CONFIG_NTSYNC=y
+> 
 
-Regarding Debian Trixie: unknown, since my understanding is that it
-does not have a release date yet, but apparently mid May is the Hard
-Freeze and then it may take e.g. a month or two to the release.
+Reviewed-by: Elizabeth Figura <zfigura@codeweavers.com>
 
-And when it releases, we may want to wait a while before bumping it,
-depending on how much time has passed since Rust 1.85.0 and depending
-on whether we managed to get e.g. Ubuntu LTSs to provide a versioned
-package etc.
 
-If something simple works, then let's just go for that -- we do not
-care too much about older versions for linting purposes, since people
-should be testing with the latest stable too anyway.
-
-Thanks!
-
-Cheers,
-Miguel
