@@ -1,46 +1,46 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA9AA4A32;
-	Sun, 16 Mar 2025 22:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E77B1A0BDB;
+	Sun, 16 Mar 2025 22:46:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742165167; cv=none; b=rXGZhPYXhGn6N7Iwb+ebnTVIu3MmoxJACVr0hSta3Bzq47ZbxK6mIQf0/yq8zQQSsI/hlwUlwaI6GtZ/vYW6Rqd+UTa/h+9HC88QGtFMborfP9rSke+KElWB3NX8k6r/NkvTX9isJibX2Pae6FSx4VUjBZdL2s/KG9yu7FYy2iA=
+	t=1742165176; cv=none; b=TGrgRM2gJK5GtdY2ms4OnlTq09zIUdHRCySD0iSgCXKg24KlcWu8owcl62PJDJ0FltxZeCjoDT8kE1OURO5NqAbuMp8RP0Bx6OUzVTKZZlg11cVitJ8wlvhMTP22tHdxUcu8t6Q45k4vLlxrpEwrAgbBLpLvuarFdaRYnKsYrF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742165167; c=relaxed/simple;
-	bh=3tj+sd1hBSK0PpyiKGpyyTMF/4GJvPBwbGnV9vwWXd0=;
+	s=arc-20240116; t=1742165176; c=relaxed/simple;
+	bh=WKSI5tQo2ZCmquUaEjyal9KCtNxILWDmnnMtd21oT78=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iX374H7CE5K4qmt2gdFkgmydQ7fh0mevX9tAc/OerDrfzAaLDbjOrE57yEoCXROkiqpXUdb8bzFm+/mOTNB1UIb4q+M3thJE26XYB2zvzH55EVSTMPuNfHgR77fnwJqIkMq8bl0Ev/bz0G/zdA4lVvUAxtEKAnhXHM3A+/RIjfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=MEOB1mNv; arc=none smtp.client-ip=185.226.149.38
+	 In-Reply-To:To:Cc; b=pORzolT+N4USd4RKWv+3gUIXc05BA6L/8VXKdkpilY+43M19srsOISfcxPWHmYIWc+B8/GP8iCI2W+wL8qBhTmDc92f7ECsEWH4G3kgKzcFTX9UiYG9Jq4PreVv5inkwHor0JzCdTzeRQHPEJ+nfhtRAnMJLtqLC5KMXrm7PGZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=R2VSz5G1; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="MEOB1mNv"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="R2VSz5G1"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1ttwjt-00CYL9-TD; Sun, 16 Mar 2025 23:45:49 +0100
+	id 1ttwkB-00Csg5-P0; Sun, 16 Mar 2025 23:46:07 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=bxiMFSV63H5IMVOHX04yoU+77ubhpH+TthNc1KSiRUY=; b=MEOB1mNv8upfTIyCtq6gr4Uz/u
-	Vf0Mu3FRnLEAvUJFt0AdeoB25lxmr8BWdk1GIE2oyKD3i4Pz+TWPqiHfBaaUF/hhUDBPwaMuXoHyN
-	TJfGq64rRtfKfMsOwcIozkUq1u9tPPjyISftVhZU3XXvNbMhIYEHyE3+ws5FeqjoxSooykEuZDZSq
-	HDi+//XbRPEbstpx7Oo6ad0SexifaFSHA8xIHRmpDrLMwdHl8q/LgU4ODZatuSypUgHSNvKw+k2V2
-	SkuOIy9zcgYgNS0wX/Pwel9IviflUmhm9IwhnWfV2bgWRDMuk6gKF413Mm14Vrj+/HZJbiwHxUbwt
-	DuZZu+Ww==;
+	bh=Qx6Q42lUm6Tq+A/H1tasLuFXsBAYaSnDK2lri+KURPw=; b=R2VSz5G1geS1IlY9yhGry/JtS+
+	jcIBvCOu0tq8IgLofQRHs/DLjNAneUf/Q/K9l0lBEpKvniVT8OPxLbZZb8xQieGrQvVohG+4J1jnU
+	5qkvnKZ80va+ERUtZjt8tdCtnhsrsC4kMQWPC8NIjnzjhZpYZe96gRUbSViEbjrD0gqZrI+1ydSsm
+	SgyuS711t1C0s7vL0qifdIzNAE1ihEQi0s111p3j0oiartg7K/VLMbWYsBpco+bFArKFyEwGM0R7f
+	C9kPv8eYHXfVLKnHcEfU8ehbKO3X61bShgw9CWx+zOg0P7dlVYQtTyWzWoTpNlZCK1w0w/MrFT+lh
+	HkI6NlFA==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1ttwjs-0000eH-ML; Sun, 16 Mar 2025 23:45:48 +0100
+	id 1ttwkB-0007hM-Ap; Sun, 16 Mar 2025 23:46:07 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1ttwjp-00AYw2-7u; Sun, 16 Mar 2025 23:45:45 +0100
+	id 1ttwjr-00AYw2-L6; Sun, 16 Mar 2025 23:45:47 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Sun, 16 Mar 2025 23:45:06 +0100
-Subject: [PATCH net v3 1/3] vsock/bpf: Fix EINTR connect() racing sockmap
- update
+Date: Sun, 16 Mar 2025 23:45:08 +0100
+Subject: [PATCH net v3 3/3] vsock/bpf: Fix bpf recvmsg() racing transport
+ reassignment
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250316-vsock-trans-signal-race-v3-1-17a6862277c9@rbox.co>
+Message-Id: <20250316-vsock-trans-signal-race-v3-3-17a6862277c9@rbox.co>
 References: <20250316-vsock-trans-signal-race-v3-0-17a6862277c9@rbox.co>
 In-Reply-To: <20250316-vsock-trans-signal-race-v3-0-17a6862277c9@rbox.co>
 To: Stefano Garzarella <sgarzare@redhat.com>, 
@@ -70,29 +70,37 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-Signal delivery during connect() may result in a disconnect of an already
-TCP_ESTABLISHED socket. Problem is that such established socket might have
-been placed in a sockmap before the connection was closed. We end up with a
-SS_UNCONNECTED vsock in a sockmap. And this, combined with the ability to
-reassign (unconnected) vsock's transport to NULL, breaks the sockmap
-contract. As manifested by WARN_ON_ONCE.
+Signal delivery during connect() may lead to a disconnect of an already
+established socket. That involves removing socket from any sockmap and
+resetting state to SS_UNCONNECTED. While it correctly restores socket's
+proto, a call to vsock_bpf_recvmsg() might have been already under way in
+another thread. If the connect()ing thread reassigns the vsock transport to
+NULL, the recvmsg()ing thread may trigger a WARN_ON_ONCE.
 
 connect
   / state = SS_CONNECTED /
                                 sock_map_update_elem
+                                vsock_bpf_recvmsg
+                                  psock = sk_psock_get()
+  lock sk
   if signal_pending
+    unhash
+      sock_map_remove_links
     state = SS_UNCONNECTED
+  release sk
 
 connect
   transport = NULL
-                                vsock_bpf_recvmsg
+                                  lock sk
                                   WARN_ON_ONCE(!vsk->transport)
 
-Ensure the socket does not stay in sockmap.
+Protect recvmsg() from racing against transport reassignment. Enforce the
+sockmap invariant that psock implies transport: lock socket before getting
+psock.
 
-WARNING: CPU: 8 PID: 1228 at net/vmw_vsock/vsock_bpf.c:97 vsock_bpf_recvmsg+0xb43/0xe00
-CPU: 8 UID: 0 PID: 1228 Comm: a.out Not tainted 6.14.0-rc5+
-RIP: 0010:vsock_bpf_recvmsg+0xb43/0xe00
+WARNING: CPU: 9 PID: 1222 at net/vmw_vsock/vsock_bpf.c:92 vsock_bpf_recvmsg+0xb55/0xe00
+CPU: 9 UID: 0 PID: 1222 Comm: a.out Not tainted 6.14.0-rc5+
+RIP: 0010:vsock_bpf_recvmsg+0xb55/0xe00
  sock_recvmsg+0x1b2/0x220
  __sys_recvfrom+0x190/0x270
  __x64_sys_recvfrom+0xdc/0x1b0
@@ -100,45 +108,76 @@ RIP: 0010:vsock_bpf_recvmsg+0xb43/0xe00
  entry_SYSCALL_64_after_hwframe+0x76/0x7e
 
 Fixes: 634f1a7110b4 ("vsock: support sockmap")
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/vmw_vsock/af_vsock.c  | 10 +++++++++-
- net/vmw_vsock/vsock_bpf.c |  1 +
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ net/vmw_vsock/vsock_bpf.c | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 7e3db87ae4333cf63327ec105ca99253569bb9fe..81b1b8e9c946a646778367ab78ca180cef75ef72 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1579,7 +1579,15 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
- 
- 		if (signal_pending(current)) {
- 			err = sock_intr_errno(timeout);
--			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
-+			if (sk->sk_state == TCP_ESTABLISHED) {
-+				/* Might have raced with a sockmap update. */
-+				if (sk->sk_prot->unhash)
-+					sk->sk_prot->unhash(sk);
-+
-+				sk->sk_state = TCP_CLOSING;
-+			} else {
-+				sk->sk_state = TCP_CLOSE;
-+			}
- 			sock->state = SS_UNCONNECTED;
- 			vsock_transport_cancel_pkt(vsk);
- 			vsock_remove_connected(vsk);
 diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
-index 07b96d56f3a577af71021b1b8132743554996c4f..c68fdaf09046b68254dac3ea70ffbe73dfa45cef 100644
+index c68fdaf09046b68254dac3ea70ffbe73dfa45cef..5138195d91fb258d4bc09b48e80e13651d62863a 100644
 --- a/net/vmw_vsock/vsock_bpf.c
 +++ b/net/vmw_vsock/vsock_bpf.c
-@@ -127,6 +127,7 @@ static void vsock_bpf_rebuild_protos(struct proto *prot, const struct proto *bas
+@@ -73,28 +73,35 @@ static int __vsock_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int
+ 	return err;
+ }
+ 
+-static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
+-			     size_t len, int flags, int *addr_len)
++static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
++			     int flags, int *addr_len)
  {
- 	*prot        = *base;
- 	prot->close  = sock_map_close;
-+	prot->unhash = sock_map_unhash;
- 	prot->recvmsg = vsock_bpf_recvmsg;
- 	prot->sock_is_readable = sk_msg_is_readable;
+ 	struct sk_psock *psock;
+ 	struct vsock_sock *vsk;
+ 	int copied;
+ 
++	/* Since signal delivery during connect() may reset the state of socket
++	 * that's already in a sockmap, take the lock before checking on psock.
++	 * This serializes a possible transport reassignment, protecting this
++	 * function from running with NULL transport.
++	 */
++	lock_sock(sk);
++
+ 	psock = sk_psock_get(sk);
+-	if (unlikely(!psock))
++	if (unlikely(!psock)) {
++		release_sock(sk);
+ 		return __vsock_recvmsg(sk, msg, len, flags);
++	}
+ 
+-	lock_sock(sk);
+ 	vsk = vsock_sk(sk);
+-
+ 	if (WARN_ON_ONCE(!vsk->transport)) {
+ 		copied = -ENODEV;
+ 		goto out;
+ 	}
+ 
+ 	if (vsock_has_data(sk, psock) && sk_psock_queue_empty(psock)) {
+-		release_sock(sk);
+ 		sk_psock_put(sk, psock);
++		release_sock(sk);
+ 		return __vsock_recvmsg(sk, msg, len, flags);
+ 	}
+ 
+@@ -108,8 +115,8 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
+ 		}
+ 
+ 		if (sk_psock_queue_empty(psock)) {
+-			release_sock(sk);
+ 			sk_psock_put(sk, psock);
++			release_sock(sk);
+ 			return __vsock_recvmsg(sk, msg, len, flags);
+ 		}
+ 
+@@ -117,8 +124,8 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
+ 	}
+ 
+ out:
+-	release_sock(sk);
+ 	sk_psock_put(sk, psock);
++	release_sock(sk);
+ 
+ 	return copied;
  }
 
 -- 
