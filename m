@@ -1,134 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC71921CC64
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 08:34:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49402E3373;
+	Mon, 17 Mar 2025 09:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742200498; cv=none; b=fDNaL+5m2cVSNX43iwS9+lLcIX2iItvWEVWW8JtBlG9WSKvZneCHsiiI4HIGLwCrQZ9ARhv0mZ3dJ+SQCH9+KGQWQAqLuUJQCJAoN+Y2vBNrwZyt4ze7bj4KVwoT4WZXh6gl7RZMB1JVJ3ULkRnBNQyhYUW8MwXnGzxXnj0j01s=
+	t=1742202256; cv=none; b=AZy5BTuQNfDsXiR7x0XR1ktiQAfuGqQqZ9cdQCvara9OFmIU36aofs33zn67Pme0wGqRE7V65S1NIR9Om6lpCtA6x91L+yssuMBxTkL/QR9lWtrxNVva9PhVCDPc8Vuh/Al5dFe2AS4I6dWQ11XPVWAFDgCtW6RpGH1FKKUIVLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742200498; c=relaxed/simple;
-	bh=c2n1Fx835UhBJSllbwffn7zGDt95tdAKPpRn0ntoO54=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=M9YLpttB7bvjMB+FRUp+GNLs8tK+stvyMcrySOgEZ2zkXwXi5t8yUiUUqTQJPEhhqTbL4rupWwlvnB8Z827cS+qms7jSGY6jAASadCR6p8wuw5BhnCmOhWH7cBnkmt0D55C8jDqEDxV+aQ0H9dte+zY6qAaF8CR4+Pzc4mEEoE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EfAwxosm; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742202256; c=relaxed/simple;
+	bh=oE67VnnPzPtErL3eqYFJl9pKX265+/+OCrhbsLHynGk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ouhf0w8A96ISJPM2ZJdNkpM6J7AfcNoLB4NgS+yMZ3z0JkPO2J9QWHO8ULEpB1u3jnrMC1l7Baq9JeNrlRoTEBfQWnTHmYzAup34CZMD/wVriCUK3y0TTAIqq75AzzrhVeppguU4fv0pr+FEZvQ5B8sAeJYk236vYmkGTm4J5ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=G/8Q+QIg; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EfAwxosm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742200495;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=K8fFsxESP3H629nCG6gkvjmwLt+3pqm+G1ABejpl59E=;
-	b=EfAwxosmi2kuQHPFTccyZ/hzPapseqk7aATs16x3QEEFIoDFVzkopbMjLm3bqQlxTGx0rx
-	XvvkLWSgCCephjVsZKdAqRCKI83X45+gw9iMlo7Ik4+wUHig4AJYFl8h8b7t3i0xtSvvGq
-	pK+uf6fjwLimgrKzYJm68G+5cYv55Pg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-589-rfSil7fdPPeds1_D3r5dKQ-1; Mon, 17 Mar 2025 04:34:53 -0400
-X-MC-Unique: rfSil7fdPPeds1_D3r5dKQ-1
-X-Mimecast-MFC-AGG-ID: rfSil7fdPPeds1_D3r5dKQ_1742200492
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3914bc0cc4aso2404174f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 01:34:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742200492; x=1742805292;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K8fFsxESP3H629nCG6gkvjmwLt+3pqm+G1ABejpl59E=;
-        b=maExLBdjN0jdc4IJKIvpDjUNYiYjaPABBP8wSDMQybmm5+1lvfZJBOrBMCJgavbFz4
-         CFiEhhHrK+bDXOKB8s0H88YE7PdGn5Ss3Con4g5IEwZVC1YARDi+iDuXtuYV8SFrKOJN
-         M2ZkTio+OkXpi7piq1dS2qtoZ5XHr9EMNB9rDQzitYl1nUjULQg6LE5zz8th2cDbk5rw
-         KqNvR5N5gbLYK6+J6H5V0KVjQ7kmlPyBGEMZls1p4yaX04h5LdDDcOuqMCUtmQ23xfhb
-         Y0DmbpDrp9wpXeypMH7GU2Feivev8qyu6hqI9ZKc/MZK/+OQ9YLYR38fVSxvZHi9sFfA
-         vEaw==
-X-Forwarded-Encrypted: i=1; AJvYcCWxsY080mOiVIJh9IGYFC6kKKIXTGkpUse4t00uLWd21AfYQyYtAvnLvNw13qnFBtIf6QdzamsXh0hDIbuwbGw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvvHfwGI7lNXSEwp7EZdCJtTXUWhcMhqv0YXmuIfWpxLklWaae
-	2iZQsoBhnCosZfJ44dwmg8hf1TVV2FdbZepGR9nbzOpAnnP4/7Gm5BjFMQWYvtQJsSLJicMfJji
-	vM43N2XgTjER1uZa8RQNIJM1HagUO0z5novFnghu6v4yhmYF+zCBPd9mv92MnAeqVew==
-X-Gm-Gg: ASbGncuCyPUCHGSzk2K9bGs/2zBFbC5p/k7tCSfPTCkK0S4mrQr5Kto1LRh/Q+jOeQ2
-	Y+KtNIJiC2D6jLM9frCpoXynczF3gE9oqvA6LrhqdGXFVSAt59TKM07P1P/lxL7hS859p/31z0v
-	xxo3fLpcLPfkjDFYTxkTarLC2U0ha7pA0u4BfaX2KJKzq2H2SfliRlKHoYCBF7rcbepJ1/kthsI
-	rePqLvfBfs1JMHWEThWsY8WHkts/2riVy8T23Hgo23Tm/anso+OAQnimzfjhG2IeSmkq62zH9ZC
-	pq0xfT8HwTtyZ1Dr7YM8zCxgwtOt06m7mrypynXoewUJHQ==
-X-Received: by 2002:a5d:6c6c:0:b0:38d:e6b6:508b with SMTP id ffacd0b85a97d-3971d23508dmr10794757f8f.9.1742200492273;
-        Mon, 17 Mar 2025 01:34:52 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGV3AlBDqXOJvZL9/HUdYQCvelee3VTZFcDu+UlzkczKdH898voG07Nf0T2P5NkPsevzif4lw==
-X-Received: by 2002:a5d:6c6c:0:b0:38d:e6b6:508b with SMTP id ffacd0b85a97d-3971d23508dmr10794744f8f.9.1742200491924;
-        Mon, 17 Mar 2025 01:34:51 -0700 (PDT)
-Received: from [192.168.88.253] (146-241-10-172.dyn.eolo.it. [146.241.10.172])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d200fae4asm98193875e9.27.2025.03.17.01.34.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Mar 2025 01:34:51 -0700 (PDT)
-Message-ID: <5b9d622e-7404-490a-a13c-1181d196d7c6@redhat.com>
-Date: Mon, 17 Mar 2025 09:34:49 +0100
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="G/8Q+QIg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1742202251; x=1742807051; i=ps.report@gmx.net;
+	bh=oE67VnnPzPtErL3eqYFJl9pKX265+/+OCrhbsLHynGk=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=G/8Q+QIgfd3XsmW2Jh3o7vx+hKDjujbaJM1qNKM5/zY8h+PYnPPqoc1hSX7EkaHw
+	 KNeRKUAqpiAvs4GaoukvXCa5KqUXdvDZCrlPla60jcVq+ScuMost8j7pp6Vn0mgY7
+	 vCZHtp/4Yh8ipcjqBb30rhWIwWn2o47aXB66cnVyooN2GLL9OKiEIIXqBfqRbes21
+	 Bj76vxxsLCwnUze76PU/98PR1xuSGlCRrv670ObWGNznTGjasMxm/u5GKe+a4l0fB
+	 fyB6SCWAALHTyUhFKSIb0MXJ30N40/fe3K+NIURK2CvrjXQneYfuW6IVheqDFtuA3
+	 B4dVwkzSbj5Uwt0fWA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([82.135.81.158]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8hZJ-1tpRYw0tLV-00GY2A; Mon, 17
+ Mar 2025 10:04:11 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Seiderer <ps.report@gmx.net>
+Subject: [PATCH net-next v1 2/2] selftest: net: update proc_net_pktgen (add more imix_weights test cases)
+Date: Mon, 17 Mar 2025 10:04:01 +0100
+Message-ID: <20250317090401.1240704-2-ps.report@gmx.net>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250317090401.1240704-1-ps.report@gmx.net>
+References: <20250317090401.1240704-1-ps.report@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v10 06/10] tap: Introduce virtio-net hash feature
-To: Akihiko Odaki <akihiko.odaki@daynix.com>, Jonathan Corbet
- <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>,
- Andrew Melnychenko <andrew@daynix.com>,
- Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
- Lei Yang <leiyang@redhat.com>, Simon Horman <horms@kernel.org>
-References: <20250313-rss-v10-0-3185d73a9af0@daynix.com>
- <20250313-rss-v10-6-3185d73a9af0@daynix.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250313-rss-v10-6-3185d73a9af0@daynix.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:GrzvT6SMDnqf4mC4jV5KuATT+E4Gp7fSY7bIowucg7Tne5vcC/q
+ t9zW41C1XxbgDu/o5UGyB0kd1NO+sjK8BT+nGuDeJkzSQ122QteybFv0WoiMmnoMKbqDxgU
+ /WPYlyoCNj++wRF9K/qLrh4TrbGrpDnF7XsFQL/HTbYJOhZTZwGeetGY1igy3r+HBdOgnyq
+ Vgm7W5NL8/KNz4p/TjW0w==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:UoqJDHe4PqI=;uXzjHhPBrA8/GMVRD0C8wR67K2S
+ dLvR7cTpoYt8Xt5S4Krty5wroYIYqh6/Q2KmRwDBls+w4CkZacsbpakTNcyvIdZ82c+tiYAJ2
+ ZHsWdnX1l8b9New7D3LhFQzmRBPlKdsi3AT2mPB9U8dWVm4Imz7BfDfxex+n2VkPeIxfPxwid
+ vxu9e8TyXtK7ewmhTO4jLvE6soo5suZoSin8rh147tY5aYMU4ULraS4We9Cq5eP1eSIeYrTeP
+ WO9fdAsAUiHLsmAi7PHkKU/hruUBzd5hP2tVN5zLl3EI2+6dB4bN1CyP9p3qOyJ6HSQAsS27J
+ 6K/4Oaf7QvEe7kj2ejdp3d7N1G95CUMQVIqrpTGKEqS3QTiCZ8gaHicYYUrUnAxCU3laBZezT
+ sHVEcc7m8KhPjuYBQWAna4/I1pbR4xpG6XPkzOg3lmUk+OX+NvZTpf0vDJ1vh0faG2Qo7d96b
+ Qie6RMTRT29rdIjHoPrRjvJt9GM6Z9xXLpFetS6ZUoiwz3rdBMeULEGCOuOLJ52FqiLggKrd5
+ bhQ8ufzr1Lf92s2DWpVEwptxeywpEujdWQFAjbt/uAmpvjquspf7rJrcZxgY++FiR6OhXrVmn
+ B0fwShVLrvnIGQOPhXob7bcH24Nktr+6grlqDoDt+Tj8QydxH1ibHZGTW9E9g8uQV0xaA8WkP
+ wdfwNLB9aJmhT2+DCoIQ7DPazb4WOd5Yqv7nCjViw1nTOyntxTbpb7AtkC790zc6/Ii3Rn2NQ
+ /Zq0cTiBr4s2G6ZyN+r5mByEj11xOtbETnbdGxaUuKEZyZRWEq42Tk0ZqIH2fqRTNQ3y9EHbW
+ 2ff4fUXX6W0e2byHTJwbpGsGnHtS/gCERFL08AUuVKkXSltxMKw7frf+i1vWgMQtfYxgiIBsC
+ iOVLQGl5QMpvZW8vQju1ydJxa6rXlfv7NtQCsIesLXmuF4yTF3mqcIQGQm5TKrqAp2a7/h990
+ SdV2MkLyXa3F1puUcOyDHkSucibYyv5pNQXWVbguu7h0Q44yi5spqaoMMlmNIBtbIJO1VgeS5
+ xaa6vgihLjC0Yg5I9oL/nLhIetUXIBt9xVn14fMO5+ZC08TN9y1Q4LgbVoQ93tf2DGM/G/kYe
+ Kjb67L6023onPAMLIzPUGHoXe+0S+kYMCJOB1TDh9ltx31bP68hS2NIHR+lQEkKJ98+6d79Lk
+ 3IzBCEWxwOO0lX9tbxoZeUrMDoV4sbQ1JRfL2BIMRnwwrCLRfGpvUrYodABWRABlf7qgQSuGk
+ 3NcY+ZRPqL1KDJTwaiVFnGyFRdAovXflTEBhRwZT1ixWNgErOwuw8MXA/eei833x9iTi97YCK
+ cY9JdqEpZO4Ac5z090nTig1Xg/1aRaNxg0STaUKonXHIUGrYm97StSrhzKVpLDBw7h6bfWhQq
+ Ap+wEtVupxvjYUyEc6L9DJOVMaHGiLXz19lDihXq/ONuHfItfPmjz3RiYCAnSxjVJq7oWV70C
+ +2ops3rnQq+P9OPsVy87iR5LZfn4=
 
-On 3/13/25 8:01 AM, Akihiko Odaki wrote:
-> @@ -998,6 +1044,16 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
->  		rtnl_unlock();
->  		return ret;
->  
-> +	case TUNGETVNETHASHCAP:
-> +		return tun_vnet_ioctl_gethashcap(argp);
-> +
-> +	case TUNSETVNETHASH:
-> +		rtnl_lock();
-> +		tap = rtnl_dereference(q->tap);
-> +		ret = tap ? tun_vnet_ioctl_sethash(&tap->vnet_hash, argp) : -EBADFD;
-
-
-Not really a review, but apparently this is causing intermittent memory
-leak in self tests:
-
-xx__-> echo scan > /sys/kernel/debug/kmemleak && cat
-/sys/kernel/debug/kmemleak
-unreferenced object 0xffff88800c6ec248 (size 8):
-  comm "tap", pid 21124, jiffies 4299141559
-  hex dump (first 8 bytes):
-    00 00 00 00 00 00 00 00                          ........
-  backtrace (crc 0):
-    __kmalloc_cache_noprof+0x2df/0x390
-    tun_vnet_ioctl_sethash+0xbf/0x3a0
-    tap_ioctl+0x6f2/0xc10
-    __x64_sys_ioctl+0x11f/0x180
-    do_syscall_64+0xc1/0x1d0
-    entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Could you please have a look?
-
-Thanks!
-
-Paolo
-
+QWRkIG1vcmUgaW1peF93ZWlnaHRzIHRlc3QgY2FzZXMgKGZvciBpbmNvbXBsZXRlIGlucHV0KS4K
+ClNpZ25lZC1vZmYtYnk6IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KLS0tCiB0
+b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQvcHJvY19uZXRfcGt0Z2VuLmMgfCA0NCArKysrKysr
+KysrKysrKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgNDQgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdp
+dCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25ldC9wcm9jX25ldF9wa3RnZW4uYyBiL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL25ldC9wcm9jX25ldF9wa3RnZW4uYwppbmRleCA0NjI4MDVhYzE2
+MTQuLjY5NDQ0ZmIyOTU3NyAxMDA2NDQKLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0
+L3Byb2NfbmV0X3BrdGdlbi5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25ldC9wcm9j
+X25ldF9wa3RnZW4uYwpAQCAtMzksNiArMzksMTAgQEAgc3RhdGljIGNvbnN0IGNoYXIgZGV2X2Nt
+ZF9wa3Rfc2l6ZV8wW10gPSAicGt0X3NpemUgMzAwIjsKIHN0YXRpYyBjb25zdCBjaGFyIGRldl9j
+bWRfaW1peF93ZWlnaHRzXzBbXSA9ICJpbWl4X3dlaWdodHMgMCw3IDU3Niw0IDE1MDAsMSI7CiBz
+dGF0aWMgY29uc3QgY2hhciBkZXZfY21kX2ltaXhfd2VpZ2h0c18xW10gPSAiaW1peF93ZWlnaHRz
+IDEwMSwxIDEwMiwyIDEwMywzIDEwNCw0IDEwNSw1IDEwNiw2IDEwNyw3IDEwOCw4IDEwOSw5IDEx
+MCwxMCAxMTEsMTEgMTEyLDEyIDExMywxMyAxMTQsMTQgMTE1LDE1IDExNiwxNiAxMTcsMTcgMTE4
+LDE4IDExOSwxOSAxMjAsMjAiOwogc3RhdGljIGNvbnN0IGNoYXIgZGV2X2NtZF9pbWl4X3dlaWdo
+dHNfMltdID0gImltaXhfd2VpZ2h0cyAxMDAsMSAxMDIsMiAxMDMsMyAxMDQsNCAxMDUsNSAxMDYs
+NiAxMDcsNyAxMDgsOCAxMDksOSAxMTAsMTAgMTExLDExIDExMiwxMiAxMTMsMTMgMTE0LDE0IDEx
+NSwxNSAxMTYsMTYgMTE3LDE3IDExOCwxOCAxMTksMTkgMTIwLDIwIDEyMSwyMSI7CitzdGF0aWMg
+Y29uc3QgY2hhciBkZXZfY21kX2ltaXhfd2VpZ2h0c18zW10gPSAiaW1peF93ZWlnaHRzIjsKK3N0
+YXRpYyBjb25zdCBjaGFyIGRldl9jbWRfaW1peF93ZWlnaHRzXzRbXSA9ICJpbWl4X3dlaWdodHMg
+IjsKK3N0YXRpYyBjb25zdCBjaGFyIGRldl9jbWRfaW1peF93ZWlnaHRzXzVbXSA9ICJpbWl4X3dl
+aWdodHMgMCI7CitzdGF0aWMgY29uc3QgY2hhciBkZXZfY21kX2ltaXhfd2VpZ2h0c182W10gPSAi
+aW1peF93ZWlnaHRzIDAsIjsKIHN0YXRpYyBjb25zdCBjaGFyIGRldl9jbWRfZGVidWdfMFtdID0g
+ImRlYnVnIDEiOwogc3RhdGljIGNvbnN0IGNoYXIgZGV2X2NtZF9kZWJ1Z18xW10gPSAiZGVidWcg
+MCI7CiBzdGF0aWMgY29uc3QgY2hhciBkZXZfY21kX2ZyYWdzXzBbXSA9ICJmcmFncyAxMDAiOwpA
+QCAtMjg0LDYgKzI4OCw0NiBAQCBURVNUX0YocHJvY19uZXRfcGt0Z2VuLCBkZXZfY21kX2ltaXhf
+d2VpZ2h0cykgewogCWxlbiA9IHdyaXRlKHNlbGYtPmRldl9mZCwgZGV2X2NtZF9pbWl4X3dlaWdo
+dHNfMiwgc2l6ZW9mKGRldl9jbWRfaW1peF93ZWlnaHRzXzIpKTsKIAlFWFBFQ1RfRVEobGVuLCAt
+MSk7CiAJRVhQRUNUX0VRKGVycm5vLCBFMkJJRyk7CisKKwkvKiB3aXRoIHRyYWlsaW5nICdcMCcg
+Ki8KKwlsZW4gPSB3cml0ZShzZWxmLT5kZXZfZmQsIGRldl9jbWRfaW1peF93ZWlnaHRzXzMsIHNp
+emVvZihkZXZfY21kX2ltaXhfd2VpZ2h0c18zKSk7CisJRVhQRUNUX0VRKGxlbiwgLTEpOworCUVY
+UEVDVF9FUShlcnJubywgRUlOVkFMKTsKKworCS8qIHdpdGhvdXQgdHJhaWxpbmcgJ1wwJyAqLwor
+CWxlbiA9IHdyaXRlKHNlbGYtPmRldl9mZCwgZGV2X2NtZF9pbWl4X3dlaWdodHNfMywgc2l6ZW9m
+KGRldl9jbWRfaW1peF93ZWlnaHRzXzMpIC0gMSk7CisJRVhQRUNUX0VRKGxlbiwgLTEpOworCUVY
+UEVDVF9FUShlcnJubywgRUlOVkFMKTsKKworCS8qIHdpdGggdHJhaWxpbmcgJ1wwJyAqLworCWxl
+biA9IHdyaXRlKHNlbGYtPmRldl9mZCwgZGV2X2NtZF9pbWl4X3dlaWdodHNfNCwgc2l6ZW9mKGRl
+dl9jbWRfaW1peF93ZWlnaHRzXzQpKTsKKwlFWFBFQ1RfRVEobGVuLCAtMSk7CisJRVhQRUNUX0VR
+KGVycm5vLCBFSU5WQUwpOworCisJLyogd2l0aG91dCB0cmFpbGluZyAnXDAnICovCisJbGVuID0g
+d3JpdGUoc2VsZi0+ZGV2X2ZkLCBkZXZfY21kX2ltaXhfd2VpZ2h0c180LCBzaXplb2YoZGV2X2Nt
+ZF9pbWl4X3dlaWdodHNfNCkgLSAxKTsKKwlFWFBFQ1RfRVEobGVuLCAtMSk7CisJRVhQRUNUX0VR
+KGVycm5vLCBFSU5WQUwpOworCisJLyogd2l0aCB0cmFpbGluZyAnXDAnICovCisJbGVuID0gd3Jp
+dGUoc2VsZi0+ZGV2X2ZkLCBkZXZfY21kX2ltaXhfd2VpZ2h0c181LCBzaXplb2YoZGV2X2NtZF9p
+bWl4X3dlaWdodHNfNSkpOworCUVYUEVDVF9FUShsZW4sIC0xKTsKKwlFWFBFQ1RfRVEoZXJybm8s
+IEVJTlZBTCk7CisKKwkvKiB3aXRob3V0IHRyYWlsaW5nICdcMCcgKi8KKwlsZW4gPSB3cml0ZShz
+ZWxmLT5kZXZfZmQsIGRldl9jbWRfaW1peF93ZWlnaHRzXzUsIHNpemVvZihkZXZfY21kX2ltaXhf
+d2VpZ2h0c181KSAtIDEpOworCUVYUEVDVF9FUShsZW4sIC0xKTsKKwlFWFBFQ1RfRVEoZXJybm8s
+IEVJTlZBTCk7CisKKwkvKiB3aXRoIHRyYWlsaW5nICdcMCcgKi8KKwlsZW4gPSB3cml0ZShzZWxm
+LT5kZXZfZmQsIGRldl9jbWRfaW1peF93ZWlnaHRzXzYsIHNpemVvZihkZXZfY21kX2ltaXhfd2Vp
+Z2h0c182KSk7CisJRVhQRUNUX0VRKGxlbiwgLTEpOworCUVYUEVDVF9FUShlcnJubywgRUlOVkFM
+KTsKKworCS8qIHdpdGhvdXQgdHJhaWxpbmcgJ1wwJyAqLworCWxlbiA9IHdyaXRlKHNlbGYtPmRl
+dl9mZCwgZGV2X2NtZF9pbWl4X3dlaWdodHNfNiwgc2l6ZW9mKGRldl9jbWRfaW1peF93ZWlnaHRz
+XzYpIC0gMSk7CisJRVhQRUNUX0VRKGxlbiwgLTEpOworCUVYUEVDVF9FUShlcnJubywgRUlOVkFM
+KTsKIH0KIAogVEVTVF9GKHByb2NfbmV0X3BrdGdlbiwgZGV2X2NtZF9kZWJ1ZykgewotLSAKMi40
+OC4xCgo=
