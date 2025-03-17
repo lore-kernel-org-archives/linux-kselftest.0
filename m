@@ -1,112 +1,146 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B5E3AC17;
-	Mon, 17 Mar 2025 09:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73447221F1B
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 09:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742202257; cv=none; b=B3RKawnS5P8FDJ8ReCel3KyOF3bvNRkT1AVFYOM5pN1SJ0ufBsSaXC5HfMzJ1R2bdcZ/wlobbQP13T+Kzn9HTPhX25b1vAQ0CoB/YBWQW3uxUetlFDPOX0o79Te2kKQpNAHJ4f1BdkmowOBAeFKQ+TpZJGrfiTM8Z1LSB5yutP4=
+	t=1742202481; cv=none; b=bYCNETCEp/+wsQnO0GhDdDGfX73n1qiCnD4IwQYZUaq4GEzVjld/GD0RFljgzTnwAjloGDiibueTeHjS3snPrg2Ozj+5xW7IaZ2M+t2TtOtiZxKpU40GXQh/FmEOD9/T9H8cld0eEOPNaSUxynmEQTFI5Cfr3TbqRIdCsw+TnEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742202257; c=relaxed/simple;
-	bh=BtV7ZrSR7GQNLdQOsdCK9tMWgq9b8VO/0Qt6zIyM9Z0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UXkpAGPtHTMCnPKOnPInwG2C5kA1SN4dgXdCE89PdXQnRDK3CP0L0g630z1hvuwavtiLNXcpGDyUv9+SktYClbJ1HWgyNhrVdATxQHMkRlHMGQhV7vw1EGb5mXg6Z8JU5Pr+oEeIT2avpx+qVxqjj5Qcfu1HJt/mKStvala4yrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=JbL6XZe2; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+	s=arc-20240116; t=1742202481; c=relaxed/simple;
+	bh=UgPBZvjsFQmiYNA6znXuMhzjQ271ggAz4JFSOSvqvZ4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=T8mN6sSB6WpYLcuIbILpPLHEZvxQ8AnRZ35Gia/CtqmVYh9kxaQzkpYM3NY28Ezkm7MdH848QvH+Ou7g1eQ4dDfibLHwCBF26BT9OYupFm3E8eRoF7CzWMkZcakgkwJKMwwTGTZDFkuvnrCpvpVJeuJQBWXquPW0zPm2mkTMggU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mdmwEFVO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=34eQYoD0; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mdmwEFVO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=34eQYoD0; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="JbL6XZe2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1742202250; x=1742807050; i=ps.report@gmx.net;
-	bh=BtV7ZrSR7GQNLdQOsdCK9tMWgq9b8VO/0Qt6zIyM9Z0=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=JbL6XZe2wChG9gJOTEEh90w8slWS0Z2DjOih2RZF4pmbgUuN2ZQQVczv7gg+zUWB
-	 dUYMfkMzEKDK2FHCReQWaNkZOCiVCtCCNaF/13davsPEtU7Sw23iOamVonnieqIfL
-	 mdUDTbRYpCjN5lduxZk/UWNCkbLXUTbPH8REJN30CiDVIqmmKE11iOlSPD37PAgsf
-	 quGT1sWKoSf6HZk/Ka8/sdp2QbxUWDYO0z/7xlXUENFL2KhNYIjmLj5GFLlYIt/9g
-	 rzjlxAMGwPkH4kzvR5JOuks0mBVZA5aNVVor5x0PM4gmAzHqvxDjpyNULoUdx3DdP
-	 9N4OmiC8q0YbsmoAjA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([82.135.81.158]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MgvvJ-1tHDCp2L5Z-00mZOc; Mon, 17
- Mar 2025 10:04:10 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Seiderer <ps.report@gmx.net>
-Subject: [PATCH net-next v1 1/2] net: pktgen: add strict buffer parsing index check
-Date: Mon, 17 Mar 2025 10:04:00 +0100
-Message-ID: <20250317090401.1240704-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.48.1
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mdmwEFVO";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="34eQYoD0";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mdmwEFVO";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="34eQYoD0"
+Received: from pobox.suse.cz (unknown [10.100.2.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id A9C0321D92;
+	Mon, 17 Mar 2025 09:07:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1742202478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wnKFNLrLhAN97UeP+wzQU9edyI2DXXEOjOLsBP6B4eQ=;
+	b=mdmwEFVOvZgIbkhQEoa9slH513xeG7AGOURUICIl1Jp1Fdeh6vi5MxfuQG/2/rlt5ZrG4/
+	Tf5ea1HCt/QclEZrMFSWgbmODsbF78/k2BaRnKOZCXfKo9EcPL3WpfEdj7aOUo2BODlNYq
+	7e1qO1IA46lUQlj+Yp1PiVTnVtzAJRA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1742202478;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wnKFNLrLhAN97UeP+wzQU9edyI2DXXEOjOLsBP6B4eQ=;
+	b=34eQYoD0Q40srGmeBJ5kuXok7ZTv2bSKWLuqtLeeouHNL9TsGu4KbnrWwBXioFteWi9ZfU
+	JNZ5yfK6tXPri+Ag==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1742202478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wnKFNLrLhAN97UeP+wzQU9edyI2DXXEOjOLsBP6B4eQ=;
+	b=mdmwEFVOvZgIbkhQEoa9slH513xeG7AGOURUICIl1Jp1Fdeh6vi5MxfuQG/2/rlt5ZrG4/
+	Tf5ea1HCt/QclEZrMFSWgbmODsbF78/k2BaRnKOZCXfKo9EcPL3WpfEdj7aOUo2BODlNYq
+	7e1qO1IA46lUQlj+Yp1PiVTnVtzAJRA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1742202478;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wnKFNLrLhAN97UeP+wzQU9edyI2DXXEOjOLsBP6B4eQ=;
+	b=34eQYoD0Q40srGmeBJ5kuXok7ZTv2bSKWLuqtLeeouHNL9TsGu4KbnrWwBXioFteWi9ZfU
+	JNZ5yfK6tXPri+Ag==
+Date: Mon, 17 Mar 2025 10:07:58 +0100 (CET)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Filipe Xavier <felipeaggger@gmail.com>
+cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+    Shuah Khan <shuah@kernel.org>, Marcos Paulo de Souza <mpdesouza@suse.com>, 
+    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, felipe_life@live.com
+Subject: Re: [PATCH PATCH 2/2] selftests: livepatch: test if ftrace can trace
+ a livepatched function
+In-Reply-To: <6d9b9394-690b-49a3-b8df-7ef510c96c00@gmail.com>
+Message-ID: <alpine.LSU.2.21.2503171006260.4236@pobox.suse.cz>
+References: <20250306-ftrace-sftest-livepatch-v1-0-a6f1dfc30e17@gmail.com> <20250306-ftrace-sftest-livepatch-v1-2-a6f1dfc30e17@gmail.com> <alpine.LSU.2.21.2503141411010.4442@pobox.suse.cz> <6d9b9394-690b-49a3-b8df-7ef510c96c00@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:lKpMuL1MIjGDQau+Hv2X9RMq4jhxMkCqgfy01wvfn2E8wT0W1In
- GHHzdcf6d439S//6zXEJ/JIdFiJzKw4t04fZZElHr5zKGReW82Ni+sqxdTJojhYO6F1Wsub
- w5eqijzQX059VgyoyO3tuiqHaSC0/r7E4A4P2h387Z6LqF4xzkwoCn7U1wvYezynmpeVIZc
- LP+qwnY9gIGXl5pURQhfw==
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -4.30
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	ARC_NA(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,live.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,suse.com,redhat.com,vger.kernel.org,live.com];
+	MIME_TRACE(0.00)[0:+];
+	FROM_EQ_ENVFROM(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[]
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:jz0iReNbelo=;sf+zMQiNykp90OeFSNbQdB1R+k6
- Vd08mehPYF5x7xHFD/8wZBVOv3olvRReVFxUBWS8d7gxE9ch8T1vur++m3EbxRBrVTMlmM3PJ
- lbrnG6DBODrSodpE4706UzXbj5YEKWZRH79V/jxwTLkQF7msR7cCFKaRmvM/mTrhuNy26xPQs
- v+VTxAtgoCsKdTvTMWEI/QzRBWmojLPIvmrozQkoRgnIvkAz5bOdEuhJ1aGs1jo4tOLcltmAQ
- c6vwU7I2VxHrHpd+zplYzZ87wP/XJ6UwTSKh59ulF8urN2msdQj4IBSQeUGG5sRFCcjQzP3ps
- Vq3N2S1d8PtResuxHeSGrE3AGWKAiA8JHQWuz1JIYaheZCxzt3lCf8uzoqRnWsFD+b19cJ+W9
- 88cKBx/FR3s/RWO24KYkXyJxO8XCOIb8x1upFmJahRIlbR/NlFalgxMpzbiaPHVyddwd5STGa
- CStIy5xRLecG2/Wp3iwcBDhTA7fpTW7VYIxWQKuR9yQsNiE7U3A4NTfxYkDijTyhYcOnzFAEq
- S9d7Oo/5ag/+2jtl2Ak2+pXZc35FpzyrPuDlR4jyPNcP2UwF3GUWwv/qnE9VKh167kXQZp89k
- FzvLYEJ10Pxb+SYDky1c9t7UfLifMZAO5oUmF+9V5OxVMWaWPq0YkMCqqWMOIWS2wlgDYLaKH
- 9UsVT42efOSzuMxGxKfGwT/ZG1V5QlbYZXemNR1qD7AXRfKeYEsItOneM5z+gOCmS0q+BYt6Z
- Vh9VB8icp9PI/Jq+8UQtfZbtFeJhS4oQ5klrm+hAX/SmMZ2RKZ6pydDHzybcvVqarWSIuIs1k
- xyiOIRi9ejFmSuXhmVGfDqiOhkmrX+LEIjKA/gGXlIBwsh4N+FpgsJB8SrMtt3/NpmrBXuQwK
- lcmnG+XtnvdtepnFNQaiUK7WrLzFYWYMQmznEXgl+KcjTJ+mEW+orezXP//4Nz48wQc3HJqcF
- a5fT109XY4kQwqLl9Fx4ve71tEE2RaAnJsgoA09ZbuxC6ILlTUh5i5cW1qFWVvMy82EtWDKjG
- VGapzB3YMUToWAAXElv0PZJWYMARIisBBE3f3nKARh9JYqFKDNPHWoVonR3FeJjyC/KqFroTW
- 41UZ4OEzmsLA15E1YKbazfqC/Eey5Jezsk9sAuqXtSqYLQTVGeWRxKYLmUDqMs73Sl/HEpM7h
- aJVGkcrsTDpRDB+Ls7TOBVGuT8Gs/Aylyt57bsShUsoXz54K78RlNTbyXutnGxsEMloOqlSTM
- Xkw1TkQpCP4zHa1JpGF/q4ClTlqEsWQrCKMc1RePQZCJiW3Hvzw3hzro7jW0mPUc5mMkDq44K
- JJ0yot0NBuHIHGZCgR35BNVpzgI3fI5KBoxdj7VkdKyXjY4L220EHt9IxqoQ888il6M1jBLzC
- I20aHDg8PWh4mmOfoWUc/nKce4koMhV1vTfWi3OmFFT9PMuppXDNnzQ8iwUEPPvF3Jwl/ix6/
- YA507OjRad21Yeqp/YDwfydwuJ7U=
+X-Spam-Level: 
 
-QWRkIHN0cmljdCBidWZmZXIgcGFyc2luZyBpbmRleCBjaGVjayB0byBhdm9pZCB0aGUgZm9sbG93
-aW5nIFNtYXRjaAp3YXJuaW5nOgoKICBuZXQvY29yZS9wa3RnZW4uYzo4NzcgZ2V0X2ltaXhfZW50
-cmllcygpCiAgd2FybjogY2hlY2sgdGhhdCBpbmNyZW1lbnRlZCBvZmZzZXQgJ2knIGlzIGNhcHBl
-ZAoKQ2hlY2tpbmcgdGhlIGJ1ZmZlciBpbmRleCBpIGFmdGVyIGV2ZXJ5IGdldF91c2VyL2krKyBz
-dGVwIGFuZCByZXR1cm5pbmcKd2l0aCBlcnJvciBjb2RlIGltbWVkaWF0ZWx5IGF2b2lkcyB0aGUg
-Y3VycmVudCBpbmRpcmVjdCAoYnV0IGNvcnJlY3QpCmVycm9yIGhhbmRsaW5nLgoKUmVwb3J0ZWQt
-Ynk6IERhbiBDYXJwZW50ZXIgPGRhbi5jYXJwZW50ZXJAbGluYXJvLm9yZz4KQ2xvc2VzOiBodHRw
-czovL2xvcmUua2VybmVsLm9yZy9uZXRkZXYvMzZjZjNlZTItMzhiMS00N2U1LWE0MmEtMzYzZWZl
-YjBhY2UzQHN0YW5sZXkubW91bnRhaW4vClNpZ25lZC1vZmYtYnk6IFBldGVyIFNlaWRlcmVyIDxw
-cy5yZXBvcnRAZ214Lm5ldD4KLS0tCiBuZXQvY29yZS9wa3RnZW4uYyB8IDggKysrKysrKysKIDEg
-ZmlsZSBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9uZXQvY29yZS9wa3Rn
-ZW4uYyBiL25ldC9jb3JlL3BrdGdlbi5jCmluZGV4IGU4NTA1OThkYjNlNy4uZmU3ZmRlZmFiOTk0
-IDEwMDY0NAotLS0gYS9uZXQvY29yZS9wa3RnZW4uYworKysgYi9uZXQvY29yZS9wa3RnZW4uYwpA
-QCAtODU2LDYgKzg1Niw5IEBAIHN0YXRpYyBzc2l6ZV90IGdldF9pbWl4X2VudHJpZXMoY29uc3Qg
-Y2hhciBfX3VzZXIgKmJ1ZmZlciwKIAkJaWYgKHBrdF9kZXYtPm5faW1peF9lbnRyaWVzID49IE1B
-WF9JTUlYX0VOVFJJRVMpCiAJCQlyZXR1cm4gLUUyQklHOwogCisJCWlmIChpID49IG1heGxlbikK
-KwkJCXJldHVybiAtRUlOVkFMOworCiAJCW1heCA9IG1pbigxMCwgbWF4bGVuIC0gaSk7CiAJCWxl
-biA9IG51bV9hcmcoJmJ1ZmZlcltpXSwgbWF4LCAmc2l6ZSk7CiAJCWlmIChsZW4gPCAwKQpAQCAt
-ODY5LDYgKzg3Miw4IEBAIHN0YXRpYyBzc2l6ZV90IGdldF9pbWl4X2VudHJpZXMoY29uc3QgY2hh
-ciBfX3VzZXIgKmJ1ZmZlciwKIAkJaWYgKGMgIT0gJywnKQogCQkJcmV0dXJuIC1FSU5WQUw7CiAJ
-CWkrKzsKKwkJaWYgKGkgPj0gbWF4bGVuKQorCQkJcmV0dXJuIC1FSU5WQUw7CiAKIAkJaWYgKHNp
-emUgPCAxNCArIDIwICsgOCkKIAkJCXNpemUgPSAxNCArIDIwICsgODsKQEAgLTkxMSw2ICs5MTYs
-OSBAQCBzdGF0aWMgc3NpemVfdCBnZXRfbGFiZWxzKGNvbnN0IGNoYXIgX191c2VyICpidWZmZXIs
-CiAJCWlmIChuID49IE1BWF9NUExTX0xBQkVMUykKIAkJCXJldHVybiAtRTJCSUc7CiAKKwkJaWYg
-KGkgPj0gbWF4bGVuKQorCQkJcmV0dXJuIC1FSU5WQUw7CisKIAkJbWF4ID0gbWluKDgsIG1heGxl
-biAtIGkpOwogCQlsZW4gPSBoZXgzMl9hcmcoJmJ1ZmZlcltpXSwgbWF4LCAmdG1wKTsKIAkJaWYg
-KGxlbiA8IDApCi0tIAoyLjQ4LjEKCg==
+On Fri, 14 Mar 2025, Filipe Xavier wrote:
+
+> On 3/14/25 10:14 AM, Miroslav Benes wrote:
+> 
+> > Hi,
+> >
+> >> +start_test "trace livepatched function and check that the live patch
+> >> remains in effect"
+> >> +
+> >> +FUNCTION_NAME="livepatch_cmdline_proc_show"
+> >> +
+> >> +load_lp $MOD_LIVEPATCH
+> >> +trace_function "$FUNCTION_NAME"
+> > trace_funtion() calls cleanup_ftrace() to prepare the test. Ok.
+> >
+> >> +if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live
+> >> patched" ]] ; then
+> >> +	log "livepatch: ok"
+> >> +fi
+> >> +
+> >> +check_traced_function "$FUNCTION_NAME"
+> >> +
+> >> +cleanup_tracing
+> > Here, I suppose, cleanup_tracing() is called to clean up after the check
+> > above so that nothing stays and more tests can be added later. Right?
+> > Would it make sense then to call cleanup_tracing() in
+> > check_traced_function()? I think it would less error prone.
+> > If needed, check_traced_function() can always be upgraded so that it
+> > checks for more traced functions.
+> 
+> In cases where we need to check two or more functions with
+> check_traced_function,
+> 
+> if there is cleanup_tracing, it will not be possible, make sense?
+> 
+> e.g: function1 call -> function2 call -> function3.
+
+I meant... check_traced_function() (or check_traced_functions() in this 
+case) can have multiple arguments. You would loop over them inside and 
+then clean up. Or did I misunderstood?
+
+Miroslav
