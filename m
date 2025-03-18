@@ -1,22 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 659882116F4
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 17:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E93821171B
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 17:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742319839; cv=none; b=pv3D1IS3GXcOFHfPZOlRSynQcN/51pyBqBs35XfCvXCLjJ7BvQRCTo1lJaya8Bi8Xk4rotNAWy9IRbYwFT/XsU8nvUG+fHmOd7vFIFXD9qMGkyY2UhsA6afPvp+HXANNUSnDXqcoJxAsyR6tVof1kgdQCajpY8OFw1XuVTcKQXc=
+	t=1742319840; cv=none; b=LtyT0bRgpg1FBu3Y5yCeYI/oM4cvVNWV8zHWVbFJwgsfxPLfDaMZiElnWtczUSwdPy3pchwJRvZqQzpB8qcbaTEdK5OHoechLnPBsIaSyRnBrUkPxUMv5msYf0A18icTzkT/gzBfpOPjKlinixLwfU1pUKMjmomq4fblxSRZv+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742319839; c=relaxed/simple;
-	bh=hI7eBDsFPsXfkNGQTfloPMrld/cFCnV5RLewB6g3Jnk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DF7Z6+IiB82apnEZOareWoz/bm8r4DaKZ3QNzRJVFqGvLOOTKGOovBcapXKNmxwct5x6XUNVISNorP+nnJ3FHzx4AgvKGhewgXFl8lJHhrA4JOaG73shDqSPFK88B+FOc/qJw0gfUX8u/ZU+Xdx39WZZhh0Jx+ImOzXpr6mPdZ0=
+	s=arc-20240116; t=1742319840; c=relaxed/simple;
+	bh=f1UEk6Kt5Obyh4Kzooa98oYbxQS+AbUO9Y396oiytDE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BWdfpM96uupMZrVuTB08PkU4BXJCFzKrMiGTTke+7er3W7PqcPiLDlIH3iyE6iDETrTVJL8YhhKdKzCtLC5tTAvh0QJkUJEbGuU0th/+j6zSUiWFkrGvhHMyS1AVoLS2KmZsukSpgtsgL7T5Ghpi4znIjJPWpBNeXMc1loYA4ys=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 234C413D5;
-	Tue, 18 Mar 2025 10:44:04 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38425152B;
+	Tue, 18 Mar 2025 10:44:06 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.27])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CC4053F673;
-	Tue, 18 Mar 2025 10:43:54 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8B433F673;
+	Tue, 18 Mar 2025 10:43:56 -0700 (PDT)
 From: Ryan Roberts <ryan.roberts@arm.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>,
@@ -24,10 +25,12 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 Cc: Ryan Roberts <ryan.roberts@arm.com>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 1/3] selftests/mm: Fix half_ufd_size_MB calculation
-Date: Tue, 18 Mar 2025 17:43:39 +0000
-Message-ID: <20250318174343.243631-1-ryan.roberts@arm.com>
+Subject: [PATCH v1 3/3] selftests/mm: Speed up split_huge_page_test
+Date: Tue, 18 Mar 2025 17:43:41 +0000
+Message-ID: <20250318174343.243631-3-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250318174343.243631-1-ryan.roberts@arm.com>
+References: <20250318174343.243631-1-ryan.roberts@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -36,35 +39,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-$half_ufd_size_MB is supposed to be half of the available hugetlb memory
-expressed in MB. But previously it was calculated in pages since
-$freepgs is the number of free pages.
+create_pagecache_thp_and_fd() was previously writing a file sized at
+twice the PMD size by making a per-byte write syscall. This was quite
+slow when the PMD size is 4M, but completely intolerable for 32M (PMD
+size for arm64's 16K page size), and 512M (PMD size for arm64's 64K page
+size).
 
-When huge pages are 2M it doesn't make a whole lot of difference; the
-number of pages that get used is just halved. But on arm64 with 16K or
-64K base pages, the PMD size (and default hugetlb size) is 32M and 512M
-respectively. So in this case we end up passing a number of MB that is
-smaller than a single hugetlb page and the test raises an error.
+The byte pattern has a 256 byte period, so let's create a 1K buffer and
+fill it with exactly 4 periods. Then we can write the buffer as many
+times as is required to fill the file. This makes things much more
+tolerable.
 
-Fixes: 2e47a445d7b3 ("selftests/mm: run_vmtests.sh: fix hugetlb mem size calculation")
+The test now passes for 16K page size. It still fails for 64K page size
+because MAX_PAGECACHE_ORDER is too small for 512M folio size (I think).
+
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
- tools/testing/selftests/mm/run_vmtests.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/mm/split_huge_page_test.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index da7e26668103..14fa9d40d574 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -304,7 +304,7 @@ uffd_stress_bin=./uffd-stress
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} anon 20 16
- # Hugetlb tests require source and destination huge pages. Pass in half
- # the size of the free pages we have, which is used for *each*.
--half_ufd_size_MB=$((freepgs / 2))
-+half_ufd_size_MB=$(((freepgs * hpgsize_KB / 2) / 1024))
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb "$half_ufd_size_MB" 32
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb-private "$half_ufd_size_MB" 32
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem 20 16
---
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index 3f353f3d070f..499333d75fff 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -5,6 +5,7 @@
+  */
+ 
+ #define _GNU_SOURCE
++#include <assert.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <stdarg.h>
+@@ -361,6 +362,7 @@ int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int *fd,
+ {
+ 	size_t i;
+ 	int dummy = 0;
++	unsigned char buf[1024];
+ 
+ 	srand(time(NULL));
+ 
+@@ -368,11 +370,12 @@ int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int *fd,
+ 	if (*fd == -1)
+ 		ksft_exit_fail_msg("Failed to create a file at %s\n", testfile);
+ 
+-	for (i = 0; i < fd_size; i++) {
+-		unsigned char byte = (unsigned char)i;
++	assert(fd_size % sizeof(buf) == 0);
++	for (i = 0; i < sizeof(buf); i++)
++		buf[i] = (unsigned char)i;
++	for (i = 0; i < fd_size; i += sizeof(buf))
++		write(*fd, buf, sizeof(buf));
+ 
+-		write(*fd, &byte, sizeof(byte));
+-	}
+ 	close(*fd);
+ 	sync();
+ 	*fd = open("/proc/sys/vm/drop_caches", O_WRONLY);
+-- 
 2.43.0
 
