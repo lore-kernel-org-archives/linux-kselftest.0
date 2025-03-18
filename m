@@ -1,66 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C038212B2F;
-	Tue, 18 Mar 2025 17:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 659E2211711
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 17:43:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742318713; cv=none; b=Kq5c2ZBC3/e/53gRwsLTp+OHZyxCSP50OsrFHP7dDFFipsPL1pe+mVKKiD7X1Ca2j6vNLuf0hQQ0XcCUZD1DsiY+AMlqmFJ3BjSzp0K+FfvRR5TGCFHv7qBe736dk2Vwsyihb99CKZcptCBem4UK+gIIkTzwL4MaF6hNT2RsY2s=
+	t=1742319839; cv=none; b=g+uYh0eCMxId2sWONKJmAhI9EFClazJp0qIZ1sQsj7o0p1sK6NVg3a4rKXgaD6BpNDgBIymDOWcX+u0mTZMfZS8OBneNiFUu1zuXb5MOwV1YQ0wneGtHV7r8IkUfTZZ6VCllRDKg8lOzXNd9Nkqusg3LzN5xlq7g1vycKWinS0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742318713; c=relaxed/simple;
-	bh=+JGrZaKDcqHFC83e6PGUPM23Myi2VS8ZTFr3mBv8eF8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iXBKMB0yRQY9msO8MRD7NKDn6eP+7WbS1KQaRe5EpJ7BHVgtvPuxCp14BihktGvbSOII9QgYl06bczcnP8abcAa0DCXS4i95jI67de5LXpD4Ki8hu9twgPusl4a2kkZI5JMWmj8LwcBs07enOAT5Ui+7u1Xo2xJroaGam/APsDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RHIDtWpw; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RHIDtWpw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 587FAC4CEDD;
-	Tue, 18 Mar 2025 17:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742318713;
-	bh=+JGrZaKDcqHFC83e6PGUPM23Myi2VS8ZTFr3mBv8eF8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RHIDtWpwP3uiGF0YUXgBPZBiLmN6Y49NlyddnaNFgRwFwUflssXpf28umRv8ehqng
-	 QE9s3Q6s5wLS7sspbbxthfQJ7+4gUuuKsLmYOSKbEBaQADeGuLKggQygq1ZODG66nR
-	 0dar5QsJwDcGYuiWZo5U2A/U5pxhZs+4RyYYqCb5q0lh1P2zg/SWXBy9SFgd4SJwrb
-	 7LD0v3sWGsiX50jl3DxP29mD03AS7bttbXe9et5pzq0IvVvj3c8t+dIBKzgR3Ev3jj
-	 yGuvfMwypQDOnQXUZm5dKso/pz1zlNQtRRIhrODlc1uxqKE/7+BNrsKdoZRnK14U07
-	 tniEX/Oh1GLsA==
-Date: Tue, 18 Mar 2025 17:25:08 +0000
-From: Simon Horman <horms@kernel.org>
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 12/12] selftests: mptcp: add pm sysctl mapping
- tests
-Message-ID: <20250318172508.GQ688833@kernel.org>
-References: <20250313-net-next-mptcp-pm-ops-intro-v1-0-f4e4a88efc50@kernel.org>
- <20250313-net-next-mptcp-pm-ops-intro-v1-12-f4e4a88efc50@kernel.org>
+	s=arc-20240116; t=1742319839; c=relaxed/simple;
+	bh=toDgPx2SC6G+ZUON7pSGCU1sqABTKdjGpQi5Z1JvH+o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ga6CHd0FwN0OBuF06o2QpFCF8sWZuLK+N4VbKxGYqEhdEvlwzwvvugnb9c/uO1ruoFSAITPiEMVKcSRbAKZfMzRSTzQNTX+RSOCNTbBOXqwuudBMqABxhK0lePVkR29DpbGmER5V4NFpusMZ7Qeq1Hm43YVPsu1aC7dFnMiBj5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B5C71516;
+	Tue, 18 Mar 2025 10:44:05 -0700 (PDT)
+Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.27])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DAC283F673;
+	Tue, 18 Mar 2025 10:43:55 -0700 (PDT)
+From: Ryan Roberts <ryan.roberts@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Xu <peterx@redhat.com>
+Cc: Ryan Roberts <ryan.roberts@arm.com>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 2/3] selftests/mm: uffd-unit-tests support for hugepages > 2M
+Date: Tue, 18 Mar 2025 17:43:40 +0000
+Message-ID: <20250318174343.243631-2-ryan.roberts@arm.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250318174343.243631-1-ryan.roberts@arm.com>
+References: <20250318174343.243631-1-ryan.roberts@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250313-net-next-mptcp-pm-ops-intro-v1-12-f4e4a88efc50@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 13, 2025 at 11:21:01AM +0100, Matthieu Baerts (NGI0) wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> This patch checks if the newly added net.mptcp.path_manager is mapped
-> successfully from or to the old net.mptcp.pm_type in userspace_pm.sh.
-> 
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+uffd-unit-tests uses a memory area with a fixed 32M size. Then it
+calculates the number of pages by dividing by page_size, which itself is
+either the base page size or the PMD huge page size depending on the
+test config. For the latter, we end up with nr_pages=1 for arm64 16K
+base pages, and nr_pages=0 for 64K base pages. This doesn't end well.
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+So let's make the 32M size a floor and also ensure that we have at least
+2 pages given the PMD size. With this change, the tests pass on arm64
+64K base page size configuration.
+
+Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+---
+ tools/testing/selftests/mm/uffd-unit-tests.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 74c8bc02b506..6973e57b227a 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -26,6 +26,8 @@
+ #define ALIGN_UP(x, align_to) \
+ 	((__typeof__(x))((((unsigned long)(x)) + ((align_to)-1)) & ~((align_to)-1)))
+ 
++#define MAX(a, b) (((a) > (b)) ? (a) : (b))
++
+ struct mem_type {
+ 	const char *name;
+ 	unsigned int mem_flag;
+@@ -196,7 +198,8 @@ uffd_setup_environment(uffd_test_args_t *args, uffd_test_case_t *test,
+ 	else
+ 		page_size = psize();
+ 
+-	nr_pages = UFFD_TEST_MEM_SIZE / page_size;
++	/* Ensure we have at least 2 pages */
++	nr_pages = MAX(UFFD_TEST_MEM_SIZE, page_size * 2) / page_size;
+ 	/* TODO: remove this global var.. it's so ugly */
+ 	nr_cpus = 1;
+ 
+-- 
+2.43.0
 
