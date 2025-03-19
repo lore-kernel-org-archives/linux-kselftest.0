@@ -1,105 +1,106 @@
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0882A24E4C3;
-	Wed, 19 Mar 2025 03:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5D142A80;
+	Wed, 19 Mar 2025 03:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742353209; cv=none; b=natrB8p4rFjAtK3m/IrSu4+r9wpx1BwkljEos8N5yisHRU38V2wSGC6HQcnGOb+4wRzmf9Wiu2f58Qc8YixbSozvFerJXT+w5RjP2eHbd5FwbzzcYkZoybIw5ElpfgsEPEaedcKMK/HaCb8NnLx9inNQe56NXrBJp1zhoPwUWk8=
+	t=1742354052; cv=none; b=fiYJ7w4b2zlrpopcNqbJgQ5MMOG7QFBBHgE/yb+6H4JzBc/4wnUrtJ0fw30yDukLFEME2x2cYwQiTyyu8VtukSo3jgRD8JQ285hO6MKOE5F1LKHhThtq7kwWgV86cggk9LWd/kKJsjBkAmLC7qDl4AwmOCPFsJxi+ahorLvY2Mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742353209; c=relaxed/simple;
-	bh=XmBYV97ddXCc98ClLrgIh2hgEfg+wCIW7Pq3F2K7xlc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p5+ZahB0DiyIIVjQbctOzmhOsLUlYfYQB85oFp5hFHyD40/Owd3zhvFYtNUhrrVVbFKaozbgWVBx1ohcDe0grv/JxJU7zn4MuoVgSI9xPfbmzexQBWJx0SnJWg1Hb9CORO1Oxi/VuYDxieuPfPhPy2nPsnVgRHxvqu24I1yW6/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Flbdykl6; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1742354052; c=relaxed/simple;
+	bh=yM4mhVvJmZfLeISwx/iN5lE/1L/nC+VHGrVR2s+Sbz4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=gZlAMTvJCS9ue+j6uq64mZOyo4nINm6ow5rqNdptZRMXoWXHu2prlUIMUx0jkrbCuxf6bHkoGfJQi9pRIiqo464TTNkuttWez6AcY/GYZKxCxEyyLK4Q2ZRTmNLkCbNWWwgbqmtxmgXWKpywixfCSBS5vlmTmUaBEwS/tEmIkRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XT3FLa6V; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Flbdykl6"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1742353201; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=dX+b5dkCzHI7qs9K1pxSG/IA6mix1y1/JgVcfCigZ/o=;
-	b=Flbdykl6JslvtwOJvj/78fil/uExxpeKXaFTo7R5/t6W6ERJVYNOxFLoFnQsYU9aoxdpwjM8jQpBFqdWT30YN/Pe8mBWmaeIFGm8I0D0PLqqgXyg3RdrOXPIZvLgETFJ/OQUlikFnv2BLhQPOt46M0OznAF6y8FSy2LTSj9O8WY=
-Received: from 30.246.160.93(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WRzjqK-_1742353198 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 19 Mar 2025 10:59:59 +0800
-Message-ID: <0a70f4ab-cd83-434d-8dd2-486d58e5599a@linux.alibaba.com>
-Date: Wed, 19 Mar 2025 10:59:57 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XT3FLa6V"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F3C47C4CEE3;
+	Wed, 19 Mar 2025 03:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742354052;
+	bh=yM4mhVvJmZfLeISwx/iN5lE/1L/nC+VHGrVR2s+Sbz4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=XT3FLa6VCWKyh5tVufhiPLl5dZ6VT8KqeEIBL4AmFMixEHOOYmUoDMcrHaf/hKBLs
+	 CIPbVnxSSnj8F8TVe7oj5pRSyD7gKXlToYekQruLJk1GeEDTIyNZsardLNnASeaK+h
+	 8yNYq23pwWdNG6LLxFwA/pCHwAz+ovso2yNfpdHyOyE55QmtZ0ifkki066/kr9/BmH
+	 PdSHr6spa99FnZxsC0tj/W73R6yWF23E+tQa4WmVJ00dqkXvqz0uEPoR7qRVLk5A5V
+	 tt8ZxTiS58+/I4/YCCr5Le8SzF0mshOiXCTDF3F7A3M2rsgOz3U2z7bAnN4E1XPgxh
+	 TRNIB4+RApjZQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5AA4C35FF3;
+	Wed, 19 Mar 2025 03:14:11 +0000 (UTC)
+From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
+Date: Wed, 19 Mar 2025 03:13:34 +0000
+Subject: [PATCH net-next v2 1/7] selftests/net: Print TCP flags in more
+ common format
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/pidfd: align stack to fix SP alignment
- exception
-To: Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
- Catalin Marinas <catalin.marinas@arm.com>,
- Mark Rutland <mark.rutland@arm.com>
-Cc: baolin.wang@linux.alibaba.com, tianruidong@linux.alibaba.com,
- brauner@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20250312061557.28532-1-xueshuai@linux.alibaba.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20250312061557.28532-1-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250319-tcp-ao-selftests-polling-v2-1-da48040153d1@gmail.com>
+References: <20250319-tcp-ao-selftests-polling-v2-0-da48040153d1@gmail.com>
+In-Reply-To: <20250319-tcp-ao-selftests-polling-v2-0-da48040153d1@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1742354050; l=1922;
+ i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
+ bh=iOlW43ng3yBwP5kn3YXXAavX+5ElU/Vcbzg1cmgHkUw=;
+ b=/+hRgGy1a3TxFF9aNzAm4ditnNMPN89DK7HhC1C7dEgHmLJJI8E/fCYVraGO8WaqbEoDS6YGb
+ 6D0neO2WTVvCNtEi/J4kAvyqCW1WAmXgg2Ll7ANTW/EkDUPjy7jDBiQ
+X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
+ pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
+X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
+ auth_id=152
+X-Original-From: Dmitry Safonov <0x7f454c46@gmail.com>
+Reply-To: 0x7f454c46@gmail.com
 
-+ ARM maintainers for review.
+From: Dmitry Safonov <0x7f454c46@gmail.com>
 
-在 2025/3/12 14:15, Shuai Xue 写道:
-> The pidfd_test fails on the ARM64 platform with the following error:
-> 
->      Bail out! pidfd_poll check for premature notification on child thread exec test: Failed
-> 
-> When exception-trace is enabled, the kernel logs the details:
-> 
->      #echo 1 > /proc/sys/debug/exception-trace
->      #dmesg | tail -n 20
->      [48628.713023] pidfd_test[1082142]: unhandled exception: SP Alignment, ESR 0x000000009a000000, SP/PC alignment exception in pidfd_test[400000+4000]
->      [48628.713049] CPU: 21 PID: 1082142 Comm: pidfd_test Kdump: loaded Tainted: G        W   E      6.6.71-3_rc1.al8.aarch64 #1
->      [48628.713051] Hardware name: AlibabaCloud AliServer-Xuanwu2.0AM-1UC1P-5B/AS1111MG1, BIOS 1.2.M1.AL.P.157.00 07/29/2023
->      [48628.713053] pstate: 60001800 (nZCv daif -PAN -UAO -TCO -DIT +SSBS BTYPE=-c)
->      [48628.713055] pc : 0000000000402100
->      [48628.713056] lr : 0000ffff98288f9c
->      [48628.713056] sp : 0000ffffde49daa8
->      [48628.713057] x29: 0000000000000000 x28: 0000000000000000 x27: 0000000000000000
->      [48628.713060] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
->      [48628.713062] x23: 0000000000000000 x22: 0000000000000000 x21: 0000000000400e80
->      [48628.713065] x20: 0000000000000000 x19: 0000000000402650 x18: 0000000000000000
->      [48628.713067] x17: 00000000004200d8 x16: 0000ffff98288f40 x15: 0000ffffde49b92c
->      [48628.713070] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
->      [48628.713072] x11: 0000000000001011 x10: 0000000000402100 x9 : 0000000000000010
->      [48628.713074] x8 : 00000000000000dc x7 : 3861616239346564 x6 : 000000000000000a
->      [48628.713077] x5 : 0000ffffde49daa8 x4 : 000000000000000a x3 : 0000ffffde49daa8
->      [48628.713079] x2 : 0000ffffde49dadc x1 : 0000ffffde49daa8 x0 : 0000000000000000
-> 
-> According to ARM ARM D1.3.10.2 SP alignment checking:
-> 
->> When the SP is used as the base address of a calculation, regardless of
->> any offset applied by the instruction, if bits [3:0] of the SP are not
->> 0b0000, there is a misaligned SP.
-> 
-> To fix it, align the stack with 16 bytes.
-> 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> ---
->   tools/testing/selftests/pidfd/pidfd_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-> index c081ae91313a..ec161a7c3ff9 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
-> @@ -33,7 +33,7 @@ static bool have_pidfd_send_signal;
->   static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
->   {
->   	size_t stack_size = 1024;
-> -	char *stack[1024] = { 0 };
-> +	char *stack[1024] __attribute__((aligned(16))) = {0};
->   
->   #ifdef __ia64__
->   	return __clone2(fn, stack, stack_size, flags | SIGCHLD, NULL, pidfd);
+Before:
+># 13145[lib/ftrace-tcp.c:427] trace event filter tcp_ao_key_not_found [2001:db8:1::1:-1 => 2001:db8:254::1:7010, L3index 0, flags: !FS!R!P!., keyid: 100, rnext: 100, maclen: -1, sne: -1] = 1
+
+After:
+># 13487[lib/ftrace-tcp.c:427] trace event filter tcp_ao_key_not_found [2001:db8:1::1:-1 => 2001:db8:254::1:7010, L3index 0, flags: S, keyid: 100, rnext: 100, maclen: -1, sne: -1] = 1
+
+For the history, I think the initial format was to emphasize the absence
+of flags as well as their presence (!R meant no RST flag). But looking
+again, it's just unreadable and hard to understand.
+Make it the standard/expected one.
+
+Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
+---
+ tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c b/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+index 24380c68fec6b7613c363cdee68d13293e593aeb..27403f875054706718256e0007a4db77f82e60c8 100644
+--- a/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
++++ b/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+@@ -427,11 +427,8 @@ static void dump_trace_event(struct expected_trace_point *e)
+ 	test_print("trace event filter %s [%s:%d => %s:%d, L3index %d, flags: %s%s%s%s%s, keyid: %d, rnext: %d, maclen: %d, sne: %d] = %zu",
+ 		   trace_event_names[e->type],
+ 		   src, e->src_port, dst, e->dst_port, e->L3index,
+-		   (e->fin > 0) ? "F" : (e->fin == 0) ? "!F" : "",
+-		   (e->syn > 0) ? "S" : (e->syn == 0) ? "!S" : "",
+-		   (e->rst > 0) ? "R" : (e->rst == 0) ? "!R" : "",
+-		   (e->psh > 0) ? "P" : (e->psh == 0) ? "!P" : "",
+-		   (e->ack > 0) ? "." : (e->ack == 0) ? "!." : "",
++		   e->fin ? "F" : "", e->syn ? "S" : "", e->rst ? "R" : "",
++		   e->psh ? "P" : "", e->ack ? "." : "",
+ 		   e->keyid, e->rnext, e->maclen, e->sne, e->matched);
+ }
+ 
+
+-- 
+2.42.2
+
 
