@@ -1,57 +1,57 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E42E266B40
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 17:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA179266F03
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 17:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742837590; cv=none; b=rwCqn2ZLnnG2EpgR22lTNyVn/8ZXlObNoUbxwN8Ti5WU368JGkHaNkRKAZVGrxaHt+JA6kyiYVzaFFCb+TZXJrwyP6LJKKfU0bUPgrLG+StWsdnFEP/Fqb4rZaqS7ms1rVuP0T6CbjFBvg/7RXqURAwcTXVLkEDqQMkDRIAskQE=
+	t=1742837592; cv=none; b=epmymirTYJ9uZKqRZ+XvgjJBdzwNjWKtwQYpvG2nzBBuJH6R0ZxqaD7GLMGWRbhklVKf785CIxuPpGN+ZRTKF2egEgSEvdlbnX92DxMa7mPpP6IClX9EOElsZo4SI7pKBUFI6kMke55eb7nnfnWviTpxvAo1+/kKvJkzm2TffhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742837590; c=relaxed/simple;
-	bh=CzYGuYYUd7AX2Fs1hEVjbTbxTpXC9vjjk2D4/WR/4rs=;
+	s=arc-20240116; t=1742837592; c=relaxed/simple;
+	bh=7yohD4OY7oJi3PjKnxCA6LaTJHZ1/TxhZUQgByNjysY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=FSNW48T4pDJ4ZMnHZ9ZepCdSX0rMRlyDAJGDs0qHjjVJWZ+rNg5kcFIANvJatoE+Xc5bb8C7yhsISIt8n6mR5+Dxbsicq+Ibno/b1wYqMRpsyyXMUbQtMCTHD8nE+cQU2aH+ZrxMAZmEZpnUPNWRxfPg4cvkS/Wxti/ZbRCoBdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mizhang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1wqmLZQP; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=a/XkJlFlcWjfx+KXGlNNnv0mIREIffNh0lfdiSToefegBhcrYHX0G1R8LCf5Rj68R/XJsJNi6Nv/P0KVpr5FLsawgjNGwcdJ3XXRIQUd2wBGAOXIy1YXyJCounsI0iVBeLyFXtocW/fFOxfrrS+1+8BYgPUP7vSsnsDm0URKIBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mizhang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=feSMjzYD; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mizhang.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1wqmLZQP"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-22651aca434so76025235ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 10:33:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="feSMjzYD"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2240c997059so104600685ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 10:33:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742837586; x=1743442386; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1742837590; x=1743442390; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=0bq5uIWHPtPqH2Nz7MB6IWHn/nwEFnOT5cezx9vd7Ig=;
-        b=1wqmLZQPeQtUFnYNjfIpE9DNlCWBbD6sXlzENq5LTZxza9NkKcFNFstKe4P2x442iT
-         apXGgx0RfgMYB56eQSX3jhwDoY10mhnYWcABNX19bBCrYYLZV0zpY7l7Uc58BSjB5bv9
-         sz6ME/HByP4/JfzTy5w3WxsSD3lBJEJmR329p0gZiZoP7q9mVvrEEbSDJ8CgyBnY0d9H
-         L2LL5yF9fdatoFaIp7dp0jzXw/dyrlc8WqW/u5c9Mzh9Hir9z7yxhPYPqO+adD3G2RxV
-         Wk5wZix9IWUeuSuw0S8YwtP5wNQca+HDt68r2nDzN1oZRKgHNDAdugwBotF8rTjMxiAT
-         TvRQ==
+        bh=dGFuB9mmLp1BQVwj/uNArSbaMRJJW4D9abapz9TbNsk=;
+        b=feSMjzYDYEpiUZ0DlHVbdW7g4WJ91v03gdyDD46ItIoKjGBNT8aFrtNvP/v5/nE7GQ
+         D/kl1Aokvlq9lYwBkB7LDM78H3iSMOLXh5T+5T/iQo13XCzRiKqdn0Bj0eSLdyjoDoRW
+         GXMHUMg/WPnTYPp8gtskXOZPZHgW36V7G2BrP+luEEhY+M1J2f6fD3bW81qBOys5XQVp
+         DuN5fJEauLn6rf4n2i3yXAhk0EqfTqLVspCf4AiJrMrSK0rfTEu47ZqgB34qL3SaUWCa
+         W5Hwx53PCc963XPgrVfYqFV/c27+7rwO24BQSdfzn2lUY1QkcrpjE7pAUwa7O3Ovs+Tg
+         Da5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742837586; x=1743442386;
+        d=1e100.net; s=20230601; t=1742837590; x=1743442390;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0bq5uIWHPtPqH2Nz7MB6IWHn/nwEFnOT5cezx9vd7Ig=;
-        b=iD81ASHqkcOnhWk2RdPSvXfEPMy9IQ1jucca8gEnpDEXfY9KMdZFqmQwi1f+UQjyC3
-         O4L9z9BKf7w8+Sr+SB96jc2DoR4F6Qa/6EtbkLD1j+dO9itmypxL0nny3dSaXa6IuKRm
-         cjULo3w8oyNk3MCK4Lkdy2upqCqexldNjeSW0ciEY4lX0QLJoaAOSxRcY/D0yMGw9Z1l
-         3cpidwRnha2LS6o8sPzp0nq+kRxYBJKTc5mBpLOWoo2CGA2R9DGFteYC1LxS/CPuZHfu
-         Hdd60FYE7coLPqExmG4N4ne08JQ6PYfXk29p6valbRgbG3rwBKEPjKnOf+n3or722Nuw
-         FjXA==
-X-Forwarded-Encrypted: i=1; AJvYcCUtomXJSCpuZ5jfG4H7dkbNgMhFk7uZ8a2RTh9V2LwCPwcLmE/o8z9thH0niU83QULuU21Q4mxPwCyP/eGC/SY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAY+Q7X+KVFan/bRg8YuMYw9w0o9cjl7tXE0wRmAkEzH0bsT9d
-	Yw+h8AhUiidJqxbVcBdSLyJqlICQVL7ovbmrU2ZueVy3xfYqLg98TBJQEb/vs9kmmFoJkSjLBtG
-	9hl7XuA==
-X-Google-Smtp-Source: AGHT+IFbjdGhv2on6ZGQymO61yqZIfPGWJmtEpWmLtg8c3el8x4krG9NA7ZJsIUev60Xj0G8Vxi6JsLrov10
-X-Received: from pjbsi11.prod.google.com ([2002:a17:90b:528b:b0:2f9:c349:2f84])
- (user=mizhang job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d2c9:b0:216:7926:8d69
- with SMTP id d9443c01a7336-22780e26127mr197421695ad.47.1742837586412; Mon, 24
- Mar 2025 10:33:06 -0700 (PDT)
+        bh=dGFuB9mmLp1BQVwj/uNArSbaMRJJW4D9abapz9TbNsk=;
+        b=pqdlJd5HR8ZB14vdy18+D/WWh++IWwt2UNX0OI6o54h997KMbdJl+T06UNYpen7TPk
+         /DTO1I/8ls+iR9bqqV7EXDOVmjSuZuZcoyenrAx1ERaV3E/TRg0urjb83hF7NsM+WrSj
+         gTEe5BBP6Le6fjujadaTxYcy7jHw0I1+9SnNWZiw3iaMaMDxktpLygphRb8YYzohn6Ct
+         xQs8BBrtiEtPw6Yp9eMu5QT6OMhm0P8K0SGK5lif6DMX31pm3KldnVMzjWxMyupVvxi8
+         Ak2gpCeBL8l6X0SvIU+Rm26Aw9hLjfhJ9nXU4shqsQuFErfkD2IClVEYW9KsjMDFpjN5
+         dXJA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2XYz7oEVHmmnMsUrn2E2i5vkZgF4IN8C9/Rgev0P0UXLe3eVP+D/y2AvoaXlJ63PRaOMCZjRYBiLSDIPqU2o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFpGQFdTd+GKheQp64C23Cg9DVi0dHHvBKsYoyl538PIsMtzZW
+	vsFrB3OUH49CJf2YuYQ43m02DQxNepoYR/jio9qFA4wTuwkkT7bhEZRD99QuUd0E08M3/a0JWEH
+	c8w46Lg==
+X-Google-Smtp-Source: AGHT+IEfRjGoPGy11ZTF+dZtGZ81t1uBtVUdGc31rboe3q80FnaB9lKjiEwv64EnTeLYudK0ci+z5pWqoJgr
+X-Received: from pfld12.prod.google.com ([2002:a05:6a00:198c:b0:736:46a8:452d])
+ (user=mizhang job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4f81:b0:736:5822:74b4
+ with SMTP id d2e1a72fcca58-73905a530a9mr23169375b3a.21.1742837589869; Mon, 24
+ Mar 2025 10:33:09 -0700 (PDT)
 Reply-To: Mingwei Zhang <mizhang@google.com>
-Date: Mon, 24 Mar 2025 17:30:49 +0000
+Date: Mon, 24 Mar 2025 17:30:51 +0000
 In-Reply-To: <20250324173121.1275209-1-mizhang@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -61,8 +61,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250324173121.1275209-1-mizhang@google.com>
 X-Mailer: git-send-email 2.49.0.395.g12beb8f557-goog
-Message-ID: <20250324173121.1275209-10-mizhang@google.com>
-Subject: [PATCH v4 09/38] perf: Add switch_guest_ctx() interface
+Message-ID: <20250324173121.1275209-12-mizhang@google.com>
+Subject: [PATCH v4 11/38] perf/x86: Forbid PMI handler when guest own PMU
 From: Mingwei Zhang <mizhang@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -81,191 +81,83 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
 	Nikunj Dadhania <nikunj.dadhania@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 
-From: Kan Liang <kan.liang@linux.intel.com>
+If a guest PMI is delivered after VM-exit, the KVM maskable interrupt will
+be held pending until EFLAGS.IF is set. In the meantime, if the logical
+processor receives an NMI for any reason at all, perf_event_nmi_handler()
+will be invoked. If there is any active perf event anywhere on the system,
+x86_pmu_handle_irq() will be invoked, and it will clear
+IA32_PERF_GLOBAL_STATUS. By the time KVM's PMI handler is invoked, it will
+be a mystery which counter(s) overflowed.
 
-When entering/exiting a guest, some contexts for a guest have to be
-switched. For examples, there is a dedicated interrupt vector for
-guests on Intel platforms.
+When LVTPC is using KVM PMI vecotr, PMU is owned by guest, Host NMI let
+x86_pmu_handle_irq() run, x86_pmu_handle_irq() restore PMU vector to NMI
+and clear IA32_PERF_GLOBAL_STATUS, this breaks guest vPMU passthrough
+environment.
 
-When PMI switch into a new guest vector, guest_lvtpc value need to be
-reflected onto HW, e,g., guest clear PMI mask bit, the HW PMI mask
-bit should be cleared also, then PMI can be generated continuously
-for guest. So guest_lvtpc parameter is added into perf_guest_enter()
-and switch_guest_ctx().
+So modify perf_event_nmi_handler() to check perf_in_guest per cpu variable,
+and if so, to simply return without calling x86_pmu_handle_irq().
 
-Add a dedicated list to track all the pmus with the PASSTHROUGH cap, which
-may require switching the guest context. It can avoid going through the
-huge pmus list.
-
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Suggested-by: Jim Mattson <jmattson@google.com>
 Signed-off-by: Mingwei Zhang <mizhang@google.com>
+Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
 ---
- include/linux/perf_event.h | 17 +++++++++++--
- kernel/events/core.c       | 51 +++++++++++++++++++++++++++++++++++++-
- 2 files changed, 65 insertions(+), 3 deletions(-)
+ arch/x86/events/core.c | 27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 37187ee8e226..58c1cf6939bf 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -584,6 +584,11 @@ struct pmu {
- 	 * Check period value for PERF_EVENT_IOC_PERIOD ioctl.
- 	 */
- 	int (*check_period)		(struct perf_event *event, u64 value); /* optional */
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index 28161d6ff26d..96a173bbbec2 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -54,6 +54,8 @@ DEFINE_PER_CPU(struct cpu_hw_events, cpu_hw_events) = {
+ 	.pmu = &pmu,
+ };
+ 
++static DEFINE_PER_CPU(bool, pmi_vector_is_nmi) = true;
 +
+ DEFINE_STATIC_KEY_FALSE(rdpmc_never_available_key);
+ DEFINE_STATIC_KEY_FALSE(rdpmc_always_available_key);
+ DEFINE_STATIC_KEY_FALSE(perf_is_hybrid);
+@@ -1737,6 +1739,24 @@ perf_event_nmi_handler(unsigned int cmd, struct pt_regs *regs)
+ 	u64 finish_clock;
+ 	int ret;
+ 
 +	/*
-+	 * Switch guest context when a guest enter/exit, e.g., interrupt vectors.
++	 * When guest pmu context is loaded this handler should be forbidden from
++	 * running, the reasons are:
++	 * 1. After perf_guest_enter() is called, and before cpu enter into
++	 *    non-root mode, host non-PMI NMI could happen, but x86_pmu_handle_irq()
++	 *    restore PMU to use NMI vector, which destroy KVM PMI vector setting.
++	 * 2. When VM is running, host non-PMI NMI causes VM exit, KVM will
++	 *    call host NMI handler (vmx_vcpu_enter_exit()) first before KVM save
++	 *    guest PMU context (kvm_pmu_put_guest_context()), as x86_pmu_handle_irq()
++	 *    clear global_status MSR which has guest status now, then this destroy
++	 *    guest PMU status.
++	 * 3. After VM exit, but before KVM save guest PMU context, host non-PMI NMI
++	 *    could happen, x86_pmu_handle_irq() clear global_status MSR which has
++	 *    guest status now, then this destroy guest PMU status.
 +	 */
-+	void (*switch_guest_ctx)	(bool enter, void *data); /* optional */
- };
- 
- enum perf_addr_filter_action_t {
-@@ -1030,6 +1035,11 @@ struct perf_event_context {
- 	local_t				nr_no_switch_fast;
- };
- 
-+struct mediated_pmus_list {
-+	raw_spinlock_t		lock;
-+	struct list_head	list;
-+};
-+
- struct perf_cpu_pmu_context {
- 	struct perf_event_pmu_context	epc;
- 	struct perf_event_pmu_context	*task_epc;
-@@ -1044,6 +1054,9 @@ struct perf_cpu_pmu_context {
- 	struct hrtimer			hrtimer;
- 	ktime_t				hrtimer_interval;
- 	unsigned int			hrtimer_active;
-+
-+	/* Track the PMU with PERF_PMU_CAP_MEDIATED_VPMU cap */
-+	struct list_head		mediated_entry;
- };
- 
- /**
-@@ -1822,7 +1835,7 @@ extern int perf_event_period(struct perf_event *event, u64 value);
- extern u64 perf_event_pause(struct perf_event *event, bool reset);
- int perf_get_mediated_pmu(void);
- void perf_put_mediated_pmu(void);
--void perf_guest_enter(void);
-+void perf_guest_enter(u32 guest_lvtpc);
- void perf_guest_exit(void);
- #else /* !CONFIG_PERF_EVENTS: */
- static inline void *
-@@ -1921,7 +1934,7 @@ static inline int perf_get_mediated_pmu(void)
- }
- 
- static inline void perf_put_mediated_pmu(void)			{ }
--static inline void perf_guest_enter(void)			{ }
-+static inline void perf_guest_enter(u32 guest_lvtpc)		{ }
- static inline void perf_guest_exit(void)			{ }
- #endif
- 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index d05487d465c9..406b86641f02 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -451,6 +451,7 @@ static inline bool is_include_guest_event(struct perf_event *event)
- static LIST_HEAD(pmus);
- static DEFINE_MUTEX(pmus_lock);
- static struct srcu_struct pmus_srcu;
-+static DEFINE_PER_CPU(struct mediated_pmus_list, mediated_pmus);
- static cpumask_var_t perf_online_mask;
- static cpumask_var_t perf_online_core_mask;
- static cpumask_var_t perf_online_die_mask;
-@@ -6053,8 +6054,26 @@ static inline void perf_host_exit(struct perf_cpu_context *cpuctx)
- 	}
- }
- 
-+static void perf_switch_guest_ctx(bool enter, u32 guest_lvtpc)
-+{
-+	struct mediated_pmus_list *pmus = this_cpu_ptr(&mediated_pmus);
-+	struct perf_cpu_pmu_context *cpc;
-+	struct pmu *pmu;
-+
-+	lockdep_assert_irqs_disabled();
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(cpc, &pmus->list, mediated_entry) {
-+		pmu = cpc->epc.pmu;
-+
-+		if (pmu->switch_guest_ctx)
-+			pmu->switch_guest_ctx(enter, (void *)&guest_lvtpc);
-+	}
-+	rcu_read_unlock();
-+}
-+
- /* When entering a guest, schedule out all exclude_guest events. */
--void perf_guest_enter(void)
-+void perf_guest_enter(u32 guest_lvtpc)
- {
- 	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
- 
-@@ -6067,6 +6086,8 @@ void perf_guest_enter(void)
- 
- 	perf_host_exit(cpuctx);
- 
-+	perf_switch_guest_ctx(true, guest_lvtpc);
-+
- 	__this_cpu_write(perf_in_guest, true);
- 
- unlock:
-@@ -6098,6 +6119,8 @@ void perf_guest_exit(void)
- 	if (WARN_ON_ONCE(!__this_cpu_read(perf_in_guest)))
- 		goto unlock;
- 
-+	perf_switch_guest_ctx(false, 0);
-+
- 	perf_host_enter(cpuctx);
- 
- 	__this_cpu_write(perf_in_guest, false);
-@@ -12104,6 +12127,15 @@ int perf_pmu_register(struct pmu *pmu, const char *name, int type)
- 		cpc = per_cpu_ptr(pmu->cpu_pmu_context, cpu);
- 		__perf_init_event_pmu_context(&cpc->epc, pmu);
- 		__perf_mux_hrtimer_init(cpc, cpu);
-+
-+		if (pmu->capabilities & PERF_PMU_CAP_MEDIATED_VPMU) {
-+			struct mediated_pmus_list *pmus;
-+
-+			pmus = per_cpu_ptr(&mediated_pmus, cpu);
-+			raw_spin_lock(&pmus->lock);
-+			list_add_rcu(&cpc->mediated_entry, &pmus->list);
-+			raw_spin_unlock(&pmus->lock);
-+		}
- 	}
- 
- 	if (!pmu->start_txn) {
-@@ -12162,6 +12194,20 @@ void perf_pmu_unregister(struct pmu *pmu)
- 	mutex_lock(&pmus_lock);
- 	list_del_rcu(&pmu->entry);
- 
-+	if (pmu->capabilities & PERF_PMU_CAP_MEDIATED_VPMU) {
-+		struct mediated_pmus_list *pmus;
-+		struct perf_cpu_pmu_context *cpc;
-+		int cpu;
-+
-+		for_each_possible_cpu(cpu) {
-+			cpc = per_cpu_ptr(pmu->cpu_pmu_context, cpu);
-+			pmus = per_cpu_ptr(&mediated_pmus, cpu);
-+			raw_spin_lock(&pmus->lock);
-+			list_del_rcu(&cpc->mediated_entry);
-+			raw_spin_unlock(&pmus->lock);
-+		}
-+	}
++	if (!this_cpu_read(pmi_vector_is_nmi))
++		return NMI_DONE;
 +
  	/*
- 	 * We dereference the pmu list under both SRCU and regular RCU, so
- 	 * synchronize against both of those.
-@@ -14252,6 +14298,9 @@ static void __init perf_event_init_all_cpus(void)
+ 	 * All PMUs/events that share this PMI handler should make sure to
+ 	 * increment active_events for their events.
+@@ -2681,10 +2701,13 @@ static void x86_pmu_switch_guest_ctx(bool enter, void *data)
+ {
+ 	u32 guest_lvtpc = *(u32 *)data;
  
- 		INIT_LIST_HEAD(&per_cpu(sched_cb_list, cpu));
+-	if (enter)
++	if (enter) {
+ 		apic_write(APIC_LVTPC, guest_lvtpc);
+-	else
++		this_cpu_write(pmi_vector_is_nmi, false);
++	} else {
+ 		apic_write(APIC_LVTPC, APIC_DM_NMI);
++		this_cpu_write(pmi_vector_is_nmi, true);
++	}
+ }
  
-+		INIT_LIST_HEAD(&per_cpu(mediated_pmus.list, cpu));
-+		raw_spin_lock_init(&per_cpu(mediated_pmus.lock, cpu));
-+
- 		cpuctx = per_cpu_ptr(&perf_cpu_context, cpu);
- 		__perf_event_init_context(&cpuctx->ctx);
- 		lockdep_set_class(&cpuctx->ctx.mutex, &cpuctx_mutex);
+ static struct pmu pmu = {
 -- 
 2.49.0.395.g12beb8f557-goog
 
