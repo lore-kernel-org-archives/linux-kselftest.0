@@ -1,170 +1,139 @@
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+Received: from mail-qv1-f98.google.com (mail-qv1-f98.google.com [209.85.219.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1ED1531E3;
-	Fri, 28 Mar 2025 15:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4C81E2821
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Mar 2025 19:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743176282; cv=none; b=Mpt7rY94QrjfJHRNnwSHf1jOizSiXxgpz+Qm25fdy3HyhJH2hg31DGZld/EPFoSbGc9tdeyqS2ntvQZZDYGGD6GgeAuyOILK8c3H8HtcO98RHgP6eRnKCa+3J8AFiDmhJ+xCEUfcPgTmSKmDz9Nqne0/mr2JkzwO7EpuaJwPQME=
+	t=1743190963; cv=none; b=K0su6MpTrlkdIoZ23yC8mRM4YpK/wGroMdjPx/nwFtwg5ngXePneB+GsAm9XyQo46lCBU5nD+gYMAkrEZnr0KFQht8HWf2krwfuJJNU1Y9UsZcU9CBOAXZqkH6MJd+N+HKMI9NTtFdmD7Zmgvv3TaKdb/kCIKmAEUGFqox6dlLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743176282; c=relaxed/simple;
-	bh=UcNKyQdwHXZwzLrvGqjuWP36gZizPpwlcMooawquYRU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XD2uXvSpsXLOPhq0gD+k/G6WNwPqAJgQbQ3SF7Q57mvOPw8rHr7r6u81nmfDh9w1LoCxIWYL3gyiUeGDfV2BUx/vZ7TZZqEmLF7odaiq9832OcGG9sMuCiQdZ2ag+7v/u9Z4GiGvUCvvVRhCiLqC11gPMRBNQ4bUa4TPP135Kpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-86d69774081so1075608241.0;
-        Fri, 28 Mar 2025 08:38:00 -0700 (PDT)
+	s=arc-20240116; t=1743190963; c=relaxed/simple;
+	bh=IIFz4j2C2Eh7fAQD0vF3myZwWOH3MPOPveM/pvRkH1c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YOyMsqfvrQGZJS5rGUC00roqZ09k0rOiV6soIzmuMt2q1YG5mLKr06udzldNgoSvxv3rzwV9/vza3CUpGrUwwlNmCPNgPX9Y5QdaaF+i121OP/YonxuMtGEPHhI0ZtrpUyzKHxw2w6QaeKTQ+qKET9wt/Q+34X9aK7ut6CBRlCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=dcPP/t60; arc=none smtp.client-ip=209.85.219.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="dcPP/t60"
+Received: by mail-qv1-f98.google.com with SMTP id 6a1803df08f44-6eaf348103cso4078716d6.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Mar 2025 12:42:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1743190961; x=1743795761; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lLazX2sR1QiGKeTx3lHr1mcmdxpFqxEOFWM2x5oC3Fg=;
+        b=dcPP/t60EJ04nWA4KNJSsA28QsWcIhbE+btJeaFWjL8RBB9EWMcwDo7Jrw3pJ0a6Uy
+         OUhC42H5kJO3/3DtTC+OXjC963gJ5P3BfRtSvJ9BVfZdq4EIToMyLzU1MClaCAhc10qp
+         xpNSJ3Cq59ANj2a+VWs4SM18EBFgaM35wCrAB1PG1XZxXOpEPWt3iJ2aXGneAIiwhqrJ
+         z3FJA8V4LTgpMvSjhokkSeZYcTaM6eamUnAwMZRf/nkOnNjcfUb2KmXip3e12QRLtfSG
+         YMJ7LFo+ZE6aTGjH+xqiRcMq47/kYEOogqoLH+sTsIuP/xHQgktgLq+s3usLAuVQwJdS
+         PlaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743176278; x=1743781078;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X+hTA5gOZExHtFsvcSKQUzkbBBEeTeN/78qhx8fvRH0=;
-        b=Dw/DUgaeVGjLox1zJ56/xduysOiKJ/ZJMYnzGyNPwcyR9uqT2JFDz5d4S5Sf1Yqm5N
-         Nm+nNO5FfUm+XZC7TFbGcwxdMBYnKo1kGpPlJUsjLQEgnQHGWFs3HIch51z3t1X8Cu1F
-         rTyy9m7uBOtYQezVkWI8r+Q/BrKjMZcxa/lmcS+8St5466ovOXmC+k8Ci1Pgff9PWmPn
-         vFtnsMSnx+18S/h9xsrW2SloU6MzUyMmxJ1PYuzPOO+TdNvEK2OiRDwvLj1jfKosaC+m
-         CsywZBW8/Wcip0AmOgKzOEK50Vr1LGV+7JmpxeIHwFRlgBJcIIPfOTSX2HYqaft49MGM
-         iKLw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9SbVZ4XTHymst05Dk8UyGYHaWPC8z7/OEwfne2gGjSZttp9VJDEXp6dziOL0Y5vJuR1wUaNlfX9zeg0c=@vger.kernel.org, AJvYcCUSu50qpwwaq+JGr4WGrwNs7iIUqqW4NWsWCoXT4zvMYEzpuY7fzbtMMgtcEjI+tdoiKm0q/0Jgragn@vger.kernel.org, AJvYcCUW01HfsyzdER5LJdfygvb9kd9HOBmKL0RpYML/ykq4DyPRKPXQmvRBpciEAuU0Txb0XyQiMUs6m9N4GrhCePM5@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPj5RrXsFNdtaKeY81Vsu9hFYBIhVk62m7BAJkeK/vPyg7fLLm
-	jTxVqKi3qSICUTPNsvq+Z1chivK1yzqFky+Qrnk0e9wV+hCaXPwe9bYHf2TP
-X-Gm-Gg: ASbGncuyCz9YmeGx7iSNUE7SP5IO+YQCCF6HWdBD2PxeQmd+xSUPr6JNLaOq2be3cH2
-	w4eGH5I1P8DIAtGz/JfuD+sL1zz9y7SmiVwwZlZKg2WnCkVZC1aJCdU2gIxIrVD7sepac/a0XYg
-	sVAFOeKUI3gv4xiHpcAFzCBOR6yWVmBS1yGFKDdTbdt2d+gNw+rI/A45rqvc6UgyALAF7NfOBR4
-	vYoe8syoaJSfleqGjNdqwrmLdQ5KjLGH4bqoZYAcX2HyamInZQRsB984KLxrmMkIjl/oZHg1lC5
-	3xW0dyib6rW7tZjxAXyyiXIz0x71bMC31y9hJpeb0KvdKCavLe+Vuh07fOxAZwTIH1kF/2wlHy7
-	XKfqHQRM=
-X-Google-Smtp-Source: AGHT+IGWQ/+pGuEMGLmbInLrpsQt2Li5HeX1nK0ejO9lsjeLZRWycyvfAb9Spzj4ZkeMdAFXL/V4bQ==
-X-Received: by 2002:a05:6102:4a81:b0:4bb:c4ff:5cb9 with SMTP id ada2fe7eead31-4c586fa8f21mr8161166137.15.1743176277910;
-        Fri, 28 Mar 2025 08:37:57 -0700 (PDT)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-871a33890aesm400827241.21.2025.03.28.08.37.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Mar 2025 08:37:57 -0700 (PDT)
-Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-86d3805a551so1084644241.3;
-        Fri, 28 Mar 2025 08:37:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUIdEYSHgLjR8WvfjEAT/JCBygYJpZZLGiKovNUbvJiTelB9o4Y47V8PIcujZRf0Jhi9zR8t4z89EQZ@vger.kernel.org, AJvYcCVG1nEm0YYu6gdqflEa6O+ybn1k2hIRF+xwmpbcjtHtg1L2STLYaWwm3OyrQoff60FKcT+LQiN8aDOGnnDfMbGc@vger.kernel.org, AJvYcCXjcztviAeRfQmdGzsIUWY9/YBrhe9dI9RbRNuu2vmc3K4Kawf8PGxD7resd3DRjojYXA2TwPjlp3sauV8=@vger.kernel.org
-X-Received: by 2002:a05:6102:41a8:b0:4c3:64be:5983 with SMTP id
- ada2fe7eead31-4c5870a1bbemr7986803137.25.1743176277027; Fri, 28 Mar 2025
- 08:37:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1743190961; x=1743795761;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lLazX2sR1QiGKeTx3lHr1mcmdxpFqxEOFWM2x5oC3Fg=;
+        b=l8xoZ2V5DFf2Cwlh3WjLQbQqON1h59obxn6fJLzqNpFqUUZSs4K5jh5uFDb5tOHGFO
+         /MuxDpVzXALxiCc/HfEe+eXvVTpVFNGuZme9Wd3fhSCtmSr5U5nVHwNvPBXHr63CAk54
+         UmTf8aMlF7bKR8sjZhMZLsvQNbhyh19VGxQgVHGREfiqARQ7+rb9QMPqeCTL5c82e39C
+         TaUw5XPYW/v9qAtLg7qerKOdmawCrCctZJZyiyn6FV/voRy+9FskFHPJ21VrDYFkR+Rq
+         VpOaS4pnilcCNXqWTEFyCaVT2233WzRozy1bEha1JxElSYgRzX46R06aDhZB3c5S0yli
+         w2kQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUbv4k1sWKLBmiRNyIH54kWzs1byTogwCS0HEQl6wWwFK8T+g+J58NuF/A7wQTaJhrVVB3mm7wOMsx0OQGP9zU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDQb0Ohbt5xY9IS9B7kZ0kyKxkRKbYeLToSF56ajiwF+WuRFqy
+	4/cwju5RF68bbSHnAOyO2+xhav3fsojnMSZ9W4hQAJ1+EasPGSpbCOdZUYKOtcaaaDlSgWfd8R0
+	tkDJe4zSZxXgBVaJ1rD2GMmZifvHQtU8V
+X-Gm-Gg: ASbGncsvj4XK/C8fWPNIEY6NjtBdJdb4ez8DeVpXghfZdiZev/weOQojoLiyHfaDRJS
+	LeWIQ/uB9lKgwccMeMx43e710KSJebFut50gZ78SDnJmwfXCndMhgqe7HtOrjy+ZLlwfmMiVGjI
+	8IcLFy7zPT+tMVys+AeVa6oCmCe99Xx7+YPri2wrWMuQYQO1g1/dSGTzgPSGsYZAoSX8j+0P1YA
+	7C58OGbLxDpKduZK+xMzcLflnA/ryMk14ePNed7ytbzEeh68KRnRvV1Hf8uyR3szANBP4UzI6j/
+	oYMFJKfO3bsJu+Kusg9wZZVYU3m8D1ZxvO9M39KXQIoUAzfU
+X-Google-Smtp-Source: AGHT+IGTVuJ9wsa8D0YOPf/IR0bLXPoK/A+oaStmp2cHkFUKuudrLMCf9S4wmCfByWcdBV5jz2al3JueEfox
+X-Received: by 2002:a05:622a:110f:b0:474:e996:197a with SMTP id d75a77b69052e-477ed7b2291mr3086091cf.10.1743190960620;
+        Fri, 28 Mar 2025 12:42:40 -0700 (PDT)
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.129])
+        by smtp-relay.gmail.com with ESMTPS id d75a77b69052e-47782a2849asm2198541cf.6.2025.03.28.12.42.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Mar 2025 12:42:40 -0700 (PDT)
+X-Relaying-Domain: purestorage.com
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 8A3F73402DD;
+	Fri, 28 Mar 2025 13:42:39 -0600 (MDT)
+Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
+	id 8669BE40DF3; Fri, 28 Mar 2025 13:42:39 -0600 (MDT)
+From: Caleb Sander Mateos <csander@purestorage.com>
+To: Ming Lei <ming.lei@redhat.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Caleb Sander Mateos <csander@purestorage.com>
+Subject: [PATCH 1/2] ublk: specify io_cmd_buf pointer type
+Date: Fri, 28 Mar 2025 13:42:29 -0600
+Message-ID: <20250328194230.2726862-2-csander@purestorage.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250328194230.2726862-1-csander@purestorage.com>
+References: <20250328194230.2726862-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <49d57ab512c47f01d6c374d533f1752871ea4246.1743091573.git.geert@linux-m68k.org>
- <CABVgOSmxsXEyLVyhhffhXUXf3-QnGmZurXaRhpiK8w894mrwzg@mail.gmail.com>
-In-Reply-To: <CABVgOSmxsXEyLVyhhffhXUXf3-QnGmZurXaRhpiK8w894mrwzg@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 28 Mar 2025 16:37:45 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUqPQmX6KdtRK-mTuXmeGpzWNmbKoH9nEk54m60n-8aVg@mail.gmail.com>
-X-Gm-Features: AQ5f1JroZEXUFnQSoskkMkDDJZaCuceDi-ZRhLKDbJHM-LThH2bv_zYDNSxSJO4
-Message-ID: <CAMuHMdUqPQmX6KdtRK-mTuXmeGpzWNmbKoH9nEk54m60n-8aVg@mail.gmail.com>
-Subject: Re: [PATCH/RFC] kunit/rtc: Add real support for very slow tests
-To: David Gow <davidgow@google.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-rtc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi David,
+io_cmd_buf points to an array of ublksrv_io_desc structs but its type is
+char *. Indexing the array requires an explicit multiplication and cast.
+The compiler also can't check the pointer types.
 
-On Fri, 28 Mar 2025 at 09:07, David Gow <davidgow@google.com> wrote:
-> Thanks for sending this out: I think this raises some good questions
-> about exactly how to handle long running tests (particularly on
-> older/slower hardware).
->
-> I've put a few notes below, but, tl;dr: I think these are all good
-> changes, even if there's more we can do to better scale to slower
-> hardware.
->
-> On Fri, 28 Mar 2025 at 00:07, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >   2. Increase timeout by ten; ideally this should only be done for very
-> >      slow tests, but I couldn't find how to access kunit_case.attr.case
-> >      from kunit_try_catch_run(),
->
->
-> My feeling for tests generally is:
-> - Normal: effectively instant on modern hardware, O(seconds) on
-> ancient hardware.
-> - Slow: takes O(seconds) to run on modern hardware, O(minutes)..O(10s
-> of minutes) on ancient hardware.
-> - Very slow: O(minutes) or higher on modern hardware, infeasible on
-> ancient hardware.
->
-> Obviously the definition of "modern" and "ancient" hardware here is
-> pretty arbitrary: I'm using "modern, high-end x86" ~4GHz as my
-> "modern" example, and "66MHz 486" as my "ancient" one, but things like
-> emulation or embedded systems fit in-between.
->
-> Ultimately, I think the timeout probably needs to be configurable on a
-> per-machine basis more than a per-test one, but having a 10x
-> multiplier (or even a 100x multiplier) for very slow tests would also
-> work for me.
+Change io_cmd_buf's type to struct ublksrv_io_desc * so it can be
+indexed directly and the compiler can type-check the code.
 
-Yes, adapting automatically to the speed of the target maachine
-would be nice, but non-trivial.
+Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+---
+ drivers/block/ublk_drv.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> I quickly tried hacking together something to pass through the
-> attribute and implement this. Diff (probably mangled by gmail) below:
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index 355a59c78539..ed73e2ffdf09 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -153,11 +153,11 @@ struct ublk_queue {
+ 	int q_id;
+ 	int q_depth;
+ 
+ 	unsigned long flags;
+ 	struct task_struct	*ubq_daemon;
+-	char *io_cmd_buf;
++	struct ublksrv_io_desc *io_cmd_buf;
+ 
+ 	bool force_abort;
+ 	bool timeout;
+ 	bool canceling;
+ 	bool fail_io; /* copy of dev->state == UBLK_S_DEV_FAIL_IO */
+@@ -701,15 +701,15 @@ static inline bool ublk_rq_has_data(const struct request *rq)
+ }
+ 
+ static inline struct ublksrv_io_desc *ublk_get_iod(struct ublk_queue *ubq,
+ 		int tag)
+ {
+-	return (struct ublksrv_io_desc *)
+-		&(ubq->io_cmd_buf[tag * sizeof(struct ublksrv_io_desc)]);
++	return &ubq->io_cmd_buf[tag];
+ }
+ 
+-static inline char *ublk_queue_cmd_buf(struct ublk_device *ub, int q_id)
++static inline struct ublksrv_io_desc *
++ublk_queue_cmd_buf(struct ublk_device *ub, int q_id)
+ {
+ 	return ublk_get_queue(ub, q_id)->io_cmd_buf;
+ }
+ 
+ static inline int __ublk_queue_cmd_buf_size(int depth)
+-- 
+2.45.2
 
-[...]
-
-Thanks!
-
-> I'll get around to extending this to allow the "base timeout" to be
-> configurable as a command-line option, too, if this seems like a good
-> way to go.
->
-> >   3. Mark rtc_time64_to_tm_test_date_range_1000 slow,
-> >   4. Mark rtc_time64_to_tm_test_date_range_160000 very slow.
->
-> Hmm... these are definitely fast enough on my "modern" machine that
-> they probably only warrant "slow", not "very slow". But given they're
-> definitely causing problems on older machines, I'm happy to go with
-> marking the large ones very slow. (I've been waiting for them for
-> about 45 minutes so far on my 486.)
->
-> Do the time tests in kernel/time/time_test.c also need to be marked
-> very slow, or does that run much faster on your setup?
-
-Hmm, I did run time_test (insmod took (+7 minutes), but I don't
-seem to have pass/fail output. Will rerun...
-
-Indeed:
-
-    # time64_to_tm_test_date_range.speed: slow
-
-Another test that wanted to be marked as slow was:
-
-    # kunit_platform_device_add_twice_fails_test: Test should be
-marked slow (runtime: 30.788248702s)
-
-I will rerun all, as it seems I have lost some logs...
-
-> Is this causing you enough strife that you want it in as-is, straight
-> away, or would you be happy with it being split up and polished a bit
-> first -- particularly around supporting the more configurable timeout,
-> and shifting the test changes into separate patches? (I'm happy to do
-> that for you if you don't want to dig around in the somewhat messy
-> KUnit try-catch stuff any further.)
-
-This is definitely not something urgent for me.
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
