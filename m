@@ -1,79 +1,82 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3818F1428E7;
-	Wed,  2 Apr 2025 21:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6349F11CBA
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Apr 2025 22:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743630403; cv=none; b=Wu8Bja0fM1azNmAdMZ72bDVvHVLcn7mWrmUOquOJDNdbX4y1abckJ5xh9gaPXZcqLgdjmIT0iy9uOTp4AoXg+DCp+S3ixvSZfeSVxG9jLhpH+YofYACRqfB6PJeZZ89rsWLoZj+/vSqxam+qcIjNZkcqOlmMPgNXIpu53kWC0AY=
+	t=1743634606; cv=none; b=mEpIE1Njs60sjjPT8cYvIcLabTbWfWG35c2pzrnBdNwuuZLKKtEICjuDtLmsa0gecc4pvcU6JXQJVgSgI79VwGiZIYrvDeTcyvA/PVEKNx3nWs4Or+P10Hm8SbANIOILiFXbCKxOZ3KcUpDDKDRE08Nb/pYGuzFXRq1V7QKE2FA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743630403; c=relaxed/simple;
-	bh=LuGP6+XkZVCLTpWzPvZ4xw075h0SfZrc7ZPN8LclwU4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BW2vnkSWZa+/mGQvHmXj0P8ZjIfvZlHYlqW9Rbge0IPrpJRHM5slcKxjrkSP30sEwm72dveza02MBALiTQFwUOUYqSdI/MGsVj4LMyK4MJNAcJwtwFTwgFo3Z9GiZwPzH71KjFFR4U4eSzl2pbUUFz+0E6ve05dQ34smdFMNi88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ncyrnpif; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1743634606; c=relaxed/simple;
+	bh=9nvCUWPa8e7gVCrn3AEc2zCBeJDxD167MCZHMdJQDPU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lrU0nEHqu7sOd9HOkxr8d6HHU/TMtuiC65yb2QxvtU7gyTqHVE0lu0BCfe+/hclCgh0WhsOi8zwp4G8icYxFkaRRcnbGlv/NwSwWzyExcy3+GNJv1dDfq8Jy7YO9EzDFBoNxdHKnHzA4qj5rSKw5cynDms1k6imcGRXjITZinLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2iXDFYU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ncyrnpif"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1743629944;
-	bh=LuGP6+XkZVCLTpWzPvZ4xw075h0SfZrc7ZPN8LclwU4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ncyrnpifAIzmd+H9MNyHucO6IN6ePiex0Fn+sqnDKxdusMLVs7QvI0AFaBC+csSvy
-	 4xMfzeIJql+iem010lBwm8XLpw+OaD4JC/N3HwTaTnr7cSvaKqqfswGQVPFdxDdr94
-	 9mkjDWjVKsiI7dlzII+3YoM9zgFaQI2j6F1+kA3o=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 02 Apr 2025 23:38:59 +0200
-Subject: [PATCH 1/2] selftests/nolibc: drop dependency from sysroot to
- defconfig
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2iXDFYU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A296CC4CEDD;
+	Wed,  2 Apr 2025 22:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743634605;
+	bh=9nvCUWPa8e7gVCrn3AEc2zCBeJDxD167MCZHMdJQDPU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Z2iXDFYUOmsTPSpo3Hu/BgT9/JZqsUJr0zIM7xmblfNgmBOLCbsuq0Deq2AwtWUY/
+	 eOaHk+AczhRnsaqJAiGoCjrKVBGinXMmSjsCdci7jFdPtlD/TWcnlQXT2JyddzgwFG
+	 ZWPLPLcaeFnBazbbMNF/N7NWPZD+13qMi16z+r9r3KSrUAT0ubUqNgptH3TW5WxRbe
+	 EXckfXi77NRLEODUPVsu4Q1nVsoAa8qhFidPtowKbqaC2nK6FY81VRFXiyEwPMbqoZ
+	 VW+nGeQYm9aPObVbd2O51hUjKAhsvDdrA7JYb0jbn3hT14xCOcLY8/8npite2Z3l7D
+	 X+e0Ohf8DlR7Q==
+Date: Wed, 2 Apr 2025 15:56:44 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Richard Fitzgerald <rf@opensource.cirrus.com>,
+ patches@opensource.cirrus.com, kunit-dev@googlegroups.com,
+ linux-kselftest@vger.kernel.org
+Subject: Re: Exclude cirrus FW tests from KUNIT_ALL_TESTS
+Message-ID: <20250402155644.67b2cb3c@kernel.org>
+In-Reply-To: <a91811dd-6f86-4af1-8d91-02b990ef2fe3@sirena.org.uk>
+References: <20250402103655.3e0c62d7@kernel.org>
+	<a91811dd-6f86-4af1-8d91-02b990ef2fe3@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250402-nolibc-nolibc-test-native-v1-1-62f2f8585220@weissschuh.net>
-References: <20250402-nolibc-nolibc-test-native-v1-0-62f2f8585220@weissschuh.net>
-In-Reply-To: <20250402-nolibc-nolibc-test-native-v1-0-62f2f8585220@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1743629943; l=820;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=LuGP6+XkZVCLTpWzPvZ4xw075h0SfZrc7ZPN8LclwU4=;
- b=zVZOOHaUv+JNsXm8eUjcbRgX2T0rlo1Ti+J3DMVEk0ioP/13L+61edL7AEN8nPtj/T+jqAz6T
- h8bjPt1t7S4Ag/rWcx14eHYyjjwTPT2DOlcjKYSqTZrOOl3jmMjsni2
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The creation of the sysroot does not require a kernel configuration.
+On Wed, 2 Apr 2025 18:55:29 +0100 Mark Brown wrote:
+> On Wed, Apr 02, 2025 at 10:36:55AM -0700, Jakub Kicinski wrote:
+> 
+> > The Cirrus tests keep failing for me when run on x86  
+> >  ./tools/testing/kunit/kunit.py run --alltests --json --arch=x86_64  
+> > https://netdev-3.bots.linux.dev/kunit/results/60103/stdout  
+> 
+> You've not said what tree you're testing there but everything is fine in
+> -next AFAICT, and there is one fix for cs_dsp on it's way to Linus at
+> the minute specifically for KUnit.
+> 
+> > It seems like new cases continue to appear and we have to keep adding
+> > them to the local ignored list. Is it possible to get these fixed or
+> > can we exclude the cirrus tests from KUNIT_ALL_TESTS?  
+> 
+> This is the first report I've seen from you...
 
-Drop the dependency.
+More of a test balloon that a real report as you alluded to.
+I was wondering if it's just me, and from your response it seems 
+to be just me.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/testing/selftests/nolibc/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I did more digging and with newer compilers I don't see the issue
+either. So I did:
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 58bcbbd029bc3ad9ccac968191b703ccf5df0717..34d01e473c013a1400bf6023132017a5f663f75c 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -232,7 +232,7 @@ all: run
- 
- sysroot: sysroot/$(ARCH)/include
- 
--sysroot/$(ARCH)/include: | defconfig
-+sysroot/$(ARCH)/include:
- 	$(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
- 	$(QUIET_MKDIR)mkdir -p sysroot
- 	$(Q)$(MAKE) -C $(srctree) outputmakefile
+  ./tools/testing/kunit/kunit.py run --alltests --json --arch=x86_64 \
+	 --kconfig_add CONFIG_INIT_STACK_ALL_ZERO=n 
 
--- 
-2.49.0
+And the problem reproduces on recent compilers, too. Which leads me
+to thinking that the tests are broken but stack init covers it up.. ?
+Strangely tho
 
+	make W=1 LLVM=1 ...
+
+doesn't report any uninitialized variable warnings.
