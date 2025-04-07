@@ -1,47 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 864A32248A4;
-	Mon,  7 Apr 2025 06:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210B3225797;
+	Mon,  7 Apr 2025 06:53:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744008784; cv=none; b=Cd6GFHyhYylY2uCCzoMk7w8UQbcFFhE7AZX3bLPKrxc4uy6yKuufFoiZ7Re7MGSz+/HaOOoS5dP9kXYguVri5L5dx4w+eXdPOS4xkhnH/ftTVuUXNiJ5EfXMDnd+ASvqGxptitpLrxXw7G/PXnkpdMyOYiOQj8gtYefacao38ws=
+	t=1744008785; cv=none; b=VmLCYHNgsr25Wn3hJBU4ztAF4GZ0/SAbAb5mfVf7Uh4sBpQUa1g7cqR3ibtKJocRVhzXT6SO1x6DYQyxmKSQ/MUZan8NRb8Xn/7vtKn3w0vC/Djw/GdXF6ihonAooftYWYzZ6ibwJRQxVzcQ6XoweHUwnmUOZsLp009M0k3gci4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744008784; c=relaxed/simple;
-	bh=7893zOP3ErdGxPwks26zDP9HHy3HGwCgpTrK5rmbvbc=;
+	s=arc-20240116; t=1744008785; c=relaxed/simple;
+	bh=X+BMimOr27k+/lCB8IAFuJEQitOZeP8NtZG5I0zUYoE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ML2CkBbtnqDzMVdBF2XQm6egvFeF4tzqbPRxSgI9tUySxjTMAFl4pubdbths+syBmf8VcWsb7zCg6qlgWpVAYl1jAciCU4fLAkQXfJEoJIuHhherdKHcjTYTN0MGIQWcO9KZ1dish3WNzkvIHeHVUAzulTEowZlEevbUKAuOzBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=UBIcstF8; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MJlkKgrP; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=IDfJ+2xtdVNKxQY61myhXtuBKQmRwJD9ryzSpky1iBZGKPwe5ffCtyA8otk/zmQftetYWHQApL3mV1VySRzBaQ/7dJcmKxmaiINbKRucrL9UE0DF5EjWjU6Bhzicm/iw5qO5pfhMEzmrqQHWc/Qmg68dczBPvGaoBbLMcYxBDyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=QC/CgySL; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jsIPwuO0; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="UBIcstF8";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MJlkKgrP"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="QC/CgySL";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jsIPwuO0"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1744008780;
+	s=2020; t=1744008782;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Nz0u8GJ5dhijczEOeytq6qafYlrK5qIQk1St+S1OOGs=;
-	b=UBIcstF84RxUF/8Oj2Zjthj5aIUzaoeRDX8ies+KzDDJQvAMK3W4q1mQJNdw/j9R8tytNw
-	W7Ra1CWJhfRchqmKvuqctyonlg8/ibhqPJHF6TehZcL3oNiVT9fVSyfIHGG2DGmKXw5+wq
-	0DAQVSLSujwIYhwPFqH12ojFAKYVe5xV4eanlOHnoM2usotLuj6CjmLj9hmXU867qGVc6/
-	+AC0MrqL7l+r8tkP/uY9rp/mxHQVxHJdX0Rp2oRwDzaVSFeG8ye4V7kgd6sQHo8gIfSCzp
-	3xt2htemjfUoVHleOteDr8/mXtwokFAnFyBA5LmrKnL5MgG5mViXoby/1N/kYg==
+	bh=wtICgEwn39BNK2RVwM0gACpiOULlMkuI9K6OeLRKX6w=;
+	b=QC/CgySLPb8G0uPvTHftXR63Js/yqF8ZwbcOXYN4by83lAtfR7GOMG1/FJMdzsu+q6j4X2
+	HpJ8oulmT5f3HuRXhlwjEvcuPr8a+mxHYNVfmJlhiWbGrS0CcmhXx0jv+xxpbKtBaFz8TL
+	csMM7Rdw3B7ZhP+73FP9AjLRKw7FNmHbOMgJHYOBwqZ0YU+nehK4Gqwzy5jLVsN4ZCLPhs
+	dkjHY2Emvcy1v25aSunqTjV8JkLnHUd7ecTdF6LbTURGZfex3zHsdQarvu/1oGKQ6CdOyN
+	lQwj7aNSCpjclWAn6Ua0vUq+wjQc0aoYBLAHfn32FLtB4fH4E4DnZ2uLBpaWGQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1744008780;
+	s=2020e; t=1744008782;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Nz0u8GJ5dhijczEOeytq6qafYlrK5qIQk1St+S1OOGs=;
-	b=MJlkKgrPigPUHnGOTupfCnd4xiQG1UQ3T7ubz7cwP6yMYulLj1LnYP5/zS1aJPad6/Q6+F
-	/lookqiBrT14O3Dw==
-Date: Mon, 07 Apr 2025 08:52:27 +0200
-Subject: [PATCH v2 04/32] selftests: harness: Mark functions without
- prototypes static
+	bh=wtICgEwn39BNK2RVwM0gACpiOULlMkuI9K6OeLRKX6w=;
+	b=jsIPwuO06RW3ZllBgG2wUUQt1igUNC7Sf9FXXabJm7I83Elv1Xbg4IkAc3EeKBZ/PJDQa7
+	XieX5GHxKs0WeBDQ==
+Date: Mon, 07 Apr 2025 08:52:29 +0200
+Subject: [PATCH v2 06/32] selftests: harness: Remove dependency on
+ libatomic
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250407-nolibc-kselftest-harness-v2-4-f8812f76e930@linutronix.de>
+Message-Id: <20250407-nolibc-kselftest-harness-v2-6-f8812f76e930@linutronix.de>
 References: <20250407-nolibc-kselftest-harness-v2-0-f8812f76e930@linutronix.de>
 In-Reply-To: <20250407-nolibc-kselftest-harness-v2-0-f8812f76e930@linutronix.de>
 To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
@@ -58,70 +58,42 @@ To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744008776; l=2245;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744008776; l=1409;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=7893zOP3ErdGxPwks26zDP9HHy3HGwCgpTrK5rmbvbc=;
- b=NMWEA3A5sGkwwVwSAad8ApervGWtmoiPgGq7uRH5Rwr1BHlX1sqvdiwl78HgCxNr4asichvrM
- ucLugT+SYlICO7jAtRfYC8zg3W19uTBVMSLA5U2em5AnxzPLAeP2McC
+ bh=X+BMimOr27k+/lCB8IAFuJEQitOZeP8NtZG5I0zUYoE=;
+ b=mpooDyXjTAA/0FPKJ3eg/h9ao9poICLHIrFGQxe/S2CvGJJdFmljNPx04hlh4b71+4eDX4RNT
+ E792W+2GTa5AiiV6fnEp0nkC9twKOHrm6z4O35YZVn/BYBBXUwDhc++
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-With -Wmissing-prototypes the compiler will warn about non-static
-functions which don't have a prototype defined.
-As they are not used from a different compilation unit they don't need to
-be defined globally.
-
-Avoid the issue by marking the functions static.
+__sync_bool_compare_and_swap() is deprecated and requires libatomic on
+GCC. Compiler toolchains don't necessarily have libatomic available, so
+avoid this requirement by using atomics that don't need libatomic.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/kselftest_harness.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ tools/testing/selftests/kselftest_harness.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 2b350ed60b2bf1cbede8e3a9b4ac5fe716900144..5822bc0b86a3c623fd34830fb8b541b27672a00b 100644
+index 222a4f51a8d704c41597e09a241ad887ef787139..7ec4f66d0e3d7f129f6c2a45ff58310dabe5d03f 100644
 --- a/tools/testing/selftests/kselftest_harness.h
 +++ b/tools/testing/selftests/kselftest_harness.h
-@@ -258,7 +258,7 @@
-  * A bare "return;" statement may be used to return early.
-  */
- #define FIXTURE_SETUP(fixture_name) \
--	void fixture_name##_setup( \
-+	static void fixture_name##_setup( \
- 		struct __test_metadata __attribute__((unused)) *_metadata, \
- 		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
- 		const FIXTURE_VARIANT(fixture_name) \
-@@ -307,7 +307,7 @@
- 	__FIXTURE_TEARDOWN(fixture_name)
- 
- #define __FIXTURE_TEARDOWN(fixture_name) \
--	void fixture_name##_teardown( \
-+	static void fixture_name##_teardown( \
- 		struct __test_metadata __attribute__((unused)) *_metadata, \
- 		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
- 		const FIXTURE_VARIANT(fixture_name) \
-@@ -987,7 +987,7 @@ static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
- 	kill(-(t->pid), SIGKILL);
- }
- 
--void __wait_for_test(struct __test_metadata *t)
-+static void __wait_for_test(struct __test_metadata *t)
- {
- 	struct sigaction action = {
- 		.sa_sigaction = __timeout_handler,
-@@ -1205,9 +1205,9 @@ static bool test_enabled(int argc, char **argv,
- 	return !has_positive;
- }
- 
--void __run_test(struct __fixture_metadata *f,
--		struct __fixture_variant_metadata *variant,
--		struct __test_metadata *t)
-+static void __run_test(struct __fixture_metadata *f,
-+		       struct __fixture_variant_metadata *variant,
-+		       struct __test_metadata *t)
- {
- 	struct __test_xfail *xfail;
- 	char test_name[1024];
+@@ -439,12 +439,12 @@
+ 		} \
+ 		if (child == 0) { \
+ 			if (_metadata->setup_completed && !fixture_name##_teardown_parent && \
+-					__sync_bool_compare_and_swap(teardown, false, true)) \
++					!__atomic_test_and_set(teardown, __ATOMIC_RELAXED)) \
+ 				fixture_name##_teardown(_metadata, self, variant->data); \
+ 			_exit(0); \
+ 		} \
+ 		if (_metadata->setup_completed && fixture_name##_teardown_parent && \
+-				__sync_bool_compare_and_swap(teardown, false, true)) \
++				!__atomic_test_and_set(teardown, __ATOMIC_RELAXED)) \
+ 			fixture_name##_teardown(_metadata, self, variant->data); \
+ 		munmap(teardown, sizeof(*teardown)); \
+ 		if (self && fixture_name##_teardown_parent) \
 
 -- 
 2.49.0
