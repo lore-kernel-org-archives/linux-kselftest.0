@@ -1,28 +1,28 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229CB17C224;
-	Wed,  9 Apr 2025 14:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4BB17C224;
+	Wed,  9 Apr 2025 14:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.74
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744209750; cv=fail; b=HkLhv+hn6r8wWdh6ejxyD01FyKItxfLAUQCit//sPR6K6fAqfZiP8xo7874sEnFov3UqOsnUSdKNsjp3rLJQIm4CxkyPanqNd3I5HdF1eTmbOPf1adMny1fWY+OldhYRBHT11pu5ZB2B3HLaq5Giizl/JtgHvQ9qmjwvht5+P9w=
+	t=1744209767; cv=fail; b=GHHWJrc4O1biLU19MKHTkktDFpo6aecdW3x8DdYJj8y2MvIgZR0C6HhBw39lDH0QuASw46QzdwULe/+6n2Ie63llmkkmfFerlBfKRc6aP8PPUYzFYfQ2S9U3lSJ7zARXh0eeNe0UCL3xOuFF5RRAcL6oZZlotSyO5SbhVbaDXeQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744209750; c=relaxed/simple;
-	bh=iazEz40QiClbJxAIKlFR2LeyEukHV9LvwHNFn1LzXaE=;
+	s=arc-20240116; t=1744209767; c=relaxed/simple;
+	bh=CnbFUE/OZRjtRGDJB0YcTw9Naxna1RKFIWvnQx12EsU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YgJ7IYWWrDt5yCrnpgUuMl27uBDPMBaSQ9XtPC6xv1nCJ28tm+9ymW7rNrTgipuUXE+czI9tv7vIMvNit+Si9XqclETRqMn5vgP6hkrX1JhlyE2oAJc/23AsOsDFFL2mnTmQ0gJGWLPXq8RpdYBmYV6C1INSnEHhMxOtC3dh4Zs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FS/JGWlw; arc=fail smtp.client-ip=40.107.237.63
+	 MIME-Version:Content-Type; b=bbcLPCB2KEE/cE/kBGdKzxxOTvL/LAN8qwhH68t6dwSwq7j253QNP3J636s8SbTForUHZEC03X6Pr4MCWYgziu3JAcMp9nrtifQaDcyE5xUdcDq6VjRzuZoAcyGAidSMSRUm28CJUfPVPhr6lRCTE3QLyHnzrWajPDxClEclo8A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=blvLQP+F; arc=fail smtp.client-ip=40.107.94.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FS/JGWlw"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="blvLQP+F"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eu5YUFM+wIo4IKsBfYF6L9npqJqaRu2dBsW+y8nOxedPPEGm2ZTF7FV5MmHSZaUe6nPbhdShGe3go5Cpcq2e7py1bgXwLTeTo5UMVaLZsfromuGimnIKBitcjmf/PtnhIJaeFeOCO/FaDPgJXtn0T8PIz/hq5rfjC186gOBF4qARROrfTqPyUN+VTXu0WgEe8kIE+o5Fb0N9npq2MG6DTNCU5nTifjEMKnnLO70kpnbPJ7Iitv1YEfNVOLxiabCM0boZ0WrbeEnpZU1sLtRVKi7RwzYQGpsBCd8MFT0XF3dYRSvK9E2An+txgrF2fhsEMGBCyzWy6TRJ1gwgoGr2yg==
+ b=liLXUgv/vASGppWcsc3PsGQlum2UbMdqZkejocNMAkS3qmE8FirCZs8Izs7pNKau651gsMESSlJ0QKKN8DRM3drSOrBzDQdFwZkoYlazy3wJozTOrMaiVEcm25bhHfecm0r3asWtdthbVncysWZiE+1G8M4ap3eYGJ7xtcIu9+z0vZtJDOGZIsropmUbX4kAfobgWJCR/643p1F7aaKsUczM7xOXV66dDxnpeHRlH4xkHxguSaGurklq2mqY5ny1ktwQ5vcvzqQjPsw6jvZlo+NjpZ4MbY+z8fPyct+RiqvsnKBKi136OWMUQP0/6LHU/l6LXq5Mn1OLv4wdIKv4Lw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DtZrrL633P7mD+R159+1dgIZxXtl2NK0stD0V2JhJV8=;
- b=MZY7Q7+4o0hVX0O+1DV8seHA4ZSt+tGlD/4iQyG5lzKN3pk95zXhNWZ3oWm3l/aA6HAHUSZ5JgJRcT90L1bOQoFj0GWI6DNoz79DmFpqUuf35AzZ9MlD2yIY+17mrHtpGbKDn2BzDakh/y2UAw7mnxB/JPI337w5hUB9+r/2W7W9xmdIu2xBasswmRfLrvdSUz7ImKf8k2QwzzI4T9kA34EnwTMer7nzwSQrCBhlaRiI0oHZphBi0ZiF2lGOLqM0+kLTcZLKSPfqiNU5JK1F6mgLxXgUf9eaQiLeyITZbWSZvNU5RJHLrlavM6rmBMcplKz7Cpk6CMls6E1iEeJ3vA==
+ bh=NVIXMDIGe6PJt+URsYS7TQpSKdeZN/N1kR8XTluTi9U=;
+ b=Yv/X3LJ77Qwt8F5kyUbykde5QDac6mEX02JUhNeh9QLWaHi6BciTtc7RGEd3c3LijB5PMIThlcSYke/Cbi51Lz72E1eSQMlzJLZM7wOVu8GAAAalycocyoxQtZD0jvE/0o+DgtnK54MdZ5R6o2UGcaWzUEhz/1nKw23ezv6XItBEqpjjlYGqa3TG/mS3tZMXo4Eudq7s6uG4yfd++26xEWIhWz6u1bjO04WHIpjVskKeOuUIHGEY1IAU4IXfF7S0dJzFOgxInuSnvevy2RsDrsvxSB64DyqFJyxrNtNegeJvmA3JGiS4hMvCufy0IszOqQx13KC4AG9ImEJbsE9w3g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -30,18 +30,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DtZrrL633P7mD+R159+1dgIZxXtl2NK0stD0V2JhJV8=;
- b=FS/JGWlw33HV/C052v3vtBvqEMGWnFs+hGGFFYf50MFVbU4W/oPelhMLJ74fe3A3juMKT4jqwLmBRpiIqvk76FSNCJsTKDXw6ABFCt9zRiWn5Ts/fjk349YWkjcIRT2GzCzM4hHHvfOOIMnrcB5V/o7qCa5hQq2eO9AlARgZrEno2DJZhxgTMZPkutrwG5IDNI4/Fti046IuvZ6m/5y3KglRWC7Y8STrz9oFNIoVe36w6lxM3XjbU1Y4zlpoJlP7gcNM/QpEjnM663iwtQP2JBtcWqfa+MJmhRm+6+z4BaFqzcMfO8KRXfK65Jw7/5NQStCRn8o+NQLUJYwsTWw+mg==
-Received: from CH0PR03CA0079.namprd03.prod.outlook.com (2603:10b6:610:cc::24)
- by CY8PR12MB7732.namprd12.prod.outlook.com (2603:10b6:930:87::12) with
+ bh=NVIXMDIGe6PJt+URsYS7TQpSKdeZN/N1kR8XTluTi9U=;
+ b=blvLQP+FM22nw3cIVQuxOftddLjuzAdgHLT5AZxkCdPDV+xB5fEo9s7vNZ1yvBTmU1dLwf6nE+7w3rC44/UtA92wKowpnqrvDJuuyGbZlRJUmZEM2zVWETIXDbVC5TWuN4Lt1jH5C4toyzx88ggUzi2SkVRQOcGR7q7Wh67FwIW35vcmOQZn8tAGug3odEh/cNlAPCR+cFXW6nG3U9wpG7qtJ0NMFpaie5ucHc516/etZfS9fcsTOxm9hXKM1ibqwDQ7Eia3UWzoL3wqZiXqCkkHMp2cVUV77M/ulgr7ajrrnOSI0SGx8tHJllfGzqPrx+NpbjQhurFmeCFb1CsufA==
+Received: from CH0PR03CA0234.namprd03.prod.outlook.com (2603:10b6:610:e7::29)
+ by DS7PR12MB5981.namprd12.prod.outlook.com (2603:10b6:8:7c::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.35; Wed, 9 Apr
- 2025 14:42:25 +0000
-Received: from CH3PEPF0000000F.namprd04.prod.outlook.com
- (2603:10b6:610:cc:cafe::c2) by CH0PR03CA0079.outlook.office365.com
- (2603:10b6:610:cc::24) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8606.36 via Frontend Transport; Wed,
- 9 Apr 2025 14:42:25 +0000
+ 2025 14:42:42 +0000
+Received: from CH3PEPF00000010.namprd04.prod.outlook.com
+ (2603:10b6:610:e7:cafe::e8) by CH0PR03CA0234.outlook.office365.com
+ (2603:10b6:610:e7::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8606.37 via Frontend Transport; Wed,
+ 9 Apr 2025 14:42:41 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -49,17 +49,17 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.160 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.160) by
- CH3PEPF0000000F.mail.protection.outlook.com (10.167.244.40) with Microsoft
+ CH3PEPF00000010.mail.protection.outlook.com (10.167.244.41) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8606.22 via Frontend Transport; Wed, 9 Apr 2025 14:42:25 +0000
+ 15.20.8606.22 via Frontend Transport; Wed, 9 Apr 2025 14:42:41 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 9 Apr 2025
- 07:42:11 -0700
+ 07:42:25 -0700
 Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.230.35) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Wed, 9 Apr 2025 07:42:05 -0700
+ 15.2.1544.14; Wed, 9 Apr 2025 07:42:18 -0700
 From: Cosmin Ratiu <cratiu@nvidia.com>
 To: <netdev@vger.kernel.org>, <cratiu@nvidia.com>
 CC: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
@@ -76,9 +76,9 @@ CC: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
  Sundeep <sbhatta@marvell.com>, hariprasad <hkelam@marvell.com>, Bharat
  Bhushan <bbhushan2@marvell.com>, Louis Peens <louis.peens@corigine.com>,
 	"Leon Romanovsky" <leonro@nvidia.com>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v2 3/6] xfrm: Remove unneeded device check from validate_xmit_xfrm
-Date: Wed, 9 Apr 2025 17:41:30 +0300
-Message-ID: <20250409144133.2833606-4-cratiu@nvidia.com>
+Subject: [PATCH net-next v2 5/6] bonding: Mark active offloaded xfrm_states
+Date: Wed, 9 Apr 2025 17:41:32 +0300
+Message-ID: <20250409144133.2833606-6-cratiu@nvidia.com>
 X-Mailer: git-send-email 2.45.0
 In-Reply-To: <20250409144133.2833606-1-cratiu@nvidia.com>
 References: <20250409144133.2833606-1-cratiu@nvidia.com>
@@ -94,124 +94,172 @@ X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF0000000F:EE_|CY8PR12MB7732:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87e995db-e309-49dc-5b68-08dd7774be9b
+X-MS-TrafficTypeDiagnostic: CH3PEPF00000010:EE_|DS7PR12MB5981:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8c2a30c9-7682-4473-3141-08dd7774c873
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014;
+	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|7416014|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?jBfvnzQ+kJtHYpMkozfRrDtVRDz+Se79bmrRwjxObFMsmvnMkODRnBKomNdP?=
- =?us-ascii?Q?bA4cteS9mZVPQ5ZnE8kCU6wb9MZUa4939FKRYS1Vo4n3kkAuis3yw7FqIenO?=
- =?us-ascii?Q?9Ul/e8nqlwtuW7HaJnETJ0Tj/hVZkgzlhZ4r/HmSLMJ9X3fwrJkQyXFMdOKS?=
- =?us-ascii?Q?uk3Cgs7mOfi8P16mLUKVQWolnTQS0sWEIQS2lZab5iviJPolFQ6OO/ln5eur?=
- =?us-ascii?Q?qjS11FwuO++/3DOGcHH3MLEKqw0mAA5IIVtM1gq0WTmfT2LqiwHu5nMQLSsX?=
- =?us-ascii?Q?jeAw9hrDuE6WkyU8L2vQSkR8/C03EjPwR7EbJ43iMvlVRyz/CNtI7mq+hPmB?=
- =?us-ascii?Q?vx1Ng3R/1se8VdXqTkCMR4a5kHrE8WJLANYtwP8JoOlJgAAP3XTYNwazlqf7?=
- =?us-ascii?Q?jotxtLnBWA7oUyaO68bNyslsUl2ycIPadVHb4EVDzelhFJJmRsKmxP+h+haC?=
- =?us-ascii?Q?MuEzxzLUxGkknED3bWKBFauAcKLEppzBaTm+43YHR+6cUvA7xXwsOd75FLMe?=
- =?us-ascii?Q?+7blEFR7F4qqCclP4YeIfsCiD2zJMwmn1XarimIxj5AgcwfH9LRsH/LgpjSM?=
- =?us-ascii?Q?iNPORKRUNqgRpXOMDD75R5oLX6fxfNapHrgyM9hrQ4ZPKUh87/mBbmOVE54f?=
- =?us-ascii?Q?9DRZl03N0pb7NXFfJq1jBK/DvIfjC7xXM9hlzpeHHa/cC1sDJ+AfEaUIsvBk?=
- =?us-ascii?Q?2JJa/09tY8AMUq4hvIC/G3BVwoMBDN0r5zWmtUcjoVd71lOSIK11BTWJZRcG?=
- =?us-ascii?Q?sBa5XfjM5l4wQ2L1IFCCgA6APS0i0/m9srPslTMuMMJxb1DtBk3fK0gRmNCc?=
- =?us-ascii?Q?gCSi+7p1GH/8PEf6nEbszkeLFBz1DHCgn3RjUoMvTYO8pw0PKee3F5acO7yw?=
- =?us-ascii?Q?NZCYgVSMEpAYodGpUr+Wkq2BUh4rWJ9ktH0+zFD1YCuTXAkEAdCS2LGiLbfP?=
- =?us-ascii?Q?jYRlwrvfwHg7YLzCTCsVNViiJw6TENom73z0Rg1TeF+97/rxPYUzNdAkf4Om?=
- =?us-ascii?Q?dAi3iDQe8QNcLOMuJ5g04UBFA1nmQo1MPNTTy5zaAePvGySuVYGh0OrLIW2+?=
- =?us-ascii?Q?v/v6m3ETFJ13w3DftP1AKvyBfwsvjzCs99Ef+Cts6h481oPEoqynzRPJOkyB?=
- =?us-ascii?Q?kDdzMLrbNmd4nvQD3Xu1781g7HeaZHsNFRVKXXk8BgNIcUf4CAyQX22av7wQ?=
- =?us-ascii?Q?aD0qEA/meLoXoe66EtbxI9ZVWpGEehp/U/g9/2ZfRIQ0/qdojdVyW2uiVM9X?=
- =?us-ascii?Q?yLl56GHfCFGZegy7/09w/c8DdoUF/JWmStbKaTqhdnOOoLOLrOVKdp0Mo0dU?=
- =?us-ascii?Q?6hbHVzuPwQWpOeK/fPRPb0GLzvbSySP4E29wUip/VGzsJTJKCdvUX6cAj/Cz?=
- =?us-ascii?Q?vRhhPBK5xgYUWwDFv7R6ceWi9kpp3KS5eJTZl5IBWrBzz62/itKB+6wkNzuQ?=
- =?us-ascii?Q?//J5aKCDlqzvy/+2TwyOnDPpS35+spWYgdRpR4sETURKonnJL/hZQq3zYROD?=
- =?us-ascii?Q?84JYltYlHbxSjqQ=3D?=
+	=?us-ascii?Q?oQoGlQS/tnOC4amxhcRKWDGweGz/V5Nx4zJDyWSwF39VhPcAhlOBnuj0+rv0?=
+ =?us-ascii?Q?+WQt96wzYkzHUhzhcjVdIHFHn0p1RMlxiwYGCwK5a+ZIDcEjm9u09AiQ2Brj?=
+ =?us-ascii?Q?6VqGV660scw/QGChNqwr/Un6cj7fpxzZgS7RNzfqu6N+OYjhXt1PAbZMvQpU?=
+ =?us-ascii?Q?MeSQi1I8qnccDYhONNfVoWkFQ/wL7zimpVHOFW6qvh0M/Bs02ngqltOwnJbG?=
+ =?us-ascii?Q?6Ni7AZUE48f163/ykw+NhwzNoHKxDSvvgI/nEty15re4SFcpAOf6GsofcAZB?=
+ =?us-ascii?Q?H1WpsPxzOVyRtrWeFwjmC1fIAA5uDhLJESVLOG7Gqi04kAHIAIXOjV9wRzNJ?=
+ =?us-ascii?Q?1bIetVOipo6fFHaj+EzwES6IpyMsAzLaWMh9Mdi448oskgptGImYXLyWiwf6?=
+ =?us-ascii?Q?o8gvqIHuxewuybSvKYztzNGj7niljBV3whrZedgaZNsYPFbor53uZExmtWc2?=
+ =?us-ascii?Q?mGDPM/Ueq26Sq7K2wGcBINfOcHLLBZM9OO8xA7Iu49NtjzrSlHwCNjbCJFBd?=
+ =?us-ascii?Q?uEddVJ7S7fid24rKZ/3riZ+nijU4/XKOkpox54h0BaTq6vGQZxB460Ah4UDT?=
+ =?us-ascii?Q?cvPjhsUpmJ9CmJExgONZz1tJhpnNjVJ6j4gXDZ0C/12ZfQBdVxDMQDvSH52k?=
+ =?us-ascii?Q?+SRd3BYf2yIar9YFYj4pNAjjL7kb/pVIqcs8mjWda/43UGaz9d3xBFlHriA3?=
+ =?us-ascii?Q?Ozjw8XIMdmdkhAZ7qPzRhSm1RtJg6mQdFuBpD1ityZqwQlmE4znaYzAjPReK?=
+ =?us-ascii?Q?03uyCMJmZIj8+DG3AA2mCYcxOforngwAAibmC9WYN63jAFs2qQnMQGR8ak2Y?=
+ =?us-ascii?Q?sKv48+U+CoUM50rIIpdCib2XcHv4tkXu6Vt9VimFn7V/SHnOcEVP5y0a+uEl?=
+ =?us-ascii?Q?UOdMkA3mZL/bU/kWWFOLzJ6XBSZMBVbLsh230PD6lyZyHy9jCLCf0Zjhvv6U?=
+ =?us-ascii?Q?/m33pfZjG7jtI5mQKivQD5CU4tlUmyaAy91HVKDNyQ1R8yfQ/RV8ewLkMh9y?=
+ =?us-ascii?Q?Fre8ONAb1LO74FZttFPp90mKErw1y2puGSsCFcrWsX2x/6GgcMvYew1TMLUJ?=
+ =?us-ascii?Q?5/E6lS/ufMS8vdc16EjsageY4FeMt9ydYEZ5QYWQO6GVTiRsxwQum/JpFLuG?=
+ =?us-ascii?Q?PDUBW/sgKcPQWbDbhIm2cPQ+Mx26I12F+8NUgMtNPPqVrYg/9FkjzkLkOoyb?=
+ =?us-ascii?Q?Xdgp4HrjVl5AXETIGzBRElyOhz+OyPksXWNAo7Y6i6Od8xQ7hzXlc3nV0lG9?=
+ =?us-ascii?Q?OISnusVqeZOEDx6AHx+wUoU99f/H8ozpw77dZMpWVaPWVetewjghz1i1dEbm?=
+ =?us-ascii?Q?2b15oB6ljj9NSkjSNW+Xv9Oa0pokoQFbWu/F8JgF8cgm0YxEyIpHomuwJK9e?=
+ =?us-ascii?Q?WvGExGjjCkkImRjNDKynlfvOEB7r4R5IpTiEkLvBkijliPZ2ZC07XbtRDjxS?=
+ =?us-ascii?Q?7rPMRbXf68jGZ7jYNP+MahcW/QqLyPQ14yyov4x9P2kdynXm1xoZSC0ndIau?=
+ =?us-ascii?Q?RtvsR15B9e/KKCltu4rIxu0KJ4QtANC/EDbGibdJpdmWbouse2olNO77Bg?=
+ =?us-ascii?Q?=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 14:42:25.2680
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 14:42:41.7820
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87e995db-e309-49dc-5b68-08dd7774be9b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c2a30c9-7682-4473-3141-08dd7774c873
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF0000000F.namprd04.prod.outlook.com
+	CH3PEPF00000010.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7732
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5981
 
-validate_xmit_xfrm checks whether a packet already passed through it on
-the master device (xso.dev) and skips processing the skb again on the
-slave device (xso.real_dev).
+When the active link is changed for a bond device, the existing xfrm
+states need to be migrated over to the new link. This is done with:
+- bond_ipsec_del_sa_all() goes through the offloaded states list and
+  removes all of them from hw.
+- bond_ipsec_add_sa_all() re-offloads all states to the new device.
 
-This check was added in commit [1] to avoid tx packets on a bond device
-pass through xfrm twice and get two sets of headers, but the check was
-soon obsoleted by commit [2], which was added around the same time to
-fix a similar but unrelated problem. Commit [3] set XFRM_XMIT only when
-packets are hw offloaded.
+But because the offload status of xfrm states isn't marked in any way,
+there can be bugs.
 
-xso.dev is usually equal to xso.real_dev, unless bonding is used, in
-which case the bonding driver uses xso.real_dev to manage offloaded xfrm
-states.
+When all bond links are down, bond_ipsec_del_sa_all() unoffloads
+everything from the previous active link. If the same link then comes
+back up, nothing gets reoffloaded by bond_ipsec_add_sa_all().
+This results in a stack trace like this a bit later when user space
+removes the offloaded rules, because mlx5e_xfrm_del_state() is asked to
+remove a rule that's no longer offloaded:
 
-Since commit [3], the check added in commit [1] is unused on all cases,
-since packets going through validate_xmit_xfrm twice bail out on the
-check added in commit [2]. Here's a breakdown of relevant scenarios:
+ [] Call Trace:
+ []  <TASK>
+ []  ? __warn+0x7d/0x110
+ []  ? mlx5e_xfrm_del_state+0x90/0xa0 [mlx5_core]
+ []  ? report_bug+0x16d/0x180
+ []  ? handle_bug+0x4f/0x90
+ []  ? exc_invalid_op+0x14/0x70
+ []  ? asm_exc_invalid_op+0x16/0x20
+ []  ? mlx5e_xfrm_del_state+0x73/0xa0 [mlx5_core]
+ []  ? mlx5e_xfrm_del_state+0x90/0xa0 [mlx5_core]
+ []  bond_ipsec_del_sa+0x1ab/0x200 [bonding]
+ []  xfrm_dev_state_delete+0x1f/0x60
+ []  __xfrm_state_delete+0x196/0x200
+ []  xfrm_state_delete+0x21/0x40
+ []  xfrm_del_sa+0x69/0x110
+ []  xfrm_user_rcv_msg+0x11d/0x300
+ []  ? release_pages+0xca/0x140
+ []  ? copy_to_user_tmpl.part.0+0x110/0x110
+ []  netlink_rcv_skb+0x54/0x100
+ []  xfrm_netlink_rcv+0x31/0x40
+ []  netlink_unicast+0x1fc/0x2d0
+ []  netlink_sendmsg+0x1e4/0x410
+ []  __sock_sendmsg+0x38/0x60
+ []  sock_write_iter+0x94/0xf0
+ []  vfs_write+0x338/0x3f0
+ []  ksys_write+0xba/0xd0
+ []  do_syscall_64+0x4c/0x100
+ []  entry_SYSCALL_64_after_hwframe+0x4b/0x53
 
-1. ESP offload off: validate_xmit_xfrm returns early on !xo.
-2. ESP offload on, no bond: skb->dev == xso.real_dev == xso.dev.
-3. ESP offload on, bond, xs on bond dev: 1st pass adds XFRM_XMIT, 2nd
-   pass returns early on XFRM_XMIT.
-3. ESP offload on, bond, xs on slave dev: 1st pass returns early on
-   !xo, 2nd pass adds XFRM_XMIT.
-4. ESP offload on, bond, xs on both bond AND slave dev: only 1 offload
-   possible in secpath. Either 1st pass adds XFRM_XMIT and 2nd pass returns
-   early on XFRM_XMIT, or 1st pass is sw and returns early on !xo.
-6. ESP offload on, crypto fallback triggered in esp_xmit/esp6_xmit: 1st
-   pass does sw crypto & secpath_reset, 2nd pass returns on !xo.
+There's also another theoretical bug:
+Calling bond_ipsec_del_sa_all() multiple times can result in corruption
+in the driver implementation if the double-free isn't tolerated. This
+isn't nice.
 
-This commit removes the unnecessary check, so xso.real_dev becomes what
-it is in practice: a private field managed by bonding driver.
-The check immediately below that can be simplified as well.
+Before the "Fixes" commit, xs->xso.real_dev was set to NULL when an xfrm
+state was unoffloaded from a device, but a race with netdevsim's
+.xdo_dev_offload_ok() accessing real_dev was considered a sufficient
+reason to not set real_dev to NULL anymore. This unfortunately
+introduced the new bugs.
 
-[1] commit 272c2330adc9 ("xfrm: bail early on slave pass over skb")
-[2] commit 94579ac3f6d0 ("xfrm: Fix double ESP trailer insertion in
-IPsec crypto offload.")
-[3] commit c7dbf4c08868 ("xfrm: Provide private skb extensions for
-segmented and hw offloaded ESP packets")
+Since .xdo_dev_offload_ok() was significantly refactored by [1] and
+there are no more users in the stack of xso.real_dev, that
+race is now gone and xs->xso.real_dev can now once again be used to
+represent which device (if any) currently holds the offloaded rule.
 
+Go one step further and set real_dev after add/before delete calls, to
+catch any future driver misuses of real_dev.
+
+[1] https://lore.kernel.org/netdev/cover.1739972570.git.leon@kernel.org/
+Fixes: f8cde9805981 ("bonding: fix xfrm real_dev null pointer dereference")
 Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
 Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
 ---
- net/xfrm/xfrm_device.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/net/bonding/bond_main.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/net/xfrm/xfrm_device.c b/net/xfrm/xfrm_device.c
-index 4f4165ff738d..0be5f7ffd019 100644
---- a/net/xfrm/xfrm_device.c
-+++ b/net/xfrm/xfrm_device.c
-@@ -145,10 +145,6 @@ struct sk_buff *validate_xmit_xfrm(struct sk_buff *skb, netdev_features_t featur
- 		return NULL;
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 4ba525a564c5..14f7c9712ad4 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -496,9 +496,9 @@ static int bond_ipsec_add_sa(struct net_device *bond_dev,
+ 		goto out;
  	}
  
--	/* This skb was already validated on the upper/virtual dev */
--	if ((x->xso.dev != dev) && (x->xso.real_dev == dev))
--		return skb;
--
- 	local_irq_save(flags);
- 	sd = this_cpu_ptr(&softnet_data);
- 	err = !skb_queue_empty(&sd->xfrm_backlog);
-@@ -159,8 +155,7 @@ struct sk_buff *validate_xmit_xfrm(struct sk_buff *skb, netdev_features_t featur
- 		return skb;
+-	xs->xso.real_dev = real_dev;
+ 	err = real_dev->xfrmdev_ops->xdo_dev_state_add(real_dev, xs, extack);
+ 	if (!err) {
++		xs->xso.real_dev = real_dev;
+ 		ipsec->xs = xs;
+ 		INIT_LIST_HEAD(&ipsec->list);
+ 		mutex_lock(&bond->ipsec_lock);
+@@ -540,12 +540,12 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
+ 		if (ipsec->xs->xso.real_dev == real_dev)
+ 			continue;
+ 
+-		ipsec->xs->xso.real_dev = real_dev;
+ 		if (real_dev->xfrmdev_ops->xdo_dev_state_add(real_dev,
+ 							     ipsec->xs, NULL)) {
+ 			slave_warn(bond_dev, real_dev, "%s: failed to add SA\n", __func__);
+-			ipsec->xs->xso.real_dev = NULL;
++			continue;
+ 		}
++		ipsec->xs->xso.real_dev = real_dev;
  	}
+ out:
+ 	mutex_unlock(&bond->ipsec_lock);
+@@ -629,6 +629,7 @@ static void bond_ipsec_del_sa_all(struct bonding *bond)
+ 				   __func__);
+ 			continue;
+ 		}
++		ipsec->xs->xso.real_dev = NULL;
+ 		real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev,
+ 							    ipsec->xs);
+ 		if (real_dev->xfrmdev_ops->xdo_dev_state_free)
+@@ -664,6 +665,7 @@ static void bond_ipsec_free_sa(struct net_device *bond_dev,
  
--	if (skb_is_gso(skb) && (unlikely(x->xso.dev != dev) ||
--				unlikely(xmit_xfrm_check_overflow(skb)))) {
-+	if (skb_is_gso(skb) && unlikely(xmit_xfrm_check_overflow(skb))) {
- 		struct sk_buff *segs;
+ 	WARN_ON(xs->xso.real_dev != real_dev);
  
- 		/* Packet got rerouted, fixup features and segment it. */
++	xs->xso.real_dev = NULL;
+ 	if (real_dev && real_dev->xfrmdev_ops &&
+ 	    real_dev->xfrmdev_ops->xdo_dev_state_free)
+ 		real_dev->xfrmdev_ops->xdo_dev_state_free(real_dev, xs);
 -- 
 2.45.0
 
