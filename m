@@ -1,35 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD54229DB64;
-	Fri, 11 Apr 2025 11:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B6B15855C;
+	Fri, 11 Apr 2025 11:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744369536; cv=none; b=Ibk+xSEvZk2qq1YNXrvankWaT7j7r+mZl7/L6zxaAREGqqQmuajgaB+RiPGuWuw5A3I+o8/+PA9Q+jiMHJxyW532nRvETIFn3GOj9SWdJs2IwwEovm1MpyXvUW6dLT+J5xP+lRK/KiOAz/UHuvTKBrjjx7e+BejaMqfHxyVJT5M=
+	t=1744371237; cv=none; b=kWX7BDbgmENfBBa7zxpEcaaaJlowAlD5/p4TWpHpPjpF8HFKiTH8SPG3IF5AaDFneJZkt28QxXlDiDE9NEB08uCpTHzIOBNrg4ILplYdI0SK390ixDIlL/xgeVrnkeyb4w0rrhGCUAo/18xHSLMaL4GE4Pkx74YQOtyIHIbP7V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744369536; c=relaxed/simple;
-	bh=rKIA8P8ck0NbKkzwHpkUlyV4dTbzRC4THZQ1beZsiJw=;
+	s=arc-20240116; t=1744371237; c=relaxed/simple;
+	bh=E3H3zS2asuRS3QQYBtL0a+seiix1UN0LZXZFWCTHeLE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rCcMHWSb0TpOoAHDQ4qbE1i6iKdzmqzYJUPCMUr5hqYGkqR5MGIyBoturbf1kNRZGQ1R2T2Oq1cI+ecsJEmpq9Nm48nryzWoQiOZfHhPBUfV6YF3HSkgDLwRRurfRR1cZXbYJVqM2ZdZaPm0RPvvm9ud38nitePG2nRMYDwmWoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IBYVclk0; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=YFwmnxycZbBlVzmSWO5OIFLGXzhxYt7Y8iu4NKKnboTwNLpaBVRSNgp7t+tZ8PaHcoYfo1eN9ImS68vUycr8Gv2BhDdSch554l/R1KFbzD332+XlXPNHptZYU7ltjPWaOG3VaB7TTAbe16kEcbVQaxYj8m4X15/CXQS8F76xsPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=JbK1GRZP; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IBYVclk0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8780C4CEE8;
-	Fri, 11 Apr 2025 11:05:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744369534;
-	bh=rKIA8P8ck0NbKkzwHpkUlyV4dTbzRC4THZQ1beZsiJw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IBYVclk0RDcl+6Qi1L1gdYAv7BtmBzryU0DAjp4TfkRF/soatOdRw0xkzB3ePxNxQ
-	 oHkcMYOAUmpyDnUuUOIJcDafRdznMsULb+tTxGoyI11nLNqHKDbAuBEaoUKAFX+Mmt
-	 sOs2wUSIQw66nk6w3nfvC7z+HpSB/YxCSc/RbV/uhbZVvh4RWCaaIp9yJM1u2sEFcz
-	 BwOb7MgLVd4sjHl19DvSpUyehbULaA8xcB4ONUOyXXnCcpo3rZl+Ux2Y8R2/BjUnA4
-	 paDf112/74JFfovp4gI5oLpQE3VNXz3MyaSfctVijcLLK+aXx5J8Lr6wzHkevJ8Ifv
-	 LbpdXt3Nm74bw==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 11 Apr 2025 13:04:54 +0200
-Subject: [PATCH net-next 8/8] selftests: mptcp: use IPPROTO_MPTCP for
- getaddrinfo
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="JbK1GRZP"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1u3Cdi-005wxV-GF; Fri, 11 Apr 2025 13:33:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=JJUVspd37HPmlTRI3GjkD10mpqCy6PqiwGnE0i9Yrm8=; b=JbK1GRZPF0xsnJzudrDRqfhcej
+	C+GPUoxS9DPFtcuy42/hlroH2XIDnNqZCzqLoZZlkPI+SHIM2EKDcgVxVSHqmVIBoCmq+0Ur2vTps
+	9d8JykNxxQmiuljknMshv8v5uXjlGaNcS4L5TpsDaJc6xr3c9o/AYaTz56skHM3CdKHqJ1uFgS9aW
+	6x60s+nExYom6skpriYJehRzLtSwazn8XvumltittzDF783hBpvgmuvGNnovgiKLDEDq2I7JlSHyh
+	eqVL5AOfS8LQ5A3Ivg6f0z4Tf8+lUryDoSO1hB1rTcZvtETtlKNuXhTC513SYm25RPZ3kPWMlE9Hy
+	uAC4fTAQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1u3Cdh-0007wg-Ld; Fri, 11 Apr 2025 13:33:42 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1u3CdU-00D5Ut-8H; Fri, 11 Apr 2025 13:33:28 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Fri, 11 Apr 2025 13:32:38 +0200
+Subject: [PATCH bpf-next v2 2/9] selftests/bpf: Add socket_kind_to_str() to
+ socket_helpers
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,112 +49,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250411-net-next-mptcp-sched-mib-sft-misc-v1-8-85ac8c6654c3@kernel.org>
-References: <20250411-net-next-mptcp-sched-mib-sft-misc-v1-0-85ac8c6654c3@kernel.org>
-In-Reply-To: <20250411-net-next-mptcp-sched-mib-sft-misc-v1-0-85ac8c6654c3@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- zhenwei pi <pizhenwei@bytedance.com>
+Message-Id: <20250411-selftests-sockmap-redir-v2-2-5f9b018d6704@rbox.co>
+References: <20250411-selftests-sockmap-redir-v2-0-5f9b018d6704@rbox.co>
+In-Reply-To: <20250411-selftests-sockmap-redir-v2-0-5f9b018d6704@rbox.co>
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Jakub Sitnicki <jakub@cloudflare.com>, Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2775; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=hAqb+9EwIsZn40xu+6ctRkc54LS4FAN8XGDT4iQnIuE=;
- b=owEBbQKS/ZANAwAKAfa3gk9CaaBzAcsmYgBn+PdlbPUd21AsOdYhyIUyuF04g+5hcYhzWrwS1
- KASAoBqkS2JAjMEAAEKAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ/j3ZQAKCRD2t4JPQmmg
- c4RYD/9fB/KGOne2fdX6ZppR7lISrMhvvQVtN15vyE6HR7rI1zMeh02FrmTi+M5jQaMiq3H71nl
- 0lGZ4CMF0h1K0SAptpMy6VoMjxg2gtHnTIl+JHiuw/0xLZSD/stL2NUl2KxZ+ZWPwIPPVCcY8Tl
- 0x6yecMgDjvZVEeUD2z4S1QvGCt7IWPbbselLkeXfyyLNR+YwkjtUhKrAGVyta9MGn3TgSagNNh
- Fv2/3mS9ljUzbzbrZ90f1M5a1y1Qha4dJca8RZrxE1VrGqRcMkgGYcXGnyCipBiT/zPTm2XfU2f
- N+gmCqsdnA0Yti06GapgUpsx4pa3vAK0+qDT6poSAfuzMixuKMCix5YuMkunn2O3tGfGy3UnbhM
- mLGuZWE2M4fDGWg/uoE9Iqnv+y7pnB2pJo/+hGn2cry1vGylstPL347hh8LRoc0m65Rv7FV4NLe
- Sj5UjFCKgXKTLpB8XFctKoCzdNpBLHb1aQOYnAd0y9tNCKUB1ZM5m0GUXdYNNPrt5bmXrH3Kl24
- IL4bfXY1lL3u7SoeypRFnlcpA4lsDWi5S5wtmGPuGWusa7uyCcyGHTi4thvFyJlBaY5zvLrK3s/
- 2uEdVgE8ccJowvjAIx2eTHAe8XfAASWd971Dmnq+rTm/9hK/3DaKz5DjRADcROo7ctP+VtdOeFw
- swTzLpp55VtuVGA==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: zhenwei pi <pizhenwei@bytedance.com>
+Add function that returns string representation of socket's domain/type.
 
-mptcp_connect.c is a startup tutorial of MPTCP programming, however
-there is a lack of ai_protocol(IPPROTO_MPTCP) usage. Add comment for
-getaddrinfo MPTCP support.
-
-This patch first uses IPPROTO_MPTCP to get addrinfo, and if glibc
-version is too old, it falls back to using IPPROTO_TCP.
-
-Co-developed-by: Geliang Tang <geliang@kernel.org>
-Signed-off-by: Geliang Tang <geliang@kernel.org>
-Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
-Notes:
-- a previous version has already been sent to Netdev. ChangeLog:
-  - show how to use IPPROTO_MPTCP with getaddrinfo, not only a comment.
-  - Link to this version:
-    https://lore.kernel.org/20250407085122.1203489-1-pizhenwei@bytedance.com
----
- tools/testing/selftests/net/mptcp/mptcp_connect.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/socket_helpers.h      | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-index c83a8b47bbdfa5fcf1462e2b2949b41fd32c9b14..ac1349c4b9e5404c95935eb38b08a15d774eb1d9 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-@@ -180,13 +180,26 @@ static void xgetnameinfo(const struct sockaddr *addr, socklen_t addrlen,
+diff --git a/tools/testing/selftests/bpf/prog_tests/socket_helpers.h b/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
+index e505c2f2595a24be9dd5b534deef4793f9a02f77..e02cabcc814e9a6a11d61ad02cf38696fb0f27ff 100644
+--- a/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
+@@ -410,4 +410,59 @@ static inline int create_socket_pairs(int family, int sotype, int *c0, int *c1,
+ 	return err;
  }
  
- static void xgetaddrinfo(const char *node, const char *service,
--			 const struct addrinfo *hints,
-+			 struct addrinfo *hints,
- 			 struct addrinfo **res)
- {
-+again:
- 	int err = getaddrinfo(node, service, hints, res);
- 
- 	if (err) {
--		const char *errstr = getxinfo_strerr(err);
-+		const char *errstr;
++static inline const char *socket_kind_to_str(int sock_fd)
++{
++	socklen_t opt_len;
++	int domain, type;
 +
-+		/* glibc starts to support MPTCP since v2.42.
-+		 * For older versions, use IPPROTO_TCP to resolve,
-+		 * and use TCP/MPTCP to create socket.
-+		 * Link: https://sourceware.org/git/?p=glibc.git;a=commit;h=a8e9022e0f82
-+		 */
-+		if (err == EAI_SOCKTYPE) {
-+			hints->ai_protocol = IPPROTO_TCP;
-+			goto again;
++	opt_len = sizeof(domain);
++	if (getsockopt(sock_fd, SOL_SOCKET, SO_DOMAIN, &domain, &opt_len))
++		FAIL_ERRNO("getsockopt(SO_DOMAIN)");
++
++	opt_len = sizeof(type);
++	if (getsockopt(sock_fd, SOL_SOCKET, SO_TYPE, &type, &opt_len))
++		FAIL_ERRNO("getsockopt(SO_TYPE)");
++
++	switch (domain) {
++	case AF_INET:
++		switch (type) {
++		case SOCK_STREAM:
++			return "tcp4";
++		case SOCK_DGRAM:
++			return "udp4";
 +		}
++		break;
++	case AF_INET6:
++		switch (type) {
++		case SOCK_STREAM:
++			return "tcp6";
++		case SOCK_DGRAM:
++			return "udp6";
++		}
++		break;
++	case AF_UNIX:
++		switch (type) {
++		case SOCK_STREAM:
++			return "u_str";
++		case SOCK_DGRAM:
++			return "u_dgr";
++		case SOCK_SEQPACKET:
++			return "u_seq";
++		}
++		break;
++	case AF_VSOCK:
++		switch (type) {
++		case SOCK_STREAM:
++			return "v_str";
++		case SOCK_DGRAM:
++			return "v_dgr";
++		case SOCK_SEQPACKET:
++			return "v_seq";
++		}
++		break;
++	}
 +
-+		errstr = getxinfo_strerr(err);
- 
- 		fprintf(stderr, "Fatal: getaddrinfo(%s:%s): %s\n",
- 			node ? node : "", service ? service : "", errstr);
-@@ -292,7 +305,7 @@ static int sock_listen_mptcp(const char * const listenaddr,
- {
- 	int sock = -1;
- 	struct addrinfo hints = {
--		.ai_protocol = IPPROTO_TCP,
-+		.ai_protocol = IPPROTO_MPTCP,
- 		.ai_socktype = SOCK_STREAM,
- 		.ai_flags = AI_PASSIVE | AI_NUMERICHOST
- 	};
-@@ -356,7 +369,7 @@ static int sock_connect_mptcp(const char * const remoteaddr,
- 			      int infd, struct wstate *winfo)
- {
- 	struct addrinfo hints = {
--		.ai_protocol = IPPROTO_TCP,
-+		.ai_protocol = IPPROTO_MPTCP,
- 		.ai_socktype = SOCK_STREAM,
- 	};
- 	struct addrinfo *a, *addr;
++	return "???";
++}
++
+ #endif // __SOCKET_HELPERS__
 
 -- 
-2.48.1
+2.49.0
 
