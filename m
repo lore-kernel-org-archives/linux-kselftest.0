@@ -1,249 +1,205 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2078.outbound.protection.outlook.com [40.107.249.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4643719E7FA;
-	Tue, 15 Apr 2025 01:38:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744681109; cv=none; b=ghVtBe/DndQ39bckxOLOEZBVJrRXsecQHtK1Vxkp/al+kb5HQmYXgi3FziBz9bf9NP8LaxrIgOrHhuTPqJSffKmZ7ORbJIo0HKT7zoEF9hf4n5dUiWquGtUiZ+KBNvB9QpV6sVGK9f7bCdfJJw/dpcaS9CDpgpXnLEVCMe3E864=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744681109; c=relaxed/simple;
-	bh=D9/copwN8Vi93hcXVQLwm6TV1oCBKCuDxgsjassI+4c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PRi+IMK8erC2fD5IW/wm7Rq9wDBY9vexJ2xqWzgt5ioyyryRi1owQRFcBJ5HGJtoeh6ilrNBrQj+r369N668pBqaiR5hYDhyBIezVgYx3bvURsBZXxebRSve7u60lgWEyysw4X9WT9/JzgzwDL8zTA368VOi5bXq7RTvjuVt1yU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=msD5sJlj; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D225F3A1BA;
+	Tue, 15 Apr 2025 01:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.78
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744682286; cv=fail; b=KgryT5ZVKE2nnqHYHaNzTP2JiC1Hha6G4agsoQ2o16DMDKksehv6OlX9k4wHDH5pNVFCJT+buzMcW3g07wTp/uPDdOaP+p7LpfzTS8khZ1P/MC7ZgJVg66i8+HNWRbLUS+qf4S8CAKYIiEErvblXjh+2buM4JBbr3lR27WmE/fU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744682286; c=relaxed/simple;
+	bh=w4JD0NL/AHwo1JfoAZFre+bdqHcUx1W0DN0F2Zs4Y58=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MWL+FrZqGdAV+k1PItd5g1oSg/qNZD7HblJEYZkdQ9s1G8WpFNzjwyOKOiGHRGwk12E1mE+VeZi75Oi+pTdbI9dGMhoesOFKT+apnqO8gzTWsf0ggGShvkIALsffuuiwPymopZ3xnOEZIpUOU8NVeWkuHTFgxwzk5oXMZI7tLr0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=JtEttDHF; arc=fail smtp.client-ip=40.107.249.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="msD5sJlj"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-39c0e0bc733so4290509f8f.1;
-        Mon, 14 Apr 2025 18:38:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744681105; x=1745285905; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hstID7d8ycIqCdy0S2HoM/NmlIdP9WL4OFhfgrftQOQ=;
-        b=msD5sJljC6I/EtHN9goTu0a7djeRR60OSMmISChLeHmJTw9Y0KJnL8AvVLHalqfarI
-         PKkGy2Ij9fCBteFprt4IEfWqMDZ4lQN2489qO9ZuGUVHCG4A2wkmCdMc0TQojZQ3VRvd
-         BEZc7W6BA3/peO+QG9ysnmYwY8cG+wc5GF9IPSCG6UP3j9MdVercRYLr1UtShV/EVKrE
-         IHaIWG6Ic3J/I6MqvQyQu5u5oxgoNOQh2yYaDI6kkfiYyvzRv4PYs+eWwWmkGLC00qvE
-         sS/ny6qOgQVzKVqnngjCHjtZ7+jK8dZ71TXU6rwhFJw3qxSv4WizCnArvI/AJA2CBvnY
-         e+uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744681105; x=1745285905;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hstID7d8ycIqCdy0S2HoM/NmlIdP9WL4OFhfgrftQOQ=;
-        b=CcfEqANc3tbTf0O2c+jpsFJv0yPAeopSm/clItGdyo8A9BYzqAVJDCJ9Yc7QorPmT7
-         0nh+2GybxBQc/W6fHuTJ3yazJinM4dbTm8n+x87MoeVoyb/hBS5xIM19qKH/02ChvHLj
-         Cuh5aDNZC29jknrwYHVNupnmqN7rhlaBTsQZHXbyF1zHgCtfpW42kEPeDxU3oNdD4MP7
-         OCNR3oXMovsSYD+6cgjG7IORcqiOi+Ngen1E5E6DM62bx3ma6cxX3658bU+z17wgJKTI
-         Guho1p0/sxCUz/absYke+ksnhO1kOMNSOuwXmE/DTwkY0LfoFGv9uKErMFCogIIZM2+V
-         PlYw==
-X-Forwarded-Encrypted: i=1; AJvYcCU5AV1GI4Ha+rltlJgm9CX5//Up2x1MJvNNcYJQ6//lCCSURacegyg6QLw8FpnLbU21xUNKRhLQ4+X0@vger.kernel.org, AJvYcCUxEByZ9/VYp44U44XcxjIr2kMyW12uZVj7vOY491FMAk2rtDCfGH7Z3/7YTm4bWk+i2RtPvstErKC8/nWg@vger.kernel.org, AJvYcCV7E/Rvf0ttQnmtVIiA97ckfEW58Ehtg/jIWDstE0LrFzMo2nPQPAR7KepP8rM1KfLAjvQhI3B6gsko+YkU@vger.kernel.org, AJvYcCVLswzPF+nqt8yuJrX3DRc1Jr5qP+iunQPhr6F+P3gXuimi89eh3gorfztzzTK6PRUlDqo=@vger.kernel.org, AJvYcCVrpRMjxs5cSqz6owxfuN3Ke2I5zk7BzqZxwKR5m52ejECbqBPlukf/vDyUC/abv4h0Aq0kPxSONSw=@vger.kernel.org, AJvYcCW07wT5BBwKwYqQy3PhydDxgXwf8Wym78+GaKiyM+0bMlkqhKQv1pq0NA5hAdnqzoD6CcAzcUnoaQu6CV6mvTOv@vger.kernel.org, AJvYcCWJbNpMghIoHTDImjc1eDIw8LdaE3IJZek/MDNUBvuQiFCMAgyW6N7Mx4+i4azrajflI6hixx4Yp0N4K/k+@vger.kernel.org, AJvYcCXIOom3JmViMNY4HFNymzxGKCo0X+uB57m+daOgmkFqZPU1XNat680+mzEN2VVbjki+akn5QPvAcrzabFHx0w+9t07tIAY+@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0goiS4OKwq3dtorXP3jIamJMVdB2nabBFilStG4elw3uzExq3
-	5TPsRbS+JNm39YZHMxy8y4MNO3/1O5YlLCpJHzOzz7j2+VHDIjbZCHfjSHn3Lblal8OhBbsb2LS
-	JLKToUgX7iMhg90yh3vosu63Cn2s=
-X-Gm-Gg: ASbGncuOL7upgNNj/NwoGGubh/LqkfEqRBZDOkGuBYnR4Yc9rBe9f2iwNAQDtohPtSq
-	Hg+Iwe28qY5Nr6AtSlYheItSXhJf/i3kbAlGpwTOs4rVCWnu9ZP7S86G2jH4h8o8YsedoBhfxKa
-	FK6S6bB8kadjlZMHOTlLSBtoKwpnv6NCKG63uZvg==
-X-Google-Smtp-Source: AGHT+IE13LNRwKepLhiR5HgiMZISHCOnuS/exoyNGmTnGn08SGCoosF3MkOhQ4I61FeJBNHAP0KCBKG0KSg/y+VQIDA=
-X-Received: by 2002:a5d:5c84:0:b0:391:2e7:67ff with SMTP id
- ffacd0b85a97d-39ea51f47e0mr10937877f8f.10.1744681105142; Mon, 14 Apr 2025
- 18:38:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="JtEttDHF"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HD/jyR7ccx63xusPi89XhYoYobSY84lZ9OdFr7IzHKyXurcYXMCfaUbmBKxpcjJM/oGMGBgQsK64pPxbtySqcn/HtV4pCT6CGSPRmdEvyFx4rDSYxQIZRZ/BEleJJYarM5Yb9QdSStWCEtWDXwrwG4PwRNPOHiQSsSniv+4RDhULaz4ZsAE6Mq+y6CFx7XCVxjBaY1okA7W8BVhXBfYacbxwmFWq6j0E4k3uJCPnXLVqZOGcvaP+4xuCENt7HYEMqJfY+BvMA/4KoiA8rSjZ5KYT0UOU2IBxOR+mAdT61uK7fGAaC9Nm1JoXeTs832H+eYB3Y4/MK6Psr3iXfA3AMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SMcrZYM463qpXcRhkrG0+mbXiFQzAPSySth9TyHjelo=;
+ b=g5l/jHyL3V+CoSLwi6zdF67fCFvxr/+V25D5ZypAvSj/YfzVSBIG/mO368dBnkKN1YW5kBa+7C1nhFtzTxHqCQ33l7BVbfxzkg/UQxDQ0Ue85DJEf34GlrLU7of7RxHgX2NmLINLRU9u7sGqVOZEwuUWeL6j8mE2Dj7u6JNv5dcxXhy2oC9kr6/PBBVHIbXafpgZ/50kCBkloa5cyXzEU5+NrRH/VfYCLKZmxJyy+JTaMiJd9Mgg+W1kctKaqIMBW2fi+JPQjaX9PnQs8Hm38P4bpgl4DvaZBpOSfu9LWj+Jy92DpVkh3LnVCGOSalzyinQeRVh7GKfMvIFyFywrtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.20) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SMcrZYM463qpXcRhkrG0+mbXiFQzAPSySth9TyHjelo=;
+ b=JtEttDHF4cpCfAD8P6MAipTi8H6Hdv3Bhc8sUtoRsp/diS9W7deeosS9HD2aDc9BZIfTu/FzmIcAkMJIeVOlZclxO0rG1RKN08LEE3Hm53t3vzWwEpqBwOcpE1rxFHZ0pZJGfkMKzs//64HmGEu2gcoj3iRVTFLmfCGBe8iVKD/GdpOrjnyGfCPCW00g5OVYVaTAB8dFHldlsli3WHO8UA3WPglApzwNHoYXIWjkKIh43ZSIuvfnvD1/XZX8mnPKHXQKoBVuJGcwSNF7en2EbWCJe2Ox2q/WbBHSgv2v1FMJyAzyLzlx1dtYXUGw1tcS5prnY+Eq78ke9RbhnGjbfg==
+Received: from DU2P250CA0008.EURP250.PROD.OUTLOOK.COM (2603:10a6:10:231::13)
+ by AM0PR07MB6259.eurprd07.prod.outlook.com (2603:10a6:20b:145::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.33; Tue, 15 Apr
+ 2025 01:58:00 +0000
+Received: from DB1PEPF00039233.eurprd03.prod.outlook.com
+ (2603:10a6:10:231:cafe::f1) by DU2P250CA0008.outlook.office365.com
+ (2603:10a6:10:231::13) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8632.35 via Frontend Transport; Tue,
+ 15 Apr 2025 01:58:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.20)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.2.20 as permitted sender) receiver=protection.outlook.com;
+ client-ip=131.228.2.20; helo=fihe3nok0734.emea.nsn-net.net; pr=C
+Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.20) by
+ DB1PEPF00039233.mail.protection.outlook.com (10.167.8.106) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.12
+ via Frontend Transport; Tue, 15 Apr 2025 01:58:00 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id A26244EF75;
+	Mon, 14 Apr 2025 16:00:19 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	edumazet@google.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v3 net-next 14/15] tcp: accecn: try to fit AccECN option with SACK
+Date: Mon, 14 Apr 2025 14:59:43 +0200
+Message-Id: <20250414125944.97350-15-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250414125944.97350-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20250414125944.97350-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
- <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
- <87semdjxcp.fsf@microsoft.com> <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
- <87friajmd5.fsf@microsoft.com>
-In-Reply-To: <87friajmd5.fsf@microsoft.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 14 Apr 2025 18:38:13 -0700
-X-Gm-Features: ATxdqUHye6neCty12upWdoIVJgMpLkd6THftJdEFKQdyUAliYMBWVcY1MoiFP1Q
-Message-ID: <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	keyrings@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, 
-	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Cong Wang <xiyou.wangcong@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB1PEPF00039233:EE_|AM0PR07MB6259:EE_
+X-MS-Office365-Filtering-Correlation-Id: 388b04c7-d3d6-4730-d418-08dd7bc0f373
+X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700013|921020;
+X-Microsoft-Antispam-Message-Info:
+ =?utf-8?B?RDU3Smppc0h2SVlibUhoMUNwK3VWRFFwK3MvWFRxNWFEcGMzUFlDTklnSVdy?=
+ =?utf-8?B?bXNFWDdlWU5PSjE0TC9pMU9ROVpXZk42djdwZU02MEhSWmh4ZlVmelB5S0VW?=
+ =?utf-8?B?Q05pMGNUaXNreXpFT3Z5R0JURnM4OG5UUjh0N280TFZoZDVSQjRLaWZkZkxa?=
+ =?utf-8?B?RExuckhKSVNoMFVFZUxVSVBtU0NoYVVFUnVzYVR0RU9PZzdPTnVsYUNtYVV1?=
+ =?utf-8?B?dVdXTDFmeUw2dVREZEtPNW5CUmVJVjZaUzFmNkdGRzNubXpud2licTREYUR6?=
+ =?utf-8?B?S2FXUUpPMnNaOHp2SjdBU1ZtUTlZK2NNQVlMZUg5akFMZEZtVVVUS2dsQ3Vr?=
+ =?utf-8?B?L2xyL1pFQ1E1WjdreVJsYmxrd0h2WjVHTGtUYnhIT1ZxY21pTEl1K05HV0pu?=
+ =?utf-8?B?c3V2c3kzcDltUjlDUTI1bHlIUm5ZYlVPck5TYnRkbmxEU1plQjcvQmdoRDlq?=
+ =?utf-8?B?dHNMVTJyZVVPdnFBeFZsMVZIU1IxVEMreUI0dXBybW5EWnRyeU5CV0l5TFBr?=
+ =?utf-8?B?LzJXRGRTQmJkR1kyUkU5RnJjSXl5b2dES0F6Um9OTFlQOG5saUpKcXc3OGdV?=
+ =?utf-8?B?clE0MnRwd3dEeW5EWTlPcWNYdmxkWEs2TU5IQnZsRUozS0dHcW9GNzlDRHNJ?=
+ =?utf-8?B?RWxIc3hmWExnNnhQZ1NySm9aYWlxdzEvOE5JTjFJUkR0emxlTDVQNm5Ma1Zp?=
+ =?utf-8?B?b2o0MW56bm56My9OWjRkQjYxSlN5OGhNb3ZjVkp6UHd6YUNDNUVLYVVrSHU1?=
+ =?utf-8?B?STNqMUkrbHIyYUZpTHQ5WjE0REpSejhaaUhBVEt5bHZiTlVmYi9BM1cwRHNz?=
+ =?utf-8?B?S2FXQVZSNEVaZ0E2aXBTOFYvdDhxRW9qT3lIcUNnL2tLUnM2UlA0WlpJbUc5?=
+ =?utf-8?B?ZUhxSjkrUS9aeGhIWUlBMjhtWG1wMEFPSzlYUDVnUzRSR0dxTTZhbWdXT054?=
+ =?utf-8?B?Q2NqZGJhV1BobCtuKzJ2QjhSeEV4eDlyVjQ0TDh3SFdvUmhDWlZPTTl5dEM0?=
+ =?utf-8?B?TGxXVUtHcjl4VytQZUJqemQ0cXhQcDJISVRSKzc0ampwZWpUNWVyMW9FTEVL?=
+ =?utf-8?B?YmVsNTEvdmo0cVFHaTdlNmJ1cWtnMGR2eEpMU1NTODNNN2UwL0huNkdyd0p5?=
+ =?utf-8?B?YVBraFpEc01iN0ZlMkJZWFo1K3pncXlQMndJSHVHanROTVQwVlgyRDFZSFVt?=
+ =?utf-8?B?eE1VWG1yVUtLbkdpTXBLS2pPUXlaeGo3NnV4N0Z0WFBxR0cwU2ZiZ2NzRC9W?=
+ =?utf-8?B?d1I4ZHJUNVNlRjJQb0c3Uk5WR2pITjcrbDk1REZiNWF0MHM0NFh5Q21FeVM4?=
+ =?utf-8?B?SHBKcjk2ak5zbHZIUVAwdGlONGdyMnptT0F6V3BCeEhGOHRDdjVxUTF0ZEtS?=
+ =?utf-8?B?SkhueUNnUVdXTVlBRFMrSnVYRWUwNUthTUw3VTY5N0U5bHhwNVJRVS9xRW51?=
+ =?utf-8?B?UnhBWDk5Mm85UlM0WEludTcxRVdIeVFCdUM1S2JIaUlpblc4QWJtUSt2aGdS?=
+ =?utf-8?B?RHgzcFBBTDJtNWpzT3RpeHlLNTVBWUdKRHBMZ3EyNTB6V1FjcTdUaFUzSkNM?=
+ =?utf-8?B?M0w4SE95NXRNS2R2cnMrdnN6ZmpCRU9nOXdRZE5QMnNrQXBYOUEwVmVyK29X?=
+ =?utf-8?B?NHVicXp3ZUZPTUFTbm5hSWV2ZXRaS1EvVTRLakt5YjJhNTU0RnB1VGlzUDdP?=
+ =?utf-8?B?MG9SdkVwNE81Rzd4TkVIUjBtNzJsaTBHcDM1OVJRbzhHRWQxT040N2dEbTF5?=
+ =?utf-8?B?SjYyWVRSbnhiUGxidEx3SlpvNGRCMFcxZzhpeThQak5zOWV1cy95Rm9rRjVB?=
+ =?utf-8?B?YXIydUM5L0JoM3RmZmlsRzVjdjR2WWsyblRFNm9xOWJZTC9ydmtJNkEyaDFj?=
+ =?utf-8?B?RGJEcWJFdHVSS09jQ2RYNzhHYk1SeFJmZ2hscUJIL09FYk1GSWx1dDNjdmlQ?=
+ =?utf-8?B?bk9IM3ZBeHVVd1U5RDNGVUE5VkxZY3VDTEJhTzN4cVNSZ0ZXMlpEVk9TcVhz?=
+ =?utf-8?B?cTNXTFBxMVJqTCtoU1dhZ3VtdW05bWhMeThJRkFtOGQrY2NFNEZtdUxaZEtx?=
+ =?utf-8?B?Sm5acUtxa2hWOXNnd0NncFZ5dDkyTEVBTE1XUT09?=
+X-Forefront-Antispam-Report:
+ CIP:131.228.2.20;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700013)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2025 01:58:00.3776
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 388b04c7-d3d6-4730-d418-08dd7bc0f373
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.20];Helo=[fihe3nok0734.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthSource: DB1PEPF00039233.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR07MB6259
 
-On Mon, Apr 14, 2025 at 5:32=E2=80=AFPM Blaise Boscaccy
-<bboscaccy@linux.microsoft.com> wrote:
->
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
->
-> > On Sat, Apr 12, 2025 at 6:58=E2=80=AFAM Blaise Boscaccy
-> > <bboscaccy@linux.microsoft.com> wrote:
-> >>
-> >> TAlexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-> >>
-> >> > On Fri, Apr 4, 2025 at 2:56=E2=80=AFPM Blaise Boscaccy
-> >> > <bboscaccy@linux.microsoft.com> wrote:
-> >> >> +
-> >> >> +static int hornet_find_maps(struct bpf_prog *prog, struct hornet_m=
-aps *maps)
-> >> >> +{
-> >> >> +       struct bpf_insn *insn =3D prog->insnsi;
-> >> >> +       int insn_cnt =3D prog->len;
-> >> >> +       int i;
-> >> >> +       int err;
-> >> >> +
-> >> >> +       for (i =3D 0; i < insn_cnt; i++, insn++) {
-> >> >> +               if (insn[0].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW)=
-) {
-> >> >> +                       switch (insn[0].src_reg) {
-> >> >> +                       case BPF_PSEUDO_MAP_IDX_VALUE:
-> >> >> +                       case BPF_PSEUDO_MAP_IDX:
-> >> >> +                               err =3D add_used_map(maps, insn[0].=
-imm);
-> >> >> +                               if (err < 0)
-> >> >> +                                       return err;
-> >> >> +                               break;
-> >> >> +                       default:
-> >> >> +                               break;
-> >> >> +                       }
-> >> >> +               }
-> >> >> +       }
-> >> >
-> >> > ...
-> >> >
-> >> >> +               if (!map->frozen) {
-> >> >> +                       attr.map_fd =3D fd;
-> >> >> +                       err =3D kern_sys_bpf(BPF_MAP_FREEZE, &attr,=
- sizeof(attr));
-> >> >
-> >> > Sorry for the delay. Still swamped after conferences and the merge w=
-indow.
-> >> >
-> >>
-> >> No worries.
-> >>
-> >> > Above are serious layering violations.
-> >> > LSMs should not be looking that deep into bpf instructions.
-> >>
-> >> These aren't BPF internals; this is data passed in from
-> >> userspace. Inspecting userspace function inputs is definitely within t=
-he
-> >> purview of an LSM.
-> >>
-> >> Lskel signature verification doesn't actually need a full disassembly,
-> >> but it does need all the maps used by the lskel. Due to API design
-> >> choices, this unfortunately requires disassembling the program to see
-> >> which array indexes are being used.
-> >>
-> >> > Calling into sys_bpf from LSM is plain nack.
-> >> >
-> >>
-> >> kern_sys_bpf is an EXPORT_SYMBOL, which means that it should be callab=
-le
-> >> from a module.
-> >
-> > It's a leftover.
-> > kern_sys_bpf() is not something that arbitrary kernel
-> > modules should call.
-> > It was added to work for cases where kernel modules
-> > carry their own lskels.
-> > That use case is gone, so EXPORT_SYMBOL will be removed.
-> >
->
-> I'm not following that at all. You recommended using module-based lskels
-> to get around code signing requirements at lsfmmbpf and now you want to
-> nuke that entire feature? And further, skel_internal will no longer be
-> usable from within the kernel and bpf_preload is no longer going to be
-> supported?
+From: Ilpo Järvinen <ij@kernel.org>
 
-It was exported to modules to run lskel-s from modules.
-It's bpf internal api, but seeing how you want to abuse it
-the feature has to go. Sadly.
+As SACK blocks tend to eat all option space when there are
+many holes, it is useful to compromise on sending many SACK
+blocks in every ACK and try to fit AccECN option there
+by reduction the number of SACK blocks. But never go below
+two SACK blocks because of AccECN option.
 
-> >> Lskels without frozen maps are vulnerable to a TOCTOU
-> >> attack from a sufficiently privileged user. Lskels currently pass
-> >> unfrozen maps into the kernel, and there is nothing stopping someone
-> >> from modifying them between BPF_PROG_LOAD and BPF_PROG_RUN.
-> >>
-> >> > The verification of module signatures is a job of the module loading=
- process.
-> >> > The same thing should be done by the bpf system.
-> >> > The signature needs to be passed into sys_bpf syscall
-> >> > as a part of BPF_PROG_LOAD command.
-> >> > It probably should be two new fields in union bpf_attr
-> >> > (signature and length),
-> >> > and the whole thing should be processed as part of the loading
-> >> > with human readable error reported back through the verifier log
-> >> > in case of signature mismatch, etc.
-> >> >
-> >>
-> >> I don't necessarily disagree, but my main concern with this is that
-> >> previous code signing patchsets seem to get gaslit or have the goalpos=
-ts
-> >> moved until they die or are abandoned.
-> >
-> > Previous attempts to add signing failed because
-> > 1. It's a difficult problem to solve
-> > 2. people only cared about their own narrow use case and not
-> > considering the needs of bpf ecosystem as a whole.
-> >
-> >> Are you saying that at this point, you would be amenable to an in-tree
-> >> set of patches that enforce signature verification of lskels during
-> >> BPF_PROG_LOAD that live in syscall.c,
-> >
-> > that's the only way to do it.
-> >
->
-> So the notion of forcing people into writing bpf-based gatekeeper program=
-s
-> is being abandoned? e.g.
->
-> https://lore.kernel.org/bpf/bqxgv2tqk3hp3q3lcdqsw27btmlwqfkhyg6kohsw7lwdg=
-beol7@nkbxnrhpn7qr/#t
-> https://lore.kernel.org/bpf/61aae2da8c7b0_68de0208dd@john.notmuch/
+As AccECN option is often not put to every ACK, the space
+hijack is usually only temporary.
 
-Not abandoned.
-bpf-based tuning of load conditions is still necessary.
-The bpf_prog_load command will check the signature only.
-It won't start rejecting progs that don't have a signature.
-For that a one liner bpf-lsm or C-based lsm would be needed
-to address your dont-trust-root use case.
+Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+---
+ net/ipv4/tcp_output.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
->
-> >> without adding extra non-code
-> >> signing requirements like attachment point verification, completely
-> >> eBPF-based solutions, or rich eBPF-based program run-time policy
-> >> enforcement?
-> >
-> > Those are secondary considerations that should also be discussed.
-> > Not necessarily a blocker.
->
-> Again, I'm confused here since you recently stated this whole thing
-> was "questionable" without attachment point verification.
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 8e1535635aab..936ec8788c8e 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -981,8 +981,21 @@ static int tcp_options_fit_accecn(struct tcp_out_options *opts, int required,
+ 		opts->num_accecn_fields--;
+ 		size -= TCPOLEN_ACCECN_PERFIELD;
+ 	}
+-	if (opts->num_accecn_fields < required)
++	if (opts->num_accecn_fields < required) {
++		if (opts->num_sack_blocks > 2) {
++			/* Try to fit the option by removing one SACK block */
++			opts->num_sack_blocks--;
++			size = tcp_options_fit_accecn(opts, required,
++						      remaining +
++						      TCPOLEN_SACK_PERBLOCK,
++						      max_combine_saving);
++			if (opts->options & OPTION_ACCECN)
++				return size - TCPOLEN_SACK_PERBLOCK;
++
++			opts->num_sack_blocks++;
++		}
+ 		return 0;
++	}
+ 
+ 	opts->options |= OPTION_ACCECN;
+ 	return size;
+-- 
+2.34.1
 
-Correct.
-For fentry prog type the attachment point is checked during the load,
-but for tracepoints it's not, and anyone who is claiming that
-their system is secure because the tracepoint prog was signed
-is simply clueless in how bpf works.
