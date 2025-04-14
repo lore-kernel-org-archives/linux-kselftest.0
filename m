@@ -1,63 +1,67 @@
 Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C7B1F4604
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 21:48:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521181F462F
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 21:48:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744667321; cv=none; b=R79FrPPTt36BzOYT6UyOPdYIDljrC/FGiwl2nWRGKxVfGtPI5pqBJZdfiCY+2mhvJofRyQA8iA8DFgwIKKiBe1XzXFpKO1/A3x9MJfQJJK8xhtnnNklUZbl13f7S/Wx6dXLJuglPdDe4O/ZBfPcgBTI7G6yxm/cE2DILX1GEreA=
+	t=1744667323; cv=none; b=vCAFACzeJJpWkdun02OtkvdJefI1ckHcdg3YE3ceG9NRXB13GaZmnr3KRfVFapM8Vi2rDhN6NxlkaNoOqThQGRABiZNFiiMtoNwPw+qdr2l/k/6AVFYmVocoPg5ugi1rc7sXC3u2muPdFJtkC2oSYHtKXzdlhfpW/LJeKVC42j4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744667321; c=relaxed/simple;
-	bh=IizzDB/CPmORQHopDxbO5MtuP8whGaXt6RoLLc612Sc=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=RNfcjKRuv6/bBmf+qp8k3JC3dUZBm6PpwLj5mGUCPF0UH23P39V1hxPRu1JiGgFG8TVp5p/GULNUP1e6UpT4NwogvWdzF25CTS4j1VDvqqy42A1X0LsjlvDofQssaLjV0K2cU4pZ55rz4Pvr6CWV9+3K/6smtVxGlKHPX61yx40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xfAa9Rj0; arc=none smtp.client-ip=209.85.214.202
+	s=arc-20240116; t=1744667323; c=relaxed/simple;
+	bh=cVF8i8fC6zYL8vuKBGWbKSE3j92w2QFKcQp75ZnO3tI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=QjJWUMJdEPJNk0wtBMFprlEmBq6IX2XiAAzb7/8D1pKnAAGf76miu+MLN8a4iSmXyp87Gt+9EGMide70tNT1opHRKFDVFav1NE9BhYjBlamFNsk4EGt+Y97l0tIPXwnCEI+MCsIFI0J1HdF/2V6aUBzl4DLK3IZOidnPYHS6wRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vD52GClC; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sagis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xfAa9Rj0"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-224191d9228so58535005ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 14:48:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vD52GClC"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2265a09dbfcso69620795ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 14:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744667318; x=1745272118; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xeY3Ne7T73IiRsQfdaGb54kmu2OZnS8MLyUx2jX+LVI=;
-        b=xfAa9Rj0GgyoTKnCaGuEOas7oPgAgy/7AxNg741hHxHVWpHJ1ZbVaicxANqiSeCGia
-         92h8IUjV0sSTcPsvoAWXCe+R64zl6djt1tUeZrYbvhWWpx6JXCYrZ2IBoA3gWV9sY3/8
-         lxFNuBlem5DcK6CpkEf621z0H0ZLTjYqrM4SPvQ0l2jcb3sX0FAw/FTBpjzlbsOWQ/mk
-         ftMRr04Z0AGc5Lulv5uiYR0ZrljBKU9NGQ/tMI9Cc9LFEUX5yyo8bR6e3T34SHau6xGN
-         0z9l1sA3COmspZ2MSQPfwrdlbZfmqGOa/pDCcXo09J7DGO+KQ/DPhUEJio8e1pbxo/i6
-         tLCA==
+        d=google.com; s=20230601; t=1744667321; x=1745272121; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K1RQ45cM2PIEyt0JnTJP0GeQFp54luaCwc0+oSbEGGM=;
+        b=vD52GClCB6y3Mn+mc6wBSpxR0xlx0PWjpFW/4jqUd0SsF+YGZ22bMk5Ue+npmsot3V
+         uQsg/NtSldigkDE/IGF0RjiWJzoCi3XJCFrZqSlGTO/ncBUnmU9vo/Omi2S2E6UpQTfA
+         d7SXIAbsqyf10D3KubGd+Jj2fP98O2YXzwhEqNkHI7GuJSt4qrSwIRLbREqDdTtX1byC
+         fAIBGNI/fap/3PFNPBqYk3K1jD2rAvqya3+W2Baafc5LQVnl76fgM9Kbf4z8coKrp5g/
+         PpxHiysqFWQcpbJkVwKStx6RiwLCcRw+Cb7drsqMiY89D3muEkynLND+0gz+1+2Fyp/v
+         OlUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744667318; x=1745272118;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xeY3Ne7T73IiRsQfdaGb54kmu2OZnS8MLyUx2jX+LVI=;
-        b=uzuCAQ+aELn/JJ4/m58GRKAfkEv0GNCs3hhGjT3Ldl9C4fyYwkM6GOrdb5L/GXcVm8
-         8ct+R2KHGXyByoqfjA1RzNXUmlW96WKweI/fn3sP6rq7tzFY//SbVDKssPPYUUGzqh6w
-         +5kUxNU2SI/g463f4SDmN1qgjgN4L+fWQhnkanmQIMWmPRWb1up0Iyi+vNQdtGocYmE/
-         pGHgMtO7CCNm3VbKJcYFFiP/QgAATFgDmzEH3+VZCsYkOT/ptYj2MqU/hoiKn62SyeVx
-         ipt17a0pbb3NRXuRUavY2Uy7SmN2lXG4VNr4bidP6PI9kbtLLfPXPD878YoGRLe15ygY
-         8biw==
-X-Gm-Message-State: AOJu0Yy8qMJDXUB8iqtYvMjK9KoppeyFB1znRKK3aPmTYl3W15ZtHa5L
-	VNrIMfBzbHnQzjANZxkLXbUYEH4GHViBHGUPMjPtqNeFSpFYYedcx2LhLiltZOf63/yU2LDmZ6x
-	QAomhdyRktq65tMCEPNm04pjx0928u3QQu3jAgwvzbmGYC2/BiO9KUtnGEYLNJXy73P52D3chpk
-	4ZK8whavyvMr+d5D27tw5qT3tzlQiK4KOR1pLObBY=
-X-Google-Smtp-Source: AGHT+IGPgqVGp0oAP4P2gAYQk7qmJgaztFSfBdues0UWUj48+fetvYtjb/Emsq94oa1wkGIcnwuPQ2gSXQ==
-X-Received: from plcm17.prod.google.com ([2002:a17:902:f211:b0:223:6546:744e])
- (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1c7:b0:220:e5be:29c7
- with SMTP id d9443c01a7336-22bea4f180fmr211893545ad.39.1744667318485; Mon, 14
- Apr 2025 14:48:38 -0700 (PDT)
-Date: Mon, 14 Apr 2025 14:47:29 -0700
+        d=1e100.net; s=20230601; t=1744667321; x=1745272121;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K1RQ45cM2PIEyt0JnTJP0GeQFp54luaCwc0+oSbEGGM=;
+        b=KtFfxgPGMItmM1cqvR6R5lJSKUrxpgANzXv4X/9+d0ymSVfF2c4A1LKr92cdRYP/p8
+         Ij8W4S35t/8GJJhba+pirYM42zWTrpOAd3pc75F3G9zAzsEECYfuWrIUm3DxHUbRdmch
+         gif7zRl+wBDiV1gjDm7pxf+kN8U9s5dLJPEqBLOszz+Dqy8/sTjWk1OXTUgD4VomkuSD
+         0oIVMuLD8CAQVTLANCQA+nolmaGmqeKAvzKjoxaicCPsUCXAPKuKQVlhoe3qjZiDppqW
+         gUw2nUnub+S6g14ri7/YxULRwVvIWWl8PGSUkWqcqOowQCJmVhoeZrfJKfwbLSyQe0n+
+         Tnxw==
+X-Gm-Message-State: AOJu0YwiSfDHAf2kDKOrHCPY3G1k6BMlVz6PGn3DtQKUE0TsfMEYd8YJ
+	4QSSSJgdD1idDmbmvZAas/7/IP6RwgR/Sm/onSAntXGc4fopfXbqXI/MUhuyIXyUdHF71iNcLnk
+	gIwyWOQg+/YQJJczx0DstInQ+woGV8S3aHqp5DJz0uxgTLVi0+h6ecyIhtzfH/CNwR3qjtiPIe5
+	pS48g9LMV1g6cGq9yOgCoRdrS8J1XRLwuddDlzfp4=
+X-Google-Smtp-Source: AGHT+IEWrLXtYYvpm1ZZzfKrrXveTwDagXihw5BYYvY9UP3EGN5bNkpDzXeiDFWZErA7LBa+tlkfQYK35Q==
+X-Received: from plly18.prod.google.com ([2002:a17:902:7c92:b0:223:5c97:5c3c])
+ (user=sagis job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:b60f:b0:223:f408:c3f7
+ with SMTP id d9443c01a7336-22bea4abb9emr154541275ad.16.1744667321435; Mon, 14
+ Apr 2025 14:48:41 -0700 (PDT)
+Date: Mon, 14 Apr 2025 14:47:31 -0700
+In-Reply-To: <20250414214801.2693294-1-sagis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20250414214801.2693294-1-sagis@google.com>
 X-Mailer: git-send-email 2.49.0.777.g153de2bbd5-goog
-Message-ID: <20250414214801.2693294-1-sagis@google.com>
-Subject: [PATCH v6 00/30] TDX KVM selftests
+Message-ID: <20250414214801.2693294-3-sagis@google.com>
+Subject: [PATCH v6 02/30] KVM: selftests: Expose function that sets up sregs
+ based on VM's mode
 From: Sagi Shahar <sagis@google.com>
 To: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
 	Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>, 
@@ -70,137 +74,95 @@ To: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
 Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-This is v6 of the TDX selftests that follow RFC v5 sent more than a year
-ago. While it has been a while since the previous posting, the TDX
-selftests kept up to date with the latest TDX development and supported
-the health of the TDX base series.
+From: Ackerley Tng <ackerleytng@google.com>
 
-With TDX base support now in kvm-coco-queue it is a good opportunity to
-to again share the TDX selftests and also remove the "RFC" to convey that
-this work is now ready to be considered for inclusion in support of the
-TDX base support.
+This allows initializing sregs without setting vCPU registers in
+KVM.
 
-Apart from the addition of one new test ("KVM: selftests: TDX: Test
-LOG_DIRTY_PAGES flag to a non-GUEST_MEMFD memslot") this series should be
-familiar to anybody that previously looked at "RFC v5". All previous feedback
-has been addressed. At the same time the changes to TDX base support needed
-several matching changes in the TDX selftests that prompted dropping all
-previously received "Reviewed-by" tags to indicate that the patches deserve
-a new look. In support of upstream inclusion this version also includes many
-non functional changes intended to follow the style and customs of this area.
+No functional change intended.
 
-This series is based on: commit 58dd191cf39c ("KVM: x86: Forbid the use of
-kvm_load_host_xsave_state() with guest_state_protected") from branch
-kvm-coco-queue on git://git.kernel.org/pub/scm/virt/kvm/kvm.git
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+Signed-off-by: Sagi Shahar <sagis@google.com>
+---
+ .../selftests/kvm/include/x86/processor.h     |  1 +
+ .../testing/selftests/kvm/lib/x86/processor.c | 45 ++++++++++---------
+ 2 files changed, 25 insertions(+), 21 deletions(-)
 
-While the kvm-coco-queue already contains these selftests, this is a
-more up-to-date version of the patches.
-
-The tree can be found at:
-https://github.com/googleprodkernel/linux-cc/tree/tdx-selftests-v6
-
-I would like to acknowledge the following people, who helped keep these
-patches up to date with the latest TDX patches and prepare them for
-review:
-
-Reinette Chatre <reinette.chatre@intel.com>
-Isaku Yamahata <isaku.yamahata@intel.com>
-Binbin Wu <binbin.wu@linux.intel.com>
-Adrian Hunter <adrian.hunter@intel.com>
-Rick Edgecombe <rick.p.edgecombe@intel.com>
-
-Links to earlier patch series:
-
-RFC v5: https://lore.kernel.org/all/20231212204647.2170650-1-sagis@google.com/
-RFC v4: https://lore.kernel.org/lkml/20230725220132.2310657-1-afranji@google.com/
-RFC v3: https://lore.kernel.org/lkml/20230121001542.2472357-1-ackerleytng@google.com/T/#u
-RFC v2: https://lore.kernel.org/lkml/20220830222000.709028-1-sagis@google.com/T/#u
-RFC v1: https://lore.kernel.org/lkml/20210726183816.1343022-1-erdemaktas@google.com/T/#u
-
-Ackerley Tng (12):
-  KVM: selftests: Add function to allow one-to-one GVA to GPA mappings
-  KVM: selftests: Expose function that sets up sregs based on VM's mode
-  KVM: selftests: Store initial stack address in struct kvm_vcpu
-  KVM: selftests: Add vCPU descriptor table initialization utility
-  KVM: selftests: TDX: Use KVM_TDX_CAPABILITIES to validate TDs'
-    attribute configuration
-  KVM: selftests: TDX: Update load_td_memory_region() for VM memory
-    backed by guest memfd
-  KVM: selftests: Add functions to allow mapping as shared
-  KVM: selftests: KVM: selftests: Expose new vm_vaddr_alloc_private()
-  KVM: selftests: TDX: Add support for TDG.MEM.PAGE.ACCEPT
-  KVM: selftests: TDX: Add support for TDG.VP.VEINFO.GET
-  KVM: selftests: TDX: Add TDX UPM selftest
-  KVM: selftests: TDX: Add TDX UPM selftests for implicit conversion
-
-Erdem Aktas (3):
-  KVM: selftests: Add helper functions to create TDX VMs
-  KVM: selftests: TDX: Add TDX lifecycle test
-  KVM: selftests: TDX: Add TDX HLT exit test
-
-Isaku Yamahata (1):
-  KVM: selftests: Update kvm_init_vm_address_properties() for TDX
-
-Roger Wang (1):
-  KVM: selftests: TDX: Add TDG.VP.INFO test
-
-Ryan Afranji (2):
-  KVM: selftests: TDX: Verify the behavior when host consumes a TD
-    private memory
-  KVM: selftests: TDX: Add shared memory test
-
-Sagi Shahar (10):
-  KVM: selftests: TDX: Add report_fatal_error test
-  KVM: selftests: TDX: Adding test case for TDX port IO
-  KVM: selftests: TDX: Add basic TDX CPUID test
-  KVM: selftests: TDX: Add basic TDG.VP.VMCALL<GetTdVmCallInfo> test
-  KVM: selftests: TDX: Add TDX IO writes test
-  KVM: selftests: TDX: Add TDX IO reads test
-  KVM: selftests: TDX: Add TDX MSR read/write tests
-  KVM: selftests: TDX: Add TDX MMIO reads test
-  KVM: selftests: TDX: Add TDX MMIO writes test
-  KVM: selftests: TDX: Add TDX CPUID TDVMCALL test
-
-Yan Zhao (1):
-  KVM: selftests: TDX: Test LOG_DIRTY_PAGES flag to a non-GUEST_MEMFD
-    memslot
-
- tools/testing/selftests/kvm/Makefile.kvm      |    8 +
- .../testing/selftests/kvm/include/kvm_util.h  |   36 +
- .../selftests/kvm/include/x86/kvm_util_arch.h |    1 +
- .../selftests/kvm/include/x86/processor.h     |    2 +
- .../selftests/kvm/include/x86/tdx/td_boot.h   |   83 ++
- .../kvm/include/x86/tdx/td_boot_asm.h         |   16 +
- .../selftests/kvm/include/x86/tdx/tdcall.h    |   54 +
- .../selftests/kvm/include/x86/tdx/tdx.h       |   67 +
- .../selftests/kvm/include/x86/tdx/tdx_util.h  |   23 +
- .../selftests/kvm/include/x86/tdx/test_util.h |  133 ++
- tools/testing/selftests/kvm/lib/kvm_util.c    |   74 +-
- .../testing/selftests/kvm/lib/x86/processor.c |  108 +-
- .../selftests/kvm/lib/x86/tdx/td_boot.S       |  100 ++
- .../selftests/kvm/lib/x86/tdx/tdcall.S        |  163 +++
- tools/testing/selftests/kvm/lib/x86/tdx/tdx.c |  243 ++++
- .../selftests/kvm/lib/x86/tdx/tdx_util.c      |  643 +++++++++
- .../selftests/kvm/lib/x86/tdx/test_util.c     |  187 +++
- .../selftests/kvm/x86/tdx_shared_mem_test.c   |  129 ++
- .../testing/selftests/kvm/x86/tdx_upm_test.c  |  461 ++++++
- tools/testing/selftests/kvm/x86/tdx_vm_test.c | 1254 +++++++++++++++++
- 20 files changed, 3742 insertions(+), 43 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/include/x86/tdx/td_boot.h
- create mode 100644 tools/testing/selftests/kvm/include/x86/tdx/td_boot_asm.h
- create mode 100644 tools/testing/selftests/kvm/include/x86/tdx/tdcall.h
- create mode 100644 tools/testing/selftests/kvm/include/x86/tdx/tdx.h
- create mode 100644 tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
- create mode 100644 tools/testing/selftests/kvm/include/x86/tdx/test_util.h
- create mode 100644 tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S
- create mode 100644 tools/testing/selftests/kvm/lib/x86/tdx/tdcall.S
- create mode 100644 tools/testing/selftests/kvm/lib/x86/tdx/tdx.c
- create mode 100644 tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
- create mode 100644 tools/testing/selftests/kvm/lib/x86/tdx/test_util.c
- create mode 100644 tools/testing/selftests/kvm/x86/tdx_shared_mem_test.c
- create mode 100644 tools/testing/selftests/kvm/x86/tdx_upm_test.c
- create mode 100644 tools/testing/selftests/kvm/x86/tdx_vm_test.c
-
+diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+index b46f1e5120d1..3162c6e8ea23 100644
+--- a/tools/testing/selftests/kvm/include/x86/processor.h
++++ b/tools/testing/selftests/kvm/include/x86/processor.h
+@@ -1025,6 +1025,7 @@ static inline struct kvm_cpuid2 *allocate_kvm_cpuid2(int nr_entries)
+ }
+ 
+ void vcpu_init_cpuid(struct kvm_vcpu *vcpu, const struct kvm_cpuid2 *cpuid);
++void vcpu_setup_mode_sregs(struct kvm_vm *vm, struct kvm_sregs *sregs);
+ 
+ static inline void vcpu_get_cpuid(struct kvm_vcpu *vcpu)
+ {
+diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+index 55971df6906c..1d6ae28aa398 100644
+--- a/tools/testing/selftests/kvm/lib/x86/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+@@ -488,34 +488,37 @@ static void kvm_seg_set_tss_64bit(vm_vaddr_t base, struct kvm_segment *segp)
+ 	segp->present = 1;
+ }
+ 
+-static void vcpu_init_sregs(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
++void vcpu_setup_mode_sregs(struct kvm_vm *vm, struct kvm_sregs *sregs)
+ {
+-	struct kvm_sregs sregs;
+-
+ 	TEST_ASSERT_EQ(vm->mode, VM_MODE_PXXV48_4K);
+ 
+-	/* Set mode specific system register values. */
+-	vcpu_sregs_get(vcpu, &sregs);
+-
+-	sregs.idt.base = vm->arch.idt;
+-	sregs.idt.limit = NUM_INTERRUPTS * sizeof(struct idt_entry) - 1;
+-	sregs.gdt.base = vm->arch.gdt;
+-	sregs.gdt.limit = getpagesize() - 1;
++	sregs->idt.base = vm->arch.idt;
++	sregs->idt.limit = NUM_INTERRUPTS * sizeof(struct idt_entry) - 1;
++	sregs->gdt.base = vm->arch.gdt;
++	sregs->gdt.limit = getpagesize() - 1;
+ 
+-	sregs.cr0 = X86_CR0_PE | X86_CR0_NE | X86_CR0_PG;
+-	sregs.cr4 |= X86_CR4_PAE | X86_CR4_OSFXSR;
++	sregs->cr0 = X86_CR0_PE | X86_CR0_NE | X86_CR0_PG;
++	sregs->cr4 |= X86_CR4_PAE | X86_CR4_OSFXSR;
+ 	if (kvm_cpu_has(X86_FEATURE_XSAVE))
+-		sregs.cr4 |= X86_CR4_OSXSAVE;
+-	sregs.efer |= (EFER_LME | EFER_LMA | EFER_NX);
++		sregs->cr4 |= X86_CR4_OSXSAVE;
++	sregs->efer |= (EFER_LME | EFER_LMA | EFER_NX);
++
++	kvm_seg_set_unusable(&sregs->ldt);
++	kvm_seg_set_kernel_code_64bit(&sregs->cs);
++	kvm_seg_set_kernel_data_64bit(&sregs->ds);
++	kvm_seg_set_kernel_data_64bit(&sregs->es);
++	kvm_seg_set_kernel_data_64bit(&sregs->gs);
++	kvm_seg_set_tss_64bit(vm->arch.tss, &sregs->tr);
+ 
+-	kvm_seg_set_unusable(&sregs.ldt);
+-	kvm_seg_set_kernel_code_64bit(&sregs.cs);
+-	kvm_seg_set_kernel_data_64bit(&sregs.ds);
+-	kvm_seg_set_kernel_data_64bit(&sregs.es);
+-	kvm_seg_set_kernel_data_64bit(&sregs.gs);
+-	kvm_seg_set_tss_64bit(vm->arch.tss, &sregs.tr);
++	sregs->cr3 = vm->pgd;
++}
++
++static void vcpu_init_sregs(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
++{
++	struct kvm_sregs sregs;
+ 
+-	sregs.cr3 = vm->pgd;
++	vcpu_sregs_get(vcpu, &sregs);
++	vcpu_setup_mode_sregs(vm, &sregs);
+ 	vcpu_sregs_set(vcpu, &sregs);
+ }
+ 
 -- 
 2.49.0.504.g3bcea36a83-goog
 
