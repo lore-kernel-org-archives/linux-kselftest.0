@@ -1,84 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB33280A3E;
-	Mon, 14 Apr 2025 11:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61EF627C873
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 12:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744628914; cv=none; b=VraFtLWtxkwno7/vnkwPbYZAZcA9bqzsSBPhXUIyHRQ2veDvUsP5DptC6D6qdd9jSiUAxp1hY6hGaEqsRC/wPX2hSQxGUTJ7fJQv7dYLDFLKHEqqk8sLjb1W7CXg8Yxso4YlSb3IIFxf2bHKI++teo55q4kDhcW+3/z+0JynKiI=
+	t=1744634158; cv=none; b=stPQuYsYO0pXmeyPEzrGPAVKaBlv0XQxw6h9yGkJ/kcCdY3Vmpws5/IM/hpX036QhIFvpMr1BzHF/DZXWShr+dVME5XknUvc2hSeg7FHD2aUCM7R4sm/lIFzM0PWtajpDzLAUxsGGxbwfvPWju2DlH3az1rH6QuV2c0DG8bL4W8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744628914; c=relaxed/simple;
-	bh=Xdy9D5Bqc7njSHzOj1S++m6E2MnsrUv9gGmsdEPEskc=;
+	s=arc-20240116; t=1744634158; c=relaxed/simple;
+	bh=zcZ//fDP0qsHY11ukqykT2yYbZXQ9AKkBKS09YdRiG0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=N5PFRLn+3lqNVK/kc40C1hjJ9HbbnRX2kfz8UZ62JgDebF/uDK7pLkDjQZ1zxkIvBYrXA1CikSJ6/7tRNA2K1UxOdZV3CL804rWoxFscIiIKCIe7W9WVO/X8T2/D6/pqZSNCQDr0wqBI/+kGC6WfXZz61DGRY4uBVQa+M1Vphzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kf1uHmjt; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=FjAZzaOg9M+b60n7khvUL+8mFAJMXlGQ+kMHfY9pIaB3ZxL09Vv0xfSZKG/9zyCfaPJjbElLKuSVo1P5qLZBCqTqmZcjpzC84gpKi/TEu13a2fXyjBR7Z4t2EMePraUapHrnkuklYbwpXI+u9zK12sZlsNzM98FcnXbyZPaJ0Ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=gz+LTD9f; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kf1uHmjt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1BCC4CEE5;
-	Mon, 14 Apr 2025 11:08:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744628914;
-	bh=Xdy9D5Bqc7njSHzOj1S++m6E2MnsrUv9gGmsdEPEskc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Kf1uHmjtuyTVJ2dL7Z3InjXnxMN0ij1nMdM0VaxyVCtJ+XVgnbfDG3qUu5giho5if
-	 OQAOGBJIoYTzy6MnB8AHsysI1il5NaqC6d7TcDOOjSBAkwxBFtN4g6J2TRdzMgZlYH
-	 wpLbRD4k88Bs4tMoRP29I5Cn5OD8FrUktoCwCPiyEIfnzNSqKNKUcKTcQiGkgBpiQI
-	 9D+zj6WooQ1Uczqa1qnU+h1BNqq76Crk3fzygpgg1/2RnDQa4wsfJMsdmXg9S3Gy/P
-	 PKkaDDlNyD5uUdStZJmyDsU460f9tTEnmOwpBC0yJ2HiToiLlPfuPyKMbKyQj6ybxY
-	 +v7v6imwaB+zQ==
-From: Christian Brauner <brauner@kernel.org>
-To: Nam Cao <namcao@linutronix.de>
-Cc: Christian Brauner <brauner@kernel.org>,
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="gz+LTD9f"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-39c266c1389so2875748f8f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Apr 2025 05:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1744634155; x=1745238955; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=68pbaLtpMYwVIsLVPcwWXXG5wNjqWZdJ0gKFjaMSW/8=;
+        b=gz+LTD9ffwBihBbU+QL6qJJEcdD/1d7sNV/NMoecuHcuYNj0SKC5ofRa/2BBYSGIdZ
+         VzawxuL4P4RzaZCH/WeVTG36FuqWM5TSbjS8cjqdKbLYYlDxAPMHx1jqE/DCSzbBVlMf
+         kCFVOrshMYuxlIJ43unY4Xb5AChbaJK4u/1sVsbMlKKmW7GF6kekjVC72qJjNHe98yh9
+         9QhorOEeusM6JWyatc0otRUGdBAITi1nuqnv3EPPMdXdmoiFtjpIyM9hUoRs0ZVNM4Rj
+         6eW9UpIU+bXw81HKctZLsQj86UYmc1t2g1M4lxmXz9NHioAxIb3hJrIjb9lREVCsow3g
+         znXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744634155; x=1745238955;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=68pbaLtpMYwVIsLVPcwWXXG5wNjqWZdJ0gKFjaMSW/8=;
+        b=PaoRtSgA9swx1NrqkhEfYtGMo5LusVYdxZQv27DH/DfW2OzEeDdosJBQL26yu/DXmw
+         aGQyPjIizwqoHY2t7VmniEJB+QMtHTuPdOTt+nyh7/Ekr6A4iqXpYIHo63UQiXJBHjd4
+         b5NsM7Z+JcBRwm42ONvTYxpXw+7l693ToLwxF1hzFqCB+3qW8BzXCXmGI4qkn8jcH5J+
+         cjGp/eEckDo3K9ZYnb8Gtca0flJo52QK34TNVR4lxj3MeoqurwlqZhHRheT5gCzQeUDk
+         Vu5w5FgXSRDgG0vGhCdtiD6VpBV+7XkSle/68vRaJEBPLm/6f50AEtodJBSrCQ27me7Y
+         fM5A==
+X-Forwarded-Encrypted: i=1; AJvYcCXLh/lkhoUCCBWEAbkE5tVUNfCnSogCgMaZrvVkpd0LsTcv5SEXcPLhZG27NukXMODNhK3nhLkVM1duMuF2BYI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmFP4Eg5YpnhF/qtgksAQLxrXv8s6gTdGiK89kP1Al6Cq6ZcDX
+	aJ1g4yOSZfY94ZH0k+xyYF/MCxkSvYNkYhxqZJa4Ktb6RIA3PZpr1z9gCoUf10s=
+X-Gm-Gg: ASbGnctJJBLTzpyVsE8XbI2G0uacQfzvoxM6gaZ8I8C2w4upchnCfiUhNHjMB+mYtKX
+	Arce+xiufXlRE6cnjQD3vIv10L8PqOu+n34W5WLZhAObIsrcc3wFr++eH/gqFwESbow4P8gA0fm
+	3asej042/h3l8F6wdrkuq+VsiYGUpyg27tBuaoxlIzA0ESprpAQT0BmkTAXfuA7W1oTtsoAushc
+	F4/ssogiqa9mMs8pdVRvE5gOO9Mf6XetXwji4bxsKkhWPbH6R1zWfJdVH5+FP0IvIkynWCuO0oI
+	/kBcyZW8i39yn3Vut1msCdRq8EMJLGBs7LXQznRQ7Q==
+X-Google-Smtp-Source: AGHT+IFbK/KsiJbbEgc4z7Wr5HZ2HsrmZowacWDhKFk2K2SS3hDxowzVqH4JTYQk6zOp8F3mGhATxg==
+X-Received: by 2002:a05:6000:250c:b0:397:8f09:600 with SMTP id ffacd0b85a97d-39ea51f5717mr9014815f8f.13.1744634154552;
+        Mon, 14 Apr 2025 05:35:54 -0700 (PDT)
+Received: from carbon-x1.. ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eae9780a0sm11003166f8f.50.2025.04.14.05.35.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Apr 2025 05:35:53 -0700 (PDT)
+From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
+To: linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+	linux-kernel@vger.kernel.org (open list),
+	linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
 	Shuah Khan <shuah@kernel.org>,
-	John Ogness <john.ogness@linutronix.de>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] selftests: coredump: Some bug fixes
-Date: Mon, 14 Apr 2025 13:08:28 +0200
-Message-ID: <20250414-wertigkeit-sozusagen-506b362280cd@brauner>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <cover.1744383419.git.namcao@linutronix.de>
-References: <cover.1744383419.git.namcao@linutronix.de>
+	Andrew Jones <ajones@ventanamicro.com>,
+	Samuel Holland <samuel.holland@sifive.com>
+Subject: [PATCH 1/5] riscv: misaligned: factorize trap handling
+Date: Mon, 14 Apr 2025 14:34:41 +0200
+Message-ID: <20250414123543.1615478-2-cleger@rivosinc.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250414123543.1615478-1-cleger@rivosinc.com>
+References: <20250414123543.1615478-1-cleger@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1275; i=brauner@kernel.org; h=from:subject:message-id; bh=Xdy9D5Bqc7njSHzOj1S++m6E2MnsrUv9gGmsdEPEskc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaT/ebM2ve6Eh3GR27Rup9a1XQvOt/6sf/TRn3fPyRzrn 2UBp67YdZSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEyk8hkjQwcTg/+jbPtLS3+z c1s8Wu320IFfKHnFMn2FlR82LEg4lMnIMPHa8uQ9HlclhGz9Ph/LWVfiG/573aHctupcVdNJtip nuAE=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Fri, 11 Apr 2025 17:09:40 +0200, Nam Cao wrote:
-> While trying the coredump test on qemu-system-riscv64, I observed test
-> failures for various reasons.
-> 
-> This series makes the test works on qemu-system-riscv64.
-> 
-> Best regards,
-> Nam
-> 
-> [...]
+misaligned accesses traps are not nmi and should be treated as normal
+one using irqentry_enter()/exit(). Since both load/store and user/kernel
+should use almost the same path and that we are going to add some code
+around that, factorize it.
 
-Applied to the vfs-6.16.coredump branch of the vfs/vfs.git tree.
-Patches in the vfs-6.16.coredump branch should appear in linux-next soon.
+Signed-off-by: Clément Léger <cleger@rivosinc.com>
+---
+ arch/riscv/kernel/traps.c | 49 ++++++++++++++++-----------------------
+ 1 file changed, 20 insertions(+), 29 deletions(-)
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index 8ff8e8b36524..55d9f3450398 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -198,47 +198,38 @@ asmlinkage __visible __trap_section void do_trap_insn_illegal(struct pt_regs *re
+ DO_ERROR_INFO(do_trap_load_fault,
+ 	SIGSEGV, SEGV_ACCERR, "load access fault");
+ 
+-asmlinkage __visible __trap_section void do_trap_load_misaligned(struct pt_regs *regs)
++enum misaligned_access_type {
++	MISALIGNED_STORE,
++	MISALIGNED_LOAD,
++};
++
++static void do_trap_misaligned(struct pt_regs *regs, enum misaligned_access_type type)
+ {
+-	if (user_mode(regs)) {
+-		irqentry_enter_from_user_mode(regs);
++	irqentry_state_t state = irqentry_enter(regs);
+ 
++	if (type ==  MISALIGNED_LOAD) {
+ 		if (handle_misaligned_load(regs))
+ 			do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+-			      "Oops - load address misaligned");
+-
+-		irqentry_exit_to_user_mode(regs);
++				      "Oops - load address misaligned");
+ 	} else {
+-		irqentry_state_t state = irqentry_nmi_enter(regs);
+-
+-		if (handle_misaligned_load(regs))
++		if (handle_misaligned_store(regs))
+ 			do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+-			      "Oops - load address misaligned");
+-
+-		irqentry_nmi_exit(regs, state);
++				      "Oops - store (or AMO) address misaligned");
+ 	}
++
++	irqentry_exit(regs, state);
+ }
+ 
+-asmlinkage __visible __trap_section void do_trap_store_misaligned(struct pt_regs *regs)
++asmlinkage __visible __trap_section void do_trap_load_misaligned(struct pt_regs *regs)
+ {
+-	if (user_mode(regs)) {
+-		irqentry_enter_from_user_mode(regs);
+-
+-		if (handle_misaligned_store(regs))
+-			do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+-				"Oops - store (or AMO) address misaligned");
+-
+-		irqentry_exit_to_user_mode(regs);
+-	} else {
+-		irqentry_state_t state = irqentry_nmi_enter(regs);
+-
+-		if (handle_misaligned_store(regs))
+-			do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+-				"Oops - store (or AMO) address misaligned");
++	do_trap_misaligned(regs, MISALIGNED_LOAD);
++}
+ 
+-		irqentry_nmi_exit(regs, state);
+-	}
++asmlinkage __visible __trap_section void do_trap_store_misaligned(struct pt_regs *regs)
++{
++	do_trap_misaligned(regs, MISALIGNED_STORE);
+ }
++
+ DO_ERROR_INFO(do_trap_store_fault,
+ 	SIGSEGV, SEGV_ACCERR, "store (or AMO) access fault");
+ DO_ERROR_INFO(do_trap_ecall_s,
+-- 
+2.49.0
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-6.16.coredump
-
-[1/3] selftests: coredump: Properly initialize pointer
-      https://git.kernel.org/vfs/vfs/c/b3da3c6ce9f6
-[2/3] selftests: coredump: Fix test failure for slow machines
-      https://git.kernel.org/vfs/vfs/c/05ac92f73615
-[3/3] selftests: coredump: Raise timeout to 2 minutes
-      https://git.kernel.org/vfs/vfs/c/52cfbe664dc9
