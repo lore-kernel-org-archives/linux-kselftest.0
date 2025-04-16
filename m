@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702FB224238;
-	Wed, 16 Apr 2025 18:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE2722538F;
+	Wed, 16 Apr 2025 18:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744828848; cv=none; b=lt4540fpqiGCG2R/INza02WA5tRCZmhztrgAsJbQ/of5MdY8l2vTEviHjtLRrMMgJ8/ZGFRLO2KYwoEe4geBxo03rTFNtOYe+ovVt7pwGAsUjnsuNpAuIq7yITHqP1L+kdvVffPhTbrmH6I47Qcwk+WKznlEsyoGA9OgN7/8I60=
+	t=1744828851; cv=none; b=PiuQgxbQAf7tVxEMOIFQNMWuQ+MslzknIMss9s/bwlBS8+FIEH1tKHKKytALA4rknowQHZag1r8v3unZ1fANJKx91bOfVihglhiBnIrQqdJ9l+49q4bxq/tEP83vaYbgvwKzy3aRnsCfVYJp/nudEmGKqVld79WvBODxwXTjc1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744828848; c=relaxed/simple;
-	bh=r74PEqmclp8XQ64KO3BZyy9Pvmd2TvaX9zqkaaQrnr0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Ftvu3mV2aZJ1lsTQuiCn7ZkQwIbopG+kO6IMPUZmJzgCgc0VJnLVWSCcWU/zJoqAjAqTcU64fJKW0ekENDeXSNu4N3lDmq5XB9DfCT3y0pn8vAjDOlSm5W/04zVCLmHlro6lzDshfVbLPmibeujAa/7uS8tdvbM94hsmcsVMssM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=dl8ih4v0; arc=none smtp.client-ip=159.69.126.157
+	s=arc-20240116; t=1744828851; c=relaxed/simple;
+	bh=Z1bcOwaEL8wb4h1D5AwFZlAHw44W8YDLCsN003ABHao=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Y2rLRGc7h+Fsxi371rScBBBM0Uj7LGfZ7JvM9R1/u06hEpqZvFk63BLaXjuNmwrN3sPS5WFsO9i8qR1MX4VHJOVpVSC6AevGxzRnbT/2o3U/aZTtjxQVGlP5d6Ngch0pYyiyZ4bqNL50lNq1SBMse1swV+LrhQVoiT40XjY0uok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=FKGY49PY; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="dl8ih4v0"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="FKGY49PY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1744828842;
-	bh=r74PEqmclp8XQ64KO3BZyy9Pvmd2TvaX9zqkaaQrnr0=;
-	h=From:Subject:Date:To:Cc:From;
-	b=dl8ih4v05EXYagBRLU3hL7RzPuFE4iiPR8iKhO9bW9Vb+7W02xIgbLITW0u6wn0s3
-	 V4158DHDOoctonK9EyReBvntzjKI8ifsb8XbhZO12MOmWPumasSBZpcb5kQ8YHrc/P
-	 u01QJCDgzlwo5JrSh3DBrDm6L4LLuCsPHfnrRizk=
+	s=mail; t=1744828843;
+	bh=Z1bcOwaEL8wb4h1D5AwFZlAHw44W8YDLCsN003ABHao=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=FKGY49PY+aJD3Zk9hYaJNGqTL2b9kWh9V1zAiApB9zkBxrWyO3gG6xRhOW6I/XLqK
+	 /iXWjsAJd5Q2zeMam5O8wgV935eLlRa3tIYVbcezzjGX/SHGTIpzWR4WYa9LieOXEd
+	 /FyhLfrguBiArRLUK2mIiCozc8sr8E2Ug24bshww=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/6] tools/nolibc: fix some undefined behaviour and enable
- UBSAN
-Date: Wed, 16 Apr 2025 20:40:15 +0200
-Message-Id: <20250416-nolibc-ubsan-v1-0-c4704bb23da7@weissschuh.net>
+Date: Wed, 16 Apr 2025 20:40:21 +0200
+Subject: [PATCH 6/6] selftests/nolibc: enable UBSAN if available
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,48 +34,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAJD5/2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDE0Mz3bz8nMykZN3SpOLEPF0DIwsTA0MzSwszUxMloJaCotS0zAqwcdG
- xtbUAkqYcN14AAAA=
-X-Change-ID: 20250416-nolibc-ubsan-028401698654
+Message-Id: <20250416-nolibc-ubsan-v1-6-c4704bb23da7@weissschuh.net>
+References: <20250416-nolibc-ubsan-v1-0-c4704bb23da7@weissschuh.net>
+In-Reply-To: <20250416-nolibc-ubsan-v1-0-c4704bb23da7@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
  Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744828842; l=1096;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744828842; l=1309;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=r74PEqmclp8XQ64KO3BZyy9Pvmd2TvaX9zqkaaQrnr0=;
- b=+RNKNlfx45F4oK8aKjqBBV9P7vD/FZXYqRMSfClRhC7KztqjtoDZZQmgm+QqJYgwrKadqBXkt
- Wg6dtyHEqoRCRtATrHRTmKq14ooNmk43kLfeq/SGr5hWT13QqdDI7uu
+ bh=Z1bcOwaEL8wb4h1D5AwFZlAHw44W8YDLCsN003ABHao=;
+ b=5uH7BCyiQnYSwYc4OPAZ5rlK+ma+NvCLUa/EsmPXvEDEVpsBANvQVnSAT2W8GTzRrxn7DeLBf
+ 3v9YgXN0OrpBa5Jz7H7j0pHw/+rzfFAa2mVIp4bg9e5dOmFRf4pAdX/
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Fix some issues uncovered by UBSAN and enable UBSAN for nolibc-test to
-avoid regressions.
+UBSAN detects undefined behaviour at runtime.
+To avoid introduction of new UB, enable UBSAN for nolibc-test.
+
+By signalling detected errors through traps no runtime dependency
+is necessary.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (6):
-      tools/nolibc: add __nolibc_has_feature()
-      tools/nolibc: disable function sanitizer for _start_c()
-      tools/nolibc: properly align dirent buffer
-      tools/nolibc: fix integer overflow in i{64,}toa_r() and
-      selftests/nolibc: disable ubsan for smash_stack()
-      selftests/nolibc: enable UBSAN if available
+ tools/testing/selftests/nolibc/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- tools/include/nolibc/compiler.h              |  6 ++++++
- tools/include/nolibc/crt.h                   |  5 +++++
- tools/include/nolibc/dirent.h                |  1 +
- tools/include/nolibc/stdlib.h                | 24 ++++++++----------------
- tools/testing/selftests/nolibc/Makefile      |  3 ++-
- tools/testing/selftests/nolibc/nolibc-test.c |  1 +
- 6 files changed, 23 insertions(+), 17 deletions(-)
----
-base-commit: 7c73c10b906778384843b9d3ac6c2224727bbf5c
-change-id: 20250416-nolibc-ubsan-028401698654
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index aa05c1faac20d3054b231090b939d050b0231d40..94f3e8be7a68f63ecd639c4f283b3cd10764ce74 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -189,9 +189,10 @@ ifeq ($(origin XARCH),command line)
+ CFLAGS_XARCH = $(CFLAGS_$(XARCH))
+ endif
+ CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
++CFLAGS_SANITIZER ?= $(call cc-option,-fsanitize=undefined -fsanitize-trap=all)
+ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wextra \
+ 		$(call cc-option,-fno-stack-protector) $(call cc-option,-Wmissing-prototypes) \
+-		$(CFLAGS_XARCH) $(CFLAGS_STACKPROTECTOR) $(CFLAGS_EXTRA)
++		$(CFLAGS_XARCH) $(CFLAGS_STACKPROTECTOR) $(CFLAGS_SANITIZER) $(CFLAGS_EXTRA)
+ LDFLAGS :=
+ 
+ LIBGCC := -lgcc
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.49.0
 
