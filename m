@@ -1,84 +1,99 @@
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C240120D516;
-	Mon, 21 Apr 2025 07:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58BDE1E8329;
+	Mon, 21 Apr 2025 07:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745220170; cv=none; b=Po5BaB7ONQWIVvh1E+Yr8Y63fO/Y97oWWAIN4ezCmXTuk2+NF2cM4ZSY8TjKrYRUO2AackmhS/7dxF2WTCIKhGZvt94mJxLQv3MJHu/Fofhf+49cBN8/pNc2zszLf3E7Su+1uYDQZAsnsQJVI5IH+hobziLyrLfPJjYuF+hvnV8=
+	t=1745220684; cv=none; b=l9bJ9HUhymKAN/SUI1Dp48AaOHrxvYr7cN1ZpDQN8iK7+YZ5kCGJW6/jTISy5LpXoXDBLgcPcW+N24ERKdJ4mlTq3b/PH7d1mNj4AVTnYi6wWmoop43bXaUu6zTpv/SXdhI7F+5DSH31KayPQJjK824sH9Z3/+xKn39+hRjqgew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745220170; c=relaxed/simple;
-	bh=CgG69MQ/EYPTgruTAu52tqABJWetDvK3CxES8vaBp0o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WPml/LZQSvR6nt6RcMU8CNAGT8tLjYgfoqbt7KCzxNrKK0+3BaB6wPAPCekUrw2OsJX43DeQXDRpDL2WWgnYRhOHzlGn4Wc3MObo5vcdiJXdUr5cBEWnT1TDOEzu2ZxDfJbWftWX5jXHlmNr9PE5kriagBOQEvf1C4ckmW/U3K4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 91A761FCE9;
-	Mon, 21 Apr 2025 07:22:45 +0000 (UTC)
-Message-ID: <95cefab6-4d9c-4ad2-bc75-d117e0aefc62@ghiti.fr>
-Date: Mon, 21 Apr 2025 09:22:45 +0200
+	s=arc-20240116; t=1745220684; c=relaxed/simple;
+	bh=qFjcpY7G4UvAvpezP2J+wXOuhfZlC9khcrCE9vkGDFE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=s4NnM75TICM4BLSFUf0s6TX+Dv+oHu9Qp7UHeYl4Yy5AGGigmsYXubDOBZZxdI84+SQ8X0IBjCkehpLPKsdd4j6QSSd+q04FO0xNK3HTQZT850LN1vUBPb4O2z2kAtVTcfpykYvIwELX+zRKUDdYSGO58s8tRbtqXjcudhPJNvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.2.5.213])
+	by gateway (Coremail) with SMTP id _____8Bx365F9AVoc0nDAA--.42988S3;
+	Mon, 21 Apr 2025 15:31:17 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.213])
+	by front1 (Coremail) with SMTP id qMiowMBxn8U+9AVopeqNAA--.25751S3;
+	Mon, 21 Apr 2025 15:31:16 +0800 (CST)
+From: Bibo Mao <maobibo@loongson.cn>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Sean Christopherson <seanjc@google.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v10 1/5] KVM: selftests: Add VM_MODE_P47V47_16K vm mode
+Date: Mon, 21 Apr 2025 15:31:06 +0800
+Message-Id: <20250421073110.2259397-2-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20250421073110.2259397-1-maobibo@loongson.cn>
+References: <20250421073110.2259397-1-maobibo@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] Documentation/sysctl: add riscv to unaligned-trap
- supported archs
-Content-Language: en-US
-To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Shuah Khan <shuah@kernel.org>,
- Andrew Jones <ajones@ventanamicro.com>,
- Samuel Holland <samuel.holland@sifive.com>
-References: <20250414123543.1615478-1-cleger@rivosinc.com>
- <20250414123543.1615478-5-cleger@rivosinc.com>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250414123543.1615478-5-cleger@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgedtvdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpedtgeeuhffhveeujeetveevieekleekvdffudefleevgefgieekkefggefhtddtveenucfkphepvddttddumeekiedumeeffeekvdemvghfledtmedufhehjeemvgdutggumedukegutdemtgdtvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeeffeekvdemvghfledtmedufhehjeemvgdutggumedukegutdemtgdtvdekpdhhvghloheplgfkrfggieemvddttddumeekiedumeeffeekvdemvghfledtmedufhehjeemvgdutggumedukegutdemtgdtvdekngdpmhgrihhlfhhrohhmpegrlhgvgiesghhhihhtihdrfhhrpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopegtlhgvghgvrhesrhhivhhoshhinhgtrdgtohhmpdhrtghpthhtoheplhhinhhugidqughotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrr
- dhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhrihhstghvsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvthdprhgtphhtthhopehprghulhdrfigrlhhmshhlvgihsehsihhfihhvvgdrtghomhdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtghomh
-X-GND-Sasl: alex@ghiti.fr
+X-CM-TRANSID:qMiowMBxn8U+9AVopeqNAA--.25751S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+	nUUI43ZEXa7xR_UUUUUUUUU==
 
-On 14/04/2025 14:34, Clément Léger wrote:
-> riscv supports the "unaligned-trap" sysctl variable, add it to the list
-> of supported architectures.
->
-> Signed-off-by: Clément Léger <cleger@rivosinc.com>
-> ---
->   Documentation/admin-guide/sysctl/kernel.rst | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index dd49a89a62d3..a38e91c4d92c 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -1595,8 +1595,8 @@ unaligned-trap
->   
->   On architectures where unaligned accesses cause traps, and where this
->   feature is supported (``CONFIG_SYSCTL_ARCH_UNALIGN_ALLOW``; currently,
-> -``arc``, ``parisc`` and ``loongarch``), controls whether unaligned traps
-> -are caught and emulated (instead of failing).
-> +``arc``, ``parisc``, ``loongarch`` and ``riscv``), controls whether unaligned
-> +traps are caught and emulated (instead of failing).
->   
->   = ========================================================
->   0 Do not emulate unaligned accesses.
+On LoongArch system, GVA width is 47 bit and GPA width is 47 bit also,
+here add new vm mode VM_MODE_P47V47_16K.
 
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ tools/testing/selftests/kvm/include/kvm_util.h | 1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c     | 3 +++
+ 2 files changed, 4 insertions(+)
 
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-
-Thanks,
-
-Alex
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index 373912464fb4..f8faed8c8024 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -177,6 +177,7 @@ enum vm_guest_mode {
+ 	VM_MODE_P36V48_4K,
+ 	VM_MODE_P36V48_16K,
+ 	VM_MODE_P36V48_64K,
++	VM_MODE_P47V47_16K,
+ 	VM_MODE_P36V47_16K,
+ 	NUM_VM_MODES,
+ };
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 815bc45dd8dc..5649cf2f40e8 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -222,6 +222,7 @@ const char *vm_guest_mode_string(uint32_t i)
+ 		[VM_MODE_P36V48_4K]	= "PA-bits:36,  VA-bits:48,  4K pages",
+ 		[VM_MODE_P36V48_16K]	= "PA-bits:36,  VA-bits:48, 16K pages",
+ 		[VM_MODE_P36V48_64K]	= "PA-bits:36,  VA-bits:48, 64K pages",
++		[VM_MODE_P47V47_16K]	= "PA-bits:47,  VA-bits:47, 16K pages",
+ 		[VM_MODE_P36V47_16K]	= "PA-bits:36,  VA-bits:47, 16K pages",
+ 	};
+ 	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
+@@ -248,6 +249,7 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+ 	[VM_MODE_P36V48_4K]	= { 36, 48,  0x1000, 12 },
+ 	[VM_MODE_P36V48_16K]	= { 36, 48,  0x4000, 14 },
+ 	[VM_MODE_P36V48_64K]	= { 36, 48, 0x10000, 16 },
++	[VM_MODE_P47V47_16K]	= { 47, 47,  0x4000, 14 },
+ 	[VM_MODE_P36V47_16K]	= { 36, 47,  0x4000, 14 },
+ };
+ _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
+@@ -319,6 +321,7 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
+ 	case VM_MODE_P36V48_16K:
+ 		vm->pgtable_levels = 4;
+ 		break;
++	case VM_MODE_P47V47_16K:
+ 	case VM_MODE_P36V47_16K:
+ 		vm->pgtable_levels = 3;
+ 		break;
+-- 
+2.39.3
 
