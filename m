@@ -1,139 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA6529CE8;
-	Tue, 22 Apr 2025 16:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CC82918FF
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Apr 2025 16:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745339006; cv=none; b=SKRbaBxUAizLCY/GTShDX7VmB3HXPSFPTBGKA2+hkm4RVM590lg+v2R0Jl6yWCl7g1gSHUiP2pFxwr0go05OIUFIoRBkKlZ2EWuwC4YU9XEnWbaleQUZf3wIsBilBGyEZVeKKbyTO6vWLbvbQka0z+wxLXB5Qy0NfiqHwzCiVQg=
+	t=1745339033; cv=none; b=F0vcEMWuG/MWnCGy7ZLCzwMC7/qSNzKXi9PT4RtZN2+hYFMkmotevK4tV8p1Oz010wy4Zvt1XbP7EyV4IHaNy3c8UjMP0/1tURJTyD4cniEkMskCj6AwDua9ir0KQVGVgOa5KcllWn8ukbAOCva9r61Fx1Res/uTIWKq+qaslLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745339006; c=relaxed/simple;
-	bh=el03+wkT7G2QcB+cYa9PQdWkqikPRn2Ydhr4BlWOGIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CBTw5opXXeJJ6l8/KrZG0lV0ipAPaTkp5QcHpg8Yv2sBPXqkHr6GffLVgcbEazTs66i0wCFvsRUmCb1jd/BoLSO3AyCnIc5qD3aZwJfJOSSyyL8/cFEFqafWDH5TdvOuOvVtMKut8NoQveaxrUv6gZ+ke7J6BgCluOGeNlEwLS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UjLMOyso; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745339033; c=relaxed/simple;
+	bh=V1few9iADl3Jql37d2sSjWVyST8COex3O6hgsGvnL9Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WSzov7rDT1Mx65RqrQ797AnQAarC8vvTmWYn27JuGNJytoArlHQrqMIQ368pnujxo5xTJ/mnIme6ZvtCCefIOJF6G5jjVO/jhzWmOGiVrm6Q7FeXILhtSKbxSU6RjhcvVPOIZQdVSPMBt+1/4K/FSgbOHom2g3Qb6RbpWK4THtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=MX8rfLpZ; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UjLMOyso"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA4D0C4CEED;
-	Tue, 22 Apr 2025 16:23:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745339005;
-	bh=el03+wkT7G2QcB+cYa9PQdWkqikPRn2Ydhr4BlWOGIw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UjLMOysolSc4V48hMrcN7AaQ+UhnfJEZiE6TH3niXOQApWPf0Kb8URGZSy18MZ6cY
-	 /ikHU7gEI7qqrvd9+ixLIOmppJINTxmNRpHWXXN2AGlZvhN4Z189aXQaf4AbNONkog
-	 Pbx7FXMAwfyO9OTWUeh4+NJuCIvbNrkXuF9XkNKAbJVuQ6jatWnZRnyxhqkmTPXlyn
-	 sXSjUTBwjKT0Sw2e4GPoDP2YX39IwBDdFB8gyzVMt+gyJ7sMe4dancoq0EolH5lu6H
-	 TvMTTdq4ReFQ1OCEbb/ZJ/BDZOZRgUmgULQBqMgsgT3kp1fNoyLkPle3C94QXeZVvA
-	 e6AR1oH/d2LjA==
-Date: Tue, 22 Apr 2025 17:23:18 +0100
-From: Simon Horman <horms@kernel.org>
-To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ij@kernel.org>
-Cc: chia-yu.chang@nokia-bell-labs.com, dsahern@kernel.org,
-	kuniyu@amazon.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
-	dave.taht@gmail.com, pabeni@redhat.com, jhs@mojatatu.com,
-	kuba@kernel.org, stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-	edumazet@google.com, andrew+netdev@lunn.ch, donald.hunter@gmail.com,
-	ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, ncardwell@google.com,
-	koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
-	ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
-	cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
-	vidhi_goel@apple.com
-Subject: Re: [PATCH v4 net-next 09/15] tcp: accecn: AccECN option
-Message-ID: <20250422162318.GI2843373@horms.kernel.org>
-References: <20250417230029.21905-1-chia-yu.chang@nokia-bell-labs.com>
- <20250417230029.21905-10-chia-yu.chang@nokia-bell-labs.com>
- <20250418183138.GE2676982@horms.kernel.org>
- <8b6f580b-d682-91f7-f958-1806ee6e8bbe@kernel.org>
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="MX8rfLpZ"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-736b350a22cso4372671b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Apr 2025 09:23:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745339030; x=1745943830; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=k21lSdGFw1ABvj7WqNf9xvlJy5uS9lN5lvHH4c8/sSI=;
+        b=MX8rfLpZHlPbpZJhzgmC0WuqaXi5gxGij7pWSEGOirRq98iMFMu2Hv+p4PAiluJiFi
+         /HcLY6neH9zdv2SLPPxxVwaONKT+i7rGXlyYE9PTb2CmODuKukgmQPz9mGpJYS0QgJGl
+         btDD2N8z6z05fNwJ++UYUr5RjcvFVMYs5OMBnjShQ2kHoznC5xLTdDfb+Dh4JUZxrVG+
+         v1mheup4GYh1v0IdcyeUH6ERa8ng8Bj9v6gLdDnm81UOw1rC985JT8bYBYKOC25YTNeI
+         VWI0ZUKj+APOg66+a8+R3aAoA94MwiEyoBEuW3RVayt9QIBkxOZmSXejSsjxt69qiXyM
+         UrMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745339030; x=1745943830;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k21lSdGFw1ABvj7WqNf9xvlJy5uS9lN5lvHH4c8/sSI=;
+        b=hQ7jMxbzGOeGDA7DTde3TSSaicCEOyxSL5aHw7XuNbbSGg6b5Lp+WHay52iR5WfIjM
+         w305C5DaVyGp3xELLn9laJlxk2TW0Q0HKlixRmEc65qTyiqtwPGt6AljBGmHwtCkwEnd
+         hMLDwYW3R8hFhe3a9IFu8I070vzL6jsYhzyrfmn4lNt5R7d3/hHN6dWKUztE7dy6BnPw
+         /eopHwP0fbVMsbm8MelrSQwJbPU/hnnghtl6LMxaVCVZqCi4aABMS2f7IiDWisTT6ZLt
+         IR79zrkrpbMprDhEp6C99nmtTl8WsAWm7ySWWAZAxVEV6XrBBtSMLJ/ZEz8Fx9iSxHIQ
+         ogSA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpTWBGQwOw5LTwanKxi5CpZ4SqkLyyK6i24XcK7oBq0+hhsmpFs4ztWeReTIXrNe8VkJVpoJPlCUrrh4PFXpo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMJEIF9nWDQ9W9BxpyCStetgJwWnDnz9od01I8Xsy7EEBgAw6N
+	i3oKWoiO+Gbv+WR/F7k4GsjQva7jN1KhGxLQdMd7HyAJA+OkTU89S/J7abAeEFQ=
+X-Gm-Gg: ASbGnct95hKAA8VGNelJ5H2a29wmF7LafgpRZGYFHfGdnQvxE9JWINXr65ry8dJ1UfR
+	DueXt9oE7wnueYGb16WwAyEBiA2ze6XTcyvK5lbUicFCZcTD5qc8CewZqNilMN0/dCZnbci+Cyg
+	MoxsXxXnlBcMUy91fg0/zANxa16WQiNwk3BYxuZibcWnJMh+BA+8gk3Bq1NQuKcxxCUTGLJDQlW
+	meFcAEkqs9lTHgxfroNMjHz/+s/HqAgoNSsDv8Evi8++NHl9moXSuq/kN0UU0Oj7V38rRrOBQ3e
+	7NiYW7ivIO1q+lQMH/Ums5znUL+by8vu5c8XJsrBaMqDlhd93qwm
+X-Google-Smtp-Source: AGHT+IGBaYB+zcFYNZod6Dyq/XeUaZqkUk/RN2FexFvjQuv/xDbjUf/BD8XILM+dfMbhssRMX5dz+g==
+X-Received: by 2002:a05:6a00:b4e:b0:736:5504:e8b4 with SMTP id d2e1a72fcca58-73dc156b0c4mr22113079b3a.19.1745339030561;
+        Tue, 22 Apr 2025 09:23:50 -0700 (PDT)
+Received: from carbon-x1.. ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbf8e13e1sm8850825b3a.46.2025.04.22.09.23.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Apr 2025 09:23:49 -0700 (PDT)
+From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
+To: linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+	linux-kernel@vger.kernel.org (open list),
+	linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Shuah Khan <shuah@kernel.org>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Samuel Holland <samuel.holland@sifive.com>
+Subject: [PATCH v2 0/5] riscv: misaligned: fix interruptible context and add tests
+Date: Tue, 22 Apr 2025 18:23:07 +0200
+Message-ID: <20250422162324.956065-1-cleger@rivosinc.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8b6f580b-d682-91f7-f958-1806ee6e8bbe@kernel.org>
 
-On Fri, Apr 18, 2025 at 10:35:14PM +0300, Ilpo Järvinen wrote:
-> On Fri, 18 Apr 2025, Simon Horman wrote:
-> 
-> > On Fri, Apr 18, 2025 at 01:00:23AM +0200, chia-yu.chang@nokia-bell-labs.com wrote:
-> > 
-> > ...
-> > 
-> > > diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> > 
-> > ...
-> > 
-> > > @@ -766,6 +769,47 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
-> > >  		*ptr++ = htonl(opts->tsecr);
-> > >  	}
-> > >  
-> > > +	if (OPTION_ACCECN & options) {
-> > > +		const u8 ect0_idx = INET_ECN_ECT_0 - 1;
-> > > +		const u8 ect1_idx = INET_ECN_ECT_1 - 1;
-> > > +		const u8 ce_idx = INET_ECN_CE - 1;
-> > > +		u32 e0b;
-> > > +		u32 e1b;
-> > > +		u32 ceb;
-> > > +		u8 len;
-> > > +
-> > > +		e0b = opts->ecn_bytes[ect0_idx] + TCP_ACCECN_E0B_INIT_OFFSET;
-> > > +		e1b = opts->ecn_bytes[ect1_idx] + TCP_ACCECN_E1B_INIT_OFFSET;
-> > > +		ceb = opts->ecn_bytes[ce_idx] + TCP_ACCECN_CEB_INIT_OFFSET;
-> > > +		len = TCPOLEN_ACCECN_BASE +
-> > > +		      opts->num_accecn_fields * TCPOLEN_ACCECN_PERFIELD;
-> > > +
-> > > +		if (opts->num_accecn_fields == 2) {
-> > > +			*ptr++ = htonl((TCPOPT_ACCECN1 << 24) | (len << 16) |
-> > > +				       ((e1b >> 8) & 0xffff));
-> > > +			*ptr++ = htonl(((e1b & 0xff) << 24) |
-> > > +				       (ceb & 0xffffff));
-> > > +		} else if (opts->num_accecn_fields == 1) {
-> > > +			*ptr++ = htonl((TCPOPT_ACCECN1 << 24) | (len << 16) |
-> > > +				       ((e1b >> 8) & 0xffff));
-> > > +			leftover_bytes = ((e1b & 0xff) << 8) |
-> > > +					 TCPOPT_NOP;
-> > > +			leftover_size = 1;
-> > > +		} else if (opts->num_accecn_fields == 0) {
-> > > +			leftover_bytes = (TCPOPT_ACCECN1 << 8) | len;
-> > > +			leftover_size = 2;
-> > > +		} else if (opts->num_accecn_fields == 3) {
-> > > +			*ptr++ = htonl((TCPOPT_ACCECN1 << 24) | (len << 16) |
-> > > +				       ((e1b >> 8) & 0xffff));
-> > > +			*ptr++ = htonl(((e1b & 0xff) << 24) |
-> > > +				       (ceb & 0xffffff));
-> > > +			*ptr++ = htonl(((e0b & 0xffffff) << 8) |
-> > > +				       TCPOPT_NOP);
-> > > +		}
-> > > +		if (tp)
-> > > +			tp->accecn_minlen = 0;
-> > 
-> > Hi,
-> > 
-> > I'm sorry if this is a false positive: Smatch flags that here we assume
-> > that tp might be NULL, while elsewhere in this function tp is dereferenced
-> > unconditionally. So my question is, can tp be NULL here?
-> 
-> Hi Simon,
-> 
-> Thanks for taking look!
-> 
-> This looks a false positive. It's because tcp_options_write() is shared by 
-> the handshake and established connections. A direct caller from the 
-> handshake path passes NULL as tp:
-> 
-> 	tcp_options_write(th, NULL, tcp_rsk(req), &opts, &key);
-> 
-> The thing that smatch doesn't know is that some TCP options are not going 
-> to be present during handshake. Those code paths that only deal with 
-> options that are for an established connection can assume full sk/tp has 
-> been already instantiated so they don't need to check tp. In addition, 
-> some funcs tcp_options_write() calls to make the opposite check by 
-> checking tcprsk instead but it has the same effect.
+This series fixes misaligned access handling when in non interruptible
+context by reenabling interrupts when possible. A previous commit
+changed raw_copy_from_user() with copy_from_user() which enables page
+faulting and thus can sleep. While correct, a warning is now triggered
+due to being called in an invalid context (sleeping in
+non-interruptible). This series fixes that problem by factorizing
+misaligned load/store entry in a single function than reenables
+interrupt if the interrupted context had interrupts enabled.
+In order for misaligned handling problems to be caught sooner, add a
+kselftest for all the currently supported instructions .
 
-Thanks for checking, I appreciate you clarifying this.
+Note: these commits were actually part of another larger series for
+misaligned request delegation but was split since it isn't directly
+required.
+
+V2:
+ - Use an array of struct to simplify misaligned load/store selection
+ - Revert use of irqentry_enter()/exit() to irqentry_nmi_enter() for
+   kernel space.
+
+Clément Léger (5):
+  riscv: misaligned: factorize trap handling
+  riscv: misaligned: enable IRQs while handling misaligned accesses
+  riscv: misaligned: use get_user() instead of __get_user()
+  Documentation/sysctl: add riscv to unaligned-trap supported archs
+  selftests: riscv: add misaligned access testing
+
+ Documentation/admin-guide/sysctl/kernel.rst   |   4 +-
+ arch/riscv/kernel/traps.c                     |  64 +++--
+ arch/riscv/kernel/traps_misaligned.c          |   2 +-
+ .../selftests/riscv/misaligned/.gitignore     |   1 +
+ .../selftests/riscv/misaligned/Makefile       |  12 +
+ .../selftests/riscv/misaligned/common.S       |  33 +++
+ .../testing/selftests/riscv/misaligned/fpu.S  | 180 +++++++++++++
+ tools/testing/selftests/riscv/misaligned/gp.S | 103 +++++++
+ .../selftests/riscv/misaligned/misaligned.c   | 254 ++++++++++++++++++
+ 9 files changed, 623 insertions(+), 30 deletions(-)
+ create mode 100644 tools/testing/selftests/riscv/misaligned/.gitignore
+ create mode 100644 tools/testing/selftests/riscv/misaligned/Makefile
+ create mode 100644 tools/testing/selftests/riscv/misaligned/common.S
+ create mode 100644 tools/testing/selftests/riscv/misaligned/fpu.S
+ create mode 100644 tools/testing/selftests/riscv/misaligned/gp.S
+ create mode 100644 tools/testing/selftests/riscv/misaligned/misaligned.c
+
+-- 
+2.49.0
+
