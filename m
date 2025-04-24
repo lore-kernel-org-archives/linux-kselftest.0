@@ -1,557 +1,211 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C291C21FF5A;
-	Thu, 24 Apr 2025 11:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98B220C47A
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 11:52:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745495300; cv=none; b=NY0EsGCntMg0OUuU4k5OtGx8cDO1XBd9lhggY+LbEuQmihtYJNR3kVcqCittkbz/zmtOP7nbpJpo3xhY/yEfn76avX1Y91Ez1yQ+4PNWlqKFXbuPzNxu9+9WHxsFaBNgS3DlFlOGg23CddGpeeHaRqzvUjwnfaqlxltBYF/RaY0=
+	t=1745495567; cv=none; b=cXZ5MZmM8wdHKZ4aNS5Wym3QaxlUKQFYrgkRQN1F+TahS23B44ALIT6CeodZBO+NnzCVVRADrPleKmiM62Hjb9UR8oSSAPT55hdSxzAn23wlg+llaXSfnp/4LN8cJbzXAipOIAapge9eTpXDy/PF2v/02apafjoPTgd3cVdNnI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745495300; c=relaxed/simple;
-	bh=VoE6OmAwofxkHiKLz+nGUa+9WokQvVG4ZP7QwcR4GxM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BzPw98HHWnSiKuYmmwXZZceXJWJHg9FVgihO8Q0+LppO57/qi4Hn+ikp1SS88rbK+wmOdrOPIEQDwcl3cSxoD1tdY7mpoOVcOQc5lvUVKzI01y17FyIIAlr5rA3YZZ2h0EXpngJIwGU69h34RMytNFWc0GNptPLTCowkvht37aQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=c0DNCiLG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kbl3b5bH; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1745495567; c=relaxed/simple;
+	bh=DjB6yBsMl6lrqs3kS6J4Z5q3FIya7mHUZ9ybBLQq0UM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=qXjdD5j1jc3CKZMod2BXSEDUJ44AeCZgQTUPmr0zygMP5uB+Zu6GnQ/ww1Xw/3Hd0aOtaMseqgYnPOAXYBplwzDbp/ThcMLZHTZBe65eB8WkChBwtG1UfJNc1T22l3maKzZRjzE0G2QphOLNLgMsD9Ien5E7BNxX8YcZo/JpxAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=bxkmDyDA; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="c0DNCiLG";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kbl3b5bH"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1745495296;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Yn58Vv/VpIlhtWOr6OS0BMTd6rBqTRqVk+MHr1fF1HY=;
-	b=c0DNCiLG2Edrc2Fd2+1g87S/vznCz1Op/gVrqwz9VWUJAPgHTMbnXApGR1wjOmgQctrEb2
-	+Sv0IWpDc0mT0kVybtsdXQ+4GiNiY3W4r52HEuIB5omvJsitCuynEpipHlqtvtg8yh8joT
-	FqJBgT9tG9F/L+qrsEL0vwN+FfmXhMtpgSMnY/DP2Yc9sDSLTBCnI6GYxZse0J5d53HCNG
-	ZPGeaBvVnMOkrcH09pF3bAuw8mxy+umszAiQgHIhUR5pEOlLSeiuWQSjqWCnTgz+YII0sI
-	fi6xLMmt70kV5s21dkdlmMnzoPUWBEEAPlwirqsEipRE3L3v393N2CHgNn0U0Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1745495296;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Yn58Vv/VpIlhtWOr6OS0BMTd6rBqTRqVk+MHr1fF1HY=;
-	b=kbl3b5bHky0ZpyGsYz5KrXBgwUuF/EGzlXC9+NDxfcwPuKU1qCI3pUyOguyeumjgNw4Jl0
-	AItN/uYw0jUnpZAA==
-Date: Thu, 24 Apr 2025 13:48:12 +0200
-Subject: [PATCH 2/3] tools/nolibc: include nolibc.h early from all header
- files
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="bxkmDyDA"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-440668acbf3so1375525e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Apr 2025 04:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1745495564; x=1746100364; darn=vger.kernel.org;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s+dd0LSkGUj1HE7Y4OEfSLazS5H3NN900Vi5gbnC580=;
+        b=bxkmDyDArMx0OqwBa+08lv4xzsGf09Af9eKmh54vpjoHPwLrnysj0ZYaflCREJRWts
+         AKiNtHz8cjrkSf0Lbb9NetGIph216zEBEWzP4tv3W681HV5wi6Pp5fu3AOMHWAxsuhky
+         MxMQgFjVqxRF0xd+zaK7mTBfYwRrP4UBVdRwSiirZT5trdIhjcLA6DBFRwemvpMjtxhV
+         0f/32r5EV8BffeBi7CqmwagilSyuDkE1jLzZxQNIIHhBudYRKIkuEuJyTaBt13eqcawp
+         jOABUZF8+8WhJiIA/bf0daBGvGLUfzHDtR59SpViLKNZNAEJI6hfWU7YLCcb4fS26KIL
+         Zj4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745495564; x=1746100364;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=s+dd0LSkGUj1HE7Y4OEfSLazS5H3NN900Vi5gbnC580=;
+        b=BfOqwc8OMOUfuAEOTcsQw7UssVjzVYUMYRP2qIqMd7O5RTlwWB/ORGTT0+IARTVz1G
+         cP3wiPuggbRLmbmwweUi9ohrJ2lczeBrS4YcYGQUzGdtUVu2FQeCWyK9xQS7cNyMSC3U
+         RAxu0Y4dO8wSjxMTDkb8vV8g96iGxmeq6i7gOddY/jn6TgegukRpQTax7aG8Csu2zxWv
+         sJKYKjUXspYvjyDsL0mEOfOC9P1IoB3E6BIqrAoTLvY2IdWVsKRq6fHLtjdM1Gk6dxng
+         AT8XQ1wc1ZuU5kD20Kx637QUE5rI7eFAqcH2SyH7B+mTfSp27QUtHvHGKesXna7iNygK
+         Kglw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4oKJtlC06u2mhntshffbsCJUsaLr+h2UREYJQ8mtbJI5F8QmXNLQUiZsM+V7uZ6LB+mpF5LqFhbJlo8UNja0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4q795psenU6I1TZdVCn25WhNt6ZmVeteqgAPY4uHXD8cRDESF
+	jEgX90K+JdekS7tJJSC09ymWFlYEZXk8KX6BQnfmnGSl3Z+4seVj9sKDPKnaeEI=
+X-Gm-Gg: ASbGncu3wv/g7s5mUsyL4px0zzsXNBiDYiFqgochZx0puBtq0Vl1v4/Jj1UL3RPiqEN
+	YFKn9WGlLiz8YWv/+5HKwFC3903jseG9t22hhyvEqGIMYYrwzesvU6VKd4OkyyB1rTsuEnfLPoO
+	AputtM3pNrJIrKnlz2/JAl0NhN9dBbxSSzOfUwgZr6cCM40zaOk8nMhxTNk0x80mW8f+EMOQxkn
+	KodXD+TIjvxohKVBMUv5Cafmle/FAyu3D1dRbbd7D32coTrKEsuhFNsErqzpJLMyrK+82wS6tlp
+	JMtpVOxKgVzlXoMNLRfy8hh/lC+aUxCwp8A8uPi+wkLGfh9s
+X-Google-Smtp-Source: AGHT+IF8wqwUphleYE2qKoazIUMOkR8h6x1rMfa0xrlvKXCx8csAkRx3P4JsSRpMyeAudqq5D+3jRA==
+X-Received: by 2002:a5d:6d8a:0:b0:3a0:678f:ddd8 with SMTP id ffacd0b85a97d-3a06cf5262cmr625001f8f.2.1745495563895;
+        Thu, 24 Apr 2025 04:52:43 -0700 (PDT)
+Received: from localhost ([2a02:8308:a00c:e200:b30c:ee4d:9e10:6a46])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a06d5323casm1860957f8f.75.2025.04.24.04.52.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Apr 2025 04:52:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250424-nolibc-header-check-v1-2-011576b6ed6f@linutronix.de>
-References: <20250424-nolibc-header-check-v1-0-011576b6ed6f@linutronix.de>
-In-Reply-To: <20250424-nolibc-header-check-v1-0-011576b6ed6f@linutronix.de>
-To: Willy Tarreau <w@1wt.eu>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745495292; l=15357;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=VoE6OmAwofxkHiKLz+nGUa+9WokQvVG4ZP7QwcR4GxM=;
- b=93IFqJ6pPP7/a7bkRI6L/cSkrVVDGtgoGvxe6KILlhLbvKZpTsK8P7/NIXub/B8jQ0btZjDWq
- c3Uy1+OWgclDMLpgTNV8Su9PB2rjKwpIvwi/vFZlyoPjXVw+O7LvZsO
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Apr 2025 13:52:43 +0200
+Message-Id: <D9EUJBQ5OHN0.2KUJHGXK262TR@ventanamicro.com>
+Subject: Re: [PATCH v12 05/28] riscv: usercfi state for task and
+ save/restore of CSR_SSP on trap entry/exit
+Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
+ <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Liam R.
+ Howlett" <Liam.Howlett@oracle.com>, "Vlastimil Babka" <vbabka@suse.cz>,
+ "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, "Paul Walmsley"
+ <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
+ Ou" <aou@eecs.berkeley.edu>, "Conor Dooley" <conor@kernel.org>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Arnd Bergmann" <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>,
+ "Eric Biederman" <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann
+ Horn" <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
+ <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
+ <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
+ <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
+ <cleger@rivosinc.com>, <broonie@kernel.org>, <rick.p.edgecombe@intel.com>,
+ "Zong Li" <zong.li@sifive.com>, "linux-riscv"
+ <linux-riscv-bounces@lists.infradead.org>
+To: "Deepak Gupta" <debug@rivosinc.com>
+From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
+References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
+ <D92WQWAUQYY4.2ED8JAFBDHGRN@ventanamicro.com>
+ <aAl_HRk49lnseiio@debug.ba.rivosinc.com>
+In-Reply-To: <aAl_HRk49lnseiio@debug.ba.rivosinc.com>
 
-Inclusion of any nolibc header file should also bring all other headers.
-On the other hand it should also be possible to include any nolibc header
-files
-in any order.
+2025-04-23T17:00:29-07:00, Deepak Gupta <debug@rivosinc.com>:
+> On Thu, Apr 10, 2025 at 01:04:39PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
+te:
+>>2025-03-14T14:39:24-07:00, Deepak Gupta <debug@rivosinc.com>:
+>>> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/=
+asm/thread_info.h
+>>> @@ -62,6 +62,9 @@ struct thread_info {
+>>>  	long			user_sp;	/* User stack pointer */
+>>>  	int			cpu;
+>>>  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
+>>> +#ifdef CONFIG_RISCV_USER_CFI
+>>> +	struct cfi_status	user_cfi_state;
+>>> +#endif
+>>
+>>I don't think it makes sense to put all the data in thread_info.
+>>kernel_ssp and user_ssp is more than enough and the rest can comfortably
+>>live elsewhere in task_struct.
+>>
+>>thread_info is supposed to be as small as possible -- just spanning
+>>multiple cache-lines could be noticeable.
+>
+> I can change it to only include only `user_ssp`, base and size.
 
-Currently this is implemented by including the catch-all nolibc.h after the
-headers own definitions.
-This is problematic if one nolibc header depends on another one.
-The first header has to include the other one before defining any symbols.
-That in turn will include the rest of nolibc while the current header has
-not defined anything yet. If any other part of nolibc depends on
-definitions from the current header, errors are encountered.
-This is already the case today. Effectively nolibc can only be included in
-the order of nolibc.h.
+No need for base and size either -- we don't touch that in the common
+exception code.
 
-Restructure the way "nolibc.h" is included.
-Move it to the beginning of the header files and before the include guards.
-Now any header will behave exactly like "nolibc.h" while the include
-guards prevent any duplicate definitions.
+> But before we go there, see below:
+>
+> $ pahole -C thread_info kbuild/vmlinux
+> struct thread_info {
+>          long unsigned int          flags;                /*     0     8 =
+*/
+>          int                        preempt_count;        /*     8     4 =
+*/
+>
+>          /* XXX 4 bytes hole, try to pack */
+>
+>          long int                   kernel_sp;            /*    16     8 =
+*/
+>          long int                   user_sp;              /*    24     8 =
+*/
+>          int                        cpu;                  /*    32     4 =
+*/
+>
+>          /* XXX 4 bytes hole, try to pack */
+>
+>          long unsigned int          syscall_work;         /*    40     8 =
+*/
+>          struct cfi_status          user_cfi_state;       /*    48    32 =
+*/
+>          /* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
+>          long unsigned int          a0;                   /*    80     8 =
+*/
+>          long unsigned int          a1;                   /*    88     8 =
+*/
+>          long unsigned int          a2;                   /*    96     8 =
+*/
+>
+>          /* size: 104, cachelines: 2, members: 10 */
+>          /* sum members: 96, holes: 2, sum holes: 8 */
+>          /* last cacheline: 40 bytes */
+> };
+>
+> If we were to remove entire `cfi_status`, it would still be 72 bytes (88 =
+bytes
+> if shadow call stack were enabled) and already spans across two cacheline=
+s.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- tools/include/nolibc/ctype.h       | 6 +++---
- tools/include/nolibc/dirent.h      | 6 +++---
- tools/include/nolibc/elf.h         | 6 +++---
- tools/include/nolibc/errno.h       | 6 +++---
- tools/include/nolibc/fcntl.h       | 6 +++---
- tools/include/nolibc/getopt.h      | 6 +++---
- tools/include/nolibc/signal.h      | 6 +++---
- tools/include/nolibc/stdio.h       | 6 +++---
- tools/include/nolibc/stdlib.h      | 6 +++---
- tools/include/nolibc/string.h      | 7 +++----
- tools/include/nolibc/sys.h         | 6 +++---
- tools/include/nolibc/sys/auxv.h    | 6 +++---
- tools/include/nolibc/sys/mman.h    | 6 +++---
- tools/include/nolibc/sys/stat.h    | 7 +++----
- tools/include/nolibc/sys/syscall.h | 6 +++---
- tools/include/nolibc/sys/time.h    | 6 +++---
- tools/include/nolibc/sys/wait.h    | 7 +++----
- tools/include/nolibc/time.h        | 6 +++---
- tools/include/nolibc/types.h       | 6 +++---
- tools/include/nolibc/unistd.h      | 6 +++---
- 20 files changed, 60 insertions(+), 63 deletions(-)
+It has only 64 bytes of data without shadow call stack, but it wasted 8
+bytes on the holes.
+a2 is somewhat an outlier that is not used most exception paths and
+excluding it makes everything fit nicely even now.
 
-diff --git a/tools/include/nolibc/ctype.h b/tools/include/nolibc/ctype.h
-index 6f90706d06442d87e262cf36c00ce7fe61972dbf..470fdf34394a5045681c76c9750c467cd944bb5e 100644
---- a/tools/include/nolibc/ctype.h
-+++ b/tools/include/nolibc/ctype.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_CTYPE_H
- #define _NOLIBC_CTYPE_H
- 
-@@ -96,7 +99,4 @@ int ispunct(int c)
- 	return isgraph(c) && !isalnum(c);
- }
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_CTYPE_H */
-diff --git a/tools/include/nolibc/dirent.h b/tools/include/nolibc/dirent.h
-index 6c60ec4ba27baefc1fc59b607338909e55c50fb6..758b95c48e7a4c9779625160f1a60a5641513ddf 100644
---- a/tools/include/nolibc/dirent.h
-+++ b/tools/include/nolibc/dirent.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2025 Thomas Weißschuh <linux@weissschuh.net>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_DIRENT_H
- #define _NOLIBC_DIRENT_H
- 
-@@ -94,7 +97,4 @@ int readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result)
- 	return 0;
- }
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_DIRENT_H */
-diff --git a/tools/include/nolibc/elf.h b/tools/include/nolibc/elf.h
-index beb0b3a87569a3037055c8fe7e9b086a26ca7d13..3e2c5228bf3d99322754ac5ba8824a0e25624d55 100644
---- a/tools/include/nolibc/elf.h
-+++ b/tools/include/nolibc/elf.h
-@@ -4,12 +4,12 @@
-  * Copyright (C) 2025 Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_SYS_ELF_H
- #define _NOLIBC_SYS_ELF_H
- 
- #include <linux/elf.h>
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_SYS_ELF_H */
-diff --git a/tools/include/nolibc/errno.h b/tools/include/nolibc/errno.h
-index 1d8d8033e8ff766ee4b3cf7efdb741d4208db04e..08a33c40ec0c18c70e32dda04a835745dad8fb30 100644
---- a/tools/include/nolibc/errno.h
-+++ b/tools/include/nolibc/errno.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2022 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_ERRNO_H
- #define _NOLIBC_ERRNO_H
- 
-@@ -22,7 +25,4 @@ int errno __attribute__((weak));
-  */
- #define MAX_ERRNO 4095
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_ERRNO_H */
-diff --git a/tools/include/nolibc/fcntl.h b/tools/include/nolibc/fcntl.h
-index 5feb08ad54a7d943b8100eac21f4058310efea91..bff2e542f20f9dbee34b88a51b08ba2dfcf26464 100644
---- a/tools/include/nolibc/fcntl.h
-+++ b/tools/include/nolibc/fcntl.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_FCNTL_H
- #define _NOLIBC_FCNTL_H
- 
-@@ -63,7 +66,4 @@ int open(const char *path, int flags, ...)
- 	return __sysret(sys_open(path, flags, mode));
- }
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_FCNTL_H */
-diff --git a/tools/include/nolibc/getopt.h b/tools/include/nolibc/getopt.h
-index 5fd06c9702e96e8c58a6b242f535bca09db69343..217abb95264b286a9f6bcd500779575a9a508352 100644
---- a/tools/include/nolibc/getopt.h
-+++ b/tools/include/nolibc/getopt.h
-@@ -5,6 +5,9 @@
-  * Copyright (C) 2025 Thomas Weißschuh <linux@weissschuh.net>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_GETOPT_H
- #define _NOLIBC_GETOPT_H
- 
-@@ -95,7 +98,4 @@ int getopt(int argc, char * const argv[], const char *optstring)
- 	return c;
- }
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_GETOPT_H */
-diff --git a/tools/include/nolibc/signal.h b/tools/include/nolibc/signal.h
-index cdcc5904c51e93c524f9afc7d49a17feda3d9af2..ac13e53ac31d7c0fb1f58e421417104caa32f765 100644
---- a/tools/include/nolibc/signal.h
-+++ b/tools/include/nolibc/signal.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2022 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_SIGNAL_H
- #define _NOLIBC_SIGNAL_H
- 
-@@ -20,7 +23,4 @@ int raise(int signal)
- 	return sys_kill(sys_getpid(), signal);
- }
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_SIGNAL_H */
-diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-index fb0417477759ee6c9663e84807c1d1067e735dec..8fa98abab2127c2cd175201d2f50d71b78d03559 100644
---- a/tools/include/nolibc/stdio.h
-+++ b/tools/include/nolibc/stdio.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_STDIO_H
- #define _NOLIBC_STDIO_H
- 
-@@ -598,7 +601,4 @@ const char *strerror(int errno)
- 	return buf;
- }
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_STDIO_H */
-diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-index 69cf1d4418f1c1f59192aee40ea3a5b684d2709a..4790298f985c2b0db91ec777140201b7ec869346 100644
---- a/tools/include/nolibc/stdlib.h
-+++ b/tools/include/nolibc/stdlib.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_STDLIB_H
- #define _NOLIBC_STDLIB_H
- 
-@@ -522,7 +525,4 @@ uintmax_t strtoumax(const char *nptr, char **endptr, int base)
- 	return __strtox(nptr, endptr, base, 0, UINTMAX_MAX);
- }
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_STDLIB_H */
-diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
-index f0d335f0e467ec870066811289dfd11e46e60a92..febfd69789666e2445b82423a5f4df5e18a1c774 100644
---- a/tools/include/nolibc/string.h
-+++ b/tools/include/nolibc/string.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_STRING_H
- #define _NOLIBC_STRING_H
- 
-@@ -305,8 +308,4 @@ int toupper(int c)
- 	return c;
- }
- 
--
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_STRING_H */
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index bc47007f04429e5b1ff7d57f21e566fa235f6512..68e60e6742114a5422c8afef56a67415ed652c2f 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_SYS_H
- #define _NOLIBC_SYS_H
- 
-@@ -1119,7 +1122,4 @@ int memfd_create(const char *name, unsigned int flags)
- 	return __sysret(sys_memfd_create(name, flags));
- }
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_SYS_H */
-diff --git a/tools/include/nolibc/sys/auxv.h b/tools/include/nolibc/sys/auxv.h
-index 04c2b9cbe51a262025bbbc7c74a0640c71529eab..c52463d6c18d7a38f40344c1817bef3a4a121e7a 100644
---- a/tools/include/nolibc/sys/auxv.h
-+++ b/tools/include/nolibc/sys/auxv.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "../nolibc.h"
-+
- #ifndef _NOLIBC_SYS_AUXV_H
- #define _NOLIBC_SYS_AUXV_H
- 
-@@ -35,7 +38,4 @@ unsigned long getauxval(unsigned long type)
- 	return ret;
- }
- 
--/* make sure to include all global symbols */
--#include "../nolibc.h"
--
- #endif /* _NOLIBC_SYS_AUXV_H */
-diff --git a/tools/include/nolibc/sys/mman.h b/tools/include/nolibc/sys/mman.h
-index ad9d06b6b7919ec76a0652266158366cf639a77a..41c7bf45e427b96efec949364890e9c2b9c226a5 100644
---- a/tools/include/nolibc/sys/mman.h
-+++ b/tools/include/nolibc/sys/mman.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "../nolibc.h"
-+
- #ifndef _NOLIBC_SYS_MMAN_H
- #define _NOLIBC_SYS_MMAN_H
- 
-@@ -57,7 +60,4 @@ int munmap(void *addr, size_t length)
- 	return __sysret(sys_munmap(addr, length));
- }
- 
--/* make sure to include all global symbols */
--#include "../nolibc.h"
--
- #endif /* _NOLIBC_SYS_MMAN_H */
-diff --git a/tools/include/nolibc/sys/stat.h b/tools/include/nolibc/sys/stat.h
-index 0eaf5496ce233a4d8b5a239eef5ecefe05a39dd6..987c8bb52502f1f758005b0afdfb2e39fc8ea1c6 100644
---- a/tools/include/nolibc/sys/stat.h
-+++ b/tools/include/nolibc/sys/stat.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "../nolibc.h"
-+
- #ifndef _NOLIBC_SYS_STAT_H
- #define _NOLIBC_SYS_STAT_H
- 
-@@ -67,8 +70,4 @@ int stat(const char *path, struct stat *buf)
- 	return 0;
- }
- 
--
--/* make sure to include all global symbols */
--#include "../nolibc.h"
--
- #endif /* _NOLIBC_SYS_STAT_H */
-diff --git a/tools/include/nolibc/sys/syscall.h b/tools/include/nolibc/sys/syscall.h
-index 59efdec8fd1c8cd9f282d1e9ea52431003342a7f..4bf97f1386a03d6db33ebf1f8de116ba72a5e608 100644
---- a/tools/include/nolibc/sys/syscall.h
-+++ b/tools/include/nolibc/sys/syscall.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "../nolibc.h"
-+
- #ifndef _NOLIBC_SYS_SYSCALL_H
- #define _NOLIBC_SYS_SYSCALL_H
- 
-@@ -13,7 +16,4 @@
- #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
- #define syscall(...) _syscall_n(_syscall_narg(__VA_ARGS__), ##__VA_ARGS__)
- 
--/* make sure to include all global symbols */
--#include "../nolibc.h"
--
- #endif /* _NOLIBC_SYS_SYSCALL_H */
-diff --git a/tools/include/nolibc/sys/time.h b/tools/include/nolibc/sys/time.h
-index 1d326c05ee627b6bdb7d2777cbb11eea385f2407..785961c52fa3b6606ee30c19a4a1c11e86ccacc0 100644
---- a/tools/include/nolibc/sys/time.h
-+++ b/tools/include/nolibc/sys/time.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "../nolibc.h"
-+
- #ifndef _NOLIBC_SYS_TIME_H
- #define _NOLIBC_SYS_TIME_H
- 
-@@ -30,7 +33,4 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
- 	return __sysret(sys_gettimeofday(tv, tz));
- }
- 
--/* make sure to include all global symbols */
--#include "../nolibc.h"
--
- #endif /* _NOLIBC_SYS_TIME_H */
-diff --git a/tools/include/nolibc/sys/wait.h b/tools/include/nolibc/sys/wait.h
-index 9a68e6a6b1df8f938225007eb0de0574257ccf00..f27be86ad5e480f3817b4500ac42fae445cdfc27 100644
---- a/tools/include/nolibc/sys/wait.h
-+++ b/tools/include/nolibc/sys/wait.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "../nolibc.h"
-+
- #ifndef _NOLIBC_SYS_WAIT_H
- #define _NOLIBC_SYS_WAIT_H
- 
-@@ -110,8 +113,4 @@ pid_t waitpid(pid_t pid, int *status, int options)
- 	return info.si_pid;
- }
- 
--
--/* make sure to include all global symbols */
--#include "../nolibc.h"
--
- #endif /* _NOLIBC_SYS_WAIT_H */
-diff --git a/tools/include/nolibc/time.h b/tools/include/nolibc/time.h
-index 84655361b9ad2ce141f9af2759f2b128ae8a83a3..9502f9aaf62110ec8ee113fcf08dd47de40e924c 100644
---- a/tools/include/nolibc/time.h
-+++ b/tools/include/nolibc/time.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2022 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_TIME_H
- #define _NOLIBC_TIME_H
- 
-@@ -25,7 +28,4 @@ time_t time(time_t *tptr)
- 	return tv.tv_sec;
- }
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_TIME_H */
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index 32d0929c633bbae29263375c461a0c82baf7f869..fe97953d16572db3e4c18cdc8921c6a991d64f94 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_TYPES_H
- #define _NOLIBC_TYPES_H
- 
-@@ -214,7 +217,4 @@ struct stat {
- })
- #endif
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_TYPES_H */
-diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
-index ac7d53d986cd11ac84dd0a17e5a7055c779b2b10..ed253305fdbafd040ca5820207d8c53c6ea9f9fc 100644
---- a/tools/include/nolibc/unistd.h
-+++ b/tools/include/nolibc/unistd.h
-@@ -4,6 +4,9 @@
-  * Copyright (C) 2017-2022 Willy Tarreau <w@1wt.eu>
-  */
- 
-+/* make sure to include all global symbols */
-+#include "nolibc.h"
-+
- #ifndef _NOLIBC_UNISTD_H
- #define _NOLIBC_UNISTD_H
- 
-@@ -56,7 +59,4 @@ int tcsetpgrp(int fd, pid_t pid)
- 	return ioctl(fd, TIOCSPGRP, &pid);
- }
- 
--/* make sure to include all global symbols */
--#include "nolibc.h"
--
- #endif /* _NOLIBC_UNISTD_H */
+> if shadow call stack were enabled) and already spans across two cacheline=
+s. I
+> did see the comment above that it should fit inside a cacheline. Although=
+ I
+> assumed its stale comment given that it already spans across cacheline an=
+d I
+> didn't see any special mention in commit messages of changes which grew t=
+his
+> structure above one cacheline. So I assumed this was a stale comment.
+>
+> On the other hand, whenever enable/lock bits are checked, there is a high
+> likelyhood that user_ssp and other fields are going to be accessed and
+> thus it actually might be helpful to have it all in one cacheline during
+> runtime.
 
--- 
-2.49.0
+Yes, although accessing enable/lock bits will be relatively rare.
+It seems better to have the overhead during thread setup, rather than on
+every trap.
 
+> So I am not sure if its helpful sticking to the comment which already is =
+stale.
+
+We could fix the holes and also use sp instead of a0 in the
+new_vmalloc_check, so everything would fit better.
+
+We are really close to fitting into a single cache-line, so I'd prefer
+if shadow stack only filled thread_info with data that is used very
+often in the exception handling code.
+
+I think we could do without user_sp in thread_info as well, so there are
+other packing options.
+
+Btw. could ssp be added to pt_regs?
+
+Thanks.
