@@ -1,47 +1,46 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B38A26B2A5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470B126B09F;
 	Mon, 28 Apr 2025 12:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745844016; cv=none; b=tl1d7kq8dZ5k55D+GKS4hbOlAqgLqbi1ybJW7OUEI/U7RTQTprgbjAspa5K9QdgK3Nh71nw9+Okx5+fxk7MK7ITtfpQzm+hSXtG8/4tf+GX7geL+K52IE9wsuMZoDpRydnOQ/rrSTGNXcjxAXiDKuAOKFjCehjbN/CGGz86Z7Ic=
+	t=1745844016; cv=none; b=nM/wCu2yRgpjyilQpBuaK1skuBu3a9jW1KhI/iUk+8QeMBQvpFgyXLsfQfvx8j0/2667aRoLchcJq6pCPorOd9ZcK98IqJ6ObLk2roLlRrxD+wErphUfdCUIKwZi7G8wF04EHVr4dr5zQrzW51PrUoB24E3okKHTkSCTv3nHVzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745844016; c=relaxed/simple;
-	bh=2XfhIYrUpwPiS3xNMEeUtDZt+yUx0Is6L7LMEnS4xiI=;
+	bh=DzFtg3UDqBFeItEsUzo9Ww6n9EDXJhOOJUAQyvCiWL0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FAaD4ZPx3G9W8COm760duzLy/9p9PNmNBGeisseNYgTL9QN8mK0/wMKYe4em6+jt5tYzhYaK195RADpUbLSNIrHvWMxr0fILDgE9VpVJk+pXCL/c6ZQpJLblAn1JEV51h5dezzxdRv80nna71MFt6Xdm4tgkNVRsgj4y6jGqbDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xkS7MhE9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cTq+Brhn; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=BCeio32V+HJT3xha3EgMsbjZOmn5KGoUaeqpmKeuepPQU3LcEg3Sg4tLeOGeLn1PVJRNfkUoGaDioJHLFB01FOrR9PX3BAB0sG2+XHD/OR2fXsvUOwnYAhROT/6KsRie0UOjSqBpZLqbrROMlecuTuaM+a19R6hajaS88zTLMFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=q8B4CDMZ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bB3L6gSJ; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xkS7MhE9";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cTq+Brhn"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="q8B4CDMZ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bB3L6gSJ"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1745844012;
+	s=2020; t=1745844011;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZKovy5nOL4qPV4KCSZjTnwgma6hkKTxr26X+/tQlD6c=;
-	b=xkS7MhE9vXG6V3ZzGaeAIEGqggxQP6Ii+aw3DcwndvQkO5WBYa7YXBim1wh8vkfK7Po27w
-	8fKSpx3nwbk3y5LYrOYc0CCggRgpOl0absLeohbBRV4r4IJJNiVDg61vIGUl7vdqySVW5y
-	Gm4mzugcc3+7OEx6EMYEt6YG4OfDxi1+CPCNr15f1xnIwYxsi4bFl7HGCno4lProSo2tqE
-	xMEbXiREIp0QTOiBO2h+kIZEMN57c6A2rcKb5VxIPoq/g+WxlfLOoOnynU3Eap0w4PV87G
-	xD/ePGeA+S18G1pG16RsZWxqR5B/n5Zb0Fp8qAfU6wj4bv3Ydsr7WZjiTwcpfg==
+	bh=N+nyq/bw7RYw7/i1fLMy0Z8JgRIiodFsEkUIDTIZCgU=;
+	b=q8B4CDMZcYAc3rYuNJXxMI3+0PWICpzgZIGiXCz6YmpzT31nIs1CytcoI6+gt0DWEssRM1
+	1BWuhOmB1pX1FhxRupw2uikPtQ7IxRrEWJvV6AcsjQFgVdWItaz4WrkjeB0FsjU1snQp0q
+	1DT4rnc7dmOOTetPjz1alwX35fEtbrxEcX7W79SqSGkGBuHvO03gwG6BA8GPTbRbBk7zJU
+	OHDEAmwnnC4ODBjJo93Gh7KkRt1FDGS7CTwt+YgeoVKUWz6uvGd4u7a/znkResUiODCewe
+	NYmeVjdo8CauUuoODcmYV1eG0NP8EX1jOKfdk+1CXjzUKzZld7+lKypEoFinnA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1745844012;
+	s=2020e; t=1745844011;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZKovy5nOL4qPV4KCSZjTnwgma6hkKTxr26X+/tQlD6c=;
-	b=cTq+Brhnh/O4B9RxZfiPxS2B3Jhv8/1GuSwGh9ZDIrpl4VHHuBV0RJxJnNYBzG2IPBKZe2
-	mQOQg4eSrfKY2KBQ==
-Date: Mon, 28 Apr 2025 14:40:08 +0200
-Subject: [PATCH v2 07/15] tools/nolibc: add support for access() and
- faccessat()
+	bh=N+nyq/bw7RYw7/i1fLMy0Z8JgRIiodFsEkUIDTIZCgU=;
+	b=bB3L6gSJ/BBTWuyGvLGaOGIhnpvlUz59x3Ti6kwKnyTVYOipXM5Its/Bb/a2tFf3GR8C5S
+	Xn88QGzaR77toeDA==
+Date: Mon, 28 Apr 2025 14:40:06 +0200
+Subject: [PATCH v2 05/15] tools/nolibc: add getrandom()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,7 +49,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250428-nolibc-misc-v2-7-3c043eeab06c@linutronix.de>
+Message-Id: <20250428-nolibc-misc-v2-5-3c043eeab06c@linutronix.de>
 References: <20250428-nolibc-misc-v2-0-3c043eeab06c@linutronix.de>
 In-Reply-To: <20250428-nolibc-misc-v2-0-3c043eeab06c@linutronix.de>
 To: Willy Tarreau <w@1wt.eu>, 
@@ -58,11 +57,11 @@ To: Willy Tarreau <w@1wt.eu>,
  Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745844007; l=2299;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745844007; l=4087;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=2XfhIYrUpwPiS3xNMEeUtDZt+yUx0Is6L7LMEnS4xiI=;
- b=R/X5VEjcDnfZETbZ9ZKyE6N3oDm78sxoUudDSbHg8TvpDPuyZVfG7wbrp3cHq3mFCkwWR1VFN
- eWDq11G/7rpCuDpyrBUvmSkAWLGMn6VlJ9HjOBOtn7CwHZBSPO09gwT
+ bh=DzFtg3UDqBFeItEsUzo9Ww6n9EDXJhOOJUAQyvCiWL0=;
+ b=drp+gnpMUFga268e6kUY4Sjn8nSqU/lBPNW1lOgtTLZY+1FIsw/KeoW9uW54CoFoPqBX35Xly
+ Tp4quOyDrx8DEJvtyDo+AfTRx1HvVagGLV04AID8S+h5UfYAIGcSTjU
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
@@ -72,62 +71,123 @@ those with nolibc.
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 Acked-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/unistd.h                | 28 ++++++++++++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c |  2 ++
- 2 files changed, 30 insertions(+)
+ tools/include/nolibc/Makefile                |  1 +
+ tools/include/nolibc/nolibc.h                |  1 +
+ tools/include/nolibc/sys/random.h            | 34 ++++++++++++++++++++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 22 ++++++++++++++++++
+ 4 files changed, 58 insertions(+)
 
-diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
-index ed253305fdbafd040ca5820207d8c53c6ea9f9fc..25bfc7732ec7e72a60f445588a233f72c008f7ef 100644
---- a/tools/include/nolibc/unistd.h
-+++ b/tools/include/nolibc/unistd.h
-@@ -20,6 +20,34 @@
- #define STDOUT_FILENO 1
- #define STDERR_FILENO 2
- 
-+#define F_OK 0
-+#define X_OK 1
-+#define W_OK 2
-+#define R_OK 4
+diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
+index 41ef18872a7e9435a5efec9c0b32b9e29fcd4ce8..4bbe3b7fa2805f356d9a5cc1e4a8ee55b05af746 100644
+--- a/tools/include/nolibc/Makefile
++++ b/tools/include/nolibc/Makefile
+@@ -47,6 +47,7 @@ all_files := \
+ 		sys.h \
+ 		sys/auxv.h \
+ 		sys/mman.h \
++		sys/random.h \
+ 		sys/stat.h \
+ 		sys/syscall.h \
+ 		sys/time.h \
+diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
+index d1b949e094eeb7cc0fe875deeafa4c972ecf35b2..3f329feb379c4c808d2e56fbb2b7a6c4b08a7c0d 100644
+--- a/tools/include/nolibc/nolibc.h
++++ b/tools/include/nolibc/nolibc.h
+@@ -98,6 +98,7 @@
+ #include "sys.h"
+ #include "sys/auxv.h"
+ #include "sys/mman.h"
++#include "sys/random.h"
+ #include "sys/stat.h"
+ #include "sys/syscall.h"
+ #include "sys/time.h"
+diff --git a/tools/include/nolibc/sys/random.h b/tools/include/nolibc/sys/random.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..8d9749f1c84572ab07c6dc70f331583063266eaf
+--- /dev/null
++++ b/tools/include/nolibc/sys/random.h
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
++/*
++ * random definitions for NOLIBC
++ * Copyright (C) 2025 Thomas Weißschuh <thomas.weissschuh@linutronix.de>
++ */
++
++/* make sure to include all global symbols */
++#include "../nolibc.h"
++
++#ifndef _NOLIBC_SYS_RANDOM_H
++#define _NOLIBC_SYS_RANDOM_H
++
++#include "../arch.h"
++#include "../sys.h"
++
++#include <linux/random.h>
 +
 +/*
-+ * int access(const char *path, int amode);
-+ * int faccessat(int fd, const char *path, int amode, int flag);
++ * ssize_t getrandom(void *buf, size_t buflen, unsigned int flags);
 + */
 +
 +static __attribute__((unused))
-+int sys_faccessat(int fd, const char *path, int amode, int flag)
++ssize_t sys_getrandom(void *buf, size_t buflen, unsigned int flags)
 +{
-+       return my_syscall4(__NR_faccessat, fd, path, amode, flag);
++       return my_syscall3(__NR_getrandom, buf, buflen, flags);
 +}
 +
 +static __attribute__((unused))
-+int faccessat(int fd, const char *path, int amode, int flag)
++ssize_t getrandom(void *buf, size_t buflen, unsigned int flags)
 +{
-+	return __sysret(sys_faccessat(fd, path, amode, flag));
++       return __sysret(sys_getrandom(buf, buflen, flags));
 +}
 +
-+static __attribute__((unused))
-+int access(const char *path, int amode)
-+{
-+	return faccessat(AT_FDCWD, path, amode, 0);
-+}
-+
- 
- static __attribute__((unused))
- int msleep(unsigned int msecs)
++#endif /* _NOLIBC_SYS_RANDOM_H */
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 14a27bc6c83e4fda595b10dc29cf56b63904272a..10db118b8b111ec17f713d57240f193c7b18c70f 100644
+index abe0ae794208762f6d91ad81e902fbf77253a1c1..df1cb3e62564f1fa78c55740f7c2403b8390168f 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1112,6 +1112,8 @@ int run_syscall(int min, int max)
- 		 * test numbers.
- 		 */
- 		switch (test + __LINE__ + 1) {
-+		CASE_TEST(access);            EXPECT_SYSZR(proc, access("/proc/self", R_OK)); break;
-+		CASE_TEST(access_bad);        EXPECT_SYSER(proc, access("/proc/self", W_OK), -1, EPERM); break;
- 		CASE_TEST(getpid);            EXPECT_SYSNE(1, getpid(), -1); break;
- 		CASE_TEST(getppid);           EXPECT_SYSNE(1, getppid(), -1); break;
- 		CASE_TEST(gettid);            EXPECT_SYSNE(has_gettid, gettid(), -1); break;
+@@ -20,6 +20,7 @@
+ #include <sys/mman.h>
+ #include <sys/mount.h>
+ #include <sys/prctl.h>
++#include <sys/random.h>
+ #include <sys/reboot.h>
+ #include <sys/resource.h>
+ #include <sys/stat.h>
+@@ -807,6 +808,26 @@ static int test_dirent(void)
+ 	return 0;
+ }
+ 
++int test_getrandom(void)
++{
++	uint64_t rng = 0;
++	ssize_t ret;
++
++	ret = getrandom(&rng, sizeof(rng), GRND_NONBLOCK);
++	if (ret == -1 && errno == EAGAIN)
++		return 0; /* No entropy available yet */
++
++	if (ret != sizeof(rng))
++		return ret;
++
++	if (!rng) {
++		errno = EINVAL;
++		return -1;
++	}
++
++	return 0;
++}
++
+ int test_getpagesize(void)
+ {
+ 	int x = getpagesize();
+@@ -1124,6 +1145,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
+ 		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
+ 		CASE_TEST(directories);       EXPECT_SYSZR(proc, test_dirent()); break;
++		CASE_TEST(getrandom);         EXPECT_SYSZR(1, test_getrandom()); break;
+ 		CASE_TEST(gettimeofday_tv);   EXPECT_SYSZR(1, gettimeofday(&tv, NULL)); break;
+ 		CASE_TEST(gettimeofday_tv_tz);EXPECT_SYSZR(1, gettimeofday(&tv, &tz)); break;
+ 		CASE_TEST(getpagesize);       EXPECT_SYSZR(1, test_getpagesize()); break;
 
 -- 
 2.49.0
