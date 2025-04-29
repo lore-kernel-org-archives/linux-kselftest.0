@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2A9283FFB;
-	Tue, 29 Apr 2025 23:51:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE792BD92E;
+	Tue, 29 Apr 2025 23:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970674; cv=none; b=fpuccmxY9kWrYDhjruRhpvUuyqUBsAno3AbzDFO1jV1sQK5WKLc4tDzSTFvstdWUDa2LD8Wn1358si9iBxBsCLq3zhRLD/kqYQ9zSu20vI6+O96HbGEiE8d0QKOxVjjQck4rQDhpCcpwj1xsuUAJfdwfr8jPKVsVBVrHE5BQULc=
+	t=1745970747; cv=none; b=o3f4j51wXmAwZDZLmuRqG7tzG6Si+eHLHhAQgzc5L97RKSoiBc0ZmzIxHG8XZoLzNuzLfK5fMzhrtc0Eo99rDIcPIcMUSYtyHof3X/yuMbMMUDwmtz/ld4y6yKmudWRVuysBynEQZgBfwd+fzsoR2jcYGPoSCSzEwGbZW1ccDyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970674; c=relaxed/simple;
+	s=arc-20240116; t=1745970747; c=relaxed/simple;
 	bh=2oz50+X7QDKubf9DkwX20leuuzsNO+Ef9u69G8iUJdo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RwOfhtPxRPJb7RGHwu4NQbWjuOAlpCyivD5CMRI/0o8dTbMyJA1bL5J5Myx6T6WGe5yKecONVo29Fyx5WU8Y5KNqeqc8E66AcQQVr9bmw0Z3SuvRPDE0XHhbvwkklYy9WrTOeDiiPHZp+DBg5IeKvQMwlfVap6GEZywLa/FXNx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dt5KyPk9; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=aCvy9NKSwNcX859W+606LHEwPcrxBb+EFgHi8koEAa6FXSQ+zyRub4xJ2UpC1NxIVgxh/KW9YKGFAybiMRdwQ0mjGA17gbrMi3g9uy+kptTKsiicVMA917rwlLkt/AIQTlwNxuCSAoK04t+r/VXV3IGNparo8nE3e6c91RuJEuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MIrNEucn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dt5KyPk9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B7FC4CEF1;
-	Tue, 29 Apr 2025 23:51:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MIrNEucn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD57C4CEE3;
+	Tue, 29 Apr 2025 23:52:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970674;
+	s=k20201202; t=1745970746;
 	bh=2oz50+X7QDKubf9DkwX20leuuzsNO+Ef9u69G8iUJdo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Dt5KyPk94EKESWCcn6VtlBXEwrfGq56JrN7T6jak3bRhw2/NmliednDiJx5Sc0M/5
-	 /ad6cfYFc0PvL3lYkSkAJDuf2BC7K1nioNRxDeQQ8dBkLcKkdED7ahJY7O79apIydS
-	 DdWYp0YKtymtCcwKHXX74flf4gMRjD5mK11J53S5egjHwLPc2E9NXhLj3k6b/W5Qdp
-	 1Y3ycs2uShQFiKaA1iMYKGCSyD6oxTTKopE+cg6sbLsiUIMtB2Y3IkOGOh+CArqdpm
-	 Avujt3OZCv260CEDvu2UGiU9/JKt29Dfe3Nkq3bdm+27OT1b6eUTakp2yy37IrnUSV
-	 b2VXj00K0pAKg==
+	b=MIrNEucnEJFIbvfytmtsi7O/ncakSMtj0ZVqeVmimfLxbCYSr/VbGtsAbGmCcS8BM
+	 CenmZS4Tf9nz+YQIpcoEKXXhJQuSdlRqybWxh90zw+w0zep1bSEJIuIHMZh8hTpdZm
+	 RJpniVdY3iEajOsC3VSl9PzdiF3o/wm4M8p96tASRaGj0pcRB+OZ6ZSQHx3HLm/WGj
+	 2tHtDCdCZeOPA6ctVfsXUczOKPA0Ffpp1G+MlQF/OYfr170Bu3I13w/nBL6A2w03ky
+	 NkmjwuId4HNlFFkhmz/evlPrZxVTaueksiUVXOoQMrCijn9u6NCudu8NoX+Ci8LcMq
+	 WtlOJKv/ZAHjg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -34,17 +34,17 @@ Cc: Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	eddyz87@gmail.com,
 	daniel@iogearbox.net,
+	eddyz87@gmail.com,
 	shuah@kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 34/39] selftests/bpf: Mitigate sockmap_ktls disconnect_after_delete failure
-Date: Tue, 29 Apr 2025 19:50:01 -0400
-Message-Id: <20250429235006.536648-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 33/37] selftests/bpf: Mitigate sockmap_ktls disconnect_after_delete failure
+Date: Tue, 29 Apr 2025 19:51:18 -0400
+Message-Id: <20250429235122.537321-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250429235006.536648-1-sashal@kernel.org>
-References: <20250429235006.536648-1-sashal@kernel.org>
+In-Reply-To: <20250429235122.537321-1-sashal@kernel.org>
+References: <20250429235122.537321-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.4
+X-stable-base: Linux 6.12.25
 Content-Transfer-Encoding: 8bit
 
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
