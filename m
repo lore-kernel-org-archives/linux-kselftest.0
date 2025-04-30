@@ -1,64 +1,66 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF786AD3
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 08:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3CF21423E
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 08:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746000997; cv=none; b=eSOTG56gi8P6h+xafzvBM6dyCMcM2RFm+XA74bycsAgVN5hSV2A0L2Pifcilh00pL6D1AMgSYi7ioVQZTwnRq71zcAuXzSw7A8jfNrTo2UG5ezo9gqlNVJv8rT8BCSxhJcitV+xv7YzHmccf4aLKhk9q9U5nSZh7lIaLZL1Lvlw=
+	t=1746000998; cv=none; b=eBO2baFL0Nv+VO23+2LblC+0mgQ7ox+F9Klo5+A/JZxhRRigsn/XUTkdgdnCJGv5jXGZLD7XFLEORQvolO8vnBTRyQvbFw811B7WVZsyCP1w4sVBJVghryozVc9rafR2rQGPVRUYi2HrMZjS2wMaAE/G0XMq5/hemL5H00OLUnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746000997; c=relaxed/simple;
-	bh=Fp3GCul0xLHijr/kSvFB7BX5T/aXnL8fUJ9m9B3qidg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VAQxu1kTT3OGfHoL+b8tpuexO9PSJjXkwB00QJ+Hxe+wp35ONDPzc9tlwFPS3Ed4O3CR+g6TdaN6TC4krZQXv9inEXLuCgh8Yj+94IUbjzA557Ak9pufg09f0lvEWsc16qPZPm4zxuhO1UWJM81Nw0ohf6cjperqhpCkEmlHS14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=SoVdaUFp; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1746000998; c=relaxed/simple;
+	bh=bGusNtEUlaX23wJD2XfALVYCzkrJMuPAiNTlbGcMBJM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=EoRiRJyLYyM5OnMDLRmEoQV1W0ld8SipVkozKfaKUdLK7JmbLwJLubrEkH3aOa5qOuTLVA2WKSCoC5C7S+KmJN0WQ8dZsdz5Ws5FVVzYRCshf8Y5V0+/E1ab3Z7nC6oLES43bOtm2F5+hIuZ9vrMK1U6TojUlfjHeV0FAFCGzeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=RBP7+1fs; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="SoVdaUFp"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-736b0c68092so6060922b3a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 01:16:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="RBP7+1fs"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7370a2d1981so5627566b3a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 01:16:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1746000994; x=1746605794; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qsXzG0OPFSj9Y/N7ILSDxyejpILMY8rt11Cw8ETnit0=;
-        b=SoVdaUFpU8Euu4kN22zzABwj7RTqH+sw67jyoOFXhmddQV4uQz1f5dS1E8+b75jc1Z
-         WNJarKsmS1lZxqDjl1S1JJVIdOfA5k+8YG/cqnzSCMzC6Uxd7qRYKFPbEdkdN3j9TFep
-         iCNSo2ViHZIAjptPBRhHo8GbTkOQR/jsO2i8edivf4rJ1wmZpymiZgIZm0Fz6fiCU+gQ
-         0551SjaQJ8inJXP33vC8y/C2AE8jFQqm0+fpvI+JfNv5ErARxsWaD+Y0WThclTTwodZJ
-         aYz7LM/nLhpVd+CXSBYsAQJVOEEoYCBR3CljnPnS6Dvy+T1RUzBpZgkQcqRokMCCrenY
-         UxgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746000994; x=1746605794;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1746000996; x=1746605796; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qsXzG0OPFSj9Y/N7ILSDxyejpILMY8rt11Cw8ETnit0=;
-        b=pAJ7QXeGpWsgwjOYBNvpZipzJ0mmm0SHH1C/5gXJhCiIlQKjYEvK9aqzWOaK2Yjdj1
-         2KsDsO8CSVusFX2FvI91vLZAzQXlNGySRixWXAZhGOuqkecvJ875IfycRtdaSpGobUhh
-         BWF0cVi3PzeM26bxdeC3MQ6xZCOMvQ43gfyFC8r7xPlLHZPZnUGd9jduaWxdtkkO/dI/
-         Fpy5qbNY48CPbf+S9L3xXrlaEQX8y97ujXRz5+Mvqrvjlp0ajpGEfSku4Qli3C4Bi4gD
-         jwhwjhDHj0rrlgkZBJqqhVs0ACtx2c6QGdRYbjXjQTg/SP1eZ39m2nrpGsyauAqHbKWc
-         svqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW/HtOJ3bUgE9kSBFknuodbhJ/c0b7RgsVgMlGZ+JSRSgtRLjdpQqjXLzNWg06QdotIjFh3PrUTadkaRCgD5k0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4/+A830vZGD00FMpDH9wFUH1naNX8FMp9M539eR5zcAGSTs5Z
-	bvaKHKy2fvZohnwpbuYxUq7+sQ/H8RXlWVcpJgYV1EDPuaZeyTxfeDa+N4HQrEM=
-X-Gm-Gg: ASbGncvSz2do23AorKoPCXJet9IXQfyK7kaPgn/mMNQitMpqFEIpXhFGyI79XIhkK5X
-	AcMqSjJH+nsqhtmrPDy7JAlPTrr462ZcOsvdvPXSs9StF8NGKEURau7O9peZnvddcKlqlQ68lus
-	pdbflx4Gr9qw9OYwHSKf2xtps7OK5WJXn/UYTvgsG254H7nf1EzYGaU/lLuCmSzfXpKZttiW/n9
-	52lKDm+lXZJoajKprNJxmMqDp0kazTk5kilqNeU+EpWXG9Z6DfQJoNZ2mEs4L+nTwosrywUlbJ9
-	MEucdf/J3d5f5GPbAaNUJedqOhlQhyACi0oTdOi5BYdHn53D8eWHjA==
-X-Google-Smtp-Source: AGHT+IH6seQgwJqi/FP/vswGEFmbX1nzlJ/wu6PVrapojvhfM+Yipa5sWjHxHBJfv7qDYrJjbCoowA==
-X-Received: by 2002:a05:6a00:1146:b0:736:7270:4d18 with SMTP id d2e1a72fcca58-740389bbc36mr3347820b3a.14.1746000994070;
-        Wed, 30 Apr 2025 01:16:34 -0700 (PDT)
+        bh=aRFZ5FKZBztRGxrY6vVfDYbRzHdpxr6eQNzNURiD5s8=;
+        b=RBP7+1fsgaaEszj/50cmRkgRo9X444NsS4dDL+X4apzaNhk3/dIGOmRe8Ij0JgEfGi
+         ikOjlkUBSMjcVILPd4Qh+RxSzNbRD4s5sppoBXNnFZegd9oVurUCFsKgq0J4dKsUZsZa
+         rqoYYdvO9J30T9sjOQD13DWdwHs3f4D/Sk/jdSd23RFJ+yD2uRfz5pHyAizzRfay9EVg
+         39njVFsQPMt4dgmEPIHyBZUzBiGJpzSngtKjUiLrQZu8Zqtfb3PARx9KRwvp4mgTG9lf
+         ge3BNpwPzGWyhbg72aPeRwY1E46DsnYDs+Z7t3+pTHfxlVBemFFSVOJsJLipbUlaFbSx
+         gt4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746000996; x=1746605796;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aRFZ5FKZBztRGxrY6vVfDYbRzHdpxr6eQNzNURiD5s8=;
+        b=HURnhUMnNvcxkwe9mD5sBWcQgJgvSTYyo/lQyaq4znrd7fjK3CfoWmFZPLI+btN1zp
+         2gUD4DhiK/PJsRSFAUVnYNQr8Ji9s3BOHi21UnTaOAAOeOYPyyZ+IHYzjTBCgNKDT2Bl
+         MlwNiKFOD95V44wt1dm02eVWynCCRBwG27RxSn9qEIjJ9Ag7djmIaZGSMpQ7zNxEpB79
+         KvaaUxAVrFQSTOdDmZejgP/woevd24UsqEVpR1/vVKybCITpJuQmbkpo5ofJhboXlANn
+         LcmmNOc3+oeXFjpPOT7inpqms7CekQKaxvitDi3OUt5oHgbRVRHFE2rckkPviaPhl0W7
+         ODJw==
+X-Forwarded-Encrypted: i=1; AJvYcCXAcNRj944Hl7wohamXYmry+dm5qYtkzyMa+8F12N7RPb/mzLuRgZakdafLagxBrhccIQK35nQDDzmib/DrY+A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeB6oJ32oJEOEjBd1e2hi9xTtOPla3BqZ8m/Ki84+e0W6MSco5
+	em+jGYRjD5gZUiZkR4riDAEhFILRPLhj75HPXM8FlF2bMFY1DwESAANcCd45+8c=
+X-Gm-Gg: ASbGnctGdFV6T75m6G/3SzMvkQAJI5n0jw/9/T7skJhlOdA9nlYe2OJari5zS/Y1eVP
+	PGc/go6VjFNUe63OW3fHL/orffuJ8SVlcnpVX6p3FrMHnUPhks4uVb/ZPVsPwD8cXCu1oClvOaR
+	/Vq4MtWcvkdBkBG0jCr6FDBip4aUz1Ld78KFp07Oswa6ziomD+ON+kJVDAP19Nejmuv4bYD4e6v
+	7h84y0S7NNE777PAryHffrdK4iOraEz7I/ULFdJ8+JsoH+1ptTdyr2zo8vsTpqq9MICvpKGUFVG
+	HxbNGqaRWmMqaElg7vh19SZufhU3EalpHVrrIfICthE+2e+dFTI6lJRb5RcZFupq
+X-Google-Smtp-Source: AGHT+IGbD1Zl91/g/+st4aTTgt5Bkror5XgxZ0mOSUBOJaMyTd1yJdlz0KXAlGwPjFYFs62/1RdnzA==
+X-Received: by 2002:a05:6a00:2e05:b0:732:2484:e0ce with SMTP id d2e1a72fcca58-7403a811cadmr2252321b3a.17.1746000996180;
+        Wed, 30 Apr 2025 01:16:36 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74039a309edsm1073084b3a.91.2025.04.30.01.16.33
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74039a309edsm1073084b3a.91.2025.04.30.01.16.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Apr 2025 01:16:33 -0700 (PDT)
+        Wed, 30 Apr 2025 01:16:35 -0700 (PDT)
 From: Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v3 0/3] RISC-V KVM selftests improvements
-Date: Wed, 30 Apr 2025 01:16:27 -0700
-Message-Id: <20250430-kvm_selftest_improve-v3-0-eea270ff080b@rivosinc.com>
+Date: Wed, 30 Apr 2025 01:16:29 -0700
+Subject: [PATCH v3 2/3] KVM: riscv: selftests: Decode stval to identify
+ exact exception type
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,11 +69,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFvcEWgC/4XNSwrCMBCA4auUrI3k1WpceQ+R0jYTO2iakpSgl
- N7dtBtBEJf/MPPNTCIEhEhOxUwCJIzohxxyV5Cub4YbUDS5iWCiZFIoek+ujvCwE8SpRjcGn4D
- qFkyrLWsqI0k+HQNYfG7s5Zq7xzj58Nq+JL5O/4CJU0bLo6zyGtdG2XPA5CMO3b7zjqxmEh9HC
- f3DEavDD1xazYGp5stZluUNvbqg9gMBAAA=
-X-Change-ID: 20250324-kvm_selftest_improve-9bedb9f0a6d3
+Message-Id: <20250430-kvm_selftest_improve-v3-2-eea270ff080b@rivosinc.com>
+References: <20250430-kvm_selftest_improve-v3-0-eea270ff080b@rivosinc.com>
+In-Reply-To: <20250430-kvm_selftest_improve-v3-0-eea270ff080b@rivosinc.com>
 To: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
  Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
  Paul Walmsley <paul.walmsley@sifive.com>, 
@@ -82,47 +82,93 @@ Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
  linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
 X-Mailer: b4 0.15-dev-42535
 
-This series improves the following tests.
-1. Get-reg-list : Adds vector support
-2. SBI PMU test : Distinguish between different types of illegal exception
+Currently, the sbi_pmu_test continues if the exception type is illegal
+instruction because access to hpmcounter will generate that. However
+illegal instruction exception may occur due to the other reasons
+which should result in test assertion.
 
-The first patch is just helper patch that adds stval support during
-exception handling.
+Use the stval to decode the exact type of instructions and which csrs are
+being accessed if it is csr access instructions. Assert in all cases
+except if it is a csr access instructions that access valid PMU related
+registers.
 
+Take this opportunity to remove the CSR_CYCLEH reference as the test is
+compiled for RV64 only.
+
+Reviewed-by: Anup Patel <anup@brainfault.org>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
-Changes in v3:
-- Dropped the redundant macros and rv32 specific csr details. 
-- Changed to vcpu_get_reg from __vcpu_get_reg based on suggestion from Drew.
-- Added RB tags from Drew.
-- Link to v2: https://lore.kernel.org/r/20250429-kvm_selftest_improve-v2-0-51713f91e04a@rivosinc.com
+ .../testing/selftests/kvm/include/riscv/processor.h  | 13 +++++++++++++
+ tools/testing/selftests/kvm/riscv/sbi_pmu_test.c     | 20 +++++++++++++++++++-
+ 2 files changed, 32 insertions(+), 1 deletion(-)
 
-Changes in v2:
-- Rebased on top of Linux 6.15-rc4
-- Changed from ex_regs to pt_regs based on Drew's suggestion. 
-- Dropped Anup's review on PATCH1 as it is significantly changed from last review.
-- Moved the instruction decoding macros to a common header file.
-- Improved the vector reg list test as per the feedback.
-- Link to v1: https://lore.kernel.org/r/20250324-kvm_selftest_improve-v1-0-583620219d4f@rivosinc.com
+diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
+index 1b5aef87de0f..162f303d9daa 100644
+--- a/tools/testing/selftests/kvm/include/riscv/processor.h
++++ b/tools/testing/selftests/kvm/include/riscv/processor.h
+@@ -11,6 +11,19 @@
+ #include <asm/csr.h>
+ #include "kvm_util.h"
+ 
++#define INSN_OPCODE_MASK	0x007c
++#define INSN_OPCODE_SHIFT	2
++#define INSN_OPCODE_SYSTEM	28
++
++#define INSN_MASK_FUNCT3	0x7000
++#define INSN_SHIFT_FUNCT3	12
++
++#define INSN_CSR_MASK		0xfff00000
++#define INSN_CSR_SHIFT		20
++
++#define GET_RM(insn)            (((insn) & INSN_MASK_FUNCT3) >> INSN_SHIFT_FUNCT3)
++#define GET_CSR_NUM(insn)       (((insn) & INSN_CSR_MASK) >> INSN_CSR_SHIFT)
++
+ static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t subtype,
+ 				    uint64_t idx, uint64_t size)
+ {
+diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+index 6e66833e5941..924a335d2262 100644
+--- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
++++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+@@ -73,7 +73,6 @@ unsigned long pmu_csr_read_num(int csr_num)
+ 
+ 	switch (csr_num) {
+ 	switchcase_csr_read_32(CSR_CYCLE, ret)
+-	switchcase_csr_read_32(CSR_CYCLEH, ret)
+ 	default :
+ 		break;
+ 	}
+@@ -130,9 +129,28 @@ static void stop_counter(unsigned long counter, unsigned long stop_flags)
+ 
+ static void guest_illegal_exception_handler(struct pt_regs *regs)
+ {
++	unsigned long insn;
++	int opcode, csr_num, funct3;
++
+ 	__GUEST_ASSERT(regs->cause == EXC_INST_ILLEGAL,
+ 		       "Unexpected exception handler %lx\n", regs->cause);
+ 
++	insn = regs->badaddr;
++	opcode = (insn & INSN_OPCODE_MASK) >> INSN_OPCODE_SHIFT;
++	__GUEST_ASSERT(opcode == INSN_OPCODE_SYSTEM,
++		       "Unexpected instruction with opcode 0x%x insn 0x%lx\n", opcode, insn);
++
++	csr_num = GET_CSR_NUM(insn);
++	funct3 = GET_RM(insn);
++	/* Validate if it is a CSR read/write operation */
++	__GUEST_ASSERT(funct3 <= 7 && (funct3 != 0 && funct3 != 4),
++		       "Unexpected system opcode with funct3 0x%x csr_num 0x%x\n",
++		       funct3, csr_num);
++
++	/* Validate if it is a HPMCOUNTER CSR operation */
++	__GUEST_ASSERT((csr_num >= CSR_CYCLE && csr_num <= CSR_HPMCOUNTER31),
++		       "Unexpected csr_num 0x%x\n", csr_num);
++
+ 	illegal_handler_invoked = true;
+ 	/* skip the trapping instruction */
+ 	regs->epc += 4;
 
----
-Atish Patra (3):
-      KVM: riscv: selftests: Align the trap information wiht pt_regs
-      KVM: riscv: selftests: Decode stval to identify exact exception type
-      KVM: riscv: selftests: Add vector extension tests
-
- .../selftests/kvm/include/riscv/processor.h        |  23 +++-
- tools/testing/selftests/kvm/lib/riscv/handlers.S   | 139 +++++++++++----------
- tools/testing/selftests/kvm/lib/riscv/processor.c  |   2 +-
- tools/testing/selftests/kvm/riscv/arch_timer.c     |   2 +-
- tools/testing/selftests/kvm/riscv/ebreak_test.c    |   2 +-
- tools/testing/selftests/kvm/riscv/get-reg-list.c   | 132 +++++++++++++++++++
- tools/testing/selftests/kvm/riscv/sbi_pmu_test.c   |  24 +++-
- 7 files changed, 247 insertions(+), 77 deletions(-)
----
-base-commit: f15d97df5afae16f40ecef942031235d1c6ba14f
-change-id: 20250324-kvm_selftest_improve-9bedb9f0a6d3
---
-Regards,
-Atish patra
+-- 
+2.43.0
 
