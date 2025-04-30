@@ -1,181 +1,362 @@
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2084.outbound.protection.outlook.com [40.107.94.84])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7BB1E9B23;
-	Wed, 30 Apr 2025 08:02:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746000133; cv=fail; b=LS8J0cUmRdobUBKHQFX2IA/moMi1Ca/gZ8mOA1CSDGAWfJucETH1jdRQ3DWRGt8HFazsIkHgSQoSgCjbZgx/Uh0BwhrMBL6fokFoHZIt55aajr6Gi8cGGVEYwZLQdfaUbzNEIvE+nkXJUV7JRr8QoanhlTNdvt6p2PexUWz25Lk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746000133; c=relaxed/simple;
-	bh=41kqCo9OPsBLmqQCPvj1mwNqmDoXMu/7cLPuNBKkofk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ndADeBafoiiunGRzyCOJNsl3vCqYfky1mnB/7ALzoRyEq80LuRPhSHM1tKdnB7Jr8Zc3Sp/K2K6VRj86pVldcoa+J6OSk8/G9DrpjUdWzloMuaQFGZWjVOWTK8pEnJ7PEkgoO2G4H1uDKU66Ts/XfHX4n7iinVvBtmzn5JMWc2M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=s30esJZJ; arc=fail smtp.client-ip=40.107.94.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC27420E33D
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 08:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746000997; cv=none; b=EZclKpxftfI0knvl0NvLIpDkc6IHm9kx6rA1vJ+JuRBcrpUBlW864EOBBpzWiPHUszZd/KlmhTwhSQwXaNka1lph/VidO9ymAWTyNNMYj6gUnXO9+8rXLX6S1RQ/5jxDdiQ2wn/bH7zQZcGDIhnhOT/pBz9LAWCLgIwmEptwAS4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746000997; c=relaxed/simple;
+	bh=vxtT9/3d3+RsfsN/8F9NhokA4ex2hx300P/B78SmG8M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=hUEl/GjKn50k21nKX0/hZ5/Fp9IaSrHOOsLNrbFvWN74W8sa9QuNUC4MWUg61i2vcG3DAbuWibVIKeqtuPNBXmOymjIRblZjkr+1lrHOi07Hvp4pBzBXlJmp7oFHbcT+kIiCseiaCrgPGaz1jfLAaNqi+NZfkbmWA4AB/gMR1xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=ZQoUu/bJ; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="s30esJZJ"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bj11sHfPUFsl+Bg1gpPPzO0gV9+vIsu313rghF8BNxw052E3jj3YyTRX/UeE3IdXW9j3wYx5mkGmvVtzHCFbgDMLaY96HwR3bjQzuP9QRVdjMeKJr+EKBNKjYtKsbe8wXkmZCD7y/vLl36RZ8hWBUCRXRNnukkJdCyl7xZNyAjCOcA9ofZanoqPsWx2CHQ0fw4p9NlC+SKD8aPMabs/S6EymFbYVrZ4d+Z+6oqxSY+zupu6cl0NL1Ryqs/oY2EtEfV05aEdlOuQv/TefXrIjiwhPIak4WX1cJSwMhkFvTULXLc/3s0rpjXeErYqNuyZ6624rGDIANIZAUYult1J1ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uAB7RlcS5TQd1fDlp4I/1yO5reiRgBbxBRTGiWpy/90=;
- b=BWzMaBjNFoolfBVuEXkC0qeQx+DdjeDYqKtKIjPWcjeE41OXGsPUvKy5p7+6ocqUPfHAns/ZhZzsbgrVUN4xqaTL1vhE2xw7oLMzY7kyBvJXKxVImtNBQabLMhMmAsTuTsOyu5mUrjNVSkjIBSAYCVX3VmCv70kO/vCMK6fZR25XdCDbV12fxXikxUXzPaNLp91VWfa7USSxjNHsmATIsFXCcrh3G0/dkBH+8KEL4BZgl4sfOVrQ/ZYnT6MLNrth1FTuSLdJbx/1sDUTKqLpp4pitrgKnCVCuV9bvKozZepJBRbP5zLIes29kTt/UkOWlMD90usLEb8O+MiGF1XMow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uAB7RlcS5TQd1fDlp4I/1yO5reiRgBbxBRTGiWpy/90=;
- b=s30esJZJBs+fWjE1oOH5uANMxiHgUXCWyePTmkX1+Dtph5RH5M11q6ahp4DX16bL935P4EPyRWCuw6dOLmyovpMF4VMLzAWSh4Gts5Z9No+fapzdIDVTKEjrG6vvG7suMdTQXfiYWBbcVWA0zzSHyWrtzU0dzVtVEY1K9AcBxzWq+LyGd+krxXsL1/I0HkVnhb0ScCohQSALa13B8fe1D0k6ANwhsow0AuhpHi2LVvz1ja3VCGXrR/h5ch6q2q6cydZrR96j6SGLgiM9piHgA9pZXJM8ftiJyoxnU8qBjQgYs3pMSYfvhos8vsagrPGbw+qf3w/BxoXG6EC98cyqng==
-Received: from BLAPR03CA0010.namprd03.prod.outlook.com (2603:10b6:208:32b::15)
- by DS5PPF482CFEB7D.namprd12.prod.outlook.com (2603:10b6:f:fc00::64a) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.33; Wed, 30 Apr
- 2025 08:02:09 +0000
-Received: from BL02EPF0001A106.namprd05.prod.outlook.com
- (2603:10b6:208:32b:cafe::a9) by BLAPR03CA0010.outlook.office365.com
- (2603:10b6:208:32b::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.37 via Frontend Transport; Wed,
- 30 Apr 2025 08:02:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BL02EPF0001A106.mail.protection.outlook.com (10.167.241.139) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8699.20 via Frontend Transport; Wed, 30 Apr 2025 08:02:09 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 30 Apr
- 2025 01:01:59 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Wed, 30 Apr 2025 01:01:59 -0700
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Wed, 30 Apr 2025 01:01:57 -0700
-Date: Wed, 30 Apr 2025 01:01:55 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Vasant Hegde <vasant.hegde@amd.com>
-CC: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
-	<will@kernel.org>, <bagasdotme@gmail.com>, <robin.murphy@arm.com>,
-	<joro@8bytes.org>, <thierry.reding@gmail.com>, <vdumpa@nvidia.com>,
-	<jonathanh@nvidia.com>, <shuah@kernel.org>, <jsnitsel@redhat.com>,
-	<nathan@kernel.org>, <peterz@infradead.org>, <yi.l.liu@intel.com>,
-	<mshavit@google.com>, <praan@google.com>, <zhangzekun11@huawei.com>,
-	<iommu@lists.linux.dev>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-tegra@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<patches@lists.linux.dev>, <mochs@nvidia.com>, <alok.a.tiwari@oracle.com>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: Re: [PATCH v2 10/22] iommufd/viommmu: Add IOMMUFD_CMD_VCMDQ_ALLOC
- ioctl
-Message-ID: <aBHY8wOmpMOxelE/@Asurada-Nvidia>
-References: <cover.1745646960.git.nicolinc@nvidia.com>
- <094992b874190ffdcf6012104b419c8649b5e4b4.1745646960.git.nicolinc@nvidia.com>
- <b0d01609-bdda-49a3-af0c-ca828a9c4cea@amd.com>
- <aA/exylmYJhIhEVL@Asurada-Nvidia>
- <b8338b47-6fbf-44ac-9b99-3555997c9f36@amd.com>
- <aBB1gLfahnLmn0N1@Asurada-Nvidia>
- <a3860aed-5b6b-4e68-a8fd-1a6ee28ba022@amd.com>
- <aBEI+T7P+hV8Y6tU@Asurada-Nvidia>
- <7c813df6-e37d-47ae-9b5a-b8735c865626@amd.com>
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="ZQoUu/bJ"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-736aa9d0f2aso8658646b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Apr 2025 01:16:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1746000995; x=1746605795; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GMR7LQ4EcuISRMn9uVkeFVkgbpXUkyH5s1ul4wVziJk=;
+        b=ZQoUu/bJHr6YglVeveIm6EMM6K3sCqbuMpcdHjg6HqMhFdKoVi/7VRnP3LRlazBrLF
+         lJWf5pc/3z820r0t1Nx04bKdhkPySBXo6M+A/BOxsMRQ1A3nrQ+RIAhLC8ISy7UT7SKD
+         LR3d1AP8uvU3698aNDb9/2Y6Em8XjwCB/blEVHuKqdthF3arhqmhMtQTRVTOCDrFLz0y
+         HiyziCR+NGNQL+EhRH+qIKnGgV03Sq9gFtgl1M/nnXsqAosWLxL/pfgPK0up3pa1oFve
+         boFIElu6zBM32vwccaUNcajD4Ur1AfBFz0eTLWwY7yGxn23U+LBcXdCCP2VdTgLMHXd+
+         ZGfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746000995; x=1746605795;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GMR7LQ4EcuISRMn9uVkeFVkgbpXUkyH5s1ul4wVziJk=;
+        b=pEG+iMB3sFn0t45r3mMCno+viFY3gKXxPenNbG6rK+nA72FOxpZQWVRmLEhb2aV2aY
+         VC4hDhc5wL65qbz/L77Gkdm3bmwKJKomP3XLw2uc/Q75Q/v8lVsLr5uPMeaiWY4OfIsh
+         L81fW1TTPHxGqNO/6/2nwlGb6c90ZGk0OKWSgcOqJVo366s+8CRheDhINbVET9kqbGSZ
+         wv13Z2KBAOTj6d7WcJGaoaSstOrvNXi4OmN22sgybHJAcZ8ALb+lJVjYjZjrTHDZPJc/
+         PDc66z5HNYg/bF8g9/SpzWUBtgUPqHlYHuMQiQB+dAnT0xVNP5cZRy31+EcISadQQdpB
+         ex2w==
+X-Forwarded-Encrypted: i=1; AJvYcCV92BKSPMxBkayrRJnX4VCZ6ZHuTAd7XoYgxkb3d7W4V8XyVicaKqXcohFhfmQ4JVUM+1fMI+weyROrnYtiJNM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmCDAApyxQiBtzOKPn1oiO+xpZkhmyIHySj/TNPgoZj0D//EZi
+	r2dKMBMY00VJhyajRCXp4LQJ9aXQ90QeMDFgar94j24rcvRDOf/pUN9YZR1jxjY=
+X-Gm-Gg: ASbGnctKOPkD8zDnzjn61bcqdopoO6iDoShYAi2pfu3Gi5yS6QIphwzT4r/TixXn/32
+	NrfWFTExnhDXYOuC/EfDlCN0WlkcLZ/gbDLnJEaF8AOenRF+1BjAAyk+XSQbtWmoJJZgAEiSLJy
+	h4ve7BGUdQ2P2SyzyUZ/RvrlGzb2fGXrm78O0ynU/Rai1UXp1lY8+m8QYAYMHH3y+D8G1n7XEbS
+	NoEEeG2RwEc5BN5vSJAauQVzxS4SeqTGU33qHDJaDHXbos5Q4qx3L21d3y8qHp3hXtbqqBEM4K5
+	tDptiHKagE9EYSCTrEE2nUmAC2DqTXtnAEIeZHZcazPW5h+C8GHW7Q==
+X-Google-Smtp-Source: AGHT+IEszTsV/BUeZBkL4ZpuZ0SkL3h2U9eOwaQLGRPB51BWwKG2aiOQfovURMFi8gr43T+5AaK3Cg==
+X-Received: by 2002:a05:6a00:139b:b0:736:bfc4:ef2c with SMTP id d2e1a72fcca58-74038793f8dmr3272406b3a.0.1746000995136;
+        Wed, 30 Apr 2025 01:16:35 -0700 (PDT)
+Received: from atishp.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74039a309edsm1073084b3a.91.2025.04.30.01.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Apr 2025 01:16:34 -0700 (PDT)
+From: Atish Patra <atishp@rivosinc.com>
+Date: Wed, 30 Apr 2025 01:16:28 -0700
+Subject: [PATCH v3 1/3] KVM: riscv: selftests: Align the trap information
+ wiht pt_regs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7c813df6-e37d-47ae-9b5a-b8735c865626@amd.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A106:EE_|DS5PPF482CFEB7D:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9e8c3e13-45df-4f02-1e89-08dd87bd4ea7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?vwbV5/hLSv+in3riSOYPtwZJnrqhj+mhENDHkS8ij0XQYtWD49vuxC2Uu4jF?=
- =?us-ascii?Q?WBxQBTMzSMnh2SuCuDB41fThXJXpY7dwnBjLgLnvIFIMlcbEOrBdyo553wGY?=
- =?us-ascii?Q?Bw05+y15rbJTzx9004NkvYxPAio5vskAXQsmee7FhUB4w0FQbdS+6n99THON?=
- =?us-ascii?Q?6stYbnBUPfPSJjPBVBf9e1CmCwDGgNGEMAqsdWqqTEZ6KGJuiO1LdjXIC5TG?=
- =?us-ascii?Q?cQdAYr9gdcDUItKGbbB/oVqX0Oeky2aH2rsqUyl5A78qs9Of3qxpLgGaQI6d?=
- =?us-ascii?Q?X3thacDnLXi5DP7BAzbc5tDXcnLcMP2CwiRKDydY7Ns+c8tz01szvWiGIkkY?=
- =?us-ascii?Q?6+IC5rO7ZG+V8obSj9RnR1gkDnipDpfLMXD9MujPjNBwh8VX6FdApWvfPHnr?=
- =?us-ascii?Q?vx+nCasmlAHo3lc/GonuQFySqaSelPY1jjeMJFWd6zhVvYKUNgy23er/KkRU?=
- =?us-ascii?Q?Xn2IG0SgMyK5HY9rv8sTER2pS/CLLqEgIyAOKMqJQStTN14eggMf5jm026nT?=
- =?us-ascii?Q?r7WpYBA3LlD8SGmBiQh6/F8F6jfY4Kyi8JZdULJB4AeK986nHZ5vp/YRDiX0?=
- =?us-ascii?Q?IfJmPOG2EFuiesdsrH/+Inf7/UkJ2JGYkYQnlWCOjOsrZEDcF1eFxfjLQ3SP?=
- =?us-ascii?Q?YgzwTKWo9D5ut5zDrx1g8/nqYc4c842mAaNBs389mWFcVUbqs3vB9u8N8gY7?=
- =?us-ascii?Q?ckQFpOn29HJ/MwH6vqo3i037voGaacQwAzbRfEU6Urck13slI7pF5AY+KBM+?=
- =?us-ascii?Q?byfE+wV+aVAMm7MMWGipMRV8RCnypEv4iT+jQo4PfQvdfvhYqwdMsVGvBIiP?=
- =?us-ascii?Q?Hwq9jjiahc/LoZfWLO3CxfEwsz5rpFclAM+IOxSHVl1TMebTr71vqSUVxilv?=
- =?us-ascii?Q?joRrsQmi/4E9vhHY7xbnMN/M/udSt6+wl/+jGzMTjYht+StEz0szsdBC2d93?=
- =?us-ascii?Q?fABcxpsTQxAdAQLmwGVGoI9WWRYi5cAt2b+2SXocUC6Aj6aUKNLo6uhlRpz3?=
- =?us-ascii?Q?SIRax1VuMwyz1Jb8q9pN75wLn8MlH6Ja+s2ps3Hs5MbwYe4MbwwHeYTjW1Pv?=
- =?us-ascii?Q?3E9el12IepE1723VMbR6zYX869WKZcGtfBbX8SbHbVFi/5EnH7/vErPnbQON?=
- =?us-ascii?Q?ukEFc/tn3lv04BxTBea6pUtRFw14cIPsoxVUAAJ9FQt6ojyJEmdRVVm7N+2p?=
- =?us-ascii?Q?PTVEIshl6bb6eFDUKo4qUDK20oylm2TluoPO5U6vo3h5V9XoCBk6yIfurFYS?=
- =?us-ascii?Q?hCnhHq5RW4uWFaLbZmAncQl7kEufm/Lm67Y70Px5LopONhwLYcZT8HZSHCDi?=
- =?us-ascii?Q?O8D/gX6wzaDoh3eH4lMqqWvOZr3zDySSNHecoSjRxVEEoWEdcr3uuykksQUe?=
- =?us-ascii?Q?vBc5zWlAEx+qqX6Hmc8GthHXno8qUXGbbEzyPCQ8eEda9tuLQ3Th2sZ/10DP?=
- =?us-ascii?Q?hfpJTP57ltnVQxP7rKLt4Pj6Kh8RcwPCu68/Egzygf7+IWlZLMVF6+U+lRrB?=
- =?us-ascii?Q?0I/6g63BqI+FiZhLi4qlxnzwH30x1nxX5/Ek?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(7416014)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 08:02:09.2794
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e8c3e13-45df-4f02-1e89-08dd87bd4ea7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A106.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PPF482CFEB7D
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250430-kvm_selftest_improve-v3-1-eea270ff080b@rivosinc.com>
+References: <20250430-kvm_selftest_improve-v3-0-eea270ff080b@rivosinc.com>
+In-Reply-To: <20250430-kvm_selftest_improve-v3-0-eea270ff080b@rivosinc.com>
+To: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Andrew Jones <ajones@ventanamicro.com>
+Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+ linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
+X-Mailer: b4 0.15-dev-42535
 
-On Wed, Apr 30, 2025 at 09:52:09AM +0530, Vasant Hegde wrote:
-> >>> Will the hardware replace the physical device ID in the event with
-> >>> the virtual device ID when injecting the event to a guest event/PPR
-> >>> queue? 
-> >>> If so, yea, I think you can define them separately using the> vCMDQ
-> >> infrastructures:
-> >>>  - IOMMU_VCMDQ_TYPE_AMD_VIOMMU_CMDBUF
-> >>>  - IOMMU_VCMDQ_TYPE_AMD_VIOMMU_EVENTLOG
-> >>>  - IOMMU_VCMDQ_TYPE_AMD_VIOMMU_PPRLOG
-> >>> (@Kevin @Jason Hmm, in this case we might want to revert the naming
-> >>>  "vCMDQ" back to "vQEUEUE", once Vasant confirms.)
-> > 
-> > I think I should rename IOMMUFD_OBJ_VCMDQ back to IOMMUFD_OBJ_VQUEUE
-> > since the same object fits three types of queue now in the AMD case.
-> 
-> Makes sense.
-> 
-> AMD architecture supports 5 buffers. In practice we have not implemented event
-> log  B / PPR Log B in Linux.
->   Command buffer
->   Event Log A / B
->   PPR Log A / B
+The current exeception register structure in selftests are missing
+few registers (e.g stval). Instead of adding it manually, change
+the ex_regs to align with pt_regs to make it future proof.
 
-I think those A/B should be dual buffers of the same type?
+Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Signed-off-by: Atish Patra <atishp@rivosinc.com>
+---
+ .../selftests/kvm/include/riscv/processor.h        |  10 +-
+ tools/testing/selftests/kvm/lib/riscv/handlers.S   | 139 +++++++++++----------
+ tools/testing/selftests/kvm/lib/riscv/processor.c  |   2 +-
+ tools/testing/selftests/kvm/riscv/arch_timer.c     |   2 +-
+ tools/testing/selftests/kvm/riscv/ebreak_test.c    |   2 +-
+ tools/testing/selftests/kvm/riscv/sbi_pmu_test.c   |   4 +-
+ 6 files changed, 83 insertions(+), 76 deletions(-)
 
-Anyway, I have renamed all the core "vCMDQ" back to "vQUEUE" in my
-local branch. Will send v3 in the next days.
+diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
+index 5f389166338c..1b5aef87de0f 100644
+--- a/tools/testing/selftests/kvm/include/riscv/processor.h
++++ b/tools/testing/selftests/kvm/include/riscv/processor.h
+@@ -60,7 +60,8 @@ static inline bool __vcpu_has_sbi_ext(struct kvm_vcpu *vcpu, uint64_t sbi_ext)
+ 	return __vcpu_has_ext(vcpu, RISCV_SBI_EXT_REG(sbi_ext));
+ }
+ 
+-struct ex_regs {
++struct pt_regs {
++	unsigned long epc;
+ 	unsigned long ra;
+ 	unsigned long sp;
+ 	unsigned long gp;
+@@ -92,16 +93,19 @@ struct ex_regs {
+ 	unsigned long t4;
+ 	unsigned long t5;
+ 	unsigned long t6;
+-	unsigned long epc;
++	/* Supervisor/Machine CSRs */
+ 	unsigned long status;
++	unsigned long badaddr;
+ 	unsigned long cause;
++	/* a0 value before the syscall */
++	unsigned long orig_a0;
+ };
+ 
+ #define NR_VECTORS  2
+ #define NR_EXCEPTIONS  32
+ #define EC_MASK  (NR_EXCEPTIONS - 1)
+ 
+-typedef void(*exception_handler_fn)(struct ex_regs *);
++typedef void(*exception_handler_fn)(struct pt_regs *);
+ 
+ void vm_init_vector_tables(struct kvm_vm *vm);
+ void vcpu_init_vector_tables(struct kvm_vcpu *vcpu);
+diff --git a/tools/testing/selftests/kvm/lib/riscv/handlers.S b/tools/testing/selftests/kvm/lib/riscv/handlers.S
+index aa0abd3f35bb..b787b982e922 100644
+--- a/tools/testing/selftests/kvm/lib/riscv/handlers.S
++++ b/tools/testing/selftests/kvm/lib/riscv/handlers.S
+@@ -10,85 +10,88 @@
+ #include <asm/csr.h>
+ 
+ .macro save_context
+-	addi  sp, sp, (-8*34)
+-	sd    x1, 0(sp)
+-	sd    x2, 8(sp)
+-	sd    x3, 16(sp)
+-	sd    x4, 24(sp)
+-	sd    x5, 32(sp)
+-	sd    x6, 40(sp)
+-	sd    x7, 48(sp)
+-	sd    x8, 56(sp)
+-	sd    x9, 64(sp)
+-	sd    x10, 72(sp)
+-	sd    x11, 80(sp)
+-	sd    x12, 88(sp)
+-	sd    x13, 96(sp)
+-	sd    x14, 104(sp)
+-	sd    x15, 112(sp)
+-	sd    x16, 120(sp)
+-	sd    x17, 128(sp)
+-	sd    x18, 136(sp)
+-	sd    x19, 144(sp)
+-	sd    x20, 152(sp)
+-	sd    x21, 160(sp)
+-	sd    x22, 168(sp)
+-	sd    x23, 176(sp)
+-	sd    x24, 184(sp)
+-	sd    x25, 192(sp)
+-	sd    x26, 200(sp)
+-	sd    x27, 208(sp)
+-	sd    x28, 216(sp)
+-	sd    x29, 224(sp)
+-	sd    x30, 232(sp)
+-	sd    x31, 240(sp)
++	addi  sp, sp, (-8*36)
++	sd    x1, 8(sp)
++	sd    x2, 16(sp)
++	sd    x3, 24(sp)
++	sd    x4, 32(sp)
++	sd    x5, 40(sp)
++	sd    x6, 48(sp)
++	sd    x7, 56(sp)
++	sd    x8, 64(sp)
++	sd    x9, 72(sp)
++	sd    x10, 80(sp)
++	sd    x11, 88(sp)
++	sd    x12, 96(sp)
++	sd    x13, 104(sp)
++	sd    x14, 112(sp)
++	sd    x15, 120(sp)
++	sd    x16, 128(sp)
++	sd    x17, 136(sp)
++	sd    x18, 144(sp)
++	sd    x19, 152(sp)
++	sd    x20, 160(sp)
++	sd    x21, 168(sp)
++	sd    x22, 176(sp)
++	sd    x23, 184(sp)
++	sd    x24, 192(sp)
++	sd    x25, 200(sp)
++	sd    x26, 208(sp)
++	sd    x27, 216(sp)
++	sd    x28, 224(sp)
++	sd    x29, 232(sp)
++	sd    x30, 240(sp)
++	sd    x31, 248(sp)
+ 	csrr  s0, CSR_SEPC
+ 	csrr  s1, CSR_SSTATUS
+-	csrr  s2, CSR_SCAUSE
+-	sd    s0, 248(sp)
++	csrr  s2, CSR_STVAL
++	csrr  s3, CSR_SCAUSE
++	sd    s0, 0(sp)
+ 	sd    s1, 256(sp)
+ 	sd    s2, 264(sp)
++	sd    s3, 272(sp)
+ .endm
+ 
+ .macro restore_context
++	ld    s3, 272(sp)
+ 	ld    s2, 264(sp)
+ 	ld    s1, 256(sp)
+-	ld    s0, 248(sp)
+-	csrw  CSR_SCAUSE, s2
++	ld    s0, 0(sp)
++	csrw  CSR_SCAUSE, s3
+ 	csrw  CSR_SSTATUS, s1
+ 	csrw  CSR_SEPC, s0
+-	ld    x31, 240(sp)
+-	ld    x30, 232(sp)
+-	ld    x29, 224(sp)
+-	ld    x28, 216(sp)
+-	ld    x27, 208(sp)
+-	ld    x26, 200(sp)
+-	ld    x25, 192(sp)
+-	ld    x24, 184(sp)
+-	ld    x23, 176(sp)
+-	ld    x22, 168(sp)
+-	ld    x21, 160(sp)
+-	ld    x20, 152(sp)
+-	ld    x19, 144(sp)
+-	ld    x18, 136(sp)
+-	ld    x17, 128(sp)
+-	ld    x16, 120(sp)
+-	ld    x15, 112(sp)
+-	ld    x14, 104(sp)
+-	ld    x13, 96(sp)
+-	ld    x12, 88(sp)
+-	ld    x11, 80(sp)
+-	ld    x10, 72(sp)
+-	ld    x9, 64(sp)
+-	ld    x8, 56(sp)
+-	ld    x7, 48(sp)
+-	ld    x6, 40(sp)
+-	ld    x5, 32(sp)
+-	ld    x4, 24(sp)
+-	ld    x3, 16(sp)
+-	ld    x2, 8(sp)
+-	ld    x1, 0(sp)
+-	addi  sp, sp, (8*34)
++	ld    x31, 248(sp)
++	ld    x30, 240(sp)
++	ld    x29, 232(sp)
++	ld    x28, 224(sp)
++	ld    x27, 216(sp)
++	ld    x26, 208(sp)
++	ld    x25, 200(sp)
++	ld    x24, 192(sp)
++	ld    x23, 184(sp)
++	ld    x22, 176(sp)
++	ld    x21, 168(sp)
++	ld    x20, 160(sp)
++	ld    x19, 152(sp)
++	ld    x18, 144(sp)
++	ld    x17, 136(sp)
++	ld    x16, 128(sp)
++	ld    x15, 120(sp)
++	ld    x14, 112(sp)
++	ld    x13, 104(sp)
++	ld    x12, 96(sp)
++	ld    x11, 88(sp)
++	ld    x10, 80(sp)
++	ld    x9, 72(sp)
++	ld    x8, 64(sp)
++	ld    x7, 56(sp)
++	ld    x6, 48(sp)
++	ld    x5, 40(sp)
++	ld    x4, 32(sp)
++	ld    x3, 24(sp)
++	ld    x2, 16(sp)
++	ld    x1, 8(sp)
++	addi  sp, sp, (8*36)
+ .endm
+ 
+ .balign 4
+diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+index dd663bcf0cc0..2eac7d4b59e9 100644
+--- a/tools/testing/selftests/kvm/lib/riscv/processor.c
++++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+@@ -402,7 +402,7 @@ struct handlers {
+ 	exception_handler_fn exception_handlers[NR_VECTORS][NR_EXCEPTIONS];
+ };
+ 
+-void route_exception(struct ex_regs *regs)
++void route_exception(struct pt_regs *regs)
+ {
+ 	struct handlers *handlers = (struct handlers *)exception_handlers;
+ 	int vector = 0, ec;
+diff --git a/tools/testing/selftests/kvm/riscv/arch_timer.c b/tools/testing/selftests/kvm/riscv/arch_timer.c
+index 9e370800a6a2..f962fefc48fa 100644
+--- a/tools/testing/selftests/kvm/riscv/arch_timer.c
++++ b/tools/testing/selftests/kvm/riscv/arch_timer.c
+@@ -15,7 +15,7 @@
+ 
+ static int timer_irq = IRQ_S_TIMER;
+ 
+-static void guest_irq_handler(struct ex_regs *regs)
++static void guest_irq_handler(struct pt_regs *regs)
+ {
+ 	uint64_t xcnt, xcnt_diff_us, cmp;
+ 	unsigned int intid = regs->cause & ~CAUSE_IRQ_FLAG;
+diff --git a/tools/testing/selftests/kvm/riscv/ebreak_test.c b/tools/testing/selftests/kvm/riscv/ebreak_test.c
+index cfed6c727bfc..739d17befb5a 100644
+--- a/tools/testing/selftests/kvm/riscv/ebreak_test.c
++++ b/tools/testing/selftests/kvm/riscv/ebreak_test.c
+@@ -27,7 +27,7 @@ static void guest_code(void)
+ 	GUEST_DONE();
+ }
+ 
+-static void guest_breakpoint_handler(struct ex_regs *regs)
++static void guest_breakpoint_handler(struct pt_regs *regs)
+ {
+ 	WRITE_ONCE(sw_bp_addr, regs->epc);
+ 	regs->epc += 4;
+diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+index 03406de4989d..6e66833e5941 100644
+--- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
++++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+@@ -128,7 +128,7 @@ static void stop_counter(unsigned long counter, unsigned long stop_flags)
+ 		       "Unable to stop counter %ld error %ld\n", counter, ret.error);
+ }
+ 
+-static void guest_illegal_exception_handler(struct ex_regs *regs)
++static void guest_illegal_exception_handler(struct pt_regs *regs)
+ {
+ 	__GUEST_ASSERT(regs->cause == EXC_INST_ILLEGAL,
+ 		       "Unexpected exception handler %lx\n", regs->cause);
+@@ -138,7 +138,7 @@ static void guest_illegal_exception_handler(struct ex_regs *regs)
+ 	regs->epc += 4;
+ }
+ 
+-static void guest_irq_handler(struct ex_regs *regs)
++static void guest_irq_handler(struct pt_regs *regs)
+ {
+ 	unsigned int irq_num = regs->cause & ~CAUSE_IRQ_FLAG;
+ 	struct riscv_pmu_snapshot_data *snapshot_data = snapshot_gva;
 
-Thanks
-Nicolin
+-- 
+2.43.0
+
