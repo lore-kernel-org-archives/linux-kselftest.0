@@ -1,60 +1,91 @@
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873CF213255;
-	Thu,  1 May 2025 07:13:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D543D2AEE9;
+	Thu,  1 May 2025 07:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746083604; cv=none; b=A/lw/V+0ezLpUY8kwo82RoSdMBP1sZGBoOhwW7qhYBFgvbIXEpl0YrT3mGCuA3imSFW4Ov/5ivWtncIr4X1v1FmQSFWL6vcZK+N+PQ5MV92MD8iTw01YchYnPGcnxY33FKtFtN4O6qaN8mI5WhHSoQF9+dPudLdAxhiWl5u3mTI=
+	t=1746085162; cv=none; b=hACXvD2q6mFB3tsRe3mWfnfa6Ke5rPWt5qyrd2PpDw0Cimq1XlDzG+qtKYXEshEKZBUCjL0Cs2CvletyEmyns68tBn7IgzP1plvnDNj+FQ3Juce6MtXNvQ3j9DPwEblq3rsFVreto82kmk9qmIyayZG3qbD02UpgDwvl98apBw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746083604; c=relaxed/simple;
-	bh=zPYU6GYNdy0mMALSF3glm6SldvCR75nV5Wr/ewBREMQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pdrA2KP4jVj42E+0wnZQtnDV2Izwpz7ilyJ1RKz8ZRazq1mOH/ZO6iNCpWtNjk1wDtRSntsmccvZ4sjHmjBD+ap26tgBHKsFy6N4/FULWvdp929bEyf4MZjHNpGtHzacDfXRjnrlRElCGff/4HTaQb19wR0oORPJP17tq4cYey0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=piT+hAhN; arc=none smtp.client-ip=99.78.197.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	s=arc-20240116; t=1746085162; c=relaxed/simple;
+	bh=hkrlTZ62WZIbf+MUF5R0plLe7rX+Hn2FPe/EawkV0eM=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Yej+X02nDfS3yI/LW4+PaeWIUXKwV8GLt4SLx1KBpOgrNLKAoIIjjjvluDdAWUzT9PZKfMtwZgAvdpfxizEqnP8kiNGXpCyEkUKBytjIjFCcxvytHg+jjbcuj7R7JFZVM1yaSjjSLFQFW4hqf6zjyGriP0wA/gIVbvEfe9wXQ6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=FX3yLych; arc=none smtp.client-ip=131.188.11.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="piT+hAhN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1746083602; x=1777619602;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vx0+NHqu1wQYPq/J+n4ZB7E7XDRzuoqX7tjLl8vX3Gc=;
-  b=piT+hAhN1GgAsvekVq13STCGXudkscunKP8ilmMCcn8ARjKXG4In+XuP
-   Q4OxKry8KbQuxu+HVbFKGxD/Az14HBdty0UpyDkJjYdC6I8R56YqXvf7u
-   sMYFG9W8v+FBg9zlw9mEoQwiPRppLqKL3OakOxSw5Uf+xejkbxJp7qn8E
-   E=;
-X-IronPort-AV: E=Sophos;i="6.15,253,1739836800"; 
-   d="scan'208";a="45627745"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 07:13:21 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.21.151:1121]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.49.105:2525] with esmtp (Farcaster)
- id cfb02766-30b7-414e-8a08-12f6538f65e7; Thu, 1 May 2025 07:13:20 +0000 (UTC)
-X-Farcaster-Flow-ID: cfb02766-30b7-414e-8a08-12f6538f65e7
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Thu, 1 May 2025 07:13:20 +0000
-Received: from 6c7e67bfbae3.amazon.com (10.187.171.60) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Thu, 1 May 2025 07:13:16 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <jiayuan.chen@linux.dev>
-CC: <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-	<horms@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <pabeni@redhat.com>, <shuah@kernel.org>,
-	<willemdebruijn.kernel@gmail.com>
-Subject: Re: [RFC net-next v1 1/2] udp: Introduce UDP_STOP_RCV option for UDP
-Date: Thu, 1 May 2025 00:12:08 -0700
-Message-ID: <20250501071308.1931-1-kuniyu@amazon.com>
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="FX3yLych"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
+	t=1746085151; bh=x1254cGxcCub/kUQM5hyyDzmObtkQ9/oIwWSNnQPgK4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From:To:CC:Subject;
+	b=FX3yLychYpnbM41rzVxjhzYjWpqFtMMfFl0/eHPmVM6vLil3mxlWlhfQqx1eMKq35
+	 PaBHRJM/523p3naZaSkiQH2f9O1BROVtxVYeVzFlpqc89WiFNhsXYR9ugMkUy2fBsh
+	 o0czQCiMH/Ba6T42kV8XUeCJEwW61yGWTkHFjpCoSoTfGB4W6R7Jr0M+ePJV7Oiftb
+	 fWxXiRp1K+gp1kRuTyfxfCf/oIsDmOy3bz2WbMxn9ADd+w8D/LyYYE+fhgJCc7QEhQ
+	 D0S5eOw0QV3kyVLh9iDNr6bLkPnUl4B6xmpHSeQgwCk5G7WL7ebqK3lceKS00XbzGW
+	 ad3HH/BixD9Cg==
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4Zp5Xb4D4Kz210D;
+	Thu,  1 May 2025 09:39:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 2001:9e8:3636:a700:12b2:e53f:6cbc:f48c
+Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:3636:a700:12b2:e53f:6cbc:f48c])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: U2FsdGVkX1+zpOyiwhLO6/w+KVc9wUxs9Zvj7+vbGvk=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4Zp5XX1rzQz1yR1;
+	Thu,  1 May 2025 09:39:08 +0200 (CEST)
+From: Luis Gerhorst <luis.gerhorst@fau.de>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Luis Gerhorst <luis.gerhorst@fau.de>,
+	Henriette Herzog <henriette.herzog@rub.de>,
+	Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+	Cupertino Miranda <cupertino.miranda@oracle.com>,
+	Jiayuan Chen <mrpre@163.com>,
+	Matan Shachnai <m.shachnai@gmail.com>,
+	Dimitar Kanaliev <dimitar.kanaliev@siteground.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Daniel Xu <dxu@dxuuu.xyz>,
+	bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v3 01/11] selftests/bpf: Fix caps for __xlated/jited_unpriv
+Date: Thu,  1 May 2025 09:35:52 +0200
+Message-ID: <20250501073603.1402960-2-luis.gerhorst@fau.de>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <1f4d3fb4eed397e346efb3ef597e29204e5a2f4b@linux.dev>
-References: <1f4d3fb4eed397e346efb3ef597e29204e5a2f4b@linux.dev>
+In-Reply-To: <20250501073603.1402960-1-luis.gerhorst@fau.de>
+References: <20250501073603.1402960-1-luis.gerhorst@fau.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,127 +93,60 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D044UWA002.ant.amazon.com (10.13.139.11) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Date: Thu, 01 May 2025 06:22:17 +0000
-> 2025/5/1 12:42, "Kuniyuki Iwashima" <kuniyu@amazon.com> wrote:
-> 
-> > 
-> > From: Jiayuan Chen <jiayuan.chen@linux.dev>
-> > 
-> > Date: Thu, 1 May 2025 11:51:08 +0800
-> > 
-> > > 
-> > > For some services we are using "established-over-unconnected" model.
-> > > 
-> > >  
-> > > 
-> > >  '''
-> > > 
-> > >  // create unconnected socket and 'listen()'
-> > > 
-> > >  srv_fd = socket(AF_INET, SOCK_DGRAM)
-> > > 
-> > >  setsockopt(srv_fd, SO_REUSEPORT)
-> > > 
-> > >  bind(srv_fd, SERVER_ADDR, SERVER_PORT)
-> > > 
-> > >  
-> > > 
-> > >  // 'accept()'
-> > > 
-> > >  data, client_addr = recvmsg(srv_fd)
-> > > 
-> > >  
-> > > 
-> > >  // create a connected socket for this request
-> > > 
-> > >  cli_fd = socket(AF_INET, SOCK_DGRAM)
-> > > 
-> > >  setsockopt(cli_fd, SO_REUSEPORT)
-> > > 
-> > >  bind(cli_fd, SERVER_ADDR, SERVER_PORT)
-> > > 
-> > >  connect(cli, client_addr)
-> > > 
-> > >  ...
-> > > 
-> > >  // do handshake with cli_fd
-> > > 
-> > >  '''
-> > > 
-> > >  
-> > > 
-> > >  This programming pattern simulates accept() using UDP, creating a new
-> > > 
-> > >  socket for each client request. The server can then use separate sockets
-> > > 
-> > >  to handle client requests, avoiding the need to use a single UDP socket
-> > > 
-> > >  for I/O transmission.
-> > > 
-> > >  
-> > > 
-> > >  But there is a race condition between the bind() and connect() of the
-> > > 
-> > >  connected socket:
-> > > 
-> > >  We might receive unexpected packets belonging to the unconnected socket
-> > > 
-> > >  before connect() is executed, which is not what we need.
-> > > 
-> > >  (Of course, before connect(), the unconnected socket will also receive
-> > > 
-> > >  packets from the connected socket, which is easily resolved because
-> > > 
-> > >  upper-layer protocols typically require explicit boundaries, and we
-> > > 
-> > >  receive a complete packet before creating a connected socket.)
-> > > 
-> > >  
-> > > 
-> > >  Before this patch, the connected socket had to filter requests at recvmsg
-> > > 
-> > >  time, acting as a dispatcher to some extent. With this patch, we can
-> > > 
-> > >  consider the bind and connect operations to be atomic.
-> > > 
-> > 
-> > SO_ATTACH_REUSEPORT_EBPF is what you want.
-> > 
-> > The socket won't receive any packets until the socket is added to
-> > 
-> > the BPF map.
-> > 
-> > No need to reinvent a subset of BPF functionalities.
-> >
-> 
-> I think this feature is for selecting one socket, not filtering out certain
-> sockets.
-> 
-> Does this mean that I need to first capture all sockets bound to the same
-> port, and then if the kernel selects a socket that I don't want to receive
-> packets on, I'll need to implement an algorithm in the BPF program to
-> choose another socket from the ones I've captured, in order to avoid
-> returning that socket?
+Currently, __xlated_unpriv and __jited_unpriv do not work because the
+BPF syscall will overwrite info.jited_prog_len and info.xlated_prog_len
+with 0 if the process is not bpf_capable(). This bug was not noticed
+before, because there is no test that actually uses
+__xlated_unpriv/__jited_unpriv.
 
-Right.
+To resolve this, simply restore the capabilities earlier (but still
+after loading the program). Adding this here unconditionally is fine
+because the function first checks that the capabilities were initialized
+before attempting to restore them.
 
-If you want a set of sockets to listen on the port, you can implement
-as such with BPF; register the sockets to the BPF map, and if kernel pick
-up other sockets and triggers the BPF prog, just return one of the
-registerd sk.
+This will be important later when we add tests that check whether a
+speculation barrier was inserted in the correct location.
 
-Even when you have connect()ed sockets on the same port, kernel will
-fall back to the normal scoring to find the best one, and it's not a
-problem as the last 'result' is one selected by BPF or a connected sk,
-and the packet won't be routed to not-yet-registered unconnected sk.
+Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
+Fixes: 9c9f73391310 ("selftests/bpf: allow checking xlated programs in verifier_* tests")
+Fixes: 7d743e4c759c ("selftests/bpf: __jited test tag to check disassembly after jit")
+---
+ tools/testing/selftests/bpf/test_loader.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+index 49f2fc61061f..9551d8d5f8f9 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -1042,6 +1042,14 @@ void run_subtest(struct test_loader *tester,
+ 	emit_verifier_log(tester->log_buf, false /*force*/);
+ 	validate_msgs(tester->log_buf, &subspec->expect_msgs, emit_verifier_log);
+ 
++	/* Restore capabilities because the kernel will silently ignore requests
++	 * for program info (such as xlated program text) if we are not
++	 * bpf-capable. Also, for some reason test_verifier executes programs
++	 * with all capabilities restored. Do the same here.
++	 */
++	if (restore_capabilities(&caps))
++		goto tobj_cleanup;
++
+ 	if (subspec->expect_xlated.cnt) {
+ 		err = get_xlated_program_text(bpf_program__fd(tprog),
+ 					      tester->log_buf, tester->log_buf_sz);
+@@ -1067,12 +1075,6 @@ void run_subtest(struct test_loader *tester,
+ 	}
+ 
+ 	if (should_do_test_run(spec, subspec)) {
+-		/* For some reason test_verifier executes programs
+-		 * with all capabilities restored. Do the same here.
+-		 */
+-		if (restore_capabilities(&caps))
+-			goto tobj_cleanup;
+-
+ 		/* Do bpf_map__attach_struct_ops() for each struct_ops map.
+ 		 * This should trigger bpf_struct_ops->reg callback on kernel side.
+ 		 */
+-- 
+2.49.0
 
-> 
-> This looks like it completely bypasses the kernel's built-in scoring
-> logic. Or is expanding BPF_PROG_TYPE_SK_REUSEPORT to have filtering
-> capabilities also an acceptable solution?
