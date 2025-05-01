@@ -1,223 +1,166 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DDA29CE6;
-	Thu,  1 May 2025 14:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 952681F8BDD
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 May 2025 14:28:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746109667; cv=none; b=sd5UH0uLu3+zRUC0ICIz7XKPIESyAdVPhnjwNnPG+DKuRtEPfiYcM2/rTQhvATEqe/1nFZ3JmmOVYwHs5TugVDqjP1q+ddE3LSax9IqOHDXb0BU+/ByL/XWMqYyLxagfVf/uRUmEurKzBPRhe77fvRh6YuRGnIR0RPFxz6Sg9yE=
+	t=1746109710; cv=none; b=sLdg2wc899oL94dCdgOOn9Syt4DUNccv2rAdbLb6U2dPriA6WOPRF4of/fTedeDtbxgPl4WMl2WLG5N21CAgFECEoWXgNMtWc3oqnO/zn/WilqP/o5tn4PFZ2cW0jZuMMhlDmgbcNwPqb2vGqU3Lt+eU758CpX5eGRWTPIkp0Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746109667; c=relaxed/simple;
-	bh=e2WGSGmrKjNzE3VLNswb+N9eUzr1Q80gbtvvRn6mreE=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=GmkljRmIk1B0srnh9+s0FHsEjSB/EGxJcKT7ukwCuUErWmkhgY/LKk+YEq2ymF80b1cQM3wy5dFCcE8y/gDmcQDx6oJNk69RuwpMEzyCBxmLB0SnR862cl3m7AgDlBuqm+cD+LhjNht/mdWR/sVF9SEzgyVlyopirydJElN9HIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fk5Ca/yc; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746109710; c=relaxed/simple;
+	bh=Bdk+C4naWZdvQAznGsmCl57RU0n4Z14M9ctNJtILpyE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=W9FabELHvhAJqutvCw5l+DAcCYNYxArWicRf+AazQuBPLwYgqWsmGgYk7ymkR+PcF211vc7dOYwfY8t7KrpXrI3pZKB0MOCzEDUCXwjrqumBEok+7eCNeG26FABcHPWM8Uhwrm3jIQDiVKLlCSuLG6qt/X0q4rpy96Swpjbxvds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=gXRCHB6m; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fk5Ca/yc"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7c9376c4dbaso128183285a.0;
-        Thu, 01 May 2025 07:27:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="gXRCHB6m"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43ea40a6e98so7806135e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 May 2025 07:28:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746109664; x=1746714464; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jlhhdp9q6ID/4uXioPB8kF8xFNbK7BMwdnQOnij5DYk=;
-        b=fk5Ca/yc5SSlLBq8MjpQK4edjO5GIY0UNpSd4ih7hL7osUWYuzhNXFbiuwvEtolBsA
-         t1ZKNKIFM7d8wENneMgAGMJ0TF8no6DcnJIHxRWRkzU29Kk5QB169NF9V4A/W195Gjnr
-         nErNs0fxfq9qlmju1EIYWpel+xY5mGpCCfHug0IThfdYQqGxdQoQMteW/O6yQIUsaiQk
-         NIrZgexl+FnnruySmz3C1WWehXFWXigo0EsaUVTWqIWI3Js7MQ284ERo9xWG0DSMZeZP
-         ZLyy2SvNa7htxL8czTDqYpz7b9XawVczu4Lk7Crlth9oU0eDWFw9ZEU7Km5ztlAekJIF
-         rm+A==
+        d=isovalent.com; s=google; t=1746109707; x=1746714507; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rQvdlwU602sy2200o3Yv2M/yNfMxMp0HA+iE0MAoltw=;
+        b=gXRCHB6mtmqMV/okRDRU9EyktzsXSmmV5WPy+DfL0lDyiWr0OB5HCc/1ZrT4ew0kHu
+         nIndcfA/LBA6um74Q1eZmr41F0vbLUxiNlxgAiUsx/uX9SUqaiVcwRbx9XBFLPe199Zm
+         CY/yHy587MbF25y7T6CqrdrlQK4JwLqVlMHg1iISal17vLmYWpL4Ibs+SYS1lH4FB7L5
+         dCDdM1oyODjVwkifMBoQM+Uoo5UQytv93bR+OQvCttuuKmHECIK3gxhRKmU/WNslRLpl
+         zo8gcYTUKtLKuK1Hv5+TczEYerBM4VwS95z6CXICTVieAyHedlnr69nzEW9K8oHh65yF
+         Hbuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746109664; x=1746714464;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jlhhdp9q6ID/4uXioPB8kF8xFNbK7BMwdnQOnij5DYk=;
-        b=HAUkegzREiilr219Xy7BFQ8atS3Dm1GRTJwO9kSY5JNrNbOXMKB808C7zDC8XhmGxn
-         Htrn3v42h2pq2CTFRtxSCzg50+Un3wP7Nc+87NpQvsIslRnwpFVP89NgQm27qlQdJW+F
-         FV0QXNNJvSr680YN7+6UX5e1jE0CiZV+hpKCRm3Dx9ydPCzWFLhdHmKXIcMsm9t/oKN9
-         dRWYZS9Un1p+hlzxI+q659ykloC3CjnavD0LGpuSyJlhsOE3uDNPkjfBZq2RBVfO/4MO
-         IZp3tynNdqJadsJO+En5ku2m+U4LLxH7wEYPiaJI5TKfzWLlf7j7q529fF/aQFyFaIdk
-         gR0A==
-X-Forwarded-Encrypted: i=1; AJvYcCW62vk8W5RbD/XRCK5wppK8PAqjMq0x+RLfFsuHAEiMNKTNeUnxJjniwyxK0Exhw5Fg1Ub4koQB20rdp2E=@vger.kernel.org, AJvYcCWNp3nIo93HO1BLQ8cmjFUkkWo49EA+2YkA0/zQdC7mRAI7a/a1DkUB6j+jPuYSt33eNjYgyVfN@vger.kernel.org, AJvYcCXs+ANe94wpQ5alsoLVnEEDhheHJutvm6hbgpnHQvtebzqFMSRYzEjmPGcXy129ONGz56OCESyjwZiaPA7l1rPM@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYLr04JcdYPke0ttMl9q5wwgBaA3FELdrU2Xg7AaqjT8PW00BW
-	SYCeI8M7/B5SRZfUPd6Pv/OYIUcEFXDuoJvliH1fCmyfpJNMhH9f
-X-Gm-Gg: ASbGncueYl8XF8974VQCKpOpFF0N0cbaeyUt3yC+xXkw1XfYijgC7q9ebmBxcpNniMB
-	JjEwJ20uGCDFO9zN0zlRXd3f1FdKlYXuvMaHPil6evj86yUU20MygSV/pRi0Ol86GQ82cOD97Eu
-	iE0USrTvj5aNGbbek0EmGba5KydiqMHkaMJwSCwr/WGzQcEGgarrECeKEWhJmBWhAGcoR45huDi
-	FG79HVH9teNtMmCS5qJWfxBKvwbyG7mis6CFOZSlefQYN6brxERZR/FqYcGuUZVQBX5bh7+mjVR
-	CeWOqe1mPE2DsJlxntRy69MBiSZcw23ZjL6tKEB9g4y6z96GCDq/0mX32AQgZNYGq5JcS64ymBE
-	yRhKwEmjSoX++8Z6sQCra
-X-Google-Smtp-Source: AGHT+IGjqqyilZJTQ6JAChTYoPBhygOgNNNZTYMgXQete2ywNqTY8GoZgssKT1j8IztLKLrT7J4vfg==
-X-Received: by 2002:a05:620a:1995:b0:7c7:c1f8:34eb with SMTP id af79cd13be357-7cacea24694mr375669585a.23.1746109664348;
-        Thu, 01 May 2025 07:27:44 -0700 (PDT)
-Received: from localhost (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7cad242b5cfsm48312685a.70.2025.05.01.07.27.43
+        d=1e100.net; s=20230601; t=1746109707; x=1746714507;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rQvdlwU602sy2200o3Yv2M/yNfMxMp0HA+iE0MAoltw=;
+        b=O0jGa4yvtId9kEsHR4ONWDAqGrE4rZOE+ios/3A4Vmkv1nQSHAezGTlTECYoUN7FgD
+         +dTEzepmEEhQNOdjxaSBvMxwf4hHMbjxto0bqHHb/b/XVYmbWm9b5f/0XcU+tSPddJaZ
+         wsgQUpQRXwDJI3sYviSaXb27zlO8Sd6tLFJvsYqaiOfyQpRuDGfk0BDclPW5hv4z/rlK
+         heO7yIyK6d0OASlNm6kXL+iaXSbnl31pzMl2BT8CUs/KRQ6Q5gOex7PRlMbfouFNwazS
+         K12oFH8pW0G6HzquhQW9k7PwQN3LLkGL782ZV3uhSxYa6d+q5IRP7NVO0GmqKk23GVrf
+         QMgg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0wePRqii5vQpKQoSsvFulvGXCZRRzK/xk+eBwHZ4zrrAIH/wQwMbEhYcYAUFniZODOh0aSR8ASsMLb8+rPyg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYbLsBFSmnMrku+WDkBoisGnq2eWxHRrTmAvXRNzmOyJXqzvgk
+	ZEupfg8HL1N4VhGjQe9uPxk00F2YT5PsBZEwVkr7vaYK0x8evy/Kcrriak+VGhY=
+X-Gm-Gg: ASbGncsLRcA9+z3ws8NPadLclC54PwrhRbzgV6p51PC7xPcnw529j1r/diCvzvs1xmU
+	URKQCZ9Kg4l8R1BloGIkAASKnVSZilfLCF1n4PLU31EMpv5m+iyzvuCUUGkuL/+OPD4gyBbGUfT
+	nFBN/GgOr5JTzR2PsA2BhYqf1WcoN6JgvlfGXScsiZLZchQr3n2PzMPXpCfQt/YPqkT4otJtyH1
+	Ao6UNLagpHy9CRP0Xwvx1j2dln2wzm9YeJ9MaiO9QGWolcBqVuVFtSIfkZrWnlSVq/150v4hXvi
+	8/qxTSU7T3pi39P023VOt29/H037VuDDviqhp/A256tLgZqdAQBiDNlvMA4UiIVrm7oL+mqxgJ3
+	zYp8hL7T5zH2bGZYRIiYZYEoaBGsietXgLK3h
+X-Google-Smtp-Source: AGHT+IGy0LDUHyJXOVHAC98GhTWux6/a5g/Z2ztBK4/3fRtxG05OxDLTr5GuNeJQsjhZZpo79dJY/A==
+X-Received: by 2002:a05:600c:502b:b0:43c:fb8e:aec0 with SMTP id 5b1f17b1804b1-441b1f2f0fdmr58254725e9.1.1746109706849;
+        Thu, 01 May 2025 07:28:26 -0700 (PDT)
+Received: from [192.168.1.240] (0.0.6.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::600])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441b89d15dasm13908445e9.16.2025.05.01.07.28.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 May 2025 07:27:43 -0700 (PDT)
-Date: Thu, 01 May 2025 10:27:43 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>, 
- jiayuan.chen@linux.dev
-Cc: davem@davemloft.net, 
- dsahern@kernel.org, 
- edumazet@google.com, 
- horms@kernel.org, 
- kuba@kernel.org, 
- kuniyu@amazon.com, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- netdev@vger.kernel.org, 
- pabeni@redhat.com, 
- shuah@kernel.org, 
- willemdebruijn.kernel@gmail.com
-Message-ID: <681384df8e0f1_35e23e294ea@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250501071308.1931-1-kuniyu@amazon.com>
-References: <1f4d3fb4eed397e346efb3ef597e29204e5a2f4b@linux.dev>
- <20250501071308.1931-1-kuniyu@amazon.com>
-Subject: Re: [RFC net-next v1 1/2] udp: Introduce UDP_STOP_RCV option for UDP
+        Thu, 01 May 2025 07:28:26 -0700 (PDT)
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Thu, 01 May 2025 15:28:21 +0100
+Subject: [PATCH bpf-next 1/2] btf: allow mmap of vmlinux btf
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250501-vmlinux-mmap-v1-1-aa2724572598@isovalent.com>
+References: <20250501-vmlinux-mmap-v1-0-aa2724572598@isovalent.com>
+In-Reply-To: <20250501-vmlinux-mmap-v1-0-aa2724572598@isovalent.com>
+To: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Lorenz Bauer <lmb@isovalent.com>
+X-Mailer: b4 0.14.2
 
-Kuniyuki Iwashima wrote:
-> From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-> Date: Thu, 01 May 2025 06:22:17 +0000
-> > 2025/5/1 12:42, "Kuniyuki Iwashima" <kuniyu@amazon.com> wrote:
-> > 
-> > > 
-> > > From: Jiayuan Chen <jiayuan.chen@linux.dev>
-> > > 
-> > > Date: Thu, 1 May 2025 11:51:08 +0800
-> > > 
-> > > > 
-> > > > For some services we are using "established-over-unconnected" model.
-> > > > 
-> > > >  
-> > > > 
-> > > >  '''
-> > > > 
-> > > >  // create unconnected socket and 'listen()'
-> > > > 
-> > > >  srv_fd = socket(AF_INET, SOCK_DGRAM)
-> > > > 
-> > > >  setsockopt(srv_fd, SO_REUSEPORT)
-> > > > 
-> > > >  bind(srv_fd, SERVER_ADDR, SERVER_PORT)
-> > > > 
-> > > >  
-> > > > 
-> > > >  // 'accept()'
-> > > > 
-> > > >  data, client_addr = recvmsg(srv_fd)
-> > > > 
-> > > >  
-> > > > 
-> > > >  // create a connected socket for this request
-> > > > 
-> > > >  cli_fd = socket(AF_INET, SOCK_DGRAM)
-> > > > 
-> > > >  setsockopt(cli_fd, SO_REUSEPORT)
-> > > > 
-> > > >  bind(cli_fd, SERVER_ADDR, SERVER_PORT)
-> > > > 
-> > > >  connect(cli, client_addr)
-> > > > 
-> > > >  ...
-> > > > 
-> > > >  // do handshake with cli_fd
-> > > > 
-> > > >  '''
-> > > > 
-> > > >  
-> > > > 
-> > > >  This programming pattern simulates accept() using UDP, creating a new
-> > > > 
-> > > >  socket for each client request. The server can then use separate sockets
-> > > > 
-> > > >  to handle client requests, avoiding the need to use a single UDP socket
-> > > > 
-> > > >  for I/O transmission.
-> > > > 
-> > > >  
-> > > > 
-> > > >  But there is a race condition between the bind() and connect() of the
-> > > > 
-> > > >  connected socket:
-> > > > 
-> > > >  We might receive unexpected packets belonging to the unconnected socket
-> > > > 
-> > > >  before connect() is executed, which is not what we need.
-> > > > 
-> > > >  (Of course, before connect(), the unconnected socket will also receive
-> > > > 
-> > > >  packets from the connected socket, which is easily resolved because
-> > > > 
-> > > >  upper-layer protocols typically require explicit boundaries, and we
-> > > > 
-> > > >  receive a complete packet before creating a connected socket.)
-> > > > 
-> > > >  
-> > > > 
-> > > >  Before this patch, the connected socket had to filter requests at recvmsg
-> > > > 
-> > > >  time, acting as a dispatcher to some extent. With this patch, we can
-> > > > 
-> > > >  consider the bind and connect operations to be atomic.
-> > > > 
-> > > 
-> > > SO_ATTACH_REUSEPORT_EBPF is what you want.
-> > > 
-> > > The socket won't receive any packets until the socket is added to
-> > > 
-> > > the BPF map.
-> > > 
-> > > No need to reinvent a subset of BPF functionalities.
-> > >
-> > 
-> > I think this feature is for selecting one socket, not filtering out certain
-> > sockets.
-> > 
-> > Does this mean that I need to first capture all sockets bound to the same
-> > port, and then if the kernel selects a socket that I don't want to receive
-> > packets on, I'll need to implement an algorithm in the BPF program to
-> > choose another socket from the ones I've captured, in order to avoid
-> > returning that socket?
-> 
-> Right.
-> 
-> If you want a set of sockets to listen on the port, you can implement
-> as such with BPF; register the sockets to the BPF map, and if kernel pick
-> up other sockets and triggers the BPF prog, just return one of the
-> registerd sk.
-> 
-> Even when you have connect()ed sockets on the same port, kernel will
-> fall back to the normal scoring to find the best one, and it's not a
-> problem as the last 'result' is one selected by BPF or a connected sk,
-> and the packet won't be routed to not-yet-registered unconnected sk.
-> 
-> 
-> > 
-> > This looks like it completely bypasses the kernel's built-in scoring
-> > logic. Or is expanding BPF_PROG_TYPE_SK_REUSEPORT to have filtering
-> > capabilities also an acceptable solution?
+User space needs access to kernel BTF for many modern features of BPF.
+Right now each process needs to read the BTF blob either in pieces or
+as a whole. Allow mmaping the sysfs file so that processes can directly
+access the memory allocated for it in the kernel.
 
-Reuseport BPF exists because we want to avoid having to continue to
-add custom rules in C for each scenario.
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+---
+ include/asm-generic/vmlinux.lds.h |  3 ++-
+ kernel/bpf/sysfs_btf.c            | 25 +++++++++++++++++++++++--
+ 2 files changed, 25 insertions(+), 3 deletions(-)
 
-In this case, I did wonder whether it is possible to avoid hitting
-the soon-to-be connected socket with the standard reuseport
-algorithm in reuseport_select_sock_by_hash.
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 58a635a6d5bdf0c53c267c2a3d21a5ed8678ce73..1750390735fac7637cc4d2fa05f96cb2a36aa448 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -667,10 +667,11 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
+  */
+ #ifdef CONFIG_DEBUG_INFO_BTF
+ #define BTF								\
++	. = ALIGN(PAGE_SIZE);						\
+ 	.BTF : AT(ADDR(.BTF) - LOAD_OFFSET) {				\
+ 		BOUNDED_SECTION_BY(.BTF, _BTF)				\
+ 	}								\
+-	. = ALIGN(4);							\
++	. = ALIGN(PAGE_SIZE);						\
+ 	.BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {			\
+ 		*(.BTF_ids)						\
+ 	}
+diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
+index 81d6cf90584a7157929c50f62a5c6862e7a3d081..7651f37b82c78b8afd96078567a5b6612f5f4d97 100644
+--- a/kernel/bpf/sysfs_btf.c
++++ b/kernel/bpf/sysfs_btf.c
+@@ -7,18 +7,39 @@
+ #include <linux/kobject.h>
+ #include <linux/init.h>
+ #include <linux/sysfs.h>
++#include <linux/mm.h>
++#include <linux/io.h>
+ 
+ /* See scripts/link-vmlinux.sh, gen_btf() func for details */
+ extern char __start_BTF[];
+ extern char __stop_BTF[];
+ 
++struct kobject *btf_kobj;
++
++static int btf_vmlinux_mmap(struct file *filp, struct kobject *kobj,
++			    const struct bin_attribute *attr,
++			    struct vm_area_struct *vma)
++{
++	size_t btf_size = __stop_BTF - __start_BTF;
++
++	if (kobj != btf_kobj)
++		return -EINVAL;
++
++	if (vma->vm_flags & (VM_WRITE|VM_EXEC|VM_MAYSHARE))
++		return -EACCES;
++
++	vm_flags_clear(vma, VM_MAYEXEC);
++	vm_flags_clear(vma, VM_MAYWRITE);
++
++	return vm_iomap_memory(vma, virt_to_phys(__start_BTF), btf_size);
++}
++
+ static struct bin_attribute bin_attr_btf_vmlinux __ro_after_init = {
+ 	.attr = { .name = "vmlinux", .mode = 0444, },
+ 	.read_new = sysfs_bin_attr_simple_read,
++	.mmap = btf_vmlinux_mmap,
+ };
+ 
+-struct kobject *btf_kobj;
+-
+ static int __init btf_vmlinux_init(void)
+ {
+ 	bin_attr_btf_vmlinux.private = __start_BTF;
 
-Setting SO_INCOMING_CPU to a cpu on which no packets arrive will
-lower its priority relative to other sockets. It's a bit of a hack,
-but should work?
+-- 
+2.49.0
+
