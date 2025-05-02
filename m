@@ -1,106 +1,163 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DA4A2F2F;
-	Fri,  2 May 2025 04:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746159848; cv=none; b=ehgYOXTcznpI4h+kYaUoINtGH4Dg6RDyyEdLmf65jSb/s68LV7WeIraEtlAfEIgVU8YSAP/iNogYIUpHAXmN4Fc3W1wiNpJq9Sv4fIO38yyJw6mxQp+oZZ/dsczNtOt4WsFY/98iZ8aCm9C9PF4dYW7x7MYO+et8I9o2BQrtZM0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746159848; c=relaxed/simple;
-	bh=xNxMPd9/iT31oaa3P1K08pqMS9oTm3FccWzUvjaDt5k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=arD7CHSuZ8CnHwIHYLwL0O2lL7FXMnBkxzlvXJaqlN7s+MrCbud28aFF6rydVxPcJ25Tz5NUut1kdvcsbbZjUe4AVw9Ev7nNX3I3zOoXLEP8LkMJMIbsSYSp6eqKhjrYxVs/8hNqb3rt/xV64tQ5tp8L68tfHmTaU2Nzn04D/HY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WEn3xYjG; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2078.outbound.protection.outlook.com [40.107.243.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D976815DBB3;
+	Fri,  2 May 2025 05:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.78
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746162266; cv=fail; b=YdPdiKJc0NnTSPlpeulbHycrGqvyL2aYUMRaKWDXMY89F4+OJIRSZESoMte26jxhsWSRz9SN+FHigeRFucjrtg4r86nKaQDybbj8qh3hj5dSITVvmt06dbD3BPiKk3RNwo9cY5mJ+UanVwLyZRwdQHBfR/p4Nto9eEyzo8BPsms=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746162266; c=relaxed/simple;
+	bh=lGjVjQJRXXr0fUsJnM3rbo3lTAvg8HsCwhBjGxOIluM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gD3aMBG/92XXNyTMrfqq52ypwojnX1DEfnFkCbihCTZ4iBbDowu3iWDtRUNl7Xtf085wTCoMN/Mu79fFpa8Ts72WHR99BSKR8FkRIdtZEN8FORoAVurcPBmjWrUtMjV3yEQR3Czsvr9xxs65c+RrVyXiTIqFUxdQ2hJNbs6yxaw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XFkRz32v; arc=fail smtp.client-ip=40.107.243.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WEn3xYjG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version:
-	Content-Type; bh=8InkDp27DC5WPYBCqXZbfAX4HPlXb/a3Sn044Zn5gN0=;
-	b=WEn3xYjG4XXTkMCCsLeVm8jVPt80e1PuhxQByP3eIKFdIcTIcy0CcBOQDTaCui
-	fCcQ9nGO5h8FNKLsUt064EOCVyFjDr9QS64KSLy5Yrol4MtWvhgKoeG97Axz/Fgk
-	ITEXT5jhiBPKoqMnnvbUQRMhZnn6EOdlHPaaqJJbC8Kso=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wDn74m1SBRoWmWQDw--.37075S2;
-	Fri, 02 May 2025 12:23:18 +0800 (CST)
-From: Haiyue Wang <haiyuewa@163.com>
-To: netdev@vger.kernel.org
-Cc: Haiyue Wang <haiyuewa@163.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	David Wei <dw@davidwei.uk>,
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net v1] selftests: iou-zcrx: Clean up build warnings for error format
-Date: Fri,  2 May 2025 12:22:20 +0800
-Message-ID: <20250502042240.17371-1-haiyuewa@163.com>
-X-Mailer: git-send-email 2.49.0
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XFkRz32v"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NRm3PQ3xlZ/5Wydu0X4fmn4WF1UNrimMC5T+wsB7Xs17kOSOsqYDDEnRdgLIsWXsXWF0VVRyQxlFAU1jg0/jlP42U7KuwhcgK5X3iUlTmhbSAx+67rpMtflH4k/NLxiv7/2PcvLlxvBh7Mz9ESfwrPtNwE6dibl9gBPr8UfI3aHf4egCDgphEbXkmjJinC7AaLiqXTb6vfCk5R3kbd5XYgaTDxjN38jFeaNgijpOC3CZS5MqY8o94/61osrCZBfxZ/+FVEUCmMoPA1nrifHvPKrCvBpXVvqcxTh+pP6Mgat8hqeKjTfkIxO9pXb4xYt6sh0LGXU4JK8d38pFRHyAPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4wv8pNiPKbZ/C8A6AHVM3VE+kSkuEsELhEg0MpJeTQc=;
+ b=u4E4z//v9Atx7l9LO9zDv0ByUIEHa9UVCE+AAjpXVOBLtFD8aq+vAOSBSjfZMgS6Cbf41pIKEQ/67iBo6WiEicxieZZLDzooajm613VRBEaIJ6BkPVd00EQDQp6DY0iYxd0OlhZhIT7LIfpMzmr3qvtJpzqRb2rtWyiw3Sb/FYD+4niqEotoTBnut4M4e0lKpwEf4/CFL479i3psGj7mK98W+UyKlDounA/uvJa+a6e9vNjTP5EuSxClDJPcZ2NlrrZc0ZetCgSGxvPwJc/7IyYHCQ4VzyXTKXskE2AfTClcShXLjI7/fCjbEg7biL2obNCVmxfR3t9LWYt7RyRjrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4wv8pNiPKbZ/C8A6AHVM3VE+kSkuEsELhEg0MpJeTQc=;
+ b=XFkRz32vlHj4fSr8GUtgi6TEglonqKuxjH6dBL6KJ6qkXe/Lh8UHRaUnlWocq8VNaHDKqRPn0Omm7Ada4ZhEZfSXAcERA9FAUgS6enozlHr5LYp1NhpD7lYtcVBDgqMMWjqHZOawOUGBXFysx8GEJsq1ijQgr+tEglG6ereI9zk=
+Received: from BL6PEPF00013DF6.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:22e:400:0:1001:0:a) by MN0PR12MB6176.namprd12.prod.outlook.com
+ (2603:10b6:208:3c3::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.19; Fri, 2 May
+ 2025 05:04:20 +0000
+Received: from BL02EPF0001A106.namprd05.prod.outlook.com
+ (2a01:111:f403:c922::3) by BL6PEPF00013DF6.outlook.office365.com
+ (2603:1036:903:4::4) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.42 via Frontend Transport; Fri,
+ 2 May 2025 05:04:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A106.mail.protection.outlook.com (10.167.241.139) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8699.20 via Frontend Transport; Fri, 2 May 2025 05:04:20 +0000
+Received: from brahmaputra.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 2 May
+ 2025 00:04:16 -0500
+From: Manali Shukla <manali.shukla@amd.com>
+To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <seanjc@google.com>, <pbonzini@redhat.com>, <nikunj@amd.com>,
+	<manali.shukla@amd.com>, <bp@alien8.de>
+Subject: [PATCH v5 2/5] x86/cpufeatures: Add CPUID feature bit for the Bus Lock Threshold
+Date: Fri, 2 May 2025 05:03:43 +0000
+Message-ID: <20250502050346.14274-3-manali.shukla@amd.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250502050346.14274-1-manali.shukla@amd.com>
+References: <20250502050346.14274-1-manali.shukla@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDn74m1SBRoWmWQDw--.37075S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tw4DKFWDtF13KF47GrWfZrb_yoW8XFy5pa
-	s5tw1qkrWrJF17JayDJrWIgFW5Xrs7A3yIkF1UAa4fXrW3AFZ2qF4fKFy0kF9rWrWS93WY
-	y3yIkF48AF1UZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zMWlkUUUUUU=
-X-CM-SenderInfo: 5kdl53xhzdqiywtou0bp/1tbiYBBBa2gUQV-PVAAAsj
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A106:EE_|MN0PR12MB6176:EE_
+X-MS-Office365-Filtering-Correlation-Id: 40752ba8-8098-4a84-ec9d-08dd8936cc4a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?R0yEs6ppwAGLde3s+OU/yiTbhovv7SKXgb9PToGw+xX0JFL0ScRYKeFO5HF4?=
+ =?us-ascii?Q?yWC1eo3W4yCfSWbYZuL+yM+mSJ3/HBHo9iqysHLBvPi1GPwb/uuafYyb2d9o?=
+ =?us-ascii?Q?HZIJ2Ss5O8zspseWnKWn0IoEYxaOmq1piei91iiS+Sg5dtI82pcot9Wvkzv3?=
+ =?us-ascii?Q?40oIUsCnc56zNFdZitJamQ3BIm+VlewKK/nI2Pq35QHq64/ldjR+kr8zJkLP?=
+ =?us-ascii?Q?2RS512AAcMHB+qK3Ou25i5eYwfISXj+OlfzxyrHUkaZVyQMZFAOQd2prnBMu?=
+ =?us-ascii?Q?R+LfNcX4bkKYBv4jyzwcZD8vQM67vWKXRDIiEthQQ3iTU7sGjaez1a+5J1Qq?=
+ =?us-ascii?Q?csMl/Jht/hNt5UsDW8aFwFhS/xlpq3xdlx+qCyYNZrwml/1ygqvr4USNq44B?=
+ =?us-ascii?Q?Eih2XULH0/mn4kEr6qnF50oz8noNEb5Ls6Tcn5aSJ/rLaPThfu0rVUBdPFkV?=
+ =?us-ascii?Q?XP91A0X0lCV+x9UanHcyKtU5/M0n8o+zg6WlezSWlEK9HrQIqeugx6XlUH82?=
+ =?us-ascii?Q?1yjZwPIYmJ98cUhw+YGJGA5UQYnONNaqIfpo3qVQWHMhLwd26tt0pIc03J/f?=
+ =?us-ascii?Q?qnKaRaPll8OAvyfv1rHSi3TR/rgp7y+vEimdOHWHLukbe8iBXJv1cijLtEMt?=
+ =?us-ascii?Q?btciJLSYeoKWqgvE4x/P7qRLZisU7bjr62msL0+DTAP0Gp+gYZ4zkrvw/iZn?=
+ =?us-ascii?Q?FGTHamov/j8jqcufqpRQcR+DDDdtCXGO896P8nEmxz3yr/zTQb7hjWZS4W8h?=
+ =?us-ascii?Q?L9NX0b6Z2aVV0p+qnnXNNRo820hJP9Mn2HsTzka9HgZrSLx4k3wx67UAdVAg?=
+ =?us-ascii?Q?3dReeLjG+glkM8KSDK6/FsWlijLFBD7m5Jy+duREUuyKsalq09yKkGm+tBTs?=
+ =?us-ascii?Q?oEKd345RVe/K722461PwDQ14mcF5WhmrSDxTtUMtM5Fv9fpOToFoeAAI2r45?=
+ =?us-ascii?Q?tZTbpetggHQFcyi2upvYNvDShCRBG8uTzZe/+x4A18d+5H6+0enyPtb0fCUe?=
+ =?us-ascii?Q?xqIoH/MeHddQkZuaYsHKt6+56tAXVrxp27qcwhpfXqf+vZXOSCoXZmippRGA?=
+ =?us-ascii?Q?MrP15/9OCm1waLyOaDjDPel6CeVAkTBaDfijJltop0z5uHds0s2bAtI30KKJ?=
+ =?us-ascii?Q?416TaTC2FKJ1jW6Brh/ettwBZjU9uFJEopeqcCsU+0OGZdriJeqV5A+usNPw?=
+ =?us-ascii?Q?ucAcP97LrAn3HY/pB8WMrJdrNWRLMbEPBSGLohLoVvW7LkGpyQlL1UxpVZ+Y?=
+ =?us-ascii?Q?vDnpLXgwQtaTQd5GtxlmGh8oPggoDyRaLD9+NYiYP0HWxGdZ8d/vScnwPGar?=
+ =?us-ascii?Q?wTCVZbSW9ArM3fEuk15Pcpe9f1VK/qQAYzRJKcbwHG3b4NQNRILm20o1K+u1?=
+ =?us-ascii?Q?fIb9QoIs7EqFrzSnoOvmr8YiuyDD8tbt6T35aoNjCQbqjqIQ2/dUECa8wsk6?=
+ =?us-ascii?Q?BJhlNwsq4FqMLcWp/90Zm5ju/AHF41QdYZcze0XRZEgROcDktjgKpNLnDnly?=
+ =?us-ascii?Q?pjr3MpqZGPxlkLGAXwuykT3RiUSne1CNGX9q?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2025 05:04:20.4729
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40752ba8-8098-4a84-ec9d-08dd8936cc4a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A106.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6176
 
-Clean up two build warnings:
+Misbehaving guests can cause bus locks to degrade the performance of
+the system. The Bus Lock Threshold feature can be used to address this
+issue by providing capability to the hypervisor to limit guest's
+ability to generate bus lock, thereby preventing system slowdown due
+to performance penalities.
 
-[1]:
-iou-zcrx.c: In function ‘process_recvzc’:
-iou-zcrx.c:263:37: warning: too many arguments for
-  format [-Wformat-extra-args]
-  263 |               error(1, 0, "payload mismatch at ", i);
-      |                           ^~~~~~~~~~~~~~~~~~~~~~
+When the Bus Lock Threshold feature is enabled, the processor checks
+the bus lock threshold count before executing the buslock and decides
+whether to trigger bus lock exit or not.
 
-[2]:
-iou-zcrx.c: In function ‘run_client’:
-iou-zcrx.c:357:47: warning: format ‘%d’ expects argument of
-  type ‘int’, but argument 4 has
-  type ‘ssize_t’ {aka ‘long int’} [-Wformat=]
-  357 |               error(1, 0, "send(): %d", sent);
-      |                                    ~^   ~~~~
-      |                                     |   |
-      |                                     int ssize_t {aka long int}
-      |                                    %ld
+The value of the bus lock threshold count '0' generates bus lock
+exits, and if the value is greater than '0', the bus lock is executed
+successfully and the bus lock threshold count is decremented.
 
-Signed-off-by: Haiyue Wang <haiyuewa@163.com>
+Presence of the Bus Lock threshold feature is indicated via CPUID
+function 0x8000000A_EDX[29].
+
+Signed-off-by: Manali Shukla <manali.shukla@amd.com>
 ---
- tools/testing/selftests/drivers/net/hw/iou-zcrx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/cpufeatures.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-index c26b4180eddd..19e1ff45deb4 100644
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-@@ -260,7 +260,7 @@ static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index e95a8e9ef22b..b51f3ce84032 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -378,6 +378,7 @@
+ #define X86_FEATURE_V_SPEC_CTRL		(15*32+20) /* "v_spec_ctrl" Virtual SPEC_CTRL */
+ #define X86_FEATURE_VNMI		(15*32+25) /* "vnmi" Virtual NMI */
+ #define X86_FEATURE_SVME_ADDR_CHK	(15*32+28) /* SVME addr check */
++#define X86_FEATURE_BUS_LOCK_THRESHOLD	(15*32+29) /* Bus lock threshold */
+ #define X86_FEATURE_IDLE_HLT		(15*32+30) /* IDLE HLT intercept */
  
- 	for (i = 0; i < n; i++) {
- 		if (*(data + i) != payload[(received + i)])
--			error(1, 0, "payload mismatch at ", i);
-+			error(1, 0, "payload mismatch at %d", i);
- 	}
- 	received += n;
- 
-@@ -354,7 +354,7 @@ static void run_client(void)
- 		chunk = min_t(ssize_t, cfg_payload_len, to_send);
- 		res = send(fd, src, chunk, 0);
- 		if (res < 0)
--			error(1, 0, "send(): %d", sent);
-+			error(1, 0, "send(): %ld", sent);
- 		sent += res;
- 		to_send -= res;
- 	}
+ /* Intel-defined CPU features, CPUID level 0x00000007:0 (ECX), word 16 */
 -- 
-2.49.0
+2.34.1
 
