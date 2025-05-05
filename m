@@ -1,327 +1,186 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2053.outbound.protection.outlook.com [40.107.243.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D48526738B
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 17:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746464898; cv=none; b=nCQkIe1lIURs5ShaMd6hrlG+e8oPE4Zfdf1HDFpnezmj5T9aAazsSlBTC9C9sa/Y7o06vLeNhOM+pc+5D85EiY+wWcnQpWS4xKyE66TVpxpPjiH5BahlpU2a/NvyPtE/d/B9Jm+oNxChW2R91ZbiSrPEq8dHastCxx/MSMXLl1M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746464898; c=relaxed/simple;
-	bh=Jtak9U7cc0PM/YZ1tVgC2DmN5i2AOKL8/qKOSE5THgM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mSmlCLqxMHYv4mT8FLags+oH1kXZ/i6AOf2/2OQVPJHec6zDkIMxNetEePt5gISmXDQ8t4eBHS1f9/QL1nBgX6u0rbmtjXVSfMztqK0mogYsQPo8dq6yJ8eV4Lt+b4ba663m7kuDk3zy587Tbww5OHBxDhiLy2xY1kWd+nU+oiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qh47oUWq; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904C1267F59;
+	Mon,  5 May 2025 17:22:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746465725; cv=fail; b=GCjkY7hMCu0LxJDQ5Wk0ZHl+Bo03EV6Irkz9LudF2blX4VpfInvsXQ2w6RRFZAmB6iFX9uMfCKv5trwYFNu47RDnaILlhsPBLXuPC2p/rru62K0fO7mwl5hqmavVqLXliixh7IrJH5bu7lYLYiN7Xa8Uyha2tFj3JmPj1HEl0PE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746465725; c=relaxed/simple;
+	bh=BI4Nc0jMJE8MxmyP1s77W1s69A2nyTbDFerdt9T6bqM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n9d40ejxURtCDixM3V0gDdpFaVMu7f1544JITTnUupqalD7jQ/d+H7u4Bm+6/7RvWITdKSQaIKLOUHIJ04W3g6kr2pIUpAvmWi6W5YXlHjLByWL5yaR6D10rJhsqyZz6XM3oRuOfYHGX7n+IX2uxGhiR96RfV7VFKmtJQK+Nzkk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jboxQEYQ; arc=fail smtp.client-ip=40.107.243.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qh47oUWq"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-47e9fea29easo7531cf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 10:08:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746464894; x=1747069694; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9Sl5qlzaLwkLoa7IyezxtoDVMCMI6oXTbeuYg/AGNhM=;
-        b=Qh47oUWqZAEM6/wEzyHqVYuvVlg74wdDTYSxMiFQsqWyrhM6l0kMewxO5T0BMNc0Lc
-         iZYwmq4cyCXM5s3VDFBzsyXYBwlh1DBdLEjL0RXxXTSKO7KodzEMhQU7O39eEOYv6EXr
-         qvuwPQG28TxxkbxjdYqTuHxEevBdnsUAOslFxn9CATq5EZnnrC+53451EyjMKH+3Bf76
-         27KcZZfiLvQC7yEi5d4SAavQwHaVrdMnn5jRoZH2TlFRA071sj/8v5fETGa1irlwHYbw
-         ZftaL9If0HjYQN2VR/5GR6+pEaUCp8e5NU0Eo8qJ0sVEM+KH6x60oQoA7MZd1okMWH0X
-         VePw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746464894; x=1747069694;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9Sl5qlzaLwkLoa7IyezxtoDVMCMI6oXTbeuYg/AGNhM=;
-        b=TA7myZyN3PUIX3ZTeqheVvfAjKY5YenDwcHjH59rN92w9BDj7x7hHi298K1W0WHfsW
-         uNpB0uHth/d/sRdptWLLbdzmWnVB1+2AlK3NHbG7nQ3n6TRH7sLNkfzg/RgMLBPrFqx+
-         6Jh4wtm71/qYFNrWuiNq7j/pwtzqXZmjqJcijTVv+Ri/+cZT2dyt6gBLKiyu3dxX6NoN
-         eloiWv7eVHEM2d8vAYXl8uzjy53icpmQf8jxEfFGGa8SQ0Bm7Ew8l3KJpXUuLd5/dEgq
-         fSFMPjxrnD+O/g9qnUStLR+j7fWM2rFgaSQvAS9f0en2w6369V6SrgiJcQ+XNphlt+tK
-         5kjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXcl6JWVfv88qNQ7mO+SgJ5iD3YAN/yl4e2IMCMtdW3kYF3/XgyHyXtGt7U52MO86q6LeoDx32Wl21HgKzAcbY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywl5w6V9ugDPGvRA5opTlThSvDECpDfDB/UgLAgx2tijAGV/ne2
-	1mOz3LOqTp5LhMNrQstra9rcaLQUMqJqbMYFV5PieeRPaquEIDOy1LWm4ZTypR5FxlbjDtVlcwk
-	clH1GVORWZVKhARsv7OpSbibSsbrpyRm9zx79
-X-Gm-Gg: ASbGncsaGNKMLqRj0pE5ugxlgkWolDFCSB0JTEfrWzKWfNrw+TG1cmh4htrXYOtQIwF
-	lLiQvE89P2rYrUF390JzQitDi5+Y6P+1ZER5wEt5KzgZ1868c5rYkCHI8TSchxhoytpEMJlAylz
-	4pgu3PLFt7xBTyWYS6daoY
-X-Google-Smtp-Source: AGHT+IG9RbCE3tWojEKNPQx5yfnmDPTu6+mJWO90vxaZ+aQ1eZ9nWwk/u1wfl/9Tse3jgXBFSeLavdU4iiR/L3XP6AA=
-X-Received: by 2002:a05:622a:586:b0:474:b44f:bb88 with SMTP id
- d75a77b69052e-490cdae6128mr590541cf.27.1746464894049; Mon, 05 May 2025
- 10:08:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jboxQEYQ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dl9HTel85K5llJQxVlBYjkKzNr+9Qt8Vq0dBzlYCoZvMfHlEk1HSesuj/Pjs2LdO/LIECUqd6pBQYXxNVp5FfF1LK+FcU6N15wRPDE8pUV/xZ/AAjxFkw2eenXUkuFoMtWphnDzZD82FH4ecq5RlSItH6hOOAyufOntVpWDJZpjUqRxn1AmT5TcQBqK/f73ym1h2pkVv+HfODxXSIFIdg4weMbFHgVHX81VdDexxmpWJLGp4k9eKKNJP/rRRRc5Mos5KCdcZ+JvoQXuB2nIgAU8KoUJIcxyPLTc2eMCDVEf8bLqUb0wkrT+OmUcLOj3FX0ZiJvD+OaGC9RLLnEJwPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mfoUNRkWcljLWHU6dK3xrDvDKWt/8XXzox7lJBPJ0XY=;
+ b=ZwEXfxEaYae0cTS2YC7MhrkqTBWbhuiofX856jt8o0j/womxlUgqoIIRKPyFzTjMKxnhESTuPK8cX9ueopJorQ0wwTQSD9eh88anf9AX734xoIZ+INqMph4tcwSrXeOpgHdJBqMDeAVhoxhWZIJf9tyB9YR6iC58anS7a+Tqb6860n83jP7Hiq7EGrXkcomqgMRqm0z1admPnS6DiB6f/fA99755fVGTAvKmDuz1jtec07i5MJ4J2ApdC1hIIqJc/skqzoGB0i4NDFM2sQhxbzcFs+8Oh5a7oBE/FngN/MxGsFAr42RgkJibt8ybTO2lZ+vViExjUUr0YJlr6AQTbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mfoUNRkWcljLWHU6dK3xrDvDKWt/8XXzox7lJBPJ0XY=;
+ b=jboxQEYQKyP1R8JDEq799qN+LVX06D2zxxkBqo9K0tpnxaLLCHpdFSTi7uiirUlalypDepQk1G+N1j5h5tl7EAwurZgjZq4yzdhVfNj5l5Wm53PXq/HXlyMrSGGUb/mbp/0yGobBtYL4BjVVEtMv6nubfE4+Qw/XNzt8Qt//OjxDFsCv8Zzt3twijQFTEHOe2Je+tl1cnSy26JT/1TmD+R/hG+CUNQT3YtV9pQkHnRBmaMERbcGmGOW6z2GnxuNjBulBsUC0fmHWy+4VGlMt1+dz4yyA+/znlT3EJoKiqvLYy4IgLe7lVwXEm0IiyEAdVLR+NNclNDZETw9SDIVLZw==
+Received: from DS7P220CA0011.NAMP220.PROD.OUTLOOK.COM (2603:10b6:8:1ca::16) by
+ SA3PR12MB7921.namprd12.prod.outlook.com (2603:10b6:806:320::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.26; Mon, 5 May
+ 2025 17:21:56 +0000
+Received: from DS1PEPF00017092.namprd03.prod.outlook.com
+ (2603:10b6:8:1ca:cafe::ff) by DS7P220CA0011.outlook.office365.com
+ (2603:10b6:8:1ca::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8699.33 via Frontend Transport; Mon,
+ 5 May 2025 17:21:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ DS1PEPF00017092.mail.protection.outlook.com (10.167.17.135) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8722.18 via Frontend Transport; Mon, 5 May 2025 17:21:56 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 5 May 2025
+ 10:21:40 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by drhqmail202.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Mon, 5 May
+ 2025 10:21:39 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Mon, 5 May
+ 2025 10:21:38 -0700
+Received: from nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
+ Transport; Mon, 5 May 2025 10:21:12 -0700
+Date: Mon, 5 May 2025 10:21:03 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: Baolu Lu <baolu.lu@linux.intel.com>, <kevin.tian@intel.com>,
+	<corbet@lwn.net>, <will@kernel.org>, <bagasdotme@gmail.com>,
+	<robin.murphy@arm.com>, <joro@8bytes.org>, <thierry.reding@gmail.com>,
+	<vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <shuah@kernel.org>,
+	<jsnitsel@redhat.com>, <nathan@kernel.org>, <peterz@infradead.org>,
+	<yi.l.liu@intel.com>, <mshavit@google.com>, <praan@google.com>,
+	<zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
+	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>
+Subject: Re: [PATCH v2 13/22] iommufd: Add mmap interface
+Message-ID: <aBjzf9PrYnwF5uZN@nvidia.com>
+References: <cover.1745646960.git.nicolinc@nvidia.com>
+ <7be26560c604b0cbc2fd218997b97a47e4ed11ff.1745646960.git.nicolinc@nvidia.com>
+ <c4d03b52-422e-41ab-845b-1d2eda7ca9e2@linux.intel.com>
+ <20250505165019.GM2260709@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250504224149.1033867-1-tjmercier@google.com>
- <20250504224149.1033867-3-tjmercier@google.com> <26ca8ddf-0d78-462f-a47d-a1128b2e058f@amd.com>
- <CABdmKX2iNk22h-KxUr4yvZO80yeRRjMfoC7yjiZ-aR_f1k402g@mail.gmail.com> <ec43f447-095e-4baf-8610-8279b565f162@amd.com>
-In-Reply-To: <ec43f447-095e-4baf-8610-8279b565f162@amd.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Mon, 5 May 2025 10:07:59 -0700
-X-Gm-Features: ATxdqUF0j9WeLA-MxEEKVNTEyhm3r86boN77kWA0rwIEETtFwZuRS9Ux9s2lLAY
-Message-ID: <CABdmKX2Tpv8vpDDZ+wcdrWuijfC1wkNhJQxVSC9trPkzBLN4tA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] bpf: Add dmabuf iterator
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: sumit.semwal@linaro.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, skhan@linuxfoundation.org, 
-	song@kernel.org, alexei.starovoitov@gmail.com, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
-	simona@ffwll.ch, corbet@lwn.net, eddyz87@gmail.com, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	jolsa@kernel.org, mykolal@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250505165019.GM2260709@nvidia.com>
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF00017092:EE_|SA3PR12MB7921:EE_
+X-MS-Office365-Filtering-Correlation-Id: f5a41d27-57e2-4798-1c04-08dd8bf955f3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?p7XiubZAculbzqVmX2gHKTfANHhpgZ2j/RJRW71YrkXWUHjxek6Ybwseg6CG?=
+ =?us-ascii?Q?A5rFBMCqJ/dOACIdsXd8ZK4MWJ+aBgRwndB94AssACeZWlfkY5lgbR06s907?=
+ =?us-ascii?Q?7EITuVM3J4OzigLRL2LJjO9/FDXa6YPe3s4/GadXaAmoBU0zvuFnqugZ+Py8?=
+ =?us-ascii?Q?AAUpaMXUi5kgtH2KU3mCDqN+lbHNISI9ZZ/zstEDhJo/rGY/BY9jalHGTiId?=
+ =?us-ascii?Q?rzygChlTRvsNgZ6nt7kOI7VylcpTYFpYDHklyeoAZQnDRgF+tTWy0tZ/0sGk?=
+ =?us-ascii?Q?yM2yleXLzQHYsTE+4KMTHEQCWw8IANF8YoaA9ZmnAn8WxI1LGGM+HU7BqmSp?=
+ =?us-ascii?Q?prHGd1pnc2XCSaAZBxz8P1NPTLQr6kBfTD3IxA8myi1rOaXD3TpQDOpkMuuX?=
+ =?us-ascii?Q?pDYUrpiPkMVhYYZfISjI3X3hLybCVGnp+deIYHQPrbuT+GN0GjB6NWeYtbYy?=
+ =?us-ascii?Q?K4gmLQc09ZbjMs4Ckno2wIerlaQnh8m9w79Ay5kksuRLAxq1Ik7UL46pIMC3?=
+ =?us-ascii?Q?bnZ1LL9qR08mvwKhD6Wzq806Ka9JrNhruKd62IMXQnPk2LWfZ/y8jsxypyA9?=
+ =?us-ascii?Q?x+/hN389YPStosrQaBTtIKPaBcH3diddDlm8HR9B3Puxury+xSGIQGXcP0jf?=
+ =?us-ascii?Q?9Ls9PCWwCtCLoB4yrB6c/ZqBf4unGgQz/TUE+dB7pNRu4nK86OCXa3YQz49/?=
+ =?us-ascii?Q?LWeaT2hYnMKVZT1yPN6+CxMnZIuZ+BWcVBPMO1AD7LyleFXcomBMGMbe2le7?=
+ =?us-ascii?Q?JTjd2j1KzHokqff0Mq0+wVuYrop5X4WrrzuPdNUpxQ7DTctluwnGZaflcWD+?=
+ =?us-ascii?Q?Yr7vdFNR+GcNJRbt3TOOrmadBdKf8zGR91czd51lWfFx9BKJjs7/0TFwA58T?=
+ =?us-ascii?Q?c9YyCoPAAw40cq7BAOWEcYbjJw7HmEX852NmOIIRD30Jgg/DxjkXvRsbivBv?=
+ =?us-ascii?Q?AQRf6zaKn14Wi7Vc+lmCHv+h3Zdb2ZCWHS8NazQWnbw13XmX6tI7q3Xvgisk?=
+ =?us-ascii?Q?jU3oAMUDLn71CeAhwbOtJbA2R90nkkXDI4DVl7hSJB/0IJ1QR/QEN4EL8UP3?=
+ =?us-ascii?Q?q5WUZTIXZHkNkuNBMTgJQEgzY9VFuuR1U9D+KLXW+2KaC9B1ck2U0pGYDOK8?=
+ =?us-ascii?Q?VIrpCNkeeYN+Q+v/Rw677u73WcSe6O4w9jXa2hGne60O9AIOEDPS6gh3iOBY?=
+ =?us-ascii?Q?n3tDKos9hqUcpiLhu9oe/CXglkNm9lmBG1stXh/QTKbrBSlb/teDk52wPS8I?=
+ =?us-ascii?Q?pTX/99TvXDSjkCancZAO2xR9ApuI3oTJB/ZNq425QSxVPruwHruHucRmAmWs?=
+ =?us-ascii?Q?0ZOKoyJVeGW0/XitAgmEtyVILzpSl35NyHVD4fFefabo+0xSyQZttA2Zot5i?=
+ =?us-ascii?Q?rzZ1B8aQa3xZ/fahIdAs8UcVY6ZTwbc+H7icGjTNmVGVeedix2hwohKNzfq/?=
+ =?us-ascii?Q?dfJLDuRR3bH5WQibt+dwCp5UKiy8RILw4d1yreN/ZSA+dZytg1kUAlMaiMAh?=
+ =?us-ascii?Q?NPS9bIybOo5zGdOqggFUn7VdwUygB0JCQPiy?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2025 17:21:56.0304
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5a41d27-57e2-4798-1c04-08dd8bf955f3
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF00017092.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7921
 
-On Mon, May 5, 2025 at 9:56=E2=80=AFAM Christian K=C3=B6nig <christian.koen=
-ig@amd.com> wrote:
->
-> On 5/5/25 18:33, T.J. Mercier wrote:
-> > On Mon, May 5, 2025 at 4:17=E2=80=AFAM Christian K=C3=B6nig <christian.=
-koenig@amd.com> wrote:
-> >>
-> >> On 5/5/25 00:41, T.J. Mercier wrote:
-> >>> The dmabuf iterator traverses the list of all DMA buffers.
-> >>>
-> >>> DMA buffers are refcounted through their associated struct file. A
-> >>> reference is taken on each buffer as the list is iterated to ensure e=
-ach
-> >>> buffer persists for the duration of the bpf program execution without
-> >>> holding the list mutex.
-> >>>
-> >>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> >>> ---
-> >>>  kernel/bpf/Makefile      |   3 +
-> >>>  kernel/bpf/dmabuf_iter.c | 134 +++++++++++++++++++++++++++++++++++++=
-++
-> >>>  2 files changed, 137 insertions(+)
-> >>>  create mode 100644 kernel/bpf/dmabuf_iter.c
-> >>>
-> >>> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-> >>> index 70502f038b92..3a335c50e6e3 100644
-> >>> --- a/kernel/bpf/Makefile
-> >>> +++ b/kernel/bpf/Makefile
-> >>> @@ -53,6 +53,9 @@ obj-$(CONFIG_BPF_SYSCALL) +=3D relo_core.o
-> >>>  obj-$(CONFIG_BPF_SYSCALL) +=3D btf_iter.o
-> >>>  obj-$(CONFIG_BPF_SYSCALL) +=3D btf_relocate.o
-> >>>  obj-$(CONFIG_BPF_SYSCALL) +=3D kmem_cache_iter.o
-> >>> +ifeq ($(CONFIG_DMA_SHARED_BUFFER),y)
-> >>> +obj-$(CONFIG_BPF_SYSCALL) +=3D dmabuf_iter.o
-> >>> +endif
-> >>>
-> >>>  CFLAGS_REMOVE_percpu_freelist.o =3D $(CC_FLAGS_FTRACE)
-> >>>  CFLAGS_REMOVE_bpf_lru_list.o =3D $(CC_FLAGS_FTRACE)
-> >>> diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
-> >>> new file mode 100644
-> >>> index 000000000000..968762e11f73
-> >>> --- /dev/null
-> >>> +++ b/kernel/bpf/dmabuf_iter.c
-> >>> @@ -0,0 +1,134 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0-only
-> >>> +/* Copyright (c) 2025 Google LLC */
-> >>> +#include <linux/bpf.h>
-> >>> +#include <linux/btf_ids.h>
-> >>> +#include <linux/dma-buf.h>
-> >>> +#include <linux/kernel.h>
-> >>> +#include <linux/seq_file.h>
-> >>> +
-> >>> +BTF_ID_LIST_SINGLE(bpf_dmabuf_btf_id, struct, dma_buf)
-> >>> +DEFINE_BPF_ITER_FUNC(dmabuf, struct bpf_iter_meta *meta, struct dma_=
-buf *dmabuf)
-> >>> +
-> >>> +static struct dma_buf *get_next_dmabuf(struct dma_buf *dmabuf)
-> >>> +{
-> >>> +     struct dma_buf *ret =3D NULL;
-> >>> +
-> >>> +     /*
-> >>> +      * Look for the first/next buffer we can obtain a reference to.
-> >>> +      *
-> >>> +      * The list mutex does not protect a dmabuf's refcount, so it c=
-an be
-> >>> +      * zeroed while we are iterating. We cannot call get_dma_buf() =
-since the
-> >>> +      * caller of this program may not already own a reference to th=
-e buffer.
-> >>> +      */
-> >>> +     mutex_lock(&dmabuf_list_mutex);
-> >>> +     if (dmabuf) {
-> >>
-> >> That looks like you try to mangle the start and next functionality in =
-just one function.
-> >>
-> >> I would just inline that into the dmabuf_iter_seq_start() and dmabuf_i=
-ter_seq_next() functions.
-> >
-> > Primarily this is to share between the open coded iterator (next
-> > patch) and this normal iterator since I didn't want to duplicate the
-> > same list traversal code across both of them.
->
-> Ah, ok that makes a bit more sense. It would still be nicer if it's in tw=
-o functions since the logic doesn't share anything common except for taking=
- the lock as far as I can seee.
->
-> >>
-> >>
-> >>> +             dma_buf_put(dmabuf);
-> >>> +             list_for_each_entry_continue(dmabuf, &dmabuf_list, list=
-_node) {
-> >>
-> >> That you can put the DMA-buf and then still uses it in list_for_each_e=
-ntry_continue() only works because the mutex is locked in the destroy path.
-> >
-> > Yup, this was deliberate.
-> >>
-> >>
-> >> I strongly suggest to just put those two functions into drivers/dma-bu=
-f/dma-buf.c right next to the __dma_buf_debugfs_list_add() and __dma_buf_de=
-bugfs_list_del() functions.
-> >
-> > By two functions, you mean a get_first_dmabuf(void) and a
-> > get_next_dmabuf(struct dma_buf*)? To make the dma_buf_put() call a
-> > little less scary since all the mutex ops are right there?
->
-> Yes, exactly that's the idea. The comment above is good to have as well, =
-but it only works one way.
->
-> If somebody changes the DMA-buf code without looking at this here we are =
-busted.
+On Mon, May 05, 2025 at 01:50:19PM -0300, Jason Gunthorpe wrote:
+> On Mon, Apr 28, 2025 at 10:50:32AM +0800, Baolu Lu wrote:
+> > On 4/26/25 13:58, Nicolin Chen wrote:
+> > > +/* Entry for iommufd_ctx::mt_mmap */
+> > > +struct iommufd_mmap {
+> > > +	unsigned long pfn_start;
+> > > +	unsigned long pfn_end;
+> > > +};
+> > 
+> > This structure is introduced to represent a mappable/mapped region,
+> > right? It would be better to add comments specifying whether the start
+> > and end are inclusive or exclusive.
+> 
+> start/end are supposed to be non-inclusive range in iommufd
+> land. start/last for inclusive.
+> 
+> This should be a u64 too
 
-Sounds good, will do. Thanks.
+Will fix.
 
->
-> Regards,
-> Christian.
->
-> >>
-> >>
-> >> Apart from those style suggestions looks good to me from the technical=
- side, but I'm not an expert for the BPF stuff.
-> >>
-> >> Regards,
-> >> Christian.
-> >
-> > Thanks for your comments and reviews!
-> >
-> >>> +                     if (file_ref_get(&dmabuf->file->f_ref)) {
-> >>> +                             ret =3D dmabuf;
-> >>> +                             break;
-> >>> +                     }
-> >>> +             }
-> >>> +     } else {
-> >>> +             list_for_each_entry(dmabuf, &dmabuf_list, list_node) {
-> >>> +                     if (file_ref_get(&dmabuf->file->f_ref)) {
-> >>> +                             ret =3D dmabuf;
-> >>> +                             break;
-> >>> +                     }
-> >>> +             }
-> >>> +     }
-> >>> +     mutex_unlock(&dmabuf_list_mutex);
-> >>> +     return ret;
-> >>> +}
-> >>> +
-> >>> +static void *dmabuf_iter_seq_start(struct seq_file *seq, loff_t *pos=
-)
-> >>> +{
-> >>> +     if (*pos)
-> >>> +             return NULL;
-> >>> +
-> >>> +     return get_next_dmabuf(NULL);
-> >>> +}
-> >>> +
-> >>> +static void *dmabuf_iter_seq_next(struct seq_file *seq, void *v, lof=
-f_t *pos)
-> >>> +{
-> >>> +     struct dma_buf *dmabuf =3D v;
-> >>> +
-> >>> +     ++*pos;
-> >>> +
-> >>> +     return get_next_dmabuf(dmabuf);
-> >>> +}
-> >>> +
-> >>> +struct bpf_iter__dmabuf {
-> >>> +     __bpf_md_ptr(struct bpf_iter_meta *, meta);
-> >>> +     __bpf_md_ptr(struct dma_buf *, dmabuf);
-> >>> +};
-> >>> +
-> >>> +static int __dmabuf_seq_show(struct seq_file *seq, void *v, bool in_=
-stop)
-> >>> +{
-> >>> +     struct bpf_iter_meta meta =3D {
-> >>> +             .seq =3D seq,
-> >>> +     };
-> >>> +     struct bpf_iter__dmabuf ctx =3D {
-> >>> +             .meta =3D &meta,
-> >>> +             .dmabuf =3D v,
-> >>> +     };
-> >>> +     struct bpf_prog *prog =3D bpf_iter_get_info(&meta, in_stop);
-> >>> +
-> >>> +     if (prog)
-> >>> +             return bpf_iter_run_prog(prog, &ctx);
-> >>> +
-> >>> +     return 0;
-> >>> +}
-> >>> +
-> >>> +static int dmabuf_iter_seq_show(struct seq_file *seq, void *v)
-> >>> +{
-> >>> +     return __dmabuf_seq_show(seq, v, false);
-> >>> +}
-> >>> +
-> >>> +static void dmabuf_iter_seq_stop(struct seq_file *seq, void *v)
-> >>> +{
-> >>> +     struct dma_buf *dmabuf =3D v;
-> >>> +
-> >>> +     if (dmabuf)
-> >>> +             dma_buf_put(dmabuf);
-> >>> +}
-> >>> +
-> >>> +static const struct seq_operations dmabuf_iter_seq_ops =3D {
-> >>> +     .start  =3D dmabuf_iter_seq_start,
-> >>> +     .next   =3D dmabuf_iter_seq_next,
-> >>> +     .stop   =3D dmabuf_iter_seq_stop,
-> >>> +     .show   =3D dmabuf_iter_seq_show,
-> >>> +};
-> >>> +
-> >>> +static void bpf_iter_dmabuf_show_fdinfo(const struct bpf_iter_aux_in=
-fo *aux,
-> >>> +                                     struct seq_file *seq)
-> >>> +{
-> >>> +     seq_puts(seq, "dmabuf iter\n");
-> >>> +}
-> >>> +
-> >>> +static const struct bpf_iter_seq_info dmabuf_iter_seq_info =3D {
-> >>> +     .seq_ops                =3D &dmabuf_iter_seq_ops,
-> >>> +     .init_seq_private       =3D NULL,
-> >>> +     .fini_seq_private       =3D NULL,
-> >>> +     .seq_priv_size          =3D 0,
-> >>> +};
-> >>> +
-> >>> +static struct bpf_iter_reg bpf_dmabuf_reg_info =3D {
-> >>> +     .target                 =3D "dmabuf",
-> >>> +     .feature                =3D BPF_ITER_RESCHED,
-> >>> +     .show_fdinfo            =3D bpf_iter_dmabuf_show_fdinfo,
-> >>> +     .ctx_arg_info_size      =3D 1,
-> >>> +     .ctx_arg_info           =3D {
-> >>> +             { offsetof(struct bpf_iter__dmabuf, dmabuf),
-> >>> +               PTR_TO_BTF_ID_OR_NULL },
-> >>> +     },
-> >>> +     .seq_info               =3D &dmabuf_iter_seq_info,
-> >>> +};
-> >>> +
-> >>> +static int __init dmabuf_iter_init(void)
-> >>> +{
-> >>> +     bpf_dmabuf_reg_info.ctx_arg_info[0].btf_id =3D bpf_dmabuf_btf_i=
-d[0];
-> >>> +     return bpf_iter_reg_target(&bpf_dmabuf_reg_info);
-> >>> +}
-> >>> +
-> >>> +late_initcall(dmabuf_iter_init);
-> >>
->
+> > > +void iommufd_ctx_free_mmap(struct iommufd_ctx *ictx, unsigned long immap_id)
+> > > +{
+> > > +	kfree(mtree_erase(&ictx->mt_mmap, immap_id >> PAGE_SHIFT));
+> > 
+> > MMIO lifecycle question: what happens if a region is removed from the
+> > maple tree (and is therefore no longer mappable), but is still mapped
+> > and in use by userspace?
+> 
+> I think we should probably zap it and make any existing VMAs
+> SIGBUS... Otherwise it is hard to reason about from the kernel side
+
+I added in v3 a pair of open/close op that would refcount the
+vIOMMU object (owner of the mmap region). This would EBUSY the
+vIOMMU destroy ioctl that would call this function.
+
+Thanks
+Nicolin
