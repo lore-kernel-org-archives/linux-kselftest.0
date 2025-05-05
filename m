@@ -1,191 +1,157 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A6626F452
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 18:39:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F52DDC3
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 May 2025 18:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746470386; cv=none; b=osUWXiig7UBNJT1cr/8n2iU8RXzmFTnC1KRZX/UijI1mI6tqYT3uHHmCUQXFK70ss4hA4uJez5Wmz4vC57HS00hxFh+LSGQeGDCjPXl+usw2Sp9G7+vJGMyHSjDk8ya1HcTS60LLCipmJYNx91aOWD4aGLU9Q07OuhFF/EZKGtE=
+	t=1746470834; cv=none; b=cBnUsPzvAKAhSQJ0dkLZFI4OjkOUg4e0F8efVed2WqFPGzhS6NbQMIyxKfAPFlsZQvV5jlmJWsNFLSfaGHpZNQ5ZG8cIn+HkoXRcDD1MJAoozNbUjHDnvm9OiVP+w0RSpHercaL4etlS4tyjADCD1QLObDM7jwNJ0EUEvKRr7Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746470386; c=relaxed/simple;
-	bh=CztS+KUwtw99mOFMGWop7TTlPlQPx0Dh4oY50Ajoq88=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=beGGBMOcylZdUG0ZOfCLyPwLToYAXO9tm4pqN4GW9QORmw3mvsD2Z9bWCdyB1RhIY7gckZEL9zYh/HRu2JFBeWNCTBlTESrAkkFl51CUkEXDP7uBQSHmYqGQft9WD7FMHbnpt4UTysVHusa3Qbm9ibpPXYcq5U5FQojP5So3bQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=iiTwDxYY; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+	s=arc-20240116; t=1746470834; c=relaxed/simple;
+	bh=uBJ7Sa/PrR5rePngwuntuhMPWvr7I69Vj5BV8YF5Qnk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fvh0d61BA0Io8rTQsSPo/ZWt7JIlVqICwToYrU3oKXeBu2wYW0BzBJV8+O7c3l7T7J0P5WUfKptoM5d8egKvvrjpL45DHs+7FqvTQ0uiF+fWftdvHiLZvyHYiNaLbrGy6IIQwMaprXcr+HV/f89O0n7MCmz3ss2H6hv5xWGNysg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C3y0wwI9; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="iiTwDxYY"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43cf3192f3bso45446425e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 11:39:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C3y0wwI9"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-22e1eafa891so25765ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 May 2025 11:47:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1746470381; x=1747075181; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OzNe6C0edsjyIWPceeV4C4p+25KcQZ/7bKBRPqQnHyY=;
-        b=iiTwDxYY4ymP7BQOSu5mxaqnasgJaQdF3cqryvZ/dRTGG5nDgk6AAEgZ1FHEbw46J6
-         HicIP7thkUanFXMxBkFdMajvwBFtV5+0PY5QEAMw3q6ELKBoKj1hqSfWsVYY4pRRJ4ga
-         dIRv/n0TP0YTJfDJN6CglfVNLO9Z53H60+o5hQE0UiIoOHlMrGwsF5qOdsBRS0HpXEgt
-         vb5LRK+3+Iak5+t3Rz576OdRUfvqao2SRbqwDot0x6mzS0bx+AjVeHcA6Me6DEF5iquA
-         K4io8QAaGH1TljgXNermtvZVbcmFBzagwN3AuwPhowHlU7Z80A4DyPv1swdyuT341r9n
-         7X9g==
+        d=google.com; s=20230601; t=1746470832; x=1747075632; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L+ZVcMDj6eiAq+w7fHgu0Ionz2mUULkjJy07tfVzR30=;
+        b=C3y0wwI93/TzbpMNwjEDs7rn8gi6OVtMdnAqMQVutgwYizMvJuC+1iXdjIxVMDNYll
+         gkUQMOhC9sIEgz8yQD9S8NWn9WYr+NUybXdloYDGTmi45kHnb3PCNbZAKs+xwku9ZBHB
+         5kLqAVHnFAowBHZsENj4dkpTpV0Q0mOv90yEZX7RwdVtAzGLbSwcVrXkQ/4t1H7Ia+Hv
+         j4zUQdDSzDsWU7fuH1bHzwf71Qm4UXqIhFc33zQZAZP2mpC09olKBm2xq1mehATDEzYn
+         uFC2PF8NBPscgSwVjFuukn4Qh5rtYjl3sI5p5ImSai2iA0UnJ1+ZqMWfwI/JstxESJZu
+         D6sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746470381; x=1747075181;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OzNe6C0edsjyIWPceeV4C4p+25KcQZ/7bKBRPqQnHyY=;
-        b=Q4NPpEJBCUh0IYzGPzeBQYJWxgGHRIvyQ3h0xrhCLu5XIAyvZY6+iXmqxHKfyOtp0a
-         fCA6HC2kl6p0nUdNjDVyJ/3RUjb/td+wx63uV6FZtPRIb8jz+6nIl4MPZRNvyeDIf3pn
-         pDrl9ojh6bSW4VBe7r6TFfrvKkDueWYhlohbYj6W+PXv7Uqw5L97PT8bHMB9tl9Wd9gI
-         66zC5oYrNgVoEC8mKrLxuf9w+cGDpd49wFHEJ0uTgmSUgsUyxVbc72ekc8jcT3AIKhIM
-         WHQHdTZ1oUob7jJwndk0ALzwNSXpAqFN2CAU8aXQ6Q9STirSNgYor9X2DqwaCeFHqitH
-         Rkmg==
-X-Forwarded-Encrypted: i=1; AJvYcCXoAG+cA4BgODtglfgtw2xesjq1ZxLkf8m7PW5bFMcAkPd6OoDXrtENWwubMr+BQYe47GsWujKTW/IgZikiz9s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywxlcy2+Wko8SwGvOA1+cW6qmYmbLpTVuk4S4oaUDK6sIB59oFv
-	Uf6yT01j7E2C7u6BbfkS90TcXnEKFbnJSgFtURLmCIani2iH/sYs8lJ8M5G2O5M=
-X-Gm-Gg: ASbGncsajnjTBk8xhz1Z2+Z6/7J6e9mkFKB3/PhciQQ6/9lpPXYP+JefNbIIW59u4kh
-	qHTSAYnSkLyI99tQv2Q1KpRKD8uU+zw/2LstMLt0zQWoi5TuQ8Yjpz+XpXjkFZ1AEggTi2qDqG+
-	cyby0uktSD2WB+kWvppSaCHjtGxIIfDtK7dPhZkSfnubHfiZAGXazJ8/bDpwCI7MjaD7w22cHA0
-	KYPFxf9NgUt839dnJM8S1ebpCPDZJMAiET6mrftu7Zmt/H8v5MeOJIl7d7J81cKK4mZQ6rpB+yW
-	4hzZfL4yl+igwXEA3ymSRrqBmPWE6yHKmSQyMBUcxeEg6GKwOL3l6tnXyQd0O3pDL1IZ/5lhSOx
-	y1mttA3m82hy1DWTylcFVFrPzfREDMS7/70+c
-X-Google-Smtp-Source: AGHT+IGwUA9SurKLxWLh45mHH6adoDU7MQ2Biah9osWdbgtkUBvKKSZQdOCU6OvgAcD3Wg09VVAOEA==
-X-Received: by 2002:a05:6000:18ae:b0:3a0:aa06:1d8d with SMTP id ffacd0b85a97d-3a0aa061dafmr1084271f8f.46.1746470381511;
-        Mon, 05 May 2025 11:39:41 -0700 (PDT)
-Received: from [192.168.1.240] (0.0.6.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::600])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099ae8117sm11328877f8f.56.2025.05.05.11.39.40
+        d=1e100.net; s=20230601; t=1746470832; x=1747075632;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L+ZVcMDj6eiAq+w7fHgu0Ionz2mUULkjJy07tfVzR30=;
+        b=oK54NROHMJv9dCRTxnqg9PHjolzLq4JrsOENa0gcZT2/r6AX1OFNsnXOkeciLzuBzk
+         0rLRaGQfDwali3przCOBWjQOhlbWzz8x37/zgqsIoH4FwVj1Gdq2l28sCkYx8nEffwmi
+         itUPfP6esZ80hWkqOMtGp043BIdDq3AcUlT/vsZ4RuRHcT21ypWHKEw/FXlgcj06RD0z
+         iIKqi//27HYmphM/BZZzvYhGb83d16Cla22Z9U5zNRK5G/eFGqVOh/V5BXlchwfQuy6B
+         p6gt8ozUg5dn6XVfsFik7eE1FygG+H4iuI5P1N1EPJuGKGIgA95wEp8/wwQiMjp8v0du
+         WWMA==
+X-Forwarded-Encrypted: i=1; AJvYcCUudCV9eMcgpeuKNH3C189dqtcZkMUkFQ9NgeZuESP6BM+3GJ9Afrumu/hMVHI2Vdj4SN6OgB/auIVmYtJ5vGU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycPJw/8Fn1Z3ZWHZUcjE3aY16yAQa3qWx7EfSrXcH2yrdS1XOl
+	2KeR2cIj0OMzOJ5SUI0bfyYe1/+o9GvR4AKn52jxx20a1SieoodbEPjj/PY/2g==
+X-Gm-Gg: ASbGncuRW64rsMRFXJ6+V6ImcQm72g4+PBvID4visuNakuuPiYsjG1xTACL4xX9Zkmt
+	zXil81xmrhjHXXKeSmFre3AXNJ6ZK/V+Mgqs/1D1Jp5dWGmNPnwB8Hs66ZE//BQ5JymoE/vfCSh
+	sEheEhu9uaTgGVrROFcA6NJS1ItHfpYoEM4V8mrU4kOL5KMD023zsaeRret6kSiONLCD9rgPseI
+	Hj0qEdOphihdPP644pyOSXRKsKS/eBHYVIVm8XLR81ZDWyyl1G8eA45FVeCFYvlIYqXN7UPb8cP
+	XqMW4u14D59eIJyKw6Qr+6jCiZN1DM9w4yPkmt3S7Y0OJJTGGpfRcuh2NJz2mSaGDJfSPCqzgJR
+	/KIN2uR8=
+X-Google-Smtp-Source: AGHT+IF+yI+Dgd32z62Vz4IkzG0Ih79IcbEYi6NeCGDCJdKqEO9PIlfWJBKMKIGX6EtzZ1WS3NzDOg==
+X-Received: by 2002:a17:902:da2d:b0:21f:2ded:bfc5 with SMTP id d9443c01a7336-22e3508e4d0mr352355ad.28.1746470831803;
+        Mon, 05 May 2025 11:47:11 -0700 (PDT)
+Received: from google.com (2.210.143.34.bc.googleusercontent.com. [34.143.210.2])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e1522054esm58673755ad.118.2025.05.05.11.47.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 May 2025 11:39:41 -0700 (PDT)
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Mon, 05 May 2025 19:38:44 +0100
-Subject: [PATCH bpf-next v3 2/3] selftests: bpf: add a test for mmapable
- vmlinux BTF
+        Mon, 05 May 2025 11:47:11 -0700 (PDT)
+Date: Mon, 5 May 2025 18:47:00 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Nicolin Chen <nicolinc@nvidia.com>, kevin.tian@intel.com,
+	corbet@lwn.net, will@kernel.org, bagasdotme@gmail.com,
+	robin.murphy@arm.com, joro@8bytes.org, thierry.reding@gmail.com,
+	vdumpa@nvidia.com, jonathanh@nvidia.com, shuah@kernel.org,
+	jsnitsel@redhat.com, nathan@kernel.org, peterz@infradead.org,
+	yi.l.liu@intel.com, mshavit@google.com, zhangzekun11@huawei.com,
+	iommu@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-tegra@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	patches@lists.linux.dev, mochs@nvidia.com, alok.a.tiwari@oracle.com,
+	vasant.hegde@amd.com
+Subject: Re: [PATCH v2 13/22] iommufd: Add mmap interface
+Message-ID: <aBkHpJIeDxJJSxeS@google.com>
+References: <cover.1745646960.git.nicolinc@nvidia.com>
+ <7be26560c604b0cbc2fd218997b97a47e4ed11ff.1745646960.git.nicolinc@nvidia.com>
+ <aBE1gUz9y415EuBQ@google.com>
+ <aBE38GwvGBnpRNLc@google.com>
+ <aBE47aySzDp2lsAz@Asurada-Nvidia>
+ <aBE800DsAOOZ4ybv@google.com>
+ <aBE/CD4Ilbydnmud@Asurada-Nvidia>
+ <aBFGCxcTh54pecsk@google.com>
+ <aBFIsYg+ITU8RvTT@Asurada-Nvidia>
+ <20250505165552.GN2260709@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250505-vmlinux-mmap-v3-2-5d53afa060e8@isovalent.com>
-References: <20250505-vmlinux-mmap-v3-0-5d53afa060e8@isovalent.com>
-In-Reply-To: <20250505-vmlinux-mmap-v3-0-5d53afa060e8@isovalent.com>
-To: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Lorenz Bauer <lmb@isovalent.com>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250505165552.GN2260709@nvidia.com>
 
-Add a basic test for the ability to mmap /sys/kernel/btf/vmlinux. Since
-libbpf doesn't have an API to parse BTF from memory we do some basic
-sanity checks ourselves.
+On Mon, May 05, 2025 at 01:55:52PM -0300, Jason Gunthorpe wrote:
+> On Tue, Apr 29, 2025 at 02:46:25PM -0700, Nicolin Chen wrote:
+> > > > > > > > > +	immap = kzalloc(sizeof(*immap), GFP_KERNEL);
+> > > > > > > > > +	if (!immap)
+> > > > > > > > > +		return -ENOMEM;
+> > > > > > > > > +	immap->pfn_start = base >> PAGE_SHIFT;
+> > > > > > > > > +	immap->pfn_end = immap->pfn_start + (size >> PAGE_SHIFT) - 1;
+> > > > > > > > > +
+> > > > > > > > > +	rc = mtree_alloc_range(&ictx->mt_mmap, immap_id, immap, sizeof(immap),
+> > > > > > > > 
+> > > > > > > > I believe this should be sizeof(*immap) ?
+> > > > > > > 
+> > > > > > > Ugh, Sorry, shouldn't this be size >> PAGE_SHIFT (num_indices to alloc) ?
+> > > > > > 
+> > > > > > mtree_load() returns a "struct iommufd_map *" pointer.
+> > > > > 
+> > > > > I'm not talking about mtree_load. I meant mtree_alloc_range takes in a
+> > > > > "size" parameter, which is being passed as sizeof(imap) in this patch.
+> > > > > IIUC, the mtree_alloc_range, via mas_empty_area, gets a range that is
+> > > > > sufficient for the given "size". 
+> > > > > 
+> > > > > Now in this case, "size" would be the no. of pfns which are mmap-able.
+> > > > > By passing sizeof(immap), we're simply reserving sizeof(ptr) i.e. 8 pfns
+> > > > > for a 64-bit machine. Whereas we really, just want to reserve a range
+> > > > > for size >> PAGE_SHIFT pfns.
+> > > > 
+> > > > But we are not storing pfns but the immap pointer..
+> 
+> That doesn't seem right, the entire point of using a maple tree is to
+> manage the pfn number space, ie the pgoff argument to mmap.
+> 
+> So when calling mtree_alloc_range:
+> 
+> int mtree_alloc_range(struct maple_tree *mt, unsigned long *startp,
+> 		void *entry, unsigned long size, unsigned long min,
+> 		unsigned long max, gfp_t gfp)
+> 
+> size should be the number of PFNs this mmap is going to use, which is
+> not sizeof() anything
+> 
+> min should be 0 and max should be uh.. U32_MAX >> PAGE_SHIFT
+> IIRC.. There is a different limit for pgof fon 32 bit mmap()
+> 
 
-Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
----
- tools/testing/selftests/bpf/prog_tests/btf_sysfs.c | 83 ++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
+This is what I was thinking as well.. why use a maple tree if we aren't
+allocating a range to manage pfns.. I was still thinking about this in
+v3 which made me hold back from acking this. I'm glad we clarified this!
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c b/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..3319cf758897d46cefa8ca25e16acb162f4e9889
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+/* Copyright (c) 2025 Isovalent */
-+
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+#include <sys/stat.h>
-+#include <sys/mman.h>
-+#include <fcntl.h>
-+#include <unistd.h>
-+
-+static void test_btf_mmap_sysfs(const char *path, struct btf *base)
-+{
-+	struct stat st;
-+	__u64 btf_size, end;
-+	void *raw_data = NULL;
-+	int fd = -1;
-+	long page_size;
-+	struct btf *btf = NULL;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+	if (!ASSERT_GE(page_size, 0, "get_page_size"))
-+		goto cleanup;
-+
-+	if (!ASSERT_OK(stat(path, &st), "stat_btf"))
-+		goto cleanup;
-+
-+	btf_size = st.st_size;
-+	end = (btf_size + page_size - 1) / page_size * page_size;
-+
-+	fd = open(path, O_RDONLY);
-+	if (!ASSERT_GE(fd, 0, "open_btf"))
-+		goto cleanup;
-+
-+	raw_data = mmap(NULL, btf_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-+	if (!ASSERT_EQ(raw_data, MAP_FAILED, "mmap_btf_writable"))
-+		goto cleanup;
-+
-+	raw_data = mmap(NULL, btf_size, PROT_READ, MAP_SHARED, fd, 0);
-+	if (!ASSERT_EQ(raw_data, MAP_FAILED, "mmap_btf_shared"))
-+		goto cleanup;
-+
-+	raw_data = mmap(NULL, end + 1, PROT_READ, MAP_PRIVATE, fd, 0);
-+	if (!ASSERT_EQ(raw_data, MAP_FAILED, "mmap_btf_invalid_size"))
-+		goto cleanup;
-+
-+	raw_data = mmap(NULL, end, PROT_READ, MAP_PRIVATE, fd, 0);
-+	if (!ASSERT_NEQ(raw_data, MAP_FAILED, "mmap_btf"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(mprotect(raw_data, btf_size, PROT_READ | PROT_WRITE), -1,
-+	    "mprotect_writable"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(mprotect(raw_data, btf_size, PROT_READ | PROT_EXEC), -1,
-+	    "mprotect_executable"))
-+		goto cleanup;
-+
-+	/* Check padding is zeroed */
-+	for (int i = btf_size; i < end; i++) {
-+		if (((__u8 *)raw_data)[i] != 0) {
-+			PRINT_FAIL("tail of BTF is not zero at page offset %d\n", i);
-+			goto cleanup;
-+		}
-+	}
-+
-+	btf = btf__new_split(raw_data, btf_size, base);
-+	if (!ASSERT_NEQ(btf, NULL, "parse_btf"))
-+		goto cleanup;
-+
-+cleanup:
-+	if (raw_data && raw_data != MAP_FAILED)
-+		munmap(raw_data, btf_size);
-+	if (btf)
-+		btf__free(btf);
-+	if (fd >= 0)
-+		close(fd);
-+}
-+
-+void test_btf_sysfs(void)
-+{
-+	if (test__start_subtest("vmlinux"))
-+		test_btf_mmap_sysfs("/sys/kernel/btf/vmlinux", NULL);
-+}
+> > > Ohh... so we are storing the raw pointer in the mtree.. I got confused
+> > > with the `LONG_MAX >> PAGE_SHIFT`.. Sorry about the confusion!
+> > 
+> > Yes. We want the pointer at mtree_load(). The pfn range is for
+> > validation after mtree_load(). And we are likely to stuff more
+> > bits into the immap structure for other verifications.
+> 
+> Validation is fine, but you still have to reserve the whole pfn number
+> space to get sensible non-overlapping pgoffs out of the allocator.
+> 
+> Jason
 
--- 
-2.49.0
-
+Thanks
+Praan
