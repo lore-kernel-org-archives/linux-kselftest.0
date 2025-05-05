@@ -1,27 +1,28 @@
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2045.outbound.protection.outlook.com [40.107.20.45])
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2048.outbound.protection.outlook.com [40.107.103.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BAE1F3D20;
-	Mon,  5 May 2025 09:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0EE414A4F9;
+	Mon,  5 May 2025 09:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.103.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746438538; cv=fail; b=Eu8K+hEI6MsIITkxYVQH+6Wd0mo1yh2K+HoO/F4nABc68YYajTiNGPtL7o345S1l2fxs5up/RhaojmCRTEMTu0NSgEQIA8+ZBxruwPfNVnhu324arEcqu+CNC4vKakkOXrDXVu61lFQpiJ9c0dbs6o8hWt6f5VyfjxG123AqT54=
+	t=1746438543; cv=fail; b=k/VctMxIrKqKusqVIiAaVRzkvyoDKrTUlyYb56Vafq47mtWB2uk/dgarPFHIeg+TqcutULvpnMjdSne7z0230GyJUvnZeH1Dm2bAgYNqo6sGl0YZpXGL4BfMnjgz1OiO37/+ZwOk3FCUJPNJWR6J/EAzI8J1NyXCa7R3jKHDVsI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746438538; c=relaxed/simple;
-	bh=Ir6EfIcppaM4GhjVe0fqBwKhdzZKnH1KdREcr+A/m1w=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Hnt+Ayxgq3UTupPXhymSU8/xGhyL2sPKxhTmhSvYTGxZW0UXHODHnFGlVXIGjXvaFHG8mzKfJVnn6tBfxcitWnfHWCEm3W5nTckWShDePnxYiwn7JmCnynZPn09P4YRfpWwy9zs27fwXA8AyJVzZ65CkTzGkcn/fBp2LIsgtpoM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=nDWlgn3N; arc=fail smtp.client-ip=40.107.20.45
+	s=arc-20240116; t=1746438543; c=relaxed/simple;
+	bh=FRZ53tph8VVHLx7Ke5P+F3vShlIFXtNXGZZmO8kvVuY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CrUDodPSWgHOqPBqX90NH3hQkjH0H4kDRdSIUBgq+NYvWppCs3y1QMi5hLEpHT6LzgiEyMMhMvJnG05IDhDadlQTIbrFcUpyL2Dn209dlmAof6+wDabIcLNsHKECKXxGMZvCdvOcjGQWLQ9HFr2TJFGiAWH3lvwYctax57wyXgg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=EsOoiH1a; arc=fail smtp.client-ip=40.107.103.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="nDWlgn3N"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="EsOoiH1a"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Z7G9/VJ6z7MFGUpo/nfLFnORtjzsG2vV95BQEajjC/Q+Q6bBDwhRwIOOR+b0STZlbBixFyqlDWIKBgfFrhs3dARxJLLMoan79uE4eyO9cKCpezdRNJHEscY7QyJ1xQS1EiKbfh+Lw080g2zjfVhlumMZA34OiQNo2cBkBuQfzJTdfYsCM1qOh7MOksLxuZ1Lsfc5W+2DWVF/gLx+wpq3vZH64ngumYLqcegmGFTdgVoyhlndPRGGlVrDMKbNjIFwfro5odVgvCHG6x3JXQBygo/BJYqYn9VCXJi8gnPgF2Js8rP7osZt++1VVLjv6WVxgRdYPJrr1DB48CK1W5YUJQ==
+ b=Rg/uTiyc13hxsTR0WZF55Jt3bXetQHm2Ix0ilU9CyJHzrOZk3MGkVB8hnoO9dgONGENZEQbDQrPspLOf8M/wP9NVsUibgZwS+tGopCsBMpNtIq4hiaFreucwzDizgd1hu+Erp3lY84/70+fPMfNHgc2J/lnAmNUkoy9R+kYNRyMa/PS3ke9ySxHpo8ziq7hwvkMomjKYkH2TbJVDUjn09p34zzPQ6Um2BDtTh/F+cyP2k/AQpZN4ZJ5RbpnczYdZVlRsj0wkcfUuGHDV9d2miU/H/yt8xi4HvmsSYt8rWop/nUFv5JjA1u4rGVGK2wBbN0n5jutfO6BjCEvUeMsRFA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Vzr1NA6RfXb2YVWrR9naHYgL4q02seUvnSRWRGlbRKU=;
- b=x1EcCKBwddenO55pslFm29zHqlvYhtQ1SgM44wlmkb6ngpq9FtLg1AQ2Z5cpGLnZK7VqXCGsSQbU/DW0Zwf+7DhUasA4mUbznuONPYGVgm5C4ZamAliVd7ajOZAMwCQZtuNu8WQPrBwtS96aMjJNOo6hBUhL6K0Z90Lj0uqmeZuhtatrqMOF/eyrxB+VH0YB45XtpFsO3Pf3dFsQ9Q0eupcUDvmUInFXJZP5xXfVPaK7bdCo81TzUQJ7SlIlScu+YVzqPpMmmSc1Xn21MFizoTe07JfhaJUdV7qQROQeoVY1wsUNlsDzTb07cVBllD18jcGd+27L6oPZ7Lx2u1SJfA==
+ bh=A7EDUfdgfYcN/oRDs85rdOA3ysu5t1xMoPYXGy6QhRw=;
+ b=lcsYgPe5oAjejtaQ6f1v+CoB30fJUaQ//P8UY/4HLY4TZyRj14tvQIF33iXjzhE/QVur4NXjZvp0bH4tBFe1adPCCQXjexsA8PzmBIX61WWfQp5E6rY0X+ijYPM3Fy/Q/sMg/2wUDCgTTjwbuh2iBH2srTSrZCNz53Q5usq1NeyLbGoGip3RPxMYg0/9NcrHP2DE0A7F+03AMPAAUstbd0fNcJGmKbjjBZbt8Nl6CTWXMQZPUiyjxQqtROyth2NbbMDwJmBrHE3M7AN/ZgFTUMWKhXeGDKhT8PK8ACCHbr+FdeGWkjY5dXKcLRIdPyrlF5CYUbSWFe3wwtHjWaiIKg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  131.228.6.101) smtp.rcpttodomain=nokia-bell-labs.com
  smtp.mailfrom=nokia-bell-labs.com; dmarc=pass (p=reject sp=reject pct=100)
@@ -30,18 +31,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Vzr1NA6RfXb2YVWrR9naHYgL4q02seUvnSRWRGlbRKU=;
- b=nDWlgn3NopgC1H6RCa415uRrSg74QoFEnz3y1jbbvMqPAb9kwsIKRK58QPaaMqxdEV8UBpKAflE+C8Mc+F+XqxFVaS594DEXsudGw9h+motFOVQYHG8/1kIWSm0DjXQpVa9wsklf4blodcJ4wQPcjIV6cckthSRDavj62ARP/hXgm7IkPeVNZMUbmCB9I8ojab4wCOgN49bsJwihRksuEDEmsu8wXz1/s1IXLey9U6BZtUfSqmhqHCPl/jztWmbSr0DD9xPgP3l439t+BIFUJAi8N/TMsX6ycmypKcSpFkJidq96rCULZwLrMPKubgr96PDN87EWNeF8q4q3Pv+sig==
-Received: from DBBPR09CA0019.eurprd09.prod.outlook.com (2603:10a6:10:c0::31)
- by AM7PR07MB6296.eurprd07.prod.outlook.com (2603:10a6:20b:13e::14) with
+ bh=A7EDUfdgfYcN/oRDs85rdOA3ysu5t1xMoPYXGy6QhRw=;
+ b=EsOoiH1aknrCh0X7VSqHQ3RgCXVwW2jd43vK9A3Ks1gW+9CeFdGkPzhioJk5TVadhnhU0AG2DaKdPlqrXXcIkarQnCIgSLmwJTOJmv4gSgxjzrrCLd6D5R/nkqnjBq3zLVPxGNQh3Zrc9Eq1I59DTQEJ+SSUuJlEFDlF8j+MyAaIOiioxoKdxT3W9yeOkhq+mLXAE7PQ9UTwalPqsbZVq2Oy1XE4yZVQV/Q1Noa7MM9I7LehlKz2DT7jlR1lT7uPGKDyXNsh29YN0eT2KJUJVCLTvgqsq1pEwAQjWHJSYLltD66TrAjkupdWsUWLNXrEmRJh+peMp8+k0/mOZm978w==
+Received: from PR0P264CA0124.FRAP264.PROD.OUTLOOK.COM (2603:10a6:100:1a::16)
+ by DBAPR07MB6584.eurprd07.prod.outlook.com (2603:10a6:10:18a::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.21; Mon, 5 May
- 2025 09:48:51 +0000
-Received: from DU2PEPF00028D13.eurprd03.prod.outlook.com
- (2603:10a6:10:c0:cafe::d1) by DBBPR09CA0019.outlook.office365.com
- (2603:10a6:10:c0::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8699.29 via Frontend Transport; Mon,
- 5 May 2025 09:48:51 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.23; Mon, 5 May
+ 2025 09:48:56 +0000
+Received: from AM3PEPF0000A78F.eurprd04.prod.outlook.com
+ (2603:10a6:100:1a:cafe::7e) by PR0P264CA0124.outlook.office365.com
+ (2603:10a6:100:1a::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8699.26 via Frontend Transport; Mon,
+ 5 May 2025 09:48:56 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.101)
  smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
@@ -50,12 +51,12 @@ Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
  receiver=protection.outlook.com; client-ip=131.228.6.101;
  helo=fr712usmtp1.zeu.alcatel-lucent.com; pr=C
 Received: from fr712usmtp1.zeu.alcatel-lucent.com (131.228.6.101) by
- DU2PEPF00028D13.mail.protection.outlook.com (10.167.242.27) with Microsoft
+ AM3PEPF0000A78F.mail.protection.outlook.com (10.167.16.118) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8722.18 via Frontend Transport; Mon, 5 May 2025 09:48:50 +0000
+ 15.20.8722.18 via Frontend Transport; Mon, 5 May 2025 09:48:56 +0000
 Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fr712usmtp1.zeu.alcatel-lucent.com (GMO) with ESMTP id 5459mcwB006243;
-	Mon, 5 May 2025 09:48:39 GMT
+	by fr712usmtp1.zeu.alcatel-lucent.com (GMO) with ESMTP id 5459mcwD006243;
+	Mon, 5 May 2025 09:48:54 GMT
 From: chia-yu.chang@nokia-bell-labs.com
 To: donald.hunter@gmail.com, xandfury@gmail.com, netdev@vger.kernel.org,
         dave.taht@gmail.com, pabeni@redhat.com, jhs@mojatatu.com,
@@ -69,331 +70,221 @@ To: donald.hunter@gmail.com, xandfury@gmail.com, netdev@vger.kernel.org,
         cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
         vidhi_goel@apple.com
 Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v14 net-next 0/5] DUALPI2 patch
-Date: Mon,  5 May 2025 11:48:32 +0200
-Message-Id: <20250505094837.7192-1-chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v14 net-next 2/5] sched: Dump configuration and statistics of dualpi2 qdisc
+Date: Mon,  5 May 2025 11:48:34 +0200
+Message-Id: <20250505094837.7192-3-chia-yu.chang@nokia-bell-labs.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250505094837.7192-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20250505094837.7192-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PEPF00028D13:EE_|AM7PR07MB6296:EE_
-X-MS-Office365-Filtering-Correlation-Id: 993d18a2-59c7-4ce7-702e-08dd8bba0a2b
+X-MS-TrafficTypeDiagnostic: AM3PEPF0000A78F:EE_|DBAPR07MB6584:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 6f308f74-18a0-4359-35a3-08dd8bba0d8e
 X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
- BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700013|13003099007|921020;
+ BCL:0;ARA:13230040|7416014|376014|36860700013|1800799024|82310400026|921020;
 X-Microsoft-Antispam-Message-Info:
- =?utf-8?B?WFVVbm9VclFkSFl4andZNmdCc0pkWEhFQ2NzZ1NCRW9WZ2NTT0N2Z3J4cUZv?=
- =?utf-8?B?RmxMTGN4V0w2Nm1RQXZuR1hxcHQxRGZQb0FKSXQ0Q1pPYXYzZk1qVGFKS0VR?=
- =?utf-8?B?elJiSnpDTHdrMkd3M3N2QzU0NVBKc1FVZ0tjZzROa29BNTdMczRFZVBvb01V?=
- =?utf-8?B?clNKRlo4ZXl6aEQ1UE9ONzREU0JyeS9MSURjYWNYUW1HSjBUZTNUUnF4L1FH?=
- =?utf-8?B?SVpDNmFJM1R6eHM0YjQ1SUhUa1QwTEc5Z2dsc3FONXQwL3dJTlFwMGI2ME84?=
- =?utf-8?B?eWt5WnBSQTNXMnVaZU1uMmdIcFFpWFRNSFpKeXVhMlhnVnVRU2ZMTy9nYm5B?=
- =?utf-8?B?Tm5KcEk2dC90MHZhQUwrYVNLRzh2dWFTVzdqamRaaFYvYWk5eUZNcWI5Q2U0?=
- =?utf-8?B?UE1OYVA3TTJ3WERXZXpLendtUmZhVVFiOVVnUzkwZEJzaXRQaUtPbTlGN0Y3?=
- =?utf-8?B?NnJKNEttNE1TeWN0T2NoN2VkTGpoQlBTSGI0M05RUEZSazBudlJnblFZVXZj?=
- =?utf-8?B?ekN0UEFnblk5citBZnF5UVdhYzlLbTh0NVlsS0ttMm9BUC9Ib1BWdnErcXkx?=
- =?utf-8?B?VitlZk0ySEc3Yis2MHZvcnFLV0l0TzQxRFdNaWdZVlE2ZDhFUzR2cm5FQ0Ja?=
- =?utf-8?B?aEZLM3Q5MWx3Q2c5NDViRWVTTE5XQ1hmSjJUa095dWNjMnYvdmVlZnVpcDFC?=
- =?utf-8?B?Rktjc2N6a1g1SE93UnhXZXdlZjM3eHFzOGxQT2w2anF3UEtmeFN5Vk9VU0J5?=
- =?utf-8?B?RGpWc251U25PV2UyWEhsZWd0cnF4eFZWNjhYYjVaSVRqak41eWhtcDVXcTJ6?=
- =?utf-8?B?OTJMaVFHVmRINnA5c2p2RTU2ZnZCNGhvY0FNRW1WbXpSR3BkZkU4MWdaNnlo?=
- =?utf-8?B?RkVYTWltaytDZ2RUdHAvQ2Y2NC96S3Exa2FvMnJsQmlPN1E5UDNwSlZydUN6?=
- =?utf-8?B?SGJKN21XVzF2SzdvZkJhSTR1bFFaNmFhQkV1WXczRWNLQUVVcnhYc3BweXJr?=
- =?utf-8?B?WWl5eHUvWm13SXZVT1BzOEhXaWx6RTUxM2EycGxjMWNBZHorOVR3NHJ6REdV?=
- =?utf-8?B?SURLcTBiSmYwY3hBem4xeXR2QnI5UWsveHFGZ2lCZHMzVWdENmpXbk5nWVJF?=
- =?utf-8?B?M09vSnF0WlBtMTg1dlNIVkxuSCtqTStxZDd3VTBZZXBpK1BVbUpIckFXODRH?=
- =?utf-8?B?SG8wYzNhblFGN0lQcWNnVTZTR3M3VVRxM0pKTmZWN1IwMGxIT2dTSjVNNEts?=
- =?utf-8?B?R0NNaDZ5NjRLMXJ4RTVkYTVHL3hIeXF3WmhkN0FwVVJlRjVXNkZyY0lLdjBp?=
- =?utf-8?B?V0FNN1dSbmtIc3Qxa1dpSW4vY2NwUlQybno5ODZOekN4NUdjZ0RPNkFWQ1Zr?=
- =?utf-8?B?Ujg1VHhEeDJIVzh2VnhPa2NHSjRnZ0RDQWZxZ2hJNlYva1VIWWE5Z1NNZXRZ?=
- =?utf-8?B?cWI0YnNKMlV5Ym8yWGFhckFRM3V6bUtTMmJmR3QrSFFRVU9lRWhmcERhWXZa?=
- =?utf-8?B?azUwUjRWRlAwcEEyWXRZbXJCOFBUMzEwSmJIL1F5WFB5VFVZdVE5cEJzTloy?=
- =?utf-8?B?Z3VrQjdNTGwrTzl5b0VlSkgxcW9JN0xmSzEzM0ZhUjNJUXZGYU94bVNlcldx?=
- =?utf-8?B?Z0NKaWFlR25xQTA1Q21scjVJdXdRRkFjczlxR3lLdVBOMUtqZS9ZdFg1ZmQ4?=
- =?utf-8?B?QXVUVFJkck5LRWQyOS9oYW9yVHBVR2xqOVB4UE96V1djRHhNTWVSU2lRUk5w?=
- =?utf-8?B?bWJxN3RldHdzS1A2UmdEcjNBWHUwaDN5bXUzVzJUOGhjYlNUcDdJa0JtK3pj?=
- =?utf-8?B?ZkxUdVFTUFMxeFpLR0ZORVNjU2ZaOHJuVDhmSGhxQkR6MlRyZEcwWGtMNERt?=
- =?utf-8?B?ZzUvMlVEc2FTQVF6RERPdXZNYmdEZ0dyWGFpWTBiaWRWV0IvamFma1NTeEgv?=
- =?utf-8?B?OHJMZ0RQNFZxTXRjaWs2Q1lQV0pNcFQ4ZkdXUHJGSi8xdFliVURWZjRtamds?=
- =?utf-8?B?bGVVQmhaNkxid3JTdWZXUWljWTNWazVjWmRnRXdWcTlxOTRJL0JjazdUY2U4?=
- =?utf-8?B?ZGdyUHBDejVDUFZIR0FaS2lIV2tRSjRqcmhnVnhTZUlrSWxROTF0RjVsbjN1?=
- =?utf-8?Q?e+Ew=3D?=
+ =?us-ascii?Q?YXyyH9tdnuXv9IIk2uki5asGMRYpPfL90ROsri5oFAibqDIruycLHbRz6heR?=
+ =?us-ascii?Q?3HeytoBBtqqaG2TvpyhZGT7avUVwIfYsq1wj/5PMGCgV7iNN0rHDw1ivpPWs?=
+ =?us-ascii?Q?LbBG3WODKg6RGnx9KZVbZS9MZ2rjHIXLvcqyOEqO0L7CGMchVWH6/lOQ3sUI?=
+ =?us-ascii?Q?JVEFGVR3C6bYfICkOXlgM3UqrzYXtRC1/v+6A82KJKEaXEZHQzcqBw/xf9K6?=
+ =?us-ascii?Q?VXAhWwvPD9R7l3KQwD1B71ZwLX3JlDTKt2ycgvhDsI2EnjVIVeK3jKaGHNNz?=
+ =?us-ascii?Q?PT4V7Rzuo4N1hrSWyHuY5l17/3KsFRhA4QR1/oK+BM8/nnmHNjPww1STtZX6?=
+ =?us-ascii?Q?x6m4Uq9mPqx3rN1M2xjqn5ST3XNWJIiRLqbEO06f/RMkX23Y4iJSYDHviyZ8?=
+ =?us-ascii?Q?o6FfIRtpIIoYtOmI7GUDw9Iq0PI21HnYJd4tGweSjsc0y/U0A9bHO0FE9TKf?=
+ =?us-ascii?Q?bb1HIGZSeS2D6OpjMjW29u3LrCEQ3I1dHN9g6XKTH2xZnMU/grlnL7xtlZxM?=
+ =?us-ascii?Q?Lkf7nvi6aKyyAc5YUN2qe39++++1pP8e5QHwWN0KNOqhrIU3O0l8WZq3lj7b?=
+ =?us-ascii?Q?+JtyCMNYMajFvafPBSZtM6bISHFAooPG2pT5/fCUFKV0Wj94xvOBnhhpr1xj?=
+ =?us-ascii?Q?/9d1hmzxryBWWoTINMMwIAjbgYU9ATjoZ2NxurxSw2MRmc+1vepauF8Ke/o+?=
+ =?us-ascii?Q?2sWNQBJK12btrCaBn3HqyUrPktZOm31IhTzLPPEBZv9Zl7iTIG1ciyl7UjFZ?=
+ =?us-ascii?Q?GoS9rJurkvdEScAEDMb6ZQx+71s7ci4WwVdOC/7uCaeCo8/HgxX5H+talDvp?=
+ =?us-ascii?Q?3lir2y+bi11DpKhmw1PQ2PFqHCL9Xs2zh4qx1x0DA30cC2cmPIyhExJg57k7?=
+ =?us-ascii?Q?NS9S7kGWKJ/NXaai34+cHp433GvTQwAVhWCJXVKgEXCQnCKyH8d2FgDqajKI?=
+ =?us-ascii?Q?AcSOLb5UJmzu2TeXIgewgwODWoKVrK5k8F4yYU/EO4OcisWpxxLmCJysI9F5?=
+ =?us-ascii?Q?99Yk0+Hy6EaUg1Lff3daZODhRtBYwydXhT0xhOOTutfge3GbMnw9gHpPqobb?=
+ =?us-ascii?Q?RB7b8SCZj5FAJJEU7IQ+oxPXhaJ/k6D2wPeMGNIqos3x9Hsk+/gT+3K1Z8kX?=
+ =?us-ascii?Q?0p6aaS4V4za+tMGNF+0DEyLCrZNTUbRLqpKeTrAYP8z8+ceYePMRehB21cbK?=
+ =?us-ascii?Q?5aFM8UX0A9VcE1DhEUKwULNJ0FyEAl68aaJFk8O7xAmzUha6ovGYqQmdt0PQ?=
+ =?us-ascii?Q?sZcfOKRhj+sIbMtmi2cAodQajbXx13dXjk1zZ5leGIIc+dJG8FpESV6USbkb?=
+ =?us-ascii?Q?G0qQTYfx/sGpxC/xNt2PZOEq+sf8SZnFZhgrahOfJeHN25XFt1jKnQq4AU1s?=
+ =?us-ascii?Q?ydHQMXedcjYBFZM6h+50xlzMEZEQD3qltLX4gsMbKtv3SifbbjbSOVrEZCKI?=
+ =?us-ascii?Q?5aehGFqCLxsS1hJpzJEv2Xg3LYN91XpFLd9uY7eyynF+LDa6Ym1JbdhNhCHj?=
+ =?us-ascii?Q?nCVfccyEv6XFZjksaHh0SsljYaJShSqm29Hm2D09LBydFeNebzq3bcsbrQ?=
+ =?us-ascii?Q?=3D=3D?=
 X-Forefront-Antispam-Report:
- CIP:131.228.6.101;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr712usmtp1.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700013)(13003099007)(921020);DIR:OUT;SFP:1101;
+ CIP:131.228.6.101;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr712usmtp1.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2025 09:48:50.6079
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2025 09:48:56.3160
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 993d18a2-59c7-4ce7-702e-08dd8bba0a2b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f308f74-18a0-4359-35a3-08dd8bba0d8e
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.101];Helo=[fr712usmtp1.zeu.alcatel-lucent.com]
-X-MS-Exchange-CrossTenant-AuthSource: DU2PEPF00028D13.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: AM3PEPF0000A78F.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR07MB6296
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR07MB6584
 
 From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-Hello,
+The configuration and statistics dump of the DualPI2 Qdisc provides
+information related to both queues, such as packet numbers and queuing
+delays in the L-queue and C-queue, as well as general information such as
+probability value, WRR credits, memory usage, packet marking counters, max
+queue size, etc.
 
-  Please find the DualPI2 patch v14.
+The following patch includes enqueue/dequeue for DualPI2.
 
-v14 (05-May-2025)
-  - Modify tc.yaml: (1) Replace flags with enum and remove enum-as-flags, (2) Remove credit-queue in xstats, and (3) Change attribute types (Donald Hunter <donald.hun
-  - Add enum and fix the ordering of variables in pkt_sched.h to align with the modified tc.yaml (Donald Hunter <donald.hunter@gmail.com>)
-  - Add validators for DROP_OVERLOAD, DROP_EARLY, ECN_MASK, and SPLIT_GSO in sch_dualpi2.c (Donald Hunter <donald.hunter@gmail.com>)
-  - Update dualpi2.json to align with the updated variable order in pkt_sched.h.
-  - Reorder patches (Donald Hunter <donald.hunter@gmail.com>)
+Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+---
+ include/uapi/linux/pkt_sched.h | 15 ++++++
+ net/sched/sch_dualpi2.c        | 86 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 101 insertions(+)
 
-v13 (26-Apr-2025)
-- Use dashes in member names to follow YNL conventions in tc.yaml (Donald Hunter <donald.hunter@gmail.com>)
-- Define enumerations separately for flags of drop-early, drop-overload, ecn-mask, credit-queue in tc.yaml (Donald Hunter <donald.hunter@gmail.com>)
-- Change the types of split-gso and step-packets into flag in tc.yaml (Donald Hunter <donald.hunter@gmail.com>)
-- Revert to u32/u8 types for tc-dualpi2-xstats members in tc.yaml (Donald Hunter <donald.hunter@gmail.com>)
-- Add new test cases in tc-tests/qdiscs/dualpi2.json to cover all dualpi2 paramters (Donald Hunter <donald.hunter@gmail.com>)
-- Change the type of TCA_DUALPI2_STEP_PACKETS into NLA_FLAG (Donald Hunter <donald.hunter@gmail.com>)
-
-v12 (22-Apr-2025)
-- Remove anonymous struct in sch_dualpi2.c (Paolo Abeni <pabeni@redhat.com>)
-- Replace u32/u8 with uint and s32 with int in tc spec document (Paolo Abeni <pabeni@redhat.com>)
-- Introduce get_memory_limit function to handle potential overflow when multipling limit with MTU (Paolo Abeni <pabeni@redhat.com>)
-- Double the packet length to further include packet overhead in memory_limit (Paolo Abeni <pabeni@redhat.com>)
-- Remove the check of qdisc_qlen(sch) when calling qdisc_tree_reduce_backlog (Paolo Abeni <pabeni@redhat.com>)
-
-v11 (15-Apr-2025)
-- Replace hstimer_init with hstimer_setup in sch_dualpi2.c
-
-v10 (25-Mar-2025)
-- Remove leftover include in include/linux/netdevice.h and anonymous struct in sch_dualpi2.c (Paolo Abeni <pabeni@redhat.com>)
-- Use kfree_skb_reason() and add SKB_DROP_REASON_DUALPI2_STEP_DROP drop reason (Paolo Abeni <pabeni@redhat.com>)
-- Split sch_dualpi2.c into 3 patches (and overall 5 patches): Struct definition & parsing, Dump stats & configuration, Enqueue/Dequeue (Paolo Abeni <pabeni@redhat.com>)
-
-v9 (16-Mar-2025)
-- Fix mem_usage error in previous version
-- Add min_qlen_step to the dualpi2 attribute as the minimum queue length in number of packets in the L-queue to start step threshold marking.
-  In previous versions, this value was fixed to 2, so the step threshold was applied to mark packets in the L queue only when the queue length of the L queue was greater than or equal to 2 packets.
-  This will cause larger queuing delays for L4S traffic at low rates (<20Mbps). So we parameterize it and change the default value to 0.
-  Comparison of tcp_1down run 'HTB 20Mbit + DUALPI2 + 10ms base delay'
-    Old versions:
-                           avg       median          # data pts
- Ping (ms) ICMP :        11.55        11.70 ms              350
- TCP upload avg :        18.96          N/A Mbits/s         350
- TCP upload sum :        18.96          N/A Mbits/s         350
-
-    New version (v9):
-                           avg       median          # data pts
- Ping (ms) ICMP :        10.81        10.70 ms              350
- TCP upload avg :        18.91          N/A Mbits/s         350
- TCP upload sum :        18.91          N/A Mbits/s         350
-
-
-  Comparison of tcp_1down run 'HTB 10Mbit + DUALPI2 + 10ms base delay'
-    Old versions:
-                           avg       median          # data pts
- Ping (ms) ICMP :        12.61        12.80 ms              350
- TCP upload avg :         9.48          N/A Mbits/s         350
- TCP upload sum :         9.48          N/A Mbits/s         350
-
-    New version (v9):
-                           avg       median          # data pts
- Ping (ms) ICMP :        11.06        10.80 ms              350
- TCP upload avg :         9.43          N/A Mbits/s         350
- TCP upload sum :         9.43          N/A Mbits/s         350
-
-
-  Comparison of tcp_1down run 'HTB 10Mbit + DUALPI2 + 10ms base delay'
-    Old versions:
-                           avg       median          # data pts
- Ping (ms) ICMP :        40.86        37.45 ms              350
- TCP upload avg :         0.88          N/A Mbits/s         350
- TCP upload sum :         0.88          N/A Mbits/s         350
- TCP upload::1  :         0.88         0.97 Mbits/s         350
-
-    New version (v9):
-                           avg       median          # data pts
- Ping (ms) ICMP :        11.07        10.40 ms              350
- TCP upload avg :         0.55          N/A Mbits/s         350
- TCP upload sum :         0.55          N/A Mbits/s         350
- TCP upload::1  :         0.55         0.59 Mbits/s         350
-
-v8 (11-Mar-2025)
-- Fix warning messages in v7
-
-v7 (07-Mar-2025)
-- Separate into 3 patches to avoid mixing changes of documentation, selftest, and code. (Cong Wang <xiyou.wangcong@gmail.com>)
-
-v6 (04-Mar-2025)
-- Add modprobe for dulapi2 in tc-testing script tc-testing/tdc.sh (Jakub Kicinski <kuba@kernel.org>)
-- Update test cases in dualpi2.json
-- Update commit message
-
-v5 (22-Feb-2025)
-- A comparison was done between MQ + DUALPI2, MQ + FQ_PIE, MQ + FQ_CODEL:
-  Unshaped 1gigE with 4 download streams test:
-   - Summary of tcp_4down run 'MQ + FQ_CODEL':
-                             avg       median       # data pts
-      Ping (ms) ICMP :       1.19     1.34 ms          349
-      TCP download avg :   235.42      N/A Mbits/s     349
-      TCP download sum :   941.68      N/A Mbits/s     349
-      TCP download::1  :   235.19   235.39 Mbits/s     349
-      TCP download::2  :   235.03   235.35 Mbits/s     349
-      TCP download::3  :   236.89   235.44 Mbits/s     349
-      TCP download::4  :   234.57   235.19 Mbits/s     349
-
-   - Summary of tcp_4down run 'MQ + FQ_PIE'
-                             avg       median        # data pts
-      Ping (ms) ICMP :       1.21     1.37 ms          350
-      TCP download avg :   235.42      N/A Mbits/s     350
-      TCP download sum :   941.61     N/A Mbits/s      350
-      TCP download::1  :   232.54  233.13 Mbits/s      350
-      TCP download::2  :   232.52  232.80 Mbits/s      350
-      TCP download::3  :   233.14  233.78 Mbits/s      350
-      TCP download::4  :   243.41  241.48 Mbits/s      350
-
-   - Summary of tcp_4down run 'MQ + DUALPI2'
-                             avg       median        # data pts
-      Ping (ms) ICMP :       1.19     1.34 ms          349
-      TCP download avg :   235.42      N/A Mbits/s     349
-      TCP download sum :   941.68      N/A Mbits/s     349
-      TCP download::1  :   235.19   235.39 Mbits/s     349
-      TCP download::2  :   235.03   235.35 Mbits/s     349
-      TCP download::3  :   236.89   235.44 Mbits/s     349
-      TCP download::4  :   234.57   235.19 Mbits/s     349
-
-
-  Unshaped 1gigE with 128 download streams test:
-   - Summary of tcp_128down run 'MQ + FQ_CODEL':
-                             avg       median       # data pts
-      Ping (ms) ICMP   :     1.88     1.86 ms          350
-      TCP download avg :     7.39      N/A Mbits/s     350
-      TCP download sum :   946.47      N/A Mbits/s     350
-
-   - Summary of tcp_128down run 'MQ + FQ_PIE':
-                             avg       median       # data pts
-      Ping (ms) ICMP   :     1.88     1.86 ms          350
-      TCP download avg :     7.39      N/A Mbits/s     350
-      TCP download sum :   946.47      N/A Mbits/s     350
-
-   - Summary of tcp_128down run 'MQ + DUALPI2':
-                             avg       median       # data pts
-      Ping (ms) ICMP   :     1.88     1.86 ms          350
-      TCP download avg :     7.39      N/A Mbits/s     350
-      TCP download sum :   946.47      N/A Mbits/s     350
-
-
-  Unshaped 10gigE with 4 download streams test:
-   - Summary of tcp_4down run 'MQ + FQ_CODEL':
-                             avg       median       # data pts
-      Ping (ms) ICMP :       0.22     0.23 ms          350
-      TCP download avg :  2354.08      N/A Mbits/s     350
-      TCP download sum :  9416.31      N/A Mbits/s     350
-      TCP download::1  :  2353.65  2352.81 Mbits/s     350
-      TCP download::2  :  2354.54  2354.21 Mbits/s     350
-      TCP download::3  :  2353.56  2353.78 Mbits/s     350
-      TCP download::4  :  2354.56  2354.45 Mbits/s     350
-
-  - Summary of tcp_4down run 'MQ + FQ_PIE':
-                             avg       median      # data pts
-      Ping (ms) ICMP :       0.20     0.19 ms          350
-      TCP download avg :  2354.76      N/A Mbits/s     350
-      TCP download sum :  9419.04      N/A Mbits/s     350
-      TCP download::1  :  2354.77  2353.89 Mbits/s     350
-      TCP download::2  :  2353.41  2354.29 Mbits/s     350
-      TCP download::3  :  2356.18  2354.19 Mbits/s     350
-      TCP download::4  :  2354.68  2353.15 Mbits/s     350
-
-   - Summary of tcp_4down run 'MQ + DUALPI2':
-                             avg       median      # data pts
-      Ping (ms) ICMP :       0.24     0.24 ms          350
-      TCP download avg :  2354.11      N/A Mbits/s     350
-      TCP download sum :  9416.43      N/A Mbits/s     350
-      TCP download::1  :  2354.75  2353.93 Mbits/s     350
-      TCP download::2  :  2353.15  2353.75 Mbits/s     350
-      TCP download::3  :  2353.49  2353.72 Mbits/s     350
-      TCP download::4  :  2355.04  2353.73 Mbits/s     350
-
-
-  Unshaped 10gigE with 128 download streams test:
-   - Summary of tcp_128down run 'MQ + FQ_CODEL':
-                             avg       median       # data pts
-      Ping (ms) ICMP   :     7.57     8.69 ms          350
-      TCP download avg :    73.97      N/A Mbits/s     350
-      TCP download sum :  9467.82      N/A Mbits/s     350
-
-   - Summary of tcp_128down run 'MQ + FQ_PIE':
-                             avg       median       # data pts
-      Ping (ms) ICMP   :     7.82     8.91 ms          350
-      TCP download avg :    73.97      N/A Mbits/s     350
-      TCP download sum :  9468.42      N/A Mbits/s     350
-
-   - Summary of tcp_128down run 'MQ + DUALPI2':
-                             avg       median       # data pts
-      Ping (ms) ICMP   :     6.87     7.93 ms          350
-      TCP download avg :    73.95      N/A Mbits/s     350
-      TCP download sum :  9465.87      N/A Mbits/s     350
-
-   From the results shown above, we see small differences between combinations.
-- Update commit message to include results of no_split_gso and split_gso (Dave Taht <dave.taht@gmail.com> and Paolo Abeni <pabeni@redhat.com>)
-- Add memlimit in the dualpi2 attribute, and add memory_used, max_memory_used, memory_limit in dualpi2 stats (Dave Taht <dave.taht@gmail.com>)
-- Update note in sch_dualpi2.c related to BBRv3 status (Dave Taht <dave.taht@gmail.com>)
-- Update license identifier (Dave Taht <dave.taht@gmail.com>)
-- Add selftest in tools/testing/selftests/tc-testing (Cong Wang <xiyou.wangcong@gmail.com>)
-- Use netlink policies for parameter checks (Jamal Hadi Salim <jhs@mojatatu.com>)
-- Modify texts & fix typos in Documentation/netlink/specs/tc.yaml (Dave Taht <dave.taht@gmail.com>)
-- Add descriptions of packet counter statistics and the reset function of sch_dualpi2.c
-- Fix step_thresh in packets
-- Update code comments in sch_dualpi2.c
-
-v4 (22-Oct-2024)
-- Update statement in Kconfig for DualPI2 (Stephen Hemminger <stephen@networkplumber.org>)
-- Put a blank line after #define in sch_dualpi2.c (Stephen Hemminger <stephen@networkplumber.org>)
-- Fix line length warning.
-
-v3 (19-Oct-2024)
-- Fix compilaiton error
-- Update Documentation/netlink/specs/tc.yaml (Jakub Kicinski <kuba@kernel.org>)
-
-v2 (18-Oct-2024)
-- Add Documentation/netlink/specs/tc.yaml (Jakub Kicinski <kuba@kernel.org>)
-- Use dualpi2 instead of skb prefix (Jamal Hadi Salim <jhs@mojatatu.com>)
-- Replace nla_parse_nested_deprecated with nla_parse_nested (Jamal Hadi Salim <jhs@mojatatu.com>)
-- Fix line length warning
-
-For more details of DualPI2, please refer IETF RFC9332 (https://datatracker.ietf.org/doc/html/rfc9332).
-
-Best regards,
-Chia-Yu
-
-Chia-Yu Chang (4):
-  sched: Struct definition and parsing of dualpi2 qdisc
-  sched: Dump configuration and statistics of dualpi2 qdisc
-  selftests/tc-testing: Add selftests for qdisc DualPI2
-  Documentation: netlink: specs: tc: Add DualPI2 specification
-
-Koen De Schepper (1):
-  sched: Add enqueue/dequeue of dualpi2 qdisc
-
- Documentation/netlink/specs/tc.yaml           |  153 +++
- include/net/dropreason-core.h                 |    6 +
- include/uapi/linux/pkt_sched.h                |   67 +
- net/sched/Kconfig                             |   12 +
- net/sched/Makefile                            |    1 +
- net/sched/sch_dualpi2.c                       | 1109 +++++++++++++++++
- tools/testing/selftests/tc-testing/config     |    1 +
- .../tc-testing/tc-tests/qdiscs/dualpi2.json   |  254 ++++
- tools/testing/selftests/tc-testing/tdc.sh     |    1 +
- 9 files changed, 1604 insertions(+)
- create mode 100644 net/sched/sch_dualpi2.c
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/dualpi2.json
-
+diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
+index dfd903814746..ffa6b057aa88 100644
+--- a/include/uapi/linux/pkt_sched.h
++++ b/include/uapi/linux/pkt_sched.h
+@@ -1262,4 +1262,19 @@ enum {
+ 
+ #define TCA_DUALPI2_MAX   (__TCA_DUALPI2_MAX - 1)
+ 
++struct tc_dualpi2_xstats {
++	__u32 prob;		/* current probability */
++	__u32 delay_c;		/* current delay in C queue */
++	__u32 delay_l;		/* current delay in L queue */
++	__u32 packets_in_c;	/* number of packets enqueued in C queue */
++	__u32 packets_in_l;	/* number of packets enqueued in L queue */
++	__u32 maxq;		/* maximum queue size */
++	__u32 ecn_mark;		/* packets marked with ecn*/
++	__u32 step_marks;	/* ECN marks due to the step AQM */
++	__s32 credit;		/* current c_protection credit */
++	__u32 memory_used;	/* Meory used of both queues */
++	__u32 max_memory_used;	/* Maximum used memory */
++	__u32 memory_limit;	/* Memory limit of both queues */
++};
++
+ #endif
+diff --git a/net/sched/sch_dualpi2.c b/net/sched/sch_dualpi2.c
+index 9a2f020d20fa..0bc4603912ff 100644
+--- a/net/sched/sch_dualpi2.c
++++ b/net/sched/sch_dualpi2.c
+@@ -123,6 +123,14 @@ static u32 dualpi2_scale_alpha_beta(u32 param)
+ 	return tmp;
+ }
+ 
++static u32 dualpi2_unscale_alpha_beta(u32 param)
++{
++	u64 tmp = ((u64)param * NSEC_PER_SEC << ALPHA_BETA_SCALING);
++
++	do_div(tmp, MAX_PROB);
++	return tmp;
++}
++
+ static ktime_t next_pi2_timeout(struct dualpi2_sched_data *q)
+ {
+ 	return ktime_add_ns(ktime_get_ns(), q->pi2_tupdate);
+@@ -443,6 +451,82 @@ static int dualpi2_init(struct Qdisc *sch, struct nlattr *opt,
+ 	return 0;
+ }
+ 
++static u32 convert_ns_to_usec(u64 ns)
++{
++	do_div(ns, NSEC_PER_USEC);
++	return ns;
++}
++
++static int dualpi2_dump(struct Qdisc *sch, struct sk_buff *skb)
++{
++	struct dualpi2_sched_data *q = qdisc_priv(sch);
++	struct nlattr *opts;
++
++	opts = nla_nest_start_noflag(skb, TCA_OPTIONS);
++	if (!opts)
++		goto nla_put_failure;
++
++	if (nla_put_u32(skb, TCA_DUALPI2_LIMIT, READ_ONCE(sch->limit)) ||
++	    nla_put_u32(skb, TCA_DUALPI2_MEMORY_LIMIT,
++			READ_ONCE(q->memory_limit)) ||
++	    nla_put_u32(skb, TCA_DUALPI2_TARGET,
++			convert_ns_to_usec(READ_ONCE(q->pi2_target))) ||
++	    nla_put_u32(skb, TCA_DUALPI2_TUPDATE,
++			convert_ns_to_usec(READ_ONCE(q->pi2_tupdate))) ||
++	    nla_put_u32(skb, TCA_DUALPI2_ALPHA,
++			dualpi2_unscale_alpha_beta(READ_ONCE(q->pi2_alpha))) ||
++	    nla_put_u32(skb, TCA_DUALPI2_BETA,
++			dualpi2_unscale_alpha_beta(READ_ONCE(q->pi2_beta))) ||
++	    nla_put_u32(skb, TCA_DUALPI2_STEP_THRESH,
++			READ_ONCE(q->step_in_packets) ?
++			READ_ONCE(q->step_thresh) :
++			convert_ns_to_usec(READ_ONCE(q->step_thresh))) ||
++	    nla_put_u32(skb, TCA_DUALPI2_MIN_QLEN_STEP,
++			READ_ONCE(q->min_qlen_step)) ||
++	    nla_put_u8(skb, TCA_DUALPI2_COUPLING,
++		       READ_ONCE(q->coupling_factor)) ||
++	    nla_put_u8(skb, TCA_DUALPI2_DROP_OVERLOAD,
++		       READ_ONCE(q->drop_overload)) ||
++	    (READ_ONCE(q->step_in_packets) &&
++	     nla_put_flag(skb, TCA_DUALPI2_STEP_PACKETS)) ||
++	    nla_put_u8(skb, TCA_DUALPI2_DROP_EARLY,
++		       READ_ONCE(q->drop_early)) ||
++	    nla_put_u8(skb, TCA_DUALPI2_C_PROTECTION,
++		       READ_ONCE(q->c_protection_wc)) ||
++	    nla_put_u8(skb, TCA_DUALPI2_ECN_MASK, READ_ONCE(q->ecn_mask)) ||
++	    nla_put_u8(skb, TCA_DUALPI2_SPLIT_GSO, READ_ONCE(q->split_gso)))
++		goto nla_put_failure;
++
++	return nla_nest_end(skb, opts);
++
++nla_put_failure:
++	nla_nest_cancel(skb, opts);
++	return -1;
++}
++
++static int dualpi2_dump_stats(struct Qdisc *sch, struct gnet_dump *d)
++{
++	struct dualpi2_sched_data *q = qdisc_priv(sch);
++	struct tc_dualpi2_xstats st = {
++		.prob			= READ_ONCE(q->pi2_prob),
++		.packets_in_c		= q->packets_in_c,
++		.packets_in_l		= q->packets_in_l,
++		.maxq			= q->maxq,
++		.ecn_mark		= q->ecn_mark,
++		.credit			= q->c_protection_credit,
++		.step_marks		= q->step_marks,
++		.memory_used		= q->memory_used,
++		.max_memory_used	= q->max_memory_used,
++		.memory_limit		= q->memory_limit,
++	};
++	u64 qc, ql;
++
++	get_queue_delays(q, &qc, &ql);
++	st.delay_l = convert_ns_to_usec(ql);
++	st.delay_c = convert_ns_to_usec(qc);
++	return gnet_stats_copy_app(d, &st, sizeof(st));
++}
++
+ /* Reset both L-queue and C-queue, internal packet counters, PI probability,
+  * C-queue protection credit, and timestamps, while preserving current
+  * configuration of DUALPI2.
+@@ -547,6 +631,8 @@ static struct Qdisc_ops dualpi2_qdisc_ops __read_mostly = {
+ 	.destroy	= dualpi2_destroy,
+ 	.reset		= dualpi2_reset,
+ 	.change		= dualpi2_change,
++	.dump		= dualpi2_dump,
++	.dump_stats	= dualpi2_dump_stats,
+ 	.owner		= THIS_MODULE,
+ };
+ 
 -- 
 2.34.1
 
