@@ -1,96 +1,129 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-oa1-f97.google.com (mail-oa1-f97.google.com [209.85.160.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C0B22D4D8;
-	Wed,  7 May 2025 21:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74FE257421
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 May 2025 21:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746653593; cv=none; b=tDdHkNv68iXe0HTZFXyCoVsiJbd0nRR4qqj0QxpfExZx1AqWkkyZxkFDAM6sySkTZzTlui/+EEFsvDlAIB7+zTDQdaaoQqkhrZnFuuUlM9NtAWCvFBptDSNbCyfqdfe8SkS/ubCszeF0xYdSIRS2TqzgGPLS1J3wPSqlkW7mT6E=
+	t=1746654593; cv=none; b=ovB1mUNDL6O4DdQyQL1wqnRpxlB/0NQhvWYiau9w3y5q87rUacH26vkPP0ubpE/bm3FcAYxNfxQwF6L7gT29lGW/H87lhhqdjpmr0zieTUJxg41O25UZoGqstm8/OMIKCvkjO6G1mru7mW8tXLY0zXO14XMYVVdzB4cwEDB4Ajc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746653593; c=relaxed/simple;
-	bh=RnL7OStzWP11PuKwcUy7PdP5FVXlw+knWwKUXmAMV9I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DyX0YEqqeq7XGe/WDlvKJOWwVZ+ZraEi7NGMC9Ym2d7ct9GmJ38fX4aSZm5TcngBATBmGj/W/eNWD+PFOe4johoO5VHm74F7ji2dJLuvJuBYLxFF+vWyjQDEuc3qUpO8c+y0FDgEvqR40CIzYY+SGexlzT1Qv6YJ2Qsht+/Tv3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RXtOjK1W; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746654593; c=relaxed/simple;
+	bh=f/xTZ8BJxeNBMZ86V1uElFpd5cDr7++FrMMuSPkUyhY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=LKKMJeEGq/2pIhTeHCPXB8cw6ZkIMs1ABn4RsVGuZyexJoT722NNZfDLLWB2Bo48d0Pi6AtExWhwpemV6ZHDau+PDMs9FoYiqXWwcYYBaSQ8JOzUDqqzXfV67O6XNywJGdD5M20RWJL0G5ybMnetvRZ9uv7xU2lYc+WMUy8uGkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=WYILmm/u; arc=none smtp.client-ip=209.85.160.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RXtOjK1W"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7396f13b750so427091b3a.1;
-        Wed, 07 May 2025 14:33:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="WYILmm/u"
+Received: by mail-oa1-f97.google.com with SMTP id 586e51a60fabf-2db2149ffceso275090fac.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 May 2025 14:49:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746653592; x=1747258392; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aaj7OEGwWGuiN7NzEmLeh1WHYDUQA4Q8RdwE33w9cVY=;
-        b=RXtOjK1WiZ+dRBmZIjbbOt+6vL9ZOLr6X6HtvYUssLt3Vm4HKEIr3FSItIPlOGmw3R
-         ZxiwKMjuRHrRw/7rn0oUAjH1FILBHhQwPOaynTwPoP1XWpEoY9ZumhhUooJL8nyfGyvz
-         d6+X4bGRt98po0mLPfkvfhBNFz97HQWIim36C7Nei+b0Xoh5ZY8sB4UuGX8ZNRPMoh2u
-         Y/FQ8QyUCJImmr1Q9S2dKV0F4GargyNJXcbNn83R5Im0GkZ1/TD1Zjv5Y5PQIKnnYP4g
-         /WSKnigoE7Ad1rvR/krYCU+GaEJWIFWDWKe+LlYXfUsK8zS773W4QSBz32k7/pAuRUZt
-         QPMA==
+        d=purestorage.com; s=google2022; t=1746654590; x=1747259390; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jtOqL5v5hGaLj2nSYEbTs7MVaDma8jT2Iux9zNB98wA=;
+        b=WYILmm/ulrWDuvRg7mGH0sDMJTqwudXYEx7iA38slj1nHr3LROdGYf9Cu7pXyuD2HH
+         KRTx65WwbA0ExJBK+ADGs50so2g0A37+cLpB0kC09+3CC9MymgwmaWP7OO0IKmL4f0sT
+         X9pn33qGlpaFIeIab8tSeUfEmYgCc1ahsqCT9RprPqhJQKprOsleCDS6Hm8aBMQ1QwhI
+         FGXlKlKxPdLQ06Aun+fkUAzKCOFwaOkD/qTHz1Y5EVojVa0pkd710gGebYLxU+aTxb0r
+         eiwQb6yeHrytusErUsXoRKs5iS4rx2zVsmWTsjMpsNzJI/awq/GByTekAYUiByGhbf3L
+         EnKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746653592; x=1747258392;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aaj7OEGwWGuiN7NzEmLeh1WHYDUQA4Q8RdwE33w9cVY=;
-        b=msTBHLH9ukXaybDe7m8S5Njpu/g12exouOyzSk60ors1z95+ZdPqq9Lly/x/aqteaX
-         Kzz4f4HGJ1z3yeSVZotrS7c5fegB9Co0rr6CirOy46rIsgxq1Aj7RtvitXwuhvXq9z7M
-         bWz7ZiZIB8lic/2P3WBGS9dqurP2gR/lkKnnXArTyRLGqFAfcOa3OGHaNMofSUDSFRvs
-         E8aGQMxeRWkcsTnez3YACteD57EsySa9GCx228jZtCEbDfWDoDVTweBpJFjIpXXqPT6u
-         wgod5F3q+JHalC8x9nDZjn7PrOHTIAEwGreurFtfjm6kaJXxNXoJNgEOvACJuhcenAMo
-         7xog==
-X-Forwarded-Encrypted: i=1; AJvYcCUK18aHlDhJdj3yoKuN/Ah0BtSyDx8hK2zLJEzSHoz1Y7YXjvvQw3TvDzEheWPxIG0/dyGzxGWx@vger.kernel.org, AJvYcCUdSEkaRh2fZWHjc2xLcS/UAWXzcb7YxoZ7Kcbb8M9y22fZFWa2HHHtbcSHLiiv6DMYNQo2q0kzZ5aaGhiJMRQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOiIbfMUOncXFEQIkv0shSFAZl9Ldc09Tfv3c3tT2szbRpBjjc
-	i3K0k9j04GCl4gARvHf8aBnQcWt0KknD70IkRkHsvoZ0r7NqDQacoHuf
-X-Gm-Gg: ASbGnctHAWL88NccgSyl7lDwQm0et+qdfBNJfVvAP+l2pF6Nu3484JPScZmd0zVHrVV
-	fvDtSiIo+Y0ymf+qrPi5fJlJglqQLTscoa47kDXy9cmeaZd3wq7wcWQSZTmxz6GlVUoLpXSqwua
-	vPFkI+zY02Ek673mNtCmQmt634QnqvMdnU/ePgOj1m8uO8tK5tKO2xy46Baxr9FFIDRZ1EtUb37
-	RmjG7As2wIFN+3yroydHzgdsVkXA5RYVF+b+JWIDBxNtBMnYZ9s479V06joOP1JrYyUMiNDOXMh
-	/ZHVghOi+jZA3KVxtYBB0jH5fH2cOBtimy56jdeoGzQGdCnEmepSi/WAW7nQrJR1yYycZZHSQCx
-	OrA==
-X-Google-Smtp-Source: AGHT+IG6S0JHDLC9rcTWR2IJxPsBqahnf2kQEU3n+8SDt4/lXqO5Uh1uOaGY4MbgXlIOGpOX/9+sTg==
-X-Received: by 2002:a05:6a00:600b:b0:73e:b65:bc47 with SMTP id d2e1a72fcca58-7409cfa5854mr6768387b3a.17.1746653591601;
-        Wed, 07 May 2025 14:33:11 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b1fb3b5113csm10064763a12.18.2025.05.07.14.33.10
+        d=1e100.net; s=20230601; t=1746654590; x=1747259390;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jtOqL5v5hGaLj2nSYEbTs7MVaDma8jT2Iux9zNB98wA=;
+        b=UrkOD9deXZBivf5ACPeB5C/+yWLF9/shcy586Pong/7IPJ9AL2l++mxzJDLxLLIVzs
+         eRfys7L08Na8eSzPUskZ7l+6Grp33qVg7q14ARrjyWUiM66rW8i7BtHMVW7AycEc+HpA
+         zhLrt5zRwjWTe0ZCS5VNCJi+MzfqWO+ASm5Hf6+EVxxAw/PVK1QC7g8LPc2mCjzm+zuW
+         rbxs7Z8asA9pP+OX+U0bN9q01c1CRRH5zszzYClnu9LM0lKzZZABRQ0DEuQKdvgCC5oi
+         KZoPYEV3KZ9NgoVibe0qbK/tMt8seftVhJ7QQdtiUc+SnjDbVz5QpB0b3NZdK7+OWQll
+         cDQA==
+X-Forwarded-Encrypted: i=1; AJvYcCU6AZESoTNm5Y3/51lxbxUyoqfA2xnNmLZyvXKGvz/MdTMDk9ViW0gnvGdv8jwf8AHWISWUg9ccSjjRA6VpR80=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGJjCHjLLBzKESBEw3LmhKYflq75CJ8vozBXoxAZRGftTQkqVP
+	vXeaf4svFBbdeHhAABqWN023iDT3WHVPqadn9OOjfA1o6fOAPpYbQivIOs0AYTcepnDCsLjKyIC
+	P1wFDgVymWiAiFpzCnlWWbpPzk6XZ9RqsKvoMxIlKVkEzl8E3
+X-Gm-Gg: ASbGncuhUMplQFDHT7yEMxTn3Jz3zk00E2gJUhgkkqfWidy1ZaDrYxWVS2r95UDbGUV
+	TTkD8JiWaAEUUU0CHBA2+57316w3NeWiLSHcqHfosQOFcNophOl9rakGwNZxd2ruFjuw6PoSvTH
+	iNwAIUngZcHFmTd3UDju6wAuYRvS9lj5Tp9kr9hUeCcFHxv4EeDYMuVo+mq/7z71v+BTuRQRsXl
+	SGDWrl3PyjLHk0Z/ADMLUJHOJK4bY5984yeolB1PKVpgR4lOeKv85IJrp+DCkd8AIAq4RTZLoQ7
+	WD25UX2mcfq37DzMA1QHu3IfXvG+Q+E=
+X-Google-Smtp-Source: AGHT+IGMnFiY0xyQc6c4BYgqiuOS8Lq+bjP0JIRCUEyTMPXHCZjKDaIlzWCuY20vgwE60gGjQrKqLLEmav5O
+X-Received: by 2002:a05:6870:8901:b0:2c2:561c:47e3 with SMTP id 586e51a60fabf-2db814c514cmr694916fac.21.1746654589745;
+        Wed, 07 May 2025 14:49:49 -0700 (PDT)
+Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
+        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-2db5cd9e153sm144323fac.23.2025.05.07.14.49.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 May 2025 14:33:11 -0700 (PDT)
-Date: Wed, 7 May 2025 14:33:10 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	shuah@kernel.org, willemb@google.com, sdf@fomichev.me,
-	mohan.prasad@microchip.com, dw@davidwei.uk, petrm@nvidia.com,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: net-drv: remove the nic_performance
- and nic_link_layer tests
-Message-ID: <aBvRlgo3kmEwJuaZ@mini-arch>
-References: <20250507140109.929801-1-kuba@kernel.org>
+        Wed, 07 May 2025 14:49:49 -0700 (PDT)
+X-Relaying-Domain: purestorage.com
+Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [IPv6:2620:125:9007:640:7:70:36:0])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 444503406B0;
+	Wed,  7 May 2025 15:49:49 -0600 (MDT)
+Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
+	id 38F63E413C6; Wed,  7 May 2025 15:49:49 -0600 (MDT)
+From: Uday Shankar <ushankar@purestorage.com>
+Date: Wed, 07 May 2025 15:49:36 -0600
+Subject: [PATCH v6 2/8] sbitmap: fix off-by-one when wrapping hint
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250507140109.929801-1-kuba@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250507-ublk_task_per_io-v6-2-a2a298783c01@purestorage.com>
+References: <20250507-ublk_task_per_io-v6-0-a2a298783c01@purestorage.com>
+In-Reply-To: <20250507-ublk_task_per_io-v6-0-a2a298783c01@purestorage.com>
+To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>, 
+ Caleb Sander Mateos <csander@purestorage.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Uday Shankar <ushankar@purestorage.com>
+X-Mailer: b4 0.14.2
 
-On 05/07, Jakub Kicinski wrote:
-> Revert fbbf93556f0c ("selftests: nic_performance: Add selftest for performance of NIC driver")
-> Revert c087dc54394b ("selftests: nic_link_layer: Add selftest case for speed and duplex states")
-> Revert 6116075e18f7 ("selftests: nic_link_layer: Add link layer selftest for NIC driver")
-> 
-> These tests don't clean up after themselves, don't use the disruptive
-> annotations, don't get included in make install etc. etc. The tests
-> were added before we have any "HW" runner, so the issues were missed.
-> Our CI doesn't have any way of excluding broken tests, remove these
-> for now to stop the random pollution of results due to broken env.
-> We can always add them back once / if fixed.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+In update_alloc_hint_after_get, we wrap the new hint back to 0 one bit
+too early. This breaks round robin tag allocation (BLK_MQ_F_TAG_RR) -
+some tags get skipped, so we don't get round robin tags even in the
+simple case of single-threaded load on a single hctx. Fix the off-by-one
+in the wrapping condition so that round robin tag allocation works
+properly.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+The same pattern occurs in __sbitmap_get_word, so fix it there too.
+
+Signed-off-by: Uday Shankar <ushankar@purestorage.com>
+---
+ lib/sbitmap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+index d3412984170c03dc6600bbe53f130404b765ac5a..aa1cec78b9649f1f3e8ef2d617dd7ee724391a8c 100644
+--- a/lib/sbitmap.c
++++ b/lib/sbitmap.c
+@@ -51,7 +51,7 @@ static inline void update_alloc_hint_after_get(struct sbitmap *sb,
+ 	} else if (nr == hint || unlikely(sb->round_robin)) {
+ 		/* Only update the hint if we used it. */
+ 		hint = nr + 1;
+-		if (hint >= depth - 1)
++		if (hint >= depth)
+ 			hint = 0;
+ 		this_cpu_write(*sb->alloc_hint, hint);
+ 	}
+@@ -182,7 +182,7 @@ static int __sbitmap_get_word(unsigned long *word, unsigned long depth,
+ 			break;
+ 
+ 		hint = nr + 1;
+-		if (hint >= depth - 1)
++		if (hint >= depth)
+ 			hint = 0;
+ 	}
+ 
+
+-- 
+2.34.1
+
