@@ -1,215 +1,139 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED49224AFA;
-	Wed, 14 May 2025 22:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED13A19CC39;
+	Wed, 14 May 2025 22:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747260991; cv=none; b=nJLs1dtkv8HUrlk8U2lAcHnORJAFjxLhERp6By8E43PTJZ/vEWI1sHz830St+GG1vd5UwiuztdSJOsCxRgcWvf6OzQrOlR9jbVHoxnki9RURQSJeECIosKmrffS7uDGHiZ711nbIusENhdtwPxqagPz8nZp2lazgiOpnLoGJLg0=
+	t=1747261306; cv=none; b=TnPMFOD2axlnsBR/NqNiVHoBAGqYoOdmoM9kuqMrskrZtR+XtKe23UqKbhht0NDlGUqPrB0qEqPF7u3gJ9tzBaBoU2L47OFtIm8IiQ6wxv4IUylA3g9pUKw3trRH/zWAF6AjRIFaIxs4K4WP+EA91I1Tu08GGmo7xCnqOjZVrQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747260991; c=relaxed/simple;
-	bh=8KERzOWdSrZs8kSwJdKHRZwEAinPslc0Smuxbo46QIg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nuRjGn3UcSd+a+C3T5PFLslCJr/Z9CrNvXJfK6/+9ZPiSpst+mhpl3mhyq5z33QivpBkyEKbAqEuBvtk6fW70lAjdoX3AXJygJUSrv8pbZGreyIVCIski//07RhtL8jLh3NSrKZUaDV6bB4PqTQ1HfHO1nJqKhgFt1c79+Ilpr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=HrXbSvj8; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1747261306; c=relaxed/simple;
+	bh=3j2GE9l3wGOmBQOG6S4c822rAlthmoDqPjq3LP9n+Os=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iGDq5C0rBYvN8O/nzatVcV1CkefhPapSxFtDbRaStkzSaEkAHFTeOyKEYIOnPpYilks3nexyPIR9rDJK0KGn1Lf7OM664HEeGdS/LgCLxmamimt9y59uAH59hHozynh6rJMeV8A8FwQYDoopdScg/bboRVhja3lgQRjGqxSqI98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LYinFPHV; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="HrXbSvj8"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1uFKOl-001vfe-Rl; Thu, 15 May 2025 00:16:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=xvhM4tbojY9tDkQHmJNrLd25j/vmeCNoOANSmjk4XqY=; b=HrXbSvj83fKZ1zxaxaAsVUVMyN
-	RNMmnp0yapE7aKb0wT0mwAMZozSex40He2ZKAqTzQyd8EgcLGT+iILMiWC4/wejnRqdYkx0sZUgWL
-	+xpNKGJbRQ1JAiTYOo8uoNuan0MMdsuGYSTQvbJHAAq+Hz6gT0Sv2dDZMqSE1rWnazUV+1PeuK7H2
-	5n+atxSNSo2VLymoaEKOW7ddbOQnbLeKly2dBM895iR48vwGF1JCof4QXJFPCX7nAxjMZW/COviqL
-	Wfmi+Xzlds2DmhM0CI+I3l/gyoDIfWAGqcumcMFKotfU6FlKw2THHUh7xHYT6LdGFHk5fyHmnFqI6
-	XGoQO/iQ==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1uFKOl-0004Ja-H5; Thu, 15 May 2025 00:16:23 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1uFKOO-005bJ3-E1; Thu, 15 May 2025 00:16:00 +0200
-From: Michal Luczaj <mhal@rbox.co>
-Date: Thu, 15 May 2025 00:15:29 +0200
-Subject: [PATCH bpf-next v3 6/8] selftests/bpf: sockmap_listen cleanup:
- Drop af_vsock redir tests
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LYinFPHV"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-22fa48f7cb2so3331655ad.1;
+        Wed, 14 May 2025 15:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747261304; x=1747866104; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oHfsdh270VAzzwWx6ys6xW+UP8Uvsw1TOQddVAOSGTA=;
+        b=LYinFPHVyv7vO4TG02vFyWVg2AF1mdrhvILYi98AM/FXOAxCh61NwCd32MQPOr0N3Y
+         nAVA17iYWdC1J/D1IJ722NcNKWzmqJ+vEp2Vk3A+v9iV7nkNtphntCxdFPUmejqDpkG8
+         aOjjSgLsoI+aLbq86wsEGMbBJwzMDmgZkclKF+93EwoSx47xQrLu1RxgLQMciaSu8gO3
+         9Y0gIGhiX4aNSBDP7SkdTtlh5UYU7XnZPWMrdyu1NjxaiZ0o+qC0ORIODN70BVIrwHdr
+         p6MYLPv28HFck/eLPhHRT/VqKc4fdmEjEfLoT8JyEqvaHUivIDjbl2aBUs1UuoCxFLmN
+         qqow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747261304; x=1747866104;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oHfsdh270VAzzwWx6ys6xW+UP8Uvsw1TOQddVAOSGTA=;
+        b=CDlLIII81kvWzuwKR5scGU5JxHgQxhwrmehctERbol4j6PttDpxHTEA7OB/j9fL4PF
+         NoqHExs99tNLsBWPYZiwYpVTAODERSu3uFLNNy4eIgwXtb3FXF0LJxa1UYjpkNavzA/T
+         uQvXsPt4i8dwCcCkv2RHeq0TEHuwVsWxJk1Xj9TDJ5TcOkhSE/S4QwZ6mMpyqLnVzFMu
+         g3H+lJfktHlgzWzKUVzJywN/ybb9GLT/6aB5ODn+S6ik7rRPhhsYbl61zb3rWfQb0+nm
+         sbm9eEE2KdwSQA+Rgn1eCj6JsI2DpcfW6IAPVYnbZXfbctqxWziBMzer6aPSu0nC4kjV
+         YySA==
+X-Forwarded-Encrypted: i=1; AJvYcCXdjCilhpOPSSgYKNEXPAL1tcmWGSXOlzOfg63JmRixZVf84jk+2dmuq7EAs2THBZe9/g+k71oiJ4DNRIk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxBCmg3/TSCAt22udIZazu1oA1XOQvUPwakq55YWTm9LWS0Acd
+	o0xVyPbziP3qEPt8I87eY1H2pkauzf9MdTRTPRmFcPUqowyUY15xCy6eZpLcwfOTyg==
+X-Gm-Gg: ASbGncvBzv2cfx9VGMdV7tNCSygsm2mE1bq8WEwspBWFL6UAE9hqc9UvP138BwFN/P3
+	r3FoNgmsGyntqq8G3/5dsajqS/yaFHRgpAfnZjW50d6KaqR6uqUSTqqBNrsRI2tMW6z0tIuWjE4
+	qdbAg7YDV0/aChHUM5ifiEiMpm33B/r0900xxMeKiESJePVRLN09Pj0UpDRqHPGgFREjArucyUL
+	ADxgtsILiOtqqIZJZa786dQuwBaOFcRTbqbk/Qb8T4Xj+ejkBSqiW61Jd3xNum+32QFLVo+v03Q
+	bFncDJ1ZPS+OcsBeUA6PXp7M7xX428zeDoPAh6Z24IStGZDYYUq7HUwgzYJyRryVKMy7dqTN3KN
+	x
+X-Google-Smtp-Source: AGHT+IFttTpWsrfV8CTbyFUfOClZsN4VaZgrm7diOQZyUoMIOzoXxLxvFc2uEuwrls7nKlhcN5t+2w==
+X-Received: by 2002:a17:903:b0e:b0:224:76f:9e4a with SMTP id d9443c01a7336-23198119c40mr70961585ad.14.1747261304097;
+        Wed, 14 May 2025 15:21:44 -0700 (PDT)
+Received: from rahul-mintos.ban-spse ([165.204.156.251])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc828ffbdsm103836525ad.196.2025.05.14.15.21.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 May 2025 15:21:43 -0700 (PDT)
+From: Rahul Kumar <rk0006818@gmail.com>
+To: skhan@linuxfoundation.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	rk0006818@gmail.com
+Subject: [PATCH] selftests: timers: Fix grammar and clarify comments in nanosleep.c
+Date: Thu, 15 May 2025 03:51:12 +0530
+Message-ID: <20250514222112.396705-1-rk0006818@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-selftests-sockmap-redir-v3-6-a1ea723f7e7e@rbox.co>
-References: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
-In-Reply-To: <20250515-selftests-sockmap-redir-v3-0-a1ea723f7e7e@rbox.co>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>, 
- Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
 
-Remove tests covered by sockmap_redir.
+Improved the clarity and grammar in the header comment of nanosleep.c
+for better readability and consistency with kernel documentation style.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
+Signed-off-by: Rahul Kumar <rk0006818@gmail.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_listen.c      | 112 ---------------------
- 1 file changed, 112 deletions(-)
+ tools/testing/selftests/timers/nanosleep.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 4ee1148d22be3d7f26a5c899542e6a29ca5e7d6c..f0ad548bdf09d1c5ffdcedfbba11c304b19490c0 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1487,116 +1487,6 @@ static void test_unix_redir(struct test_sockmap_listen *skel, struct bpf_map *ma
- 	unix_skb_redir_to_connected(skel, map, sotype);
+diff --git a/tools/testing/selftests/timers/nanosleep.c b/tools/testing/selftests/timers/nanosleep.c
+index 252c6308c569..84adf8a4ab5d 100644
+--- a/tools/testing/selftests/timers/nanosleep.c
++++ b/tools/testing/selftests/timers/nanosleep.c
+@@ -1,12 +1,12 @@
+-/* Make sure timers don't return early
+- *              by: john stultz (johnstul@us.ibm.com)
+- *		    John Stultz (john.stultz@linaro.org)
+- *              (C) Copyright IBM 2012
+- *              (C) Copyright Linaro 2013 2015
+- *              Licensed under the GPLv2
++ /*
++ * Ensure timers do not return early.
++ * Author: John Stultz (john.stultz@linaro.org)
++ * Copyright (C) IBM 2012
++ * Copyright (C) Linaro 2013, 2015
++ * Licensed under the GPLv2
+  *
+- *  To build:
+- *	$ gcc nanosleep.c -o nanosleep -lrt
++ * To build:
++ *     $ gcc nanosleep.c -o nanosleep -lrt
+  *
+  *   This program is free software: you can redistribute it and/or modify
+  *   it under the terms of the GNU General Public License as published by
+@@ -61,7 +61,7 @@ char *clockstring(int clockid)
+ 	case CLOCK_TAI:
+ 		return "CLOCK_TAI";
+ 	};
+-	return "UNKNOWN_CLOCKID";
++	return "UNKNOWN_CLOCKID"; // Could not identify clockid
  }
  
--/* Returns two connected loopback vsock sockets */
--static int vsock_socketpair_connectible(int sotype, int *v0, int *v1)
--{
--	return create_pair(AF_VSOCK, sotype | SOCK_NONBLOCK, v0, v1);
--}
--
--static void vsock_unix_redir_connectible(int sock_mapfd, int verd_mapfd,
--					 enum redir_mode mode, int sotype)
--{
--	const char *log_prefix = redir_mode_str(mode);
--	char a = 'a', b = 'b';
--	int u0, u1, v0, v1;
--	int sfd[2];
--	unsigned int pass;
--	int err, n;
--	u32 key;
--
--	zero_verdict_count(verd_mapfd);
--
--	if (socketpair(AF_UNIX, SOCK_STREAM | SOCK_NONBLOCK, 0, sfd))
--		return;
--
--	u0 = sfd[0];
--	u1 = sfd[1];
--
--	err = vsock_socketpair_connectible(sotype, &v0, &v1);
--	if (err) {
--		FAIL("vsock_socketpair_connectible() failed");
--		goto close_uds;
--	}
--
--	err = add_to_sockmap(sock_mapfd, u0, v0);
--	if (err) {
--		FAIL("add_to_sockmap failed");
--		goto close_vsock;
--	}
--
--	n = write(v1, &a, sizeof(a));
--	if (n < 0)
--		FAIL_ERRNO("%s: write", log_prefix);
--	if (n == 0)
--		FAIL("%s: incomplete write", log_prefix);
--	if (n < 1)
--		goto out;
--
--	n = xrecv_nonblock(mode == REDIR_INGRESS ? u0 : u1, &b, sizeof(b), 0);
--	if (n < 0)
--		FAIL("%s: recv() err, errno=%d", log_prefix, errno);
--	if (n == 0)
--		FAIL("%s: incomplete recv", log_prefix);
--	if (b != a)
--		FAIL("%s: vsock socket map failed, %c != %c", log_prefix, a, b);
--
--	key = SK_PASS;
--	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
--	if (err)
--		goto out;
--	if (pass != 1)
--		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
--out:
--	key = 0;
--	bpf_map_delete_elem(sock_mapfd, &key);
--	key = 1;
--	bpf_map_delete_elem(sock_mapfd, &key);
--
--close_vsock:
--	close(v0);
--	close(v1);
--
--close_uds:
--	close(u0);
--	close(u1);
--}
--
--static void vsock_unix_skb_redir_connectible(struct test_sockmap_listen *skel,
--					     struct bpf_map *inner_map,
--					     int sotype)
--{
--	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
--	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
--	int sock_map = bpf_map__fd(inner_map);
--	int err;
--
--	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
--	if (err)
--		return;
--
--	skel->bss->test_ingress = false;
--	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_EGRESS, sotype);
--	skel->bss->test_ingress = true;
--	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_INGRESS, sotype);
--
--	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
--}
--
--static void test_vsock_redir(struct test_sockmap_listen *skel, struct bpf_map *map)
--{
--	const char *family_name, *map_name;
--	char s[MAX_TEST_NAME];
--
--	family_name = family_str(AF_VSOCK);
--	map_name = map_type_str(map);
--	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
--	if (!test__start_subtest(s))
--		return;
--
--	vsock_unix_skb_redir_connectible(skel, map, SOCK_STREAM);
--	vsock_unix_skb_redir_connectible(skel, map, SOCK_SEQPACKET);
--}
--
- static void test_reuseport(struct test_sockmap_listen *skel,
- 			   struct bpf_map *map, int family, int sotype)
+ /* returns 1 if a <= b, 0 otherwise */
+@@ -90,7 +90,7 @@ int nanosleep_test(int clockid, long long ns)
  {
-@@ -1882,14 +1772,12 @@ void serial_test_sockmap_listen(void)
- 	run_tests(skel, skel->maps.sock_map, AF_INET6);
- 	test_unix_redir(skel, skel->maps.sock_map, SOCK_DGRAM);
- 	test_unix_redir(skel, skel->maps.sock_map, SOCK_STREAM);
--	test_vsock_redir(skel, skel->maps.sock_map);
+ 	struct timespec now, target, rel;
  
- 	skel->bss->test_sockmap = false;
- 	run_tests(skel, skel->maps.sock_hash, AF_INET);
- 	run_tests(skel, skel->maps.sock_hash, AF_INET6);
- 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_DGRAM);
- 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_STREAM);
--	test_vsock_redir(skel, skel->maps.sock_hash);
+-	/* First check abs time */
++	/* First, check absolute time using clock_nanosleep with TIMER_ABSTIME */
+ 	if (clock_gettime(clockid, &now))
+ 		return UNSUPPORTED;
+ 	target = timespec_add(now, ns);
+@@ -102,7 +102,7 @@ int nanosleep_test(int clockid, long long ns)
+ 	if (!in_order(target, now))
+ 		return -1;
  
- 	test_sockmap_listen__destroy(skel);
- }
-
+-	/* Second check reltime */
++	/* Then, test relative time sleep */
+ 	clock_gettime(clockid, &now);
+ 	rel.tv_sec = 0;
+ 	rel.tv_nsec = 0;
 -- 
-2.49.0
+2.43.0
 
