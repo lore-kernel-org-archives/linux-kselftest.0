@@ -1,264 +1,403 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8615ECA6B
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 08:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B81E298990;
+	Thu, 15 May 2025 08:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747299158; cv=none; b=TKbCt1m06J/ANFtsXoBPZSjs1WCX79S9Fm241SdHup+G/MHJwM1RRDlh49vC6z1aB6d9kAsE+Sizklrzpu5ipEmc+WO+hHOr6zVBS145OTSGiBzWfvJr/nPnGGa3zNptIXSX5xteN0GISfXfvKD+jcbIPFLwI7tThGy7VfMsKac=
+	t=1747299483; cv=none; b=aFOINlGm9oK9fjsX0bU7RzJKKaStZsPrccbQ1BfFIru0HQzl3sskg7gu8aJvef9hmCxuCRYIeK/CO1pgOZEG0FwLSOtVlIzlTRasCML8onOnyLGAVjlwnif0qS5ZsTr9i5Q8qRm/g/CkRUD7LJYOMNBYZW+QruN0QD4LeJN5pEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747299158; c=relaxed/simple;
-	bh=PGXvcUd7AEZN3/JlvOlbni86hFgiQ4HPyrDarRZ8hOI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=V+sTAx3tt4UB4XlwvFbQj4ZiQrldEoAQsbmYPmHc+iyvXW+Zw2P4jTcib98khiUIQaLm1wycqWxcoNMOevqsms/HcXLitks/zEVzsvhyGr94yWPKuGSF7SabhGMhYJ5WtxALUmplxk3AbNW7HxaREzaDlP/MyjPWilz4a+farr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Y2E3n9FN; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	s=arc-20240116; t=1747299483; c=relaxed/simple;
+	bh=NEV/vgjb1O/PPVkq9/gsk0ry6YJMMin78MpzVr9F6jE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=O7vNeR4NNcdyhrjMJIxdrgKTxD8OFnwHthKTQjIGQ96ONT5rXmTZw4YsDBh2UbRQPIamFZd28S081TQMJslibdRtrb6Wf9PbiVq0a1Uge6N+6DzjoVopR9Xg7aW6skinEEXeBRgXCZpFxvyGiRxxJ1mdfRQgM3PCdR6jz1/gMRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kw1RJr0R; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Y2E3n9FN"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-54fcffd6b9dso722656e87.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 01:52:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1747299153; x=1747903953; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IhYYFU/0gd4i6u7YSldc/A6P4zLJhDJyiOeiCd5c27I=;
-        b=Y2E3n9FNsFwg7KkZ4bjY5QisnRjya4qPfLIxbhOMFFSD+WGUUZEJkk8CwyyaF5UNnc
-         bIp8fhD1v5ZuAPTRsItMIcbtMpeHIvyWqRuZZabnU0cpDD9UDtYBRVGA1en98JT83Uk7
-         W3goy9sySq3RvFdNodp4Ispux6/5XgG72AqBlcGQ9YsCIhKIYgu2CKr9ZBGYrq2/ncTK
-         DEv/ekCuV0TJk6GZwfeXCa5o0HQCxyPEIgCyAQZNqzu6JE80Am6jSa27xIy+qO3vHEqU
-         /ZVMR+mJ6Ee8nW8BTad8Vfqe31uApMyut2//U6xYGZJKhumf2Hk0nnKBPykt23bAjkjz
-         sOdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747299153; x=1747903953;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IhYYFU/0gd4i6u7YSldc/A6P4zLJhDJyiOeiCd5c27I=;
-        b=vD0Kid0Q3raIyUb0wgZ9zGk5ArNnHTOXZ9cI0n4huAlXx501BDMjs2nP8ekImLV9se
-         7do7SnNG01nkZCtdoChi8SoIJ+8aWmTAJb34ZSnyEzV3Yy6WdZQ+5FLnY8yWR98KelU9
-         NqibTWgoaALVZ0SXwK/ERL96ig4nSk/MqMN+FMcWcAY0JW3if/GIKUkPKk99II1Mvscu
-         5NAtW7DS0L6UTeGOp0D1OTr6KeAQRQBBkqq2uUR0NlfSVI+prbwhUeelaSOhP9haOtIa
-         RwAUj+XrgIKF/jzE3C7sZMhHDBct3XdDYpcfyfeqMG7Fw26yRt82WlB5gfWQMSBT0jrg
-         vwwg==
-X-Forwarded-Encrypted: i=1; AJvYcCXyicBCvxfgAJNQ2XNZy9hHkntmX29UI2zflli5n678p2EEFFODu3Q5HIc6rCWbCcXC508mIWAwJj41KMNK6XI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwE3edssoLSpa84G/urBjUf1HRFXMaWkO5raRDxYQ4Q3bMJTbZ
-	FWCROPVh7Kej7QlM5oV6nNJDqwDuJQl+5HVSSwPpXfFSUytGjHMJEf+ca68f0QaCq6Bq0/X9ZDg
-	P
-X-Gm-Gg: ASbGnctkZJWvkvXfAd/14y0J2lW+e3UiGPWUMI4ONDx+opteV1lZaAd/DVg+/1/gdQr
-	bOMIfi5uoShP9PCBPea2INGWr7g+LinnarYwQcBRdd77IlpGlxK+mpPL5E6DV8W01Cn8yiXHIbw
-	8mng0RVjtWFTczse8b+dkwIlHOR11QbCYN7NInSImsttXvjuUwAcCERw0T0PiTjITOdb6BkEoAh
-	pXyVSOt+sY+Lp+ajQE39RYP6RW1OLmGX3hOZTOSFDl1ewnq2tyHwpfwBgFIrbZ3gKC/fL3eQfZo
-	fjWkge/la67nW0+1aHCjzD3c+aI8hAsbKxpX+yfNZxC3yn+8Gu0=
-X-Google-Smtp-Source: AGHT+IGnVdWt5OD2bKCz++KFVpJxcO50pC03iTHgGj6sIJhut7VYuKCl9xAAlL4aqjVD7tiXjB6LOw==
-X-Received: by 2002:a05:600c:c0d2:20b0:442:f482:c421 with SMTP id 5b1f17b1804b1-442f482c78emr24654775e9.22.1747297431669;
-        Thu, 15 May 2025 01:23:51 -0700 (PDT)
-Received: from carbon-x1.. ([91.197.138.148])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442f395166fsm59310785e9.18.2025.05.15.01.23.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 01:23:50 -0700 (PDT)
-From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org
-Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Deepak Gupta <debug@rivosinc.com>
-Subject: [PATCH v7 06/14] riscv: misaligned: request misaligned exception from SBI
-Date: Thu, 15 May 2025 10:22:07 +0200
-Message-ID: <20250515082217.433227-7-cleger@rivosinc.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250515082217.433227-1-cleger@rivosinc.com>
-References: <20250515082217.433227-1-cleger@rivosinc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kw1RJr0R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE405C4CEED;
+	Thu, 15 May 2025 08:58:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747299483;
+	bh=NEV/vgjb1O/PPVkq9/gsk0ry6YJMMin78MpzVr9F6jE=;
+	h=From:Date:Subject:To:Cc:From;
+	b=kw1RJr0RO/a8+KiqP4uGF/0iyDF019soPfxFudneNTz+AoHZ65xM1G9tTZc7BXLb7
+	 VZFU9OQlMAEbuwdIUeraQllqBZZiRKVFrZAnGkQAa9X0dDsZT91s/e2eVmti05AE3X
+	 8jwf2H94jECberw/VbcRgAYOlgtF7VsxRLV51dJw1feqk5VH5NY8N5AjF3UpknaoBY
+	 oy2gyr3HMpHN3SWd1TXifE78O/Rp3E4XbPFiTZ2pOW2x1mfCBjziC+hDeBse1+Gn5Q
+	 6nkI6IdBfiAIpzP9gLYXRowipH9v+NZMWqm3DxvZO3YTooKtp6pUtvqZC7pPbL6Fhs
+	 /pET26bYjrLkg==
+From: Mark Brown <broonie@kernel.org>
+Date: Thu, 15 May 2025 10:57:43 +0200
+Subject: [PATCH] selftests/mm: Fix test result reporting in gup_longterm
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250515-selftests-mm-gup-longterm-dups-v1-1-05f8f731cf63@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAIasJWgC/x3NQQrDIBBG4auEWXfAhKRIr1K6EPNrB6IRx5RCy
+ N0rXX6b905SVIHSYzip4iMqe+4YbwP5t8sRLGs3TWZazDLOrNhCgzbllDgehbc9x4aaeD2K8t0
+ 6N8ME762lHikVQb7/wfN1XT8s1rlDcAAAAA==
+X-Change-ID: 20250514-selftests-mm-gup-longterm-dups-68aa4e0fcc88
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-c25d1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10522; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=NEV/vgjb1O/PPVkq9/gsk0ry6YJMMin78MpzVr9F6jE=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBoJayXuu5E064SKrebHXiJNB4DB5TQnQRm9TYHX
+ 8hCCTCb/F6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaCWslwAKCRAk1otyXVSH
+ 0DBhB/0Qtlq8iuwdvSiCW2Zc1PK1cV1yKz0/abE4XfAcO0QCzDdUgaM6FTJO2GEVppn8XvTQPL1
+ JX2GNonWUt7Lm9l7o5UjiJTRY2baR1nwhEyyT2fuIBVLVZ7EiZPfC+cFttnG86nfsVjQyrjVAON
+ 2pFId0Tgsndp1ebHJMe5LY8pdwDlWBpbkhpx1xqYu0ZLjpHCLOyk/CTCeov4FO1AvlYW0ECGPws
+ z8BcbV8TBcBS9re54BeuTkV2mTQqRKl1gN6KcGxiFG+LHRYWb71VakjqKND/KDP/YrOmPlaWEIC
+ XF3BNQOsUeCWE7X3I8rgTZATA8jBZ5obVtY7f6PJqvDmohVv
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Now that the kernel can handle misaligned accesses in S-mode, request
-misaligned access exception delegation from SBI. This uses the FWFT SBI
-extension defined in SBI version 3.0.
+The kselftest framework uses the string logged when a test result is
+reported as the unique identifier for a test, using it to track test
+results between runs. The gup_longterm test completely fails to follow
+this pattern, it runs a single test function repeatedly with various
+parameters but each result report is a string logging an error message
+which is fixed between runs.
 
-Signed-off-by: Clément Léger <cleger@rivosinc.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Since the code already logs each test uniquely before it starts refactor
+to also print this to a buffer, then use that name as the test result.
+This isn't especially pretty, really this test could use a more
+substantial cleanup.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/riscv/include/asm/cpufeature.h        |  3 +-
- arch/riscv/kernel/traps_misaligned.c       | 71 +++++++++++++++++++++-
- arch/riscv/kernel/unaligned_access_speed.c |  8 ++-
- 3 files changed, 77 insertions(+), 5 deletions(-)
+ tools/testing/selftests/mm/gup_longterm.c | 163 ++++++++++++++++++++----------
+ 1 file changed, 107 insertions(+), 56 deletions(-)
 
-diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
-index f56b409361fb..dbe5970d4fe6 100644
---- a/arch/riscv/include/asm/cpufeature.h
-+++ b/arch/riscv/include/asm/cpufeature.h
-@@ -67,8 +67,9 @@ void __init riscv_user_isa_enable(void);
- 	_RISCV_ISA_EXT_DATA(_name, _id, _sub_exts, ARRAY_SIZE(_sub_exts), _validate)
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index 21595b20bbc3..a849537f9372 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -35,6 +35,8 @@ static int nr_hugetlbsizes;
+ static size_t hugetlbsizes[10];
+ static int gup_fd;
  
- bool __init check_unaligned_access_emulated_all_cpus(void);
-+void unaligned_access_init(void);
-+int cpu_online_unaligned_access_init(unsigned int cpu);
- #if defined(CONFIG_RISCV_SCALAR_MISALIGNED)
--void check_unaligned_access_emulated(struct work_struct *work __always_unused);
- void unaligned_emulation_finish(void);
- bool unaligned_ctl_available(void);
- DECLARE_PER_CPU(long, misaligned_access_speed);
-diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-index 77c788660223..592b1a28e897 100644
---- a/arch/riscv/kernel/traps_misaligned.c
-+++ b/arch/riscv/kernel/traps_misaligned.c
-@@ -16,6 +16,7 @@
- #include <asm/entry-common.h>
- #include <asm/hwprobe.h>
- #include <asm/cpufeature.h>
-+#include <asm/sbi.h>
- #include <asm/vector.h>
- 
- #define INSN_MATCH_LB			0x3
-@@ -646,7 +647,7 @@ bool __init check_vector_unaligned_access_emulated_all_cpus(void)
- 
- static bool unaligned_ctl __read_mostly;
- 
--void check_unaligned_access_emulated(struct work_struct *work __always_unused)
-+static void check_unaligned_access_emulated(struct work_struct *work __always_unused)
++static char test_name[1024];
++
+ static __fsword_t get_fs_type(int fd)
  {
- 	int cpu = smp_processor_id();
- 	long *mas_ptr = per_cpu_ptr(&misaligned_access_speed, cpu);
-@@ -657,6 +658,13 @@ void check_unaligned_access_emulated(struct work_struct *work __always_unused)
- 	__asm__ __volatile__ (
- 		"       "REG_L" %[tmp], 1(%[ptr])\n"
- 		: [tmp] "=r" (tmp_val) : [ptr] "r" (&tmp_var) : "memory");
-+}
-+
-+static int cpu_online_check_unaligned_access_emulated(unsigned int cpu)
-+{
-+	long *mas_ptr = per_cpu_ptr(&misaligned_access_speed, cpu);
-+
-+	check_unaligned_access_emulated(NULL);
+ 	struct statfs fs;
+@@ -93,33 +95,48 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 	__fsword_t fs_type = get_fs_type(fd);
+ 	bool should_work;
+ 	char *mem;
++	int result = KSFT_PASS;
+ 	int ret;
  
- 	/*
- 	 * If unaligned_ctl is already set, this means that we detected that all
-@@ -665,9 +673,10 @@ void check_unaligned_access_emulated(struct work_struct *work __always_unused)
- 	 */
- 	if (unlikely(unaligned_ctl && (*mas_ptr != RISCV_HWPROBE_MISALIGNED_SCALAR_EMULATED))) {
- 		pr_crit("CPU misaligned accesses non homogeneous (expected all emulated)\n");
--		while (true)
--			cpu_relax();
-+		return -EINVAL;
- 	}
-+
-+	return 0;
- }
- 
- bool __init check_unaligned_access_emulated_all_cpus(void)
-@@ -699,4 +708,60 @@ bool __init check_unaligned_access_emulated_all_cpus(void)
- {
- 	return false;
- }
-+static int cpu_online_check_unaligned_access_emulated(unsigned int cpu)
-+{
-+	return 0;
-+}
-+#endif
-+
-+#ifdef CONFIG_RISCV_SBI
-+
-+static bool misaligned_traps_delegated;
-+
-+static int cpu_online_sbi_unaligned_setup(unsigned int cpu)
-+{
-+	if (sbi_fwft_set(SBI_FWFT_MISALIGNED_EXC_DELEG, 1, 0) &&
-+	    misaligned_traps_delegated) {
-+		pr_crit("Misaligned trap delegation non homogeneous (expected delegated)");
-+		return -EINVAL;
++	if (fd < 0) {
++		result = KSFT_FAIL;
++		goto report;
 +	}
 +
-+	return 0;
-+}
-+
-+void __init unaligned_access_init(void)
-+{
-+	int ret;
-+
-+	ret = sbi_fwft_set_online_cpus(SBI_FWFT_MISALIGNED_EXC_DELEG, 1, 0);
-+	if (ret)
-+		return;
-+
-+	misaligned_traps_delegated = true;
-+	pr_info("SBI misaligned access exception delegation ok\n");
-+	/*
-+	 * Note that we don't have to take any specific action here, if
-+	 * the delegation is successful, then
-+	 * check_unaligned_access_emulated() will verify that indeed the
-+	 * platform traps on misaligned accesses.
-+	 */
-+}
-+#else
-+void __init unaligned_access_init(void) {}
-+
-+static int cpu_online_sbi_unaligned_setup(unsigned int cpu __always_unused)
-+{
-+	return 0;
-+}
- #endif
-+
-+int cpu_online_unaligned_access_init(unsigned int cpu)
-+{
-+	int ret;
-+
-+	ret = cpu_online_sbi_unaligned_setup(cpu);
-+	if (ret)
-+		return ret;
-+
-+	return cpu_online_check_unaligned_access_emulated(cpu);
-+}
-diff --git a/arch/riscv/kernel/unaligned_access_speed.c b/arch/riscv/kernel/unaligned_access_speed.c
-index b8ba13819d05..ae2068425fbc 100644
---- a/arch/riscv/kernel/unaligned_access_speed.c
-+++ b/arch/riscv/kernel/unaligned_access_speed.c
-@@ -236,6 +236,11 @@ arch_initcall_sync(lock_and_set_unaligned_access_static_branch);
+ 	if (ftruncate(fd, size)) {
+ 		if (errno == ENOENT) {
+ 			skip_test_dodgy_fs("ftruncate()");
+ 		} else {
+-			ksft_test_result_fail("ftruncate() failed (%s)\n", strerror(errno));
++			ksft_print_msg("ftruncate() failed (%s)\n",
++				       strerror(errno));
++			result = KSFT_FAIL;
++			goto report;
+ 		}
+ 		return;
+ 	}
  
- static int riscv_online_cpu(unsigned int cpu)
+ 	if (fallocate(fd, 0, 0, size)) {
+-		if (size == pagesize)
+-			ksft_test_result_fail("fallocate() failed (%s)\n", strerror(errno));
+-		else
+-			ksft_test_result_skip("need more free huge pages\n");
+-		return;
++		if (size == pagesize) {
++			ksft_print_msg("fallocate() failed (%s)\n", strerror(errno));
++			result = KSFT_FAIL;
++		} else {
++			ksft_print_msg("need more free huge pages\n");
++			result = KSFT_SKIP;
++		}
++		goto report;
+ 	}
+ 
+ 	mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
+ 		   shared ? MAP_SHARED : MAP_PRIVATE, fd, 0);
+ 	if (mem == MAP_FAILED) {
+-		if (size == pagesize || shared)
+-			ksft_test_result_fail("mmap() failed (%s)\n", strerror(errno));
+-		else
+-			ksft_test_result_skip("need more free huge pages\n");
+-		return;
++		if (size == pagesize || shared) {
++			ksft_print_msg("mmap() failed (%s)\n", strerror(errno));
++			result = KSFT_FAIL;
++		} else {
++			ksft_print_msg("need more free huge pages\n");
++			result = KSFT_SKIP;
++		}
++		goto report;
+ 	}
+ 
+ 	/* Fault in the page such that GUP-fast can pin it directly. */
+@@ -134,7 +151,8 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		 */
+ 		ret = mprotect(mem, size, PROT_READ);
+ 		if (ret) {
+-			ksft_test_result_fail("mprotect() failed (%s)\n", strerror(errno));
++			ksft_print_msg("mprotect() failed (%s)\n", strerror(errno));
++			result = KSFT_FAIL;
+ 			goto munmap;
+ 		}
+ 		/* FALLTHROUGH */
+@@ -147,12 +165,14 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 				type == TEST_TYPE_RW_FAST;
+ 
+ 		if (gup_fd < 0) {
+-			ksft_test_result_skip("gup_test not available\n");
++			ksft_print_msg("gup_test not available\n");
++			result = KSFT_SKIP;
+ 			break;
+ 		}
+ 
+ 		if (rw && shared && fs_is_unknown(fs_type)) {
+-			ksft_test_result_skip("Unknown filesystem\n");
++			ksft_print_msg("Unknown filesystem\n");
++			result = KSFT_SKIP;
+ 			return;
+ 		}
+ 		/*
+@@ -169,14 +189,19 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		args.flags |= rw ? PIN_LONGTERM_TEST_FLAG_USE_WRITE : 0;
+ 		ret = ioctl(gup_fd, PIN_LONGTERM_TEST_START, &args);
+ 		if (ret && errno == EINVAL) {
+-			ksft_test_result_skip("PIN_LONGTERM_TEST_START failed (EINVAL)n");
++			ksft_print_msg("PIN_LONGTERM_TEST_START failed (EINVAL)n");
++			result = KSFT_SKIP;
+ 			break;
+ 		} else if (ret && errno == EFAULT) {
+-			ksft_test_result(!should_work, "Should have failed\n");
++			if (should_work)
++				result = KSFT_FAIL;
++			else
++				result = KSFT_PASS;
+ 			break;
+ 		} else if (ret) {
+-			ksft_test_result_fail("PIN_LONGTERM_TEST_START failed (%s)\n",
+-					      strerror(errno));
++			ksft_print_msg("PIN_LONGTERM_TEST_START failed (%s)\n",
++				       strerror(errno));
++			result = KSFT_FAIL;
+ 			break;
+ 		}
+ 
+@@ -189,7 +214,10 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		 * some previously unsupported filesystems, we might want to
+ 		 * perform some additional tests for possible data corruptions.
+ 		 */
+-		ksft_test_result(should_work, "Should have worked\n");
++		if (should_work)
++			result = KSFT_PASS;
++		else
++			result = KSFT_FAIL;
+ 		break;
+ 	}
+ #ifdef LOCAL_CONFIG_HAVE_LIBURING
+@@ -199,8 +227,9 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 
+ 		/* io_uring always pins pages writable. */
+ 		if (shared && fs_is_unknown(fs_type)) {
+-			ksft_test_result_skip("Unknown filesystem\n");
+-			return;
++			ksft_print_msg("Unknown filesystem\n");
++			result = KSFT_SKIP;
++			goto report;
+ 		}
+ 		should_work = !shared ||
+ 			      fs_supports_writable_longterm_pinning(fs_type);
+@@ -208,8 +237,9 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		/* Skip on errors, as we might just lack kernel support. */
+ 		ret = io_uring_queue_init(1, &ring, 0);
+ 		if (ret < 0) {
+-			ksft_test_result_skip("io_uring_queue_init() failed (%s)\n",
+-					      strerror(-ret));
++			ksft_print_msg("io_uring_queue_init() failed (%s)\n",
++				       strerror(-ret));
++			result = KSFT_SKIP;
+ 			break;
+ 		}
+ 		/*
+@@ -222,17 +252,28 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		/* Only new kernels return EFAULT. */
+ 		if (ret && (errno == ENOSPC || errno == EOPNOTSUPP ||
+ 			    errno == EFAULT)) {
+-			ksft_test_result(!should_work, "Should have failed (%s)\n",
+-					 strerror(errno));
++			if (should_work) {
++				ksft_print_msg("Should have failed (%s)\n",
++					       strerror(errno));
++				result = KSFT_FAIL;
++			} else {
++				result = KSFT_PASS;
++			}
+ 		} else if (ret) {
+ 			/*
+ 			 * We might just lack support or have insufficient
+ 			 * MEMLOCK limits.
+ 			 */
+-			ksft_test_result_skip("io_uring_register_buffers() failed (%s)\n",
+-					      strerror(-ret));
++			ksft_print_msg("io_uring_register_buffers() failed (%s)\n",
++				       strerror(-ret));
++			result = KSFT_SKIP;
+ 		} else {
+-			ksft_test_result(should_work, "Should have worked\n");
++			if (should_work) {
++				result = KSFT_PASS;
++			} else {
++				ksft_print_msg("Should have worked\n");
++				result = KSFT_FAIL;
++			}
+ 			io_uring_unregister_buffers(&ring);
+ 		}
+ 
+@@ -246,21 +287,32 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 
+ munmap:
+ 	munmap(mem, size);
++report:
++	ksft_test_result(result, "%s\n", test_name);
+ }
+ 
+ typedef void (*test_fn)(int fd, size_t size);
+ 
++static void log_test_start(const char *name, ...)
++{
++	va_list args;
++	va_start(args, name);
++
++	vsnprintf(test_name, sizeof(test_name), name, args);
++	ksft_print_msg("[RUN] %s\n", test_name);
++
++	va_end(args);
++}
++
+ static void run_with_memfd(test_fn fn, const char *desc)
  {
-+	int ret = cpu_online_unaligned_access_init(cpu);
-+
-+	if (ret)
-+		return ret;
-+
- 	/* We are already set since the last check */
- 	if (per_cpu(misaligned_access_speed, cpu) != RISCV_HWPROBE_MISALIGNED_SCALAR_UNKNOWN) {
- 		goto exit;
-@@ -248,7 +253,6 @@ static int riscv_online_cpu(unsigned int cpu)
- 	{
- 		static struct page *buf;
+ 	int fd;
  
--		check_unaligned_access_emulated(NULL);
- 		buf = alloc_pages(GFP_KERNEL, MISALIGNED_BUFFER_ORDER);
- 		if (!buf) {
- 			pr_warn("Allocation failure, not measuring misaligned performance\n");
-@@ -439,6 +443,8 @@ static int __init check_unaligned_access_all_cpus(void)
- {
- 	int cpu;
+-	ksft_print_msg("[RUN] %s ... with memfd\n", desc);
++	log_test_start("%s ... with memfd", desc);
  
-+	unaligned_access_init();
+ 	fd = memfd_create("test", 0);
+-	if (fd < 0) {
+-		ksft_test_result_fail("memfd_create() failed (%s)\n", strerror(errno));
+-		return;
+-	}
++	if (fd < 0)
++		ksft_print_msg("memfd_create() failed (%s)\n", strerror(errno));
+ 
+ 	fn(fd, pagesize);
+ 	close(fd);
+@@ -271,23 +323,23 @@ static void run_with_tmpfile(test_fn fn, const char *desc)
+ 	FILE *file;
+ 	int fd;
+ 
+-	ksft_print_msg("[RUN] %s ... with tmpfile\n", desc);
++	log_test_start("%s ... with tmpfile", desc);
+ 
+ 	file = tmpfile();
+ 	if (!file) {
+-		ksft_test_result_fail("tmpfile() failed (%s)\n", strerror(errno));
+-		return;
+-	}
+-
+-	fd = fileno(file);
+-	if (fd < 0) {
+-		ksft_test_result_fail("fileno() failed (%s)\n", strerror(errno));
+-		goto close;
++		ksft_print_msg("tmpfile() failed (%s)\n", strerror(errno));
++		fd = -1;
++	} else {
++		fd = fileno(file);
++		if (fd < 0) {
++			ksft_print_msg("fileno() failed (%s)\n", strerror(errno));
++		}
+ 	}
+ 
+ 	fn(fd, pagesize);
+-close:
+-	fclose(file);
 +
- 	if (unaligned_scalar_speed_param != RISCV_HWPROBE_MISALIGNED_SCALAR_UNKNOWN) {
- 		pr_info("scalar unaligned access speed set to '%s' (%lu) by command line\n",
- 			speed_str[unaligned_scalar_speed_param], unaligned_scalar_speed_param);
++	if (file)
++		fclose(file);
+ }
+ 
+ static void run_with_local_tmpfile(test_fn fn, const char *desc)
+@@ -295,22 +347,22 @@ static void run_with_local_tmpfile(test_fn fn, const char *desc)
+ 	char filename[] = __FILE__"_tmpfile_XXXXXX";
+ 	int fd;
+ 
+-	ksft_print_msg("[RUN] %s ... with local tmpfile\n", desc);
++	log_test_start("%s ... with local tmpfile", desc);
+ 
+ 	fd = mkstemp(filename);
+-	if (fd < 0) {
+-		ksft_test_result_fail("mkstemp() failed (%s)\n", strerror(errno));
+-		return;
+-	}
++	if (fd < 0)
++		ksft_print_msg("mkstemp() failed (%s)\n", strerror(errno));
+ 
+ 	if (unlink(filename)) {
+-		ksft_test_result_fail("unlink() failed (%s)\n", strerror(errno));
+-		goto close;
++		ksft_print_msg("unlink() failed (%s)\n", strerror(errno));
++		close(fd);
++		fd = -1;
+ 	}
+ 
+ 	fn(fd, pagesize);
+-close:
+-	close(fd);
++
++	if (fd >= 0)
++		close(fd);
+ }
+ 
+ static void run_with_memfd_hugetlb(test_fn fn, const char *desc,
+@@ -319,15 +371,14 @@ static void run_with_memfd_hugetlb(test_fn fn, const char *desc,
+ 	int flags = MFD_HUGETLB;
+ 	int fd;
+ 
+-	ksft_print_msg("[RUN] %s ... with memfd hugetlb (%zu kB)\n", desc,
++	log_test_start("%s ... with memfd hugetlb (%zu kB)", desc,
+ 		       hugetlbsize / 1024);
+ 
+ 	flags |= __builtin_ctzll(hugetlbsize) << MFD_HUGE_SHIFT;
+ 
+ 	fd = memfd_create("test", flags);
+ 	if (fd < 0) {
+-		ksft_test_result_skip("memfd_create() failed (%s)\n", strerror(errno));
+-		return;
++		ksft_print_msg("memfd_create() failed (%s)\n", strerror(errno));
+ 	}
+ 
+ 	fn(fd, hugetlbsize);
+
+---
+base-commit: 82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3
+change-id: 20250514-selftests-mm-gup-longterm-dups-68aa4e0fcc88
+
+Best regards,
 -- 
-2.49.0
+Mark Brown <broonie@kernel.org>
 
