@@ -1,62 +1,62 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712CC289E2B
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 08:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9056C28A735
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 08:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747297431; cv=none; b=MlEUa0OVArL1LrY7Xt/AqhGmsEPFQo18uVOO0JpTw/vKzH5o0xgq4Fu1d8eYbK9Dv2nfXa90iEGYzimgVKvai8UaNI7+VLxqswXPenUrH5F9vqqSsBXCUWIuumWd0VAcNq8cI6yWDkYEvS8XSDpd/zsMk00mw3f3MJ0EJ65Kw2g=
+	t=1747297432; cv=none; b=ZyCRsOQoAgN/zPyImbHz8MHHr6Jlir/sPvuH77LhPrRzjvlF7MBXoveOLxyaV+OhbVrCtEjLe74nv+t+s6OLVYXRbJRnOJ+MyLcDV9LcQdujGmW6gSNzcZOUQnEcTGo9r87Of9uJ/bx/+Ds+ySQ+/3EoQnn0w5Fw4JoWGrXdUy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747297431; c=relaxed/simple;
-	bh=a4HmXbZsUXBGVxOtLEuaSzvGsxTBPYeLxEetHvR5itM=;
+	s=arc-20240116; t=1747297432; c=relaxed/simple;
+	bh=IrQydkaY6DjwPRJK+9IUCeQaVW2h03QqX2m5JrkLHsM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k744xtMKUkpMFXY1XkdP8Zg9plWjPmoW4qpBCjSAhwREb4IiTpNUMF+Mqd2VH6QmEsjdV88RR9bM2NI35tOECQZgiEAbtMgtJkWPk+JeIIW5H/t4paWPeqEukwR7siHImrP/RnYs68fL0dDAAAMDdiWJGvuzzPD8+edjKCgPRK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=BOEqXedG; arc=none smtp.client-ip=209.85.128.49
+	 MIME-Version:Content-Type; b=ge2zKGj7SF1fbMR89C7wbuvoy0ihrzbGDS+pV4E6POuwLhmMKp5s7b99bnBt23wt4UJEs8Hs929vM2VURoFKP6XnUQmZeAMLSfVEEuy+l8xjTOtax/arnWa0Q4SmbkOeRlokhTKlemeAFXohlhdVgxUEFqOgAtZPL0lhWg8F5FU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=FcHH/svy; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="BOEqXedG"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-442ccf0e1b3so7911575e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 01:23:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="FcHH/svy"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3a1f8c85562so371401f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 May 2025 01:23:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1747297425; x=1747902225; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1747297429; x=1747902229; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GthJpHk7CYaw8f95HNVaUdqkaGIjKWsbIYnr+62Txtw=;
-        b=BOEqXedGgKBrqtt6+QDX0qKChGPFjJzR+fX1Qb9EUvVY9PCc//lb/ltgncyEroOSYA
-         nB/N39aWg32Y37VSFupzZmcxqHQa4zY1Eg6EIytHx4/tLuNIGmdX7WADYd/dQoCcWtq4
-         jq9vDYIo69Bag2XuHEnT/mWx9N1VVWZATJA00yjmChuW+LZwb8rfoGtqdfhqI58p9UBE
-         tDYTrkZmreUzchxg8HGqp2DobGihtsB+Z4F5WWkZsx2mPa6b+sYZyyrvDM1TiN1dxiR8
-         gCr3PBV0m/zpkqHZTS2vmnKeFy6wYD6FN7jrq5OOYS2Ecbh6mIjg1VCXLgs91x/IfXVo
-         /8Tw==
+        bh=JOCKOWdc9Rm9mheK+/kf775/MsCKzvlzcdVw7vqLpnQ=;
+        b=FcHH/svyXIzVPxmjz6E+H53OWL+Onrh21R0zhbBna5NB2i+ay4FR4Dv+A1QmprWHgj
+         ZMNiC6xrYmz8eDiBxmtgCByHemxlduCT4hgABSEsgsA0xV/efa9GcsQC0Ld3EkUkxiO0
+         F7KKMyrRSMSjacHrYnN7OSDBI1ZrGBpzehncjhzG1K54zc+XZMPp52uqL3ud94DDOLaM
+         1JeOV6ln6TUOth3iOjczsLzIr5cZxlMVagKRCxQ4/jxvN7g0IReoOJl/LUnwfvtckx2W
+         Q/NjNXlpcvIUkxNULgooLXUJBYL0PHrQ68x3KfECe3r42HuSdsm7vyOUbgYneKAVRl6a
+         hG6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747297425; x=1747902225;
+        d=1e100.net; s=20230601; t=1747297429; x=1747902229;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GthJpHk7CYaw8f95HNVaUdqkaGIjKWsbIYnr+62Txtw=;
-        b=bPFY7dWxs1N7+5f8HozQ3Wti5GUmW2A1dNZVYs/IhKU9NlXs1VQZJwjIIhlTDK4oMG
-         2DAnjtBCfc7SDqWKIsM4jGci9jCbfMcZ8rG2W0e/F6uD5tM9o1m2XHMS+mlhXAWvBDs3
-         1rqL89rC4CnarcCb3hIVfud3iUC9XWQQToa5lZzLv8scMapSqQ03tSs8ZpLJnHEbUzIs
-         SQBbPHe5kFd12G+Dkvts73OhBpduUlzWCJQ4Miv8vCAjsusajup7oRIvYdhovG1pP6KB
-         UgwXvBNrYPyeYHAbys2Imu05JyutJ4F/SS5Sp3xWDa+jepHNAmJe36abV4X0iizdCE/A
-         u15A==
-X-Forwarded-Encrypted: i=1; AJvYcCUq9FA6qzeZILWmQV17H267sw7Y971cMiW5FOi5igtptDOu3mSvydFfEpjwqswU0zMUqMU3QG/+M/fYIyHdG/s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnFc7U4afLmCgSpqPlXrs32iySJtLnYbXrc5zKLixdC5wpCZug
-	eqPa7NlmrXTYY5FLFH9IUXd0T0BfHBDZPi9ZqCwZ64Jxqs38jQB08v3gD5KXW9s=
-X-Gm-Gg: ASbGncs7zFnuBYdsFJoO5mHOCQxcoGH2DIKy1bAerEPwtT3OEV/tqUxg5C7rMfEIDvN
-	hrIBDGtZ0giOOR1tIM9GGJgOietQFtIF2JeH6gNaLJqukoUmb1w8sQPvleUFRlmXet7NSbC/NzX
-	t22B9jRF26DuWqS8hFMZO5KrvEb12xIU+qxDztF5U7lQgSWyNOCRT9V7uewOackH5prn247AdBl
-	KEpcNQi98y2FPuS2YjRSzZQUXY9gTOOt0dUIJFmsGtxPBO36AivCfibA8/03ibVBH6HwoIqxex7
-	tiJvh3BatoxT23+Vh30BfuyKosX9tzZdXdFTICZkvIGE7Ks3jF4=
-X-Google-Smtp-Source: AGHT+IH7x3YD3rfJ1K3d7RT3c2JHqxBPnyHoNq9PzYlNLe+gbgjdmPJmhvvDoyxbPRh62T/5hHxcIw==
-X-Received: by 2002:a05:600c:c09:b0:43d:82c:2b23 with SMTP id 5b1f17b1804b1-442f2168c29mr50336365e9.23.1747297424728;
-        Thu, 15 May 2025 01:23:44 -0700 (PDT)
+        bh=JOCKOWdc9Rm9mheK+/kf775/MsCKzvlzcdVw7vqLpnQ=;
+        b=H7hxGyCtmjtB0wIW0DKVJmkVseBnpe2o5AS7vE0cq1aIn/7QBI3wYvxOZJi5FyB837
+         gbIHj7Qg9AHINdAfgwCrrspds6joPbLydG56ynk46zAF9tc4SDLBlHWwzgxwRpsp2gzL
+         iEseWPRbkTOzUXO5WJpmopLcg2siUehJ7fwkCf+PxCGgI5oAQGproszi8lSxlZMQOBl4
+         5N+TVU37wOwubapia34a207zpYXICHVE1Hm/v5zweHBMSBMFOD4SEg1Id6HX+GIMbVPX
+         6MTTRBmXBcFmpedtSZ7ADNdE/hYjXXaJPv6f5pTBXb2Z0u6uWBe194vXRtahNrTAnpvI
+         xyCw==
+X-Forwarded-Encrypted: i=1; AJvYcCWdRaDqP4xG4JR6e9/EK7dO7cWazqJHDkS5eYs1l/USFNuKuGe9FRrmH3INT93IOotLwcxy29YZF10RuPB7KN0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcUidw3uAfPY7enEA1xxLuSvAKq3VeMRCUw1U0caWh4MPEVxyf
+	kHVwzazZGP8XUzYPnSql1BxU9LxS9ZzD/jl7oBXVbgtYbMVUJ6toxmdizCNLzWM=
+X-Gm-Gg: ASbGncvI9B2OSR7AMZuasML/wSvm9CDjIxSZ28dnPhapo5fcJDaMcHiLY/dHCoFwgKJ
+	xExsTKFMl9ANBj7nKZqHptBI3y0Aew78TKntGW6cjlI1AZLFUXdrKNstrjE95wBZVdD5Lh8To/r
+	JqGPtPszaJJvI1clAj6/obTXoNhm0BkgPbOOLmS1o8VqkqcmVg8KsH/u8DbBaN8CCH3uF6BSItY
+	zMDs1HIge641ZbxCKwRLwI8WjgWQ5UAPn/LGVKcm0OVjqIvKa0T9rgc+ysxi9YQQ+e0RFHRL9XO
+	fCrMDgr8xFBNzR/Kpt9zgdzDreO4sv7Rue3hyBkkaf75gXege0c=
+X-Google-Smtp-Source: AGHT+IEDgFHO6gLcxW55XNJ4ZpshV/UtxVM8HE5Xz/T24HqOjUp3uFD1+/lwkhut6j4hCuDDjciWCg==
+X-Received: by 2002:a05:6000:1ac6:b0:3a1:fd29:b892 with SMTP id ffacd0b85a97d-3a3537b4926mr1265289f8f.49.1747297428847;
+        Thu, 15 May 2025 01:23:48 -0700 (PDT)
 Received: from carbon-x1.. ([91.197.138.148])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442f395166fsm59310785e9.18.2025.05.15.01.23.43
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442f395166fsm59310785e9.18.2025.05.15.01.23.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 01:23:44 -0700 (PDT)
+        Thu, 15 May 2025 01:23:47 -0700 (PDT)
 From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
 To: Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -75,9 +75,9 @@ Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
 	Andrew Jones <ajones@ventanamicro.com>,
 	Deepak Gupta <debug@rivosinc.com>,
 	Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v7 01/14] riscv: sbi: add Firmware Feature (FWFT) SBI extensions definitions
-Date: Thu, 15 May 2025 10:22:02 +0200
-Message-ID: <20250515082217.433227-2-cleger@rivosinc.com>
+Subject: [PATCH v7 04/14] riscv: sbi: add FWFT extension interface
+Date: Thu, 15 May 2025 10:22:05 +0200
+Message-ID: <20250515082217.433227-5-cleger@rivosinc.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250515082217.433227-1-cleger@rivosinc.com>
 References: <20250515082217.433227-1-cleger@rivosinc.com>
@@ -90,77 +90,115 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The Firmware Features extension (FWFT) was added as part of the SBI 3.0
-specification. Add SBI definitions to use this extension.
+This SBI extensions enables supervisor mode to control feature that are
+under M-mode control (For instance, Svadu menvcfg ADUE bit, Ssdbltrp
+DTE, etc). Add an interface to set local features for a specific cpu
+mask as well as for the online cpu mask.
 
 Signed-off-by: Clément Léger <cleger@rivosinc.com>
-Reviewed-by: Samuel Holland <samuel.holland@sifive.com>
-Tested-by: Samuel Holland <samuel.holland@sifive.com>
-Reviewed-by: Deepak Gupta <debug@rivosinc.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 Reviewed-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/include/asm/sbi.h | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ arch/riscv/include/asm/sbi.h | 17 +++++++++++
+ arch/riscv/kernel/sbi.c      | 57 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 74 insertions(+)
 
 diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-index 3d250824178b..bb077d0c912f 100644
+index 0938f2a8d01b..341e74238aa0 100644
 --- a/arch/riscv/include/asm/sbi.h
 +++ b/arch/riscv/include/asm/sbi.h
-@@ -35,6 +35,7 @@ enum sbi_ext_id {
- 	SBI_EXT_DBCN = 0x4442434E,
- 	SBI_EXT_STA = 0x535441,
- 	SBI_EXT_NACL = 0x4E41434C,
-+	SBI_EXT_FWFT = 0x46574654,
+@@ -503,6 +503,23 @@ int sbi_remote_hfence_vvma_asid(const struct cpumask *cpu_mask,
+ 				unsigned long asid);
+ long sbi_probe_extension(int ext);
  
- 	/* Experimentals extensions must lie within this range */
- 	SBI_EXT_EXPERIMENTAL_START = 0x08000000,
-@@ -402,6 +403,33 @@ enum sbi_ext_nacl_feature {
- #define SBI_NACL_SHMEM_SRET_X(__i)		((__riscv_xlen / 8) * (__i))
- #define SBI_NACL_SHMEM_SRET_X_LAST		31
++int sbi_fwft_set(u32 feature, unsigned long value, unsigned long flags);
++int sbi_fwft_set_cpumask(const cpumask_t *mask, u32 feature,
++			 unsigned long value, unsigned long flags);
++/**
++ * sbi_fwft_set_online_cpus() - Set a feature on all online cpus
++ * @feature: The feature to be set
++ * @value: The feature value to be set
++ * @flags: FWFT feature set flags
++ *
++ * Return: 0 on success, appropriate linux error code otherwise.
++ */
++static inline int sbi_fwft_set_online_cpus(u32 feature, unsigned long value,
++					   unsigned long flags)
++{
++	return sbi_fwft_set_cpumask(cpu_online_mask, feature, value, flags);
++}
++
+ /* Check if current SBI specification version is 0.1 or not */
+ static inline int sbi_spec_is_0_1(void)
+ {
+diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+index 1d44c35305a9..818efafdc8e9 100644
+--- a/arch/riscv/kernel/sbi.c
++++ b/arch/riscv/kernel/sbi.c
+@@ -299,6 +299,63 @@ static int __sbi_rfence_v02(int fid, const struct cpumask *cpu_mask,
+ 	return 0;
+ }
  
-+/* SBI function IDs for FW feature extension */
-+#define SBI_EXT_FWFT_SET		0x0
-+#define SBI_EXT_FWFT_GET		0x1
-+
-+enum sbi_fwft_feature_t {
-+	SBI_FWFT_MISALIGNED_EXC_DELEG		= 0x0,
-+	SBI_FWFT_LANDING_PAD			= 0x1,
-+	SBI_FWFT_SHADOW_STACK			= 0x2,
-+	SBI_FWFT_DOUBLE_TRAP			= 0x3,
-+	SBI_FWFT_PTE_AD_HW_UPDATING		= 0x4,
-+	SBI_FWFT_POINTER_MASKING_PMLEN		= 0x5,
-+	SBI_FWFT_LOCAL_RESERVED_START		= 0x6,
-+	SBI_FWFT_LOCAL_RESERVED_END		= 0x3fffffff,
-+	SBI_FWFT_LOCAL_PLATFORM_START		= 0x40000000,
-+	SBI_FWFT_LOCAL_PLATFORM_END		= 0x7fffffff,
-+
-+	SBI_FWFT_GLOBAL_RESERVED_START		= 0x80000000,
-+	SBI_FWFT_GLOBAL_RESERVED_END		= 0xbfffffff,
-+	SBI_FWFT_GLOBAL_PLATFORM_START		= 0xc0000000,
-+	SBI_FWFT_GLOBAL_PLATFORM_END		= 0xffffffff,
++struct fwft_set_req {
++	u32 feature;
++	unsigned long value;
++	unsigned long flags;
++	atomic_t error;
 +};
 +
-+#define SBI_FWFT_PLATFORM_FEATURE_BIT		BIT(30)
-+#define SBI_FWFT_GLOBAL_FEATURE_BIT		BIT(31)
++static void cpu_sbi_fwft_set(void *arg)
++{
++	struct fwft_set_req *req = arg;
++	int ret;
 +
-+#define SBI_FWFT_SET_FLAG_LOCK			BIT(0)
++	ret = sbi_fwft_set(req->feature, req->value, req->flags);
++	if (ret)
++		atomic_set(&req->error, ret);
++}
 +
- /* SBI spec version fields */
- #define SBI_SPEC_VERSION_DEFAULT	0x1
- #define SBI_SPEC_VERSION_MAJOR_SHIFT	24
-@@ -419,6 +447,11 @@ enum sbi_ext_nacl_feature {
- #define SBI_ERR_ALREADY_STARTED -7
- #define SBI_ERR_ALREADY_STOPPED -8
- #define SBI_ERR_NO_SHMEM	-9
-+#define SBI_ERR_INVALID_STATE	-10
-+#define SBI_ERR_BAD_RANGE	-11
-+#define SBI_ERR_TIMEOUT		-12
-+#define SBI_ERR_IO		-13
-+#define SBI_ERR_DENIED_LOCKED	-14
- 
- extern unsigned long sbi_spec_version;
- struct sbiret {
++/**
++ * sbi_fwft_set() - Set a feature on the local hart
++ * @feature: The feature ID to be set
++ * @value: The feature value to be set
++ * @flags: FWFT feature set flags
++ *
++ * Return: 0 on success, appropriate linux error code otherwise.
++ */
++int sbi_fwft_set(u32 feature, unsigned long value, unsigned long flags)
++{
++	return -EOPNOTSUPP;
++}
++
++/**
++ * sbi_fwft_set_cpumask() - Set a feature for the specified cpumask
++ * @mask: CPU mask of cpus that need the feature to be set
++ * @feature: The feature ID to be set
++ * @value: The feature value to be set
++ * @flags: FWFT feature set flags
++ *
++ * Return: 0 on success, appropriate linux error code otherwise.
++ */
++int sbi_fwft_set_cpumask(const cpumask_t *mask, u32 feature,
++			       unsigned long value, unsigned long flags)
++{
++	struct fwft_set_req req = {
++		.feature = feature,
++		.value = value,
++		.flags = flags,
++		.error = ATOMIC_INIT(0),
++	};
++
++	if (feature & SBI_FWFT_GLOBAL_FEATURE_BIT)
++		return -EINVAL;
++
++	on_each_cpu_mask(mask, cpu_sbi_fwft_set, &req, 1);
++
++	return atomic_read(&req.error);
++}
++
+ /**
+  * sbi_set_timer() - Program the timer for next timer event.
+  * @stime_value: The value after which next timer event should fire.
 -- 
 2.49.0
 
