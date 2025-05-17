@@ -1,133 +1,111 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C4E280A3B
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 May 2025 23:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B196427470;
+	Sat, 17 May 2025 01:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747439908; cv=none; b=oT2c7Hgt9jNL0MyKefF+bYn9RTt/lKi8evxcZB702MGTMnecpTCNoleR0wyy+Xd8aCB4aoH4FpVAd1QWuEyy3c78NswP41oe84CwmwlqOtsNo8h3J7aAmQ6H6DHCLtPQP6YHn5iJUAoY0xWXzZ2zOsfvQpgfHHh6DQnKuOoudwk=
+	t=1747444801; cv=none; b=AmSIpqHfIS/NWAzPMxbG0iicW33Znt6z0xCX1ygVn0vlTXzPtR4fWg5N2hZq2qGIwALv9poXl9jmhMpAkJ0jLNVsjOlQQ5q5vi3dHbKMg2WAdOqaKywX6MW+6DyRa1VBTOxOJioiu4yqaPVlwxvqxzVYZV2Il41vegkftlXLSi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747439908; c=relaxed/simple;
-	bh=pwVKSSy58H8/xVINe4a7dwbXnm8QeMVTsphrYZUu1Zo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MiExSsUe3UyMa5moTphqcSMqbqaGUJ5WBdxmUHdT3neu3uNnYXG1EY/jLK6OIRi9+qEwyeFX8kmSvuh6WJZsC3Y62w5gFeYdF0isEdBk2K7y81aiE6Gmuu6Smy/yYkGqsGCn9Q8TWZrdoFSTVyXZSlBArr0CkRzuDCRXW+z2+FQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pX95yTsD; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1747444801; c=relaxed/simple;
+	bh=YsKePZvqTWlFr6OhKrqVUpzRgw0bdJvrf5A8NoOOoKU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZxS/LjbSaJ55PWkd4+E9WyQACnvxKTTbc/17wjKQKeLtak0yz8c3G8BV83JBjDT19u0O2Ck6jFLYKm70bcW5LQXkVZ5neN1nqPCk+KkHOA4xvX8SN2/z21Bu2OkLnHcwwe6VLphfjGqTKcqfAYT1zqVKvlpC3hZgmpHvSj5kZ7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RcWuqE15; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pX95yTsD"
-Message-ID: <8b11ba85-0c95-4b7a-9206-ead8099bc013@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1747439893;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EPRT6tmwQEpVbRbwRNdU0oFUqb9qQTxFeTyAspVLMs8=;
-	b=pX95yTsDC3Ric+OnlCcVjjaBGP/p5qYQc46Vf3I4fAWFDb9NCt2l1vd9/H9mIMO1VrYswD
-	6r3aU+1unjr5BQbqbkiPagtLp0NahXy+wMkgs4QbcfWls7AGoRy3phBMvUGtzMllVJvgx/
-	/jv5Z0DY7BE2UvE65VhP7vtvmFGu6b4=
-Date: Fri, 16 May 2025 16:57:47 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RcWuqE15"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7c546334bdeso223875485a.2;
+        Fri, 16 May 2025 18:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747444798; x=1748049598; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w5B2LV4vwIzx30sEcS8DzEw+CgYVXQvdv+JneouFlZM=;
+        b=RcWuqE15k9bMZYBFKZf5C7VIc7j6zB7PDCofa71DHj0q+Q4ABI1FdzJPsTJYAHrOXb
+         BpcRDVNYY2dMEifONaSRqOlXu5uvFvVcjJAkH4uQFvrJXaAlKyhL0XfBIbMh4fColC3U
+         9YtoDKKSkIBHLFdbY2l5Ya54ytlRz0A5UFAwxihgK+xOfRdglZolC+Dt3Uufu6/LAThG
+         IZ0lg6SBxM5KGc/LHkQlcvJpAaiNDeBXj2Kkkpy+z5DxuByqqXT/UsDHqBaWAkz+reRa
+         tNB4x6G4JofN0qoBSIn+57ls+QOy4kOs5QeWECEF97GYycHaIN1a6EE4Mzs6osrn90ZL
+         jJzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747444798; x=1748049598;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w5B2LV4vwIzx30sEcS8DzEw+CgYVXQvdv+JneouFlZM=;
+        b=AnJsMXRguAmWitNSuDBx11S7lTWCr9C81GrfsNnAutwjjHEAm8wPkBgwuP7sRlh7le
+         kwYUPHZ5lpCpX0AVgbY/v20KUWwQ5BEOsIJ8A3tyN306Esp6yPcuo3x1MhqHi9Za6FFv
+         taLZLe2on74DigI7iI3eJ1KWxiNEB2OWa+TABHyC/BYyLvfHZR4A1VUJBfKMm+qBRbQJ
+         Q1TFCe4XqiykdK8z3VYCFNc8ncUZWZqwyr0UMzmU7EiBnijlDdERGKlR7DBB4uXJB8fb
+         OXtoKdNK5Kv+wgLThOD+qT+AABQpiAXwvZlrJ5yw8ljHv9wGASIqlYjHOcjifOszzaO7
+         tcgA==
+X-Forwarded-Encrypted: i=1; AJvYcCVetDr6iqyEU1QwozUz+0CS9mNEco2sZGez4HE4XoFoRcid6UoddTyCjPtgubVHCImAQEbqQ3EtrPySPBY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsaBMa6ign5ph67t4nElFlVrmf9dB8O3OmTA8+PsKE8dPE9gFD
+	54NVST6BCRHSx9QVXjwCnG4KLoxm4gsEdHYpsMWfQ7Xcsl28idXlrw8=
+X-Gm-Gg: ASbGnctOkjyB7/hiusO41cI0C2H2F5zJZ/CpV/qZ6Z3uJitoesBRRHvlvNcAUI7w4Vy
+	Zjx68EYNZPIQxrVrEPCW2bFEQGsKvaF0++pWGe38wU2Oluh/l2Vc/cVxk18CIXiFXJoPm1d10cK
+	zhz2SUuHJaNMxjDZZo4y0sr4SeXLlAt2Q5AAziOaQ96QOiohJKHpl9+S6Dxgr0t9JuIC5v8R1lZ
+	ClB7XnzFcXZkLFF6rxrygMg27zHeo5UcR1kT9/z89IyUXnLuV2mEV5YgprGDRLGYGzMlngCh48s
+	L0dR0mZH0zLpRW+VBWYEQNeMeXK7oMUDP0A9YvwE3EvyzUyarWEyUfpbkxp6MK6eFNO5kkrRi0g
+	oskY9JDLyORU=
+X-Google-Smtp-Source: AGHT+IFt20saecnFbFsogWIYjVcuzAeRTdiKaetLRfG3JsrhwZZoQ7Zn+HfpuPK+p1/FbmaM+ZtRzA==
+X-Received: by 2002:a05:620a:1794:b0:7ca:dac1:a2d9 with SMTP id af79cd13be357-7cd47f63fbbmr635936685a.28.1747444798604;
+        Fri, 16 May 2025 18:19:58 -0700 (PDT)
+Received: from localhost.localdomain ([2a0d:e487:224f:4011:50ae:ea20:4b60:8f04])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7cd468cc89fsm186790385a.105.2025.05.16.18.19.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 May 2025 18:19:58 -0700 (PDT)
+From: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+To: skhan@linuxfoundation.org,
+	shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	jihed.chaibi.dev@gmail.com
+Subject: [PATCH 1/1] Fix typo in cpu-on-off-test selftest script:
+Date: Sat, 17 May 2025 03:19:28 +0200
+Message-Id: <20250517011928.673585-1-jihed.chaibi.dev@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v7 14/14] RISC-V: KVM: add support for
- SBI_FWFT_MISALIGNED_DELEG
-To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
- Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org
-Cc: Samuel Holland <samuel.holland@sifive.com>,
- Andrew Jones <ajones@ventanamicro.com>, Deepak Gupta <debug@rivosinc.com>
-References: <20250515082217.433227-1-cleger@rivosinc.com>
- <20250515082217.433227-15-cleger@rivosinc.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Atish Patra <atish.patra@linux.dev>
-In-Reply-To: <20250515082217.433227-15-cleger@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 5/15/25 1:22 AM, ClÃ©ment LÃ©ger wrote:
-> SBI_FWFT_MISALIGNED_DELEG needs hedeleg to be modified to delegate
-> misaligned load/store exceptions. Save and restore it during CPU
-> load/put.
-> 
-> Signed-off-by: Clément Léger <cleger@rivosinc.com>
-> Reviewed-by: Deepak Gupta <debug@rivosinc.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->   arch/riscv/kvm/vcpu_sbi_fwft.c | 41 ++++++++++++++++++++++++++++++++++
->   1 file changed, 41 insertions(+)
-> 
-> diff --git a/arch/riscv/kvm/vcpu_sbi_fwft.c b/arch/riscv/kvm/vcpu_sbi_fwft.c
-> index b0f66c7bf010..6770c043bbcb 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_fwft.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_fwft.c
-> @@ -14,6 +14,8 @@
->   #include <asm/kvm_vcpu_sbi.h>
->   #include <asm/kvm_vcpu_sbi_fwft.h>
->   
-> +#define MIS_DELEG (BIT_ULL(EXC_LOAD_MISALIGNED) | BIT_ULL(EXC_STORE_MISALIGNED))
-> +
->   struct kvm_sbi_fwft_feature {
->   	/**
->   	 * @id: Feature ID
-> @@ -68,7 +70,46 @@ static bool kvm_fwft_is_defined_feature(enum sbi_fwft_feature_t feature)
->   	return false;
->   }
->   
-> +static bool kvm_sbi_fwft_misaligned_delegation_supported(struct kvm_vcpu *vcpu)
-> +{
-> +	return misaligned_traps_can_delegate();
-> +}
-> +
-> +static long kvm_sbi_fwft_set_misaligned_delegation(struct kvm_vcpu *vcpu,
-> +					struct kvm_sbi_fwft_config *conf,
-> +					unsigned long value)
-> +{
-> +	struct kvm_vcpu_config *cfg = &vcpu->arch.cfg;
-> +
-> +	if (value == 1) {
-> +		cfg->hedeleg |= MIS_DELEG;
-> +		csr_set(CSR_HEDELEG, MIS_DELEG);
-> +	} else if (value == 0) {
-> +		cfg->hedeleg &= ~MIS_DELEG;
-> +		csr_clear(CSR_HEDELEG, MIS_DELEG);
-> +	} else {
-> +		return SBI_ERR_INVALID_PARAM;
-> +	}
-> +
-> +	return SBI_SUCCESS;
-> +}
-> +
-> +static long kvm_sbi_fwft_get_misaligned_delegation(struct kvm_vcpu *vcpu,
-> +					struct kvm_sbi_fwft_config *conf,
-> +					unsigned long *value)
-> +{
-> +	*value = (csr_read(CSR_HEDELEG) & MIS_DELEG) == MIS_DELEG;
-> +
-> +	return SBI_SUCCESS;
-> +}
-> +
->   static const struct kvm_sbi_fwft_feature features[] = {
-> +	{
-> +		.id = SBI_FWFT_MISALIGNED_EXC_DELEG,
-> +		.supported = kvm_sbi_fwft_misaligned_delegation_supported,
-> +		.set = kvm_sbi_fwft_set_misaligned_delegation,
-> +		.get = kvm_sbi_fwft_get_misaligned_delegation,
-> +	},
->   };
->   
->   static struct kvm_sbi_fwft_config *
+Fix typo in hotplaggable_offline_cpus function name:
 
-LGTM.
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+"hotplaggable" is replaced by "hotpluggable"
+
+Signed-off-by: Jihed Chaibi <jihed.chaibi.dev@gmail.com>
+---
+ tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+index d5dc7e0dc..6232a46ca 100755
+--- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
++++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+@@ -67,7 +67,7 @@ hotpluggable_cpus()
+ 	done
+ }
+ 
+-hotplaggable_offline_cpus()
++hotpluggable_offline_cpus()
+ {
+ 	hotpluggable_cpus 0
+ }
+@@ -151,7 +151,7 @@ offline_cpu_expect_fail()
+ 
+ online_all_hot_pluggable_cpus()
+ {
+-	for cpu in `hotplaggable_offline_cpus`; do
++	for cpu in `hotpluggable_offline_cpus`; do
+ 		online_cpu_expect_success $cpu
+ 	done
+ }
+-- 
+2.39.5
+
