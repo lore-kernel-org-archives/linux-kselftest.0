@@ -1,68 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F9F4B1E5E;
-	Mon, 19 May 2025 23:48:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC998AD4B;
+	Tue, 20 May 2025 01:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747698528; cv=none; b=Fg3OORQcQoj4ppo0pmC+QFG9UAulEV0hL5eJ+FGeQjXXCvNxwHY50NxYyk76Y/8oLJE5IXgC5PVRIFQOrTYeiH5ZNJBmYJEbUOzqR5RHJHoubgrfxFLcCFxgclshD0Yj3iNSireYC3dSYOOmdOhTgph2SqaTMGbzfsyIFxXX2Gg=
+	t=1747704604; cv=none; b=QTTpWaUkhtjEwVsbXtejjlPuOlheZyQ261UEOOD4QGYwpHAFE2k7uANKQjBFlRrwsux+qavUF027QkVpsHWyrPuyD/d3ymkdaaIAO26T9cNTrrx53Ocn00jqiqlom+rfyH5dhpjNiWk21BfncIoqu2Lr2BYAfoY/89uf32KKAa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747698528; c=relaxed/simple;
-	bh=KY1eMq/GYCaPfzTkzeeKII/x7ctTj9mKeTjTe1ksYQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cDqTlc2CdnSOVVBZEEK2iH1oU6cyeR6FrQo5k+I7Jdsre1YRgWmLvnP/ceiDPQz5oehVEcPZ2yUoCJQ5cc7UiodnzhjOcYyftLnKfhwLDPUAWp88buUqkfCx1In8rBh8A4vBzddjCQzS4HnBWdxJclrcWukBBGKU3TFN1E+yYI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JfTUfceC; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JfTUfceC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3110DC4CEED;
-	Mon, 19 May 2025 23:48:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747698527;
-	bh=KY1eMq/GYCaPfzTkzeeKII/x7ctTj9mKeTjTe1ksYQE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JfTUfceCoa6lkj7bKXecnZoPZPki2zZjT0xTf1jakn8U9GrVa0efdOwsbV1YblNdL
-	 +/hQYHBNtG8Eel3jwrPlnDZBhIVlatLBuxGMoEJu9jYPjm8Xb/hPdojjLo4VtINz8j
-	 hJ3vFKFxQwnrvQIhTEsaImnzW5voGbmZjPPkaZAh3ev8lgLbj9u77cabFlgncuM1d3
-	 E0fekisSWd1Iv9F8QdGd8EfXxdiZnLPLCtMiMw7S2wtajmeQ8vEq1T37wrgASJkoRb
-	 yIgldeav/X7arKnYC73NjPGoBz2ritOrQiO54ljTzTo2ZpyxpBD9ARxshS2RM7KIYH
-	 QXQ/yLQwbZHSw==
-Date: Mon, 19 May 2025 16:48:46 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Ilias
- Apalodimas <ilias.apalodimas@linaro.org>, Neal Cardwell
- <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, David Ahern
- <dsahern@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan
- <shuah@kernel.org>, sdf@fomichev.me, ap420073@gmail.com, praan@google.com,
- shivajikant@google.com
-Subject: Re: [PATCH net-next v1 5/9] net: devmem: ksft: add ipv4 support
-Message-ID: <20250519164846.40cd01e4@kernel.org>
-In-Reply-To: <20250519023517.4062941-6-almasrymina@google.com>
-References: <20250519023517.4062941-1-almasrymina@google.com>
-	<20250519023517.4062941-6-almasrymina@google.com>
+	s=arc-20240116; t=1747704604; c=relaxed/simple;
+	bh=lLgyxHLN0HABypQaaKZ0ZY1XaCd2eLBbA4OldzWkMuI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=gNDscIndXxSRpNcxiRO4RwurqTejOLqEq72/D9YqSbrH7jesGCFBqnNVJHAfXZvyBcUC+JFaHJOln2zi4bbqbhNokNeJ61TK6VnvTX4zT+24t3Dx8QYc38FIzCmMrMauDdn9ldeYPfnNeivzghTWa9l4E4lF08zvytADVsS53ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.2.5.213])
+	by gateway (Coremail) with SMTP id _____8Bx22oX2ytoV8zyAA--.30047S3;
+	Tue, 20 May 2025 09:29:59 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.213])
+	by front1 (Coremail) with SMTP id qMiowMDxPcUS2ytoy1ziAA--.54307S3;
+	Tue, 20 May 2025 09:29:58 +0800 (CST)
+From: Bibo Mao <maobibo@loongson.cn>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Sean Christopherson <seanjc@google.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH v12 1/5] KVM: selftests: Add VM_MODE_P47V47_16K VM mode
+Date: Tue, 20 May 2025 09:29:50 +0800
+Message-Id: <20250520012954.1785088-2-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20250520012954.1785088-1-maobibo@loongson.cn>
+References: <20250520012954.1785088-1-maobibo@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMDxPcUS2ytoy1ziAA--.54307S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+	nUUI43ZEXa7xR_UUUUUUUUU==
 
-On Mon, 19 May 2025 02:35:13 +0000 Mina Almasry wrote:
-> +    addr = cfg.addr_v[ipver]
-> +    if ipver == "6":
-> +        addr = "[" + addr + "]"
+On LoongArch system, 16K page is used in general and GVA width is 47 bit
+while GPA width is 47 bit also, here add new VM mode VM_MODE_P47V47_16K.
 
-You want baddr ?
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ tools/testing/selftests/kvm/include/kvm_util.h | 1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c     | 3 +++
+ 2 files changed, 4 insertions(+)
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/tools/testing/selftests/drivers/net/lib/py/env.py#n155
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index 373912464fb4..f8faed8c8024 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -177,6 +177,7 @@ enum vm_guest_mode {
+ 	VM_MODE_P36V48_4K,
+ 	VM_MODE_P36V48_16K,
+ 	VM_MODE_P36V48_64K,
++	VM_MODE_P47V47_16K,
+ 	VM_MODE_P36V47_16K,
+ 	NUM_VM_MODES,
+ };
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 815bc45dd8dc..5649cf2f40e8 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -222,6 +222,7 @@ const char *vm_guest_mode_string(uint32_t i)
+ 		[VM_MODE_P36V48_4K]	= "PA-bits:36,  VA-bits:48,  4K pages",
+ 		[VM_MODE_P36V48_16K]	= "PA-bits:36,  VA-bits:48, 16K pages",
+ 		[VM_MODE_P36V48_64K]	= "PA-bits:36,  VA-bits:48, 64K pages",
++		[VM_MODE_P47V47_16K]	= "PA-bits:47,  VA-bits:47, 16K pages",
+ 		[VM_MODE_P36V47_16K]	= "PA-bits:36,  VA-bits:47, 16K pages",
+ 	};
+ 	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
+@@ -248,6 +249,7 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+ 	[VM_MODE_P36V48_4K]	= { 36, 48,  0x1000, 12 },
+ 	[VM_MODE_P36V48_16K]	= { 36, 48,  0x4000, 14 },
+ 	[VM_MODE_P36V48_64K]	= { 36, 48, 0x10000, 16 },
++	[VM_MODE_P47V47_16K]	= { 47, 47,  0x4000, 14 },
+ 	[VM_MODE_P36V47_16K]	= { 36, 47,  0x4000, 14 },
+ };
+ _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
+@@ -319,6 +321,7 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
+ 	case VM_MODE_P36V48_16K:
+ 		vm->pgtable_levels = 4;
+ 		break;
++	case VM_MODE_P47V47_16K:
+ 	case VM_MODE_P36V47_16K:
+ 		vm->pgtable_levels = 3;
+ 		break;
+-- 
+2.39.3
 
-In general you should use cfg.addr, cfg.addr_remote and self.addr_ipver 
-if you don't care about what IP version env provides.
-
-If you want to test specifically v4 or v6 they should be separate test
-cases (doesn't sound like that's your intention here tho)
