@@ -1,136 +1,119 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E9A28C5C9;
-	Tue, 20 May 2025 20:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FCC157487;
+	Tue, 20 May 2025 20:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747773051; cv=none; b=Y7q1GuWzEEfuoTFZJwRAAq0Tzq+noBEftylQLqMovXmke/KKG7WjcfLyouwU2fPimvExld3EhD+SQGAyntj55LZ5HGBw31YPTcSPMpfRsyFly9QaPw2+EIDog9NquJxUIO+J4/xfPOuw0v5cqvuOU08NKxiWQqxd1T37O8LMpxM=
+	t=1747774157; cv=none; b=juAITO+VAS8V/ISPW5jBUj3cZNJzN99zMl+YKlqNVYm55WooX4FbFzciz6IMIsVaxF5YlS3wX5JyTHSUiugc3wz/QJnOCinfEic/jFAJfq7wFQCtj+Gjl4PvEBnyi/Sy0kzaf8m1tP1xDg2RTyGQcr48+sVLtlOa4VB8YhEH5A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747773051; c=relaxed/simple;
-	bh=bcLMozayoGqEz52RybIZIVxk1TOssx6utCvVWOzGK68=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kQRtW8nkEbJg5mOL8h9cfyvzonmCmQjFXG8UV/5cUQ3YLyFVfWQt8Ce2D5IWvMxgIXfSvUW0nzvBL1fXgcpYblHPJF7htdERfbqCBVCArEhURK9ELsooAVTMITvKLcTsPWz5Cufzpc2iMgBV4MozisqvB9jm9Jh5nppFI/qiZEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DVdvxzw6; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747774157; c=relaxed/simple;
+	bh=HdsgE3dVEvFD0Kza/FGL4PVyH2AyEt8jTw7NRdOU/NU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=g5VKV+BeC4o2tODyP/A2RIvN/gcsIICNW49LshnSAXj/cXimTcR7XGHsoDhZH5qqrOfepASmYkQv2ZmdkACYvwmPXuIFLJlaZNpI0BSc9sF6vq+KjQ11RPsTSk+RVlONwO/Xwa3PEzNe3QwIpS9K29tm2QX4ga7ZsttNzFPNH6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=f24I04oa; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DVdvxzw6"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b26c5fd40a9so5692690a12.1;
-        Tue, 20 May 2025 13:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747773049; x=1748377849; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1eLzuw0HTNUjJ6jLhtDsWvEva0lYGbRxIzrs1qJRnlo=;
-        b=DVdvxzw623cHNW4QSpA7xqceGOvJ1svjD/nWKuIlEsaRNkQ77ywtw8kZH2+JywdYzB
-         Nx6nl872uu/+87hm1J8tIW5hLxMoOcu+cyuRbzOuVoA6f0+AxLbCN3Rzew/8kkWd84vE
-         hVE5h3rHUi8NJZ3T6zaDamJVUjJLykzaQJ4Ao01ZuqyOjr4L2Sjw/HP8kYma2AUqOhkY
-         XpV0aEjqLTMbpK8lvt0VZ31kTExpSIFZo8nYzfLdBx2lO3uC8PN1Lb4LtJs4pBualnpK
-         16jQIoe2yGuMmRyAvSxRmw4cldUQ9TtyXTID2ja6rcxQRkCrujzBYL+D2L0Qtqcf4g+A
-         CmXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747773049; x=1748377849;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1eLzuw0HTNUjJ6jLhtDsWvEva0lYGbRxIzrs1qJRnlo=;
-        b=slM2QLi1x5/R6Gdz2nWrRrvqBWtQgAHUGvGTbW/89TIXxOGvx3+aMuPLPabvHeZ033
-         pgWITHSLDPsqWuXLjvL222t8xwk6YvfCnbGGMtVzbaXHtnUZc+RA6wIhKfn+c6IvGKic
-         zRO1M89HjckyN4PXUivaz45W0BrTzi8JGsUXa4gtoMOWGSE1CeBpU6GigG3GM3Cjp4cJ
-         xgqTs7WPftE8en3tDCNKeew74BQB8NKQmTQEs5va74BkOKo6b0gTk61MLve+9GEqQ3s0
-         +ktkQYZWBtwqKT3nMRwg5nLulG7s+kMSO7zbezRAF2SLFl+0Yyop1dlu1BhAI7jYdSVC
-         Q3YQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXSh5L2/yyiHdzP0g7EueYWW9p+PvneBAA7tjrVhDzocC3gH9a2EsdjFX4SyhwgFVfXXyzE1U1Jlk87lrB3x83P@vger.kernel.org, AJvYcCXd0LCd8vNCV7FxVcRf/mNvw7Z8ev4dG0MMPZ9xvAzjPWPIh1wyeYgrQ9rXbNIwwtK7LJgDCNkj0i1VXbs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywNbk2gXmLCoA/be6DQDrwMmHX4LjrHmNVDtogk9i202enTGNt
-	Q8cpOOOLuvL/7SktmQGP74cWNMkpJtrVCimYzJV7WHDISHBCGWTQ16O2FuLN
-X-Gm-Gg: ASbGncsg6wks2De/Gu81uAWsjpQ1x33LYR6M8J0zioWzuZ1z49QOQ5mJRr/08l2zgfN
-	EeassQceJ5kJ6s2VKtcEIg/Mh/+/iiEUvGUwVhdv1Wuxbgzu7lsUelSNo/+x1mdLZnKPzAude2J
-	V2vvQfEt7hSqzs1BgOukOXwqhzy35YbAql0BbCC8QDagQ6MlgePn8q+l42tUbIZVaScenQG23BQ
-	QLC+AbnmTB3H7fivXhRd1GRQ/T+OUAkZg5lvQcxPb+gUepzLGsmfH1594kQc5Px0rRjsdWt6dyx
-	rR/6rDvtvFzjd6z9lO3+aovqD+B6MJPkz1uXQKmIacNzhOmOMpmSs0gGCOZb36vBhqnFCyfu9m5
-	OBW18bun3se7Z
-X-Google-Smtp-Source: AGHT+IEVUmgvjua+d3P0w0PYb33BqOETSqmjOHNLhMRKnH3Q74/tsD6IDoR/Hg1n5IlX3rYVJCZ7VA==
-X-Received: by 2002:a17:902:f707:b0:232:11dc:d95f with SMTP id d9443c01a7336-23211dce734mr166616845ad.4.1747773049010;
-        Tue, 20 May 2025 13:30:49 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-231d4ed5737sm80021205ad.239.2025.05.20.13.30.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 May 2025 13:30:48 -0700 (PDT)
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	viro@zeniv.linux.org.uk,
-	horms@kernel.org,
-	andrew+netdev@lunn.ch,
-	shuah@kernel.org,
-	sagi@grimberg.me,
-	willemb@google.com,
-	asml.silence@gmail.com,
-	almasrymina@google.com,
-	stfomichev@gmail.com,
-	jdamato@fastly.com,
-	kaiyuanz@google.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 3/3] selftests: ncdevmem: add tx test with multiple IOVs
-Date: Tue, 20 May 2025 13:30:44 -0700
-Message-ID: <20250520203044.2689904-3-stfomichev@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250520203044.2689904-1-stfomichev@gmail.com>
-References: <20250520203044.2689904-1-stfomichev@gmail.com>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="f24I04oa"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=fyXXUndsFU1fi1/cHrhrRGj97R8gSsjU9AE57nmvn3s=; b=f24I04oaBlDBxUow8TjGfmH9+y
+	4Wz5r5AIV7+/o3E2jCggtxFXHtVmiLhYADxxBpB2osEMw6yhlTq2FlH7Pg2pXoVV6LO1jzexdLA3u
+	RBHCAyrQioZnUNxDk4SXoY5blOwu9YJT+6aljlvLK162sxahupMzAhz2b8xqM6gRwKZatlwA/U6gB
+	DK5S3oCtfs6TrywV3vtNqT4VmcEybraHicH7cJDmOVHg2IyMYiHb4qJMMaBqaYygJYDZV7ViOfAo1
+	kcisLCDjWcXhG4q4DIlD23s9shub124faPTnS8BlK3IU87KEqQzqMwVasAhurqMTFLloWqBNZtkXP
+	5c1EIn7g==;
+Received: from [191.204.192.64] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1uHTtZ-00AsVE-Kb; Tue, 20 May 2025 22:49:05 +0200
+From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Date: Tue, 20 May 2025 17:48:34 -0300
+Subject: [PATCH v4 1/7] selftests/futex: Add ASSERT_ macros
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20250520-tonyk-robust_futex-v4-1-1123093e59de@igalia.com>
+References: <20250520-tonyk-robust_futex-v4-0-1123093e59de@igalia.com>
+In-Reply-To: <20250520-tonyk-robust_futex-v4-0-1123093e59de@igalia.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
+ Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>, 
+ Arnd Bergmann <arnd@arndb.de>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+ Waiman Long <longman@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-api@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+X-Mailer: b4 0.14.2
 
-Use prime 3 for length to make offset slowly drift away.
+Create ASSERT_{EQ, NE, TRUE, FALSE} macros to make test creation easier.
 
-Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
+Signed-off-by: André Almeida <andrealmeid@igalia.com>
 ---
- .../testing/selftests/drivers/net/hw/devmem.py  | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ tools/testing/selftests/futex/include/logging.h | 38 +++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
-index 7fc686cf47a2..d7f6a76eb2b7 100755
---- a/tools/testing/selftests/drivers/net/hw/devmem.py
-+++ b/tools/testing/selftests/drivers/net/hw/devmem.py
-@@ -49,12 +49,27 @@ from lib.py import ksft_disruptive
-     ksft_eq(socat.stdout.strip(), "hello\nworld")
+diff --git a/tools/testing/selftests/futex/include/logging.h b/tools/testing/selftests/futex/include/logging.h
+index 874c69ce5cce9efa3a9d6de246f5972a75437dbf..a19755622a877932884570c8f58aaee7371d5f8f 100644
+--- a/tools/testing/selftests/futex/include/logging.h
++++ b/tools/testing/selftests/futex/include/logging.h
+@@ -23,6 +23,44 @@
+ #include <linux/futex.h>
+ #include "kselftest.h"
  
- 
-+@ksft_disruptive
-+def check_tx_chunks(cfg) -> None:
-+    cfg.require_ipver("6")
-+    require_devmem(cfg)
++#define ASSERT_EQ(var, value)	\
++do {				\
++	if (var != value) {	\
++		ksft_test_result_fail("%s: expected %ld, but %s has %ld\n", \
++				      __func__, (long) value, #var, \
++				      (long) var); \
++		return;		\
++	}			\
++} while (0)
 +
-+    port = rand_port()
-+    listen_cmd = f"socat -U - TCP6-LISTEN:{port}"
++#define ASSERT_NE(var, value)	\
++do {				\
++	if (var == value) {	\
++		ksft_test_result_fail("%s: expected not %ld, but %s has %ld\n", \
++				      __func__, (long) value, #var, \
++				      (long) var); \
++		return; \
++	}		\
++} while (0)
 +
-+    with bkg(listen_cmd, exit_wait=True) as socat:
-+        wait_port_listen(port)
-+        cmd(f"echo -e \"hello\\nworld\"| {cfg.bin_remote} -f {cfg.ifname} -s {cfg.addr_v['6']} -p {port} -z 3", host=cfg.remote, shell=True)
++#define ASSERT_TRUE(var)	\
++do {				\
++	if ((var) == 0) {	\
++		ksft_test_result_fail("%s: expected %s to be true\n", \
++				      __func__, #var); \
++		return;		\
++	}			\
++} while (0)
 +
-+    ksft_eq(socat.stdout.strip(), "hello\nworld")
++#define ASSERT_FALSE(var)	\
++do {				\
++	if (var) {		\
++		ksft_test_result_fail("%s: expected %s to be false\n", \
++				      __func__, #var); \
++		return;		\
++	}			\
++} while (0)
 +
-+
- def main() -> None:
-     with NetDrvEpEnv(__file__) as cfg:
-         cfg.bin_local = path.abspath(path.dirname(__file__) + "/ncdevmem")
-         cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
- 
--        ksft_run([check_rx, check_tx],
-+        ksft_run([check_rx, check_tx, check_tx_chunks],
-                  args=(cfg, ))
-     ksft_exit()
- 
+ /*
+  * Define PASS, ERROR, and FAIL strings with and without color escape
+  * sequences, default to no color.
+
 -- 
 2.49.0
 
