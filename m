@@ -1,55 +1,55 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A37215779
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 23:31:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426332288EA
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 23:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748043073; cv=none; b=Vtn2Q/6lDGkfamnsmPzjtcZQ4Bgg2yfmz9N65bk3c0LREgYWoC7LG8CnWMxp0J49mWyQNo4sCRzjWZ20wki0DzpwreIKNIvfdWgQcBRtmNlq5po7m5bDlFLSJRNMXvoRxVhZWSuvvyexuBZ41/Qao08qtUWj3rwJgIT0pHOGLlQ=
+	t=1748043076; cv=none; b=SQraAL47lB2t8s5ckZasvcxS2zQjPuAdSQd0JpT9rDf9+GpUFISElGpcQP0r/9753PgdX/NQjq/VaiOOwfYNT6jvsaNquNNtAuZrpb2be3eORi3G5XSl9nCTpMhyeDKbGDNR3iwMFf09axvjnzA7/+5KMaNXQDNIWCE27vFahe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748043073; c=relaxed/simple;
-	bh=iRmwnk0PM4Hf3mgEI6zwXc+LDu9EVp0n9/ZhsmiqBxk=;
+	s=arc-20240116; t=1748043076; c=relaxed/simple;
+	bh=DAWskm27fuqrexunKfw7hlYhX+xBN+WRyq42RSxSiHw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VL57X3c5OwLgEqnzEY87g2gkX6fgzV1lM6s+tkNWLe2gN7SjUq4onfmFFoNRpxjCizqb8YMfl1NGzTzy+0Y5fIJdeIJgnLRX4PwhsWX+6kwuWqDSDGE33WFiOAUt9P0OXXz4Q9uSyYdP4NVvahqvSYxHdLZsSuZqO+Qgmtcyx4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3cbeesok; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=IH1D3LL8zNdsslzpIMw3foq3UbJJr3Y2Scj7S2hlIx+NtpjYw/gof0dLH7CBGQN0eXPOgQWWJqBUOZrNfvG9fhjXANsWPK1tUHWAhRfXcgpxXMGlz2jo0MJQOxv288eg1Fwg6hTpsbDI/5p2sg002uQS8yVKlVJHuKz5kz5hNYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hvwhhDvp; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3cbeesok"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b26cdc70befso205901a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 16:31:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hvwhhDvp"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-23202dacd94so4833175ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 16:31:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748043071; x=1748647871; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1748043073; x=1748647873; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4vc5iaoQdMCELnH2bjQjNG3ycmxby9Jwfat7xnJ+cIE=;
-        b=3cbeesokxX1HtedECa0vQUfWdqQelcTpWc3PVQfOwPcYv53QDNGE37k76zEPu/QwoQ
-         RH3naQ9V/mJMCCJVQ5iINHHRvH4liIWEtA5AtWzLeGM3nIQpiSIkqSbMESYxtt6ZcEAk
-         aq9buLOwkAArF+KBQpilppkbFIjyn8od3/VidHBNG7ZB1DZkc+7Y35JzgBPVimEW4GtI
-         zQDQqT47aMBLmW0MK9v4JHqc3zVLa4DcLHSoUHp5/L02jwglT26714936J+r5u5NrfrS
-         sm2LR/IH3InJqE4EKwayzdx+UCrST9D1ye1toXDElgKnFVNQroytzZ4EAZThe82lpniB
-         a5Sw==
+        bh=LkfzIEiQP12AqfoYTR1F5iroWEnqNbyGGqI+9c5Fw70=;
+        b=hvwhhDvpcFf/LRVYb+aulSl74A4Gv8qhu8cvSDS2gn4mgwJDOc3KKvPnh5LDsYab73
+         P26tqdJYxdSTJ/DAxJgg8evJIn2IcTBLFy6EZdawsJL1eVvffE4S3EzSeInFJfl+7p/r
+         Fm8qhZbeDCZozqwhLdePdu/nb/rWXzX7gMbdCOB/VvxifJupD00f6lHkghU0/RzzEgxL
+         3Q6PqR/6EgLy7y5ppFUpOZDq/IQB1HKSmDOhiJQ0aTJ8wYcF3u9u0H51EqJ4VaZqUSyZ
+         8rV50EW9P5a7Xiw3Bn7425/Ysk0opTSJpiVgocNFnTuGOYvpkpEdpN1RRIj6gYY+4KW2
+         5I9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748043071; x=1748647871;
+        d=1e100.net; s=20230601; t=1748043073; x=1748647873;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4vc5iaoQdMCELnH2bjQjNG3ycmxby9Jwfat7xnJ+cIE=;
-        b=bMq2LOnYnMsPjLpRBT1/ZnLbyFUBdTRTf3jJDmGU5uE32soX3RhNjxakXQrrS1h/Hx
-         9ATWCqW12FDTprmUeDXsvy1q/aBI8DkxIt3kqGCT37/oGCheoh6KJGH2SN9anV/PShls
-         1owuInNBZIMa9FgqCM8K3PAULs44idqt6d6xA4ofxqbogTGUx8Qbq0x9CGPqWF5ONMxQ
-         iiE1HX8Onj9PpxJ44mXAh7+4/k7SObapyDgytGYEbMzFzaMArxz/OEyNELaabsBl8XKL
-         GxbxuKZJXA3W0w5MpbNjbwRuDN/YBnpOMDKOZDjxSprN8lcupPWFXmiRmKxjJW+J7Pl0
-         1TYg==
-X-Forwarded-Encrypted: i=1; AJvYcCX/8qBQqL0HY85blYUokwnsdpqUNTn5rFZ97nP/s4CBSA+Zf57gSdyY1OOBSnzn57t5ideSRTYVIuXC29ld1P0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNZBj7XJ8yhf11L+26sh6g+SxAzG/taNFCf8T7T6k88rDU7p6L
-	am/jsWYa/Eg8MvCMOKPkzDV+UrerhwByKDF755IsI+m8LlbYzc4tjAUQAomvzoIPTd/fxAOLNkb
-	VfDTwJhmz2zOBSA==
-X-Google-Smtp-Source: AGHT+IENl5MZx9Ed61vrQtEhT0u+T8Rn2almAe9O4wV7zO3WdxHu48H2yMXx6eyRV4vIc9HaVDD+Ouk3nTGwEw==
-X-Received: from pfbjw32.prod.google.com ([2002:a05:6a00:92a0:b0:740:4dd9:9ebf])
+        bh=LkfzIEiQP12AqfoYTR1F5iroWEnqNbyGGqI+9c5Fw70=;
+        b=vPt6eSazyX4RZn9XmYlT5DzFqn22sSornjOOv+m0jGf6xfSKM5dH8uOuz+Kkzu0uMa
+         B/DTcCw8g5H2/IbM6zGdiLwYvHhDxGi70SProaYdUZACexkbqOYtzE6mmXOykb0gQxS3
+         WC5YW7CV4SAljZUR2iqjvWa89vjboW1KfOCuBxtphM0uRB5XDvPsIdNZQ4G3jRj0i+qe
+         VHLUHKrGcrdjf4/T3uJsS7T8GoxVRXKuC7mHgtwAJlkdjzyQz4W1Dj8KOHJIo8ZQ+Q73
+         goirYxE1DDDtI/dLo87XGOYa633gPX6cOR9oz0arisq58f68J0QFLvEWVJuNh3kxNWHh
+         4Vcg==
+X-Forwarded-Encrypted: i=1; AJvYcCVuRoyGaI49LALeYumT3dp8a6XSLI529C+NhhLGhd1bGWWYnjNo6KX7cQPhA54CbG/T8k35saCv2jQo5wodKoQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxM4RJJL7qsXzNLoosagoxcLoP0cg4+Pl/7fp3ZjhLt3xLYFGfm
+	UAWpgDEGF6A08AS4FlGGthPGR/GwBzFpJ2kdxhT9/AojpJ2Li/0vawBWTxXRB8csAgIgnYzE3Fm
+	F3d/jMGlg3GqP0g==
+X-Google-Smtp-Source: AGHT+IFzO7OjMkXaL4rEwqaamuxhJjG5KKXFAt1EzMEKAU4Dd7G9aXElHl7IXHhqg+ZCo4NgkPw58plyDAXDOA==
+X-Received: from pjur3.prod.google.com ([2002:a17:90a:d403:b0:2ef:82c0:cb8d])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:9185:b0:215:e1cc:6356 with SMTP id adf61e73a8af0-2188c2677f4mr1813659637.13.1748043070879;
- Fri, 23 May 2025 16:31:10 -0700 (PDT)
-Date: Fri, 23 May 2025 23:30:14 +0000
+ 2002:a17:902:cf04:b0:231:c9d1:962f with SMTP id d9443c01a7336-23414fa45cbmr18303725ad.29.1748043073697;
+ Fri, 23 May 2025 16:31:13 -0700 (PDT)
+Date: Fri, 23 May 2025 23:30:16 +0000
 In-Reply-To: <20250523233018.1702151-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,8 +59,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250523233018.1702151-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.49.0.1151.ga128411c76-goog
-Message-ID: <20250523233018.1702151-30-dmatlack@google.com>
-Subject: [RFC PATCH 29/33] vfio: selftests: Make iommufd the default iommu_mode
+Message-ID: <20250523233018.1702151-32-dmatlack@google.com>
+Subject: [RFC PATCH 31/33] KVM: selftests: Build and link sefltests/vfio/lib
+ into KVM selftests
 From: David Matlack <dmatlack@google.com>
 To: Alex Williamson <alex.williamson@redhat.com>
 Cc: Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
@@ -83,29 +84,40 @@ Cc: Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
 	Dave Jiang <dave.jiang@intel.com>, Dan Williams <dan.j.williams@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Now that VFIO selftests support iommufd, make it the default mode.
-IOMMUFD is the successor to VFIO_TYPE1{,v2}_IOMMU and all new features
-are being added there, so it's a slightly better fit as the default
-mode.
+Include libvfio.mk into the KVM selftests Makefile and link it into all
+KVM selftests by adding it to LIBKVM_OBJS.
+
+Note that KVM selftests build their own copy of sefltests/vfio/lib and
+the resulting object files are placed in $(OUTPUT)/lib. This allows the
+KVM and VFIO selftests to apply different CFLAGS when building without
+conflicting with each other.
 
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- tools/testing/selftests/vfio/lib/vfio_pci_device.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/Makefile.kvm | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index d996e012a646..d3c3958136cc 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -432,7 +432,7 @@ static const struct vfio_iommu_mode iommu_modes[] = {
- 	},
- };
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 065029b35355..85f651743325 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -252,12 +252,15 @@ pgste-option = $(call try-run, echo 'int main(void) { return 0; }' | \
+ LDLIBS += -ldl
+ LDFLAGS += -pthread $(no-pie-option) $(pgste-option)
  
--const char *default_iommu_mode = "vfio_type1_iommu";
-+const char *default_iommu_mode = "iommufd";
++include ../vfio/lib/libvfio.mk
++
+ LIBKVM_C := $(filter %.c,$(LIBKVM))
+ LIBKVM_S := $(filter %.S,$(LIBKVM))
+ LIBKVM_C_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_C))
+ LIBKVM_S_OBJ := $(patsubst %.S, $(OUTPUT)/%.o, $(LIBKVM_S))
+ LIBKVM_STRING_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_STRING))
+-LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ)
++
++LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ) $(LIBVFIO_O)
+ SPLIT_TEST_GEN_PROGS := $(patsubst %, $(OUTPUT)/%, $(SPLIT_TESTS))
+ SPLIT_TEST_GEN_OBJ := $(patsubst %, $(OUTPUT)/$(SRCARCH)/%.o, $(SPLIT_TESTS))
  
- void iommu_mode_help(const char *flag)
- {
 -- 
 2.49.0.1151.ga128411c76-goog
 
