@@ -1,55 +1,55 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAF222B8A2
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 23:31:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C671D229B38
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 23:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748043077; cv=none; b=ipMjtWZe11ZjB+1OBeTrU6Ndq/sUYXfCQ/emUiJpNGKHhhlHCb2FJkMgviHNyIb2bla48JLcF3aDwJiy2+5XxWR0UJepblzjjN1uQNXdQUAn6Pe3Aka+k0xaaX9RKR/I6pCHC00uGq5B8VUD65luHuL3jREsOLBSR1BNfzBgBXQ=
+	t=1748043077; cv=none; b=erpTwfnTDxY/vJo1vV09h72CZZT9+xPbymLO1alxRAXRqAK6Uo7DfbN2fWLk+8HahbN3sHJC+MyMAJFVOfy6moi0GUBqcd6VlcKXIESsXkinbrDJOpGSmnVCrV4NlpiyRJrR/c5ybjce0oZOR12Ub7JJwrLNXgHfJm2+1lahqBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1748043077; c=relaxed/simple;
-	bh=7rRBY86PTObo3oEj6GtRFKOFWd3Gm261npT8EREiQ40=;
+	bh=V6y4Z3il5pkbZW3kvHSiHu1maiMBrnHrERRkgL7kBq4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=UFTFMj2WPyihnsq4zLQSy1QnGjeOySrA4dTtVwG6w9I14NhZzmWTgJ3ngpEhWxWI/PZoCM/Q27E1kKpO0g05znX9Ycjc0N5NiPvgEwbNORJmwitUQqLN7qD4gSCOkBKLqK9HaZZqUDJeaGMlmDJkXQwe8gg/EQlgzFsxRlqOrL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WKFwn/vT; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=dW52FsVqlIxBiZLa/uSI/ELVTze9ZlA0Srcse1VFkB9rlZ6cnN8jXawkfUjaWd0L32gihOdztCKH4hJSKGyjhOm4dmBYVOzqPNZz7cj+4wWfiUYTNgnzoF6S/e5Osw9maMf6gs/ckOLeBf0K9T5l4sA9E2utlG8hCujdClint4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u660tKJH; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WKFwn/vT"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b269789425bso357883a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 16:31:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u660tKJH"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-30ed0017688so377151a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 May 2025 16:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748043075; x=1748647875; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1748043072; x=1748647872; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yo9mRGpagqbJhYzSp9Ult1E6G6b4ESDTgwcuA3onprI=;
-        b=WKFwn/vTZjPvtP3lnc5vbWhX6SXZl05Vyuj0z9wlNf/E5qPgdeeTFTCKoAymwnvgYM
-         O2C+UTNVjSBHGV2x/2//+mQbeHFzIJSKyrdvZXAe+H3pQLK5hfNN0SJMpkPOvPdpa+jk
-         NdI9jeiS2VneG1WLANsAwQOo2Sy8SslEreyyv2O2MeJGg0z7zIsGqY01mdLpFnGOTR2j
-         soqxuVd5yQvF0W8LiZarbJl5aMZZpWE6OkxL+I81dV/2qzSS+hDFem+0oIrVN0H+sfhE
-         Xro4ng6/nXUhTSQZU09m4UKDo1y41qoBmDVF6RRgceDO0BPM1D4ZP9rwQ3dubozdV1iH
-         CHvQ==
+        bh=0hym13EB2jEzPzAvfGU/pnzl8+6u9GycwL6e33A1UGk=;
+        b=u660tKJH/c5EgN1qJQg41R8xHQnhZG7BBGqzjjJW3CirN5IQbfIZeN0icWEZBbAbBU
+         pix9G6NIPunxkMZRia7K9S07BAfH/zThn5J28yxkErWRxsDVl03arj6VSACV/ZgF1sb6
+         a5ysxAmx2SEE9FTxdQeOUzoP8I3JWi/UpfZgIZUk/qUf87vpVqIcUIrOR8Cdgqeqg1MT
+         TUq3TZEzFe5kUklOffzxE5CyXaQYGEYWaKwXASkMwysotdJ5gKBeYP0X+7oc1/m5VU7H
+         qhVl99pLPYcTs4uQGktQs60aYGphIWaM1G3oiRacdn9d8WKQwXp3HlJSvu/cejM4/FuR
+         vv1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748043075; x=1748647875;
+        d=1e100.net; s=20230601; t=1748043072; x=1748647872;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yo9mRGpagqbJhYzSp9Ult1E6G6b4ESDTgwcuA3onprI=;
-        b=EeEYip3+YzMgOLbT7/nuQTKKL+b1QvxIwjW3Ts6TvZ0YcwAf1q4fNLeoGUMXF0Ou2A
-         kNn6QKdcvcLyz4w8Na1KdTa6ugIqJuFCHnFhxNZ+wpBy6y9TVA/wY/go+nSwM0prQlXr
-         9+EAws1LcQvmiByI10xQaJOfa2BUUYkTM/KFEqd/4iU4mkpS3LvQN5pxcXMJpvDrqrv3
-         bJ3YOUvVVsBFFYdFKNNW8/0609qcLu/+wnQSCRZ8kThm4NxF19yQCkuKLykOwWldzYhR
-         P9pPrk3nixW48l3w7WKwFo7f4e9wQL0+wCjmgpCyXBgjWgwi31is/KM5Sxn4FYNzNsuS
-         byOA==
-X-Forwarded-Encrypted: i=1; AJvYcCX1sqxzsV4B9hEGkZ6S72QYCLE8aIHtrqaIqukFM7HYFTAW4GHcVKOVeI6FvwZGyG/920Xs459/GYPS5H7Rlkc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+wjedrf3c20aIWavVpfmn37VzplL9gmUuUbaVaY2jG9OaJ0Ot
-	wu+LC2ew86FOYTEOvEubG57nUitC7MDdXbxsFNTdnriKBQQHbbDDMbJ9zn+/aFf/X5+6dyvD5Ka
-	FM9X3p7i6WyQcKw==
-X-Google-Smtp-Source: AGHT+IF5to/4I9yAyOmnfnA1trnApj3SN76KVvlbuzWw2yq6WhGqsv1WJFS6rBHMnkN9ethsvDzyy189vp+W1Q==
-X-Received: from pgww10.prod.google.com ([2002:a05:6a02:2c8a:b0:b2b:fdb8:587])
+        bh=0hym13EB2jEzPzAvfGU/pnzl8+6u9GycwL6e33A1UGk=;
+        b=sSZZBEUkHIQ4B+44Co6yR27JvYu+XjvVvhNkfUnnizm2NjpFKwhjfDQFF0pvkkSz+D
+         0B7lhyOeo7UuMLQGTE47XTIMFjigqFlzvm5UgnWO0LH41Z+Z3UctrELACRVuKysS6/7R
+         2BK5zL8A7AQAaQTgQM6b7QpYCfz2dnDprZMtfk71y/PYeWIR+QTK7lWk/bF7b8xYUaVC
+         Jm0InjH0RqexnJ+DL3nDFYAPIuzuQfoRZReqWokPPUsqrd/re/1qjfpCr1V+boQXMG76
+         0uLCDWaTNy9Nvj9hyqXP3mXljQ/nKASWcAgey57TphP7jb7kq4uq3D8LitDRVaIWdtY/
+         TIqg==
+X-Forwarded-Encrypted: i=1; AJvYcCX8EJ3GqRvoiWSvLxRL5U7VPsmxfY5r9BX88pWQOlUzg0FSWtbMm3atQevEwe4BOjvSI3OsOBNlhcCzlS6rh/U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmroFEDzzgyAaj038ByJfgnbsNUB7HvVtPeLcGoHWVJ/Iteufo
+	wlh9jS/HtjeCMJ5BnCMdLCDunm4nQDJrPKeRF0x68hO32rDLYwZFn3lD+y70AQrfdVk0hg6A15a
+	JzYoGON9nzWLzlg==
+X-Google-Smtp-Source: AGHT+IETLd5XFVQbklzgkagzTnQNtyAeaa6wV1F90VSfKA26TlAQJipkBn0k6MgW4PQB6exb9CZ4O3xxDogoWg==
+X-Received: from pjbdb11.prod.google.com ([2002:a17:90a:d64b:b0:2ff:84e6:b2bd])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:5483:b0:215:d217:2194 with SMTP id adf61e73a8af0-2188c3530f5mr2155614637.34.1748043075109;
- Fri, 23 May 2025 16:31:15 -0700 (PDT)
-Date: Fri, 23 May 2025 23:30:17 +0000
+ 2002:a17:90a:d60e:b0:30c:540b:9ba with SMTP id 98e67ed59e1d1-3110f0f9b4cmr1682015a91.10.1748043072300;
+ Fri, 23 May 2025 16:31:12 -0700 (PDT)
+Date: Fri, 23 May 2025 23:30:15 +0000
 In-Reply-To: <20250523233018.1702151-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,9 +59,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250523233018.1702151-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.49.0.1151.ga128411c76-goog
-Message-ID: <20250523233018.1702151-33-dmatlack@google.com>
-Subject: [RFC PATCH 32/33] KVM: selftests: Test sending a vfio-pci device IRQ
- to a VM
+Message-ID: <20250523233018.1702151-31-dmatlack@google.com>
+Subject: [RFC PATCH 30/33] vfio: selftests: Add a script to help with running
+ VFIO selftests
 From: David Matlack <dmatlack@google.com>
 To: Alex Williamson <alex.williamson@redhat.com>
 Cc: Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
@@ -84,233 +84,189 @@ Cc: Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
 	Dave Jiang <dave.jiang@intel.com>, Dan Williams <dan.j.williams@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add a new selftest called vfio_pci_device_irq_test that routes and
-delivers an MSI from a vfio-pci device into a guest.
+Introduce run.sh, a script to help with running VFIO selftests. The
+script is intended to be used for both humans manually running VFIO
+selftests, and to incorporate into test automation where VFIO selftests
+may run alongside other tests. As such the script aims to be hermetic,
+returning the system to the state it was before the test started.
 
-Note that this test currently uses vfio_pci_irq_trigger(), in which VFIO
-emulates a device sending the MSI. In the future we want to replace this
-with a real MSI so we can test the hardware path (e.g. VT-d on Intel).
+The script takes as input the BDF of a device to use and a command to
+run (typically the command would be a VFIO selftest). e.g.
 
-This test only supports x86_64 for now, but can be ported to other
-architectures in the future.
+  $ ./run.sh -d 0000:6a:01.0 ./vfio_pci_device_test
+
+ or
+
+  $ ./run.sh -d 0000:6a:01.0 -- ./vfio_pci_device_test
+
+The script then handles unbinding device 0000:6a:01.0 from its current
+driver, binding it to vfio-pci, running the test, unbinding from
+vfio-pci, and binding back to the original driver.
+
+When run.sh runs the provided test, it does so by appending the BDF as
+the last parameter. For example:
+
+  $ ./run.sh -d 0000:6a:01.0 -- echo hello
+
+Results in the following being printed to stdout:
+
+  hello 0000:6a:01.0
+
+The script also supports a mode where it can break out into a shell so
+that multiple tests can be run manually.
+
+  $ ./run.sh -d 0000:6a:01.0 -s
+  ... bind to vfio-pci and launch $SHELL ...
+  $ echo $BDF
+  0000:6a:01.0
+  $ ./vfio_pci_device_test $BDF
+  ...
+  $ exit
+  ... unbind from vfio-pci ...
+  $
+
+Choosing which device to use is up to the user.
+
+In the future this script should be extensible to tests that want to use
+multiple devices. The script can support accepting -d BDF multiple times
+and parse them into an array, setup all the devices, pass the list of
+BDFs to the test, and then cleanup all the devices.
 
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../testing/selftests/kvm/include/kvm_util.h  |   4 +
- tools/testing/selftests/kvm/lib/kvm_util.c    |  21 +++
- .../selftests/kvm/vfio_pci_device_irq_test.c  | 129 ++++++++++++++++++
- 4 files changed, 155 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/vfio_pci_device_irq_test.c
+ tools/testing/selftests/vfio/Makefile |   1 +
+ tools/testing/selftests/vfio/run.sh   | 110 ++++++++++++++++++++++++++
+ 2 files changed, 111 insertions(+)
+ create mode 100755 tools/testing/selftests/vfio/run.sh
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 85f651743325..fefb6408b2e9 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -139,6 +139,7 @@ TEST_GEN_PROGS_x86 += rseq_test
- TEST_GEN_PROGS_x86 += steal_time
- TEST_GEN_PROGS_x86 += system_counter_offset_test
- TEST_GEN_PROGS_x86 += pre_fault_memory_test
-+TEST_GEN_PROGS_x86 += vfio_pci_device_irq_test
+diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+index 21fb1809035e..2ab86bd930b0 100644
+--- a/tools/testing/selftests/vfio/Makefile
++++ b/tools/testing/selftests/vfio/Makefile
+@@ -3,6 +3,7 @@ TEST_GEN_PROGS_EXTENDED += vfio_dma_mapping_test
+ TEST_GEN_PROGS_EXTENDED += vfio_iommufd_setup_test
+ TEST_GEN_PROGS_EXTENDED += vfio_pci_device_test
+ TEST_GEN_PROGS_EXTENDED += vfio_pci_driver_test
++TEST_PROGS_EXTENDED := run.sh
+ include ../lib.mk
+ include lib/libvfio.mk
  
- # Compiled outputs used by test targets
- TEST_GEN_PROGS_EXTENDED_x86 += x86/nx_huge_pages_test
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 373912464fb4..860883ac53e1 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -866,6 +866,8 @@ void vcpu_args_set(struct kvm_vcpu *vcpu, unsigned int num, ...);
- void kvm_irq_line(struct kvm_vm *vm, uint32_t irq, int level);
- int _kvm_irq_line(struct kvm_vm *vm, uint32_t irq, int level);
- 
-+void kvm_add_irqfd(struct kvm_vm *vm, u32 gsi, int fd);
-+
- #define KVM_MAX_IRQ_ROUTES		4096
- 
- struct kvm_irq_routing *kvm_gsi_routing_create(void);
-@@ -874,6 +876,8 @@ void kvm_gsi_routing_irqchip_add(struct kvm_irq_routing *routing,
- int _kvm_gsi_routing_write(struct kvm_vm *vm, struct kvm_irq_routing *routing);
- void kvm_gsi_routing_write(struct kvm_vm *vm, struct kvm_irq_routing *routing);
- 
-+void kvm_route_gsi(struct kvm_vm *vm, struct kvm_irq_routing_entry *entry);
-+
- const char *exit_reason_str(unsigned int exit_reason);
- 
- vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm, vm_paddr_t paddr_min,
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 815bc45dd8dc..3ae752da5065 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1871,6 +1871,16 @@ void kvm_irq_line(struct kvm_vm *vm, uint32_t irq, int level)
- 	TEST_ASSERT(ret >= 0, KVM_IOCTL_ERROR(KVM_IRQ_LINE, ret));
- }
- 
-+void kvm_add_irqfd(struct kvm_vm *vm, u32 gsi, int fd)
-+{
-+	struct kvm_irqfd arg = {
-+		.gsi = gsi,
-+		.fd = fd,
-+	};
-+
-+	vm_ioctl(vm, KVM_IRQFD, &arg);
-+}
-+
- struct kvm_irq_routing *kvm_gsi_routing_create(void)
- {
- 	struct kvm_irq_routing *routing;
-@@ -1921,6 +1931,17 @@ void kvm_gsi_routing_write(struct kvm_vm *vm, struct kvm_irq_routing *routing)
- 	TEST_ASSERT(!ret, KVM_IOCTL_ERROR(KVM_SET_GSI_ROUTING, ret));
- }
- 
-+void kvm_route_gsi(struct kvm_vm *vm, struct kvm_irq_routing_entry *entry)
-+{
-+	u8 buf[sizeof(struct kvm_irq_routing) + sizeof(*entry)] = {};
-+	struct kvm_irq_routing *routes = (void *)&buf;
-+
-+	routes->nr = 1;
-+	routes->entries[0] = *entry;
-+
-+	vm_ioctl(vm, KVM_SET_GSI_ROUTING, routes);
-+}
-+
- /*
-  * VM Dump
-  *
-diff --git a/tools/testing/selftests/kvm/vfio_pci_device_irq_test.c b/tools/testing/selftests/kvm/vfio_pci_device_irq_test.c
-new file mode 100644
-index 000000000000..c792fc169028
+diff --git a/tools/testing/selftests/vfio/run.sh b/tools/testing/selftests/vfio/run.sh
+new file mode 100755
+index 000000000000..b461cc1b2f11
 --- /dev/null
-+++ b/tools/testing/selftests/kvm/vfio_pci_device_irq_test.c
-@@ -0,0 +1,129 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "kvm_util.h"
-+#include "test_util.h"
-+#include "apic.h"
-+#include "processor.h"
++++ b/tools/testing/selftests/vfio/run.sh
+@@ -0,0 +1,110 @@
++# SPDX-License-Identifier: GPL-2.0-or-later
 +
-+#include <pthread.h>
-+#include <time.h>
-+#include <linux/vfio.h>
-+#include <vfio_util.h>
++readonly VFIO_PCI_DRIVER=/sys/bus/pci/drivers/vfio-pci
 +
-+static bool guest_ready_for_irq;
-+static bool guest_received_irq;
-+
-+#define TIMEOUT_NS (10ULL * 1000 * 1000 * 1000)
-+
-+static void guest_enable_interrupts(void)
-+{
-+	x2apic_enable();
-+	asm volatile ("sti");
++function bind() {
++	echo "Binding ${1} to ${2}"
++	echo "${1}" > "${2}/bind"
 +}
 +
-+void kvm_route_msi(struct kvm_vm *vm, u32 gsi, struct kvm_vcpu *vcpu, u8 vector)
-+{
-+	struct kvm_irq_routing_entry entry = {
-+		.gsi = gsi,
-+		.type = KVM_IRQ_ROUTING_MSI,
-+		.u.msi.address_lo = 0xFEE00000 | (vcpu->id << 12),
-+		.u.msi.data = vector,
-+	};
-+
-+	kvm_route_gsi(vm, &entry);
++function unbind() {
++	echo "Unbinding ${1} from ${2}"
++	echo "${1}" > "${2}/unbind"
 +}
 +
-+static void guest_irq_handler(struct ex_regs *regs)
-+{
-+	WRITE_ONCE(guest_received_irq, true);
-+	GUEST_DONE();
++function set_sriov_numvfs() {
++	echo "Setting ${1} sriov_numvfs to ${2}"
++	echo ${2} > /sys/bus/pci/devices/${1}/sriov_numvfs
 +}
 +
-+static void guest_code(void)
-+{
-+	guest_enable_interrupts();
-+	WRITE_ONCE(guest_ready_for_irq, true);
++function add_id() {
++	if echo $(echo ${1} | tr : ' ') > ${2}/new_id 2> /dev/null; then
++		echo "Added ${1} to ${2}"
++		return 0
++	fi
 +
-+	for (;;)
-+		continue;
++	return 1
 +}
 +
-+void *vcpu_thread_main(void *arg)
-+{
-+	struct kvm_vcpu *vcpu = arg;
-+	struct ucall uc;
-+
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_EQ(UCALL_DONE, get_ucall(vcpu, &uc));
-+
-+	return NULL;
++function remove_id() {
++	echo "Removing ${1} from ${2}"
++	echo $(echo ${1} | tr : ' ') > ${2}/remove_id
 +}
 +
-+static void help(const char *name)
-+{
-+	printf("Usage: %s [-i iommu_mode] segment:bus:device.function\n", name);
-+	iommu_mode_help("-i");
-+	exit(1);
++function cleanup() {
++	if [ "${new_driver}" ]; then unbind ${bdf} ${new_driver} ; fi
++	if [ "${new_id}"     ]; then remove_id ${device_id} ${VFIO_PCI_DRIVER} ; fi
++	if [ "${old_driver}" ]; then bind ${bdf} ${old_driver} ; fi
++	if [ "${old_numvfs}" ]; then set_sriov_numvfs ${bdf} ${old_numvfs} ; fi
 +}
 +
-+int main(int argc, char **argv)
-+{
-+	/* Random non-reserved vector and GSI to use for the device IRQ */
-+	const u8 vector = 0xe0;
-+	const u32 gsi = 32;
-+
-+	struct timespec start, elapsed;
-+	struct vfio_pci_device *device;
-+	const char *iommu_mode = NULL;
-+	struct kvm_vcpu *vcpu;
-+	pthread_t vcpu_thread;
-+	struct kvm_vm *vm;
-+	int c;
-+
-+	while ((c = getopt(argc, argv, "i:")) != -1) {
-+		switch (c) {
-+		case 'i':
-+			iommu_mode = optarg;
-+			break;
-+		default:
-+			help(argv[0]);
-+		}
-+	}
-+
-+	if (optind >= argc)
-+		help(argv[0]);
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+	vm_install_exception_handler(vm, vector, guest_irq_handler);
-+
-+	device = vfio_pci_device_init(argv[optind], iommu_mode);
-+	TEST_REQUIRE(device->msix_info.count > 0);
-+
-+	vfio_pci_msix_enable(device, 0, 1);
-+	kvm_add_irqfd(vm, gsi, device->msi_eventfds[0]);
-+	kvm_route_msi(vm, gsi, vcpu, vector);
-+
-+	pthread_create(&vcpu_thread, NULL, vcpu_thread_main, vcpu);
-+
-+	while (!READ_ONCE(guest_ready_for_irq))
-+		sync_global_from_guest(vm, guest_ready_for_irq);
-+
-+	/*
-+	 * TODO: Get the device to send a physical MSI to exercise IRQ Bypass
-+	 * (e.g. VT-d on Intel), rather than manually synthesizing a
-+	 * notification from VFIO.
-+	 */
-+	vfio_pci_irq_trigger(device, VFIO_PCI_MSIX_IRQ_INDEX, 0);
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+
-+	while (!READ_ONCE(guest_received_irq)) {
-+		elapsed = timespec_elapsed(start);
-+		TEST_ASSERT(timespec_to_ns(elapsed) < TIMEOUT_NS, "vCPU never received IRQ\n");
-+		sync_global_from_guest(vm, guest_received_irq);
-+	}
-+
-+	pthread_join(vcpu_thread, NULL);
-+	vfio_pci_device_cleanup(device);
-+
-+	return 0;
++function usage() {
++	echo "usage: $0 [-d segment:bus:device.function] [-s] [-h] [cmd ...]" >&2
++	echo >&2
++	echo "  -d: The BDF of the device to use for the test (required)" >&2
++	echo "  -h: Show this help message" >&2
++	echo "  -s: Drop into a shell rather than running a command" >&2
++	echo >&2
++	echo "   cmd: The command to run and arguments to pass to it." >&2
++	echo "        Required when not using -s. The SBDF will be " >&2
++	echo "        appended to the argument list." >&2
++	exit 1
 +}
++
++function main() {
++	while getopts "d:hs" opt; do
++		case $opt in
++			d) bdf="$OPTARG" ;;
++			s) shell=true ;;
++			*) usage ;;
++		esac
++	done
++
++	# Shift past all optional arguments.
++	shift $((OPTIND - 1))
++
++	# Check that the user passed in the command to run.
++	[ ! "${shell}" ] && [ $# = 0 ] && usage
++
++	# Check that the user passed in a BDF.
++	[ "${bdf}" ] || usage
++
++	trap cleanup EXIT
++	set -e
++
++	test -d /sys/bus/pci/devices/${bdf}
++
++	device_id=$(lspci -s ${bdf} -n | cut -d' ' -f3)
++
++	if [ -f /sys/bus/pci/devices/${bdf}/sriov_numvfs ]; then
++		old_numvfs=$(cat /sys/bus/pci/devices/${bdf}/sriov_numvfs)
++		set_sriov_numvfs ${bdf} 0
++	fi
++
++	if [ -L /sys/bus/pci/devices/${bdf}/driver ]; then
++		old_driver=$(readlink -m /sys/bus/pci/devices/${bdf}/driver)
++		unbind ${bdf} ${old_driver}
++	fi
++
++	# Add the device ID to vfio-pci. If it hasn't already been added, this will
++	# succeed and bind the device to vfio-pci. If it has already been added, this
++	# will fail and we have to manually bind the device.
++	if add_id ${device_id} ${VFIO_PCI_DRIVER}; then
++		new_id=true
++	else
++		bind ${bdf} ${VFIO_PCI_DRIVER}
++	fi
++
++	new_driver=${VFIO_PCI_DRIVER}
++
++	echo
++	if [ "${shell}" ]; then
++		echo "Dropping into ${SHELL} with BDF=${bdf}"
++		BDF=${bdf} ${SHELL}
++	else
++		"$@" ${bdf}
++	fi
++	echo
++}
++
++main "$@"
 -- 
 2.49.0.1151.ga128411c76-goog
 
