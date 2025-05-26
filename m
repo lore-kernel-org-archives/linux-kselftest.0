@@ -1,99 +1,202 @@
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496111EEA47
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 09:08:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366CD19D88F
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 09:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748250531; cv=none; b=ASewbmOcm5TwhvBm6Z2spx9EopzUovTkPS+XP6N84eH9RyGbpPqzqBSkwYaEwnO3TTJvetdaEFtDlKcP0w4oMNuaJRmzkcHvbtU5NV/Vwr7kgJfPFQTXRIXuzJY7YiJlqr4+agPdhbtKsExHhiPXLeACJgCEP9z0wUKMdF69JoQ=
+	t=1748252300; cv=none; b=oiubRXIcoU54rrxKU4BAKggOkRgVyRIcyoM4o/CVuCJRjTcpuIdFgSavciz7TXHZ6KQX9AUe4KJnvHicNrimhj41iWYjDv4MQZ2zcr7tNLhmsIVYnQVK7bBwsiDyDmgMLRZY251SW+wEsssNauR9HnY2BkBj7KLVcD+UPcs/8G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748250531; c=relaxed/simple;
-	bh=MY3yWw8Vp2xlTwAqSqo+mPvjKSzOe/68Igjza+AVaBA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=OBoFgFqqlrI08cEtf8X21LqRMr2x6MNom/T6plD51xWpdbwQ7frli+84jBpKbH3C6agPz+YDFQin7Phkp+Y3rFHky0nKrzgKtMl5sKaqhZsgu0PGJe2HHiGLniQpxQukPvOPzjlwDLAbErPVwV0USt74RGHM4GnnXbrhCxaQPNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AAnYrsLE; arc=none smtp.client-ip=209.85.221.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+	s=arc-20240116; t=1748252300; c=relaxed/simple;
+	bh=i9i8/ewq7VfXozbNbj+b/u9iFiv/PHquWUPkUve+/0M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uG9mqbNPlgATCrFh7z0qk2iF5pvAmLumxWBkUNHIgQnAQhnuC3yoBAkikuCW3PNDKzbnYsq2u4A097A7QFSYGEFfMGTJWmC5721zD2xCUpXJT8fqpmlV95mugOIuFQzwS9J6KlrgX1rA9141fdiU4kvZU8Owr6Lg56ide3ac3Zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=t75CBBJ7; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AAnYrsLE"
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-3a4d95f197dso451276f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 02:08:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="t75CBBJ7"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7426c44e014so1546395b3a.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 May 2025 02:38:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748250528; x=1748855328; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vV1ZLtaPYPIU9C4hlxpLQHgd5RO8hZ+AB4T6N5ac4gY=;
-        b=AAnYrsLEaETAbkoUp2cftkcR12c7jm3VBkzhUw2ry/3TL0hIG4RHAOSciOGJhF5ujV
-         UyXHnXVdpTjQTIJbXmqm8WXU+pPuo0BNukRQKAF5MEyxaXejOqcUlevtB4AlSCa8aAih
-         ofLEgZ5ot76TtgRUBuWOtrwwuX1qx5STA9iogknt9yiFA5sV2JKvg214W4JbjskgD/2C
-         8dPJctIvpGx+JZFwYdo9WImU9jz6+AHQ/1aW4n8JQv/13r3QRDvBVxlLSlV78zDSpb9A
-         OKGDrJ9mGapGzxWAL0x8Q5pAlwN2KjCleBIyRnwsixG4Z663YRnZACrF8PYPFG31qMcT
-         9K0g==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1748252297; x=1748857097; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ayXEI8Cfv1/N/P9sk6QD8plzK1Zh4bjNNg4FyYTKeW8=;
+        b=t75CBBJ7R1LrkYCsBz5TIfMTqIl70m9KyqO7kgTF4RIHArUiDG3ZzgE1UVinXfohWk
+         GJ9cvQDAcoC/365RclM8JQL6xgG9pCX2slQfk/2DvrMbhVqdP8ZBZMJ+Al+U5ODE5Mhc
+         mp+M+7B7u8vQ7ENRPl6mzi0UZle+l8TqTtl2BmcoRorbmkr9sgdbD64QW0KEz8iopxT1
+         shCd5t/b7KEM92tFRZcN//Cxs23PDZt9jwtHhF7l5d1gTT+FpFqoj168WEvVYfqku8sq
+         gKLUvQdgDMvsLtsdUPHAoP3OpR0pFkmEleuPHHsfGjcnZRzU8JCOTCvWzEwMulLXWrDC
+         gxTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748250528; x=1748855328;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vV1ZLtaPYPIU9C4hlxpLQHgd5RO8hZ+AB4T6N5ac4gY=;
-        b=X0X9ftCz/fRSqsAf1cVyESHZBJGmNgtLYpTbWw/shnAIfH1s429TWXhcpep7snglrb
-         SIH1N3qOORbUJcFSeQpiYzY9YQN/nAGjL+fMKPJ6Ewwt70Wk7qS218cfYjjcptxuSaU4
-         fmlacs7aUUkcFhrj7RwC4b8y8YWD4T0S0Hf87kIRCfL5xg9Jo014WhxlCZKtkIAqUdmp
-         +Dgsfk3RWxjdTJ99I4OB/QPPwS9cU2duFzT73OzVHVAZjNtvKJndarqmk0WGD+RoJteY
-         SgG8+epO4LSF7wZBe3cdvE1mlvbk49/3pJHF1GjvYDxhZnQRhQJPE/R/ogyILj/ffy5o
-         Dpxw==
-X-Forwarded-Encrypted: i=1; AJvYcCXkhcUv1XaDJKfRW2y/wEGPl8wFiWxXf9WTQIsmPeQVNfsQNfEAVUK3SH2njkp+g3+yNLJw90ntVj8D6XN0K4M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCLw1+CeZorT7QyN6iy3bFLLKDR0bgZ7c1mezRGKHp67J4RdKz
-	9M5uEfTxACbyv79CfKAWCOWUvWdkfULNN2B2wcTtSk4g1WygFeTAK85yR9fltN7vlSgaDQfG0N/
-	R3JzsbipWCNaKRg==
-X-Google-Smtp-Source: AGHT+IHAQLjrmeWjPRISFIiXgvA5maVZRslviy+wu0GfEc4uIyIYcxyOpXuuEsFBPNoXDEFyqckMW1YRit0mQg==
-X-Received: from wmcn11.prod.google.com ([2002:a05:600c:c0cb:b0:44a:82c6:853f])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6000:250c:b0:3a4:cfbf:51ae with SMTP id ffacd0b85a97d-3a4cfbf5352mr5135469f8f.4.1748250528651;
- Mon, 26 May 2025 02:08:48 -0700 (PDT)
-Date: Mon, 26 May 2025 09:08:46 +0000
-In-Reply-To: <CALkFLLK19Uqr2veWCn79cbLLgde5f+otf9Qx0xSPGdhdnekGrw@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1748252297; x=1748857097;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ayXEI8Cfv1/N/P9sk6QD8plzK1Zh4bjNNg4FyYTKeW8=;
+        b=VoNt6OGnzPg7mBELDrKuut8W93KI1xXr1wFymRSsN3xWbTa3gftZTWnjTnuxqNbqMD
+         SB67iGexL3pZHD6akBCW7/m2ozIw1uhE+pP3HZUJtd/6h7CK0tLqJM32ZZHF0XAguEIi
+         W3JmInyWiXiVpwIdTbeGzTUjJCwkXpvB68d0g4ZqFuwJbmOp6HDqhmQRRW3alfuu/hZm
+         vXmmNyA6x7V+bHSdn69E974XJ+U+X+balLd/PpB9CyzV3VlJosG9rN7o940xpcazVJYR
+         9ndtp0UBy6UmUISPNs0L7diqX3gXDLSqqDMnbaM/S8v0E37ztKmBe+CSqTR/Ii4wx12o
+         KF4g==
+X-Forwarded-Encrypted: i=1; AJvYcCWpdMD+/hFrIKxeVSR3NEnW/7/36FVah7o4ks5Bjpw3QOVmrAGYktTKOhi4xzyk4xwfrIIHQY97OsQMYnMBKC8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCUYEZOazQnKS0vgXSfU0b+INUrlOXFGstj81o+373JD+yiYBx
+	P5iuWvozd2T7xfnI+j03wzAXL9ZeGKagF1qG+M+hdF5ldTB+75nlOX6VJFZNv1Fduhc=
+X-Gm-Gg: ASbGncth9skPK5S8Gf9r5CEajXIQGm/tgVz0KHUXOndGyvPRrP6Vvtstxfo+iXB8tk6
+	iJLZDCk2ZJWyzaTdoLH8e/z2rqKGPXmvXRbEuP/Yqq9H7SQLTrfWwg2NRhYrDbMPDnSd2GA12Nt
+	EAl6uOCXC/ebLFM5RaUcZhAS9GTjbNzUu4/6PzDb6wy5DQKGs1VsKD3NtXtgHMA4x0NC+8xp+jr
+	Oof0GS8J3oyMj74akw66B/6RvGNqiVVaUttwX4k/kGCE2rEyFkVhSI+a4o0nw160SijvAfmiMkP
+	IQkiHL8GTsB+jCibXSQyf3TQc2fcLtJM0ebbo7TUlpV9t/98u7jOMfG1k5hQXBi0PoBO3B1wbjN
+	g61dnBbFzpQ/0l0p1qPs/
+X-Google-Smtp-Source: AGHT+IGtpgkfGcWHXNllZ6N7OfshZvdC/ul39y9uFpqnjdl5yZSiN5+nr2uee+5tOzhJpdCxTYM3zg==
+X-Received: by 2002:a05:6a21:8dc6:b0:20d:5076:dd78 with SMTP id adf61e73a8af0-2188c3c78f7mr13332787637.42.1748252297429;
+        Mon, 26 May 2025 02:38:17 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eb0a4af6sm16624196a12.77.2025.05.26.02.38.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 May 2025 02:38:16 -0700 (PDT)
+Message-ID: <20aeb166-6128-4dda-a963-c9f66f491bcc@rivosinc.com>
+Date: Mon, 26 May 2025 11:38:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250501163827.2598-1-ujwal.kundur@gmail.com> <20250510160335.1898-1-ujwal.kundur@gmail.com>
- <D9V0UTL5BCLM.1WHR6F4UN14QQ@google.com> <CALkFLLLfxT1pQ_ySB1NU4KXOEGLd2wB8pbhpBG2HfK3_mLOYAQ@mail.gmail.com>
- <DA0VHZ6KE96B.XOYNEFMGWD58@google.com> <CALkFLLK19Uqr2veWCn79cbLLgde5f+otf9Qx0xSPGdhdnekGrw@mail.gmail.com>
-X-Mailer: aerc 0.20.0
-Message-ID: <DA5Z38N5WHO5.2FFOQZYC6WKMI@google.com>
-Subject: Re: [PATCH v3 1/1] selftests/mm/uffd: Refactor non-composite global
- vars into struct
-From: Brendan Jackman <jackmanb@google.com>
-To: Ujwal Kundur <ujwal.kundur@gmail.com>
-Cc: <akpm@linux-foundation.org>, <peterx@redhat.com>, <shuah@kernel.org>, 
-	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>, 
-	<linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 09/14] riscv: misaligned: move emulated access
+ uniformity check in a function
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: Charlie Jenkins <charlie@rivosinc.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
+ Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+ linux-kselftest@vger.kernel.org, Samuel Holland <samuel.holland@sifive.com>,
+ Deepak Gupta <debug@rivosinc.com>
+References: <20250523101932.1594077-1-cleger@rivosinc.com>
+ <20250523101932.1594077-10-cleger@rivosinc.com> <aDC-0qe5STR7ow4m@ghost>
+ <b2afb9c7-a3d2-4bf6-bfaa-d804358ccd88@rivosinc.com>
+ <20250526-baaca3f03adcac2b6488f040@orel>
+Content-Language: en-US
+From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+In-Reply-To: <20250526-baaca3f03adcac2b6488f040@orel>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun May 25, 2025 at 7:19 PM UTC, Ujwal Kundur wrote:
->> I'm afraid I'm too ignorant of this code to be able to suggest something
->> good here. But, can we just remove the comment and plumb the gopts
->> through to uffd_poll_thread()->uffd_handle_page_fault()->__copy_page()?
+
+
+On 26/05/2025 10:41, Andrew Jones wrote:
+> On Fri, May 23, 2025 at 09:21:51PM +0200, Clément Léger wrote:
 >>
->> This is not pretty but it lets us remove the global vars which is
->> clearly a step in the right direction.
->
-> Perhaps Andrew can weigh in? If I understood this correctly, we're
-> trying to assert that retrying a successful UFFDIO_COPY operation
-> always results in EEXIST. This is being done in a somewhat racy
-> fashion where a flag (test_uffdio_copy_eexist) is set every 10 seconds
-> using alarm(2). IMO this is a flaky test, we should either:
-> - remove this variable and associated logic entirely (preferred)
-> - use a probability function to set this a % of the time instead of
-> every 10 seconds
-> - use an async library that can replace the implementation without the
-> use of global vars
+>>
+>> On 23/05/2025 20:30, Charlie Jenkins wrote:
+>>> On Fri, May 23, 2025 at 12:19:26PM +0200, Clément Léger wrote:
+>>>> Split the code that check for the uniformity of misaligned accesses
+>>>> performance on all cpus from check_unaligned_access_emulated_all_cpus()
+>>>> to its own function which will be used for delegation check. No
+>>>> functional changes intended.
+>>>>
+>>>> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+>>>> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+>>>> ---
+>>>>  arch/riscv/kernel/traps_misaligned.c | 20 ++++++++++++++------
+>>>>  1 file changed, 14 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
+>>>> index f1b2af515592..7ecaa8103fe7 100644
+>>>> --- a/arch/riscv/kernel/traps_misaligned.c
+>>>> +++ b/arch/riscv/kernel/traps_misaligned.c
+>>>> @@ -645,6 +645,18 @@ bool __init check_vector_unaligned_access_emulated_all_cpus(void)
+>>>>  }
+>>>>  #endif
+>>>>  
+>>>> +static bool all_cpus_unaligned_scalar_access_emulated(void)
+>>>> +{
+>>>> +	int cpu;
+>>>> +
+>>>> +	for_each_online_cpu(cpu)
+>>>> +		if (per_cpu(misaligned_access_speed, cpu) !=
+>>>> +		    RISCV_HWPROBE_MISALIGNED_SCALAR_EMULATED)
+>>>> +			return false;
+>>>> +
+>>>> +	return true;
+>>>> +}
+>>>
+>>> This ends up wasting time when !CONFIG_RISCV_SCALAR_MISALIGNED since it
+>>> will always return false in that case. Maybe there is a way to simplify
+>>> the ifdefs and still have performant code, but I don't think this is a
+>>> big enough problem to prevent this patch from merging.
+>>
+>> Yeah I though of that as well but the amount of call to this function is
+>> probably well below 10 times so I guess it does not really matters in
+>> that case to justify yet another ifdef ?
+> 
+> Would it need an ifdef? Or can we just do
+> 
+>  if (!IS_ENABLED(CONFIG_RISCV_SCALAR_MISALIGNED))
+>     return false;
+> 
+> at the top of the function?
+> 
+> While the function wouldn't waste much time since it's not called much and
+> would return false on the first check done in the loop, since it's a
+> static function, adding the IS_ENABLED() check would likely allow the
+> compiler to completely remove it and all the branches depending on it.
 
-Sorry I don't have an opinion on which of these is the best (I can try
-to find some time to form an opionion on this later!), but:
+Ah yeah indeed ! I'll do that
 
-Fixing the flakiness sounds great, but I would suggest decoupling that
-from the refactoring. If it's practical, focus on removing the globals
-first, while leaving the fundamental logic the same, even if it's bad.
-Then as a separate series, fix the logic. 
+Thanks,
+
+Clément
+
+> 
+> Thanks,
+> drew
+> 
+>>
+>>>
+>>> Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
+>>> Tested-by: Charlie Jenkins <charlie@rivosinc.com>
+>>
+>> Thanks,
+>>
+>> Clément
+>>
+>>>
+>>>> +
+>>>>  #ifdef CONFIG_RISCV_SCALAR_MISALIGNED
+>>>>  
+>>>>  static bool unaligned_ctl __read_mostly;
+>>>> @@ -683,8 +695,6 @@ static int cpu_online_check_unaligned_access_emulated(unsigned int cpu)
+>>>>  
+>>>>  bool __init check_unaligned_access_emulated_all_cpus(void)
+>>>>  {
+>>>> -	int cpu;
+>>>> -
+>>>>  	/*
+>>>>  	 * We can only support PR_UNALIGN controls if all CPUs have misaligned
+>>>>  	 * accesses emulated since tasks requesting such control can run on any
+>>>> @@ -692,10 +702,8 @@ bool __init check_unaligned_access_emulated_all_cpus(void)
+>>>>  	 */
+>>>>  	on_each_cpu(check_unaligned_access_emulated, NULL, 1);
+>>>>  
+>>>> -	for_each_online_cpu(cpu)
+>>>> -		if (per_cpu(misaligned_access_speed, cpu)
+>>>> -		    != RISCV_HWPROBE_MISALIGNED_SCALAR_EMULATED)
+>>>> -			return false;
+>>>> +	if (!all_cpus_unaligned_scalar_access_emulated())
+>>>> +		return false;
+>>>>  
+>>>>  	unaligned_ctl = true;
+>>>>  	return true;
+>>>> -- 
+>>>> 2.49.0
+>>>>
+>>
+
