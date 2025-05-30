@@ -1,197 +1,384 @@
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AA41E515;
-	Fri, 30 May 2025 13:24:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.149.25
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748611459; cv=fail; b=R45/rySfghDUxvzIL3S7/ueNy3vML3c7SAYH0y56C69u/EUF7DvF7wYc6xB+URMgzqaKwd1S40fucJ1fXfsa5NVmhIQcVzZlFJASSXJkgxIU6uPHf7T4gttnqw51yYI2ZgsK2dz/OkSeBvAycqG39D28zeAfJXSN2L77m2BX7l8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748611459; c=relaxed/simple;
-	bh=7HRF+PUorsgSSdOumetgp6bK4NH5r6YDRe8ZI+6Hkq4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TiVDG1wA1V1jC2JiEz32wYsp9t4Lk5rqsY/4QKMdnsjrye5XmI/xQuAx+EZTFuCMQswhEeitip3C9KvMIoijUQIU0VoI+I3w6F81LpIH5yNrQKwnR8QsO6qepJg4imEYuzWdQnSZMjPF1VTV3hiVTLbpGcRoSQp2V+gEZSW7RzQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=h+jbPAg6; dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b=Qn2xfal6; arc=fail smtp.client-ip=67.231.149.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7AF1547D2;
+	Fri, 30 May 2025 13:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748611997; cv=none; b=hCeEpNiwQyyR1S9jH9+sXb9d2mW3c4jktfxpVH/n0wmrobN8S2H5ctxkfZFj+jvqeSrkQcF3t1gy6y1HyPYG8bIx/WW8o2XhwsOOTyojdhUoDMkgsuC5HHQuRaAGN7J1siwfFWQ5GZ1I6UYNTOzUmNE2FBx2vZR+SNU07HIobAs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748611997; c=relaxed/simple;
+	bh=4w22kZ52negMUTuIli5dR16SY+t1/SlhL095ZunFByM=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nvcKWYbxTwDxnPnmMRTD5xlnHB6k2Z9RuAbm6LTRzTtr3X8wz/7pnVOGIDmMph0ze+NQMVNEVJURONnL3A180VZb8aPXzP+1ci5ytchaydB3QV3JkIjTrYM3GFfIcYkTxtrMopztuu537RgtngD1Fzb7UtnrTMR6nTFqSq7tP/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=NweBX4q9; arc=none smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="h+jbPAg6";
-	dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b="Qn2xfal6"
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54U7Oxxm004760;
-	Fri, 30 May 2025 08:23:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	PODMain02222019; bh=BraL+uiPimIcl44K91VdSp7ntXPCQx03rpkbFIGvAvM=; b=
-	h+jbPAg6Fuu1v7Qf9BjYRhgR7Q0DBTSwqLhL2V4+eUAN9gIQE9kYDb8MaQf/or0d
-	/zSHGgnqA5UlvGeuYtVpZQXuqNjXFtX1Rt/ZFG2tP/bKBIQ4mvFzyxi8h+zbK1Bi
-	59/7Z8oSFb4THKsmIjWWALy9A66mGaoI885Il5KgF/DUDxHXaGE7/bjI5LAJ/vXl
-	uuDTMcWkAPTq47MQ37ZQa34lFUlaRdAj7gYjx2A/jBWvON+Kdw9lK5cOu20exxqD
-	vEDGZ173fkRjZ2ZWO+wy4JKnMq6cntjBt+YTKOD0afJd1wOOoBbkaFyOx1/VCJyq
-	jTYQw/sc45VXDSvnu18wFQ==
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11on2118.outbound.protection.outlook.com [40.107.236.118])
-	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 46x3msugw8-1
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="NweBX4q9"
+Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54UCLQEJ002202;
+	Fri, 30 May 2025 12:58:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=default; bh=Wz
+	t3C1uyCswPs1cKeQlufIRtqHdv3juNPPqO3gwQN9g=; b=NweBX4q9U8U+Xwn+TB
+	dxkaC5s7rVhsmhpnkXk+AIyZ6BfIcPhOpTE/t4n6bU08npF4lSl7Td0psX416x1v
+	mgN2EzP3rTcIbXkvdHsppxHZOTelclkYxCgTDJJ7+rkYxBNn3kIPgdKag+F0aUHf
+	7Wvk3bqcGKEa/c/+1vGgn2EB89ngJ4gA/VVf6QdpotqwL4nsfnHyLCOp5basQ9R+
+	Eh3oE/mRPaNp004RVBsH3RSBoR8kcYazvDlPgY9eveO40yK+JS6JaeeB5iOFJ4LR
+	qOPtoEPY92fy/CT59rU2OTi599VJRNrE2RZXSBYYThEfk0ZPQB8VjcBoAkSZ42Vs
+	Yd8Q==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 46uux3kfr6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 30 May 2025 08:23:54 -0500 (CDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wp0xM0JWNR1YxkDz4ftG6afieCr7b2sgM4gvr5UdMDMLAFki/iUjTbqO1PziFeQEW6TQIsI4JxpTbJRReZxvm8/+4aXcHOXteuBpcQtODfYdO+uEUo37Q1fCNbYOabeuGyyYHRKZsbtXvxvmjbJ8L7DQDaNcqoQ5cdPsaHv0uRl8mJsEiLTeATfHsIl1t6jKMrjQmEKlUVUlQ0OHGP4+uZ8xJl8sncejFtU9HThU7CjFl82cc86dohKREugp8mDL3knndTDXZtOJSvI94dyqSsW+DiBykwzhCybo3ds5aK+VF26O77i1TEAtukUHzVbbabIrjOftdBKBU8YkFOJgyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BraL+uiPimIcl44K91VdSp7ntXPCQx03rpkbFIGvAvM=;
- b=lWrP/s1WWJoezi0sja6c13sWpF2yqseVGZrV7q0GIF+2oU0nDFvGJIOhIA8mbBtBEBHsrHEYN6NZ6lXeMozunx2SpnXWBSqnLa7XxkX8OfhM62a873t8rOPraeAeW2j9k53chqvP2/U2XyZbZrW8iDiMWnkfZPfFeqFLUK8Nh+7NlkHoqLQw3vNEtfi5WElCGg/fFSDe96Q1AnS+g9qmKIorQwK0J62SUsj7qwtWJCw1flFtgXCpj5WCRWAGI6vl+xtNRAChhUffAmM/DDcXDHd3MOPPSu+ohhbf7jY9Qr+L/2dl5ebt7qcI3FUiSMXT4Y0yRMyN3nwQqp734ilA0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 84.19.233.75) smtp.rcpttodomain=cirrus.com
- smtp.mailfrom=opensource.cirrus.com; dmarc=fail (p=reject sp=reject pct=100)
- action=oreject header.from=opensource.cirrus.com; dkim=none (message not
- signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=cirrus4.onmicrosoft.com; s=selector2-cirrus4-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BraL+uiPimIcl44K91VdSp7ntXPCQx03rpkbFIGvAvM=;
- b=Qn2xfal6lZ75x/g+GlBwALwqFTRouAnZmXb3trcYDczPhoirg0u+NK4aNAQEERZMY/fcVAaS0QmMgnMDsszD8DLjVih1EaETJApKzZjxhlWxiPfx7UwKJm5v7lYFJPgG48jH2sNC4FJD0s/zgNR+fevwIZ1XHdZDxeF6USUecDQ=
-Received: from MN2PR05CA0050.namprd05.prod.outlook.com (2603:10b6:208:236::19)
- by LV3PR19MB8443.namprd19.prod.outlook.com (2603:10b6:408:20c::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.21; Fri, 30 May
- 2025 13:23:49 +0000
-Received: from BL02EPF0001A0FC.namprd03.prod.outlook.com
- (2603:10b6:208:236:cafe::cf) by MN2PR05CA0050.outlook.office365.com
- (2603:10b6:208:236::19) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.15 via Frontend Transport; Fri,
- 30 May 2025 13:23:49 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 84.19.233.75)
- smtp.mailfrom=opensource.cirrus.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=oreject header.from=opensource.cirrus.com;
-Received-SPF: Fail (protection.outlook.com: domain of opensource.cirrus.com
- does not designate 84.19.233.75 as permitted sender)
- receiver=protection.outlook.com; client-ip=84.19.233.75;
- helo=edirelay1.ad.cirrus.com;
-Received: from edirelay1.ad.cirrus.com (84.19.233.75) by
- BL02EPF0001A0FC.mail.protection.outlook.com (10.167.242.103) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.18
- via Frontend Transport; Fri, 30 May 2025 13:23:49 +0000
-Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
-	by edirelay1.ad.cirrus.com (Postfix) with ESMTPS id CFC32406547;
-	Fri, 30 May 2025 13:23:47 +0000 (UTC)
-Received: from [198.90.194.24] (EDIN4L06LR3.ad.cirrus.com [198.90.194.24])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPSA id 1A3C9820258;
-	Fri, 30 May 2025 13:23:47 +0000 (UTC)
-Message-ID: <1f131def-8ae4-42ab-8c4c-b3489515e6fd@opensource.cirrus.com>
-Date: Fri, 30 May 2025 14:23:47 +0100
+	Fri, 30 May 2025 12:58:07 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH007.crowdstrike.sys (10.100.11.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 30 May 2025 12:58:02 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <qmo@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
+        <song@kernel.org>, <yonghong.song@linux.dev>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <mykolal@fb.com>,
+        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>,
+        <justin.deschamp@crowdstrike.com>, <mark.fontana@crowdstrike.com>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add test for bpftool access to read-only protected maps
+Date: Fri, 30 May 2025 22:57:17 +1000
+Message-ID: <20250530125717.34746-2-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250530125717.34746-1-slava.imameev@crowdstrike.com>
+References: <20250530125717.34746-1-slava.imameev@crowdstrike.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kunit: configs: Enable CONFIG_INIT_STACK_ALL_PATTERN in
- all_tests
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-References: <20250411095904.1593224-1-rf@opensource.cirrus.com>
- <20250529083811.778bc31b@kernel.org>
-Content-Language: en-US
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <20250529083811.778bc31b@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A0FC:EE_|LV3PR19MB8443:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6ed2870a-4fce-45e1-c035-08dd9f7d36ad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|36860700013|61400799027;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?T2hGMCtUWXF0YWNFYko4MXNjTTVOTTZZWGdLQ0ViZVl0bkM1V1h1YUVUTkk4?=
- =?utf-8?B?T1R6UStXYjl0eit6MTZROHRSMG5sbVh2MHI2NWpuTGNMM25SUmZrNHA4K0VP?=
- =?utf-8?B?bmJNNHdQdVZxeXVKTGtwcFkxWEZXenJjR2V5ZTBxeTVoSURHSDdseEZTVlUx?=
- =?utf-8?B?a3ptbGpEVjQ2ams2aWg3THJ6SWJqT0l5UXhVRzJrV2l5VGJkU0FWL3dHUnVv?=
- =?utf-8?B?UUZ5VkczZEtzR25vMmJUb2diYStHSE1aeFZXZmIySTlTMm8zOWswQWdqNXpi?=
- =?utf-8?B?NXNDeDY3WWFUdnkydGJpMkgvYXpxM2wvbmJLOHdKdHkzYldQRHgyZUlOV3lK?=
- =?utf-8?B?LytqWkxZN0JtWE9OM2s3MUFZWTdYUW5rVXBzdVpQa21zaEE0UTMxOFpUcWJr?=
- =?utf-8?B?QVZRbEJvY0xsVG42YUh1VmVYRHJLYWx2YmdmekJBZUNXVzZVU2JEZngwcCt0?=
- =?utf-8?B?eE5mcDBXcDhpcnRERXkxTjVENC8zS0Rad3I5MnU4SUJtRkNUM29yN1RPQkxG?=
- =?utf-8?B?VUVoa3QwMVpSd29rblpuaGIxYjdDZ2JwYkZFNGlIQTJJS3J1Kyt0RUVwMGtu?=
- =?utf-8?B?OTBVVlczWUpDRWFHVkpTeml4YTNlN0R1UllMRzJGZXFvV0NESEZBVllNVzM3?=
- =?utf-8?B?Ykg1T3ZKaWlQVTdFaXpLRi8ycHpKdXIvVzh1YTB1cGtnVzIwMVVrM2dFcVls?=
- =?utf-8?B?RE1HZ3d0V1dDK2p5YXM2SkdkMWptTEUvNmxDTmdOWERaOStsMjBCSGVoTmJ1?=
- =?utf-8?B?a1MvcTNYM2kydjFUQkJpTEQ0dkR4VmJqY2grUkd5S3p4ZWpHWFROQ0lranV3?=
- =?utf-8?B?TnQ1Mm80U29ONTZla3BmQUhoaWpEUy9OTVZudWU4UFBoMndudEEzZ00yS1JV?=
- =?utf-8?B?aUM5eUJjY1Y5bFl5enJaZGhZQ3gvZUVDZ2NzZnRDT0pLYTVmaXZXci9RSjlz?=
- =?utf-8?B?dGl0bXViR0VuaHRmZXd3OXFsclFiSmZlVzlZa3NqVEY4aFVEYW9ZazBOY1Q0?=
- =?utf-8?B?OEM4MTVCV0xEb0pXN01OYzR6aHkyRFE4Z3h0WllUWElOSkF5dE45S3BDZjFN?=
- =?utf-8?B?d2JKdTNjRW1JUkxrRHZJdS9HTjRzWkdaWXV1VE9zenBFNGhWTDFTMkxnZld2?=
- =?utf-8?B?R2xUZENVLzd6L09XOG9XdkY1Q3FmU2NiZXZNSDRodHowY2E0RUFBYU9yUWpF?=
- =?utf-8?B?LzdKZUVacDc0MWI1dGVGRG1jL1NZTlJZWnVGT0tOd0ljK3NyRUdFYmlJRGd4?=
- =?utf-8?B?V0F6VEduYlNIMUJ5TzlGbEJKdmZWeDFkRlZmL1M1MUFNUlBURzZZL2dyTk90?=
- =?utf-8?B?aUZjSTNCblBaSmtFeTlUdUo0T3ZmOXI1Q0w1TitJK0JVeTRuS01Lclg0MHZN?=
- =?utf-8?B?d2RDOUNnb0tPTzdmVGRCdTMxTm1Fa2RvY05lQXgyNFVUMVR1VGlod0ZoTVhU?=
- =?utf-8?B?bWJPWUlUaEt2anFsSFNIWnZmMm9VTXhKTXBlYXVyS0xkL2VxTjUrdkhBTUJT?=
- =?utf-8?B?bVFiczc2TnhrUFo0MEFETDVkZk5qVklLMEY3ZU9PQUVzOVBudHl5c0I3M2hO?=
- =?utf-8?B?RnFjYUl4Q3BUMkFzWnJtSXlzcm1DVDFaSmI3VE4yNEFDd25lTHlrTm4xRnNG?=
- =?utf-8?B?Z2NycmRST2NwTTA5RnhiR2hFYmg1eW43d1R3cnM2VCtCa211SHdoclkySVA4?=
- =?utf-8?B?VnZJOFlINk1yYkhibUFSVExmMWoxbGgwRVFpZk1HWUVKRHZJNjFpa2NNeFpV?=
- =?utf-8?B?TWd5a1NUVm8xUTVnanU2akFxZGNIRnF2NC9weVNnM201WUVuaHgvbE1QUlNC?=
- =?utf-8?B?K3lKZTh1K0V5SDc2NUJFaDd0QW15T2ZQRkJhWlJqY1ljSTVGd1JGZ0dYSDYw?=
- =?utf-8?B?R0luRjJuS0s3akNwRmZ2QndZWnBXQWVBMmxyNFJKQ1BkOHVQM3AyMTdKeDg3?=
- =?utf-8?B?cXVNSmowSXIzeVFxblR6NHdobmFsRWVCNUtaaEkvN1dpQXRkRVYxT0dCWmhw?=
- =?utf-8?B?L0JuYnF6SDl0MzBBSW9FZ3k3d3Z1RklyY2pQbE9zRnpVejI0d0pFWkVhdXA5?=
- =?utf-8?Q?FQYXni?=
-X-Forefront-Antispam-Report:
-	CIP:84.19.233.75;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:edirelay1.ad.cirrus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700013)(61400799027);DIR:OUT;SFP:1102;
-X-OriginatorOrg: opensource.cirrus.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2025 13:23:49.1479
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ed2870a-4fce-45e1-c035-08dd9f7d36ad
-X-MS-Exchange-CrossTenant-Id: bec09025-e5bc-40d1-a355-8e955c307de8
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bec09025-e5bc-40d1-a355-8e955c307de8;Ip=[84.19.233.75];Helo=[edirelay1.ad.cirrus.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A0FC.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR19MB8443
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTMwMDExNyBTYWx0ZWRfX7MQXs4Z1GiPo uumJBmT4KWjkLia9eDd/S4q3fLn0CYW0CQx8vlc0MvmzmfyED7s/bfVa4r10WtTT8pzH65lGzYh rWe/T2xV1l1cac4Y7UqMju8ySKh52nh6S05Pr4urtuYvpzwa1xJ3moVqZbN5/Ro+XXKPFHsY3m4
- ZlXOAmTyQJhHVTgqDlaUniRUE5Eh+ubSTxFWynsZhVs+A2B5Vf9duTTbeBRNBac+CtKHR8Octpv sGW4FRkrDG4Exbh3kW489Wy1rq6hewMdPfeevXn0/AZuWFr1VKou2a56nK3/ZKdI8JftQ/DJlpj ewmdE8BiD+/UQfLxtbb3VVkfFNZkyYHVx7nlZ377bSIzoz6t0Mp6xTsGoWQtky6W4nVl1ztixuj
- 4o75RpYlDevF/O1vQBIJr0qy6cIAFDf8NCIxpfLKB37fNq2qu8yvxUxmIqGBr/2xOOYfvqe3
-X-Authority-Analysis: v=2.4 cv=Qohe3Uyd c=1 sm=1 tr=0 ts=6839b16a cx=c_pps a=KnCRqBS1W09bL7b8BvnpRQ==:117 a=h1hSm8JtM9GN1ddwPAif2w==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=IkcTkHD0fZMA:10
- a=dt9VzEwgFbYA:10 a=s63m1ICgrNkA:10 a=RWc_ulEos4gA:10 a=w1d2syhTAAAA:8 a=umfE2JSC5LyJRm4ppqEA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: CseGHcp_nDp1toFcbz0zEJ-gnHwkJWS0
-X-Proofpoint-ORIG-GUID: CseGHcp_nDp1toFcbz0zEJ-gnHwkJWS0
-X-Proofpoint-Spam-Reason: safe
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH009.crowdstrike.sys (10.100.11.79) To
+ 04WPEXCH007.crowdstrike.sys (10.100.11.74)
+X-Disclaimer: USA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-30_05,2025-05-30_01,2025-03-28_01
 
-On 29/5/25 16:38, Jakub Kicinski wrote:
-> On Fri, 11 Apr 2025 10:59:04 +0100 Richard Fitzgerald wrote:
->> Enable CONFIG_INIT_STACK_ALL_PATTERN in all_tests.config. This helps
->> to detect use of uninitialized local variables.
->>
->> This option found an uninitialized data bug in the cs_dsp test.
->>
->> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
->> ---
->>   tools/testing/kunit/configs/all_tests.config | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
->> index cdd9782f9646..4a60bb71fe72 100644
->> --- a/tools/testing/kunit/configs/all_tests.config
->> +++ b/tools/testing/kunit/configs/all_tests.config
->> @@ -10,6 +10,7 @@ CONFIG_KUNIT_EXAMPLE_TEST=y
->>   CONFIG_KUNIT_ALL_TESTS=y
->>   
->>   CONFIG_FORTIFY_SOURCE=y
->> +CONFIG_INIT_STACK_ALL_PATTERN=y
-> 
-> This breaks kunit for older compilers:
+Add selftest cases that validate bpftool's expected behavior when
+accessing maps protected from modification via security_bpf_map.
 
-Drop it then.
-It's not essential. Just something that showed a bug in a test so I
-thought would be useful to test always. But if there are compatibility
-problems it would be better not to have it in all_tests.
+The test includes a BPF program attached to security_bpf_map with two maps:
+- A protected map that only allows read-only access
+- An unprotected map that allows full access
+
+The test script attaches the BPF program to security_bpf_map and
+verifies that for the bpftool map command:
+- Read access works on both maps
+- Write access fails on the protected map
+- Write access succeeds on the unprotected map
+- These behaviors remain consistent when the maps are pinned
+
+Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
+---
+ tools/testing/selftests/bpf/Makefile          |   1 +
+ .../selftests/bpf/progs/security_bpf_map.c    |  56 +++++
+ .../testing/selftests/bpf/test_bpftool_map.sh | 208 ++++++++++++++++++
+ 3 files changed, 265 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/security_bpf_map.c
+ create mode 100755 tools/testing/selftests/bpf/test_bpftool_map.sh
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index cf5ed3bee573..731a86407799 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -109,6 +109,7 @@ TEST_PROGS := test_kmod.sh \
+ 	test_xdping.sh \
+ 	test_bpftool_build.sh \
+ 	test_bpftool.sh \
++	test_bpftool_map.sh \
+ 	test_bpftool_metadata.sh \
+ 	test_doc_build.sh \
+ 	test_xsk.sh \
+diff --git a/tools/testing/selftests/bpf/progs/security_bpf_map.c b/tools/testing/selftests/bpf/progs/security_bpf_map.c
+new file mode 100644
+index 000000000000..57226f2ceb5f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/security_bpf_map.c
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include "vmlinux.h"
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++
++#define EPERM 1 /* Operation not permitted */
++
++/* From include/linux/mm.h. */
++#define FMODE_WRITE	0x2
++
++struct map;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, __u32);
++	__type(value, __u32);
++	__uint(max_entries, 1);
++} prot_map SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, __u32);
++	__type(value, __u32);
++	__uint(max_entries, 1);
++} not_prot_map SEC(".maps");
++
++SEC("fmod_ret/security_bpf_map")
++int BPF_PROG(fmod_bpf_map, struct bpf_map *map, int fmode)
++{
++	if (map == &prot_map) {
++		/* Allow read-only access */
++		if (fmode & FMODE_WRITE)
++			return -EPERM;
++	}
++
++	return 0;
++}
++
++/*
++ * This program keeps references to maps. This is needed to prevent
++ * optimizing them out.
++ */
++SEC("fentry/bpf_fentry_test1")
++int BPF_PROG(bpf_fentry_test1, int a)
++{
++	__u32 key = 0;
++	__u32 val1 = a;
++	__u32 val2 = a + 1;
++
++	bpf_map_update_elem(&prot_map, &key, &val1, BPF_ANY);
++	bpf_map_update_elem(&not_prot_map, &key, &val2, BPF_ANY);
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/test_bpftool_map.sh b/tools/testing/selftests/bpf/test_bpftool_map.sh
+new file mode 100755
+index 000000000000..c7c7f3d2071e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_bpftool_map.sh
+@@ -0,0 +1,208 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++PROTECTED_MAP_NAME="prot_map"
++NOT_PROTECTED_MAP_NAME="not_prot_map"
++BPF_FILE="security_bpf_map.bpf.o"
++TESTNAME="security_bpf_map"
++BPF_FS=$(awk '$3 == "bpf" {print $2; exit}' /proc/mounts)
++BPF_DIR="$BPF_FS/test_$TESTNAME"
++SCRIPT_DIR=$(dirname $(realpath "$0"))
++BPF_FILE_PATH="$SCRIPT_DIR/$BPF_FILE"
++# Assume the script is located under tools/testing/selftests/bpf/
++KDIR_ROOT_DIR=$(realpath "$SCRIPT_DIR"/../../../../)
++
++_cleanup()
++{
++	set +eu
++	[ -d "$TMPDIR" ] && rm -rf "$TMPDIR" 2> /dev/null
++	[ -d "$BPF_DIR" ] && rm -rf "$BPF_DIR" 2> /dev/null
++}
++
++cleanup_skip()
++{
++	echo "selftests: $TESTNAME [SKIP]"
++	_cleanup
++
++	exit $ksft_skip
++}
++
++cleanup()
++{
++	if [ "$?" = 0 ]; then
++		echo "selftests: $TESTNAME [PASS]"
++	else
++		echo "selftests: $TESTNAME [FAILED]"
++	fi
++	_cleanup
++}
++
++# Parameters:
++#   $1: The top of kernel repository
++#   $2: Output directory
++build_bpftool()
++{
++	local kdir_root_dir="$1"
++	local output_dir="$2"
++	local pwd="$(pwd)"
++	local ncpus=1
++
++	echo Building bpftool ...
++
++	#We want to start build from the top of kernel repository.
++	cd "$kdir_root_dir"
++	if [ ! -e tools/bpf/bpftool/Makefile ]; then
++		echo bpftool files not found
++		exit $ksft_skip
++	fi
++
++	# Determine the number of CPUs for parallel compilation
++	if command -v nproc >/dev/null 2>&1; then
++		ncpus=$(nproc)
++	fi
++
++	make -C tools/bpf/bpftool -s -j"$ncpus" OUTPUT="$output_dir"/ >/dev/null
++	echo ... finished building bpftool
++	cd "$pwd"
++}
++
++# Function to test map access with configurable write expectations
++# Parameters:
++#   $1: Map name
++#   $2: Whether write should succeed (true/false)
++#   $3: bpftool path
++#   $4: BPF_DIR
++test_map_access() {
++	local map_name="$1"
++	local write_should_succeed="$2"
++	local bpftool_path="$3"
++	local pin_path="$4/${map_name}_pinned"
++	local key="0 0 0 0"
++	local value="1 1 1 1"
++
++	echo "Testing access to map: $map_name"
++
++	# Test read access to the map
++	if "$bpftool_path" map lookup name "$map_name" key $key; then
++		echo "  Read access to $map_name succeeded"
++	else
++		echo "  Read access to $map_name failed"
++		exit 1
++	fi
++
++	# Test write access to the map
++	if "$bpftool_path" map update name "$map_name" key $key value $value; then
++		if [ "$write_should_succeed" = "true" ]; then
++			echo "  Write access to $map_name succeeded as expected"
++		else
++			echo "  Write access to $map_name succeeded but should have failed"
++			exit 1
++		fi
++	else
++		if [ "$write_should_succeed" = "true" ]; then
++			echo "  Write access to $map_name failed but should have succeeded"
++			exit 1
++		else
++			echo "  Write access to $map_name failed as expected"
++		fi
++	fi
++
++	# Pin the map to the BPF filesystem
++	"$bpftool_path" map pin name "$map_name" "$pin_path"
++	if [ -e "$pin_path" ]; then
++		echo "  Successfully pinned $map_name to $pin_path"
++	else
++		echo "  Failed to pin $map_name"
++		exit 1
++	fi
++
++	# Test read access to the pinned map
++	if "$bpftool_path" map lookup pinned "$pin_path" key $key; then
++		echo "  Read access to pinned $map_name succeeded"
++	else
++		echo "  Read access to pinned $map_name failed"
++		exit 1
++	fi
++
++	# Test write access to the pinned map
++	if "$bpftool_path" map update pinned "$pin_path" key $key value $value; then
++		if [ "$write_should_succeed" = "true" ]; then
++			echo "  Write access to pinned $map_name succeeded as expected"
++		else
++			echo "  Write access to pinned $map_name succeeded but should have failed"
++			exit 1
++		fi
++	else
++		if [ "$write_should_succeed" = "true" ]; then
++			echo "  Write access to pinned $map_name failed but should have succeeded"
++			exit 1
++		else
++			echo "  Write access to pinned $map_name failed as expected"
++		fi
++	fi
++
++	echo "  Finished testing $map_name"
++	echo
++}
++
++check_root_privileges() {
++	if [ $(id -u) -ne 0 ]; then
++		echo "Need root privileges"
++		exit $ksft_skip
++	fi
++}
++
++check_bpffs() {
++	if [ -z "$BPF_FS" ]; then
++		echo "Could not run test without bpffs mounted"
++		exit $ksft_skip
++	fi
++}
++
++create_tmp_dir() {
++	TMPDIR=$(mktemp -d)
++	if [ $? -ne 0 ] || [ ! -d "$TMPDIR" ]; then
++		echo "Failed to create temporary directory"
++		exit $ksft_skip
++	fi
++}
++
++locate_or_build_bpftool() {
++	if ! bpftool version > /dev/null 2>&1; then
++		build_bpftool "$KDIR_ROOT_DIR" "$TMPDIR"
++		BPFTOOL_PATH="$TMPDIR"/bpftool
++	else
++		echo "Using bpftool from PATH"
++		BPFTOOL_PATH="bpftool"
++	fi
++}
++
++set -eu
++
++trap cleanup_skip EXIT
++
++check_root_privileges
++
++check_bpffs
++
++create_tmp_dir
++
++locate_or_build_bpftool
++
++mkdir "$BPF_DIR"
++
++trap cleanup EXIT
++
++# Load and attach the BPF programs to control maps access
++"$BPFTOOL_PATH" prog loadall "$BPF_FILE_PATH" "$BPF_DIR"/prog autoattach
++
++# Test protected map (write should fail)
++test_map_access "$PROTECTED_MAP_NAME" "false" "$BPFTOOL_PATH" "$BPF_DIR"
++
++# Test not protected map (write should succeed)
++test_map_access "$NOT_PROTECTED_MAP_NAME" "true" "$BPFTOOL_PATH" "$BPF_DIR"
++
++exit 0
+-- 
+2.34.1
 
