@@ -1,604 +1,197 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABAC17BD3;
-	Fri, 30 May 2025 13:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748611018; cv=none; b=gjTdZuhXYh0FLfzSdObIcwrBEG1Xx5Puri4Uym61f5C4gietNHmPQ9PiycIG3rH8qrwBdeymXwIaxnpHGyAvgVGyLEaM6R9kO5GPplc+VsULSiZOTPZL2LnFYZSFfzvtpDb+fQld9Xm/svjn/bd+RfJUV15U33/Mfudt7QkozRM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748611018; c=relaxed/simple;
-	bh=odSpI0BeOEr3gfWcu6dm8dCBXa6N3MN2XV4lNf57b3k=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gugsZl6noh+fgH7Wh/dWRZ5fyNzApXOI+gdtuP2DpNLJx3TojCFq1MaWI0DF9h7ZRIcFZVsMsZhMl87M1qCBWlvnQRW/eSLkC8ireqmrSMqUMrRhrwPXGsmASPJKWuQBxp6JciZvhli8VutRfEUXQ23mKRmDjFRID5+U8A5sMRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=OlE45DgI; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AA41E515;
+	Fri, 30 May 2025 13:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.149.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748611459; cv=fail; b=R45/rySfghDUxvzIL3S7/ueNy3vML3c7SAYH0y56C69u/EUF7DvF7wYc6xB+URMgzqaKwd1S40fucJ1fXfsa5NVmhIQcVzZlFJASSXJkgxIU6uPHf7T4gttnqw51yYI2ZgsK2dz/OkSeBvAycqG39D28zeAfJXSN2L77m2BX7l8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748611459; c=relaxed/simple;
+	bh=7HRF+PUorsgSSdOumetgp6bK4NH5r6YDRe8ZI+6Hkq4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TiVDG1wA1V1jC2JiEz32wYsp9t4Lk5rqsY/4QKMdnsjrye5XmI/xQuAx+EZTFuCMQswhEeitip3C9KvMIoijUQIU0VoI+I3w6F81LpIH5yNrQKwnR8QsO6qepJg4imEYuzWdQnSZMjPF1VTV3hiVTLbpGcRoSQp2V+gEZSW7RzQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=h+jbPAg6; dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b=Qn2xfal6; arc=fail smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="OlE45DgI"
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54U5tYJH013510;
-	Fri, 30 May 2025 12:57:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=default; bh=jmVUGjZmv+RCtWS4PPyAaRxK
-	z/CajiPe93qR/cXGm/M=; b=OlE45DgII48j9+M6G2hpqMr1wVVlOQrhPobOCxoS
-	luclLAuwaMPWXOY+IRpiBSXGm58sf6MIHgoi1pM/1G6u0J0XjFuykVMuanrBHtO9
-	HMdjrIcpSQ3ouDLYSI+yZGd0u7PnjOxtaOd8c9jrB6pwhh3c9LbkCKTuYLA9M/zO
-	ZfbiImQJc00xIc9QflavbZV7HUc/pM+YEXIJnIHd+4W2NWAJPXbK8/SVq3jnSMKU
-	hfe0d2ksA12MNgqI/mYXNWrv72YqmbtaSMeSuc06mYhgwNpLFj/Ej8pg3W1LS2bP
-	mVXaSYfCW3+8/PpV+fp0DeBoVzm5gu9vgS75HQjXMV+PyA==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 46wj9euygu-1
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="h+jbPAg6";
+	dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b="Qn2xfal6"
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54U7Oxxm004760;
+	Fri, 30 May 2025 08:23:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	PODMain02222019; bh=BraL+uiPimIcl44K91VdSp7ntXPCQx03rpkbFIGvAvM=; b=
+	h+jbPAg6Fuu1v7Qf9BjYRhgR7Q0DBTSwqLhL2V4+eUAN9gIQE9kYDb8MaQf/or0d
+	/zSHGgnqA5UlvGeuYtVpZQXuqNjXFtX1Rt/ZFG2tP/bKBIQ4mvFzyxi8h+zbK1Bi
+	59/7Z8oSFb4THKsmIjWWALy9A66mGaoI885Il5KgF/DUDxHXaGE7/bjI5LAJ/vXl
+	uuDTMcWkAPTq47MQ37ZQa34lFUlaRdAj7gYjx2A/jBWvON+Kdw9lK5cOu20exxqD
+	vEDGZ173fkRjZ2ZWO+wy4JKnMq6cntjBt+YTKOD0afJd1wOOoBbkaFyOx1/VCJyq
+	jTYQw/sc45VXDSvnu18wFQ==
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11on2118.outbound.protection.outlook.com [40.107.236.118])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 46x3msugw8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 30 May 2025 12:57:55 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH007.crowdstrike.sys (10.100.11.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 30 May 2025 12:57:50 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <qmo@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
-        <song@kernel.org>, <yonghong.song@linux.dev>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <mykolal@fb.com>,
-        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>,
-        <justin.deschamp@crowdstrike.com>, <mark.fontana@crowdstrike.com>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: [PATCH bpf-next 1/2] bpftool: Use appropriate permissions for map access
-Date: Fri, 30 May 2025 22:57:16 +1000
-Message-ID: <20250530125717.34746-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	Fri, 30 May 2025 08:23:54 -0500 (CDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wp0xM0JWNR1YxkDz4ftG6afieCr7b2sgM4gvr5UdMDMLAFki/iUjTbqO1PziFeQEW6TQIsI4JxpTbJRReZxvm8/+4aXcHOXteuBpcQtODfYdO+uEUo37Q1fCNbYOabeuGyyYHRKZsbtXvxvmjbJ8L7DQDaNcqoQ5cdPsaHv0uRl8mJsEiLTeATfHsIl1t6jKMrjQmEKlUVUlQ0OHGP4+uZ8xJl8sncejFtU9HThU7CjFl82cc86dohKREugp8mDL3knndTDXZtOJSvI94dyqSsW+DiBykwzhCybo3ds5aK+VF26O77i1TEAtukUHzVbbabIrjOftdBKBU8YkFOJgyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BraL+uiPimIcl44K91VdSp7ntXPCQx03rpkbFIGvAvM=;
+ b=lWrP/s1WWJoezi0sja6c13sWpF2yqseVGZrV7q0GIF+2oU0nDFvGJIOhIA8mbBtBEBHsrHEYN6NZ6lXeMozunx2SpnXWBSqnLa7XxkX8OfhM62a873t8rOPraeAeW2j9k53chqvP2/U2XyZbZrW8iDiMWnkfZPfFeqFLUK8Nh+7NlkHoqLQw3vNEtfi5WElCGg/fFSDe96Q1AnS+g9qmKIorQwK0J62SUsj7qwtWJCw1flFtgXCpj5WCRWAGI6vl+xtNRAChhUffAmM/DDcXDHd3MOPPSu+ohhbf7jY9Qr+L/2dl5ebt7qcI3FUiSMXT4Y0yRMyN3nwQqp734ilA0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 84.19.233.75) smtp.rcpttodomain=cirrus.com
+ smtp.mailfrom=opensource.cirrus.com; dmarc=fail (p=reject sp=reject pct=100)
+ action=oreject header.from=opensource.cirrus.com; dkim=none (message not
+ signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cirrus4.onmicrosoft.com; s=selector2-cirrus4-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BraL+uiPimIcl44K91VdSp7ntXPCQx03rpkbFIGvAvM=;
+ b=Qn2xfal6lZ75x/g+GlBwALwqFTRouAnZmXb3trcYDczPhoirg0u+NK4aNAQEERZMY/fcVAaS0QmMgnMDsszD8DLjVih1EaETJApKzZjxhlWxiPfx7UwKJm5v7lYFJPgG48jH2sNC4FJD0s/zgNR+fevwIZ1XHdZDxeF6USUecDQ=
+Received: from MN2PR05CA0050.namprd05.prod.outlook.com (2603:10b6:208:236::19)
+ by LV3PR19MB8443.namprd19.prod.outlook.com (2603:10b6:408:20c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.21; Fri, 30 May
+ 2025 13:23:49 +0000
+Received: from BL02EPF0001A0FC.namprd03.prod.outlook.com
+ (2603:10b6:208:236:cafe::cf) by MN2PR05CA0050.outlook.office365.com
+ (2603:10b6:208:236::19) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.15 via Frontend Transport; Fri,
+ 30 May 2025 13:23:49 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 84.19.233.75)
+ smtp.mailfrom=opensource.cirrus.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=oreject header.from=opensource.cirrus.com;
+Received-SPF: Fail (protection.outlook.com: domain of opensource.cirrus.com
+ does not designate 84.19.233.75 as permitted sender)
+ receiver=protection.outlook.com; client-ip=84.19.233.75;
+ helo=edirelay1.ad.cirrus.com;
+Received: from edirelay1.ad.cirrus.com (84.19.233.75) by
+ BL02EPF0001A0FC.mail.protection.outlook.com (10.167.242.103) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.18
+ via Frontend Transport; Fri, 30 May 2025 13:23:49 +0000
+Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by edirelay1.ad.cirrus.com (Postfix) with ESMTPS id CFC32406547;
+	Fri, 30 May 2025 13:23:47 +0000 (UTC)
+Received: from [198.90.194.24] (EDIN4L06LR3.ad.cirrus.com [198.90.194.24])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPSA id 1A3C9820258;
+	Fri, 30 May 2025 13:23:47 +0000 (UTC)
+Message-ID: <1f131def-8ae4-42ab-8c4c-b3489515e6fd@opensource.cirrus.com>
+Date: Fri, 30 May 2025 14:23:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH009.crowdstrike.sys (10.100.11.79) To
- 04WPEXCH007.crowdstrike.sys (10.100.11.74)
-X-Disclaimer: USA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-30_05,2025-05-30_01,2025-03-28_01
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kunit: configs: Enable CONFIG_INIT_STACK_ALL_PATTERN in
+ all_tests
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+References: <20250411095904.1593224-1-rf@opensource.cirrus.com>
+ <20250529083811.778bc31b@kernel.org>
+Content-Language: en-US
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <20250529083811.778bc31b@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A0FC:EE_|LV3PR19MB8443:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6ed2870a-4fce-45e1-c035-08dd9f7d36ad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|82310400026|36860700013|61400799027;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?T2hGMCtUWXF0YWNFYko4MXNjTTVOTTZZWGdLQ0ViZVl0bkM1V1h1YUVUTkk4?=
+ =?utf-8?B?T1R6UStXYjl0eit6MTZROHRSMG5sbVh2MHI2NWpuTGNMM25SUmZrNHA4K0VP?=
+ =?utf-8?B?bmJNNHdQdVZxeXVKTGtwcFkxWEZXenJjR2V5ZTBxeTVoSURHSDdseEZTVlUx?=
+ =?utf-8?B?a3ptbGpEVjQ2ams2aWg3THJ6SWJqT0l5UXhVRzJrV2l5VGJkU0FWL3dHUnVv?=
+ =?utf-8?B?UUZ5VkczZEtzR25vMmJUb2diYStHSE1aeFZXZmIySTlTMm8zOWswQWdqNXpi?=
+ =?utf-8?B?NXNDeDY3WWFUdnkydGJpMkgvYXpxM2wvbmJLOHdKdHkzYldQRHgyZUlOV3lK?=
+ =?utf-8?B?LytqWkxZN0JtWE9OM2s3MUFZWTdYUW5rVXBzdVpQa21zaEE0UTMxOFpUcWJr?=
+ =?utf-8?B?QVZRbEJvY0xsVG42YUh1VmVYRHJLYWx2YmdmekJBZUNXVzZVU2JEZngwcCt0?=
+ =?utf-8?B?eE5mcDBXcDhpcnRERXkxTjVENC8zS0Rad3I5MnU4SUJtRkNUM29yN1RPQkxG?=
+ =?utf-8?B?VUVoa3QwMVpSd29rblpuaGIxYjdDZ2JwYkZFNGlIQTJJS3J1Kyt0RUVwMGtu?=
+ =?utf-8?B?OTBVVlczWUpDRWFHVkpTeml4YTNlN0R1UllMRzJGZXFvV0NESEZBVllNVzM3?=
+ =?utf-8?B?Ykg1T3ZKaWlQVTdFaXpLRi8ycHpKdXIvVzh1YTB1cGtnVzIwMVVrM2dFcVls?=
+ =?utf-8?B?RE1HZ3d0V1dDK2p5YXM2SkdkMWptTEUvNmxDTmdOWERaOStsMjBCSGVoTmJ1?=
+ =?utf-8?B?a1MvcTNYM2kydjFUQkJpTEQ0dkR4VmJqY2grUkd5S3p4ZWpHWFROQ0lranV3?=
+ =?utf-8?B?TnQ1Mm80U29ONTZla3BmQUhoaWpEUy9OTVZudWU4UFBoMndudEEzZ00yS1JV?=
+ =?utf-8?B?aUM5eUJjY1Y5bFl5enJaZGhZQ3gvZUVDZ2NzZnRDT0pLYTVmaXZXci9RSjlz?=
+ =?utf-8?B?dGl0bXViR0VuaHRmZXd3OXFsclFiSmZlVzlZa3NqVEY4aFVEYW9ZazBOY1Q0?=
+ =?utf-8?B?OEM4MTVCV0xEb0pXN01OYzR6aHkyRFE4Z3h0WllUWElOSkF5dE45S3BDZjFN?=
+ =?utf-8?B?d2JKdTNjRW1JUkxrRHZJdS9HTjRzWkdaWXV1VE9zenBFNGhWTDFTMkxnZld2?=
+ =?utf-8?B?R2xUZENVLzd6L09XOG9XdkY1Q3FmU2NiZXZNSDRodHowY2E0RUFBYU9yUWpF?=
+ =?utf-8?B?LzdKZUVacDc0MWI1dGVGRG1jL1NZTlJZWnVGT0tOd0ljK3NyRUdFYmlJRGd4?=
+ =?utf-8?B?V0F6VEduYlNIMUJ5TzlGbEJKdmZWeDFkRlZmL1M1MUFNUlBURzZZL2dyTk90?=
+ =?utf-8?B?aUZjSTNCblBaSmtFeTlUdUo0T3ZmOXI1Q0w1TitJK0JVeTRuS01Lclg0MHZN?=
+ =?utf-8?B?d2RDOUNnb0tPTzdmVGRCdTMxTm1Fa2RvY05lQXgyNFVUMVR1VGlod0ZoTVhU?=
+ =?utf-8?B?bWJPWUlUaEt2anFsSFNIWnZmMm9VTXhKTXBlYXVyS0xkL2VxTjUrdkhBTUJT?=
+ =?utf-8?B?bVFiczc2TnhrUFo0MEFETDVkZk5qVklLMEY3ZU9PQUVzOVBudHl5c0I3M2hO?=
+ =?utf-8?B?RnFjYUl4Q3BUMkFzWnJtSXlzcm1DVDFaSmI3VE4yNEFDd25lTHlrTm4xRnNG?=
+ =?utf-8?B?Z2NycmRST2NwTTA5RnhiR2hFYmg1eW43d1R3cnM2VCtCa211SHdoclkySVA4?=
+ =?utf-8?B?VnZJOFlINk1yYkhibUFSVExmMWoxbGgwRVFpZk1HWUVKRHZJNjFpa2NNeFpV?=
+ =?utf-8?B?TWd5a1NUVm8xUTVnanU2akFxZGNIRnF2NC9weVNnM201WUVuaHgvbE1QUlNC?=
+ =?utf-8?B?K3lKZTh1K0V5SDc2NUJFaDd0QW15T2ZQRkJhWlJqY1ljSTVGd1JGZ0dYSDYw?=
+ =?utf-8?B?R0luRjJuS0s3akNwRmZ2QndZWnBXQWVBMmxyNFJKQ1BkOHVQM3AyMTdKeDg3?=
+ =?utf-8?B?cXVNSmowSXIzeVFxblR6NHdobmFsRWVCNUtaaEkvN1dpQXRkRVYxT0dCWmhw?=
+ =?utf-8?B?L0JuYnF6SDl0MzBBSW9FZ3k3d3Z1RklyY2pQbE9zRnpVejI0d0pFWkVhdXA5?=
+ =?utf-8?Q?FQYXni?=
+X-Forefront-Antispam-Report:
+	CIP:84.19.233.75;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:edirelay1.ad.cirrus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700013)(61400799027);DIR:OUT;SFP:1102;
+X-OriginatorOrg: opensource.cirrus.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2025 13:23:49.1479
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ed2870a-4fce-45e1-c035-08dd9f7d36ad
+X-MS-Exchange-CrossTenant-Id: bec09025-e5bc-40d1-a355-8e955c307de8
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bec09025-e5bc-40d1-a355-8e955c307de8;Ip=[84.19.233.75];Helo=[edirelay1.ad.cirrus.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A0FC.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR19MB8443
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTMwMDExNyBTYWx0ZWRfX7MQXs4Z1GiPo uumJBmT4KWjkLia9eDd/S4q3fLn0CYW0CQx8vlc0MvmzmfyED7s/bfVa4r10WtTT8pzH65lGzYh rWe/T2xV1l1cac4Y7UqMju8ySKh52nh6S05Pr4urtuYvpzwa1xJ3moVqZbN5/Ro+XXKPFHsY3m4
+ ZlXOAmTyQJhHVTgqDlaUniRUE5Eh+ubSTxFWynsZhVs+A2B5Vf9duTTbeBRNBac+CtKHR8Octpv sGW4FRkrDG4Exbh3kW489Wy1rq6hewMdPfeevXn0/AZuWFr1VKou2a56nK3/ZKdI8JftQ/DJlpj ewmdE8BiD+/UQfLxtbb3VVkfFNZkyYHVx7nlZ377bSIzoz6t0Mp6xTsGoWQtky6W4nVl1ztixuj
+ 4o75RpYlDevF/O1vQBIJr0qy6cIAFDf8NCIxpfLKB37fNq2qu8yvxUxmIqGBr/2xOOYfvqe3
+X-Authority-Analysis: v=2.4 cv=Qohe3Uyd c=1 sm=1 tr=0 ts=6839b16a cx=c_pps a=KnCRqBS1W09bL7b8BvnpRQ==:117 a=h1hSm8JtM9GN1ddwPAif2w==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=IkcTkHD0fZMA:10
+ a=dt9VzEwgFbYA:10 a=s63m1ICgrNkA:10 a=RWc_ulEos4gA:10 a=w1d2syhTAAAA:8 a=umfE2JSC5LyJRm4ppqEA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: CseGHcp_nDp1toFcbz0zEJ-gnHwkJWS0
+X-Proofpoint-ORIG-GUID: CseGHcp_nDp1toFcbz0zEJ-gnHwkJWS0
+X-Proofpoint-Spam-Reason: safe
 
-Modify several functions in tools/bpf/bpftool/common.c to allow
-specification of requested access for file descriptors, such as
-read-only access.
+On 29/5/25 16:38, Jakub Kicinski wrote:
+> On Fri, 11 Apr 2025 10:59:04 +0100 Richard Fitzgerald wrote:
+>> Enable CONFIG_INIT_STACK_ALL_PATTERN in all_tests.config. This helps
+>> to detect use of uninitialized local variables.
+>>
+>> This option found an uninitialized data bug in the cs_dsp test.
+>>
+>> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+>> ---
+>>   tools/testing/kunit/configs/all_tests.config | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
+>> index cdd9782f9646..4a60bb71fe72 100644
+>> --- a/tools/testing/kunit/configs/all_tests.config
+>> +++ b/tools/testing/kunit/configs/all_tests.config
+>> @@ -10,6 +10,7 @@ CONFIG_KUNIT_EXAMPLE_TEST=y
+>>   CONFIG_KUNIT_ALL_TESTS=y
+>>   
+>>   CONFIG_FORTIFY_SOURCE=y
+>> +CONFIG_INIT_STACK_ALL_PATTERN=y
+> 
+> This breaks kunit for older compilers:
 
-Update bpftool to request only read access for maps when write
-access is not required. This fixes errors when reading from maps
-that are protected from modification via security_bpf_map.
-
-Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
----
- tools/bpf/bpftool/btf.c           |  3 +-
- tools/bpf/bpftool/common.c        | 57 ++++++++++++++++++++++---------
- tools/bpf/bpftool/iter.c          |  2 +-
- tools/bpf/bpftool/link.c          |  2 +-
- tools/bpf/bpftool/main.h          | 13 ++++---
- tools/bpf/bpftool/map.c           | 56 +++++++++++++++++-------------
- tools/bpf/bpftool/map_perf_ring.c |  3 +-
- tools/bpf/bpftool/prog.c          |  4 +--
- 8 files changed, 90 insertions(+), 50 deletions(-)
-
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 6b14cbfa58aa..1ba27cb03348 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -905,7 +905,8 @@ static int do_dump(int argc, char **argv)
- 			return -1;
- 		}
- 
--		fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
-+		fd = map_parse_fd_and_info(&argc, &argv, &info, &len,
-+					   BPF_F_RDONLY);
- 		if (fd < 0)
- 			return -1;
- 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index ecfa790adc13..ff1c99281beb 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -193,7 +193,8 @@ int mount_tracefs(const char *target)
- 	return err;
- }
- 
--int open_obj_pinned(const char *path, bool quiet)
-+int open_obj_pinned(const char *path, bool quiet,
-+		    const struct bpf_obj_get_opts *opts)
- {
- 	char *pname;
- 	int fd = -1;
-@@ -205,7 +206,7 @@ int open_obj_pinned(const char *path, bool quiet)
- 		goto out_ret;
- 	}
- 
--	fd = bpf_obj_get(pname);
-+	fd = bpf_obj_get_opts(pname, opts);
- 	if (fd < 0) {
- 		if (!quiet)
- 			p_err("bpf obj get (%s): %s", pname,
-@@ -221,12 +222,13 @@ int open_obj_pinned(const char *path, bool quiet)
- 	return fd;
- }
- 
--int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type)
-+int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type,
-+			const struct bpf_obj_get_opts *opts)
- {
- 	enum bpf_obj_type type;
- 	int fd;
- 
--	fd = open_obj_pinned(path, false);
-+	fd = open_obj_pinned(path, false, opts);
- 	if (fd < 0)
- 		return -1;
- 
-@@ -555,7 +557,7 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
- 	if (typeflag != FTW_F)
- 		goto out_ret;
- 
--	fd = open_obj_pinned(fpath, true);
-+	fd = open_obj_pinned(fpath, true, NULL);
- 	if (fd < 0)
- 		goto out_ret;
- 
-@@ -928,7 +930,7 @@ int prog_parse_fds(int *argc, char ***argv, int **fds)
- 		path = **argv;
- 		NEXT_ARGP();
- 
--		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_PROG);
-+		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_PROG, NULL);
- 		if ((*fds)[0] < 0)
- 			return -1;
- 		return 1;
-@@ -965,7 +967,8 @@ int prog_parse_fd(int *argc, char ***argv)
- 	return fd;
- }
- 
--static int map_fd_by_name(char *name, int **fds)
-+static int map_fd_by_name(char *name, int **fds,
-+			  const struct bpf_get_fd_by_id_opts *opts)
- {
- 	unsigned int id = 0;
- 	int fd, nb_fds = 0;
-@@ -973,6 +976,7 @@ static int map_fd_by_name(char *name, int **fds)
- 	int err;
- 
- 	while (true) {
-+		LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts_ro);
- 		struct bpf_map_info info = {};
- 		__u32 len = sizeof(info);
- 
-@@ -985,7 +989,9 @@ static int map_fd_by_name(char *name, int **fds)
- 			return nb_fds;
- 		}
- 
--		fd = bpf_map_get_fd_by_id(id);
-+		/* Request a read-only fd to query the map info */
-+		opts_ro.open_flags = BPF_F_RDONLY;
-+		fd = bpf_map_get_fd_by_id_opts(id, &opts_ro);
- 		if (fd < 0) {
- 			p_err("can't get map by id (%u): %s",
- 			      id, strerror(errno));
-@@ -1004,6 +1010,15 @@ static int map_fd_by_name(char *name, int **fds)
- 			continue;
- 		}
- 
-+		/* Get an fd with the requested options. */
-+		close(fd);
-+		fd = bpf_map_get_fd_by_id_opts(id, opts);
-+		if (fd < 0) {
-+			p_err("can't get map by id (%u): %s", id,
-+			      strerror(errno));
-+			goto err_close_fds;
-+		}
-+
- 		if (nb_fds > 0) {
- 			tmp = realloc(*fds, (nb_fds + 1) * sizeof(int));
- 			if (!tmp) {
-@@ -1023,8 +1038,16 @@ static int map_fd_by_name(char *name, int **fds)
- 	return -1;
- }
- 
--int map_parse_fds(int *argc, char ***argv, int **fds)
-+int map_parse_fds(int *argc, char ***argv, int **fds, __u32 open_flags)
- {
-+	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts);
-+
-+	if (open_flags & ~BPF_F_RDONLY) {
-+		p_err("invalid open_flags: %x", open_flags);
-+		return -1;
-+	}
-+	opts.open_flags = open_flags;
-+
- 	if (is_prefix(**argv, "id")) {
- 		unsigned int id;
- 		char *endptr;
-@@ -1038,7 +1061,7 @@ int map_parse_fds(int *argc, char ***argv, int **fds)
- 		}
- 		NEXT_ARGP();
- 
--		(*fds)[0] = bpf_map_get_fd_by_id(id);
-+		(*fds)[0] = bpf_map_get_fd_by_id_opts(id, &opts);
- 		if ((*fds)[0] < 0) {
- 			p_err("get map by id (%u): %s", id, strerror(errno));
- 			return -1;
-@@ -1056,16 +1079,18 @@ int map_parse_fds(int *argc, char ***argv, int **fds)
- 		}
- 		NEXT_ARGP();
- 
--		return map_fd_by_name(name, fds);
-+		return map_fd_by_name(name, fds, &opts);
- 	} else if (is_prefix(**argv, "pinned")) {
- 		char *path;
-+		LIBBPF_OPTS(bpf_obj_get_opts, get_opts);
-+		get_opts.file_flags = open_flags;
- 
- 		NEXT_ARGP();
- 
- 		path = **argv;
- 		NEXT_ARGP();
- 
--		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_MAP);
-+		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_MAP, &get_opts);
- 		if ((*fds)[0] < 0)
- 			return -1;
- 		return 1;
-@@ -1075,7 +1100,7 @@ int map_parse_fds(int *argc, char ***argv, int **fds)
- 	return -1;
- }
- 
--int map_parse_fd(int *argc, char ***argv)
-+int map_parse_fd(int *argc, char ***argv, __u32 open_flags)
- {
- 	int *fds = NULL;
- 	int nb_fds, fd;
-@@ -1085,7 +1110,7 @@ int map_parse_fd(int *argc, char ***argv)
- 		p_err("mem alloc failed");
- 		return -1;
- 	}
--	nb_fds = map_parse_fds(argc, argv, &fds);
-+	nb_fds = map_parse_fds(argc, argv, &fds, open_flags);
- 	if (nb_fds != 1) {
- 		if (nb_fds > 1) {
- 			p_err("several maps match this handle");
-@@ -1103,12 +1128,12 @@ int map_parse_fd(int *argc, char ***argv)
- }
- 
- int map_parse_fd_and_info(int *argc, char ***argv, struct bpf_map_info *info,
--			  __u32 *info_len)
-+			  __u32 *info_len, __u32 open_flags)
- {
- 	int err;
- 	int fd;
- 
--	fd = map_parse_fd(argc, argv);
-+	fd = map_parse_fd(argc, argv, open_flags);
- 	if (fd < 0)
- 		return -1;
- 
-diff --git a/tools/bpf/bpftool/iter.c b/tools/bpf/bpftool/iter.c
-index 5c39c2ed36a2..ad318a8667a4 100644
---- a/tools/bpf/bpftool/iter.c
-+++ b/tools/bpf/bpftool/iter.c
-@@ -37,7 +37,7 @@ static int do_pin(int argc, char **argv)
- 				return -1;
- 			}
- 
--			map_fd = map_parse_fd(&argc, &argv);
-+			map_fd = map_parse_fd(&argc, &argv, 0);
- 			if (map_fd < 0)
- 				return -1;
- 
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index 3535afc80a49..8523be11dcd9 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -117,7 +117,7 @@ static int link_parse_fd(int *argc, char ***argv)
- 		path = **argv;
- 		NEXT_ARGP();
- 
--		return open_obj_pinned_any(path, BPF_OBJ_LINK);
-+		return open_obj_pinned_any(path, BPF_OBJ_LINK, NULL);
- 	}
- 
- 	p_err("expected 'id' or 'pinned', got: '%s'?", **argv);
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 9eb764fe4cc8..6db704fda5c0 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -15,6 +15,7 @@
- 
- #include <bpf/hashmap.h>
- #include <bpf/libbpf.h>
-+#include <bpf/bpf.h>
- 
- #include "json_writer.h"
- 
-@@ -140,8 +141,10 @@ void get_prog_full_name(const struct bpf_prog_info *prog_info, int prog_fd,
- int get_fd_type(int fd);
- const char *get_fd_type_name(enum bpf_obj_type type);
- char *get_fdinfo(int fd, const char *key);
--int open_obj_pinned(const char *path, bool quiet);
--int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type);
-+int open_obj_pinned(const char *path, bool quiet,
-+		    const struct bpf_obj_get_opts *opts);
-+int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type,
-+			const struct bpf_obj_get_opts *opts);
- int mount_bpffs_for_file(const char *file_name);
- int create_and_mount_bpffs_dir(const char *dir_name);
- int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(int *, char ***));
-@@ -167,10 +170,10 @@ int do_iter(int argc, char **argv) __weak;
- int parse_u32_arg(int *argc, char ***argv, __u32 *val, const char *what);
- int prog_parse_fd(int *argc, char ***argv);
- int prog_parse_fds(int *argc, char ***argv, int **fds);
--int map_parse_fd(int *argc, char ***argv);
--int map_parse_fds(int *argc, char ***argv, int **fds);
-+int map_parse_fd(int *argc, char ***argv, __u32 open_flags);
-+int map_parse_fds(int *argc, char ***argv, int **fds, __u32 open_flags);
- int map_parse_fd_and_info(int *argc, char ***argv, struct bpf_map_info *info,
--			  __u32 *info_len);
-+			  __u32 *info_len, __u32 open_flags);
- 
- struct bpf_prog_linfo;
- #if defined(HAVE_LLVM_SUPPORT) || defined(HAVE_LIBBFD_SUPPORT)
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 81cc668b4b05..c7dc2eae8ba8 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -337,9 +337,9 @@ static void fill_per_cpu_value(struct bpf_map_info *info, void *value)
- 		memcpy(value + i * step, value, info->value_size);
- }
- 
--static int parse_elem(char **argv, struct bpf_map_info *info,
--		      void *key, void *value, __u32 key_size, __u32 value_size,
--		      __u32 *flags, __u32 **value_fd)
-+static int parse_elem(char **argv, struct bpf_map_info *info, void *key,
-+		      void *value, __u32 key_size, __u32 value_size,
-+		      __u32 *flags, __u32 **value_fd, __u32 open_flags)
- {
- 	if (!*argv) {
- 		if (!key && !value)
-@@ -362,7 +362,7 @@ static int parse_elem(char **argv, struct bpf_map_info *info,
- 			return -1;
- 
- 		return parse_elem(argv, info, NULL, value, key_size, value_size,
--				  flags, value_fd);
-+				  flags, value_fd, open_flags);
- 	} else if (is_prefix(*argv, "value")) {
- 		int fd;
- 
-@@ -388,7 +388,7 @@ static int parse_elem(char **argv, struct bpf_map_info *info,
- 				return -1;
- 			}
- 
--			fd = map_parse_fd(&argc, &argv);
-+			fd = map_parse_fd(&argc, &argv, open_flags);
- 			if (fd < 0)
- 				return -1;
- 
-@@ -424,7 +424,7 @@ static int parse_elem(char **argv, struct bpf_map_info *info,
- 		}
- 
- 		return parse_elem(argv, info, key, NULL, key_size, value_size,
--				  flags, NULL);
-+				  flags, NULL, open_flags);
- 	} else if (is_prefix(*argv, "any") || is_prefix(*argv, "noexist") ||
- 		   is_prefix(*argv, "exist")) {
- 		if (!flags) {
-@@ -440,7 +440,7 @@ static int parse_elem(char **argv, struct bpf_map_info *info,
- 			*flags = BPF_EXIST;
- 
- 		return parse_elem(argv + 1, info, key, value, key_size,
--				  value_size, NULL, value_fd);
-+				  value_size, NULL, value_fd, open_flags);
- 	}
- 
- 	p_err("expected key or value, got: %s", *argv);
-@@ -639,7 +639,7 @@ static int do_show_subset(int argc, char **argv)
- 		p_err("mem alloc failed");
- 		return -1;
- 	}
--	nb_fds = map_parse_fds(&argc, &argv, &fds);
-+	nb_fds = map_parse_fds(&argc, &argv, &fds, BPF_F_RDONLY);
- 	if (nb_fds < 1)
- 		goto exit_free;
- 
-@@ -672,12 +672,15 @@ static int do_show_subset(int argc, char **argv)
- 
- static int do_show(int argc, char **argv)
- {
-+	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts);
- 	struct bpf_map_info info = {};
- 	__u32 len = sizeof(info);
- 	__u32 id = 0;
- 	int err;
- 	int fd;
- 
-+	opts.open_flags = BPF_F_RDONLY;
-+
- 	if (show_pinned) {
- 		map_table = hashmap__new(hash_fn_for_key_as_id,
- 					 equal_fn_for_key_as_id, NULL);
-@@ -707,7 +710,7 @@ static int do_show(int argc, char **argv)
- 			break;
- 		}
- 
--		fd = bpf_map_get_fd_by_id(id);
-+		fd = bpf_map_get_fd_by_id_opts(id, &opts);
- 		if (fd < 0) {
- 			if (errno == ENOENT)
- 				continue;
-@@ -909,7 +912,7 @@ static int do_dump(int argc, char **argv)
- 		p_err("mem alloc failed");
- 		return -1;
- 	}
--	nb_fds = map_parse_fds(&argc, &argv, &fds);
-+	nb_fds = map_parse_fds(&argc, &argv, &fds, BPF_F_RDONLY);
- 	if (nb_fds < 1)
- 		goto exit_free;
- 
-@@ -997,7 +1000,7 @@ static int do_update(int argc, char **argv)
- 	if (argc < 2)
- 		usage();
- 
--	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
-+	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
- 	if (fd < 0)
- 		return -1;
- 
-@@ -1006,7 +1009,7 @@ static int do_update(int argc, char **argv)
- 		goto exit_free;
- 
- 	err = parse_elem(argv, &info, key, value, info.key_size,
--			 info.value_size, &flags, &value_fd);
-+			 info.value_size, &flags, &value_fd, 0);
- 	if (err)
- 		goto exit_free;
- 
-@@ -1076,7 +1079,7 @@ static int do_lookup(int argc, char **argv)
- 	if (argc < 2)
- 		usage();
- 
--	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
-+	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, BPF_F_RDONLY);
- 	if (fd < 0)
- 		return -1;
- 
-@@ -1084,7 +1087,8 @@ static int do_lookup(int argc, char **argv)
- 	if (err)
- 		goto exit_free;
- 
--	err = parse_elem(argv, &info, key, NULL, info.key_size, 0, NULL, NULL);
-+	err = parse_elem(argv, &info, key, NULL, info.key_size, 0, NULL, NULL,
-+			 BPF_F_RDONLY);
- 	if (err)
- 		goto exit_free;
- 
-@@ -1127,7 +1131,7 @@ static int do_getnext(int argc, char **argv)
- 	if (argc < 2)
- 		usage();
- 
--	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
-+	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, BPF_F_RDONLY);
- 	if (fd < 0)
- 		return -1;
- 
-@@ -1140,8 +1144,8 @@ static int do_getnext(int argc, char **argv)
- 	}
- 
- 	if (argc) {
--		err = parse_elem(argv, &info, key, NULL, info.key_size, 0,
--				 NULL, NULL);
-+		err = parse_elem(argv, &info, key, NULL, info.key_size, 0, NULL,
-+				 NULL, BPF_F_RDONLY);
- 		if (err)
- 			goto exit_free;
- 	} else {
-@@ -1198,7 +1202,7 @@ static int do_delete(int argc, char **argv)
- 	if (argc < 2)
- 		usage();
- 
--	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
-+	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, BPF_F_RDONLY);
- 	if (fd < 0)
- 		return -1;
- 
-@@ -1209,7 +1213,8 @@ static int do_delete(int argc, char **argv)
- 		goto exit_free;
- 	}
- 
--	err = parse_elem(argv, &info, key, NULL, info.key_size, 0, NULL, NULL);
-+	err = parse_elem(argv, &info, key, NULL, info.key_size, 0, NULL, NULL,
-+			 0);
- 	if (err)
- 		goto exit_free;
- 
-@@ -1226,11 +1231,16 @@ static int do_delete(int argc, char **argv)
- 	return err;
- }
- 
-+static int map_parse_read_only_fd(int *argc, char ***argv)
-+{
-+	return map_parse_fd(argc, argv, BPF_F_RDONLY);
-+}
-+
- static int do_pin(int argc, char **argv)
- {
- 	int err;
- 
--	err = do_pin_any(argc, argv, map_parse_fd);
-+	err = do_pin_any(argc, argv, map_parse_read_only_fd);
- 	if (!err && json_output)
- 		jsonw_null(json_wtr);
- 	return err;
-@@ -1319,7 +1329,7 @@ static int do_create(int argc, char **argv)
- 			if (!REQ_ARGS(2))
- 				usage();
- 			inner_map_fd = map_parse_fd_and_info(&argc, &argv,
--							     &info, &len);
-+							     &info, &len, 0);
- 			if (inner_map_fd < 0)
- 				return -1;
- 			attr.inner_map_fd = inner_map_fd;
-@@ -1368,7 +1378,7 @@ static int do_pop_dequeue(int argc, char **argv)
- 	if (argc < 2)
- 		usage();
- 
--	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
-+	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
- 	if (fd < 0)
- 		return -1;
- 
-@@ -1407,7 +1417,7 @@ static int do_freeze(int argc, char **argv)
- 	if (!REQ_ARGS(2))
- 		return -1;
- 
--	fd = map_parse_fd(&argc, &argv);
-+	fd = map_parse_fd(&argc, &argv, 0);
- 	if (fd < 0)
- 		return -1;
- 
-diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
-index 552b4ca40c27..bcb767e2d673 100644
---- a/tools/bpf/bpftool/map_perf_ring.c
-+++ b/tools/bpf/bpftool/map_perf_ring.c
-@@ -128,7 +128,8 @@ int do_event_pipe(int argc, char **argv)
- 	int err, map_fd;
- 
- 	map_info_len = sizeof(map_info);
--	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len);
-+	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len,
-+				       0);
- 	if (map_fd < 0)
- 		return -1;
- 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 96eea8a67225..deeaa5c1ed7d 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1062,7 +1062,7 @@ static int parse_attach_detach_args(int argc, char **argv, int *progfd,
- 	if (!REQ_ARGS(2))
- 		return -EINVAL;
- 
--	*mapfd = map_parse_fd(&argc, &argv);
-+	*mapfd = map_parse_fd(&argc, &argv, 0);
- 	if (*mapfd < 0)
- 		return *mapfd;
- 
-@@ -1608,7 +1608,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 			}
- 			NEXT_ARG();
- 
--			fd = map_parse_fd(&argc, &argv);
-+			fd = map_parse_fd(&argc, &argv, 0);
- 			if (fd < 0)
- 				goto err_free_reuse_maps;
- 
--- 
-2.34.1
+Drop it then.
+It's not essential. Just something that showed a bug in a test so I
+thought would be useful to test always. But if there are compatibility
+problems it would be better not to have it in all_tests.
 
