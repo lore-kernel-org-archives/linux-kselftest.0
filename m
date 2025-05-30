@@ -1,449 +1,121 @@
-Received: from mail-pl1-f228.google.com (mail-pl1-f228.google.com [209.85.214.228])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408C025EF92
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 23:47:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634819475;
+	Fri, 30 May 2025 01:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748562471; cv=none; b=SKz+FrVPCUUgv9W+5lpjd2TlVT+hMNRi7xh80RGGyE1515xAybOGVG/nCPg3TBLsZYT7pK5R9hV3JTMncE4et/H3B+pCuCFOR2NLh75o1c9CKEOV3oZYzYd2MztoVKMC04hz38ICmXXCOvWa49VOX7f3SgD5eOqGznH76gnJ1qI=
+	t=1748568602; cv=none; b=ESU3qWpx5tBbbXjKlNBD8+fpRhlIsUWSOOMgk4Kq6bp2cyXpe5k9BJFE1me1NTkjBRru9WqTlhAF0dHUqffwp5Q8OjdMN1x5FXFS6lgXGqAJOPoIpHjvg2cerAVe51Cqidup/aEFwbQsaUJv7cTpsoObohdHSHRK6uhFL6kcgDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748562471; c=relaxed/simple;
-	bh=cG6DwOTES7Wr1Mys+5MNrPViClJyvreq1N/+Wqx3nzw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HAT7mVKF7DioyCLj/dKJk1XQtfIifBpmCFDuv5K1iNnPPinDpu6rv+ytWgPD4R320YFuiemK1i1kKX6clJkmf7YL53AqV2oRqmMcjUTl15IO0+gvAAgWmxLQu6II9lc3XZSjQ36MBq7MQ0cgBWmzTacZn1AigoV2GL+O6avrcdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=e3yj3hpl; arc=none smtp.client-ip=209.85.214.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+	s=arc-20240116; t=1748568602; c=relaxed/simple;
+	bh=+TFmXCqtLZ8kiawumxahT/VHs4zh/m9qAIziG3dAgZA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RuZKny8ne0zOvf4+rNrARZ3Y+r8RrqP/Af8NBZZ7BuCmh1VwnR92jW6Vj4Rdkdvl48JEpPW6lMuoq5mA/YOlzYYqarOKPQQmIZ2rl8UANm9GNInJ1RdQJrB1aFtfigHbL7X+hYitGIdxKrGpQ9nk2XXGxm4JxzmcdnzB6BvDQwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=xdkkHen9; arc=none smtp.client-ip=162.62.57.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="e3yj3hpl"
-Received: by mail-pl1-f228.google.com with SMTP id d9443c01a7336-234d366e5f2so19277955ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 May 2025 16:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1748562468; x=1749167268; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mqr8wPmXHui64U4BrsJfaf/eXjrHjuKhn37qP/UCybM=;
-        b=e3yj3hplIB5egdLA776Aq/L1+PD53TZzVL/t9Ql8/uUbW6prokdlWBewz/RQn7tVaT
-         hNLaSseDgEdKXkE40F+HPvXfiQD5YSvtBKrzxg/HH397tPAPdPr+QoL0YOE0wJdIMA+y
-         lAQ8jglztWGbjqkSzts1A1iVcrrL1YTpYxYbvzR4tVQiYyK/WJKvFjpXuHcn7pguWK2l
-         IzpZk3hJ5uRDtelB1y9OkXUnkiLbYv3a3QeSjisOY1ia+z64u2ao+yz04xxAIvK5czMQ
-         DU84MQiAD++Xu/5u3rooPewEDwWFoPAPgKWq9G0RYuA+6/l440O98dGlRsodX5BenufB
-         Axog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748562468; x=1749167268;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mqr8wPmXHui64U4BrsJfaf/eXjrHjuKhn37qP/UCybM=;
-        b=Z3Dt7fal4KvMq0AVTE9SP8JWflo0zjxqmI2FApkZamJDw+cPvRNVgTUh1t/Mmbj+ZT
-         iWGMzbrs93vDPsxTWAEkYGVqqdopOwiG1oKZGggtDjnSDXhxr33QzeS76xtQD6OKueO8
-         Bd8EcmgiaQnAcGg0B0TcG+sxJKBb2Q5qCrxM7/U0tUuD9SnzCm+l22N9jrXgD+bwSGo3
-         UbEGh+XcDKP58sR1W4rHlaFEuu64xjIdLllC4RPTBO9XVIrJ/rOsXgbLpW5WlMguozAP
-         WeJdyog9xFeGawf8EThM1GLonj1uN6lR/TpVjMssFHMioxJclxBFEFdEgIziiV9iisxu
-         p+fw==
-X-Forwarded-Encrypted: i=1; AJvYcCVNiVn+aGXrtRxT8phmflGBMyfSBhY1m49tXi5um86jzxZiYoku6SbrFYcu0iF0DEgnuxIriGnSYT0gMT05mNU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxp5sDBXGBNMVYd3CIrOotB98q/sAvkBK+jYZrcBCp4A1Q5xOBJ
-	9izzhkJa9h1wn3lTTCGvs2Zlnql7Hv+C4jskdWIjtp56Glpxmd/rL98XFVlLhI4X5s0n4obyvEB
-	zrxt7yTeoPfIzGkwAdbezItHO5iBdJ67Uka0m
-X-Gm-Gg: ASbGncuJnZre7o9hc3dzbpIXW7zGlIQdojvYlrXbuCwmjEGCYy9dIFFRgBChjO/NnSi
-	Xnh2nMla0g6L7glVUr5VUHC92b3mm87mDP73UnvSPS4Z2Hdiv0sRRAeGT+UIxUW4mRW6BD2Ylpx
-	7eeVTbHi/wfJmwlg+Rc8xXKKKeUp2zYXnV45XExOWfL7CzUGoXS2Yy8tllnUBWF7fUDHaAhhtTG
-	UbZ1S1Ix2XkO4YeDCc5KQm8KAgYdE+og8IhIRzOtsESqWq1RHTYnY3rB80iWAcgy3nyC+CyLMI9
-	WK5mT4AJ6YAl2EE3NFaOVx+JwXxGGEJXpPfK2g2HKbuj7A==
-X-Google-Smtp-Source: AGHT+IG1ZPTXQp/BEvmIHUxdKJYm74BGOXdyiJgEIpYxUg7isBcxi57Ly1duzFJtzxTUubhEVl6D8HB0kQJI
-X-Received: by 2002:a05:6870:5baa:b0:2ba:11d5:ad64 with SMTP id 586e51a60fabf-2e921353e2fmr674071fac.23.1748562457590;
-        Thu, 29 May 2025 16:47:37 -0700 (PDT)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id 006d021491bc7-60c1ec07d44sm25115eaf.24.2025.05.29.16.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 May 2025 16:47:37 -0700 (PDT)
-X-Relaying-Domain: purestorage.com
-Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [IPv6:2620:125:9007:640:7:70:36:0])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 34E313409F5;
-	Thu, 29 May 2025 17:47:35 -0600 (MDT)
-Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
-	id C78EAE40FA4; Thu, 29 May 2025 17:47:34 -0600 (MDT)
-From: Uday Shankar <ushankar@purestorage.com>
-Date: Thu, 29 May 2025 17:47:15 -0600
-Subject: [PATCH v8 6/9] selftests: ublk: kublk: decouple ublk_queues from
- ublk server threads
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="xdkkHen9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1748568593;
+	bh=d/Y6VEfM9SurICbLntJEFopmvBrML0o9kXS3a5I2T2E=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=xdkkHen9UG2KjxWMfMvZ5YARakhb8PatUjAHYFje7i76H7eJT6+Icn++Egrnx39tZ
+	 +V1dznCbPlCFgW6cSmxg7w2T6Dhi30Gt27N42POeGCXqQnD4unW7D7LYqMAEKVO7Dv
+	 9/mkbpDNpC5hNewiwMIXry9WIQs9MFuN2biB14KU=
+Received: from [10.56.52.9] ([39.156.73.10])
+	by newxmesmtplogicsvrszb20-0.qq.com (NewEsmtp) with SMTP
+	id 7288748B; Fri, 30 May 2025 09:28:40 +0800
+X-QQ-mid: xmsmtpt1748568520tyjwdxpn4
+Message-ID: <tencent_C8CF57BAD10D440E8308A19E2C894B341507@qq.com>
+X-QQ-XMAILINFO: No4GWyI4cWt6a1L7H8fewm5WKIVIP5BHfKlE5bVXolURhqFbtLdqoSpronad9P
+	 1nt257iai3dasHZFj9kwS+xbRum60Y1KIE5k3f8JXobZBQgIgiQtjMwBst+ken4NniB8kRBJuDki
+	 0zGqlD1aPCHtrFbF8CaRM1dkWhV3UJ6zAnwUdyCDUis3Za1r/MThHGN3vItxT104WZL5JF+pTMY6
+	 7hzBIV0KawuuI90BU5X22AAAHMFW00VEAjBPHIDS9JDVL88xhGmrjPnDqESg+C1YrF9OcpnWgUem
+	 FaEAbGpB6gEETDzK9V4qEDwheu7Q8xXfugm0QwTxZnEU/foIEJBAjqWZCQWn/Pl7WoGqgsg4+O1E
+	 5Nj3o5kne+KI17XcxTgtJwVeVwKkQRjaqBSW3CJi/8+I7XDy9QEXova7zRaOoEOs4X2/BF0EdXm0
+	 fThHL0fKhzplL5EO9yha3uQfPJ5M0cb5UvSDxjS8p7BQxdXT1LnOqwBv7Vgej6BkW3EMCHCI+FxJ
+	 j6VDlYnnM7q4C4icf9Og/nDokfwwqf55VRPaE2H4f+YTlC8AGdo4vTWItFuNI8Yxj3lt/ZYALC7s
+	 qUWg2gdaurJygWthl0YYoblsGZmsQedhWiAPI1vBy2+WO1nPfGhE1ZY1j5EOoYWTvGi2+Hs+e/Px
+	 u0EjoyrsDRheZqrRBtYi2MSSz0rUToiZ8GAe0g6LKLtyDyl7/DNII3Zzh8rwawyEF1dFuztoPiUo
+	 I7JTzPjiZafIvNkMLQIJHfpEzQkJzVhCpyPfcd18JIfR2M+ClA62QyNNr0I/fgmfbslFw4X0Xl90
+	 Kl425X80hC7pQ1RY8n4wt4TuEv49HFMrTB314ARKX8cWzqzdvAvglitqy8e3qxGyYO862kDADT6K
+	 pcs2avJEaN+FQX9+txltkXZv1AmbQb1nfBWzrZ0XD+kKF272NGwkfpgIKRmPUPjv33NTzZx8qDiR
+	 3qPfF8n22JUZ9p+Y0tmrPHh1++cFl8xFBqDC+qRg8F5xQld4yqiaUVUZoxvcp/
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+X-OQ-MSGID: <0a5e325f-9567-4cfa-9e34-08e0258a96f0@foxmail.com>
+Date: Fri, 30 May 2025 09:28:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250529-ublk_task_per_io-v8-6-e9d3b119336a@purestorage.com>
-References: <20250529-ublk_task_per_io-v8-0-e9d3b119336a@purestorage.com>
-In-Reply-To: <20250529-ublk_task_per_io-v8-0-e9d3b119336a@purestorage.com>
-To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>, 
- Caleb Sander Mateos <csander@purestorage.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
- Uday Shankar <ushankar@purestorage.com>
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add bpf_task_cwd_from_pid() kfunc
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, rongtao@cestc.cn,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, Juntong Deng <juntong.deng@outlook.com>,
+ Amery Hung <amery.hung@bytedance.com>,
+ Dave Marchevsky <davemarchevsky@fb.com>, Hou Tao <houtao1@huawei.com>,
+ "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
+ <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <cover.1748488784.git.rtoax@foxmail.com>
+ <tencent_97F8B56B340F51DB604B482FEBF012460505@qq.com>
+ <CAADnVQ+hUk2wV3M+9mgv_i5sNt_FuHpAnDpkQJ22D37bxAJHsQ@mail.gmail.com>
+Content-Language: en-US
+From: Rong Tao <rtoax@foxmail.com>
+In-Reply-To: <CAADnVQ+hUk2wV3M+9mgv_i5sNt_FuHpAnDpkQJ22D37bxAJHsQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Add support in kublk for decoupled ublk_queues and ublk server threads.
-kublk now has two modes of operation:
 
-- (preexisting mode) threads and queues are paired 1:1, and each thread
-  services all the I/Os of one queue
-- (new mode) thread and queue counts are independently configurable.
-  threads service I/Os in a way that balances load across threads even
-  if load is not balanced over queues.
+On 5/29/25 13:44, Alexei Starovoitov wrote:
+> On Wed, May 28, 2025 at 8:37 PM Rong Tao <rtoax@foxmail.com> wrote:
+>> From: Rong Tao <rongtao@cestc.cn>
+>>
+>> It is a bit troublesome to get cwd based on pid in bpf program, such as
+>> bpftrace example [1].
+>>
+>> This patch therefore adds a new bpf_task_cwd_from_pid() kfunc which
+>> allows BPF programs to get cwd from a pid.
+>>
+>> [1] https://github.com/bpftrace/bpftrace/issues/3314
+> Yes. This is cumbersome, but adding a very specific kfunc
+> to the kernel is not a solution.
+> This is tracing, no need for precise cwd. probe_read_kernel
+> can do the job. bpftrace needs to have better C interop.
+> Once that happens any kind of tracing extraction will be
+> easy to write in C. Like this bpf_task_cwd_from_pid()
+> can already be written as C bpf program.
+Thanks for your reply, Yesterday I tried many ways to implement
+the solution of getting cwd from pid/task, but all failed. The basic
+idea is to rewrite the d_path() code, but in the bpf program, there
+will be various memory security access problems, even if enough
+  `if (!ptr)` are added, the program cannot be loaded successfully.
 
-The default is the preexisting mode. The new mode is activated by
-passing the --per_io_tasks flag.
+https://github.com/Rtoax/bcc/commit/2ba7a2389fc1183264e5195ff26561d93038886c
 
-Signed-off-by: Uday Shankar <ushankar@purestorage.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
----
- tools/testing/selftests/ublk/file_backed.c |   4 +-
- tools/testing/selftests/ublk/kublk.c       | 105 ++++++++++++++++++++++++-----
- tools/testing/selftests/ublk/kublk.h       |   5 ++
- tools/testing/selftests/ublk/null.c        |   6 +-
- tools/testing/selftests/ublk/stripe.c      |   4 +-
- 5 files changed, 100 insertions(+), 24 deletions(-)
+     bcc/tools$ sudo ./opensnoop.py -F
 
-diff --git a/tools/testing/selftests/ublk/file_backed.c b/tools/testing/selftests/ublk/file_backed.c
-index 922a87108b9f7bae53098e74602c7b1f3e0246bc..cfa59b631693793465f0e6909a6fbe1a364f4523 100644
---- a/tools/testing/selftests/ublk/file_backed.c
-+++ b/tools/testing/selftests/ublk/file_backed.c
-@@ -54,7 +54,7 @@ static int loop_queue_tgt_rw_io(struct ublk_queue *q, const struct ublksrv_io_de
- 
- 	ublk_io_alloc_sqes(ublk_get_io(q, tag), sqe, 3);
- 
--	io_uring_prep_buf_register(sqe[0], 0, tag, q->q_id, tag);
-+	io_uring_prep_buf_register(sqe[0], 0, tag, q->q_id, ublk_get_io(q, tag)->buf_index);
- 	sqe[0]->flags |= IOSQE_CQE_SKIP_SUCCESS | IOSQE_IO_HARDLINK;
- 	sqe[0]->user_data = build_user_data(tag,
- 			ublk_cmd_op_nr(sqe[0]->cmd_op), 0, q->q_id, 1);
-@@ -66,7 +66,7 @@ static int loop_queue_tgt_rw_io(struct ublk_queue *q, const struct ublksrv_io_de
- 	sqe[1]->flags |= IOSQE_FIXED_FILE | IOSQE_IO_HARDLINK;
- 	sqe[1]->user_data = build_user_data(tag, ublk_op, 0, q->q_id, 1);
- 
--	io_uring_prep_buf_unregister(sqe[2], 0, tag, q->q_id, tag);
-+	io_uring_prep_buf_unregister(sqe[2], 0, tag, q->q_id, ublk_get_io(q, tag)->buf_index);
- 	sqe[2]->user_data = build_user_data(tag, ublk_cmd_op_nr(sqe[2]->cmd_op), 0, q->q_id, 1);
- 
- 	return 2;
-diff --git a/tools/testing/selftests/ublk/kublk.c b/tools/testing/selftests/ublk/kublk.c
-index 40431a8357a8f74d7d62e271e9090c8708c3ecc5..a98e14e4c245965d817b93843ff9a4011291223b 100644
---- a/tools/testing/selftests/ublk/kublk.c
-+++ b/tools/testing/selftests/ublk/kublk.c
-@@ -505,8 +505,11 @@ static int ublk_thread_init(struct ublk_thread *t)
- 	}
- 
- 	if (dev->dev_info.flags & (UBLK_F_SUPPORT_ZERO_COPY | UBLK_F_AUTO_BUF_REG)) {
-+		unsigned nr_ios = dev->dev_info.queue_depth * dev->dev_info.nr_hw_queues;
-+		unsigned max_nr_ios_per_thread = nr_ios / dev->nthreads;
-+		max_nr_ios_per_thread += !!(nr_ios % dev->nthreads);
- 		ret = io_uring_register_buffers_sparse(
--			&t->ring, dev->dev_info.queue_depth);
-+			&t->ring, max_nr_ios_per_thread);
- 		if (ret) {
- 			ublk_err("ublk dev %d thread %d register spare buffers failed %d",
- 					dev->dev_info.dev_id, t->idx, ret);
-@@ -578,7 +581,7 @@ static void ublk_set_auto_buf_reg(const struct ublk_queue *q,
- 	if (q->tgt_ops->buf_index)
- 		buf.index = q->tgt_ops->buf_index(q, tag);
- 	else
--		buf.index = tag;
-+		buf.index = q->ios[tag].buf_index;
- 
- 	if (q->state & UBLKSRV_AUTO_BUF_REG_FALLBACK)
- 		buf.flags = UBLK_AUTO_BUF_REG_FALLBACK;
-@@ -660,18 +663,44 @@ int ublk_queue_io_cmd(struct ublk_io *io)
- 
- static void ublk_submit_fetch_commands(struct ublk_thread *t)
- {
--	/*
--	 * Service exclusively the queue whose q_id matches our thread
--	 * index. This may change in the future.
--	 */
--	struct ublk_queue *q = &t->dev->q[t->idx];
-+	struct ublk_queue *q;
- 	struct ublk_io *io;
--	int i = 0;
-+	int i = 0, j = 0;
- 
--	for (i = 0; i < q->q_depth; i++) {
--		io = &q->ios[i];
--		io->t = t;
--		ublk_queue_io_cmd(io);
-+	if (t->dev->per_io_tasks) {
-+		/*
-+		 * Lexicographically order all the (qid,tag) pairs, with
-+		 * qid taking priority (so (1,0) > (0,1)). Then make
-+		 * this thread the daemon for every Nth entry in this
-+		 * list (N is the number of threads), starting at this
-+		 * thread's index. This ensures that each queue is
-+		 * handled by as many ublk server threads as possible,
-+		 * so that load that is concentrated on one or a few
-+		 * queues can make use of all ublk server threads.
-+		 */
-+		const struct ublksrv_ctrl_dev_info *dinfo = &t->dev->dev_info;
-+		int nr_ios = dinfo->nr_hw_queues * dinfo->queue_depth;
-+		for (i = t->idx; i < nr_ios; i += t->dev->nthreads) {
-+			int q_id = i / dinfo->queue_depth;
-+			int tag = i % dinfo->queue_depth;
-+			q = &t->dev->q[q_id];
-+			io = &q->ios[tag];
-+			io->t = t;
-+			io->buf_index = j++;
-+			ublk_queue_io_cmd(io);
-+		}
-+	} else {
-+		/*
-+		 * Service exclusively the queue whose q_id matches our
-+		 * thread index.
-+		 */
-+		struct ublk_queue *q = &t->dev->q[t->idx];
-+		for (i = 0; i < q->q_depth; i++) {
-+			io = &q->ios[i];
-+			io->t = t;
-+			io->buf_index = i;
-+			ublk_queue_io_cmd(io);
-+		}
- 	}
- }
- 
-@@ -826,7 +855,8 @@ static void *ublk_io_handler_fn(void *data)
- 		return NULL;
- 	}
- 	/* IO perf is sensitive with queue pthread affinity on NUMA machine*/
--	ublk_thread_set_sched_affinity(t, info->affinity);
-+	if (info->affinity)
-+		ublk_thread_set_sched_affinity(t, info->affinity);
- 	sem_post(info->ready);
- 
- 	ublk_dbg(UBLK_DBG_THREAD, "tid %d: ublk dev %d thread %u started\n",
-@@ -893,7 +923,7 @@ static int ublk_start_daemon(const struct dev_ctx *ctx, struct ublk_dev *dev)
- 
- 	ublk_dbg(UBLK_DBG_DEV, "%s enter\n", __func__);
- 
--	tinfo = calloc(sizeof(struct ublk_thread_info), dinfo->nr_hw_queues);
-+	tinfo = calloc(sizeof(struct ublk_thread_info), dev->nthreads);
- 	if (!tinfo)
- 		return -ENOMEM;
- 
-@@ -919,17 +949,29 @@ static int ublk_start_daemon(const struct dev_ctx *ctx, struct ublk_dev *dev)
- 				 dinfo->dev_id, i);
- 			goto fail;
- 		}
-+	}
- 
-+	for (i = 0; i < dev->nthreads; i++) {
- 		tinfo[i].dev = dev;
- 		tinfo[i].idx = i;
- 		tinfo[i].ready = &ready;
--		tinfo[i].affinity = &affinity_buf[i];
-+
-+		/*
-+		 * If threads are not tied 1:1 to queues, setting thread
-+		 * affinity based on queue affinity makes little sense.
-+		 * However, thread CPU affinity has significant impact
-+		 * on performance, so to compare fairly, we'll still set
-+		 * thread CPU affinity based on queue affinity where
-+		 * possible.
-+		 */
-+		if (dev->nthreads == dinfo->nr_hw_queues)
-+			tinfo[i].affinity = &affinity_buf[i];
- 		pthread_create(&dev->threads[i].thread, NULL,
- 				ublk_io_handler_fn,
- 				&tinfo[i]);
- 	}
- 
--	for (i = 0; i < dinfo->nr_hw_queues; i++)
-+	for (i = 0; i < dev->nthreads; i++)
- 		sem_wait(&ready);
- 	free(tinfo);
- 	free(affinity_buf);
-@@ -953,7 +995,7 @@ static int ublk_start_daemon(const struct dev_ctx *ctx, struct ublk_dev *dev)
- 		ublk_send_dev_event(ctx, dev, dev->dev_info.dev_id);
- 
- 	/* wait until we are terminated */
--	for (i = 0; i < dinfo->nr_hw_queues; i++)
-+	for (i = 0; i < dev->nthreads; i++)
- 		pthread_join(dev->threads[i].thread, &thread_ret);
-  fail:
- 	for (i = 0; i < dinfo->nr_hw_queues; i++)
-@@ -1063,6 +1105,7 @@ static int ublk_stop_io_daemon(const struct ublk_dev *dev)
- 
- static int __cmd_dev_add(const struct dev_ctx *ctx)
- {
-+	unsigned nthreads = ctx->nthreads;
- 	unsigned nr_queues = ctx->nr_hw_queues;
- 	const char *tgt_type = ctx->tgt_type;
- 	unsigned depth = ctx->queue_depth;
-@@ -1086,6 +1129,23 @@ static int __cmd_dev_add(const struct dev_ctx *ctx)
- 		return -EINVAL;
- 	}
- 
-+	/* default to 1:1 threads:queues if nthreads is unspecified */
-+	if (!nthreads)
-+		nthreads = nr_queues;
-+
-+	if (nthreads > UBLK_MAX_THREADS) {
-+		ublk_err("%s: %u is too many threads (max %u)\n",
-+				__func__, nthreads, UBLK_MAX_THREADS);
-+		return -EINVAL;
-+	}
-+
-+	if (nthreads != nr_queues && !ctx->per_io_tasks) {
-+		ublk_err("%s: threads %u must be same as queues %u if "
-+			"not using per_io_tasks\n",
-+			__func__, nthreads, nr_queues);
-+		return -EINVAL;
-+	}
-+
- 	dev = ublk_ctrl_init();
- 	if (!dev) {
- 		ublk_err("%s: can't alloc dev id %d, type %s\n",
-@@ -1109,6 +1169,8 @@ static int __cmd_dev_add(const struct dev_ctx *ctx)
- 	if ((features & UBLK_F_QUIESCE) &&
- 			(info->flags & UBLK_F_USER_RECOVERY))
- 		info->flags |= UBLK_F_QUIESCE;
-+	dev->nthreads = nthreads;
-+	dev->per_io_tasks = ctx->per_io_tasks;
- 	dev->tgt.ops = ops;
- 	dev->tgt.sq_depth = depth;
- 	dev->tgt.cq_depth = depth;
-@@ -1307,6 +1369,7 @@ static int cmd_dev_get_features(void)
- 		[const_ilog2(UBLK_F_UPDATE_SIZE)] = "UPDATE_SIZE",
- 		[const_ilog2(UBLK_F_AUTO_BUF_REG)] = "AUTO_BUF_REG",
- 		[const_ilog2(UBLK_F_QUIESCE)] = "QUIESCE",
-+		[const_ilog2(UBLK_F_PER_IO_DAEMON)] = "PER_IO_DAEMON",
- 	};
- 	struct ublk_dev *dev;
- 	__u64 features = 0;
-@@ -1401,8 +1464,10 @@ static void __cmd_create_help(char *exe, bool recovery)
- 			exe, recovery ? "recover" : "add");
- 	printf("\t[--foreground] [--quiet] [-z] [--auto_zc] [--auto_zc_fallback] [--debug_mask mask] [-r 0|1 ] [-g]\n");
- 	printf("\t[-e 0|1 ] [-i 0|1]\n");
-+	printf("\t[--nthreads threads] [--per_io_tasks]\n");
- 	printf("\t[target options] [backfile1] [backfile2] ...\n");
- 	printf("\tdefault: nr_queues=2(max 32), depth=128(max 1024), dev_id=-1(auto allocation)\n");
-+	printf("\tdefault: nthreads=nr_queues");
- 
- 	for (i = 0; i < sizeof(tgt_ops_list) / sizeof(tgt_ops_list[0]); i++) {
- 		const struct ublk_tgt_ops *ops = tgt_ops_list[i];
-@@ -1459,6 +1524,8 @@ int main(int argc, char *argv[])
- 		{ "auto_zc",		0,	NULL,  0 },
- 		{ "auto_zc_fallback", 	0,	NULL,  0 },
- 		{ "size",		1,	NULL, 's'},
-+		{ "nthreads",		1,	NULL,  0 },
-+		{ "per_io_tasks",	0,	NULL,  0 },
- 		{ 0, 0, 0, 0 }
- 	};
- 	const struct ublk_tgt_ops *ops = NULL;
-@@ -1534,6 +1601,10 @@ int main(int argc, char *argv[])
- 				ctx.flags |= UBLK_F_AUTO_BUF_REG;
- 			if (!strcmp(longopts[option_idx].name, "auto_zc_fallback"))
- 				ctx.auto_zc_fallback = 1;
-+			if (!strcmp(longopts[option_idx].name, "nthreads"))
-+				ctx.nthreads = strtol(optarg, NULL, 10);
-+			if (!strcmp(longopts[option_idx].name, "per_io_tasks"))
-+				ctx.per_io_tasks = 1;
- 			break;
- 		case '?':
- 			/*
-diff --git a/tools/testing/selftests/ublk/kublk.h b/tools/testing/selftests/ublk/kublk.h
-index 3a2ae095bee18633acd5a9c923cfab2d14fe3bff..6be601536b3d2c095654da5fba0cf13a51142052 100644
---- a/tools/testing/selftests/ublk/kublk.h
-+++ b/tools/testing/selftests/ublk/kublk.h
-@@ -80,6 +80,7 @@ struct dev_ctx {
- 	char tgt_type[16];
- 	unsigned long flags;
- 	unsigned nr_hw_queues;
-+	unsigned short nthreads;
- 	unsigned queue_depth;
- 	int dev_id;
- 	int nr_files;
-@@ -89,6 +90,7 @@ struct dev_ctx {
- 	unsigned int	fg:1;
- 	unsigned int	recovery:1;
- 	unsigned int	auto_zc_fallback:1;
-+	unsigned int	per_io_tasks:1;
- 
- 	int _evtfd;
- 	int _shmid;
-@@ -131,6 +133,7 @@ struct ublk_io {
- 
- 	int result;
- 
-+	unsigned short buf_index;
- 	unsigned short tgt_ios;
- 	void *private_data;
- 	struct ublk_thread *t;
-@@ -203,6 +206,8 @@ struct ublk_dev {
- 	struct ublksrv_ctrl_dev_info  dev_info;
- 	struct ublk_queue q[UBLK_MAX_QUEUES];
- 	struct ublk_thread threads[UBLK_MAX_THREADS];
-+	unsigned nthreads;
-+	unsigned per_io_tasks;
- 
- 	int fds[MAX_BACK_FILES + 1];	/* fds[0] points to /dev/ublkcN */
- 	int nr_fds;
-diff --git a/tools/testing/selftests/ublk/null.c b/tools/testing/selftests/ublk/null.c
-index 9acc7e0d271b5ae52d6d31587cc5bfb63b19778d..afe0b99d77eec74acae04952a9af5348252bc599 100644
---- a/tools/testing/selftests/ublk/null.c
-+++ b/tools/testing/selftests/ublk/null.c
-@@ -62,7 +62,7 @@ static int null_queue_zc_io(struct ublk_queue *q, int tag)
- 
- 	ublk_io_alloc_sqes(ublk_get_io(q, tag), sqe, 3);
- 
--	io_uring_prep_buf_register(sqe[0], 0, tag, q->q_id, tag);
-+	io_uring_prep_buf_register(sqe[0], 0, tag, q->q_id, ublk_get_io(q, tag)->buf_index);
- 	sqe[0]->user_data = build_user_data(tag,
- 			ublk_cmd_op_nr(sqe[0]->cmd_op), 0, q->q_id, 1);
- 	sqe[0]->flags |= IOSQE_CQE_SKIP_SUCCESS | IOSQE_IO_HARDLINK;
-@@ -70,7 +70,7 @@ static int null_queue_zc_io(struct ublk_queue *q, int tag)
- 	__setup_nop_io(tag, iod, sqe[1], q->q_id);
- 	sqe[1]->flags |= IOSQE_IO_HARDLINK;
- 
--	io_uring_prep_buf_unregister(sqe[2], 0, tag, q->q_id, tag);
-+	io_uring_prep_buf_unregister(sqe[2], 0, tag, q->q_id, ublk_get_io(q, tag)->buf_index);
- 	sqe[2]->user_data = build_user_data(tag, ublk_cmd_op_nr(sqe[2]->cmd_op), 0, q->q_id, 1);
- 
- 	// buf register is marked as IOSQE_CQE_SKIP_SUCCESS
-@@ -136,7 +136,7 @@ static unsigned short ublk_null_buf_index(const struct ublk_queue *q, int tag)
- {
- 	if (q->state & UBLKSRV_AUTO_BUF_REG_FALLBACK)
- 		return (unsigned short)-1;
--	return tag;
-+	return q->ios[tag].buf_index;
- }
- 
- const struct ublk_tgt_ops null_tgt_ops = {
-diff --git a/tools/testing/selftests/ublk/stripe.c b/tools/testing/selftests/ublk/stripe.c
-index 97079c3121ef8d4edc71891a289dd40658ce3f2a..37d50bbf5f5e86a520efedc9228510f8e1273625 100644
---- a/tools/testing/selftests/ublk/stripe.c
-+++ b/tools/testing/selftests/ublk/stripe.c
-@@ -141,7 +141,7 @@ static int stripe_queue_tgt_rw_io(struct ublk_queue *q, const struct ublksrv_io_
- 	ublk_io_alloc_sqes(ublk_get_io(q, tag), sqe, s->nr + extra);
- 
- 	if (zc) {
--		io_uring_prep_buf_register(sqe[0], 0, tag, q->q_id, tag);
-+		io_uring_prep_buf_register(sqe[0], 0, tag, q->q_id, io->buf_index);
- 		sqe[0]->flags |= IOSQE_CQE_SKIP_SUCCESS | IOSQE_IO_HARDLINK;
- 		sqe[0]->user_data = build_user_data(tag,
- 			ublk_cmd_op_nr(sqe[0]->cmd_op), 0, q->q_id, 1);
-@@ -167,7 +167,7 @@ static int stripe_queue_tgt_rw_io(struct ublk_queue *q, const struct ublksrv_io_
- 	if (zc) {
- 		struct io_uring_sqe *unreg = sqe[s->nr + 1];
- 
--		io_uring_prep_buf_unregister(unreg, 0, tag, q->q_id, tag);
-+		io_uring_prep_buf_unregister(unreg, 0, tag, q->q_id, io->buf_index);
- 		unreg->user_data = build_user_data(
- 			tag, ublk_cmd_op_nr(unreg->cmd_op), 0, q->q_id, 1);
- 	}
+     ; if (dentry == vfsmnt->mnt_root || dentry == dentry->d_parent) { @ 
+main.c:174
+     109: (79) r2 = *(u64 *)(r7 +0)
+     R7 invalid mem access 'scalar'
 
--- 
-2.34.1
+At the same time, bpf_d_path cannot be used because it can only be
+applied to functions in btf_allowlist_d_path. Currently, it is
+impossible to get cwd from pid/task in user mode. Any suggestions?
+
+In addition, I fully tested this patch yesterday and it performed well.
+
+Rong Tao
 
