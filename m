@@ -1,198 +1,99 @@
-Received: from mail-io1-f74.google.com (mail-io1-f74.google.com [209.85.166.74])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BA8230BEF
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Jun 2025 19:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7278C1805A
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Jun 2025 20:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748892561; cv=none; b=sFBo/4K+gvgIwm26jy15dFbo6jG0nJFBCv0jCX0WuBtMWWmTgcWS4FLBZP03pJleaxV7fq60jkgaL5UQqTmstWL1fg0/gl0S8yRcbuHhQRW792JnF+cyKfznIKRyVBhhEee7hOtHSav4tLnoWGkvxFk5ifuaCsURPaYrROvfgZY=
+	t=1748894572; cv=none; b=RvuCGRHMynSwPHuXiX0llbzNRX+DPT86N9Yn9d2+DXauzCODJHr0th1t2e2Va2CwrwNry70CDFujF9gzcD8tON4IJPu//ZR7sY1aH5/h6RdW2spmMjen/wJmxN+gYvhWYvUWFkyHNyeUtEqTyUYTSBXr984xzngU9X6iGhY0BYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748892561; c=relaxed/simple;
-	bh=CcnjBedU7/MUCvahUwrHCirXtUmsFSqeBjbuRsRRORA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=HgGqJ3TG0rehIlw1jG6fJpQ5sBwcjpV91O01qc4V9fSx2RQ/CTHv+0D/L1dOIgRjHahgSgsGITjaZQlYd9ouG+vCE3dS3NBRaET4tnQMRUWcyqhiCLuX0xN0DJusNv88Z8RMUdSMBuTgQsLzToB4MPZtZvwENHMM7MUH3z8Fyz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MKc6IavZ; arc=none smtp.client-ip=209.85.166.74
+	s=arc-20240116; t=1748894572; c=relaxed/simple;
+	bh=O44jyZ1Kd5oy20AmMmw4W6ZFK/TJmZN764rJdr8yx4I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V4FyscxKkXgq/0bvSGMaKbqhlU5zWBAbedPQtmEqkt5AL6pBwuswy02E9Bgi9f3CLyPnlVx/4skqrkEGLWa5/ivdhbHnRJK3WJYsXF8VM5jwEdzuytx/g9PYLKuJWPrITJ2OtaFSXDFee7wjjfqdVsH5peWD09TtSbkGVSsRxek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iylWw/Jx; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MKc6IavZ"
-Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-86d0aa2dc99so225247339f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 12:29:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iylWw/Jx"
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7caeeef95d4so455080985a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jun 2025 13:02:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1748892554; x=1749497354; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PcghHp9NHNnZagjNBq90Et1fDsToCSyQRDmWBaP4jq8=;
-        b=MKc6IavZyZ2vCc0m8Mw8KUOTyONnpML2pmjdMq/OJy11tOD5BHZsiprQ4ngenZ+gYD
-         Q3kwzYd1bkGrGF8FOtaCTv/fDD6ul62nL8meketehgh8X0RePczxOiVPfI9Ft7KKAl33
-         InFFtijp5G10n/PhoxkMDIRHO+jxGs8w3utD9iCelYdFk5KLixML5uQcgfW55x73OmiK
-         P4Rup1h6DzjoqHgXLQoNsgYnIW6EjW09iolUgwPDEr5xtR5qqYutn42Q2Om3fLuBUm0r
-         Fb6e+Tt01bv/mT6qY9jbUnRX3LQd10rX9YUJZZ0O7dGVej3aHn8PQL+UabP023czWAiM
-         5Mdw==
+        d=google.com; s=20230601; t=1748894570; x=1749499370; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O44jyZ1Kd5oy20AmMmw4W6ZFK/TJmZN764rJdr8yx4I=;
+        b=iylWw/JxxWujBMjFUrikA+1ZWIGEE0meR8bh8CWFU8HFvD8n398lEvox18579iQHd7
+         mqWsIgHEJbnv+QquBgmvsiMqWjOfNDA0NTDtruHxAy9EUXeZQ+IQpO43sHgYXhWq+BS1
+         2qCYtNzB4yZ1DcKxdc98PkAMtsymI8qUsh+uYLArSHIp1FUIrrBdx2/QKZiz6f6uXs6w
+         tP6kiDcP+UynlE4wPW6bZqrifxlt26xh1J23szo6yIHQ+3O/RutyQ1T7XlgULOQulhAr
+         gDR7jJmhhw8gWy7LcTKyJC+R2cQlocMvfxwiY0Uc1RfeeHsxEvEAt4LGt6Q/R6nSufve
+         n4FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748892554; x=1749497354;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PcghHp9NHNnZagjNBq90Et1fDsToCSyQRDmWBaP4jq8=;
-        b=MyyogaDf5lBio3/ddy7VRCSVPg3cp8gc0A3t4ES99uO5A6gkbHCk/isoyeb77ASruT
-         UlcBXLN2D8NPxoFR2Ch/Zl9Vkrzd+Y5mrEbh4EF5dCB5hgZTesGLNbZQJECDObtoXpaV
-         xiz1Q5nKcl5ShELh50Mp1NMR3haZ6ebTSKZJ7RM1XJw0CG4qEe4OA98MN7jl8xEs5mHS
-         pdqYbdCoWNSVkT1fIwkM5ITQ1hSWtES1eHdBojNK8OAGmG7c6168C1OgURmCQ7R+XFqq
-         C6plNP7GNKeeG9Xl9g7XNTHybwdGoRlRwndGIFm/g8I9RP0ZLbiAwSSFkQBJfqu61Fet
-         cAsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVdLA3j+hJRbil+3eCPNjnZrPn2OmusuQSxLp1zKkPBH5tGDQ8kZlyWwC8w4kABnOjXfDiYNU4qGLLsXPiBdi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydXuKZGbZoWHmHKCUzuydnME6PCDphWOlCurB3ct4HRncqFZtT
-	Bh1TDmtcN7RPRoI+d0opGCagPtFppeJVe+FRQ6PIQnOH6wZYX2dboPqRue0VGe6x/pvqltBAX7h
-	XHNMn5epJ/5lNsuVa1AyrSnGDMQ==
-X-Google-Smtp-Source: AGHT+IEnhHZikzLqY9Iyw+UlUAPLFo203H/gjCIqwNlpl0+DZeuWgmgKIGVnEnC2cAT2atcfhzVzUE50F2kqc2B8Og==
-X-Received: from ilah6.prod.google.com ([2002:a05:6e02:1d86:b0:3dd:a262:4f8c])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6e02:b21:b0:3dc:7bc9:503e with SMTP id e9e14a558f8ab-3dd9c989ce3mr159545185ab.2.1748892554217;
- Mon, 02 Jun 2025 12:29:14 -0700 (PDT)
-Date: Mon,  2 Jun 2025 19:27:01 +0000
-In-Reply-To: <20250602192702.2125115-1-coltonlewis@google.com>
+        d=1e100.net; s=20230601; t=1748894570; x=1749499370;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O44jyZ1Kd5oy20AmMmw4W6ZFK/TJmZN764rJdr8yx4I=;
+        b=NwJVWZY9ecEgLx5BdVPLVJRrTb9FaxQK542ShOdQY77IlhLcC1M1SvaEHeowUKFXYV
+         HYQKbCucJ3JqHgqSF6MVZaXy0fJoGK6UiudE/inJiEehGysgA7evWW1W+NiKs9WFHyRV
+         Wb/m3QWTJf27gUCu0p5Q+L6mUFKVnehpJ0++ULWOY2+gNkCORDCMFWZBqRhZjm7UNamD
+         oAdFaH+HecLROF7LuyMhYE91uPgZFeChNbEa7Ilm/fIO8B/scuBA1hn8uvD8QyMZ4jVO
+         KVi8u5w9u6wbLU4OKGuTNXLXZ8nXsBmdhIQXFIHocJOgsxkYakjcCET4F8TK+TuECGsp
+         y2Nw==
+X-Forwarded-Encrypted: i=1; AJvYcCUhSjtjAappW769BkAI2y3glLscIuFjEqq6+N3MpYXvfD73zaTXsNONayDeWcGh5vOPM1FG1E9d1l8Hn9ct+a4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywo1K2VE0H9LWQUD6vHvjZhuAmBwBRpDOlJv7o2yZ0Khx87a5bi
+	0/1ClBogjD4igwK8PScvOpvcjOi0n0fznRQ/HlK4Gg5sY2JBskWN2v5U5MYLNTmvuZIWF32hqbX
+	8/4D9i/e9t+h508a7ScV8foFMy1pDfSw6dIrG7HoG
+X-Gm-Gg: ASbGncv96oZwzoE9tViQFTuxp14H4v7ETdAlfvkn2cJlJSXPCp0PHM4wRGNZiG/Nure
+	clWJJvvE8kdJa+yOR4EPnhenhCTh+Aid6sxYlirzX02+bT07IgFSgNg8QNHh0kKV2zaBCAhbvnp
+	KqJgKWWN4Z977nOv4BWTpUhPwMHdzSBrwDplnpARKUgqo=
+X-Google-Smtp-Source: AGHT+IHgeqPf5EHr1jkfDZ0TWZsQVURsdNh9voMjdnoBkFzaz/mgj3xBAjN2lvxPZngxMNZ2zDqWAhRk0bMIaFAslVQ=
+X-Received: by 2002:a05:620a:17a9:b0:7cf:749d:803e with SMTP id
+ af79cd13be357-7d0a2034287mr2485082285a.51.1748894570064; Mon, 02 Jun 2025
+ 13:02:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250602192702.2125115-1-coltonlewis@google.com>
-X-Mailer: git-send-email 2.49.0.1204.g71687c7c1d-goog
-Message-ID: <20250602192702.2125115-17-coltonlewis@google.com>
-Subject: [PATCH 16/17] KVM: arm64: Add ioctl to partition the PMU when supported
-From: Colton Lewis <coltonlewis@google.com>
-To: kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Colton Lewis <coltonlewis@google.com>
+MIME-Version: 1.0
+References: <20250531072031.2263491-1-blakejones@google.com> <CAADnVQJv_FVciT9LC+W=sVtWAt9oXeAACzmTHzyqY-2svi4ugA@mail.gmail.com>
+In-Reply-To: <CAADnVQJv_FVciT9LC+W=sVtWAt9oXeAACzmTHzyqY-2svi4ugA@mail.gmail.com>
+From: Blake Jones <blakejones@google.com>
+Date: Mon, 2 Jun 2025 13:02:37 -0700
+X-Gm-Features: AX0GCFsfxApMIel-NOMbuG9RAZwUCpPsL1Wg6IssdJPcoBruecM6kKjr4-18sUg
+Message-ID: <CAP_z_ChBf6tiBZuLYE8ZGOXLYPpbNtH3F54_yBmF59oWpZ_q5A@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: add support for printing BTF character arrays as strings
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Namhyung Kim <namhyung@kernel.org>, 
+	Ian Rogers <irogers@google.com>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add KVM_ARM_PMU_PARTITION to partition the PMU for a given vCPU with a
-specified number of reserved host counters. Add a corresponding
-KVM_CAP_ARM_PMU_PARTITION to check for this ability.
+Hi Alexei,
 
-This capability is allowed on an initialized vCPU where PMUv3, VHE,
-and FGT are supported.
+Thanks for taking a look at this.
 
-If the ioctl is never called, partitioning will fall back on kernel
-command line kvm.reserved_host_counters as before.
+On Sat, May 31, 2025 at 11:20=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> Please split selftests vs main libbpf parts.
+> [...]
+> Please use normal kernel style comments.
+> We're gradually getting away from networking style.
+> [...]
+> we allow up to 100 char per line.
+> Don't split it that short.
 
-Signed-off-by: Colton Lewis <coltonlewis@google.com>
----
- Documentation/virt/kvm/api.rst | 16 ++++++++++++++++
- arch/arm64/kvm/arm.c           | 21 +++++++++++++++++++++
- include/uapi/linux/kvm.h       |  4 ++++
- 3 files changed, 41 insertions(+)
+I'll clean these up and send out a new patch set.
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index fe3d6b5d2acc..88b851cb6f66 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -6464,6 +6464,22 @@ the capability to be present.
- 
- `flags` must currently be zero.
- 
-+4.144 KVM_ARM_PARTITION_PMU
-+---------------------------
-+
-+:Capability: KVM_CAP_ARM_PMU_PARTITION
-+:Architectures: arm64
-+:Type: vcpu ioctl
-+:Parameters: arg[0] is the number of counters to reserve for the host
-+
-+This API controls the ability to partition the PMU counters into two
-+sets, one set reserved for the host and one set reserved for the
-+guest. When partitoned, KVM will allow the guest direct hardware
-+access to the most commonly used PMU capabilities for those counters,
-+bypassing the KVM traps in the standard emulated PMU implementation
-+and reducing the overhead of any guest software that uses PMU
-+capabilities such as `perf`. The host PMU driver will not access any
-+of the counters or bits reserved for the guest.
- 
- .. _kvm_run:
- 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 4a1cc7b72295..1c44160d3b2d 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -21,6 +21,7 @@
- #include <linux/irqbypass.h>
- #include <linux/sched/stat.h>
- #include <linux/psci.h>
-+#include <linux/perf/arm_pmu.h>
- #include <trace/events/kvm.h>
- 
- #define CREATE_TRACE_POINTS
-@@ -38,6 +39,7 @@
- #include <asm/kvm_emulate.h>
- #include <asm/kvm_mmu.h>
- #include <asm/kvm_nested.h>
-+#include <asm/kvm_pmu.h>
- #include <asm/kvm_pkvm.h>
- #include <asm/kvm_ptrauth.h>
- #include <asm/sections.h>
-@@ -382,6 +384,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_ARM_PMU_V3:
- 		r = kvm_supports_guest_pmuv3();
- 		break;
-+	case KVM_CAP_ARM_PARTITION_PMU:
-+		r = kvm_pmu_partition_supported();
-+		break;
- 	case KVM_CAP_ARM_INJECT_SERROR_ESR:
- 		r = cpus_have_final_cap(ARM64_HAS_RAS_EXTN);
- 		break;
-@@ -1809,6 +1814,22 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
- 
- 		return kvm_arm_vcpu_finalize(vcpu, what);
- 	}
-+	case KVM_ARM_PARTITION_PMU: {
-+		struct arm_pmu *pmu;
-+		u8 host_counters;
-+
-+		if (unlikely(!kvm_vcpu_initialized(vcpu)))
-+			return -ENOEXEC;
-+
-+		if (!kvm_pmu_partition_supported())
-+			return -EPERM;
-+
-+		if (copy_from_user(&host_counters, argp, sizeof(host_counters)))
-+			return -EFAULT;
-+
-+		pmu = vcpu->kvm->arch.arm_pmu;
-+		return kvm_pmu_partition(pmu, host_counters);
-+	}
- 	default:
- 		r = -EINVAL;
- 	}
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index c9d4a908976e..f7387c0696d5 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -932,6 +932,7 @@ struct kvm_enable_cap {
- #define KVM_CAP_ARM_WRITABLE_IMP_ID_REGS 239
- #define KVM_CAP_ARM_EL2 240
- #define KVM_CAP_ARM_EL2_E2H0 241
-+#define KVM_CAP_ARM_PARTITION_PMU 242
- 
- struct kvm_irq_routing_irqchip {
- 	__u32 irqchip;
-@@ -1410,6 +1411,9 @@ struct kvm_enc_region {
- #define KVM_GET_SREGS2             _IOR(KVMIO,  0xcc, struct kvm_sregs2)
- #define KVM_SET_SREGS2             _IOW(KVMIO,  0xcd, struct kvm_sregs2)
- 
-+/* Available with KVM_CAP_ARM_PARTITION_PMU */
-+#define KVM_ARM_PARTITION_PMU	_IOWR(KVMIO, 0xce, u8)
-+
- #define KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE    (1 << 0)
- #define KVM_DIRTY_LOG_INITIALLY_SET            (1 << 1)
- 
--- 
-2.49.0.1204.g71687c7c1d-goog
-
+Blake
