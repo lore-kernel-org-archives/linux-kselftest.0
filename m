@@ -1,177 +1,188 @@
-Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f202.google.com (mail-il1-f202.google.com [209.85.166.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBB722579E;
-	Tue,  3 Jun 2025 21:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B951A8405
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Jun 2025 21:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748986111; cv=none; b=UkxS8CTdCjPpYJCz4X3Dgf5WBn6kydciJHm6j9CCsoxBWe/RAgIlEi6Iecu2aFEFEEk2HXfVj1UvBY/XXijQwbvt+hnDRTS+rKbxabQjJT+51agtdYXR5dXFm60sgFMWPKymSacXTc0KB83N2jR73WuyyBs2vnttFUuBr8cmFcQ=
+	t=1748986365; cv=none; b=RQ4E77/ci+tlj6OfSVxyGd0MgF7RN9y9p8euhnj05HAhrtP621YDiqgr16+oWlpM6oRQSWGUmHOTf8Ew5N4KFGc59QS36oj5NNLuSLNqM8/SMlIsIK4ckZEr8CpP3QTCh4Z2pxIenP2JyMxMBBqeknNHzThGsR4QGT66S65fYbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748986111; c=relaxed/simple;
-	bh=91X80LvGHfH90x/qxrnpS8bkmAvt6UUlA5rRQzLZg/I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fAGDMLJYjxnaHK1y80D5bTUufSvegHgv5Td4LNrFP708rglaNu1xDwJBy9xGsRbmiTSZoLBF/WHJGRD7/RgYk3yzeyUFqmN3txRVSrHAqqzSEkik+vRUFSKBWCwDMs02WtXgGuCGhOJB1TcevLWwR50FnB4uDOmPvIoHE7RQq8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=R3pPMiSf; arc=none smtp.client-ip=131.188.11.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	s=arc-20240116; t=1748986365; c=relaxed/simple;
+	bh=mRmmFnlPCP5qmGp8cqulc+n4NmAySDPtVlsv8iPw48Q=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=p8K2RUNSOOoew+sVLDJBqP2Nkj2xxdfpC06SCB+S2Qnq3/cVIlsry61O+xlwzIOeX52QCKVNXiHezlpKcJSlqdLqB6RYA9dPguSPa4rUghFvohn2boqa0pPtGdYRF2YveOepuZ1WewidMJCfPcOMVJ/FllxEmOYqxwRcD8RJ5X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=K8FA1uSf; arc=none smtp.client-ip=209.85.166.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="R3pPMiSf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1748986107; bh=ARpytHsyfivjxGjflz99PobPaQ/Mtr9Wv+8PNmUUgKc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
-	 Subject;
-	b=R3pPMiSfvWBr9q+phUTH/uIaiJTRngnHfV38FDKrEu0rWW+NROPwI97cQI7vvjF9b
-	 QlyUwWpcjrB479J15KVsC/l25vUlnmyiCTosRvJ2hJOtB7Ds9aJObDxXllxWOhaPh8
-	 YZre8UFpOFSwEEB9f0BZtu3V6yc+qQt878BdQqa2kxcqpCbIfrOkEDgXcvJd0cBB47
-	 QfCCl0tiF4jeF8x+TUt+UUU8xvyOgWNbL+Xc3T65ZjnzZWH5jnWlhreysMVud+aA/U
-	 vKr1XiZC/4YJUdN/IdteEihDFKFaeCRI48HciCVZ9uM7rWMkpiKMlLhVpI1pBrIE3j
-	 OAviOnKmghToA==
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4bBkNB6ZfkzPkZc;
-	Tue,  3 Jun 2025 23:28:26 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at boeck4.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2001:9e8:3639:fe00:a21f:4ce4:8495:5578
-Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:3639:fe00:a21f:4ce4:8495:5578])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX18910nUSGoVfudKBySRew8N0fTZeQak0HM=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4bBkN73X7dzPkPR;
-	Tue,  3 Jun 2025 23:28:23 +0200 (CEST)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Luis Gerhorst <luis.gerhorst@fau.de>,
-	Henriette Herzog <henriette.herzog@rub.de>,
-	Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-	Cupertino Miranda <cupertino.miranda@oracle.com>,
-	Jiayuan Chen <mrpre@163.com>,
-	Matan Shachnai <m.shachnai@gmail.com>,
-	Dimitar Kanaliev <dimitar.kanaliev@siteground.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Daniel Xu <dxu@dxuuu.xyz>,
-	bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kselftest@vger.kernel.org
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v4 8/9] selftests/bpf: Add test for Spectre v1 mitigation
-Date: Tue,  3 Jun 2025 23:28:14 +0200
-Message-ID: <20250603212814.338867-1-luis.gerhorst@fau.de>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250603205800.334980-1-luis.gerhorst@fau.de>
-References: <20250603205800.334980-1-luis.gerhorst@fau.de>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K8FA1uSf"
+Received: by mail-il1-f202.google.com with SMTP id e9e14a558f8ab-3ddb9d32cfeso17431375ab.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Jun 2025 14:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1748986362; x=1749591162; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=A0l5G93fC29AgVAtcdaJmVpgHO/IQHFXQv4WdPYaaHE=;
+        b=K8FA1uSfxXYjE7M/3EGc5Xqz1jBw8GcDGVwsHp27n1ZI7vHBo0QWT2qQjdijACY7BA
+         lwqOv2PA2bN5COEHIj2Wn68GG+8L7U6PfTrmvhlaXGpyEgz/xHgfGsQwKWU+X06EG/UE
+         2V8F6qw1w5fm+Ivo5jH9xnc9Mfk55rKMzVmVPqFSu6ppANUTxsRslGaFaCLNyadaEoxB
+         MdC5tLrVwVffEBkfLJYlp6EDqSKGHLSk/wqER1yM6wUATYBMlgrWkEGdCdrUK1yC7AmZ
+         mPOWsVnwgF7Gz0feqkFGxRyAB34+dtwPJMGpv1EPafIAEfKeeLEJ0Yoy/TEW/tygeHzU
+         ETQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748986362; x=1749591162;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A0l5G93fC29AgVAtcdaJmVpgHO/IQHFXQv4WdPYaaHE=;
+        b=E/mpx0u085lnZzH0fDuMagQyOV/0PcoBmWD4AW720Ixwr4VVJzgtwhAoI8p/ezk80Y
+         8AupsSGdlWNFhLk1og7C189GleOHraVhn28Qs2NZRTeeEX4TY/DfVGy2TDm3RDILUjpW
+         0VBSoLy4zN8eXqZkSEo39ne4EQF6R+UcBDt3hbZKrBURDPk9s2WkOFZoeMPG+0LxtIVg
+         ZkOgVJfxF/utz+eBmQfcugllL1eMdlHHB+Sv7oEi7IIHDoAfDPiPyZYMjxsabDYlJaLM
+         PFyA4J1J9jPxCFplENMBfNX6b6A7/7zagBX8voFYCSnZPYtZwHSwQwQDHG35i2eTZ4T6
+         1shg==
+X-Forwarded-Encrypted: i=1; AJvYcCWpe80avcHk/woZ9PfPy9CmtsOevm1QTpmqEWx7goxdAc3rSoIuCoJMReXECKSJmknZER0NRUldZ/XvXU1JvIg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxothiXON+JZtXWrluHLxvgvvLXGSBv9O3WSgjDauc93G8rh698
+	2FAtRaG5nTM4lWSfIy7xA9y6OkmvnYld+eGXPHZJo2novygmKvs9HmDeyL4Hv1pqbGyBCmH13t1
+	HzxtdPAgxs6gr1YeY47GltVAHqA==
+X-Google-Smtp-Source: AGHT+IEpZcrefEWDzzUjOLjOnRYEdIFZat5s3G0oLfOvn/O8rphYPOQ1GWMYf3Wj71ilVVre/pSRPvqRpgjiaR79Qg==
+X-Received: from ilbbm14.prod.google.com ([2002:a05:6e02:330e:b0:3d9:2b64:6884])
+ (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a92:c241:0:b0:3dc:7a9a:44d5 with SMTP id e9e14a558f8ab-3ddbedc8c8fmr6231205ab.22.1748986362621;
+ Tue, 03 Jun 2025 14:32:42 -0700 (PDT)
+Date: Tue, 03 Jun 2025 21:32:41 +0000
+In-Reply-To: <aD4llDZwb_sC_Ptj@linux.dev> (message from Oliver Upton on Mon, 2
+ Jun 2025 15:28:36 -0700)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Message-ID: <gsnt4iww3406.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [PATCH 06/17] KVM: arm64: Introduce method to partition the PMU
+From: Colton Lewis <coltonlewis@google.com>
+To: Oliver Upton <oliver.upton@linux.dev>
+Cc: kvm@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
+	linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
+	maz@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, 
+	yuzenghui@huawei.com, mark.rutland@arm.com, shuah@kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-This is based on the gadget from the description of commit 9183671af6db
-("bpf: Fix leakage under speculation on mispredicted branches").
+Oliver Upton <oliver.upton@linux.dev> writes:
 
-Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../selftests/bpf/progs/verifier_unpriv.c     | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
+> On Mon, Jun 02, 2025 at 07:26:51PM +0000, Colton Lewis wrote:
+>>   static void kvm_arm_setup_mdcr_el2(struct kvm_vcpu *vcpu)
+>>   {
+>> +	u8 hpmn = vcpu->kvm->arch.arm_pmu->hpmn;
+>> +
+>>   	preempt_disable();
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index c42c3839b30c..43236b93ebb5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -729,4 +729,61 @@ l0_%=:	r0 = 0;						\
- "	::: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("unpriv: Spectre v1 path-based type confusion of scalar as stack-ptr")
-+__success __success_unpriv __retval(0)
-+#ifdef SPEC_V1
-+__xlated_unpriv("if r0 != 0x1 goto pc+2")
-+/* This nospec prevents the exploit because it forces the mispredicted (not
-+ * taken) `if r0 != 0x0 goto l0_%=` to resolve before using r6 as a pointer.
-+ * This causes the CPU to realize that `r6 = r9` should have never executed. It
-+ * ensures that r6 always contains a readable stack slot ptr when the insn after
-+ * the nospec executes.
-+ */
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r9 = *(u8 *)(r6 +0)")
-+#endif
-+__naked void unpriv_spec_v1_type_confusion(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_hash_8b] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l2_%=;				\
-+	/* r0: pointer to a map array entry */		\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_hash_8b] ll;				\
-+	/* r1, r2: prepared call args */		\
-+	r6 = r10;					\
-+	r6 += -8;					\
-+	/* r6: pointer to readable stack slot */	\
-+	r9 = 0xffffc900;				\
-+	r9 <<= 32;					\
-+	/* r9: scalar controlled by attacker */		\
-+	r0 = *(u64 *)(r0 + 0); /* cache miss */		\
-+	if r0 != 0x0 goto l0_%=;			\
-+	r6 = r9;					\
-+l0_%=:	if r0 != 0x1 goto l1_%=;			\
-+	r9 = *(u8 *)(r6 + 0);				\
-+l1_%=:  /* leak r9 */					\
-+	r9 &= 1;					\
-+	r9 <<= 9;					\
-+	*(u64*)(r10 - 8) = r9;				\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l2_%=;				\
-+	/* leak secret into is_cached(map[0|512]): */	\
-+	r0 = *(u64 *)(r0 + 0);				\
-+l2_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_8b)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.49.0
+>>   	/*
+>>   	 * This also clears MDCR_EL2_E2PB_MASK and MDCR_EL2_E2TB_MASK
+>>   	 * to disable guest access to the profiling and trace buffers
+>>   	 */
+>> -	vcpu->arch.mdcr_el2 = FIELD_PREP(MDCR_EL2_HPMN,
+>> -					 *host_data_ptr(nr_event_counters));
+>> -	vcpu->arch.mdcr_el2 |= (MDCR_EL2_TPM |
+>> +	vcpu->arch.mdcr_el2 = FIELD_PREP(MDCR_EL2_HPMN, hpmn);
+>> +	vcpu->arch.mdcr_el2 |= (MDCR_EL2_HPMD |
+>> +				MDCR_EL2_TPM |
 
+> This isn't safe, as there's no guarantee that kvm_arch::arm_pmu is
+> pointing that the PMU for this CPU. KVM needs to derive HPMN from some
+> per-CPU state, not anything tied to the VM/vCPU.
+
+I'm confused. Isn't this function preparing to run the vCPU on this
+CPU? Why would it be pointing at a different PMU?
+
+And HPMN is something that we only want set when running a vCPU, so
+there isn't any per-CPU state saying it should be anything but the
+default value (number of counters) outside that context.
+
+Unless you just mean I should check the number of counters again and
+make sure HPMN is not an invalid value.
+
+>> +/**
+>> + * kvm_pmu_partition() - Partition the PMU
+>> + * @pmu: Pointer to pmu being partitioned
+>> + * @host_counters: Number of host counters to reserve
+>> + *
+>> + * Partition the given PMU by taking a number of host counters to
+>> + * reserve and, if it is a valid reservation, recording the
+>> + * corresponding HPMN value in the hpmn field of the PMU and clearing
+>> + * the guest-reserved counters from the counter mask.
+>> + *
+>> + * Passing 0 for @host_counters has the effect of disabling  
+>> partitioning.
+>> + *
+>> + * Return: 0 on success, -ERROR otherwise
+>> + */
+>> +int kvm_pmu_partition(struct arm_pmu *pmu, u8 host_counters)
+>> +{
+>> +	u8 nr_counters;
+>> +	u8 hpmn;
+>> +
+>> +	if (!kvm_pmu_reservation_is_valid(host_counters))
+>> +		return -EINVAL;
+>> +
+>> +	nr_counters = *host_data_ptr(nr_event_counters);
+>> +	hpmn = kvm_pmu_hpmn(host_counters);
+>> +
+>> +	if (hpmn < nr_counters) {
+>> +		pmu->hpmn = hpmn;
+>> +		/* Inform host driver of available counters */
+>> +		bitmap_clear(pmu->cntr_mask, 0, hpmn);
+>> +		bitmap_set(pmu->cntr_mask, hpmn, nr_counters);
+>> +		clear_bit(ARMV8_PMU_CYCLE_IDX, pmu->cntr_mask);
+>> +		if (pmuv3_has_icntr())
+>> +			clear_bit(ARMV8_PMU_INSTR_IDX, pmu->cntr_mask);
+>> +
+>> +		kvm_debug("Partitioned PMU with HPMN %u", hpmn);
+>> +	} else {
+>> +		pmu->hpmn = nr_counters;
+>> +		bitmap_set(pmu->cntr_mask, 0, nr_counters);
+>> +		set_bit(ARMV8_PMU_CYCLE_IDX, pmu->cntr_mask);
+>> +		if (pmuv3_has_icntr())
+>> +			set_bit(ARMV8_PMU_INSTR_IDX, pmu->cntr_mask);
+>> +
+>> +		kvm_debug("Unpartitioned PMU");
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+
+> Hmm... Just in terms of code organization I'm not sure I like having KVM
+> twiddling with *host* support for PMUv3. Feels like the ARM PMU driver
+> should own partitioning and KVM just takes what it can get.
+
+Okay. I can move the code.
+
+>> @@ -239,6 +245,13 @@ void kvm_host_pmu_init(struct arm_pmu *pmu)
+>>   	if (!pmuv3_implemented(kvm_arm_pmu_get_pmuver_limit()))
+>>   		return;
+
+>> +	if (reserved_host_counters) {
+>> +		if (kvm_pmu_partition_supported())
+>> +			WARN_ON(kvm_pmu_partition(pmu, reserved_host_counters));
+>> +		else
+>> +			kvm_err("PMU Partition is not supported");
+>> +	}
+>> +
+
+> Hasn't the ARM PMU been registered with perf at this point? Surely the
+> driver wouldn't be very pleased with us ripping counters out from under
+> its feet.
+
+AFAICT nothing in perf registration cares about the number of counters
+the PMU has. The PMUv3 driver tracks its own available counters through
+cntr_mask and I modify that during partition.
+
+Since this is still initialization of the PMU, I don't believe anything
+has had a chance to use a counter yet that will be ripped away.
+
+Aesthetically It makes since to change this if I move the partitioning
+code to the PMUv3 driver, but I think it's inconsequential to the
+function.
