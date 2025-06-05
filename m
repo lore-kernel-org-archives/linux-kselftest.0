@@ -1,71 +1,90 @@
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9566C1DFE12;
-	Thu,  5 Jun 2025 08:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41AB2040B6
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Jun 2025 10:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749113512; cv=none; b=SOZ7o6r52Owf8jVDfTXzCytbJrbQSfUCnh0XPq/Wqi79V9MVEO5cN11S+W7Hipf1p9LN3yI7LrA6garLbXkK85kcstq5m4YclSYu1CDQKi5CIyUY2GCuFQfOz6HfFIL9xqJs++/sKx+rD+K+0kITaYlAA7pkui3K9KRos0Cv6pg=
+	t=1749119824; cv=none; b=cQUaiLsx7h5k6D5dIKul4YCm5kN7eRdp9jiGwPimaYptQm/jHHqUrmy8FKkuwDD+iUmKfpV1eSXeVL22JReTRLn5ZWGp+b8W4Pvw74jlHhG/Xf2ycJpIsetgkot0z6GnDCW6Lge7O+rb9goCdFs2dqORDoHK8NPa7L4UdsLsf+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749113512; c=relaxed/simple;
-	bh=DmWtOysdA0Nmoh/X3y+VMEQ694VNJeZDCcbZ+gNbVPU=;
-	h=Message-ID:From:To:Subject:Date:MIME-Version; b=gV5/ZTR65nMtd9Yq4yrRbFLTR43QN9VZM0gO7713MRoyKovyuKPHmMJNHfGfol+Kmizllc5/fc9X3bVqz+LyRoV2zLNWkV1/yOqFX53u3qcmUshuPQOXeqGvHyuayMI1mBNFsdFDGojWxUlKlJ8dJQtV8CxLPS8FZ+dxXvG/dkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=sHN411Tb; arc=none smtp.client-ip=162.62.57.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1749119824; c=relaxed/simple;
+	bh=VzQyPkruYWrDZAOkmL/UT3N0xShjKnGR9pQJo0jQ/Qk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XHxHaQsOWrsQGWNdDLRKZVnk6pbD1H1s/JYYDvhj6Pw3DQnsO2T2xWsikP2IHw4caUERlkyA+i4+kb1EIzXZMRWnAlgtIiSvxO0mRggOptGWOH1cBfcs8/4UGwMb1RBCd4GnYH6CTbv5V3KWXSfzSMSRgHiZhRierG58SqTj/tA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Uv+MQfO1; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="sHN411Tb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1749113503;
-	bh=Ns6Z7O8rmMKISC4J3f9FZ4mWtQOdi3wfP7xqU/uLv1o=;
-	h=From:To:Subject:Date;
-	b=sHN411TbxK859SJhTjstwxDSuMym9RTVjToryz7HvJnHrDoc3E+uvuffdcJla7aUv
-	 l1ybSgblwGQK+zMPc2/hYQ4LXk/wz3QHuSz/mhpoxQZHVW5zHrQ5fm8gMS9X6PSvXI
-	 z5/bOQFtIIjvvC6x7nBE0NKpEgMbVXIyut8J4uao=
-Received: from NUC10.. ([39.156.73.10])
-	by newxmesmtplogicsvrszb16-1.qq.com (NewEsmtp) with SMTP
-	id B51A7CC6; Thu, 05 Jun 2025 16:45:17 +0800
-X-QQ-mid: xmsmtpt1749113117tqk3sbk1c
-Message-ID: <tencent_3DD7405C0839EBE2724AC5FA357B5402B105@qq.com>
-X-QQ-XMAILINFO: NFB6T0Z6Ys1E1T8LRCAA3Q5cCT745Of5aONkg7N3j82TuaUg4mVTA3qD1h39FH
-	 rFl7K8LOKeiXnbBQR3BZHn1EZCted/XMYS1CQsX/jB2sdX8m3gdmbsjHCmhq5L9rPa1nljn7FZCa
-	 FHahyWmgr+e5UCSTkAVdq2H/gQnn7rbVbKVlx9jVFIf4vO3XE7KD2LkABTWB0+5RVG0ZRN2p5GJw
-	 zb1REP4WCl8Cb2t4HkaSDKWTlSnAKMcaBWJFZO3xZeEU3ZMnZgR3wgeaq7deGE9BraznIi8mtzJL
-	 MJeYx2H21zxqLWBLj/LuMg6hyfqJsz/xUo9w7z1iUkhlvOtvsFxtJQ6JtXZPJwTHqX66gwyG18kZ
-	 lv0W+mcmMxlR43yGCfk38Wuqqn3AOFjr6vv61/kY0ini5UmUgxanb567xpWYZ78jzl5V33lu0x8v
-	 0rYwSRuYAKqJUjXWVfJQxJjPmf3vIbz74kmJhOi0PaU45hV2vYWmHktHMm8zoNfAfoLqrpMRxEuK
-	 IZGeTnnaa83RHffw2h5jrl/7OTUa7yPWkESmE0VeUyPIkoYq5nKZGjDgUJSL/aUS9I3PYa8LcGcH
-	 +c8akGjwRtmnwV9gcicH5PsoufybTB+2NefLATGMkxGjT7qk2MktpZCUbzLbMbgsL7jYyglDMVJ4
-	 svnz7x+y2wNjwSkrnYtkKALosKTtgn+kuitt6GBcbM3e/KZqrNp0h12YAArS/V42RK2vXJYGXAW2
-	 l03VsRVTsXn0qJ8MZlaF8XEIIH/W2/b/yuk6Y0aTJgc2QofraBuScScZ74ti7Syx1fJizxkUapcM
-	 hEeEeySVpcUMxDIIsPsCX2QwV4Vg8b8ULHrWO6D8+I3KAISIN7jTuJ5VmBvpdF3WPGxZwn341STz
-	 HMxoN2MegXFbR2c85UvvZLIBKg/PM617djQ2BxDkp9XlMBzG212meGt43qMTz9KkNmvz8n8hfGfo
-	 7szGmWIBhWlIP2Rho/4EBr4T13supbNEIRoSspWTE=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-From: Rong Tao <rtoax@foxmail.com>
-To: rongtao@cestc.cn,
-	rtoax@foxmail.com,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Uv+MQfO1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749119821;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AdRsO2Uefrz8JMO751IFZEkS7KH/EcFqwNDUBdHYAOY=;
+	b=Uv+MQfO1hJLdRNQc5RbCrFffkuT6VY62Vo/TMGCOFJBu0/GjkqEW5QL6claC+JfbUOsf8Y
+	nK7N1LkCM9uXRz3UebFePpBymKvfdK/0YoDeNURLvddI7vNiSLGg+F0Hn5Vwzm2e2oS5F1
+	G/8W2MBbfvmnsBtZu/UsvD8WFxZPzsk=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-121-4pYT4vHhOsu4DCkDHKTbFg-1; Thu, 05 Jun 2025 06:37:00 -0400
+X-MC-Unique: 4pYT4vHhOsu4DCkDHKTbFg-1
+X-Mimecast-MFC-AGG-ID: 4pYT4vHhOsu4DCkDHKTbFg_1749119819
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3a4ee113461so312442f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Jun 2025 03:37:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749119819; x=1749724619;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AdRsO2Uefrz8JMO751IFZEkS7KH/EcFqwNDUBdHYAOY=;
+        b=cmCoNZa1k47quklYkeHnAul/De38aMT7f/dv//OdHHsS4FkID2ESXOmP6LR0FKVcyT
+         ScllOXdSEkGuDcBTolTWRXPg4WjH1ArZHZTZ5eam/+cuI+vQeo/wf1jvUNEHziYV/ABP
+         U0T2kCi/hzzXFew65di2fOSF+6dSnF7XS7BsaPTP4jgcWpIvLIkNXMnnwcNk3UxaRBWX
+         WQ23c/ti98trept+zB99R1KFtN6QpVbPrOvn5GhoFrIiOsgv3EqazB/pFMRvzmbWlred
+         HY6c8fdb6kRwmpRts3YKsd0Bl5PuwmuSULknY2NjhubKp5tO90aPwf6Iv42N1ypnTGS4
+         VIug==
+X-Forwarded-Encrypted: i=1; AJvYcCW0681k3CuuXrTzALX86n3PsouRpr/KmHSRhJxsyevNUNCbVm4vWEs2nz+Tnz2zECYILjsbVfaxmRV6RQOs7Eg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2St+X5OAtEL1JxHdupA7Px+XB+my42uZ5v0F4W25i39nNms6W
+	+igPGv51wfmSiCFnYRPb6pHKK/hsRkRcNhnpCN1c/OAg6jUIxssZN+DUh8edXgeUIiXFCQ7C6vO
+	KaRJMBkyDbLOXXC8IXGWr0U5dbM34goi89EZ5FJV5R8b/R3qDAdkyendEvDjIDrmAXBxBhg==
+X-Gm-Gg: ASbGncsvSZREBN7BRuMgTsITbf3sRfaUJ1uPTll6x4P4vxREPJ32Dxrvbib5+kzYhUY
+	mcK4OXql6ok1gp2nfwp85aYqYlFw4YIOerugOaTaVyeJuOS+sQSc+fwsWjWp4n14PgS60aQhL+t
+	eiHwkrBaqtmargg2E7E6GT8P9Cv8JGMNdzwgBE0ZmIPB79ki11g8aj4L0EQWX2rouBlDXgRJN4m
+	1K5KZ9M12xfxBh0g2gVQia2C/BtTUrRydFXSay18RbYCq8Dm4nZBb8UXAxVHT1lF0A5iYo1bXOF
+	fH52lzavJvy65HAlWuKMyN0xSl7mOc2wqJu0kx/n/crw+s36NV68dOkZTWzLWxouDCIYZta3dQ=
+	=
+X-Received: by 2002:a05:6000:144e:b0:3a3:ec58:ebf2 with SMTP id ffacd0b85a97d-3a51d8f6a68mr5594165f8f.7.1749119819364;
+        Thu, 05 Jun 2025 03:36:59 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFRjZpPO2+0jMcuZP9CR9nsUnOUJ7V0YuUBqF23a88OV3aPhw4HnJ7EZRrzi+l8ZxUNJutO1Q==
+X-Received: by 2002:a05:6000:144e:b0:3a3:ec58:ebf2 with SMTP id ffacd0b85a97d-3a51d8f6a68mr5594137f8f.7.1749119819002;
+        Thu, 05 Jun 2025 03:36:59 -0700 (PDT)
+Received: from rh.fritz.box (p200300f6af1bce00e6fe5f11c0a7f4a1.dip0.t-ipconnect.de. [2003:f6:af1b:ce00:e6fe:5f11:c0a7:f4a1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-451f8311ae6sm14105175e9.2.2025.06.05.03.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jun 2025 03:36:58 -0700 (PDT)
+From: Sebastian Ott <sebott@redhat.com>
+To: Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>
+Cc: Colton Lewis <coltonlewis@google.com>,
+	Ricardo Koller <ricarkol@google.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
 	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH bpf-next] selftests/bpf: rbtree: Fix incorrect global variable usage
-Date: Thu,  5 Jun 2025 16:45:14 +0800
-X-OQ-MSGID: <20250605084516.287041-1-rtoax@foxmail.com>
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Sebastian Ott <sebott@redhat.com>
+Subject: [PATCH v3 1/4] KVM: arm64: selftests: fix help text for arch_timer_edge_cases
+Date: Thu,  5 Jun 2025 12:36:10 +0200
+Message-ID: <20250605103613.14544-2-sebott@redhat.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250605103613.14544-1-sebott@redhat.com>
+References: <20250605103613.14544-1-sebott@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,49 +93,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Rong Tao <rongtao@cestc.cn>
+Fix the help text for arch_timer_edge_cases to show the correct
+option for setting the wait time.
 
-Within __add_three() function, should use function parameters instead of
-global variables. So that the variables groot_nested.inner.root and
-groot_nested.inner.glock in rbtree_add_nodes_nested() are tested
-correctly.
-
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
+Signed-off-by: Sebastian Ott <sebott@redhat.com>
 ---
- tools/testing/selftests/bpf/progs/rbtree.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/rbtree.c b/tools/testing/selftests/bpf/progs/rbtree.c
-index a3620c15c136..49fe93d7e059 100644
---- a/tools/testing/selftests/bpf/progs/rbtree.c
-+++ b/tools/testing/selftests/bpf/progs/rbtree.c
-@@ -61,19 +61,19 @@ static long __add_three(struct bpf_rb_root *root, struct bpf_spin_lock *lock)
- 	}
- 	m->key = 1;
- 
--	bpf_spin_lock(&glock);
--	bpf_rbtree_add(&groot, &n->node, less);
--	bpf_rbtree_add(&groot, &m->node, less);
--	bpf_spin_unlock(&glock);
-+	bpf_spin_lock(lock);
-+	bpf_rbtree_add(root, &n->node, less);
-+	bpf_rbtree_add(root, &m->node, less);
-+	bpf_spin_unlock(lock);
- 
- 	n = bpf_obj_new(typeof(*n));
- 	if (!n)
- 		return 3;
- 	n->key = 3;
- 
--	bpf_spin_lock(&glock);
--	bpf_rbtree_add(&groot, &n->node, less);
--	bpf_spin_unlock(&glock);
-+	bpf_spin_lock(lock);
-+	bpf_rbtree_add(root, &n->node, less);
-+	bpf_spin_unlock(lock);
- 	return 0;
- }
- 
+diff --git a/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c b/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c
+index a36a7e2db434..c4716e0c1438 100644
+--- a/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c
++++ b/tools/testing/selftests/kvm/arm64/arch_timer_edge_cases.c
+@@ -986,7 +986,7 @@ static void test_print_help(char *name)
+ 	pr_info("\t-b: Test both physical and virtual timers (default: true)\n");
+ 	pr_info("\t-l: Delta (in ms) used for long wait time test (default: %u)\n",
+ 	     LONG_WAIT_TEST_MS);
+-	pr_info("\t-l: Delta (in ms) used for wait times (default: %u)\n",
++	pr_info("\t-w: Delta (in ms) used for wait times (default: %u)\n",
+ 		WAIT_TEST_MS);
+ 	pr_info("\t-p: Test physical timer (default: true)\n");
+ 	pr_info("\t-v: Test virtual timer (default: true)\n");
 -- 
 2.49.0
 
