@@ -1,249 +1,216 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C74121C19C;
-	Mon,  9 Jun 2025 16:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749486351; cv=none; b=jtr0VRmbm9niXowKbT2RwQVzSKynxpNUu15wsuuDZMCE7Qc8vPuoHvpIfEZMi7tHMwq717EdG2YrHuhE85wvUYrwhfec/eyX+UOsKIxDTOEKTfWRK2KAwCvg1Rh6Q/sfZhYQEw8RVwyVkBX8776hOJX/tiWkbGVdGq2mmyVRmAI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749486351; c=relaxed/simple;
-	bh=u8r2Q+UtHJ4Nd9Z2cHIyBuA8VSeH+waJg4MzAJzv7o8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hpsANtuBtOeQr3FO5gvppNRwzr+YtytZBe+99a7z5U+zTsjVoM3xPaxSieJFTaL3WjEjEs6MI22J6up99WWEpWJFXLVz9b0EUX/1ztc06MiFRSuNTQv5eoOxzfkzlXg1bhQnMNISc+tFnoFJcwcySxe9C33Kd1UCMDpxKTb4F5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gcG75G4N; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034523A1B6;
+	Mon,  9 Jun 2025 16:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749486876; cv=fail; b=HW767J0g4TxGYomSInyYJUStVezb2XSgs5/W6YfhoEUypdvH1Fi4vyi1nibaD1QStLLeDTm7/RGR/Aj64YShE+xh4Dml9UJ+FlrntTVqOfKwNSbGmEdCZVu0xCtoHR/jD9A6lHP7BJWS6liewN8nX8XoesK1kVHu1oSNrG6jZH8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749486876; c=relaxed/simple;
+	bh=RyBXszOHDMA58Bbht2PNr3Mz0wLtB/cEqIPMI2iIst0=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=klHZXzUp5G6gj+dRld05xr65X1UI0Qh/vePsFI7rvJjdr7IpQFO7GFEufiLBJDDe1+5eTK8ZOA8D94sH50U89N++5EYQwdbH0bS+INjopMvFu8aNWZCQ15Bbl9CVXgGGs4gyrsKn7DsBl7MVxDrR5JfXoI/V1Nv2Y3nCPaQmzzo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nVBm3buh; arc=fail smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gcG75G4N"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-747fc77bb2aso3474288b3a.3;
-        Mon, 09 Jun 2025 09:25:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749486349; x=1750091149; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rIrnh6Y6z0RsAszSzJMckGXGP+N0IS1GPSV62LbBz1M=;
-        b=gcG75G4Nf09QWzPIdG32NyX6gnNqq18Mq9ifc+BIYuEZD5S7gNNDohTp2ui4V7YPT0
-         Hi7/Iqo/YRy1Y9cLS+QOqeo7+dA1PtJTWFQNAqf4Y+VTJczxwaccTddx9rijDB2xWcWd
-         NcIRR2tnSXOgJsNUjUYB4Odlo5X4d0l42EjnR2Fl21SLidQI5joiPe1T2XsfA+e9E9mQ
-         oUaka6lm9TyY93wI0XC0IEwx6Jp3dPMFq+YQdE4Nz7eU0oxbMMsELA5LyrokvDOBJlwH
-         xsi7Z94wh0rC7aKnGabngIqcAcPnPXuP0XDYDbVWLJDx6PSlwqMneMo3sMJhOfW71utF
-         8l4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749486349; x=1750091149;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rIrnh6Y6z0RsAszSzJMckGXGP+N0IS1GPSV62LbBz1M=;
-        b=gzlYJoPbNKirj3JNf1CKoU62/Y4vv8+NdkfVhglHCprIQhPFPKRxwnIl0KY7szUvnJ
-         PsnwHQbzvf5i4bYFA84Lm8i7pBx8lfmYzWcCHdpgT1qz3RjeQc/4sf8z1wcBMwCxpvqf
-         OasTmlzwT9NR2t1KEEdyLUNjWGnHvNN0y1F7vmWTQqE+lXktP2v9lmkCVm5gJfmQYO7l
-         iIu6dxWJ4oO13JezuW9xnHavsfu2e9em4c477BjeETf0hGLkjZUANHFBHOd6GTPI8j53
-         Z0jSZ0Rims4NmTj2bey/BEB30CaNvlgk/Uo4WWKwEDEkNe/UoTRYsbaojR5qg8wjW5AB
-         gFsg==
-X-Forwarded-Encrypted: i=1; AJvYcCU62juxx5aIL8F8YIGIqSietfW5dOl5PhMYMn5GeajL0PyibLKcQCAw4tVeiImJj3iZvEMtqZjYkV9j1H2qv5Yc@vger.kernel.org, AJvYcCUDuvl8fey9387k8Jmedki9WHszDSEYKR/blwd/Tffgms6d8jwsUJGoV/+PeSERTyTLUxG7Ez8bkvBaiA==@vger.kernel.org, AJvYcCVvWo2lqQRwZqfAXjZy4ILqNA3ryt6pc6jLccBkf4sihJU8dFAHEuNKz4YQKCTBEOETFBRVQ/g3bmrS8NE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCL0q/MuCxwRHPv9l3XX8IhYlzOXJuHQ1v2RbC6u5RdVZWGCop
-	8ZzL2gfI2lCwacC4ph8O9bkMu1BPjcK6A0D7yIMVX+M55w3VSaMyWWHsZS5Y
-X-Gm-Gg: ASbGncuf3eDyb+eTdZbphAZ/YihpI0mTYmWQDlPh897nCnbmmgypSzNTEp7JZaJpYb1
-	wkCdtSvL5ANRQLKWnJhlUBJ5JjSgTEH+bJUFjWmmZhTDOhNZuXpIENU/B6+Ou27/ky/qLRHZSEQ
-	lAdgWShzJOomwyaouWumGI9SrnosvLhGlyZw7rs//c3pODhnO6BF/K+U6m2KCH9guueIejBKmKo
-	bK6FYlffnQtFIuR+UPeky5iKujEYdoaik9t9V3R/MhvTBPeSMaSPTFD322JsoHAO7VivQ0qV3or
-	naJ4WNF90uonBW1EpILY2rLgxnssD7zvoo8hi9+JKgxYpamZaavONcNhoJkcuK7eUjRCgYTGWm/
-	Osk47Dnh6oevK
-X-Google-Smtp-Source: AGHT+IHWJwEpttKcOYtxUVS3ky2ehdeYMgNt9I8XWQyiwY2W97FEQfM0AyDBiEXIyrcRZ6JMgZ6g5w==
-X-Received: by 2002:a05:6a21:1fc5:b0:1f5:7ba7:69d8 with SMTP id adf61e73a8af0-21ee25321f3mr19247516637.15.1749486349275;
-        Mon, 09 Jun 2025 09:25:49 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-7482b0ea2b2sm5915308b3a.161.2025.06.09.09.25.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jun 2025 09:25:48 -0700 (PDT)
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	skalluru@marvell.com,
-	manishc@marvell.com,
-	andrew+netdev@lunn.ch,
-	michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com,
-	ajit.khaparde@broadcom.com,
-	sriharsha.basavapatna@broadcom.com,
-	somnath.kotur@broadcom.com,
-	anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com,
-	tariqt@nvidia.com,
-	saeedm@nvidia.com,
-	louis.peens@corigine.com,
-	shshaikh@marvell.com,
-	GR-Linux-NIC-Dev@marvell.com,
-	ecree.xilinx@gmail.com,
-	horms@kernel.org,
-	dsahern@kernel.org,
-	shuah@kernel.org,
-	mheib@redhat.com,
-	ruanjinjie@huawei.com,
-	stfomichev@gmail.com,
-	linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	linux-rdma@vger.kernel.org,
-	oss-drivers@corigine.com,
-	linux-net-drivers@amd.com,
-	linux-kselftest@vger.kernel.org,
-	leon@kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: [PATCH net-next v2 4/4] Revert "bnxt_en: bring back rtnl_lock() in the bnxt_open() path"
-Date: Mon,  9 Jun 2025 09:25:41 -0700
-Message-ID: <20250609162541.1230022-5-stfomichev@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250609162541.1230022-1-stfomichev@gmail.com>
-References: <20250609162541.1230022-1-stfomichev@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nVBm3buh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749486875; x=1781022875;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=RyBXszOHDMA58Bbht2PNr3Mz0wLtB/cEqIPMI2iIst0=;
+  b=nVBm3buhOol2AKHhoQzyxHV8J7w6B8GdTf8OQOynS38kjjuwvxZiXpqV
+   50+9srj3aF8wGWFwE9VaSwOeqxQiSFZIIqQefiE553mEi7We9+P260a6m
+   vTnjioQpZ6KK3JKXTXGp7cY5xWpAXp1/rwRir8pgoaDFu28o0HKqWg5Ob
+   W3VJSrAe2RoAEbrTIdZ6ItuEMVtv8pN9yQgx0c3sWX+Hi4G+o5dciP+O9
+   AToz5FX/ej+gXqlTz28rp14AnPB/bXZHSsQA/S9oQrgYfC1nE3khWaU5L
+   5AbL49DatshvQaFKgvQoK52njp1iOQH71G8VxSjbC4WFvccqcOh+KwpTZ
+   Q==;
+X-CSE-ConnectionGUID: zxOYaK0WTWGAPa+6wBHIiA==
+X-CSE-MsgGUID: zYKgGw9JQEaja+kdeLCNMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="51278654"
+X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
+   d="scan'208";a="51278654"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 09:34:35 -0700
+X-CSE-ConnectionGUID: ygKksHNBSbKcyMBoThKkCQ==
+X-CSE-MsgGUID: 0t0Jg2N4TR+Rq7JOCwrLCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
+   d="scan'208";a="150402823"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 09:34:33 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Mon, 9 Jun 2025 09:34:32 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25 via Frontend Transport; Mon, 9 Jun 2025 09:34:32 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (40.107.223.76)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.55; Mon, 9 Jun 2025 09:34:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KuQ43G4u4lrJlYdqyIf8aX3eA7yQUzlaxkD2ZQ1MHQyQ6W6T5U9fWm04QKdd3Wzcxz+Gu3DlF9fh6b30Jktk6IfIv6sIsROPuBWiEi8P8KAmCK+OCNHDFlpkuOYk9d9bcfZqlrMK4W0Dlfq4NdiQvO5LsIR8v3aVqo04XE7um3uVQJ2SLpurdOAEN5+Q2jV5GDabwaHUQUaDdWuPiyDuMFRArQmpra2yDIT1Q7KBfVExbbBsC6Rq1dtZB5mc62RHknNF8u1AffOIsIt1ce5K+o/jR1qCGtP0RbTCjaFrbadAk3QHDcVrFRnZdcFR6uPyeUUYHYYbUOvFVCDa9KzlRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uha44ENY+QvecICQ5SK7Yj1C0hbNgo3eyedJx+bXMJ4=;
+ b=HcqwPHPFFgUebq/xQ0XewC+INBV9j/HiT2xbKNrtQdXNDOOjIDLaOzGn9pLofLxz/1DceVE3BMHQ33HQDMWJMrxrNcZGkaw/HDUmsK2g36TmX321f07obi64GybivE/e6q3Hx6rLiVQKKFsMW1o7rCqVwdN+BlB73X/VTmts1XrtKMj6xpRHwVnvip1HMQ9r1kbEjAMHYH0VIgEB8c5FkIF7RZHY1NqMxeZWRQLIi+TaWRbqeub/16PxuNaBaGkv0Fky53ujgmauZAPY0m2btZ9eAQyWVgqkgw8EmJhQw4xA5rLFQYQkFhmtdTQjzbW1m5fbIeRnvn5mDJqHElCeBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3322.namprd11.prod.outlook.com (2603:10b6:5:55::19) by
+ CO1PR11MB4996.namprd11.prod.outlook.com (2603:10b6:303:90::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8813.31; Mon, 9 Jun 2025 16:34:30 +0000
+Received: from DM6PR11MB3322.namprd11.prod.outlook.com
+ ([fe80::fca4:6188:1cda:9c1e]) by DM6PR11MB3322.namprd11.prod.outlook.com
+ ([fe80::fca4:6188:1cda:9c1e%4]) with mapi id 15.20.8813.020; Mon, 9 Jun 2025
+ 16:34:30 +0000
+Message-ID: <a31448d0-bc0a-4bc9-8edd-1986ff5244bc@intel.com>
+Date: Mon, 9 Jun 2025 09:34:27 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/2] x86/fred: Prevent immediate repeat of single step
+ trap on return from SIGTRAP handler
+To: "Xin Li (Intel)" <xin@zytor.com>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+CC: <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+	<shuah@kernel.org>, <andrew.cooper3@citrix.com>, <stable@vger.kernel.org>
+References: <20250609084054.2083189-1-xin@zytor.com>
+Content-Language: en-US
+From: Sohil Mehta <sohil.mehta@intel.com>
+In-Reply-To: <20250609084054.2083189-1-xin@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR03CA0012.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::22) To DM6PR11MB3322.namprd11.prod.outlook.com
+ (2603:10b6:5:55::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3322:EE_|CO1PR11MB4996:EE_
+X-MS-Office365-Filtering-Correlation-Id: fb6f5f22-c4f4-4077-5495-08dda77381ee
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?WU9yRnFQa2ZjT0lScTlzUmV3bm1BdHFscXBBWVNSNDg4RDQ2VnZWbXZramhJ?=
+ =?utf-8?B?UngvZVJ1d29PbnY0Kzl0YmZ2SmJuNkExSXAzRU5rNFNPd1N0SlVTM3Q0TnJn?=
+ =?utf-8?B?aVdpYUIzbDRvQVY3RkdYeUFFVmd6VXRvaGNTMEZWbnErWmN4RkxISWJvQjF1?=
+ =?utf-8?B?M1JURkk3RXgrMHpnY0Q3S1ZyS2tLSUp0SFl6VVVUeStXWTc0WUZCTWlxTEtE?=
+ =?utf-8?B?NmZKZjRqV3loNlp2T0QrSi9YL09WUU1FSTV6ZHhnTXNvUnpieTJJaDB2aVNT?=
+ =?utf-8?B?eDdzUXl1NUN2TXlzMnAzWjNVWGRYOGkxUWJ2TTVwSHA5TzZTYkcyOGhIaWtJ?=
+ =?utf-8?B?SHNWNnUyOFF2YVh0WGVsRlhuQUNkWFlaOERYV0J6R2NtRzgvOXExK3NzSjhV?=
+ =?utf-8?B?VHo4WFpYcjlWQk9mRWhUaHoxUlZza0RZbzI4Z2dSM2FVR1pDQ1MrRlI4VjQz?=
+ =?utf-8?B?K29zUVhpTkJRamFOSnVoWUtZd1hVR1dkam5zZmVmNlJObkJKa3lOUk9oMEE3?=
+ =?utf-8?B?Wk9ERndjVVJiU3B6UEhQUldPczlHK2pJRFZSRkRtdVBYdGJSZ25mbUpyTHcv?=
+ =?utf-8?B?VXF0OWpWUithREJWU3dKWVNFQVg0N2hhbng3SmxScGxFYm42ZWQzWEpwcm1C?=
+ =?utf-8?B?Vk9GRVBZVFErRzJCWVlmVVdJVFRDYndLQ1N4R3hTejNwT0lKLzlJdEZxVUNJ?=
+ =?utf-8?B?SjZyREZuN04rRk9iYWpiSi9weVo3aExsU0hHVHdJNWdQOFJaUGdxUFNwa0pL?=
+ =?utf-8?B?bXVlYUlHMWxMSG9jK2dUcno4dFg3OWdlS3BnMlpwbnB1SS8yZmRtN24xYTFW?=
+ =?utf-8?B?NGJTY3p1L3VKajUyRVlzUzJEY3dDQzhaTHJUMkY1b1hJbU5BdGxkV3A4VnhF?=
+ =?utf-8?B?Q2RoU1pMclRDMFdRdFVpUTF6Y3hPUzVCbVJmWkhTMGFNamN4UDNCR2FaMXVW?=
+ =?utf-8?B?b3RmdGN4bDY4dGJPOUFib2ZMQStOd3hMbnNQdzVGWmMzT0FKdXdMN1F1eDBN?=
+ =?utf-8?B?cTRVVkZLMmJHWkNRbGN2L0RCMTg4WWdMMVdRQUtGSkwvcG1sdTloTmtoMW0v?=
+ =?utf-8?B?ejcvSWR4eDUrKzVmc3VjTkFTT1RidzZzNDFJRUVLaUs0R0QrQnFWZHgvMHVG?=
+ =?utf-8?B?TlNUclg4ZnJUUkJiWkFMdzl5dGdrUm5YMnVEdENTK1NVQjh5UStqUzNGaVpz?=
+ =?utf-8?B?WUZVakx0WkxTRzhJN2dGUHo2cGpkblBTQ1I1dnNrWCtNWVRoNTdRM0JLNG1z?=
+ =?utf-8?B?MEVvSnQzQ2gyNDhuUm5aaGxYWDNXejVTV0Y5NkJ2UTZOUzdvTCtrNG8xWTdM?=
+ =?utf-8?B?bUZvQzdzbTlzdWI3K2FPSGVMT05sV2VDdlNnakdERWR1Um9xK2NJeWtiUmJa?=
+ =?utf-8?B?TFpJcU5oMFlveFpEUHFQRXN0Q0RQaVJzNGF0UTFJbU9mTmJ6OUxTMjVzazdv?=
+ =?utf-8?B?MHRCRm5tSU0zWUtsOFVMUjVWczdqWEF5aEphWTcxSW5zNU9jbjYvTE1IUnZT?=
+ =?utf-8?B?bFJmclhrUjJLSDUvYjF5MjdXejV0cXdVUmkwc0NmdXIyamlyMzQvZ2JFK09a?=
+ =?utf-8?B?VlduNWs1R1grbTBrZ0NuQWUxb29GbTBFQWVFVCtaaERWcE1CZFJHdEQyUjdo?=
+ =?utf-8?B?NExHTFhJY0hQZk56NlpiNWRaSFBmcnMrTmNYU0NLQ1orUUt2SWh1NW41YnZC?=
+ =?utf-8?B?VDNNdEFtL1dMYnhIeGVyK2lCTnVmeHpXWVF0aitwb1ZPSlJWejNiYkRmMURW?=
+ =?utf-8?B?cFdFU0lwRTdLQUp2REVrVXZCWlpzTHJ0ZC9Xb2llU3d1NTI2SVg1TEdtSXlw?=
+ =?utf-8?B?T2IycVVOZUxjOW14RThtdkNhOHgxbTJyWnBwL0cvRERwN1g0WExRSTFMN3NK?=
+ =?utf-8?B?UVlGZFQxNXBSaHJocFVmZmZBU3c5YUxadzczT2IvVWtDbkE9PQ==?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3322.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RUhMYWh5QS94N0pjYTBnQ3VteFNuS3JtTlhrMFFELzBKcktFMmlmLytaQVFv?=
+ =?utf-8?B?Mkw3V0pPSVJRV2N6ZWVFNHFYRFIxWnl0ZHh2RUtGNTRLMWl2RTlhdkxObzdB?=
+ =?utf-8?B?S3JCckpveGFXRm1VYmthUjBYczB0SWpuRUVkUFJiZUZVVzltdng3ZlhjR2Nq?=
+ =?utf-8?B?WXYzcHlzMG1zYVV1WFZTSk9Tb0hQUDJZbVQrUzJPWDMwYS9FWUR3WDUzZnB3?=
+ =?utf-8?B?Q09seENKbFE2alJnemlabUFiZTVUa2JETTVHZXBjQ043ZER1U3A5aURlWlVo?=
+ =?utf-8?B?dEdOVGVLYzA3NWczVDZtWXdIUnpmcHJ6N0tmekJHT1FrNUc0MzB3cnVEbnkz?=
+ =?utf-8?B?SUtzRDJvcEF4QmR0cXk1bFpVaEhHS2FjTlE4b0taMmtJUVRzbFpRUDBNcDAx?=
+ =?utf-8?B?SlFrbzNURDN2N21OSWZ5QWxwV2grUGtpMVhhRXh0VGx1M1dnVU52T0ZHWDFZ?=
+ =?utf-8?B?UlYyMkMzbm1IWVhxNWVVRmo2OGFndVVJNVY3ZHNxVjJ2YkN0V1EzODlzSWhV?=
+ =?utf-8?B?TUl3dVUxQUxyMnBOK2Z0U285UXpsTzlJSTdzdkhQZTJIUGNXSWRBa21WMEY5?=
+ =?utf-8?B?a1kxc0R1ZnplS1NWL29tNUNjU0lTcy9rZCsvOVMxRjNUMi9kZlBsZndVVURK?=
+ =?utf-8?B?N1B1bloxT3dhRGFwOTBEODhZZE1SRkwrODgyZFFQdmFWNmpwV24xUzZRT3hX?=
+ =?utf-8?B?VnB6T242VXNna204VFZXN2VkOG9aR0xzUjdjd0JRTEhqb3Vmelk1MlRTa1Ft?=
+ =?utf-8?B?Mk9vaFYwRkxxbkxtUVpaYWREWjJKeTdaTUtId3czWUtkM04vVUMwN2dteUhj?=
+ =?utf-8?B?ZEVYY1RKY21hS1VKcnFyOVo2K05yTUJOc2lOaGdtS2FkZ05EeTJrWDNQYTRC?=
+ =?utf-8?B?SXZFSzc3R2puS2ZuSVpuVFMxL3N2SEV3ZUhZSDhzS0MrSVFQRDJyaTJseVZO?=
+ =?utf-8?B?TUhrWVBERHlIK2x6MGFFZEh5OGZHK2pMd0wzeU1QMXNRditIUTVldFlhV0dO?=
+ =?utf-8?B?cGF4RStWS3IxQzQ0WnNWbHRPSGZMdnNoZVBWU1VGZXVxeG5Tb1Y2dkJSVnlj?=
+ =?utf-8?B?L0NBT01zNTMrVWZJTTJDNndPNUg3M2M1eFVHTHphWkhPMDBPREk5VEwzaXFm?=
+ =?utf-8?B?aTdZdjYyY2F5ZS9BeEZaZ000TG5FT3d2My9aNkkwVzRnekdDTVE0WjBuVkl3?=
+ =?utf-8?B?RWhLY25LM21QcUlBRmo2S1RBS2UzdnpvRGFjSWZFc2I5LzcwRHY0aUVyN1p2?=
+ =?utf-8?B?OUM3OUszcUxveENRS3BydlB6dFE3ZlRrRy9ESkVzbHlrNkxRU3dkOUJFbThw?=
+ =?utf-8?B?Q1hRUjJHekNOdml1UVl1WUo3ekJMM0gzRkpwaEFlUkdDR2hwRThPZmNJNlRW?=
+ =?utf-8?B?UlhydXlTNzJVUXB5SVY4ajF3QVRKeHROU2dvMUZGVWxSWkxlTExrazRVVlJz?=
+ =?utf-8?B?N214cFdHaHk0L1ZtVTZwUk5wQnFMTkF3b2ROSTZJaHR2ZXJQNlJFaUFBaThy?=
+ =?utf-8?B?UU84RFpFYlpQZlJ2bFUvbGNQc2ZGRENCYmQ5N2cvSFlxaU94YWlYRVlwbkhF?=
+ =?utf-8?B?UzBVdHJvWFJ4V3Zqc25YRlV4MDd2cU14b0VaZEI5UWFIc2lEK01YSEpLeHEy?=
+ =?utf-8?B?UE9YUE4wTHR3L0xCR2U3N3BMbmVvUHRrRWRpL05TbmVGbGd6dnBIS2lOWit3?=
+ =?utf-8?B?Q2ZRcUM3SVU4SWNMelMweFZ0aWxQcll5VnVZQWpqdmYwV2c1c3QxZlJNSnF0?=
+ =?utf-8?B?TVQ3NCtQc3VzVGxFSmQ4WkJCdTF3clZkamJVR0t1OG5pRS9jRU5VNWhEdWtH?=
+ =?utf-8?B?WXg1dEt6RUFMQ1R4ampLY3FlRUh1WXBJazVOdlNZQWI4M2NTZTFsbzVidjZF?=
+ =?utf-8?B?Wm5XUmtEWVpBMjBIdmZpWVpkQlFOTlZrWE54SDZvYU5ncXZMcjV4eHB4V2Nn?=
+ =?utf-8?B?SGlLTFR2aThlUzM5U3lNZHRieWNMV3AwTS9zOUVSdWNZcEhxTmJEUi9SM3hT?=
+ =?utf-8?B?cmZNUDBjVVo3SnlDS3hhRC9vN3BubW9vWGp4bWFIeXp3ekh5S0tnUjN6dmxX?=
+ =?utf-8?B?N2Z5RUVuQVd3NFBpcGc2a09zK0tPUVIzMlZYckE5Q1lpVjR3YU1RNytDL0N1?=
+ =?utf-8?Q?y8+9eBQ/9ZWb1bdexwwcODLWB?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb6f5f22-c4f4-4077-5495-08dda77381ee
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3322.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2025 16:34:30.3075
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Gj/ZDqou6qQVC9S84Jk5gcki21YEBKCbURqw81XOzHJu4P35VovVI8NOn6mmYHgg1YkaDrLyi4Dk2n6dN3J9BA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4996
+X-OriginatorOrg: intel.com
 
-This reverts commit 325eb217e41fa14f307c7cc702bd18d0bb38fe84.
+On 6/9/2025 1:40 AM, Xin Li (Intel) wrote:
+> 
+> Xin Li (Intel) (2):
+>   x86/fred/signal: Prevent immediate repeat of single step trap on
+>     return from SIGTRAP handler
+>   selftests/x86: Add a test to detect infinite SIGTRAP handler loop
+> 
 
-udp_tunnel infra doesn't need RTNL, should be safe to get back
-to only netdev instance lock.
+I see that Dave just applied the patches. Sending this out anyway since
+I was done reviewing them.
 
-Cc: Michael Chan <michael.chan@broadcom.com>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Signed-off-by: Stanislav Fomichev <stfomichev@gmail.com>
----
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 36 +++++------------------
- 1 file changed, 7 insertions(+), 29 deletions(-)
+Reviewed-by: Sohil Mehta <sohil.mehta@intel.com>
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index a3dadde65b8d..1da208c36572 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -14055,28 +14055,13 @@ static void bnxt_unlock_sp(struct bnxt *bp)
- 	netdev_unlock(bp->dev);
- }
- 
--/* Same as bnxt_lock_sp() with additional rtnl_lock */
--static void bnxt_rtnl_lock_sp(struct bnxt *bp)
--{
--	clear_bit(BNXT_STATE_IN_SP_TASK, &bp->state);
--	rtnl_lock();
--	netdev_lock(bp->dev);
--}
--
--static void bnxt_rtnl_unlock_sp(struct bnxt *bp)
--{
--	set_bit(BNXT_STATE_IN_SP_TASK, &bp->state);
--	netdev_unlock(bp->dev);
--	rtnl_unlock();
--}
--
- /* Only called from bnxt_sp_task() */
- static void bnxt_reset(struct bnxt *bp, bool silent)
- {
--	bnxt_rtnl_lock_sp(bp);
-+	bnxt_lock_sp(bp);
- 	if (test_bit(BNXT_STATE_OPEN, &bp->state))
- 		bnxt_reset_task(bp, silent);
--	bnxt_rtnl_unlock_sp(bp);
-+	bnxt_unlock_sp(bp);
- }
- 
- /* Only called from bnxt_sp_task() */
-@@ -14084,9 +14069,9 @@ static void bnxt_rx_ring_reset(struct bnxt *bp)
- {
- 	int i;
- 
--	bnxt_rtnl_lock_sp(bp);
-+	bnxt_lock_sp(bp);
- 	if (!test_bit(BNXT_STATE_OPEN, &bp->state)) {
--		bnxt_rtnl_unlock_sp(bp);
-+		bnxt_unlock_sp(bp);
- 		return;
- 	}
- 	/* Disable and flush TPA before resetting the RX ring */
-@@ -14125,7 +14110,7 @@ static void bnxt_rx_ring_reset(struct bnxt *bp)
- 	}
- 	if (bp->flags & BNXT_FLAG_TPA)
- 		bnxt_set_tpa(bp, true);
--	bnxt_rtnl_unlock_sp(bp);
-+	bnxt_unlock_sp(bp);
- }
- 
- static void bnxt_fw_fatal_close(struct bnxt *bp)
-@@ -15017,17 +15002,15 @@ static void bnxt_fw_reset_task(struct work_struct *work)
- 		bp->fw_reset_state = BNXT_FW_RESET_STATE_OPENING;
- 		fallthrough;
- 	case BNXT_FW_RESET_STATE_OPENING:
--		while (!rtnl_trylock()) {
-+		while (!netdev_trylock(bp->dev)) {
- 			bnxt_queue_fw_reset_work(bp, HZ / 10);
- 			return;
- 		}
--		netdev_lock(bp->dev);
- 		rc = bnxt_open(bp->dev);
- 		if (rc) {
- 			netdev_err(bp->dev, "bnxt_open() failed during FW reset\n");
- 			bnxt_fw_reset_abort(bp, rc);
- 			netdev_unlock(bp->dev);
--			rtnl_unlock();
- 			goto ulp_start;
- 		}
- 
-@@ -15047,7 +15030,6 @@ static void bnxt_fw_reset_task(struct work_struct *work)
- 			bnxt_dl_health_fw_status_update(bp, true);
- 		}
- 		netdev_unlock(bp->dev);
--		rtnl_unlock();
- 		bnxt_ulp_start(bp, 0);
- 		bnxt_reenable_sriov(bp);
- 		netdev_lock(bp->dev);
-@@ -15996,7 +15978,7 @@ static int bnxt_queue_start(struct net_device *dev, void *qmem, int idx)
- 		   rc);
- 	napi_enable_locked(&bnapi->napi);
- 	bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
--	netif_close(dev);
-+	bnxt_reset_task(bp, true);
- 	return rc;
- }
- 
-@@ -16812,7 +16794,6 @@ static int bnxt_resume(struct device *device)
- 	struct bnxt *bp = netdev_priv(dev);
- 	int rc = 0;
- 
--	rtnl_lock();
- 	netdev_lock(dev);
- 	rc = pci_enable_device(bp->pdev);
- 	if (rc) {
-@@ -16857,7 +16838,6 @@ static int bnxt_resume(struct device *device)
- 
- resume_exit:
- 	netdev_unlock(bp->dev);
--	rtnl_unlock();
- 	bnxt_ulp_start(bp, rc);
- 	if (!rc)
- 		bnxt_reenable_sriov(bp);
-@@ -17023,7 +17003,6 @@ static void bnxt_io_resume(struct pci_dev *pdev)
- 	int err;
- 
- 	netdev_info(bp->dev, "PCI Slot Resume\n");
--	rtnl_lock();
- 	netdev_lock(netdev);
- 
- 	err = bnxt_hwrm_func_qcaps(bp);
-@@ -17041,7 +17020,6 @@ static void bnxt_io_resume(struct pci_dev *pdev)
- 		netif_device_attach(netdev);
- 
- 	netdev_unlock(netdev);
--	rtnl_unlock();
- 	bnxt_ulp_start(bp, err);
- 	if (!err)
- 		bnxt_reenable_sriov(bp);
--- 
-2.49.0
+
+>  arch/x86/include/asm/sighandling.h         |  22 +++++
+>  arch/x86/kernel/signal_32.c                |   4 +
+>  arch/x86/kernel/signal_64.c                |   4 +
+>  tools/testing/selftests/x86/Makefile       |   2 +-
+>  tools/testing/selftests/x86/sigtrap_loop.c | 101 +++++++++++++++++++++
+>  5 files changed, 132 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/x86/sigtrap_loop.c
+> 
+> 
+> base-commit: dd2922dcfaa3296846265e113309e5f7f138839f
 
