@@ -1,52 +1,52 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAA843ABC;
-	Mon,  9 Jun 2025 09:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5CB1A238C;
+	Mon,  9 Jun 2025 09:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749462401; cv=none; b=RKWuKial/4OAvpVWEGG042Sai4oIAYyzZHF+RD3G1B2PwIyXWYqyczJdgcBNDkX71xUvRr1wulKhMaGbFqpmkT2KrVGoXN6PJXfTh+K8HtPgXaW3xUL41xyykVx88vzpl+lTehWjXdIAXdCdEZnIwOC2/1VlGi2nUAOE9EAXYUg=
+	t=1749462401; cv=none; b=aD5t2gQLxmxsZWdZn8lPnjeRJvWnnTGBxxU+Fk+yskPdepXHCh7G3Ct7fHocU+iRTScCl5HYx0GxiYS+d+BpxiIeiQE/eoIR7HE3bx1eDL1hxXXIWlY7S0TuZnk2OD7CF7ZFVmyYsoAOeFtpgi6h6MdskXBr9Ll1E32xUP6PC+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749462401; c=relaxed/simple;
-	bh=S0zLAeHsvrQely1Eg98rRJ60Qe7vUeRLcvUYKnD+2dY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZljJu1Gm8/mr8WEyAF5xxt9uCHWwdFjPnDOnPcy5y/h1/dhE9cJhZatzz7d43/RNV5CvnHsS8ra0FQIf05pDbgMmSvQNB/2ytDOQAxzAM11g6IIA5S75QXvYebIK7q8DYQlWnZs4ki8MvV3aD6nITtiblqQz7baKw70rf80OO5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.42
+	bh=PcMgP/Xx+i1wlGQQTmnJJGspz6T6srm8czqC/8uKNrg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=unkOetBz+vRIDK6/mMZL+8StXGYLFX9dSpwH0GDoOC4fhu3ioHlGK9OviPUtirDr10HFRs2CZU5VrNaG8axKPpU9+NvPtd1uSkmoS29bh7serPDwNmZVxUk6DVZ21moaxkPqdgxZO9oRfBZPguv7eN2/iq9S6by/UhLxMMf6arc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-607873cc6c4so4930248a12.1;
-        Mon, 09 Jun 2025 02:46:36 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-605b9488c28so6607056a12.2;
+        Mon, 09 Jun 2025 02:46:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749462394; x=1750067194;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UTWm875t3M6R+O/wif88xNULhJplDQ78uU2/bqyGyzg=;
-        b=PU1DA+h2RPWYPU+ciOqkb8tERCGjDDmzeVtvOWFPnZi1r0WX0a8vitr7QSLNVXue6f
-         SZEZEnm/1AmTe8cvfXtP+9G6rjM56S8vtMjh/fZhTAOGWljUx7Ccz0hEq0MngzN6eeVV
-         x/eLRqe2xj/ol5RJe1oRhOsBMN2YDTvUYXriOowRWvwAV+m0Em+7Bs0IhjmpjCWAKGWM
-         +sIO3EmMpFQsBC78Z31t3WJG1N8jFMuDfPauzKW3INnf8c5mwqzWPJFBK3NpRJ+oOyBT
-         HHxNCtX9df6l8UfaVf3jI8sxRKLlhxmTH4/2yS8amsaR6d+dIhFHFo6IHAd/fsbChor0
-         briw==
-X-Forwarded-Encrypted: i=1; AJvYcCWUTaohM41bjZZAJtnctklGTxkawtp63MqHbdcJRov/v6YWkC/j8I5De8u3ZyEvHM40/NSgI4Jc0jMpwvQ=@vger.kernel.org, AJvYcCX4WjwsdCGq2+D9KMlE55X3VepZq9q8aMQ6xOUnmSM+Nee2CQt6/zm4ijIKQkEcZ1eK4Z65Cp65Dw7ik7+GBNXD@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAlL4PvW2Me22VzbP7MDmDURg2YxTN/Mvx+bLkaCEQ36ZiKxT9
-	GZDj51qVaL8Qb4O9OhiCMgIKL2OOe426TNbXQxBV0wFUQVvrmCJXyk3e5+tiBw==
-X-Gm-Gg: ASbGnctxBJ5888DMdxnAOvNvwMMdc/dTg6le7Gbng7VABGLi/5H7Hnx5WPMEGgttT1J
-	rrTMwBUu6X7Cj2PwP+fcEGXLLVqIEzmKpNQJNB0BwZL2G6pkExy7jjP+JPXZMxxBDRsqjlpfPf9
-	pqwwH6tBRodoRR9NhBEtOyDz6IkPzfLufi5ia4+f/rRgv9dkvDeMFlSxxXQpbCgs+Fi5otnRQcF
-	wvtg2olDRCeMAmPdNWUzQBc2MWb795pi5O2grptSKO/pbJpSfk/1RbdDGIGL3F+kM0r8NLDx5Ut
-	FuUi6i9hapfOlL/xQGsO/o1NGAk8szFT5lQyv55vrC9WIA9RDsqG7BaE9hxRJQY=
-X-Google-Smtp-Source: AGHT+IE77dDQ9ytDhfYQaoseol1SrMwVYetw2MHEsjZHaMq/3LNPtCCtli11UGUK9q7VGMW8OzpZbA==
-X-Received: by 2002:a05:6402:34cd:b0:602:427c:452b with SMTP id 4fb4d7f45d1cf-60772a65fc3mr11750323a12.3.1749462394257;
-        Mon, 09 Jun 2025 02:46:34 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:8::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-607783de35bsm4427006a12.67.2025.06.09.02.46.33
+        d=1e100.net; s=20230601; t=1749462397; x=1750067197;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9srcSMol0c+UDsrqSjvhXDEchnbl8eBTxxIuTk0MKl4=;
+        b=t/nYqclP+oqmP0wPFrj0J3mPyBP31jtJDDhky2xttFkrZC1/Hh66wMxN/v/dnElwY4
+         TKL0bGOXH+YuPOBErWd2+kGlisDKxPbDncvXslqZNF6CZPT6TCzkhqo2MX00F6gHQTz5
+         lxAe15uHhKcGY5f71q/cuwF/Qiw7R6Lldg4per1v5rE66Yy+wJnoE7k5IgIRMeFg/qhC
+         KZSqH0D6h+TPGrPYMVK6yn7YiUrEwh38ATx+jU/RIpmAWkSwuD6lm3eyN6tvrkrisKH8
+         StPMW22fijq2pfJYBd3j45WBPg9oEH2PTAUbiMAfSjtSzq7Pn+Kjdx5jHXZnUnA1HeeX
+         nY+w==
+X-Forwarded-Encrypted: i=1; AJvYcCU+SGPX5wxB8uWTgOxgjsL8gEILr6t624xxx7lFk+6ax9i0yRXJHbyfcgK+187h8mhaJuX7LyBeqnZKfbm1i0Rl@vger.kernel.org, AJvYcCXaN4Hs22b1jcWNS5CT/eB5QY1RyA8TDdT7r9pevVdHjQJ2BmayyiVo/BoV2palPHu+EIz4lNPTohWlKpk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXC+TW/phRnchcUdX8cIFUaHaNpv1p8eUTBxhEUx3xd/WdtPXh
+	iVPOaowFHr5FvmHZWbmBGmPzvYGs1VAMUKpothO6Qc9Q1usjkAF7S9UUNpjRiw==
+X-Gm-Gg: ASbGncsoun/wz+hq0pKGmDZH15bbGRsQOZrjdENooUyith9V1cb/kJf73O39b2tAoEy
+	dW57ysBBH2tPYKk0GZ7uWZw8sLovJ4cWcZelL8HXQZ+LZLDrl15L/9eIz5ZnFyh7gMdLtphLzyS
+	ZTsMTAYoMsVhMwF9XoFm8XJZ8waIGQ6NN35S+RgyKbfEccwvcwYcEkKaL71jDzyZ0jyuSVC9Yr/
+	jISAEf5Xe0TrWCwtbGyFX9abUoeqBE/h2DI4TpZQsIM7Oc07CSi+2Fdknm9TZG0EGIrnZa8jiRS
+	l3KTijIrlPRO1s1noggLNWpjkafEC7yrd3VjnTD2mdX+hFNPDeArNg==
+X-Google-Smtp-Source: AGHT+IExjHyiPhte1wwY1E+snj45M23nryaOO7uTbbMCxtigSnjey2IkVn1y4SiCS8mVaf9DAC0EDw==
+X-Received: by 2002:a17:906:dc8b:b0:ad2:28be:9a16 with SMTP id a640c23a62f3a-ade1abc4055mr1125553066b.51.1749462397154;
+        Mon, 09 Jun 2025 02:46:37 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:71::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade1db575f9sm523118766b.48.2025.06.09.02.46.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jun 2025 02:46:33 -0700 (PDT)
+        Mon, 09 Jun 2025 02:46:36 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next v3 0/4] netconsole: Optimize console registration
- and improve testing
-Date: Mon, 09 Jun 2025 02:46:25 -0700
-Message-Id: <20250609-netcons_ext-v3-0-5336fa670326@debian.org>
+Date: Mon, 09 Jun 2025 02:46:27 -0700
+Subject: [PATCH net-next v3 2/4] netconsole: Add automatic console
+ unregistration on target removal
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,11 +55,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHKtRmgC/23NQQqDMBCF4auEWZuSjBoTV71HKUXNqNkkJQliE
- e9eyKYIXT++/x2QKDpK0LMDIm0uueChZ3XFYFoHvxB3FnoGKLAVLWruKU/BpxftmbcdGo1KmpE
- GqBi8I81uL7UHeMrc057hWTFYXcohfsrNJsv+t7hJLrkycyepEQ0Jcbc0usHfQlxKaMMfVgKvG
- LngNGttjTE1KnvB53l+Afgh7inuAAAA
-X-Change-ID: 20250528-netcons_ext-572982619bea
+Message-Id: <20250609-netcons_ext-v3-2-5336fa670326@debian.org>
+References: <20250609-netcons_ext-v3-0-5336fa670326@debian.org>
+In-Reply-To: <20250609-netcons_ext-v3-0-5336fa670326@debian.org>
 To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -69,71 +67,110 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  gustavold@gmail.com, Usama Arif <usamaarif642@gmail.com>, 
  linux-kselftest@vger.kernel.org, kernel-team@meta.com
 X-Mailer: b4 0.15-dev-42535
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2229; i=leitao@debian.org;
- h=from:subject:message-id; bh=S0zLAeHsvrQely1Eg98rRJ60Qe7vUeRLcvUYKnD+2dY=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoRq14GCabtcxMjK2YejjIEZqnAa6sTG7YBYGUf
- EFrBeC3RMyJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEateAAKCRA1o5Of/Hh3
- bTf/D/4ubFlvfMPN6Ia+28eIX5AyBNVi9hY32aWLi+kp02fpuzs11y2sd8air9Y82LbgHHHpe2r
- CnqZqKw/XnoHmKulEd3GPE1fdMPC0ZqJrJ39IPV2h3D3yAawR2K6us+nYJUElgKxeg+a9Rjc8ie
- XIyA4eL47RsykFwr5SoXW7CTU/njU+xHdtpECCdugjgrzDMInWStu+vlISMR7GZXq+ZSoQBEt0X
- O/BRYujrr0jtwKqVchpyjFsQlI4ACvncm3CH0BfdDG1cPY2DpTd9xpbNVUW00JGzJPQfuZ2PXS5
- c0by9C6rKEKSngRwvk730dtLWNM301VJvmDNXH+vAyMiY1pM54bbc3CsLobsrbs5hdcFIyz79IQ
- Lc3MMrFHlcbAnqrNHVrdGE+aJPNOWguviBhXMfq0XZTrVGndPdbu9qDKtoZhDUlx/cCWiFYRH5C
- 1Q2izO5WPCNEQJQ6S5Z48aQbIR6d+vA4c2bcPggqRBXDfcbvkyaBrXeVjMy1EFQzGY21RMtB/YX
- ZFwQwqlT24bMmA1ZB3s5KdmlBaDZ5tyXo/JPbJV0B1pKZpq2RQZKxg4k6Y2UL922tQrTKYqC/cJ
- JhzznXfCpo4zQIeH1k5V6edd2PAd72XMSRDaEujxovlD706NvRb15KF6hXblGFqAvAySkanwtZo
- EEui9EvMW4XJg1g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3187; i=leitao@debian.org;
+ h=from:subject:message-id; bh=PcMgP/Xx+i1wlGQQTmnJJGspz6T6srm8czqC/8uKNrg=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoRq14syo3K59GlRRtZ/UTJ18TAka+WDv7liY1z
+ Ie8t+/sMs6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaEateAAKCRA1o5Of/Hh3
+ bfmrEACC6/RhIchyphNzgUoDnwYukGg0+m1yS0ka+SpqBs/N2ddHwFjNVNHKoiKLt8Quha0EF/Y
+ oDAklIbHOP8eR4ZFBHK6D5AhGw3M5xeAzZpNMmI5KRs0+4UUqUIhXa78tftmEpK/ZxhxTdnfm07
+ kOHZSYM9iJud7vQMe3ABkrbVVKzWqfmLZAwZhyQJTJr1HL5PuFHXYNokJKOJEEFRy3PDir9aYKx
+ +o6UHkXx0aHXhar4wJXqya1N6EUSQh8EVsfvFpkvk/oBYMgc5WAfDb6bAcTPDJ5N472VBpOF3S+
+ IT/lUvDpOf6uWtTGgngw3Cqx3yfSOPH5sy/FsK/ndjLMDKezfpdUAeVD4hRERuCI1OAVZXkm53j
+ et54Gea4bNTatQDGdsGUJpKB7Mk9Ej7fb+dFrNRg5m21e1eKV+czFr/e+bLol6VckULXctpVP0i
+ yr3MmoH/jqnSqYPpkWo4aFe4beZSkifRnfUiu85xe4/qfQKhRsVBsIRDUiR1Qack+2ytzhz3RHN
+ kk2OI9uVsjRemCllal35e9Mk+6x6yAtBkpnUEQ93RN37AeEiKqr9B5AcOijKHFA2lZ9GhZVZztN
+ HI1ZgqkiWNAF3rxuHvMk/9Hj1tvH+Xj0typTIMy1JcEOXIXHC0Ze3YF9oVgWELKPn1wPLtuyaSg
+ XeTerqsc4OR1znA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-During performance analysis of console subsystem latency, I discovered that
-netconsole registers console handlers even when no active targets exist.
-These orphaned console handlers are invoked on every printk() call, get
-the lock, iterate through empty target lists, and consume CPU cycles
-without performing any useful work.
+Add unregister_netcons_consoles() function to automatically unregister
+console handlers when no targets of the corresponding type remain active.
 
-This patch series addresses the inefficiency by:
+The function iterates through the target list to determine which console
+types (basic vs extended) are still needed, and unregisters any console
+handlers that are no longer required. This prevents having registered
+console handlers without corresponding active targets.
 
-1. Implementing dynamic console registration/unregistration based on target
-   availability, ensuring console handlers are only active when needed
-2. Adding automatic cleanup of unused console registrations when targets
-   are disabled or removed
-3. Extending the selftest suite to cover non-extended console format,
-   which was previously untested
+The function is called when a target is disabled and moved to the cleanup
+list, ensuring proper cleanup of unused console registrations.
 
-The optimization reduces printk() overhead by eliminating unnecessary
-function calls and list traversals when netconsole targets are not
-configured, improving overall system performance during heavy logging
-scenarios.
-
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v3:
-- Set CON_ENABLED before re-enabling the console, to fix a selftest that
-  was failing, as reported by Jakub on v2.
-- Link to v2: https://lore.kernel.org/r/20250602-netcons_ext-v2-0-ef88d999326d@debian.org
+ drivers/net/netconsole.c | 39 +++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 37 insertions(+), 2 deletions(-)
 
-Changes in v2:
-- Added selftests to test the new mechanism
-- Unregister the console if the last target got disabled
-- Sending to net-next instead of net (Jakub)
-- Link to v1: https://lore.kernel.org/r/20250528-netcons_ext-v1-1-69f71e404e00@debian.org
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index 01baa45221b4b..21077aff061c5 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -460,6 +460,33 @@ static ssize_t sysdata_release_enabled_show(struct config_item *item,
+ 	return sysfs_emit(buf, "%d\n", release_enabled);
+ }
+ 
++/* Iterate in the list of target, and make sure we don't have any console
++ * register without targets of the same type
++ */
++static void unregister_netcons_consoles(void)
++{
++	struct netconsole_target *nt;
++	u32 console_type_needed = 0;
++	unsigned long flags;
++
++	spin_lock_irqsave(&target_list_lock, flags);
++	list_for_each_entry(nt, &target_list, list) {
++		if (nt->extended)
++			console_type_needed |= CONS_EXTENDED;
++		else
++			console_type_needed |= CONS_BASIC;
++	}
++	spin_unlock_irqrestore(&target_list_lock, flags);
++
++	if (!(console_type_needed & CONS_EXTENDED) &&
++	    console_is_registered(&netconsole_ext))
++		unregister_console(&netconsole_ext);
++
++	if (!(console_type_needed & CONS_BASIC) &&
++	    console_is_registered(&netconsole))
++		unregister_console(&netconsole);
++}
++
+ /*
+  * This one is special -- targets created through the configfs interface
+  * are not enabled (and the corresponding netpoll activated) by default.
+@@ -493,14 +520,18 @@ static ssize_t enabled_store(struct config_item *item,
+ 			goto out_unlock;
+ 		}
+ 
+-		if (nt->extended && !console_is_registered(&netconsole_ext))
++		if (nt->extended && !console_is_registered(&netconsole_ext)) {
++			netconsole_ext.flags |= CON_ENABLED;
+ 			register_console(&netconsole_ext);
++		}
+ 
+ 		/* User might be enabling the basic format target for the very
+ 		 * first time, make sure the console is registered.
+ 		 */
+-		if (!nt->extended && !console_is_registered(&netconsole))
++		if (!nt->extended && !console_is_registered(&netconsole)) {
++			netconsole.flags |= CON_ENABLED;
+ 			register_console(&netconsole);
++		}
+ 
+ 		/*
+ 		 * Skip netpoll_parse_options() -- all the attributes are
+@@ -528,6 +559,10 @@ static ssize_t enabled_store(struct config_item *item,
+ 		list_move(&nt->list, &target_cleanup_list);
+ 		spin_unlock_irqrestore(&target_list_lock, flags);
+ 		mutex_unlock(&target_cleanup_list_lock);
++		/* Unregister consoles, whose the last target of that type got
++		 * disabled.
++		 */
++		unregister_netcons_consoles();
+ 	}
+ 
+ 	ret = strnlen(buf, count);
 
----
-Breno Leitao (4):
-      netconsole: Only register console drivers when targets are configured
-      netconsole: Add automatic console unregistration on target removal
-      selftests: netconsole: Do not exit from inside the validation function
-      selftests: netconsole: Add support for basic netconsole target format
-
- drivers/net/netconsole.c                           | 67 +++++++++++++++++++---
- .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 27 +++++++--
- .../testing/selftests/drivers/net/netcons_basic.sh | 50 ++++++++++------
- 3 files changed, 112 insertions(+), 32 deletions(-)
----
-base-commit: 2c7e4a2663a1ab5a740c59c31991579b6b865a26
-change-id: 20250528-netcons_ext-572982619bea
-
-Best regards,
 -- 
-Breno Leitao <leitao@debian.org>
+2.47.1
 
