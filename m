@@ -1,28 +1,28 @@
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011068.outbound.protection.outlook.com [40.107.130.68])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011042.outbound.protection.outlook.com [52.101.65.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D979B29AB01;
-	Tue, 10 Jun 2025 13:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECBC52BD02A;
+	Tue, 10 Jun 2025 13:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749561378; cv=fail; b=Drm+wqY6mhmCPiaphujwQQ9xsZp74/Ea2epE1f3t6fxIghawhkPlbiHWRzwyIDi/vWBIZ8xAwHMPKuqWmLHI3tagB2LzNlQU7yEOSIsIn8w065gIu/Z+U/uz4idL9bl/xUh3FkT3GBXmP0lWMT2/wXo53PkyyLUsIsfmYVECpys=
+	t=1749561383; cv=fail; b=mXVG+gjWiRw5kfZQThcW5v2Y9jjlKGsIGHItuXiRFajGP4m1UEZhHaS25A416uotP7zg7jBZXGJBHlUOUzW0uTmdOTWmvJrNYluyItez7lcQPA3Wda845UIUFkLelDd1kB9ne86MH/QooDSPZSAaSXveYdc9uKh4Iaj3sNkNHfE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749561378; c=relaxed/simple;
-	bh=2SoTNvB2ujkdqIyF5DA+fALtVhVJUqx2ovi0K/aJU24=;
+	s=arc-20240116; t=1749561383; c=relaxed/simple;
+	bh=kdOP0+TtDowaUwSfQoN3o7Nn1g9nl1SNY6MPBIce+qI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hDEw9MhZr1wn/ycPIAJDEuQXaS+rZhAfp9e6BPpnrJhIGns0Dlxa3i7PEPWzFs/mOdBs7F0PwKhQec5g6rBEcwtdm6K8NSKDBuJ/sDgZHc9pCKkL2Ik1evUlUQ+7aoGcMVn6ElVZQ9M0GHG9zpdgJ9a/DQ4QP8NmfZU0JSi41Kg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=qWzwo19b; arc=fail smtp.client-ip=40.107.130.68
+	 MIME-Version:Content-Type; b=ecYO+RZv2ZosN8sEoGNxR7sd7BDOv5vJWl181oWEllmVXCMCh6dfGneS+/haEyX3+mcJs4gnbHsJOLYE/SJ12Roqq7YnLL3rhhvLq5Y7eCIAwuX9IJiAu/cmdntZ3RKu9Ic1LitcveQ6MIp7gyzvipvhKG0TVrr36+Pgr99bw+g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=aKH6yrjz; arc=fail smtp.client-ip=52.101.65.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="qWzwo19b"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="aKH6yrjz"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EcVSBLk00fhcxU3WPLGCZNOExhFfvIuugxD6MjjaJsU/iG+P7Diln5fJltg/YY/wK8mIRG1MO/difxoVyFsJ3HvVm4Vrk3MpWpmQKBSNKAF0EoQMrzc0S98kHCVputmkAwYK1snV5MjHHUtPH7a4MgWqTRoJzIY8KO9A1TRl2fn1raeO4pE1M9VeaAJe7oNDhh1t6wcTUbGzbT6Kjrq52AVRIFl/miOP2yc0KpsRgluGD1s3K0x9r1EuuGTNCopHUUu6pqnpzkyXo5tRwUGvcSjyVCiJi1Dm7h9TNgStrJlmI5kVOrkuFWGlZh/D6B/wl754FlEIR7d8BGNHB1ZvSg==
+ b=MqAGlODroaVmyOsB13+hI5NTF6kJsegr+e7MmisEFz3s1Cq6F7P5VZtUcApnUp1z7DhRGKXK1EPlts+fkQA6oZKdCcApQVHMbwYuzMrfO/evHiOWI1zhKWhyDTXc6VQdiGD5BzlHCe5xFRF6Zxakq2rpL/8FoFir7qgcT4JCRZQvMa4tmBprbvEHWqHph8+kcX7DyKwkMdbVr0DwG5yZL4nJ8owKvaSz334RGQNXsuWdfwGV1Ztn/joJFYRZl/3+qTpTFbhPLBPgcDwtpxqrkP7xDmC/cP1FtSl0Fp0O8+qQTmwhfRKo+k3sJ4DftqW8FW0D0XF13T7VMDLdJUIdHA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+8eTq6jqgUWewSGzgW2KidfUrdMXlkzGu69SkKj+Ls8=;
- b=a8vMNrYWEirpjXqf19rbvY4C0uvIA9iKlSJ6BN8quADlzztkW1WKQ9TfPhsf9ig85k+2M/QoJPNHJqp+0G51Ks0nkbvfF5ZZ2y+h4a8ai7sAsa3CXnquBnjcsEx0GNLAACno/TJuSi2l8G1JrPkD7hfzGhm3qx/dpm7ky6uYEEyOd04B4kKXt7Y21cfpeozZKBS2p/8wziUIQw1LCkrB5SCqvXpgD3CiHBHPtg15giqqWXPJzMqY3igVHUXw/GnGkPb485WQmsoOEYo86+WcNd+xoExplrAUBdoGlgGP2Jr6dPG4JmNFcx3J5/oClhsv1/MjxkRMhro5mlZw4lLQHA==
+ bh=LkIPP8g4bSAxqSaBtyMLAIJMVmDzNjtt6ciUCSaP5us=;
+ b=YhNq3BhPI/VoDAufHPre6tlZLR1lRm2rLXDZJKlxKOXTaSYhRrOkVf9FPCYN8NqeadW3iKETRZuAAvlx0C1Ppl1lZFEpzSjSMO0om+3eMhJhaR0gXXt9Lh09E5jIIP2YZS3pubQBuabECmdZTZavuiWTutJa3tFYw7o7Sy0fO5w9vrhGF88Ue5wey7W5MoTLWvUnvx6yKTaYJGVxZdCQcLkQDZqnCov/iFbXoTqfm+PyVlf3xT5aNb2CxCkHhexwpxChgYwMg7dn7wJTYv0BnzpIYZ4K81SE2E+QfdgNb2yTBhVmt7xcee6u9TqUTN7g0Sy0z4mdB4vtRIL72fi3RQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  131.228.6.100) smtp.rcpttodomain=nokia-bell-labs.com
  smtp.mailfrom=nokia-bell-labs.com; dmarc=pass (p=reject sp=reject pct=100)
@@ -31,18 +31,17 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+8eTq6jqgUWewSGzgW2KidfUrdMXlkzGu69SkKj+Ls8=;
- b=qWzwo19bjKiwqZWAHLUJN9UsulVV90TG+6aseXa74I3G9peUTuDmsCdCf3sdppx3v2v3GRqhMstYryTgFkSwsPUDiw9kKHIKam+z2Pr90eBgk+4EZKLcmal+ujNzgij1KeE0h5vIEAAPZTiRKsHphkXyUikp8IjCWDMnn2LXjQDTGyA5dwGvuejA/M29UGr8TfOVj78PJoV3aYfn52NqdbRxrxIDzjEsmF4llC3qp9P3cd9zYYGxn89siPRzT8GSi4iJellztj+y7TPK7yAZxw6jgou7RYtsIvgvqnSS4kEPgHJzXbAJrh1k2OSZqe0rT9/m6sAoij+3XxyFbC0m0g==
-Received: from DB9PR01CA0008.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:1d8::13) by OSKPR07MB10589.eurprd07.prod.outlook.com
- (2603:10a6:e10:9e::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.18; Tue, 10 Jun
- 2025 13:16:11 +0000
-Received: from DB1PEPF000509F0.eurprd03.prod.outlook.com
- (2603:10a6:10:1d8:cafe::55) by DB9PR01CA0008.outlook.office365.com
- (2603:10a6:10:1d8::13) with Microsoft SMTP Server (version=TLS1_3,
+ bh=LkIPP8g4bSAxqSaBtyMLAIJMVmDzNjtt6ciUCSaP5us=;
+ b=aKH6yrjz2Xtuj/1mjiukRh3fZbxUc2jVTca+pqsn9qfxaz1CVzfJtExvZznbiL74NNg8S/yc43CARinYuDEVg0YZqc5IlL8qBlUOBAgWwfBR4Ien45EYDncX9tAcQStAs3WuMX4ZvAqyBC/J8FZBu8ci5NMdciZ+s5tZQ8sk8vxu6r3EdurkfjuC8PEhQTPZYZLHjIPXoXbOnmydBl8yPoe+euY10SG7O4V0xYh7zBPRZpBg6isVBG8kGaKkah0H+iK7LQUfofurm3A9hLlo/FA9S/6RxjSbBwx1TvW/SxwXzQcwtPkEeqpBjLnW4M0e5H1Iozz6TOj2OkRU50CFtQ==
+Received: from DUZP191CA0011.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:4f9::9) by
+ GV1PR07MB9071.eurprd07.prod.outlook.com (2603:10a6:150:8a::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8813.30; Tue, 10 Jun 2025 13:16:16 +0000
+Received: from DU2PEPF00028D12.eurprd03.prod.outlook.com
+ (2603:10a6:10:4f9:cafe::28) by DUZP191CA0011.outlook.office365.com
+ (2603:10a6:10:4f9::9) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.8792.35 via Frontend Transport; Tue,
- 10 Jun 2025 13:16:26 +0000
+ 10 Jun 2025 13:16:16 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.100)
  smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
@@ -51,12 +50,12 @@ Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
  receiver=protection.outlook.com; client-ip=131.228.6.100;
  helo=fr711usmtp2.zeu.alcatel-lucent.com; pr=C
 Received: from fr711usmtp2.zeu.alcatel-lucent.com (131.228.6.100) by
- DB1PEPF000509F0.mail.protection.outlook.com (10.167.242.74) with Microsoft
+ DU2PEPF00028D12.mail.protection.outlook.com (10.167.242.26) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8835.15 via Frontend Transport; Tue, 10 Jun 2025 13:16:11 +0000
+ 15.20.8835.15 via Frontend Transport; Tue, 10 Jun 2025 13:16:15 +0000
 Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fr711usmtp2.zeu.alcatel-lucent.com (GMO) with ESMTP id 55ADGIT9016767;
-	Tue, 10 Jun 2025 13:16:37 GMT
+	by fr711usmtp2.zeu.alcatel-lucent.com (GMO) with ESMTP id 55ADGITB016767;
+	Tue, 10 Jun 2025 13:16:40 GMT
 From: chia-yu.chang@nokia-bell-labs.com
 To: horms@kernel.org, donald.hunter@gmail.com, xandfury@gmail.com,
         netdev@vger.kernel.org, dave.taht@gmail.com, pabeni@redhat.com,
@@ -69,10 +68,14 @@ To: horms@kernel.org, donald.hunter@gmail.com, xandfury@gmail.com,
         ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
         cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
         vidhi_goel@apple.com
-Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v17 net-next 1/5] sched: Struct definition and parsing of dualpi2 qdisc
-Date: Tue, 10 Jun 2025 15:15:34 +0200
-Message-Id: <20250610131538.18777-2-chia-yu.chang@nokia-bell-labs.com>
+Cc: Olga Albisser <olga@albisser.org>,
+        Olivier Tilmans <olivier.tilmans@nokia.com>,
+        Henrik Steen <henrist@henrist.net>,
+        Bob Briscoe <research@bobbriscoe.net>,
+        Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v17 net-next 3/5] sched: Add enqueue/dequeue of dualpi2 qdisc
+Date: Tue, 10 Jun 2025 15:15:36 +0200
+Message-Id: <20250610131538.18777-4-chia-yu.chang@nokia-bell-labs.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250610131538.18777-1-chia-yu.chang@nokia-bell-labs.com>
 References: <20250610131538.18777-1-chia-yu.chang@nokia-bell-labs.com>
@@ -82,748 +85,752 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB1PEPF000509F0:EE_|OSKPR07MB10589:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 98ef675b-6003-4e2c-da20-08dda820f823
+X-MS-TrafficTypeDiagnostic: DU2PEPF00028D12:EE_|GV1PR07MB9071:EE_
+X-MS-Office365-Filtering-Correlation-Id: d2415155-67d2-4d77-22c6-08dda820fafa
 X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
- BCL:0;ARA:13230040|36860700013|376014|7416014|82310400026|1800799024|13003099007|921020;
+ BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014|7416014|921020|13003099007;
 X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?fnrU5Ib0zZmAkDjH4eUXL8etigHDmi5FtFil981QsGV2y0PHVsysLuhYXBUQ?=
- =?us-ascii?Q?/bN7pJzEt8CBDE4cESs/aJD6Tut1ikCTM2cOLNnqalpYz7hrflf2Il0nVkJ4?=
- =?us-ascii?Q?gDdV6+wbYsBdssvtgf7zI3o+x6YSiGxcS92zGLAxSSIZZpybTJeEweP20mxV?=
- =?us-ascii?Q?JcmWOtn5ekqzXbikevEHvfmslWAwd7Ghl1MNSW/fMXttbSxHPojqc4wCNpvn?=
- =?us-ascii?Q?HwSBUttouxziDe73gobPn9VuN2EJu+g3LH6Md3sD40oI0Q7bKgtbbtPW85oo?=
- =?us-ascii?Q?52dI9QfHieNgLOW+JXbPKry3Tz/RGQtarhyOKbx8v8840aQfNNTI9uHPLIy2?=
- =?us-ascii?Q?3T0xvXY2Aw3C/kZJ8WzpwATNgxGJhZtYMDJRWvS6y/y1igcdg2sMbnMvW9W5?=
- =?us-ascii?Q?omQfIdW9kzURohr+UD0PNuYKt6v5iXHd26LPY6AaQboKDTUb1pGmhJ7ySMdw?=
- =?us-ascii?Q?Xq35mZ/kJOMI92IhJFVLPObti4Q2FKkfN4eUr3Z9D2saCKkOoZUSS5zC5BAs?=
- =?us-ascii?Q?yJiimD07OeU6oHqqPCtLeaUUY/E8u+bvOBy4rQ9JnLKhhyq7radsSFqkTNDv?=
- =?us-ascii?Q?Ilw6UmCPmyxJvqQcA/zObr5W3uUKPvWZa0xqhEvvcSbEiLesGDUmUwiJrGUY?=
- =?us-ascii?Q?0iZyhVEL2VzUiNj8HExACdZWhOsevQU3SS5pFgcJnZ4TTgReL061j7ktuBWM?=
- =?us-ascii?Q?UXCDDIfeyH5hGM1OX0brbcuEe5ryUxDzJb/d7GxsgTZrX0sqe28h981lfAEj?=
- =?us-ascii?Q?70625UfC8puNlRgh9FHADfyMUJpCFwb5rd6iMHvZMRdKPVsio9hZ2VOJk8BM?=
- =?us-ascii?Q?AasxjpcpmLh1aFqyMP/nBzfk5nI+s73zAXUZjIXxi843ePxhT/CniYcZwIGQ?=
- =?us-ascii?Q?nzJrp438x50JHVJ9ln4q1kBztaLtjdPVlwrS+oMyd0mHImfDr92Nw7cJc2L1?=
- =?us-ascii?Q?KOqBA+ajvgJtbPCSLDygXktoYvY4scDD1pfqmgcXFewfzcxQgZIBmJqAC5FD?=
- =?us-ascii?Q?OR4DBznHseJwiyDnmicYE6StJfJi+oY8Qby1hRUPhUD/HPtUF4w1PsWKS0r+?=
- =?us-ascii?Q?aGKVp5Aiepl313DwKI71EAlAMctRVbWLRNc0I5VoCK7Whfp5bZce/jjeG6dC?=
- =?us-ascii?Q?Tfa3qFi62DK8313MBjuN1J99Pc6ilUXqBKIK45oHVSCjWc/Jt7YS+ondLKi9?=
- =?us-ascii?Q?2fXAVhLmESIpZiCZG7R0Sm+2sjsYXZbeHM9SQZbfi39/i4/KaROlS33E3g5m?=
- =?us-ascii?Q?Z+KMSu7LiY1Wir5bC9DUMAnFJjV6riOc60Su7TRDDNxhppD3gjBrJufEnYJ/?=
- =?us-ascii?Q?yM7QS5E1I2kzNXKywqjr05AyE1aryCCbspEpWmoQPi4ycIKjtuyBcjOjXKoK?=
- =?us-ascii?Q?aTw7+wkTXZ3tq0NbpZoa5Sge40H3Zcmoo4c5scfxf7bWptM0EleKir80x6LA?=
- =?us-ascii?Q?p6crsuhoNOxrDI/kHINyu5ItlXY2UMhL2illPbXOsVY6mngvo1dCqG7HCyt5?=
- =?us-ascii?Q?Gj+KADjbv9LG13iG+RU3FFmc7Wh7uhMea4ijCfOZUWww2Tngp0NOYdAwyg?=
- =?us-ascii?Q?=3D=3D?=
+ =?utf-8?B?UzluS3c0Y3cvZUtWMHNpdG9KbWZDdjNxM0hTM0s2ZUtuSXJ3YVZaVy9qN1ds?=
+ =?utf-8?B?MlU2TFpmYWk4OTEyendqbGVhVnQvVTdzWS84cmpST1NDL2c2V2pnMnFvWEta?=
+ =?utf-8?B?WG9DQTZ1Y0RXNjFXQW9nSW9lem5BQnVOb0EwUnhCQ0JDV3M0SjJPTlZGR1V6?=
+ =?utf-8?B?RFhWOWo5ek04dGNCMHdOMmJIcFgvVXNUYU9nT2hab203eGphNmJqRlhYYVBD?=
+ =?utf-8?B?OFZiRlZGNXhITzZ2SDlySnlLK0tFYzZCL3BJbGRvRzJSQ0RQY0lOak1qWTVU?=
+ =?utf-8?B?aUlLelVuNjVpazdCczA3bFpmZ2NFME5BbENHVEwyU1Y1YXVMeDY4eU5ZWk9k?=
+ =?utf-8?B?ejlYNFFXb09iUXljNXZwWjdXUC8xeXg2WGtOS3I1VENHTEFXZlp0NUh1bE1k?=
+ =?utf-8?B?UEJtMGR4b2pGZlo1RUp3UFFwR3BKOFFJVGg2Rjl5dG9wRW9vVnV2WkVrVktT?=
+ =?utf-8?B?Qlo4bFZDanN4MFBqSDFVck9QRTZNVnhCSWsraDBuWk80SEVxNUhra2gvR1Ro?=
+ =?utf-8?B?ZTZlczJSY1FHb200dTdTRmN6Q1ZyNlJ2TjllSUVyZEQ1WHhBSUp2alFOODRu?=
+ =?utf-8?B?YXpDQzdPWlA0WVB0ODJWdmJxSktPSStaaHhGKytJOC90U212SHB6L2JZbWY1?=
+ =?utf-8?B?a0dYdUtlbUV1M3hYOCtYVUl0ZTVFbjFKWXVxS1FqTnlMNHFtdzdNb0QzV2Fy?=
+ =?utf-8?B?RC9BZVVPeTI2eGhXUzN3MjJiQ3pIRkNsaFpZTnYwVGVhY0pJdHdJZkdCR0F1?=
+ =?utf-8?B?YVV1SWNncFV0YjFDTWU5SHlnMXU1eUcwMmJmUmNDS1JvbTMwcUF6b1VSMXFj?=
+ =?utf-8?B?eEEvZFpRVlE5MVRFZGlKYXRGMVpwTkFIbVVsNVUvcjduQWdPTVpLMjBxS29J?=
+ =?utf-8?B?OXgwaXhCNjd4Qzd2SkV6YUlYNGdsWWxUTXBxVzBoTWt6YnpEdkZpZXMwSGZQ?=
+ =?utf-8?B?Ri9HNVhvay9lVk0yc1AvTmtEL2t6NUVNRlpzRnZHNnkvY0hRUnM3THlUUktu?=
+ =?utf-8?B?Tzc2Z1FDdUcxSjBxTHpNUWVsVUlQT0lGTUh6QmxCYWczbmFVK3ltNFhnK2Qr?=
+ =?utf-8?B?TGhiTGQ1RXBTOTJBZ2x3SUQzdXhMc2d0d3d6V0J5MWZLa2M0bklIMGhHQUxG?=
+ =?utf-8?B?YXdSVDZsaC9TYStQRVU2S055VHBxR0Jqck96L1RBQmh0bkFXUVN1a3dMV01G?=
+ =?utf-8?B?NEZIUTBJV2FET2prMEQ3bnhjUERybXNzN2s0ek5OUWNSZVBpQmNRK0RYbVA4?=
+ =?utf-8?B?Q1NPZEk0QndDNWdCZkJBVzdXbHB5eVRKSThjUVpQTWlWOHRWdG8rZ3JoU0Zt?=
+ =?utf-8?B?OUFWL0xveUtGVURZNmc1RFp2azEzdm9neDNvZUVqZU91Wm92S2RMcldibWFj?=
+ =?utf-8?B?QzNjQksySFp5ZFUzazBOdndOc1Y4NzFjdVFMdzNZdFFIZk16MG5BKy9wVHlC?=
+ =?utf-8?B?WW0wMDdKRVBLOUZzQ2FRbjJUN0JFTHdpRWlxNDBPcHhqV1NBWnJib2ZYOTVH?=
+ =?utf-8?B?SUtMQTJZemtUeERSLzF2K21HZm5CN0hIakx3THVLRzk0MU1KVlR0RS92bU0y?=
+ =?utf-8?B?RXFKS0pwTG85dXJqdnU2ZzZ4NE1sVkt2UjQ5elBzSmpjbTdPSWdJVjM2Q0Uv?=
+ =?utf-8?B?cFhGL0RrTkdGbDh3bXVHOFpaZGZoYTR4ZXNWTEd4Wmp5QUN6UUp5QmVGQ0Z3?=
+ =?utf-8?B?aDdhdUlxbFRYQVJNUUJhUWxkQ1NsZ1MvRUE0Z29NY0xoS2orVStBdDhmWU9Y?=
+ =?utf-8?B?TGVwSmxwZ3hSUkRpYnV0SXFoMFJkMzd3ZnMxVW1oYWdFd2VBaVpVZVA2c2pU?=
+ =?utf-8?B?ZW5QN20vdUFUTDFwWWU3TEpKQmtmTWt5NVdhY2RTd013bkdsdnJ3ZHR2NEJX?=
+ =?utf-8?B?akpBS3ptc0xmanVNanN2MUg1ZituZmE5QklMUFdGbWxacTlvbG5ZT1NXNkY2?=
+ =?utf-8?B?TitYWXk2NWk1S3RRNzNNZDV5elkwYzdSTnVOdEhlU0NBTm5JRlIvdklYYTZX?=
+ =?utf-8?B?Yk4vSGNvTHp3emNYSzYwYTZSTy9wdmQxQWdEY05ZYWRmOE8vdVB5eXpnM3V4?=
+ =?utf-8?B?c2JGVDhlZXpNWjJENjBqUE5MTlpmUVYvSmRiUT09?=
 X-Forefront-Antispam-Report:
- CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(82310400026)(1800799024)(13003099007)(921020);DIR:OUT;SFP:1101;
+ CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014)(7416014)(921020)(13003099007);DIR:OUT;SFP:1101;
 X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 13:16:11.0829
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 13:16:15.8405
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98ef675b-6003-4e2c-da20-08dda820f823
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2415155-67d2-4d77-22c6-08dda820fafa
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.100];Helo=[fr711usmtp2.zeu.alcatel-lucent.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB1PEPF000509F0.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DU2PEPF00028D12.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSKPR07MB10589
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR07MB9071
 
-From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+From: Koen De Schepper <koen.de_schepper@nokia-bell-labs.com>
 
-DualPI2 is the reference implementation of IETF RFC9332 DualQ Coupled
-AQM (https://datatracker.ietf.org/doc/html/rfc9332) providing two
-queues called low latency (L-queue) and classic (C-queue). By default,
-it enqueues non-ECN and ECT(0) packets into the C-queue and ECT(1) and
-CE packets into the low latency queue (L-queue), as per IETF RFC9332 spec.
+DualPI2 provides L4S-type low latency & loss to traffic that uses a
+scalable congestion controller (e.g. TCP-Prague, DCTCP) without
+degrading the performance of 'classic' traffic (e.g. Reno,
+Cubic etc.). It is to be the reference implementation of IETF RFC9332
+DualQ Coupled AQM (https://datatracker.ietf.org/doc/html/rfc9332).
 
-This patch defines the dualpi2 Qdisc structure and parsing, and the
-following two patches include dumping and enqueue/dequeue for the DualPI2.
+Note that creating two independent queues cannot meet the goal of
+DualPI2 mentioned in RFC9332: "...to preserve fairness between
+ECN-capable and non-ECN-capable traffic." Further, it could even
+lead to starvation of Classic traffic, which is also inconsistent
+with the requirements in RFC9332: "...although priority MUST be
+bounded in order not to starve Classic traffic." DualPI2 is
+designed to maintain approximate per-flow fairness on L-queue and
+C-queue by forming a single qdisc using the coupling factor and
+scheduler between two queues.
 
+The qdisc provides two queues called low latency and classic. It
+classifies packets based on the ECN field in the IP headers. By
+default it directs non-ECN and ECT(0) into the classic queue and
+ECT(1) and CE into the low latency queue, as per the IETF spec.
+
+Each queue runs its own AQM:
+* The classic AQM is called PI2, which is similar to the PIE AQM but
+  more responsive and simpler. Classic traffic requires a decent
+  target queue (default 15ms for Internet deployment) to fully
+  utilize the link and to avoid high drop rates.
+* The low latency AQM is, by default, a very shallow ECN marking
+  threshold (1ms) similar to that used for DCTCP.
+
+The DualQ isolates the low queuing delay of the Low Latency queue
+from the larger delay of the 'Classic' queue. However, from a
+bandwidth perspective, flows in either queue will share out the link
+capacity as if there was just a single queue. This bandwidth pooling
+effect is achieved by coupling together the drop and ECN-marking
+probabilities of the two AQMs.
+
+The PI2 AQM has two main parameters in addition to its target delay.
+The integral gain factor alpha is used to slowly correct any persistent
+standing queue error from the target delay, while the proportional gain
+factor beta is used to quickly compensate for queue changes (growth or
+shrinkage). Either alpha and beta are given as a parameter, or they can
+be calculated by tc from alternative typical and maximum RTT parameters.
+
+Internally, the output of a linear Proportional Integral (PI)
+controller is used for both queues. This output is squared to
+calculate the drop or ECN-marking probability of the classic queue.
+This counterbalances the square-root rate equation of Reno/Cubic,
+which is the trick that balances flow rates across the queues. For
+the ECN-marking probability of the low latency queue, the output of
+the base AQM is multiplied by a coupling factor. This determines the
+balance between the flow rates in each queue. The default setting
+makes the flow rates roughly equal, which should be generally
+applicable.
+
+If DUALPI2 AQM has detected overload (due to excessive non-responsive
+traffic in either queue), it will switch to signaling congestion
+solely using drop, irrespective of the ECN field. Alternatively, it
+can be configured to limit the drop probability and let the queue
+grow and eventually overflow (like tail-drop).
+
+GSO splitting in DUALPI2 is configurable from userspace while the
+default behavior is to split gso. When running DUALPI2 at unshaped
+10gigE with 4 download streams test, splitting gso apart results in
+halving the latency with no loss in throughput:
+
+Summary of tcp_4down run 'no_split_gso':
+                         avg         median      # data pts
+ Ping (ms) ICMP   :       0.53      0.30 ms         350
+ TCP download avg :    2326.86       N/A Mbits/s    350
+ TCP download sum :    9307.42       N/A Mbits/s    350
+ TCP download::1  :    2672.99   2568.73 Mbits/s    350
+ TCP download::2  :    2586.96   2570.51 Mbits/s    350
+ TCP download::3  :    1786.26   1798.82 Mbits/s    350
+ TCP download::4  :    2261.21   2309.49 Mbits/s    350
+
+Summart of tcp_4down run 'split_gso':
+                         avg          median      # data pts
+ Ping (ms) ICMP   :       0.22      0.23 ms         350
+ TCP download avg :    2335.02       N/A Mbits/s    350
+ TCP download sum :    9340.09       N/A Mbits/s    350
+ TCP download::1  :    2335.30   2334.22 Mbits/s    350
+ TCP download::2  :    2334.72   2334.20 Mbits/s    350
+ TCP download::3  :    2335.28   2334.58 Mbits/s    350
+ TCP download::4  :    2334.79   2334.39 Mbits/s    350
+
+A similar result is observed when running DUALPI2 at unshaped 1gigE
+with 1 download stream test:
+
+Summary of tcp_1down run 'no_split_gso':
+                         avg         median      # data pts
+ Ping (ms) ICMP :         1.13      1.25 ms         350
+ TCP download   :       941.41    941.46 Mbits/s    350
+
+Summart of tcp_1down run 'split_gso':
+                         avg         median      # data pts
+ Ping (ms) ICMP :         0.51      0.55 ms         350
+ TCP download   :       941.41    941.45 Mbits/s    350
+
+Additional details can be found in the draft:
+  https://datatracker.ietf.org/doc/html/rfc9332
+
+Signed-off-by: Koen De Schepper <koen.de_schepper@nokia-bell-labs.com>
+Co-developed-by: Olga Albisser <olga@albisser.org>
+Signed-off-by: Olga Albisser <olga@albisser.org>
+Co-developed-by: Olivier Tilmans <olivier.tilmans@nokia.com>
+Signed-off-by: Olivier Tilmans <olivier.tilmans@nokia.com>
+Co-developed-by: Henrik Steen <henrist@henrist.net>
+Signed-off-by: Henrik Steen <henrist@henrist.net>
+Signed-off-by: Bob Briscoe <research@bobbriscoe.net>
+Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+Co-developed-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Acked-by: Dave Taht <dave.taht@gmail.com>
 
 ---
 v17:
-- Replace 0xffffffff with U32_MAX
-- Use new helper function qdisc_dequeue_internal()
-- Add s64 casting when calculating the delta of the PI controller
-- Add comments for readability
-
-v16:
-- Add qdisc_lock() to dualpi2_timer()
-- Introduce convert_ns_to_usec() to convert u64 usec to u32 ns w/o overflow
+- Add helper function skb_apply_step()
+- Change the drop reason into SKB_DROP_REASON_QDISC_CONGESTED for drop_early
+- Modify the condition to remove the original skb when enqueuing with GSO segments
+- Add brackets and spaces for readability
 ---
- include/uapi/linux/pkt_sched.h |  53 +++
- net/sched/sch_dualpi2.c        | 593 +++++++++++++++++++++++++++++++++
- 2 files changed, 646 insertions(+)
- create mode 100644 net/sched/sch_dualpi2.c
+ include/net/dropreason-core.h |   6 +
+ net/sched/Kconfig             |  12 +
+ net/sched/Makefile            |   1 +
+ net/sched/sch_dualpi2.c       | 464 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 483 insertions(+)
 
-diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
-index 3e41349f3fa2..ae8af0e8d479 100644
---- a/include/uapi/linux/pkt_sched.h
-+++ b/include/uapi/linux/pkt_sched.h
-@@ -1211,4 +1211,57 @@ enum {
+diff --git a/include/net/dropreason-core.h b/include/net/dropreason-core.h
+index bcf9d7467e1a..1156be6b28ab 100644
+--- a/include/net/dropreason-core.h
++++ b/include/net/dropreason-core.h
+@@ -121,6 +121,7 @@
+ 	FN(ARP_PVLAN_DISABLE)		\
+ 	FN(MAC_IEEE_MAC_CONTROL)	\
+ 	FN(BRIDGE_INGRESS_STP_STATE)	\
++	FN(DUALPI2_STEP_DROP)		\
+ 	FNe(MAX)
  
- #define TCA_ETS_MAX (__TCA_ETS_MAX - 1)
+ /**
+@@ -573,6 +574,11 @@ enum skb_drop_reason {
+ 	 * ingress bridge port does not allow frames to be forwarded.
+ 	 */
+ 	SKB_DROP_REASON_BRIDGE_INGRESS_STP_STATE,
++	/**
++	 * @SKB_DROP_REASON_DUALPI2_STEP_DROP: dropped by the step drop
++	 * threshold of DualPI2 qdisc.
++	 */
++	SKB_DROP_REASON_DUALPI2_STEP_DROP,
+ 	/**
+ 	 * @SKB_DROP_REASON_MAX: the maximum of core drop reasons, which
+ 	 * shouldn't be used as a real 'reason' - only for tracing code gen
+diff --git a/net/sched/Kconfig b/net/sched/Kconfig
+index ad914d2b2e22..6ddff028b81a 100644
+--- a/net/sched/Kconfig
++++ b/net/sched/Kconfig
+@@ -415,6 +415,18 @@ config NET_SCH_BPF
  
-+/* DUALPI2 */
-+enum {
-+	TCA_DUALPI2_DROP_OVERLOAD_OVERFLOW = 0,
-+	TCA_DUALPI2_DROP_OVERLOAD_DROP = 1,
-+	__TCA_DUALPI2_DROP_OVERLOAD_MAX,
-+};
-+#define TCA_DUALPI2_DROP_OVERLOAD_MAX (__TCA_DUALPI2_DROP_OVERLOAD_MAX - 1)
+ 	  If unsure, say N.
+ 
++config NET_SCH_DUALPI2
++	tristate "Dual Queue PI Square (DUALPI2) scheduler"
++	help
++	  Say Y here if you want to use the Dual Queue Proportional Integral
++	  Controller Improved with a Square scheduling algorithm.
++	  For more information, please see https://tools.ietf.org/html/rfc9332
 +
-+enum {
-+	TCA_DUALPI2_DROP_EARLY_DROP_DEQUEUE = 0,
-+	TCA_DUALPI2_DROP_EARLY_DROP_ENQUEUE = 1,
-+	__TCA_DUALPI2_DROP_EARLY_MAX,
-+};
-+#define TCA_DUALPI2_DROP_EARLY_MAX (__TCA_DUALPI2_DROP_EARLY_MAX - 1)
++	  To compile this driver as a module, choose M here: the module
++	  will be called sch_dualpi2.
 +
-+enum {
-+	TCA_DUALPI2_ECN_MASK_L4S_ECT = 1,
-+	TCA_DUALPI2_ECN_MASK_CLA_ECT = 2,
-+	TCA_DUALPI2_ECN_MASK_ANY_ECT = 3,
-+	__TCA_DUALPI2_ECN_MASK_MAX,
-+};
-+#define TCA_DUALPI2_ECN_MASK_MAX (__TCA_DUALPI2_ECN_MASK_MAX - 1)
++	  If unsure, say N.
 +
-+enum {
-+	TCA_DUALPI2_SPLIT_GSO_NO_SPLIT_GSO = 0,
-+	TCA_DUALPI2_SPLIT_GSO_SPLIT_GSO = 1,
-+	__TCA_DUALPI2_SPLIT_GSO_MAX,
-+};
-+#define TCA_DUALPI2_SPLIT_GSO_MAX (__TCA_DUALPI2_SPLIT_GSO_MAX - 1)
-+
-+enum {
-+	TCA_DUALPI2_UNSPEC,
-+	TCA_DUALPI2_LIMIT,		/* Packets */
-+	TCA_DUALPI2_MEMORY_LIMIT,	/* Bytes */
-+	TCA_DUALPI2_TARGET,		/* us */
-+	TCA_DUALPI2_TUPDATE,		/* us */
-+	TCA_DUALPI2_ALPHA,		/* Hz scaled up by 256 */
-+	TCA_DUALPI2_BETA,		/* HZ scaled up by 256 */
-+	TCA_DUALPI2_STEP_THRESH,	/* Packets or us */
-+	TCA_DUALPI2_STEP_PACKETS,	/* Whether STEP_THRESH is in packets */
-+	TCA_DUALPI2_MIN_QLEN_STEP,	/* Minimum qlen to apply STEP_THRESH */
-+	TCA_DUALPI2_COUPLING,		/* Coupling factor between queues */
-+	TCA_DUALPI2_DROP_OVERLOAD,	/* Whether to drop on overload */
-+	TCA_DUALPI2_DROP_EARLY,		/* Whether to drop on enqueue */
-+	TCA_DUALPI2_C_PROTECTION,	/* Percentage */
-+	TCA_DUALPI2_ECN_MASK,		/* L4S queue classification mask */
-+	TCA_DUALPI2_SPLIT_GSO,		/* Split GSO packets at enqueue */
-+	TCA_DUALPI2_PAD,
-+	__TCA_DUALPI2_MAX
-+};
-+
-+#define TCA_DUALPI2_MAX   (__TCA_DUALPI2_MAX - 1)
-+
- #endif
+ menuconfig NET_SCH_DEFAULT
+ 	bool "Allow override default queue discipline"
+ 	help
+diff --git a/net/sched/Makefile b/net/sched/Makefile
+index 904d784902d1..5078ea84e6ad 100644
+--- a/net/sched/Makefile
++++ b/net/sched/Makefile
+@@ -63,6 +63,7 @@ obj-$(CONFIG_NET_SCH_CBS)	+= sch_cbs.o
+ obj-$(CONFIG_NET_SCH_ETF)	+= sch_etf.o
+ obj-$(CONFIG_NET_SCH_TAPRIO)	+= sch_taprio.o
+ obj-$(CONFIG_NET_SCH_BPF)	+= bpf_qdisc.o
++obj-$(CONFIG_NET_SCH_DUALPI2)	+= sch_dualpi2.o
+ 
+ obj-$(CONFIG_NET_CLS_U32)	+= cls_u32.o
+ obj-$(CONFIG_NET_CLS_ROUTE4)	+= cls_route.o
 diff --git a/net/sched/sch_dualpi2.c b/net/sched/sch_dualpi2.c
-new file mode 100644
-index 000000000000..6c510bc321d2
---- /dev/null
+index 2d7a83cc03f2..07b5e453acf0 100644
+--- a/net/sched/sch_dualpi2.c
 +++ b/net/sched/sch_dualpi2.c
-@@ -0,0 +1,593 @@
-+// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+/* Copyright (C) 2024 Nokia
-+ *
-+ * Author: Koen De Schepper <koen.de_schepper@nokia-bell-labs.com>
-+ * Author: Olga Albisser <olga@albisser.org>
-+ * Author: Henrik Steen <henrist@henrist.net>
-+ * Author: Olivier Tilmans <olivier.tilmans@nokia.com>
-+ * Author: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-+ *
-+ * DualPI Improved with a Square (dualpi2):
-+ * - Supports congestion controls that comply with the Prague requirements
-+ *   in RFC9331 (e.g. TCP-Prague)
-+ * - Supports coupled dual-queue with PI2 as defined in RFC9332
-+ * - Supports ECN L4S-identifier (IP.ECN==0b*1)
-+ *
-+ * note: Although DCTCP and BBRv3 can use shallow-threshold ECN marks,
-+ *   they do not meet the 'Prague L4S Requirements' listed in RFC 9331
-+ *   Section 4, so they can only be used with DualPI2 in a datacenter
-+ *   context.
-+ *
-+ * References:
-+ * - RFC9332: https://datatracker.ietf.org/doc/html/rfc9332
-+ * - De Schepper, Koen, et al. "PI 2: A linearized AQM for both classic and
-+ *   scalable TCP."  in proc. ACM CoNEXT'16, 2016.
-+ */
+@@ -113,8 +113,44 @@ struct dualpi2_sched_data {
+ 	u32	step_marks;	/* ECN mark pkt counter due to step AQM */
+ 	u32	memory_used;	/* Memory used of both queues */
+ 	u32	max_memory_used;/* Maximum used memory */
 +
-+#include <linux/errno.h>
-+#include <linux/hrtimer.h>
-+#include <linux/if_vlan.h>
-+#include <linux/kernel.h>
-+#include <linux/limits.h>
-+#include <linux/module.h>
-+#include <linux/skbuff.h>
-+#include <linux/types.h>
-+
-+#include <net/gso.h>
-+#include <net/inet_ecn.h>
-+#include <net/pkt_cls.h>
-+#include <net/pkt_sched.h>
-+
-+/* 32b enable to support flows with windows up to ~8.6 * 1e9 packets
-+ * i.e., twice the maximal snd_cwnd.
-+ * MAX_PROB must be consistent with the RNG in dualpi2_roll().
-+ */
-+#define MAX_PROB U32_MAX
-+
-+/* alpha/beta values exchanged over netlink are in units of 256ns */
-+#define ALPHA_BETA_SHIFT 8
-+
-+/* Scaled values of alpha/beta must fit in 32b to avoid overflow in later
-+ * computations. Consequently (see and dualpi2_scale_alpha_beta()), their
-+ * netlink-provided values can use at most 31b, i.e. be at most (2^23)-1
-+ * (~4MHz) as those are given in 1/256th. This enable to tune alpha/beta to
-+ * control flows whose maximal RTTs can be in usec up to few secs.
-+ */
-+#define ALPHA_BETA_MAX ((1U << 31) - 1)
-+
-+/* Internal alpha/beta are in units of 64ns.
-+ * This enables to use all alpha/beta values in the allowed range without loss
-+ * of precision due to rounding when scaling them internally, e.g.,
-+ * scale_alpha_beta(1) will not round down to 0.
-+ */
-+#define ALPHA_BETA_GRANULARITY 6
-+
-+#define ALPHA_BETA_SCALING (ALPHA_BETA_SHIFT - ALPHA_BETA_GRANULARITY)
-+
-+/* We express the weights (wc, wl) in %, i.e., wc + wl = 100 */
-+#define MAX_WC 100
-+
-+struct dualpi2_sched_data {
-+	struct Qdisc *l_queue;	/* The L4S Low latency queue (L-queue) */
-+	struct Qdisc *sch;	/* The Classic queue (C-queue) */
-+
-+	/* Registered tc filters */
-+	struct tcf_proto __rcu *tcf_filters;
-+	struct tcf_block *tcf_block;
-+
-+	/* PI2 parameters */
-+	u64	pi2_target;	/* Target delay in nanoseconds */
-+	u32	pi2_tupdate;	/* Timer frequency in nanoseconds */
-+	u32	pi2_prob;	/* Base PI probability */
-+	u32	pi2_alpha;	/* Gain factor for the integral rate response */
-+	u32	pi2_beta;	/* Gain factor for the proportional response */
-+	struct hrtimer pi2_timer; /* prob update timer */
-+
-+	/* Step AQM (L-queue only) parameters */
-+	u32	step_thresh;	/* Step threshold */
-+	bool	step_in_packets; /* Step thresh in packets (1) or time (0) */
-+
-+	/* C-queue starvation protection */
-+	s32	c_protection_credit; /* Credit (sign indicates which queue) */
-+	s32	c_protection_init; /* Reset value of the credit */
-+	u8	c_protection_wc; /* C-queue weight (between 0 and MAX_WC) */
-+	u8	c_protection_wl; /* L-queue weight (MAX_WC - wc) */
-+
-+	/* General dualQ parameters */
-+	u32	memory_limit;	/* Memory limit of both queues */
-+	u8	coupling_factor;/* Coupling factor (k) between both queues */
-+	u8	ecn_mask;	/* Mask to match packets into L-queue */
-+	u32	min_qlen_step;	/* Minimum queue length to apply step thresh */
-+	bool	drop_early;	/* Drop at enqueue (1) instead of dequeue  (0) */
-+	bool	drop_overload;	/* Drop (1) on overload, or overflow (0) */
-+	bool	split_gso;	/* Split aggregated skb (1) or leave as is (0) */
-+
-+	/* Statistics */
-+	u64	c_head_ts;	/* Enqueue timestamp of the C-queue head */
-+	u64	l_head_ts;	/* Enqueue timestamp of the L-queue head */
-+	u64	last_qdelay;	/* Q delay val at the last probability update */
-+	u32	packets_in_c;	/* Enqueue packet counter of the C-queue */
-+	u32	packets_in_l;	/* Enqueue packet counter of the L-queue */
-+	u32	maxq;		/* Maximum queue size of the C-queue */
-+	u32	ecn_mark;	/* ECN mark pkt counter due to PI probability */
-+	u32	step_marks;	/* ECN mark pkt counter due to step AQM */
-+	u32	memory_used;	/* Memory used of both queues */
-+	u32	max_memory_used;/* Maximum used memory */
++	/* Deferred drop statistics */
++	u32	deferred_drops_cnt;	/* Packets dropped */
++	u32	deferred_drops_len;	/* Bytes dropped */
 +};
 +
-+static u32 dualpi2_scale_alpha_beta(u32 param)
-+{
-+	u64 tmp = ((u64)param * MAX_PROB >> ALPHA_BETA_SCALING);
++struct dualpi2_skb_cb {
++	u64 ts;			/* Timestamp at enqueue */
++	u8 apply_step:1,	/* Can we apply the step threshold */
++	   classified:2,	/* Packet classification results */
++	   ect:2;		/* Packet ECT codepoint */
++};
 +
-+	do_div(tmp, NSEC_PER_SEC);
-+	return tmp;
++enum dualpi2_classification_results {
++	DUALPI2_C_CLASSIC	= 0,	/* C-queue */
++	DUALPI2_C_L4S		= 1,	/* L-queue (scale mark/classic drop) */
++	DUALPI2_C_LLLL		= 2,	/* L-queue (no drops/marks) */
++	__DUALPI2_C_MAX			/* Keep last*/
+ };
+ 
++static struct dualpi2_skb_cb *dualpi2_skb_cb(struct sk_buff *skb)
++{
++	qdisc_cb_private_validate(skb, sizeof(struct dualpi2_skb_cb));
++	return (struct dualpi2_skb_cb *)qdisc_skb_cb(skb)->data;
 +}
 +
-+static ktime_t next_pi2_timeout(struct dualpi2_sched_data *q)
++static u64 dualpi2_sojourn_time(struct sk_buff *skb, u64 reference)
 +{
-+	return ktime_add_ns(ktime_get_ns(), q->pi2_tupdate);
++	return reference - dualpi2_skb_cb(skb)->ts;
 +}
 +
-+static void dualpi2_reset_c_protection(struct dualpi2_sched_data *q)
++static u64 head_enqueue_time(struct Qdisc *q)
 +{
-+	q->c_protection_credit = q->c_protection_init;
++	struct sk_buff *skb = qdisc_peek_head(q);
++
++	return skb ? dualpi2_skb_cb(skb)->ts : 0;
 +}
 +
-+/* This computes the initial credit value and WRR weight for the L queue (wl)
-+ * from the weight of the C queue (wc).
-+ * If wl > wc, the scheduler will start with the L queue when reset.
+ static u32 dualpi2_scale_alpha_beta(u32 param)
+ {
+ 	u64 tmp = ((u64)param * MAX_PROB >> ALPHA_BETA_SCALING);
+@@ -136,6 +172,30 @@ static ktime_t next_pi2_timeout(struct dualpi2_sched_data *q)
+ 	return ktime_add_ns(ktime_get_ns(), q->pi2_tupdate);
+ }
+ 
++static bool skb_is_l4s(struct sk_buff *skb)
++{
++	return dualpi2_skb_cb(skb)->classified == DUALPI2_C_L4S;
++}
++
++static bool skb_in_l_queue(struct sk_buff *skb)
++{
++	return dualpi2_skb_cb(skb)->classified != DUALPI2_C_CLASSIC;
++}
++
++static bool skb_apply_step(struct sk_buff *skb, struct dualpi2_sched_data *q)
++{
++	return skb_is_l4s(skb) && qdisc_qlen(q->l_queue) >= q->min_qlen_step;
++}
++
++static bool dualpi2_mark(struct dualpi2_sched_data *q, struct sk_buff *skb)
++{
++	if (INET_ECN_set_ce(skb)) {
++		q->ecn_mark++;
++		return true;
++	}
++	return false;
++}
++
+ static void dualpi2_reset_c_protection(struct dualpi2_sched_data *q)
+ {
+ 	q->c_protection_credit = q->c_protection_init;
+@@ -155,6 +215,408 @@ static void dualpi2_calculate_c_protection(struct Qdisc *sch,
+ 	dualpi2_reset_c_protection(q);
+ }
+ 
++static bool dualpi2_roll(u32 prob)
++{
++	return get_random_u32() <= prob;
++}
++
++/* Packets in the C-queue are subject to a marking probability pC, which is the
++ * square of the internal PI probability (i.e., have an overall lower mark/drop
++ * probability). If the qdisc is overloaded, ignore ECT values and only drop.
++ *
++ * Note that this marking scheme is also applied to L4S packets during overload.
++ * Return true if packet dropping is required in C queue
 + */
-+static void dualpi2_calculate_c_protection(struct Qdisc *sch,
-+					   struct dualpi2_sched_data *q, u32 wc)
++static bool dualpi2_classic_marking(struct dualpi2_sched_data *q,
++				    struct sk_buff *skb, u32 prob,
++				    bool overload)
 +{
-+	q->c_protection_wc = wc;
-+	q->c_protection_wl = MAX_WC - wc;
-+	q->c_protection_init = (s32)psched_mtu(qdisc_dev(sch)) *
-+		((int)q->c_protection_wc - (int)q->c_protection_wl);
-+	dualpi2_reset_c_protection(q);
++	if (dualpi2_roll(prob) && dualpi2_roll(prob)) {
++		if (overload || dualpi2_skb_cb(skb)->ect == INET_ECN_NOT_ECT)
++			return true;
++		dualpi2_mark(q, skb);
++	}
++	return false;
 +}
 +
-+static s64 __scale_delta(u64 diff)
++/* Packets in the L-queue are subject to a marking probability pL given by the
++ * internal PI probability scaled by the coupling factor.
++ *
++ * On overload (i.e., @local_l_prob is >= 100%):
++ * - if the qdisc is configured to trade losses to preserve latency (i.e.,
++ *   @q->drop_overload), apply classic drops first before marking.
++ * - otherwise, preserve the "no loss" property of ECN at the cost of queueing
++ *   delay, eventually resulting in taildrop behavior once sch->limit is
++ *   reached.
++ * Return true if packet dropping is required in L queue
++ */
++static bool dualpi2_scalable_marking(struct dualpi2_sched_data *q,
++				     struct sk_buff *skb,
++				     u64 local_l_prob, u32 prob,
++				     bool overload)
 +{
-+	do_div(diff, 1 << ALPHA_BETA_GRANULARITY);
-+	return diff;
++	if (overload) {
++		/* Apply classic drop */
++		if (!q->drop_overload ||
++		    !(dualpi2_roll(prob) && dualpi2_roll(prob)))
++			goto mark;
++		return true;
++	}
++
++	/* We can safely cut the upper 32b as overload==false */
++	if (dualpi2_roll(local_l_prob)) {
++		/* Non-ECT packets could have classified as L4S by filters. */
++		if (dualpi2_skb_cb(skb)->ect == INET_ECN_NOT_ECT)
++			return true;
++mark:
++		dualpi2_mark(q, skb);
++	}
++	return false;
 +}
 +
-+static void get_queue_delays(struct dualpi2_sched_data *q, u64 *qdelay_c,
-+			     u64 *qdelay_l)
++/* Decide whether a given packet must be dropped (or marked if ECT), according
++ * to the PI2 probability.
++ *
++ * Never mark/drop if we have a standing queue of less than 2 MTUs.
++ */
++static bool must_drop(struct Qdisc *sch, struct dualpi2_sched_data *q,
++		      struct sk_buff *skb)
 +{
-+	u64 now, qc, ql;
++	u64 local_l_prob;
++	bool overload;
++	u32 prob;
++
++	if (sch->qstats.backlog < 2 * psched_mtu(qdisc_dev(sch)))
++		return false;
++
++	prob = READ_ONCE(q->pi2_prob);
++	local_l_prob = (u64)prob * q->coupling_factor;
++	overload = local_l_prob > MAX_PROB;
++
++	switch (dualpi2_skb_cb(skb)->classified) {
++	case DUALPI2_C_CLASSIC:
++		return dualpi2_classic_marking(q, skb, prob, overload);
++	case DUALPI2_C_L4S:
++		return dualpi2_scalable_marking(q, skb, local_l_prob, prob,
++						overload);
++	default: /* DUALPI2_C_LLLL */
++		return false;
++	}
++}
++
++static void dualpi2_read_ect(struct sk_buff *skb)
++{
++	struct dualpi2_skb_cb *cb = dualpi2_skb_cb(skb);
++	int wlen = skb_network_offset(skb);
++
++	switch (skb_protocol(skb, true)) {
++	case htons(ETH_P_IP):
++		wlen += sizeof(struct iphdr);
++		if (!pskb_may_pull(skb, wlen) ||
++		    skb_try_make_writable(skb, wlen))
++			goto not_ecn;
++
++		cb->ect = ipv4_get_dsfield(ip_hdr(skb)) & INET_ECN_MASK;
++		break;
++	case htons(ETH_P_IPV6):
++		wlen += sizeof(struct ipv6hdr);
++		if (!pskb_may_pull(skb, wlen) ||
++		    skb_try_make_writable(skb, wlen))
++			goto not_ecn;
++
++		cb->ect = ipv6_get_dsfield(ipv6_hdr(skb)) & INET_ECN_MASK;
++		break;
++	default:
++		goto not_ecn;
++	}
++	return;
++
++not_ecn:
++	/* Non pullable/writable packets can only be dropped hence are
++	 * classified as not ECT.
++	 */
++	cb->ect = INET_ECN_NOT_ECT;
++}
++
++static int dualpi2_skb_classify(struct dualpi2_sched_data *q,
++				struct sk_buff *skb)
++{
++	struct dualpi2_skb_cb *cb = dualpi2_skb_cb(skb);
++	struct tcf_result res;
++	struct tcf_proto *fl;
++	int result;
++
++	dualpi2_read_ect(skb);
++	if (cb->ect & q->ecn_mask) {
++		cb->classified = DUALPI2_C_L4S;
++		return NET_XMIT_SUCCESS;
++	}
++
++	if (TC_H_MAJ(skb->priority) == q->sch->handle &&
++	    TC_H_MIN(skb->priority) < __DUALPI2_C_MAX) {
++		cb->classified = TC_H_MIN(skb->priority);
++		return NET_XMIT_SUCCESS;
++	}
++
++	fl = rcu_dereference_bh(q->tcf_filters);
++	if (!fl) {
++		cb->classified = DUALPI2_C_CLASSIC;
++		return NET_XMIT_SUCCESS;
++	}
++
++	result = tcf_classify(skb, NULL, fl, &res, false);
++	if (result >= 0) {
++#ifdef CONFIG_NET_CLS_ACT
++		switch (result) {
++		case TC_ACT_STOLEN:
++		case TC_ACT_QUEUED:
++		case TC_ACT_TRAP:
++			return NET_XMIT_SUCCESS | __NET_XMIT_STOLEN;
++		case TC_ACT_SHOT:
++			return NET_XMIT_SUCCESS | __NET_XMIT_BYPASS;
++		}
++#endif
++		cb->classified = TC_H_MIN(res.classid) < __DUALPI2_C_MAX ?
++			TC_H_MIN(res.classid) : DUALPI2_C_CLASSIC;
++	}
++	return NET_XMIT_SUCCESS;
++}
++
++static int dualpi2_enqueue_skb(struct sk_buff *skb, struct Qdisc *sch,
++			       struct sk_buff **to_free)
++{
++	struct dualpi2_sched_data *q = qdisc_priv(sch);
++	struct dualpi2_skb_cb *cb;
++
++	if (unlikely(qdisc_qlen(sch) >= sch->limit) ||
++	    unlikely((u64)q->memory_used + skb->truesize > q->memory_limit)) {
++		qdisc_qstats_overlimit(sch);
++		if (skb_in_l_queue(skb))
++			qdisc_qstats_overlimit(q->l_queue);
++		return qdisc_drop_reason(skb, sch, to_free,
++					 SKB_DROP_REASON_QDISC_OVERLIMIT);
++	}
++
++	if (q->drop_early && must_drop(sch, q, skb)) {
++		qdisc_drop_reason(skb, sch, to_free,
++				  SKB_DROP_REASON_QDISC_CONGESTED);
++		return NET_XMIT_SUCCESS | __NET_XMIT_BYPASS;
++	}
++
++	cb = dualpi2_skb_cb(skb);
++	cb->ts = ktime_get_ns();
++	q->memory_used += skb->truesize;
++	if (q->memory_used > q->max_memory_used)
++		q->max_memory_used = q->memory_used;
++
++	if (qdisc_qlen(sch) > q->maxq)
++		q->maxq = qdisc_qlen(sch);
++
++	if (skb_in_l_queue(skb)) {
++		/* Apply step thresh if skb is L4S && L-queue len >= min_qlen */
++		dualpi2_skb_cb(skb)->apply_step = skb_apply_step(skb, q);
++
++		/* Keep the overall qdisc stats consistent */
++		++sch->q.qlen;
++		qdisc_qstats_backlog_inc(sch, skb);
++		++q->packets_in_l;
++		if (!q->l_head_ts)
++			q->l_head_ts = cb->ts;
++		return qdisc_enqueue_tail(skb, q->l_queue);
++	}
++	++q->packets_in_c;
++	if (!q->c_head_ts)
++		q->c_head_ts = cb->ts;
++	return qdisc_enqueue_tail(skb, sch);
++}
++
++/* By default, dualpi2 will split GSO skbs into independent skbs and enqueue
++ * each of those individually. This yields the following benefits, at the
++ * expense of CPU usage:
++ * - Finer-grained AQM actions as the sub-packets of a burst no longer share the
++ *   same fate (e.g., the random mark/drop probability is applied individually)
++ * - Improved precision of the starvation protection/WRR scheduler at dequeue,
++ *   as the size of the dequeued packets will be smaller.
++ */
++static int dualpi2_qdisc_enqueue(struct sk_buff *skb, struct Qdisc *sch,
++				 struct sk_buff **to_free)
++{
++	struct dualpi2_sched_data *q = qdisc_priv(sch);
++	int err;
++
++	err = dualpi2_skb_classify(q, skb);
++	if (err != NET_XMIT_SUCCESS) {
++		if (err & __NET_XMIT_BYPASS)
++			qdisc_qstats_drop(sch);
++		__qdisc_drop(skb, to_free);
++		return err;
++	}
++
++	if (q->split_gso && skb_is_gso(skb)) {
++		netdev_features_t features;
++		struct sk_buff *nskb, *next;
++		int cnt, byte_len, orig_len;
++		int err;
++
++		features = netif_skb_features(skb);
++		nskb = skb_gso_segment(skb, features & ~NETIF_F_GSO_MASK);
++		if (IS_ERR_OR_NULL(nskb))
++			return qdisc_drop(skb, sch, to_free);
++
++		cnt = 1;
++		byte_len = 0;
++		orig_len = qdisc_pkt_len(skb);
++		skb_list_walk_safe(nskb, nskb, next) {
++			skb_mark_not_on_list(nskb);
++
++			/* Iterate through GSO fragments of an skb:
++			 * (1) Set pkt_len from the single GSO fragments
++			 * (2) Copy classified and ect values of an skb
++			 * (3) Enqueue fragment & set ts in dualpi2_enqueue_skb
++			 */
++			qdisc_skb_cb(nskb)->pkt_len = nskb->len;
++			dualpi2_skb_cb(nskb)->classified =
++				dualpi2_skb_cb(skb)->classified;
++			dualpi2_skb_cb(nskb)->ect = dualpi2_skb_cb(skb)->ect;
++			err = dualpi2_enqueue_skb(nskb, sch, to_free);
++
++			if (err == NET_XMIT_SUCCESS) {
++				/* Compute the backlog adjustment that needs
++				 * to be propagated in the qdisc tree to reflect
++				 * all new skbs successfully enqueued.
++				 */
++				++cnt;
++				byte_len += nskb->len;
++			}
++		}
++		if (cnt > 1) {
++			/* The caller will add the original skb stats to its
++			 * backlog, compensate this if any nskb is enqueued.
++			 */
++			--cnt;
++			byte_len -= orig_len;
++		}
++		qdisc_tree_reduce_backlog(sch, -cnt, -byte_len);
++		consume_skb(skb);
++		return err;
++	}
++	return dualpi2_enqueue_skb(skb, sch, to_free);
++}
++
++/* Select the queue from which the next packet can be dequeued, ensuring that
++ * neither queue can starve the other with a WRR scheduler.
++ *
++ * The sign of the WRR credit determines the next queue, while the size of
++ * the dequeued packet determines the magnitude of the WRR credit change. If
++ * either queue is empty, the WRR credit is kept unchanged.
++ *
++ * As the dequeued packet can be dropped later, the caller has to perform the
++ * qdisc_bstats_update() calls.
++ */
++static struct sk_buff *dequeue_packet(struct Qdisc *sch,
++				      struct dualpi2_sched_data *q,
++				      int *credit_change,
++				      u64 now)
++{
++	struct sk_buff *skb = NULL;
++	int c_len;
++
++	*credit_change = 0;
++	c_len = qdisc_qlen(sch) - qdisc_qlen(q->l_queue);
++	if (qdisc_qlen(q->l_queue) && (!c_len || q->c_protection_credit <= 0)) {
++		skb = __qdisc_dequeue_head(&q->l_queue->q);
++		WRITE_ONCE(q->l_head_ts, head_enqueue_time(q->l_queue));
++		if (c_len)
++			*credit_change = q->c_protection_wc;
++		qdisc_qstats_backlog_dec(q->l_queue, skb);
++
++		/* Keep the global queue size consistent */
++		--sch->q.qlen;
++		q->memory_used -= skb->truesize;
++	} else if (c_len) {
++		skb = __qdisc_dequeue_head(&sch->q);
++		WRITE_ONCE(q->c_head_ts, head_enqueue_time(sch));
++		if (qdisc_qlen(q->l_queue))
++			*credit_change = ~((s32)q->c_protection_wl) + 1;
++		q->memory_used -= skb->truesize;
++	} else {
++		dualpi2_reset_c_protection(q);
++		return NULL;
++	}
++	*credit_change *= qdisc_pkt_len(skb);
++	qdisc_qstats_backlog_dec(sch, skb);
++	return skb;
++}
++
++static int do_step_aqm(struct dualpi2_sched_data *q, struct sk_buff *skb,
++		       u64 now)
++{
++	u64 qdelay = 0;
++
++	if (q->step_in_packets)
++		qdelay = qdisc_qlen(q->l_queue);
++	else
++		qdelay = dualpi2_sojourn_time(skb, now);
++
++	if (dualpi2_skb_cb(skb)->apply_step && qdelay > q->step_thresh) {
++		if (!dualpi2_skb_cb(skb)->ect) {
++			/* Drop this non-ECT packet */
++			return 1;
++		}
++
++		if (dualpi2_mark(q, skb))
++			++q->step_marks;
++	}
++	qdisc_bstats_update(q->l_queue, skb);
++	return 0;
++}
++
++static void drop_and_retry(struct dualpi2_sched_data *q, struct sk_buff *skb,
++			   struct Qdisc *sch, enum skb_drop_reason reason)
++{
++	++q->deferred_drops_cnt;
++	q->deferred_drops_len += qdisc_pkt_len(skb);
++	kfree_skb_reason(skb, reason);
++	qdisc_qstats_drop(sch);
++}
++
++static struct sk_buff *dualpi2_qdisc_dequeue(struct Qdisc *sch)
++{
++	struct dualpi2_sched_data *q = qdisc_priv(sch);
++	struct sk_buff *skb;
++	int credit_change;
++	u64 now;
 +
 +	now = ktime_get_ns();
-+	qc = READ_ONCE(q->c_head_ts);
-+	ql = READ_ONCE(q->l_head_ts);
 +
-+	*qdelay_c = qc ? now - qc : 0;
-+	*qdelay_l = ql ? now - ql : 0;
-+}
-+
-+static u32 calculate_probability(struct Qdisc *sch)
-+{
-+	struct dualpi2_sched_data *q = qdisc_priv(sch);
-+	u32 new_prob;
-+	u64 qdelay_c;
-+	u64 qdelay_l;
-+	u64 qdelay;
-+	s64 delta;
-+
-+	get_queue_delays(q, &qdelay_c, &qdelay_l);
-+	qdelay = max(qdelay_l, qdelay_c);
-+
-+	/* Alpha and beta take at most 32b, i.e, the delay difference would
-+	 * overflow for queuing delay differences > ~4.2sec.
-+	 */
-+	delta = ((s64)qdelay - (s64)q->pi2_target) * q->pi2_alpha;
-+	delta += ((s64)qdelay - (s64)q->last_qdelay) * q->pi2_beta;
-+	q->last_qdelay = qdelay;
-+
-+	/* Bound new_prob between 0 and MAX_PROB */
-+	if (delta > 0) {
-+		new_prob = __scale_delta(delta) + q->pi2_prob;
-+		if (new_prob < q->pi2_prob)
-+			new_prob = MAX_PROB;
-+	} else {
-+		new_prob = q->pi2_prob - __scale_delta(~delta + 1);
-+		if (new_prob > q->pi2_prob)
-+			new_prob = 0;
-+	}
-+
-+	/* If we do not drop on overload, ensure we cap the L4S probability to
-+	 * 100% to keep window fairness when overflowing.
-+	 */
-+	if (!q->drop_overload)
-+		return min_t(u32, new_prob, MAX_PROB / q->coupling_factor);
-+	return new_prob;
-+}
-+
-+static u32 get_memory_limit(struct Qdisc *sch, u32 limit)
-+{
-+	/* Apply rule of thumb, i.e., doubling the packet length,
-+	 * to further include per packet overhead in memory_limit.
-+	 */
-+	u64 memlim = mul_u32_u32(limit, 2 * psched_mtu(qdisc_dev(sch)));
-+
-+	if (upper_32_bits(memlim))
-+		return U32_MAX;
-+	else
-+		return lower_32_bits(memlim);
-+}
-+
-+static u32 convert_us_to_nsec(u32 us)
-+{
-+	u64 ns = mul_u32_u32(us, NSEC_PER_USEC);
-+
-+	if (upper_32_bits(ns))
-+		return U32_MAX;
-+	else
-+		return lower_32_bits(ns);
-+}
-+
-+static enum hrtimer_restart dualpi2_timer(struct hrtimer *timer)
-+{
-+	struct dualpi2_sched_data *q = from_timer(q, timer, pi2_timer);
-+	struct Qdisc *sch = q->sch;
-+	spinlock_t *root_lock; /* to lock qdisc for probability calculations */
-+
-+	rcu_read_lock();
-+	root_lock = qdisc_lock(qdisc_root_sleeping(sch));
-+	spin_lock(root_lock);
-+
-+	WRITE_ONCE(q->pi2_prob, calculate_probability(sch));
-+	hrtimer_set_expires(&q->pi2_timer, next_pi2_timeout(q));
-+
-+	spin_unlock(root_lock);
-+	rcu_read_unlock();
-+	return HRTIMER_RESTART;
-+}
-+
-+static struct netlink_range_validation dualpi2_alpha_beta_range = {
-+	.min = 1,
-+	.max = ALPHA_BETA_MAX,
-+};
-+
-+static struct netlink_range_validation dualpi2_wc_range = {
-+	.min = 0,
-+	.max = MAX_WC,
-+};
-+
-+static struct netlink_range_validation dualpi2_ecn_mask_range = {
-+	.min = TCA_DUALPI2_ECN_MASK_L4S_ECT,
-+	.max = TCA_DUALPI2_ECN_MASK_MAX,
-+};
-+
-+static const struct nla_policy dualpi2_policy[TCA_DUALPI2_MAX + 1] = {
-+	[TCA_DUALPI2_LIMIT]		= NLA_POLICY_MIN(NLA_U32, 1),
-+	[TCA_DUALPI2_MEMORY_LIMIT]	= NLA_POLICY_MIN(NLA_U32, 1),
-+	[TCA_DUALPI2_TARGET]		= {.type = NLA_U32},
-+	[TCA_DUALPI2_TUPDATE]		= NLA_POLICY_MIN(NLA_U32, 1),
-+	[TCA_DUALPI2_ALPHA]		=
-+		NLA_POLICY_FULL_RANGE(NLA_U32, &dualpi2_alpha_beta_range),
-+	[TCA_DUALPI2_BETA]		=
-+		NLA_POLICY_FULL_RANGE(NLA_U32, &dualpi2_alpha_beta_range),
-+	[TCA_DUALPI2_STEP_THRESH]	= {.type = NLA_U32},
-+	[TCA_DUALPI2_STEP_PACKETS]	= {.type = NLA_FLAG},
-+	[TCA_DUALPI2_MIN_QLEN_STEP]	= {.type = NLA_U32},
-+	[TCA_DUALPI2_COUPLING]		= NLA_POLICY_MIN(NLA_U8, 1),
-+	[TCA_DUALPI2_DROP_OVERLOAD]	=
-+		NLA_POLICY_MAX(NLA_U8, TCA_DUALPI2_DROP_OVERLOAD_MAX),
-+	[TCA_DUALPI2_DROP_EARLY]	=
-+		NLA_POLICY_MAX(NLA_U8, TCA_DUALPI2_DROP_EARLY_MAX),
-+	[TCA_DUALPI2_C_PROTECTION]	=
-+		NLA_POLICY_FULL_RANGE(NLA_U8, &dualpi2_wc_range),
-+	[TCA_DUALPI2_ECN_MASK]		=
-+		NLA_POLICY_FULL_RANGE(NLA_U8, &dualpi2_ecn_mask_range),
-+	[TCA_DUALPI2_SPLIT_GSO]		=
-+		NLA_POLICY_MAX(NLA_U8, TCA_DUALPI2_SPLIT_GSO_MAX),
-+};
-+
-+static int dualpi2_change(struct Qdisc *sch, struct nlattr *opt,
-+			  struct netlink_ext_ack *extack)
-+{
-+	struct nlattr *tb[TCA_DUALPI2_MAX + 1];
-+	struct dualpi2_sched_data *q;
-+	int old_backlog;
-+	int old_qlen;
-+	int err;
-+
-+	if (!opt)
-+		return -EINVAL;
-+	err = nla_parse_nested(tb, TCA_DUALPI2_MAX, opt, dualpi2_policy,
-+			       extack);
-+	if (err < 0)
-+		return err;
-+
-+	q = qdisc_priv(sch);
-+	sch_tree_lock(sch);
-+
-+	if (tb[TCA_DUALPI2_LIMIT]) {
-+		u32 limit = nla_get_u32(tb[TCA_DUALPI2_LIMIT]);
-+
-+		WRITE_ONCE(sch->limit, limit);
-+		WRITE_ONCE(q->memory_limit, get_memory_limit(sch, limit));
-+	}
-+
-+	if (tb[TCA_DUALPI2_MEMORY_LIMIT])
-+		WRITE_ONCE(q->memory_limit,
-+			   nla_get_u32(tb[TCA_DUALPI2_MEMORY_LIMIT]));
-+
-+	if (tb[TCA_DUALPI2_TARGET]) {
-+		u64 target = nla_get_u32(tb[TCA_DUALPI2_TARGET]);
-+
-+		WRITE_ONCE(q->pi2_target, target * NSEC_PER_USEC);
-+	}
-+
-+	if (tb[TCA_DUALPI2_TUPDATE]) {
-+		u64 tupdate = nla_get_u32(tb[TCA_DUALPI2_TUPDATE]);
-+
-+		WRITE_ONCE(q->pi2_tupdate, convert_us_to_nsec(tupdate));
-+	}
-+
-+	if (tb[TCA_DUALPI2_ALPHA]) {
-+		u32 alpha = nla_get_u32(tb[TCA_DUALPI2_ALPHA]);
-+
-+		WRITE_ONCE(q->pi2_alpha, dualpi2_scale_alpha_beta(alpha));
-+	}
-+
-+	if (tb[TCA_DUALPI2_BETA]) {
-+		u32 beta = nla_get_u32(tb[TCA_DUALPI2_BETA]);
-+
-+		WRITE_ONCE(q->pi2_beta, dualpi2_scale_alpha_beta(beta));
-+	}
-+
-+	if (tb[TCA_DUALPI2_STEP_THRESH]) {
-+		u32 step_th = nla_get_u32(tb[TCA_DUALPI2_STEP_THRESH]);
-+		bool step_pkt = nla_get_flag(tb[TCA_DUALPI2_STEP_PACKETS]);
-+
-+		WRITE_ONCE(q->step_in_packets, step_pkt);
-+		WRITE_ONCE(q->step_thresh,
-+			   step_pkt ? step_th : convert_us_to_nsec(step_th));
-+	}
-+
-+	if (tb[TCA_DUALPI2_MIN_QLEN_STEP])
-+		WRITE_ONCE(q->min_qlen_step,
-+			   nla_get_u32(tb[TCA_DUALPI2_MIN_QLEN_STEP]));
-+
-+	if (tb[TCA_DUALPI2_COUPLING]) {
-+		u8 coupling = nla_get_u8(tb[TCA_DUALPI2_COUPLING]);
-+
-+		WRITE_ONCE(q->coupling_factor, coupling);
-+	}
-+
-+	if (tb[TCA_DUALPI2_DROP_OVERLOAD]) {
-+		u8 drop_overload = nla_get_u8(tb[TCA_DUALPI2_DROP_OVERLOAD]);
-+
-+		WRITE_ONCE(q->drop_overload, (bool)drop_overload);
-+	}
-+
-+	if (tb[TCA_DUALPI2_DROP_EARLY]) {
-+		u8 drop_early = nla_get_u8(tb[TCA_DUALPI2_DROP_EARLY]);
-+
-+		WRITE_ONCE(q->drop_early, (bool)drop_early);
-+	}
-+
-+	if (tb[TCA_DUALPI2_C_PROTECTION]) {
-+		u8 wc = nla_get_u8(tb[TCA_DUALPI2_C_PROTECTION]);
-+
-+		dualpi2_calculate_c_protection(sch, q, wc);
-+	}
-+
-+	if (tb[TCA_DUALPI2_ECN_MASK]) {
-+		u8 ecn_mask = nla_get_u8(tb[TCA_DUALPI2_ECN_MASK]);
-+
-+		WRITE_ONCE(q->ecn_mask, ecn_mask);
-+	}
-+
-+	if (tb[TCA_DUALPI2_SPLIT_GSO]) {
-+		u8 split_gso = nla_get_u8(tb[TCA_DUALPI2_SPLIT_GSO]);
-+
-+		WRITE_ONCE(q->split_gso, (bool)split_gso);
-+	}
-+
-+	old_qlen = qdisc_qlen(sch);
-+	old_backlog = sch->qstats.backlog;
-+	while (qdisc_qlen(sch) > sch->limit ||
-+	       q->memory_used > q->memory_limit) {
-+		struct sk_buff *skb = qdisc_dequeue_internal(sch, true);
-+
-+		q->memory_used -= skb->truesize;
-+		qdisc_qstats_backlog_dec(sch, skb);
-+		rtnl_qdisc_drop(skb, sch);
-+	}
-+	qdisc_tree_reduce_backlog(sch, old_qlen - qdisc_qlen(sch),
-+				  old_backlog - sch->qstats.backlog);
-+
-+	sch_tree_unlock(sch);
-+	return 0;
-+}
-+
-+/* Default alpha/beta values give a 10dB stability margin with max_rtt=100ms. */
-+static void dualpi2_reset_default(struct Qdisc *sch)
-+{
-+	struct dualpi2_sched_data *q = qdisc_priv(sch);
-+
-+	q->sch->limit = 10000;				/* Max 125ms at 1Gbps */
-+	q->memory_limit = get_memory_limit(sch, q->sch->limit);
-+
-+	q->pi2_target = 15 * NSEC_PER_MSEC;
-+	q->pi2_tupdate = 16 * NSEC_PER_MSEC;
-+	q->pi2_alpha = dualpi2_scale_alpha_beta(41);	/* ~0.16 Hz * 256 */
-+	q->pi2_beta = dualpi2_scale_alpha_beta(819);	/* ~3.20 Hz * 256 */
-+
-+	q->step_thresh = 1 * NSEC_PER_MSEC;
-+	q->step_in_packets = false;
-+
-+	dualpi2_calculate_c_protection(q->sch, q, 10);	/* wc=10%, wl=90% */
-+
-+	q->ecn_mask = TCA_DUALPI2_ECN_MASK_L4S_ECT;	/* INET_ECN_ECT_1 */
-+	q->min_qlen_step = 0;		/* Always apply step mark in L-queue */
-+	q->coupling_factor = 2;		/* window fairness for equal RTTs */
-+	q->drop_overload = TCA_DUALPI2_DROP_OVERLOAD_DROP; /* Drop overload */
-+	q->drop_early = TCA_DUALPI2_DROP_EARLY_DROP_DEQUEUE; /* Drop dequeue */
-+	q->split_gso = TCA_DUALPI2_SPLIT_GSO_SPLIT_GSO;	/* Split GSO */
-+}
-+
-+static int dualpi2_init(struct Qdisc *sch, struct nlattr *opt,
-+			struct netlink_ext_ack *extack)
-+{
-+	struct dualpi2_sched_data *q = qdisc_priv(sch);
-+	int err;
-+
-+	q->l_queue = qdisc_create_dflt(sch->dev_queue, &pfifo_qdisc_ops,
-+				       TC_H_MAKE(sch->handle, 1), extack);
-+	if (!q->l_queue)
-+		return -ENOMEM;
-+
-+	err = tcf_block_get(&q->tcf_block, &q->tcf_filters, sch, extack);
-+	if (err)
-+		return err;
-+
-+	q->sch = sch;
-+	dualpi2_reset_default(sch);
-+	hrtimer_setup(&q->pi2_timer, dualpi2_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_PINNED);
-+
-+	if (opt) {
-+		err = dualpi2_change(sch, opt, extack);
-+
-+		if (err)
-+			return err;
-+	}
-+
-+	hrtimer_start(&q->pi2_timer, next_pi2_timeout(q),
-+		      HRTIMER_MODE_ABS_PINNED);
-+	return 0;
-+}
-+
-+/* Reset both L-queue and C-queue, internal packet counters, PI probability,
-+ * C-queue protection credit, and timestamps, while preserving current
-+ * configuration of DUALPI2.
-+ */
-+static void dualpi2_reset(struct Qdisc *sch)
-+{
-+	struct dualpi2_sched_data *q = qdisc_priv(sch);
-+
-+	qdisc_reset_queue(sch);
-+	qdisc_reset_queue(q->l_queue);
-+	q->c_head_ts = 0;
-+	q->l_head_ts = 0;
-+	q->pi2_prob = 0;
-+	q->packets_in_c = 0;
-+	q->packets_in_l = 0;
-+	q->maxq = 0;
-+	q->ecn_mark = 0;
-+	q->step_marks = 0;
-+	q->memory_used = 0;
-+	q->max_memory_used = 0;
-+	dualpi2_reset_c_protection(q);
-+}
-+
-+static void dualpi2_destroy(struct Qdisc *sch)
-+{
-+	struct dualpi2_sched_data *q = qdisc_priv(sch);
-+
-+	q->pi2_tupdate = 0;
-+	hrtimer_cancel(&q->pi2_timer);
-+	if (q->l_queue)
-+		qdisc_put(q->l_queue);
-+	tcf_block_put(q->tcf_block);
-+}
-+
-+static struct Qdisc *dualpi2_leaf(struct Qdisc *sch, unsigned long arg)
-+{
-+	return NULL;
-+}
-+
-+static unsigned long dualpi2_find(struct Qdisc *sch, u32 classid)
-+{
-+	return 0;
-+}
-+
-+static unsigned long dualpi2_bind(struct Qdisc *sch, unsigned long parent,
-+				  u32 classid)
-+{
-+	return 0;
-+}
-+
-+static void dualpi2_unbind(struct Qdisc *q, unsigned long cl)
-+{
-+}
-+
-+static struct tcf_block *dualpi2_tcf_block(struct Qdisc *sch, unsigned long cl,
-+					   struct netlink_ext_ack *extack)
-+{
-+	struct dualpi2_sched_data *q = qdisc_priv(sch);
-+
-+	if (cl)
-+		return NULL;
-+	return q->tcf_block;
-+}
-+
-+static void dualpi2_walk(struct Qdisc *sch, struct qdisc_walker *arg)
-+{
-+	unsigned int i;
-+
-+	if (arg->stop)
-+		return;
-+
-+	/* We statically define only 2 queues */
-+	for (i = 0; i < 2; i++) {
-+		if (arg->count < arg->skip) {
-+			arg->count++;
++	while ((skb = dequeue_packet(sch, q, &credit_change, now))) {
++		if (!q->drop_early && must_drop(sch, q, skb)) {
++			drop_and_retry(q, skb, sch,
++				       SKB_DROP_REASON_QDISC_CONGESTED);
 +			continue;
 +		}
-+		if (arg->fn(sch, i + 1, arg) < 0) {
-+			arg->stop = 1;
-+			break;
++
++		if (skb_in_l_queue(skb) && do_step_aqm(q, skb, now)) {
++			qdisc_qstats_drop(q->l_queue);
++			drop_and_retry(q, skb, sch,
++				       SKB_DROP_REASON_DUALPI2_STEP_DROP);
++			continue;
 +		}
-+		arg->count++;
++
++		q->c_protection_credit += credit_change;
++		qdisc_bstats_update(sch, skb);
++		break;
 +	}
++
++	if (q->deferred_drops_cnt) {
++		qdisc_tree_reduce_backlog(sch, q->deferred_drops_cnt,
++					  q->deferred_drops_len);
++		q->deferred_drops_cnt = 0;
++		q->deferred_drops_len = 0;
++	}
++	return skb;
 +}
 +
-+/* Minimal class support to handler tc filters */
-+static const struct Qdisc_class_ops dualpi2_class_ops = {
-+	.leaf		= dualpi2_leaf,
-+	.find		= dualpi2_find,
-+	.tcf_block	= dualpi2_tcf_block,
-+	.bind_tcf	= dualpi2_bind,
-+	.unbind_tcf	= dualpi2_unbind,
-+	.walk		= dualpi2_walk,
-+};
-+
-+static struct Qdisc_ops dualpi2_qdisc_ops __read_mostly = {
-+	.id		= "dualpi2",
-+	.cl_ops		= &dualpi2_class_ops,
-+	.priv_size	= sizeof(struct dualpi2_sched_data),
-+	.peek		= qdisc_peek_dequeued,
-+	.init		= dualpi2_init,
-+	.destroy	= dualpi2_destroy,
-+	.reset		= dualpi2_reset,
-+	.change		= dualpi2_change,
-+	.owner		= THIS_MODULE,
-+};
-+
-+static int __init dualpi2_module_init(void)
-+{
-+	return register_qdisc(&dualpi2_qdisc_ops);
-+}
-+
-+static void __exit dualpi2_module_exit(void)
-+{
-+	unregister_qdisc(&dualpi2_qdisc_ops);
-+}
-+
-+module_init(dualpi2_module_init);
-+module_exit(dualpi2_module_exit);
-+
-+MODULE_DESCRIPTION("Dual Queue with Proportional Integral controller Improved with a Square (dualpi2) scheduler");
-+MODULE_AUTHOR("Koen De Schepper <koen.de_schepper@nokia-bell-labs.com>");
-+MODULE_AUTHOR("Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>");
-+MODULE_AUTHOR("Olga Albisser <olga@albisser.org>");
-+MODULE_AUTHOR("Henrik Steen <henrist@henrist.net>");
-+MODULE_AUTHOR("Olivier Tilmans <olivier.tilmans@nokia.com>");
-+
-+MODULE_LICENSE("Dual BSD/GPL");
-+MODULE_VERSION("1.0");
+ static s64 __scale_delta(u64 diff)
+ {
+ 	do_div(diff, 1 << ALPHA_BETA_GRANULARITY);
+@@ -648,6 +1110,8 @@ static struct Qdisc_ops dualpi2_qdisc_ops __read_mostly = {
+ 	.id		= "dualpi2",
+ 	.cl_ops		= &dualpi2_class_ops,
+ 	.priv_size	= sizeof(struct dualpi2_sched_data),
++	.enqueue	= dualpi2_qdisc_enqueue,
++	.dequeue	= dualpi2_qdisc_dequeue,
+ 	.peek		= qdisc_peek_dequeued,
+ 	.init		= dualpi2_init,
+ 	.destroy	= dualpi2_destroy,
 -- 
 2.34.1
 
