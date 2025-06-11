@@ -1,193 +1,228 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2079.outbound.protection.outlook.com [40.107.220.79])
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3C62472A3;
-	Wed, 11 Jun 2025 21:48:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.79
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749678511; cv=fail; b=l3WzDH5DOb+PfL5wwfbh8eiNBNW0xMN2F40ApjFCBLCSnWMeThkcfWkH8HgV9qKI6Ns8nMsVqebs3A4X/vh5YTFHAg2UmJHrWLDwWKANZFW8NWcGKj4UmvRTTaFT0/5eM8lN+Sl4/rJkgHljI5TLyAb5Pgo19FKhOBwd9TL8TXk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749678511; c=relaxed/simple;
-	bh=7jcW2ixufnjRElbGLWqTHHQsmuubN1g7u8MQAjN9l3I=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NcUIn3EgVfk2PXEKg/p1aPQPMZmg9l/GzD+/J66I2oksfTOjQ5u0t/2ierzmD8NCJpeqWI72jUD78q97FfW2arwyic3i/BA+p16z44dkbcUg/30tkpFvzgv0zBOi8TQEfpi4VGRaacyzOShUzGbmaChyVlOO3DL0Ehyxu783DSQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=fail (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hTKn8bA9 reason="signature verification failed"; arc=fail smtp.client-ip=40.107.220.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B3B247DF9;
+	Wed, 11 Jun 2025 21:49:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749678581; cv=none; b=qHF8hKI9oyWkGxiCKRpzIcXR7bNDpVkgxi2jXWV7izp/Y3blWDoDfrgrOS2zH+CpLf8XhjO8FIlRspbrQHmWG1SMVhrKhj3IhtX4FL7OUlenZ3I7Jey6VOXDvn4/5AgYhUZuEEX1L33koksgDY/nVHg/j4NPJgT66flE5pRDTa4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749678581; c=relaxed/simple;
+	bh=OtDz+EVCzM/AZL6dZm9vgoBTwCYbhlzoU3pVGOM3SQ8=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TDbzNzSdzn4H5kmYAky5VQ/nWdVs2ZcCodfYKT6/+OIZeB86s47tUV69eEmf19lpFf2x4JXBHPD74Z0bXIitFv6G/9jm3mGGg3/kCN4/GAb7tKF91L14bdggyaVAZlAkgSUZv7qPDlI2E+RoHRRYo6Se7MRzoFVVUujTk7IyVAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=jUf+PHhC; arc=none smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hTKn8bA9"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FzDIwYmaE/MJaRaDKzmC4bmuiq/oCww+vbdehlwcuU2qwrCfYKn3FBcUzKMtIGA/sjCkXKjYtNMQeiqO9CQ9NqRx2AfsOMP6aF74yP1qE6L5LF3aagbWl9otx8HGV6cq8qYNroAdalXnoiV4X/JdwDvH2aGCWjz/EL1Cmc7DOIkjFPoZEmpEMW8MunQiP53F9iuDQGiNaX6JiewUbatxh24RctkhXoRCkibBeCs+KGdOD+uipZmJFbKYbzaEA4kDsd8tded1nZWC7HNVjfhK1c0+oQn9TqY0nbKAlmFr5LnzosM911Tc1HiAd7gSrg20X84xYjhU81lyd7jAhtwPqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i6kJu/b9VdoFV4YStMWf42p7cEe9aXtQ0vh+A0YyPPU=;
- b=AeSE0KgwefWDbFCRsE1o4I7trSjfXVKb3wPxNxLbo0Y47hijMCxsfNbICpuIBZGuTty6V6jPIHUUP7xXJw3gWxnzrWoUj64gUIPZY/im9Pkqq28FnYwx3oUCgNQwLL4YZQPSZ4oIWq7oFO+AGpSJU8ryaRlwUMNYvdje19Fjxb/bISydYTKVbHyOz0CP6uxkrRGFOr8LlSeNkdbzVk+O1zCQZjxTP+9pixMTjCasnvSCsEt7biIZAm5OGJO8CtyPUvK1g8iyJA2dxCUQLQJ6t/N109cIcKkmOQW8vEXFscWI1lpVFy6lQShdCmKU71qJvbmMtaLyW6c4RCiNrabgMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linutronix.de smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i6kJu/b9VdoFV4YStMWf42p7cEe9aXtQ0vh+A0YyPPU=;
- b=hTKn8bA9mE6iRBKWtQOBHeNwd7bF2CDiqVsjhJWEdlVx6U0tMydW7IzJaoZxlSN1bIAdWJX6rp9VSAQVs/8GnJdZa4eaq/1ERnnJ34axAt/RAgvDhCTiktjMiA224yOSkJsxDkMgRAPn7tqIZEK5D6+AlaFjKu1yD3LTl7p6s0iokM0eO+/T8P5cmFhxNqm0lwGg8cMFPtyOulHh+24JOYmgnDmGutd4bEap9/906Nv7YYAbFuYtlHqsuR2k7Zcyx1xJSjULaZn1RiPJrOylmwf9srRKm5NDA3Yi2HZFozn0ySdd6PIdEPute9B8TK4NulPfijMqp2Bw+AcUNn3WDw==
-Received: from BL6PEPF0001641A.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:22e:400:0:1004:0:6) by DS5PPF5FAA0E762.namprd12.prod.outlook.com
- (2603:10b6:f:fc00::651) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.33; Wed, 11 Jun
- 2025 21:48:25 +0000
-Received: from BL6PEPF0001AB53.namprd02.prod.outlook.com
- (2a01:111:f403:f903::3) by BL6PEPF0001641A.outlook.office365.com
- (2603:1036:903:4::a) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.19 via Frontend Transport; Wed,
- 11 Jun 2025 21:48:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL6PEPF0001AB53.mail.protection.outlook.com (10.167.241.5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8835.15 via Frontend Transport; Wed, 11 Jun 2025 21:48:25 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 11 Jun
- 2025 14:48:05 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 11 Jun
- 2025 14:48:05 -0700
-Received: from nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Wed, 11 Jun 2025 14:48:02 -0700
-Date: Wed, 11 Jun 2025 14:47:58 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-CC: Jason Gunthorpe <jgg@nvidia.com>, Shuah Khan <shuah@kernel.org>, "Shuah
- Khan" <skhan@linuxfoundation.org>, Willy Tarreau <w@1wt.eu>, Thomas
- =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>, Kees Cook
-	<kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry
-	<wad@chromium.org>, Mark Brown <broonie@kernel.org>, Muhammad Usama Anjum
-	<usama.anjum@collabora.com>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 09/14] selftests: harness: Move teardown conditional
- into test metadata
-Message-ID: <aEn5jmXZbC5hARGv@nvidia.com>
-References: <20250505-nolibc-kselftest-harness-v4-0-ee4dd5257135@linutronix.de>
- <20250505-nolibc-kselftest-harness-v4-9-ee4dd5257135@linutronix.de>
- <aEfVYQaid5uOHB+Y@nvidia.com>
- <20250610130817-253d2b2d-030a-4eda-91fc-3edb58a4f549@linutronix.de>
- <20250610120902.GB543171@nvidia.com>
- <aEh+DNmbZrqg6rHR@nvidia.com>
- <20250610234657.GO543171@nvidia.com>
- <aEkqtfcOJDrxAAcs@nvidia.com>
- <20250611093942-f6c65a06-c72a-4451-aa1e-8cb8de0d69cb@linutronix.de>
- <aEm6tuzy7WK12sMh@nvidia.com>
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="jUf+PHhC"
+Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55BGUBYc023981;
+	Wed, 11 Jun 2025 21:06:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=SnGev3U/yD8kg9SDWZeTHMimn/M3rVYK94ITsbFxIR8=; b=jUf+
+	PHhC61HkOauLm/IHn1MrMfklj66WPTUyVwKVrrnjGYbyLsOJUa3I1oBGYIO3tnES
+	4falPcmwRgXzCZMs1KR37H3WPJ4WgyNa69LXtbChVUy50FqTGyzlUUfATRHz3ozd
+	kStvB0TP8Zw21ASY7GItvLH4FEXEZdAWKTTZGbUWzX5nqrUov52ZKcOeGN1Fcgty
+	b3e/XsQn0hjPymzgaHUQkPRjDsYcxzrTGAV+9VcPM4kRz771sEIxyl2LZNO9cdvr
+	0D4tlQv7hdvK4eDeCwsXE55DwATxmME3K/neD1Dj12wl8G1RXKvdv6SvkIfx7Urr
+	GOu9hyKqReB2egUcNA==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 476ps7r7n7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Jun 2025 21:06:41 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH007.crowdstrike.sys (10.100.11.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 11 Jun 2025 21:06:36 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <qmo@kernel.org>
+CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <eddyz87@gmail.com>, <haoluo@google.com>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <justin.deschamp@crowdstrike.com>, <kpsingh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <mark.fontana@crowdstrike.com>, <martin.lau@linux.dev>,
+        <mykolal@fb.com>, <sdf@fomichev.me>, <shuah@kernel.org>,
+        <slava.imameev@crowdstrike.com>, <song@kernel.org>,
+        <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Use appropriate permissions for map access
+Date: Thu, 12 Jun 2025 07:06:33 +1000
+Message-ID: <20250611210633.92084-1-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <c3b403f5-4849-44f3-82cb-b0b506b10138@kernel.org>
+References: <c3b403f5-4849-44f3-82cb-b0b506b10138@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aEm6tuzy7WK12sMh@nvidia.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB53:EE_|DS5PPF5FAA0E762:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2da97f07-0502-4f81-6547-08dda931b1ad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|7416014|36860700013|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?iso-8859-1?Q?jraXD+arxW0EHB9EvXE+3yFtuh1aOyzjIkq/Mb1aBdZ76nCdBLbzvmw3rQ?=
- =?iso-8859-1?Q?IkdHJNvLkzNMCqKmMFxk2RwS0Xm3p9dtv60M1JxlYUYHghflsDEVzHPuSf?=
- =?iso-8859-1?Q?bf8IRl2thZW+jrveBy5bq/LEU5v1twlJZ3PEPTRYzoQiSymvNsEvydW1+S?=
- =?iso-8859-1?Q?LEslyTCgXcQ4D14QMyfgtpjThu15Z2eoVVp9+tas9jtrVG6Y7uyAqtMASf?=
- =?iso-8859-1?Q?gp/unIdDrIQ1zxxLNCefHAAVW9551pjxQDe+r4LtRUizPtGl8kICKYocD0?=
- =?iso-8859-1?Q?tK6b5EkspOSWtqpZekw3LX4KbQMGVYTquvpoJr8gF+hPDw8vB82seLwEUt?=
- =?iso-8859-1?Q?57p5K1Uzqqsx03W6i2W7ahBbNpLHSYQSBttjTV5+OY0jPDz7KMUNGgQPLW?=
- =?iso-8859-1?Q?86chY5SEtMV/NNf/IDOB1RWi8Xrh7R2qOeeNrK6fecuw2ccDlD5KK7ifpD?=
- =?iso-8859-1?Q?OuLjlpZ3XOqaj8xobl0N+OMVVbDxdqD5wFPZ99O5+W0n566i/3mprJjtvo?=
- =?iso-8859-1?Q?ZVGfn3s3aVQmLG6OblUbzSmSC7BAfLAyYQsbbvO1o1F43iZ1b4UXmE3Pfd?=
- =?iso-8859-1?Q?RceD7tu66W5HSq7vEkuXlHvxSmxPVWTCoSQArkDOQinnnofNZXkJ0dmvf1?=
- =?iso-8859-1?Q?EQn/lyjiPvSEFuHZ1maLFzjmcI/RBXT5VphksN8CJ5A/3VZzK1oNaZYDkH?=
- =?iso-8859-1?Q?sHQPdr94JhOCXJfqJZ+IMP7yorPUtt3W7LXCZpRsVDCLfSGvbB6NPrVyul?=
- =?iso-8859-1?Q?GTlzdI+5CRVlSn8qPH6TdQ6HWlGNSkzg7qfOGFY/sZjUGtk1gGl1+VpdCK?=
- =?iso-8859-1?Q?w5VrLpSP7EAGxL1RV9Jk/t5wVMkkidRXghK42kLpsXeVyRDHp/xtbHY5h9?=
- =?iso-8859-1?Q?/yfDUXXDRF5NuDTDHRc6hPmuzOpynII2vKDXDwSq87+pFpS3o7FooC7znK?=
- =?iso-8859-1?Q?bKdYqaWP3JiQcGfG+oz7Tu5yTjphajZGPCNh1xb8F7BSXyjl7Ole6qe61P?=
- =?iso-8859-1?Q?m9gGDGZRgvji30tWVTyUPLIY7JrIZWNI2RSCJj/3ILdczfwvgtJxx63Byk?=
- =?iso-8859-1?Q?hdIgzeaqXcGidA+V+q+J1h1PyqLly//5JnBMm6kSeNJ2P2wTdNToP0d1jj?=
- =?iso-8859-1?Q?CGM6oqHlIams9E2lPKYcsgc+n1z4+xsFzeBZXS0cJ/pEXvlfrK9yhV8XCO?=
- =?iso-8859-1?Q?jHtPFrfV84M1Vfx/qDrg6FoT4XmtFA58EIaVq8bIfLC6ltkg9XLMVvvDpg?=
- =?iso-8859-1?Q?i8PvGATEVsInU2PcqOOgZPBgdgQg5mUokibXRY45Eozl5eR14PedoBxxdG?=
- =?iso-8859-1?Q?6kv+Fsv9XWYCrzKvnkAvbU+oGEao6MvZdHksSSFgKAityAaK+fWsW4Wphl?=
- =?iso-8859-1?Q?YFLTJCLELS9iCv+FRXuyHvN+QcFFYSolV9rsVo969OYpB+TfUKx6PX2sCc?=
- =?iso-8859-1?Q?/xzY4AhJa05maOOkuKKHvbjkLNb5wPoo1ZliY7Y5ZC/nryBb4fSMyi5vz1?=
- =?iso-8859-1?Q?OZ4urBj50GbnlX8tLEHtUJxmBn2W3UwdDrh/umvMATokNAciidQpGkywoo?=
- =?iso-8859-1?Q?sZL+X7l/1SimUd8MSMka1JDbw5so?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2025 21:48:25.4335
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2da97f07-0502-4f81-6547-08dda931b1ad
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB53.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PPF5FAA0E762
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH006.crowdstrike.sys (10.100.11.70) To
+ 04WPEXCH007.crowdstrike.sys (10.100.11.74)
+X-Disclaimer: USA
+X-Proofpoint-ORIG-GUID: ApAh2UNTX3bCMpO1EKz6kR3-5nHK5-ov
+X-Proofpoint-GUID: ApAh2UNTX3bCMpO1EKz6kR3-5nHK5-ov
+X-Authority-Analysis: v=2.4 cv=OeyYDgTY c=1 sm=1 tr=0 ts=6849efe1 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=6IFa9wvqVegA:10 a=pl6vuDidAAAA:8 a=j6b8ci30a58VJQJFYksA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjExMDE3OCBTYWx0ZWRfX1mcB1tCRvOqP
+ 2JrS/+x3UxZWySTQe5gosarprNVi12I2fnWaZ2dL7d6+RphZkr4hlcgEcesYwLDiIZTDKBf/iKy
+ gx/nPYISkHZ8EQh7ACp6KtnkVL8q40wRqx7gK/VBa0Jw3RGe5wJ4AmFNnbQABEypkC/6um/6hwU
+ Wk9BPQVTe6c1oL/AwR5m/ZykB3rBzEVwmJO9MNfeQAXVs4OlVVJX31pYDfuhx+ic925lwuBVmB4
+ 7xdTow7zBVmgicFLZZDg5tGRTk5TKzBvxk9K0xjmarPe93yqSKAOnKqWr15cmfLeQZBcd92xTBE
+ VEd5/cuKA3PK63cN+dJ7zYlu6TBBhlXeQmFCQ7P+9DRxXhkHIkJ2ny+NlqXRY1IwMMEld2yohng
+ zjReRLJ1P8MFpiMsBPBlgmU3AMAKnf5LRZ2AGTj7BIAHe5EZ3Zi0fosabjwrdQL1PiPVLI4A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-11_09,2025-06-10_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 suspectscore=0
+ malwarescore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0
+ impostorscore=0 mlxscore=0 clxscore=1015 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2506110178
 
-On Wed, Jun 11, 2025 at 10:19:56AM -0700, Nicolin Chen wrote:
-> On Wed, Jun 11, 2025 at 10:04:35AM +0200, Thomas Weißschuh wrote:
-> > On Wed, Jun 11, 2025 at 12:05:25AM -0700, Nicolin Chen wrote:
-> > > 2) parent doesn't seem to wait for the setup() to complete..
-> > 
-> > setup() is called in the child (L431) right before the testcase itself is
-> > called (L436). The parent waits for the child to exit (L439) before unmapping.
-> > 
-> > > 3) when parent runs faster than the child that is still running
-> > >    setup(), the parent unmaps the no_teardown and set it to NULL,
-> > >    then UAF in the child, i.e. signal 11?
-> > 
-> > That should never happen as the waitpid() will block until the child running
-> > setup() and the testcase itself have exited.
-> 
-> Ah, maybe I was wrong about these narratives. But the results show
-> that iommufd_dirty_tracking_teardown() was not called in the failed
-> cases:
+> > Modify several functions in tools/bpf/bpftool/common.c to allow
+> > specification of requested access for file descriptors, such as
+> > read-only access.
+> >
+> > Update bpftool to request only read access for maps when write
+> > access is not required. This fixes errors when reading from maps
+> > that are protected from modification via security_bpf_map.
+> >
+> > Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
+>
+>
+> Thanks for this!
+>
+> I think the topic of map access in bpftool has been discussed in the
+> path, but I can't remember what we said or find it again - maybe I don't
+> remember correctly. Looks good to me overall.
+>
+> One question: How thoroughly have you tested that write permissions are
+> necessary for the different cases? I'm asking because I'm wondering
+> whether we could restrict to read-only in a couple more cases, see
+> below. (At the end of the day it doesn't matter too much, it's fine
+> being conservative and conserving write permissions for now, we can
+> always refine later; it's already an improvement to do read-only for the
+> dump/list cases).
 
-Here is a new finding...
 
-As you replied that I was wrong about the race between the parent
-and the child processes, the parent does wait for the completion
-of the child. But the child exited with status=139 i.e. signal 11
-due to UAF, which however is resulted from the iommufd test code:
+The goal of this patch was to fix bpftool errors we experienced on our systems.
+The efforts were focused only on changes to the affected subset of map commands.
 
-FIXTURE_SETUP(iommufd_dirty_tracking)
-{
-	....
-	vrc = mmap(self->buffer, variant->buffer_size, PROT_READ | PROT_WRITE,
-	^
-	|
-        after this line, the _metadata->no_teardown is set to NULL.
 
-So, the child process accessing this NULL pointer crashed with the
-signal 11..
+> > +		/* Get an fd with the requested options. */
+> > +		close(fd);
+> > +		fd = bpf_map_get_fd_by_id_opts(id, opts);
+> > +		if (fd < 0) {
+> > +			p_err("can't get map by id (%u): %s", id,
+> > +			      strerror(errno));
+> > +			goto err_close_fds;
+> > +		}
+>
+>
+> We could maybe skip this step if the requested options are read-only, no
+> need to close and re-open a fd in that case?
 
-And I did a further experiment by turning "bool *no_teardown" to a
-"bool no_teardown". Then, the mmap() in iommufd_dirty_tracking will
-set _metadata->teardown_fn function pointer to NULL..
 
-Thanks
-Nicolin
+I agree. The change will be submitted with version 3.
+
+
+> > -int map_parse_fds(int *argc, char ***argv, int **fds)
+> > +int map_parse_fds(int *argc, char ***argv, int **fds, __u32 open_flags)
+> >  {
+> > +	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts);
+> > +
+> > +	if (open_flags & ~BPF_F_RDONLY) {
+> > +		p_err("invalid open_flags: %x", open_flags);
+> > +		return -1;
+> > +	}
+>
+>
+> I don't think we need this check, the flag is never passed by users. If
+> you want to catch a bug, use an assert() instead?
+
+
+I agree. This check is replaced with an assert and will be submitted with v3.
+
+
+> > diff --git a/tools/bpf/bpftool/iter.c b/tools/bpf/bpftool/iter.c
+> > index 5c39c2ed36a2..ad318a8667a4 100644
+> > --- a/tools/bpf/bpftool/iter.c
+> > +++ b/tools/bpf/bpftool/iter.c
+> > @@ -37,7 +37,7 @@ static int do_pin(int argc, char **argv)
+> >  				return -1;
+> >  			}
+> >  
+> > -			map_fd = map_parse_fd(&argc, &argv);
+> > +			map_fd = map_parse_fd(&argc, &argv, 0);
+>
+>
+> Do you need write permissions here? (I don't remember.)
+
+
+Iterator requires only read access. I changed it to BPF_F_RDONLY for v3.
+An iterator test is added to v3.
+
+
+> > -	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
+> > +	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, BPF_F_RDONLY);
+>
+>
+> This one is surprising, don't you need write permissions to delete an
+> element from the map? Please double-check if you haven't already, I
+> wouldn't want to break "bpftool map delete".
+>
+> I note you don't test items deletion in your tests, by the way.
+
+
+Right, the delete command requires write access. I changed it and added
+an item deletion test to v3.
+
+
+> >  static int do_pin(int argc, char **argv)
+> >  {
+> >  	int err;
+> >  
+> > -	err = do_pin_any(argc, argv, map_parse_fd);
+> > +	err = do_pin_any(argc, argv, map_parse_read_only_fd);
+> >  	if (!err && json_output)
+> >  		jsonw_null(json_wtr);
+> >  	return err;
+> > @@ -1319,7 +1329,7 @@ static int do_create(int argc, char **argv)
+> >  			if (!REQ_ARGS(2))
+> >  				usage();
+> >  			inner_map_fd = map_parse_fd_and_info(&argc, &argv,
+> > -							     &info, &len);
+> > +							     &info, &len, 0);
+>
+>
+> Do you need write permissions for the inner map's fd? This is something
+> that could be worth checking in the tests, as well.
+
+The inner map fd can be created with read only access. I changed it and added
+a test for map-of-maps creation to v3.
+
+
+> > @@ -128,7 +128,8 @@ int do_event_pipe(int argc, char **argv)
+> >  	int err, map_fd;
+> >  
+> >  	map_info_len = sizeof(map_info);
+> > -	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len);
+> > +	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len,
+> > +				       0);
+>
+>
+> This one might be worth checking, too.
+
+
+An event pipe map fd requires write access as the map is updated by bpf_map_update_elem
+inside __perf_buffer__new .
+
+
