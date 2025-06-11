@@ -1,81 +1,64 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311FC221F1C;
-	Wed, 11 Jun 2025 20:19:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D727A1B0F19;
+	Wed, 11 Jun 2025 20:40:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749673199; cv=none; b=GSDsu1l0Pdb/lqPV+7UaCWljWgUs7JkS8VW9fe3ui6oldlrjySi+Py1QxNwH3VaKgYRDOiBrjdnfOYzjwNb0Mr9faICaWE6o+qKSadF7ro2nJirsHuQc0sRlXhH1UNs/CEqBggihD0TbQPMjlvSP2rOKopg9dngQT06SuOtHrv0=
+	t=1749674441; cv=none; b=l8BAfxhjRbbm3MKfAo1clgGKanGi1qTSF4vRTW986CzksK0pVdLxW9YybK6GU5rzyB4IusR0xxgjATMt3ixt3pUJb1DtqyeB9MdMXmV3IsWd+Y5d6eBhYQGx3TeTBWaRA2SfPjLfLxvawA+1qnFDZftALAt216ZOSNcDL50eKdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749673199; c=relaxed/simple;
-	bh=sVPJNnU4KUdgzcWkpA0/cHyEhadQYNuxyP1hdsqxzbs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=LPhL8dZMW0Dps4GlpBwt5RcSeAD1pbG1kFgC+CtTJ9EEY2syVPfeq/fJNW2qW6SSuBYBH1mqTYzl+tDMNWcINPnpNy4rinJuWygaBVVAqQ3jf6RfuWgF4nGAn64BI862aPv41YRmvO5nPmBoT9lGtILYKPUfKSVXk0cBf00802A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NMuFaECk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749674441; c=relaxed/simple;
+	bh=uirVWt9rb13ek5yxqU0kG0tBN6Zipa/a8Qss9K4NP08=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sYLkj8p22gexdD3ndHVdiOLsxhAD1s5GoSKA71lVPBmMUyOx0EDF9+Ib0TQbeLD9rX8KJ/xspfa2zOfHzfWmmKi3BLsUnzj4dwhF2PPe9VyQAau1nkq3lXZHoX6+cnkC2OH+mPNRbWa0hZIpaa4zlAAVdwhOvKnQj1xPvHPfmJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Az4TPHLm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NMuFaECk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E65C4CEE3;
-	Wed, 11 Jun 2025 20:19:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Az4TPHLm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40462C4CEE3;
+	Wed, 11 Jun 2025 20:40:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749673198;
-	bh=sVPJNnU4KUdgzcWkpA0/cHyEhadQYNuxyP1hdsqxzbs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=NMuFaECkTyG3OMTtDySYQDoyUlHeHX4Lv9neEBaGb8qPWbjmFrohhi8Jk+6BNreCZ
-	 khX8woBUHD0XJPDbue2fIJ+iRvCBUDjrt2N5ZWIb6bn6SbBPFPrA2EWnaekuIiL5gQ
-	 cj4RT8zzd1XstyzPT+p49sTfXzrtp5XL8MLc/LXyBXOe5XYXhORIjiEh2oVZFiRDuc
-	 vtt91AsI4NKvDQ5x3VSDiaSUR114rLsGmpTnRM/wuceV2e8B5w/3BNDFAUcLc60421
-	 v5+4pKkun/8ZpCrRBvSIGoJyKpl8ZsFj2cz0qhXvZAz+N3gWVf7KrDtOXCns4cKfWD
-	 rO5EsQZmvkBaQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAE4B380DBE9;
-	Wed, 11 Jun 2025 20:20:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1749674440;
+	bh=uirVWt9rb13ek5yxqU0kG0tBN6Zipa/a8Qss9K4NP08=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Az4TPHLmHMfaLzHXZZo1Ngmr/4uyeu35qgcp/QJLbYVTof+ctGIwnYQII+473UU81
+	 snqTDX411u4Qf52NN/iOnkE0GkniFLRFXWNmLbhfhmiRmxMVpfraywXku9yF42fAsX
+	 ymWu2ZIu2sByBs2WZl+8x+sEJXUQHyvGHtpz4ZsrluO2E7jRgMvuL0qpTPSFgKVFDS
+	 a+15vqcdnu0XbEVRHXMrUny0/XUiwkoy0omczR7bWl9S1feBi1JybNMP+WE8BEqSQr
+	 07Truc8Xzm4WbDzDmWHLvfDGODPVlwqJwoDUyl0QESBR/e+KVjUoVabO/UXN3gvZfx
+	 QLcdHkEkCErsg==
+Date: Wed, 11 Jun 2025 13:40:39 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Gustavo Luiz Duarte <gustavold@gmail.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH net-next 3/5] netconsole: append msgid to sysdata
+Message-ID: <20250611134039.6f5430fe@kernel.org>
+In-Reply-To: <aEmhA0QoZy3LbAu+@gmail.com>
+References: <20250611-netconsole-msgid-v1-0-1784a51feb1e@gmail.com>
+	<20250611-netconsole-msgid-v1-3-1784a51feb1e@gmail.com>
+	<aEmhA0QoZy3LbAu+@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v10] selftests/vsock: add initial vmtest.sh for
- vsock
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174967322875.3469458.13217210613857945716.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Jun 2025 20:20:28 +0000
-References: <20250609-vsock-vmtest-v10-1-7f37198e1cd4@gmail.com>
-In-Reply-To: <20250609-vsock-vmtest-v10-1-7f37198e1cd4@gmail.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: sgarzare@redhat.com, stefanha@redhat.com, shuah@kernel.org,
- kvm@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 09 Jun 2025 09:39:24 -0700 you wrote:
-> This commit introduces a new vmtest.sh runner for vsock.
+On Wed, 11 Jun 2025 08:30:11 -0700 Breno Leitao wrote:
+> >  static int prepare_extradata(struct netconsole_target *nt)
+> >  {
+> > -	u32 fields = SYSDATA_CPU_NR | SYSDATA_TASKNAME;
+> > +	u32 fields = SYSDATA_CPU_NR | SYSDATA_TASKNAME | SYSDATA_MSGID;  
 > 
-> It uses virtme-ng/qemu to run tests in a VM. The tests validate G2H,
-> H2G, and loopback. The testing tools from tools/testing/vsock/ are
-> reused. Currently, only vsock_test is used.
-> 
-> VMCI and hyperv support is included in the config file to be built with
-> the -b option, though not used in the tests.
-> 
-> [...]
+> This might be gone now, according to your last patch.,
 
-Here is the summary with links:
-  - [net-next,v10] selftests/vsock: add initial vmtest.sh for vsock
-    https://git.kernel.org/netdev/net-next/c/a4a65c6fe08b
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Right, please wait until tomorrow afternoon (Pacific Time), then rebase
+and repost. We will merge the net tree into net-next after we send the
+pending fixes to Linus. Otherwise by the time we try to merge this it
+will no longer apply..
