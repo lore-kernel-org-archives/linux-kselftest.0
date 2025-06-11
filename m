@@ -1,200 +1,147 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAB01B0F19;
-	Wed, 11 Jun 2025 20:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC6A1A8F82
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 21:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749674455; cv=none; b=A+986G2SUpQVP/DbhT04+KLOzrsT3BUCTlEuAUBDaF4TAT7LtbpfEHSphh3BRYMZuT7UPpSmqwJq8LMM2pMG3Arvv9wJyeDHwO6/r9v4Yq3lksJz6RHhszos+nWN8CboxV9RQoBz4anlkzpMnSeNspQHSl+wmDeHDmqEtMtPdYE=
+	t=1749676617; cv=none; b=oUgI5OCNWWFfVPL5rXP7ccAxaua6Y1ek0VDY35bRQkgvmCM5iFMGY4XptJABYmUpq76lOPh6YRZN+C5sQjl16H99gWL6N0aw+C7/Hu9qxnhyV4mDnnArk7KXBcKrnz9kYyzHJqr3Uwe2Dk3jhPIBLqpmPGM0IvY631M1I2IfF7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749674455; c=relaxed/simple;
-	bh=KCDA6Zq4eciz2ZLQLHx4SDBnp9mfmlLvEJstbWkDAhU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:Content-Type:
-	 MIME-Version; b=MpdgcYGWztWkMfsMCIo09HOdsRSuQuum20xaejSGoujwWkN7I9+lFF3sO1O0FUHnoNspnEBj/vEU/CrNZ5s1GzvSXG5wKiYq5JwcZt5IHiIa30ZADIchSGn53K2xN5LTjTID79BnkuQ92w74n7krXzFcwUh0rQ3OklsNOhRz9H4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=XJkWT7MO; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1749676617; c=relaxed/simple;
+	bh=NECYWsPH7RKAtQbRL0XnwHUNxi8qMBhhQIcgYAF72FU=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=AqefCtaYxc1nf0F2E5VbUIisRhwHxmdCoM5SRgMkH8tDcaao/C5LpC6MKw9dZKu99UwN7MdOttuThJQA8rCv/vbe8ELn7WC3Q/BkOrW8cz/XHStoKtEnAbyQNlbWO9s4bRtVLcoBlrgPjs8Oj/dy3gXh1PzoNmgimiR7+DUDV0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--afranji.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jYGZKaX5; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--afranji.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="XJkWT7MO"
-Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55BK1lZA001834;
-	Wed, 11 Jun 2025 20:40:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-id:content-transfer-encoding:content-type:date
-	:from:in-reply-to:message-id:mime-version:subject:to; s=default;
-	 bh=KCDA6Zq4eciz2ZLQLHx4SDBnp9mfmlLvEJstbWkDAhU=; b=XJkWT7MO7Apv
-	0C+8QWuriw6f6IBx2QmCGGZWMn6MIlv8lHgzjSo3/H+op48zJ0baKFESE2bLiwuB
-	Kk//QLzHTzNrIVk3oRoxJJBhG2WxEm3LZF0PsgYLT+FrF6zt+e9zSfo72To9JLY7
-	rg9TEU9YoAK9RXE0xuzOiNaw6A2wjlAzVYo++hxcTN37IdR50gIsrHAKWI7L5bVt
-	YJQq+W52f48TfiRy9NRKJzgGd+tsSZ+TYdc2dUFObaYqyfdiw3vTSB6NlSpYqMf+
-	JIJ3hzOIS8HbJdFywM4ralW6pNU81LtToY2ptH3NoXAr1mOUmc4BiPP6OAKNimuS
-	VwGALzAFOQ==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 47602mcqbr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Jun 2025 20:40:13 +0000 (GMT)
-Received: from 04WPEXCH007.crowdstrike.sys (10.100.11.74) by
- 04WPEXCH010.crowdstrike.sys (10.100.11.80) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 11 Jun 2025 20:40:12 +0000
-Received: from 04WPEXCH007.crowdstrike.sys ([fe80::ed14:528a:c622:96df]) by
- 04WPEXCH007.crowdstrike.sys ([fe80::ed14:528a:c622:96df%17]) with mapi id
- 15.02.1544.009; Wed, 11 Jun 2025 20:40:12 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: "qmo@kernel.org" <qmo@kernel.org>
-CC: "andrii@kernel.org" <andrii@kernel.org>,
-        "ast@kernel.org"
-	<ast@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "eddyz87@gmail.com"
-	<eddyz87@gmail.com>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "jolsa@kernel.org"
-	<jolsa@kernel.org>,
-        Justin Deschamp <justin.deschamp@crowdstrike.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>,
-        Mark Fontana
-	<mark.fontana@crowdstrike.com>,
-        "martin.lau@linux.dev"
-	<martin.lau@linux.dev>,
-        "mykolal@fb.com" <mykolal@fb.com>,
-        "sdf@fomichev.me"
-	<sdf@fomichev.me>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        Slava Imameev
-	<slava.imameev@crowdstrike.com>,
-        "song@kernel.org" <song@kernel.org>,
-        "yonghong.song@linux.dev" <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Use appropriate permissions for
- map access
-Thread-Topic: [PATCH bpf-next v2 1/2] bpftool: Use appropriate permissions for
- map access
-Thread-Index: AQHb2xEHLNWmNiS110S7Xob0pzp7lw==
-Date: Wed, 11 Jun 2025 20:40:12 +0000
-Message-ID: <3B98B12C-05AB-400E-ACB1-11D3CF188CE2@contoso.com>
-In-Reply-To: <<c3b403f5-4849-44f3-82cb-b0b506b10138@kernel.org>>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-disclaimer: USA
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <972AB3C86844BC4285F020E8DFD32A32@crowdstrike.sys>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jYGZKaX5"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3138e64b3f1so292074a91.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jun 2025 14:16:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1749676615; x=1750281415; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=LOsJ8fO8l9KNsBrYZMTXVSP3wn3/FZjJX+dB1opvLg8=;
+        b=jYGZKaX5LNUxWcMqgpTV2NUUw6oUIKcSxTfToAFaivjmEn8d7CqwqEVOwVR/R/rhn1
+         K4O+xQB+eY7biq1mo2zqTQjrh2Ww5R7Qp02ZR5bNwIv1aiJSegQYQFr+O9aUZqoY30QH
+         PIb1glceS0V9B9lFOsQOH/5V6dq3EyjhmKJ3SVDhHCL6Aa3NC9zdzKBwPCJpjQTedVBo
+         ZbTASs9ovX0+7C9PGI8Ki7xkYDxsX78bactpJCM05alqcsAaDmi+yo/aCRZc8AZg8MRm
+         2jqMJA7FO0f3xcs432+eMtmQJbhzRCV/+lGhNgNDLXmeXjB8dbmF3RQoqrjG/lEGXGHO
+         8sOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749676615; x=1750281415;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LOsJ8fO8l9KNsBrYZMTXVSP3wn3/FZjJX+dB1opvLg8=;
+        b=UCXuV9ssJ6evE8FyHk7Z3/8OH7LWY/N39CchxM7rwQU3vaxPftULiawuGRVhYJxXhf
+         9Td7ecizuJ0I9uqRW3u6d/NzJvyv+H6Iyrkbf67Zy2iTGf61Cx9NvR44CEqQ7BCQSdvB
+         sFShTp3gPtCu756OU4+eidqach9R2KqQoIEBxqvV9kiLUwhNnvzx58Ebvkr2iDNWZLP4
+         w2lFJndaV+hV5aYuIpTGJl5PKgualkq8UwKCVkS12xV73ismqiCBtumQXU7G3p5t18fG
+         f9uwaGoxHMDqxC7ExSQ3U0NH5GYZNHYYJ27Krj6bNwOhtMTMObl8OTSMpO0hA+eqoyYp
+         X6NA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwDXR5UKzwnLj1PyoGIfmi+SI7CPeSj/r5bZsFnSxtYKWfFdN6v6xF3kgJ06s9bqZMyJaq9wB2tHjv0MnEYGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp8xJANNqUn1tdkPhc0DY+2u0KQ5u3+162+MPGwYzxI7FP60iS
+	dCQ/llfMTiM2ok+nWCqCf94urrVeMeHNyrKbXKBrtPXp06N0I9YmiOgXNwnzS0uzU5OVHOexzg9
+	Pm+LyGvc4wQ==
+X-Google-Smtp-Source: AGHT+IF6qbV42OSMgEB/L2JOEi7E6FqjbgD2fsncm8r6Nqy7IPKImoaTuEIAXwkZoxK9ENk1RCq0tlxAz2mg
+X-Received: from pjh5.prod.google.com ([2002:a17:90b:3f85:b0:311:485b:d057])
+ (user=afranji job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3b8b:b0:311:e9ac:f5ce
+ with SMTP id 98e67ed59e1d1-313c08bbb9dmr724334a91.21.1749676615444; Wed, 11
+ Jun 2025 14:16:55 -0700 (PDT)
+Date: Wed, 11 Jun 2025 21:16:27 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Authority-Analysis: v=2.4 cv=QdVmvtbv c=1 sm=1 tr=0 ts=6849e9ad cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=xqWC_Br6kY4A:10 a=EjBHVkixTFsA:10 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10
- a=pl6vuDidAAAA:8 a=j6b8ci30a58VJQJFYksA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: XElHJLKqTw3-9czRKakvfgh9_tmvEqND
-X-Proofpoint-ORIG-GUID: XElHJLKqTw3-9czRKakvfgh9_tmvEqND
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjExMDE3NCBTYWx0ZWRfXxIRpR+2f8Fim
- i5Lr2L62ltc23Ofe5sGt5xYstSZ7PXrlpTQm68e5kWDXl1uUsf9jobwp8myVN8e7Nmtm7UrdHU0
- rrUZpcrFfPe/V5yU7B3nYVGFgzOuMKngSoDpNImrG5uvLC90OBhRSg2QpSgfC/oCbgOklhKPChm
- AOhnQj+5xlMt17mhGn1QXxaDN7YFwjYY16vCuVDjwRd3LRj3A1w9YDZmZIHslzSxDc90SO4tbLR
- u4hZsFtRmbbwVeoECdcaQ6tseYgyuUiT2TyF2hLUunYa2ND0A2F9JNjPZT0ZMRBHqAreWG5XlXe
- Uh466iKANscoC3V05qyIsG2xbC5od6hChC84bXBFPeqBQYRVn96FfC2rnQ+Usx4DyDdzggrmQc6
- cxE/DHjAuDq/jzOGcc8qgrw/wfNhgNVR7HnirILua8lFk1E8TT8ut8CMrgJyjUYOBJ6Nrfmo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-11_09,2025-06-10_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 phishscore=0 bulkscore=0 clxscore=1011 impostorscore=0
- mlxlogscore=999 lowpriorityscore=0 malwarescore=0 suspectscore=0 adultscore=0
- priorityscore=1501 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506110174
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.rc1.591.g9c95f17f64-goog
+Message-ID: <cover.1749672978.git.afranji@google.com>
+Subject: [RFC PATCH v2 00/10] Add TDX intra-host migration support
+From: Ryan Afranji <afranji@google.com>
+To: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
+Cc: sagis@google.com, bp@alien8.de, chao.p.peng@linux.intel.com, 
+	dave.hansen@linux.intel.com, dmatlack@google.com, erdemaktas@google.com, 
+	isaku.yamahata@intel.com, kai.huang@intel.com, mingo@redhat.com, 
+	pbonzini@redhat.com, seanjc@google.com, tglx@linutronix.de, 
+	zhi.wang.linux@gmail.com, ackerleytng@google.com, andrew.jones@linux.dev, 
+	david@redhat.com, hpa@zytor.com, kirill.shutemov@linux.intel.com, 
+	linux-kselftest@vger.kernel.org, tabba@google.com, vannapurve@google.com, 
+	yan.y.zhao@intel.com, rick.p.edgecombe@intel.com, 
+	Ryan Afranji <afranji@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-PiA+IE1vZGlmeSBzZXZlcmFsIGZ1bmN0aW9ucyBpbiB0b29scy9icGYvYnBmdG9vbC9jb21tb24u
-YyB0byBhbGxvdw0KPiA+IHNwZWNpZmljYXRpb24gb2YgcmVxdWVzdGVkIGFjY2VzcyBmb3IgZmls
-ZSBkZXNjcmlwdG9ycywgc3VjaCBhcw0KPiA+IHJlYWQtb25seSBhY2Nlc3MuDQo+ID4gDQo+ID4g
-VXBkYXRlIGJwZnRvb2wgdG8gcmVxdWVzdCBvbmx5IHJlYWQgYWNjZXNzIGZvciBtYXBzIHdoZW4g
-d3JpdGUNCj4gPiBhY2Nlc3MgaXMgbm90IHJlcXVpcmVkLiBUaGlzIGZpeGVzIGVycm9ycyB3aGVu
-IHJlYWRpbmcgZnJvbSBtYXBzDQo+ID4gdGhhdCBhcmUgcHJvdGVjdGVkIGZyb20gbW9kaWZpY2F0
-aW9uIHZpYSBzZWN1cml0eV9icGZfbWFwLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IFNsYXZh
-IEltYW1lZXYgPHNsYXZhLmltYW1lZXZAY3Jvd2RzdHJpa2UuY29tPg0KPg0KPg0KPiBUaGFua3Mg
-Zm9yIHRoaXMhDQo+DQo+IEkgdGhpbmsgdGhlIHRvcGljIG9mIG1hcCBhY2Nlc3MgaW4gYnBmdG9v
-bCBoYXMgYmVlbiBkaXNjdXNzZWQgaW4gdGhlDQo+IHBhdGgsIGJ1dCBJIGNhbid0IHJlbWVtYmVy
-IHdoYXQgd2Ugc2FpZCBvciBmaW5kIGl0IGFnYWluIC0gbWF5YmUgSSBkb24ndA0KPiByZW1lbWJl
-ciBjb3JyZWN0bHkuIExvb2tzIGdvb2QgdG8gbWUgb3ZlcmFsbC4NCj4NCj4gT25lIHF1ZXN0aW9u
-OiBIb3cgdGhvcm91Z2hseSBoYXZlIHlvdSB0ZXN0ZWQgdGhhdCB3cml0ZSBwZXJtaXNzaW9ucyBh
-cmUNCj4gbmVjZXNzYXJ5IGZvciB0aGUgZGlmZmVyZW50IGNhc2VzPyBJJ20gYXNraW5nIGJlY2F1
-c2UgSSdtIHdvbmRlcmluZw0KPiB3aGV0aGVyIHdlIGNvdWxkIHJlc3RyaWN0IHRvIHJlYWQtb25s
-eSBpbiBhIGNvdXBsZSBtb3JlIGNhc2VzLCBzZWUNCj4gYmVsb3cuIChBdCB0aGUgZW5kIG9mIHRo
-ZSBkYXkgaXQgZG9lc24ndCBtYXR0ZXIgdG9vIG11Y2gsIGl0J3MgZmluZQ0KPiBiZWluZyBjb25z
-ZXJ2YXRpdmUgYW5kIGNvbnNlcnZpbmcgd3JpdGUgcGVybWlzc2lvbnMgZm9yIG5vdywgd2UgY2Fu
-DQo+IGFsd2F5cyByZWZpbmUgbGF0ZXI7IGl0J3MgYWxyZWFkeSBhbiBpbXByb3ZlbWVudCB0byBk
-byByZWFkLW9ubHkgZm9yIHRoZQ0KPiBkdW1wL2xpc3QgY2FzZXMpLg0KDQoNClRoZSBnb2FsIG9m
-IHRoaXMgcGF0Y2ggd2FzIHRvIGZpeCBicGZ0b29sIGVycm9ycyB3ZSBleHBlcmllbmNlZCBvbiBv
-dXIgc3lzdGVtcy4NClRoZSBlZmZvcnRzIHdlcmUgZm9jdXNlZCBvbmx5IG9uIGNoYW5nZXMgdG8g
-dGhlIGFmZmVjdGVkIHN1YnNldCBvZiBtYXAgY29tbWFuZHMuDQoNCg0KPiA+ICsJCS8qIEdldCBh
-biBmZCB3aXRoIHRoZSByZXF1ZXN0ZWQgb3B0aW9ucy4gKi8NCj4gPiArCQljbG9zZShmZCk7DQo+
-ID4gKwkJZmQgPSBicGZfbWFwX2dldF9mZF9ieV9pZF9vcHRzKGlkLCBvcHRzKTsNCj4gPiArCQlp
-ZiAoZmQgPCAwKSB7DQo+ID4gKwkJCXBfZXJyKCJjYW4ndCBnZXQgbWFwIGJ5IGlkICgldSk6ICVz
-IiwgaWQsDQo+ID4gKwkJCSAgICAgIHN0cmVycm9yKGVycm5vKSk7DQo+ID4gKwkJCWdvdG8gZXJy
-X2Nsb3NlX2ZkczsNCj4gPiArCQl9DQo+DQo+DQo+IFdlIGNvdWxkIG1heWJlIHNraXAgdGhpcyBz
-dGVwIGlmIHRoZSByZXF1ZXN0ZWQgb3B0aW9ucyBhcmUgcmVhZC1vbmx5LCBubw0KPiBuZWVkIHRv
-IGNsb3NlIGFuZCByZS1vcGVuIGEgZmQgaW4gdGhhdCBjYXNlPw0KDQoNCkkgYWdyZWUuIFRoZSBj
-aGFuZ2Ugd2lsbCBiZSBzdWJtaXR0ZWQgd2l0aCB2ZXJzaW9uIDMuDQoNCg0KPiA+IC1pbnQgbWFw
-X3BhcnNlX2ZkcyhpbnQgKmFyZ2MsIGNoYXIgKioqYXJndiwgaW50ICoqZmRzKQ0KPiA+ICtpbnQg
-bWFwX3BhcnNlX2ZkcyhpbnQgKmFyZ2MsIGNoYXIgKioqYXJndiwgaW50ICoqZmRzLCBfX3UzMiBv
-cGVuX2ZsYWdzKQ0KPiA+ICB7DQo+ID4gKwlMSUJCUEZfT1BUUyhicGZfZ2V0X2ZkX2J5X2lkX29w
-dHMsIG9wdHMpOw0KPiA+ICsNCj4gPiArCWlmIChvcGVuX2ZsYWdzICYgfkJQRl9GX1JET05MWSkg
-ew0KPiA+ICsJCXBfZXJyKCJpbnZhbGlkIG9wZW5fZmxhZ3M6ICV4Iiwgb3Blbl9mbGFncyk7DQo+
-ID4gKwkJcmV0dXJuIC0xOw0KPiA+ICsJfQ0KPg0KPg0KPiBJIGRvbid0IHRoaW5rIHdlIG5lZWQg
-dGhpcyBjaGVjaywgdGhlIGZsYWcgaXMgbmV2ZXIgcGFzc2VkIGJ5IHVzZXJzLiBJZg0KPiB5b3Ug
-d2FudCB0byBjYXRjaCBhIGJ1ZywgdXNlIGFuIGFzc2VydCgpIGluc3RlYWQ/DQoNCg0KSSBhZ3Jl
-ZS4gVGhpcyBjaGVjayBpcyByZXBsYWNlZCB3aXRoIGFuIGFzc2VydCBhbmQgd2lsbCBiZSBzdWJt
-aXR0ZWQgd2l0aCB2My4NCg0KDQo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL2JwZi9icGZ0b29sL2l0
-ZXIuYyBiL3Rvb2xzL2JwZi9icGZ0b29sL2l0ZXIuYw0KPiA+IGluZGV4IDVjMzljMmVkMzZhMi4u
-YWQzMThhODY2N2E0IDEwMDY0NA0KPiA+IC0tLSBhL3Rvb2xzL2JwZi9icGZ0b29sL2l0ZXIuYw0K
-PiA+ICsrKyBiL3Rvb2xzL2JwZi9icGZ0b29sL2l0ZXIuYw0KPiA+IEBAIC0zNyw3ICszNyw3IEBA
-IHN0YXRpYyBpbnQgZG9fcGluKGludCBhcmdjLCBjaGFyICoqYXJndikNCj4gPiAgCQkJCXJldHVy
-biAtMTsNCj4gPiAgCQkJfQ0KPiA+ICANCj4gPiAtCQkJbWFwX2ZkID0gbWFwX3BhcnNlX2ZkKCZh
-cmdjLCAmYXJndik7DQo+ID4gKwkJCW1hcF9mZCA9IG1hcF9wYXJzZV9mZCgmYXJnYywgJmFyZ3Ys
-IDApOw0KPg0KPg0KPiBEbyB5b3UgbmVlZCB3cml0ZSBwZXJtaXNzaW9ucyBoZXJlPyAoSSBkb24n
-dCByZW1lbWJlci4pDQoNCg0KSXRlcmF0b3IgcmVxdWlyZXMgb25seSByZWFkIGFjY2Vzcy4gSSBj
-aGFuZ2VkIGl0IHRvIEJQRl9GX1JET05MWSBmb3IgdjMuDQpBbiBpdGVyYXRvciB0ZXN0IGlzIGFk
-ZGVkIHRvIHYzLg0KDQoNCj4gPiAtCWZkID0gbWFwX3BhcnNlX2ZkX2FuZF9pbmZvKCZhcmdjLCAm
-YXJndiwgJmluZm8sICZsZW4pOw0KPiA+ICsJZmQgPSBtYXBfcGFyc2VfZmRfYW5kX2luZm8oJmFy
-Z2MsICZhcmd2LCAmaW5mbywgJmxlbiwgQlBGX0ZfUkRPTkxZKTsNCj4NCj4NCj4gVGhpcyBvbmUg
-aXMgc3VycHJpc2luZywgZG9uJ3QgeW91IG5lZWQgd3JpdGUgcGVybWlzc2lvbnMgdG8gZGVsZXRl
-IGFuDQo+IGVsZW1lbnQgZnJvbSB0aGUgbWFwPyBQbGVhc2UgZG91YmxlLWNoZWNrIGlmIHlvdSBo
-YXZlbid0IGFscmVhZHksIEkNCj4gd291bGRuJ3Qgd2FudCB0byBicmVhayAiYnBmdG9vbCBtYXAg
-ZGVsZXRlIi4NCj4NCj4gSSBub3RlIHlvdSBkb24ndCB0ZXN0IGl0ZW1zIGRlbGV0aW9uIGluIHlv
-dXIgdGVzdHMsIGJ5IHRoZSB3YXkuDQoNCg0KUmlnaHQsIHRoZSBkZWxldGUgY29tbWFuZCByZXF1
-aXJlcyB3cml0ZSBhY2Nlc3MuIEkgY2hhbmdlZCBpdCBhbmQgYWRkZWQNCmFuIGl0ZW0gZGVsZXRp
-b24gdGVzdCB0byB2My4NCg0KDQo+ID4gIHN0YXRpYyBpbnQgZG9fcGluKGludCBhcmdjLCBjaGFy
-ICoqYXJndikNCj4gPiAgew0KPiA+ICAJaW50IGVycjsNCj4gPiAgDQo+ID4gLQllcnIgPSBkb19w
-aW5fYW55KGFyZ2MsIGFyZ3YsIG1hcF9wYXJzZV9mZCk7DQo+ID4gKwllcnIgPSBkb19waW5fYW55
-KGFyZ2MsIGFyZ3YsIG1hcF9wYXJzZV9yZWFkX29ubHlfZmQpOw0KPiA+ICAJaWYgKCFlcnIgJiYg
-anNvbl9vdXRwdXQpDQo+ID4gIAkJanNvbndfbnVsbChqc29uX3d0cik7DQo+ID4gIAlyZXR1cm4g
-ZXJyOw0KPiA+IEBAIC0xMzE5LDcgKzEzMjksNyBAQCBzdGF0aWMgaW50IGRvX2NyZWF0ZShpbnQg
-YXJnYywgY2hhciAqKmFyZ3YpDQo+ID4gIAkJCWlmICghUkVRX0FSR1MoMikpDQo+ID4gIAkJCQl1
-c2FnZSgpOw0KPiA+ICAJCQlpbm5lcl9tYXBfZmQgPSBtYXBfcGFyc2VfZmRfYW5kX2luZm8oJmFy
-Z2MsICZhcmd2LA0KPiA+IC0JCQkJCQkJICAgICAmaW5mbywgJmxlbik7DQo+ID4gKwkJCQkJCQkg
-ICAgICZpbmZvLCAmbGVuLCAwKTsNCj4NCj4NCj4gRG8geW91IG5lZWQgd3JpdGUgcGVybWlzc2lv
-bnMgZm9yIHRoZSBpbm5lciBtYXAncyBmZD8gVGhpcyBpcyBzb21ldGhpbmcNCj4gdGhhdCBjb3Vs
-ZCBiZSB3b3J0aCBjaGVja2luZyBpbiB0aGUgdGVzdHMsIGFzIHdlbGwuDQoNClRoZSBpbm5lciBt
-YXAgZmQgY2FuIGJlIGNyZWF0ZWQgd2l0aCByZWFkIG9ubHkgYWNjZXNzLiBJIGNoYW5nZWQgaXQg
-YW5kIGFkZGVkDQphIHRlc3QgZm9yIG1hcC1vZi1tYXBzIGNyZWF0aW9uIHRvIHYzLg0KDQoNCj4g
-PiBAQCAtMTI4LDcgKzEyOCw4IEBAIGludCBkb19ldmVudF9waXBlKGludCBhcmdjLCBjaGFyICoq
-YXJndikNCj4gPiAgCWludCBlcnIsIG1hcF9mZDsNCj4gPiAgDQo+ID4gIAltYXBfaW5mb19sZW4g
-PSBzaXplb2YobWFwX2luZm8pOw0KPiA+IC0JbWFwX2ZkID0gbWFwX3BhcnNlX2ZkX2FuZF9pbmZv
-KCZhcmdjLCAmYXJndiwgJm1hcF9pbmZvLCAmbWFwX2luZm9fbGVuKTsNCj4gPiArCW1hcF9mZCA9
-IG1hcF9wYXJzZV9mZF9hbmRfaW5mbygmYXJnYywgJmFyZ3YsICZtYXBfaW5mbywgJm1hcF9pbmZv
-X2xlbiwNCj4gPiArCQkJCSAgICAgICAwKTsNCj4NCj4NCj4gVGhpcyBvbmUgbWlnaHQgYmUgd29y
-dGggY2hlY2tpbmcsIHRvby4NCg0KDQpBbiBldmVudCBwaXBlIG1hcCBmZCByZXF1aXJlcyB3cml0
-ZSBhY2Nlc3MgYXMgdGhlIG1hcCBpcyB1cGRhdGVkIGJ5IGJwZl9tYXBfdXBkYXRlX2VsZW0gDQpp
-bnNpZGUgX19wZXJmX2J1ZmZlcl9fbmV3IC4NCg0KDQoNCg==
+Hello,
+
+This is RFC v2 for the TDX intra-host migration patch series. It
+addresses comments in RFC v1 [1] and is rebased onto the latest kvm/next
+(v6.16-rc1).
+
+This patchset was built on top of the latest TDX selftests [2] and gmem
+linking [3] RFC patch series.
+
+Here is the series stitched together for your convenience:
+https://github.com/googleprodkernel/linux-cc/tree/tdx-copyless-rfc-v2
+
+Changes from RFC v1:
++ Added patch to prevent deadlock warnings by re-ordering locking order.
++ Added patch to allow vCPUs to be created for uninitialized VMs.
++ Minor optimizations to TDX intra-host migration core logic.
++ Moved lapic state transfer into TDX intra-host migration core logic.
++ Added logic to handle posted interrupts that are injected during
+migration.
++ Added selftests.
++ Addressed comments from RFC v1.
++ Various small changes to make patchset compatible with latest version
+of kvm/next.
+
+[1] https://lore.kernel.org/lkml/20230407201921.2703758-2-sagis@google.com
+[2] https://lore.kernel.org/lkml/20250414214801.2693294-2-sagis@google.com
+[3] https://lore.kernel.org/all/cover.1747368092.git.afranji@google.com
+
+Ackerley Tng (2):
+  KVM: selftests: Add TDX support for ucalls
+  KVM: selftests: Add irqfd/interrupts test for TDX with migration
+
+Ryan Afranji (3):
+  KVM: x86: Adjust locking order in move_enc_context_from
+  KVM: TDX: Allow vCPUs to be created for migration
+  KVM: selftests: Refactor userspace_mem_region creation out of
+    vm_mem_add
+
+Sagi Shahar (5):
+  KVM: Split tdp_mmu_pages to mirror and direct counters
+  KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
+  KVM: TDX: Implement moving mirror pages between 2 TDs
+  KVM: TDX: Add core logic for TDX intra-host migration
+  KVM: selftests: TDX: Add tests for TDX in-place migration
+
+ arch/x86/include/asm/kvm_host.h               |   7 +-
+ arch/x86/kvm/mmu.h                            |   2 +
+ arch/x86/kvm/mmu/mmu.c                        |  66 ++++
+ arch/x86/kvm/mmu/tdp_mmu.c                    |  72 +++-
+ arch/x86/kvm/mmu/tdp_mmu.h                    |   6 +
+ arch/x86/kvm/svm/sev.c                        |  13 +-
+ arch/x86/kvm/vmx/main.c                       |  12 +-
+ arch/x86/kvm/vmx/tdx.c                        | 236 +++++++++++-
+ arch/x86/kvm/vmx/x86_ops.h                    |   1 +
+ arch/x86/kvm/x86.c                            |  14 +-
+ tools/testing/selftests/kvm/Makefile.kvm      |   2 +
+ .../testing/selftests/kvm/include/kvm_util.h  |  25 ++
+ .../selftests/kvm/include/x86/tdx/tdx_util.h  |   3 +
+ .../selftests/kvm/include/x86/tdx/test_util.h |   5 +
+ .../testing/selftests/kvm/include/x86/ucall.h |   4 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 222 ++++++++----
+ .../testing/selftests/kvm/lib/ucall_common.c  |   2 +-
+ .../selftests/kvm/lib/x86/tdx/tdx_util.c      |  63 +++-
+ .../selftests/kvm/lib/x86/tdx/test_util.c     |  17 +
+ tools/testing/selftests/kvm/lib/x86/ucall.c   | 108 ++++--
+ .../kvm/x86/tdx_irqfd_migrate_test.c          | 264 ++++++++++++++
+ .../selftests/kvm/x86/tdx_migrate_tests.c     | 337 ++++++++++++++++++
+ 22 files changed, 1349 insertions(+), 132 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/tdx_irqfd_migrate_test.c
+ create mode 100644 tools/testing/selftests/kvm/x86/tdx_migrate_tests.c
+
+-- 
+2.50.0.rc1.591.g9c95f17f64-goog
+
