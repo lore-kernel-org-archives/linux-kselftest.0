@@ -1,46 +1,46 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DEF23645F;
-	Wed, 11 Jun 2025 07:38:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F64F2376EF;
+	Wed, 11 Jun 2025 07:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749627518; cv=none; b=ZGckYIdoITOTe5GXpoIhyRf0lcGf4cZo2/Chgm4PGCBeikhOa/5Vsl2q8TITPxOXFs0G9Wc3o8tC4bQQSzJMvCpAnnkwulCBog99k8DJ9bJON/CxOxbJWGy2hmu3tXQJt4HHLwqnt8S4X5EBCqPhwEgaZbVGGxoWPwAwofUDSUI=
+	t=1749627519; cv=none; b=QdJwkuP4TItMVRwe2xG4J3uaGiRTH9Ywx3aX4Az8rD9+URMTZL+7joKYoPrH4NTr4d3d6FHQ0/+t+6ROcOFLcbB+smX5PlLqmUaqqFW4jqWZvkgbeTgk10WExxSxOPjnb0jRcJQAgQDlJ9AgVy3nfK+494IBsWa0NV/3ODuUkLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749627518; c=relaxed/simple;
-	bh=pD/oIF6vl9bmzEkj5ZAggKlVnatrMGsxFjGxCBob1vE=;
+	s=arc-20240116; t=1749627519; c=relaxed/simple;
+	bh=jBKSdQACvBBwcM6WzYQQQ4hGpXONRfQDjnNvXZvxW6A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pYEcaYdUNTPZ3UnC9Tmsn6NPW4NS3cnRl7DfhWuNlCCVW157C2xSOkCnC+rOGuAVjUhGaXlu0unXRe7cWrsu6oruACyShqixeFIkJxupEOP3Y2OCPuVr8y9HzWC/645dipeEIa55qneGxe6vHvQnYhha2uzVpP9MuYR0Epr6BiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=oTMf50hh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Eyt1KjCL; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=Vpk0xl7c6fYYAUHe0M5FRbxBzuCjcuIqSixb4xJPjT8V6ZmCLfMIQi0ebhcAo91bsWZFQaJiOtuSdoWhosxzod42yk9RgOC5HEFUKJ1auy83Gg0QjlxLFGph9QufrBfmiNHgMSj/mZKQIrA2qti31iqu6N5ZPUIjGAY887vsPrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=geerNP5r; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qtPNzx5N; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="oTMf50hh";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Eyt1KjCL"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="geerNP5r";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qtPNzx5N"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1749627514;
+	s=2020; t=1749627515;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hLESzJCjyRk9NgOKWsvqneN/Z/AUG3s6f3HWO22jmYQ=;
-	b=oTMf50hhVcZvAq7cTFl2mfQ/H4rC+iKT77rmSwh9XM4lzT+iEYd+Iwslf1uxQ+S0+g8xW2
-	2iweO6okLzO+oGrR8jwnfbkW3N5rEOKiuC4IWVtJEZL34pfSOTmfQNSBZ3sRxium/aN6ky
-	G2W0oigiG4c2afXkqglMZ09onZcvyDT6vqUsAubrdys8DNRFbZ1GL4NOXg5Aed6hff/6+5
-	pBcWCVqCsS9vd9n6SGQtlCseLG95HY/CegtQ6Em5vLCjEaElicn2rPAWqMYyS/iVbq5W6Z
-	Iic/sKQWofH6ropkyg3u56CVQXVGdqonVn0u932jzrUwLdAAoarX9tMPjux4dQ==
+	bh=vdek1izyzsKO1yVmEA7bKNhgQcuaR13nn+u8f6WyIHk=;
+	b=geerNP5rxOPVeqffu3dQrtqo4+vGzQHyBJQQ2gTbXnsNbGfcYqeRI3eH+7kl6d6Q8ZOWM8
+	cZSaPjHv0bETgi/Bu0OA082S6U3pF8SYOBGgIoUdEfQogLVPazY5apgW8s9qmYKVeeLzdw
+	OCwgF8qiNtMuxHTMARdglws33NZPZq4vzZ+xqwydlaF501Hh73VXlsVXlkf/eqVBCew8ok
+	3Osi+tEr7cfaW6b6Nv/gXUhZzz2/ny4Je2CcdrJo3ntBV0XT5e8wKWgU6vgAjHAKy1C6lq
+	KGZndSVn2ldurZLYZmIK/8Q1/P4AN0fVimsOA3H6tux+iV7E5yDn5vV1QjiydQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1749627514;
+	s=2020e; t=1749627515;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hLESzJCjyRk9NgOKWsvqneN/Z/AUG3s6f3HWO22jmYQ=;
-	b=Eyt1KjCLG4nBEZrCwUCujpVH1Np3Ey9ikW6SJ/XQstAYueHJ9vwJj8AF04q6pcLn6gsdkE
-	a/wdLSa1qB7TwWBg==
-Date: Wed, 11 Jun 2025 09:38:13 +0200
-Subject: [PATCH v3 07/16] kbuild: introduce blob framework
+	bh=vdek1izyzsKO1yVmEA7bKNhgQcuaR13nn+u8f6WyIHk=;
+	b=qtPNzx5NePI7G6dwBvU7pzFKpSbdK0NPlWYBDIrCPoSjEKR4g6RLBmdNNUOn4hLiKepuEb
+	bo6Y19/By7QYsoAw==
+Date: Wed, 11 Jun 2025 09:38:16 +0200
+Subject: [PATCH v3 10/16] kunit: tool: Parse skipped tests from kselftest.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250611-kunit-kselftests-v3-7-55e3d148cbc6@linutronix.de>
+Message-Id: <20250611-kunit-kselftests-v3-10-55e3d148cbc6@linutronix.de>
 References: <20250611-kunit-kselftests-v3-0-55e3d148cbc6@linutronix.de>
 In-Reply-To: <20250611-kunit-kselftests-v3-0-55e3d148cbc6@linutronix.de>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -68,223 +68,80 @@ Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
  linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
  linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
  workflows@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- Nicolas Schier <nicolas.schier@linux.dev>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1749627510; l=7359;
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749627510; l=2785;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=pD/oIF6vl9bmzEkj5ZAggKlVnatrMGsxFjGxCBob1vE=;
- b=okb47YtxatsIw23cWcUwSqe3GEUIdBFjMySlBe+F8PzQLJv/i65uwNeakG3GPik12BxsbwBTY
- l0bAQhPUq7yAGA3PuaiJ5HPWP9bGdsm/3aHZ0V6wue2TOqRI4F79SWJ
+ bh=jBKSdQACvBBwcM6WzYQQQ4hGpXONRfQDjnNvXZvxW6A=;
+ b=bjaPIZjodgAcgTvHsoZuoYuCJ+8/113ovz1oTBu/1LlrHK/MHWKqy2KqNxuYAG05G3hLbAykW
+ UvyjivABt0VD8uvoFsDEry57lSwU0Hn9WKM/N0eHfz2aN/PQpcmR7uG
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Various subsystems embed non-code build artifacts into the kernel,
-for example the initramfs, /proc/config.gz, vDSO image, etc.
-Currently each user has their own implementation for that.
+Skipped tests reported by kselftest.h use a different format than KTAP,
+there is no explicit test name. Normally the test name is part of the
+free-form string after the SKIP keyword:
 
-Add a common "blob" framework to provide this functionality.
-It provides standard kbuild and C APIs to embed and later access non-code
-build artifacts into the kernel image or modules.
+	ok 3 # SKIP test: some reason
 
-Reviewed-by: Nicolas Schier <n.schier@avm.de>
+Extend the parser to handle those correctly. Use the free-form string as
+test name instead.
+
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
-Due to its closeness to kbuild this is currently added to its MAINTAINER entry.
-But I can also maintain it on its own.
----
- Documentation/kbuild/makefiles.rst | 23 +++++++++++++++++++++--
- MAINTAINERS                        |  2 ++
- include/linux/blob.h               | 31 +++++++++++++++++++++++++++++++
- scripts/Makefile.blobs             | 19 +++++++++++++++++++
- scripts/Makefile.build             |  6 ++++++
- scripts/Makefile.clean             |  2 +-
- scripts/blob-wrap.c                | 27 +++++++++++++++++++++++++++
- 7 files changed, 107 insertions(+), 3 deletions(-)
+ tools/testing/kunit/kunit_parser.py                             | 8 +++++---
+ tools/testing/kunit/test_data/test_is_test_passed-kselftest.log | 3 ++-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-index 2adea36ac6ebf6c292e01a3e04c0b633e3c1b8ad..5d158780948ab6d7d21287231e310dc87d5e1dc7 100644
---- a/Documentation/kbuild/makefiles.rst
-+++ b/Documentation/kbuild/makefiles.rst
-@@ -525,8 +525,8 @@ otherwise the command line check will fail, and the target will
- always be built.
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 2478beb28fc3db825855ad46200340e884da7df1..4599d23c79b79f0e219d655c7053c8c3b34f8152 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -352,9 +352,9 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
+ 	lines.pop()
+ 	return True
  
- If the target is already listed in the recognized syntax such as
--obj-y/m, lib-y/m, extra-y/m, always-y/m, hostprogs, userprogs, Kbuild
--automatically adds it to $(targets). Otherwise, the target must be
-+obj-y/m, lib-y/m, extra-y/m, always-y/m, hostprogs, userprogs, blobs,
-+Kbuild automatically adds it to $(targets). Otherwise, the target must be
- explicitly added to $(targets).
+-TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
++TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+)? ?(- )?([^#]*)( # .*)?$')
  
- Assignments to $(targets) are without $(obj)/ prefix. if_changed may be
-@@ -1019,6 +1019,25 @@ There are two ways to do this.
-     This will tell Kbuild to build binderfs_example when it visits this
-     Makefile.
+-TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?(.*) # SKIP(.*)$')
++TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+)? ?(- )?(.*) # SKIP ?(.*)$')
  
-+.. _kbuild_blobs:
-+
-+Blob framework
-+==============
-+
-+Kbuild supports wrapping source or generated files into object files which are linked
-+into the kernel and then accessed at runtime through ``include/linux/blob.h``.
-+
-+Example::
-+
-+  obj-m := some-module.o
-+  userprogs := some-userprog
-+  blobs := some-userprog.blob.o
-+  some-userprog.blob-symbol := some_userprog
-+  some-module-y += some-userprog.blob.o
-+
-+Kbuild will build the :ref:`userprog <kbuild_userprogs>` ``some-userprog`` and
-+link it into ``some-module`` from where it can be accessed as ``BLOB(some_userprog)``.
-+
- Kbuild clean infrastructure
- ===========================
+ def peek_test_name_match(lines: LineStream, test: Test) -> bool:
+ 	"""
+@@ -379,6 +379,8 @@ def peek_test_name_match(lines: LineStream, test: Test) -> bool:
+ 	if not match:
+ 		return False
+ 	name = match.group(4)
++	if not name:
++		return False
+ 	return name == test.name
  
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a92290fffa163f9fe8fe3f04bf66426f9a894409..435f8af750d40d859b48dd4f93f7991768f218e1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13063,11 +13063,13 @@ Q:	https://patchwork.kernel.org/project/linux-kbuild/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
- F:	Documentation/kbuild/
- F:	Makefile
-+F:	include/linux/blob.h
- F:	scripts/*vmlinux*
- F:	scripts/Kbuild*
- F:	scripts/Makefile*
- F:	scripts/bash-completion/
- F:	scripts/basic/
-+F:	scripts/blob-wrap.c
- F:	scripts/clang-tools/
- F:	scripts/dummy-tools/
- F:	scripts/include/
-diff --git a/include/linux/blob.h b/include/linux/blob.h
-new file mode 100644
-index 0000000000000000000000000000000000000000..4104d04e036fadce220e05fd2d9b996323dd06e8
---- /dev/null
-+++ b/include/linux/blob.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Linkable blob API.
-+ *
-+ * Copyright (C) 2025, Linutronix GmbH.
-+ * Author: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-+ */
-+
-+#ifndef _LINUX_BLOB_H
-+#define _LINUX_BLOB_H
-+
-+#include <linux/args.h>
-+#include <linux/types.h>
-+
-+struct blob {
-+	const char *const path;
-+	const u8 *data;
-+	const u8 *end;
-+};
-+
-+#define BLOB(_symbol)	({					\
-+	extern const struct blob CONCATENATE(__blob_, _symbol);	\
-+	&CONCATENATE(__blob_, _symbol);				\
-+})
-+
-+static inline size_t blob_size(const struct blob *blob)
-+{
-+	return blob->end - blob->data;
-+}
-+
-+#endif /* _LINUX_BLOB_H */
-diff --git a/scripts/Makefile.blobs b/scripts/Makefile.blobs
-new file mode 100644
-index 0000000000000000000000000000000000000000..fd20ebb41c1d6509750debf7896a08a143d28759
---- /dev/null
-+++ b/scripts/Makefile.blobs
-@@ -0,0 +1,19 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Build linkable blobs
-+#
-+
-+blobs	:= $(addprefix $(obj)/, $(blobs))
-+
-+blob-stem = $(subst -,_,$(subst .blob,,$(basename $(patsubst $(obj)/%,%,$@))))
-+blob-symbol = $(or $($(target-stem)-symbol),$(blob-stem))
-+
-+blob-flags = -DBLOB_SYMBOL="$(blob-symbol)" -DBLOB_INPUT=$<
-+
-+quiet_cmd_blob = BLOB    $@
-+      cmd_blob = $(CC) $(c_flags) $(blob-flags) -c -o $@ $(srctree)/scripts/blob-wrap.c
-+
-+$(blobs): $(obj)/%.blob.o: $(obj)/% $(srctree)/scripts/blob-wrap.c FORCE
-+	$(call if_changed_dep,blob)
-+
-+targets += $(blobs)
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index a6461ea411f7a95a9dd156897bec43cb22ef1092..de000268a538875596aae597efaf06058474b17d 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -529,6 +529,12 @@ ifneq ($(need-dtbslist)$(dtb-y)$(dtb-)$(filter %.dtb %.dtb.o %.dtbo.o,$(targets)
- include $(srctree)/scripts/Makefile.dtbs
- endif
+ def parse_test_result(lines: LineStream, test: Test,
+@@ -416,7 +418,7 @@ def parse_test_result(lines: LineStream, test: Test,
  
-+# $(sort ...) is used here to remove duplicated words and excessive spaces.
-+blobs := $(sort $(blobs))
-+ifneq ($(blobs),)
-+include $(srctree)/scripts/Makefile.blobs
-+endif
-+
- # Build
- # ---------------------------------------------------------------------------
+ 	# Set name of test object
+ 	if skip_match:
+-		test.name = skip_match.group(4)
++		test.name = skip_match.group(4) or skip_match.group(5)
+ 	else:
+ 		test.name = match.group(4)
  
-diff --git a/scripts/Makefile.clean b/scripts/Makefile.clean
-index 6ead00ec7313b3e4330a8de5f1342f2da1d6eb84..536972b0a528d117e17296da9936825c3903af6e 100644
---- a/scripts/Makefile.clean
-+++ b/scripts/Makefile.clean
-@@ -25,7 +25,7 @@ subdir-ymn	:= $(addprefix $(obj)/,$(subdir-ymn))
- # directory
- 
- __clean-files	:= \
--	$(clean-files) $(targets) $(hostprogs) $(userprogs) \
-+	$(clean-files) $(targets) $(hostprogs) $(userprogs) $(blobs) \
- 	$(extra-y) $(extra-m) $(extra-) \
- 	$(always-y) $(always-m) $(always-) \
- 	$(hostprogs-always-y) $(hostprogs-always-m) $(hostprogs-always-) \
-diff --git a/scripts/blob-wrap.c b/scripts/blob-wrap.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..82ab3bc641bd69ec35029c2f4a9dd6d6c6720a02
---- /dev/null
-+++ b/scripts/blob-wrap.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/args.h>
-+#include <linux/blob.h>
-+#include <linux/stringify.h>
-+
-+#define BLOB_SYMBOL_DATA	CONCATENATE(__blob_data_, BLOB_SYMBOL)
-+#define BLOB_SYMBOL_END		CONCATENATE(__blob_end_, BLOB_SYMBOL)
-+
-+asm (
-+"	.pushsection .rodata, \"a\"\n"
-+"	.global " __stringify(BLOB_SYMBOL_DATA) "\n"
-+__stringify(BLOB_SYMBOL_DATA) ":\n"
-+"	.incbin \"" __stringify(BLOB_INPUT) "\"\n"
-+"	.global " __stringify(BLOB_SYMBOL_END) "\n"
-+__stringify(BLOB_SYMBOL_END) ":\n"
-+"	.popsection\n"
-+);
-+
-+extern const u8 BLOB_SYMBOL_DATA;
-+extern const u8 BLOB_SYMBOL_END;
-+
-+const struct blob CONCATENATE(__blob_, BLOB_SYMBOL) = {
-+	.path	= __stringify(BLOB_INPUT),
-+	.data	= &BLOB_SYMBOL_DATA,
-+	.end	= &BLOB_SYMBOL_END,
-+};
+diff --git a/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log b/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log
+index 65d3f27feaf22a3f47ed831c4c24f6f11c625a92..30d9ef18bcec177067288d5242771236f29b7d56 100644
+--- a/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log
++++ b/tools/testing/kunit/test_data/test_is_test_passed-kselftest.log
+@@ -1,5 +1,5 @@
+ TAP version 13
+-1..2
++1..3
+ # selftests: membarrier: membarrier_test_single_thread
+ # TAP version 13
+ # 1..2
+@@ -12,3 +12,4 @@ ok 1 selftests: membarrier: membarrier_test_single_thread
+ # ok 1 sys_membarrier available
+ # ok 2 sys membarrier invalid command test: command = -1, flags = 0, errno = 22. Failed as expected
+ ok 2 selftests: membarrier: membarrier_test_multi_thread
++ok 3 # SKIP selftests: membarrier: membarrier_test_multi_thread
 
 -- 
 2.49.0
