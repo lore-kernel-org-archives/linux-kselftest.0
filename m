@@ -1,111 +1,89 @@
-Received: from out199-7.us.a.mail.aliyun.com (out199-7.us.a.mail.aliyun.com [47.90.199.7])
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24EB72636;
-	Fri, 13 Jun 2025 01:46:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222A372636;
+	Fri, 13 Jun 2025 01:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749779214; cv=none; b=deMp2DVSMwQEGH69VNlElWPICMzb7q3Uu+Z1ruTXSsNuT7poRmB+NwVh/lNx2mw9O+ReC9MnVTbphJtiPm+JeUBf1vd7+iSRuU1Fcvr6FQ+IaqOpemFpFvVsKDTEQlaHOPjUvaF8kikZUvQAs/qZGsVIiaYesnR/RMouNICpJoU=
+	t=1749779377; cv=none; b=LLgiRYp4GBwlBaIu0w4AA69FsQwggBp3GuQaT+ttB0OwvAwzCXih1U4iBugAy+w1EqhxGEh9zF+JREb+RGzw5pIu8eND0oEVShTIVt4zXE3+2AJ186BO3yd+6JlAENkkmZ3RoIug+9nXMOo60ANeGHAiOKrRdMy+Z17yyzJdfBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749779214; c=relaxed/simple;
-	bh=E0r94BR3E6A0HCGt3cREJiiePlVg/qmmZSqcR0FneOU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N5p/hRAIpzHFx4pOJ28geZzok4/Dnpx8YqaCXyDArmeewGtlx6WVZvEhe5B94tTqYr6gCNtuxJwjSkduyYIOgWwdP1H12AcAw0Bm601sP/38kZsAsb+ndIxOnxMucA8+RO0+c6t8dzj2beDavhOEkJnvp1CO5RNvfa6iaURSDak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=jz70MgVY; arc=none smtp.client-ip=47.90.199.7
+	s=arc-20240116; t=1749779377; c=relaxed/simple;
+	bh=sM5LQBogj1YqlTMubTmqr5U56exFczyX2txJ3YgHXlY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OSafzb/10qR1ws578ibrYk6H/1Q3z1GUwKPXm2mDNz1Nhab4N7TET4X2MLgRu7sSMPsWkMMv22SphJt3ecggfVGOCVMcVHTUA4Dcl517eU1CF1t/3XWZYNKAh8uCBxWBGWjFAVM4uEql/osTfRfEjdbm9tLcbJYbhS1GZs1A6CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=FLUNqVcF; arc=none smtp.client-ip=115.124.30.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="jz70MgVY"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="FLUNqVcF"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1749779194; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=CSzFqjAOdYOhtCVpEGFFODIRgXuSQjCJncahjlXIPOY=;
-	b=jz70MgVYyiYpxaOzwt7VFlXT7nxkmfp9DoJJDiMH0KyCQUZ9cOd98j5lByJS3/OkXg7lnhx6Zis1NgZmPSxLjAl5ww5W49GT4vqJB1T51XyZsiFgKWgPUqpFy78l5MnyCzgk+Iq/9dmN4xn+fNYJzFuniOMWRPKMfoFVuG5rruM=
-Received: from 30.74.144.147(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Wdic67h_1749778874 cluster:ay36)
+	t=1749779372; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=FtipOg0jR+RxbNWbEIuvLEIIRNhaeKYX+tgFf32YOWs=;
+	b=FLUNqVcFNfKqNIFKCVkRB7ptQ88o5tBolUGApXZBb3q2lyBk/mOF6xiGGWpv1oCAFsgThCQ+Z2jFrRXHJU/Za4B04qHU1rGb8Nzbm7VZkj0LZJ5hnV01oijMeUZJqLnP1oTChPOdIi5eEdMm9MJJJfuhCdGVgteubWA96aAEQl8=
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WdiYSol_1749779371 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Fri, 13 Jun 2025 09:41:15 +0800
-Message-ID: <28221305-14de-4e46-a9f4-8bf90c7b32c0@linux.alibaba.com>
-Date: Fri, 13 Jun 2025 09:41:14 +0800
+          Fri, 13 Jun 2025 09:49:31 +0800
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+To: akpm@linux-foundation.org,
+	david@redhat.com
+Cc: lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	npache@redhat.com,
+	ryan.roberts@arm.com,
+	dev.jain@arm.com,
+	baohua@kernel.org,
+	shuah@kernel.org,
+	ziy@nvidia.com,
+	baolin.wang@linux.alibaba.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/2] selftests: mm: add shmem collapse as a default test item
+Date: Fri, 13 Jun 2025 09:49:20 +0800
+Message-ID: <a30b1529b399f2e649b5a05c3d352f41a68faeae.1749779183.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <d8502fc50d0304c2afd27ced062b1d636b7a872e.1749779183.git.baolin.wang@linux.alibaba.com>
+References: <d8502fc50d0304c2afd27ced062b1d636b7a872e.1749779183.git.baolin.wang@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] selftests: khugepaged: fix the shmem collapse failure
-To: Zi Yan <ziy@nvidia.com>
-Cc: akpm@linux-foundation.org, david@redhat.com, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, shuah@kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <c16d1d452aa876b449324d12df6465677158a711.1749697399.git.baolin.wang@linux.alibaba.com>
- <AFC17CA1-DF5A-48F0-8E63-E139005F5880@nvidia.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <AFC17CA1-DF5A-48F0-8E63-E139005F5880@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Currently, we only test anonymous memory collapse by default. We should also
+add shmem collapse as a default test item to catch issues that could break
+the test cases.
 
+Reviewed-by: Dev Jain <dev.jain@arm.com>
+Tested-by: Dev Jain <dev.jain@arm.com>
+Acked-by: David Hildenbrand <david@redhat.com>
+Acked-by: Zi Yan <ziy@nvidia.com>
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+---
+Changes from v1:
+ - Collect reviewed and acked tags. Thanks.
+---
+ tools/testing/selftests/mm/run_vmtests.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On 2025/6/12 23:46, Zi Yan wrote:
-> On 11 Jun 2025, at 23:54, Baolin Wang wrote:
-> 
->> When running the khugepaged selftest for shmem (./khugepaged all:shmem),
->> I encountered the following test failures:
->> "
->> Run test: collapse_full (khugepaged:shmem)
->> Collapse multiple fully populated PTE table.... Fail
->> ...
->> Run test: collapse_single_pte_entry (khugepaged:shmem)
->> Collapse PTE table with single PTE entry present.... Fail
->> ...
->> Run test: collapse_full_of_compound (khugepaged:shmem)
->> Allocate huge page... OK
->> Split huge page leaving single PTE page table full of compound pages... OK
->> Collapse PTE table full of compound pages.... Fail
->> "
->>
->> The reason for the failure is that, it will set MADV_NOHUGEPAGE to prevent
->> khugepaged from continuing to scan shmem VMA after khugepaged finishes
->> scanning in the wait_for_scan() function. Moreover, shmem requires a refault
->> to establish PMD mappings.
->>
->> However, after commit 2b0f922323cc, PMD mappings are prevented if the VMA is
-> 
-> Can you add the title of the commit? It is easier to understand the context.
-> 
-> 2b0f922323cc ("mm: don't install PMD mappings when THPs are disabled by the hw/process/vma")
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 33fc7fafa8f9..a38c984103ce 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -485,6 +485,10 @@ CATEGORY="thp" run_test ./khugepaged
+ 
+ CATEGORY="thp" run_test ./khugepaged -s 2
+ 
++CATEGORY="thp" run_test ./khugepaged all:shmem
++
++CATEGORY="thp" run_test ./khugepaged -s 4 all:shmem
++
+ CATEGORY="thp" run_test ./transhuge-stress -d 20
+ 
+ # Try to create XFS if not provided
+-- 
+2.43.5
 
-Sure.
-
-> 
->> set with MADV_NOHUGEPAGE flag, so shmem cannot establish PMD mappings during
->> refault.
->>
->> To fix this issue, we can set the MADV_NOHUGEPAGE flag after the shmem refault.
->> With this fix, the shmem test case passes.
->>
->> Fixes: 2b0f922323cc ("mm: don't install PMD mappings when THPs are disabled by the hw/process/vma")
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> ---
->>   tools/testing/selftests/mm/khugepaged.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
->> index 8a4d34cce36b..d462f62d8116 100644
->> --- a/tools/testing/selftests/mm/khugepaged.c
->> +++ b/tools/testing/selftests/mm/khugepaged.c
->> @@ -561,8 +561,6 @@ static bool wait_for_scan(const char *msg, char *p, int nr_hpages,
->>   		usleep(TICK);
->>   	}
->>
->> -	madvise(p, nr_hpages * hpage_pmd_size, MADV_NOHUGEPAGE);
->> -
->>   	return timeout == -1;
->>   }
->>
-> I assume you are going to just remove this madvise based on your discussion
-> with David. With that, feel free to add Reviewed-by: Zi Yan <ziy@nvidia.com>
-
-Thanks.
