@@ -1,89 +1,96 @@
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0191DEFE0;
-	Mon, 16 Jun 2025 06:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F59158520;
+	Mon, 16 Jun 2025 06:26:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750054506; cv=none; b=Pljb7CK5rab+fS/x6fSPrxJlicfou+34jB8YI9ouPFIXrfMkjnq/EBt/K3zXTY7W/lTjjbnDS4fyFI5YCAhF/0Q8GTaYKEiGxuZXlBZo6S337xZ1BaPNv0lLAj1NfhDlqcfmMS0sP5mmXXfFaoanAOviEWm2qZMnea2QR+tXX3g=
+	t=1750055194; cv=none; b=fjJbuhM7M21LsydaoPcEDWL/D54k0R0j4hb32Ootwjqt0j5zSIl2XmjqMfHZaHTdu9fhhVA6djx0+EfPh1abD2bhI0e9H/i/dVsKAOxDi0b/kA3nubBKrzLASTY38kuosKTSXM7KKIxXtv04HDw/mIcPBah4/Wqeac5bdICHiAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750054506; c=relaxed/simple;
-	bh=01Dh3/JKpAgSejIE64mTqC7VtvSIfjcSsvNN6mHkM+U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=prlCHYejN2YYaQO4oOSm24zqvbqzRsPN4TIEVQGhmWBgT0T5nRGZRrGaYknZVX+oyY9SfHi/tl8kFw8rUJ9uMNJY6yEffWEPiL9C0fwzy0b5hNFzMx5HaiUzyCTEBTvIEE5BXwavVGjJtNbtDEeRtaRLBLRY67IDTPALL2PuNbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=WuNLzXg2; arc=none smtp.client-ip=185.125.188.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1750055194; c=relaxed/simple;
+	bh=HM/nycRhtf8N42uu6R05gdsOLIoLfoh3SEuT7ZJryPI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gAD1Ql67qSV8N0ZlY+KyQTrEgBr4SxmF7Zk/LQuzYVzfIKDMbpUPlr9DE59y/rqXDnQxtADYS+Fg1sTtYHCpOdLGY4tAk5pxO/pyh0w2ro7B1YX0cH2RLNhGlcaPpLrZ0TK1DUAB1CJkr+760bQlVNVQUl+lTHfKaMVqPi33ct8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gKlG62xz; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="WuNLzXg2"
-Received: from localhost.localdomain (2.general.phlin.uk.vpn [10.172.194.39])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id AE36241ACB;
-	Mon, 16 Jun 2025 06:09:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1750054148;
-	bh=erA/UguxQP3JF42uo8ErXFFZLH61G26696D+fredls8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version;
-	b=WuNLzXg29xfR148rjWOUb+YH+JvpDP+hamry+rGpqMX1TA8aMECgQr0vtJ0OdX6hG
-	 VPVelFgYlbaHNY5W8by7xS3c8kK0idWr7grxrtbBehbZP/GEYEsvMYpoOTgWLkwblC
-	 +6Ln9HNM0jKhjm5JakpMrVFXEeY10nlcA48Py0MmdJP96P82oDe1UdT4G9eZP5tydJ
-	 FnroepdEFMuPU1Ui2XSy/pByPMZrBS+9ykPh5ZhQmrBkjm6CIeWNqT8tp1AEgX6guy
-	 ablifj+xMou8qXbwm5sSTm66eb3i88UXtc5Rg9QTNEN/U/6+D/52wwauaqPgPeSR+R
-	 puDt3XOAvUceg==
-From: Po-Hsu Lin <po-hsu.lin@canonical.com>
-To: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: shuah@kernel.org,
-	po-hsu.lin@canonical.com
-Subject: [PATCH 1/1] selftests/memfd: skip hugetlbfs test if not supported
-Date: Mon, 16 Jun 2025 14:04:23 +0800
-Message-Id: <20250616060423.2180088-2-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250616060423.2180088-1-po-hsu.lin@canonical.com>
-References: <20250616060423.2180088-1-po-hsu.lin@canonical.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gKlG62xz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750055193; x=1781591193;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HM/nycRhtf8N42uu6R05gdsOLIoLfoh3SEuT7ZJryPI=;
+  b=gKlG62xzu4UiRGbbS/8UujqNGNbmqC1NK1ykVcNIDIyFC3BakmYtgmgc
+   dTLQ7mAFkZ7rjihwFcCrI7iRtEa2jFUZjNyheCUe+Mie65VW7qov6ZHE4
+   qePGy4D9PHN64Aq/m8WN3TY9mmrwkAYk8cQ4DOWQO3PfRyokQRhNUDaf8
+   N23gMDF6OGDRY0SLsMxx0guaULFk3knoTdotJV/cr5Dsd1zuf3Ae2vWop
+   LUO9rcNuOwrd86bo5NgANLrNaQ7myI/0ZChPwXecx0MFotHWbekmaDnUY
+   S9wZkJQHDa9QLBMcXeqqCAcTp8dKjg/RZ9mDGp9ahWUsoLrL2IndInyeu
+   g==;
+X-CSE-ConnectionGUID: uDRwicS4Q6KOZADpocBraA==
+X-CSE-MsgGUID: dtDb6qwVQPCZw4SD1JeY1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="69632404"
+X-IronPort-AV: E=Sophos;i="6.16,240,1744095600"; 
+   d="scan'208";a="69632404"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2025 23:26:32 -0700
+X-CSE-ConnectionGUID: bbwYisgpS32dkyJ6Bx5rnw==
+X-CSE-MsgGUID: cFHQS0MtTmmVQHGxTz19LA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,240,1744095600"; 
+   d="scan'208";a="148841753"
+Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2025 23:26:25 -0700
+Message-ID: <4bee4885-3e30-4376-947e-eae881e757d7@linux.intel.com>
+Date: Mon, 16 Jun 2025 14:25:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 06/25] iommufd/access: Allow access->ops to be NULL for
+ internal use
+To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, kevin.tian@intel.com,
+ corbet@lwn.net, will@kernel.org
+Cc: bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
+ thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+ shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
+ peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
+ praan@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, patches@lists.linux.dev, mochs@nvidia.com,
+ alok.a.tiwari@oracle.com, vasant.hegde@amd.com, dwmw2@infradead.org
+References: <cover.1749884998.git.nicolinc@nvidia.com>
+ <e6a989c4dd9cb94aa4a98d46ed56a2afcb41b70d.1749884998.git.nicolinc@nvidia.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <e6a989c4dd9cb94aa4a98d46ed56a2afcb41b70d.1749884998.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Check hugetlbfs support before starting tests in run_hugetlbfs_test.sh.
+On 6/14/25 15:14, Nicolin Chen wrote:
+> The access object has been used externally by VFIO mdev devices, allowing
+> them to pin/unpin physical pages (via needs_pin_pages). Meanwhile, a racy
+> unmap can occur in this case, so these devices usually implement an unmap
+> handler, invoked by iommufd_access_notify_unmap().
+> 
+> The new HW queue object will need the same pin/unpin feature, although it
+> (unlike the mdev case) wants to reject any unmap attempt, during its life
+> cycle.
+> 
+> To reuse the access object for the new HW queue, allow its access->ops to
+> be NULL. Error out a NULL access->ops in iommufd_access_notify_unmap() to
+> reject an unmap operation and propagatethe errno upwards.
+> 
+> Then, update iommufd_access_change_ioas() and iommufd_access_pin_pages(),
+> to allow this new use case.
+> 
+> Suggested-by: Jason Gunthorpe<jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
 
-Otherwise on a system that does not support hugetlbfs the free huge
-pages availability check will fail with:
-  ./run_hugetlbfs_test.sh: line 47: [: -lt: unary operator expected
-  ./run_hugetlbfs_test.sh: line 60: 12577 Aborted                 (core dumped) ./memfd_test hugetlbfs
-  Aborted (core dumped)
-
-And it will left a fuse_mnt process behind, which may cause some
-unexpected issues.
-
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/memfd/run_hugetlbfs_test.sh | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/tools/testing/selftests/memfd/run_hugetlbfs_test.sh b/tools/testing/selftests/memfd/run_hugetlbfs_test.sh
-index fb633eeb0290..15f4d1299563 100755
---- a/tools/testing/selftests/memfd/run_hugetlbfs_test.sh
-+++ b/tools/testing/selftests/memfd/run_hugetlbfs_test.sh
-@@ -10,6 +10,11 @@ ksft_skip=4
- #
- hpages_test=8
- 
-+if ! grep -q hugetlbfs /proc/filesystems; then
-+	echo "hugetlbfs not supported, test skipped."
-+	exit $ksft_skip
-+fi
-+
- #
- # Get count of free huge pages from /proc/meminfo
- #
--- 
-2.34.1
-
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
