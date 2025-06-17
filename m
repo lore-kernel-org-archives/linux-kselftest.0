@@ -1,40 +1,41 @@
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E4E2853E0;
-	Tue, 17 Jun 2025 18:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7A723AE84;
+	Tue, 17 Jun 2025 18:35:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750185328; cv=none; b=QLe+kd5vB+/HyoNLtPny7wTra8pwCh/WmjFp/+9wMSThAwjCae2SoL1DCjhHlspgBSyw0057JIYiIJOolF1TaKCxw78L422K4Aj5DTfzK0Y3dV5z1AMn2YxrhE8sI9Cnlypykmyqr/j6HoLqxJJ7T5800pWP4IGNc25dfHRg1K8=
+	t=1750185329; cv=none; b=Hz651GsAaiMuMB/KSwOYZS27u+2u/G8GBpC3CkDBpHP+v+2d8FqpdjASlzy2e4o8PybSas6Crxlu1MZIEN+6DjuIyoViOyvrv+RgWPtnabJ0HWkfTDIAmPKgXpASw1gW36YISgdGoiHjq6R/LSB0DQSxLMZsCNAvFFttiqLdv9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750185328; c=relaxed/simple;
-	bh=HdsgE3dVEvFD0Kza/FGL4PVyH2AyEt8jTw7NRdOU/NU=;
+	s=arc-20240116; t=1750185329; c=relaxed/simple;
+	bh=1Te3gUCb3wx4Xfv+yeVdknw42AFZu1cU2lHKKErDv+k=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GvZTNKS94tRjulDB8D3t+c8Uw8z1iz1eK6e8Tdy6zLFnM8zko0hWWgZfYI828BAouxv/h9MEwtvwAo4WAvL0/jJSpH9hEqChLfYZb1b8iu0lI2yIBkpiw7SY7QxlHP1/eV6mq98mbdsbUecDHYChucqhZxMb0iN9YJv9Y1YB84s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=br0MBrsR; arc=none smtp.client-ip=213.97.179.56
+	 In-Reply-To:To:Cc; b=CK8VbvGWPukcsPU8r1tDg15NKeQp39CIBBaQ0pPisLuSoPWZbfch+a+JDEP4AjhPtR3oU3zoXJIGtrQUF56OeMksNXrK6n5GuRXRs9jllNm/alHpHlNZJ//q378uWd70vxKl8SzBdT6zlQIMUcFaoSwyyoh1jkEgNL6Ol/Co3lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=RuGGDr/5; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="br0MBrsR"
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="RuGGDr/5"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	s=20170329; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=fyXXUndsFU1fi1/cHrhrRGj97R8gSsjU9AE57nmvn3s=; b=br0MBrsRE9RK8fS/T57MdHP6H4
-	VnkGANwToBV2D1zevNfDTTWSDoOPoy1ShzfxLKrwc5GF14DrnhOr8nBiocgx32niK86/sJlXd8Baa
-	S7RxASIfpWCLgwhGOQPHwt17orkvOPoMIMTYrJ6dffwKTOeNvrSOm6UDLn/N6GK4qFGtXqh+z0X9s
-	tvvb9jhye2eef45j1saJ0Qrg12Ts9yN37X4U7QtsVu7hI+lRbfX/M6W3xVoyznfmZvWvI/zeB/l0L
-	pHhjTxNNbotVsY09/v5gRHd4DumcGXP2gjlBYJncOJ8xgzHRA7eUYv6WyQy5zInMuwptirP3heBzo
-	72QjImgQ==;
+	bh=mf6hTPlKjBS7l4gbTn3lLHJV8+IbbJlPwtkPqOBsY2A=; b=RuGGDr/56zGcsKtYz20WEhQQ3k
+	31ODKV9V5vwm9OvH6X8CxEnnoj5r1bBLjmotARxCvkVQlsNbzC2eZMQsRI/xgUqv73jAG5CX21nDo
+	yUvoFdS6Jn4wO9hsx7PvZjz3yaI5ts+amFUWufqmYK4ZW0TYOerWedVnkDum7hj0smC2stZFJ23IE
+	9rp2OCtzE/oTnFO2pneOMwGZouqxtok/j8+9eMrn3XF9T2Mw/957ckfgmiIH4EDJ1vBPxENDOjRDk
+	Kdr6ubfNNvhSzyTCKwXzIyhsU31Uj0fFXJUKe599mHdxsLn5GsKQgKa0DDz2YmNjHsv/2tmNQ6ILN
+	OBn9Sg1A==;
 Received: from [191.204.192.64] (helo=[192.168.15.100])
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uRb9D-004j89-3M; Tue, 17 Jun 2025 20:35:03 +0200
+	id 1uRb9T-004j89-2J; Tue, 17 Jun 2025 20:35:19 +0200
 From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Date: Tue, 17 Jun 2025 15:34:18 -0300
-Subject: [PATCH RESEND v4 1/7] selftests/futex: Add ASSERT_ macros
+Date: Tue, 17 Jun 2025 15:34:23 -0300
+Subject: [PATCH RESEND v4 6/7] futex: Remove the limit of elements for
+ sys_set_robust_list2 lists
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250617-tonyk-robust_futex-v4-1-6586f5fb9d33@igalia.com>
+Message-Id: <20250617-tonyk-robust_futex-v4-6-6586f5fb9d33@igalia.com>
 References: <20250617-tonyk-robust_futex-v4-0-6586f5fb9d33@igalia.com>
 In-Reply-To: <20250617-tonyk-robust_futex-v4-0-6586f5fb9d33@igalia.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
@@ -57,62 +58,139 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
 X-Mailer: b4 0.14.2
 
-Create ASSERT_{EQ, NE, TRUE, FALSE} macros to make test creation easier.
+Remove the limit of ROBUST_LIST_LIMIT elements that a robust list can
+have, for the ones created with the new interface. This is done by
+overwritten the list as it's proceeded in a way that we avoid circular
+lists.
+
+For the old interface, we keep the limited behavior to avoid changing
+the API.
 
 Signed-off-by: André Almeida <andrealmeid@igalia.com>
 ---
- tools/testing/selftests/futex/include/logging.h | 38 +++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ kernel/futex/core.c | 50 ++++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 36 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/include/logging.h b/tools/testing/selftests/futex/include/logging.h
-index 874c69ce5cce9efa3a9d6de246f5972a75437dbf..a19755622a877932884570c8f58aaee7371d5f8f 100644
---- a/tools/testing/selftests/futex/include/logging.h
-+++ b/tools/testing/selftests/futex/include/logging.h
-@@ -23,6 +23,44 @@
- #include <linux/futex.h>
- #include "kselftest.h"
+diff --git a/kernel/futex/core.c b/kernel/futex/core.c
+index 49b3bc592948a811f995017027f33ad8f285531f..61f0b48a2bcd8ab926754980ab3454b9ec13a344 100644
+--- a/kernel/futex/core.c
++++ b/kernel/futex/core.c
+@@ -1152,7 +1152,8 @@ static inline int fetch_robust_entry(struct robust_list __user **entry,
+  * We silently return on any sign of list-walking problem.
+  */
+ static void exit_robust_list64(struct task_struct *curr,
+-			       struct robust_list_head __user *head)
++			       struct robust_list_head __user *head,
++			       bool destroyable)
+ {
+ 	struct robust_list __user *entry, *next_entry, *pending;
+ 	unsigned int limit = ROBUST_LIST_LIMIT, pi, pip;
+@@ -1196,13 +1197,17 @@ static void exit_robust_list64(struct task_struct *curr,
+ 		}
+ 		if (rc)
+ 			return;
+-		entry = next_entry;
+-		pi = next_pi;
++
+ 		/*
+ 		 * Avoid excessively long or circular lists:
+ 		 */
+-		if (!--limit)
++		if (!destroyable && !--limit)
+ 			break;
++		else
++			put_user(&head->list, &entry->next);
++
++		entry = next_entry;
++		pi = next_pi;
  
-+#define ASSERT_EQ(var, value)	\
-+do {				\
-+	if (var != value) {	\
-+		ksft_test_result_fail("%s: expected %ld, but %s has %ld\n", \
-+				      __func__, (long) value, #var, \
-+				      (long) var); \
-+		return;		\
-+	}			\
-+} while (0)
+ 		cond_resched();
+ 	}
+@@ -1214,7 +1219,8 @@ static void exit_robust_list64(struct task_struct *curr,
+ }
+ #else
+ static void exit_robust_list64(struct task_struct *curr,
+-			      struct robust_list_head __user *head)
++			      struct robust_list_head __user *head,
++			      bool destroyable)
+ {
+ 	pr_warn("32bit kernel should not allow ROBUST_LIST_64BIT");
+ }
+@@ -1252,7 +1258,8 @@ fetch_robust_entry32(u32 *uentry, struct robust_list __user **entry,
+  * We silently return on any sign of list-walking problem.
+  */
+ static void exit_robust_list32(struct task_struct *curr,
+-			       struct robust_list_head32 __user *head)
++			       struct robust_list_head32 __user *head,
++			       bool destroyable)
+ {
+ 	struct robust_list __user *entry, *next_entry, *pending;
+ 	unsigned int limit = ROBUST_LIST_LIMIT, pi, pip;
+@@ -1301,14 +1308,17 @@ static void exit_robust_list32(struct task_struct *curr,
+ 		}
+ 		if (rc)
+ 			return;
+-		uentry = next_uentry;
+-		entry = next_entry;
+-		pi = next_pi;
+ 		/*
+ 		 * Avoid excessively long or circular lists:
+ 		 */
+-		if (!--limit)
++		if (!destroyable && !--limit)
+ 			break;
++		else
++			put_user((struct robust_list __user *) &head->list, &entry->next);
 +
-+#define ASSERT_NE(var, value)	\
-+do {				\
-+	if (var == value) {	\
-+		ksft_test_result_fail("%s: expected not %ld, but %s has %ld\n", \
-+				      __func__, (long) value, #var, \
-+				      (long) var); \
-+		return; \
-+	}		\
-+} while (0)
++		uentry = next_uentry;
++		entry = next_entry;
++		pi = next_pi;
+ 
+ 		cond_resched();
+ 	}
+@@ -1474,26 +1484,38 @@ static void exit_pi_state_list(struct task_struct *curr)
+ static inline void exit_pi_state_list(struct task_struct *curr) { }
+ #endif
+ 
++/*
++ * futex_cleanup - After the task exists, process the robust lists
++ *
++ * Walk through the linked list, parsing robust lists and freeing the
++ * allocated lists. Lists created with the set_robust_list2 don't have a limit
++ * for sizing and can be destroyed while we walk on it to avoid circular list.
++ */
+ static void futex_cleanup(struct task_struct *tsk)
+ {
+ 	struct robust_list2_entry *curr, *n;
+ 	struct list_head *list2 = &tsk->robust_list2;
++	bool destroyable = true;
++	int i = 0;
+ 
+ 	/*
+-	 * Walk through the linked list, parsing robust lists and freeing the
+-	 * allocated lists
+ 	 */
+ 	if (unlikely(!list_empty(list2))) {
+ 		list_for_each_entry_safe(curr, n, list2, list) {
++			destroyable = true;
++			if (tsk->robust_list_index == i)
++				destroyable = false;
 +
-+#define ASSERT_TRUE(var)	\
-+do {				\
-+	if ((var) == 0) {	\
-+		ksft_test_result_fail("%s: expected %s to be true\n", \
-+				      __func__, #var); \
-+		return;		\
-+	}			\
-+} while (0)
-+
-+#define ASSERT_FALSE(var)	\
-+do {				\
-+	if (var) {		\
-+		ksft_test_result_fail("%s: expected %s to be false\n", \
-+				      __func__, #var); \
-+		return;		\
-+	}			\
-+} while (0)
-+
- /*
-  * Define PASS, ERROR, and FAIL strings with and without color escape
-  * sequences, default to no color.
+ 			if (curr->head != NULL) {
+ 				if (curr->list_type == ROBUST_LIST_64BIT)
+-					exit_robust_list64(tsk, curr->head);
++					exit_robust_list64(tsk, curr->head, destroyable);
+ 				else if (curr->list_type == ROBUST_LIST_32BIT)
+-					exit_robust_list32(tsk, curr->head);
++					exit_robust_list32(tsk, curr->head, destroyable);
+ 				curr->head = NULL;
+ 			}
+ 			list_del_init(&curr->list);
+ 			kfree(curr);
++			i++;
+ 		}
+ 	}
+ 
 
 -- 
 2.49.0
