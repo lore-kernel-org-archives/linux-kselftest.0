@@ -1,55 +1,55 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD4B248F5C
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 23:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E54F24A054
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 23:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750461681; cv=none; b=AlEebaTWQksDzvsPYkMFwg+lr+GR/FQV+0Og2oYcwxEUaF75xSe/2gFNOh2RWlG1obHrzZV7qKSgD4RHxhAlUqjHVM9pU/k7yfamkHwepXak/ZDjlQKqnGaj11Wc4v3vhq2pyUSBVDnVHCrnldVWlyIxd5bGAMWaCp9fUDnWGpg=
+	t=1750461682; cv=none; b=thsBjTPftkv/utC7HqSTRK4CotP+6PfkMMsrQc3DLeqjVnm+S6T3L21KBRSBx5Pq/4uj2FbLHUu3dsYkExsrI8nNKLkXCVIPpgnSncxuxkdxGpxwpyDOOuAl7MY/l7JtjhwpCIj8B/B4wjazyDmnMisPxRMzYk+1OYIZnpuCWxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750461681; c=relaxed/simple;
-	bh=gLRUScYA799tkKdNg2Z9ksed2nyZ8Y12jaGmMFqu66c=;
+	s=arc-20240116; t=1750461682; c=relaxed/simple;
+	bh=/gFFNVd7bwLeoJYgrwOu6qpw9rprLNcNtUCRwUJjaIQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=kHYGTlKSOxC3QQq15wNiDP+F/rRjozD9PqUwNzjexl61EOhwP1hW1GB3cr2QTn2D0m+Odr44/+dIGT8fRGr3J+mW2u2FC4utkebhEoqCxVKBaFbLZj1vjtl6saeZ7qMsq3HzmbwKkPqRIUGI2O96PmmtGnoUhCTV8+xLUTXyqvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jlFodltq; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=YTVLdt1VEC5SJP5F+lI4cXviTBqvkJF0K0X3MzeVrneUDoca+UNZztYs280GqaMo7WPhlHya8NDCw0XHrH15et5LrqrzXlezvblCd+7Y6WI6uic97b8zQOhdg9q040C4s8zyzhP5L2KkV948yRewseCb7LVCYn47TuVSCWix8jE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3gqYClI4; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jlFodltq"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-235c897d378so19577165ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 16:21:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3gqYClI4"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-311d670ad35so2057449a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 16:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750461678; x=1751066478; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1750461681; x=1751066481; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3nYYurnoBXOfb09fz2PAwE9hHYgYkIpTNzvrXVYiVWc=;
-        b=jlFodltqLMxWkH1LpVLSVT1JRLB3jpH+Fcgnt/2Kt+8vDFbFydkcOBpJw5k5khomH9
-         hSSm1cchZOHQIo736nlQdvOD8e7nuQPbAyigUXdrCL+yjfv5/QApRL4fEPLUzrTXeaUG
-         f02t0viG/xo+k1Tr6lpcswjhNtqEaCTUtVJ79n7mZv0nOAqAQZDED87hXz79lsIyRnEp
-         IiDYT5QGDwkohQGCFzCwjJ0W3xQSav+NUIexMFF6Ie90ox2E04wwA+7K3wrA8tswskZ/
-         nbTnfw0uh5QaJ7cihF/sosEX7VPgbjZch/e/4/EgswnsGDWMw1vcy4otjvpWgqiC3kVA
-         c8rw==
+        bh=jNvLu7QFuLSzgFfb+o1cFiGO1Lra6YWueQxkEfGnMNs=;
+        b=3gqYClI4srGQYD5yG9JQZw1fJvUkTcDzGbmDzEvZ7iWVgLvsqGBOueKqe6v1WA/gtB
+         dD/53nLwZtX8vvozOrl4vYpKBA+LU1xynPljodicXV1voCtqXSp1VK9RSzrNqdfwcb+m
+         2ECmsvc/tG0pe2k1boGsnMm9cOSIUMF29EAUOYp6LaofVKN1C97Dr7ix2StLZpGvKY0Y
+         kBtv9vhu1ylxU4n+f4j24ChTR9GiGcbJz0KlCebGBv+BpbsswJuAoHECUv11cQtD8C5P
+         GDauveoR9JSbU672N3iMNVCupZGUh6vb2rM85cTHU7CuVxIyyegByGyXB3tFpvEBuqzX
+         yZgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750461678; x=1751066478;
+        d=1e100.net; s=20230601; t=1750461681; x=1751066481;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3nYYurnoBXOfb09fz2PAwE9hHYgYkIpTNzvrXVYiVWc=;
-        b=qYvKGVkwcYeYYkvP6kw3/Z6AlWlJXzfnwV9vAWAXVDOV3xbJj/7WXkJPVS++Mty0PI
-         vT6SyDrV0d1OXpNZwC4f8ez5j5fKGW5K91OmxPqHb9Lwr9WIdY/mZM5ZxIBdO4/7OXX3
-         Q6Vqjk6BzODMJTaV/oMVTNwRFUw/dv/c/TWkp6o63MJjo4ZhRFkTisPEbd4Wvest0xVY
-         QownPhOLNWO7ymVjD8pEU3LsDBOSzP+XHLMTntrFncpEoITaG8wdjUX2tJUPt/l1WDIR
-         n159lmksoecDoJ440wMI9L9R+g1vgxfNAwnQP0unwSPgZpKLx6wf+cweBZqBipqFoVe1
-         Q7aA==
-X-Forwarded-Encrypted: i=1; AJvYcCUML0phOxIm06UuQ0ZUhSELgmw/005xdBmAGjdNQwiVIAEK/LjLiBG0oP+CXwz9ciJPCDbtU1DJpEVruAcrNMI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyStHEvkWvrJv57EPiol7sKSqJZz4b1+KA9bXtWNQKzUbL2hBk9
-	R0eAT7IF1EzrsJmgXGcnI0Uo/rVN4vzpQx8D9YUYrEZ5cNDNangIvDopuqNv1mO58Su/OjqtUdt
-	0mte1gZ6SXr8AgA==
-X-Google-Smtp-Source: AGHT+IFVmT1w+eByS2QRX7RNUH2I8axtla1E4AjTyB11bWa0mX7YPOfmJPGjONxefvie0XxXreZy3d6oTn6BOQ==
-X-Received: from plbku6.prod.google.com ([2002:a17:903:2886:b0:235:13ac:d4ee])
+        bh=jNvLu7QFuLSzgFfb+o1cFiGO1Lra6YWueQxkEfGnMNs=;
+        b=gl/zNiKcxU1pC4T9yjxnbE6F7zMojerSYtV0LCBFR6v0mFMxM0jtYCps5aqhcYDfyJ
+         DuIAu2y0zPL62/+bNfKzNawH+Ck6oLQzIsbZ8mJNsvRkiNioMgebb7MJuBH/jV7qEO5C
+         GLQ1Rw++ng7GNaVOAtBKipkUmNpxHjj4fgSSj8tE4jjCnonxBZEOEiA+52NogNuIvtrO
+         l0+3VS8yIeblgn2JVZKet8GEwq1VOdOVa2hcZqrBwe3gjKMQK3RLkq3i9vYsw9oxjIoQ
+         V0bWtM7rycJs5MVEbD3xq5ykUYW8qWyk5zGNiUdVWND4jZ0FnjeJpK26achNclIzSyc4
+         94KA==
+X-Forwarded-Encrypted: i=1; AJvYcCUqbFn3k+v7HaoTAGW/ed/1Qn8i6hAiJA0LUqZAqcgfvlGTNgWlwggAkyNRsCzwMlQDbhVU1I5wNKQ8Qu/XtDo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqzhBVwPki9wDJjdMCrT/1eFgUvBrORVGdKTnn8d35CTlcTUPp
+	ct1EQcjsXL6ky9hjN6cj7JuHclKPENEZSmJj7ApnrBQ64hHEK0YVBvm7q+dToyJjQ4XKY20AJbZ
+	B146RDkDx3RPkLQ==
+X-Google-Smtp-Source: AGHT+IE5U13pCesAd3SJBRAIp4RiZ7MjGkyuGqvxaCmz6abdXRn4Yx5dm8NsY5+C+uRgn5qVoevhE/+QEM0c8A==
+X-Received: from pjbov4.prod.google.com ([2002:a17:90b:2584:b0:30e:6bb2:6855])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:32c5:b0:235:779:ede0 with SMTP id d9443c01a7336-237d98a09edmr80519705ad.35.1750461678045;
- Fri, 20 Jun 2025 16:21:18 -0700 (PDT)
-Date: Fri, 20 Jun 2025 23:20:08 +0000
+ 2002:a17:90b:5647:b0:311:fc8b:31b5 with SMTP id 98e67ed59e1d1-3159d64820emr7798200a91.14.1750461680722;
+ Fri, 20 Jun 2025 16:21:20 -0700 (PDT)
+Date: Fri, 20 Jun 2025 23:20:10 +0000
 In-Reply-To: <20250620232031.2705638-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250620232031.2705638-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.50.0.rc2.701.gf1e915cc24-goog
-Message-ID: <20250620232031.2705638-11-dmatlack@google.com>
-Subject: [PATCH 10/33] tools headers: Import asm-generic MMIO helpers
+Message-ID: <20250620232031.2705638-13-dmatlack@google.com>
+Subject: [PATCH 12/33] tools headers: Import iosubmit_cmds512()
 From: David Matlack <dmatlack@google.com>
 To: Alex Williamson <alex.williamson@redhat.com>
 Cc: Aaron Lewis <aaronlewis@google.com>, 
@@ -80,544 +80,96 @@ Cc: Aaron Lewis <aaronlewis@google.com>,
 	Wei Yang <richard.weiyang@gmail.com>, "Yury Norov [NVIDIA]" <yury.norov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Import the asm-generic MMIO helper functions from the kernel headers
-into tools/include/. The top-level include is <linux/io.h> which then
-includes the arch-specific <asm/io.h>, which then includes
-<asm-generic/io.h>. This layout is chosen to match the kernel header
-layout and to appease checkpatch.pl (which warns against including
-<asm/io.h> or <asm-generic/io.h> directly).
+Import iosubmit_cmds512() from arch/x86/include/asm/io.h into tools/ so
+it can be used by VFIO selftests to interact with Intel DSA devices.
 
-Changes made when importing:
+Also pull in movdir64b() from arch/x86/include/asm/special_insns.h into
+tools/, which is the underlying instruction used by iosubmit_cmds512().
 
- - Add missing includes at the top.
- - Stub out mmiowb_set_pending().
- - Stub out _THIS_IP_.
- - Stub out log_*_mmio() calls.
- - Drop the CONFIG_64BIT checks, since tools/include/linux/types.h
-   always defines u64.
+Changes made when importing: None
 
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- tools/include/asm-generic/io.h | 482 +++++++++++++++++++++++++++++++++
- tools/include/asm/io.h         |   7 +
- tools/include/linux/io.h       |   4 +-
- 3 files changed, 492 insertions(+), 1 deletion(-)
- create mode 100644 tools/include/asm-generic/io.h
- create mode 100644 tools/include/asm/io.h
+ tools/arch/x86/include/asm/io.h            | 26 +++++++++++++++++++++
+ tools/arch/x86/include/asm/special_insns.h | 27 ++++++++++++++++++++++
+ 2 files changed, 53 insertions(+)
+ create mode 100644 tools/arch/x86/include/asm/special_insns.h
 
-diff --git a/tools/include/asm-generic/io.h b/tools/include/asm-generic/io.h
-new file mode 100644
-index 000000000000..e5a0b07ad452
---- /dev/null
-+++ b/tools/include/asm-generic/io.h
-@@ -0,0 +1,482 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _TOOLS_ASM_GENERIC_IO_H
-+#define _TOOLS_ASM_GENERIC_IO_H
-+
-+#include <asm/barrier.h>
-+#include <asm/byteorder.h>
-+
-+#include <linux/compiler.h>
-+#include <linux/kernel.h>
-+#include <linux/types.h>
-+
-+#ifndef mmiowb_set_pending
-+#define mmiowb_set_pending() do { } while (0)
-+#endif
-+
-+#ifndef __io_br
-+#define __io_br()      barrier()
-+#endif
-+
-+/* prevent prefetching of coherent DMA data ahead of a dma-complete */
-+#ifndef __io_ar
-+#ifdef rmb
-+#define __io_ar(v)      rmb()
-+#else
-+#define __io_ar(v)      barrier()
-+#endif
-+#endif
-+
-+/* flush writes to coherent DMA data before possibly triggering a DMA read */
-+#ifndef __io_bw
-+#ifdef wmb
-+#define __io_bw()      wmb()
-+#else
-+#define __io_bw()      barrier()
-+#endif
-+#endif
-+
-+/* serialize device access against a spin_unlock, usually handled there. */
-+#ifndef __io_aw
-+#define __io_aw()      mmiowb_set_pending()
-+#endif
-+
-+#ifndef __io_pbw
-+#define __io_pbw()     __io_bw()
-+#endif
-+
-+#ifndef __io_paw
-+#define __io_paw()     __io_aw()
-+#endif
-+
-+#ifndef __io_pbr
-+#define __io_pbr()     __io_br()
-+#endif
-+
-+#ifndef __io_par
-+#define __io_par(v)     __io_ar(v)
-+#endif
-+
-+#ifndef _THIS_IP_
-+#define _THIS_IP_ 0
-+#endif
-+
-+static inline void log_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
-+				  unsigned long caller_addr, unsigned long caller_addr0) {}
-+static inline void log_post_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
-+				       unsigned long caller_addr, unsigned long caller_addr0) {}
-+static inline void log_read_mmio(u8 width, const volatile void __iomem *addr,
-+				 unsigned long caller_addr, unsigned long caller_addr0) {}
-+static inline void log_post_read_mmio(u64 val, u8 width, const volatile void __iomem *addr,
-+				      unsigned long caller_addr, unsigned long caller_addr0) {}
-+
-+/*
-+ * __raw_{read,write}{b,w,l,q}() access memory in native endianness.
-+ *
-+ * On some architectures memory mapped IO needs to be accessed differently.
-+ * On the simple architectures, we just read/write the memory location
-+ * directly.
-+ */
-+
-+#ifndef __raw_readb
-+#define __raw_readb __raw_readb
-+static inline u8 __raw_readb(const volatile void __iomem *addr)
-+{
-+	return *(const volatile u8 __force *)addr;
-+}
-+#endif
-+
-+#ifndef __raw_readw
-+#define __raw_readw __raw_readw
-+static inline u16 __raw_readw(const volatile void __iomem *addr)
-+{
-+	return *(const volatile u16 __force *)addr;
-+}
-+#endif
-+
-+#ifndef __raw_readl
-+#define __raw_readl __raw_readl
-+static inline u32 __raw_readl(const volatile void __iomem *addr)
-+{
-+	return *(const volatile u32 __force *)addr;
-+}
-+#endif
-+
-+#ifndef __raw_readq
-+#define __raw_readq __raw_readq
-+static inline u64 __raw_readq(const volatile void __iomem *addr)
-+{
-+	return *(const volatile u64 __force *)addr;
-+}
-+#endif
-+
-+#ifndef __raw_writeb
-+#define __raw_writeb __raw_writeb
-+static inline void __raw_writeb(u8 value, volatile void __iomem *addr)
-+{
-+	*(volatile u8 __force *)addr = value;
-+}
-+#endif
-+
-+#ifndef __raw_writew
-+#define __raw_writew __raw_writew
-+static inline void __raw_writew(u16 value, volatile void __iomem *addr)
-+{
-+	*(volatile u16 __force *)addr = value;
-+}
-+#endif
-+
-+#ifndef __raw_writel
-+#define __raw_writel __raw_writel
-+static inline void __raw_writel(u32 value, volatile void __iomem *addr)
-+{
-+	*(volatile u32 __force *)addr = value;
-+}
-+#endif
-+
-+#ifndef __raw_writeq
-+#define __raw_writeq __raw_writeq
-+static inline void __raw_writeq(u64 value, volatile void __iomem *addr)
-+{
-+	*(volatile u64 __force *)addr = value;
-+}
-+#endif
-+
-+/*
-+ * {read,write}{b,w,l,q}() access little endian memory and return result in
-+ * native endianness.
-+ */
-+
-+#ifndef readb
-+#define readb readb
-+static inline u8 readb(const volatile void __iomem *addr)
-+{
-+	u8 val;
-+
-+	log_read_mmio(8, addr, _THIS_IP_, _RET_IP_);
-+	__io_br();
-+	val = __raw_readb(addr);
-+	__io_ar(val);
-+	log_post_read_mmio(val, 8, addr, _THIS_IP_, _RET_IP_);
-+	return val;
-+}
-+#endif
-+
-+#ifndef readw
-+#define readw readw
-+static inline u16 readw(const volatile void __iomem *addr)
-+{
-+	u16 val;
-+
-+	log_read_mmio(16, addr, _THIS_IP_, _RET_IP_);
-+	__io_br();
-+	val = __le16_to_cpu((__le16 __force)__raw_readw(addr));
-+	__io_ar(val);
-+	log_post_read_mmio(val, 16, addr, _THIS_IP_, _RET_IP_);
-+	return val;
-+}
-+#endif
-+
-+#ifndef readl
-+#define readl readl
-+static inline u32 readl(const volatile void __iomem *addr)
-+{
-+	u32 val;
-+
-+	log_read_mmio(32, addr, _THIS_IP_, _RET_IP_);
-+	__io_br();
-+	val = __le32_to_cpu((__le32 __force)__raw_readl(addr));
-+	__io_ar(val);
-+	log_post_read_mmio(val, 32, addr, _THIS_IP_, _RET_IP_);
-+	return val;
-+}
-+#endif
-+
-+#ifndef readq
-+#define readq readq
-+static inline u64 readq(const volatile void __iomem *addr)
-+{
-+	u64 val;
-+
-+	log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
-+	__io_br();
-+	val = __le64_to_cpu((__le64 __force)__raw_readq(addr));
-+	__io_ar(val);
-+	log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
-+	return val;
-+}
-+#endif
-+
-+#ifndef writeb
-+#define writeb writeb
-+static inline void writeb(u8 value, volatile void __iomem *addr)
-+{
-+	log_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_);
-+	__io_bw();
-+	__raw_writeb(value, addr);
-+	__io_aw();
-+	log_post_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_);
-+}
-+#endif
-+
-+#ifndef writew
-+#define writew writew
-+static inline void writew(u16 value, volatile void __iomem *addr)
-+{
-+	log_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-+	__io_bw();
-+	__raw_writew((u16 __force)cpu_to_le16(value), addr);
-+	__io_aw();
-+	log_post_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-+}
-+#endif
-+
-+#ifndef writel
-+#define writel writel
-+static inline void writel(u32 value, volatile void __iomem *addr)
-+{
-+	log_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-+	__io_bw();
-+	__raw_writel((u32 __force)__cpu_to_le32(value), addr);
-+	__io_aw();
-+	log_post_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-+}
-+#endif
-+
-+#ifndef writeq
-+#define writeq writeq
-+static inline void writeq(u64 value, volatile void __iomem *addr)
-+{
-+	log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-+	__io_bw();
-+	__raw_writeq((u64 __force)__cpu_to_le64(value), addr);
-+	__io_aw();
-+	log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-+}
-+#endif
-+
-+/*
-+ * {read,write}{b,w,l,q}_relaxed() are like the regular version, but
-+ * are not guaranteed to provide ordering against spinlocks or memory
-+ * accesses.
-+ */
-+#ifndef readb_relaxed
-+#define readb_relaxed readb_relaxed
-+static inline u8 readb_relaxed(const volatile void __iomem *addr)
-+{
-+	u8 val;
-+
-+	log_read_mmio(8, addr, _THIS_IP_, _RET_IP_);
-+	val = __raw_readb(addr);
-+	log_post_read_mmio(val, 8, addr, _THIS_IP_, _RET_IP_);
-+	return val;
-+}
-+#endif
-+
-+#ifndef readw_relaxed
-+#define readw_relaxed readw_relaxed
-+static inline u16 readw_relaxed(const volatile void __iomem *addr)
-+{
-+	u16 val;
-+
-+	log_read_mmio(16, addr, _THIS_IP_, _RET_IP_);
-+	val = __le16_to_cpu((__le16 __force)__raw_readw(addr));
-+	log_post_read_mmio(val, 16, addr, _THIS_IP_, _RET_IP_);
-+	return val;
-+}
-+#endif
-+
-+#ifndef readl_relaxed
-+#define readl_relaxed readl_relaxed
-+static inline u32 readl_relaxed(const volatile void __iomem *addr)
-+{
-+	u32 val;
-+
-+	log_read_mmio(32, addr, _THIS_IP_, _RET_IP_);
-+	val = __le32_to_cpu((__le32 __force)__raw_readl(addr));
-+	log_post_read_mmio(val, 32, addr, _THIS_IP_, _RET_IP_);
-+	return val;
-+}
-+#endif
-+
-+#if defined(readq) && !defined(readq_relaxed)
-+#define readq_relaxed readq_relaxed
-+static inline u64 readq_relaxed(const volatile void __iomem *addr)
-+{
-+	u64 val;
-+
-+	log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
-+	val = __le64_to_cpu((__le64 __force)__raw_readq(addr));
-+	log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
-+	return val;
-+}
-+#endif
-+
-+#ifndef writeb_relaxed
-+#define writeb_relaxed writeb_relaxed
-+static inline void writeb_relaxed(u8 value, volatile void __iomem *addr)
-+{
-+	log_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_);
-+	__raw_writeb(value, addr);
-+	log_post_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_);
-+}
-+#endif
-+
-+#ifndef writew_relaxed
-+#define writew_relaxed writew_relaxed
-+static inline void writew_relaxed(u16 value, volatile void __iomem *addr)
-+{
-+	log_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-+	__raw_writew((u16 __force)cpu_to_le16(value), addr);
-+	log_post_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-+}
-+#endif
-+
-+#ifndef writel_relaxed
-+#define writel_relaxed writel_relaxed
-+static inline void writel_relaxed(u32 value, volatile void __iomem *addr)
-+{
-+	log_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-+	__raw_writel((u32 __force)__cpu_to_le32(value), addr);
-+	log_post_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-+}
-+#endif
-+
-+#if defined(writeq) && !defined(writeq_relaxed)
-+#define writeq_relaxed writeq_relaxed
-+static inline void writeq_relaxed(u64 value, volatile void __iomem *addr)
-+{
-+	log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-+	__raw_writeq((u64 __force)__cpu_to_le64(value), addr);
-+	log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-+}
-+#endif
-+
-+/*
-+ * {read,write}s{b,w,l,q}() repeatedly access the same memory address in
-+ * native endianness in 8-, 16-, 32- or 64-bit chunks (@count times).
-+ */
-+#ifndef readsb
-+#define readsb readsb
-+static inline void readsb(const volatile void __iomem *addr, void *buffer,
-+			  unsigned int count)
-+{
-+	if (count) {
-+		u8 *buf = buffer;
-+
-+		do {
-+			u8 x = __raw_readb(addr);
-+			*buf++ = x;
-+		} while (--count);
-+	}
-+}
-+#endif
-+
-+#ifndef readsw
-+#define readsw readsw
-+static inline void readsw(const volatile void __iomem *addr, void *buffer,
-+			  unsigned int count)
-+{
-+	if (count) {
-+		u16 *buf = buffer;
-+
-+		do {
-+			u16 x = __raw_readw(addr);
-+			*buf++ = x;
-+		} while (--count);
-+	}
-+}
-+#endif
-+
-+#ifndef readsl
-+#define readsl readsl
-+static inline void readsl(const volatile void __iomem *addr, void *buffer,
-+			  unsigned int count)
-+{
-+	if (count) {
-+		u32 *buf = buffer;
-+
-+		do {
-+			u32 x = __raw_readl(addr);
-+			*buf++ = x;
-+		} while (--count);
-+	}
-+}
-+#endif
-+
-+#ifndef readsq
-+#define readsq readsq
-+static inline void readsq(const volatile void __iomem *addr, void *buffer,
-+			  unsigned int count)
-+{
-+	if (count) {
-+		u64 *buf = buffer;
-+
-+		do {
-+			u64 x = __raw_readq(addr);
-+			*buf++ = x;
-+		} while (--count);
-+	}
-+}
-+#endif
-+
-+#ifndef writesb
-+#define writesb writesb
-+static inline void writesb(volatile void __iomem *addr, const void *buffer,
-+			   unsigned int count)
-+{
-+	if (count) {
-+		const u8 *buf = buffer;
-+
-+		do {
-+			__raw_writeb(*buf++, addr);
-+		} while (--count);
-+	}
-+}
-+#endif
-+
-+#ifndef writesw
-+#define writesw writesw
-+static inline void writesw(volatile void __iomem *addr, const void *buffer,
-+			   unsigned int count)
-+{
-+	if (count) {
-+		const u16 *buf = buffer;
-+
-+		do {
-+			__raw_writew(*buf++, addr);
-+		} while (--count);
-+	}
-+}
-+#endif
-+
-+#ifndef writesl
-+#define writesl writesl
-+static inline void writesl(volatile void __iomem *addr, const void *buffer,
-+			   unsigned int count)
-+{
-+	if (count) {
-+		const u32 *buf = buffer;
-+
-+		do {
-+			__raw_writel(*buf++, addr);
-+		} while (--count);
-+	}
-+}
-+#endif
-+
-+#ifndef writesq
-+#define writesq writesq
-+static inline void writesq(volatile void __iomem *addr, const void *buffer,
-+			   unsigned int count)
-+{
-+	if (count) {
-+		const u64 *buf = buffer;
-+
-+		do {
-+			__raw_writeq(*buf++, addr);
-+		} while (--count);
-+	}
-+}
-+#endif
-+
-+#endif /* _TOOLS_ASM_GENERIC_IO_H */
-diff --git a/tools/include/asm/io.h b/tools/include/asm/io.h
-new file mode 100644
-index 000000000000..9ae219b12604
---- /dev/null
-+++ b/tools/include/asm/io.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _TOOLS_ASM_IO_H
-+#define _TOOLS_ASM_IO_H
-+
-+#include <asm-generic/io.h>
-+
-+#endif /* _TOOLS_ASM_IO_H */
-diff --git a/tools/include/linux/io.h b/tools/include/linux/io.h
-index e129871fe661..4b94b84160b8 100644
---- a/tools/include/linux/io.h
-+++ b/tools/include/linux/io.h
-@@ -2,4 +2,6 @@
- #ifndef _TOOLS_IO_H
- #define _TOOLS_IO_H
+diff --git a/tools/arch/x86/include/asm/io.h b/tools/arch/x86/include/asm/io.h
+index 4c787a2363de..ecad61a3ea52 100644
+--- a/tools/arch/x86/include/asm/io.h
++++ b/tools/arch/x86/include/asm/io.h
+@@ -4,6 +4,7 @@
  
--#endif
-+#include <asm/io.h>
+ #include <linux/compiler.h>
+ #include <linux/types.h>
++#include "special_insns.h"
+ 
+ #define build_mmio_read(name, size, type, reg, barrier) \
+ static inline type name(const volatile void __iomem *addr) \
+@@ -72,4 +73,29 @@ build_mmio_write(__writeq, "q", u64, "r", )
+ 
+ #include <asm-generic/io.h>
+ 
++/**
++ * iosubmit_cmds512 - copy data to single MMIO location, in 512-bit units
++ * @dst: destination, in MMIO space (must be 512-bit aligned)
++ * @src: source
++ * @count: number of 512 bits quantities to submit
++ *
++ * Submit data from kernel space to MMIO space, in units of 512 bits at a
++ * time.  Order of access is not guaranteed, nor is a memory barrier
++ * performed afterwards.
++ *
++ * Warning: Do not use this helper unless your driver has checked that the CPU
++ * instruction is supported on the platform.
++ */
++static inline void iosubmit_cmds512(void __iomem *dst, const void *src,
++				    size_t count)
++{
++	const u8 *from = src;
++	const u8 *end = from + count * 64;
 +
-+#endif /* _TOOLS_IO_H */
++	while (from < end) {
++		movdir64b(dst, from);
++		from += 64;
++	}
++}
++
+ #endif /* _TOOLS_ASM_X86_IO_H */
+diff --git a/tools/arch/x86/include/asm/special_insns.h b/tools/arch/x86/include/asm/special_insns.h
+new file mode 100644
+index 000000000000..04af42a99c38
+--- /dev/null
++++ b/tools/arch/x86/include/asm/special_insns.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _TOOLS_ASM_X86_SPECIAL_INSNS_H
++#define _TOOLS_ASM_X86_SPECIAL_INSNS_H
++
++/* The dst parameter must be 64-bytes aligned */
++static inline void movdir64b(void *dst, const void *src)
++{
++	const struct { char _[64]; } *__src = src;
++	struct { char _[64]; } *__dst = dst;
++
++	/*
++	 * MOVDIR64B %(rdx), rax.
++	 *
++	 * Both __src and __dst must be memory constraints in order to tell the
++	 * compiler that no other memory accesses should be reordered around
++	 * this one.
++	 *
++	 * Also, both must be supplied as lvalues because this tells
++	 * the compiler what the object is (its size) the instruction accesses.
++	 * I.e., not the pointers but what they point to, thus the deref'ing '*'.
++	 */
++	asm volatile(".byte 0x66, 0x0f, 0x38, 0xf8, 0x02"
++		     : "+m" (*__dst)
++		     :  "m" (*__src), "a" (__dst), "d" (__src));
++}
++
++#endif /* _TOOLS_ASM_X86_SPECIAL_INSNS_H */
 -- 
 2.50.0.rc2.701.gf1e915cc24-goog
 
