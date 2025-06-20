@@ -1,31 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E542376EF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6EB8238178;
 	Fri, 20 Jun 2025 21:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750455589; cv=none; b=sF8JSqGcX6cutanm7kMg3BUFSIr6aWnsp5D9fZlk22m+vemFazCXjdjrKk27Fo2c+7L/k/G2YwIhq9aYv/iXHC2imkWC8Vn05o/0hmKSS5DS63doJdOjmjGlh1mqU1r/grXLzicXrCsrE2JJrKAdMNdZ/kwSkN2XwryW7xlIBjw=
+	t=1750455589; cv=none; b=GMtm+HGt3S9rXntEAHF7tliPVJgu1Bhc9WHrHkJ3Hr1JOYGYkYDP3DzQoAbMAZtAb+AfTGgjqCwUP/deIn6Kf4NaKA3Pwj/sQ3KOXPPp1Tb01ndT9z96c26xDr/r5rLrXa1XGZcGZsdNqm4tjQoj/UqHpyyUyDf7O6Pf5NMhEbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750455589; c=relaxed/simple;
-	bh=C2vgoysKylfmcrNzQLq3BsQt6CzbAM6YNXWLVhmaDUc=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nKm9ktt1yXiUEElvpW/djBB/HQeAHq+a8AHDR0K6HfsHcxp+f9dSFQe0B++OaLHirosXSOdBrhSIFSCWJLECYCPQXT/jYuVDq/uOS/IV2STBkZsFKCw27PA3PeqT4fOJEVbMb5GsunenLi4rlqgPrgsLwey0728e1TUYIrSl6l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=DyzeQwiG; arc=none smtp.client-ip=159.69.126.157
+	bh=6ml43yk9vOCtPWikBGN5ZCduTpE8kt0rfUh8lqsvMj4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=sewlcLRw2juxO49xn32aDCNWpcemL++JPJvc4whyhknZN6wnn9uoGR+nBI05WNs82NYgePY3gyyWGjA1cWzHinf+RC5NoQf+U5mqrv72VoBH/aGrwQ+/Py+u/LoTR420WPEPM5D7UDkMQ9WAl1SG1dgAhTJoiSkSFYdNRs0zc0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=C9SVEg7/; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="DyzeQwiG"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="C9SVEg7/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1750455579;
-	bh=C2vgoysKylfmcrNzQLq3BsQt6CzbAM6YNXWLVhmaDUc=;
-	h=From:Subject:Date:To:Cc:From;
-	b=DyzeQwiGFW5lkCiZhCN2e95mcPv6p14Uw6toQglLghVNxvYGSos1+9wa58Eowb/BW
-	 5hbMXPUC0njVN+7xBCaPKZenknWa2wWMXp8GMkDcR9j2y6fYJI4+MQFnDmhJ43y2S1
-	 0KbuRabwVMpEAvh7dqKMxzmt9ycsQT1+ndl8ApLs=
+	bh=6ml43yk9vOCtPWikBGN5ZCduTpE8kt0rfUh8lqsvMj4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=C9SVEg7/3edLKq9BxGqCoKi0TK9ulapsfcg1kxaMk+5t3AhgQ5xQokAHL3s+rKb/1
+	 OsLuQgL+sHpKfqa2C9dtVSm+/VGnE8XSVVphqCrA6ga2QWHsaeWb6rHRV5L9MoOwzD
+	 CJIUmLT9icjfHRpnIZcFQ/dizL0uXY8eO5Yt6mwM=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/4] selftests/nolibc: integrate with kselftests
-Date: Fri, 20 Jun 2025 23:39:29 +0200
-Message-Id: <20250620-nolibc-selftests-v1-0-f6b2ce7c5071@weissschuh.net>
+Date: Fri, 20 Jun 2025 23:39:31 +0200
+Subject: [PATCH 2/4] selftests/nolibc: split out CFLAGS logic
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,45 +34,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIABHVVWgC/x3MQQqAIBBA0avErBPMSqurRAursQbCwpEIpLsnL
- d/i/wSMgZBhKBIEvInp9BlVWcCyW7+hoDUblFSt1JUW/jxoXgTj4SJyZFH31pjGyE4ZBTm7Ajp
- 6/uU4ve8HG57Bp2IAAAA=
-X-Change-ID: 20250616-nolibc-selftests-39a774708272
+Message-Id: <20250620-nolibc-selftests-v1-2-f6b2ce7c5071@weissschuh.net>
+References: <20250620-nolibc-selftests-v1-0-f6b2ce7c5071@weissschuh.net>
+In-Reply-To: <20250620-nolibc-selftests-v1-0-f6b2ce7c5071@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1750455578; l=977;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750455578; l=2577;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=C2vgoysKylfmcrNzQLq3BsQt6CzbAM6YNXWLVhmaDUc=;
- b=Zfq2d8U0y+i1o/sm7ch8nTLLUXpzgksVYTkeQZrCB2JmquPhJ3rU7v8DmPSlPGX/R+6XMAIfH
- s1GaG0J6iWxDB5BHupgSPzOmsFuzaBBs8FC4elXd9Iq6K212PDonCaN
+ bh=6ml43yk9vOCtPWikBGN5ZCduTpE8kt0rfUh8lqsvMj4=;
+ b=kya2WzdcUMU0j+ht31ZZrJE3DWAcrPDj7HtBvA5GOekBCkyTZWKRtDDacqSfOdHCalFOHbEqh
+ hUTeSvMwJtaAS4zXFjLLv7+ylaYexs0LmIXK1+ZnB+x0/mk+F69X9l/
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Hook up nolibc-test with the kselftests framework.
-This enables CI systems and developers to easily execute the tests.
+Some upcoming changes will reuse the CFLAGS.
+
+Split the computation into a reusable Makefile.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (4):
-      selftests/nolibc: drop implicit defconfig executions
-      selftests/nolibc: split out CFLAGS logic
-      selftests/nolibc: rename Makefile
-      selftests/nolibc: integrate with kselftests
+ tools/testing/selftests/nolibc/Makefile         | 12 ++++--------
+ tools/testing/selftests/nolibc/Makefile.include | 10 ++++++++++
+ 2 files changed, 14 insertions(+), 8 deletions(-)
 
- tools/testing/selftests/Makefile                |   1 +
- tools/testing/selftests/nolibc/Makefile         | 346 +-----------------------
- tools/testing/selftests/nolibc/Makefile.include |  10 +
- tools/testing/selftests/nolibc/Makefile.nolibc  | 340 +++++++++++++++++++++++
- tools/testing/selftests/nolibc/run-tests.sh     |   2 +-
- 5 files changed, 363 insertions(+), 336 deletions(-)
----
-base-commit: d7161bd24e41eee5a3cca5bd8caaf1afdf9120c9
-change-id: 20250616-nolibc-selftests-39a774708272
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 41b97dfd02bff3fb57f4d2b73b718f5c389d25e9..6d62f350d0c16405785a8aabc7f5741b82e55370 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -195,14 +195,10 @@ CFLAGS_sparc32 = $(call cc-option,-m32)
+ ifeq ($(origin XARCH),command line)
+ CFLAGS_XARCH = $(CFLAGS_$(XARCH))
+ endif
+-_CFLAGS_STACKPROTECTOR = $(call cc-option,-fstack-protector-all) $(call cc-option,-mstack-protector-guard=global)
+-CFLAGS_STACKPROTECTOR ?= $(call try-run, \
+-	echo 'void foo(void) {}' | $(CC) -x c - -o - -S $(CLANG_CROSS_FLAGS) $(_CFLAGS_STACKPROTECTOR) | grep -q __stack_chk_guard, \
+-	$(_CFLAGS_STACKPROTECTOR))
+-CFLAGS_SANITIZER ?= $(call cc-option,-fsanitize=undefined -fsanitize-trap=all)
+-CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wextra \
+-		$(call cc-option,-fno-stack-protector) $(call cc-option,-Wmissing-prototypes) \
+-		$(CFLAGS_XARCH) $(CFLAGS_STACKPROTECTOR) $(CFLAGS_SANITIZER) $(CFLAGS_EXTRA)
++
++include Makefile.include
++
++CFLAGS  ?= $(CFLAGS_NOLIBC_TEST) $(CFLAGS_XARCH) $(CFLAGS_EXTRA)
+ LDFLAGS :=
+ 
+ LIBGCC := -lgcc
+diff --git a/tools/testing/selftests/nolibc/Makefile.include b/tools/testing/selftests/nolibc/Makefile.include
+new file mode 100644
+index 0000000000000000000000000000000000000000..66287fafbbe07e1750e31c3b2388ac4be1e7f8ae
+--- /dev/null
++++ b/tools/testing/selftests/nolibc/Makefile.include
+@@ -0,0 +1,10 @@
++# SPDX-License-Identifier: GPL-2.0
++
++__CFLAGS_STACKPROTECTOR = $(call cc-option,-fstack-protector-all) $(call cc-option,-mstack-protector-guard=global)
++_CFLAGS_STACKPROTECTOR ?= $(call try-run, \
++	echo 'void foo(void) {}' | $(CC) -x c - -o - -S $(CLANG_CROSS_FLAGS) $(__CFLAGS_STACKPROTECTOR) | grep -q __stack_chk_guard, \
++	$(__CFLAGS_STACKPROTECTOR))
++_CFLAGS_SANITIZER ?= $(call cc-option,-fsanitize=undefined -fsanitize-trap=all)
++CFLAGS_NOLIBC_TEST  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wextra \
++		$(call cc-option,-fno-stack-protector) $(call cc-option,-Wmissing-prototypes) \
++		$(_CFLAGS_STACKPROTECTOR) $(_CFLAGS_SANITIZER)
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.50.0
 
