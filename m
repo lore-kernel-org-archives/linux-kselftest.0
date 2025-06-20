@@ -1,55 +1,55 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7426B242D6B
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 23:21:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C919A243364
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 23:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750461678; cv=none; b=LBlYdn83wQLoIcHKpyKXXMWWFlmnhR04220B9ATYDtCs+dkIju1zxu5uwDv2kZJROTo/0xRIkcgU8ZohrqXMCtmRuIGjVEm/JC6Y7sNr6281CHTCPn7eTJrwnNAF8vjl8MHRBNqck8uLusTI3Owz3XaRz6gZDYWV2wJ25LEx6QU=
+	t=1750461681; cv=none; b=OdnKCuJhoAAm+7lKSBRsnRllwPSWna5FSFjJx5CaK0SJyfjTcgOu2SSQIW1fU/JLd1gOr6FwvrlylEloE7qQ3HnPDkbINOg1/mWvF8kGp5JK2mQsrLP8gPW1N4uY+iKRQG5tTQ7t5FfgE1IHZNSmiWZEi0VcDRKq9Wk8TNqy61U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750461678; c=relaxed/simple;
-	bh=GCECazfby9C7Sfo4AIvrRW5D6g28njFUtXYSv94ZK6E=;
+	s=arc-20240116; t=1750461681; c=relaxed/simple;
+	bh=rjAOOg5rAqiE8TcyI+gxmP/J4K5fE0ChxFTfHJ5WsPg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CRNGCttWevafnsqDQJPcjG5T5zC4OKOCesXGKHS5sZUz9hboyUyP2WgGvJ1X7Eo8szILxqTOA7tktZfPNkU5zbXPkoZQbXgjy7ZIgRIGY86TPSsJ1VV7xQCCflsapvFBTKAbO0lg/Knvzdz7bkQXIaKWOpZppzrCYUEV3eNb1Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v5KhJG/b; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=bz/K0hNx/5j6PvrM0oFwseSXQmwPkg/FrUs5zQQpMMX4KmZNT4IGwbEXH78nzIpZDrYzKwayFIPp9OCrOkjFfnZcQxSfAPMn78ykunyPu/iuk0qbnFZv3in4SZjDTy5f02Em8t18CgmY1tOYG+cHS4QClCb6VqYIxAt0bekYgEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tlSDHG08; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v5KhJG/b"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3138e65efe2so2001740a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 16:21:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tlSDHG08"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-748b4d5c045so1829562b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jun 2025 16:21:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750461677; x=1751066477; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1750461679; x=1751066479; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PvClDGTsV0nVxKJRC5mJjifd6UvnizVaVJrdNpMJ3Oo=;
-        b=v5KhJG/bsZTVW9B+SnNl1JLeE+1rTQl+B8bwqcZj1+cy6ZvkpwXcBT4uWdyXrOI8X9
-         9WFEJgKDuCxzM8om4gsYmaR1WgZ9BvTySAUpuHLRci+FOVjV177y3fE9+2fYyEcFqt67
-         Wydu5PYbZx7m7bfJWsB+l5x6MCbNZ0ui50MY8w2vMPVi+8kCGYpEH6BzkbHgrSKXkbYe
-         3/pnWCJp6Rz5BPitQNlpfEgR+/eLdd5Z/1BVq35hORDlTOv5EX22e18/2I/BkPiVV18y
-         OsTZ58I8zFNzzmrQzPQ++JwF8yxfcMqFcHyuiVuP7K/K3CEDXzT5XCp1gmKEAbxP4UBF
-         O8Tg==
+        bh=94GJWP70zctYgbzarRKMjhu8IQXsXSiZ1mX5cwoCPok=;
+        b=tlSDHG08ICUgIZF586gLlTpnHZiAkHfoEmmgRp9iLSQEu4GYvRJNryk7hUtQVzlVrK
+         m9zOOEoJHEPYbIqxg/1MHPf7IqcCTzIIFRCjNaKTD43NbSZIW/69RmA1OrDaCm6pnmI3
+         /wmO6T2oyOayP1eOSchrvyRwjYYZeBp8DRMTtkcKrN9Mvj6M3vW8cVGnFWu2rTBOqvtg
+         DtCoOw30YNCvhdFlh8A6OgvHgZvxSDu+Jv3lODqnKTg4Je5qKAEU5RheqK22SigvwV9S
+         QN3+3IJAKn1k7aeyvcr6CtxoNWsqvWq0k3ZOCyQGumwKAT0J3iJG1H5QFGWp8pfihhqp
+         S+Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750461677; x=1751066477;
+        d=1e100.net; s=20230601; t=1750461679; x=1751066479;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PvClDGTsV0nVxKJRC5mJjifd6UvnizVaVJrdNpMJ3Oo=;
-        b=akG9NN1h3ikmnC/yep1z2Yy282SaT/sG5ErU0OhWaQ3fRQjQwmuyi2ygtA6/xILKQu
-         x8MJP/NQV1gVKWeojCAe5aSdsSHfz52rHPNKekmDklUjNxC7pAlZ6oecOtqahaueWN6l
-         sPd/n2jZSgr45QQDTyTm0FIYZWiJ2u+dyJQj0L2UUIs1BBfdvu34Li9u/lZM24CiFaUe
-         +G7WHJJHHwd3xYuAXbmda/p6NqbOwRqsfYrQyCykIT45IpyKv6d6kMHfTHCjL6KSypio
-         C+/U1vv6wKI4GEyqaJvH6YCxbhlzC22hy59LtiovUwLO17q8NI8nSNcc7Qz46L9oruZ2
-         EFWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGxD2JDS1/ZDEUlBqCeQWTr52wO0z/mEVtJ6SGSZJZ5mRP/wENTEAhTUF3T2H/jfAT7C4QuLl5WuKOCWSNCQc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBwijqRNUioXujg4erQEne+Rde27SbBKmjd0JXrLM2fWZDzHmM
-	rVHbyH00Ga5FGhvW2k/wE3TvxtHOvChcLFalhzsVlSwApLNlZbaJ1eBAvgxEtenDQ9jvj9m7JKD
-	TPQscjLqcDANefw==
-X-Google-Smtp-Source: AGHT+IESBx6jlke0ktMNRQti3tZH62mCQ+ym4g2KsoZFQe4jIm6qAxSgXKPHUbhbtRcB9Ib2saZy4ww6bNCBlQ==
-X-Received: from pjj15.prod.google.com ([2002:a17:90b:554f:b0:312:14e5:174b])
+        bh=94GJWP70zctYgbzarRKMjhu8IQXsXSiZ1mX5cwoCPok=;
+        b=pyc6fNo1gIsR9Zh3eYCHOhucqa5Uw9iDmIP1hHj5rxbencKPByorzv3OioL+kH6uxU
+         K8xfsPeS8KidUNtUBQ4vDKwC1ArZYhuS+xQLPgw3f3oo2QmyBjw4XQ5aRA95rUPrmJkO
+         atggKPrap6ePIGAyTxpbWlchRVgHruCVwWlIh3d+BwUdf/4nW+Na5cuuxgIOqdcVVZSu
+         B6Aj95O76UP6zrg8ku+b2tu/KiHJHeNR6v6VmlQwmm2Ia2Nfdk+1pBx1kgTKIRj9LxRP
+         qqLVqeSRZcn3EjMFWFNXEfdw1nPRr/NDoFC56vTAXxui6B65NgOlX5XxLmJPCf0r3X5u
+         jiWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUtAXxkK2jfeylMXfP9w2KHdQvqUTKpO2+VasQ4nVWCbhZ8YLoNet8/syByju8jcn+YXo5thVvhqp6iValFjUE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYaQn+WEEfc1RW++eCgiqRlj2VTZEkXG+qS7xVbRG2NM3CI+gR
+	nmsAwFJdJLf11+Q045JlzfCQG5j0y7/2aYlyvw8I4tKyOPnhjmte8NRtMQ9haAbK97KWCnpzh9U
+	+y4cYtybRjjZ2MQ==
+X-Google-Smtp-Source: AGHT+IE4VMXsve8M9dbvTR8GNNExOeCyx2MQbPfsc8q8B1evW0kfg7x5+2IlqSW/SM0OnBHCr9pUi8Np41/tTQ==
+X-Received: from pfrh7.prod.google.com ([2002:aa7:9f47:0:b0:748:4f7c:c605])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:57ec:b0:312:1b53:5e98 with SMTP id 98e67ed59e1d1-3159d9116f1mr5879971a91.34.1750461676802;
- Fri, 20 Jun 2025 16:21:16 -0700 (PDT)
-Date: Fri, 20 Jun 2025 23:20:07 +0000
+ 2002:a05:6a00:3a0a:b0:73d:fa54:afb9 with SMTP id d2e1a72fcca58-7490d786d97mr6243442b3a.7.1750461679257;
+ Fri, 20 Jun 2025 16:21:19 -0700 (PDT)
+Date: Fri, 20 Jun 2025 23:20:09 +0000
 In-Reply-To: <20250620232031.2705638-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250620232031.2705638-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.50.0.rc2.701.gf1e915cc24-goog
-Message-ID: <20250620232031.2705638-10-dmatlack@google.com>
-Subject: [PATCH 09/33] tools headers: Add stub definition for __iomem
+Message-ID: <20250620232031.2705638-12-dmatlack@google.com>
+Subject: [PATCH 11/33] tools headers: Import x86 MMIO helper overrides
 From: David Matlack <dmatlack@google.com>
 To: Alex Williamson <alex.williamson@redhat.com>
 Cc: Aaron Lewis <aaronlewis@google.com>, 
@@ -80,29 +80,115 @@ Cc: Aaron Lewis <aaronlewis@google.com>,
 	Wei Yang <richard.weiyang@gmail.com>, "Yury Norov [NVIDIA]" <yury.norov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add an empty definition for __iomem so that kernel headers that use
-__iomem can be imported into tools/include/ with less modifications.
+Import the x86-specific overrides for <asm-generic/io.h> from the kernel
+headers into tools/include/.
+
+Changes made when importing:
+ - Replace CONFIG_X86_64 with __x86_64__.
 
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- tools/include/linux/compiler.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/arch/x86/include/asm/io.h | 75 +++++++++++++++++++++++++++++++++
+ tools/include/asm/io.h          |  4 ++
+ 2 files changed, 79 insertions(+)
+ create mode 100644 tools/arch/x86/include/asm/io.h
 
-diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
-index d627e66a04a6..bebed7b06b91 100644
---- a/tools/include/linux/compiler.h
-+++ b/tools/include/linux/compiler.h
-@@ -138,6 +138,10 @@
- # define __force
- #endif
- 
-+#ifndef __iomem
-+# define __iomem
-+#endif
+diff --git a/tools/arch/x86/include/asm/io.h b/tools/arch/x86/include/asm/io.h
+new file mode 100644
+index 000000000000..4c787a2363de
+--- /dev/null
++++ b/tools/arch/x86/include/asm/io.h
+@@ -0,0 +1,75 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _TOOLS_ASM_X86_IO_H
++#define _TOOLS_ASM_X86_IO_H
 +
- #ifndef __weak
- # define __weak			__attribute__((weak))
- #endif
++#include <linux/compiler.h>
++#include <linux/types.h>
++
++#define build_mmio_read(name, size, type, reg, barrier) \
++static inline type name(const volatile void __iomem *addr) \
++{ type ret; asm volatile("mov" size " %1,%0":reg (ret) \
++:"m" (*(volatile type __force *)addr) barrier); return ret; }
++
++#define build_mmio_write(name, size, type, reg, barrier) \
++static inline void name(type val, volatile void __iomem *addr) \
++{ asm volatile("mov" size " %0,%1": :reg (val), \
++"m" (*(volatile type __force *)addr) barrier); }
++
++build_mmio_read(readb, "b", unsigned char, "=q", :"memory")
++build_mmio_read(readw, "w", unsigned short, "=r", :"memory")
++build_mmio_read(readl, "l", unsigned int, "=r", :"memory")
++
++build_mmio_read(__readb, "b", unsigned char, "=q", )
++build_mmio_read(__readw, "w", unsigned short, "=r", )
++build_mmio_read(__readl, "l", unsigned int, "=r", )
++
++build_mmio_write(writeb, "b", unsigned char, "q", :"memory")
++build_mmio_write(writew, "w", unsigned short, "r", :"memory")
++build_mmio_write(writel, "l", unsigned int, "r", :"memory")
++
++build_mmio_write(__writeb, "b", unsigned char, "q", )
++build_mmio_write(__writew, "w", unsigned short, "r", )
++build_mmio_write(__writel, "l", unsigned int, "r", )
++
++#define readb readb
++#define readw readw
++#define readl readl
++#define readb_relaxed(a) __readb(a)
++#define readw_relaxed(a) __readw(a)
++#define readl_relaxed(a) __readl(a)
++#define __raw_readb __readb
++#define __raw_readw __readw
++#define __raw_readl __readl
++
++#define writeb writeb
++#define writew writew
++#define writel writel
++#define writeb_relaxed(v, a) __writeb(v, a)
++#define writew_relaxed(v, a) __writew(v, a)
++#define writel_relaxed(v, a) __writel(v, a)
++#define __raw_writeb __writeb
++#define __raw_writew __writew
++#define __raw_writel __writel
++
++#ifdef __x86_64__
++
++build_mmio_read(readq, "q", u64, "=r", :"memory")
++build_mmio_read(__readq, "q", u64, "=r", )
++build_mmio_write(writeq, "q", u64, "r", :"memory")
++build_mmio_write(__writeq, "q", u64, "r", )
++
++#define readq_relaxed(a)	__readq(a)
++#define writeq_relaxed(v, a)	__writeq(v, a)
++
++#define __raw_readq		__readq
++#define __raw_writeq		__writeq
++
++/* Let people know that we have them */
++#define readq			readq
++#define writeq			writeq
++
++#endif /* __x86_64__ */
++
++#include <asm-generic/io.h>
++
++#endif /* _TOOLS_ASM_X86_IO_H */
+diff --git a/tools/include/asm/io.h b/tools/include/asm/io.h
+index 9ae219b12604..eed5066f25c4 100644
+--- a/tools/include/asm/io.h
++++ b/tools/include/asm/io.h
+@@ -2,6 +2,10 @@
+ #ifndef _TOOLS_ASM_IO_H
+ #define _TOOLS_ASM_IO_H
+ 
++#if defined(__i386__) || defined(__x86_64__)
++#include "../../arch/x86/include/asm/io.h"
++#else
+ #include <asm-generic/io.h>
++#endif
+ 
+ #endif /* _TOOLS_ASM_IO_H */
 -- 
 2.50.0.rc2.701.gf1e915cc24-goog
 
