@@ -1,58 +1,87 @@
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5311DDA31;
-	Mon, 23 Jun 2025 20:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C214C2628C;
+	Mon, 23 Jun 2025 21:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750710292; cv=none; b=ohgpg864F3KlshVy6CCRll4PAKmgQRlNsOJeIEkknEvJCogKWjs4viLW/06I/mpCxpupeEdnQdSULEajpR+DPmKJ9bi1ofmD94KM690iaAnnVHnU3Ldlw4h7xej08uTgHjo6JVfgr2rLXV8uOn7mTOrrxNOFljmCR+Rs6Kh4XlA=
+	t=1750713372; cv=none; b=i3baRM5hIDflqPRMVALZ6akOpP8dQu7PO2Hk/p3eYEYlEA5tsARqPEI1MJbGCelSnof8e/VVwFI3A19SDJgB8sZ4SJUisgaoW8cE5ZuUJthDn+KbPPGinmTUYAKZACc7MfAGgduCnyVg/wKk0SQMXiR1HFsWxsmsYnEiDSVsNQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750710292; c=relaxed/simple;
-	bh=138x1mqWMUb+JBsCOaeXzkalzNvIx8qivTb237BPDzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IcGgmq1RZyAsz3QPM+7l0/ZHppkrrD5jlyRE/9uzLPnWJ4uKOdjLY3VhZCGg8fGpkI1+corFuZ030xovaQLgxHGg6Z5nPkeOXVqCoJz+hfHKljJaVnln5m8ly60t1hNb0+6ULWwTWPLQoakGBQDBGFskh1+WXamcipfMMyr5UIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 55NKOgqf030320;
-	Mon, 23 Jun 2025 22:24:42 +0200
-Date: Mon, 23 Jun 2025 22:24:42 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 3/4] selftests/nolibc: rename Makefile
-Message-ID: <20250623202442.GA30317@1wt.eu>
-References: <20250620-nolibc-selftests-v1-0-f6b2ce7c5071@weissschuh.net>
- <20250620-nolibc-selftests-v1-3-f6b2ce7c5071@weissschuh.net>
- <20250621041421.GA26603@1wt.eu>
- <20db87b0-05ff-476b-a58f-d0945bfacf20@t-8ch.de>
- <20250621084739.GC26934@1wt.eu>
- <0084290f-49b5-4599-953e-0db6bf46e32c@t-8ch.de>
+	s=arc-20240116; t=1750713372; c=relaxed/simple;
+	bh=JXT55h1kBuOnOzqPmpYxX1L2/iZn2J8XhrAQLZByMqA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=MA+PX76WKnPvvC7lcL8elAXrJpMOi6OfuvUFHYCC08bBN1V5Eo7Ejgj29d8U/Rawzh/O6Wo+n3v7GrQoXZNGL70s9GshGLS+RzpDRC6SPSiH8Z1ku9paDmE9SHlM5dDLKTwcghwkCbQBiu173D1nSCxptVtViszJtUBn7MxW5VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=WZofouo4; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="WZofouo4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1750713368;
+	bh=JXT55h1kBuOnOzqPmpYxX1L2/iZn2J8XhrAQLZByMqA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=WZofouo4A2DqrhUw/NzUbOORc1oZ1Cphg/szyquc7/xvEXDls6ZxwWlBncnHj1qQe
+	 gAO2pIpdJJF0R8l6Xk7Q9T3w5dKQkkWqZ//XCUXFTblTeCN86d2m6fQ37QUK5y89FX
+	 5GVrH7BHmv1dMQjpz3pM+g9U5hhXVxtvSNOoK36M=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Mon, 23 Jun 2025 23:15:52 +0200
+Subject: [PATCH v2 1/3] selftests/nolibc: fix EXTRACONFIG variables
+ ordering
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0084290f-49b5-4599-953e-0db6bf46e32c@t-8ch.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Message-Id: <20250623-nolibc-sh-v2-1-0f5b4b303025@weissschuh.net>
+References: <20250623-nolibc-sh-v2-0-0f5b4b303025@weissschuh.net>
+In-Reply-To: <20250623-nolibc-sh-v2-0-0f5b4b303025@weissschuh.net>
+To: Yoshinori Sato <ysato@users.sourceforge.jp>, 
+ Rich Felker <dalias@libc.org>, 
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+ Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-sh@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750713367; l=1123;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=JXT55h1kBuOnOzqPmpYxX1L2/iZn2J8XhrAQLZByMqA=;
+ b=Ju5eduvCW7qTCKhvkS1NoIMcxHMmg5crbapxtIQIsSvPZMv49Y4FKGSIkeO6QotRGU2GcNKxf
+ uzkdHSsYPXvA76PcHrxb6ua/ucMrX6E8OFmZfLbo0kLA+2n0+uUJAju
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Hi Thomas,
+The variable block got disordered at some point.
 
-On Mon, Jun 23, 2025 at 10:18:19PM +0200, Thomas Weiﬂschuh wrote:
-(...)
-> > I hadn't thought about this, but that could indeed make sense. Let's see
-> > later how it goes and let's not add burden about this for now. Please just
-> > keep your patch as-is.
-> 
-> Sounds good. Could you give a formal Ack for the patch/series?
+Use the correct ordering.
 
-Sure, as usual, for the relevant parts of the series:
-
+Signed-off-by: Thomas Wei√üschuh <linux@weissschuh.net>
 Acked-by: Willy Tarreau <w@1wt.eu>
+---
+ tools/testing/selftests/nolibc/Makefile.nolibc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Cheers,
-Willy
+diff --git a/tools/testing/selftests/nolibc/Makefile.nolibc b/tools/testing/selftests/nolibc/Makefile.nolibc
+index 6d62f350d0c16405785a8aabc7f5741b82e55370..9e220a733d97f3f916c6aa38df2414781f17ef94 100644
+--- a/tools/testing/selftests/nolibc/Makefile.nolibc
++++ b/tools/testing/selftests/nolibc/Makefile.nolibc
+@@ -107,10 +107,10 @@ DEFCONFIG_sparc64    = sparc64_defconfig
+ DEFCONFIG_m68k       = virt_defconfig
+ DEFCONFIG            = $(DEFCONFIG_$(XARCH))
+ 
+-EXTRACONFIG_m68k      = -e CONFIG_BLK_DEV_INITRD
+-EXTRACONFIG           = $(EXTRACONFIG_$(XARCH))
+ EXTRACONFIG_arm       = -e CONFIG_NAMESPACES
+ EXTRACONFIG_armthumb  = -e CONFIG_NAMESPACES
++EXTRACONFIG_m68k      = -e CONFIG_BLK_DEV_INITRD
++EXTRACONFIG           = $(EXTRACONFIG_$(XARCH))
+ 
+ # optional tests to run (default = all)
+ TEST =
+
+-- 
+2.50.0
+
