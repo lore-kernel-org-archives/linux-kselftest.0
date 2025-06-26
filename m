@@ -1,33 +1,32 @@
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A29425BEE5;
-	Thu, 26 Jun 2025 08:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D657925B69B;
+	Thu, 26 Jun 2025 08:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750925365; cv=none; b=hxInFLv9PQG/9QHp3j/2QYR++v8/Akf8VLsjdqJ/o+UJlib5AB3c6PDfMNqZZ86EgpLbTyuv2nuYvTfbC5BB/fZp8Wn/HBWJOx/Lsw4Yt4/1+1w3v69McXucEceCUKlN9vAouVIViqGZSJBDCpWWPbFhvZju2qDpS/C7C1SMajY=
+	t=1750925365; cv=none; b=jXHoXkbTUv+3deeVisnAeM204A+vYAVU3GXC2vu1uD2n0b7flKHATEDR0C35AbYa+hXRp51y4YwVOipUUXf3CbrsMggm2ed9o56muzbGtAyTdvL0PUJ/8medkC94AwNQ3zQ6ye5RcVsPcI9tvPZNv3bdH7ye0VaxUNIPSM/GK8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750925365; c=relaxed/simple;
-	bh=c3niX+HJaQ8owsfiuEOlcQPwWpISnGpgVINBzouzlSg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XTXRU7h7rMuXeT3HZsTn+CEVLXIbd7nAOjH7t1lykFhWK6YpYVIonMlLCp30ZeLuvKNpJutx1WDYZ2aTAU3SLoTJUbztNTR7tUdJqioCSda5ext3HOQNteXCMUL/EOC4O3OuW3aG26g/vwjUj5bTeBntIN/645bbYZj3T2Ng3J0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+	bh=2qUwvorJKhJX/rnLKPbtBqT32gzi34OE7WyleCENtYU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=stahZYVI5IeHyChqLoHPkHv4uWOL9nkOEeGVHg7fMowfJxvyZ2mkvZZpVfQ/FLvfGVlFsMcbgP13S09Q0E31MsrQ9eghTaD60z8lVcomy2SD71vYqAdohRbSdlaYZv6RzEraZIvfkDqvQvSydZApBbK5T4LCERSO3xLYEkRsjKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4bSWWc57XCz1QBqh;
-	Thu, 26 Jun 2025 16:07:40 +0800 (CST)
-Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
-	by mail.maildlp.com (Postfix) with ESMTPS id DF0521402CD;
-	Thu, 26 Jun 2025 16:09:19 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4bSWSw2MzLz2CfD1;
+	Thu, 26 Jun 2025 16:05:20 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 4CA191A016C;
+	Thu, 26 Jun 2025 16:09:18 +0800 (CST)
 Received: from kwepemq200018.china.huawei.com (7.202.195.108) by
- dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 26 Jun 2025 16:09:19 +0800
+ 15.2.1544.11; Thu, 26 Jun 2025 16:09:18 +0800
 Received: from localhost.localdomain (10.50.165.33) by
  kwepemq200018.china.huawei.com (7.202.195.108) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 26 Jun 2025 16:09:18 +0800
+ 15.2.1544.11; Thu, 26 Jun 2025 16:09:17 +0800
 From: Yicong Yang <yangyicong@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <maz@kernel.org>,
 	<oliver.upton@linux.dev>, <corbet@lwn.net>,
@@ -38,12 +37,10 @@ CC: <joey.gouly@arm.com>, <suzuki.poulose@arm.com>, <yuzenghui@huawei.com>,
 	<shameerali.kolothum.thodi@huawei.com>, <linuxarm@huawei.com>,
 	<prime.zeng@hisilicon.com>, <xuwei5@huawei.com>, <yangyicong@hisilicon.com>,
 	<tangchengchang@huawei.com>, <wangzhou1@hisilicon.com>
-Subject: [PATCH v3 2/7] KVM: arm64: Add documentation for KVM_EXIT_ARM_LDST64B
-Date: Thu, 26 Jun 2025 16:09:01 +0800
-Message-ID: <20250626080906.64230-3-yangyicong@huawei.com>
+Subject: [PATCH v3 0/7] Add support for FEAT_{LS64, LS64_V} and related tests
+Date: Thu, 26 Jun 2025 16:08:59 +0800
+Message-ID: <20250626080906.64230-1-yangyicong@huawei.com>
 X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20250626080906.64230-1-yangyicong@huawei.com>
-References: <20250626080906.64230-1-yangyicong@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,90 +52,102 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  kwepemq200018.china.huawei.com (7.202.195.108)
 
-From: Marc Zyngier <maz@kernel.org>
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-Add a bit of documentation for KVM_EXIT_ARM_LDST64B so that userspace
-knows what to expect.
+Armv8.7 introduces single-copy atomic 64-byte loads and stores
+instructions and its variants named under FEAT_{LS64, LS64_V}.
+Add support for Armv8.7 FEAT_{LS64, LS64_V}:
+- Add identifying and enabling in the cpufeature list
+- Expose the support of these features to userspace through HWCAP3
+  and cpuinfo
+- Add related hwcap test
+- Handle the trap of unsupported memory (normal/uncacheable) access in a VM
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- Documentation/virt/kvm/api.rst | 43 ++++++++++++++++++++++++++++------
- 1 file changed, 36 insertions(+), 7 deletions(-)
+A real scenario for this feature is that the userspace driver can make use of
+this to implement direct WQE (workqueue entry) - a mechanism to fill WQE
+directly into the hardware.
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 9abf93ee5f65..54799aafe357 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -1300,12 +1300,13 @@ userspace, for example because of missing instruction syndrome decode
- information or because there is no device mapped at the accessed IPA, then
- userspace can ask the kernel to inject an external abort using the address
- from the exiting fault on the VCPU. It is a programming error to set
--ext_dabt_pending after an exit which was not either KVM_EXIT_MMIO or
--KVM_EXIT_ARM_NISV. This feature is only available if the system supports
--KVM_CAP_ARM_INJECT_EXT_DABT. This is a helper which provides commonality in
--how userspace reports accesses for the above cases to guests, across different
--userspace implementations. Nevertheless, userspace can still emulate all Arm
--exceptions by manipulating individual registers using the KVM_SET_ONE_REG API.
-+ext_dabt_pending after an exit which was not either KVM_EXIT_MMIO,
-+KVM_EXIT_ARM_NISV, or KVM_EXIT_ARM_LDST64B. This feature is only available if
-+the system supports KVM_CAP_ARM_INJECT_EXT_DABT. This is a helper which
-+provides commonality in how userspace reports accesses for the above cases to
-+guests, across different userspace implementations. Nevertheless, userspace
-+can still emulate all Arm exceptions by manipulating individual registers
-+using the KVM_SET_ONE_REG API.
- 
- See KVM_GET_VCPU_EVENTS for the data structure.
- 
-@@ -7002,12 +7003,14 @@ in send_page or recv a buffer to recv_page).
- 
- ::
- 
--		/* KVM_EXIT_ARM_NISV */
-+		/* KVM_EXIT_ARM_NISV / KVM_EXIT_ARM_LDST64B */
- 		struct {
- 			__u64 esr_iss;
- 			__u64 fault_ipa;
- 		} arm_nisv;
- 
-+- KVM_EXIT_ARM_NISV:
-+
- Used on arm64 systems. If a guest accesses memory not in a memslot,
- KVM will typically return to userspace and ask it to do MMIO emulation on its
- behalf. However, for certain classes of instructions, no instruction decode
-@@ -7041,6 +7044,32 @@ Note that although KVM_CAP_ARM_NISV_TO_USER will be reported if
- queried outside of a protected VM context, the feature will not be
- exposed if queried on a protected VM file descriptor.
- 
-+- KVM_EXIT_ARM_LDST64B:
-+
-+Used on arm64 systems. When a guest using a LD64B, ST64B, ST64BV, ST64BV0,
-+outside of a memslot, KVM will return to userspace with KVM_EXIT_ARM_LDST64B,
-+exposing the relevant ESR_EL2 information and faulting IPA, similarly to
-+KVM_EXIT_ARM_NISV.
-+
-+Userspace is supposed to fully emulate the instructions, which includes:
-+
-+	- fetch of the operands for a store, including ACCDATA_EL1 in the case
-+	  of a ST64BV0 instruction
-+	- deal with the endianness if the guest is big-endian
-+	- emulate the access, including the delivery of an exception if the
-+	  access didn't succeed
-+	- provide a return value in the case of ST64BV/ST64BV0
-+	- return the data in the case of a load
-+	- increment PC if the instruction was successfully executed
-+
-+Note that there is no expectation of performance for this emulation, as it
-+involves a large number of interaction with the guest state. It is, however,
-+expected that the instruction's semantics are preserved, specially the
-+single-copy atomicity property of the 64 byte access.
-+
-+This exit reason must be handled if userspace sets ID_AA64ISAR1_EL1.LS64 to a
-+non-zero value, indicating that FEAT_LS64* is enabled.
-+
- ::
- 
- 		/* KVM_EXIT_X86_RDMSR / KVM_EXIT_X86_WRMSR */
+Picked Marc's 2 patches form [1] for handling the LS64 trap in a VM on emulated
+MMIO and the introduce of KVM_EXIT_ARM_LDST64B.
+
+[1] https://lore.kernel.org/linux-arm-kernel/20240815125959.2097734-1-maz@kernel.org/
+
+Tested with hwcap test [*]:
+[*] https://lore.kernel.org/linux-arm-kernel/20250331094320.35226-5-yangyicong@huawei.com/
+On host:
+root@localhost:/tmp# dmesg | grep "All CPU(s) started"
+[    0.504846] CPU: All CPU(s) started at EL2
+root@localhost:/tmp# ./hwcap
+[...]
+# LS64 present
+ok 217 cpuinfo_match_LS64
+ok 218 sigill_LS64
+ok 219 # SKIP sigbus_LS64
+# LS64_V present
+ok 220 cpuinfo_match_LS64_V
+ok 221 sigill_LS64_V
+ok 222 # SKIP sigbus_LS64_V
+# 115 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+# Totals: pass:107 fail:0 xfail:0 xpass:0 skip:115 error:0
+
+On guest:
+root@localhost:/# dmesg | grep "All CPU(s) started"
+[    0.451482] CPU: All CPU(s) started at EL1
+root@localhost:/mnt# ./hwcap
+[...]
+# LS64 present
+ok 217 cpuinfo_match_LS64
+ok 218 sigill_LS64
+ok 219 # SKIP sigbus_LS64
+# LS64_V present
+ok 220 cpuinfo_match_LS64_V
+ok 221 sigill_LS64_V
+ok 222 # SKIP sigbus_LS64_V
+# 115 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+# Totals: pass:107 fail:0 xfail:0 xpass:0 skip:115 error:0
+
+Change since v2:
+- Handle the LS64 fault to userspace and allow userspace to inject LS64 fault
+- Reorder the patches to make KVM handling prior to feature support
+Link: https://lore.kernel.org/linux-arm-kernel/20250331094320.35226-1-yangyicong@huawei.com/
+
+Change since v1:
+- Drop the support for LS64_ACCDATA
+- handle the DABT of unsupported memory type after checking the memory attributes
+Link: https://lore.kernel.org/linux-arm-kernel/20241202135504.14252-1-yangyicong@huawei.com/
+
+Marc Zyngier (2):
+  KVM: arm64: Add exit to userspace on {LD,ST}64B* outside of memslots
+  KVM: arm64: Add documentation for KVM_EXIT_ARM_LDST64B
+
+Yicong Yang (5):
+  KVM: arm64: Handle DABT caused by LS64* instructions on unsupported
+    memory
+  KVM: arm/arm64: Allow user injection of unsupported exclusive/atomic
+    DABT
+  arm64: Provide basic EL2 setup for FEAT_{LS64, LS64_V} usage at EL0/1
+  arm64: Add support for FEAT_{LS64, LS64_V}
+  KVM: arm64: Enable FEAT_{LS64, LS64_V} in the supported guest
+
+ Documentation/arch/arm64/booting.rst    | 12 ++++++
+ Documentation/arch/arm64/elf_hwcaps.rst |  6 +++
+ Documentation/virt/kvm/api.rst          | 43 +++++++++++++++++----
+ arch/arm64/include/asm/el2_setup.h      | 12 +++++-
+ arch/arm64/include/asm/esr.h            |  8 ++++
+ arch/arm64/include/asm/hwcap.h          |  2 +
+ arch/arm64/include/asm/kvm_emulate.h    |  7 ++++
+ arch/arm64/include/uapi/asm/hwcap.h     |  2 +
+ arch/arm64/include/uapi/asm/kvm.h       |  3 +-
+ arch/arm64/kernel/cpufeature.c          | 51 +++++++++++++++++++++++++
+ arch/arm64/kernel/cpuinfo.c             |  2 +
+ arch/arm64/kvm/guest.c                  |  4 ++
+ arch/arm64/kvm/inject_fault.c           | 29 ++++++++++++++
+ arch/arm64/kvm/mmio.c                   | 27 ++++++++++++-
+ arch/arm64/kvm/mmu.c                    | 21 +++++++++-
+ arch/arm64/tools/cpucaps                |  2 +
+ include/uapi/linux/kvm.h                |  3 +-
+ 17 files changed, 222 insertions(+), 12 deletions(-)
+
 -- 
 2.24.0
 
