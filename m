@@ -1,72 +1,87 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2046.outbound.protection.outlook.com [40.107.94.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D222CCA9;
-	Thu, 26 Jun 2025 19:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750965391; cv=none; b=mVc820pMBnQgUlLPBJFiJyXmF5oSIGf19Sv9lkNYeEiP6+POTh89tkMH2C1zmbjFgXEWQhUlNyAn2E/PxyHvjpBL74CZilnAWDl83LraxDpkKFEHG53ewnov6VqLrH/QSDiEDQdUUaZkj8MxnvRWyWz6UcyK6RTIgoFAyqQ66yQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750965391; c=relaxed/simple;
-	bh=h3+wCYKb+e64nlS7ZiGvNL4qU/lPfezz6///qDSCFIs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J+tWyZEIybMYtjz+QRaBXI3AeOkhhCpNKYeM9Y//Vhnfbui255jxZcPcWa2w4aISmtKDxfpmIJuCnDparbEcrwcIj8A/JO78t2dbt0pcwgH344YqVZFw/aCFR9ZodsMIoAyfP7e6JO7UG71s6HVFGJMBpCNp7oDmByiCilEwiIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SbVi+jKC; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76314253F3D;
+	Thu, 26 Jun 2025 19:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750966523; cv=fail; b=Jftdg2g8WENJRG/TpIZT3+aUIheCJqByBcNQ5XcsltL3YcNKqdfKCxcPV2fROxsnxEWpnYyHJs1S/+jiREUlsDgUOvOc2LGlAApOPjbdvL8DWZBrUDh937sbE5Ktg6I+u91pf++vL2MSSinkUZOyNDQVu9CThOM2i505N+YceTk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750966523; c=relaxed/simple;
+	bh=1JUVYv7VfsC86vWRVTcTxxfBtmg7jBP7WOOO9DXAFf0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZPq5+IQ5uRq+g4IR3nCbvnSCheqw1zC/zausg8dyUaOKe3Z2NQdNSt5rvLaV/UZkPXpu8kZICpZuJS9U5EJPK8xBGB81SJY8RErFyvBgH53PbYnoKAZ0crVOc+nWgRPaxpOn7lkI6aHfVc2tchh4w/FqjJIww3FF8/90pc6jUIo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=UKcY2KS6; arc=fail smtp.client-ip=40.107.94.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SbVi+jKC"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-235a3dd4f0dso10795735ad.0;
-        Thu, 26 Jun 2025 12:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750965389; x=1751570189; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kEGLkVDliz6D9cLYESQeH89M3mbRzJDwNUogp0ZBAxw=;
-        b=SbVi+jKCW+QnSy2zK/mE1FD7qdiIbvphuJbq2azklufESSW764cyMSb+vj5Wck56ja
-         S6oezmhWV5tq/nAytzouaRV49lwsVVT2qtB6qAM/p8vVhfDBSLoRcSXI/HBo5p2cXiUg
-         ggG8Fbe5tAMCBZcVLoKTT46NSnqK92VCw9g6aLOIC8DB+G1pYJkSbcwa3QBeOYENPvsl
-         AjzHU2v5H5U0WUTzWTUgiKVbsS+PL1T7XlfWjJdyhKEPutGCCQfiiyIBxPJE2NjqmA+P
-         pyurnyr3yIj1CE3+O06uZQgbWdRT/Za4TjiH0aH4up4FsS/sKLZZhiE57PzZpFqJM1wi
-         ZpEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750965389; x=1751570189;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kEGLkVDliz6D9cLYESQeH89M3mbRzJDwNUogp0ZBAxw=;
-        b=FPzdbCiBd+35vRnft8XyovoZv8VsWTxEHUUfRxk7EEQ+WOCVGtNu4Z+BBB3k8WYp5c
-         JYk5UZu2sgrcMKhCQ6oqRKgyG13ivDimwYeoHEk2p5zPPEabMSSInhham5p5TlPfZ9N4
-         VyFTzn5vEg9TMLbzbvEmw9tiv3iKWasTV6Is4VO+qxtVbeF9MrFIq3QV7AXlin0xlZaM
-         V/8+puS7kBLD95LDFLx+wxuMra6AUGZP9aWPTebRLovshj3G+cIUeRy9bDEObjR8kgMQ
-         HcDpWa5aujdRFuOnGZwQl8eeST4ydA6U23jKv2Wk+ay5wbWMndQX61gTl4mfRij74+An
-         xUAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUcEmFZTmH66NodX7yB/gKll8gAw8UnrohE3XaGmalyOapPulOxY2P6ZHLn6eepg9pyIWrxM6GTGQ8364s=@vger.kernel.org, AJvYcCW9u3yrgoJBT20F4MOoicyMxgfMsuyuGbdg5ts7tLww9klclqf1nZSKRYu1oqftDfwK0AVtFXTGOQ9NNcqfPJHw@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOq7ZNSmvAVtBM6FucO6R+Si2w7MIp/otUr8rUGLNfOQnnnBwz
-	KN/Ac61ovVHPUhoXmNie4m3kqwmGs6wgtsLuudCMl0DQzbhZvhX1sZPz
-X-Gm-Gg: ASbGncszNMNBGEaK+G0C34ZHXww1n8nZl13kOl3oHc3kY2nvTW6BDt+B4uROF9tgMeE
-	jMAht6sDYnJmH5p5v/LH3qXWiExqC4EMWPSOIYvi23TwRWrw7bU81QU+C4JUPF6NF+5rjbM1Mpq
-	aOxKMrZ4fMuENKtKxbx1q1ioQaYnzNjdVl86F+xYeZuC4zs0wcWneAirqoT9eFAnQeTSZxBwSE5
-	IwXqbLdHP/2HK1FnpD2vKHdCGTQp6L/mrq9bJXZXvwQasjLCmeX9qrFfgOtBb4rxdcv3rGvVoOR
-	XW+qSP11ptsY+ZmKQ318Rl2irmY7xZIYF+SZf+SJxh57WBoN1uz7GlkRP8K0Iio9
-X-Google-Smtp-Source: AGHT+IGZJiK7V87UN2yeGD2QBj1W9kV1b1WZgMlsenEy/ueEwohDtG/9+5bGugIvGv5i43iGmzj+jA==
-X-Received: by 2002:a17:902:ce8e:b0:223:4d7e:e52c with SMTP id d9443c01a7336-23ac3cf546dmr7602755ad.5.1750965389212;
-        Thu, 26 Jun 2025 12:16:29 -0700 (PDT)
-Received: from p920.. ([2001:569:799a:1600:203c:1dca:e60c:1243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23abe4245d2sm4038765ad.199.2025.06.26.12.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jun 2025 12:16:28 -0700 (PDT)
-From: Moon Hee Lee <moonhee.lee.ca@gmail.com>
-To: shuah@kernel.org
-Cc: yifei.l.liu@oracle.com,
-	zhujun2@cmss.chinamobile.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev,
-	Moon Hee Lee <moonhee.lee.ca@gmail.com>
-Subject: [PATCH] selftests: breakpoints: use suspend_stats to reliably check suspend success
-Date: Thu, 26 Jun 2025 12:16:26 -0700
-Message-ID: <20250626191626.36794-1-moonhee.lee.ca@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="UKcY2KS6"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yt0OXnJd7pg7VkLwFgWTcwrzR4HhrTjR6hc1k2TsSYwlGE035WJhjb2t0Xm32bV/BwNgfA8/M20wHHNstMG2qGf1OQMHDelZRMO5yc6nhVuJMbSYwHrjfkSHK1LHUk/QJ1WPBWV5NHpuv2Yy2gsiogcS/gK+YE6j7x1ob6jXbxX0Nb6Q6cP1kwEUH8n3d7R29pgozs/zevvmlG7EemmQ3xWA0DhA9VJWolNLcFEtl1UdDR8h8MI3jGVBFtKmTIbPl2Mht0u8u0YvCT/6RE2QTtfN21DbNmOmV1aXT0qCqGBOiNvV78SYhgaatvDECTCAEiZk1x+gjWbfjBvmFE25bQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B2f8EYjthoS3VOx1IkRkVlfr42dHKFaCafW+xsZkPL8=;
+ b=O162qqt31Ca8+kLERqVro6I++TMOX+cszTwnn7Dp6HPEa7HU+A2NAg6gMXzldmltZe73+cs+J4GF7DD740tId5X1BWCXlAEENr47MrzK/vPh4P4/A5KCddvz90vVShBO+GOZMNO4DZuXCGy52zj0zX7umByFSXVTohCg5VpgH64gkMW5cVmLJqY1cbbuH+eozc8IxQrJHf9YvSYKMW5yl+M0XRFGmGFtqJSqpT7kAF0MCHfOiQleh0Ri0jF/wPQUWg2uJdIy+9t/CZucEr82N4gR0cCfHOoQgPYNpwUZ84pZksMijL47dVapBLcqgOi5jjMkWF5gnQL1MYoyhnFvSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B2f8EYjthoS3VOx1IkRkVlfr42dHKFaCafW+xsZkPL8=;
+ b=UKcY2KS69YOCIWEt38iuG0QvkB3YBrMNA7vGuaQzgwy193x2ts6v1QLg3q6SOGCe2Y0VDqw9sJfpkiXtRMG6MAJz5lXTIzaMktZiUXj08oeia6GGaa+9H9bxxY/h27OwWro1WKKL06XEgNJdOLpSNkZvX65ut76H9O+D6ckHaGdU3nhmE8dQSGalTr40CuINDerRnIuO2yuZUdja9FJ3S+Vrm0tzabOA6Gh3tqKd5uJW6yYeN3ncuPzSSqlUgguLzhRKAMb7hfe8ImAtsYfk/qjIU1N1b1dtzD22ouFNqQ9V6zFnDonu2XErogGjH4fRk3fz7lrtt7gdrEJmywCRQQ==
+Received: from MW4PR04CA0249.namprd04.prod.outlook.com (2603:10b6:303:88::14)
+ by PH7PR12MB7139.namprd12.prod.outlook.com (2603:10b6:510:1ef::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.25; Thu, 26 Jun
+ 2025 19:35:20 +0000
+Received: from SJ1PEPF00002311.namprd03.prod.outlook.com
+ (2603:10b6:303:88:cafe::51) by MW4PR04CA0249.outlook.office365.com
+ (2603:10b6:303:88::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.20 via Frontend Transport; Thu,
+ 26 Jun 2025 19:35:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SJ1PEPF00002311.mail.protection.outlook.com (10.167.242.165) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8880.14 via Frontend Transport; Thu, 26 Jun 2025 19:35:19 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 26 Jun
+ 2025 12:35:07 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Thu, 26 Jun 2025 12:35:06 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Thu, 26 Jun 2025 12:35:05 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
+	<will@kernel.org>
+CC: <bagasdotme@gmail.com>, <robin.murphy@arm.com>, <joro@8bytes.org>,
+	<thierry.reding@gmail.com>, <vdumpa@nvidia.com>, <jonathanh@nvidia.com>,
+	<shuah@kernel.org>, <jsnitsel@redhat.com>, <nathan@kernel.org>,
+	<peterz@infradead.org>, <yi.l.liu@intel.com>, <mshavit@google.com>,
+	<praan@google.com>, <zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
+	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>,
+	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>
+Subject: [PATCH v7 01/28] iommufd: Report unmapped bytes in the error path of iopt_unmap_iova_range
+Date: Thu, 26 Jun 2025 12:34:32 -0700
+Message-ID: <102e38967b38c28abbe8ebe70b39dcc8e14450ba.1750966133.git.nicolinc@nvidia.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1750966133.git.nicolinc@nvidia.com>
+References: <cover.1750966133.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,106 +89,92 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00002311:EE_|PH7PR12MB7139:EE_
+X-MS-Office365-Filtering-Correlation-Id: d6bf07a4-8bef-494b-a07c-08ddb4e895d8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?TximNwzwD+OjZnBSAIVDW58gCA5iVWI/nHWpKetRYOIE5HTn2e+pxyfcKWpS?=
+ =?us-ascii?Q?dx2nwcKFIAyiepS15fHTedAfdO0TDxYr8pawm+9QSVs1UgeWbeG2g8ufJqSq?=
+ =?us-ascii?Q?qruXyn5yZe3P+KkHEd5Yxd9LRG/Dwm7veULi405OpC1tANS2UxHcvDGll6hR?=
+ =?us-ascii?Q?pWci4ccA2X/T6MZro10eDYAGfSsgGsJN0jyxTUTe10deB2PyyjRKgv5aYCBu?=
+ =?us-ascii?Q?f+L0X7HnHA3vpBRe0X4J8qxU1Q7rCZFK7PoiUFPb3SIZXx8RGP3b1bE4GOut?=
+ =?us-ascii?Q?0ZE4FUKlL+QdI2BVuEMT5D+EbsaTFjHExAPZI7Jhp+EkwF8w1jDvFgJiEhOR?=
+ =?us-ascii?Q?TJ7G6OnlVC0vHbikIxYaapAOmq4ixblIh0lNqiPolzTEdaubStjxjiY8i7Aq?=
+ =?us-ascii?Q?pYL4NmKyfIbazhcKa1KWOMQRtVino92DfvA+0Rnmq9D5X4MGzwBUaz48yJBN?=
+ =?us-ascii?Q?ljMlRDhyaXmgu0X88IoycwgJ/5/un7vM2FKh85FO4GqIyl/iFIPpR3+B0kUp?=
+ =?us-ascii?Q?swpuTgosduml/3fJaqMjXfGrUewJXiBz+Thdxij72VY8mVOiGpJOCdTP4Zn1?=
+ =?us-ascii?Q?ub7I0nv9jgFsEuRRl8VtR4iYileKAp1CS9mSx0NqIKwml/SKRJq1qZj0xIQH?=
+ =?us-ascii?Q?XUKLSlIIOP/QjTVEV9HPFJqqCCAa0QZxeXcRUaWjLRkZqiDbUHkwWC1eNVfQ?=
+ =?us-ascii?Q?j4OXIpE7PZQ+imJvZXla10yjOiQFlpL1K14Zmh3SsHsoitnW2EGp1LiekWbv?=
+ =?us-ascii?Q?qYh82WKEbsuVtyo4upYQJZI4u8U0dGVPF3mNjJrPpeo70H4sZK/szjBWYyzD?=
+ =?us-ascii?Q?3tIIMCIMm837Jvva2KYTP4YAH1YQfxZwXTJSQJNI1UT7R+aGSJ8bhxWTCDPR?=
+ =?us-ascii?Q?K6UxuROHWZvSJIN7ukUCgqSG2rdQU8/bvsGXNn+kpIWwEF+XwWgWhmW+Uam/?=
+ =?us-ascii?Q?Q+zrIcyBcslMplF1e7P2NjGNiKhjkQ1WpvK2WwbW0XwBlfj+WGPpMnX7Ri6p?=
+ =?us-ascii?Q?ad6UtlZkApT7wquxambQxwskp5BG/I3VKhueyh92b7bkonL+vV/v7YBRY9yP?=
+ =?us-ascii?Q?tLI1rYUAbVbrqs+mv1xbChUufbtPf4m6bITSJV4HCNop1hL86NUS/HOuEap/?=
+ =?us-ascii?Q?tCDsZFn8xMtpURMMv0aTJdDUrSHERRT/87vk9Y8XclBOCTHs1OsKV49na+TI?=
+ =?us-ascii?Q?w6erBdgZEBKZsnDAXrRBLABL9iy0Bdn4n8+JOCTMA5z3qOQTFwFYRNbQlipd?=
+ =?us-ascii?Q?d+Psu2zJvQ4Ys6V3wfGTBvR1ED6qyF82iwSpjmS0srikplcu+s+e0Nm3Iok/?=
+ =?us-ascii?Q?JtEYDY/MHl7qNjRL7OLuvEcA79oId2275zqBiHEEF40sxqRdERp6WnRlcCJM?=
+ =?us-ascii?Q?cX2pogJYDkkdxmUu7QcxFds/zIF+uJ2L4MDOxSJarsWv6EaOe/1YTcApNKtu?=
+ =?us-ascii?Q?Eh94ztOuK1d7MiBrOdyq7+coelQjCjxBe2BKTvUDptE51ZvW8VNnfpMiAx0y?=
+ =?us-ascii?Q?llRhrXkQz/3o9bY3a/tFE32LJHT/eweBnQZ6?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014)(7416014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2025 19:35:19.5211
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6bf07a4-8bef-494b-a07c-08ddb4e895d8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00002311.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7139
 
-The step_after_suspend_test verifies that the system successfully
-suspended and resumed by setting a timerfd and checking whether the
-timer fully expired. However, this method is unreliable due to timing
-races.
+There are callers that read the unmapped bytes even when rc != 0. Thus, do
+not forget to report it in the error path too.
 
-In practice, the system may take time to enter suspend, during which the
-timer may expire just before or during the transition. As a result,
-the remaining time after resume may show non-zero nanoseconds, even if
-suspend/resume completed successfully. This leads to false test failures.
-
-Replace the timer-based check with a read from
-/sys/power/suspend_stats/success. This counter is incremented only
-after a full suspend/resume cycle, providing a reliable and race-free
-indicator.
-
-Also remove the unused file descriptor for /sys/power/state, which
-remained after switching to a system() call to trigger suspend [1].
-
-[1] https://lore.kernel.org/all/20240930224025.2858767-1-yifei.l.liu@oracle.com/
-
-Fixes: c66be905cda2 ("selftests: breakpoints: use remaining time to check if suspend succeed")
-Signed-off-by: Moon Hee Lee <moonhee.lee.ca@gmail.com>
+Fixes: 8d40205f6093 ("iommufd: Add kAPI toward external drivers for kernel access")
+Cc: stable@vger.kernel.org
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 ---
- .../breakpoints/step_after_suspend_test.c     | 41 ++++++++++++++-----
- 1 file changed, 31 insertions(+), 10 deletions(-)
+ drivers/iommu/iommufd/io_pagetable.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/breakpoints/step_after_suspend_test.c b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
-index 8d275f03e977..8d233ac95696 100644
---- a/tools/testing/selftests/breakpoints/step_after_suspend_test.c
-+++ b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
-@@ -127,22 +127,42 @@ int run_test(int cpu)
- 	return KSFT_PASS;
- }
+diff --git a/drivers/iommu/iommufd/io_pagetable.c b/drivers/iommu/iommufd/io_pagetable.c
+index 13d010f19ed1..22fc3a12109f 100644
+--- a/drivers/iommu/iommufd/io_pagetable.c
++++ b/drivers/iommu/iommufd/io_pagetable.c
+@@ -743,8 +743,10 @@ static int iopt_unmap_iova_range(struct io_pagetable *iopt, unsigned long start,
+ 			iommufd_access_notify_unmap(iopt, area_first, length);
+ 			/* Something is not responding to unmap requests. */
+ 			tries++;
+-			if (WARN_ON(tries > 100))
+-				return -EDEADLOCK;
++			if (WARN_ON(tries > 100)) {
++				rc = -EDEADLOCK;
++				goto out_unmapped;
++			}
+ 			goto again;
+ 		}
  
-+/*
-+ * Reads the suspend success count from sysfs.
-+ * Returns the count on success or exits on failure.
-+ */
-+static int get_suspend_success_count_or_fail(void)
-+{
-+	FILE *fp;
-+	int val;
-+
-+	fp = fopen("/sys/power/suspend_stats/success", "r");
-+	if (!fp)
-+		ksft_exit_fail_msg(
-+			"Failed to open suspend_stats/success: %s\n",
-+			strerror(errno));
-+
-+	if (fscanf(fp, "%d", &val) != 1) {
-+		fclose(fp);
-+		ksft_exit_fail_msg(
-+			"Failed to read suspend success count\n");
-+	}
-+
-+	fclose(fp);
-+	return val;
-+}
-+
- void suspend(void)
- {
--	int power_state_fd;
- 	int timerfd;
- 	int err;
-+	int count_before;
-+	int count_after;
- 	struct itimerspec spec = {};
- 
- 	if (getuid() != 0)
- 		ksft_exit_skip("Please run the test as root - Exiting.\n");
- 
--	power_state_fd = open("/sys/power/state", O_RDWR);
--	if (power_state_fd < 0)
--		ksft_exit_fail_msg(
--			"open(\"/sys/power/state\") failed %s)\n",
--			strerror(errno));
--
- 	timerfd = timerfd_create(CLOCK_BOOTTIME_ALARM, 0);
- 	if (timerfd < 0)
- 		ksft_exit_fail_msg("timerfd_create() failed\n");
-@@ -152,14 +172,15 @@ void suspend(void)
- 	if (err < 0)
- 		ksft_exit_fail_msg("timerfd_settime() failed\n");
- 
-+	count_before = get_suspend_success_count_or_fail();
-+
- 	system("(echo mem > /sys/power/state) 2> /dev/null");
- 
--	timerfd_gettime(timerfd, &spec);
--	if (spec.it_value.tv_sec != 0 || spec.it_value.tv_nsec != 0)
-+	count_after = get_suspend_success_count_or_fail();
-+	if (count_after <= count_before)
- 		ksft_exit_fail_msg("Failed to enter Suspend state\n");
- 
- 	close(timerfd);
--	close(power_state_fd);
- }
- 
- int main(int argc, char **argv)
+@@ -766,6 +768,7 @@ static int iopt_unmap_iova_range(struct io_pagetable *iopt, unsigned long start,
+ out_unlock_iova:
+ 	up_write(&iopt->iova_rwsem);
+ 	up_read(&iopt->domains_rwsem);
++out_unmapped:
+ 	if (unmapped)
+ 		*unmapped = unmapped_bytes;
+ 	return rc;
 -- 
 2.43.0
 
