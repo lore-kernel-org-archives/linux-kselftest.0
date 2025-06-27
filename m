@@ -1,160 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4201294A15;
-	Fri, 27 Jun 2025 09:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5534226D4C7;
+	Fri, 27 Jun 2025 10:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751016590; cv=none; b=QFlkkvqweOjrC6VEH0hEG06hQ9YsR8QYO790yNnbgAnGXUon/17qXExGw11F5n4O1usCtrhK3ycJd94UVHhnvkTJP+z7r5TKh1Ye2qHIxZyzdqzwTf8j04MDbTfSG0BL6QFAw9oB2ddVXY9Yhg4SLsqfNbU3crz+w6mF35Ohayc=
+	t=1751021120; cv=none; b=jOPw3eQhvG2e+HoxH2Gd6YEXwAobyfD796Hrzg3LUFJXrHPAkKsKbQGwOfh2zMtYPOafE0PGPH3XD4j0gVCTkONOzoFN+FwdyWZj9HB7pO0FjqJyaULBEJ4OWgUmEbNaeaC6ILsbrtWAE2y8wcgo219bq3fAxYg4dOUBoOMsBg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751016590; c=relaxed/simple;
-	bh=d4f+GZZnhp9tckE2m7jLPOTS9D1ocVue3qS/xZNyyjU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=C6X00KvCKxYwOs9uTlvwhNBZTBogJA3wbs4tOdSCfW5CVmJlpw0CSpDJuaFCFErYAtKZg0EAfaSlje3ZRgCjnTCLXGuBepYNmC9yygpdht6ZUxAaEFT72TlxzCqaqy4SpzvpYSbGpH6v9HpPs9Yi/l3eyUDFEw3j2ASRYt4jl5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NcG10En4; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NcG10En4"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8FECBC4CEF8;
-	Fri, 27 Jun 2025 09:29:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751016589;
-	bh=d4f+GZZnhp9tckE2m7jLPOTS9D1ocVue3qS/xZNyyjU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=NcG10En4/836ZBMejRMxm99cEoSUMjpofJuFTDcpuqzEK/rIBA/ph6YX1EByj3iQd
-	 JlFf4P+pSRb45PZkPY6gWy6QsS29kZMVIRwwlDKvQKcix4A7QLQ35/+RscCfZ0+fn5
-	 7EwNkKoYOxWHaFuzJHiD9nnxdGUcX/uNdzGNDMPa5seZ7WuBLOvcZfq7FWguYq6X8w
-	 NkC5q56kqLi1YhaHf0Gd8PiifQICaQCKoTbUYa8OYD7CR3PFrKcZKzoXZJiFLia+hZ
-	 E4ms4N4s/OmKx3XRlSVoJu643n+It5lQi9yJjnauXXRUO/8uG39rBjJSU6IdP8MKzl
-	 7N6oW3a0VzAEg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E22C83010;
-	Fri, 27 Jun 2025 09:29:49 +0000 (UTC)
-From: Joel Granados <joel.granados@kernel.org>
-Date: Fri, 27 Jun 2025 11:27:28 +0200
-Subject: [PATCH 4/5] kernel/sys.c: Move overflow{uid,gid} sysctl into
- kernel/sys.c
+	s=arc-20240116; t=1751021120; c=relaxed/simple;
+	bh=rOC3ZN61YB87VOjCKjWidgsmHChsG4gpfO2vqW9HwGM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YS8axdIdm/Thpc6nCxxMhjwgtPRH0ZgequvY4x5V42LRTw7GUSZXzoTHxhsLtwNUJkq+TakeABnOUcQvIF5ujsWJaNbHeJL4mZIv/WXJEz8tTylCvkqVI/F5H33o1WGsi9YS7ydlHY3YPUzH0xwIRiq99UJaISVHybjrEXOwnpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D31A1A00;
+	Fri, 27 Jun 2025 03:45:00 -0700 (PDT)
+Received: from [10.163.36.129] (unknown [10.163.36.129])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A64A3F58B;
+	Fri, 27 Jun 2025 03:45:14 -0700 (PDT)
+Message-ID: <af5cbd48-6312-481d-8e91-7739612493c1@arm.com>
+Date: Fri, 27 Jun 2025 16:15:09 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/arm64: Prevent build warnings from
+ -Wmaybe-uninitialized
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250625020138.3777454-1-anshuman.khandual@arm.com>
+ <dd3dee5a-b030-4658-8cef-c777928368d4@sirena.org.uk>
+Content-Language: en-US
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <dd3dee5a-b030-4658-8cef-c777928368d4@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250627-jag-sysctl-v1-4-20dd9801420b@kernel.org>
-References: <20250627-jag-sysctl-v1-0-20dd9801420b@kernel.org>
-In-Reply-To: <20250627-jag-sysctl-v1-0-20dd9801420b@kernel.org>
-To: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Joel Granados <joel.granados@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2495;
- i=joel.granados@kernel.org; h=from:subject:message-id;
- bh=d4f+GZZnhp9tckE2m7jLPOTS9D1ocVue3qS/xZNyyjU=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGheZIuy7IYp/NYoQ0F4Y1Sbfl0C0VMKXwA/n
- 6a/S49z66DfoYkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJoXmSLAAoJELqXzVK3
- lkFPhDUMAIAgHoQkjO5401S0OP+G118xWa+XDYveVdPCJb5Z+6xXdERrXwDCjQCZ+5Z+RSWCKaA
- X6BKed8rjDHIR6uQODGH88koTbpOqpBo7d2vYNxItk7WE0OC/cBjIulurqjsEO3135Gz7toWdO0
- 76AnPLdwQ9npTwKjMdIVsWrYDi6I2Mpw//nSBTVq429AOvFwP4DaY96RNjMs/T+leTzpVE39kou
- veIIC0Wcg1p8Af7XBlwfkEefiuWwPGg0trnaehEmxGBhgI/B0klzjjvfZtvBqigVpMqUVV1LB8z
- TuaC2+BDED8kC8C3LMiI5l8spLrp819I1W1gXngmxHZZMgXqmp9ojO6Omn/c4Mj6bF/b+1Bnorb
- 2u31hDPJaAPJHhYdSVwMn6TjsPeCh9u0nvDd5wxp8kUfWi8dlAsKVe+sLkr/xlStFbD/Aoa0Sce
- R9+c2ybUOfSLQgSLZ4niwj1x5PS40RBwn0ArobBfdMJRb4Q424OIu7y6GLo1BOReuaAonxaE2f5
- Hk=
-X-Developer-Key: i=joel.granados@kernel.org; a=openpgp;
- fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
-X-Endpoint-Received: by B4 Relay for joel.granados@kernel.org/default with
- auth_id=239
 
-Moved ctl_tables elements for overflowuid and overflowgid into in
-kernel/sys.c. Create a register function that keeps them under "kernel"
-and run it after core with postcore_initcall.
 
-This is part of a greater effort to move ctl tables into their
-respective subsystems which will reduce the merge conflicts in
-kernel/sysctl.c.
 
-Signed-off-by: Joel Granados <joel.granados@kernel.org>
----
- kernel/sys.c    | 30 ++++++++++++++++++++++++++++++
- kernel/sysctl.c | 18 ------------------
- 2 files changed, 30 insertions(+), 18 deletions(-)
+On 25/06/25 3:54 PM, Mark Brown wrote:
+> On Wed, Jun 25, 2025 at 03:01:38AM +0100, Anshuman Khandual wrote:
+> 
+>> @@ -96,7 +96,7 @@ static int write_sleep_read(void)
+>>  static int write_fork_read(void)
+>>  {
+>>  	pid_t newpid, waiting, oldpid;
+>> -	int status;
+>> +	int status = 0;
+>>  
+>>  	set_tpidr2(getpid());
+>>  
+> 
+> This will shut the warnings up, but it's a bit of a heavy hammer that
+> means that the warning can never trigger warnings for that variable
+> being unused.  Is it possible to fix this by updating the control flow
+> such that the compiler can tell that the initialisation follows the use?
 
-diff --git a/kernel/sys.c b/kernel/sys.c
-index adc0de0aa364aebb23999f621717a5d32599921c..bbeee62f9abcdf18cdf5cdb06271476b048357ae 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -181,6 +181,36 @@ int fs_overflowgid = DEFAULT_FS_OVERFLOWGID;
- EXPORT_SYMBOL(fs_overflowuid);
- EXPORT_SYMBOL(fs_overflowgid);
- 
-+static const struct ctl_table overflow_sysctl_table[] = {
-+	{
-+		.procname	= "overflowuid",
-+		.data		= &overflowuid,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_MAXOLDUID,
-+	},
-+	{
-+		.procname	= "overflowgid",
-+		.data		= &overflowgid,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_MAXOLDUID,
-+	},
-+};
-+
-+static int __init init_overflow_sysctl(void)
-+{
-+	register_sysctl_init("kernel", overflow_sysctl_table);
-+	return 0;
-+}
-+
-+postcore_initcall(init_overflow_sysctl);
-+
-+
- /*
-  * Returns true if current's euid is same as p's uid or euid,
-  * or has CAP_SYS_NICE to p's user_ns.
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 2df63b69edf6fd21a58584d670e75e6f26a6e5cc..21b70443aea75ae3212f70e5ce7efbfdf8a4f75b 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1475,24 +1475,6 @@ static const struct ctl_table kern_table[] = {
- 		.proc_handler	= proc_dointvec,
- 	},
- #endif
--	{
--		.procname	= "overflowuid",
--		.data		= &overflowuid,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_MAXOLDUID,
--	},
--	{
--		.procname	= "overflowgid",
--		.data		= &overflowgid,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_MAXOLDUID,
--	},
- 	{
- 		.procname	= "ngroups_max",
- 		.data		= (void *)&ngroups_max,
+The problem might not exist in reality. In the test function test_fork()
+in the file tools/testing/selftests/arm64/gcs/basic-gcs.c there does not
+seem to be a path where WIFEXITED(status) might get called when 'status'
+has not been initialized as there is a preceding waitpid() which would
+ensure 'status' gets set. Similar scenarios are present in fork_test_c()
+and write_fork_read() as well. 
 
--- 
-2.47.2
-
+But the compiler still throws these build warnings. Seems to be false
+positives and this fix just works around that.
 
