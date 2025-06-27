@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA38293C5B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2201293C71;
 	Fri, 27 Jun 2025 09:29:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751016589; cv=none; b=J9EhUN88E4VZ78ELkAvwv8WSz73zGypu+xGLdc2mN05SkxTrjMQSkTI+MVzevo/2Hkys1GyTO4fZM2yRq7xogfnkZlgJSLAnmhNjoVmHDFv9mZkYpaaN9NlgNgro1tYG3+LRTk0H4Tzgl1NEyNMxmeoU4XnJ+9XavTsy83xNi68=
+	t=1751016590; cv=none; b=mSxBnAYQFydPYplhdhYH7sC3SrzwJVMW/SE0C5XJXO2L5diYZ6/e3PwT6iNSQiu/Zf1p+Ax5Up+0tDRq4zYtZ3EwuWBImH8rEoegXCFrWxQz7c7j2MwPk2oem6kjDz+tMJZi6v68KN8ua13113HREX1UjI3H2Nwabz5LKQxyq1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751016589; c=relaxed/simple;
-	bh=O0ypzQeGPRlM3z8kh5kwMJv1JvpRZXn0U0UtN6aCpRM=;
+	s=arc-20240116; t=1751016590; c=relaxed/simple;
+	bh=hgTq3HJakHDLAQL9R275nXbuleoJE/PtptKFtlOZlIs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Nyl37EBIi1Gj/kkES8eoy19d4MclpBkTYYdMlTRCP9gVLAnTl8FClTWhT+kg88enTdRq4u301iwgQf6/bGHOk9CBJ1JTwjCP9NFJ4qww3vAUcOuTes9x6VyG0wbJfo2uTr0euoWNpwNfxHqZRkigXQdcV47hp936g1F2E8I6VaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWRJpTr6; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=etaz7QroIdq0KMnV1GVVX8odozbLf1wpS5DQltenh7mqPBvnczvWmAgrNzjLyVD0id1IobH3zs6dovwP9pt2hS7ehHGG/IgGrGfDufXKSbNSsGbv/cM0imgbLTywuho4eysba8yYXq3AjcrX9Tyj+0g4eB3GKdd1bp0m4wMud0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e//iFiMP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWRJpTr6"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 769A1C4CEF0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e//iFiMP"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DBBEC4CEF5;
 	Fri, 27 Jun 2025 09:29:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1751016589;
-	bh=O0ypzQeGPRlM3z8kh5kwMJv1JvpRZXn0U0UtN6aCpRM=;
+	bh=hgTq3HJakHDLAQL9R275nXbuleoJE/PtptKFtlOZlIs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=LWRJpTr6xyB0I5AbGBLUw3U7w1hsrDqBjpPPkKGGwSwjIIkRbeQ6WpGFIfDUMd8Ad
-	 de3TjQPGv89MbJrfN3PtWV7McT+zNfjES4HgC+pwJSXrHv6cN+fhYINl7hQTOALOeb
-	 T6aHaapJSlOKpjRuwy3Q/TqeW/YNLXKOVrt7QX9IquU0bnndL6zL045x4QcrnEBl7m
-	 OIAtOI8K1Ze261/65df/mju50V9Muq6PK51pdgsGIXOhnuUEBr8bRN7cr1yIItAw4x
-	 qqEs4yWhTyKNaYn0MFXYW8S/grZyxVckdsVRCyVAGoS2lYutipGNsHJddRDGTrxxMP
-	 L6ZowJ5oYcrIA==
+	b=e//iFiMPG+kIkeO00iAQNxm07FQ6j2M1qk0oKOOKOLL3oSeAAPYsGvpgzDVoYsZwi
+	 0+DKO0BGz+UO3uRTIZJTD894Xo5vUWEO2MleVFIaoklqTbNrp78OdpbZDY8c0YL4Ce
+	 eXcLvcNi5CKzu31hSFcdleggATqu/i/OK2TeEU8O1hTO9yquSoxDNvfwpzckWiEtF5
+	 /6ApimCDO9x/WIZ6qFbhVxuuFB/WnqxUzDLSMQrtwnoz20ANfBl4iRlhB216WVXtCS
+	 X52ZltH9rkhF253xXEhfIkA1xLDncoZVIT4c1oFH4dOoTpRUf7Enan/7R/1vUBAs9B
+	 ZaujDl2Q1qkug==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E401C7EE3A;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 856E6C83000;
 	Fri, 27 Jun 2025 09:29:49 +0000 (UTC)
 From: Joel Granados <joel.granados@kernel.org>
-Date: Fri, 27 Jun 2025 11:27:26 +0200
-Subject: [PATCH 2/5] sysctl: Removed unused variable
+Date: Fri, 27 Jun 2025 11:27:29 +0200
+Subject: [PATCH 5/5] sysctl: rename kern_table -> sysctl_subsys_table
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250627-jag-sysctl-v1-2-20dd9801420b@kernel.org>
+Message-Id: <20250627-jag-sysctl-v1-5-20dd9801420b@kernel.org>
 References: <20250627-jag-sysctl-v1-0-20dd9801420b@kernel.org>
 In-Reply-To: <20250627-jag-sysctl-v1-0-20dd9801420b@kernel.org>
 To: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
@@ -50,44 +50,103 @@ To: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
 Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Joel Granados <joel.granados@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=685;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2432;
  i=joel.granados@kernel.org; h=from:subject:message-id;
- bh=O0ypzQeGPRlM3z8kh5kwMJv1JvpRZXn0U0UtN6aCpRM=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGheZIl5s5St2dBl54Hk4RjroiWdqlkUFAugj
- +e0QJdUODMiRYkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJoXmSJAAoJELqXzVK3
- lkFPcmoL/i14QMIIr0HafzdK8WfZqc/c0dndrNGEcIjJiCNDSitIjcCIRGLqDi93jAbZnRBeXRS
- NbQdw2USHPBqU28c8caCMCSxaXKiWUsUGa8z4HUMY+44793BI8nBTx3yWzpXSBzQyRHcon/7Ceh
- lWeOqlfCLvO7+ql/DyXh2pxiNCEyNFlk98qV5cQl/+toB0vy9m/6m6mrXUjrtePJoQDqAE7bYlU
- 35aqjc/a42HM+34l/2UsBYwk9RKhFu15qXBzp0mrUZjNxkcmlRrVea5URZFjcRgoZgFhskKhnxa
- nVhzi34+I+w1+qUXA5icwltS1p8/BlzPkO3tug4t/fLjyJOSsnVnxB+mGzk7VAUmpx/BY4+fJBk
- jwSx9qLcDgS32jj5YhQdGUEF57Iz3KVBIVyEQrT2cHPRekttG0PMx/G4rFG+/MwLEe+QbY6GdiE
- VGwVqaEZPP+AblDsB9O2DnMgZmh3DJb2azCIqpmbX5Hjfj1ylOa8xrH63KiqeoPfVq6is+19pu5
- G8=
+ bh=hgTq3HJakHDLAQL9R275nXbuleoJE/PtptKFtlOZlIs=;
+ b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGheZItRvg7iUt/llY0jbi3S8p4tXdqPpP3ES
+ PH4SAld/qySPIkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJoXmSLAAoJELqXzVK3
+ lkFPkkcL/0kQbR1sj7lbluFeCpSjtNkpKm+jLiXZcrRmAe9K4iSgODeEZRXR7j+6fu9IqphE3Gm
+ Z5lm4OhRmxF/P21L5oBXMHdsBsmEyFU5qQVQTGTCq+qZIHJSm7p+XsvQ04r/vBDcVjWHiSVDnOH
+ 4fF+pPRuoPm2EQP/q2zT4tYvaajLN/8mBOVDxiokci+6K8PDk/O6dn97UYlQIS4gX8qj6CFHE1H
+ N5dz1iSBTb5coUDKVmuBbaqEL8r1MXo4fiVeVtX3qvha4mEB4QdwZhL0U/DtNXzu0KGhEhtu0vB
+ ZdautBKdIG/ui5nC7p5HUam91iIVu0bnfrHmZ1VNuFkk5nSSGEV/APDcz5AbIpzAWhzYTfore0h
+ 6erbmuF00MVdrGY9W/T+rFU6pYYy6q/ftmH8yZzRds0H30FAjmj/CEIxlxv74C53FXR+TQvcwEK
+ OrCAqwpvdhNlacaC3dvBEwF8mPBZ7cR+czVEYERECXdd+RYsqgyPDgsjPCc3Cq+9eZFI4Ujo3f6
+ fE=
 X-Developer-Key: i=joel.granados@kernel.org; a=openpgp;
  fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
 X-Endpoint-Received: by B4 Relay for joel.granados@kernel.org/default with
  auth_id=239
 
-Remove unaligned_dump_stack from sysctl.h; it is no longer used or
-defined.
+Renamed sysctl table from kern_table to sysctl_subsys_table and grouped
+the two arch specific ctls to the end of the array.
+
+This is part of a greater effort to move ctl tables into their
+respective subsystems which will reduce the merge conflicts in
+kernel/sysctl.c.
 
 Signed-off-by: Joel Granados <joel.granados@kernel.org>
 ---
- include/linux/sysctl.h | 1 -
- 1 file changed, 1 deletion(-)
+ kernel/sys.c    |  1 -
+ kernel/sysctl.c | 22 +++++++++++-----------
+ 2 files changed, 11 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
-index 30bcbc59d12d2f4cec7545e7ee3f5ea5f0eefbd7..92e9146b1104123d3dc0ff004bd681861e297581 100644
---- a/include/linux/sysctl.h
-+++ b/include/linux/sysctl.h
-@@ -243,7 +243,6 @@ int do_proc_douintvec(const struct ctl_table *table, int write,
- 		      void *data);
+diff --git a/kernel/sys.c b/kernel/sys.c
+index bbeee62f9abcdf18cdf5cdb06271476b048357ae..18a037cc6f61a339f1f21af9c26b25ecca1ae43c 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -210,7 +210,6 @@ static int __init init_overflow_sysctl(void)
  
- extern int unaligned_enabled;
--extern int unaligned_dump_stack;
- extern int no_unaligned_warning;
+ postcore_initcall(init_overflow_sysctl);
  
- #else /* CONFIG_SYSCTL */
+-
+ /*
+  * Returns true if current's euid is same as p's uid or euid,
+  * or has CAP_SYS_NICE to p's user_ns.
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 21b70443aea75ae3212f70e5ce7efbfdf8a4f75b..cb6196e3fa993daa21704d190baf366084e014f7 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1454,7 +1454,7 @@ int proc_do_static_key(const struct ctl_table *table, int write,
+ 	return ret;
+ }
+ 
+-static const struct ctl_table kern_table[] = {
++static const struct ctl_table sysctl_subsys_table[] = {
+ #ifdef CONFIG_PROC_SYSCTL
+ 	{
+ 		.procname	= "sysctl_writes_strict",
+@@ -1465,15 +1465,6 @@ static const struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_NEG_ONE,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+-#endif
+-#ifdef CONFIG_SYSCTL_ARCH_UNALIGN_ALLOW
+-	{
+-		.procname	= "unaligned-trap",
+-		.data		= &unaligned_enabled,
+-		.maxlen		= sizeof (int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec,
+-	},
+ #endif
+ 	{
+ 		.procname	= "ngroups_max",
+@@ -1489,6 +1480,15 @@ static const struct ctl_table kern_table[] = {
+ 		.mode		= 0444,
+ 		.proc_handler	= proc_dointvec,
+ 	},
++#ifdef CONFIG_SYSCTL_ARCH_UNALIGN_ALLOW
++	{
++		.procname	= "unaligned-trap",
++		.data		= &unaligned_enabled,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++	},
++#endif
+ #ifdef CONFIG_SYSCTL_ARCH_UNALIGN_NO_WARN
+ 	{
+ 		.procname	= "ignore-unaligned-usertrap",
+@@ -1502,7 +1502,7 @@ static const struct ctl_table kern_table[] = {
+ 
+ int __init sysctl_init_bases(void)
+ {
+-	register_sysctl_init("kernel", kern_table);
++	register_sysctl_init("kernel", sysctl_subsys_table);
+ 
+ 	return 0;
+ }
 
 -- 
 2.47.2
