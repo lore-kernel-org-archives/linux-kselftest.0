@@ -1,79 +1,131 @@
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 292ED2874E0;
-	Wed,  2 Jul 2025 13:19:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D350A26FD8F;
+	Wed,  2 Jul 2025 13:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462378; cv=none; b=PdsOgiZgXI568l8YZV30QBAUadedVCcRmCYTa/cDGAUU8AVd9rrbAYBXgCzgab5181noG8ZLlVz1NAqT3G70HlpBLfGTQH1Zod8h7fGKydUIpSpGEIEUsxfAwZwp+/eQvo1H51bDaE5x/FsjgY0ytljH+sFC5DlLpy+0KI6B1zY=
+	t=1751462422; cv=none; b=Q5vKmRVJb6emzIHFHCpvr/WCri786KNXX+P7Lg41diUBMeikdFOtClrx3fRQtTqHAADqPJT6/RzEPd+Dgm4cCwow/kdHT6OiZh2xtQbAVBZyczN13OVeg1TpbW/tVV1iNm1WOg9iaO/8A+V/yUaqHMKXU17XCgZeoxaU3O5OHsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462378; c=relaxed/simple;
-	bh=tuVAUH59+l/O8UCrXTZ5Z+cA00nPP9nSSO/OIl+MgdQ=;
+	s=arc-20240116; t=1751462422; c=relaxed/simple;
+	bh=Vw+TK6BmCACUGzgvGFj2GeLrvABo3wOiWncJZBGBnxU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VBCIy0Bb0mRHwFneiz8vMCvdQlJfftWVJE6amIukS7E8Bliha8ubTOecT4oxXWMdR1lGzFEQ2WMJTPpuKuyeUwGgV/+BZzpgr+fmvb7H91Iskjb2N1/Iwuy0kGgKhQ+UI9FHqZskANI3C6aWMdg05mUng0usblpZwp3LNgGgbMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1uWwab-00058l-00; Wed, 02 Jul 2025 14:29:25 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 9F5D4C0C86; Wed,  2 Jul 2025 14:28:58 +0200 (CEST)
-Date: Wed, 2 Jul 2025 14:28:58 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Huacai Chen <chenhuacai@kernel.org>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: Re: [PATCH v4 1/2] MIPS: Don't crash in stack_top() for tasks
- without ABI or vDSO
-Message-ID: <aGUmClZQXMIQAIif@alpha.franken.de>
-References: <20250611-kunit-mips-v4-0-1d8997fb2ae4@linutronix.de>
- <20250611-kunit-mips-v4-1-1d8997fb2ae4@linutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s+A2SO9nXF5gY6WISO08y47p4D0UOFVV9URoXE0st5FTuxr8VyYlaoxFPTYiW4P8emG6uPZwmCwJ6w7jw+GkO4q47DOqm8P6UCG2AWZf9XizQMr5bIefuL7mp/pDH+/prMpUMhIXVnNAwc2c634v0rljNt6yqbaCGpb0X4ouAFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J1fKOICr; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J1fKOICr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0E9C4CEED;
+	Wed,  2 Jul 2025 13:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751462421;
+	bh=Vw+TK6BmCACUGzgvGFj2GeLrvABo3wOiWncJZBGBnxU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J1fKOICrttxn/1HT2v5kxU/WySxxo4X9A+Cr+GbsuBkSPKO0J4MxTupYq3LJa+cdh
+	 4IGb3a6rWpdZi+AMS4jEzeYgqdh8tzYFLGbkY7wjLoc9P3aBtfQm6t09FLg0Lm01Gq
+	 jkGTdfgJF2Lxp0yji0nM/xl+KDpLOj4mtKWRrqm7iJOKpIDG8HgzsLYChQfT0Bm/uo
+	 MD8jMkxcYbRMETnsvqGpi5nJIEmVAZFB1rvgzWmPcZVa19+Vcyixoi2JUhe1c6YM6j
+	 5XZ0YuC6vk7NY7QGH/bADWMYgPj8J2VR88K4Gg/qxP+CFHdrisjL+TPxOO8YjHGiWS
+	 wzu2l721Fdwfg==
+Date: Wed, 2 Jul 2025 18:50:02 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Anup Patel <apatel@ventanamicro.com>, Marc Zyngier <maz@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, 
+	Richard Zhu <hongxing.zhu@nxp.com>, Lucas Stach <l.stach@pengutronix.de>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, imx@lists.linux.dev, devicetree@vger.kernel.org
+Subject: Re: [PATCH v19 08/10] pci: imx6: Add helper function
+ imx_pcie_add_lut_by_rid()
+Message-ID: <s6uvv5yotunkzmmc7hoxsxccihuoze5e6hkzdpmgqjaq7otlh6@uazl74vzsweg>
+References: <20250609-ep-msi-v19-0-77362eaa48fa@nxp.com>
+ <20250609-ep-msi-v19-8-77362eaa48fa@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250611-kunit-mips-v4-1-1d8997fb2ae4@linutronix.de>
+In-Reply-To: <20250609-ep-msi-v19-8-77362eaa48fa@nxp.com>
 
-On Wed, Jun 11, 2025 at 01:28:26PM +0200, Thomas Wei�schuh wrote:
-> Not all tasks have an ABI associated or vDSO mapped,
-> for example kthreads never do.
-> If such a task ever ends up calling stack_top(), it will derefence the
-> NULL ABI pointer and crash.
+On Mon, Jun 09, 2025 at 12:34:20PM GMT, Frank Li wrote:
+> Add helper function imx_pcie_add_lut_by_rid(), which will be used for
+> Endpoint mode in the future. No functional change.
 > 
-> This can for example happen when using kunit:
-> 
->     mips_stack_top+0x28/0xc0
->     arch_pick_mmap_layout+0x190/0x220
->     kunit_vm_mmap_init+0xf8/0x138
->     __kunit_add_resource+0x40/0xa8
->     kunit_vm_mmap+0x88/0xd8
->     usercopy_test_init+0xb8/0x240
->     kunit_try_run_case+0x5c/0x1a8
->     kunit_generic_run_threadfn_adapter+0x28/0x50
->     kthread+0x118/0x240
->     ret_from_kernel_thread+0x14/0x1c
-> 
-> Only dereference the ABI point if it is set.
-> 
-> The GIC page is also included as it is specific to the vDSO.
-> Also move the randomization adjustment into the same conditional.
-> 
-> Signed-off-by: Thomas Wei�schuh <thomas.weissschuh@linutronix.de>
-> Reviewed-by: David Gow <davidgow@google.com>
+
+What do you mean by 'used for Endpoint mode'? Endpoint mode is already supported
+by this driver. So be explicit on how the new helper is going to be used.
+
+Also, looks like this patch is independent of the doorbell patches. So this and
+9/10 should come first.
+
+- Mani
+
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 > ---
->  arch/mips/kernel/process.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-
-applied to mips-next.
-
-Thomas.
+> change from v14 to v16
+> - none
+> 
+> change from v13 to v14
+> - new patch
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index 5a38cfaf989b1..032b906c44dfa 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -1096,18 +1096,14 @@ static void imx_pcie_remove_lut(struct imx_pcie *imx_pcie, u16 rid)
+>  	}
+>  }
+>  
+> -static int imx_pcie_enable_device(struct pci_host_bridge *bridge,
+> -				  struct pci_dev *pdev)
+> +static int imx_pcie_add_lut_by_rid(struct imx_pcie *imx_pcie, u32 rid)
+>  {
+> -	struct imx_pcie *imx_pcie = to_imx_pcie(to_dw_pcie_from_pp(bridge->sysdata));
+> -	u32 sid_i, sid_m, rid = pci_dev_id(pdev);
+> +	struct device *dev = imx_pcie->pci->dev;
+>  	struct device_node *target;
+> -	struct device *dev;
+> +	u32 sid_i, sid_m;
+>  	int err_i, err_m;
+>  	u32 sid = 0;
+>  
+> -	dev = imx_pcie->pci->dev;
+> -
+>  	target = NULL;
+>  	err_i = of_map_id(dev->of_node, rid, "iommu-map", "iommu-map-mask",
+>  			  &target, &sid_i);
+> @@ -1182,6 +1178,13 @@ static int imx_pcie_enable_device(struct pci_host_bridge *bridge,
+>  	return imx_pcie_add_lut(imx_pcie, rid, sid);
+>  }
+>  
+> +static int imx_pcie_enable_device(struct pci_host_bridge *bridge, struct pci_dev *pdev)
+> +{
+> +	struct imx_pcie *imx_pcie = to_imx_pcie(to_dw_pcie_from_pp(bridge->sysdata));
+> +
+> +	return imx_pcie_add_lut_by_rid(imx_pcie, pci_dev_id(pdev));
+> +}
+> +
+>  static void imx_pcie_disable_device(struct pci_host_bridge *bridge,
+>  				    struct pci_dev *pdev)
+>  {
+> 
+> -- 
+> 2.34.1
+> 
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+மணிவண்ணன் சதாசிவம்
