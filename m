@@ -1,77 +1,88 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB6B184
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Jul 2025 00:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3790710F9
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Jul 2025 00:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751414766; cv=none; b=tMEfFQK+HVDZfIdrPFxXGWC22C6njhEMhBRGUxDBxl1t/vjqazp1LUxUScvWnRhj14dy7YWmtGXp46kxO4d7lZtr/TDyegM5jJihSP1ICAKkFzkSyjLdE6xlPOlivi8C+QWtPFKM+gp59hxbzW1Aw3EsJ7FYGn5NmEPuEfjldn0=
+	t=1751415280; cv=none; b=e9LaKdkrUYkR7f917KtYPjiLP+AVKE+/52Ei5jgJWBmUrKw49SMhz0PUhMLtWFqhK7EnTYBsgeJrIon+8o1admAiSytCUmXeBCjhOJkBmTHfL8tTHGRE+lgYlc25MwMYrLzmvZvHETdQzK5r/ojb7G3VUPHwk8XBkFRgL5PiqEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751414766; c=relaxed/simple;
-	bh=bIMTi4MWsgaUbmZu8ndOxvFLqagge7bVFXfE8u72634=;
+	s=arc-20240116; t=1751415280; c=relaxed/simple;
+	bh=269QJMUMdHzfHuz4jq/gGMWfgE3bohbbwQ/J8DDsB00=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HLQTqnwVDan1zgKaRnvxXOnOIMsow+chh2q9piFx3EtlmVYvjIxwp6OYQAXeeQvMT+wqvbLj9TQbOTiregFq51jkeMGBsA8M9dEFi3BBOWbD19TvXMP+VAj21jlxpQ1W9l8Hx3cXFp8DuXmeZ0x/k8A0GalgY7WMnx9s0gs8nuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CVNb94Iv; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cwr0K7sJlRdClV2quVs9KnJAyL2VZM0SfkpEUbazbH5VE8dTnbS3K8EL44AvUnRePyKteLGAKK8FAQKZuq+/F3CDguUXYv/+Y3mT/zH6E8Hhcp2D3R2V4XEiybcDUWcdGghsFpt50Ks53mhcxZlktprT1PfrHi2ESIcCnAu/hWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Cxzn6tqP; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CVNb94Iv"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a548a73ff2so5556609f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 17:06:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Cxzn6tqP"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-235e389599fso364415ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 17:14:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1751414760; x=1752019560; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1751415277; x=1752020077; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ce3zDRJVoRRIoVuOih+y1uZIYHn+OOhDiG27OLlb9rE=;
-        b=CVNb94IvQLjV3Kc0WC6Ibs+Hn96TZhMGBiKW0BKCKqBQ/sFqmF8HLm7AQUDUtwqAF5
-         P4svXkkMAxLVTWrrF7uLZUjdace7iRHzoET/dR+5G9BMn64vwp8OcDUU2h81O41g8kV+
-         RDHL7G9RcMRjTwfBpDBDQi2QDm0w/RyiptwPLehfdv7Y0yXGeRNwCMwvx4cnngNMO4lc
-         mVg8pEanOfRbrUKOmPkQFIIBAk6mqV7Q1BUjBaNQMGET9F/atmK+hTYylh5hOTa7VBbz
-         MAFBmwvN5C46Shv1i+iv7K07DHXgxLZWHFPygr6k1W6aVQcR0neULyutljOw5NvQ3kgL
-         JboA==
+        bh=yWta2RBHdNOuAiG72RgunT5XM70BX2r3Pve9teJEvWA=;
+        b=Cxzn6tqPvRE9UvbZT/57SywjenE6nqLEHezJYHok7YZh0Wvy/3AwmhujdyMZG3yefM
+         TkBJAZMSc0LVc+0OLFFr6NqehXZ5mPtdMhoBW++WQI5/a2N5xIpIWjFv5R9svGBOatmv
+         f/CQyvTb19Y4VP65NJPTv5ki0dndcb8NOP9Idf59aC1fHpQgGG/QkUTcpiLBV/fCr4RF
+         j6iHlsJAbbnwl7NCqbVPGZSwLQU4Q1SxO0UBKgVOlg+Utf+xIiCtVs4f4Sg6DHrUaXCr
+         ju7ahl+omqInUz9QA3ThFC9aOB6DxQcvfsnWq8KSfKu0/XANKcBWJ7x0OGMLnZN333Me
+         0PGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751414760; x=1752019560;
+        d=1e100.net; s=20230601; t=1751415277; x=1752020077;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ce3zDRJVoRRIoVuOih+y1uZIYHn+OOhDiG27OLlb9rE=;
-        b=DsP9aL1Gv+AxswR+/6/5Q2dxZlcI6X6tEyJMnAb943Y5sMVl/hUkGTC9Nsmz7s/DOf
-         F+WW0upMSFXoE1a/TQis1AlqQ8U7B646Caz/DHFify07mBIbzdiGb/QH6Kzh6oZNIMoA
-         qwnSppzkIPfDj9LA9DF63whag2vgXVR5Esn1U8QVjzXoNZ3Iimn45jFFcK18kgnuhxCU
-         tp1J8fx+OCPsbdPrvjGRlhe+I7SrPLwVEa3ytAz0NDi/R3+PnZ00TgZ/VrUJbO+NOAzc
-         u0t67V2V9Zz8YXVP8yJGGcYZBwo+omvYMgKk+r4REnqjDdf1mRjOqk7+qxXxbCo7Bwl4
-         HHWg==
-X-Forwarded-Encrypted: i=1; AJvYcCW+9eqWwjeL77UjXL500jH23a8uhQGbwQyDfMaELaxSI42mwLWS7Ss7x28pDwla8pQCoBw9BSbjtpu/Bjg49GY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybjcjVKlFP7BFuOjpmE5dezZBCdbh8U1/MJcCaSjNW15pZ90Gb
-	lVugcUH0hONaPEQgQ4vLdk0BxD8W+g/u95kIp8QNSYLnX5mDBRIT5+IajehKBZvqUA==
-X-Gm-Gg: ASbGncucepCrl29OVfNPKIcc3Oz0RtLT6GUbFX/ts02AuPTnOwzfUyuVlx0AEgWLqVd
-	m5tlCKKfR+aF6BzTWN8bXo/GZbWNhdkppldBQd7BFjnlxrD3dI57Lk8pogE4/UiZ23cSPUdevAx
-	fb6by0mfZ/LEZxbfwtjj2fmGjGu7cO8co3ulMQMHzN9F9fIVmzBhC7eamIsBepxjNCVvBHDav1m
-	eIjEQW/8gJh3JNGA+7WMSYhaKNJMkTfDqaoddxDUpMr3MLA+YqrxCnRd/ulYHdZtuTq0o2qAfg/
-	9pB09XeCHNdnBnW/KuWI6ydKwoBOF52oNBbb/G15W7zfbfpYW9KXJNLJnEjjQA==
-X-Google-Smtp-Source: AGHT+IHgFK+x5iOOCR7s+Jwca4C328dxRJPFWJLVCE70nVrrFL6mJkkvUSJeMxzZnHxSrAYyY3US1Q==
-X-Received: by 2002:a05:6000:2dc1:b0:3a4:d83a:eb4c with SMTP id ffacd0b85a97d-3b2013f8c90mr292003f8f.57.1751414760277;
-        Tue, 01 Jul 2025 17:06:00 -0700 (PDT)
-Received: from MiWiFi-CR6608-srv ([202.127.77.110])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-318c14fd6b5sm12475850a91.35.2025.07.01.17.05.57
+        bh=yWta2RBHdNOuAiG72RgunT5XM70BX2r3Pve9teJEvWA=;
+        b=o7TyIGzCdpIXZ4uJfE/w4qBb8pg/4mPjKGnyKlZrQHqvAWUr0RFPZPSRrzrFURdUtT
+         hIGQAuFeB65uNNgsOdsGXCHPLReo8e1pt03ZB47xIflFHltaHcXbgKTVhBU9CDsdYSxV
+         YdZr9Sx55h4ppTslWFbkLX5LpnRQSYW9BPHIsHBYWjKzuvyjR+wyuOl69wBEKgiUdB2f
+         TPhqVeE9TN4bWwshGEKKKpmh/48xShTcQ6L+NGpSOgBcAgijHugV0GqaRlM5aRyINkGT
+         EUX2EBZQ6OJCix0EAi/rpfRXqeX37qVd7SxratW1HlFjd+2a/Z0ZYoLpWwvkGydebB0/
+         5SqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWCZ1H84WhFzdDtdoP8ywidtF3D203lyJ4njhuuzQmjtdkcsL34xViilQ6ZdHHO7C6mJs/xcXmMEj1KB8uwFyk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/I0TWbBJJG5hTHQMvLyd6kU41NLiY6opma2bxJhhn6GxZz8yY
+	N4+a2zFKg9+NuERXvPwH8FbB2JNcOeD1/kRjB9avoor0x2iuGt6QJiJinZhdDWK5Lw==
+X-Gm-Gg: ASbGnctn5Qlm7qicjQU+qrxxuDLBGO77Z0Hn4Se70G1dTTu1kqAJZaF5lviwSD+5ZES
+	jXghiz39135wk2X/02RQsmpHohsICdk9MULHeAyd5+tu8uwhhf4568AEFxTEAX1deESs4H4/s+I
+	A6QH9tuXusXo5Udgm0cDu8OVYe5OJXUFwnlcvO4MV/v4HlH7apLwcn4JQo/aGfss/3W8wgG7Ibd
+	U28DZyIPON+Gs1BNOkbyG1apVIvqJtxtGGvOjEmkbPqCQ9DEggSm0VOom8WDpv4n9a41QBkFIv/
+	rXvnIKDHvBHx1hWOBg57n2AKhK7pVaFtg93ictzVUSI2BRs5Sr7xTUeVaYumijWL5HhaRdu4ln6
+	bcaQ2R+udh0ztfouMSheJ
+X-Google-Smtp-Source: AGHT+IGvJMG8/hp+2Ct3jUaU9SAz7W5inwlVAS3AX7hVe0NTLM1n/six7+4FqNJbQ+qt9+fMTBDOTg==
+X-Received: by 2002:a17:902:f70b:b0:234:bca7:2934 with SMTP id d9443c01a7336-23c5fef098cmr4092395ad.6.1751415277107;
+        Tue, 01 Jul 2025 17:14:37 -0700 (PDT)
+Received: from google.com (232.98.126.34.bc.googleusercontent.com. [34.126.98.232])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb3b7986sm121732375ad.164.2025.07.01.17.14.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jul 2025 17:05:59 -0700 (PDT)
-Date: Wed, 2 Jul 2025 08:05:23 -0400
-From: Wei Gao <wegao@suse.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Terry Tritton <terry.tritton@linaro.org>, Shuah Khan <shuah@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	ttritton@google.com, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/futex: Convert 32bit timespec struct to
- 64bit version for 32bit compatibility mode
-Message-ID: <aGUggwe_gJon_2E3@MiWiFi-CR6608-srv>
-References: <20250701142313.9880-1-terry.tritton@linaro.org>
- <87ikkblkff.ffs@tglx>
+        Tue, 01 Jul 2025 17:14:36 -0700 (PDT)
+Date: Wed, 2 Jul 2025 00:14:28 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
+	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
+	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
+	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
+	zhangzekun11@huawei.com, iommu@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
+	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com,
+	dwmw2@infradead.org, baolu.lu@linux.intel.com
+Subject: Re: [PATCH v7 27/28] iommu/tegra241-cmdqv: Add user-space use support
+Message-ID: <aGR55PUBnwb8qT8U@google.com>
+References: <cover.1750966133.git.nicolinc@nvidia.com>
+ <539ee2ec112162abdba511574e2205a77b425059.1750966133.git.nicolinc@nvidia.com>
+ <aGQGm1-i4M75b9Qp@google.com>
+ <aGQ6KCI9OZEwHdxS@Asurada-Nvidia>
+ <aGQ_F7Qx3scbbA-J@google.com>
+ <aGRDtYRXFLoT+PrI@Asurada-Nvidia>
+ <aGRIctg4T6cQECx4@google.com>
+ <aGRcPSwaJkTeUrMx@Asurada-Nvidia>
+ <aGRmaOORg-YDfncY@google.com>
+ <aGRozoIDIlgl9H9x@Asurada-Nvidia>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,33 +91,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87ikkblkff.ffs@tglx>
+In-Reply-To: <aGRozoIDIlgl9H9x@Asurada-Nvidia>
 
-On Tue, Jul 01, 2025 at 10:34:28PM +0200, Thomas Gleixner wrote:
-> On Tue, Jul 01 2025 at 15:23, Terry Tritton wrote:
-> > Futex_waitv can not accept old_timespec32 struct, so userspace should
-> > convert it from 32bit to 64bit before syscall in 32bit compatible mode.
-> >
-> > This fix is based off [1]
-> >
-> > Link: https://lore.kernel.org/all/20231203235117.29677-1-wegao@suse.com/ [1]
-> >
-> > Signed-off-by: Wei Gao <wegao@suse.com>
-> > Signed-off-by: Terry Tritton <terry.tritton@linaro.org>
+On Tue, Jul 01, 2025 at 04:01:34PM -0700, Nicolin Chen wrote:
+> On Tue, Jul 01, 2025 at 10:51:20PM +0000, Pranjal Shrivastava wrote:
+> > On Tue, Jul 01, 2025 at 03:07:57PM -0700, Nicolin Chen wrote:
+> > > On Tue, Jul 01, 2025 at 08:43:30PM +0000, Pranjal Shrivastava wrote:
+> > > > On Tue, Jul 01, 2025 at 01:23:17PM -0700, Nicolin Chen wrote:
+> > > > > Or perhaps calling them "non-accelerated commands" would be nicer.
+> > > > 
+> > > > Uhh okay, so there'll be a separate driver in the VM issuing invalidation
+> > > > commands directly to the CMDQV thus we don't see any of it's part here?
+> > > 
+> > > That's how it works. VM must run a guest-level VCMDQ driver that
+> > > separates accelerated and non-accelerated commands as it already
+> > > does:
+> > > 
+> > >     accelerated commands => VCMDQ (HW)
+> > > non-accelerated commands => SMMU CMDQ (SW) =iommufd=> SMMU CMDQ (HW)
+> > > 
+> > 
+> > Right exactly what got me confused. I was assuming the same CMDQV driver
+> > would run in the Guest kernel but seems like there's another driver for
+> > the Guest that's not in tree yet or maybe is a purely user-space thing?
 > 
-> This is still wrong.
+> It's the same tegra241-cmdqv.c in the kernel, which is already
+> a part of mainline Linux. Both host and guest run the same copy
+> of software. The host kernel just has the user VINTF part (via
+> iommufd) additional to what the guest already has.
 > 
-> If it is based on someone else work, then you need to attribute it
-> Originally-by and omit the Signed-off-by of the original author.
+> > And the weird part was that "invalidation" commands are accelerated but
+> > we use the .cache_invalidate viommu op for `non-invalidation` commands.
+> > But I guess what you meant there could be non-accelerated invalidation 
+> > commands (maybe something stage 2 TLBIs?) which would go through the 
+> > .cache_invalidate op, right?
 > 
-> If you just picked it up and adopted it to a later kernel version then
-> you need to add 'From: Original Author' and preserve his Signed-off-by.
+> I am talking about this:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c?h=v6.16-rc4#n305
+> 
+> Those commands returned "false" will be issued to smmu->cmdq in a
+> guest VM, which will be trapped by VMM as a standard SMMU nesting
+> and will be further forwarded via iommufd to the host kernel that
+> will invoke this cache_invalidate op in the arm-smmu-v3 driver.
+> 
+> Those commands returned "true" will be issued to vcmdq->cmdq that
+> is HW-accelerated queue (setup by VMM via iommufd's hw_queue/mmap).
 
-@Terry @Thomas, Thank you both for the mention in the commit. I appreciate being included.
-I guess above options both good.
+
+Right, this brings me back to my original understanding, the arm-smmu-v3
+driver checks for "supported commands" and figures out which queue shall
+they be issued to.. now there are commands which are "non-invalidation"
+commands which are non-acclerated like CMD_PRI_RESP, which would be
+issued through the trap => .cache_invalidate path. 
+
+Thus, coming back to the two initial points:
+
+1) Issuing "non-invalidation" commands through .cache_invalidate could
+   be confusing, I'm not asking to change the op name here, but if we
+   plan to label it, let's label them as "Trapped commands" OR
+   "non-accelerated" commands as you suggested.
+
+2) The "FIXME" confusion: The comment in arm_vsmmu_cache_invalidate
+   mentions we'd like to "fix" the issuing of commands through the main
+   cmdq and instead like to group by "type", if that "type" is the queue
+   type (which I assume it is because IOMMU_TYPE has to be arm-smmu-v3),
+   what do we plan to do differently there, given that the op is only
+   for trapped commands *have* to go through the main CMDQ?
+
+   If we were planning to do something based on the queue type, I was
+   hoping for it to be addressed in this series as we've introduced the
+   Tegra CMDQ type. 
+
+That's all I wanted to say, sorry for if this was confusing.
 
 > 
-> If you collaborated with him, then you want to use Co-developed-by.
-> 
-> All of this is documented in Documentation/process/
-> 
+> Nicolin
+
+Thanks,
+Praan
