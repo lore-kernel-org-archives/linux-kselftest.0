@@ -1,122 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576C327700B;
-	Wed,  2 Jul 2025 13:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 292ED2874E0;
+	Wed,  2 Jul 2025 13:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462184; cv=none; b=StGOa9KkFMRrSnru/r8014+VmJN52E/OuUSoF4+QGhmHnnYi0r5z1MkM2tM1eDx7C44DwiKeNeFLTQ7gWvIcRAca37ei+ZX9Dp1xR1HYq8q0emC6XKbaQ3vsVFQV0n6vFinhWMarnSsgPXQ65DbSAPKCd3HKLuKSPM+uZPGH6Vs=
+	t=1751462378; cv=none; b=PdsOgiZgXI568l8YZV30QBAUadedVCcRmCYTa/cDGAUU8AVd9rrbAYBXgCzgab5181noG8ZLlVz1NAqT3G70HlpBLfGTQH1Zod8h7fGKydUIpSpGEIEUsxfAwZwp+/eQvo1H51bDaE5x/FsjgY0ytljH+sFC5DlLpy+0KI6B1zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462184; c=relaxed/simple;
-	bh=BalqjDGonmJyXEzDFjwpcwkTqv8MDEHIz2hYDyigmKU=;
+	s=arc-20240116; t=1751462378; c=relaxed/simple;
+	bh=tuVAUH59+l/O8UCrXTZ5Z+cA00nPP9nSSO/OIl+MgdQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JS8yu7PS2fhR15yuNjrbBV+9UbYJLQBdw/Eng4wB6hTV97oQhW/KRuXNIpgKzuRl4bbWed/JBZJ9SZfUGB08GywelI3O95dwi0k28Elm3XOZwz2dAFzAIX54m5gNIZn/G5QNtPSxgAd9J7LpA+El/HgoJobklXzz4O02A1artNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3owOUtM; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3owOUtM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C4BC4CEED;
-	Wed,  2 Jul 2025 13:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751462184;
-	bh=BalqjDGonmJyXEzDFjwpcwkTqv8MDEHIz2hYDyigmKU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V3owOUtMnbbvO0krTqvLoWpLm1WkZCnvikqym0I+oe5gDYS6XcLZM0ON4AOd3e1Mf
-	 hllI3RTOM+c8lyijWVGowILYr/ZOAHLki7Ud+J//IpPO9JA6BeK5PdVTDdperVX8SY
-	 Sw/14lBoOgyzoA1OF5kX/ZxmW+4kxHw6lOWj2atwl5gT7Im+nRCjoprVWU3A5cFet9
-	 62spxD0/kOK47Uh0NZTFQjUR+pXgGdr2OQk+BAyOmaPisTgVjPBRSTj34ab5DAC1c0
-	 nIIZZmTXw+ZelUkHzkwsSGCRK/wQXYWDBKK8khIdHO/UvRAec5DJK2w8mdzt5d45c2
-	 dNgaIEF2P+eUA==
-Date: Wed, 2 Jul 2025 18:46:04 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Anup Patel <apatel@ventanamicro.com>, Marc Zyngier <maz@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, 
-	Richard Zhu <hongxing.zhu@nxp.com>, Lucas Stach <l.stach@pengutronix.de>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, imx@lists.linux.dev, devicetree@vger.kernel.org
-Subject: Re: [PATCH v19 07/10] selftests: pci_endpoint: Add doorbell test case
-Message-ID: <u7crpzltdyqypkvrkfbs6sruc4z3cpzyvcnqkokzsicbqkoj7e@6uxhoifc5xl7>
-References: <20250609-ep-msi-v19-0-77362eaa48fa@nxp.com>
- <20250609-ep-msi-v19-7-77362eaa48fa@nxp.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=VBCIy0Bb0mRHwFneiz8vMCvdQlJfftWVJE6amIukS7E8Bliha8ubTOecT4oxXWMdR1lGzFEQ2WMJTPpuKuyeUwGgV/+BZzpgr+fmvb7H91Iskjb2N1/Iwuy0kGgKhQ+UI9FHqZskANI3C6aWMdg05mUng0usblpZwp3LNgGgbMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1uWwab-00058l-00; Wed, 02 Jul 2025 14:29:25 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 9F5D4C0C86; Wed,  2 Jul 2025 14:28:58 +0200 (CEST)
+Date: Wed, 2 Jul 2025 14:28:58 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Huacai Chen <chenhuacai@kernel.org>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Subject: Re: [PATCH v4 1/2] MIPS: Don't crash in stack_top() for tasks
+ without ABI or vDSO
+Message-ID: <aGUmClZQXMIQAIif@alpha.franken.de>
+References: <20250611-kunit-mips-v4-0-1d8997fb2ae4@linutronix.de>
+ <20250611-kunit-mips-v4-1-1d8997fb2ae4@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250609-ep-msi-v19-7-77362eaa48fa@nxp.com>
+In-Reply-To: <20250611-kunit-mips-v4-1-1d8997fb2ae4@linutronix.de>
 
-On Mon, Jun 09, 2025 at 12:34:19PM GMT, Frank Li wrote:
-> Add doorbell test case.
+On Wed, Jun 11, 2025 at 01:28:26PM +0200, Thomas Wei�schuh wrote:
+> Not all tasks have an ABI associated or vDSO mapped,
+> for example kthreads never do.
+> If such a task ever ends up calling stack_top(), it will derefence the
+> NULL ABI pointer and crash.
 > 
-
-This also warrants a documentation change.
-
-- Mani
-
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> This can for example happen when using kunit:
+> 
+>     mips_stack_top+0x28/0xc0
+>     arch_pick_mmap_layout+0x190/0x220
+>     kunit_vm_mmap_init+0xf8/0x138
+>     __kunit_add_resource+0x40/0xa8
+>     kunit_vm_mmap+0x88/0xd8
+>     usercopy_test_init+0xb8/0x240
+>     kunit_try_run_case+0x5c/0x1a8
+>     kunit_generic_run_threadfn_adapter+0x28/0x50
+>     kthread+0x118/0x240
+>     ret_from_kernel_thread+0x14/0x1c
+> 
+> Only dereference the ABI point if it is set.
+> 
+> The GIC page is also included as it is specific to the vDSO.
+> Also move the randomization adjustment into the same conditional.
+> 
+> Signed-off-by: Thomas Wei�schuh <thomas.weissschuh@linutronix.de>
+> Reviewed-by: David Gow <davidgow@google.com>
 > ---
-> change from v14 to v16
-> - Add set IRQ type
-> 
-> change from v13 to v14
-> - merge to selftests framework
-> ---
->  .../selftests/pci_endpoint/pci_endpoint_test.c     | 28 ++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> index ac26481d29d9d..da0db0e7c9693 100644
-> --- a/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> +++ b/tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> @@ -229,4 +229,32 @@ TEST_F(pci_ep_data_transfer, COPY_TEST)
->  					 test_size[i]);
->  	}
->  }
-> +
-> +FIXTURE(pcie_ep_doorbell)
-> +{
-> +	int fd;
-> +};
-> +
-> +FIXTURE_SETUP(pcie_ep_doorbell)
-> +{
-> +	self->fd = open(test_device, O_RDWR);
-> +
-> +	ASSERT_NE(-1, self->fd) TH_LOG("Can't open PCI Endpoint Test device");
-> +};
-> +
-> +FIXTURE_TEARDOWN(pcie_ep_doorbell)
-> +{
-> +	close(self->fd);
-> +};
-> +
-> +TEST_F(pcie_ep_doorbell, DOORBELL_TEST)
-> +{
-> +	int ret;
-> +
-> +	pci_ep_ioctl(PCITEST_SET_IRQTYPE, PCITEST_IRQ_TYPE_AUTO);
-> +	ASSERT_EQ(0, ret) TH_LOG("Can't set AUTO IRQ type");
-> +
-> +	pci_ep_ioctl(PCITEST_DOORBELL, 0);
-> +	EXPECT_FALSE(ret) TH_LOG("Test failed for Doorbell\n");
-> +}
->  TEST_HARNESS_MAIN
-> 
-> -- 
-> 2.34.1
-> 
+>  arch/mips/kernel/process.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+
+applied to mips-next.
+
+Thomas.
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
