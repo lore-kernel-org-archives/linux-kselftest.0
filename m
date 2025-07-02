@@ -1,78 +1,77 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7E8254B18
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Jul 2025 10:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACCCF4C6E;
+	Wed,  2 Jul 2025 10:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751451737; cv=none; b=hcWcEfmRFnhs4ncCIZwEN8OaBcS8RKj2RZJNSVt0iZJ0j/h3HMtLTh2h34okFNb3WNYAjJFMtqHFt+C0/B+f1mzedORzlSfcj+aql0L5M9VnR3SbO3YzdQHtWSbdC3uaoJlwMfmVVf4N0P9LvAmUUFw+rwvZDLC+b7UtGvhnYDE=
+	t=1751452999; cv=none; b=bx8Ip8R8BFxriCByQB+jS+p7MoNVuqWrmNW4RV5QecYLgwOsZXc2Vb0wa0HSSDaEV0YC4+hrEBPzvrk4U8sX6UK/pn30RngkkU2GSlRMUKDi6ZfuO8tR8w3NNBbhypitludwNBc0NkSre+1BXD6rf9/wamFs8YX+wdPIyIwKsGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751451737; c=relaxed/simple;
-	bh=mkRBaO6sFEsyEwMWNKBmYyY+/tTAEW4N56/rVgdTsGE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I+jsxnsdsv1luI+1v/ZGlSIaidhYfouIo9YRtU9khWgd/YSk3+8roCT8sqj/a1sg9TXwFivmYulBKjoeCvHT7Hxx85XXtPUYCZfPXO19ksXC+PkGdIrZQxd0+07lfvMYKf3T2xZrxvWF2YgqDQmELTLwGmpI7Kb599cCs2leLkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fYtr3UPI; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1751452999; c=relaxed/simple;
+	bh=RHLJ9D48DllsGUWCN1uoEd21Mm8wSzcmeliizhoLpy4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bhncK0RyPPm74ClZgX75qC1rAF0Euqt67pcKvppeoihQe4T/J0quGgHMPvcG6PyBjD4+CoDrp+uixOobVQgzNpfMhBpR8zhnjLcO83AYKJUVhXSFQP6wp1olStjRYGVouNl/xiJjpjTstHhCdlIczB9IGlRVYPEwqnhvOPHafcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q8oFkd6g; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fYtr3UPI"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a54690d369so4004819f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Jul 2025 03:22:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q8oFkd6g"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-747fc77bb2aso4044144b3a.3;
+        Wed, 02 Jul 2025 03:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751451733; x=1752056533; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751452997; x=1752057797; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J3z7HDKWq14/Rf/7W5PSUqbSzAkGXyN4UWZk2FxpZbs=;
-        b=fYtr3UPIysdb4iPSOot3HEGJ2msMf3WvGgojHrnMVa8MO6lcwZQTYrFHxNsi7Wovqf
-         zRfQLAjE3R1ChKz0bdWwFrNjE3OYhZGfhUyOzfXmVW1pXJNmgiqVSwitxEvZElaPVnuo
-         4i5hSkCQOOnBiPGUH8BtQ8bhGsuDuuhLtSBJVliXXLjCcIampBwuNlpDpgg240yvMA/a
-         /TpuVZxey43c85KusVvqWt3yUlW482yMDaiF94VX1rkCWbKrwsLB52WWlzgzfotWpayO
-         LnD6bMcS/71APzEFGrzQdH0D4L8gL2f2MBIXPGfMPF5am9vfUZmuML5NL1RZ36+yMz3r
-         a2SQ==
+        bh=zdPAwwrb4QJU2IWSSlyaWAnqCnTmtH2bZk+NO2oHIiA=;
+        b=Q8oFkd6g03X6+RJo05Oae/BwHM4IqRUWtDU9EXA4UEK/Txbv73ZOpzOTf/jH9yLQ29
+         QYVgY3VRNI+8QWPbRmE2drNQV9QJhhGwtbDmPrjiUl7yHpTp5JimZEV7nIAsR4t+WHq7
+         UAupONbSUc/ErwBawa6cMS3RztwM+ZO53E/S2k0l62JyTOJpatvDIK066VbAhkrS2Y0A
+         REmaIQHJmGpddE+JUP1g8WXEE50Z0Yu213Ml1jQiwog3QrpNTiKo3Ci14B/LdjPfWuZ2
+         UCoYe+3KuUipUd/RF+wr14K3VeK7OdA+FZ3yKoUypxgF/n7ehuLCgVAgs+gttSSGpWzG
+         StxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751451733; x=1752056533;
+        d=1e100.net; s=20230601; t=1751452997; x=1752057797;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=J3z7HDKWq14/Rf/7W5PSUqbSzAkGXyN4UWZk2FxpZbs=;
-        b=ldX+NyfccKHftOMBlclsz+m5ZydW68ETPWr1IEMOH4Ts4Iipc9KR4D0H2mPQd6TyV4
-         FQSB+Xz0gNqzak5zCUnSsXWUwrK1hlU/XtcLm9PaKmjSkeeginUMJVdNf8J1yCf+aCWP
-         aEycMbIq3sOIcgFBlUMrfX60MVO6iOP4DWSQWZa8ceCc7jxQ3OuMyz1/oXcyA3nEo8Pu
-         XGyqi+ohe/C+QRIkSHW26zU+gtMpSQB90Z2NnKL7WMVu/wx30Guod5dZy187Nnwwa5B3
-         Lf3VIFo2grRZIFHeroicnPMKs/Wy9cePoCMFs3ef191PwHTKVExvGbjfCp9SUa8clnVR
-         Fp6A==
-X-Forwarded-Encrypted: i=1; AJvYcCVXELscxkxJSnBBVoG6sTVQacz6f7MgveABFYONEkDQZXgodtoi4eR1jo4PS8h/I1A9j3NSSlF7AzoOr2rcuVs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRW8GIWqOPsOcJ9oVFJTP1DufzmgK4nAC0ZrzEDSA35ufsifde
-	BDueYNkSuHHCTmwFVpp4Rkp+dYBkrviZe1LlVjJnI7G61hYgXOyp1Uez/xkjsyqysKU=
-X-Gm-Gg: ASbGncvTKqXYZKI+3dxhJGXrvymrlqF6PrSNFw87tsHAUaChHxDsa+3fDy9AyaNIJBO
-	nP1eEQATs1plGrvT+B7vEYh5uVLbOrOTR9nbjtpq8ietkude1utenSZ/nnK+Y1Ie0ILZai2Y30B
-	bn6qxCy7X85uqR69cz+YCh0H4KbOqcZK7RPX1Uz2ZgRUqAMb3Xi5SApKS6EM/QzHl5Bc4jXIe4g
-	JgkNpsQeJqmtv41bI7KGjDp3Icc40kF8Yh3G89KWu1IwgJYuV1Rq+mm6SXt55pI52vj2+sqyhU5
-	2fEqCN0fkplHQECzhTve4r83BkXKWx7RMSpcWGM8qSI+yE3UG31vFXD5By+Jrq22fsE/yODKH8Y
-	sp7CN5Yg6gQOcJREwg7vwJ9DvoABWAh7tIdOqbeInCgBszlf9W4L9uJbEplu9TPykRGXpdIA=
-X-Google-Smtp-Source: AGHT+IHtRMzhbL6QsN9H974H+fxsiNS5bFCmumvbhYvPgTdjTPW4usMEO3Wmz4ct4XCnUJJtbPwGYg==
-X-Received: by 2002:a05:6000:18ad:b0:3a5:783f:528a with SMTP id ffacd0b85a97d-3b201aacd01mr1888649f8f.59.1751451733312;
-        Wed, 02 Jul 2025 03:22:13 -0700 (PDT)
-Received: from green.cable.virginm.net (nail-04-b2-v4wan-166353-cust693.vm26.cable.virginm.net. [82.35.130.182])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a892e5972bsm15840504f8f.68.2025.07.02.03.22.12
+        bh=zdPAwwrb4QJU2IWSSlyaWAnqCnTmtH2bZk+NO2oHIiA=;
+        b=OF4/7pT4M1MR6iAboIK58hceMYFV+Ok82G46FVFoTE+hDhyFiOziJUSk9MhXBcPIiW
+         wCi7WKJz9z/tAPDMigDz0rqTh/L+NNeYc0hWcZtS/e5DtxOxJIKlGUnq+dxYrtkGuqSP
+         Y6o/at6g58zCiC4zmRm5h3GuH6JY8/LxlmGhrHxt1JBkLXjdjdffm0nrDPhxF9p9tgX+
+         vLSziH207QD0UN4vi5+xehGb19kGEM1wPey2fg941LS/YX8xRD2kZFJcQY6N5rfQJ2sz
+         s1NYGesNSB0upnDhC2XV6ooFAPN5nM63MlH11ZbHAdhlCzgDde5KYdSvLZPxAPlPwRZK
+         I+lA==
+X-Forwarded-Encrypted: i=1; AJvYcCUKpUShm5E8lgmIIMPNn/tUG6aWvqK2UbugzdPuWppZR3f9rfYyuwIXYtuomichmWNW15M3GvwAxNsN5QCdTQM=@vger.kernel.org, AJvYcCUcSddts3HLE/BDmDXYwnBVbmhVDglQlB61G6RlUoYM5JJjvjSH27HGnWLZ7NXHnpJX0EVYAxHY@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5AGIyvPXm2fsK2yNIHI+x/XdzQO2491m/QZcOz7oWMGe7h91l
+	U7E+pAPJZVYMHWKw8OX+p/+4okXSGeGtxUkU4Fz1vly6CuHTU8kXbrez
+X-Gm-Gg: ASbGncvu04x1jra8JC9al47BsCTelL6b35sxwPreuGx/OFdk1fbbtJ2vdrGPBTRBO01
+	h547Y+m+CyHdt83lkORZtXYcZXNVELCt0hm8p5+qFTyEcMDzc7I4fLajUZoTm8Sq6OV3WsNU4r4
+	m5S0h2kU6abnlHaZHETXNNsXgeQSRf/Il/TzNY73V4ZL/29SvSA31teiO8hy4aagg5jhzbrc63s
+	ftaJaMDHxcZO2Fl5KVgzN0BdM2oF0KrlReA48x4ao8ma7gOcDTq5V0wBJOfz1P2SQkR5XkRUFc0
+	d1NHFSShNjd9UDQ6/TYKMrEJMH2/JRudzYQ+LXhkihBUNFZv29g=
+X-Google-Smtp-Source: AGHT+IEeiHFvgdgKJjn0wBnclG5KXDNWT8Pp2yzRR3R/ETtmSUop97FYezDUkFO3sL3XSJBZmVb8HA==
+X-Received: by 2002:a05:6a20:3ca3:b0:222:1802:2ddb with SMTP id adf61e73a8af0-222d7dc4e64mr5025821637.8.1751452996777;
+        Wed, 02 Jul 2025 03:43:16 -0700 (PDT)
+Received: from ap.. ([182.213.254.91])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af54099besm14064227b3a.9.2025.07.02.03.43.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 03:22:12 -0700 (PDT)
-From: Terry Tritton <terry.tritton@linaro.org>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Shuah Khan <shuah@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-Cc: ttritton@google.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Terry Tritton <terry.tritton@linaro.org>,
-	Wei Gao <wegao@suse.com>
-Subject: [PATCH v3] selftests/futex: Convert 32bit timespec struct to 64bit version for 32bit compatibility mode
-Date: Wed,  2 Jul 2025 11:21:57 +0100
-Message-Id: <20250702102157.5222-1-terry.tritton@linaro.org>
-X-Mailer: git-send-email 2.39.5
+        Wed, 02 Jul 2025 03:43:16 -0700 (PDT)
+From: Taehee Yoo <ap420073@gmail.com>
+To: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	shuah@kernel.org,
+	almasrymina@google.com,
+	sdf@fomichev.me,
+	jdamato@fastly.com,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: ap420073@gmail.com
+Subject: [PATCH v2 net-next] selftests: devmem: configure HDS threshold
+Date: Wed,  2 Jul 2025 10:42:49 +0000
+Message-Id: <20250702104249.1665034-1-ap420073@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,59 +80,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Futex_waitv can not accept old_timespec32 struct, so userspace should
-convert it from 32bit to 64bit before syscall in 32bit compatible mode.
+The devmem TCP requires the hds-thresh value to be 0, but it doesn't
+change it automatically.
+Therefore, make configure_headersplit() sets hds-thresh value to 0.
 
-This fix is based off [1]
-
-Link: https://lore.kernel.org/all/20231203235117.29677-1-wegao@suse.com/ [1]
-
-Originally-by: Wei Gao <wegao@suse.com>
-Signed-off-by: Terry Tritton <terry.tritton@linaro.org>
+Signed-off-by: Taehee Yoo <ap420073@gmail.com>
 ---
-Changes in v3:
-- Fix signed-off-by chain but for real this time
 
-Changes in v2:
-- Fix signed-off-by chain
+v2:
+ - Do not implement configure_hds_thresh().
+ - Make configure_headersplit() sets hds-thresh to 0.
 
- .../testing/selftests/futex/include/futex2test.h  | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/futex/include/futex2test.h b/tools/testing/selftests/futex/include/futex2test.h
-index ea79662405bc..6780e51eb2d6 100644
---- a/tools/testing/selftests/futex/include/futex2test.h
-+++ b/tools/testing/selftests/futex/include/futex2test.h
-@@ -55,6 +55,13 @@ struct futex32_numa {
- 	futex_t numa;
- };
+diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+index cc9b40d9c5d5..52b72de11e3b 100644
+--- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
++++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+@@ -331,6 +331,12 @@ static int configure_headersplit(bool on)
+ 	ret = ethtool_rings_set(ys, req);
+ 	if (ret < 0)
+ 		fprintf(stderr, "YNL failed: %s\n", ys->err.msg);
++	if (on) {
++		ethtool_rings_set_req_set_hds_thresh(req, 0);
++		ret = ethtool_rings_set(ys, req);
++		if (ret < 0)
++			fprintf(stderr, "YNL failed: %s\n", ys->err.msg);
++	}
+ 	ethtool_rings_set_req_free(req);
  
-+#if !defined(__LP64__)
-+struct timespec64 {
-+	int64_t tv_sec;
-+	int64_t tv_nsec;
-+};
-+#endif
-+
- /**
-  * futex_waitv - Wait at multiple futexes, wake on any
-  * @waiters:    Array of waiters
-@@ -65,7 +72,15 @@ struct futex32_numa {
- static inline int futex_waitv(volatile struct futex_waitv *waiters, unsigned long nr_waiters,
- 			      unsigned long flags, struct timespec *timo, clockid_t clockid)
- {
-+#if !defined(__LP64__)
-+	struct timespec64 timo64 = {0};
-+
-+	timo64.tv_sec = timo->tv_sec;
-+	timo64.tv_nsec = timo->tv_nsec;
-+	return syscall(__NR_futex_waitv, waiters, nr_waiters, flags, &timo64, clockid);
-+#else
- 	return syscall(__NR_futex_waitv, waiters, nr_waiters, flags, timo, clockid);
-+#endif
- }
+ 	if (ret == 0) {
+@@ -338,9 +344,12 @@ static int configure_headersplit(bool on)
+ 		ethtool_rings_get_req_set_header_dev_index(get_req, ifindex);
+ 		get_rsp = ethtool_rings_get(ys, get_req);
+ 		ethtool_rings_get_req_free(get_req);
+-		if (get_rsp)
++		if (get_rsp) {
+ 			fprintf(stderr, "TCP header split: %s\n",
+ 				tcp_data_split_str(get_rsp->tcp_data_split));
++			fprintf(stderr, "HDS threshold: %u\n",
++				get_rsp->hds_thresh);
++		}
+ 		ethtool_rings_get_rsp_free(get_rsp);
+ 	}
  
- /*
 -- 
-2.39.5
+2.34.1
 
