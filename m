@@ -1,467 +1,616 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010018.outbound.protection.outlook.com [52.101.84.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670001EFF8B;
-	Wed,  2 Jul 2025 04:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751431078; cv=fail; b=XvVFdkMjJLvh9sqO5U677qfII0AKC3OgOg3W/NRS5k9QlB4sSMheU6bwZIj0D16bk96Fwjli8Ja6uf2aGVwhU6pHsuKUxMui2D7Kgwf6YIeUVrxaX+spxTAyAko1xkMdjAwEUy2rT1Q54H+VMhQX3+4KeJB891bpc3QwuRxr6xE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751431078; c=relaxed/simple;
-	bh=DMGRb3RB900YnSeibBqTvGKUd9QEzgrJW/Ki0UxN3w8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GQM8oUO9R6PnWlFtiKa//XAFthlBSiZhyicQVwVGZR9zN68lc2Ih0HcKoE5poiC8GK4bCm4p12K/EXjNlF8rj1Cef3aX1PApXAhPGixQ5l+TZveLJOazxwA7ZgrZNXdDk+smPawBiLaeikAW5SpdydATBkDFKlf5p4lve6cnhsA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=nzIgD2jc; arc=fail smtp.client-ip=52.101.84.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3AF2F42
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Jul 2025 05:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751435269; cv=none; b=rBa9zzJpzv0K+ROV6Epv8uDJMelCCUYJg6zxLsMj/6BJuzdf76QHcenIFbTw9Dy+1TkCjY2Cw5fmJrJRlNY8sJIHTiPq8U3KZ5PYLcyIzQRXc76Y0ZAC27YKXnEXkS/QKVi3r+4pC81/WDpm6QIOcWyrtH1hYDbHl51o7k1PlhQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751435269; c=relaxed/simple;
+	bh=HFFAtUvblh1Q9YNdiHkRWse+RTNGjE4/oWKX9KnVNgo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RKH6Fs6U8eUlNag5xBv6v0y14c2EWX8RcTfQCQDXvnyVGGgjiCMN5p0aWOZpJAWWQ1cCcTQyPl8N9RsAL6eFR3Tace2puHIpbl0K/uDPwUhyTWJ6hsM0YIr+abQqKUBOHr2sntt3hujs5yvBzh5uLqrOc8ZDpaYJY6RcWCqXYQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IrQKjjgt; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="nzIgD2jc"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eY73EFSaDnGeWzM1Rz/BG3D9iLrLPC9j7Ps6+65XMq8IEZK/ENRgOx0QZk448N5yc/+DcY+7cOvmAauSyonF1y/Xp5KUX3jFusy36cdjquYDD00ZMZsT6aka4gkGwEHrqvwvYyqguhNqAS/OkdV25sTHd0eLkOf6On9TAcThft/ETbOVUryujxiPSDdyzTSBb2wz9ZFqOcAfUw7s3Uh7/gr+WLO8F14AhByQoak5bp0seDiH6WurcK+K7FtUh33AKVghRn7ejzCCFB6Iba91gpAQZm7VJoZ5qS2tsAKNUsWMNfH+XNseJEdHmHC1La+gGtXPMJcVGTKfxx910NcVfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LzSxPc45HM6ktl9tTU664k4Zpn1exUUs1AAkUm5HNsI=;
- b=km9gr8HByklu+RVo/1Mbb25m16ThDjUmdetLl0Xl5ZFni2No2jzoP7gjvwuUpQ11SnVp9+OgyoaoKWVM/rxg1GNQcLoEprDOkfe9YJCzMM5Sn/9dblOmfjpNPvAV+psYwOFS/M+jmQuN8rpisZhizH7d/nUYIUn/i0VRNgRfYtghmGJV8eacGwR+3aIJVabqYB/fJd4RVSyF2coZZB1YMDhQ0AOPkk0ijIcvLGPV2XrOliV7BO4mG/9O62G2ZEOZdpIlB4VfAxYMtFrG9UgOAiwowtzc4d8scX6DWuc6bArDUlcSSt5KQ/l1ef0wcN22A5Sc5/dltkRzKjwhOwnUOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.6.101) smtp.rcpttodomain=amazon.com
- smtp.mailfrom=nokia-bell-labs.com; dmarc=pass (p=reject sp=reject pct=100)
- action=none header.from=nokia-bell-labs.com; dkim=none (message not signed);
- arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LzSxPc45HM6ktl9tTU664k4Zpn1exUUs1AAkUm5HNsI=;
- b=nzIgD2jc693cCZ0ozHquhP7/qRT07qU0oVOJnUB3U+gMz14fNGxPYBev2tByK3faK4/kOyHiKQbwIvbVmbG2FDwKlCmgA3EuR5sSi9g9lLbpyDxtAIM/nrAM+qxAbJXRXIzjALL7A93+e7SaOFhPQeeW5KdPnPqvqeo9VuyvGQCum8mk/UR4dcnS0SeFpM/52xID0IKaQhW/wSVpER83aHl69kVhN6jh7G7PHVUxRWFBgdBZ+z77n2hzoIkBIpWdIgusb88kPptMBQGQtTmWQ3shDJ8y8pZiXx4+zfIN0KFmTQBqKCQFVRBzTvb4nmhudywW4ujmhM4JnUnQzzZ6aQ==
-Received: from DU6P191CA0051.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:53e::7) by
- DB9PR07MB8010.eurprd07.prod.outlook.com (2603:10a6:10:2a6::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8880.32; Wed, 2 Jul 2025 04:37:47 +0000
-Received: from DB5PEPF00014B8A.eurprd02.prod.outlook.com
- (2603:10a6:10:53e:cafe::f1) by DU6P191CA0051.outlook.office365.com
- (2603:10a6:10:53e::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8901.20 via Frontend Transport; Wed,
- 2 Jul 2025 04:37:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.101)
- smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
- designates 131.228.6.101 as permitted sender)
- receiver=protection.outlook.com; client-ip=131.228.6.101;
- helo=fr712usmtp1.zeu.alcatel-lucent.com; pr=C
-Received: from fr712usmtp1.zeu.alcatel-lucent.com (131.228.6.101) by
- DB5PEPF00014B8A.mail.protection.outlook.com (10.167.8.198) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8901.20
- via Frontend Transport; Wed, 2 Jul 2025 04:37:47 +0000
-Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fr712usmtp1.zeu.alcatel-lucent.com (Postfix) with ESMTP id 7E9A71C003B;
-	Wed,  2 Jul 2025 07:37:45 +0300 (EEST)
-From: chia-yu.chang@nokia-bell-labs.com
-To: pabeni@redhat.com,
-	edumazet@google.com,
-	linux-doc@vger.kernel.org,
-	corbet@lwn.net,
-	horms@kernel.org,
-	dsahern@kernel.org,
-	kuniyu@amazon.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	dave.taht@gmail.com,
-	jhs@mojatatu.com,
-	kuba@kernel.org,
-	stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	davem@davemloft.net,
-	andrew+netdev@lunn.ch,
-	donald.hunter@gmail.com,
-	ast@fiberby.net,
-	liuhangbin@gmail.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ij@kernel.org,
-	ncardwell@google.com,
-	koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com,
-	ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com,
-	cheshire@apple.com,
-	rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com,
-	vidhi_goel@apple.com
-Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v10 net-next 13/15] tcp: accecn: AccECN option failure handling
-Date: Wed,  2 Jul 2025 06:37:17 +0200
-Message-Id: <20250702043719.15130-14-chia-yu.chang@nokia-bell-labs.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250702043719.15130-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20250702043719.15130-1-chia-yu.chang@nokia-bell-labs.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IrQKjjgt"
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6fabe9446a0so58763946d6.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Jul 2025 22:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751435266; x=1752040066; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xpSptfEsp+8iqjBHbVXxfLIAOZoek2C1CulmX0EyxV8=;
+        b=IrQKjjgtKrpHYiT/0XrKkpoOk5XUb/K770iCPWTd+Y5ox2+hmkyhPEnbOP58wMXX7e
+         /uMZDN6aqU1D+YMnsu0R8Do+UI3lIGvmYrT8ZkL4nMli/c8msxWCnnDaEFLg7iGmIuIZ
+         +vUG3UCKKaRepOUEz6qum012JPfkV2GsOXcEfsKXsMPhFJ20yNms8aU9KUabOx0l9vwu
+         zixkAho4978IVwiiVhPEgWrlmL+k2+SU+MtUWxKwHNav7cFisZMq45W9VVVhwWwq7MJr
+         Z03X8yZXLP/KtaNgwRh9GorNV4uAg2XyMohZR0gSqwa6BHzIBLxzoQ+HYu7b0g4cs4EM
+         Pi1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751435266; x=1752040066;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xpSptfEsp+8iqjBHbVXxfLIAOZoek2C1CulmX0EyxV8=;
+        b=vW3RmwQbEtJFN/WmZqRLiFnK36nVdHh0TnthHHUoRfzjSeBA1If5Ur4M3pi8hAVLsM
+         DDnYRIfRMiS9ZIsTG3OVfYBvyyPwIlFYA5V+3gC7drUUG0wqLmrWbNkEM0TBBZlA0QWM
+         vGNp1PLeRv7qA3s3RVrH3/OlCGOB0Zdr7rUihbItb55xa0nHvTj2GwNGH9yvsbZE0Mxk
+         m4NYfNZYlpdLUVczhMLwh848H8rlrvOZtfxIsUMYdqYI4IbW/exz7eblCMNfyTvLg+Ji
+         e4hgya7vEy77nJXcfNe00oX3mHzd7woQP3aWzdvCSLlrMTz7Qf9vPyZx7ur7N8Pc8Twz
+         iHSw==
+X-Forwarded-Encrypted: i=1; AJvYcCVsz1ddkDZOjPSisVGd1MSBfZPn47dkKi6Six3tVqumQQ6iBCyjvAb/bqbQIST+MHHytfw5ve6OiVyKUP0a8YI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoUGOhzcVZr89qlO/nlngVDmMayGLfNGvV2ZDCkPYQzrI/nykm
+	VtCxtkS4QoTFX9oAKm3vqzDvx7UtFKXZRNJOFoG/AhWrfxUH0uNC4d9lHb2ZQan/vurI0T7C+JB
+	CtM6q5eBy+c8jwX9JFWvf2gs5IsalHpf+vM9A4G9C
+X-Gm-Gg: ASbGncv1IeDv1Z/zPVF3ksiQvA7Be0t2QlM+NFivxD/2LRF7UGUQL0MgZhS5TsB3Q5y
+	Q4SurxJG6HGh5cBav9ovp7Q/AQQv4OxTd1rtZLN1CY7equD7eBgDh58Q0dPPppBh5KPME9/ZqT/
+	c/NP7ITVqJ+OR4RhiChHiWYvXUBEIo8hcwkvtFxnFPE5Af
+X-Google-Smtp-Source: AGHT+IGIUl43Yqnnu4nNTw+1ei1BeK4rfzlOmXX5TO2r8aO9xgHUMRMtD1IftHFbt+aAMv7wOxSQPhuK2PM8rNnQKD8=
+X-Received: by 2002:a05:6214:dcd:b0:6f5:3cae:920f with SMTP id
+ 6a1803df08f44-702b1b376ffmr19866246d6.27.1751435266019; Tue, 01 Jul 2025
+ 22:47:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB5PEPF00014B8A:EE_|DB9PR07MB8010:EE_
-X-MS-Office365-Filtering-Correlation-Id: bf9af1ed-a176-40c5-80b8-08ddb92231c8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014|7416014|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NURkYWkzeFRlQU1HVW0vU0FaZ3FXc2pGbE4wdkQ5VlRlSHZ2WjN0OXBlQmRj?=
- =?utf-8?B?QjBkN3AvL0VnZ05MbERySW5pU2JrNjhKVWRwYzZmeWhabCsrVXd4TWVmd2Zk?=
- =?utf-8?B?Rk83Vmw4OTJYMmRwY1RreXMyLzQxYmZJWmxYMmp3OFdwL1Qwc0pjWTFiUHRM?=
- =?utf-8?B?NEF0Y25wR3RLRDdGWnJVRjZwVFYxV1ZiNzVoelZoS2cvS3pwU05HdGJhNzlU?=
- =?utf-8?B?ZUtqT2JEMHg0T2FCcmNWZlEwM2pKaGp4ckkrc2xWOEZoNjRKNzVkRGhQUDc5?=
- =?utf-8?B?cVhYdmlqK0ZmUDMrelZEbG1rTUttU0ZPRFFsaHhyWEZoeXNRU1FaakJEUTVV?=
- =?utf-8?B?cFZaaG9mSFBYTXcvWUlqdDgrRUpYZ2hJeTB0VytZdXdmOS96SnBVbjFnejB0?=
- =?utf-8?B?MTk2S3JxMUZUOHhtdFpGeGJlYWorOVg0Ry9LZHlMc2VpYnhKQ1hPOU4vSzdD?=
- =?utf-8?B?SFBqRElXRDNXWnZkTnpqVEZMZ0NJZXhDbk83Vk9OYmQvYXQ2S3lOTXhtS0w5?=
- =?utf-8?B?ZnZ0RHhqbTVxR2ZEbjcwSlh6eWsxRTdWTTJSUVZyRHhLTHdXT2RhRHk5WFo4?=
- =?utf-8?B?a0loOWgyTDFLb2szRFlmQzdlVlFCYjVwZ3B6YmNYTEpoS3Z2UFgvZmErWnAr?=
- =?utf-8?B?OXBsdEpmMlZCYmFzRE5wZDRIYVRYNEgzWGM2VTlwZ01HbTN5alZ1TUhMVDk3?=
- =?utf-8?B?dmRHYUpUcWNnbnpWR3A5cFRJT2luZERoODUzWXhieEhydjBScEo4SmlCdUlQ?=
- =?utf-8?B?TDJONUMwYXFXM1NYWW9udkYrMnN4YlQwai9oVTUycytPOVRhYlhBU24vWktV?=
- =?utf-8?B?cDlma3ZEaVhLaEJNUTBLbkNJalNmTTRrcTdtM0tjdnZhU2NuMTVCNS8yTFhR?=
- =?utf-8?B?R3AzWWxIcjQ4VkwycTBiTUFSem9raE4wMndKNldGTlNOeTk0UkhpYkwxZkFT?=
- =?utf-8?B?NExmSmY3blhBRm5FQXFnSUdKV3RBaEFkRnZ4eTN2ZHAzeUpIZ2FFQTd1Q09a?=
- =?utf-8?B?R093U09oRmVzdWN1Y1QxL1prSGtBcWR6VlpXcUhOYmg2UHJpZkxyRjJQQzlJ?=
- =?utf-8?B?ZTlPUTNDRnNBWTMxekU1WGptN1RNZWVmczV3MjVRYjFaSTRnUUN5T3Njd2Jl?=
- =?utf-8?B?Y2FyQUZRSDByUSs1L3pmV3VzdkZvSnU1KzJnUlJrNVRjc1FrSEVmQm5EN3Vz?=
- =?utf-8?B?YTFrZ1Avd3d3ZHFPVWwzeG9yVXU3YU4rcm1EVkRDVUsvaUpJY1o4QWdvWVhE?=
- =?utf-8?B?aG5pQnJ4WmxqVVhIR0huWnpOdW51VWFkK3M3b0U1WDNUNzhMak0yRGUzNm1r?=
- =?utf-8?B?MTZSQ25QMjZ1WnVuMnJJZzYxbzFLWi9oeWQ5aDBRSVZ3c2pmMjViRy9MNGhy?=
- =?utf-8?B?MVdCME12aVVDYlFwL3hQUlltaTZySTYraFlWZTF4bGFydkpVQlFJZXhMelZw?=
- =?utf-8?B?bDc4eGhjVkpsOUJ4cWxOdUhJbjE1dE5qRlUwd2dTTlVCRjVzZzlreXdLNUUy?=
- =?utf-8?B?bUNoYUxPakdnczIvZnlYdDFIb3pHYUd2OFU4UkwxOEdtck9pRlJDdmFEMnNv?=
- =?utf-8?B?QlhlQjVPeXphTUUvYURsazEyUnJIVGJ5enYwS1RJMEtGeGc0Vm1XRU02ejho?=
- =?utf-8?B?cDNaZHFHeWswSmwwWVlyem5RdW5lRzFyMG9PcEhEVVVIK1dWblo5enFYSzRO?=
- =?utf-8?B?UDZwYkhXb3dXYXZ3L01hNlZ5a3NGV1NHTi91dHhrSlFTdlYvc1FYNWMrQ0M0?=
- =?utf-8?B?Y3Z6UHVsbnExcUdlSVBmekRYR25hYmVpazM3M2VaMkdqRU54OWV0R09KSmtx?=
- =?utf-8?B?QnArelZQNi9qakg0clNPU1lSMk9TbzJtN1F2cjN6VG5US1BMVlhmNWt2MktE?=
- =?utf-8?B?VXVxM0F5ZGRuenBxc2hoRFFVdFUrWTRnQXh5elR5YmpXVE1JWXJqeEZXNVFj?=
- =?utf-8?B?SlRBL1hBZ09tNGsxbkJPMDBHLzB6amZBUGM0RGFKaGtleW1EQWlyaVhNQzNV?=
- =?utf-8?B?V2JjclVzOVo1QXdWbG9ma25CS0MxZHRpanVsaVJFbWdHNDVtL1RtSjFvMWdY?=
- =?utf-8?B?Y1ZKa09nQjE1YzBnSUh3NHlUaWh0M1EyYlNOZz09?=
-X-Forefront-Antispam-Report:
-	CIP:131.228.6.101;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr712usmtp1.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2025 04:37:47.0908
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf9af1ed-a176-40c5-80b8-08ddb92231c8
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.101];Helo=[fr712usmtp1.zeu.alcatel-lucent.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB5PEPF00014B8A.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR07MB8010
+References: <20250702010447.2994412-1-ynaffit@google.com> <20250702010447.2994412-4-ynaffit@google.com>
+In-Reply-To: <20250702010447.2994412-4-ynaffit@google.com>
+From: David Gow <davidgow@google.com>
+Date: Wed, 2 Jul 2025 13:47:32 +0800
+X-Gm-Features: Ac12FXyM4dJfdfmzM8nAn6L0b5e8E6wgRYb0QtWJxEyonSMsiAqAhl96KSlYr6Q
+Message-ID: <CABVgOSkw5NQcaX-AWmRn8HFCijWLb=w+q3KUtnuSsgb0YwTmmg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] binder: Scaffolding for binder_alloc KUnit tests
+To: Tiffany Yang <ynaffit@google.com>
+Cc: linux-kernel@vger.kernel.org, keescook@google.com, kernel-team@android.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
+	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Christian Brauner <brauner@kernel.org>, 
+	Carlos Llamas <cmllamas@google.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000edf3170638ebcc50"
 
-From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+--000000000000edf3170638ebcc50
+Content-Type: text/plain; charset="UTF-8"
 
-AccECN option may fail in various way, handle these:
-- Attempt to negotiate the use of AccECN on the 1st retransmitted SYN
-	- From the 2nd retransmitted SYN, stop AccECN negotiation
-- Remove option from SYN/ACK rexmits to handle blackholes
-- If no option arrives in SYN/ACK, assume Option is not usable
-        - If an option arrives later, re-enabled
-- If option is zeroed, disable AccECN option processing
+On Wed, 2 Jul 2025 at 09:05, Tiffany Yang <ynaffit@google.com> wrote:
+>
+> Add setup and teardown for testing binder allocator code with KUnit.
+> Include minimal test cases to verify that tests are initialized
+> correctly.
+>
+> Tested-by: Rae Moar <rmoar@google.com>
+> Signed-off-by: Tiffany Yang <ynaffit@google.com>
+> ---
+> v2:
+> * Added tested-by tag
+> ---
 
-This patch use existing padding bits in tcp_request_sock and
-holes in tcp_sock without increasing the size.
+This looks great, thanks.
 
-Signed-off-by: Ilpo Järvinen <ij@kernel.org>
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+One small request: could we split the change to expose
+kunit_attach_mm() into a separate commit? That'd make it easier for
+people to backport independently of binder changes if other tests want
+to use this, too.
 
----
-v9:
-- Add comments about the 1st retx SYN still attempt AccECN negotiation
+Cheers,
+-- David
 
-v8:
-- Add new helper function tcp_accecn_saw_opt_fail_recv()
----
- include/linux/tcp.h      |  4 +++-
- include/net/tcp_ecn.h    | 50 +++++++++++++++++++++++++++++++++++++---
- net/ipv4/tcp.c           |  1 +
- net/ipv4/tcp_input.c     | 35 ++++++++++++++++++++++++++--
- net/ipv4/tcp_minisocks.c | 14 +++++++++++
- net/ipv4/tcp_output.c    | 11 +++++++--
- 6 files changed, 107 insertions(+), 8 deletions(-)
+>  drivers/android/Kconfig                    |  11 ++
+>  drivers/android/Makefile                   |   1 +
+>  drivers/android/binder.c                   |   5 +-
+>  drivers/android/binder_alloc.c             |  15 +-
+>  drivers/android/binder_alloc.h             |   6 +
+>  drivers/android/binder_internal.h          |   4 +
+>  drivers/android/tests/.kunitconfig         |   3 +
+>  drivers/android/tests/Makefile             |   3 +
+>  drivers/android/tests/binder_alloc_kunit.c | 166 +++++++++++++++++++++
+>  include/kunit/test.h                       |  12 ++
+>  lib/kunit/user_alloc.c                     |   4 +-
+>  11 files changed, 222 insertions(+), 8 deletions(-)
+>  create mode 100644 drivers/android/tests/.kunitconfig
+>  create mode 100644 drivers/android/tests/Makefile
+>  create mode 100644 drivers/android/tests/binder_alloc_kunit.c
+>
+> diff --git a/drivers/android/Kconfig b/drivers/android/Kconfig
+> index 07aa8ae0a058..b1bc7183366c 100644
+> --- a/drivers/android/Kconfig
+> +++ b/drivers/android/Kconfig
+> @@ -47,4 +47,15 @@ config ANDROID_BINDER_IPC_SELFTEST
+>           exhaustively with combinations of various buffer sizes and
+>           alignments.
+>
+> +config ANDROID_BINDER_ALLOC_KUNIT_TEST
+> +       tristate "KUnit Tests for Android Binder Alloc" if !KUNIT_ALL_TESTS
+> +       depends on ANDROID_BINDER_IPC && KUNIT
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         This feature builds the binder alloc KUnit tests.
+> +
+> +         Each test case runs using a pared-down binder_alloc struct and
+> +         test-specific freelist, which allows this KUnit module to be loaded
+> +         for testing without interfering with a running system.
+> +
+>  endmenu
+> diff --git a/drivers/android/Makefile b/drivers/android/Makefile
+> index c9d3d0c99c25..74d02a335d4e 100644
+> --- a/drivers/android/Makefile
+> +++ b/drivers/android/Makefile
+> @@ -4,3 +4,4 @@ ccflags-y += -I$(src)                   # needed for trace events
+>  obj-$(CONFIG_ANDROID_BINDERFS)         += binderfs.o
+>  obj-$(CONFIG_ANDROID_BINDER_IPC)       += binder.o binder_alloc.o
+>  obj-$(CONFIG_ANDROID_BINDER_IPC_SELFTEST) += binder_alloc_selftest.o
+> +obj-$(CONFIG_ANDROID_BINDER_ALLOC_KUNIT_TEST)  += tests/
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index c463ca4a8fff..9dfe90c284fc 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -68,6 +68,8 @@
+>  #include <linux/sizes.h>
+>  #include <linux/ktime.h>
+>
+> +#include <kunit/visibility.h>
+> +
+>  #include <uapi/linux/android/binder.h>
+>
+>  #include <linux/cacheflush.h>
+> @@ -5956,10 +5958,11 @@ static void binder_vma_close(struct vm_area_struct *vma)
+>         binder_alloc_vma_close(&proc->alloc);
+>  }
+>
+> -static vm_fault_t binder_vm_fault(struct vm_fault *vmf)
+> +VISIBLE_IF_KUNIT vm_fault_t binder_vm_fault(struct vm_fault *vmf)
+>  {
+>         return VM_FAULT_SIGBUS;
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(binder_vm_fault);
+>
+>  static const struct vm_operations_struct binder_vm_ops = {
+>         .open = binder_vma_open,
+> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+> index 2e89f9127883..c79e5c6721f0 100644
+> --- a/drivers/android/binder_alloc.c
+> +++ b/drivers/android/binder_alloc.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/uaccess.h>
+>  #include <linux/highmem.h>
+>  #include <linux/sizes.h>
+> +#include <kunit/visibility.h>
+>  #include "binder_alloc.h"
+>  #include "binder_trace.h"
+>
+> @@ -57,13 +58,14 @@ static struct binder_buffer *binder_buffer_prev(struct binder_buffer *buffer)
+>         return list_entry(buffer->entry.prev, struct binder_buffer, entry);
+>  }
+>
+> -static size_t binder_alloc_buffer_size(struct binder_alloc *alloc,
+> -                                      struct binder_buffer *buffer)
+> +VISIBLE_IF_KUNIT size_t binder_alloc_buffer_size(struct binder_alloc *alloc,
+> +                                                struct binder_buffer *buffer)
+>  {
+>         if (list_is_last(&buffer->entry, &alloc->buffers))
+>                 return alloc->vm_start + alloc->buffer_size - buffer->user_data;
+>         return binder_buffer_next(buffer)->user_data - buffer->user_data;
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(binder_alloc_buffer_size);
+>
+>  static void binder_insert_free_buffer(struct binder_alloc *alloc,
+>                                       struct binder_buffer *new_buffer)
+> @@ -959,7 +961,7 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
+>                            failure_string, ret);
+>         return ret;
+>  }
+> -
+> +EXPORT_SYMBOL_IF_KUNIT(binder_alloc_mmap_handler);
+>
+>  void binder_alloc_deferred_release(struct binder_alloc *alloc)
+>  {
+> @@ -1028,6 +1030,7 @@ void binder_alloc_deferred_release(struct binder_alloc *alloc)
+>                      "%s: %d buffers %d, pages %d\n",
+>                      __func__, alloc->pid, buffers, page_count);
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(binder_alloc_deferred_release);
+>
+>  /**
+>   * binder_alloc_print_allocated() - print buffer info
+> @@ -1122,6 +1125,7 @@ void binder_alloc_vma_close(struct binder_alloc *alloc)
+>  {
+>         binder_alloc_set_mapped(alloc, false);
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(binder_alloc_vma_close);
+>
+>  /**
+>   * binder_alloc_free_page() - shrinker callback to free pages
+> @@ -1229,8 +1233,8 @@ binder_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+>
+>  static struct shrinker *binder_shrinker;
+>
+> -static void __binder_alloc_init(struct binder_alloc *alloc,
+> -                               struct list_lru *freelist)
+> +VISIBLE_IF_KUNIT void __binder_alloc_init(struct binder_alloc *alloc,
+> +                                         struct list_lru *freelist)
+>  {
+>         alloc->pid = current->group_leader->pid;
+>         alloc->mm = current->mm;
+> @@ -1239,6 +1243,7 @@ static void __binder_alloc_init(struct binder_alloc *alloc,
+>         INIT_LIST_HEAD(&alloc->buffers);
+>         alloc->freelist = freelist;
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(__binder_alloc_init);
+>
+>  /**
+>   * binder_alloc_init() - called by binder_open() for per-proc initialization
+> diff --git a/drivers/android/binder_alloc.h b/drivers/android/binder_alloc.h
+> index aa05a9df1360..dc8dce2469a7 100644
+> --- a/drivers/android/binder_alloc.h
+> +++ b/drivers/android/binder_alloc.h
+> @@ -188,5 +188,11 @@ int binder_alloc_copy_from_buffer(struct binder_alloc *alloc,
+>                                   binder_size_t buffer_offset,
+>                                   size_t bytes);
+>
+> +#if IS_ENABLED(CONFIG_KUNIT)
+> +void __binder_alloc_init(struct binder_alloc *alloc, struct list_lru *freelist);
+> +size_t binder_alloc_buffer_size(struct binder_alloc *alloc,
+> +                               struct binder_buffer *buffer);
+> +#endif
+> +
+>  #endif /* _LINUX_BINDER_ALLOC_H */
+>
+> diff --git a/drivers/android/binder_internal.h b/drivers/android/binder_internal.h
+> index 1ba5caf1d88d..b5d3014fb4dc 100644
+> --- a/drivers/android/binder_internal.h
+> +++ b/drivers/android/binder_internal.h
+> @@ -592,4 +592,8 @@ void binder_add_device(struct binder_device *device);
+>   */
+>  void binder_remove_device(struct binder_device *device);
+>
+> +#if IS_ENABLED(CONFIG_KUNIT)
+> +vm_fault_t binder_vm_fault(struct vm_fault *vmf);
+> +#endif
+> +
+>  #endif /* _LINUX_BINDER_INTERNAL_H */
+> diff --git a/drivers/android/tests/.kunitconfig b/drivers/android/tests/.kunitconfig
+> new file mode 100644
+> index 000000000000..a73601231049
+> --- /dev/null
+> +++ b/drivers/android/tests/.kunitconfig
+> @@ -0,0 +1,3 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_ANDROID_BINDER_IPC=y
+> +CONFIG_ANDROID_BINDER_ALLOC_KUNIT_TEST=y
+> diff --git a/drivers/android/tests/Makefile b/drivers/android/tests/Makefile
+> new file mode 100644
+> index 000000000000..6780967e573b
+> --- /dev/null
+> +++ b/drivers/android/tests/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +obj-$(CONFIG_ANDROID_BINDER_ALLOC_KUNIT_TEST)  += binder_alloc_kunit.o
+> diff --git a/drivers/android/tests/binder_alloc_kunit.c b/drivers/android/tests/binder_alloc_kunit.c
+> new file mode 100644
+> index 000000000000..4b68b5687d33
+> --- /dev/null
+> +++ b/drivers/android/tests/binder_alloc_kunit.c
+> @@ -0,0 +1,166 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Test cases for binder allocator code
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <kunit/test.h>
+> +#include <linux/anon_inodes.h>
+> +#include <linux/err.h>
+> +#include <linux/file.h>
+> +#include <linux/fs.h>
+> +#include <linux/mm.h>
+> +#include <linux/mman.h>
+> +#include <linux/sizes.h>
+> +
+> +#include "../binder_alloc.h"
+> +#include "../binder_internal.h"
+> +
+> +MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
+> +
+> +#define BINDER_MMAP_SIZE SZ_128K
+> +
+> +struct binder_alloc_test {
+> +       struct binder_alloc alloc;
+> +       struct list_lru binder_test_freelist;
+> +       struct file *filp;
+> +       unsigned long mmap_uaddr;
+> +};
+> +
+> +static void binder_alloc_test_init_freelist(struct kunit *test)
+> +{
+> +       struct binder_alloc_test *priv = test->priv;
+> +
+> +       KUNIT_EXPECT_PTR_EQ(test, priv->alloc.freelist,
+> +                           &priv->binder_test_freelist);
+> +}
+> +
+> +static void binder_alloc_test_mmap(struct kunit *test)
+> +{
+> +       struct binder_alloc_test *priv = test->priv;
+> +       struct binder_alloc *alloc = &priv->alloc;
+> +       struct binder_buffer *buf;
+> +       struct rb_node *n;
+> +
+> +       KUNIT_EXPECT_EQ(test, alloc->mapped, true);
+> +       KUNIT_EXPECT_EQ(test, alloc->buffer_size, BINDER_MMAP_SIZE);
+> +
+> +       n = rb_first(&alloc->allocated_buffers);
+> +       KUNIT_EXPECT_PTR_EQ(test, n, NULL);
+> +
+> +       n = rb_first(&alloc->free_buffers);
+> +       buf = rb_entry(n, struct binder_buffer, rb_node);
+> +       KUNIT_EXPECT_EQ(test, binder_alloc_buffer_size(alloc, buf),
+> +                       BINDER_MMAP_SIZE);
+> +       KUNIT_EXPECT_TRUE(test, list_is_last(&buf->entry, &alloc->buffers));
+> +}
+> +
+> +/* ===== End test cases ===== */
+> +
+> +static void binder_alloc_test_vma_close(struct vm_area_struct *vma)
+> +{
+> +       struct binder_alloc *alloc = vma->vm_private_data;
+> +
+> +       binder_alloc_vma_close(alloc);
+> +}
+> +
+> +static const struct vm_operations_struct binder_alloc_test_vm_ops = {
+> +       .close = binder_alloc_test_vma_close,
+> +       .fault = binder_vm_fault,
+> +};
+> +
+> +static int binder_alloc_test_mmap_handler(struct file *filp,
+> +                                         struct vm_area_struct *vma)
+> +{
+> +       struct binder_alloc *alloc = filp->private_data;
+> +
+> +       vm_flags_mod(vma, VM_DONTCOPY | VM_MIXEDMAP, VM_MAYWRITE);
+> +
+> +       vma->vm_ops = &binder_alloc_test_vm_ops;
+> +       vma->vm_private_data = alloc;
+> +
+> +       return binder_alloc_mmap_handler(alloc, vma);
+> +}
+> +
+> +static const struct file_operations binder_alloc_test_fops = {
+> +       .mmap = binder_alloc_test_mmap_handler,
+> +};
+> +
+> +static int binder_alloc_test_init(struct kunit *test)
+> +{
+> +       struct binder_alloc_test *priv;
+> +       int ret;
+> +
+> +       priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
+> +       if (!priv)
+> +               return -ENOMEM;
+> +       test->priv = priv;
+> +
+> +       ret = list_lru_init(&priv->binder_test_freelist);
+> +       if (ret) {
+> +               kunit_err(test, "Failed to initialize test freelist\n");
+> +               return ret;
+> +       }
+> +
+> +       /* __binder_alloc_init requires mm to be attached */
+> +       ret = kunit_attach_mm();
+> +       if (ret) {
+> +               kunit_err(test, "Failed to attach mm\n");
+> +               return ret;
+> +       }
+> +       __binder_alloc_init(&priv->alloc, &priv->binder_test_freelist);
+> +
+> +       priv->filp = anon_inode_getfile("binder_alloc_kunit",
+> +                                       &binder_alloc_test_fops, &priv->alloc,
+> +                                       O_RDWR | O_CLOEXEC);
+> +       if (IS_ERR_OR_NULL(priv->filp)) {
+> +               kunit_err(test, "Failed to open binder alloc test driver file\n");
+> +               return priv->filp ? PTR_ERR(priv->filp) : -ENOMEM;
+> +       }
+> +
+> +       priv->mmap_uaddr = kunit_vm_mmap(test, priv->filp, 0, BINDER_MMAP_SIZE,
+> +                                        PROT_READ, MAP_PRIVATE | MAP_NORESERVE,
+> +                                        0);
+> +       if (!priv->mmap_uaddr) {
+> +               kunit_err(test, "Could not map the test's transaction memory\n");
+> +               return -ENOMEM;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static void binder_alloc_test_exit(struct kunit *test)
+> +{
+> +       struct binder_alloc_test *priv = test->priv;
+> +
+> +       /* Close the backing file to make sure binder_alloc_vma_close runs */
+> +       if (!IS_ERR_OR_NULL(priv->filp))
+> +               fput(priv->filp);
+> +
+> +       if (priv->alloc.mm)
+> +               binder_alloc_deferred_release(&priv->alloc);
+> +
+> +       /* Make sure freelist is empty */
+> +       KUNIT_EXPECT_EQ(test, list_lru_count(&priv->binder_test_freelist), 0);
+> +       list_lru_destroy(&priv->binder_test_freelist);
+> +}
+> +
+> +static struct kunit_case binder_alloc_test_cases[] = {
+> +       KUNIT_CASE(binder_alloc_test_init_freelist),
+> +       KUNIT_CASE(binder_alloc_test_mmap),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite binder_alloc_test_suite = {
+> +       .name = "binder_alloc",
+> +       .test_cases = binder_alloc_test_cases,
+> +       .init = binder_alloc_test_init,
+> +       .exit = binder_alloc_test_exit,
+> +};
+> +
+> +kunit_test_suite(binder_alloc_test_suite);
+> +
+> +MODULE_AUTHOR("Tiffany Yang <ynaffit@google.com>");
+> +MODULE_DESCRIPTION("Binder Alloc KUnit tests");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 39c768f87dc9..d958ee53050e 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -531,6 +531,18 @@ static inline char *kunit_kstrdup(struct kunit *test, const char *str, gfp_t gfp
+>   */
+>  const char *kunit_kstrdup_const(struct kunit *test, const char *str, gfp_t gfp);
+>
+> +/**
+> + * kunit_attach_mm() - Create and attach a new mm if it doesn't already exist.
+> + *
+> + * Allocates a &struct mm_struct and attaches it to @current. In most cases, call
+> + * kunit_vm_mmap() without calling kunit_attach_mm() directly. Only necessary when
+> + * code under test accesses the mm before executing the mmap (e.g., to perform
+> + * additional initialization beforehand).
+> + *
+> + * Return: 0 on success, -errno on failure.
+> + */
+> +int kunit_attach_mm(void);
+> +
+>  /**
+>   * kunit_vm_mmap() - Allocate KUnit-tracked vm_mmap() area
+>   * @test: The test context object.
+> diff --git a/lib/kunit/user_alloc.c b/lib/kunit/user_alloc.c
+> index 46951be018be..b8cac765e620 100644
+> --- a/lib/kunit/user_alloc.c
+> +++ b/lib/kunit/user_alloc.c
+> @@ -22,8 +22,7 @@ struct kunit_vm_mmap_params {
+>         unsigned long offset;
+>  };
+>
+> -/* Create and attach a new mm if it doesn't already exist. */
+> -static int kunit_attach_mm(void)
+> +int kunit_attach_mm(void)
+>  {
+>         struct mm_struct *mm;
+>
+> @@ -49,6 +48,7 @@ static int kunit_attach_mm(void)
+>
+>         return 0;
+>  }
+> +EXPORT_SYMBOL_GPL(kunit_attach_mm);
+>
+>  static int kunit_vm_mmap_init(struct kunit_resource *res, void *context)
+>  {
+> --
+> 2.50.0.727.gbf7dc18ff4-goog
+>
 
-diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-index 2c0a2db6e6dd..8609fb138108 100644
---- a/include/linux/tcp.h
-+++ b/include/linux/tcp.h
-@@ -173,6 +173,7 @@ struct tcp_request_sock {
- 	u8				syn_ect_snt: 2,
- 					syn_ect_rcv: 2,
- 					accecn_fail_mode:4;
-+	u8				saw_accecn_opt  :2;
- #ifdef CONFIG_TCP_AO
- 	u8				ao_keyid;
- 	u8				ao_rcv_next;
-@@ -408,7 +409,8 @@ struct tcp_sock {
- 		syn_fastopen_child:1; /* created TFO passive child socket */
- 
- 	u8	keepalive_probes; /* num of allowed keep alive probes	*/
--	u8	accecn_fail_mode:4;	/* AccECN failure handling */
-+	u8	accecn_fail_mode:4,	/* AccECN failure handling */
-+		saw_accecn_opt:2;	/* An AccECN option was seen */
- 	u32	tcp_tx_delay;	/* delay (in usec) added to TX packets */
- 
- /* RTT measurement */
-diff --git a/include/net/tcp_ecn.h b/include/net/tcp_ecn.h
-index d4c4f04a4ee4..be189601b2fe 100644
---- a/include/net/tcp_ecn.h
-+++ b/include/net/tcp_ecn.h
-@@ -91,6 +91,11 @@ static inline void tcp_accecn_fail_mode_set(struct tcp_sock *tp, u8 mode)
- 	tp->accecn_fail_mode |= mode;
- }
- 
-+#define TCP_ACCECN_OPT_NOT_SEEN		0x0
-+#define TCP_ACCECN_OPT_EMPTY_SEEN	0x1
-+#define TCP_ACCECN_OPT_COUNTER_SEEN	0x2
-+#define TCP_ACCECN_OPT_FAIL_SEEN	0x3
-+
- static inline u8 tcp_accecn_ace(const struct tcphdr *th)
- {
- 	return (th->ae << 2) | (th->cwr << 1) | th->ece;
-@@ -151,6 +156,14 @@ static inline bool tcp_accecn_validate_syn_feedback(struct sock *sk, u8 ace,
- 	return true;
- }
- 
-+static inline void tcp_accecn_saw_opt_fail_recv(struct tcp_sock *tp,
-+						u8 saw_opt)
-+{
-+	tp->saw_accecn_opt = saw_opt;
-+	if (tp->saw_accecn_opt == TCP_ACCECN_OPT_FAIL_SEEN)
-+		tcp_accecn_fail_mode_set(tp, TCP_ACCECN_OPT_FAIL_RECV);
-+}
-+
- /* Validate the 3rd ACK based on the ACE field, see Table 4 of AccECN spec */
- static inline void tcp_accecn_third_ack(struct sock *sk,
- 					const struct sk_buff *skb, u8 sent_ect)
-@@ -427,9 +440,34 @@ static inline void tcp_accecn_set_ace(struct tcp_sock *tp, struct sk_buff *skb,
- 	}
- }
- 
-+static inline u8 tcp_accecn_option_init(const struct sk_buff *skb,
-+					u8 opt_offset)
-+{
-+	u8 *ptr = skb_transport_header(skb) + opt_offset;
-+	unsigned int optlen = ptr[1] - 2;
-+
-+	WARN_ON_ONCE(ptr[0] != TCPOPT_ACCECN0 && ptr[0] != TCPOPT_ACCECN1);
-+	ptr += 2;
-+
-+	/* Detect option zeroing: an AccECN connection "MAY check that the
-+	 * initial value of the EE0B field or the EE1B field is non-zero"
-+	 */
-+	if (optlen < TCPOLEN_ACCECN_PERFIELD)
-+		return TCP_ACCECN_OPT_EMPTY_SEEN;
-+	if (get_unaligned_be24(ptr) == 0)
-+		return TCP_ACCECN_OPT_FAIL_SEEN;
-+	if (optlen < TCPOLEN_ACCECN_PERFIELD * 3)
-+		return TCP_ACCECN_OPT_COUNTER_SEEN;
-+	ptr += TCPOLEN_ACCECN_PERFIELD * 2;
-+	if (get_unaligned_be24(ptr) == 0)
-+		return TCP_ACCECN_OPT_FAIL_SEEN;
-+
-+	return TCP_ACCECN_OPT_COUNTER_SEEN;
-+}
-+
- /* See Table 2 of the AccECN draft */
--static inline void tcp_ecn_rcv_synack(struct sock *sk, const struct tcphdr *th,
--				      u8 ip_dsfield)
-+static inline void tcp_ecn_rcv_synack(struct sock *sk, const struct sk_buff *skb,
-+				      const struct tcphdr *th, u8 ip_dsfield)
- {
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	u8 ace = tcp_accecn_ace(th);
-@@ -468,7 +506,13 @@ static inline void tcp_ecn_rcv_synack(struct sock *sk, const struct tcphdr *th,
- 	default:
- 		tcp_ecn_mode_set(tp, TCP_ECN_MODE_ACCECN);
- 		tp->syn_ect_rcv = ip_dsfield & INET_ECN_MASK;
--		tp->accecn_opt_demand = 2;
-+		if (tp->rx_opt.accecn &&
-+		    tp->saw_accecn_opt < TCP_ACCECN_OPT_COUNTER_SEEN) {
-+			u8 saw_opt = tcp_accecn_option_init(skb, tp->rx_opt.accecn);
-+
-+			tcp_accecn_saw_opt_fail_recv(tp, saw_opt);
-+			tp->accecn_opt_demand = 2;
-+		}
- 		if (INET_ECN_is_ce(ip_dsfield) &&
- 		    tcp_accecn_validate_syn_feedback(sk, ace,
- 						     tp->syn_ect_snt)) {
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 797b7121e1cc..c1bdbb241003 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3396,6 +3396,7 @@ int tcp_disconnect(struct sock *sk, int flags)
- 	tp->delivered_ce = 0;
- 	tp->wait_third_ack = 0;
- 	tp->accecn_fail_mode = 0;
-+	tp->saw_accecn_opt = TCP_ACCECN_OPT_NOT_SEEN;
- 	tcp_accecn_init_counters(tp);
- 	tp->prev_ecnfield = 0;
- 	tp->accecn_opt_tstamp = 0;
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 103260fc9130..5a8f5ca9efde 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -398,7 +398,22 @@ static bool tcp_accecn_process_option(struct tcp_sock *tp,
- 	unsigned int i;
- 	u8 *ptr;
- 
-+	if (tcp_accecn_opt_fail_recv(tp))
-+		return false;
-+
- 	if (!(flag & FLAG_SLOWPATH) || !tp->rx_opt.accecn) {
-+		if (!tp->saw_accecn_opt) {
-+			/* Too late to enable after this point due to
-+			 * potential counter wraps
-+			 */
-+			if (tp->bytes_sent >= (1 << 23) - 1) {
-+				u8 saw_opt = TCP_ACCECN_OPT_FAIL_SEEN;
-+
-+				tcp_accecn_saw_opt_fail_recv(tp, saw_opt);
-+			}
-+			return false;
-+		}
-+
- 		if (estimate_ecnfield) {
- 			u8 ecnfield = estimate_ecnfield - 1;
- 
-@@ -414,6 +429,13 @@ static bool tcp_accecn_process_option(struct tcp_sock *tp,
- 	order1 = (ptr[0] == TCPOPT_ACCECN1);
- 	ptr += 2;
- 
-+	if (tp->saw_accecn_opt < TCP_ACCECN_OPT_COUNTER_SEEN) {
-+		tp->saw_accecn_opt = tcp_accecn_option_init(skb,
-+							    tp->rx_opt.accecn);
-+		if (tp->saw_accecn_opt == TCP_ACCECN_OPT_FAIL_SEEN)
-+			tcp_accecn_fail_mode_set(tp, TCP_ACCECN_OPT_FAIL_RECV);
-+	}
-+
- 	res = !!estimate_ecnfield;
- 	for (i = 0; i < 3; i++) {
- 		u32 init_offset;
-@@ -6092,7 +6114,13 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
- 	if (th->syn) {
- 		if (tcp_ecn_mode_accecn(tp)) {
- 			accecn_reflector = true;
--			tcp_accecn_opt_demand_min(sk, 1);
-+			if (tp->rx_opt.accecn &&
-+			    tp->saw_accecn_opt < TCP_ACCECN_OPT_COUNTER_SEEN) {
-+				u8 saw_opt = tcp_accecn_option_init(skb, tp->rx_opt.accecn);
-+
-+				tcp_accecn_saw_opt_fail_recv(tp, saw_opt);
-+				tcp_accecn_opt_demand_min(sk, 1);
-+			}
- 		}
- 		if (sk->sk_state == TCP_SYN_RECV && sk->sk_socket && th->ack &&
- 		    TCP_SKB_CB(skb)->seq + 1 == TCP_SKB_CB(skb)->end_seq &&
-@@ -6582,7 +6610,8 @@ static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
- 		 */
- 
- 		if (tcp_ecn_mode_any(tp))
--			tcp_ecn_rcv_synack(sk, th, TCP_SKB_CB(skb)->ip_dsfield);
-+			tcp_ecn_rcv_synack(sk, skb, th,
-+					   TCP_SKB_CB(skb)->ip_dsfield);
- 
- 		tcp_init_wl(tp, TCP_SKB_CB(skb)->seq);
- 		tcp_try_undo_spurious_syn(sk);
-@@ -7157,6 +7186,8 @@ static void tcp_openreq_init(struct request_sock *req,
- 	tcp_rsk(req)->snt_tsval_first = 0;
- 	tcp_rsk(req)->last_oow_ack_time = 0;
- 	tcp_rsk(req)->accecn_ok = 0;
-+	tcp_rsk(req)->saw_accecn_opt = TCP_ACCECN_OPT_NOT_SEEN;
-+	tcp_rsk(req)->accecn_fail_mode = 0;
- 	tcp_rsk(req)->syn_ect_rcv = 0;
- 	tcp_rsk(req)->syn_ect_snt = 0;
- 	req->mss = rx_opt->mss_clamp;
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index 848c756a37b8..fd80e24ea30b 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -473,6 +473,7 @@ static void tcp_ecn_openreq_child(struct sock *sk,
- 		tcp_ecn_mode_set(tp, TCP_ECN_MODE_ACCECN);
- 		tp->syn_ect_snt = treq->syn_ect_snt;
- 		tcp_accecn_third_ack(sk, skb, treq->syn_ect_snt);
-+		tp->saw_accecn_opt = treq->saw_accecn_opt;
- 		tp->prev_ecnfield = treq->syn_ect_rcv;
- 		tp->accecn_opt_demand = 1;
- 		tcp_ecn_received_counters_payload(sk, skb);
-@@ -688,6 +689,7 @@ struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
- 	bool own_req;
- 
- 	tmp_opt.saw_tstamp = 0;
-+	tmp_opt.accecn = 0;
- 	if (th->doff > (sizeof(struct tcphdr)>>2)) {
- 		tcp_parse_options(sock_net(sk), skb, &tmp_opt, 0, NULL);
- 
-@@ -865,6 +867,18 @@ struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
- 	if (!(flg & TCP_FLAG_ACK))
- 		return NULL;
- 
-+	if (tcp_rsk(req)->accecn_ok && tmp_opt.accecn &&
-+	    tcp_rsk(req)->saw_accecn_opt < TCP_ACCECN_OPT_COUNTER_SEEN) {
-+		u8 saw_opt = tcp_accecn_option_init(skb, tmp_opt.accecn);
-+
-+		tcp_rsk(req)->saw_accecn_opt = saw_opt;
-+		if (tcp_rsk(req)->saw_accecn_opt == TCP_ACCECN_OPT_FAIL_SEEN) {
-+			u8 fail_mode = TCP_ACCECN_OPT_FAIL_RECV;
-+
-+			tcp_rsk(req)->accecn_fail_mode |= fail_mode;
-+		}
-+	}
-+
- 	/* For Fast Open no more processing is needed (sk is the
- 	 * child socket).
- 	 */
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 65ef1c3c97c2..560b0ca54bb8 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -986,9 +986,14 @@ static unsigned int tcp_syn_options(struct sock *sk, struct sk_buff *skb,
- 		}
- 	}
- 
--	/* Simultaneous open SYN/ACK needs AccECN option but not SYN */
-+	/* Simultaneous open SYN/ACK needs AccECN option but not SYN.
-+	 * It is attempted to negotiate the use of AccECN also on the first
-+	 * retransmitted SYN, as mentioned in "3.1.4.1. Retransmitted SYNs"
-+	 * of AccECN draft.
-+	 */
- 	if (unlikely((TCP_SKB_CB(skb)->tcp_flags & TCPHDR_ACK) &&
- 		     tcp_ecn_mode_accecn(tp) &&
-+		     inet_csk(sk)->icsk_retransmits < 2 &&
- 		     READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option) &&
- 		     remaining >= TCPOLEN_ACCECN_BASE)) {
- 		opts->use_synack_ecn_bytes = 1;
-@@ -1077,7 +1082,7 @@ static unsigned int tcp_synack_options(const struct sock *sk,
- 
- 	if (treq->accecn_ok &&
- 	    READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option) &&
--	    remaining >= TCPOLEN_ACCECN_BASE) {
-+	    req->num_timeout < 1 && remaining >= TCPOLEN_ACCECN_BASE) {
- 		opts->use_synack_ecn_bytes = 1;
- 		remaining -= tcp_options_fit_accecn(opts, 0, remaining);
- 	}
-@@ -1156,6 +1161,8 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
- 
- 	if (tcp_ecn_mode_accecn(tp) &&
- 	    READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option) &&
-+	    tp->saw_accecn_opt &&
-+	    !tcp_accecn_opt_fail_send(tp) &&
- 	    (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option) >= TCP_ACCECN_OPTION_FULL ||
- 	     tp->accecn_opt_demand ||
- 	     tcp_accecn_option_beacon_check(sk))) {
--- 
-2.34.1
+--000000000000edf3170638ebcc50
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
+MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+jmkLAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFBp5bTxrTm/d
+WMmRETO8lNkA4c7fMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBF
+tO3/N2l9hTaij/K0xCpLwIlrqpNo0nMAvvG5LPQQjSeHnTh06tWTgsPCOJ65GX+bqWRDwGTu8WTq
+c5ihCNOikBs25j82yeLkfdbeN/tzRGUb2RD+8n9I3CnyMSG49U2s0ZdncsrIVFh47KW2TpHTF7R8
+N1dri01wPg8hw4u0+XoczR2TiBrBOISKmAlkAi+P9ivT31gSHdbopoL4x0V2Ow9IOp0chrQQUZtP
+KBytLhzUzd9wIsE0QMNDbw6jeG8+a4sd17zpXSbBywIGw7sEvPtnBjMaf5ib3kznlOne6tuDVx4y
+QFExTCSrP3OTMUkNbpIdgzg2CHQ2aB8i8YsTZ8Q8Q8ztPJ+xDNsqBUeYxILLjTjxQQovToqipB3f
+6IMyk+lWCdDS+iCLYZULV1BTHSdwp1NM3t4jZ8TMlV+JzAyRqz4lzSl8ptkFhKBJ7w2tDrZ3BEXB
+8ASUByRxeh+pC1Z5/HhqfiWMVPjaWmlRRJVlRk+ObKIv2CblwxMYlo2Mn8rrbEDyfum1RTMW55Z6
+Vumvw5QTHe29TYxSiusovM6OD5y0I+4zaIaYDx/AtF0mMOFXb1MDyynf1CDxhtkgnrBUseHSOU2e
+MYs7IqzRap5xsgpJS+t7cp/P8fdlCNvsXss9zZa279tKwaxR0U2IzGxRGsWKGxDysn1HT6pqMDGC
+Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAUXA7LnOuRz2DvkWTeMc
+0TANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgii25+Gg2MNUPRxq/5o5UwDbmF0x0
+TFcAZdPGxB8GLmgwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+NzAyMDU0NzQ2WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
+AQEBBQAEggEADl3ZUoxR7771vbBo53L0eN3pC8BV/6HOtordBqCSjt4R8qh4dmhkK7I6BBP1XbFg
+mupL43241CmkqfsmY+8lqr6TYdu3JPNfYaPzHqu1QighwvMjyIDLaIWU5BQLGXBgJessNR0z9M9l
+egbL1Up0oARcn9lqmRbxSMtd624qgJr6kP5GTmtQ8nkp/RHSyAvGx1b01qd2sr21gIXt4UEh3Pf0
+Ow+O6AMMd2g6n7QBUKwo92LHBzoAjZ3x3ldfmGCPoLJ+Z8s6vh7xVklFA1Q/iUnerjMMnv0mZXMU
+R6xwtNafdoqNkan65p3dE0J5505GfnrANAYFDELbMldOcZn+6w==
+--000000000000edf3170638ebcc50--
