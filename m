@@ -1,110 +1,86 @@
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF872FC000
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Jul 2025 13:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1AD309A61;
+	Fri,  4 Jul 2025 13:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751636019; cv=none; b=M3kSVvQbNDkWbJTQMSZkPs2OmYFF4EGUjveoog5wBNHkhstsELPpueezlqm+eODCU37aINjQLBWvU3nEsSJtlYhm8oYSAuQBUMoRCe+no8TBvo83HZ5vPSRiFGV1BFTWBwYB7YI4FhPcs1uNfToY60x5PeIOQEeNUdyjTMU6gOI=
+	t=1751636638; cv=none; b=canH9sX9nTe/imlW4op6AlO9OJz9cuYumOya+b+ar56A+u85hjDzoif8uNt/xCMU75zs0v1hDi898b+pCXBymDnKDvw/NmpxFNoznMzwT0QqMhdVAdXwn10Yi0GFJG8kSYv/ampI6ER2jVLqLg8AALhTgg4nfKQ0zw93JhVeq+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751636019; c=relaxed/simple;
-	bh=MXbicf/CN8RsEsRNgUbQUrnMIhrP14zCOu9f6J6vtIE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FmwKEc5AlsNAefjSjkqlzn/D97koVPQq4G7C6EMwx6W8P81NqoGykTiKFa0IR2cQMcH5pNK7hGuRrPaKiP+90DeGR1vHj7ohyqbVhdlkX7tHVQlpRaA61eed7r2eIEe8k8hSaORvfM7DZKR22TTembs8fugYPp/roxco8IAvjNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 564DX9v6024345;
-	Fri, 4 Jul 2025 15:33:09 +0200
-Date: Fri, 4 Jul 2025 15:33:09 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Benjamin Berg <benjamin@sipsolutions.net>, linux-kselftest@vger.kernel.org,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Subject: Re: [RFC v2] tools/nolibc: add sigaction()
-Message-ID: <20250704133309.GA23995@1wt.eu>
-References: <20250701122910.45823-1-benjamin@sipsolutions.net>
- <21cf1fee-21ce-43b2-95cc-18aa58adcd87@t-8ch.de>
- <c870d823e686c4b4ef6928d9ca0162d72e484339.camel@sipsolutions.net>
- <81dc0649-9abe-421d-a372-a346c329d3af@t-8ch.de>
+	s=arc-20240116; t=1751636638; c=relaxed/simple;
+	bh=sbyyvykq7k9bxaIjeUmKcMBZluPy5PtwNcI02Bk5Es0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cW5T2O/q7q+byk/HscGnsXUbyjVFBI5TqfPReuW3UNuiNL8T1b9dek3GGBrDWVBVZ19uvO8LS18KBucD11En33pUwXVkIu+gGS5ULfhYL1x85oRRLaHi0FqmhjuB/SJxDo9tY1zleTfiO21A2A7BK5kRhj5uLESwGPl6jrBnX1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4IgKwXrM; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ROunPDue; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4IgKwXrM";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ROunPDue"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1751636635;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZwW0FahEeSDNEBwmMNr8v/XF6zAPS880RbT/B7oXGFo=;
+	b=4IgKwXrMZjSLBXBZClVqNfRyg2st5D6E0F6I4+WrsLziAaOhKv4z8BI3qBdkxpInRLtmce
+	UkLYy/aGw0Cpq0R/Xwo526QhopbSlWz2wdExFLFr7Pb/bVUYQ2+tVclUE3BSfKGWMHXGS8
+	LYZBKRK1WR93AMIjFNfXwrNmz8hQa3ZR7vJ64R2OBF0pe9SfMfSUb1YJvXgycE2jpb2zG6
+	8NdEISkeCSBPvoCAmfC90wKqLRQ1HzaoY0+WVPk71qJaiV2ux1kytR6D+fA/XFFzUhuq4e
+	kwCYteMP+wnLCBWBck89XjCbm2t2Ywl/zFJJq8tR5A1uIvDqhOBKXDFtA+oQVA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1751636635;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZwW0FahEeSDNEBwmMNr8v/XF6zAPS880RbT/B7oXGFo=;
+	b=ROunPDuezJLrlO7lkhqlTsHSkOEzyFuL+cfFZQv8h0oOL7Wkyq5GLktbXLyiN9K3nvJx2P
+	bhFIVo9fCxMowCCA==
+Subject: [PATCH 0/2] selftests/nolibc: correctly report errors from
+ printf() and friends
+Date: Fri, 04 Jul 2025 15:43:11 +0200
+Message-Id: <20250704-nolibc-printf-error-v1-0-74b7a092433b@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <81dc0649-9abe-421d-a372-a346c329d3af@t-8ch.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-B4-Tracking: v=1; b=H4sIAG/aZ2gC/x3MQQqAIBBA0avIrBswUaKuEi3MxhoIjTEiiO6et
+ HyL/x8oJEwFBvWA0MWFc6poGwVh82kl5KUajDZOd9piyjvPAQ/hdEYkkSzovbOxd23Q3kItD6H
+ I938dp/f9AIhOaKFlAAAA
+X-Change-ID: 20250704-nolibc-printf-error-aa54f951c0a4
+To: Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Shuah Khan <shuah@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751636627; l=685;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=sbyyvykq7k9bxaIjeUmKcMBZluPy5PtwNcI02Bk5Es0=;
+ b=lR7ecbdvzNLwR8ymNbu4varcrN4gc1i0wjZmxNFvR48R94b2gOrkybL+imYaU2Mrx1cSplTeV
+ l6jIFPdZvr3Cs0m1dlsJqReb2SEOQuiAf0+mEDIoFaDgMxU6PqcDXaD
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Fri, Jul 04, 2025 at 12:50:32PM +0200, Thomas Weiﬂschuh wrote:
-> On 2025-07-02 17:33:24+0200, Benjamin Berg wrote:
-> > On Wed, 2025-07-02 at 00:04 +0200, Thomas Weiﬂschuh wrote:
-> > > [SNIP]
-> > > > --- a/tools/include/nolibc/arch-i386.h
-> > > > +++ b/tools/include/nolibc/arch-i386.h
-> > > > @@ -10,6 +10,19 @@
-> > > > †#include "compiler.h"
-> > > > †#include "crt.h"
-> > > > †
-> > > > +/* Needed to get the correct struct sigaction definition */
-> > > > +#define SA_RESTORER	0x04000000
-> > > > +
-> > > > +/* Restorer must be set on i386 */
-> > > > +#define _NOLIBC_ARCH_NEEDS_SA_RESTORER
-> > > > +
-> > > > +/* Otherwise we would need to use sigreturn instead of rt_sigreturn */
-> > > > +#define _NOLIBC_ARCH_FORCE_SIG_FLAGS SA_SIGINFO
-> > > > +
-> > > > +/* Avoid linux/signal.h, it has an incorrect _NSIG and sigset_t */
-> > > > +#include <asm-generic/signal.h>
-> > > > +#include <asm-generic/siginfo.h>
-> > > 
-> > > This doesn't work if the user already has <linux/signal.h> included for
-> > > some other reason. The symbol names will conflict.
-> > 
-> > I was thinking this is fine. Such a conflict already exists between the
-> > normal glibc <signal.h> and <linux/signal.h>.
-> 
-> It would be enough to keep compatibility with glibc.
-> But personally I'd like to make it work generally.
-> 
-> > So there would only be a
-> > problem if the user is explicitly not including <signal.h> to then use
-> > <linux/signal.h>. I doubt that makes sense.
-> 
-> Technically nolibc is always included as a whole, so any application
-> using it would be prevented from using linux/signal.h.
-> 
-> Maybe Willy has some strong opinions.
-> Otherwise I'm also fine if we keep this part as is for now.
-> Then if everything else is addressed I'll try to actually implement my
-> proposal on top.
-> 
-> Does this sound reasonable?
+When an error is encountered by printf() it needs to be reported.
 
-I think that userland application writers are used to seeing random
-failures here and there when they start using linux/ without being invited
-to do so. Of course it's never fun to deal with build failures, but the
-effort spent overengineering solutions is often not worth being spent
-when you figure that sometimes the next application you try will blatantly
-fail again. I'd suggest that we stay on the pragmatic side of things: if
-we find a solution that works fine for the common case, that may break for
-rare cases that already break with glibc, I think we're already fine. That
-doesn't mean we don't need to think about it, but it's not something urgent
-nor that warrants taking more risks either.
+Signed-off-by: Thomas Wei√üschuh <thomas.weissschuh@linutronix.de>
+---
+Thomas Wei√üschuh (2):
+      selftests/nolibc: create /dev/full when running as PID 1
+      selftests/nolibc: correctly report errors from printf() and friends
 
-I personally also think that we'll face an increasing amount of build
-issue reports due to our attempt at being more compatible. Indeed, in the
-past, one had to #ifdef all includes and pass -include nolibc on the gcc
-command line. Nowadays by supporting a larger number of functions and
-include file names, we encourage developers to try to simply switch their
-libc for nolibc. We do know that the coverage remains low, and reports
-will come proportionally to the ratio of apparent ease of use to feature
-coverage. That's expected and we should try to resist feeling bad about
-it. I don't think we'll ever aim at competing with glibc/musl for example,
-so a little bit of application adaptation is expected from time to time.
+ tools/include/nolibc/stdio.h                 |  4 ++--
+ tools/testing/selftests/nolibc/nolibc-test.c | 27 ++++++++++++++++++++++++++-
+ 2 files changed, 28 insertions(+), 3 deletions(-)
+---
+base-commit: 1536aa0fb1e09cb50f401ec4852c60f38173d751
+change-id: 20250704-nolibc-printf-error-aa54f951c0a4
 
-Cheers,
-Willy
+Best regards,
+-- 
+Thomas Wei√üschuh <thomas.weissschuh@linutronix.de>
+
