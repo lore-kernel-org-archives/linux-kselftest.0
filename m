@@ -1,75 +1,53 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7970219DF48;
-	Mon,  7 Jul 2025 07:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751872690; cv=none; b=USqPLtr5O+OAsUfEmLaWwlJIDXwnpy3M8nXGtqKmOXLNSbWDG9S3wCe2qkskqT6rldoROH53a6yMvNnpOAYgD1GtMnMZvYLJHsuwzn1rel/7RPWl8BUUOrNkD+yvaoVgq0UKK0mjR9Ts/2tP9n8XU23qqLpYHf2IhpEA0DFLpPg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751872690; c=relaxed/simple;
-	bh=QSGl4K4f2MNV/fdE1EOY0GdLB5rrl8evP70DAea8sTo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fnxLD56no6tqobZQ7fjjTeYvuwDKv6RL1erYzBWcI3xIwz6/otJ+Z8jQDUsDS/+Op75cq0bUIMAQfmF9EDXbtTz6y3516UR/lndY+y9aT07aDlJ3tEgVfPlvMd/dScLTMEL2VDLykM/o1F0x/RU0S+P8PX1Hz6EoqFKKSlaQZk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RTFu88jY; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6C421FF5C;
+	Mon,  7 Jul 2025 07:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751873638; cv=pass; b=kIi36ws2BC6cHrhg0FC42UniDIoiUdcZ17Rtp1kpKH7oZbpSTBa9iR/stDG1d2++JM5OTeD7T09UBgRz7z03toXaLiiUtuahluw7/ArdBagw+tZKODb5NVtbwST2s9qiZeObKJ4b7d+iWudC57d2JN8DSMpiJwPNtPfIcEGYsA8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751873638; c=relaxed/simple;
+	bh=wXsTWyd4yYlOsiktiqaiTuUm1qucpLijYl3bq49V17w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZILTz21rYqEtwppwi670Th+QQutZuTREtY2wviqtPy82izQ9Z3DbMD5LDDrf0RQVPUBHF7/5vM3YAYFcYXUbXkdiTXAXogdu/4nBzZ27ry3uEIPihJtpeilZyCCIDaS28webEriT22XW0dl54yGuSJfHzOBuOTY0i0DcdttaI50=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=aJlh81gn; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RTFu88jY"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 566FRg3p002175;
-	Mon, 7 Jul 2025 07:17:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=jIepRk6DVAebh6PEsLNjSpb6du02Gr5YnB3tOZopq
-	qc=; b=RTFu88jYvpX7Y8m8tnWsSHI6nhlzKlob6KT8YSmL+hbgLhzYVrEeTg1xf
-	SO7jTcWOHL6VCB4DZ6UMCZ/BLxl4jsv17CH9Q/msCPAr3F7WaHTxLSG9dNpeyeV/
-	h0VXQVmmOZwk/ViYpwcuEcgm2g1nN/hzcXZhnE/krEHMkTPQKcNi2S9MeToOpQ9m
-	Im1VYzoKY56ekeSvmC0MyYTm2CDtAWET7znu2fxkKIv+ktbLdQRh/Jj9wObtpLiT
-	bteAyeT+8nknQbxOp/TXchAI3m6j+ztgmF7U4Lq4AfMInNQcFVqbtTwklJ6F9iib
-	dRz+tyLB/mXDGHtlFJLEDuRtUA+0w==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47ptfyfsfn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 07 Jul 2025 07:17:45 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 5677Hil5011374;
-	Mon, 7 Jul 2025 07:17:44 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47ptfyfsfh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 07 Jul 2025 07:17:44 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5675R9CG013582;
-	Mon, 7 Jul 2025 07:17:43 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 47qgkkmr00-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 07 Jul 2025 07:17:43 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5677Hdd223200230
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 7 Jul 2025 07:17:39 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 86D362004D;
-	Mon,  7 Jul 2025 07:17:39 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4C02C20043;
-	Mon,  7 Jul 2025 07:17:36 +0000 (GMT)
-Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.in.ibm.com (unknown [9.109.219.153])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  7 Jul 2025 07:17:36 +0000 (GMT)
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, andrii@kernel.org,
-        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
-Subject: [PATCH] selftests/bpf: Set CONFIG_PACKET=y for selftests
-Date: Mon,  7 Jul 2025 12:47:35 +0530
-Message-ID: <20250707071735.705137-1-skb99@linux.ibm.com>
-X-Mailer: git-send-email 2.43.5
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="aJlh81gn"
+ARC-Seal: i=1; a=rsa-sha256; t=1751873620; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=HTCku5Z4eE+HXVPl3u6T2Czgb3E8BG0hU0FVn/GpZjxuDiW5YetXJMhHfh95kfzxvgNsyN09pPJe0boWmoD0NxCGIfiJD8sfNEDZ82lARDwuG3n9a9X2wwBIVMXry4hfk4pL2iGKt6LAS99IEujqwYdZBmfAZD1N0o1b7Ipv4m8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1751873620; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=BdU2n3YWpibKbpwCxOh1ePuw+qQOxSR0HU9wfR6gAUw=; 
+	b=UUtocAbeWAI9mnkKNCOlVjqWdsytG9HMeedJ9kKrctqq7KJ7JkyEu8zd6+ZCVsVoPRUolbhlLonFfNxnXfgI7JoICALTx6KEjDlQnoH9EgwIgNIKjGQmmfhTziS/wEI0anJWqdrK41eEvGD9ggnABvzLtTLp9fYdBbNPPo8LZhE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
+	dmarc=pass header.from=<usama.anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751873620;
+	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=BdU2n3YWpibKbpwCxOh1ePuw+qQOxSR0HU9wfR6gAUw=;
+	b=aJlh81gnwv0G1WDmGbMUDQMTGB7/sBHhRZLQ/LdDsTfMlJSrQlsII+HOS4H4R+pC
+	+3PxtlCvu3Y0bXGRyk3u09OWv3tMp8ZfX2PPh6zmdtFpmGGufya6lLwCL5EgMZV8zCv
+	XwCHvyPXvLIpvlBqF73giMgeFOZKnBr6oXA06TlY=
+Received: by mx.zohomail.com with SMTPS id 1751873617320882.1477553147479;
+	Mon, 7 Jul 2025 00:33:37 -0700 (PDT)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	kernel@collabora.com,
+	David Hildenbrand <david@redhat.com>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] selftests/mm: pagemap_scan ioctl: add PFN ZERO test cases
+Date: Mon,  7 Jul 2025 12:33:20 +0500
+Message-ID: <20250707073321.106431-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,58 +55,231 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=crubk04i c=1 sm=1 tr=0 ts=686b7499 cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=PmTHI85cWLbkpOWelngA:9
-X-Proofpoint-ORIG-GUID: 2Mm_RrxbAbON0QE-fcdfu8EiPAjOOCEF
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzA3MDA0MSBTYWx0ZWRfX4hyEHs9Gu1VF 59dRfRfk8fRfKfE9LdlSr2I9457vYFDvj2Oe9Vks4yX2gM7LNSzkeoRfizaPGxCL6MhgdIjQibj cdSsZtgcteq/PvUT267uMxuEUybPaMfkeU45M5ZnixxMaG2th26NmzloY+YI3LWkjauwKMZTLDM
- Yns/bWBe54c79z+G0IiSNATXD+WCK/qU8vhosiNJSHLXU2iyWbtfFR9xDAsb3Kne5LdV6maGBWM btAP0j4/CmKGH4ER9vVNiYIRL/eYBJDfXxEGxDaCE3byntVZUJaNppodJfWtrR5lfWUrgM27IiI UfQZ+4zB4BWEBnIyo7qzfinMIyeHPQBXSOzF/StqcLp8KyuDXhu2bd5xaJyFpviAAKrgVLHIE9R
- DCcho4vruxNwPQwIZnzLeC3plaawsUmacYYjOE/7sqKG16WJhaft/HvoR9Mql7dUAy/AmbNN
-X-Proofpoint-GUID: eEAtjYMO7P97frU--vvMkJu3f2-QJ8jF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-07_01,2025-07-06_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=948
- priorityscore=1501 adultscore=0 suspectscore=0 lowpriorityscore=0
- clxscore=1011 impostorscore=0 malwarescore=0 spamscore=0 bulkscore=0
- phishscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507070041
+X-ZohoMailClient: External
 
-BPF selftest fails to build with below error:
+Add test cases to test the correctness of PFN ZERO flag of pagemap_scan
+ioctl. Test with normal pages backed memory and huge pages backed
+memory.
 
-  CLNG-BPF [test_progs] lsm_cgroup.bpf.o
-progs/lsm_cgroup.c:105:21: error: variable has incomplete type 'struct sockaddr_ll'
-  105 |         struct sockaddr_ll sa = {};
-      |                            ^
-progs/lsm_cgroup.c:105:9: note: forward declaration of 'struct sockaddr_ll'
-  105 |         struct sockaddr_ll sa = {};
-      |                ^
-1 error generated.
-
-lsm_cgroup selftest requires sockaddr_ll structure which is not there
-in vmlinux.h when the kernel is built with CONFIG_PACKET=m.
-
-Enabling CONFIG_PACKET=y ensures that sockaddr_ll is available in vmlinux,
-allowing it to be captured in the generated vmlinux.h for bpf selftests.
-
-Reported-by: Sachin P Bappalige <sachinpb@linux.ibm.com>
-Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+Cc: David Hildenbrand <david@redhat.com>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/bpf/config | 1 +
- 1 file changed, 1 insertion(+)
+The bug has been fixed [1].
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index f74e1ea0ad3b..7247833fe623 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -105,6 +105,7 @@ CONFIG_IP_NF_IPTABLES=y
- CONFIG_IP6_NF_IPTABLES=y
- CONFIG_IP6_NF_FILTER=y
- CONFIG_NF_NAT=y
-+CONFIG_PACKET=y
- CONFIG_RC_CORE=y
- CONFIG_SECURITY=y
- CONFIG_SECURITYFS=y
+[1] https://lore.kernel.org/all/20250617143532.2375383-1-david@redhat.com
+Changes since v1:
+- Skip if madvise() fails
+- Skip test if use_zero_page isn't set to 1
+- Keep on using memalign()+free() to allocate huge pages
+
+Changes sice v2:
+- Move zero page detection code out to vm_util and use that
+- Use mmap instead of memalign to allocate hugepage
+---
+ tools/testing/selftests/mm/cow.c           | 27 +-------
+ tools/testing/selftests/mm/pagemap_ioctl.c | 72 +++++++++++++++++++++-
+ tools/testing/selftests/mm/vm_util.c       | 23 +++++++
+ tools/testing/selftests/mm/vm_util.h       |  2 +
+ 4 files changed, 95 insertions(+), 29 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+index b6cfe0a4b7dfd..b26bbf6ec4617 100644
+--- a/tools/testing/selftests/mm/cow.c
++++ b/tools/testing/selftests/mm/cow.c
+@@ -72,31 +72,6 @@ static int detect_thp_sizes(size_t sizes[], int max)
+ 	return count;
+ }
+ 
+-static void detect_huge_zeropage(void)
+-{
+-	int fd = open("/sys/kernel/mm/transparent_hugepage/use_zero_page",
+-		      O_RDONLY);
+-	size_t enabled = 0;
+-	char buf[15];
+-	int ret;
+-
+-	if (fd < 0)
+-		return;
+-
+-	ret = pread(fd, buf, sizeof(buf), 0);
+-	if (ret > 0 && ret < sizeof(buf)) {
+-		buf[ret] = 0;
+-
+-		enabled = strtoul(buf, NULL, 10);
+-		if (enabled == 1) {
+-			has_huge_zeropage = true;
+-			ksft_print_msg("[INFO] huge zeropage is enabled\n");
+-		}
+-	}
+-
+-	close(fd);
+-}
+-
+ static bool range_is_swapped(void *addr, size_t size)
+ {
+ 	for (; size; addr += pagesize, size -= pagesize)
+@@ -1791,7 +1766,7 @@ int main(int argc, char **argv)
+ 	}
+ 	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
+ 						    ARRAY_SIZE(hugetlbsizes));
+-	detect_huge_zeropage();
++	has_huge_zeropage = detect_huge_zeropage();
+ 
+ 	ksft_set_plan(ARRAY_SIZE(anon_test_cases) * tests_per_anon_test_case() +
+ 		      ARRAY_SIZE(anon_thp_test_cases) * tests_per_anon_thp_test_case() +
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index 57b4bba2b45f3..059c6d5f971e7 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -1,4 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
++
+ #define _GNU_SOURCE
+ #include <stdio.h>
+ #include <fcntl.h>
+@@ -34,8 +35,8 @@
+ #define PAGEMAP "/proc/self/pagemap"
+ int pagemap_fd;
+ int uffd;
+-unsigned int page_size;
+-unsigned int hpage_size;
++size_t page_size;
++size_t hpage_size;
+ const char *progname;
+ 
+ #define LEN(region)	((region.end - region.start)/page_size)
+@@ -1480,6 +1481,68 @@ static void transact_test(int page_size)
+ 			      extra_thread_faults);
+ }
+ 
++void zeropfn_tests(void)
++{
++	unsigned long long mem_size;
++	struct page_region vec;
++	int i, ret;
++	char *mmap_mem, *mem;
++
++	/* Test with normal memory */
++	mem_size = 10 * page_size;
++	mem = mmap(NULL, mem_size, PROT_READ, MAP_PRIVATE | MAP_ANON, -1, 0);
++	if (mem == MAP_FAILED)
++		ksft_exit_fail_msg("error nomem\n");
++
++	/* Touch each page to ensure it's mapped */
++	for (i = 0; i < mem_size; i += page_size)
++		(void)((volatile char *)mem)[i];
++
++	ret = pagemap_ioctl(mem, mem_size, &vec, 1, 0,
++			    (mem_size / page_size), PAGE_IS_PFNZERO, 0, 0, PAGE_IS_PFNZERO);
++	if (ret < 0)
++		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
++
++	ksft_test_result(ret == 1 && LEN(vec) == (mem_size / page_size),
++			 "%s all pages must have PFNZERO set\n", __func__);
++
++	munmap(mem, mem_size);
++
++	/* Test with huge page if user_zero_page is set to 1 */
++	if (!detect_huge_zeropage()) {
++		ksft_test_result_skip("%s use_zero_page not supported or set to 1\n", __func__);
++		return;
++	}
++
++	mem_size = 2 * hpage_size;
++	mmap_mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE,
++			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (mmap_mem == MAP_FAILED)
++		ksft_exit_fail_msg("error nomem\n");
++
++	/* We need a THP-aligned memory area. */
++	mem = (char *)(((uintptr_t)mmap_mem + hpage_size) & ~(hpage_size - 1));
++
++	ret = madvise(mem, hpage_size, MADV_HUGEPAGE);
++	if (!ret) {
++		char tmp = *mem;
++
++		asm volatile("" : "+r" (tmp));
++
++		ret = pagemap_ioctl(mem, hpage_size, &vec, 1, 0,
++				    0, PAGE_IS_PFNZERO, 0, 0, PAGE_IS_PFNZERO);
++		if (ret < 0)
++			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
++
++		ksft_test_result(ret == 1 && LEN(vec) == (hpage_size / page_size),
++				 "%s all huge pages must have PFNZERO set\n", __func__);
++	} else {
++		ksft_test_result_skip("%s huge page not supported\n", __func__);
++	}
++
++	munmap(mmap_mem, mem_size);
++}
++
+ int main(int __attribute__((unused)) argc, char *argv[])
+ {
+ 	int shmid, buf_size, fd, i, ret;
+@@ -1494,7 +1557,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 	if (init_uffd())
+ 		ksft_exit_pass();
+ 
+-	ksft_set_plan(115);
++	ksft_set_plan(117);
+ 
+ 	page_size = getpagesize();
+ 	hpage_size = read_pmd_pagesize();
+@@ -1669,6 +1732,9 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 	/* 16. Userfaultfd tests */
+ 	userfaultfd_tests();
+ 
++	/* 17. ZEROPFN tests */
++	zeropfn_tests();
++
+ 	close(pagemap_fd);
+ 	ksft_exit_pass();
+ }
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index a36734fb62f38..dde9e8ab4dc46 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -424,3 +424,26 @@ bool check_vmflag_io(void *addr)
+ 		flags += flaglen;
+ 	}
+ }
++
++bool detect_huge_zeropage(void)
++{
++	int fd = open("/sys/kernel/mm/transparent_hugepage/use_zero_page",
++		      O_RDONLY);
++	bool enabled = 0;
++	char buf[15];
++	int ret;
++
++	if (fd < 0)
++		return 0;
++
++	ret = pread(fd, buf, sizeof(buf), 0);
++	if (ret > 0 && ret < sizeof(buf)) {
++		buf[ret] = 0;
++
++		if (strtoul(buf, NULL, 10) == 1)
++			enabled = 1;
++	}
++
++	close(fd);
++	return enabled;
++}
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index 6effafdc4d8a2..ca4c1f78ce18c 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -74,6 +74,8 @@ int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
+ unsigned long get_free_hugepages(void);
+ bool check_vmflag_io(void *addr);
+ 
++bool detect_huge_zeropage(void);
++
+ /*
+  * On ppc64 this will only work with radix 2M hugepage size
+  */
 -- 
-2.43.5
+2.43.0
 
