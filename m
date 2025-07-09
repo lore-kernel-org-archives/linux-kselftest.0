@@ -1,117 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BF5257AC7;
-	Wed,  9 Jul 2025 21:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F5C2185B1
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Jul 2025 21:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752094972; cv=none; b=hECv9luMG/fMa1CYHNo09kTHBREVxAjJbHkf7NRWTB4BcdNqbmw0q4Im6k6qray4LT91kMUJlH6DdJL6YYFGN5M3UUYxSESCD1+e7GJQMQ5auouLTLHeUrESpskULpTjFFNS3rrGSPFyBcMSL4uIylDiIyR5YK3ZgLkJlz/Z0dU=
+	t=1752096101; cv=none; b=Y9rwlmWLpVm5sXSCvnA7ieqb1CDPOMiRzE2gPo3qwUCqIwddFOCAGCk54AfK3Hy1/rheuHb7885C1xrM6vpesIAHJIFUmuKJKZD3R5CTanxLGgOAHThYSnvNbcxDBqVsK2Dn72tf0L42ixpFGltGdutfpHjrcCU75JA/LbphEX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752094972; c=relaxed/simple;
-	bh=UfZBgPNXsNVvIoKoizlLf9l//dyhqb8DPMRaq9LzZjs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OnRH9K3UpePan4Nbmilpim/xjnRb1l52e6xxkZJLCKxMq68mYqvTB6n12T8mXOhYvMHCRbc/oVDzheusyK8OumTYqona++sTte/ZtXG5o136WDWXOwhNFrZH0V2O7AHsEicnPgJhoLZF+EEqnbUPujaxnOeRQrWgzLYLE5/iIjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M/tnP8Vy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752096101; c=relaxed/simple;
+	bh=dP367fUd28amdqfJPIo3DgT0c9fgqhV7yXceinDaOP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ANCLh6VNcjFc7UYGhSVy8wqKl12KNIYyG8v1TsnGE7FaYRCm0iJQFH+9I8vL7nXnCdSQ2+WrxffqgCl7vj+a1i8+DS5d2jnFzZJiX5X3xH83mBi/T3qrvMYCE50YKtJ2jFJQoCejrvCFG5ZJNYfCw/sQ4v5C5/nB1uL7tIsQyqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=qvhPs8jp; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M/tnP8Vy"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D37C1C2BCFA;
-	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752094970;
-	bh=UfZBgPNXsNVvIoKoizlLf9l//dyhqb8DPMRaq9LzZjs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=M/tnP8VyPPkfzJjm3qBZhzq2Fb8cd2Or2VRnWwr1QsZSkK4FvkUgb7wCEX0WSV3lM
-	 Y/XghyWKmFyg6ndUie7YYxJYaeA+cg8nefgRZLg0Apf67eZ/UKjqsTmPbeOya5yXES
-	 aPQ5D1wAglTTur4rKsaH8f1zWWg24CDXfhUVvFfvF3mz/X3h/j2icXP2rqML5y3l4o
-	 rZexCfuej3dEoyZUMHF4TSNFyYmmLAfG3XuEeIE1JUuyYKtDdi+a0DKZjVm58dbpPA
-	 XQqMn4cdUj4NBzQhplh7BPVFXAgOaKePtO2LdJXSAeQDCVTv2qbDi628GNaqrxUjwa
-	 vpEsklXQSSOKw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3182C83F09;
-	Wed,  9 Jul 2025 21:02:50 +0000 (UTC)
-From: Frank Li via B4 Relay <devnull+Frank.Li.nxp.com@kernel.org>
-Date: Wed, 09 Jul 2025 17:02:21 -0400
-Subject: [PATCH v20 9/9] arm64: dts: imx95: Add msi-map for pci-ep device
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="qvhPs8jp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1752096097;
+	bh=dP367fUd28amdqfJPIo3DgT0c9fgqhV7yXceinDaOP4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qvhPs8jpQhPoLM2li+k4GoegrDQrH8a/O/GVSwgNQ4IblCz2ccXWadDsK8Bcs8W1H
+	 FHQeFtJo7QUkk49wSe7+qbs6HE8iZj0j+1WVo43U7UvKENyXDb2aKMC2pp1KnUFqla
+	 vlvtD+/RHGI6ouqvFxQ0ow7ST6XVQldpF4gFgl24=
+Date: Wed, 9 Jul 2025 23:21:37 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Benjamin Berg <benjamin@sipsolutions.net>
+Cc: Willy Tarreau <w@1wt.eu>, linux-kselftest@vger.kernel.org, 
+	Benjamin Berg <benjamin.berg@intel.com>
+Subject: Re: [PATCH 3/3] tools/nolibc: add signal support
+Message-ID: <7a524c29-6d2e-4676-82cb-28b0af76e1b7@t-8ch.de>
+References: <20250709155512.971080-1-benjamin@sipsolutions.net>
+ <20250709155512.971080-4-benjamin@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250709-ep-msi-v20-9-43d56f9bd54a@nxp.com>
-References: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
-In-Reply-To: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
-To: Kishon Vijay Abraham I <kishon@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Thomas Gleixner <tglx@linutronix.de>, Anup Patel <apatel@ventanamicro.com>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, Marc Zyngier <maz@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>, 
- Shuah Khan <shuah@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>, 
- Lucas Stach <l.stach@pengutronix.de>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>
-Cc: Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- imx@lists.linux.dev, devicetree@vger.kernel.org, 
- Niklas Cassel <cassel@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
- Manivannan Sadhasivam <mani@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752094968; l=973;
- i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=wW9Nwm5vAKtBf5Pux9lo/+uSvITxDxxhF8J82uPpSQ8=;
- b=DwCDvXI2dHfwlsH95rdKs+F2c/1lzDZ414RkLAX3HFvb+CoWvLp9S117yYeOziC1x2KQAU/tq
- la73DIrVfCRCNMZgtll5F27wBhCkcCh5a+dH9c4JYZXoZt/HGW/UfR7
-X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
- pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
-X-Endpoint-Received: by B4 Relay for Frank.Li@nxp.com/20240130 with
- auth_id=121
-X-Original-From: Frank Li <Frank.Li@nxp.com>
-Reply-To: Frank.Li@nxp.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250709155512.971080-4-benjamin@sipsolutions.net>
 
-From: Frank Li <Frank.Li@nxp.com>
+On 2025-07-09 17:55:12+0200, Benjamin Berg wrote:
+(...)
 
-Add msi-map for pci-ep device.
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -1270,6 +1270,72 @@ int test_namespace(void)
+>  	return ret;
+>  }
+>  
+> +sig_atomic_t signal_check;
 
-Acked-by: Manivannan Sadhasivam <mani@kernel.org>
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-change in v20
-- add Manivannan's ACK
+static?
 
-change from v14 to v16
-- none
+> +
+> +static void sighandler(int signum)
+> +{
+> +	if (signum == SIGUSR1) {
+> +		kill(getpid(), SIGUSR2);
+> +		signal_check = 1;
+> +	} else {
+> +		signal_check++;
+> +	}
 
-change from v13 to v14
-- new patch
----
- arch/arm64/boot/dts/freescale/imx95.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+This could use some operations which make it clearer which steps
+occurred in which order. See the constructor tests.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx95.dtsi b/arch/arm64/boot/dts/freescale/imx95.dtsi
-index 632631a2911224cadc16a943cdb467e091e43384..c59d11eb7a581a500d381ef96f1e44533052c2a2 100644
---- a/arch/arm64/boot/dts/freescale/imx95.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx95.dtsi
-@@ -1797,6 +1797,7 @@ pcie1_ep: pcie-ep@4c380000 {
- 			assigned-clock-rates = <3600000000>, <100000000>, <10000000>;
- 			assigned-clock-parents = <0>, <0>,
- 						 <&scmi_clk IMX95_CLK_SYSPLL1_PFD1_DIV2>;
-+			msi-map = <0x0 &its 0x98 0x1>;
- 			power-domains = <&scmi_devpd IMX95_PD_HSIO_TOP>;
- 			status = "disabled";
- 		};
+> +}
+> +
+> +int test_signals(int test_idx)
+> +{
+> +	struct sigaction sa = {
+> +		.sa_flags = 0,
+> +		.sa_handler = sighandler,
+> +	};
+> +	struct sigaction sa_old = {
+> +		/* Anything other than SIG_DFL */
+> +		.sa_handler = sighandler,
+> +	};
+> +	int llen; /* line length */
+> +	int ret = 0;
+> +	int res;
+> +
+> +	signal_check = 0;
+> +
+> +	sigemptyset(&sa.sa_mask);
+> +	sigaddset(&sa.sa_mask, SIGUSR2);
 
--- 
-2.34.1
+I'd like to see some tests for the sigset functions.
 
+> +
+> +	res = sigaction(SIGUSR1, &sa, &sa_old);
+> +	llen = printf("    register SIGUSR1: %d", res);
+> +	EXPECT_SYSZR(1, res);
+> +	if (res)
+> +		goto out;
+> +
+> +	llen = printf("    sa_old.sa_handler: SIG_DFL (%p)", SIG_DFL);
+> +	EXPECT_PTREQ(1, SIG_DFL, sa_old.sa_handler);
+> +	if (res)
+> +		goto out;
+> +
+> +	res = sigaction(SIGUSR2, &sa, NULL);
+> +	llen = printf("    register SIGUSR2: %d", res);
+> +	EXPECT_SYSZR(1, res);
+> +	if (res)
+> +		goto out;
+> +
+> +	/* Trigger the first signal. */
+> +	kill(getpid(), SIGUSR1);
+> +
+> +	/* If signal_check is 1 or higher, then signal emission worked */
+> +	llen = printf("    signal emission: 1 <= signal_check");
+> +	EXPECT_GE(1, signal_check, 1);
+> +
+> +	/* If it is 2, then signal masking worked */
+> +	llen = printf("    signal masking: 2 == signal_check");
+> +	EXPECT_EQ(1, signal_check, 2);
+> +
+> +out:
+> +	llen = printf("%d %s", test_idx, "sigaction");
+> +	EXPECT_EQ(1, res, 0);
 
+Restore the default handler afterwards?
+
+> +
+> +	return ret;
+> +}
+> +
+>  /* Run syscall tests between IDs <min> and <max>.
+>   * Return 0 on success, non-zero on failure.
+>   */
+> @@ -1398,6 +1464,7 @@ int run_syscall(int min, int max)
+>  		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
+>  		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_statx, 0, NULL, 0, 0, NULL), -1, EFAULT); break;
+>  		CASE_TEST(namespace);         EXPECT_SYSZR(euid0 && proc, test_namespace()); break;
+> +		case __LINE__:                ret += test_signals(test); break;
+>  		case __LINE__:
+>  			return ret; /* must be last */
+>  		/* note: do not set any defaults so as to permit holes above */
+> -- 
+> 2.50.0
+> 
