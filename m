@@ -1,211 +1,174 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABA527AC44;
-	Wed,  9 Jul 2025 09:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B9878F36;
+	Wed,  9 Jul 2025 09:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752051852; cv=none; b=gDwPObvSM7FCDDBmAeQ6jDEsOMrunjqdjTShDkDcg6JoVBsT3HkHV+X/CeciHJHPdC5wWfWVWcvjqc5im6/XwxK56EUG42blMQd1S20YtjtN5Oq+nw6c3UdPMrSx3hwX/jDaMYhM0JlUKH9UW6PAznNbIiWoU1zs0p1HW+Y3VXw=
+	t=1752052113; cv=none; b=D73BcvKzn0SquRFSpjJ3be6eTyaYEi31ScfYth24hK/N2jQMXx1Hn4QvkktHRQScaUg1pPGUFVH6ijrcj3Vbd0b1bGMxrO1+CuBkp52Tc+scvb+Fj0TiFGJSm50cOdOKAHGf++5eJpEjIa83iqHdElEX1HDLMxsi+dC51jafDqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752051852; c=relaxed/simple;
-	bh=GOzhX2GzqLAc2kmJ9CRuzgbr4ARczQe5nsnIL5KbtaU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LJnCGbsTwCC3FjC5il1ntB3L+P9p7icf/BWQQWasnL1V5mNVPirYge9icRo2l8Mr6xXIbVwReQEajQ5SEbYC8NMPDNu+LzZA/dAIvXGCT/A5lw3UmYbzxtV6u/0zr2iX1ZzkLpy0XZguEKE9XaWXmBMC6pz7xuZcTATKCVSHPfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HJYrDYHM; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1752052113; c=relaxed/simple;
+	bh=4oP/BxQ13aamcUJCA30PvuCdZJb618zDuY0b6VNikI0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=R3BLYBNXSEqUt+s7OUCEt4WYrKC7ar2AszMfoL8s/98Cs8DVbNlXoqy7IGWIAs2FOB1OSo8/xIjfqgYQxWXH8N/R4C0VhoufthAysho9GfxCWBlGy9vcwprWMD4w6tp7Nv1XtuFWhJGIW9j8yBVd7htxUlAcpXkKOYo5GHGM2CI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HJYrDYHM"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7426c44e014so4246399b3a.3;
-        Wed, 09 Jul 2025 02:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752051850; x=1752656650; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=raLbeBFFTNqeQUKnu2mwcarmbDXgKlnhQ613jJ0RUBM=;
-        b=HJYrDYHMOkUgTM0NebJvrs/U+yyH6MH1iPYktNVEiZC0iiUL6qGDS9n3biDDzk50hl
-         xNQ1ExWLS5T9MzSWw2NSR6Tdc8ohfAq5Nlm/1lplWlWxtGO4mU1EJYp8bFJKmEahfwQs
-         kCIo1LakeWo1YzI5pb9QagL64nQO5LxeqyDRrwGjaoYCHXxe7myfD1IGsRy+VjkzO/AJ
-         91SkN7bGN82TxMN/+VHyBswKYuqHlD7dbs4XchlLDagLlW/RISbYO0JRUUstR6tz8t2s
-         zREZt8D/6I7kBd2TKnRcw7IezTXZz4SF/0JJubkkHzuGYEA4W113uve/Wak/Z+amU/T5
-         oREw==
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-60bfcada295so8618190a12.1;
+        Wed, 09 Jul 2025 02:08:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752051850; x=1752656650;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=raLbeBFFTNqeQUKnu2mwcarmbDXgKlnhQ613jJ0RUBM=;
-        b=D09Eg6GjDHh9xY+tT+/C0Mgi3IHqxrEGyI/jMqyIyhwoDqUQGmkn+fCDP4O2VV0OUz
-         Dq40Lv6/SkZShAv3B9oy4Ok1Ysrw/nJmo2nq3MO+Wy3ltmw/B6+VNUUqUma5rUcPvYDa
-         Hj7o5yg6+7V3jG3on8dYz+RsXNb5KeBPT0pIhKITsLCRthmZwsq9gLd26uFIcNJByc3F
-         ni/aZMkSXV/GxUIGCLRCcFDF/zK5evgUHtf9RcnOwhB2WV90EZoG5u6joatbNLfNJ0yl
-         ZTWLTKO6gLpBgnEmwmOD4EkY5+Q5bNZbFyuw06tO7QhES0EBxCnaZDWyK0gBos9GEg1Y
-         fiPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV1YzVtpyoKtWfvk8UhUI9H3jw6MoDdH9pRD8X3mojisj7GZwDmalZOfa0a29k+5Dxe9q3l3q7jjTmWFDLxT6cB@vger.kernel.org, AJvYcCWnpNCJlbG0GsS0UYdUJsWJItrvL6yF0oY9NZc3CPOazXoNPEvpwexb7J3FfaBLPg1ZgEIAHG6kpfl4f4k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0U5i8JdLtY2PQ0c+yNqWBvuJKXJIQVpV/jX4vYxVbF1AYHhXl
-	8obIjL/uFnA/wGqzo0/47TMb0LvtbVQK9TyYw31JYzR2R1T5KUlpjjoB3A7ZXEszig8=
-X-Gm-Gg: ASbGncsXDUdNgQTOyDDcN+e30KpiGhZLTkmfK6t5hkGjyykMeDBMJmg/dwq+AUpcBLy
-	DxH+z3sEpE3mAZzlgRdHok3ljT/aVYObew18RRVbjuj+u741pvkixV2EZ7vPs22b5grjWlZuPUL
-	PDEnqMfu7L4wlVroDbOUi/0JRp+WESwBLhQeg0u32PIKaxl/8QUr0odLRgepO0RP5yCx56Ykf69
-	z1KbkKeRImraMBRkA6P7mPAuEfNiNPFNgIL4U6K2+zfBPeh/cd1BxhZxsQbd6y4PrFskX0/37S6
-	PcELSuM/aCb4TYC3hhd4EUNNFLUjlQNGMftwirPpQv2jqyl4yMgUDRq+QSMXBk4I/Ji0xtPV/Y3
-	dJfAd1zkkB+M=
-X-Google-Smtp-Source: AGHT+IHDEUt/lqlxNpmzPOz7UgJ4iGmRo3ZrudmpTUJwyed3xSYhz7n9LWORFwOMhw+vEeMCj5hwew==
-X-Received: by 2002:a05:6a21:6f13:b0:229:1130:7411 with SMTP id adf61e73a8af0-22cd7aa495emr2801773637.31.1752051849837;
-        Wed, 09 Jul 2025 02:04:09 -0700 (PDT)
-Received: from localhost.localdomain ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b38ee74a681sm13619309a12.76.2025.07.09.02.04.04
+        d=1e100.net; s=20230601; t=1752052110; x=1752656910;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WSsTwFQE4LJ67DmF/fgc6P+/sHFKlTuTrdiV4mhoHyE=;
+        b=MkJ27OeTUYH1/oEjNWotgHzKm2qaib7zA5jIsKNDX8wv/+dO8msBSSsLKDkIqmbfAP
+         EcSYBzO/P29nV7E15460ySPlSVus7L2gKORhUXKhQdWxmNmNaM8fcgBR9Zwl7D+KtMFo
+         /qaRTJm0JIN7MqRWPi+uz6bfpL80wg9AqjQeayqOoPxUYht3SpqxtMS2fh2gvOiYXmok
+         6iCG1fdPB6t6EiLF8/qNQ6Csji176ojxpeechSSqnzH5P6PHQIEU7ttdxdbABtpmifEM
+         +YRy3mLJS8LtW63RK+z/xzv7/V15zUc3PfjXFgmUQ9xSVAbKMK+j1K8sHa+y5Cge9snC
+         gSMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZ/pZx4ZgGkNSz6gL2VOcUCTYTm4II2wHK366YEtRS/+laNQmjrkw/fepKB28WaigvZ+shsn/o29GDyi205H96@vger.kernel.org, AJvYcCWXDs0hZE+m4iV4MpK0ukhRlwMgfmoTnoq4HdOvoHF/Lbz9qB7ART5FqA41PlA1nshdjS0=@vger.kernel.org, AJvYcCWoGsJ9oUg9cWfcw3NLx6I+Hv8zzI9xoeiHnx2sQ+YH0qFJxShUiycLOH4s7J6kvjvziAcc9LaV@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw8bLbu4Ou3CMJ/QZOxDhbjiWk4R6EcLqXRaYOlEOhDnbnOi++
+	3xfzzqk0upqPtKezGNlTFuRXb/KbIaTYVFCj3PiwRxkkVsvtc+Ubu1jQ9tAnxg==
+X-Gm-Gg: ASbGncsxjl5XTfFwRsR1OP0BJg7lACHAgdFumMfMYpSwPyJphc+4D8eknnLPRXeqOao
+	V+b6x/7zQ9baRL3vxlME9wrF9AjLUAa4Sp/tMAJCkcTB14bC2tN+Fm4J6+jYuCv6kufKtTetWbr
+	1nLwz8CsrvUvwp8QCqhn5LkjDuq4B7KHxQXygOuPHZlIOMaKmQDH3mNEV5KNLX2tZwx+edrLeXM
+	C2qYYuqVb74SKwl1jlj89s2wl59TrHqTP0RrVY/KFYoXsCZlX9vRrn7lUpAbe9ALBvxcVAfxz6j
+	VbMgR8wAtIJ6XliwvwIH7vfLFdOMTAnLFkZx7yK8mqENPn3p+kiCnQ==
+X-Google-Smtp-Source: AGHT+IFVKDXRSM/7QlhW8X/iY/vWLuI93QWpeJcbvGgdIWUfRuFXIxogGi5q4e81CMsYHkVbjNqP/Q==
+X-Received: by 2002:a05:6402:40c5:b0:606:df70:7aa2 with SMTP id 4fb4d7f45d1cf-611a6f3ef46mr1239856a12.31.1752052109427;
+        Wed, 09 Jul 2025 02:08:29 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:70::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60fcb0c790dsm8538029a12.37.2025.07.09.02.08.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 02:04:09 -0700 (PDT)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net 2/2] selftests: bonding: add test for passive LACP mode
-Date: Wed,  9 Jul 2025 09:03:44 +0000
-Message-ID: <20250709090344.88242-3-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20250709090344.88242-1-liuhangbin@gmail.com>
-References: <20250709090344.88242-1-liuhangbin@gmail.com>
+        Wed, 09 Jul 2025 02:08:28 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v5 0/3] selftest: net: Add selftest for netpoll
+Date: Wed, 09 Jul 2025 02:08:14 -0700
+Message-Id: <20250709-netpoll_test-v5-0-b3737895affe@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAH4xbmgC/23PwYqDMBDG8VcJc3aWOEkc9bTvsSzFJmMbKLFok
+ C7Fdy91D+vanoff92fuMMkYZYJW3WGUOU5xSNAqVyjw5y6dBGOAVgFpcroqCZPk63C5HLJMGbv
+ SkA2kHfsaCgXXUfp4W+e+IEnGJLcM34WCc5zyMP6snblc7+8n5xJLtMy2D41rjOk/gxxjlz6G8
+ fRM/CrSb5TTVV0b6pl6v1XP/kybJrmdJtRoORAzOyJ61WareacNanTsjoG09nXXvGj7p1nv/7W
+ o0YsnYqldZf7rZVke7/8wVKMBAAA=
+X-Change-ID: 20250612-netpoll_test-a1324d2057c8
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, bpf@vger.kernel.org, 
+ kernel-team@meta.com, Breno Leitao <leitao@debian.org>, 
+ Willem de Bruijn <willemb@google.com>
+X-Mailer: b4 0.15-dev-dd21f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3426; i=leitao@debian.org;
+ h=from:subject:message-id; bh=4oP/BxQ13aamcUJCA30PvuCdZJb618zDuY0b6VNikI0=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBobjGLCka0PhRapUGcKAOYG1LziuVAG+bSZzBNR
+ vK/d940zuKJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaG4xiwAKCRA1o5Of/Hh3
+ bUuOD/46pfHqzsum11VFl4bHz3EmIf5Dwg8DsZPZsAuqvip1bLcVfgSH4wpZ07vLUdZRZLLdZ/K
+ NIh1jMAGzcHv9n0GAFmYT3jwVcrRtg2xNtoNE2Mx3YGub0sgz5ZXhVkWRA3hE5AGfLKx2H4BYbw
+ yhWeduw2rKPc3Yhe0Z7KooV1qD1phFlKSKREIRYGFmOsHScDNupY09uvSST1qRQIDIv1z4Eh+d8
+ xo7o1dk2JU9zEA1VxWiYTisRL6NVlvtd5uqnCPShchCsp777rCZobe0CLVY2zL1IF0ytwsYqs85
+ JZldcuzYgOBX1cUd2lBAEfHtd03S4YEli4WnnSJwGkNhPA/YRIaAlkkEoTkcPduzVQyllwCd4Iz
+ Y+35U7+HMspMDI0KC89BlWnke+OcrtURmNdU4Ek1pe1T8VWbNVMZFuhRvruYj/uIm9d1GosGEK3
+ okIZhv0yIHRGQZxk3crKWAM9Bydhtg/UiyzDKqDQt4b5n/MHf4s35wN8EYLG09ybn4yhESTXNXP
+ RraYAXU2WJ1objji3zIsmGdKuWMQ/FIsQo8QnYeejv3p7jIt4KG+S2kAPsjmmYsTewHicwiROdm
+ CuFhbjdbZcahKGDdRycem9Jt7VfzkLEfgXoDJIpmq6WV3pcqVfmMz7LaE0h6f6qUr2LYlaT24GH
+ vAWWBTXY2+bpOWA==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Add a selftest to verify bonding behavior when lacp_active is set to off.
+I am submitting a new selftest for the netpoll subsystem specifically
+targeting the case where the RX is polling in the TX path, which is
+a case that we don't have any test in the tree today. This is done when
+netpoll_poll_dev() called, and this test creates a scenario when that is
+probably.
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+The test does the following:
+
+ 1) Configuring a single RX/TX queue to increase contention on the
+    interface.
+ 2) Generating background traffic to saturate the network, mimicking
+    real-world congestion.
+ 3) Sending netconsole messages to trigger netpoll polling and monitor
+    its behavior.
+ 4) Using dynamic netconsole targets via configfs, with the ability to
+    delete and recreate targets during the test.
+ 5) Running bpftrace in parallel to verify that netpoll_poll_dev() is
+    called when expected. If it is called, then the test passes,
+    otherwise the test is marked as skipped.
+
+In order to achieve it, I stole Jakub's bpftrace helper from [1], and
+did some small changes that I found useful to use the helper.
+
+So, this patchset basically contains:
+
+ 1) The code stolen from Jakub
+ 2) Improvements on bpftrace() helper
+ 3) The selftest itself
+
+Link: https://lore.kernel.org/all/20250421222827.283737-22-kuba@kernel.org/ [1]
+
 ---
- .../drivers/net/bonding/bond_passive_lacp.sh  | 21 +++++
- .../drivers/net/bonding/bond_topo_lacp.sh     | 77 +++++++++++++++++++
- 2 files changed, 98 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
- create mode 100644 tools/testing/selftests/drivers/net/bonding/bond_topo_lacp.sh
+Changes in v5:
+- Rebased on top of net-next.
+- Calling bpftrace_stop using the defer helper. (Willem)
+- Link to v4: https://lore.kernel.org/r/20250702-netpoll_test-v4-0-cec227e85639@debian.org
 
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh b/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
-new file mode 100755
-index 000000000000..4cf8a5999aaa
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/bond_passive_lacp.sh
-@@ -0,0 +1,21 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Testing if bond works with lacp_active = off
-+
-+lib_dir=$(dirname "$0")
-+source ${lib_dir}/bond_topo_lacp.sh
-+
-+trap cleanup EXIT
-+setup_topo_lacp
-+
-+lacp_bond_reset "${c_ns}" "lacp_active off"
-+# make sure the switch state is not expired [A,T,G,S,Ex]
-+if slowwait 15 ip netns exec ${s_ns} grep -q 'port state: 143' /proc/net/bonding/bond0; then
-+	RET=1
-+else
-+	RET=0
-+fi
-+log_test "bond 802.3ad" "lacp_active off"
-+
-+exit $EXIT_STATUS
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond_topo_lacp.sh b/tools/testing/selftests/drivers/net/bonding/bond_topo_lacp.sh
-new file mode 100644
-index 000000000000..33dca6ebdc4b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/bond_topo_lacp.sh
-@@ -0,0 +1,77 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Topology for Bond mode 802.3ad testing
-+#
-+#  +-------------------------+
-+#  |          bond0          |  Switch
-+#  |            +            |  192.0.2.254/24
-+#  |      eth0  |  eth1      |  2001:db8::254/24
-+#  |        +---+---+        |
-+#  |        |       |        |
-+#  +-------------------------+
-+#           |       |
-+#  +-------------------------+
-+#  |        |       |        |
-+#  |        +---+---+        |  Client
-+#  |      eth0  |  eth1      |  192.0.2.1/24
-+#  |            +            |  2001:db8::1/24
-+#  |          bond0          |
-+#  +-------------------------+
-+
-+REQUIRE_MZ=no
-+NUM_NETIFS=0
-+lib_dir=$(dirname "$0")
-+source "$lib_dir"/../../../net/forwarding/lib.sh
-+
-+s_ip4="192.0.2.254"
-+c_ip4="192.0.2.1"
-+s_ip6="2001:db8::254"
-+c_ip6="2001:db8::1"
-+
-+switch_create()
-+{
-+	ip netns exec ${s_ns} sysctl -q net.ipv6.conf.default.keep_addr_on_down=1
-+	ip -n ${s_ns} link add eth0 type veth peer name eth0 netns ${c_ns}
-+	ip -n ${s_ns} link add eth1 type veth peer name eth1 netns ${c_ns}
-+	ip -n ${s_ns} link add bond0 type bond mode 802.3ad miimon 100 lacp_active on lacp_rate fast
-+	ip -n ${s_ns} link set eth0 master bond0
-+	ip -n ${s_ns} link set eth1 master bond0
-+	ip -n ${s_ns} addr add ${s_ip4}/24 dev bond0
-+	ip -n ${s_ns} addr add ${s_ip6}/24 dev bond0
-+	ip -n ${s_ns} link set bond0 up
-+}
-+
-+client_create()
-+{
-+	ip netns exec ${c_ns} sysctl -q net.ipv6.conf.default.keep_addr_on_down=1
-+	ip -n ${c_ns} link add bond0 type bond mode 802.3ad miimon 100 lacp_active on lacp_rate fast
-+	ip -n ${c_ns} link set eth0 master bond0
-+	ip -n ${c_ns} link set eth1 master bond0
-+	ip -n ${c_ns} addr add ${c_ip4}/24 dev bond0
-+	ip -n ${c_ns} addr add ${c_ip6}/24 dev bond0
-+	ip -n ${c_ns} link set bond0 up
-+}
-+
-+setup_topo_lacp()
-+{
-+	setup_ns s_ns c_ns
-+	defer cleanup_all_ns
-+
-+	switch_create
-+	client_create
-+}
-+
-+# Reset bond with and options
-+lacp_bond_reset()
-+{
-+	local netns="$1"
-+	local param="$2"
-+
-+	ip -n ${netns} link set bond0 down
-+	ip -n ${netns} link set bond0 type bond $param
-+	ip -n ${netns} link set bond0 up
-+
-+	# Wait for IPv6 address ready as it needs DAD
-+	slowwait 10 ip netns exec ${c_ns} ping6 ${s_ip6} -c 1 -W 0.1 &> /dev/null
-+}
--- 
-2.46.0
+Changes in v4:
+- Make the test XFail if it doesn't hit the function we are looking for
+- Toggle the interface while the traffic is flowing.
+- Bumped the number of messages from 10 to 40 per iterations.
+   * This is hitting ~15 times per run on my vng test.
+- Decreased the time from 15 seconds to 10 seconds, given that if
+  it didn't hit the function in 10 seconds, 5 seconds extra will not
+  help.
+- Link to v3: https://lore.kernel.org/r/20250627-netpoll_test-v3-0-575bd200c8a9@debian.org
+
+Changes in v3:
+- Make pylint happy (Simon)
+- Remove the unnecessary patch in bpftrace to raise an exception when it
+  fails. (Jakub)
+- Improved the bpftrace code (Willem)
+- Stop sending messages if bpftrace is not alive anymore.
+- Link to v2: https://lore.kernel.org/r/20250625-netpoll_test-v2-0-47d27775222c@debian.org
+
+Changes in v2:
+- Stole Jakub's helper to run bpftrace
+- Removed the DEBUG option and moved logs to logging
+- Change the code to have a higher chance of calling netpoll_poll_dev().
+  In my current configuration, it is hitting multiple times during the
+  test.
+- Save and restore TX/RX queue size (Jakub)
+- Link to v1: https://lore.kernel.org/r/20250620-netpoll_test-v1-1-5068832f72fc@debian.org
+
+---
+Breno Leitao (2):
+      selftests: drv-net: Strip '@' prefix from bpftrace map keys
+      selftests: net: add netpoll basic functionality test
+
+Jakub Kicinski (1):
+      selftests: drv-net: add helper/wrapper for bpftrace
+
+ tools/testing/selftests/drivers/net/Makefile       |   1 +
+ .../selftests/drivers/net/lib/py/__init__.py       |   3 +-
+ .../testing/selftests/drivers/net/netpoll_basic.py | 366 +++++++++++++++++++++
+ tools/testing/selftests/net/lib/py/utils.py        |  35 ++
+ 4 files changed, 404 insertions(+), 1 deletion(-)
+---
+base-commit: 0234362d0af4649bc2ff745e94d06d0c6f0a46ce
+change-id: 20250612-netpoll_test-a1324d2057c8
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
