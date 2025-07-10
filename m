@@ -1,35 +1,35 @@
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A59E2367CB;
-	Thu, 10 Jul 2025 06:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE7F280308;
+	Thu, 10 Jul 2025 06:23:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752128583; cv=none; b=MG724YmtSCK3mIav6U142nuUBcskSMnmht8MFDvnU2r4Nkg3o/WkQ9nih6sP6IlOcNEjy3B2wU8u4REMGxhU0YOjmRMROW7fMgdfFcb9ekOlA0pJdY3hZ93FZCfypV6MmMIaI/wcfnKGyheCOoz0EqYMyWmJf8a/dpanCRciTeo=
+	t=1752128585; cv=none; b=q+iGpqUjlpuGIGcpd1ln+ULRFE/yBM1fPsw2KBusAUkr0Ix8iottRJjBRV94uRdUZFFL6ESLZmOAEcxGxKM4i3/4xeSWbsnwz3AEgt2Ig9XkS8ZA+biWgCFNvsOFZdvAq5QJLUsoMFG3SLkexxlC0csvG/SBOo3I0kh4qiOtme8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752128583; c=relaxed/simple;
-	bh=ImfD8P5z+mtAjzz7BhqW0g6/91pbdofzl1RFonjLVN4=;
+	s=arc-20240116; t=1752128585; c=relaxed/simple;
+	bh=JXTBH1n5C03e9YAeMfPrLiKH4adM3tDux3oo/ksXWBE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F1ays3TCFJ8tAaMSyFQzcW51fmr/G6FfJlijCWVKimdKtYEMugxV3W3iy1nHMA9c9/kOn2QZUD2Of5S+jPTFNOTi3y4DzrrrcivTbUrv1wz4ms0fwMHHINhOeA+uS/4PK45mp4EQCxzftzmOYNC+Gcu1MNwA9n2q3kgrugd0Z10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FH4DFO1W; arc=none smtp.client-ip=217.70.183.193
+	 MIME-Version; b=BqkE07KGzZWqLSdMvtU0pXBoU3v3THcqvSFMAgjpqJ6A27cXpt9ouHf2FkHwPnim3z0scYDIJckL3iNb5OH6vaYBbuoFWZkxpaldvKmhniR06FE6+ZAz2naIkOxBJtdBb7Wp/kCvVMCNR6m5T5NMIjX/hFzbHZyQnp++4iDqiqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XoFfrMXc; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FH4DFO1W"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 833B344366;
-	Thu, 10 Jul 2025 06:22:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XoFfrMXc"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4EA0B42E77;
+	Thu, 10 Jul 2025 06:22:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1752128578;
+	t=1752128580;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4Q9JOti4S05buOv3fIa7+/S1BiaLMp32d7n3hlccVJU=;
-	b=FH4DFO1WdFRXRhimozZZkLF+xu/++eHXHyw5Hj0+2e0FN+pncJ5rwuAQiWGYCtInm0HlZN
-	N5kMsBKmRdDLuMMxSvijuW4mO7jHOiX78xEHWw6dB4MZzRC9FCSI+YJ5cc5vnjUU6VGwSD
-	w/1+CJdTQKK4tCCEkGI1e+oTa50HrYJgFaNFoY9+iWKUOja985ZEfiXPb4pTFGjGBaoibH
-	XxbWp6aeo9cZRcJD42x+2heyFzVp9FRkxfeRKbB9XSCxDuYv2GF5wY0fKeTGi8DRWTs/S3
-	YWAvMyX4KvPCVhHLgMd1hVjnbKMyq0WbjrLRznneZ2n8ON3r2hNV/J5gy9vd8g==
+	bh=FKLJQx8y+r0nUlrTaPnBNH5DOZUZAbdKtbnXwbqzRRE=;
+	b=XoFfrMXcolqyVgPd+HdseZ3We2zwCCKOHdsVjVwlU9N2O2+6X1RAx9StT1mTwDhUMWRtJ4
+	RMxeKaMorv3ulyGboQj/ut2ZDT4KU/i3cEOqTvshQVCOB2tYPQvRsmL4COVndxjQuy5e14
+	k3Hp1iCuyizKbH2RFCFWsd7tVhk90wCZyRUMzoEkRvJUnEgo5hHCOhWHlNLqoGhneqwQDH
+	ifO8A+2Dj8o3AyOC8IQZnt53TyiMi7Ir4hNdQVuiBjoSYhL2jXHQOI29th7VaEuGh7ywA/
+	YBgNXsoot19TAScvB4qPNjileoTkzpF7gJdtSIEe7dR5sKfdlU+srfL+S8uNcg==
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
 To: davem@davemloft.net
 Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
@@ -49,9 +49,9 @@ Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
 	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v3 1/3] net: netdevsim: Add PHY support in netdevsim
-Date: Thu, 10 Jul 2025 08:22:45 +0200
-Message-ID: <20250710062248.378459-2-maxime.chevallier@bootlin.com>
+Subject: [PATCH net-next v3 3/3] selftests: ethtool: Introduce ethernet PHY selftests on netdevsim
+Date: Thu, 10 Jul 2025 08:22:47 +0200
+Message-ID: <20250710062248.378459-4-maxime.chevallier@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250710062248.378459-1-maxime.chevallier@bootlin.com>
 References: <20250710062248.378459-1-maxime.chevallier@bootlin.com>
@@ -68,580 +68,129 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefleejudcutefuodetggdotef
  ghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomh
 X-GND-Sasl: maxime.chevallier@bootlin.com
 
-With the introduction of phy_link_topology, we have the ability to keep
-track of PHY devices that sit behind a net_device. While we still can
-only attach one single PHY to a netdev, we can look at all these PHYs
-through netlink, with the ETHTOOL_MSG_PHY_GET command.
+Now that netdevsim supports PHY device simulation, we can start writing
+some tests to cover a little bit all PHY-related ethtool commands.
 
-Moreover, netlink commands that are targeting PHY devices also now
-allow specifying which PHY we want to address in a given netlink
-command.
+So far we only test the basic use of "ethtool --show-phys", with :
+ - A simple command to get a PHY we just added
+ - A DUMP command listing PHYs on multiple netdevsim instances
+ - A Filtered DUMP command listing all PHYs on a netdevsim
 
-That whole process comes with its own complexity, and a few bugs were
-dicovered over the months following the introduction of
-phy_link_topology.
-
-As devices with multiple PHYs are fairly uncommon, testing the corner
-cases of multi-phy setups proves to be difficult.
-
-To that extent, introduce PHY support in netdevsim. The main goal (for
-now) is not to be able to test PHYlib, but these phy-specific
-netlink interfaces.
-
-These netdevsim PHYs use a custom phy_driver that relies on
-re-implementing the phy_driver callbacks. In other words, this is not a
-PHY driver that relies on mdio emulation, and will not work with any of
-the genphy helpers.
-
-The debugfs API for PHY creation and deletion works as follows :
-
-PHY device creation :
-
-echo $ID > /sys/kernel/debug/netdevsim/netdevsimXXX/ports/YY/phy_add
-
-if $ID is 0, then the PHY parent will be the netdev corresponding to the
-port's netdev. The first PHY that is added with the netdev as a parent
-will be attached to the netdev.
-
-if $ID > 0, the index must correspond to a previously added PHY. This
-allows creating any arbitrary tree of PHYs.
-
-Upon PHY addition, a phyXX directory will be created, XX being the
-phyindex of the PHY in the topology:
-
- [...]/ports/YY/phyXX/
-
-This directory contains a "link" file, allowing to toggle the virtual
-PHY's link state.
-
-One can then list the PHYs with "ethtool --show-phys ethX".
+Introduce some helpers to create netdevsim PHYs, and a new test file.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
- drivers/net/Kconfig               |   1 +
- drivers/net/netdevsim/Makefile    |   4 +
- drivers/net/netdevsim/dev.c       |   2 +
- drivers/net/netdevsim/netdev.c    |   8 +
- drivers/net/netdevsim/netdevsim.h |  25 ++
- drivers/net/netdevsim/phy.c       | 375 ++++++++++++++++++++++++++++++
- 6 files changed, 415 insertions(+)
- create mode 100644 drivers/net/netdevsim/phy.c
+ .../selftests/drivers/net/netdevsim/config    |  1 +
+ .../drivers/net/netdevsim/ethtool-common.sh   | 15 +++++
+ .../drivers/net/netdevsim/ethtool-phy.sh      | 64 +++++++++++++++++++
+ 3 files changed, 80 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh
 
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index b29628d46be9..4f277b04fdea 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -630,6 +630,7 @@ config NETDEVSIM
- 	depends on IPV6 || IPV6=n
- 	depends on PSAMPLE || PSAMPLE=n
- 	depends on PTP_1588_CLOCK_MOCK || PTP_1588_CLOCK_MOCK=n
-+	depends on PHYLIB || PHYLIB=n
- 	select NET_DEVLINK
- 	select PAGE_POOL
- 	select NET_SHAPER
-diff --git a/drivers/net/netdevsim/Makefile b/drivers/net/netdevsim/Makefile
-index f8de93bc5f5b..49f4c515e5e3 100644
---- a/drivers/net/netdevsim/Makefile
-+++ b/drivers/net/netdevsim/Makefile
-@@ -21,3 +21,7 @@ endif
- ifneq ($(CONFIG_MACSEC),)
- netdevsim-objs += macsec.o
- endif
-+
-+ifneq ($(CONFIG_PHYLIB),)
-+netdevsim-objs += phy.o
-+endif
-diff --git a/drivers/net/netdevsim/dev.c b/drivers/net/netdevsim/dev.c
-index b3647691060c..1ebb4f5b3bdd 100644
---- a/drivers/net/netdevsim/dev.c
-+++ b/drivers/net/netdevsim/dev.c
-@@ -1510,6 +1510,7 @@ static int nsim_dev_reload_create(struct nsim_dev *nsim_dev,
- 	devlink = priv_to_devlink(nsim_dev);
- 	nsim_dev = devlink_priv(devlink);
- 	INIT_LIST_HEAD(&nsim_dev->port_list);
-+	INIT_LIST_HEAD(&nsim_dev->phy_list);
- 	nsim_dev->fw_update_status = true;
- 	nsim_dev->fw_update_overwrite_mask = 0;
- 
-@@ -1583,6 +1584,7 @@ int nsim_drv_probe(struct nsim_bus_dev *nsim_bus_dev)
- 	nsim_dev->switch_id.id_len = sizeof(nsim_dev->switch_id.id);
- 	get_random_bytes(nsim_dev->switch_id.id, nsim_dev->switch_id.id_len);
- 	INIT_LIST_HEAD(&nsim_dev->port_list);
-+	INIT_LIST_HEAD(&nsim_dev->phy_list);
- 	nsim_dev->fw_update_status = true;
- 	nsim_dev->fw_update_overwrite_mask = 0;
- 	nsim_dev->max_macs = NSIM_DEV_MAX_MACS_DEFAULT;
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index e36d3e846c2d..ff891536f691 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -952,6 +952,7 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
- 
- 	nsim_macsec_init(ns);
- 	nsim_ipsec_init(ns);
-+	nsim_phy_init(ns);
- 
- 	err = register_netdevice(ns->netdev);
- 	if (err)
-@@ -968,6 +969,7 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
- 	return 0;
- 
- err_ipsec_teardown:
-+	nsim_phy_teardown(ns);
- 	nsim_ipsec_teardown(ns);
- 	nsim_macsec_teardown(ns);
- 	nsim_bpf_uninit(ns);
-@@ -1058,6 +1060,7 @@ void nsim_destroy(struct netdevsim *ns)
- 	RCU_INIT_POINTER(ns->peer, NULL);
- 	unregister_netdevice(dev);
- 	if (nsim_dev_port_is_pf(ns->nsim_dev_port)) {
-+		nsim_phy_teardown(ns);
- 		nsim_macsec_teardown(ns);
- 		nsim_ipsec_teardown(ns);
- 		nsim_bpf_uninit(ns);
-@@ -1098,6 +1101,10 @@ static int __init nsim_module_init(void)
- {
- 	int err;
- 
-+	err = nsim_phy_drv_register();
-+	if (err)
-+		return err;
-+
- 	err = nsim_dev_init();
- 	if (err)
- 		return err;
-@@ -1124,6 +1131,7 @@ static void __exit nsim_module_exit(void)
- 	rtnl_link_unregister(&nsim_link_ops);
- 	nsim_bus_exit();
- 	nsim_dev_exit();
-+	nsim_phy_drv_unregister();
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/config b/tools/testing/selftests/drivers/net/netdevsim/config
+index 5117c78ddf0a..223e82cb7759 100644
+--- a/tools/testing/selftests/drivers/net/netdevsim/config
++++ b/tools/testing/selftests/drivers/net/netdevsim/config
+@@ -6,6 +6,7 @@ CONFIG_NETDEVSIM=m
+ CONFIG_NET_SCH_MQPRIO=y
+ CONFIG_NET_SCH_MULTIQ=y
+ CONFIG_NET_SCH_PRIO=y
++CONFIG_PHYLIB=m
+ CONFIG_PSAMPLE=y
+ CONFIG_PTP_1588_CLOCK_MOCK=y
+ CONFIG_VXLAN=m
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
+index d9c7a3d397a9..1bd0ac5e7bba 100644
+--- a/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
++++ b/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
+@@ -53,3 +53,18 @@ function make_netdev {
+     # get new device name
+     ls /sys/bus/netdevsim/devices/netdevsim${NSIM_ID}/net/
  }
- 
- module_init(nsim_module_init);
-diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
-index 809dd29fc5fe..b7d75c636be9 100644
---- a/drivers/net/netdevsim/netdevsim.h
-+++ b/drivers/net/netdevsim/netdevsim.h
-@@ -314,6 +314,7 @@ struct nsim_dev {
- 	struct list_head bpf_bound_maps;
- 	struct netdev_phys_item_id switch_id;
- 	struct list_head port_list;
-+	struct list_head phy_list;
- 	bool fw_update_status;
- 	u32 fw_update_overwrite_mask;
- 	u32 max_macs;
-@@ -419,6 +420,30 @@ static inline void nsim_macsec_teardown(struct netdevsim *ns)
- }
- #endif
- 
-+#if IS_ENABLED(CONFIG_PHYLIB)
-+void nsim_phy_init(struct netdevsim *ns);
-+void nsim_phy_teardown(struct netdevsim *dev);
-+int nsim_phy_drv_register(void);
-+void nsim_phy_drv_unregister(void);
-+#else
-+static inline void nsim_phy_init(struct netdevsim *ns)
-+{
-+}
 +
-+static inline void nsim_phy_teardown(struct netdevsim *ns)
-+{
-+}
++function make_phydev_on_netdev {
++    local parent_ndev_nsim_id=$1
++    local parent=$2
 +
-+static inline int __init nsim_phy_drv_register(void)
-+{
-+	return 0;
-+}
++    local ndev_dfs=/sys/kernel/debug/netdevsim/netdevsim$parent_ndev_nsim_id/ports/0
 +
-+static inline void __exit nsim_phy_drv_unregister(void)
-+{
-+}
-+#endif
++    old_dev_dfs=$(find $ndev_dfs -type d)
++    echo $parent > $ndev_dfs/phy_add
++    new_dev_dfs=$(find $ndev_dfs -type d)
 +
- struct nsim_bus_dev {
- 	struct device dev;
- 	struct list_head list;
-diff --git a/drivers/net/netdevsim/phy.c b/drivers/net/netdevsim/phy.c
-new file mode 100644
-index 000000000000..6ef64e3fdf3c
++    # The new phydev name corresponds to the new file that was created. Its
++    # name isn't predictable.
++    echo $old_dev_dfs $new_dev_dfs | xargs -n1 | sort  | uniq -u
++}
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh
+new file mode 100755
+index 000000000000..b10440d108b2
 --- /dev/null
-+++ b/drivers/net/netdevsim/phy.c
-@@ -0,0 +1,375 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2025 Maxime Chevallier <maxime.chevallier@bootlin.com>
++++ b/tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh
+@@ -0,0 +1,64 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
 +
-+#include <linux/debugfs.h>
-+#include <linux/list.h>
-+#include <linux/netdevice.h>
-+#include <linux/slab.h>
-+#include <linux/phy.h>
-+#include <linux/phy_fixed.h>
-+#include <linux/phy_link_topology.h>
-+#include <linux/platform_device.h>
++source ethtool-common.sh
 +
-+#include "netdevsim.h"
++# Bail if ethtool is too old
++if ! ethtool -h | grep show-phys >/dev/null 2>&1; then
++    echo "SKIP: No --show-phys support in ethtool"
++    exit 4
++fi
 +
-+static atomic_t bus_num = ATOMIC_INIT(0);
-+
-+/* Dumb MDIO bus for the virtual PHY to sit on */
-+struct nsim_mdiobus {
-+	struct platform_device *pdev;
-+	struct mii_bus *mii;
-+};
-+
-+static int nsim_mdio_read(struct mii_bus *bus, int phy_addr, int reg_num)
-+{
-+	return 0;
++function make_netdev_from_id {
++    local new_nsim_id="$1"
++    # Make a netdevsim
++    echo "$new_nsim_id" > /sys/bus/netdevsim/new_device
++    udevadm settle
++    # get new device name
++    ls /sys/bus/netdevsim/devices/netdevsim"${new_nsim_id}"/net/
 +}
 +
-+static int nsim_mdio_write(struct mii_bus *bus, int phy_addr, int reg_num,
-+			   u16 val)
-+{
-+	return 0;
++function cleanup_netdev_from_id {
++    local to_del_nsim_id="$1"
++    echo "$to_del_nsim_id" > /sys/bus/netdevsim/del_device
 +}
 +
-+struct nsim_phy_device {
-+	struct phy_device *phy;
-+	struct dentry *phy_dir;
++NSIM_NETDEV=$(make_netdev)
 +
-+	struct list_head node;
++set -o pipefail
 +
-+	bool link;
-+};
++# Check simple PHY addition and listing
 +
-+/* Virtual PHY driver for netdevsim */
-+static int nsim_match_phy_device(struct phy_device *phydev,
-+				 const struct phy_driver *drv)
-+{
-+	struct mii_bus *mii = phydev->mdio.bus;
++# Parent == 0 means that the PHY's parent is the netdev
++PHY_DFS=$(make_phydev_on_netdev "$NSIM_ID" 0)
 +
-+	return (mii->read == nsim_mdio_read) &&
-+	       (mii->write == nsim_mdio_write);
-+}
++# First PHY gets index 1
++index=$(ethtool --show-phys "$NSIM_NETDEV" | grep "PHY index" | cut -d ' ' -f 3)
++check $? "$index" "1"
 +
-+static int nsim_get_features(struct phy_device *phydev)
-+{
-+	/* Act like a 1G PHY */
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_TP_BIT, phydev->supported);
++# Insert a second PHY, same parent. It gets index 2.
++PHY2_DFS=$(make_phydev_on_netdev "$NSIM_ID" 0)
 +
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_1000baseT_Half_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_100baseT_Half_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_100baseT_Full_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_10baseT_Half_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_10baseT_Full_BIT, phydev->supported);
++# Create another netdev
++NSIM_ID2=$((RANDOM % 1024))
++NSIM_NETDEV_2=$(make_netdev_from_id "$NSIM_ID2")
 +
-+	return 0;
-+}
++PHY3_DFS=$(make_phydev_on_netdev "$NSIM_ID2" 0);
 +
-+static int nsim_config_aneg(struct phy_device *phydev)
-+{
-+	return 0;
-+}
++# Check unfiltered PHY Dump
++n_phy=$(ethtool --show-phys '*' | grep -c "PHY index")
++check $? "$n_phy" "3"
 +
-+static int nsim_read_status(struct phy_device *phydev)
-+{
-+	struct nsim_phy_device *ns_phy = phydev->priv;
++# Check filtered Dump
++n_phy=$(ethtool --show-phys "$NSIM_NETDEV" | grep -c "PHY index")
++check $? "$n_phy" "2"
 +
-+	if (!ns_phy)
-+		return 0;
++cleanup_netdev_from_id "$NSIM_ID2"
 +
-+	if (ns_phy->link) {
-+		phydev->speed = SPEED_1000;
-+		phydev->duplex = DUPLEX_FULL;
-+	} else {
-+		phydev->speed = SPEED_UNKNOWN;
-+		phydev->duplex = DUPLEX_UNKNOWN;
-+	}
-+
-+	phydev->link = ns_phy->link;
-+
-+	return 0;
-+}
-+
-+static struct phy_driver nsim_virtual_phy_drv[] = {
-+	{
-+		.name			= "Netdevsim virtual PHY driver",
-+		.get_features		= nsim_get_features,
-+		.match_phy_device	= nsim_match_phy_device,
-+		.config_aneg		= nsim_config_aneg,
-+		.read_status		= nsim_read_status,
-+	},
-+};
-+
-+static struct nsim_mdiobus *nsim_mdiobus_create(void)
-+{
-+	struct nsim_mdiobus *mb;
-+
-+	mb = kzalloc(sizeof(*mb), GFP_KERNEL);
-+	if (!mb)
-+		return NULL;
-+
-+	mb->pdev = platform_device_register_simple("nsim MDIO bus",
-+						   atomic_read(&bus_num),
-+						   NULL, 0);
-+	if (IS_ERR(mb->pdev))
-+		goto free_mb;
-+
-+	mb->mii = mdiobus_alloc();
-+	if (!mb->mii)
-+		goto free_pdev;
-+
-+	snprintf(mb->mii->id, MII_BUS_ID_SIZE, "nsim-%d", atomic_read(&bus_num));
-+	atomic_inc(&bus_num);
-+	mb->mii->name = "nsim MDIO Bus";
-+	mb->mii->priv = mb;
-+	mb->mii->parent = &mb->pdev->dev;
-+	mb->mii->read = &nsim_mdio_read;
-+	mb->mii->write = &nsim_mdio_write;
-+	mb->mii->phy_mask = ~0;
-+
-+	if (mdiobus_register(mb->mii))
-+		goto free_mdiobus;
-+
-+	return mb;
-+
-+free_mdiobus:
-+	atomic_dec(&bus_num);
-+	mdiobus_free(mb->mii);
-+free_pdev:
-+	platform_device_unregister(mb->pdev);
-+free_mb:
-+	kfree(mb);
-+
-+	return NULL;
-+}
-+
-+static void nsim_mdiobus_destroy(struct nsim_mdiobus *mb)
-+{
-+	mdiobus_unregister(mb->mii);
-+	mdiobus_free(mb->mii);
-+	atomic_dec(&bus_num);
-+	platform_device_unregister(mb->pdev);
-+	kfree(mb);
-+}
-+
-+static struct nsim_phy_device *nsim_phy_register(void)
-+{
-+	struct nsim_phy_device *ns_phy;
-+	struct nsim_mdiobus *mb;
-+	int err;
-+
-+	mb = nsim_mdiobus_create();
-+	if (IS_ERR(mb))
-+		return ERR_CAST(mb);
-+
-+	ns_phy = kzalloc(sizeof(*ns_phy), GFP_KERNEL);
-+	if (!ns_phy) {
-+		err = -ENOMEM;
-+		goto out_mdio;
-+	}
-+
-+	INIT_LIST_HEAD(&ns_phy->node);
-+
-+	ns_phy->phy = get_phy_device(mb->mii, 0, false);
-+	if (IS_ERR(ns_phy->phy)) {
-+		err = PTR_ERR(ns_phy->phy);
-+		goto out_phy_free;
-+	}
-+
-+	err = phy_device_register(ns_phy->phy);
-+	if (err)
-+		goto out_phy;
-+
-+	ns_phy->phy->priv = ns_phy;
-+
-+	return ns_phy;
-+
-+out_phy:
-+	phy_device_free(ns_phy->phy);
-+out_phy_free:
-+	kfree(ns_phy);
-+out_mdio:
-+	nsim_mdiobus_destroy(mb);
-+	return ERR_PTR(err);
-+}
-+
-+static void nsim_phy_destroy(struct nsim_phy_device *ns_phy)
-+{
-+	struct phy_device *phydev = ns_phy->phy;
-+	struct mii_bus *mii = phydev->mdio.bus;
-+	struct nsim_mdiobus *mb = mii->priv;
-+
-+	debugfs_remove_recursive(ns_phy->phy_dir);
-+
-+	phy_device_remove(phydev);
-+	list_del(&ns_phy->node);
-+	kfree(ns_phy);
-+
-+	nsim_mdiobus_destroy(mb);
-+}
-+
-+static void nsim_phy_debugfs_create(struct nsim_dev_port *port,
-+				    struct nsim_phy_device *ns_phy)
-+{
-+	char phy_dir_name[sizeof("phy") + 10];
-+
-+	sprintf(phy_dir_name, "phy%u", ns_phy->phy->phyindex);
-+
-+	/* create debugfs stuff */
-+	ns_phy->phy_dir = debugfs_create_dir(phy_dir_name, port->ddir);
-+
-+	debugfs_create_bool("link", 0600, ns_phy->phy_dir, &ns_phy->link);
-+}
-+
-+static void nsim_adjust_link(struct net_device *dev)
-+{
-+	phy_print_status(dev->phydev);
-+}
-+
-+static ssize_t
-+nsim_phy_add_write(struct file *file, const char __user *data,
-+		   size_t count, loff_t *ppos)
-+{
-+	struct net_device *dev = file->private_data;
-+	struct netdevsim *ns = netdev_priv(dev);
-+	struct nsim_phy_device *ns_phy;
-+	struct phy_device *pphy;
-+	u32 parent_id;
-+	char buf[10];
-+	ssize_t ret;
-+	int err;
-+
-+	if (*ppos != 0)
-+		return 0;
-+
-+	if (count >= sizeof(buf))
-+		return -ENOSPC;
-+
-+	ret = copy_from_user(buf, data, count);
-+	if (ret)
-+		return -EFAULT;
-+	buf[count] = '\0';
-+
-+	ret = kstrtouint(buf, 10, &parent_id);
-+	if (ret)
-+		return -EINVAL;
-+
-+	ns_phy = nsim_phy_register();
-+	if (IS_ERR(ns_phy))
-+		return PTR_ERR(ns_phy);
-+
-+	if (!parent_id) {
-+		if (!dev->phydev) {
-+			err = phy_connect_direct(dev, ns_phy->phy, nsim_adjust_link,
-+						 PHY_INTERFACE_MODE_NA);
-+			if (err)
-+				return err;
-+
-+			phy_attached_info(ns_phy->phy);
-+
-+			phy_start(ns_phy->phy);
-+		} else {
-+			phy_link_topo_add_phy(dev, ns_phy->phy, PHY_UPSTREAM_MAC, dev);
-+		}
-+	} else {
-+		pphy = phy_link_topo_get_phy(dev, parent_id);
-+		if (!pphy)
-+			return -EINVAL;
-+
-+		phy_link_topo_add_phy(dev, ns_phy->phy, PHY_UPSTREAM_PHY, pphy);
-+	}
-+
-+	nsim_phy_debugfs_create(ns->nsim_dev_port, ns_phy);
-+
-+	list_add(&ns_phy->node, &ns->nsim_dev->phy_list);
-+
-+	return count;
-+}
-+
-+static const struct file_operations nsim_phy_add_fops = {
-+	.open = simple_open,
-+	.write = nsim_phy_add_write,
-+	.llseek = generic_file_llseek,
-+	.owner = THIS_MODULE,
-+};
-+
-+static ssize_t
-+nsim_phy_del_write(struct file *file, const char __user *data,
-+		   size_t count, loff_t *ppos)
-+{
-+	struct net_device *dev = file->private_data;
-+	struct nsim_phy_device *ns_phy;
-+	struct phy_device *phydev;
-+	u32 phy_index;
-+	char buf[10];
-+	ssize_t ret;
-+
-+	if (*ppos != 0)
-+		return 0;
-+
-+	if (count >= sizeof(buf))
-+		return -ENOSPC;
-+
-+	ret = copy_from_user(buf, data, count);
-+	if (ret)
-+		return -EFAULT;
-+	buf[count] = '\0';
-+
-+	ret = kstrtouint(buf, 10, &phy_index);
-+	if (ret)
-+		return -EINVAL;
-+
-+	phydev = phy_link_topo_get_phy(dev, phy_index);
-+	if (!phydev)
-+		return -ENODEV;
-+
-+	ns_phy = phydev->priv;
-+
-+	if (dev->phydev && dev->phydev == phydev) {
-+		phy_stop(phydev);
-+		phy_detach(phydev);
-+	} else {
-+		phy_link_topo_del_phy(dev, phydev);
-+	}
-+
-+	nsim_phy_destroy(ns_phy);
-+
-+	return count;
-+}
-+
-+static const struct file_operations nsim_phy_del_fops = {
-+	.open = simple_open,
-+	.write = nsim_phy_del_write,
-+	.llseek = generic_file_llseek,
-+	.owner = THIS_MODULE,
-+};
-+
-+void nsim_phy_init(struct netdevsim *ns)
-+{
-+	debugfs_create_file("phy_add", 0200, ns->nsim_dev_port->ddir,
-+			    ns->netdev, &nsim_phy_add_fops);
-+
-+	debugfs_create_file("phy_del", 0200, ns->nsim_dev_port->ddir,
-+			    ns->netdev, &nsim_phy_del_fops);
-+}
-+
-+void nsim_phy_teardown(struct netdevsim *ns)
-+{
-+	struct nsim_phy_device *ns_phy, *pos;
-+
-+	list_for_each_entry_safe(ns_phy, pos, &ns->nsim_dev->phy_list, node)
-+		nsim_phy_destroy(ns_phy);
-+}
-+
-+int __init nsim_phy_drv_register(void)
-+{
-+	return phy_drivers_register(nsim_virtual_phy_drv,
-+				    ARRAY_SIZE(nsim_virtual_phy_drv),
-+				    THIS_MODULE);
-+}
-+
-+void __exit nsim_phy_drv_unregister(void)
-+{
-+	phy_drivers_unregister(nsim_virtual_phy_drv,
-+			       ARRAY_SIZE(nsim_virtual_phy_drv));
-+}
++if [ "$num_errors" -eq 0 ]; then
++    echo "PASSED all $((num_passes)) checks"
++    exit 0
++else
++    echo "FAILED $num_errors/$((num_errors+num_passes)) checks"
++    exit 1
++fi
 -- 
 2.49.0
 
