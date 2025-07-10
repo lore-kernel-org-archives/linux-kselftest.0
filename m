@@ -1,33 +1,35 @@
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C09D1F948;
-	Thu, 10 Jul 2025 06:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BAA27FD4A;
+	Thu, 10 Jul 2025 06:23:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752128582; cv=none; b=LgblZPowztHOpPk2ozXiwixBZkHQEoJmYvxAlj3A29iRPqkl4V+HOd73RIOYRYw1bEiSaKNvG0yS7XBTKWDadV3S/XTcqyJ/ckeZzZ2Pr36MJuu57+43C+JlIZdUuZ5N9Rom0ivmnTIlbds4HpHM+JyXbFonABGOSuO/D50wP6s=
+	t=1752128583; cv=none; b=Eb01In7C+u/8n8YLTxFlCJLH/XViKci6E4vGyJCmVsk8h23wRjjZCoVDHh5YmSD34BTKo+61E7U3u7L+UjedaLoXZhIT5jwYJF8JU+z9K1mv9VgU8c7YCgDi/2WvXviz+DVt4rTJnQPNcFmnmTCC+lRC0RLXobZEV3yPNK/zy0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752128582; c=relaxed/simple;
-	bh=M8DuLG0HMb8JJA8QF4/LocOVETDgVy/0Q/eMqNzZrrY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sIz3Iqn7MQ9t3hjIjtYp/F/IQJ+MxXHEgPXr3p5OI0vTuW49h0puDonT+ZJDOO+vuXfwmH9d74mIqf6nS51yoylghYibl4uwE23y2LqIBgX8Ms9OCd49simuq5S/N8vcwd3Gx6ld9F5I/OUyKXtqBpBJ5c9vbSyQ4kEb4g8xLoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mEIYmXPT; arc=none smtp.client-ip=217.70.183.193
+	s=arc-20240116; t=1752128583; c=relaxed/simple;
+	bh=J8GO0yT61Qc0ZqI8Dt9DrUCMl8bIRDzX8e+GF0FHNmk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=C2mNL5NSkxiF6TL3sTchun5zfhZ1W3dpMHE4oV1ELp1gS42mPp70VM85SsO1KL1xqY8ptt9pd22XttbldA6vDlvAd+Z+2mfYaJSAXnFV99R1rVdfCQvXeq8FNXyujGfm7Qsd7peQRfJADQPk2wxKgbCPdUr1Zt3QCwl58A2gzQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fjlWOVOG; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mEIYmXPT"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 23CDB44363;
-	Thu, 10 Jul 2025 06:22:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fjlWOVOG"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6930844367;
+	Thu, 10 Jul 2025 06:22:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1752128577;
+	t=1752128579;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rMYNYEgyyY1uHqv+Hw5rr8kPHp4rKI9o5Ur8Ushc1Iw=;
-	b=mEIYmXPTYCnmaPRAOJxI4hF1B2VvJ3eC1WZ91Dy0SaRHkLkRNG6vm1zOzkXC+NLJNMwif5
-	nvWnZ+sQH6PPjgDpuaIrgwgIiruHmKnI1fiyHhjnENG4nDycVRK/9N8SkEqbs8z/Jv5yFH
-	M5bxyQfhnnZ4P+qhzvUTQxe+A4B1BeT56I7uom6Pyi7pVxDHldRxDekZhqAQPEMCLzAYak
-	3txuuhnUyh3Tq/6uKKoc+PJDmqP40bc1TRN4227D0osGcYPK6HRoyfQlm1YZx/jenz3/5a
-	IIUDewyv3rLTXLhIz1B4CbqKz8sjlaAp1jBvN/g7DRlDNJEkj4498J1MaXRtDA==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/DGbcvy4by3MBfkYs/n6Um3YEhPcZL5yY5OSs/o0DG4=;
+	b=fjlWOVOGeApGzYr2ngomNtgxHo3FQSdye8SvFFwAU0BscgWr1N9D6sFHLQNpgm0C6aigfS
+	vrP56h0VXrodZ+cs0fxl3UvuFalyQZaLPgb7uHVsHgrukp08+QvWAQx6hpBl57yBiQGNor
+	WDH3vRZZtfwHdgr0XmGEHIba8oM2aYLKEh/HlTtlzyuIYI38jgXcylZXDq1ZpD6m+KoucA
+	xGWbsmlIjQ6NuRJz5Sy2r7IM26mNPVWm2viXTzX4v+2FuNwlhujtwcr2AKTqaMUmH7od3e
+	fzdgtn6AuR6haY8B51N2dipRMrFMgeWjSVl1CXxTn0Sst7cpnsdgZv6aZlQ4Cg==
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
 To: davem@davemloft.net
 Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
@@ -47,10 +49,12 @@ Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
 	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v3 0/3] netdevsim: add support for PHY devices
-Date: Thu, 10 Jul 2025 08:22:44 +0200
-Message-ID: <20250710062248.378459-1-maxime.chevallier@bootlin.com>
+Subject: [PATCH net-next v3 2/3] selftests: ethtool: Drop the unused old_netdevs variable
+Date: Thu, 10 Jul 2025 08:22:46 +0200
+Message-ID: <20250710062248.378459-3-maxime.chevallier@bootlin.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250710062248.378459-1-maxime.chevallier@bootlin.com>
+References: <20250710062248.378459-1-maxime.chevallier@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,46 +64,37 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefleejudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeejhfelieehgfffiefftdffiedvheefteehkedukefgteffteevffeuueejiedtveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvrgdtudemtggsudelmeekugegheemgeeltddtmeeiheeikeemvdelsgdumeelvghfheemvgektgejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgduleemkegugeehmeegledttdemieehieekmedvlegsudemlegvfhehmegvkegtjedphhgvlhhopehfvgguohhrrgdrhhhomhgvpdhmrghilhhfrhhomhepmhgrgihimhgvrdgthhgvvhgrlhhlihgvrhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudekpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmpdhrtghpt
- hhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhm
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefleejudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeevgedtffelffelveeuleelgfejfeevvdejhfehgeefgfffvdefteegvedutefftdenucfkphepvdgrtddumegtsgduleemkegugeehmeegledttdemieehieekmedvlegsudemlegvfhehmegvkegtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekugegheemgeeltddtmeeiheeikeemvdelsgdumeelvghfheemvgektgejpdhhvghlohepfhgvughorhgrrdhhohhmvgdpmhgrihhlfhhrohhmpehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedukedprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepmhgrgihimhgvrdgthhgvvhgrlhhlihgvrhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkv
+ ghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomh
 X-GND-Sasl: maxime.chevallier@bootlin.com
 
-Hi everyone,
+old_netdevs is unused in ethtool-common.sh. Only the UDP tunnels test
+uses that variable, but it maintains it locally.
 
-Here's a V3 for the netdevsim PHY support. This V3 includes :
- - A fix for a compiling issue with PHYLIB=n
- - An updated KConfig to only allow PHYLIB=y|n
- - Converted the link setting file to a bool debugfs file, relying on
-   link state polling
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+---
+ .../testing/selftests/drivers/net/netdevsim/ethtool-common.sh | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-The idea of this series is to allow attaching virtual PHY devices to
-netdevsim, so that we can test PHY-related ethtool commands. This can be
-extended in the future for phylib testing as well.
-
-V2: https://lore.kernel.org/netdev/20250708115531.111326-1-maxime.chevallier@bootlin.com/
- - Fix building with PHYLIB=m
- - Use shellcheck on the shell scripts
-
-V1: https://lore.kernel.org/netdev/20250702082806.706973-1-maxime.chevallier@bootlin.com/
-
-Maxime Chevallier (3):
-  net: netdevsim: Add PHY support in netdevsim
-  selftests: ethtool: Drop the unused old_netdevs variable
-  selftests: ethtool: Introduce ethernet PHY selftests on netdevsim
-
- drivers/net/Kconfig                           |   1 +
- drivers/net/netdevsim/Makefile                |   4 +
- drivers/net/netdevsim/dev.c                   |   2 +
- drivers/net/netdevsim/netdev.c                |   8 +
- drivers/net/netdevsim/netdevsim.h             |  25 ++
- drivers/net/netdevsim/phy.c                   | 375 ++++++++++++++++++
- .../selftests/drivers/net/netdevsim/config    |   1 +
- .../drivers/net/netdevsim/ethtool-common.sh   |  19 +-
- .../drivers/net/netdevsim/ethtool-phy.sh      |  64 +++
- 9 files changed, 496 insertions(+), 3 deletions(-)
- create mode 100644 drivers/net/netdevsim/phy.c
- create mode 100755 tools/testing/selftests/drivers/net/netdevsim/ethtool-phy.sh
-
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
+index 80160579e0cc..d9c7a3d397a9 100644
+--- a/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
++++ b/tools/testing/selftests/drivers/net/netdevsim/ethtool-common.sh
+@@ -43,13 +43,11 @@ function check {
+ }
+ 
+ function make_netdev {
+-    # Make a netdevsim
+-    old_netdevs=$(ls /sys/class/net)
+-
+     if ! $(lsmod | grep -q netdevsim); then
+ 	modprobe netdevsim
+     fi
+ 
++    # Make a netdevsim
+     echo $NSIM_ID $@ > /sys/bus/netdevsim/new_device
+     udevadm settle
+     # get new device name
 -- 
 2.49.0
 
