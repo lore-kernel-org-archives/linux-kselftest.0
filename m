@@ -1,186 +1,182 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2074.outbound.protection.outlook.com [40.107.212.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E879F27E7E3
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 05:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752126596; cv=none; b=O/uT/TLLKRzECkUKIY7AKZzDboYDk44Bm4lE6ISFxRZ26ZOQChZRc7JQQ44Z7gyX4h6ShjZzHuf7kYtdoBsWQ1vGr7DxS4Eo3c0tJ0WJedO+j6QTcinadUqidlClGiJVgyCezUy6KJDva8sqFsZ2B3D5Qbi+qP0MGvBhyXMgQpw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752126596; c=relaxed/simple;
-	bh=h0KjSpeWdigZAZsRt1k8nf58qKzquiGW74F6JUkVpXg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A4Twg834AZG5ndc+zIxRQR6EdItdde9dj+J4Btsog+Hh5FkSu/3yp4DR6zAQX4XB+w6uxipvs2ifMtrT+LxHKceuBCAFJLJBQPBiOjWsaufTsaflqprh+b3OaRkiX2PjtU+ztky4RKpe0eTizx7R8h9Dy3A1WpbLFgz/xiW0gH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4yRJQ8mq; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9513B280;
+	Thu, 10 Jul 2025 06:00:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752127207; cv=fail; b=MWQiXQH8B+vVYYu0HSYNQvWveSpN99GU5iwcNqN5EMSPuAvpwDriIWR9C9f1Yu4PJ5Cy4k6M8Qg4+1Bokycs3iWiunUtqsUaGLy/T5fWlR7zRJWKTNu0NbhC1Am2XUEvBDsGfWbtNRFaBk1Xk/2gDKu45gRz85bA1gs4n8zVLwk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752127207; c=relaxed/simple;
+	bh=2J+j32eo3dPCDRvxdB6elZRRB1LgpKPEa7yqvlEGFgQ=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UjxVbUdCb3XnS7FIn8gY34LTIoK7cxQhFbGZfXwy1G4VMhA3OxG9pS3aj2R9trP763694Tdu/6uFPjbrN/bRTLrVfQFXkpR9mHuHPSmZ2mr+omRFnpHrbcG0c83CXbOdK6NQBPDGlS6UkP7+cT0uMHjgS9JIwUFcCais58PJsxY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=VdAVgvhs; arc=fail smtp.client-ip=40.107.212.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4yRJQ8mq"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4a9e8459f28so205121cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Jul 2025 22:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1752126592; x=1752731392; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g2DkamPXkqG5QCK86AOwRmXVbMEqNBmAF1PKjGfsOCw=;
-        b=4yRJQ8mqpUDSOh2uiqNou9iyLo1sNhsqpDvPZCNQqfz4RssJl7EfiOhP+l3yAr9ULT
-         ltQV+NQLXLiEXCMZJ+Rj4o8dt3Ee9Jha7R5LRcCbfaOFYlQdKL0QdevEjauyuhWfLWUD
-         9RB56VVVtQv53V6pPNZp6+bQXS/PNVOVaeFa+IM9Ul87A8VzNtZyYQUHO2hgmj78iJdC
-         tHhnU8+xmaoZrtPLeyZVrZVnvcfFG7zbxJo0DcuUNfGJRNwpIChzOFYdaYUv6KjDzfWI
-         SrlMFv8b2kHQ6odQykd1dWGT/iPY/aZo/H7DECb0owkHa5ENJSk5rGhwozqwNf5XANub
-         lOIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752126592; x=1752731392;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g2DkamPXkqG5QCK86AOwRmXVbMEqNBmAF1PKjGfsOCw=;
-        b=i3xl1UiRCpxGCvXpgmV8/M7JyHGJ2CUZUZRh97+bs5Ad76PzONwoGYiPP3BVUotqcE
-         1kaooClOcEbwF/9S2EjvU7iLo1aO/Z19cwH4gQrBaRUSDpR+BGXLtH4BjdJsnRzzcEZg
-         c3WleAGHEkOWoROVOx1sCcOPs/8H6fneNloSsk98ZS/FPgse/yoKuaZQe1iMBV+3WzYk
-         L6o+uxI9ExNTv25fXVlp4NqNiZVXo6FzY1hoFgBRoNbGgGg6PdOiSs/CsFsAny6hQfF+
-         pfWbKXXaGiJnwrVrubmVNyt5oJEalz/ynSQmUhRFDV5Xq1Gu1le6rej+3foErFyW7tbE
-         T5hA==
-X-Forwarded-Encrypted: i=1; AJvYcCVL5x6yxbQlO0ueWte06UUT1YAKXuopcKdAjyiQAwyhxUFWy0T5wa/pJ9fL3RY/Z+M79yHfLRNxb2HPUW+kjYQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUc+xJ3BrzgpCcro8OfOPJDooLn9gtj7khecfgsGzcqMwgsxWS
-	7Y1an9iTStIvGT3AlZoy5NNZJRxsxKFjsjTIHyMo2Grc7adH01hYxeMGeZ510D3ajkX+NbCU1Ta
-	dvPygCTF2bz4rYB6P6LiTRLjTW/eg3BGusz1KcRhI
-X-Gm-Gg: ASbGncvuQSm8M6CUFHl8wZrVCBJnl/aq9eMMbXpN4qJAAk113TnQQoXTzx1wb6uBuv6
-	PiCe2IP4MoX2IFrSY2+3w87KtkONXGhZWgH6CvtsH+4agbTW/gj4cIQrWiU5MPVF1aUEIQyV7fI
-	Pa/wmxJeO1fwKwVA68iiaz24yQ357rRSP6+RsP0Oglcngz/cXdjEfX3fOAQpKhHc1SlCsBWpW9U
-	A==
-X-Google-Smtp-Source: AGHT+IHd9bYNDNAN5ENOSYbR3QqescLdRwV2rs10KxjR/R0bjr3EaIwYCIh2/P1wreAPm2DA7zZ9VtunAr5OldSmhpc=
-X-Received: by 2002:a05:622a:8e0a:b0:4a7:ff6d:e956 with SMTP id
- d75a77b69052e-4a9ec7d20b7mr1710771cf.3.1752126592089; Wed, 09 Jul 2025
- 22:49:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="VdAVgvhs"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DLWgE5dJEQ3wUU10d0+NlyBpSfaRGEBXp0LECXE+1YfmiMEKne43GMPamRe7MZdOqEF9ob5inBHkFBSopRafF+dkVaJNxEYx9EHr90cTv4ODd5tObQ6TMjQpXuKG9Dg9bBzCaF6VmGsCXYjy03gAA7TSL9/9r+IjEE8+d5PkQU74bsajKSHYENPxmbW/J8fk3uAJ3PjeplIuYZJT011ZtqHZfdmy/GnH8N/HUYHYiJlX8f6gwWpQrk/UzeJ4PBjWj/lVOHZEEAAbpH8pwvxpfJr38myS2joQbADSh/8fiU08wGhUByTWlWg4BM+BvjfArI+87dRY8mDyLy23aNgdRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/BnabqTncymFIsnzldAZgcWH6gkUjxym7aZDsKbUhlY=;
+ b=pe9m7chcvyX8PNpiYpV/CZbBP555MSFAV0sjeFIMk9+ZWMk7ZDd1KK6JETl/t41PA8ZUsCBMbLyh43HSbLr0evfrflnSMl/q17xlOKxU9NR4XokV8R7+5E0dfKnkaM7QWbpKZDtCkBpY0TXR6f9om1nmaokYv9DpSPyJU67pyj50IUdk7nGeB9VIEP5xwMblJmhUJrCEzQdtHamgVqEnqeFMfPcKgcT9jU4KXbCih7xC398U8wPNg0o8if3KskqECMi5+NEktjeSSwxkOvLMkf9hjXWcJXUeJWWuNnJ2KSFqiJAAKEI6xiu0UWyvHT5fgexIivAEF/LYr6vF9KQ08g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/BnabqTncymFIsnzldAZgcWH6gkUjxym7aZDsKbUhlY=;
+ b=VdAVgvhsCymbcRXQeyS/MxPKJY2QL8QNV7oH9dSMLr1+zm+gwD5x76jHwSPzQh7TQckOr7pj4WpUbkf17HV2Uri9RKICC6P9zQgn/R9Q8cE66D1LiSJJQLs5h/9vuYUhz1ffN/e5JaxXS/xIqErEX8G1uE4Fl3I48nVMY7jTMWiSK7U/KIIvSzcZQN4O+9xhJ/F6xDAmRj4MZok0GFGwBUTqbj6OLi1M5wsAleT4T5id6QySkOzyAj3wsTvvjge0ED253pio7MVtVo1IJZxyUYrJ9P5F52ePTSg/+zzEoRJzhLxjtXHIl6xSwYmLEds8EItfAJQPXVShA1u8RzNiIg==
+Received: from CH0PR03CA0398.namprd03.prod.outlook.com (2603:10b6:610:11b::29)
+ by DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.29; Thu, 10 Jul
+ 2025 06:00:00 +0000
+Received: from CH2PEPF00000144.namprd02.prod.outlook.com
+ (2603:10b6:610:11b:cafe::88) by CH0PR03CA0398.outlook.office365.com
+ (2603:10b6:610:11b::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8922.22 via Frontend Transport; Thu,
+ 10 Jul 2025 06:00:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CH2PEPF00000144.mail.protection.outlook.com (10.167.244.101) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8922.22 via Frontend Transport; Thu, 10 Jul 2025 06:00:00 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 9 Jul 2025
+ 22:59:48 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 9 Jul
+ 2025 22:59:47 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Wed, 9 Jul 2025 22:59:46 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>
+CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <bagasdotme@gmail.com>,
+	<will@kernel.org>, <robin.murphy@arm.com>, <joro@8bytes.org>,
+	<thierry.reding@gmail.com>, <vdumpa@nvidia.com>, <jonathanh@nvidia.com>,
+	<shuah@kernel.org>, <jsnitsel@redhat.com>, <nathan@kernel.org>,
+	<peterz@infradead.org>, <yi.l.liu@intel.com>, <mshavit@google.com>,
+	<praan@google.com>, <zhangzekun11@huawei.com>, <iommu@lists.linux.dev>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <patches@lists.linux.dev>,
+	<mochs@nvidia.com>, <alok.a.tiwari@oracle.com>, <vasant.hegde@amd.com>,
+	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>
+Subject: [PATCH v9 01/29] iommufd: Report unmapped bytes in the error path of iopt_unmap_iova_range
+Date: Wed, 9 Jul 2025 22:58:53 -0700
+Message-ID: <e2b61303bbc008ba1a4e2d7c2a2894749b59fdac.1752126748.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1752126748.git.nicolinc@nvidia.com>
+References: <cover.1752126748.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250704060727.724817-1-surenb@google.com> <20250704060727.724817-7-surenb@google.com>
- <0e0312c9-9a89-4a1b-a135-4425ea95d6f6@suse.cz>
-In-Reply-To: <0e0312c9-9a89-4a1b-a135-4425ea95d6f6@suse.cz>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 9 Jul 2025 22:49:40 -0700
-X-Gm-Features: Ac12FXxTrq12WEb497yNoTrLUG113kauaA6N6gifPoRES-xwIKd4uwt6gAWXY3I
-Message-ID: <CAJuCfpG+rzpEqDYAOr+CH-4remxJzuGKEH-=zpf_bWcah-1atw@mail.gmail.com>
-Subject: Re: [PATCH v6 6/8] fs/proc/task_mmu: remove conversion of seq_file
- position to unsigned
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, 
-	lorenzo.stoakes@oracle.com, david@redhat.com, peterx@redhat.com, 
-	jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org, paulmck@kernel.org, 
-	shuah@kernel.org, adobriyan@gmail.com, brauner@kernel.org, 
-	josef@toxicpanda.com, yebin10@huawei.com, linux@weissschuh.net, 
-	willy@infradead.org, osalvador@suse.de, andrii@kernel.org, 
-	ryan.roberts@arm.com, christophe.leroy@csgroup.eu, tjmercier@google.com, 
-	kaleshsingh@google.com, aha310510@gmail.com, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF00000144:EE_|DS7PR12MB6214:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a82a150-62f5-4a02-cbc5-08ddbf770181
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?b/zM/HywbG360pl8CfeIVuCC5S8BoftrdTi12KwWGUeNvORr4mInB4uItsQq?=
+ =?us-ascii?Q?3HuDCm7g+//U7F3nn4NU/1lc96GA60L1qkwUx1ZyIFFDASexB0vf+Gb3T+xt?=
+ =?us-ascii?Q?WO1WWT8PCH3zJLocixv+XEWsFAMbBTpB0vc6j14MIiHiFRZrqfimhQllwJZl?=
+ =?us-ascii?Q?RVktmlgJ9k47heBvzeZfK3XZpTqBtg+aXPdyszLCqv+wj8Y3mvVaD8J/0ZiJ?=
+ =?us-ascii?Q?x5M4/jR12XjBPCPlKWMEih0mmqi5daQhXP/+etAybcsV1n0q4Vc3Zc1t2eCy?=
+ =?us-ascii?Q?ZZHdYcd/o44pGVrOyvKIg6suxaHg2jDqLPTfMqHtNAqpdVO/9mz065MzRHg9?=
+ =?us-ascii?Q?UJ7hUsAD2RvNcT0j+j9aUbANY/rWx6u+gALKmRdNc2aKGdo4+b8kZ1UNr4fi?=
+ =?us-ascii?Q?E/syfYo4/1t9SrHdSxSs1pOHDHprM0t4NnVJDMWL+M+gHE6xBFbg1gov3amL?=
+ =?us-ascii?Q?PDMz5QeD3l+xvry1fkFkTKj1qyuN8JD2SgboDmXahYnK3qYUyFEVcpad87JX?=
+ =?us-ascii?Q?Fhr7Nrta+mG//AbieMJt2rIrNEZM4Rix8sQMWBJxensCtmii1HAYrRgaqsWE?=
+ =?us-ascii?Q?rRuGfjUlRoTVbdJE01hrlysOKQckaa/SyyT5VHckQxxiPRx0Fa7ajuLXtSx2?=
+ =?us-ascii?Q?PKHwgYITwi8o0MdF2jOVzdWsuZEvV5c0p38IVuznjvgWyEKd6wNGgPrl5IJD?=
+ =?us-ascii?Q?+CIck0ofCU7n35oNMakn0D9s3fXmGeG8iEd1CA+GeLn7vfsw5jDtu0g3po+I?=
+ =?us-ascii?Q?Jk9xxAVXkK7hR+DsgFmEcZ49uoLXEx2QNDZjeq07taZTOVAjfVnW1ZYsMNGt?=
+ =?us-ascii?Q?dojTkpUwUmpFzKnX8M16Sk5JPFQ/qFDaxfvIhrKkJNDtD/z3Ujp4Sh3BEkQ/?=
+ =?us-ascii?Q?5pr5N4kP6JGS0lnv9crr37FiB99W9QXK8Wv8k3EMJ58cNcc5HdJLkT0MbafT?=
+ =?us-ascii?Q?w+0UYZ3ptKMqTHk+r9olo/K9OQge812gHNwwiNSU9XUkA+HeTs+6riq1qvqd?=
+ =?us-ascii?Q?fUOEvHuksUx1WymbnXkcy8Ou+fpJSHBc3lHcPIqR4BMlWyDPE37DWLBSwquV?=
+ =?us-ascii?Q?uQyqbEYfgLwhAqGVIaclSTMmLCzYU/ynCmF+y8RjtG2Pru6GWS1gnWWPkHwc?=
+ =?us-ascii?Q?d41IToQVoXFMyYAm4kbVeqaq/ZDFiUvVe3p7tU1gRT0vogRuQBSg54kf+HsC?=
+ =?us-ascii?Q?YNl45QADhlzeQD9frS+6P2TVEd00cn2HSUzE6KZE2qjlKoNmHkiXzKScWikR?=
+ =?us-ascii?Q?/ZJdV4BmSdVfHDzsGbfif8ryLFvx95VBWI7z78mYdkNpl8COxYZuU7GM1/lX?=
+ =?us-ascii?Q?ROrzalvcaX0VjXPckpYxYkQ5sdCz4n+Zd8BqHd3BAmTMQbs4cba2iZVnQvFm?=
+ =?us-ascii?Q?Pv8drjJ/tRSdkSn4iWzWl7o0/P9haxvVd8znB81IIhS2BKbH4fnv3O1FWulc?=
+ =?us-ascii?Q?s/xuFuiGce00GOEbee1xmdXeqcGRhpilVGs00/tjkZCW/b8AEuyQz+aJrwqY?=
+ =?us-ascii?Q?6pEf/bdyjFNWurgjHPG8Hu+FAaAk3nIRUE3u?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014)(7416014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2025 06:00:00.2254
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a82a150-62f5-4a02-cbc5-08ddbf770181
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF00000144.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6214
 
-On Tue, Jul 8, 2025 at 10:37=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
-ote:
->
-> On 7/4/25 08:07, Suren Baghdasaryan wrote:
-> > Back in 2.6 era, last_addr used to be stored in seq_file->version
-> > variable, which was unsigned long. As a result, sentinels to represent
-> > gate vma and end of all vmas used unsigned values. In more recent
-> > kernels we don't used seq_file->version anymore and therefore conversio=
-n
-> > from loff_t into unsigned type is not needed. Similarly, sentinel value=
-s
-> > don't need to be unsigned. Remove type conversion for set_file position
-> > and change sentinel values to signed.
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
->
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
->
-> Some stuff in the code gave me a pause but it's out of scope here so just=
- in
-> case someone wants to do some extra churn...
->
-> > ---
-> >  fs/proc/task_mmu.c | 14 +++++++-------
-> >  1 file changed, 7 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> > index 751479eb128f..b8bc06d05a72 100644
-> > --- a/fs/proc/task_mmu.c
-> > +++ b/fs/proc/task_mmu.c
-> > @@ -135,7 +135,7 @@ static struct vm_area_struct *proc_get_vma(struct p=
-roc_maps_private *priv,
-> >       if (vma) {
-> >               *ppos =3D vma->vm_start;
-> >       } else {
-> > -             *ppos =3D -2UL;
-> > +             *ppos =3D -2;
-> >               vma =3D get_gate_vma(priv->mm);
-> >       }
-> >
-> > @@ -145,11 +145,11 @@ static struct vm_area_struct *proc_get_vma(struct=
- proc_maps_private *priv,
-> >  static void *m_start(struct seq_file *m, loff_t *ppos)
-> >  {
-> >       struct proc_maps_private *priv =3D m->private;
-> > -     unsigned long last_addr =3D *ppos;
-> > +     loff_t last_addr =3D *ppos;
-> >       struct mm_struct *mm;
-> >
-> >       /* See m_next(). Zero at the start or after lseek. */
-> > -     if (last_addr =3D=3D -1UL)
-> > +     if (last_addr =3D=3D -1)
-> >               return NULL;
-> >
-> >       priv->task =3D get_proc_task(priv->inode);
-> > @@ -170,9 +170,9 @@ static void *m_start(struct seq_file *m, loff_t *pp=
-os)
-> >               return ERR_PTR(-EINTR);
-> >       }
-> >
-> > -     vma_iter_init(&priv->iter, mm, last_addr);
-> > +     vma_iter_init(&priv->iter, mm, (unsigned long)last_addr);
->
-> I wonder if this should rather be done only after dealing with the -2 cas=
-e
-> below. It seems wrong to init the iterator with a bogus address. What if =
-it
-> acquires some sanity checks?
->
-> >       hold_task_mempolicy(priv);
->
-> It seems suboptimal to do that mempolicy refcount dance for numa_maps sak=
-e
-> even if we're reading a different /proc file... maybe priv could have a f=
-lag
-> to determine?
->
-> > -     if (last_addr =3D=3D -2UL)
-> > +     if (last_addr =3D=3D -2)
-> >               return get_gate_vma(mm);
->
-> I think only after the above it makes sense to init the iterator?
+There are callers that read the unmapped bytes even when rc != 0. Thus, do
+not forget to report it in the error path too.
 
-Yes makes sense but let me do that outside of this patchset as it's
-rather unrelated.
+Fixes: 8d40205f6093 ("iommufd: Add kAPI toward external drivers for kernel access")
+Cc: stable@vger.kernel.org
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+---
+ drivers/iommu/iommufd/io_pagetable.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
->
-> >       return proc_get_vma(priv, ppos);
-> > @@ -180,8 +180,8 @@ static void *m_start(struct seq_file *m, loff_t *pp=
-os)
-> >
-> >  static void *m_next(struct seq_file *m, void *v, loff_t *ppos)
-> >  {
-> > -     if (*ppos =3D=3D -2UL) {
-> > -             *ppos =3D -1UL;
-> > +     if (*ppos =3D=3D -2) {
-> > +             *ppos =3D -1;
-> >               return NULL;
-> >       }
-> >       return proc_get_vma(m->private, ppos);
->
+diff --git a/drivers/iommu/iommufd/io_pagetable.c b/drivers/iommu/iommufd/io_pagetable.c
+index 13d010f19ed1..22fc3a12109f 100644
+--- a/drivers/iommu/iommufd/io_pagetable.c
++++ b/drivers/iommu/iommufd/io_pagetable.c
+@@ -743,8 +743,10 @@ static int iopt_unmap_iova_range(struct io_pagetable *iopt, unsigned long start,
+ 			iommufd_access_notify_unmap(iopt, area_first, length);
+ 			/* Something is not responding to unmap requests. */
+ 			tries++;
+-			if (WARN_ON(tries > 100))
+-				return -EDEADLOCK;
++			if (WARN_ON(tries > 100)) {
++				rc = -EDEADLOCK;
++				goto out_unmapped;
++			}
+ 			goto again;
+ 		}
+ 
+@@ -766,6 +768,7 @@ static int iopt_unmap_iova_range(struct io_pagetable *iopt, unsigned long start,
+ out_unlock_iova:
+ 	up_write(&iopt->iova_rwsem);
+ 	up_read(&iopt->domains_rwsem);
++out_unmapped:
+ 	if (unmapped)
+ 		*unmapped = unmapped_bytes;
+ 	return rc;
+-- 
+2.43.0
+
