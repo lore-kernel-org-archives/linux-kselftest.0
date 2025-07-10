@@ -1,90 +1,82 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011068.outbound.protection.outlook.com [40.107.130.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B69F2E889C;
-	Thu, 10 Jul 2025 15:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81A1274FDE;
+	Thu, 10 Jul 2025 16:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.68
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752162741; cv=fail; b=ZzPohKctE/54apEWa5N0VoJ1SONKIBb/CyjntCHTJg54IIw5atqOCwkFS4FlVmgRFS1MXwVEV93vmcCg2RD3LJJaOuBRQPMEPewph+9k/8qinrjTTvzgN3m/PRbwPbZrGB+/hJnNyb6w0Bt7izFQDFn5duWODeGGRvlUQEuicww=
+	t=1752163625; cv=fail; b=XqgV2wzeHj8O8el19nJuQkdfBHs+GqBA/A/ofSIxCSIvwcNq0Kb3YT4hocmKpsQMYJCdJGsiEUIwnclxlvndE956h9faUEILolXEd1S4Fa9wdMXYQ66IUNHZ9GA3u+8nfO4kleoxiQh47Ui7f9Hp57VQneXQK0by5aBE0DYOgOY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752162741; c=relaxed/simple;
-	bh=WjIvaaak3+a0ZLQYpZMMIIPF1jwippv2MvpS0SDzK8E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XfgO92qSw409kkf2pg+tlxEXSFDSUYd9Jg1fnKyy2hZoHXzisPYWTsq21SlPU3mK3I5JRPxtQM7Bww9KQDArAiD6sZ0bSKRfATg7TNy/4fj8wRRJWk8lePC1XV9Q8b4BcGjK0gRN08HhkkF/Xv6/5jXhpWK39vgUqfUbcDD/S6A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=UyL8dIXq; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=su3C3OXk; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1752163625; c=relaxed/simple;
+	bh=u16O43YT0cKvq99wqmTKPaEBSRCFqTZHDIymud3Zu/A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=j/LJ7sq9bfPsLmIVW0/gE2VqeTV9F8MZah61E9SJ5s8vKFwXtQndgk8cKS6Mkav/eEFS6AmktHP3Qjd5Rg2xAeSHwhoZyFf99vE0pbGX9ZalFDtAk1SQW0xPzQmssMPApLX/mmfjx2+BX/CH0Yfzw2Mjm2fC7sY61jJ/PksGpJo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=GQsgERL8; arc=fail smtp.client-ip=40.107.130.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="UyL8dIXq";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="su3C3OXk"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56AF2txB011988;
-	Thu, 10 Jul 2025 15:51:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=wLrC+vwRdPPXcPBcFwBvNGSjcZqJaEwUh3SicxKQA40=; b=
-	UyL8dIXqJuPG7YMJXUCruIaaOW2884nz4/ZxwUWqw9xsqYqTEv9JT6jdqUzyTujU
-	QxFaq15iBocikohCIdBvxgBvOZ01EqXwPRtcM/0/Etz6Ei20Kzwjzo17Nio8IWXc
-	MZXC3D/5629pT1NsDQnEgxFvehWzhfFHKQWkl5MBJk4R7GzRcU4Inh0cykSFWJLu
-	pJGH5SMlySKrp6FgMK73YDmBbKeyEDYmsM5At6A5mFqFoMqPKdwc2+0rFog4fkzy
-	gjlH08jv5a+PaltDDUCwBz+x8DqAXiw52e0uy5tgKa7/gjRH6k9KdnSgiDTSZRVd
-	iGyJNCL0LBEtAv15TAGaEg==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47tft083tx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 10 Jul 2025 15:51:05 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 56AERUUJ023626;
-	Thu, 10 Jul 2025 15:51:04 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12on2070.outbound.protection.outlook.com [40.107.243.70])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 47ptgcpwg8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 10 Jul 2025 15:51:04 +0000
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="GQsgERL8"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=C08thwamT5TPeVsX6VhUi7M5bEmGeNlcZPeYcH/Cj9YRzlIv8PSRye60iiRuSbN9gEgL8y1CYKIRkU7gSa4NS1v9IVPVv+jEguQds3Y3tm41eRkaf34jESGgpcLZgVj8HOLhA5sz/e5Qa/SWGbSUsWKNJbFmmExrrVXfBBg6gQPcN9ypbuLDQaF3xS/aC7+nbaFlQOZf6J6fmysKUjunA7PkFICD/HZlR4dORJzohvO3Jpqt6Fu7ORMPGl/Q+Q/dwW1bAIUZnxaCfeiW7y9K9wLDxroWcHm31KTBEa1UewSlZzs0dUgxFksfK9LSBW9mvTQdYq7Yk5TdIKZeKAPBLA==
+ b=WBKIw/of3lsVdqDg9ij8o8lVLZNtiyGiPKzrqb/ST5wRnNQIa1aNCropyEQLtWcIpdCIP2VJSTPDKl4t4WIydU20YQx6CL+T2Z/ip8e+3IaB/HUhixo0Ni/GBHPw0rsPaWBVRPvRkfQgqRsdxcGw4wV0GDxS554HbOrufUTHXPnlHE7kbTBOm4n+AuLRGPsSW+UsuDI6udtfD4wrwIFqw5DS9M0I4KFJidsMS8HMOSpAao475lbgxOEIVYOSMs7x7pW8NIljnBdYkr/Tg/BBZ1PGJIEdeyiu5x2R6XxgIJTop+OpMDND+1eahvtP61DZra4wdjyO4wqbUpfALOmkFw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wLrC+vwRdPPXcPBcFwBvNGSjcZqJaEwUh3SicxKQA40=;
- b=eWoN/u+H67KOC4PMfVaT8HfAf5erpOyKSLZqMrS7LTfqfSRdOMgmdj02EEQKZQrvYeCFEF8keBh4WUzF7I5mcgqyIHKZGRXnZCT3Ky0demc+pNl5wXhQQo7n5va4z1xhAADtbrsukoM8uDiYCB/jhli4uob08WOjIG2HwBD/Pe7B1PDb5GnOAPcByf5HjG/7kM4czCZ1y2idkt0UPfMoajriPH4c7wA5RyJ10H6aLlWk470F9pP1D2IsF4KxK/8XJp17ilRnPolekJKiyQMBr2oQTr1I+oyQSO/7d7QgTqxl9wr3hTroV68btiBEICKha8kPJaPIbPWLznzbS4qahg==
+ bh=Kt05uIgwetaXwYDwJG3akXamgFNRAZiiBy+CrKT9hqs=;
+ b=mHigO5Ciw1rG+jai73ksdBZ82s8ahhRyV9VKkq1ZTIePtNLWYEnw+ctVDI58wlLU6wuw/hqPkq/00pJZ0o09fBP9JavbSlB0aYXrryhUiXWprzxnNFdSrHQ5baXNv7v6LWz3haDoDZfGkcUfaLaYCGoWPhign7881Hzixh8iaV8zjZKZxdSaLoPYxxejD0Hjp6O9HqMqWpzFSWZZ1VzHQUxq2DyfxTO/aAX/X9qfbUwR1dp/nCsnYMagU8fX1Lf8M6yAgztAky2b4qhC4GbY1H2nBWdgzaMqj/hBohcxCa3e4Fb6+GKraFhcevO4Q2YQMw2XP3oC15HHMoOIigShug==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wLrC+vwRdPPXcPBcFwBvNGSjcZqJaEwUh3SicxKQA40=;
- b=su3C3OXkjvW5QcR1Lvl9q1Te8Am6Egink5xuYAs7gp+OLiftarJ7GPzkA83TculdN3IxnWnXNenVdzsHQRKoGzzBY7G+cu/vrHCO76i1u5pHoLoRjks7jHrkjW5JWgSP8YBaslJoaLS09GWrRrIh0AtGsEd/9gih9FvdPejB15k=
-Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
- by IA0PR10MB6769.namprd10.prod.outlook.com (2603:10b6:208:43e::22) with
+ bh=Kt05uIgwetaXwYDwJG3akXamgFNRAZiiBy+CrKT9hqs=;
+ b=GQsgERL8jzrjYleIbFvzTMAYZakiAP6W5mS+/JcOD74f8DId4CnfftaNlYG3nOJnayvQJNE9DzcYYQ5jb2yXzZ7Bqa3I/B+fJkWAJgmM4bJhcC+IHk1eGg7gjqco4RjusSshiJAwluFjclyCvbl+Zc7ZqANYNKVl3fUyfGIVkIErRptf59GwzdtJoLw3esN+pEzjtzMa9vqx+jqVldHjF8AnnJR/EjoKwnHU4qKOtJOw8BL3L8xLkgsxdTmfiumwFpTAvKLcaeWfjBrNTD84lZ9c214niuYayqa4+N88VGfLruMrlWDxVaZxjdSTwp7bql5Iqv5igCP0cW9PNujvHg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by OSKPR04MB11317.eurprd04.prod.outlook.com (2603:10a6:e10:99::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.29; Thu, 10 Jul
- 2025 15:51:01 +0000
-Received: from DM4PR10MB8218.namprd10.prod.outlook.com
- ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
- ([fe80::2650:55cf:2816:5f2%6]) with mapi id 15.20.8901.024; Thu, 10 Jul 2025
- 15:51:01 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Peter Xu <peterx@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 09/10] mm/mremap: permit mremap() move of multiple VMAs
-Date: Thu, 10 Jul 2025 16:50:33 +0100
-Message-ID: <6fe9dd2a366c7f55201320a81412f789ccfd675c.1752162066.git.lorenzo.stoakes@oracle.com>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <cover.1752162066.git.lorenzo.stoakes@oracle.com>
-References: <cover.1752162066.git.lorenzo.stoakes@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO2P265CA0156.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:9::24) To DM4PR10MB8218.namprd10.prod.outlook.com
- (2603:10b6:8:1cc::16)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.27; Thu, 10 Jul
+ 2025 16:06:59 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%5]) with mapi id 15.20.8901.023; Thu, 10 Jul 2025
+ 16:06:59 +0000
+Date: Thu, 10 Jul 2025 12:06:51 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Niklas Cassel <cassel@kernel.org>
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Anup Patel <apatel@ventanamicro.com>, Marc Zyngier <maz@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	dlemoal@kernel.org, jdmason@kudzu.us, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, imx@lists.linux.dev,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v20 0/9] PCI: EP: Add RC-to-EP doorbell with platform MSI
+ controller
+Message-ID: <aG/lG2r4U4rPrEeB@lizhi-Precision-Tower-5810>
+References: <20250709-ep-msi-v20-0-43d56f9bd54a@nxp.com>
+ <aG-mqWtUu9-CD43U@ryzen>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aG-mqWtUu9-CD43U@ryzen>
+X-ClientProxiedBy: AS4PR09CA0018.eurprd09.prod.outlook.com
+ (2603:10a6:20b:5d4::6) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,333 +84,240 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|IA0PR10MB6769:EE_
-X-MS-Office365-Filtering-Correlation-Id: 76e16d6e-74df-499c-8640-08ddbfc9920d
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|OSKPR04MB11317:EE_
+X-MS-Office365-Filtering-Correlation-Id: a9465d7e-a754-46de-99f1-08ddbfcbcc88
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|52116014|376014|7416014|1800799024|366016|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?vKM3iuMqKv5Gdy6PJPPFaUReTyQElMqLEqLpaAxWukB/B7mleUVYr+SN9Ya2?=
- =?us-ascii?Q?+wT6+d3e8IDih+hkD1K42uHwcIfasUAn3lInzKTaMjbSYRh9WP/d1QJou5Ge?=
- =?us-ascii?Q?b9UepuFAg/gCBubLA6gDmZIv9jl70iundtDXtj0IZQXpfr2yda/4vxjayJmx?=
- =?us-ascii?Q?0FtOVP74dtm5eJz0c4z9wfmNpICQSlBTylEyP3udWt8UiaHTOMnXuEJbFDrL?=
- =?us-ascii?Q?d7GdkI/39nBWZbeAyXSO/fI1T3CL9mmdXGszXiBcaf9s9yqa8SRt14bYb6ZG?=
- =?us-ascii?Q?0Vp4k9Ww275iqUrnOCTrfPBSR+QrFoL033zKiiePmwT2bEOE1JXjdIjUA8ga?=
- =?us-ascii?Q?de4+Wr5OJuLaXMDcHMlJr1OutalyfC0G7pZZRN70Q5dw3kmvPpklnN0exLr+?=
- =?us-ascii?Q?C3UxqPbfCqLVe9wjfYyGXczU5n9HRkEXjitMJ3yBO6H65q4p6o7gqBEzGTvz?=
- =?us-ascii?Q?7++g8XeCBZfEHQXYVFDqNEx80DSJSpRUSS67u3C1A+GGBrAnjqgl1g0iu4C1?=
- =?us-ascii?Q?XPRM+jg4sYwWsC3eZY7d3IxT2Qei/7k6XTz6zKHnPHjI9outbX/zYHuodOqy?=
- =?us-ascii?Q?gz0OtQcqVHXMvkleAQGSvZLGXhOpss3TSqQdG7kTUfOIX830PRhYG6cggm7b?=
- =?us-ascii?Q?AMGkVlinnOTYz6LL2WIblyRqUoW8EWXWDz80vFeJko4ugd4QncvttgcbAc+S?=
- =?us-ascii?Q?jOhtUsSMEB6+BOTwV2UZ169IpJXrXRxda9gZbERgptkpxpeBSIPkt6tTh77C?=
- =?us-ascii?Q?ttcXJPMj85lvQGPObHeN0pbtLHnUd71z2m70cLVbwIHWRrcHo1Ib0Ssp0Bwn?=
- =?us-ascii?Q?6kwpWMAk/6VNvcqAcauQ3hy80AKAwsGfnMcBWiHCWiuPC4z37vVsSShLLHvh?=
- =?us-ascii?Q?dpKQ8ebtyHSEujKDeMZ4Tr20yf8AOCb5Ek3cQ5x9F45OfPIol5oGJ+ZSzLPR?=
- =?us-ascii?Q?RHSWNe8EwvBXB+xq24TYm7EqpqjAv4MF1wLS47EBmHYF/sHbB2NEmGgzoadi?=
- =?us-ascii?Q?olfpaWuG0G2+oKhCdPe+GPh6Hh10X8kJZeNdlKcCs/iXBSV2fBy8fyPoL8K3?=
- =?us-ascii?Q?ST761D7D1H578dPPPsphtX3jQ9zLhlu5pUUTnoOPyNvfpkvjEDlc3tapZ/IS?=
- =?us-ascii?Q?Ue9zwKkIUteut7uv3I9ymEmY0/0as3KdcfOcvP0gIeXpX877jS6/iJZJ76RW?=
- =?us-ascii?Q?dMFTxlhQJtloVhOlPI+87WV0gFfRzw/dt/kXEnU+Dx7PExegWFaVS4r/1rRd?=
- =?us-ascii?Q?oLNtz5TmymMcrVRTZ2k7vAKrz/GhXA8oRklXJ6ZObekla0NBJZea1C/XDUSR?=
- =?us-ascii?Q?gQyatIjtSbCWdPigdt4rx1dgcd5UqUCSFY1pTEvzlCgHNmo2maM8Emse29j7?=
- =?us-ascii?Q?pIIJrdbwve3hO6JsZOoij74kGNqipBu2q+XkJ8neBd4rZf38+MboN+h9BdxK?=
- =?us-ascii?Q?iGTZk2BIIRI=3D?=
+	=?us-ascii?Q?VXe82JHdmzsDp11m9odwHG/tnQo7jhkjCq7eDDvUg9vMT3L8GXsu2Z15NdbI?=
+ =?us-ascii?Q?nQ2NZyIaqqT3v724vSqvYWJf/xtReF4ARoQpcT1qCy1clnPzgu9CLNiDKdt1?=
+ =?us-ascii?Q?lygnfNGom+VvkpIKDR4FLmNYUx9zSH9enyEw/KYJEiqhxvo6o8E6PO5RlTwA?=
+ =?us-ascii?Q?dljtEfJCSSfe8Gu02a6pvCGneJn9R/DakGxp0GfOh2BxKlzdFCxMLHXUw5iC?=
+ =?us-ascii?Q?DZtFKqd7c7hto9u/DEZPvyY28VYdxnD/CSp+XvJ/CChBn8bVD1nBuIUZYgJZ?=
+ =?us-ascii?Q?BVmY58rf2PUxNqix8BXBxKeErmip7o+gxWST5wOhyjx5JY5PXtTmHcCbeprl?=
+ =?us-ascii?Q?YxcbOr8/1nnlC80NPCBzy0PHJ2XieGf7SbjoYjpX9f/M2lTqvpvkJ8N4j+gE?=
+ =?us-ascii?Q?Bejqd60aV158YrOGb7byX5oqzEStBhoDw7kXF+JjKqF304flnNooFKoxyeti?=
+ =?us-ascii?Q?bJHVxMd+nH3krcCwQWtvx2kvebgEZ+GJAsAopdA4IGhNKNLkEeezzP2m2I0g?=
+ =?us-ascii?Q?12Hv6VOJ/b5vClLZBYKcgmOegCFZlEJI5KRtMbdJ14YldsOinpysx3Pttxn7?=
+ =?us-ascii?Q?yVLbV5Ykhl1/f0Q5UMJ22dztUVE6Ztqgesc4Hz+75qbr6L/wNxZMzKMU2XKn?=
+ =?us-ascii?Q?67Mhr9iLH/tOwDgchfolbdW0jTSIED6jsVgtVV4LXGDy3gJfg0YSiiNuy6a1?=
+ =?us-ascii?Q?pmEv7O2rOBb3gxAi7AX//rN8TNQ0CPwmRtJgZJqGmYvj/foWOVxR2B5VEXvR?=
+ =?us-ascii?Q?ZhFtWLZY9zr6YlzE4h7fbgCQ+VjfyDOT/WVJuHG8T/lgjhIyDlqMDuGgX11j?=
+ =?us-ascii?Q?JqBelTVa92ZYSUPAmX7LmsrgBRYRwWtLcEx2yEvb4XTXzBT5ZsXNj/fdU/BI?=
+ =?us-ascii?Q?SZX7haU3+aYJNg8bD8iwYG/JmdbfetybluKq4ydRRg48KGfDyR5Mdr5+L8dn?=
+ =?us-ascii?Q?jUx4vp4UZjyKGVbpq+JJBpxUc4IwWvtjxD11ijg5UOKZ9N55nFrVXDQ1MAQL?=
+ =?us-ascii?Q?kwYqDaunEzsDCXPomdWAogZMY/9x28bxL91rzA74zbnkvErwkwvMjv/H/DP4?=
+ =?us-ascii?Q?tQogEnzxzST+bOaMyTWKSpEDxQXdp2PBHwT6kNqEMRePcbjpD0ieojwL+3G0?=
+ =?us-ascii?Q?xgEmgULhqcd1BRZy88lk/FSxyMGEHoSIm3Lwhh/Y0JJRXW2ho+AqJKFjBN4j?=
+ =?us-ascii?Q?WF2XMNnv3UJ3p3q8/vF3Rf2G0ypi1TtcYIO4gynYD+CRl5vcxIpvAe3V0Y9K?=
+ =?us-ascii?Q?18nm94haeqd1KiwzK9cRXqiQ4/m13Q2v8B5r9m6uujCkD0rScJwHo/p4KATK?=
+ =?us-ascii?Q?xJU7SwHgBROPVlCEtRQyWN6Rwm9VZqdXlNNfxwY0wV/Suq9TcryzP9jG4kMj?=
+ =?us-ascii?Q?psBBGD+96Umw8mqDTx25Q/6g5G6Myz4V5fEOX6Fo5ePdfEK38Zlzdd1WwfSN?=
+ =?us-ascii?Q?xVZPyYleW2hJfZeQdXdW2txXgrT5XyHa8LcAEECM403IZsdTIrEEFK4qcP/q?=
+ =?us-ascii?Q?vNNA4MI2gIzfhD8=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(52116014)(376014)(7416014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?TeoV/f380GvW+vBw9sNG3/VVM5dgeKjEsvR2lr/0z2P98ejUbmdv8Jqkh1A0?=
- =?us-ascii?Q?NhUhYop5fQtkUm96kUt9le2X5V2zL6Ae76cOCemB72dpr4sLpHsbOH7SlEcj?=
- =?us-ascii?Q?IjkHUUWUBCx2t7Kbp3dmIoktpFaq5oSK9poPbtA1u7wG9ZmvAH2/Tw2z9o+F?=
- =?us-ascii?Q?bwBIDABkPo+TtlW5izX86XLWq02H6IzUeG7deypwyDzF8KVjX7YcZ+cpVOQ8?=
- =?us-ascii?Q?+6sWhrYb8BRAo19Et26HIHHchahqH6dvKBkqxzBgwi/kXZlCEU7fpOx3yn1v?=
- =?us-ascii?Q?PFVB4sjroxufuzegcSvrjTPLBMc0YtqJOCZ+GNV9tiFyOjzOhrWlIT+bGEGt?=
- =?us-ascii?Q?w5AeYXS0zDuHnMoN3f7kMJZaVIe6kyRDPVfEYItu5cpZvbzObdDYMSLep2Hj?=
- =?us-ascii?Q?f/pxQ8n4dln+3XYrMrqgBpNDpgoekfI2QYVNTqRRJoyntpicTCcxvT1ziW8M?=
- =?us-ascii?Q?T9NUZCsSixxTx+jIue7nsg3YY6U9IFqo+QNHUtQ5vg3Td7jSyr/9wHc7qQCi?=
- =?us-ascii?Q?0peRhID06PbXFyMZQRGdmi4Gff2oHJXLiRuAEXHA4IinGIc/14UEBHoPd66u?=
- =?us-ascii?Q?jVz/WvZJm46V0qn2QHKkSFr0V3muWsWy447u/zh2H8mIMdfiegiJc0H8AYc5?=
- =?us-ascii?Q?d3lkDL4Ieq3ryju2mKY0RCuS/G2SMh9aAktwmorlEBKs/UJXKj3258iIs+x7?=
- =?us-ascii?Q?WE3f9X2cPjJMfylf0KdZBlwdqcjM4kwKJSox1BW3udMafrKTsNFiOxE0dDhh?=
- =?us-ascii?Q?+8LrSTvhu4XeVyp2sjtb/hTyDwg79hT45H5FAfdI79O/sKN7fnDrrXV0gfTD?=
- =?us-ascii?Q?SPWO2dQlM1E3ryuHhZajst3QovE5eJcvBBtISGVzH9omV3psYZ54C2PFU+k4?=
- =?us-ascii?Q?oSNEt/6D2PIJpH7pQSMJYBRY/sejq8WEeV4D7qC65W/x6XY12ybCKP+d4Tny?=
- =?us-ascii?Q?oGAMbj5TLL0Oitjg1G49bjqi/ClxZIEqi35FKgwxL9cI20X2+0uD0W1gydMW?=
- =?us-ascii?Q?BsLsGwJiYZh7hujgR9cDsPAV+6AUwYUSiw0+q7ZS6XR9pTU8AjJRdz6jSYGx?=
- =?us-ascii?Q?R2gJmpV+NKXZwM0ky2uNCmsyGn0d7OF5DIcPCx05BcZpf8hJWzyYe5XlupGn?=
- =?us-ascii?Q?5J2XBTchYoghWu0WuAVngC+uQ8Jo+HV21YgQuoXsyIKduJi8DsxiDMQjiG2T?=
- =?us-ascii?Q?syGLICT8Q+GO4zg5Zq5cgW1OxytuHneFExIZtyy67NpkTtL3jhFzZ2iVYop7?=
- =?us-ascii?Q?gAtZSSr0H7yli4CYdrhdF+ywhNb/BACNXm2CtGwGgG4TOUEhu5jHoCtzPC3o?=
- =?us-ascii?Q?gxBX11wknX1dyZ0HYLAcp59bGiMv5+ZG99/hcDyUdhvQp+LIYcwiZLtKF7mW?=
- =?us-ascii?Q?YXpQllrJYaQp52UAd47Oqnu/8tWXEJydPdRJAO4SvJQ2nszU13Kc9XOeyuvh?=
- =?us-ascii?Q?2ynhnSPxzm8kYFPm30yUZ1rHi4YrrA4AmELiIwwyQWVBM+LeZQpaLIjwfku3?=
- =?us-ascii?Q?Iq4UN4ap5HuaPrz+6TyZZ/cejgEQ4YKNkVib6YAXrwPgD4MuTpCnN/MM1iEX?=
- =?us-ascii?Q?sxLAbrzthqhcLVmmxUFEzegsFusXw5Yr6OamAAf5LJiMK4om2OmvmQtE7mvy?=
- =?us-ascii?Q?SA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	xiwNtbpYK+Tk3dT2vU8CZ6b1lLENGW2Ik1S7qUHUUp+cInlqP6NP/NHzjLI4F5p3hgybuuWUZxxjDnIR/ovfnGYaP1F9ZCwwjDaqKf2gd4ty5yDfcnTcOrO0SV56piOh7le3as8kawnUQEW7I5/rXHdHkG9qGfSta4YDHDC7rCfp7fz/FPmr0Z0DDI3ImEnM7xBNCAhq09khglx4Jbg1dj7Isib9t5lvxSzqZOSe15UCv8Gy2Ydr6OzNaioBo0nN+PmSGRFsMNKxrJT7LfqokkOQbQrMOiVOgX9K4/Trva6n+d3FwNmmHvb3AwDLh2IFhsV+TetXFDo5JaUMBrpx6Uj2alyTG0xE6DlD8UT+oDtHA26q0kvOStcKb/ZDM6lp31gV9bQDGC2NjlqgJu60WQ5HpZxYFrHSvRNY8mB14yHViMoA1az+yw3O/aIIiZX5iJicG3gJvciuXP9uYlAbhKzfm2Yh9zY4UwdpX58llhMNeN/xXOyIO2Ft3EhXZwYW/oFN5QME8GKsbagSwgFv7e8ll5Wwm4Jx6Eowy8RzuIiCe/TIrChvHcsZ9/R5yPanSfWks2auoUdA/V0QkzpdPzRmPlYSwlmdz+EFKd7MkKA=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76e16d6e-74df-499c-8640-08ddbfc9920d
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
+	=?us-ascii?Q?aaZ+OSq4tU27s+wwx4yU2sGJ9rpnIlV+rdkUiOhztruIaldjimzy7TF7rQAY?=
+ =?us-ascii?Q?Tug3YPVTe77vuZITN8xAIKYD0YEFkVwWu49jHuDBsxIISz+FJbyTQH99koAb?=
+ =?us-ascii?Q?mhj5wNzOpFz7BSm7mFWq6UaZswwvX7SToB+D8pFdY8aT8kEu0j5t0w+phY54?=
+ =?us-ascii?Q?NhcQyUvVLMAluq4VkfaRmdHWeg/ztVy8iBXGgITt66PExEnt9DG9XDlFSmIQ?=
+ =?us-ascii?Q?I2F1VdyRaNZgYsPuuTqZedn8V6xU709rc0mNoUWQW8ZFJR+TcGFHWQvUADuv?=
+ =?us-ascii?Q?KpqYmoH1vnUaCQKnE1n7Q2y3CQW6SAAET/z4QmCN2AhBttoBASyG7q+ZgPqD?=
+ =?us-ascii?Q?ovb4/V0sB24m/nGeoFRTYrb0La18FJyNTNlySTzPu5wXge1VpJpwckvm/XSx?=
+ =?us-ascii?Q?NNWaCOW8UsDl4G+gqrU29ux0+/Ct+rYSd3vmJlYvcfZgqhx9L1ingfIZgYAy?=
+ =?us-ascii?Q?Mtnn7ukmamYtP0NH+8HUPh2kfvIAnJfUt6olUCZYIfLPRMYgozM5IVIpDpa1?=
+ =?us-ascii?Q?OwEiFjJDWsDI/siKEZplVvt7Nx0Atd4To2sg3LgghZf0tZOMLYULcTiia9mB?=
+ =?us-ascii?Q?ymcrdG3y61Njy3WDGGYBuw/Z4WwDQ5qnbso0kMt9pn9ZaMuQqi91kABqaidN?=
+ =?us-ascii?Q?U8BzMlXq3Z5o3cuCAmgfSQI2MkQrIen6GGOsl+T3RBZIe3hCLKThW2VgbXfn?=
+ =?us-ascii?Q?qUEk79WskkTB0dhG4dkJsO2HDMBYc5srdJHK/XrQoPEjuDh4j7h5Xz7jpWdD?=
+ =?us-ascii?Q?SfAks5eOaXsfLJ7Y3480d78ds05fHg4BnK2D7xGexwYMVFhtQ3JxPjlPBUnH?=
+ =?us-ascii?Q?0pcF+7cp9PVLMy3P63jdZkCY+1xRqvj9lGjg2A4YvwqMAzYGnBh/RYxLUr4Y?=
+ =?us-ascii?Q?8eT+tXCtdMjqEKyf9MWllhrqdtI2V/wGB/4FleJgcCQ4jC/nvm22uqIiY8/L?=
+ =?us-ascii?Q?kF/tJZzrGzaQB8Ok1rxHJSGd7jhgHZ7ZIiEBNOLyHcDkE645c2H1cJv7C3Zp?=
+ =?us-ascii?Q?CnKDCH4KXp+RGgurIrC4veTMKkjHmFZa5obDd+g2lyAxUXHShCOXxDJpvYb0?=
+ =?us-ascii?Q?qTEkEICX8LRFw8T4gbndNzOwh0SBZXY+5Z2JgpEf6ZDP8dAsUle6Hot+Zame?=
+ =?us-ascii?Q?REaRGKqUtZynfkMUq0UxY/8GyhYwtxMhlePU6ahH73TcNDNdVP6zMQrixRro?=
+ =?us-ascii?Q?rpZZ+8DqMt3HPE3a7Uv+yb9ZUw431g1PRmg32LwqRErX+LaCsn6czeN98iN2?=
+ =?us-ascii?Q?aDB9V+ysmZbdl88wkm/QptMdDBX6bYqDBOKDlxP5xEqg7ytT+J0d/ijdqbFd?=
+ =?us-ascii?Q?dnepvCssagqSEdo4xv3GOEs9mEPCSYATK/v2j2JPSmqrHKnNxmsD68lbwqjx?=
+ =?us-ascii?Q?mc1AJTWgWNFUA/OhuL36dCJN3KYfcfI4oi1cAK9DqBcVQT7E1uiPdOfaW1HV?=
+ =?us-ascii?Q?PmOX11ZJEUiqwcnxGrgqH229rOx/PxnvV5xIp6t9vMPvh+Oewg9/JpoqfY0s?=
+ =?us-ascii?Q?ndnlY1R5wJhr9fBDmeOpnzBbwimheDH4pAD8dvEb7VL42TdC+k+uEMVxOVuA?=
+ =?us-ascii?Q?IuzWClD8w5U3ic03z8p09QA3gppgiywd5+Gfi6xm?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9465d7e-a754-46de-99f1-08ddbfcbcc88
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2025 15:51:01.6876
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2025 16:06:59.0729
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: q3PqZzBpGu6Q7j7cSFHuYKsh3EUWUEcA6fpgLSE9c2iuaVeinegivICLnAS6xS+ZgjMHAr6VTIL5PI7c53tJE84gvnwMh60NwzY2H/ymfI8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB6769
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-10_04,2025-07-09_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 bulkscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
- definitions=main-2507100136
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEwMDEzNiBTYWx0ZWRfXzvC9fYH+Rsb0 kzaayej4gYr+qUbBua2AL/C4jZmB4kIckaqFvpyWOyPHYsC5evFDckJTYzG4XFMMZi8qQXq5sk5 hnFjq4u/kK50X2w/GE39ZuKPS7T9lQ3LC+8P3WbsWLYJ1aew2CvzEqFFFYyQIUxRW3gEz+qz0mR
- +M9eRMoQx40Fnl0JIaxoQYPX4xl07X7R+PJ+keQGzhMD9iDfz8uAT28wrn5gpCxoD8CMyDSd6xn jhjg1fRQ41gE+Y56aBnjaetozjvSEbaXcV8hU8lpzS59zobGXjgoypAqRBEefquHygmc6UzsjOC Wp1hfDUsnusyQEJ0WjI9UKXLKZ6JaHgKu7jZ6qtvi5vRO5wJvmKGaXEQB7Wl1mc7yNJy1im4vV3
- ze4ilzjaDvWHMkrhZtbVef4O2ms/Tu5gkkOFxKK9WTeqTh1FN/lLYRSZPUfmIAOXO/q4xKIY
-X-Proofpoint-ORIG-GUID: kUeBEkcXRU3p8mWPi9oFXUp52VGiRov7
-X-Authority-Analysis: v=2.4 cv=cvybk04i c=1 sm=1 tr=0 ts=686fe169 b=1 cx=c_pps a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=Wb1JkmetP80A:10 a=GoEa3M9JfhUA:10 a=yPCof4ZbAAAA:8 a=0r5cTyXUqGrpW3ZitcIA:9
-X-Proofpoint-GUID: kUeBEkcXRU3p8mWPi9oFXUp52VGiRov7
+X-MS-Exchange-CrossTenant-UserPrincipalName: FC7HlmIiK5TXG82U82KNXyY9lew3MefCZJfTtEQfN0uO/Mn4Xsjb9mRKK7mj8b89KLwNvgCGxUN8IOrUhWuYig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSKPR04MB11317
 
-Historically we've made it a uAPI requirement that mremap() may only
-operate on a single VMA at a time.
+On Thu, Jul 10, 2025 at 01:40:25PM +0200, Niklas Cassel wrote:
+> Hello Frank,
+>
+> I tested v20 of your series, but unfortunately, it still doesn't work.
+>
+> When enabling the doorbell, the programming of the inbound iATU fails:
+>
+> ## pci_epf_test_enable_doorbell()
+> ## keeps the BAR size, and BAR type of a BAR that has already been configured,
+> ## but changes the address translation for this BAR to redirect to the GIC ITS
+> ## rather than to the memory allocated by pci_epf_alloc_space()
+> ## (does not free the memory allocated by pci_epf_alloc_space())
+>
+> [   39.347502] pci_epf_test_enable_doorbell: msg hi: 0x0 msg low: 0xfe670040
+> [   39.348103] pci_epf_test_enable_doorbell: base: 0xfe670000 off: 0x40
+> [   39.348658] dw_pcie_ep_inbound_atu index: 1 parent_bus_addr: 0xfe670000 bar: 1 size: 0x100000
+> [   39.349403] dw_pcie_prog_ep_inbound_atu parent_bus_addr: 0xfe670000 pci->region_align: 0x10000 IS_ALIGNED: 1
+> [   39.350260] dw_pcie_prog_ep_inbound_atu parent_bus_addr: 0xfe670000 size: 0x100000 IS_ALIGNED: 0
+> [   39.351028] rockchip-dw-pcie a40000000.pcie-ep: Failed to program IB window
+>
+> ## pci_epf_test_disable_doorbell()
+> ## changes the address translation for this BAR to redirect to the memory
+> ## allocated by pci_epf_alloc_space() (which was never freed when enabling the
+> ## doorbell)
+>
+> [   39.351656] dw_pcie_ep_inbound_atu index: 1 parent_bus_addr: 0xa2e00000 bar: 1 size: 0x100000
+> [   39.352401] dw_pcie_prog_ep_inbound_atu parent_bus_addr: 0xa2e00000 pci->region_align: 0x10000 IS_ALIGNED: 1
+> [   39.353257] dw_pcie_prog_ep_inbound_atu parent_bus_addr: 0xa2e00000 size: 0x100000 IS_ALIGNED: 1
+>
+>
+> The reason why pci_epf_test_enable_doorbell() fails is because of this check:
+> https://github.com/torvalds/linux/blob/v6.16-rc5/drivers/pci/controller/dwc/pcie-designware.c#L663
+>
+> If you want to understand why this very important check is there, it is
+> because the DWC controller requires that the physical address programmed in
+> the iATU is aligned to the size of the BAR (BAR_MASK+1), see this commit:
+> https://github.com/torvalds/linux/commit/129f6af747b2
+>
+>
+> Applying the following patch on top of your v20 series makes things work as
+> intended and makes the pcie_ep_doorbell.DOORBELL_TEST selftest pass for me:
+>
+> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+> index dfdd25cfc003..7d356b0201ae 100644
+> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
+> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+> @@ -738,9 +738,9 @@ static void pci_epf_test_enable_doorbell(struct pci_epf_test *epf_test,
+>  	reg->doorbell_bar = cpu_to_le32(bar);
+>
+>  	msg = &epf->db_msg[0].msg;
+> -	ret = pci_epf_align_inbound_addr(epf, bar, ((u64)msg->address_hi << 32) | msg->address_lo,
+> +	ret = pci_epf_align_inbound_addr(epf, epf->bar[bar].size,
+> +					((u64)msg->address_hi << 32) | msg->address_lo,
+>  					&epf_test->db_bar.phys_addr, &offset);
+> -
+>  	if (ret)
+>  		goto err_doorbell;
+>
+> diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
+> index c21d8e786eb3..b3d4117182e2 100644
+> --- a/drivers/pci/endpoint/pci-epf-core.c
+> +++ b/drivers/pci/endpoint/pci-epf-core.c
+> @@ -478,44 +478,36 @@ struct pci_epf *pci_epf_create(const char *name)
+>  EXPORT_SYMBOL_GPL(pci_epf_create);
+>
+>  /**
+> - * pci_epf_align_inbound_addr() - Align the given address based on the BAR
+> - *				 alignment requirement
+> + * pci_epf_align_inbound_addr() - Align the given address based on the BAR size
+> + *
+>   * @epf: the EPF device
+> + * @bar_size: the current BAR size
+>   * @addr: inbound address to be aligned
+> - * @bar: the BAR number corresponding to the given addr
+> - * @base: base address matching the @bar alignment requirement.
+> + * @base: base address matching the @bar_size alignment requirement.
+>   * @off: offset to be added to the @base address.
+>   *
+> - * Helper function to align input 'addr' to base and offset, which match
+> - * BAR's alignment requirement.
+> + * Helper function to align input 'addr' to base and offset, when dynamically
+> + * changing a BAR.
+>   *
+>   * The pci_epf_alloc_space() function already accounts for alignment. This is
+>   * primarily intended for use with other memory regions not allocated by
+>   * pci_epf_alloc_space(), such as peripheral register spaces or the trigger
+>   * address for a platform MSI controller.
+> + *
+> + * Since this function is only used when dynamically changing a BAR (i.e. when
+> + * calling set_bar() twice, without ever calling clear_bar(), as calling
+> + * clear_bar() would clear the BAR's PCI address assigned by the host), this
+> + * function must align to the current BAR size, since we are not clearing the
+> + * BAR configuration.
+>   */
+> -int pci_epf_align_inbound_addr(struct pci_epf *epf, enum pci_barno bar,
+> -			      u64 addr, dma_addr_t *base, size_t *off)
+> +int pci_epf_align_inbound_addr(struct pci_epf *epf, size_t bar_size, u64 addr,
+> +			      dma_addr_t *base, size_t *off)
+>  {
+> -	const struct pci_epc_features *epc_features;
+> -	u64 align;
+> -
+> -	if (!base || !off)
+> +	if (!base || !off || !bar_size)
+>  		return -EINVAL;
+>
+> -	epc_features = pci_epc_get_features(epf->epc, epf->func_no, epf->vfunc_no);
+> -	if (!epc_features) {
+> -		dev_err(&epf->dev, "epc_features not implemented\n");
+> -		return -EOPNOTSUPP;
+> -	}
+> -
+> -	align = epc_features->align;
+> -	align = align ? align : 128;
+> -	if (epc_features->bar[bar].type == BAR_FIXED)
+> -		align = max(epc_features->bar[bar].fixed_size, align);
+> -
+> -	*base = round_down(addr, align);
+> -	*off = addr & (align - 1);
+> +	*base = round_down(addr, bar_size);
+> +	*off = addr & (bar_size - 1);
+>
+>  	return 0;
+>  }
+> diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
+> index 0ca08f0d05d7..bcc8184325d2 100644
+> --- a/include/linux/pci-epf.h
+> +++ b/include/linux/pci-epf.h
+> @@ -242,8 +242,8 @@ void *pci_epf_alloc_space(struct pci_epf *epf, size_t size, enum pci_barno bar,
+>  void pci_epf_free_space(struct pci_epf *epf, void *addr, enum pci_barno bar,
+>  			enum pci_epc_interface_type type);
+>
+> -int pci_epf_align_inbound_addr(struct pci_epf *epf, enum pci_barno bar,
+> -			      u64 addr, dma_addr_t *base, size_t *off);
+> +int pci_epf_align_inbound_addr(struct pci_epf *epf, size_t bar_size, u64 addr,
+> +			      dma_addr_t *base, size_t *off);
+>  int pci_epf_bind(struct pci_epf *epf);
+>  void pci_epf_unbind(struct pci_epf *epf);
+>  int pci_epf_add_vepf(struct pci_epf *epf_pf, struct pci_epf *epf_vf);
+>
+>
+>
+>
+> However, the more I think about it, considering that this alignment requirement
+> is inherent to the DWC controller (other controllers might not have this
+> requirement), perhaps pci_epf_align_inbound_addr() should not be a function in
+> pci-epf-core.c, perhaps this function would be better suited to live in
+> drivers/pci/controller/dwc/pcie-designware-ep.c ?
 
-For instances where VMAs need to be resized, this makes sense, as it
-becomes very difficult to determine what a user actually wants should they
-indicate a desire to expand or shrink the size of multiple VMAs (truncate?
-Adjust sizes individually? Some other strategy?).
+I think align to bar size is quite make sense now. Even other controllers
+have not such requirement, align to bar size still work.
 
-However, in instances where a user is moving VMAs, it is restrictive to
-disallow this.
+Anyways, it need be align. We still pass down bar number, get bar size
+in pci_epf_align_inbound_addr(). So we can fine tune algorithm in future,
+such as add field in epc_features.
 
-This is especially the case when anonymous mapping remap may or may not be
-mergeable depending on whether VMAs have or have not been faulted due to
-anon_vma assignment and folio index alignment with vma->vm_pgoff.
-
-Often this can result in surprising impact where a moved region is faulted,
-then moved back and a user fails to observe a merge from otherwise
-compatible, adjacent VMAs.
-
-This change allows such cases to work without the user having to be
-cognizant of whether a prior mremap() move or other VMA operations has
-resulted in VMA fragmentation.
-
-Having refactored mremap code to aggregate per-VMA and parameter checks, we
-are now in a position to permit this kind of move.
-
-We do so by detecting if this is a move-only operation up-front, and then
-utilising a separate code path via remap_move() rather than the ordinary
-single-VMA path.
-
-There are two tasks that occur outside of the mmap write lock - userfaultfd
-notification and population of unmapped regions of expanded VMAs should the
-VMA be mlock()'d.
-
-The latter doesn't apply, as this is logic for a move only and thus no
-expansion can take place. In the former case, we explicitly disallow
-multi-VMA operations on uffd-armed VMAs.
-
-The mmap lock is never dropped in the move-only case, this only occurs on a
-VMA shrink.
-
-We take care to handle cases where a VMA merge has occurred, by resetting
-the VMA iterator in such instances.
-
-We needn't worry about self-merges, as in those cases we would, by
-definition, not be spanning multiple VMAs. The overlapping range test is
-performed on the whole range so specifically disallows this.
-
-Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
----
- mm/mremap.c | 132 +++++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 125 insertions(+), 7 deletions(-)
-
-diff --git a/mm/mremap.c b/mm/mremap.c
-index 8cb08ccea6ad..1c88ed7eae0a 100644
---- a/mm/mremap.c
-+++ b/mm/mremap.c
-@@ -69,6 +69,8 @@ struct vma_remap_struct {
- 	enum mremap_type remap_type;	/* expand, shrink, etc. */
- 	bool mmap_locked;		/* Is mm currently write-locked? */
- 	unsigned long charged;		/* If VM_ACCOUNT, # pages to account. */
-+	bool multi_vma;			/* Is >1 VMA being moved? */
-+	bool vmi_needs_reset;		/* Was the VMA iterator invalidated? */
- };
- 
- static pud_t *get_old_pud(struct mm_struct *mm, unsigned long addr)
-@@ -1188,6 +1190,9 @@ static int copy_vma_and_data(struct vma_remap_struct *vrm,
- 		*new_vma_ptr = NULL;
- 		return -ENOMEM;
- 	}
-+	if (vma != vrm->vma)
-+		vrm->vmi_needs_reset = true;
-+
- 	vrm->vma = vma;
- 	pmc.old = vma;
- 	pmc.new = new_vma;
-@@ -1583,6 +1588,18 @@ static bool vrm_will_map_new(struct vma_remap_struct *vrm)
- 	return false;
- }
- 
-+/* Does this remap ONLY move mappings? */
-+static bool vrm_move_only(struct vma_remap_struct *vrm)
-+{
-+	if (!vrm_implies_new_addr(vrm))
-+		return false;
-+
-+	if (vrm->old_len != vrm->new_len)
-+		return false;
-+
-+	return true;
-+}
-+
- static void notify_uffd(struct vma_remap_struct *vrm, bool failed)
- {
- 	struct mm_struct *mm = current->mm;
-@@ -1646,10 +1663,29 @@ static int check_prep_vma(struct vma_remap_struct *vrm)
- 			(vma->vm_flags & (VM_DONTEXPAND | VM_PFNMAP)))
- 		return -EINVAL;
- 
--	/* We can't remap across vm area boundaries */
-+	/*
-+	 * We can't remap across the end of VMAs, as another VMA may be
-+	 * adjacent:
-+	 *
-+	 *       addr   vma->vm_end
-+	 *  |-----.----------|
-+	 *  |     .          |
-+	 *  |-----.----------|
-+	 *        .<--------->xxx>
-+	 *            old_len
-+	 *
-+	 * We also require that vma->vm_start <= addr < vma->vm_end.
-+	 */
- 	if (old_len > vma->vm_end - addr)
- 		return -EFAULT;
- 
-+	/*
-+	 * We can't support moving multiple uffd VMAs as notify requires mmap
-+	 * lock to be dropped.
-+	 */
-+	if (vrm->multi_vma && userfaultfd_armed(vma))
-+		return -EINVAL;
-+
- 	if (new_len <= old_len)
- 		return 0;
- 
-@@ -1746,6 +1782,84 @@ static unsigned long check_mremap_params(struct vma_remap_struct *vrm)
- 	return 0;
- }
- 
-+static unsigned long remap_move(struct vma_remap_struct *vrm)
-+{
-+	struct vm_area_struct *vma;
-+	unsigned long start = vrm->addr;
-+	unsigned long end = vrm->addr + vrm->old_len;
-+	unsigned long new_addr = vrm->new_addr;
-+	unsigned long prev_addr = start;
-+	VMA_ITERATOR(vmi, current->mm, start);
-+	unsigned long res = -EFAULT;
-+	unsigned long last_end;
-+
-+	/*
-+	 * When moving VMAs we allow for batched moves across multiple VMAs,
-+	 * with all VMAs in the input range [addr, addr + old_len) being moved
-+	 * (and split as necessary).
-+	 */
-+	for_each_vma_range(vmi, vma, end) {
-+		/* Account for start, end not aligned with VMA start, end. */
-+		unsigned long addr = max(vma->vm_start, start);
-+		unsigned long len = min(end, vma->vm_end) - addr;
-+		unsigned long offset, res_vma;
-+
-+		/* Merged with self, move on. */
-+		if (vrm->multi_vma && prev_addr == addr)
-+			continue;
-+
-+		/*
-+		 * To sensibly move multiple VMAs, accounting for the fact that
-+		 * get_unmapped_area() may align even MAP_FIXED moves, we simply
-+		 * attempt to move such that the gaps between source VMAs remain
-+		 * consistent in destination VMAs, e.g.:
-+		 *
-+		 *           X        Y                       X        Y
-+		 *         <--->     <->                    <--->     <->
-+		 * |-------|   |-----| |-----|      |-------|   |-----| |-----|
-+		 * |   A   |   |  B  | |  C  | ---> |   A'  |   |  B' | |  C' |
-+		 * |-------|   |-----| |-----|      |-------|   |-----| |-----|
-+		 *                               new_addr
-+		 *
-+		 * Now, new_addr may be altered even with MREMAP_FIXED set, due
-+		 * to e.g. alignment changes from get_unmapped_area().
-+		 *
-+		 * So we map B' at A'->vm_end + X, and C' at B'->vm_end + Y.
-+		 */
-+		offset = vrm->multi_vma ? vma->vm_start - last_end : 0;
-+		last_end = vma->vm_end;
-+
-+		vrm->vma = vma;
-+		vrm->addr = addr;
-+		vrm->new_addr = new_addr + offset;
-+		vrm->old_len = vrm->new_len = len;
-+
-+		res_vma = check_prep_vma(vrm);
-+		if (!res_vma)
-+			res_vma = mremap_to(vrm);
-+		if (IS_ERR_VALUE(res_vma))
-+			return res_vma;
-+
-+		/* mmap lock is only dropped on shrink. */
-+		VM_WARN_ON_ONCE(!vrm->mmap_locked);
-+		/* This is a move, no expand should occur. */
-+		VM_WARN_ON_ONCE(vrm->populate_expand);
-+
-+		if (!vrm->multi_vma)
-+			res = res_vma;
-+
-+		if (vrm->vmi_needs_reset) {
-+			vma_iter_reset(&vmi);
-+			vrm->vmi_needs_reset = false;
-+		}
-+		vrm->multi_vma = true;
-+		prev_addr = addr;
-+		new_addr = res_vma + vrm->new_len;
-+	}
-+
-+	return res;
-+}
-+
- static unsigned long do_mremap(struct vma_remap_struct *vrm)
- {
- 	struct mm_struct *mm = current->mm;
-@@ -1763,13 +1877,17 @@ static unsigned long do_mremap(struct vma_remap_struct *vrm)
- 		return -EINTR;
- 	vrm->mmap_locked = true;
- 
--	vrm->vma = vma_lookup(current->mm, vrm->addr);
--	res = check_prep_vma(vrm);
--	if (res)
--		goto out;
-+	if (vrm_move_only(vrm)) {
-+		res = remap_move(vrm);
-+	} else {
-+		vrm->vma = vma_lookup(current->mm, vrm->addr);
-+		res = check_prep_vma(vrm);
-+		if (res)
-+			goto out;
- 
--	/* Actually execute mremap. */
--	res = vrm_implies_new_addr(vrm) ? mremap_to(vrm) : mremap_at(vrm);
-+		/* Actually execute mremap. */
-+		res = vrm_implies_new_addr(vrm) ? mremap_to(vrm) : mremap_at(vrm);
-+	}
- 
- out:
- 	failed = IS_ERR_VALUE(res);
--- 
-2.50.0
-
+Frank
+>
+>
+> Kind regards,
+> Niklas
