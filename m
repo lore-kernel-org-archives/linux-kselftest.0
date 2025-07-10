@@ -1,151 +1,122 @@
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C6F27467B;
-	Thu, 10 Jul 2025 13:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB12427466A
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Jul 2025 13:53:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752155407; cv=none; b=enAOVa9AVf3RhH5U1UdLljgqNZLUWQOJXBdFnqRyhFWA5vhv+/7JRtXsz9v3bkZUZLEL1o42A1/H0GSwJH1+gXUQ2Blsnt7pbk98wzgYx5HF6W4bymlfz5owrLBc+UbWe0V5sVWgSYb7vHdVJFeoLie4VINt9FsKKHtcGso1pco=
+	t=1752155616; cv=none; b=cs25FKm1btB9W5AijpeTzSp9WOWLPSqk/iOpOKqZE5dplxU7GXNJESRc1bzB9lKr5xyXJh11m4SP1VvXPsrquT3d1wRVtze8srW7YN5hA0B5JNY0vxVJ+FuZGUCdGOPAQDfDo0T2QoyHjB15bO+mP88SEX6Lj0qvCjTPi0zzTCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752155407; c=relaxed/simple;
-	bh=SUWRZ9dxXGm6+zx/mzro3m8Nr7n+JkOPnhEWZD0cam4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jCYKqnEywXp0JBegHkzVDnIfb2IATOjlcLRQBAIvgEGqIX9YEw6b80cVr3/kXpIY+8gh6OTGLHQh/m+BNglZcItZZKM+twGnvgGhfQ+UnC+25IDoJEhWmSFBjPjCMr2W9MmB3qUFNOavD2lOAJZAGOQ4s+1sxgYHLF+qgKPzlAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=jrc78443; arc=none smtp.client-ip=54.204.34.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1752155616; c=relaxed/simple;
+	bh=UtxvfRS7dCCelVAqNGRe/33nhtCwjjQBTFWWFgldm/k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=aoSB3zDOF1r/Zk02q9miMo6sZNLAzOP5+A53YMaaOpymXTngcbJC3sH3j+Y3UvhHgebB1rXjCut0EdW9La3EKg9OUkZMQjXvyXDxzwgEpcYGzcCij1bDmiYEctvYxG5fOlRQofl1Q7IngKFARswoTFEbrJlg6JhMSEMzF5t5C0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vVaSeGDf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=I2F3ZpKF; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vVaSeGDf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=I2F3ZpKF; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="jrc78443"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1752155352;
-	bh=eER373CBKVzjZU12vPfZqu6v9KD+kKd8SlW6nlnHSPM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=jrc78443Mz4tHwjHVtUWntmpM82FBBwwHUxk6kSDZDC9ZiMWMfC0mJ8B6cQ2IJeTa
-	 QMXAD7kyjEvgkC6/P/BQtgT+uWYvy94iH+5l0nz5TPeydTtpuHJNsXM1YLDLcLpZkB
-	 KkaUkV4JC3nQooWSsDwSN6vW/F8HdrXURS42n38U=
-X-QQ-mid: zesmtpip2t1752155310tec24b4f1
-X-QQ-Originating-IP: y3pfuQqVdTiPsuUM2wAolixPa+zMpnrZCdXw+LqGsSI=
-Received: from avenger-e500 ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 10 Jul 2025 21:48:28 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 6548783299079273511
-EX-QQ-RecipientCnt: 9
-From: WangYuli <wangyuli@uniontech.com>
-To: wangyuli@uniontech.com
-Cc: akpm@linux-foundation.org,
-	chelsyratnawat2001@gmail.com,
-	guanwentao@uniontech.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	niecheng1@uniontech.cm,
-	shuah@kernel.org,
-	zhanjun@uniontech.com
-Subject: [PATCH] selftests/thermal: Remove duplicate newlines in perror calls
-Date: Thu, 10 Jul 2025 21:47:51 +0800
-Message-ID: <F482FB1EC020000C+20250710134751.306096-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <6338CD0E839B770B+20250710130412.284531-1-wangyuli@uniontech.com>
-References: <6338CD0E839B770B+20250710130412.284531-1-wangyuli@uniontech.com>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vVaSeGDf";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="I2F3ZpKF";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vVaSeGDf";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="I2F3ZpKF"
+Received: from hawking.nue2.suse.org (unknown [10.168.4.11])
+	by smtp-out1.suse.de (Postfix) with ESMTP id 0C34B2174F;
+	Thu, 10 Jul 2025 13:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1752155613; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dqHAb6A+qGi2SOHcnTAX3cJ4NSLLXaw7K2xbvYD8taY=;
+	b=vVaSeGDfJu/KnM9Cltgj9f2dojKl+74uBYN13F8FRS2moAPpUh9CiYnOo2PLHzBAp3w3Rs
+	3RTNYP2MqgDBC9XJRgZeaw7L8Nf82na3ks901hIvIFwu4xS1Mx4Vg4iNveRq349yDbMVwP
+	5igKMjO3ZrHCN0Mc3ciT3mjO9e5VfxY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1752155613;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dqHAb6A+qGi2SOHcnTAX3cJ4NSLLXaw7K2xbvYD8taY=;
+	b=I2F3ZpKFKYQQ6zf1Q7x6jPjegu89n3KXj82r4B6+dt8WY/1IjsujZ3itop5lHClVHobkca
+	fXf4/Ey3siEMj1Cw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1752155613; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dqHAb6A+qGi2SOHcnTAX3cJ4NSLLXaw7K2xbvYD8taY=;
+	b=vVaSeGDfJu/KnM9Cltgj9f2dojKl+74uBYN13F8FRS2moAPpUh9CiYnOo2PLHzBAp3w3Rs
+	3RTNYP2MqgDBC9XJRgZeaw7L8Nf82na3ks901hIvIFwu4xS1Mx4Vg4iNveRq349yDbMVwP
+	5igKMjO3ZrHCN0Mc3ciT3mjO9e5VfxY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1752155613;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dqHAb6A+qGi2SOHcnTAX3cJ4NSLLXaw7K2xbvYD8taY=;
+	b=I2F3ZpKFKYQQ6zf1Q7x6jPjegu89n3KXj82r4B6+dt8WY/1IjsujZ3itop5lHClVHobkca
+	fXf4/Ey3siEMj1Cw==
+Received: by hawking.nue2.suse.org (Postfix, from userid 17005)
+	id F1C374A0569; Thu, 10 Jul 2025 15:53:32 +0200 (CEST)
+From: Andreas Schwab <schwab@suse.de>
+To: =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@rivosinc.com>
+Cc: linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-riscv@lists.infradead.org,  Palmer Dabbelt <palmer@dabbelt.com>,
+  Paul Walmsley <paul.walmsley@sifive.com>,  Shuah Khan <shuah@kernel.org>,
+  Alexandre Ghiti <alex@ghiti.fr>
+Subject: Re: [PATCH v4] selftests: riscv: add misaligned access testing
+In-Reply-To: <20250710133506.994476-1-cleger@rivosinc.com> (=?utf-8?Q?=22C?=
+ =?utf-8?Q?l=C3=A9ment_L=C3=A9ger=22's?=
+	message of "Thu, 10 Jul 2025 15:35:05 +0200")
+References: <20250710133506.994476-1-cleger@rivosinc.com>
+Date: Thu, 10 Jul 2025 15:53:32 +0200
+Message-ID: <mvmecuognj7.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: N+/GyfuFbcLiCJEi0ToNj6nxMYd6PUav400TffcjIuPYO83RisX08Ozs
-	1m8ky8xgCqM/A3ZIax8Ev0dLPz46SpHlBZbu3+HBsBJ4/TarRA3JIS7HBXZnIk8md3r9ET/
-	rHs804FKnhhXSRMrLn/0MeolYYFFy7aggMQy/akDm0oY7UuZWmgDJOG+F9h+eAP1ieWbrke
-	YMRry0X3nsFnFPO03A8aAthsmeRKUdc7vgUBtGRHNUXEhVvUkQNKHX8mURHG/r1YDI7k0LQ
-	RjEN1IDeXp1XCpHEy3JkSabtDW947PKUr5f4+z5bLjeOFnsXTu4Onzzc6HjOfyHGzD1isAf
-	V5nsJf1UMv6GyxZtSueKiSIWhyp/tKsDMyBG+vqmwtJL9xEbxeVl3crsmiOEYqo0iZfs9tm
-	X3trSWqlrrGzBI90wKzy9R3aOh0VVmC1hrUumCp1tv0JevAL9AkpPwWafUrKTXK92Paas1W
-	j9i5es9gZmeRmu7gWOcVP81+VdypGU5SOX0KE+UTk4B9VXQqAEe8hmLEeWW7dtLqIx32FbS
-	HIzCEVUo1a44p7pmY/kneBGpf1ntXIEj6ahoL/p3x4KFxauwxbZvo5LLtVbdu6tJ/3N7kr6
-	9dFz9ma3bTKIStThTJCcQ1bLdPvKx5iODYaFwyQXilFzaSb634KcbtPq/HBrnF0nfJgiK8f
-	OhQ7iXbc3KsARV6d4QfJYcteSwYuGWvL/zHQ+r2eGQziKj6Ql/TQDIqtMxgrLprstFit3R6
-	4ZfOLaWR/peI3fumd5uqGm9HyIqG0oZWL5c9FiyralWfsgsXElSwyMxYoRLAZkF+4I6lHh0
-	uBz7akEnFAIROFGPyA4lTsxgzDj6H7b7CC1ADZQyNl4BMsI1HGm0Nt7wTE9ZTtMlQlm+aUQ
-	v2LrIMUSKu3MjGcPtUDm4fQ//FVyaC/P0MmJ8laBZ+nd0ebA/FoyA7qHkwLuFB2Bk/giL9c
-	xhvdCIna4T760ilpEvSYhMlmDn+ULXHLyu9fjsG81sgE2Nm/QcX4uQMusb8Ukyw3/6eHeOb
-	JUW2RRhAgGsWGQXKDt1DQW5/ox+zo=
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-X-QQ-RECHKSPAM: 0
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.20 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.989];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_NO_TLS_LAST(0.10)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_ONE(0.00)[1];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid]
+X-Spam-Flag: NO
+X-Spam-Score: -4.20
 
-The perror() function automatically appends a newline character,
-so the explicit '\n' in the format strings is redundant and results
-in duplicate newlines in the output.
+On Jul 10 2025, Clément Léger wrote:
 
-Remove the redundant '\n' characters from perror() calls in
-workload_hint_test.c to fix the formatting.
+> This selftest tests all the currently emulated instructions (except for
+> the RV32 compressed ones which are left as a future exercise for a RV32
+> user). For the FPU instructions, all the FPU registers are tested.
 
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- .../intel/workload_hint/workload_hint_test.c       | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+If that didn't catch the missing sign extension that I just fixed in
+<https://lore.kernel.org/linux-riscv/mvmikk0goil.fsf@suse.de>, you
+should consider extending the tests.
 
-diff --git a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-index bda006af8b1b..ba58589a1145 100644
---- a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-+++ b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-@@ -32,12 +32,12 @@ void workload_hint_exit(int signum)
- 
- 	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
- 	if (fd < 0) {
--		perror("Unable to open workload type feature enable file\n");
-+		perror("Unable to open workload type feature enable file");
- 		exit(1);
- 	}
- 
- 	if (write(fd, "0\n", 2) < 0) {
--		perror("Can't disable workload hints\n");
-+		perror("Can't disable workload hints");
- 		exit(1);
- 	}
- 
-@@ -70,12 +70,12 @@ int main(int argc, char **argv)
- 		sprintf(delay_str, "%s\n", argv[1]);
- 		fd = open(WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE, O_RDWR);
- 		if (fd < 0) {
--			perror("Unable to open workload notification delay\n");
-+			perror("Unable to open workload notification delay");
- 			exit(1);
- 		}
- 
- 		if (write(fd, delay_str, strlen(delay_str)) < 0) {
--			perror("Can't set delay\n");
-+			perror("Can't set delay");
- 			exit(1);
- 		}
- 
-@@ -92,12 +92,12 @@ int main(int argc, char **argv)
- 	/* Enable feature via sysfs knob */
- 	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
- 	if (fd < 0) {
--		perror("Unable to open workload type feature enable file\n");
-+		perror("Unable to open workload type feature enable file");
- 		exit(1);
- 	}
- 
- 	if (write(fd, "1\n", 2) < 0) {
--		perror("Can't enable workload hints\n");
-+		perror("Can't enable workload hints");
- 		exit(1);
- 	}
- 
-@@ -108,7 +108,7 @@ int main(int argc, char **argv)
- 	while (1) {
- 		fd = open(WORKLOAD_TYPE_INDEX_ATTRIBUTE, O_RDONLY);
- 		if (fd < 0) {
--			perror("Unable to open workload type file\n");
-+			perror("Unable to open workload type file");
- 			exit(1);
- 		}
- 
 -- 
-2.50.0
-
+Andreas Schwab, SUSE Labs, schwab@suse.de
+GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+"And now for something completely different."
