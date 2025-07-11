@@ -1,63 +1,63 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5330F2144B4;
-	Fri, 11 Jul 2025 12:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFAE1F4C8C;
+	Fri, 11 Jul 2025 12:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752235373; cv=none; b=kesY9SUcMhRa3wy2QJSLszeVieJx9RI6a2jnBcoTPeQoCdHbnwJ+2Jl/9ianrYDKvkwHq8BMhZhcT3Tgzies8e7UDtYIjNZGRcDGq7xe8IK3RslOfFHKC9TF72HQTDeJkaQgfpxZSoPfCPRGyOyAAyDULA9UyUzMqIu+R6opvRw=
+	t=1752235790; cv=none; b=bVmw8bA+Z0bqRBmfcf3BhvR4VuS9BMpc/HwPOt8B6b81yYkIqMJAAeU7W3orBNXeO+GjXhYw1DdtFOGOQh1b88TD5pTzgZjf95lqbR8hu8XWfa5LFACI7Oa1ks8m430ySIr0X+BwtTDTAgys19JCqdg/tz7x7ZLTFTuiHAphGrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752235373; c=relaxed/simple;
-	bh=XsFF2I3r2LyLT3Mlh+lSG2S5J1f1unVaVJkKRBrcwWE=;
+	s=arc-20240116; t=1752235790; c=relaxed/simple;
+	bh=1mUysb+8o08SdBBmYbBUyKMVp31ubQlaOrJqMOyPPks=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kcPIH+4JEUmaLToEoUmCkkqVr8JM4VlCYZs7qf0si7KenysnlOgfe0RLUWjOl/OGKle4NtiwGdshBlZ60RCPAJ7zmgYlXFepSgyFonE3rfk7K6SnV2D09xWSULgrmGVcgp5/JKjge2VMsLWSgMKyBtJsOQavfyzbpLqFMdhzzFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ebhJSSmi; arc=none smtp.client-ip=209.85.215.180
+	 MIME-Version; b=D/5k38YPBSgOdD/lRfwv2S8i20zG8F179hIxIfwQmDPNULXrsg9ok2fLgaljGrSrdVRVzVlzg6mMhMfNtoNFi+6Qzheh4cx2YIkvQyEtL6k6bnN3UCrw+8bL/dMd0u+ffdZAm3PVe9phiGWLIisNPyWrmkNmXxJjrs4h81K6u4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ia9o9Iau; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ebhJSSmi"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b2c2c762a89so1743115a12.0;
-        Fri, 11 Jul 2025 05:02:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ia9o9Iau"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-73972a54919so1811763b3a.3;
+        Fri, 11 Jul 2025 05:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752235371; x=1752840171; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752235788; x=1752840588; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XsFF2I3r2LyLT3Mlh+lSG2S5J1f1unVaVJkKRBrcwWE=;
-        b=ebhJSSmicdCt1irUv57fnul9kWxJyba7SME6uATRSy+OrMjko0RkFrNZlkE6xT64JJ
-         DZyzvvayaR61YmgiGz4vYQ9u1rA4tUP4qJ3tHTZZcvOhtoqjFXIh1JjUpB8WXdZFHbOj
-         YX/syaxRbZYAM8NkW6PSkpnGRP/nZWUbPBXRIjulRdzFJkr9oJkljF+hoWHMXMHIdChj
-         Q9G3gBKhbw1sbiipZuvQ3Kmmfc6dBrC7DNg1CA2mNR3DBy97GgOqlmwR1Ozn69ArBwsZ
-         87sNpx9x0ZxYc9aZTCu3l8juTjwFp86Rm72i2LGDOsgljVvNHeMK3cK9cEzdZTAMOguy
-         AUXQ==
+        bh=RZh+h9FkEGoNBmFQ/fWxX9YZY8n00mTm9exBYWyxMyE=;
+        b=Ia9o9Iau06WfbNNgeNWenOCOT/YMZjrI1fBkrN8Tv6jy04w0T1oArsOvkhkJrMU8pD
+         RHEZU5u/Bo5n14oHuYoPJXOouCuQbzwMZjTDphy3OoDSKot+E5ddVZ5gdNA4FSWxJz9n
+         pl6RaRqR5owwko5ImcQE5QHZgFhb7rmRDyj9J0AIe7ZPUCA2l7sjOkENQwnDKQVupfda
+         8UGHFJZSZcCauXO5Wtrj9Ch58WCpOle+Gh20OopFfJVqqILovfkSekCYyEKHPtHCOmyS
+         laCUmkm/7gHLSU/7w0UlhYK1TdJuxqG2m+jJ5kmu/zer4Yw7ep6Zvdwu5cO0BhMakZgm
+         vSWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752235371; x=1752840171;
+        d=1e100.net; s=20230601; t=1752235788; x=1752840588;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XsFF2I3r2LyLT3Mlh+lSG2S5J1f1unVaVJkKRBrcwWE=;
-        b=dPBPWRpAx6QqQRha4c5GtMEM6HXsDvbwdV0LutKPvs/c9oSILb46jKrdKAUOFFztPH
-         x+M50so8PTyTM0FvA4An1hiWZAdHCt1rf/WNAfWcfewIxCQBw5APXP7+gonzxWUCZypn
-         x6h8J0VaIinBDfj3VRbvM/s12Y4Lln8r949jYgAMiKguv0fBGUhb/Rv9DG5WG/tIAdc2
-         Zlia/cgZBRyuv74CltzPG3j2kZB2ul0Iynr8ECPYBu7h3aKVASg4UEOSetZGyEGJPmlI
-         jmUluiGMy4s22eb4HtSza7E9oS7O07zTzjhzhRuUI1rvNJSHsbzHj1drZN8JiHZw2aWR
-         ykBw==
-X-Forwarded-Encrypted: i=1; AJvYcCWOBzh4b9XcgzOUlcOEJMyjOu8Cn9YekzVfKX5JDaam5dB6sSpSUygQTExiijuekeIW2XFY+peufClWpuaDCYtr@vger.kernel.org, AJvYcCX0yA8RJjZzs0q5XRCIf1vJYYf5vXuxV41zvBDESPYOQW46TRCIWxZIFs8GNF8XmoR7CDqnB1wClE22uU0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbeIVN5dW3Q1+9gsfmwSrrOf/oBl1LYsYgq6JOldveVN5Fv4PG
-	bomwADukIqq0cdNTJQ5pABCjH/2M9/v5NolKKgDI/Bq9tlBRODKrfhyz
-X-Gm-Gg: ASbGncsLw+gej7XwO7KFS7dkw8Zh4HxJ65517opMKhS6s22kZ9no6m+5g43NYNH/Wle
-	VHkOsEtdH38SnGaOmBFHD7BYaLTr4bzDEtDw1JYheWx1PNtVqOc1MehHavJvUOITv0IU/DPKHYK
-	B6gAVBzsPdF2aJ28SCsq21dC7rXiYk554DFbNmlwWYNYuWA8k9BwVWG8PHahgUQnnZd5CAU7S7z
-	IV0SjlRZR4fpQcVKtunpGn6brbtWj+W/hvNnEyzcrVdmZbTYiCaciFWANjb3gk8xhjhvpHynwPe
-	n8N4QQFPzu+RwLV4i6uE5kRHC0ImCIBwH1whfZW74293Ww1Rwq/Bh41gZo+QPErqVZ9Cp3a3ubm
-	GHn2RUnRclXw+RZ8NxlK3WHWKQesRmqrwot1Wb3cokHvnMu/RLBRiLk8=
-X-Google-Smtp-Source: AGHT+IFYWQ/ZoNjvtPKzQLCzn9YTVSOIlm6UJwjlTwkSQUC7rk/srKvasjhL4LUz8bqQlLKaz/2kWg==
-X-Received: by 2002:a17:90b:4c0d:b0:315:af43:12ee with SMTP id 98e67ed59e1d1-31c50e1763cmr2463122a91.16.1752235371389;
-        Fri, 11 Jul 2025 05:02:51 -0700 (PDT)
+        bh=RZh+h9FkEGoNBmFQ/fWxX9YZY8n00mTm9exBYWyxMyE=;
+        b=a9p4p/FNUAgEdgLkLc4g+qxbEW22hjzOFhVvJkVcDrCWt+kiq+Qwz/xwSRuySVlIRp
+         yRZGO/mjIpUHW+9eOkjZzO/cojM+YkKerGHLR5UYBO7GWJAEkvtC2aaLvvbkQa5LU1uG
+         /foCIF8Fvz97+PXZAzyI2C76SyNgpivGMSCX+v8oAdGkOwSEkD5Sq7VemSrNiZxny7ax
+         DtHJM2tHAxECsN4PG35M1YkYw+MAtBK9feuStPdy3oUxBdYEJvzywJk2okTXXHm6kPTL
+         131RMcpQV2HGByOFYtlNIJtSynUe/UYK4y/XSXK1tnjtt56XzVFUW484z87sF568/w/B
+         iE0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUgexyf/qbqRymTez8zYuNgThhqEmtGv5mR1Tu8rNxGdQ6DEguP9lPX0Zd8Tap2oPk+hs+khKY2Vn3/tEY=@vger.kernel.org, AJvYcCXQqD62FAzGVasz6s0Te5ypqNIYtCWD/bW3LjTT6loJiSTqDEcM3gRFkXDOP+nYsLPeeX4dgt9VAtJyAb+NSDEK@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQbbwR8+iQhCbVLi5302x6wld+tQzV9P7ytp/NSBXwQMV4DbNp
+	+rtD6LmAiPPNN9vV0w3y7vWx570tZxHYvfM5k2cVui/65R1yfqpCEO/O
+X-Gm-Gg: ASbGncuIZ385z/5FADu25CYII/uc6AccIyYXCQupv+RM11GQkBaxKcmhwYmziyZI7si
+	lAaL0BxD4Lxzmtlz7ZJpwiHGopjdLGsFwqp8joNOXp3W08Tks/MHx6q/++NDvcy4E+S9QyCv6JN
+	h4PKRT/53Xj6C7UoeJ9gYDBsXk9KMa5M/mgF+mNVLk9W0OYunVpRmk3dDn82O324trp1NUKur7W
+	2a6Vz1MUWJlbJyAoxl4eeSKxvOG/0YXlTAJiFwmnx9cGclkFto7ST4F7+L3Yi/N/7xuOl2lq6sb
+	SZO6pyVKnxHHiwEc9MjCfruQTHs6eqid2gnUNe82JqeliH5CJSoWW7ItHJ77teoIbeGJWNjm8gc
+	VDijamqMnHAZyVa3yO4dPXDVypYHbbwzVFd8ud/jCLhxRVh1o
+X-Google-Smtp-Source: AGHT+IE2NZ0+J8d0OK9Iy+YWW1/9BUq73Ob8bE/TFoBEJqMyC+uapo8S3f7XGSDKa5bAQ5+00q06WA==
+X-Received: by 2002:a05:6a21:8dc7:b0:222:1802:2dd7 with SMTP id adf61e73a8af0-2313504f6f3mr4547110637.13.1752235787862;
+        Fri, 11 Jul 2025 05:09:47 -0700 (PDT)
 Received: from DESKTOP-GIED850.localdomain ([114.247.113.178])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c3e978c75sm5660371a91.19.2025.07.11.05.02.46
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3bbe72913csm4944545a12.72.2025.07.11.05.09.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jul 2025 05:02:50 -0700 (PDT)
+        Fri, 11 Jul 2025 05:09:47 -0700 (PDT)
 From: wang lian <lianux.mm@gmail.com>
 To: lorenzo.stoakes@oracle.com
 Cc: Liam.Howlett@oracle.com,
@@ -78,97 +78,78 @@ Cc: Liam.Howlett@oracle.com,
 	vbabka@suse.cz,
 	zijing.zhang@proton.me,
 	ziy@nvidia.com
-Subject: Re: [PATCH v4] selftests/mm: add process_madvise() tests
-Date: Fri, 11 Jul 2025 20:02:00 +0800
-Message-ID: <20250711120232.13452-1-lianux.mm@gmail.com>
+Subject: Re: [PATCH v3] selftests/mm: add process_madvise() tests
+Date: Fri, 11 Jul 2025 20:09:38 +0800
+Message-ID: <20250711120938.15270-1-lianux.mm@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <a6c8e519-69a5-4de8-a857-64459581233f@lucifer.local>
-References: <a6c8e519-69a5-4de8-a857-64459581233f@lucifer.local>
+In-Reply-To: <e05e7e0d-02e3-435c-bb82-91200a868448@lucifer.local>
+References: <e05e7e0d-02e3-435c-bb82-91200a868448@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=yes
 Content-Transfer-Encoding: 8bit
 
 Hi Lorenzo Stoakes,
 
-> > Hi Lorenzo Stoakes,
+> On Fri, Jul 11, 2025 at 09:34:38AM +0100, Mark Brown wrote:
+> > On Thu, Jul 10, 2025 at 12:28:13PM -0400, Zi Yan wrote:
+> > > On 10 Jul 2025, at 4:42, Mark Brown wrote:
+> > > > On Wed, Jul 09, 2025 at 10:46:07AM -0400, Zi Yan wrote:
+> > > >
+> > > > > Right. My /usr/include/sys does not have pidfd.h. IMHO selftests
+> > > > > should not rely on userspace headers, otherwise we cannot test
+> > > > > latest kernel changes.
+> > > >
+> > > > That's not realistic, we need to be able to use things like libc and for
+> > > > many areas you'd just end up copying or reimplmenenting the userspace
+> > > > libraries.  There's some concerns for sure, for example we used to have
+> > >
+> > > Sure. For libraries like libc, it is unrealistic to not rely on it.
+> > > But for header files, are we expecting to install any kernel headers
+> > > to the running system to get selftests compiled? If we are testing
+> > > RC versions and header files might change before the actual release,
+> > > that would pollute the system header files, right?
 > >
-> > >> + *
-> > >> + * This test deterministically validates process_madvise() with MADV_COLLAPSE
-> > >> + * on a remote process, other advices are difficult to verify reliably.
-> > >> + *
-> > >> + * The test verifies that a memory region in a child process, initially
-> > >> + * backed by small pages, can be collapsed into a Transparent Huge Page by a
-> > >> + * request from the parent. The result is verified by parsing the child's
-> > >> + * /proc/<pid>/smaps file.
-> > >> + */
+> > Right, for the kernel's headers there's two things - we use a
+> > combination of tools/include and 'make headers_install' which populates
+> > usr/include in the kernel tree (apparently mm rejects the latter but it
+> > is widely used in the selftests, especially for architecture specifics).
+> > These install locally and used before the system headers.
 > >
-> > > This is clever and you've put a lot of effort in, but this just seems
-> > > absolutely prone to flaking and you're essentially testing something that's
-> > > highly automated.
+> > > > OTOH in a case like this where we can just refer directly to a kernel
+> > > > header for some constants or structs then it does make sense to use the
+> > > > kernel headers, or in other cases where we're testing things that are
 > >
-> > > I think you're also going way outside of the realms of testing
-> > > process_madvise() and are getting into testing essentially MADV_COLLAPSE
-> > > here.
+> > > That is exactly my point above.
 > >
-> > > > We have to try to keep the test specific to what it is you're testing -
-> > > which is process_madvise() itself.
-> >
-> > > So for me, and I realise you've put a ton of work into this and I'm really
-> > > sorry to say it, I think you should drop this specific test.
-> >
-> > > For me simply testing the remote MADV_DONTNEED is enough.
-> >
-> > My motivation for this complex test came from the need to verify that
-> > the process_madvise operation was actually successful. Without checking
-> > the outcome, the test would only validate that the syscall returns the
-> > correct number of bytes, not that the advice truly took effect on the
-> > target process's memory.
-> >
-> > For remote calls, process_madvise is intentionally limited to
-> > non-destructive advice: MADV_COLD, MADV_PAGEOUT, MADV_WILLNEED,
-> > and MADV_COLLAPSE. However, verifying the effects of COLD, PAGEOUT,
-> > and WILLNEED is very difficult to do reliably in a selftest. This left
-> > MADV_COLLAPSE as what seemed to be the only verifiable option.
-> >
-> > But, as you correctly pointed out, MADV_COLLAPSE is too dependent on
-> > the system's THP state and prone to races with khugepaged. This is the
-> > very issue I tried to work around in v4 after the v3 test failures.
-> > So I think this test is necessary.
-> > As for your other opinions, I completely agree.
+> > What was said was a bit stronger though, and might lead people down a
+> > wheel reinvention path.
+>
+> Let's PLEASE not rehash all this again...
+>
+> This patch literally just needs PIDFD_SELF, I've provided a couple of ways
+> of doing that without introducing this requirement.
+>
+> We already have a test that uses this with no problems ever reported on
+> which this patch was based.
+>
+> Thanks.
 
-> MADV_COLLAPSE is not a reliable test and we're going to end up with flakes. The
-> implementation as-is is unreliable, and I"m not sure there's any way to make it
-> not-unreliable.
+You are absolutely right, and my apologies for introducing this
+unnecessary header dependency.
 
-> This is especially true as we change THP behaviour over time. I don't want to
-> see failed test reports because of this.
+Just to clarify, the build failure Zi Yan reported on arm64 was not
+caused by PIDFD_SELF. It was from my use of the pidfd_open() glibc
+wrapper in the test, which incorrectly pulled in the system's
+<sys/pidfd.h>.
 
-> I think it might be best to simply assert that the operation succesfully
-> completes without checking whether it actually executes the requested task - it
-> would render this functionality completely broken if it were not to actually do
-> what was requested.
-
-> >
-> >
-> >
-> > Best regards,
-> > Wang Lian
-
-Thank you for the clarification. You've convinced me.
-
-Your suggestion provides a much cleaner path forward. It allows the test
-to focus on the process_madvise syscall's interface—asserting the
-successful return—without the flakiness of verifying side-effects that
-are difficult to observe reliably. This makes the test much more robust.
-
-I will update the patch to implement this clear assertion logic. Thank
-you for guiding me to this better solution.
-
+Based on our discussion and a review of other tests, I understand the
+correct approach is to avoid such dependencies. I will fix this properly
+in the next version by using a direct syscall wrapper for pidfd_open.
+Thank you for the guidance.
 
 Best regards,
 Wang Lian
