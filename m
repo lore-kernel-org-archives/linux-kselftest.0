@@ -1,116 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A5C2853E3;
-	Thu, 17 Jul 2025 08:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B615D2877C6;
+	Thu, 17 Jul 2025 08:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752742186; cv=none; b=Uul8sWlVTomaex982JqSC8EbBKpVxEX5L2kKwhkJ6Hpav+q2z9xZWvmEYcAuamGBRoT1haz8PgvlWlpoV2ckRKH9CkMJfdcGe8yjupa6HX1wARcDSO9QMX06P1/4uXOtHdGF5ZS7a4blva+xD93Pcnlze5bel0KXAu+dzuM3b4U=
+	t=1752742689; cv=none; b=Y5vKRpx0QI7Jb0VWaPx3BSqjuNoI2u60YmrkUXGoppVeel45IrPRd+UMParL+5zzJDq+egoyjx7K/xF1/wSHA41tmBGMUWwZt8CiwvQS4mUyeLfc1wQUsv4+J1W0wLxRNbMniwiUdwCgPuZbWoqlxshiOjJazDHdKjInGpHtTbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752742186; c=relaxed/simple;
-	bh=1LaZMmufVKTiGZ1B+WdO3aR89rghURP6uEd2rsuld3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bL9e5oKlUjS9ucQ5mjvUh0BU+g6Brv0/KYcuskKS5IiJ5gO/O9ejZfHvaT7wdQQxAbncbTszZJ6Ar3tQUoqCR1qXM1h/GqGkV6bE0/KFYryhjpPIDQC9eTIi1vqTSivu0pVsN5eDbZZLv4Z5Vihy50P8PEbKVnJNvUyU327jMSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lOSFBXon; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752742689; c=relaxed/simple;
+	bh=2jMdX6j55NT9eihyocsisG6oF4T76N5o4zc+QU5NAAM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=BgqOT6G9u57H2VT1fG0h+UlKNicstwaxjCoEarVglKtZD6SBTMaEv3nzh3bv++cV9IZvsUuccTTFCqRJcW/2SP6YbVKlPIWN++EthOXH9psDQD9rlbC2EOdCxbaaSxfsPOTQCqfw+gnrhRiUgkhch2fRPwIhGgB/5J8Hg+6fh64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iyM1zKKI; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=7NzxRth6; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lOSFBXon"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08DE7C4CEED;
-	Thu, 17 Jul 2025 08:49:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752742185;
-	bh=1LaZMmufVKTiGZ1B+WdO3aR89rghURP6uEd2rsuld3s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lOSFBXonALTq4dkOywT4xN2hhzCqX0iqVkTVuJJXa9C+H+FN9PkqbyO++9Mocnm5o
-	 TlSekzaBH6Pn6oaDakF4NIRz9K9B0pwRmhyf+81WMF80SRwwOorv57DUCjzoItdwyd
-	 fdIzVUxI4Yl0bgZ+BGfo5jzvRmFTSlYhMP3KZDlQmlmYMRbLb8vbR96EOxqttldm3L
-	 CFoa7CpqGqfB6RZzgn4zJcdDjgdvfFCG1ShybgH1FM1Ka+fDvFUC076bL5DklbnXZE
-	 fOQ+SImE0z8OiZQtbxTElodRLlanUXmH1gehrnxsHT95TTc4+Ty6LK1an5NU6FSeg6
-	 vSiIYpw/35h/g==
-Date: Thu, 17 Jul 2025 09:49:37 +0100
-From: Will Deacon <will@kernel.org>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net,
-	bagasdotme@gmail.com, robin.murphy@arm.com, joro@8bytes.org,
-	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-	shuah@kernel.org, jsnitsel@redhat.com, nathan@kernel.org,
-	peterz@infradead.org, yi.l.liu@intel.com, mshavit@google.com,
-	praan@google.com, zhangzekun11@huawei.com, iommu@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
-	mochs@nvidia.com, alok.a.tiwari@oracle.com, vasant.hegde@amd.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com
-Subject: Re: [PATCH v9 23/29] iommu/arm-smmu-v3-iommufd: Add vsmmu_size/type
- and vsmmu_init impl ops
-Message-ID: <aHi5IUXqHJZGB67M@willie-the-truck>
-References: <cover.1752126748.git.nicolinc@nvidia.com>
- <375ac2b056764534bb7c10ecc4f34a0bae82b108.1752126748.git.nicolinc@nvidia.com>
- <aHE4Y-fbucm-j-yi@willie-the-truck>
- <aHahEP0+LKmeA/Tf@Asurada-Nvidia>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iyM1zKKI";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="7NzxRth6"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1752742134;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pWbDBIIXVL3ZWM9iRY5xS/P3YT+spaFoacgu8gc6A0w=;
+	b=iyM1zKKIkm8FsKvW1XpLqiIs0+6vNqb26PlBs1dckBn+rPECfpE7rV50zGolGtlNG84k7M
+	8tW6dRW9xYhUr7ePkQm6zX94jVSXFqfBVGWwRgmy0oF6weXs1+CmEYwmiOLupy31QbJ40/
+	qEc9VcHdz86LQOAwhBfxODdlV+aLtbWMqTnGR3jnLNaQUMKQ6zrQYNCkeMqS5C1TU8tYVY
+	9URM33pKqrZv9XNAI/XhyBLeC65HoEXgXm368eN3kc3b02OwQK3jHxK9I8B/YJXc80lyA4
+	QTK60AC68VZsJ4vXCh6ZnTu5C5uRZQbbamhi2CjIJ/ANMwQypeC7nLpGfzJFrw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1752742134;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pWbDBIIXVL3ZWM9iRY5xS/P3YT+spaFoacgu8gc6A0w=;
+	b=7NzxRth6zWVV/6I4Dq1iHBWA9/fd5z/WOJ49OSIcjU2VB/cZiJ3oAh1IqTKWw4HSAjRS11
+	vimlphpNeiIQ6+Cg==
+Date: Thu, 17 Jul 2025 10:48:05 +0200
+Subject: [PATCH v5 03/15] kbuild: doc: add label for userprogs section
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aHahEP0+LKmeA/Tf@Asurada-Nvidia>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250717-kunit-kselftests-v5-3-442b711cde2e@linutronix.de>
+References: <20250717-kunit-kselftests-v5-0-442b711cde2e@linutronix.de>
+In-Reply-To: <20250717-kunit-kselftests-v5-0-442b711cde2e@linutronix.de>
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+ Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, Kees Cook <kees@kernel.org>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+ Christoph Hellwig <hch@lst.de>, Luis Chamberlain <mcgrof@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-doc@vger.kernel.org, workflows@vger.kernel.org, linux-mm@kvack.org, 
+ linux-fsdevel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ Nicolas Schier <nicolas.schier@linux.dev>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752742130; l=891;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=2jMdX6j55NT9eihyocsisG6oF4T76N5o4zc+QU5NAAM=;
+ b=+3aySTgi6hWn9mZEvgNetw07NXKrm6NyhIOGMeEqfgPL0d3Qqs8y7i99gbydKBvBgqLxdXGEo
+ Le7o3xihKh1DCfAS37Y50FC2L5PE8tOSeM12h0u6XixSPfJUZrXhOYI
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Hi Nicolin,
+Some upcoming documentation will link directly to the userprogs section.
 
-On Tue, Jul 15, 2025 at 11:42:24AM -0700, Nicolin Chen wrote:
-> Sorry for the late response.
+Add a label to the section so it can be referenced.
 
-No problem at all.
+Reviewed-by: Nicolas Schier <n.schier@avm.de>
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Acked-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+ Documentation/kbuild/makefiles.rst | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> On Fri, Jul 11, 2025 at 05:14:27PM +0100, Will Deacon wrote:
-> > >  /* MMIO registers */
-> > >  #define ARM_SMMU_IDR0			0x0
-> > > @@ -720,6 +721,10 @@ struct arm_smmu_impl_ops {
-> > >  	int (*init_structures)(struct arm_smmu_device *smmu);
-> > >  	struct arm_smmu_cmdq *(*get_secondary_cmdq)(
-> > >  		struct arm_smmu_device *smmu, struct arm_smmu_cmdq_ent *ent);
-> > > +	const size_t vsmmu_size;
-> > > +	const enum iommu_viommu_type vsmmu_type;
-> > > +	int (*vsmmu_init)(struct arm_vsmmu *vsmmu,
-> > > +			  const struct iommu_user_data *user_data);
-> > 
-> > It would be nice to avoid adding data members to the ops structure, if
-> 
-> You mean the "vsmmu_size" and "vsmmu_type" right?
+diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+index 8aef3650c1f32b6b197e0dc777e26775d371a081..c14c1f632f6069c8751c8388a35bef539e19f9e8 100644
+--- a/Documentation/kbuild/makefiles.rst
++++ b/Documentation/kbuild/makefiles.rst
+@@ -891,6 +891,8 @@ This is possible in two ways:
+     This will tell kbuild to build lxdialog even if not referenced in
+     any rule.
+ 
++.. _kbuild_userprogs:
++
+ Userspace Program support
+ =========================
+ 
 
-Yup.
+-- 
+2.50.0
 
-> So you want them to be removed, by having two impl_ops:
-> 	size_t get_vsmmu_size(enum iommu_viommu_type vsmmu_type);
-> 	int (*vsmmu_init)(struct arm_vsmmu *vsmmu,
-> 			  const struct iommu_user_data *user_data);
-> 
-> right?
-
-Yes, please.
-
-> > at all possible. The easiest thing would probably be to add a function
-> > for getting the vsmmu size and then pushing the two checks against
-> > 'vsmmu_type' down into the impl_ops callbacks so that:
-> > 
-> >   1. If the type is IOMMU_VIOMMU_TYPE_ARM_SMMUV3, we don't bother with
-> >      the impl_ops at all in arm_vsmmu_init() and arm_smmu_get_viommu_size()
-> 
-> Hmm, I was hoping for an implementation could support the default
-> IOMMU_VIOMMU_TYPE_ARM_SMMUV3 while having its own viommu_ops or so.
-> But I think your suggestion is fine since there is no such a use
-> case at this moment :)
-> 
-> >   2. Otherwise, we pass the type into the impl_ops and they can check it
-> > 
-> > Of course, that can be a patch on top of the series as there's no point
-> > respinning the whole just for this.
-> 
-> Thanks for that! I can draft a patch to send later this week once
-> the requirements are confirmed.
-
-Thank you!
-
-Will
