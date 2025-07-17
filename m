@@ -1,46 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B615D2877C6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61BF2877CC;
 	Thu, 17 Jul 2025 08:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752742689; cv=none; b=Y5vKRpx0QI7Jb0VWaPx3BSqjuNoI2u60YmrkUXGoppVeel45IrPRd+UMParL+5zzJDq+egoyjx7K/xF1/wSHA41tmBGMUWwZt8CiwvQS4mUyeLfc1wQUsv4+J1W0wLxRNbMniwiUdwCgPuZbWoqlxshiOjJazDHdKjInGpHtTbU=
+	t=1752742689; cv=none; b=R+UPNO17grw+Qb4slryYN/4njDg96q37HWp8v+rj2Zm/3cXEa6vBq1y9m85QIs/eiOhG0s2vcoeCQyEyqeDDCd0GSF05r1ppqOHLPtGJSfh7qDwvK7nkK39arg/V+Y8xAP653iRVDjO9TOQnoPQvsrOnVlIW4P/pLUqVJguL0dA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752742689; c=relaxed/simple;
-	bh=2jMdX6j55NT9eihyocsisG6oF4T76N5o4zc+QU5NAAM=;
+	bh=cfu3lghX/dVKMnf+oTJvUQeZzazAXiEvWWJO6QHDXlY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BgqOT6G9u57H2VT1fG0h+UlKNicstwaxjCoEarVglKtZD6SBTMaEv3nzh3bv++cV9IZvsUuccTTFCqRJcW/2SP6YbVKlPIWN++EthOXH9psDQD9rlbC2EOdCxbaaSxfsPOTQCqfw+gnrhRiUgkhch2fRPwIhGgB/5J8Hg+6fh64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iyM1zKKI; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=7NzxRth6; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=L3j/NaXiajBt/VFrgDD+K09vS5Md++fplREqPaabQJtluReYOxyxpsY30yFNlPCxAfP8RDK+7sTUG7pm5u9hblqYpcb/TvqqZEZ5AhuZP/q15dSwlJV0S61yPZexBGkGbweguDZ0wiA8CE0kdWczuYRn12Dxgfvv6zsdVlX6svM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OPzjx07J; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xAUGO+Gy; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iyM1zKKI";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="7NzxRth6"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OPzjx07J";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xAUGO+Gy"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1752742134;
+	s=2020; t=1752742133;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pWbDBIIXVL3ZWM9iRY5xS/P3YT+spaFoacgu8gc6A0w=;
-	b=iyM1zKKIkm8FsKvW1XpLqiIs0+6vNqb26PlBs1dckBn+rPECfpE7rV50zGolGtlNG84k7M
-	8tW6dRW9xYhUr7ePkQm6zX94jVSXFqfBVGWwRgmy0oF6weXs1+CmEYwmiOLupy31QbJ40/
-	qEc9VcHdz86LQOAwhBfxODdlV+aLtbWMqTnGR3jnLNaQUMKQ6zrQYNCkeMqS5C1TU8tYVY
-	9URM33pKqrZv9XNAI/XhyBLeC65HoEXgXm368eN3kc3b02OwQK3jHxK9I8B/YJXc80lyA4
-	QTK60AC68VZsJ4vXCh6ZnTu5C5uRZQbbamhi2CjIJ/ANMwQypeC7nLpGfzJFrw==
+	bh=xN4BVFhjUpkxABwqqODMy02TSfofXF5j7xQt53A5sBo=;
+	b=OPzjx07J6hoGGcvsU2fCdpXuPeKld8KiH2ZENQmPI2YiE2BGny6t4r799olu5TWHi1Krks
+	vf1RzZf/cyyF2+lHBNrPIGfMPZlqgG3992ql0ioDlMNb5hqwrf0D998VMLPbkGdIZucc2H
+	D7K1KWy1RGa3sKnuTWGj1yoGcBih2IGdvL0VFpMH2ugPNfrVvvJyOhn6es5nWGFSPteRpG
+	G1rPVzCXrSfufAe3G6rO/8uSbIqcFLLvQ5XV7aVUBi0qnXVdO74jKzFursgCQ+t4KdtD4i
+	ckaB+oil+xGeV78osbYLSa74xduTwIGoFeBXzhkUiMzM6LiAk3EjzdSoMdz6aQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1752742134;
+	s=2020e; t=1752742133;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pWbDBIIXVL3ZWM9iRY5xS/P3YT+spaFoacgu8gc6A0w=;
-	b=7NzxRth6zWVV/6I4Dq1iHBWA9/fd5z/WOJ49OSIcjU2VB/cZiJ3oAh1IqTKWw4HSAjRS11
-	vimlphpNeiIQ6+Cg==
-Date: Thu, 17 Jul 2025 10:48:05 +0200
-Subject: [PATCH v5 03/15] kbuild: doc: add label for userprogs section
+	bh=xN4BVFhjUpkxABwqqODMy02TSfofXF5j7xQt53A5sBo=;
+	b=xAUGO+Gyfr4tVFpKJ1JIrlbkIcDic4DfuPY2wBG5AwxYAafFn8F5+So7p+Jgk5vnTH6f4D
+	m+iIN58gwWCUwIDw==
+Date: Thu, 17 Jul 2025 10:48:03 +0200
+Subject: [PATCH v5 01/15] kbuild: userprogs: avoid duplication of flags
+ inherited from kernel
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,7 +50,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250717-kunit-kselftests-v5-3-442b711cde2e@linutronix.de>
+Message-Id: <20250717-kunit-kselftests-v5-1-442b711cde2e@linutronix.de>
 References: <20250717-kunit-kselftests-v5-0-442b711cde2e@linutronix.de>
 In-Reply-To: <20250717-kunit-kselftests-v5-0-442b711cde2e@linutronix.de>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -70,38 +71,42 @@ Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
  linux-fsdevel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
  Nicolas Schier <nicolas.schier@linux.dev>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752742130; l=891;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752742130; l=1281;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=2jMdX6j55NT9eihyocsisG6oF4T76N5o4zc+QU5NAAM=;
- b=+3aySTgi6hWn9mZEvgNetw07NXKrm6NyhIOGMeEqfgPL0d3Qqs8y7i99gbydKBvBgqLxdXGEo
- Le7o3xihKh1DCfAS37Y50FC2L5PE8tOSeM12h0u6XixSPfJUZrXhOYI
+ bh=cfu3lghX/dVKMnf+oTJvUQeZzazAXiEvWWJO6QHDXlY=;
+ b=Vd8KNi0o39hC712kNsh4HqtZ1iWGgJyUvVmox4SD4cDv9sM2uVDnNecFKnQbmIaGuUnS+Xgw7
+ H4Ox/ALXHZXCJGKfU1HzaPiVb+/itP7PQ4yTl34pPGNDMfWvjc4EzyJ
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Some upcoming documentation will link directly to the userprogs section.
+The duplication makes maintenance harder. Changes need to be done in two
+places and the lines will grow overly long.
 
-Add a label to the section so it can be referenced.
+Use an intermediary variable instead.
 
-Reviewed-by: Nicolas Schier <n.schier@avm.de>
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Reviewed-by: Nicolas Schier <n.schier@avm.de>
 Acked-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- Documentation/kbuild/makefiles.rst | 2 ++
- 1 file changed, 2 insertions(+)
+ Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-index 8aef3650c1f32b6b197e0dc777e26775d371a081..c14c1f632f6069c8751c8388a35bef539e19f9e8 100644
---- a/Documentation/kbuild/makefiles.rst
-+++ b/Documentation/kbuild/makefiles.rst
-@@ -891,6 +891,8 @@ This is possible in two ways:
-     This will tell kbuild to build lxdialog even if not referenced in
-     any rule.
+diff --git a/Makefile b/Makefile
+index 35e6e5240c61a8a329011929fcd0352b881dccdc..c4293cf91e968ca8ee64452841fb266e24df63f6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1130,8 +1130,9 @@ LDFLAGS_vmlinux	+= --emit-relocs --discard-none
+ endif
  
-+.. _kbuild_userprogs:
-+
- Userspace Program support
- =========================
+ # Align the bit size of userspace programs with the kernel
+-KBUILD_USERCFLAGS  += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
+-KBUILD_USERLDFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
++USERFLAGS_FROM_KERNEL := -m32 -m64 --target=%
++KBUILD_USERCFLAGS  += $(filter $(USERFLAGS_FROM_KERNEL), $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
++KBUILD_USERLDFLAGS += $(filter $(USERFLAGS_FROM_KERNEL), $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
  
+ # userspace programs are linked via the compiler, use the correct linker
+ ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_LD_IS_LLD),yy)
 
 -- 
 2.50.0
