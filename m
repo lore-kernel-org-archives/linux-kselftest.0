@@ -1,178 +1,200 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011006.outbound.protection.outlook.com [40.107.130.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C6A1459FA
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Jul 2025 14:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752848205; cv=none; b=Mr3Ep0mp5EIH6i66FOMnx/tmauhXtjBYxfyslmxqZA81QVZYluXMATzP5YxLdliGA8He/6gvuq6cfYT/jBSxLt8KppleAnCmC+GIbWgvGHKJ0Y+6HUO0v8Rgu5Qb1NFiv7p0Q6M5boC0AVdFEqfkGvHocNcU1JHfLigOjHv1eg4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752848205; c=relaxed/simple;
-	bh=IEpz5MuPybctEE6oMtgWNR5YKWeY5hFOXCAWZ+aBtvA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bNVKgddzZoVKIoqyCdzAQ+TzIUoBr770xZeG2Ma5QcR7W+2YsvUK4KOssavjd1BzIswzAPobjfnORvWla8AhkInpwpP6Aqye+aZ+Ezuge69NTOaNy7kSttCJU5OL91XbhP+32o6VLw9/Fb8l2hVLvJ+2A2yKy3LujfFtK857fSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cV0ZtEwA; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893F1189905;
+	Fri, 18 Jul 2025 14:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.6
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752848454; cv=fail; b=Ph10ULjYPjyZN0Q+PRIqmSYJ1Lld72ed7QD//Ou9Bko+CQ6f1a8lo4iYxVkujLQyYiAhGVaqFGmax6VFuQzUks9h2fqDe1ol7o0TNPXme90g21WaDJkuUv5DBBpvg/ag0qAFqSZFrwpbhjySArgCY7VRxfh0I3hhiItOKhGkZcA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752848454; c=relaxed/simple;
+	bh=QheIjnkZhAAj/gUXxo2UK5OQhY+fZUG8lLWtSanvv3g=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uq6/BXMIuhnzwnaLeevNKVWY7qz44ePSPCamoQ08JI0aGiRDqRWSxdTLYIwSQgjppYXclP4WnTn/waxvxGYA2Ys8xe5voJtNj9fDAiMbNvYnUqfArpG3ghc991WRN8FBXYTKt2ns0ExVxOPUHj7ZKlFF5yPx/SxrDBfp9yk4dRw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=CBUIb6zI; arc=fail smtp.client-ip=40.107.130.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cV0ZtEwA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752848202;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=jTEbkRUl2wcpnkebbyZvnRyOtKvRlXMkLNOPG34fi+M=;
-	b=cV0ZtEwAIuMrg0frJ/mQHMoFPVvkA++eSOQD1lfHNiiNtl3f7eqZRk6blt1U5vNerGr/Yc
-	OBVgZubPcxJR/V9q708Dcu1psga2TzsoHsZIbC5+9BNoCf3Mziiu/xkw2vKEXuSt4Kb281
-	XzXwO0cnT111DGfa3lDCQO+GVf+Ldfc=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-220-QqyLjZqaO86O4eA9wIyn-w-1; Fri,
- 18 Jul 2025 10:16:37 -0400
-X-MC-Unique: QqyLjZqaO86O4eA9wIyn-w-1
-X-Mimecast-MFC-AGG-ID: QqyLjZqaO86O4eA9wIyn-w_1752848195
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0B12B1800291;
-	Fri, 18 Jul 2025 14:16:35 +0000 (UTC)
-Received: from redhat.com (unknown [10.72.116.131])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 68DEE18016F9;
-	Fri, 18 Jul 2025 14:16:27 +0000 (UTC)
-From: shuali@redhat.com
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Simon Horman <horms@kernel.org>,
-	Xin Long <lucien.xin@gmail.com>,
-	xiyou.wangcong@gmail.com,
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="CBUIb6zI"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UyPLBDPL9Hn1p2log+EB2IC5q4ELumOxoGrJ+E4myZLD3fwcQC7l62gBcMc3jOG3H9iDWRPrzuWhsXHfw6dLdH+HypQuDILgERZ3Ee7O1OvR1jGcGSR6rw7JoZpcXvuNCl7RLRpZ3LOk4qQh0jDYrJ8UYhwT34UtVTMQ50X6+oqTSQUeJ3Y1Fz0XBCD/r3Zno+ZAsCaCRYhUtpidYZw6dIJ/bKzfV67VXTQc/f3NSTQT78xLsNyGHWVAEr5SmlHqwEvxld8PKxg39pW3w7utL0qaZzMwD15GHvtuASRA4Z8GHQAw0Ej2byr0CFpwNMopI78e5BTRkoPBlccKE0xDRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x+ETTqRHjl1PhpSYo1DUXf4AWZcV2Hu4tc2zyFyl39c=;
+ b=ZTgMnmS4wTOY8qPVe/EIpNRSpc0qfMdXxcxIFkkg6GpASRW4DAw3lR21U1f6S+0JhSKn4rz6E1OShbEtwd6SbpEt/XtxhG6eTkJbH2NiXQsat8JRrNCNcn7TBqdeHsIqboqDDYa9Y0mvyvdj+XUbR7uNPDtYQacqkvtLRnUYqNmuO0/2OYL+KwKFJFgmY/dC6X8V8bkuYVFKSAlhr4V59ibAPNhUlfbK8uqNl8UpwoTcv19ice0NthL5CHrwb9o9cZTO5uXdH0fGT+dLl1H6z6OvnmcPpPm6sH4bjgRPWs6OZXFFCWiuSNWdMtft/26sqx4MtdwDWYoTYc9XHFicjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.241) smtp.rcpttodomain=amazon.com
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=nokia-bell-labs.com; dkim=none (message not signed);
+ arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x+ETTqRHjl1PhpSYo1DUXf4AWZcV2Hu4tc2zyFyl39c=;
+ b=CBUIb6zInehs7JB/cQqrTh+YmxMBecMHI0N+LHzjt69tqIaZIrFjXhdEnBf8l4owtlSNiisVrA3hoCBylG+mSfsaWle9lnCTXuelAg7wjazkUpwGKxYTaPtnZtnIVKaK82zxLjeNL0KphTnupwulQ1KLMbT1NIzXmNDgf+NkGdytgJsaDPvI3qgkxT9gn4oQiPs1Kejtty0z5dab5W3zw8e21kmYK6qx/KY5tufyqwidyQwW7l3+GtCMJHO12u3EAnbx1kvZhMphoE62FRmdSNDD7AD9X40b+Bhvhoh3NgLwn4O6vtMpBTDEniA9JcYByMj4cfagjz0cD6AtRe7zZA==
+Received: from DBBPR09CA0027.eurprd09.prod.outlook.com (2603:10a6:10:d4::15)
+ by DBAPR07MB6773.eurprd07.prod.outlook.com (2603:10a6:10:17c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.25; Fri, 18 Jul
+ 2025 14:20:49 +0000
+Received: from DB5PEPF00014B97.eurprd02.prod.outlook.com
+ (2603:10a6:10:d4:cafe::6c) by DBBPR09CA0027.outlook.office365.com
+ (2603:10a6:10:d4::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8943.23 via Frontend Transport; Fri,
+ 18 Jul 2025 14:20:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.241)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.2.241 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.2.241;
+ helo=fihe3nok0734.emea.nsn-net.net; pr=C
+Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.241) by
+ DB5PEPF00014B97.mail.protection.outlook.com (10.167.8.235) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8943.21
+ via Frontend Transport; Fri, 18 Jul 2025 14:20:48 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id 5F270201C8;
+	Fri, 18 Jul 2025 17:20:47 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: pabeni@redhat.com,
+	edumazet@google.com,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	kuniyu@amazon.com,
+	bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] selftests: tc: Add generic erspan_opts matching support for tc-flower
-Date: Fri, 18 Jul 2025 22:16:12 +0800
-Message-ID: <1f354a1afd60f29bbbf02bd60cb52ecfc0b6bd17.1752848172.git.shuali@redhat.com>
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v13 net-next 01/14] tcp: reorganize SYN ECN code
+Date: Fri, 18 Jul 2025 16:20:19 +0200
+Message-Id: <20250718142032.10725-2-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250718142032.10725-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20250718142032.10725-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5PEPF00014B97:EE_|DBAPR07MB6773:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3cffdef7-4594-4c1a-343b-08ddc6064b3f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|7416014|376014|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OXRBSWtibVloSDFVbVJOZ0N5SUdpNjNCN3FwdnpCakQyaWZFQk1ZZFZOZVNL?=
+ =?utf-8?B?dCs2cEttU0NpM2hBc2ZYMFFDTWFSbGRUYVBtZVhFRVViUVNjU1ZCNU1ma1RT?=
+ =?utf-8?B?Sk90dEQ2S2RTNjBXdFA4YnVwei8zK1o1cDRBbDR3QnRqZTBRNlZLb0FhOE10?=
+ =?utf-8?B?dythcE1NVXA1MUFTeWF0RGZsMHA3eC9SVTV5Q0dFTTE3NXV6TDdXdzlZV0hq?=
+ =?utf-8?B?YWRYbUp2UjhLQncrbGpsQmRvNExQZUtnVmFpU1U0OEFkZG5WNmpLVWxuM2Rq?=
+ =?utf-8?B?MlIybWc1SCtmWnV2Uk5adDFaRGczMDFUSnFOWWgzZ0VnWHJBMjRQT3EzajFX?=
+ =?utf-8?B?KzNSb0dvK0xDYTdSZkhwRHJoK3dBZTBzNWl2ZDExK0dtN3JLdENwUjI1TWdL?=
+ =?utf-8?B?YnFybSs5b3lYUlpqY3p5QUQ0Sm12ZUpDeHhTUjI2K3drNEFDL0FmSVBBRlFQ?=
+ =?utf-8?B?YjlEb0xvY3h2TmlQczVjMjFGbnlxblFpVEFIOWttV3d1NjNDTHNEekRWbFFz?=
+ =?utf-8?B?dXVoNll0amg1MjBadVNQSWVtc0RwMmtFVkJQQWhjdG1RaUtsL2Eyays0ZGhh?=
+ =?utf-8?B?YW5IamEzcytwbFQ4S0Jkam9rNDhleWpmNkUzc3YrdGo4ZkFFanBKelFFcHd4?=
+ =?utf-8?B?SVRuQU1WRmhZaE0wSkp0akJ5dUlPNTFPWG51TFEzWEtKZlFHcEg1b09zUGFS?=
+ =?utf-8?B?SDVNaXJDb2VHdzQxSElWYjA5M1FwOVE0SGptZUs4UXMwdXNaTHYzTmdKbEV2?=
+ =?utf-8?B?NFJXSE1aQXBOMXJNODBIc29qMjhTbEVWNU10UmZRUnRFUittWjVBZEtCYzVU?=
+ =?utf-8?B?d1Fxa1lodWYxT3lLSXlYR0lZcGV4NmpPaVJud2JmT3NyeTRHQ0k4bStibytu?=
+ =?utf-8?B?UVZxaEM5SXJQK1pwRnNaUmRTNzB0cHNFdDVreDlUNzlhTFFOeW92NzNRTDQ5?=
+ =?utf-8?B?UXhiZUNEdyt0dnlxMXNQNUFwSXFhMWFmOHpjQjBrYk1mS0U4cXNzVE9yUDFJ?=
+ =?utf-8?B?WlpVZndmOHU5TXI1SFlMRjhWY3RQdDMwdnpnVm1VQWlhNXFjWUtyVnhhZm02?=
+ =?utf-8?B?SURqeU54MTVkbnNVQS9wemlXZkIrTHNTMzgzcGlFS1VXWG12SDVpUFREL0lG?=
+ =?utf-8?B?SklVcGpzTkNqQy9nRlNvZjBJWE5NUEJVOG04TEY1dnVXbjlxc3NtaTRFWE1x?=
+ =?utf-8?B?Um5iN290TVMxaXZKSGRVYVkxTTRoZkRrNnl3Q0xxRzZacGdmVG83TnBGL2o0?=
+ =?utf-8?B?cHNQTUl3VjU5VUJsMkRiZWpUTHpTUUdsc1laRGgyRnJZL0YzRFhkd0tFMVBk?=
+ =?utf-8?B?VWJ0U1UzS1RzQ1BpNlFkM1dGZ1pGejRmcXo5b1hXUFFFMEdLNlUvbE9vMWpJ?=
+ =?utf-8?B?cTRxNUJ0ZHgwRGMwM1I0ZjRkemI0V3lodGhFd21GM0J5NWMwb2VGVEdEZW5C?=
+ =?utf-8?B?Wmo4aGppMHVMMWZ5S1dCVWV1NWpCUGdKVHBtRDluN1BRZzdyTDAxckNUQ1dC?=
+ =?utf-8?B?YnorZFdEang4ZGw0U0Q2SkJzRmViaHdmTFZmekdMVTZFbGFuWEZWRHJmQ3h6?=
+ =?utf-8?B?Yzh3YWpwV1JnaWdub1ZQSjFmeHFmWnJHME1zOUJiNFNERURqNnFiUzJHRjM2?=
+ =?utf-8?B?M1Avc3FFd3pLNkFoL3B3MEJydWxUU1NFZWlHWjY2UituYUVNUXAzVDg4Q0NV?=
+ =?utf-8?B?UUNlbjdVOGhURERKcFUrV3JVY3VwcGFJdllTdjdRazZMSFpqYmthY3dwVHpj?=
+ =?utf-8?B?bHdFQUZXOFNmRk50dS9NcEJYMzVxdms4eURNRFBQNTdWdksrelNYN3VSS2pC?=
+ =?utf-8?B?WkI5cHNadmw2ek9uSjlrNDNERjlmeVlEMU5rZmVXcWZnT05JWlNBWmJkTDlD?=
+ =?utf-8?B?VVFHM0haWnhmN3JxSEEzODB5Mjd6ZjUyQWdrdkZwU0tpL2dkWUppZENUMVBr?=
+ =?utf-8?B?TElMNitrS3B2bjBHUzJNOFU1cnBWRTg4azNWWW9Uc3JndE9IdU1FdmxFV0lY?=
+ =?utf-8?B?dkxzVTZBNllRYkpsMTJnSnFkc0QvVS9qN3dMMVZrTkppVkZIOFJrREtSUmxL?=
+ =?utf-8?B?OEZzanJac01lM0t0QTJsT3lRWWVRWHR5enIrQT09?=
+X-Forefront-Antispam-Report:
+	CIP:131.228.2.241;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(7416014)(376014)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2025 14:20:48.9968
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3cffdef7-4594-4c1a-343b-08ddc6064b3f
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.241];Helo=[fihe3nok0734.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB5PEPF00014B97.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR07MB6773
 
-From: Li Shuang <shuali@redhat.com>
+From: Ilpo Järvinen <ij@kernel.org>
 
-Add test cases to tc_flower.sh to validate generic matching on ERSPAN
-options. Both ERSPAN Type II and Type III are covered.
+Prepare for AccECN that needs to have access here on IP ECN
+field value which is only available after INET_ECN_xmit().
 
-Also add check_tc_erspan_support() to verify whether tc supports
-erspan_opts.
+No functional changes.
 
-Signed-off-by: Li Shuang <shuali@redhat.com>
+Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 ---
- tools/testing/selftests/net/forwarding/lib.sh | 14 +++++
- .../selftests/net/forwarding/tc_flower.sh     | 52 ++++++++++++++++++-
- 2 files changed, 65 insertions(+), 1 deletion(-)
+ net/ipv4/tcp_output.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 9308b2f77fed..890b3374dacd 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -142,6 +142,20 @@ check_tc_version()
- 	fi
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index b616776e3354..caa980c3f25a 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -350,10 +350,11 @@ static void tcp_ecn_send_syn(struct sock *sk, struct sk_buff *skb)
+ 	tp->ecn_flags = 0;
+ 
+ 	if (use_ecn) {
+-		TCP_SKB_CB(skb)->tcp_flags |= TCPHDR_ECE | TCPHDR_CWR;
+-		tcp_ecn_mode_set(tp, TCP_ECN_MODE_RFC3168);
+ 		if (tcp_ca_needs_ecn(sk) || bpf_needs_ecn)
+ 			INET_ECN_xmit(sk);
++
++		TCP_SKB_CB(skb)->tcp_flags |= TCPHDR_ECE | TCPHDR_CWR;
++		tcp_ecn_mode_set(tp, TCP_ECN_MODE_RFC3168);
+ 	}
  }
  
-+check_tc_erspan_support()
-+{
-+	local dev=$1; shift
-+
-+	tc filter add dev $dev ingress pref 1 handle 1 flower \
-+		erspan_opts 1:0:0:0 &> /dev/null
-+	if [[ $? -ne 0 ]]; then
-+		echo "SKIP: iproute2 too old; tc is missing erspan support"
-+		return $ksft_skip
-+	fi
-+	tc filter del dev $dev ingress pref 1 handle 1 flower \
-+		erspan_opts 1:0:0:0 &> /dev/null
-+}
-+
- # Old versions of tc don't understand "mpls_uc"
- check_tc_mpls_support()
- {
-diff --git a/tools/testing/selftests/net/forwarding/tc_flower.sh b/tools/testing/selftests/net/forwarding/tc_flower.sh
-index b1daad19b01e..b58909a93112 100755
---- a/tools/testing/selftests/net/forwarding/tc_flower.sh
-+++ b/tools/testing/selftests/net/forwarding/tc_flower.sh
-@@ -6,7 +6,7 @@ ALL_TESTS="match_dst_mac_test match_src_mac_test match_dst_ip_test \
- 	match_ip_tos_test match_indev_test match_ip_ttl_test
- 	match_mpls_label_test \
- 	match_mpls_tc_test match_mpls_bos_test match_mpls_ttl_test \
--	match_mpls_lse_test"
-+	match_mpls_lse_test match_erspan_opts_test"
- NUM_NETIFS=2
- source tc_common.sh
- source lib.sh
-@@ -676,6 +676,56 @@ match_mpls_lse_test()
- 	log_test "mpls lse match ($tcflags)"
- }
- 
-+match_erspan_opts_test()
-+{
-+	RET=0
-+
-+	check_tc_erspan_support $h2 || return 0
-+
-+	# h1 erspan setup
-+	tunnel_create erspan1 erspan 192.0.2.1 192.0.2.2 dev $h1 seq key 1001 \
-+		tos C ttl 64 erspan_ver 1 erspan 6789 # ERSPAN Type II
-+	tunnel_create erspan2 erspan 192.0.2.1 192.0.2.2 dev $h1 seq key 1002 \
-+		tos C ttl 64 erspan_ver 2 erspan_dir egress erspan_hwid 63 \
-+		# ERSPAN Type III
-+	ip link set dev erspan1 master v$h1
-+	ip link set dev erspan2 master v$h1
-+	# h2 erspan setup
-+	ip link add ep-ex type erspan ttl 64 external # To collect tunnel info
-+	ip link set ep-ex up
-+	ip link set dev ep-ex master v$h2
-+	tc qdisc add dev ep-ex clsact
-+
-+	# ERSPAN Type II [decap direction]
-+	tc filter add dev ep-ex ingress protocol ip  handle 101 flower \
-+		$tcflags enc_src_ip 192.0.2.1 enc_dst_ip 192.0.2.2 \
-+		enc_key_id 1001 erspan_opts 1:6789:0:0 \
-+		action drop
-+	# ERSPAN Type III [decap direction]
-+	tc filter add dev ep-ex ingress protocol ip  handle 102 flower \
-+		$tcflags enc_src_ip 192.0.2.1 enc_dst_ip 192.0.2.2 \
-+		enc_key_id 1002 erspan_opts 2:0:1:63 action drop
-+
-+	ep1mac=$(mac_get erspan1)
-+	$MZ erspan1 -c 1 -p 64 -a $ep1mac -b $h2mac -t ip -q
-+	tc_check_packets "dev ep-ex ingress" 101 1
-+	check_err $? "ERSPAN Type II"
-+
-+	ep2mac=$(mac_get erspan2)
-+	$MZ erspan2 -c 1 -p 64 -a $ep1mac -b $h2mac -t ip -q
-+	tc_check_packets "dev ep-ex ingress" 102 1
-+	check_err $? "ERSPAN Type III"
-+
-+	# h2 erspan cleanup
-+	tc qdisc del dev ep-ex clsact
-+	tunnel_destroy ep-ex
-+	# h1 erspan cleanup
-+	tunnel_destroy erspan2 # ERSPAN Type III
-+	tunnel_destroy erspan1 # ERSPAN Type II
-+
-+	log_test "erspan_opts match ($tcflags)"
-+}
-+
- setup_prepare()
- {
- 	h1=${NETIFS[p1]}
 -- 
-2.50.1
+2.34.1
 
