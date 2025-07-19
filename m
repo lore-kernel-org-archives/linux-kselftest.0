@@ -1,31 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB7F2877EE;
-	Sat, 19 Jul 2025 15:38:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1E72874F5;
+	Sat, 19 Jul 2025 15:38:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752939537; cv=none; b=pyk3YaWY0Bcp+IKJoJxGhNhD36FX5WEQdHDfDDElNPbL2O7zes4HGvBDpPifiTTy9N5JIjnND66khBI3//h0mQiKNQ+/O6XcFi+DcQrMO1kQE+vqqSJPrMcHXOTitsv1ME7c9SoURTXwvtJlSFq2YGFnu41f3OM3KRBt/ZwK28A=
+	t=1752939538; cv=none; b=ACBFpyfB0+cCU7Kw8BiW9BtGmPg/5ciTgIQ6FQweoPo36Pg9Zm/dHsZuAxJ2+3ljVRfgVDUJklq0Vr38W8i6eqG1MQyCSRTef4ZlAbrgslz0WA605bLb/UoI0YI+ahIaLiW+6fxy0fknhQZ1NFga5cZJN1vNQqb7hEob7SX1f2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752939537; c=relaxed/simple;
-	bh=51GkrVrQpjPfvvJr3LapBWVH8+FIFYkaT062gxrS96I=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=vBmbnSi1KX5eQJDnqP7w23oOjYDXV/9OX20tzzMLPSSj3OYCQ2yERVGg19v1cUi0LSc5mER77ezSuhadBST3/4h+XNPdsfKzFlflHiqso5XuVaA3KM5DtKXXGQr9tO7HoK2ag+CuOP2SDfW00/brqzKdzr60kD4DgxE7iy8yPaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=WVtI9GZY; arc=none smtp.client-ip=159.69.126.157
+	s=arc-20240116; t=1752939538; c=relaxed/simple;
+	bh=3Pc/7W9jGeJsclFMq26ljxi4YQXtAlShpU7g+dHBhLE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qchJKoj1mFGFsu1XCuiGjqUsFsoVZYl9ckrD2G0g8D4fiywirTDu4OOd7x1xKvYX82KRho2K7rhJypApJGVX2OFp0+ZAFYSYVXIoQ5LKvOl8kAUR2zjSaiYYdkwwuvtBYursAON8euZxpTbCrpEQ2iGcJpfPHKDQHT2lO63eNfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=XBoYGhP6; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="WVtI9GZY"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="XBoYGhP6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1752939526;
-	bh=51GkrVrQpjPfvvJr3LapBWVH8+FIFYkaT062gxrS96I=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=WVtI9GZYhsNpCZV/Cgg8eE7tgSuYjabUaW6lyLIS/v92QbaJFV/2FNnvHDrYwVkcG
-	 yioU/3HcMnzGsIlaxW40bBR30+/9sb1nICi21tzsXtVhqxEns2advXeQ/9zQHxUgEN
-	 OFkdfjRGZDztG3XLAgZsqrV9B04a2ZuC/j/q0VFQ=
+	bh=3Pc/7W9jGeJsclFMq26ljxi4YQXtAlShpU7g+dHBhLE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=XBoYGhP69JKViaPzYCUcN0nHTTlmE0vFiqYyy5nvDP4DL60hI8rRC3n2ykSODYNvw
+	 59j1o/3Gj1mocZvl3/bFjdkfQ/RgHiCCtL5wu2b1SoSi4SHZPNNoCQKT5jEfUklc+O
+	 CVq0/J6+Jq2klUQAgQNipoiEJvwA3aZgQfvWSS4U=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 19 Jul 2025 17:38:29 +0200
-Subject: [PATCH 3/3] selftests/nolibc: always compile the kernel with GCC
+Subject: [PATCH 0/3] selftests/nolibc: enable qemu-system tests with LLVM
+ builds
+Date: Sat, 19 Jul 2025 17:38:26 +0200
+Message-Id: <20250719-nolibc-llvm-system-v1-0-1730216ce171@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,9 +35,10 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250719-nolibc-llvm-system-v1-3-1730216ce171@weissschuh.net>
-References: <20250719-nolibc-llvm-system-v1-0-1730216ce171@weissschuh.net>
-In-Reply-To: <20250719-nolibc-llvm-system-v1-0-1730216ce171@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAPK7e2gC/x3MSQqAMAxA0atI1gZsxPEq4sIhaqBWaUQU8e4Wl
+ 2/x/wPKXlihjh7wfIrK5gJMHMGwdG5mlDEYKKEsKUyFbrPSD2jtuaLeevCKqTFFTn1OJVUQwt3
+ zJNc/bdr3/QCwMYgiZAAAAA==
+X-Change-ID: 20250719-nolibc-llvm-system-311762b62829
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
  Nathan Chancellor <nathan@kernel.org>, 
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
@@ -45,41 +47,34 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752939526; l=1288;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752939526; l=812;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=51GkrVrQpjPfvvJr3LapBWVH8+FIFYkaT062gxrS96I=;
- b=BRqqIxDJNQdSvuWhzuAvv++iXFFsb1KwrMKiT8bWI8nXvZwVhxwcGPJOIn8Ry8DkCynnALEcu
- rwqRwA6kxhDBHkv+uuQnvLcytH6hZ3eskUoIYw4adK3VZ0jFevyjRNi
+ bh=3Pc/7W9jGeJsclFMq26ljxi4YQXtAlShpU7g+dHBhLE=;
+ b=Acps2JrolwO4FngVGlywyhKRnMNhBRsBHXL2RDwwVxX3gKXIEj4Fcra3JW5F0p7LPH77CHGal
+ KsXM/M5C21qCxhsx7PxfzuViisLUnkzrF6jP485vOCXcvWPcanZQl3p
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-LLVM/clang can not build the kernel for all architectures supported by
-nolibc. The current setup uses the same compiler to build the kernel as
-is used for nolibc-test. This prevents using the full qemu-system tests
-for LLVM builds.
+Currently the test setup does not support running nolibc-test built with
+LLVM in qemu-system. Enable this.
 
-Instead always build the kernel with GCC. For the nolibc testsuite the
-kernel does not need to be built with LLVM.
+FYI, sparc32 on LLVM seems to be broken at the moment. To me this looks
+like a LLVM regression, emitting invalid object code.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/Makefile.nolibc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas Weißschuh (3):
+      selftests/nolibc: deduplicate invocations of toplevel Makefile
+      selftests/nolibc: don't pass CC to toplevel Makefile
+      selftests/nolibc: always compile the kernel with GCC
 
-diff --git a/tools/testing/selftests/nolibc/Makefile.nolibc b/tools/testing/selftests/nolibc/Makefile.nolibc
-index 6e6dddaa2e3ed56886cd76c423297648d13027c7..3d8e314c2433a2d032cf4f58ea1d6a2f430faaae 100644
---- a/tools/testing/selftests/nolibc/Makefile.nolibc
-+++ b/tools/testing/selftests/nolibc/Makefile.nolibc
-@@ -263,7 +263,7 @@ REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++
- 		printf("\nSee all results in %s\n", ARGV[1]); }'
- 
- # Execute the toplevel kernel Makefile
--KBUILD_MAKE = $(MAKE) -C $(srctree) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE)
-+KBUILD_MAKE = $(MAKE) -C $(srctree) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) LLVM=
- 
- help:
- 	@echo "Supported targets under selftests/nolibc:"
+ tools/testing/selftests/nolibc/Makefile.nolibc | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+---
+base-commit: b9e50363178a40c76bebaf2f00faa2b0b6baf8d1
+change-id: 20250719-nolibc-llvm-system-311762b62829
 
+Best regards,
 -- 
-2.50.1
+Thomas Weißschuh <linux@weissschuh.net>
 
