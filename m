@@ -1,144 +1,104 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51F5279DCA;
-	Tue, 22 Jul 2025 18:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588F4287275
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Jul 2025 23:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753208944; cv=none; b=kbMoJeVUiA3NCwbJGVJq67WJVBocDE+bt9bNCtfukpXkKPJuCoFTUpQ2fzMoQotGGDmCa1XyxmIuqdEupngSGx3/Av1jOLo6hau2yF2GlPIHhi7XVN79TmvtOtTN1SuOamo/rKxynar9Pzhh1SEMdK9pSY6J+TnGaonBXD0odlI=
+	t=1753225658; cv=none; b=TCJ2NXq2zpVGgMEPzUviUtoWyW8buWY0/tRpMVTs87I6EFGaO3z1Zc/7xUFtQC2G4SbWt5zPQKUUk9+v7GThSv6Zyn/y8yzQJXUr3o8tEC+sZJKdBEy1CFQx6/2fb60nXolZT4tVwCfIzrO/MSm6Cfzp+gd+SVG/++XMf9BBZeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753208944; c=relaxed/simple;
-	bh=RkkNdI9vuLQPiw+fmWHYyUPaYD/kN0qVxA2pr7pBEqg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dbpgAx5/jnRCx2+iomG7TpD1paITJ7i2q45/cDQgdL2Hqn5udcajfpi5M3RHrU3TAMVqKpLqWzhddifU5Q5JlBYc1YASgGeuVcW9xBIfcW19+yDSnyTOMtJO+XVu0TIezdlJC0aIvhK1e+FVuUdPaHnnUg2PmcLUrrctYnNZe8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YsWODkJ2; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753225658; c=relaxed/simple;
+	bh=i9Topy5p8+oRB1ybTn3eGTjAdmW4So/zy81PHcCSQws=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=h0FONT6Tf0guroLc43nXpFeS1/4n1j320UJc1uVgf0K0RYN57pZPqrg1gF3v/uDOEAuUy8RwLYLHa0cVQuQ5PVMZCueeqr4M34fm3mbCBsUfAhfABd8zFg7en3g/aBjP5Vm1Up31pXJWZeuyfpSXVTCtxjZp5YChmjckP6jefME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3oBXBwjH; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YsWODkJ2"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-234bfe37cccso45744515ad.0;
-        Tue, 22 Jul 2025 11:29:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3oBXBwjH"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3132e7266d3so6061321a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Jul 2025 16:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753208942; x=1753813742; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ncnqQH/L5XHCltFY0Cw0EuBCxvGsfMZiIzARQQHUSw8=;
-        b=YsWODkJ2KwwgVCs4OkqmvuBqz78mJw1dhm0L3TTTtT5RxYC4Xe+KzT1yjh6gSSnNQ4
-         LYZzilxrOlBJ1qlxrNw1oP7/DYL8d/Vv1LcePh3qyPsAYHen3U6gulXev7aP2GrCquYF
-         pfyhYiN1wKy3CVt9XQfTX0kQCTL2PjMTwUQlOC6mgIjmK4omZYGpUsrIZ4k8tOdHuEvS
-         K4UXf9vgwuYy+0wEdhnLQLOF1ZrIHXPUiOtpt13qb8A0Laz8U+NQ7yM7NTw04+lsJPYg
-         NCSYqD+7thrh6SBV74K1ciSyX5jU+vmENVDzX74petSuFX0VJYR6tme/if6ROh6Cfkqh
-         /n6A==
+        d=google.com; s=20230601; t=1753225656; x=1753830456; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f+m6qI30JHvrm3ONaGCpQMi0L8lxI7PYDb1Mu/Pb3F4=;
+        b=3oBXBwjHNB/20r0hYHUo9vZehvohDETqWCUjsCDEyL+kRBgH4IOWq6ZyqqnhLOvxXE
+         Ol9d1WAShIZs29mgPsEl2AANInab5X7lTu38QVCnI+8gAdxo4BtQ/mbDzmJUL3PmlYzM
+         3tY29xS1MbB928GRSQSaDAABmfc7vxaAik5oQbM5dsiNMQx6tUZoSlJCusNNJzrsBpKR
+         HiQFpV4DuZastDN6Fqywl1v5FIiC6zu2vbea3np75HcthenrRXt04v1+wDeFE6puqlXY
+         S4lxz9g/X7uGpGABuuT003TMROQDqgCPxScrE+Q9JJBiFkWkUa4n4aboTYaNVQqSyNf3
+         I3ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753208942; x=1753813742;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ncnqQH/L5XHCltFY0Cw0EuBCxvGsfMZiIzARQQHUSw8=;
-        b=XaG+LHJaQyRiJmOtVtKP4JiYFmW5g222K/nXUDNtOwO/AVV1wlsdAH0Y7wz7HWFhv8
-         /UJzvtj1chRrIN9LQFe9CZ4sW0S7gWf4fIxOWh4tgdW2Abqkd73eo85owha2pdqjEjYg
-         QNpnOASx3yEnYvLkWjycMMQfN0BICDgN3rgQZouxKpT2qleTJ1Ttl/xO23Qfr29SW7XR
-         EOpnQBRQKAX5pOMvvlsaQ3IikoodyYqaMhoxKlit5GF/hxEz3UT13poDX3YPNaJUiJNn
-         vyxbp8ExudwL5lQpqeOc7sQuRCvU9mz+jNhkWv/v4n4xPx+vQ2Us3h6MBKTPgOYF+Ex7
-         5FXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV8xe2wj3LkgtdbFU5PZ0Fq6YdgvoSfy8/XhaYoO11IGeOabbF5OoFjs17c1w0A/wOSs/xCcIhYQXZ9lPFMadmN@vger.kernel.org, AJvYcCVuFnt52sNkMM047SaPP50uJ4BHz/BdBJiFmJVzKbi+xzkMo3+fOaapfPFe7fC7/WJLvHVrGee6cQILt+M=@vger.kernel.org, AJvYcCWMLpzx3/DE4/PFdiNooABCjVnYb2jew9xNFblDN6DOHbVqn+GVtZpu6yPEgf+TzCgUcMoMpKRQ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+EA+N5uZcZP5P09XxLI3BfsbkqRY8TBffETTflMmIKkdBXw+1
-	Yzh3dycX9yIIb5v/FpqxDJogufVv9kQYmoBAXU4rwQb5QaQzngV5Gtg=
-X-Gm-Gg: ASbGncsnceepDqvE15+Ky45ST5P5PQNVSg8IiLBEv/t7jPXIqGivpv8f+6fhL3E94HF
-	YCnriGV3x3pylHac1DjKp2cguZsyLBUjmg+clzmyDXZIioApvbesYUoYlrJYk05MMilaz1ML7+1
-	KESvzZmpiG7XnwvJrJvuaK+55Ql6P2LVZ5vO0nPmxvJ5z+6qeYUpLEhRHFdizdsEtdHs9vVTXlI
-	ucBtLL8gGaV0gkxT1kiD8yqkc17+MOugpT3MALiiVL19jhURM16PLPed+6jJGJMyVJnZaDHb42O
-	p3AJdkgJSbybeEFIc+lmBVjZqBZZr4kZrWgQhBL5SZepE2kwbtITMz6NRABhRZi6xj0Ff/iRGU7
-	lS+ZhjAFbtxoZHhAlLRyeFLMr47RIQCxAEfTQJ3VkyA6OsFlBp4WFurQcJ4I=
-X-Google-Smtp-Source: AGHT+IFRqRgH5nBI3wyQnIhjc30c5pwMRyVnycr06EYwVUjXAPmUT7KBxaujhM7aPhesuvyYhscZsQ==
-X-Received: by 2002:a17:903:19e4:b0:234:c65f:6c0c with SMTP id d9443c01a7336-23f98171bbbmr47285ad.15.1753208942004;
-        Tue, 22 Jul 2025 11:29:02 -0700 (PDT)
-Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-23e3b6b48e5sm80681325ad.101.2025.07.22.11.29.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jul 2025 11:29:00 -0700 (PDT)
-Date: Tue, 22 Jul 2025 11:28:59 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Simon Horman <horms@kernel.org>
-Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, sd@queasysnail.net, andrew+netdev@lunn.ch,
-	shuah@kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Cosmin Ratiu <cratiu@nvidia.com>
-Subject: Re: [PATCH net 1/2] macsec: set IFF_UNICAST_FLT priv flag
-Message-ID: <aH_Ya_81eYzoiZZT@mini-arch>
-References: <20250721165423.990313-1-sdf@fomichev.me>
- <20250722163645.GP2459@horms.kernel.org>
+        d=1e100.net; s=20230601; t=1753225656; x=1753830456;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f+m6qI30JHvrm3ONaGCpQMi0L8lxI7PYDb1Mu/Pb3F4=;
+        b=Lj6mpXE7iq1JP1HeCUNw5xFFtwcA8f+7iqIsbmWDJeCtsDsk56st+kRvwHD9sRrGa3
+         0eqqXDmuZMX77q4fPHC7NpEzEj2r5hqlMO+CjOufXtBzcdSydSYWovi1fU7AbWnv0xWH
+         ucLePMUROwJmt9LG4YZZg7VCnuPE+aiNKHGmuWt+sLyIQ/iahYbfB2ws4Z8NV1XvaJhp
+         ilBR7QApFKp5RgUHxvyWX7j95WmhWhm9IJ2fhaQ93X5wqSMhR4ie7FhJoctip2j3+vq/
+         J+KHXI9kJlZWDTcHY0omtnKSNXu3r7A3AzEfHpCH1WRDTxajqQP69nWZjzRtvbIJuSii
+         S/EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV6NVi3aCDRDN2zVmqt2q8u5901nRArYTat6Ymxli0TYrgWMTEDSksY8k5bJF2DPhdSqna+h4MEEPDFXjbhJDk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1Mq1jycfyIA+cIj8oDd/Q5ZJBLO/6ew56xpb+hlqN4orQjHko
+	y244MiSibhuN2/MPzGYJwt5jBE+Z2I/h1wDX7gcqjHDzh3KJAuPQ3knKXi0gVQr1yNDxVRJL/5x
+	tEfhePg==
+X-Google-Smtp-Source: AGHT+IFOb8KYXXobVAAvvjW+Fe1YbH8mwfp6V2E801ROWDybd0+20juthdBHS5x4qZEtLjQQN6CpBVqzr4M=
+X-Received: from pjuj4.prod.google.com ([2002:a17:90a:d004:b0:313:242b:1773])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5647:b0:311:fc8b:31b5
+ with SMTP id 98e67ed59e1d1-31e507abbc6mr1697551a91.14.1753225656408; Tue, 22
+ Jul 2025 16:07:36 -0700 (PDT)
+Date: Tue, 22 Jul 2025 16:07:34 -0700
+In-Reply-To: <80a047e2-e0fb-40cd-bb88-cce05ca017ac@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250722163645.GP2459@horms.kernel.org>
+Mime-Version: 1.0
+References: <20250713174339.13981-2-shivankg@amd.com> <bdce1a12-ab73-4de1-892b-f8e849a8ab51@redhat.com>
+ <aH-j8bOXMfOKdpHp@google.com> <80a047e2-e0fb-40cd-bb88-cce05ca017ac@redhat.com>
+Message-ID: <aIAZtgtdy5Fw1OOi@google.com>
+Subject: Re: [PATCH V9 0/7] Add NUMA mempolicy support for KVM guest-memfd
+From: Sean Christopherson <seanjc@google.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Shivank Garg <shivankg@amd.com>, vbabka@suse.cz, willy@infradead.org, 
+	akpm@linux-foundation.org, shuah@kernel.org, pbonzini@redhat.com, 
+	brauner@kernel.org, viro@zeniv.linux.org.uk, ackerleytng@google.com, 
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, pvorel@suse.cz, 
+	bfoster@redhat.com, tabba@google.com, vannapurve@google.com, 
+	chao.gao@intel.com, bharata@amd.com, nikunj@amd.com, michael.day@amd.com, 
+	shdhiman@amd.com, yan.y.zhao@intel.com, Neeraj.Upadhyay@amd.com, 
+	thomas.lendacky@amd.com, michael.roth@amd.com, aik@amd.com, jgg@nvidia.com, 
+	kalyazin@amazon.com, peterx@redhat.com, jack@suse.cz, rppt@kernel.org, 
+	hch@infradead.org, cgzones@googlemail.com, ira.weiny@intel.com, 
+	rientjes@google.com, roypat@amazon.co.uk, ziy@nvidia.com, 
+	matthew.brost@intel.com, joshua.hahnjy@gmail.com, rakie.kim@sk.com, 
+	byungchul@sk.com, gourry@gourry.net, kent.overstreet@linux.dev, 
+	ying.huang@linux.alibaba.com, apopple@nvidia.com, chao.p.peng@intel.com, 
+	amit@infradead.org, ddutile@redhat.com, dan.j.williams@intel.com, 
+	ashish.kalra@amd.com, gshan@redhat.com, jgowans@amazon.com, 
+	pankaj.gupta@amd.com, papaluri@amd.com, yuzhao@google.com, 
+	suzuki.poulose@arm.com, quic_eberman@quicinc.com, 
+	aneeshkumar.kizhakeveetil@arm.com, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-On 07/22, Simon Horman wrote:
-> On Mon, Jul 21, 2025 at 09:54:22AM -0700, Stanislav Fomichev wrote:
-> > Cosmin reports the following locking issue:
+On Tue, Jul 22, 2025, David Hildenbrand wrote:
+> On 22.07.25 16:45, Sean Christopherson wrote:
+> > On Tue, Jul 22, 2025, David Hildenbrand wrote:
+> > > Just to clarify: this is based on Fuad's stage 1 and should probably still be
+> > > tagged "RFC" until stage-1 is finally upstream.
+> > > 
+> > > (I was hoping stage-1 would go upstream in 6.17, but I am not sure yet if that is
+> > > still feasible looking at the never-ending review)
 > > 
-> >   # BUG: sleeping function called from invalid context at
-> >   kernel/locking/mutex.c:275
-> >   #   dump_stack_lvl+0x4f/0x60
-> >   #   __might_resched+0xeb/0x140
-> >   #   mutex_lock+0x1a/0x40
-> >   #   dev_set_promiscuity+0x26/0x90
-> >   #   __dev_set_promiscuity+0x85/0x170
-> >   #   __dev_set_rx_mode+0x69/0xa0
-> >   #   dev_uc_add+0x6d/0x80
-> >   #   vlan_dev_open+0x5f/0x120 [8021q]
-> >   #  __dev_open+0x10c/0x2a0
-> >   #  __dev_change_flags+0x1a4/0x210
-> >   #  netif_change_flags+0x22/0x60
-> >   #  do_setlink.isra.0+0xdb0/0x10f0
-> >   #  rtnl_newlink+0x797/0xb00
-> >   #  rtnetlink_rcv_msg+0x1cb/0x3f0
-> >   #  netlink_rcv_skb+0x53/0x100
-> >   #  netlink_unicast+0x273/0x3b0
-> >   #  netlink_sendmsg+0x1f2/0x430
-> > 
-> > Which is similar to recent syzkaller reports in [0] and [1] and triggers
-> > because macsec does not advertise IFF_UNICAST_FLT although it has proper
-> > ndo_set_rx_mode callback that takes care of pushing uc/mc addresses
-> > down to the real device.
-> > 
-> > In general, dev_uc_add call path is problematic for stacking
-> > non-IFF_UNICAST_FLT because we might grab netdev instance lock under
-> > addr_list_lock spinlock, so this is not a systemic fix.
-> > 
-> > 0: https://lore.kernel.org/netdev/686d55b4.050a0220.1ffab7.0014.GAE@google.com
-> > 1: https://lore.kernel.org/netdev/68712acf.a00a0220.26a83e.0051.GAE@google.com/
-> > Link: 2aff4342b0f5b1539c02ffd8df4c7e58dd9746e7.camel@nvidia.com
+> > 6.17 is very doable.
 > 
-> I think that Link: should be followed by a URL
-> 
-> Link: https://lore.kernel.org/netdev/2aff4342b0f5b1539c02ffd8df4c7e58dd9746e7.camel@nvidia.com
+> I like your optimism :)
 
-Whoops, sorry, forgot to prefix the message id with a URL :-( If this
-gets a CR, I'll repost with a fix. (presumably should be easy to fix
-during git am)
- 
-> > Fixes: 7e4d784f5810 ("net: hold netdev instance lock during rtnetlink operations")
-> > Reported-by: Cosmin Ratiu <cratiu@nvidia.com>
-> > Tested-by: Cosmin Ratiu <cratiu@nvidia.com>
-> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> 
-> Hi Stan,
-> 
-> I ran the test provided by patch 2/2.
-> When run with with a debug kernel using VNG.
-> 
-> It reliably passes with patch 1/2 applied. And fails without patch 1/2 applied.
-> Where fails means the kernel panics along the lines of the stack trace in
-> the commit message.
-> 
-> Reviewed-by: Simon Horman <horms@kernel.org>
-> Tested-by: Simon Horman <horms@kernel.org>
-
-Thank you for testing!
+I'm not optimistic, just incompetent.  I forgot what kernel we're on.  **6.18**
+is very doable, 6.17 not so much.
