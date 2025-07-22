@@ -1,395 +1,200 @@
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3127C28B7D3;
-	Tue, 22 Jul 2025 23:19:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF5B1FDA;
+	Wed, 23 Jul 2025 00:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753226390; cv=none; b=ZkvCta/drOzxilm5KdsA5SCTl+yqC7WHPWnM6nGwiNwmtwyScu9sV+IKJLPisJftOqcmGX/Jm2cLOGFR3hBrVTb21VWOEacnrICGXxeIzi1s8yX0HJ8ClU30ZNuXHcQyUzw863FDYsR42iSMp50GYaiy0Coxne6t1Shqb0i45QQ=
+	t=1753228931; cv=none; b=l9FNM/R1lurZeUVX97yXPmoP2pemdK3f/Lm3cukS2aS7n3L0eJKPeb60mV2c6aR2NBCo3unZXeO1Sg1qrqmIMYd6CtT+Btww4AMJEVzppADcAlN6JalgH718SuYnXN0ebeFwc9++fnITZjAMCMBUXN2GXqOFJcZM8V0nQpICnjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753226390; c=relaxed/simple;
-	bh=iERN6Xzk9sHzsB4pLCPzg+cd0rkOPiJ6NJagUizg4D0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HbY6IudQxf9WN+Upb8aPap46HWU7UgkOXFiPLLE6F/owTRbSH5BQzyotGJa2OEILyhrlAkbx04f/AUEvDvZuVhi5fdOu2z428ZIrI74X7PXKjMQxviPBxHiIoeUXrnmDA42s+bn7B7zRc7+2qyJbNw1iv6R/ZrWEH7u13RfXX6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=pSsmAH0b; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+	s=arc-20240116; t=1753228931; c=relaxed/simple;
+	bh=dewk3TAValYYQExAPJkqLo7eeu1mdvuRf3ddUbYlT50=;
+	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=YmK/14Nl7fU5ab5jTt4e4HY+ooqXSRnx4BP9KXSMR+go/i0/YcbsImItJa0NMybuKrCM1YHJlOB67RO5wUGLIyDOUWr9R9SeyppsFf1eqWXbZhiULyb9hgItS8003BVav3g6HQzn+Dp8wBlShbZoZnZg3wMPO/qWRdYabO9MxK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IAj2DzIM; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="pSsmAH0b"
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4bmtWx40bRz9tKY;
-	Wed, 23 Jul 2025 01:19:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1753226381;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ga146VfUnbYMyYkmA+aailWJBUlJlGizk/gmO5Hyyfg=;
-	b=pSsmAH0b+jJYacyGxS8hatPE1X+DUMc0aN6RwPvJHabw0eaoUjNSBE0DgLeLaZLdlYhpZ9
-	rL+lBDcBr3JmrukxwtCLTaQSavAVzi76K6IgN9LC1o3XiWRP9QW6w4wR92jI3o1LGin1k2
-	V7RZz+VE7FZAJd+Rt0Zdc9L0mqVNE94Pg8tiZZyRm+wgG4fEfTP+AlXVq96BNIzkKDSZz7
-	Xj8k/d+8aWFejT+KBgXOsvjmcv5rS87UbIqaLu0z+iSFoIv0K7pqxo2AlzSrdnbJkRcF70
-	BIr1sSzA/8XSa6vyCO+W+Y6xynOifI4nIUZgF2iYJGeyAGZiF0waq+PNIhCP8A==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
-From: Aleksa Sarai <cyphar@cyphar.com>
-Date: Wed, 23 Jul 2025 09:18:54 +1000
-Subject: [PATCH RFC v2 4/4] selftests/proc: add tests for new pidns APIs
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IAj2DzIM"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-748d982e92cso4089496b3a.1;
+        Tue, 22 Jul 2025 17:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753228929; x=1753833729; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=afioNrw39xivAx0anOKx/PDNnLStyhXg1rvkkGxqeuY=;
+        b=IAj2DzIMXqzjWTLRYOTSEOCVkh1q4c/3h+3dkF0IaRLHtWFZAbzBLJcDHm9FoBMxRW
+         lX9F/tF5ewl6OixEhAeOHgQiQr+PKM0Bq1/EWpcuK6FjEIKxrbUxKGrkDWpcS9b4uz12
+         8L41N2BrgfHx69/7ae9qLZpa+o7sndemJDAJnUoxxQ0FNuEhan7pUaDt81V3iXmWjgz9
+         p4JC0zS172mNy/KJnc9hD1TvlRSHf37sPu2e3fH345LDeQpGgnmIM+DnQi+VwbptFxcB
+         4MupB26J+4Lq/xQz61gOJRXvFQ04UvGPZ7QkTpbTTp5r9IVIZC3dOWFyqVfAtMCTHHs6
+         DamQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753228929; x=1753833729;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=afioNrw39xivAx0anOKx/PDNnLStyhXg1rvkkGxqeuY=;
+        b=c0nSV5MBMpH6zN6RxtS/t7bu3rqU/rV2lDx4KkJ/L4QQ53I2/60uIStL7zPs1DK90u
+         UPwwJrU3Mootf1+7FIaqVCkoC9sPrKNBhF4o40HVmac2zgUcHebmks5ByGdSiZro46HH
+         YsrZQ4TSgMljQIXKFd8EwgiEOCZfjQQgJ4eHGXdavx82dqoPLvuciIZ1OfZqFfCTqQGo
+         Y31tbsCgwbPrDTq2dFT4S+SmaiA9CIE/p4zYC6OxyP2aEokP6kXXrfelF9tyqjzLtNJo
+         fqaAUG7GMNIwhe38fZrF33RseezxPtEJpIelRMq1eWRcslLcXYXBm2ytQ0jb3LfhFnCy
+         JyHw==
+X-Forwarded-Encrypted: i=1; AJvYcCUP0ni5f/ddLuckEOSAd7fIAWWZ9iJUwDZ8GV1W6NbFdtLRL9GD4ChV4/keAJem5bY4365CzEIFqhMt5nGbDYH9gEG6LCfa@vger.kernel.org, AJvYcCWOF1j42vDL04S/zZJ5/cRX6z1Hd4/buQcN+60Emb3r24aRPHY3Fk+9hU0pR/hL8SJM0sD507B15Y28Rng=@vger.kernel.org, AJvYcCXOqvU6CBiDR3Zrap1et1If2KiMFJO58szIEKopUQbYve8zqC99yHddVW8/KSOGHV3BS6kR82KgoM22tdAGrq6P@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKDZN69PheFDG9BgpZnXyH+WY+u/CKjXVBKwU9EUx2Y/tjvzPe
+	fsXIkEi74xkx+TsCXIfo/1YsJ88yt/PMIQdmdaZisYNN4r6MPck7PUpz
+X-Gm-Gg: ASbGncuNkP4hYe28R2dXw3AgvhPijJQ/Uqd9+uDcegEvc0xeq8xYDVz2np2AjG/5U8k
+	JdWOt2RD43pxLGNKaZY9pmljPZPMpV6m6ykJqOx35T+I88MGT7viTUSocaDXi97d68J80CNqU1f
+	c410PqnIH2inur4Anwl/9q8fOw2hBScs1MpkZB97nQawOUEOvZlYThlD2zQiE3hAbOPW1PyGP0M
+	bNb+aOesEyG3tDuFWC0GsPM0A/S7OHYC5uoVqHT8Vrybt95odJgrEMmYKct9kD/3oJnX38GF/C4
+	otLyQdaD87ZOnabgdvrn0pWOjrLJCAS0OrPxyANpxJ3eGR7m5h0qr24BR6Iwp6S8YCjbNs07MuV
+	vC3K2HzuJTLVVCCKQKcXG7BY=
+X-Google-Smtp-Source: AGHT+IEOrOtE3x8MeA1SKBJMd59JULb3/k3gDSOBVNnDEa6DvuyNQgbznfPDnTFZY/cLR7sKgxhnHQ==
+X-Received: by 2002:a05:6a21:6b0d:b0:222:d191:5bbd with SMTP id adf61e73a8af0-23d491446f0mr1142486637.39.1753228928763;
+        Tue, 22 Jul 2025 17:02:08 -0700 (PDT)
+Received: from 1337 ([136.159.213.219])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-759c89d5820sm8437213b3a.52.2025.07.22.17.02.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jul 2025 17:02:08 -0700 (PDT)
+From: Abhinav Saxena <xandfury@gmail.com>
+To: Fan Wu <wufan@kernel.org>
+Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G?=
+ =?utf-8?Q?=C3=BCnther?= Noack <gnoack@google.com>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge
+ E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>,
+ linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH RFC 2/4] landlock: implement memfd detection
+Date: Tue, 22 Jul 2025 15:56:38 -0600
+References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
+ <20250719-memfd-exec-v1-2-0ef7feba5821@gmail.com>
+ <CAKtyLkEJKLgO1GvpTNmW=DnRhrsiPXGgz9=F7oJXVQPLSocSeA@mail.gmail.com>
+User-agent: mu4e 1.10.8; emacs 30.1
+In-reply-to: <CAKtyLkEJKLgO1GvpTNmW=DnRhrsiPXGgz9=F7oJXVQPLSocSeA@mail.gmail.com>
+Message-ID: <87v7nj7p1d.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250723-procfs-pidns-api-v2-4-621e7edd8e40@cyphar.com>
-References: <20250723-procfs-pidns-api-v2-0-621e7edd8e40@cyphar.com>
-In-Reply-To: <20250723-procfs-pidns-api-v2-0-621e7edd8e40@cyphar.com>
-To: Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-api@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9962; i=cyphar@cyphar.com;
- h=from:subject:message-id; bh=iERN6Xzk9sHzsB4pLCPzg+cd0rkOPiJ6NJagUizg4D0=;
- b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMWQ0yBTsauX+3WS7hd/t/3ljl529dbIJNY7NRn85D0oxM
- GssDfndUcrCIMbFICumyLLNzzN00/zFV5I/rWSDmcPKBDKEgYtTACbys43hf+IP/Qqbb129cgJM
- Z47zhQec6EjY/kQxqCbkcOwpTkebLwz/o39nrnshbDFr4wH+o7sdlmuw/o7PfHR5ocFst6d5h0+
- a8QAA
-X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
- fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
-X-Rspamd-Queue-Id: 4bmtWx40bRz9tKY
+Content-Type: multipart/mixed; boundary="=-=-="
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- tools/testing/selftests/proc/.gitignore   |   1 +
- tools/testing/selftests/proc/Makefile     |   1 +
- tools/testing/selftests/proc/proc-pidns.c | 286 ++++++++++++++++++++++++++++++
- 3 files changed, 288 insertions(+)
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/proc/.gitignore b/tools/testing/selftests/proc/.gitignore
-index 973968f45bba..2dced03e9e0e 100644
---- a/tools/testing/selftests/proc/.gitignore
-+++ b/tools/testing/selftests/proc/.gitignore
-@@ -17,6 +17,7 @@
- /proc-tid0
- /proc-uptime-001
- /proc-uptime-002
-+/proc-pidns
- /read
- /self
- /setns-dcache
-diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
-index b12921b9794b..c6f7046b9860 100644
---- a/tools/testing/selftests/proc/Makefile
-+++ b/tools/testing/selftests/proc/Makefile
-@@ -27,5 +27,6 @@ TEST_GEN_PROGS += setns-sysvipc
- TEST_GEN_PROGS += thread-self
- TEST_GEN_PROGS += proc-multiple-procfs
- TEST_GEN_PROGS += proc-fsconfig-hidepid
-+TEST_GEN_PROGS += proc-pidns
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/proc/proc-pidns.c b/tools/testing/selftests/proc/proc-pidns.c
-new file mode 100644
-index 000000000000..e7e34c78d383
---- /dev/null
-+++ b/tools/testing/selftests/proc/proc-pidns.c
-@@ -0,0 +1,286 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Author: Aleksa Sarai <cyphar@cyphar.com>
-+ * Copyright (C) 2025 SUSE LLC.
-+ */
-+
-+#include <assert.h>
-+#include <errno.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <sys/ioctl.h>
-+#include <sys/prctl.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#define bail(fmt, ...)							\
-+	do {								\
-+		fprintf(stderr, fmt ": %m", __VA_ARGS__);		\
-+		exit(1);						\
-+	} while (0)
-+
-+#define ASSERT_SUCCESS	ASSERT_FALSE
-+#define ASSERT_FAIL	ASSERT_TRUE
-+
-+int touch(char *path)
-+{
-+	int fd = open(path, O_WRONLY|O_CREAT|O_CLOEXEC, 0644);
-+	if (fd < 0 || close(fd) < 0)
-+		return -errno;
-+	return 0;
-+}
-+
-+FIXTURE(ns)
-+{
-+	int host_mntns, host_pidns;
-+	int dummy_pidns;
-+};
-+
-+FIXTURE_SETUP(ns)
-+{
-+	/* Stash the old mntns. */
-+	self->host_mntns = open("/proc/self/ns/mnt", O_RDONLY|O_CLOEXEC);
-+	ASSERT_GE(self->host_mntns, 0);
-+
-+	/* Create a new mount namespace and make it private. */
-+	ASSERT_SUCCESS(unshare(CLONE_NEWNS));
-+	ASSERT_SUCCESS(mount(NULL, "/", NULL, MS_PRIVATE|MS_REC, NULL));
-+
-+	/*
-+	 * Create a proper tmpfs that we can use and will disappear once we
-+	 * leave this mntns.
-+	 */
-+	ASSERT_SUCCESS(mount("tmpfs", "/tmp", "tmpfs", 0, NULL));
-+
-+	/*
-+	 * Create a pidns we can use for later tests. We need to fork off a
-+	 * child so that we get a usable nsfd that we can bind-mount and open.
-+	 */
-+	ASSERT_SUCCESS(touch("/tmp/dummy-pidns"));
-+
-+	self->host_pidns = open("/proc/self/ns/pid", O_RDONLY|O_CLOEXEC);
-+	ASSERT_GE(self->host_pidns, 0);
-+	ASSERT_SUCCESS(unshare(CLONE_NEWPID));
-+
-+	pid_t pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (!pid) {
-+		prctl(PR_SET_PDEATHSIG, SIGKILL);
-+		ASSERT_SUCCESS(mount("/proc/self/ns/pid", "/tmp/dummy-pidns", NULL, MS_BIND, 0));
-+		exit(0);
-+	}
-+
-+	int wstatus;
-+	ASSERT_EQ(waitpid(pid, &wstatus, 0), pid);
-+	ASSERT_TRUE(WIFEXITED(wstatus));
-+	ASSERT_EQ(WEXITSTATUS(wstatus), 0);
-+
-+	ASSERT_SUCCESS(setns(self->host_pidns, CLONE_NEWPID));
-+
-+	self->dummy_pidns = open("/tmp/dummy-pidns", O_RDONLY|O_CLOEXEC);
-+	ASSERT_GE(self->dummy_pidns, 0);
-+}
-+
-+FIXTURE_TEARDOWN(ns)
-+{
-+	ASSERT_SUCCESS(setns(self->host_mntns, CLONE_NEWNS));
-+	ASSERT_SUCCESS(close(self->host_mntns));
-+
-+	ASSERT_SUCCESS(close(self->host_pidns));
-+	ASSERT_SUCCESS(close(self->dummy_pidns));
-+}
-+
-+TEST_F(ns, pidns_mount_string_path)
-+{
-+	ASSERT_SUCCESS(mkdir("/tmp/proc-host", 0755));
-+	ASSERT_SUCCESS(mount("proc", "/tmp/proc-host", "proc", 0, "pidns=/proc/self/ns/pid"));
-+	ASSERT_SUCCESS(access("/tmp/proc-host/self/", X_OK));
-+
-+	ASSERT_SUCCESS(mkdir("/tmp/proc-dummy", 0755));
-+	ASSERT_SUCCESS(mount("proc", "/tmp/proc-dummy", "proc", 0, "pidns=/tmp/dummy-pidns"));
-+	ASSERT_FAIL(access("/tmp/proc-dummy/1/", X_OK));
-+	ASSERT_FAIL(access("/tmp/proc-dummy/self/", X_OK));
-+}
-+
-+TEST_F(ns, pidns_fsconfig_string_path)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_GE(fsfd, 0);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_STRING, "pidns", "/tmp/dummy-pidns", 0));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_GE(mountfd, 0);
-+
-+	ASSERT_FAIL(faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_FAIL(faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(mountfd));
-+}
-+
-+TEST_F(ns, pidns_fsconfig_fd)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_GE(fsfd, 0);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_FD, "pidns", NULL, self->dummy_pidns));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_GE(mountfd, 0);
-+
-+	ASSERT_FAIL(faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_FAIL(faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(mountfd));
-+}
-+
-+TEST_F(ns, pidns_reconfigure_remount)
-+{
-+	ASSERT_SUCCESS(mkdir("/tmp/proc", 0755));
-+	ASSERT_SUCCESS(mount("proc", "/tmp/proc", "proc", 0, ""));
-+	ASSERT_SUCCESS(access("/tmp/proc/self/", X_OK));
-+
-+	ASSERT_SUCCESS(mount(NULL, "/tmp/proc", NULL, MS_REMOUNT, "pidns=/tmp/dummy-pidns"));
-+	ASSERT_FAIL(access("/tmp/proc/self/", X_OK));
-+}
-+
-+TEST_F(ns, pidns_reconfigure_fsconfig_string_path)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_GE(fsfd, 0);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_GE(mountfd, 0);
-+
-+	ASSERT_SUCCESS(faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_SUCCESS(faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_STRING, "pidns", "/tmp/dummy-pidns", 0));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_RECONFIGURE, NULL, NULL, 0));
-+
-+	ASSERT_FAIL(faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_FAIL(faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(mountfd));
-+}
-+
-+TEST_F(ns, pidns_reconfigure_fsconfig_fd)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_GE(fsfd, 0);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_GE(mountfd, 0);
-+
-+	ASSERT_SUCCESS(faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_SUCCESS(faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_FD, "pidns", NULL, self->dummy_pidns));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_RECONFIGURE, NULL, NULL, 0));
-+
-+	ASSERT_FAIL(faccessat(mountfd, "1/", X_OK, 0));
-+	ASSERT_FAIL(faccessat(mountfd, "self/", X_OK, 0));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(mountfd));
-+}
-+
-+int is_same_inode(int fd1, int fd2)
-+{
-+	struct stat stat1, stat2;
-+
-+	assert(fstat(fd1, &stat1) == 0);
-+	assert(fstat(fd2, &stat2) == 0);
-+
-+	return stat1.st_ino == stat2.st_ino && stat1.st_dev == stat2.st_dev;
-+}
-+
-+#define PROCFS_IOCTL_MAGIC 'f'
-+#define PROCFS_GET_PID_NAMESPACE	_IO(PROCFS_IOCTL_MAGIC, 1)
-+
-+TEST_F(ns, get_pidns_ioctl)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_GE(fsfd, 0);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_FD, "pidns", NULL, self->dummy_pidns));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_GE(mountfd, 0);
-+
-+	/* fsmount returns an O_PATH, which ioctl(2) doesn't accept. */
-+	int new_mountfd = openat(mountfd, ".", O_RDONLY|O_DIRECTORY|O_CLOEXEC);
-+	ASSERT_GE(new_mountfd, 0);
-+
-+	ASSERT_SUCCESS(close(mountfd));
-+	mountfd = -EBADF;
-+
-+	int procfs_pidns = ioctl(new_mountfd, PROCFS_GET_PID_NAMESPACE);
-+	ASSERT_GE(procfs_pidns, 0);
-+
-+	ASSERT_NE(self->dummy_pidns, procfs_pidns);
-+	ASSERT_FALSE(is_same_inode(self->host_pidns, procfs_pidns));
-+	ASSERT_TRUE(is_same_inode(self->dummy_pidns, procfs_pidns));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(new_mountfd));
-+	ASSERT_SUCCESS(close(procfs_pidns));
-+}
-+
-+TEST_F(ns, reconfigure_get_pidns_ioctl)
-+{
-+	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	ASSERT_GE(fsfd, 0);
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+
-+	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	ASSERT_GE(mountfd, 0);
-+
-+	/* fsmount returns an O_PATH, which ioctl(2) doesn't accept. */
-+	int new_mountfd = openat(mountfd, ".", O_RDONLY|O_DIRECTORY|O_CLOEXEC);
-+	ASSERT_GE(new_mountfd, 0);
-+
-+	ASSERT_SUCCESS(close(mountfd));
-+	mountfd = -EBADF;
-+
-+	int procfs_pidns1 = ioctl(new_mountfd, PROCFS_GET_PID_NAMESPACE);
-+	ASSERT_GE(procfs_pidns1, 0);
-+
-+	ASSERT_NE(self->dummy_pidns, procfs_pidns1);
-+	ASSERT_TRUE(is_same_inode(self->host_pidns, procfs_pidns1));
-+	ASSERT_FALSE(is_same_inode(self->dummy_pidns, procfs_pidns1));
-+
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_STRING, "pidns", "/tmp/dummy-pidns", 0));
-+	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_RECONFIGURE, NULL, NULL, 0));
-+
-+	int procfs_pidns2 = ioctl(new_mountfd, PROCFS_GET_PID_NAMESPACE);
-+	ASSERT_GE(procfs_pidns2, 0);
-+
-+	ASSERT_NE(self->dummy_pidns, procfs_pidns2);
-+	ASSERT_FALSE(is_same_inode(self->host_pidns, procfs_pidns2));
-+	ASSERT_TRUE(is_same_inode(self->dummy_pidns, procfs_pidns2));
-+
-+	ASSERT_SUCCESS(close(fsfd));
-+	ASSERT_SUCCESS(close(new_mountfd));
-+	ASSERT_SUCCESS(close(procfs_pidns1));
-+	ASSERT_SUCCESS(close(procfs_pidns2));
-+}
-+
-+TEST_HARNESS_MAIN
+Fan Wu <wufan@kernel.org> writes:
 
--- 
-2.50.0
+> On Sat, Jul 19, 2025 at 4:13=E2=80=AFAM Abhinav Saxena <xandfury@gmail.co=
+m> wrote:
+>>
+>> Add is_memfd_file() function to reliably detect memfd files by checking
+>> for =E2=80=9Cmemfd:=E2=80=9D prefix in dentry names on shmem-backed file=
+s. This
+>> distinguishes true memfd files from regular shmem files.
+>>
+>> Move domain_is_scoped() to domain.c for reuse across subsystems.
+>> Add comprehensive kunit tests for memfd detection edge cases.
+>>
+>> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+>> =E2=80=94
+>>  security/landlock/domain.c |  67 +++++++++++++++
+>>  security/landlock/domain.h |   4 +
+>>  security/landlock/fs.c     | 210 ++++++++++++++++++++++++++++++++++++++=
++++++++
+>>  security/landlock/task.c   |  67 =E2=80=94=E2=80=94=E2=80=94=E2=80=94=
+=E2=80=94
+>>  4 files changed, 281 insertions(+), 67 deletions(-)
+>
+> =E2=80=A6
+>
+>>
+>> +/**
+>> + * is_memfd_file - Check if file was created via memfd_create()
+>> + * @file: File to check
+>> + *
+>> + * Returns true if @file was created via memfd_create(), false otherwis=
+e.
+>> + *
+>> + * memfd files are shmem-backed files with =E2=80=9Cmemfd:=E2=80=9D pre=
+fix in their dentry name.
+>> + * This is the definitive way to distinguish memfd files from regular s=
+hmem
+>> + * files.
+>> + */
+>> +static bool is_memfd_file(struct file *file)
+>> +{
+>> +       const struct dentry *dentry;
+>> +       const unsigned char *name;
+>> +       size_t name_len;
+>> +
+>> +       /* Fast path: basic validation */
+>> +       if (unlikely(!file))
+>> +               return false;
+>> +
+>> +       /* Must be shmem-backed first - this is the cheapest definitive =
+check */
+>> +       if (!shmem_file(file))
+>> +               return false;
+>> +
+>> +#ifdef CONFIG_MEMFD_CREATE
+>> +
+>> +       /* Validate dentry and get name info */
+>> +       dentry =3D file->f_path.dentry;
+>> +       if (unlikely(!dentry))
+>> +               return false;
+>> +
+>> +       name_len =3D dentry->d_name.len;
+>> +       name =3D dentry->d_name.name;
+>> +
+>> +       /* memfd files always have =E2=80=9Cmemfd:=E2=80=9D prefix (6 ch=
+aracters) */
+>> +       if (name_len < 6 || unlikely(!name))
+>> +               return false;
+>> +
+>> +       /* Check for exact =E2=80=9Cmemfd:=E2=80=9D prefix */
+>> +       return memcmp(name, =E2=80=9Cmemfd:=E2=80=9D, 6) =3D=3D 0;
+>> +#else
+>> +       return false;
+>> +#endif
+>
+> I was trying to do something similar early this year but didn=E2=80=99t h=
+ear
+> feedback from the linux-mm folks.
+> <https://lore.kernel.org/linux-security-module/20250129203932.22165-1-wuf=
+an@kernel.org/>
+>
+> I have considered this approach but didn=E2=80=99t use it. My concern is,
+> potentially a malicious user can create a file in a shmem fs, e.g.
+> tmpfs , with the =E2=80=9Cmemfd:=E2=80=9D prefix, which can be used to by=
+pass security
+> policy.
+> (Resending this message due to a misconfiguration with my email
+> client. Apologies for any inconvenience.)
+>
+> -Fan
 
+Hi Fan,
+
+Thanks for your comments.
+
+I agree that an LSM hook into memfd_create() would be a much better
+solution. In the absence of such a function, do you think adding a
+`d_unlinked(dentry)` check could serve as an additional verification?
+
+I say things since I *think* that legitimate memfd files are always
+unlinked while spoofed tmpfs files remain linked. I could be wrong
+though.
+
+In any case, we can test this approach using kprobes to validate
+the behavior.
+
+-Abhinav
+
+--=-=-=--
