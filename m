@@ -1,61 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9FA291C16;
-	Thu, 24 Jul 2025 14:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C372E5B2E
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Jul 2025 15:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753367705; cv=none; b=G9ZINkimI7Umvy/QzQY+OmzKYf0aCgzpN7s98BZg8sRgA0kJjrPtzW+Nt/jB0xADZt9k3tH+T7nd5dAwOl6Zh7YXKnXAlZ3TpSORlZiuW+bFLjmv5kaMq4031Pgd3pDk8SnIKwYPDSzTwFsWqSwZuRHKR8eFEU68z6NCZhOad4Q=
+	t=1753370124; cv=none; b=P5Fvj6z8RRbFjeUHcZpVC0gXAGJUDODzAEgIBeqL2zn33l4lrkFwHJA6tBeEKdDmFWXX9MJito1g5OXbPK27qM8NjomRWl3qUXvuwFlQkZ9GaF0dYvRlFZ9adqr2RG5yfXv972GBOlemIms2O0i8JcZFi1E5Kh3/4TL69ACOExo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753367705; c=relaxed/simple;
-	bh=5psh7yEe3Xi6LRR7E6HhzRkflXNDxhFntpQpk6AAwdQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dxwStlMzo87tik6hkhOdpgViahmht2pJxB/y7DCypgvKbizc6Sed31lYhd1eXiW7b7WpnC+iSo2Vzp6WpHHCGNShODvvKZwvTsbOyzpwp/Gg0q9m9R1zaqeYIpim15gfnBwHSkvWjeCWmtT05UI3PSzgsyAOKrPOf2VaoGglwzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iZ+OyHSB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753370124; c=relaxed/simple;
+	bh=EOcAPAX1vQ4XIk2/UrVWTxL9MCVWE5oN9MT9W2II56I=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EhMBJ8+TKzdk4v5wIFVYN+PeNE4hyXs9c6kOJ6Df50+z+ocamGr+se9Qct/XS4qw5DBuW3ug0XZDQcaBE4X4z2YbZ7D5db4JSxtxeBmhuJsS+MrAn3EjCRBKt/oVKEdB6HB5xZyhVwV18Fm1Qu+UJ34WP8vM8WXj5RpLl5UZ4vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A4798Up0; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iZ+OyHSB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BDCC4CEED;
-	Thu, 24 Jul 2025 14:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753367703;
-	bh=5psh7yEe3Xi6LRR7E6HhzRkflXNDxhFntpQpk6AAwdQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iZ+OyHSB/aTgsSKk4Vjwoz7QzsfA04RxX0KPmLW5a3BR4j6N7aiaF8wO3mNFYM1h9
-	 uMes4Nr3pK3P0P7sWQOB/KM97Jc6krkxWhbe65Zv9Zd78Z/9tR5aXUcRILHVneOKqo
-	 c5fEBNXqFVcZT/7w1ZMEABMYgf0R8t6whS9ccKs8CndP1fSFXNm/IRDp5HHMJUinYL
-	 O2POlvnMhT7aepTdc16aohCf2Tv06SbPZA+KU9IYbCQAY2CFgDtcnwfNWgtLiaxVMg
-	 +6FMSg5GKeiLLFDxi9KdJgbuUWM3BYTApit2XWt1tkeOwwn4bs+WYxBAN4xI5rvHR6
-	 6Eb6pmQNjrDMA==
-Date: Thu, 24 Jul 2025 07:35:01 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- netdev@vger.kernel.org, Nikolay Aleksandrov <razor@blackwall.org>, Simon
- Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Petr Machata <petrm@nvidia.com>, Amit Cohen
- <amcohen@nvidia.com>, Vladimir Oltean <vladimir.oltean@nxp.com>, Alessandro
- Zanni <alessandro.zanni87@gmail.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 3/3] selftests: bonding: add test for LACP
- actor port priority
-Message-ID: <20250724073501.1c0357c6@kernel.org>
-In-Reply-To: <aIJDz3AgQtnzSR59@fedora>
-References: <20250724081632.12921-1-liuhangbin@gmail.com>
-	<20250724081632.12921-4-liuhangbin@gmail.com>
-	<aIJDz3AgQtnzSR59@fedora>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A4798Up0"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1753370118;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ElR9Dd4bdnPHpZLYz3QLh/uZus9GLW0mgy218VPlreM=;
+	b=A4798Up0BsBRUIgT7YPu1ixF9//13jLsBK4Y5pNRMwPKvbMj7qRSx8FNQ+w4Z4G/eb8LqQ
+	sigTBLrPYKGJ4/VOkhEl7oJJucqgYPaDuP96d3utXvj1PcnkvrgtrmL2ppaqlkUQIkRBz9
+	iZWZNTfmDzOmtOsh60GS7n7OzlPm1OQ=
+From: KaFai Wan <kafai.wan@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	shuah@kernel.org,
+	kafai.wan@linux.dev,
+	laoar.shao@gmail.com,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	leon.hwang@linux.dev
+Subject: [PATCH bpf-next v4 1/4] bpf: Show precise rejected function when attaching fexit/fmod_ret to __noreturn functions
+Date: Thu, 24 Jul 2025 23:14:51 +0800
+Message-ID: <20250724151454.499040-2-kafai.wan@linux.dev>
+In-Reply-To: <20250724151454.499040-1-kafai.wan@linux.dev>
+References: <20250724151454.499040-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 24 Jul 2025 14:31:43 +0000 Hangbin Liu wrote:
-> Should I drop this selftest as it needs the new iproute2 feature that has
-> not applied yet?
+With this change, we know the precise rejected function name when
+attaching fexit/fmod_ret to __noreturn functions from log.
 
-No need, I'll add the iproute2 patch in the CI.
+$ ./fexit
+libbpf: prog 'fexit': BPF program load failed: -EINVAL
+libbpf: prog 'fexit': -- BEGIN PROG LOAD LOG --
+Attaching fexit/fmod_ret to __noreturn function 'do_exit' is rejected.
+
+Suggested-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+Acked-by: Yafang Shao <laoar.shao@gmail.com>
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/verifier.c                               | 3 ++-
+ tools/testing/selftests/bpf/progs/fexit_noreturns.c | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e2fcea860755..00d287814f12 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -23946,7 +23946,8 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	} else if ((prog->expected_attach_type == BPF_TRACE_FEXIT ||
+ 		   prog->expected_attach_type == BPF_MODIFY_RETURN) &&
+ 		   btf_id_set_contains(&noreturn_deny, btf_id)) {
+-		verbose(env, "Attaching fexit/fmod_ret to __noreturn functions is rejected.\n");
++		verbose(env, "Attaching fexit/fmod_ret to __noreturn function '%s' is rejected.\n",
++			tgt_info.tgt_name);
+ 		return -EINVAL;
+ 	}
+ 
+diff --git a/tools/testing/selftests/bpf/progs/fexit_noreturns.c b/tools/testing/selftests/bpf/progs/fexit_noreturns.c
+index 54654539f550..b1c33d958ae2 100644
+--- a/tools/testing/selftests/bpf/progs/fexit_noreturns.c
++++ b/tools/testing/selftests/bpf/progs/fexit_noreturns.c
+@@ -8,7 +8,7 @@
+ char _license[] SEC("license") = "GPL";
+ 
+ SEC("fexit/do_exit")
+-__failure __msg("Attaching fexit/fmod_ret to __noreturn functions is rejected.")
++__failure __msg("Attaching fexit/fmod_ret to __noreturn function 'do_exit' is rejected.")
+ int BPF_PROG(noreturns)
+ {
+ 	return 0;
+-- 
+2.43.0
+
