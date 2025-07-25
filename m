@@ -1,105 +1,150 @@
-Received: from mx1.emlix.com (mx1.emlix.com [178.63.209.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1241E2D46DF;
-	Fri, 25 Jul 2025 10:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.209.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF9E2E5B32;
+	Fri, 25 Jul 2025 10:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753437688; cv=none; b=YQNkBtKO1ZyF0+d0CtcqdhwFq4XMCfi8C4kUer6YRauCCjbgc41Tva38++/RfjSDl8yDpuGMMEcYaIppINcYVzL2NfYPPKgGikUCHyi9DJLsJCQBk5vxU4RUjJ7iwbdL0F3cLwVdBOuOJg50UnRQ63HW4PAcXFHMqX0Pmxcl0eI=
+	t=1753441197; cv=none; b=Vj9vaOIrq5odjzBLXfPWCaJfzIAsc6SOTDaeRtEahmVZO+5XE+dRJjW76L/hQsrDmS6ApvLUW2CnYMUuKIUbsuMmvK3ltuM1eC2bWzn73okTfqCppr9HNn92UHdx/mTbA+L0PfBtwb1jOQ3O4Rc72s19UuucSSb0uPFKKPwt0Lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753437688; c=relaxed/simple;
-	bh=lKLrzCdnI8SoLPBCXEq2qmm2fjjI5TLH0MX9m08dmyw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BDLAgJz65/yAaD66pjRoPG5748aCcfBMWv+nm5Wrap4N2Gny3iRa95aEzPybKyCepIreLmgeulWqdB6WVEuYqqfgiQ3SPEpO0ckgxNHkShM6dkSnIfg1NfXj2I2VIgiW9rGnYBvPNWRboSfJmuKo5WvdG+Xx2aFhR+OriyC0z20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emlix.com; spf=pass smtp.mailfrom=emlix.com; arc=none smtp.client-ip=178.63.209.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emlix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emlix.com
-Received: from mailer.emlix.com (p5098be52.dip0.t-ipconnect.de [80.152.190.82])
-	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.emlix.com (Postfix) with ESMTPS id 3D9975F760;
-	Fri, 25 Jul 2025 11:51:58 +0200 (CEST)
-From: Rolf Eike Beer <eb@emlix.com>
-To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann <arnd@arndb.de>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>,
- Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>,
- Shannon Nelson <shannon.nelson@amd.com>,
- Nick Alcock <nick.alcock@oracle.com>, John Stultz <jstultz@google.com>,
- Stephen Boyd <sboyd@kernel.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas.weissschuh@linutronix.de>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- sparclinux@vger.kernel.org,
- Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas.weissschuh@linutronix.de>
-Subject:
- Re: [PATCH RFC 08/14] sparc64: vdso: Move syscall fallbacks into header
-Date: Fri, 25 Jul 2025 11:51:51 +0200
-Message-ID: <2376810.ElGaqSPkdT@devpool92.emlix.com>
-Organization: emlix GmbH
-In-Reply-To: <20250724-vdso-sparc64-generic-2-v1-8-e376a3bd24d1@linutronix.de>
-References:
- <20250724-vdso-sparc64-generic-2-v1-0-e376a3bd24d1@linutronix.de>
- <20250724-vdso-sparc64-generic-2-v1-8-e376a3bd24d1@linutronix.de>
+	s=arc-20240116; t=1753441197; c=relaxed/simple;
+	bh=bUcU0cDobyQLiDEp8CMj60WJQEIv2TENj1HTo6Qkt9A=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IKbBN5kk8dFo/6/sCjc5gDMTc/0rFYxiYroYzLaSea2n4ixFeACMfJ3Ie58IUlbTtqinAGckQS2Y3JBxa19z5d6/2OsIUdZfQiJWScblEPLj69+vWYZh9AKiggOyK3rx6VkERqlAULjWjthfYEeHvSZbU4SfBQVnDdLalbD/iY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LouPv15I; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LouPv15I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98D28C4CEE7;
+	Fri, 25 Jul 2025 10:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753441196;
+	bh=bUcU0cDobyQLiDEp8CMj60WJQEIv2TENj1HTo6Qkt9A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=LouPv15IyL7WQztlYQATxazBJpsdsDswdQ1iYdVQB47FExi3Dm+QBnsxhItQ0IiFS
+	 Hsk1jXWPip8IpipAwm4pGCQQK4YTIKep8GzyKNciqYHe5ZyTJDdWhhJh/ZpucUZGm6
+	 HBZPVLkjihDL11jcyUeLTnicx/K4Wqjwc+GGEZG74BnubN1vSE5s+4/a7ueysM9PB1
+	 RZbPaJ4W00Kfuam5WTmxs7iY12nWVUwlXCGk/ucYDYfKDOafO8twOA2QnZ7ABFzHpT
+	 J8E1/KWOzzU4aq1sE0Qpdu4GtGOuzLQf4W6TpoS4/goTfNbrEL+mFtCsIlBB96TJMu
+	 NsRa76FZ+ffbw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1ufG9a-001JSg-4Q;
+	Fri, 25 Jul 2025 11:59:54 +0100
+Date: Fri, 25 Jul 2025 11:59:52 +0100
+Message-ID: <86ecu48riv.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+Cc: Eric Auger <eauger@redhat.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	oliver.upton@linux.dev,
+	joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	seanjc@google.com,
+	darren@os.amperecomputing.com
+Subject: Re: [RFC PATCH v2 0/9] KVM: Enable Nested Virt selftests
+In-Reply-To: <ccd8caba-95b9-450e-afb1-deb0c42b781b@os.amperecomputing.com>
+References: <20250512105251.577874-1-gankulkarni@os.amperecomputing.com>
+	<92c7e99c-5574-422c-92f1-62d5cde58fec@redhat.com>
+	<7bf7bd52-7553-42a7-afdb-a5e95f8699b5@os.amperecomputing.com>
+	<86a56veiyy.wl-maz@kernel.org>
+	<3be548bf-aee4-46ab-bcbf-15bf629b24da@os.amperecomputing.com>
+	<86jz58c5ut.wl-maz@kernel.org>
+	<9d5d82f1-b488-4b0a-98c2-27e95d63fc5c@os.amperecomputing.com>
+	<867c12czux.wl-maz@kernel.org>
+	<ccd8caba-95b9-450e-afb1-deb0c42b781b@os.amperecomputing.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart4999642.GXAFRqVoOG";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: gankulkarni@os.amperecomputing.com, eauger@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, seanjc@google.com, darren@os.amperecomputing.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
---nextPart4999642.GXAFRqVoOG
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Rolf Eike Beer <eb@emlix.com>
-Date: Fri, 25 Jul 2025 11:51:51 +0200
-Message-ID: <2376810.ElGaqSPkdT@devpool92.emlix.com>
-Organization: emlix GmbH
-MIME-Version: 1.0
+On Fri, 25 Jul 2025 11:01:05 +0100,
+Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com> wrote:
+> 
+> 
+> Hi Marc,
+> 
+> On 6/23/2025 7:41 PM, Marc Zyngier wrote:
+> > On Mon, 23 Jun 2025 11:31:32 +0100,
+> > Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com> wrote:
+> >> 
+> >> On 6/19/2025 5:15 PM, Marc Zyngier wrote:
+> >>>>    >
+> >>>>> Also, running EL2 is the least of our worries, because that's pretty
+> >>>>> easy to deal with. It is running at EL1/0 when EL2 is present that is
+> >>>>> interesting, and I see no coverage on that front.
+> >>>> 
+> >>>> Sorry, I did not get this comment fully.
+> >>>> When we run selftest on Host with -g option, the guest code will run in vEL2 as L1.
+> >>>> This is implemented as per comment in V1.
+> >>>> 
+> >>>> When we run same selftest from L1 shell, then guest_code will be running in EL0/1 like running from L0.
+> >>> 
+> >>> What good does this bring us if we need to boot a full guest OS to run
+> >>> tests? What we need is synthetic tests that implement the whole stack:
+> >>> 
+> >>> - L1 guest hypervisor
+> >>> - L2 guest hypervisor
+> >>> - L2 guest
+> >>> - L3 guest hypervisor
+> >>> - L3 guest
+> >>> - [...]
+> >> 
+> >> IIUC, selftest leverages host OS support and uses various IOCTLs to
+> >> support the guest_code run. Are you saying to implement all this
+> >> again (without OS help) in guest_code to run it as hypervisor and
+> >> launch guest_code2 as NestedVM?.
+> > 
+> > The whole point of having small selftests is to run something that is
+> > simpler several orders of magnitude simpler than the full blown
+> > OS/hypervisor. So indeed, I'm asking for selftests that build chains
+> > of guests up to some level and verify that the nesting, as described
+> > in the architecture, works correctly.
+> > 
+> 
+> Do you see value in the patches as they are, without the changes to
+> support the bare-metal hypervisor in guest or will you only consider
+> them if they are first reworked to support the recursive guests?
 
-Thomas Wei=C3=9Fschuh wrote:
-> The generic vDSO libraries expected the syscall fallbacks
+Running existing tests at EL2 may an interesting goal, but the way
+you've gone about it is really wrong. These tests are not about
+"nested", they are about running at EL2. So getting rid of all the
+"nested" nonsense in patch #1 and focusing on the *two* flavours of
+EL2 would be a good start.
 
-"in" missing?
+Also, EL2 tests shouldn't be optional. If EL2 is available, the test
+should run, without any option, and things like
 
-> asm/vdso/gettimeofday.h. To prepare the adoption of the generic library,
-> move the existing functions there.
++	if (is_nested)
++		vm = nv_vm_create_with_vcpus_gic(1, &vcpu, &gic_fd, guest_main);
++	else
++		vm = vm_create_with_one_vcpu(&vcpu, guest_main);
 
-Regards,
+are just non-starters. You just need to either get rid of the whole
+vm_create_with_one_vcpu() nonsense, or teach it to take an execution
+context.
 
-Eike
-=2D-=20
-Rolf Eike Beer
+But the real NV tests are not optional either. They need to happen,
+and I don't have the confidence that they will if I agree to what you
+are suggesting. Because it's been months since I asked for these
+things, and not much has happened in the interval.
 
-emlix GmbH
-Headquarters: Berliner Str. 12, 37073 G=C3=B6ttingen, Germany
-Phone +49 (0)551 30664-0, e-mail info@emlix.com
-District Court of G=C3=B6ttingen, Registry Number HR B 3160
-Managing Directors: Heike Jordan, Dr. Uwe Kracke
-VAT ID No. DE 205 198 055
-Office Berlin: Panoramastr. 1, 10178 Berlin, Germany
-Office Bonn: Bachstr. 6, 53115 Bonn, Germany
-http://www.emlix.com
+	M.
 
-emlix - your embedded Linux partner
---nextPart4999642.GXAFRqVoOG
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iLMEAAEIAB0WIQQ/Uctzh31xzAxFCLur5FH7Xu2t/AUCaINTtwAKCRCr5FH7Xu2t
-/MbPA/0dlCLsBzjM6FN8qagJQNydE/tBZ+VyT4fkbivBpk22EBBU/fUMv1cRMBS4
-IHjJZcXzzYjF/INn4F3ER3KmLKU2R2VaSCvqusFVsc2x9aMWFOlyqOPz+usm9up7
-zMndffsEMsHWu9SCiM85zbErgtoGHcu7R52wDWws9wH6W17qhg==
-=gvab
------END PGP SIGNATURE-----
-
---nextPart4999642.GXAFRqVoOG--
-
-
-
+-- 
+Without deviation from the norm, progress is not possible.
