@@ -1,121 +1,107 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FDE219300;
-	Sat, 26 Jul 2025 19:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A922521C160;
+	Sat, 26 Jul 2025 21:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753557281; cv=none; b=LAQurfiXCRW7S6yHsPyRE8R0zQgU2cbr9ZDVdY2rBUUY0tZxL3qdLNsB/btaUAfz2zvjIOYiXxOP77VCK5v5ygCcTQeQN+Zrsg+bMzRSdSEXrDmw3RRHwiwCBBI6tSgbIfZ59cIxzll2Z3vxbT5ypsF5GglrjcCu/F+UACgrXMw=
+	t=1753566274; cv=none; b=gIrudvQsUK3j2CieVfJ2/njw7q5XJJu8vW0B+Ap8TDXHcKoriUEliwD9sGFj82VINVFx6vpIR+E9bDJYMBbHSDVvcNkj/QA+Ke1JM1DRi4WJcD2BPMHaMHIVJ6997yP9UT3TTIHQ5Z4Qe2UShEssVNZNkpGUpvQWx6EOKMpFrgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753557281; c=relaxed/simple;
-	bh=P1hYjFDSCAoFlyAkV2asYDBPZHfVwHXvMY0Fw/8MUrw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M/38jYWZTih3yFvFKzGHuZxxws+s/gcqNtLYdjW58XByYe2nUv29X7lETpLlZc+HLdbBTu+F6sdDDajOJ+/UzSO7BNYr+SkqDGPp3Rjx0PkMx9NsKVkcaXsSNSQVh+Pgel55ZsQCLiTzUCukxDCCFlkCnuURkNhaSzmbCFWJNiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Qjc9KVxC; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1753566274; c=relaxed/simple;
+	bh=5HWLFwqXBTQ60dZq3V7io5uEommZHIlp3IPinC8aaCQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lSA3Mex+qQk5snlpphPtSo1eBFtxuAaaXgfsdtvRLqjECzYLKIdViN1HvtA64d0H2UxXtiS1LXv2ksz6w/BC4fUg5yRB7dtWFHmU6xqRCh0kUHwr6K7WL1XW6PFndfbxlz1l0luDcMNYbm/ClyYdV9j+T7wXSI4dhpI0aRGtvUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rSmXsEkU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Qjc9KVxC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=XItMU9mIdM3iXfkaZWvCDGF2WtlmssSbd8WieKxoeug=; b=Qjc9KVxCABkQ/65EMF64wQpjQu
-	HHFzW1eRIeueDKsu0nBNIyeuK5EIf9RuwTIEucQGqT18wLxva6IkIyYPuIODVy80fBuIjh2yuN1rM
-	bOcbnGMldbYhTySvle64g0gn7a6McdyzjmsdyOTB0KoM5vmbsNYwkqa7F1Rfk5AWqGl54GiB12SES
-	XgaCoJI2D7czmdqE5cWzNBgGdQA5zAe0+W/4go+BFqEO/5SZN+LM9LOEC1ZMTELJZ6DFWSPui8TAX
-	1WJ3bR8MOJ5Oci7O4lDQhZbzaUR++yKKQl1NW/M8i+zQkIc+ootG3mX7cdPPxK1I3NJd/9cKZgWrm
-	Xwqrngew==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1ufk2V-000NEr-1T;
-	Sat, 26 Jul 2025 20:54:35 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1ufk2T-000H9H-1O;
-	Sat, 26 Jul 2025 20:54:34 +0200
-Message-ID: <e691eb39-e13a-4558-8f62-6a1fd98382f1@iogearbox.net>
-Date: Sat, 26 Jul 2025 20:54:33 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rSmXsEkU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91AE9C4CEED;
+	Sat, 26 Jul 2025 21:44:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753566274;
+	bh=5HWLFwqXBTQ60dZq3V7io5uEommZHIlp3IPinC8aaCQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rSmXsEkUDjluym09uhQZWivmOAMaeX2l5LHEx4RjucbdtXPuzLm26z8xa69Hryxxb
+	 +sHEahu9hQ7jpC52V6FVNhGLetHi1Pl7BmO0sB+24Armm8q+OTq25WCNmVvmAMV9Cp
+	 vgSMuwiJQxutTwtlApJCaqAshM7N+arEns04PQ/O4crJC64qVfj1U6Rfvgsp4vON6C
+	 iQbMOQ9xyiU+Dl15afnunJ5vOH3LkDBWGRhpwgs0ldoXLPnt2//EoZKmK0bE6DGl2D
+	 W0op7rfykPOES6E9NZb05YLE821VOemA2jGmQOZ6bTEGKRshPSu3jIpeUTYvfC5gXh
+	 WIC/i2h5Dv1wA==
+Date: Sat, 26 Jul 2025 22:44:29 +0100
+From: Mark Brown <broonie@kernel.org>
+To: dan.j.williams@intel.com
+Cc: Jakub Kicinski <kuba@kernel.org>, workflows@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>, Donald Zickus <dzickus@redhat.com>,
+	Gustavo Padovan <gustavo.padovan@collabora.com>
+Subject: Re: Crediting test authors
+Message-ID: <aIVMPbZcmAvG9z2o@finisterre.sirena.org.uk>
+References: <20250725080023.6425488c@kernel.org>
+ <6883b3046b640_134cc7100ad@dwillia2-xfh.jf.intel.com.notmuch>
+ <20250725102019.7add0be0@kernel.org>
+ <6883ced97d944_134cc7100fa@dwillia2-xfh.jf.intel.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] selftests: bpf: fix legacy netfilter options
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, ast@kernel.org, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- shuah@kernel.org, pablo@netfilter.org, bigeasy@linutronix.de, fw@strlen.de,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250726155349.1161845-1-kuba@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20250726155349.1161845-1-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27711/Sat Jul 26 10:35:43 2025)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lSJ5+sUpAZPI4LqF"
+Content-Disposition: inline
+In-Reply-To: <6883ced97d944_134cc7100fa@dwillia2-xfh.jf.intel.com.notmuch>
+X-Cookie: Do not cut switchbacks.
 
-On 7/26/25 5:53 PM, Jakub Kicinski wrote:
-> Recent commit to add NETFILTER_XTABLES_LEGACY missed setting
-> a couple of configs to y. They are still enabled but as modules
-> which appears to have upset BPF CI, e.g.:
-> 
->     test_bpf_nf_ct:FAIL:iptables-legacy -t raw -A PREROUTING -j CONNMARK --set-mark 42/0 unexpected error: 768 (errno 0)
-> 
-> Fixes: 3c3ab65f00eb ("selftests: net: Enable legacy netfilter legacy options.")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+--lSJ5+sUpAZPI4LqF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jul 25, 2025 at 11:37:13AM -0700, dan.j.williams@intel.com wrote:
+> Jakub Kicinski wrote:
+
+> > So a tag would be ideal. But it's a hard nut to crack. Best I can come
+> > up with would be:
+
+> > Reproducer: test.case.path # 001122aabb (optimal) commit of the test ca=
+se
+
+> That's true, more than a few times I have had distro folks reach out to
+> ask "how do I verify this backport" and end up manually pointing to the
+> new unit test that backstops a fix.
+
+> Although, from that tag I would not know where to get the commit. Maybe:
+>=20
+> Test: <git url>
+>=20
+> ...as a new Link: type?
+
+It seems like there's some overlap here with the work that people have
+been intermittently trying to do on test cataloging, eg:
+
+   https://lore.kernel.org/workflows/CAK18DXYitS7hL1mA3QsPLmW9-R0q6Kin0C5Uv=
+9fj=3DuS90WSnxA@mail.gmail.com/
+
+That's been approached more from the "what tests should I run?" end of
+things since it's been driven by people interested in testing and CI,
+but it feels like there's a lot of overlap with the describing the
+suites part of things.  It'd be a lot easier to write and read tags like
+the above if we could define some more compact names than git URLs for
+suites/tests.
+
+--lSJ5+sUpAZPI4LqF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiFTDwACgkQJNaLcl1U
+h9BTBAf/Wg40Hu3hkEcBN+rbAsYasDqcG+2s/6NTIlhao2RdgdjqnaU6ygN0EdPN
+fClkSm+JP+uOdVzcbirTiqTY5c/MulfjamZQmEphMVcFGIployqsSZhvsMsaD4xV
+MBbGlEMVWgj07jiWJBWK0A2UIL2UpdbyCn3jHiNUgrbjIeYJK5R4Ni/SExj21uqW
+PpDNv+0ZCfj5tTDrwHKWnK1KbB/sO393r9IdaNPLXOY6c5dXaeaYYi1aGX7M0/DG
+BW8SCXsDSBZioRN16chRGav+JfiC2xec/vwrLtfhr0pHZAEWN2tz8o6iDIYj+YVH
+bKTMxCMcSCqkejJLhV7H35mwFy10lQ==
+=HB/M
+-----END PGP SIGNATURE-----
+
+--lSJ5+sUpAZPI4LqF--
