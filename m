@@ -1,72 +1,74 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02311DF97C;
-	Wed, 30 Jul 2025 18:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA65B15D1;
+	Wed, 30 Jul 2025 18:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753900401; cv=none; b=RXmC0dD5KfMtOT4/HD6UsuqGjZDB0MSEBCL+zXitQlh5NcRcnWISQaq2VVmqRyw7L8a25+Vo8QQGOuFj6eaVvnR+HpFwp/YSQngv2gJMv51z6x2LfJyJHu0v7A1ql9r4HnEAPP9k3wjZL+StsfslK4gOt+CHrBhAMq1psPxJDWw=
+	t=1753900416; cv=none; b=mLYaHd7HyWcU5iyCEWRdVUxhWzCtlDWVkkcHwlj4JvxR7ry6OMsuTdSoKcm0BuvoivCiUjwl0pN1UDOx3oIH/tN1FRKuCwPxeIEuVl79DcJn3YSU+hH1HuOxq0+ITNm7m44/VAunwyzOyx9q/UhliblF4OjW3YTeqrn1XNjvMXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753900401; c=relaxed/simple;
-	bh=1z35DOrDo0K5qnRG3rh/MpzSfxVUIsME4OuSWDoH1WQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BD2lWxYY95z0ZXG5iBlnvNmopCCSCUAmdlmScQTpEBY3Exm7u5u0XrBZ1pSzupce0kFjMzAiI6cxUq4+7ZMAQ4iMM6gVZYEzDveygX7XAlilUgfzyGruGIrgqhM5GNvIdAfi6dkppRat7cjj/fwyElXMTHmckw2SiNNZpY/kAZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QUASvIYt; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1753900416; c=relaxed/simple;
+	bh=K75OD8oDjI/AOWUQUKexEk5vDgahZSkGDyUgITfjITc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=uslNbtWZvkxaiMdWfQzGbIv/I1dSNH3WgaFAjXbmehc2fsAP7Xk7kzksDI+hFWuCQ9zjarNBxZZu8ILDn9pRlDATbd+fl3BSUqzEfCAJMVZNxlqvli5wXppL1Cpd5A/Gb/zZr+C1GQPIHCAWvExujDT2KtXmOO2srewP1p009R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XEgCSfkT; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QUASvIYt"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-24049d1643aso1350265ad.3;
-        Wed, 30 Jul 2025 11:33:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XEgCSfkT"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-240418cbb8bso954235ad.2;
+        Wed, 30 Jul 2025 11:33:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753900399; x=1754505199; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pfr5Mj0mOFchlFGCNfQ/8BknjNq/tL5+q+1cQf2WpPw=;
-        b=QUASvIYtSs07JB2e2h5X9EpFgF7alDYWNjIHC4Y9l9bh04mGhoe8Jo17duqHNEWEj9
-         2TPCu7U93fW/f8KeOgwN795k05NrxY5O30oL1HIKEar7kW8u+EDMniyaOMptLBTk05lp
-         M20RcKMZsEzwuNN2a3efFytv0GApAVZ+O+qpRQ+hNlUka6o/EZfAdPog+W9zeK30mLQf
-         zDzmwDwMAyJMetjMEuanJkjS5p/m7j4ZUdFu/qi2fG04K71IRTrQV1a+yfRwbLbuQLpo
-         j0byUV4fc2itn/u88HfYlorPMp8kwS15EFS+Zqv64PAJayj+zj9DTIyeJzIRmRByo2Mw
-         3/dw==
+        d=gmail.com; s=20230601; t=1753900414; x=1754505214; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/LXC/P3UhtK4ADtDq003zjxL7YJD8iyJ1al2gSLKcFg=;
+        b=XEgCSfkTMQPmvhQ5FCPzyW0hHvGPRoEVIav36jcDexUN5QJDkauu29ybhBHuvZkg0g
+         jE1dS0l7RcjMYERN0oDgWUmJbZAOAyXih40b4afyj3P4BKJk8cOND5DdU/KOHDegmHZY
+         R4edQsIhpZAi7lke3EgkiLxWegSpQOxjszlMja+glVo33pAFp0XgjQFlTed6lxpUoOH2
+         hDmImDGHHCc30SnkDn9JVsJu9bihbTl37VknIEDnX6rJjAKsMsrrTaQCyHmloY0SO4SS
+         MsZcWHB5XE4TGlcV+PoDLShDHTxc5f5wpbh/a5WkeuQm9OVtYkPkkxsMCkMAWCq/q/35
+         61+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753900399; x=1754505199;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pfr5Mj0mOFchlFGCNfQ/8BknjNq/tL5+q+1cQf2WpPw=;
-        b=NWSh7Yh6IoMjhshCapFsGBGHUQhrjcdlyxwXuJJkMd2qhu8Y+thxP34zoQV4bYDDpw
-         77A6wR6RAp4Wj5RYeQNldtg/DY/+W1Yo8tvsFyKnFOPby8QOzxKqUsbsLq3+e4Bv+cRY
-         qYyqfw39ULNUX0r96i1CtGEKnrTcho52pKXsk1UG8CNQl0lVroMeZ2rvSKiTeAsmvg/0
-         3FTOdcMPkBX4J72f8moMj+tfeBG1pWQJ6v7VV2KO+1vdHHUSgs3kl9Apu5ZJ3k+nXFdW
-         X4Gwfc75g9fa4L/5cQtVrHQec2nxwS3xmBJ+N7hsBK2S6ck64bonFXwabAQCHlutiumL
-         PCyw==
-X-Forwarded-Encrypted: i=1; AJvYcCVKG/1zP8OH/vEUgaW7P4lHa8w6XO5I0ovBZJ48DmuowGu5X9ZWGU47eesh3EDrLS/NBuNBIhxfDrMLAJA=@vger.kernel.org, AJvYcCVa+FMcz4iFITRbLkFdwX9ZWIuvu3F+WizpumWWfgVpvaPdHivnWhA3RqOfIicmi95Y4v40gyrhSshNwKSTgqVB@vger.kernel.org
-X-Gm-Message-State: AOJu0Yww7t4F4aPaxMi7y7afz0WMOBqbQkIpH5bdWnHlswundoVqG5oW
-	fovLnIYHMBO5B3/4wO8sgNaWSPoMmH4fXjIsr1L/GKLMPWqjCVU8NFWJ
-X-Gm-Gg: ASbGncuqemeLVngQ8aZS+S0G/97M5rYUFa9Mvm8VOtLDRijLW46M79nMrjKhIVFlH73
-	dhZcEhFeuwhxQlm+LPtUCQ2eN5S6r61ezQe2Um8CHblbxwO0+/cyRmfPxwGLIOO3v3LuOUjC0/m
-	mxI1me4Tnpaxcd2N8FuDSLpTlOuLy6CfYz/T+Ef4ecmXsf7kEpid7qTv7bijdyLsH7ZxbyNwR9t
-	HWBeaX82fWHF/VUsUoipaKDyGnG9+vDtecfpPOXJrwYsLS091d7kIewCnqVvDO6GxEPNPK315Oe
-	1Y7yjn1IKlgx+GQ+xMWDFDSnUBzf4V87nj3Y3PD/sDjfGYRWhdmWmx1GM3qPxMFS7SkSoV2Nybx
-	ufP+9x+ZSMscymst2xxZQBBTLnVAz
-X-Google-Smtp-Source: AGHT+IFk72ahEPEvl4D33vR6IcdQMO68lWrfY/canlFV5/QzGCtlFRDGLGn12c9w9tg2tlrldBG2bg==
-X-Received: by 2002:a17:903:18b:b0:23f:f96d:7579 with SMTP id d9443c01a7336-24096b3fc61mr53132105ad.37.1753900398941;
-        Wed, 30 Jul 2025 11:33:18 -0700 (PDT)
-Received: from LilGuy ([157.32.139.86])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-2402efa3500sm73585585ad.31.2025.07.30.11.33.15
+        d=1e100.net; s=20230601; t=1753900414; x=1754505214;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/LXC/P3UhtK4ADtDq003zjxL7YJD8iyJ1al2gSLKcFg=;
+        b=lS/B37vBU57P4dBYWokVqTLi+1rd8cPOaS0rWTdjzaP1sErt0nj5xR6b9I5xl6FUO/
+         CIdM7jSR6AO4Y0iHY+9Rcu+KUshR+8Wf+eRD+Glc7wcas2RHV4iQE0CVF9oxXGK0g93X
+         2KRllhg8wh4Sfz8s9VfxwlEgiXOq4WPIsqGZC+kNgzd8ld7BwAcJIuuD9yTECFqCZKYN
+         L4vphayNfHakT8O7+OSZbXAiu0FK/50HAmjzTtMVklBhE6B64XvK0HP1mDrV9EhD2oaB
+         B8tL2cyAwOgWkdb6+wnmjOHOyYzT8Mm3Og12pRkiywNovoglDRRjxm87o2fRUcdlNNZ2
+         Hcqw==
+X-Forwarded-Encrypted: i=1; AJvYcCXS/cASSsE29ya6vZ+xF61Ctz8IicAPswutDBhE5qY8j9Ms7ahFxbF2vJGDe5JxAob5+6rUfi5ScpQvHiA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjP5y6yuW62zOkUXOgUFHDmVuxLoNXpfC566UBhjUBzt4hUQEc
+	m6CNStWXPly4SFLdnzXbayLcLYKMSf8hIRYaL5lVna0dVoZfaSlmimzo
+X-Gm-Gg: ASbGncuL/inWvf5WugRcmQn35rcsgf/98gCqAzAkwNwd/cBpAHpclYiSjFwQh4LXRSI
+	X771ZpbIwTrpAcsRaQv65EbKr0j9c0WiUmJfllzMKCWKdTkk9nkI6yPZJ2h5A4gBHvwZn13b/he
+	aeWuWADQ6PlAYwnJjA4m/IsQyaI2H02jTAp/GUB6T/Zp8WHTP0I8bmNUW74ET7fBcwHxViHpr4H
+	ed5yCTrEhySgjKnSk1zP3jmoM82PVLx2g44VKNsgxpy8lDWY/fYpU2gqXGSaSkpTTQe0UXEA/ol
+	Hkhm0Hw6fYsaH60vwKQVUTcVlVIGitiIp2ewPR3WIMRXaOmIk81ueePcn9HyiKOMxe4oCHhcI5a
+	vF92SOVbtFp5NfsaZfbrUWe2asbqUpxiSYmcrbYFdLbG6AhU1KbAh
+X-Google-Smtp-Source: AGHT+IHpBy+0LBCwjzZmW3aB+1tGd+YleBhuJ3andCoDufWYPAvK8XzlVHgKxfLqC4B5sYbKRBXdmQ==
+X-Received: by 2002:a17:903:198d:b0:23f:b112:2eaa with SMTP id d9443c01a7336-24096b23962mr61649835ad.41.1753900413613;
+        Wed, 30 Jul 2025 11:33:33 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:d021:481c:67c7:4b27:6088:74d5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fc5a9d219sm104643095ad.98.2025.07.30.11.33.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Jul 2025 11:33:18 -0700 (PDT)
-From: Swaraj Gaikwad <swarajgaikwad1925@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Swaraj-1925 <swarajgaikwad1925@gmail.com>
-Subject: [PATCH] selftests/mm: Fix typos and improve output messages
-Date: Thu, 31 Jul 2025 00:02:51 +0000
-Message-ID: <20250731000251.5412-1-swarajgaikwad1925@gmail.com>
-X-Mailer: git-send-email 2.50.1
+        Wed, 30 Jul 2025 11:33:32 -0700 (PDT)
+From: Vishal Parmar <vishistriker@gmail.com>
+To: skhan@linuxfoundation.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Vishal Parmar <vishistriker@gmail.com>
+Subject: [PATCH v2] Subject: [PATCH] selftests: panic: Add test module to trigger kernel panic
+Date: Thu, 31 Jul 2025 00:03:27 +0530
+Message-Id: <20250730183327.1001875-1-vishistriker@gmail.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250730172707.999401-1-vishistriker@gmail.com>
+References: <20250730172707.999401-1-vishistriker@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,44 +77,155 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Swaraj-1925 <swarajgaikwad1925@gmail.com>
+This patch adds a new test module under tools/testing/selftests/panic
+that intentionally triggers a kernel panic for test and diagnostic
+purposes. The goal is to provide a reproducible and isolated kernel
+panic event for testing crash dump mechanisms or validating kernel
+panic handling behavior.
 
-Fixed spelling and grammar issues in test output messages
-to improve readability.
+The test includes:
+- A kernel module that calls panic() in init.
+- A Makefile to build the kernel module.
+- A run.sh script to load the module and capture panic logs.
 
-Signed-off-by: swarajgaikwad1925@gmail.com
+Changes in v2:
+- Added run.sh
+- Added reference output log of run.sh
+
+Signed-off-by: Vishal Parmar <vishistriker@gmail.com>
 ---
- tools/testing/selftests/mm/Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/panic/Makefile        | 13 +++++++++
+ .../selftests/panic/panic_trigger_test.c      | 26 +++++++++++++++++
+ .../selftests/panic/reference_output_log.txt  | 29 +++++++++++++++++++
+ tools/testing/selftests/panic/run.sh          | 17 +++++++++++
+ 5 files changed, 86 insertions(+)
+ create mode 100644 tools/testing/selftests/panic/Makefile
+ create mode 100644 tools/testing/selftests/panic/panic_trigger_test.c
+ create mode 100644 tools/testing/selftests/panic/reference_output_log.txt
+ create mode 100755 tools/testing/selftests/panic/run.sh
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index ae6f994d3add..96985c545d16 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -48,10 +48,10 @@ ifneq (,$(wildcard $(KDIR)/Module.symvers))
- ifneq (,$(wildcard $(KDIR)/include/linux/page_frag_cache.h))
- TEST_GEN_MODS_DIR := page_frag
- else
--PAGE_FRAG_WARNING = "missing page_frag_cache.h, please use a newer kernel"
-+PAGE_FRAG_WARNING = "Missing page_frag_cache.h, Please use a newer kernel"
- endif
- else
--PAGE_FRAG_WARNING = "missing Module.symvers, please have the kernel built first"
-+PAGE_FRAG_WARNING = "Missing Module.symvers, Please build the kernel first"
- endif
- 
- TEST_GEN_FILES = cow
-@@ -202,8 +202,8 @@ ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)
- all: warn_32bit_failure
- 
- warn_32bit_failure:
--	@echo "Warning: you seem to have a broken 32-bit build" 2>&1;		\
--	echo  "environment. This will reduce test coverage of 64-bit" 2>&1;	\
-+	@echo "Warning: you seem to have a broken 32-bit build environment." 2>&1;		\
-+	echo  "This will reduce test coverage of 64-bit" 2>&1;	\
- 	echo  "kernels. If you are using a Debian-like distribution," 2>&1;	\
- 	echo  "try:"; 2>&1;							\
- 	echo  "";								\
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 339b31e6a6b5..7b824470a9b3 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -78,6 +78,7 @@ TARGETS += net/packetdrill
+ TARGETS += net/rds
+ TARGETS += net/tcp_ao
+ TARGETS += nsfs
++TARGETS += panic
+ TARGETS += pci_endpoint
+ TARGETS += pcie_bwctrl
+ TARGETS += perf_events
+diff --git a/tools/testing/selftests/panic/Makefile b/tools/testing/selftests/panic/Makefile
+new file mode 100644
+index 000000000000..e4a1b88a63b2
+--- /dev/null
++++ b/tools/testing/selftests/panic/Makefile
+@@ -0,0 +1,13 @@
++# SPDX-License-Identifier: GPL-2.0
++
++obj-m := panic_trigger_test.o
++
++KDIR := $(abspath ../../../../)
++PWD  := $(shell pwd)
++
++all:
++	$(MAKE) -C $(KDIR) M=$(PWD) modules
++
++clean:
++	$(MAKE) -C $(KDIR) M=$(PWD) clean
++	rm -f *.mod.c *.o *.ko *.order *.symvers
+diff --git a/tools/testing/selftests/panic/panic_trigger_test.c b/tools/testing/selftests/panic/panic_trigger_test.c
+new file mode 100644
+index 000000000000..4e2e043fe3ad
+--- /dev/null
++++ b/tools/testing/selftests/panic/panic_trigger_test.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * panic_test.c - Module to test kernel panic
++ */
++
++#include <linux/module.h>
++#include <linux/init.h>
++
++static int __init panic_test_init(void)
++{
++    pr_info("Triggering a deliberate kernel panic now.\n");
++    panic("Triggered by panic_test module.");
++    return 0;
++}
++
++static void __exit panic_test_exit(void)
++{
++    pr_info("This should not be printed, as system panics on init.\n");
++}
++
++module_init(panic_test_init);
++module_exit(panic_test_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Vishal Parmar");
++MODULE_DESCRIPTION("Module to trigger kernel panic for testing");
+diff --git a/tools/testing/selftests/panic/reference_output_log.txt b/tools/testing/selftests/panic/reference_output_log.txt
+new file mode 100644
+index 000000000000..2c8143bf6c4a
+--- /dev/null
++++ b/tools/testing/selftests/panic/reference_output_log.txt
+@@ -0,0 +1,29 @@
++[*] Inserting module: panic_trigger_test.ko
++[   30.377307] panic_trigger_test: loading out-of-tree module taints kernel.
++[   30.380328] Triggering a deliberate kernel panic now.
++[   30.382369] Kernel panic - not syncing: Triggered by panic_test module.
++[   30.383349] CPU: 1 UID: 0 PID: 99 Comm: insmod Tainted: G           O        6.16.0-rc7-00140-gec2df4364666 #1 PREEMPT(voluntary) 
++[   30.383349] Tainted: [O]=OOT_MODULE
++[   30.383349] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
++[   30.383349] Call Trace:
++[   30.383349]  <TASK>
++[   30.383349]  panic+0x325/0x380
++[   30.383349]  ? __pfx_panic_test_init+0x10/0x10 [panic_trigger_test]
++[   30.383349]  panic_test_init+0x1c/0xff0 [panic_trigger_test]
++[   30.383349]  do_one_initcall+0x55/0x220
++[   30.383349]  do_init_module+0x5b/0x230
++[   30.383349]  __do_sys_init_module+0x150/0x180
++[   30.383349]  do_syscall_64+0xa4/0x260
++[   30.383349]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
++[   30.383349] RIP: 0033:0x7f88f09177d9
++[   30.383349] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d f7 05 8
++[   30.383349] RSP: 002b:00007ffc16317848 EFLAGS: 00000206 ORIG_RAX: 00000000000000af
++[   30.383349] RAX: ffffffffffffffda RBX: 000055a4a84b0eae RCX: 00007f88f09177d9
++[   30.383349] RDX: 000055a4a84b0eae RSI: 00000000000019e8 RDI: 000055a4c9b4b370
++[   30.383349] RBP: 00007ffc16317bd0 R08: 000055a4c9b4b310 R09: 00000000000019e8
++[   30.383349] R10: 0000000000000007 R11: 0000000000000206 R12: 00007ffc16317bd8
++[   30.383349] R13: 00007ffc16317be0 R14: 000055a4a84b0eae R15: 00007f88f0b25020
++[   30.383349]  </TASK>
++[   30.383349] Kernel Offset: 0x10000000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
++[   30.383349] ---[ end Kernel panic - not syncing: Triggered by panic_test module. ]---
++
+diff --git a/tools/testing/selftests/panic/run.sh b/tools/testing/selftests/panic/run.sh
+new file mode 100755
+index 000000000000..ffa20dc22708
+--- /dev/null
++++ b/tools/testing/selftests/panic/run.sh
+@@ -0,0 +1,17 @@
++# tools/testing/selftests/panic/run.sh
++
++#!/bin/sh
++set -e
++
++MOD_NAME="panic_trigger_test.ko"
++LOG_FILE="panic_log.txt"
++
++echo "[*] Clearing dmesg..."
++dmesg -c
++
++echo "[*] Inserting module: $MOD_NAME"
++insmod ./$MOD_NAME
++
++echo "[*] Capturing dmesg..."
++dmesg > "$LOG_FILE"
++
 -- 
-2.50.1
+2.39.5
 
