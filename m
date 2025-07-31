@@ -1,174 +1,172 @@
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA5721CFF6
-	for <linux-kselftest@vger.kernel.org>; Thu, 31 Jul 2025 15:58:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753977515; cv=none; b=SdmOCFOgCsB5uM0rlXhmRkIwzER/Htju5cKqbWve6TYvgB9kOsO4vq+ZZ0KfdouDPEZU0jsdHWN3Wh45dspLmmCjpUPOD0Ixz74aeIwQvO4u2Dwlj8ubRaxfduU3QKVSczy1by9OssuJjQ0LeLhuxuDRceQysrt3QP/5JLzzww0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753977515; c=relaxed/simple;
-	bh=gmzrttWeWDT3PGDpJ2II7NY3KHDvCISiDvnyW1TVYP8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=K2agpuuG0dL+7m3eddcy5JGa7T1KdQS8As1lxgUOzyS8iXncPH8BlCwczY89BWQg1gnRp6o5lsssL5YEMvQ5pPQKjLFmEvkEqTij091suYLmHIUYT719/dZ09hREjihDj1L96QhwEml2bM2glJ2ItmTu22LncBB3wsT+asehhfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MiZ1DpWc; arc=none smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2EE1F7569;
+	Thu, 31 Jul 2025 16:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753977788; cv=pass; b=Mw6abGQq4UqigHb8lmMVX1cg27/dSeR41qnyXMQdm7vtvfXZacGBuTo7avIz1jdEpjtjT+IEgEznulpfBwnbrAmFlpIaS9r6NXOu2lyp2pCeADBsAJ0IXibd16ads/Q9Npo3kxO2v690x4UvYjCJeGCbGf8DbSPiSIu4rhFnuvw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753977788; c=relaxed/simple;
+	bh=No24s4T5i2jffXqMefP6oST480RjYux7jXeoFxtjyu8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=glWa02uPx/xdMxjs0W5DuZlZi8NwAWqA4aYcxThCe6N3AoYAXfSjQ5sK8ywuPC3siOLwLt8/vXHlYgBTODHL9wYQkhAol0OEePg+MQlXlnvsXZG905S15+KQi828q5Fa6oGolhZusmy05Od176rgvTn6LNA8FggLljc0kZPqdSI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=XrTVbySq; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MiZ1DpWc"
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4fbf1326dfeso783686137.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 31 Jul 2025 08:58:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753977513; x=1754582313; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jKKboCZbQOuMPhW93A7UzwoZX1h4N/abO1uaKk6KKOQ=;
-        b=MiZ1DpWcnlQphGiqsN6vVD56SYrHaGYJqvLS5bZ/19Z8pAgVFylNUH5duiEEZf64A+
-         GRUcFp0IPzttfViNGNB0Sk8ed12VAOBhR4Ujyyqdfz9TqpGAe8iB52eUzORV6cyNXgZQ
-         2Ctju5zMO78qKuzacXrEnpsAhYWZunpBC5WgbKdmSBn93r4Ibqd7PlYQSeIczLLQ0yD8
-         Bjm7rkuLEv3T6ebm8nAT4w4oPDfqv6KnYjTj37aLRekmohMctDqb50Wg2tefCkJH3pXI
-         YGEvb0xPsjxObCSTKGVcEkqqPGcy4bb/9P24YmkITNSxli5w6OLOgDdM3J+oJP0EnyaC
-         JsHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753977513; x=1754582313;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jKKboCZbQOuMPhW93A7UzwoZX1h4N/abO1uaKk6KKOQ=;
-        b=ZSti6AFyqUM74eTRIqhkt6golVO5cgc0QtxHd2nARkhd4OY1RUxlzwOO5N12kNJsSI
-         O6Er5Mu1yKktf89Up/Zd/W/Az8AgF1YaCdyYmIPbQS/E5/mNhNz2isTZUko/KjGFhmA6
-         EYOZ3enhw0+TBqnbQs3pU4c56IAYeUVKlYhsm4lVqqQ/2JpxG78eNEtRXKaqxUoq50d2
-         T4J/sUKznAr8n2ouCgvZDnDPLj5SF3reCq3ceqv+aXrhFVEcRgY74n6eO1+dqpx8xk1U
-         IrOkrygzNjftEBXhOkJ6HFE/HeFjAenni52jKeAYuPjikfWv3HvazACTgtle4fQWJAcm
-         F0bA==
-X-Forwarded-Encrypted: i=1; AJvYcCVuopUuXP7sBESliGitknxsx0p7wQkFaVD2fidkLTcloffRaxSVgcyHrCdJvCGjUNfYK8v0fD8GHMwq1PkTnVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziEDQVmms2lTzsY/qEjFF+Ta4lvmcIwCIwKtnE2JAogX9AjEKU
-	0G43bhRHHW3bbRCUJuOVLJvjt4hU+vhPC1GoK/hvdAI2MnNMdo2M3k6oeyYmx6UNj3g=
-X-Gm-Gg: ASbGnctDQ6RgRBVEGmI7AgyCmENixWPOWkQGcgXjCicSF4h9yrEA39nytDsXRKJZUTZ
-	gKGMn4xL7ejfnCFeQaHtzX3czMsl2ev0ix6vAO6mCBkRbVsR+uN9/COdUeymX7JD0v2pNIgv/x/
-	VZTRy1ThK+iMyWIZL1D4H8RUQQtJ7yQTSPRxi/Qvy7HoJVeN7LTybLgcgvSm7WCvmimmDkELK3B
-	f9Ja5VwrtGEIW2TjAu/QZopgH54x16bUokLV9IpW16OacyIhYkbbEkEGicpIcLpnELgaY6g3PzJ
-	ipVPf0FlVDLnHeET9NkHOey52++de+AcHnUJvE3Uuhm/R/nCyH7TjA7O1SK83l//gxlmG8td4cR
-	jIAgd8JEDX89mbXI/efKX1UKNXDY=
-X-Google-Smtp-Source: AGHT+IFlKXeAtHhTk1SLO+CqePwO/w0WEyRur6i2wT7kumlydhvgPfkl/quSflZO/twV73QrziIhPg==
-X-Received: by 2002:a05:6102:5686:b0:4e7:3e76:cd21 with SMTP id ada2fe7eead31-4fbe7f376f5mr4909961137.9.1753977512820;
-        Thu, 31 Jul 2025 08:58:32 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-88d8f422459sm431284241.21.2025.07.31.08.58.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Jul 2025 08:58:32 -0700 (PDT)
-Date: Thu, 31 Jul 2025 18:58:28 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Marie Zhussupova <marievic@google.com>,
-	rmoar@google.com, davidgow@google.com, shuah@kernel.org,
-	brendan.higgins@linux.dev
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, elver@google.com,
-	dvyukov@google.com, lucas.demarchi@intel.com,
-	thomas.hellstrom@linux.intel.com, rodrigo.vivi@intel.com,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	kasan-dev@googlegroups.com, intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Marie Zhussupova <marievic@google.com>
-Subject: Re: [PATCH 6/9] kunit: Enable direct registration of parameter
- arrays to a KUnit test
-Message-ID: <5683507a-dacc-4e46-893f-d1e775d2ef22@suswa.mountain>
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="XrTVbySq"
+ARC-Seal: i=1; a=rsa-sha256; t=1753977741; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=kZrcr8lGjCQ/uaYK88EneYfN9ao5iMrIBdWosfJasMphAJ+cPsUae+MsXRWpNTJQ2tuMMoGDsQJGfRUlk6ZZ31RYSYDRaPmFnRO97x1qjXvufx2sdQPsUXSfy7CS8HV2xD0sJcH4tywWNZM8rogeXywoqIdoG/S/1TiSGyyRNwI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1753977741; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=0rIUsTPjbY2X209n7mDn3VwLafDt4aFcMM5+u+5YCmk=; 
+	b=F5IMe+DOqWDoDKoKKGDgGGaQmw31nvnJ+KztuVci0qh25Ojm+uUW8vJm66LWSJjuAE1wrn2whXV2iEjB42gYvFVPfIVvQ4YIKKdGl5NxztAboLrRE8LDmwf48uhBxhsvEoTLC3CATq3OPWcb/7T4aGdDCgzEtc54jz4WwPOPbQc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
+	dmarc=pass header.from=<usama.anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1753977741;
+	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
+	bh=0rIUsTPjbY2X209n7mDn3VwLafDt4aFcMM5+u+5YCmk=;
+	b=XrTVbySq+/g7c2Lj1WWTvNchEk/DPefYFSW+l/DPiM3RTR1jK97eeN6kQWi/uqCn
+	4TbpNczuDUhU3hmlpg/ORIfQKY88frscvRFeoHjMi0OKR26mWrB5qGFMGKNajkvOkba
+	y3oqaKPZCEbduEF/ife2TlXQ0ee2aLNB2MrSDlsA=
+Received: by mx.zohomail.com with SMTPS id 1753977738812600.6316331219836;
+	Thu, 31 Jul 2025 09:02:18 -0700 (PDT)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@redhat.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Peter Xu <peterx@redhat.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Nico Pache <npache@redhat.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org,
+	Shuah Khan <shuah@kernel.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	kernel@collabora.com
+Subject: [PATCH v2 1/8] selftests/mm: Add -Wunreachable-code and fix warnings
+Date: Thu, 31 Jul 2025 21:01:25 +0500
+Message-Id: <20250731160132.1795351-2-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250731160132.1795351-1-usama.anjum@collabora.com>
+References: <20250731160132.1795351-1-usama.anjum@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250729193647.3410634-7-marievic@google.com>
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-Hi Marie,
+Enable -Wunreachable-code flag to catch dead code and fix them.
 
-kernel test robot noticed the following build warnings:
+1. Remove the dead code and write a comment instead:
+hmm-tests.c:2033:3: warning: code will never be executed
+[-Wunreachable-code]
+                perror("Should not reach this\n");
+                ^~~~~~
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+2. ksft_exit_fail_msg() calls exit(). Remove the dead code.
+split_huge_page_test.c:301:3: warning: code will never be executed
+[-Wunreachable-code]
+                goto cleanup;
+                ^~~~~~~~~~~~
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marie-Zhussupova/kunit-Add-parent-kunit-for-parameterized-test-context/20250730-033818
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
-patch link:    https://lore.kernel.org/r/20250729193647.3410634-7-marievic%40google.com
-patch subject: [PATCH 6/9] kunit: Enable direct registration of parameter arrays to a KUnit test
-config: nios2-randconfig-r072-20250731 (https://download.01.org/0day-ci/archive/20250731/202507310854.pZvIcswn-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 8.5.0
+3. Remove duplicate inline.
+pkey_sighandler_tests.c:44:15: warning: duplicate 'inline' declaration
+specifier [-Wduplicate-decl-specifier]
+static inline __always_inline
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202507310854.pZvIcswn-lkp@intel.com/
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/mm/Makefile                | 1 +
+ tools/testing/selftests/mm/hmm-tests.c             | 5 ++---
+ tools/testing/selftests/mm/pkey_sighandler_tests.c | 2 +-
+ tools/testing/selftests/mm/split_huge_page_test.c  | 4 +---
+ 4 files changed, 5 insertions(+), 7 deletions(-)
 
-New smatch warnings:
-lib/kunit/test.c:723 kunit_run_tests() error: we previously assumed 'test_case->generate_params' could be null (see line 714)
-
-vim +723 lib/kunit/test.c
-
-914cc63eea6fbe Brendan Higgins     2019-09-23  681  int kunit_run_tests(struct kunit_suite *suite)
-914cc63eea6fbe Brendan Higgins     2019-09-23  682  {
-fadb08e7c7501e Arpitha Raghunandan 2020-11-16  683  	char param_desc[KUNIT_PARAM_DESC_SIZE];
-914cc63eea6fbe Brendan Higgins     2019-09-23  684  	struct kunit_case *test_case;
-acd8e8407b8fcc David Gow           2021-08-03  685  	struct kunit_result_stats suite_stats = { 0 };
-acd8e8407b8fcc David Gow           2021-08-03  686  	struct kunit_result_stats total_stats = { 0 };
-8631cd2cf5fbf2 Marie Zhussupova    2025-07-29  687  	const void *curr_param;
-914cc63eea6fbe Brendan Higgins     2019-09-23  688  
-c272612cb4a2f7 David Gow           2022-07-01  689  	/* Taint the kernel so we know we've run tests. */
-c272612cb4a2f7 David Gow           2022-07-01  690  	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
-c272612cb4a2f7 David Gow           2022-07-01  691  
-1cdba21db2ca31 Daniel Latypov      2022-04-29  692  	if (suite->suite_init) {
-1cdba21db2ca31 Daniel Latypov      2022-04-29  693  		suite->suite_init_err = suite->suite_init(suite);
-1cdba21db2ca31 Daniel Latypov      2022-04-29  694  		if (suite->suite_init_err) {
-1cdba21db2ca31 Daniel Latypov      2022-04-29  695  			kunit_err(suite, KUNIT_SUBTEST_INDENT
-1cdba21db2ca31 Daniel Latypov      2022-04-29  696  				  "# failed to initialize (%d)", suite->suite_init_err);
-1cdba21db2ca31 Daniel Latypov      2022-04-29  697  			goto suite_end;
-1cdba21db2ca31 Daniel Latypov      2022-04-29  698  		}
-1cdba21db2ca31 Daniel Latypov      2022-04-29  699  	}
-1cdba21db2ca31 Daniel Latypov      2022-04-29  700  
-cae56e1740f559 Daniel Latypov      2022-04-29  701  	kunit_print_suite_start(suite);
-914cc63eea6fbe Brendan Higgins     2019-09-23  702  
-fadb08e7c7501e Arpitha Raghunandan 2020-11-16  703  	kunit_suite_for_each_test_case(suite, test_case) {
-fadb08e7c7501e Arpitha Raghunandan 2020-11-16  704  		struct kunit test = { .param_value = NULL, .param_index = 0 };
-acd8e8407b8fcc David Gow           2021-08-03  705  		struct kunit_result_stats param_stats = { 0 };
-fadb08e7c7501e Arpitha Raghunandan 2020-11-16  706  
-887d85a0736ff3 Rae Moar            2023-03-08  707  		kunit_init_test(&test, test_case->name, test_case->log);
-03806177fa4cbb Marie Zhussupova    2025-07-29  708  		__kunit_init_parent_test(test_case, &test);
-03806177fa4cbb Marie Zhussupova    2025-07-29  709  
-529534e8cba3e6 Rae Moar            2023-07-25  710  		if (test_case->status == KUNIT_SKIPPED) {
-529534e8cba3e6 Rae Moar            2023-07-25  711  			/* Test marked as skip */
-529534e8cba3e6 Rae Moar            2023-07-25  712  			test.status = KUNIT_SKIPPED;
-529534e8cba3e6 Rae Moar            2023-07-25  713  			kunit_update_stats(&param_stats, test.status);
-44c50ed8e59936 Marie Zhussupova    2025-07-29 @714  		} else if (!test_case->generate_params && !test.params_data.params) {
-                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
-Imagine ->generate_parms is NULL but test.params_data.params is
-non-NULL.
-
-37dbb4c7c7442d David Gow           2021-11-02  715  			/* Non-parameterised test. */
-529534e8cba3e6 Rae Moar            2023-07-25  716  			test_case->status = KUNIT_SKIPPED;
-37dbb4c7c7442d David Gow           2021-11-02  717  			kunit_run_case_catch_errors(suite, test_case, &test);
-37dbb4c7c7442d David Gow           2021-11-02  718  			kunit_update_stats(&param_stats, test.status);
-03806177fa4cbb Marie Zhussupova    2025-07-29  719  		} else if (test_case->status != KUNIT_FAILURE) {
-fadb08e7c7501e Arpitha Raghunandan 2020-11-16  720  			/* Get initial param. */
-fadb08e7c7501e Arpitha Raghunandan 2020-11-16  721  			param_desc[0] = '\0';
-8631cd2cf5fbf2 Marie Zhussupova    2025-07-29  722  			/* TODO: Make generate_params try-catch */
-13ee0c64bd88a3 Marie Zhussupova    2025-07-29 @723  			curr_param = test_case->generate_params(&test, NULL, param_desc);
-                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
-Then this could crash.
-
-I suspect that this is fine, but I bet that in the previous
-condition, just testing one would probably have been sufficient
-or maybe we could have change && to ||.
-
-529534e8cba3e6 Rae Moar            2023-07-25  724  			test_case->status = KUNIT_SKIPPED;
-6c738b52316c58 Rae Moar            2022-11-23  725  			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-6c738b52316c58 Rae Moar            2022-11-23  726  				  "KTAP version 1\n");
-44b7da5fcd4c99 David Gow           2021-11-02  727  			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-44b7da5fcd4c99 David Gow           2021-11-02  728  				  "# Subtest: %s", test_case->name);
-fadb08e7c7501e Arpitha Raghunandan 2020-11-16  729  
-8631cd2cf5fbf2 Marie Zhussupova    2025-07-29  730  			while (curr_param) {
-
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index d13b3cef2a2b2..23d4bf6215465 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -34,6 +34,7 @@ endif
+ MAKEFLAGS += --no-builtin-rules
+ 
+ CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
++CFLAGS += -Wunreachable-code
+ LDLIBS = -lrt -lpthread -lm
+ 
+ # Some distributions (such as Ubuntu) configure GCC so that _FORTIFY_SOURCE is
+diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+index 141bf63cbe05e..15aadaf24a667 100644
+--- a/tools/testing/selftests/mm/hmm-tests.c
++++ b/tools/testing/selftests/mm/hmm-tests.c
+@@ -2027,11 +2027,10 @@ TEST_F(hmm, hmm_cow_in_device)
+ 	if (pid == -1)
+ 		ASSERT_EQ(pid, 0);
+ 	if (!pid) {
+-		/* Child process waitd for SIGTERM from the parent. */
++		/* Child process waits for SIGTERM from the parent. */
+ 		while (1) {
+ 		}
+-		perror("Should not reach this\n");
+-		exit(0);
++		/* Should not reach this */
+ 	}
+ 	/* Parent process writes to COW pages(s) and gets a
+ 	 * new copy in system. In case of device private pages,
+diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+index b5e076a564c95..302fef54049c8 100644
+--- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
++++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+@@ -41,7 +41,7 @@ static siginfo_t siginfo = {0};
+  * syscall will attempt to access the PLT in order to call a library function
+  * which is protected by MPK 0 which we don't have access to.
+  */
+-static inline __always_inline
++static __always_inline
+ long syscall_raw(long n, long a1, long a2, long a3, long a4, long a5, long a6)
+ {
+ 	unsigned long ret;
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index 05de1fc0005b7..a85b2e393e4e8 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -296,10 +296,8 @@ void split_file_backed_thp(int order)
+ 		ksft_exit_fail_msg("Unable to create a tmpfs for testing\n");
+ 
+ 	status = snprintf(testfile, INPUT_MAX, "%s/thp_file", tmpfs_loc);
+-	if (status >= INPUT_MAX) {
++	if (status >= INPUT_MAX)
+ 		ksft_exit_fail_msg("Fail to create file-backed THP split testing file\n");
+-		goto cleanup;
+-	}
+ 
+ 	fd = open(testfile, O_CREAT|O_RDWR, 0664);
+ 	if (fd == -1) {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.5
 
