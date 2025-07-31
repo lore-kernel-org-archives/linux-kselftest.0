@@ -1,177 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973132D77F6;
-	Wed, 30 Jul 2025 14:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02311DF97C;
+	Wed, 30 Jul 2025 18:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753886019; cv=none; b=PJDu94IvIXtPVkyH37kUKp0BHI7c29acWHVTPoTCqwn9O+XWsRjAexTxpDab1odLKkMlP/VI6TjjJgW2q10Lz48unb8KpECtXMvr8PoyFhlsTWLOSmoYIkc2Sif1D6D762KkJwOTZ+HyuACdfrJrfNND8vexU+DiQ2fL5ltw5/I=
+	t=1753900401; cv=none; b=RXmC0dD5KfMtOT4/HD6UsuqGjZDB0MSEBCL+zXitQlh5NcRcnWISQaq2VVmqRyw7L8a25+Vo8QQGOuFj6eaVvnR+HpFwp/YSQngv2gJMv51z6x2LfJyJHu0v7A1ql9r4HnEAPP9k3wjZL+StsfslK4gOt+CHrBhAMq1psPxJDWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753886019; c=relaxed/simple;
-	bh=pmEi+E7y8N1fUJ2Skd77GVL6bd2TokFUGYI1O6z8kE8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hZc2xhKxXUqR6vZ9ZpKRjicYCaNFprm1a+PyvDHZ6v1nNZwyfRkEoxyZ4RxoTFSbfdKHVg4RmfQih5TmoTQmjHknIXdBTIKFIDrX6y8I1wyIKf4o2nhZkh5cq6k+jZQmNFpjz1uUC87QMeKD3bEWN6U0cuhKRGEwVjCNjiKFIUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bz4SgOuh; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753900401; c=relaxed/simple;
+	bh=1z35DOrDo0K5qnRG3rh/MpzSfxVUIsME4OuSWDoH1WQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BD2lWxYY95z0ZXG5iBlnvNmopCCSCUAmdlmScQTpEBY3Exm7u5u0XrBZ1pSzupce0kFjMzAiI6cxUq4+7ZMAQ4iMM6gVZYEzDveygX7XAlilUgfzyGruGIrgqhM5GNvIdAfi6dkppRat7cjj/fwyElXMTHmckw2SiNNZpY/kAZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QUASvIYt; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bz4SgOuh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753886017; x=1785422017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pmEi+E7y8N1fUJ2Skd77GVL6bd2TokFUGYI1O6z8kE8=;
-  b=bz4SgOuhTjzo4tbiBXg9uUkDQlvXLWX9kmP7mUaQYk0Kk/ywMx2wZxgA
-   rA2UV9FgN7CnvQgnp++gqklDemIpnb1HvaKQlHT7lUtZgCZ/xrx9wzOog
-   uWrdeIzH1/kALWNp8DzkQiF2ygBE9ac6guFH9/9DdSPeSiNJ2egaw+64u
-   NZ5dYQYWrZDBEMitfc4THthKkyBuVw5Kc04kLOfkE0lh7zL/RcDnk47jN
-   OoTyH1PYs8tSNEfMb/WwWkZeCLveT4jL5IL9jR/BMV/unnekACg+pGqSq
-   trPrIafJ4GTbNE5WJbd9T0h1u/banmFhq+BG17Mv2VZDCOkl5Z9NPyyxW
-   g==;
-X-CSE-ConnectionGUID: oSYIRRuPTGCEybDf0ElfwA==
-X-CSE-MsgGUID: 1yMVzIKRRU265qP10OSNGA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="60013797"
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="60013797"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 07:33:37 -0700
-X-CSE-ConnectionGUID: hkTixScCTg6cwK/DCkLisA==
-X-CSE-MsgGUID: zW5cvb46RTmWg/nwgXfSFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="167492737"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 30 Jul 2025 07:33:33 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uh7s2-0002pg-1A;
-	Wed, 30 Jul 2025 14:33:30 +0000
-Date: Wed, 30 Jul 2025 22:32:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marie Zhussupova <marievic@google.com>, rmoar@google.com,
-	davidgow@google.com, shuah@kernel.org, brendan.higgins@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, elver@google.com,
-	dvyukov@google.com, lucas.demarchi@intel.com,
-	thomas.hellstrom@linux.intel.com, rodrigo.vivi@intel.com,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	kasan-dev@googlegroups.com, intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Marie Zhussupova <marievic@google.com>
-Subject: Re: [PATCH 3/9] kunit: Pass additional context to generate_params
- for parameterized testing
-Message-ID: <202507302223.BTl33Nvo-lkp@intel.com>
-References: <20250729193647.3410634-4-marievic@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QUASvIYt"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-24049d1643aso1350265ad.3;
+        Wed, 30 Jul 2025 11:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753900399; x=1754505199; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pfr5Mj0mOFchlFGCNfQ/8BknjNq/tL5+q+1cQf2WpPw=;
+        b=QUASvIYtSs07JB2e2h5X9EpFgF7alDYWNjIHC4Y9l9bh04mGhoe8Jo17duqHNEWEj9
+         2TPCu7U93fW/f8KeOgwN795k05NrxY5O30oL1HIKEar7kW8u+EDMniyaOMptLBTk05lp
+         M20RcKMZsEzwuNN2a3efFytv0GApAVZ+O+qpRQ+hNlUka6o/EZfAdPog+W9zeK30mLQf
+         zDzmwDwMAyJMetjMEuanJkjS5p/m7j4ZUdFu/qi2fG04K71IRTrQV1a+yfRwbLbuQLpo
+         j0byUV4fc2itn/u88HfYlorPMp8kwS15EFS+Zqv64PAJayj+zj9DTIyeJzIRmRByo2Mw
+         3/dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753900399; x=1754505199;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pfr5Mj0mOFchlFGCNfQ/8BknjNq/tL5+q+1cQf2WpPw=;
+        b=NWSh7Yh6IoMjhshCapFsGBGHUQhrjcdlyxwXuJJkMd2qhu8Y+thxP34zoQV4bYDDpw
+         77A6wR6RAp4Wj5RYeQNldtg/DY/+W1Yo8tvsFyKnFOPby8QOzxKqUsbsLq3+e4Bv+cRY
+         qYyqfw39ULNUX0r96i1CtGEKnrTcho52pKXsk1UG8CNQl0lVroMeZ2rvSKiTeAsmvg/0
+         3FTOdcMPkBX4J72f8moMj+tfeBG1pWQJ6v7VV2KO+1vdHHUSgs3kl9Apu5ZJ3k+nXFdW
+         X4Gwfc75g9fa4L/5cQtVrHQec2nxwS3xmBJ+N7hsBK2S6ck64bonFXwabAQCHlutiumL
+         PCyw==
+X-Forwarded-Encrypted: i=1; AJvYcCVKG/1zP8OH/vEUgaW7P4lHa8w6XO5I0ovBZJ48DmuowGu5X9ZWGU47eesh3EDrLS/NBuNBIhxfDrMLAJA=@vger.kernel.org, AJvYcCVa+FMcz4iFITRbLkFdwX9ZWIuvu3F+WizpumWWfgVpvaPdHivnWhA3RqOfIicmi95Y4v40gyrhSshNwKSTgqVB@vger.kernel.org
+X-Gm-Message-State: AOJu0Yww7t4F4aPaxMi7y7afz0WMOBqbQkIpH5bdWnHlswundoVqG5oW
+	fovLnIYHMBO5B3/4wO8sgNaWSPoMmH4fXjIsr1L/GKLMPWqjCVU8NFWJ
+X-Gm-Gg: ASbGncuqemeLVngQ8aZS+S0G/97M5rYUFa9Mvm8VOtLDRijLW46M79nMrjKhIVFlH73
+	dhZcEhFeuwhxQlm+LPtUCQ2eN5S6r61ezQe2Um8CHblbxwO0+/cyRmfPxwGLIOO3v3LuOUjC0/m
+	mxI1me4Tnpaxcd2N8FuDSLpTlOuLy6CfYz/T+Ef4ecmXsf7kEpid7qTv7bijdyLsH7ZxbyNwR9t
+	HWBeaX82fWHF/VUsUoipaKDyGnG9+vDtecfpPOXJrwYsLS091d7kIewCnqVvDO6GxEPNPK315Oe
+	1Y7yjn1IKlgx+GQ+xMWDFDSnUBzf4V87nj3Y3PD/sDjfGYRWhdmWmx1GM3qPxMFS7SkSoV2Nybx
+	ufP+9x+ZSMscymst2xxZQBBTLnVAz
+X-Google-Smtp-Source: AGHT+IFk72ahEPEvl4D33vR6IcdQMO68lWrfY/canlFV5/QzGCtlFRDGLGn12c9w9tg2tlrldBG2bg==
+X-Received: by 2002:a17:903:18b:b0:23f:f96d:7579 with SMTP id d9443c01a7336-24096b3fc61mr53132105ad.37.1753900398941;
+        Wed, 30 Jul 2025 11:33:18 -0700 (PDT)
+Received: from LilGuy ([157.32.139.86])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-2402efa3500sm73585585ad.31.2025.07.30.11.33.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Jul 2025 11:33:18 -0700 (PDT)
+From: Swaraj Gaikwad <swarajgaikwad1925@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Swaraj-1925 <swarajgaikwad1925@gmail.com>
+Subject: [PATCH] selftests/mm: Fix typos and improve output messages
+Date: Thu, 31 Jul 2025 00:02:51 +0000
+Message-ID: <20250731000251.5412-1-swarajgaikwad1925@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250729193647.3410634-4-marievic@google.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Marie,
+From: Swaraj-1925 <swarajgaikwad1925@gmail.com>
 
-kernel test robot noticed the following build errors:
+Fixed spelling and grammar issues in test output messages
+to improve readability.
 
-[auto build test ERROR on shuah-kselftest/kunit]
-[also build test ERROR on shuah-kselftest/kunit-fixes drm-xe/drm-xe-next linus/master v6.16 next-20250730]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: swarajgaikwad1925@gmail.com
+---
+ tools/testing/selftests/mm/Makefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marie-Zhussupova/kunit-Add-parent-kunit-for-parameterized-test-context/20250730-033818
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
-patch link:    https://lore.kernel.org/r/20250729193647.3410634-4-marievic%40google.com
-patch subject: [PATCH 3/9] kunit: Pass additional context to generate_params for parameterized testing
-config: arm64-randconfig-002-20250730 (https://download.01.org/0day-ci/archive/20250730/202507302223.BTl33Nvo-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507302223.BTl33Nvo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507302223.BTl33Nvo-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/xe/xe_migrate.c:1917:
->> drivers/gpu/drm/xe/tests/xe_migrate.c:772:44: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     772 |         KUNIT_CASE_PARAM(xe_migrate_sanity_kunit, xe_pci_live_device_gen_param),
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   In file included from drivers/gpu/drm/xe/xe_migrate.c:1917:
-   drivers/gpu/drm/xe/tests/xe_migrate.c:773:42: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     773 |         KUNIT_CASE_PARAM(xe_validate_ccs_kunit, xe_pci_live_device_gen_param),
-         |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   2 errors generated.
---
-   In file included from drivers/gpu/drm/xe/xe_dma_buf.c:319:
->> drivers/gpu/drm/xe/tests/xe_dma_buf.c:285:37: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     285 |         KUNIT_CASE_PARAM(xe_dma_buf_kunit, xe_pci_live_device_gen_param),
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   1 error generated.
---
-   In file included from drivers/gpu/drm/xe/xe_bo.c:3128:
->> drivers/gpu/drm/xe/tests/xe_bo.c:610:41: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     610 |         KUNIT_CASE_PARAM(xe_ccs_migrate_kunit, xe_pci_live_device_gen_param),
-         |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   In file included from drivers/gpu/drm/xe/xe_bo.c:3128:
-   drivers/gpu/drm/xe/tests/xe_bo.c:611:38: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     611 |         KUNIT_CASE_PARAM(xe_bo_evict_kunit, xe_pci_live_device_gen_param),
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   In file included from drivers/gpu/drm/xe/xe_bo.c:3128:
-   drivers/gpu/drm/xe/tests/xe_bo.c:624:44: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     624 |         KUNIT_CASE_PARAM_ATTR(xe_bo_shrink_kunit, xe_pci_live_device_gen_param,
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:228:24: note: expanded from macro 'KUNIT_CASE_PARAM_ATTR'
-     228 |                   .generate_params = gen_params,                                \
-         |                                      ^~~~~~~~~~
-   3 errors generated.
---
-   In file included from drivers/gpu/drm/xe/xe_mocs.c:799:
->> drivers/gpu/drm/xe/tests/xe_mocs.c:193:46: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     193 |         KUNIT_CASE_PARAM(xe_live_mocs_kernel_kunit, xe_pci_live_device_gen_param),
-         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   In file included from drivers/gpu/drm/xe/xe_mocs.c:799:
-   drivers/gpu/drm/xe/tests/xe_mocs.c:194:45: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     194 |         KUNIT_CASE_PARAM(xe_live_mocs_reset_kunit, xe_pci_live_device_gen_param),
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   2 errors generated.
-
-
-vim +772 drivers/gpu/drm/xe/tests/xe_migrate.c
-
-54f07cfc016226 Akshata Jahagirdar 2024-07-17  770  
-0237368193e897 Michal Wajdeczko   2024-07-08  771  static struct kunit_case xe_migrate_tests[] = {
-37db1e77628551 Michal Wajdeczko   2024-07-20 @772  	KUNIT_CASE_PARAM(xe_migrate_sanity_kunit, xe_pci_live_device_gen_param),
-37db1e77628551 Michal Wajdeczko   2024-07-20  773  	KUNIT_CASE_PARAM(xe_validate_ccs_kunit, xe_pci_live_device_gen_param),
-0237368193e897 Michal Wajdeczko   2024-07-08  774  	{}
-0237368193e897 Michal Wajdeczko   2024-07-08  775  };
-0237368193e897 Michal Wajdeczko   2024-07-08  776  
-
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index ae6f994d3add..96985c545d16 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -48,10 +48,10 @@ ifneq (,$(wildcard $(KDIR)/Module.symvers))
+ ifneq (,$(wildcard $(KDIR)/include/linux/page_frag_cache.h))
+ TEST_GEN_MODS_DIR := page_frag
+ else
+-PAGE_FRAG_WARNING = "missing page_frag_cache.h, please use a newer kernel"
++PAGE_FRAG_WARNING = "Missing page_frag_cache.h, Please use a newer kernel"
+ endif
+ else
+-PAGE_FRAG_WARNING = "missing Module.symvers, please have the kernel built first"
++PAGE_FRAG_WARNING = "Missing Module.symvers, Please build the kernel first"
+ endif
+ 
+ TEST_GEN_FILES = cow
+@@ -202,8 +202,8 @@ ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)
+ all: warn_32bit_failure
+ 
+ warn_32bit_failure:
+-	@echo "Warning: you seem to have a broken 32-bit build" 2>&1;		\
+-	echo  "environment. This will reduce test coverage of 64-bit" 2>&1;	\
++	@echo "Warning: you seem to have a broken 32-bit build environment." 2>&1;		\
++	echo  "This will reduce test coverage of 64-bit" 2>&1;	\
+ 	echo  "kernels. If you are using a Debian-like distribution," 2>&1;	\
+ 	echo  "try:"; 2>&1;							\
+ 	echo  "";								\
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.1
+
