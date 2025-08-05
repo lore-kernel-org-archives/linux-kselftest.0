@@ -1,335 +1,346 @@
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E5EF282EE;
-	Tue,  5 Aug 2025 07:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44DE7253B7A;
+	Tue,  5 Aug 2025 07:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754378969; cv=none; b=HvBcB+0sOIdQEHlABYjWU9sChLwmSc+/rmOvtr9upJyzQisBF9EVlzFKtUbgtAyWdONcS4W6h8y0TOebKHEjcChggBJYIMASnEDLEBCNdMgP48gB2mM3yNM7BseqZ5DJdPa3FF8L5PK5sC+3hfLE4el1fkrAU87BMM+kCFenCY4=
+	t=1754380237; cv=none; b=vEh5rjVjWCDSVf5pT7ZEtaZ8zIq9d74/jbuXcq/Z1+NQlsiZYUYO3zxPDZQpuiv8vhzQ7NS2jJxcU3sd9i4z8ox+JixJahOepixSvaqZKZZkd68OAiHbbwEJV5dR1E2YffTZlZFvy0X8MAsnyN5hp1cTx86pVjDgxvMtdPxQYmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754378969; c=relaxed/simple;
-	bh=YiSBx51qUAJhEI1Vc8mOuai6IqOQu/TakE/doWnHuFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Offn8/zGx+KSfZxwKnflLLpqmUTFxcmE5inoPHH6DqJdxFNJJJik8hZVCc6ot99KsEHkv0WPQJ6teDooTqIk8jLeHya2PWAvKZpx1XWvkay4qC9VJCUIi9VCsz/8S30p2zx7fFBo+A3g8xtCPZ18mH7W7DqUvm0OkeGwjNsNX24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=xLs7dR6V; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="xLs7dR6V"
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4bx4mz1YqVz9sqy;
-	Tue,  5 Aug 2025 09:29:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1754378963;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Pfh8YJ4n3uQCmVckM45sIplsuScMr3VZ5PLpA8Dw3NM=;
-	b=xLs7dR6Vmy3KBoEtHV6RG5nPh39Q/vHHLVGDhIEG/L0MFDYaxGZD9vjTmX0vM4dwWwlY5m
-	xnMj7qKnybzTp5Bik6fSlL0Pt7MqgVUT3+z7cdmI9pWwZEsU9ADX3vd+v+b3pXw7BPvth4
-	C1BmLy/HzQcOpHz+rjhQzHVCZoKeMd+7CQCgb0kV0JdxVhrQRmjzyCRqOYLuqvyMoGv4zt
-	HCdm7Mt+nvooS3eks+q+EzwQWWQEnDg2J0tx/Iv4J+8XRTuDgRqkG+uENlW9R1xzFxuj0b
-	tXtM94tk8m5SclXE3yK79i6MlSWoQ0pHKBJB69lloMnDNQUjVG2e4cQSmfxl7g==
-Date: Tue, 5 Aug 2025 17:29:07 +1000
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <shuah@kernel.org>
-Cc: Andy Lutomirski <luto@amacapital.net>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v4 2/4] procfs: add "pidns" mount option
-Message-ID: <2025-08-05.1754378656-steep-harps-muscled-mailroom-lively-gosling-VVGNTP@cyphar.com>
-References: <20250805-procfs-pidns-api-v4-0-705f984940e7@cyphar.com>
- <20250805-procfs-pidns-api-v4-2-705f984940e7@cyphar.com>
+	s=arc-20240116; t=1754380237; c=relaxed/simple;
+	bh=g/t25Bt+PisbEVWlCemog3oZxaQOf0Bdpi+isHFUzos=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RToTFBm7lzGP8Orz+t8ry10yvWvo8XI2dF3nZ7sxda6Tk1GHtH+Oh9JNhg/JIcdrQPFlgvXDQF75FSAJHQM1oCmStC9hH2qUn9PGS9BjulbGOo6N45OWAy12allu841orr6FSUCVwJaFVnfvGwnuGNTx6y9tCnlnzyb9p7H8vnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+	by localhost (Postfix) with ESMTP id 4bx5365ZZNz9tKP;
+	Tue,  5 Aug 2025 09:41:38 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1OEbE3GMNzcM; Tue,  5 Aug 2025 09:41:38 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase1.c-s.fr (Postfix) with ESMTP id 4bx5364c1qz9tCB;
+	Tue,  5 Aug 2025 09:41:38 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 945C38B765;
+	Tue,  5 Aug 2025 09:41:38 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id SrGpeUTETfvg; Tue,  5 Aug 2025 09:41:38 +0200 (CEST)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 54E308B763;
+	Tue,  5 Aug 2025 09:41:37 +0200 (CEST)
+Message-ID: <c53da8e9-c15d-47b4-9422-4461f0b7c188@csgroup.eu>
+Date: Tue, 5 Aug 2025 09:41:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5o54eqw2png257t6"
-Content-Disposition: inline
-In-Reply-To: <20250805-procfs-pidns-api-v4-2-705f984940e7@cyphar.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [bpf-next 2/6] bpf,powerpc: Implement PROBE_MEM32 pseudo
+ instructions
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
+ andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, naveen@kernel.org,
+ maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+ memxor@gmail.com, iii@linux.ibm.com, shuah@kernel.org
+References: <20250805062747.3479221-1-skb99@linux.ibm.com>
+ <20250805062747.3479221-3-skb99@linux.ibm.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Language: fr-FR
+In-Reply-To: <20250805062747.3479221-3-skb99@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
---5o54eqw2png257t6
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 2/4] procfs: add "pidns" mount option
-MIME-Version: 1.0
 
-On 2025-08-05, Aleksa Sarai <cyphar@cyphar.com> wrote:
-> Since the introduction of pid namespaces, their interaction with procfs
-> has been entirely implicit in ways that require a lot of dancing around
-> by programs that need to construct sandboxes with different PID
-> namespaces.
->=20
-> Being able to explicitly specify the pid namespace to use when
-> constructing a procfs super block will allow programs to no longer need
-> to fork off a process which does then does unshare(2) / setns(2) and
-> forks again in order to construct a procfs in a pidns.
->=20
-> So, provide a "pidns" mount option which allows such users to just
-> explicitly state which pid namespace they want that procfs instance to
-> use. This interface can be used with fsconfig(2) either with a file
-> descriptor or a path:
->=20
->   fsconfig(procfd, FSCONFIG_SET_FD, "pidns", NULL, nsfd);
->   fsconfig(procfd, FSCONFIG_SET_STRING, "pidns", "/proc/self/ns/pid", 0);
->=20
-> or with classic mount(2) / mount(8):
->=20
->   // mount -t proc -o pidns=3D/proc/self/ns/pid proc /tmp/proc
->   mount("proc", "/tmp/proc", "proc", MS_..., "pidns=3D/proc/self/ns/pid");
->=20
-> As this new API is effectively shorthand for setns(2) followed by
-> mount(2), the permission model for this mirrors pidns_install() to avoid
-> opening up new attack surfaces by loosening the existing permission
-> model.
->=20
-> In order to avoid having to RCU-protect all users of proc_pid_ns() (to
-> avoid UAFs), attempting to reconfigure an existing procfs instance's pid
-> namespace will error out with -EBUSY. Creating new procfs instances is
-> quite cheap, so this should not be an impediment to most users, and lets
-> us avoid a lot of churn in fs/proc/* for a feature that it seems
-> unlikely userspace would use.
->=20
-> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+Le 05/08/2025 à 08:27, Saket Kumar Bhaskar a écrit :
+> Add support for [LDX | STX | ST], PROBE_MEM32, [B | H | W | DW]
+> instructions.  They are similar to PROBE_MEM instructions with the
+> following differences:
+> - PROBE_MEM32 supports store.
+> - PROBE_MEM32 relies on the verifier to clear upper 32-bit of the
+> src/dst register
+> - PROBE_MEM32 adds 64-bit kern_vm_start address (which is stored in _R26
+> in the prologue). Due to bpf_arena constructions such _R26 + reg +
+> off16 access is guaranteed to be within arena virtual range, so no
+> address check at run-time.
+> - PROBE_MEM32 allows STX and ST. If they fault the store is a nop. When
+> LDX faults the destination register is zeroed.
+> 
+> To support these on powerpc, we do tmp1 = _R26 + src/dst reg and then use
+> tmp1 as the new src/dst register. This allows us to reuse most of the
+> code for normal [LDX | STX | ST].
+> 
+> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 > ---
->  Documentation/filesystems/proc.rst |  8 ++++
->  fs/proc/root.c                     | 98 ++++++++++++++++++++++++++++++++=
-+++---
->  2 files changed, 100 insertions(+), 6 deletions(-)
->=20
-> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesyste=
-ms/proc.rst
-> index 5236cb52e357..5a157dadea0b 100644
-> --- a/Documentation/filesystems/proc.rst
-> +++ b/Documentation/filesystems/proc.rst
-> @@ -2360,6 +2360,7 @@ The following mount options are supported:
->  	hidepid=3D	Set /proc/<pid>/ access mode.
->  	gid=3D		Set the group authorized to learn processes information.
->  	subset=3D		Show only the specified subset of procfs.
-> +	pidns=3D		Specify a the namespace used by this procfs.
->  	=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
->  hidepid=3Doff or hidepid=3D0 means classic mode - everybody may access a=
-ll
-> @@ -2392,6 +2393,13 @@ information about processes information, just add =
-identd to this group.
->  subset=3Dpid hides all top level files and directories in the procfs that
->  are not related to tasks.
-> =20
-> +pidns=3D specifies a pid namespace (either as a string path to something=
- like
-> +`/proc/$pid/ns/pid`, or a file descriptor when using `FSCONFIG_SET_FD`) =
-that
-> +will be used by the procfs instance when translating pids. By default, p=
-rocfs
-> +will use the calling process's active pid namespace. Note that the pid
-> +namespace of an existing procfs instance cannot be modified (attempting =
-to do
-> +so will give an `-EBUSY` error).
+>   arch/powerpc/net/bpf_jit.h        |   5 +-
+>   arch/powerpc/net/bpf_jit_comp.c   |  10 ++-
+>   arch/powerpc/net/bpf_jit_comp32.c |   2 +-
+>   arch/powerpc/net/bpf_jit_comp64.c | 108 ++++++++++++++++++++++++++++--
+>   4 files changed, 114 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index 4c26912c2e3c..2d095a873305 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -161,9 +161,10 @@ struct codegen_context {
+>   	unsigned int seen;
+>   	unsigned int idx;
+>   	unsigned int stack_size;
+> -	int b2p[MAX_BPF_JIT_REG + 2];
+> +	int b2p[MAX_BPF_JIT_REG + 3];
+>   	unsigned int exentry_idx;
+>   	unsigned int alt_exit_addr;
+> +	u64 arena_vm_start;
+>   };
+>   
+>   #define bpf_to_ppc(r)	(ctx->b2p[r])
+> @@ -201,7 +202,7 @@ int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg,
+>   
+>   int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 *fimage, int pass,
+>   			  struct codegen_context *ctx, int insn_idx,
+> -			  int jmp_off, int dst_reg);
+> +			  int jmp_off, int dst_reg, u32 code);
+>   
+>   #endif
+>   
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index c0684733e9d6..35bfdf4d8785 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -204,6 +204,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>   
+>   	/* Make sure that the stack is quadword aligned. */
+>   	cgctx.stack_size = round_up(fp->aux->stack_depth, 16);
+> +	cgctx.arena_vm_start = bpf_arena_get_kern_vm_start(fp->aux->arena);
+>   
+>   	/* Scouting faux-generate pass 0 */
+>   	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+> @@ -326,7 +327,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>    */
+>   int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 *fimage, int pass,
+>   			  struct codegen_context *ctx, int insn_idx, int jmp_off,
+> -			  int dst_reg)
+> +			  int dst_reg, u32 code)
+>   {
+>   	off_t offset;
+>   	unsigned long pc;
+> @@ -354,7 +355,12 @@ int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 *fimage, int pass
+>   		(fp->aux->num_exentries * BPF_FIXUP_LEN * 4) +
+>   		(ctx->exentry_idx * BPF_FIXUP_LEN * 4);
+>   
+> -	fixup[0] = PPC_RAW_LI(dst_reg, 0);
+> +	if ((BPF_CLASS(code) == BPF_LDX && BPF_MODE(code) == BPF_PROBE_MEM32) ||
+> +	    (BPF_CLASS(code) == BPF_LDX && BPF_MODE(code) == BPF_PROBE_MEM))
+> +		fixup[0] = PPC_RAW_LI(dst_reg, 0);
+> +	else if (BPF_CLASS(code) == BPF_ST || BPF_CLASS(code) == BPF_STX)
+> +		fixup[0] = PPC_RAW_NOP();
 > +
->  Chapter 5: Filesystem behavior
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> =20
-> diff --git a/fs/proc/root.c b/fs/proc/root.c
-> index ed86ac710384..fd1f1c8a939a 100644
-> --- a/fs/proc/root.c
-> +++ b/fs/proc/root.c
-> @@ -38,12 +38,14 @@ enum proc_param {
->  	Opt_gid,
->  	Opt_hidepid,
->  	Opt_subset,
-> +	Opt_pidns,
->  };
-> =20
->  static const struct fs_parameter_spec proc_fs_parameters[] =3D {
-> -	fsparam_u32("gid",	Opt_gid),
-> +	fsparam_u32("gid",		Opt_gid),
->  	fsparam_string("hidepid",	Opt_hidepid),
->  	fsparam_string("subset",	Opt_subset),
-> +	fsparam_file_or_string("pidns",	Opt_pidns),
->  	{}
->  };
-> =20
-> @@ -109,11 +111,66 @@ static int proc_parse_subset_param(struct fs_contex=
-t *fc, char *value)
->  	return 0;
->  }
-> =20
-> +#ifdef CONFIG_PID_NS
-> +static int proc_parse_pidns_param(struct fs_context *fc,
-> +				  struct fs_parameter *param,
-> +				  struct fs_parse_result *result)
-> +{
-> +	struct proc_fs_context *ctx =3D fc->fs_private;
-> +	struct pid_namespace *target, *active =3D task_active_pid_ns(current);
-> +	struct ns_common *ns;
-> +	struct file *ns_filp __free(fput) =3D NULL;
+
+Is there also a 'else' to consider ? If not, why not just a 'else' 
+instead of an 'if else' ?
+
+>   	if (IS_ENABLED(CONFIG_PPC32))
+>   		fixup[1] = PPC_RAW_LI(dst_reg - 1, 0); /* clear higher 32-bit register too */
+>   
+> diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+> index 0aace304dfe1..3087e744fb25 100644
+> --- a/arch/powerpc/net/bpf_jit_comp32.c
+> +++ b/arch/powerpc/net/bpf_jit_comp32.c
+> @@ -1087,7 +1087,7 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+>   				}
+>   
+>   				ret = bpf_add_extable_entry(fp, image, fimage, pass, ctx, insn_idx,
+> -							    jmp_off, dst_reg);
+> +							    jmp_off, dst_reg, code);
+>   				if (ret)
+>   					return ret;
+>   			}
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+> index 489de21fe3d6..16e62766c757 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -44,6 +44,7 @@
+>   /* BPF register usage */
+>   #define TMP_REG_1	(MAX_BPF_JIT_REG + 0)
+>   #define TMP_REG_2	(MAX_BPF_JIT_REG + 1)
+> +#define ARENA_VM_START  (MAX_BPF_JIT_REG + 2)
+>   
+>   /* BPF to ppc register mappings */
+>   void bpf_jit_init_reg_mapping(struct codegen_context *ctx)
+> @@ -61,6 +62,8 @@ void bpf_jit_init_reg_mapping(struct codegen_context *ctx)
+>   	ctx->b2p[BPF_REG_7] = _R28;
+>   	ctx->b2p[BPF_REG_8] = _R29;
+>   	ctx->b2p[BPF_REG_9] = _R30;
+> +	/* non volatile register for kern_vm_start address */
+> +	ctx->b2p[ARENA_VM_START] = _R26;
+>   	/* frame pointer aka BPF_REG_10 */
+>   	ctx->b2p[BPF_REG_FP] = _R31;
+>   	/* eBPF jit internal registers */
+> @@ -69,8 +72,8 @@ void bpf_jit_init_reg_mapping(struct codegen_context *ctx)
+>   	ctx->b2p[TMP_REG_2] = _R10;
+>   }
+>   
+> -/* PPC NVR range -- update this if we ever use NVRs below r27 */
+> -#define BPF_PPC_NVR_MIN		_R27
+> +/* PPC NVR range -- update this if we ever use NVRs below r26 */
+> +#define BPF_PPC_NVR_MIN		_R26
+>   
+>   static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
+>   {
+> @@ -170,10 +173,17 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+>   		if (bpf_is_seen_register(ctx, bpf_to_ppc(i)))
+>   			EMIT(PPC_RAW_STD(bpf_to_ppc(i), _R1, bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+>   
+> +	if (ctx->arena_vm_start)
+> +		EMIT(PPC_RAW_STD(bpf_to_ppc(ARENA_VM_START), _R1,
+> +				 bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
 > +
-> +	switch (param->type) {
-> +	case fs_value_is_file:
-> +		/* came through fsconfig, steal the file reference */
-> +		ns_filp =3D no_free_ptr(param->file);
-> +		break;
-> +	case fs_value_is_string:
-> +		ns_filp =3D filp_open(param->string, O_RDONLY, 0);
-> +		break;
-
-I just realised that we probably also want to support FSCONFIG_SET_PATH
-here, but fsparam_file_or_string() doesn't handle that at the moment. I
-think we probably want to have fsparam_file_or_path() which would act
-like:
-
- 1. A path with FSCONFIG_SET_STRING and FSCONFIG_SET_PATH.
- 2. A file with FSCONFIG_SET_FD.
-
-These are the semantics I would already expect from these kinds of
-flags, but at the moment FSCONFIG_SET_PATH is entirely disallowed.
-
-@Amir:
-
-I wonder if overlayfs (the only other user of fsparam_file_or_string())
-would also prefer having these semantics? We could just migrate
-fsparam_file_or_string() to fsparam_file_or_path() everwhere, since I'm
-pretty sure these are the semantics userspace expects anyway.
-
-> +	default:
-> +		WARN_ON_ONCE(true);
-> +		break;
-> +	}
-> +	if (!ns_filp)
-> +		ns_filp =3D ERR_PTR(-EBADF);
-> +	if (IS_ERR(ns_filp)) {
-> +		errorfc(fc, "could not get file from pidns argument");
-> +		return PTR_ERR(ns_filp);
-> +	}
+>   	/* Setup frame pointer to point to the bpf stack area */
+>   	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+>   		EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+>   				STACK_FRAME_MIN_SIZE + ctx->stack_size));
 > +
-> +	if (!proc_ns_file(ns_filp))
-> +		return invalfc(fc, "pidns argument is not an nsfs file");
-> +	ns =3D get_proc_ns(file_inode(ns_filp));
-> +	if (ns->ops->type !=3D CLONE_NEWPID)
-> +		return invalfc(fc, "pidns argument is not a pidns file");
-> +	target =3D container_of(ns, struct pid_namespace, ns);
+> +	if (ctx->arena_vm_start)
+> +		PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
+>   }
+>   
+>   static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx)
+> @@ -185,6 +195,10 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+>   		if (bpf_is_seen_register(ctx, bpf_to_ppc(i)))
+>   			EMIT(PPC_RAW_LD(bpf_to_ppc(i), _R1, bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+>   
+> +	if (ctx->arena_vm_start)
+> +		EMIT(PPC_RAW_LD(bpf_to_ppc(ARENA_VM_START), _R1,
+> +				bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
 > +
-> +	/*
-> +	 * pidns=3D is shorthand for joining the pidns to get a fsopen fd, so t=
-he
-> +	 * permission model should be the same as pidns_install().
-> +	 */
-> +	if (!ns_capable(target->user_ns, CAP_SYS_ADMIN)) {
-> +		errorfc(fc, "insufficient permissions to set pidns");
-> +		return -EPERM;
-> +	}
-> +	if (!pidns_is_ancestor(target, active))
-> +		return invalfc(fc, "cannot set pidns to non-descendant pidns");
+>   	/* Tear down our stack frame */
+>   	if (bpf_has_stack_frame(ctx)) {
+>   		EMIT(PPC_RAW_ADDI(_R1, _R1, BPF_PPC_STACKFRAME + ctx->stack_size));
+> @@ -990,6 +1004,50 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+>   			}
+>   			break;
+>   
+> +		case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
+> +		case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
+> +		case BPF_STX | BPF_PROBE_MEM32 | BPF_W:
+> +		case BPF_STX | BPF_PROBE_MEM32 | BPF_DW:
 > +
-> +	put_pid_ns(ctx->pid_ns);
-> +	ctx->pid_ns =3D get_pid_ns(target);
-> +	put_user_ns(fc->user_ns);
-> +	fc->user_ns =3D get_user_ns(ctx->pid_ns->user_ns);
-> +	return 0;
-> +}
-> +#endif /* CONFIG_PID_NS */
+> +			EMIT(PPC_RAW_ADD(tmp1_reg, dst_reg, bpf_to_ppc(ARENA_VM_START)));
 > +
->  static int proc_parse_param(struct fs_context *fc, struct fs_parameter *=
-param)
->  {
->  	struct proc_fs_context *ctx =3D fc->fs_private;
->  	struct fs_parse_result result;
-> -	int opt;
-> +	int opt, err;
-> =20
->  	opt =3D fs_parse(fc, proc_fs_parameters, param, &result);
->  	if (opt < 0)
-> @@ -125,14 +182,38 @@ static int proc_parse_param(struct fs_context *fc, =
-struct fs_parameter *param)
->  		break;
-> =20
->  	case Opt_hidepid:
-> -		if (proc_parse_hidepid_param(fc, param))
-> -			return -EINVAL;
-> +		err =3D proc_parse_hidepid_param(fc, param);
-> +		if (err)
-> +			return err;
->  		break;
-> =20
->  	case Opt_subset:
-> -		if (proc_parse_subset_param(fc, param->string) < 0)
-> -			return -EINVAL;
-> +		err =3D proc_parse_subset_param(fc, param->string);
-> +		if (err)
-> +			return err;
-> +		break;
+> +			ret = bpf_jit_emit_probe_mem_store(ctx, src_reg, off, code, image);
+> +			if (ret)
+> +				return ret;
 > +
-> +	case Opt_pidns:
-> +#ifdef CONFIG_PID_NS
-> +		/*
-> +		 * We would have to RCU-protect every proc_pid_ns() or
-> +		 * proc_sb_info() access if we allowed this to be reconfigured
-> +		 * for an existing procfs instance. Luckily, procfs instances
-> +		 * are cheap to create, and mount-beneath would let you
-> +		 * atomically replace an instance even with overmounts.
-> +		 */
-> +		if (fc->purpose =3D=3D FS_CONTEXT_FOR_RECONFIGURE) {
-> +			errorfc(fc, "cannot reconfigure pidns for existing procfs");
-> +			return -EBUSY;
-> +		}
-> +		err =3D proc_parse_pidns_param(fc, param, &result);
-> +		if (err)
-> +			return err;
->  		break;
-> +#else
-> +		errorfc(fc, "pidns mount flag not supported on this system");
-> +		return -EOPNOTSUPP;
-> +#endif
-> =20
->  	default:
->  		return -EINVAL;
-> @@ -154,6 +235,11 @@ static void proc_apply_options(struct proc_fs_info *=
-fs_info,
->  		fs_info->hide_pid =3D ctx->hidepid;
->  	if (ctx->mask & (1 << Opt_subset))
->  		fs_info->pidonly =3D ctx->pidonly;
-> +	if (ctx->mask & (1 << Opt_pidns) &&
-> +	    !WARN_ON_ONCE(fc->purpose =3D=3D FS_CONTEXT_FOR_RECONFIGURE)) {
-> +		put_pid_ns(fs_info->pid_ns);
-> +		fs_info->pid_ns =3D get_pid_ns(ctx->pid_ns);
-> +	}
->  }
-> =20
->  static int proc_fill_super(struct super_block *s, struct fs_context *fc)
->=20
-> --=20
-> 2.50.1
->=20
+> +			ret = bpf_add_extable_entry(fp, image, fimage, pass, ctx,
+> +						    ctx->idx - 1, 4, -1, code);
+> +			if (ret)
+> +				return ret;
+> +
+> +			break;
+> +
+> +		case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
+> +		case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
+> +		case BPF_ST | BPF_PROBE_MEM32 | BPF_W:
+> +		case BPF_ST | BPF_PROBE_MEM32 | BPF_DW:
+> +
+> +			EMIT(PPC_RAW_ADD(tmp1_reg, dst_reg, bpf_to_ppc(ARENA_VM_START)));
+> +
+> +			if (BPF_SIZE(code) == BPF_W || BPF_SIZE(code) == BPF_DW) {
+> +				PPC_LI32(tmp2_reg, imm);
+> +				src_reg = tmp2_reg;
+> +			} else {
+> +				EMIT(PPC_RAW_LI(tmp2_reg, imm));
+> +				src_reg = tmp2_reg;
+> +			}
+> +
+> +			ret = bpf_jit_emit_probe_mem_store(ctx, src_reg, off, code, image);
+> +			if (ret)
+> +				return ret;
+> +
+> +			ret = bpf_add_extable_entry(fp, image, fimage, pass, ctx,
+> +						    ctx->idx - 1, 4, -1, code);
+> +			if (ret)
+> +				return ret;
+> +
+> +			break;
+> +
+>   		/*
+>   		 * BPF_STX ATOMIC (atomic ops)
+>   		 */
+> @@ -1142,9 +1200,10 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+>   				 * Check if 'off' is word aligned for BPF_DW, because
+>   				 * we might generate two instructions.
+>   				 */
+> -				if ((BPF_SIZE(code) == BPF_DW ||
+> -				    (BPF_SIZE(code) == BPF_B && BPF_MODE(code) == BPF_PROBE_MEMSX)) &&
+> -						(off & 3))
+> +				if ((BPF_SIZE(code) == BPF_DW && (off & 3)) ||
+> +				    (BPF_SIZE(code) == BPF_B &&
+> +				     BPF_MODE(code) == BPF_PROBE_MEMSX) ||
+> +				    (BPF_SIZE(code) == BPF_B && BPF_MODE(code) == BPF_MEMSX))
+>   					PPC_JMP((ctx->idx + 3) * 4);
+>   				else
+>   					PPC_JMP((ctx->idx + 2) * 4);
+> @@ -1190,12 +1249,49 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+>   
+>   			if (BPF_MODE(code) == BPF_PROBE_MEM) {
+>   				ret = bpf_add_extable_entry(fp, image, fimage, pass, ctx,
+> -							    ctx->idx - 1, 4, dst_reg);
+> +							    ctx->idx - 1, 4, dst_reg, code);
+>   				if (ret)
+>   					return ret;
+>   			}
+>   			break;
+>   
+> +		/* dst = *(u64 *)(ul) (src + ARENA_VM_START + off) */
+> +		case BPF_LDX | BPF_PROBE_MEM32 | BPF_B:
+> +		case BPF_LDX | BPF_PROBE_MEM32 | BPF_H:
+> +		case BPF_LDX | BPF_PROBE_MEM32 | BPF_W:
+> +		case BPF_LDX | BPF_PROBE_MEM32 | BPF_DW:
+> +
+> +			EMIT(PPC_RAW_ADD(tmp1_reg, src_reg, bpf_to_ppc(ARENA_VM_START)));
+> +
+> +			switch (size) {
+> +			case BPF_B:
+> +				EMIT(PPC_RAW_LBZ(dst_reg, tmp1_reg, off));
+> +				break;
+> +			case BPF_H:
+> +				EMIT(PPC_RAW_LHZ(dst_reg, tmp1_reg, off));
+> +				break;
+> +			case BPF_W:
+> +				EMIT(PPC_RAW_LWZ(dst_reg, tmp1_reg, off));
+> +				break;
+> +			case BPF_DW:
+> +				if (off % 4) {
+> +					EMIT(PPC_RAW_LI(tmp2_reg, off));
+> +					EMIT(PPC_RAW_LDX(dst_reg, tmp1_reg, tmp2_reg));
+> +				} else {
+> +					EMIT(PPC_RAW_LD(dst_reg, tmp1_reg, off));
+> +				}
+> +				break;
+> +			}
+> +
+> +			if (size != BPF_DW && insn_is_zext(&insn[i + 1]))
+> +				addrs[++i] = ctx->idx * 4;
+> +
+> +			ret = bpf_add_extable_entry(fp, image, fimage, pass, ctx,
+> +						    ctx->idx - 1, 4, dst_reg, code);
+> +			if (ret)
+> +				return ret;
+> +			break;
+> +
+>   		/*
+>   		 * Doubleword load
+>   		 * 16 byte instruction that uses two 'struct bpf_insn'
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-https://www.cyphar.com/
-
---5o54eqw2png257t6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaJGywwAKCRAol/rSt+lE
-b9g9AP0cbo5zi5SaWHVkITOZ9tdmZPQ3mBfvQN80O6xOYxAasQD9GGvqDQLIZudv
-LWdGv0XCW63Bw5sA4NH64WxUuKaO3wk=
-=YRkM
------END PGP SIGNATURE-----
-
---5o54eqw2png257t6--
