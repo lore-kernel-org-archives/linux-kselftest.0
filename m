@@ -1,223 +1,282 @@
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AE3175A5;
-	Tue,  5 Aug 2025 05:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F691078F;
+	Tue,  5 Aug 2025 06:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754373243; cv=none; b=ZBp17RtvMN/SPj4VqTRlHUJrzCBkQVSGk+8KHj1xzTk2Tuo12vypppyeB2IxUORm2oXeYchWy1Ygr1yh8KCyalqU1NKWrKsyl0daUedYDx4vxJsDPVGC1fz0UOEqrHLbZF77zKIH4YCW8goPzpTwbGy1pD0bl6z7GSmBmcEd4mQ=
+	t=1754374192; cv=none; b=J3buCkJPV1WpyjzZqbXoc+rCRkcM3ilhITkXTLtabtbe7SwbNVMCaBnQcrCrERthEgs4soDoLeqJPFLL8BJAyDVdzVEFRr0bI/UDsknsrLb7eC+UWk7YSBr5yO3qRCZWILM2xK6925NSJXZDEBMmSEIAZErbAVeOGzXdx4QJKR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754373243; c=relaxed/simple;
-	bh=b3qLvidQt2IQmyqEcAsLJbmTR+wVyp6SbcerHb1qMcs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hy2vXOhRTo/c4zigZyhpweHyn1q2wDksmrE76+qAsU1UMAWCu1ch6Jw47tSkM1FynqTTNe4u0jny3VAb64+hmCfT9w5DYfkU9IASUpF2EodOtzmjQoshbe+CBtVoiUOhcKW84AOeykvGmk3oDQtdKL9zn9TwJ/P1zIq1lUtpNPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=bBjDfKYW; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+	s=arc-20240116; t=1754374192; c=relaxed/simple;
+	bh=udjhgi6qxAFlIcnadf+oQO8aauar43fffLw4K8xogfw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P3hjHdDu65UperVxALaA5+6I7KVKJo2PP8aVuz3sdjUrz9B0i+ElSwg8f4300JnjMiUEWnv95ASBc/4jgKmarB7+zbQxsSo+ylzqGW57oenPzX7X9AB/7GAzzv4DAcbN39SxJkOFBNEiEGiMeGjA9WZNZainFdjvlr5946xvAF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PCyEjKdV; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="bBjDfKYW"
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4bx2T60Psrz9t8l;
-	Tue,  5 Aug 2025 07:45:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1754372730;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bPF4WdQCtv984o72KwXLxMISxhU/aJPqgLwzYtsm72M=;
-	b=bBjDfKYWT21NFwvhbyK5aFKtO6yFlm8WKPH9dWAj5oD5m1o+cPDeaf3RswmG9jD83irGDi
-	OpSvCvXeZuBix3/tg2FMC3AL8+gyQwrHiZibGBamiSy0+gusfknYSXjoUG11XufHr79v3u
-	MlViEwFLGuQ3lGIcljKeXIn8m4w6+Fsj6atzQWPSheC0cBLTAigLG/UyXtsbl9AnMLXxvE
-	Xh3lR5sdmm9nFCjCaZpezk3FnoxlEBuDmYJ/6vqSp4OH4Sn5xcuTJsiKuPM5+mqs78ViPV
-	o17N3NWGq4KpbOeOgNto/Uksx9Cu4EwpetVbqhnax656nKXT5VIaTRzEDWBH9Q==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::2 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
-From: Aleksa Sarai <cyphar@cyphar.com>
-Subject: [PATCH v4 0/4] procfs: make reference pidns more user-visible
-Date: Tue, 05 Aug 2025 15:45:07 +1000
-Message-Id: <20250805-procfs-pidns-api-v4-0-705f984940e7@cyphar.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PCyEjKdV"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5754twoK000914;
+	Tue, 5 Aug 2025 06:09:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=KZIUdY
+	nSrH8hLHLCb8+749ChGGZ8R8KtKeM+yeFqK6M=; b=PCyEjKdVzoiKo7aeakZCBD
+	dTtxSd/6ikCQAd/elqlWw/JDFE3i/qLg9FPEWM3MXUBDcLVODJ3da1DtZyNlZLCt
+	PJg1nPYoti3+TEwYu2F2bKv6Q68DrVat19dAA5HQZTlSnKgq/CdSitHvvhsCHBS9
+	Rvxx26efTAqktt5ODblTPJtJs5MOFevZ55e7/t2vAf20PuoC5J6SEwPNeoN5BbJ1
+	SQhKtWKi4THkgIgO0tktTSRHk+C6eFARkU67zMsa349ajaZxfa1wG3GS1ICSYjMx
+	vm0aZQkJ5c7c1dqNKaEQJFlbHtoHv28/w7vSmXFJFX7KwuKtp/h5o4pJ3RP3IQQw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48bbbq07wp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Aug 2025 06:09:32 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 57569WLr013800;
+	Tue, 5 Aug 2025 06:09:32 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48bbbq07wf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Aug 2025 06:09:32 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5754fB0T006873;
+	Tue, 5 Aug 2025 06:09:31 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 489xgmh2dy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Aug 2025 06:09:31 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 57569UgB22282868
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 5 Aug 2025 06:09:30 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 754B35813E;
+	Tue,  5 Aug 2025 06:09:30 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 71EF858124;
+	Tue,  5 Aug 2025 06:09:17 +0000 (GMT)
+Received: from [9.109.245.113] (unknown [9.109.245.113])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  5 Aug 2025 06:09:17 +0000 (GMT)
+Message-ID: <20fb853c-7d79-4d26-9c8a-f6ce9367d424@linux.ibm.com>
+Date: Tue, 5 Aug 2025 11:39:15 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGOakWgC/23NTQ6CMBCG4auYrq3p9IcWV97DuCDtIF0ITWsaC
- eHuFuICA8v3S+aZiSSMHhO5niYSMfvkh76EPJ+I7Zr+idS70oQzrpgGTUMcbJto8K5PtAmeGnS
- gjJACWkbKWYjY+s9K3h+lO5/eQxzXDxmW9Ydx2GMZKKPKupoxjQq4u9kxdE282OFFFi3zrSAOB
- F6EigNqdM6gZDtBbAV5IIgiSFsZZWtgNRd/wjzPX4EKj1I1AQAA
-To: Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc: Andy Lutomirski <luto@amacapital.net>, linux-kernel@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Aleksa Sarai <cyphar@cyphar.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7460; i=cyphar@cyphar.com;
- h=from:subject:message-id; bh=b3qLvidQt2IQmyqEcAsLJbmTR+wVyp6SbcerHb1qMcs=;
- b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMWRMnJV35/6lhU2bWe6c99t5d/cht20Cy821S3StD09t/
- V617E/f4Y5SFgYxLgZZMUWWbX6eoZvmL76S/GklG8wcViaQIQxcnAIwEekljAwv5yivvVnkLrSR
- vfXk4+Wpn166LLTnnrJ5VZB6vEPwv6z7jAzbNp5fo5x/vczhas+Cjh1/LR3a7bbue9Pf/bPhdPe
- dCiEGAA==
-X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
- fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
-X-Rspamd-Queue-Id: 4bx2T60Psrz9t8l
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/7] selftest/mm: Fix ksm_funtional_test failures
+To: Wei Yang <richard.weiyang@gmail.com>,
+        Aboorva Devarajan <aboorvad@linux.ibm.com>
+Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com,
+        lorenzo.stoakes@oracle.com, shuah@kernel.org, pfalcato@suse.de,
+        david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+        npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+        baohua@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ritesh.list@gmail.com
+References: <20250729053403.1071807-1-aboorvad@linux.ibm.com>
+ <20250729053403.1071807-4-aboorvad@linux.ibm.com>
+ <20250804091141.ifwryfmgjepwrog4@master>
+Content-Language: en-US
+From: Donet Tom <donettom@linux.ibm.com>
+In-Reply-To: <20250804091141.ifwryfmgjepwrog4@master>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: k3p7J4adTRlrZ9ZmUW45SmpQ7mAGp2RF
+X-Authority-Analysis: v=2.4 cv=M65NKzws c=1 sm=1 tr=0 ts=6891a01c cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VnNF1IyMAAAA:8 a=0R2oKJRu712hfJE7rpUA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: aDV2fjvZ8eW6TQSfXuRrIfKTplaaXBqG
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA1MDAzNyBTYWx0ZWRfX0Zx4ttLZjAVU
+ MkjHC9a9E8hxGzo8KaSa/xD5kERSTjlpLOEGXz+LwvGVu9ypduqLtuTSLO5wAtsNC38EaLaoxn9
+ jGPGGwSl7oVPr1lriJlIVPWFmYvLpJBLDxWCZmvCLtz23b00//y4Io6jTJF1ppg5dqZj5+N7Dfe
+ u7UxmqJBiSuLLlNTOPo4hRUdjoNwoeG4XJR1S65Oeu2sZ4ev4CCt9toK02E9/wHHAjlsSGKg1AQ
+ 8xXnZVffvG21nJmOx68m16pKWYy6TRWsznfAN0hCSnR0KoGobD3zO42BIfPv00En1Y0cao60Ud1
+ qJAZNVTQ2RXAEMkfdYp5wUPjeO9qvWt9i92VEbscnusnoc/iuT9SXjP2doH/uNjQ3Rb4iA9zkQu
+ P/zzPLVUmAwqq6Ihgj+Rl5/TdFRucHTt0z09PBgyYyqbFsMThb7ezLTeoaXpW3R5Evp6Gf/G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-05_01,2025-08-04_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 malwarescore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1015 mlxscore=0 phishscore=0 priorityscore=1501
+ mlxlogscore=999 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2508050037
 
-Ever since the introduction of pid namespaces, procfs has had very
-implicit behaviour surrounding them (the pidns used by a procfs mount is
-auto-selected based on the mounting process's active pidns, and the
-pidns itself is basically hidden once the mount has been constructed).
 
-/* pidns mount option for procfs */
+On 8/4/25 2:41 PM, Wei Yang wrote:
+> On Tue, Jul 29, 2025 at 11:03:59AM +0530, Aboorva Devarajan wrote:
+>> From: Donet Tom <donettom@linux.ibm.com>
+>>
+>> This patch fixed 2 issues.
+>>
+>> 1) After fork() in test_prctl_fork, the child process uses the file
+>> descriptors from the parent process to read ksm_stat and
+>> ksm_merging_pages. This results in incorrect values being read (parent
+>> process ksm_stat and ksm_merging_pages will be read in child), causing
+>> the test to fail.
+>>
+>> This patch calls init_global_file_handles() in the child process to
+>> ensure that the current process's file descriptors are used to read
+>> ksm_stat and ksm_merging_pages.
+>>
+>> 2) All tests currently call ksm_merge to trigger page merging.
+>> To ensure the system remains in a consistent state for subsequent
+>> tests, it is better to call ksm_unmerge during the test cleanup phase.
+>>
+>> In the test_prctl_fork test, after a fork(), reading ksm_merging_pages
+>> in the child process returns a non-zero value because a previous test
+>> performed a merge, and the child's memory state is inherited from the
+>> parent.
+>>
+>> Although the child process calls ksm_unmerge, the ksm_merging_pages
+>> counter in the parent is reset to zero, while the child's counter
+>> remains unchanged. This discrepancy causes the test to fail.
+>>
+>> To avoid this issue, each test should call ksm_unmerge during cleanup
+>> to ensure the counter is reset and the system is in a clean state for
+>> subsequent tests.
+>>
+>> execv argument is an array of pointers to null-terminated strings.
+>> In this patch we also added NULL in the execv argument.
+>>
+>> Fixes: 6c47de3be3a0 ("selftest/mm: ksm_functional_tests: extend test case for ksm fork/exec")
+>> Co-developed-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+>> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+>> Signed-off-by: Donet Tom <donettom@linux.ibm.com>
+>> ---
+>> tools/testing/selftests/mm/ksm_functional_tests.c | 12 +++++++++++-
+>> 1 file changed, 11 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+>> index d8bd1911dfc0..996dc6645570 100644
+>> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
+>> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+>> @@ -46,6 +46,8 @@ static int ksm_use_zero_pages_fd;
+>> static int pagemap_fd;
+>> static size_t pagesize;
+>>
+>> +static void init_global_file_handles(void);
+>> +
+>> static bool range_maps_duplicates(char *addr, unsigned long size)
+>> {
+>> 	unsigned long offs_a, offs_b, pfn_a, pfn_b;
+>> @@ -274,6 +276,7 @@ static void test_unmerge(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			 "Pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+> In __mmap_and_merge_range(), we call ksm_unmerge(). Why this one not help?
+>
+> Not very familiar with ksm stuff. Would you mind giving more on how this fix
+> the failure you see?
 
-This implicit behaviour has historically meant that userspace was
-required to do some special dances in order to configure the pidns of a
-procfs mount as desired. Examples include:
 
- * In order to bypass the mnt_too_revealing() check, Kubernetes creates
-   a procfs mount from an empty pidns so that user namespaced containers
-   can be nested (without this, the nested containers would fail to
-   mount procfs). But this requires forking off a helper process because
-   you cannot just one-shot this using mount(2).
+The issue I was facing here was test_prctl_fork was failing.
 
- * Container runtimes in general need to fork into a container before
-   configuring its mounts, which can lead to security issues in the case
-   of shared-pidns containers (a privileged process in the pidns can
-   interact with your container runtime process). While
-   SUID_DUMP_DISABLE and user namespaces make this less of an issue, the
-   strict need for this due to a minor uAPI wart is kind of unfortunate.
+# [RUN] test_prctl_fork
+# Still pages merged
+#
 
-Things would be much easier if there was a way for userspace to just
-specify the pidns they want. Patch 1 implements a new "pidns" argument
-which can be set using fsconfig(2):
+This issue occurred because the previous test performed a merge, causing
+the value of /proc/self/ksm_merging_pages to reflect the number of
+deduplicated pages. After that, a fork() was called. Post-fork, the 
+child process
+inherited the parent's ksm_merging_pages value.
 
-    fsconfig(procfd, FSCONFIG_SET_FD, "pidns", NULL, nsfd);
-    fsconfig(procfd, FSCONFIG_SET_STRING, "pidns", "/proc/self/ns/pid", 0);
+Then, the child process invoked __mmap_and_merge_range(), which resulted
+in unmerging the pages and resetting the value. However, since the 
+parent process
+had performed the merge, its ksm_merging_pages value also got reset to 0.
+Meanwhile, the child process had not performed any merge itself, so the 
+inherited
+value remained unchanged. That’s why get_my_merging_page() in the child was
+returning a non-zero value.
 
-or classic mount(2) / mount(8):
+Initially, I fixed the issue by calling ksm_unmerge() before the fork(), 
+and that
+resolved the problem. Later, I decided it would be cleaner to move the
+ksm_unmerge() call to the test cleanup phase.
 
-    // mount -t proc -o pidns=/proc/self/ns/pid proc /tmp/proc
-    mount("proc", "/tmp/proc", "proc", MS_..., "pidns=/proc/self/ns/pid");
 
-The initial security model I have in this RFC is to be as conservative
-as possible and just mirror the security model for setns(2) -- which
-means that you can only set pidns=... to pid namespaces that your
-current pid namespace is a direct ancestor of and you have CAP_SYS_ADMIN
-privileges over the pid namespace. This fulfils the requirements of
-container runtimes, but I suspect that this may be too strict for some
-usecases.
-
-The pidns argument is not displayed in mountinfo -- it's not clear to me
-what value it would make sense to show (maybe we could just use ns_dname
-to provide an identifier for the namespace, but this number would be
-fairly useless to userspace). I'm open to suggestions. Note that
-PROCFS_GET_PID_NAMESPACE (see below) does at least let userspace get
-information about this outside of mountinfo.
-
-Note that you cannot change the pidns of an already-created procfs
-instance. The primary reason is that allowing this to be changed would
-require RCU-protecting proc_pid_ns(sb) and thus auditing all of
-fs/proc/* and some of the users in fs/* to make sure they wouldn't UAF
-the pid namespace. Since creating procfs instances is very cheap, it
-seems unnecessary to overcomplicate this upfront. Trying to reconfigure
-procfs this way errors out with -EBUSY.
-
-/* ioctl(PROCFS_GET_PID_NAMESPACE) */
-
-In addition, being able to figure out what pid namespace is being used
-by a procfs mount is quite useful when you have an administrative
-process (such as a container runtime) which wants to figure out the
-correct way of mapping PIDs between its own namespace and the namespace
-for procfs (using NS_GET_{PID,TGID}_{IN,FROM}_PIDNS). There are
-alternative ways to do this, but they all rely on ancillary information
-that third-party libraries and tools do not necessarily have access to.
-
-To make this easier, add a new ioctl (PROCFS_GET_PID_NAMESPACE) which
-can be used to get a reference to the pidns that a procfs is using.
-
-Rather than copying the (fairly strict) security model for setns(2),
-apply a slightly looser model to better match what userspace can already
-do:
-
- * Make the ioctl only valid on the root (meaning that a process without
-   access to the procfs root -- such as only having an fd to a procfs
-   file or some open_tree(2)-like subset -- cannot use this API). This
-   means that the process already has some level of access to the
-   /proc/$pid directories.
-
- * If the calling process is in an ancestor pidns, then they can already
-   create pidfd for processes inside the pidns, which is morally
-   equivalent to a pidns file descriptor according to setns(2). So it
-   seems reasonable to just allow it in this case. (The justification
-   for this model was suggested by Christian.)
-
- * If the process has access to /proc/1/ns/pid already (i.e. has
-   ptrace-read access to the pidns pid1), then this ioctl is equivalent
-   to just opening a handle to it that way.
-
-   Ideally we would check for ptrace-read access against all processes
-   in the pidns (which is very likely to be true for at least one
-   process, as SUID_DUMP_DISABLE is cleared on exec(2) and is rarely set
-   by most programs), but this would obviously not scale.
-
-I'm open to suggestions for whether we need to make this stricter (or
-possibly allow more cases).
-
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
-Changes in v4:
-- Remove unneeded EXPORT_SYMBOL_GPL. [Christian Brauner]
-- Return -EOPNOTSUPP for new APIs for CONFIG_PID_NS=n rather than
-  pretending they don't exist entirely. [Christian Brauner]
-- PROCFS_IOCTL_MAGIC conflicts with XSDFEC_MAGIC, so we need to allocate
-  subvalues more carefully (switch to _IO(PROCFS_IOCTL_MAGIC, 32)).
-- Add some more selftests for PROCFS_GET_PID_NAMESPACE.
-- Reword argument for PROCFS_GET_PID_NAMESPACE security model based on
-  Christian's suggestion, and remove CAP_SYS_ADMIN edge-case (in most
-  cases, such a process would also have ptrace-read credentials over the
-  pidns pid1).
-- v3: <https://lore.kernel.org/r/20250724-procfs-pidns-api-v3-0-4c685c910923@cyphar.com>
-
-Changes in v3:
-- Disallow changing pidns for existing procfs instances, as we'd
-  probably have to RCU-protect everything that touches the pinned pidns
-  reference.
-- Improve tests with slightly nicer ASSERT_ERRNO* macros.
-- v2: <https://lore.kernel.org/r/20250723-procfs-pidns-api-v2-0-621e7edd8e40@cyphar.com>
-
-Changes in v2:
-- #ifdef CONFIG_PID_NS
-- Improve cover letter wording to make it clear we're talking about two
-  separate features with different permission models. [Andy Lutomirski]
-- Fix build warnings in pidns_is_ancestor() patch. [kernel test robot]
-- v1: <https://lore.kernel.org/r/20250721-procfs-pidns-api-v1-0-5cd9007e512d@cyphar.com>
-
----
-Aleksa Sarai (4):
-      pidns: move is-ancestor logic to helper
-      procfs: add "pidns" mount option
-      procfs: add PROCFS_GET_PID_NAMESPACE ioctl
-      selftests/proc: add tests for new pidns APIs
-
- Documentation/filesystems/proc.rst        |  12 ++
- fs/proc/root.c                            | 166 +++++++++++++++-
- include/linux/pid_namespace.h             |   9 +
- include/uapi/linux/fs.h                   |   4 +
- kernel/pid_namespace.c                    |  22 ++-
- tools/testing/selftests/proc/.gitignore   |   1 +
- tools/testing/selftests/proc/Makefile     |   1 +
- tools/testing/selftests/proc/proc-pidns.c | 315 ++++++++++++++++++++++++++++++
- 8 files changed, 514 insertions(+), 16 deletions(-)
----
-base-commit: 66639db858112bf6b0f76677f7517643d586e575
-change-id: 20250717-procfs-pidns-api-8ed1583431f0
-
-Best regards,
--- 
-Aleksa Sarai <cyphar@cyphar.com>
-
+>
+>> 	munmap(map, size);
+>> }
+>>
+>> @@ -338,6 +341,7 @@ static void test_unmerge_zero_pages(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			"KSM zero pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>>
+>> @@ -366,6 +370,7 @@ static void test_unmerge_discarded(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			 "Pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>>
+>> @@ -452,6 +457,7 @@ static void test_unmerge_uffd_wp(void)
+>> close_uffd:
+>> 	close(uffd);
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>> #endif
+>> @@ -515,6 +521,7 @@ static int test_child_ksm(void)
+>> 	else if (map == MAP_MERGE_SKIP)
+>> 		return -3;
+>>
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> 	return 0;
+>> }
+>> @@ -548,6 +555,7 @@ static void test_prctl_fork(void)
+>>
+>> 	child_pid = fork();
+>> 	if (!child_pid) {
+>> +		init_global_file_handles();
+> Would this leave fd in parent as orphan?
+>
+>> 		exit(test_child_ksm());
+>> 	} else if (child_pid < 0) {
+>> 		ksft_test_result_fail("fork() failed\n");
+>> @@ -595,7 +603,7 @@ static void test_prctl_fork_exec(void)
+>> 		return;
+>> 	} else if (child_pid == 0) {
+>> 		char *prg_name = "./ksm_functional_tests";
+>> -		char *argv_for_program[] = { prg_name, FORK_EXEC_CHILD_PRG_NAME };
+>> +		char *argv_for_program[] = { prg_name, FORK_EXEC_CHILD_PRG_NAME, NULL };
+>>
+>> 		execv(prg_name, argv_for_program);
+>> 		return;
+>> @@ -644,6 +652,7 @@ static void test_prctl_unmerge(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			 "Pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>>
+>> @@ -677,6 +686,7 @@ static void test_prot_none(void)
+>> 	ksft_test_result(!range_maps_duplicates(map, size),
+>> 			 "Pages were unmerged\n");
+>> unmap:
+>> +	ksm_unmerge();
+>> 	munmap(map, size);
+>> }
+>>
+>> -- 
+>> 2.47.1
+>>
