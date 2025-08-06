@@ -1,112 +1,314 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5AB1E32CF;
-	Wed,  6 Aug 2025 08:20:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DED21F948;
+	Wed,  6 Aug 2025 09:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754468428; cv=none; b=E6O8AMDFdM/AjOXXG1661EIfTv2MJo6JGj527FG8BMYT8mHSfhPLcbQUuSW8QIYnnuDsQTzBD6eger2NTGXR7S7lCIZvOi1rsc7YnolQg5wspPCROAkFZRNGeJvCxi/U57xNH3ygV/bDL3s8UEaXhSvLx5ohBFJiXU4uR4JQl7w=
+	t=1754471476; cv=none; b=I2OqkG7OAdW+xuRJLRfIaItl8EUrZ87K7udPF7fT7z8VqMAvpXH2SNLEBVh+LlmcWo6BzMgBt14sv3YAaNqO0OXqMTSJdPiEIZpNhglZW21oFFPe1kcSbpDeCjabvxm/RK4uovGo82+yLHHTa1WdZt5ga/EQRAxb4JRzSQs+NOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754468428; c=relaxed/simple;
-	bh=2Zg3JIzvXIyqJnoZOSLrCALPdYrjS+32WFTDqn2TkLQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EDDtayuVDVvHJwquAKVowWjoCfV9eMMciBZxHJoV7smgysY3aqnkNGBdTt6GfKBFFWrwa1ZXsTMEPLilZR28IHVe4pUIdr38B+efWvFF5jwp5I1XWzwE8ihzYrJPGvXSq1g+kwu0lc4EglqONs0gCJrid3mXY3Kf5NnkHF4UUI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MdsPfF2G; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1754471476; c=relaxed/simple;
+	bh=GHrQqSC1UtWlG4pv4bxpFM9GNMvL/w8HFNVLh9OzojE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=KnV0KixMsSmUENulrWfoKmMJoBdDIPyKXdCHF7XfIMQGCL2h3JQ2BB3ov86rGEUpFpjpedXTw0tuip9ht+4/j+RKfkG/9WZKL0GqtLykqNZ/Y0vpvhTeCA3PgDShlddwbrLnB11KCZaspWiHdsUPIbDgJU6fuSuUH+/k6q7nKxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=ILovQubZ reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MdsPfF2G"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b422b31b1c0so3958713a12.0;
-        Wed, 06 Aug 2025 01:20:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754468426; x=1755073226; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tk74vFBOtgpOUaVzdQICrykdzva6RLuKYXQfB725rV0=;
-        b=MdsPfF2Gw8ijIC1wEH/mHJtOPVG15vx7uB3KKUsdOspNeU/JhPKyFwDL5VR1SIN7N6
-         Tao7+Udo84UBBDPT7flOScJ+9oB24wckomsN6aBuevQWVuABazk/Oay4PgyE89nP11nt
-         GCUmP7abcmupvPrz1Y/kkIhzQlgIa2DcXXqnvuhU0z8IrcdhUs4NF3QhONyQLlD2TcAG
-         TKOyrPS0zGmkIawqHcoRU0dbCjfZA5ZITwlC7uyng5xnfyrBdr9J1wU/ol/CzChDZ4OO
-         ksBcgEnwo0uJ8JPHYF1ydjh/isvjcVm+cpwanGO6VTvcKu+czpgjuKOu8/2X+xYkghVw
-         Jb2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754468426; x=1755073226;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tk74vFBOtgpOUaVzdQICrykdzva6RLuKYXQfB725rV0=;
-        b=JjeHTtQoXIW+xOVdTK2XZo/kmuQYW/Y3ssXYUwZvO0yPPuKn8JCCyZNx+LnL3dJOEa
-         8WRtoM6qxtsYZM3rvY4GTe/9oDHjpkpDmsIfGPIUUmUKPQUmoWWTe8eBg+a5mQgY+MSU
-         f89CM4DwFRgXQySLhdZQg/iM8LSyutUYhLnvZVh8+khq92YPkKb73E1VBdKVylDlr1kR
-         9M7ceBUhb7m5UlsKHK6d4vWrYWxkdF5tZIeaRykGwtkdK9yzPGXYeuvmHf5bDf6OYVeI
-         D5MN9/jUUpvjX0hnJ4PxpywPrE1p1FBga6WHJU3IFlIFA9U1YTKOa8472vGVNouFYl3D
-         LZhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUKJtVy6mdkvV+pfdQ85A+CR7ZD/3URFTWxBdTiIXEXGyEuvUKRC7fYd9hPhqk40bj/PAKteOYn@vger.kernel.org, AJvYcCVBsrPKmXFCN25qU0IlfnevOnCkgs9xKbw1K9PpMGRGtx+gYV5keU6uiGt94ZDJPx6MaFjR8M73rszlsg5jZcUg@vger.kernel.org, AJvYcCW5GAPu/JBLT+NUb6l1aUfhlWsIiuW5eCniMe01Czan8Dl5x4shg8iCJV5npe/cQoFQP+oZDhaLcDTzZoA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnlTquXe0xM3AOE8ZILCsQGlpfSbNdk7YMe9SMrcNCS3ffnJIM
-	obtufF5oGnHnii+iiUB+N3hjUIKkLh6ks2SWFF0IOdaA8+8YqhcuG+jR
-X-Gm-Gg: ASbGnctgGuubQpQ6x31VSVFCoIDmX+nv/K9hiYVn7Q60L5aDmj0QIeSTpocrVyfAoPm
-	bBg0S3B4mFXd8HzLSJwI4MOp0NXnkTQsEAZKX/wMGTY/9K8XdKW/1KZ+eYNkwwsoEfHkjH1SK29
-	PfYpvDQZfuQm3Eju9sAFEdgJ4kzs7/S6bBlxPTWoEIERxkka3HIz5Pj4Ax8TiLPa1ySXk3hHBPO
-	lB/XoorQHfe3XNWpdvp4MoEW8Mey0kaIGopCmM//UcqM8hTHCk4ViigqRXX0A20J1kLK5VmAEKm
-	oLRmqcDwEQR9Yhzu9EiRGkC2xTGZg+AV3jqRT6F4IOUBGGX9WvdsK1yMpsr4yETFo3a8Rs9RWCQ
-	AKTu3Xh1nmUHyM19lZQEwCYtnLyn9u28eLX4dOxjYR9Lm9PaSoAjHNg==
-X-Google-Smtp-Source: AGHT+IEReFrA9fu6w4gM/cP7i9PjlBPwmU6McdahgPWGATLeJixMmq/Kf/I51qnimVALN6oZwVx02A==
-X-Received: by 2002:a17:90b:48d2:b0:31a:ab75:6e45 with SMTP id 98e67ed59e1d1-32166cb5d9amr2019526a91.28.1754468426250;
-        Wed, 06 Aug 2025 01:20:26 -0700 (PDT)
-Received: from manjaro.domain.name ([2401:4900:1c30:7b0d:6527:282d:9edd:5f40])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3216126c96esm2078947a91.22.2025.08.06.01.20.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Aug 2025 01:20:25 -0700 (PDT)
-From: Pranav Tyagi <pranav.tyagi03@gmail.com>
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	dw@davidwei.uk,
-	haiyuewa@163.com,
-	axboe@kernel.dk,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: linux-kernel-mentees@lists.linux.dev,
-	Pranav Tyagi <pranav.tyagi03@gmail.com>
-Subject: [PATCH] selftests/drivers/net: replace typeof() with __auto_type
-Date: Wed,  6 Aug 2025 13:50:16 +0530
-Message-ID: <20250806082016.14891-1-pranav.tyagi03@gmail.com>
-X-Mailer: git-send-email 2.49.0
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="ILovQubZ"
+Received: from h205.csg.ci.i.u-tokyo.ac.jp (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 5769A4Q5005818
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Wed, 6 Aug 2025 18:10:13 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=cNChbfwbJxu1p5jME8+k/YzZo2FzwjCcltFsF+wNolE=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Date:Subject:Message-Id:To;
+        s=rs20250326; t=1754471413; v=1;
+        b=ILovQubZMvdmX4JupMk0+o5hS9d1oHFD/LOTYDhCE9Rx1fIWftCeY+n5oeAPTDYg
+         Eqe74MSJsTncKg9JzaZL0QyvCPj7JSZZa2UiLlIl7jlL+uOSgFkVy7uXaPfZ6M3c
+         J8x/BLWE36onnKZWuL9r/H/RR9Dlkpvari6SP8pmN2kV8Fi69UNiMRWWonyQl6sX
+         /nwbnxU4dYSURcWsDjE6AYKC+eQuZ3eCWXfVca8QcDRuDzZOVw2FT0+AIeVweHoI
+         CiWev08DGiq7qgq+19v+7R3R0zABjK5m6+pOau/HIL1Odsj8SwCTXfxoddYAILOO
+         zs6v7mRu1+ZJs3BowaDHYA==
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Date: Wed, 06 Aug 2025 18:09:55 +0900
+Subject: [PATCH RFC v2 2/2] KVM: arm64: selftests: Test guest PMUv3
+ composition
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250806-hybrid-v2-2-0661aec3af8c@rsg.ci.i.u-tokyo.ac.jp>
+References: <20250806-hybrid-v2-0-0661aec3af8c@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <20250806-hybrid-v2-0-0661aec3af8c@rsg.ci.i.u-tokyo.ac.jp>
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+X-Mailer: b4 0.14.2
 
-Replace typeof() with __auto_type in iou-zcrx.c.
-__auto_type was introduced in GCC 4.9 and reduces the compile time for
-all compilers. No functional changes intended.
+Test the following:
+- KVM_ARM_VCPU_PMU_V3_COMPOSITION is unset at initialization.
+- KVM_ARM_VCPU_PMU_V3_COMPOSITION can be set.
+- Setting KVM_ARM_VCPU_PMU_V3_COMPOSITION for the first after setting
+  an event filter results in EBUSY.
+- KVM_ARM_VCPU_PMU_V3_COMPOSITION can be set again even if an event
+  filter has already been set.
+- Setting KVM_ARM_VCPU_PMU_V3_COMPOSITION after running a VCPU results
+  in EBUSY.
+- The composite guest PMUv3 behaves as a PMUv3 whose PMCR.N is 0.
 
-Signed-off-by: Pranav Tyagi <pranav.tyagi03@gmail.com>
+Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 ---
- tools/testing/selftests/drivers/net/hw/iou-zcrx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../selftests/kvm/arm64/vpmu_counter_access.c      | 148 ++++++++++++++++-----
+ 1 file changed, 118 insertions(+), 30 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-index 62456df947bc..85551594bf0f 100644
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-@@ -42,8 +42,8 @@ static long page_size;
- #define SEND_SIZE (512 * 4096)
- #define min(a, b) \
- 	({ \
--		typeof(a) _a = (a); \
--		typeof(b) _b = (b); \
-+		__auto_type _a = (a); \
-+		__auto_type _b = (b); \
- 		_a < _b ? _a : _b; \
- 	})
- #define min_t(t, a, b) \
+diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+index f16b3b27e32ed7ca57481f27d689d47783aa0345..8d91d8017aea6a190be4a11e5abedb3324d93989 100644
+--- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
++++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
+@@ -409,16 +409,7 @@ static void create_vpmu_vm(void *guest_code)
+ {
+ 	struct kvm_vcpu_init init;
+ 	uint8_t pmuver, ec;
+-	uint64_t dfr0, irq = 23;
+-	struct kvm_device_attr irq_attr = {
+-		.group = KVM_ARM_VCPU_PMU_V3_CTRL,
+-		.attr = KVM_ARM_VCPU_PMU_V3_IRQ,
+-		.addr = (uint64_t)&irq,
+-	};
+-	struct kvm_device_attr init_attr = {
+-		.group = KVM_ARM_VCPU_PMU_V3_CTRL,
+-		.attr = KVM_ARM_VCPU_PMU_V3_INIT,
+-	};
++	uint64_t dfr0;
+ 
+ 	/* The test creates the vpmu_vm multiple times. Ensure a clean state */
+ 	memset(&vpmu_vm, 0, sizeof(vpmu_vm));
+@@ -445,10 +436,6 @@ static void create_vpmu_vm(void *guest_code)
+ 	TEST_ASSERT(pmuver != ID_AA64DFR0_EL1_PMUVer_IMP_DEF &&
+ 		    pmuver >= ID_AA64DFR0_EL1_PMUVer_IMP,
+ 		    "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pmuver);
+-
+-	/* Initialize vPMU */
+-	vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
+-	vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &init_attr);
+ }
+ 
+ static void destroy_vpmu_vm(void)
+@@ -475,14 +462,26 @@ static void run_vcpu(struct kvm_vcpu *vcpu, uint64_t pmcr_n)
+ 	}
+ }
+ 
+-static void test_create_vpmu_vm_with_pmcr_n(uint64_t pmcr_n, bool expect_fail)
++static void test_init_vpmu_vm_with_pmcr_n(uint64_t pmcr_n, bool composition,
++					  bool expect_fail)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	uint64_t pmcr, pmcr_orig;
++	uint64_t irq = 23;
+ 
+ 	create_vpmu_vm(guest_code);
+ 	vcpu = vpmu_vm.vcpu;
+ 
++	if (composition)
++		vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++				     KVM_ARM_VCPU_PMU_V3_COMPOSITION, NULL);
++
++	vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++			     KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
++
++	vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++			     KVM_ARM_VCPU_PMU_V3_INIT, NULL);
++
+ 	pmcr_orig = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0));
+ 	pmcr = pmcr_orig;
+ 
+@@ -508,15 +507,15 @@ static void test_create_vpmu_vm_with_pmcr_n(uint64_t pmcr_n, bool expect_fail)
+  * Create a guest with one vCPU, set the PMCR_EL0.N for the vCPU to @pmcr_n,
+  * and run the test.
+  */
+-static void run_access_test(uint64_t pmcr_n)
++static void run_access_test(uint64_t pmcr_n, bool composition)
+ {
+ 	uint64_t sp;
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vcpu_init init;
+ 
+-	pr_debug("Test with pmcr_n %lu\n", pmcr_n);
++	pr_debug("Test with pmcr_n %lu, composition %d\n", pmcr_n, composition);
+ 
+-	test_create_vpmu_vm_with_pmcr_n(pmcr_n, false);
++	test_init_vpmu_vm_with_pmcr_n(pmcr_n, composition, false);
+ 	vcpu = vpmu_vm.vcpu;
+ 
+ 	/* Save the initial sp to restore them later to run the guest again */
+@@ -550,14 +549,14 @@ static struct pmreg_sets validity_check_reg_sets[] = {
+  * Create a VM, and check if KVM handles the userspace accesses of
+  * the PMU register sets in @validity_check_reg_sets[] correctly.
+  */
+-static void run_pmregs_validity_test(uint64_t pmcr_n)
++static void run_pmregs_validity_test(uint64_t pmcr_n, bool composition)
+ {
+ 	int i;
+ 	struct kvm_vcpu *vcpu;
+ 	uint64_t set_reg_id, clr_reg_id, reg_val;
+ 	uint64_t valid_counters_mask, max_counters_mask;
+ 
+-	test_create_vpmu_vm_with_pmcr_n(pmcr_n, false);
++	test_init_vpmu_vm_with_pmcr_n(pmcr_n, composition, false);
+ 	vcpu = vpmu_vm.vcpu;
+ 
+ 	valid_counters_mask = get_counters_mask(pmcr_n);
+@@ -607,11 +606,11 @@ static void run_pmregs_validity_test(uint64_t pmcr_n)
+  * the vCPU to @pmcr_n, which is larger than the host value.
+  * The attempt should fail as @pmcr_n is too big to set for the vCPU.
+  */
+-static void run_error_test(uint64_t pmcr_n)
++static void run_error_test(uint64_t pmcr_n, bool composition)
+ {
+ 	pr_debug("Error test with pmcr_n %lu (larger than the host)\n", pmcr_n);
+ 
+-	test_create_vpmu_vm_with_pmcr_n(pmcr_n, true);
++	test_init_vpmu_vm_with_pmcr_n(pmcr_n, composition, true);
+ 	destroy_vpmu_vm();
+ }
+ 
+@@ -629,20 +628,109 @@ static uint64_t get_pmcr_n_limit(void)
+ 	return get_pmcr_n(pmcr);
+ }
+ 
+-int main(void)
++static void test_config(uint64_t pmcr_n, bool composition)
+ {
+-	uint64_t i, pmcr_n;
+-
+-	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
++	uint64_t i;
+ 
+-	pmcr_n = get_pmcr_n_limit();
+ 	for (i = 0; i <= pmcr_n; i++) {
+-		run_access_test(i);
+-		run_pmregs_validity_test(i);
++		run_access_test(i, composition);
++		run_pmregs_validity_test(i, composition);
+ 	}
+ 
+ 	for (i = pmcr_n + 1; i < ARMV8_PMU_MAX_COUNTERS; i++)
+-		run_error_test(i);
++		run_error_test(i, composition);
++}
++
++static void test_composition(void)
++{
++	struct kvm_pmu_event_filter filter = { .nevents = 0 };
++	struct kvm_vm *vm;
++	struct kvm_vcpu *running_vcpu;
++	struct kvm_vcpu *stopped_vcpu;
++	struct kvm_vcpu_init init;
++	int ret;
++
++	create_vpmu_vm(guest_code);
++	ret = __vcpu_has_device_attr(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++				     KVM_ARM_VCPU_PMU_V3_COMPOSITION);
++	if (ret) {
++		TEST_ASSERT(ret == -1 && errno == ENXIO,
++			    KVM_IOCTL_ERROR(KVM_GET_DEVICE_ATTR, ret));
++		destroy_vpmu_vm();
++		return;
++	}
++
++	/* Assert that composition is unset at initialization. */
++	ret = __vcpu_device_attr_get(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++				     KVM_ARM_VCPU_PMU_V3_COMPOSITION, NULL);
++	TEST_ASSERT(ret == -1 && errno == ENXIO,
++		    KVM_IOCTL_ERROR(KVM_GET_DEVICE_ATTR, ret));
++
++	/* Assert that setting composition succeeds. */
++	vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++			     KVM_ARM_VCPU_PMU_V3_COMPOSITION, NULL);
++
++	/* Assert that getting composition succeeds. */
++	vcpu_device_attr_get(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++			     KVM_ARM_VCPU_PMU_V3_COMPOSITION, NULL);
++
++	/*
++	 * Assert that setting composition again succeeds even if an event
++	 * filter has already been set.
++	 */
++	vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++			     KVM_ARM_VCPU_PMU_V3_FILTER, &filter);
++
++	vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++			     KVM_ARM_VCPU_PMU_V3_COMPOSITION, NULL);
++
++	destroy_vpmu_vm();
++
++	create_vpmu_vm(guest_code);
++
++	/*
++	 * Assert that setting composition results in EBUSY if an event filter
++	 * has already been set while composition has not.
++	 */
++	vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++			     KVM_ARM_VCPU_PMU_V3_FILTER, &filter);
++
++	ret = __vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++				     KVM_ARM_VCPU_PMU_V3_COMPOSITION, NULL);
++	TEST_ASSERT(ret == -1 && errno == EBUSY,
++		    KVM_IOCTL_ERROR(KVM_GET_DEVICE_ATTR, ret));
++
++	destroy_vpmu_vm();
++
++	/*
++	 * Assert that setting composition after running a VCPU results in
++	 * EBUSY.
++	 */
++	vm = vm_create(2);
++	vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
++	init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
++	running_vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
++	stopped_vcpu = aarch64_vcpu_add(vm, 1, &init, guest_code);
++	vcpu_device_attr_set(running_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++			     KVM_ARM_VCPU_PMU_V3_INIT, NULL);
++	vcpu_run(running_vcpu);
++
++	ret = __vcpu_device_attr_set(stopped_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
++				     KVM_ARM_VCPU_PMU_V3_COMPOSITION, NULL);
++	TEST_ASSERT(ret == -1 && errno == EBUSY,
++		    KVM_IOCTL_ERROR(KVM_GET_DEVICE_ATTR, ret));
++
++	kvm_vm_free(vm);
++
++	test_config(0, true);
++}
++
++int main(void)
++{
++	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
++
++	test_config(get_pmcr_n_limit(), false);
++	test_composition();
+ 
+ 	return 0;
+ }
+
 -- 
-2.49.0
+2.50.1
 
