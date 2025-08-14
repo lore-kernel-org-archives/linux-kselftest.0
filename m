@@ -1,121 +1,159 @@
 Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72F51D6188;
-	Thu, 14 Aug 2025 14:18:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D19A31DE3DC;
+	Thu, 14 Aug 2025 14:46:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755181100; cv=none; b=aKYR7zyr4yqgvZ7kf9hasOvOJ7qfdveWb8B0is8gwS6Bq023tjSTiJIcHJkzmvqRbniDks3X3j2HGT9nN07uQQ4q+YjRy+eNd+uI7LwFEYoTXd3nhPMq24zzZJHNhlO8DbxhMBDPZGb3hY30xF6AJrFk5Lm52GrRo6GR1FPX82k=
+	t=1755182791; cv=none; b=AEd5HpA6FWiKEuo3bXFxfzV2NnzwXthfrUXU41GfY9D/cQuHjEBn8L3idCEhDFU+ekcjuWm86smz07Tl4v+S7G+01mC5boDmfq3yYdsZEBAyElkl/D2UEAcsBH4YXXW7EAy1NVRS18xjUJn6adosxlhDbXNksE8Jo+Fb3eHeS5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755181100; c=relaxed/simple;
-	bh=fkB8DkoZb1oZNbrYSSwnjyBm03Xw/im88bG42r7TEkU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X4foZsTh2IotsZYHBcxlPNUr7ZUr1A3iuu5mX4RT5ybGPo6HFNVsLdNYJm30a8tqJgNkq50mdKizyzQrmH3TfziLyGJcFplBjuUufU3cJ+QDi7Obl+GuEaJ+yxcU216ej0xg93ecOwA34t7pf08yhPbC5z9eZWt5yssawxU6qeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Mzo6F6co; arc=none smtp.client-ip=117.135.210.5
+	s=arc-20240116; t=1755182791; c=relaxed/simple;
+	bh=8hPHzUAgyGwhy43MMAgAV7dpiZxePD5SBMyFrvCu1eE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=hR+vrnBgVI3ameigIxjOceewDZS2ypCmOFLqtY8r551yNV4QW/s7HwqXvzEFh9klfX+GMYxLCdF66xl6dEo+FEHpO7WQu/UsdfHwxo5gV0Ytp4/o7c94QTS6lvrJDuU01VU1aFYlHTZbSK6XF1zZVjWt7Uk6QresEeh7xlyelRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=W8xB+TnM reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Mzo6F6co"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="W8xB+TnM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=0O
-	BOvNjE4rQN4ZWaV0+VTg3QRrUL9Y9ebRZMVvXEMMI=; b=Mzo6F6coua6wBtKhDi
-	YgBghu9a/s8UbTedn382ewkp2uoFgSo5o2exy7iZlsi4RastDZVeSFytbqgLnJf6
-	F0jE4NnXuM3qzG1Nd5HYkr8s7qP/8WgKErUHk2Pzg0tbSGdGK6hZmiYQ+tXOc1Ee
-	18f7Q8EdTcTF1laF7O3Ar57Q0=
-Received: from phoenix.. (unknown [])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wAXt8QG8J1otxnOBw--.45910S2;
-	Thu, 14 Aug 2025 22:17:44 +0800 (CST)
-From: Jiawei Zhao <phoenix500526@163.com>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=RseyEhVTZIct83afWcpg19/RHjuLXDuLnFTss+tar0k=; b=W
+	8xB+TnM2aCUZNdCO2CVupd3HmBQFFri6rSUhVmrpejPznMoYmP1cecdeW4pDnO/y
+	Fo1mjnKR8HGIenbOmkpHV2EMj7MEnh/M2fSxXwI3heh8ykkZPHVJdPiFzPJsU1KS
+	jEo7mg+VXQch/ukjWEXJ+M+hU6C2Bb1uP0H7X1n9GM=
+Received: from phoenix500526$163.com ( [120.230.124.83] ) by
+ ajax-webmail-wmsvr-40-102 (Coremail) ; Thu, 14 Aug 2025 22:45:40 +0800
+ (CST)
+Date: Thu, 14 Aug 2025 22:45:40 +0800 (CST)
+From: =?GBK?B?1dS80ey/?= <phoenix500526@163.com>
+To: "Jiri Olsa" <olsajiri@gmail.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+	daniel@iogearbox.net, shuah@kernel.org, yonghong.song@linux.dev,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v9 0/3] libbpf: fix USDT SIB argument handling causing unrecognized register error
-Date: Thu, 14 Aug 2025 14:17:37 +0000
-Message-ID: <20250814141741.77698-1-phoenix500526@163.com>
-X-Mailer: git-send-email 2.43.0
+Subject: Re:Re: [PATCH bpf-next v8 2/2] selftests/bpf: Add an usdt_o2 test
+ case in selftests to cover SIB handling logic
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <aJ2lxyUYfQkfQW2-@krava>
+References: <20250814064504.103401-1-phoenix500526@163.com>
+ <20250814064504.103401-3-phoenix500526@163.com> <aJ2lxyUYfQkfQW2-@krava>
+X-NTES-SC: AL_Qu2eB/2TvU8v5ieaYukfmUsVh+o9X8K1vfsk3oZfPJp+jCzp6CUNclhTBEr81tCDEh+0kAiHdzxR+P1Xbahacr8MuTAFFW1cj6E5+hJmZdBiYw==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAXt8QG8J1otxnOBw--.45910S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktFy5Zr1xJr4UGF1UGFg_yoW5Jw45pa
-	yrK3s8tryjya47JFsxXr47tw4fGan3GrWUGF1Iqw1Yvr4rGFyxJr4xKr15JrnxGa95Xa4Y
-	vF1DtF43Gas5A37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jrZ2fUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBgB2piGid6YUzlgABsB
+Message-ID: <56f988c1.9066.198a90b34fd.Coremail.phoenix500526@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:ZigvCgD3v7GV9p1oMlUaAA--.2524W
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFAOpiGid7mspcQACsc
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-optimization, the compiler will generate SIB addressing mode for global
-array and PC-relative addressing mode for global variable,
-e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
-
-The current USDT implementation in libbpf cannot parse these two formats,
-causing `bpf_program__attach_usdt()` to fail with -ENOENT
-(unrecognized register).
-
-This patch series adds support for SIB addressing mode in USDT probes.
-The main changes include:
-- add correct handling logic for SIB-addressed arguments in
-  `parse_usdt_arg`.
-- add an usdt_o2 test case to cover SIB addressing mode.
-
-Testing shows that the SIB probe correctly generates 8@(%rcx,%rax,8) 
-argument spec and passes all validation checks.
-
-The modification history of this patch series:
-Change since v1:
-- refactor the code to make it more readable
-- modify the commit message to explain why and how
-
-Change since v2:
-- fix the `scale` uninitialized error
-
-Change since v3:
-- force -O2 optimization for usdt.test.o to generate SIB addressing usdt
-  and pass all test cases.
-
-Change since v4:
-- split the patch into two parts, one for the fix and the other for the
-  test
-
-Change since v5:
-- Only enable optimization for x86 architecture to generate SIB addressing
-  usdt argument spec.
-
-Change since v6:
-- Add an usdt_o2 test case to cover SIB addressing mode.
-- Reinstate the usdt.c test case.
-
-Change since v7:
-- Refactor modifications to __bpf_usdt_arg_spec to avoid increasing its size,
-  achieving better compatibility
-- Fix some minor code style issues
-- Refactor the usdt_o2 test case, removing semaphore and adding GCC attribute
-  to force -O2 optimization
-
-Change since v8:
-- Refactor the usdt_o2 test case, using assembly to force SIB addressing mode.
-
-Jiawei Zhao (3):
-  libbpf: fix USDT SIB argument handling causing unrecognized register
-    error
-  selftests/bpf: Add an usdt_o2 test case in selftests to cover SIB
-    handling logic
-  selftests/bpf: make usdt_o2 reliably generate SIB USDT arg spec
-
- tools/lib/bpf/usdt.bpf.h                      | 54 +++++++++++++-
- tools/lib/bpf/usdt.c                          | 61 ++++++++++++++--
- tools/testing/selftests/bpf/Makefile          |  1 +
- .../selftests/bpf/prog_tests/usdt_o2.c        | 73 +++++++++++++++++++
- .../selftests/bpf/progs/test_usdt_o2.c        | 37 ++++++++++
- 5 files changed, 219 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
-
--- 
-2.43.0
-
+CgoKCgoKCkhpo6xKaXJpLiBJJ3ZlIGFscmVhZHkgbW9kaWZ5IHVzZHRfbzIuYyB0byBnZW5lcmF0
+ZSBpdHMgdXNkdCBhcmd1bWVudCBzcGVjIGluCmFzc2VtYmx5LiBCdXQgSSBjYW5ub3QgcmVwcm9k
+dWNlIHRoaXMgaXNzdWUgb24gbXkgbWFjaGluZS4gQ291bGQgeW91IGhlbHAKbWUgdmVyaWZ5IHRo
+aXMgbW9kaWZpY2F0aW9uPyAKClRoZSBtb2RpZmljYXRpb24gaXMgaW4gdGhlIFtQQVRDSCBicGYt
+bmV4dCB2OSAzLzNdIHNlbGZ0ZXN0cy9icGY6IG1ha2UgdXNkdF9vMiByZWxpYWJseSBnZW5lcmF0
+ZQogU0lCIFVTRFQgYXJnIHNwZWMKClRoYW5rcwoKCgoKCkF0IDIwMjUtMDgtMTQgMTc6MDA6NTUs
+ICJKaXJpIE9sc2EiIDxvbHNhamlyaUBnbWFpbC5jb20+IHdyb3RlOgo+T24gVGh1LCBBdWcgMTQs
+IDIwMjUgYXQgMDY6NDU6MDRBTSArMDAwMCwgSmlhd2VpIFpoYW8gd3JvdGU6Cj4+IFdoZW4gdXNp
+bmcgR0NDIG9uIHg4Ni02NCB0byBjb21waWxlIGFuIHVzZHQgcHJvZyB3aXRoIC1PMSBvciBoaWdo
+ZXIKPj4gb3B0aW1pemF0aW9uLCB0aGUgY29tcGlsZXIgd2lsbCBnZW5lcmF0ZSBTSUIgYWRkcmVz
+c2luZyBtb2RlIGZvciBnbG9iYWwKPj4gYXJyYXkgYW5kIFBDLXJlbGF0aXZlIGFkZHJlc3Npbmcg
+bW9kZSBmb3IgZ2xvYmFsIHZhcmlhYmxlLAo+PiBlLmcuICIxQC05NiglcmJwLCVyYXgsOCkiIGFu
+ZCAiLTFANCt0MSglcmlwKSIuCj4+IAo+PiBJbiB0aGlzIHBhdGNoOgo+PiAtIGFkZCB1c2R0X28y
+IHRlc3QgY2FzZSB0byBjb3ZlciBTSUIgYWRkcmVzc2luZyB1c2R0IGFyZ3VtZW50IHNwZWMKPj4g
+ICBoYW5kbGluZyBsb2dpYwo+Cj5oaSwKPm9uIG15IHNldHVwIChnY2MxNSkgdGhlIHRlc3QgZ2Vu
+ZXJhdGVzIHVzdCByZWdpc3RlciBhcmd1bWVudDoKPgo+ICBzdGFwc2R0ICAgICAgICAgICAgICAw
+eDAwMDAwMDJhICAgICAgIE5UX1NUQVBTRFQgKFN5c3RlbVRhcCBwcm9iZSBkZXNjcmlwdG9ycykK
+PiAgICBQcm92aWRlcjogdGVzdAo+ICAgIE5hbWU6IHVzZHQxCj4gICAgTG9jYXRpb246IDB4MDAw
+MDAwMDAwMDc2NzdjZSwgQmFzZTogMHgwMDAwMDAwMDAzNWJjNzI4LCBTZW1hcGhvcmU6IDB4MDAw
+MDAwMDAwMDAwMDAwMAo+ICAgIEFyZ3VtZW50czogOEAlcmF4Cj4KPgo+ICA3Njc3YzY6ICAgICAg
+IDQ4IDhiIDA0IGM1IDIwIDQ5IDljICAgIG1vdiAgICAweDM5YzQ5MjAoLCVyYXgsOCksJXJheAo+
+ICA3Njc3Y2Q6ICAgICAgIDAzCj4gIDc2NzdjZTogICAgICAgOTAgICAgICAgICAgICAgICAgICAg
+ICAgbm9wCj4KPgo+SSdtIG5vdCBzdXJlIGlmIHRoZXJlJ3MgcmVsaWFibGUgc29sdXRpb24gdG8g
+Z2VuZXJhdGUgU0lCIGFyZ3VtZW50IGZyb20gZ2NjLAo+bWF5YmUgd2UgY291bGQgZ2VuZXJhdGUg
+YWxsIGluIGFzc2VtYmx5LCBidXQgdGhhdCBtaWdodCBnZXQgY29tcGxpY2F0ZWQKPgo+amlya2EK
+Pgo+Cj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBKaWF3ZWkgWmhhbyA8cGhvZW5peDUwMDUyNkAxNjMu
+Y29tPgo+PiAtLS0KPj4gIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9NYWtlZmlsZSAgICAg
+ICAgICB8ICAxICsKPj4gIC4uLi9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvdXNkdF9vMi5jICAg
+ICAgICB8IDY5ICsrKysrKysrKysrKysrKysrKysKPj4gIC4uLi9zZWxmdGVzdHMvYnBmL3Byb2dz
+L3Rlc3RfdXNkdF9vMi5jICAgICAgICB8IDM3ICsrKysrKysrKysKPj4gIDMgZmlsZXMgY2hhbmdl
+ZCwgMTA3IGluc2VydGlvbnMoKykKPj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCB0b29scy90ZXN0aW5n
+L3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy91c2R0X28yLmMKPj4gIGNyZWF0ZSBtb2RlIDEwMDY0
+NCB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ3MvdGVzdF91c2R0X28yLmMKPj4gCj4+
+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvTWFrZWZpbGUgYi90b29s
+cy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvTWFrZWZpbGUKPj4gaW5kZXggNDg2MzEwNjAzNGRmLi4y
+NGZmMWEzMjk2MjUgMTAwNjQ0Cj4+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9N
+YWtlZmlsZQo+PiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvTWFrZWZpbGUKPj4g
+QEAgLTc2MCw2ICs3NjAsNyBAQCBUUlVOTkVSX0JQRl9CVUlMRF9SVUxFIDo9ICQkKGVycm9yIG5v
+IEJQRiBvYmplY3RzIHNob3VsZCBiZSBidWlsdCkKPj4gIFRSVU5ORVJfQlBGX0NGTEFHUyA6PQo+
+PiAgJChldmFsICQoY2FsbCBERUZJTkVfVEVTVF9SVU5ORVIsdGVzdF9tYXBzKSkKPj4gIAo+PiAr
+Cj4+ICAjIERlZmluZSB0ZXN0X3ZlcmlmaWVyIHRlc3QgcnVubmVyLgo+PiAgIyBJdCBpcyBtdWNo
+IHNpbXBsZXIgdGhhbiB0ZXN0X21hcHMvdGVzdF9wcm9ncyBhbmQgc3VmZmljaWVudGx5IGRpZmZl
+cmVudCBmcm9tCj4+ICAjIHRoZW0gKGUuZy4sIHRlc3QuaCBpcyB1c2luZyBjb21wbGV0ZWx5IHBh
+dHRlcm4pLCB0aGF0IGl0J3Mgd29ydGgganVzdAo+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGlu
+Zy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvdXNkdF9vMi5jIGIvdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMvYnBmL3Byb2dfdGVzdHMvdXNkdF9vMi5jCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+
+IGluZGV4IDAwMDAwMDAwMDAwMC4uZjAyZGNmNTE4OGFiCj4+IC0tLSAvZGV2L251bGwKPj4gKysr
+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvdXNkdF9vMi5jCj4+IEBA
+IC0wLDAgKzEsNjkgQEAKPj4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wCj4+
+ICsvKiBDb3B5cmlnaHQgKGMpIDIwMjUgSmlhd2VpIFpoYW8gPHBob2VuaXg1MDA1MjZAMTYzLmNv
+bT4uICovCj4+ICsjaW5jbHVkZSA8dGVzdF9wcm9ncy5oPgo+PiArCj4+ICsjaW5jbHVkZSAiLi4v
+c2R0LmgiCj4+ICsjaW5jbHVkZSAidGVzdF91c2R0X28yLnNrZWwuaCIKPj4gKwo+PiArI2lmIGRl
+ZmluZWQoX19HTlVDX18pICYmICFkZWZpbmVkKF9fY2xhbmdfXykKPj4gK19fYXR0cmlidXRlX18o
+KG9wdGltaXplKCJPMiIpKSkKPj4gKyNlbmRpZgo+PiArCj4+ICsjZGVmaW5lIHRlc3RfdmFsdWUg
+MHhGRURDQkE5ODc2NTQzMjEwVUxMCj4+ICsjZGVmaW5lIFNFQyhuYW1lKSBfX2F0dHJpYnV0ZV9f
+KChzZWN0aW9uKG5hbWUpLCB1c2VkKSkKPj4gKwo+PiAraW50IGxldHNfdGVzdF90aGlzKGludCk7
+Cj4+ICtzdGF0aWMgdm9sYXRpbGUgX191NjQgYXJyYXlbMV0gPSB7dGVzdF92YWx1ZX07Cj4+ICsK
+Pj4gK3N0YXRpYyBfX2Fsd2F5c19pbmxpbmUgdm9pZCB0cmlnZ2VyX2Z1bmModm9pZCkKPj4gK3sK
+Pj4gKwkvKiBCYXNlIGFkZHJlc3MgKyBvZmZzZXQgKyAoaW5kZXggKiBzY2FsZSkgKi8KPj4gKwlm
+b3IgKHZvbGF0aWxlIGludCBpID0gMDsgaSA8PSAwOyBpKyspCj4+ICsJCVNUQVBfUFJPQkUxKHRl
+c3QsIHVzZHQxLCBhcnJheVtpXSk7Cj4+ICt9Cj4+ICsKPj4gK3N0YXRpYyB2b2lkIGJhc2ljX3Np
+Yl91c2R0KHZvaWQpCj4+ICt7Cj4+ICsJTElCQlBGX09QVFMoYnBmX3VzZHRfb3B0cywgb3B0cyk7
+Cj4+ICsJc3RydWN0IHRlc3RfdXNkdF9vMiAqc2tlbDsKPj4gKwlzdHJ1Y3QgdGVzdF91c2R0X28y
+X19ic3MgKmJzczsKPj4gKwlpbnQgZXJyOwo+PiArCj4+ICsJc2tlbCA9IHRlc3RfdXNkdF9vMl9f
+b3Blbl9hbmRfbG9hZCgpOwo+PiArCWlmICghQVNTRVJUX09LX1BUUihza2VsLCAic2tlbF9vcGVu
+IikpCj4+ICsJCXJldHVybjsKPj4gKwo+PiArCWJzcyA9IHNrZWwtPmJzczsKPj4gKwlic3MtPm15
+X3BpZCA9IGdldHBpZCgpOwo+PiArCj4+ICsJZXJyID0gdGVzdF91c2R0X28yX19hdHRhY2goc2tl
+bCk7Cj4+ICsJaWYgKCFBU1NFUlRfT0soZXJyLCAic2tlbF9hdHRhY2giKSkKPj4gKwkJZ290byBj
+bGVhbnVwOwo+PiArCj4+ICsJLyogdXNkdDEgd29uJ3QgYmUgYXV0by1hdHRhY2hlZCAqLwo+PiAr
+CW9wdHMudXNkdF9jb29raWUgPSAweGNhZmVkZWFkYmVlZmZlZWQ7Cj4+ICsJc2tlbC0+bGlua3Mu
+dXNkdDEgPSBicGZfcHJvZ3JhbV9fYXR0YWNoX3VzZHQoc2tlbC0+cHJvZ3MudXNkdDEsCj4+ICsJ
+CQkJCQkgICAgIDAgLypzZWxmKi8sICIvcHJvYy9zZWxmL2V4ZSIsCj4+ICsJCQkJCQkgICAgICJ0
+ZXN0IiwgInVzZHQxIiwgJm9wdHMpOwo+PiArCWlmICghQVNTRVJUX09LX1BUUihza2VsLT5saW5r
+cy51c2R0MSwgInVzZHQxX2xpbmsiKSkKPj4gKwkJZ290byBjbGVhbnVwOwo+PiArCj4+ICsJdHJp
+Z2dlcl9mdW5jKCk7Cj4+ICsKPj4gKwlBU1NFUlRfRVEoYnNzLT51c2R0MV9jYWxsZWQsIDEsICJ1
+c2R0MV9jYWxsZWQiKTsKPj4gKwlBU1NFUlRfRVEoYnNzLT51c2R0MV9jb29raWUsIDB4Y2FmZWRl
+YWRiZWVmZmVlZCwgInVzZHQxX2Nvb2tpZSIpOwo+PiArCUFTU0VSVF9FUShic3MtPnVzZHQxX2Fy
+Z19jbnQsIDEsICJ1c2R0MV9hcmdfY250Iik7Cj4+ICsJQVNTRVJUX0VRKGJzcy0+dXNkdDFfYXJn
+LCB0ZXN0X3ZhbHVlLCAidXNkdDFfYXJnIik7Cj4+ICsJQVNTRVJUX0VRKGJzcy0+dXNkdDFfYXJn
+X3JldCwgMCwgInVzZHQxX2FyZ19yZXQiKTsKPj4gKwlBU1NFUlRfRVEoYnNzLT51c2R0MV9hcmdf
+c2l6ZSwgc2l6ZW9mKGFycmF5WzBdKSwgInVzZHQxX2FyZ19zaXplIik7Cj4+ICsKPj4gK2NsZWFu
+dXA6Cj4+ICsJdGVzdF91c2R0X28yX19kZXN0cm95KHNrZWwpOwo+PiArfQo+PiArCj4+ICsKPj4g
+Kwo+PiArdm9pZCB0ZXN0X3VzZHRfbzIodm9pZCkKPj4gK3sKPj4gKwliYXNpY19zaWJfdXNkdCgp
+Owo+PiArfQo+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dz
+L3Rlc3RfdXNkdF9vMi5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3Rlc3Rf
+dXNkdF9vMi5jCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+IGluZGV4IDAwMDAwMDAwMDAwMC4u
+MTQ2MDJhYTU0NTc4Cj4+IC0tLSAvZGV2L251bGwKPj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMvYnBmL3Byb2dzL3Rlc3RfdXNkdF9vMi5jCj4+IEBAIC0wLDAgKzEsMzcgQEAKPj4gKy8v
+IFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wCj4+ICsvKiBDb3B5cmlnaHQgKGMpIDIw
+MjIgTWV0YSBQbGF0Zm9ybXMsIEluYy4gYW5kIGFmZmlsaWF0ZXMuICovCj4+ICsKPj4gKyNpbmNs
+dWRlICJ2bWxpbnV4LmgiCj4+ICsjaW5jbHVkZSA8YnBmL2JwZl9oZWxwZXJzLmg+Cj4+ICsjaW5j
+bHVkZSA8YnBmL3VzZHQuYnBmLmg+Cj4+ICsKPj4gK2ludCBteV9waWQ7Cj4+ICsKPj4gK2ludCB1
+c2R0MV9jYWxsZWQ7Cj4+ICt1NjQgdXNkdDFfY29va2llOwo+PiAraW50IHVzZHQxX2FyZ19jbnQ7
+Cj4+ICtpbnQgdXNkdDFfYXJnX3JldDsKPj4gK3U2NCB1c2R0MV9hcmc7Cj4+ICtpbnQgdXNkdDFf
+YXJnX3NpemU7Cj4+ICsKPj4gK1NFQygidXNkdCIpCj4+ICtpbnQgdXNkdDEoc3RydWN0IHB0X3Jl
+Z3MgKmN0eCkKPj4gK3sKPj4gKwlsb25nIHRtcDsKPj4gKwo+PiArCWlmIChteV9waWQgIT0gKGJw
+Zl9nZXRfY3VycmVudF9waWRfdGdpZCgpID4+IDMyKSkKPj4gKwkJcmV0dXJuIDA7Cj4+ICsKPj4g
+KwlfX3N5bmNfZmV0Y2hfYW5kX2FkZCgmdXNkdDFfY2FsbGVkLCAxKTsKPj4gKwo+PiArCXVzZHQx
+X2Nvb2tpZSA9IGJwZl91c2R0X2Nvb2tpZShjdHgpOwo+PiArCXVzZHQxX2FyZ19jbnQgPSBicGZf
+dXNkdF9hcmdfY250KGN0eCk7Cj4+ICsKPj4gKwl1c2R0MV9hcmdfcmV0ID0gYnBmX3VzZHRfYXJn
+KGN0eCwgMCwgJnRtcCk7Cj4+ICsJdXNkdDFfYXJnID0gKHU2NCl0bXA7Cj4+ICsJdXNkdDFfYXJn
+X3NpemUgPSBicGZfdXNkdF9hcmdfc2l6ZShjdHgsIDApOwo+PiArCj4+ICsJcmV0dXJuIDA7Cj4+
+ICt9Cj4+ICsKPj4gK2NoYXIgX2xpY2Vuc2VbXSBTRUMoImxpY2Vuc2UiKSA9ICJHUEwiOwo+PiAt
+LSAKPj4gMi40My4wCj4+IAo+PiAK
