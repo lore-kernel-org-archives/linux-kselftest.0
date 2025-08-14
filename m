@@ -1,206 +1,188 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F95625EFBE;
-	Thu, 14 Aug 2025 07:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C67A25A659;
+	Thu, 14 Aug 2025 07:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755154870; cv=none; b=dwQG6w+D5653higroa4yBbwtv7sOcc12YSEwini72gCnl/cMlyn9eEi9LYpVAEvdLchQeL7u5CFeiI0y7oCyULHSCgRBilvRn3d3HBkqSPgw4czW9FargFHaGn/ntqu7PJjzDlxm5VpNbutPoXeAO5oTCiGWJmq1OzN1UqR6KMk=
+	t=1755155139; cv=none; b=OgH6wClEOEaRxav42RjDjg+o0yHvSula8uY8DCJS7SGVMu3ZCaD0INKJYatB2BMtboOH4mrhW7NeGavmNUQx0aIE4nXwUyTpJBS2j5xAurisWj6X8OisrF581eXXJTLpk4mp9HE0W9wpX43rQ00juRX531jEZqLeXkde8RCRrVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755154870; c=relaxed/simple;
-	bh=l4RpZEZEyFuGtuV7W4a26EQUDXnqU+r9rXYOKFw33+U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F4GxBmW4HL5iod7Hnw067+SvoyXbuacjcHUHnIgHJdKNBERSkr8djGlr/3KAKdt7drPVw0WOMNLCm+aYKdyN1BDkGgQiJAmhbHp8VzTjLMoaf6T/Ea+VH85GQGo4kCZAOkkFDC2WOyd91LZZCwzhqTWUcp/CjVhliH2lRM6okxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=A9jg6Dz0; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1755155139; c=relaxed/simple;
+	bh=KXtijr+I+nto8on/vYSGro/glqW/adtu+zzDmd7P0To=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=bBlI1S/lYKNz0Xa2wZ5HXwgrQZsvnlVajsahTpG6dWYcS1vDtJrzTG1eRilk523HTPdQm5nTPNTbtOQwdk/OAl6IRdvkwFxFf7yDadQbOeQ4X8QqECUmr5kKx34FH0FrnvAWDrZalw1Q/E9cxVNXp5doUzXnK2vt/DHums/W4pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WUVRjhnX; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="A9jg6Dz0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=6l
-	zJrqnywi6rrLDFjSoml0wlX8+SiyR25gUueMYiFr8=; b=A9jg6Dz0CLQU5LlnEw
-	/7Z/iX+HT4P174N36MNM5xExrOvUUz/Dms+YLo8GFui/VdAkKNbX2tfFOgwj2E1j
-	M6HoW0YGG+9anyDcof+Cl0DSWa2TSMbjVP0f2kP+jNVedVzZPQmlfxLzKGpmLk7C
-	KW/SsMc01NdwL6etF5Xiv6jpg=
-Received: from phoenix.. (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wCHVEjxhZ1oTQ2nBQ--.36242S4;
-	Thu, 14 Aug 2025 14:45:08 +0800 (CST)
-From: Jiawei Zhao <phoenix500526@163.com>
-To: andrii@kernel.org
-Cc: eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	shuah@kernel.org,
-	yonghong.song@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v8 2/2] selftests/bpf: Add an usdt_o2 test case in selftests to cover SIB handling logic
-Date: Thu, 14 Aug 2025 06:45:04 +0000
-Message-ID: <20250814064504.103401-3-phoenix500526@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250814064504.103401-1-phoenix500526@163.com>
-References: <20250814064504.103401-1-phoenix500526@163.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WUVRjhnX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755155137; x=1786691137;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=KXtijr+I+nto8on/vYSGro/glqW/adtu+zzDmd7P0To=;
+  b=WUVRjhnXTkmur9SJOxddG4rbertoRUIQa5AB5/zKQxGVk8MY972FSYIe
+   VbyoLUhifK2fCtEI47u4Yt8jI8Nswsi0VfYPqXul5ByV/no8v25YhUHuY
+   38O12S22tf4F+g6cc5bG5xqQj/FR6FaRmVtqfBE5+EzcVhqs1yWn3Jm8K
+   Ui/L7XFiF+vfK9dRBiYWF5iSOR18xl9KW4CyqRF3XyBUVO2LMkFFMQOAl
+   jL8k4EpHcLYe+Ws613fPdrb5wxug6mptu+4LiaktDhv0cmBM8EmZ59GYY
+   JWgsyUh7KfJWEo9d0kgzqIKWjx6E3gZvp64xA71y8DUp0pSWZJRFrr+mF
+   w==;
+X-CSE-ConnectionGUID: wUzauBo6Q4KPgaOyJ7utfA==
+X-CSE-MsgGUID: Xa0w9SKEQB+p8/yjnC3ZcA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="80040380"
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="80040380"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 00:05:37 -0700
+X-CSE-ConnectionGUID: hee8cGoQTVqaZ6GC6+sPXw==
+X-CSE-MsgGUID: WlQoPe84Q4y0NiHDRz3qlw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="197542278"
+Received: from unknown (HELO [10.238.0.107]) ([10.238.0.107])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 00:05:33 -0700
+Message-ID: <c359e0d3-b840-4e98-b06d-94b4e3f7f792@linux.intel.com>
+Date: Thu, 14 Aug 2025 15:05:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 10/30] KVM: selftests: TDX: Add report_fatal_error test
+From: Binbin Wu <binbin.wu@linux.intel.com>
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
+ Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
+ Andrew Jones <ajones@ventanamicro.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>,
+ Erdem Aktas <erdemaktas@google.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
+ <ira.weiny@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20250807201628.1185915-1-sagis@google.com>
+ <20250807201628.1185915-11-sagis@google.com>
+ <ef499c6e-d62c-450e-982b-82c53054ea53@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <ef499c6e-d62c-450e-982b-82c53054ea53@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCHVEjxhZ1oTQ2nBQ--.36242S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktF4fAF15uFyUZw1UKFg_yoWrtrW5pa
-	48X348KFWIqF13K3Wftr4Utr4rKanayrW8JFykXryavr48JryIqr1xKr17tasxG395XF1r
-	A39xtan8Gr48JaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j2PfQUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBawWpiGidggVa6QAAsO
 
-When using GCC on x86-64 to compile an usdt prog with -O1 or higher
-optimization, the compiler will generate SIB addressing mode for global
-array and PC-relative addressing mode for global variable,
-e.g. "1@-96(%rbp,%rax,8)" and "-1@4+t1(%rip)".
 
-In this patch:
-- add usdt_o2 test case to cover SIB addressing usdt argument spec
-  handling logic
 
-Signed-off-by: Jiawei Zhao <phoenix500526@163.com>
----
- tools/testing/selftests/bpf/Makefile          |  1 +
- .../selftests/bpf/prog_tests/usdt_o2.c        | 69 +++++++++++++++++++
- .../selftests/bpf/progs/test_usdt_o2.c        | 37 ++++++++++
- 3 files changed, 107 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt_o2.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_o2.c
+On 8/13/2025 6:58 PM, Binbin Wu wrote:
+>
+>
+> On 8/8/2025 4:16 AM, Sagi Shahar wrote:
+>> The test checks report_fatal_error functionality.
+>>
+>> TD guest can use TDG.VP.VMCALL<ReportFatalError> to report the fatal error
+>> it has experienced. TD guest is requesting a termination with the error
+>> information that include 16 general-purpose registers.
+>
+> I think it's worth to mention that KVM converts TDG.VP.VMCALL<ReportFatalError>
+> to KVM_EXIT_SYSTEM_EVENT with the type KVM_SYSTEM_EVENT_TDX_FATAL.
+>
+>>
+>> Co-developed-by: Binbin Wu <binbin.wu@linux.intel.com>
+>> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
+>> Signed-off-by: Sagi Shahar <sagis@google.com>
+>> ---
+>>   .../selftests/kvm/include/x86/tdx/tdx.h       |  6 ++-
+>>   .../selftests/kvm/include/x86/tdx/tdx_util.h  |  1 +
+>>   .../selftests/kvm/include/x86/tdx/test_util.h | 19 +++++++
+>>   tools/testing/selftests/kvm/lib/x86/tdx/tdx.c | 18 +++++++
+>>   .../selftests/kvm/lib/x86/tdx/tdx_util.c      |  6 +++
+>>   .../selftests/kvm/lib/x86/tdx/test_util.c     | 10 ++++
+>>   tools/testing/selftests/kvm/x86/tdx_vm_test.c | 51 ++++++++++++++++++-
+>>   7 files changed, 108 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+>> index a7161efe4ee2..2acccc9dccf9 100644
+>> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+>> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+>> @@ -4,9 +4,13 @@
+>>     #include <stdint.h>
+>>   +#include "kvm_util.h"
+>> +
+>> +#define TDG_VP_VMCALL_REPORT_FATAL_ERROR 0x10003
+>> +
+>>   #define TDG_VP_VMCALL_INSTRUCTION_IO 30
+>>     uint64_t tdg_vp_vmcall_instruction_io(uint64_t port, uint64_t size,
+>>                         uint64_t write, uint64_t *data);
+>> -
+>> +void tdg_vp_vmcall_report_fatal_error(uint64_t error_code, uint64_t data_gpa);
+>>   #endif // SELFTEST_TDX_TDX_H
+>> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+>> index 57a2f5893ffe..d66cf17f03ea 100644
+>> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+>> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+>> @@ -15,5 +15,6 @@ struct kvm_vm *td_create(void);
+>>   void td_initialize(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>>              uint64_t attributes);
+>>   void td_finalize(struct kvm_vm *vm);
+>> +void td_vcpu_run(struct kvm_vcpu *vcpu);
+>>     #endif // SELFTESTS_TDX_KVM_UTIL_H
+>> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/test_util.h b/tools/testing/selftests/kvm/include/x86/tdx/test_util.h
+>> index 07d63bf1ffe1..dafeee9af1dc 100644
+>> --- a/tools/testing/selftests/kvm/include/x86/tdx/test_util.h
+>> +++ b/tools/testing/selftests/kvm/include/x86/tdx/test_util.h
+>> @@ -38,4 +38,23 @@ bool is_tdx_enabled(void);
+>>   void tdx_test_success(void);
+>>   void tdx_test_assert_success(struct kvm_vcpu *vcpu);
+>>   +/*
+>> + * Report an error with @error_code to userspace.
+>> + *
+>> + * Return value from tdg_vp_vmcall_report_fatal_error() is ignored since
+>> + * execution is not expected to continue beyond this point.
+>> + */
+>> +void tdx_test_fatal(uint64_t error_code);
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 4863106034df..24ff1a329625 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -760,6 +760,7 @@ TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
- TRUNNER_BPF_CFLAGS :=
- $(eval $(call DEFINE_TEST_RUNNER,test_maps))
- 
-+
- # Define test_verifier test runner.
- # It is much simpler than test_maps/test_progs and sufficiently different from
- # them (e.g., test.h is using completely pattern), that it's worth just
-diff --git a/tools/testing/selftests/bpf/prog_tests/usdt_o2.c b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
-new file mode 100644
-index 000000000000..f02dcf5188ab
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/usdt_o2.c
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Jiawei Zhao <phoenix500526@163.com>. */
-+#include <test_progs.h>
-+
-+#include "../sdt.h"
-+#include "test_usdt_o2.skel.h"
-+
-+#if defined(__GNUC__) && !defined(__clang__)
-+__attribute__((optimize("O2")))
-+#endif
-+
-+#define test_value 0xFEDCBA9876543210ULL
-+#define SEC(name) __attribute__((section(name), used))
-+
-+int lets_test_this(int);
-+static volatile __u64 array[1] = {test_value};
-+
-+static __always_inline void trigger_func(void)
-+{
-+	/* Base address + offset + (index * scale) */
-+	for (volatile int i = 0; i <= 0; i++)
-+		STAP_PROBE1(test, usdt1, array[i]);
-+}
-+
-+static void basic_sib_usdt(void)
-+{
-+	LIBBPF_OPTS(bpf_usdt_opts, opts);
-+	struct test_usdt_o2 *skel;
-+	struct test_usdt_o2__bss *bss;
-+	int err;
-+
-+	skel = test_usdt_o2__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	bss = skel->bss;
-+	bss->my_pid = getpid();
-+
-+	err = test_usdt_o2__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	/* usdt1 won't be auto-attached */
-+	opts.usdt_cookie = 0xcafedeadbeeffeed;
-+	skel->links.usdt1 = bpf_program__attach_usdt(skel->progs.usdt1,
-+						     0 /*self*/, "/proc/self/exe",
-+						     "test", "usdt1", &opts);
-+	if (!ASSERT_OK_PTR(skel->links.usdt1, "usdt1_link"))
-+		goto cleanup;
-+
-+	trigger_func();
-+
-+	ASSERT_EQ(bss->usdt1_called, 1, "usdt1_called");
-+	ASSERT_EQ(bss->usdt1_cookie, 0xcafedeadbeeffeed, "usdt1_cookie");
-+	ASSERT_EQ(bss->usdt1_arg_cnt, 1, "usdt1_arg_cnt");
-+	ASSERT_EQ(bss->usdt1_arg, test_value, "usdt1_arg");
-+	ASSERT_EQ(bss->usdt1_arg_ret, 0, "usdt1_arg_ret");
-+	ASSERT_EQ(bss->usdt1_arg_size, sizeof(array[0]), "usdt1_arg_size");
-+
-+cleanup:
-+	test_usdt_o2__destroy(skel);
-+}
-+
-+
-+
-+void test_usdt_o2(void)
-+{
-+	basic_sib_usdt();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_usdt_o2.c b/tools/testing/selftests/bpf/progs/test_usdt_o2.c
-new file mode 100644
-index 000000000000..14602aa54578
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_usdt_o2.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/usdt.bpf.h>
-+
-+int my_pid;
-+
-+int usdt1_called;
-+u64 usdt1_cookie;
-+int usdt1_arg_cnt;
-+int usdt1_arg_ret;
-+u64 usdt1_arg;
-+int usdt1_arg_size;
-+
-+SEC("usdt")
-+int usdt1(struct pt_regs *ctx)
-+{
-+	long tmp;
-+
-+	if (my_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	__sync_fetch_and_add(&usdt1_called, 1);
-+
-+	usdt1_cookie = bpf_usdt_cookie(ctx);
-+	usdt1_arg_cnt = bpf_usdt_arg_cnt(ctx);
-+
-+	usdt1_arg_ret = bpf_usdt_arg(ctx, 0, &tmp);
-+	usdt1_arg = (u64)tmp;
-+	usdt1_arg_size = bpf_usdt_arg_size(ctx, 0);
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+Another thing to mention is that tdx_test_fatal() and tdx_test_fatal_with_data()
+use R12 to pass the input error_code, which is functionally workable, since both
+guest and userspace code are in KVM selftest test code.
 
+But TDX GHCI spec has its own format for R12:
+- 31:0
+   TD-specific error code
+   * Panic – 0x0.
+   * Values – 0x1 to 0xFFFFFFFF reserved.
+- 62:32
+   TD-specific extended error code.
+   TD software defined.
+- 63
+   Set if the TD specified additional information in the GPA parameter (R13).
+So, this patch series doesn't follow the format.
+
+Also, tdx_test_fatal_with_data() set bit 63 of R12, so, the value reported to
+userspace will be different in R12 from the original parameter passed by the
+guest, and setting bit 63 could collide with the error code defined by guest.
+
+IMHO, it's better to follow the GHCI spec.
+But if TDX KVM selftest code doesn't want to follow it, then it should not set
+bit 63 for tdx_test_fatal_with_data() in R12.
+
+>>
+>> +
+>> +/*
+>> + * Report an error with @error_code to userspace.
+>> + *
+>> + * @data_gpa may point to an optional shared guest memory holding the error
+>> + * string.
+>
+> A according to the GHCI spec, this is the optional GPA pointing to a shared guest memory, but in these TDX KVM selftest cases, it may not used that way. It may need some clarification about it. And based on the usage in this patch series, the name data_gpa may be misleading.
+>
+>
+>> + *
+>> + * Return value from tdg_vp_vmcall_report_fatal_error() is ignored since
+>> + * execution is not expected to continue beyond this point.
+>> + */
+>> +void tdx_test_fatal_with_data(uint64_t error_code, uint64_t data_gpa);
+>> + 
+[...]
