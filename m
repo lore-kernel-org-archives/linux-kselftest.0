@@ -1,112 +1,128 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CBB213B284;
-	Thu, 14 Aug 2025 01:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E09156C6F
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Aug 2025 01:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755134456; cv=none; b=GeG7ODQA9jyD0aG+0L7+SxBUVrg0GCA0NRKQDBB2FCIeCEh+lfz49CPkC/h6bWY4r6/nJzKIbcQtlYT/xXfiv8JX/zN1AYX85L/Z75uRvpzkI6it2Jqd82ePKWi+4TTwSpvxLFncDyN4GhsT98EQ6fLsMoENArD5/DVqJa5LCRU=
+	t=1755135037; cv=none; b=VZEnqklbXO/FmJXVkIJH8botwl8gcyqKY/Cgvlk4pVYzA6IBucbkXVp3uSKzgb1YZPmJNbbzYl54KRgZdeB/JnWT64g14Sskk6Xo7tJmDTkjyGaO0w+1hj0ySuqun/xb5BmWiASkUowOLX4sxmxymX07GH1Zybyaj+DidvM8ET0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755134456; c=relaxed/simple;
-	bh=m4lYhJOAX6OzhCoxvxa3w7Bi06OVgYOFkg8XRvWCN1c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mhpKkbgRB/JsJP59md1j0T2kdJcGzhmMSSkUzsWFIcP+nXkhhMBjbHdg11hFJFyV0dUHgGWM/yZm1j+xZNzeKSxMqB5OS1K2KmmjvbItioGsaDMa910RaP8B5mXUTpzJNAON8kXjuNgY1xNFuc4sN7Ai0hfcDGH9dRjMl/wMIhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lEHTfYrR; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1755135037; c=relaxed/simple;
+	bh=WbgJ5isNsqVYV5zzaKVbpULuS/3hHjDmri82xKxBaDQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=sT5E7dLP8ykxLb/YMUqgPf7MDJyK2dlgMdFOj8BDFNfeU5UHGdSTTDXzU5qELUOTiLhCKeO7wDAADm6YcoJLkWT8CyrTCvy2j5TNuh2P3L+p+lis3li8o8RG+W2A/Wins4uutWlKFjfqSx2RFvY2l9TqtdFCfOfDf+4YOElhLnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r/G5BgbH; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lEHTfYrR"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-76e2ea79219so580523b3a.2;
-        Wed, 13 Aug 2025 18:20:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r/G5BgbH"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-24458121274so4638815ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Aug 2025 18:30:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755134455; x=1755739255; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bY+gN+RE9yc44nXCY62WmJ+eFktjeTQkc8/RADp1XWQ=;
-        b=lEHTfYrRgIP0WAx2XuYfiSQVFjD8EudQKCJwQrPGKF3ddTkyWNrV/SZetopOnCc+ID
-         4O/npYfo/3oTumcMjTs8j6xgBqZOSK6CXWFL9qGQQYf9JXTejAmJO/VosY2k3+yRoiGa
-         bD5FJzoUUwbvF5REltdAUiYX+7/jr/IKO0amTLf1bym++3o0p3Pajvrh/9LZuY3HflTb
-         VyWbtYYv2eFg4bR5QKEa/2tbASEKAp3jVXf3o5verjXLt5NFLSWsRR0SAPF3KqE/JSdW
-         qdT+8MaDOxAIC2E0zpqnWgvDKOQwIPsb6nhnS80QiRbsKJh8kFCwHF4i6L8y9mDmLp+v
-         d4PA==
+        d=google.com; s=20230601; t=1755135035; x=1755739835; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:user-agent:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4oH/H8Uczj38sjgvka81xmx7klPZUzo+Pao4BcFdNEY=;
+        b=r/G5BgbH01l17L9hLaUr8LrJjHdwJS8TGK0S/8Y8GGcnlxtNzDshxVo7SmLGcBGpS/
+         W2dQoqCIi5WWR+SUID++57ytheg66TiYNnytJ3SyBC19QP3HtH+4wjMHdRJXb8BejCSz
+         FY1V0IBmZ7MUy3+4MMHtZwVDfqisttn0F/S1kpLpdeovqQZqRF7vrvszc2HJh6ArpZJC
+         N8JefQsQSr7lxKfq44kKsaXY4KIGOyofQdDaoCdv1iarj7ye1wzw1RepuQxgO18pDOIA
+         AXlBzLVsdY+9qAWCWhOtEpgKfmnpkiDSxt0KzCnh+EhknRHJzOMT8PSOXggtb8uy0h3q
+         ROlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755134455; x=1755739255;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bY+gN+RE9yc44nXCY62WmJ+eFktjeTQkc8/RADp1XWQ=;
-        b=ReH2CgmMr+SL89xx9ABkoqZdPVWC7u1Q/3ZzOpaLwrJyR9YXjhj4TekK9XIUi0E5QF
-         NHUH9j+yaA8cZN1jK6TQsYtYOujB18D4Mwf4rjkEZOdAdjleJqTsIvWXS5S4ktVU72ix
-         pX9RUP2XMi+LkSkQwThY+JxcD2rCS+6QftRbSU2IG+gOMkrob7s3vvMPJSlrOIewParz
-         Zdh6vdxZeLN2wNKHtUJvXxB4/LlG4FZwol3n5oUVfl2LeInuZIrQPPNdNhXVA0Iuvazh
-         LcTukKZAwoo2NorbJusmUW9pDXx8F6t/uSSWPkXyGyQ1vTb7BJaVqIkyJ6z0ubCy+Dee
-         jAAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUrLk/nboEHoMnvweI2xSwPB+I8Om2iJTInhRaFglAHR5fEqmm4qkilqVXZCzhr9HThswhHCMHOxSnZSONVycnJ@vger.kernel.org, AJvYcCW2bJwKshLigZ9lwGofAwic/4b/d1nar+G+hf2SZl/hbGKVKUgV1shrGoQOVRfdSaK7kmi1sXCpZrs1@vger.kernel.org, AJvYcCX0HelfjGOfB48y9PDxxac2A6ai6IxrqZEXuqnQ3sMrbuC67kRJCvYAzpHiYjiPFRwJVYihxrjYhU8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAbq4t6237OL7DlciYhVHCkJL9Kb63/MgCirtK12YH5XasVVLE
-	5KcV6x5oGlhXaaRgKfqa1GUQPe5LF7caFVyFaesiDiwwMVAf8F9BQkFs
-X-Gm-Gg: ASbGnct/1SaZP8cBgeTYOmQRn7mvIYXnelujUehdfc/60duuSSsACVojCPlK1Pb6azN
-	FSD2g2pu4/tOd/8PUydXvMN7iFudRoSIDjEjANtiewjnVM/ajpGOgQWegxBc3PCa+VD5EGMkdbd
-	G+ZTyPj1W33hwWf60V3s1Wh6O35pduHXlE9VInYLRAa6ypBI/px0quwAi3c4Lhw/ldMvYQ790FF
-	JZ9IVD5DN/9JMufR8iELS6+edCEeU8v7X2OmVfr9tMn2atHWeK2JDRz6YspXb51JgfuWkq5VSVo
-	5S2/J7CLMcqvQJ+LOphGimlKXYPm/XjO8EK3kPS/UXHxLyTD/9VsBUax7Fwn5AkVSAr8KxG6bqf
-	/6Sp/c50SbBElw0sXCOXrhQ==
-X-Google-Smtp-Source: AGHT+IGc9mRGpcx6RCRKtzBKovcaJTPERpE45hilmapfqOdxJN9UfEAzEDSb1oTISgTR20bGmnWDEA==
-X-Received: by 2002:aa7:88d5:0:b0:757:ca2b:48a3 with SMTP id d2e1a72fcca58-76e2fc43fa5mr1710919b3a.9.1755134454538;
-        Wed, 13 Aug 2025 18:20:54 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bccfcf531sm33049596b3a.92.2025.08.13.18.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Aug 2025 18:20:52 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 36E1442A57A5; Thu, 14 Aug 2025 08:20:49 +0700 (WIB)
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Documentation <linux-doc@vger.kernel.org>,
-	Linux Kernel Workflows <workflows@vger.kernel.org>,
-	Linux Kernel Selftests <linux-kselftest@vger.kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	David Gow <davidgow@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Tim Bird <Tim.Bird@sony.com>,
-	Rae Moar <rmoar@google.com>
-Subject: [PATCH 1/2] Documentation: ktap: Correct "its" spelling
-Date: Thu, 14 Aug 2025 08:20:45 +0700
-Message-ID: <20250814012046.21235-2-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250814012046.21235-1-bagasdotme@gmail.com>
-References: <20250814012046.21235-1-bagasdotme@gmail.com>
+        d=1e100.net; s=20230601; t=1755135035; x=1755739835;
+        h=cc:to:from:subject:message-id:user-agent:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4oH/H8Uczj38sjgvka81xmx7klPZUzo+Pao4BcFdNEY=;
+        b=eMhJbwWZFi7gI+BxwHlIT2N6zPyTJeYz9Dy1aM3GQ5rnWFQAtgJiTP0OcNufAIU3OP
+         FZ1zZCk7bk/b3uJqJK8dXtvjOPWE3EtNmPPLinQPrq/Bl/CMaEnjjDtJW5wXCvppBk3A
+         6mOqGu313HEc6SOu+huPqVbmufIgVZDVYHx91r47f60h2a4DFzKqAMeF/K/3OY8n3yo+
+         euhe6lBiJrEzgSQ2xFW5uNF69u04vRIo2iIe8GgGzsrbVZR7DDWZdGEMdpvVRwtWcKPt
+         W7+mfYmoaxw/EpPHaCOgC9gekjyPuW4SJ9FPa7pmvZBdYs/I6puBmNLP3z8V39R8fIu4
+         r4AQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWR4hgumboZpcbehXocLnOP4adBtPBb+GeoYLQaAUx7DmhBSuIe/HU0NCKM4Yx/UFWoxgc+1owZDjtUi2MMNf4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxa7hIwdJWNMqfelcK4Eul9j9fxF4Qe5F5/7t1+XeHDKSPQdFZF
+	F1iQuKcfGGLmu5KfDtHrDZ0AZbvhRhKMkxDl18GKI1DMQMX/a97TTyJuZE6zVJgnmnN224jCbiU
+	MJnyZy45s2A==
+X-Google-Smtp-Source: AGHT+IEvtjIjDFf5oUu8XtuvZ66AuDR6piAkpqJV0aQYguAIByySyHcA1rR4otGY+tKdX93cPC7afkFJ2b9b
+X-Received: from pluo13.prod.google.com ([2002:a17:903:4b0d:b0:23f:f074:4148])
+ (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:138a:b0:240:4d19:8797
+ with SMTP id d9443c01a7336-24458a50a4amr18212045ad.22.1755135035267; Wed, 13
+ Aug 2025 18:30:35 -0700 (PDT)
+Date: Wed, 13 Aug 2025 18:30:33 -0700
+In-Reply-To: <aJo7udUoWJt_jLzK@slm.duckdns.org> (Tejun Heo's message of "Mon,
+ 11 Aug 2025 08:51:37 -1000")
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1075; i=bagasdotme@gmail.com; h=from:subject; bh=m4lYhJOAX6OzhCoxvxa3w7Bi06OVgYOFkg8XRvWCN1c=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDBlzLU7xVRkmL+RuS5Hyy/RxOLf63MeLITcSuxhum7tXv Y5mmTOto5SFQYyLQVZMkWVSIl/T6V1GIhfa1zrCzGFlAhnCwMUpABORuMzIcGLK2Xl807PXbLLs 6N5ZM70407b46bfU0vRnodIrct4Zz2JkWHdrvV250FET8WknldNmWd9qW/jjdePMdZtE6h5eW3t oGScA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20250805032940.3587891-4-ynaffit@google.com> <20250805032940.3587891-5-ynaffit@google.com>
+ <aJo7udUoWJt_jLzK@slm.duckdns.org>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Message-ID: <dbx8qzxe7kqu.fsf@ynaffit-andsys.c.googlers.com>
+Subject: Re: [RFC PATCH v3 1/2] cgroup: cgroup.freeze.stat.local time accounting
+From: Tiffany Yang <ynaffit@google.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Chen Ridong <chenridong@huawei.com>, 
+	kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-Fix possessive adjective "its" spelling.
+Tejun Heo <tj@kernel.org> writes:
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/dev-tools/ktap.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Hello,
 
-diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-index 414c105b10a9f8..54fac3d3bf7b05 100644
---- a/Documentation/dev-tools/ktap.rst
-+++ b/Documentation/dev-tools/ktap.rst
-@@ -5,7 +5,7 @@ The Kernel Test Anything Protocol (KTAP), version 1
- ===================================================
- 
- TAP, or the Test Anything Protocol is a format for specifying test results used
--by a number of projects. It's website and specification are found at this `link
-+by a number of projects. Its website and specification are found at this `link
- <https://testanything.org/>`_. The Linux Kernel largely uses TAP output for test
- results. However, Kernel testing frameworks have special needs for test results
- which don't align with the original TAP specification. Thus, a "Kernel TAP"
+> Generally looks good to me. Some comments on cosmetics / interface.
+
+> On Mon, Aug 04, 2025 at 08:29:41PM -0700, Tiffany Yang wrote:
+> ...
+>> +  cgroup.freeze.stat.local
+
+> This was mentioned before and maybe I missed the following discussions but
+> given that cgroup.freeze is a part of core cgroup, cgroup.stat.local is
+> probably the right place. It's not great that cgroup.stat wouldn't be a
+> superset of cgroup.stat.local but we can add the hierarchical counter  
+> later
+> if necessary.
+
+Got it. I had ended up opting for the "freeze"-specific name because
+there was already a cgroup_local_stat_show that seemed to imply that
+cgroup.stat.local was reserved for controllers with a struct
+cgroup_subsys. I will update v4 with something similar for core!
+
+
+>> +	A read-only flat-keyed file which exists in non-root cgroups.
+>> +	The following entry is defined:
+>> +
+>> +	  freeze_time_total
+
+> How about just frozen_usec? "_usec" is what we used in cpu.stat for time
+> stats.
+
+Ack.
+
+
+>> +		Cumulative time that this cgroup has spent between freezing and
+>> +		thawing, regardless of whether by self or ancestor groups.
+>> +		NB: (not) reaching "frozen" state is not accounted here.
+>> +
+>> +		Using the following ASCII representation of a cgroup's freezer
+>> +		state, ::
+
+> It's a bit odd to include credit in a doc file. Maybe move it to the
+> description or add Co-developed-by: tag?
+
+
+Will do! Thanks for looking over this :).
+
 -- 
-An old man doll... just what I always wanted! - Clara
-
+Tiffany Y. Yang
