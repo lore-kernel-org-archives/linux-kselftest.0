@@ -1,104 +1,144 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A367D275878
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Aug 2025 06:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FAB5271469;
+	Mon, 18 Aug 2025 06:48:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755499231; cv=none; b=qm7kGA0T6xJH28/HG0FQPiaqhUZjb+m8cm0pVnAdxLeAgl6aqIx2hzQI7ILN1SLx53ezpeVaKQPFP55UMZHoO8i+CPHfp+4kIy4CXDeYQEoUMk8ZUIRmypV6BOmQvPCT4WZhTUxhGtRnEZDDj/mSOt4yAuea48vA/+52ehQDOd8=
+	t=1755499695; cv=none; b=esdMYkLQ8H0iqJuxabSAbCPwDXLzr7JUMqIzCDaP9BOkeZJtIRN/qKZ7fEA9Qg57Q3+S9p1Xq3j9/D1vcA4OHcy4g3Tlhjc5sj4IXYIiRqR9SWkYAoo95lr1ldxHSb12QoKUgOHdKkk6FwMQ7AnUDSWck/hKfUpt8LjCySlOnAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755499231; c=relaxed/simple;
-	bh=t9l3iGT2moqPKCdatCZEonuLHNcA0o3xJeqCNK4h3Cc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d8k/p9tXjAcfLlLPPFnST90ZB+ELm5lI7HvnOBhn6jieCfgNFs7+pEmWcF34tKNFnRwKUzfEVCAcsCu1evRuN42XiII2Gc+vu4uDe2te9chkjurl0vl+rRCQYol9RFFQ99jUg12FwD5745bExTRiDaOk+bjTzCsEUhZ5JwXVEc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mgkpnL6G; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mgkpnL6G"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45a1abf5466so20030385e9.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 Aug 2025 23:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755499228; x=1756104028; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lHRhDwyRYUb4TwjG35dT0f5D0HO6DNzP9EjaeHo4uJU=;
-        b=mgkpnL6GK4iZ75WZGOj2O4LeCaDsRvI/g9EpYT08+nm0lArGIpsgWt7L/kLfu7OXAF
-         Yp9fx/FYq7iiG2vtb9CuCFY9noQN3ZRILbmLltdWhk3jPPAYzg1HwBqVFNvMk4fqEdj1
-         osW9CBfFGAbBmPCp3fkch1BFmS0g7y3ynbT2iK2Rzl4kqvBvyxUGj/F7FhqhQv0f8ZTJ
-         Ht5Yq1CuumhrHJR/UyFibE46abxc7X7Qre5lLuA+/NG5jPIudBC5cejK98Auup8RHaq6
-         BI8R5uxjoGeBlp6PAoL28YYgw2SsPrib9TmE+J9q71KspukJDUwOB9CHMsKRnGUmR32v
-         sSGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755499228; x=1756104028;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lHRhDwyRYUb4TwjG35dT0f5D0HO6DNzP9EjaeHo4uJU=;
-        b=Thmz3aovDrUxM1pX78L1Ys5Iprxj4/FaoIRlQaC+TjISM+zl16deuhzHgbpUsncwaI
-         2ByXXMnpov5v6eXsSCgomfavzKYl68vapFhnE5abOcBoQeRl3g1ue9Ifctp6H2Fuor2Q
-         1YAFl7O1X73QTPrZiswr+9pqet1uSF4kanfnojtIIiNglAadZsB0It8Mw3OeiOa4xZ2c
-         ulyfkQwB23l1YSA39AGg7/YQc8B2lwjptIK+8bAztM8bDUiNZbOfKDKCO9laDjFQkemv
-         HuhCe6mLypQgMP7zlC/Xf+YtmlzXhroECxi032f/UHr+z7bPAkVxnj9A3RJbfFuwsLJ1
-         7kGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWEKVaB7N/jFWJS4Vn0Grbnns1bvIrfLYANTQ6U0v8YSjK39L+abg9+Mv/rr7DAVMPcRg/ErUTTxb0chAFU4H4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyX08CgAHQJcKhnRuupjrf98pXNYrhTtam3jsGoSU6RfDdLKLdp
-	VbNTXS1nsEjwbzPdZ1KJYdZQiQgBD+fQXVCSeNYcftKk8g31oXT0OrsI
-X-Gm-Gg: ASbGnctYGjpx0nW0LCFjT9SkD/+CVk74QQMfKmXiF14ynKEjkvlLEgvy7UZYGZ3vTSc
-	8GkkSZIAXJRe8CvdRN6owc79YPAkuCEMCGjR8YwkrtWjBJOLKiTgU2SYnn3U3ZQzpTHJu5/9mUS
-	mPnxURPfbyGFDJecOkztI48BqEj7LMDmA/c6zVFjeqsUWFnjkjUblBMtuizYxv88IF6n4r8wE2e
-	cjP5iqUiydrxJYMux5sXosHwjmD/MEsr9uknftPe4GBq5qrTXwx9FOgVB1SUJYab2gl1cYw1MfX
-	ecblPPzkuPQ6Fl0huw9T9Xm68g06kfKRJOGD1NOYeMPn4MV8LMRg+sTwnvp2AjAzR6hxiKb19BI
-	NVJfEZiJcEH7XO/x8JdEETg==
-X-Google-Smtp-Source: AGHT+IEklZkqqlj4pQE9hTOJwLOePZQxvYuZZS+FbaGplVr6in8Lz8zXjA+Qpx8rRj/KHhz0zm7o2w==
-X-Received: by 2002:a05:600c:c104:b0:43c:ed33:a500 with SMTP id 5b1f17b1804b1-45a1b819ca7mr81403645e9.10.1755499227703;
-        Sun, 17 Aug 2025 23:40:27 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45a1c790689sm166654115e9.28.2025.08.17.23.40.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 17 Aug 2025 23:40:27 -0700 (PDT)
-Date: Mon, 18 Aug 2025 06:40:26 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Wei Yang <richard.weiyang@gmail.com>, david@redhat.com,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	rppt@kernel.org, riel@surriel.com, harry.yoo@oracle.com,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [Patch v3 0/2] assert rmap behaves as expected
-Message-ID: <20250818064026.htixfallwid3cdf4@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20250818022905.15428-1-richard.weiyang@gmail.com>
- <20250817200642.c3ca3c89832fd9e0cb5117f4@linux-foundation.org>
+	s=arc-20240116; t=1755499695; c=relaxed/simple;
+	bh=/Rbi+7Qg6M3NBpz+YhkXT9Rv+w4RfPWzgLPvOfozXeM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=U90H2U4rvlR2K800xd0oGPt2tIg4FRzLkcRn2gfXh3NP0vODY3YW0mjCFGdTnTAuaAajMge6aosmvTmumhqE7mAKnH+Bwhj5kRECW8ohpEVlSLSMrwzK0d4O437yYDWqB8KxYjTRjw3ZySHV7rkJyhX/B99/zpy7JSWtO/S9QLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4c538M5XFdzdcPF;
+	Mon, 18 Aug 2025 14:43:47 +0800 (CST)
+Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id CF13F140158;
+	Mon, 18 Aug 2025 14:48:09 +0800 (CST)
+Received: from kwepemq200018.china.huawei.com (7.202.195.108) by
+ dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 18 Aug 2025 14:48:09 +0800
+Received: from DESKTOP-VM4LOUJ.huawei.com (10.67.121.177) by
+ kwepemq200018.china.huawei.com (7.202.195.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 18 Aug 2025 14:48:08 +0800
+From: Yicong Yang <yangyicong@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <maz@kernel.org>,
+	<oliver.upton@linux.dev>, <corbet@lwn.net>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>
+CC: <joey.gouly@arm.com>, <suzuki.poulose@arm.com>, <yuzenghui@huawei.com>,
+	<shuah@kernel.org>, <jonathan.cameron@huawei.com>,
+	<shameerkolothum@gmail.com>, <linuxarm@huawei.com>,
+	<prime.zeng@hisilicon.com>, <xuwei5@huawei.com>, <yangyicong@hisilicon.com>,
+	<tangchengchang@huawei.com>, <wangzhou1@hisilicon.com>
+Subject: [PATCH v5 2/7] KVM: arm64: Add documentation for KVM_EXIT_ARM_LDST64B
+Date: Mon, 18 Aug 2025 14:48:01 +0800
+Message-ID: <20250818064806.25417-3-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20250818064806.25417-1-yangyicong@huawei.com>
+References: <20250818064806.25417-1-yangyicong@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250817200642.c3ca3c89832fd9e0cb5117f4@linux-foundation.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemq200018.china.huawei.com (7.202.195.108)
 
-On Sun, Aug 17, 2025 at 08:06:42PM -0700, Andrew Morton wrote:
->On Mon, 18 Aug 2025 02:29:03 +0000 Wei Yang <richard.weiyang@gmail.com> wrote:
->
->> As David suggested, currently we don't have a high level test case to
->> verify the behavior of rmap. This patch set introduce the verification
->> on rmap by migration.
->
->I'm seeing many rejects here, so please redo against tomorrow's mm-new?
->
+From: Marc Zyngier <maz@kernel.org>
 
-Sure.
+Add a bit of documentation for KVM_EXIT_ARM_LDST64B so that userspace
+knows what to expect.
 
->Also, seeing "assert" in the changelogs was a little surprising.  The
->term "assert" made me expect to see assertions, such as VM_BUG_ON(). 
->Perhaps "test that" would be clearer.
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+---
+ Documentation/virt/kvm/api.rst | 43 ++++++++++++++++++++++++++++------
+ 1 file changed, 36 insertions(+), 7 deletions(-)
 
-Will update it.
-
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 6aa40ee05a4a..85168f9fc642 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -1300,12 +1300,13 @@ userspace, for example because of missing instruction syndrome decode
+ information or because there is no device mapped at the accessed IPA, then
+ userspace can ask the kernel to inject an external abort using the address
+ from the exiting fault on the VCPU. It is a programming error to set
+-ext_dabt_pending after an exit which was not either KVM_EXIT_MMIO or
+-KVM_EXIT_ARM_NISV. This feature is only available if the system supports
+-KVM_CAP_ARM_INJECT_EXT_DABT. This is a helper which provides commonality in
+-how userspace reports accesses for the above cases to guests, across different
+-userspace implementations. Nevertheless, userspace can still emulate all Arm
+-exceptions by manipulating individual registers using the KVM_SET_ONE_REG API.
++ext_dabt_pending after an exit which was not either KVM_EXIT_MMIO,
++KVM_EXIT_ARM_NISV, or KVM_EXIT_ARM_LDST64B. This feature is only available if
++the system supports KVM_CAP_ARM_INJECT_EXT_DABT. This is a helper which
++provides commonality in how userspace reports accesses for the above cases to
++guests, across different userspace implementations. Nevertheless, userspace
++can still emulate all Arm exceptions by manipulating individual registers
++using the KVM_SET_ONE_REG API.
+ 
+ See KVM_GET_VCPU_EVENTS for the data structure.
+ 
+@@ -7009,12 +7010,14 @@ in send_page or recv a buffer to recv_page).
+ 
+ ::
+ 
+-		/* KVM_EXIT_ARM_NISV */
++		/* KVM_EXIT_ARM_NISV / KVM_EXIT_ARM_LDST64B */
+ 		struct {
+ 			__u64 esr_iss;
+ 			__u64 fault_ipa;
+ 		} arm_nisv;
+ 
++- KVM_EXIT_ARM_NISV:
++
+ Used on arm64 systems. If a guest accesses memory not in a memslot,
+ KVM will typically return to userspace and ask it to do MMIO emulation on its
+ behalf. However, for certain classes of instructions, no instruction decode
+@@ -7048,6 +7051,32 @@ Note that although KVM_CAP_ARM_NISV_TO_USER will be reported if
+ queried outside of a protected VM context, the feature will not be
+ exposed if queried on a protected VM file descriptor.
+ 
++- KVM_EXIT_ARM_LDST64B:
++
++Used on arm64 systems. When a guest using a LD64B, ST64B, ST64BV, ST64BV0,
++outside of a memslot, KVM will return to userspace with KVM_EXIT_ARM_LDST64B,
++exposing the relevant ESR_EL2 information and faulting IPA, similarly to
++KVM_EXIT_ARM_NISV.
++
++Userspace is supposed to fully emulate the instructions, which includes:
++
++	- fetch of the operands for a store, including ACCDATA_EL1 in the case
++	  of a ST64BV0 instruction
++	- deal with the endianness if the guest is big-endian
++	- emulate the access, including the delivery of an exception if the
++	  access didn't succeed
++	- provide a return value in the case of ST64BV/ST64BV0
++	- return the data in the case of a load
++	- increment PC if the instruction was successfully executed
++
++Note that there is no expectation of performance for this emulation, as it
++involves a large number of interaction with the guest state. It is, however,
++expected that the instruction's semantics are preserved, specially the
++single-copy atomicity property of the 64 byte access.
++
++This exit reason must be handled if userspace sets ID_AA64ISAR1_EL1.LS64 to a
++non-zero value, indicating that FEAT_LS64* is enabled.
++
+ ::
+ 
+ 		/* KVM_EXIT_X86_RDMSR / KVM_EXIT_X86_WRMSR */
 -- 
-Wei Yang
-Help you, Help me
+2.24.0
+
