@@ -1,70 +1,70 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FE435209B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5C4352086
 	for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 20:07:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755806872; cv=none; b=WTTX33FJn96fxGQ976lVnT2YkRJwquKvq5E8vZar72PTuqhBUCyGnb7gwAtCqdxW7JaXCZQlysSZ7lv6POVxAkbu78sK5qQyXRKHbPrHA4tVztLILaNW25s3Vez8l2MHBY+vRpw45dAT35VwJe7vKFcnN0Vo0znrzSMhSOMPluQ=
+	t=1755806873; cv=none; b=iY9eRxgxr5pdkJTCdlTtoCMeO+BZhus5u3LY9kYNbx5b0mNjSmxQKmpmY91Mrn0adsREqe6vaQ4+3WTCo1jolgw92A9mwRaPQropz+ff6ajOj9mCayZK1TNyIZfmAC3gOwvFsY9bJ8l6h3zUk4IM3HznqVkYe7/bN0apA+TuS4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755806872; c=relaxed/simple;
-	bh=ncGz2ZUizfxPtBenqYCMYHXawyPm3K75je3+1YWzFIk=;
+	s=arc-20240116; t=1755806873; c=relaxed/simple;
+	bh=KQhGj4yMV2JJyYTphSuwtYusktgVAWzYxv4GDdmnyDY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=St2l3/irqGJwwyIuqL/Tr+aEd9FptYw50RJ/vZ3LWoJV6XyR2Pcw579tsUbCPelgnPgTRdxtUfgNkJ0aFe6DTvCZrgvTSRFz03F/+unKHCA18/z5W7pa0a2oaBOobiK9tynbNFp9o/LOghoiTnmN8qE3r/qju0mzEJ3CM+9gE8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bQegWUNt; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=tSPj7Vrp8086i8TV9pbdIq8zLeAOxhxmRmpt3lqIDlFqTIRVWLKPk7dNYPQRPPNMXS/plVEPdaJFgRBmFWf+gQfkOb1eB7qYOs6i1BsFSgVehSCuRxBZIxLBLDmb3iz5uwNe9aoqyCfFIwIpcFJBnKDlilLoxHLdtzVdN4Uh+hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XLRVpvTc; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bQegWUNt"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XLRVpvTc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755806869;
+	s=mimecast20190719; t=1755806867;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=G9hzYOZv6YXUN4v1wicJ53nqMhopJDezqYU76J2buLg=;
-	b=bQegWUNtDMs5UIWTi66EHbfuIIa5+qKC9ZhLsRrB9Fe3tywG+NPTR3N3T8oW8JE3gyOvlc
-	0cuFkah4boJL7Ei9wbFCRdzzv2JA46SSgX4nMefPLpN4ezoYIn/Av0Dt9geCi9Fmky85u9
-	ra/HbnAWuQyLLd9JZMZS757ma2k49X0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=PkrXh5PHMEq3NY5i+0892fbAshOERsmwyMLhbVIa0Cc=;
+	b=XLRVpvTcbElPFDMgSTftJD5u1O/bgjR9ozIdvcHOxgzm72cSmVaRZU+rRFhJowHFMD6o8n
+	UzjYAAu4E7FOrz9BRNZ2hfODmb9zuJ1sognmpAf6K/GTGvTzmI4hG/1bHRRU/5OQ1SMSEA
+	qQC5JMbVtF2ICWdSZ6aJrOddEdghZ98=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-502-KrjtBBiHPdiU9jffGWtikA-1; Thu, 21 Aug 2025 16:07:31 -0400
-X-MC-Unique: KrjtBBiHPdiU9jffGWtikA-1
-X-Mimecast-MFC-AGG-ID: KrjtBBiHPdiU9jffGWtikA_1755806850
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-45a1b05a59cso9773795e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 13:07:31 -0700 (PDT)
+ us-mta-167-z9jkaU0qPmmP9oZd51tpnA-1; Thu, 21 Aug 2025 16:07:44 -0400
+X-MC-Unique: z9jkaU0qPmmP9oZd51tpnA-1
+X-Mimecast-MFC-AGG-ID: z9jkaU0qPmmP9oZd51tpnA_1755806863
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3b9edf332faso441008f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 13:07:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755806850; x=1756411650;
+        d=1e100.net; s=20230601; t=1755806863; x=1756411663;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G9hzYOZv6YXUN4v1wicJ53nqMhopJDezqYU76J2buLg=;
-        b=Ot1CIElc2huN7wZArbXqswcBYizTpA/VJtxekljw9O/wYdd/+yQU7fgXmGwGFw9QyN
-         et145Xpewa3k/nHVDyxnyevFGPR1QLXjvz+6uE6X2wsq7qhKVlPcSOo/sVQXO21+pKpd
-         XBOvOgyxwUpcvmaVucQUjAN/FIT/GtKhdMwgHsfXddtxKDTV81Il2f5M2tby1/gCp704
-         Gz2e4ctcNlpV9tiCP4hNDdi1s/yHe6hEQH01qGXGoui4nC5pey9QmR6lTmc+jMOL7IrK
-         vwlblzHCCxN0HNOyNi05TDbnrUHN8JSTo1cQF/E1eG2gnlyC+85mZQ+bqO3S4FMZaYka
-         zx4A==
-X-Forwarded-Encrypted: i=1; AJvYcCXymMMBaWQLsWsrWt7bGf8734XvgtFRScBgt/ULPgvaFtxCxCrkqCzAOsl7tpjK55hEHLkHpXP1L8azDCvTYs4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5/dIYnTzVaaaKF0E3UwErtl46cmQ/HMEa/msCSusoUD6Un2gi
-	lU7WIBereXYy9AKCbcu4IrXBgILPN0cp5e+c1TAN7iIEDeM/l0+5+Qy4pyoswSVJFP3BmpSmP6E
-	YwNW2B6BaTgR2i2AkXgvpukzY+Z/0+1r7tKgpaip2PJUliZS9JFv95s67CYRyGOd7TONv4Q==
-X-Gm-Gg: ASbGncs2Vs6uwgxFNaadbDojrqSkVbYFDcGalBTivoOJ2In/Fm45Re9FnLFsxYr3Fzw
-	t0AhIhcsIDNuDPtc6EBSe1d2oZLo+baYFEunH36aO51Dlm6H0nnM/LsJ6eM0ZaKWktIxOByG1tZ
-	cPpAJsvbcA9b9v8bqFxIsDij1ZljTFAIFUBgs+ulXm77Tzx6Bqc6r4/WWgVMLKTiawk7/RQSZgK
-	Qu81qlRq0kGMIqrnAZGdap02bO7JgZP/brRaSmBzB9YC5VmMS48CHRKT7BORoWqHxCoAqe96FG5
-	IesT8NdY04qK+yQRNoXpZqJA3z2peycEnScVJTDQMO7iazg0Bu5oXX2gEJGbcESItbNsKPoiamm
-	m5JXl301QopUDkhBTYCqvEw==
-X-Received: by 2002:a05:600c:1548:b0:459:dfde:3329 with SMTP id 5b1f17b1804b1-45b517ddbe2mr2955965e9.31.1755806850034;
-        Thu, 21 Aug 2025 13:07:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHPNoTdvVqQJqQwQf/z0aFpcDb/7HunF1Y6KwbAqmFFF4D3cnAaKEmAnoGbjwE6N5eIepmoyw==
-X-Received: by 2002:a05:600c:1548:b0:459:dfde:3329 with SMTP id 5b1f17b1804b1-45b517ddbe2mr2955545e9.31.1755806849496;
-        Thu, 21 Aug 2025 13:07:29 -0700 (PDT)
+        bh=PkrXh5PHMEq3NY5i+0892fbAshOERsmwyMLhbVIa0Cc=;
+        b=UFyQszVBzY1cuYYdHlxK1GnlQfVfyVmr3AFQQwFdmuV4fasLJlQnqOkp2u65YahRDb
+         OVpK1YXHq4LNOPO4uC69xrqhZi4estrksWZSyn/uA5aFW/RteQCwS9ANehgDOHsVmjnL
+         Xa7h+meYFbfAQilU1evohlXxbZ1zWN1dN4XNUhN39LGAmKVyVgNpkoszaRpWLv6En7tL
+         ATJ2cDyv+xRFTSZtlMTgo4TrHfXEHUarGdDFcqUz0Hk7leAHnZJTbjEnp1sO4iFAbCRD
+         gL9RJjOOXl9o6rbvSSzuUW7PajMSD8pMSvAKYSGNNcE90c/ai4sm5ID4crQVWQ+PjTHt
+         Jkrg==
+X-Forwarded-Encrypted: i=1; AJvYcCV7f8pZMeaa7ycK8x8CsKay0BUbLIcNfosY62av9KJ2YH/CJh21guUKH6rAqIB3OvgCeTIAKv+fRMSGEVjcri0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywb4EAdo0M1Rw2P3nVs+Q38sCoaN+4L4o2YbuxX4WV5inIrY71P
+	JfwMUB5xqrQP5T6Zoi/UfEL5xwwCQRCC5hwqPtbVvu+OOAHAsk4j0UCT0JR0i0jPpHBFNCB3SpX
+	a5aC1LF6sVtYo9Vye0BU6X9ecV/worbxwstAQLehXV/OQi54W/tbdpXgqvW12fnYtDeP1Ww==
+X-Gm-Gg: ASbGnctWw8jYDcTJuR8E/fssq6kXuwewHwf1QWqirF6TNr3FUFmvjrfp5/a7NcTu0c9
+	u85cFn1DOINrMhenIcvWd6fueJzQuv0K3ZzAAqRCsa3y5BnD+QVE2qsRUfQUtPA0Ii549EyBZga
+	0KtacFKi1ai6T03baqccc8EZoUtMu/dG0WTWLT1+8Dg0mfbQHMJm4qKTxrWTgDiagq3t44gdKaw
+	WfwXfPuJQhY4QeveVvicPt121Y/exNqrcFWMpJ47ER4T7AVztAiPMBmDVZihKxjbmO++E8PJzpG
+	T6L7VMva7WQphWAZ0HngNv1za6UL7fWgpGUd3gfEWKnC39b9nH0qCm955QWAwIhGyNFF1XnCKBs
+	GVArGuQ21VBxGXOhEjcz6QA==
+X-Received: by 2002:a5d:5d0a:0:b0:3b9:14f2:7eea with SMTP id ffacd0b85a97d-3c5daefc2a3mr192556f8f.18.1755806863492;
+        Thu, 21 Aug 2025 13:07:43 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFB28V/U3gI+p1afMr2c1HujEN1g59N1A45YIj+RBO5vrtdOMlsNhrN6BtrkE7YShkW7nBB8Q==
+X-Received: by 2002:a5d:5d0a:0:b0:3b9:14f2:7eea with SMTP id ffacd0b85a97d-3c5daefc2a3mr192518f8f.18.1755806862961;
+        Thu, 21 Aug 2025 13:07:42 -0700 (PDT)
 Received: from localhost (p200300d82f26ba0008036ec5991806fd.dip0.t-ipconnect.de. [2003:d8:2f26:ba00:803:6ec5:9918:6fd])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3c3a8980ed5sm7242256f8f.16.2025.08.21.13.07.27
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45b51b61256sm1742995e9.3.2025.08.21.13.07.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Aug 2025 13:07:29 -0700 (PDT)
+        Thu, 21 Aug 2025 13:07:42 -0700 (PDT)
 From: David Hildenbrand <david@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: David Hildenbrand <david@redhat.com>,
@@ -114,9 +114,9 @@ Cc: David Hildenbrand <david@redhat.com>,
 	wireguard@lists.zx2c4.com,
 	x86@kernel.org,
 	Zi Yan <ziy@nvidia.com>
-Subject: [PATCH RFC 08/35] mm/hugetlb: check for unreasonable folio sizes when registering hstate
-Date: Thu, 21 Aug 2025 22:06:34 +0200
-Message-ID: <20250821200701.1329277-9-david@redhat.com>
+Subject: [PATCH RFC 13/35] mm: simplify folio_page() and folio_page_idx()
+Date: Thu, 21 Aug 2025 22:06:39 +0200
+Message-ID: <20250821200701.1329277-14-david@redhat.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250821200701.1329277-1-david@redhat.com>
 References: <20250821200701.1329277-1-david@redhat.com>
@@ -128,43 +128,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Let's check that no hstate that corresponds to an unreasonable folio size
-is registered by an architecture. If we were to succeed registering, we
-could later try allocating an unsupported gigantic folio size.
+Now that a single folio/compound page can no longer span memory sections
+in problematic kernel configurations, we can stop using nth_page().
 
-Further, let's add a BUILD_BUG_ON() for checking that HUGETLB_PAGE_ORDER
-is sane at build time. As HUGETLB_PAGE_ORDER is dynamic on powerpc, we have
-to use a BUILD_BUG_ON_INVALID() to make it compile.
-
-No existing kernel configuration should be able to trigger this check:
-either SPARSEMEM without SPARSEMEM_VMEMMAP cannot be configured or
-gigantic folios will not exceed a memory section (the case on sparse).
+While at it, turn both macros into static inline functions and add
+kernel doc for folio_page_idx().
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/hugetlb.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/mm.h         | 16 ++++++++++++++--
+ include/linux/page-flags.h |  5 ++++-
+ 2 files changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 514fab5a20ef8..d12a9d5146af4 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4657,6 +4657,7 @@ static int __init hugetlb_init(void)
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 48a985e17ef4e..ef360b72cb05c 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -210,10 +210,8 @@ extern unsigned long sysctl_admin_reserve_kbytes;
  
- 	BUILD_BUG_ON(sizeof_field(struct page, private) * BITS_PER_BYTE <
- 			__NR_HPAGEFLAGS);
-+	BUILD_BUG_ON_INVALID(HUGETLB_PAGE_ORDER > MAX_FOLIO_ORDER);
+ #if defined(CONFIG_SPARSEMEM) && !defined(CONFIG_SPARSEMEM_VMEMMAP)
+ #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
+-#define folio_page_idx(folio, p)	(page_to_pfn(p) - folio_pfn(folio))
+ #else
+ #define nth_page(page,n) ((page) + (n))
+-#define folio_page_idx(folio, p)	((p) - &(folio)->page)
+ #endif
  
- 	if (!hugepages_supported()) {
- 		if (hugetlb_max_hstate || default_hstate_max_huge_pages)
-@@ -4740,6 +4741,7 @@ void __init hugetlb_add_hstate(unsigned int order)
- 	}
- 	BUG_ON(hugetlb_max_hstate >= HUGE_MAX_HSTATE);
- 	BUG_ON(order < order_base_2(__NR_USED_SUBPAGE));
-+	WARN_ON(order > MAX_FOLIO_ORDER);
- 	h = &hstates[hugetlb_max_hstate++];
- 	__mutex_init(&h->resize_lock, "resize mutex", &h->resize_key);
- 	h->order = order;
+ /* to align the pointer to the (next) page boundary */
+@@ -225,6 +223,20 @@ extern unsigned long sysctl_admin_reserve_kbytes;
+ /* test whether an address (unsigned long or pointer) is aligned to PAGE_SIZE */
+ #define PAGE_ALIGNED(addr)	IS_ALIGNED((unsigned long)(addr), PAGE_SIZE)
+ 
++/**
++ * folio_page_idx - Return the number of a page in a folio.
++ * @folio: The folio.
++ * @page: The folio page.
++ *
++ * This function expects that the page is actually part of the folio.
++ * The returned number is relative to the start of the folio.
++ */
++static inline unsigned long folio_page_idx(const struct folio *folio,
++		const struct page *page)
++{
++	return page - &folio->page;
++}
++
+ static inline struct folio *lru_to_folio(struct list_head *head)
+ {
+ 	return list_entry((head)->prev, struct folio, lru);
+diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+index d53a86e68c89b..080ad10c0defc 100644
+--- a/include/linux/page-flags.h
++++ b/include/linux/page-flags.h
+@@ -316,7 +316,10 @@ static __always_inline unsigned long _compound_head(const struct page *page)
+  * check that the page number lies within @folio; the caller is presumed
+  * to have a reference to the page.
+  */
+-#define folio_page(folio, n)	nth_page(&(folio)->page, n)
++static inline struct page *folio_page(struct folio *folio, unsigned long nr)
++{
++	return &folio->page + nr;
++}
+ 
+ static __always_inline int PageTail(const struct page *page)
+ {
 -- 
 2.50.1
 
