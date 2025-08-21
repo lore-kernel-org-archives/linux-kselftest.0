@@ -1,31 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EE91DEFE0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F4A20B218;
 	Thu, 21 Aug 2025 15:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755789196; cv=none; b=u1ITZggVkeriuz/i71BKRtezAXfZ30oHYqjY5WrILUvr0qA+rjX0owZjPGJmIpFUYcXtAP/97cxi9MyI0rPIzbjGZbCa6U8JkfQZ4+YlJQ1kLQrGgxnl8xmOgeFQj4INaZJe1pYT28WC+B4xRbrXO2vA7/ppy5q3IVRkyc3+tFY=
+	t=1755789197; cv=none; b=WNRZdw5u9rJ0aV1s5Cp5LpCnWBkWtnqTzzOn9rk+88qzpZbTpp8EEM1/XXDaEV+HTw72HggkTjthMfjHmWYf/eFYhdOYsJZ0w3GDYC9M17tDPQgFw+jsjjVrPW/BvN9Gd1aUkVjLL116CXuNabRPaHHgjSCb1t6HTCaaFpQjmZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755789196; c=relaxed/simple;
-	bh=qodkbxh+3qRl8JdkLf1RKw+tBZAn05xOsGyllQXNnGg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bUnLJjjb0fPrhsGPfxQCd5ms1dxyIbxpKLwe7GLVTNYJ5GqidskmHgp4rmn15jMC9N+mdJ7WqqVGxnwbA4bv7OCTn2uYTUv5V/5eigyU+14SkqdcB3Uf27jlVYtGNtrUL4gG/VjRYejySSO2pdcWQn7OF53k1I3oxb+yjx4rbpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=rMl2rQX8; arc=none smtp.client-ip=159.69.126.157
+	s=arc-20240116; t=1755789197; c=relaxed/simple;
+	bh=h/4lrKAX6pF/gjGhEXhKe5bBTHwGePjRZnh/r+I4xI4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=SHw6zAUelfPSwdcuB2CIO9eaoRCrjY25kZCA3EQTgru5JOF5CFBV3zRx0MIcyCW9qwtfQKTopoPGlhGhaTqq3yYuZq3yf0MIs3AbAZvi58Ab6KbNl1pnFxOXzROs7x64CQLNss2eCOEtwJ0bgrld5QhENc8oZwK4DBqdESch9kQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=iAK3Yt20; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="rMl2rQX8"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="iAK3Yt20"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1755789186;
-	bh=qodkbxh+3qRl8JdkLf1RKw+tBZAn05xOsGyllQXNnGg=;
-	h=From:Subject:Date:To:Cc:From;
-	b=rMl2rQX8INuqKsgnuQBfCdmNBfgPoXTiAPULHv5yMpPUDWGF5M/p/4kePW701WDNb
-	 akDC5b7bfvENcanirtjI/lZXR3RSsHlsAOf5rkezr5aG/KHgfuDqirXH2ZMVoCOuHw
-	 KnSOpY52cEtlb6tLq35IBPRe97670ldMLXXpCgSQ=
+	bh=h/4lrKAX6pF/gjGhEXhKe5bBTHwGePjRZnh/r+I4xI4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=iAK3Yt209KoUD5hZLoakwBGYllm7FZn2mNfFs8SUAjwxpvDND+DcEhqweUbyX04ZS
+	 Ec2UW43S3gLMOWXSQu461XAx0VZg5ureV6xd61Jxc0+VIIa5D4M/UwaQQD8fS2mmSN
+	 8m5SKRzpBm2jGKj4zmdSZKrvvVWJC+N7BIDNfX00=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/2] kselftest/arm64/gcs: Cleanups for basic-gcs.c
-Date: Thu, 21 Aug 2025 17:13:01 +0200
-Message-Id: <20250821-nolibc-gcs-fixes-v1-0-88519836c915@weissschuh.net>
+Date: Thu, 21 Aug 2025 17:13:03 +0200
+Subject: [PATCH 2/2] kselftest/arm64/gcs: Use nolibc's getauxval()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,10 +34,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAH03p2gC/x3LQQqAIBBA0avIrBtQSZKuEi3SphoIDQciCO+et
- Hx8/gtChUlgVC8Uulk4pwbTKYjHknZCXpvBauu0twZTPjlE3KPgxg8JGhO3wXkXwtBD265Cf2j
- XNNf6AbBcKthiAAAA
-X-Change-ID: 20250821-nolibc-gcs-fixes-11cf7585bb74
+Message-Id: <20250821-nolibc-gcs-fixes-v1-2-88519836c915@weissschuh.net>
+References: <20250821-nolibc-gcs-fixes-v1-0-88519836c915@weissschuh.net>
+In-Reply-To: <20250821-nolibc-gcs-fixes-v1-0-88519836c915@weissschuh.net>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
  Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
  Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
@@ -46,29 +45,53 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755789186; l=531;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755789186; l=1309;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=qodkbxh+3qRl8JdkLf1RKw+tBZAn05xOsGyllQXNnGg=;
- b=JE6FOoDOazDnOVA+XQS69RfeWKq/hWoXA6Jd8c9cGQo5lFQSmvSmfnwzVENC5di3S9qg8Tlt4
- X8UnVcDnx/5Dhjc0y8ukmX67x/BfIsqNhqI+OMtXnbFIqJfQm1OniiM
+ bh=h/4lrKAX6pF/gjGhEXhKe5bBTHwGePjRZnh/r+I4xI4=;
+ b=hIZZJkYzmN2hdyvFbNdtAvwuxrH719lR2ZzZJRUedITZyThsSbc/iRxqfkT61PGxExwDfboaA
+ rHiSZqT3Cx3Dy4prmE4ufwjTxVehaU0ivf0eJruoKdrB4KZF1fPQude
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Two small cleanups.
+Nolibc now does have getauxval(), use it.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (2):
-      kselftest/arm64/gcs: Correctly check return value when disabling GCS
-      kselftest/arm64/gcs: Use nolibc's getauxval()
+ tools/testing/selftests/arm64/gcs/basic-gcs.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
- tools/testing/selftests/arm64/gcs/basic-gcs.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
----
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20250821-nolibc-gcs-fixes-11cf7585bb74
+diff --git a/tools/testing/selftests/arm64/gcs/basic-gcs.c b/tools/testing/selftests/arm64/gcs/basic-gcs.c
+index 100d2a983155f7347a19b2b8b88f9494dc6a51d5..250977abc3988685abf68666d35b7a8547f74f4e 100644
+--- a/tools/testing/selftests/arm64/gcs/basic-gcs.c
++++ b/tools/testing/selftests/arm64/gcs/basic-gcs.c
+@@ -10,6 +10,7 @@
+ 
+ #include <sys/mman.h>
+ #include <asm/mman.h>
++#include <asm/hwcap.h>
+ #include <linux/sched.h>
+ 
+ #include "kselftest.h"
+@@ -386,14 +387,13 @@ int main(void)
+ 
+ 	ksft_print_header();
+ 
+-	/*
+-	 * We don't have getauxval() with nolibc so treat a failure to
+-	 * read GCS state as a lack of support and skip.
+-	 */
++	if (!(getauxval(AT_HWCAP) & HWCAP_GCS))
++		ksft_exit_skip("SKIP GCS not supported\n");
++
+ 	ret = my_syscall5(__NR_prctl, PR_GET_SHADOW_STACK_STATUS,
+ 			  &gcs_mode, 0, 0, 0);
+ 	if (ret != 0)
+-		ksft_exit_skip("Failed to read GCS state: %d\n", ret);
++		ksft_exit_fail_msg("Failed to read GCS state: %d\n", ret);
+ 
+ 	if (!(gcs_mode & PR_SHADOW_STACK_ENABLE)) {
+ 		gcs_mode = PR_SHADOW_STACK_ENABLE;
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.50.1
 
