@@ -1,70 +1,70 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5D735AAC8
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 20:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDF334F488
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 20:07:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755806875; cv=none; b=QknJkiv9eRsgNqoXZDQCazBwnE5gw+FU4+HVEOZesOUmLRlaNl6RLSUtODiKcl9aKTahOn2HcRVqSNgZWOf8DOLrFxfDQ1IToY/8XkKatOPjXGEpnNEpoiHUSQphAa9aaKFSCAHAYEn6rQoGSsRaufdwl30bnxR3EiXksh4t0xM=
+	t=1755806880; cv=none; b=GFc8XnyK3mweSK1BUa+Vg8+khTxUyNYQk1DKiWyV1y9xcdLTrGAQNE4SMzl0vq9gjV/AwLQTMgCFMWCfL8y8qtyTT6aQUAWWR3wUfn6XU9zxj9AZg2uDGfYeCcN47CMIQm+BPuaBJ7M1nReJ1jhcWaeF8OSLWJ/ca1BM3pU3pqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755806875; c=relaxed/simple;
-	bh=d4tmPeOlqOBXo+X4Tiv9h/CbkpHAugux1EiNuLc/Y0E=;
+	s=arc-20240116; t=1755806880; c=relaxed/simple;
+	bh=jeuBd6AEd//7dLky0U/9/K8CcfgAIF74DmeLEQ7xh6M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Uo33/Lvd7O9fjzNLMQhTv3Z4m3p1xjGrrP2CvS63OkurhIKerye4Vf25XoBodU9WAc18R408HzM3b8fDQ4AATyBFnfOOcSWG8tnmNyCnmJ6RCG8FU/2lmN2omkTGve7n6RU02j1Lx+xtiS6aeigFS9ainxch+/DVpTaMbNwrG3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ApVUgePM; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=pzf4qT4eLFy47oo8P/gk5pmD6Vqpx5tS0TqMDqlTztN57XKoS/5MN+98UPGfGyxEcG++8o5WdR4ei8LuKN4BcopEhsP0RUu2+nHvfjV7K+1j9Yn6ENxdvv4uIhv9tdFkTAlTrGHZ2ITpsrhn1GcGZCn6zMSQ1+l1vO32AKaVpTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Cc7k8vzI; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ApVUgePM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Cc7k8vzI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755806872;
+	s=mimecast20190719; t=1755806877;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=MzMWVCGQW0mP4+/ULAfe7CdOmgWkAKLnoxAB4Fy092E=;
-	b=ApVUgePMc5w7rL41HNMIKF85AcMs6Un4ujFWJA5x+7+Llhbk1+gVkmabnDQ0P0g6RwRZ6I
-	hiG/PTnBi6M9L8qRsc++NZhZs06JhKlMLLamkv6/9nyiqk5kpcRGlad8oxOAC+Nn5J3rGI
-	2Nt7rHQpw5MKfM1CUw8SvaJu7Y3EaHY=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=NPs2EdTZ9fd3MpWdb0ATDCa6nUqfGtFMv2uyZP7L+uU=;
+	b=Cc7k8vzI8vWyxlhOTg3zj5LNGjaDshsiz6wO+Ms72EVhWwZd1ayoq4w78xvhwzeswURLhd
+	sTkMrm8c281eBuTMugA4EQ0gLZR/hym/wLnJuwYj0b/EGcngrTVom43mob3elWoOAbQwg8
+	yXIaPVKhDlpqvvHwwbMbC25+SHd0wvM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-86-xRma-TuWOKmpq5LWabixug-1; Thu, 21 Aug 2025 16:07:50 -0400
-X-MC-Unique: xRma-TuWOKmpq5LWabixug-1
-X-Mimecast-MFC-AGG-ID: xRma-TuWOKmpq5LWabixug_1755806869
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3b9e4117542so631172f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 13:07:50 -0700 (PDT)
+ us-mta-680-U7gJMxOKMoaVlKtMMFWAAA-1; Thu, 21 Aug 2025 16:07:55 -0400
+X-MC-Unique: U7gJMxOKMoaVlKtMMFWAAA-1
+X-Mimecast-MFC-AGG-ID: U7gJMxOKMoaVlKtMMFWAAA_1755806874
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45a1b0514a5so6771815e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Aug 2025 13:07:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755806869; x=1756411669;
+        d=1e100.net; s=20230601; t=1755806874; x=1756411674;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MzMWVCGQW0mP4+/ULAfe7CdOmgWkAKLnoxAB4Fy092E=;
-        b=ByKh6aVETOummQasIsj1/c9fGxRCkUNx3UTXKEkniamZQUFigRi/HOS3/9gPKYOgcA
-         9A3uuBE0e1Acm6um7K+TUvIvynrRFMB2Q0nP7C6DV5q5O9SL4emN9A6B44WLhHV69XX5
-         MXGFFEH4nwqergTLvHu7QGa3m9IvKwZ7EvNEwqYzHG8t68nz1gjGGoimsZo+orMLqY5d
-         U1e9jdr6xGxELCpQU/xVp/G0HSBgslaHLhcl9OolglcRINsf5GDzDCbORiTz9cbc8fUL
-         Lg70Wv5vHvgJkTWHm11ybUsLk+PCSXhLEFhKVi07HV05Jf3r5QVYP15yey8jDxAUlDC7
-         djbg==
-X-Forwarded-Encrypted: i=1; AJvYcCVY2btue8SKHD46usjC2DnGGoTVm5GRgxb+qIAbn0YSSprbY3RBRkwRbHjHPW7VY2OxCu8dUSezEO9zj5SGWRA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPBZTxpMSfzSI2DNJN0uUp5Pjy/mttJqbVGVubPNaqzq03q3Zf
-	xMhcZJgTACXFcs0Oe3PM/OxBCP4kBoTKDaHDPmNzpuCFngTcfgFtOlMOfQT4vOYg3Rqpj+vU8YX
-	nNnaCw2U9qHYw+2KXSi0PCIpPvwnEC/W31lQRAUUGuhEWMYNb1ybmcOPgKqUA5reRGqTOrg==
-X-Gm-Gg: ASbGncto5GIUT9lysa3xSi6bwR6+7I2HDJtDiW8PcauzwBDFSasiH1OmxWFuaGR6BGV
-	Qh8D4GwHEpXzG41LKj7Z98NASMxcDen3opuRUjaAEf2ze6Hl+m9i/7ZPSQpqEquF3FGyrxB69WL
-	fN6z2ZMiZXlG9Vu+8DgRAQ301ZZlLC1LHnXBPNbxTmfKAAQue1AxdevoFBkOQypDQqS7hviKuui
-	no+ixQDcznQR4gysN23oHgY0WUWMdiRndZOKMNqUZ6Ar5a4g943DVEhlKoklnPucdrxVl6zO4kI
-	clFWW38GSnKdMlpZCiDbiJmpjEpMp1+fZi+va/Vl+v9sDeAHo2T/gaaSezXf30Z7W+JpJYPiGV6
-	SDNIqrJ/Cg3nlc0swiTUSzA==
-X-Received: by 2002:a05:6000:2901:b0:3b7:c703:ce4 with SMTP id ffacd0b85a97d-3c5dcff5f3amr167784f8f.59.1755806868883;
-        Thu, 21 Aug 2025 13:07:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHCm64ALptQrKyrLlaLt4xJ2vziBy3gZm4Q1WMVX6wnWhr2W2tRcHnZJHBwxpAOnTfL4mKx+A==
-X-Received: by 2002:a05:6000:2901:b0:3b7:c703:ce4 with SMTP id ffacd0b85a97d-3c5dcff5f3amr167760f8f.59.1755806868453;
-        Thu, 21 Aug 2025 13:07:48 -0700 (PDT)
+        bh=NPs2EdTZ9fd3MpWdb0ATDCa6nUqfGtFMv2uyZP7L+uU=;
+        b=FK1Kc3BwdKeNzvt+XUe7jV9Xgbd78yc/foV0XJxGyipHxU5p9f6gm6NJzvkm7qbSa5
+         rAoNvHQO5/eHMFhH3fP8jsDPcKuJZ4A4mwpBB6Vev7MBUgbiu7uFva6zkiOVRSoym9hI
+         do5D1C91fEkEWt86OwZTkPW02q/ZARznTFvRd2PsfyE4jE85gm/7jchlLcJhPPSC31q2
+         AIn/2B8igoeJ1tTMXgkkWeXRB6dc1CX8t2DIANYLy0sBzWbJ3n0xuyPR00cx8tvzrpte
+         lbKv9t/CypB+t3JyjCVWM1w0yjhPAa842fJ363nTGWo5RavsdzffCtsofZLtMAXF58qn
+         XWpA==
+X-Forwarded-Encrypted: i=1; AJvYcCUynjSABbpR0v3UFPKWXf658kHBpAvz/IxyO4tPgfxN1xqYZcEp6qsnE3lojQOg9Ch1ASqsJj+aJyKBpKImoC8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwshIcYNGq5twTmkNiZiKj9D358V+3iP0RM8HdSwFKyPpNQTupp
+	X2prU3gxyiXsi74SgttxOoTFjj8cW20QAXQsNCysicrQcNZcABwDn2T2qNFgNwhLbzS3lvIqXLz
+	IWThnYTtiEg/iU1dBAStr5YnrApqgO3Yk+pKLr+5p/8KrPmJN+u1q5ttdJVN4sJyZktMo1Q==
+X-Gm-Gg: ASbGncvVfSO51MBieJWu5uiU2LiWaf/jg0hqar8XipEuf6tqDgEgClu7icQAvYbLX62
+	uR/R+rrMAHjw2n+ZUJJJSJy4dx/HN4AjnDMUWYftjkLwPKS4Fw3AsDcdGMVyxw4jgJrRPMH27tB
+	bwM1zyX1bqa3vRhGn1MYHUA7MBEh+kvuNU1wRmW1vxW7qVNWgr+sUocSf9gL9R9wnKAfGzburxX
+	3oAIwdmSEf22KPNuyixLxcxW3qGG0oMYFy3EAG28V6Auk5F3FeE9c0A5dowvkkfxjSaDMsItsfg
+	MaZsacnBhMDF+JslAbl9OVZ1DfmWMlMVbHdU9Tbr6tNbehIegC+WxZsOhImW7VH6RINlSnZelTW
+	hKywd6cUNNGiEKlw63Q8/pQ==
+X-Received: by 2002:a05:600c:1388:b0:459:d451:3364 with SMTP id 5b1f17b1804b1-45b517d40f2mr2554065e9.24.1755806874298;
+        Thu, 21 Aug 2025 13:07:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFo8ikhW4DoWVw60oDeAXqMRvn4UERlcVawLCjGel2pacwRc1R1ONhYVQm5EzuW0YIJQT4FDg==
+X-Received: by 2002:a05:600c:1388:b0:459:d451:3364 with SMTP id 5b1f17b1804b1-45b517d40f2mr2553905e9.24.1755806873856;
+        Thu, 21 Aug 2025 13:07:53 -0700 (PDT)
 Received: from localhost (p200300d82f26ba0008036ec5991806fd.dip0.t-ipconnect.de. [2003:d8:2f26:ba00:803:6ec5:9918:6fd])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3c5826751d5sm1323274f8f.14.2025.08.21.13.07.46
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3c07487a009sm12690403f8f.11.2025.08.21.13.07.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Aug 2025 13:07:47 -0700 (PDT)
+        Thu, 21 Aug 2025 13:07:53 -0700 (PDT)
 From: David Hildenbrand <david@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: David Hildenbrand <david@redhat.com>,
@@ -114,9 +114,9 @@ Cc: David Hildenbrand <david@redhat.com>,
 	wireguard@lists.zx2c4.com,
 	x86@kernel.org,
 	Zi Yan <ziy@nvidia.com>
-Subject: [PATCH RFC 15/35] fs: hugetlbfs: remove nth_page() usage within folio in adjust_range_hwpoison()
-Date: Thu, 21 Aug 2025 22:06:41 +0200
-Message-ID: <20250821200701.1329277-16-david@redhat.com>
+Subject: [PATCH RFC 17/35] mm/gup: drop nth_page() usage within folio when recording subpages
+Date: Thu, 21 Aug 2025 22:06:43 +0200
+Message-ID: <20250821200701.1329277-18-david@redhat.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250821200701.1329277-1-david@redhat.com>
 References: <20250821200701.1329277-1-david@redhat.com>
@@ -128,58 +128,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The nth_page() is not really required anymore, so let's remove it.
-While at it, cleanup and simplify the code a bit.
+nth_page() is no longer required when iterating over pages within a
+single folio, so let's just drop it when recording subpages.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- fs/hugetlbfs/inode.c | 25 ++++++++-----------------
- 1 file changed, 8 insertions(+), 17 deletions(-)
+ mm/gup.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 34d496a2b7de6..dc981509a7717 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -198,31 +198,22 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
- static size_t adjust_range_hwpoison(struct folio *folio, size_t offset,
- 		size_t bytes)
- {
--	struct page *page;
--	size_t n = 0;
--	size_t res = 0;
-+	struct page *page = folio_page(folio, offset / PAGE_SIZE);
-+	size_t n, safe_bytes;
+diff --git a/mm/gup.c b/mm/gup.c
+index b2a78f0291273..f017ff6d7d61a 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -491,9 +491,9 @@ static int record_subpages(struct page *page, unsigned long sz,
+ 	struct page *start_page;
+ 	int nr;
  
--	/* First page to start the loop. */
--	page = folio_page(folio, offset / PAGE_SIZE);
- 	offset %= PAGE_SIZE;
--	while (1) {
-+	for (safe_bytes = 0; safe_bytes < bytes; safe_bytes += n) {
-+
- 		if (is_raw_hwpoison_page_in_hugepage(page))
- 			break;
+-	start_page = nth_page(page, (addr & (sz - 1)) >> PAGE_SHIFT);
++	start_page = page + ((addr & (sz - 1)) >> PAGE_SHIFT);
+ 	for (nr = 0; addr != end; nr++, addr += PAGE_SIZE)
+-		pages[nr] = nth_page(start_page, nr);
++		pages[nr] = start_page + nr;
  
- 		/* Safe to read n bytes without touching HWPOISON subpage. */
--		n = min(bytes, (size_t)PAGE_SIZE - offset);
--		res += n;
--		bytes -= n;
--		if (!bytes || !n)
--			break;
--		offset += n;
--		if (offset == PAGE_SIZE) {
--			page = nth_page(page, 1);
--			offset = 0;
--		}
-+		n = min(bytes - safe_bytes, (size_t)PAGE_SIZE - offset);
-+		offset = 0;
-+		page++;
- 	}
- 
--	return res;
-+	return safe_bytes;
+ 	return nr;
  }
+@@ -1512,7 +1512,7 @@ static long __get_user_pages(struct mm_struct *mm,
+ 			}
  
- /*
+ 			for (j = 0; j < page_increm; j++) {
+-				subpage = nth_page(page, j);
++				subpage = page + j;
+ 				pages[i + j] = subpage;
+ 				flush_anon_page(vma, subpage, start + j * PAGE_SIZE);
+ 				flush_dcache_page(subpage);
 -- 
 2.50.1
 
