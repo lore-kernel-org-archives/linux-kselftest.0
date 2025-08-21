@@ -1,31 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464B62D12EE;
-	Thu, 21 Aug 2025 15:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893CF35335A;
+	Thu, 21 Aug 2025 15:40:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755790839; cv=none; b=ZNE7yVUt4cubS5yGvuyt7qK91yqg42NR3OWZbC9B1MRXQRORPeOG4LjSz+qW5CaJzyQ7ufJkken9jv7Bn96cg9WamunN2HmPqqeZJBtC463T3J4jDaM+GAzXEmcAK89to7j+jLu+lmYoVfgWkQtjWi+yUhVRRsAvI2m6SXvWKRE=
+	t=1755790842; cv=none; b=R23kI3n3CFO/9SucrqOS/NdND1UzAKNqz81vbM4AVOxP7/2bnxUZyUdWnwhU6E8hfV+iJ43Q7Fq7iwsDsLJ7JGP3Vy+roYpDq1F0VAm/J+GuO57LW1OcVpmR8QsCIjQJBqBm1G33h75riiw03Gy8uxuKNO0SQajhC0dVBVF/xcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755790839; c=relaxed/simple;
-	bh=EDi7kgFTFGG9Vox1cVUjyMOtC59OypbC935AUmppWQM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=thQhzF/ox51G/JGMSxKC/FXB9xtbIbqiNxRTs/MLoBMDSNEezQsCQaOh8SmR3pu4vwVyyyzxJjaBh5xfi7cFdeomk10VbD5n6TAIIM9Gymx0wuSw+8Do+OsOn9Su+KNrjucxNGIi2z1vKSgT+DksoPjVgeYZc0Iqgp4LZrjxjAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Wn4rSLgA; arc=none smtp.client-ip=159.69.126.157
+	s=arc-20240116; t=1755790842; c=relaxed/simple;
+	bh=Nytg3brGBX94RkJqufZjR2+fI2MqCelukAJyT2C5iuA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Y3SIeTYNk9QH8iZtM8XwMa+6LHqmvMvH7K95mn4OIi4nfefrz0NI32w+YfrhnhWThPixL7L2Pv8DxxJAb1fSny9Rqr5ezCMtw+dGB1lBAxA3VHIA0u6n5v+uBUWBWzZdLMlWZDsJRxYOQB2Y81NaKdNJXWGQLplfILYk/WSoC7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ehysW5Ti; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Wn4rSLgA"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ehysW5Ti"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1755790835;
-	bh=EDi7kgFTFGG9Vox1cVUjyMOtC59OypbC935AUmppWQM=;
-	h=From:Subject:Date:To:Cc:From;
-	b=Wn4rSLgAtBESNTpqj4tuLfgY95Xb0GTw1j3Yjf1aWIl+QbESxXrkWN+oq/d1EkFGt
-	 sNthlD3h7gTF7wnD8mNtzl69KvFjL4BwpGQUqZKpJJnS10BiLLybmqBS2txPp2FNC1
-	 KsY+eqDn92GhYEQ0FJKP9nzDDHezyltqFPr7Gm+s=
+	bh=Nytg3brGBX94RkJqufZjR2+fI2MqCelukAJyT2C5iuA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=ehysW5Ti14GbYFhA26/1gVMOc2+KTHF/h4tN3ojF7izVXO2E6sUcmCrRHdTJhy9U2
+	 Q+4khxVCHYmfxyNbWUEceTDgDIemdajFjc4rCJlxPt9LiN232sK9qvTcgxBHXYwIIv
+	 aur07jnAWkia87y1UW1975zb7YLEvYv3XXofnsxg=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/7] tools/nolibc: reduce __nolibc_enosys() fallbacks
-Date: Thu, 21 Aug 2025 17:40:31 +0200
-Message-Id: <20250821-nolibc-enosys-v1-0-4b63f2caaa89@weissschuh.net>
+Date: Thu, 21 Aug 2025 17:40:37 +0200
+Subject: [PATCH 6/7] kselftest/arm64: tpidr2: Switch to waitpid() over
+ wait4()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,59 +35,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAO89p2gC/x3MQQqAIBBA0avIrBN0QIiuEi3UphoIDQeiEO+et
- HyL/ysIFSaBSVUodLNwTh12UBAPn3bSvHYDGnRmRKtTPjlETSnLKxoDUjTBGRc89OYqtPHz/+a
- ltQ+QOsuCXwAAAA==
-X-Change-ID: 20250821-nolibc-enosys-2b2ec0b505ba
+Message-Id: <20250821-nolibc-enosys-v1-6-4b63f2caaa89@weissschuh.net>
+References: <20250821-nolibc-enosys-v1-0-4b63f2caaa89@weissschuh.net>
+In-Reply-To: <20250821-nolibc-enosys-v1-0-4b63f2caaa89@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Catalin Marinas <catalin.marinas@arm.com>, 
  Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc: Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org, 
  linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755790835; l=1762;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755790835; l=1157;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=EDi7kgFTFGG9Vox1cVUjyMOtC59OypbC935AUmppWQM=;
- b=IWi1WXyurTh7V5K7rWfEYUuPalw0ndbYdqh6apShuST0cLYoa1D/Ii+IMbwJFHiFj7eau7szJ
- aZbpUT8VPeYAaNLfOyw9Uqpz9yDKCnzYiCoI0jqlT91qHoe4fU4/1Hi
+ bh=Nytg3brGBX94RkJqufZjR2+fI2MqCelukAJyT2C5iuA=;
+ b=VqLBwVGYCEIudHHlBaFHOBetWwInVKrleIrbKcGtAm22hGoGNMsD8h8JJQiG88d2h8qI7f1f7
+ PR8nnUUDe10CiRbHV66a9YcSv/TqfRjhX2KHuXKXIFqXr0HyQtO8xf5
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The __nolibc_enosys() fallback is used when the UAPI headers do not
-provide a certain syscall number or any possible fallback syscall.
-This is either because the syscall definition is fairly new and nolibc
-tries to be compatible with old UAPI headers or an architecture does not
-support a syscall at all.
-Many of these __nolibc_enosys() fallbacks have become unnecessary.
-Either because the "new" syscalls or not so new anymore or real
-fallbacks have been implemented in the meantime.
+wait4() is deprecated, non-standard and about to be removed from nolibc.
 
-Unnecessary usages of __nolibc_enosys() as it is not obvious anymore if
-a given function is really implemented on all architectures.
+Switch to the equivalent waitpid() call.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (7):
-      tools/nolibc: remove __nolibc_enosys() fallback from time64-related functions
-      tools/nolibc: remove __nolibc_enosys() fallback from *at() functions
-      tools/nolibc: remove __nolibc_enosys() fallback from dup2()
-      tools/nolibc: remove __nolibc_enosys() fallback from fork functions
-      tools/nolibc: fold llseek fallback into lseek()
-      kselftest/arm64: tpidr2: Switch to waitpid() over wait4()
-      tools/nolibc: drop wait4() support
+ tools/testing/selftests/arm64/abi/tpidr2.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- tools/include/nolibc/poll.h                |  4 +-
- tools/include/nolibc/sys.h                 | 90 +++++++++---------------------
- tools/include/nolibc/sys/timerfd.h         |  8 +--
- tools/include/nolibc/sys/wait.h            | 17 ------
- tools/include/nolibc/time.h                |  8 +--
- tools/testing/selftests/arm64/abi/tpidr2.c |  6 +-
- 6 files changed, 34 insertions(+), 99 deletions(-)
----
-base-commit: 850047b19741490631855a475ccaa3ed29316039
-change-id: 20250821-nolibc-enosys-2b2ec0b505ba
+diff --git a/tools/testing/selftests/arm64/abi/tpidr2.c b/tools/testing/selftests/arm64/abi/tpidr2.c
+index f58a9f89b952c42c5393b93a2db4fefe3f335e5a..3b520b7efa49e0058616c04fcdc0222bd8b03d8a 100644
+--- a/tools/testing/selftests/arm64/abi/tpidr2.c
++++ b/tools/testing/selftests/arm64/abi/tpidr2.c
+@@ -182,16 +182,16 @@ static int write_clone_read(void)
+ 	}
+ 
+ 	for (;;) {
+-		waiting = wait4(ret, &status, __WCLONE, NULL);
++		waiting = waitpid(ret, &status, __WCLONE);
+ 
+ 		if (waiting < 0) {
+ 			if (errno == EINTR)
+ 				continue;
+-			ksft_print_msg("wait4() failed: %d\n", errno);
++			ksft_print_msg("waitpid() failed: %d\n", errno);
+ 			return 0;
+ 		}
+ 		if (waiting != ret) {
+-			ksft_print_msg("wait4() returned wrong PID %d\n",
++			ksft_print_msg("waitpid() returned wrong PID %d\n",
+ 				       waiting);
+ 			return 0;
+ 		}
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.50.1
 
