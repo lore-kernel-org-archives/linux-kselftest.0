@@ -1,112 +1,82 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1127258EFF;
-	Thu, 21 Aug 2025 15:38:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FAD52D061C;
+	Thu, 21 Aug 2025 15:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755790735; cv=none; b=qPXpVwDAqPCfEs4Lu4+6f+/MmRH1Q4QupDmjrspdBj3D6octHF0AodH7ppbZLg6WKTJsne1HDlp0uhxRVKH5PgvTybbpb60IDE6wta2CUnWLfE9nosaq1l9VdQUcmWP6KPErgjs9Y7Eps5QM5gU2JLYZ/V+4z2PhE8z8iqAMifk=
+	t=1755790838; cv=none; b=jer3oSfJmhf2AvcZ2sMnMQE1+s4O7SJfwi31BoiVnZ/FvR5AQslk0Zs4TX7pYbcFSwBl6W2OwX8iCQ2+xgFNIoELt9PDLZWEPMBZD1rDReaqn23dajq5VreiErROwjvxnwUBZ+00hDNrhMIUKV8wHF9jf6faEdu41V7SepOtBLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755790735; c=relaxed/simple;
-	bh=34WxhVkd3Zb9HWQceYCWNuG5BF2cNsCX7/SRYVYgZDU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=YfPkdjfZNYW9KRkRolzb4DKalQkl8LpnSnNA5JTyK4bcICWQ6fNLY2ihZbUqhd4Vtlxw/jWfzAO6FMVnWDleJ2UZvfBGX7OmsvaG8TpqhhWG9QeR5qoFDgVDPbSV8LFOL+QX2dhetolxZVnGTicSbD+4GmLlr5ca0iXzCZnANb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=Sx/XziRd reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1755790838; c=relaxed/simple;
+	bh=lJZvG23U87rgiOGKfE/Nw17HdxdXmhpAjW+f05nD3+Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Pkint+MGarerZsvQsdurvvQtdWhthp1zy2N9ynM16rcHk6MqDta9HoQYmQQspJJ2OhKiL/xfJ1YxAydIBNPDXIQvLbv+v+gz4Nm9To99oQcM6sWFb0jU7Iqkb1crVxtpr2kTEa3vFnMNBCbZknf8knEqwlL87LccyaRxc2WS7/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=tfIHsAKU; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="Sx/XziRd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=N3Ina/fhCR8xT0SbpvmwgG8VxddZ2Fai2XOqRVIwIcE=; b=S
-	x/XziRdPgFrU2/P3dXRFlhoWrVS5011E2vH98MZN04FsdskRB7VMaTzQDrW3l8vt
-	Pwmin/i3MZYHW7HZAJgikWQLStZWrFzH4/4DOvdImWD5fO5D6Dpp3UG+PTyzA7mb
-	2Fextc/rqXntkcUu8oiSiRZfwfI323+i9P7OLIGnFI=
-Received: from phoenix500526$163.com ( [120.230.124.83] ) by
- ajax-webmail-wmsvr-40-132 (Coremail) ; Thu, 21 Aug 2025 23:38:13 +0800
- (CST)
-Date: Thu, 21 Aug 2025 23:38:13 +0800 (CST)
-From: =?UTF-8?B?6LW15L2z54Kc?= <phoenix500526@163.com>
-To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
-Cc: "Yonghong Song" <yonghong.song@linux.dev>, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH v7 2/2] selftests/bpf: Force -O2 for USDT selftests
- to cover SIB handling logic
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20250519(9504565a)
- Copyright (c) 2002-2025 www.mailtech.cn 163com
-In-Reply-To: <CAEf4Bzbpu9PM6GHV6ewE_hJJ7=94Rn1ZYq5QWVnpoH6_LRQDCw@mail.gmail.com>
-References: <20250806092458.111972-1-phoenix500526@163.com>
- <20250806092458.111972-3-phoenix500526@163.com>
- <f5d8d886-1de3-4521-917a-e98b645b987e@linux.dev>
- <30d8fcac.2669.19882763de2.Coremail.phoenix500526@163.com>
- <e7ba3f7f-38b8-4c06-8aff-ef1fb8d04d86@linux.dev>
- <310495cd.19eb.19893314d03.Coremail.phoenix500526@163.com>
- <0f6d16c1-0e85-4709-9846-3a993a9f041b@linux.dev>
- <65e51538.57aa.1989d162bb8.Coremail.phoenix500526@163.com>
- <2559a8cd-b439-43fc-96e4-d5f2941ca4d8@linux.dev>
- <3fbb9319.20c8.198a1410186.Coremail.phoenix500526@163.com>
- <6c444d7d-524d-4bc8-bda6-0440af621ebe@linux.dev>
- <46f4c341.1dea.198b845a4b0.Coremail.phoenix500526@163.com>
- <7495eeb9-777b-4b9e-8312-c6654268d6ec@linux.dev>
- <CAEf4Bzbpu9PM6GHV6ewE_hJJ7=94Rn1ZYq5QWVnpoH6_LRQDCw@mail.gmail.com>
-X-NTES-SC: AL_Qu2eB/uSv04i5SSQYukfmUsVh+o9X8K1vfsk3oZfPJp+jAPo8CYNenRSAXvt8e60NDCgmgmGWztUxPtYULV/TqgBw3HLFMj7h2JODLD44ZLNbA==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="tfIHsAKU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1755790835;
+	bh=lJZvG23U87rgiOGKfE/Nw17HdxdXmhpAjW+f05nD3+Q=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=tfIHsAKUdlhE3JfZMTPsthocNLD6ubw3qrp7dKiy9ruHd5j/oYnP4pYmy8WF6A4wP
+	 xAG33BlmM+fzK3F03ZLgSs0ezFCaQhVS6dEyT9V4uHkDeAvuWCksRs/3LezYuGsZGw
+	 iUlNkyBi0x7Kuqg8+SeeiwCto/d5AoZqha81cAm8=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Thu, 21 Aug 2025 17:40:34 +0200
+Subject: [PATCH 3/7] tools/nolibc: remove __nolibc_enosys() fallback from
+ dup2()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <eb7a3ed.9723.198cd47d479.Coremail.phoenix500526@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:hCgvCgD3X+xmPadotSMfAA--.2845W
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFAGwiGinMrOWNQACsC
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250821-nolibc-enosys-v1-3-4b63f2caaa89@weissschuh.net>
+References: <20250821-nolibc-enosys-v1-0-4b63f2caaa89@weissschuh.net>
+In-Reply-To: <20250821-nolibc-enosys-v1-0-4b63f2caaa89@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>, Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755790835; l=841;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=lJZvG23U87rgiOGKfE/Nw17HdxdXmhpAjW+f05nD3+Q=;
+ b=RXUu/QyPF4EAgnDokpRfyPuO6CVAQRbUmb7Ce1r3/E3Oekw6nRTlDhkW19/s8p0vL2PX4H+Xz
+ mFK27aYX3z2Cw+QsDicbioNafkpEH6HeEA26wEHrqDr9/wv+1VbXwIz
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-CgoKCgoKCgoKSW4gdGhlIHByZXZpb3VzIGRpc2N1c3Npb24gd2l0aCBZb25naG9uZyBTb25nLCB3
-ZSBmb3VuZCB0aGF0IHNvbWUgY29tcGlsZXIgd291bGQgZ2VuZXJhdGUKc3VjaCBhbiBhcmd1ZW1l
-bnQgZm9ybWF0LiBBbHRob3VnaCBJIGhhdmUgbmV2ZXIgZW5jb3VudGVyIHN1Y2ggYW4gaXNzdWUs
-IEkgZm91bmQgdGhhdCB0aGUgCmdsb2JhbCB2b2xhdGlsZSB2YXJpYWJsZSBjb3VsZCB0cmlnZ2Vy
-IHRoZSBjb21waWxlciB0byBnZW5lcmF0ZSB0aGlzIGFyZ3VtZW50IHNwZWMuIFNvIEkgdHJpZWQg
-dG8gCnNvbHZlIHRoaXMgcHJvYmxlbS4gSSBndWVzcyB0aGlzIHdvdWxkIG5vdCBiZSBhIHByb2Js
-ZW0gc2luY2Ugd2UgaGF2ZSBhbHJlYWR5IHVzZWQgU1RBUF9QUk9CRV9BU00KdG8gcmVsaWFibHkg
-Z2VuZXJhdGUgU0lCIGFyZ3VtZW50IHNwZWMuIAoKQlRXLCBJIGhhdmUgYW5vdGhlciBpc3N1ZSB0
-byBkaXNjdXNzLiAKCk5vdywgYmNjIGZyYW1ld29yayBpcyBub3QgYSByZWNvbW1lbmRhdGlvbiBm
-b3Igd3JpdGluZyBicGYgcHJvZ3JhbSwgc28gYnBmdHJhY2UgaXMgbm93IG1pZ3JhdGluZyAKZnJv
-bSBiY2MgZnJhbWV3b3JrIHRvIGxpYmJwZi4gQmNjIGZyYW1ld29yayBwcm92aWRlcyBzb21lIHJl
-bGV2YW50IEFQSXMgZm9yIGdldCB1c2R0IHByb2JlIGluZm9bMV0uCkFuZCBJIGZvdW5kIHRoYXQg
-dGhlcmUgaXMgbm90IHNpbWlsYXIgQVBJcyBpbiBsaWJicGYsIHRoZXJlZm9yZSBJIGhhdmUgdG8g
-cGFyc2UgZWxmIGZpbGUgbWFudWFsbHkuIAoKQ291bGQgd2UgYWRkIHNvbWUgcmVsZXZhbnQgQVBJ
-cywgbWF5YmUgbGlrZSBgYnBmX3Byb2dyYW1fX3VzZHRfcHJvYmVfbGlzdGAsIGluIGxpYmJwZj8g
-SSBjYW4gbWFrZQphIHBhdGNoIHRvIGltcGxlbWVudCBpdC4gV0RZVD8KCgpbMV0uIGh0dHBzOi8v
-Z2l0aHViLmNvbS9icGZ0cmFjZS9icGZ0cmFjZS9ibG9iLzFjZDRiYmRkNGExM2RkNTU4ODBmMmNj
-NjM4ZGRlNjQxZmI1Zjg0NzQvc3JjL3VzZHQuY3BwI0wxMzFDMS1MMTUyQzIKCgoKCgoKCkF0IDIw
-MjUtMDgtMjEgMDc6MDA6MzUsICJBbmRyaWkgTmFrcnlpa28iIDxhbmRyaWkubmFrcnlpa29AZ21h
-aWwuY29tPiB3cm90ZToKPk9uIE1vbiwgQXVnIDE4LCAyMDI1IGF0IDEwOjM14oCvQU0gWW9uZ2hv
-bmcgU29uZyA8eW9uZ2hvbmcuc29uZ0BsaW51eC5kZXY+IHdyb3RlOgo+Pgo+Pgo+Pgo+PiBPbiA4
-LzE3LzI1IDY6NDMgQU0sIOi1teS9s+eCnCB3cm90ZToKPj4gPgo+PiA+Cj4+ID4KPj4gPgo+PiA+
-Cj4+ID4KPj4gPiBIaSwgWW9uZ2hvbmcuIEkndmUgYWxyZWFkeSBmaWxlZCBhbiBpc3N1ZVsxXSBp
-biBHQ0MgIGNvbW11bml0eS4KPj4gPgo+PiA+Cj4+ID4gQWNjcm9kaW5nIHRvIHRoZSBkaXNjdXNz
-aW9uLCBpdCdzIG5vdCBhIGdjYyBidWcgYnV0IG1heSBiZSBhIHN5c3RlbXRhcCBidWcuCj4+ID4g
-SSBkb24ndCBrbm93IGhvdyB0byByZXBvcnQgdGhpcyBidWcgdG8gc3lzdGVtdGFwLCBidXQgSSBm
-b3VuZCB0aGF0IHRoZQo+PiA+IGxpYmJwZi91c2R0IGhhdmUgdGhlIHNhbWUgcHJvYmxlbS4gSSd2
-ZSBmaWxlZCBhbiBpc3N1ZSBpbiBsaWJicGYvdXNkdCByZXBvWzJdLgo+PiA+Cj4+ID4gSSBhbHNv
-IGhhdmUgc29tZSBpZGVhcyBhYm91dCBpdC4gSSB3cm90ZSBpdCBkb3duIGluIHRoZSBpc3N1ZVsy
-XSBjb21tZW50Lgo+PiA+IE1heSBiZSB3ZSBjYW4gZGlzY3VzcyB0aGVyZS4KPj4gPgo+PiA+IFsx
-XS4gaHR0cHM6Ly9nY2MuZ251Lm9yZy9idWd6aWxsYS9zaG93X2J1Zy5jZ2k/aWQ9MTIxNTY5Cj4+
-ID4gWzJdLiBodHRwczovL2dpdGh1Yi5jb20vbGliYnBmL3VzZHQvaXNzdWVzLzEzCj4+Cj4+IFRo
-YW5rcyBmb3IgZmlsaW5nIGFuIGlzc3VlIG9uIGdjYyBhbmQgZ2V0dGluZyBzb21lIGZlZWRiYWNr
-L3N1Z2dlc3Rpb25zCj4+IGZyb20gZ2NjIGNvbW11bml0eS4KPj4KPj4gQ3VycmVudGx5LCBsaWJi
-cGYvdXNkdCBkb2VzIG5vdCBzdXBvcnQgZm9ybWF0IGxpa2UgJy0xQHRpKCVyaXApJy4gSWYgd2Ug
-ZG8KPgo+RXhhY3RseSwgaXQgZG9lc24ndC4gSSBoYXZlbid0IHlldCByYW4gaW50byBhIGNhc2Ug
-d2hlcmUgcmVhbC13b3JsZAo+YXBwbGljYXRpb25zIHdvdWxkIHVzZSBzdWNoIGFuIGFyZ3VtZW50
-IGZvcm1hdCwgc28gdGhlcmUgd2FzIG5vCj5pbmNlbnRpdmUgaW4gdHJ5aW5nIHRvIHN1cHBvcnQg
-aXQuCj4KPldhcyB0aGlzIGlzc3VlIGRpc2NvdmVyZWQgYXMgcGFydCBvZiB0ZXN0aW5nIG9uIHNv
-bWUgcmVhbCB3b3JsZAo+YXBwbGljYXRpb24sIG9yIGl0J3MgbW9zdGx5IHRocm91Z2ggdGVzdGlu
-ZyBvbiBzeW50aGV0aWMgY2FzZXM/Cj4KPj4gaW50ZW5kIHRvIGltcGxlbWVudCB0aGlzLiBsaWJi
-cGYvdXNkdCBjYW4gcmVqZWN0IHRoYXQgaWYgJ3RpJyBpcyBhCj4+IHN0YXRpYyB2YXJpYWJsZS4g
-bGliYnBmIGNhbiBwcm92aWRlIHNvbWUgaGludHMgYWJvdXQgaG93IHRvIG1ha2UgaXQKPj4gd29y
-ayAoc2VlIGFib3ZlIFsxXSBhbmQgWzJdKS4gVGhlbiwgaXQgd291bGQgYmUgdXNlcidzIHJlcG9u
-c2liaWxpdHkgdG8KPj4gY2hhbmdlIGNvZGUgc28gbGliYnBmIGNhbiBzdXBwb3J0IGl0Lgo+Pgo+
-PiA+Cj4+ID4KPj4gPgo+Cj5bLi4uXQo=
+All architectures have one of the real functions available.
+The additional fallback to __nolibc_enosys() is superfluous.
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/include/nolibc/sys.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 2b9c3bf697e74e80016606814fe21929512ca007..9c4fa7efc1d606f18a5a92b0a3dd9ad7b9b4521b 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -235,10 +235,8 @@ int sys_dup2(int old, int new)
+ {
+ #if defined(__NR_dup3)
+ 	return my_syscall3(__NR_dup3, old, new, 0);
+-#elif defined(__NR_dup2)
+-	return my_syscall2(__NR_dup2, old, new);
+ #else
+-	return __nolibc_enosys(__func__, old, new);
++	return my_syscall2(__NR_dup2, old, new);
+ #endif
+ }
+ 
+
+-- 
+2.50.1
+
