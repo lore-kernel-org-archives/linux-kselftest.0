@@ -1,83 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4FB2E719C;
-	Thu, 21 Aug 2025 15:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FA3224234;
+	Thu, 21 Aug 2025 15:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755788405; cv=none; b=km2E4wgvxRuJ4olEd7Z8MHP0Y/XJ+XIeKOLi0y15BYnC5Vy2mI5NADgDwh+8sdyop/4rXN8EUJQr9cT3fGGL2bh3Vjr0NeQH+ijgurtz8I9Qp5p4dDSW702o0tsbRNg4QfbzjCCKb0vhNpnEqLkSMPrtsKUcPaSKl0xlfvuQkHU=
+	t=1755789196; cv=none; b=PDOCD3RbYZmLlePiw3tj53qD8gYEAA6dbukclA+liTAXVq3+746CFRINRgmKulxEyIOx28GrAHrG2ORnlrPHpvqrc/UBCdpg8kv2puIOmq4Kef2bV/kuD/Qrltqvac5bN79884VrpJ272ZrzGJXaDxJF0J1B9yi4pIQDYpk20es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755788405; c=relaxed/simple;
-	bh=VEtsEWyLke6pHvxuCSoaRicQZP8ik1aQraZxnD6VNOI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=gHxGz0vBVTvHatyHhUezvR1b1+GGBm9y7Z6gq10z+zZXUPqX8i/yhG9ZAZ8m0i+VYQ1W7iysZzqZw9FB7y4vQlkAsnBobycFZTMcU39wwhZUDhM2hiCq3u+iM6X/Xdi2OPeGn0y9nRIfCyFOjp/ggy6mpPayEPaAO2PnKqBKgUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKwM0cHd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755789196; c=relaxed/simple;
+	bh=6EpRJ0Xfy+QCs9ctVXp6cVbyBNBAtx5211b7njYkhrs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=bQjh0Zpe0QWdkUbxlC3rX1eEyOtr42Rd8bN59p2lJdamnLUfH5mNipCmI9sT8M95gL/NIm41aJ5pBVmRnAmgxKai4SWZO9f+jGYJkjU/dJk8OFPQXMRVN8ZhQc2UVT3qaCbmY4mguPmXNK95bQKKKxS7vWMuofp8md/qgzri46o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=RmuQ0Fx8; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKwM0cHd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B48C4CEEB;
-	Thu, 21 Aug 2025 15:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755788405;
-	bh=VEtsEWyLke6pHvxuCSoaRicQZP8ik1aQraZxnD6VNOI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=dKwM0cHdxy60EC5yxNY6NLZ/OwpaiUNOXu+J2AjIGQh0JbUj8N4N7r1L/8L6UgBjG
-	 dyOjMXvGEGMBQDmzr5uqGbQDLZTe3DRE3qkayuN2HhF+8IUGtcqJr1wFiunEaopKHr
-	 QVT3QdHxxPBDdlakRoTT4oFnlqFjw05OMQR+EQClNxgJhXpialCU0hEylRM7RVBCdI
-	 Uxj96v0U+e5f6UtsjShni51tqRJQkWOJNaOLUAmhunqc4Xb7kHhnFoCx4OLS+tZsXF
-	 9J7WSX8xHDM3uLlLaiVJv77dE0tw29xXwTKvbShg8/lnwa2tv1eb9SHsah4gd9W4Au
-	 anR5XsNsAudCg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADDF7383BF5D;
-	Thu, 21 Aug 2025 15:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="RmuQ0Fx8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1755789186;
+	bh=6EpRJ0Xfy+QCs9ctVXp6cVbyBNBAtx5211b7njYkhrs=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=RmuQ0Fx8PSY+jFpL9QaWEv+rmRSQFMwzxujYPwDofuO7aO4a0NGmy6IP9y3EHo3tE
+	 bZFRGIzus5kUT4WITHxwPbVxf7OA6g2tg4vW2Tv78goo8B5SI5jSCUamkTU484slwU
+	 fKwYAKLz1AvEUyy70SfybLakPNRkhz14Z9Jwr7DU=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Thu, 21 Aug 2025 17:13:02 +0200
+Subject: [PATCH 1/2] kselftest/arm64/gcs: Correctly check return value when
+ disabling GCS
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/2] tls: fix handling of zero-length records on the
- rx_list
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175578841229.1075387.17185721811161977550.git-patchwork-notify@kernel.org>
-Date: Thu, 21 Aug 2025 15:00:12 +0000
-References: <20250820021952.143068-1-kuba@kernel.org>
-In-Reply-To: <20250820021952.143068-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- sd@queasysnail.net, borisp@nvidia.com, john.fastabend@gmail.com,
- linux-kselftest@vger.kernel.org, ramdhan@starlabs.sg, billy@starlabs.sg
+Message-Id: <20250821-nolibc-gcs-fixes-v1-1-88519836c915@weissschuh.net>
+References: <20250821-nolibc-gcs-fixes-v1-0-88519836c915@weissschuh.net>
+In-Reply-To: <20250821-nolibc-gcs-fixes-v1-0-88519836c915@weissschuh.net>
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
+ Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755789186; l=984;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=6EpRJ0Xfy+QCs9ctVXp6cVbyBNBAtx5211b7njYkhrs=;
+ b=11Pm092QniwA1C7akmN/woe12MP6+ssB98JgfCEkl6lfy9QfgApnV3kEZCvBBgBbKkm0rjuW0
+ AXoNaBLBMTfAWs8kkzmX7fq7gdjKCw5Is5MNRGwyWB8EFR51dmT8Ph6
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Hello:
+The return value was not assigned to 'ret', so the check afterwards
+does not do anything.
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Fixes: 3d37d4307e0f ("kselftest/arm64: Add very basic GCS test program")
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/testing/selftests/arm64/gcs/basic-gcs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Tue, 19 Aug 2025 19:19:51 -0700 you wrote:
-> Each recvmsg() call must process either
->  - only contiguous DATA records (any number of them)
->  - one non-DATA record
-> 
-> If the next record has different type than what has already been
-> processed we break out of the main processing loop. If the record
-> has already been decrypted (which may be the case for TLS 1.3 where
-> we don't know type until decryption) we queue the pending record
-> to the rx_list. Next recvmsg() will pick it up from there.
-> 
-> [...]
+diff --git a/tools/testing/selftests/arm64/gcs/basic-gcs.c b/tools/testing/selftests/arm64/gcs/basic-gcs.c
+index 54f9c888249d74451e1432280a395156ce72e56c..100d2a983155f7347a19b2b8b88f9494dc6a51d5 100644
+--- a/tools/testing/selftests/arm64/gcs/basic-gcs.c
++++ b/tools/testing/selftests/arm64/gcs/basic-gcs.c
+@@ -410,7 +410,7 @@ int main(void)
+ 	}
+ 
+ 	/* One last test: disable GCS, we can do this one time */
+-	my_syscall5(__NR_prctl, PR_SET_SHADOW_STACK_STATUS, 0, 0, 0, 0);
++	ret = my_syscall5(__NR_prctl, PR_SET_SHADOW_STACK_STATUS, 0, 0, 0, 0);
+ 	if (ret != 0)
+ 		ksft_print_msg("Failed to disable GCS: %d\n", ret);
+ 
 
-Here is the summary with links:
-  - [net,1/2] tls: fix handling of zero-length records on the rx_list
-    https://git.kernel.org/netdev/net/c/62708b9452f8
-  - [net,2/2] selftests: tls: add tests for zero-length records
-    https://git.kernel.org/netdev/net/c/a61a3e961baf
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.50.1
 
