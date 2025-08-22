@@ -1,261 +1,94 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619D835207C
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 21:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77085334375;
+	Fri, 22 Aug 2025 21:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755898016; cv=none; b=KKTtBX8nqsPcJPNxlF7WQy+G9pBeQN4iJOYEVKTgTQBn20kaPnHRDIM25HYh7XDvzZot1+4Tl7XFX/04NYSkvPpmDB+a0YQMlVe1x5ZmvsM9hAAOickKDKWysYVwLemQKnv2TILxpmP2qz7FK4PtTzJrumq8bE/1t9fjdWQgxa8=
+	t=1755898054; cv=none; b=NhXlQk0qsxV7pWWtFc/ueK9d+iM2c6EvI9sLNTPxCA70dolprWOwcQhjT0AvaEu/WyGuibE+eKyYm93IvJhG0yvAiCRGOw3gJkbp12X8ADSCQORdHMntbK0ooOp5IMp8f6vmZdDit48N4Ma5IszILxRXsCGePNfWxLi7T2v5Cbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755898016; c=relaxed/simple;
-	bh=eC1A6NkOSOpLHw7BmMrdgE+pyNgtUry9BNmdqlZgQL8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=n70N+NZg9Jcri8FJPMkkEGCqO1rjRycjSe9f7YcM4IC+mGiRtnAk1YNGn6rRfyp0IhrDgZ/+46ikHSnlb+ZxyJXkIOryG1IlNCzP0JmjrWTGRtK37tMJCbylGN+5i2NhSTTcyYy+4wQBGou128YxWuxEtc2L6STfS4HLpcx5mTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RiSnncrb; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
+	s=arc-20240116; t=1755898054; c=relaxed/simple;
+	bh=NgvM1y6eKAact5srhZSWA6nq5hfv7jYa6jFxeGzxTvg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q3427Mi503Zqx1by1jCcHlXuvG0f8dK8i1OQgZxqDlZMUdbLZa7iPnz8eWXmwfxYe8bXUgmbz7Wl4pl6fPPRx3JIdUJ9WogUNGB2k+zH2KnhDxKS3LTZpzknD1KCW/RO3yQMNZB/CmMC1I0tpZwqglurMa3lUXpzduQ1oV66bMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AkeRbb3H; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RiSnncrb"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-244581c62faso32680685ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Aug 2025 14:26:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AkeRbb3H"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-76e2e6038cfso2959837b3a.0;
+        Fri, 22 Aug 2025 14:27:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755898014; x=1756502814; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=38ornbn3jxDRGC0TBG5oYiu+bNjuHezhBgQyOoDyC+Y=;
-        b=RiSnncrbEpJBk/LEDS5hYTfzcJpr7AhD0iH8iVKExUvTzqUphAxMHFdr+ub03ZhY59
-         LmWN37e7VFBbgtz9JWEuhrUUkNXWPaySVUA1IyTEVx3opAWZpy0vTGXgkBQ2vpv1W1yv
-         rmFycYIs67so83rPQF+lPVZQvosEp2O+rODY485jKhtXMuZkXherkWyIZL8qxwH7xz3V
-         4zzGFgpYSX3arz4Kcx4uo7wrW43+gxmBSkj+16TzJeXgiTBDVi4NzaNr7bCs0/9++O8N
-         dWFh7Ji+udPTHhQi+3HtO/4akBTPkGaAB2IS5NG9l6RgxYaBoYEmEqkw89Q/7xAQ5O7F
-         MxCw==
+        d=gmail.com; s=20230601; t=1755898053; x=1756502853; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qc5aKUbyHXzB+ReBgimqpIrI93bwlyDaCPI5BMn2Uj4=;
+        b=AkeRbb3H2g5BreBlIidTV+O7cEo1S2UdrVK6zHgisSLmjyvNuOR6X/kWliyNNaYKsT
+         cNaI2Is3fs9CWbn5rX7K7bopLzuwuqK15P72ifR1h6Erar8DtepbNGhj6KkcNU6m7fJV
+         t3zgSt+YS7Y5jZaDpLbMto+Ifkj0FCC6EJY5UAeGDCoFkgSD7H///6MWWFbswWunoOfA
+         khWRPYxF5/BOKyXRsTy1uySY1fyxwdeHxcA5bISlw5yFPsYz7QvGdN9G8c+fmwDq04fF
+         4VPbZHRKJq7ElXK/rO2rqP7u+4aSWtiAfFtKwC95fjZH8W/zjrD5vniXV0ZDSoDzwbW6
+         k05A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755898014; x=1756502814;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=38ornbn3jxDRGC0TBG5oYiu+bNjuHezhBgQyOoDyC+Y=;
-        b=Ko6VZV7WW2+AD6mRORNZ6udHt5qLYeriLlVLOqHNfXxtQSfx8Q/mPd5T9//mzqw2Jh
-         Oa9OeNHDBxGGIGrfA1sqburhwa55qGirP+SQ+up9J0XvOxAzEHeEOTjRcXavJxuIFUEd
-         T3E27Ms8lwZVcHnv1+5r09wD9dZ8DWctw/o0ohYedhBS8alO1GmGysp2wqLaWwGgG5YU
-         upo4Qzf0IO2mbG6DD4cjOX/ky4pWDskiUWzidMkOGW+TVCflbIjrYq5VugpL+X5RsazT
-         Zbb78ygaib9O0vq2scJnY4MlqHR3bDCoKd/M3hUubvVk2Z9dw2c9t6YJUUxyaPgGoVP+
-         ZBkA==
-X-Forwarded-Encrypted: i=1; AJvYcCWY9x/n1iHPf+/9rn7YN2Ze+OtS5w6Uy3omC0qwUgsOZAOWIB8jQGsnfebu+Du9n3+/TCEwBasEQLO9R0ZzYlw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzke9hjla5DMg/o/HO/toPZgijMvTBb/ZeGscGhzs6KXSkDj0S4
-	NVIzOOW1Ch6M6YVt//lg5KQq4Hz5abwyxPTmmVPqOGJfWntjJooNzL+hPw5ihT4AGGgDru10Ek3
-	YDnMXy5UOwgzo0A==
-X-Google-Smtp-Source: AGHT+IGEhVH4DT4YDDvOB5Y0P9w1lXXR67RVbV4Im5UbeUAIXfdfV8gpSOY1MpxXR8gZ2Y8jo3h5afn4e0nJrg==
-X-Received: from pjbpd12.prod.google.com ([2002:a17:90b:1dcc:b0:321:c3e4:5824])
- (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:246:b0:234:9656:7db9 with SMTP id d9443c01a7336-2462ef1f38emr46894415ad.32.1755898013804;
- Fri, 22 Aug 2025 14:26:53 -0700 (PDT)
-Date: Fri, 22 Aug 2025 21:25:17 +0000
-In-Reply-To: <20250822212518.4156428-1-dmatlack@google.com>
+        d=1e100.net; s=20230601; t=1755898053; x=1756502853;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qc5aKUbyHXzB+ReBgimqpIrI93bwlyDaCPI5BMn2Uj4=;
+        b=pNm4DItNHxMQ8kLtVpHC8by7FV3tv4gRSR1M7rmLich32cef9TfR2hCuyAqoVx2LQX
+         MSn8/ZeL1R/Wl7HrCiztohUDQoug3OhZE6Bq2167TKLFa9O+wlDK7WUdUF0IKuIijbaU
+         dlJmByplbX5y8pD5tudOgTtP9ojB+U4AHwG/L6ugPBMr43Jllgh2ZZWEWXwTsCvzkPQI
+         ygxPEQMSvmvPWGQrQZa0Eta3W6NBdaKL2jVnJmifmEVX1mCIpzUFUpXZut0Dr9YdrL66
+         HrC71NBmlDWN5D8b4kHZ1MOl16pNaUDLKPMO9VCJyqjodMVZB98SULJQXlN8u2LRtmnM
+         uI2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUfi88R5uoOGu7o7D9SXMqTWpGC++Od6ysXYRBtLAgKNKeljtyqnYXJCGDJjIFivrs22X6jhjcvk9kI/oS3pTE=@vger.kernel.org, AJvYcCUti/bks5hRB/NSFbXndRidUzjvg2mPNrfYTKcsN5/zEl/+nAmzbYkLlDifJUl6Ts5aiKbM85ql@vger.kernel.org
+X-Gm-Message-State: AOJu0YzP8NS9g7hEal+X4Ac4wy8QcpH/2PinyiNzibSauWmGkG1yG87y
+	ZCxNabT0YZ9vMud8ktuvFYu3VJNAuV94f0lS+EEXOK30qZe64SnTEwo=
+X-Gm-Gg: ASbGncv0v/YDqyFfbEwOJkbxBWRXCpU86VkfdB0unQCaLfvcDAuGCfVU7A1+hqpRNdB
+	aCzhnJtIzj7WgAtZ50vTrIdvzfZgOFzga9++HNsEPBPgnb/tWgf4gr8W1I9iOnWYQyPbYe84pls
+	NJu53Gvd1XHUDs36zPDPfWjJkqhljjDVwnPQIpJEcM6k46cuGmC0GcEK6h4tsDKVjS4m6fFLQJN
+	9CDV62iSiK5f5MEILXQiK2gYKS1sKIItPUkDeOMYf+ZGUe3D2BkGFHsHuyUUGuMzv3FoCAt9Bm7
+	ZIk0aYw+hFxfumHY4Cfjd2Puocuk3a1dgEU6aQ7B940NS0Ot539IUO/u2v75Nc4IZJFCuiLZJwM
+	rfyU/P1YbM5VedYp43gq1xeTzRGcmCpo/BiDGElfBpK/M2+WzXiVzQsf3RwMcCcXLXWBbA3ny0K
+	IQYCrCIxYX+NZdxZOmUSMvVBXWWUmtT8UiALrEqBtpKavOJcIMvlGGHp/UbOVB5BpvCuXGLA/Ch
+	MQp
+X-Google-Smtp-Source: AGHT+IFcRAEgnT2HNaZdwXSF3E3InxI/riwDq92jZH1LrJ/Inxw9lTA2ibF+EylSfTnl3Cly917mig==
+X-Received: by 2002:a05:6a20:12c8:b0:240:2371:d003 with SMTP id adf61e73a8af0-24340cd311cmr6435779637.28.1755898052647;
+        Fri, 22 Aug 2025 14:27:32 -0700 (PDT)
+Received: from localhost (c-73-158-218-242.hsd1.ca.comcast.net. [73.158.218.242])
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b49cb8afc11sm651400a12.17.2025.08.22.14.27.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Aug 2025 14:27:32 -0700 (PDT)
+Date: Fri, 22 Aug 2025 14:27:31 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	almasrymina@google.com, sdf@fomichev.me, joe@dama.to,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 2/4] selftests: drv-net: ncdevmem: save IDs of
+ flow rules we added
+Message-ID: <aKjgw1R9Zpl7nCKZ@mini-arch>
+References: <20250822200052.1675613-1-kuba@kernel.org>
+ <20250822200052.1675613-3-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250822212518.4156428-1-dmatlack@google.com>
-X-Mailer: git-send-email 2.51.0.rc2.233.g662b1ed5c5-goog
-Message-ID: <20250822212518.4156428-31-dmatlack@google.com>
-Subject: [PATCH v2 30/30] vfio: selftests: Add a script to help with running
- VFIO selftests
-From: David Matlack <dmatlack@google.com>
-To: Alex Williamson <alex.williamson@redhat.com>
-Cc: Aaron Lewis <aaronlewis@google.com>, 
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Arnaldo Carvalho de Melo <acme@redhat.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
-	David Matlack <dmatlack@google.com>, dmaengine@vger.kernel.org, 
-	Jason Gunthorpe <jgg@nvidia.com>, Joel Granados <joel.granados@kernel.org>, 
-	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Vinicius Costa Gomes <vinicius.gomes@intel.com>, Vipin Sharma <vipinsh@google.com>, 
-	"Yury Norov [NVIDIA]" <yury.norov@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250822200052.1675613-3-kuba@kernel.org>
 
-Introduce run.sh, a script to help with running VFIO selftests. The
-script is intended to be used for both humans manually running VFIO
-selftests, and to incorporate into test automation where VFIO selftests
-may run alongside other tests. As such the script aims to be hermetic,
-returning the system to the state it was before the test started.
+On 08/22, Jakub Kicinski wrote:
+> In prep for more selective resetting of ntuple filters
+> try to save the rule IDs to a table.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-The script takes as input the BDF of a device to use and a command to
-run (typically the command would be a VFIO selftest). e.g.
+This seems ok to unblock nipa cleanup, but at this point why not copy-paste
+proper ioctl from kperf? https://github.com/facebookexperimental/kperf/blob/main/devmem.c#L119
+(seems less complicated than popen)
 
-  $ ./run.sh -d 0000:6a:01.0 ./vfio_pci_device_test
-
- or
-
-  $ ./run.sh -d 0000:6a:01.0 -- ./vfio_pci_device_test
-
-The script then handles unbinding device 0000:6a:01.0 from its current
-driver, binding it to vfio-pci, running the test, unbinding from
-vfio-pci, and binding back to the original driver.
-
-When run.sh runs the provided test, it does so by appending the BDF as
-the last parameter. For example:
-
-  $ ./run.sh -d 0000:6a:01.0 -- echo hello
-
-Results in the following being printed to stdout:
-
-  hello 0000:6a:01.0
-
-The script also supports a mode where it can break out into a shell so
-that multiple tests can be run manually.
-
-  $ ./run.sh -d 0000:6a:01.0 -s
-  $ echo $VFIO_SELFTESTS_BDF
-  $ ./vfio_pci_device_test
-  $ exit
-
-Choosing which device to use is up to the user.
-
-In the future this script should be extensible to tests that want to use
-multiple devices. The script can support accepting -d BDF multiple times
-and parse them into an array, setup all the devices, pass the list of
-BDFs to the test, and then cleanup all the devices.
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: David Matlack <dmatlack@google.com>
----
- tools/testing/selftests/vfio/Makefile |   1 +
- tools/testing/selftests/vfio/run.sh   | 109 ++++++++++++++++++++++++++
- 2 files changed, 110 insertions(+)
- create mode 100755 tools/testing/selftests/vfio/run.sh
-
-diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
-index ee09c027ade5..324ba0175a33 100644
---- a/tools/testing/selftests/vfio/Makefile
-+++ b/tools/testing/selftests/vfio/Makefile
-@@ -3,6 +3,7 @@ TEST_GEN_PROGS += vfio_dma_mapping_test
- TEST_GEN_PROGS += vfio_iommufd_setup_test
- TEST_GEN_PROGS += vfio_pci_device_test
- TEST_GEN_PROGS += vfio_pci_driver_test
-+TEST_PROGS_EXTENDED := run.sh
- include ../lib.mk
- include lib/libvfio.mk
- 
-diff --git a/tools/testing/selftests/vfio/run.sh b/tools/testing/selftests/vfio/run.sh
-new file mode 100755
-index 000000000000..0476b6d7adc3
---- /dev/null
-+++ b/tools/testing/selftests/vfio/run.sh
-@@ -0,0 +1,109 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+# Global variables initialized in main() and then used during cleanup() when
-+# the script exits.
-+declare DEVICE_BDF
-+declare NEW_DRIVER
-+declare OLD_DRIVER
-+declare OLD_NUMVFS
-+declare DRIVER_OVERRIDE
-+
-+function write_to() {
-+	# Unfortunately set -x does not show redirects so use echo to manually
-+	# tell the user what commands are being run.
-+	echo "+ echo \"${2}\" > ${1}"
-+	echo "${2}" > ${1}
-+}
-+
-+function bind() {
-+	write_to /sys/bus/pci/drivers/${2}/bind ${1}
-+}
-+
-+function unbind() {
-+	write_to /sys/bus/pci/drivers/${2}/unbind ${1}
-+}
-+
-+function set_sriov_numvfs() {
-+	write_to /sys/bus/pci/devices/${1}/sriov_numvfs ${2}
-+}
-+
-+function set_driver_override() {
-+	write_to /sys/bus/pci/devices/${1}/driver_override ${2}
-+}
-+
-+function clear_driver_override() {
-+	set_driver_override ${1} ""
-+}
-+
-+function cleanup() {
-+	if [ "${NEW_DRIVER}"      ]; then unbind ${DEVICE_BDF} ${NEW_DRIVER} ; fi
-+	if [ "${DRIVER_OVERRIDE}" ]; then clear_driver_override ${DEVICE_BDF} ; fi
-+	if [ "${OLD_DRIVER}"      ]; then bind ${DEVICE_BDF} ${OLD_DRIVER} ; fi
-+	if [ "${OLD_NUMVFS}"      ]; then set_sriov_numvfs ${DEVICE_BDF} ${OLD_NUMVFS} ; fi
-+}
-+
-+function usage() {
-+	echo "usage: $0 [-d segment:bus:device.function] [-s] [-h] [cmd ...]" >&2
-+	echo >&2
-+	echo "  -d: The BDF of the device to use for the test (required)" >&2
-+	echo "  -h: Show this help message" >&2
-+	echo "  -s: Drop into a shell rather than running a command" >&2
-+	echo >&2
-+	echo "   cmd: The command to run and arguments to pass to it." >&2
-+	echo "        Required when not using -s. The SBDF will be " >&2
-+	echo "        appended to the argument list." >&2
-+	exit 1
-+}
-+
-+function main() {
-+	local shell
-+
-+	while getopts "d:hs" opt; do
-+		case $opt in
-+			d) DEVICE_BDF="$OPTARG" ;;
-+			s) shell=true ;;
-+			*) usage ;;
-+		esac
-+	done
-+
-+	# Shift past all optional arguments.
-+	shift $((OPTIND - 1))
-+
-+	# Check that the user passed in the command to run.
-+	[ ! "${shell}" ] && [ $# = 0 ] && usage
-+
-+	# Check that the user passed in a BDF.
-+	[ "${DEVICE_BDF}" ] || usage
-+
-+	trap cleanup EXIT
-+	set -e
-+
-+	test -d /sys/bus/pci/devices/${DEVICE_BDF}
-+
-+	if [ -f /sys/bus/pci/devices/${DEVICE_BDF}/sriov_numvfs ]; then
-+		OLD_NUMVFS=$(cat /sys/bus/pci/devices/${DEVICE_BDF}/sriov_numvfs)
-+		set_sriov_numvfs ${DEVICE_BDF} 0
-+	fi
-+
-+	if [ -L /sys/bus/pci/devices/${DEVICE_BDF}/driver ]; then
-+		OLD_DRIVER=$(basename $(readlink -m /sys/bus/pci/devices/${DEVICE_BDF}/driver))
-+		unbind ${DEVICE_BDF} ${OLD_DRIVER}
-+	fi
-+
-+	set_driver_override ${DEVICE_BDF} vfio-pci
-+	DRIVER_OVERRIDE=true
-+
-+	bind ${DEVICE_BDF} vfio-pci
-+	NEW_DRIVER=vfio-pci
-+
-+	echo
-+	if [ "${shell}" ]; then
-+		echo "Dropping into ${SHELL} with VFIO_SELFTESTS_BDF=${DEVICE_BDF}"
-+		VFIO_SELFTESTS_BDF=${DEVICE_BDF} ${SHELL}
-+	else
-+		"$@" ${DEVICE_BDF}
-+	fi
-+	echo
-+}
-+
-+main "$@"
--- 
-2.51.0.rc2.233.g662b1ed5c5-goog
-
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
