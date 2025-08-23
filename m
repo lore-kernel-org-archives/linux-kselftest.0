@@ -1,27 +1,27 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E414822259D;
-	Sat, 23 Aug 2025 06:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADEF81E4AB;
+	Sat, 23 Aug 2025 07:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755931854; cv=none; b=WH2HHrXJAKEg0d8Ll8y6cY5p3gIMioacfp6/wq7WQC5NCAD+Wg0z+VJadi1WNMlhybTPo4kx7702b4+l2sruUa9CSz8mEC1/edWR30D462PQ0Oj69rP+3Lz7K3AWW4GSrXpPol/MBDwfCgvQveiBqpNJCqCXFT3f04oKUYwcVd0=
+	t=1755933555; cv=none; b=bsjN3Zw8llEqzW/0LC4EJLeq2fk7xZyhLDSyj2+dTGi1hcxxNyUE6sPOjxOU9ZfUqDEcJgvWD29RH04VpASqDp6oCmacOSV6H/LKnhbHs26Iurupgu3j1qSocOjRg9X/1tqkCWIewmrGOJrcBiEuYVgiVxb4cwvqrylf3bNP0yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755931854; c=relaxed/simple;
-	bh=Xu1KTs9YrlqBzPX7FyCGl6pGbxsunB6DwjpVd1dZVwc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aG6A/HTVpcw3I7LZ0EwLBSKwBKsqv4Hc9kPsHM9c7kKF+2VH4ujkznE7eW9b2ZctNSrBXolM5IhwPy6psBVMXvO9/hV92NR6+SrDs/Vlvxe+0avSOQnufdtsS6CrL+d0VMPnyfkVDco+1SBHHqWBug3k4k4USsVmiIpp/vTleDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=OWiqrWYa; arc=none smtp.client-ip=117.135.210.5
+	s=arc-20240116; t=1755933555; c=relaxed/simple;
+	bh=KitFibol2Aae7q/65u4KChsF9jZ+Luq0MZlvtX1tHAA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p4dWgEmPNlBSliLHspGGKwQbhjKcZaYIILLTPcgDcadAy2cxEsFxwICbXZ7dED0wKct9fqLatSSncgHQ4Cvc4P9qGhrAF00OCvPbncwOatX0on6NRSSxQBQgRJ14MxXmBpBS+Xmo1rZ/TCrJWmfzmsGZdBtVeCIVwnHrncITSuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Vag11rd6; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="OWiqrWYa"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Vag11rd6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Ot
-	0XN5hmrW5u2kJcpWmjJSBYnA+EPfGrLvdVTkcdShk=; b=OWiqrWYa7EoJKlRHNR
-	B2iNdrmRuUrZn989UjeG4zhy9iUJSjojaDGe15eC7nl+k/Rav8q5iTnsPzo6fZLp
-	6efLSvEyvsHoUjiesOcyzXI27+iCjOhTB4sQNx5vYr+Io71DG4hS/NNDhmPARCfY
-	C9w5L3ooGU0k6ZyJfLw8PoPg4=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=OI
+	Z18m9fJcHtCDCLIheqxHmmUxmgzQxXPzdeaAhEmr8=; b=Vag11rd6X7YDF1TntE
+	Rj62heAmp9mt4NbloFqpfxoxJe2mZUIMVL6fs2l2wVn1BOGX+82yFfP7+3HDrnHj
+	ZH5H46IJOOjS/nIcKWUsCWyYGWVai9rtjVFBlZjW7f/WQEsn2lZIyVkV0p4n4C8W
+	RYmY4aqY+ZOrl0TgqcXxckXmc=
 Received: from phoenix.. (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wAn8USdZKlohCriDQ--.20793S2;
-	Sat, 23 Aug 2025 14:50:07 +0800 (CST)
+	by gzsmtp4 (Coremail) with SMTP id PygvCgBHfPRQa6loSD0TAQ--.40650S2;
+	Sat, 23 Aug 2025 15:18:42 +0800 (CST)
 From: Jiawei Zhao <phoenix500526@163.com>
 To: ast@kernel.org
 Cc: daniel@iogearbox.net,
@@ -30,9 +30,9 @@ Cc: daniel@iogearbox.net,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v14 0/2] libbpf: fix USDT SIB argument handling causing unrecognized register error
-Date: Sat, 23 Aug 2025 06:50:02 +0000
-Message-ID: <20250823065005.1187181-1-phoenix500526@163.com>
+Subject: [PATCH bpf-next v15 0/2] libbpf: fix USDT SIB argument handling causing unrecognized register error
+Date: Sat, 23 Aug 2025 07:18:37 +0000
+Message-ID: <20250823071839.1191350-1-phoenix500526@163.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -41,12 +41,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAn8USdZKlohCriDQ--.20793S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktFy5Zr1xJr4UGF1UGFg_yoW5urWDpF
-	WrGws8KrWqyas7GFsxWr42yw43Wan5GF4UJrn2qw1Yvr4rGFy7Ar4Igr15GrnxWa97X34Y
-	vFs8tF98GasYvw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jopBfUUUUU=
-X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/1tbiFAqyiGipWPbE8QAAs+
+X-CM-TRANSID:PygvCgBHfPRQa6loSD0TAQ--.40650S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWw4ktFy5Zr1xJr4UGF1UGFg_yoW5uw1rpF
+	WrWws8trWqyas7GFsxWr42yw43Wan5GF4UJrn2qw1Yvr4rGF17Ar4Igr15GrnxWa97X34Y
+	vFs8tFs8GasYvw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jrdb8UUUUU=
+X-CM-SenderInfo: pskrv0dl0viiqvswqiywtou0bp/xtbBawqyiGipYPOxzgAAs2
 
 When using GCC on x86-64 to compile an usdt prog with -O1 or higher
 optimization, the compiler will generate SIB addressing mode for global
@@ -121,6 +121,9 @@ Change since v12:
 Change since v13(resolve some review comments):
 - https://lore.kernel.org/bpf/CAEf4BzZWd2zUC=U6uGJFF3EMZ7zWGLweQAG3CJWTeHy-5yFEPw@mail.gmail.com/
 - https://lore.kernel.org/bpf/CAEf4Bzbs3hV_Q47+d93tTX13WkrpkpOb4=U04mZCjHyZg4aVdw@mail.gmail.com/
+
+Change since v14:
+- fix a typo in __bpf_usdt_arg_spec
 
 Jiawei Zhao (2):
   libbpf: fix USDT SIB argument handling causing unrecognized register
