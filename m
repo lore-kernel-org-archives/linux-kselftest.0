@@ -1,63 +1,78 @@
-Received: from cdmsr2.hinet.net (210-65-1-144.hinet-ip.hinet.net [210.65.1.144])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAD9296BDF
-	for <linux-kselftest@vger.kernel.org>; Mon, 25 Aug 2025 21:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.65.1.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0971E32DB;
+	Mon, 25 Aug 2025 23:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756158730; cv=none; b=pbLANMEo17+YRO/9DlRL6ejLxbWBfD+XREc6TYGGgmPAFFJGNrk3bIs3BOr4F3RLoAulJYsntRbFb/Qk/PmJmvpCQQkQbEM+xkjylNAluPZmo6IeXqGXogpR8rWxa1JLvswCyBzaaY5KAe1ggf3lRmlvBi3W9tMRa5BW03CzITc=
+	t=1756163401; cv=none; b=kiOQI4NbIxml6xvbLaj3LPPudwDjSdw00b/N+rMxvSNHNtwt2rvtyj/4uTFQGb4bowAPDbpKwLibUIKfdxgFmAZcs5WZclDIwTvVZL1B1fnqknrCGGuDB+7PSxdgeQZVsuiKmOI7Pe1iaD50D9CLcXQnxnGUS5x2Y3dyUheAlTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756158730; c=relaxed/simple;
-	bh=Z1MdS5Urfw7ePm/p1D4MrWWCnqc/pjXbcAkk0qAPJOI=;
-	h=Message-ID:From:To:Subject:Date:MIME-Version:Content-Type; b=FKjXgc554a4dXENPdVvj1Y2/7Ku4zTMzJJB03i9byFDnc7ojNp/eJPV3Wl01et+ENXHXKAKu7Rp+qP/B0JFJ3BRaloLvWSDPqVJYRS1pdMnc0yxwE6OmSIPIVgH8xdrULxLG46gLaxsOisiUIX21bVplKoF57jllR1bZZxqqA64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=msa.hinet.net header.i=@msa.hinet.net header.b=au+RDO+f; arc=none smtp.client-ip=210.65.1.144
+	s=arc-20240116; t=1756163401; c=relaxed/simple;
+	bh=vccet8eGicWe9Xr+i7u7kD4Y1huOxJLngM2a+gcoxIQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=JTJetA9O9I6GgJAn/TEAWKUtS8sz687iN64YfJlUsFlDGEGynh3mbmdcPjI4BVybiVdTg0CWDf8fjhR7FDb9ybGaWyJ9sB8UNzNcjlhmcuph5V8Q+kn+4SHmNiTjYZ3NpM9/4iOHgxzi0VIrR6oXZq/c1SU6nwRWBlE1VhPIrUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UWAFhq0s; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=msa.hinet.net header.i=@msa.hinet.net header.b="au+RDO+f"
-Received: from cmsr8.hinet.net ([10.199.216.87])
-	by cdmsr2.hinet.net (8.15.2/8.15.2) with ESMTPS id 57PLq6s6896121
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Aug 2025 05:52:06 +0800
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; d=msa.hinet.net;
-	s=default; t=1756158726; bh=JBCbLQYoCHeAvUijnyWJT+nTyyE=;
-	h=From:To:Subject:Date;
-	b=au+RDO+fNsUcaJrSVG5+GaM0YXSxQXD6yRQ6hPb4a+cOynIsxLvgw/m6q4NQx2KaZ
-	 JjaD35FO46RaX2K7f2UTSOEiWMbr1G7j0VEwCAadT1KH19G14fYwBqFPdcG2I9CiIg
-	 58W8uS7NzJZuKptTAWVvGbZuWsW1dG2mQ86iR+FY=
-Received: from [127.0.0.1] (118-171-30-179.dynamic-ip.hinet.net [118.171.30.179])
-	by cmsr8.hinet.net (8.15.2/8.15.2) with ESMTPS id 57PLmtLr760228
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Aug 2025 05:48:58 +0800
-Message-ID: <2d262685ca97dfb651c8bcecf8e52811ed93385bbb5491b381557f097dcf8626@msa.hinet.net>
-From: Sales <europe-salesclue@msa.hinet.net>
-Reply-To: europe-sales@albinayah-group.com
-To: linux-kselftest@vger.kernel.org
-Subject: September Quote - RFQ
-Date: Mon, 25 Aug 2025 14:48:58 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UWAFhq0s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A65EC4CEED;
+	Mon, 25 Aug 2025 23:10:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756163400;
+	bh=vccet8eGicWe9Xr+i7u7kD4Y1huOxJLngM2a+gcoxIQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=UWAFhq0snlJZsQF32B5mX5blOpwSiWtLWtPtm/5SIRaR/NqqQuORX/j7Snj36WQfz
+	 JsUFbu1Xq3YJmO1riP7WrfLkQ2TpfBGcQQSl+6fgKG1K09LDR62GZZrBlY0BhQFYB6
+	 1nwU0HpMer6g4aL+V7NCb289COVWD/dF/jf041wqPB2WoqNSn5zxRM5aFhut7Uqkdq
+	 J7D0Uf1BAF4L30/gY+JWfPEXifMeNMegu5GIDiiIlN/S8v2+v23e3N4xGEGDZ6BqEc
+	 8ZrtluAzudTfJI2UdBIYfQXYYnP+urCusfyMmrAypJ25ro4AVYjR4P9JXBw8chlKcL
+	 Aljmh4ogIWmcQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C71383BF70;
+	Mon, 25 Aug 2025 23:10:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.4 cv=YdAe5BRf c=1 sm=1 tr=0 ts=68acda4b
-	a=lFXb0aLNiSyhbXvmCvqasA==:117 a=kj9zAlcOel0A:10 a=OrFXhexWvejrBOeqCD4A:9
-	a=CjuIK1q_8ugA:10
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3] selftests: rtnetlink: skip tests if tools or
+ feats are missing
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175616340800.3590689.4133856229422004642.git-patchwork-notify@kernel.org>
+Date: Mon, 25 Aug 2025 23:10:08 +0000
+References: <20250822140633.891360-2-alessandro@0x65c.net>
+In-Reply-To: <20250822140633.891360-2-alessandro@0x65c.net>
+To: Alessandro Ratti <alessandro@0x65c.net>
+Cc: liuhangbin@gmail.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ pabeni@redhat.com, skhan@linuxfoundation.org
 
-Hi,
+Hello:
 
-Please provide a quote for your products:
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Include:
-1.Pricing (per unit)
-2.Delivery cost & timeline
-3.Quote expiry date
+On Fri, 22 Aug 2025 16:03:40 +0200 you wrote:
+> Some rtnetlink selftests assume the presence of ifconfig and iproute2
+> support for the `proto` keyword in `ip address` commands. These
+> assumptions can cause test failures on modern systems (e.g. Debian
+> Bookworm) where:
+> 
+>  - ifconfig is not installed by default
+>  - The iproute2 version lacks support for address protocol
+> 
+> [...]
 
-Deadline: September
+Here is the summary with links:
+  - [net-next,v3] selftests: rtnetlink: skip tests if tools or feats are missing
+    https://git.kernel.org/netdev/net-next/c/e79012967b26
 
-Thanks!
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Kamal Prasad
 
-Albinayah Trading
