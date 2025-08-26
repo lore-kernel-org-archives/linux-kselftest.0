@@ -1,130 +1,109 @@
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F4B3164CA;
-	Tue, 26 Aug 2025 16:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F9B27BF7D
+	for <linux-kselftest@vger.kernel.org>; Tue, 26 Aug 2025 16:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756225847; cv=none; b=Or4IqRDJsx66vnsytlzSWcui/GY1xwdAAv0vy6UX2l/MaqKaUvwW9neepj2SVYgRPsnD2tRZmtZaF8ATRDP+SBnzj/B7QXvtJmjzNihECknudjmXwrKsXxV2f935xKFi2560S6W7nsbLC6GP3uO0QR3zY80DGn5cMBSPwki2CX4=
+	t=1756226298; cv=none; b=EUkqY6VDFn8i8Jdc9EGAIEh2ovVAHkRCDpPtJaz9c7sxeyFkdGYWhRlLKOjqzxU36x8BNMiC3aBv2g8kUoY3GtRZEvZGgkz+ft/8L1UjFej5gl0mQeYbUY2oX6TePH0H4cYKyGRqGydKmI5SeakWlfphh+h5WA32risJ54SXhuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756225847; c=relaxed/simple;
-	bh=jsdL7AJNNXRh3kNJfVcr9C/2adFC1awoc6/bhR7hmMM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SkuBQVr4lgHIfwCfFFcA/CycsNhIzEVrkffZ9fa1OE1kk67gTCgcHU+aANWqxrgdQK7PkbCp9deR3MuwQSkro0zwQWyYTZE39CKdpZhDQB6NV8gIb3ZuvLMPwjSEB1TZIpAimCvLqupjxUwdYvcSUtcNRimCKw1xvkNxP/594UE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from ROG.lan (unknown [118.251.176.199])
-	by APP-03 (Coremail) with SMTP id rQCowAD3jX8L4a1oBKJmDw--.6398S6;
-	Wed, 27 Aug 2025 00:30:25 +0800 (CST)
-From: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
-To: paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	anup@brainfault.org,
-	pbonzini@redhat.com,
-	shuah@kernel.org,
-	cyan.yang@sifive.com,
-	cleger@rivosinc.com,
-	charlie@rivosinc.com,
-	cuiyunhui@bytedance.com,
-	samuel.holland@sifive.com,
-	namcao@linutronix.de,
-	jesse@rivosinc.com,
-	inochiama@gmail.com,
-	yongxuan.wang@sifive.com,
-	ajones@ventanamicro.com,
-	parri.andrea@gmail.com,
-	mikisabate@gmail.com,
-	yikming2222@gmail.com,
-	thomas.weissschuh@linutronix.de
-Cc: linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	pincheng.plct@isrc.iscas.ac.cn
-Subject: [PATCH v2 4/5] riscv: KVM: allow Zilsd and Zclsd extensions for Guest/VM
-Date: Wed, 27 Aug 2025 00:29:38 +0800
-Message-Id: <20250826162939.1494021-5-pincheng.plct@isrc.iscas.ac.cn>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250826162939.1494021-1-pincheng.plct@isrc.iscas.ac.cn>
-References: <20250826162939.1494021-1-pincheng.plct@isrc.iscas.ac.cn>
+	s=arc-20240116; t=1756226298; c=relaxed/simple;
+	bh=IZA6OL5p8O+5QNVz1cw/X3Wrim59+EoqxbFxaryX0Cc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=nJM5vjRxOuCGZQrT0cAhsQF6RuhSVhp136Yf/JjQwOvdIi5IJwu6O4TeWkTaMvhPsRcBN4sEfkXMRwPBtZZcLwtB6npW3kcyyyCDDBRyU0y8qi2r58Zzuu6S50T07L5XwlZeq5PJc9qWSXio7O7bSvbKkHa4iB3b7byrFDKDUEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=e8o1NA52; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e8o1NA52"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-771e331f0fcso1942038b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Aug 2025 09:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1756226297; x=1756831097; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KArhLKucBXK1qma7WLAGLPHRkqsc2bT2vqsvNWf6PMM=;
+        b=e8o1NA524f3NKL/ph8L3v/cRKbXvrP4LfgBiux/K/hKN4MHdDHYUAdHXx8nz1h7g/8
+         thQeU7L5Q6itRTejj1d3uI7rxYy2VzOJPs/EIaZ/qHY822Nqcn4HGJTx1ccXYeVD+07q
+         y+NvdwhgBtOIK2XRc1Cr2pNwYL5GPGcZHaDKiZ5ym7O+fU3Yzky660ErRCxNz9vHTgJP
+         utnjihofGdYw1UNWCC4pYBAHemgSwbHTmEhlrGATocS1rrxmP5pUFQ2bHhFimNCk7tFn
+         ZAh7vlFMWgXVB8nlHf+FjBMnT5m5nKcANLfvaEPokCu6RDlwg+BrHDjfRCfQmw5GRTpv
+         gABw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756226297; x=1756831097;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KArhLKucBXK1qma7WLAGLPHRkqsc2bT2vqsvNWf6PMM=;
+        b=NYFF+jlz4PPzfqZpTs1zoxPO5SU3VtI7QZ6VX//tlYn9zKD4gwdvJsDSelZpvbAzu4
+         2zhYY4EUH2ghzSoUsgdFkbkbme3U3iVaTX3rzH8J7yVTou0Cq+JUTajGmkkTh6Q/O+A/
+         Yd/KnB17B14kvvjpZDWTPcm+11mB7aVH7sl0e8xAE3blBKh51lQRUpzPPjL+P5OrCTjZ
+         eTaq4mEbuIq5DBVGNfxpzGBMzNY7e+s51WtUnQhlqGJixIz/FAUVbn7vU1RzyhLy1Ags
+         /eNxhyvwK6k/UvCxLaTihADReE+17GEOIF2CBK9S4nQLWIeCkYeSXgUsd0UYGSRk7Z3K
+         I26Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWj4fkQd/Xm8J4bFH6KXwVle/a6b5rMCt+Su1sFDp87HnTmpVe3PulVs8lMxUMQLxxa2aQLmCDFiEK20M2jEdw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRZZ4yhzI7vdqECTT5zee9Zn+W/sBp+lAY0NbrakCPVsHLwDae
+	vZK7xsLNuyOEolVcu9qia/SBlxoPay72UjEC4kbdoxfCX6Hv/uFUEJIX4kpwvbFHh5E3zrnUacS
+	F9R7tNQ==
+X-Google-Smtp-Source: AGHT+IHW22aqV9V9u5Zze8D3GfPgtdWWFsehZkrUkllA1TCvbFhmXlWXij1jXskDhKIIjelfwPENG1eV3eQ=
+X-Received: from pgww6.prod.google.com ([2002:a05:6a02:2c86:b0:b4c:2bd1:3d27])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:b32a:b0:243:6e7b:9666
+ with SMTP id adf61e73a8af0-2436e7ba22dmr9292868637.28.1756226296889; Tue, 26
+ Aug 2025 09:38:16 -0700 (PDT)
+Date: Tue, 26 Aug 2025 09:38:15 -0700
+In-Reply-To: <aKv1VNFiOPJZBN/T@yzhao56-desk.sh.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowAD3jX8L4a1oBKJmDw--.6398S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw4ruw45tFyDtrWUCrWUCFg_yoW8Wr17pr
-	s8CF9I9rW5C34fuas7twn8ur18Ww4UWws0ka1xur4xJFyUCry8JF1DA3W3Zr1DJay09rn5
-	WF1fGr18Zw45Ar7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmm14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-	z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_
-	Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x
-	IIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_
-	Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8c
-	xan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-	c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-	CE17CEb7AF67AKxVWrXVW8Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWU
-	CwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr
-	0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-	YxBIdaVFxhVjvjDU0xZFpf9x0pRQJ5wUUUUU=
-X-CM-SenderInfo: pslquxhhqjh1xofwqxxvufhxpvfd2hldfou0/
+Mime-Version: 1.0
+References: <20250821042915.3712925-1-sagis@google.com> <20250821042915.3712925-11-sagis@google.com>
+ <aKv1VNFiOPJZBN/T@yzhao56-desk.sh.intel.com>
+Message-ID: <aK3i910ghgsaIkir@google.com>
+Subject: Re: [PATCH v9 10/19] KVM: selftests: Set up TDX boot code region
+From: Sean Christopherson <seanjc@google.com>
+To: Yan Zhao <yan.y.zhao@intel.com>
+Cc: Sagi Shahar <sagis@google.com>, linux-kselftest@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Roger Wang <runanwang@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
+	Oliver Upton <oliver.upton@linux.dev>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Chao Gao <chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Extend the KVM ISA extension ONE_REG interface to allow KVM user space
-to detect and enable Zilsd and Zclsd extensions for Guest/VM.
+On Mon, Aug 25, 2025, Yan Zhao wrote:
+> > +	/*
+> > +	 * Handcode "JMP rel8" at the RESET vector to jump back to the TD boot
+> > +	 * code, as there are only 16 bytes at the RESET vector before RIP will
+> > +	 * wrap back to zero.  Insert a trailing int3 so that the vCPU crashes
+> > +	 * in case the JMP somehow falls through.  Note!  The target address is
+> > +	 * relative to the end of the instruction!
+> > +	 */
+> > +	TEST_ASSERT(TD_BOOT_CODE_SIZE < 256,
+> Looks TD_BOOT_CODE_SIZE needs to be <= 126, as the jump range is limited to -128
+> to +127 for JMP rel8.
 
-Signed-off-by: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
----
- arch/riscv/include/uapi/asm/kvm.h | 2 ++
- arch/riscv/kvm/vcpu_onereg.c      | 2 ++
- 2 files changed, 4 insertions(+)
+Gah, I managed to forget that relative targets obviously need to be signed values,
+and I also forgot to account for the size of the JMP in the assert.  Go me.
 
-diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-index 5f59fd226cc5..beb7ce06dce8 100644
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@ -174,6 +174,8 @@ enum KVM_RISCV_ISA_EXT_ID {
- 	KVM_RISCV_ISA_EXT_ZCD,
- 	KVM_RISCV_ISA_EXT_ZCF,
- 	KVM_RISCV_ISA_EXT_ZCMOP,
-+	KVM_RISCV_ISA_EXT_ZCLSD,
-+	KVM_RISCV_ISA_EXT_ZILSD,
- 	KVM_RISCV_ISA_EXT_ZAWRS,
- 	KVM_RISCV_ISA_EXT_SMNPM,
- 	KVM_RISCV_ISA_EXT_SSNPM,
-diff --git a/arch/riscv/kvm/vcpu_onereg.c b/arch/riscv/kvm/vcpu_onereg.c
-index 2e1b646f0d61..8219769fc4a1 100644
---- a/arch/riscv/kvm/vcpu_onereg.c
-+++ b/arch/riscv/kvm/vcpu_onereg.c
-@@ -64,6 +64,7 @@ static const unsigned long kvm_isa_ext_arr[] = {
- 	KVM_ISA_EXT_ARR(ZCD),
- 	KVM_ISA_EXT_ARR(ZCF),
- 	KVM_ISA_EXT_ARR(ZCMOP),
-+	KVM_ISA_EXT_ARR(ZCLSD),
- 	KVM_ISA_EXT_ARR(ZFA),
- 	KVM_ISA_EXT_ARR(ZFH),
- 	KVM_ISA_EXT_ARR(ZFHMIN),
-@@ -78,6 +79,7 @@ static const unsigned long kvm_isa_ext_arr[] = {
- 	KVM_ISA_EXT_ARR(ZIHINTPAUSE),
- 	KVM_ISA_EXT_ARR(ZIHPM),
- 	KVM_ISA_EXT_ARR(ZIMOP),
-+	KVM_ISA_EXT_ARR(ZILSD),
- 	KVM_ISA_EXT_ARR(ZKND),
- 	KVM_ISA_EXT_ARR(ZKNE),
- 	KVM_ISA_EXT_ARR(ZKNH),
--- 
-2.39.5
+Maybe express this as:
 
+	TEST_ASSERT(TD_BOOT_CODE_SIZE + 2 < 128,
+		    "TD boot code not addressable by 'JMP rel8'");
+	
+> > +		    "TD boot code not addressable by 'JMP rel8'");
+> > +	hva[0] = 0xeb;
+> > +	hva[1] = 256 - 2 - TD_BOOT_CODE_SIZE;
+
+I think I lucked into getting this right though?
+
+> > +	hva[2] = 0xcc;
+> > +}
+> > -- 
+> > 2.51.0.rc1.193.gad69d77794-goog
+> > 
+> > 
