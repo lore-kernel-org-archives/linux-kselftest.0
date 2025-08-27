@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBDF4314A7C
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 Aug 2025 22:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5101A9FB0
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 Aug 2025 22:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756332750; cv=none; b=TGByFwF5F/T5wClnr8Eb7ueVxLwOdVmA0t8E6b1CCqkZpOW2en7AtXs7ZP7zKTvkxIZfRHAoSPv44G/rBvPrSnwEaGZ2NKC9LpH1dzqfbVMgI8WzqrwPAwEINFRGfgnJ6oTkOP0K/Qcgj7OQ5aACDQTN1ciSpeHTnzhu/eAfiPY=
+	t=1756332848; cv=none; b=PEF0Yy9uN18dP8v05+DCQXNA2NY6t+qfrlsTN+vWzFqwpcFhzlTV7ow2R4jl82Fyc1v8S2wl/RQe+zJbCJciT8quU56QrIZPhIMHhoJ1+cFiGM0dOqlSTA7YYWIWcgrMry9OTawyuyQQqn+mRNO0afyMTMddiA+Le5IhIxs2Wgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756332750; c=relaxed/simple;
-	bh=iGZUypeqt9sJTZSbmscxEGdF7ypney9TkqLCMup3OEw=;
+	s=arc-20240116; t=1756332848; c=relaxed/simple;
+	bh=qYYk6KZcslwxGKEwqkJsa/AY4n3xHnxHh8FtUFt6+As=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SVmpJl59WCvnmYm+e6X+lv+Xj87o/JcqzxwDewB8kGW3v0hvLD6c0mbiSgHF9NwCLVZz53hiUAqRfHzpb0Rb1kKE9l5EoYiYALDFQxXeWyEZWcocoKNuZPkw28KorRSWqW+VRJqhKveNzGXKtbYw3CDEoNVJE1cszapZzB26jhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RGhE5J1r; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=OfTTBrjHrhF0TckkMoHW35HjKcbq7amrXoLvjO2tJs0PF+MkNXw1avnsl6Fabs5cIOD0kTJIPv7cfVTRKP4iS+3YBpfcKMTUf2+mur1PZOZJPcs0OZ9bLHq/1eXgf5LlZddl5DjbyHTJTrIZLehC1kdLP3vwF64IMbmhbC+V1+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M0AykLCX; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RGhE5J1r"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M0AykLCX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756332748;
+	s=mimecast20190719; t=1756332846;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xokvzkSIEpQffuWgfIG7Waj6e5Wn3/nTay4YDrY+vKU=;
-	b=RGhE5J1rTjGUUWILh7nTbTryRlWEMJe7FaGbMWjWk+JdEdlPgdevzMiQwMH3wSrLknQz/w
-	svxYMU5xQTVD6AABj39WuzwXslQrS1p+4oAHyiI1f10DGJItB46S2faQgM3yac2a6h0qlP
-	EdiZEyrfk0CWRArV5NvRfTLOupqUfiQ=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=jt1gUZzcr2XqEG7AN90PiEkY48hGbYno8tKmbdcHa9Y=;
+	b=M0AykLCX0yZ5uL5W11zeQxBMd2kUOzwM2A+bzarAKsFZXWvZWECyrkQbl4S9depP6FELa4
+	REnLtkiot0qI0lfyepswQke1pGWryLNPsil8TXDU57n3L4oJaCI0fnnVGzF08RzB59OBtk
+	YZCLzgKmTE1UV2yShKMzyt/1NKQoga8=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-488-RQvXUovaMI65FI3R-Bh1mA-1; Wed,
- 27 Aug 2025 18:12:26 -0400
-X-MC-Unique: RQvXUovaMI65FI3R-Bh1mA-1
-X-Mimecast-MFC-AGG-ID: RQvXUovaMI65FI3R-Bh1mA_1756332741
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-522-J9sCWjtzNZKv3p8K8yqDNQ-1; Wed,
+ 27 Aug 2025 18:06:02 -0400
+X-MC-Unique: J9sCWjtzNZKv3p8K8yqDNQ-1
+X-Mimecast-MFC-AGG-ID: J9sCWjtzNZKv3p8K8yqDNQ_1756332357
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A0A3C19560AA;
-	Wed, 27 Aug 2025 22:12:21 +0000 (UTC)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 230CF19560B0;
+	Wed, 27 Aug 2025 22:05:57 +0000 (UTC)
 Received: from t14s.redhat.com (unknown [10.22.80.195])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2874830001A5;
-	Wed, 27 Aug 2025 22:12:05 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5908830001A1;
+	Wed, 27 Aug 2025 22:05:42 +0000 (UTC)
 From: David Hildenbrand <david@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: David Hildenbrand <david@redhat.com>,
@@ -91,9 +91,9 @@ Cc: David Hildenbrand <david@redhat.com>,
 	wireguard@lists.zx2c4.com,
 	x86@kernel.org,
 	Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v1 36/36] mm: remove nth_page()
-Date: Thu, 28 Aug 2025 00:01:40 +0200
-Message-ID: <20250827220141.262669-37-david@redhat.com>
+Subject: [PATCH v1 13/36] mm/hugetlb: cleanup hugetlb_folio_init_tail_vmemmap()
+Date: Thu, 28 Aug 2025 00:01:17 +0200
+Message-ID: <20250827220141.262669-14-david@redhat.com>
 In-Reply-To: <20250827220141.262669-1-david@redhat.com>
 References: <20250827220141.262669-1-david@redhat.com>
 Precedence: bulk
@@ -105,40 +105,76 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Now that all users are gone, let's remove it.
+We can now safely iterate over all pages in a folio, so no need for the
+pfn_to_page().
+
+Also, as we already force the refcount in __init_single_page() to 1,
+we can just set the refcount to 0 and avoid page_ref_freeze() +
+VM_BUG_ON. Likely, in the future, we would just want to tell
+__init_single_page() to which value to initialize the refcount.
+
+Further, adjust the comments to highlight that we are dealing with an
+open-coded prep_compound_page() variant, and add another comment explaining
+why we really need the __init_single_page() only on the tail pages.
+
+Note that the current code was likely problematic, but we never ran into
+it: prep_compound_tail() would have been called with an offset that might
+exceed a memory section, and prep_compound_tail() would have simply
+added that offset to the page pointer -- which would not have done the
+right thing on sparsemem without vmemmap.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- include/linux/mm.h                   | 2 --
- tools/testing/scatterlist/linux/mm.h | 1 -
- 2 files changed, 3 deletions(-)
+ mm/hugetlb.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 2ca1eb2db63ec..b26ca8b2162d9 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -210,9 +210,7 @@ extern unsigned long sysctl_admin_reserve_kbytes;
- 
- #if defined(CONFIG_SPARSEMEM) && !defined(CONFIG_SPARSEMEM_VMEMMAP)
- bool page_range_contiguous(const struct page *page, unsigned long nr_pages);
--#define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
- #else
--#define nth_page(page,n) ((page) + (n))
- static inline bool page_range_contiguous(const struct page *page,
- 		unsigned long nr_pages)
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 4a97e4f14c0dc..1f42186a85ea4 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -3237,17 +3237,18 @@ static void __init hugetlb_folio_init_tail_vmemmap(struct folio *folio,
  {
-diff --git a/tools/testing/scatterlist/linux/mm.h b/tools/testing/scatterlist/linux/mm.h
-index 5bd9e6e806254..121ae78d6e885 100644
---- a/tools/testing/scatterlist/linux/mm.h
-+++ b/tools/testing/scatterlist/linux/mm.h
-@@ -51,7 +51,6 @@ static inline unsigned long page_to_phys(struct page *page)
+ 	enum zone_type zone = zone_idx(folio_zone(folio));
+ 	int nid = folio_nid(folio);
++	struct page *page = folio_page(folio, start_page_number);
+ 	unsigned long head_pfn = folio_pfn(folio);
+ 	unsigned long pfn, end_pfn = head_pfn + end_page_number;
+-	int ret;
+-
+-	for (pfn = head_pfn + start_page_number; pfn < end_pfn; pfn++) {
+-		struct page *page = pfn_to_page(pfn);
  
- #define page_to_pfn(page) ((unsigned long)(page) / PAGE_SIZE)
- #define pfn_to_page(pfn) (void *)((pfn) * PAGE_SIZE)
--#define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
++	/*
++	 * We mark all tail pages with memblock_reserved_mark_noinit(),
++	 * so these pages are completely uninitialized.
++	 */
++	for (pfn = head_pfn + start_page_number; pfn < end_pfn; page++, pfn++) {
+ 		__init_single_page(page, pfn, zone, nid);
+ 		prep_compound_tail((struct page *)folio, pfn - head_pfn);
+-		ret = page_ref_freeze(page, 1);
+-		VM_BUG_ON(!ret);
++		set_page_count(page, 0);
+ 	}
+ }
  
- #define __min(t1, t2, min1, min2, x, y) ({              \
- 	t1 min1 = (x);                                  \
+@@ -3257,12 +3258,15 @@ static void __init hugetlb_folio_init_vmemmap(struct folio *folio,
+ {
+ 	int ret;
+ 
+-	/* Prepare folio head */
++	/*
++	 * This is an open-coded prep_compound_page() whereby we avoid
++	 * walking pages twice by initializing/preparing+freezing them in the
++	 * same go.
++	 */
+ 	__folio_clear_reserved(folio);
+ 	__folio_set_head(folio);
+ 	ret = folio_ref_freeze(folio, 1);
+ 	VM_BUG_ON(!ret);
+-	/* Initialize the necessary tail struct pages */
+ 	hugetlb_folio_init_tail_vmemmap(folio, 1, nr_pages);
+ 	prep_compound_head((struct page *)folio, huge_page_order(h));
+ }
 -- 
 2.50.1
 
