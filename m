@@ -1,45 +1,77 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5530E6FC5;
-	Thu, 28 Aug 2025 02:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from out203-205-221-245.mail.qq.com (out203-205-221-245.mail.qq.com [203.205.221.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C16277036;
+	Thu, 28 Aug 2025 02:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756346564; cv=none; b=cHc8ZTMInJAb9mCelQHnQwAM3N3Iro+FhsQ95ckwrc9u96VS1vNPcZeqReQHgmkogHTkBnHYdt3cU5EDVvWEL8PmPUwTQQxNk8tqj0x8vZn2jVyLQ3cH/KBj5v5wTp+cm3JZvw3vyFqfe3QivYz4xJbaVGGktzPDFsP5swx7fLo=
+	t=1756349928; cv=none; b=oP/JjBEJ49caXAWk2bf4CqsZVSS5pJ89L1GhjPEGY70PRNGdDhHlTeVGKmzFpwiga0uaiAvkpt9WJ9aTIVvqcK+so9UrODE01gYm4j1nW8+pUfkHO1PvoA+ufkBKpXaCWjzcXrWuD6NxYGKPp4IlcvJjFLabfZIgAxY/6JWhHw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756346564; c=relaxed/simple;
-	bh=K+BvfHQ6GZvUzePGxTv1JATYJz5TFKaeSY5EJziNkPA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bG5L8G2j5MUYbtg3zzDzNFrOIjQsJEZ1qgsgxvszHGTqPhTY+Xfw9iJqDKpqrxIakTNavUrSew1xlg2wr+/hM/47oPmNLDCjnMj7MIsGe5mdZh23lAUBxQRPVL0TkmpHNyqR2s6PATCaxvtkE+lbLY1tlCMba5iliVZPqDaab0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=pZfbwDAf; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1756349928; c=relaxed/simple;
+	bh=9MlaewShrzwNP5cMPLBFY2qQOGWyYpp79Q4CAVUza28=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=X1z8F44HpTreXVRguFdF0ES/0HSh47bhlajMt9GMFL2fjPOhVmNkQuS6XKIv8tF0S0h2iUJeSJnvNBSwp4Jb5+mPbnUdUk7Yeoa261pmCT9Hq64qELKQMJ58rqaEGdDPNWxSwTGY2/XqiUjiUagr97SNF1CLOyNyN+i/TtrEKWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=KwtwZNgz; arc=none smtp.client-ip=203.205.221.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="pZfbwDAf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=HH
-	aZaXSsQmUrUGFer1hYYAyBe53nx4+hk+JxbYQnGQo=; b=pZfbwDAf1uOSgD9kOs
-	7uXZ3whjN5RsCu1xC9aCWzHtd9dNqLONgWKQrFD+Ds/wtQmfWOfJJTqlP2PsWJF+
-	Ypgs2Z8E0O88yQB0yMaq9agOUGPbXmrZMoAVsmthciVIj5PuhIcJUu8f1U9gs+2D
-	VBEc/72aKY2HVkM3/g6EIFg68=
-Received: from thinkpadx13gen2i.. (unknown [])
-	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wDHXVakuK9o58F6EQ--.39153S2;
-	Thu, 28 Aug 2025 10:02:13 +0800 (CST)
-From: Zongmin Zhou <min_halo@163.com>
-To: horms@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Zongmin Zhou <zhouzongmin@kylinos.cn>
-Subject: [PATCH v2] selftests: net: avoid memory leak
-Date: Thu, 28 Aug 2025 10:02:10 +0800
-Message-Id: <20250828020210.25475-1-min_halo@163.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250827161230.GB10519@horms.kernel.org>
-References: <20250827161230.GB10519@horms.kernel.org>
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="KwtwZNgz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1756349617;
+	bh=qD7BGCwe3Vj4PWN7gaUtbqxYjKU5h/fA619lif8uTXA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=KwtwZNgzcaF5Zxzb5vzCdl5pQyvLnSNmA1usWFZWBb5mdma6flLH32hzPz0ze60m5
+	 z4OWvhEJ/MqsGsw1SJPXZytu1wHzKTv5Iuoo/tQQQWfQo77s2LEZm9644QNjj6LMqX
+	 6f1SY9GSDF+rLoUsTy3I4dvxtuzMKKQKkQROMR4A=
+Received: from NUC10 ([39.156.73.10])
+	by newxmesmtplogicsvrsza36-0.qq.com (NewEsmtp) with SMTP
+	id D5E218EC; Thu, 28 Aug 2025 10:53:30 +0800
+X-QQ-mid: xmsmtpt1756349610tsimvv81o
+Message-ID: <tencent_DF4DA83EEBFB9246E5E3357BB40911CCA005@qq.com>
+X-QQ-XMAILINFO: MRb64KOzELYunc+ptYJ5Xg5rHPjjOlJVdWadpg+EZmUNNsWzuK8Ia1lYURXZ8O
+	 fI3rkxQNjSl9NJGmnpcPAPTLtSEtV9bLyp+lobNjHJmfRKqKBLky2r7yVxHhp/trrRjezlfnINNV
+	 L/Re3JsnuzrtGpTQu8Qa00msL9/2kuL76dH0vDHM+SvpzDNFI3aH3U9YAM5dYhr7zYVhssq31cKs
+	 VcPVyxbaj3cjrKL8cSsfkPDM0myuzfudTa83FBfUJSnQsBmK0nbBbLqQLm6pz5Y4sMmcB1rMXJGU
+	 I1K9sQ0SOxeMR64TM20TQ9VjWDkqZ7F8NCHWAW4KUT4mwBgMls7ypD1Bf2dwwlhlloebAxeqXGpV
+	 7IzDdaRglNjs4nlrVE5+0IW3YIQZphTjmVb0FLa8XoZqgUocWUeO/zpVEu9o5Q5l5MUeskTucrl0
+	 4a6+Tj2LpH90WGth9RKl6/Oj+95TC7mEVgZv7lQHXUwkVe+P56lJhA84kj/d3oUB/x5lM748mR2R
+	 TGeozq+cZBWZ7B9mQSGVSLZ3+25p0/ozfmnydscxdbU5GTH5o2KdtNm1MVun+5UZFn8GB8rvjc4D
+	 RTiXUNoWr00C+7rPgPm+wbMt5nLvtNQSrZzpMc11dQNITTIhT804MZXhl6wSvN6TR9iTplVH8LTZ
+	 g5+CSJkYWyezg6J9t8GLlvpHAA4tSJzqAyg64+CbRnXZxxdG9MGrDM8aJXEWqkv5TXb/nnPYak97
+	 /fkpNps91sMEOwJ8ztcSe7eNpcQRyLt7hSV3nasoSjkqQexgFlFgYVdN5ZXWQeXVGEFI/53tm5FF
+	 ZrEhCiElRefm4eK3OFNvsE8F82jpiuXFYjiC5JSbrYMce1ydsjw716jRj2tflltRDmjG0uv/ttbM
+	 A0OUr7PTN0hIsWT4X0YxS0DyJbk13q8C8IqPYH/v7t012aGdigdRslQtZs/9zNb8Arcxt5rTFOBP
+	 qI3hdpQAKiWnB+nZutCHnI0eGz4siSB70OgVHTomywiHAYx0qHXJzOyQkni4/5wsBsVse+FTPdsx
+	 S5Pce6MdVCs3keMuDzUYbPJEWrAyp+avy7liQ4/QufurC756S7iW6ptlx/Rlg=
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+From: Rong Tao <rtoax@foxmail.com>
+To: andrii.nakryiko@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net
+Cc: rtoax@foxmail.com,
+	Rong Tao <rongtao@cestc.cn>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [bpf-next v2 1/2] bpf/helpers: bpf_strnstr: Exact match length
+Date: Thu, 28 Aug 2025 10:53:13 +0800
+X-OQ-MSGID: <e37d08a0e813eed1bc82777e11f3335a0c7672e7.1756348926.git.rongtao@cestc.cn>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1756348926.git.rongtao@cestc.cn>
+References: <cover.1756348926.git.rongtao@cestc.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,57 +79,40 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDHXVakuK9o58F6EQ--.39153S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr4xXFW3trWrXrWrArW8JFb_yoW8Gr15pa
-	yI9w1fKr48Ka17JFs8trsYgF4YkwsayF409F17Jrn5Awn8Jr9Yqr4fKF45KF12grZ2qwnx
-	ZF9xuF1Y9an5J3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U6CJdUUUUU=
-X-CM-SenderInfo: pplqsxxdorqiywtou0bp/xtbBzRe3q2ivtepWZAAAss
 
-From: Zongmin Zhou <zhouzongmin@kylinos.cn>
+From: Rong Tao <rongtao@cestc.cn>
 
-The buffer be used without free,fix it to avoid memory leak.
+strnstr should not treat the ending '\0' of s2 as a matching character,
+otherwise the parameter 'len' will be meaningless, for example:
 
-Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
+    1. bpf_strnstr("openat", "open", 4) = -ENOENT
+    2. bpf_strnstr("openat", "open", 5) = 0
+
+This patch makes (1) return 0, indicating a successful match.
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
-Changes in v2:
-- add the label to use instead of directly to use on each case.
----
- tools/testing/selftests/net/cmsg_sender.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ kernel/bpf/helpers.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
-index a825e628aee7..71984e0a44e2 100644
---- a/tools/testing/selftests/net/cmsg_sender.c
-+++ b/tools/testing/selftests/net/cmsg_sender.c
-@@ -491,7 +491,8 @@ int main(int argc, char *argv[])
- 	if (err) {
- 		fprintf(stderr, "Can't resolve address [%s]:%s\n",
- 			opt.host, opt.service);
--		return ERN_SOCK_CREATE;
-+		err = ERN_SOCK_CREATE;
-+		goto err_free_buff;
- 	}
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 401b4932cc49..ced7132980fe 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3672,10 +3672,12 @@ __bpf_kfunc int bpf_strnstr(const char *s1__ign, const char *s2__ign, size_t len
  
- 	if (ai->ai_family == AF_INET6 && opt.sock.proto == IPPROTO_ICMP)
-@@ -501,7 +502,8 @@ int main(int argc, char *argv[])
- 	if (fd < 0) {
- 		fprintf(stderr, "Can't open socket: %s\n", strerror(errno));
- 		freeaddrinfo(ai);
--		return ERN_RESOLVE;
-+		err = ERN_RESOLVE;
-+		goto err_free_buff;
- 	}
- 
- 	if (opt.sock.proto == IPPROTO_ICMP) {
-@@ -575,5 +577,7 @@ int main(int argc, char *argv[])
- err_out:
- 	close(fd);
- 	freeaddrinfo(ai);
-+err_free_buff:
-+	free(buf);
- 	return err;
- }
+ 	guard(pagefault)();
+ 	for (i = 0; i < XATTR_SIZE_MAX; i++) {
+-		for (j = 0; i + j < len && j < XATTR_SIZE_MAX; j++) {
++		for (j = 0; i + j <= len && j < XATTR_SIZE_MAX; j++) {
+ 			__get_kernel_nofault(&c2, s2__ign + j, char, err_out);
+ 			if (c2 == '\0')
+ 				return i;
++			if (i + j == len)
++				break;
+ 			__get_kernel_nofault(&c1, s1__ign + j, char, err_out);
+ 			if (c1 == '\0')
+ 				return -ENOENT;
 -- 
-2.34.1
+2.51.0
 
