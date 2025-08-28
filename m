@@ -1,98 +1,136 @@
-Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D2C280A5E;
-	Thu, 28 Aug 2025 02:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E9821CC47;
+	Thu, 28 Aug 2025 03:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756349960; cv=none; b=s74lbm5jH0rOo+wYkY5b7RqId963NvseISyagDiBFhhJ8YJF6Fbvrv5CGBsV/GSbNMU4p1OcTIeKmWTiNeVlWjmSJCLF2XgjTSEb+MATj5ze8J5mkL7ONXYWIgFRphTyXtVATTmwaPBIYvLdvqp5JGGTD2yNRKPpG6bHsBBWUCw=
+	t=1756351507; cv=none; b=WQvRh4qbTNrX3h3GWGP+gk7+7GYwW42R2ZiQ+dfuwkJghqkatUKQjx+P54g8idM7GWwohfxSg3+KuoJc20ita25Q6I0UxWJuhNjQ7Z286b2zDuQMxUnuJjT/LZqumZzAe/PCpAFHZZTz0NLVdBMHSO775Exeh8PduH+38eRyCbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756349960; c=relaxed/simple;
-	bh=5gs41ZCC4d6DGtyICS++oNVNudnBDahs+aRZExwrWp8=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=dtyKb+qEkFYJiVjDSEIJfE5C7iWMFT4SBUM5pFIf8NdMpwebpR/1wy43eS8mZhmgvdw45DWgOBFQlHg1UXkrpneht/bvC88Cfo4gsGdnumwUfG3gdj3SnA58XRHK+yU/lGwRX5U3ljmpC4FLljeXb7CC/WGGo25jU3XECpz/DkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=iHKgQEsD; arc=none smtp.client-ip=203.205.221.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1756351507; c=relaxed/simple;
+	bh=VYK52dIq5ithVBRXhtSUMCwCpkoQVxauo174v6CEHKY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sn2GH281IfapQtdE3ygZSHwzSy0q3CwGKnEAk6U/ZGCyNxghQaj2/J2WPU47pD3iJcMUvXPMR0e0U5rCCNBYohZzbXuRDgDgL0LbaQ1/oQSMcO+9HvghhHk/QQIKK0M/luX57aPi1EIAoWuASldFURdF62PeWEGEdJErDIMu7jU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SYcNbLkR; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="iHKgQEsD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756349955;
-	bh=ktoQ0Z4pHUomM4rTJgPBIVs37Sa+v1lzPTgiPz0znA8=;
-	h=From:To:Cc:Subject:Date;
-	b=iHKgQEsDerldHfjc0yol/l7IC/pF9yA5ngY7cMx6+GGl+2AXh9oEsFFplT6NJAyF9
-	 6vfmiiHKChFSdFjx5QR4JHKSKNUu9bv4CuIGS8G0kZhvP4R2EvSHpks5w6dPqCbtEp
-	 AIiMwm2Njm7EKTmTi0Gv4mmVTPoZBHIRoMSuPtX8=
-Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrsza29-0.qq.com (NewEsmtp) with SMTP
-	id D3AAC8AB; Thu, 28 Aug 2025 10:52:58 +0800
-X-QQ-mid: xmsmtpt1756349578txd2xn0jh
-Message-ID: <tencent_A23159E297D62A89AF24A3EA881106A44208@qq.com>
-X-QQ-XMAILINFO: OIJV+wUmQOUAqe7hFlzhMx+sRMiuTr8xqpPQTKZIl1/5iC0lKaVxEcET4fW0Dk
-	 1AvdVCdHh0G+NynAg1cg+DSgQNpWbZ78HhK/ces1Tm6zOZmAekxYFp56reE0xozUjHMkZTAWHaXO
-	 kjC/MENVgb0sSqnn045pTSRj+2hYqO2gyraW+z6Mzc/6qu8L4iIqoihAgVMp4zC7juZY9smjsoSD
-	 /ZbQGwWFrXRJ+ZlsxQKfcMuQaqqiOsOgZbqG2o/akZYE9iVe+dncam6ZrUTptm0BxKYdS5pZgMeb
-	 MpovU6q06Pu/lZzT/gtrdYDTOsrTZH3qy6fNOk7273txV6a11Zg7TGSmcVnXFONyEBmR7wslEXYt
-	 mM0ZRU+0zjgopLr3bR6sAK/SGjWmhuKATaj+RstT/mwAuTbBzvKSFQx83JaXRTIuTDEw3ikqQQnL
-	 eSqLOnzRkbjZd1GqdNMMHbXq23V67cW0wBq9j5YrEcX5DN6q43NHLynT04JLI9iPLoK+wjfKqn6e
-	 w39h8eR0q0HqNkGvqPVThJ6h3uvSuJ3FvB9W6fBMrakKZGVH5FIECjYq+d63eV4ey9x8Eax+lyB3
-	 vs82OBvvalBSzpyXhwNaQ5pkVa2nbypHnr8xfkURX5YiKXcaMc/2aTJSWgeCmKh9wKi81k7zuVLU
-	 rGuZi0RXl1B2tcKg0SdzxXAnk5ed2zkdGxyZFsddBwfE2AnahzJ0saW9p++SzTadTZ+hYyEKEV/e
-	 T0VXY4ECzgb2F/z4HKUGRJRG0txxMWWZX5xbl3DuvYvNXIycwbIxFCjKRALSAXlAR07+MongIe6O
-	 4xkQysIU4DaeSWRgCHau7vZGswo3zWKw3PQl1BsITEeteYawXOoFOoL4L9iaNEbEdYZaSdRe/D9L
-	 AgvE0m7VzBzWK5O4bL+DroOJBe5T3Ws+ynGo57gr2ulZj0otsK2MfNQdm+PGsHH7+a1qc3E80O1L
-	 dtwc3HeFtwW6Fwyefgiqq+zO/0pXu1IjOhQe7IO2GVOK62rQHPHmmrsn4xiQJU3fcP6TqCo5gQg+
-	 kPzYnSkgIe4rTvF6VLaVBC7kuYPS/HqsxN7HcXLs8NBZjNKHik6nja6gNm9y4=
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-From: Rong Tao <rtoax@foxmail.com>
-To: andrii.nakryiko@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net
-Cc: rtoax@foxmail.com,
-	Rong Tao <rongtao@cestc.cn>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Viktor Malik <vmalik@redhat.com>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [bpf-next v2 0/2] bpf/helpers: Fix bpf_strnstr len error
-Date: Thu, 28 Aug 2025 10:52:01 +0800
-X-OQ-MSGID: <cover.1756348926.git.rongtao@cestc.cn>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SYcNbLkR"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-76e1fc69f86so1309029b3a.0;
+        Wed, 27 Aug 2025 20:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756351505; x=1756956305; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MLyx6ML0KJAS+1NvI+nDMGvNH+1iNlA/o7NMKd8ru7Q=;
+        b=SYcNbLkRbAJn25uZCBV9t+3Xd+f96Z/fSpL69Cqt1iKqHZiF+F5Tda6WVCLAmKuNSx
+         O8mVpPL3dNnjgqPnUAEDA9Fvwjoc16BIPaY8t7oA7Uba19xvX2JLy/bwTl616+uZIQaC
+         z7kjbqaNOgz6nddTUs/4oZPkhfvgDLiCiav41Jhd1xVxl88ju1eyYaXcZZ85GhB12TlG
+         s080UrjW7BQanig4SCA2EVe5N99f/pNWo6+suEiFTCquWJ/GRPV6PpldRI8p3DpiGRb4
+         sCpbw/yYLTXaaOzMQYq75xNAeFu/okHJas97XBlbXT0hJBhFQVSNszblpcWBk6uaCB9n
+         nvXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756351505; x=1756956305;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MLyx6ML0KJAS+1NvI+nDMGvNH+1iNlA/o7NMKd8ru7Q=;
+        b=ZfawNw+LAeeRd1DS0XA54IlyAPPUoCk67N1SsD/GJBTLVju4cyhnfN89Q6tZMcf1VQ
+         hGqpjzeCUTAh6Ihw85BXX5HKpdHoyXzEEUoAQsCGntEDT9tHjAfm++/F7hvLthwbYkhf
+         FYwRuQIl6c8yi2ADBe4aQwRt1+F6qR/gRHNvVsdyu2vhKbZD0LJRpcJfQo+HX4qoSkop
+         8Ki0szp8ui4iWqzq2g/zqVuuw+syR41PC66WuNLb5RAVQgh7p+yT4ZBbSvYWKPgTXnGn
+         Hcqw0EEweHYIeKKQrvliQzEf5xDK6aozU0rpYrz9nCLlD0YJWGjaNJytgK/1oA9zDQKb
+         pnjA==
+X-Forwarded-Encrypted: i=1; AJvYcCUSiVCMh5pKieGs1Gs7jCKx6ipBPn+12EXPI6RhM7EMFBeLTtPehIW2EEd9JlnjlRGSEeK+z3g2TUE=@vger.kernel.org, AJvYcCXHg20lZ+S1/YoN87wFnP+QOBvSNhNO9qrPqaC6xsmiRQL0XBdZaqmEERbnb1R1u5xLJgowyJe4tsvKPjgGcdJJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcdHa8q/u/FBPQs0SxQoHbEZ6St7cg4sMU2FE8wk0RTV5rT2BN
+	bY/zhwGlSVFI3SAexEiODTUVkOmpbKGbsTzEcKqcLyLZYkN3Oo2raXKe
+X-Gm-Gg: ASbGnctw5fMSxRARwA0kJQM6WkJiQnm85HpbfmIuzlS72pGF5MJF94zvYx3yLYZkPMD
+	UYlZJy5o9G9re+LGQ0wMIGbKAEafTQilYm7exEokvdi02CAmqSPPaDOUALpTQn6MYoE82L3EwU/
+	KDCpre2dUnxhxDDuwtxz+IX4BtGmJ7vja8QJQpJFpfGDcGhyAKpnAZZ35HMWYx0lpI7/brs52Ge
+	i1Tzuux3tKwJcAj4LrLRrHD8QvwzswzAsDOZqH5bFUz7f2vFCA0joKVF56lN/JT7ZEV0FuY8tR5
+	GC7v/VOf5PS3PnJ99SIs4AVQ4WDyDQq9eDpuDWRI7DfX6v7JYjMdmSqULAhbQn7Mf580lctUQfD
+	5/qW9QbtK864qJScAeQEd8Ew+7yo=
+X-Google-Smtp-Source: AGHT+IHspYn3n01oCVanCisayOBpzEX9n1l0rBErbk+dYTSa259uJbdyVIwQ/0yywctKmGk8IZVleQ==
+X-Received: by 2002:a17:902:cecc:b0:237:f757:9ad8 with SMTP id d9443c01a7336-248753ada89mr94764985ad.1.1756351504807;
+        Wed, 27 Aug 2025 20:25:04 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2467de528fesm127471915ad.97.2025.08.27.20.24.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Aug 2025 20:25:04 -0700 (PDT)
+Date: Thu, 28 Aug 2025 03:24:55 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jay Vosburgh <jv@jvosburgh.net>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Petr Machata <petrm@nvidia.com>,
+	Amit Cohen <amcohen@nvidia.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	David Ahern <dsahern@gmail.com>,
+	Jonas Gorski <jonas.gorski@gmail.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv4 iproute2-next] iplink: bond_slave: add support for
+ actor_port_prio
+Message-ID: <aK_MB7ikY0hUhGqn@fedora>
+References: <20250825070528.421434-1-liuhangbin@gmail.com>
+ <1859262.1756320199@famine>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1859262.1756320199@famine>
 
-From: Rong Tao <rongtao@cestc.cn>
+On Wed, Aug 27, 2025 at 11:43:19AM -0700, Jay Vosburgh wrote:
+> Hangbin Liu <liuhangbin@gmail.com> wrote:
+> 
+> >Add support for the actor_port_prio option for bond slaves.
+> >This per-port priority can be used by the bonding driver in ad_select to
+> >choose the higher-priority aggregator during failover.
+> >
+> >Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> >---
+> >v4: no update
+> >v3: rename ad_actor_port_prio to actor_port_prio
+> >v2: no update
+> >---
+> > ip/iplink_bond.c       |  1 +
+> > ip/iplink_bond_slave.c | 18 ++++++++++++++++--
+> > man/man8/ip-link.8.in  |  6 ++++++
+> > 3 files changed, 23 insertions(+), 2 deletions(-)
+> >
+> >diff --git a/ip/iplink_bond.c b/ip/iplink_bond.c
+> >index d6960f6d9b03..1a2c1b3042a0 100644
+> >--- a/ip/iplink_bond.c
+> >+++ b/ip/iplink_bond.c
+> >@@ -91,6 +91,7 @@ static const char *ad_select_tbl[] = {
+> > 	"stable",
+> > 	"bandwidth",
+> > 	"count",
+> >+	"prio",
+> 
+> 	Should this be actor_port_prio?
 
-Fix bpf_strnstr() wrong 'len' parameter, bpf_strnstr("open", "open", 4)
-should return 0 instead of -ENOENT.
+hmm, actor_port_prio correspond to the ip link option name, which is also
+acceptable.
 
-Rong Tao (2):
-  bpf/helpers: bpf_strnstr: Exact match length
-  selftests/bpf: Add tests for bpf_strnstr
+While in kernel, we defined the select policy as
 
- kernel/bpf/helpers.c                                      | 4 +++-
- tools/testing/selftests/bpf/progs/string_kfuncs_success.c | 2 ++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+        { "stable",    BOND_AD_STABLE,    BOND_VALFLAG_DEFAULT},
+        { "bandwidth", BOND_AD_BANDWIDTH, 0},
+        { "count",     BOND_AD_COUNT,     0},
++       { "prio",      BOND_AD_PRIO,      0},
 
----
-v2: Follow Andrii Nakryiko's advise, fix the 'wrong fix';
-v1: https://lore.kernel.org/lkml/tencent_65E5988AD52BEC280D22964189505CD6ED06@qq.com/
--- 
-2.51.0
+So I think the prio here should also be OK.
 
+You can decide which one to use.
+
+Thanks
+Hangbin
