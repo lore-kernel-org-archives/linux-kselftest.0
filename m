@@ -1,54 +1,55 @@
-Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5357721D3EE;
-	Thu, 28 Aug 2025 11:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB53214813;
+	Thu, 28 Aug 2025 11:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756379519; cv=none; b=ocVqWE6E/7rrNOIOFQCxCuAiRImtNYarJZO9DTiSc1Jnzlleo5sP4bzSQZiD2YJUw3tQU/gajOBAdNAYAmat9YOExhDpwhTRWN3z5Gu+5IHvI21hyYQZhn4nKvCPoXHCZLTJXTIgTsMDLhzk8onib8kEWY8zyYzmnUrodHdR/H0=
+	t=1756379971; cv=none; b=D0iXMwQMFMsfXWKbSadEtTJaJvFNis2PFYxvQlzxTSo+LWhk74qgUJY1Wiiy4KTo+6n7Mlbxyesn2l2alEQz+G/pP1rEW4rGlO1+oPc76vmMJWwgAX1bZVQr5aWttYVpV8a/wfe0qRWdZfdPSGGc4uVwYrJnFH11r4eK7/hBUdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756379519; c=relaxed/simple;
-	bh=NPxx/ey2tXKTRsHU1SUjCV4ADg0ZhVLhJz4gBqVmG84=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=NsmECoFov+aKCDnfxRqnMht6m35ygctPP0+ls9edOxSks5zw7dZ/C/tDSw/jhLFmkLctqHn1dFUlqgJSYYYbvizm0f2jsx6kzzbV/4l+Iml8Sj571C39fewNfhYWE+Obc0xhD9s6sXZQHMDQFUYhFD0rni0YNOCjd0di6seSwOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=ZzptfstS; arc=none smtp.client-ip=162.62.58.216
+	s=arc-20240116; t=1756379971; c=relaxed/simple;
+	bh=FXgfQymDrsmrepLJABIctJ0oih0TYDCQeRXty9SQJdw=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=X1TEc5sks74Zmg5b9SGaC4Jc0taz4kxWi56aS5OcdZQTYX/8mbP3xDSTZn63eE8/2MuiS3f2evxc7l0c4GspEKEiu2X2FaTzHJrKiC4TEHCkGE84vx/k5kxKVxC9Tb8VwOUe5q+uSTIyTdSTp5c9Ojdgx6WNxSGno51voayKqno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=BwCfnwXr; arc=none smtp.client-ip=162.62.57.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="ZzptfstS"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="BwCfnwXr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756379205;
-	bh=BcVs6RdP2pVoj2tAX1f2LpjoEbkeuktpGmJZui03meQ=;
-	h=From:To:Cc:Subject:Date;
-	b=ZzptfstStfO6aAXbq/AEKgn2QZUMn7vegJfZY4yz3ZnNphXtntqy9vxSbQzHtu0cm
-	 akJFo2ITBYBmWF2mtaPur9QTN0sOzDq6uNpg1q7j0ZuUl57Ogr3o+l6oMqHtJV9h9E
-	 BqkyrpzRcPWfF6Nh51HDScp5Y0oFHYlNsCDBNiJg=
+	s=s201512; t=1756379657;
+	bh=tcR1dyJby3rnBKKEPlwBslHLorWRcZCdjqllQkvmPyw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=BwCfnwXreQ31C2w/qPOdbXx+4uik5jw4wYAkBbQYW1NxX3oq6DoUvxN4mRZfbVUwr
+	 j89Rt2xtuR89kyq9SH1IYg7MgLBzxEWtMMPX3olIV7H3BFsGQFYCDmK8JOaOnDqztM
+	 4wmh4rKramiaoqm/U2IwlJeW+Pp4lHw689BQpSFI=
 Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrszb42-0.qq.com (NewEsmtp) with SMTP
-	id 1A914CDB; Thu, 28 Aug 2025 19:06:41 +0800
-X-QQ-mid: xmsmtpt1756379201tzxa3pir2
-Message-ID: <tencent_8B8FEE211A1A0009ED67855EA2AAECBDE20A@qq.com>
-X-QQ-XMAILINFO: NAtipnnbTPeaZftIKjm/rzpYqAps5Bu6jLMD80w4t5M+CXEhckWTv5o7AbnL5p
-	 f5CsG5CvIxXXyvoyRAsTNAzbjXQOoWeDfqffw4Q3JtCd79pHyEm3+D5XoKRS6KT+qCsmRLY89iL0
-	 ArrfBA6oCIdFkGbrtfqMu08UGDGSPC7TS5RLtGl4vQLXdSAdWytqFL3WjjQZU9ntQfWlXlYNiiR9
-	 j67iuVdY07/ASW5afemUwE3hhVP+jhUOogECLpggCetT0Q9slMFHRfHECLVZVSmH+dfRdyzu58Ml
-	 meB3+u9Z7nXKJ7syeEhK887iWP90QUwOa6ffsDJXLGimxZku8iZ01cQbOpoAMt0eCVI1cJIbc5gi
-	 NW8FrPbT296tHhOpbZ2hGaG1gk3J3HuPXa2YfhdJ6yq4nVwJIXSD5ULEGcypmvkTRhTKsFKTHqDH
-	 z+wpRb6S2YIjHj90ZSQFS+J1QsOQV3pNuQVkX0bphRazjurtvow1IjXOSpli3jTkpmYG0GtV5kDW
-	 ofOSPo3bm/Z4dUyXtfMK4Wmn+5IAGSM3KG3NV7W6uzkYmZwedUWwk+2PlW/5BFw47GTzwskSuQ3M
-	 TGl8yE+v1actqPHz34+anKqJK0Xawu3Eoo7bYAhjhR+JuTEAu0W79Hj7FdaZ1OcxvgsbescUqMP7
-	 p3e2ZJPVCea942MWOGHlC6pc8BEfOoIud+VRlkdsJiPomGgKqlXrts93pH2V3nugxw1ib9p4w44o
-	 +KdII4yjcnPKBHfCu2HnBlPfStYeIe1An+opThrqTgNTRKAKU+qhZDjEers24myxBDVynXrzSltk
-	 hFB6nTQDVxd69SVy35fhY1amJdhqvQLBFqH/W4s5fEq0g+Xj/8IV9kerlU3afBmDgDC+an7VT4Nq
-	 wYuq6yCoiC53QU5tL0e5s5XlYiQvidXE+ETysv+qo99yEXXFL58iyh7yb1hFgk7kD5+1Ltvc6MSG
-	 UosnqVUWbuzcU3x594CDIjTOasoXEXnRq653xwTdURTV8q9RKV1SHheSlSJM8q52fAkhy0xXV9Ru
-	 Kwkdj+fh/DdxQ/GKqs0gx/+1bZZGtWH+w+K8eyJUMv34SJDMFyDnJl9qsSXO8=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
+	id 204184AE; Thu, 28 Aug 2025 19:08:04 +0800
+X-QQ-mid: xmsmtpt1756379284tcf27c71l
+Message-ID: <tencent_A842AF5EA32A88970690424E592897FC2A08@qq.com>
+X-QQ-XMAILINFO: N3l5ASPewLWq3KNqT5Iyod68V1MYkhI8XKpuANWh6xLWrgN9KAxvzDlV7wbX0r
+	 ++acAEkktHYeBNf31kmldATyh3lU+FuzWXEWHFoyvZvSbUx/QVdnB2SE3DqBZ9GjbzcF0NvpJaZU
+	 VQec3cH1S/R0kiuJJdlabiUo7F1RTmP30L5yCE8o5DrwokJcykmiduiHOW5wunTa+jFI6XK6oF3a
+	 P9wn/5ivIreAcVH7d4sWxZvzQNJOdnSAwhdm0s1Qn683ClMZDJ7/bCiC6o9l+9B3VUNizpctjkzd
+	 XCe3RtDpd2/l9ZZTQ9aUZBiGxQYkLH7ML/ShWhpuIM4WUAfCPqbo5dYaZocLVHj5fFjAXhM/5sMq
+	 gr0ir0bGG4K1OjaQd4uHaS/fkzlYleBW6MGaWnNX+IbUGUq4ycdmQggPeaZ1fqeNWoNg4nTCmYFq
+	 X2rGjau2+c7E/5NZsJZEYgZ7bLG/QJiBVuwiXJ6HCIhhpQicgxxvna9OKLm+LuPToy/xQoWvM7WH
+	 Leh2REUzVd5oj5un9zslNp4Nzeftbmm44fZM2Db3gupDQKHRuaBNUP8aqcS0LenpB0+sRuM9ej+5
+	 RQ9wp7VX7rjH8zqgo6y2Ne9zIXU1kn88vTJjCDkfVaryy/SXQiv8m+ne9LRVp1vFw3e4D32hk3Fc
+	 o8jMnhk4kOMKegoLzUUu/XWEbS1i4HE50TqFE2LOAZBsJKPfX+OMmkXHuzPjlBfK4y7d44mB4Oqf
+	 i2Mb2cgwyvMb2cIf6alv9qUhAlqVJWMsyG2YJy2aC6Ro7fPJ0y0fw5IwNix8SSkAqw7GypsbOalL
+	 K42tiYuj3iqyz3SteKjK4IdWhrKlKcbFvuSJcnRrjVMeXhqB33Zu07N4Rn0ms9bLoDAbDgd6OwCb
+	 weYHmfX/UfusgolCMDQa4tpsFNAaDzDs++iVrR2SO0CiH5Yc3cjc8jIeCUDkZB3/fCvQdnX1MAqc
+	 sMaqG5Pz7lve3o7sifCRfvNhJY6c1iht5G88I9wPeDSdNBGf+enj9mjgbLkrt2CUH0oo5KJmADlA
+	 wF3HoC715EKfhjdTyB/5gC1mCmxvU=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
 From: Rong Tao <rtoax@foxmail.com>
 To: andrii.nakryiko@gmail.com,
 	ast@kernel.org,
 	daniel@iogearbox.net,
 	vmalik@redhat.com
-Cc: Rong Tao <rtoax@foxmail.com>,
+Cc: Rong Tao <rongtao@cestc.cn>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -61,14 +62,15 @@ Cc: Rong Tao <rtoax@foxmail.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Mykola Lysenko <mykolal@fb.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Rong Tao <rongtao@cestc.cn>,
 	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
 	linux-kernel@vger.kernel.org (open list),
 	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v3 0/2] Fix bpf_strnstr len error
-Date: Thu, 28 Aug 2025 19:06:26 +0800
-X-OQ-MSGID: <cover.1756378974.git.rtoax@foxmail.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add tests for bpf_strnstr
+Date: Thu, 28 Aug 2025 19:07:37 +0800
+X-OQ-MSGID: <01ab64c260739383c3f9253789c9b5ba0762776b.1756378974.git.rtoax@foxmail.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1756378974.git.rtoax@foxmail.com>
+References: <cover.1756378974.git.rtoax@foxmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,22 +79,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix bpf_strnstr() wrong 'len' parameter, bpf_strnstr("open", "open", 4)
-should return 0 instead of -ENOENT.
+From: Rong Tao <rongtao@cestc.cn>
 
-Rong Tao (2):
-  bpf/helpers: bpf_strnstr: Exact match length
-  selftests/bpf: Add tests for bpf_strnstr
+Add two tests for bpf_strnstr():
 
- kernel/bpf/helpers.c                                      | 4 +++-
- tools/testing/selftests/bpf/progs/string_kfuncs_success.c | 4 +++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+    bpf_strnstr("", "", 0) = 0
+    bpf_strnstr("hello world", "hello", 5) = 0
 
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
-v3: Fix selftests/bpf error in v2, sorry about that;
-v2: Follow Andrii Nakryiko's advise, fix the 'wrong fix';
-    https://lore.kernel.org/lkml/tencent_DF4DA83EEBFB9246E5E3357BB40911CCA005@qq.com/
-v1: https://lore.kernel.org/lkml/tencent_65E5988AD52BEC280D22964189505CD6ED06@qq.com/
+ tools/testing/selftests/bpf/progs/string_kfuncs_success.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+index 46697f381878..1b56bd5860e9 100644
+--- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
++++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+@@ -30,7 +30,9 @@ __test(2) int test_strcspn(void *ctx) { return bpf_strcspn(str, "lo"); }
+ __test(6) int test_strstr_found(void *ctx) { return bpf_strstr(str, "world"); }
+ __test(-ENOENT) int test_strstr_notfound(void *ctx) { return bpf_strstr(str, "hi"); }
+ __test(0) int test_strstr_empty(void *ctx) { return bpf_strstr(str, ""); }
+-__test(0) int test_strnstr_found(void *ctx) { return bpf_strnstr(str, "hello", 6); }
++__test(0) int test_strnstr_found1(void *ctx) { return bpf_strnstr("", "", 0); }
++__test(0) int test_strnstr_found2(void *ctx) { return bpf_strnstr(str, "hello", 5); }
++__test(0) int test_strnstr_found3(void *ctx) { return bpf_strnstr(str, "hello", 6); }
+ __test(-ENOENT) int test_strnstr_notfound(void *ctx) { return bpf_strnstr(str, "hi", 10); }
+ __test(0) int test_strnstr_empty(void *ctx) { return bpf_strnstr(str, "", 1); }
+ 
 -- 
 2.51.0
 
