@@ -1,76 +1,35 @@
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C39B2E9EBA;
-	Tue,  2 Sep 2025 23:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40F6274B51;
+	Tue,  2 Sep 2025 23:50:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756856962; cv=none; b=KggZS8IdxxD1x5ZvEM6QFIMiojE0oilx1PVYzOLfJo2GgpsnVBun1iNGp/6orFzP2b06nMl8MMTWLPZHHmcxl1GGNNSxcNO8TSUymjx3MPVXCfkXDi9lAfx95he0AiOyPZwI2zgA6Ni8qXqg4CnhyXWx8sRb841LEUGLUeLf4NE=
+	t=1756857003; cv=none; b=FVoNIY09SqN5ld/WxbOTOMEfAzkd7YVXhva8MhtEGXSARC+22jLuo6ZfFilpu/xrKMzj1nZiRBwWwwKEz5bQHHWKdCeM+cYkCRfkjnAl2A/5+5dUKezXqoM8NgKXS5R/zCJoE6OGhTGZPhE2iTec2rqi3G4fK1oMLrN1LlKx2bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756856962; c=relaxed/simple;
-	bh=GOf9LZLLQ2q5Q93T28kTqYJJclpPeEMzOpGWjHU5iZQ=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=jJw08V7UieaaIGqJenq/s4TIB+I7g35I7uQllW7Gn1XRbFu1HejBu/Wh0PJVdAzg1zGVEAQUURut7jFvFiCuiEDL+M4wFY5NcX93gCU4U2IW373ss/+O7CPx8tq3Lj5EK9uyzN/euMU7DAEmYUJe5Z2FuU6vJK6JDhagZBZDbrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=tp+8jCKf; arc=none smtp.client-ip=162.62.57.252
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1756857003; c=relaxed/simple;
+	bh=9U/Ky3yNBRcz05JV+fG2x+dIoICYXW+AY/iTU6QURg0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=SzZhR7bhRdCbjt9RQ0Q6tETJbpEhQk8gN4TNiiBj09aip/jA6w4FFP9wDZXGk6PrKIXuSa8Q+exy4mv4Mroil4ANrcje8nT2aLa9C/+jHlh/sJazZ3UXLmWLAXCaxKvijSA6KjPeQSaeG1gKb+0y069PO+dKzRDTTmjZhzQZNI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVQVKfbu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="tp+8jCKf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756856954;
-	bh=eui+lHKYd2DznXFc/Y0MXUOvULuqsgiVsJKZMCgi9rw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=tp+8jCKfV96TyXNU3gM1SeN8t0nhngjhyb2Wj5xecuMCOTJDBe1oNgU3ocSxgk5op
-	 K4QG5mSI66ukM8ON2fZYmDvQSdBF+78MYKvUUNyR3sBmc7w8piU0/5WdIf8WRQeXYl
-	 CFla/aqcVuPyGh5ufZsHAuPfclMq4cCLryhuBnz0=
-Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrsza56-0.qq.com (NewEsmtp) with SMTP
-	id C4A1EA5B; Wed, 03 Sep 2025 07:49:10 +0800
-X-QQ-mid: xmsmtpt1756856950tizblv9xh
-Message-ID: <tencent_81A1A0ACC04B68158C57C4D151C46A832B07@qq.com>
-X-QQ-XMAILINFO: NC/J3CrDtaBbKIsy3VxpTrKIJW8W98+rBshspiPLUzR2uyMbCRounbxMLhNClP
-	 nxqTpN+Ofe6yu9JNnoGISObPFKWUJKewUpp/bt3i14bBhnJmF8jH3pHwonRRZhotPFGg5+kfgPgX
-	 KUG8f5u/nb6Rhr+kzD82jx2tISZ+omolKlrn2RlYPewPFqIsIIuanPbRoWuhXKXZPY+tL1jp2nLk
-	 Zf+6seuPokFGuR6uZXzFuv9/V/TvztSsGkrZ8UsRbUx7/l829tq7SIa2G4zdGAFZKApy6swY0bag
-	 JsL6V3ZmzzdFnzxTRAK7R+1N90kfrrQECtRD2z/I4+vMqKD57KqM6aw9ManPbcpWrahX3mrHZjZk
-	 yZof3uLvZeClz20ij9HFxNgjn9NhoI+q+ItZ5AjmFr6BcGTPJgZHoKGoP4yDp4slV5sgoZ+IpV6/
-	 VqJ3KeJv+8KdKNjTJ8vSGLbGGmiauTSBCh7DgYr3oEnC0Td+wMwTfBbF2rUqR0m62ATM1owZPxUP
-	 OR0X4eLu2DwLYk0YHOR4gIj6K/qVV/sC2sBLbRZPd5+wW4g1U/olXTIow6JHlVSyLPi2JUvqE+em
-	 +TkrGoCcFlWKWd91/1sqxmYqESGxZji6LoSYkiPETqpN4iKkRz550V7QUXrZ6AeuTqAKEImH7Yzm
-	 2tZ5Czu3XDDn9toP3VP5JaqEWlO/BFJDY9NtiW+yVY4Ij2q3FqGlgqkJkDMNi+zji3ysqg+GBJGP
-	 D3D9ReRVWQp10QZ0/r8V2cwGRZF1o0XzVIYunfOBOXSUJhCkk+9+hHclBCrqcQxfLxZLg1jZ94nt
-	 Ok3qQV207sOil9jm6hQuS4TiPtHuhMVWDCJefjZDYVrZ8NInwCXKTwgDOXCaEpa1GNDNm0qPeHeI
-	 EVARb9eFl0CD/gBKuZTHJSH85q1cAHt+vxGpv3DPEK/eR9XUejOwCaJcZBiVDn+1zUFVIR3YYlbP
-	 E5UPjA+QB40nnUlvDj/CMFLt/WbBeftpdaGFRH52KtBemG183THPBEc3JpAdQg7AZ2FG0YN8953I
-	 A5MhzyeGtOXL99PHAIkKlyDESZ6mEJLAPenipxuQ==
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-From: Rong Tao <rtoax@foxmail.com>
-To: yonghong.song@linux.dev,
-	andrii@kernel.org,
-	ast@kernel.org,
-	vmalik@redhat.com
-Cc: rtoax@foxmail.com,
-	Rong Tao <rongtao@cestc.cn>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Test kfunc bpf_strcasecmp
-Date: Wed,  3 Sep 2025 07:48:36 +0800
-X-OQ-MSGID: <73ae449045d23c96dd1f0da9a694cb203659eb27.1756856613.git.rtoax@foxmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1756856613.git.rtoax@foxmail.com>
-References: <cover.1756856613.git.rtoax@foxmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVQVKfbu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61010C4CEED;
+	Tue,  2 Sep 2025 23:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756857003;
+	bh=9U/Ky3yNBRcz05JV+fG2x+dIoICYXW+AY/iTU6QURg0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=mVQVKfbujn2yIKsWpUWu0HfZK5lXywIRNh41oCjg1j/LwCt2Y7j6iGtIF47b+nlcK
+	 2776UmA/k/OIQ9lAvzFmDvUN1co+SKrLpsJqcOaG2bqWNSZbL9zdP3m+bwgTNjNd+J
+	 n+qiwarDkeYyzcbBkFfyNkHGO8Ax7eLKg++ylQTU1NRxa7GcdJGQW60jjulnw6UQHJ
+	 Vi7ZHg/1ktR08m33ZPq5EVhzMBtI0yAlV7Jf1axhC2aAM4eg70ZkDSzNaXzlxiEMi4
+	 QrHBqmN/ZdntaOtBFy38Y3vld6TWfXyDTxStwZMOKMzIiJpAX0rLdAhxc3uARxK4Ov
+	 6tVAyoK/PxBdQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB2C2383BF64;
+	Tue,  2 Sep 2025 23:50:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,90 +37,50 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 1/2] selftests: drv-net: rss_ctx: use Netlink
+ for
+ timed reconfig
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <175685700877.471478.8564578752631875348.git-patchwork-notify@kernel.org>
+Date: Tue, 02 Sep 2025 23:50:08 +0000
+References: <20250901173139.881070-1-kuba@kernel.org>
+In-Reply-To: <20250901173139.881070-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ ecree.xilinx@gmail.com, gal@nvidia.com, joe@dama.to,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Hello:
 
-Add testsuites for kfunc bpf_strcasecmp.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/bpf/prog_tests/string_kfuncs.c     | 1 +
- tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c | 6 ++++++
- tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c | 1 +
- tools/testing/selftests/bpf/progs/string_kfuncs_success.c  | 5 +++++
- 4 files changed, 13 insertions(+)
+On Mon,  1 Sep 2025 10:31:38 -0700 you wrote:
+> The rss_ctx test has gotten pretty flaky after I increased
+> the queue count in NIPA 2->3. Not 100% clear why. We get
+> a lot of failures in the rss_ctx.test_hitless_key_update case.
+> 
+> Looking closer it appears that the failures are mostly due
+> to startup costs. I measured the following timing for ethtool -X:
+>  - python cmd(shell=True)  : 150-250msec
+>  - python cmd(shell=False) :  50- 70msec
+>  - timed in bash           :  45- 55msec
+>  - YNL Netlink call        :   2-  4msec
+>  - .set_rxfh callback      :   1-  2msec
+> 
+> [...]
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-index 35af8044d059..4d66fad3c8bd 100644
---- a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-@@ -8,6 +8,7 @@
- 
- static const char * const test_cases[] = {
- 	"strcmp",
-+	"strcasecmp",
- 	"strchr",
- 	"strchrnul",
- 	"strnchr",
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-index 53af438bd998..99d72c68f76a 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-@@ -31,6 +31,8 @@ char *invalid_kern_ptr = (char *)-1;
- /* Passing NULL to string kfuncs (treated as a userspace ptr) */
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_null1(void *ctx) { return bpf_strcmp(NULL, "hello"); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strcmp_null2(void *ctx) { return bpf_strcmp("hello", NULL); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_null1(void *ctx) { return bpf_strcasecmp(NULL, "HELLO"); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strcasecmp_null2(void *ctx) { return bpf_strcasecmp("HELLO", NULL); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strchr_null(void *ctx) { return bpf_strchr(NULL, 'a'); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strchrnul_null(void *ctx) { return bpf_strchrnul(NULL, 'a'); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strnchr_null(void *ctx) { return bpf_strnchr(NULL, 1, 'a'); }
-@@ -49,6 +51,8 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return
- /* Passing userspace ptr to string kfuncs */
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr1(void *ctx) { return bpf_strcmp(user_ptr, "hello"); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr2(void *ctx) { return bpf_strcmp("hello", user_ptr); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_user_ptr1(void *ctx) { return bpf_strcasecmp(user_ptr, "HELLO"); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_user_ptr2(void *ctx) { return bpf_strcasecmp("HELLO", user_ptr); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strchr_user_ptr(void *ctx) { return bpf_strchr(user_ptr, 'a'); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strchrnul_user_ptr(void *ctx) { return bpf_strchrnul(user_ptr, 'a'); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strnchr_user_ptr(void *ctx) { return bpf_strnchr(user_ptr, 1, 'a'); }
-@@ -69,6 +73,8 @@ SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr2(void *ctx) { re
- /* Passing invalid kernel ptr to string kfuncs should always return -EFAULT */
- SEC("syscall") __retval(-EFAULT) int test_strcmp_pagefault1(void *ctx) { return bpf_strcmp(invalid_kern_ptr, "hello"); }
- SEC("syscall") __retval(-EFAULT) int test_strcmp_pagefault2(void *ctx) { return bpf_strcmp("hello", invalid_kern_ptr); }
-+SEC("syscall") __retval(-EFAULT) int test_strcasecmp_pagefault1(void *ctx) { return bpf_strcasecmp(invalid_kern_ptr, "HELLO"); }
-+SEC("syscall") __retval(-EFAULT) int test_strcasecmp_pagefault2(void *ctx) { return bpf_strcasecmp("HELLO", invalid_kern_ptr); }
- SEC("syscall") __retval(-EFAULT) int test_strchr_pagefault(void *ctx) { return bpf_strchr(invalid_kern_ptr, 'a'); }
- SEC("syscall") __retval(-EFAULT) int test_strchrnul_pagefault(void *ctx) { return bpf_strchrnul(invalid_kern_ptr, 'a'); }
- SEC("syscall") __retval(-EFAULT) int test_strnchr_pagefault(void *ctx) { return bpf_strnchr(invalid_kern_ptr, 1, 'a'); }
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-index 89fb4669b0e9..e41cc5601994 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-@@ -7,6 +7,7 @@
- char long_str[XATTR_SIZE_MAX + 1];
- 
- SEC("syscall") int test_strcmp_too_long(void *ctx) { return bpf_strcmp(long_str, long_str); }
-+SEC("syscall") int test_strcasecmp_too_long(void *ctx) { return bpf_strcasecmp(long_str, long_str); }
- SEC("syscall") int test_strchr_too_long(void *ctx) { return bpf_strchr(long_str, 'b'); }
- SEC("syscall") int test_strchrnul_too_long(void *ctx) { return bpf_strchrnul(long_str, 'b'); }
- SEC("syscall") int test_strnchr_too_long(void *ctx) { return bpf_strnchr(long_str, sizeof(long_str), 'b'); }
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-index 46697f381878..67830456637b 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-@@ -12,6 +12,11 @@ char str[] = "hello world";
- /* Functional tests */
- __test(0) int test_strcmp_eq(void *ctx) { return bpf_strcmp(str, "hello world"); }
- __test(1) int test_strcmp_neq(void *ctx) { return bpf_strcmp(str, "hello"); }
-+__test(0) int test_strcasecmp_eq1(void *ctx) { return bpf_strcasecmp(str, "hello world"); }
-+__test(0) int test_strcasecmp_eq2(void *ctx) { return bpf_strcasecmp(str, "HELLO WORLD"); }
-+__test(0) int test_strcasecmp_eq3(void *ctx) { return bpf_strcasecmp(str, "HELLO world"); }
-+__test(1) int test_strcasecmp_neq1(void *ctx) { return bpf_strcasecmp(str, "hello"); }
-+__test(1) int test_strcasecmp_neq2(void *ctx) { return bpf_strcasecmp(str, "HELLO"); }
- __test(1) int test_strchr_found(void *ctx) { return bpf_strchr(str, 'e'); }
- __test(11) int test_strchr_null(void *ctx) { return bpf_strchr(str, '\0'); }
- __test(-ENOENT) int test_strchr_notfound(void *ctx) { return bpf_strchr(str, 'x'); }
+Here is the summary with links:
+  - [net-next,v2,1/2] selftests: drv-net: rss_ctx: use Netlink for timed reconfig
+    https://git.kernel.org/netdev/net-next/c/4022f92a2e4e
+  - [net-next,v2,2/2] selftests: drv-net: rss_ctx: make the test pass with few queues
+    https://git.kernel.org/netdev/net-next/c/e2cf2d5baa09
+
+You are awesome, thank you!
 -- 
-2.51.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
