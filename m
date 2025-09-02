@@ -1,145 +1,100 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D252E8B7B
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 09:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7663D987;
+	Tue,  2 Sep 2025 09:24:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756804934; cv=none; b=Gvt3rdKcppO5j1yLVl/MXfSagMB9P5b4qOEkcc2CHrxu2aDJEvKVnIPvpDi4h6/FU3wwe2RLbwRavvkWJZokoi96xeegUbNB0EhU35q+7WvnTQGL9C2d5ISiNH9EYlJ2ziHc6WubU3UG3u7zqL/E/ObAqAJFe3hLYMNTblwtt4E=
+	t=1756805050; cv=none; b=czyg8caX7weW0HYD/srftTTEhv4hN0a3GhX0suUZcD2vjZJ/q/4Z0LY3ypd++HSvOe8JNRtyatkC5u53Lvb4XFtfUQUFfh3j/Dw0NU80KX/WCuzGe7ydHewmomAxOUpBufeIQEIyqgFTcBNR3HiHlDoRWWw+ZbszDgA5f1B5/EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756804934; c=relaxed/simple;
-	bh=Pv1NlzKjL0xFo8BfGbhy/7KnNZN8WrItjraHEOkXixw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tntzxT8B4GzymvsCQnvlrf+GQTIoz+VjR3G+NBaIFrOxtMff+vF9aazRffSbYnpztubRFLjR0XJpOBuhMKagsXZvgn/cz7j9UkG1Qer4MLvSGNmYuHP/TXsz/KH9tL0lz1VzrYMQsiYLJJGUhV5sRnE9fk9HAroIuoaG8MOYQZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ursulin.net; spf=none smtp.mailfrom=ursulin.net; dkim=pass (2048-bit key) header.d=ursulin-net.20230601.gappssmtp.com header.i=@ursulin-net.20230601.gappssmtp.com header.b=BjJ4DkI0; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ursulin.net
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ursulin.net
+	s=arc-20240116; t=1756805050; c=relaxed/simple;
+	bh=pPTR2DPjWLZI78Um/TK9fffQxLMetALz3OjN/SJclL8=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=mlK5LRNUlIS5Tg+S91xgvnM+5otgW08LIkWUQACsrar1qQMByB2dpk2HIa+BdwjN2QIMwrKqIfMKxT0vlaRFUh6Cn6BrlCmA72sHUo2Xrien/Rv5vPrm3Q7BxR6rgMlLCZ2BMiU66AhQ0uMSZkhwtkWUXvjhRd6kQiW0b+M8WjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=Q5BTvG0A; arc=none smtp.client-ip=203.205.221.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ursulin-net.20230601.gappssmtp.com header.i=@ursulin-net.20230601.gappssmtp.com header.b="BjJ4DkI0"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-45b8b2712d8so22268735e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Sep 2025 02:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ursulin-net.20230601.gappssmtp.com; s=20230601; t=1756804931; x=1757409731; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0Be300C9M54HN2j6qqn3KzILYOn0Dm/rUn/s4aJntRQ=;
-        b=BjJ4DkI0nOIeBWi829gHdcdGEnRHe1ZnQO1njdb+Jyp0kjPhbqnc/pH3IqlbX/mPRt
-         KImIiC5IOBhDUsCOe+bsijMfqcLKa+dXYa461vlf8W43jDTp2NN/HyQttUmEPfTyMDsa
-         +znjOYbf7zmMPfsw7iujVXgeGLUXtwGXlQ+SY2EucQk11hSB12zyiFkHuuLs1Vp+GMQK
-         znrByajiS5QwRXsCGGX/uEAkboujg3cDsCxXhSDvaaKtpi9xTJYSIPVmQMJW+nANv+26
-         x3bpMDTCAYkVqg6BQ0C/DVGa/O/iwl4l6QGYI8jJHyq5e0aZ7lgtishdDOyJn3yv5f02
-         d/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756804931; x=1757409731;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Be300C9M54HN2j6qqn3KzILYOn0Dm/rUn/s4aJntRQ=;
-        b=WIVbaNQ/jvpLA4fKLWtSSZ/dZ3afW1aEmW7DVZeBgwERZyMVSWYrMrMU2eXm/MeE4l
-         t4t5fnX0y2Mr9DzZUUhOoiD0B3e390HObt4BVC/rxAyitGfZyOb09BCranX631vSACwD
-         5A8tTQ+9WIpsNugn7dhHuJIRKZ68pxehTBik8ngOUd0Ew3ENokD0fbdzifo5bwKiZjyV
-         jOLepICAc9LPPMEGBsZFV2J6FeHLVrL83gbpNiZjFcd8vKBH/ODcnXDVYtLVYJFq3gdN
-         5zncWIpW60/3qBrUUUi8o4V/tdd3IJ4Xex1ETFUHNq4MHsIrQxjaOkvxrRobqf1ooYYQ
-         svBA==
-X-Forwarded-Encrypted: i=1; AJvYcCUhUuW1ej0q5vH9uwVD8tRzllitoL5Wt2Uwhcj4cWESpEBDE3tfdlK5tlLReGXfk2rHWQCKCXF5Fytc75T2v8w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTXffoHLpS3EJ9a8yQc9UJWLXtB3OjhBc20jqO42eXeXQRcbt4
-	9ONh5n3qsaAOc58U8pXUX6nRNo3JYU3467NlZ0WouZBdli1jOPuq7cTdK20Bc37HAGk=
-X-Gm-Gg: ASbGncurpgs/4VroNsyC8Q0cSCfrzy2lNDtAtuz2MxDIp5Yhtu+lMBAVvKNH4IfbppB
-	+/qZZ0MX8xr7CTeviGWarSKTO89wwuijFYeB8VWf/jcRGwfH5vfxgZtPGS70JKNSDxEtKt0Epty
-	dYorZXatbQjywqRok4xZTq5rVvCS1Y0BsnZ9BimU/WveJ/tKkMdLT17yM8/VCQnu93HaH32JG1x
-	A+E5nxo0AMPCp/XVxmLYTiy/7EIDFfwH83X7lC1UgnS8QgNNMDuXSzM8lQdroIZVfaMsy6RA36T
-	uNx7UMy5vUMhBr9+2x9vwEFA4GUkzD6SYfE36eHwdP4Bbt4RW1P7qMZ3cSZi/a1cQT/4T/QXAs3
-	Ow+8PI3AabAaWtvPMRIxh1EYoL/fAgkCBpCk=
-X-Google-Smtp-Source: AGHT+IFjGWdM7r4OC2xPYq10JBW42QzIVS9ISDbv655toZnOdc57tKWSkMByc2ni755H7QY3mBnVYA==
-X-Received: by 2002:a05:600c:a04:b0:45b:7d24:beac with SMTP id 5b1f17b1804b1-45b8553335amr94619035e9.10.1756804930815;
-        Tue, 02 Sep 2025 02:22:10 -0700 (PDT)
-Received: from [192.168.0.101] ([84.66.36.92])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d0b9402299sm17994846f8f.18.2025.09.02.02.22.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Sep 2025 02:22:10 -0700 (PDT)
-Message-ID: <4bbf5590-7591-4dfc-a23e-0bda6cb31a80@ursulin.net>
-Date: Tue, 2 Sep 2025 10:22:09 +0100
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="Q5BTvG0A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1756804739;
+	bh=EpAarfKxM9Xf2n5id5G25GoKghSsP58gEeX99TV+bR4=;
+	h=From:To:Cc:Subject:Date;
+	b=Q5BTvG0AHk+LlRDP/VDDrPzYzeGvTV/OcbJL1FvpxBSXtLTRggnP3gCJPzeEITBt2
+	 Hcqt7ZO5FRzYTUBDjvz2d5/KZzy+HS3g9+EkProBoxvFXOpE1p14QfaAD75gIJe+Iz
+	 C3gZ+lzbBUIa/aGvKU40pDlFuQoVXn/JH+OohwuU=
+Received: from NUC10 ([39.156.73.10])
+	by newxmesmtplogicsvrsza56-0.qq.com (NewEsmtp) with SMTP
+	id 4B722280; Tue, 02 Sep 2025 17:18:55 +0800
+X-QQ-mid: xmsmtpt1756804735tlq9vma9p
+Message-ID: <tencent_E3598F975B2A13AFC3A3E08837062E42A908@qq.com>
+X-QQ-XMAILINFO: NMGzQWUSIfvTYId8edV+Tl6aZmURxcRHFXImvr8PRps3rdF3p9vcMWW80VYG5G
+	 D81vFsFzsDVjC1LTGHQXYV4SH5riK/L5cfIoTJ+rDitDc2jqcIeSC+CwcTdNU3W0O6t2mO0BxSFQ
+	 +irP8PtmoVN3xZngDZBHO10e2fZGCEdU6tI54g4irRcRKLguaRGE8ROp6dbVcKoVibtOmc8NVYDR
+	 NIlx9S9riUWX8FXS3vjtfdums/y0tEj3oX62FcH4rA4FUaVTMmCGDfQ+Ez4QGhn9OJIGd4OhesJt
+	 n8F5WCtgGf3L0LdmN9C1V+3kWEhXqIN8Hk6vc5wOLbcq+FT9LLsOiks35hDd8Ppu//6TWDAoRUH3
+	 MKR9WZwjm+laioU/WWi0MfpD85QYQrR+rEf6c6eNxK4oWbly+vv+DF7h2CldLoot6xW/ghAUlPEX
+	 1YxAkf90xlWxsk1gytTOAY/cnvF0zfbBhC7HWVyWaRi4NZhWqfsv0xvykpJ31S71I/C/n2hMolib
+	 yPh94okuoYaM1BUiMudTKhuNCPUX8wdoqlX2T0MJR38/Bl9rT6StgD3NYmpH+EaSYbhaAwfYWGY8
+	 tatgGSe+5sB2FscRADUd83uIJkL8ry8ckjgcnTMZdCcWel0BLfOvYIV/7MLraPMfLgKZJlcVGjKx
+	 BBHkVqYmrj7OQUNFBJ+SCHTWys2tlRZA2GFKUo9t4+QgkQRhdo0/B1Og2KPaCpga1s/LGVW80zd0
+	 gXSysHNqJZq5HlVlSWZhlggX6p9fbnr/0+ZIdhI8wwm43KpjV2SwvStSbwAhBiWXORLe/kRabCZI
+	 m1c2cibIz9ixfoMVJqsYn5BCc2S4OLvKpva9Izi7bWzIaES3WmqKpDFNY7RjQdnos/7K0uBHVEw8
+	 tOrLR2j41cSqvMoQHQM+OEVpyWQQAnjXBgQq6S2dClyA310HypC4UEMK8/EjpuOFUZXBqDvffv9m
+	 uVNSjBNrfELbzk1Rpgzme+SFBkwHgfKDqLbc6va0JJCmn5PHnwBVBSAGe5NDHTo3fkgcjKHcbZ5R
+	 O/1UNBP82EJMn0hVNOzI85LwhuV8/64FF/ttNUwgULGsrOhoatAWHLnJIGJvTXPzgyggDAUQ==
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+From: Rong Tao <rtoax@foxmail.com>
+To: andrii@kernel.org,
+	ast@kernel.org,
+	vmalik@redhat.com
+Cc: rtoax@foxmail.com,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Rong Tao <rongtao@cestc.cn>,
+	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH bpf-next v3 0/2] bpf: Add kfunc bpf_strcasecmp()
+Date: Tue,  2 Sep 2025 17:18:25 +0800
+X-OQ-MSGID: <cover.1756804522.git.rtoax@foxmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 26/37] drm/i915/gem: drop nth_page() usage within SG
- entry
-To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Alexander Potapenko <glider@google.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
- Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
- dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- iommu@lists.linux.dev, io-uring@vger.kernel.org,
- Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
- Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
- kasan-dev@googlegroups.com, kvm@vger.kernel.org,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
- linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
- linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-scsi@vger.kernel.org, Marco Elver <elver@google.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>, Michal Hocko <mhocko@suse.com>,
- Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
- netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
- Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
- Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
- virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
- wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
-References: <20250901150359.867252-1-david@redhat.com>
- <20250901150359.867252-27-david@redhat.com>
-Content-Language: en-GB
-From: Tvrtko Ursulin <tursulin@ursulin.net>
-In-Reply-To: <20250901150359.867252-27-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Kfunc already support bpf_strcmp, this patchset introduce bpf_strcasecmp
+and add some selftests.
 
-On 01/09/2025 16:03, David Hildenbrand wrote:
-> It's no longer required to use nth_page() when iterating pages within a
-> single SG entry, so let's drop the nth_page() usage.
-> 
-> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Tvrtko Ursulin <tursulin@ursulin.net>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Simona Vetter <simona@ffwll.ch>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->   drivers/gpu/drm/i915/gem/i915_gem_pages.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_pages.c b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> index c16a57160b262..031d7acc16142 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> @@ -779,7 +779,7 @@ __i915_gem_object_get_page(struct drm_i915_gem_object *obj, pgoff_t n)
->   	GEM_BUG_ON(!i915_gem_object_has_struct_page(obj));
->   
->   	sg = i915_gem_object_get_sg(obj, n, &offset);
-> -	return nth_page(sg_page(sg), offset);
-> +	return sg_page(sg) + offset;
->   }
->   
->   /* Like i915_gem_object_get_page(), but mark the returned page dirty */
+Rong Tao (2):
+  bpf: add bpf_strcasecmp kfunc
+  selftests/bpf: Test kfunc bpf_strcasecmp
 
-LGTM. If you want an ack to merge via a tree other than i915 you have 
-it. I suspect it might be easier to coordinate like that.
+ kernel/bpf/helpers.c                          | 68 +++++++++++++------
+ .../selftests/bpf/prog_tests/string_kfuncs.c  |  1 +
+ .../bpf/progs/string_kfuncs_failure1.c        |  6 ++
+ .../bpf/progs/string_kfuncs_failure2.c        |  1 +
+ .../bpf/progs/string_kfuncs_success.c         |  5 ++
+ 5 files changed, 61 insertions(+), 20 deletions(-)
 
-Regards,
-
-Tvrtko
+---
+v3: Update prog_tests/string_kfuncs.c for "strcasecmp";
+v2: Remove __ign prefix from __bpf_strcasecmp and add E2BIG failure test;
+    https://lore.kernel.org/lkml/tencent_8646158457D4511C447C833B21B3ACF6CB07@qq.com/
+v1: https://lore.kernel.org/lkml/tencent_5AE811A28781BE106AD6CDE59F4ADD2BFA06@qq.com/
+-- 
+2.51.0
 
