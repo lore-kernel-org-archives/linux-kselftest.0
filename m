@@ -1,310 +1,208 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-236.mail.qq.com (out203-205-221-236.mail.qq.com [203.205.221.236])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C00724E4BD
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 23:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D202277CB6;
+	Tue,  2 Sep 2025 23:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.236
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756857337; cv=none; b=PeVol4u3CmYw/CTYG/4ZWKk5o4rMbxakXSmTAR6cyLRDMFojhSy+AaxEb01UWcJYZiQRlxsPUh3SEhsAB2Mkf8jFkvGuYOI85Zl1v5hclB2Qu62x2Y5qm2ET3aFXymeYT2nKAC5Jb1ZZ3AHytOobMbpa7q5RZKdi6fwKFZgj+CU=
+	t=1756857461; cv=none; b=tx7oCmggObodO8zxlJSX1PW8F47F64Uuy6DmTGL6bG+WjPNJjq94ud9XDwyRognrd36g9M1f5B+FjnApyqC+jA+6h+qObGphneBakODILHkavZuhcUdBioAwcfEJSIfgbEJNHgWJkCD3Q3ymO3VJRkQ1+GevJsjU/ymwna0ubWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756857337; c=relaxed/simple;
-	bh=BgL7U4H/QEOKGQm2G8hM9ycFx9km2fSP4Aw1+zKZBl4=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ZgBzEng7bYkrgIyrt8KrteSAoZEZhJ9CMuOSBrBxdw6kpcMzxTSfTPsuFYgVpttBWcyx7eJwo42YUQMextxsTUwTFdvyZ6kpPwfrBD5ZHYmOO7F9dp+4aGeJToAi7BjS7YuIGPbt0Pk4ZTZgOa72WD5BZ1ZiztCOtBRsxC8sJsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p8+vdApF; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--marcharvey.bounces.google.com
+	s=arc-20240116; t=1756857461; c=relaxed/simple;
+	bh=UKRV8zqIZvmEUKJw7/IUU3WRzDcW6oHIiaAA/kuvLgQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MmGrXnRF5w43sQGUKOjVAwgpDCSaZsYxn/FRyMZmYvpt+QJXCT5If0KYeOyaRlRVxtIvL3cb4kwcPE47UT2gJYSNRFK7LrUktnzEP70f29U4QviYkbK133e4zRlB05JRrFbYF0OeyKwP7tsSde9ivfPZ7HHDCmNAr1hIt4ldciA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=a3EkTwFR; arc=none smtp.client-ip=203.205.221.236
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p8+vdApF"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2445805d386so64293625ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Sep 2025 16:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756857334; x=1757462134; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CIGRTa+hx7UfZvsP2fZBXMpfI369FpWVdSbO05Zb4TE=;
-        b=p8+vdApFWyqkQz6FE+D4sF5On5fVKM1c8LlKUiDb/rJfrfVN8Ioh+ZsJcxCt1h9LnF
-         vUchkaCYQV8Vtf/PLU2Gm1KI15QvxCGRXA2p8YgG/TnPbYio1IxuuXZzoV9AmCvkJAz2
-         E0DBVYGLHFlZX7w8gCeObimolLQ79+kXWpT9+xRjek+wxDkHChi3Mg/VscOs8Kz0zKYB
-         iGGf5eGpVkfztdDSBWNOPDhMPRj+ol0Kh/iG6R1cmSV3Z9tmablKY8NynyKNlmKqnFK5
-         w5/UTD0S6Kbemgtfache6LzVTaWQ79hxO24BRGDf7fiqbh62qBBHS7ip+o9FvZSHVVzI
-         KYXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756857334; x=1757462134;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CIGRTa+hx7UfZvsP2fZBXMpfI369FpWVdSbO05Zb4TE=;
-        b=UiX4ISEsARJjKtL94fPw5aUFrUToHna6tyKENJIk6G8BswA+Kcm9NSdjMNdr1BVihO
-         5BtFXwTHSOErvrWdq/TN05QbkVEhb9ayxrlNis0dgVJt+CfN3a9bUYsr3o75Gk0dlf4g
-         CkLs5vTJW8+SkHBl2snjYqcG+S2r59a5DGMWbyzqmXDzgEoj30ts0YsNFvEnQ5ozUeDM
-         6A58isTkWYB1/LUQxZjXl41zvnFVKZEJZKPHAWXHEXv179r9/aNCL6ZhL4J3DX4HatKP
-         rxDrZXlAHjMq++QLp2mFN8yTLz6Jm8A1t+znatVaf3IwXFd/CWiwTE7TRAdoKx+aC6Mk
-         Cefw==
-X-Forwarded-Encrypted: i=1; AJvYcCWTmvvCasZZOmA5rMmKaGmwiQfyJ9eW4Gm58FhilbuURhD7Et3lh7Uc823xCd5p5S/3uUMLxTSWdQw0LQJp85U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPoIxjnT1hhVmv8FObnRnoT5l/Fc2BEKbvvoqvCWiqqOc33GjM
-	q12UedYLIUzbkOJSRXHyj3mHcGqb6ATaCN5cwnb/xnRRi5dN622DXcx0nAsoWbc5Mwtqr6C2Wq+
-	SEZ1vFBDQy6+dsLQajyG7yA==
-X-Google-Smtp-Source: AGHT+IHhkNI0TBiTHsK3Yf20wfZ8jdimx+BAATrPLxjOnbn8CaU4LzudRl9ZwHjqTaNe30Olvhohi+5JNqCloWxj
-X-Received: from pldq13.prod.google.com ([2002:a17:902:c9cd:b0:24c:8f0c:bd97])
- (user=marcharvey job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:f789:b0:249:2789:4110 with SMTP id d9443c01a7336-24944890abfmr165843255ad.10.1756857333921;
- Tue, 02 Sep 2025 16:55:33 -0700 (PDT)
-Date: Tue,  2 Sep 2025 23:55:04 +0000
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="a3EkTwFR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1756857456;
+	bh=F2obJWGDhr+R33s1tIhyS3cq15WFRqq0Gm0kntRQQvQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=a3EkTwFR9uZ1NGMJ05FzHEwjY/R6oL9bCDgzbb8jBIfJ1BB1WLE+MhEPUxZGws9+R
+	 aOxgAUwz0Jooc10CQg9HYTVBexyOha7e/E8z0mrfCXce1E+LksXUk4hL6v7edznpt4
+	 uDGnqBbs3F7GElqYc/dFkFMNA0ezhyG9isyd3D2E=
+Received: from [10.56.52.9] ([39.156.73.10])
+	by newxmesmtplogicsvrsza36-0.qq.com (NewEsmtp) with SMTP
+	id C493BE26; Wed, 03 Sep 2025 07:49:09 +0800
+X-QQ-mid: xmsmtpt1756856949tpmm49ws0
+Message-ID: <tencent_C34BE7725EE5E7556B540B91C3A05E083D05@qq.com>
+X-QQ-XMAILINFO: MmpliBmRb3iCQR1bTXfLR1W02/D0qL61NJCdby35Lb/mvilCAmZEgHPfeIw1G8
+	 pQ478bblMfWiK1MgML23lts38Y7fgTHwh8b6F0SEyaiEfDPiZX4i8BWpj4TpnDErSOB4gxmX5H1N
+	 5kiIPCQwLYJ+YYJYgilHKkK09UAHC7BcLprxNNHVdwis58CCgNv0TKAJdcpkNuxDVyg0KmD8Oiey
+	 pqbBLCAXMNhWzlexB8fEe+RxKaD27ZYu2t+J7ZQeJ7b+EHErnZoT+PjFxSnAgFRXhaG/w+p5GEwd
+	 OhUB5F0FTLUDgtvu23+oej+6noLGPVeeQo3yHDRQWFEEhOH0TQxb7mgGWvQK7P0IX5eCbyO4aC0O
+	 587V2aKvOthYgjYHhjttBLj6ZKYEBZovgm8InTNbpVrcmBp8h68ehqmbtKxIkmK5WBi4zwtFAEQc
+	 pkBbIiOenGAKi+cmW8RTqXDxztd1giNdz21kAJ90SdoLNYUZHYTf4/vtxEVJLpc5+PxhL+ZUPssJ
+	 gxAmO0tzaButi458PCfbCLuURgaMWOmKf7BSaPEKijngrhIecMATxwj6F//ZcHP8Tak4I6fU2y4n
+	 OofezAGaDwPlX+sNV+Sv2s7lH9ivUjpzXFGvrfAWPlyEWGle+ICtNt1QD0N9DauaIjCnFZQZRPmc
+	 d19CLhRDOKKevqWb3WBb72dBOmyvy4hLQCY3bYllGDWMjrYz6uFLnGA1mBOEfRmAsTQvJR3T2lIU
+	 n5qBTXFGkMpUXBVNaEFlYmNnY8gwsCZqN5koiujbZ8bglFxFCPKT4M7MZJyhO4b2AfmJV2fkyis7
+	 EpJwN3mA5x+Zzw8PiIaDpx/QTXvr0otsPXrEFN0O8qMDlzC2vHaaqf5poaPQk/r2QJmnzTL1+waC
+	 05G9SLcAIjQ4EQfBRchn0DrAeuYiWCZfMVTuj14JxM5tOvV6HGPCfCC9p5mbhBsocOppf9kwa9fn
+	 GtyTOHiny0V/y+oSXTnilA/A0GrAW2qo+aYWSf6dJvliQjpsM9wUfAiF6ElcbbALSr13HzZxs3u0
+	 h1cpmXkzfmisz26mTO582A/tPDm1I=
+X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+X-OQ-MSGID: <9322fc15-794d-42e2-89f6-9dba9f5068b4@foxmail.com>
+Date: Wed, 3 Sep 2025 07:49:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.0.355.g5224444f11-goog
-Message-ID: <20250902235504.4190036-1-marcharvey@google.com>
-Subject: [PATCH net-next] selftests: net: Add tests to verify team driver
- option set and get.
-From: Marc Harvey <marcharvey@google.com>
-To: jiri@resnulli.us, andrew+netdev@lunn.ch
-Cc: edumazet@google.com, willemb@google.com, maheshb@google.com, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Marc Harvey <marcharvey@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: add bpf_strcasecmp kfunc
+To: Yonghong Song <yonghong.song@linux.dev>, andrii@kernel.org,
+ ast@kernel.org, vmalik@redhat.com
+Cc: Rong Tao <rongtao@cestc.cn>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>,
+ "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
+ <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <cover.1756804522.git.rtoax@foxmail.com>
+ <tencent_0E0C830021A02CBCCB6D95AE57CFD100C407@qq.com>
+ <e960900d-3811-4b8b-b4b3-bb23048ef5d6@linux.dev>
+Content-Language: en-US
+From: Rong Tao <rtoax@foxmail.com>
+In-Reply-To: <e960900d-3811-4b8b-b4b3-bb23048ef5d6@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-There are currently no kernel tests that verify setting and getting
-options of the team driver.
 
-In the future, options may be added that implicitly change other
-options, which will make it useful to have tests like these that show
-nothing breaks. There will be a follow up patch to this that adds new
-"rx_enabled" and "tx_enabled" options, which will implicitly affect the
-"enabled" option value and vice versa.
+On 9/3/25 00:54, Yonghong Song wrote:
+>
+>
+> On 9/2/25 2:19 AM, Rong Tao wrote:
+>> From: Rong Tao <rongtao@cestc.cn>
+>>
+>> bpf_strcasecmp() function performs same like bpf_strcmp() except 
+>> ignoring
+>> the case of the characters.
+>>
+>> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+>> ---
+>>   kernel/bpf/helpers.c | 68 +++++++++++++++++++++++++++++++-------------
+>>   1 file changed, 48 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index 401b4932cc49..238fd992c786 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -3349,45 +3349,72 @@ __bpf_kfunc void __bpf_trap(void)
+>>    * __get_kernel_nofault instead of plain dereference to make them 
+>> safe.
+>>    */
+>>   -/**
+>> - * bpf_strcmp - Compare two strings
+>> - * @s1__ign: One string
+>> - * @s2__ign: Another string
+>> - *
+>> - * Return:
+>> - * * %0       - Strings are equal
+>> - * * %-1      - @s1__ign is smaller
+>> - * * %1       - @s2__ign is smaller
+>> - * * %-EFAULT - Cannot read one of the strings
+>> - * * %-E2BIG  - One of strings is too large
+>> - * * %-ERANGE - One of strings is outside of kernel address space
+>> - */
+>> -__bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
+>> +int __bpf_strcasecmp(const char *s1, const char *s2, bool ignore_case)
+>
+> The function __bpf_strcasecmp should be a static function.
 
-The tests use teamnl to first set options to specific values and then
-gets them to compare to the set values.
+Thanks a lot, I just add 'static' and tested it, submit V4, please review.
 
-Signed-off-by: Marc Harvey <marcharvey@google.com>
----
- .../selftests/drivers/net/team/Makefile       |   6 +-
- .../selftests/drivers/net/team/options.sh     | 194 ++++++++++++++++++
- 2 files changed, 198 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/team/options.sh
+Rong Tao
 
-diff --git a/tools/testing/selftests/drivers/net/team/Makefile b/tools/testing/selftests/drivers/net/team/Makefile
-index eaf6938f100e..8b00b70ce67f 100644
---- a/tools/testing/selftests/drivers/net/team/Makefile
-+++ b/tools/testing/selftests/drivers/net/team/Makefile
-@@ -1,11 +1,13 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for net selftests
- 
--TEST_PROGS := dev_addr_lists.sh propagation.sh
-+TEST_PROGS := dev_addr_lists.sh propagation.sh options.sh
- 
- TEST_INCLUDES := \
- 	../bonding/lag_lib.sh \
- 	../../../net/forwarding/lib.sh \
--	../../../net/lib.sh
-+	../../../net/lib.sh \
-+	../../../net/in_netns.sh \
-+	../../../net/lib/sh/defer.sh \
- 
- include ../../../lib.mk
-diff --git a/tools/testing/selftests/drivers/net/team/options.sh b/tools/testing/selftests/drivers/net/team/options.sh
-new file mode 100755
-index 000000000000..b9c7aa357ad5
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/team/options.sh
-@@ -0,0 +1,194 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# These tests verify basic set and get functionality of the team
-+# driver options over netlink.
-+
-+# Run in private netns.
-+test_dir="$(dirname "$0")"
-+if [[ $# -eq 0 ]]; then
-+        "${test_dir}"/../../../net/in_netns.sh "$0" __subprocess
-+        exit $?
-+fi
-+
-+ALL_TESTS="
-+        team_test_options
-+"
-+
-+source "${test_dir}/../../../net/lib.sh"
-+
-+TEAM_PORT="team0"
-+MEMBER_PORT="dummy0"
-+
-+setup()
-+{
-+        ip link add name "${MEMBER_PORT}" type dummy
-+        ip link add name "${TEAM_PORT}" type team
-+}
-+
-+get_and_check_value()
-+{
-+        local option_name="$1"
-+        local expected_value="$2"
-+        local port_flag="$3"
-+
-+        local value_from_get
-+
-+        value_from_get=$(teamnl "${TEAM_PORT}" getoption "${option_name}" \
-+                "${port_flag}")
-+        if [[ $? != 0 ]]; then
-+                echo "Could not get option '${option_name}'" >&2
-+                return 1
-+        fi
-+
-+        if [[ "${value_from_get}" != "${expected_value}" ]]; then
-+                echo "Incorrect value for option '${option_name}'" >&2
-+                echo "get (${value_from_get}) != set (${expected_value})" >&2
-+                return 1
-+        fi
-+}
-+
-+set_and_check_get()
-+{
-+        local option_name="$1"
-+        local option_value="$2"
-+        local port_flag="$3"
-+
-+        local value_from_get
-+
-+        teamnl "${TEAM_PORT}" setoption "${option_name}" "${option_value}" \
-+                "${port_flag}"
-+        if [[ $? != 0 ]]; then
-+                echo "'setoption ${option_name} ${option_value}' failed" >&2
-+                return 1
-+        fi
-+
-+        get_and_check_value "${option_name}" "${option_value}" "${port_flag}"
-+        return $?
-+}
-+
-+# Get a "port flag" to pass to the `teamnl` command.
-+# E.g. $?="dummy0" -> "port=dummy0",
-+#      $?=""       -> ""
-+get_port_flag()
-+{
-+        local port_name="$1"
-+
-+        if [[ -n "${port_name}" ]]; then
-+                echo "--port=${port_name}"
-+        fi
-+}
-+
-+attach_port_if_specified()
-+{
-+        local port_name="${1}"
-+
-+        if [[ -n "${port_name}" ]]; then
-+                ip link set dev "${port_name}" master "${TEAM_PORT}"
-+                return $?
-+        fi
-+}
-+
-+detach_port_if_specified()
-+{
-+        local port_name="${1}"
-+
-+        if [[ -n "${port_name}" ]]; then
-+                ip link set dev "${port_name}" nomaster
-+                return $?
-+        fi
-+}
-+
-+#######################################
-+# Test that an option's get value matches its set value.
-+# Globals:
-+#   RET - Used by testing infra like `check_err`.
-+#   EXIT_STATUS - Used by `log_test` to whole script exit value.
-+# Arguments:
-+#   option_name - The name of the option.
-+#   value_1 - The first value to try setting.
-+#   value_2 - The second value to try setting.
-+#   port_name - The (optional) name of the attached port.
-+#######################################
-+team_test_option()
-+{
-+        local option_name="$1"
-+        local value_1="$2"
-+        local value_2="$3"
-+        local possible_values="$2 $3 $2"
-+        local port_name="$4"
-+        local port_flag
-+
-+        RET=0
-+
-+        echo "Setting '${option_name}' to '${value_1}' and '${value_2}'"
-+
-+        attach_port_if_specified "${port_name}"
-+        check_err $? "Couldn't attach ${port_name} to master"
-+        port_flag=$(get_port_flag "${port_name}")
-+
-+        # Set and get both possible values.
-+        for value in ${possible_values}; do
-+                set_and_check_get "${option_name}" "${value}" "${port_flag}"
-+                check_err $? "Failed to set '${option_name}' to '${value}'"
-+        done
-+
-+        detach_port_if_specified "${port_name}"
-+        check_err $? "Couldn't detach ${port_name} from its master"
-+
-+        log_test "Set + Get '${option_name}' test"
-+}
-+
-+#######################################
-+# Test that getting a non-existant option fails.
-+# Globals:
-+#   RET - Used by testing infra like `check_err`.
-+#   EXIT_STATUS - Used by `log_test` to whole script exit value.
-+# Arguments:
-+#   option_name - The name of the option.
-+#   port_name - The (optional) name of the attached port.
-+#######################################
-+team_test_get_option_fails()
-+{
-+        local option_name="$1"
-+        local port_name="$2"
-+        local port_flag
-+
-+        RET=0
-+
-+        attach_port_if_specified "${port_name}"
-+        check_err $? "Couldn't attach ${port_name} to master"
-+        port_flag=$(get_port_flag "${port_name}")
-+
-+        # Just confirm that getting the value fails.
-+        teamnl "${TEAM_PORT}" getoption "${option_name}" "${port_flag}"
-+        check_fail $? "Shouldn't be able to get option '${option_name}'"
-+
-+        detach_port_if_specified "${port_name}"
-+
-+        log_test "Get '${option_name}' fails"
-+}
-+
-+team_test_options()
-+{
-+        # Wrong option name behavior.
-+        team_test_get_option_fails fake_option1
-+        team_test_get_option_fails fake_option2 "${MEMBER_PORT}"
-+
-+        # Correct set and get behavior.
-+        team_test_option mode activebackup loadbalance
-+        team_test_option notify_peers_count 0 5
-+        team_test_option notify_peers_interval 0 5
-+        team_test_option mcast_rejoin_count 0 5
-+        team_test_option mcast_rejoin_interval 0 5
-+        team_test_option enabled true false "${MEMBER_PORT}"
-+        team_test_option user_linkup true false "${MEMBER_PORT}"
-+        team_test_option user_linkup_enabled true false "${MEMBER_PORT}"
-+        team_test_option priority 10 20 "${MEMBER_PORT}"
-+        team_test_option queue_id 0 1 "${MEMBER_PORT}"
-+}
-+
-+require_command teamnl
-+setup
-+tests_run
-+exit "${EXIT_STATUS}"
--- 
-2.51.0.355.g5224444f11-goog
+>
+>>   {
+>>       char c1, c2;
+>>       int i;
+>>   -    if (!copy_from_kernel_nofault_allowed(s1__ign, 1) ||
+>> -        !copy_from_kernel_nofault_allowed(s2__ign, 1)) {
+>> +    if (!copy_from_kernel_nofault_allowed(s1, 1) ||
+>> +        !copy_from_kernel_nofault_allowed(s2, 1)) {
+>>           return -ERANGE;
+>>       }
+>>         guard(pagefault)();
+>>       for (i = 0; i < XATTR_SIZE_MAX; i++) {
+>> -        __get_kernel_nofault(&c1, s1__ign, char, err_out);
+>> -        __get_kernel_nofault(&c2, s2__ign, char, err_out);
+>> +        __get_kernel_nofault(&c1, s1, char, err_out);
+>> +        __get_kernel_nofault(&c2, s2, char, err_out);
+>> +        if (ignore_case) {
+>> +            c1 = tolower(c1);
+>> +            c2 = tolower(c2);
+>> +        }
+>>           if (c1 != c2)
+>>               return c1 < c2 ? -1 : 1;
+>>           if (c1 == '\0')
+>>               return 0;
+>> -        s1__ign++;
+>> -        s2__ign++;
+>> +        s1++;
+>> +        s2++;
+>>       }
+>>       return -E2BIG;
+>>   err_out:
+>>       return -EFAULT;
+>>   }
+>>   +/**
+>> + * bpf_strcmp - Compare two strings
+>> + * @s1__ign: One string
+>> + * @s2__ign: Another string
+>> + *
+>> + * Return:
+>> + * * %0       - Strings are equal
+>> + * * %-1      - @s1__ign is smaller
+>> + * * %1       - @s2__ign is smaller
+>> + * * %-EFAULT - Cannot read one of the strings
+>> + * * %-E2BIG  - One of strings is too large
+>> + * * %-ERANGE - One of strings is outside of kernel address space
+>> + */
+>> +__bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
+>> +{
+>> +    return __bpf_strcasecmp(s1__ign, s2__ign, false);
+>> +}
+>> +
+>> +/**
+>> + * bpf_strcasecmp - Compare two strings, ignoring the case of the 
+>> characters
+>> + * @s1__ign: One string
+>> + * @s2__ign: Another string
+>> + *
+>> + * Return:
+>> + * * %0       - Strings are equal
+>> + * * %-1      - @s1__ign is smaller
+>> + * * %1       - @s2__ign is smaller
+>> + * * %-EFAULT - Cannot read one of the strings
+>> + * * %-E2BIG  - One of strings is too large
+>> + * * %-ERANGE - One of strings is outside of kernel address space
+>> + */
+>> +__bpf_kfunc int bpf_strcasecmp(const char *s1__ign, const char 
+>> *s2__ign)
+>> +{
+>> +    return __bpf_strcasecmp(s1__ign, s2__ign, true);
+>> +}
+>> +
+>>   /**
+>>    * bpf_strnchr - Find a character in a length limited string
+>>    * @s__ign: The string to be searched
+>> @@ -3832,6 +3859,7 @@ BTF_ID_FLAGS(func, bpf_iter_dmabuf_destroy, 
+>> KF_ITER_DESTROY | KF_SLEEPABLE)
+>>   #endif
+>>   BTF_ID_FLAGS(func, __bpf_trap)
+>>   BTF_ID_FLAGS(func, bpf_strcmp);
+>> +BTF_ID_FLAGS(func, bpf_strcasecmp);
+>>   BTF_ID_FLAGS(func, bpf_strchr);
+>>   BTF_ID_FLAGS(func, bpf_strchrnul);
+>>   BTF_ID_FLAGS(func, bpf_strnchr);
+>
 
