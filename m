@@ -1,155 +1,131 @@
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003DA32F76D;
-	Tue,  2 Sep 2025 08:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5142EA169
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Sep 2025 08:13:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756800471; cv=none; b=gTw4kX01QmX7BgB1WM2v5t4KlKm45T3lPQyiPZ6QiBOXnvPzGTStmyAfxrwMqfaM4DrkJZ6FoaMMfLGlM3t9JfBseiqMVsxcn86Y/yzCOepKBOY5B4zenqnklP2FvjVQG7RIMcaCL0EQDEi0oqTOPjLhFjyjBo7sa7uflNby5Ks=
+	t=1756800826; cv=none; b=b2VTB2v+v2p3kzQ0Tin/5GDdhEnJJVv6B3VrBoXmatvY1eizGOzAvS2zw6oz1jxCoSj0/aAW2OoBrxi1QLuDKRNMk/GAvqu0S9RroqnJFQqGfOkn/f5vF1jItrF3umhrGTPc2mrwigQib9ZCmWgTVTfvN4LqhWutC7aEAk+MDX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756800471; c=relaxed/simple;
-	bh=Ohhov6v/OLsvpbXkKsZD5ewTCOATp1DHaDs4YVVvz0I=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=S2+ll4NwC1B0OX3bb1pIg2zHTQfsTkaMGCpbbXLttleY3yVSJxDlNQrpYLKShX58a/USB9AiM0h/Y7xJfRgoJplQGhBkmmWKAL8IbnB02zpaLb4mnGVYP23PxZ8R+Oto99FfDxx75mSGuKm76GbF8UVzQAKhqhOP0gk9zJ+Ucww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=bfLPC0DQ; arc=none smtp.client-ip=43.163.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1756800826; c=relaxed/simple;
+	bh=BkM6l6APB2TFKCoFfdt9Ocj0nHtE/XpSdiMC8ZOLAsY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BT0KysF0XKuoInsdl8n/l7uCzkk0SRgS/XCn6zFTZnThDyym8dm4i4/RKdSv6ma1ZPeyBDzQkALtg6Dm+dbNNVi8PWyNl/w0jcxNd5gfhia76e1z+fM6X30V46kU7JihKM0gQnILypVA2JMri7ikkOOVZDAxB7+vlasBZx8r1Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bQHlo6vx; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="bfLPC0DQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756800164;
-	bh=DHv/3pCqg7IfUg+7m4SMm6A8GvVbbb7UAh5j6MLnr9s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=bfLPC0DQA3oILeUvZF5RZU3H2EGU2Isj8O7zZ7aTcApzkuhunPnxAF8pfqkP1Cs6P
-	 z8jn5XaP2VpBSiNEziXsH+R8E3Lzj/7n7EPmaX5Xf7cpbVtUr3DwmvypMGte4UCALH
-	 AG7syDJQM8eQPyUgIsxasPrBJkq4TPBAtZ4WS9a8=
-Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrszb20-0.qq.com (NewEsmtp) with SMTP
-	id E18998A0; Tue, 02 Sep 2025 15:56:24 +0800
-X-QQ-mid: xmsmtpt1756799784ty09pciml
-Message-ID: <tencent_00107416F7259ACAC62BF8681F22B5C19D06@qq.com>
-X-QQ-XMAILINFO: MyHh0PQai9FpC612lp1m7WJ7ZM8lXFcyDpB3lCONa2W3q0mA1qpSV8xEfCprzY
-	 g0kOu4k3xm6PY/AsFHepnxkOQzYTXTtMQzHdg12YEnhmyHtUzouI7QgTQMQvkO9SWL7uNei0GXD7
-	 0e2AL5qfPLtmMCREcP3/ZhSmGRT/SlmbH5n0pkt72it1aAAoQAZI9HargHFBPdyUzubzEUTtpVyZ
-	 uVtIJZ/AD9Ps9kvy6TArMzBNAr5FSnD/zSBrOrQNzFNbDnt8wqopt184TcnPYEy6RuXLV1eKhpUc
-	 ZkBaH2GeYeivqOHQU5sj5VhuLPr6Bg4k8OsK1vzAfOFX15j35SwbouA/iDConpXP9Kfxv7XPHZZJ
-	 sh3Gq4xo2E3gqMnTh6jK2WUkFcLkMtKFXnWPsN5XhGqrbx9ESddJGplWKGtZtcDs5AX48MEjzQps
-	 RwWka2tunNcjQFqPVFYtsHxX0xZmdFTlp58wdLm14yxOhTen+DTuOORj12OxSKY02KYyYKSi8P6q
-	 ayWxdHcXS0XWVsfXw6Qz0cEQAfu/Z9zvYEJDSkMnsZVnVRwMvazzzOwAsCJuPRt4IUg5ev7BbT+G
-	 H/Va/LFe/W3Qz2W5FvebgBosQ5DFYHq+g26r8XaIrvtN9dxIBfZ9i2vuLTRZvrfM5xm9pem7slBL
-	 LBGH8yi/Q2gvZ3RfWMzJeyV1VEF4PO5lrh5iyo5cCK+Rvix4nVbnCepqp9EfBLLz0amKZZtMj/he
-	 ivhLEY9aN7+jeDAQzN0210a6uC64/z1uZnLMAS7LyYJBx9G4urI+zrMFNw+COyWHgob0dA4zjjTh
-	 S1qPHiGW4V2LxYtFTjkf3PNu/qXNhzjdJrcQH7r9XJFCBM9Z3OWqbAN9NhptYOrgoPSJY6kypUHm
-	 Uxt85IjP3sxjttlPBEAxdgL4qjMar90Gm9bRFa7vdXESHFd13jSgaOU6T39Y1tRXHsOPReTxW35a
-	 sCi8lPsu7R4jtwFaPKXo4CI6tfI5D533X/CnNpsMDKHg0vBMqb3dGeHhX0UyXynDG1JEU8Y/jEV1
-	 9BjRUF2OWpNYmf3pNL3rPA1yZgquNJgK0iXBWhzy292nJhm5X85YOXYB9O2t1czy9T/ITc4JZoxI
-	 5qD2zakf2ybJ9kVIE=
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-From: Rong Tao <rtoax@foxmail.com>
-To: andrii@kernel.org,
-	ast@kernel.org,
-	vmalik@redhat.com
-Cc: rtoax@foxmail.com,
-	Rong Tao <rongtao@cestc.cn>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test kfunc bpf_strcasecmp
-Date: Tue,  2 Sep 2025 15:55:50 +0800
-X-OQ-MSGID: <1ae45b38862a4afcc3b8c1bb50476258b76747a9.1756798860.git.rtoax@foxmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1756798860.git.rtoax@foxmail.com>
-References: <cover.1756798860.git.rtoax@foxmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bQHlo6vx"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b03fa5c5a89so379417666b.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Sep 2025 01:13:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756800823; x=1757405623; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9023zF9YjRSOsUPLytfDAvNSQZrPyUAwlY34V1EiUsE=;
+        b=bQHlo6vxa6HaSV16yfCGVkFWe3avbMELpiq4/PCXhaAZCp+R3GWlqPH6l8UVCGSyIE
+         ksgMSBiOPFZeq9dNGws+n8K6AmtRe/RmV+kaz6ZzxLJjf6E3HZgivi2ix2QFJ9FUTXxp
+         /Q/2WSVuVWaGjSjONsfmNMltHZX4ADLehEUjVrLuds3bWtsmz7IyS0pCNp/iyVX4b6m6
+         tn0jr9jSefHfuZysAjtnf/IQXahVwpVerwBqZaIgRk3DrwhM/fiQg0QAmDrRjcCihdIB
+         qN5SW24w8ArphLA8xMwge1a88nAQ6UmrMbuwpyr0aIbGj8RK2+FHB6zlcRXxoTStBPZp
+         aTyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756800823; x=1757405623;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9023zF9YjRSOsUPLytfDAvNSQZrPyUAwlY34V1EiUsE=;
+        b=u9SllKKUhgRkYZ6v8RUaMZbAkgrEH7yfCWVu0MurJaHifBLlXuc1gO/ZraryygUG3y
+         AseRgLFk/01vMIjj7/YFBCCAacXakq8u0479zmAjL+2kIY6DzPjgcRN8rUpiKPlLCyIl
+         Z2s6ZnxFpNSQvwc8xjCWjszO1z71kqLXm7b5YDut4x7YG8qClX9pDe6FahmQ6irNfLET
+         TIZvRMKIFQYsdlObC7mSP/wKog3YqiqO9ic5U44fMSvBMpnza16bFMcNU2TlLg8/7SeP
+         CodziLKjwvpuPyBzZIk3PB812zsCjyXBatVvY+vka/4wRVQADvw88+ALJHfl7h4CWoPw
+         K4Tg==
+X-Forwarded-Encrypted: i=1; AJvYcCXvJkU9Up5chryhiEcU2D7LYEKKFFKpLM/CwwUtNxcngNTG/28tkGlv5C+5Ze7m57bze+cQV48IR3eEfzOltyE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxol2ZN2PoB5uH8KuKTps/19iYcQaZt3TD6qfth90BaCCzsrlIh
+	yKgKdEPRNpwYuIMXRUQ7ykrylMDoRQ+tMJ/iyd4LRFHyaua+5aRPpEas
+X-Gm-Gg: ASbGncuNMCYRGPnNq1KE8UAKLAjXHLLIWANrirrEmCxnD3zPnNmxB7Wks4YkHlZsh4a
+	fRKQ9CBntVBZS67QRFZMDerUoYXoqL0X9hHXod7N1cWdKU1So9dYkPy2S6jT2ZOp5qxPl7zSo5I
+	Qg3PeY9xQCHj4FX+zFBLA5Kxb8sOp3aXYkTStBlp0nwxu3PFWeh/2Rt5mI6cIqKOL137HsjyCjR
+	AKEx9exsB73HAnE+CtlXroXgFzUOIWXk/Oj8H4i4r8/qdGg/mqrxpJqr8kg+3tZcaR8tIoCILAt
+	xb4esCGB1YvAzMUsavrsrr16V/I4uvA0tZ9tnp72cePQo3DhtnH/yCp4P0IP7Q35Ec8jRgJ/PjJ
+	30odEeFlMsHGJmyKr/DaDAgXgPi7wQczkNCBw
+X-Google-Smtp-Source: AGHT+IHOLANPIOlqUUqaEwu94jaJxxWod+bsV1Xs0JCF3RYuGTmiVCDK4bHjkTjaBPdFyrtpJB6Q0w==
+X-Received: by 2002:a17:907:5ca:b0:afe:e4d2:6d7f with SMTP id a640c23a62f3a-b01f1a0e59emr875555066b.60.1756800822806;
+        Tue, 02 Sep 2025 01:13:42 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aff032125e2sm1021634766b.77.2025.09.02.01.13.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 02 Sep 2025 01:13:42 -0700 (PDT)
+Date: Tue, 2 Sep 2025 08:13:42 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Wei Yang <richard.weiyang@gmail.com>, Zi Yan <ziy@nvidia.com>,
+	akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
+	baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [Patch v2] selftests/mm: check content to see whether mremap
+ corrupt data
+Message-ID: <20250902081342.rthx5sopowmg4hyb@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20250831022701.2595-1-richard.weiyang@gmail.com>
+ <f8e942de-1a50-412e-9020-1bc901b4243b@redhat.com>
+ <61E58B7C-23D0-49FE-8D0C-CE0B672114E2@nvidia.com>
+ <0a0b0018-9427-4201-bf53-6aeb251bc482@redhat.com>
+ <1D88E773-C11E-4F28-A13A-1A681898198B@nvidia.com>
+ <5a796574-0a3c-4040-b0bc-3ff757402759@redhat.com>
+ <20250902025112.d2n3o4imeptppctd@master>
+ <dd30710a-a210-44dc-93f9-1e7ddf096251@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dd30710a-a210-44dc-93f9-1e7ddf096251@redhat.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-From: Rong Tao <rongtao@cestc.cn>
+On Tue, Sep 02, 2025 at 09:49:48AM +0200, David Hildenbrand wrote:
+>> > +	/*
+>> > +	 * To challenge spitting code, we will mremap page[x] of the
+>> > +	 * thp[x] into a smaller area, and trigger the split from that
+>> > +	 * smaller area. This will end up replacing the PMD mappings in
+>> > +	 * the thp_area by PTE mappings first, leaving the THPs unsplit.
+>> > +	 */
 
-Add testsuites for kfunc bpf_strcasecmp.
+This confuse me a little. How about move "and trigger the split from that
+smaller area" to the end? So that I know mremap convert to pte-mapping and
+leave thp unsplit. Then we do the split.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c | 6 ++++++
- tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c | 1 +
- tools/testing/selftests/bpf/progs/string_kfuncs_success.c  | 5 +++++
- 3 files changed, 12 insertions(+)
+>> > +	page_area = mmap(NULL, page_area_size, PROT_READ | PROT_WRITE,
+>> > +			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+>> > +	if (page_area == MAP_FAILED) {
+>> > +		ksft_test_result_fail("Fail to allocate memory: %s\n", strerror(errno));
+>> > +		goto out;
+>> > +	}
+>> > -		if (i % pagesize == 0 &&
+>> > -		    !is_backed_by_folio(&pte_mapped[i], 0, pagemap_fd, kpageflags_fd))
+>> > -			thp_size++;
+>> > +	for (i = 0; i < nr_thps; i++) {
+>> > +		tmp = mremap(thp_area + pmd_pagesize * i + pagesize * i,
+>> > +			     pagesize, pagesize, MREMAP_MAYMOVE|MREMAP_FIXED,
+>> > +			     page_area + pagesize * i);
+>> 
+>> Would this create one hole at the beginning of each 2M range and cause
+>> splitting underlining THP?
+>
+>Yes, it will create a hole (this also happens in the old code).
+>
+>As the comment above it now states: "leaving the THPs unsplit"
+>
+>There is a check verifying that after this mremap code.
+>
 
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-index 53af438bd998..99d72c68f76a 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-@@ -31,6 +31,8 @@ char *invalid_kern_ptr = (char *)-1;
- /* Passing NULL to string kfuncs (treated as a userspace ptr) */
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_null1(void *ctx) { return bpf_strcmp(NULL, "hello"); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strcmp_null2(void *ctx) { return bpf_strcmp("hello", NULL); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_null1(void *ctx) { return bpf_strcasecmp(NULL, "HELLO"); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strcasecmp_null2(void *ctx) { return bpf_strcasecmp("HELLO", NULL); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strchr_null(void *ctx) { return bpf_strchr(NULL, 'a'); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strchrnul_null(void *ctx) { return bpf_strchrnul(NULL, 'a'); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strnchr_null(void *ctx) { return bpf_strnchr(NULL, 1, 'a'); }
-@@ -49,6 +51,8 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return
- /* Passing userspace ptr to string kfuncs */
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr1(void *ctx) { return bpf_strcmp(user_ptr, "hello"); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr2(void *ctx) { return bpf_strcmp("hello", user_ptr); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_user_ptr1(void *ctx) { return bpf_strcasecmp(user_ptr, "HELLO"); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcasecmp_user_ptr2(void *ctx) { return bpf_strcasecmp("HELLO", user_ptr); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strchr_user_ptr(void *ctx) { return bpf_strchr(user_ptr, 'a'); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strchrnul_user_ptr(void *ctx) { return bpf_strchrnul(user_ptr, 'a'); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strnchr_user_ptr(void *ctx) { return bpf_strnchr(user_ptr, 1, 'a'); }
-@@ -69,6 +73,8 @@ SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr2(void *ctx) { re
- /* Passing invalid kernel ptr to string kfuncs should always return -EFAULT */
- SEC("syscall") __retval(-EFAULT) int test_strcmp_pagefault1(void *ctx) { return bpf_strcmp(invalid_kern_ptr, "hello"); }
- SEC("syscall") __retval(-EFAULT) int test_strcmp_pagefault2(void *ctx) { return bpf_strcmp("hello", invalid_kern_ptr); }
-+SEC("syscall") __retval(-EFAULT) int test_strcasecmp_pagefault1(void *ctx) { return bpf_strcasecmp(invalid_kern_ptr, "HELLO"); }
-+SEC("syscall") __retval(-EFAULT) int test_strcasecmp_pagefault2(void *ctx) { return bpf_strcasecmp("HELLO", invalid_kern_ptr); }
- SEC("syscall") __retval(-EFAULT) int test_strchr_pagefault(void *ctx) { return bpf_strchr(invalid_kern_ptr, 'a'); }
- SEC("syscall") __retval(-EFAULT) int test_strchrnul_pagefault(void *ctx) { return bpf_strchrnul(invalid_kern_ptr, 'a'); }
- SEC("syscall") __retval(-EFAULT) int test_strnchr_pagefault(void *ctx) { return bpf_strnchr(invalid_kern_ptr, 1, 'a'); }
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-index 89fb4669b0e9..e41cc5601994 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-@@ -7,6 +7,7 @@
- char long_str[XATTR_SIZE_MAX + 1];
- 
- SEC("syscall") int test_strcmp_too_long(void *ctx) { return bpf_strcmp(long_str, long_str); }
-+SEC("syscall") int test_strcasecmp_too_long(void *ctx) { return bpf_strcasecmp(long_str, long_str); }
- SEC("syscall") int test_strchr_too_long(void *ctx) { return bpf_strchr(long_str, 'b'); }
- SEC("syscall") int test_strchrnul_too_long(void *ctx) { return bpf_strchrnul(long_str, 'b'); }
- SEC("syscall") int test_strnchr_too_long(void *ctx) { return bpf_strnchr(long_str, sizeof(long_str), 'b'); }
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-index 46697f381878..67830456637b 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-@@ -12,6 +12,11 @@ char str[] = "hello world";
- /* Functional tests */
- __test(0) int test_strcmp_eq(void *ctx) { return bpf_strcmp(str, "hello world"); }
- __test(1) int test_strcmp_neq(void *ctx) { return bpf_strcmp(str, "hello"); }
-+__test(0) int test_strcasecmp_eq1(void *ctx) { return bpf_strcasecmp(str, "hello world"); }
-+__test(0) int test_strcasecmp_eq2(void *ctx) { return bpf_strcasecmp(str, "HELLO WORLD"); }
-+__test(0) int test_strcasecmp_eq3(void *ctx) { return bpf_strcasecmp(str, "HELLO world"); }
-+__test(1) int test_strcasecmp_neq1(void *ctx) { return bpf_strcasecmp(str, "hello"); }
-+__test(1) int test_strcasecmp_neq2(void *ctx) { return bpf_strcasecmp(str, "HELLO"); }
- __test(1) int test_strchr_found(void *ctx) { return bpf_strchr(str, 'e'); }
- __test(11) int test_strchr_null(void *ctx) { return bpf_strchr(str, '\0'); }
- __test(-ENOENT) int test_strchr_notfound(void *ctx) { return bpf_strchr(str, 'x'); }
+Thanks for clarifying. One nit to the comment above.
+
 -- 
-2.51.0
-
+Wei Yang
+Help you, Help me
