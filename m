@@ -1,76 +1,85 @@
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3674320766E;
-	Tue,  2 Sep 2025 06:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78AF11CBA;
+	Tue,  2 Sep 2025 06:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756794286; cv=none; b=kBwNUKGU2RgIkqKQEdKJH/8cXv53ok/KKC262AghQhIVRp+tBdt9jmlS2ucOct82fKSknfukr6S9dc1ObO9uXX3n6eWipfu7xOkJ8QBYwf3jJfQqvPi4YZ18oYqmtUUXh//ZbeFvXYp2SIo/6/QoquVCoMR/feQD19bo3IRzya4=
+	t=1756795521; cv=none; b=oNeYEH49gVqaRMw9g7Itvi5xix7zsSiDk/w1bfwoFgJNL0ngwYZrveITiyYtTYM05sjlqZlwW6gXvfgLNPHP7M16LNasDrNnvCFex7a3GGBftHYX8Q+CqZWex+FqHNTl8BcoY5p/ndfHy3r+A2WkTbmltKws7JlaniXb6N1qRCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756794286; c=relaxed/simple;
-	bh=pBbfXBaCjVTdvFIyj0xyIkrOIgzJkc6xwtHuCXjJCcc=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=LHb3/RnfSbgZ4KkcxOacTa/I7tOMw91nl2BIgCk+sO0D8TZgPvz4I0SW815/H0R1nJnMOsi2hVpPRnB8Zc5iZwgTpaFWpId1zhkShvQRVTJoCFTTImsgGm1d/k1+k8WMAiMSyt5DBoeGADx52i2z8N0g+0Pfu/WDfWx69cAVSh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=bDESYUSL; arc=none smtp.client-ip=162.62.57.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1756795521; c=relaxed/simple;
+	bh=MZDGet5HvbyJe4I49Po29yzsJmGJlefb4UaCgiQD2as=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XwU7wxZ4PubMABEWApE5oy2lrPAwL1La4wngmB7AS8Bmba7MwtXQxdY1jawdpCXJzK+jf35z+YXaAiMe1KlSMYBVE8qpReLfLOt25z36t6IT4nr+WbwALGcY1ZpO/yqAu5H9ImrkqAK+K7+/inPh9etwanl+MVAvC/TlaMEun84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlQd74Q3; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="bDESYUSL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1756794279;
-	bh=uB6NR5T09rE01HsYu8s5M59Wksdw4bQnffBeuOV1ES4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=bDESYUSLu+2TuktM0ZsRcRYV1jif773XQ7kne3EGYj7yEx7WYX4MbCEB6HlBibVxL
-	 E6UpYX8TyaYwcVPBrL/OZbqJIHp13wlRF8VgAC4Gf8d8x6kEW6faWLgB9Cf8jAYsj+
-	 I89xji8Rus3BzosTH6i8e9ZQR9jZE0I+9fkeZsfc=
-Received: from NUC10 ([39.156.73.10])
-	by newxmesmtplogicsvrsza36-0.qq.com (NewEsmtp) with SMTP
-	id 49A9E668; Tue, 02 Sep 2025 14:18:26 +0800
-X-QQ-mid: xmsmtpt1756793906tl4rl611y
-Message-ID: <tencent_5AE811A28781BE106AD6CDE59F4ADD2BFA06@qq.com>
-X-QQ-XMAILINFO: MJf32pulH481+n/Cr6Lp1C4yYQG3St95t0GfTZFzAndZSE06OUtN65j3wTYkZL
-	 c5461PizXJ+K07bdzjuReRwPmxs1Gw5mcb/PBObj8xchqdP7S/x3Wfgz58FSCEpSdn8QLHS8YVI+
-	 LwqEfi8UNmTC0A9zJ14ls47zAuSwHCELueXBXPhcV+hRx9jQZCmL8b463tNuqjnm8ACvMCPTQFzt
-	 Xa3QysDnf/hBUiFyK973IQfPFfv9RHiIKh+xuuj+SjRFbZUcqM8BLt0Aj44QLPUCOj84UgveQ80q
-	 Q70DWMPK5QTBHY2bUm2WkD7T6Iu0rHnsOk5rlkfm43Fi4CH5zNgXr4SnsrHqIRN2AgpdsjGqRjJX
-	 wWpPlXHBxK1IlbBYf5vVJ5cwTGdZywx/jqI2m2tiUsWC/+WO3nLv9BC/eaWFv7SRG/M7DJnJ9pMa
-	 t2RVpZXDdmFaDTWCBHQ6+/EDut3xPw1aICuUmmu6j8I5pdkKNZzvWAwjRy+1BZZfPVhsVFnO+8kQ
-	 fPKBXlQzlrBXm8B7WAW9xhiBlSffz3J3QyKTVxdn4Hr6oDs1sBU/p+cZeywnqHbM0oULTM7IylEa
-	 7HIehKYni3EB/pls5cZ3UsFg9Xy++1fPMCcueVdxjyW5zf6smP1xN4UKFkUN380IIW6ZoYMN3svS
-	 GAX3Ji6+me+2tq4uxsrtXCjW1jIayLL7/0p1nS9jl947GUIMahKGnSmb7oqeo8NYNxslpBxs0BdU
-	 wCLLdBAS/+Ron7Ew2uh/1xJB8XjQ29D33aEGsMnKe3WENEFJPdLqRlhz8/NwdBzT+Hfu8+zO3X0x
-	 PhFoGTwL30UostP7aqNNe+DXqHj1nJy37jFtlmrTJhU2Kfc1b6vGVIryzXj7qXdW7+SmfZlhbsA6
-	 fLmYlqUhbdeHLxCTqr/c1kb5gwdJtkE4UVMS0JiyZEMwTY8SIygQPbL38QCaT2RpEQB5ZRs0M+ZX
-	 gl7QONE7xjhJ9cx0k/0HTA/xPrFZOMTeQ8QxAU00W97x3VTRKO+IaztxM3wDW14by+fHp+rC5tsC
-	 vglZkKjyfNjHeX334YNWuUbhrXfBjptTXZYSYZ4g==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-From: Rong Tao <rtoax@foxmail.com>
-To: andrii@kernel.org,
-	ast@kernel.org,
-	vmalik@redhat.com
-Cc: rtoax@foxmail.com,
-	Rong Tao <rongtao@cestc.cn>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlQd74Q3"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7723f0924a3so2979476b3a.2;
+        Mon, 01 Sep 2025 23:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756795518; x=1757400318; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z1KdY6vBL5GsCdWVNZfyRlg3w7cF/fAODtNwJr3SZBw=;
+        b=IlQd74Q3OgP0II0hXSGyXv2/YGj8xuhPFLxd2GiQCR2P7BUl8s0UaZZ2jjanIj8j29
+         EiD6dykSQscMeKhkeeVJB7nJS5qLrgat2wBC2cawG3YHZTbVfajNOvFpqJsE1Zz+abQW
+         GEwlQkhQOUeWYSr+UxKXDBQbeaiwDAvQHUoK76Nwp//Z/Rhpe6j9HuMu7MyJIpWcSgso
+         oSo/8tUSubdGAA6uGE5qsnAcS5ffgoBJ5xHwXiPrY+k9YfCWvlv10ydOMbQgMqcbafG8
+         oKk041Vxkt01VawFwjB6a3uhiIUfRREs1bH+IIk0kJSTeD8IuLqRBRniGowg749Hnf3u
+         CU+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756795518; x=1757400318;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z1KdY6vBL5GsCdWVNZfyRlg3w7cF/fAODtNwJr3SZBw=;
+        b=P8oBrTMsGDXkQnZt+BN2KMQ/8cZll1ZugKUV2wvSWm9kgrb2Uy7bMpCRFK+Yn4J7HQ
+         ndr6rihGxSNIyKKZR+VdxsOLiq1sLNx1umUVb4TCu4MG6Xhnl/fq+yMwJeee8BF2d2RB
+         /PCKZpXjGovbgU3lv0U6vaSWBKSSHdp+ygeY2qYVXCE9U4GkRMutm8OL9QZcg40yiNe5
+         /2pf9qXB+HV5uHhgwt2EF+xJfvXzn0O9bXJqk7tBY2UX7zURMSDX9BrvtQGC5MWT5ImH
+         k+xANGSGd+JP/G7swM56OgWhsymx0jrndaPSK5QTHJBZFpJxWT1NBJfkSuuCeAekqnab
+         VWWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUf858e1MYZLVwmf51tK/zanClqg7B8jSq0ytFO1UwcytSxgEblhF2AXcs1pBVBbKxq0Cbx/7htYKNQsYB9XKxF@vger.kernel.org, AJvYcCUn/u/LJWa6uzuBbvKGf1mch588cnx2xZbw0KzjWtjG8RaDAxYxtAuCfAR2cv2p6btHPU82oD4hPbg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7fEOA2bKgMzD7lJ+o3y5O+voK7Rshw3WlgyZqsb5cuxF0qd5M
+	F1w3CDypMpPZ1urTlgyNpvWNSGLNE6ORKgT/1MNaq+04Oet+zHRsQOHtkhOBR3gG7dU=
+X-Gm-Gg: ASbGncuR7bpe0qIPU4ttt54gx7eFOHKIifGTvT0zxZ3Bs0lBtbklgouBfOepS4GxF+p
+	Pe+hV2huvxytLg01H+2mOxonVizRU1zPl6v07z7celPtZmlNJWWmVIeJZI8Bwpwv19VBvDUGy1s
+	/TT2JhChn4DRLk34gNVIy2dRczSkliFCzUZ/kgVRtZ7jzjOEqifGWNu1BWrimFWAyTB4Ta+Wt6f
+	MLnNEWCa5RvRXrCiXQUq2zyfkgt/sI5CNeRRHqe/nwsvHGpMOHgySa3T8y0ZWcDXGveDPtZf+es
+	+FT390jCEFiZbJJVS0mxxzUCn+reUsdlAEN83fc0deC1zxPRGJJ1SOOEHBW6sI5H2nmnaVUoFSv
+	CeMSinMN0/0wqHI5DWBBaXDPF/sx6+q0OWyYnu3yZCEdtXWWT/3sx
+X-Google-Smtp-Source: AGHT+IFlr6G4W7XvbKQI8j141P+hasUXu8hu79ecvZiU/MNbbbdttQ/E1hJ9ygf1TLpoDLexBr3O6Q==
+X-Received: by 2002:a05:6a21:32a0:b0:243:b125:16c5 with SMTP id adf61e73a8af0-243d6f581f5mr14101148637.49.1756795517864;
+        Mon, 01 Sep 2025 23:45:17 -0700 (PDT)
+Received: from fedora.redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4cd2ea3a04sm10936681a12.38.2025.09.01.23.45.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Sep 2025 23:45:17 -0700 (PDT)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next 1/2] bpf: add bpf_strcasecmp kfunc
-Date: Tue,  2 Sep 2025 14:17:57 +0800
-X-OQ-MSGID: <3fe33cfa3f596358f9b2e83b6ed6263f63350d1a.1756793624.git.rongtao@cestc.cn>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1756793624.git.rongtao@cestc.cn>
-References: <cover.1756793624.git.rongtao@cestc.cn>
+	Jonathan Corbet <corbet@lwn.net>,
+	Petr Machata <petrm@nvidia.com>,
+	Amit Cohen <amcohen@nvidia.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	David Ahern <dsahern@gmail.com>,
+	Jonas Gorski <jonas.gorski@gmail.com>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCHv5 net-next 0/3] bonding: support aggregator selection based on port priority
+Date: Tue,  2 Sep 2025 06:44:58 +0000
+Message-ID: <20250902064501.360822-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,104 +88,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Rong Tao <rongtao@cestc.cn>
+This patchset introduces a new per-port bonding option: `ad_actor_port_prio`.
 
-bpf_strcasecmp() function performs same like bpf_strcmp() except ignoring
-the case of the characters.
+It allows users to configure the actor's port priority, which can then be used
+by the bonding driver for aggregator selection based on port priority.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- kernel/bpf/helpers.c | 56 +++++++++++++++++++++++++++++++++-----------
- 1 file changed, 42 insertions(+), 14 deletions(-)
+This provides finer control over LACP aggregator choice, especially in setups
+with multiple eligible aggregators over 2 switches.
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 401b4932cc49..e807a708e5fc 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -3349,20 +3349,7 @@ __bpf_kfunc void __bpf_trap(void)
-  * __get_kernel_nofault instead of plain dereference to make them safe.
-  */
- 
--/**
-- * bpf_strcmp - Compare two strings
-- * @s1__ign: One string
-- * @s2__ign: Another string
-- *
-- * Return:
-- * * %0       - Strings are equal
-- * * %-1      - @s1__ign is smaller
-- * * %1       - @s2__ign is smaller
-- * * %-EFAULT - Cannot read one of the strings
-- * * %-E2BIG  - One of strings is too large
-- * * %-ERANGE - One of strings is outside of kernel address space
-- */
--__bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
-+int __bpf_strcasecmp(const char *s1__ign, const char *s2__ign, bool ignore_case)
- {
- 	char c1, c2;
- 	int i;
-@@ -3376,6 +3363,10 @@ __bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
- 	for (i = 0; i < XATTR_SIZE_MAX; i++) {
- 		__get_kernel_nofault(&c1, s1__ign, char, err_out);
- 		__get_kernel_nofault(&c2, s2__ign, char, err_out);
-+		if (ignore_case) {
-+			c1 = tolower(c1);
-+			c2 = tolower(c2);
-+		}
- 		if (c1 != c2)
- 			return c1 < c2 ? -1 : 1;
- 		if (c1 == '\0')
-@@ -3388,6 +3379,42 @@ __bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
- 	return -EFAULT;
- }
- 
-+/**
-+ * bpf_strcmp - Compare two strings
-+ * @s1__ign: One string
-+ * @s2__ign: Another string
-+ *
-+ * Return:
-+ * * %0       - Strings are equal
-+ * * %-1      - @s1__ign is smaller
-+ * * %1       - @s2__ign is smaller
-+ * * %-EFAULT - Cannot read one of the strings
-+ * * %-E2BIG  - One of strings is too large
-+ * * %-ERANGE - One of strings is outside of kernel address space
-+ */
-+__bpf_kfunc int bpf_strcmp(const char *s1__ign, const char *s2__ign)
-+{
-+	return __bpf_strcasecmp(s1__ign, s2__ign, false);
-+}
-+
-+/**
-+ * bpf_strcasecmp - Compare two strings, ignoring the case of the characters
-+ * @s1__ign: One string
-+ * @s2__ign: Another string
-+ *
-+ * Return:
-+ * * %0       - Strings are equal
-+ * * %-1      - @s1__ign is smaller
-+ * * %1       - @s2__ign is smaller
-+ * * %-EFAULT - Cannot read one of the strings
-+ * * %-E2BIG  - One of strings is too large
-+ * * %-ERANGE - One of strings is outside of kernel address space
-+ */
-+__bpf_kfunc int bpf_strcasecmp(const char *s1__ign, const char *s2__ign)
-+{
-+	return __bpf_strcasecmp(s1__ign, s2__ign, true);
-+}
-+
- /**
-  * bpf_strnchr - Find a character in a length limited string
-  * @s__ign: The string to be searched
-@@ -3832,6 +3859,7 @@ BTF_ID_FLAGS(func, bpf_iter_dmabuf_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
- #endif
- BTF_ID_FLAGS(func, __bpf_trap)
- BTF_ID_FLAGS(func, bpf_strcmp);
-+BTF_ID_FLAGS(func, bpf_strcasecmp);
- BTF_ID_FLAGS(func, bpf_strchr);
- BTF_ID_FLAGS(func, bpf_strchrnul);
- BTF_ID_FLAGS(func, bpf_strnchr);
+v5:
+a) rename 'prio' to 'actor_port_prio' in bond_ad_select_tbl (Jay Vosburgh)
+b) update document description
+
+v4:
+a) fix actor_port_prio minimal value (Jay Vosburgh)
+b) fix ad_agg_selection_test comment order (Paolo Abeni)
+c) restruct selftest, reduce duplication (Paolo Abeni)
+
+v3:
+a) add comments when init slave port_priority (Jonas Gorski)
+b) rename ad_lacp_port_prio to lacp_port_prio (Jay Vosburgh)
+
+v2:
+a) set default bond option value for port priority (Nikolay Aleksandrov)
+b) fix __agg_ports_priority coding style (Nikolay Aleksandrov)
+c) fix shellcheck warns
+
+Hangbin Liu (3):
+  bonding: add support for per-port LACP actor priority
+  bonding: support aggregator selection based on port priority
+  selftests: bonding: add test for LACP actor port priority
+
+ Documentation/networking/bonding.rst          |  25 +++-
+ drivers/net/bonding/bond_3ad.c                |  31 +++++
+ drivers/net/bonding/bond_netlink.c            |  16 +++
+ drivers/net/bonding/bond_options.c            |  45 +++++++-
+ include/net/bond_3ad.h                        |   2 +
+ include/net/bond_options.h                    |   1 +
+ include/uapi/linux/if_link.h                  |   1 +
+ .../selftests/drivers/net/bonding/Makefile    |   3 +-
+ .../drivers/net/bonding/bond_lacp_prio.sh     | 108 ++++++++++++++++++
+ tools/testing/selftests/net/forwarding/lib.sh |  24 ----
+ tools/testing/selftests/net/lib.sh            |  24 ++++
+ 11 files changed, 247 insertions(+), 33 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_lacp_prio.sh
+
 -- 
-2.51.0
+2.50.1
 
