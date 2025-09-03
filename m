@@ -1,77 +1,76 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141CC20EB;
-	Wed,  3 Sep 2025 00:44:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83AE272618;
+	Wed,  3 Sep 2025 00:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756860288; cv=none; b=oJTBOyJmInH4b6QQFQVYDZbxhmYuql5lfTxUD9H6NLS1AYA+HTA+7RAeKeZ58Ih5thNqp+43LSsILvZe74rxNZjD83hR+RUwLCluxjOzOT3pd11JjmgbNI0VoATjYklczIRZBBcD+0GpCBxjYsyTPS/G8+5BEOtnt91+YUwj0mQ=
+	t=1756860851; cv=none; b=pjRhr4xsJiTrcplgjTpehN3pnpWiuO272Mv1Rt6HqHWnI6nurmYtyh8d1CR4e2BmjS2gG+pcPBkl7ZbtPPt6K6YmSp0JDko0zCHL5J4NyxW1sdw8Xm0yED2ASrTugl2q592qYlvyXQubfQ7PszLEGXq4nhYVwnJoWKPxfE7X9p0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756860288; c=relaxed/simple;
-	bh=NccB3h/Et98EAas0rh6/+OuzQlgUYYvExszhgL4SOw0=;
+	s=arc-20240116; t=1756860851; c=relaxed/simple;
+	bh=kcNwJOzkqoX9rSeUpLch61HWAKlvtsQHVFyVO47m5F4=;
 	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=U17dIEjngiaDvVGObBhibvxFZp+uBvfOlYCSeJfsiXDgEVMjoYRZpYRO1NkaY/34b1kSMmCKMk+0q5tZdyaHKzNjX9G1nXpzalkdtnSF4PCLHuoQJrfwEoUBrbBfKMvJPtouqvK+scq/uDiWSnmRYY930SuO452dXD1AmKjkpk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AXroOjNX; arc=none smtp.client-ip=209.85.214.170
+	 MIME-Version:Content-Type; b=Hkzqdm2nN8USLldO7ivg7Sp6Spek7MDmaozqnUTM2otpz2759gXsd89YivjAmfS2cJ0lv04xDNXRApQSprDJ4CtDvN2Tvwxfr83+50rN/4bkdBT2q43UvRj4wBkU/d3l1Q3+4PVzHMDMVx4ZvPU7S6Cn9U8+s+0CwWwKvxmfmTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SjTCV1BO; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AXroOjNX"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-24c863e852aso3858955ad.1;
-        Tue, 02 Sep 2025 17:44:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SjTCV1BO"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-32326e8005bso5972372a91.3;
+        Tue, 02 Sep 2025 17:54:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756860285; x=1757465085; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756860849; x=1757465649; darn=vger.kernel.org;
         h=mime-version:message-id:in-reply-to:user-agent:references:date
          :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n+jJHEXUqKZxNCmW90fN8yoWhef+e9CtSLJLwD2hj/A=;
-        b=AXroOjNXC5Z2TfKe4cZI6l5/c8gVLuX+lNaaDyZZg1NuslSgsMsT8rHuNpYStU41SD
-         1FO0ESQmBmNzESuPyzHcXFdIf0+Blei307OX3JDrknwAP8n4Rp2k+2kAoLFyWQQiF7wo
-         oxS+zHP8yVAysjYzzUc5H50CvTCF77aKv6TdnlXKqH2scPwW7kfndgM3UF9a6AW8pXFQ
-         siSJPm+t9eju/Yr+RsicZM+iW39u3hNiKcVeZ6bTDlL9JYDPV2KuJHodGjoJhdVP8CI7
-         EjREXEjRePpSuMVzwuUKfnKAaNbm63MqL9501h5xbfqr+71ZAVZPznZjbawM5XjRksXO
-         ZgfQ==
+        bh=DzJEWr0hHSTCHLW2ZPbPTexdMSB3GHBPnCsDiiEa0CE=;
+        b=SjTCV1BO2WllFNxIiSpTP31Hiot+2eWcwRbhOJ0zC4eVJh+bZ/7JlRIK5WiZRFUDVe
+         /aFi+zNT3LAW4u6Uz4Tk2iwolar1ptvo07P9zhvLUmfb2TPzPXbL76VnkQ+leRI2/JYn
+         FZ7zUC1hnGqlJcVIyr6YW505a/6UWMWa9Pv1A/Gphh/2hsICS6+MinD0cAnh9N9PWuia
+         dit2moQhqXwIeH+cqq3o1Kbk46nsj13/mEWDCtEFRZQXYb37DG0WQo7Kp9wlZtt8cfaq
+         TDgemLMc/ZGPpTD3mnkCa6Te2GwgxW38KEkgsgTyFx5RH/lvTH2vZfdU1dqlnvdruqKU
+         +0Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756860285; x=1757465085;
+        d=1e100.net; s=20230601; t=1756860849; x=1757465649;
         h=mime-version:message-id:in-reply-to:user-agent:references:date
          :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n+jJHEXUqKZxNCmW90fN8yoWhef+e9CtSLJLwD2hj/A=;
-        b=aDGiJJCxKE9NzLUy1LkjcHJ5I7DVvSAaEq/K40ExLMjVpPrsdApxBXQK05Q5R9eCod
-         PeqZOCdfUEpFfgD2hHBQja55BSIScs3P0/P9pp0pTRAdnifZNYnIay5yIaOUSjtR5tcv
-         MdZ+dODMNGvdjCU0rR0L9uBVIN1nxDqrRkzFg8pt8NICjmYGUzKWdEA6tUVaVZSQ0htX
-         rg+hL8FlQdO795j9k/d0UC3tWpkyraatKBKmXH9Oe4vtvZk6uRUXKKYMm6GJfs/HjEzL
-         E/twSXJqXShSMcWhZ/woQsnKRwV87ZdtvQbgC6jqjDQDSgTvdy+bzp5JLDRiEU66P6lb
-         sk4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVNHHEXckPVvoua2NYdLyfrWl2vtzIj0oKKyAPdmT7WwxPhpTP3PUmWzra97Eao3xgzzwH4ajuK/eJEe49m@vger.kernel.org, AJvYcCWbCax8pFZXy7zjHYQ42O2Cg1l1TQ0UTTHF2UlX361Kn3HUmLULBh3RS/nI4JID9oV6sOApmiI7K4VHHDGT94s=@vger.kernel.org, AJvYcCXXsnn3XOUGz55IIyOhSGkP9h/1reQYzQKacHQItfdJ7Nznw/VGNroayBNbdF+dS6UlkY4VGx+M50UA/IUuSRKK@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeDaB++BWb8rxDkX9eqhswcJK3H5fqlOt77azcWqo1ST/l9r1I
-	XmQ4xfacog4zifyEFzfehIK/myGYZ93oxqJxNJAhXG+NAoIUWt59Jm17QFojrh0F
-X-Gm-Gg: ASbGncuCmQbJzmRMBIK+Fp68J9EYm8HBR9eZ37RRNRp+Rwe4UBaPTHYxpJfSf4WIbyY
-	SxecYfSsDZND0Y6+b5lwnvGDT3b0H3sU6eUaExfqV/oUK3aTFowy0G2SZgAYkLVfwDQmHRGrJfY
-	Dr0rN77kqYJbofHtl/y2G5E31mYyCANgMk4RjisfBtQ1oECklKT03oy3FP8XzNb/HdPHTTOMnxQ
-	ZEUJI2GabDi5IPoDQEsKlv+WVqzrBqG4D5QUFCfz6Wnz4GepO007dZPJAfPhfJr+DURt68YVFT6
-	06E2cZmWD02Et12fVJASUn1ZIZ9sOikIdby/zC8Is+hS3zZIhiMtxgS7/riNIvpDrvwvHSMYlB0
-	vFOwLn92jpu5trO20z7l02usE2OJnCZn5tg==
-X-Google-Smtp-Source: AGHT+IEj1mh9iwON3JN1bm2ubUrrqAKd7AKOw1vxWK61dVS+UZon9FMiFI7SrcHklV+nl/Mb4YDw/A==
-X-Received: by 2002:a17:902:e749:b0:24b:15b3:223d with SMTP id d9443c01a7336-24b15b34ad6mr50640105ad.16.1756860284196;
-        Tue, 02 Sep 2025 17:44:44 -0700 (PDT)
+        bh=DzJEWr0hHSTCHLW2ZPbPTexdMSB3GHBPnCsDiiEa0CE=;
+        b=av320V5ItACEZdPiASAHwCZvAiWI/qaZ2pLfzN5NdtvIJsbW819Kaylz+HkJDUt9ot
+         YQ9oYfmSI+31hQ6ph4zDU7q6QyK1KJ8Tah5fxxjYnNEMBlRasD8UR4IVdwkj+DmXaVFR
+         JVj3Lydao+9VijsZVut+HOLcirTsFILiO18tohgz2gGdf5R0uWlG99R6DWhOUXNjUWwk
+         D2FDR2cwqMtTUKDs7g68k8IAzcC00wMUi5qt939W+KbUcs6t9WzI1f8LWuZsrtMO/Aq4
+         wSeOo+1sUVduX2X5HS4OYKOEMxLgL/8qDQlJfu3NsywRPvlViUX0lU6e1OrybZ9xyNEf
+         1h1A==
+X-Forwarded-Encrypted: i=1; AJvYcCUAbj6ptgF6o7Z6j0xGBKT6aNxW4IFVWNurcqLSEzQzAiKEsYOGVunS3W/yZy1BcOJ6Q4hzHD5MesV60ZOQKmZ4@vger.kernel.org, AJvYcCUm3bLuMs0qjhwtYrl5/9rpR7T4xcgpqk8IyJ84Bl8KBJYcrjb54jrLuJGEH0dAY47Q+2ZvjAnZuKVFjjk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9qcpaU7mJSndMNnltwiFjbsAW29i39Nz3gAKJvKH4LjscvdQ+
+	qq8Jc4GOFQdj/X6zXcQJM6bjunq7cqlNGQL5q6i2Sp3UzWYSiOstJwzZ
+X-Gm-Gg: ASbGncubbeOlN8/k9rMNBxshPyYqDSTmXXa/uW+1fO4LfkhMD1U408Bsa4K01VbJdIq
+	JjZwwXoYC9TYai+OsYjP+AXGxUqo1mMlk70AFfXc6RbgTpGtVgEPpN/8KX8bwwWD09ANMpgyKsr
+	yS+o+cdE5E3t6Ui9qMlSq9Zsp4IcPbiL5tXVbPCJ0U47C0iR1DdioN48NEIZUW3qsF1IfvgD7PW
+	MKW6ihOGs6OxKp6oyUyZeAl+KzMX7shaHBcAzAuA2+nheWqklXJqtd3Rjjx7mrnXi3zCMa02qgS
+	3xw3t3jXntsUzEka74wDCfaH9VSXiqXiVNMHn4xDaPlLbSX5/OesBc19XeWgO3tUxxrsk3a4HuH
+	YcJyRKKIYS33S
+X-Google-Smtp-Source: AGHT+IHdJRbu698YeETZFzXq2+vUi4ALBmmNCdIrvup3Pn4gbUSIokcsFYQ5ZINuGQZKealxpkFTXg==
+X-Received: by 2002:a17:90b:582b:b0:328:acc:da37 with SMTP id 98e67ed59e1d1-32815414342mr12323150a91.5.1756860848466;
+        Tue, 02 Sep 2025 17:54:08 -0700 (PDT)
 Received: from 1337 ([136.159.213.138])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24b21e9a251sm25480815ad.88.2025.09.02.17.44.42
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-327d93317f0sm15280215a91.6.2025.09.02.17.54.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Sep 2025 17:44:42 -0700 (PDT)
+        Tue, 02 Sep 2025 17:54:07 -0700 (PDT)
 From: Abhinav Saxena <xandfury@gmail.com>
-To: Kees Cook <kees@kernel.org>
+To: Justin Stitt <justinstitt@google.com>
 Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Paul Moore
- <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
+ <morbo@google.com>, Paul Moore <paul@paul-moore.com>, Kees Cook
+ <kees@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 Subject: Re: [PATCH v3] selftests/tty: add TIOCSTI test suite
-Date: Tue, 02 Sep 2025 18:30:28 -0600
+Date: Tue, 02 Sep 2025 18:44:55 -0600
 References: <20250730-toicsti-bug-v3-1-dd2dac97f27a@gmail.com>
- <202508061135.00D9366F@keescook>
+ <ytndgs2vwkhijeuruejvk55geqouuditkjpge6u7gb6qt6hxqa@uh2wnuapkb5f>
 User-agent: mu4e 1.10.8; emacs 30.2
-In-reply-to: <202508061135.00D9366F@keescook>
-Message-ID: <87o6rsjreu.fsf@gmail.com>
+In-reply-to: <ytndgs2vwkhijeuruejvk55geqouuditkjpge6u7gb6qt6hxqa@uh2wnuapkb5f>
+Message-ID: <87ms7cjqz5.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,88 +84,16 @@ Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Kees Cook <kees@kernel.org> writes:
+Justin Stitt <justinstitt@google.com> writes:
 
+Hi,
+
+> Hi,
+>
 > On Wed, Jul 30, 2025 at 06:14:43PM -0600, Abhinav Saxena wrote:
->> TIOCSTI is a TTY ioctl command that allows inserting characters into
->> the terminal input queue, making it appear as if the user typed those
->> characters. This functionality has behavior that varies based on system
->> configuration and process credentials.
->>=20
->> The dev.tty.legacy_tiocsti sysctl introduced in commit 83efeeeb3d04
->> (=E2=80=9Ctty: Allow TIOCSTI to be disabled=E2=80=9D) controls TIOCSTI u=
-sage. When
->> disabled, TIOCSTI requires CAP_SYS_ADMIN capability.
->>=20
->> The current implementation checks the current process=E2=80=99s credenti=
-als via
->> capable(CAP_SYS_ADMIN), but does not validate against the file opener=E2=
-=80=99s
->> credentials stored in file->f_cred. This creates different behavior when
->> file descriptors are passed between processes via SCM_RIGHTS.
->>=20
->> Add a test suite with 16 test variants using fixture variants to verify
->> TIOCSTI behavior when dev.tty.legacy_tiocsti is enabled/disabled:
->>=20
->> - Basic TIOCSTI tests (8 variants): Direct testing with different
->>   capability and controlling terminal combinations
->> - FD passing tests (8 variants): Test behavior when file descriptors
->>   are passed between processes with different capabilities
->>=20
->> The FD passing tests document this behavior - some tests show different
->> results than expected based on file opener credentials, demonstrating
->> that TIOCSTI uses current process credentials rather than file opener
->> credentials.
->>=20
->> The tests validate proper enforcement of the legacy_tiocsti sysctl. Test
->> implementation uses openpty(3) with TIOCSCTTY for isolated PTY
->> environments. See tty_ioctl(4) for details on TIOCSTI behavior and
->> security requirements.
 >
-> This is looking really nice! Notes below=E2=80=A6
+> <snip>
 >
->>=20
->> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
->> =E2=80=94
->> To run all tests:
->> $ sudo ./tools/testing/selftests/tty/tty_tiocsti_test
->>=20
->> Test Results:
->> - PASSED: 13/16 tests
->> - Different behavior: 3/16 tests (documenting credential checking behavi=
-or)
->>=20
->> All tests validated using:
->> - scripts/checkpatch.pl =E2=80=93strict (clean output)
->> - Functional testing on kernel v6.16-rc2
->>=20
->> Changes in v3:
->> - Replaced all printf() calls with TH_LOG() for proper test logging (Kee=
-s Cook)
->> - Added struct __test_metadata parameter to helper functions
->> - Moved common legacy_tiocsti availability check to FIXTURE_SETUP()
->> - Implemented sysctl modification/restoration in FIXTURE_SETUP/TEARDOWN
->> - Used openpty() with TIOCSCTTY for reliable PTY testing environment
->> - Fixed child/parent synchronization in FD passing tests
->> - Replaced manual _exit(1) handling with proper ASSERT statements
->> - Switched // comments to /* */ format throughout
->> - Expanded to 16 test variants using fixture variants
->> - Enhanced error handling and test reliability
->> - Link to v2: <https://lore.kernel.org/r/20250713-toicsti-bug-v2-1-b1837=
-87eea29@gmail.com>
->> - Link to v1: <https://lore.kernel.org/r/20250622-toicsti-bug-v1-0-f3743=
-73b04b2@gmail.com>
->>=20
->> References:
->> - tty_ioctl(4) - documents TIOCSTI ioctl and capability requirements
->> - openpty(3) - pseudo-terminal creation and management
->> - commit 83efeeeb3d04 (=E2=80=9Ctty: Allow TIOCSTI to be disabled=E2=80=
-=9D)
->> - Documentation/security/credentials.rst
->> - <https://github.com/KSPP/linux/issues/156>
->> - <https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad/>
->> - drivers/tty/Kconfig
->> - Documentation/driver-api/tty/
 >> =E2=80=94
 >>  tools/testing/selftests/tty/Makefile           |   6 +-
 >>  tools/testing/selftests/tty/config             |   1 +
@@ -190,6 +117,21 @@ s Cook)
 >> +
 >> +# Add libcap for TIOCSTI test
 >> +$(OUTPUT)/tty_tiocsti_test: LDLIBS +=3D -lcap
+>
+> Is it necessary to append -lcap to LDLIBS twice? Once globally and once
+> for that TU?
+>
+
+So I built the tests in two ways:
+
+1. Building all targets with `make -C tools/testing/selftests/tty/`
+2. Building a specific target which is tty_tiocsti_test in this case.
+   I do this with `make -C tools/testing/selftests/tty/ tty_tiocsti_test`
+
+I may be completely wrong here, but I think I need the global for (1)
+and TU specific append for (2). There may better ways to do this,
+however. Open to ideas :)
+
 >> diff =E2=80=93git a/tools/testing/selftests/tty/config b/tools/testing/s=
 elftests/tty/config
 >> new file mode 100644
@@ -544,6 +486,19 @@ sg)) {
 >> + */
 >> +static inline bool drop_to_nobody(struct __test_metadata *_metadata)
 >> +{
+>
+> Maybe we can retrieve the uid/gid from getpwnam(3) with:
+>   const struct passwd *pw =3D getpwnam(=E2=80=9Cnobody=E2=80=9D);
+>
+> =E2=80=A6 then use pw->pw_{uid,gid}. I suggest this because there might be
+> portability issues with the hardcoded 65534 =E2=80=93 not 100% sure thoug=
+h.
+>
+
+Thanks! Yep, I guess it is better to get rid of `nobody` logic
+completely for better portability. I replaced it with `drop_all_privs`
+in v4 [1].
+
 >> +	ASSERT_EQ(setgroups(0, NULL), 0);
 >> +	ASSERT_EQ(setgid(65534), 0);
 >> +	ASSERT_EQ(setuid(65534), 0);
@@ -576,390 +531,27 @@ etadata)
 >> +	return value;
 >> +}
 >> +
->> +static inline bool set_legacy_tiocsti_setting(struct __test_metadata *_=
-metadata,
->> +					      int value)
->> +{
->> +	FILE *fp;
->> +	bool success =3D false;
->> +
->> +	/* Sanity-check the value */
->> +	ASSERT_GE(value, 0);
->> +	ASSERT_LE(value, 1);
->> +
->> +	/*
->> +	 * Try to open for writing; if we lack permission, return false so
->> +	 * the test harness will skip variants that need to change it
->> +	 */
->> +	fp =3D fopen(=E2=80=9C/proc/sys/dev/tty/legacy_tiocsti=E2=80=9D, =E2=
-=80=9Cw=E2=80=9D);
->> +	if (!fp)
->> +		return false;
->> +
->> +	/* Write the new setting */
->> +	if (fprintf(fp, =E2=80=9C%d\n=E2=80=9D, value) > 0)
->> +		success =3D true;
->> +	else
->> +		TH_LOG(=E2=80=9CFailed to write legacy_tiocsti: %s=E2=80=9D, strerror=
-(errno));
->> +
->> +	fclose(fp);
->> +	return success;
 >
-> It=E2=80=99s not very obvious, but actually some write failures are delay=
-ed
-> until the close. From the man page:
+> <snip>
 >
-> ERRORS
->     =E2=80=A6
->     The fclose() function may also fail and set errno for any of the
->     errors specified for the routines close(2), write(2), or fflush(3).
+>> =E2=80=94
+>> base-commit: 283564a43383d6f26a55546fe9ae345b5fa95e66
+>> change-id: 20250618-toicsti-bug-7822b8e94a32
+>>=20
+>> Best regards,
+>> =E2=80=93=20
+>> Abhinav Saxena <xandfury@gmail.com>
+>>=20
+>>
 >
-> You=E2=80=99ll need to check both the fprintf and the fclose. Probably as:
->
-> 	if (fprintf(fp, =E2=80=9C%d\n=E2=80=9D, value) > 0 && fclose(fp))
-> 		success =3D true;
-> 	else
-> 		TH_LOG(=E2=80=9CFailed to write legacy_tiocsti: %s=E2=80=9D, strerror(e=
-rrno));
-> 	return success;
->
->> +}
->> +
->> +/*
->> + * TIOCSTI injection test function
->> + * @tty_fd: TTY slave file descriptor to test TIOCSTI on
->> + * Returns: 0 on success, -errno on failure
->> + */
->> +static inline int test_tiocsti_injection(struct __test_metadata *_metad=
-ata,
->> +					 int tty_fd)
->> +{
->> +	int ret;
->> +	char inject_char =3D =E2=80=99V=E2=80=99;
->> +
->> +	errno =3D 0;
->> +	ret =3D ioctl(tty_fd, TIOCSTI, &inject_char);
->> +	return ret =3D=3D 0 ? 0 : -errno;
->> +}
->> +
->> +FIXTURE_SETUP(tiocsti)
->> +{
->> +	/* Create PTY pair for basic tests */
->> +	self->has_pty =3D (openpty(&self->pty_master_fd, &self->pty_slave_fd,
->> +				 NULL, NULL, NULL) =3D=3D 0);
->> +	if (!self->has_pty) {
->> +		self->pty_master_fd =3D -1;
->> +		self->pty_slave_fd =3D -1;
->> +	}
->> +
->> +	self->initial_cap_sys_admin =3D has_cap_sys_admin();
->> +	self->original_legacy_tiocsti_setting =3D
->> +		get_legacy_tiocsti_setting(_metadata);
->> +
->> +	if (self->original_legacy_tiocsti_setting < 0)
->> +		SKIP(return, =E2=80=9Clegacy_tiocsti sysctl not available (kernel < 6=
-.2)=E2=80=9D);
->> +
->> +	/* Test if we can modify the sysctl (requires appropriate privileges) =
-*/
->> +	self->can_modify_sysctl =3D set_legacy_tiocsti_setting(_metadata,
->> +							     self->original_legacy_tiocsti_setting);
->> +	if (!self->can_modify_sysctl)
->> +		TH_LOG(=E2=80=9CWarning: Cannot modify legacy_tiocsti sysctl - will s=
-kip mismatched variants=E2=80=9D);
->> +}
->> +
->> +FIXTURE_TEARDOWN(tiocsti)
->> +{
->> +	/*
->> +	 * Backup restoration -
->> +	 * each test should restore its own sysctl changes
->> +	 */
->> +	if (self->can_modify_sysctl &&
->> +	    self->original_legacy_tiocsti_setting >=3D 0) {
->> +		int current_value =3D get_legacy_tiocsti_setting(_metadata);
->> +
->> +		if (current_value !=3D self->original_legacy_tiocsti_setting) {
->> +			TH_LOG(=E2=80=9CBackup: Restoring legacy_tiocsti from %d to %d=E2=80=
-=9D,
->> +			       current_value,
->> +			       self->original_legacy_tiocsti_setting);
->> +			set_legacy_tiocsti_setting(_metadata,
->> +				self->original_legacy_tiocsti_setting);
->> +		}
->
-> This =E2=80=9Cset the value if it=E2=80=99s different=E2=80=9D logic here=
- is mostly duplicated
-> below; probably better to have a helper for doing this. It can also be
-> aware of the value (since you read it during SETUP), so you may not need
-> the triple read (once in SETUP, once in test, once in TEARDOWN). Though
-> it doesn=E2=80=99t really hurt anything to do the read/check/write cycle =
-here
-> either. Up to you!
->
->> +	}
->> +
->> +	if (self->has_pty) {
->> +		if (self->pty_master_fd >=3D 0)
->> +			close(self->pty_master_fd);
->> +		if (self->pty_slave_fd >=3D 0)
->> +			close(self->pty_slave_fd);
->> +	}
->> +}
->> +
->> +TEST_F(tiocsti, test)
->> +{
->> +	int saved_legacy_tiocsti =3D get_legacy_tiocsti_setting(_metadata);
->> +	bool need_restore =3D false;
->> +	int status;
->> +	pid_t child_pid;
->> +
->> +	/* Set legacy_tiocsti sysctl to match variant requirement */
->> +	if (self->can_modify_sysctl) {
->> +		if (saved_legacy_tiocsti !=3D variant->legacy_tiocsti) {
->> +			if (!set_legacy_tiocsti_setting(_metadata,
->> +					variant->legacy_tiocsti)) {
->> +				SKIP(return,
->> +				     =E2=80=9CFailed to set legacy_tiocsti sysctl=E2=80=9D);
->> +			}
->> +			need_restore =3D true;
->
-> You don=E2=80=99t need to handle the restore since TEARDOWN will do it, y=
-es?
->
->> +		}
->> +	} else {
->> +		/*
->> +		 * Can=E2=80=99t modify sysctl
->> +		 * - check if current value matches variant
->> +		 */
->> +		if (self->original_legacy_tiocsti_setting !=3D
->> +		    variant->legacy_tiocsti) {
->> +			SKIP(return,
->> +			    =E2=80=9Clegacy_tiocsti setting mismatch and cannot modify sysct=
-l=E2=80=9D);
->> +		}
->
-> I feel like both the set and this check should be part of SETUP instead?
-> All variants have a legacy_tiocsti setting, so better to put common
-> setup code in the SETUP.
->
->> +	}
->> +
->> +	/* Common skip conditions */
->> +	if (variant->test_type `=3D TEST_PTY_TIOCSTI_BASIC && !self->has_pty) {
->> +		SKIP(goto restore_sysctl,
->> +		     "PTY not available for controlling terminal test");
->> +	}
->> +
->> +	if (variant->test_type =3D' TEST_PTY_TIOCSTI_FD_PASSING &&
->> +	    !self->initial_cap_sys_admin) {
->> +		SKIP(goto restore_sysctl,
->> +		     =E2=80=9CFD Pass tests require CAP_SYS_ADMIN=E2=80=9D);
->> +	}
->> +
->> +	if (variant->requires_cap && !self->initial_cap_sys_admin) {
->> +		SKIP(goto restore_sysctl,
->> +		     =E2=80=9CTest requires initial CAP_SYS_ADMIN=E2=80=9D);
->> +	}
->
-> Same for all of these: they do a skip, which should work from SETUP. And
-> they can be done before sysctl changing, so they can just do a return.
-> (A skipped SETUP will, I think, still call TEARDOWN.)
->
->> +	if (variant->test_type =3D=3D TEST_PTY_TIOCSTI_BASIC) {
->
-> variants within variants. ;)
->
-> I would lift the fork logic out of the if/else, and then put the bodies
-> of each in a separate function (pass in the metadata and the pid).
-> That=E2=80=99ll make these more readable instead of be heavily indented.
->
->
->> +		/* `=3D=3D=3D' BASIC TIOCSTI TEST `=3D=3D=3D' */
->> +		child_pid =3D fork();
->> +		ASSERT_GE(child_pid, 0);
->> +
->> +		if (child_pid =3D=3D 0) {
->> +			/* Child process - perform the actual test */
->> +
->> +			/* Handle capability requirements */
->> +			if (self->initial_cap_sys_admin &&
->> +			    !variant->requires_cap)
->> +				ASSERT_TRUE(drop_to_nobody(_metadata));
->> +
->> +			if (variant->controlling_tty) {
->> +				/*
->> +				 * Create new session and set PTY as
->> +				 * controlling terminal
->> +				 */
->> +				pid_t sid =3D setsid();
->> +
->> +				ASSERT_GE(sid, 0);
->> +				ASSERT_EQ(ioctl(self->pty_slave_fd, TIOCSCTTY,
->> +						0),
->> +					  0);
->
-> which avoids this kind of weird =E2=80=9Coh no I=E2=80=99m almost at 80 c=
-haracters=E2=80=9D
-> stuff above.
->
->> +			}
->> +
->> +			/*
->> +			 * Validate test environment setup and verify final
->> +			 * capability state matches expectation
->> +			 * after potential drop.
->> +			 *
->> +			 */
->> +			ASSERT_TRUE(self->has_pty);
->> +			ASSERT_EQ(has_cap_sys_admin(), variant->requires_cap);
->> +
->> +			/* Test TIOCSTI and validate result */
->> +			int result =3D test_tiocsti_injection(_metadata,
->> +							    self->pty_slave_fd);
->> +
->> +			/* Check against expected result from variant */
->> +			EXPECT_EQ(result, variant->expected_success);
->> +			_exit(0);
->> +		}
->> +
->> +	} else {
->> +		/* `=3D=3D=3D' FD PASSING SECURITY TEST `=3D=3D=3D' */
->> +		int sockpair[2];
->> +
->> +		ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM, 0, sockpair), 0);
->> +
->> +		child_pid =3D fork();
->> +		ASSERT_GE(child_pid, 0);
->> +
->> +		if (child_pid =3D=3D 0) {
->> +			/* Child process - create PTY and send FD */
->> +			close(sockpair[0]);
->> +			signal(SIGHUP, SIG_IGN);
->> +
->> +			/* Handle privilege dropping */
->> +			if (!variant->requires_cap && has_cap_sys_admin())
->> +				ASSERT_TRUE(drop_to_nobody(_metadata));
->> +
->> +			/* Create child=E2=80=99s PTY */
->> +			int child_master_fd, child_slave_fd;
->> +
->> +			ASSERT_EQ(openpty(&child_master_fd, &child_slave_fd,
->> +					  NULL, NULL, NULL),
->> +				  0);
->> +
->> +			if (variant->controlling_tty) {
->> +				pid_t sid =3D setsid();
->> +
->> +				ASSERT_GE(sid, 0);
->> +				ASSERT_EQ(ioctl(child_slave_fd, TIOCSCTTY, 0),
->> +					  0);
->> +			}
->> +
->> +			/* Test child=E2=80=99s direct TIOCSTI for reference */
->> +			int direct_result =3D test_tiocsti_injection(_metadata,
->> +								   child_slave_fd);
->> +			EXPECT_EQ(direct_result, variant->expected_success);
->> +
->> +			/* Send FD to parent */
->> +			ASSERT_EQ(send_fd_via_socket(sockpair[1],
->> +						     child_slave_fd),
->> +				  0);
->> +
->> +			/* Wait for parent completion signal */
->> +			char sync_byte;
->> +			ssize_t bytes_read =3D read(sockpair[1], &sync_byte, 1);
->> +
->> +			ASSERT_EQ(bytes_read, 1);
->> +
->> +			close(child_master_fd);
->> +			close(child_slave_fd);
->> +			close(sockpair[1]);
->> +			_exit(0);
->> +		}
->> +
->> +		/* Parent process - receive FD and test TIOCSTI */
->> +		close(sockpair[1]);
->> +
->> +		int received_fd =3D recv_fd_via_socket(sockpair[0]);
->> +
->> +		ASSERT_GE(received_fd, 0);
->> +
->> +		bool parent_has_cap =3D self->initial_cap_sys_admin;
->> +
->> +		TH_LOG(=E2=80=9C`=3D' TIOCSTI FD Passing Test Context `=3D'=E2=80=9D);
->> +		TH_LOG(=E2=80=9Clegacy_tiocsti: %d, Parent CAP_SYS_ADMIN: %s, Child: =
-%s=E2=80=9D,
->> +		       variant->legacy_tiocsti, parent_has_cap ? =E2=80=9Cyes=E2=80=
-=9D : =E2=80=9Cno=E2=80=9D,
->> +		       variant->requires_cap ? =E2=80=9Ckept=E2=80=9D : =E2=80=9Cdrop=
-ped=E2=80=9D);
->> +
->> +		/* SECURITY TEST: Try TIOCSTI with FD opened by child */
->> +		int result =3D test_tiocsti_injection(_metadata, received_fd);
->> +
->> +		/* Log security concern if demonstrated */
->> +		if (result =3D=3D 0 && !variant->requires_cap) {
->> +			TH_LOG("*** SECURITY CONCERN DEMONSTRATED ***=E2=80=9C);
->> +			TH_LOG(=E2=80=9DPrivileged parent can use TIOCSTI on FD from unprivi=
-leged child=E2=80=9C);
->> +			TH_LOG(=E2=80=9DThis shows current process credentials are used, not=
- opener credentials=E2=80=9C);
->> +		}
->> +
->> +		EXPECT_EQ(result, variant->expected_success)
->> +		{
->> +			TH_LOG(=E2=80=9DFD passing: expected error %d, got %d=E2=80=9C,
->> +			       variant->expected_success, result);
->> +		}
->> +
->> +		/* Signal child completion */
->> +		char sync_byte =3D =E2=80=98D=E2=80=99;
->> +		ssize_t bytes_written =3D write(sockpair[0], &sync_byte, 1);
->> +
->> +		ASSERT_EQ(bytes_written, 1);
->> +
->> +		close(received_fd);
->> +		close(sockpair[0]);
->> +	}
->> +
->> +	/* Common child process cleanup for both test types */
->> +	ASSERT_EQ(waitpid(child_pid, &status, 0), child_pid);
->> +
->> +	if (WIFSIGNALED(status)) {
->> +		TH_LOG(=E2=80=9DChild terminated by signal %d=E2=80=9C, WTERMSIG(stat=
-us));
->> +		ASSERT_FALSE(WIFSIGNALED(status))
->> +		{
->> +			TH_LOG(=E2=80=9DChild process failed assertion");
->> +		}
->> +	} else {
->> +		EXPECT_EQ(WEXITSTATUS(status), 0);
->> +	}
->> +
->> +restore_sysctl:
->> +	if (need_restore)
->> +		set_legacy_tiocsti_setting(_metadata, saved_legacy_tiocsti);
->> +}
->> +
->> +TEST_HARNESS_MAIN
->
-> Thanks for chipping away at this! :)
->
-> -Kees
+> Justin
 
 Thanks for the feedback!
 
-I wasn=E2=80=99t sure if you could use fixture data inside setup and teardo=
-wn.
-But apparently we can[1]. I have addressed the fclose() error handling,
-moved setup skip logic to FIXTURE_SETUP() and addressed all other
-changes in v4.
+=E2=80=A2 Abhinav
 
--Abhinav
-
-[1] - tools/testing/selftests/kselftest_harness/harness-selftest.c
+[1] - Link to v4:
+<https://lore.kernel.org/all/20250902-toicsti-bug-v4-1-e5c960e0b3d6@gmail.c=
+om/>
 
 --=-=-=--
