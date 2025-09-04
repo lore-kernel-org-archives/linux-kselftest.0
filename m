@@ -1,119 +1,78 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9082FC00C;
-	Wed,  3 Sep 2025 23:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B314D11185;
+	Thu,  4 Sep 2025 00:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756943419; cv=none; b=GPmIJYkR3s0eCVntc+2gv9T7XXpI7ej3aPO6ptQyxlXa5uOg4piiSRISC75jMEJrtImiI8yfw4XUW+J12bv4QMVvbl4/7Le7TQ36ulGIooolaE5lW/eCu5Jp37CNFATE+ZVzAts3hiPoXBBZp4nbMFbQ5BPdmNAhfZzw1xXxVSI=
+	t=1756946269; cv=none; b=CKlYcwu/JMUPeUx5rQST4uB4vfX/0wPwbuCv3bQkPBhQlBTtI+f/XLsVodYTRbtw8kk6x/bkj30FbQWGobwx18VSMSisGbIdGjU2a3rVMeIEdELvbcxmKhty4K/9nnwjFF6KAKNmg8mEE4Y2WUzzyXpb2QuV2MpBvM/NyogldgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756943419; c=relaxed/simple;
-	bh=BqkLCnP3oR6UuS7FXhVR1ZvXxz/7DRQNIuUoOfipT44=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=as+mO+mMPIjGQDAJb6wfY5Z94YslXK6LpC5KtvTvfPXMZ0DzL3W5RUXjGUBxtfZdnivwSxujyC1K8vBhtN0mIV6sGxuGEwq4kCkAevf1ZjkCGWM8/DERmxNxT55SdKvKBEHGpsE/G9TC58bZ7WxNFBlFid+BeXfFDIB99sWeboI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TppK43Dv; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756946269; c=relaxed/simple;
+	bh=NolWOvG4QsvlIv/gjPI7YpwDSettfhcYFKxMsBKbASk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VCXxas6hzGZ2HIEo5daq+7Of95w5DhL04kGSd9QCCTUzttpktTFNOISmovxRKwwQaToTvZLQOQNG8ZwzliLySzYXvyTTMDY7DIxUNlxjpLypcAjvw6gwJ/lfuEmG7n5P9FL6JCjxKgnPp8hbGTDcZWkQh7eltiZVx4JpUrOwcTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EKb0p+c8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TppK43Dv"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7724cacc32bso407996b3a.0;
-        Wed, 03 Sep 2025 16:50:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756943415; x=1757548215; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/eOCiwclm9k9gMd8SjgNITsnepC3MetxeXscE2+ZlhA=;
-        b=TppK43DvH4MtqYM5788M8Kt/9pHLBDT05bD4YLqnIpDMJAmDFxSQ3I+OZbBToQB4Wi
-         fJoEF/Su8qAsWqO/2A/0qOADjNxUB/J1zjNRPxkBv8PlMUQgE1whwE9eV261HOXUsS7s
-         bAviOwFj+R2mdBVwCYvH27nD/Kj8OCAUEgAcIOTOh/v5FloqyPMQhLEZRoFl8TEX8bFS
-         BiNn15atbIiEJ841AERLsjDZQ2w63Aiab+0XRmjWPzKZ5qm0kBWjxeH0lB1ssHQAsbGl
-         xiIe9pHAhKvKA+IaRFkELlB72NDueECorNwQ55iMo+W50LS3jNF4JQL0fuyGgIDyEn3D
-         LpRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756943415; x=1757548215;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/eOCiwclm9k9gMd8SjgNITsnepC3MetxeXscE2+ZlhA=;
-        b=bN/N0iTf0pClx7XXRe8/NrAJh62WutyxrERZb17KPmpepcnvf6iuDAscWxrY/NEqoX
-         6wvBecyxPbCBywtSxQEqjwjR1oof7s/Q2veBdnfNHaK8xAzQIOYD/g/AKpEoXk7UW/yk
-         3R1A088OlAK1F9IzBhGEBH3bXIXll+9+9BjiJ6fP2Eyl2/R8bTuDeXKlzn77HQwcLpB3
-         S9KbGJLMd/K7P2fvyea1CkY67YfF0J5OWyKWtNl0SkJN3N+ioWnDHhigpNMIWRqR1y1F
-         jDB6DrymcUnMK0jKvQL2Fm4ArQ2BqoDgR6BSf16uzZhfKLH0/aOq5mNPxt6L0/Jua1IZ
-         8eOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUf7fFkVx0+4v5UNm9yUj5PTrzV3q9Lzpc7TFhtL1qmVUN2VzlZ1sVfaS375Az5FDTDjxSqVi9BxogzQYVKybdU@vger.kernel.org, AJvYcCWQbUNubMa4+rJ3xfICztrxlO0MFaekP+8nl3sc/DIX+QPcr3i6rekWJ8p8Qn10kjK2+o/wqz0nlusoGkpI@vger.kernel.org, AJvYcCWaMkqkjloPJyuo0c70+I/tm0B/Qx2+MuJ2acuPO/jMFxm383YJnW/JpOft4GGKmKBkKtU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxd7cDcb2lYllNrvz9bM9xa9juyKh/Wk8YDeT+yxL89DZPJ9RYh
-	NFn1F9H0wyF3++FPL+AgXa1Rf2+2S9LCQWydFp7krT3WdwKEOC+7cTw+qk+ZzB0BVwXTBxkZsr6
-	rIubbo8WHg32qqpVX7sVi1o+PK/t5EYw=
-X-Gm-Gg: ASbGncsKAJoZR8I7D45H3M4VSl4syMovtyhHmZAx2oXz1aQ0+aYE3pRC0GUSPmb23Ps
-	bivxbb1rR3LMCrVD9AZHjidi0955H2KVQJzTSADF8h0vlzeKN6sftZZ4OAJ2XmOWRQKXzMfvEAI
-	/wliDARQIKDVe7rKftQFp01D3IYqcG7n2sT9Vr8hztV0jEC+Hqm8NWMbnYWKnfjs7DOivUFyRkF
-	RWU0Odbz5EI2j67gcvk8cw=
-X-Google-Smtp-Source: AGHT+IEbvD30j5zQqt7UwIVsxOfkapLt99TiC2+GXC139JaN4tqHx3/ZpTFskOrD/zA4xj3hXn9Q0Z+H7N/iEhZs1ss=
-X-Received: by 2002:a17:902:cf08:b0:249:2d84:f406 with SMTP id
- d9443c01a7336-24944870965mr254374065ad.3.1756943414969; Wed, 03 Sep 2025
- 16:50:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EKb0p+c8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5CCBC4CEE7;
+	Thu,  4 Sep 2025 00:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756946267;
+	bh=NolWOvG4QsvlIv/gjPI7YpwDSettfhcYFKxMsBKbASk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EKb0p+c8aqKFipoaV/P5iGdQW8/hboXbUjd0vh960xEZwZlyt3fo9D/2yzUPHCWmT
+	 xJ8EMTMDzjOL7Oh1diNcfmzz74HZux5y6wciqwgpjC6T6vXscfPuzspJwpwZurLe9L
+	 uMsVBTYbHqpWUC/WcBogvvb49wTtbbWpPOBMWXOkD6NYDCCYe4bsUaiDh2ATw0YoPG
+	 dsDV628CPXWiK00SlJnqn7dx1LdZiutQQbisK5G6D5ovRAPbLgCeFzVnQsUR0AY6WM
+	 bU5W07Z/JSXMkdQ4vLBgEHnRXdJP0rt15sc5G3HmVj7tzF0u5skVRSkSj9AbfkSOiv
+	 4EQwHACXfXV4A==
+Date: Wed, 3 Sep 2025 17:37:46 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de,
+ calvin@wbinvd.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next] selftest: netcons: create a torture test
+Message-ID: <20250903173746.5c04c306@kernel.org>
+In-Reply-To: <20250902-netconsole_torture-v1-1-03c6066598e9@debian.org>
+References: <20250902-netconsole_torture-v1-1-03c6066598e9@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250901034252.26121-1-dongml2@chinatelecom.cn>
-In-Reply-To: <20250901034252.26121-1-dongml2@chinatelecom.cn>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 3 Sep 2025 16:50:00 -0700
-X-Gm-Features: Ac12FXy_S7ElHWHvyy3ZkXbr4arXUIIENhZqC8u6zhUCjSyx8ViFHMQrJkbrzRg
-Message-ID: <CAEf4BzZVTr26Uogf8uh=7HmgG6Qo_uVy3fX8bQgC+Xs63wZcCA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/3] selftests/bpf: benchmark all symbols for kprobe-multi
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: andrii@kernel.org, olsajiri@gmail.com, eddyz87@gmail.com, mykolal@fb.com, 
-	ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
-	yikai.lin@vivo.com, memxor@gmail.com, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sun, Aug 31, 2025 at 8:43=E2=80=AFPM Menglong Dong <menglong8.dong@gmail=
-.com> wrote:
->
-> Add the benchmark testcase "kprobe-multi-all", which will hook all the
-> kernel functions during the testing.
->
-> This series is separated out from [1].
->
-> Changes since V2:
-> * add some comment to attach_ksyms_all, which notes that don't run the
->   testing on a debug kernel
->
-> Changes since V1:
-> * introduce trace_blacklist instead of copy-pasting strcmp in the 2nd
->   patch
-> * use fprintf() instead of printf() in 3rd patch
->
-> Link: https://lore.kernel.org/bpf/20250817024607.296117-1-dongml2@chinate=
-lecom.cn/ [1]
-> Menglong Dong (3):
->   selftests/bpf: move get_ksyms and get_addrs to trace_helpers.c
->   selftests/bpf: skip recursive functions for kprobe_multi
->   selftests/bpf: add benchmark testing for kprobe-multi-all
->
+On Tue, 02 Sep 2025 09:33:33 -0700 Breno Leitao wrote:
+> Create a netconsole test that puts a lot of pressure on the netconsole
+> list manipulation. Do it by creating dynamic targets and deleting
+> targets while messages are being sent. Also put interface down while the
+> messages are being sent, as creating parallel targets.
+> 
+> The code launches three background jobs on distinct schedules:
+> 
+>  * Toggle netcons target every 30 iterations
+>  * create and delete random_target every 50 iterations
+>  * toggle iface every 70 iterations
+> 
+> This creates multiple concurrency sources that interact with netconsole
+> states. This is good practice to simulate stress, and exercise netpoll
+> and netconsole locks.
 
-this doesn't apply cleanly over bpf-next, can you please rebase and
-resend to let CI run?
+Oh, when you said "selftest will be posted later" in the fix I thought
+you meant days, not hours later :) It's better if the fix and test are
+in one series. Better for backports, and it avoid situations like last
+night when the fix was already dropped from pw but this test was still
+running (and crashing the kernel).
 
->  tools/testing/selftests/bpf/bench.c           |   4 +
->  .../selftests/bpf/benchs/bench_trigger.c      |  61 +++++
->  .../selftests/bpf/benchs/run_bench_trigger.sh |   4 +-
->  .../bpf/prog_tests/kprobe_multi_test.c        | 220 +---------------
->  .../selftests/bpf/progs/trigger_bench.c       |  12 +
->  tools/testing/selftests/bpf/trace_helpers.c   | 234 ++++++++++++++++++
->  tools/testing/selftests/bpf/trace_helpers.h   |   3 +
->  7 files changed, 319 insertions(+), 219 deletions(-)
->
-> --
-> 2.51.0
->
+Regarding the test, I think it makes sense. Tho is there a way we can
+reuse more of the existing code? Do you write all these scripts by hand
+or get AI to write them? I was hoping you'd add more tests relating to
+bonding. To confirm bonding still works. And as I mentioned I think
+bonding is still a bit buggy if we "propagate" multiple nps and then
+remove them out of order..
