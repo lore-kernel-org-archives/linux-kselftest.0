@@ -1,87 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C180335BD0;
-	Wed, 10 Sep 2025 17:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7203376A1
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 18:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757527140; cv=none; b=hDLhzEaSQ2iFqWg9t6FG0EM4M7yqvvntJz6uUeJtpT97aYHP4VTMU9bcCJqTj6KClPR7CoQTL4/C0UDpZaJujmh4fnDIWAu6x4CxXVxCNkx+A6F3RRjVVle/uNHx80IbkZINACNjxmtsFU5xR3mYgxRYgpJ94b0xtjUzKMqPPgA=
+	t=1757527593; cv=none; b=RC1EvwzrRntOXZTYe2wuedb2pMtuiM4QF+FRa5lwynPPdsXtI2TgAWDU2s+u9HF+gOmH2AfnoZWvdX/xNWgHxToyD+xuwidb9OziFH9OBEiEUkf0xH+Km+V2UqwvjXpE7z4vkrtMtdMk3gPThr/fS00MzuwSyljEN22ie07xfwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757527140; c=relaxed/simple;
-	bh=3OB/1/72wpDUqru7+1lTnbYAH1kOUgOBvd4nyep3M+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tQxZfkUiMEGaPA6Lk3ptbSi2emN9FITCbmmUEZ8h1A5U3yUe/+qsaAu8/P55lhaaeVuSJPk6IlFIOmnJzOR4r2JL8nlv+0Ik++iid38sjMr3j/iBBqJwTaqxsGug+S3tZ4XZIcCOG2ygUtWpgn/KvZwPuUJyZtyDSYUSSDt9W9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aH+6MLhC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757527593; c=relaxed/simple;
+	bh=p1K1r7QiSjUuPGqQLi4Dtbb3OFi1h0fLaBfxqHPJQcg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=el47CyYKf6IzLbDplbPdgE7CSf6IqF6KR8O+4itD94wQHMxPFu3Enmg+JRj+EzhvNytCUNb7LAuQGCccznWeCHgmutirPPQ0mQ+gZeheXPLiAk42MD/jQgc8NCaK2QTE96v8WhOoRIdbsFU2cAxqipoDLiuQgDC7QLdzhng37Fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XxNtZegD; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aH+6MLhC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22DE8C4CEF0;
-	Wed, 10 Sep 2025 17:58:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757527139;
-	bh=3OB/1/72wpDUqru7+1lTnbYAH1kOUgOBvd4nyep3M+c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=aH+6MLhCiTLp+wcLENeAQnSaoWiN6EoIINKbn2FryQMIC5MHBxTg9XsVpuG+y7GzA
-	 oWI28v9zBjfAbjTne2el34PVx8v0MupyesTwYeZhTKwGvzTssG+BHPLKJkdRz+C3U/
-	 17LlR6pb1vKaDF3AVshE2WgLu5fJ8ec/z/zPbLyrCLYunvpwo9JkWXYZsg1Fuim65x
-	 AwLBuwwjUKLmaIKnuA3SN/rze55snN8nHAl3/0S4u8KCiTAGxtMnwg5qyxN70CQnBw
-	 cksIUSCtjCeCDlSY1AVCLLhvKip61op49hcNAVI1VWu8qhvkF8S8gMec1MdWss1SZC
-	 WdQlY6CasUVsA==
-Date: Wed, 10 Sep 2025 10:58:58 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Calvin Owens <calvin@wbinvd.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Simon Horman <horms@kernel.org>, david decotigny
- <decot@googlers.com>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de,
- kernel-team@meta.com, stable@vger.kernel.org, jv@jvosburgh.net
-Subject: Re: [PATCH net v3 1/3] netpoll: fix incorrect refcount handling
- causing incorrect cleanup
-Message-ID: <20250910105858.083ca8df@kernel.org>
-In-Reply-To: <jibftqm5ihdgazmk3p5gsjhlc536itqaq7r5uag5fuiqtth6cp@abihzyykh4gy>
-References: <20250905-netconsole_torture-v3-0-875c7febd316@debian.org>
-	<20250905-netconsole_torture-v3-1-875c7febd316@debian.org>
-	<aL9A3JDyx3TxAzLf@mozart.vkv.me>
-	<20250908182958.23dc4ba0@kernel.org>
-	<kmvkrqkkrbfctpramlchpwqikg2x3btb3debshabqctt7azu2j@tv4ziqd4gldh>
-	<20250909161625.470d2835@kernel.org>
-	<jibftqm5ihdgazmk3p5gsjhlc536itqaq7r5uag5fuiqtth6cp@abihzyykh4gy>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XxNtZegD"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-32baaf13944so866683a91.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Sep 2025 11:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757527591; x=1758132391; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hGGo2FqzU3GfR0P/K8YS6WMuWrLlPcudWZNlFzJbBN0=;
+        b=XxNtZegDm6GNBs35QuoMYQ5zD/WgnTH6obcTb5lOfuVgoVpRmjZWpEcC2uZkfR6D4v
+         Kno/wDxqp74EKwfnfJb/zxaTbvfj2LzEWLUV0tIxrYthwR5kHdRGdOA9vslnaNGhvxPX
+         cxXyglSroDn2yoAdRXO9mrvy0oL74011noweqN9BGK7S1PdtLyESypDaIJeRu69H3QMB
+         5CeIpmgkwaKSJGRB6/L6vQ4lSWX6iU0lzecOoYc0Dwx0iksYGtW584wbTBSf3UrwiXAq
+         JFWt9pK8jznBTwYGIbkxgDuUrKLlCIkYN24CPOyakm8A/4YkRJTxhIu4Em/aVRUT4f1O
+         mU1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757527591; x=1758132391;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hGGo2FqzU3GfR0P/K8YS6WMuWrLlPcudWZNlFzJbBN0=;
+        b=nJo3EJe1JSZpc0q8pkEEnmNaIbIC5nJGeFLWAoqPZj4vJwWsegmZkDVQv2puZIVKAl
+         0yC2cXyC3+foUaDrE+RN4dZVny+3LTNJNcBQsNoLnc0QvTH35ZQFpZ+BotrFX0aCHOC/
+         mq90AlGatiUS/qNyVyauJcE10QdigGYZ3yQEfhOwa6iPm/0C9vbOvL4Z7VDseOdvJKNB
+         PEgOzVU6nLWi6ElW51ASs8yX2UkDBRoEj2fZ7GPSX2d8xC5hFYF8qprr9xLP2VmRtxJY
+         0BHHj2NPER10byzlRGnObybOdTYFYasftOrHE2qGW3mk3oQErsSrcsGLmGw0BStUmzYV
+         3tIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUW8V7YSoPHFRaA2WizvuYUV88IPZnR1zmfxA8z3woI23BJHX8qknjWgscHv3MVqYPGCFC7nfWn6TJhLt/MTdQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8c8zn+cTnHlJM8DT79mB6JmBd4aK6fCbtnbVFYchB03FprDxL
+	bViR1nWQ9KeABMillxOA8mNZJwQM7e/KXzksmoxTMu0QTrYCnrm0y3SCy6btYKOC
+X-Gm-Gg: ASbGncuh4/ZvBCSsTT3weRT2DboV5Z2UQY3EXcDXq/pzPrPrG96i0c8a5gPHhw1Dv5m
+	/+iiIwvW/NMJJrbjYmxZoc5FhTbmolS8uq2aNO9ywjamXhKW8+/+/7RDFubpj7dioSjKubeKt0e
+	nYdwRH79Zyzcwi6dmYkyVIauGZjd4aqxJMDBLb6i6lcJRP77KsR6KSdl8gB84DRa103QNY749Gq
+	sKjw+CzzVM1tx4T3TtSAehouYrynIec/i5AOfW67LzvVlmva94D8CJ1sv1gGN8WJqvpz5v6mkDM
+	jxrU9kJicYebEGupOrToBZrmfaTy1r8mSIzLFTZ6/w6JtI7wcMFLDZbcQZ7sTd6BZATBH7+LFkD
+	ninnVURCOS1lxTzjizhvbckZQC17/rQ==
+X-Google-Smtp-Source: AGHT+IEzw+HMhtbClo177HVd/w1cVZeS4EdrLYZApgOY0nZ482UsPgyuJQa51LNrMY3+KaXBnksi2g==
+X-Received: by 2002:a17:90b:180d:b0:32b:dfd7:e42c with SMTP id 98e67ed59e1d1-32d43fb8b5amr13570751a91.5.1757527591266;
+        Wed, 10 Sep 2025 11:06:31 -0700 (PDT)
+Received: from ranganath.. ([2406:7400:98:777f:f183:f24a:5cd4:ead3])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32dbb313dafsm3279188a91.6.2025.09.10.11.06.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Sep 2025 11:06:30 -0700 (PDT)
+From: Ranganath V N <vnranganath.20@gmail.com>
+To: vnranganath.20@gmail.com
+Cc: brauner@kernel.org,
+	broonie@kernel.org,
+	jlayton@kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	skhan@linuxfoundation.org
+Subject: [PATCH] selftests/filesystems: Fix build warning on anon_inode_test
+Date: Wed, 10 Sep 2025 23:36:15 +0530
+Message-ID: <20250910180616.4324-1-vnranganath.20@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250730192748.39517-1-vnranganath.20@gmail.com>
+References: <20250730192748.39517-1-vnranganath.20@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, 10 Sep 2025 07:12:03 -0700 Breno Leitao wrote:
-> On Tue, Sep 09, 2025 at 04:16:25PM -0700, Jakub Kicinski wrote:
-> > On Tue, 9 Sep 2025 13:17:27 -0700 Breno Leitao wrote:  
-> > > On Mon, Sep 08, 2025 at 06:29:58PM -0700, Jakub Kicinski wrote:  
-> > > > On Mon, 8 Sep 2025 13:47:24 -0700 Calvin Owens wrote:    
-> > > > > I wonder if there might be a demon lurking in bonding+netpoll that this
-> > > > > was papering over? Not a reason not to fix the leaks IMO, I'm just
-> > > > > curious, I don't want to spend time on it if you already did :)    
-> > > > 
-> > > > +1, I also feel like it'd be good to have some bonding tests in place
-> > > > when we're removing a hack added specifically for bonding.    
-> > > 
-> > > Do you prefer to have a separated bonding selftest, or, is it better to
-> > > add some bond operations in the torture selftest?  
-> > 
-> > Normal test is preferable, given the flakiness rate and patch volume
-> > I'm a bit scared of randomized testing as part of CI.  
+>clang warning null passed where non-null argument is expected.
+>
+>anon_inode_test.c:45:19: warning: argument 3 null where non-null expected [-Wnonnull]
+>   45 |         ASSERT_LT(execveat(fd_context, "", NULL, NULL, AT_EMPTY_PATH), 0);
+>      |                   ^~~~~~~~
+>
+>Signed-off-by: Ranganath V N <vnranganath.20@gmail.com>
+>---
+> tools/testing/selftests/filesystems/anon_inode_test.c | 4 +++-
+> 1 file changed, 3 insertions(+), 1 deletion(-)
+>
+>diff --git a/tools/testing/selftests/filesystems/anon_inode_test.c b/tools/testing/selftests/filesystems/anon_inode_test.c
+>index 73e0a4d4fb2f..f796dad679db 100644
+>--- a/tools/testing/selftests/filesystems/anon_inode_test.c
+>+++ b/tools/testing/selftests/filesystems/anon_inode_test.c
+>@@ -38,11 +38,13 @@ TEST(anon_inode_no_chmod)
+> TEST(anon_inode_no_exec)
+> {
+> 	int fd_context;
+>+	static char *argv[] = { NULL };
+>+	static char *envp[] = { NULL };
 > 
-> Ok, I will create a selftest to cover the netpoll part of bonding, as
-> soon as my understanding is good enough. I don't think it will be quick,
-> but, it is on my hi-pri todo list.
+> 	fd_context = sys_fsopen("tmpfs", 0);
+> 	ASSERT_GE(fd_context, 0);
 > 
-> Do you want to have the selftest done before merging this patch, or, can
-> they go in parallel?
+>-	ASSERT_LT(execveat(fd_context, "", NULL, NULL, AT_EMPTY_PATH), 0);
+>+	ASSERT_LT(execveat(fd_context, "", argv, envp, AT_EMPTY_PATH), 0);
+> 	ASSERT_EQ(errno, EACCES);
+> 
+> 	EXPECT_EQ(close(fd_context), 0);
 
-I said "it'd be good to have some bonding tests in place when we're
-removing a hack added specifically for bonding."
-"In place" means part of CI when we're merging this fix.
-Please read emails more carefully.
+Hi,
+Please let me know the feedback for this patch.
+
+Thanks,
+Ranganath
