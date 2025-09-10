@@ -1,43 +1,78 @@
-Received: from out198-20.us.a.mail.aliyun.com (out198-20.us.a.mail.aliyun.com [47.90.198.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C604925B2F4;
-	Wed, 10 Sep 2025 03:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87DB137750;
+	Wed, 10 Sep 2025 03:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757473531; cv=none; b=A5sg+dCG4axTr8y/+u9GZfVDg3xS9yRzbmmSlU+K+7Bw5ZTj4VBK7+eN8NFT0Qcijo6UYX4kAEfyoaj/q8tJLNzUk/kMD4Pr/rLpg/t93ZjTy+COW3Ksl7ldXPYfjYpJiqZ98kwiS2aU9fU7tFExOD/2ok3fXoWohHgXMuOx6jg=
+	t=1757474403; cv=none; b=hwl0cGZvPXCA8f+7Wr9StnCt38lJfrRgP3t0XXH5M++1W297ORfrWFQlflKworrQgQ/b23dc6BEqAmiFsRb9ILRgRpsjE4OacpRWVbvpZAP/TQTQrtHXarb271OZWxAzMvjFEGFYN/LkljoS2OBX+2AdrzXQpg8C/AmE5Ef/UYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757473531; c=relaxed/simple;
-	bh=OPf2QR2k6DAiKqVX0oVySRjxE6j2hrfdjMNsYF+M5Xs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fC/Vk1OZkY0ihNrpe4SIYBIvXIapWcQnvkucGqfFbxZ03+vDYRREzL4r36KwTW2r+5/b8gz2hYPw7llcbog1ttaeWcYFrytZcvJFAlCTumctZIDpeXoB/rHr+1wIJZ8mWJbsob5OX5zlTJYYgLBcVUIj79WQV9KtrbbLrJgC1TE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com; spf=pass smtp.mailfrom=antgroup.com; dkim=pass (1024-bit key) header.d=antgroup.com header.i=@antgroup.com header.b=V63k7WyG; arc=none smtp.client-ip=47.90.198.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antgroup.com
+	s=arc-20240116; t=1757474403; c=relaxed/simple;
+	bh=edMboBqpV+c/SWWCaYM/Emlr2efUoLGPbtc76VqsCKA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K5xlRuCJF2ERP+wx4O3sFTnnf6VmqR5zGqHsXP4aV2WepTlypkq07TLQCtG5fWILu+Cjn3Z9MczZf6IDtS9sgTYcQqAk+ysdstJRvRT48Bdw1VFp5oLHCXfpQ7bGnwUATUV7S8pL6ABCg0gTtH3pGOYDZrpVJ6k9cNccQ3ijzJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JwUGvzXh; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antgroup.com header.i=@antgroup.com header.b="V63k7WyG"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=antgroup.com; s=default;
-	t=1757473514; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=E93cY9FHGBGF8PLSftp1VfXTr3kQA09+IbltBz6T4yc=;
-	b=V63k7WyG1wUTbdCfT7qVAta4EaGh01O9+eyOwslzy6DaWNpodzj4qOcmDF7XdCkdK2RpdfYxlw36TG05AW0tZUt2jN9F6IJrWMUMaHXUL/ZYKjY1UBRZ0dcVfZyxX2uDGR0Q+AZveTJFbmGHH+3e/pe/DrnMHmj4oXWNDEfeWn4=
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.ebeulmh_1757472571 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Wed, 10 Sep 2025 10:49:31 +0800
-From: Hou Wenlong <houwenlong.hwl@antgroup.com>
-To: kvm@vger.kernel.org
-Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JwUGvzXh"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-77269d19280so5813295b3a.3;
+        Tue, 09 Sep 2025 20:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757474401; x=1758079201; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rsl93Xqa2i9RSlCPVdYRuHUPMJ3D0CyaFu//J8FzEaE=;
+        b=JwUGvzXh91dCulyb6YXvZIIKcOsozPFE0nUaLzKgt4SLi+G5vn+URAx90SRPbc0Tns
+         zNHJiBc7D5x4q73H114hZfYo0R2dyEh+UjUWq+75cFXzeeBQCKlqy3CmMxoPsJPlnKc8
+         0yfQAZk404fS9XRVpMbF8gxnmPLBNgKRDWuOv3WhCOR9xalzLDr+2KWc79EGEWZrSFeO
+         +igF7NXK88TrZNOdQtUDwHcAln1WSUtmkwNeg1XcYD0kIfP4RFN1d+p3Xu4/4BHOqkDk
+         d394h7xkmBg7VK20p4BL7IFgoz/oq7DqcKZwaRr8tAsggHYcdD/DPXEIsd3dOTl/bt2k
+         ffsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757474401; x=1758079201;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rsl93Xqa2i9RSlCPVdYRuHUPMJ3D0CyaFu//J8FzEaE=;
+        b=ghRgjCGXdZe77hQuDHD6G5Yra6CbPaVRtBWXOgjc1ZRpsFP15h+mrQlL8wzlpaqbEC
+         v7VW6Pwgwz6yMPjWUh5bHMZjfsYIrAW/bbtxp6FhlXAvhVTMDPV+DXS/pAv+ixGQi+Po
+         xC0tdaHO6NcZfea/HqI9/T9LfauY0dJaAg5x9Tzp6SrbXtU8I9ygWFXgBA+UTP7b9UV8
+         fMwxOZukUYKdPDXahOlauhmMDJAOHW5/i3ChcW7ht8aUrDdLlpcaFw7v/FIsFBP7sUu7
+         9irn2V6ZiiCLlhz8bOcbON9rY6GXiFwL0ToPKSiQnyMdgqBiWujcsZguMcOz/jobl8wJ
+         46ZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVDzb7CTD3tidqnnsWhSsrbu43fMCGkmMiPbJjDQkN1a62pqBrxp59opgwDq8iXHMVgPw4nDwzoFDcwGLIkUsA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAu4hwNtStnLUDknjYD/LfEqPiWKD5SKIJ+EsMXcWFnSkgzmBC
+	skrmZdd5IKb3/j3yi0oeBnV0JHe5HZC96QyljOqHvHOKrvr0cU9nx6kn1e2AAmGT
+X-Gm-Gg: ASbGncsl9DCN8oHvbuaAT/+3NjQxsky07G5N7GOGPO3ipAnK7QK1oX0rJ1yN0bhE8XY
+	TxZ6JDGUC3BRU81Bt3Q76sWu1flgtsLEN0KSgtAU6CRhuTF1AZnG6/YCkU4kR5y5pk3bqMSb3hp
+	oSLvvZJJfAI8NQIPymw3c7PBEVzgU9BjZSsuILOY15mt7hTxM2ywrKp0jX0QM6ymw4geRAEFynJ
+	YlnxpBEaZTunY4nG2wYpdF8kPAtK1xkP2xeMnCdehZcl0Gjg0KV4Wg0QaktYyJBBU0AgALv5UpA
+	00zP00uMF8O4HeYM18simPF4GCwKO01pdwUGlpVUv7dZg1MkF1m2rceeHHWp395ZQfHmSmbEsDz
+	AVZlGRy5cA1Y00LmnkMT9oW7ueihmFfua/elsW+INBDxbnfop4Qu/
+X-Google-Smtp-Source: AGHT+IHW0yfu3nzMddMIzQMkH08njRI+DCPb2Ocmq8LbcfMJx2wcEy9Bn/hFiC6/CRYxEOUmVjwudA==
+X-Received: by 2002:a05:6a00:3cc9:b0:772:a5c:6eea with SMTP id d2e1a72fcca58-7742ddf0f44mr19112441b3a.17.1757474400986;
+        Tue, 09 Sep 2025 20:20:00 -0700 (PDT)
+Received: from fedora.redhat.com ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-774661247cdsm3554308b3a.33.2025.09.09.20.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Sep 2025 20:20:00 -0700 (PDT)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] KVM: selftests: Verify 'BS' bit checking in pending debug exception during VM entry
-Date: Wed, 10 Sep 2025 10:49:19 +0800
-Message-Id: <3c0686934fc33ebb484aa5cc71443a22504df7ca.1757416809.git.houwenlong.hwl@antgroup.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1757416809.git.houwenlong.hwl@antgroup.com>
-References: <cover.1757416809.git.houwenlong.hwl@antgroup.com>
+	Hangbin Liu <liuhangbin@gmail.com>,
+	David Wilder <wilder@us.ibm.com>
+Subject: [PATCHv3 net 1/2] bonding: don't set oif to bond dev when getting NS target destination
+Date: Wed, 10 Sep 2025 03:19:45 +0000
+Message-ID: <20250910031946.400430-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,105 +81,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In the x86's debug_regs test, add a test case to cover the scenario where
-single-step with STI in VMX sets the 'BS' bit in pending debug
-exceptions for #DB interception and instruction emulation in both cases.
+Unlike IPv4, IPv6 routing strictly requires the source address to be valid
+on the outgoing interface. If the NS target is set to a remote VLAN interface,
+and the source address is also configured on a VLAN over a bond interface,
+setting the oif to the bond device will fail to retrieve the correct
+destination route.
 
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Fix this by not setting the oif to the bond device when retrieving the NS
+target destination. This allows the correct destination device (the VLAN
+interface) to be determined, so that bond_verify_device_path can return the
+proper VLAN tags for sending NS messages.
+
+Reported-by: David Wilder <wilder@us.ibm.com>
+Closes: https://lore.kernel.org/netdev/aGOKggdfjv0cApTO@fedora/
+Suggested-by: Jay Vosburgh <jv@jvosburgh.net>
+Tested-by: David Wilder <wilder@us.ibm.com>
+Acked-by: Jay Vosburgh <jv@jvosburgh.net>
+Fixes: 4e24be018eb9 ("bonding: add new parameter ns_targets")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- .../selftests/kvm/include/x86/processor.h     |  3 +-
- tools/testing/selftests/kvm/x86/debug_regs.c  | 41 +++++++++++++++++--
- 2 files changed, 40 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
-index 488d516c4f6f..f5827cca813e 100644
---- a/tools/testing/selftests/kvm/include/x86/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86/processor.h
-@@ -34,7 +34,8 @@ extern uint64_t guest_tsc_khz;
+v3: no update
+v2: split the patch into 2 parts, the kernel change and test update (Jay Vosburgh)
+
+---
+ drivers/net/bonding/bond_main.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 257333c88710..30cf97f4e814 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -3355,7 +3355,6 @@ static void bond_ns_send_all(struct bonding *bond, struct slave *slave)
+ 		/* Find out through which dev should the packet go */
+ 		memset(&fl6, 0, sizeof(struct flowi6));
+ 		fl6.daddr = targets[i];
+-		fl6.flowi6_oif = bond->dev->ifindex;
  
- #define NMI_VECTOR		0x02
- 
--#define X86_EFLAGS_FIXED	 (1u << 1)
-+#define X86_EFLAGS_FIXED	(1u << 1)
-+#define X86_EFLAGS_TF		(1u << 8)
- 
- #define X86_CR4_VME		(1ul << 0)
- #define X86_CR4_PVI		(1ul << 1)
-diff --git a/tools/testing/selftests/kvm/x86/debug_regs.c b/tools/testing/selftests/kvm/x86/debug_regs.c
-index ba80b77c2869..60dea0116b21 100644
---- a/tools/testing/selftests/kvm/x86/debug_regs.c
-+++ b/tools/testing/selftests/kvm/x86/debug_regs.c
-@@ -15,11 +15,31 @@
- 
- #define IRQ_VECTOR 0xAA
- 
-+#define  CAST_TO_RIP(v)  ((unsigned long long)&(v))
-+
- /* For testing data access debug BP */
- uint32_t guest_value;
- 
- extern unsigned char sw_bp, hw_bp, write_data, ss_start, bd_start;
--extern unsigned char fep_bd_start;
-+extern unsigned char fep_bd_start, fep_sti_start, fep_sti_end;
-+
-+static void guest_db_handler(struct ex_regs *regs)
-+{
-+	static int count;
-+	unsigned long target_rips[2] = {
-+		CAST_TO_RIP(fep_sti_start),
-+		CAST_TO_RIP(fep_sti_end),
-+	};
-+
-+	__GUEST_ASSERT(regs->rip == target_rips[count], "STI: unexpected rip 0x%lx (should be 0x%lx)",
-+		       regs->rip, target_rips[count]);
-+	regs->rflags &= ~X86_EFLAGS_TF;
-+	count++;
-+}
-+
-+static void guest_irq_handler(struct ex_regs *regs)
-+{
-+}
- 
- static void guest_code(void)
- {
-@@ -69,13 +89,25 @@ static void guest_code(void)
- 	if (is_forced_emulation_enabled) {
- 		/* DR6.BD test for emulation */
- 		asm volatile(KVM_FEP "fep_bd_start: mov %%dr0, %%rax" : : : "rax");
-+
-+		/* pending debug exceptions for emulation */
-+		asm volatile("pushf\n\t"
-+			     "orq $" __stringify(X86_EFLAGS_TF) ", (%rsp)\n\t"
-+			     "popf\n\t"
-+			     "sti\n\t"
-+			     "fep_sti_start:"
-+			     "cli\n\t"
-+			     "pushf\n\t"
-+			     "orq $" __stringify(X86_EFLAGS_TF) ", (%rsp)\n\t"
-+			     "popf\n\t"
-+			     KVM_FEP "sti\n\t"
-+			     "fep_sti_end:"
-+			     "cli\n\t");
- 	}
- 
- 	GUEST_DONE();
- }
- 
--#define  CAST_TO_RIP(v)  ((unsigned long long)&(v))
--
- static void vcpu_skip_insn(struct kvm_vcpu *vcpu, int insn_len)
- {
- 	struct kvm_regs regs;
-@@ -110,6 +142,9 @@ int main(void)
- 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
- 	run = vcpu->run;
- 
-+	vm_install_exception_handler(vm, DB_VECTOR, guest_db_handler);
-+	vm_install_exception_handler(vm, IRQ_VECTOR, guest_irq_handler);
-+
- 	/* Test software BPs - int3 */
- 	memset(&debug, 0, sizeof(debug));
- 	debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_USE_SW_BP;
+ 		dst = ip6_route_output(dev_net(bond->dev), NULL, &fl6);
+ 		if (dst->error) {
 -- 
-2.31.1
+2.50.1
 
