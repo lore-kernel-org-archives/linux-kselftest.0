@@ -1,102 +1,106 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CFEE3009F8
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 13:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF642701C0;
+	Fri, 12 Sep 2025 13:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757684802; cv=none; b=H5xhKpnIAtjjsc6aG+mbZVqTgwycNCRNuP3m5vL+5Yuk2JK0m3z2JXBN+/rgvMg1gU/gGmp/CqrAVTmk0cTaQJPS8qRVCGDzfdAU1EXspEK7k/v1aPOEl9DmN30HYlHyudpRlzpj0rLf21OEqEry8r5q9YVHrKVZQ7waCO6vZSQ=
+	t=1757685586; cv=none; b=FtdppgfRZFecGM7antFyCctnAo+TdGnMFvve4qjQ3ahW3SZvczEJITId8usJZ8K5Hf89pkRRIXYd1e2e8WgHSXGBuD31NcR2inFe9lURqU14odd129z6Pyo49u5ZYcR5M7WsNdxxGMhd+qTac1fs+zRNF/hFOwSKBVl4ouSe520=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757684802; c=relaxed/simple;
-	bh=v4JtY9vSL/ymUzoCEJf8PMANI/JiqvGzFXWGWHS7MS0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YtlN9hcVMdAJpb2Iupt2dQCqdNjnhBXYXvesdAPtE26HAvQObh/yBsKMhClm+76v+V1FPGyrriLpMamDEdJl/hTo9aXa17zLhIPX5/OgacxdsQqNE19YMZniUHzzpB938PL3KMZILmGVEB7c1LX3fMxMSBsDjIF0LCJMMy3HenU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=Kin5uA9V; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+	s=arc-20240116; t=1757685586; c=relaxed/simple;
+	bh=G9RU8pqf54/5vuMI1yPvLacDTNLbF1FmLEXp604XgK4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gq0FlFR+Hc9hZQryY7g33E22PDKqCDmWWpP91igtNkcyQo2gjTZgh2iOpEOkzh42RkTPd4AaO45wpFkgzYMvPoC9fwmx4JwV19cehiXKm7D0MaBT8Gsgh9rGlhupU8oTNPTq8BrVAzgXkLCxUC0IGzL2ht+QvkU8/mZRlHhDErI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=UrU+X9FD; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="Kin5uA9V"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-337e714b3b4so15557071fa.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Sep 2025 06:46:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757684799; x=1758289599; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v4JtY9vSL/ymUzoCEJf8PMANI/JiqvGzFXWGWHS7MS0=;
-        b=Kin5uA9VaG3pa35slgeqtL0t/NXMDxDV8wuuizb0JMZlJPfH2iZuQwUIVN4myJab34
-         MCx9MEYrkB1WOAfBEDEiqz/0/LImTP5gjG8L6S7C8GqvBk9ybUkCnOJryfegB3YbESAq
-         ucwFXVERQZ0X8SXb0xwRzKdtvajMxpqxFnBoYA6NRMRWZw2K2PfAve9HEESXntHvMlqb
-         gi2u3bkLls4cfTSMW5RKMiLpmreLTPTObakV+KaxLVmu5siEWUH6TVJzJbYf3uDvBDeY
-         dZo7fN9gsMxJOFXu7qRD+5bLt0OOB6YPEwivKfC65rfjLbZpgiQttLEeLqfjEv6i+9sY
-         zsxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757684799; x=1758289599;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v4JtY9vSL/ymUzoCEJf8PMANI/JiqvGzFXWGWHS7MS0=;
-        b=Lia0vqGHhNJJQZDs0TFwDPAxeJzfNcxD6jFa8EjBeDNPs3tTqgPkIhC3wxMC2f82DY
-         OX2/RyCvNHJX0VWyMNIwOSW6mVTWJU8+Rp5mZlLIqe5dif3+aIMDE6J17z4InW5H6PrL
-         +LeDW/wrwQDuEnlXYtl9I9MGG2VEbiq2N2DYP7NxlRTenRFx0IUBSE4P1bSLav5eWeMU
-         QldB9gFOXPnZyuNekqJOsPhjAK5pzUcpYlvDYr8YwczneNp1P5T5ZBLRnpcTMv2ZcNXI
-         SFtCLa1Hvu8Hzm0KWFWrhIuJFLeInCqDzZ6rW0VDu5hyBZSj45hCeqtXDmit1CpF32TO
-         ++dg==
-X-Forwarded-Encrypted: i=1; AJvYcCXTHtzcpWRZ1jjtQqRxBUbqpRQaLxJtuEtZINH1HKr9b83L+wRPQ6TSrGAGU7VcCc/SnaND17/gxR235gPnxaU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4ykDSGVcN5iKGCz3CdmCxUtgSAYA1jo7FXAW0uKk3Ba5zCyLQ
-	Wu7YJwJrmxKJ/GrzJ4Hp11dmMa34RDmInPdbSAmgwFh42Yb5IcDRLNcx0vCrrbjpRyAOKR6TSJf
-	BwVxQOPLpFqax3dz9UDX+DyKsFB517YaGRuMVylda8A==
-X-Gm-Gg: ASbGncsyaySt5gvk5sxRHBNUDv3wPVc2L/L6s2UHgzNWoKUdlZ9Ms4rjloWp1XAYDqW
-	j5ZJ4Y33b8RYLbiywXYi5juI/wyMOOwZC7VXnEAaHH3wouQS/Pkdu7nWX3oGaHstvmpESyyLm2Z
-	HVmorGmG4iZNg9IV6M8V+Wr0IzobpPGzwJV8FyZNxAyWWY7GEoOS29HwHtUZPy4dhd+EnuYPYB4
-	O/hopiCi+m5Z8ulSi9sXohkEJVKKHXReg9mmg==
-X-Google-Smtp-Source: AGHT+IGl0c5/zhdOHSETmwuPRA4tqW6HoSSHPDwaRkjQJteW3bfz+plrHfEmjYRmQh9olW2s5Fl6FKUzor1dOfUjNsc=
-X-Received: by 2002:a05:651c:198a:b0:336:e46c:5eea with SMTP id
- 38308e7fff4ca-3513ecc4932mr8562981fa.31.1757684799188; Fri, 12 Sep 2025
- 06:46:39 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="UrU+X9FD"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 9DC00ED;
+	Fri, 12 Sep 2025 15:58:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1757685506;
+	bh=G9RU8pqf54/5vuMI1yPvLacDTNLbF1FmLEXp604XgK4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UrU+X9FDxorhe2X9h9OaavknEOicBw5R9Rv4QwWyrhDhdWRLUUvAnZXLTOTMhqbVS
+	 r+NRpgAfMnRIYfBcrfQHQKpLuH9QUEMMlFdquGQiNEJhJ5svleibyGEELqQBJzjccu
+	 NuHPGSqcs1ffOGzoRDhwR8LcRgGhCeR05jMD0V5o=
+Date: Fri, 12 Sep 2025 16:59:16 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Benson Leung <bleung@chromium.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Dawid Niedzwiecki <dawidn@google.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v3 0/5] platform/chrome: Fix a possible UAF via revocable
+Message-ID: <20250912135916.GF31682@pendragon.ideasonboard.com>
+References: <20250912081718.3827390-1-tzungbi@kernel.org>
+ <2033c6cd-4112-4c8a-a9ef-2ab34f3504b8@kernel.org>
+ <CACMJSeuKH+WKOXLNU92dMssqhK02xG3z=cT0VeXYM+ZGuPCB9g@mail.gmail.com>
+ <aMQW2jUFlx7Iu9U5@tzungbi-laptop>
+ <20250912132656.GC31682@pendragon.ideasonboard.com>
+ <2025091209-curfew-safari-f6e0@gregkh>
+ <CAMRc=MfdoB50o=3Q2p94o+f7S2Bzr=TAtWWQcDrC5Wf3Q5nqAA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250912081718.3827390-1-tzungbi@kernel.org> <2033c6cd-4112-4c8a-a9ef-2ab34f3504b8@kernel.org>
- <CACMJSeuKH+WKOXLNU92dMssqhK02xG3z=cT0VeXYM+ZGuPCB9g@mail.gmail.com>
- <aMQW2jUFlx7Iu9U5@tzungbi-laptop> <20250912132656.GC31682@pendragon.ideasonboard.com>
- <2025091209-curfew-safari-f6e0@gregkh>
-In-Reply-To: <2025091209-curfew-safari-f6e0@gregkh>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Fri, 12 Sep 2025 15:46:27 +0200
-X-Gm-Features: Ac12FXyIDSy-eYKyNqWjJQnokOfxXk3HAMgS7Hxbag5ilFR-3-M21SM8Ndw8aGw
-Message-ID: <CAMRc=MfdoB50o=3Q2p94o+f7S2Bzr=TAtWWQcDrC5Wf3Q5nqAA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] platform/chrome: Fix a possible UAF via revocable
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	Dawid Niedzwiecki <dawidn@google.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMRc=MfdoB50o=3Q2p94o+f7S2Bzr=TAtWWQcDrC5Wf3Q5nqAA@mail.gmail.com>
 
-On Fri, Sep 12, 2025 at 3:39=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> I have no objection moving this to the cdev api, BUT given that 'struct
-> cdev' is embedded everywhere, I don't think it's going to be a simple
-> task, but rather have to be done one-driver-at-a-time like the patch in
-> this series does it.
->
+On Fri, Sep 12, 2025 at 03:46:27PM +0200, Bartosz Golaszewski wrote:
+> On Fri, Sep 12, 2025 at 3:39 PM Greg Kroah-Hartman wrote:
+> >
+> > I have no objection moving this to the cdev api, BUT given that 'struct
+> > cdev' is embedded everywhere, I don't think it's going to be a simple
+> > task, but rather have to be done one-driver-at-a-time like the patch in
+> > this series does it.
+> 
+> I don't think cdev is the right place for this as user-space keeping a
+> reference to a file-descriptor whose "backend" disappeared is not the
+> only possible problem. We can easily create a use-case of a USB I2C
+> expander being used by some in-kernel consumer and then unplugged.
+> This has nothing to do with the character device. I believe the
+> sub-system level is the right place for this and every driver
+> subsystem would have to integrate it separately, taking its various
+> quirks into account.
 
-I don't think cdev is the right place for this as user-space keeping a
-reference to a file-descriptor whose "backend" disappeared is not the
-only possible problem. We can easily create a use-case of a USB I2C
-expander being used by some in-kernel consumer and then unplugged.
-This has nothing to do with the character device. I believe the
-sub-system level is the right place for this and every driver
-subsystem would have to integrate it separately, taking its various
-quirks into account.
+That's why I mentioned in-kernel users previously. Drivers routinely
+acquire resources provided by other drivers, and having a way to revoke
+those is needed.
 
-Bartosz
+It is a different but related problem compared to userspace racing with
+.remove(). Could we solve both using the same backend concepts ?
+Perhaps, time will tell, and if that works nicely, great. But we still
+have lots of drivers exposing character devices to userspace (usually
+through a subsystem-specific API, drivers that create a cdev manually
+are the minority). That problem is in my opinion more urgent than
+handling the removal of in-kernel resources, because it's more common,
+and is easily triggerable by userspace. The good news is that it should
+also be simpler to solve, we should be able to address the enter/exit
+part entirely in cdev, and limit the changes to drivers in .remove() to
+the strict minimum.
+
+What I'd like to see is if the proposed implementation of revocable
+resources can be used as a building block to fix the cdev issue. If it
+ca, great, let's solve it then. If it can't, that's still fine, it will
+still be useful for in-kernel resources, even if we need a different
+implementation for cdev.
+
+-- 
+Regards,
+
+Laurent Pinchart
