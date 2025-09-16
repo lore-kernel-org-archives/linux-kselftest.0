@@ -1,72 +1,71 @@
-Received: from mail-ua1-f98.google.com (mail-ua1-f98.google.com [209.85.222.98])
+Received: from mail-qk1-f228.google.com (mail-qk1-f228.google.com [209.85.222.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C873288504
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 22:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C583A29A9E9
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 22:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758060373; cv=none; b=XndHuPzQlB6TD+46OofGQgtn2yYZRRyQpjaAklfF7ogZYrMQ2vdej0eX8OxswvxFcWUMMaIr8Os8qKwh2ooNYwhYWYouQPf1dyv6pMkCZEqNtitS0XogYZ4z3ZTbJogFzp5TN+g/ecDwnraJinCcCSWafrMJwGRql+lt/TWicL0=
+	t=1758060720; cv=none; b=ZAjNtPcnuz2eEhcBuFRi1dQtVy/vgS54KqUWVhiW37UL78jLf37PcKduUPumB4fSeqlNaluEhIFqYLqqgeiaOPQLBB6X8PbtCDHX3QDZ3J/CenMoPpllKVi5qmZl+iK07ajyhiqzgAsNfGx0QD8iETNFB3eAYBv0J8VL413nY1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758060373; c=relaxed/simple;
-	bh=SIKkpUuN+UMf7521jvtEXvNWyyT5bVbD3qrrehDOkvQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sOPKVA5uwGylDhmmI0ygmwCWtS7Wcso5KHaIfF38yvp9FdZSXaJgPrplpn0u/nCXNEn+2N3eQyWEZlFVtA7vmgang5pDl0V4xmcyafatT8dZPpkBeKXjlj4HRLPn08ttsgvw99dUEVh8v7tN1S3tQ59JG2J1XrbIR/sYAD6o6UU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Qa/OtKv4; arc=none smtp.client-ip=209.85.222.98
+	s=arc-20240116; t=1758060720; c=relaxed/simple;
+	bh=XttLlsk7gRYOJmZapB4xIOHiWQITKrOKA4AQTvB7Qng=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=q0fCdMz3iTgj+DstdCMfDVOhPTvCdWRAgiHMcBCr4+uNC9TTG6SyVKWQ5iD3D9ZhWW6bJjsUzBQHZtT+df7cDOblFC9pjfQ+7dVpEwl1NKhEa7O4VFhRyvYv5kA3JkTnjBy+OGUyTjuc6bDVcCxmKEXy5IMmHnqLmCUYaTJnXuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=TwrvrGg+; arc=none smtp.client-ip=209.85.222.228
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Qa/OtKv4"
-Received: by mail-ua1-f98.google.com with SMTP id a1e0cc1a2514c-8ddac4b8124so1201263241.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 15:06:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="TwrvrGg+"
+Received: by mail-qk1-f228.google.com with SMTP id af79cd13be357-81999b1e9ccso526120385a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 15:11:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1758060370; x=1758665170; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N4wsBOfcY7SP6UfIj6tlKK4cAsDmDK/TmLfUs8mNZfw=;
-        b=Qa/OtKv4I0T6S6fGPCaPaJZFvWytzOoXDnT7Q3nH11SuoW9lBlrccns3LRDVfTsrGE
-         yCzfJ+pmIyh1dItShechWM4zUJ2UT5yJQcIsbDg289Gvj5+hDNQ3MGmr4RVcnMrPkKoJ
-         +SN8oHTstQMYL5xHsKPkPr9bqAKrTEBygsxzzUXzy+5hF827qwQtL6Ul8fDFNUg+eax6
-         FS5e5c+RJO6QQDMmJkTpJpXd7rJzPBVj+bfblBq1QiB9sTkk9rhkp5h7RoeR8mGIQLRw
-         8ThhbyLjDA4By8EfwTn78mFf4qSL5ndrG5GoWzJBcxlhmhs/h+9+sZy3mLRuPLP77Dip
-         D5Aw==
+        d=purestorage.com; s=google2022; t=1758060718; x=1758665518; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gw4DZLmwyg50YkiGh4/gwXF8OX17xCIpJi1m3KAs3MQ=;
+        b=TwrvrGg+Yx150JEEa3EX4I/vZ02aC41DFgU8tA0gB5Ay7UTnBt9EKU0RCU6j13B4xS
+         rmJUOs04pwcQQMHnm/s2FWrFXudPIQCx8ZeMEBHBTJBLRcz+9YqvOfmnHtOc3aBImwgg
+         D53jo5JW/FfbwwUlkT7kQZfDIe///6OrqlCaIpQnERQtTKqKbdv4cODSHMiYvPiTX6Va
+         P1yA9oqL/SokPHBM+k4uKNcykspdLVgp8FrJN9TJUa5EG/jeKoasib9iSLhlPhyDf2r4
+         Y+rtWOtiHv1DlqZ9M6q7D3syzKfvlRm2cE9haL+kosRHlMfhspNXzAUEAai661E9/oGz
+         vfJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758060370; x=1758665170;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N4wsBOfcY7SP6UfIj6tlKK4cAsDmDK/TmLfUs8mNZfw=;
-        b=TMWei7Bc9xBKutCq8D+AklMl1Z0thP6Xk2wVu6dCysnhWOrqnRgqc0NeM0R9XzctzD
-         z437fp0WK40fIFdVFc+Vj+zHlWwd+yJW5dAbzklI56aZsFQQMDeJ0Agm/EsjzagqZFgK
-         M7zmOKYSPn61eXCXGmaBuVIzbV1P7f/Y/bHDDPkEGEHgKVsaWMt9LJL5/CokF+BxMNxv
-         e7GCWKGpNGHJ5w2zm2lzJ4EA2vBlvmZQBMQKlm2wycR0h2L/abpRIsqXFoJZvl5b8bP4
-         uD9weKPuCAS6Zd8WmKIuFgUY+GMg3B+Gj8jXyF4fQKqw4AH9wLkx9IE8gD4F6Lom5ews
-         gfzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVVBgIH25VMloErSv0dtCEa7OCXRv5BXXRCwtCoFCIL94BBJBh1TuBw1GlGBtJ6n0GUqLnNcm1KA5tzdy0O0i4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzt/pVosWm/IXcEhbmm6+NGXkBqliU2v/9AnqGfIKAQ4TLwWmIu
-	EcIxgJDwCPTyylTCY450TZ7mlrw4gFFtE73UvUOIR9YmUPxw+8oGC27ozS4mMh8kAGPMePYTWcE
-	07tQ9U2TOMa7pAUjcf1HcaFYKEFdT+9LIHXBxgoi9/ULXf86X+URf
-X-Gm-Gg: ASbGnctqBgqDvEoKJqt7i+pQC3tW9O+PT5O6lvNHSBsBgLPBE+m0TJZ80yHxvkQqwjV
-	biQ2B6WSqE5bKe1Uvkt0gj7wKyKvahyHwQayYNWlktJFply8A6ScOLPIw2KDY9DsxBCrA75o1OC
-	IqoRJ2TRJmDj4wC9wHi3s5Yer1ZDEL84Ropzz073VuMl4Gg0S2DdV6tBsInBroTkpuiKZzGEY1d
-	8plqYUHbkvgX5RBvcBrkMdF1NcJJXbAg2QbyS1UOM41hxBnhJAwarwNDLgtbMuvLxU5KqyJXEND
-	qzHwMMiP52LW7BnftPzaaAPqwEvaoK9hz22oZZfwFZqom0N1ap/dsl69h1c=
-X-Google-Smtp-Source: AGHT+IFugGzusLHKIrSZCStJj5Llvm4aQRrc73nKgf/iXkByRK+6zltAVsAANgINDHQF55kouKN5b5uW5P5c
-X-Received: by 2002:a05:6102:5a92:b0:526:1e74:9548 with SMTP id ada2fe7eead31-55608ea0285mr7126569137.1.1758060370249;
-        Tue, 16 Sep 2025 15:06:10 -0700 (PDT)
-Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id ada2fe7eead31-557f9d4b892sm975973137.5.2025.09.16.15.06.09
+        d=1e100.net; s=20230601; t=1758060718; x=1758665518;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gw4DZLmwyg50YkiGh4/gwXF8OX17xCIpJi1m3KAs3MQ=;
+        b=uZ4b+NZTvznAxVG51k94XOBFRf5A+OVWoDx+vNVfOs2bsgrJk83P+JGSlw08qkpDK9
+         bmliZVzwQJNas+OGO7tT+95NduX4wU4St5NNB9Dib+lcUXttsY3bF/WyWYqCbuUrc8hI
+         qI4z2r/+BXWx1HT8XKpJUHjI3EcelWFyxwehCia7oBNUsJnix6Bk0NwzSg5m8pYgF7G9
+         O1Gq8RB024F/mW4QswgXIbqw/GAcMoIZ+MU1KuI0xd8wRzBKVeIsfwCakbX05B0VbtjZ
+         pqMBxRkhEzBcIw34Q/C0GqZk/ZfN4FVOWdEyX9w6dkF8U7e1CEreujjXVQkvEEkCTC6l
+         K6Ug==
+X-Forwarded-Encrypted: i=1; AJvYcCVmTcUHrTYxjdT7OPLImKoPU4ZAySV2Q84tJ77xuMfFcuS+q/K+XrXIf1KmoTgv1v6I42TV9bdDjhb0wY4ARqU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl3WO5N3PRgRYRDpqSGQ7j8Vho4xbQawXqgmuAr53uFyDVcGs1
+	KeAPc64w1F9zsvaK0GMwTzapFf2MTP1SUsWJgjmGCZ9f8c/W5sEVShAVPUOgDh6vgPlpl3fpr0G
+	2xA898Hylu3gBBzvUzSIDJ8T+G5x7Zg0vy1JS
+X-Gm-Gg: ASbGnct5Y9U8M/syXLdtE2nts1Ai3iFF408hrUN0MtJdHrTF8pLCyJKxDkLaxjWPssZ
+	Z/GcsXPF1W3i0NygsddGpkNuw7RmJKJ93HElw03uzpn6y6Hqsletf7Ahn4XQMMc5KxAqZ+SSaCF
+	/4HywMUcmW1FTid39lPR9APWN4mLnR8Jo5bpYqs50MmyGe+nDzcNy0fzUK76bGKzI6f12aPvTrW
+	XCFiThOhYC1LU6bV7z9m+sJJkiVTLwr2w7hEwbK5pKWoVjbQMgIO/6YUK0S8cDZnps2XcE87EWy
+	zXW3hnIdlTajxjDxgskKnTToHK29dQlSht0RHOB22hgYxQnWfJWqi21XtFBAhxukgpITjePOhg=
+	=
+X-Google-Smtp-Source: AGHT+IEnOu89ChzU0BaakveFO/z5V8vksE/0QseUXToeKSzd42RhZeVmBkDqeZoXQOUm1RYcOOqyWsIgjzJ5
+X-Received: by 2002:a05:620a:44d6:b0:807:198c:8880 with SMTP id af79cd13be357-823fc1c9312mr1910814185a.18.1758060717588;
+        Tue, 16 Sep 2025 15:11:57 -0700 (PDT)
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
+        by smtp-relay.gmail.com with ESMTPS id af79cd13be357-820cd700f5asm91037785a.7.2025.09.16.15.11.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Sep 2025 15:06:10 -0700 (PDT)
+        Tue, 16 Sep 2025 15:11:57 -0700 (PDT)
 X-Relaying-Domain: purestorage.com
-Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [IPv6:2620:125:9007:640:7:70:36:0])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id C7E57340A4D;
-	Tue, 16 Sep 2025 16:06:08 -0600 (MDT)
+Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [10.7.70.36])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id BA82334023F;
+	Tue, 16 Sep 2025 16:11:56 -0600 (MDT)
 Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
-	id C2794E40837; Tue, 16 Sep 2025 16:06:08 -0600 (MDT)
+	id C8796E41646; Tue, 16 Sep 2025 16:11:56 -0600 (MDT)
 From: Uday Shankar <ushankar@purestorage.com>
-Date: Tue, 16 Sep 2025 16:05:55 -0600
-Subject: [PATCH 1/3] selftests: ublk: kublk: simplify feat_map definition
+Date: Tue, 16 Sep 2025 16:11:53 -0600
+Subject: [PATCH] selftests: ublk: fix behavior when fio is not installed
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,100 +74,90 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250916-ublk_features-v1-1-52014be9cde5@purestorage.com>
-References: <20250916-ublk_features-v1-0-52014be9cde5@purestorage.com>
-In-Reply-To: <20250916-ublk_features-v1-0-52014be9cde5@purestorage.com>
+Message-Id: <20250916-ublk_fio-v1-1-8d522539eed7@purestorage.com>
+X-B4-Tracking: v=1; b=H4sIAKjgyWgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDS0Mz3dKknOz4tMx8XUNLQwNLS4skA4MkYyWg8oKi1LTMCrBR0bG1tQA
+ tsZGgWgAAAA==
+X-Change-ID: 20250916-ublk_fio-1910998b00b3
 To: Caleb Sander Mateos <csander@purestorage.com>, 
  Ming Lei <ming.lei@redhat.com>, Shuah Khan <shuah@kernel.org>
 Cc: linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Uday Shankar <ushankar@purestorage.com>
 X-Mailer: b4 0.14.2
 
-Simplify the definition of feat_map by introducing a helper macro
-FEAT_NAME to avoid having to type the feature name twice. As a side
-effect, this changes the names in the feature list to be the full macro
-name instead of the abbreviated names that were used before, but this is
-a good change for clarity.
+Some ublk selftests have strange behavior when fio is not installed.
+While most tests behave correctly (run if they don't need fio, or skip
+if they need fio), the following tests have different behavior:
 
-Using the full feature macro names ruins the alignment of the output, so
-change the output format to put each feature's hex value before its
-name, as this is easier to align nicely. The output now looks as
-follows:
+- test_null_01 and test_null_02 try to run fio without checking if it
+  exists first, and fail on any failure of the fio command (including
+  "fio command not found"). So these tests fail when they should skip.
+- test_stress_05 runs fio without checking if it exists first, but
+  doesn't fail on fio command failure. This test passes, but that pass
+  is misleading as the test doesn't do anything useful without fio
+  installed. So this test passes when it should skip.
 
-# ./kublk features
-ublk_drv features: 0x7fff
-0x1               : UBLK_F_SUPPORT_ZERO_COPY
-0x2               : UBLK_F_URING_CMD_COMP_IN_TASK
-0x4               : UBLK_F_NEED_GET_DATA
-0x8               : UBLK_F_USER_RECOVERY
-0x10              : UBLK_F_USER_RECOVERY_REISSUE
-0x20              : UBLK_F_UNPRIVILEGED_DEV
-0x40              : UBLK_F_CMD_IOCTL_ENCODE
-0x80              : UBLK_F_USER_COPY
-0x100             : UBLK_F_ZONED
-0x200             : UBLK_F_USER_RECOVERY_FAIL_IO
-0x400             : UBLK_F_UPDATE_SIZE
-0x800             : UBLK_F_AUTO_BUF_REG
-0x1000            : UBLK_F_QUIESCE
-0x2000            : UBLK_F_PER_IO_DAEMON
-0x4000            : unknown
+Fix these issues by adding _have_program fio checks to the top of all
+three of these tests.
 
 Signed-off-by: Uday Shankar <ushankar@purestorage.com>
 ---
- tools/testing/selftests/ublk/kublk.c | 31 ++++++++++++++++---------------
- 1 file changed, 16 insertions(+), 15 deletions(-)
+ tools/testing/selftests/ublk/test_null_01.sh   | 4 ++++
+ tools/testing/selftests/ublk/test_null_02.sh   | 4 ++++
+ tools/testing/selftests/ublk/test_stress_05.sh | 4 ++++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/tools/testing/selftests/ublk/kublk.c b/tools/testing/selftests/ublk/kublk.c
-index 6512dfbdbce3a82f1202de17319ea593337427e6..4e5d82f2a14a01d9e56d31126eae2e26ec718b6c 100644
---- a/tools/testing/selftests/ublk/kublk.c
-+++ b/tools/testing/selftests/ublk/kublk.c
-@@ -1363,21 +1363,22 @@ static int cmd_dev_list(struct dev_ctx *ctx)
- static int cmd_dev_get_features(void)
- {
- #define const_ilog2(x) (63 - __builtin_clzll(x))
-+#define FEAT_NAME(f) [const_ilog2(f)] = #f
- 	static const char *feat_map[] = {
--		[const_ilog2(UBLK_F_SUPPORT_ZERO_COPY)] = "ZERO_COPY",
--		[const_ilog2(UBLK_F_URING_CMD_COMP_IN_TASK)] = "COMP_IN_TASK",
--		[const_ilog2(UBLK_F_NEED_GET_DATA)] = "GET_DATA",
--		[const_ilog2(UBLK_F_USER_RECOVERY)] = "USER_RECOVERY",
--		[const_ilog2(UBLK_F_USER_RECOVERY_REISSUE)] = "RECOVERY_REISSUE",
--		[const_ilog2(UBLK_F_UNPRIVILEGED_DEV)] = "UNPRIVILEGED_DEV",
--		[const_ilog2(UBLK_F_CMD_IOCTL_ENCODE)] = "CMD_IOCTL_ENCODE",
--		[const_ilog2(UBLK_F_USER_COPY)] = "USER_COPY",
--		[const_ilog2(UBLK_F_ZONED)] = "ZONED",
--		[const_ilog2(UBLK_F_USER_RECOVERY_FAIL_IO)] = "RECOVERY_FAIL_IO",
--		[const_ilog2(UBLK_F_UPDATE_SIZE)] = "UPDATE_SIZE",
--		[const_ilog2(UBLK_F_AUTO_BUF_REG)] = "AUTO_BUF_REG",
--		[const_ilog2(UBLK_F_QUIESCE)] = "QUIESCE",
--		[const_ilog2(UBLK_F_PER_IO_DAEMON)] = "PER_IO_DAEMON",
-+		FEAT_NAME(UBLK_F_SUPPORT_ZERO_COPY),
-+		FEAT_NAME(UBLK_F_URING_CMD_COMP_IN_TASK),
-+		FEAT_NAME(UBLK_F_NEED_GET_DATA),
-+		FEAT_NAME(UBLK_F_USER_RECOVERY),
-+		FEAT_NAME(UBLK_F_USER_RECOVERY_REISSUE),
-+		FEAT_NAME(UBLK_F_UNPRIVILEGED_DEV),
-+		FEAT_NAME(UBLK_F_CMD_IOCTL_ENCODE),
-+		FEAT_NAME(UBLK_F_USER_COPY),
-+		FEAT_NAME(UBLK_F_ZONED),
-+		FEAT_NAME(UBLK_F_USER_RECOVERY_FAIL_IO),
-+		FEAT_NAME(UBLK_F_UPDATE_SIZE),
-+		FEAT_NAME(UBLK_F_AUTO_BUF_REG),
-+		FEAT_NAME(UBLK_F_QUIESCE),
-+		FEAT_NAME(UBLK_F_PER_IO_DAEMON),
- 	};
- 	struct ublk_dev *dev;
- 	__u64 features = 0;
-@@ -1404,7 +1405,7 @@ static int cmd_dev_get_features(void)
- 				feat = feat_map[i];
- 			else
- 				feat = "unknown";
--			printf("\t%-20s: 0x%llx\n", feat, 1ULL << i);
-+			printf("0x%-16llx: %s\n", 1ULL << i, feat);
- 		}
- 	}
+diff --git a/tools/testing/selftests/ublk/test_null_01.sh b/tools/testing/selftests/ublk/test_null_01.sh
+index a34203f726685787da80b0e32da95e0fcb90d0b1..c2cb8f7a09fe37a9956d067fd56b28dc7ca6bd68 100755
+--- a/tools/testing/selftests/ublk/test_null_01.sh
++++ b/tools/testing/selftests/ublk/test_null_01.sh
+@@ -6,6 +6,10 @@
+ TID="null_01"
+ ERR_CODE=0
  
++if ! _have_program fio; then
++	exit "$UBLK_SKIP_CODE"
++fi
++
+ _prep_test "null" "basic IO test"
+ 
+ dev_id=$(_add_ublk_dev -t null)
+diff --git a/tools/testing/selftests/ublk/test_null_02.sh b/tools/testing/selftests/ublk/test_null_02.sh
+index 5633ca8766554b22be252c7cb2d13de1bf923b90..8accd35beb55c149f74b23f0fb562e12cbf3e362 100755
+--- a/tools/testing/selftests/ublk/test_null_02.sh
++++ b/tools/testing/selftests/ublk/test_null_02.sh
+@@ -6,6 +6,10 @@
+ TID="null_02"
+ ERR_CODE=0
+ 
++if ! _have_program fio; then
++	exit "$UBLK_SKIP_CODE"
++fi
++
+ _prep_test "null" "basic IO test with zero copy"
+ 
+ dev_id=$(_add_ublk_dev -t null -z)
+diff --git a/tools/testing/selftests/ublk/test_stress_05.sh b/tools/testing/selftests/ublk/test_stress_05.sh
+index 566cfd90d192ce8c1f98ca2539792d54a787b3d1..274295061042e5db3f4f0846ae63ea9b787fb2ee 100755
+--- a/tools/testing/selftests/ublk/test_stress_05.sh
++++ b/tools/testing/selftests/ublk/test_stress_05.sh
+@@ -5,6 +5,10 @@
+ TID="stress_05"
+ ERR_CODE=0
+ 
++if ! _have_program fio; then
++	exit "$UBLK_SKIP_CODE"
++fi
++
+ run_io_and_remove()
+ {
+ 	local size=$1
 
+---
+base-commit: da7b97ba0d219a14a83e9cc93f98b53939f12944
+change-id: 20250916-ublk_fio-1910998b00b3
+
+Best regards,
 -- 
-2.34.1
+Uday Shankar <ushankar@purestorage.com>
 
