@@ -1,170 +1,321 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1180283FFB
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 09:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76AAA2F7ACB;
+	Tue, 16 Sep 2025 10:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758015953; cv=none; b=LuGOgW/AEWXRyWVB0Atezr/04nqwantQXOO/pfQEMnwZNsCaP0S6ykxxggaXgjdz65XPpuYY9gdnogiF1AKf14SD74e7MrVGiuFaIsZXguVD1U/PvezMVadOckkgUni0l9WoufInmgPyHS6tQFaiPgi2sCNouO/530nHETwpkQY=
+	t=1758017544; cv=none; b=tEAJFonY7o8cd3rDEA3mWc8Ex87sDXmwSSKfkQutYw2w+LSAn5+R1vhOLMcLagRdJXGX0JNRgGa0ecgACGHvvJXvy/AtK6JT9iZMesATj+z2mGhs0AZ2CUgJW3ztqxd1QLJ4gDo/Nq34ucAOtBrh00vGbqcqkvghPmk8XgkkxeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758015953; c=relaxed/simple;
-	bh=lWnSe1pV0Ful5u/fWF13PXLlDM6P7YcSgGp/5IvU0sA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bsAL9veHJfuT9wwvhYcRgyLU+5FVQI9WHV8R2Fl6o6C4724LJBaa7avBEW26w8Q6CP/aevhJUQNpraQsg/zrizvf2BGdP1zEMReJW5CrAhLwB9LRvl+UHGHxLj9RO8zTfiHPDd2IEDm+8eu3bln2p+zRwAGgHM8QES0iQ4Je99I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=K65Bx6sn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=s+q/lPMQ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=K65Bx6sn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=s+q/lPMQ; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="K65Bx6sn";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="s+q/lPMQ";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="K65Bx6sn";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="s+q/lPMQ"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0F0EB229B4;
-	Tue, 16 Sep 2025 09:45:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758015949; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5oCU9M02aU9Dmr9fi7iWYb6ulEbsfk24rHf2PZ4f6ns=;
-	b=K65Bx6snDj8aGtx3uk0hpU3UuFWQxNh+kSu5kW/d2PmF+YMm4doF3EzSukzv8G9tmKlzZp
-	kS5nzKgodqpGpgFJSnAWtM0G+vKj5jkmuZ7Ie9X27H4PQMZajeY8Hr6dxA+h64/0+rDYZf
-	9dTXxaLMPUEikbSt/5CA1b4wThkhBS0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758015949;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5oCU9M02aU9Dmr9fi7iWYb6ulEbsfk24rHf2PZ4f6ns=;
-	b=s+q/lPMQNDvYqbcNUv9cxVllj/4LZhw7lsUjq9p3o5Wdr3t8BlyJ2hTD5O0Nj+LW6Loki3
-	doMwA+VJdxT/bvBA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=K65Bx6sn;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="s+q/lPMQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758015949; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5oCU9M02aU9Dmr9fi7iWYb6ulEbsfk24rHf2PZ4f6ns=;
-	b=K65Bx6snDj8aGtx3uk0hpU3UuFWQxNh+kSu5kW/d2PmF+YMm4doF3EzSukzv8G9tmKlzZp
-	kS5nzKgodqpGpgFJSnAWtM0G+vKj5jkmuZ7Ie9X27H4PQMZajeY8Hr6dxA+h64/0+rDYZf
-	9dTXxaLMPUEikbSt/5CA1b4wThkhBS0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758015949;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5oCU9M02aU9Dmr9fi7iWYb6ulEbsfk24rHf2PZ4f6ns=;
-	b=s+q/lPMQNDvYqbcNUv9cxVllj/4LZhw7lsUjq9p3o5Wdr3t8BlyJ2hTD5O0Nj+LW6Loki3
-	doMwA+VJdxT/bvBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D7BEC139CB;
-	Tue, 16 Sep 2025 09:45:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id HvRYMcoxyWgWPwAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Tue, 16 Sep 2025 09:45:46 +0000
-Date: Tue, 16 Sep 2025 10:45:45 +0100
-From: Pedro Falcato <pfalcato@suse.de>
-To: Kalesh Singh <kaleshsingh@google.com>
-Cc: akpm@linux-foundation.org, minchan@kernel.org, 
-	lorenzo.stoakes@oracle.com, david@redhat.com, Liam.Howlett@oracle.com, rppt@kernel.org, 
-	kernel-team@android.com, android-mm@google.com, stable@vger.kernel.org, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/7] mm: fix off-by-one error in VMA count limit checks
-Message-ID: <ekawpt644ur6grvw5a6mqxzssyxxjo5mcfzxxe7vkjevge4yze@36zxeivutuk5>
-References: <20250915163838.631445-1-kaleshsingh@google.com>
- <20250915163838.631445-2-kaleshsingh@google.com>
+	s=arc-20240116; t=1758017544; c=relaxed/simple;
+	bh=+jBhf7v7FWI9SUvmU0eP8Ap7x6YsUlvlITRjlGy9t8M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AC/ZNedjtcFPy3KVHETDyoWmKClT4mZdxsGjdcUrcVel6twVjZgBtT6fh0HANAd9wDQeVKTNFYXxEFpoeFec6ekUdu3WwdARbdcfzcuvtihKdlyeSFZgRa7gtuQKXWeHBcfe17x8+6tNTZll9hPZi6dNWOmz81sVj9gyCcLgYAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35CE912FC;
+	Tue, 16 Sep 2025 03:12:10 -0700 (PDT)
+Received: from [10.163.42.157] (unknown [10.163.42.157])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BA3FE3F673;
+	Tue, 16 Sep 2025 03:12:09 -0700 (PDT)
+Message-ID: <a99eb11f-a7ac-48a3-a671-c5f0f6b5b491@arm.com>
+Date: Tue, 16 Sep 2025 15:42:07 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250915163838.631445-2-kaleshsingh@google.com>
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 0F0EB229B4
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCVD_COUNT_TWO(0.00)[2];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	R_RATELIMIT(0.00)[to_ip_from(RLg31yqq1xypujqsbh8raoa6zf)];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:email]
-X-Spam-Score: -4.01
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] mm/memory-failure: Support disabling soft offline for
+ HugeTLB pages
+To: Kyle Meyer <kyle.meyer@hpe.com>, akpm@linux-foundation.org,
+ corbet@lwn.net, david@redhat.com, linmiaohe@huawei.com, shuah@kernel.org,
+ tony.luck@intel.com, jane.chu@oracle.com, jiaqiyan@google.com
+Cc: Liam.Howlett@oracle.com, bp@alien8.de, hannes@cmpxchg.org, jack@suse.cz,
+ joel.granados@kernel.org, laoar.shao@gmail.com, lorenzo.stoakes@oracle.com,
+ mclapinski@google.com, mhocko@suse.com, nao.horiguchi@gmail.com,
+ osalvador@suse.de, rafael.j.wysocki@intel.com, rppt@kernel.org,
+ russ.anderson@hpe.com, shawn.fan@intel.com, surenb@google.com,
+ vbabka@suse.cz, linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <aMiu_Uku6Y5ZbuhM@hpe.com>
+Content-Language: en-US
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <aMiu_Uku6Y5ZbuhM@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 15, 2025 at 09:36:32AM -0700, Kalesh Singh wrote:
-> The VMA count limit check in do_mmap() and do_brk_flags() uses a
-> strict inequality (>), which allows a process's VMA count to exceed
-> the configured sysctl_max_map_count limit by one.
+On 16/09/25 5:57 AM, Kyle Meyer wrote:
+> Soft offlining a HugeTLB page reduces the HugeTLB page pool.
 > 
-> A process with mm->map_count == sysctl_max_map_count will incorrectly
-> pass this check and then exceed the limit upon allocation of a new VMA
-> when its map_count is incremented.
+> Commit 56374430c5dfc ("mm/memory-failure: userspace controls soft-offlining pages")
+> introduced the following sysctl interface to control soft offline:
 > 
-> Other VMA allocation paths, such as split_vma(), already use the
-> correct, inclusive (>=) comparison.
+> /proc/sys/vm/enable_soft_offline
 > 
-> Fix this bug by changing the comparison to be inclusive in do_mmap()
-> and do_brk_flags(), bringing them in line with the correct behavior
-> of other allocation paths.
+> The interface does not distinguish between page types:
 > 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Cc: <stable@vger.kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> Cc: Mike Rapoport <rppt@kernel.org>
-> Cc: Minchan Kim <minchan@kernel.org>
-> Cc: Pedro Falcato <pfalcato@suse.de>
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+>     0 - Soft offline is disabled
+>     1 - Soft offline is enabled
+> 
+> Convert enable_soft_offline to a bitmask and support disabling soft
+> offline for HugeTLB pages:
+> 
+> Bits:
+> 
+>     0 - Enable soft offline
+>     1 - Disable soft offline for HugeTLB pages
+> 
+> Supported values:
+> 
+>     0 - Soft offline is disabled
+>     1 - Soft offline is enabled
+>     3 - Soft offline is enabled (disabled for HugeTLB pages)
+> 
+> Existing behavior is preserved.
+> 
+> Update documentation and HugeTLB soft offline self tests.
+> 
+> Reported-by: Shawn Fan <shawn.fan@intel.com>
+> Suggested-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Kyle Meyer <kyle.meyer@hpe.com>
+> ---
+> 
+> Tony's patch:
+> * https://lore.kernel.org/all/20250904155720.22149-1-tony.luck@intel.com
+> 
+> v1:
+> * https://lore.kernel.org/all/aMGkAI3zKlVsO0S2@hpe.com
+> 
+> v1 -> v2:
+> * Make the interface extensible, as suggested by David.
+> * Preserve existing behavior, as suggested by Jiaqi and David.
+> 
+> Why clear errno in self tests?
+> 
+> madvise() does not set errno when it's successful and errno is set by madvise()
+> during test_soft_offline_common(3) causing test_soft_offline_common(1) to fail:
+> 
+> # Test soft-offline when enabled_soft_offline=1
+> # Hugepagesize is 1048576kB
+> # enable_soft_offline => 1
+> # Before MADV_SOFT_OFFLINE nr_hugepages=7
+> # Allocated 0x80000000 bytes of hugetlb pages
+> # MADV_SOFT_OFFLINE 0x7fd600000000 ret=0, errno=95
+> # MADV_SOFT_OFFLINE should ret 0
+> # After MADV_SOFT_OFFLINE nr_hugepages=6
+> not ok 2 Test soft-offline when enabled_soft_offline=1
+> 
+> ---
+>  .../ABI/testing/sysfs-memory-page-offline     |  3 ++
+>  Documentation/admin-guide/sysctl/vm.rst       | 28 ++++++++++++++++---
+>  mm/memory-failure.c                           | 17 +++++++++--
+>  .../selftests/mm/hugetlb-soft-offline.c       | 19 ++++++++++---
+>  4 files changed, 56 insertions(+), 11 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-memory-page-offline b/Documentation/ABI/testing/sysfs-memory-page-offline
+> index 00f4e35f916f..d3f05ed6605e 100644
+> --- a/Documentation/ABI/testing/sysfs-memory-page-offline
+> +++ b/Documentation/ABI/testing/sysfs-memory-page-offline
+> @@ -20,6 +20,9 @@ Description:
+>  		number, or a error when the offlining failed.  Reading
+>  		the file is not allowed.
+>  
+> +		Soft-offline can be controlled via sysctl, see:
+> +		Documentation/admin-guide/sysctl/vm.rst
+> +
 
-Reviewed-by: Pedro Falcato <pfalcato@suse.de>
+This update is applicable right away without other changes proposed.
+Probably can be moved into a separate patch in itself ?
+>  What:		/sys/devices/system/memory/hard_offline_page
+>  Date:		Sep 2009
+>  KernelVersion:	2.6.33
+> diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+> index 4d71211fdad8..ace73480eb9d 100644
+> --- a/Documentation/admin-guide/sysctl/vm.rst
+> +++ b/Documentation/admin-guide/sysctl/vm.rst
+> @@ -309,19 +309,39 @@ physical memory) vs performance / capacity implications in transparent and
+>  HugeTLB cases.
+>  
+>  For all architectures, enable_soft_offline controls whether to soft offline
+> -memory pages.  When set to 1, kernel attempts to soft offline the pages
+> -whenever it thinks needed.  When set to 0, kernel returns EOPNOTSUPP to
+> -the request to soft offline the pages.  Its default value is 1.
+> +memory pages.
+> +
+> +enable_soft_offline is a bitmask:
+> +
+> +Bits::
+> +
+> +	0 - Enable soft offline
+> +	1 - Disable soft offline for HugeTLB pages
+> +
+> +Supported values::
+> +
+> +	0 - Soft offline is disabled
+> +	1 - Soft offline is enabled
+> +	3 - Soft offline is enabled (disabled for HugeTLB pages)
 
-Looks good, thanks!
+This looks very adhoc even though existing behavior is preserved.
 
--- 
-Pedro
+- Are HugeTLB pages the only page types to be considered ?
+- How the remaining bits here are going to be used later ?
+
+Also without a bit-wise usage roadmap, is not changing a procfs
+interface (ABI) bit problematic ?
+> +
+> +The default value is 1.
+> +
+> +If soft offline is disabled for the requested page type, EOPNOTSUPP is returned.
+>  
+>  It is worth mentioning that after setting enable_soft_offline to 0, the
+>  following requests to soft offline pages will not be performed:
+>  
+> +- Request to soft offline from sysfs (soft_offline_page).
+> +
+>  - Request to soft offline pages from RAS Correctable Errors Collector.
+>  
+> -- On ARM, the request to soft offline pages from GHES driver.
+> +- On ARM and X86, the request to soft offline pages from GHES driver.
+>  
+>  - On PARISC, the request to soft offline pages from Page Deallocation Table.
+>  
+> +Note:
+> +	Soft offlining a HugeTLB page reduces the HugeTLB page pool.
+> +
+>  extfrag_threshold
+>  =================
+>  
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index fc30ca4804bf..0ad9ae11d9e8 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -64,11 +64,14 @@
+>  #include "internal.h"
+>  #include "ras/ras_event.h"
+>  
+> +#define SOFT_OFFLINE_ENABLED		BIT(0)
+> +#define SOFT_OFFLINE_SKIP_HUGETLB	BIT(1)
+> +
+>  static int sysctl_memory_failure_early_kill __read_mostly;
+>  
+>  static int sysctl_memory_failure_recovery __read_mostly = 1;
+>  
+> -static int sysctl_enable_soft_offline __read_mostly = 1;
+> +static int sysctl_enable_soft_offline __read_mostly = SOFT_OFFLINE_ENABLED;
+>  
+>  atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
+>  
+> @@ -150,7 +153,7 @@ static const struct ctl_table memory_failure_table[] = {
+>  		.mode		= 0644,
+>  		.proc_handler	= proc_dointvec_minmax,
+>  		.extra1		= SYSCTL_ZERO,
+> -		.extra2		= SYSCTL_ONE,
+> +		.extra2		= SYSCTL_THREE,
+>  	}
+>  };
+>  
+> @@ -2799,12 +2802,20 @@ int soft_offline_page(unsigned long pfn, int flags)
+>  		return -EIO;
+>  	}
+>  
+> -	if (!sysctl_enable_soft_offline) {
+> +	if (!(sysctl_enable_soft_offline & SOFT_OFFLINE_ENABLED)) {
+>  		pr_info_once("disabled by /proc/sys/vm/enable_soft_offline\n");
+>  		put_ref_page(pfn, flags);
+>  		return -EOPNOTSUPP;
+>  	}
+>  
+> +	if (sysctl_enable_soft_offline & SOFT_OFFLINE_SKIP_HUGETLB) {
+> +		if (folio_test_hugetlb(pfn_folio(pfn))) {
+> +			pr_info_once("disabled for HugeTLB pages by /proc/sys/vm/enable_soft_offline\n");
+> +			put_ref_page(pfn, flags);
+> +			return -EOPNOTSUPP;
+> +		}
+> +	}
+> +
+>  	mutex_lock(&mf_mutex);
+>  
+>  	if (PageHWPoison(page)) {
+> diff --git a/tools/testing/selftests/mm/hugetlb-soft-offline.c b/tools/testing/selftests/mm/hugetlb-soft-offline.c
+> index f086f0e04756..b87c8778cadf 100644
+> --- a/tools/testing/selftests/mm/hugetlb-soft-offline.c
+> +++ b/tools/testing/selftests/mm/hugetlb-soft-offline.c
+> @@ -5,6 +5,8 @@
+>   *   offlining failed with EOPNOTSUPP.
+>   * - if enable_soft_offline = 1, a hugepage should be dissolved and
+>   *   nr_hugepages/free_hugepages should be reduced by 1.
+> + * - if enable_soft_offline = 3, hugepages should stay intact and soft
+> + *   offlining failed with EOPNOTSUPP.
+>   *
+>   * Before running, make sure more than 2 hugepages of default_hugepagesz
+>   * are allocated. For example, if /proc/meminfo/Hugepagesize is 2048kB:
+> @@ -32,6 +34,9 @@
+>  
+>  #define EPREFIX " !!! "
+>  
+> +#define SOFT_OFFLINE_ENABLED		(1 << 0)
+> +#define SOFT_OFFLINE_SKIP_HUGETLB	(1 << 1)
+> +
+>  static int do_soft_offline(int fd, size_t len, int expect_errno)
+>  {
+>  	char *filemap = NULL;
+> @@ -56,6 +61,7 @@ static int do_soft_offline(int fd, size_t len, int expect_errno)
+>  	ksft_print_msg("Allocated %#lx bytes of hugetlb pages\n", len);
+>  
+>  	hwp_addr = filemap + len / 2;
+> +	errno = 0;
+>  	ret = madvise(hwp_addr, pagesize, MADV_SOFT_OFFLINE);
+>  	ksft_print_msg("MADV_SOFT_OFFLINE %p ret=%d, errno=%d\n",
+>  		       hwp_addr, ret, errno);
+> @@ -83,7 +89,7 @@ static int set_enable_soft_offline(int value)
+>  	char cmd[256] = {0};
+>  	FILE *cmdfile = NULL;
+>  
+> -	if (value != 0 && value != 1)
+> +	if (value < 0 || value > 3)
+>  		return -EINVAL;
+>  
+>  	sprintf(cmd, "echo %d > /proc/sys/vm/enable_soft_offline", value);
+> @@ -155,13 +161,17 @@ static int create_hugetlbfs_file(struct statfs *file_stat)
+>  static void test_soft_offline_common(int enable_soft_offline)
+>  {
+>  	int fd;
+> -	int expect_errno = enable_soft_offline ? 0 : EOPNOTSUPP;
+> +	int expect_errno = 0;
+>  	struct statfs file_stat;
+>  	unsigned long hugepagesize_kb = 0;
+>  	unsigned long nr_hugepages_before = 0;
+>  	unsigned long nr_hugepages_after = 0;
+>  	int ret;
+>  
+> +	if (!(enable_soft_offline & SOFT_OFFLINE_ENABLED) ||
+> +	     (enable_soft_offline & SOFT_OFFLINE_SKIP_HUGETLB))
+> +		expect_errno = EOPNOTSUPP;
+> +
+>  	ksft_print_msg("Test soft-offline when enabled_soft_offline=%d\n",
+>  		       enable_soft_offline);
+>  
+> @@ -198,7 +208,7 @@ static void test_soft_offline_common(int enable_soft_offline)
+>  	// No need for the hugetlbfs file from now on.
+>  	close(fd);
+>  
+> -	if (enable_soft_offline) {
+> +	if (expect_errno == 0) {
+>  		if (nr_hugepages_before != nr_hugepages_after + 1) {
+>  			ksft_test_result_fail("MADV_SOFT_OFFLINE should reduced 1 hugepage\n");
+>  			return;
+> @@ -219,8 +229,9 @@ static void test_soft_offline_common(int enable_soft_offline)
+>  int main(int argc, char **argv)
+>  {
+>  	ksft_print_header();
+> -	ksft_set_plan(2);
+> +	ksft_set_plan(3);
+>  
+> +	test_soft_offline_common(3);
+>  	test_soft_offline_common(1);
+>  	test_soft_offline_common(0);
+>  
+
