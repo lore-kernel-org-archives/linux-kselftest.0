@@ -1,163 +1,111 @@
-Received: from mail-qk1-f228.google.com (mail-qk1-f228.google.com [209.85.222.228])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C583A29A9E9
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 22:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02B329C327
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 22:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758060720; cv=none; b=ZAjNtPcnuz2eEhcBuFRi1dQtVy/vgS54KqUWVhiW37UL78jLf37PcKduUPumB4fSeqlNaluEhIFqYLqqgeiaOPQLBB6X8PbtCDHX3QDZ3J/CenMoPpllKVi5qmZl+iK07ajyhiqzgAsNfGx0QD8iETNFB3eAYBv0J8VL413nY1Q=
+	t=1758062382; cv=none; b=dGsdDXc8conDeyY+ei38bHBOpkDCtli3bi6jUeHkCahIopxngMAMsWdTZr9Xl04oLAUKa2r4serMFuVnWd+L48lb3uy+Sk+qLtJlqm4UVjqWClrY9+tSID0zVctutLKon+7UVuFh0ulwSNQcM1aDk4Zr+olALDue9EYuB1IrCrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758060720; c=relaxed/simple;
-	bh=XttLlsk7gRYOJmZapB4xIOHiWQITKrOKA4AQTvB7Qng=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=q0fCdMz3iTgj+DstdCMfDVOhPTvCdWRAgiHMcBCr4+uNC9TTG6SyVKWQ5iD3D9ZhWW6bJjsUzBQHZtT+df7cDOblFC9pjfQ+7dVpEwl1NKhEa7O4VFhRyvYv5kA3JkTnjBy+OGUyTjuc6bDVcCxmKEXy5IMmHnqLmCUYaTJnXuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=TwrvrGg+; arc=none smtp.client-ip=209.85.222.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+	s=arc-20240116; t=1758062382; c=relaxed/simple;
+	bh=k0SOfZoXTL+6XpT7LDFJn/Tq3Mu6JeeevxzxgIaMsmg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JMffyFqZkbghOPZCRsKHCXNtG1QOL85jt9sXYXadDpPWhHVZutypmTlcAIYUxVny7Gamc4ebX+c+l/1gsl9Kw/veAI+Fgh6uNbfKYI/zMTQicbKpDE1gXhLNCtK2stvsgtdxE92qtE9mqMnhaWD9x2oKEEONvem/d5QxiruqJSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BkAA8D/1; arc=none smtp.client-ip=209.85.222.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="TwrvrGg+"
-Received: by mail-qk1-f228.google.com with SMTP id af79cd13be357-81999b1e9ccso526120385a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 15:11:58 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BkAA8D/1"
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-827923a97e9so342093985a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Sep 2025 15:39:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1758060718; x=1758665518; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gw4DZLmwyg50YkiGh4/gwXF8OX17xCIpJi1m3KAs3MQ=;
-        b=TwrvrGg+Yx150JEEa3EX4I/vZ02aC41DFgU8tA0gB5Ay7UTnBt9EKU0RCU6j13B4xS
-         rmJUOs04pwcQQMHnm/s2FWrFXudPIQCx8ZeMEBHBTJBLRcz+9YqvOfmnHtOc3aBImwgg
-         D53jo5JW/FfbwwUlkT7kQZfDIe///6OrqlCaIpQnERQtTKqKbdv4cODSHMiYvPiTX6Va
-         P1yA9oqL/SokPHBM+k4uKNcykspdLVgp8FrJN9TJUa5EG/jeKoasib9iSLhlPhyDf2r4
-         Y+rtWOtiHv1DlqZ9M6q7D3syzKfvlRm2cE9haL+kosRHlMfhspNXzAUEAai661E9/oGz
-         vfJQ==
+        d=linuxfoundation.org; s=google; t=1758062379; x=1758667179; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ywdaVb62eCR3TvAc/4+sZpZzoYKTPBN8q6oGAifJQEA=;
+        b=BkAA8D/1/6NCcFJlQD8q6QQQHj1raguXwPyrIhw4GIJc0ZO1z+tfSWboWr2QU0rGLE
+         NxgxmMth1RzQF9hnJP5SxRc8XH1VcPypk9OTPa81T3CU/HdKfAytIe1/xgFT9XgqQx2U
+         DStqeNofIvkJqE/Y5KjU5n3gz683riqFw3Q4U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758060718; x=1758665518;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gw4DZLmwyg50YkiGh4/gwXF8OX17xCIpJi1m3KAs3MQ=;
-        b=uZ4b+NZTvznAxVG51k94XOBFRf5A+OVWoDx+vNVfOs2bsgrJk83P+JGSlw08qkpDK9
-         bmliZVzwQJNas+OGO7tT+95NduX4wU4St5NNB9Dib+lcUXttsY3bF/WyWYqCbuUrc8hI
-         qI4z2r/+BXWx1HT8XKpJUHjI3EcelWFyxwehCia7oBNUsJnix6Bk0NwzSg5m8pYgF7G9
-         O1Gq8RB024F/mW4QswgXIbqw/GAcMoIZ+MU1KuI0xd8wRzBKVeIsfwCakbX05B0VbtjZ
-         pqMBxRkhEzBcIw34Q/C0GqZk/ZfN4FVOWdEyX9w6dkF8U7e1CEreujjXVQkvEEkCTC6l
-         K6Ug==
-X-Forwarded-Encrypted: i=1; AJvYcCVmTcUHrTYxjdT7OPLImKoPU4ZAySV2Q84tJ77xuMfFcuS+q/K+XrXIf1KmoTgv1v6I42TV9bdDjhb0wY4ARqU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl3WO5N3PRgRYRDpqSGQ7j8Vho4xbQawXqgmuAr53uFyDVcGs1
-	KeAPc64w1F9zsvaK0GMwTzapFf2MTP1SUsWJgjmGCZ9f8c/W5sEVShAVPUOgDh6vgPlpl3fpr0G
-	2xA898Hylu3gBBzvUzSIDJ8T+G5x7Zg0vy1JS
-X-Gm-Gg: ASbGnct5Y9U8M/syXLdtE2nts1Ai3iFF408hrUN0MtJdHrTF8pLCyJKxDkLaxjWPssZ
-	Z/GcsXPF1W3i0NygsddGpkNuw7RmJKJ93HElw03uzpn6y6Hqsletf7Ahn4XQMMc5KxAqZ+SSaCF
-	/4HywMUcmW1FTid39lPR9APWN4mLnR8Jo5bpYqs50MmyGe+nDzcNy0fzUK76bGKzI6f12aPvTrW
-	XCFiThOhYC1LU6bV7z9m+sJJkiVTLwr2w7hEwbK5pKWoVjbQMgIO/6YUK0S8cDZnps2XcE87EWy
-	zXW3hnIdlTajxjDxgskKnTToHK29dQlSht0RHOB22hgYxQnWfJWqi21XtFBAhxukgpITjePOhg=
-	=
-X-Google-Smtp-Source: AGHT+IEnOu89ChzU0BaakveFO/z5V8vksE/0QseUXToeKSzd42RhZeVmBkDqeZoXQOUm1RYcOOqyWsIgjzJ5
-X-Received: by 2002:a05:620a:44d6:b0:807:198c:8880 with SMTP id af79cd13be357-823fc1c9312mr1910814185a.18.1758060717588;
-        Tue, 16 Sep 2025 15:11:57 -0700 (PDT)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id af79cd13be357-820cd700f5asm91037785a.7.2025.09.16.15.11.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Sep 2025 15:11:57 -0700 (PDT)
-X-Relaying-Domain: purestorage.com
-Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [10.7.70.36])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id BA82334023F;
-	Tue, 16 Sep 2025 16:11:56 -0600 (MDT)
-Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
-	id C8796E41646; Tue, 16 Sep 2025 16:11:56 -0600 (MDT)
-From: Uday Shankar <ushankar@purestorage.com>
-Date: Tue, 16 Sep 2025 16:11:53 -0600
-Subject: [PATCH] selftests: ublk: fix behavior when fio is not installed
+        d=1e100.net; s=20230601; t=1758062379; x=1758667179;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ywdaVb62eCR3TvAc/4+sZpZzoYKTPBN8q6oGAifJQEA=;
+        b=KJRnMCi05x2Nv4U1gjLSy4KZd0yUUihRmliLFtMzP7rAPNziDFMZs+C6FUH3nl5t7p
+         WhDK22IeAyOS1TTzHLboikH6ATBa3hoIoakp3hsRPH/4M7d8g6B7uoKylhdvEkWv+GDd
+         xd6WehjPZgki771Z47wH+S/ZuLBFU+7Dy8pZRE6+5zqZWi0/VeMXnYskG75Kfw1P6PAl
+         0nohBiPulMXKw3N0qCU7kEYMLqGTSi5+5UOa3IgkYzpIZR/CBJjYsg4O8UCu/P3j+nHJ
+         u/d6yWKstBgQij8QIjPZAoVLhxRGkyPp46uW220vskgvqcpYND5s3HlQKfvEEfQZ1ytP
+         glFw==
+X-Forwarded-Encrypted: i=1; AJvYcCW3iXYaro/IAKf0qwLHXiv9z9nJP5R0+spzCOL9NMQRzsPkMfHmAis1BAJstS64sFApZ4tsaH2+Kn6Pm+c18ko=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0NVB5lSYNWkwCUEcbA2MYgoW4CP0KHHXFEa2n+Nm1udAK6Yaf
+	byY+obAFiiD92Wa5OPezpU6ar/8ozGzpijbxRVN8ICdLN1w7GDB7ICraYwVWTnqMpvoxXWN5+NL
+	vdFLO
+X-Gm-Gg: ASbGncs7W75g34YfC8HXQTQxD3lHQkUVMfohzvlAm6SynrJAp9h85P4FkIrNvb3j1rR
+	WJjVNOHE1lfb9oCdYOsNuo9OLeZh1BrxSaJduvOkoXCh2g5YdPp65rsrMEpRcEubrWJ0tsKx/Q6
+	Uu96LPKjxpUSWgLGeTuIvs1+macoa4Mt7txGh73Ip+9/KC0TXlQWY/n5uIqyelRMfbU/YmW/VlH
+	jR1FR7dQhp3Nx+pkQOScKdSGsX9ITeYEez8zOpEitGSsDjKvknvQCR+bJuz4nMfSfQbLe26CWii
+	9ue+0QA8P5guuHjWlwZt8npD80X9BmvRrKOXwH0QKOFLtL/GqW1D5zkKOZjxKXYJGQarCmQiy+b
+	DNy0uVhYzI62IXpdw7zbwKttMk8jnDorwALTbO/sODEezlP0JbJ3aOYZYw+kxWbo4uAStoKSLSg
+	o8CMXMdGZX65jL700YCpOo+rVTWeg25UwoYBsORkWycR0=
+X-Google-Smtp-Source: AGHT+IESNgABLBfvwr4hM4tLIKI9UIhpBPnDVjoN9Ta2vfOV0RzKOw0gmHxxKYKx1UMzPUGBzABwLQ==
+X-Received: by 2002:a05:620a:450e:b0:811:1212:1b6e with SMTP id af79cd13be357-8311390c126mr173485a.50.1758062378651;
+        Tue, 16 Sep 2025 15:39:38 -0700 (PDT)
+Received: from [192.168.226.35] (207-181-222-53.s5939.c3-0.hnc-cbr1.chi-hnc.il.cable.rcncustomer.com. [207.181.222.53])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b639cb2562sm87328371cf.13.2025.09.16.15.39.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Sep 2025 15:39:38 -0700 (PDT)
+Message-ID: <f18854b2-f9c8-44a3-a09d-3b2ddbcb971a@linuxfoundation.org>
+Date: Tue, 16 Sep 2025 16:39:37 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: kselftest and cargo
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-kselftest@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-integrity@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <aMlqouOSU8XN7V5H@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <aMlqouOSU8XN7V5H@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250916-ublk_fio-v1-1-8d522539eed7@purestorage.com>
-X-B4-Tracking: v=1; b=H4sIAKjgyWgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDS0Mz3dKknOz4tMx8XUNLQwNLS4skA4MkYyWg8oKi1LTMCrBR0bG1tQA
- tsZGgWgAAAA==
-X-Change-ID: 20250916-ublk_fio-1910998b00b3
-To: Caleb Sander Mateos <csander@purestorage.com>, 
- Ming Lei <ming.lei@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Uday Shankar <ushankar@purestorage.com>
-X-Mailer: b4 0.14.2
 
-Some ublk selftests have strange behavior when fio is not installed.
-While most tests behave correctly (run if they don't need fio, or skip
-if they need fio), the following tests have different behavior:
+On 9/16/25 07:48, Jarkko Sakkinen wrote:
+> Hi,
+> 
+> The pre-existing kselftest for TPM2 is derived works of my earlier Python
+> based rudimentary TPM2 stack called 'tpm2-scripts'.
+> 
+> In order to get more coverage and more mainintainable and extensible test
+> suite I'd like to eventually rewrite the tests with bash and tpm2sh, which
+> is a TPM2 cli written with Rust and based on my new TPM2 stack [1] [2].
+> 
+> Given linux-rust work, would it be acceptable to require cargo to install
+> a runner for kselftest? I'm finishing off now 0.11 version of the tool,
+> which will take some time (versions before that are honestly quite bad,
+> don't try them) but after that this would be something I'd like to
+> put together.
 
-- test_null_01 and test_null_02 try to run fio without checking if it
-  exists first, and fail on any failure of the fio command (including
-  "fio command not found"). So these tests fail when they should skip.
-- test_stress_05 runs fio without checking if it exists first, but
-  doesn't fail on fio command failure. This test passes, but that pass
-  is misleading as the test doesn't do anything useful without fio
-  installed. So this test passes when it should skip.
+Probably fine - how does this impact kselftest default run?
 
-Fix these issues by adding _have_program fio checks to the top of all
-three of these tests.
+> 
+> NOTE: while tpm2-protocol itself is Apache/MIT, tpm2sh is GPL3 licensed
+> command-line program (for what it is worth).
+> 
+> [1] https://github.com/puavo-org/tpm2sh
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/tpm2-protocol.git/about/
+> 
+> BR, Jarkko
+> 
+> 
 
-Signed-off-by: Uday Shankar <ushankar@purestorage.com>
----
- tools/testing/selftests/ublk/test_null_01.sh   | 4 ++++
- tools/testing/selftests/ublk/test_null_02.sh   | 4 ++++
- tools/testing/selftests/ublk/test_stress_05.sh | 4 ++++
- 3 files changed, 12 insertions(+)
-
-diff --git a/tools/testing/selftests/ublk/test_null_01.sh b/tools/testing/selftests/ublk/test_null_01.sh
-index a34203f726685787da80b0e32da95e0fcb90d0b1..c2cb8f7a09fe37a9956d067fd56b28dc7ca6bd68 100755
---- a/tools/testing/selftests/ublk/test_null_01.sh
-+++ b/tools/testing/selftests/ublk/test_null_01.sh
-@@ -6,6 +6,10 @@
- TID="null_01"
- ERR_CODE=0
- 
-+if ! _have_program fio; then
-+	exit "$UBLK_SKIP_CODE"
-+fi
-+
- _prep_test "null" "basic IO test"
- 
- dev_id=$(_add_ublk_dev -t null)
-diff --git a/tools/testing/selftests/ublk/test_null_02.sh b/tools/testing/selftests/ublk/test_null_02.sh
-index 5633ca8766554b22be252c7cb2d13de1bf923b90..8accd35beb55c149f74b23f0fb562e12cbf3e362 100755
---- a/tools/testing/selftests/ublk/test_null_02.sh
-+++ b/tools/testing/selftests/ublk/test_null_02.sh
-@@ -6,6 +6,10 @@
- TID="null_02"
- ERR_CODE=0
- 
-+if ! _have_program fio; then
-+	exit "$UBLK_SKIP_CODE"
-+fi
-+
- _prep_test "null" "basic IO test with zero copy"
- 
- dev_id=$(_add_ublk_dev -t null -z)
-diff --git a/tools/testing/selftests/ublk/test_stress_05.sh b/tools/testing/selftests/ublk/test_stress_05.sh
-index 566cfd90d192ce8c1f98ca2539792d54a787b3d1..274295061042e5db3f4f0846ae63ea9b787fb2ee 100755
---- a/tools/testing/selftests/ublk/test_stress_05.sh
-+++ b/tools/testing/selftests/ublk/test_stress_05.sh
-@@ -5,6 +5,10 @@
- TID="stress_05"
- ERR_CODE=0
- 
-+if ! _have_program fio; then
-+	exit "$UBLK_SKIP_CODE"
-+fi
-+
- run_io_and_remove()
- {
- 	local size=$1
-
----
-base-commit: da7b97ba0d219a14a83e9cc93f98b53939f12944
-change-id: 20250916-ublk_fio-1910998b00b3
-
-Best regards,
--- 
-Uday Shankar <ushankar@purestorage.com>
-
+thanks,
+-- Shuah
