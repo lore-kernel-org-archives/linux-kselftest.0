@@ -1,133 +1,109 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A40C341365;
-	Wed, 17 Sep 2025 15:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DF929ACEE
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 16:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758124237; cv=none; b=FlUph24pCRM4SAO1RWaCcwxNZfuRfvt8HokxGOIcTONnqS5sy1iNUlqsZ5VbAxEmOvpfwovYiRwX7vLh5rmXEVWOzceQyG+jBWkMUt9J7qS6RF8zhjfF3jxsCnrmE0sOPQJ06oJL1ytzWOtzX8bJfZfBhr83wEBLpx9BkyGqWrg=
+	t=1758125161; cv=none; b=dOCT2upuZQLh8kzOWkW5GFj8tbQpxrTG+Mn4F6/U+IWJVPuqd4usx7UO1khzpH1igjoUscxVxPI4b3N6mGxHNg9UOn03nLsPVXXiqDiGhfhcqG8m5QqleTqVuRGaDu72iDObAp5P+r47vFmjD0V/3jciM6gnhxa1EKsIzZzRoW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758124237; c=relaxed/simple;
-	bh=gMlGy7IwJmgxQ01YDgC0fqwZq8TOm4obHsD+x0lnXD8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GFkEjYL/KwIke02NRt3hnE8H8/lie35JcW/q5XUNazuuagPVIVB8IvudnJLGhsqImw4UMujD1bYlCc1ODKbBmMI5yVdRmm5jEUdnMsLxvpeDSjmMIM3zBFs4LMj5he9kn9SzUKT2gRsDEzaoeZnD9fpZrh3xPlXFzs6S18KYgs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4cRjGc51W3z9sxb;
-	Wed, 17 Sep 2025 17:23:52 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id semPCKf2cGPh; Wed, 17 Sep 2025 17:23:52 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4cRjGc3ltzz9sxZ;
-	Wed, 17 Sep 2025 17:23:52 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 699538B76C;
-	Wed, 17 Sep 2025 17:23:52 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id sLjYwSuYZXNq; Wed, 17 Sep 2025 17:23:52 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 38E3E8B767;
-	Wed, 17 Sep 2025 17:23:40 +0200 (CEST)
-Message-ID: <c4a281c7-e225-418f-95c3-8fa91073a6b4@csgroup.eu>
-Date: Wed, 17 Sep 2025 17:23:40 +0200
+	s=arc-20240116; t=1758125161; c=relaxed/simple;
+	bh=rGzvhCSSZAHHlEpBZeE52UHASucCX8HP2pf4IkNCfN0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sf1UiO85/mXqj6WJV0aa39e0zjRB3ddJD30tk8mFKdglg8Z93AqDCu8W0qo83QPDYw94Rmrwdi+Dl+i/DJuvsxzbIcaA8DuenlewcYNYfxYGae5Ee1H/T8La0YDJcoTAb4a/Bj/ymDvCYAorOElc6cnmD3jT5JJuC1NOGno7z2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pg9mz5oO; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pg9mz5oO"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-afcb7a16441so1043116566b.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 09:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758125158; x=1758729958; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rGzvhCSSZAHHlEpBZeE52UHASucCX8HP2pf4IkNCfN0=;
+        b=Pg9mz5oO17M4GNGPldc3IhFzUXqJWy9wSeR+MmlYeEbktn5ysWSNDU2u0AIFsN0Ljz
+         Av0oVsifY04GhEcEzqh1lfFXvvUMnHjqmo3rKS8tNQUzhnE2iwdL1lZN/LJXzwbemiaa
+         1mYBCF+28XvM56G5asW9dUzjcKKAIIlx6n+DasqmbqijROCigyjVcr7vT90u1Uci0w1H
+         2TYfEb+jvGfmizkZwUHyXNr2fzzDeH7wsW245K1FTB8Uc4A4TLUQe5TGxH5MFzQGi5oH
+         0nD/03MFop7QdnS4B94oqaG8ciUkcTlQUUrH2YJC1dMIYsSKlOIN/hv/IxpAWipUjqCc
+         3BRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758125158; x=1758729958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rGzvhCSSZAHHlEpBZeE52UHASucCX8HP2pf4IkNCfN0=;
+        b=LYug1VBuMeHH7TcKKA1zvsP9kqns+qhK6bCbNfsyRShovCccpm+35lw0eTltopwZDu
+         lmHWABF+8euJ0LuwP70cSVHTL45oIqIVaR5xxwKickaXZwEPJrw1Pt1ykuduM4mFVL6v
+         iM24+MYLLhBdpHZsfpSy6sevutGbDs6SMBbE0Mdx2BuP8Hb62lDBj8n1nbOKOZ0Ku0b+
+         sbl8a29UyALm27nCLLX+xZ1ZIvZo8KRx8mFMkZV909D9jbGasSADjcg4Au+5yO2AULZ1
+         pk6rxQMBQmismOniJf+7Jfmb1L/jy5HOPBUtTmXhYVJN5eXDLvn5a9n3IBvf+Tf4lD72
+         iXJg==
+X-Forwarded-Encrypted: i=1; AJvYcCXrhTobHrydE1+4aXg68yO+MwuGApqg9DmvTXzff9E+6U9bGH3cfplGQRC37kzbA+iLubMwZA/pSuspa/vvO0c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygJlBndT8WZH5/pSqBNWmiEdh/a4QacwC0x1SosTwVDZvGaYOZ
+	sPmY/gWrziw7NLGOFL53PAPrE7tnmC52NO7L90Flr/ORRoz8ieP70RS9wJGdMaD1zO27FQZqCPG
+	2tt8Kl+0R00blz+6xk8W3jkNLE1Clck0=
+X-Gm-Gg: ASbGncttyCVIxn2YkCy51PlrPcRPIsb4p9OKb3NhXsGOKkwpPXI/T5zCYytKqwZCZcK
+	MgZHbcKxeBmbbOoAo5Y2fkVVWIZWSEj6GEyNNvMlahcSSJkl6+IFCIkk9QTq+TWlIR1wos8hQ/Y
+	JOZa2JxVuooz1DB/SLzf9s0HoG57Jk1O3+k4FDQynRMMpozprJXtzGVAmcwTQfaStpNyF4Y27Sa
+	PcogP6eaYEGW3+iEbRmN6J1Iuz7B6oimybkFiQ=
+X-Google-Smtp-Source: AGHT+IFYdSGvI+uA61yyZkwt50Ad23ev1FWqCOSE8kh6RNPVGA/Gis8pt6U0TfAHwkQbkeFce5QBPD3rY+N2cvqSbLg=
+X-Received: by 2002:a17:907:c15:b0:b04:5b0a:5850 with SMTP id
+ a640c23a62f3a-b1bbbe51dcbmr310348066b.40.1758125157798; Wed, 17 Sep 2025
+ 09:05:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 07/36] powerpc/vdso: Explicitly include asm/cputable.h
- and asm/feature-fixups.h
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann
- <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>,
- John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
- "Jason A. Donenfeld" <Jason@zx2c4.com>, Russell King
- <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Shannon Nelson <sln@onemain.com>,
- linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
-References: <20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
- <20250917-vdso-sparc64-generic-2-v3-7-3679b1bc8ee8@linutronix.de>
- <41d100c5-4706-400e-a61a-46b068f1bc74@csgroup.eu>
- <20250917171207-1fad0416-7543-481c-a998-5881fab1714e@linutronix.de>
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Language: fr-FR
-In-Reply-To: <20250917171207-1fad0416-7543-481c-a998-5881fab1714e@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <cover.1752824628.git.namcao@linutronix.de> <43d64ad765e2c47e958f01246320359b11379466.1752824628.git.namcao@linutronix.de>
+ <aflo53gea7i6cyy22avn7mqxb3xboakgjwnmj4bqmjp6oafejj@owgv35lly7zq> <87zfat19i7.fsf@yellow.woof>
+In-Reply-To: <87zfat19i7.fsf@yellow.woof>
+From: Mateusz Guzik <mjguzik@gmail.com>
+Date: Wed, 17 Sep 2025 18:05:45 +0200
+X-Gm-Features: AS18NWCZPfFFjmQOs9cr5KbbP9wMx9RwhnFf7m9BDXKCe0S4-642QEnnMrWwHTY
+Message-ID: <CAGudoHFLrkk_FBgFJ_ppr60ARSoJT7JLji4soLdKbrKBOxTR1Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] eventpoll: Fix epoll_wait() report false negative
+To: Nam Cao <namcao@linutronix.de>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Shuah Khan <shuah@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, 
+	Soheil Hassas Yeganeh <soheil@google.com>, Khazhismel Kumykov <khazhy@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Eric Dumazet <edumazet@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Sep 17, 2025 at 3:41=E2=80=AFPM Nam Cao <namcao@linutronix.de> wrot=
+e:
+> My question is whether the performance of epoll_wait() with zero
+> timeout is really that important that we have to complicate
+> things. If epoll_wait() with zero timeout is called repeatedly in a loop
+> but there is no event, I'm sure there will be measurabled performance
+> drop. But sane user would just use timeout in that case.
+>
+> epoll's data is protected by a lock. Therefore I think the most
+> straightforward solution is just taking the lock before reading the
+> data.
+>
 
+I have no idea what the original use case is. I see the author of the
+patch is cc'ed, so hopefully they will answer.
 
-Le 17/09/2025 à 17:21, Thomas Weißschuh a écrit :
-> On Wed, Sep 17, 2025 at 04:41:49PM +0200, Christophe Leroy wrote:
->>
->>
->> Le 17/09/2025 à 16:00, Thomas Weißschuh a écrit :
->>> The usage of ASM_FTR_IFCLR(CPU_TR_ARCH_31) requires asm/cputable.h and
->>> asm/feature-fixups.h. Currently these headers are included transitively,
->>> but that transitive inclusion is about to go away.
->>
->> Hum ...
->>
->> That was unexpectedly added by commit 9c7bfc2dc21e ("powerpc/64s: Make
->> POWER10 and later use pause_short in cpu_relax loops")
->>
->> In theory, vdso/ headers shouldn't include any headers outside of vdso/
-> 
-> I am aware. But this is the dependency as it exists today and I don't really
-> want to make this series larger than it already is. This is by far not the
-> only such layering violation in the vDSO headers. I have some patches prepared...
-> 
->>> Explicitly include the headers.
->>>
->>> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
->>> ---
->>>    arch/powerpc/include/asm/vdso/processor.h | 3 +++
->>>    1 file changed, 3 insertions(+)
->>>
->>> diff --git a/arch/powerpc/include/asm/vdso/processor.h b/arch/powerpc/include/asm/vdso/processor.h
->>> index 80d13207c5688d73954822aede2bbe2d0e05c054..42b64903bdf47cc5bd571fc3b5caed45e6358cb9 100644
->>> --- a/arch/powerpc/include/asm/vdso/processor.h
->>> +++ b/arch/powerpc/include/asm/vdso/processor.h
->>> @@ -4,6 +4,9 @@
->>>    #ifndef __ASSEMBLY__
->>
->> __ASSEMBLY__ is replaced by __ASSEMBLER__ in powerpc-next in commit
->> 74db6cc331b0 ("powerpc: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi
->> headers")
-> 
-> Ack. I'll have to rebase this series after -rc1 in any case. Right now I am
-> hoping to collect some Acks.
-> 
->>> +#include <asm/cputable.h>
->>> +#include <asm/feature-fixups.h>
->>> +
->>>    /* Macros for adjusting thread priority (hardware multi-threading) */
->>>    #ifdef CONFIG_PPC64
->>>    #define HMT_very_low()		asm volatile("or 31, 31, 31	# very low priority")
->>>
->>
+> Lockless is hard to get right and may cause hard-to-debug problems. So
+> unless this performance drop somehow bothers someone, I would prefer
+> "keep it simple, stupid".
+>
 
+Well epoll is known to suffer from lock contention, so I would like to
+think the lockless games were motivated by a real-world need, but I'm
+not going peruse the history to find out.
 
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-
-
+I can agree the current state concerning ep_events_available() is
+avoidably error prone and something(tm) should be done. fwiw the
+refcount thing is almost free on amd64, I have no idea how this pans
+out on arm64.
