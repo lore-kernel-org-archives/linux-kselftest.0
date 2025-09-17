@@ -1,122 +1,152 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E9627A917
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 20:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F132749CE;
+	Wed, 17 Sep 2025 21:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758141112; cv=none; b=F2HagnOaf6SMrVJi/vkErwPSKSBsYlMfw/TiOQZDnDTVC5ijjtSbzY0Lj0AKGK2Lii9xEmsDF8IekVbbD9bQw+4eRdcvAQTjZvfRwPMDCcqaokdGTnHSF8QE1o0vNExOTMdgbEV4fnuc+Z0n4Ag3pT0ejW4sxhi6Y4XnNpbC5Dk=
+	t=1758144189; cv=none; b=p7fXn0m9n4yHK0s2Bq7Y1sV2g7MUJInibqspYEoronjsnKFwLYy4zB3rgkZRwVF8Nsr1++wRYjScCXPp+bkBfLYbRu9rRyDoGGnyqzmc/pWTC6NmqW5pFTluqVcTT9w1Fu5wpKkKdmJBKhyERpqBtcwK2dIiG337f9zsNo173sE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758141112; c=relaxed/simple;
-	bh=5OBIs0bUsQlBfNz/o3OM/cckvzwG61wfY25aaGHql4M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sbK3i+jDaUFqp1R7d2XQOqD5uxu8hG9dDmgyBlX4HO4ohFcg41UvayUo0yLeNHd62T6p1KeTIZrXzzYahoyY5DnQUno5ky3/sTvQJ/1Ui4nbLSG4ZSM9VPkrPRc4mv+XgTDnkjq8EMzrp7YeqAzMiPZE1yN/pcjEoY9mGieHQdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iPRBHiBB; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1758144189; c=relaxed/simple;
+	bh=otSik+JnSkPnr4TEEejhUGJeE4ZX3swssBkOB7WXF9Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=caQ0Zfp6XoB3Rr5rwXr31w6V2cxTVj6+hyldVtbCu9OSxZ+XGCWyCzcInN2bPzigZuH+wJFIq1koCbqtQnM1DFnFZLU7FbbJJ74voKPsDC2OJmmGfdFYuQs6FdhRMsYOoe3WCXctYE1Xh6ZsN43cNtTQM0aDGLekF2aFHgU3Qm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=n+bjVVqf; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iPRBHiBB"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-267c90c426dso13405ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 13:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758141110; x=1758745910; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5OBIs0bUsQlBfNz/o3OM/cckvzwG61wfY25aaGHql4M=;
-        b=iPRBHiBBNchRzIgeBGxAgEvAguVI4ofWDB2FMokbFInew0Tlx5LZZoHFSAy6xQje6G
-         LZHaNDddx8SucnH7T4p7gYxOSxd8UTRqQYDckmQpUaAeU8xW7XXMNc1/pVsnM3FuirPI
-         4oJVfSH82hK6IDsB2wGXcrlEEyMd4iMBRA7S7usUq8QL+m1RT7ZpzqDAMMSuw9qURSGp
-         99vh8TslRh4UeIuJjt/yVQsmUTcBKjoU0RSax47ut2vz/nQzpfPJyZR5UHsIJGEIz4Zg
-         dxm5CwPRCA70dUPQBbQO7ETbURshVyia+iI9t6lrLp8wZuyQJmTJgFDfnFqF/2iFMhJf
-         4/gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758141110; x=1758745910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5OBIs0bUsQlBfNz/o3OM/cckvzwG61wfY25aaGHql4M=;
-        b=wkDtxMDzV7fUPrpeDvCtbTqsJpEy6Ma4WEK5eoLS3o7dmrzDpfOwL4hBMe524ClQKS
-         C3sctZI8Fc+mT6afbztBsMEDXA4F8MzkD4CMZs1Q0cB8sFL2Um3oUo/s9Vg0Qr8g0tmd
-         yvmIkEO4Nb+jDvLuxZljjL+LmZoQ4jyedvvmnzUUq5zGXYCgzDuq/GQZUDA8QwOoeNkH
-         6F7H3tQru8cD27JmO6K1h8ljVbmznQs+77zjDOgU9iP5Ml1WIasTuGeQcbffZCCJUlQJ
-         cH6iR5cFFDkJljqefPMtXtRXw2miVt+HY1MeGJuuJy779pakzGBmviwgf2rzEChhZI81
-         P/aw==
-X-Forwarded-Encrypted: i=1; AJvYcCWhCQahWr7zrkO54SQiW9AdMrJgGDnWYO6mZ49yzupFoHo7qBEI3HL2ZkAZVrbdipzrwxNhSkhULLKsejCmWHA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzsPItABi1mBGGplla8JJh4C4a5BT7HhM9Q20J2/3L+l+OBTfk
-	b4ZP2nwwhFBSS/Rl/38ieIlRGZNFhM+dwXMYmvqxhvdUy9tTBHsMX+2/I+cirayEVbBD2rB7HqD
-	ttpESev2q4kpf5YobCXn6DziUbkvdabEiNCTISEJ4
-X-Gm-Gg: ASbGnctKd2boxbtVMLVWWVbEOT7Xok8XBrwiQ9e4OdlxVJ+DD7/G3x5xafbmoahUSZx
-	YFopGELvAEoBI/eFi04zFPXki3n9cunMmAPUiMkj0ZHDY96+H+QmhcDamQryBgWShpLGQy6DkFk
-	9KdjK892hdeSC8BRYSkV5N+Rx8P/FFeY8AlNNcnqpdIfiPMKl/3DUzJAfn/yd6ym8jKGyQ7y/Tm
-	ia9m8Lwl06heGXrNGGDK8jZwpB2Af7sl/3UZbg9g5wyy+2sQfi/WEipj81K0gs=
-X-Google-Smtp-Source: AGHT+IGi1Cl1cxLljbDRwITE9vfhwz+DrDPsOJguUQv2zzG51+QwzyCb4weDhywo5yliSwxcW6sHs7Lpaphswpsb2Ak=
-X-Received: by 2002:a17:902:e550:b0:24c:f4b1:baaf with SMTP id
- d9443c01a7336-26808a33cc5mr6423875ad.1.1758141109587; Wed, 17 Sep 2025
- 13:31:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="n+bjVVqf"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=7MnV56UP6V8cQnSkVSRXAg5Em6U9ykJi8OOAtSFWsgY=; b=n+bjVVqf5+ik6ac7aS43YfvCAh
+	yTZoNNpJY9B8eaFW6Sz9O/2NgEXwgN0Zu4oJo1IArzzHn9ZeVLv3LQQ3nhZIWD3z45xmAGeYVNMYI
+	ITEyylYYWwaOKWLIvoeR2mjOQH869kIYR60TN9Kiw4yFmzwkO3JV2DmJ/ZvVkjXtmcSJQtTDrADDR
+	pFqAIt1MJqZMNY3c79sCarMf0ZYM1Mc3WJsmZHpnVfxHJ1Q3F2c84ZfCIfIta26O2MvUZDSKZCtYU
+	LpeHHYHxzmGw7QyplVBGLTzOeANfxqYTa+k+Bgeawg65AL2ByztGBEV5VSsgAvfJ+jI1E/PTmGvQd
+	yjs4Zupw==;
+Received: from [191.204.197.103] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1uyzc8-00CsMq-Lz; Wed, 17 Sep 2025 23:22:56 +0200
+From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Date: Wed, 17 Sep 2025 18:21:40 -0300
+Subject: [PATCH v3 01/15] selftests: kselftest: Create ksft_print_dbg_msg()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250915163838.631445-1-kaleshsingh@google.com>
- <20250915163838.631445-7-kaleshsingh@google.com> <eb7820ed-3351-4cb5-8341-d6a48ed7746f@redhat.com>
- <CAC_TJvctkyGEKv8mVE83D2DzCd-HiXh9co_DuZfwuF86FJoiJw@mail.gmail.com> <322fd5d2-d7f4-40d8-8a06-6e7c5e9ef180@redhat.com>
-In-Reply-To: <322fd5d2-d7f4-40d8-8a06-6e7c5e9ef180@redhat.com>
-From: Kalesh Singh <kaleshsingh@google.com>
-Date: Wed, 17 Sep 2025 13:31:37 -0700
-X-Gm-Features: AS18NWACcEbm1lm4H8WkQEbyfcTpHlrzU-8yyCAEibl_VJPt8WSVNJn2mY9O19Y
-Message-ID: <CAC_TJvf84Zerwe7-UiRW3AYnC=_Zu3tVSSWTRcaEyoRGEnBHug@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] mm: add assertion for VMA count limit
-To: David Hildenbrand <david@redhat.com>
-Cc: akpm@linux-foundation.org, minchan@kernel.org, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de, 
-	kernel-team@android.com, android-mm@google.com, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, 
-	Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, Jann Horn <jannh@google.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250917-tonyk-robust_test_cleanup-v3-1-306b373c244d@igalia.com>
+References: <20250917-tonyk-robust_test_cleanup-v3-0-306b373c244d@igalia.com>
+In-Reply-To: <20250917-tonyk-robust_test_cleanup-v3-0-306b373c244d@igalia.com>
+To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel-dev@igalia.com, 
+ =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+X-Mailer: b4 0.14.2
 
-On Wed, Sep 17, 2025 at 11:34=E2=80=AFAM David Hildenbrand <david@redhat.co=
-m> wrote:
->
-> >> Can't that fire when changing the max count from user space at just th=
-e
-> >> wrong time?
-> >
-> > You are right: technically it's possible if it was raised between the
-> > time of checking and when the new VMA is added.
-> >
-> >>
-> >> I assume we'll have to tolerated that and might just want to drop this
-> >> patch from the series.
-> >>
-> >
-> > It is compiled out in !CONFIG_VM_DEBUG builds, would we still want to d=
-rop it?
->
-> Due to the racy nature I think any kinds of assertions would be wrong.
-> Without any such races possible I would agree that the checks would be
-> nice to have.
+Create ksft_print_dbg_msg() so testers can enable extra debug messages
+when running a test with the flag -d.
 
-Alright I'll drop this in the next revision.
+Signed-off-by: André Almeida <andrealmeid@igalia.com>
+---
+ tools/testing/selftests/kselftest.h         | 14 ++++++++++++++
+ tools/testing/selftests/kselftest_harness.h | 13 +++++++++----
+ 2 files changed, 23 insertions(+), 4 deletions(-)
 
-Thanks,
-Kalesh
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index c3b6d2604b1e486af5a224a11386f75fe0a83495..8deeb4b72e7338abde47e2369a9728c3eb29907b 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -54,6 +54,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <stdarg.h>
++#include <stdbool.h>
+ #include <string.h>
+ #include <stdio.h>
+ #include <sys/utsname.h>
+@@ -104,6 +105,7 @@ struct ksft_count {
+ 
+ static struct ksft_count ksft_cnt;
+ static unsigned int ksft_plan;
++static bool ksft_debug_enabled;
+ 
+ static inline unsigned int ksft_test_num(void)
+ {
+@@ -175,6 +177,18 @@ static inline __printf(1, 2) void ksft_print_msg(const char *msg, ...)
+ 	va_end(args);
+ }
+ 
++static inline void ksft_print_dbg_msg(const char *msg, ...)
++{
++	va_list args;
++
++	if (!ksft_debug_enabled)
++		return;
++
++	va_start(args, msg);
++	ksft_print_msg(msg, args);
++	va_end(args);
++}
++
+ static inline void ksft_perror(const char *msg)
+ {
+ 	ksft_print_msg("%s: %s (%d)\n", msg, strerror(errno), errno);
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 2925e47db995d7197ed1f55bd9cc657669df9bd3..ffefd2704ca8f60f329b5d85870253fe26c61b52 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -1091,7 +1091,7 @@ static int test_harness_argv_check(int argc, char **argv)
+ {
+ 	int opt;
+ 
+-	while ((opt = getopt(argc, argv, "hlF:f:V:v:t:T:r:")) != -1) {
++	while ((opt = getopt(argc, argv, "dhlF:f:V:v:t:T:r:")) != -1) {
+ 		switch (opt) {
+ 		case 'f':
+ 		case 'F':
+@@ -1104,12 +1104,16 @@ static int test_harness_argv_check(int argc, char **argv)
+ 		case 'l':
+ 			test_harness_list_tests();
+ 			return KSFT_SKIP;
++		case 'd':
++			ksft_debug_enabled = true;
++			break;
+ 		case 'h':
+ 		default:
+ 			fprintf(stderr,
+-				"Usage: %s [-h|-l] [-t|-T|-v|-V|-f|-F|-r name]\n"
++				"Usage: %s [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name]\n"
+ 				"\t-h       print help\n"
+ 				"\t-l       list all tests\n"
++				"\t-d       enable debug prints\n"
+ 				"\n"
+ 				"\t-t name  include test\n"
+ 				"\t-T name  exclude test\n"
+@@ -1142,8 +1146,9 @@ static bool test_enabled(int argc, char **argv,
+ 	int opt;
+ 
+ 	optind = 1;
+-	while ((opt = getopt(argc, argv, "F:f:V:v:t:T:r:")) != -1) {
+-		has_positive |= islower(opt);
++	while ((opt = getopt(argc, argv, "dF:f:V:v:t:T:r:")) != -1) {
++		if (opt != 'd')
++			has_positive |= islower(opt);
+ 
+ 		switch (tolower(opt)) {
+ 		case 't':
 
->
-> --
-> Cheers
->
-> David / dhildenb
->
+-- 
+2.51.0
+
