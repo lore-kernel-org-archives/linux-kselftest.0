@@ -1,41 +1,41 @@
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F89286D57;
-	Wed, 17 Sep 2025 21:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334C310F1;
+	Wed, 17 Sep 2025 21:23:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758144189; cv=none; b=uXfWPRiHR5aqXIqslThbCB5FXbcJGeqNOJj0g0nkAJ4aTFBpvydWSXDLJhRWFHzDKcBn0gbs6innM0tyi8tngNUZB9DIoCspnVI724FtH7BKt/NO3ZP3SwpwBPMkJXLnV1oQjuYR0XrH/Zb9XbjTOJUWj46rzZHRDMui6bhXk4c=
+	t=1758144190; cv=none; b=EBRAc9q/uPWf5JYydKQMnyEO1TRefcp7FWMxRu7BNT95B7D07WfbMsace+3hTGsU/zsii4zvo+Q2TMYg8pQdeFSF9EMKaKZlvVN9+OP4Y9nyHnCLe5TvgP3NMeRU20MuaJ0yM49DURC4cTeOqsVtFwANWVfpJGBwJCDFgbNU4vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758144189; c=relaxed/simple;
-	bh=M9SdNmZ7sf3/7agXW2nsU1LwEsflHfYP4Tck0MDm+0U=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OFvWd7zQ4y28JGcRGH9lZkVcjJBDbLAAUlixb2ejsG3tRRcVEP5QTJbHQM4guBsNibUyKgdjQ/MiXFDehL0b1nE0O6lkKvtz0sMnLpJAs93zU5lKddzlTLY2h3fK+J9fjCY5WFAVib2oVvHQb+V2x0GAzkENgVfJbo4hBn2G194=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=CWKpb6zf; arc=none smtp.client-ip=213.97.179.56
+	s=arc-20240116; t=1758144190; c=relaxed/simple;
+	bh=G4nBMFUl9TRGyugFoxi0XWZQfZSBFN9lVw4uXH248/g=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=nc5ObgiV1SYcpsYTvHLjEU6bQq0kp31s/jUbVzoxRmbha/I/v7Wp9UHQ135g3uOjzWDVcGEwEqbJJJgmXSlcvNnhjkNV7XB7RSg62J79xDWmP3AByKFfEmLLNooK4YJjZyI73G9fXjEfkhpPORR5hAePOi9s84sdkm/eBAqu28k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=dRvZGYbe; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="CWKpb6zf"
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="dRvZGYbe"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=EqTdjLcj6gBchcuEdKrZwAtJtZokHrURM25ZvOOpHJk=; b=CWKpb6zf72GJ1Nn6dEFE7kZ4Wx
-	RZewnfDmJdXBklL75qsvLwA5g+jAwRbx/eHjOh796DAUbByhy2ZO59htbpmgRZlUXb+kAKXOXFQmJ
-	9OlqtgDoYrvu8xdXwS2hcm1aFJlLjM5GUniwGtVLfxTFP+Cdji3KDgsBNXIjdfn+wZXpIC4dnczl9
-	H1+8snTAKzZ/3tw+dpgq6L4cqn9IffKPl2V8ljNOnNwUtePhzKMsPw2qRds4F0meO6UP7n4q1bXo5
-	ekBtIAX8gyECxYyRhOVu6AhSKW0k5PdWobatWYe5nm9RLlUb1WUfUioW4Uk92pK7rb3JZ61OJyFXv
-	P30DkvVQ==;
+	s=20170329; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=5MA3Nwyi3v5YzbJpOc29czxPwtQbH7uDtAVwn/G935o=; b=dRvZGYbeY4dn1VZ1endKGBBVUk
+	tYS+sHj93mNrFtN25V8tSjlFYozfTDzZHp/NPwcNROOAjl/BvlvpHNEz4zv8sC8BalWwDXB87YtLo
+	jQn4iwPr/UnCASSDtNhiu1V/EWxWZzYKCUUNCdKtmgnsQAkROKByTQlb0a+f+i3+Cd/HqxaKZ2mv9
+	y/W451QfJPMDVVOGGMEhsmFaOd4amgveWYnfcuvhkt/uz49egkYOQgJYv5vqzrpi5a9slCy2+M8kc
+	OQdgpUIZj2X22B2ca3exbDp1jWmod5ufKzKLqXIuLdmFHvbfbMmqcVXHmq/LhrlhBMAQ4qEKo2AaI
+	SNPS6GeQ==;
 Received: from [191.204.197.103] (helo=[192.168.15.100])
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uyzc6-00CsMq-08; Wed, 17 Sep 2025 23:22:54 +0200
+	id 1uyzcG-00CsMq-S2; Wed, 17 Sep 2025 23:23:05 +0200
 From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Subject: [PATCH v3 00/15] selftests/futex: Refactor tests to use
- kselftest_harness.h
-Date: Wed, 17 Sep 2025 18:21:39 -0300
-Message-Id: <20250917-tonyk-robust_test_cleanup-v3-0-306b373c244d@igalia.com>
+Date: Wed, 17 Sep 2025 18:21:43 -0300
+Subject: [PATCH v3 04/15] selftests/futex: Refactor
+ futex_requeue_pi_signal_restart with kselftest_harness.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,11 +44,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAGQmy2gC/33N3QqDIBTA8VcJr+fwq6Jd7T3GGGpasqahJovo3
- WfBYLvp5sD/wPmdBQTljQrgUizAq2SCcTYHPRVA9tx2Cpo2NyCIlKhGFEZn5yf0TkwhPqLKQw6
- K22mELdaUoYpWZduAfD96pc17t2/33L0J0fl5f5Xwtv2q7EBNGCIokdZMEyaZwlfT8cHws3Qvs
- LGJ/FAEHVEkU1g3QopS1KRhf9S6rh+kaHt0DgEAAA==
-X-Change-ID: 20250703-tonyk-robust_test_cleanup-d1f3406365d9
+Message-Id: <20250917-tonyk-robust_test_cleanup-v3-4-306b373c244d@igalia.com>
+References: <20250917-tonyk-robust_test_cleanup-v3-0-306b373c244d@igalia.com>
+In-Reply-To: <20250917-tonyk-robust_test_cleanup-v3-0-306b373c244d@igalia.com>
 To: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
  Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
  Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
@@ -58,99 +56,258 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
 X-Mailer: b4 0.14.2
 
-This patch series refactors all futex selftests to use
-kselftest_harness.h instead of futex's logging.h, as discussed here [1].
+To reduce the boilerplate code, refactor futex_requeue_pi_signal_restart
+test to use kselftest_harness header instead of futex's logging header.
 
-This allows to remove a lot of boilerplate code and to simplify some
-parts of the test logic, mainly when the test needs to exit early. The
-result of this is more than 500 lines removed from
-tools/testing/selftests/futex/. Also, this enables new tests to use
-kselftest.h features like ASSERT_s and such.
-
-There are some caveats around this refactor:
- - logging.h had verbosity levels, while kselftest_harness.h doesn't. I
-   created a new print function called ksft_print_dbg_msg() that prints
-   the message if the user uses the -d flag, so now there's an
-   equivalent of this feature.
- - futex_requeue_pi test accepted command line arguments to be used as
-   test parameters (e.g. ./futex_requeue_pi -b -l -t 500000). This
-   doesn't work with kselftest_harness.h because there's no
-   straightforward way to send command line arguments to the test.
-   I used FIXTURE_VARIANT() to achieve the same result, but now the
-   parameters live inside of the test file, instead of on
-   functional/run.sh. This increased a little bit the number of test
-   cases for futex_requeue_pi, from 22 to 24.
-
-Although there are a lot of patches, they follow a simple pattern:
- - The usage() function, options parsing, kseftest setup
-   (ksft_print_header(), ksft_set_plan(), ksft_print_cnts()), are all
-   gone
- - info() is replaced with ksft_print_dbg_msg()
- - Exit on error paths are replaced with ksft_exit_fail_msg()
- - fail/pass replaced with their ksft_ equivalents.
-
-I have compared the results of run.sh before and after this patchset and
-didn't find any regression from the test results.
-
-Thanks,
-	André
-
-[1] https://lore.kernel.org/lkml/87ecv6p364.ffs@tglx/
-
+Signed-off-by: André Almeida <andrealmeid@igalia.com>
 ---
-Changes in v3:
-- Rebased on top of tip/locking/futex
-- Link to v2: https://lore.kernel.org/r/20250720-tonyk-robust_test_cleanup-v2-0-1f9bcb5b7294@igalia.com
+ .../functional/futex_requeue_pi_signal_restart.c   | 129 ++++++---------------
+ tools/testing/selftests/futex/functional/run.sh    |   2 +-
+ 2 files changed, 38 insertions(+), 93 deletions(-)
 
-Changes in v2:
-- Rebased on top of tip/master
-- Dropped priv_hash global test variant now that this feature was
-  dropped
-- Added include <stdbool.h> in the first patch
-- Link to v1: https://lore.kernel.org/r/20250704-tonyk-robust_test_cleanup-v1-0-c0ff4f24c4e1@igalia.com
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c b/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
+index c6b8f32990c87587551b14577b200e62c56af223..e34ee0f9ebccdb2cd2984e48acf157245b12848f 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
+@@ -24,11 +24,11 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++
+ #include "atomic.h"
+ #include "futextest.h"
+-#include "logging.h"
++#include "../../kselftest_harness.h"
+ 
+-#define TEST_NAME "futex-requeue-pi-signal-restart"
+ #define DELAY_US 100
+ 
+ futex_t f1 = FUTEX_INITIALIZER;
+@@ -37,15 +37,6 @@ atomic_t requeued = ATOMIC_INITIALIZER;
+ 
+ int waiter_ret = 0;
+ 
+-void usage(char *prog)
+-{
+-	printf("Usage: %s\n", prog);
+-	printf("  -c	Use color\n");
+-	printf("  -h	Display this help message\n");
+-	printf("  -v L	Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
+-	       VQUIET, VCRITICAL, VINFO);
+-}
+-
+ int create_rt_thread(pthread_t *pth, void*(*func)(void *), void *arg,
+ 		     int policy, int prio)
+ {
+@@ -57,35 +48,28 @@ int create_rt_thread(pthread_t *pth, void*(*func)(void *), void *arg,
+ 	memset(&schedp, 0, sizeof(schedp));
+ 
+ 	ret = pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
+-	if (ret) {
+-		error("pthread_attr_setinheritsched\n", ret);
+-		return -1;
+-	}
++	if (ret)
++		ksft_exit_fail_msg("pthread_attr_setinheritsched\n");
+ 
+ 	ret = pthread_attr_setschedpolicy(&attr, policy);
+-	if (ret) {
+-		error("pthread_attr_setschedpolicy\n", ret);
+-		return -1;
+-	}
++	if (ret)
++		ksft_exit_fail_msg("pthread_attr_setschedpolicy\n");
+ 
+ 	schedp.sched_priority = prio;
+ 	ret = pthread_attr_setschedparam(&attr, &schedp);
+-	if (ret) {
+-		error("pthread_attr_setschedparam\n", ret);
+-		return -1;
+-	}
++	if (ret)
++		ksft_exit_fail_msg("pthread_attr_setschedparam\n");
+ 
+ 	ret = pthread_create(pth, &attr, func, arg);
+-	if (ret) {
+-		error("pthread_create\n", ret);
+-		return -1;
+-	}
++	if (ret)
++		ksft_exit_fail_msg("pthread_create\n");
++
+ 	return 0;
+ }
+ 
+ void handle_signal(int signo)
+ {
+-	info("signal received %s requeue\n",
++	ksft_print_dbg_msg("signal received %s requeue\n",
+ 	     requeued.val ? "after" : "prior to");
+ }
+ 
+@@ -94,78 +78,46 @@ void *waiterfn(void *arg)
+ 	unsigned int old_val;
+ 	int res;
+ 
+-	waiter_ret = RET_PASS;
+-
+-	info("Waiter running\n");
+-	info("Calling FUTEX_LOCK_PI on f2=%x @ %p\n", f2, &f2);
++	ksft_print_dbg_msg("Waiter running\n");
++	ksft_print_dbg_msg("Calling FUTEX_LOCK_PI on f2=%x @ %p\n", f2, &f2);
+ 	old_val = f1;
+ 	res = futex_wait_requeue_pi(&f1, old_val, &(f2), NULL,
+ 				    FUTEX_PRIVATE_FLAG);
+ 	if (!requeued.val || errno != EWOULDBLOCK) {
+-		fail("unexpected return from futex_wait_requeue_pi: %d (%s)\n",
++		ksft_test_result_fail("unexpected return from futex_wait_requeue_pi: %d (%s)\n",
+ 		     res, strerror(errno));
+-		info("w2:futex: %x\n", f2);
++		ksft_print_dbg_msg("w2:futex: %x\n", f2);
+ 		if (!res)
+ 			futex_unlock_pi(&f2, FUTEX_PRIVATE_FLAG);
+-		waiter_ret = RET_FAIL;
+ 	}
+ 
+-	info("Waiter exiting with %d\n", waiter_ret);
+ 	pthread_exit(NULL);
+ }
+ 
+ 
+-int main(int argc, char *argv[])
++TEST(futex_requeue_pi_signal_restart)
+ {
+ 	unsigned int old_val;
+ 	struct sigaction sa;
+ 	pthread_t waiter;
+-	int c, res, ret = RET_PASS;
+-
+-	while ((c = getopt(argc, argv, "chv:")) != -1) {
+-		switch (c) {
+-		case 'c':
+-			log_color(1);
+-			break;
+-		case 'h':
+-			usage(basename(argv[0]));
+-			exit(0);
+-		case 'v':
+-			log_verbosity(atoi(optarg));
+-			break;
+-		default:
+-			usage(basename(argv[0]));
+-			exit(1);
+-		}
+-	}
+-
+-	ksft_print_header();
+-	ksft_set_plan(1);
+-	ksft_print_msg("%s: Test signal handling during requeue_pi\n",
+-	       basename(argv[0]));
+-	ksft_print_msg("\tArguments: <none>\n");
++	int res;
+ 
+ 	sa.sa_handler = handle_signal;
+ 	sigemptyset(&sa.sa_mask);
+ 	sa.sa_flags = 0;
+-	if (sigaction(SIGUSR1, &sa, NULL)) {
+-		error("sigaction\n", errno);
+-		exit(1);
+-	}
++	if (sigaction(SIGUSR1, &sa, NULL))
++		ksft_exit_fail_msg("sigaction\n");
+ 
+-	info("m1:f2: %x\n", f2);
+-	info("Creating waiter\n");
++	ksft_print_dbg_msg("m1:f2: %x\n", f2);
++	ksft_print_dbg_msg("Creating waiter\n");
+ 	res = create_rt_thread(&waiter, waiterfn, NULL, SCHED_FIFO, 1);
+-	if (res) {
+-		error("Creating waiting thread failed", res);
+-		ret = RET_ERROR;
+-		goto out;
+-	}
++	if (res)
++		ksft_exit_fail_msg("Creating waiting thread failed");
+ 
+-	info("Calling FUTEX_LOCK_PI on f2=%x @ %p\n", f2, &f2);
+-	info("m2:f2: %x\n", f2);
++	ksft_print_dbg_msg("Calling FUTEX_LOCK_PI on f2=%x @ %p\n", f2, &f2);
++	ksft_print_dbg_msg("m2:f2: %x\n", f2);
+ 	futex_lock_pi(&f2, 0, 0, FUTEX_PRIVATE_FLAG);
+-	info("m3:f2: %x\n", f2);
++	ksft_print_dbg_msg("m3:f2: %x\n", f2);
+ 
+ 	while (1) {
+ 		/*
+@@ -173,11 +125,11 @@ int main(int argc, char *argv[])
+ 		 * restart futex_wait_requeue_pi() in the kernel. Wait for the
+ 		 * waiter to block on f1 again.
+ 		 */
+-		info("Issuing SIGUSR1 to waiter\n");
++		ksft_print_dbg_msg("Issuing SIGUSR1 to waiter\n");
+ 		pthread_kill(waiter, SIGUSR1);
+ 		usleep(DELAY_US);
+ 
+-		info("Requeueing waiter via FUTEX_CMP_REQUEUE_PI\n");
++		ksft_print_dbg_msg("Requeueing waiter via FUTEX_CMP_REQUEUE_PI\n");
+ 		old_val = f1;
+ 		res = futex_cmp_requeue_pi(&f1, old_val, &(f2), 1, 0,
+ 					   FUTEX_PRIVATE_FLAG);
+@@ -191,12 +143,10 @@ int main(int argc, char *argv[])
+ 			atomic_set(&requeued, 1);
+ 			break;
+ 		} else if (res < 0) {
+-			error("FUTEX_CMP_REQUEUE_PI failed\n", errno);
+-			ret = RET_ERROR;
+-			break;
++			ksft_exit_fail_msg("FUTEX_CMP_REQUEUE_PI failed\n");
+ 		}
+ 	}
+-	info("m4:f2: %x\n", f2);
++	ksft_print_dbg_msg("m4:f2: %x\n", f2);
+ 
+ 	/*
+ 	 * Signal the waiter after requeue, waiter should return from
+@@ -204,19 +154,14 @@ int main(int argc, char *argv[])
+ 	 * futex_unlock_pi() can't happen before the signal wakeup is detected
+ 	 * in the kernel.
+ 	 */
+-	info("Issuing SIGUSR1 to waiter\n");
++	ksft_print_dbg_msg("Issuing SIGUSR1 to waiter\n");
+ 	pthread_kill(waiter, SIGUSR1);
+-	info("Waiting for waiter to return\n");
++	ksft_print_dbg_msg("Waiting for waiter to return\n");
+ 	pthread_join(waiter, NULL);
+ 
+-	info("Calling FUTEX_UNLOCK_PI on mutex=%x @ %p\n", f2, &f2);
++	ksft_print_dbg_msg("Calling FUTEX_UNLOCK_PI on mutex=%x @ %p\n", f2, &f2);
+ 	futex_unlock_pi(&f2, FUTEX_PRIVATE_FLAG);
+-	info("m5:f2: %x\n", f2);
+-
+- out:
+-	if (ret == RET_PASS && waiter_ret)
+-		ret = waiter_ret;
+-
+-	print_result(TEST_NAME, ret);
+-	return ret;
++	ksft_print_dbg_msg("m5:f2: %x\n", f2);
+ }
++
++TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
+index cc1b743668a2084922c892d2924ef0ebb46386e4..6d48a7ea95cf99ebe6742554eea7dc180cd4c458 100755
+--- a/tools/testing/selftests/futex/functional/run.sh
++++ b/tools/testing/selftests/futex/functional/run.sh
+@@ -38,7 +38,7 @@ echo
+ ./futex_requeue_pi_mismatched_ops
+ 
+ echo
+-./futex_requeue_pi_signal_restart $COLOR
++./futex_requeue_pi_signal_restart
+ 
+ echo
+ ./futex_wait_timeout $COLOR
 
----
-André Almeida (15):
-      selftests: kselftest: Create ksft_print_dbg_msg()
-      selftests/futex: Refactor futex_requeue_pi with kselftest_harness.h
-      selftests/futex: Refactor futex_requeue_pi_mismatched_ops with kselftest_harness.h
-      selftests/futex: Refactor futex_requeue_pi_signal_restart with kselftest_harness.h
-      selftests/futex: Refactor futex_wait_timeout with kselftest_harness.h
-      selftests/futex: Refactor futex_wait_wouldblock with kselftest_harness.h
-      selftests/futex: Refactor futex_wait_unitialized_heap with kselftest_harness.h
-      selftests/futex: Refactor futex_wait_private_mapped_file with kselftest_harness.h
-      selftests/futex: Refactor futex_wait with kselftest_harness.h
-      selftests/futex: Refactor futex_requeue with kselftest_harness.h
-      selftests/futex: Refactor futex_waitv with kselftest_harness.h
-      selftests/futex: Refactor futex_priv_hash with kselftest_harness.h
-      selftests/futex: Refactor futex_numa_mpol with kselftest_harness.h
-      selftests/futex: Drop logging.h include from futex_numa
-      selftests/futex: Remove logging.h file
-
- tools/testing/selftests/futex/functional/Makefile  |   3 +-
- .../selftests/futex/functional/futex_numa.c        |   3 +-
- .../selftests/futex/functional/futex_numa_mpol.c   |  39 +--
- .../selftests/futex/functional/futex_priv_hash.c   |  48 +---
- .../selftests/futex/functional/futex_requeue.c     |  76 ++----
- .../selftests/futex/functional/futex_requeue_pi.c  | 261 ++++++++++-----------
- .../functional/futex_requeue_pi_mismatched_ops.c   |  86 ++-----
- .../functional/futex_requeue_pi_signal_restart.c   | 129 +++-------
- .../selftests/futex/functional/futex_wait.c        | 103 +++-----
- .../functional/futex_wait_private_mapped_file.c    |  83 ++-----
- .../futex/functional/futex_wait_timeout.c          | 139 +++++------
- .../functional/futex_wait_uninitialized_heap.c     |  76 ++----
- .../futex/functional/futex_wait_wouldblock.c       |  75 ++----
- .../selftests/futex/functional/futex_waitv.c       |  98 ++++----
- tools/testing/selftests/futex/functional/run.sh    |  61 +----
- tools/testing/selftests/futex/include/logging.h    | 148 ------------
- tools/testing/selftests/kselftest.h                |  14 ++
- tools/testing/selftests/kselftest_harness.h        |  13 +-
- 18 files changed, 456 insertions(+), 999 deletions(-)
----
-base-commit: ed323aeda5e09fa1ab95946673939c8c425c329c
-change-id: 20250703-tonyk-robust_test_cleanup-d1f3406365d9
-
-Best regards,
 -- 
-André Almeida <andrealmeid@igalia.com>
+2.51.0
 
