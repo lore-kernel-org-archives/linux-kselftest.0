@@ -1,125 +1,193 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3484A30BF72;
-	Wed, 17 Sep 2025 15:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221DE335944
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 15:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758122487; cv=none; b=coJqUAdV8hbCSSo1ZxfxCn2Hh4YlsztlUkAbjALgvk7+bWq0C+2K4/VYw25D3mBGs4DEz4t95lCKvuZXPCoyIOXhKfhTjBaX2buNtpYFIuEbWG/y41TXbH2WZVSj9Xv41diKIRz/tDhxavcbK4yYAZGKCC6YPvLw1U+XCJs3Qys=
+	t=1758122702; cv=none; b=RUBJqkhJDXecS5+V8nMxpfI9tpaVxfU3Cf9eBiVoR4GDJpT/u1osUoFC2xy5ABgP/6OG62RsVaSioEmwlOoNgSoxQ2yhufz3aGNKbCzGj82Xz69KIh4zCQftSJ8aCLHaEtLD3aIP/rCiNg9y5UBxrw3uefZaJl1gCdqXNoptT/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758122487; c=relaxed/simple;
-	bh=JnjyxHE2SHo2lMYG24a/vuZ5+YxATNSRGf4WRidX/4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S3yxGXzDTyQa/5oyU4IE+tHJ+DjgoQDiPMzK8X1MZtQDpfog8jnHyYpyCR37MBkIfWWdowkpOKVc/d4DnpZnyJ/6BNOHEOpC/zW9Ogs/niao+AR36BZ8hjgIwIf0S1Cu6oQxzWGEAuGxnlfHEfLlALvVDrQKXwwCGnYUvCfb4Jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3nhivmng; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ob8EioHS; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1758122702; c=relaxed/simple;
+	bh=le3rR+Y/6+X3RB7WTCbO7Z1Cx/tQDdq7HqEHt580Kts=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mZ4jDrPUTthmu4V6Vm466gT2858rkfuuN4JWugvF3AzjHe/ndEXZXkIYr56TNiXL50N1kIThwvG5DoUP1KNqE+96/CxdVYFC+oAvlCIWlfZWSZ8pBSUcRD4sE61JaOmXtcaLhWdwSKA1weTpeuQhv5kVnP7YyF7TsKb/tQ/Hu6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UecDoJdN; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3nhivmng";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ob8EioHS"
-Date: Wed, 17 Sep 2025 17:21:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1758122483;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UecDoJdN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758122699;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=U/sWpX1d0FqUQZmJaMW2nRnPQMp56EHFIU2k1H50MYU=;
-	b=3nhivmngd6+PmA3+eV33THTVRq9jhpe+HBt/O4eCUY3Xh5mSatPaAakAkLSiN/PgvcAopM
-	y0Vf/JBYg9oMJuBPbUW8p3kfUkXUykpOTcPsUyVMjVq1GXYPIMNETdFVpFy8Dq/WubWuCF
-	s78V7VLCyrlgSlUS4fRKO9Jc+yrd1jlMFKyXuxYp5AiWpIVOuskTy+86RTMbqukB7HkVfE
-	7tOkUXZcX2xRhQyZwhU66M/r+VdJA/P0eIRfDbHpsj4zJHjLjz1urRGJEwwhNOxhg3HUFu
-	gLLrhHi+vVShPn758ZvkO2UBIFtcaaRzj0ag6ZXNqRNipr1zS9Npoc4oLzCXjA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1758122483;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U/sWpX1d0FqUQZmJaMW2nRnPQMp56EHFIU2k1H50MYU=;
-	b=ob8EioHSqHCIf/3CBZz5Tz2bb9bzFkW7kWflQdESNktBSVsvxeZSnY6E6RONhA6DbGeGkn
-	5sDsyosGlBsU7rDA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Russell King <linux@armlinux.org.uk>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v3 07/36] powerpc/vdso: Explicitly include asm/cputable.h
- and asm/feature-fixups.h
-Message-ID: <20250917171207-1fad0416-7543-481c-a998-5881fab1714e@linutronix.de>
-References: <20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
- <20250917-vdso-sparc64-generic-2-v3-7-3679b1bc8ee8@linutronix.de>
- <41d100c5-4706-400e-a61a-46b068f1bc74@csgroup.eu>
+	bh=nOCE7GBioLoeEPVZjsvaFHh39u6q73Q5ex3kMGocTYI=;
+	b=UecDoJdNPzzHKwmqpU8hn10PEscwt1wWNUC/BWxE4CBcXQYHduBKQh1RWGJf8+YXvalAbK
+	Bz4FR7B+tMgdv38jtC7PrYfNNIDJeC8vQiFi/bCKm64ESDaSg5h9xKRIo6pqLPffdRFQbO
+	mutaJ5J74Vn4hRhmkueoNdupaolmFE0=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-21-DzT4R1BKPaKR_HBLWV6Seg-1; Wed, 17 Sep 2025 11:24:58 -0400
+X-MC-Unique: DzT4R1BKPaKR_HBLWV6Seg-1
+X-Mimecast-MFC-AGG-ID: DzT4R1BKPaKR_HBLWV6Seg_1758122698
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4b5eb7b2c05so154782991cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Sep 2025 08:24:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758122697; x=1758727497;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nOCE7GBioLoeEPVZjsvaFHh39u6q73Q5ex3kMGocTYI=;
+        b=iXuRZITmN4pemMvVL9/lnPsPJAz8/TJDM3KI1QsOfjKsFqzpEEVlNkt6EVZpydBMv+
+         GbpJOfM+BchktvFH8/4UHpOtG+tyMwAox5l1ONnZ6X/wi+vQrpiCjLPmNTbnNg6Nzg+C
+         4o4+GHwNP1i+DuhE88zMdp/NOf6Et8t7jryt7ik+SO2Q8PSSYIGRI+nF3FuPX9bob9T+
+         uMk4UoQmhqcJGsbotjdFk+qu9CHVds0KQ3S9eR51ENnbETweekkCkyHCBXwgEt9a3oFP
+         cbJ39P5+3Yvo/9Nro7LBEFlZJcq0aaKkKEDU+apsD2ZgCu/Qo9F4Bv+8oQ2B6BH1jCGI
+         eTAw==
+X-Forwarded-Encrypted: i=1; AJvYcCU5HIVobV0p3Qt8Usq/gS9wEZ8qRjc8blIsPDYP6BekAdUTSAo3jrGuAzG0F1zJeYRpHIN+ZAXlfBcTpD+npnY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvSMaR76Yau5BpJny8udztRdYDWYlJJo3EGEljxpTncPShaaAq
+	z1kZB/vM1m9k33Oui6z2MfWJHuCw5BRhjTqXBOo7Vc9MxVFDBZqZQKUyWZRoEv8lBE8mAWDq9Hc
+	Y1TFPq9angC+8/jNlYeCn8VtVqAMddU1EQS3lWuvTNh1Fb95yRvEzmkm/hzGyl1vq+LfhpO7aKP
+	mF81n0nJnxDaMV+m8MZB1jIhGLNkJWMjGLak1LMXFcp2tPmTmnlarj
+X-Gm-Gg: ASbGncuPbtcxCWL/WXMZ1BZcIrafcG3OiDS3htaS9Tkhk814j0bV0+Ld8uljh47aN3k
+	YZwO5o/Ab9IYY6vR0jskrvT0PWYDtPkrgqmPIRxHFLRQ95U9524GRjZgUnO3JLtSZKigB2yNyeB
+	YxWy4VRBjkOXf68Gt/o5TXtGgCL29hDiNbtFXZTu4qcpMfjpSphS6Q0g==
+X-Received: by 2002:a05:622a:1e15:b0:4b4:8f2c:ba40 with SMTP id d75a77b69052e-4ba6a5db701mr19915851cf.43.1758122697449;
+        Wed, 17 Sep 2025 08:24:57 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFGX/u0/DWoQ2j8jO01gOLX81vhmFXebVct9qpuqQjgpv8prCPbkq0kI6Uh7cjMspWrlS3R3UWH++SHXByzydM=
+X-Received: by 2002:a05:622a:1e15:b0:4b4:8f2c:ba40 with SMTP id
+ d75a77b69052e-4ba6a5db701mr19915641cf.43.1758122697037; Wed, 17 Sep 2025
+ 08:24:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <41d100c5-4706-400e-a61a-46b068f1bc74@csgroup.eu>
+References: <20250910170000.6475-1-gpaoloni@redhat.com> <20250910170000.6475-2-gpaoloni@redhat.com>
+ <878qifgxbj.fsf@trenco.lwn.net>
+In-Reply-To: <878qifgxbj.fsf@trenco.lwn.net>
+From: Gabriele Paoloni <gpaoloni@redhat.com>
+Date: Wed, 17 Sep 2025 17:24:45 +0200
+X-Gm-Features: AS18NWDoDDpQpUCvPoMLIIOoLe9NuL6mhF4S2DmGBGnkJMhA8eLTTv_JNTSuMdM
+Message-ID: <CA+wEVJZreV0zpaNT70_FjuWwEujppsP4ZW_miqdRSfcHyXWrmQ@mail.gmail.com>
+Subject: Re: [RFC v2 PATCH 1/3] Documentation: add guidelines for writing
+ testable code specifications
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	gregkh@linuxfoundation.org, linux-mm@kvack.org, 
+	safety-architecture@lists.elisa.tech, acarmina@redhat.com, 
+	kstewart@linuxfoundation.org, chuckwolber@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 17, 2025 at 04:41:49PM +0200, Christophe Leroy wrote:
-> 
-> 
-> Le 17/09/2025 ‡ 16:00, Thomas Weiﬂschuh a Ècrit†:
-> > The usage of ASM_FTR_IFCLR(CPU_TR_ARCH_31) requires asm/cputable.h and
-> > asm/feature-fixups.h. Currently these headers are included transitively,
-> > but that transitive inclusion is about to go away.
-> 
-> Hum ...
-> 
-> That was unexpectedly added by commit 9c7bfc2dc21e ("powerpc/64s: Make
-> POWER10 and later use pause_short in cpu_relax loops")
-> 
-> In theory, vdso/ headers shouldn't include any headers outside of vdso/
+Hi Jonathan
 
-I am aware. But this is the dependency as it exists today and I don't really
-want to make this series larger than it already is. This is by far not the
-only such layering violation in the vDSO headers. I have some patches prepared...
+Many thanks for your review
 
-> > Explicitly include the headers.
-> > 
-> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+On Tue, Sep 16, 2025 at 12:34=E2=80=AFAM Jonathan Corbet <corbet@lwn.net> w=
+rote:
+>
+> Gabriele Paoloni <gpaoloni@redhat.com> writes:
+>
+> [Taking a quick look...]
+>
+> > The Documentation/doc-guide/kernel-doc.rst chapter describes
+> > how to document the code using the kernel-doc format, however
+> > it does not specify the criteria to be followed for writing
+> > testable specifications; i.e. specifications that can be used
+> > to for the semantic description of low level requirements.
+> >
+> > This patch adds a guideline that defines criteria to formally
+> > describe developers=E2=80=99 intent at the function and subfunction
+> > level in the form of testable expectations.
+> >
+> > Signed-off-by: Gabriele Paoloni <gpaoloni@redhat.com>
+> > Signed-off-by: Chuck Wolber <chuckwolber@gmail.com>
+> > Signed-off-by: Kate Stewart <kstewart@linuxfoundation.org>
 > > ---
-> >   arch/powerpc/include/asm/vdso/processor.h | 3 +++
-> >   1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/arch/powerpc/include/asm/vdso/processor.h b/arch/powerpc/include/asm/vdso/processor.h
-> > index 80d13207c5688d73954822aede2bbe2d0e05c054..42b64903bdf47cc5bd571fc3b5caed45e6358cb9 100644
-> > --- a/arch/powerpc/include/asm/vdso/processor.h
-> > +++ b/arch/powerpc/include/asm/vdso/processor.h
-> > @@ -4,6 +4,9 @@
-> >   #ifndef __ASSEMBLY__
-> 
-> __ASSEMBLY__ is replaced by __ASSEMBLER__ in powerpc-next in commit
-> 74db6cc331b0 ("powerpc: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi
-> headers")
-
-Ack. I'll have to rebase this series after -rc1 in any case. Right now I am
-hoping to collect some Acks.
-
-> > +#include <asm/cputable.h>
-> > +#include <asm/feature-fixups.h>
+> >  .../doc-guide/code-specifications.rst         | 208 ++++++++++++++++++
+> >  Documentation/doc-guide/index.rst             |   1 +
+> >  2 files changed, 209 insertions(+)
+> >  create mode 100644 Documentation/doc-guide/code-specifications.rst
+> >
+> > diff --git a/Documentation/doc-guide/code-specifications.rst b/Document=
+ation/doc-guide/code-specifications.rst
+> > new file mode 100644
+> > index 000000000000..dee1b4f089e1
+> > --- /dev/null
+> > +++ b/Documentation/doc-guide/code-specifications.rst
+> > @@ -0,0 +1,208 @@
+> > +.. title:: How-to write testable code specifications
 > > +
-> >   /* Macros for adjusting thread priority (hardware multi-threading) */
-> >   #ifdef CONFIG_PPC64
-> >   #define HMT_very_low()		asm volatile("or 31, 31, 31	# very low priority")
-> > 
-> 
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +How-to write testable code specifications
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +Introduction
+> > +------------
+> > +The Documentation/doc-guide/kernel-doc.rst chapter describes how to do=
+cument the code using the kernel-doc format, however it does not specify th=
+e criteria to be followed for writing testable specifications; i.e. specifi=
+cations that can be used to for the semantic description of low level requi=
+rements.
+>
+> Please, for any future versions, stick to the 80-column limit; this is
+> especially important for text files that you want humans to read.
+
+Thanks I will stick to 80 chars for future submissions
+
+>
+> As a nit, you don't need to start by saying what other documents don't
+> do, just describe the purpose of *this* document.
+
+Yes, my goal was to explain the purpose of this doc, however, re-reading
+this intro I realize that it uses a negative tone, that is not good.
+I will rephrase explaining the it expands on top of kernel-doc.rst
+to further specify the expectations from the code and the assumptions
+to correctly use it.
+
+>
+> More substantially ... I got a way into this document before realizing
+> that you were describing an addition to the format of kerneldoc
+> comments.  That would be good to make clear from the outset.
+>
+> What I still don't really understand is what is the *purpose* of this
+> formalized text?  What will be consuming it?  You're asking for a fair
+> amount of effort to write and maintain these descriptions; what's in it
+> for the people who do that work?
+
+The goal is to clearly define what the code is expected to do and how
+to correctly invoke it so that:
+1) A user of the code does not wrongly invoke it
+2) A developer or a maintainer can check if code changes are compliant
+    with such expectations (maybe he did wrong changes or the expectations
+    need to change)
+3) A tester can verify if test cases are correct WRT such expectations and
+    complete
+
+>
+> How does an author determine whether the specifications they have
+> written are correct, both gramatically and semantically?
+
+For grammatical purpose, probably an automated check could be
+implemented, for semantic aspects the first level of verification comes
+from the community and maintainer review process, whereas the second
+level of verification come from selftests that should be written according
+to the expectations from the code and should trace to them (as in the
+example in patch 3)
+
+Thanks
+Gab
+
+>
+> Thanks,
+>
+> jon
+>
+
