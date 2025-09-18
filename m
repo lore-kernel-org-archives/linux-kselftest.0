@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E18283153;
-	Thu, 18 Sep 2025 11:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6240023E35B;
+	Thu, 18 Sep 2025 12:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758196122; cv=none; b=R8JWPB+jj1+QdzsKsvwuirGUb/E+eI2Lr4wT40jHvop05juDvgta/H/PCUwBnLq7wDzBnZ5K5UJduOiAd1Gn7TTl1+xHsi7gEXfqLaJtHMjT0xAoxGosciMx4Rf102IKtWyib7J3vdUlfYZYZewDJKCFMSJ8a+TEfTL6hzj8j3g=
+	t=1758196842; cv=none; b=PTD13DuzL68xKTkQTvLD376x0peRv38LoDqU2COnkvW4MCjHEbTrxNIUIlHFyCVAwdQXAtHNwf9wCgrxn7Q+ncd0Ui7tDO7BvR0PKgEI7ly+SuYAs5xMDTXY6sIipj5zWyCkB1/LQBRRSUnYwAjACxOvjHjLWcamz7q3ma9v1sY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758196122; c=relaxed/simple;
-	bh=/GS2pi0BPhylD1m4PDk3EtPIv0KWtd8YNZ8MMg1pVkY=;
+	s=arc-20240116; t=1758196842; c=relaxed/simple;
+	bh=uaDExXeL/34UENiB9oEbazFZaj9laAcFWPbmwXdDets=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ucwx74BIePSj9CjenmF0Lumr+h/uHdxiirmLnnZIKJvkzi1HED7+eRSsM+pyg8LLpFkJaC4JTBNNagf65xP91GNlgeJ4EWj3Wz6Mv31wRwUXjaecJgYcZqr9jP/D8Ppi2Q71Rs4khUnX1fPc2qegEk5+zkmTZrbc8Nw+OMYp1YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=afUQKMJe; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=NhHWXtVXZQGVC9hiCkYVQMAoeoOwfObT7a5rxlGLad5+l8WRlvsl5R4/l884C0KE0GerqbH2pUEeQ3nbnXcO4vf5cS5jiY05MfoLfijY8nMS4fRD8ti7B3Fm7yH0ucdnr2Zd5mTBhuLYbyqlZYZuA8IOU8Ij4UqlBu0zV9SpYo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mDj3c0Im; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="afUQKMJe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E8F7C4CEE7;
-	Thu, 18 Sep 2025 11:48:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mDj3c0Im"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5567BC4CEE7;
+	Thu, 18 Sep 2025 12:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758196121;
-	bh=/GS2pi0BPhylD1m4PDk3EtPIv0KWtd8YNZ8MMg1pVkY=;
+	s=k20201202; t=1758196842;
+	bh=uaDExXeL/34UENiB9oEbazFZaj9laAcFWPbmwXdDets=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=afUQKMJe3SZLc6Bp48RNJW9wskTebguMeMhbdotT0nsxBGAcS1HoUw2x2+voUrCUL
-	 2hmNJ3tq26QDYQ84qBCcX6kBuH1IWQVDajTU+S1GAcHxBIy6wfV+ZCCqJSWdUta9RR
-	 Ge0px/b+idBZT2BMlCVCTw9myHppianrLaXtnHTbgEhSlFag2bxRGqmaCmWB8f8uLX
-	 Mh0srkBkFOp+1sbDwS80Ugnpk3zV6kQqaj6gcCkTNGk272pV/NsoBrJKsPsGHGqZCR
-	 P/GSwyvyLSip48Wh6Elz+LqNSRlTBZrGtsiwI7o8JMUlXiwZNoddrbJfa4CuSXJz9w
-	 iPf1DTrWIe2qA==
-Date: Thu, 18 Sep 2025 12:48:35 +0100
-From: Will Deacon <will@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+	b=mDj3c0ImOBTRTsZRIde5ZCK1uAHycNbTl5sgkvFeIpdF/A8yKtzFyUj1Lo+LET/DL
+	 G8hTXbzye3PkKcwwep9JJ72BQAdirttpadB1/jkal6vpAWTWhRzRu1J2wwE+LxBkzo
+	 b1htL3aUhflHSRh0Z1oUqnYoJ+4Q+uvpj1ePUmW6ihPNfRs4eJ2Bkd+X+7UdBJ+jAY
+	 PhIFsaTsck/eo3+xsTGL8MeqcYieLWzhrLt/cRQnVUXY+H3T6klGJddQydEBP3vfzv
+	 B6RcFYtocMWIAnbUM2rJnhjMmkwgl0WNbCouEq1G7Sfcv70Co+fl6IvwCcQZgogdzg
+	 w8yDq0I01L5hQ==
+Date: Thu, 18 Sep 2025 13:00:36 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Will Deacon <will@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	Oleg Nesterov <oleg@redhat.com>,
@@ -41,64 +41,55 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	linux-doc@vger.kernel.org
 Subject: Re: [PATCH 3/5] arm64/sme: Support disabling streaming mode via
  ptrace on SME only systems
-Message-ID: <aMvxkzg_LT4C4Quh@willie-the-truck>
+Message-ID: <8e99cb8a-cc9b-483c-9b71-22fd640cc1e0@sirena.org.uk>
 References: <20250820-arm64-sme-ptrace-sme-only-v1-0-f7c22b2871f8@kernel.org>
  <20250820-arm64-sme-ptrace-sme-only-v1-3-f7c22b2871f8@kernel.org>
+ <aMvxkzg_LT4C4Quh@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bvjGEp7kODe4zFUz"
+Content-Disposition: inline
+In-Reply-To: <aMvxkzg_LT4C4Quh@willie-the-truck>
+X-Cookie: Victory uber allies!
+
+
+--bvjGEp7kODe4zFUz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250820-arm64-sme-ptrace-sme-only-v1-3-f7c22b2871f8@kernel.org>
 
-On Wed, Aug 20, 2025 at 07:29:05PM +0100, Mark Brown wrote:
-> Currently it is not possible to disable streaming mode via ptrace on SME
-> only systems, the interface for doing this is to write via NT_ARM_SVE but
-> such writes will be rejected on a system without SVE support. Enable this
-> functionality by allowing userspace to write SVE_PT_REGS_FPSIMD format data
-> via NT_ARM_SVE with the vector length set to 0 on SME only systems. Such
-> writes currently error since we require that a vector length is specified
-> which should minimise the risk that existing software is relying on current
-> behaviour.
-> 
-> Reads are not supported since I am not aware of any use case for this and
-> there is some risk that an existing userspace application may be confused if
-> it reads NT_ARM_SVE on a system without SVE. Existing kernels will return
-> FPSIMD formatted register state from NT_ARM_SVE if full SVE state is not
-> stored, for example if the task has not used SVE. Returning a vector length
-> of 0 would create a risk that software would try to do things like allocate
-> space for register state with zero sizes, while returning a vector length of
-> 128 bits would look like SVE is supported. It seems safer to just not make
-> the changes to add read support.
-> 
-> It remains possible for userspace to detect a SME only system via the ptrace
-> interface only since reads of NT_ARM_SSVE and NT_ARM_ZA will succeed while
-> reads of NT_ARM_SVE will fail. Read/write access to the FPSIMD registers in
-> non-streaming mode is available via REGSET_FPR.
-> 
-> sve_set_common() already avoids allocating SVE storage when doing a FPSIMD
-> formatted write and allocating SME storage when doing a NT_ARM_SVE write so
-> we change the function to validate the new case and skip setting a vector
-> length for it.
-> 
-> The aim is to make a minimally invasive change, no operation that would
-> previously have succeeded will be affected, and we use a previously
-> defined interface in new circumstances rather than define completely new
-> ABI.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  Documentation/arch/arm64/sve.rst |  5 +++++
->  arch/arm64/kernel/ptrace.c       | 40 +++++++++++++++++++++++++++++++++-------
->  2 files changed, 38 insertions(+), 7 deletions(-)
+On Thu, Sep 18, 2025 at 12:48:35PM +0100, Will Deacon wrote:
 
-It would be good to have an Ack from the userspace side (GDB?) so that
-we know that the minimal ABI change you're proposing is sufficient.
+> It would be good to have an Ack from the userspace side (GDB?) so that
+> we know that the minimal ABI change you're proposing is sufficient.
 
-In the meantime, I'll pick up the first two selftests as they are
-independent of this part.
+Yes, we need confirmation from the userspace side before this is merged.
+I've had some informal feedback from some of the Arm people that was
+positive but they needed to do some more thorough validation, and we
+need feedback from people outside Arm too.
 
-Will
+> In the meantime, I'll pick up the first two selftests as they are
+> independent of this part.
+
+Thanks.
+
+--bvjGEp7kODe4zFUz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjL9GMACgkQJNaLcl1U
+h9C86gf+OjW6SC1j2hLmMmr8tVWsSjMpw6sm0E+0BYO1sNqhyaVpq7tZ480kgRuG
+Zun/blkfFADtOYns4v0uejGuAgUPZh1rUd2PPsrpJXCgzIZ8l7ybYHSNcDp+O6sv
+4tvtC63ooo4Hw4so+ldcrx790Wm9hQbtdcCbCLrnr8E1mStPjGevJ2Dl4oczpS9Q
+59XgVlzbsimHPb6DgRPziNyjo/k9DGYMr+BRO/Ysqq5LLNde6X1bT1gpozjytV+h
+UgQr5UcnPjmwgBedNGnhPntpno5xXusX3pp7LH6AJUzWI9G+okL4dMIL91iwhk0I
+6vjx6PdurHVoAZHfRnaPgolpi6lnUw==
+=BfEc
+-----END PGP SIGNATURE-----
+
+--bvjGEp7kODe4zFUz--
