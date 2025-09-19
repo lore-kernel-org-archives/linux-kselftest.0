@@ -1,36 +1,36 @@
 Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DA1263F52;
-	Fri, 19 Sep 2025 15:36:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8A4314A9A;
+	Fri, 19 Sep 2025 15:36:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758296167; cv=none; b=fQsyI9IJ4GGKP9ZbIgjj6FaMX95WQOSaxqvPKq63W/LI/oyz8IHIerLEGrh3PjqaRW1Di9Q6r6xTWQ35E2DZ6A0y1iZoMR2RM4Ox304ZLYDgWf5Q1rpyyp7SDx4xQF/RBCEW6m0zisXW5U97SsCQvIlK9feg4JMueKyVAEyz2bo=
+	t=1758296168; cv=none; b=ToWm45Gbg/tZ2FybGCt3qN3wyc9yk4QR/Fd/C1Eu3n7puBEH4zHKWZqoEX98aBnBIlDUyaWy54YV4vZl8oKALpqem5ra9sW2xTSXqcjT//eLeIRZaeTcOtLZSr+NaNFV868TNbfrb1orKwwRyTlgAhGngXN0578isE3WDamiFyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758296167; c=relaxed/simple;
-	bh=PRT07XBigAUomxauCtvGE3E/7dxDQ7qSMfDJLAMwWiE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bwQGb9hx+mCH35bNcMqG6qbUOMVe1cBlxvv7YCJAjSI0iLI8w0INfccIcyXPD9JYIZPmJadQjH6mDbwk9xYLrPGwaI7k+U69hp6ddFtdtEhfFsw16hIJBIti4QYGTQntppWPegb/cZ8UWleKY9sYycljPsJG+NBnt7RG9iOm01c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=NhvMMFDu; arc=none smtp.client-ip=168.119.38.16
+	s=arc-20240116; t=1758296168; c=relaxed/simple;
+	bh=wcLrD0WS5YjvvCsdm8gr/2mkmWKC74LSIzDcH4K3Lmw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jo6vkjZJlDs/eGxSHTuCNzxmKcvU50zHtk+CZrkIGJSQT+LkBTDebDU31cWmQqSMRJBtQZb1v4+VMzfd1oYN/sL+TReaN6gxO5urnK4YwVQkf438FE9UyiwJwQOzoM4616kkeP/lDp8/9to0UtbAf4lRVFLVO2V6boMyNfgCoRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=woKeZR/Q; arc=none smtp.client-ip=168.119.38.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="NhvMMFDu"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="woKeZR/Q"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
-	Resent-Message-ID:In-Reply-To:References;
-	bh=2kkh21e/IwlRCoBO9MaQ5jF2MRbtUk5+kD17PYi26nM=; t=1758296163; x=1759505763; 
-	b=NhvMMFDu9PjXFroQy0jvBoXRHAOJW6LjOVjQVMr+lCe2r4IqR84kQt6QOiz1hf6S8yTDuuYnaYp
-	++kxr3uCsG8BywdK4k2bdL+ZIwcSiM27N5KPkOZVbCgTX6EaMI8pmvp/hv0HZn+6OoMoEXkNqu+iZ
-	7rTKwGRJc2rzVqNc6nWY5AneBLvDGQi5CK6wNNb94OCGOGuYWhBtmEeIRNUzDp/wLXXkCZlWVmZ7W
-	JXlgrgaYmNxzK5+HImQTDkKA/Z/MPNDGunVx8ycwXq+By3gxHQ5xPvwNoL4MpKwzEUAoosVYrykZi
-	bFGZ6LLG/5uTdBClnZrKTjk9WF13QV/5Uc/g==;
+	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Content-Type:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=XKawjy2bKBrQJPdin7KqQUscEYPsaoP0832vtVrwP/Q=;
+	t=1758296165; x=1759505765; b=woKeZR/QX59XMHr/pH01fHWpjWxeh6iw1pkl9AOIXo5PQYZ
+	wH3ht48FIyfCT9E0J1wTZc++TH4jInCL5qJk4y4lV8PNkugudEG4SHeyRiR08AAcMG5aquA01A6BE
+	jnkG8G2We074Vlpsf8z62tkyr4ilggFwD+algH36jchtxROrRpzrv+kZgJcc41/+hT+l0lLtnoIGq
+	HhA+hSt9exKzsuzqAII2xlBabd+PeDzZPko9srrm1Pg82LNyVrj72CrDfIcGfUW8xrej+e7fRnsNd
+	xUQQDRWpvtx569SnEGGLOgv3LDILXNAuKdZmaOUc+wQ8H0mzaSLMV9JPwGRlx6mg==;
 Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.98.2)
 	(envelope-from <benjamin@sipsolutions.net>)
-	id 1uzd9S-0000000G6O6-33lI;
-	Fri, 19 Sep 2025 17:35:58 +0200
+	id 1uzd9U-0000000G6O6-1vjd;
+	Fri, 19 Sep 2025 17:36:00 +0200
 From: Benjamin Berg <benjamin@sipsolutions.net>
 To: linux-um@lists.infradead.org,
 	Willy Tarreau <w@1wt.eu>,
@@ -39,106 +39,248 @@ To: linux-um@lists.infradead.org,
 	Arnaldo Carvalho de Melo <acme@redhat.com>
 Cc: linux-kernel@vger.kernel.org,
 	Benjamin Berg <benjamin.berg@intel.com>
-Subject: [PATCH v2 00/11] Start porting UML to nolibc
-Date: Fri, 19 Sep 2025 17:34:09 +0200
-Message-ID: <20250919153420.727385-1-benjamin@sipsolutions.net>
+Subject: [PATCH v2 02/11] um: use tools/include for user files
+Date: Fri, 19 Sep 2025 17:34:11 +0200
+Message-ID: <20250919153420.727385-3-benjamin@sipsolutions.net>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20250919153420.727385-1-benjamin@sipsolutions.net>
+References: <20250919153420.727385-1-benjamin@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-malware-bazaar: not-scanned
 
 From: Benjamin Berg <benjamin.berg@intel.com>
 
-This patchset is an attempt to start a nolibc port of UML. The goal is
-to port UML to use nolibc in smaller chunks to make the switch more
-manageable.
+Using the kernel headers directly from the userspace parts of UML is
+problematic. Switch to use the headers from the tools/include
+subdirectory instead. These contain stripped down versions that work
+well for UML and only relatively small adjustments are needed to make it
+work.
 
-There are three parts to this patchset:
- * Two patches to use tools/include headers instead of kernel headers
-   for userspace files.
- * A few nolibc fixes and a new NOLIBC_NO_STARTCODE compile flag for it
- * Finally nolibc build support for UML and switching two files while
-   adding the appropriate support in nolibc itself.
+This adds code to create two symlinks so that the userspace code can
+still find asm-offsets.h and user_constants.h. Other than that, some
+includes are moved into USER_CFLAGS instead of handling them in
+Makefile.rules.
 
-v1 of this patchset was
-  https://lore.kernel.org/all/20250915071115.1429196-1-benjamin@sipsolutions.net/
+Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
 
-Changes in v2:
-- add sys/uio.h and sys/ptrace.h to nolibc
-- Use NOLIBC_NO_RUNTIME to disable nolibc startup code
-- Fix out-of-tree build
-- various small improvements and cleanups
+---
+v2:
+- Fix out-of-tree building
+---
+ arch/um/Makefile                | 18 ++++++++++++------
+ arch/um/include/shared/init.h   |  2 +-
+ arch/um/include/shared/user.h   |  5 -----
+ arch/um/kernel/skas/stub.c      |  1 +
+ arch/um/kernel/skas/stub_exe.c  |  4 ++--
+ arch/um/os-Linux/skas/process.c |  6 ++----
+ arch/um/os-Linux/start_up.c     |  4 ++--
+ arch/um/scripts/Makefile.rules  |  2 +-
+ arch/x86/um/Makefile            |  6 ++++--
+ arch/x86/um/user-offsets.c      |  1 -
+ 10 files changed, 25 insertions(+), 24 deletions(-)
 
-Should the nolibc changes be merged separately or could everything go
-through the same branch?
-
-Also, what about tools/include/linux/compiler.h? It seems that was added
-for the tracing code, but it is not clear to me who might ACK that fix.
-
-Benjamin
-
-Benjamin Berg (11):
-  tools compiler.h: fix __used definition
-  um: use tools/include for user files
-  tools/nolibc/stdio: remove perror if NOLIBC_IGNORE_ERRNO is set
-  tools/nolibc/dirent: avoid errno in readdir_r
-  tools/nolibc: use __fallthrough__ rather than fallthrough
-  tools/nolibc: add option to disable runtime
-  um: add infrastructure to build files using nolibc
-  um: use nolibc for the --showconfig implementation
-  tools/nolibc: add uio.h with readv and writev
-  tools/nolibc: add ptrace support
-  um: switch ptrace FP register access to nolibc
-
- arch/um/Makefile                             | 38 +++++++++++---
- arch/um/include/shared/init.h                |  2 +-
- arch/um/include/shared/os.h                  |  2 +
- arch/um/include/shared/user.h                |  6 ---
- arch/um/kernel/Makefile                      |  2 +-
- arch/um/kernel/skas/stub.c                   |  1 +
- arch/um/kernel/skas/stub_exe.c               |  4 +-
- arch/um/os-Linux/skas/process.c              |  6 +--
- arch/um/os-Linux/start_up.c                  |  4 +-
- arch/um/scripts/Makefile.rules               | 10 +++-
- arch/x86/um/Makefile                         |  6 ++-
- arch/x86/um/os-Linux/Makefile                |  5 +-
- arch/x86/um/os-Linux/registers.c             | 16 ++----
- arch/x86/um/user-offsets.c                   |  1 -
- tools/include/linux/compiler.h               |  2 +-
- tools/include/nolibc/Makefile                |  2 +
- tools/include/nolibc/arch-arm.h              |  2 +
- tools/include/nolibc/arch-arm64.h            |  2 +
- tools/include/nolibc/arch-loongarch.h        |  2 +
- tools/include/nolibc/arch-m68k.h             |  2 +
- tools/include/nolibc/arch-mips.h             |  2 +
- tools/include/nolibc/arch-powerpc.h          |  2 +
- tools/include/nolibc/arch-riscv.h            |  2 +
- tools/include/nolibc/arch-s390.h             |  2 +
- tools/include/nolibc/arch-sh.h               |  2 +
- tools/include/nolibc/arch-sparc.h            |  2 +
- tools/include/nolibc/arch-x86.h              |  4 ++
- tools/include/nolibc/compiler.h              |  4 +-
- tools/include/nolibc/crt.h                   |  3 ++
- tools/include/nolibc/dirent.h                |  6 +--
- tools/include/nolibc/nolibc.h                |  2 +
- tools/include/nolibc/stackprotector.h        |  2 +
- tools/include/nolibc/stdio.h                 |  2 +
- tools/include/nolibc/stdlib.h                |  2 +
- tools/include/nolibc/sys.h                   |  3 +-
- tools/include/nolibc/sys/auxv.h              |  3 ++
- tools/include/nolibc/sys/ptrace.h            | 52 ++++++++++++++++++++
- tools/include/nolibc/sys/uio.h               | 49 ++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c | 11 +++++
- 39 files changed, 222 insertions(+), 48 deletions(-)
- create mode 100644 tools/include/nolibc/sys/ptrace.h
- create mode 100644 tools/include/nolibc/sys/uio.h
-
+diff --git a/arch/um/Makefile b/arch/um/Makefile
+index 7be0143b5ba3..f7c509262568 100644
+--- a/arch/um/Makefile
++++ b/arch/um/Makefile
+@@ -42,7 +42,7 @@ include $(srctree)/$(HOST_DIR)/Makefile.um
+ core-y += $(HOST_DIR)/um/
+ 
+ SHARED_HEADERS	:= $(ARCH_DIR)/include/shared
+-ARCH_INCLUDE	:= -I$(srctree)/$(SHARED_HEADERS)
++ARCH_INCLUDE	:= -I$(srctree)/$(SHARED_HEADERS) -I$(objtree)/$(SHARED_HEADERS)
+ ARCH_INCLUDE	+= -I$(srctree)/$(HOST_DIR)/um/shared
+ KBUILD_CPPFLAGS += -I$(srctree)/$(HOST_DIR)/um
+ 
+@@ -70,10 +70,13 @@ KBUILD_AFLAGS += $(ARCH_INCLUDE)
+ 
+ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
+ 		$(ARCH_INCLUDE) $(MODE_INCLUDE) $(filter -I%,$(CFLAGS)) \
+-		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
+-		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__ \
+-		-include $(srctree)/include/linux/compiler-version.h \
+-		-include $(srctree)/include/linux/kconfig.h
++		-idirafter $(srctree)/tools/include \
++		-D__UM_HOST__ \
++		-include $(srctree)/tools/include/linux/compiler.h \
++		-include $(srctree)/tools/include/linux/kconfig.h \
++		-include $(objtree)/include/generated/autoconf.h \
++		-include $(srctree)/include/linux/kern_levels.h \
++		-include $(srctree)/$(ARCH_DIR)/include/shared/user.h
+ 
+ #This will adjust *FLAGS accordingly to the platform.
+ include $(srctree)/$(ARCH_DIR)/Makefile-os-Linux
+@@ -116,6 +119,9 @@ archheaders:
+ 
+ archprepare:
+ 	$(Q)$(MAKE) $(build)=$(HOST_DIR)/um include/generated/user_constants.h
++	$(Q)mkdir -p $(ARCH_DIR)/include/shared/generated
++	$(Q)ln -fs ../../../../../include/generated/user_constants.h $(ARCH_DIR)/include/shared/generated/
++	$(Q)ln -fs ../../../../../include/generated/asm-offsets.h $(ARCH_DIR)/include/shared/generated/
+ 
+ LINK-$(CONFIG_LD_SCRIPT_STATIC) += -static
+ LINK-$(CONFIG_LD_SCRIPT_DYN) += -no-pie
+@@ -147,7 +153,7 @@ export CFLAGS_vmlinux := $(LINK-y) $(LINK_WRAPS) $(LD_FLAGS_CMDLINE) $(CC_FLAGS_
+ # When cleaning we don't include .config, so we don't include
+ # TT or skas makefiles and don't clean skas_ptregs.h.
+ CLEAN_FILES += linux x.i gmon.out
+-MRPROPER_FILES += $(HOST_DIR)/include/generated
++MRPROPER_FILES += $(HOST_DIR)/include/generated $(ARCH_DIR)/include/shared/generated
+ 
+ archclean:
+ 	@find . \( -name '*.bb' -o -name '*.bbg' -o -name '*.da' \
+diff --git a/arch/um/include/shared/init.h b/arch/um/include/shared/init.h
+index 1a659e2e8cc3..d201705bedb3 100644
+--- a/arch/um/include/shared/init.h
++++ b/arch/um/include/shared/init.h
+@@ -41,7 +41,7 @@
+ typedef int (*initcall_t)(void);
+ typedef void (*exitcall_t)(void);
+ 
+-#include <linux/compiler_types.h>
++#define __section(section)	__attribute__((__section__(section)))
+ 
+ /* These are for everybody (although not all archs will actually
+    discard it in modules) */
+diff --git a/arch/um/include/shared/user.h b/arch/um/include/shared/user.h
+index 139eb78a4767..c9b853e1282f 100644
+--- a/arch/um/include/shared/user.h
++++ b/arch/um/include/shared/user.h
+@@ -16,13 +16,8 @@
+  */
+ #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+ 
+-/* This is to get size_t and NULL */
+-#ifndef __UM_HOST__
+ #include <linux/types.h>
+-#else
+ #include <stddef.h>
+-#include <sys/types.h>
+-#endif
+ 
+ extern void panic(const char *fmt, ...)
+ 	__attribute__ ((format (printf, 1, 2)));
+diff --git a/arch/um/kernel/skas/stub.c b/arch/um/kernel/skas/stub.c
+index 67cab46a602c..6c9bb1511ea2 100644
+--- a/arch/um/kernel/skas/stub.c
++++ b/arch/um/kernel/skas/stub.c
+@@ -5,6 +5,7 @@
+ 
+ #include <sysdep/stub.h>
+ 
++#include <linux/init.h>
+ #include <linux/futex.h>
+ #include <sys/socket.h>
+ #include <errno.h>
+diff --git a/arch/um/kernel/skas/stub_exe.c b/arch/um/kernel/skas/stub_exe.c
+index cbafaa684e66..0563838c01d1 100644
+--- a/arch/um/kernel/skas/stub_exe.c
++++ b/arch/um/kernel/skas/stub_exe.c
+@@ -4,8 +4,8 @@
+ #include <asm/unistd.h>
+ #include <sysdep/stub.h>
+ #include <stub-data.h>
+-#include <linux/filter.h>
+-#include <linux/seccomp.h>
++#include <uapi/linux/filter.h>
++#include <uapi/linux/seccomp.h>
+ #include <generated/asm-offsets.h>
+ 
+ void _start(void);
+diff --git a/arch/um/os-Linux/skas/process.c b/arch/um/os-Linux/skas/process.c
+index 78f48fa9db8b..8ad7e863af97 100644
+--- a/arch/um/os-Linux/skas/process.c
++++ b/arch/um/os-Linux/skas/process.c
+@@ -29,9 +29,7 @@
+ #include <sysdep/stub.h>
+ #include <sysdep/mcontext.h>
+ #include <linux/futex.h>
+-#include <linux/threads.h>
+ #include <timetravel.h>
+-#include <asm-generic/rwonce.h>
+ #include "../internal.h"
+ 
+ int is_skas_winch(int pid, int fd, void *data)
+@@ -204,7 +202,7 @@ void wait_stub_done_seccomp(struct mm_id *mm_idp, int running, int wait_sigsys)
+ 			 * Either way, if PID is negative, then we have no
+ 			 * choice but to kill the task.
+ 			 */
+-			if (__READ_ONCE(mm_idp->pid) < 0)
++			if (READ_ONCE(mm_idp->pid) < 0)
+ 				goto out_kill;
+ 
+ 			ret = syscall(__NR_futex, &data->futex,
+@@ -217,7 +215,7 @@ void wait_stub_done_seccomp(struct mm_id *mm_idp, int running, int wait_sigsys)
+ 			}
+ 		} while (data->futex == FUTEX_IN_CHILD);
+ 
+-		if (__READ_ONCE(mm_idp->pid) < 0)
++		if (READ_ONCE(mm_idp->pid) < 0)
+ 			goto out_kill;
+ 
+ 		running = 0;
+diff --git a/arch/um/os-Linux/start_up.c b/arch/um/os-Linux/start_up.c
+index a827c2e01aa5..8971f4fdddab 100644
+--- a/arch/um/os-Linux/start_up.c
++++ b/arch/um/os-Linux/start_up.c
+@@ -28,8 +28,8 @@
+ #include <stdbool.h>
+ #include <stub-data.h>
+ #include <sys/prctl.h>
+-#include <linux/seccomp.h>
+-#include <linux/filter.h>
++#include <uapi/linux/seccomp.h>
++#include <uapi/linux/filter.h>
+ #include <sysdep/mcontext.h>
+ #include <sysdep/stub.h>
+ #include <registers.h>
+diff --git a/arch/um/scripts/Makefile.rules b/arch/um/scripts/Makefile.rules
+index a8b7d9dab0a6..b4a2e0058503 100644
+--- a/arch/um/scripts/Makefile.rules
++++ b/arch/um/scripts/Makefile.rules
+@@ -9,7 +9,7 @@ USER_OBJS += $(filter %_user.o,$(obj-y) $(USER_SINGLE_OBJS))
+ USER_OBJS := $(foreach file,$(USER_OBJS),$(obj)/$(file))
+ 
+ $(USER_OBJS:.o=.%): \
+-	c_flags = -Wp,-MD,$(depfile) $(USER_CFLAGS) -include $(srctree)/include/linux/kern_levels.h -include user.h $(CFLAGS_$(basetarget).o)
++	c_flags = -Wp,-MD,$(depfile) $(USER_CFLAGS) $(CFLAGS_$(basetarget).o)
+ 
+ # These are like USER_OBJS but filter USER_CFLAGS through unprofile instead of
+ # using it directly.
+diff --git a/arch/x86/um/Makefile b/arch/x86/um/Makefile
+index b42c31cd2390..d8a120bace25 100644
+--- a/arch/x86/um/Makefile
++++ b/arch/x86/um/Makefile
+@@ -38,8 +38,10 @@ subarch-$(CONFIG_MODULES) += ../kernel/module.o
+ 
+ USER_OBJS := bugs_$(BITS).o ptrace_user.o fault.o
+ 
+-$(obj)/user-offsets.s: c_flags = -Wp,-MD,$(depfile) $(USER_CFLAGS) \
+-	-Iarch/x86/include/generated
++$(obj)/user-offsets.s: c_flags = -Wp,-MD,$(depfile) $(USER_CFLAGS)	\
++	-Iarch/x86/include/generated					\
++	-include $(srctree)/include/linux/kbuild.h
++
+ targets += user-offsets.s
+ 
+ include/generated/user_constants.h: $(obj)/user-offsets.s FORCE
+diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+index d6e1cd9956bf..74fc9763b76e 100644
+--- a/arch/x86/um/user-offsets.c
++++ b/arch/x86/um/user-offsets.c
+@@ -8,7 +8,6 @@
+ #define __FRAME_OFFSETS
+ #include <linux/ptrace.h>
+ #include <asm/types.h>
+-#include <linux/kbuild.h>
+ 
+ #define DEFINE_LONGS(sym, val)	\
+ 	COMMENT(#val " / sizeof(unsigned long)");	\
 -- 
 2.51.0
 
