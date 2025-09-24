@@ -1,123 +1,132 @@
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAD22571C7;
-	Wed, 24 Sep 2025 08:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F10128727C
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 08:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758701718; cv=none; b=dRyJD+bEGTg2z+RkNNMC5dMsk2fpsk1kydoJWaodptTAGSYBTn9aI0buv4nn8J2GhU9t4aiMjTwdJFd/PpldM4sKv/1l/oiMPMRpXkvUkHfkUJrVmVgqF+rnIwCHkpWepQcxzWPdgKIZD0o7Q1ekNtD0DGbzHbWLkHnEd24LQyk=
+	t=1758702383; cv=none; b=P8lymkIF4IYpiyLf+0enNlGeMxtaXtA24Q7dfjMEG4q5Y0tOvN+ImUCgF3dt+SehtlBewD3flPk5T1t3w7MmNnGCwBkxxlLfsV1jlKoSeGlReDPR2TBjSi5YnH8zGiEQVojA8aOnpaq3t7UHarHMLzAophFjDoIl3umPDxXwxqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758701718; c=relaxed/simple;
-	bh=D2wn6RMMBnB/+9wWDZ2/t9VQgCDz7Hs9Ndx57HE6Dsg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iIXSeihCzUIJyVzOUI5adNWzm1PHzLfj+43YrbxCLePAR9g+ub4QL2BEiXaehK1koZ1CVaIRGOUM72SR9RZ8q7bVR2bY+0D57QviWhMatyjMFlnQMsI+RB//8tcw/8oTy5RSJNTct/0pJW3kn+dsj6nJS/F+rbKxS8E71ZAQgwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=f8DZpYAG; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="f8DZpYAG"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=D2wn6RMMBnB/+9wWDZ2/t9VQgCDz7Hs9Ndx57HE6Dsg=;
-	t=1758701716; x=1759911316; b=f8DZpYAGqZNrtO12hrxWKoTJxIBRZIkJOU4i7mzCmdm6LoK
-	LDfy2qH1UUkyg0laJmQ8pKR9PGatQmgTbwLUQjlMbgiPtfQs4J3YAa2PtaWey6DdYc8VJlEcgWrHV
-	sjRA3I0/1zzspQIdTkkQe1i06ZBA9XOTTOpNx1ladj7X81fqa11bZPOFgTiiKVOXN+N01R8K+co1t
-	WZkqGmuxSu1kRAVfKWRw1xARslSoxjW3/3eXKAieH6+hwH2r+3Cyw9dd8Buiw0rG2GEXvp/7XIqkC
-	/e47eSY+BOly6S1I7NBjfaBukDVONxDTpHkNpcpNzizSMALKvFdnEdfIJ01v0MYw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <benjamin@sipsolutions.net>)
-	id 1v1KLs-00000008P0I-0JrN;
-	Wed, 24 Sep 2025 09:55:48 +0200
-Message-ID: <97fde69716ea4742b6cb4aca1a3ecc8788693cd3.camel@sipsolutions.net>
-Subject: Re: [PATCH v2 00/11] Start porting UML to nolibc
-From: Benjamin Berg <benjamin@sipsolutions.net>
-To: Willy Tarreau <w@1wt.eu>, Hajime Tazaki <thehajime@gmail.com>
-Cc: johannes@sipsolutions.net, hch@infradead.org,
- linux-um@lists.infradead.org, 	linux@weissschuh.net,
- linux-kselftest@vger.kernel.org, acme@redhat.com, 
-	linux-kernel@vger.kernel.org
-Date: Wed, 24 Sep 2025 09:55:47 +0200
-In-Reply-To: <20250924033217.GA9039@1wt.eu>
-References: <20250919153420.727385-1-benjamin@sipsolutions.net>
-	 <aM15eChUObXfxLzs@infradead.org>
-	 <4354d88c2ff7a57a7324cc39b4ce5ed4ebe5277d.camel@sipsolutions.net>
-	 <m2y0q47mbs.wl-thehajime@gmail.com> <20250924033217.GA9039@1wt.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	s=arc-20240116; t=1758702383; c=relaxed/simple;
+	bh=+tUrgkxN/lp2KXqz828oyBVZ2yDGNOIKK7iRndNRB/A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hqiLqjs9HW28HJx6RhzgDDDEFeaJzK5fUn0OhvrEJ3VjQ4Xj4uhA5XoBA1WUGiizN5T1I4pMSrSe4L3f/ggo4C3zlasCFXZDsQ1YcoKpgq6qk+ngpl4dmb8fOltG51Q+MaCf1RDCiStLeGUKaIeaUluVInPXBlguXbm/wUOhb5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-63486ff378cso522955a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Sep 2025 01:26:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758702379; x=1759307179;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7ZeXGQPLJ237ts6pnuqslfPixY1clqbR+lLUJqF8pM0=;
+        b=H0sltXLlUCzeXn0Se11UVnBiyFuX7hJP4vLOKhIJOw4y+LMjZWjUK13RWINDKinvVM
+         QDokz26e6IApnRF8xtehrBW+P211V/VmIwylmBhpwb6I04WEPyEWRM4T999t5uTXqzA2
+         Lxf6X73UsK/FQD68vUINlfdr6zgQHCRLwJ8XGySVKKsYIjpqGNjmcAfx671u4yMIdBKo
+         GIsEiVOsUjOgZsE6GN2O7hVO5MnWsfPrnOqkkFz7EfwJs6QopEMh2yj63oo4A4Xu8TDK
+         0TyEh9JtZitwz4pSU9WrvouBsRZOwvzM5haLBOk8aKyG+khAqbEzOSP22Pl7DJ15mFF/
+         ktKg==
+X-Forwarded-Encrypted: i=1; AJvYcCU2itLCVN1Zc5D9BUV3pcN3JtFMKsS0v9aXi8vs9tgrCZnADUFMFzOF2SSYkNtnlXUmcj16FqhbgT3aTHWU4WM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQmBGOzKLcoSWZc9A/EFnoBCOWHUy4GNOkGzVgCvEj4AZQH2Sq
+	YS5TKJaOLIDns/l+65wlaWGvMD6No4NzIP2QCVtQ5G+aZzIwacCH+7RS
+X-Gm-Gg: ASbGncvQUhsQZvnqABlAKAeEr/54QcUTsys9lvoS/DtGnwf3Bzrwa0bSHMDAGEaPOcA
+	6WpbJDr2Tc0gdYPvcjD3Ph8hSstf8H9aqXGYIFqgapa5X79Y/RsLKJjpbKXmsXvVQl0EcUNZBwx
+	OXlORsuMQe8rNhTJkiRPc9SZARJznaoKA8CjvoweJdCiTkfb4O4pT9RY5BJxoMlE033GLWNySfR
+	FengWJXx2l7vu5lLqAxDiQZOANPvmoX6Xhzfes0TZUPficuNBqeNs+ONI2ZHDHMe6hceq3imYNI
+	ym0xKC8PLRW87QOVbFxI+wtbSrB2QQ6sBu9jUxs+GsOITSfol78bMcwZUu+eaEaqxUGQc3wGP/z
+	IeNqOIClp6/YqVA==
+X-Google-Smtp-Source: AGHT+IFvEGn77kjtA6Y8SK5uc34FRU7qFYS3L/ZCPGwLjDFkpKGYZCp8QtLrY/o9FuB9JVbNkzTzQQ==
+X-Received: by 2002:a05:6402:50ce:b0:627:f96f:aa7b with SMTP id 4fb4d7f45d1cf-634839a09a0mr1588732a12.7.1758702379165;
+        Wed, 24 Sep 2025 01:26:19 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:70::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62fa5cfa60dsm12473716a12.4.2025.09.24.01.26.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Sep 2025 01:26:18 -0700 (PDT)
+Date: Wed, 24 Sep 2025 01:26:16 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Andre Carvalho <asantostc@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 5/6] netconsole: resume previously
+ deactivated target
+Message-ID: <aukchuzsfvztulvy4ibpfsw7srpbqm635e24azpcvnlgpmqxjm@e4mm3xoyvnu7>
+References: <20250921-netcons-retrigger-v2-0-a0e84006237f@gmail.com>
+ <20250921-netcons-retrigger-v2-5-a0e84006237f@gmail.com>
+ <t32t7uopvipphrbo7zsnkbayhpj5vgogfcagkt5sumknchmsia@n6znkrsulm4p>
+ <4evp3lo4rg7lh2qs6gunocnk5xlx6iayruhb6eoolmah6qu3fp@bwwr3sf5tnno>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4evp3lo4rg7lh2qs6gunocnk5xlx6iayruhb6eoolmah6qu3fp@bwwr3sf5tnno>
 
-On Wed, 2025-09-24 at 05:32 +0200, Willy Tarreau wrote:
-> On Wed, Sep 24, 2025 at 08:58:47AM +0900, Hajime Tazaki wrote:
-> >=20
-> > Hello Benjamin, Johannes,
-> >=20
-> > On Mon, 22 Sep 2025 16:41:36 +0900,
-> > Johannes Berg wrote:
-> > >=20
-> > > On Fri, 2025-09-19 at 08:40 -0700, Christoph Hellwig wrote:
-> > > > On Fri, Sep 19, 2025 at 05:34:09PM +0200, Benjamin Berg wrote:
-> > > > > From: Benjamin Berg <benjamin.berg@intel.com>
-> > > > >=20
-> > > > > This patchset is an attempt to start a nolibc port of UML.
-> > > >=20
-> > > > It would be useful to explain why that is desirable.
-> > >=20
-> > > Agree, it should be here, but FWIW it's been discussed elsewhere on t=
-he
-> > > linux-um list in the past and basically there are various issues arou=
-nd
-> > > it. Off the top of my head:
-> > > =C2=A0- glibc enabling new features such as rseq that interact badly =
-with how
-> > > =C2=A0=C2=A0 UML manages memory (there were fixes for this, it worked=
- sometimes
-> > > =C2=A0=C2=A0 and sometimes not)
-> > > =C2=A0- allocation placement for TLS is problematic (see the SMP seri=
-es)
-> > > =C2=A0- it's (too) easy to accidentally call glibc functions that req=
-uire
-> > > =C2=A0=C2=A0 huge amounts of stack space
-> > >=20
-> > > There are probably other reasons, but the mixed nature of UML being b=
-oth
-> > > kernel and "hypervisor" code in a single place doesn't mix well with
-> > > glibc.
-> >=20
-> > just curious
-> >=20
-> > - are those issues not happening in other libc implementation ? (e.g.,
-> > =C2=A0 musl-libc)
-> > - same question to nolibc: is there any possibility that nolibc will
-> > =C2=A0 evolve as glibc does, and this evolution introduces the UML issu=
-es ?
->=20
-> Nolibc focuses on early boot programs. That does not mean it will never
-> evolve towrards more generic usage but this remains unlikely, and in any
-> case there's the goal will remain not to degrade the experience on the
-> original target (early boot). That doesn't mean there will never be any
-> breakage but we're doing our best to keep things in a clean and workable
-> state. Regarding threads, it seems unlikely that they'll arrive any time
-> soon. But if they did, assuming UML would by then be a long established
-> user, we'd certainly find a solution together (even via build-time
-> defines if needed).
+Hello Andre, 
 
-Also, with nolibc it is really simple to override any functions as
-needed. We will likely want to do this for malloc/free so that nothing
-bad can happen there.
+On Tue, Sep 23, 2025 at 08:30:39PM +0100, Andre Carvalho wrote:
+> On Tue, Sep 23, 2025 at 05:22:25AM -0700, Breno Leitao wrote:
+> > For targets that are set by the mac address, they don't necessarily get
+> > np.dev_name populated, do they?
+> > 
+> > I am double checking netpoll_setup(), and if
+> > is_valid_ether_addr(np->dev_mac), I don't see np.dev_name being
+> > populated.
+> 
+> I was not expecting it to be the case either, bu my understanding is that 
+> np.dev_name does get populated by __netpoll_setup, which is called unconditionally 
+> at the end of netpoll_setup. __netpoll_setup eventually does:
+> 
+> np->dev = ndev;
+> strscpy(np->dev_name, ndev->name, IFNAMSIZ);
+> 
+> I've confirmed that for targets bound by mac, np->dev_name is empty before these
+> lines but then it is correctly populated here. For targets create by name,
+> np->dev_name is already correctly set prior to this. 
+> Please, let me know if I'm missing something.
 
-Actually, UML already tries to do that for glibc. However, it
-effectively fails (for dynamically linked builds) because the
-dynamically linked glibc still uses its internal version for these
-symbols.
+Thanks for confirming it. I think this might cause some semantics
+confusion for the user, given it is asking it to bind to mac, and later,
+netconsole is binding by dev_name.
 
-Benjamin
+Let's say the following case:
+
+ 1) netconsole is configured to bind to mac X which happens to be on eth0.
+ 2) there is a PCI downstream failure which causes a re-enumeration
+ 3) netconsole will get DEACTIVATED during phase 2
+ 4) After the re-enumeration, eth0 becomes some other and interface (not
+ the one with mac X).
+ 5) Now you are going to bind do eth0 which is not the one with mac X.
+
+> > Should we also compare that the mac doesn't match before returning?
+> 
+> Even though the above seem to work on my tests, I was not 100% sure we wanted
+> to also check the dev_name when we initially bound by mac.
+> I've also considered the approach below, which I think achieves what you are
+> suggesting:
+> 
+> if (!is_broadcast_ether_addr(nt->np.dev_mac)) {
+> 	if(memcmp(nt->np.dev_mac, ndev->dev_addr, ETH_ALEN))
+> 		return;
+> } else if (strncmp(nt->np.dev_name, ndev->name, IFNAMSIZ)) {
+>         return;
+> }
+> 
+> Let me know if you prefer this approach, it would allow resuming targets in case
+> even if their dev_name changes.
+
+I would prefer this approach than the current one, this would avoid the
+problem above.
+
+The other option is to always populate the mac during netpoll setup and
+then always resume based on mac. This seems a more precise resume.
+
+In this case, if the device goes to DEACTIVATED, then np.dev_mac will be
+populated, and you only compare it to check if you want to resume it.
