@@ -1,149 +1,135 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B8429BD94
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Sep 2025 09:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B4A2BE041
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Sep 2025 09:46:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758879995; cv=none; b=dRAAY90vKFZzzgO5WmUC63OtvKjYXnPs1akZcXKRyMkLG/l6+JQg2A5XHqXLNRh0Am70uHpskbRcLrpkHsk0Gte9kORbyLd/zE956FAwBDMr9W1KvIbd/9CLGlGDo1J8H1zTdxBrGMjpkI9S9jzCDJkXV6i7DqFrWTSdqVMubZI=
+	t=1758879999; cv=none; b=QXQbKXeMWj6079yDcPCRdta2LeBHykLot0WpaTBsLCPkBzsHLVJGDIUHX7j8yJQvFDxExm8zK6somuMGNrvida4MUuPXpyWnJbOowcB/6aEfAipA4Xe11Tzl9B76+fKDcJQ46/lIFU45ulV4pOvuF6FagI4/o3dLqwod6L9+jmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758879995; c=relaxed/simple;
-	bh=hUMRS7DJvk7Xj1VzsmX84BYsYqaTZzC1ukrIfumPYIU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pMvVhKUirlXoxgxzBMCR0GQFUfcBRshGlPRUGi3C6EFQBICO4DTPBRPVrv+dvvHJLTLGTolgCVRAVvZ6YxAUpiyP4d4Ru9GVShUQ9ZOCy5Z8QyVCNznPBdOgGD1my3fjoANF9+LVor0B+AGizZsG/AlY7sXwlxZokrPgY5AIaVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YNZESI5h; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1758879999; c=relaxed/simple;
+	bh=kfIi6VrIE2lEa92dIkJL1fhpPaEmO6naVvpOiV6YbKc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jWyHx01lJbA9Y4sroFB/41wlg6Czj0pJAgqGIpl/mMi7Q05xYIsjZbY9+qZfjNkAGWGMbv0eTgqYsb75cXLyjhh6x+S0Q7e4UcRkn71FtLPz6cA+HKHphR2ZfhpLxYrTkU41UAW6SsNBmMF7h794xfDYYBJ1e6CAqs5lr1iNSug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HbHlnkNU; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YNZESI5h"
-Message-ID: <c88514c3-e15f-4853-8acf-15e7b4b979f4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1758879980;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HbHlnkNU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758879996;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wL/DKY7lmmAFsSL3d0RvnMPd7olra+yxGHLjKGhoofY=;
-	b=YNZESI5h/jXNDiLLb7j86+j+TkXx1nKw543VaKtpr8w5CCCBn8PBOYUz9LE0gA3VqxAeTq
-	vk8gHrlHjKvE2h5y4LlVK9XHV23gdoSJUvecSr6p74DcXM6u9ckDN633ckuAjfmHnKaOOB
-	P/laAqnp0QFmiI8hpwCxa0nGYMdpMzQ=
-Date: Fri, 26 Sep 2025 10:46:15 +0100
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rSya+H0jA/G4MDTH6lvX00akKIqMxNianJVPL7t72DQ=;
+	b=HbHlnkNU6S+yt2Itxcmgvozny2o4nvxBbH8800hcldcFQirO/2N0aK2oZjsy2O3o+oEG6/
+	rYHoaKxZyTS+BseDvZ/vMZNuN86h9561UqTgonsUn1B7oDhgA+4PIgogbPkXiNfXfLH3x/
+	OqPOGYo+K3sks7elhvhD8uQeBhMvTn8=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-63-e4MAtEV7Mj2HfGs7lxr5tA-1; Fri,
+ 26 Sep 2025 05:46:32 -0400
+X-MC-Unique: e4MAtEV7Mj2HfGs7lxr5tA-1
+X-Mimecast-MFC-AGG-ID: e4MAtEV7Mj2HfGs7lxr5tA_1758879991
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 70856195609F;
+	Fri, 26 Sep 2025 09:46:31 +0000 (UTC)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb (unknown [10.45.225.225])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 84B9318003FC;
+	Fri, 26 Sep 2025 09:46:27 +0000 (UTC)
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Nam Cao <namcao@linutronix.de>
+Cc: Gabriele Monaco <gmonaco@redhat.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	John Kacur <jkacur@redhat.com>,
+	Waylon Cude <wcude@redhat.com>,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/2] selftests/verification: Add initial RV tests
+Date: Fri, 26 Sep 2025 11:46:11 +0200
+Message-ID: <20250926094613.34030-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v7 06/12] KVM: guest_memfd: add module param for disabling
- TLB flushing
-To: David Hildenbrand <david@redhat.com>, Dave Hansen
- <dave.hansen@intel.com>, "Roy, Patrick" <roypat@amazon.co.uk>
-Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>,
- "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>,
- "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
- "joey.gouly@arm.com" <joey.gouly@arm.com>,
- "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
- "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
- <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>,
- "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "luto@kernel.org" <luto@kernel.org>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "willy@infradead.org" <willy@infradead.org>,
- "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
- "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
- "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
- "vbabka@suse.cz" <vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>,
- "surenb@google.com" <surenb@google.com>, "mhocko@suse.com"
- <mhocko@suse.com>, "song@kernel.org" <song@kernel.org>,
- "jolsa@kernel.org" <jolsa@kernel.org>, "ast@kernel.org" <ast@kernel.org>,
- "daniel@iogearbox.net" <daniel@iogearbox.net>,
- "andrii@kernel.org" <andrii@kernel.org>,
- "martin.lau@linux.dev" <martin.lau@linux.dev>,
- "eddyz87@gmail.com" <eddyz87@gmail.com>,
- "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
- "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
- "kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
- <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
- "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
- "peterx@redhat.com" <peterx@redhat.com>, "jannh@google.com"
- <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
- "shuah@kernel.org" <shuah@kernel.org>, "seanjc@google.com"
- <seanjc@google.com>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "linux-mm@kvack.org" <linux-mm@kvack.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "Cali, Marco" <xmarcalx@amazon.co.uk>,
- "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
- "Thomson, Jack" <jackabt@amazon.co.uk>,
- "derekmn@amazon.co.uk" <derekmn@amazon.co.uk>,
- "tabba@google.com" <tabba@google.com>,
- "ackerleytng@google.com" <ackerleytng@google.com>
-References: <20250924151101.2225820-4-patrick.roy@campus.lmu.de>
- <20250924152214.7292-1-roypat@amazon.co.uk>
- <20250924152214.7292-3-roypat@amazon.co.uk>
- <e25867b6-ffc0-4c7c-9635-9b3f47b186ca@intel.com>
- <c1875a54-0c87-450f-9370-29e7ec4fea3d@redhat.com>
- <82bff1c4-987f-46cb-833c-bd99eaa46e7a@intel.com>
- <c79173d8-6f18-40fa-9621-e691990501e4@redhat.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Patrick Roy <patrick.roy@linux.dev>
-Content-Language: en-US
-In-Reply-To: <c79173d8-6f18-40fa-9621-e691990501e4@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+
+Add a series of tests to validate the RV tracefs API and basic
+functionality.
+
+* available monitors:
+    Check that all monitors (from the monitors folder) appear as
+    available and have a description. Works with nested monitors.
+
+* enable/disable:
+    Enable and disable all monitors and validate both the enabled file
+    and the enabled_monitors. Check that enabling container monitors
+    enables all nested monitors.
+
+* reactors:
+    Set all reactors and validate the setting, also for nested monitors.
+
+* wwnr with printk:
+    wwnr is broken on purpose, run it with a load and check that the
+    printk reactor works. Also validate disabling reacting_on or
+    monitoring_on prevents reactions.
+
+These tests use the ftracetest suite. The first patch of the series
+adapts ftracetest to make this possible.
+
+The enable/disable test cannot pass on upstream without the application
+of the fix in [1].
+
+[1] - https://lore.kernel.org/lkml/87tt0t4u19.fsf@yellow.woof
+
+To: Steven Rostedt <rostedt@goodmis.org>
+To: Nam Cao <namcao@linutronix.de>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: John Kacur <jkacur@redhat.com>
+Cc: Waylon Cude <wcude@redhat.com>
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+Gabriele Monaco (2):
+  selftest/ftrace: Generalise ftracetest to use with RV
+  selftests/verification: Add initial RV tests
+
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/ftrace/ftracetest     | 34 ++++++---
+ .../ftrace/test.d/00basic/mount_options.tc    |  2 +-
+ .../testing/selftests/ftrace/test.d/functions |  6 +-
+ .../testing/selftests/verification/.gitignore |  2 +
+ tools/testing/selftests/verification/Makefile |  8 ++
+ tools/testing/selftests/verification/config   |  1 +
+ tools/testing/selftests/verification/settings |  1 +
+ .../selftests/verification/test.d/functions   | 39 ++++++++++
+ .../test.d/rv_monitor_enable_disable.tc       | 75 +++++++++++++++++++
+ .../verification/test.d/rv_monitor_reactor.tc | 68 +++++++++++++++++
+ .../test.d/rv_monitors_available.tc           | 18 +++++
+ .../verification/test.d/rv_wwnr_printk.tc     | 29 +++++++
+ .../verification/verificationtest-ktap        |  8 ++
+ 14 files changed, 278 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/verification/.gitignore
+ create mode 100644 tools/testing/selftests/verification/Makefile
+ create mode 100644 tools/testing/selftests/verification/config
+ create mode 100644 tools/testing/selftests/verification/settings
+ create mode 100644 tools/testing/selftests/verification/test.d/functions
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_monitors_available.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
+ create mode 100644 tools/testing/selftests/verification/verificationtest-ktap
 
 
+base-commit: cec1e6e5d1ab33403b809f79cd20d6aff124ccfe
+-- 
+2.51.0
 
-On Thu, 2025-09-25 at 21:13 +0100, David Hildenbrand wrote:
-> On 25.09.25 21:59, Dave Hansen wrote:
->> On 9/25/25 12:20, David Hildenbrand wrote:
->>> On 25.09.25 20:27, Dave Hansen wrote:
->>>> On 9/24/25 08:22, Roy, Patrick wrote:
->>>>> Add an option to not perform TLB flushes after direct map manipulations.
->>>>
->>>> I'd really prefer this be left out for now. It's a massive can of worms.
->>>> Let's agree on something that works and has well-defined behavior before
->>>> we go breaking it on purpose.
->>>
->>> May I ask what the big concern here is?
->>
->> It's not a _big_ concern. 
-> 
-> Oh, I read "can of worms" and thought there is something seriously problematic :)
-> 
->> I just think we want to start on something
->> like this as simple, secure, and deterministic as possible.
-> 
-> Yes, I agree. And it should be the default. Less secure would have to be opt-in and documented thoroughly.
-
-Yes, I am definitely happy to have the 100% secure behavior be the
-default, and the skipping of TLB flushes be an opt-in, with thorough
-documentation!
-
-But I would like to include the "skip tlb flushes" option as part of
-this patch series straight away, because as I was alluding to in the
-commit message, with TLB flushes this is not usable for Firecracker for
-performance reasons :(
-
->>
->> Let's say that with all the unmaps that load_unaligned_zeropad() faults
->> start to bite us. It'll take longer to find them if the TLB isn't flushed.
->>
->> Basically, it'll make the bad things happen sooner rather than later.
-> 
-> Agreed.
-> 
-
-Best,
-Patrick
