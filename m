@@ -1,157 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18670F4F1;
-	Fri, 26 Sep 2025 08:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B8429BD94
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Sep 2025 09:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758877200; cv=none; b=mav6V2l/Wc8z/dnZ6WaijvW/6Fun8ng2ziD4TjTsnbW1wjbm7caJZaqBxgmtvDUL2dN5wB3ujgvtUKMeWIR6Nx5Iilpx5BOP/uwzkOgpJkz0g4OOBlkNyPlpDQ6ozMTY5W35/jgcR4e8znp5KS9cFX+3gf68bz588AMFk1L9hyY=
+	t=1758879995; cv=none; b=dRAAY90vKFZzzgO5WmUC63OtvKjYXnPs1akZcXKRyMkLG/l6+JQg2A5XHqXLNRh0Am70uHpskbRcLrpkHsk0Gte9kORbyLd/zE956FAwBDMr9W1KvIbd/9CLGlGDo1J8H1zTdxBrGMjpkI9S9jzCDJkXV6i7DqFrWTSdqVMubZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758877200; c=relaxed/simple;
-	bh=L0oABFhpwRrsTJJhUFzKMLEuhir4Lfkj64YL/jUGDeU=;
+	s=arc-20240116; t=1758879995; c=relaxed/simple;
+	bh=hUMRS7DJvk7Xj1VzsmX84BYsYqaTZzC1ukrIfumPYIU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ag5YBmtV3Ng2K5p2fYIn3q9JesbOKHpHRRfEEFD4ItEsJ5K/q8cTpzjvcXUWteFEiEhDwNZZxpOl1YU7puGCgdYDjR/LOghghAZto8ZjbxQrLv1rARE6AqRtuPhbyf4XL56ipHcDIZRRjsA8mvtnG1Yho53heA/wjWAsW/51+cU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R/RKfhzK; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=pMvVhKUirlXoxgxzBMCR0GQFUfcBRshGlPRUGi3C6EFQBICO4DTPBRPVrv+dvvHJLTLGTolgCVRAVvZ6YxAUpiyP4d4Ru9GVShUQ9ZOCy5Z8QyVCNznPBdOgGD1my3fjoANF9+LVor0B+AGizZsG/AlY7sXwlxZokrPgY5AIaVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YNZESI5h; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R/RKfhzK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CFC2C4CEF5;
-	Fri, 26 Sep 2025 08:59:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758877199;
-	bh=L0oABFhpwRrsTJJhUFzKMLEuhir4Lfkj64YL/jUGDeU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=R/RKfhzKCAHUUHOUZQQWDSgUR4W9XLp4aoZd/Afp2edAjWaep1kDpOlJX2gReYj2A
-	 jKLIeyPDMVYtUt74x3sHfkfe4kqaSnD5spOFAIO0nG5UbVS9gtfc+apHJioZ/lv6s3
-	 otvv4LEC9cu1rolLxcTo1LCKrUGNMvPwD10gBAGJ+wNRJDKkRMqu+xtphkGmB2lxrr
-	 CFHNGXW+d37fQVoc+j+rvHWaYjntwimBQ0vKZViCqawTt1pUu+0lwg/php8jyujIeu
-	 rrqzPzV8NrRogP/53UvNcGN+1SbnoIyM2u3EPKUafk7ZTG0uc2cUz/AGqreYfF+FLp
-	 MdMhUzVHxolUw==
-Message-ID: <e03d6d69-73ea-46dc-b632-149ef5831f85@kernel.org>
-Date: Fri, 26 Sep 2025 10:59:51 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YNZESI5h"
+Message-ID: <c88514c3-e15f-4853-8acf-15e7b4b979f4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1758879980;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wL/DKY7lmmAFsSL3d0RvnMPd7olra+yxGHLjKGhoofY=;
+	b=YNZESI5h/jXNDiLLb7j86+j+TkXx1nKw543VaKtpr8w5CCCBn8PBOYUz9LE0gA3VqxAeTq
+	vk8gHrlHjKvE2h5y4LlVK9XHV23gdoSJUvecSr6p74DcXM6u9ckDN633ckuAjfmHnKaOOB
+	P/laAqnp0QFmiI8hpwCxa0nGYMdpMzQ=
+Date: Fri, 26 Sep 2025 10:46:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC bpf-next v2 1/5] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-To: Stanislav Fomichev <stfomichev@gmail.com>,
- Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-kselftest@vger.kernel.org
-References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
- <20250925-bpf-xdp-meta-rxcksum-v2-1-6b3fe987ce91@kernel.org>
- <aNYUqdaIJV1cvFCb@mini-arch>
+Subject: Re: [PATCH v7 06/12] KVM: guest_memfd: add module param for disabling
+ TLB flushing
+To: David Hildenbrand <david@redhat.com>, Dave Hansen
+ <dave.hansen@intel.com>, "Roy, Patrick" <roypat@amazon.co.uk>
+Cc: "pbonzini@redhat.com" <pbonzini@redhat.com>,
+ "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>,
+ "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+ "joey.gouly@arm.com" <joey.gouly@arm.com>,
+ "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+ "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
+ <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>,
+ "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+ "luto@kernel.org" <luto@kernel.org>,
+ "peterz@infradead.org" <peterz@infradead.org>,
+ "willy@infradead.org" <willy@infradead.org>,
+ "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+ "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+ "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+ "vbabka@suse.cz" <vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>,
+ "surenb@google.com" <surenb@google.com>, "mhocko@suse.com"
+ <mhocko@suse.com>, "song@kernel.org" <song@kernel.org>,
+ "jolsa@kernel.org" <jolsa@kernel.org>, "ast@kernel.org" <ast@kernel.org>,
+ "daniel@iogearbox.net" <daniel@iogearbox.net>,
+ "andrii@kernel.org" <andrii@kernel.org>,
+ "martin.lau@linux.dev" <martin.lau@linux.dev>,
+ "eddyz87@gmail.com" <eddyz87@gmail.com>,
+ "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+ "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+ "kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
+ <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
+ "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
+ "peterx@redhat.com" <peterx@redhat.com>, "jannh@google.com"
+ <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
+ "shuah@kernel.org" <shuah@kernel.org>, "seanjc@google.com"
+ <seanjc@google.com>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+ "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+ "linux-mm@kvack.org" <linux-mm@kvack.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "Cali, Marco" <xmarcalx@amazon.co.uk>,
+ "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
+ "Thomson, Jack" <jackabt@amazon.co.uk>,
+ "derekmn@amazon.co.uk" <derekmn@amazon.co.uk>,
+ "tabba@google.com" <tabba@google.com>,
+ "ackerleytng@google.com" <ackerleytng@google.com>
+References: <20250924151101.2225820-4-patrick.roy@campus.lmu.de>
+ <20250924152214.7292-1-roypat@amazon.co.uk>
+ <20250924152214.7292-3-roypat@amazon.co.uk>
+ <e25867b6-ffc0-4c7c-9635-9b3f47b186ca@intel.com>
+ <c1875a54-0c87-450f-9370-29e7ec4fea3d@redhat.com>
+ <82bff1c4-987f-46cb-833c-bd99eaa46e7a@intel.com>
+ <c79173d8-6f18-40fa-9621-e691990501e4@redhat.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Patrick Roy <patrick.roy@linux.dev>
 Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <aNYUqdaIJV1cvFCb@mini-arch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <c79173d8-6f18-40fa-9621-e691990501e4@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
 
-On 26/09/2025 06.20, Stanislav Fomichev wrote:
-> On 09/25, Lorenzo Bianconi wrote:
->> Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
->> checksum will be use by devices capable of exposing receive checksum
->> result via bpf_xdp_metadata_rx_checksum().
->> Moreover, introduce xmo_rx_checksum netdev callback in order allow the
->> eBPF program bounded to the device to retrieve the RX checksum result
->> computed by the hw NIC.
+On Thu, 2025-09-25 at 21:13 +0100, David Hildenbrand wrote:
+> On 25.09.25 21:59, Dave Hansen wrote:
+>> On 9/25/25 12:20, David Hildenbrand wrote:
+>>> On 25.09.25 20:27, Dave Hansen wrote:
+>>>> On 9/24/25 08:22, Roy, Patrick wrote:
+>>>>> Add an option to not perform TLB flushes after direct map manipulations.
+>>>>
+>>>> I'd really prefer this be left out for now. It's a massive can of worms.
+>>>> Let's agree on something that works and has well-defined behavior before
+>>>> we go breaking it on purpose.
+>>>
+>>> May I ask what the big concern here is?
 >>
->> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
->> ---
->>   Documentation/netlink/specs/netdev.yaml |  5 +++++
->>   include/net/xdp.h                       | 14 ++++++++++++++
->>   net/core/xdp.c                          | 29 +++++++++++++++++++++++++++++
->>   3 files changed, 48 insertions(+)
+>> It's not a _big_ concern. 
+> 
+> Oh, I read "can of worms" and thought there is something seriously problematic :)
+> 
+>> I just think we want to start on something
+>> like this as simple, secure, and deterministic as possible.
+> 
+> Yes, I agree. And it should be the default. Less secure would have to be opt-in and documented thoroughly.
+
+Yes, I am definitely happy to have the 100% secure behavior be the
+default, and the skipping of TLB flushes be an opt-in, with thorough
+documentation!
+
+But I would like to include the "skip tlb flushes" option as part of
+this patch series straight away, because as I was alluding to in the
+commit message, with TLB flushes this is not usable for Firecracker for
+performance reasons :(
+
 >>
->> diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
->> index e00d3fa1c152d7165e9485d6d383a2cc9cef7cfd..00699bf4a7fdb67c6b9ee3548098b0c933fd39a4 100644
->> --- a/Documentation/netlink/specs/netdev.yaml
->> +++ b/Documentation/netlink/specs/netdev.yaml
->> @@ -61,6 +61,11 @@ definitions:
->>           doc: |
->>             Device is capable of exposing receive packet VLAN tag via
->>             bpf_xdp_metadata_rx_vlan_tag().
->> +      -
->> +        name: checksum
->> +        doc: |
->> +          Device is capable of exposing receive checksum result via
->> +          bpf_xdp_metadata_rx_checksum().
->>     -
->>       type: flags
->>       name: xsk-flags
->> diff --git a/include/net/xdp.h b/include/net/xdp.h
->> index aa742f413c358575396530879af4570dc3fc18de..9ab9ac10ae2074b70618a9d4f32544d8b9a30b63 100644
->> --- a/include/net/xdp.h
->> +++ b/include/net/xdp.h
->> @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
->>   			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
->>   			   bpf_xdp_metadata_rx_vlan_tag, \
->>   			   xmo_rx_vlan_tag) \
->> +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
->> +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
->> +			   bpf_xdp_metadata_rx_checksum, \
->> +			   xmo_rx_checksum)
->>   
->>   enum xdp_rx_metadata {
->>   #define XDP_METADATA_KFUNC(name, _, __, ___) name,
->> @@ -643,12 +647,22 @@ enum xdp_rss_hash_type {
->>   	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
->>   };
->>   
->> +enum xdp_checksum {
->> +	XDP_CHECKSUM_NONE		= CHECKSUM_NONE,
->> +	XDP_CHECKSUM_UNNECESSARY	= CHECKSUM_UNNECESSARY,
->> +	XDP_CHECKSUM_COMPLETE		= CHECKSUM_COMPLETE,
->> +	XDP_CHECKSUM_PARTIAL		= CHECKSUM_PARTIAL,
->> +};
+>> Let's say that with all the unmaps that load_unaligned_zeropad() faults
+>> start to bite us. It'll take longer to find them if the TLB isn't flushed.
+>>
+>> Basically, it'll make the bad things happen sooner rather than later.
 > 
-> Btw, might be worth mentioning, awhile ago we had settled on a smaller set of
-> exposed types:
+> Agreed.
 > 
-> https://lore.kernel.org/netdev/20230811161509.19722-13-larysa.zaremba@intel.com/
-> 
-> Maybe go through the previous postings and check if the arguments are
-> still relevant? (or explain why we want more checksum now)
 
-IHMO the linked proposal reduced the types too much.
-
-I think Lorenzo's suggested types are much better. One argument is of-
-cause that the types corresponds directly to the (time proven) types
-used by the SKB.
-
-I could argue, that we are lacking a type that indicate hardware
-"failed" to do the checksum, but that is indirectly covered by
-CHECKSUM_NONE case.  And having BPF-developers deal with both
-CHECKSUM_NONE and CHECKSUM_FAIL correctly is a recipe for bugs.
-
-I will explain in another email, why we need to document what
-CHECKSUM_NONE actually means.
-
---Jesper
-
-
-
-
-
-
+Best,
+Patrick
