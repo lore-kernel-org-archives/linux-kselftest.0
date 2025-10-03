@@ -1,83 +1,113 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58198273803
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Oct 2025 08:45:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A1D275AF2;
+	Fri,  3 Oct 2025 08:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759481113; cv=none; b=tF3497eVkI0lzQgKC2tLfq03GynRrHDkt3zJEXzV7CPAmJMOKg4gHZKuI/vhqXbhhYTLGSRY5zNXA+jhnevdbsUpf7N83IaIUs0Wyrcf6Bc10Fmv4/efkXZLBIleIF+TDD9G6T4aEScB0m1vCqSmWjw5yraayvuMtDlVXlrKUh4=
+	t=1759481233; cv=none; b=oB2zVi/O4p8dVFNLjAiaFDkg3zDrT7QuXXSvzyiuZP9q4vPldFST38l663XkXfpY4OEhiqQkxPzgBXXd2w3hopOQZmTZSpD2hEQA43XZS+e8dGN3L25YwASeuRel97q/WTnFgU+j+3z1Le5Yzkyl1Y2vRlhLLPUVEz0p2Dd8fCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759481113; c=relaxed/simple;
-	bh=YB1ghMEOeQ5JFYWeY2ps8djFxf5/HuRtlXBeq/CH+jo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BA+rMgWoQN4XHWM4UubKM+rOMSTSfCUAqqRF7HsS0a8dcJecKIdOazxHs+jQy7KxJfTvyS5AjsmTTiqFHC6CR3XXg7dr2+PwOGukZp+Hm3njuEfFbaIlXTkkPqj6NjBO34UeepP3O7pO+HEPNe4UrO/wlP1J5RrKWZ+FD11p0OE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6318855a83fso4115855a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Oct 2025 01:45:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759481110; x=1760085910;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lNchDiEzIDmBEztmo8oZmioyYgfq18ckj4ZJE8yTj5I=;
-        b=DBrmj9LIYWi4zNrG7PQSKxn22ljOY7f5q4W9QTF2nOh07Po8VIs24XQb1qkRmmtp/s
-         BZznovD5Cu+MKBNFV8OrsWY+vOgIpQF23SiaeDKZqcmzb94O5BaW29BTNRVgkC3cYCBn
-         HEDSk8JIxmA7s7GE8Cr/3mvZY5XXBtnGYS57tuGLI6kssKICCyFZcwHF/d/IdLJmS6QG
-         9G+tDP/jXIZfUGs1vlS8X6zZmhHAi2cCroXxNHwTicLIch3SaeX52BwcXzDjunWYTxSH
-         WINhk5RoKxxQCWa0HhfisDV3ElWnh1qMEsvyidq8W9UV+a9y3iINuhisPNLe43fLs33C
-         biXA==
-X-Forwarded-Encrypted: i=1; AJvYcCWhYPMWsKLrIojGnP/SeIW8OknnAnV658XDMVURjo56QR+TMCUgwh3c5e5U/nr+V0Vw/wuM70W2k9cQZmEdFtU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVpJKpdp1l7Jw2mszqZ1dvopwL4SDD+mUKzAlOIEQDsdvyrgNX
-	/bODFhyseQMgMcfEBAws0qSZAZ3MVGBfDsa6A0Uhtd6YQFa/FXrtnjgU
-X-Gm-Gg: ASbGncuNcvehqCgiizTnny6SnTgFMUuB/yymxM6Wgp7oSyKcb6U4ME7lWU/8unwYVE8
-	r5BWLZX3KNTIdKax0GAzEGFgOeAxeqbBEPNlBtvjq4Sm1WsD7A8ipOaB1UKm6DjGCGkfM3XoTla
-	Z4bIkM6tLFnZ899744fzL1SUlPj9yBR348jvr0/TdHGByfq19etjCzIbt0cC/Kli0xenyr/1dNn
-	RzGUKVtItl6gNs3oqxzQnvK4H9XXr6t+HoJ+NnFyUUFs2HX/QoKC62mvM3JMsO7VmzBprCfyK2a
-	WfmiUvdEFv+llZalum6cGVOh02P5HwVpNAMuGGpkW/EdE3dzox0rjQnzCfH8REcrpeR/1qxPcmw
-	H43uZm8B2fQskoGf3K9Y0mvSNc4RMbVgJbRyfpw==
-X-Google-Smtp-Source: AGHT+IGjw0zmq2CU/sdA/VkxJILpqI/TtLALso31v4P2kiwd0BksUPICZg/6K3fI5iB1htfz3dZPgQ==
-X-Received: by 2002:a05:6402:5347:10b0:634:5297:e3b3 with SMTP id 4fb4d7f45d1cf-63939c509b6mr1714584a12.38.1759481110436;
-        Fri, 03 Oct 2025 01:45:10 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff:74::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6378811f14bsm3554826a12.45.2025.10.03.01.45.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Oct 2025 01:45:09 -0700 (PDT)
-Date: Fri, 3 Oct 2025 01:45:06 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, david decotigny <decot@googlers.com>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de, calvin@wbinvd.org, 
-	kernel-team@meta.com, jv@jvosburgh.net, stable@vger.kernel.org
-Subject: Re: [PATCH net v6 0/4] net: netpoll: fix memory leak and add
- comprehensive selftests
-Message-ID: <s4lrro6msmvu3xtxbrwk3njvmh4vrtk6tmpis4c5q5cbmojuuc@pig4xhrvhoxq>
-References: <20251002-netconsole_torture-v6-0-543bf52f6b46@debian.org>
+	s=arc-20240116; t=1759481233; c=relaxed/simple;
+	bh=KdhvngRIzUvJjCKOe7aQRI/7vJZpSB4qLpuJxx/8jSo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CNeYmTLLQs79/quEudc+uLv8rBP7DE2KfFZK0oAs966XtIrmt24hszwvlnrArYD9WbBRDxu/sbqjq4PB8iiPbIaDRBsOnQm8TYuYCY4vze7uutPkAv1d1wT2DO5JPX/HSYbMsiO7wbgzVqAkrOpvsoTnY4PLIUu5nH3i0emgtLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LiPXq2mb; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LiPXq2mb"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1759481228;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N+ayMPxTFn1sqgrWQClbx3xLTMHfXKLiK2Xn5bMQL3I=;
+	b=LiPXq2mbY9BWD0v/aKVD5QN0EUAPZQrjkH4EvcwQqECr1mC99hYQNOG6OFf/P4Uk+NxNhI
+	cb6RjlZHblng/T1iLji1uHP0KUzlN3KZhguvTxDh1uaJND70TOiWSdzLqkzkXYsjlv5dVL
+	nCEzg4VrLSniCmt+KwAf8QlXHIrv3Pg=
+From: KaFai Wan <kafai.wan@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	kafai.wan@linux.dev,
+	toke@redhat.com,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Le Chen <tom2cat@sjtu.edu.cn>
+Subject: [PATCH bpf 1/2] bpf: Avoid RCU context warning when unpinning htab with internal structs
+Date: Fri,  3 Oct 2025 16:45:27 +0800
+Message-ID: <20251003084528.502518-2-kafai.wan@linux.dev>
+In-Reply-To: <20251003084528.502518-1-kafai.wan@linux.dev>
+References: <20251003084528.502518-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251002-netconsole_torture-v6-0-543bf52f6b46@debian.org>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Oct 02, 2025 at 08:26:24AM -0700, Breno Leitao wrote:
-> Fix a memory leak in netpoll and introduce netconsole selftests that
-> expose the issue when running with kmemleak detection enabled.
-> 
-> This patchset includes a selftest for netpoll with multiple concurrent
-> users (netconsole + bonding), which simulates the scenario from test[1]
-> that originally demonstrated the issue allegedly fixed by commit
-> efa95b01da18 ("netpoll: fix use after free") - a commit that is now
-> being reverted.
-> 
-> Sending this to "net" branch because this is a fix, and the selftest
-> might help with the backports validation.
+When unpinning a BPF hash table (htab or htab_lru) that contains internal
+structures (timer, workqueue, or task_work) in its values, a BUG warning
+is triggered:
+ BUG: sleeping function called from invalid context at kernel/bpf/hashtab.c:244
+ in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 14, name: ksoftirqd/0
+ ...
 
-This is conflicting with `net` tree. Rebasing and resending.
+The issue arises from the interaction between BPF object unpinning and
+RCU callback mechanisms:
+1. BPF object unpinning uses ->free_inode() which schedules cleanup via
+   call_rcu(), deferring the actual freeing to an RCU callback that
+   executes within the RCU_SOFTIRQ context.
+2. During cleanup of hash tables containing internal structures,
+   htab_map_free_internal_structs() is invoked, which includes
+   cond_resched() or cond_resched_rcu() calls to yield the CPU during
+   potentially long operations.
+
+However, cond_resched() or cond_resched_rcu() cannot be safely called from
+atomic RCU softirq context, leading to the BUG warning when attempting
+to reschedule.
+
+Fix this by changing from ->free_inode() to ->destroy_inode() for BPF
+objects (prog, map, link). This allows direct inode freeing without
+RCU callback scheduling, avoiding the invalid context warning.
+
+Reported-by: Le Chen <tom2cat@sjtu.edu.cn>
+Closes: https://lore.kernel.org/all/1444123482.1827743.1750996347470.JavaMail.zimbra@sjtu.edu.cn/
+Fixes: 68134668c17f ("bpf: Add map side support for bpf timers.")
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+---
+ kernel/bpf/inode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index f90bdcc0a047..65c2a71d7de1 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -790,7 +790,7 @@ const struct super_operations bpf_super_ops = {
+ 	.statfs		= simple_statfs,
+ 	.drop_inode	= inode_just_drop,
+ 	.show_options	= bpf_show_options,
+-	.free_inode	= bpf_free_inode,
++	.destroy_inode	= bpf_free_inode,
+ };
+ 
+ enum {
+-- 
+2.43.0
+
