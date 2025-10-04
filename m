@@ -1,98 +1,100 @@
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF60C25A63D;
-	Sat,  4 Oct 2025 15:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDC8248F66
+	for <linux-kselftest@vger.kernel.org>; Sat,  4 Oct 2025 16:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759590015; cv=none; b=Q/0lzgj1Z6FFlfVa6KG2BlXriGVch5OCCXgwDfdfwxLmk6t5J+zJQFyNvwboT5dCH/KQfJVJ6f5hXxP/HINR63bHJWUE/ffzV3LP3xYqcyJxHnDhJTxXTiZCJiKNoOTpGiDYez2wdWxCUf823qcOTmPomrqFDN6JG+dBCSiZi2g=
+	t=1759594579; cv=none; b=V5EWYSXK3PO2P6SSr4KoOvXkmiFVCZMrAF7rQiRukznPaY97h6sUbP2siJdxyqYQ6gz6JAy+iZsO62YGjNderagqfLU6+fv257d7Z4tBBSEZCrwxCRr38TgKnHDYTnPCkgPFIK4V7s98V9EPW6iADtI1pafuAjHL5cNJ6FTuMTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759590015; c=relaxed/simple;
-	bh=QVLvGlKGENt5Oa1RDESsTcNXnOD/LO4z2+tZnMEGLzU=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=qLJi39yUlWti9FzLWk0BB9GAj7RfIDGTrNKMLsZLx+x/55SXY3csh4oKrUI0vrUgu/fFr7oIxpfXNkiLpcwpKJdJJSi/QZ+bv6IF1lLjbf+iOhvlmyqDfc8PgBfmEozVBuZytzG7aSRz9tfTQBbNgIy50BXkW/ougyJHySoxJDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=rue4QxY1; arc=none smtp.client-ip=162.62.57.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1759594579; c=relaxed/simple;
+	bh=BFtFWz45fCHfJppYTWPt51ZzCzGvzVWdQH30FH6IQUc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c123/oaZeW0evjExeuMCwMiJOf2LLGVttfPl0U1bCdvkMcm1P9Gc8rZjDNXKSAwd3ZPmv5VhN2eIfyfCME35496Q1+FsKVrF/mzD+gqYKtMTKPwXyPs3wYO8otmgIIKeFsRLPqxwuU2/O1Ry3Jf6HmAL71qbnL5Edez2RecxXM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MEBuwWWA; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="rue4QxY1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1759590001;
-	bh=tn+YvF5nNWzUdFcTIZa4tTMNaGP57a1gNGPj26KqOM0=;
-	h=From:To:Cc:Subject:Date;
-	b=rue4QxY13aotxXJhp+BAIXKP/RXc5Eqf37r9w3f46bAHFPZnPhhziKTMw9f9FuYEL
-	 MuJNnR0gqnu+o2PhO4Zcgx9i7I5vUAA05ov9VHQ6tQjZmGD6l8fu/t9NxcpDIFJpyJ
-	 dbDHMRwMbx+1plLeoL4Y75MVm7BP6yZjWgg3SfxA=
-Received: from rtoax ([183.198.135.10])
-	by newxmesmtplogicsvrszb42-0.qq.com (NewEsmtp) with SMTP
-	id B9C95EF0; Sat, 04 Oct 2025 22:46:28 +0800
-X-QQ-mid: xmsmtpt1759589188tarf5jxve
-Message-ID: <tencent_6CF18825069C425759D597502A56AF85A308@qq.com>
-X-QQ-XMAILINFO: Nwl7PuG5jlSkIQI2xkKGPz2sNzpTy/KxLxsIosdPU5PqjEzfCAToQ4duB/fmls
-	 diPosV23DYr7mefP9mOuWiVqAZ7yDMhASS47YPPR7PNa85FX7yBwlvugoOsQJySZE9xTageyn9YT
-	 ZuoTNL1oOajuUyIpa1sCVNmSdAHCUZmaHdqFShs9KgyIoWhOyABFh5e+jW41Djd7GBg/8+gApWPA
-	 kZUV+iBDdFgQVQDnYAUtoozUeeMearRwA47Dt+8hALyjHutuWlDyj6nm6K3/1+X4uZ0k8duRIoFm
-	 NoCtaRvxw5CC/h7wZsnn5mb7xunOCANifxknqfIV76wKrXZtYnhA/RsF+4Gw/Xfgs/bfo+z8cyIg
-	 SO9+nzGbEGnAkuFd3pA7OrYVVNC4gQ/vApLwIczRm2GMymms76vd9/K2RTt8CJSTB+rcREMvHW86
-	 fg5naIW8SESx4IezEEl2Y2AEnlekOyPqAvg8X4nii9J34EdW7xOYmhL9Kd3LrbpBpy+7/H/gdsuw
-	 Lyv5GVqmYGi6XI3vtRz0SG4LN+zTGRNjsr2WIqC6sEng88Ca/b/3b/WJgNPAbh+1WQ1Fa1tBWE5F
-	 2m3eeeyGbifCP8NsLH4n8aNKyE2BbRLC3dzbY8mQGaZ3cT8hUkqhk0Thf+p4174aUhMn1vW3Hp4T
-	 UuR7fPWH2Gk+Ja8URLTb2EAFjEhGC1at7AVKXqGcOMOPH4PiumkZJuZ1EOar7LPpBkw1vTnN/Bt7
-	 WjAp1mrnwJmEpPO3YBp08IqQs6ltdciQxwJ/NLJXlQ83pqsC6nJbJe+pAVlMJvjkpss9JKmHJHUi
-	 i16dnqHTRmEP0dUQ+bad+fnx4eofkXyCrSB47X09egoKZBRc/yRLXFzt6bMYn8Nru1moBCfDI5Xm
-	 G3x0dIYwkbzf00U1RmCWgztFxHz88Kt8GMaoQtQ01QQsMZDGkFrMkdPGDG2S+J7ebQ0hffgBb3uA
-	 A0XAfr1JIMyQNXEWV391OuBPl8P/OXHppTl6NXjiBfJkHHU0KHluz7xGgJaHNksLAEUaVbWF9EH8
-	 ZwREUD+fxfHPqj/XeCxxXt/T7DtPjkpUiso8OfUQ==
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-From: Rong Tao <rtoax@foxmail.com>
-To: vmalik@redhat.com,
-	ast@kernel.org
-Cc: Rong Tao <rongtao@cestc.cn>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v2 0/2] Add kfuncs bpf_strcasestr and bpf_strncasestr
-Date: Sat,  4 Oct 2025 22:45:59 +0800
-X-OQ-MSGID: <cover.1759588929.git.rongtao@cestc.cn>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MEBuwWWA"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-42557c5cedcso1786238f8f.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Oct 2025 09:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759594576; x=1760199376; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BFtFWz45fCHfJppYTWPt51ZzCzGvzVWdQH30FH6IQUc=;
+        b=MEBuwWWA9jG+HkRdcJFUB/0ltpuZgooele6Ye5mDK+4vq96J1dYnFPwL77ItXw5KyF
+         6LhBiMF6o81Mb5hhyyDhYnILOzIBLgTZX2m1wQw3BIofmoya+kdnDViUNOCX2sQMswYH
+         uWz8xBj6op4IWnPsAN2atKfCuL1V9wIgBom3uDtrZb0J6kH31fJmIOeUYCvYg3IMKffG
+         Zx5B/lGX54JMm68jvoLD5xYdiJbNd6R/Jc0xit/8+g9mohzPHsW0OqK1U/A5glGdyEWP
+         z/Tc39KnyDXiMne35jPL7ver7a2sfWgg//dDYvCpANgGoIsXQfqrSyh5+vInGzKFYrB9
+         j/XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759594576; x=1760199376;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BFtFWz45fCHfJppYTWPt51ZzCzGvzVWdQH30FH6IQUc=;
+        b=QPQzoJRLCtd+sQNa0Rrjms7f6tw+vV6tgwFhwx/8Iv/pkYEv44ffT7imUPN+7Hx6UI
+         bwszKszVuhpJ+MgQcBMR0BT2w1R0qcUdALfi4P70LGCwySL/g9LfJL2SgwfMJ8F5I2Iw
+         7lFQeGG1QC/3nfezjBBJFCIPJYpfzDBwgEN+LoXh7h8G0YnFpb1ugsw2kq4L1c0I4sll
+         5wNGo8atz9ERmqXWf+VYDEA2DRYia0IBVYjZS7FAxpMXa+vxkVmrrzfRLzeZFvE8MAWy
+         ZPNO0oAUDM4Pf2tz8p8UUhCFRQqovdNMKEIxpQwUpw3bzI1eWA4Tuj/eGr8+CG8npvZx
+         XV8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVa+7xxwz5u2cyoSv0ayghWM3mXYAHFmpNSCEf29NtB9KWISg5CJ1XCnxnjW3ddwXdRBh3RzM9klx4lmkE8kAU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFOb5R3tMgUJI6tA33P1JHAIkpdJ7CayrHEQuH87eQtrz1cITA
+	0HE/KPQuiTI3BDXTiUdpojr2p/a8nYaBaXfkc6V3kKGqzz0xZv+EcBuPwvGRONELk/IBpPlWzis
+	Z6S7la4Ec1qOwlkIX9gVil8AKgAqmYDA=
+X-Gm-Gg: ASbGncuw6JBLYR6qYy98A8C+kuKpXe4Dpl9ZKltQliYYSFCt/wkS1rBfcnD5EY1AQIw
+	MsgARx7gM694aE/M7HNEh2CS478eO2nTM+0TKBgH/pUN55ceFGu2aAz8aAC8fPMncHt3y7sEJDU
+	wiEPMON0l2uiscNLEptTl28kdxcIPBHtQAZj6zKG4EwEYXnW46M6Xu+yKvHv1fv+/sRR12/MQ3N
+	Lpo4ceJ4fzw3OBEyAHcBj0FGiSi0TfRxe3zqfkfwuKMK0RCo1qZW21Cp8W99a5uK4UkHec=
+X-Google-Smtp-Source: AGHT+IG/MV88gOTgIBtKglK8w1B5S7CgfnDOr0uIJuq9YH1xAWacU7h3e14hKjJmdWrb0tfBYx6T3oHJx47i8VNfTVc=
+X-Received: by 2002:a05:6000:2401:b0:3ea:e0fd:28e8 with SMTP id
+ ffacd0b85a97d-4256719e9c6mr4129999f8f.32.1759594575949; Sat, 04 Oct 2025
+ 09:16:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <tencent_1259E1972E2A9FAF3DA342882306E1421308@qq.com>
+In-Reply-To: <tencent_1259E1972E2A9FAF3DA342882306E1421308@qq.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 4 Oct 2025 09:16:04 -0700
+X-Gm-Features: AS18NWCQqriAfAUku8dSRijSYcwsuw4WSLelAlUXdhySmf6if1b2NeynApQdIj0
+Message-ID: <CAADnVQJ5oEi0iiS+_N1f=K+0oTdDswGiESrd1tve_F_7aMOCBQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf_doc: Support 1st const parameter of bpf_d_path()
+To: Rong Tao <rtoax@foxmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Rong Tao <rongtao@cestc.cn>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Jason Xing <kerneljasonxing@gmail.com>, 
+	Willem de Bruijn <willemb@google.com>, Paul Chaignon <paul.chaignon@gmail.com>, 
+	Tao Chen <chen.dylane@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin Kelly <martin.kelly@crowdstrike.com>, Anton Protopopov <a.s.protopopov@gmail.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Al Viro <viro@zeniv.linux.org.uk>, 
+	"open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Rong Tao <rongtao@cestc.cn>
+On Sat, Oct 4, 2025 at 7:24=E2=80=AFAM Rong Tao <rtoax@foxmail.com> wrote:
+>
+> From: Rong Tao <rongtao@cestc.cn>
+>
+> Since commit 1b8abbb12128 ("bpf...d_path(): constify path argument"),
+> the first parameter of the bpf_d_path() has been changed to a const
+> constant. We need to modify the header file and bpf_doc.py.
 
-Add kfuncs bpf_strcasestr and bpf_strncasestr, which are extensions of
-bpf_strstr and bpf_strnstr, suitable for more scenarios.
+...
 
-Rong Tao (2):
-  bpf: add bpf_strcasestr,bpf_strncasestr kfuncs
-  selftests/bpf: Test bpf_strcasestr,bpf_strncasestr kfuncs
+> Fixes: 1b8abbb12128 ("bpf...d_path(): constify path argument")
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
 
- kernel/bpf/helpers.c                          | 96 +++++++++++++++----
- .../selftests/bpf/prog_tests/string_kfuncs.c  |  2 +
- .../bpf/progs/string_kfuncs_failure1.c        | 12 +++
- .../bpf/progs/string_kfuncs_failure2.c        |  2 +
- .../bpf/progs/string_kfuncs_success.c         | 13 +++
- 5 files changed, 104 insertions(+), 21 deletions(-)
-
--- 
-v2: remove extra __bpf_kfunc and fix comment of bpf_strncasestr().
-v1: https://lore.kernel.org/all/tencent_8AF4D15B4475031E2185ACDE4B1495995707@qq.com/
--- 
-2.51.0
-
+Thanks. I reworded the commit message and applied it to the bpf tree.
