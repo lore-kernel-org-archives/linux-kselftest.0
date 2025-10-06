@@ -1,122 +1,139 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A14257820
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Oct 2025 07:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8D4259C83;
+	Mon,  6 Oct 2025 10:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759736601; cv=none; b=PSrN5lzxOik6Qy2Hk4Ny9FwnWoy/DuYXESgmaB+ripTuynAuzJeObV27irl+VCG9PPGS50j8IB0KOpMTCNlhIYaEEYXGGMjsc4glmVnVq2CmSA1RuITuFIYp+t/hfAmW+VBg9SUZPZAV25R8E/HWc5HzABdE/+C52u6Jw3+4vec=
+	t=1759747669; cv=none; b=tml4xtVwYWs7mwKu465pxaD9M1wNYmsIhsvhYxtQe8J4IYyauWoIwFyBOajIomUKRi+FbYs4heASeBAJovYd3/4qXOaToPNs2uKLWlmDGAxuudifybv/pb6Jz16G0BR61jbzOUzpKpUlXQcLdtryVBvskiTo1m9DbqRTPnXAq0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759736601; c=relaxed/simple;
-	bh=C/mZn+WHYcVqu0T+c/x5PT79Zv6hxCKk90h2Bfu7lJQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LExbDngp3yU2zYCk3cpGpUsMRCDyZOmfMEBHk9tJj3Zl60i+nJZb6rEkNTq7yJqBosdKxkMeHok5Z5W8gd5MENOyCU3S4SxmkOCcyYm/y8Lp7kZ/4LspkC4SOraFuhgr8MnZTMYtO3h4o4ibuc/G7QYRj+mFMRvHhP29fnrttVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PsBXezeB; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759747669; c=relaxed/simple;
+	bh=FX1Lzu7+bvM9e8qmukvbO1hpPMzmlxgfp1qFo7AK/EQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=miDG5M6zH2nR+N4KhMGspZyicQXFTmDEh9ybswXjTlXN3HR+mLrxpPwebHxHysiiOqDHjMS/H8EKFHhQdNj4df9F7p4DBzVyfAygw1GCUL1GC9xovSEVk5dzcfGjbrAE8tYY2km5ucrFKZ8EY44tph7O1wcpbAS0IbE7mE7jP10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E597mMN/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PsBXezeB"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-776379289dcso348700b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Oct 2025 00:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759736599; x=1760341399; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tw/9lPWHfMPkffQmkaSdCiEp9p7tCzCfQj89DSw96nE=;
-        b=PsBXezeBPjtNKFZQydDkaSEOoVwb8gMYwStiQMFyIn4rvT2IusPOgz0dp7JM67eDiv
-         RYefwi+HLiiTMUcHNYPpQj8sycZlkgcF2rlZ9eRHFq+1v+VIlauQhRPZsabSsU4X89lC
-         +D15vfJp0XEUYUir0KlByxYEDCkFVAs+sgwXXq1uJRtAROGhpwdTw3eStK7qsjoEmO14
-         bejL75YKRlwgPA9JhgPjavrK2+h7nKXP6ua+EKccxucQ27Kuw51QNAeJIG9BieeKECrC
-         OTx8B4HBRnYGJNCNokUjyvhTLPzxisUfJNA5hYEG8X9NdhCdf0vCcrC/bQgEDzcuDfTm
-         AUlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759736599; x=1760341399;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tw/9lPWHfMPkffQmkaSdCiEp9p7tCzCfQj89DSw96nE=;
-        b=NuB8YUSqnhuk9Id+puSl13PSKC7rjjE9i84bQV1n87F1oTkRAFjH2JO1Hy60zwMDal
-         ZCRkaEBQK+RQfO6/DLj8ISGZa31+wpyB0RhtBSlshedNw/WUzaPgl6e2A87HvBVX3rfI
-         O1dZm5vQ40ZLrvKMBjykCWhtNQE+UmEWDePhKP0eP9NeI6YpEHZVwZAoJLbys2fESmqs
-         Cv81wNahjgc39fM45c5yp30DvGynFg2LoKgt9CFWIQIQsWyofa7YuOVIBNywt6dJWQ5G
-         9Mbi+Nd0I1nduTAzJySPGYiRFIH2Rxemf9SzruY0dRJCVAgse4S9yQsw2dh/+I2zgLue
-         biWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXQuwG2y/+zz8VpHNSag03yrchhYFIbEFDZb/mFNOTbxVfkUYK1flFvwss81H/acIgnMZkj1uUTb/oa3jmM5UU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywrn2+GVpfy7ZttCLNiRVW+OW6zSKEWIUaybZnlpIdJYYZMhJgd
-	PjVaA6iiBIW5cIa3JPoeHPG4lO2JCuHGd1+7QjumqdiF6d4yeVpXIc0IS3HzTGrv
-X-Gm-Gg: ASbGncu2tG1bnd7E/fhl5tVkQawbSLITq93pbsIn6zRRiY6K829ku1F2LA2Y8Nyv7nI
-	danZQRhsjl0uaXELjIlIFK21lvLKxiFTGiJZOzZnqc55X2ukR90h9BB/6EWLZcuUS6RXmiMqxCs
-	Nnl2azN5B5y5ebsLv8PigWcmzrtCWM9h+lZiC06IA8a0NngM7VlF5A4leWjFHl55/8WvwEx1Y7X
-	PsmWY9iUrRVA4USRm9yIaAQ0G9biIJ1/C5zZAeE+kAINOEAovYogF46RFs5F1cfxMhQmFgZWYcW
-	2e7ZYFCfGGujsLAGwVw+llrVxUKVUo785Ca5UCy6YOnp/A9Kcxty9SaVN6SFBjpD89nB1T1ierU
-	q+gyeBOaFU/XAb8i1YjeOLBOvyMAlhefNUQw9jKnyhJ8qRamC94b/pT0=
-X-Google-Smtp-Source: AGHT+IEMB07ViPSEotVWrOcwSD9ma9t+HQ//zB3NHR8w0pPltXfnUy8JcwvN3opxQHM+UsEYUSNjJw==
-X-Received: by 2002:a05:6300:6675:b0:2bd:d83a:d1b3 with SMTP id adf61e73a8af0-32b61b2e1ecmr8038240637.0.1759736598836;
-        Mon, 06 Oct 2025 00:43:18 -0700 (PDT)
-Received: from ranganath.. ([2406:7400:98:f9ad:a206:7416:2450:6aa2])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6099f58ac2sm11231639a12.35.2025.10.06.00.43.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Oct 2025 00:43:18 -0700 (PDT)
-From: Ranganath V N <vnranganath.20@gmail.com>
-To: brauner@kernel.org,
-	broonie@kernel.org,
-	jlayton@kernel.org,
-	shuah@kernel.org
-Cc: linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/filesystems: Fix build warning on anon_inode_test
-Date: Mon,  6 Oct 2025 13:13:08 +0530
-Message-ID: <20251006074309.4348-1-vnranganath.20@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250919104948.67953-1-vnranganath.20@gmail.com>
-References: <20250919104948.67953-1-vnranganath.20@gmail.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E597mMN/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FDD7C4CEF5;
+	Mon,  6 Oct 2025 10:47:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1759747669;
+	bh=FX1Lzu7+bvM9e8qmukvbO1hpPMzmlxgfp1qFo7AK/EQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E597mMN/x7YVkjNX1Bc0G8W7GHt89kk8u2seksXgi5q2H3Gw9DqBry/MoIgd7Hl/f
+	 QcuYuZ/DwxfZxXg04LwRoNwgtiAl8T7SsOstK7UXK8SyqkUmffohAckrwzORjzcTe+
+	 /i/1SV3Pn0pttPu3dXePy8Hlmyjuwx9fL801o6Qw=
+Date: Mon, 6 Oct 2025 12:47:45 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Eliav Farber <farbere@amazon.com>
+Cc: jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+	dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+	hpa@zytor.com, tony.luck@intel.com, qiuxu.zhuo@intel.com,
+	james.morse@arm.com, rric@kernel.org, airlied@linux.ie,
+	daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, robdclark@gmail.com,
+	sean@poorly.run, jdelvare@suse.com, linux@roeck-us.net,
+	linus.walleij@linaro.org, dmitry.torokhov@gmail.com, maz@kernel.org,
+	wens@csie.org, jernej.skrabec@gmail.com, agk@redhat.com,
+	snitzer@redhat.com, dm-devel@redhat.com, davem@davemloft.net,
+	kuba@kernel.org, mcoquelin.stm32@gmail.com,
+	krzysztof.kozlowski@canonical.com, malattia@linux.it,
+	hdegoede@redhat.com, mgross@linux.intel.com, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, sakari.ailus@linux.intel.com,
+	clm@fb.com, josef@toxicpanda.com, dsterba@suse.com, jack@suse.com,
+	tytso@mit.edu, adilger.kernel@dilger.ca, dushistov@mail.ru,
+	luc.vanoostenryck@gmail.com, rostedt@goodmis.org, pmladek@suse.com,
+	senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
+	linux@rasmusvillemoes.dk, minchan@kernel.org, ngupta@vflare.org,
+	akpm@linux-foundation.org, yoshfuji@linux-ipv6.org,
+	dsahern@kernel.org, pablo@netfilter.org, kadlec@netfilter.org,
+	fw@strlen.de, jmaloy@redhat.com, ying.xue@windriver.com,
+	shuah@kernel.org, willy@infradead.org, sashal@kernel.org,
+	quic_akhilpo@quicinc.com, ruanjinjie@huawei.com,
+	David.Laight@aculab.com, herve.codina@bootlin.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-edac@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-sparse@vger.kernel.org,
+	linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, tipc-discussion@lists.sourceforge.net,
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Subject: Re: [PATCH v2 07/19 5.15.y] minmax: simplify and clarify
+ min_t()/max_t() implementation
+Message-ID: <2025100648-capable-register-101b@gregkh>
+References: <20251003130006.41681-1-farbere@amazon.com>
+ <20251003130006.41681-8-farbere@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251003130006.41681-8-farbere@amazon.com>
 
->clang warning null passed where non-null argument is expected.
->
->anon_inode_test.c:45:19: warning: argument 3 null where non-null expected [-Wnonnull]
->   45 |         ASSERT_LT(execveat(fd_context, "", NULL, NULL, AT_EMPTY_PATH), 0);
->      |                   ^~~~~~~~
->
->Signed-off-by: Ranganath V N <vnranganath.20@gmail.com>
->---
->Adding missed mainters to the patch
->
-> tools/testing/selftests/filesystems/anon_inode_test.c | 4 +++-
-> 1 file changed, 3 insertions(+), 1 deletion(-)
->
->diff --git a/tools/testing/selftests/filesystems/anon_inode_test.c b/tools/testing/selftests/filesystems/anon_inode_test.c
->index 73e0a4d4fb2f..f796dad679db 100644
->--- a/tools/testing/selftests/filesystems/anon_inode_test.c
->+++ b/tools/testing/selftests/filesystems/anon_inode_test.c
->@@ -38,11 +38,13 @@ TEST(anon_inode_no_chmod)
-> TEST(anon_inode_no_exec)
-> {
-> 	int fd_context;
->+	static char *argv[] = { NULL };
->+	static char *envp[] = { NULL };
+On Fri, Oct 03, 2025 at 12:59:54PM +0000, Eliav Farber wrote:
+> From: Linus Torvalds <torvalds@linux-foundation.org>
 > 
-> 	fd_context = sys_fsopen("tmpfs", 0);
-> 	ASSERT_GE(fd_context, 0);
+> [ Upstream commit 017fa3e89187848fd056af757769c9e66ac3e93d ]
 > 
->-	ASSERT_LT(execveat(fd_context, "", NULL, NULL, AT_EMPTY_PATH), 0);
->+	ASSERT_LT(execveat(fd_context, "", argv, envp, AT_EMPTY_PATH), 0);
-> 	ASSERT_EQ(errno, EACCES);
+> This simplifies the min_t() and max_t() macros by no longer making them
+> work in the context of a C constant expression.
 > 
-> 	EXPECT_EQ(close(fd_context), 0);
+> That means that you can no longer use them for static initializers or
+> for array sizes in type definitions, but there were only a couple of
+> such uses, and all of them were converted (famous last words) to use
+> MIN_T/MAX_T instead.
+> 
+> Cc: David Laight <David.Laight@aculab.com>
+> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
 
-Hi Christian Brauner,
+Eliav, your testing infrastructure needs some work, this patch breaks
+the build on this kernel tree:
 
-I just wanted to kindlyfollow up on this patch.
-I'd appreicate any feedback or comments when you have chance.
+In file included from ./include/linux/kernel.h:16,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/wait.h:7,
+                 from ./include/linux/wait_bit.h:8,
+                 from ./include/linux/fs.h:6,
+                 from fs/erofs/internal.h:10,
+                 from fs/erofs/zdata.h:9,
+                 from fs/erofs/zdata.c:6:
+fs/erofs/zdata.c: In function ‘z_erofs_decompress_pcluster’:
+fs/erofs/zdata.h:185:61: error: ISO C90 forbids variable length array ‘pages_onstack’ [-Werror=vla]
+  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
+      |                                                             ^~~~
+./include/linux/minmax.h:49:23: note: in definition of macro ‘__cmp_once_unique’
+   49 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
+      |                       ^
+./include/linux/minmax.h:164:27: note: in expansion of macro ‘__cmp_once’
+  164 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
+      |                           ^~~~~~~~~~
+fs/erofs/zdata.h:185:9: note: in expansion of macro ‘min_t’
+  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
+      |         ^~~~~
+fs/erofs/zdata.c:847:36: note: in expansion of macro ‘Z_EROFS_VMAP_ONSTACK_PAGES’
+  847 |         struct page *pages_onstack[Z_EROFS_VMAP_ONSTACK_PAGES];
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-Regards,
-Rangaanth
+
+I'll drop this whole series, please do a bit more testing before sending
+out a new version.
+
+thanks,
+
+greg k-h
