@@ -1,452 +1,257 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D9032E7F0D;
-	Tue,  7 Oct 2025 16:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE221DF26A
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Oct 2025 17:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759854173; cv=none; b=MUrt9sZsU/0u00rXGrse9HrhrROYq8NX/dMZWFbVyqatL7XDqmU0qYNBeGscZvMYTCFZt96Z6yYS3hGthOGiufOuoKguvrfrp0T+y5S1TKsEmhgL+NtGHLbRd7wRA0dnezi4NNYNbBE849LaCIVWD7lHkzOGwLO+wPMIvyAIaPw=
+	t=1759859135; cv=none; b=s84AvKs0hdXIlzHZA9/Jg7t7FRjXvjVC5POmpSNDx9XErvFeDE0sU4Pd2RSxJQ9D/uq+micNfzsE74UiDGISQKYj2FL2OgMrTxzv+Zp/vNrjDNuYxneAduEU5HXtpPIPyKjC3WMCfaQoA/fmjz80F51qo+zdS9rQOtI+/1vgGCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759854173; c=relaxed/simple;
-	bh=FxtD5IGXeq7MCAvR+IxCPdcBc032QcgvLySh7UVr4uU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=AqA5VF4qmzViv/MzI5G7XaVHzIyiZVXGfHHfyx2AUjhmy+CtUH3shsibn9J0OoBF+siIsnBqNzXoTf+uxzAFrU/dPcU68U/Q3dPfd0fsFqV+A/D6gbHu/0+VxN9MmOd/gpQzuE6cj8ex4A48s4hjF1fMqKQsnGKkQ5YIY6MUmjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4ch16R56SFz9sSC;
-	Tue,  7 Oct 2025 17:59:27 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id osQ9mmBknqDa; Tue,  7 Oct 2025 17:59:27 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4ch16R41Z2z9sRy;
-	Tue,  7 Oct 2025 17:59:27 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 799A68B770;
-	Tue,  7 Oct 2025 17:59:27 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id z2pXmbf4wtaa; Tue,  7 Oct 2025 17:59:27 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id D16208B76E;
-	Tue,  7 Oct 2025 17:59:26 +0200 (CEST)
-Message-ID: <feadc4f6-839b-4c04-b6df-dedf279fb315@csgroup.eu>
-Date: Tue, 7 Oct 2025 17:59:25 +0200
+	s=arc-20240116; t=1759859135; c=relaxed/simple;
+	bh=A9ePXX71Y+LsTLae1xp4zR0f461PjyxprdjUgwTk7fM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aAuzToQXY5nD2A75hJKQqE4DzGbJug9rdCx4Kzovp65oe50Ojqun7V7bcRYYgrnBnOSKHH9mnseI/ukEMlGkzy7xkRrQe46BDQ2ND0JLihcKwTiYpXOXtBrmDNROM1XSNbiFsPRNPdUH+NmhEyQzAxeu2ommPY74v6kf8wA1hP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=IVj1OSui; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="IVj1OSui"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4df2911ac5aso40677961cf.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Oct 2025 10:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1759859132; x=1760463932; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pg8Ok5I2xXMgGAu/MYDoh42vS3DGGi3CdtYED5anodk=;
+        b=IVj1OSuip0Tb0+Yf3E2iRsjnfBHmc/0mPSPh3MHPVQpfvbrPHU69v+GkcKagqs2wZA
+         PL4FBiXnakC3/aCRB/7VsFKgBbZpY8rcVUF+qzVp/KF+QMo9rRkgopdts5IVUUxtvch5
+         2S4fpHQqPWuQwqamtIGZ5Ee4Dm0wXKipuzpGtks8KhRhyNh0upgL+S4Cs5JH1fjFO2bv
+         bR6vzTleoUtfxBXcslvcCtJqp7QbSAgUPI6iZQ3wqHBgh7+TQFPJGODYi/H4RMzYe0/k
+         OzuAtu7PuMf43mPFa/z25th3H/0oIprKlSXH90c5HcXwrILnc56CZq3L9VHo4rU3Wo/8
+         M41Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759859132; x=1760463932;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Pg8Ok5I2xXMgGAu/MYDoh42vS3DGGi3CdtYED5anodk=;
+        b=JPOqZZ9l9plGmxngMD1qqWtqc7H2e6uKcbFmHWtuqvsJs0JfoMDI0JP6vJ0+uDmdp0
+         ae+pfLiFP4XtG7jBhPb+KuMLXIiDj/mYyHw2QupeUFQLEP/UdNhovzBcBNaxopYM9cdN
+         BL+fY4i1ODUk+blYRGhGqq4XpyfV8Pru9FB6v0TzjKPz3x7o799K7Xtrt5U1JzoqYouU
+         iLsntnohCwazCjw+AVlbJr13p7pXV+Acc0P15T06jfdXgG6vkY1aqim91cMlW1vYWVOn
+         /fKbIe34WSGIZXNc7Auj2r3H2F0cl+9uROS3mV/xYjaxtp48VwlQJ9Z900zgbF+gFpyW
+         Nczw==
+X-Forwarded-Encrypted: i=1; AJvYcCVcX7DOFDswmLtGG1eviezyimFQ2k8261ZfaYDhrsohmQeYMr00HFjWPBAx7cSDaRaRVw9shqKgQdhfwcgqTOU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMiAsI2xlMCL3kkPzGVaxEYfQb7qE6BLZNfPLfr2t0OmfR3Ag4
+	DjT/tTEwB4eohcqyEDeTaqyMhPUOmeIDMH6i89h+Q/E3RObzK31Cla0NjyKmYDJXFAaWKbjnYWA
+	ls4ejqVyt3f/a/k2bBEkTqB9jqM8zxEkhJ27FudKfPw==
+X-Gm-Gg: ASbGncu0QZTV/ifQsLOYOQOZAmfYDbdMVTvqtCHLg6oxQABisTpdi1Tuke3rjwNQlT6
+	rVmZHdIkILfgdiTmuT72O9OAL4hzak6yZoUQqkT8V2aN0htpfM6IwB2iOpMZZT+cWX8UMNbBjhy
+	PUCgHqd/+1cKHrUCqRGLY4sZliA0n3ttJPvaMu+OunQ8Ce16MmA85ycyb6Nki15K1KL7V8vZY/G
+	FB/ZQUZLvaxr0YcR4Zlo2omsyMq
+X-Google-Smtp-Source: AGHT+IHNjzqpOMzH8y9LtPxqns/WAVziX7arXy0dAsX1RKPk6LIPf4fgO+HjB3KbrVxZePVT+qHVLaK+4PsanmQvw4Y=
+X-Received: by 2002:a05:622a:5984:b0:4cb:57b4:4d6c with SMTP id
+ d75a77b69052e-4e6eaccc73cmr6198371cf.12.1759859131884; Tue, 07 Oct 2025
+ 10:45:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bisected][linux-next20251003] tmp2 selftests resulting in Kernel
- OOPs
-To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
- LKML <linux-kernel@vger.kernel.org>,
- linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>, linux-kselftest@vger.kernel.org,
- daleksan@redhat.com, jstancek@redhat.com, jarkko@kernel.org,
- pmenzel@molgen.mpg.de
-References: <88f1df7e-8347-45f7-a2a1-e321e72e4009@linux.ibm.com>
- <3d7a5f70-7ece-48ba-92bd-8b6473fd8b6c@linux.ibm.com>
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Language: fr-FR
-In-Reply-To: <3d7a5f70-7ece-48ba-92bd-8b6473fd8b6c@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <0-v6-0fb54a1d9850+36b-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <0-v6-0fb54a1d9850+36b-iommu_pt_jgg@nvidia.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Tue, 7 Oct 2025 13:44:54 -0400
+X-Gm-Features: AS18NWDVmKIn_CzJQvh8opoEabYMKh9EbkUyk4WKvUuBQpzLn_UekMBEkXUqjwM
+Message-ID: <CA+CK2bBT80np3hZbSu=dRH8UOKT9RruHF3jtaXyTJUmNe8UfFQ@mail.gmail.com>
+Subject: Re: [PATCH v6 00/15] Consolidate iommu page table implementations (AMD)
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>, 
+	Justin Stitt <justinstitt@google.com>, Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, 
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>, Will Deacon <will@kernel.org>, 
+	Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez <alejandro.j.jimenez@oracle.com>, 
+	James Gowans <jgowans@amazon.com>, Michael Roth <michael.roth@amd.com>, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Oct 7, 2025 at 12:12=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
+>
+> [All the precursor patches are merged now and AMD/RISCV/VTD conversions
+> are written]
+>
+> Currently each of the iommu page table formats duplicates all of the logi=
+c
+> to maintain the page table and perform map/unmap/etc operations. There ar=
+e
+> several different versions of the algorithms between all the different
+> formats. The io-pgtable system provides an interface to help isolate the
+> page table code from the iommu driver, but doesn't provide tools to
+> implement the common algorithms.
+>
+> This makes it very hard to improve the state of the pagetable code under
+> the iommu domains as any proposed improvement needs to alter a large
+> number of different driver code paths. Combined with a lack of software
+> based testing this makes improvement in this area very hard.
+>
+> iommufd wants several new page table operations:
+>  - More efficient map/unmap operations, using iommufd's batching logic
+>  - unmap that returns the physical addresses into a batch as it progresse=
+s
+>  - cut that allows splitting areas so large pages can have holes
+>    poked in them dynamically (ie guestmemfd hitless shared/private
+>    transitions)
+>  - More agressive freeing of table memory to avoid waste
+>  - Fragmenting large pages so that dirty tracking can be more granular
+>  - Reassembling large pages so that VMs can run at full IO performance
+>    in migration/dirty tracking error flows
+>  - KHO integration for kernel live upgrade
+>
+> Together these are algorithmically complex enough to be a very significan=
+t
+> task to go and implement in all the page table formats we support. Just
+> the "server" focused drivers use almost all the formats (ARMv8 S1&S2 / x8=
+6
+> PAE / AMDv1 / VT-D SS / RISCV)
+>
+> Instead of doing the duplicated work, this series takes the first step to
+> consolidate the algorithms into one places. In spirit it is similar to th=
+e
+> work Christoph did a few years back to pull the redundant get_user_pages(=
+)
+> implementations out of the arch code into core MM. This unlocked a great
+> deal of improvement in that space in the following years. I would like to
+> see the same benefit in iommu as well.
+>
+> My first RFC showed a bigger picture with all most all formats and more
+> algorithms. This series reorganizes that to be narrowly focused on just
+> enough to convert the AMD driver to use the new mechanism.
+>
+> kunit tests are provided that allow good testing of the algorithms and al=
+l
+> formats on x86, nothing is arch specific.
+>
+> AMD is one of the simpler options as the HW is quite uniform with few
+> different options/bugs while still requiring the complicated contiguous
+> pages support. The HW also has a very simple range based invalidation
+> approach that is easy to implement.
+>
+> The AMD v1 and AMD v2 page table formats are implemented bit for bit
+> identical to the current code, tested using a compare kunit test that
+> checks against the io-pgtable version (on github, see below).
+>
+> Updating the AMD driver to replace the io-pgtable layer with the new stuf=
+f
+> is fairly straightforward now. The layering is fixed up in the new versio=
+n
+> so that all the invalidation goes through function pointers.
+>
+> Several small fixing patches have come out of this as I've been fixing th=
+e
+> problems that the test suite uncovers in the current code, and
+> implementing the fixed version in iommupt.
+>
+> On performance, there is a quite wide variety of implementation designs
+> across all the drivers. Looking at some key performance across
+> the main formats:
+>
+> iommu_map():
+>    pgsz  ,avg new,old ns, min new,old ns  , min % (+ve is better)
+>      2^12,     53,66    ,      51,63      ,  19.19 (AMDV1)
+>  256*2^12,    386,1909  ,     367,1795    ,  79.79
+>  256*2^21,    362,1633  ,     355,1556    ,  77.77
+>
+>      2^12,     56,62    ,      52,59      ,  11.11 (AMDv2)
+>  256*2^12,    405,1355  ,     357,1292    ,  72.72
+>  256*2^21,    393,1160  ,     358,1114    ,  67.67
+>
+>      2^12,     55,65    ,      53,62      ,  14.14 (VTD second stage)
+>  256*2^12,    391,518   ,     332,512     ,  35.35
+>  256*2^21,    383,635   ,     336,624     ,  46.46
+>
+>      2^12,     57,65    ,      55,63      ,  12.12 (ARM 64 bit)
+>  256*2^12,    380,389   ,     361,369     ,   2.02
+>  256*2^21,    358,419   ,     345,400     ,  13.13
+>
+> iommu_unmap():
+>    pgsz  ,avg new,old ns, min new,old ns  , min % (+ve is better)
+>      2^12,     69,88    ,      65,85      ,  23.23 (AMDv1)
+>  256*2^12,    353,6498  ,     331,6029    ,  94.94
+>  256*2^21,    373,6014  ,     360,5706    ,  93.93
+>
+>      2^12,     71,72    ,      66,69      ,   4.04 (AMDv2)
+>  256*2^12,    228,891   ,     206,871     ,  76.76
+>  256*2^21,    254,721   ,     245,711     ,  65.65
+>
+>      2^12,     69,87    ,      65,82      ,  20.20 (VTD second stage)
+>  256*2^12,    210,321   ,     200,315     ,  36.36
+>  256*2^21,    255,349   ,     238,342     ,  30.30
+>
+>      2^12,     72,77    ,      68,74      ,   8.08 (ARM 64 bit)
+>  256*2^12,    521,357   ,     447,346     , -29.29
+>  256*2^21,    489,358   ,     433,345     , -25.25
+>
+>   * Above numbers include additional patches to remove the iommu_pgsize()
+>     overheads. gcc 13.3.0, i7-12700
+>
+> This version provides fairly consistent performance across formats. ARM
+> unmap performance is quite different because this version supports
+> contiguous pages and uses a very different algorithm for unmapping. Thoug=
+h
+> why it is so worse compared to AMDv1 I haven't figured out yet.
+>
+> The per-format commits include a more detailed chart.
+>
+> There is a second branch:
+>    https://github.com/jgunthorpe/linux/commits/iommu_pt_all
+>
+> Containing supporting work and future steps:
+>  - ARM short descriptor (32 bit), ARM long descriptor (64 bit) formats
+>  - RISCV format and RISCV conversion
+>     https://github.com/jgunthorpe/linux/commits/iommu_pt_riscv
+>  - Support for a DMA incoherent HW page table walker
+>  - VT-D second stage format and VT-D conversion
+>     https://github.com/jgunthorpe/linux/commits/iommu_pt_vtd
+>  - DART v1 & v2 format
+>  - Draft of a iommufd 'cut' operation to break down huge pages
+>  - A compare test that checks the iommupt formats against the iopgtable
+>    interface, including updating AMD to have a working iopgtable and patc=
+hes
+>    to make VT-D have an iopgtable for testing.
+>  - A performance test to micro-benchmark map and unmap against iogptable
+>
+> My strategy is to go one by one for the drivers:
+>  - AMD driver conversion
+>  - RISCV page table and driver
+>  - Intel VT-D driver and VTDSS page table
+>  - Flushing improvements for RISCV
+>  - ARM SMMUv3
+>
+> And concurrently work on the algorithm side:
+>  - debugfs content dump, like VT-D has
+>  - Cut support
+>  - Increase/Decrease page size support
+>  - map/unmap batching
+>  - KHO
 
+I'm wondering if this work could be used in the future to expand
+page_table_check to support IOMMU page tables. For instance, every
+time a PTE is inserted or removed, an external state machine could
+check for false sharing or improper logic. This approach could
+significantly help with preventing and detecting memory corruption
+early.
 
-Le 07/10/2025 à 17:08, Venkat Rao Bagalkote a écrit :
-> 
-> On 07/10/25 10:59 am, Venkat Rao Bagalkote wrote:
->> Greetings!!!
->>
->>
->> IBM CI has reported a kernel OOPs while running TPM2selftests on IBM 
->> Power11 system with linux-next20251002 kernel.
->>
->>
->> Test Case:
->>
->> make run_tests
->> TAP version 13
->> 1..3
->> # timeout set to 600
->> # selftests: tpm2: test_smoke.sh
->> # test_read_partial_overwrite (tpm2_tests.SmokeTest) ... ok
->> # test_read_partial_resp (tpm2_tests.SmokeTest) ... ok
->> # test_seal_with_auth (tpm2_tests.SmokeTest) ... ok
->> # test_seal_with_policy (tpm2_tests.SmokeTest) ... ok
->> # test_seal_with_too_long_auth (tpm2_tests.SmokeTest) ... ok
->> # test_send_two_cmds (tpm2_tests.SmokeTest) ... ok
->> # test_too_short_cmd (tpm2_tests.SmokeTest) ... ok
->> # test_unseal_with_wrong_auth (tpm2_tests.SmokeTest) ... ok
->> # test_unseal_with_wrong_policy (tpm2_tests.SmokeTest) ... ERROR
->> #
->> # ======================================================================
->> # ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
->> # -----------------------------------------------------
->>
->>
->> Traces:
->>
->>
->> [  452.604333] BUG: KASAN: slab-use-after-free in tpmrm_release+0x78/0xa8
->> [  452.604345] Read of size 8 at addr c00000001c650000 by task 
->> python3/1856
->> [  452.604353]
->> [  452.604358] CPU: 24 UID: 0 PID: 1856 Comm: python3 Kdump: loaded 
->> Not tainted 6.17.0-next-20251003 #1 VOLUNTARY
->> [  452.604364] Hardware name: IBM,9080-HEX Power11 (architected) 
->> 0x820200 0xf000007 of:IBM,FW1110.01 (NH1110_069) hv:phyp pSeries
->> [  452.604368] Call Trace:
->> [  452.604370] [c0000000c1867840] [c00000000187ea4c] 
->> dump_stack_lvl+0x84/0xe8 (unreliable)
->> [  452.604380] [c0000000c1867870] [c000000000803754] 
->> print_address_description.constprop.0+0x11c/0x56c
->> [  452.604388] [c0000000c1867910] [c000000000803c84] 
->> print_report+0xe0/0x358
->> [  452.604394] [c0000000c18679e0] [c000000000804124] 
->> kasan_report+0x128/0x1f4
->> [  452.604400] [c0000000c1867af0] [c0000000008062b4] 
->> __asan_load8+0xa8/0xe0
->> [  452.604406] [c0000000c1867b10] [c000000000f2ec18] 
->> tpmrm_release+0x78/0xa8
->> [  452.604412] [c0000000c1867b40] [c0000000008b6a2c] __fput+0x21c/0x60c
->> [  452.604417] [c0000000c1867bc0] [c0000000008ada70] sys_close+0x74/0xd0
->> [  452.604424] [c0000000c1867bf0] [c000000000039270] 
->> system_call_exception+0x1e0/0x460
->> [  452.604431] [c0000000c1867e50] [c00000000000d05c] 
->> system_call_vectored_common+0x15c/0x2ec
->> [  452.604438] ---- interrupt: 3000 at 0x7fffb7534ab4
->> [  452.604443] NIP:  00007fffb7534ab4 LR: 00007fffb7534ab4 CTR: 
->> 0000000000000000
->> [  452.604446] REGS: c0000000c1867e80 TRAP: 3000   Not tainted 
->> (6.17.0-next-20251003)
->> [  452.604449] MSR:  800000000280f033 
->> <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 44284422  XER: 00000000
->> [  452.604466] IRQMASK: 0
->> [  452.604466] GPR00: 0000000000000006 00007ffff65d76b0 
->> 00007fffb7c17700 0000000000000006
->> [  452.604466] GPR04: 0000000000000000 0000000000000000 
->> 0000000000000000 0000000000000004
->> [  452.604466] GPR08: 0000000000000000 0000000000000000 
->> 0000000000000000 0000000000000000
->> [  452.604466] GPR12: 0000000000000000 00007fffb7e6b8e0 
->> 00000000000000a1 00007fffb67acec0
->> [  452.604466] GPR16: 0000000164032ad0 00007fffb67aceb0 
->> 00007fffb76f6a90 0000000000000000
->> [  452.604466] GPR20: 00007fffb6f21850 0000000000000000 
->> 00007fffb71062c0 0000000164034490
->> [  452.604466] GPR24: 00007fffb6f2fea0 00007fffb67acea8 
->> 0000000164032b18 00007fffb7c45b32
->> [  452.604466] GPR28: 00007fffb7c678e0 00007fffb67aceb8 
->> 0000000000000006 0000000164034490
->> [  452.604510] NIP [00007fffb7534ab4] 0x7fffb7534ab4
->> [  452.604513] LR [00007fffb7534ab4] 0x7fffb7534ab4
->> [  452.604516] ---- interrupt: 3000
->> [  452.604518]
->> [  452.604601] Allocated by task 1856:
->> [  452.604607]  kasan_save_stack+0x34/0x64
->> [  452.604614]  kasan_save_track+0x2c/0x50
->> [  452.604621]  kasan_save_alloc_info+0x58/0x74
->> [  452.604628]  __kasan_kmalloc+0x12c/0x168
->> [  452.604635]  __kmalloc_cache_noprof+0x1d8/0x71c
->> [  452.604643]  tpmrm_open+0x88/0x168
->> [  452.604649]  chrdev_open+0x1f4/0x484
->> [  452.604656]  do_dentry_open+0x578/0x9cc
->> [  452.604663]  vfs_open+0x68/0x23c
->> [  452.604670]  do_open+0x514/0x74c
->> [  452.604676]  path_openat+0x16c/0x380
->> [  452.604682]  do_filp_open+0x104/0x230
->> [  452.604689]  do_sys_openat2+0xb8/0x154
->> [  452.604696]  sys_openat+0xcc/0x130
->> [  452.604703]  system_call_exception+0x1e0/0x460
->> [  452.604710]  system_call_vectored_common+0x15c/0x2ec
->> [  452.604718]
->> [  452.604722] Freed by task 1856:
->> [  452.604726]  kasan_save_stack+0x34/0x64
->> [  452.604733]  kasan_save_track+0x2c/0x50
->> [  452.604739]  __kasan_save_free_info+0x64/0x110
->> [  452.604747]  __kasan_slab_free+0xb0/0x10c
->> [  452.604753]  kfree+0x220/0x624
->> [  452.604760]  tpmrm_release+0x6c/0xa8
->> [  452.604766]  __fput+0x21c/0x60c
->> [  452.604772]  sys_close+0x74/0xd0
->> [  452.604779]  system_call_exception+0x1e0/0x460
->> [  452.604786]  system_call_vectored_common+0x15c/0x2ec
->> [  452.604794]
->> [  452.604797] The buggy address belongs to the object at 
->> c00000001c650000
->> [  452.604797]  which belongs to the cache kmalloc-8k of size 8192
->> [  452.604806] The buggy address is located 0 bytes inside of
->> [  452.604806]  freed 8192-byte region [c00000001c650000, 
->> c00000001c652000)
->> [  452.604815]
->> [  452.604818] The buggy address belongs to the physical page:
->> [  452.604824] page: refcount:0 mapcount:0 mapping:0000000000000000 
->> index:0xc00000001c644000 pfn:0x1c60
->> [  452.604833] head: order:3 mapcount:0 entire_mapcount:0 
->> nr_pages_mapped:0 pincount:0
->> [  452.604840] flags: 0x3ffffe00000040(head|node=0|zone=0| 
->> lastcpupid=0x1fffff)
->> [  452.604849] page_type: f5(slab)
->> [  452.604856] raw: 003ffffe00000040 c000000007012300 5deadbeef0000122 
->> 0000000000000000
->> [  452.604864] raw: c00000001c644000 000000008020001e 00000000f5000000 
->> 0000000000000000
->> [  452.604872] head: 003ffffe00000040 c000000007012300 
->> 5deadbeef0000122 0000000000000000
->> [  452.604879] head: c00000001c644000 000000008020001e 
->> 00000000f5000000 0000000000000000
->> [  452.604887] head: 003ffffe00000003 c00c000000071801 
->> 00000000ffffffff 00000000ffffffff
->> [  452.604894] head: ffffffffffffffff 0000000000000000 
->> 00000000ffffffff 0000000000000008
->> [  452.604900] page dumped because: kasan: bad access detected
->> [  452.604905]
->> [  452.604908] Memory state around the buggy address:
->> [  452.604914]  c00000001c64ff00: fc fc fc fc fc fc fc fc fc fc fc fc 
->> fc fc fc fc
->> [  452.604920]  c00000001c64ff80: fc fc fc fc fc fc fc fc fc fc fc fc 
->> fc fc fc fc
->> [  452.604927] >c00000001c650000: fa fb fb fb fb fb fb fb fb fb fb fb 
->> fb fb fb fb
->> [  452.604933]                    ^
->> [  452.604937]  c00000001c650080: fb fb fb fb fb fb fb fb fb fb fb fb 
->> fb fb fb fb
->> [  452.604944]  c00000001c650100: fb fb fb fb fb fb fb fb fb fb fb fb 
->> fb fb fb fb
->> [  452.604950] 
->> ==================================================================
->> [  452.604955] Disabling lock debugging due to kernel taint
->> [  452.604961] Kernel attempted to read user page (770) - exploit 
->> attempt? (uid: 0)
->> [  452.604969] BUG: Kernel NULL pointer dereference on read at 0x00000770
->> [  452.604975] Faulting instruction address: 0xc0000000002b2e0c
->> [  452.604982] Oops: Kernel access of bad area, sig: 11 [#1]
->> [  452.604987] LE PAGE_SIZE=64K MMU=Radix  SMP NR_CPUS=8192 NUMA pSeries
->> [  452.604996] Modules linked in: nft_fib_inet nft_fib_ipv4 
->> nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 
->> nft_reject nft_ct nft_chain_nat nf_nat bonding nf_conntrack tls 
->> nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink sunrpc 
->> pseries_rng vmx_crypto fuse ext4 crc16 mbcache jbd2 sd_mod sg ibmvscsi 
->> ibmveth scsi_transport_srp pseries_wdt
->> [  452.605073] CPU: 24 UID: 0 PID: 1856 Comm: python3 Kdump: loaded 
->> Tainted: G    B               6.17.0-next-20251003 #1 VOLUNTARY
->> [  452.605084] Tainted: [B]=BAD_PAGE
->> [  452.605089] Hardware name: IBM,9080-HEX Power11 (architected) 
->> 0x820200 0xf000007 of:IBM,FW1110.01 (NH1110_069) hv:phyp pSeries
->> [  452.605096] NIP:  c0000000002b2e0c LR: c0000000002b2e08 CTR: 
->> 0000000000000000
->> [  452.605103] REGS: c0000000c1867820 TRAP: 0300   Tainted: G B       
->> (6.17.0-next-20251003)
->> [  452.605110] MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 
->> 28284420  XER: 0000000d
->> [  452.605132] CFAR: c000000000807920 DAR: 0000000000000770 DSISR: 
->> 40000000 IRQMASK: 0
->> [  452.605132] GPR00: c0000000002b2e08 c0000000c1867ac0 
->> c00000000234a500 0000000000000001
->> [  452.605132] GPR04: 0000000000000008 0000000000000000 
->> c0000000002b2e08 0000000000000001
->> [  452.605132] GPR08: 0000000000000020 0000000000000001 
->> 0000000000000001 a80e000000000000
->> [  452.605132] GPR12: c00e0000009b1c8c c000000d0ddeb700 
->> 0000000000000000 0000000000000000
->> [  452.605132] GPR16: 0000000000000000 0000000000000000 
->> 0000000000000000 0000000000000000
->> [  452.605132] GPR20: 0000000000000008 0000000000000000 
->> c000000008202f00 c00000007b9ff620
->> [  452.605132] GPR24: c00000008a76cb20 c00000008a76cb40 
->> c00000008a76cb08 c000000002201e80
->> [  452.605132] GPR28: c000000061569248 0000000000000770 
->> c00000008a76cb00 0000000000000768
->> [  452.605227] NIP [c0000000002b2e0c] up_read+0x50/0x17c
->> [  452.605237] LR [c0000000002b2e08] up_read+0x4c/0x17c
->> [  452.605245] Call Trace:
->> [  452.605249] [c0000000c1867ac0] [c0000000002b2e08] 
->> up_read+0x4c/0x17c (unreliable)
->> [  452.605261] [c0000000c1867b10] [c000000000f2ec28] 
->> tpmrm_release+0x88/0xa8
->> [  452.605271] [c0000000c1867b40] [c0000000008b6a2c] __fput+0x21c/0x60c
->> [  452.605280] [c0000000c1867bc0] [c0000000008ada70] sys_close+0x74/0xd0
->> [  452.605291] [c0000000c1867bf0] [c000000000039270] 
->> system_call_exception+0x1e0/0x460
->> [  452.605301] [c0000000c1867e50] [c00000000000d05c] 
->> system_call_vectored_common+0x15c/0x2ec
->> [  452.605312] ---- interrupt: 3000 at 0x7fffb7534ab4
->> [  452.605319] NIP:  00007fffb7534ab4 LR: 00007fffb7534ab4 CTR: 
->> 0000000000000000
->> [  452.605326] REGS: c0000000c1867e80 TRAP: 3000   Tainted: G B       
->> (6.17.0-next-20251003)
->> [  452.605333] MSR:  800000000280f033 
->> <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 44284422  XER: 00000000
->> [  452.605362] IRQMASK: 0
->> [  452.605362] GPR00: 0000000000000006 00007ffff65d76b0 
->> 00007fffb7c17700 0000000000000006
->> [  452.605362] GPR04: 0000000000000000 0000000000000000 
->> 0000000000000000 0000000000000004
->> [  452.605362] GPR08: 0000000000000000 0000000000000000 
->> 0000000000000000 0000000000000000
->> [  452.605362] GPR12: 0000000000000000 00007fffb7e6b8e0 
->> 00000000000000a1 00007fffb67acec0
->> [  452.605362] GPR16: 0000000164032ad0 00007fffb67aceb0 
->> 00007fffb76f6a90 0000000000000000
->> [  452.605362] GPR20: 00007fffb6f21850 0000000000000000 
->> 00007fffb71062c0 0000000164034490
->> [  452.605362] GPR24: 00007fffb6f2fea0 00007fffb67acea8 
->> 0000000164032b18 00007fffb7c45b32
->> [  452.605362] GPR28: 00007fffb7c678e0 00007fffb67aceb8 
->> 0000000000000006 0000000164034490
->> [  452.605450] NIP [00007fffb7534ab4] 0x7fffb7534ab4
->> [  452.605456] LR [00007fffb7534ab4] 0x7fffb7534ab4
->> [  452.605462] ---- interrupt: 3000
->> [  452.605467] Code: fbc1fff0 7c7f1b78 f8010010 f821ffb1 e92d0c78 
->> f9210028 39200000 3ba30008 38800008 7fa3eb78 48554af5 60000000 
->> <ebdf0008> eb8d0908 7bc90764 fbc10020
->> [  452.605501] ---[ end trace 0000000000000000 ]---
->> [  452.613685] pstore: backend (nvram) writing error (-1)
->> [  452.613691]
->>
->>
-> 
-> Git bisect is pointing to eb28a2adba0654878bcfd909b429bf567b35922b as 
-> first bad commit.
+The main requirement would be to define a common logic for all IOMMU
+page tables. For the existing page_table_check, we use double-mapping
+detection logic [1]. If we were to implement something similar for the
+IOMMU, what kind of logic could we apply?
 
-Should be fixed by the following change ?
+Pasha
 
-diff --git a/drivers/char/tpm/tpmrm-dev.c b/drivers/char/tpm/tpmrm-dev.c
-index 13322dd9ac9e0..334b3ec2b36a5 100644
---- a/drivers/char/tpm/tpmrm-dev.c
-+++ b/drivers/char/tpm/tpmrm-dev.c
-@@ -54,8 +54,8 @@ static int tpmrm_release(struct inode *inode, struct 
-file *file)
-
-  	tpm_common_release(file, fpriv);
-  	tpm2_del_space(fpriv->chip, &priv->space);
--	kfree(priv);
-  	up_read(&fpriv->chip->open_lock);
-+	kfree(priv);
-
-  	return 0;
-  }
-
-
-> 
-> 
-> eb28a2adba0654878bcfd909b429bf567b35922b is the first bad commit
-> commit eb28a2adba0654878bcfd909b429bf567b35922b
-> Author: Jonathan McDowell <noodles@meta.com>
-> Date:   Tue Sep 23 18:10:00 2025 +0100
-> 
->      tpm: Ensure exclusive userspace access when using /dev/tpm<n>
-> 
->      There is an is_open lock on /dev/tpm<n> that dates back to at least
->      2013, but it only prevents multiple accesses via *this* interface. 
-> It is
->      perfectly possible for userspace to use /dev/tpmrm<n>, or the 
-> kernel to
->      use the internal interfaces, to access the TPM. For tooling expecting
->      exclusive access, such as firmware updates, this can cause issues.
-> 
->      Close the userspace loophole by changing the simple bit lock to a full
->      read/write mutex. Direct /dev/tpm<n> access needs an exclusive write
->      lock, the resource broker continues to allow concurrent access 
-> *except*
->      when /dev/tpm<n> is open.
-> 
->      Signed-off-by: Jonathan McDowell <noodles@meta.com>
->      Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->      Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
->   drivers/char/tpm/tpm-chip.c  |  1 +
->   drivers/char/tpm/tpm-dev.c   | 14 ++++++++------
->   drivers/char/tpm/tpmrm-dev.c | 20 ++++++++++++++++++--
->   include/linux/tpm.h          |  3 ++-
->   4 files changed, 29 insertions(+), 9 deletions(-)
-> 
-> 
-> 
-> Git bisect log:
-> 
-> 
-> git bisect log
-> git bisect start
-> # status: waiting for both good and bad commits
-> # good: [e5f0a698b34ed76002dc5cff3804a61c80233a7a] Linux 6.17
-> git bisect good e5f0a698b34ed76002dc5cff3804a61c80233a7a
-> # status: waiting for bad commit, 1 good commit known
-> # bad: [47a8d4b89844f5974f634b4189a39d5ccbacd81c] Add linux-next 
-> specific files for 20251003
-> git bisect bad 47a8d4b89844f5974f634b4189a39d5ccbacd81c
-> # good: [f79e772258df311c2cb21594ca0996318e720d28] Merge tag 'media/ 
-> v6.18-1' of git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux- 
-> media
-> git bisect good f79e772258df311c2cb21594ca0996318e720d28
-> # good: [6bda5a67f6a2ae4c0153e693e96bd408d054c732] Merge branch 'xtensa- 
-> for-next' of https://eur01.safelinks.protection.outlook.com/? 
-> url=https%3A%2F%2Fgithub.com%2Fjcmvbkbc%2Flinux- 
-> xtensa.git&data=05%7C02%7Cchristophe.leroy2%40cs- 
-> soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485179363%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=0Y%2BuK%2B%2BkZRoXNH%2FK4Ni4hd3RVZJmX8c2SqoLd40qq2Q%3D&reserved=0
-> git bisect good 6bda5a67f6a2ae4c0153e693e96bd408d054c732
-> # bad: [09026363ffabf7bb33e0ce000d8bff3e41b0c3de] Merge branch 'next' of 
-> https://eur01.safelinks.protection.outlook.com/? 
-> url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fpcmoore%2Faudit.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485205361%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=XuvSxtgtEAPPm3jl6X02nRyTfSh0EXMCUorpI21Y6Cs%3D&reserved=0
-> git bisect bad 09026363ffabf7bb33e0ce000d8bff3e41b0c3de
-> # good: [c32d529ea3e39ba4918f3865ef90ef6bddaa498c] Merge branch 'for- 
-> next' of https://eur01.safelinks.protection.outlook.com/? 
-> url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fhid%2Fhid.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485215132%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=eOflHx6SriPsE%2FEwEURKIEzRciXVlmsDJ7F%2F1tTJVtk%3D&reserved=0
-> git bisect good c32d529ea3e39ba4918f3865ef90ef6bddaa498c
-> # good: [3fa51882336f09d1a8a03edf107ef43e3b872fc1] Merge branch 'next' 
-> of https://eur01.safelinks.protection.outlook.com/? 
-> url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fiwlwifi%2Fiwlwifi-next.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485223439%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=kf7T2nWCNZ3zKqCl%2FFyIMWoWDqerBMMJJmwEDC3dldo%3D&reserved=0
-> git bisect good 3fa51882336f09d1a8a03edf107ef43e3b872fc1
-> # good: [acc26ceeebaa1880ceb70379abb3fac92d1007d5] Merge branch 'drm-xe- 
-> next' of https://eur01.safelinks.protection.outlook.com/? 
-> url=https%3A%2F%2Fgitlab.freedesktop.org%2Fdrm%2Fxe%2Fkernel.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485231891%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=rAhIU15LaLZVLiCngMMd%2FD8WZFNbBbxlqb95l4ZqN3E%3D&reserved=0
-> git bisect good acc26ceeebaa1880ceb70379abb3fac92d1007d5
-> # good: [3e06c10cef8079782836155d66c2a91798600cfc] Merge branch 'for- 
-> next' of https://eur01.safelinks.protection.outlook.com/? 
-> url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fdevice-mapper%2Flinux-dm.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485239888%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=96H7h%2FqU8AOA6BMX3gRIqFvbwree0RrwBKFiyAbbWqw%3D&reserved=0
-> git bisect good 3e06c10cef8079782836155d66c2a91798600cfc
-> # bad: [cf305bb4070bef42cea469a6c4e751a63f5cacf2] Merge branch 'next' of 
-> https://eur01.safelinks.protection.outlook.com/? 
-> url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fjarkko%2Flinux-tpmdd.git&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485248529%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=aYTIA07yF9iCvHBin54NcH7%2Bhcn4wpuUR1%2BCGncndKQ%3D&reserved=0
-> git bisect bad cf305bb4070bef42cea469a6c4e751a63f5cacf2
-> # good: [19766d4984c39d75393d22cbdad14974cb7f9366] Merge branch 'next' 
-> of https://eur01.safelinks.protection.outlook.com/? 
-> url=https%3A%2F%2Fgithub.com%2Fcschaufler%2Fsmack- 
-> next&data=05%7C02%7Cchristophe.leroy2%40cs- 
-> soprasteria.com%7C18e20b6baa664009b66c08de05b37367%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638954465485256294%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=SAfMhKzF9h2YURPEqPu6ze2oIUJ87TNyRIFC%2B1JjWGE%3D&reserved=0
-> git bisect good 19766d4984c39d75393d22cbdad14974cb7f9366
-> # good: [4e349e68974e71da13d4b34988f795f4cfe29650] tpm: use a map for 
-> tpm2_calc_ordinal_duration()
-> git bisect good 4e349e68974e71da13d4b34988f795f4cfe29650
-> # bad: [b6889908d493fe03a1db28aa9afdade6bceda158] tpm: Allow for 
-> exclusive TPM access when using /dev/tpm<n>
-> git bisect bad b6889908d493fe03a1db28aa9afdade6bceda158
-> # bad: [eb28a2adba0654878bcfd909b429bf567b35922b] tpm: Ensure exclusive 
-> userspace access when using /dev/tpm<n>
-> git bisect bad eb28a2adba0654878bcfd909b429bf567b35922b
-> # good: [11baa7201b1baefd281e5a7faf7de5b7e407364c] tpm: Prevent local 
-> DOS via tpm/tpm0/ppi/*operations
-> git bisect good 11baa7201b1baefd281e5a7faf7de5b7e407364c
-> # first bad commit: [eb28a2adba0654878bcfd909b429bf567b35922b] tpm: 
-> Ensure exclusive userspace access when using /dev/tpm<n>
-> 
->>
->> If you happen to fix this, please add below tag.
->>
->>
->> Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
->>
->>
->> Regards,
->>
->> Venkat.
->>
-> 
-
+[1] https://docs.kernel.org/mm/page_table_check.html
