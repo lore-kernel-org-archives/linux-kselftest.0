@@ -1,122 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA21525A2CF;
-	Tue,  7 Oct 2025 23:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD80B2877C2;
+	Wed,  8 Oct 2025 00:51:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759879633; cv=none; b=sQSQI4KFXzXiJZ4TiVW2E1uwDcxMqWJCzkgk3Ysy+KdpJztTuWO9XJiy5xaq+Qve3irqkVMMUhUm+v47+SZeeMdKdYvFYawhHAU9C9gguNV4d7/N0AiWyPg7X0Xx3hYi8vKx81iDBMbQ3tVihoIxVYxIqbeD5RN30LlqYMw3OFc=
+	t=1759884677; cv=none; b=BfE/zoZeAyLAYeXN1pFGrjy8p1jcSI+m1uMa5X49QLXjthN74Bnak7mDmv8MONLwUGm4+Zork3tSeq0B/vrrM0ihqq4rumbudlNlUmWX0cP/2N255bTphcKheURffsXjunRRWpXKD5eFF+SN6Px8eBG5KetVtuzmOZIqxLm0vN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759879633; c=relaxed/simple;
-	bh=8MoZ1d0XyNgN6tYgtpi12mNE2n0Js6b8j98amLW4u4g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p66pN5sr0I8EAAeRRAvKpH+BmMJWb7x9nNhn4PXL55QN2INPAevNijhbyc5VpPstL2rYTvQgLSiAlg047bIwXLWPN+9cqDuU2SGQ39u8UOHqzdZUQzr9UoyA12xxP8rX3WZdr4e/gSE0uj9PfrspZH0FQWIEPWIRXQpB7IzLsV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AUdwSb6h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759884677; c=relaxed/simple;
+	bh=ip9Z6xXZyARdKTzPzXZm8Lt9Os1E7qphGPd4Rh7D3s0=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=CuNxgpYiYl8Hgzy7jLhfmdWeiiZqUP6GqzKT8SVEXjwNZQTIpTppQac96ScESyD6/TNDy7/4T/RVKQuj6HnoMe9iJq7PXp1SXioA0p/6x0FFTu2RZ8XQ2M6sAz+6eNZnqvTo888JX6m/gNBmkUBDtMughnW4J+9uzfDw/Q98tyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PiNR8Ulr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AUdwSb6h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4705C4CEF1;
-	Tue,  7 Oct 2025 23:27:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PiNR8Ulr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E9CC4CEF1;
+	Wed,  8 Oct 2025 00:51:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759879631;
-	bh=8MoZ1d0XyNgN6tYgtpi12mNE2n0Js6b8j98amLW4u4g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AUdwSb6hVjM8l00aXiF9H8j/gszw/N8jyPNSgEN0X1Lm+u2todoQGpw+YogIKtd3Y
-	 xNhLxfJhcNak9i4yw5DmujEfdQMhf7Rq/w75vJKnDAyiJZ3Vnqp6Qz4BOjjbUwD5c+
-	 E4IuBjkJu0l3uHOeJvVfY7fxH5Zb3z+UxTvQRfZ9aJMkIwdJwZWTyDEPNJipdfd2LY
-	 VJCqkN6XlfOvJ6yo9gjkjKm/xA5ZwGqcesxK6tE+1kfP3vH7MSSE0YuQEXhqB+E5p4
-	 vkJRyuHNxxXeWMH56IHthOroxgAXHgWmvevQbyfh7Z5MKgLzXgWdm1QdG2KjPkPHRZ
-	 zoRoVNhyM4yag==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	bpf@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	johndale@cisco.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2 8/9] selftests: drv-net: pp_alloc_fail: lower traffic expectations
-Date: Tue,  7 Oct 2025 16:26:52 -0700
-Message-ID: <20251007232653.2099376-9-kuba@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251007232653.2099376-1-kuba@kernel.org>
-References: <20251007232653.2099376-1-kuba@kernel.org>
+	s=k20201202; t=1759884676;
+	bh=ip9Z6xXZyARdKTzPzXZm8Lt9Os1E7qphGPd4Rh7D3s0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PiNR8Ulr/Nd31jm8jP7o4IVAlPCLO0zBrHyWBfo/fpazSBd4XAIH+pJh5CoWVZzTp
+	 FTHb/uOkDHl4tJatt/d9qoR7ga/upW5LFb7Tw17x3zD98v7T+WFPW9R9kTZQdNnXji
+	 rm6mhwXzpMPqbxYVjD+h4faxWJtxpyMT6g88Zwuq0R+bZtxiBjassjPdc0LTlCSxDK
+	 ++9sMELLQqIBPeq2wcRTN8wesRPMm4FRnq0/Dyd/AelLmiamVxVoHGIWaaKTG9nWql
+	 Ad4eNyck/ZO+M6qCgWO5RGQkfa0XMeTR7xFeyLG9FdOdUSo8MKvSBmoG28HfI2dems
+	 lH2mS8kJB9vyw==
+Date: Wed, 8 Oct 2025 09:51:11 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Ryan Chung <seokwoo.chung130@gmail.com>
+Cc: rostedt@goodmis.org, mathieu.desnoyers@efficios.com, shuah@kernel.org,
+ hca@linux.ibm.com, corbet@lwn.net, linux-trace-kernel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 0/5] tracing: fprobe: list-style filters,
+Message-Id: <20251008095111.5732b065dcebe53fc80063c5@kernel.org>
+In-Reply-To: <20251004235001.133111-1-seokwoo.chung130@gmail.com>
+References: <20251004235001.133111-1-seokwoo.chung130@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Lower the expected level of traffic in the pp_alloc_fail test
-and calculate failure counter thresholds based on the traffic
-rather than using a fixed constant.
+Hi Ryan,
 
-We only have "QEMU HW" in NIPA right now, and the test (due to
-debug dependencies) only works on debug kernels in the first place.
-We need some place for it to pass otherwise it seems to be bit
-rotting. So lower the traffic threshold so that it passes on QEMU
-and with a debug kernel...
+Thanks for update!
 
-Reviewed-by: Simon Horman <horms@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-v2:
- - use seen_fails in 2 more places
+On Sun,  5 Oct 2025 08:46:54 +0900
+Ryan Chung <seokwoo.chung130@gmail.com> wrote:
 
-CC: shuah@kernel.org
-CC: johndale@cisco.com
-CC: linux-kselftest@vger.kernel.org
----
- .../selftests/drivers/net/hw/pp_alloc_fail.py    | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+> This series aims to extend fprobe with list-style filters and a clear
+> entry/exist qualifier. Users can now specify a comma-separated symbol
+> list with ! exclusions, and use a spec-level suffix to select probe
+> type:
+> 
+> - funcA*, !funcAB, funcC -> entry probes
+> - funcA*, !funcAB, funcC:entry -> explicit entry
+> - funcA*, !funcAB, funcC:exit -> return/exit across the whole list
 
-diff --git a/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py b/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
-index fc66b7a7b149..2a51b60df8a1 100755
---- a/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
-+++ b/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
-@@ -7,6 +7,7 @@ Test driver resilience vs page pool allocation failures.
- 
- import errno
- import time
-+import math
- import os
- from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import KsftSkipEx, KsftFailEx
-@@ -62,7 +63,7 @@ from lib.py import cmd, tool, GenerateTraffic
-         stat1 = get_stats()
-         time.sleep(1)
-         stat2 = get_stats()
--        if stat2['rx-packets'] - stat1['rx-packets'] < 15000:
-+        if stat2['rx-packets'] - stat1['rx-packets'] < 4000:
-             raise KsftFailEx("Traffic seems low:", stat2['rx-packets'] - stat1['rx-packets'])
- 
- 
-@@ -89,11 +90,16 @@ from lib.py import cmd, tool, GenerateTraffic
-         time.sleep(3)
-         s2 = get_stats()
- 
--        if s2['rx-alloc-fail'] - s1['rx-alloc-fail'] < 1:
-+        seen_fails = s2['rx-alloc-fail'] - s1['rx-alloc-fail']
-+        if seen_fails < 1:
-             raise KsftSkipEx("Allocation failures not increasing")
--        if s2['rx-alloc-fail'] - s1['rx-alloc-fail'] < 100:
--            raise KsftSkipEx("Allocation increasing too slowly", s2['rx-alloc-fail'] - s1['rx-alloc-fail'],
--                             "packets:", s2['rx-packets'] - s1['rx-packets'])
-+        pkts = s2['rx-packets'] - s1['rx-packets']
-+        # Expecting one failure per 512 buffers, 3.1x safety margin
-+        want_fails = math.floor(pkts / 512 / 3.1)
-+        if seen_fails < want_fails:
-+            raise KsftSkipEx("Allocation increasing too slowly", seen_fails,
-+                             "packets:", pkts)
-+        ksft_pr(f"Seen: pkts:{pkts} fails:{seen_fails} (pass thrs:{want_fails})")
- 
-         # Basic failures are fine, try to wobble some settings to catch extra failures
-         check_traffic_flowing()
+
+Just a note, it should not accept spaces in the list. The space
+is the highest level delimiter. I hope actual implementation
+does not accept spaces. So something like:
+
+ "funcA*,!funcAB,funcC"
+ "funcA*,!funcAB,funcC:entry"
+ "funcA*,!funcAB,funcC:exit"
+
+
+> 
+> For compatibility, %return remains supported for single, literal
+> symbols. When a list or wildcard is used, an explicit [GROUP/EVENT is
+> required and autogeneration is disabled. Autogen names are kept for
+> single-symbol specs, with wildcard sanitization. For list/wildcard forms
+> we set ctx->funcname = NULL so BTF lookups are not attempted.
+
+OK. So "funcA*%return" and "funcA,funcB%return" will fail.
+
+> 
+> The series moves parsing to the parse path, documents the new syntax,
+> and adds selftests that accept valid list cases and reject empty tokens,
+> stray commas, and %return mixed with lists or wildcards. Selftests also
+> verify enable/disable flow and that entry+exit on the same set do not
+> double-count attached functions.
+
+Thanks for adding selftests and document, that is important to maintain
+features.
+
+> 
+> Help wanted: This is my first time contributing ftrace selftests. I
+> would appreciate comments and recommendations on test structure and
+> coverage.
+
+OK, let me review it.
+
+Thanks,
+
+
+> 
+> Basic coverage is included, but this likely needs broader testing across
+> architectures. Feedback and additional test ideas are welcome.
+> 
+> Changes since v2:
+> - Introduce spec-level: :entry/:exit; reject %return with
+>   lists/wildcards
+> - Require explict [GROUP/]EVENT for list/wildcard; keep autogen only for
+>   single literal.
+> - Sanitize autogen names for single-symbol wildcards
+> - Set ctx->funcname = NULL for list/wildcard to bypass BTF
+> - Move list parsing out of __register_trace_fprobe() and into the parse
+>   path
+> - Update docs and tracefs README and add dynevent selftests for
+>   accept/reject and enable/disable flow
+> 
+> Link: https://lore.kernel.org/lkml/20250904103219.f4937968362bfff1ecd3f004@kernel.org/
+> 
+> Ryan Chung (5):
+>   docs: tracing: fprobe: document list filters and :entry/:exit
+>   tracing: fprobe: require explicit [GROUP/]EVENT for list/wildcard
+>   tracing: fprobe: support comma-separated symbols and :entry/:exit
+>   selftests/ftrace: dynevent: add reject cases for list/:entry/:exit
+>   selftests/ftrace: dynevent: add reject cases
+> 
+>  Documentation/trace/fprobetrace.rst           |  27 +-
+>  kernel/trace/trace.c                          |   3 +-
+>  kernel/trace/trace_fprobe.c                   | 247 ++++++++++++++----
+>  .../test.d/dynevent/add_remove_fprobe.tc      | 121 +++++++++
+>  .../test.d/dynevent/fprobe_syntax_errors.tc   |  13 +
+>  5 files changed, 349 insertions(+), 62 deletions(-)
+> 
+> -- 
+> 2.43.0
+> 
+
+
 -- 
-2.51.0
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
