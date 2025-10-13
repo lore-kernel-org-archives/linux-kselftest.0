@@ -1,189 +1,80 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0D830E828
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 15:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE113101C5
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 15:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760368550; cv=none; b=hnGHfGDRizRIzgqQZ1jWfLWqVbkEPDm9ANpUGxsWsoxpRy10RIN1CeldcEihDy18AzHm8uGcZj5xZKSXVU+fqGJBylwhSFsOkv4fGhsVtaQqOOwJlp3DhqVEuNvKidSaoe7gn6HuIv80WfnbF3hjbn+85IvbMJQVPNy5EjlcsdM=
+	t=1760369780; cv=none; b=bPBWCPaHsT/F1koIU1L+ja4VvSTIp4H+OhZCvL3xMp3INSBIhUio5HHV4tDsqsfvWI6AvhGEvv4EcQIVESYK7Dh/ivZGq5tCv6o2gCf3j1SURfUtk2G0npyY8Rpe2htbeKm8B4bfTbCpvSi4RgDtYqDJ8BKNKwB5xEqMLvO1eEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760368550; c=relaxed/simple;
-	bh=AfUKt9Y64nk4DJCkkE4xk0dAPQmcJX1fmTUpYECF7XQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gc/cJLK0xlk/GOKfmM8BxjFchhrQ6wQXSdcq0h7HEUsla3tVa8DMeBBj3K4UzzituRc+oqYWRzadj1K5a8fyo/HUUQ1Kqc+VRZ+vBztE1bgOsCVmI9MygFIE6QDd9XFLU0wxbbwiLPXi+RR37Xp/OGz9uVr6n3HONY41E0euMTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BgnmrADV; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1760369780; c=relaxed/simple;
+	bh=KnbiNEI6jdfFoyCXFlvrrBN2LNaWnjAsJojkaDAb3zY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=G93oHhcsxgcNM4U2NeAnwfgVYHa+xsqn+SEl3iPfQU78BXvS0RLgWCZvvRbUKI8uOyJ9xQ2iHDmG/Xe/s2hllAsTiOTftbLLVypoXpfWckXLogG47yyhkNFyEMSECWSWn61CmnejOI/cNCpYB3r+l4/KmEvHP4FiG7al7fpoCeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VixOhuDl; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BgnmrADV"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-46fcf9f63b6so2643765e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 08:15:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VixOhuDl"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-46e3e177893so29497855e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 08:36:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760368547; x=1760973347; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mzQnDluOQWqcbRXyu07+4Pf89SEymkI9ph5TfK7+5co=;
-        b=BgnmrADVG8gUrQACGHOnlAuw3ZUzfD5DdKxuFfhmStZ6yxMKplWDpwZnCFRgcGG8yu
-         tkAbRXxegbx1xF3+VVzCWjJnr82WRf/oiU6+qrvGdC2eoMFVWjNw0AVneVmmIVG4hCyp
-         +3JZ+jyeVhm8X/CJCkutqaFfYGC0j0XxLXnvNSphOdrMhvNaTmdEJRZLu6dlWAQBjEiX
-         e3cJIjGNgZBWi80wN6N3NMg9CaIqFgyqF1ytintQt3Rtg9BODNXLkiY7kZ6hsw9XnduD
-         WHaPBDy7rKK0mUT720K8uTsDZ65QThBssvARIT7pY/ZLPL0euKwbnU3ftczS7JOY1j3f
-         yl9w==
+        d=google.com; s=20230601; t=1760369777; x=1760974577; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FlFedRueswZiwwJSvXOIyDnT3oPzpw1Sfa+/cqnl83o=;
+        b=VixOhuDlRMASSH2Ew9mehjOzjWokkcGCCRdHf8AMO5OClJ0Fr0LOTdvRH0mi5A5XiH
+         kO4fsUFGI4vYu5qL7MloeBxssldw0PWI7+Zdu2aThISPeR89vLFbGncEXToXv9yEIht/
+         4qUoDYr2tizImnE9U5fOHCKUFwq/tB6vesJe8GcD9dorknx3kOaJqXvUuINv/xkiWkkA
+         m5n4yMELxn/8vlGCti/YwJdzZQccm6U64lVXjalFRZugh+iTkNibpfuwjmpyg4O8ztkr
+         UHRdtGiHjtK6ovbfur5eTWOaEGucxrG/oG9q4+pdXWVn9t3pDL2kdj/dVSoNGpQiDLeB
+         hhvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760368547; x=1760973347;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mzQnDluOQWqcbRXyu07+4Pf89SEymkI9ph5TfK7+5co=;
-        b=sSJ7f3HOfif6uzud/nrnwyHS/Ielc0hQg3HDFfaUWz7Ydcm20FNMXdrGUG4HFkhXuO
-         aLyYpYRJDy51NnlCdG6Nl5eItk+zf5ak/bVbFpHIhnsU1Fro2cJqoRll4Mo9Pi/ClaFo
-         x08DvhbcBPyrG6QwxmiXRJ5m8va8ujCon8xuFLDh+D3Q9G0/E1jVnxwE1cKDmbgxdDXO
-         JdlZCRjeF+3uJ4i0X57vXoomskLPjhQ9XzYtKC53wJMMkEdHxwa7jUmmAP2DWh66oV9i
-         UDjw8Pn7bXnVvh8yQMf3tgtSAzRQTPRGuCe5aXOiE0uWk8ktQ2W08QYBqDv37I2WFLRT
-         guwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWNX4IpK4+n8IaxmQeYayHH2u8aRCfkg0SCr2fTdP1nnAhO9L0tt0E6oPS6ybNDCjF4GLY234lOE2cOchS96JQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7o40ggXkqr381SBtRWHqwNqBV1Dt3StKBZpGMFVOmdJGVN42t
-	kQ/N44dhhfUtTbc2mRxySmX3CMhKkNnexAk+i0FbDSABRG+EzTSEHCdk
-X-Gm-Gg: ASbGncu5lCUaYygRKfw8xdZaR991dmUcP4nP6q6wEjA2cmgC2FVs706bcvG+cgzxj4t
-	Xh4Gz95J8mBpnycNtPVlxDyTEhz18Agoe4A18uD8DOGysqPgwzsbgW5VG/Y+xZGb2U0g47gXCf+
-	CCgFKryeNAAVLQz+b4U5f81BcYgS2ozyvKKM5tEQmRliH3+uygUdc9w2RXA6zIi0abpp8rW5iZs
-	DIiolFiGm5A7J26drE7Z7+0hd99h5dPo/PzflOmXU9sxizl0ZF59CDMp1WHMLHO/wAh1jd5pxTQ
-	ahP6AJY3f8rhEAv8ViCnpcpJUwfnjgrQ00nBVXDLXZfdpEd14EG4DOjLW8Z5f1ttX0ZwUxGndNo
-	uUFHwP+86ll1NuOrGimkQbFa+osTdO5uLJzL5sfmGhGfQF/m/0okYz0ZEJLj8cVEE59y8sVN3O+
-	sgImMl0vHC4jAzysdaKZNntNklyA==
-X-Google-Smtp-Source: AGHT+IHgTeXKHH2vcpsvzOcBDeWFCxx7j6NWXF765EtO+25xvlfpvrezTIu3A7FfM3RO5CiMYA9Vog==
-X-Received: by 2002:a05:600c:1e85:b0:46e:39e4:1721 with SMTP id 5b1f17b1804b1-46fa9aa261amr141333095e9.12.1760368546663;
-        Mon, 13 Oct 2025 08:15:46 -0700 (PDT)
-Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.3.91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fab36a773sm135545825e9.0.2025.10.13.08.15.45
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 13 Oct 2025 08:15:46 -0700 (PDT)
-From: Jack Thomson <jackabt.amazon@gmail.com>
-To: maz@kernel.org,
-	oliver.upton@linux.dev,
-	pbonzini@redhat.com
-Cc: joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	isaku.yamahata@intel.com,
-	roypat@amazon.co.uk,
-	kalyazin@amazon.co.uk,
-	jackabt@amazon.com
-Subject: [PATCH v2 4/4] KVM: selftests: Add option for different backing in pre-fault tests
-Date: Mon, 13 Oct 2025 16:15:01 +0100
-Message-ID: <20251013151502.6679-5-jackabt.amazon@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251013151502.6679-1-jackabt.amazon@gmail.com>
-References: <20251013151502.6679-1-jackabt.amazon@gmail.com>
+        d=1e100.net; s=20230601; t=1760369777; x=1760974577;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FlFedRueswZiwwJSvXOIyDnT3oPzpw1Sfa+/cqnl83o=;
+        b=KMMu94PRRwiSP951tnf1I5vmehh9cHHSIagw/dkUsk/BuP8ShGE+xttAGFI9f8yFaE
+         oaPVMN9NFNYOa6UcRVnVX/I+/uSPx8gPrfvUBANAL5lhgrGYc5Hm3sri1sgRq7a83I3H
+         CSsnt8Gln9QkgXoFlpLEhN2ab0eTuyf3PTa7cEkcKguIUXo24hyDFf7BRvvC4ycIPHDL
+         kJxP7OHQOX4764ag2D/uC3luQvbi8LS5kjdKMF2S3MVVi/gqv5SuHAtwmyD1XpOjKY9G
+         HeAAk0+6LzM4L+a/183BxXL5QigA+C/dGvcvTO+OLvHEvY0v4V/13yKz3v9PjNfSFpby
+         Y/Xw==
+X-Forwarded-Encrypted: i=1; AJvYcCVvIm/Q6QRU9+1R+jXg0FZJ6mOLHkBmqMK3c7HsMJxv5o27N01sMl0ujf0Rsnm8csQJXqJuyISl5FGib8PdGjk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7i26GkdBU0x9sYcke44N1h6D8XmzrOoolqeQluyTZe9XZMRG7
+	L6UCRVY1N5ffK5iZ7e1N89eWxwJIF2b1NrsAI1gm++AbUyJuUZCY4M/pdu6mwZWfnuAMYqRMkkv
+	mvVZ3zLGloLB5Ug==
+X-Google-Smtp-Source: AGHT+IHe33aTc6DLr2QuBitaWmdhOm2nkmbEu0YxgnPqOB4zoPd1RlYBlwwAqBGdVpW1YUG3fMQrmSmUYvbqkQ==
+X-Received: from wmby12.prod.google.com ([2002:a05:600c:c04c:b0:46e:3771:b9c9])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:a341:b0:46e:74bb:6bc with SMTP id 5b1f17b1804b1-46fa9a8932cmr136710475e9.5.1760369776743;
+ Mon, 13 Oct 2025 08:36:16 -0700 (PDT)
+Date: Mon, 13 Oct 2025 15:36:16 +0000
+In-Reply-To: <20251013-l1tf-test-v1-2-583fb664836d@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20251013-l1tf-test-v1-0-583fb664836d@google.com> <20251013-l1tf-test-v1-2-583fb664836d@google.com>
+X-Mailer: aerc 0.21.0
+Message-ID: <DDHB06W60S97.3GDEC7DRZFQEJ@google.com>
+Subject: Re: [PATCH 2/2] KVM: x86: selftests: add an L1TF exploit test
+From: Brendan Jackman <jackmanb@google.com>
+To: Brendan Jackman <jackmanb@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>
+Cc: Alexandra Sandulescu <aesa@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>, 
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<kvm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Jack Thomson <jackabt@amazon.com>
+On Mon Oct 13, 2025 at 3:13 PM UTC, Brendan Jackman wrote:
+> The test requirements are: the machine is vulnerable to L1TF and the
+> helper kernel module is loaded prior to the test execution.
+> The test should pass when the kernel enables asi (asi=on). 
 
-Add a -m option to specify different memory backing types for the
-pre-fault tests (e.g., anonymous, hugetlb), allowing testing of the
-pre-fault functionality across different memory configurations.
-
-Signed-off-by: Jack Thomson <jackabt@amazon.com>
----
- .../selftests/kvm/pre_fault_memory_test.c     | 31 ++++++++++++++++---
- 1 file changed, 26 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-index ed9848a8af60..22e2e53945d9 100644
---- a/tools/testing/selftests/kvm/pre_fault_memory_test.c
-+++ b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-@@ -76,6 +76,7 @@ static void pre_fault_memory(struct kvm_vcpu *vcpu, u64 gpa, u64 size,
- struct test_params {
- 	unsigned long vm_type;
- 	bool private;
-+	enum vm_mem_backing_src_type mem_backing_src;
- };
- 
- static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
-@@ -94,7 +95,11 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
- 	uint64_t guest_test_virt_mem;
- 	uint64_t alignment, guest_page_size;
- 
-+	size_t backing_src_pagesz = get_backing_src_pagesz(p->mem_backing_src);
-+
- 	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(guest_mode));
-+	pr_info("Testing memory backing src type: %s\n",
-+		vm_mem_backing_src_alias(p->mem_backing_src)->name);
- 
- 	vm = vm_create_shape_with_one_vcpu(shape, &vcpu, guest_code);
- 
-@@ -110,10 +115,11 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
- #else
- 	alignment = SZ_2M;
- #endif
-+	alignment = max(alignment, backing_src_pagesz);
- 	guest_test_phys_mem = align_down(guest_test_phys_mem, alignment);
- 	guest_test_virt_mem = guest_test_phys_mem & ((1ULL << (vm->va_bits - 1)) - 1);
- 
--	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+	vm_userspace_mem_region_add(vm, p->mem_backing_src,
- 				    guest_test_phys_mem, TEST_SLOT, test_config.test_num_pages,
- 				    p->private ? KVM_MEM_GUEST_MEMFD : 0);
- 	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, test_config.test_num_pages);
-@@ -155,7 +161,8 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
- 	kvm_vm_free(vm);
- }
- 
--static void test_pre_fault_memory(unsigned long vm_type, bool private)
-+static void test_pre_fault_memory(unsigned long vm_type, enum vm_mem_backing_src_type backing_src,
-+				  bool private)
- {
- 	if (vm_type && !(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(vm_type))) {
- 		pr_info("Skipping tests for vm_type 0x%lx\n", vm_type);
-@@ -165,6 +172,7 @@ static void test_pre_fault_memory(unsigned long vm_type, bool private)
- 	struct test_params p = {
- 		.vm_type = vm_type,
- 		.private = private,
-+		.mem_backing_src = backing_src,
- 	};
- 
- 	for_each_guest_mode(__test_pre_fault_memory, &p);
-@@ -174,10 +182,23 @@ int main(int argc, char *argv[])
- {
- 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
- 
--	test_pre_fault_memory(0, false);
-+	int opt;
-+	enum vm_mem_backing_src_type backing = VM_MEM_SRC_ANONYMOUS;
-+
-+	while ((opt = getopt(argc, argv, "m:")) != -1) {
-+		switch (opt) {
-+		case 'm':
-+			backing = parse_backing_src_type(optarg);
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	test_pre_fault_memory(0, backing, false);
- #ifdef __x86_64__
--	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, false);
--	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, true);
-+	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, backing, false);
-+	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, backing, true);
- #endif
- 	return 0;
- }
--- 
-2.43.0
-
+Agh, sorry, I missed a bit when scrubbing the commit message, there
+should not be mentions of ASI in here.
