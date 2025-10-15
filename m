@@ -1,104 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086CC298CD7;
-	Wed, 15 Oct 2025 18:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454B3325495
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 18:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760553250; cv=none; b=M/ClbbH54KoLFdsIKSlRlvgtVymD8Ig0FTsd+1MRb6Q0FsrlIP0N/qW0zoUw9tYa20UMzaJP+qrRpSB7sUMr2ccTViPLD/rd13biWyyl3+xnvl+aqxdu5yctPkmzUIOABwMeHT4w3fsVP+95+OZIicngwvr82hv+ZeaGKRMUils=
+	t=1760553410; cv=none; b=FIGY3kq4X5nH10NREL4P+dy1iWbGM0XX6cAoPLw1BgVykwxuUD6hmbSK6NuSUVUn05HzvZ1pwX7UI7tyw9h4c/K5wRxOQ8Bj2uaqoltEINI7EFelCAU6pEfKRRa8tae99cOLBTDKZk5yAM36gQSDqstwJCGQ5I0Mn9to9GnbH+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760553250; c=relaxed/simple;
-	bh=UYiRQSvgs+jqwo1HIyxcSuFqSwz8wIVukPHpImMwyIA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=laf96pLFXewziEelQJSVKS7xEIUhxQKZkL8i7RBQEgbBiUA3N/+fnpWYmkDYYD+n79/cZ3ofQARxanueKtk2bVMnMFckl4MGq9n8rO/G9BDOLy3SqjaXk3EHdwfMpFFhtoD4VAaBD5rqPfTU9p2a3hAwQFoHRuw95aJa/DPj65Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JOEDk1TK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760553410; c=relaxed/simple;
+	bh=+ewbUy3AHFgUEwycvkbHsOaDseVTEdJWwpTlP6Kuyo4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=fQG67D3hJy8dCzxu6mxshuw+srPEfq+i1HxeFsi38Jh8pUsRj6icU5vdl8O6LPjmwhCvO8Qb06PYLD3urUxIqo2aSIbrR1QdnjopUi4ZU2Df+q7+RAFSSrOUXBpBAKh8Hr/WD4P8PtYJCfSXwqA7MlmIpx5tAIXZgcdGJfv/mHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Uxi7iJ+L; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JOEDk1TK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37C68C4CEF8;
-	Wed, 15 Oct 2025 18:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760553249;
-	bh=UYiRQSvgs+jqwo1HIyxcSuFqSwz8wIVukPHpImMwyIA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=JOEDk1TKOjy+sC4x4jD08sMX/9cOzdUAu2Drq6EqtlqtkOXstKVfDB3o1we/whMWc
-	 NYuCMn5I5HwyzfBwDCkpx+eAR7TCllmtTVbSGyeBTvghTNqiIb35VmH/iFlaOkHxnw
-	 /o14sS8HvwFWWx6aE1cB/SqXmMJAjhPotn2E3o9Qd8iCctD9xNtcMnw25OqLesbHdf
-	 bFE+KISodttgwOsCT4rEK0o38x06cmfw7n0NfaqvQCUo2UOYqm2lWjAL9jVWLPkZMf
-	 8Ha1ZwQ7XsYExqR+70kRUYkoGFBx+9A79cE9ZZ8aRJy5qZeENg+MGhD+l3iAgZlogf
-	 RIA24f459PU9A==
-From: Mark Brown <broonie@kernel.org>
-Date: Wed, 15 Oct 2025 18:56:38 +0100
-Subject: [PATCH v2 3/3] kselftest/arm64: Cover disabling streaming mode
- without SVE in fp-ptrace
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Uxi7iJ+L"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-77f5e6a324fso18523834b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 11:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760553408; x=1761158208; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0ilCg17JQ++to0ldYWXPZYiNCoMtQnD6yTXTJa/H8UI=;
+        b=Uxi7iJ+L0bDVYVPbcCV1xpE/EceJ1lIFMIHhTkZE9eLlmRzDJqf/RYYA8GRpayeow9
+         z0uCq46Sgy9KTWIwJgUNYoCjDFI1aB96uLOfMiQdbCPMlZaZQKnZ0YNuLLSryy7XdOLk
+         J6fuU90u8snSA1hKOwyYOo+dyuRtTYGgTGBsPSaqt32SgzhssiROZ22icUXhmm3IwHg4
+         yaW5KD8ruKwtt1807mbWsbiuvQw+3WPTMVMJ3ev9HmxUQWb5GP92yrGtqHmC2Zx1Gng5
+         i3t7Q4gm+XRrSyiHXoahJJ/f+d8sucbrP+oC7gGyCFgi/VIjAD3LfQAXRhXmz6+7FSxE
+         VR6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760553408; x=1761158208;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0ilCg17JQ++to0ldYWXPZYiNCoMtQnD6yTXTJa/H8UI=;
+        b=kQQKQPGZyXFfDtdKgP40J+DHuGOWfdLGRfWw8J1Yx9wwbo3XnE7mfHE4pfzdAnrqMX
+         qCBLTwsY2xFShxThfBUE2u5X5pOLRmZP3QjOC+lHkeoKUiA6pHUQo7i4SbJQdvm5yO+l
+         iXUUtm+l8IlY+JJ19Vek0Pt+inByJPN98FdP6LrO2USj3SARjGBG+JbR67omfF7iPTP9
+         O/IqKDh9/q9PxxH6r1sRMlrUepaczeAqVf7ELSjZwEeiSmfL8M34xASFRm7pLBPHgP4f
+         G7pPb5NdNM4WC+rxSGqVg5qh/VQrXx5S1qS9WmXx/rLqxw48SiapSlkTmcZ3J5FcKpr7
+         aFxA==
+X-Forwarded-Encrypted: i=1; AJvYcCVoIMGf+qPlKdvCHksI5qgNmMQT3pDmQRMVsYs/N/yR++7ox1PnWIf72ZfbabSEhUpc3xuCVvTfkcEb3Fsxjh0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBWOBhPCT1r7PUAWPr4E8QLNIxr1YBVUCxQNIF49KuF6b3Sua4
+	8074TEUt4fp+YfRo5bV06X1AfkLHFKtJe7K089drB7u24slJ8qPMbsWz8lOhmyGud+llFOAK1r6
+	DqLxUEQ==
+X-Google-Smtp-Source: AGHT+IH8PPaE3dBlYhL9Cayq48vHN7MW+dNQWzXLTzpeemhgXmBd6s/PSaBxdBzVpqnpNlS0tiwU3TI6UZk=
+X-Received: from pfbbe19.prod.google.com ([2002:a05:6a00:1f13:b0:77f:6432:dc09])
+ (user=wyihan job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2e13:b0:781:1771:c12c
+ with SMTP id d2e1a72fcca58-7938269d8b7mr36969858b3a.0.1760553408537; Wed, 15
+ Oct 2025 11:36:48 -0700 (PDT)
+Date: Wed, 15 Oct 2025 18:35:51 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251015-arm64-sme-ptrace-sme-only-v2-3-33c7b2f27cbf@kernel.org>
-References: <20251015-arm64-sme-ptrace-sme-only-v2-0-33c7b2f27cbf@kernel.org>
-In-Reply-To: <20251015-arm64-sme-ptrace-sme-only-v2-0-33c7b2f27cbf@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Oleg Nesterov <oleg@redhat.com>
-Cc: Mark Rutland <mark.rutland@arm.com>, 
- David Spickett <david.spickett@arm.com>, 
- Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
- Luis Machado <luis.machado.foss@gmail.com>, 
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-2a268
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1409; i=broonie@kernel.org;
- h=from:subject:message-id; bh=UYiRQSvgs+jqwo1HIyxcSuFqSwz8wIVukPHpImMwyIA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBo7+kUW7mFnAgXj0oaG5JSKhdvIsEUwyyPyt8j1
- wi+2EsZtxCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaO/pFAAKCRAk1otyXVSH
- 0DQbB/976gT7Mug2JIPAZ1WwQXFgHP1WlsQ7C2JzCVbO6aQakwbYHMPhSyqLJm9LVSIr3iTdhu9
- O/xfa/bTdYTIXC3Cadu/kSL4Gd/eM5q9Sf5qyxIIv9T9ox4hq/XunynZMyX+8JbvopLCor1qaQX
- yCWVTuIzBf8esBtIy8tObX/pKuU9T1YxJy8LMtGmA1QSDtF5OzrWIcb6TLzwu4XJxS3L96bTYo3
- Gsj5FhAnm5gA12AH2E3ekO5mpyBgquSV3/XTHKiXiV9ewXGtEsvqCKoTTegojjICtY0JGkZVybZ
- DtksaYcL99KTtZ9Ht+3IElE4WC2qeczhQ9cX+pwXIIbAmv4Q
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.788.g6d19910ace-goog
+Message-ID: <cover.1760551864.git.wyihan@google.com>
+Subject: [RFC PATCH 0/3] mm: Fix MF_DELAYED handling on memory failure
+From: Lisa Wang <wyihan@google.com>
+To: linmiaohe@huawei.com, nao.horiguchi@gmail.com, akpm@linux-foundation.org, 
+	pbonzini@redhat.com, shuah@kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.or, 
+	linux-kselftest@vger.kernel.org
+Cc: david@redhat.com, rientjes@google.com, seanjc@google.com, 
+	ackerleytng@google.com, vannapurve@google.com, michael.roth@amd.com, 
+	jiaqiyan@google.com, tabba@google.com, dave.hansen@linux.intel.com, 
+	Lisa Wang <wyihan@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On a system which support SME but not SVE we can now disable streaming mode
-via ptrace by writing FPSIMD formatted data through NT_ARM_SVE with a VL of
-0. Extend fp-ptrace to cover rather than skip these cases, relax the check
-for SVE writes of FPSIMD format data to not skip if SME is supported and
-accept 0 as the VL when performing the ptrace write.
+Hello,
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/fp-ptrace.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+This patch series addresses an issue in the memory failure handling path
+where MF_DELAYED is incorrectly treated as an error. This issue was
+revealed because guest_memfd=E2=80=99s .error_remove_folio() callback retur=
+ns
+MF_DELAYED.
 
-diff --git a/tools/testing/selftests/arm64/fp/fp-ptrace.c b/tools/testing/selftests/arm64/fp/fp-ptrace.c
-index a85c19e9524e..0114108ab25f 100644
---- a/tools/testing/selftests/arm64/fp/fp-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/fp-ptrace.c
-@@ -1071,7 +1071,7 @@ static bool sve_write_supported(struct test_config *config)
- 
- static bool sve_write_fpsimd_supported(struct test_config *config)
- {
--	if (!sve_supported())
-+	if (!sve_supported() && !sme_supported())
- 		return false;
- 
- 	if ((config->svcr_in & SVCR_ZA) != (config->svcr_expected & SVCR_ZA))
-@@ -1231,9 +1231,6 @@ static void sve_write_fpsimd(pid_t child, struct test_config *config)
- 	vl = vl_expected(config);
- 	vq = __sve_vq_from_vl(vl);
- 
--	if (!vl)
--		return;
--
- 	iov.iov_len = SVE_PT_SIZE(vq, SVE_PT_REGS_FPSIMD);
- 	iov.iov_base = malloc(iov.iov_len);
- 	if (!iov.iov_base) {
+Currently, when the .error_remove_folio() callback for guest_memfd returns
+MF_DELAYED, there are a few issues.
 
--- 
-2.47.2
+1. truncate_error_folio() maps this to MF_FAILED. This causes
+   memory_failure() to return -EBUSY, which unconditionally triggers a
+   SIGBUS. The process=E2=80=99 configured memory corruption kill policy is=
+ ignored
+   - even if PR_MCE_KILL_LATE is set, the process will still get a SIGBUS
+   on deferred memory failures.
+
+2. =E2=80=9CFailed to punch page=E2=80=9D is printed, even though MF_DELAYE=
+D indicates that
+   it was intentionally not punched.
+
+The first patch corrects this by updating truncate_error_folio() to
+propagate MF_DELAYED to its caller. This allows memory_failure() to return
+0, indicating success, and lets the delayed handling proceed as designed.
+This patch also updates me_pagecache_clean() to account for the folio's
+refcount, which remains elevated during delayed handling, aligning its
+logic with me_swapcache_dirty().
+
+The subsequent two patches add KVM selftests to validate the fix and the
+expected behavior of guest_memfd memory failure:
+
+The first test patch verifies that memory_failure() now returns 0 in the
+delayed case and confirms that SIGBUS signaling logic remains correct for
+other scenarios (e.g., madvise injection or PR_MCE_KILL_EARLY).
+
+The second test patch confirms that after a memory failure, the poisoned
+page is correctly unmapped from the KVM guest's stage 2 page tables and
+that a subsequent access by the guest correctly notifies the userspace VMM
+with EHWPOISON.
+
+This patch series is built upon kvm/next. In addition, to align with the
+change of INIT_SHARED and to use the macro wrapper in guest_memfd
+selftests, we put these patches behind Sean=E2=80=99s patches [1].
+
+For ease of testing, this series is also available, stitched together, at
+https://github.com/googleprodkernel/linux-cc/tree/memory-failure-mf-delayed=
+-fix-rfc-v1=20
+
+[1]: https://lore.kernel.org/all/20251003232606.4070510-1-seanjc@google.com=
+/T/
+
+Thank you,
+
+
+Lisa Wang (3):
+  mm: memory_failure: Fix MF_DELAYED handling on truncation during
+    failure
+  KVM: selftests: Add memory failure tests in guest_memfd_test
+  KVM: selftests: Test guest_memfd behavior with respect to stage 2 page
+    tables
+
+ mm/memory-failure.c                           |  24 +-
+ .../testing/selftests/kvm/guest_memfd_test.c  | 233 ++++++++++++++++++
+ 2 files changed, 248 insertions(+), 9 deletions(-)
+
+--=20
+2.51.0.788.g6d19910ace-goog
 
