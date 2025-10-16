@@ -1,49 +1,49 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A933343219
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 14:47:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782193451C4
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 14:47:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760626027; cv=none; b=uxf543/dm85R02m73ylKRsSx4fsK78ROFpxgyuxITmsdIUF5d6aUHs0MPOHeQt5tZg7Yw1FmxDu+eXjZAyZXwls63axMbBUY0zCElkKf0oJF3dNbmKW9tdgEQwafjxz/CPsHC3afytTHOalj3BBLwKv5UFxIMr13Y3ATMdHgd3E=
+	t=1760626028; cv=none; b=D+9chC8LXa9hEP0Zyu3x1U0aH0LL03jhISeu01SwW5SJ37D0aoJNfCQKztSgLtEru9ZzAld5CAMFj2uFj228Ttr8IPR29TfJpGVTpXX3GfN9zDWdh+E5wUsv2Vz1enPWzseOHaU7fhFOhIleEuy7YN3A26SRAPBb02ij5ANwP/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760626027; c=relaxed/simple;
-	bh=BtawZQfHc3r94zhdPsLAO1Sny98T6rBbY+VgVvkTtNI=;
+	s=arc-20240116; t=1760626028; c=relaxed/simple;
+	bh=vxd5viqIAF53p9qHcx2+SSC6DWLKIshKJ2YVAGNmP6A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FrHlTWEkBvZnwOC5Ua6GjrACOweldik8hF8Pm/5q+6OmCG2VezXcwEiC1BqPXrw4un0BxlfCheOtYFPkxCcZNSYvlW4ldYf3Er0gDngMB2eQHWKsmo/8qRNxzSb6HzFqpPOAuGBGdEQHqDYOeBnmyAcZ0mljfghQQpQGdnMftJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=yonch.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.43
+	 MIME-Version; b=KmSIDLxwbZsMSUM71Y0KcPMrLx3J6HmH4C2gsF7uvX4KzsYD+68x+BHu4kuml3c3Z96FVdXF6IQVMrjMqe9lnH+b4lcJy4f7L60GYCCCIwyt2aeM59xlejgu7njwf8yBrfU0g/qTH9nLxhGyEItnk+h9LDw7N8R+5Zv4tddsorg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=yonch.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=yonch.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7b00927607eso585803a34.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 07:47:04 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-43f5ec025d3so480281b6e.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 07:47:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760626023; x=1761230823;
+        d=1e100.net; s=20230601; t=1760626025; x=1761230825;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/EHCgPHyfakU523tKXhaAbUatgQF6sU/svILEddytVE=;
-        b=DZi/LeoaR6b/EQuk9jFP5v31mhyzc3RqVoP42LVh0Jvph88aatMh4re8vJNsbnWPaN
-         eyja758h0faKgcPaXC9ukvz4NtKlEm3Lx7oHoJrO0+6QFVlOlaNUgNUXA9rgFLux2I//
-         bYA77L7gXvaX7RjYg65iqvsOHETVJrUYr1BCcE7/tfKPtELC/PgLxzlxYecbdFQq7bjQ
-         oXXrjjD0IHWrGT1N2xPNWiZp/T1iJRGGeGrH59F2YuIv7wM+Y8IrJIEIMEz3z8SzRbKw
-         BaEng6BDgeNsv3+J+QSmKWTO7MXmK9RsOKgmlBJ+S5HecKJq5cJLA9gX90eY/6OmAJ6T
-         OWDQ==
-X-Gm-Message-State: AOJu0YxaV1CZBTm34bT+hRF2RWWglg0ajHt9YNhd24A8KAd3x7btmxCr
-	GtzWgUut2TI+a1jGIylLNknE+8xZCT2jagRRMfRGbMG/J02w9iI4CwDX
-X-Gm-Gg: ASbGncs2wR7XCh7lvyaVKHDmFhDiJpDSGz4lctLBkAEZJbn+1GRR8kMgSbnbKNe9xoZ
-	OohqROoHJ4ee8WwodLUpO2DjH6ZTK6mkteWyFzcMCkzxqy8LvaetvS4GUbySC/8czTzo1Wxc+Rg
-	9Q9nG+zQMYw0/v2jI2433JJ6OYu+mfOYBpcbLbqGnI/AxjOrQRO9HzwMA2eOIrz5xUfxs5wfKG5
-	XnmUAmBjgQ3XqjhikVfG9a7MfvqJLp5d3rOEUn7oQRQYO2jYXlgdRgnV8aQ3xTzG0mRp1rFs7ES
-	4drp902bkq6RhYq11xiEgPdEeENaitQL1qF9d3FRlLZrozf1d3ALc+TUI1o+Ll8/027VxtTGAty
-	J1cKP6pCSI/fq7sAPU9YVySEdMW/st/nh5RWQ2zHIfM7+HAAk/FZkWw7hd2IlQC582PjMFcLZx2
-	ViwEfIeJMr4S1W2nG6UDYpHBmeh+rJxT6ErYn9jNQC60s1sVMyl3gY5L9D
-X-Google-Smtp-Source: AGHT+IFaoc5h662tQMy3sYuAt7P7VYvJhJI8+JkPL9/LadjSZTqNRwdw+T5zs/QxcPeMC09gOumcZw==
-X-Received: by 2002:a05:6808:250a:b0:441:c9c5:b76d with SMTP id 5614622812f47-443a2e63051mr110288b6e.28.1760626023486;
-        Thu, 16 Oct 2025 07:47:03 -0700 (PDT)
+        bh=WkeQ5GVzAIUDDgYC2BBLNxE47r9RQHz/6gTcvpiCb7E=;
+        b=tTAN14TuBXk4TXCkPVsaeymPhgtB266+kkXYsW3xbkHHiTN1eI3XHpOqeZtl03PyY0
+         KanOpREhNYKKSAUObcpqyyLbQ8GTU/nqGcfVBdhsJNmumIvdbz8jHkNU2NRLocwhlnWU
+         pXxoLFlW/c0VZFo12h4kQ6ZvWHg2O01HP4zrU/30Ggsmz5TAMnple8x0VEnwi/RxjsFM
+         pBm5sXz1HSXleLUU5zgt6dgdbeTSq7JltYWlUTe4lGXeCRZijzRe+n4vW7Y1Gl8n3nH2
+         p7Y7qPiZfREqGbmaouHNpbTeHl2jQLfXQLouS5qfmqI9t9y4ehSf+w7l8xAbYgjh2rxi
+         XZ6g==
+X-Gm-Message-State: AOJu0YwtGf4/t6hA0bMdw59fRp58MVyllzq+7J7lRTMFQPsVIx6ipyUi
+	L1Di/1W5Cp6pZtwgfiPpL7oyTAT2xR7QOKdZwDoXNPdg4TvbY87I8Jt8
+X-Gm-Gg: ASbGncuR9oqYsfJdkBn9hFdOPjN+oNpgpOtv9Cg58OvYVTT2EAFRX0hQga103I0mlzI
+	eiPZbCdKc+eC7CASRj949V4qVXbiX0BFHe0BR6w7o8AzQXD1VoVgu3qYcGWpbMuw9LuCfWYFutz
+	ZXQ5arbbYPTcspsu1ZMG1prRw5ohaGwxOJWl8wubg7MEBQPQ89YLuVAqOr5qhysgNFNJeA5BC3c
+	oSS/UxgpnMzLcva4bYXVThU/tmGNUcWpoy9LZ1n1IWod8xIhzPd8eewkI2+6/yF0gT8E6ooGkxF
+	i7w8PrtgnpivEeLHFBpCr0QrkZkgJ4Mu02AGKgM1DFBkqJkazj5DumvU33z+zcG1G37TQfFKfkb
+	11Xp3eKb498CgD5r5MZcKEUqPcM2mgwcxVNbT5FVq/kziQaXE4Fd66tMFX/nFIEKUOJAZv8Mzab
+	fkfCXEwuHrTlLLQa7eSCKD6n8OLlSdGyVphwNjfwGN6R/xG5xoiqc2sZ7H
+X-Google-Smtp-Source: AGHT+IHad8QU7400Suvztwz7R3TknwRXuPTBhGJThjhex4bA27wajLbo4tHyKKwflCEojRIUm28PFg==
+X-Received: by 2002:a05:6808:14c5:b0:43f:507f:ced2 with SMTP id 5614622812f47-443a2f1b8camr127533b6e.23.1760626025484;
+        Thu, 16 Oct 2025 07:47:05 -0700 (PDT)
 Received: from localhost.localdomain (syn-067-079-108-173.biz.spectrum.com. [67.79.108.173])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-441cc812f24sm3678018b6e.12.2025.10.16.07.47.02
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-441cc812f24sm3678018b6e.12.2025.10.16.07.47.04
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 16 Oct 2025 07:47:03 -0700 (PDT)
+        Thu, 16 Oct 2025 07:47:05 -0700 (PDT)
 From: Jonathan Perry <yonch@yonch.com>
 To: Tony Luck <tony.luck@intel.com>,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -54,9 +54,9 @@ Cc: linux-kselftest@vger.kernel.org,
 	James Morse <james.morse@arm.com>,
 	Roman Storozhenko <romeusmeister@gmail.com>,
 	Jonathan Perry <yonch@yonch.com>
-Subject: [PATCH 2/8] resctrl/mon: Split RMID read init from execution
-Date: Thu, 16 Oct 2025 09:46:50 -0500
-Message-ID: <20251016144656.74928-3-yonch@yonch.com>
+Subject: [PATCH 4/8] resctrl/mon: Create mon_event_setup_read() helper
+Date: Thu, 16 Oct 2025 09:46:52 -0500
+Message-ID: <20251016144656.74928-5-yonch@yonch.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20251016144656.74928-1-yonch@yonch.com>
 References: <20251016144656.74928-1-yonch@yonch.com>
@@ -68,136 +68,139 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce rmid_read_init() to fill struct rmid_read (resource, domain,
-rdtgroup, event id, flags, ci). Change mon_event_read() to accept a
-prepared rmid_read and a CPU mask.
+Refactor the selection of monitored event from the kernfs seq_show
+handler to a helper function. This provides a single setup path that
+the resctrl PMU will reuse.
 
-Update callers to use rmid_read_init() + mon_event_read().
-
-This prepares reuse from contexts that pre-select the CPU (e.g. the
-perf PMU) without duplicating initialization logic.
+Add mon_event_setup_read() to encapsulate domain lookup,
+rmid_read_init(), and selection of the valid CPU mask for the read.
+Rework rdtgroup_mondata_show() to call the helper before reading.
 
 No functional change intended.
 
 Signed-off-by: Jonathan Perry <yonch@yonch.com>
 ---
- fs/resctrl/ctrlmondata.c | 40 ++++++++++++++++++++++------------------
- fs/resctrl/internal.h    |  5 +++--
- fs/resctrl/rdtgroup.c    |  6 ++++--
- 3 files changed, 29 insertions(+), 22 deletions(-)
+ fs/resctrl/ctrlmondata.c | 71 ++++++++++++++++++++++------------------
+ fs/resctrl/internal.h    |  2 ++
+ 2 files changed, 41 insertions(+), 32 deletions(-)
 
 diff --git a/fs/resctrl/ctrlmondata.c b/fs/resctrl/ctrlmondata.c
-index 0d0ef54fc4de..82f8ad2b3053 100644
+index f28328c49479..d1e4cf6f2128 100644
 --- a/fs/resctrl/ctrlmondata.c
 +++ b/fs/resctrl/ctrlmondata.c
-@@ -546,28 +546,31 @@ struct rdt_domain_hdr *resctrl_find_domain(struct list_head *h, int id,
- 	return NULL;
+@@ -594,32 +594,16 @@ void mon_event_read(struct rmid_read *rr, cpumask_t *cpumask)
+ 		resctrl_arch_mon_ctx_free(rr->r, rr->evtid, rr->arch_mon_ctx);
  }
  
--void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
-+void rmid_read_init(struct rmid_read *rr, struct rdt_resource *r,
- 		    struct rdt_mon_domain *d, struct rdtgroup *rdtgrp,
--		    cpumask_t *cpumask, int evtid, int first)
-+		    int evtid, int first, struct cacheinfo *ci)
+-int rdtgroup_mondata_show(struct seq_file *m, void *arg)
++int mon_event_setup_read(struct rmid_read *rr, cpumask_t **cpumask,
++			 struct mon_data *md, struct rdtgroup *rdtgrp)
  {
--	int cpu;
+-	struct kernfs_open_file *of = m->private;
+ 	enum resctrl_res_level resid;
+ 	enum resctrl_event_id evtid;
+ 	struct rdt_domain_hdr *hdr;
+-	struct rmid_read rr = {0};
+ 	struct rdt_mon_domain *d;
+-	struct rdtgroup *rdtgrp;
+-	int domid, cpu, ret = 0;
+ 	struct rdt_resource *r;
+ 	struct cacheinfo *ci;
+-	struct mon_data *md;
+-	cpumask_t *cpumask;
 -
--	/* When picking a CPU from cpu_mask, ensure it can't race with cpuhp */
--	lockdep_assert_cpus_held();
+-	rdtgrp = rdtgroup_kn_lock_live(of->kn);
+-	if (!rdtgrp) {
+-		ret = -ENOENT;
+-		goto out;
+-	}
 -
--	/*
--	 * Setup the parameters to pass to mon_event_count() to read the data.
--	 */
-+	memset(rr, 0, sizeof(*rr));
- 	rr->rgrp = rdtgrp;
- 	rr->evtid = evtid;
- 	rr->r = r;
- 	rr->d = d;
- 	rr->first = first;
-+	rr->ci = ci;
- 	if (resctrl_arch_mbm_cntr_assign_enabled(r) &&
--	    resctrl_is_mbm_event(evtid)) {
-+	    resctrl_is_mbm_event(evtid))
- 		rr->is_mbm_cntr = true;
--	} else {
--		rr->arch_mon_ctx = resctrl_arch_mon_ctx_alloc(r, evtid);
-+}
-+
-+void mon_event_read(struct rmid_read *rr, cpumask_t *cpumask)
-+{
-+	int cpu;
-+
-+	/* When picking a CPU from cpu_mask, ensure it can't race with cpuhp */
-+	lockdep_assert_cpus_held();
-+
-+	if (!rr->is_mbm_cntr) {
-+		rr->arch_mon_ctx = resctrl_arch_mon_ctx_alloc(rr->r, rr->evtid);
- 		if (IS_ERR(rr->arch_mon_ctx)) {
- 			rr->err = -EINVAL;
- 			return;
-@@ -588,7 +591,7 @@ void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
- 		smp_call_on_cpu(cpu, smp_mon_event_count, rr, false);
+-	md = of->kn->priv;
+-	if (WARN_ON_ONCE(!md)) {
+-		ret = -EIO;
+-		goto out;
+-	}
++	int domid, cpu;
  
- 	if (rr->arch_mon_ctx)
--		resctrl_arch_mon_ctx_free(r, evtid, rr->arch_mon_ctx);
-+		resctrl_arch_mon_ctx_free(rr->r, rr->evtid, rr->arch_mon_ctx);
- }
- 
- int rdtgroup_mondata_show(struct seq_file *m, void *arg)
-@@ -635,9 +638,9 @@ int rdtgroup_mondata_show(struct seq_file *m, void *arg)
+ 	resid = md->rid;
+ 	domid = md->domid;
+@@ -639,30 +623,53 @@ int rdtgroup_mondata_show(struct seq_file *m, void *arg)
  				ci = get_cpu_cacheinfo_level(cpu, RESCTRL_L3_CACHE);
  				if (!ci)
  					continue;
--				rr.ci = ci;
--				mon_event_read(&rr, r, NULL, rdtgrp,
--					       &ci->shared_cpu_map, evtid, false);
-+				rmid_read_init(&rr, r, NULL, rdtgrp,
+-				rmid_read_init(&rr, r, NULL, rdtgrp,
+-						     evtid, false, ci);
+-				cpumask = &ci->shared_cpu_map;
+-				goto perform;
++				rmid_read_init(rr, r, NULL, rdtgrp,
 +					       evtid, false, ci);
-+				mon_event_read(&rr, &ci->shared_cpu_map);
- 				goto checkresult;
++				*cpumask = &ci->shared_cpu_map;
++				return 0;
  			}
  		}
-@@ -654,7 +657,8 @@ int rdtgroup_mondata_show(struct seq_file *m, void *arg)
- 			goto out;
- 		}
+-		ret = -ENOENT;
+-		goto out;
++		return -ENOENT;
+ 	} else {
+ 		/*
+ 		 * This file provides data from a single domain. Search
+ 		 * the resource to find the domain with "domid".
+ 		 */
+ 		hdr = resctrl_find_domain(&r->mon_domains, domid, NULL);
+-		if (!hdr || WARN_ON_ONCE(hdr->type != RESCTRL_MON_DOMAIN)) {
+-			ret = -ENOENT;
+-			goto out;
+-		}
++		if (!hdr || WARN_ON_ONCE(hdr->type != RESCTRL_MON_DOMAIN))
++			return -ENOENT;
++
  		d = container_of(hdr, struct rdt_mon_domain, hdr);
--		mon_event_read(&rr, r, d, rdtgrp, &d->hdr.cpu_mask, evtid, false);
-+		rmid_read_init(&rr, r, d, rdtgrp, evtid, false, NULL);
-+		mon_event_read(&rr, &d->hdr.cpu_mask);
+-		rmid_read_init(&rr, r, d, rdtgrp, evtid, false, NULL);
+-		cpumask = &d->hdr.cpu_mask;
++		rmid_read_init(rr, r, d, rdtgrp, evtid, false, NULL);
++		*cpumask = &d->hdr.cpu_mask;
++		return 0;
  	}
++}
  
- checkresult:
+-perform:
++int rdtgroup_mondata_show(struct seq_file *m, void *arg)
++{
++	struct kernfs_open_file *of = m->private;
++	struct rmid_read rr = {0};
++	struct rdtgroup *rdtgrp;
++	int ret = 0;
++	struct mon_data *md;
++	cpumask_t *cpumask;
++
++	rdtgrp = rdtgroup_kn_lock_live(of->kn);
++	if (!rdtgrp) {
++		ret = -ENOENT;
++		goto out;
++	}
++
++	md = of->kn->priv;
++	if (WARN_ON_ONCE(!md)) {
++		ret = -EIO;
++		goto out;
++	}
++
++	ret = mon_event_setup_read(&rr, &cpumask, md, rdtgrp);
++	if (ret)
++		goto out;
+ 	mon_event_read(&rr, cpumask);
+ 
+ 	/*
 diff --git a/fs/resctrl/internal.h b/fs/resctrl/internal.h
-index 63fb4d6c21a7..dcc0b7bea3ac 100644
+index dcc0b7bea3ac..486cbca8d0ec 100644
 --- a/fs/resctrl/internal.h
 +++ b/fs/resctrl/internal.h
-@@ -363,9 +363,10 @@ int rdtgroup_mondata_show(struct seq_file *m, void *arg);
- int rdtgroup_mondata_open(struct kernfs_open_file *of);
- void rdtgroup_mondata_release(struct kernfs_open_file *of);
- 
--void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
-+void rmid_read_init(struct rmid_read *rr, struct rdt_resource *r,
+@@ -366,6 +366,8 @@ void rdtgroup_mondata_release(struct kernfs_open_file *of);
+ void rmid_read_init(struct rmid_read *rr, struct rdt_resource *r,
  		    struct rdt_mon_domain *d, struct rdtgroup *rdtgrp,
--		    cpumask_t *cpumask, int evtid, int first);
-+		    int evtid, int first, struct cacheinfo *ci);
-+void mon_event_read(struct rmid_read *rr, cpumask_t *cpumask);
+ 		    int evtid, int first, struct cacheinfo *ci);
++int mon_event_setup_read(struct rmid_read *rr, cpumask_t **cpumask,
++			 struct mon_data *md, struct rdtgroup *rdtgrp);
+ void mon_event_read(struct rmid_read *rr, cpumask_t *cpumask);
  
  int resctrl_mon_resource_init(void);
- 
-diff --git a/fs/resctrl/rdtgroup.c b/fs/resctrl/rdtgroup.c
-index 17b61dcfad07..34337abe5345 100644
---- a/fs/resctrl/rdtgroup.c
-+++ b/fs/resctrl/rdtgroup.c
-@@ -3235,8 +3235,10 @@ static int mon_add_all_files(struct kernfs_node *kn, struct rdt_mon_domain *d,
- 		if (ret)
- 			return ret;
- 
--		if (!do_sum && resctrl_is_mbm_event(mevt->evtid))
--			mon_event_read(&rr, r, d, prgrp, &d->hdr.cpu_mask, mevt->evtid, true);
-+		if (!do_sum && resctrl_is_mbm_event(mevt->evtid)) {
-+			rmid_read_init(&rr, r, d, prgrp, mevt->evtid, true, NULL);
-+			mon_event_read(&rr, &d->hdr.cpu_mask);
-+		}
- 	}
- 
- 	return 0;
