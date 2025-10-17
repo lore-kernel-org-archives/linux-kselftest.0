@@ -1,55 +1,55 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721A933C535
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 20:12:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76A7345749
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 20:12:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760731969; cv=none; b=HHKCIIFHFWcE4Hnd/nu5A75ZJKK40aJqVdlEZfiGsEWYozaRqJLO8JzhcfbxPF8VTTbTIMhsjFKq8XqseMcwOtf2pC/TS5oiVA6odY+uFxas518zmtYOcpdIaPHqm/Q5Ni8JawfpVDftyGT4V02vLwlope6P8zsziqsoBJnPEbw=
+	t=1760731972; cv=none; b=H8nG9Qlvg/PfvhUkErAEeraTwUXGy5h7+aAOxoT4cmznkYtkxxgtAAcxgP7nF3gP33sioQA7Os7CoN8iamM8Jg1eJEuNyd4/YXim1hHzG03Io2j+BclioGBvTsZLr6XX26ftqe0R7D+ci1lZtIRCik6yeWCqgi89QmGqnoH+K3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760731969; c=relaxed/simple;
-	bh=cwrAgKoOfoFmDzsB8GfouVjdDaQE4lrV8AsgVEuqlvI=;
+	s=arc-20240116; t=1760731972; c=relaxed/simple;
+	bh=5sPCbmVaZjwOnK8esh5b6y2EMzjDjIkrPLz3+NCgVqA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bl5qr3jWtGrVvPKkMR7rhkliSsGWD8FQZbKe5YRfd3G9BQtaFoEyt0fyAyrpLh7XpULWg7aTZUxGlhNCz9OR/zAeXnbXbz0JwFMBDXInuWMaQBUXKvtfjdgCmPzX7Om6itTB9vJ/MlYdXiHKuiNOKr89xKedNuv5U4ILyL5Ni9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MXn6fijT; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=jy4AmOsgc+dpJNnFYdAYIjqvjPlSNnT20qyUZPuQw36EBWp7C5MvFKz/elso7MqcSsD5tdxbWTAzQ7/uYMiD9A7SL1g1nsWnFmQXVCiwa7AceXcSco9GeH0k7XOuKz+7XW1tyUXfWv9Jw2+86AZ5DzGUHhdnIo81V6LKP0SpmCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2GPCu6NB; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MXn6fijT"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-272b7bdf41fso30746765ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 13:12:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2GPCu6NB"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-32ee4998c50so1882280a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 13:12:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760731965; x=1761336765; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1760731969; x=1761336769; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kctxz4bkwPEMxjAo5uv7zMkhZ7DomPYpJw8TjHTwuwc=;
-        b=MXn6fijTk5zfppuhelhljX6A3t/1mAok4nn+OItA1YOiK7sNzRcgeMZam9Y3wAuO9x
-         DiXbL8Py+OICYKWM2mJQ9XiITrVZST62sEg+hVfxIBr9Q7Q4WesD8WU19UXwlFf/uhtS
-         9nFc7VIrLLcsMpA5iNIiPScP/NbPFM20N78M5CuMIJTDwdiIhBL3hqOZZLWPDebvDG4T
-         10J+dSm2KqBdWBsjM3maHkHIoLh8rWcDR3ZBFR/ypecLBbbKTQ4p8yh1aY0pTWIaBWJD
-         KSn/9zT2SgnYebDpEsOPirPIEBzP2OkZ55eZCZrIqS1YKgPy4xAamUvwfVCZU9crPKG/
-         PX8g==
+        bh=KR72vgpCvELPyR/ICJ3IjpNbxUCWAnmK6eB3NpuYbR4=;
+        b=2GPCu6NBEQ55fkAt62GWgZJGk65LERr9vIAnjHp/c3Z8GfUJGHtq0HPcHoH8N0y1o/
+         nwQgm8NIDrox+5S8SdA46S7Lxqcao+Ahby6IPylziz6YP/ek2uywwB/ekjMKBhn/nSB0
+         d7LagSCiX2+mGIihCUzlfZggCfiKjxcGAJ5Wl9lZXH+msnTYEdmNZSKZ76q+X2Np2Y1P
+         AXRGOQ1nlvjNvTa09XdWT2YdYMZX3ftUApXUCVgd+6oD0Lqx0Yi6573wGNIkG7c2b7Wf
+         2M5UzNj73z/5djAQQWSyGsoOblkvVU6ND7tMS2vfWCUwUjf3XNyHEeI/dghRLs2A4BS1
+         8TIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760731965; x=1761336765;
+        d=1e100.net; s=20230601; t=1760731969; x=1761336769;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kctxz4bkwPEMxjAo5uv7zMkhZ7DomPYpJw8TjHTwuwc=;
-        b=DPkMKoeCgV0kFOCZDIr1E+n0KrEn9XbZhhTr+9ytwSn8sJdjMJS+L7lXlzJCxZb9rY
-         TwVtygufCO6g+Ay9UKS2eLab9uB4uNZV2iVJePBVZ7LQ68KEgVGzpYeN/xPd5/d0OFJz
-         VS52VtAXpi20JbvvN7gk+yuaNUhCTZGVXuQedWDSvJKWJ+Dq5edvltMssiATpYx0+jKw
-         ZZyEqZLMLm1Q6e2C8au7A4Plp//lzLWWpPdAwlPa7qn7+zqJYYykJhOEPnhJid7VMC8f
-         s/UHKSnGA6dKw1WJiLnhULO6bGI9aYfizjbl2/ZLmBdUm2BspELODDA8lbmRaErkjJmm
-         4WoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUiLarBeScsBh9TpmMVy57Q3L9pGRemXKZ1uJEzpc+7rgDMQ+wZIKSdrq8fYu6+UuZzzU9Dp2QrXjw0Au/Cmww=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yweo5k3NP3EN7PWlCDZfz/VRZMFuko17B6lGyoLh6Dfi1g7d87r
-	NNcvdHZhDMXHxd4Swc6eLQAfIkihc8RtrTjY2ByJSgyLJ/QlKm7CJydpxXPVwPHi30wW/e2AO4D
-	+uzUGIUM01cwyEI+oOc6Jom+XFg==
-X-Google-Smtp-Source: AGHT+IFw3NgbtgTZNOENDz2gBk436xq9cSXbkfHKeXAn9g3NU8+yq1Zt0gAdx01FZUaxcKcWB1HdYR90j/8QeZ03Wg==
-X-Received: from plar10.prod.google.com ([2002:a17:902:c7ca:b0:27e:4187:b4d3])
+        bh=KR72vgpCvELPyR/ICJ3IjpNbxUCWAnmK6eB3NpuYbR4=;
+        b=bOhky/AerKx3bjnLEGGfjASYzc2cRioux56iIXkLxUc5XurPxOtwHo05ftBBvt3mOS
+         20bqlXQvluU1ymanpsGaMeyvqQR2UTygLygO2C7tLJbotEuSPYcESp28ecCbA8c1cAy2
+         QQJFRRZkS69LK61s+rp0VUvJf65Kup5kEPU3eHfJ76gEuTC4gEzt8urYnV5L02tEM/C9
+         7t4IuQh1C9VEzz03t4kElanZcdBjfHqOGxp3RHMXmuOjYBHRr8kVrQmKwA5xZNEHhJhf
+         Xhi79eX6My0YfHhlJzLVh8kGGq13DmufN8xdm5Gpk9EZpFk8zfIaHDjFoT3eFSdtJdsy
+         cQ6w==
+X-Forwarded-Encrypted: i=1; AJvYcCW1IIm89S/0DgdOxo1AM/wCbgkSW0X0Ti/sXAxBMQq3lxm/a5/Zkuw+gJIygtsdaDSkgrrSjUeZYr88GP/vsK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBxIN1pTABBpl0lj3N7w+zSMyy2qrom3AdF/LK+/Z01ZyHFtEP
+	FgJbmz9/J7/LE+UaTPsE7Db3Y+/xoIov9u21i54OgkwEFJN64ssBr4AeXN6vBkP4KLDZqDn41eL
+	RYEVa951cP8bzjL1hjfkqw5cuEg==
+X-Google-Smtp-Source: AGHT+IGTLI28yZrk0rADnL8AJRnYpgX7fVX5tQYbza0e4ND5OU4Hj5SMJ3v64nlbDhoh1Pqxs5RCZmim7dvJP9f9Zg==
+X-Received: from pjbdy13.prod.google.com ([2002:a17:90b:6cd:b0:33b:ce80:9efc])
  (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:ce8d:b0:290:52aa:7291 with SMTP id d9443c01a7336-290cba41df2mr57184855ad.53.1760731965412;
- Fri, 17 Oct 2025 13:12:45 -0700 (PDT)
-Date: Fri, 17 Oct 2025 13:11:51 -0700
+ 2002:a17:90b:2e46:b0:335:2823:3683 with SMTP id 98e67ed59e1d1-33bcf953e72mr6347941a91.9.1760731968802;
+ Fri, 17 Oct 2025 13:12:48 -0700 (PDT)
+Date: Fri, 17 Oct 2025 13:11:53 -0700
 In-Reply-To: <cover.1760731772.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,9 +59,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <cover.1760731772.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.51.0.858.gf9c4a03a3a-goog
-Message-ID: <98bee9fff5dcd28a378d81f8b52a561bca8e7362.1760731772.git.ackerleytng@google.com>
-Subject: [RFC PATCH v1 10/37] KVM: guest_memfd: Enable INIT_SHARED on
- guest_memfd for x86 Coco VMs
+Message-ID: <36defde6a09d2a7b4ff5507b752546a906b262f9.1760731772.git.ackerleytng@google.com>
+Subject: [RFC PATCH v1 12/37] KVM: Move KVM_VM_MEMORY_ATTRIBUTES config
+ definition to x86
 From: Ackerley Tng <ackerleytng@google.com>
 To: cgroups@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
 	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -99,41 +99,56 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Sean Christopherson <seanjc@google.com>
 
-Now that guest_memfd supports tracking private vs. shared within gmem
-itself, allow userspace to specify INIT_SHARED on a guest_memfd instance
-for x86 Confidential Computing (CoCo) VMs, so long as per-VM attributes
-are disabled, i.e. when it's actually possible for a guest_memfd instance
-to contain shared memory.
+Bury KVM_VM_MEMORY_ATTRIBUTES in x86 to discourage other architectures
+from adding support for per-VM memory attributes, because tracking private
+vs. shared memory on a per-VM basis is now deprecated in favor of tracking
+on a per-guest_memfd basis, and no other memory attributes are on the
+horizon.
+
+This will also allow modifying KVM_VM_MEMORY_ATTRIBUTES to be
+user-selectable (in x86) without creating weirdness in KVM's Kconfigs.
+Now that guest_memfd support memory attributes, it's entirely possible to
+run x86 CoCo VMs without support for KVM_VM_MEMORY_ATTRIBUTES.
+
+Leave the code itself in common KVM so that it's trivial to undo this
+change if new per-VM attributes do come along.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/x86.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ arch/x86/kvm/Kconfig | 4 ++++
+ virt/kvm/Kconfig     | 4 ----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 5e38c4c9cf63c..4ad451982380e 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -13941,14 +13941,13 @@ bool kvm_arch_no_poll(struct kvm_vcpu *vcpu)
- }
+diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+index acb03b45ba050..49c7709e3d895 100644
+--- a/arch/x86/kvm/Kconfig
++++ b/arch/x86/kvm/Kconfig
+@@ -80,6 +80,10 @@ config KVM_WERROR
  
- #ifdef CONFIG_KVM_GUEST_MEMFD
--/*
-- * KVM doesn't yet support initializing guest_memfd memory as shared for VMs
-- * with private memory (the private vs. shared tracking needs to be moved into
-- * guest_memfd).
-- */
- bool kvm_arch_supports_gmem_init_shared(struct kvm *kvm)
- {
--	return !kvm_arch_has_private_mem(kvm);
-+	/*
-+	 * INIT_SHARED isn't supported if the memory attributes are per-VM,
-+	 * in which case guest_memfd can _only_ be used for private memory.
-+	 */
-+	return !vm_memory_attributes || !kvm_arch_has_private_mem(kvm);
- }
+ 	  If in doubt, say "N".
  
- #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_PREPARE
++config KVM_VM_MEMORY_ATTRIBUTES
++	select KVM_MEMORY_ATTRIBUTES
++	bool
++
+ config KVM_SW_PROTECTED_VM
+ 	bool "Enable support for KVM software-protected VMs"
+ 	depends on EXPERT
+diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+index b3473aec4d24d..72b19813e5412 100644
+--- a/virt/kvm/Kconfig
++++ b/virt/kvm/Kconfig
+@@ -112,10 +112,6 @@ config KVM_MEMORY_ATTRIBUTES
+        depends on KVM_GENERIC_MMU_NOTIFIER
+        bool
+ 
+-config KVM_VM_MEMORY_ATTRIBUTES
+-       select KVM_MEMORY_ATTRIBUTES
+-       bool
+-
+ config KVM_GUEST_MEMFD
+        select KVM_MEMORY_ATTRIBUTES
+        select XARRAY_MULTI
 -- 
 2.51.0.858.gf9c4a03a3a-goog
 
