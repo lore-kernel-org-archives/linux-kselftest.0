@@ -1,111 +1,94 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC232D5412
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 09:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DEAD2D6E71
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 09:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760694199; cv=none; b=tX1rpyI7t4Uxh+id6L0+JbZGn0Y2rvwb2yu0RbvF2LJqZ1bpW0vGNifGwE4fD08HEt24B08GCrSybTm85W0CC9DgnulaHFWIG3LRWBuRzbsowGiAeG7gPxjJeSpX5x0yjElImcBSdVpDfhOrm3Xuor89KEMrXJcX6KwnYO3s090=
+	t=1760695023; cv=none; b=BeGaWil5EeLDIhuoata88wkMixZ5WBll9K00FZ7NhNBU30G6rcQiziz1HnOjTz/MGIfv+2bpZbdDJzfAAeFWtV0682wQPBZXp3t/VIjIt2iUv9xT62lP/pSebIerDC4tw3fodWRYsde7TR5o3DVXowfVxEd5l1cFs/Ry3OVSxFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760694199; c=relaxed/simple;
-	bh=/M7Bnm3gjioI+Av04wQGAmQfU91Qw7IuTFIH55BhMAE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bpq8n2YAyn9NkPb1V22hSEud4abtslimUJSa5mhwW1yUhtbpo3NPKNbjKE1yKiNEruF75bgSFzx7ckd8wCN9YElFSzWqtM5NpawfYXJIyJ0I4Uhjp80zNjY6VDFBaAPSdof7iZ/AlyemYV6LayWM+uRtOH7IVNe8nmxWLUd2a+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WCOAuiz7; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1760695023; c=relaxed/simple;
+	bh=xwkxvH1FPDvwbJfFaw1wRPhCDrLbmhSWOofttyY7r+A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZiCw8pvNr06Lh6A+wjUHf6W3tddUqrK1d1LY7j6e1GT9O5QQMPJrteEyMPfyK/bgENUWRnF5/jbQVnaQe/57md63vjs/5XPlkSrz5y9jMXo+IPDuF9vSQznbNDgodLa5nLyPBx2yYdkjnEBhQMuX9TNkgxTFRNH307BYojB/nCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=BAHf8r5r; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WCOAuiz7"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7835321bc98so1665486b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 02:43:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="BAHf8r5r"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3ee64bc6b85so1667113f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 02:57:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760694197; x=1761298997; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DK/268SDlKo91KyuWt/Uk0juTRvqRZCB2PBwlunHbIo=;
-        b=WCOAuiz7eBnx9liP4aTDwjkG2Mbof5u+glrDE8WoccMy24LBTe2MOqc/TYIpUI/RJp
-         SfMaGMcSsaXofJKnCxrzJO/QUw4uNBETGUZIbi2kPXCPadVbC9Qh2pEspOcfqJLJYMuA
-         GGcR9tR6M9ORr6My8TjWU0yWH/WqgRQK4D4efcMKPGA8g1a8tm56wM2yT65ZTCJDgJdH
-         SUfdpb+yNE6psxjM0+DzXa34Ytqw/4Qpffs9csqS2T9j5e0TwmxFl4rTu4gAZQjHQxKr
-         PXCqAGlpNPSr8KjfY2m1laiLRj0QfpoavaJgjD6w4x2g6b8h5aXcV+bhXKLyd88YQx8O
-         YzFA==
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1760695020; x=1761299820; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KjcGQpb5leVMb/C6XggUPD/+kfrKFLcG6qmnmp/+GHE=;
+        b=BAHf8r5rrdAtbmmJ5i4mZuX0iZEU5vMCa1JxAlVrpOGqc4Y7yKVK7QARNchOKrkqN4
+         cqEiizDpzOXvM0UfBlD7EjXtpSJ8sJ0/H+JWMQTqxVe209mYorVwNGjajs0qIXFnQX/B
+         BZ345OwhlfUlSwurJvnpwowRoD31CxcHFKdiFwfP3qyzY7mRCSZ0NiVoDKnlYaP2adMk
+         5KULHxddnIKlFBCWhFGCK/mJN1FVNmENGNnu27ejTVlx/PhJDURDSou0wWSIF96GcvJh
+         /t10BvpxKN6uyKoggmH3RCcQHLNLtQbatN/ZBz60JCSzkAg5AWXfNglmGexNoBN8INqU
+         4Rgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760694197; x=1761298997;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DK/268SDlKo91KyuWt/Uk0juTRvqRZCB2PBwlunHbIo=;
-        b=NoDqkEMYGsv1xEqCBAPd/pHnvH/3XHqinWl2G4JnYWWi5O22kHGKwr++WKjkxIJGfT
-         T+8vkGy7pvtZUWHqjUWWUDgJc/zgKewTxsgEA7vtZx8SsDMcFmpwD/jeTBIgphP3E7g8
-         ZzRJG1Lbuh99Yr1do2YFuIoTO+KvkDuOb4+xehgI2Bq/kVMZxQjrTsfn2tzfDZ4pvLYd
-         4krGbGfq3c03HpYzsg+VL0jdghnZWrOX2xdW2RbiYXDwrM24RCZHKjTkp3Capb0ebtub
-         kQyUF8o90qt5QENhu+NKqCIjJRJLtrHdQ73/z1VQidk7yah8MsK1zZjz8GqdFWbKK+k9
-         iBSA==
-X-Gm-Message-State: AOJu0YwOF3Fg0dRaigtKMdXWkwmFRV3CMi9php9jkRATkMtb/IVW2Sp1
-	Dk+k/DPkElhCww+sKZEqmm0nsu2UXJVUS7negHBHlphJGXtXKHwY6npq
-X-Gm-Gg: ASbGnctS0yyWxY1fGU7blUxOdzaqI/ZCJ+CyaBLb4sPABFuujmpZcpa0wFJsBtYR8SJ
-	oqxmQC/TcAdEoPPv/PWp7s1Y21VxuUPA2rbTSW4GG9k3HumXoZn0TAUDJ0hW0/ViNFeDx17jnS5
-	+FunOZFxLLyafDK/0Zi/gmL69wphC7zVWmT3W5trAtzd+VuylAc+SoyfPWeSGttyGXAaKlH3+fl
-	4XzAfBV3WcQICWjJWEcpdxlPG7qfaOrgcqv7bRllEUitq+e7WRThCi0gQxj38OGziH9+TU/UxwZ
-	kpzrtcFA6vyBXay7x1zvbz4/p7NmvkwbnY9C5v8X25mjkQg6q6jWrig+U24tl3EdZ7/ro42/hmc
-	+Hdapc414P8giLfdJ4WQduj7gdVMMB+GCbg4EaTq5UDucp4ETH3ge2rKmbdbm2pE2qJBoQbF7h+
-	nhEu/AD8nghA==
-X-Google-Smtp-Source: AGHT+IHVk1UlLvUv11fCrAvl7GZkv39UL14NzeVw04C1QLEJi71IrKA1z/tBFl1eYTam3trbIvNwag==
-X-Received: by 2002:a05:6a20:3d84:b0:2b3:4f2a:d2e9 with SMTP id adf61e73a8af0-334a8515183mr3683681637.9.1760694197461;
-        Fri, 17 Oct 2025 02:43:17 -0700 (PDT)
-Received: from server.. ([103.251.57.248])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a1394139c8sm9963789b3a.18.2025.10.17.02.43.14
+        d=1e100.net; s=20230601; t=1760695020; x=1761299820;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KjcGQpb5leVMb/C6XggUPD/+kfrKFLcG6qmnmp/+GHE=;
+        b=W6lRY4KpqGfqwyWI94drWC5l3KSG8ZwEXxcJLW3R0wC7KZ4VUW1D43N2awDA3u7DOj
+         AkZSyXpTv3xJxArqZgOP73Yt3v/JJfFJVvj2IuJLJUxApY8LbUAtehB7gr4HiAl1aB6H
+         AvVR8H/azX6dmY9gywRi9O1KJUkGA1kN9z+DGkBan1jSHTk73Nkb2ylPCQnhC0JIMzuT
+         QPcnQQkaHTb9mj51RLH9k1kdk6G7Xdwd49DEU4wA+NBtqZYo513h2mOT6n8f3hZnmYpb
+         HGYYFlhzveu0/zqoW052DBOO92kbw8uGIWprotNlGI3XQZfaeqQyhJVxFIGAZvaaHXjl
+         0qpA==
+X-Forwarded-Encrypted: i=1; AJvYcCWhNdnq61M9Xh+Jth6FU+pWLyG4tbY4Zkc+HvfgUL9MghwwKGjCpIneQu/6SG181dOKckMdXcrhDgNuUJJAZBE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeyKNVUS16tuVkRdfKrnWlSB5vltjS/DUQqumKZzlDJ7ca6jLN
+	HwUahx3UrVCZg2gILt/ayn67n2sQiEmDySbx48k+izuzl2QlzbWdnScD/GZffgHQW1s=
+X-Gm-Gg: ASbGncuJ6qbhhMGtES8H0kefsNM9drwzcovQO8CkZLn4Ri9mfgmLbNIZnT1BS9L7tJv
+	uuxZvdSmUnDcBz/cyIopiPt0c1bA34rfG0BO/5M0trTbAzwVUvp/W/MR+N5GZIUUEV+9y1xxcfC
+	2OE9gDNUJwSWlpedJCSoBqhv8zXnSYwW3lw7Dy1V7nZUN7lVExf+1rw6YSHRBOJCeXl5q2vBLwH
+	tdRro31hckzkdi7rpXGREljmF8dmbEr2DqJRH0xSXR4F4ZHkcUlQ8Kril9u/+3ZHVatQGHgW8J1
+	yLrCeMo4LZWAa5naHWDA7P9h2UAfOsNq3mmz8zPfo8x9PEVl8rrB1dwrUoBHAmFaDAKsziqt2ck
+	zmQGEwrr/5sl5GUN6kUpgPS/cervP1f0TreTfeywvGl7N5vz3MFJTF97rMpTIt6o9g40dgpNYbo
+	aqz8j23UtVdv+7z4J59tiuMSHk27CGDNa2hFhP/Q==
+X-Google-Smtp-Source: AGHT+IEeZDP2fZLW2njiX0+fFCA2KIjPFuvYhRMWhYWRWctEosSmZW5GRuJTpVFprjQALkK02Vuvcw==
+X-Received: by 2002:a05:6000:24c3:b0:3fa:ff5d:c34a with SMTP id ffacd0b85a97d-42704da9deamr2388563f8f.39.1760695019334;
+        Fri, 17 Oct 2025 02:56:59 -0700 (PDT)
+Received: from jiri-mlt.client.nvidia.com ([140.209.217.211])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42704a929acsm5791355f8f.18.2025.10.17.02.56.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 02:43:17 -0700 (PDT)
-From: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
-To: akpm@linux-foundation.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	shuah@kernel.org,
-	richard.weiyang@gmail.com,
-	lkp@intel.com,
-	reddybalavignesh9979@gmail.com,
-	linux-kernel-mentees@lists.linux.dev
-Subject: [PATCH] samples/vfs: add selftests include path for kselftest.h
-Date: Fri, 17 Oct 2025 14:32:01 +0530
-Message-ID: <20251017090201.317521-1-reddybalavignesh9979@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251016104409.68985-1-reddybalavignesh9979@gmail.com>
-References: <20251016104409.68985-1-reddybalavignesh9979@gmail.com>
+        Fri, 17 Oct 2025 02:56:58 -0700 (PDT)
+Date: Fri, 17 Oct 2025 11:56:55 +0200
+From: Jiri Pirko <jiri@resnulli.us>
+To: Nikolay Aleksandrov <razor@blackwall.org>
+Cc: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org, 
+	Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Stephen Hemminger <stephen@networkplumber.org>, David Ahern <dsahern@gmail.com>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] bonding: show master index when dumping slave
+ info
+Message-ID: <7quap7umeeksodg62bbv4ob4344edplb7f33yiebs2hvhrrdvf@wndrzz7rxi7v>
+References: <20251017030310.61755-1-liuhangbin@gmail.com>
+ <0be57e07-3b90-44f7-85d5-97a90ac13831@blackwall.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0be57e07-3b90-44f7-85d5-97a90ac13831@blackwall.org>
 
-The test-list-all-mounts sample includes pidfd.h from selftests,
-which now uses the centralized kselftest.h include after the
-previous change. Add the selftests directory to the include path
-so the build can find kselftest.h
+Fri, Oct 17, 2025 at 08:10:09AM +0200, razor@blackwall.org wrote:
+>On 10/17/25 06:03, Hangbin Liu wrote:
+>> Currently, there is no straightforward way to obtain the master/slave
+>> relationship via netlink. Users have to retrieve all slaves through sysfs
+>> to determine these relationships.
+>> 
+>
+>How about IFLA_MASTER? Why not use that?
 
-This fixes a build error reported by the kernel test robot.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202510171513.6IWk005g-lkp@intel.com/
-
-Signed-off-by: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
----
- samples/vfs/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/samples/vfs/Makefile b/samples/vfs/Makefile
-index 6554b73a75c8..9256ca5d762b 100644
---- a/samples/vfs/Makefile
-+++ b/samples/vfs/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
- userprogs-always-y += test-fsmount test-statx mountinfo test-list-all-mounts
- 
-+userccflags += -I $(srctree)/tools/testing/selftests/
- userccflags += -I usr/include
--- 
-2.43.0
-
+It's been there for a decade. Plus is, it exposes master for all
+slave-master devices. Odd that you missed it.
