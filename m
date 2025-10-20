@@ -1,35 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0672B337BA7;
-	Mon, 20 Oct 2025 20:53:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61904337B91
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 20:53:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760993638; cv=none; b=Zl8n4xHJpwe5gtiwSTDRyOjWaGkMAjLUGgJpDpmic/s5hmLbD38D9XXYdSdITbQ7okojAGSsmz8L9fJA4keJeaBiNtRW5tZHenFVaz9W1DfXh3rhvvHADCS/ZE6sPfT2MbFxg7u/oT2INPZ9Bi8nmvYo2U56zJkQ3KPv3go8mbY=
+	t=1760993640; cv=none; b=sYgPiFS+2b9Wcu8LQaWszPT7tQcFp5u/F9/xKoSPPG0f1b/8n2PVFAI5ZsgWB2ejEeAmj64cEUy8ug0zy8EZDofCVVG64ENG2Ieub3OzwkFnspvOTazmqXOoe7j00uFjIr3WNnyJQ0L2HUvWVArDJwwIQgU6sQvVK58FAU3XntQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760993638; c=relaxed/simple;
-	bh=Ex6n0S48Ck7Plo4nY6ioRrqLE/WG/09KNPUA0FObYxQ=;
+	s=arc-20240116; t=1760993640; c=relaxed/simple;
+	bh=HpHI2zP/MHNPN2ZG0jq8qy7AdU5skeePc4YpaV5sqak=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=H/wHf/PEkw72xEZsO3fYRWV2VmEmmXiofUfwaakgDXHFzu3DefgEoT5pQso0aXUqntRXU3gJbBf7V60aoN6TNglc5M4UQI6lAWeJWzRmWVw/kvn0qf/FBiZBBWZUVdzlMsGQo4GgDnX43kiM+U1DOZf1R4QKeB4chy7DVwOv2y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CB2royZI; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=KPkE0qKQzp/afxfyxPnt4phUAqVIiagry9VSS2fmtmQn3UeC+bAGhPqqdQhTlHumTqNs3sabBHz+LkxxHrdHe0AbpB2zUpr2f1k3AzN3MdzP0Rr7nRC6Ee5YISo0dgd+RLZOWgBK8di9qXhepN1CkisrRpINAqCTZNjp5NswlhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=Qi1p0rAj; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CB2royZI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B6BC2BCF4;
-	Mon, 20 Oct 2025 20:53:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760993637;
-	bh=Ex6n0S48Ck7Plo4nY6ioRrqLE/WG/09KNPUA0FObYxQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=CB2royZIFoehWRr9hLbMLoLflvZLDyYrE56lHWw04MEq3RbEAYlKU4UHTPIddfiTQ
-	 Na2n2JNLkK3PuE46xQrm6h8zRNApOopwRv4rQvbK8J7bVCSuV0eMKJUbR25lqZiXlR
-	 IZ7NIG/GxDsSl448WL1xkgkUJczolhIuqpHMSFcHQtQmM9dF6B9FJ/IZt+VaoXZGIW
-	 wGUeNibl7sEcx248zPvgIoLSAWR5N8ftC1b2pr3FMaESC3laZaqL7P1U0UKg0Tdydu
-	 Dj+Ua+HBil+41Or4zpS0MbqtsyR8Er3uRKfIVt7n039PuzR0RHDFyFnUSQWFDRcXwu
-	 2NsAATYLfmclg==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 20 Oct 2025 22:53:28 +0200
-Subject: [PATCH net 3/5] selftests: mptcp: join: mark implicit tests as
- skipped if not supported
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="Qi1p0rAj"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-791c287c10dso3732301b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 13:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc.com; s=google; t=1760993637; x=1761598437; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2zbm+cvasSeWoh5NRRT51waj2rRu/qBUWCUacGfv0Qo=;
+        b=Qi1p0rAjoxlkFnoCZlp96Jbxz+o9I0H7sZvtNRniS/dts4zA2S3krSo/Fx1xWy9Il1
+         +uQt9epw2aMJvcp5MQctFZrRjEGKa/ccMwJ17g0gj5iFjiPVfPHHjH/xrQsyNmzEwPv3
+         Ry0h9nBaUG93dVco7n4OFEnFhSBDy3TGc/LNrxf4jKD8vRZNQjNtrSryjEKoL2JmCB+M
+         MCW8OFAm04ly9kzyQ8YJDoVWtCQYZHndGBI7eRMfXGKL+nZgPIdKPWEOXORQTyjY+PpW
+         jwIXQ/o0ZXOJl56PeDU4mZa6J38pB9Q7ztfjDiZY/JWxJ01ltcKr36LWXtPI9QA0W8aa
+         4wKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760993637; x=1761598437;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2zbm+cvasSeWoh5NRRT51waj2rRu/qBUWCUacGfv0Qo=;
+        b=QE6x30Dwyg4rSxIdNSEloqiv32lCcsZ+oBlZmzOfmmll7AiuY7dZAsI1SotjZpxFMF
+         +v45+vycckl7Xu0C6eCNVlc0YOywl5JiXlv5ry/Lkxi5loY4RvpL/rnXvb5+J/hvDR6m
+         U3l0uYEO/UJEX2enKYOFbkbDxwHtQVBTkaKGFVV19wzVX4NHf/b/klgCYVpB2hv/MvVB
+         1KLl7Br4mhi96aPh1Wd3U/oZ9a2O2G3mA//Nr7g3L3EYQ05Kal5hJPlm78+FzeoGK8R6
+         sFv/Rpuvh7JPUPHuTrn8pwO32LGvHwiaM/NUwss1a6WnsgbiBP620ZbqLwckLEGtFbZ+
+         H0XQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWsTboZX4CWUDgev3vFIP+O/njncIJ5RICzEg6tir/HjWQV6WevoCpwMYn9+k64b8shL9U/5KVqtY2E3hg9yp0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXpkTfFtUBg0TbYeRwaI/809xTi4PyxX4qSVJna+YmhozkUcL2
+	jHLsjaKitawV6+zuY9U1UnTq9Gy+bsb1XiEVUBXachHMbkt1p+bNUs7eICZoLEEfVM8=
+X-Gm-Gg: ASbGncuIvKezAYPgcwzjusjscfyVSq9cCdozfJ1ic/rfOiuNs1uc89BWDgcLMZfSLkA
+	iuNxaIuffMe3HXkBQD2aBgCVEL/+YGYZI1+K6+jqVqnjpogdn7R2F4edawlnLAIBmfrmkiiiVKb
+	mMwhCwjfcIyxe1ip1fwjJ15EWRSUf2F/B9yeYHYdn0kUJ7Ocpr9JtFEXaVvA6RT0DPPc7cBkOYf
+	XFQ2g1UlTiTCZyjcYvbaRS8Ha0gYQlDtXMnK0sUsItEI6UfbfuDznTZfP0wb63zPuVjI1/I0a5e
+	S1EKq/0EIR3Q1lHF1a/0vkOovwAQFRSSnRRqpOK+UZsqBH4T3xOduIeflqaG8QH3rz9poSioZrQ
+	+0gxY6LxWFW6bkX6nw8DXwziJyKKM7lAJTZuVhAkDqEQSvisdkEOrBSuFbOGfGiVvE2OT8fyNXi
+	UgxGodag58cJRQJJ9GW68p
+X-Google-Smtp-Source: AGHT+IE1g/KbpvYvMQc6A135OEMdW1EQcArxrHV88hDIqT7H4tb5uf8t9yxI+vtWLXy+tIlYRNuKtg==
+X-Received: by 2002:aa7:9066:0:b0:781:155c:f9c9 with SMTP id d2e1a72fcca58-7a220accef5mr12718068b3a.20.1760993636577;
+        Mon, 20 Oct 2025 13:53:56 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a22ff1591dsm9453867b3a.7.2025.10.20.13.53.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Oct 2025 13:53:56 -0700 (PDT)
+From: Deepak Gupta <debug@rivosinc.com>
+Date: Mon, 20 Oct 2025 13:53:39 -0700
+Subject: [PATCH v22 10/28] riscv/mm: Implement map_shadow_stack() syscall
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,62 +70,221 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251020-net-mptcp-c-flag-late-add-addr-v1-3-8207030cb0e8@kernel.org>
-References: <20251020-net-mptcp-c-flag-late-add-addr-v1-0-8207030cb0e8@kernel.org>
-In-Reply-To: <20251020-net-mptcp-c-flag-late-add-addr-v1-0-8207030cb0e8@kernel.org>
-To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1571; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=Ex6n0S48Ck7Plo4nY6ioRrqLE/WG/09KNPUA0FObYxQ=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDK+LQyTuMTkUjjXyC2h8q/MlaB1usfeu6a83OtjF2i0O
- XmLV7lNRykLgxgXg6yYIot0W2T+zOdVvCVefhYwc1iZQIYwcHEKwEQinjD8FTCtuetRue+ApqvI
- 2UvbfKLD5p45NdFs0/SS3/MSI9pecjEyvEzZp7t+mqiOWK/iymuZVTKrn+zI+bM96//WP27xM2s
- 9OQE=
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Message-Id: <20251020-v5_user_cfi_series-v22-10-9ae5510d1c6f@rivosinc.com>
+References: <20251020-v5_user_cfi_series-v22-0-9ae5510d1c6f@rivosinc.com>
+In-Reply-To: <20251020-v5_user_cfi_series-v22-0-9ae5510d1c6f@rivosinc.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+ Vlastimil Babka <vbabka@suse.cz>, 
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+ Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>, 
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+ Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
+ atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
+ alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
+ rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org, 
+ Zong Li <zong.li@sifive.com>, Deepak Gupta <debug@rivosinc.com>
+X-Mailer: b4 0.13.0
 
-The call to 'continue_if' was missing: it properly marks a subtest as
-'skipped' if the attached condition is not valid.
+As discussed extensively in the changelog for the addition of this
+syscall on x86 ("x86/shstk: Introduce map_shadow_stack syscall") the
+existing mmap() and madvise() syscalls do not map entirely well onto the
+security requirements for shadow stack memory since they lead to windows
+where memory is allocated but not yet protected or stacks which are not
+properly and safely initialised. Instead a new syscall map_shadow_stack()
+has been defined which allocates and initialises a shadow stack page.
 
-Without that, the test is wrongly marked as passed on older kernels.
+This patch implements this syscall for riscv. riscv doesn't require token
+to be setup by kernel because user mode can do that by itself. However to
+provide compatibility and portability with other architectues, user mode
+can specify token set flag.
 
-Fixes: 36c4127ae8dd ("selftests: mptcp: join: skip implicit tests if not supported")
-Cc: stable@vger.kernel.org
-Reviewed-by: Geliang Tang <geliang@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Reviewed-by: Zong Li <zong.li@sifive.com>
+Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/riscv/kernel/Makefile  |   1 +
+ arch/riscv/kernel/usercfi.c | 143 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 144 insertions(+)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index deba21ca5a97..d98f8f8905b9 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -3939,7 +3939,7 @@ endpoint_tests()
- 	# subflow_rebuild_header is needed to support the implicit flag
- 	# userspace pm type prevents add_addr
- 	if reset "implicit EP" &&
--	   mptcp_lib_kallsyms_has "subflow_rebuild_header$"; then
-+	   continue_if mptcp_lib_kallsyms_has "subflow_rebuild_header$"; then
- 		pm_nl_set_limits $ns1 2 2
- 		pm_nl_set_limits $ns2 2 2
- 		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
-@@ -3964,7 +3964,7 @@ endpoint_tests()
- 	fi
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index f60fce69b725..2d0e0dcedbd3 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -125,3 +125,4 @@ obj-$(CONFIG_ACPI)		+= acpi.o
+ obj-$(CONFIG_ACPI_NUMA)	+= acpi_numa.o
  
- 	if reset_with_tcp_filter "delete and re-add" ns2 10.0.3.2 REJECT OUTPUT &&
--	   mptcp_lib_kallsyms_has "subflow_rebuild_header$"; then
-+	   continue_if mptcp_lib_kallsyms_has "subflow_rebuild_header$"; then
- 		start_events
- 		pm_nl_set_limits $ns1 0 3
- 		pm_nl_set_limits $ns2 0 3
+ obj-$(CONFIG_GENERIC_CPU_VULNERABILITIES) += bugs.o
++obj-$(CONFIG_RISCV_USER_CFI) += usercfi.o
+diff --git a/arch/riscv/kernel/usercfi.c b/arch/riscv/kernel/usercfi.c
+new file mode 100644
+index 000000000000..0b3bbb41490a
+--- /dev/null
++++ b/arch/riscv/kernel/usercfi.c
+@@ -0,0 +1,143 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2024 Rivos, Inc.
++ * Deepak Gupta <debug@rivosinc.com>
++ */
++
++#include <linux/sched.h>
++#include <linux/bitops.h>
++#include <linux/types.h>
++#include <linux/mm.h>
++#include <linux/mman.h>
++#include <linux/uaccess.h>
++#include <linux/sizes.h>
++#include <linux/user.h>
++#include <linux/syscalls.h>
++#include <linux/prctl.h>
++#include <asm/csr.h>
++#include <asm/usercfi.h>
++
++#define SHSTK_ENTRY_SIZE sizeof(void *)
++
++/*
++ * Writes on shadow stack can either be `sspush` or `ssamoswap`. `sspush` can happen
++ * implicitly on current shadow stack pointed to by CSR_SSP. `ssamoswap` takes pointer to
++ * shadow stack. To keep it simple, we plan to use `ssamoswap` to perform writes on shadow
++ * stack.
++ */
++static noinline unsigned long amo_user_shstk(unsigned long *addr, unsigned long val)
++{
++	/*
++	 * Never expect -1 on shadow stack. Expect return addresses and zero
++	 */
++	unsigned long swap = -1;
++
++	__enable_user_access();
++	asm goto(
++		".option push\n"
++		".option arch, +zicfiss\n"
++		"1: ssamoswap.d %[swap], %[val], %[addr]\n"
++		_ASM_EXTABLE(1b, %l[fault])
++		".option pop\n"
++		: [swap] "=r" (swap), [addr] "+A" (*addr)
++		: [val] "r" (val)
++		: "memory"
++		: fault
++		);
++	__disable_user_access();
++	return swap;
++fault:
++	__disable_user_access();
++	return -1;
++}
++
++/*
++ * Create a restore token on the shadow stack.  A token is always XLEN wide
++ * and aligned to XLEN.
++ */
++static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
++{
++	unsigned long addr;
++
++	/* Token must be aligned */
++	if (!IS_ALIGNED(ssp, SHSTK_ENTRY_SIZE))
++		return -EINVAL;
++
++	/* On RISC-V we're constructing token to be function of address itself */
++	addr = ssp - SHSTK_ENTRY_SIZE;
++
++	if (amo_user_shstk((unsigned long __user *)addr, (unsigned long)ssp) == -1)
++		return -EFAULT;
++
++	if (token_addr)
++		*token_addr = addr;
++
++	return 0;
++}
++
++static unsigned long allocate_shadow_stack(unsigned long addr, unsigned long size,
++					   unsigned long token_offset, bool set_tok)
++{
++	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
++	struct mm_struct *mm = current->mm;
++	unsigned long populate, tok_loc = 0;
++
++	if (addr)
++		flags |= MAP_FIXED_NOREPLACE;
++
++	mmap_write_lock(mm);
++	addr = do_mmap(NULL, addr, size, PROT_READ, flags,
++		       VM_SHADOW_STACK | VM_WRITE, 0, &populate, NULL);
++	mmap_write_unlock(mm);
++
++	if (!set_tok || IS_ERR_VALUE(addr))
++		goto out;
++
++	if (create_rstor_token(addr + token_offset, &tok_loc)) {
++		vm_munmap(addr, size);
++		return -EINVAL;
++	}
++
++	addr = tok_loc;
++
++out:
++	return addr;
++}
++
++SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
++{
++	bool set_tok = flags & SHADOW_STACK_SET_TOKEN;
++	unsigned long aligned_size = 0;
++
++	if (!cpu_supports_shadow_stack())
++		return -EOPNOTSUPP;
++
++	/* Anything other than set token should result in invalid param */
++	if (flags & ~SHADOW_STACK_SET_TOKEN)
++		return -EINVAL;
++
++	/*
++	 * Unlike other architectures, on RISC-V, SSP pointer is held in CSR_SSP and is available
++	 * CSR in all modes. CSR accesses are performed using 12bit index programmed in instruction
++	 * itself. This provides static property on register programming and writes to CSR can't
++	 * be unintentional from programmer's perspective. As long as programmer has guarded areas
++	 * which perform writes to CSR_SSP properly, shadow stack pivoting is not possible. Since
++	 * CSR_SSP is writeable by user mode, it itself can setup a shadow stack token subsequent
++	 * to allocation. Although in order to provide portablity with other architecture (because
++	 * `map_shadow_stack` is arch agnostic syscall), RISC-V will follow expectation of a token
++	 * flag in flags and if provided in flags, setup a token at the base.
++	 */
++
++	/* If there isn't space for a token */
++	if (set_tok && size < SHSTK_ENTRY_SIZE)
++		return -ENOSPC;
++
++	if (addr && (addr & (PAGE_SIZE - 1)))
++		return -EINVAL;
++
++	aligned_size = PAGE_ALIGN(size);
++	if (aligned_size < size)
++		return -EOVERFLOW;
++
++	return allocate_shadow_stack(addr, aligned_size, size, set_tok);
++}
 
 -- 
-2.51.0
+2.43.0
 
