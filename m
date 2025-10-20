@@ -1,131 +1,185 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769FC313265;
-	Mon, 20 Oct 2025 13:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A2F3176EF
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 13:34:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760965278; cv=none; b=F2fgTdnaKgIYQFJKXduVct5nDnLflo9bEwMkmEH7k7Oqq8qqs3KpJuqtzVan9ZMa+T3SUNEu4SWHp36l1dCnkIUqtMy5llhjHqQ8FJNCDdUEH07tu1Alr5JeswDJksJRzbOIIj+SoxmRvd8xzmhh30r4aa0KbiaBjXaUV6sWkqg=
+	t=1760967285; cv=none; b=gSD7ZS7CKbhTByTuEsv2eOMawmu7iPXUz2bDBpv9on9y2XUcuDMbgz2Dq8W31hhgHVZr93JrQxLXs51wC5KZ2UELSmRS/Icqi/4nNGMKhj8me+VZ1TYLwV3KTF5QZhWABtpv2mK/dca5gvZxRnet2f+dGbzsPd2Ck0z+EiFCQJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760965278; c=relaxed/simple;
-	bh=0SzM7POeZzsGGQ5mWGCo5naisyyNFb+Sx+BZH6gSIJc=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lFuwO8zZ9tTkSVhMe9begLM4PxK5g8LSevuciDn90l0vSbRRzmdPQvj+hU3wtHRa09DP19A/4tUuugnSnoOeCSQ0N8UErsN3MkN2BZRXeYxoDtP6XeVcusBbAUq50CL6f0RbrHgo3BPLfEUKqAhC5hm7g6lFSV+Iz/OpuXMjHvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H8pJPmcB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760967285; c=relaxed/simple;
+	bh=qaL9YbmZJTW/ixYO94qG+wib+260CKv9uoYvrwMFIF8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TvupkB8K4S8dAmDeFTg39AYNRZ7xTzJd/Pa9geUJj3kTrkO8osL+lZLrOwsH/P1z8jYxiKa6jrSPcx3XcuXuMg2XqSQSGg5M2P7Ou1mx+pj27y4XlEnZ30vfLbPqbWNDtvxURbJoCs7GJ0rY0+/yCYX8sJTsRITcnNOWuOJ8jSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VMMnZKj4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8pJPmcB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8488C4CEF9;
-	Mon, 20 Oct 2025 13:01:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VMMnZKj4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEADEC116C6
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 13:34:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760965278;
-	bh=0SzM7POeZzsGGQ5mWGCo5naisyyNFb+Sx+BZH6gSIJc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=H8pJPmcB/M8iv4RfG9SDzfYjcT/VZrk6Du9GXGrHrZNFKRjD8Jw7upRZ9ORP9qyrT
-	 rt7YVzkFB+hOLUSIJ+NeB/xTtTSDx+FIIWxzr00CwbV1FrRY4jeAXEUk/AzXg7GkgI
-	 08n4dJUuyx6SAWTToA2wAVooQ593MUnZi/0K7dLOUlNiKcqNNAg75ourh/JpCJFrLp
-	 +yc+crit+o+Sf+HJDvn1e2H1G6wHifdqa+8tpNsxRgfzc1RN1UKLo808puEPioAioX
-	 NPztSZoqbtvUW3dldcn+sNC2XBg3bSl0LEW26DG8EFrFEVRQbGfFAMfrs6YPNC3ejp
-	 QV0sUm5WygvQw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vApVj-0000000FVlB-3hp4;
-	Mon, 20 Oct 2025 13:01:16 +0000
-Date: Mon, 20 Oct 2025 14:01:15 +0100
-Message-ID: <86ms5lwwv8.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Maximilian Dittgen <mdittgen@amazon.de>
-Cc: <epetron@amazon.de>,
-	<kvm@vger.kernel.org>,
-	<kvmarm@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>,
-	<linux-kselftest@vger.kernel.org>,
-	<mdittgen@amazon.com>,
-	<nh-open-source@amazon.com>,
-	<oliver.upton@linux.dev>,
-	<pbonzini@redhat.com>,
-	<shuah@kernel.org>
-Subject: Re: [PATCH] KVM: selftests: fix ITS collection target addresses in vgic_lpi_stress
-In-Reply-To: <20251020121220.83972-1-mdittgen@amazon.de>
-References: <20251017161918.40711-1-mdittgen@amazon.de>
-	<86v7kdwj8u.wl-maz@kernel.org>
-	<20251020121220.83972-1-mdittgen@amazon.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1760967284;
+	bh=qaL9YbmZJTW/ixYO94qG+wib+260CKv9uoYvrwMFIF8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VMMnZKj40SWvA7YFx0Z+1zHS4alDBzPjYYOVrtVcYnOOyvzzbb/b5rsp5V3rlggs6
+	 Oufq6qWhD7Q+aELu92bRpV5FXiP2XQDNSrb2A2WI1xw8nkqIifwhRke3EvnkafR9DW
+	 4oh5vsLN0v/CNtC1w7C2B4cFms4i/8xqXwg5Tqosyumf2zqEecZmYD7ZWunU2l8k2g
+	 BTverz1tfqP4gUlH8U1s/NHiIBOUF+ewGlzeSRUhkjYFu8u4AyErNmZV0hs/HoEEXv
+	 VJCEgiCrtAQyfcbDJxLqSIJyH1jHKL0+l9RIhrcC6rnr1W5R42R7v5jQnP5LbzjwMn
+	 DcdYd+cKur5qQ==
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3f99ac9acc4so4012385f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 06:34:44 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUZDsVN5PZh2sRkntTdpUOzEXl+TnKRaAy+V/fpqfG1J0j7lCCByjAVooqy8EV4pft9vSbKpBpigB5fyi6Hj+Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylPLp9XIJ2Gk3W5FFIiqtAoROosTgaeEsHz3qbW2J8X3BsFsTU
+	Qfi7SMBqLdNbQ27GbINPT7xLqqthv0Ov6tMF17yh4qs1etBzbnk1mEFJQMS1HHeH5FO5OSiG7iZ
+	ehSt5ZH1HdYJUwMdOt/eOxBVbCjVcX5k=
+X-Google-Smtp-Source: AGHT+IFQwlCf7FjnCPutO24ZzoIvXCKxA8V6xzsVKhuniPH312m1I40LeS2q7hRVe9Mx5ZgcbJzBUyetjP4FtY8fo7s=
+X-Received: by 2002:a05:6000:2c0c:b0:427:928:78a0 with SMTP id
+ ffacd0b85a97d-42709287a50mr7648478f8f.63.1760967283331; Mon, 20 Oct 2025
+ 06:34:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: mdittgen@amazon.de, epetron@amazon.de, kvm@vger.kernel.org, kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, mdittgen@amazon.com, nh-open-source@amazon.com, oliver.upton@linux.dev, pbonzini@redhat.com, shuah@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+References: <20251020042056.30283-1-luxu.kernel@bytedance.com> <20251020042056.30283-5-luxu.kernel@bytedance.com>
+In-Reply-To: <20251020042056.30283-5-luxu.kernel@bytedance.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Mon, 20 Oct 2025 21:34:27 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRyXPxtw1mvMEAt2NLMUecu++DyN8n+HxmcpbPPF_KB3Q@mail.gmail.com>
+X-Gm-Features: AS18NWDpy2g1Qp1BbuHJudf6VVHWVv_M97q7whwhpvd314t5p96b7PWN5zNzj08
+Message-ID: <CAJF2gTRyXPxtw1mvMEAt2NLMUecu++DyN8n+HxmcpbPPF_KB3Q@mail.gmail.com>
+Subject: Re: [PATCH v4 04/10] riscv: Introduce Zalasr instructions
+To: Xu Lu <luxu.kernel@bytedance.com>
+Cc: corbet@lwn.net, paul.walmsley@sifive.com, palmer@dabbelt.com, 
+	aou@eecs.berkeley.edu, alex@ghiti.fr, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, will@kernel.org, peterz@infradead.org, 
+	boqun.feng@gmail.com, mark.rutland@arm.com, anup@brainfault.org, 
+	atish.patra@linux.dev, pbonzini@redhat.com, shuah@kernel.org, 
+	parri.andrea@gmail.com, ajones@ventanamicro.com, brs@rivosinc.com, 
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	apw@canonical.com, joe@perches.com, lukas.bulwahn@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 20 Oct 2025 13:12:20 +0100,
-Maximilian Dittgen <mdittgen@amazon.de> wrote:
-> 
-> On Fri, 17 Oct 2025 19:06:25 +0200,
-> Marc Zyngier <maz@kernel.org> wrote:
-> >
-> >	  * We use linear CPU numbers for redistributor addressing,
-> >	  * so GITS_TYPER.PTA is 0.
-> >
-> > It is not an address.
-> 
-> The issue is that its_encode_target in selftests is designed for
-> physical redistriubtor addresses (GITS_TYPER.PTA = 1) and thus
-
-No. Please read the spec.
-
-> performs a right shift by 16 bits:
-> 
-> 		its_mask_encode(&cmd->raw_cmd[2], target_addr >> 16, 51, 16);
-> 
-> When the vgic_lpi_stress selftest passes in a linear vCPU id as
-> the redistributor address (GITS_TYPER.PTA = 0 behavior),
-> The its_encode_target function shifts the CPU numbers 16 bits right,
-> functionally zeroing them.
-> 
-> We need to either:
-> - Align this specific selftest with GITS_TYPER.PTA = 0 and not use
->     its_encode_target to encode the target vCPU id. Instead have a
->     dedicated encode function for the use case without a bit shift.
-> - Align all selftests with GITS_TYPER.PTA = 0 and refactor
->     its_encode_target to skip the bit shift altogether.
-> - Align selftests with GITS_TYPER.PTA = 1 and pass a redistributor
->     address, not a vCPU id, into its_send_mapc_cmd().
-
-What part of "GITS_TYPER.PTA is 0" did you miss?
-
+On Mon, Oct 20, 2025 at 12:21=E2=80=AFPM Xu Lu <luxu.kernel@bytedance.com> =
+wrote:
 >
-> Otherwise, the selftest's current behavior incorrectly maps all
-> collections to target vCPU 0.
+> Introduce l{b|h|w|d}.{aq|aqrl} and s{b|h|w|d}.{rl|aqrl} instruction
+> encodings.
+>
+> Signed-off-by: Xu Lu <luxu.kernel@bytedance.com>
+> ---
+>  arch/riscv/include/asm/insn-def.h | 79 +++++++++++++++++++++++++++++++
+>  1 file changed, 79 insertions(+)
+>
+> diff --git a/arch/riscv/include/asm/insn-def.h b/arch/riscv/include/asm/i=
+nsn-def.h
+> index d5adbaec1d010..3fec7e66ce50f 100644
+> --- a/arch/riscv/include/asm/insn-def.h
+> +++ b/arch/riscv/include/asm/insn-def.h
+> @@ -179,6 +179,7 @@
+>  #define RV___RS1(v)            __RV_REG(v)
+>  #define RV___RS2(v)            __RV_REG(v)
+>
+> +#define RV_OPCODE_AMO          RV_OPCODE(47)
+>  #define RV_OPCODE_MISC_MEM     RV_OPCODE(15)
+>  #define RV_OPCODE_OP_IMM       RV_OPCODE(19)
+>  #define RV_OPCODE_SYSTEM       RV_OPCODE(115)
+> @@ -208,6 +209,84 @@
+>         __ASM_STR(.error "hlv.d requires 64-bit support")
+>  #endif
+>
+> +#define LB_AQ(dest, addr)                                      \
+> +       INSN_R(OPCODE_AMO, FUNC3(0), FUNC7(26),                 \
+> +              RD(dest), RS1(addr), __RS2(0))
+> +
+> +#define LB_AQRL(dest, addr)                                    \
+> +       INSN_R(OPCODE_AMO, FUNC3(0), FUNC7(27),                 \
+> +              RD(dest), RS1(addr), __RS2(0))
+> +
+> +#define LH_AQ(dest, addr)                                      \
+> +       INSN_R(OPCODE_AMO, FUNC3(1), FUNC7(26),                 \
+> +              RD(dest), RS1(addr), __RS2(0))
+> +
+> +#define LH_AQRL(dest, addr)                                    \
+> +       INSN_R(OPCODE_AMO, FUNC3(1), FUNC7(27),                 \
+> +              RD(dest), RS1(addr), __RS2(0))
+> +
+> +#define LW_AQ(dest, addr)                                      \
+> +       INSN_R(OPCODE_AMO, FUNC3(2), FUNC7(26),                 \
+> +              RD(dest), RS1(addr), __RS2(0))
+> +
+> +#define LW_AQRL(dest, addr)                                    \
+> +       INSN_R(OPCODE_AMO, FUNC3(2), FUNC7(27),                 \
+> +              RD(dest), RS1(addr), __RS2(0))
+> +
+> +#define SB_RL(src, addr)                                       \
+> +       INSN_R(OPCODE_AMO, FUNC3(0), FUNC7(29),                 \
+> +              __RD(0), RS1(addr), RS2(src))
+> +
+> +#define SB_AQRL(src, addr)                                     \
+> +       INSN_R(OPCODE_AMO, FUNC3(0), FUNC7(31),                 \
+> +              __RD(0), RS1(addr), RS2(src))
+> +
+> +#define SH_RL(src, addr)                                       \
+> +       INSN_R(OPCODE_AMO, FUNC3(1), FUNC7(29),                 \
+> +              __RD(0), RS1(addr), RS2(src))
+> +
+> +#define SH_AQRL(src, addr)                                     \
+> +       INSN_R(OPCODE_AMO, FUNC3(1), FUNC7(31),                 \
+> +              __RD(0), RS1(addr), RS2(src))
+> +
+> +#define SW_RL(src, addr)                                       \
+> +       INSN_R(OPCODE_AMO, FUNC3(2), FUNC7(29),                 \
+> +              __RD(0), RS1(addr), RS2(src))
+> +
+> +#define SW_AQRL(src, addr)                                     \
+> +       INSN_R(OPCODE_AMO, FUNC3(2), FUNC7(31),                 \
+> +              __RD(0), RS1(addr), RS2(src))
+> +
+> +#ifdef CONFIG_64BIT
+> +#define LD_AQ(dest, addr)                                      \
+> +       INSN_R(OPCODE_AMO, FUNC3(3), FUNC7(26),                 \
+> +              RD(dest), RS1(addr), __RS2(0))
+> +
+> +#define LD_AQRL(dest, addr)                                    \
+> +       INSN_R(OPCODE_AMO, FUNC3(3), FUNC7(27),                 \
+> +              RD(dest), RS1(addr), __RS2(0))
+> +
+> +#define SD_RL(src, addr)                                       \
+> +       INSN_R(OPCODE_AMO, FUNC3(3), FUNC7(29),                 \
+> +              __RD(0), RS1(addr), RS2(src))
+> +
+> +#define SD_AQRL(src, addr)                                     \
+> +       INSN_R(OPCODE_AMO, FUNC3(3), FUNC7(31),                 \
+> +              __RD(0), RS1(addr), RS2(src))
+> +#else
+> +#define LD_AQ(dest, addr)                                      \
+> +       __ASM_STR(.error "ld.aq requires 64-bit support")
+> +
+> +#define LD_AQRL(dest, addr)                                    \
+> +       __ASM_STR(.error "ld.aqrl requires 64-bit support")
+> +
+> +#define SD_RL(dest, addr)                                      \
+> +       __ASM_STR(.error "sd.rl requires 64-bit support")
+> +
+> +#define SD_AQRL(dest, addr)                                    \
+> +       __ASM_STR(.error "sd.aqrl requires 64-bit support")
+> +#endif
+> +
+>  #define SINVAL_VMA(vaddr, asid)                                        \
+>         INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(11),              \
+>                __RD(0), RS1(vaddr), RS2(asid))
+> --
+> 2.20.1
+>
+I didn't find problem.
 
-To be clear: I don't object to the patch. I object to the nonsensical
-commit message.
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-You cannot say "I'm replacing the vcpu_id with an address". That's not
-for you to decide, as the emulated HW is *imposing* that decision on
-you. You don't even have the addresses at which the RDs are. You are
-merely *reformatting* the vcpu_id to fit a field that can *also*
-contain a 64kB-aligned address *when GITS_TYPER.PTA==1*. See 5.3.1 in
-the GICv3 spec.
-
-And yes, what you have is the correct fix. Just wrap it as a helper
-(I'd suggest procnum_to_rdbase(), if you need a name for it).
-
-This test also violate the architecture by not performing a SYNC after
-any command, which would also require the use of a properly formatted
-target field. But hey, correctness is overrated.
-
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+--=20
+Best Regards
+ Guo Ren
