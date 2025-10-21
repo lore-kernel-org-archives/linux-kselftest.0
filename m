@@ -1,124 +1,117 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CDA347BC0
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 16:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213E534D4EB;
+	Tue, 21 Oct 2025 17:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761065707; cv=none; b=DqLccU4HwwdGSrTatgoiDTRqcmA2PnWgYVHhZQ94h9GvT5wiCJ7koaEn3rbrT71nIoxUPrajf9vUgOJy1B8rJpG3iyHLErq0XuKoQeAkRJ3w2/FTwp56eu2mP50dqQMaayD0G9W3SrxMoRw1pYlmc7UjyBlGg8MKALezuAu4htU=
+	t=1761067147; cv=none; b=MFwqmIHnt0WLI/lwFqVlGTAPzDXdqJ0hIFIGOxU4L+QXgUZew+gjJ+qh0Hb1XxiQOcdsHf1ttQdz5oVsyWmKuSel4UeLCiYhoVvnbOYQRXbeTT45iAkWbdEuIlz47xTmb4fxaa4049N3c1kroSxbJfXhhpWy87IorVlGEqVEls0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761065707; c=relaxed/simple;
-	bh=MD15u5LqqmayWloxdzFGq0sNLTBc1b1Ii0ATLOQcv8U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qhNFx56vWnC3sWUk0pfIgMI0ZYu2QROFSaicsY+E2pwhv8pNXnXhkM5eZDejfO5bzfTiGVTMZjJl22p3Fnxs6ArtYB3BIajsr4r+lCff/6cN4bwqB8U4GvdrNkNIu9Bf53iykdpwmcidTuZBRFxum53pkj+6CGM1JmPUEIocock=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NNRc5cnX; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761067147; c=relaxed/simple;
+	bh=+bRiLb5dQAvRN4R9gkpLifGt86iHL6GjIh9D2uxZEnk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JfbjDUWbNOY7NdcmqXM3DSovfV6Q4rvbIXpktOzG0j8H9lku2LZHuXzNeQ/RLnk37aVRiZsWu1tNdkqCwaE2lY2Iv4tusDXx/dpDOg6QRQ8lPaMwKykBxvSiKYone3N5Va5xoUMxlAJSXcQy7+UTyAdHPD6OdpsUp5BruMPOqoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=AsbCUW7u; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NNRc5cnX"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-426edfffc66so59086f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 09:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761065704; x=1761670504; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qn9OLNMyl8gChDp28IqA1MLvsXpL32JwaHFC00xTtCc=;
-        b=NNRc5cnXLfbWheS5JvW+1vO5mWwePGxYnLtn01PAfA8vOtmQgEH3BXpgbYE8SclLYk
-         8a4pbZfjxmSgujPZLxwhP4zb96V/v8PsjkxYq1YdTF7DUAnudpRCWr0wK4tJOu59Hc0G
-         09WR0FfLVoRl0GkpwNk+vbcDMiSEGpRwRZ84fgxqepsGR4WGySjqrbof4L8qqRsutft4
-         ndac/Fn9/YZEYqqiLSXOskn3N0ca1MHiHvZOZQMHxqqE+zgiIlcm5aQMd4QGEx7qktQH
-         g1opwS5cWzwg2yrN7pyEQq5CR+69rPX0HDQBjYnXAISKd8JS4rrhIh0DjmEPMDfGXccI
-         dy/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761065704; x=1761670504;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qn9OLNMyl8gChDp28IqA1MLvsXpL32JwaHFC00xTtCc=;
-        b=K2oSQYA7qldeHmPd8+mVEWhqzQbE8IVYEJBOS0Yj95uLCG5o/Rq+s7h//UGKDaBzBF
-         TqZAqeLadddeP0gc1VOcziMRsyzMvJShnd1grOYeXSWwRvOPTQcrxTtOvnhImMzZVfyH
-         0aNolATPq41EPSS0FI3JO0aF7MJFLcMSgwE2N/8XhHoOWndWO1bwpc94IV54l8+G29hh
-         BuiJEhUczlt9eO3bCj/tPW8J7u9CIFTVOzgatZd9Tx0UnXbHoigUlOV5+U8L94tU0Nrl
-         ah620/+X3Eg2J8PNP30HDtkZUSGd8nO1+Swg1MChvR2+wz3lwTOtbVLDXO34StD5880C
-         dRww==
-X-Forwarded-Encrypted: i=1; AJvYcCWCXWZ6Anpw/4yXOii3wQpWZWjr5zKNX8W/DCQYiz10ChdD6yU5INDB20gICM3gpFdx6H3agUobO1VDOYGkEx8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhUGMLlXseuYQA3HY4GBP3hzyO2MspMaMkPfx14E6whJgNffY1
-	XqFCZ+e9EF7nIgsa7SovtD5gnCPJGDZGvaWhoPPBOGPy+m+DaPspR5Se
-X-Gm-Gg: ASbGnctYK8BmuNBbOh6VPw790GJfig5zLIrM9PTmdAgKzbp9lLLhJp8xSbvoPefnssP
-	cppZnnlXbN7XrDUuVVlPsp/6YZ+/ozn2VVlO0xEJhOmLFBWzRNH716JuTHlNs3xU+zc+WsIOjsT
-	3+9aqIyYehSbhU3H8H0w9Hj886LpmknFfNUoSYSfAJQN3/353R3u6D3oDPwhO4Q/qXfBK1Af1VM
-	nj2cQeC50lyYAoDJP7Z/9knAjZCp+QV0nT2Wgpn5f9aNmUTYdj09GmtbyIKcyTEy8Pip46mT2J5
-	C/qk+ppNlxZpxcFj0GGYN7XhjUEOx/mUp54irJ8TecztPeMJ+55FTXq/eyfR5C6BlMUNdMmvssr
-	9HPgvUt6EmVr1WmfYFDlJgHAbvqE+FZIBVxxP8W3UHJExVtBuHvRBuJfVKGKg6Jk3/Uts4wXIVw
-	Tk/m83wJdkd2SbTKEGQfEs+u5OzHDn+75dT69DOpmFzMA1RJhM8NVy7bpV2EUw4tWsjSy8Xw==
-X-Google-Smtp-Source: AGHT+IFB8n84f69J64AkWR9VGuZDwOZaYOeLxR1PP9RJZ4VLcpx4xH2b3szKu1AMRcrRkxak/JLlHg==
-X-Received: by 2002:a5d:5847:0:b0:3dc:1473:17fb with SMTP id ffacd0b85a97d-428531c8828mr255369f8f.20.1761065704306;
-        Tue, 21 Oct 2025 09:55:04 -0700 (PDT)
-Received: from alessandro-pc.station (net-2-37-207-41.cust.vodafonedsl.it. [2.37.207.41])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475c427f77bsm1649005e9.3.2025.10.21.09.55.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 09:55:04 -0700 (PDT)
-From: Alessandro Zanni <alessandro.zanni87@gmail.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org
-Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftest: net: prevent use of uninitialized variable
-Date: Tue, 21 Oct 2025 18:54:33 +0200
-Message-ID: <20251021165451.32984-1-alessandro.zanni87@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AsbCUW7u"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=3kQP4yV9UYdKyPruWtgSSnS3+OsO9+ZfKrTdjVj28bU=; b=AsbCUW7uoEw4D6UkYmckrB21EA
+	UwGd31LewtCpEHLg4WsMUXp7Zj3+2yX2ud+RBu8Dr2kHv3qs2XPD2cHi8XKHyzNMYgGR3/7ozRYPW
+	hlBlWgy6HcWaxP9lJgmc9PK9eNYCVuQmZFW9I+SsJFZx6nyNy0jSkVOfXBq9k6q8Dvedi7B+G3uaf
+	dGslZlog/zvcQV9X/Y5c31q5946IzGhYRH3oPNlIvqzvoLIg+gZ3/PT/NN4n6Lx3dZx3vqKFAh/yT
+	IEZApwcrK59mZNVsZz3+J7FC9WH4E2g1bxSpHGih4DNVs+3NA6ef1VqtX/9kNWsWmHEYcRbKWrXxt
+	IWBcvPVg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vBG0a-0000000DsSb-2NOb;
+	Tue, 21 Oct 2025 17:18:54 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 57FE730315A; Tue, 21 Oct 2025 11:59:36 +0200 (CEST)
+Date: Tue, 21 Oct 2025 11:59:36 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Bill Wendling <morbo@google.com>
+Cc: Kees Cook <kees@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Marco Elver <elver@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Johannes Weiner <hannes@cmpxchg.org>, llvm@lists.linux.dev,
+	Al Viro <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Tamir Duberstein <tamird@gmail.com>,
+	Michael Kelley <mhklinux@outlook.com>,
+	kernel test robot <lkp@intel.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Uros Bizjak <ubizjak@gmail.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Marc Herbert <Marc.Herbert@linux.intel.com>,
+	Christopher Ferris <cferris@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Paolo Abeni <pabeni@redhat.com>, Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/3] compiler_types: Introduce __counted_by_ptr()
+Message-ID: <20251021095936.GM3245006@noisy.programming.kicks-ass.net>
+References: <20251020220005.work.095-kees@kernel.org>
+ <20251020220118.1226740-1-kees@kernel.org>
+ <CAGG=3QV7-W5vEPNtABghg=ktn6kKs45_e-PWBT9oCUzURod1bg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGG=3QV7-W5vEPNtABghg=ktn6kKs45_e-PWBT9oCUzURod1bg@mail.gmail.com>
 
-Fix to avoid the usage of the `ret` variable uninitialized in the
-following macro expansions.
+On Mon, Oct 20, 2025 at 03:53:55PM -0700, Bill Wendling wrote:
+> On Mon, Oct 20, 2025 at 3:01 PM Kees Cook <kees@kernel.org> wrote:
+> >
+> > Introduce __counted_by_ptr(), which works like __counted_by(), but for
+> > pointer struct members:
+> >
+> > struct foo {
+> >         int a, b, c;
+> >         char *buffer __counted_by_ptr(bytes);
+> >         short nr_bars;
+> >         struct bar *bars __counted_by_ptr(nr_bars);
+> >         size_t bytes;
+> > };
+> >
+> > Since "counted_by" can only be applied to pointer members in very recent
+> > compiler versions, its application ends up needing to be distinct from
+> > flexible array "counted_by" annotations, hence a separate macro.
+> >
+> > Unfortunately, this annotation cannot be used for "void *" members
+> > (since such a member is considered a pointer to an incomplete type,
+> > and neither Clang nor GCC developers could be convinced otherwise[1],
+> > even in the face of the GNU extension that "void *" has size "1 byte"
+> > for pointer arithmetic). For "void *" members, we must use the coming
+> > "sized_by" attribute.
+> >
+> I'm pretty sure that "sized_by" is available in Clang right now.
 
-It solves the following warning:
-
-In file included from netlink-dumps.c:21:
-netlink-dumps.c: In function ‘dump_extack’:
-../kselftest_harness.h:788:35: warning: ‘ret’ may be used uninitialized [-Wmaybe-uninitialized]
-  788 |                         intmax_t  __exp_print = (intmax_t)__exp; \
-      |                                   ^~~~~~~~~~~
-../kselftest_harness.h:631:9: note: in expansion of macro ‘__EXPECT’
-  631 |         __EXPECT(expected, #expected, seen, #seen, ==, 0)
-      |         ^~~~~~~~
-netlink-dumps.c:169:9: note: in expansion of macro ‘EXPECT_EQ’
-  169 |         EXPECT_EQ(ret, FOUND_EXTACK);
-      |         ^~~~~~~~~
-
-The issue can be reproduced, building the tests, with the command:
-make -C tools/testing/selftests TARGETS=net
-
-Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
----
- tools/testing/selftests/net/netlink-dumps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
-index 7618ebe528a4..8ebb8b1b9c5c 100644
---- a/tools/testing/selftests/net/netlink-dumps.c
-+++ b/tools/testing/selftests/net/netlink-dumps.c
-@@ -112,7 +112,7 @@ static const struct {
- TEST(dump_extack)
- {
- 	int netlink_sock;
--	int i, cnt, ret;
-+	int i, cnt, ret = 0;
- 	char buf[8192];
- 	int one = 1;
- 	ssize_t n;
--- 
-2.43.0
-
+My clang-22 build seems to accept it no problem indeed -- although I've
+not verified it actually does anything with it.
