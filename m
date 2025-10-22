@@ -1,78 +1,91 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7014E34CFDB;
-	Wed, 22 Oct 2025 18:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DA32E1EE0
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 19:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761157691; cv=none; b=Im4zz3/fJvt+h5N6yYQvRC5Wdrdef0xznxBx1+rqd9mdr5DMW27BllFNZP5ptE+BbI8e/AzSopjo+Jzcuha70fqr7oiQiSfNHId09EU37ZFlvLzcYwmmIYIaOhplog1QoRxuweXRnNX7ORozvzIJ2NjftW26FH/yOa3Dq8HmWH4=
+	t=1761161863; cv=none; b=ct7oDi1/accW7mI+uXYmg3Ee5FXwxpRFf/fbkGlOkYI5PXg0yKJJwHXX72dmduc0/B59nBA16lI33KAf9oh1BYpi1cGPfctoCwfPXjbrDLvM3agFn65ssVxJEnoL/ekfKysHGS1BvGWuvadsgGZO6pfJdcwSb+/y5+mdxv2rmkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761157691; c=relaxed/simple;
-	bh=9+WeqbUMUpY6ROiRaae5knohxpc6q4u+xKCz4B6a3L4=;
+	s=arc-20240116; t=1761161863; c=relaxed/simple;
+	bh=I3cHTrAxy2U+MxqnGLbfk7CvSLkrAOGgZJa4QBXHuVs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bV+MMd+KH2q5422t5VvEAB+9pS/P7TyQlUlwc+h+cDFa/ldJBVLO4/OVlOWCkbTNO3NH+0UQ23r3Anmvo+QqW7aAsSCsxOULQmcINNWjwaAFXRfr5/iDSL4JWhG4tI981IeED4j6IiFNqp/fCR62zQOr59CRLQrpf424g+tkKv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=us.ibm.com; spf=none smtp.mailfrom=linux.vnet.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MsBxJEBM; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=us.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.vnet.ibm.com
+	 MIME-Version; b=Yj+O/n5i6dqhVUf8+JVMENXSpHCyS3BU6pc0+GnwgsZUDRB+A9fcEdLhwf8xvR+6b7z63u/NI6LirMMF1C+xag3rztedBdstct0+2+66kU5DaFUHQ5egAR/Y+juZA4xRDw9EUdrm9sL/6Hr58weVzu+v6ikoJTd5VPnjFC/moNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VzqCHuMS; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MsBxJEBM"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59MAOXHA003946;
-	Wed, 22 Oct 2025 18:27:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=meFZWl7a64A8cL8YC
-	fMpTCg5cNlveAeMzgceTrc7Ukw=; b=MsBxJEBMBtZ3uq1zV2EItNUQKql6pBnlU
-	prSV/UceL1ATpRRIEk5T+Vee3Bv0IbhXAqeZR7Sskxfx/ziPSoadJTfYZ2637/eN
-	oy6fAJ24M4n5ctA8QYstrpS0AMlufASGk+JbgqGPHiQmDAK6A9nxookfpEvPluRP
-	o8yDPtYZFGnSKaWNOkAIzOXuH7RAiYTF2H5FrwrL3lOiWrB6//wdFEN6IZA3kYry
-	moa/TFr1hGF7v8iL0gu0g9l7L2h5BkVjq+/0GsjexuDLl2+POJGI6tHojL9mjQFd
-	zHfBo6OhJUaeY/s3VIRMPc+B/wfxjT474EO0k5QycopC952QKDbNg==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49v32hmwa5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Oct 2025 18:27:54 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 59MIRXlV012650;
-	Wed, 22 Oct 2025 18:27:54 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49v32hmw9y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Oct 2025 18:27:54 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59MHwNrL002381;
-	Wed, 22 Oct 2025 18:27:53 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 49vqejhpu7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Oct 2025 18:27:53 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59MIRpTx10224282
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 22 Oct 2025 18:27:52 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D0BD85805D;
-	Wed, 22 Oct 2025 18:27:51 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8DEF058052;
-	Wed, 22 Oct 2025 18:27:51 +0000 (GMT)
-Received: from localhost (unknown [9.61.190.208])
-	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 22 Oct 2025 18:27:51 +0000 (GMT)
-From: David Wilder <wilder@us.ibm.com>
-To: netdev@vger.kernel.org
-Cc: jv@jvosburgh.net, wilder@us.ibm.com, pradeep@us.ibm.com,
-        i.maximets@ovn.org, amorenoz@redhat.com, haliu@redhat.com,
-        stephen@networkplumber.org, horms@kernel.org, kuba@kernel.org,
-        pabeni@redhat.com, andrew+netdev@lunn.ch, edumazet@google.com,
-        razor@blackwall.org, shuah@kernel.org, corbet@lwn.net,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH net-next v14 7/7] bonding: Selftest and documentation for the arp_ip_target parameter.
-Date: Wed, 22 Oct 2025 11:25:34 -0700
-Message-ID: <20251022182721.2567561-8-wilder@us.ibm.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251022182721.2567561-1-wilder@us.ibm.com>
-References: <20251022182721.2567561-1-wilder@us.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VzqCHuMS"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7815092cd0bso76975207b3.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 12:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761161861; x=1761766661; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1I6BBnxvi5qLac/74f/dMlgM8GZOp/rYTvMusxZK7TQ=;
+        b=VzqCHuMSIaBKAMoqf+FSBQNxK7D7vboglEyqofZ67lHAcGxPISA0HMo2YERgFce/Mm
+         VxkrZka3UKNhhsyCvBCWAqrjkrkLhKJWW8g3NrCFVSye30Osi0Nn7U+Z+a5Z8HIiSsv6
+         n50FGhiZexvjR3haAQ/kLYRsvb7fyjo8R1sbV1Bi54Q8MX7n+21j0XtojazDjGIWc08h
+         SLQQGKVqySIX87t0IvME3ZGrcacmP+SvWo+5fyzuGJnA6WDZ3c2M30938EcUbjpYbng6
+         zgBI8auMjeN7GCM4lvYUpSay0MqdaxysMTm92AArdpXpgqTdKQJxvPAxhG1xdsNc5QZo
+         bYIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761161861; x=1761766661;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1I6BBnxvi5qLac/74f/dMlgM8GZOp/rYTvMusxZK7TQ=;
+        b=KTr3fFxFbil2UvOOEJjQ4FGCNe/+Pfo5hQPgEVFUCJPp2f5Ix88HVaJGZ6Px5AHenS
+         FAPzC46As3g+W+BMkmqAevW7e54yTZghI2HrN/s/qqz/XnM5oO5+ddKcoOFZrG95tKxx
+         cXzfJmW7R806JGlbpd1hZqOb4nIznEeGxy/EJ+DegbwKrxukbOKyWzI2K9FVXueg0fLe
+         NsFcQiWGLHj8E9ByX0Mh3mx2WhWYlL5TvmnAdMPKmvspLVYThgnAWl1JXgHHYjMSQ3sg
+         hx0xwiF3ENmyxzYCZ0JyFntjtH8qNcdNZFgQT1TtDq4woQ05fqWH7lemJWYvMB0x/+W6
+         tTYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVVq0YQSiAPMHRNX2vfMypeeGS9MrkNGZKW4sYoiQuKrb3W+H4zrBEB0CL1btQx6gjBI9L9MWxjw08fz+2dYFI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyktPSsBIwAp6rg9qb30W3WMeHqUqiuDtauKwuDp2DsserF4dqa
+	mGs0B/PWGfeBsuUMNAiQabJ7Ho0SFg1avgarJowm4JtGdC6zEyfjs3k2
+X-Gm-Gg: ASbGnctIo3uZtiQw6eHP2pFk/8yizsMo4DumnpiOJ8L2onlRQhGZ+GWvDUEYMoSCVxd
+	CrQWd4xSenxP4U+ngWBvIRL9kD3AtwwX5iIR9q9hohlgaa5TMpqylYtyj+vtYZd8Ilwn2SUCq82
+	ZNpDVVzUoPjbuHNo15+w/aEvidJYFk9KIYOs41KdHUcSBSj5YJP7WcMFfk9NGFPq7peWtFBQPdH
+	RLJvZLMlWOU/w6eEU2xlIJIwI5uGvU8H6J7ea6KdMHOnhjg3ddYzEhifa7W/N2v/EAidBEvSfWq
+	grloJFdRq07UdkoNGheXW5QmB0v+6BeExi0xz3Czq3eankUJ0WTyMomBsB+wiOYgSG2ivPxCgEJ
+	w9TpaqLoNWhJyNNmxjr/HwG8H9d0A57x+5BExVDHcZz+SXSH+zaiTKbQCW3+/YFe+FcmyLBCOo6
+	xUaglGX0z4
+X-Google-Smtp-Source: AGHT+IH+iLB6X3B/A9qOT5qQojJ/eSkqHMtJhTbDnR+YPsUvzwnyluoqh2ZL2XNJmLBjojFYz9a/pg==
+X-Received: by 2002:a05:690c:3809:b0:783:6f8d:e7a6 with SMTP id 00721157ae682-7836f8df439mr333615937b3.51.1761161861001;
+        Wed, 22 Oct 2025 12:37:41 -0700 (PDT)
+Received: from localhost ([2a03:2880:25ff:8::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-785cd6ec6besm301287b3.50.2025.10.22.12.37.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Oct 2025 12:37:40 -0700 (PDT)
+From: Daniel Zahka <daniel.zahka@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Simon Horman <horms@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	Mark Bloch <mbloch@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Willem de Bruijn <willemb@google.com>,
+	Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+	Cosmin Ratiu <cratiu@nvidia.com>,
+	Raed Salem <raeds@nvidia.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 1/5] psp: report basic stats from the core
+Date: Wed, 22 Oct 2025 12:37:33 -0700
+Message-ID: <20251022193739.1376320-2-daniel.zahka@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251022193739.1376320-1-daniel.zahka@gmail.com>
+References: <20251022193739.1376320-1-daniel.zahka@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,285 +93,298 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE4MDAyMiBTYWx0ZWRfXx5qb89SK/H7d
- 9e+Z9z+IgYqn0Y26XcIUooDbTGATQwjtd7oCCST74YMlITqBhJbIxG1vTZOOqVEAhUMYS+LAQ4t
- XFB9hb+e82BChkhTUAyUdXnga7UcTmXEiBy8DZ2J/McjedvaJSCK8TkX+5vxgXz1tZtbTZbu5XX
- MceQ0VQbiZl9u6heQ7amB9QIXZ5hcqrfNB0dNTvs1l+6mKFSchOa3lXrUkyPCHiNUHcY8CnHq8/
- IcxAUsveeggFvRDrtSv2e08bUKnE9q/tXDUj8Oug9b3dYFar8u57e8i3o1uu+40VzVWYc0X0yS6
- wO/6wA1AGpqfb4RuWrqPw0nFtrJdRx1tsJnnAZK0YKD796PSbPOQ11mngWL6mY0bsN8UL6tGxn/
- uB1EnLTJQXwgq5n3JnfPDrXvpPoUKg==
-X-Authority-Analysis: v=2.4 cv=OrVCCi/t c=1 sm=1 tr=0 ts=68f9222a cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
- a=5H582h-KRMRMVc_AKwkA:9 a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-GUID: 7q-XxNz2Jgori3RZuQ_6FV8_KPpsZWrr
-X-Proofpoint-ORIG-GUID: s03uzgX91kX3MM8eWScNnXCbitmuCq9D
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-22_07,2025-10-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
- clxscore=1011 bulkscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510180022
 
-Selftest provided as a functional test for the arp_ip_target parameter
-both with and without user supplied vlan tags. Bonding documentation
-has been updated for the arp_ip_target option.
+From: Jakub Kicinski <kuba@kernel.org>
 
-Signed-off-by: David Wilder <wilder@us.ibm.com>
+Track and report stats common to all psp devices from the core. A
+'stale-event' is when the core marks the rx state of an active
+psp_assoc as incapable of authenticating psp encapsulated data.
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
- Documentation/networking/bonding.rst          |  11 +
- .../selftests/drivers/net/bonding/Makefile    |   1 +
- .../drivers/net/bonding/bond-arp-ip-target.sh | 204 ++++++++++++++++++
- 3 files changed, 216 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond-arp-ip-target.sh
+ Documentation/netlink/specs/psp.yaml | 40 ++++++++++++++
+ include/net/psp/types.h              |  9 ++++
+ include/uapi/linux/psp.h             | 10 ++++
+ net/psp/psp-nl-gen.c                 | 19 +++++++
+ net/psp/psp-nl-gen.h                 |  2 +
+ net/psp/psp_nl.c                     | 79 ++++++++++++++++++++++++++++
+ net/psp/psp_sock.c                   |  4 +-
+ 7 files changed, 162 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/networking/bonding.rst b/Documentation/networking/bonding.rst
-index e700bf1d095c..08a3191a0322 100644
---- a/Documentation/networking/bonding.rst
-+++ b/Documentation/networking/bonding.rst
-@@ -330,6 +330,17 @@ arp_ip_target
- 	maximum number of targets that can be specified is 16.  The
- 	default value is no IP addresses.
+diff --git a/Documentation/netlink/specs/psp.yaml b/Documentation/netlink/specs/psp.yaml
+index 944429e5c9a8..914148221384 100644
+--- a/Documentation/netlink/specs/psp.yaml
++++ b/Documentation/netlink/specs/psp.yaml
+@@ -76,6 +76,28 @@ attribute-sets:
+         name: spi
+         doc: Security Parameters Index (SPI) of the association.
+         type: u32
++  -
++    name: stats
++    attributes:
++      -
++        name: dev-id
++        doc: PSP device ID.
++        type: u32
++        checks:
++          min: 1
++      -
++        name: key-rotations
++        type: uint
++        doc: |
++          Number of key rotations during the lifetime of the device.
++          Kernel statistic.
++      -
++        name: stale-events
++        type: uint
++        doc: |
++          Number of times a socket's Rx got shut down due to using
++          a key which went stale (fully rotated out).
++          Kernel statistic.
  
-+        When an arp_ip_target is configured the bonding driver will
-+        attempt to automatically determine what vlans the arp probe will
-+        pass through. This process of gathering vlan tags is required
-+        for the arp probe to be sent. However, in some configurations
-+        this process may fail. In these cases you may manually
-+        supply a list of vlan tags. To specify a list of vlan tags
-+        append the ipv4 address with [tag1/tag2...]. For example:
-+        arp_ip_target=10.0.0.1[10]. If you simply need to disable the
-+        vlan discovery process you may provide an empty list, for example:
-+        arp_ip_target=10.0.0.1[].
-+
- ns_ip6_target
+ operations:
+   list:
+@@ -177,6 +199,24 @@ operations:
+         pre: psp-assoc-device-get-locked
+         post: psp-device-unlock
  
- 	Specifies the IPv6 addresses to use as IPv6 monitoring peers when
-diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-index 402d4ee84f2e..b9594790e6df 100644
---- a/tools/testing/selftests/drivers/net/bonding/Makefile
-+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-@@ -3,6 +3,7 @@
++    -
++      name: get-stats
++      doc: Get device statistics.
++      attribute-set: stats
++      do:
++        request:
++          attributes:
++            - dev-id
++        reply: &stats-all
++          attributes:
++            - dev-id
++            - key-rotations
++            - stale-events
++        pre: psp-device-get-locked
++        post: psp-device-unlock
++      dump:
++        reply: *stats-all
++
+ mcast-groups:
+   list:
+     -
+diff --git a/include/net/psp/types.h b/include/net/psp/types.h
+index 31cee64b7c86..5b0ccaac3882 100644
+--- a/include/net/psp/types.h
++++ b/include/net/psp/types.h
+@@ -59,6 +59,10 @@ struct psp_dev_config {
+  *			device key
+  * @stale_assocs:	associations which use a rotated out key
+  *
++ * @stats:	statistics maintained by the core
++ * @stats.rotations:	See stats attr key-rotations
++ * @stats.stales:	See stats attr stale-events
++ *
+  * @rcu:	RCU head for freeing the structure
+  */
+ struct psp_dev {
+@@ -81,6 +85,11 @@ struct psp_dev {
+ 	struct list_head prev_assocs;
+ 	struct list_head stale_assocs;
  
- TEST_PROGS := \
- 	bond-arp-interval-causes-panic.sh \
-+	bond-arp-ip-target.sh \
- 	bond-break-lacpdu-tx.sh \
- 	bond-eth-type-change.sh \
- 	bond-lladdr-target.sh \
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond-arp-ip-target.sh b/tools/testing/selftests/drivers/net/bonding/bond-arp-ip-target.sh
-new file mode 100755
-index 000000000000..9e3ecd8c2ced
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/bond-arp-ip-target.sh
-@@ -0,0 +1,204 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test bonding arp_ip_target.
-+# Topology for Bond mode 1,5,6 testing
-+#
-+#  +-------------------------+
-+#  |                         | Server
-+#  |        bond0.10.20      | 192.20.2.1/24
-+#  |            |            |
-+#  |         bond0.10        | 192.10.2.1/24
-+#  |            |            |
-+#  |          bond0          | 192.0.2.1/24
-+#  |            |            |
-+#  |            +            |
-+#  |      eth0  |  eth1      |
-+#  |        +---+---+        |
-+#  |        |       |        |
-+#  +-------------------------+
-+#           |       |
-+#  +-------------------------+
-+#  |        |       |        |
-+#  |    +---+-------+---+    |  Gateway
-+#  |    |      br0      |    |
-+#  |    +-------+-------+    |
-+#  |            |            |
-+#  +-------------------------+
-+#               |
-+#  +-------------------------+
-+#  |            |            |  Client
-+#  |          eth0           | 192.0.0.2/24
-+#  |            |            |
-+#  |         eth0.10         | 192.10.10.2/24
-+#  |            |            |
-+#  |        eth0.10.20       | 192.20.20.2/24
-+#  +-------------------------+
++	struct {
++		unsigned long rotations;
++		unsigned long stales;
++	} stats;
 +
-+# shellcheck disable=SC2317
+ 	struct rcu_head rcu;
+ };
+ 
+diff --git a/include/uapi/linux/psp.h b/include/uapi/linux/psp.h
+index 607c42c39ba5..31592760ad79 100644
+--- a/include/uapi/linux/psp.h
++++ b/include/uapi/linux/psp.h
+@@ -45,6 +45,15 @@ enum {
+ 	PSP_A_KEYS_MAX = (__PSP_A_KEYS_MAX - 1)
+ };
+ 
++enum {
++	PSP_A_STATS_DEV_ID = 1,
++	PSP_A_STATS_KEY_ROTATIONS,
++	PSP_A_STATS_STALE_EVENTS,
 +
-+lib_dir=$(dirname "$0")
++	__PSP_A_STATS_MAX,
++	PSP_A_STATS_MAX = (__PSP_A_STATS_MAX - 1)
++};
 +
-+# shellcheck source=/dev/null # Ignore source warning.
-+source "${lib_dir}"/bond_topo_2d1c.sh
+ enum {
+ 	PSP_CMD_DEV_GET = 1,
+ 	PSP_CMD_DEV_ADD_NTF,
+@@ -55,6 +64,7 @@ enum {
+ 	PSP_CMD_KEY_ROTATE_NTF,
+ 	PSP_CMD_RX_ASSOC,
+ 	PSP_CMD_TX_ASSOC,
++	PSP_CMD_GET_STATS,
+ 
+ 	__PSP_CMD_MAX,
+ 	PSP_CMD_MAX = (__PSP_CMD_MAX - 1)
+diff --git a/net/psp/psp-nl-gen.c b/net/psp/psp-nl-gen.c
+index 9fdd6f831803..73f8b06d66f0 100644
+--- a/net/psp/psp-nl-gen.c
++++ b/net/psp/psp-nl-gen.c
+@@ -47,6 +47,11 @@ static const struct nla_policy psp_tx_assoc_nl_policy[PSP_A_ASSOC_SOCK_FD + 1] =
+ 	[PSP_A_ASSOC_SOCK_FD] = { .type = NLA_U32, },
+ };
+ 
++/* PSP_CMD_GET_STATS - do */
++static const struct nla_policy psp_get_stats_nl_policy[PSP_A_STATS_DEV_ID + 1] = {
++	[PSP_A_STATS_DEV_ID] = NLA_POLICY_MIN(NLA_U32, 1),
++};
 +
-+# shellcheck disable=SC2154 # Ignore unassigned referenced warning.
-+echo "${c_ns}" "${s_ns}" > /dev/null
+ /* Ops table for psp */
+ static const struct genl_split_ops psp_nl_ops[] = {
+ 	{
+@@ -99,6 +104,20 @@ static const struct genl_split_ops psp_nl_ops[] = {
+ 		.maxattr	= PSP_A_ASSOC_SOCK_FD,
+ 		.flags		= GENL_CMD_CAP_DO,
+ 	},
++	{
++		.cmd		= PSP_CMD_GET_STATS,
++		.pre_doit	= psp_device_get_locked,
++		.doit		= psp_nl_get_stats_doit,
++		.post_doit	= psp_device_unlock,
++		.policy		= psp_get_stats_nl_policy,
++		.maxattr	= PSP_A_STATS_DEV_ID,
++		.flags		= GENL_CMD_CAP_DO,
++	},
++	{
++		.cmd	= PSP_CMD_GET_STATS,
++		.dumpit	= psp_nl_get_stats_dumpit,
++		.flags	= GENL_CMD_CAP_DUMP,
++	},
+ };
+ 
+ static const struct genl_multicast_group psp_nl_mcgrps[] = {
+diff --git a/net/psp/psp-nl-gen.h b/net/psp/psp-nl-gen.h
+index 25268ed11fb5..5bc3b5d5a53e 100644
+--- a/net/psp/psp-nl-gen.h
++++ b/net/psp/psp-nl-gen.h
+@@ -28,6 +28,8 @@ int psp_nl_dev_set_doit(struct sk_buff *skb, struct genl_info *info);
+ int psp_nl_key_rotate_doit(struct sk_buff *skb, struct genl_info *info);
+ int psp_nl_rx_assoc_doit(struct sk_buff *skb, struct genl_info *info);
+ int psp_nl_tx_assoc_doit(struct sk_buff *skb, struct genl_info *info);
++int psp_nl_get_stats_doit(struct sk_buff *skb, struct genl_info *info);
++int psp_nl_get_stats_dumpit(struct sk_buff *skb, struct netlink_callback *cb);
+ 
+ enum {
+ 	PSP_NLGRP_MGMT,
+diff --git a/net/psp/psp_nl.c b/net/psp/psp_nl.c
+index 8aaca62744c3..094da52e357e 100644
+--- a/net/psp/psp_nl.c
++++ b/net/psp/psp_nl.c
+@@ -262,6 +262,7 @@ int psp_nl_key_rotate_doit(struct sk_buff *skb, struct genl_info *info)
+ 		     psd->generation & ~PSP_GEN_VALID_MASK);
+ 
+ 	psp_assocs_key_rotated(psd);
++	psd->stats.rotations++;
+ 
+ 	nlmsg_end(ntf, (struct nlmsghdr *)ntf->data);
+ 	genlmsg_multicast_netns(&psp_nl_family, dev_net(psd->main_netdev), ntf,
+@@ -503,3 +504,81 @@ int psp_nl_tx_assoc_doit(struct sk_buff *skb, struct genl_info *info)
+ 	nlmsg_free(rsp);
+ 	return err;
+ }
 +
-+DEBUG=${DEBUG:-0}
-+test "${DEBUG}" -ne 0 && set -x
-+
-+# vlan subnets
-+c_ip4="192.0.2.10"
-+c_ip4v10="192.10.2.10"
-+c_ip4v20="192.20.2.10"
-+
-+export ALL_TESTS="
-+	no_vlan_hints
-+	with_vlan_hints
-+"
-+
-+# Build stacked vlans on top of an interface.
-+stack_vlans()
++static int
++psp_nl_stats_fill(struct psp_dev *psd, struct sk_buff *rsp,
++		  const struct genl_info *info)
 +{
-+	RET=0
-+	local interface="$1"
-+	local ns=$2
-+	local last="$interface"
-+	local tags="10 20"
++	void *hdr;
 +
-+	if ! ip -n "${ns}" link show "${interface}" > /dev/null; then
-+		RET=1
-+		msg="Failed to create ${interface}"
-+		return 1
-+	fi
++	hdr = genlmsg_iput(rsp, info);
++	if (!hdr)
++		return -EMSGSIZE;
 +
-+	if [ "$ns" == "${s_ns}" ]; then host=1; else host=10;fi
++	if (nla_put_u32(rsp, PSP_A_STATS_DEV_ID, psd->id) ||
++	    nla_put_uint(rsp, PSP_A_STATS_KEY_ROTATIONS,
++			 psd->stats.rotations) ||
++	    nla_put_uint(rsp, PSP_A_STATS_STALE_EVENTS, psd->stats.stales))
++		goto err_cancel_msg;
 +
-+	for tag in $tags; do
-+		ip -n "${ns}" link add link "$last" name "$last"."$tag" type vlan id "$tag"
-+		ip -n "${ns}" address add 192."$tag".2."$host"/24 dev "$last"."$tag"
-+		ip -n "${ns}" link set up dev "$last"."$tag"
-+		last=$last.$tag
-+	done
++	genlmsg_end(rsp, hdr);
++	return 0;
++
++err_cancel_msg:
++	genlmsg_cancel(rsp, hdr);
++	return -EMSGSIZE;
 +}
 +
-+wait_for_arp_request()
++int psp_nl_get_stats_doit(struct sk_buff *skb, struct genl_info *info)
 +{
-+	local target=$1
-+	local ip
-+	local interface
++	struct psp_dev *psd = info->user_ptr[0];
++	struct sk_buff *rsp;
++	int err;
 +
-+	ip=$(echo "${target}" | awk -F "[" '{print $1}')
-+	interface="$(ip -n "${c_ns}" -br addr show | grep "${ip}" | awk -F @ '{print $1}')"
++	rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
++	if (!rsp)
++		return -ENOMEM;
 +
-+	tc -n "${c_ns}" qdisc add dev "${interface}" clsact
-+	tc -n "${c_ns}" filter add dev "${interface}" ingress protocol arp \
-+	handle 101 flower skip_hw arp_op request arp_tip "${ip}" action pass
++	err = psp_nl_stats_fill(psd, rsp, info);
++	if (err)
++		goto err_free_msg;
 +
-+	slowwait_for_counter 5 5 tc_rule_handle_stats_get \
-+		"dev ${interface} ingress" 101 ".packets" "-n ${c_ns}" &> /dev/null || RET=1
++	return genlmsg_reply(rsp, info);
 +
-+	tc -n "${c_ns}" filter del dev "${interface}" ingress
-+	tc -n "${c_ns}" qdisc del dev "${interface}" clsact
-+
-+	if [ "$RET" -ne 0 ]; then
-+		msg="Arp probe not received by ${interface}"
-+		return 1
-+	fi
++err_free_msg:
++	nlmsg_free(rsp);
++	return err;
 +}
 +
-+# Check for link flapping.
-+# First verify the arp requests are being received
-+# by the target.  Then verify that the Link Failure
-+# Counts are not increasing over time.
-+# Arp probes are sent every 100ms, two probes must
-+# be missed to trigger a slave failure. A one second
-+# wait should be sufficient.
-+check_failure_count()
++static int
++psp_nl_stats_get_dumpit_one(struct sk_buff *rsp, struct netlink_callback *cb,
++			    struct psp_dev *psd)
 +{
-+	local bond=$1
-+	local target=$2
-+	local proc_file=/proc/net/bonding/${bond}
++	if (psp_dev_check_access(psd, sock_net(rsp->sk)))
++		return 0;
 +
-+	wait_for_arp_request "${target}" || return 1
-+
-+	LinkFailureCount1=$(ip netns exec "${s_ns}" grep -F "Link Failure Count" "${proc_file}" \
-+	| awk -F: '{ sum += $2 } END { print sum }')
-+	sleep 1
-+	LinkFailureCount2=$(ip netns exec "${s_ns}" grep -F "Link Failure Count" "${proc_file}" \
-+	| awk -F: '{ sum += $2 } END { print sum }')
-+
-+	[ "$LinkFailureCount1" != "$LinkFailureCount2" ] && RET=1
++	return psp_nl_stats_fill(psd, rsp, genl_info_dump(cb));
 +}
 +
-+setup_bond_topo()
++int psp_nl_get_stats_dumpit(struct sk_buff *rsp, struct netlink_callback *cb)
 +{
-+	setup_prepare
-+	setup_wait
-+	stack_vlans bond0 "${s_ns}"
-+	stack_vlans eth0 "${c_ns}"
++	struct psp_dev *psd;
++	unsigned long index;
++	int err = 0;
++
++	mutex_lock(&psp_devs_lock);
++	xa_for_each_start(&psp_devs, index, psd, cb->args[0]) {
++		mutex_lock(&psd->lock);
++		err = psp_nl_stats_get_dumpit_one(rsp, cb, psd);
++		mutex_unlock(&psd->lock);
++		if (err)
++			break;
++	}
++	mutex_unlock(&psp_devs_lock);
++
++	if (err != -EMSGSIZE)
++		return err;
++
++	cb->args[0] = index;
++	return err;
 +}
-+
-+skip_with_vlan_hints()
-+{
-+	# check if iproute supports arp_ip_target with vlans option.
-+	if ! ip -n "${s_ns}" link add bond2 type bond arp_ip_target 10.0.0.1[10]; then
-+		ip -n "${s_ns}" link del bond2 2> /dev/null
-+		return 0
-+	fi
-+	return 1
-+}
-+
-+no_vlan_hints()
-+{
-+	RET=0
-+	local targets="${c_ip4} ${c_ip4v10} ${c_ip4v20}"
-+	local target
-+	msg=""
-+
-+	for target in $targets; do
-+		bond_reset "mode $mode arp_interval 100 arp_ip_target ${target}"
-+		stack_vlans bond0 "${s_ns}"
-+		if [ "$RET" -ne 0 ]; then
-+			log_test "no_vlan_hints" "${msg}"
-+			return
-+		fi
-+		check_failure_count bond0 "${target}"
-+		log_test "arp_ip_target=${target} ${msg}"
-+	done
-+}
-+
-+with_vlan_hints()
-+{
-+	RET=0
-+	local targets="${c_ip4}[] ${c_ip4v10}[10] ${c_ip4v20}[10/20]"
-+	local target
-+	msg=""
-+
-+	if skip_with_vlan_hints; then
-+		log_test_skip "skip_with_vlan_hints" \
-+		"Installed iproute doesn't support extended arp_ip_target options."
-+		return 0
-+	fi
-+
-+	for target in $targets; do
-+		bond_reset "mode $mode arp_interval 100 arp_ip_target ${target}"
-+		stack_vlans bond0 "${s_ns}"
-+		if [ "$RET" -ne 0 ]; then
-+			log_test "no_vlan_hints" "${msg}"
-+			return
-+		fi
-+		check_failure_count bond0 "${target}"
-+		log_test "arp_ip_target=${target} ${msg}"
-+	done
-+}
-+
-+trap cleanup EXIT
-+
-+mode=active-backup
-+
-+setup_bond_topo
-+tests_run
-+
-+exit "$EXIT_STATUS"
+diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
+index a931d825d1cc..f785672b7df6 100644
+--- a/net/psp/psp_sock.c
++++ b/net/psp/psp_sock.c
+@@ -253,8 +253,10 @@ void psp_assocs_key_rotated(struct psp_dev *psd)
+ 	/* Mark the stale associations as invalid, they will no longer
+ 	 * be able to Rx any traffic.
+ 	 */
+-	list_for_each_entry_safe(pas, next, &psd->prev_assocs, assocs_list)
++	list_for_each_entry_safe(pas, next, &psd->prev_assocs, assocs_list) {
+ 		pas->generation |= ~PSP_GEN_VALID_MASK;
++		psd->stats.stales++;
++	}
+ 	list_splice_init(&psd->prev_assocs, &psd->stale_assocs);
+ 	list_splice_init(&psd->active_assocs, &psd->prev_assocs);
+ 
 -- 
-2.50.1
+2.47.3
 
