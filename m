@@ -1,30 +1,32 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54CE9269B1C
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 16:46:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78472877D5
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 16:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761151585; cv=none; b=eQwkqn5mUTHoaCS/tMWnHy3p1tKYjUK2UDeNuExPK2WoHMaUeWmKtxLCdzRYacRaeTiGefSYiSB86uo5irGaJ4Zv9F1N2ZAKc4T3AbJZ/9dDtnawAl3nRaW4gUcQ1nn4MSMVTUuGoKyCbWbXmiaE3iZ3UL5PZI42+yf+Pa/liwY=
+	t=1761151591; cv=none; b=oSYp/xkRsXSM0NskTKe6FyPo7srMTuHgdIz8BaRK1cPJf6SzMIT/f7Sd/4F8nn8kFgZmMWaNLqqmqTV0iVbq7GlBp/35/OzRpYlXJEHGZVGU4i1gX4cF5kON0NmTAOCL3Ue0epnX6NHNFZebOdPdrNvRK6knu6Lo1E8wSmNTiGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761151585; c=relaxed/simple;
-	bh=kHipxjPKdfKyZjusmW/Xen/+cggiUczv4HaoaLIzec4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mZfhd3/GeP1wl/Nst6E7nQ1ywNXok4wSaji0P8Cvmw2GAkeRJd/B6/OTNUFaaLduyKto+VU0UiFYWuGekYgO5GBlWGuATpQAiwp+L0wphiE6zMIFcsqVznZdrw/5lXzaILGEESDX4qVY0i1IP4CbIe9x2Oael3D+U58vu4A3S2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DglCSK7/; arc=none smtp.client-ip=91.218.175.174
+	s=arc-20240116; t=1761151591; c=relaxed/simple;
+	bh=wrsQAp0TGs8gJXBhL+Pm/Ez5V7kMDw/AHC3OiikOpMQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=X2qxBebv4KF+KdC4HYSjGrcyf46kZAkrP40PkWZjSdagwnVxMOk/pggnK6xw3tkNrVrP4HubfHc1B3nw3hbFqC6oqfLFQYdwuXoqalN3VC2mc/oKZlJC5XO39BIfRF0E3m9hQoFYc9ZlzzCDy37G3BUoCJTKyaZzcgRrlloXjKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VoFBlYf/; arc=none smtp.client-ip=91.218.175.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DglCSK7/"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VoFBlYf/"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761151571;
+	t=1761151587;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YR3WnEjvrHHzguVdZ+7J/zHY0xABiTWzZ7eMT7M8+Do=;
-	b=DglCSK7/VAhxn7bUjD72797plehx2OIH1weyvIRcgUYCfvrG/Xa2C5H1ADDd+geZrS3grI
-	sAxp1WAOBdxuaxSPhxH5JlVTsuopnm/x0zh2fwb4Q9d3uzgOm2YeoJ0iI3r2YfCPXvOyXE
-	Fg8WURLOUskyp2geh7U9T36eIACet50=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tE0qJy2M/AZrZXVbIbayGvBfV5fR9ey5S78aB6UPd6Y=;
+	b=VoFBlYf/alWqPDOqivJXzjjBUpQ3M2YCxCaxiBivgUp3LrNSG5JbaoDyskPlf+7cMhPSFE
+	gxV6E+zta7cYYyC3KgBWKE6iEd1bjb0KXNWwHe1TIvo+ZJnNEiYkiAq6MhSkF3V43/nQsu
+	VUDRCNdsnRJ4EXpSLCcbujeIGzweTxs=
 From: KaFai Wan <kafai.wan@linux.dev>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -48,9 +50,11 @@ To: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
 Cc: KaFai Wan <kafai.wan@linux.dev>
-Subject: [PATCH bpf-next 0/2] bpf: Skip bounds adjustment for conditional jumps on same register
-Date: Thu, 23 Oct 2025 00:44:55 +0800
-Message-ID: <20251022164457.1203756-1-kafai.wan@linux.dev>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add test for conditional jumps on same register
+Date: Thu, 23 Oct 2025 00:44:57 +0800
+Message-ID: <20251022164457.1203756-3-kafai.wan@linux.dev>
+In-Reply-To: <20251022164457.1203756-1-kafai.wan@linux.dev>
+References: <20251022164457.1203756-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,18 +64,41 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-This small patchset is about avoid verifier bug warning when conditional
- jumps on same register when the register holds a scalar with range.
+Add a test case to verify that conditional jumps on the same register
+(e.g., JGT r0 > r0) do not trigger verifier BUG warnings when the register
+holds a scalar with range.
 
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
-KaFai Wan (2):
-  bpf: Skip bounds adjustment for conditional jumps on same register
-  selftests/bpf: Add test for conditional jumps on same register
-
- kernel/bpf/verifier.c                           |  4 ++++
  .../selftests/bpf/progs/verifier_bounds.c       | 17 +++++++++++++++++
- 2 files changed, 21 insertions(+)
+ 1 file changed, 17 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index 0a72e0228ea9..620095635af5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -1709,4 +1709,21 @@ __naked void jeq_disagreeing_tnums(void *ctx)
+ 	: __clobber_all);
+ }
+ 
++SEC("socket")
++__description("JGT on same register")
++__success __log_level(2)
++__naked void jgt_same_register(void *ctx)
++{
++	asm volatile("			\
++	call %[bpf_get_prandom_u32];	\
++	w8 = 0x80000000;		\
++	r0 &= r8;			\
++	if r0 > r0 goto +1;		\
++	call %[bpf_get_prandom_u32];	\
++	exit;				\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
