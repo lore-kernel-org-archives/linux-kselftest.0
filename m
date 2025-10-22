@@ -1,584 +1,208 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DDD34FF6B
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 19:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59FA822FE0A
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 19:46:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761161868; cv=none; b=pJ2Sh9FVQN4xFjh5kkb2w28c8K1YXA8MaMwLDL3DMOEOJR86IYoZXmPBnsuQfLsonbMCys0Qdi1yR0XXo2mIvOkvrjWmVijI7A5ooYrFXy+KMi9IIPXFPw9OdvUn6bV0G0nvWyfxd36CsPGpwQj2dtX8sFtA4L9DIO3cOpMJW94=
+	t=1761162411; cv=none; b=mGjefH0Ox0ixUzrIteDHUYMtRs0ZX+HKmlC6M/FnUlnONtxrEu+tZONKMOSk1My8aQf+It3cxzsNMlFgYIJdFvkG044k/NP7J5P1bHw701IbSp0zvpfZbozNYeMTwOiAp4QjJ52oogfd+Ntq2Nv6KCRg4YP7YgvVZ0ZrQ55LPaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761161868; c=relaxed/simple;
-	bh=cWdK126leWtqQ4dYNa02wul2ubG0ck94cQMEbnMs4UY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ly/LUoMr1touY3PehPneSaXY7Wmqu+MhzdjQCAAmF3K2+rU/c1tnWjZ6zHbWLav7FulJrPwBBFEE6wEZvzFfPUkWmSCMg8goX7HUmMjT4wFQJLziBzG5kXAVat8JzEa4I4aHDJ3mcWZI4Ct2eHWtzs1+SDrTmkDKIGxAJSZyk4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DEVvwlBB; arc=none smtp.client-ip=209.85.128.175
+	s=arc-20240116; t=1761162411; c=relaxed/simple;
+	bh=S/hh9/DeowLYEhJeBCNJoewLIAtZFWUGUe4gp+FIQNQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=l/qbHeXYeLdrrrwfExjStj7z/3XgsWMAHl8DAqm6jJeTQGQ8Ad7uvp4sFBEfqu9APAunqkxqGJS9yUxlaY6zEZAq6V0p9paIoOrPtKMd/2Q238N1mWAVbUIewTWfRUkiWgpYHq2aqr7pL3ilAT7wki6jnrmoPjxHB71fAEwu11E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IbM8fVV1; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DEVvwlBB"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-784807fa38dso66858847b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 12:37:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IbM8fVV1"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-79ef9d1805fso24644b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 12:46:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761161864; x=1761766664; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HmTMFkzUKVGvZi2AQyPOkhzC3I5cHteV4vo6m2H4W88=;
-        b=DEVvwlBB8rm6q9VakZB0pdcHLd2GdVEs2EHXS4QAQXAiakx+dLeDvoYiKLr8JfLsUR
-         bEk+mZOI61lH6PLqdbtjGctTMYYjoZQTM7Dh1aYVrJjfTS/oKnRcPPuiaWSpspYNYQ0H
-         cR7dPRrOb9fHg8uhCUBVf5wuYOOPFYO1WtfHNGukkUEK3nBY0UjxseDxImudavgbkq0z
-         oK9xxztPOBTZfN2sXimbZY8xz05+mHkuNc6MCbYzmD+AAtSk1JNf4NSRjx5QJ8VfDNKi
-         L7hfK7yLdXPZcdEX1r4J1qb19/I9jUKudL84DeLEKb6BU25QE5lK54/Tf9XbZm3c28+g
-         kMuA==
+        d=gmail.com; s=20230601; t=1761162408; x=1761767208; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=EWn78QyuKi/0YAncXLY/1r1sZ48dyDwTSq2IyjTdbM4=;
+        b=IbM8fVV1zuPqLXj4M1QiSk1ZDYtworO0iJ5/1xagQXq6xDPvb0Wus8fxudHszkJDY6
+         gM9LBYBaav+FTqvowQsX14r7mrSFMXoAhCZDC+ZdK6f7qcKYN5TEMlJKLsXwE6JC3ySx
+         1ZUnmuytvEDZw7X3p4RbszLAXTcOgYXM7WXnSOTA0PuKs8jLyAuWAHcnEapEUf/aCCPp
+         1W//b/8fE+FoFBMpcGOri3RBvIXHEk3x60453n8IoMh3tU+Y+lnJBrVBrD0CFGoODy35
+         zaZZGPZWNQABhKMAkGcN93yY08l30MFr1sxWhs8Q7XHP4b7bRvTJMKQTGR73eI8LtnhI
+         wf3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761161864; x=1761766664;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HmTMFkzUKVGvZi2AQyPOkhzC3I5cHteV4vo6m2H4W88=;
-        b=ezSG0LxxTGI24QS3JKJdSjyfGicUANNPWrMhGU/Ey0/s3HjBPYJS1nwdRq15DMbWXH
-         NJXQya6tIR8qfiLohbHLRRwQPvnwaWnFxFlNHrLAh4lRw2CRQp0iadnLwX5E3nzluhaJ
-         GAAQij19zQtpBwBIHMn/gMXdp/5dzo9LHfCNAeAekPKlgx43qVms4OsHJbTZaf+IF+Qb
-         k+n2n+ouMCU2nvI07CwLMI9qRlfzJhrfpbELGY78JiZ2ZJLMVQT9nQuy6r+XiIVbEA3W
-         WkpFW4USj9ux3jSqrLXdJfuAAppk9LqxuJ+NQ5uIAlddMZ0ATdoqV3b4jz6m45QYY+5b
-         Ve9g==
-X-Forwarded-Encrypted: i=1; AJvYcCXDETwtT3x7YORrZzv41AFSgm/jY5jyMmLAfD9Q+y2V9fzHg6ZTwlO3HtPm8vyGPvj04j5uJDKbkwvUKUMCzVk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzuir6GPdwZ0cEV/Fx4w+eN9inkEKLw2MXAd0O9xC04WAphEZdi
-	hjHsAo3udVOigUKl0c/3/Kom9WKs/tbJVW8JzB5AfJTrsQKu9KT3XZU4
-X-Gm-Gg: ASbGncva/tAn7sZQ+PGB6nWsncU0F6v24gw/PXJN6Mmoal5oBb07W+lE1HqTI6zywa9
-	suZ0hnBZshLd2EBbtaXLUuH9BvdyFuWfsLk1/iqGkFjGfGPeboNLBsjOj8On+OyGc7JQTc5kmD2
-	PmVtkwAdYJSxC3GyjOz2LvvLNn0d5cKPk8J66kb0nbTZneAe0h4gkiqgkQfgVuw42/4Ogcsg9jP
-	B9O4YhQ2Sz1RQMNUbxGng8sDjXxH/7t5UHyMHt7U39Ze1TImxcoW+JchDuKEEXs3WPSSSlo3MC+
-	5G8SwW6ALefUAJ3mgrTBT8/LjUacqo4ycCJswQ2x6TAkyRZ003etBM1tWTw7R3z0kGuDavkjvrc
-	ctV6zlf3QN+WXQsFzpQOd/k3U740YjYj4HvCXIDUebzRxDbfUU35EPCnCrF1NQ+oFt1eBf2485l
-	AoxBPkPf3JzA==
-X-Google-Smtp-Source: AGHT+IFf0o6lNTPGxmkJC0aag21WXNVefTyyuUybgDvT9UB7YBvgmwO8nxQsZeTa8ox/HhiqIiRDxA==
-X-Received: by 2002:a05:690c:8d04:b0:71f:b944:100e with SMTP id 00721157ae682-7836d327571mr166706547b3.53.1761161864197;
-        Wed, 22 Oct 2025 12:37:44 -0700 (PDT)
-Received: from localhost ([2a03:2880:25ff:55::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-785cd5e23e4sm369817b3.22.2025.10.22.12.37.43
+        d=1e100.net; s=20230601; t=1761162408; x=1761767208;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EWn78QyuKi/0YAncXLY/1r1sZ48dyDwTSq2IyjTdbM4=;
+        b=BAh4nyWA5dNwucq4iuZbQIaufkgVQkKXeEE4RJcbzGHK6VGnvh+SYmaDncqqS1znPI
+         ADQbSZ6YKLkdsNzrtda6Ou18ZTz3RvxF38T9NQruIzqG0HJB9YfoQWtG3Y26uXMway3n
+         2sLsorO9Cz6Xjxj67DTDVcdVjmPyrAYxOlxvI19Cgk18RAUCIY8/s+H0M/+sEgZzGSfB
+         uj6sZFCejFCFJqQNWiVNVR0dy3bU385PINDWbbS58PUYAt9M40KwWIrsWRNu+coNhJWV
+         +EoWadKtKx5sPx+JO3hUlDGqQy+fYPvnu0dhqNyAEloEoZ+RczTAWCDgI/cyth3SxuDK
+         FHWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXNxYVor3MVZrVWXuH9Vq6KMZQRFWR3uuRX7u3IDRC658+XGNqe6lnJvJgGtXkutxUQs/C//qktzudCvlvcPIA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9de/OlGKI8KzHmQ6clD+j5TcCJv9u8yS69Me1r64X2VeT6+nu
+	+A0HYj1Na5I71vuWLgHD7Y1u4Oyrli2eoFjSPLe0RaEyttpWVX6GvakV
+X-Gm-Gg: ASbGnctH+CK1z0RClBLGzO3OSU7p14pev+uxGBbXg/b08Oiw+pWtmq1vVKB9NSfqGWK
+	d7u7plJ0bh0r4cl3x5k1TdyeFYxYHEgiRiiIQ9vUA2YZJwlvac2qrH4Vh25q4sq6Oex6R4xk6OV
+	JmQnf2bAq5NwJhjdDWX9pGVhApDa69FmkHeKULVur0Rx9kgIhhDcIZV3alH5ANBHoKdeQosHRwi
+	oho3YRmEWg7U9hJ4ep55fE3k/0OkjI9fJDi3lQuD8gtswzIrATVFUjjiZ3LnUHeT0PNCyS4Qig+
+	qSnQJYlelW6pXDtvv2VJ7pFDR4+3GlA5auDyrsH7973ZD2FF7PV+OY5CATE8bcromY5h0Nl7mnH
+	1MEVAHffFpbDVqjQ6Wium7aOiMv7PMhsLDnl8TIIHNAcR75iXOfE5HZnjXFfQ41k+OU1KChqakI
+	e+VVA6qUZnss06oJkxctFWa/6V
+X-Google-Smtp-Source: AGHT+IHymbTcbH235aXvQeVtJWuH5sno4WRQtI5oIYoYQBt9QK1TA5w0gykjqr/O4pXkL3QYwNj9hA==
+X-Received: by 2002:a05:6a20:939d:b0:250:1407:50a1 with SMTP id adf61e73a8af0-334a85763b5mr27844617637.24.1761162407500;
+        Wed, 22 Oct 2025 12:46:47 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:fa8d:1a05:3c71:d71? ([2620:10d:c090:500::7:b877])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6a76b5a007sm13513736a12.31.2025.10.22.12.46.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 12:37:43 -0700 (PDT)
-From: Daniel Zahka <daniel.zahka@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Simon Horman <horms@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Boris Pismenny <borisp@nvidia.com>,
-	Mark Bloch <mbloch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Willem de Bruijn <willemb@google.com>,
-	Rahul Rameshbabu <rrameshbabu@nvidia.com>,
-	Cosmin Ratiu <cratiu@nvidia.com>,
-	Raed Salem <raeds@nvidia.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 4/5] net/mlx5e: Add PSP stats support for Rx/Tx flows
-Date: Wed, 22 Oct 2025 12:37:36 -0700
-Message-ID: <20251022193739.1376320-5-daniel.zahka@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251022193739.1376320-1-daniel.zahka@gmail.com>
-References: <20251022193739.1376320-1-daniel.zahka@gmail.com>
+        Wed, 22 Oct 2025 12:46:47 -0700 (PDT)
+Message-ID: <1d03174dfe2a7eab1166596c85a6b586a660dffc.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Skip bounds adjustment for
+ conditional jumps on same register
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yonghong Song <yonghong.song@linux.dev>, KaFai Wan
+ <kafai.wan@linux.dev>, 	ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, 	martin.lau@linux.dev,
+ song@kernel.org, kpsingh@kernel.org, sdf@fomichev.me, 	haoluo@google.com,
+ jolsa@kernel.org, shuah@kernel.org, paul.chaignon@gmail.com, 
+	m.shachnai@gmail.com, luis.gerhorst@fau.de, colin.i.king@gmail.com, 
+	harishankar.vishwanathan@gmail.com, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: Kaiyan Mei <M202472210@hust.edu.cn>, Yinhao Hu <dddddd@hust.edu.cn>
+Date: Wed, 22 Oct 2025 12:46:45 -0700
+In-Reply-To: <39af9321-fb9b-4cee-84f1-77248a375e85@linux.dev>
+References: <20251022164457.1203756-1-kafai.wan@linux.dev>
+	 <20251022164457.1203756-2-kafai.wan@linux.dev>
+	 <39af9321-fb9b-4cee-84f1-77248a375e85@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Jakub Kicinski <kuba@kernel.org>
+On Wed, 2025-10-22 at 11:14 -0700, Yonghong Song wrote:
+>=20
+> On 10/22/25 9:44 AM, KaFai Wan wrote:
+> > When conditional jumps are performed on the same register (e.g., r0 <=
+=3D r0,
+> > r0 > r0, r0 < r0) where the register holds a scalar with range, the ver=
+ifier
+> > incorrectly attempts to adjust the register's min/max bounds. This lead=
+s to
+> > invalid range bounds and triggers a BUG warning:
+> >=20
+> > verifier bug: REG INVARIANTS VIOLATION (true_reg1): range bounds violat=
+ion u64=3D[0x1, 0x0] s64=3D[0x1, 0x0] u32=3D[0x1, 0x0] s32=3D[0x1, 0x0] var=
+_off=3D(0x0, 0x0)
+> > WARNING: CPU: 0 PID: 93 at kernel/bpf/verifier.c:2731 reg_bounds_sanity=
+_check+0x163/0x220
+> > Modules linked in:
+> > CPU: 0 UID: 0 PID: 93 Comm: repro-x-3 Tainted: G        W           6.1=
+8.0-rc1-ge7586577b75f-dirty #218 PREEMPT(full)
+> > Tainted: [W]=3DWARN
+> > Hardware name: QEMU Ubuntu 24.04 PC (i440FX + PIIX, 1996), BIOS 1.16.3-=
+debian-1.16.3-2 04/01/2014
+> > RIP: 0010:reg_bounds_sanity_check+0x163/0x220
+> > Call Trace:
+> >   <TASK>
+> >   reg_set_min_max.part.0+0x1b1/0x360
+> >   check_cond_jmp_op+0x1195/0x1a60
+> >   do_check_common+0x33ac/0x33c0
+> >   ...
+> >=20
+> > The issue occurs in reg_set_min_max() function where bounds adjustment =
+logic
+> > is applied even when both registers being compared are the same. Compar=
+ing a
+> > register with itself should not change its bounds since the comparison =
+result
+> > is always known (e.g., r0 =3D=3D r0 is always true, r0 < r0 is always f=
+alse).
+> >=20
+> > Fix this by adding an early return in reg_set_min_max() when false_reg1=
+ and
+> > false_reg2 point to the same register, skipping the unnecessary bounds
+> > adjustment that leads to the verifier bug.
+> >=20
+> > Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> > Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> > Closes: https://lore.kernel.org/all/1881f0f5.300df.199f2576a01.Coremail=
+.kaiyanm@hust.edu.cn/
+> > Fixes: 0df1a55afa83 ("bpf: Warn on internal verifier errors")
+> > Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+> > ---
+> >   kernel/bpf/verifier.c | 4 ++++
+> >   1 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 6d175849e57a..420ad512d1af 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -16429,6 +16429,10 @@ static int reg_set_min_max(struct bpf_verifier=
+_env *env,
+> >   	if (false_reg1->type !=3D SCALAR_VALUE || false_reg2->type !=3D SCAL=
+AR_VALUE)
+> >   		return 0;
+> >  =20
+> > +	/* If conditional jumps on the same register, skip the adjustment */
+> > +	if (false_reg1 =3D=3D false_reg2)
+> > +		return 0;
+>=20
+> Your change looks good. But this is a special case and it should not
+> happen for any compiler generated code. So could you investigate
+> why regs_refine_cond_op() does not work? Since false_reg1 and false_reg2
+> is the same, so register refinement should keep the same. Probably
+> some minor change in regs_refine_cond_op(...) should work?
+>=20
+> > +
+> >   	/* fallthrough (FALSE) branch */
+> >   	regs_refine_cond_op(false_reg1, false_reg2, rev_opcode(opcode), is_j=
+mp32);
+> >   	reg_bounds_sync(false_reg1);
 
-Add all statistics described under the "Implementation Requirements"
-section of the PSP Architecture Specification:
+I think regs_refine_cond_op() is not written in a way to handle same
+registers passed as reg1 and reg2. E.g. in this particular case the
+condition is reformulated as "r0 < r0", and then the following branch
+is taken:
 
-Rx successfully decrypted PSP packets:
-psp_rx_pkts  : Number of packets decrypted successfully
-psp_rx_bytes : Number of bytes decrypted successfully
+   static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_r=
+eg_state *reg2,
+                                 u8 opcode, bool is_jmp32)
+   {
+ 	...
+         case BPF_JLT: // condition is rephrased as r0 < r0
+                 if (is_jmp32) {
+                         ...
+                 } else {
+                         reg1->umax_value =3D min(reg1->umax_value, reg2->u=
+max_value - 1);
+                         reg2->umin_value =3D max(reg1->umin_value + 1, reg=
+2->umin_value);
+                 }
+                 break;
+ 	...
+   }
 
-Rx PSP authentication failure statistics:
-psp_rx_pkts_auth_fail  : Number of PSP packets that failed authentication
-psp_rx_bytes_auth_fail : Number of PSP bytes that failed authentication
+Note that intent is to adjust umax of the LHS (reg1) register and umin
+of the RHS (reg2) register. But here it ends up adjusting the same register=
+.
 
-Rx PSP bad frame error statistics:
-psp_rx_pkts_frame_err;
-psp_rx_bytes_frame_err;
+(a) before refinement: u64=3D[0x0, 0x80000000] s64=3D[0x0, 0x80000000] u32=
+=3D[0x0, 0x80000000] s32=3D[0x80000000, 0x0]
+(b) after  refinement: u64=3D[0x1, 0x7fffffff] s64=3D[0x0, 0x80000000] u32=
+=3D[0x0, 0x80000000] s32=3D[0x80000000, 0x0]
+(c) after  sync      : u64=3D[0x1, 0x0] s64=3D[0x1, 0x0] u32=3D[0x1, 0x0] s=
+32=3D[0x1, 0x0]
 
-Rx PSP drop statistics:
-psp_rx_pkts_drop  : Number of PSP packets dropped
-psp_rx_bytes_drop : Number of PSP bytes dropped
+At (b) the u64 range translated to s32 is > 0, while s32 range is <=3D 0,
+hence the invariant violation.
 
-Tx successfully encrypted PSP packets:
-psp_tx_pkts  : Number of packets encrypted successfully
-psp_tx_bytes : Number of bytes encrypted successfully
-
-Tx drops:
-tx_drop : Number of misc psp related drops
-
-The above can be seen using the ynl cli:
-./pyynl/cli.py  --spec netlink/specs/psp.yaml --dump get-stats
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Raed Salem <raeds@nvidia.com>
-Signed-off-by: Rahul Rameshbabu <rrameshbabu@nvidia.com>
-Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
----
- .../mellanox/mlx5/core/en_accel/psp.c         | 239 ++++++++++++++++--
- .../mellanox/mlx5/core/en_accel/psp.h         |  18 ++
- .../mellanox/mlx5/core/en_accel/psp_rxtx.c    |   1 +
- .../net/ethernet/mellanox/mlx5/core/en_main.c |   5 +
- 4 files changed, 248 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp.c
-index 8565cfe8d7dc..93c8f1f19d6b 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp.c
-@@ -28,12 +28,15 @@ struct mlx5e_psp_tx {
- 	struct mlx5_flow_handle *rule;
- 	struct mutex mutex; /* Protect PSP TX steering */
- 	u32 refcnt;
-+	struct mlx5_fc *tx_counter;
- };
- 
- struct mlx5e_psp_rx_err {
- 	struct mlx5_flow_table *ft;
- 	struct mlx5_flow_handle *rule;
--	struct mlx5_flow_handle *drop_rule;
-+	struct mlx5_flow_handle *auth_fail_rule;
-+	struct mlx5_flow_handle *err_rule;
-+	struct mlx5_flow_handle *bad_rule;
- 	struct mlx5_modify_hdr *copy_modify_hdr;
- };
- 
-@@ -50,6 +53,10 @@ struct mlx5e_accel_fs_psp_prot {
- 
- struct mlx5e_accel_fs_psp {
- 	struct mlx5e_accel_fs_psp_prot fs_prot[ACCEL_FS_PSP_NUM_TYPES];
-+	struct mlx5_fc *rx_counter;
-+	struct mlx5_fc *rx_auth_fail_counter;
-+	struct mlx5_fc *rx_err_counter;
-+	struct mlx5_fc *rx_bad_counter;
- };
- 
- struct mlx5e_psp_fs {
-@@ -72,9 +79,19 @@ static enum mlx5_traffic_types fs_psp2tt(enum accel_fs_psp_type i)
- static void accel_psp_fs_rx_err_del_rules(struct mlx5e_psp_fs *fs,
- 					  struct mlx5e_psp_rx_err *rx_err)
- {
--	if (rx_err->drop_rule) {
--		mlx5_del_flow_rules(rx_err->drop_rule);
--		rx_err->drop_rule = NULL;
-+	if (rx_err->bad_rule) {
-+		mlx5_del_flow_rules(rx_err->bad_rule);
-+		rx_err->bad_rule = NULL;
-+	}
-+
-+	if (rx_err->err_rule) {
-+		mlx5_del_flow_rules(rx_err->err_rule);
-+		rx_err->err_rule = NULL;
-+	}
-+
-+	if (rx_err->auth_fail_rule) {
-+		mlx5_del_flow_rules(rx_err->auth_fail_rule);
-+		rx_err->auth_fail_rule = NULL;
- 	}
- 
- 	if (rx_err->rule) {
-@@ -117,6 +134,7 @@ static int accel_psp_fs_rx_err_add_rule(struct mlx5e_psp_fs *fs,
- {
- 	u8 action[MLX5_UN_SZ_BYTES(set_add_copy_action_in_auto)] = {};
- 	struct mlx5_core_dev *mdev = fs->mdev;
-+	struct mlx5_flow_destination dest[2];
- 	struct mlx5_flow_act flow_act = {};
- 	struct mlx5_modify_hdr *modify_hdr;
- 	struct mlx5_flow_handle *fte;
-@@ -147,10 +165,14 @@ static int accel_psp_fs_rx_err_add_rule(struct mlx5e_psp_fs *fs,
- 	accel_psp_setup_syndrome_match(spec, PSP_OK);
- 	/* create fte */
- 	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_MOD_HDR |
--		MLX5_FLOW_CONTEXT_ACTION_FWD_DEST;
-+			  MLX5_FLOW_CONTEXT_ACTION_FWD_DEST |
-+			  MLX5_FLOW_CONTEXT_ACTION_COUNT;
- 	flow_act.modify_hdr = modify_hdr;
--	fte = mlx5_add_flow_rules(rx_err->ft, spec, &flow_act,
--				  &fs_prot->default_dest, 1);
-+	dest[0].type = fs_prot->default_dest.type;
-+	dest[0].ft = fs_prot->default_dest.ft;
-+	dest[1].type = MLX5_FLOW_DESTINATION_TYPE_COUNTER;
-+	dest[1].counter = fs->rx_fs->rx_counter;
-+	fte = mlx5_add_flow_rules(rx_err->ft, spec, &flow_act, dest, 2);
- 	if (IS_ERR(fte)) {
- 		err = PTR_ERR(fte);
- 		mlx5_core_err(mdev, "fail to add psp rx err copy rule err=%d\n", err);
-@@ -158,22 +180,69 @@ static int accel_psp_fs_rx_err_add_rule(struct mlx5e_psp_fs *fs,
- 	}
- 	rx_err->rule = fte;
- 
--	/* add default drop rule */
-+	/* add auth fail drop rule */
- 	memset(spec, 0, sizeof(*spec));
- 	memset(&flow_act, 0, sizeof(flow_act));
-+	accel_psp_setup_syndrome_match(spec, PSP_ICV_FAIL);
- 	/* create fte */
--	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_DROP;
--	fte = mlx5_add_flow_rules(rx_err->ft, spec, &flow_act, NULL, 0);
-+	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_DROP |
-+			  MLX5_FLOW_CONTEXT_ACTION_COUNT;
-+	dest[0].type = MLX5_FLOW_DESTINATION_TYPE_COUNTER;
-+	dest[0].counter = fs->rx_fs->rx_auth_fail_counter;
-+	fte = mlx5_add_flow_rules(rx_err->ft, spec, &flow_act, dest, 1);
- 	if (IS_ERR(fte)) {
- 		err = PTR_ERR(fte);
--		mlx5_core_err(mdev, "fail to add psp rx err drop rule err=%d\n", err);
-+		mlx5_core_err(mdev, "fail to add psp rx auth fail drop rule err=%d\n",
-+			      err);
- 		goto out_drop_rule;
- 	}
--	rx_err->drop_rule = fte;
-+	rx_err->auth_fail_rule = fte;
-+
-+	/* add framing drop rule */
-+	memset(spec, 0, sizeof(*spec));
-+	memset(&flow_act, 0, sizeof(flow_act));
-+	accel_psp_setup_syndrome_match(spec, PSP_BAD_TRAILER);
-+	/* create fte */
-+	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_DROP |
-+			  MLX5_FLOW_CONTEXT_ACTION_COUNT;
-+	dest[0].type = MLX5_FLOW_DESTINATION_TYPE_COUNTER;
-+	dest[0].counter = fs->rx_fs->rx_err_counter;
-+	fte = mlx5_add_flow_rules(rx_err->ft, spec, &flow_act, dest, 1);
-+	if (IS_ERR(fte)) {
-+		err = PTR_ERR(fte);
-+		mlx5_core_err(mdev, "fail to add psp rx framing err drop rule err=%d\n",
-+			      err);
-+		goto out_drop_auth_fail_rule;
-+	}
-+	rx_err->err_rule = fte;
-+
-+	/* add misc. errors drop rule */
-+	memset(spec, 0, sizeof(*spec));
-+	memset(&flow_act, 0, sizeof(flow_act));
-+	/* create fte */
-+	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_DROP |
-+			  MLX5_FLOW_CONTEXT_ACTION_COUNT;
-+	dest[0].type = MLX5_FLOW_DESTINATION_TYPE_COUNTER;
-+	dest[0].counter = fs->rx_fs->rx_bad_counter;
-+	fte = mlx5_add_flow_rules(rx_err->ft, spec, &flow_act, dest, 1);
-+	if (IS_ERR(fte)) {
-+		err = PTR_ERR(fte);
-+		mlx5_core_err(mdev, "fail to add psp rx misc. err drop rule err=%d\n",
-+			      err);
-+		goto out_drop_error_rule;
-+	}
-+	rx_err->bad_rule = fte;
-+
- 	rx_err->copy_modify_hdr = modify_hdr;
- 
- 	goto out_spec;
- 
-+out_drop_error_rule:
-+	mlx5_del_flow_rules(rx_err->err_rule);
-+	rx_err->err_rule = NULL;
-+out_drop_auth_fail_rule:
-+	mlx5_del_flow_rules(rx_err->auth_fail_rule);
-+	rx_err->auth_fail_rule = NULL;
- out_drop_rule:
- 	mlx5_del_flow_rules(rx_err->rule);
- 	rx_err->rule = NULL;
-@@ -461,6 +530,10 @@ static void accel_psp_fs_cleanup_rx(struct mlx5e_psp_fs *fs)
- 		return;
- 
- 	accel_psp = fs->rx_fs;
-+	mlx5_fc_destroy(fs->mdev, accel_psp->rx_bad_counter);
-+	mlx5_fc_destroy(fs->mdev, accel_psp->rx_err_counter);
-+	mlx5_fc_destroy(fs->mdev, accel_psp->rx_auth_fail_counter);
-+	mlx5_fc_destroy(fs->mdev, accel_psp->rx_counter);
- 	for (i = 0; i < ACCEL_FS_PSP_NUM_TYPES; i++) {
- 		fs_prot = &accel_psp->fs_prot[i];
- 		mutex_destroy(&fs_prot->prot_mutex);
-@@ -474,7 +547,10 @@ static int accel_psp_fs_init_rx(struct mlx5e_psp_fs *fs)
- {
- 	struct mlx5e_accel_fs_psp_prot *fs_prot;
- 	struct mlx5e_accel_fs_psp *accel_psp;
-+	struct mlx5_core_dev *mdev = fs->mdev;
-+	struct mlx5_fc *flow_counter;
- 	enum accel_fs_psp_type i;
-+	int err;
- 
- 	accel_psp = kzalloc(sizeof(*accel_psp), GFP_KERNEL);
- 	if (!accel_psp)
-@@ -485,9 +561,68 @@ static int accel_psp_fs_init_rx(struct mlx5e_psp_fs *fs)
- 		mutex_init(&fs_prot->prot_mutex);
- 	}
- 
-+	flow_counter = mlx5_fc_create(mdev, false);
-+	if (IS_ERR(flow_counter)) {
-+		mlx5_core_warn(mdev,
-+			       "fail to create psp rx flow counter err(%ld)\n",
-+			       PTR_ERR(flow_counter));
-+		err = PTR_ERR(flow_counter);
-+		goto out_err;
-+	}
-+	accel_psp->rx_counter = flow_counter;
-+
-+	flow_counter = mlx5_fc_create(mdev, false);
-+	if (IS_ERR(flow_counter)) {
-+		mlx5_core_warn(mdev,
-+			       "fail to create psp rx auth fail flow counter err(%ld)\n",
-+			       PTR_ERR(flow_counter));
-+		err = PTR_ERR(flow_counter);
-+		goto out_counter_err;
-+	}
-+	accel_psp->rx_auth_fail_counter = flow_counter;
-+
-+	flow_counter = mlx5_fc_create(mdev, false);
-+	if (IS_ERR(flow_counter)) {
-+		mlx5_core_warn(mdev,
-+			       "fail to create psp rx error flow counter err(%ld)\n",
-+			       PTR_ERR(flow_counter));
-+		err = PTR_ERR(flow_counter);
-+		goto out_auth_fail_counter_err;
-+	}
-+	accel_psp->rx_err_counter = flow_counter;
-+
-+	flow_counter = mlx5_fc_create(mdev, false);
-+	if (IS_ERR(flow_counter)) {
-+		mlx5_core_warn(mdev,
-+			       "fail to create psp rx auth fail flow counter err(%ld)\n",
-+			       PTR_ERR(flow_counter));
-+		err = PTR_ERR(flow_counter);
-+		goto out_err_counter_err;
-+	}
-+	accel_psp->rx_bad_counter = flow_counter;
-+
- 	fs->rx_fs = accel_psp;
- 
- 	return 0;
-+
-+out_err_counter_err:
-+	mlx5_fc_destroy(mdev, accel_psp->rx_err_counter);
-+	accel_psp->rx_err_counter = NULL;
-+out_auth_fail_counter_err:
-+	mlx5_fc_destroy(mdev, accel_psp->rx_auth_fail_counter);
-+	accel_psp->rx_auth_fail_counter = NULL;
-+out_counter_err:
-+	mlx5_fc_destroy(mdev, accel_psp->rx_counter);
-+	accel_psp->rx_counter = NULL;
-+out_err:
-+	for (i = 0; i < ACCEL_FS_PSP_NUM_TYPES; i++) {
-+		fs_prot = &accel_psp->fs_prot[i];
-+		mutex_destroy(&fs_prot->prot_mutex);
-+	}
-+	kfree(accel_psp);
-+	fs->rx_fs = NULL;
-+
-+	return err;
- }
- 
- void mlx5_accel_psp_fs_cleanup_rx_tables(struct mlx5e_priv *priv)
-@@ -532,6 +667,7 @@ static int accel_psp_fs_tx_create_ft_table(struct mlx5e_psp_fs *fs)
- {
- 	int inlen = MLX5_ST_SZ_BYTES(create_flow_group_in);
- 	struct mlx5_flow_table_attr ft_attr = {};
-+	struct mlx5_flow_destination dest = {};
- 	struct mlx5_core_dev *mdev = fs->mdev;
- 	struct mlx5_flow_act flow_act = {};
- 	u32 *in, *mc, *outer_headers_c;
-@@ -580,8 +716,11 @@ static int accel_psp_fs_tx_create_ft_table(struct mlx5e_psp_fs *fs)
- 	flow_act.crypto.type = MLX5_FLOW_CONTEXT_ENCRYPT_DECRYPT_TYPE_PSP;
- 	flow_act.flags |= FLOW_ACT_NO_APPEND;
- 	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_ALLOW |
--			  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_ENCRYPT;
--	rule = mlx5_add_flow_rules(ft, spec, &flow_act, NULL, 0);
-+			  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_ENCRYPT |
-+			  MLX5_FLOW_CONTEXT_ACTION_COUNT;
-+	dest.type = MLX5_FLOW_DESTINATION_TYPE_COUNTER;
-+	dest.counter = tx_fs->tx_counter;
-+	rule = mlx5_add_flow_rules(ft, spec, &flow_act, &dest, 1);
- 	if (IS_ERR(rule)) {
- 		err = PTR_ERR(rule);
- 		mlx5_core_err(mdev, "PSP: fail to add psp tx flow rule, err = %d\n", err);
-@@ -650,6 +789,7 @@ static void accel_psp_fs_cleanup_tx(struct mlx5e_psp_fs *fs)
- 	if (!tx_fs)
- 		return;
- 
-+	mlx5_fc_destroy(fs->mdev, tx_fs->tx_counter);
- 	mutex_destroy(&tx_fs->mutex);
- 	WARN_ON(tx_fs->refcnt);
- 	kfree(tx_fs);
-@@ -658,10 +798,13 @@ static void accel_psp_fs_cleanup_tx(struct mlx5e_psp_fs *fs)
- 
- static int accel_psp_fs_init_tx(struct mlx5e_psp_fs *fs)
- {
-+	struct mlx5_core_dev *mdev = fs->mdev;
- 	struct mlx5_flow_namespace *ns;
-+	struct mlx5_fc *flow_counter;
- 	struct mlx5e_psp_tx *tx_fs;
-+	int err;
- 
--	ns = mlx5_get_flow_namespace(fs->mdev, MLX5_FLOW_NAMESPACE_EGRESS_IPSEC);
-+	ns = mlx5_get_flow_namespace(mdev, MLX5_FLOW_NAMESPACE_EGRESS_IPSEC);
- 	if (!ns)
- 		return -EOPNOTSUPP;
- 
-@@ -670,9 +813,57 @@ static int accel_psp_fs_init_tx(struct mlx5e_psp_fs *fs)
- 		return -ENOMEM;
- 
- 	mutex_init(&tx_fs->mutex);
-+	flow_counter = mlx5_fc_create(mdev, false);
-+	if (IS_ERR(flow_counter)) {
-+		mlx5_core_warn(mdev,
-+			       "fail to create psp tx flow counter err(%ld)\n",
-+			       PTR_ERR(flow_counter));
-+		err = PTR_ERR(flow_counter);
-+		goto out_err;
-+	}
-+	tx_fs->tx_counter = flow_counter;
- 	tx_fs->ns = ns;
- 	fs->tx_fs = tx_fs;
- 	return 0;
-+
-+out_err:
-+	mutex_destroy(&tx_fs->mutex);
-+	kfree(tx_fs);
-+	return err;
-+}
-+
-+static void
-+mlx5e_accel_psp_fs_get_stats_fill(struct mlx5e_priv *priv, void *psp_stats)
-+{
-+	struct mlx5e_psp_stats *stats = (struct mlx5e_psp_stats *)psp_stats;
-+	struct mlx5e_psp_tx *tx_fs = priv->psp->fs->tx_fs;
-+	struct mlx5_core_dev *mdev = priv->mdev;
-+	struct mlx5e_accel_fs_psp *accel_psp;
-+
-+	accel_psp = (struct mlx5e_accel_fs_psp *)priv->psp->fs->rx_fs;
-+
-+	if (tx_fs->tx_counter)
-+		mlx5_fc_query(mdev, tx_fs->tx_counter, &stats->psp_tx_pkts,
-+			      &stats->psp_tx_bytes);
-+
-+	if (accel_psp->rx_counter)
-+		mlx5_fc_query(mdev, accel_psp->rx_counter, &stats->psp_rx_pkts,
-+			      &stats->psp_rx_bytes);
-+
-+	if (accel_psp->rx_auth_fail_counter)
-+		mlx5_fc_query(mdev, accel_psp->rx_auth_fail_counter,
-+			      &stats->psp_rx_pkts_auth_fail,
-+			      &stats->psp_rx_bytes_auth_fail);
-+
-+	if (accel_psp->rx_err_counter)
-+		mlx5_fc_query(mdev, accel_psp->rx_err_counter,
-+			      &stats->psp_rx_pkts_frame_err,
-+			      &stats->psp_rx_bytes_frame_err);
-+
-+	if (accel_psp->rx_bad_counter)
-+		mlx5_fc_query(mdev, accel_psp->rx_bad_counter,
-+			      &stats->psp_rx_pkts_drop,
-+			      &stats->psp_rx_bytes_drop);
- }
- 
- void mlx5_accel_psp_fs_cleanup_tx_tables(struct mlx5e_priv *priv)
-@@ -849,12 +1040,30 @@ mlx5e_psp_key_rotate(struct psp_dev *psd, struct netlink_ext_ack *exack)
- 	return mlx5e_psp_rotate_key(priv->mdev);
- }
- 
-+static void
-+mlx5e_psp_get_stats(struct psp_dev *psd, struct psp_dev_stats *stats)
-+{
-+	struct mlx5e_priv *priv = netdev_priv(psd->main_netdev);
-+	struct mlx5e_psp_stats nstats;
-+
-+	mlx5e_accel_psp_fs_get_stats_fill(priv, &nstats);
-+	stats->rx_packets = nstats.psp_rx_pkts;
-+	stats->rx_bytes = nstats.psp_rx_bytes;
-+	stats->rx_auth_fail = nstats.psp_rx_pkts_auth_fail;
-+	stats->rx_error = nstats.psp_rx_pkts_frame_err;
-+	stats->rx_bad = nstats.psp_rx_pkts_drop;
-+	stats->tx_packets = nstats.psp_tx_pkts;
-+	stats->tx_bytes = nstats.psp_tx_bytes;
-+	stats->tx_error = atomic_read(&priv->psp->tx_drop);
-+}
-+
- static struct psp_dev_ops mlx5_psp_ops = {
- 	.set_config   = mlx5e_psp_set_config,
- 	.rx_spi_alloc = mlx5e_psp_rx_spi_alloc,
- 	.tx_key_add   = mlx5e_psp_assoc_add,
- 	.tx_key_del   = mlx5e_psp_assoc_del,
- 	.key_rotate   = mlx5e_psp_key_rotate,
-+	.get_stats    = mlx5e_psp_get_stats,
- };
- 
- void mlx5e_psp_unregister(struct mlx5e_priv *priv)
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp.h b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp.h
-index 42bb671fb2cb..b3284d00415f 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp.h
-@@ -7,11 +7,29 @@
- #include <net/psp/types.h>
- #include "en.h"
- 
-+struct mlx5e_psp_stats {
-+	u64 psp_rx_pkts;
-+	u64 psp_rx_bytes;
-+	u64 psp_rx_pkts_auth_fail;
-+	u64 psp_rx_bytes_auth_fail;
-+	u64 psp_rx_pkts_frame_err;
-+	u64 psp_rx_bytes_frame_err;
-+	u64 psp_rx_pkts_drop;
-+	u64 psp_rx_bytes_drop;
-+	u64 psp_tx_pkts;
-+	u64 psp_tx_bytes;
-+	u64 psp_tx_pkts_drop;
-+	u64 psp_tx_bytes_drop;
-+};
-+
- struct mlx5e_psp {
- 	struct psp_dev *psp;
- 	struct psp_dev_caps caps;
- 	struct mlx5e_psp_fs *fs;
- 	atomic_t tx_key_cnt;
-+	atomic_t tx_drop;
-+	/* Stats manage */
-+	struct mlx5e_psp_stats stats;
- };
- 
- static inline bool mlx5_is_psp_device(struct mlx5_core_dev *mdev)
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
-index 828bff1137af..c17ea0fcd8ef 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
-@@ -186,6 +186,7 @@ bool mlx5e_psp_handle_tx_skb(struct net_device *netdev,
- 	/* psp_encap of the packet */
- 	if (!psp_dev_encapsulate(net, skb, psp_st->spi, psp_st->ver, 0)) {
- 		kfree_skb_reason(skb, SKB_DROP_REASON_PSP_OUTPUT);
-+		atomic_inc(&priv->psp->tx_drop);
- 		return false;
- 	}
- 	if (skb_is_gso(skb)) {
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index a56825921c23..9fe18ae1e4e1 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -3998,6 +3998,11 @@ void mlx5e_fold_sw_stats64(struct mlx5e_priv *priv, struct rtnl_link_stats64 *s)
- 		s->rx_bytes     += rq_stats->bytes;
- 		s->multicast    += rq_stats->mcast_packets;
- 	}
-+
-+#ifdef CONFIG_MLX5_EN_PSP
-+	if (priv->psp)
-+		s->tx_dropped	+= atomic_read(&priv->psp->tx_drop);
-+#endif
- }
- 
- void
--- 
-2.47.3
-
+I think it's better to move the reg1 =3D=3D reg2 check inside
+regs_refine_cond_op(), or to handle this case in is_branch_taken().
