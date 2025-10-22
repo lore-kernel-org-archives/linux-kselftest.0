@@ -1,64 +1,64 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EC534CFD5
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 19:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE0734CFD5
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 19:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761161866; cv=none; b=Dr9kl7ZKirLOVmM3sI+SO6YALcew7MMfGPRT3mjrkrdtJgOyQxHd8K87GaHfjo5R9XixO4jJ7iI1axDEfu5KXuFB8XQolK10Ymiiz97ErggpnQ+Om0VqWjqSf7yhetRwRcDq7hgrVUS/NDQskfE2T2uEUj293viwGJVAbgvzuBw=
+	t=1761161868; cv=none; b=GrcXYqgntiMBBRVVwfz8UawTtKbsP2P6+nhxnfwRu82cMvLIiysfVLD+uLdlQhR4xja+9lRER9YOovo3JjGGCqDL3VpsHVw/XwwrTP+Kpdwib5Gg4jdc7scuLgFbFu7zujkUrgLIZwx9pYlBcSDRyY65/ZSI4HzFYP4jNMpXaHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761161866; c=relaxed/simple;
-	bh=1ZcH+freiTc2BFHIA9kvuajmkkOkrkAeOn1kUnv1tlk=;
+	s=arc-20240116; t=1761161868; c=relaxed/simple;
+	bh=ylW0lW+wuEzlGL+hHENqSKVEnatP0qVhMDiawJdeZVU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tpw5ZrhFyPB/xF+UC6fVR8o5GCzBTUfYjfzi06qnUqUwlom5rtrMg+uANV/dKI1ebKl9x9zfCkHL9FZSqBtnUK1m5qy94kT1IRmKW6UqCoMsdr6Kdb9kPqmUAs8IwE6c+3k5elrdVe9GoMwxqbCNQ4txNSyPaVA9a0pNwPu2Bu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BcJPH5qo; arc=none smtp.client-ip=209.85.128.172
+	 MIME-Version; b=AtSU9u5X3GvhSMEPew9diqVNu+isDBAgSjwymXmW1pBao/m3M80BinzXzeznrwBKzpM1u+Q57awYBRHdjZ3pHbiMWN/DPoG0GZfl0/RkIBvq3oXWcTWP3jrZ/cvX5Mqob2EfDfMurkfNwq8NJhqMXeJYySCvLSKrT6Z6ASRofZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iJBR23m/; arc=none smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BcJPH5qo"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-784807fa38dso66858347b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 12:37:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iJBR23m/"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7847f4265e3so52486947b3.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 12:37:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761161863; x=1761766663; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761161865; x=1761766665; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=536/HhY62MdF/LWmTEl7+XnkY5ekoqPvcMB/TqmnVQ0=;
-        b=BcJPH5qoVj/TjMbvAaIl2FC9uL3y4S0Fhwxq0dKU53BDPgE484GE+Di80PqRGNXSRu
-         ML7oVp5yhfSGMByeAImoxe5H4bJDjN9S6uup4Lonk1/9DK202Nl4I4WGFwwEByg67nN8
-         dLpctDJ7ts4NJZJYPsOuP6MZAeKdnQJItQ+s/SAwGGB1ktUtB13CQKpkOyrdcjBHTdwE
-         o6aTO+xcjTlJfTOuxFY3v8atPt8SLjXgs9pHSxZhLHYNF/TV7cAXyo8h59Mqx5vhgHEW
-         ZqgqenyBOb0bxa/23VwSw/OCQJPpGU9VQebganGk0IbDFBZxwzsOfZmi729l1XRSEnWD
-         5xIA==
+        bh=ivCZW/5kdODw7DGks4Fdh9OvB5fw5w/Le7nkqaVGoCM=;
+        b=iJBR23m/a/4iEfx19vRkNc2zjH2dI4ddBdOzyQVwf7Z06L/eDCj8P26vbEbpviy5mT
+         oYRYXpGZ7KyvaDXcLxJH5pKYFmxVPk8e4pg9LIaO2GS/jnrVSG/I2onR/Ms3bzOSSS+O
+         DzM+AOibYomae44qu75X+WQTJN23dNHRs8ekFHiJ7s8v+vg6NZC7N6pHrUz+NAxWllou
+         /0gI7ZMSDmhM20kc5RsorE1N9Z2bsGaTc6aC9uCLShaAZX+ElgN0FfDndkM/c1d+5qE7
+         RckNzQ7l6bLuvevHkF49AigpqNX9YYSaM9psf5rSQZiLyqOlfB4gGcfgSIAMOaviwwu6
+         ElTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761161863; x=1761766663;
+        d=1e100.net; s=20230601; t=1761161865; x=1761766665;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=536/HhY62MdF/LWmTEl7+XnkY5ekoqPvcMB/TqmnVQ0=;
-        b=K8/pOHCaemBs/qjroYaWG1cKD3qN8YH1JY6WOufQoYmxo3wH8d2ytXZGePw1cu68qW
-         rst3Fk2VU/qxMvHa3eTdJfwQTDnt+Vk2qFaBiKSeKf0LlkbFZUcmoDrLCTI1Mtvd5nlL
-         yyC4IjAoRQ83/zSVUoU26JAtU/FRuGd66dKCYvcXO2yiGSlpDNVayJCmcUKjL5PmY17F
-         GFvkDO+H1VLcwUYDrdyginqwQowNDyaCdY2HbVxCKTZZcZFKI79Oe2zVgEJ4f0iD0CcR
-         PpAaSsm6rWbuhfZmyLsmydbpIh4Ov5gEFR6c41NvXmf6K5ygCMJCzGxJAIUob/aP3ISH
-         fYJg==
-X-Forwarded-Encrypted: i=1; AJvYcCWFfdtSnFGObrURWltXkAeC6ultxPfDF5nucawy6WN8kOuv/ywBQgitqsTa3PrxXWDpTp5C244GTdCKPDaS2XI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/rVgfFMMuemRnnkc+B6hXyT65eE6IJEiCayJnD84EATxKGnHd
-	aQ6pKrEMwye+RD3oX3e7uR+/qbLECLLqLxF2QY1USGBLIJIzf0AhlIj2
-X-Gm-Gg: ASbGncuShgFGfka1cXK6WtVbNOdgLfHxprv/mDe9m3EIrvoZDCAZG1YyKUvmJgFUNNP
-	jnIXR2lcyy+ugG4eNRbWuRT9auzXbSUtqu8rR+bMzyfJ3fGOldWULHT5w/4nIlfNjg3B9Y2redm
-	01CFwAdG0Fyj9jpUoPX12lV+E7rhm6k2zMRr2Fg48tZ3A+mJJEqqjNefWHjAKjVvDPIrgCWLiBE
-	OGOdoYphgtNai8f5+F9EAJYcD5RH7gWObumSAjxO3o/rohne8vnwl/OCU5UCY4P/m0699TUWh94
-	Sw8GPWWaYMntxuGWFj9y1qmeULYKTzm99CbjlL3DbJoBBLxZg0OUu+lhZssfg4UqbAgU7G6LY5g
-	x3Mttw0rO0xTYltwUM089VwFhS0kA7PYr8kcfmGrHE/8xCGn6g8GECUkL1XGLvecHjdHjf7KUYj
-	DuDDLN+qh1kRWH8EVaZwrl
-X-Google-Smtp-Source: AGHT+IFQ3QqdLs9HgrrLJwYU/QHK2PD1NorQ8XNs9ineWxU8yVWwa5XCbjDKb0C9IzmNewXZ+H2/1Q==
-X-Received: by 2002:a05:690c:6809:b0:784:8153:c5de with SMTP id 00721157ae682-7848153cefemr138316137b3.35.1761161863165;
-        Wed, 22 Oct 2025 12:37:43 -0700 (PDT)
-Received: from localhost ([2a03:2880:25ff:42::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-785cd6cbe09sm308897b3.36.2025.10.22.12.37.42
+        bh=ivCZW/5kdODw7DGks4Fdh9OvB5fw5w/Le7nkqaVGoCM=;
+        b=kqhIwQOFhS7YCLaX4iksRjlr50N3LrxU7Lwah3xnW/YzE+e3/ZL1ek8WecpWOh36k2
+         ZQ3wJoCfptVmbbI+NE3uL5n7HvzG3jmLUAuGk/24K6V08klxLshR1Db0vtXQd/RwGmk8
+         0MzuejeGC+htBfF1WmH/9XY/6GOCy1hFTsqS8trl2Qqo/RT6wB2YSaN4Ywumrt4Rcwra
+         VIzJKU3Y1SMITgwSCgoAGHd58MdxnMHft+Al4bFgohD7ckyEZyOodZXC04RKOB3KGWnc
+         xMxvTFJ6VDl76ZmolnvTczU7tD0T+jt3/WGmCFDIzHxN5Mzt7N2NCBKonfMt6ztFo2mH
+         Be0w==
+X-Forwarded-Encrypted: i=1; AJvYcCU5CUVv93dwNVeX4vvT2tTqMncFYJmQPQA6HBpM1Zfb4bnmofs3Of4hsw38wlC52HKLpN6uAeiymc/h1Vnpkvs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCvFLV+eUDTwuxNnERosU71zq+gDd+B2tgOMNWq0FjkXQWa2va
+	LxzT9SKgd7P5dqCt1bJLpwqSQ3YIpOK9PMIFJ4XiRqRokojxCkNJaVsm
+X-Gm-Gg: ASbGnctU0TZScbsavJlf1N0Kou4zXp1hHv7kjnajHh+ap1BltV1R+/IwdmrhIPr4k7I
+	iTLjZoCUjmmpZFG9lQ0UyXTrspspy4cmDqYHY2rjlvJI3GpmH9V6esYF04PUSh0v/li2yo7H2J8
+	Qn4DdLCwGyfELOA2NkiLXXH4Q9BJzZeIn32DOBmG2btKGVZhJoDkzFZGpGQsv1inoLF2/jtQcYs
+	8KO1RNC9lirsTl/LxoW+5pn/yypC8stq0W7wakq3BTf4rfJlCQrQ39W5AKzSv2oAmT3q/p+odth
+	IvP+00NTsiNaA5jvDGgvpev/ufhNgRcOBlA36WwAw7HJGf8FLKivpgBTnqO/CYo7hCAG09JvPD6
+	fT+fKjgS/6R5uypcsGTtrxSW6zZMf0ha3hjcBFjUjnw+tnTjFd8418kyEHV8eEtjecMP55DNR0Y
+	/5V08m+VsG5g==
+X-Google-Smtp-Source: AGHT+IGjCWGo1TAspfTDu45sSrwaWKqH3Wc9qY1tqCL28A1h73pipVf/1H81/xPqRvUVY3LjX8WpnQ==
+X-Received: by 2002:a05:690c:6910:b0:785:28dd:2fee with SMTP id 00721157ae682-78528dd3420mr76741147b3.11.1761161865366;
+        Wed, 22 Oct 2025 12:37:45 -0700 (PDT)
+Received: from localhost ([2a03:2880:25ff:49::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-785cd5e23e4sm369957b3.22.2025.10.22.12.37.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 12:37:42 -0700 (PDT)
+        Wed, 22 Oct 2025 12:37:44 -0700 (PDT)
 From: Daniel Zahka <daniel.zahka@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -80,9 +80,9 @@ Cc: Simon Horman <horms@kernel.org>,
 	Kuniyuki Iwashima <kuniyu@google.com>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 3/5] psp: add stats from psp spec to driver facing api
-Date: Wed, 22 Oct 2025 12:37:35 -0700
-Message-ID: <20251022193739.1376320-4-daniel.zahka@gmail.com>
+Subject: [PATCH net-next 5/5] netdevsim: implement psp device stats
+Date: Wed, 22 Oct 2025 12:37:37 -0700
+Message-ID: <20251022193739.1376320-6-daniel.zahka@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251022193739.1376320-1-daniel.zahka@gmail.com>
 References: <20251022193739.1376320-1-daniel.zahka@gmail.com>
@@ -94,213 +94,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Jakub Kicinski <kuba@kernel.org>
+For now only tx/rx packets/bytes are reported. This is not compliant
+with the PSP Architecture Specification.
 
-Provide a driver api for reporting device statistics required by the
-"Implementation Requirements" section of the PSP Architecture
-Specification. Use a warning to ensure drivers report stats required
-by the spec.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
- Documentation/netlink/specs/psp.yaml | 55 ++++++++++++++++++++++++++++
- include/net/psp/types.h              | 26 +++++++++++++
- include/uapi/linux/psp.h             |  8 ++++
- net/psp/psp_main.c                   |  3 +-
- net/psp/psp_nl.c                     | 22 ++++++++++-
- 5 files changed, 112 insertions(+), 2 deletions(-)
+ drivers/net/netdevsim/netdevsim.h |  5 +++++
+ drivers/net/netdevsim/psp.c       | 27 +++++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/Documentation/netlink/specs/psp.yaml b/Documentation/netlink/specs/psp.yaml
-index 914148221384..f3a57782d2cf 100644
---- a/Documentation/netlink/specs/psp.yaml
-+++ b/Documentation/netlink/specs/psp.yaml
-@@ -98,6 +98,61 @@ attribute-sets:
-           Number of times a socket's Rx got shut down due to using
-           a key which went stale (fully rotated out).
-           Kernel statistic.
-+      -
-+        name: rx-packets
-+        type: uint
-+        doc: |
-+          Number of successfully processed and authenticated PSP packets.
-+          Device statistic (from the PSP spec).
-+      -
-+        name: rx-bytes
-+        type: uint
-+        doc: |
-+          Number of successfully authenticated PSP bytes received, counting from
-+          the first byte after the IV through the last byte of payload.
-+          The fixed initial portion of the PSP header (16 bytes)
-+          and the PSP trailer/ICV (16 bytes) are not included in this count.
-+          Device statistic (from the PSP spec).
-+      -
-+        name: rx-auth-fail
-+        type: uint
-+        doc: |
-+          Number of received PSP packets with unsuccessful authentication.
-+          Device statistic (from the PSP spec).
-+      -
-+        name: rx-error
-+        type: uint
-+        doc: |
-+          Number of received PSP packets with length/framing errors.
-+          Device statistic (from the PSP spec).
-+      -
-+        name: rx-bad
-+        type: uint
-+        doc: |
-+          Number of received PSP packets with miscellaneous errors
-+          (invalid master key indicated by SPI, unsupported version, etc.)
-+          Device statistic (from the PSP spec).
-+      -
-+        name: tx-packets
-+        type: uint
-+        doc: |
-+          Number of successfully processed PSP packets for transmission.
-+          Device statistic (from the PSP spec).
-+      -
-+        name: tx-bytes
-+        type: uint
-+        doc: |
-+          Number of successfully processed PSP bytes for transmit, counting from
-+          the first byte after the IV through the last byte of payload.
-+          The fixed initial portion of the PSP header (16 bytes)
-+          and the PSP trailer/ICV (16 bytes) are not included in this count.
-+          Device statistic (from the PSP spec).
-+      -
-+        name: tx-error
-+        type: uint
-+        doc: |
-+          Number of PSP packets for transmission with errors.
-+          Device statistic (from the PSP spec).
+diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
+index 02c1c97b7008..af6fcfcda8ba 100644
+--- a/drivers/net/netdevsim/netdevsim.h
++++ b/drivers/net/netdevsim/netdevsim.h
+@@ -109,6 +109,11 @@ struct netdevsim {
+ 	int rq_reset_mode;
  
- operations:
-   list:
-diff --git a/include/net/psp/types.h b/include/net/psp/types.h
-index 5b0ccaac3882..1aa3857a85c1 100644
---- a/include/net/psp/types.h
-+++ b/include/net/psp/types.h
-@@ -150,6 +150,25 @@ struct psp_assoc {
- 	u8 drv_data[] __aligned(8);
- };
+ 	struct {
++		u64 rx_packets;
++		u64 rx_bytes;
++		u64 tx_packets;
++		u64 tx_bytes;
++		struct u64_stats_sync syncp;
+ 		struct psp_dev *dev;
+ 		u32 spi;
+ 		u32 assoc_cnt;
+diff --git a/drivers/net/netdevsim/psp.c b/drivers/net/netdevsim/psp.c
+index 332b5b744f01..3912f2611862 100644
+--- a/drivers/net/netdevsim/psp.c
++++ b/drivers/net/netdevsim/psp.c
+@@ -70,6 +70,13 @@ nsim_do_psp(struct sk_buff *skb, struct netdevsim *ns,
+ 		*psp_ext = skb->extensions;
+ 		refcount_inc(&(*psp_ext)->refcnt);
+ 		skb->decrypted = 1;
++
++		u64_stats_update_begin(&ns->psp.syncp);
++		ns->psp.tx_packets++;
++		ns->psp.rx_packets++;
++		ns->psp.tx_bytes += skb->len - skb_inner_transport_offset(skb);
++		ns->psp.rx_bytes += skb->len - skb_inner_transport_offset(skb);
++		u64_stats_update_end(&ns->psp.syncp);
+ 	} else {
+ 		struct ipv6hdr *ip6h __maybe_unused;
+ 		struct iphdr *iph;
+@@ -164,12 +171,32 @@ static void nsim_assoc_del(struct psp_dev *psd, struct psp_assoc *pas)
+ 	ns->psp.assoc_cnt--;
+ }
  
-+struct psp_dev_stats {
-+	union {
-+		struct {
-+			u64 rx_packets;
-+			u64 rx_bytes;
-+			u64 rx_auth_fail;
-+			u64 rx_error;
-+			u64 rx_bad;
-+			u64 tx_packets;
-+			u64 tx_bytes;
-+			u64 tx_error;
-+		};
-+		DECLARE_FLEX_ARRAY(u64, required);
-+	};
-+	char required_end[0];
++static void nsim_get_stats(struct psp_dev *psd, struct psp_dev_stats *stats)
++{
++	struct netdevsim *ns = psd->drv_priv;
++	unsigned int start;
 +
-+	/* optional stats would go here */
-+};
-+
- /**
-  * struct psp_dev_ops - netdev driver facing PSP callbacks
-  */
-@@ -188,6 +207,13 @@ struct psp_dev_ops {
- 	 * Remove an association from the device.
- 	 */
- 	void (*tx_key_del)(struct psp_dev *psd, struct psp_assoc *pas);
-+
-+	/**
-+	 * @get_stats: get statistics from the device
-+	 * Stats required by the spec must be maintained and filled in.
-+	 * Stats must be filled in member-by-member, never memset the struct.
++	/* WARNING: do *not* blindly zero stats in real drivers!
++	 * All required stats must be reported by the device!
 +	 */
-+	void (*get_stats)(struct psp_dev *psd, struct psp_dev_stats *stats);
++	memset(stats, 0, offsetof(struct psp_dev_stats, required_end));
++
++	do {
++		start = u64_stats_fetch_begin(&ns->psp.syncp);
++		stats->rx_bytes = ns->psp.rx_bytes;
++		stats->rx_packets = ns->psp.rx_packets;
++		stats->tx_bytes = ns->psp.tx_bytes;
++		stats->tx_packets = ns->psp.tx_packets;
++	} while (u64_stats_fetch_retry(&ns->psp.syncp, start));
++}
++
+ static struct psp_dev_ops nsim_psp_ops = {
+ 	.set_config	= nsim_psp_set_config,
+ 	.rx_spi_alloc	= nsim_rx_spi_alloc,
+ 	.tx_key_add	= nsim_assoc_add,
+ 	.tx_key_del	= nsim_assoc_del,
+ 	.key_rotate	= nsim_key_rotate,
++	.get_stats	= nsim_get_stats,
  };
  
- #endif /* __NET_PSP_H */
-diff --git a/include/uapi/linux/psp.h b/include/uapi/linux/psp.h
-index 31592760ad79..d8449c043ba1 100644
---- a/include/uapi/linux/psp.h
-+++ b/include/uapi/linux/psp.h
-@@ -49,6 +49,14 @@ enum {
- 	PSP_A_STATS_DEV_ID = 1,
- 	PSP_A_STATS_KEY_ROTATIONS,
- 	PSP_A_STATS_STALE_EVENTS,
-+	PSP_A_STATS_RX_PACKETS,
-+	PSP_A_STATS_RX_BYTES,
-+	PSP_A_STATS_RX_AUTH_FAIL,
-+	PSP_A_STATS_RX_ERROR,
-+	PSP_A_STATS_RX_BAD,
-+	PSP_A_STATS_TX_PACKETS,
-+	PSP_A_STATS_TX_BYTES,
-+	PSP_A_STATS_TX_ERROR,
- 
- 	__PSP_A_STATS_MAX,
- 	PSP_A_STATS_MAX = (__PSP_A_STATS_MAX - 1)
-diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
-index 481aaf0fc9fc..a8534124f626 100644
---- a/net/psp/psp_main.c
-+++ b/net/psp/psp_main.c
-@@ -60,7 +60,8 @@ psp_dev_create(struct net_device *netdev,
- 		    !psd_ops->key_rotate ||
- 		    !psd_ops->rx_spi_alloc ||
- 		    !psd_ops->tx_key_add ||
--		    !psd_ops->tx_key_del))
-+		    !psd_ops->tx_key_del ||
-+		    !psd_ops->get_stats))
- 		return ERR_PTR(-EINVAL);
- 
- 	psd = kzalloc(sizeof(*psd), GFP_KERNEL);
-diff --git a/net/psp/psp_nl.c b/net/psp/psp_nl.c
-index 094da52e357e..9fe683c952f9 100644
---- a/net/psp/psp_nl.c
-+++ b/net/psp/psp_nl.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- 
-+#include <linux/ethtool.h>
- #include <linux/skbuff.h>
- #include <linux/xarray.h>
- #include <net/genetlink.h>
-@@ -509,7 +510,18 @@ static int
- psp_nl_stats_fill(struct psp_dev *psd, struct sk_buff *rsp,
- 		  const struct genl_info *info)
- {
-+	const unsigned int required_cnt = offsetof(struct psp_dev_stats,
-+						   required_end) / sizeof(u64);
-+	struct psp_dev_stats stats;
- 	void *hdr;
-+	int i;
-+
-+	memset(&stats, 0xff, sizeof(stats));
-+	psd->ops->get_stats(psd, &stats);
-+
-+	for (i = 0; i < required_cnt; i++)
-+		if (WARN_ON_ONCE(stats.required[i] == ETHTOOL_STAT_NOT_SET))
-+			return -EOPNOTSUPP;
- 
- 	hdr = genlmsg_iput(rsp, info);
- 	if (!hdr)
-@@ -518,7 +530,15 @@ psp_nl_stats_fill(struct psp_dev *psd, struct sk_buff *rsp,
- 	if (nla_put_u32(rsp, PSP_A_STATS_DEV_ID, psd->id) ||
- 	    nla_put_uint(rsp, PSP_A_STATS_KEY_ROTATIONS,
- 			 psd->stats.rotations) ||
--	    nla_put_uint(rsp, PSP_A_STATS_STALE_EVENTS, psd->stats.stales))
-+	    nla_put_uint(rsp, PSP_A_STATS_STALE_EVENTS, psd->stats.stales) ||
-+	    nla_put_uint(rsp, PSP_A_STATS_RX_PACKETS, stats.rx_packets) ||
-+	    nla_put_uint(rsp, PSP_A_STATS_RX_BYTES, stats.rx_bytes) ||
-+	    nla_put_uint(rsp, PSP_A_STATS_RX_AUTH_FAIL, stats.rx_auth_fail) ||
-+	    nla_put_uint(rsp, PSP_A_STATS_RX_ERROR, stats.rx_error) ||
-+	    nla_put_uint(rsp, PSP_A_STATS_RX_BAD, stats.rx_bad) ||
-+	    nla_put_uint(rsp, PSP_A_STATS_TX_PACKETS, stats.tx_packets) ||
-+	    nla_put_uint(rsp, PSP_A_STATS_TX_BYTES, stats.tx_bytes) ||
-+	    nla_put_uint(rsp, PSP_A_STATS_TX_ERROR, stats.tx_error))
- 		goto err_cancel_msg;
- 
- 	genlmsg_end(rsp, hdr);
+ static struct psp_dev_caps nsim_psp_caps = {
 -- 
 2.47.3
 
