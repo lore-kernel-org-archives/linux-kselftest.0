@@ -1,163 +1,123 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1AB52FD695
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 16:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A90200C2
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 16:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761151461; cv=none; b=FEaKg1Jge+oAn8og3VoynFFEKedhLDjQUw1/0LUQhpMqXY/SvNc7fQTEYr51EIxndNQllYHYQm6Jdz+LJwApxfiyX+zRlJD1sA2NnyNXH6m7EGZkYP0Tat8u2nN9EfpxE58er3v9fd6BRjD5dENS2QM52b+K01oq2A6K2QFIUl8=
+	t=1761151584; cv=none; b=biambesKCa4SFKc683l4zpqjoVosLYMd+mRpgqZfIB6FnkC3nkvETdVpgKg6dsOK5XXLrOxpz/MUOxc/eWTecqkfy6qmWFjDq9rAhe34NRbhYp/+iNk3KRsX3w0o5G/kRRfdbqLInh+Tz4cjqhjQR7fKfEVZvAPLvWOY4yvoVTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761151461; c=relaxed/simple;
-	bh=j4tvMOGoWp+6/LQDA5S0P6afK9AwH6IIUHE/pmi2IAI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cWXfe6W+yJTjpLeramKB9JKabVwBcedQFSjUjHN9AYFOOwrD8aUr4e1O+eoctilhG+KobQYyguRetLthA9eQ4DEhVrD0oE4uuWOheMxyhXvbP0Zh0qQuxiAiZ5yHBwVqin08AN2vErgDqAlX3owkEGhYmQTreLYb3YUCu4vJPF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kMRCjZUd; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761151584; c=relaxed/simple;
+	bh=Og7Afz0y84kh3PCRyhT21PX40s4Ey/kKnquD3IaHpcQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pWGkTS6QILOnTsGSJyzdKiFRzdxSkpcVXZSrlhbnafTx97nzSqEUIxcpGFuz0in54WYvhBiVq5i+NBJ5xx+ut3cwY59XNk+X3lGTPBp+SyuVrk7okTaamXLiRFm2ivtBYgi+WcKVB8V7qMR3X79XZinJXVpTZCU5Rc8G74ye6TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wVgrFwGg; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kMRCjZUd"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3ee130237a8so4639546f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 09:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761151458; x=1761756258; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ygaNDNbabPv3r2xGJYgwETszLPm4Qf+7vTtVF4xoUiU=;
-        b=kMRCjZUdMW1Owzb4tWtvNB+hEv7/H1VUUuZ3F8TuB+baR5ROulyizYhenLuDbq51Pt
-         slahJs85//Tk3RjzhP+SSnHZt1Wgf42fXt+Z+QifsRCTQp1NnmqajZ1LYmuOcB+aGH7K
-         t4cRiy7vkSlOQsybx6xXajkgLbhaj1IvzPlWXkEBBp2T9OqBEjnwz1+mfHk4hJYVN03Q
-         HNwH1bPhEhSic/xJm622kyrRzMM+uP4LtoX6Sm/WECQSxQJU5TstQVMNqoA7n8sZLIaa
-         sO/FU85JLHCyKiCvu30Mv4WyGVYy9Uxd/rruFpBXT4UPOjNYDfT0kN+bK3jutr6DlzCO
-         lwVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761151458; x=1761756258;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ygaNDNbabPv3r2xGJYgwETszLPm4Qf+7vTtVF4xoUiU=;
-        b=unS09Yl/8jRkdYfsDPG/ZvNp+tA8AuBTE2cElX/Qt9PGnfyaY9pmoBDHrmdL996EuN
-         2IkAI9X1AbrCE1/+CssVSmdk/lZajiiyW5Rv8UcyLQW/+lRlkCQ3KfijYBK/Jfn7zpuK
-         4Runm9ndKyWnGRWtvhr6zZz4HCryaOFvpV+od8q95IB3wi5CgmoELXzBUPubMBKOP1YI
-         PpAnTBN8mmx/1Fz6ATQTDgrw3LOnfUgxT3DgNckugX+vts2iqohmbyFu6QNiQ9ixL2ra
-         iRmnc8Cq55bXUC+y1JZzV0T5GaGubLFbrXp7+T55UPVCRm5YgZhEVxXuYprcw5v6vR31
-         xYqA==
-X-Forwarded-Encrypted: i=1; AJvYcCXCWbxcpQ/V5y77kiHhlnh73IEAEZekI44Wk4R/oHPudM93aW+eKqVXlMdar3UhnJ5ENXp80MH8MCrcG2ZG1Po=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxrlasgu03UHneW/VWikufPBr8r4X9B2h9nBF4w4eWcRGqdm+Nm
-	tqDR4rirvTeHACFXKCR3BuQJtxr536vGBSlROlpRDHoV8SDEkrmZj7lvOqlt1PcSQXGS4FC2+/X
-	y4Kte0TBaJFTsClp/BHFnvZ07sd36rQY=
-X-Gm-Gg: ASbGnctEduuRK7nA0d+GPCi6LaYhTh2KByYpzTWj9UwfCYzhMz+E0eKVCn25mORW5Fy
-	HcAjo54hz1I6ZHmcpO4pafQ6ierW3P/VTHT/lmtKeNhg2LOZa256RVV0WaHVg3sJyOeXh52AFaL
-	/JRfCcqq54NnyhVleVmwfTh8C5nlYPLbHywlqotIwaz7edWXwFhZOpx57gOHlM2lEdVVVpPkLcJ
-	otyek8TdvyQZU6Njf+1Z67x3R6bXPieRhH41cyZXY2eWD1v88qxgVRYuWVTYfnrHYazK4UKnxZ8
-	aSsCKoilgx0961swiQ==
-X-Google-Smtp-Source: AGHT+IG8PotEN+a4eXRonUtwAj3rbW+NEcQG8KtHZl4hlsvXRedBaBpDgp56n6VfESdp1DVnSACGAph72ACzXHQzamg=
-X-Received: by 2002:a05:6000:40df:b0:427:8c85:a4ac with SMTP id
- ffacd0b85a97d-4278c85aac0mr14251693f8f.47.1761151457697; Wed, 22 Oct 2025
- 09:44:17 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wVgrFwGg"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761151579;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=n5YHSfe0I86BaZgDlDp2zuQzKHrMTOgU+I9FSbZgluc=;
+	b=wVgrFwGgZ+tEI3kAVhwc6vBfvjSjkn2u09FLM914n/wy+QJPl3diG65eLbfKKqw0bEzKOu
+	tzrqsYC2Y6WVPj/AFimVgPRzB1DDKBzncG1Rz8hUlp7Wdm7JCMKC0KnnAgB57gdrlSjGtp
+	/oTE+DDIyPGHCc2nf2vi/24CwKlxc+U=
+From: KaFai Wan <kafai.wan@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	paul.chaignon@gmail.com,
+	m.shachnai@gmail.com,
+	luis.gerhorst@fau.de,
+	colin.i.king@gmail.com,
+	harishankar.vishwanathan@gmail.com,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: KaFai Wan <kafai.wan@linux.dev>,
+	Kaiyan Mei <M202472210@hust.edu.cn>,
+	Yinhao Hu <dddddd@hust.edu.cn>
+Subject: [PATCH bpf-next 1/2] bpf: Skip bounds adjustment for conditional jumps on same register
+Date: Thu, 23 Oct 2025 00:44:56 +0800
+Message-ID: <20251022164457.1203756-2-kafai.wan@linux.dev>
+In-Reply-To: <20251022164457.1203756-1-kafai.wan@linux.dev>
+References: <20251022164457.1203756-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251022-tc_tunnel-v2-0-a44a0bd52902@bootlin.com>
- <20251022-tc_tunnel-v2-3-a44a0bd52902@bootlin.com> <DDOOS5LR0GZH.ITEM5495FPOX@bootlin.com>
-In-Reply-To: <DDOOS5LR0GZH.ITEM5495FPOX@bootlin.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 22 Oct 2025 09:44:05 -0700
-X-Gm-Features: AS18NWDLP0NjwQEzYp_qrJd1MU37XauNkLfKjad0wMcbqRCgfSv54aOHXJEi0bg
-Message-ID: <CAADnVQJ6zKbThz8B5bqBpwz=gyqeindZb1kwCmM90PsR4-7iQQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: integrate
- test_tc_tunnel.sh tests into test_progs
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, ebpf@linuxfoundation.org, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Oct 22, 2025 at 12:52=E2=80=AFAM Alexis Lothor=C3=A9
-<alexis.lothore@bootlin.com> wrote:
->
-> On Wed Oct 22, 2025 at 9:39 AM CEST, Alexis Lothor=C3=A9 (eBPF Foundation=
-) wrote:
-> > The test_tc_tunnel.sh script checks that a large variety of tunneling
-> > mechanisms handled by the kernel can be handled as well by eBPF
-> > programs. While this test shares similarities with test_tunnel.c (which
-> > is already integrated in test_progs), those are testing slightly
-> > different things:
-> > - test_tunnel.c creates a tunnel interface, and then get and set tunnel
-> >   keys in packet metadata, from BPF programs.
-> > - test_tc_tunnels.sh manually parses/crafts packets content
-> >
-> > Bring the tests covered by test_tc_tunnel.sh into the test_progs
-> > framework, by creating a dedicated test_tc_tunnel.sh. This new test
-> > defines a "generic" runner which, for each test configuration:
-> > - will configure the relevant veth pair, each of those isolated in a
-> >   dedicated namespace
-> > - will check that traffic will fail if there is only an encapsulating
-> >   program attached to one veth egress
-> > - will check that traffic succeed if we enable some decapsulation modul=
-e
-> >   on kernel side
-> > - will check that traffic still succeeds if we replace the kernel
-> >   decapsulation with some eBPF ingress decapsulation.
-> >
-> > Example of the new test execution:
-> >
-> >   # ./test_progs -a tc_tunnel
-> >   #447/1   tc_tunnel/ipip_none:OK
-> >   #447/2   tc_tunnel/ipip6_none:OK
-> >   #447/3   tc_tunnel/ip6tnl_none:OK
-> >   #447/4   tc_tunnel/sit_none:OK
-> >   #447/5   tc_tunnel/vxlan_eth:OK
-> >   #447/6   tc_tunnel/ip6vxlan_eth:OK
-> >   #447/7   tc_tunnel/gre_none:OK
-> >   #447/8   tc_tunnel/gre_eth:OK
-> >   #447/9   tc_tunnel/gre_mpls:OK
-> >   #447/10  tc_tunnel/ip6gre_none:OK
-> >   #447/11  tc_tunnel/ip6gre_eth:OK
-> >   #447/12  tc_tunnel/ip6gre_mpls:OK
-> >   #447/13  tc_tunnel/udp_none:OK
-> >   #447/14  tc_tunnel/udp_eth:OK
-> >   #447/15  tc_tunnel/udp_mpls:OK
-> >   #447/16  tc_tunnel/ip6udp_none:OK
-> >   #447/17  tc_tunnel/ip6udp_eth:OK
-> >   #447/18  tc_tunnel/ip6udp_mpls:OK
-> >   #447     tc_tunnel:OK
-> >   Summary: 1/18 PASSED, 0 SKIPPED, 0 FAILED
-> >
-> > Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bo=
-otlin.com>
->
-> A note about test duration:
-> the overall test duration, in my setup (x86 qemu-based setup, running on
-> x86), is around 13s. Reviews on similar series ([1]) shows that such a
-> duration is not really desirable for CI integration. I checked how to
-> reduce it, and it appears that most of it is due to the fact that for eac=
-h
-> subtest, we verify that if we insert bpf encapsulation (egress) program,
-> and nothing on server side, we properly fail to connect client to server.
-> This test then relies on timeout connection,  and I already reduced it as
-> much as possible, but I guess going below the current value (500ms) will
-> just start to make the whole test flaky.
->
-> I took this "check connection failure" from the original script, and kind
-> of like it for its capacity to detect false negatives, but should I
-> eventually get rid of it ?
+When conditional jumps are performed on the same register (e.g., r0 <= r0,
+r0 > r0, r0 < r0) where the register holds a scalar with range, the verifier
+incorrectly attempts to adjust the register's min/max bounds. This leads to
+invalid range bounds and triggers a BUG warning:
 
-I vote to get rid of it.
-I'd rather have test_progs that are quick enough to execute for CI and
-for all developers then more in depth coverage for the corner case.
-Note that for the verifier range test we randomize the test coverage,
-since the whole permutation takes hours to run. Instead we randomly
-pick a couple tests and run only those. Since CI runs for every patch
-the overall coverage is good enough.
-Would something like that possible here ? and in the other xsk test?
+verifier bug: REG INVARIANTS VIOLATION (true_reg1): range bounds violation u64=[0x1, 0x0] s64=[0x1, 0x0] u32=[0x1, 0x0] s32=[0x1, 0x0] var_off=(0x0, 0x0)
+WARNING: CPU: 0 PID: 93 at kernel/bpf/verifier.c:2731 reg_bounds_sanity_check+0x163/0x220
+Modules linked in:
+CPU: 0 UID: 0 PID: 93 Comm: repro-x-3 Tainted: G        W           6.18.0-rc1-ge7586577b75f-dirty #218 PREEMPT(full)
+Tainted: [W]=WARN
+Hardware name: QEMU Ubuntu 24.04 PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+RIP: 0010:reg_bounds_sanity_check+0x163/0x220
+Call Trace:
+ <TASK>
+ reg_set_min_max.part.0+0x1b1/0x360
+ check_cond_jmp_op+0x1195/0x1a60
+ do_check_common+0x33ac/0x33c0
+ ...
+
+The issue occurs in reg_set_min_max() function where bounds adjustment logic
+is applied even when both registers being compared are the same. Comparing a
+register with itself should not change its bounds since the comparison result
+is always known (e.g., r0 == r0 is always true, r0 < r0 is always false).
+
+Fix this by adding an early return in reg_set_min_max() when false_reg1 and
+false_reg2 point to the same register, skipping the unnecessary bounds
+adjustment that leads to the verifier bug.
+
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Closes: https://lore.kernel.org/all/1881f0f5.300df.199f2576a01.Coremail.kaiyanm@hust.edu.cn/
+Fixes: 0df1a55afa83 ("bpf: Warn on internal verifier errors")
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+---
+ kernel/bpf/verifier.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6d175849e57a..420ad512d1af 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -16429,6 +16429,10 @@ static int reg_set_min_max(struct bpf_verifier_env *env,
+ 	if (false_reg1->type != SCALAR_VALUE || false_reg2->type != SCALAR_VALUE)
+ 		return 0;
+ 
++	/* If conditional jumps on the same register, skip the adjustment */
++	if (false_reg1 == false_reg2)
++		return 0;
++
+ 	/* fallthrough (FALSE) branch */
+ 	regs_refine_cond_op(false_reg1, false_reg2, rev_opcode(opcode), is_jmp32);
+ 	reg_bounds_sync(false_reg1);
+-- 
+2.43.0
+
