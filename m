@@ -1,145 +1,124 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0041FC7C5
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 16:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B651DC997;
+	Fri, 24 Oct 2025 16:17:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761322575; cv=none; b=tOemDjkXUkdfRNeC2OcsBNW7E3PUqd4suNCPk74GtWWj9W5A903UvKXSqk8nATkSGNOYizVttyyeFGiccyUdvO3XCaYrXO8n8qv20olHGv/p1n6/61SnPjUcR/zIOLtRN5MCDPy1oYUYUEY5vsmXcEmgoAZl3vfQsP7icHhKa8Q=
+	t=1761322671; cv=none; b=tRIihwugBAxzB4La0XuLI0CD+NKWzOetd5FZOJLtuFVd/Vr02FzQPKxexf+bN8U7M4dXrF8ENFthMrcLyauVMbrg8PbCR8/Y+16YPVOl4MX/pLugMsfcr3saIkc81BJLiRhlyfYBIsam71kAyu9ICuUEtg0ju3ujKqlawGCO1Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761322575; c=relaxed/simple;
-	bh=5TtwmnLbDDTqvZTxESC4gxv7z3uy/Gk67LVww9+74lY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oksYknHr3LKNAtntMUO2IQ8SQQ3ahcDBbZcCBP8JT7xN71L4LnFPh4ENHW+fhION99l74waNpOS0m8+YIL8ENXmCtUfjQ118SAr+/gdpsISl+RF6yiHc6uQt5DzV4QdDCurYsWZiumIw6xWvN9IlDqZF+JCjm8qDQ2d+uGQNdBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=AYhIiJNS; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1761322671; c=relaxed/simple;
+	bh=wk66qIygkkbUUS4Vseh1sg6teJA5/ZT5GoMUU6R4qwg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nNEi7vl7pHPbato9mJlZPWzY+G6M7Ep4qT0BEamPD/cwjSrjH7zg/HDV7kHsZmZ0XNw+b3OMwoZTn5UG+OoJV1y4NNWRnBOQuD630+DopEmlmmmmxHy4j4VSxzcp1vk4OFJI0s+CI4lULWvfKYbPLQKgev9X1SywSSqv9ZBIFo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S9e/39w/; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="AYhIiJNS"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-378d50162e0so27370551fa.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 09:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1761322571; x=1761927371; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8hoXtHHA5k7qKtUM3YbUnyrHBlYIGcj0sn2V7B2w8uw=;
-        b=AYhIiJNSgW9VfySWCqhv8vusgRNE0Xyz4rRuFPljaIV+rKixnuML7H56bpNKIod08N
-         emvQHQGDdyQao6oi3K6/J+qxOOsHhJQKSUJ6ALrqJEWrgOGC+04KLQgRtJnw3nmhYIGV
-         Xulx4f7CBwhhnGHF5QojhNtX478qnCBi5TSfxdNPHnoO/gFI7QWtzRXmJ2s2DT6+HYss
-         El5pLH92HLYX1a1k7lGJNw0n6fCa1BSGfFDwn9JVe6Rhf5fLlXA8+TTI/rWQZRLwchkt
-         bpmLCEQ3Qzcmew/86eCUyezpSSMg8Iz4y2OINNPbCDUcJ5AijJm7Q61b9DhHoWmXq8SL
-         9ONw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761322571; x=1761927371;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8hoXtHHA5k7qKtUM3YbUnyrHBlYIGcj0sn2V7B2w8uw=;
-        b=USKO6iocqnbHGUAKsu29kkgnkmVMKNqhS2D/dG/dmESPZnJ9DQMz5zFJuYAuLVty80
-         k/+aDaXUyp7iEOLwk8QWj8O2iDtBwcP9QWSuQiLBSEjnybAN5XaopZzF0n+qDxflMOMp
-         Ef12G7BgvobW4fKjpu/T+sbOMm6gSewMeI+D78T3IM3nZhbgXHm1mQl7OcFKAWQknHsm
-         YmKTcVWhmkZmps5ulP4Y0KM+9tvv+glgfODAitjcIi08JfqoNdUMP1xg/oStEtCjoO+Z
-         j7kDXmhGXTLXFGYbP4ntmSRLcQA1rqrFUAQk10J1ZRi90AT2Wkr5lYxxqkQcerDvBpEB
-         AEog==
-X-Forwarded-Encrypted: i=1; AJvYcCWUOK9N1F1wcZaxY3TzT0bUJLUBjjMm+r90M0ZPBJ1V/kNSNi4v7UERHiU3Wlcsopgk0zmVSggYmEw5dFg2lDA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJjJw2wOZRvz0t14G0MeQsg96MyUaZChSZtS5wFF4jgGfJOOmM
-	pKlftICOgB95IrGdo3cmZOgL4LkHhxAX/fk1v5hUSRGpYosWnc7nuMFCq7tt7IDSmqCE57glP1N
-	ee68sq76zF2Bb7p6nIX9bJkgLmGXi5J6HR/finI62fpwnPQH1KT1I
-X-Gm-Gg: ASbGncvG4Nc3y93mlbH7S54/4t244GcwnGBAGulwUoqWJSfjXuj7WCSHOHKNsq2Uqai
-	OlvMcQXz+vDLUpOCytgqAkgwyvztsSKS0yCY412G595LXSDCLNEjSwX3816DLamkkoOqQ8/hvH+
-	qO0o1P0imkh3L+xhud6HlubeYLA3ZFW9yIXiFPJIK28tkn9kdY/6cdhFPdZJlQ6/im3kuidwGJa
-	lNJm/GMLtRVOGCvwpDn8VH2LxfJlnKIiGJt7Vafw7cEzta9DrnE6B9bL1oHD2kBRIna
-X-Google-Smtp-Source: AGHT+IH8WOU0xbwl7Y+ksyd5jD9X6PhDLczYsD+A6K0t8J7OJdygB2+hIh+k9oSvOmjM4CFOKsep5og5GveG+1uLBEs=
-X-Received: by 2002:a05:651c:12c7:b0:372:93dd:681a with SMTP id
- 38308e7fff4ca-37797a744bfmr92216601fa.35.1761322570537; Fri, 24 Oct 2025
- 09:16:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S9e/39w/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761322670; x=1792858670;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wk66qIygkkbUUS4Vseh1sg6teJA5/ZT5GoMUU6R4qwg=;
+  b=S9e/39w/1ASlPnXtSKu/WcGkTQZcG5b21wnI9KDxAr/3R2iXvU1aVd2L
+   Q8t1TtWA5AV2UhRhbXIsrxBMng/Uz4R32JZ6iqoVZckv2ekH6aqDGsPpq
+   /iYJpolBT7sMxTTj6Srm8CtiD0bggx81NYropnM6ZcyHDQh9hdjWwFb0B
+   o6zI1Xnvo4/Kj8MOBOmQN5+r4fF8WKf7KEst3uUUysXkZuFAHfyWR284e
+   N5lOfbKaDllFeoq1vbpDPrkbzRAWN9t8cxdj0U/D+OjDhb84AQ831VPU0
+   viZENhOAxuSKgKpMoDC304uI/YaVN+b7hWnzU4bamqB3tTfs0BXkqwVHC
+   w==;
+X-CSE-ConnectionGUID: RLw1A/tISsSQHsHa9f9qSw==
+X-CSE-MsgGUID: kCdlq5ZrQjGMYyg4+eAh9A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63412299"
+X-IronPort-AV: E=Sophos;i="6.19,252,1754982000"; 
+   d="scan'208";a="63412299"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2025 09:17:47 -0700
+X-CSE-ConnectionGUID: rox9pthtT9qkicVmkF+xRw==
+X-CSE-MsgGUID: OqN+FRlvSO2q/H4Vl8klIA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,252,1754982000"; 
+   d="scan'208";a="183643221"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 24 Oct 2025 09:17:38 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vCKS1-000Een-0H;
+	Fri, 24 Oct 2025 16:17:01 +0000
+Date: Sat, 25 Oct 2025 00:14:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Add kfuncs for detecting execution
+ context
+Message-ID: <202510242353.hCaLzqVt-lkp@intel.com>
+References: <20251022113412.352307-2-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251022005719.3670224-1-pasha.tatashin@soleen.com>
- <20251022005719.3670224-4-pasha.tatashin@soleen.com> <mafs0ikg7fbez.fsf@kernel.org>
- <CA+CK2bDrrg0UoJXpeN+Au2-sreYrZ+DHVcEUidzPw2Qk60orgg@mail.gmail.com>
- <mafs0o6pwe1sy.fsf@kernel.org> <mafs0jz0ke1qd.fsf@kernel.org>
-In-Reply-To: <mafs0jz0ke1qd.fsf@kernel.org>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Fri, 24 Oct 2025 12:15:32 -0400
-X-Gm-Features: AS18NWDS5bf4nRNM2qxXHaSonlVu1EPNEq3HBS0RPvYO5kiX8yMEO_3tWdOfdcs
-Message-ID: <CA+CK2bB_xPAsHXU62Hd5iBt-+Jf2BiXQM4M-QEL=AA_Xu-APhg@mail.gmail.com>
-Subject: Re: [PATCHv7 3/7] kho: drop notifiers
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net, 
-	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, masahiroy@kernel.org, 
-	ojeda@kernel.org, rdunlap@infradead.org, rppt@kernel.org, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251022113412.352307-2-jiayuan.chen@linux.dev>
 
-On Fri, Oct 24, 2025 at 11:52=E2=80=AFAM Pratyush Yadav <pratyush@kernel.or=
-g> wrote:
->
-> On Fri, Oct 24 2025, Pratyush Yadav wrote:
->
-> > On Fri, Oct 24 2025, Pasha Tatashin wrote:
-> >
-> >>> > -int kho_add_subtree(struct kho_serialization *ser, const char *nam=
-e, void *fdt)
-> >>> > +int kho_add_subtree(const char *name, void *fdt)
-> >>> >  {
-> >>> > -     int err =3D 0;
-> >>> > -     u64 phys =3D (u64)virt_to_phys(fdt);
-> >>> > -     void *root =3D page_to_virt(ser->fdt);
-> >>> > +     struct kho_sub_fdt *sub_fdt;
-> >>> > +     int err;
-> >>> >
-> >>> > -     err |=3D fdt_begin_node(root, name);
-> >>> > -     err |=3D fdt_property(root, PROP_SUB_FDT, &phys, sizeof(phys)=
-);
-> >>> > -     err |=3D fdt_end_node(root);
-> >>> > +     sub_fdt =3D kmalloc(sizeof(*sub_fdt), GFP_KERNEL);
-> >>> > +     if (!sub_fdt)
-> >>> > +             return -ENOMEM;
-> >>> >
-> >>> > -     if (err)
-> >>> > -             return err;
-> >>> > +     INIT_LIST_HEAD(&sub_fdt->l);
-> >>> > +     sub_fdt->name =3D name;
-> >>> > +     sub_fdt->fdt =3D fdt;
-> >>> >
-> >>> > -     return kho_debugfs_fdt_add(&kho_out.dbg, name, fdt, false);
-> >>> > +     mutex_lock(&kho_out.fdts_lock);
-> >>> > +     list_add_tail(&sub_fdt->l, &kho_out.sub_fdts);
-> >>> > +     err =3D kho_debugfs_fdt_add(&kho_out.dbg, name, fdt, false);
-> >>>
-> >>> I think you should remove sub_fdt from the list and kfree() it on err=
-or
-> >>> here. Otherwise we signal an error to the caller and they might free
-> >>> sub_fdt->fdt, which will later result in a use-after-free at
-> >>> __kho_finalize().
-> >>
-> >> I think, it is better to simply do:
-> >> WARN_ON_ONCE(kho_debugfs_fdt_add(...));
-> >> Now debugfs is optional, and there is no reason to return an error to
-> >> a caller if kho_debugfs_fdt_add() fails
-> >
-> > Yeah, that works too.
->
-> On a second thought, maybe pr_warn() instead of WARN_ON()? This isn't an
-> assertion since the debugfs creation can fail for many reasons. It isn't
-> expected to always succeed. So a full WARN_ON() splat seems overkill.
+Hi Jiayuan,
 
-I sent it with WARN_ON_ONCE(), I can change it to pr_warn_once() if
-there is another revision, otherwise we can just send a separate patch
-to make the change it is not that important.
+kernel test robot noticed the following build warnings:
 
-Pasha
+[auto build test WARNING on bpf-next/master]
 
->
-> [...]
->
-> --
-> Regards,
-> Pratyush Yadav
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiayuan-Chen/bpf-Add-kfuncs-for-detecting-execution-context/20251022-193551
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20251022113412.352307-2-jiayuan.chen%40linux.dev
+patch subject: [PATCH bpf-next v1 1/2] bpf: Add kfuncs for detecting execution context
+config: alpha-randconfig-r123-20251023 (https://download.01.org/0day-ci/archive/20251024/202510242353.hCaLzqVt-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251024/202510242353.hCaLzqVt-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510242353.hCaLzqVt-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+   kernel/bpf/helpers.c:1199:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long long ( *[usertype] callback_fn )( ... ) @@     got void [noderef] __rcu * @@
+   kernel/bpf/helpers.c:1199:21: sparse:     expected unsigned long long ( *[usertype] callback_fn )( ... )
+   kernel/bpf/helpers.c:1199:21: sparse:     got void [noderef] __rcu *
+   kernel/bpf/helpers.c:2480:18: sparse: sparse: symbol 'bpf_task_release_dtor' was not declared. Should it be static?
+   kernel/bpf/helpers.c:2510:18: sparse: sparse: symbol 'bpf_cgroup_release_dtor' was not declared. Should it be static?
+>> kernel/bpf/helpers.c:4260:18: sparse: sparse: symbol 'bpf_in_nmi_context' was not declared. Should it be static?
+   kernel/bpf/helpers.c:2976:18: sparse: sparse: context imbalance in 'bpf_rcu_read_lock' - wrong count at exit
+   kernel/bpf/helpers.c:2981:18: sparse: sparse: context imbalance in 'bpf_rcu_read_unlock' - unexpected unlock
+
+vim +/bpf_in_nmi_context +4260 kernel/bpf/helpers.c
+
+  4254	
+  4255	/**
+  4256	 * bpf_in_nmi_context - Check whether we are serving NMI
+  4257	 *
+  4258	 * Return: true if we are serving NMI
+  4259	 */
+> 4260	__bpf_kfunc bool bpf_in_nmi_context(void)
+  4261	{
+  4262		return in_nmi();
+  4263	}
+  4264	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
