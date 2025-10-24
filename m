@@ -1,126 +1,254 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2041D61BC
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 16:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC722332EA3
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 16:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761321740; cv=none; b=C0x9NUMMjbrmqP7huotSjmf9uSwKvSKurhdydyUsvREO7gOypNUxsIfFxbP2y+wAXf+vQq7/ysCT6i9h2oOHDa8gE4F8RTgiqtWenxRWMTsoB1qPVLt58O1ZQ7CmzBTQ8MEivzx7xfqFeCM73yczKl5ytize5djBpfj49LNSsPk=
+	t=1761322207; cv=none; b=jqQKudHhOkH3PWcvPSqCqhTX+2qSo6G0NBcbs6ECe17/+a/ng5sLj4webDkFJAfjlE+Qt+xOk+zo4BQg5yRfh0lKKRR9v+JLcMiwkCI6AqoacphFsIbNtq3QHbMIfLhIRvXz0lJC9hc2bP++iQRdlBkfvAaQOVm0dd853GHDD6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761321740; c=relaxed/simple;
-	bh=kz8737jx33Kz8tp/SyIDVxBRNflDp84kE5dHp/ycEQg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=cvEUqywWPVDtqnJG+isjfOm/k00Us5WZdrXusJtAaSs2F0w7VgJlv8yCIHLw9yBiCF9y+OL3Eiz9TB4CRQSSdhWKN2B1mtf0IzgdflwP384VIrgv2x55qRnKOcJj7sX2SFSIjgB5ZIdpzaPnMVyqXd4T5pwi/mkcBmlpLqES1X4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sTqbTBFN; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1761322207; c=relaxed/simple;
+	bh=7Ctj7U8/5C4UX61ox/HAuuPfBskF5Q9DSmh/7EoeFe4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=edvkq7oRh9kvPHPOHEA+20PbM99DTN6kLvkj+aTlV9wy2tIK93SKJDhCQ46Itg//chLpmZL5XXQ5jDpLWpSaYRM4SKtE5NZIc64G4/8OVG68cUftNjyxA90W+ODoiUkMYWmrLAUulWWI41SlrzkdH3vAr/KIyp+IWDiM148xX4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=VEHDXw+h; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sTqbTBFN"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-33baf262850so2185051a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 09:02:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="VEHDXw+h"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-78488cdc20aso28634517b3.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 09:10:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761321738; x=1761926538; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+        d=soleen.com; s=google; t=1761322205; x=1761927005; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=P1MKrGdWjc8E/Ebl4vfeAKzWc5S72Fxhrb9RaFQ7z64=;
-        b=sTqbTBFN393e5C3StI8G7zgDd9NSDlDoKAQMex/cNoevNpd/ke1ajBDzagoQMnPSqs
-         EjcK87xKmKiOEQ1xMV20E7AUwNvv6KT3ZWyut4qrhNhfZxHq4ACEqpFudvxFQOJeYkOE
-         7lhxeHNqIsGBhzaBDLF4ESkf6GsiXvlytFS9GGIyA1uTYVheTj4Q1snEwdpMWF7q0SqT
-         hsUDtBYoZZqoyDd2ByllpOu3B9aA57+TrZ9rwhzDvVWNpIwNunDouSFYxwZlBBWnEJAM
-         pvM5jD0XGVAcGvcE7KZdvlkUkViZuwT1FJ0emsX6qZfKfTUSdTMg2H7+o4y7q1QjvsQI
-         pzHA==
+        bh=2SbWqW9Qai+Lun71fJPV2ZvcU3Evl3TvbhEARlh+dkw=;
+        b=VEHDXw+h95jrzqb+ExCf0AKQIjbTt3kIghTdCoQVAqWa7ZVG47WZ1wKafk0fxJbkBp
+         DE8XdhmjYf+53q+hQLFBFkzTy/f7VdsX2b8JgcrsHlTavQZZWMyXiBl4BcEeXD+2Ke0F
+         H5OKuQ49+RL8ahG+kvxvJYUm2J6Guw1cLldFLHkbmsB6ijQw8aUfp7BwsZ5D3kxNlpqT
+         3TsIzVCrbE4rq9xyxAB+PrEGy3stCbE9ONaiQkQgXiBu03TV/IIs3nmd5tTegDWyiMno
+         3zv5WFj8NEOrypTtDLPJq8zFH61VzGEjdPWV5S0dhT0gczHSF+1jY42Xfm2QWRkIpD0f
+         d2Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761321738; x=1761926538;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=P1MKrGdWjc8E/Ebl4vfeAKzWc5S72Fxhrb9RaFQ7z64=;
-        b=ogTr+gb3uGHOPhX2KS2+C1UiigeQC14pYCec41uHySgIqygNIRfmTUO1QaeKGcAJn8
-         CWF7tZXV7DIcZvEo4QDWgHmve/61tAw3a2Ftp1JNlpHHeBPfOdK/L7y3ciC0Yk8FRKuA
-         G+5vYdW1gmGbbOJNrAEzSEVeRwFOPRKoEmJB5Kb0Sw8+JfyGeaxZEcuTspg6I6mGKgl4
-         xe6qLRRJ+k9yVqEOdir8hLMN+mERQ/M0OIj6MljfOcY8XOjWB2NH9hyOH3TdJTD9MfY/
-         jbSXehHKwkBJveW35H80VK+aRYpsNvuHCAKvJgNTrFRPu5SNTqK0Evj4nu5LYu+OpI+d
-         nBrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUuBMTQMYOcAEguHXnhj5nCPDErtrsW2qMVvxWaRxqDaMzcWfWoP+WcjQ0JtYtcTbdOlf5qu05dpGH6M40uUV0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1G9D1pyrcNR7yJU24TwNpMU0gEsfoeTRuOl+x+pavgDDaeNrc
-	emPnyVplB0flzUHfgbPRXDA5gkMhxsZQBA3xDQ//GHOUuPX5TZFuKAIy7et1OBPIvyU0fDOcuxc
-	wOTTuAA==
-X-Google-Smtp-Source: AGHT+IEPJrBEzf9AFsnuAfARW2fQ8J+uVH9VRs0BFow9LMUVTh88VT5tvwRbbVcv0vCZSy2S66pTwnqydR4=
-X-Received: from pjbrt12.prod.google.com ([2002:a17:90b:508c:b0:33b:bb95:de6])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4c0b:b0:32e:d599:1f66
- with SMTP id 98e67ed59e1d1-33bcf8fbaa0mr32076128a91.30.1761321737475; Fri, 24
- Oct 2025 09:02:17 -0700 (PDT)
-Date: Fri, 24 Oct 2025 09:01:43 -0700
-In-Reply-To: <CAAhR5DGcz-2=a6Q2zZS_eP2ZjNNPs65jNG+K50tdVAQfC6AbbA@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1761322205; x=1761927005;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2SbWqW9Qai+Lun71fJPV2ZvcU3Evl3TvbhEARlh+dkw=;
+        b=ibzA0kuq2nXHyVQ2+iK/PmBebVAXrHrOp6Xs8T0d85RviWMxCegzpCaVMAeGVuuKln
+         QDFG+AfG+7OPn1rbDDSzW+amoJAqZ8ufR6jUFjwNw/1XlH2S+Oqg99/yE36mYAYOF7CK
+         wf962TrwfOLMBfMg0F1T/PjTaLsqA0INU/F9sugPH+wzEWWVmZqKYWEEjlNrA6mtHiGE
+         e4MYP1Wv/k0/3e6uCp8TGOqFwFQGYMcO0/evVDHLOdwOqGmUVtieygRIv0wBXFZQb75t
+         g31NhAA2BhLOkYkZGgZfCUU+NlvAlBaLiUjiOWeUo2oTfHNFmv5FV+uqDVZVsU4MzFgT
+         VBUw==
+X-Forwarded-Encrypted: i=1; AJvYcCV60LI/Wd2je1tdofoQl0sJBfzc3MQh/xSKBSP7qzOhcVGNajJv6eNWd9X1nNxul9GsaliQ5sbgg4dztOAx5h8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLezbo6a19JdcVKjfxG/OCmWd2bFgRkBhYy/YBkICCfuurnwvk
+	vwg7Ru22LwyBjzYDr2zcBQRbpXKP8LB4IAoF8WzFLgaO73PeOCQ1d2LXjraIbUIJvoI=
+X-Gm-Gg: ASbGncvyBHdwmTrWIeOBFC2Ik9iF3cTaxXRW9KDiwhsDNgPXTM6SmZhTsfEoVwLW2a6
+	uWK535wC70+Xl7FeE1sgTb43tkUpXNyQtn5KoGkvH5TnEhlwFeIutZaq7rlmIH7wB8IZHcx+rBo
+	9z6joxabo1IAPJLwFJBwZWqTn1SPT0JN47QsCgRmrvTfqogOUdG1cZGLen/PCRatk0Ql567rhzt
+	5N47f3hhBXMhmdwe2jE27FVCid3rjbERN0tSKxPz4MJykWcqGzga5YqdMotz9mPqrBflXiTJuCN
+	ouvhGt7ZcV8TRihLd4KYuZdm1GX7/D1BV93m2mQDm16pjiQIFXyugoDuM8RirfsI/dcVkBwBkt2
+	sUQRZRrq47NiSIYFpmIK0qilytH/vjnyAAAuU/u3yt14off7FihYR7v6lxm24uhecW+VfHd7+JB
+	cuQGqS6tcCt1845N4M3W6gyputgl2xkQWK9G/pDj6I/Fm/nH6Zdu/REb+9wtr2Gra7fSXisUBdM
+	gwZPnPTVpDiiiVQSUOic9nsoFf3DVsLEg==
+X-Google-Smtp-Source: AGHT+IHZAItAvq+Ap/Z72KhPLfQ8TowTJ5+sfBUaR7iDrNtO0b+4ThX0ZIHOf9SDvkQBFhT4ShLEEg==
+X-Received: by 2002:a05:690c:22c6:b0:784:8286:fde3 with SMTP id 00721157ae682-78482870f7emr209860417b3.42.1761322204728;
+        Fri, 24 Oct 2025 09:10:04 -0700 (PDT)
+Received: from soleen.us-east4-b.c.cloudtop-prod-us-east.internal (53.47.86.34.bc.googleusercontent.com. [34.86.47.53])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-785cd6edd87sm14099197b3.51.2025.10.24.09.10.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Oct 2025 09:10:04 -0700 (PDT)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: akpm@linux-foundation.org,
+	brauner@kernel.org,
+	corbet@lwn.net,
+	graf@amazon.com,
+	jgg@ziepe.ca,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	masahiroy@kernel.org,
+	ojeda@kernel.org,
+	pasha.tatashin@soleen.com,
+	pratyush@kernel.org,
+	rdunlap@infradead.org,
+	rppt@kernel.org,
+	tj@kernel.org
+Subject: [PATCH v8 1/8] kho: allow to drive kho from within kernel
+Date: Fri, 24 Oct 2025 12:09:55 -0400
+Message-ID: <20251024161002.747372-2-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.51.1.821.gb6fe4d2222-goog
+In-Reply-To: <20251024161002.747372-1-pasha.tatashin@soleen.com>
+References: <20251024161002.747372-1-pasha.tatashin@soleen.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250925172851.606193-1-sagis@google.com> <20250925172851.606193-14-sagis@google.com>
- <68efcb7ee33e5_cab031002e@iweiny-mobl.notmuch> <CAAhR5DGcz-2=a6Q2zZS_eP2ZjNNPs65jNG+K50tdVAQfC6AbbA@mail.gmail.com>
-Message-ID: <aPui50JMEcuIl7-8@google.com>
-Subject: Re: [PATCH v11 13/21] KVM: selftests: Add helpers to init TDX memory
- and finalize VM
-From: Sean Christopherson <seanjc@google.com>
-To: Sagi Shahar <sagis@google.com>
-Cc: Ira Weiny <ira.weiny@intel.com>, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Erdem Aktas <erdemaktas@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
-	Oliver Upton <oliver.upton@linux.dev>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Chao Gao <chao.gao@intel.com>, 
-	Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 23, 2025, Sagi Shahar wrote:
-> On Wed, Oct 15, 2025 at 11:25=E2=80=AFAM Ira Weiny <ira.weiny@intel.com> =
-wrote:
-> >
-> > Sagi Shahar wrote:
-> > > From: Ackerley Tng <ackerleytng@google.com>
-> > >
-> >
-> > [snip]
-> >
-> > > diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/too=
-ls/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> > > index 2551b3eac8f8..53cfadeff8de 100644
-> > > --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> > > +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> > > @@ -270,3 +270,61 @@ void vm_tdx_init_vm(struct kvm_vm *vm, uint64_t =
-attributes)
-> > >
-> > >       free(init_vm);
-> > >  }
-> > > +
-> >
-> > [snip]
-> >
-> > > +
-> > > +void vm_tdx_finalize(struct kvm_vm *vm)
-> >
-> > Why is this not a new kvm_arch_vm_finalize_vcpu() call?
->=20
-> What do you mean?
+Allow kernel to drive finalize and abort without requiring triggers
+from the userspace.
 
-Ira is pointing out that upstream now has kvm_arch_vm_finalize_vcpus(), so =
-you
-can (and I agree, should) implement that for x86.c, and do vm_tdx_finalize(=
-) from
-there (based on the VM shape) instead of requiring the caller to manually f=
-inalize
-the TD.
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+---
+ include/linux/kexec_handover.h | 15 +++++++
+ kernel/kexec_handover.c        | 75 +++++++++++++++++++++-------------
+ 2 files changed, 61 insertions(+), 29 deletions(-)
 
-Unlike SEV, where userspace can manipulate guest state prior to LAUNCH, TDX=
- guest
-state is unreachable from time zero, i.e. there is unlikely to be many (any=
-?) use
-cases where a selftest wants to do something between creating vCPUs and fin=
-alizing
-the TD.
+diff --git a/include/linux/kexec_handover.h b/include/linux/kexec_handover.h
+index 25042c1d8d54..04d0108db98e 100644
+--- a/include/linux/kexec_handover.h
++++ b/include/linux/kexec_handover.h
+@@ -67,6 +67,10 @@ void kho_memory_init(void);
+ 
+ void kho_populate(phys_addr_t fdt_phys, u64 fdt_len, phys_addr_t scratch_phys,
+ 		  u64 scratch_len);
++
++int kho_finalize(void);
++int kho_abort(void);
++
+ #else
+ static inline bool kho_is_enabled(void)
+ {
+@@ -139,6 +143,17 @@ static inline void kho_populate(phys_addr_t fdt_phys, u64 fdt_len,
+ 				phys_addr_t scratch_phys, u64 scratch_len)
+ {
+ }
++
++static inline int kho_finalize(void)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline int kho_abort(void)
++{
++	return -EOPNOTSUPP;
++}
++
+ #endif /* CONFIG_KEXEC_HANDOVER */
+ 
+ #endif /* LINUX_KEXEC_HANDOVER_H */
+diff --git a/kernel/kexec_handover.c b/kernel/kexec_handover.c
+index de4466b47455..6458f369a346 100644
+--- a/kernel/kexec_handover.c
++++ b/kernel/kexec_handover.c
+@@ -1087,7 +1087,7 @@ static int kho_out_update_debugfs_fdt(void)
+ 	return err;
+ }
+ 
+-static int kho_abort(void)
++static int __kho_abort(void)
+ {
+ 	int err;
+ 	unsigned long order;
+@@ -1120,7 +1120,27 @@ static int kho_abort(void)
+ 	return err;
+ }
+ 
+-static int kho_finalize(void)
++int kho_abort(void)
++{
++	int ret = 0;
++
++	if (!kho_enable)
++		return -EOPNOTSUPP;
++
++	guard(mutex)(&kho_out.lock);
++	if (!kho_out.finalized)
++		return -ENOENT;
++
++	ret = __kho_abort();
++	if (ret)
++		return ret;
++
++	kho_out.finalized = false;
++
++	return kho_out_update_debugfs_fdt();
++}
++
++static int __kho_finalize(void)
+ {
+ 	int err = 0;
+ 	u64 *preserved_mem_map;
+@@ -1163,12 +1183,32 @@ static int kho_finalize(void)
+ abort:
+ 	if (err) {
+ 		pr_err("Failed to convert KHO state tree: %d\n", err);
+-		kho_abort();
++		__kho_abort();
+ 	}
+ 
+ 	return err;
+ }
+ 
++int kho_finalize(void)
++{
++	int ret;
++
++	if (!kho_enable)
++		return -EOPNOTSUPP;
++
++	guard(mutex)(&kho_out.lock);
++	if (kho_out.finalized)
++		return -EEXIST;
++
++	ret = __kho_finalize();
++	if (ret)
++		return ret;
++
++	kho_out.finalized = true;
++
++	return kho_out_update_debugfs_fdt();
++}
++
+ static int kho_out_finalize_get(void *data, u64 *val)
+ {
+ 	mutex_lock(&kho_out.lock);
+@@ -1178,35 +1218,12 @@ static int kho_out_finalize_get(void *data, u64 *val)
+ 	return 0;
+ }
+ 
+-static int kho_out_finalize_set(void *data, u64 _val)
++static int kho_out_finalize_set(void *data, u64 val)
+ {
+-	int ret = 0;
+-	bool val = !!_val;
+-
+-	mutex_lock(&kho_out.lock);
+-
+-	if (val == kho_out.finalized) {
+-		if (kho_out.finalized)
+-			ret = -EEXIST;
+-		else
+-			ret = -ENOENT;
+-		goto unlock;
+-	}
+-
+ 	if (val)
+-		ret = kho_finalize();
++		return kho_finalize();
+ 	else
+-		ret = kho_abort();
+-
+-	if (ret)
+-		goto unlock;
+-
+-	kho_out.finalized = val;
+-	ret = kho_out_update_debugfs_fdt();
+-
+-unlock:
+-	mutex_unlock(&kho_out.lock);
+-	return ret;
++		return kho_abort();
+ }
+ 
+ DEFINE_DEBUGFS_ATTRIBUTE(fops_kho_out_finalize, kho_out_finalize_get,
+-- 
+2.51.1.821.gb6fe4d2222-goog
+
