@@ -1,79 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F4F199E94;
-	Sun, 26 Oct 2025 16:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBE4207A22
+	for <linux-kselftest@vger.kernel.org>; Sun, 26 Oct 2025 16:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761496373; cv=none; b=mAPWNyNKZ0xdLXLFmIXhJQCKs+13nkrPJsNbC9FaWYs17dmhYpv44jgtePPDMCvVn/9lwwzTIKB+bRqGhYtO68wgzR75cZWrRvhcZgyTmd3Vyinf6KYCvx7Baa3Yx6raKBFSTbRDM2CZ62CT2y/9hJrntv8sx/+gTEqitUdSpdA=
+	t=1761496731; cv=none; b=oANUYbEGvwbUuJkFP03nTss/ychIBb7twRF8aDQVudHKZCzHDs+MPSpJhrgTo5Lj7ySePnlWajxuOgu7VgLdFGi2CoiT7ygz0Otq8GaiQkRRF/ag67FUNCETvTpvsnRzNAY27SoJ9tF0cEZ1Tu4FTVDR6CQOuMdNyGAGahkpJ4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761496373; c=relaxed/simple;
-	bh=TLoSRzFkmVrwgpjKLeey5fVAXkXkjkmPb8voffDY+HI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ONoMZAfjAkCJzfXx88Nz5VgXS2AWPCua1EOqBv7BCvnlSM4RYM55TQIS8gt5z0R8ekQ6Rc7OVimIECZbhRt7HMmn8AhMS1t0py0iLOcNfX0FfbPygJc7EN8yippTHCJheGLzO+1vIQGIBLvNokLZedrjzS0MWh++uE8Bn03mE+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FReRi25K; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761496731; c=relaxed/simple;
+	bh=DEw7ZOeAhejnvjJ1BDBFz3PfQdtqnj7GFeIhTc3OuG0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EeSts5ONfMRcLq9FajBqPKrZmqB5rLQINqE5jkLEgeReIQkeAOTKPIWwQH4smz9n28ilS1YeO1WOp3mHBdMFan6RhlHUKKs5EOJjdsx/Xqtg/gu/dxigkq5qjgzRw9pNdyJETTY2sDpQrB2gEhR2iPpjLqzai9dQcrPGrTFMLV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LzSQOpsJ; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FReRi25K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B99F3C4CEE7;
-	Sun, 26 Oct 2025 16:32:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761496373;
-	bh=TLoSRzFkmVrwgpjKLeey5fVAXkXkjkmPb8voffDY+HI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FReRi25K/f+KSaosgYM1ay6UWpxX7lF5Eq8dVT8Mm1vZxatuQeSSSKe46o2h4C5P8
-	 kvWdFVgRG/3MRT47JjoBJGaVd8hyr81OlcauaNfdu4oA2j9sFcQq7iaD6b7lRNrM4C
-	 h7213YEZiH2wch9bQQcTzN2Ulx2wWpcaSLxmA88IYW76wGzBCS59YnuiyXyPLszMdz
-	 53Zl2pgwsiHxbX7F3bLrgImltnHnZsqo9b+afYNwa6cH2oGtQm83Mgyl9vP4eHAqyC
-	 6vuxdaNLuO3tV1AOgi+zrJIrtX9WiNvsSCd9tk6HMpdIlwhBh27Jgd4oppcInZfMnz
-	 Smi3cPsUAKppA==
-Date: Sun, 26 Oct 2025 18:32:44 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
-	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	masahiroy@kernel.org, ojeda@kernel.org, pratyush@kernel.org,
-	rdunlap@infradead.org, tj@kernel.org
-Subject: Re: [PATCH v8 7/8] liveupdate: kho: move kho debugfs directory to
- liveupdate
-Message-ID: <aP5NLJoSfKTVnsQV@kernel.org>
-References: <20251024161002.747372-1-pasha.tatashin@soleen.com>
- <20251024161002.747372-8-pasha.tatashin@soleen.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LzSQOpsJ"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761496727;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HFoJR/u0IaB/0PpKtMKlYiR9B8oxdFtp8dSKC4xgXkY=;
+	b=LzSQOpsJHn6rFsK+TfZWJOs4aaD/pVMhAHOY7TtByt2X/ef4VXy8Ycy/E2zHUZLDkEmcth
+	wvzNb6T5mXqUyzqvrZAI6tPdjcqa09KbyDEoCvvcfZ07nZ0VqFzqa9i8GCrHdcepqmHzCg
+	A77mM81A8q33C3GBRRAa0e/EGqhNbbI=
+From: KaFai Wan <kafai.wan@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	paul.chaignon@gmail.com,
+	m.shachnai@gmail.com,
+	memxor@gmail.com,
+	harishankar.vishwanathan@gmail.com,
+	colin.i.king@gmail.com,
+	kafai.wan@linux.dev,
+	luis.gerhorst@fau.de,
+	shung-hsi.yu@suse.com,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: syzbot+c950cc277150935cc0b5@syzkaller.appspotmail.com
+Subject: [PATCH bpf-next 1/2] bpf: Fix tnum_overlap to check for zero mask first
+Date: Mon, 27 Oct 2025 00:38:05 +0800
+Message-ID: <20251026163806.3300636-2-kafai.wan@linux.dev>
+In-Reply-To: <20251026163806.3300636-1-kafai.wan@linux.dev>
+References: <20251026163806.3300636-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251024161002.747372-8-pasha.tatashin@soleen.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Oct 24, 2025 at 12:10:01PM -0400, Pasha Tatashin wrote:
-> Now, that LUO and KHO both live under kernel/liveupdate, it makes
+Syzbot reported a kernel warning due to a range invariant violation in
+the BPF verifier. The issue occurs when tnum_overlap() fails to detect
+that two tnums don't have any overlapping bits.
 
-And they still don't :/
+The problematic BPF program:
+   0: call bpf_get_prandom_u32
+   1: r6 = r0
+   2: r6 &= 0xFFFFFFFFFFFFFFF0
+   3: r7 = r0
+   4: r7 &= 0x07
+   5: r7 -= 0xFF
+   6: if r6 == r7 goto <exit>
 
-> sense to also move the kho debugfs files to liveupdate/ in order to
-> keep current and upcoming LUO/KHO features organized.
-> 
-> The old names:
-> /sys/kernel/debug/kho/out/
-> /sys/kernel/debug/kho/in/
-> 
-> The new names:
-> /sys/kernel/debug/liveupdate/kho_out/
-> /sys/kernel/debug/liveupdate/kho_in/
-> 
-> Also, export the liveupdate_debufs_root, so future LUO selftests,
-> kexec telemtry, and other users could use it as well.
+After instruction 5, R7 has the range:
+   R7: u64=[0xffffffffffffff01, 0xffffffffffffff08] var_off=(0xffffffffffffff00; 0xf)
 
-No, this is backwards. If anything it will be kho_debugfs_root.
-But I don't see why we can't have /sys/kernel/debug/liveupdate alongside
-/sys/kernel/debug/kho.
+R6 and R7 don't overlap since they have no agreeing bits. However,
+is_branch_taken() fails to recognize this, causing the verifier to
+refine register bounds and end up with inconsistent bounds:
+
+   6: if r6 == r7 goto <exit>
+   R6: u64=[0xffffffffffffff01, 0xffffffffffffff00] var_off=(0xffffffffffffff00, 0x0)
+   R7: u64=[0xffffffffffffff01, 0xffffffffffffff00] var_off=(0xffffffffffffff00, 0x0)
+
+The root cause is that tnum_overlap() doesn't properly handle the case
+where the masks have no overlapping bits.
+
+Fix this by adding an early check for zero mask intersection in tnum_overlap().
+
+Reported-by: syzbot+c950cc277150935cc0b5@syzkaller.appspotmail.com
+Fixes: f41345f47fb2 ("bpf: Use tnums for JEQ/JNE is_branch_taken logic")
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+---
+ kernel/bpf/tnum.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/kernel/bpf/tnum.c b/kernel/bpf/tnum.c
+index f8e70e9c3998..af2f38b4f840 100644
+--- a/kernel/bpf/tnum.c
++++ b/kernel/bpf/tnum.c
+@@ -163,6 +163,8 @@ bool tnum_overlap(struct tnum a, struct tnum b)
+ {
+ 	u64 mu;
  
-@Andrew, please drop this patch for now.
-
++	if ((a.mask & b.mask) == 0)
++		return false;
+ 	mu = ~a.mask & ~b.mask;
+ 	return (a.value & mu) == (b.value & mu);
+ }
 -- 
-Sincerely yours,
-Mike.
+2.43.0
+
