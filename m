@@ -1,131 +1,161 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F2C329C7E
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 12:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8BA32D0CE;
+	Tue, 28 Oct 2025 12:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761653049; cv=none; b=kwtK7dXmygA85RatgUL+ow1GopRnkr97UjAYbL482v7OHKdXtt9DfTqMbbzr9jsVujfVk85pwTBXGc4cq5ApsUSZxbBe5hzg0luOoHFvxLlv7/po4pqvbNSIIjTBHfiTAYGx25cIhp6rkPPAxWivU1omZuFKmzFdobmfdl1SVBM=
+	t=1761656261; cv=none; b=pfo8LsqpI5PyRThojGPJP60Wc+yXo/vGbeBEa/K98WktoMFYsh5UK/88zJyx1iRcTYDb7aqdLj22nZcbeITjnWSe6ci/cGdywLUhLQllbw0a+jbeUzbxsrvIYSIBk06XtTyDkHAiZ4bZYe743jn3BqIDJX8oe89Me/H45DZhmvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761653049; c=relaxed/simple;
-	bh=WskojuOBnwIjjigUBWEDMhf7Assmbp3QvliKc3R2txY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hOrIScd5DOJo00/I7ouqmK/vtCCEKV6cxEkqHzk5jnO66XjurqAXphfV9lgDRm0p2HFTzI407Ap799Dbn9t+k5UK5pw5JdL+8e2W8o2GMSPy92sauW8OC6pQOjRnjsWokkxavFgKbGgvkvYHdnJ5zkY08142LlgD67cPIZgNHrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iKRHWTXY; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1761656261; c=relaxed/simple;
+	bh=gsmcNbNURitO6q56ccvvEmt+1Z4kuwmFkP4C51xT8uM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Iovgt9BWX+0gWpw1quGKRmHMf0KEjRV9Mrc/vZc0L1IL1fJHoknrENsVZpxYo6MJaCl5KBldUMSoT1qWOq/F9FUMluvRtNtazvy7vyhowSQQElkPlDabntrtJsuIFoNMcvvx+84tnGvBq/QO25hnT2w5Ho9AfYuvWSfzfAaDtag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=hD0BYqaB; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iKRHWTXY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761653046;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5xM3wpdALZDN/yyL3dIoanvrY9zgAvQNamISjAjH9Xc=;
-	b=iKRHWTXYRpHQZ27rlx7kGAwC2yo4XM2TpZMwucl0zC+hcG19lq94AlUPg0Vults/8Nn4R1
-	OvLhgzBT5Oc96e2HtXq0vWlECA8eDc60J/WmvNEeosRJGMQHEbOXET7NUa8hUpR5QNenC9
-	VUm/5wY0H96ee+N1SHdSMMMcyKVpepk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-292-hrlhAVh8PNG0KFrDMX4iOg-1; Tue, 28 Oct 2025 08:04:04 -0400
-X-MC-Unique: hrlhAVh8PNG0KFrDMX4iOg-1
-X-Mimecast-MFC-AGG-ID: hrlhAVh8PNG0KFrDMX4iOg_1761653043
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-47496b3c1dcso44549425e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 05:04:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761653042; x=1762257842;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5xM3wpdALZDN/yyL3dIoanvrY9zgAvQNamISjAjH9Xc=;
-        b=Bc+TnRcZeLQs/38LyQNUqI9TOwVwjeIBF2+TIpi6cpYUVT1qF2d+s2ve0+MQqSwulV
-         K9WRfGF3LlJ8PclWX9jLxYx4M6XDqNJ9WnfEWHOmmY+Kc/0zrTjeyXLBV1qvKvRm6ibk
-         WRE8dPPQm/zUKZB3/Ms/FPbiim2eV7J7gARYa//4mMQ22WGATICnoXEtHgs3CIWv6qhg
-         9oCGJCYkItYMYjx62LGGUAozoNLL30pQz57jliJS5lPlaKL3dIMUO+Moaa5IuEu1HqAQ
-         Y+s71zxNyT3pDbW7c7bryY3+gzNX7U50yWKquR+9gJF0gF5d0c2OFfqZetexWzXvbRsw
-         jxPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZiSVpBPFai31AVoW2EOXvnI4TLIZg4SmB4ji6DKondNBpS1LcyWmzd+gUD/oXop4Pf2jZhYz1ah4WTWNVnjU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy02bd0vBPiext6shiBmknRALxZJ7AG0yUnqjbUo9RPy2mn+L31
-	7DqSRKSIcj23CF2K3bIzSWX5I+Fppgx3gOq8+bFp24mUon09s1U2bawKR4jwx+zeWJlRTYGee4j
-	viMZzTjFwlwmlhiZ1ZoiT1/ZDujgbQ1XcCVkS4xrtMdlLAzsxPfNxAvsQIvOFkClyGSzhEg==
-X-Gm-Gg: ASbGnctw4FNKaBAkbLYE57C310zD8ncwInTzknM3H7WDAUZpiPrAFa5OAmvLHYkDneD
-	gLJGTNBdVSylFxk0Vsljuwsp/0ju0gLUas6r43azNq9NUJDJVOAI6JWJZLdnR4fRuH1Q9lDkGKY
-	tAeX+gU+aeLoaJV33z+MnlVv4jM0WXLK1jL96bnolswOJk3SATKTgkmQDKtBb38ax7ZY2ph6RhA
-	wwHhU4O4MPeOBZ4trKbwuWGq6agEniD5Y0+P6ElXlvWOrUfjcxLOjnjXc8a1kOjN7HFTUcKPec3
-	NlP7vFCGYm5grbQkgUbq82Hdf+T/U04CSrx1/3/Q6EVgop683SOTCtPddhGLXBGwVD/o2bZMfIy
-	3Y9IJ/Zkem/KW/2f+LQFxxgVEQ1KYu/z+0jeDtjN+zHouq3E=
-X-Received: by 2002:a05:600c:45d1:b0:46f:c55a:5a8d with SMTP id 5b1f17b1804b1-47717df9d11mr30659375e9.4.1761653042570;
-        Tue, 28 Oct 2025 05:04:02 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF6BMjF+yCSS1WwGmhw2kl9y9f0ddjV6c/A0RrHdROCvFXSSyoxTUbY0rSmrFqSolRY/cH10g==
-X-Received: by 2002:a05:600c:45d1:b0:46f:c55a:5a8d with SMTP id 5b1f17b1804b1-47717df9d11mr30658905e9.4.1761653042071;
-        Tue, 28 Oct 2025 05:04:02 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475dd035dc2sm196120995e9.5.2025.10.28.05.03.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Oct 2025 05:04:01 -0700 (PDT)
-Message-ID: <c5021188-593c-431c-bf01-6775f5b2b2ed@redhat.com>
-Date: Tue, 28 Oct 2025 13:03:58 +0100
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="hD0BYqaB"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59SBDkSA000814;
+	Tue, 28 Oct 2025 12:57:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=mb/y7
+	FEzNycOvYSrVsJVWjpIYgTXGaDeMrsO3utUP3M=; b=hD0BYqaB77LyEYRQLIeYF
+	w0fW88Pi0yMkSZ38VcW5LMBoDV2P+sdPbQcWwFKWMKFfAndF/78GOBq8/KIXYzSV
+	gTASHyZNf+XUogIIis4q6OTvGSlPM/at24vCaFxtAqhGDUKJgXbVo9Xz24iIyIuI
+	AmbcezzuqjYmh6ufRfBiAl6NQq7jONGPcICDnXUGWty0SBkETGOtbWD3DgmT45sR
+	l88KCgQ2Xx9zzI2BLCmTMPlp2EhFyCgZVrvAm5TYF2ianjLHyFOkzvOHVszfWmmi
+	dDhACaGh1WZkPIZApC6rxHv8MSZ18q30ou7ZCnq3NOjbEuvZX+/oIJL6Q8IlCbC4
+	Q==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a22x6ucyv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Oct 2025 12:57:17 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 59SAjHie009317;
+	Tue, 28 Oct 2025 12:57:16 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4a0n0fcxbe-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Oct 2025 12:57:16 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 59SCvCUu017359;
+	Tue, 28 Oct 2025 12:57:15 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4a0n0fcx93-2;
+	Tue, 28 Oct 2025 12:57:15 +0000
+From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To: bpf@vger.kernel.org
+Cc: alan.maguire@oracle.com,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [RFC bpf-next 1/2] bpftool: Print map ID upon creation and support JSON output
+Date: Tue, 28 Oct 2025 05:57:02 -0700
+Message-ID: <20251028125705.3586552-2-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20251028125705.3586552-1-harshit.m.mogalapalli@oracle.com>
+References: <20251028125705.3586552-1-harshit.m.mogalapalli@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 2/3] bpf,sockmap: disallow MPTCP sockets from
- sockmap
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, mptcp@lists.linux.dev
-Cc: stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
- John Fastabend <john.fastabend@gmail.com>, Eric Dumazet
- <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>,
- Willem de Bruijn <willemb@google.com>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Matthieu Baerts <matttbe@kernel.org>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20251023125450.105859-1-jiayuan.chen@linux.dev>
- <20251023125450.105859-3-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20251023125450.105859-3-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-28_04,2025-10-22_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ adultscore=0 phishscore=0 suspectscore=0 bulkscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2510020000 definitions=main-2510280108
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDI3MDA1MiBTYWx0ZWRfX95N11HEns04B
+ 6NodjEh95VpK1iGQtPc3zVFacGMl7PVwZd2hoBnhymrqnTXU5RHhdLLuYcU019SZhrwMdzNN/x5
+ MBJTvAaDOvs2uoVFtAJJTwl42dowXFF9K0KRcGaXqAOnvIXXzWXqYJXbWMINP+st8fvm0IfrUSc
+ DGv/PDwVXgZMCzD/9Gk4P+NSyQau9t5cofMOZWPCtp7hFERdE6PFD/fo5/697wbgpSYmkhJj/0S
+ 82oCzacXXvep04bsHSEXQad2P3S6e55IxRlUAJ0NPohP+SQ07wMe1iIQXmBCSq5dbh+MED2TVeR
+ rH9JZvsyRczvAt5PzarOhcON4PqVKrexB5kS+4TdvQCBpDBNTcMNfecA9fyQXvJhlk0aLqs03lQ
+ WZQWRs4NLYNKoLCWtmyRNxbRc5Zjf0fSmfORM5IQoSdD3+ZRkpo=
+X-Proofpoint-GUID: CYzt4iSB5hcuy8UoTZtI9zKVjbTQXwXq
+X-Proofpoint-ORIG-GUID: CYzt4iSB5hcuy8UoTZtI9zKVjbTQXwXq
+X-Authority-Analysis: v=2.4 cv=dbiNHHXe c=1 sm=1 tr=0 ts=6900bdad b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=NEAV23lmAAAA:8 a=yPCof4ZbAAAA:8
+ a=Al0WAx8ni899RPj6ES4A:9 cc=ntf awl=host:12123
 
-On 10/23/25 2:54 PM, Jiayuan Chen wrote:
-> MPTCP creates subflows for data transmission, and these sockets should not
-> be added to sockmap because MPTCP sets specialized data_ready handlers
-> that would be overridden by sockmap.
-> 
-> Additionally, for the parent socket of MPTCP subflows (plain TCP socket),
-> MPTCP sk requires specific protocol handling that conflicts with sockmap's
-> operation(mptcp_prot).
-> 
-> This patch adds proper checks to reject MPTCP subflows and their parent
-> sockets from being added to sockmap, while preserving compatibility with
-> reuseport functionality for listening MPTCP sockets.
+It is useful to print map ID on successful creation.
 
-It's unclear to me why that is safe. sockmap is going to change the
-listener msk proto ops.
+JSON case:
+$ ./bpftool -j map create /sys/fs/bpf/test_map4 type hash key 4 value 8 entries 128 name map4
+{"id":12}
 
-The listener could disconnect and create an egress connection, still
-using the wrong ops.
+Generic case:
+$ ./bpftool  map create /sys/fs/bpf/test_map5 type hash key 4 value 8 entries 128 name map5
+Map successfully created with ID: 15
 
-I think sockmap should always be prevented for mptcp socket, or at least
-a solid explanation of why such exception is safe should be included in
-the commit message.
+Bpftool Issue: https://github.com/libbpf/bpftool/issues/121
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+ tools/bpf/bpftool/map.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-Note that the first option allows for solving the issue entirely in the
-mptcp code, setting dummy/noop psock_update_sk_prot for mptcp sockets
-and mptcp subflows.
-
-/P
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index c9de44a45778..b6580f25361d 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -1251,6 +1251,8 @@ static int do_create(int argc, char **argv)
+ 	LIBBPF_OPTS(bpf_map_create_opts, attr);
+ 	enum bpf_map_type map_type = BPF_MAP_TYPE_UNSPEC;
+ 	__u32 key_size = 0, value_size = 0, max_entries = 0;
++	struct bpf_map_info map_info = {};
++	__u32 map_info_len = sizeof(map_info);
+ 	const char *map_name = NULL;
+ 	const char *pinfile;
+ 	int err = -1, fd;
+@@ -1353,13 +1355,27 @@ static int do_create(int argc, char **argv)
+ 	}
+ 
+ 	err = do_pin_fd(fd, pinfile);
+-	close(fd);
+-	if (err)
++	if (err) {
++		close(fd);
+ 		goto exit;
++	}
+ 
+-	if (json_output)
+-		jsonw_null(json_wtr);
++	err = bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
++	if (err) {
++		p_err("Failed to fetch map info: %s\n", strerror(errno));
++		close(fd);
++		goto exit;
++	}
+ 
++	close(fd);
++
++	if (json_output) {
++		jsonw_start_object(json_wtr);
++		jsonw_int_field(json_wtr, "id", map_info.id);
++		jsonw_end_object(json_wtr);
++	} else {
++		printf("Map successfully created with ID: %u\n", map_info.id);
++	}
+ exit:
+ 	if (attr.inner_map_fd > 0)
+ 		close(attr.inner_map_fd);
+-- 
+2.50.1
 
