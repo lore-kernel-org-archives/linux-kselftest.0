@@ -1,125 +1,118 @@
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4594530E82B
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 15:20:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CCB325710
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 15:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761751247; cv=none; b=XuGKb6gGFbmIxN99/etp3uz5rG02j79lfQBzfg5wrgwlU4uc3nd2JguaUu/Rw/YsbayD9zjvE/azXNtoFGtnr1YJ6a/bh0viT4wtCJf+AYpkepkgoX0kwfhA/deFAQjA07Nn5FLF03WfqAqJOWltLNZhDLJOpLTHUNKhc+gGwI0=
+	t=1761751429; cv=none; b=TMU2Q6jv28epoehc61QlijH1zvuXqkkg9rAiqcyFXc25SA83P84xWqS7Hj+zrvzeOaiZUJDl0T0ZBkumQxQTFU5MbqsdA4uDC100YQGRICM+x8Y6/Dxk0gYywR0K2Ooauoa1PA9VaAO+bqRyWwXRXf9YyCYuTg9Qn/DOA5iVrv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761751247; c=relaxed/simple;
-	bh=HtJoUupx6d/yAjUM+7GHFEp8E2bMSioh2TQ2z1eUvkg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uo3QTpNuxR6MvVgjjp3HwydUcfjHR2kN3z5ZwjbIiKMEbqSwkkAreqcEW8X6LAzbpWvrxKMnG/aj9iWABhnAdlROm03GurcsDwBWCEPpiBmZqmJLgF/DqSgkS39yr55UYP3oNwY8uImTH5dcAk+VYg0q26TeEj/iwZ4J0kjj0oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YO8wlahf; arc=none smtp.client-ip=209.85.214.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761751429; c=relaxed/simple;
+	bh=GnnlHMFRbVrpcnyBkNDcSZjt6llB0RXl0xQOlvsDe5c=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=EYaw2MO7rWsuExfDb4vMhuDspEpoTeJORB+I1Ek3pcYKo371AybfKaMpnst40CwN0HF7kWIsfihnzf0RsDQf+P7m2+iRhQwDVdZMoiOlvWYPBadUhsKJ1ZIPkKipDqvDAR1JPdHTyWG0GQ6wPBtBWKcMEMdAHavhpAKgayykKFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oQHMBVSM; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YO8wlahf"
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-290cd62acc3so82331245ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 08:20:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oQHMBVSM"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-4283be7df63so3630623f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 08:23:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761751245; x=1762356045; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=StYPN+Xnv/FlnNbB7eCIIAuswaamCaMZ2VJSzNeBonw=;
-        b=YO8wlahfk7zhuSu1taBkNV56d397C4+ZSInUL/QkrdiaOsPQ5MA0soEKfiN1TYN4Qn
-         CVmAV0FikZzMfUd5O4x7D7OxEgG6fnDOv3H7rfs0hJRemFrbiibfJzRJIQ4dHMS5jQKS
-         Srl1pIJR42ieowOEibynXL6YaR8rd9bpVw7yDvaexC6ZxnDSViS+zAWs/ixP9306ZgnI
-         mHA+umwm3ksAqMkg+n9sGZ5r+5SWmMuBl3j+uz0RdkM/xVdZRgHRWyOOg1CN3uw41hC1
-         1OXydasfIbqaSRVSdu9PIhk2aWeweSg929CU5mfJSCKROZqApyga5796HyQf5hm9A/u7
-         usqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761751245; x=1762356045;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1761751425; x=1762356225; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=StYPN+Xnv/FlnNbB7eCIIAuswaamCaMZ2VJSzNeBonw=;
-        b=hflQykAkgcoX62KMgJBy1Qs3oqnaQ002UQinZjFTYynjOlBj564heoZVhMDAk0zXnG
-         I6gmIfwtqGMFRVQjw+V3kVY+9ULCNkuVABrkBeuxBl1ASO8KxKQ3Kk77bQVEVqD2w4Qi
-         +KcXaEHM+1CB2fqJWveeOl4Lh2m3AKebTYnP6dFxWDNoWoYaBbM5txa95azArYEiL5NJ
-         fJ+2RhyOoiOWh29Pnr/7ANiupeX6LA7JgjAh7kN+7s75verAyLUJeHiBHhs66CK5Xp2+
-         YiInd7boSQOJpmlsWRwkVS4RqCz4SY+OrRJOzsjARRgk0elQ7EcK8OTmIGtarIOKi3LX
-         q9MQ==
-X-Gm-Message-State: AOJu0YxWhybWSdN/C5e0VDwsnbpzjf7EDQuCpP1TNP//7isINCrEuIFF
-	I9gSp4rnOFu3fCGGzbsrUWPyyyooFTW6ZwfbRGWLdZc7CHMVlVXKdlvG
-X-Gm-Gg: ASbGnct/81jf3OczSRZQ2CdNzfkh80XzeG14SGsVtdpdRJtJpsxPXobbhZSnlvaoQyU
-	S3wkOScAjMvutSfAXJAoFaE39zZKof3sT/cDTJ7a3cAHX3YtjegFjisY1T6WYI2wWEmAvaN/A5d
-	qtoxEHdd23pdzlqlwbf2OKNylundaZ7WGs1eC2oTTzaVoRwVWSjLaoRV5Rvb8dcP0SukyReVeDP
-	cG3DbTIEaeBQIHCeET1sJwz9PIfjE6rjwzPSMBFpViXBLJnZUhy1bWTsYOUsjUXzKWJtNe/bDfL
-	WZ+56990/sgqR3cbt0LyuSgR1H5pahxjn95/BkZfokeFIeAlEEdLoRCwzKKEyveIefMd0MjkkOV
-	pz2OMiw4pQG9RVK0URBr4znS0ycmzFgzzm5s1nI7oyj7863gB/SBm/qYVlfTmPaXcYLSa3ql2xJ
-	zjpIl4ype+ZqRnwsk5ATM=
-X-Google-Smtp-Source: AGHT+IEpwGryO+Dsdw+yBiLYzvfG216rbfuFmYTVEwK59maJasPtn26KCM1zCvZKBwTCZ0ScENApeA==
-X-Received: by 2002:a17:902:f550:b0:277:3488:787e with SMTP id d9443c01a7336-294dee0cebemr41194955ad.12.1761751245449;
-        Wed, 29 Oct 2025 08:20:45 -0700 (PDT)
-Received: from fedora ([103.120.31.122])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498cf3bfesm157605975ad.4.2025.10.29.08.20.41
+        bh=GnnlHMFRbVrpcnyBkNDcSZjt6llB0RXl0xQOlvsDe5c=;
+        b=oQHMBVSMJ2M4QjAW8A7GtSAF9S6FkVCh2HHuqy3FhR5UzylxgotmNVkpR7YLWV6rfn
+         VOutUscxHLqWLt0JqDHs8hixfx95W7FB52sKo9QYv9p3+f3eHN4QkMSW472X1K7TxxCP
+         XjVWEtQPwThUR7pLHWxItQKrTQVRSrSCo6nZG4InGUYT/O4omm9oVxUNPc8D0u4R3k8k
+         1wsrNT11QK2lBzx0qOtZd5gixGG1gG1sgc+CtA6+FrX7IJCFbF2O2e8OU+OzG2daQijI
+         Q9hGbMmkbOzLxVKFQVFPYzqW3iMZvAgwtakzd+5/Fn/g1j3HHF3D76Yocm6VJZN+iWjN
+         8a1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761751425; x=1762356225;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GnnlHMFRbVrpcnyBkNDcSZjt6llB0RXl0xQOlvsDe5c=;
+        b=FryFC/hmr3jIXaXlzvVidlCbwaRnW8Xdo4CQAy0DqAYYbZVdLodrIjkmGapwvVaKiD
+         ntklRpItVdmBBwvxmMCLfXq6OcdXgt5NyMqGkQoNkhySNe0NDUA0JQ5UO0cv1WSXH26D
+         +d3VnSWENUWVJM0KB/p3rG3mF0nxMlB/8fmy9J9VPT1JVz1LzSgxjMdMmZaQfFtUvb6v
+         sB+QTNRrcJQI1PRMdbKeKS+yyYtA1pXZgljPX33UCKTaBtB7vuuAdXTsyGuPYkHfA7pC
+         dQCRNHXjwiB/AwUgtzr6fcWIMkmX6lH8GvrdXCDFTWIYGyUGfs45/IGxpuO3CIVoTncK
+         QFVA==
+X-Forwarded-Encrypted: i=1; AJvYcCWALe1nVRawe15nXKdamfZdFtrNGORHOyKwmzyj/XSv06uf2zsBhomkrsb3V64T6CusWVoIVRIPrxT4kNGFdso=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/kVn1IiaHyeN3FtX8iILi2aG2EpP6HTAi8SjwZGNxdWCJSADB
+	Pi4daY3UHNsYGArHd4vakqBsTqGrNizYzAlnVEldZFAhu83Z9Zexo1SIcZzwmL508Jg=
+X-Gm-Gg: ASbGnct7hc02+DJ9aIL0Rb0hUCa4brjLhQHtMArgLjOpnAKzpXZxSIHgKWFO9QyHwY4
+	/BwkrGR9u8nHecek+KQHWkNOHMAvErBcobNhcw3GDauIsGS8Al4JZKbmRUKr0Hk4A5CZXtdcQUo
+	W1mBD+4O7RgCJWZ2Q5iPR4n6RU9pGVA1/wp2cR/YKrZTPv3VZ/kmpmQmrMSYGxNycgGhMkgYG0M
+	1su9MajUmDbuTkBGYyRPaKMWRs7nBZdQ/3s+wAAPhWVT0oLtXjKfVWBB52vnaFW5rCI2wf9AoQC
+	mNOJTXbZFj+vWUd9IfszQx9tjJXpsv3ZHhPSV+nTVErK+kXOEXYHTyoEL23jJIRqqeQEs7fHldj
+	6BO567Nf4ah0Pa/tb69wwLX2BllP7wfha+2enn0gctSl9HCbvSbRScD6BLUooHgifua/hfH5Q0g
+	NBLgilFteESFIO3wM=
+X-Google-Smtp-Source: AGHT+IF3kypRXz+lbNGUUJZxGE/9fLgsZ6x2lXzXuM2CaCBPkYTwY5pskZrBjx2J28zmiWA3+gROqw==
+X-Received: by 2002:a05:6000:2308:b0:426:d54d:224d with SMTP id ffacd0b85a97d-429aef8b88bmr2958293f8f.27.1761751425212;
+        Wed, 29 Oct 2025 08:23:45 -0700 (PDT)
+Received: from e125016.powerhub ([2a0a:ef40:e8d:4a01:29a9:3ab3:ba86:f8fc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952e3201sm26823811f8f.47.2025.10.29.08.23.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 08:20:44 -0700 (PDT)
-Date: Wed, 29 Oct 2025 20:50:38 +0530
-From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
-	Wei Yang <richard.weiyang@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] selftests/user_events: Avoid taking address of packed
- member in perf_test
-Message-ID: <aQIwxjBNonW5Py_I@fedora>
-References: <20251027113439.36059-1-ankitkhushwaha.linux@gmail.com>
- <20251027162521.c56c7f89f6ad4e3d639c408c@linux-foundation.org>
- <aQD2Igc3svAF3klc@fedora>
- <20251028132605.2926d3ef5eb6ea60d22ceffe@linux-foundation.org>
+        Wed, 29 Oct 2025 08:23:44 -0700 (PDT)
+From: David Spickett <david.spickett@linaro.org>
+To: broonie@kernel.org
+Cc: catalin.marinas@arm.com,
+	corbet@lwn.net,
+	david.spickett@arm.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	luis.machado.foss@gmail.com,
+	mark.rutland@arm.com,
+	oleg@redhat.com,
+	shuah@kernel.org,
+	thiago.bauermann@linaro.org,
+	will@kernel.org,
+	David Spickett <david.spickett@linaro.org>
+Subject: Re: [PATCH v2 1/3] arm64/sme: Support disabling streaming mode via ptrace on SME only systems
+Date: Wed, 29 Oct 2025 15:23:30 +0000
+Message-Id: <20251029152330.155394-1-david.spickett@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251015-arm64-sme-ptrace-sme-only-v2-1-33c7b2f27cbf@kernel.org>
+References: <20251015-arm64-sme-ptrace-sme-only-v2-1-33c7b2f27cbf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251028132605.2926d3ef5eb6ea60d22ceffe@linux-foundation.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 28, 2025 at 01:26:05PM -0700, Andrew Morton wrote:
-> On Tue, 28 Oct 2025 22:28:10 +0530 Ankit Khushwaha <ankitkhushwaha.linux@gmail.com> wrote:
-> 
-> > > > @@ -236,7 +237,8 @@ TEST_F(user, perf_empty_events) {
-> > > >  	ASSERT_EQ(1 << reg.enable_bit, self->check);
-> > > >  
-> > > >  	/* Ensure write shows up at correct offset */
-> > > > -	ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
-> > > > +	memcpy(&write_index, &reg.write_index, sizeof(reg.write_index));
-> > > > +	ASSERT_NE(-1, write(self->data_fd, &write_index,
-> > > >  	                    sizeof(reg.write_index)));
-> > > 
-> > > Simply casting &write_index to void* would fix this?
-> > 
-> > yes, this hides the type mismatch from the compiler. But i think
-> > casting to void * will not fix the alignment mismatch for packed struct.
-> > It works on x86, but might break on other platform.
-> 
-> It's the second argument to write(2)!  write(2) expects a const char *,
-> but void* will work.
+I have put the LLDB changes for this into review.
+We are tracking SME only support in this issue:
+https://github.com/llvm/llvm-project/issues/138717
 
-Hi Andrew,
-Indeed 
-`ASSERT_NE(-1, write(self->data_fd, (void *)&reg.write_index, 
-		     sizeof(reg.write_index)));`
+The PRs that relate to these kernel changes are
+listed in this comment:
+https://github.com/llvm/llvm-project/issues/138717#issuecomment-3456979166
 
-would work. However since `reg` is packed struct, directly taking the 
-address of its member  `&reg.write_index` may lead to unaligned access 
-on some architectures. as indicated by the compiler warning
+LLDB's use case for this new ptrace feature is to restore
+process state after expression evaluation takes a process
+from non-streaming to streaming mode. We have a specific
+code path to handle that restoration, and it was not a
+problem to integrate this new ptrace feature.
 
-	perf_test.c:239:38: warning: taking address of packed member
-	'write_index' of class or structure 'user_reg' may result in 
-	an unaligned pointer value [-Waddress-of-packed-member]
-	239 |         ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
-      	    |						  ^~~~~~~~~~~~~~~
+I have proven with testcases that LLDB can restore
+any streaming mode/ZA/streaming vector length
+combination, starting from any other combination.
 
-Using `memcpy` avoids this by performing a byte-wise copy, which is safe 
-to use for packed structures.
+The LLDB changes will remain in review until if/when
+these kernel changes are accepted. I expect LLDB
+reviewers will be ok approving changes on the condition
+that I wait for the kernel side before merging.
 
-Thanks
--- Ankit
+I expect LLDB review to take some time, likely a month,
+due to the availability of reviewers at this time.
+
+Reviewed-by: David Spickett <david.spickett@linaro.org>
