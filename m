@@ -1,125 +1,121 @@
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D4725785A;
-	Wed, 29 Oct 2025 14:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DC626C39F;
+	Wed, 29 Oct 2025 14:25:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761746843; cv=none; b=sQd+eQnzb/BEJTlcDJQfDIxzN2XFSvztWhyP9FJPl7yPypTwkCxNS3D6ywpqdIArnlp/jtZInD3I5t7vM2KlM27e1qzpesxfAGPnWLpxdgaEpUUuJ6HwU8afKypueIkKxD5sY6aibfATiYv0PeGoDuP6kkLPb/RF2mEFshnGoK4=
+	t=1761747953; cv=none; b=DsDp0M1uypvLrEbynzel9FYeRkdFL1cphSXBXdGPT2DlgkDfbdZXmo6QpyMKT/njuQ+o26KDqQkowU9K7DTz5J0GyuH2SSPRb4qjxPdZU0eIiXelrqXWUjhzL3vMImXK/N8iFZbxY1IjMlIl+5bDFafnSg/bCqucpZrnpZWKHEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761746843; c=relaxed/simple;
-	bh=jbDiRc1txlZTTk//UC1k3FW4pC0DVEyDhtcenS6QTzU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bkllNIFWieXV5qX7WMvYC9aQByp+xIX6Ag6jE6NFavcJGxWHQHVA35z4wXOWkBjppfggBkq5oAFr2w6qOnIXxDqGbPRY1nvhzzO8d8FlghGeRnEmzJh7nJNOFcXcbmzPfAakiHK5uGtnpaLMXICQE260P1m9FrM/0wDxhn0Im84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=VMBlA123; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+	s=arc-20240116; t=1761747953; c=relaxed/simple;
+	bh=eX4MwDdVNFiSJIUIDmCiZKp9nu2G7K/VXocP8qjTRlw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=k51XZIZXEFlnu7PQKtXgNFl83Zd5pd5C4a+PmvY7HNgaFwVz/YUHjkmNEI+sZe2AEPg8BAz6mD10tnZ12luGwYnvYpAfTzrBb621hgTTgRa11SCcHlhKdYQhg03SSt8HSJBRFm1DC9jNCTwRMpIuK9MwQNuUEI7UACkpbA/IyIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rtnLJZah; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="VMBlA123"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=jbDiRc1txlZTTk//UC1k3FW4pC0DVEyDhtcenS6QTzU=;
-	t=1761746841; x=1762956441; b=VMBlA123oYDK6lnjS3/iOydwhEBhwAbGjDABq1MXLNLkVhX
-	i1C1XzHUmg3JumW6kuyvgYXnlKLq3fKX/zzKkFCNEZBzFUpi1kxq65iwg5oOhhipUwoooEr3pW2Pv
-	nyUVMn6N9QqjqPdyrWpEJyhBen1qHmQ6Qv8Z0/ZjMO26jI1UVSKVffgi0wjCwf8q7t82mEVoevCkd
-	Ier5OEwm7kJX/Kekr2AhT7waitdg3Tqr8+Ouz6PjN+vCkxZhF7SPG3Vkba+hb0Ov7qnbyh8irp9SS
-	J0C9l79vPNMUzFTV/W4qweSXz5Dm81+aS8ck46OWscqRdcdV1DpdbOWBC8+RTIfw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <benjamin@sipsolutions.net>)
-	id 1vE6pV-0000000EkWX-0O7N;
-	Wed, 29 Oct 2025 15:07:13 +0100
-Message-ID: <516b490d30be6d0676ffe3be5942954bc3c08a39.camel@sipsolutions.net>
-Subject: Re: [PATCH v3 09/12] um: use nolibc for the --showconfig
- implementation
-From: Benjamin Berg <benjamin@sipsolutions.net>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: linux-um@lists.infradead.org, Willy Tarreau <w@1wt.eu>, 
-	linux-kselftest@vger.kernel.org, kernel test robot <lkp@intel.com>, Arnaldo
- Carvalho de Melo	 <acme@redhat.com>, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Date: Wed, 29 Oct 2025 15:07:12 +0100
-In-Reply-To: <99359472-8b1e-4d51-adb8-5b16f1f90a9f@weissschuh.net>
-References: <aNaNtI+mbyc4zgFy@rli9-mobl>
-	 <99359472-8b1e-4d51-adb8-5b16f1f90a9f@weissschuh.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rtnLJZah"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74334C4CEF7;
+	Wed, 29 Oct 2025 14:25:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761747953;
+	bh=eX4MwDdVNFiSJIUIDmCiZKp9nu2G7K/VXocP8qjTRlw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=rtnLJZah0zkZY3E6GlkRXjyP9ZgcQTQOeXraInstDmxh/JWMNN1qhZVMoM6uCAAjl
+	 zwnFSbvoj5xyi84d88E3+p6/xWog3LorSHHeLWlKN8lpJe7uU00/Lsm4BvqtavBPR6
+	 idp/kNGr3VGLyq7WkqDSwI/aHNXl9LVD9chEboM+4MfCY4jvsFBSENBiDP9eS3gMk8
+	 XM4c4tD5euqtU9yxPlz8avj5nAB5iUbBpKEVt8dI4drAott6zUS+M/1XoXP2QcoLdH
+	 4Ik8K5o6zXtoIpVG2sPIqqVjbCSaLn3VBHPzluBYNwC41G/Xv0YBbXvej8uT8OqO0x
+	 gNDJBviXt7ulw==
+Content-Type: multipart/mixed; boundary="===============7495328656080687778=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Message-Id: <b13f0f29e5f3308b5b2d973237634a7a7ec7c7be034227a633d6e49ed9f657cd@mail.kernel.org>
+In-Reply-To: <20251029-xsk-v6-12-5a63a64dff98@bootlin.com>
+References: <20251029-xsk-v6-12-5a63a64dff98@bootlin.com>
+Subject: Re: [PATCH bpf-next v6 12/15] selftests/bpf: test_xsk: Don't exit immediately if validate_traffic fails
+From: bot+bpf-ci@kernel.org
+To: bastien.curutchet@bootlin.com,bjorn@kernel.org,magnus.karlsson@intel.com,maciej.fijalkowski@intel.com,jonathan.lemon@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,mykolal@fb.com,shuah@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org
+Cc: thomas.petazzoni@bootlin.com,alexis.lothore@bootlin.com,netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,bastien.curutchet@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 29 Oct 2025 14:25:50 +0000 (UTC)
 
-Hi Thomas,
+--===============7495328656080687778==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2025-10-20 at 17:21 +0300, Thomas Wei=C3=9Fschuh wrote:
-> Hi Benjamin,
->=20
-> Sep 26, 2025 15:57:43 kernel test robot <lkp@intel.com>:
->=20
-> > kernel test robot noticed the following build warnings:
-> >=20
-> > [auto build test WARNING on uml/next]
-> > [also build test WARNING on uml/fixes shuah-kselftest/next shuah-
-> > kselftest/fixes linus/master v6.17-rc7 next-20250925]
-> > [If your patch is applied to the wrong git tree, kindly drop us a
-> > note.
-> > And when submitting patch, we suggest to use '--base' as documented
-> > in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >=20
-> > url:=C2=A0=C2=A0=C2=A0
-> > https://github.com/intel-lab-lkp/linux/commits/Benjamin-Berg/tools-comp=
-iler-h-fix-__used-definition/20250924-222547
-> > base:=C2=A0=C2=A0
-> > https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux=C2=A0next
-> > patch link:=C2=A0=C2=A0=C2=A0
-> > https://lore.kernel.org/r/20250924142059.527768-10-benjamin%40sipsoluti=
-ons.net
-> > patch subject: [PATCH v3 09/12] um: use nolibc for the --showconfig
-> > implementation
-> > :::::: branch date: 2 days ago
-> > :::::: commit date: 2 days ago
-> > config: um-randconfig-r111-20250926
-> > (https://download.01.org/0day-ci/archive/20250926/202509261452.g5pe
-> > aXCc-lkp@intel.com/config)
-> > compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-> > reproduce (this is a W=3D1 build):
-> > (https://download.01.org/0day-ci/archive/20250926/202509261452.g5pe
-> > aXCc-lkp@intel.com/reproduce)
-> >=20
-> > If you fix the issue in a separate patch/commit (i.e. not just a
-> > new version of
-> > the same patch/commit), kindly add following tags
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Closes:
-> > > https://lore.kernel.org/r/202509261452.g5peaXCc-lkp@intel.com/
-> >=20
-> > sparse warnings: (new ones prefixed by >>)
-> > =C2=A0=C2=A0 command-line: note: in included file (through
-> > tools/include/nolibc/nolibc.h, tools/include/nolibc/stddef.h,
-> > arch/um/include/shared/user.h, builtin):
-> > > > tools/include/nolibc/sys.h:109:29: sparse: sparse: Using plain
-> > > > integer as NULL pointer
-> > =C2=A0=C2=A0unistd.h:70:30: sparse: sparse: Using plain integer as NULL
-> > pointer
-> > =C2=A0=C2=A0 tools/include/nolibc/unistd.h:70:33: sparse: sparse: Using=
- plain
-> > integer as NULL pointer
->=20
-> Do you intend to work on your UML with nolibc patches this cycle?
-> If not I would fix these sparse warnings in the nolibc tree and also
-> apply your nolibc patches.
 
-We are not in a hurry for the UML part and while it shouldn't be too
-much work, I obviously didn't get around to it in the last week.
+```
+commit 5ed620bf5df1b2a38af461580d5207eadf5c552e
+Author: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 
-So, feel free to pull the patches in via your tree. Then I'll submit
-the UML part again in the next cycle.
+selftests/bpf: test_xsk: Don't exit immediately if validate_traffic fails
 
-Benjamin
+This changes __testapp_validate_traffic() to return TEST_FAILURE instead
+of calling exit_with_error(), and adds cleanup for sockets and umem
+before returning on pthread_barrier_destroy() failure.
+
+> diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/test_xsk.c
+> index 2c392d5b9..18a6ce648 100644
+> --- a/tools/testing/selftests/bpf/test_xsk.c
+> +++ b/tools/testing/selftests/bpf/test_xsk.c
+> @@ -1772,12 +1772,12 @@ static int __testapp_validate_traffic(struct test_spec *test, struct ifobject *i
+>  	err = test_spec_set_mtu(test, test->mtu);
+>  	if (err) {
+>  		ksft_print_msg("Error, could not set mtu.\n");
+> -		exit_with_error(err);
+> +		return TEST_FAILURE;
+>  	}
+>
+>  	if (ifobj2) {
+>  		if (pthread_barrier_init(&barr, NULL, 2))
+> -			exit_with_error(errno);
+> +			return TEST_FAILURE;
+>  		pkt_stream_reset(ifobj2->xsk->pkt_stream);
+>  	}
+>
+
+[ ... ]
+
+> @@ -1791,8 +1791,11 @@ static int __testapp_validate_traffic(struct test_spec *test, struct ifobject *i
+>
+>  	if (ifobj2) {
+>  		pthread_barrier_wait(&barr);
+> -		if (pthread_barrier_destroy(&barr))
+> -			exit_with_error(errno);
+> +		if (pthread_barrier_destroy(&barr)) {
+> +			clean_sockets(test, ifobj1);
+> +			clean_umem(test, ifobj1, NULL);
+> +			return TEST_FAILURE;
+> +		}
+>
+>  		/*Spawn TX thread */
+>  		pthread_create(&t1, NULL, ifobj2->func_ptr, test);
+
+In __testapp_validate_traffic(), thread t0 is created via pthread_create()
+before the barrier operations. If pthread_barrier_destroy() fails, can this
+leak thread t0?
+
+The pthread_create(&t0, ...) happens earlier in the function. The normal
+execution paths handle t0 via pthread_kill() or pthread_join(), but when
+pthread_barrier_destroy() fails, the new error path calls clean_sockets()
+and clean_umem() but never joins or kills t0 before returning TEST_FAILURE.
+
+The commit message says "Release the resource of the 1st thread if a
+failure happens between its creation and the creation of the second
+thread", but the code only releases sockets and umem.
+
+
+```
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+In-Reply-To-Subject: `selftests/bpf: test_xsk: Don't exit immediately if validate_traffic fails`
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/18910697393
+
+--===============7495328656080687778==--
