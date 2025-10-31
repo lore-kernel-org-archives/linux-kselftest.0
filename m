@@ -1,42 +1,42 @@
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B584632ED52;
-	Fri, 31 Oct 2025 08:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040B32E0910
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 08:05:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761897905; cv=none; b=Px/3zdb7QTN7fyjJcyga4XAuajlZaBn+51mXrTiF0EnOmV5q5aOpPit9ToxtIWdRd/EcBeISe7pZKTlcQTxlVu81EB+8J4JLrEzOWXEQi/dob1r0SpOEZdd5fHAhVoZy7RSsYMUxSdZdwNeqYqUY8DjpCDBZoB9Ovqvjwoaf8Vo=
+	t=1761897911; cv=none; b=OeU4VXcsQ9kR1SOCayTVAw0RVynMeESMnKXAxXXJHcQKZuV7jWDj6InPBKyh+6phYTjSWLCesDbYv/w3SRLSZRwzp+J1vvXQKjuOsqxOiPCZs6UitHASi0Qsw2VA1cVxaFc3iGmQ1KZWXGcRa3ZgHb0KYxRAZmCtW5O3zSiG3B8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761897905; c=relaxed/simple;
-	bh=ZwKe430WcXOk/3GiwCgeIjtMWKpX3sKwXSY1J1f6ucU=;
+	s=arc-20240116; t=1761897911; c=relaxed/simple;
+	bh=15E47hyvmQPrJWkj4LYQAs5VLKJP00bGmfww35DXTcY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CcZp8HMgb5y0Myo0RkAnFLSD13oZxhwOHgv08rKNkJI968x4baJjLwuX03RNJIodnMa3ddisZRuCwV4Sj9KFbIH9NgmvRu6/FE/cyJPvnyewJESGWyp5jLXKxZTWQPpT97+VsI7Wctp8VQ7S/ysAN0wk2tywUTmCym5dPzIWY5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=05MoPBNq; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=i6sPHP/zkkMh/OQOTvUj+fAmQ2MCqWCey9eJDNEYQjI0z5PsDb1OHB49M0e4nn3LeJ4O4tod0HtYAIA0ecGVlwGeYTDl39jX8cA1if1/SDUiGhXWiSEcX3jJGJA4AVBQuYDbCQ8SZUwn3s1Z+xDhRYc5qtH57/95VoH+eU1uIZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ijmFjcbf; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="05MoPBNq"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ijmFjcbf"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id C09BEC0E94D;
-	Fri, 31 Oct 2025 08:04:41 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 191F9C0E94F;
+	Fri, 31 Oct 2025 08:04:47 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 4772A60704;
-	Fri, 31 Oct 2025 08:05:02 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9F7071180FB57;
-	Fri, 31 Oct 2025 09:04:58 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 92C0060704;
+	Fri, 31 Oct 2025 08:05:07 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 793131180FB58;
+	Fri, 31 Oct 2025 09:05:04 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761897900; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1761897906; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=wjSUqrmy8yTxpGwe8E8DxpLkivQqp7irxh7QJFAmi08=;
-	b=05MoPBNqggJhq9WNBXxCmidbJty7YJgMATkc7cynd5VDws/xY3P4EqQiTGLeUIRFmt41Yt
-	y6b+E5FJX0HeIU6jLFCzoQh3yf4nO/m3Th123Rp8YiDl/xUDgr60kU6a1Wv6gcn/HmlZ4Z
-	Jm64GfNd7lHnhYIgeZndYPMKeXZML2GrSFND6faKecAx5TAm79T+YluOvGSWRVwMup04Y8
-	Xzu7Td62jDCVm2Ihq2gCkfunlRqoobezlv5aQZ+dfVCPn3uMQHx0VZDEHa6FTDQu4vlA+E
-	wOsyHER96rnck4UP4A3ar5lGKTzEcAhhMBvxW2+MNSu/FdIGf+FMUTc5SmL7SQ==
+	bh=nw7naf5mx2NiW6CLXgmCEx5KgfTcyto6pFTnj3WONc8=;
+	b=ijmFjcbfFXzOc3EtJtbd1oPaWiS4+xQwcyyPoeULHd14NO98Js68hmN8IQCSKmiuhVmxAf
+	Hdu9gh5kGo6cgExYzAVgLpsMTQIoLRL5/ExsygA3Z7m2/pUo+4lAUbeUCbb49eJekHAwy6
+	09Kx/ZOq4FeSt/s64ROItXlUf6ev1f+byqEkF6Qo46xMNPxeg8vYwtIAQKW0BRKcEDRK1p
+	5wtI3bnl+BHNsFxGT4yDNLjjHgUkbHhMPdq2BSj/IVRWl3MlmeJZu0dzlI2S/W/3CjGcXM
+	c5TeWwJiptHkrikUYTZg/dIxduxtnAetCiKrvxHYjj2aO/BXjSkBrPJsYQGKUA==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Fri, 31 Oct 2025 09:04:41 +0100
-Subject: [PATCH bpf-next v7 05/15] selftests/bpf: test_xsk: fix memory leak
- in testapp_xdp_shared_umem()
+Date: Fri, 31 Oct 2025 09:04:43 +0100
+Subject: [PATCH bpf-next v7 07/15] selftests/bpf: test_xsk: Release
+ resources when swap fails
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251031-xsk-v7-5-39fe486593a3@bootlin.com>
+Message-Id: <20251031-xsk-v7-7-39fe486593a3@bootlin.com>
 References: <20251031-xsk-v7-0-39fe486593a3@bootlin.com>
 In-Reply-To: <20251031-xsk-v7-0-39fe486593a3@bootlin.com>
 To: =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
@@ -70,67 +70,38 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-testapp_xdp_shared_umem() generates pkt_stream on each xsk from xsk_arr,
-where normally xsk_arr[0] gets pkt_streams and xsk_arr[1] have them NULLed.
-At the end of the test pkt_stream_restore_default() only releases
-xsk_arr[0] which leads to memory leaks.
+testapp_validate_traffic() doesn't release the sockets and the umem
+created by the threads if the test isn't currently in its last step.
+Thus, if the swap_xsk_resources() fails before the last step, the
+created resources aren't cleaned up.
 
-Release the missing pkt_stream at the end of testapp_xdp_shared_umem()
+Clean the sockets and the umem in case of swap_xsk_resources() failure.
 
 Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/test_xsk.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_xsk.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/test_xsk.c
-index eb18288ea1e4aa1c9337d16333b7174ecaed0999..d7cb2821469c62abd0d532821e836336a2177eb5 100644
+index 84b724731e26d0c7e67131ec1bd562e223d3d09d..8fe75845d7a6aa5342229fa419fcbaa411ae9e70 100644
 --- a/tools/testing/selftests/bpf/test_xsk.c
 +++ b/tools/testing/selftests/bpf/test_xsk.c
-@@ -570,6 +570,22 @@ static void pkt_stream_even_odd_sequence(struct test_spec *test)
- 	}
- }
+@@ -1866,8 +1866,13 @@ int testapp_xdp_prog_cleanup(struct test_spec *test)
+ 	if (testapp_validate_traffic(test))
+ 		return TEST_FAILURE;
  
-+static void release_even_odd_sequence(struct test_spec *test)
-+{
-+	struct pkt_stream *later_free_tx = test->ifobj_tx->xsk->pkt_stream;
-+	struct pkt_stream *later_free_rx = test->ifobj_rx->xsk->pkt_stream;
-+	int i;
-+
-+	for (i = 0; i < test->nb_sockets; i++) {
-+		/* later_free_{rx/tx} will be freed by restore_default() */
-+		if (test->ifobj_tx->xsk_arr[i].pkt_stream != later_free_tx)
-+			pkt_stream_delete(test->ifobj_tx->xsk_arr[i].pkt_stream);
-+		if (test->ifobj_rx->xsk_arr[i].pkt_stream != later_free_rx)
-+			pkt_stream_delete(test->ifobj_rx->xsk_arr[i].pkt_stream);
+-	if (swap_xsk_resources(test))
++	if (swap_xsk_resources(test)) {
++		clean_sockets(test, test->ifobj_rx);
++		clean_sockets(test, test->ifobj_tx);
++		clean_umem(test, test->ifobj_rx, test->ifobj_tx);
+ 		return TEST_FAILURE;
 +	}
 +
-+}
-+
- static u64 pkt_get_addr(struct pkt *pkt, struct xsk_umem_info *umem)
- {
- 	if (!pkt->valid)
-@@ -2043,6 +2059,7 @@ int testapp_xdp_shared_umem(struct test_spec *test)
- {
- 	struct xsk_xdp_progs *skel_rx = test->ifobj_rx->xdp_progs;
- 	struct xsk_xdp_progs *skel_tx = test->ifobj_tx->xdp_progs;
-+	int ret;
- 
- 	test->total_steps = 1;
- 	test->nb_sockets = 2;
-@@ -2053,7 +2070,11 @@ int testapp_xdp_shared_umem(struct test_spec *test)
- 
- 	pkt_stream_even_odd_sequence(test);
- 
--	return testapp_validate_traffic(test);
-+	ret = testapp_validate_traffic(test);
-+
-+	release_even_odd_sequence(test);
-+
-+	return ret;
+ 	return testapp_validate_traffic(test);
  }
  
- int testapp_poll_txq_tmout(struct test_spec *test)
 
 -- 
 2.51.0
