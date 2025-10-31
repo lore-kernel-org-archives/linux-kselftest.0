@@ -1,109 +1,152 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6864532ABF7
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 22:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA11329E52
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 23:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761949738; cv=none; b=oDDry/iznXMT3UXP8QVB4ZkHlfzB/zCZIpOJ0zPkpMuic0E+Qv1wCJE5WONd1YCL0LJL3wODMLi/De27W8JF+D8AiT9DxU5MslGCztnpbWFwFWx97VS3+B6bw6bzbWaSWmH2p/QzpDD1LtHMbIiUV8dlEZYp8L647j14oaSXtiY=
+	t=1761952385; cv=none; b=nZN/bnbljydBZlXaf43T2GEc/3/j0yO/ee58p14g/FTZry2mFkPoIQL1RBd7A8QEsgYOs2eveHYgRGpJDM3aWlWNjKGsrPmICM/nXlev9WU8wv1wUdTxaqIY3zL9oLS9BTZ68DlpXAfKBmEpUzdC2Bdyh5THz/3PymiSoaQzMB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761949738; c=relaxed/simple;
-	bh=VZXcKlS2NfJQUqJUaLkoMO31MbXfEPxVU5q67dhNYbY=;
+	s=arc-20240116; t=1761952385; c=relaxed/simple;
+	bh=gY82JgAv1A8rYj9MCaiZVHVrEMWrbrCoiDwppP0oGWg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aCdBPY3UrcAOWGWZ/Cdni0aAjQRdZdX7KfNMQ9tjeLZs3+vLPf/efeMiFTlH1D/ZDPZJWFHjHN9QGN5yaBmiRDrC35tf5YMlohlVMa4qkNMSKAMaCCohvAQZx9gSW03erx3X/NUJwJreB+Kii4rtP3IRZwJ/hGTNZDWpQjJA9aY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kmqv0t4r; arc=none smtp.client-ip=209.85.167.49
+	 To:Cc:Content-Type; b=qoCPc3jcmMnh0lAqhva+7sdpYJ4bcnvULtSW9YNcXSD6bmszP5elDWrmyzlSAisLGaX0VN5C8VN4+yVvrKJWjDwf+jAxUc75dMI3cYF2L4o+3N3tXX0KCLwflbcBstl88HWzahAPhn0QEi2l9XwGTZVkd+fLf4wR0O9NCj9CXx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pkN8RXiA; arc=none smtp.client-ip=209.85.160.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kmqv0t4r"
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-57f0aa38aadso3977137e87.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 15:28:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pkN8RXiA"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4ea12242d2eso82021cf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 16:13:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761949734; x=1762554534; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1761952382; x=1762557182; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A4VDPOkfEPN3V+mmkEOqmJfTYjVG4ZaMp9wTEce6ggY=;
-        b=kmqv0t4rwZ+OooujAZB89C6U1PE4NY/hxG/N3arnBNvt6gcdI5fjWrSGf9YrcyXxKN
-         yGg9J1HH/8TDQyiQiH1cwV2QnT74vWm7ZDyzcEYxuprajEkVaX4f/gJzwKnq1HfQ20ZI
-         X/H4W9dQ2Sgb7YJMKmtl9Y68AnxuYX3owuhcNhD5/lBrRXvnr8VB6MuiuH4tYrGBphz1
-         FtPytlwa3a6X1saOPHQg4ZaGJlMimZNSNYSsVunvrU6M11Y6f++bi+QoWO4mJJIvDi44
-         uv6MJFrni1aUExCr/m8s6EQTGCu1qWpjXecUUFYn+kyCivXg8JeMiTaqkLgHZZqwIxn1
-         jxhg==
+        bh=gY82JgAv1A8rYj9MCaiZVHVrEMWrbrCoiDwppP0oGWg=;
+        b=pkN8RXiAjdXxo7BRN5+terCdOCJFnliS5crjawRNQ5x3UOuShVrfTVS7/ndcHb9rK5
+         XPJ77kaAfE9BoNEsCAXr+3d7DjfbmCPZOQqZf+0sLjvImi4VgycqCUfkOtLOAmTdrDqM
+         3Bv9NiHCI/pUxNMCL0SOrzD13yYc80M8iJDj/Pn7SZ3hbTAkVzseB+I44xaHwZHA25UG
+         b+hXRc179Gp9+IkCuj9XXiHOpqoqvqHp3E5Ukq/gnBpfTc2s78WdqUj0cUM4lPrlaEwI
+         mHUfMlzOadgUghqvFM4HClQq/fB5XEAjzx7T87V82BTE+F1ZZ4+GhbaYdFyLbY/HG3NT
+         Ad3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761949734; x=1762554534;
+        d=1e100.net; s=20230601; t=1761952382; x=1762557182;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A4VDPOkfEPN3V+mmkEOqmJfTYjVG4ZaMp9wTEce6ggY=;
-        b=um8RIp2f1MMTTMtZYB7I7bEfu04UM+mAYv7cOhC7e9uahrPqV+BoLdOPMfJS1B1cdV
-         1NzoZyZ0j4/wVEIY1ezGLY9dCviy8a+IyYKZ0HzkyHU5+P/EC2sATVpMjIbLbA/YQOOz
-         3WXgWJTLx8O45IaV4rBwj2ZdpNIwfJXxVAbIsYZIkqqo1icHuaQLxhpilp80HHXnJ+8R
-         79UNBufkcCgdL3iw1uPvkSg8/jWt3XtXxFyg17HuCb5U+UjnQu63KiSnPdHc4ooW9jnZ
-         t3/mn85w6gRu2zOy3GQetlmuakmRWDGN9fagSkSGq4xZ+TTyZ4cXJHs4WtAn7R38Uq/7
-         FSkA==
-X-Forwarded-Encrypted: i=1; AJvYcCUPTUpzoueu/ZgbRhWVs/9WZvG3V+D7RQiO3vNLvs01zXR/841h8pZPF7iY31aSR7ziyN5EZBtIKzzYlRnApIg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJCerJhSeg2EcZ33IGV6uoTb/v/6OjFoBvfptFrphZiPOfyPBK
-	GTnjxrw6hC8nKwQcAOgCvsbACJ3c6rZ1AK2YCmKze9LmTdq83gvhlCO3cM1k7OQ13m3KQx/BM6e
-	lCJTGIQdCHq5sWwq+IeFGSeLqf018IHeZCMB8vQqX
-X-Gm-Gg: ASbGncuzM3T4GdoqxaaKR1uFaSGfbv+gS2YcsLwoy1EjsimsVchLJpv9JZUf/rFVlw8
-	7q4g8wAMrU58b+GsFl4p/neJoB/xfUUU0OmN8Qnz2u+JJMb2SvnU2MqsuItAUYZhIadT5vKDmMt
-	PAuL59KWY/1wZ3L1Q8Cgjgh/jTdk1UTqEa6cqmnsT3Z9RclGbZ/i7iaGILdzGQMr5W5v1ObQ+su
-	L/v6UvF8jAYydebFD3OT5vk9pPP8lwwEDpODFanBbhOpOGokJ3a40bkJAKNAZWbQqfoTKk=
-X-Google-Smtp-Source: AGHT+IFSwcMwTIDGFtEaqjdkz/AcJl72mmVl0IpQ+J78Aae+a4oANLR7hdtuxWyAxkV1yPdEbNFPfRUD01apBcVpx5M=
-X-Received: by 2002:a05:6512:15a1:b0:593:11bd:9af7 with SMTP id
- 2adb3069b0e04-5941d5586cemr1780294e87.36.1761949734165; Fri, 31 Oct 2025
- 15:28:54 -0700 (PDT)
+        bh=gY82JgAv1A8rYj9MCaiZVHVrEMWrbrCoiDwppP0oGWg=;
+        b=JDMrPRdvufsRmmst5R6wIKOUawabwJrA0+mEKC776BGh3smxui0lfFxCTJfrXSEiRC
+         K8ChLhLmuexh71okiY8lk2j/Qhu1YqUW7kseVLZl+2+tfBtY9Hx4NbzP0i4YAkj/84lb
+         947gZhl5vM7zoFnJ9KnqbUTFMxuz3eR1h77uF8lgfW9FbiNP0e0RXnPXwPH1xM8f4j+/
+         4nZJFQyPKyE73IzcVCYYlB592qHtEkUpOoIcqAXc/iqEUmW2BuDmgyd7+Q7W/h62skCG
+         O8kw4lYSrOuWBxsrAFJNsUL5OX3ezAMKJLVRIYsDpx1Oq/N1thOS7wht6CtJIjItnjje
+         BaLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXxKfqS8sm/RUkCA5jecrXMttRkoTqQBZNk1KINY0dqpdqdWVEFz2/NrJrJE2tIghbP9zZiYO9zrmIgrCOqDvc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyML+qa/OjddlX8ZSvcpuchcf9USWuJM0nTyLpVqSOwRYOtpCTu
+	ofqUldcVFTe1esPRaxI9mPryEYL1JTQlWzijCZzCtxHYevmdsVWOV5TDEKf2h7yNqNK+DATgv16
+	6Bb2m7deXlCy9nzCgillk46yYmWp+YJAnfXjvDAVU
+X-Gm-Gg: ASbGncvw7P20eLU5dXVev1mUdpcDKuUwcVs7QFbxDtTdNBmq97o+skAdDRXtBhTtApt
+	nzFPZGfR7Pc9YYj/epRGIi/lLjI/9tgbwJ6Kxm5cUyelRycUuqROXdH4vqTd3I5k0sfpw6WYtsf
+	yXFzzcl2PpfgFL7rOW4P1B7/b21WAduteuRxHkDIn5Z6JVNCzKyIbVWN9R6cpc2JgrfuBudFmoj
+	S0mR8TCbyN/BXT9ZZwNvNQ6POWGYfglKnrSWlk7O0B9rVNvKdagq9PvlLA=
+X-Google-Smtp-Source: AGHT+IENbX2I9QLWCzbGqCz+aeN8c925eFyi708BVOjF22TIfxJHEaH3VCvZrnHqn6i5au9Z3HH9DEYcpuxXzSR6lhg=
+X-Received: by 2002:a05:622a:1991:b0:4b3:1617:e617 with SMTP id
+ d75a77b69052e-4ed424d7c14mr1098221cf.11.1761952382100; Fri, 31 Oct 2025
+ 16:13:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251018000713.677779-1-vipinsh@google.com> <20251018000713.677779-6-vipinsh@google.com>
-In-Reply-To: <20251018000713.677779-6-vipinsh@google.com>
-From: David Matlack <dmatlack@google.com>
-Date: Fri, 31 Oct 2025 15:28:27 -0700
-X-Gm-Features: AWmQ_bkJhwWK8iLPcHy-hUK2RP4WggOSXosGGLXjIhn9TKPWrHQgEkrODFylvq4
-Message-ID: <CALzav=f9tjgyF7TBsfjCpmvRezkkgfQY-OXwj+TaebjeffK-0A@mail.gmail.com>
-Subject: Re: [RFC PATCH 05/21] vfio/pci: Register VFIO live update file
- handler to Live Update Orchestrator
-To: Vipin Sharma <vipinsh@google.com>
-Cc: bhelgaas@google.com, pasha.tatashin@soleen.com, jgg@ziepe.ca, 
-	graf@amazon.com, pratyush@kernel.org, gregkh@linuxfoundation.org, 
-	chrisl@kernel.org, rppt@kernel.org, skhawaja@google.com, parav@nvidia.com, 
-	saeedm@nvidia.com, kevin.tian@intel.com, jrhilke@google.com, david@redhat.com, 
-	jgowans@amazon.com, dwmw2@infradead.org, epetron@amazon.de, 
-	junaids@google.com, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Alex Williamson <alex@shazbot.org>
+References: <cover.1761756437.git.lorenzo.stoakes@oracle.com>
+ <7de40603015dee82970f5d37332a6d5af7532063.1761756437.git.lorenzo.stoakes@oracle.com>
+ <xnsn5rfqigbm5ryjtbf2rtfotneiwygzesvyfdxiqrzlyzljdr@tmbht4ggnjcv>
+ <61ae955e-310d-488e-b350-59bb809f06e1@lucifer.local> <c736tssdw3z57kamh6eqc23gr575q375n2o2nnszih64afnaf7@zwbqremsbhwf>
+ <053f3a04-9195-4f8d-8959-42e0c3ba077b@lucifer.local> <72ee2324-d599-44b6-92ce-ed0afafed78f@suse.cz>
+ <3ae457cd-6c18-4870-a617-7f937b107cb4@suse.cz> <88b72728-fa3f-4a70-9ea2-40ff50673047@lucifer.local>
+ <a3bcac19-78b7-4918-81b3-641a65a19a9d@suse.cz>
+In-Reply-To: <a3bcac19-78b7-4918-81b3-641a65a19a9d@suse.cz>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Fri, 31 Oct 2025 16:12:51 -0700
+X-Gm-Features: AWmQ_bnVgpHA3Q0hYHvJgIIm_FpBFlpB9mdVzh6mL8zZeBp2jS4PiSvnDoBUG6c
+Message-ID: <CAJuCfpEs1JTywfZNPrVmeTHUUyK+7waCU9fqfur2Q_xxx7hacw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mm: introduce VM_MAYBE_GUARD and make visible for
+ guard regions
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Pedro Falcato <pfalcato@suse.de>, 
+	Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
+	David Hildenbrand <david@redhat.com>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Andrei Vagin <avagin@gmail.com>, Barry Song <21cnbao@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 17, 2025 at 5:07=E2=80=AFPM Vipin Sharma <vipinsh@google.com> w=
-rote:
-> +static const struct liveupdate_file_ops vfio_pci_luo_fops =3D {
-> +       .retrieve =3D vfio_pci_liveupdate_retrieve,
-> +       .can_preserve =3D vfio_pci_liveupdate_can_preserve,
-> +       .owner =3D THIS_MODULE,
-> +};
-> +
-> +static struct liveupdate_file_handler vfio_pci_luo_handler =3D {
-> +       .ops =3D &vfio_pci_luo_fops,
-> +       .compatible =3D "vfio-v1",
-> +};
-> +
-> +void __init vfio_pci_liveupdate_init(void)
-> +{
-> +       int err =3D liveupdate_register_file_handler(&vfio_pci_luo_handle=
-r);
-> +
-> +       if (err)
-> +               pr_err("VFIO PCI liveupdate file handler register failed,=
- error %d.\n", err);
-> +}
+On Thu, Oct 30, 2025 at 2:48=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> wr=
+ote:
+>
+> On 10/30/25 20:47, Lorenzo Stoakes wrote:
+> > On Thu, Oct 30, 2025 at 07:47:34PM +0100, Vlastimil Babka wrote:
+> >> >
+> >> > Could we use MADVISE_VMA_READ_LOCK mode (would be actually an improv=
+ement
+> >> > over the current MADVISE_MMAP_READ_LOCK), together with the atomic f=
+lag
+> >> > setting? I think the places that could race with us to cause RMW use=
+ vma
+> >> > write lock so that would be excluded. Fork AFAICS unfortunately does=
+n't (for
+> >> > the oldmm) and it probably would't make sense to start doing it. May=
+be we
+> >> > could think of something to deal with this special case...
+> >>
+> >> During discussion with Pedro off-list I realized fork takes mmap lock =
+for
+> >> write on the old mm, so if we kept taking mmap sem for read, then vma =
+lock
+> >> for read in addition (which should be cheap enough, also we'd only nee=
+d it
+> >> in case VM_MAYBE_GUARD is not yet set), and set the flag atomicaly, pe=
+rhaps
+> >> that would cover all non-bening races?
+> >>
+> >>
+> >
+> > We take VMA write lock in dup_mmap() on each mpnt (old VMA).
+>
+> Ah yes I thought it was the new one.
+>
+> > We take the VMA write lock (vma_start_write()) for each mpnt.
+> >
+> > We then vm_area_dup() the mpnt to the new VMA before calling:
+> >
+> > copy_page_range()
+> > -> vma_needs_copy()
+> >
+> > Which is where the check is done.
+> >
+> > So we are holding the VMA write lock, so a VMA read lock should suffice=
+ no?
+>
+> Yeah, even better!
+>
+> > For belts + braces we could atomically read the flag in vma_needs_copy(=
+),
+> > though note it's intended VM_COPY_ON_FORK could have more than one flag=
+.
+> >
+> > We could drop that for now and be explicit.
+>
+> Great!
 
-Alex and Jason, should this go in the top-level VFIO directory? And
-then have all the preservation logic go through vfio_device_ops? That
-would make Live Update support for VFIO cdev files extensible to other
-drivers in the future.
+Overall, I think it should be possible to set this flag atomically
+under VMA read-lock. However, if you introduce new vm_flags
+manipulation functions, please make sure they can't be used for other
+vm_flags. In Android I've seen several "interesting" attempts to
+update vm_flags under a read-lock (specifically in the page-fault
+path) and had to explain why that's a bad idea.
