@@ -1,396 +1,166 @@
-Received: from sonic312-24.consmr.mail.gq1.yahoo.com (sonic312-24.consmr.mail.gq1.yahoo.com [98.137.69.205])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB1F309F01
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 20:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=98.137.69.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E8330DD01
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 20:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761942145; cv=none; b=sH5bcjQtOCIT/97DcTRH4Z7dYct5eoduEsWAGyQkahYb1sjgW0NDdD0uRY5f+IPPpsUCqMXtJ1HesSSVM86u/VNZPWI8ndPXpCPdkt2BIH7kbb8jGX8DktrIxbrxPwHgKq1z/9HQOMBTpg6L2TPikfBbgJ5QA8GZEles6MB0neE=
+	t=1761942162; cv=none; b=WYJFqhGaVNaavezf6gaNEj4jXxtWysJICqgi5HLUUZ5YUS8dNmthGAjgzl+pnKNV7CgOLfscF85zPUEVD+h/Xleyr8byhf4jiygbMkvsAhY2hRqeDpN1KXuYPhQAqz760Z7YYRJ7UvrL7GXZc8SeyqphHG5J2bl20Gbm1OODnBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761942145; c=relaxed/simple;
-	bh=zShKxfP0nVEMYim+rC7RNh4h8Uy6aeRNwb1snK7E9FM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IJWTz08POdOMtcvlL3H9PjApG93cTqTByAwBzmHkndCQMCuZzYPdMLuhYsAzp05hzr7hDHofaUKUbGOzGF1tVf0ynlbuYWgeCZfGn3s1C3mwIo+VRnkcIhja0WhPitgH+jYy570fsnY+l4FikU55qppoJWAlwtsgIEPb/EeWKGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=DXP1uES5; arc=none smtp.client-ip=98.137.69.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
+	s=arc-20240116; t=1761942162; c=relaxed/simple;
+	bh=xG56qsMH2WuZG3c7wHt0lGtWrKdZNmLha+U2JMxWS24=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QSvz02orWUQ/0pU/vFrC9PlN/N6AN+Uks+khnsJYkO0YE0d+IIEfGUfZnVeow0jfA6Zf6RNKmTb6HAH78tmGB4/nePvDsLCClDJLQ2g/M0fM26oK1zksbA3xAIGO8Ka3fNfyeNVcAVlf5D6rMZZXAp7l+e7m591xcrQHSA2q/EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dnfmtsd/; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="DXP1uES5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1761942142; bh=BOJ5Jw7QZ2Hwk9e5yvlRJo3M6jwqiPaySJ51gXkIEA4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=DXP1uES5yBVIPSvwNw7a5pl+R0z1wtiHhgPBFdgZf+YJqYBAGKgNXBysHEYulKpJiTof1VONU7sxhkaWS+tFVDHcy7SnkAXuxxr2+IRutmTlMku4kW15ZaVEENo3joAg0gjO/eH0cROF+pA8rU4luw16fzOCCkmTRwEwikmcDNQGxsTaM2/l7q3Rr2uEuqaJNvVzolsRlJvwgsRlXn2Ehgx3fFwdGFxYpKjHwyk2xy94//rnIl7296e1R5assxHwKL4tnbVhvR8hXO21/kF8DxjNQoGo4sTsXpLjjA2sSkMfJ6YZy2LrWne4OaleLWK3CGfv/MVMvLw9HZVfx1BxsA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1761942142; bh=dmO8A9Zc10xP0zxKVnuP6QUNit6TxDgmUSs4PLnOfG6=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=PHFBxgpMJ+/XI4YD2dE/tNJFBWrHm4yAZjZ+rVGZlnBLg4lRekenH2Qjf+yy2UkSkTrsq3M//YnctHRzJrzWknweS/YSUxgd3IwCneCPReQyfceegDmEqQB2X5NQR/6VpqRzYUxSNq2mcbDlKlHW+qejpkgKlmUPo2GyoFDpDCCFkIGeIstGh3jqbtlob42dsCkL4Iq5jX4bdePSZXyrsVETdYmND3aGoaqL1ikWlSZ2YYA/kKVBoO48f50agAra1DRetFZ6LZwZnsXlawHs1qWAZ1QO20yRsdJ9B8JsdgNivbHWKWBYuz33UiCAyzyk+lcP4Gq6yVtyr1QASt3zdw==
-X-YMail-OSG: i5zodQ4VM1kZF8iwGb2vMiF.eay8FlyGapXXFu9sBOtutZnUc27RCNIt1yAbBPT
- eYJY4fXFg2tU06wW1Kzk1.EPVTGfl8Nf7DHjw3UrqEVQtjQx40Q3YsaVdrmCc61hUsOIABRcJtMT
- s9FB73Zz55X_Qn_C4SGpXAKrZcaPMwDQFzCWxEu4dJ27EAsc4UNQ2QLPGYQmMa5x0SWam5YjOAU6
- hwRA1zTkTHGv.TTT6Mm1vP2s9Szp4SJPW9Smwz3idbwvrB0WDfFus06o7JEeG5SAmrDt_xEI4wAd
- ei6D0Ym6JV.A8W__PJai890JQUvGraPj6VEkquHldVVge6FIHsYUOhFVU4sWN3rnN5ZEHbyfkqty
- mfkl0yYVwXwQYDOdZg8eAWpt.T7CMgHQcW2svAIYdzcKH3H3Hrb6OGgdjZ8O7VjYPB_J6C1ntvc6
- oJc7zZQzHZRlnHUlRZmAJrY7xGIuyQ8PYNWZRfPpiWLE.N.TkwfOsK9rr.2R0qQogaOC8V7hSneG
- gr93WUeF.dG8TxUQhZ1W6rV2b0HDb97qAYMTFobXoFySNYsylyTtdJR._UrEOwgyepWQLjOxwObw
- TROvUp69vhalCtdD1BCjHtR2LW5Jsv1.RjSSnorkErw8zOXy4v.oja5MtlR9T0OU3IVgUxDbFn3w
- 5CPiPxFcB9HGMKJvRgm.M6w8iq07OFJlK_S0YEdev5Tbs4l0t88fkOek9Jw9Wyo46nqUZ9SqnPhN
- xA_lAe.BL.OvSjykC3uTtGJLab9XntTpMrUEK2330Tq5Eit5WjWxuktUX_lUJanb6.ILFVd3xjE3
- 6dI2fnhFqyvvif.eT7zmr10kwuqidT6sE8NSyggts7jcOGbPOyZCj0IpeUImEwNO1pgQ5CeaFt0G
- smrNwJtqtP5IWtE3CM6c7DW8HR8c6wvhQ6cFbWNcZ9lpzl053lh2lOZ9OaRoRHjReHWYULnjKVgj
- mA3ZsIzB9Q3jneyWa4kKz8t9EZ.T56dbdtMD.ca2KVIb5B1rHWHT61qNCZ71A5hI95J661e.xUqb
- bZpfokGwpZdQvLqBlQMojrE5c8x.GFipmtboZHxZjFWo4VXg2Hv3r2Qr7EORTw_k_U_ZfV2vPtsC
- Fv7jYtp5GMHe5LL.oSnW6lSyoBIXSbI.seZJtBfZ6Ml_WQLHQeSV8rRufQZaBqHyHpJw7DHN3vTx
- lTpGgBAD7sK2jyaC9yTRpsUYROrV78OweE08YuUQkBPzmZIHFn3WSo_lFFnvThJriN_M26c9f8EU
- Sv.TYE.M9.Nugk7DwGzI1D7udctRkh3IkqWlwzUSyBX5IoBVsHuOfeVG0yimEPa2caYA2WKjaQ.M
- GtXvpZ9Y2mbUpzF26TxGog4llm9cYD2OOb4X.KbCFb_56mbSgpD34HMckU67Dt5dnZ9UhNbKbK_b
- x8BwMq8DpChmvg3Ay2TsnR8R1Vel2Ya8porV3BuOEzDHHyskEypjuaeRwQrQD57G8NziIXh.fnpR
- VekNsZ_FOFrryqCJnXFS2DjYKR337k6LPnW04hmeij7LbDtpP3lXiYawiP4l8lgPq7n3Cta01NCS
- uOgnpGyDllv6cjS_jUKeOLmhsiAQIXMeJAm2HzOZF9ZF7Jt0tiz7h6Oh15ZwV3EFVy0pz8LhNdkm
- W6NbURv5oS9QW8YSEUV.3hMzkoWZqLolGEqABiC17k3Gqe.gFi1GcJBxP0c1OSTSHWUQFFtMNEeK
- YiM2fdhl4bafUaggGx_VFtCr8G0hx3NAQ1smZosF_5wCoxcLqgoXxWTZMv89mb7SQL72QawEzk5U
- 9HRgjcyWeN3bEPze6ll9p98VtsfQSvZftc7Wij_bozyWQjth_QiN0Ha.5kPPEz1QZGSgy5OTUZ2W
- KOIi9FFsRHNZAAky39q8F_yoY5Knsdmmh3xikNV0q0hS0bLzz9vRibzdl_a4WebMULZIMD.xrzKn
- fM3rsQ38Q0Muz3alVeVcytdrDwhgSUqbxBOhNlM70jz7xt4CUv36iLSgbn5CGz2qPGwIQPSaVDrj
- b2SAyCN.eZ9NiJfcZTC4lU92ltsl9n4bI1iV6ARRZ1ug2dZHtQ1ffO3lFL0Eto1Yur9YU14i57Ry
- bsXz5dTWnfJQMyN0FOA_6hf4ThW78gmDMXvLBEZ34tHqiNic0RaKNnF_cTtr9klYWWwQKeE7IPSX
- U6Az1mlwVowgUezrnRTyQVEv7Ul7HTvOUZfvnlQEUT0Uq4VCHKjVDk8MXbUMc0JJ0gVZ.WaNC0C_
- 2IEUIE3gUgP6nBPsNtaHO1VxAxQrZ1cQH01wNQQJpFcp3UyRXfdB906n402KPL6FJFFtpv2R0hej
- LPJtxDjOeEthk
-X-Sonic-MF: <adelodunolaoluwa@yahoo.com>
-X-Sonic-ID: 1aa3a47d-2071-4549-b0bb-ab07f69b22cc
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.gq1.yahoo.com with HTTP; Fri, 31 Oct 2025 20:22:22 +0000
-Received: by hermes--production-ir2-5fcfdd8d7f-72pzv (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 047a24e14e331714b0dc96afdb1dc439;
-          Fri, 31 Oct 2025 20:02:02 +0000 (UTC)
-Message-ID: <939c78fc-ea90-4e5d-a9b1-e750dd6b4e25@yahoo.com>
-Date: Fri, 31 Oct 2025 21:01:56 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dnfmtsd/"
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-592fa38fe60so3467864e87.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 13:22:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761942158; x=1762546958; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qsZcwQVtwdhCivWDhKm/5zaUeqA1jP6eTb4+KpUSqwc=;
+        b=Dnfmtsd/2UPto3N512HWy0p6HVN4bGZjYL80D0TJsw80Lzob49WkluayNIGeEEMG7s
+         QIfpZvrkdhauNgYGLYvl7JdcAl4dio8McASFWffevhouzftHdwx0Gc+bVy263Lec9jGd
+         A3r5C3il4z78pHaDC7EItw1PhSBe0uvi2uv2wAxCCz3Pl97oSmh4WX1keL+NC/u1f9mP
+         zBhfZbD9pjr/2r0GKPwnDXLmUFCrSxEkt9A7FlxX+3v+uMbiy4ZXjrDF3i49MeeM0JQb
+         39+Eoc8bWsdxq9PNVmnzrwPrTNDKUzhaar+1Fswsu9bL5xp03+kd8B8fwAZgpmQGDKld
+         OGvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761942158; x=1762546958;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qsZcwQVtwdhCivWDhKm/5zaUeqA1jP6eTb4+KpUSqwc=;
+        b=LF+s0dUKDEIjKLGBBAn4bWLY8IODvLbidoDao6gPmZcsglCBamw9t4Uy+U5/1/SRML
+         W8tZ4ndlkEVcQVZiSPOy63OE6+JRIu0wahLf/iELBOfCIwYp1Pf1Q89VZ/ryJL+/v+M/
+         1aRnK8ADC8Qzm/M9CHtOxaoXJimMJVzEAJUz9LLyilTZA4SkZ0soM+oiChQxLiqAMO5t
+         pgRz91umbo7Qbz7a/7MbnHkUzayY+QhSpNxMKEErhqgPHZ3w4eU0T9t6uaupTTxMReMO
+         TPMCWxWczXVEGWLrCMZVXrsAIs4hfmeB2PCvwiSt94EA/I0RV1R1vEpZpejtNX8+T4vZ
+         ja/g==
+X-Forwarded-Encrypted: i=1; AJvYcCV0hhIkfAfPK6MEbHR/asbt7N4Y9XO3uVCfS7gl7foLAWfuFNbxbJPcjCFfH4/PdZ6Ty4p7S9mpEccaiWQ8S5k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCKCYNaB2ouSf8Lq2rxUH7t/y1BwXqPEnRG5XRYaEHXyaw72X5
+	PQMNE2Z1Z11b38gG+omIfoVN+FyK8pMdOzOln7cbyZjCpy7ypmJHRthiDC/Wn227
+X-Gm-Gg: ASbGnctEDLKVRCcI3zl6557gyvt9WOIocbZp+XTva3aRJy7ZBr/Cu9IWimMGLd02Zdq
+	5fucBtUpcalBDKoG0qz8d0kQLem43GXk0TR5YTFezf+QyKSak14D/skrH4FfKISXAbZX9OjcIx/
+	c5/cBQLR1Y0Eaekv0qYaZY+oZRD1GdqznwlOwppA0t6cc/phwEscr9ZSfiiKcpkipunAlACKZ9X
+	zg8AgURmR10ommrDeeq1r+H45nbrQj3zmUbuKXRnEeyBtiAIgpK5daFvh64jFG+T8Y7Len9L3ks
+	vEvIN4SnVL2zlJoG/36/lOJJ60vro38ltTgR4MHqAWIfZtExfQa8iT53drt4pVMgPIokCTpZH/X
+	6mK/CrD3oo3frud5khrX3OIDLs/j4aaJuhFGNkbyR4D/d05Xz6zV7eSIGs0NDmXGULIRjuJF00t
+	tk3mk=
+X-Google-Smtp-Source: AGHT+IEFROwv14v4VtNeXmBx07IO0llOFTdpkWeY0h878Ddr9Ngru7QFo7D5rPTu2YYfmOzcxZIaTQ==
+X-Received: by 2002:a05:6512:1384:b0:592:f814:7c94 with SMTP id 2adb3069b0e04-5941d5079a9mr1680972e87.1.1761942158041;
+        Fri, 31 Oct 2025 13:22:38 -0700 (PDT)
+Received: from archlinux ([109.234.31.186])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5941f5b5d3csm706058e87.68.2025.10.31.13.22.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Oct 2025 13:22:36 -0700 (PDT)
+From: zntsproj <vacacax16@gmail.com>
+X-Google-Original-From: zntsproj <vseokaktusah7@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: bamv2005@gmail.com,
+	shuah@kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	zntsproj <vseokaktusah7@gmail.com>
+Subject: [PATCH] gpio-selftests: replace fixed sleep with polling+timeout
+Date: Fri, 31 Oct 2025 23:22:26 +0300
+Message-ID: <20251031202226.7148-1-vseokaktusah7@gmail.com>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: af_unix: Add tests for ECONNRESET and EOF
- semantics
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: "=David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- David Hunter <david.hunter.linux@gmail.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel-mentees@lists.linuxfoundation.org
-References: <20251025190256.11352-1-adelodunolaoluwa.ref@yahoo.com>
- <20251025190256.11352-1-adelodunolaoluwa@yahoo.com>
- <CAAVpQUAbDfaiAZ_NCppGE5vsafWoU7V1xvnqtQQM44cwv6jHsA@mail.gmail.com>
- <7c4070ed-1702-4288-90c6-7edb90468718@yahoo.com>
- <CAAVpQUAT8CVwQfSXq+P78kgPVy8gyD9thEgBcAz45Jpxh=1smw@mail.gmail.com>
-Content-Language: en-US
-From: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
-In-Reply-To: <CAAVpQUAT8CVwQfSXq+P78kgPVy8gyD9thEgBcAz45Jpxh=1smw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.24652 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On 10/31/25 20:41, Kuniyuki Iwashima wrote:
-> On Thu, Oct 30, 2025 at 6:45 AM Sunday Adelodun
-> <adelodunolaoluwa@yahoo.com> wrote:
->> On 10/28/25 19:28, Kuniyuki Iwashima wrote:
->>> On Sat, Oct 25, 2025 at 12:03 PM Sunday Adelodun
->>> <adelodunolaoluwa@yahoo.com> wrote:
->>>> Add selftests to verify and document Linux’s intended behaviour for
->>>> UNIX domain sockets (SOCK_STREAM and SOCK_DGRAM) when a peer closes.
->>>> The tests cover:
->>>>
->>>>     1. EOF returned when a SOCK_STREAM peer closes normally.
->>>>     2. ECONNRESET returned when a SOCK_STREAM peer closes with unread data.
->>>>     3. SOCK_DGRAM sockets not returning ECONNRESET on peer close.
->>>>
->>>> This follows up on review feedback suggesting a selftest to clarify
->>>> Linux’s semantics.
->>>>
->>>> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
->>>> Signed-off-by: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
->>>> ---
->>>> Changelog:
->>>>
->>>> Changes made from v1:
->>>>
->>>> - Patch prefix updated to selftest: af_unix:.
->>>>
->>>> - All mentions of “UNIX” changed to AF_UNIX.
->>>>
->>>> - Removed BSD references from comments.
->>>>
->>>> - Shared setup refactored using FIXTURE_VARIANT().
->>>>
->>>> - Cleanup moved to FIXTURE_TEARDOWN() to always run.
->>>>
->>>> - Tests consolidated to reduce duplication: EOF, ECONNRESET, SOCK_DGRAM peer close.
->>>>
->>>> - Corrected ASSERT usage and initialization style.
->>>>
->>>> - Makefile updated for new directory af_unix.
->>>>
->>>>    tools/testing/selftests/net/af_unix/Makefile  |   1 +
->>>>    .../selftests/net/af_unix/unix_connreset.c    | 161 ++++++++++++++++++
->>>>    2 files changed, 162 insertions(+)
->>>>    create mode 100644 tools/testing/selftests/net/af_unix/unix_connreset.c
->>>>
->>>> diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing/selftests/net/af_unix/Makefile
->>>> index de805cbbdf69..5826a8372451 100644
->>>> --- a/tools/testing/selftests/net/af_unix/Makefile
->>>> +++ b/tools/testing/selftests/net/af_unix/Makefile
->>>> @@ -7,6 +7,7 @@ TEST_GEN_PROGS := \
->>>>           scm_pidfd \
->>>>           scm_rights \
->>>>           unix_connect \
->>>> +       unix_connreset \
->>>>    # end of TEST_GEN_PROGS
->>>>
->>>>    include ../../lib.mk
->>>> diff --git a/tools/testing/selftests/net/af_unix/unix_connreset.c b/tools/testing/selftests/net/af_unix/unix_connreset.c
->>>> new file mode 100644
->>>> index 000000000000..c65ec997d77d
->>>> --- /dev/null
->>>> +++ b/tools/testing/selftests/net/af_unix/unix_connreset.c
->>>> @@ -0,0 +1,161 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/*
->>>> + * Selftest for AF_UNIX socket close and ECONNRESET behaviour.
->>>> + *
->>>> + * This test verifies that:
->>>> + *  1. SOCK_STREAM sockets return EOF when peer closes normally.
->>>> + *  2. SOCK_STREAM sockets return ECONNRESET if peer closes with unread data.
->>>> + *  3. SOCK_DGRAM sockets do not return ECONNRESET when peer closes.
->>>> + *
->>>> + * These tests document the intended Linux behaviour.
->>>> + *
->>>> + */
->>>> +
->>>> +#define _GNU_SOURCE
->>>> +#include <stdlib.h>
->>>> +#include <string.h>
->>>> +#include <fcntl.h>
->>>> +#include <unistd.h>
->>>> +#include <errno.h>
->>>> +#include <sys/socket.h>
->>>> +#include <sys/un.h>
->>>> +#include "../../kselftest_harness.h"
->>>> +
->>>> +#define SOCK_PATH "/tmp/af_unix_connreset.sock"
->>>> +
->>>> +static void remove_socket_file(void)
->>>> +{
->>>> +       unlink(SOCK_PATH);
->>>> +}
->>>> +
->>>> +FIXTURE(unix_sock)
->>>> +{
->>>> +       int server;
->>>> +       int client;
->>>> +       int child;
->>>> +};
->>>> +
->>>> +FIXTURE_VARIANT(unix_sock)
->>>> +{
->>>> +       int socket_type;
->>>> +       const char *name;
->>>> +};
->>>> +
->>>> +/* Define variants: stream and datagram */
->>>> +FIXTURE_VARIANT_ADD(unix_sock, stream) {
->>>> +       .socket_type = SOCK_STREAM,
->>>> +       .name = "SOCK_STREAM",
->>>> +};
->>>> +
->>>> +FIXTURE_VARIANT_ADD(unix_sock, dgram) {
->>>> +       .socket_type = SOCK_DGRAM,
->>>> +       .name = "SOCK_DGRAM",
->>>> +};
->>> Let's add coverage for SOCK_SEQPACKET,
->>> which needs listen() / connect() but other semantics
->>> are similar to SOCK_DGRAM.
->> I will add it through:
->> if (variant->socket_type == SOCK_STREAM ||
->>                  variant->socket_type == SOCK_SEQPACKET)
->>
->>
->> in both the setup and teardown fixtures with a little bit of modification
->>
->> where necessary (especially in the setup fixture).
->>
->> And also the fixture_variant_add macro.
->>
->>>> +
->>>> +FIXTURE_SETUP(unix_sock)
->>>> +{
->>>> +       struct sockaddr_un addr = {};
->>>> +       int err;
->>>> +
->>>> +       addr.sun_family = AF_UNIX;
->>>> +       strcpy(addr.sun_path, SOCK_PATH);
->>>> +
->>>> +       self->server = socket(AF_UNIX, variant->socket_type, 0);
->>>> +       ASSERT_LT(-1, self->server);
->>>> +
->>>> +       err = bind(self->server, (struct sockaddr *)&addr, sizeof(addr));
->>>> +       ASSERT_EQ(0, err);
->>>> +
->>>> +       if (variant->socket_type == SOCK_STREAM) {
->>>> +               err = listen(self->server, 1);
->>>> +               ASSERT_EQ(0, err);
->>>> +
->>>> +               self->client = socket(AF_UNIX, SOCK_STREAM, 0);
->>>> +               ASSERT_LT(-1, self->client);
->>>> +
->>>> +               err = connect(self->client, (struct sockaddr *)&addr, sizeof(addr));
->>>> +               ASSERT_EQ(0, err);
->>>> +
->>>> +               self->child = accept(self->server, NULL, NULL);
->>>> +               ASSERT_LT(-1, self->child);
->>>> +       } else {
->>>> +               /* Datagram: bind and connect only */
->>>> +               self->client = socket(AF_UNIX, SOCK_DGRAM | SOCK_NONBLOCK, 0);
->>>> +               ASSERT_LT(-1, self->client);
->>>> +
->>>> +               err = connect(self->client, (struct sockaddr *)&addr, sizeof(addr));
->>>> +               ASSERT_EQ(0, err);
->>>> +       }
->>>> +}
->>>> +
->>>> +FIXTURE_TEARDOWN(unix_sock)
->>>> +{
->>>> +       if (variant->socket_type == SOCK_STREAM)
->>>> +               close(self->child);
->>>> +
->>>> +       close(self->client);
->>>> +       close(self->server);
->>>> +       remove_socket_file();
->>>> +}
->>>> +
->>>> +/* Test 1: peer closes normally */
->>>> +TEST_F(unix_sock, eof)
->>>> +{
->>>> +       char buf[16] = {};
->>>> +       ssize_t n;
->>>> +
->>>> +       if (variant->socket_type != SOCK_STREAM)
->>>> +               SKIP(return, "This test only applies to SOCK_STREAM");
->>> Instead of skipping, let's define final ASSERT() results
->>> for each type.
->>>
->>> Same for other 2 tests.
->> can I use a switch statement in all the tests? say, for example
-> switch() is completely fine, but I guess "if" will be shorter :)
-I will go for if then.
->
->> test1:
->>
->> ...
->>
->> switch (variant->socket_type) {
->>
->> case SOCK_STREAM:
->>
->> case SOCK_SEQPACKET:
->>
->>           ASSERT_EQ(0, n);
-> You need break; here.
-Thank you. It was an omission
->
->> case SOCK_DGRAM:
->>
->>           ASSERT(-1, n);
->>
->>           ASSERT_EQ(EAGAIN, errno);
->>
->>           break;
-> And also please make sure the compiler will not complain
-> without default: depending on inherited build options.
-I will look into this
->
->> }
->>
->> ...
->>
->> test2:
->>
->> ...
->>
->> switch (variant->socket_type) {
->>
->> case SOCK_STREAM:
->>
->> case SOCK_SEQPACKET:
->>
->>           ASSERT_EQ(-1, n);
->>
->>           ASSERT_EQ(ECONNRESET, errno);
->>
->>           break;
->>
->> case SOCK_DGRAM:
->>
->>           ASSERT(-1, n);
->>
->>           ASSERT_EQ(EAGAIN, errno);
->>
->>           break;
->>
->> }
->> ...
->>
->> test 3:
->>
->> ...
->>
->> switch (variant->socket_type) {
->>
->> case SOCK_STREAM:
->>
->> case SOCK_SEQPACKET:
->>
->>           ASSERT_EQ(-1, n);
->>
->>           ASSERT_EQ(ECONNRESET, errno);
->>
->>           break;
->>
->> case SOCK_DGRAM:
->>
->>           ASSERT(-1, n);
->>
->>           ASSERT_EQ(EAGAIN, errno);
->>
->>           break;
->>
->> }
->>
->> ...
->>
->> if not these, could you kindly shed more light to what you meant
->>
->>>
->>>> +
->>>> +       /* Peer closes normally */
->>>> +       close(self->child);
->>>> +
->>>> +       n = recv(self->client, buf, sizeof(buf), 0);
->>>> +       TH_LOG("%s: recv=%zd errno=%d (%s)", variant->name, n, errno, strerror(errno));
->>>> +       if (n == -1)
->>>> +               ASSERT_EQ(ECONNRESET, errno);
->>> ... otherwise, we don't see an error here
->>>
->>>> +
->>>> +       if (n != -1)
->>>> +               ASSERT_EQ(0, n);
->>> and this can be checked unconditionally.
->> did you mean I should remove the if (n != -1) ASSERT_EQ(0, n); part?
-> If SOCK_DGRAM does not reuse this test, yes.
->
-> The point is we do not want to miss future regression by
-> preparing both if (n == -1) case and if  (n == 0) case, one
-> of which should never happen at this point.
->
-> Thanks!
->
-Thank you for these.
-I will work on them and send v3 shortly.
+Replace the hard-coded sleep 0.1 with a polling loop with timeout
+to check the sysfs GPIO value. This avoids timing-dependent
+flaky failures in CI and on slower machines.
+---
+ .../testing/selftests/gpio/gpio-aggregator.sh | 59 +++++++++++++++----
+ 1 file changed, 46 insertions(+), 13 deletions(-)
 
-Thanks once again.
+diff --git a/tools/testing/selftests/gpio/gpio-aggregator.sh b/tools/testing/selftests/gpio/gpio-aggregator.sh
+index 9b6f80ad9..1e81e62e9 100755
+--- a/tools/testing/selftests/gpio/gpio-aggregator.sh
++++ b/tools/testing/selftests/gpio/gpio-aggregator.sh
+@@ -671,26 +671,59 @@ teardown_4() {
+ 	agg_configfs_cleanup
+ }
+ 
++# helper: wait for sysfs file to become a given value (timeout in seconds)
++wait_for_sysfs_value() {
++    file="$1"
++    expected="$2"
++    timeout="${3:-2}"   # seconds
++    interval="0.01"     # seconds per poll
++    max=$((timeout * 100))
++    i=0
++
++    while [ "$i" -lt "$max" ]; do
++        if [ "$(cat "$file")" = "$expected" ]; then
++            return 0
++        fi
++        sleep "$interval"
++        i=$((i + 1))
++    done
++
++    return 1
++}
++
+ echo "4.1. Forwarding set values"
+ setup_4
+ OFFSET=0
+ for SETTING in $SETTINGS; do
+-	CHIP=$(echo "$SETTING" | cut -d: -f1)
+-	BANK=$(echo "$SETTING" | cut -d: -f2)
+-	LINE=$(echo "$SETTING" | cut -d: -f3)
+-	DEVNAME=$(cat "$CONFIGFS_SIM_DIR/$CHIP/dev_name")
+-	CHIPNAME=$(cat "$CONFIGFS_SIM_DIR/$CHIP/$BANK/chip_name")
+-	VAL_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio${LINE}/value"
+-	test $(cat $VAL_PATH) = "0" || fail "incorrect value read from sysfs"
+-	$BASE_DIR/gpio-mockup-cdev -s 1 "/dev/$(agg_configfs_chip_name agg0)" "$OFFSET" &
+-	mock_pid=$!
+-	sleep 0.1 # FIXME Any better way?
+-	test "$(cat $VAL_PATH)" = "1" || fail "incorrect value read from sysfs"
+-	kill "$mock_pid"
+-	OFFSET=$(expr $OFFSET + 1)
++    CHIP=$(echo "$SETTING" | cut -d: -f1)
++    BANK=$(echo "$SETTING" | cut -d: -f2)
++    LINE=$(echo "$SETTING" | cut -d: -f3)
++    DEVNAME=$(cat "$CONFIGFS_SIM_DIR/$CHIP/dev_name")
++    CHIPNAME=$(cat "$CONFIGFS_SIM_DIR/$CHIP/$BANK/chip_name")
++    VAL_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio${LINE}/value"
++
++    test "$(cat "$VAL_PATH")" = "0" || fail "incorrect value read from sysfs"
++
++    $BASE_DIR/gpio-mockup-cdev -s 1 "/dev/$(agg_configfs_chip_name agg0)" "$OFFSET" &
++    mock_pid=$!
++
++    # wait up to 2s for value to flip to "1"
++    if ! wait_for_sysfs_value "$VAL_PATH" "1" 2; then
++        kill "$mock_pid" 2>/dev/null || true
++        wait "$mock_pid" 2>/dev/null || true
++        fail "timeout waiting for $VAL_PATH to become 1"
++    fi
++
++    test "$(cat "$VAL_PATH")" = "1" || fail "incorrect value read from sysfs"
++
++    kill "$mock_pid" 2>/dev/null || true
++    wait "$mock_pid" 2>/dev/null || true
++
++    OFFSET=$((OFFSET + 1))
+ done
+ teardown_4
+ 
++
+ echo "4.2. Forwarding set config"
+ setup_4
+ OFFSET=0
+-- 
+2.51.2
 
