@@ -1,132 +1,129 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73526296BB7;
-	Sat,  1 Nov 2025 19:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A36B2868B5
+	for <linux-kselftest@vger.kernel.org>; Sat,  1 Nov 2025 19:46:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762025671; cv=none; b=sgvlBfxzakDgKevkTREbbSzxiUUi6Vnm43HUXF35NXlr2BxsKu0IaUdbqLNmqoOnVX7x1Niw5WUvjXpoV7IRiRpxBtTmjKx7gOdLuqQwWS4LA3QMCp2g8r0WVjh3k6/H3vrSHAkoJDUTD8TqnOjJ2GlRK1KIwCdxv82qs+nRo90=
+	t=1762026375; cv=none; b=KlKXVv4GqAa1EcxdqNPJT42XGzvvQuNeyyOxiiAA7JgCPPHk4xuFHGkZLEOsogcnyf8sb8akSsSMhOsXVUFHMfSlxREJJS14YvBgS4SVU8Mz/Z/jKJNTgLl3TGxKattJ6QPbcGgN2jbWNVN3IrIutFtnYZRTnTPBbXNJEaEdaXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762025671; c=relaxed/simple;
-	bh=9q6vCz/5bPhsdaBKqGHSicsAwhDjoOHGYrh2mAOw+kI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iAJpqG/SSMmZjTC/etb9JD6lRP8K7CZAF8LIrNEfivGMUuejpZnzRST94dEArLudpFAb0sLZ59PKYXZnApr4pNawgrBlLfnXVAeJkx9GpFUMwOEcNLFtFw+H5N83bKMujWbkZScpwdseBUZw9X1HG1fyedEe1v+eu+uWKGhFjMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Ir6BRqpi; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1762026375; c=relaxed/simple;
+	bh=ya9HLn9UBkGfXOMBjOZnSUdvjJGss6zEIROPu9RJexs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=NZOprWZ+NoslLnqrN1cCzPuLUXSnSi2VPLmu7yuUxn/WZpWnVO6ge+ixrHsz+wYg/I1wLGxDw3IX0EcXs4js42rxbzFxMllUpKUPAP14wZ9Swg6Ij4sykA/EmXrBySDEZ7ruyOJJKeaQcFUfDLZePwiUw0h90fhz+FoIkqbG7Gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bt6NhuXw; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ir6BRqpi"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A1JVhov006631;
-	Sat, 1 Nov 2025 19:34:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=Dc9F5frfU26RSb9GNsKNqcQjAhpyN
-	/KoW+lW1Wj6Lxc=; b=Ir6BRqpifKKQeZJ+jhWM0gqsTcMMsgo1MQvR0bRqbdzsE
-	sbqxpdmz9roydbF+OM/OkbBCWOhmqE1k892SX7zoAsmPqie9IT/tq8NCkyDaACMp
-	59dOmTeEZsc3YbAQljU7Pq40iszUEaDgHGm4Bgjt0G5wlaak93RXulgpQ96sLUj7
-	ArItluvLCPNL9LAkSgV9fxz+rxNFWyYNUwyC3rI5XabO+/yFTVZpz/ASVB9xFLEg
-	x3r5R90sR4j6pVPKNVZqgg73VGIfCM/AvdwwaX5nvyoltJk0rzQn6+K/VWpIWMn/
-	Ae6aeae0gJwiei40GilxnScDE4NGTLrIHwkb/5XHA==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a5rdgr023-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 01 Nov 2025 19:34:01 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5A1HhnGD020948;
-	Sat, 1 Nov 2025 19:34:01 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a58n6s24y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 01 Nov 2025 19:34:01 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5A1JY0Gg007914;
-	Sat, 1 Nov 2025 19:34:00 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4a58n6s24r-1;
-	Sat, 01 Nov 2025 19:34:00 +0000
-From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To: bpf@vger.kernel.org
-Cc: alan.maguire@oracle.com,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 0/2] Print map ID on successful creation
-Date: Sat,  1 Nov 2025 12:33:53 -0700
-Message-ID: <20251101193357.111186-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bt6NhuXw"
+Message-ID: <57bbade3-0707-4045-b39b-2053434b0b7c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1762026370;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qSk/sZRQi90GHI3IILQtj3YgPAQn3xbHNm/4+VGi7to=;
+	b=bt6NhuXwWlyIZUWEiIsROrc2jyonkIZX/DOSReszd9+6z1Nhl2up7ZnTMedodcIqC9ozwX
+	W6aLNMDub//7cjEzYGIR3b7lj/p/0Mp4ex4mSvTR50MifJPiYezgJYuplEidrWU1FkCTxz
+	qJsT50eEfIWOMW9JdydU/DYe9lZNic8=
+Date: Sat, 1 Nov 2025 12:45:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v9 9/9] liveupdate: kho: Use %pe format specifier for
+ error pointer printing
+To: Pasha Tatashin <pasha.tatashin@soleen.com>, akpm@linux-foundation.org,
+ brauner@kernel.org, corbet@lwn.net, graf@amazon.com, jgg@ziepe.ca,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, masahiroy@kernel.org, ojeda@kernel.org,
+ pratyush@kernel.org, rdunlap@infradead.org, rppt@kernel.org, tj@kernel.org
+References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
+ <20251101142325.1326536-10-pasha.tatashin@soleen.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <20251101142325.1326536-10-pasha.tatashin@soleen.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-01_05,2025-10-29_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
- spamscore=0 suspectscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
- definitions=main-2511010168
-X-Proofpoint-GUID: l-wTHLNXJ9g4ByYukzg-xBHhiJzgJx2y
-X-Proofpoint-ORIG-GUID: l-wTHLNXJ9g4ByYukzg-xBHhiJzgJx2y
-X-Authority-Analysis: v=2.4 cv=DoJbOW/+ c=1 sm=1 tr=0 ts=690660aa cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=NEAV23lmAAAA:8
- a=a9B3Gpd4lODhp7-wpV4A:9 a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAxMDE2OCBTYWx0ZWRfX4gvUmblxf5Y1
- HaItr4o4bHjD6FB7ZLnOpG/nScdfzfotA0VdLrZmR/lwHyD0cP7CTUQeH+ztB6zhWPYlQfp1VvT
- rYZfuktF7x1z22E5JsiS8rtxRkeMF99KiCG5IF7Y0rXoR4Xa44yQjz81W4ogjDkSI+KNPwrA2sV
- ZO5nH9JwhwZbWz0LuJ5dZVErsDecCDqURu7v2jpJO5Gkd9JYfOnoIt6hfR3j8TWfZwo/OeI+oQI
- K3y9KdmgSU1lw2BkGvLr9jzzO7mN3F83ha/mnkxWVzCSoeW9V+8fViFDda3ZdkNzRetQ3KtbU/G
- c7Zgx2eLn6W83vfofbw/eJJG3qA3VrxF/tvpRpHb47Bz+eTumV5wATcPGf/8mTTz37tF8R1kDRc
- GKpVieuREuh/99B+8xIlHDQKrDKjFQ==
-
-Hi all,
-
-I have tried looking at an issue from the bpftool repository:
-https://github.com/libbpf/bpftool/issues/121 and this patch series
-tries to add that enhancement.
-
-Summary: Currently when a map creation is successful there is no message
-on the terminal, printing IDs on successful creation of maps can help
-notify the user and can be used in CI/CD.
-
-The first patch adds the logic for printing and the second patch adds a
-simple selftest for the same.
-
-Thank you very much.
-
-V1 --> V2: PATCH 1 updated [Thanks Yonghong for suggesting better way of
-error handling with a new label for close(fd); instead of calling
-multiple times]
-
-V2 --> V3: Thanks to Quentin.
-	PATCH1: drop \n in p_err statement
-	PATCH2: Remove messages in cases of successful ID printing. Also
-	remove message with a "FAIL:" prefix to make it more consistent.
-
-Regards,
-Harshit
+X-Migadu-Flow: FLOW_OUT
 
 
-Harshit Mogalapalli (2):
-  bpftool: Print map ID upon creation and support JSON output
-  selftests/bpf: Add test for bpftool map ID printing
+在 2025/11/1 7:23, Pasha Tatashin 写道:
+> From: Zhu Yanjun <yanjun.zhu@linux.dev>
+>
+> Make pr_xxx() call to use the %pe format specifier instead of %d.
+> The %pe specifier prints a symbolic error string (e.g., -ENOMEM,
+> -EINVAL) when given an error pointer created with ERR_PTR(err).
+>
+> This change enhances the clarity and diagnostic value of the error
+> message by showing a descriptive error name rather than a numeric
+> error code.
+>
+> Note, that some err are still printed by value, as those errors
+> might come from libfdt and not regular errnos.
+>
+> Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+> Co-developed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
- tools/bpf/bpftool/map.c                       | 21 +++++++++---
- .../testing/selftests/bpf/test_bpftool_map.sh | 32 +++++++++++++++++++
- 2 files changed, 49 insertions(+), 4 deletions(-)
+Appreciate your help, Pasha
+
+Yanjun.Zhu
+
+> Reviewed-by: Simon Horman <horms@kernel.org>
+> ---
+>   kernel/liveupdate/kexec_handover.c         |  4 ++--
+>   kernel/liveupdate/kexec_handover_debugfs.c | 10 ++++++----
+>   2 files changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/kernel/liveupdate/kexec_handover.c b/kernel/liveupdate/kexec_handover.c
+> index be945c133a2f..167c761988d3 100644
+> --- a/kernel/liveupdate/kexec_handover.c
+> +++ b/kernel/liveupdate/kexec_handover.c
+> @@ -1448,8 +1448,8 @@ void __init kho_populate(phys_addr_t fdt_phys, u64 fdt_len,
+>   		memblock_add(area->addr, size);
+>   		err = memblock_mark_kho_scratch(area->addr, size);
+>   		if (WARN_ON(err)) {
+> -			pr_warn("failed to mark the scratch region 0x%pa+0x%pa: %d",
+> -				&area->addr, &size, err);
+> +			pr_warn("failed to mark the scratch region 0x%pa+0x%pa: %pe",
+> +				&area->addr, &size, ERR_PTR(err));
+>   			goto out;
+>   		}
+>   		pr_debug("Marked 0x%pa+0x%pa as scratch", &area->addr, &size);
+> diff --git a/kernel/liveupdate/kexec_handover_debugfs.c b/kernel/liveupdate/kexec_handover_debugfs.c
+> index 46e9e6c0791f..ac739d25094d 100644
+> --- a/kernel/liveupdate/kexec_handover_debugfs.c
+> +++ b/kernel/liveupdate/kexec_handover_debugfs.c
+> @@ -150,8 +150,8 @@ __init void kho_in_debugfs_init(struct kho_debugfs *dbg, const void *fdt)
+>   		err = __kho_debugfs_fdt_add(&dbg->fdt_list, sub_fdt_dir, name,
+>   					    phys_to_virt(*fdt_phys));
+>   		if (err) {
+> -			pr_warn("failed to add fdt %s to debugfs: %d\n", name,
+> -				err);
+> +			pr_warn("failed to add fdt %s to debugfs: %pe\n", name,
+> +				ERR_PTR(err));
+>   			continue;
+>   		}
+>   	}
+> @@ -168,8 +168,10 @@ __init void kho_in_debugfs_init(struct kho_debugfs *dbg, const void *fdt)
+>   	 * reviving state from KHO and setting up KHO for the next
+>   	 * kexec.
+>   	 */
+> -	if (err)
+> -		pr_err("failed exposing handover FDT in debugfs: %d\n", err);
+> +	if (err) {
+> +		pr_err("failed exposing handover FDT in debugfs: %pe\n",
+> +		       ERR_PTR(err));
+> +	}
+>   }
+>   
+>   __init int kho_out_debugfs_init(struct kho_debugfs *dbg)
 
 -- 
-2.50.1
+Best Regards,
+Yanjun.Zhu
 
