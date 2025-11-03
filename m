@@ -1,88 +1,105 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044362DF6F8;
-	Mon,  3 Nov 2025 08:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A2A2EF664
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Nov 2025 09:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762160329; cv=none; b=CI7YD+AikEmu2uD2Bdk1Hm0VxkTIXSqtQjMN32qPX+mslVOhAujT3d8ZAzHjPa6g5tOLXFw/U1MpwplB9BgYhk40hwsJVGNzKpqduamodRJGhJmgvINoEmlimnZnPb9LdT/QIgH34VUB/xRE0nbgybyoES71n6QxrOxrHWKuQiw=
+	t=1762162787; cv=none; b=k8A2YLqHNyOChcj/MQ8xYbnrimHN9EDjFdr7LvzmY4q0NIe3JLrqs6t2pnIfTlrco9+4g9/CGCyWCrXUiAEmI5zxAkVYod/3N5Fsi+fJsgIb2wgfJVb9HYBtFv4JjoXoGztjdzTUzqlGv4lloU/eZ7Y/S7eTCPHonxroFA0mIfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762160329; c=relaxed/simple;
-	bh=JXPCsQTTxVnoh0TkP1LaQ3H1WCvGUkzl8sNo7rus+JQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=pOdeot5EPzYYNJMcQVvhSoxckJc5xmfd4A/SNEcA5RwoGeAM0n4mcZr/Acv0vKqTFYMqx5tK3dRFi4ZQ7oG+KIYn8QvCQwFvz2U/jSM1KmrCp/X5E3u54gJZyy8OEDGCoPfQyMCzOsDUHpIvQXu7XoOcREUlg2WlzSPcMgx4lHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=sFhv3Gsf; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1762162787; c=relaxed/simple;
+	bh=wN2aU/M8qhuJf9I7yq5BtC9TMEbeEqeInZHiWNRpMcQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=NkBmrRNVXXp+L58IoH31btDYuzt8+z1c1q32/pjjnCyapv/hQUnk5/0yRXCd+zPOxEB3cVEDvr9sxziotuQlB7PEQcSgSTCWT3p4aEAsjtCHwXM1aQkOotLxJ+GAgfCqrIDJaqq9Y8uInSbK/+tlIV0gc7PY86VkLuVhLi1L9pI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fJE5DKqL; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="sFhv3Gsf"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=vhZdASlHH+QeEq0UbVzWVoPF8l6AizkcGzyv7NcZ9Mk=;
-	b=sFhv3GsfQN1H1yy+8lqdJs/YTjxE/ctYLlpRHqbIF1HL8eVbhAa3uTGbSJfEK7Ap7X5qK2Vn7
-	symE54OrB7tDUT/1FniVkv2WM2Pe1+FwsRqZ2PoPlmHtorOtuW3sfSCwtF9Dw9DzF9laYu4UtYB
-	rJ8NDNTnYlIDS1bk3vJFhtc=
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4d0QSk5RT4zLlVC;
-	Mon,  3 Nov 2025 16:57:10 +0800 (CST)
-Received: from dggpemf500016.china.huawei.com (unknown [7.185.36.197])
-	by mail.maildlp.com (Postfix) with ESMTPS id 65DAE1A016C;
-	Mon,  3 Nov 2025 16:58:44 +0800 (CST)
-Received: from [10.174.177.19] (10.174.177.19) by
- dggpemf500016.china.huawei.com (7.185.36.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 3 Nov 2025 16:58:43 +0800
-Message-ID: <2ea387c7-cd15-44cc-8789-af3fbe0460a3@huawei.com>
-Date: Mon, 3 Nov 2025 16:58:42 +0800
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fJE5DKqL"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id CA5B3C0D79F;
+	Mon,  3 Nov 2025 09:39:21 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8A41460628;
+	Mon,  3 Nov 2025 09:39:42 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7C3581181802F;
+	Mon,  3 Nov 2025 10:39:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1762162781; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=vkeC2Id2TZzKkRDJDdQieEk1hQjbOf+Z6dHLIhtw7EU=;
+	b=fJE5DKqLMxGrsvaZpi9XL9uZbYF+IT52opnNBntnb0+EsyDZs1EVJk2TXtSHRsUbhEm7Ov
+	QRVa9WzZRinCxJysO64SgUx7/iEMt/hvuoTl/tuuOsb4zgMEKdggLQ3gqJvEaG4qr5hNWS
+	HbtSyk1JYkjf1N2yt9m0raq84eG7dlbuUODIYpD1Bh1NuEHJWRSUej+CY/4T49JhQO1QBq
+	46L5KRrSbx1Q9WNdFaMXXneOnF5kqSOg2Bz7Urb94CLlg6J9Ua5CbEQulOI29O95BykPVD
+	vHwEWayJY+HUtqDDNKoASp7vSvPdd492wS+zT2Dt7bLZEz4qFLebqY3ICSYU8w==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] selftests: netdevsim: Fix ethtool-features.sh fail
-To: Sabrina Dubroca <sd@queasysnail.net>
-CC: <kuba@kernel.org>, <andrew@lunn.ch>, <davem@davemloft.net>,
-	<edumazet@google.com>, <pabeni@redhat.com>, <shuah@kernel.org>,
-	<horms@kernel.org>, <netdev@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<yuehaibing@huawei.com>, <zhangchangzhong@huawei.com>
-References: <20251030032203.442961-1-wangliang74@huawei.com>
- <aQPxN5lQui5j8nK8@krikkit>
-From: Wang Liang <wangliang74@huawei.com>
-In-Reply-To: <aQPxN5lQui5j8nK8@krikkit>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- dggpemf500016.china.huawei.com (7.185.36.197)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 03 Nov 2025 10:39:36 +0100
+Message-Id: <DDYYKJWVL8KH.3UDBWDYHK2M8N@bootlin.com>
+Subject: Re: [PATCH bpf-next 2/4] selftests/bpf: integrate test_tc_edt into
+ test_progs
+Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <martin.lau@kernel.org>, <clm@meta.com>, <ihor.solodrai@linux.dev>,
+ <bot+bpf-ci@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <andrii@kernel.org>, <eddyz87@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
+ <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+ <jolsa@kernel.org>, <shuah@kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Martin KaFai Lau" <martin.lau@linux.dev>, <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20251031-tc_edt-v1-2-5d34a5823144@bootlin.com>
+ <09feef91b51f675195b5b1b9a854d844c9999c0cebb429d785fe60f6c787dc8b@mail.kernel.org> <d886e631-851b-4e2f-aecb-ecdb541dfedc@linux.dev>
+In-Reply-To: <d886e631-851b-4e2f-aecb-ecdb541dfedc@linux.dev>
+X-Last-TLS-Session-Version: TLSv1.3
 
+On Fri Oct 31, 2025 at 8:28 PM CET, Martin KaFai Lau wrote:
+> On 10/31/25 9:20 AM, bot+bpf-ci@kernel.org wrote:
 
-在 2025/10/31 7:13, Sabrina Dubroca 写道:
-> 2025-10-30, 11:22:03 +0800, Wang Liang wrote:
->> This patch adds executable permission to script 'ethtool-features.sh', and
->> check 'ethtool --json -k' support.
-> Those are two separate things, probably should be two separate patches.
+[...]
 
-
-Ok, I will extract the executable permission change to a new patch.
-
+>>> +	while (true) {
+>>> +		send(conn->client_conn_fd, (void *)tx_buffer, BUFFER_LEN, 0);
+>>> +		ts_end =3D get_time_ns();
+>>> +		if ((ts_end - ts_start)/100000 >=3D TIMEOUT_MS) {
+>>                                           ^^^^^^
+>>=20
+>> Does this time conversion use the correct divisor? The timeout check
+>> appears to divide nanoseconds by 100000, but TIMEOUT_MS is 2000
+>> milliseconds. Converting nanoseconds to milliseconds requires dividing
+>> by 1000000, not 100000. With the current calculation, the timeout would
+>> trigger after 200 milliseconds rather than 2000 milliseconds.
 >
-> [...]
->> @@ -7,6 +7,11 @@ NSIM_NETDEV=$(make_netdev)
->>   
->>   set -o pipefail
->>   
->> +if ! ethtool --json -k $NSIM_NETDEV > /dev/null 2>&1; then
-> I guess it's improving the situation, but I've got a system with an
-> ethtool that accepts the --json argument, but silently ignores it for
->   -k (ie `ethtool --json -k $DEV` succeeds but doesn't produce a json
-> output), which will still cause the test to fail later.
+> The report is correct, there is a typo in the denominator.
+
+Gaaaah, that's one stupid mistake, and so I possibly got too enthusiastic
+about the initial results. I'll redo some more tests with this point fixed.
+
+> Use the send_recv_data() helper in network_helpers.c. It should simplify=
+=20
+> this test and no need to pthread_create, while loop, ....etc.=20
+> send_recv_data limits by the number of bytes instead of the length of=20
+> time. There is a target rate in this test, so it should be easy to=20
+> convert from time limit to byte limit and reuse the send_recv_data.
+
+Nice, thanks for the hint, I'll then simplify the whole test by using this
+helper.
+
+Alexis
 
 
-That is indeed a bit strange.
 
-I'm not sure the best way to handle this situation now. Maybe update ethtool
-instead of checking the output is not a bad method.
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
