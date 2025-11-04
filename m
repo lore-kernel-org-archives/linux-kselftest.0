@@ -1,137 +1,114 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FE424290D;
-	Tue,  4 Nov 2025 08:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF1F1DED5C
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Nov 2025 09:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762246722; cv=none; b=hWula8g9a4gxAp1FRzygDXtJjvgYSU45Wdeb/nCCxSayik1LBAlov+KpCZjfXSbClaZ949OQ/KcPxb8jvCEf2WT71kh1syFh4yC9Ji4KqwoOQjqU3anq3D52Ucli5lbzmphq2mLqddyw+l/mY4S9XFHwMnwKJXXqAkV54BvfeB0=
+	t=1762248443; cv=none; b=h48c9/7SCKxVwOaO1KErrcr0PJo6rr80nAlfj32HN5GeykKfgwFH/4OXgS+aeyLBjhHpONfa2LGUstDZrUbTKjzXDs+BYc+kUMTk+PRdChBwLWL3qrVWLSbzt2Sh13Dr3FoEoJsYo7JrNUPwKCjRcMXxi3/CoT4BySOSAKRoVbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762246722; c=relaxed/simple;
-	bh=mQ+pL67AT04YF45u9EUzsf1ZKb6p3yTfcs+Jl3Ya/3Y=;
+	s=arc-20240116; t=1762248443; c=relaxed/simple;
+	bh=Xlh8IX2UxKPjmcYl/o/bcB5iJvFYIskHf31VHQFGkFM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kOHQz8qL2u4JyVX2ZNclCgvLqLGQlZ5hCElngJ0Z2G1Qo3go8aVfTyuzM4isIZR2gqgto2jADz6Eyo+7xgZdc1sAVRa+I580Sc6bphzY7d7bxMYPKjH2WZkUKFsXA1D18ozm+BAr38EUagi4+MtGQYw2vZv1XBWkqO87e7z64lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=PCKNJxul; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=AYbRVmwT; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ta2BYsCbjzHa3D54PHjxepH8o3rS+mhuQKV5yLYYDq1Kaqlp2zJv6VjZ3OdkPJ3OMtgFxvs96cUmtd3g5HPaQ5j2eN/dZZwTo2dI6cYDCqvSenAW9jFvhLd0JRqX1NxHbo15CBKFEDA19F3orWSzbPAFKP2qq/UZnO7BGa+ZwLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JQHnrjMn; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="PCKNJxul";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="AYbRVmwT"
-Date: Tue, 4 Nov 2025 09:58:37 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1762246719;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C0LvKOhhmgkPbAnJv9RUevotOR4DI1Uoh5ENCeo7njA=;
-	b=PCKNJxulpg/PvsGYBz8V1FU4pIkAMexataoGH0wB1Wq12nZZHH8f2DwldZBJQaarAJVsP8
-	yusjtIDWmV+OdYsTjKunNaFJcWiiyhHX6oDRiKaBNw6mbt6vWYMefNn74zwVvtcQNanAb/
-	sFKjzpbAdgHOKh9I1DfB1uxqKlG9OH5OjQWRzQk9ok7MeccZ7XACWEaO4CMbje+8IR5FNE
-	ksy6MxBeFin8cOh8nSGbd7sgJ1u4+BFBLgtkTy0AC0nIyqKnVIQCZ0PrgpFKDWnHjNm1K5
-	thTLlUN+ZyklfklQSZjodwcMM1QHkniqB323QaFPf3lG/gDXH1KQ8B2yVTGLvw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1762246719;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C0LvKOhhmgkPbAnJv9RUevotOR4DI1Uoh5ENCeo7njA=;
-	b=AYbRVmwTnBF9DHCl3zSORA5EBbeymIDmU5LN0MCGPkSaFq3DfisSLGnmVmNwMSYywgJ4+e
-	uTDyt4qZNgxw5dDg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Mark Brown <broonie@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Russell King <linux@armlinux.org.uk>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>, Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, Aishwarya.TCV@arm.com
-Subject: Re: [PATCH v4 23/35] vdso/datastore: Map pages through struct page
-Message-ID: <20251104095555-ed009488-3aa8-43c5-b39f-066f04dee5a3@linutronix.de>
-References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
- <20251014-vdso-sparc64-generic-2-v4-23-e0607bf49dea@linutronix.de>
- <aQjJNmwniQwwjeBR@finisterre.sirena.org.uk>
- <CGME20251104084442eucas1p2af1bd88393f4d6a532df1cd41f32a287@eucas1p2.samsung.com>
- <e7f05748-a11c-47eb-b1fa-cdc9dc6d05e0@samsung.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JQHnrjMn"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2957850c63bso24623435ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Nov 2025 01:27:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762248441; x=1762853241; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UzXrHOeB98INksGwlSTvLp657Fh/P82/6TlCuQQCFz8=;
+        b=JQHnrjMnbPh9r+yAkdhB9PYW4QJuzsQwWfatdDJrwdOMw+7bAs3/YA9BOlKdabz79e
+         RVJ5eukBhamc1ysxKFO8caE7zOjdcuZYbPwWgo5igXHY9RTc1gTgwkTSZKGhJo1b8GIe
+         Mzw1beK5F48rwAPJg7oCy+oQ0fMhLVOEBKAd3OAW0PJRDx9hvhnMbpGhJEjl3rR2Kv0Q
+         OOpKVNRevkUBi6AedXZLJDoIb6gDd0T7qa8WeOuV6lTI2MzkNhQ5ExX3fdSAPVmfT3Gj
+         Am8YYLf2x9XgGOuR06lfcVDz+FAUeZOpg6c2aRcPfOLGyhqrDkdwjim5OOxqV1mhqMUa
+         VSUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762248441; x=1762853241;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UzXrHOeB98INksGwlSTvLp657Fh/P82/6TlCuQQCFz8=;
+        b=EwN0qDs++iAHgXR3bYLWoGjXZMgUTQWy2EEszCN3wc7AZn5QeP8dt6nzpY1QgSMG1P
+         xO3tlK/FtopOwiTrAJqU2vlsSIpyV7McuxYPO9hJ82PveL1IkdM9UQh1u3m8+vce2CVU
+         H1BahaJoIbLlR4wHaqpzM+TuHa3bJSc0nBoeOLRjO/dd0RZ2M52kxTjKr20zFGFoVRds
+         jpVIRtL9d9mOArdcApjs5KG47bHKC7iItCYzpCfn/qMudxlc9Q1vNacCnVfYulcAdmqs
+         9+Jvhf3COFy/DPyy9aTj3Y776efYp6C8xlVQelLxFv5aeptxwqMUQxUs/q8MUItS4IDx
+         rMaA==
+X-Forwarded-Encrypted: i=1; AJvYcCVmuKmpIhE1t51DhS1ig5HtdTveWerIpdVpgTHGBfSJXMUnTg1nYxQHYhTewVMTW4JXH3ltDQvkrpW55eCBU4s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSG8iaTcs23xUj7xOuOXLpjNkmFbc9QfqmRAUfhY/SkBd2OtPU
+	1KvdnXvNhZBgoSht3RzuKhHhtHPS+zDQKLdHMQ2J+nYAAVjysuO7S6N2
+X-Gm-Gg: ASbGncs3ROVW1qRBDDGT1TCnrLJ3rc/2HTSKzYb2Pg8AsQQKWwuUOF6ra4mmojFTrVp
+	abtS8BI/4rbMUO4lYyF3lvSrc3bdlWUfG88XsofP7vpSBgNECnFyi9LFd4RyORvmloCs6Zs5Mvj
+	YYdhi3cBJh14KpcBOb75LWkGlpU/NiegT1qEXYbsIjUWzMElVWiB+EdlzK/BfNpbu+EET52WKuK
+	XcYVOlSzrmpbUx6ESqDXst7Gpzi43EzBVUm4AJzO9zveCi+SN/Vkh/q6HwMa5h6P4LAnab9Betd
+	k6EDFK2iXJt2MDfPRoGBHXvQYxZnLD9/90v397C3GoXBBjf2zfvAC+hmaszLH8Gxu3UFJv929uF
+	NjzYs1uqRGQel2Df0LBiZTUGuUnR1BE6LdfQT/VzYTFLIkdx1uSbNdNvvxBB5p+u9dFBE5EHHBa
+	1GvzeC
+X-Google-Smtp-Source: AGHT+IELRqgcw/IW+zjDRYns6NqUSqFVZJxSSkN5p809al0q/XTyw0llD+RBmt4pBeBgE9jNvUrD/w==
+X-Received: by 2002:a17:902:cece:b0:271:9b0e:54c7 with SMTP id d9443c01a7336-295f93ad584mr40393785ad.11.1762248441090;
+        Tue, 04 Nov 2025 01:27:21 -0800 (PST)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29601998336sm19459955ad.31.2025.11.04.01.27.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Nov 2025 01:27:20 -0800 (PST)
+Date: Tue, 4 Nov 2025 09:27:12 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Donald Hunter <donald.hunter@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jan Stancek <jstancek@redhat.com>,
+	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>,
+	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Guillaume Nault <gnault@redhat.com>,
+	Petr Machata <petrm@nvidia.com>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 2/3] netlink: specs: update rt-rule src/dst
+ attribute types to support IPv4 addresses
+Message-ID: <aQnG8IYsY3oyYekf@fedora>
+References: <20251029082245.128675-1-liuhangbin@gmail.com>
+ <20251029082245.128675-3-liuhangbin@gmail.com>
+ <20251029163742.3d96c18d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e7f05748-a11c-47eb-b1fa-cdc9dc6d05e0@samsung.com>
+In-Reply-To: <20251029163742.3d96c18d@kernel.org>
 
-Hi Marek,
-
-On Tue, Nov 04, 2025 at 09:44:38AM +0100, Marek Szyprowski wrote:
-> On 03.11.2025 16:24, Mark Brown wrote:
-> > On Tue, Oct 14, 2025 at 08:49:09AM +0200, Thomas Weißschuh wrote:
-> >
-> >> An upcoming change will allocate the datapages dynamically instead of as
-> >> part of the kernel image. Such pages can only be mapped through
-> >> 'struct page' and not through PFNs.
-> > I'm seeing some boot failures on some arm64 platforms in -next which are
-> > bisecting to this patch in -next.  Unfortunately the diagnostics aren't
-> > super useful, we seem to just stop making progress in userspace with no
-> > obvious output.  One sample log from the FVP is:
-
-(...)
-
-> Then I've tested it on ARM64bit (RaspberrryPi3b+ board) and got the 
-> following panic on 6a011a228293 ("vdso/datastore: Map pages through 
-> struct page") commit:
+On Wed, Oct 29, 2025 at 04:37:42PM -0700, Jakub Kicinski wrote:
+> On Wed, 29 Oct 2025 08:22:44 +0000 Hangbin Liu wrote:
+> >        -
+> >          name: dst
+> > -        type: u32
+> > +        type: binary
+> > +        display-hint: ipv4
+> >        -
+> >          name: src
+> > -        type: u32
+> > +        type: binary
+> > +        display-hint: ipv4
 > 
-> VFS: Mounted root (ext4 filesystem) on device 179:3. Trying to move old 
-> root to /initrd ... okay devtmpfs: mounted Freeing unused kernel memory: 
-> 12672K Run /sbin/init as init process Unable to handle kernel paging 
-> request at virtual address ffffffffc20b5d48 Mem abort info: ESR = 
-> 0x0000000096000006 EC = 0x25: DABT (current EL), IL = 32 bits SET = 0, 
-> FnV = 0 EA = 0, S1PTW = 0 FSC = 0x06: level 2 translation fault Data 
-> abort info: ISV = 0, ISS = 0x00000006, ISS2 = 0x00000000 CM = 0, WnR = 
-> 0, TnD = 0, TagAccess = 0 GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0 
-> swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000000230b000 
-> [ffffffffc20b5d48] pgd=0000000000000000, p4d=0000000003618403, 
-> pud=0000000003619403, pmd=0000000000000000 Internal error: Oops: 
-> 0000000096000006 [#1] SMP Modules linked in: CPU: 2 UID: 0 PID: 1 Comm: 
-> init Tainted: G W 6.18.0-rc1+ #16136 PREEMPT Tainted: [W]=WARN Hardware 
-> name: Raspberry Pi 3 Model B (DT) pstate: 80000005 (Nzcv daif -PAN -UAO 
-> -TCO -DIT -SSBS BTYPE=--) pc : vvar_fault+0x7c/0x17c lr : 
-> vvar_fault+0x24/0x17c ... Call trace: vvar_fault+0x7c/0x17c (P) 
-> special_mapping_fault+0x24/0xd0 __do_fault+0x3c/0x238 
-> __handle_mm_fault+0xaa0/0x19e0 handle_mm_fault+0xcc/0x384 
-> do_page_fault+0x1a0/0x720 do_translation_fault+0x60/0x6c 
-> do_mem_abort+0x44/0x94 el0_da+0x54/0x230 el0t_64_sync_handler+0xd0/0xe4 
-> el0t_64_sync+0x198/0x19c Code: f2d83fe0 8b010063 d34cfc63 8b031803 
-> (f9400461) ---[ end trace 0000000000000000 ]--- Kernel panic - not 
-> syncing: Attempted to kill init! exitcode=0x0000000b SMP: stopping 
-> secondary CPUs Kernel Offset: disabled CPU features: 
-> 0x000000,00180000,40004000,0400421b Memory Limit: none ---[ end Kernel 
-> panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
-> 
-> Reverting "clocksource: Remove ARCH_CLOCKSOURCE_DATA", "vdso/datastore: 
-> Allocate data pages dynamically" and "vdso/datastore: Map pages through 
-> struct page" on top of linux-next fixes booting on all tested boards.
+> This will be annoying For C / C++, and you didn't set the max len 
+> so I think we'll also have to malloc each time. Do we not support
+> display-hint for scalars?
 
-Thanks for the report. I have a Raspberry Pi 3 Model B V1.2 here and will try
-to reproduce the issue with it.
-Can you send me your kernel configuration?
-Which line is vvar_fault+0x7c/0x17c?
+Hi Jakub,
 
+I just realize that most of the address/src/dst in rt-addr/route are
+dual stack. The same with FRA_DST. We can't simply change binary to u32.
+So can we keep this u32 -> binary change?
 
-Thomas
+Thanks
+Hangbin
