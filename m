@@ -1,259 +1,148 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4222156C40
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 14:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6A1320A33;
+	Wed,  5 Nov 2025 14:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762353243; cv=none; b=MXRbtRPFrMJuRHNnFCpUrEFfNny/szRVHOhYtRsY9u5dNKuHmAM/BK0ilPt0Z8Q+q6ia/kPa8un8YY5AMfWaIkXrHCiIPytimQczFF6pZQvQH2zeDZyBjtkbh/edD3nDEg7mvqmdyAtB/goj9Ck/72MaOf4o4dTelIkCEiB+peE=
+	t=1762353431; cv=none; b=DztR3T0pQfeSdbdRDKxyPb8N/NgS/VmXwsU70Cf0tsE8UnmMvKDx+vdmc9CZtj59iAGBdmvXWscI7SWQ69ad69JCe2hbDVfGGMRD6WuTYUScFy5Q6H4ZGfQPVFDsofVCDoJhvpyM5xk1SEQ2JAr4XNWeW8044fTtZYkYTbgPU78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762353243; c=relaxed/simple;
-	bh=KFCBX1MYnJq2fTO13szb1kI/C2Hc+wr41HxRFWuqHhA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XzRFVK7WWi3/mvTL0XKfubw1ZoTgKqMYmcrXY71GQrJi5nSB7mBViDLaXNg3Exh7SdGYL8D/IvGZA9CoiWTb5s9UNh9Q0wjKkKYVLivzFl6NTfEfReBT7hn8hIDqchY8OaLWrS9cbvwY7BzIX+4XJ6Buee2QfM8bAz6SoseO/68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hiQjTgvU; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1762353431; c=relaxed/simple;
+	bh=Z5SbtMpM/KuQHHw5Ea+YCo1vcyY6brvzqA7sJIGK5EI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a1ko1o02nvGvmuxjBAaCwh5lLhyyKrBS9G28Klr5/umZxPtP/Rf0vd769sBlMHtflswvBwJDgIJTnUwN6zzE+HsnVoWtZgU4Zm9lIUbTxBGm0gBix0idig52oOu+sX7aM1sfPdmgpfZt3M0K4bqo3Hh/voQWNAsj7V8MOM3JKHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZQg2G6Zw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hiQjTgvU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762353239;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ElYGIlkPKzTybpsHtstaGauKroEiTfyK75ipBsehUhk=;
-	b=hiQjTgvUcKKC/ubKDN4U5yCnqsqirhO0T905sdr2cskiSruNkolGSEoSU8wusboX2irCdT
-	0u+/f7zuqyvfB4JlZuvUE2Y/oS3aQA3O3UnDg2c7wQsn+stgtZwZFskeFz/snQN8SHuSgO
-	8itfpeMiXXinflyrmfI4Ax8SMlI+spo=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-631-ONJ9TyxoOGyURfFJlmVhEg-1; Wed,
- 05 Nov 2025 09:33:57 -0500
-X-MC-Unique: ONJ9TyxoOGyURfFJlmVhEg-1
-X-Mimecast-MFC-AGG-ID: ONJ9TyxoOGyURfFJlmVhEg_1762353232
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7691519560A1;
-	Wed,  5 Nov 2025 14:33:48 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.124])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 5DEDA180049F;
-	Wed,  5 Nov 2025 14:33:28 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed,  5 Nov 2025 15:32:31 +0100 (CET)
-Date: Wed, 5 Nov 2025 15:32:10 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexey Dobriyan <adobriyan@gmail.com>, Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
-	James Morris <jamorris@linux.microsoft.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Adrian Reber <areber@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	tiozhang <tiozhang@didiglobal.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	YueHaibing <yuehaibing@huawei.com>,
-	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
-	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
-	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
-	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
-	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	David Windsor <dwindsor@gmail.com>,
-	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
-	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Hans Liljestrand <ishkamiel@gmail.com>,
-	Penglei Jiang <superman.xpt@gmail.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Adrian Ratiu <adrian.ratiu@collabora.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Cyrill Gorcunov <gorcunov@gmail.com>,
-	Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v17] exec: Fix dead-lock in de_thread with ptrace_attach
-Message-ID: <20251105143210.GA25535@redhat.com>
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZQg2G6Zw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79221C4CEF5;
+	Wed,  5 Nov 2025 14:37:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762353430;
+	bh=Z5SbtMpM/KuQHHw5Ea+YCo1vcyY6brvzqA7sJIGK5EI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZQg2G6ZwBqsKwJRdiFkY/rYwCLGY/YnAR15qvZXZsuX4y0TDE4KR8dAsJ8J85IibG
+	 WLB2WTuVuiX6q8A8KJl/+PInySjninqSC4bIZS3GBKhEnr37ZwIA4DvDubyH3Amvi9
+	 95DIQri8tt9HcZcLouoAWZS0NXhixQx81nsXp+ErxgUfH9VEjqj8SK4HcUdMl8wb4m
+	 z+dSi5X64yhHDoQh7xFX/5g1ju2IPSsgDwTp02koedPRcUEG4DvEtULFsvqU65UKCc
+	 /oDflTneqEOewy9E0YuhiMejfBaSk101uUPyS1Ex1izb/CiN9zWJqk1XHFvKioWDuA
+	 f5csU76CxNB7A==
+Message-ID: <cc0592aa-a360-437b-bbd1-9a1dda14c132@kernel.org>
+Date: Wed, 5 Nov 2025 15:37:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net v4 0/3] mptcp: Fix conflicts between MPTCP and sockmap
+Content-Language: en-GB, fr-BE
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, mptcp@lists.linux.dev
+Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20251105113625.148900-1-jiayuan.chen@linux.dev>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20251105113625.148900-1-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-I am still thinking about another approach, will write another email.
-But let me take a closer look at your patch.
+Hi Jiayuan,
 
-First of all, can you split it? See below.
+On 05/11/2025 12:36, Jiayuan Chen wrote:
+> Overall, we encountered a warning [1] that can be triggered by running the
+> selftest I provided.
 
-On 08/21, Bernd Edlinger wrote:
->
-> -static int de_thread(struct task_struct *tsk)
-> +static int de_thread(struct task_struct *tsk, struct linux_binprm *bprm)
->  {
->  	struct signal_struct *sig = tsk->signal;
->  	struct sighand_struct *oldsighand = tsk->sighand;
->  	spinlock_t *lock = &oldsighand->siglock;
-> +	struct task_struct *t;
-> +	bool unsafe_execve_in_progress = false;
->
->  	if (thread_group_empty(tsk))
->  		goto no_thread_group;
-> @@ -932,6 +934,19 @@ static int de_thread(struct task_struct *tsk)
->  	if (!thread_group_leader(tsk))
->  		sig->notify_count--;
->
-> +	for_other_threads(tsk, t) {
-> +		if (unlikely(t->ptrace)
-> +		    && (t != tsk->group_leader || !t->exit_state))
-> +			unsafe_execve_in_progress = true;
+Thank you for the v4!
 
-you can add "break" into the "if ()" block...
+> sockmap works by replacing sk_data_ready, recvmsg, sendmsg operations and
+> implementing fast socket-level forwarding logic:
+> 1. Users can obtain file descriptors through userspace socket()/accept()
+>    interfaces, then call BPF syscall to perform these replacements.
+> 2. Users can also use the bpf_sock_hash_update helper (in sockops programs)
+>    to replace handlers when TCP connections enter ESTABLISHED state
+>   (BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB/BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB)
+> 
+> However, when combined with MPTCP, an issue arises: MPTCP creates subflow
+> sk's and performs TCP handshakes, so the BPF program obtains subflow sk's
+> and may incorrectly replace their sk_prot. We need to reject such
+> operations. In patch 1, we set psock_update_sk_prot to NULL in the
+> subflow's custom sk_prot.
 
-But this is minor. Why do we need "bool unsafe_execve_in_progress" ?
-If this patch is correct, de_thread() can drop/reacquire cred_guard_mutex
-unconditionally.
+This new version looks good to me. I have some small comments on patches
+1 and 2 that can only be addressed if a v5 is needed I think.
 
-If you really think it makes sense, please make another patch with the
-changelog.
+I have some questions for the 3rd patch. It would be good if someone
+else with more experience with the BPF selftests can also look at it.
 
-I'd certainly prefer to avoid this boolean at least for the start. If nothing
-else to catch the potential problems earlier.
+> Additionally, if the server's listening socket has MPTCP enabled and the
+> client's TCP also uses MPTCP, we should allow the combination of subflow
+> and sockmap. This is because the latest Golang programs have enabled MPTCP
+> for listening sockets by default [2]. For programs already using sockmap,
+> upgrading Golang should not cause sockmap functionality to fail.
 
-> +	if (unlikely(unsafe_execve_in_progress)) {
-> +		spin_unlock_irq(lock);
-> +		sig->exec_bprm = bprm;
-> +		mutex_unlock(&sig->cred_guard_mutex);
-> +		spin_lock_irq(lock);
+Note: even if these patches here are needed to avoid stream corruption
+and other issues, in your specific case with sockmap, I think it would
+be better to set this env var until MPTCP support is added to sockmap:
 
-I don't think spin_unlock_irq() + spin_lock_irq() makes any sense...
+  GODEBUG=multipathtcp=0
 
-> @@ -1114,13 +1139,31 @@ int begin_new_exec(struct linux_binprm * bprm)
->  	 */
->  	trace_sched_prepare_exec(current, bprm);
->
-> +	/* If the binary is not readable then enforce mm->dumpable=0 */
-> +	would_dump(bprm, bprm->file);
-> +	if (bprm->have_execfd)
-> +		would_dump(bprm, bprm->executable);
-> +
-> +	/*
-> +	 * Figure out dumpability. Note that this checking only of current
-> +	 * is wrong, but userspace depends on it. This should be testing
-> +	 * bprm->secureexec instead.
-> +	 */
-> +	if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
-> +	    is_dumpability_changed(current_cred(), bprm->cred) ||
-> +	    !(uid_eq(current_euid(), current_uid()) &&
-> +	      gid_eq(current_egid(), current_gid())))
-> +		set_dumpable(bprm->mm, suid_dumpable);
-> +	else
-> +		set_dumpable(bprm->mm, SUID_DUMP_USER);
-> +
-
-OK, we need to do this before de_thread() drops cred_guard_mutex.
-But imo this too should be done in a separate patch, the changelog should
-explain this change.
-
-> @@ -1361,6 +1387,11 @@ static int prepare_bprm_creds(struct linux_binprm *bprm)
->  	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
->  		return -ERESTARTNOINTR;
->
-> +	if (unlikely(current->signal->exec_bprm)) {
-> +		mutex_unlock(&current->signal->cred_guard_mutex);
-> +		return -ERESTARTNOINTR;
-> +	}
-
-OK, if signal->exec_bprm != NULL, then current is already killed. But
-proc_pid_attr_write() and ptrace_traceme() do the same. So how about
-something like
-
-	int lock_current_cgm(void)
-	{
-		if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
-			return -ERESTARTNOINTR;
-
-		if (!current->signal->group_exec_task)
-			return 0;
-
-		WARN_ON(!fatal_signal_pending(current));
-		mutex_unlock(&current->signal->cred_guard_mutex);
-		return -ERESTARTNOINTR;
-	}
-
-?
-
-Note that it checks ->group_exec_task, not ->exec_bprm. So this change can
-come in a separate patch too, but I won't insist.
-
-> @@ -453,6 +454,28 @@ static int ptrace_attach(struct task_struct *task, long request,
->  				return retval;
->  		}
->
-> +		if (unlikely(task == task->signal->group_exec_task)) {
-> +			retval = down_write_killable(&task->signal->exec_update_lock);
-> +			if (retval)
-> +				return retval;
-> +
-> +			scoped_guard (task_lock, task) {
-> +				struct linux_binprm *bprm = task->signal->exec_bprm;
-> +				const struct cred __rcu *old_cred = task->real_cred;
-> +				struct mm_struct *old_mm = task->mm;
-> +
-> +				rcu_assign_pointer(task->real_cred, bprm->cred);
-> +				task->mm = bprm->mm;
-> +				retval = __ptrace_may_access(task, PTRACE_MODE_ATTACH_REALCREDS);
-> +				rcu_assign_pointer(task->real_cred, old_cred);
-> +				task->mm = old_mm;
-> +			}
-
-This is the most problematic change which I can't review...
-
-Firstly, it changes task->mm/real_cred for __ptrace_may_access() and this
-looks dangerous to me.
-
-Say, current_is_single_threaded() called by another CLONE_VM process can
-miss group_exec_task and falsely return true. Probably not that bad, in
-this case old_mm should go away soon, but still...
-
-And I don't know if this can fool the users of task_cred_xxx/__task_cred
-somehow.
-
-Or. check_unsafe_exec() sets LSM_UNSAFE_PTRACE if ptrace. Is it safe to
-ptrace the execing task after that? I have no idea what the security hooks
-can do...
-
-Again, can't review this part.
-
-Oleg.
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
