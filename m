@@ -1,64 +1,64 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD47194C96
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 00:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D164819D89E
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 00:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762388774; cv=none; b=loQclH1SRE2gJ8GeYeomN5CuZBO9Ei3Hb3orheAWTHqL109WOKF+pewHaTmTI5/YD1vdgAzid6cHJe4npwIhnl3vCCM0VfKRKvcKlSRNZ8QqkojJCfUrYvoTwOeLa+JA8Eg3cAZCexxXDXtMJMuT2N1ymIBUJ3n1Gecv6Ib1cZw=
+	t=1762388777; cv=none; b=kv1xAUW37EsNOMirCSO/X/auZ1OmBEiYIMrmqQ9Ry7ghnKZ1z6U0KpqE66ZhotpBjCoDATcA9wHhtZ+crM2dPT5QK3SeMFp5heeIy+AIDubj+fjvLT7LwT0iU/7BJNjdJ/nsyTYeDgpOaTvnXSFHUt0/JAJky8Rrc0xht+kR0Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762388774; c=relaxed/simple;
-	bh=4MYN7EAgWnSODODG6A19x6ijHGlK8gmMv8zjON/zh+s=;
+	s=arc-20240116; t=1762388777; c=relaxed/simple;
+	bh=1vagyyZCCWaC322iPJ0jzikTtv7ZxpGVPgoAR86lLxU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sV5wA7xv2E2Y3XSCQ5I0q+loZQwDobvsfHmG5F4ZBnQ7zTSKa8OPw58iYUy0rLbWBUnSnDd1AemPqajpuRmfSB+OVYThoL4qWEgJNxG7qMI4zhuqiOZviH1fgWlG8qNrX12J3khAZos5sXCUX4kQnbh0UL1FAXGwb9KFaLR36Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BLdvknL5; arc=none smtp.client-ip=209.85.128.174
+	 MIME-Version; b=aEFXjO2T7VPx7dG1ys5uwSfLHeq3ZU0/JZcOQMSoFBP1VmVnZDeiDjvetVu2dRlXuVil2PzebIfmhVgzKlWNCVREnwUnVxCx+vxnvL9J47eoEL1HGaZmwuyk94A6Qxs9SHNbInhSYXnWB512OpYnLl15bkLqidW/1JF/iNiEG04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=elcd4RZY; arc=none smtp.client-ip=209.85.128.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BLdvknL5"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-786943affbaso3647427b3.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 16:26:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="elcd4RZY"
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-78665368a5cso4024157b3.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 16:26:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762388771; x=1762993571; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762388773; x=1762993573; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Fj6rW30AFi0w9W9uK7Qpyv8PnHs6M2XJTUrrQLC3IC8=;
-        b=BLdvknL5PQxwSWGcKz//ajzKsjybP2gL0i6pb0u1PauO8nW3YppEtUE3j//YjRXYus
-         4pDmvrKEyzOZZsLnLf4njfKClfuJfPqaCbjEGura/QDOi1LL+OfLBqUB3lYEICU+yUTQ
-         M+Itm4Q2I5eyAA0fNHGth3JaW4EWzn92QciUT4x/qjh07sIKJfrc6fzpLeo3iCXw8wN4
-         CqulfAGsQ8FjYzWCqJ06CqSI8YR2MZdTt4uzsRbpZRYmWnBWAuO7kFox9UNadWvMCQRM
-         oxTiHAjuv/EhV0LlCZ44vanOG7ZYH1j8QcLOPSu7fxlu+vx6MOGaZYRaBmkRQPXgkFFR
-         /MAA==
+        bh=6TevgQTeoZLcNkHLCnCTiMLpnQ43etaT1P8DpvGUggw=;
+        b=elcd4RZYccCwWSOMErwujlMCP18ztwDuT5IftS4a7zQqTJhGwtnnRI2NtH4XpnRVuR
+         /6q5j9qp0FahStGPq2ffJUGjdA65yzKOToUiI708boeKyv5l+8sVQ8oB4hYbzF9cAAyq
+         RNMIS8efMWXBXlHozx6Fv9C23hgdVLvYuHBbY7J3XFe1BqstPzxkD4TSioXvOafXY1Hh
+         L2eB6P1hnGxYUPaBfkff9fv511XIjFDXXgdWHq1z7UHfrLu95C2xfLiNyuw/GLNJlGwz
+         m7Nv5/rJY9L7cI1XadMPDfPeO6XM2k/IGsj5oJYHHpNDxRqjf6upCWnvoZ1wxY+jTvQi
+         GnBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762388771; x=1762993571;
+        d=1e100.net; s=20230601; t=1762388773; x=1762993573;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Fj6rW30AFi0w9W9uK7Qpyv8PnHs6M2XJTUrrQLC3IC8=;
-        b=Q4FJmqv9PMbpOpSEINCoT4bK1V5T1YupsB1zRe1eq6RXfcKzo0c8l4ufdtRPjS5lIT
-         1J0TVrTxuCfiae0JaXv6yG3xO08doqJIhY9/6SRPhcWAkh5hqbYXbrLzay4VcomP2qAV
-         RaoMNUeSYkWbg8nDSAF7c/D2SNsyZteG96hJsciilRG67YEdcx4x+hTQwkA8weAVaxx6
-         Ap6Ay9XT5jC7Knc0ATnYMqRKQiawVc+FEEB+V5gLRg8srQvrDMVOeQwwig/s0zXS/QSC
-         ZRmfHUpil9pddjPI2Y+mmHP25Z0RFvsWyKGakOp3q81nsfQpwjaDynN39S32cZ3D0+9U
-         VuCg==
-X-Forwarded-Encrypted: i=1; AJvYcCUHQrI1cZWjx/K7ZnnaqLz5tsK2R1EZHt5Tn1rBZJ7qVRq2fzhra+7r9/hshv13k65mHaL8uZ9soExkJPLPaxY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyie3zRBP+6ZlfbwiNcG1chsKPpSjV1ioLbOlBXUpwKMWBP8zR8
-	5j2IKmXzlezsOfnQpJhkr3jQPoBgo7VLvCssmyy/ZpUkv/eNm12jzSXl
-X-Gm-Gg: ASbGncsmJQXfmn0xOgIj8SMrQgmYBWzH/q4JeL+SURfEbjbduhnxOktkixpPHNcUxxr
-	OMklBTPpL5r4PtH3+C52asw4D3TYcaObynN5WFT1DcGaLojWKYlshzQ+pOQ09m85xvYr/hrj5z9
-	5J3gsBdTqLdC31PiPbdV2VczMexVSny+wKDYUS654wUTscCgNKPBNWKojS1uDfBDWN8EWjaDUk0
-	lOlhk/0SaT0MjK/J3nBAHZZ2YejyBlhVe4BqV5/h3bE0gRF64j9XWhc3Izmqf2KACYr0l14C8iF
-	L9s/QtWsaKb6zzKTr4ERWTJg6odeLlW4zLYOwnPHAhAFCRJQwE/onEGu4lACGO54SWdMp/wAIpm
-	kddgVV9ae+yg6lPJlJ9iOwjatZDG8ji+io5jEZneAUj/kQ/RJqWUpC3H3B/KwaoHBDsNCVJnF0l
-	tHL4M26RbILw==
-X-Google-Smtp-Source: AGHT+IFS2iWAxEnztB5To7sq/L7ysBy9qfC2JiggfaKdL+MGbkE7IAtmPDihj9rg7WJDwBFUgndIyQ==
-X-Received: by 2002:a05:690c:8d14:b0:784:8b82:98d2 with SMTP id 00721157ae682-786a4213583mr42199497b3.70.1762388770706;
-        Wed, 05 Nov 2025 16:26:10 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:74::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-787b159b666sm3400747b3.39.2025.11.05.16.26.09
+        bh=6TevgQTeoZLcNkHLCnCTiMLpnQ43etaT1P8DpvGUggw=;
+        b=QQrFGr0tHERii81GFp9ZhSU7M8lPfNeOsxLGLHOKgq7Bk95FbXzsp0y3Qx/ZUkEEMT
+         2gWKAJKAxEvvmruaRo7pEugqZAoDNXy6gbV/yiPkUthJF5xB/yt+i0A44mv2BOqXh5pZ
+         sLq0jCv6sqYMcgZ+s8N7LL2VS8/mqa1VZqR0ooKXOnp/F0tsiXM65tiAvduAk0GqbVtj
+         OEHjhVH207sNl82Io8sGcwa5eE2YcI6txRBXl1DfJUCpqRrVwJzo/VICYBqmSV9wfwkt
+         34qo6IYN4DN6BbdlNXiH6w68Opf9FF/iGb5TwpCRCnsBCtDcFfY54QEpUs7n8sWJ+aXf
+         OTig==
+X-Forwarded-Encrypted: i=1; AJvYcCXtI/HTsnafcxecD7ah1wVDharaV5fjzV6Gl5wFcIAMLWfElU/TU23NBqUzWyvN5m0n0dK5jMW/EUs7HYyIERo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbJd/839Z819F0rVY/Qn7+kMZ6bMQD7JKW6q9sH4niikJZ9HBi
+	PJUY5T1y2gc7zCIcDELDgwXS5+UzUPVSblaq1Wt9qxfFwUwIhpgcyJu8
+X-Gm-Gg: ASbGncvwSAdboz+XfR7RmfB8YRnffOYiygS30vwNZjxSj/AVRs11UU6wHKppugumRZF
+	iEk5qXUUPyolWI+ZitDNUfgCvUWyt8JZRWKs0Q8hY1ruhHCGS+zSVMNd6+ohCyTa1GLOyBQZMk8
+	WbiJ2q9l0+6QgDysZ5zgosSLCZ7skiAw3q9UObcizz8hNNQxKXhY/VxUnzQl9Lzd3PYmmm/Z3Im
+	9MMOCxLaYRp0uRyYtl8BtZfF5McdUdaOQRyFmMAqswrINQgEx813L3VDTcNgpzaHlESP1N94mDV
+	92ah0dpqYiVqQpAWKhXT7lvUwMqFx+QlgaXwRTMavbB/BZdhQLv83pcJFBiAkvZVTx4i5LzJrmR
+	R+k0FG+A5osGFXHWTAoka6OCoGXBcRhhV2poFx3iqnTmis86eSsc8WtzR6aU+uG2vbdTdyycGsO
+	gJbTP/v0AQBQ==
+X-Google-Smtp-Source: AGHT+IHvp1gFuqtFzy10m9mJFmg4rE1anfKt+5H7osce0MlN6ZYPG5ynTMrbUc2Tbt/egPhenlcaeQ==
+X-Received: by 2002:a05:690c:a089:20b0:786:6f81:eb37 with SMTP id 00721157ae682-786a402d456mr47363307b3.0.1762388772799;
+        Wed, 05 Nov 2025 16:26:12 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:45::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-787b13ec33dsm3577997b3.17.2025.11.05.16.26.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 16:26:10 -0800 (PST)
+        Wed, 05 Nov 2025 16:26:12 -0800 (PST)
 From: Daniel Zahka <daniel.zahka@gmail.com>
 To: "David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -76,9 +76,9 @@ To: "David S . Miller" <davem@davemloft.net>,
 Cc: netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v3 1/5] psp: report basic stats from the core
-Date: Wed,  5 Nov 2025 16:26:02 -0800
-Message-ID: <20251106002608.1578518-2-daniel.zahka@gmail.com>
+Subject: [PATCH net-next v3 3/5] psp: add stats from psp spec to driver facing api
+Date: Wed,  5 Nov 2025 16:26:04 -0800
+Message-ID: <20251106002608.1578518-4-daniel.zahka@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251106002608.1578518-1-daniel.zahka@gmail.com>
 References: <20251106002608.1578518-1-daniel.zahka@gmail.com>
@@ -92,296 +92,212 @@ Content-Transfer-Encoding: 8bit
 
 From: Jakub Kicinski <kuba@kernel.org>
 
-Track and report stats common to all psp devices from the core. A
-'stale-event' is when the core marks the rx state of an active
-psp_assoc as incapable of authenticating psp encapsulated data.
+Provide a driver api for reporting device statistics required by the
+"Implementation Requirements" section of the PSP Architecture
+Specification. Use a warning to ensure drivers report stats required
+by the spec.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
 
 Notes:
-    v2:
-    - don't return skb->len from psp_nl_get_stats_dumpit() on success and
-      EMSGSIZE
+    v3:
+    - remove zero length array from psp_dev_stats
 
- Documentation/netlink/specs/psp.yaml | 40 +++++++++++++++
- include/net/psp/types.h              |  9 ++++
- include/uapi/linux/psp.h             | 10 ++++
- net/psp/psp-nl-gen.c                 | 19 +++++++
- net/psp/psp-nl-gen.h                 |  2 +
- net/psp/psp_nl.c                     | 74 ++++++++++++++++++++++++++++
- net/psp/psp_sock.c                   |  4 +-
- 7 files changed, 157 insertions(+), 1 deletion(-)
+ Documentation/netlink/specs/psp.yaml | 55 ++++++++++++++++++++++++++++
+ include/net/psp/types.h              | 23 ++++++++++++
+ include/uapi/linux/psp.h             |  8 ++++
+ net/psp/psp_main.c                   |  3 +-
+ net/psp/psp_nl.c                     | 21 ++++++++++-
+ 5 files changed, 108 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/netlink/specs/psp.yaml b/Documentation/netlink/specs/psp.yaml
-index 944429e5c9a8..914148221384 100644
+index 914148221384..f3a57782d2cf 100644
 --- a/Documentation/netlink/specs/psp.yaml
 +++ b/Documentation/netlink/specs/psp.yaml
-@@ -76,6 +76,28 @@ attribute-sets:
-         name: spi
-         doc: Security Parameters Index (SPI) of the association.
-         type: u32
-+  -
-+    name: stats
-+    attributes:
+@@ -98,6 +98,61 @@ attribute-sets:
+           Number of times a socket's Rx got shut down due to using
+           a key which went stale (fully rotated out).
+           Kernel statistic.
 +      -
-+        name: dev-id
-+        doc: PSP device ID.
-+        type: u32
-+        checks:
-+          min: 1
-+      -
-+        name: key-rotations
++        name: rx-packets
 +        type: uint
 +        doc: |
-+          Number of key rotations during the lifetime of the device.
-+          Kernel statistic.
++          Number of successfully processed and authenticated PSP packets.
++          Device statistic (from the PSP spec).
 +      -
-+        name: stale-events
++        name: rx-bytes
 +        type: uint
 +        doc: |
-+          Number of times a socket's Rx got shut down due to using
-+          a key which went stale (fully rotated out).
-+          Kernel statistic.
++          Number of successfully authenticated PSP bytes received, counting from
++          the first byte after the IV through the last byte of payload.
++          The fixed initial portion of the PSP header (16 bytes)
++          and the PSP trailer/ICV (16 bytes) are not included in this count.
++          Device statistic (from the PSP spec).
++      -
++        name: rx-auth-fail
++        type: uint
++        doc: |
++          Number of received PSP packets with unsuccessful authentication.
++          Device statistic (from the PSP spec).
++      -
++        name: rx-error
++        type: uint
++        doc: |
++          Number of received PSP packets with length/framing errors.
++          Device statistic (from the PSP spec).
++      -
++        name: rx-bad
++        type: uint
++        doc: |
++          Number of received PSP packets with miscellaneous errors
++          (invalid master key indicated by SPI, unsupported version, etc.)
++          Device statistic (from the PSP spec).
++      -
++        name: tx-packets
++        type: uint
++        doc: |
++          Number of successfully processed PSP packets for transmission.
++          Device statistic (from the PSP spec).
++      -
++        name: tx-bytes
++        type: uint
++        doc: |
++          Number of successfully processed PSP bytes for transmit, counting from
++          the first byte after the IV through the last byte of payload.
++          The fixed initial portion of the PSP header (16 bytes)
++          and the PSP trailer/ICV (16 bytes) are not included in this count.
++          Device statistic (from the PSP spec).
++      -
++        name: tx-error
++        type: uint
++        doc: |
++          Number of PSP packets for transmission with errors.
++          Device statistic (from the PSP spec).
  
  operations:
    list:
-@@ -177,6 +199,24 @@ operations:
-         pre: psp-assoc-device-get-locked
-         post: psp-device-unlock
- 
-+    -
-+      name: get-stats
-+      doc: Get device statistics.
-+      attribute-set: stats
-+      do:
-+        request:
-+          attributes:
-+            - dev-id
-+        reply: &stats-all
-+          attributes:
-+            - dev-id
-+            - key-rotations
-+            - stale-events
-+        pre: psp-device-get-locked
-+        post: psp-device-unlock
-+      dump:
-+        reply: *stats-all
-+
- mcast-groups:
-   list:
-     -
 diff --git a/include/net/psp/types.h b/include/net/psp/types.h
-index 31cee64b7c86..5b0ccaac3882 100644
+index 5b0ccaac3882..25a9096d4e7d 100644
 --- a/include/net/psp/types.h
 +++ b/include/net/psp/types.h
-@@ -59,6 +59,10 @@ struct psp_dev_config {
-  *			device key
-  * @stale_assocs:	associations which use a rotated out key
-  *
-+ * @stats:	statistics maintained by the core
-+ * @stats.rotations:	See stats attr key-rotations
-+ * @stats.stales:	See stats attr stale-events
-+ *
-  * @rcu:	RCU head for freeing the structure
-  */
- struct psp_dev {
-@@ -81,6 +85,11 @@ struct psp_dev {
- 	struct list_head prev_assocs;
- 	struct list_head stale_assocs;
- 
-+	struct {
-+		unsigned long rotations;
-+		unsigned long stales;
-+	} stats;
-+
- 	struct rcu_head rcu;
+@@ -150,6 +150,22 @@ struct psp_assoc {
+ 	u8 drv_data[] __aligned(8);
  };
  
++struct psp_dev_stats {
++	union {
++		struct {
++			u64 rx_packets;
++			u64 rx_bytes;
++			u64 rx_auth_fail;
++			u64 rx_error;
++			u64 rx_bad;
++			u64 tx_packets;
++			u64 tx_bytes;
++			u64 tx_error;
++		};
++		DECLARE_FLEX_ARRAY(u64, required);
++	};
++};
++
+ /**
+  * struct psp_dev_ops - netdev driver facing PSP callbacks
+  */
+@@ -188,6 +204,13 @@ struct psp_dev_ops {
+ 	 * Remove an association from the device.
+ 	 */
+ 	void (*tx_key_del)(struct psp_dev *psd, struct psp_assoc *pas);
++
++	/**
++	 * @get_stats: get statistics from the device
++	 * Stats required by the spec must be maintained and filled in.
++	 * Stats must be filled in member-by-member, never memset the struct.
++	 */
++	void (*get_stats)(struct psp_dev *psd, struct psp_dev_stats *stats);
+ };
+ 
+ #endif /* __NET_PSP_H */
 diff --git a/include/uapi/linux/psp.h b/include/uapi/linux/psp.h
-index 607c42c39ba5..31592760ad79 100644
+index 31592760ad79..d8449c043ba1 100644
 --- a/include/uapi/linux/psp.h
 +++ b/include/uapi/linux/psp.h
-@@ -45,6 +45,15 @@ enum {
- 	PSP_A_KEYS_MAX = (__PSP_A_KEYS_MAX - 1)
- };
+@@ -49,6 +49,14 @@ enum {
+ 	PSP_A_STATS_DEV_ID = 1,
+ 	PSP_A_STATS_KEY_ROTATIONS,
+ 	PSP_A_STATS_STALE_EVENTS,
++	PSP_A_STATS_RX_PACKETS,
++	PSP_A_STATS_RX_BYTES,
++	PSP_A_STATS_RX_AUTH_FAIL,
++	PSP_A_STATS_RX_ERROR,
++	PSP_A_STATS_RX_BAD,
++	PSP_A_STATS_TX_PACKETS,
++	PSP_A_STATS_TX_BYTES,
++	PSP_A_STATS_TX_ERROR,
  
-+enum {
-+	PSP_A_STATS_DEV_ID = 1,
-+	PSP_A_STATS_KEY_ROTATIONS,
-+	PSP_A_STATS_STALE_EVENTS,
-+
-+	__PSP_A_STATS_MAX,
-+	PSP_A_STATS_MAX = (__PSP_A_STATS_MAX - 1)
-+};
-+
- enum {
- 	PSP_CMD_DEV_GET = 1,
- 	PSP_CMD_DEV_ADD_NTF,
-@@ -55,6 +64,7 @@ enum {
- 	PSP_CMD_KEY_ROTATE_NTF,
- 	PSP_CMD_RX_ASSOC,
- 	PSP_CMD_TX_ASSOC,
-+	PSP_CMD_GET_STATS,
+ 	__PSP_A_STATS_MAX,
+ 	PSP_A_STATS_MAX = (__PSP_A_STATS_MAX - 1)
+diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
+index 481aaf0fc9fc..a8534124f626 100644
+--- a/net/psp/psp_main.c
++++ b/net/psp/psp_main.c
+@@ -60,7 +60,8 @@ psp_dev_create(struct net_device *netdev,
+ 		    !psd_ops->key_rotate ||
+ 		    !psd_ops->rx_spi_alloc ||
+ 		    !psd_ops->tx_key_add ||
+-		    !psd_ops->tx_key_del))
++		    !psd_ops->tx_key_del ||
++		    !psd_ops->get_stats))
+ 		return ERR_PTR(-EINVAL);
  
- 	__PSP_CMD_MAX,
- 	PSP_CMD_MAX = (__PSP_CMD_MAX - 1)
-diff --git a/net/psp/psp-nl-gen.c b/net/psp/psp-nl-gen.c
-index 9fdd6f831803..73f8b06d66f0 100644
---- a/net/psp/psp-nl-gen.c
-+++ b/net/psp/psp-nl-gen.c
-@@ -47,6 +47,11 @@ static const struct nla_policy psp_tx_assoc_nl_policy[PSP_A_ASSOC_SOCK_FD + 1] =
- 	[PSP_A_ASSOC_SOCK_FD] = { .type = NLA_U32, },
- };
- 
-+/* PSP_CMD_GET_STATS - do */
-+static const struct nla_policy psp_get_stats_nl_policy[PSP_A_STATS_DEV_ID + 1] = {
-+	[PSP_A_STATS_DEV_ID] = NLA_POLICY_MIN(NLA_U32, 1),
-+};
-+
- /* Ops table for psp */
- static const struct genl_split_ops psp_nl_ops[] = {
- 	{
-@@ -99,6 +104,20 @@ static const struct genl_split_ops psp_nl_ops[] = {
- 		.maxattr	= PSP_A_ASSOC_SOCK_FD,
- 		.flags		= GENL_CMD_CAP_DO,
- 	},
-+	{
-+		.cmd		= PSP_CMD_GET_STATS,
-+		.pre_doit	= psp_device_get_locked,
-+		.doit		= psp_nl_get_stats_doit,
-+		.post_doit	= psp_device_unlock,
-+		.policy		= psp_get_stats_nl_policy,
-+		.maxattr	= PSP_A_STATS_DEV_ID,
-+		.flags		= GENL_CMD_CAP_DO,
-+	},
-+	{
-+		.cmd	= PSP_CMD_GET_STATS,
-+		.dumpit	= psp_nl_get_stats_dumpit,
-+		.flags	= GENL_CMD_CAP_DUMP,
-+	},
- };
- 
- static const struct genl_multicast_group psp_nl_mcgrps[] = {
-diff --git a/net/psp/psp-nl-gen.h b/net/psp/psp-nl-gen.h
-index 25268ed11fb5..5bc3b5d5a53e 100644
---- a/net/psp/psp-nl-gen.h
-+++ b/net/psp/psp-nl-gen.h
-@@ -28,6 +28,8 @@ int psp_nl_dev_set_doit(struct sk_buff *skb, struct genl_info *info);
- int psp_nl_key_rotate_doit(struct sk_buff *skb, struct genl_info *info);
- int psp_nl_rx_assoc_doit(struct sk_buff *skb, struct genl_info *info);
- int psp_nl_tx_assoc_doit(struct sk_buff *skb, struct genl_info *info);
-+int psp_nl_get_stats_doit(struct sk_buff *skb, struct genl_info *info);
-+int psp_nl_get_stats_dumpit(struct sk_buff *skb, struct netlink_callback *cb);
- 
- enum {
- 	PSP_NLGRP_MGMT,
+ 	psd = kzalloc(sizeof(*psd), GFP_KERNEL);
 diff --git a/net/psp/psp_nl.c b/net/psp/psp_nl.c
-index 8aaca62744c3..f990cccbe99c 100644
+index f990cccbe99c..6afd7707ec12 100644
 --- a/net/psp/psp_nl.c
 +++ b/net/psp/psp_nl.c
-@@ -262,6 +262,7 @@ int psp_nl_key_rotate_doit(struct sk_buff *skb, struct genl_info *info)
- 		     psd->generation & ~PSP_GEN_VALID_MASK);
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
  
- 	psp_assocs_key_rotated(psd);
-+	psd->stats.rotations++;
++#include <linux/ethtool.h>
+ #include <linux/skbuff.h>
+ #include <linux/xarray.h>
+ #include <net/genetlink.h>
+@@ -509,7 +510,17 @@ static int
+ psp_nl_stats_fill(struct psp_dev *psd, struct sk_buff *rsp,
+ 		  const struct genl_info *info)
+ {
++	unsigned int required_cnt = sizeof(struct psp_dev_stats) / sizeof(u64);
++	struct psp_dev_stats stats;
+ 	void *hdr;
++	int i;
++
++	memset(&stats, 0xff, sizeof(stats));
++	psd->ops->get_stats(psd, &stats);
++
++	for (i = 0; i < required_cnt; i++)
++		if (WARN_ON_ONCE(stats.required[i] == ETHTOOL_STAT_NOT_SET))
++			return -EOPNOTSUPP;
  
- 	nlmsg_end(ntf, (struct nlmsghdr *)ntf->data);
- 	genlmsg_multicast_netns(&psp_nl_family, dev_net(psd->main_netdev), ntf,
-@@ -503,3 +504,76 @@ int psp_nl_tx_assoc_doit(struct sk_buff *skb, struct genl_info *info)
- 	nlmsg_free(rsp);
- 	return err;
- }
-+
-+static int
-+psp_nl_stats_fill(struct psp_dev *psd, struct sk_buff *rsp,
-+		  const struct genl_info *info)
-+{
-+	void *hdr;
-+
-+	hdr = genlmsg_iput(rsp, info);
-+	if (!hdr)
-+		return -EMSGSIZE;
-+
-+	if (nla_put_u32(rsp, PSP_A_STATS_DEV_ID, psd->id) ||
-+	    nla_put_uint(rsp, PSP_A_STATS_KEY_ROTATIONS,
-+			 psd->stats.rotations) ||
-+	    nla_put_uint(rsp, PSP_A_STATS_STALE_EVENTS, psd->stats.stales))
-+		goto err_cancel_msg;
-+
-+	genlmsg_end(rsp, hdr);
-+	return 0;
-+
-+err_cancel_msg:
-+	genlmsg_cancel(rsp, hdr);
-+	return -EMSGSIZE;
-+}
-+
-+int psp_nl_get_stats_doit(struct sk_buff *skb, struct genl_info *info)
-+{
-+	struct psp_dev *psd = info->user_ptr[0];
-+	struct sk_buff *rsp;
-+	int err;
-+
-+	rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
-+	if (!rsp)
-+		return -ENOMEM;
-+
-+	err = psp_nl_stats_fill(psd, rsp, info);
-+	if (err)
-+		goto err_free_msg;
-+
-+	return genlmsg_reply(rsp, info);
-+
-+err_free_msg:
-+	nlmsg_free(rsp);
-+	return err;
-+}
-+
-+static int
-+psp_nl_stats_get_dumpit_one(struct sk_buff *rsp, struct netlink_callback *cb,
-+			    struct psp_dev *psd)
-+{
-+	if (psp_dev_check_access(psd, sock_net(rsp->sk)))
-+		return 0;
-+
-+	return psp_nl_stats_fill(psd, rsp, genl_info_dump(cb));
-+}
-+
-+int psp_nl_get_stats_dumpit(struct sk_buff *rsp, struct netlink_callback *cb)
-+{
-+	struct psp_dev *psd;
-+	int err = 0;
-+
-+	mutex_lock(&psp_devs_lock);
-+	xa_for_each_start(&psp_devs, cb->args[0], psd, cb->args[0]) {
-+		mutex_lock(&psd->lock);
-+		err = psp_nl_stats_get_dumpit_one(rsp, cb, psd);
-+		mutex_unlock(&psd->lock);
-+		if (err)
-+			break;
-+	}
-+	mutex_unlock(&psp_devs_lock);
-+
-+	return err;
-+}
-diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
-index a931d825d1cc..f785672b7df6 100644
---- a/net/psp/psp_sock.c
-+++ b/net/psp/psp_sock.c
-@@ -253,8 +253,10 @@ void psp_assocs_key_rotated(struct psp_dev *psd)
- 	/* Mark the stale associations as invalid, they will no longer
- 	 * be able to Rx any traffic.
- 	 */
--	list_for_each_entry_safe(pas, next, &psd->prev_assocs, assocs_list)
-+	list_for_each_entry_safe(pas, next, &psd->prev_assocs, assocs_list) {
- 		pas->generation |= ~PSP_GEN_VALID_MASK;
-+		psd->stats.stales++;
-+	}
- 	list_splice_init(&psd->prev_assocs, &psd->stale_assocs);
- 	list_splice_init(&psd->active_assocs, &psd->prev_assocs);
+ 	hdr = genlmsg_iput(rsp, info);
+ 	if (!hdr)
+@@ -518,7 +529,15 @@ psp_nl_stats_fill(struct psp_dev *psd, struct sk_buff *rsp,
+ 	if (nla_put_u32(rsp, PSP_A_STATS_DEV_ID, psd->id) ||
+ 	    nla_put_uint(rsp, PSP_A_STATS_KEY_ROTATIONS,
+ 			 psd->stats.rotations) ||
+-	    nla_put_uint(rsp, PSP_A_STATS_STALE_EVENTS, psd->stats.stales))
++	    nla_put_uint(rsp, PSP_A_STATS_STALE_EVENTS, psd->stats.stales) ||
++	    nla_put_uint(rsp, PSP_A_STATS_RX_PACKETS, stats.rx_packets) ||
++	    nla_put_uint(rsp, PSP_A_STATS_RX_BYTES, stats.rx_bytes) ||
++	    nla_put_uint(rsp, PSP_A_STATS_RX_AUTH_FAIL, stats.rx_auth_fail) ||
++	    nla_put_uint(rsp, PSP_A_STATS_RX_ERROR, stats.rx_error) ||
++	    nla_put_uint(rsp, PSP_A_STATS_RX_BAD, stats.rx_bad) ||
++	    nla_put_uint(rsp, PSP_A_STATS_TX_PACKETS, stats.tx_packets) ||
++	    nla_put_uint(rsp, PSP_A_STATS_TX_BYTES, stats.tx_bytes) ||
++	    nla_put_uint(rsp, PSP_A_STATS_TX_ERROR, stats.tx_error))
+ 		goto err_cancel_msg;
  
+ 	genlmsg_end(rsp, hdr);
 -- 
 2.47.3
 
