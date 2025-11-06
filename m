@@ -1,53 +1,52 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEF033C50D
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 15:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0347534845D
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 15:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762444620; cv=none; b=heIsrBMP06dt0gtuKji72NHFiRg/6ImUQD44hPsTRDVO84K6uT/BVrr65EF04ve9nFKKMfrl0jwm4x6IrRTafFYsPa9/XuV4P0pdiD4zjYXSgpl6hypCCUDL+4ZQTowOqlDZrOCcFsP5vc1KiPzydG3QX1mrFcOdCrHjE2hP4I8=
+	t=1762444622; cv=none; b=gBTBGnzVQEnsq7XcS2nf5JUaOeQbYsuzVJfiQtwMXY6ohOplZhf94PwCtzTKfG2NEkQonTyplAicxclmLKZV/YDt3esJHBMrEc5CNwILNCLzpxmz5p8d2wyoeLhbatwE5glNs0sRSCtc6kXe4aeavZ8qMf6KpN3YDl89cbgumVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762444620; c=relaxed/simple;
-	bh=rOrZ/4A04kwhL0ic9QR0izswFHe9Y3mAQqCArP6A188=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=i88HGoogvnMP3mPzfTlFf+8V2kiuziU1dszr7+6JTXMG/tRv9/jQ47hiZO3VDuI1bRRD9ioyfa6CHXR3ItpjpqS4ICigTm+cjiJU1yCMxlUZTSpbC9+tEgubj7eJ1tOjxzrWdbyR+qemdCSjyvZhRZ1dy1GzdwSSrvYUDbd4M/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.49
+	s=arc-20240116; t=1762444622; c=relaxed/simple;
+	bh=g8Rymja0V72nq6OnDIyWQadzgQlOQaCKBNDvE6hktyo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=rJVlcEhwQPOB0Getm4pB9O3/9ilmjlXaeHpBn1chq8yeEi+bNfEIKMJ6p1DSbdvbst5HPbq5kbYm7+Jpw9TUk44Qn0v+T7NooEoaI5vRGrEgHxq1ur3eNIh4QzI1vlGIqwDi5z89MghsMwC+sCW53hKtTZ5npYWU8O0QMpR7tDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-640741cdda7so1714863a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 07:56:57 -0800 (PST)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-594516d941cso690220e87.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 07:57:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762444616; x=1763049416;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+PmoYhmQszxefHjhkpT3KQeYOeoKqB+UgwTp/bM0o7s=;
-        b=Pj4E6p/MHg+DA3SOlVjdz+UsKAnoTUkqxwdygG/5uLxtMAiuDpIL4lnDjqCojkXaL6
-         ae3w8IKs7izGWB3R4J9OFUVfbvoO3BMgtMbncEMM4/byW2LvNOdUQhj/oUJKVlr7CK8V
-         fZoWKE7qAfIk8XUlIV+9Yd7O7u9Djvl8GR3ZKPI9RQSXDrNcCHsWQQorHj0IRV4WBrj2
-         FF2Bdn6XBiXJb2yiGoPkDWq6g+cSbJ7zDkkJFV0RmBOZm1k13JZ8Q44q8mz+qXJVq477
-         7PMumZF/t0Lvt0krYld/mU10W0vv7jhm1oSOoWmxkEkD8wbIVzVVRTxkz/BtLj8AMYxK
-         0qYA==
-X-Forwarded-Encrypted: i=1; AJvYcCXRXHDnrgn4gTI3Nt+VKzzPfRMFcg2D6Kt+MJUdDQKap3WZQorgMfAxFQ5YG+Ihjcj/cYi27urr1XovykY3vys=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0e4BPWjgpWJq0p8i2X43lXGN3wBy5bHoc94VvUHbqmo8CNl0a
-	CqUQ58z1j92hT+aAH9CbK/x7B0U7WUoB9TXfDWWId46cLUMBrE4YZp6A
-X-Gm-Gg: ASbGncv113+kPIRX7ZnjeR1Qvyu40mWyCAp8JeeqPO2MveXB+BNeU7vcUbdZct+pvMm
-	ZR/NTV0+PJxx8AjNNHr8nhAc6GlKoRovSK4XiisbZ3u4bUakCCF+wJ1ZIb7U5VWSfCfMUr1Cep0
-	rOtmALbKvyd0IRvi3MI3V6Go0vq95BT6hkY92k2tSnIsqI6Jx+H04u+IE+W99DivnCmrfacee5P
-	LKdgQEq/BFzq2GKxgJstjAb/vhfxQt5N+o9fTod5IDwgwgg/56xIU8f4YsKgpF5wsBYIuJ0rhgm
-	QLbzncucur7uxeNSjvIzAScYEVuVsiuKUkr+Fq5jF0+S3G6I08uPmxDBlFWZN5A/4wKM4utKuID
-	POkvYbWfawxMU/tXkt6PMPDUwwZmYFrpOCab3s0WrncZwks0buWRr5vQffm2NNfGqGyw=
-X-Google-Smtp-Source: AGHT+IGtUCnY/0gL5xUXSuNGqI8E7ELQM5g8O42ZsyJXJ0jZ2YG8OSfxqQDMKV4oFHPUZ8QwMLmBOw==
-X-Received: by 2002:a17:907:1c0a:b0:b28:b057:3958 with SMTP id a640c23a62f3a-b726554c3d8mr890156866b.48.1762444615548;
-        Thu, 06 Nov 2025 07:56:55 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:73::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72a2824c2asm132004266b.34.2025.11.06.07.56.54
+        d=1e100.net; s=20230601; t=1762444619; x=1763049419;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hnf8G2/o1fozlbYtBL0vduYZr+SYz2Fp67m1oGmqTd0=;
+        b=FwkuuXUPBkaOwbAeCvSNOV1oNlimWwktc8ayk91Cn783daoXJbXTfP8NQs1Jij+6PG
+         ESgb8dODoclQOn0OzvGkprETEPvlKSuDMtk7Xetqp0mSFQGFn5vai6NpyxrlDpYqoPbv
+         xXZh0gI1tXhepi8HBgvy9p7PJLDhssHVBe92VK6OC9cpp5aFyZjC4uowUIR7YiegP6JF
+         zCTuoH0+pMmeniwpNsynIe94SlcvvsJHFS55p8Q46PxSWbZ8xW8ypfRovYcFWzNZWOcI
+         4pP4gTYn2RPIUwSHxy+V41hrsvAsFC820/dLfXNIXyfkIUHUfuSJhJY0/Dcv36nkjbbq
+         oQug==
+X-Forwarded-Encrypted: i=1; AJvYcCVcGy2W17w1fOoJbg5o/y0z04mdzw8sHJbCcdSodCIX5+104hLebWdrrKPzWCPhUX4Cp6dfdQUWBXawLSWV0HU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyYJs5aEv50lM6tC6vFPi3FPUdX/XPDeiYlDIBhFFx5SAoehPj
+	3nZWLf2jVPX/TSX6RIl8a81NbuIwp9SX1081HGBKE5BQTB3yP5bC6957
+X-Gm-Gg: ASbGncvjeOgdG1nX64ISYUsjSKUrsGBlPCEUHfUR39gUnMwXb1fPPfUrSMqvV5Dceae
+	x3ImHx3BXThGnbI27hO+BG5YZFQdQ9nOzmu91DcagVoojMFGFfmQcW0BuVlrBZOOTavGHGBvrlB
+	xPJywnJUTaFZz3E6FCPf9NpwjPI5KWAOAX+SWqLvQDd0jCtC+S6I4KhgRs56I6ifCOdQ89cJQwg
+	/T5FNz94vWjiR1SbT3GAwdDQHUBq9eWTl1N/hwhTz8yLvB4LOSL0WLZ1L5ts2SgCdliud3LcYUF
+	IQpkVmoq3PfPlugQ9Rmm0NZO6EHBdJK4dIs7ukrxX/4GyCd0iTupu6syyguFL/UFMOhOYLRyBAL
+	snnDH4enQNa2puFedCnkamkBazZfkAIJwsb+aqWHARgskiNRWnXlEaq+bSAqFi8UlLo4=
+X-Google-Smtp-Source: AGHT+IGDdzVlfGHG+gjJo6cKPMlpMJ1QYh9sBUqB7vzk7C8ccCORsGYwXnCa2OgNkGSYTk97jL4WSA==
+X-Received: by 2002:a05:6512:3b89:b0:594:2d8d:96d0 with SMTP id 2adb3069b0e04-5943d753f59mr2172947e87.15.1762444618841;
+        Thu, 06 Nov 2025 07:56:58 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:74::])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5944a013af4sm819942e87.3.2025.11.06.07.56.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 07:56:55 -0800 (PST)
+        Thu, 06 Nov 2025 07:56:58 -0800 (PST)
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net v9 0/4] net: netpoll: fix memory leak and add
- comprehensive selftests
-Date: Thu, 06 Nov 2025 07:56:46 -0800
-Message-Id: <20251106-netconsole_torture-v9-0-f73cd147c13c@debian.org>
+Date: Thu, 06 Nov 2025 07:56:48 -0800
+Subject: [PATCH net v9 2/4] selftest: netcons: refactor target creation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,13 +55,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAD/FDGkC/33RTWrDMBAF4KsYrTNl9C951XuUUiR5lAiKHWTXt
- ATfvcSL1sVO1wPfPN67sZFqoZG1zY1VmstYhp61jT81LF1CfyYoHWsbJlBo9CigpykN/Ti809s
- 01OmjErichMwYUvCenRp2rZTL54q+sJ4m9npq2KWM01C/1kczX0//mTMHDiiTQWO0d+SfO4ol9
- E9DPa/eLLaGOjQEIGhrNXW6S9KYnSG3hj40JCA4q5PNFDvJ94baGNweGgoQMOgoo8uOJ9oZemu
- 4Q0MDgrUkNGFQFPc5zI/B8UGn5t6HkjFrkU1Ue8NuDXloWEAIwYucEhkR9ru4X4M/2MXdcwjnl
- EISOeAfY1mWb/1CxiSWAgAA
-X-Change-ID: 20250902-netconsole_torture-8fc23f0aca99
+Message-Id: <20251106-netconsole_torture-v9-2-f73cd147c13c@debian.org>
+References: <20251106-netconsole_torture-v9-0-f73cd147c13c@debian.org>
+In-Reply-To: <20251106-netconsole_torture-v9-0-f73cd147c13c@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -71,100 +66,95 @@ To: Andrew Lunn <andrew+netdev@lunn.ch>,
 Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de, 
  calvin@wbinvd.org, kernel-team@meta.com, calvin@wbinvd.org, 
- jv@jvosburgh.net, Breno Leitao <leitao@debian.org>, stable@vger.kernel.org
+ jv@jvosburgh.net, Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.15-dev-dd21f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3370; i=leitao@debian.org;
- h=from:subject:message-id; bh=rOrZ/4A04kwhL0ic9QR0izswFHe9Y3mAQqCArP6A188=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBpDMVFwKvvzkebqNy/kZS1nG85335bRbP4s/Pu5
- IU2Ck7/bKmJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaQzFRQAKCRA1o5Of/Hh3
- bQSgEACQ1IzCyzKXtsX1G1SQIUxRdM5w4WuZXB37xspJkRXQoQTcPBeg+oSGeBu94hWm4DByKnB
- nb+1MdF3FXpbqlybrKyL6i28j2T3EhcB+G7rDdaAQ3uINsgGqElQRcPOA+Sn8ufuor2Qt899iBA
- MSsgTzJUzJ+OA3gIci+ub104ujlJCRszUiI9n3uQtZp2Me0hbVyXe+EOpFMOzLB0vwHRWiP/eqT
- JnZnyC9/3mIradwD7dLP7Its2eqC0s8siUnnjUItzeHJ3lFwJl2bp2cYTplZKA6GurnBzSujtOR
- At0z69SADJ5seIywWNs7bOsKKmSq9snvcl6HXsWICe7zIMFrG1FPzIMek3O4N48gayrk9ZTcOPJ
- jOOLgSsxA2sPvLKQaqiiSYOV7I2ethrpy9aap6zasMyGy7axv6wJfJ1TQRYWST1xbun1xv0fxlH
- tsfrzxoIMfRoLTfjla7pad1iy9US+u81V2N0QdMNTdfb0GX6uhlDdR4BNON/mzS7T8JWogV4ZwP
- 56L6JB+ygDB3AzaIDOm6FTuH8opSklHolK5oIfvjPFd1MZ1GzkzF3VaJ+tN9aI884cl1yup9rVM
- pDry9PYPHFeRggKwwL5zgbOXTotyepzEznTjh6yGgIEuhrMpSeeRctXHtfyJ9wtQ5xP3RcZT17F
- GY8ZdsemENBPBJw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2478; i=leitao@debian.org;
+ h=from:subject:message-id; bh=g8Rymja0V72nq6OnDIyWQadzgQlOQaCKBNDvE6hktyo=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBpDMVGKjU4mF7SehuwG2/2BkvWMPlfMIMcjPYYC
+ VlUgkAxUmqJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaQzFRgAKCRA1o5Of/Hh3
+ bcBcD/9pqAJ8YiEHBvh7fDBNGanf0hoX/xrVBl6Ns/ujJUEVA+37c8XdLbS2EcpvWB9bSpT/yxm
+ KvcYgXbcKCBQbbFINhL8hY5IOjPS4YvEyhc8bQ2uChIe7Ib9knZ7mVO2rZCR/KlgCXpV/XkV/MX
+ cDpECoGz2ZspQyK52jXFo6edgwzT/xRzhlJco/N4mu4gA5ht3waJktbN9DkumDvN6NOJh3hLpcy
+ w59ZJt6n9akf1MP1WGcgoqm2+6mkvI/3PSzXC0lbX9rhP4muFu694U372Nmui1KlRvU0kbHeIXg
+ ScIKE6o18/3Ws/kxSX6cl0+06yPPULhswkBauHfLMEy4ApAdqOGUFnCEIQHb68iqeYOFHXMVMQX
+ hEgqyu4PPIJPHQFfaZXb8NGvC+Q8f7qlJld32Pe1cZ9nDOxhQp67pm3qsgD1Hdw36n30CXCrXOf
+ WJdCPGg6+mN2zCgDNKLhCgulk8usSqWHuUVZxjyI9Z2egITnXHnniH9slAoOnz/7TtLF2wjhnbg
+ Z0isi1X5ku8AncaQdzV7GUtm9Ec7WHr4sejZWxGYm+l66AFo90wRO6wjC9qXc7NGriEtIRE4xn+
+ 9nie+KJXx2c/4vLmqtgPh+XHMymsDiCOt7WZWdjj0kFMjbnRaLTRuLT/0C9MDj5Wy2Z2ejsJtpF
+ IU2jieFRMzDe95g==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Fix a memory leak in netpoll and introduce netconsole selftests that
-expose the issue when running with kmemleak detection enabled.
+Extract the netconsole target creation from create_dynamic_target(), by
+moving it from create_dynamic_target() into a new helper function. This
+enables other tests to use the creation of netconsole targets with
+arbitrary parameters and no sleep.
 
-This patchset includes a selftest for netpoll with multiple concurrent
-users (netconsole + bonding), which simulates the scenario from test[1]
-that originally demonstrated the issue allegedly fixed by commit
-efa95b01da18 ("netpoll: fix use after free") - a commit that is now
-being reverted.
-
-Sending this to "net" branch because this is a fix, and the selftest
-might help with the backports validation.
-
-Link: https://lore.kernel.org/lkml/96b940137a50e5c387687bb4f57de8b0435a653f.1404857349.git.decot@googlers.com/ [1]
+The new helper will be utilized by forthcoming torture-type selftests
+that require dynamic target management.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
+Reviewed-by: Simon Horman <horms@kernel.org>
 ---
-Changes in v9:
-- Reordered the config entries in tools/testing/selftests/drivers/net/bonding/config (NIPA)
-- Link to v8: https://lore.kernel.org/r/20251104-netconsole_torture-v8-0-5288440e2fa0@debian.org
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 30 ++++++++++++++--------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
-Changes in v8:
-- Sending it again, now that commit 1a8fed52f7be1 ("netdevsim: set the
-  carrier when the device goes up") has landed in net
-- Created one namespace for TX and one for RX (Paolo)
-- Used additional helpers to create and delete netdevsim (Paolo)
-- Link to v7: https://lore.kernel.org/r/20251003-netconsole_torture-v7-0-aa92fcce62a9@debian.org
+diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+index 8e1085e896472..9b5ef8074440c 100644
+--- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
++++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+@@ -113,31 +113,39 @@ function set_network() {
+ 	configure_ip
+ }
+ 
+-function create_dynamic_target() {
+-	local FORMAT=${1:-"extended"}
++function _create_dynamic_target() {
++	local FORMAT="${1:?FORMAT parameter required}"
++	local NCPATH="${2:?NCPATH parameter required}"
+ 
+ 	DSTMAC=$(ip netns exec "${NAMESPACE}" \
+ 		 ip link show "${DSTIF}" | awk '/ether/ {print $2}')
+ 
+ 	# Create a dynamic target
+-	mkdir "${NETCONS_PATH}"
++	mkdir "${NCPATH}"
+ 
+-	echo "${DSTIP}" > "${NETCONS_PATH}"/remote_ip
+-	echo "${SRCIP}" > "${NETCONS_PATH}"/local_ip
+-	echo "${DSTMAC}" > "${NETCONS_PATH}"/remote_mac
+-	echo "${SRCIF}" > "${NETCONS_PATH}"/dev_name
++	echo "${DSTIP}" > "${NCPATH}"/remote_ip
++	echo "${SRCIP}" > "${NCPATH}"/local_ip
++	echo "${DSTMAC}" > "${NCPATH}"/remote_mac
++	echo "${SRCIF}" > "${NCPATH}"/dev_name
+ 
+ 	if [ "${FORMAT}" == "basic" ]
+ 	then
+ 		# Basic target does not support release
+-		echo 0 > "${NETCONS_PATH}"/release
+-		echo 0 > "${NETCONS_PATH}"/extended
++		echo 0 > "${NCPATH}"/release
++		echo 0 > "${NCPATH}"/extended
+ 	elif [ "${FORMAT}" == "extended" ]
+ 	then
+-		echo 1 > "${NETCONS_PATH}"/extended
++		echo 1 > "${NCPATH}"/extended
+ 	fi
+ 
+-	echo 1 > "${NETCONS_PATH}"/enabled
++	echo 1 > "${NCPATH}"/enabled
++
++}
++
++function create_dynamic_target() {
++	local FORMAT=${1:-"extended"}
++	local NCPATH=${2:-"$NETCONS_PATH"}
++	_create_dynamic_target "${FORMAT}" "${NCPATH}"
+ 
+ 	# This will make sure that the kernel was able to
+ 	# load the netconsole driver configuration. The console message
 
-Changes in v7:
-- Rebased on top of `net`
-- Link to v6: https://lore.kernel.org/r/20251002-netconsole_torture-v6-0-543bf52f6b46@debian.org
-
-Changes in v6:
-- Expand the tests even more and some small fixups
-- Moved the test to bonding selftests
-- Link to v5: https://lore.kernel.org/r/20250918-netconsole_torture-v5-0-77e25e0a4eb6@debian.org
-
-Changes in v5:
-- Set CONFIG_BONDING=m in selftests/drivers/net/config.
-- Link to v4: https://lore.kernel.org/r/20250917-netconsole_torture-v4-0-0a5b3b8f81ce@debian.org
-
-Changes in v4:
-- Added an additional selftest to test multiple netpoll users in
-  parallel
-- Link to v3: https://lore.kernel.org/r/20250905-netconsole_torture-v3-0-875c7febd316@debian.org
-
-Changes in v3:
-- This patchset is a merge of the fix and the selftest together as
-  recommended by Jakub.
-
-Changes in v2:
-- Reuse the netconsole creation from lib_netcons.sh. Thus, refactoring
-  the create_dynamic_target() (Jakub)
-- Move the "wait" to after all the messages has been sent.
-- Link to v1: https://lore.kernel.org/r/20250902-netconsole_torture-v1-1-03c6066598e9@debian.org
-
----
-Breno Leitao (4):
-      net: netpoll: fix incorrect refcount handling causing incorrect cleanup
-      selftest: netcons: refactor target creation
-      selftest: netcons: create a torture test
-      selftest: netcons: add test for netconsole over bonded interfaces
-
- net/core/netpoll.c                                 |   7 +-
- tools/testing/selftests/drivers/net/Makefile       |   1 +
- .../testing/selftests/drivers/net/bonding/Makefile |   2 +
- tools/testing/selftests/drivers/net/bonding/config |   4 +
- .../drivers/net/bonding/netcons_over_bonding.sh    | 361 +++++++++++++++++++++
- .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  82 ++++-
- .../selftests/drivers/net/netcons_torture.sh       | 130 ++++++++
- 7 files changed, 569 insertions(+), 18 deletions(-)
----
-base-commit: 7d1988a943850c584e8e2e4bcc7a3b5275024072
-change-id: 20250902-netconsole_torture-8fc23f0aca99
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+-- 
+2.47.3
 
