@@ -1,36 +1,36 @@
-Received: from cmccmta2.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4A061DA0E1;
-	Thu,  6 Nov 2025 05:43:59 +0000 (UTC)
+Received: from cmccmta3.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580DB28E9;
+	Thu,  6 Nov 2025 05:58:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762407845; cv=none; b=ABqqV4oJRnPgUSOIITjKp5Voa3UgPcksTv+D6EUsqsDpDMadDUcKZVmOx68v0SLoRFX/d+VvFsjHH2DJxF6ipH2aJMc1Rg8SIJMXuql0NWG9AF8kyIr44RUEFBBKK8YHU0xE+BPlxJaMGRmlOoJr36jgqTLQeJp8gK31HK1ieRE=
+	t=1762408710; cv=none; b=PwEjFiJgiQRUw8DPjoy7eG7/Ji20RxmLujuzCFoGcKqsUHgHk0sXgl5loBCy6utfLzDvxrEXTcUwslSs/shRbKhHMjWHu1f9geaPtH/w2PF/vpzdeCelcwXipmI+fCUm9UFTwYL0HN/1bw0XkKUXhuoT2JsuvIe6NX9nUDPYZ/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762407845; c=relaxed/simple;
-	bh=VltWER56COxnICQrkyLAFOuJG20Kgc9n+y4y0mPsSQ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=arkVqgStJIhfhSR3oJEJ1NR39VRXC77P76cJW7HmozIc34KzAGsnab6uSlftebInxhz7BQZlf1fe0vbiLgXTQPhwupH/yH/9TYu1hClepy0dxS0zPgfhDhKpWCNKYwhKmwK1dqX10gjbbrOJqPzYsTPXFGbpMKewVRkCO1HxrCc=
+	s=arc-20240116; t=1762408710; c=relaxed/simple;
+	bh=DswA1willBQzbF6hAF3QyQvRhGbnRQbotxR22cAl3wo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UfVTusl1WaazsUhzR4vvgACGNFZjqGuVpYVidsRwePOQbnF2aCvm+BUQF5tol4uZMqjDe1qiccGJLgJ0R3UXh/4npCYLZUzGJ+XyGzVH50B7Pz47y/D0mn00gPn18rEy76UuiQIFb0Mrgvop2hwZ9CT6iiGZmsETuK4Hvi3vp0M=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee5690c34dfdf7-a5f1b;
-	Thu, 06 Nov 2025 13:40:52 +0800 (CST)
-X-RM-TRANSID:2ee5690c34dfdf7-a5f1b
+	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee9690c38fc83e-aa902;
+	Thu, 06 Nov 2025 13:58:23 +0800 (CST)
+X-RM-TRANSID:2ee9690c38fc83e-aa902
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from FHB-W5100149 (unknown[10.55.1.70])
-	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee1690c34e2fa4-4531b;
-	Thu, 06 Nov 2025 13:40:52 +0800 (CST)
-X-RM-TRANSID:2ee1690c34e2fa4-4531b
+	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee8690c38fd764-45acd;
+	Thu, 06 Nov 2025 13:58:23 +0800 (CST)
+X-RM-TRANSID:2ee8690c38fd764-45acd
 From: Zhang Chujun <zhangchujun@cmss.chinamobile.com>
-To: vkoul@kernel.org
-Cc: dmaengine@vger.kernel.org,
+To: broonie@kernel.org
+Cc: linux-sound@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Zhang Chujun <zhangchujun@cmss.chinamobile.com>
-Subject: [PATCH] selftests/dma: fix invalid array access in printf
-Date: Thu,  6 Nov 2025 11:30:56 +0800
-Message-ID: <20251106033056.1926-1-zhangchujun@cmss.chinamobile.com>
+Subject: [PATCH] selftest/alsa: correct grammar in conf_get_bool error string
+Date: Thu,  6 Nov 2025 13:58:19 +0800
+Message-ID: <20251106055819.1996-1-zhangchujun@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -40,28 +40,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The printf statement attempts to print the DMA direction string using
-the syntax 'dir[directions]', which is an invalid array access. The
-variable 'dir' is an integer, and 'directions' is a char pointer array.
-This incorrect syntax should be 'directions[dir]', using 'dir' as the
-index into the 'directions' array. Fix this by correcting the array
-access from 'dir[directions]' to 'directions[dir]'.
+The phrase "an bool" is grammatically incorrect; it should be
+"a bool".
 
 Signed-off-by: Zhang Chujun <zhangchujun@cmss.chinamobile.com>
 
-diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
-index b12f1f9babf8..b925756373ce 100644
---- a/tools/testing/selftests/dma/dma_map_benchmark.c
-+++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-@@ -118,7 +118,7 @@ int main(int argc, char **argv)
- 	}
+diff --git a/tools/testing/selftests/alsa/conf.c b/tools/testing/selftests/alsa/conf.c
+index 5b7c83fe87b3..317212078e36 100644
+--- a/tools/testing/selftests/alsa/conf.c
++++ b/tools/testing/selftests/alsa/conf.c
+@@ -448,7 +448,7 @@ int conf_get_bool(snd_config_t *root, const char *key1, const char *key2, int de
+ 		ksft_exit_fail_msg("key '%s'.'%s' search error: %s\n", key1, key2, snd_strerror(ret));
+ 	ret = snd_config_get_bool(cfg);
+ 	if (ret < 0)
+-		ksft_exit_fail_msg("key '%s'.'%s' is not an bool\n", key1, key2);
++		ksft_exit_fail_msg("key '%s'.'%s' is not a bool\n", key1, key2);
+ 	return !!ret;
+ }
  
- 	printf("dma mapping benchmark: threads:%d seconds:%d node:%d dir:%s granule: %d\n",
--			threads, seconds, node, dir[directions], granule);
-+			threads, seconds, node, directions[dir], granule);
- 	printf("average map latency(us):%.1f standard deviation:%.1f\n",
- 			map.avg_map_100ns/10.0, map.map_stddev/10.0);
- 	printf("average unmap latency(us):%.1f standard deviation:%.1f\n",
 -- 
 2.50.1.windows.1
 
