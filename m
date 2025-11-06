@@ -1,120 +1,117 @@
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43F730C345
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 09:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4282E11D7;
+	Thu,  6 Nov 2025 10:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762422950; cv=none; b=B6bDmCPbDZzAsVO31hLOlxforBquiWyLBQk7huPPD2HPESD4bZ+4GDI5ig+wQoOHReVo00z1tAzre1Y1/ZbcnAYAcdFTxMP2v95Z+42mUbImmxZaU6pNJL6bInwv+RGVKvb6PiaKAfLeEH2s3T8VJRgOa5Rk28eCPs2AZ2PVdLc=
+	t=1762423337; cv=none; b=Or3FvvkqUxGv5sU5wgp/phBFiLmlDQsRM7DLylDp3l59WLegu9p4J6LKy1lGsaryrYkUZMOX3Knr8PlGvE6Kae3njXo/cPlFGCc6BJq+uW/kJytwJ48p7Q8up0c4xJagiURUFF5/aJLyXkUTOuhrTLmi2JYa3y69IV5AEqpoEF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762422950; c=relaxed/simple;
-	bh=lGb+rCNSnJ/Re9I074l78vjpp6/yu6/7U6mL2e+8rjE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JsGfbnZ1nJHX88ko1Zxp7EqSLuwl94leqTXDlk+zUdel/ykSpKCOEXOeA6KClUefE7m0MOYKeE2qpEi62E+xGo+BntpNWju1q7i/IYEzus77sKNGy1QZnsg1aD5cTiNHzazQQGgE417L4a+I+tHLAkPa78QYAgTwjjhkACsB+eE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DeHZwXIl; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762423337; c=relaxed/simple;
+	bh=XfbRCZJaIPPL9RqG5I4uWuUiOvFF0sMMnDdDPpO0Deo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=cljTLa5jDFdYcbeoIybtAK+DTeN6vx/qTaKAE18twUn9MrwrdsPOCDb3eeZIT4tmLUzR1+thj1ZpGPHzhVbjQh9zNUAA/kxz0mAI+jL+/BuOSV9NawP+Lqok2xBwnm2wI+pm9U/el8NTugTZTH/qo2r9IlPxxACBmxQq2XLkTZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CZq9Wu29; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=d8Y4q6xG; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DeHZwXIl"
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-290aaff555eso7881875ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 01:55:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762422948; x=1763027748; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sx3MpVj7PiHTaRtB2+AQXnkYRvNzs0/kE3anQ6IOaeM=;
-        b=DeHZwXIlOAQIZ4IYN0+ls86e4UlJ0pQ/AJlt+cSbeVJ7vEAtxKCq7cKJ7GjTgJD9h5
-         HKK08f04i+iB8Yj3X58iYIiAnKwOoiS1cWccJlln6STUByWjrmIfYUBMxMbI0rTRHEIS
-         BH9P2R/6EePvfMC0AKE1F0saP/KAEkG43owBXowWkLgV/KiqysTUUk926Fg0LUZVmytO
-         VWayLjKTxISmBgBjxtajeI62BBHnYXFNETGwv473Nz2wt4cPYPEX/cI/bI0yN936IoCg
-         deX5AdMpe5qCDxhl1P+ITLp8FQFh8Epf0c/zcxOEDiTpmeV+uRBzSOd/qbClOtoCE26d
-         lMCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762422948; x=1763027748;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sx3MpVj7PiHTaRtB2+AQXnkYRvNzs0/kE3anQ6IOaeM=;
-        b=DCOIm61QuuBG/4N+96U26ANTtKYizO9LhHAZGPHhAqbWRV/CjpEmmMVhFlvMnlUQ0V
-         cMfflrigyMvbICzoYNesvPn6zLFPz46aKr9afrTWDuTvLQITD3cxKKsc/I5JDVTFhxTb
-         IuKPGlD1/6HZHGcQvPSUZrS4o5HCS/ZRjXSLWV0Ed+cJngt1Jts8gWkAYNhfJMODwzQf
-         se9QytZ9VhQCo/j7d2Em4J5d51sVnE6TYdw++hOTAGVNjxxP6xl42b1v13QqqTOHzB+L
-         dXlHkI/OoSnFuuhpFCNrDHAXQgRMUx4Ss4bzNxzG+7EDbKzni8hteGhYJdq+FcVV+sXp
-         CiZg==
-X-Gm-Message-State: AOJu0YxSlGGciJIMASc7HVB8XpcD/utDTnB3c9kRDtB4DyShEqxHssZh
-	YFg/r3IwiiVgqd7lOSFNCxjqotZgSgrn6s51AvU+XzZ6cDOPpjcUt4+92QmDjKbr
-X-Gm-Gg: ASbGncuAq0o4iEOkW8+LwHCEHoN4D8UMgnbP7f20iHK4aW+92ZVfE0zFsYTf3cdSmmC
-	uldxI2rsOTDxKA5k1u4R4A9ICEx6Z78N22FaG0dKSDW5o6chFg6FoMxGn0tRcAY3Tj/ypRd5BrN
-	WA0NxRZwLmJYhjy43l8wk/W1FgdXMC7vp4IGRn9/8LBPBNk2zgKnfXTX1SOebf9rwApQ6o94A9j
-	jmU02eLYtnKiJEyIz3HasMxLY+hIK3tcY3RrLhaLuvUyKp8Djvhr5T94rhkORES2m+BJN2C1HoH
-	YBkCxYCAIezRV6SMjsF3uR7QddgHX1rkQk+5k4w8+D+B61tmf2xvKzNTZZ6WNfdteWF1ov+vcer
-	gj2ZeTbSFrQrXVdriYdNPOogFG8vF/0wqeVcDTY+6dVZkqiDqh1DuQegXgW+dRg+TGPcfB5m60A
-	kwhgMlq9nEabaWGW+PNcg=
-X-Google-Smtp-Source: AGHT+IGLWpaeqUyOqwgdTGI+r36lnGa7tydw0O2a7A+GFy9ENF5YsdFbKzmv4BnmJ82XJw5jO5gf6w==
-X-Received: by 2002:a17:902:d48c:b0:294:ccc6:ccfd with SMTP id d9443c01a7336-2962ad1bdffmr91436475ad.24.1762422947738;
-        Thu, 06 Nov 2025 01:55:47 -0800 (PST)
-Received: from fedora ([103.120.31.122])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29651ca1eb7sm23046285ad.89.2025.11.06.01.55.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 01:55:46 -0800 (PST)
-From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-To: linux-kselftest@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Subject: [PATCH v2] selftests/user_events: Fix type cast for write_index packed member in perf_test
-Date: Thu,  6 Nov 2025 15:25:32 +0530
-Message-ID: <20251106095532.15185-1-ankitkhushwaha.linux@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CZq9Wu29";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="d8Y4q6xG"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1762423331;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d61fN+YsBbfOpc/TI9xXXEgh8u4ram9nD50U99mHlYE=;
+	b=CZq9Wu29/BJLN8xesS+fKvmG1nv36JlDSJ08JYmTChRiPH3pFjjoTZVsuEHtE7/NjtI9YA
+	YJMEFbkvYTBVSFiTI5rExiIWya8v7PZ5xFs38uZHp2RQKD5RuPIvvxUbt5ByzazItDNu3L
+	mAATXLbZEBLRAKhRfsUTkIfyb8OnQSzlJ1EhzuA7arp2ROcXTteWn9ravQGD5ERyklNRe1
+	QlUUaNbtCO5xem0Y2pgdj0nAlkOoialkJGgIMCLPp2RTu4WKwAah2lKOLYd+kDV5HcZ7kk
+	xc+QO2kvkbD5clIRDuiddBhx7teFC6hrCM+l+CaNWS4/3hUpjSXTeK+W5ZiHWQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1762423331;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d61fN+YsBbfOpc/TI9xXXEgh8u4ram9nD50U99mHlYE=;
+	b=d8Y4q6xGHeWZSFTaw6xKwtX2QEMXFsfEkbUXtkn6AAQuREvr9ASttKf2YQISbUxSOyht3Q
+	cJYdpKIJ9okV3tAA==
+Date: Thu, 06 Nov 2025 11:01:56 +0100
+Subject: [PATCH v5 03/34] arm64: vDSO: gettimeofday: Explicitly include
+ vdso/clocksource.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20251106-vdso-sparc64-generic-2-v5-3-97ff2b6542f7@linutronix.de>
+References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
+In-Reply-To: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
+ Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
+ John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+ Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
+ "Jason A. Donenfeld" <Jason@zx2c4.com>, 
+ Russell King <linux@armlinux.org.uk>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Shannon Nelson <sln@onemain.com>
+Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+ linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762423327; l=950;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=XfbRCZJaIPPL9RqG5I4uWuUiOvFF0sMMnDdDPpO0Deo=;
+ b=3GS8tpkvgHKiJsfgHWm5ubVV3I9cKnKzRWQdI3BUDk0saE9EvuDLjaf1Hnk6AktCIMkBuZ3PL
+ IRavzTBjoL5CCZ57tc9RUOnuLxLNp3A1Z6w12JRbI6JL0LWjT+ZOfVN
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Accessing 'reg.write_index' directly triggers a -Waddress-of-packed-member
-warning due to potential unaligned pointer access:
+The reference to VDSO_CLOCKMODE_NONE requires vdso/clocksource.h. Currently
+this header is included transitively, but that transitive inclusion is
+about to go away.
 
-perf_test.c:239:38: warning: taking address of packed member 'write_index'
-of class or structure 'user_reg' may result in an unaligned pointer value
-[-Waddress-of-packed-member]
-  239 |         ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
-      |                                             ^~~~~~~~~~~~~~~
+Explicitly include the header.
 
-Since write(2) works with any alignment. Casting '&reg.write_index'
-explicitly to 'void *' to suppress this warning.
-
-Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Tested-by: Andreas Larsson <andreas@gaisler.com>
+Reviewed-by: Andreas Larsson <andreas@gaisler.com>
 ---
-Changelog:
-v2:
-- typecast '&reg.write_index' to 'void *' & remove use of memcpy as
- suggested by Andrew.
+ arch/arm64/include/asm/vdso/gettimeofday.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-v1: https://lore.kernel.org/linux-kselftest/20251027113439.36059-1-ankitkhushwaha.linux@gmail.com/
+diff --git a/arch/arm64/include/asm/vdso/gettimeofday.h b/arch/arm64/include/asm/vdso/gettimeofday.h
+index c59e84105b43cdb0c823da3dd793a83781f84302..909780bcadae92109b175e23cb05e966683731d4 100644
+--- a/arch/arm64/include/asm/vdso/gettimeofday.h
++++ b/arch/arm64/include/asm/vdso/gettimeofday.h
+@@ -9,6 +9,8 @@
+ 
+ #ifndef __ASSEMBLY__
+ 
++#include <vdso/clocksource.h>
++
+ #include <asm/alternative.h>
+ #include <asm/arch_timer.h>
+ #include <asm/barrier.h>
 
----
- tools/testing/selftests/user_events/perf_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
-index 201459d8094d..cafec0e52eb3 100644
---- a/tools/testing/selftests/user_events/perf_test.c
-+++ b/tools/testing/selftests/user_events/perf_test.c
-@@ -236,7 +236,7 @@ TEST_F(user, perf_empty_events) {
- 	ASSERT_EQ(1 << reg.enable_bit, self->check);
-
- 	/* Ensure write shows up at correct offset */
--	ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
-+	ASSERT_NE(-1, write(self->data_fd, (void *)&reg.write_index,
- 						sizeof(reg.write_index)));
- 	val = (void *)(((char *)perf_page) + perf_page->data_offset);
- 	ASSERT_EQ(PERF_RECORD_SAMPLE, *val);
---
+-- 
 2.51.0
 
