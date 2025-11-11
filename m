@@ -1,47 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9702635470A;
-	Tue, 11 Nov 2025 10:50:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC91354ACB;
+	Tue, 11 Nov 2025 10:50:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762858205; cv=none; b=ACRiOw8Zgb2iKrAG8aqzJYjpxbBjYSkxhfur0xQmVA6LKEfkZLHtB8qM0JeFni2hfHa6i48K+SUVNprOUVRHszwoQAPFzETi3XHYS8DBTnCSuoDh1kT9LuGvJfubEcrZQ5USyZrmSzG2aXkiys73OVathbZl+4nsr9aYVqUjepA=
+	t=1762858206; cv=none; b=oXLNEJCTkMLNmuMUEjAGVJ1Fv8XnIaZI8v7zqZid/yMgXH1cEodTXzwo0MFnDnracG4GLJLYa45QZZztCiDhR01CaWMX5S/kJieijnjyfmRUwY2uUisMJTxcGIscmrqeywZnlGZa4Ytu5I7K9cigcnIP1+7TiVMm6Afs+sBVJqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762858205; c=relaxed/simple;
-	bh=xj97LjnkpZXwOaVKrKnQFjnvVZvSP4GS9N09KI7Aj8M=;
+	s=arc-20240116; t=1762858206; c=relaxed/simple;
+	bh=mgBbhqKXIVtDgBpWnLQNQGMfOsIij1eGHRln0s0hly4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SqQ/JJaP2CcvhC0yKD3NzbrgD53inTmTbecDN4OILbmNfCy4wjjI+HRgwo3HyCO05uAVzitfAL0mroJyaEAqLM6u6XUb8TqFlqnQMaH0WubrPxAXB2R28XAZNWsx1iU3EW9nnnl29McsuYw4N5FAlvM4l2O3S5oBtENhIRXkeBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=r72c0LL0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LKCjCSwp; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=bjMmvr4z29tHx0i++nyU3G/RDGpy00X2a2JG9BNUh6rFkC/L6LW7KtN+w+qftb4bprDLKgNbA1ntT083GfcazLkmuSBSvkPUOMSoKBQAFEjePNFLmdaOI1oqg+Lv3uoidFbbRPiq1dPTtpBfNrvjhbZ3w3bK+iw2m8IbGNR6amw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kX62CJfs; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vdkja6jT; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="r72c0LL0";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LKCjCSwp"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kX62CJfs";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vdkja6jT"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1762858200;
+	s=2020; t=1762858202;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=75wyZV/JgSFGjOOw2HZQaIX8t+5lodFpKe8oY/EEK3o=;
-	b=r72c0LL0o4jpfXtGhN17ap4a2vv+9YYspOhmVEGSdk5D69wV8ByTFMEI4Psjce7QI+VZSW
-	BdLwIDsZCJm8Tp9BPc6M4MqiyTOTwDPFsCW+tc3rCOsU32CZx2rrBaBFrQD00UeBEmvkX7
-	cNQraZjlfzfpGCJVZDN8gBM8YO2sQrHsDdl17PwpWXLhGNdEjD6MslGkql4hqcVEP2NH/j
-	RZvmN/JkmjLPP0lpAGjCqWDeK6a7GWPtoMQUb1uBj+Vczc4WELBIXwai054Mm3tmXDwo/F
-	Tam8KP+9WvnT7pMHO/oc59TcGVhwrCx+ArwX+xNvk+A7LpbDqtjN1A+1PRERoQ==
+	bh=sistUqI+ZNMZcEsNWeX14s6eyv+7oxVPQusG72kG8mg=;
+	b=kX62CJfsu34b/p1ELlKrVuaLCRDsqj0cf/1o9ndnkd4WUERKUdUwjC9YEiJePnTq01MaS8
+	jYjuRW34m638jv9FGL1diWmcgES4mJ9LE2ez2QCq4YL+YXH9ahMSS/jxi588lyb+C2dHY1
+	gbUjpqzLXoogfH1WiS4TFoZLqyE6kC23nWemczjEfLWu6tF2QpLkercb4Is/WGsp5wcvzP
+	Bqkk5GrhDBLtWZz01JX/gTcszoSDf7JvQOLqU/kW0ygidqJAUCODq17hdoof2Yx/oiXbGu
+	fkFF3q0K82L23crkHgnGPfYx8vzWCcOIITkjX3zBtlfo6XyNPLabpA/CGcfdnQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1762858200;
+	s=2020e; t=1762858202;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=75wyZV/JgSFGjOOw2HZQaIX8t+5lodFpKe8oY/EEK3o=;
-	b=LKCjCSwp8E5WRgIAEwIJBTkvzYMKdpnyzXFyPp+ScpK3C2utczT1dXEEQPtMP3X3nZBiUG
-	8LheUGktxq38m7Cg==
-Date: Tue, 11 Nov 2025 11:49:50 +0100
-Subject: [PATCH 04/10] selftests: vDSO: vdso_test_abi: Provide
- compatibility with 32-bit musl
+	bh=sistUqI+ZNMZcEsNWeX14s6eyv+7oxVPQusG72kG8mg=;
+	b=vdkja6jTT93WzFXfEgOaffywrrBGK9186pEZyLOwk24KsUjVuKPPGglUH66EmOUjp4skVw
+	42/EC200V9LuN0Dw==
+Date: Tue, 11 Nov 2025 11:49:53 +0100
+Subject: [PATCH 07/10] selftests: vDSO: vdso_test_correctness: Drop
+ SYS_getcpu fallbacks
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251111-vdso-test-types-v1-4-03b31f88c659@linutronix.de>
+Message-Id: <20251111-vdso-test-types-v1-7-03b31f88c659@linutronix.de>
 References: <20251111-vdso-test-types-v1-0-03b31f88c659@linutronix.de>
 In-Reply-To: <20251111-vdso-test-types-v1-0-03b31f88c659@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -59,37 +59,40 @@ To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
 Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1762858197; l=959;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762858197; l=858;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=xj97LjnkpZXwOaVKrKnQFjnvVZvSP4GS9N09KI7Aj8M=;
- b=OmnufXbuYmp5o3tfhBXSGrlafXB0/gJmN60StxsJ5P++2JW41ILa5gEzsJ5GkQgy0OBGd7iA1
- 0Daha48GDwvDPFF+Tf9NF3SyCJveqIGViFPjC42ZvCE1Jl6H6vje8aF
+ bh=mgBbhqKXIVtDgBpWnLQNQGMfOsIij1eGHRln0s0hly4=;
+ b=+mz60Gl3j8aCAxam+h0y27sD2AoYMmH2/BdXJEx63i/d4+4aTD+zsi4iUfoO5vZKqueBFaeN6
+ iijz2PaVHSJD+YlmkH2GRBR8oWQnBJ4IS2qiM7alGDGwsKeDMaKKr9o
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The 32-bit time variants on musl have different names, provide a fallback.
+These fallbacks are only valid on x86 and unused in the first place.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/vDSO/vdso_test_abi.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/vDSO/vdso_test_correctness.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
-index bb5a5534ae7e8a46d7e68a561684c29a752b866d..0a6b16a21369642384d43b0efd1bca227a2a4298 100644
---- a/tools/testing/selftests/vDSO/vdso_test_abi.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
-@@ -166,7 +166,11 @@ static void vdso_test_clock_getres(__kernel_clockid_t clk_id)
- 		clock_getres_fail++;
- 	}
+diff --git a/tools/testing/selftests/vDSO/vdso_test_correctness.c b/tools/testing/selftests/vDSO/vdso_test_correctness.c
+index da651cf53c6ca4242085de109c7fc57bd807297c..66cd1d4c19872e78c0e608f5e0fb5215cf902b50 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_correctness.c
++++ b/tools/testing/selftests/vDSO/vdso_test_correctness.c
+@@ -25,14 +25,6 @@
  
-+#ifdef SYS_clock_getres
- 	ret = syscall(SYS_clock_getres, clk_id, &sys_ts);
-+#else
-+	ret = syscall(SYS_clock_getres_time32, clk_id, &sys_ts);
-+#endif
+ static const char **name;
  
- 	ksft_print_msg("The syscall resolution is %lld %lld\n",
- 			(long long)sys_ts.tv_sec, (long long)sys_ts.tv_nsec);
+-#ifndef SYS_getcpu
+-# ifdef __x86_64__
+-#  define SYS_getcpu 309
+-# else
+-#  define SYS_getcpu 318
+-# endif
+-#endif
+-
+ #ifndef __NR_clock_gettime64
+ #define __NR_clock_gettime64	403
+ #endif
 
 -- 
 2.51.0
