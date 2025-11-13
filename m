@@ -1,132 +1,153 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4433659F7
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 16:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EAD735CB92;
+	Thu, 13 Nov 2025 16:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763052157; cv=none; b=p6/neuCLBpw4YQ03JHLTjTlopRnV2uglEAYMwJrmqSEv18ErpqZFEtJiGIZE4Nog0R2ty+OjX21+j2HMg8wE/ZKMbm7daEmWSvnspYTL25ChoECDluWU671LECUgIDScSIbnXC4Rqid4OonKJjMFaUrooOcg3dttNiG8fQ61gr8=
+	t=1763052385; cv=none; b=Zz7gTLmeMs2oejnZ9Mw/56XpCALUBwvjNSjDzYviPuU/AN/WRwBVmAjlbSoA7dEStyGDbcS39NW+YyIXbVswLkwg5rW/9YTJhXgExhYvZZ1nJWRIq/R8Npf2tSTI3dHdvnwZMHk0tPlDYh0IwJY8LuVX3/viv1B9N8W25rQ1GwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763052157; c=relaxed/simple;
-	bh=AZDhgFsJHk/7/ccWHmuKjRVzzDMIUsT8B2xszzmjcS4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T+RjydmQmWyDie3qi83OeAP2BjnZtxdlsbhwJFjh9UAwxc1n90NJ/RHrSPgCbCvzLuXzMIGB9nkPzLnyIvR/Z/tgNUXAVQ0o+TjMl8r1w6A7XDzuKcvsl2JRo4R0r6tt6UZnPmtGbU1Y0FP/2SAetRSHaDJJ1xjC7fkVwamEEIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IuJ4IYJX; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763052385; c=relaxed/simple;
+	bh=3xOkFRyx8ajSderbZPHE6EZhwEEq/CfQCCTKeRWj+14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mSGUUK0dgW6hIGTkMmv3kDdn55U6XAzaa9Fv3poLCwNlM9FbiMPRO+vsoCciSA8smUO6KfYsymhewh2QeyFusZxDY16GQysJDLhVuUDE7Wumdu//NVdsFOXz0i8P5+ECa+GG2uDvuRfu5XBlOvDTnAnJ8hsiKcwOnSmGD+fqbLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ANlFB3Kd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IuJ4IYJX"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42b305881a1so116628f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 08:42:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763052154; x=1763656954; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tnv5GvLZO90fssK5mBO/V2ejb0VVnidgq+QHki0NiLw=;
-        b=IuJ4IYJXLJ2V5+7Y5+mRDTUTL2yzgqfIK7tEPsOTetMWojJb6Y1g9LSVir2GIvKVRf
-         Yv+a1pGGPiP6Gfxk16B/uaFurp0SkXbX+hphQNp07ksmvhtcOWOV7mjdOuI0BqjvYYKU
-         zDONzb9C2el/O/eHTD6PIjHk62BdfujD1UdFvbAhW0UuvYcywIzbmM9w7oUWYdX62qrk
-         DFBCpTUbKm+UhP7HXJ7dusVMcE2FsBbdwYrOUlcKBjsaVC2379pTisGc+099x7tO//2V
-         e/1QdPmECdMRPGnOfCRPRTJO4BLRv+D3Hbpl4s0fCD/vFymEydKWRfbkioWs0E5X+Hzt
-         glvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763052154; x=1763656954;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Tnv5GvLZO90fssK5mBO/V2ejb0VVnidgq+QHki0NiLw=;
-        b=dEMUdnW3YPujf5OS+qD7ueumJrzusNOrJYR/3hRqKXEwG3p/E2FDu8qYgbYO4KgfkM
-         2jwtK19kUi39rRBj9qb+srtSURBuz5h4aUBW4FbBZVMUmXtkfOgL4lG0iQWWW7Pr2hRl
-         9xBnUBBhMp5Rdb0xhWjF67yB+XKDdutyDXrAJrhyrnlyzptfZIcyQWO7rIala2Misp3f
-         4r9EHnCgTE3NVHwZZD9c5s8eNr6ih+ChOXR/UQ4l5/GimsJJrm/urfIn/omh2DgaF4bB
-         huffpOH3ix9xLiiU443ycWp358P6e/Gr3kGzUQNm8GPkEUvUxv/710orSrj93Z/aG+2f
-         FUsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZC9nMhjkC4SY3xQzrD8bwW+PDafP5OXLnsH1HeK/HWgJjLgeuLn3VTkgrzwKOu0i90iUOxtR3Hdb2Zympad0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ1pOB1dShhmire5Qau20UodFOkrzEBAUt3bE1wEju3Pq1mFHI
-	FMqTG/EQeRBBDwybEewyzFNchxiqFmYs2RfLxb8fotUSHbSMWv7L+J2q
-X-Gm-Gg: ASbGncswxTsLAX3d1j2brcG2ZZ8L6eREcjwguadGErRZhmhS7XLjj49+KGg38tzXE/I
-	2M72EsXV47PyXpbih3jbVQtxXouoLB778MJyBJwCb0fPov209KocY10PvQ0OwbFcLExIWuNB8W3
-	EbjjUvBDXlD2+XsjHjcms+QOjIpNYt/G+pV/7rxf66kywLWgP76NJw9g4PlZn60m1Pb2DLLxh5+
-	W0lXPO2H6YdkCCz9o+2tnkvtgVWmraUQVEVoUZkg6cQ8Oty9qVUDXxt1u8tYMD8TaLgBWdGm+ya
-	2BrOH+FLBOOKMnJye0Vx4Jt+2U96SvyYISWVRGkJQd6hkBmYfkDNfekVyBtRwcadWgmri46M31D
-	9lApMJBD+1YC69YswF8GXIVIxVA/O7H0Hq9kzKWeQfqvNczBdSn67GRYWCGJqoL9n6q7IVs8n/3
-	hAguEy3A/SdF07R6c=
-X-Google-Smtp-Source: AGHT+IFlJhZQHRbGLobb3YLbAsBiS2Koyw/Ec1i06oLS8N0XCLnx1tPyDdy1oAHB/rz71WT4cMX8YQ==
-X-Received: by 2002:a05:600c:c4b8:b0:477:5b01:7d42 with SMTP id 5b1f17b1804b1-4778fee8183mr614895e9.5.1763052153366;
-        Thu, 13 Nov 2025 08:42:33 -0800 (PST)
-Received: from localhost ([2a03:2880:31ff:50::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53f21948sm4877254f8f.43.2025.11.13.08.42.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Nov 2025 08:42:32 -0800 (PST)
-From: Gustavo Luiz Duarte <gustavold@gmail.com>
-Date: Thu, 13 Nov 2025 08:42:21 -0800
-Subject: [PATCH net-next v2 4/4] netconsole: Increase MAX_USERDATA_ITEMS
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ANlFB3Kd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79371C4CEF5;
+	Thu, 13 Nov 2025 16:46:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763052385;
+	bh=3xOkFRyx8ajSderbZPHE6EZhwEEq/CfQCCTKeRWj+14=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ANlFB3KdmGzi6pRPz/Msov+nrcs+dWmK2IqxUKObhB61zauElfiUr1UU7ct9t6nqV
+	 nnGxLC+uyoz35YrNU0U7ucFPGn5WdCgU3dB1+NAPf/KRBwj+BoZSGUZDgRuKbbn2Nk
+	 n586FtCTMEYY15fU08udtoAB5JdYmyiiG6bQdi7zhzqq+4QlJBLBG5PFPx+vNmB01Z
+	 ndTghWSxlJ/eNyMr4uZGhNvCaD7nfRRgOilnnh4bO8FS6VtKCQTVp4CD5IWbfd7QWP
+	 V9uOK3ldMMyng+FvbS4mcsqcq4fYWbnrWBzUCjvfK7j12aaF4way83aTHQYgFRkst7
+	 +R/ej7dlhrZwQ==
+Date: Thu, 13 Nov 2025 18:46:15 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+Cc: akpm@linux-foundation.org, peterx@redhat.com, david@redhat.com,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	surenb@google.com, mhocko@suse.com, shuah@kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com, khalid@kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH v2] selftests/mm/uffd: remove static address usage in
+ shmem_allocate_area()
+Message-ID: <aRYLVyR6l-bGCxui@kernel.org>
+References: <20251113142050.108638-1-mehdi.benhadjkhelifa@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251113-netconsole_dynamic_extradata-v2-4-18cf7fed1026@meta.com>
-References: <20251113-netconsole_dynamic_extradata-v2-0-18cf7fed1026@meta.com>
-In-Reply-To: <20251113-netconsole_dynamic_extradata-v2-0-18cf7fed1026@meta.com>
-To: Breno Leitao <leitao@debian.org>, Andre Carvalho <asantostc@gmail.com>, 
- Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Gustavo Luiz Duarte <gustavold@gmail.com>
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251113142050.108638-1-mehdi.benhadjkhelifa@gmail.com>
 
-Increase MAX_USERDATA_ITEMS from 16 to 256 entries now that the userdata
-buffer is allocated dynamically.
+On Thu, Nov 13, 2025 at 03:20:33PM +0100, Mehdi Ben Hadj Khelifa wrote:
+> The current shmem_allocate_area() implementation uses a hardcoded virtual
+> base address (BASE_PMD_ADDR) as a hint for mmap() when creating shmem-backed
+> test areas. This approach is fragile and may fail on systems with ASLR or
+> different virtual memory layouts, where the chosen address is unavailable.
+> 
+> Replace the static base address with a dynamically reserved address range
+> obtained via mmap(NULL, ..., PROT_NONE). The memfd-backed areas and their
+> alias are then mapped into that reserved region using MAP_FIXED, preserving
+> the original layout and aliasing semantics while avoiding collisions with
+> unrelated mappings.
+> 
+> This change improves robustness and portability of the test suite without
+> altering its behavior or coverage.
+> 
+> Suggested-by: Mike Rapoport <rppt@kernel.org>
+> Signed-off-by: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
 
-The previous limit of 16 was necessary because the buffer was statically
-allocated for all targets. With dynamic allocation, we can support more
-entries without wasting memory on targets that don't use userdata.
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-This allows users to attach more metadata to their netconsole messages,
-which is useful for complex debugging and logging scenarios.
-
-Also update the testcase accordingly.
-
-Signed-off-by: Gustavo Luiz Duarte <gustavold@gmail.com>
----
- drivers/net/netconsole.c                                | 2 +-
- tools/testing/selftests/drivers/net/netcons_overflow.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index 12fbc303a8240..36ce19936fa39 100644
---- a/drivers/net/netconsole.c
-+++ b/drivers/net/netconsole.c
-@@ -50,7 +50,7 @@ MODULE_LICENSE("GPL");
- /* The number 3 comes from userdata entry format characters (' ', '=', '\n') */
- #define MAX_EXTRADATA_NAME_LEN		(MAX_EXTRADATA_ENTRY_LEN - \
- 					MAX_EXTRADATA_VALUE_LEN - 3)
--#define MAX_USERDATA_ITEMS		16
-+#define MAX_USERDATA_ITEMS		256
- #define MAX_PRINT_CHUNK			1000
- 
- static char config[MAX_PARAM_LENGTH];
-diff --git a/tools/testing/selftests/drivers/net/netcons_overflow.sh b/tools/testing/selftests/drivers/net/netcons_overflow.sh
-index 29bad56448a24..06089643b7716 100755
---- a/tools/testing/selftests/drivers/net/netcons_overflow.sh
-+++ b/tools/testing/selftests/drivers/net/netcons_overflow.sh
-@@ -15,7 +15,7 @@ SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
- 
- source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
- # This is coming from netconsole code. Check for it in drivers/net/netconsole.c
--MAX_USERDATA_ITEMS=16
-+MAX_USERDATA_ITEMS=256
- 
- # Function to create userdata entries
- function create_userdata_max_entries() {
+> ---
+> Testing(Retested):
+> A diff between running the mm selftests on 6.18-rc5 from before and after
+> the change show no regression on x86_64 architecture with 32GB DDR5 RAM.
+> 
+> ChangeLog:
+> 
+> Changes from v1:
+> 
+> -Implemented Mike's suggestions to make cleanup code more clear.
+> 
+> Link:https://lore.kernel.org/all/20251111205739.420009-1-mehdi.benhadjkhelifa@gmail.com/
+> 
+>  tools/testing/selftests/mm/uffd-common.c | 24 +++++++++++++++---------
+>  1 file changed, 15 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+> index 994fe8c03923..edd02328f77b 100644
+> --- a/tools/testing/selftests/mm/uffd-common.c
+> +++ b/tools/testing/selftests/mm/uffd-common.c
+> @@ -10,7 +10,6 @@
+>  uffd_test_ops_t *uffd_test_ops;
+>  uffd_test_case_ops_t *uffd_test_case_ops;
+>  
+> -#define BASE_PMD_ADDR ((void *)(1UL << 30))
+>  
+>  /* pthread_mutex_t starts at page offset 0 */
+>  pthread_mutex_t *area_mutex(char *area, unsigned long nr, uffd_global_test_opts_t *gopts)
+> @@ -142,30 +141,37 @@ static int shmem_allocate_area(uffd_global_test_opts_t *gopts, void **alloc_area
+>  	unsigned long offset = is_src ? 0 : bytes;
+>  	char *p = NULL, *p_alias = NULL;
+>  	int mem_fd = uffd_mem_fd_create(bytes * 2, false);
+> +	size_t region_size = bytes * 2 + hpage_size;
+>  
+> -	/* TODO: clean this up.  Use a static addr is ugly */
+> -	p = BASE_PMD_ADDR;
+> -	if (!is_src)
+> -		/* src map + alias + interleaved hpages */
+> -		p += 2 * (bytes + hpage_size);
+> +	void *reserve = mmap(NULL, region_size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS,
+> +			-1, 0);
+> +	if (reserve == MAP_FAILED) {
+> +		close(mem_fd);
+> +		return -errno;
+> +	}
+> +
+> +	p = reserve;
+>  	p_alias = p;
+>  	p_alias += bytes;
+>  	p_alias += hpage_size;  /* Prevent src/dst VMA merge */
+>  
+> -	*alloc_area = mmap(p, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
+> +	*alloc_area = mmap(p, bytes, PROT_READ | PROT_WRITE, MAP_FIXED | MAP_SHARED,
+>  			   mem_fd, offset);
+>  	if (*alloc_area == MAP_FAILED) {
+>  		*alloc_area = NULL;
+> +		munmap(reserve, region_size);
+> +		close(mem_fd);
+>  		return -errno;
+>  	}
+>  	if (*alloc_area != p)
+>  		err("mmap of memfd failed at %p", p);
+>  
+> -	area_alias = mmap(p_alias, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
+> +	area_alias = mmap(p_alias, bytes, PROT_READ | PROT_WRITE, MAP_FIXED | MAP_SHARED,
+>  			  mem_fd, offset);
+>  	if (area_alias == MAP_FAILED) {
+> -		munmap(*alloc_area, bytes);
+>  		*alloc_area = NULL;
+> +		munmap(reserve, region_size);
+> +		close(mem_fd);
+>  		return -errno;
+>  	}
+>  	if (area_alias != p_alias)
+> -- 
+> 2.51.2
+> 
 
 -- 
-2.47.3
-
+Sincerely yours,
+Mike.
