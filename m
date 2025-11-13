@@ -1,47 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8555A355800;
-	Thu, 13 Nov 2025 15:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC12A355035;
+	Thu, 13 Nov 2025 15:31:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763047874; cv=none; b=cNJgEXiUfGe4UJEJmTHSKyHuhV/PVVKK6tTVcU0eABM9OoQmRmNKr5oh2lriRnKVxet9D9CwV9684ivpuAXLoQwoIA5l30709EjMetb+G3G9iIww1KhgJ/1CkPD5XWw3zVEulWKJDv3DDiADIEThw83XyEUAlr5ousAH9PU+HhM=
+	t=1763047875; cv=none; b=gQyL+lBTyx1m7olBkMgdQ994FdBhx5q/yUhzgy7T+QuXHbrQu8TUNBjSW6Qn1m+6Zb+9Mc9xXmJuHd3/QIUF78ReTUL5IS7QincqQp92JBEMHBr/ikjFESDgOCpYV9TdZhcXEak1hF+FJDnYjIVu3r6PkABMMspyeHBCBPwhfTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763047874; c=relaxed/simple;
-	bh=aE/WV2Mi+bsanJlDrSl9gQQohVGvHhC6JpfJzLKQvZ4=;
+	s=arc-20240116; t=1763047875; c=relaxed/simple;
+	bh=TK3kDMdKI7t7x2lzP/yrgs3XhFSrM6UorVFO2YD8btE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KXqzBrlHo2BlA3KidT9PXNOQRGxp8oRx3gMrPfYuYmmAgkw6pyqPtgw6FOJyA4cJNIa0VQqYGk6dH+Rvw9suPvpNVkeQrJfcx4NhBBexO99uI7ng4MrKplcYs9MPFxo2ay6gimaz3l7pncb28UFdMDv7HRIE9UNCTVJyGNJ+iWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tpZJ6RB2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sQDJJmYk; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=p3ip6zHT0YY+ENuvzFml24hxe+NKc+q5dD/ImLvFi+XFYH31m2ohdLjGoCVLJ9FkBEDLYNHRlinFkWfR9m4nSbIxtcsHmdMqRqDjaD3nwGF0ub1JiuN9dZSBwUGlENv+XB2X4fTxQlgrca8jifdApJnuCukvOXA7gZhwpQBTt1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cBqO4yEB; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=/UP3j5af; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tpZJ6RB2";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sQDJJmYk"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cBqO4yEB";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="/UP3j5af"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763047868;
+	s=2020; t=1763047872;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=EWRbOr5K7jIjvQLAayug9MX0ujPyaf2nA2ZDGHxUXu0=;
-	b=tpZJ6RB2ZIWMQ0un4x93pd20M34fmnMYRKkyy9xaBC7z9leBe5c2jCbWKdnNhuYRHtmPlz
-	PB5GhK/opGbBv/sOGccrvw06+bK5vRY2JY9IDaDzTTTTM0dlvOndWlDxWaeGoSNtUeI2q1
-	if+QNECS1vQm8b4B1ZLE1OA8nz5l3dAVUyPp8OpM6NYMiaFg4NV9FErZ0fv2EODmhluFj2
-	0hZiHpgT+90bhcDXkOuKwWXfxFj7yRlPVhi5Pw9W2mZll/zo026MUa/KE1qiDhP8P/kOMQ
-	5M3vmXq2QIhuiKbJDEjThtOnT17HJLZbSXWz3XQolTepEAp58MLvdcT5td+KpA==
+	bh=2ZFSs81AIopxVpJk23vsXnUXNlQYUu8F0A7B4CVaEBE=;
+	b=cBqO4yEBWMtMvzSwaRiBc3j1aa9vS6c4eP2KB0WyIyUC7NhneRw36H/h57JnXbEhyJc8dM
+	cojD/AUTZZ6VmXR6IticxNQFdgxFqnTevq/xVZZ7Ke7FtpzRtzwkYvYQ0VFV/Hioob0iBH
+	hhvhfz8AJdnzeSHIhHFkjiyimkd7cf1dxxKyzMUTTnz7RpdMfIgwlIf3PnS/Syj6ap7zDt
+	Li6194V0Fq9J0KrSr4lnKTv4NiGdIGgJVVmfjp4rr46FG2eojODN5yWZaDBExdl4kjNl0R
+	9K3kO5wgvIfmUOmapdG2kM1lCcyDS88wxpjutEziVDUcMjuAVXNKOR0fVfZxVw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763047868;
+	s=2020e; t=1763047872;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=EWRbOr5K7jIjvQLAayug9MX0ujPyaf2nA2ZDGHxUXu0=;
-	b=sQDJJmYkRj6ZYQGLKn4+GzX6J7z/0ymTCf45xrdzmYLuIGdM3wKrikA/JMitN++QimZYYB
-	vhIRj8LI79ziqjAg==
-Date: Thu, 13 Nov 2025 16:30:21 +0100
-Subject: [PATCH v2 05/14] selftests: vDSO: vdso_test_gettimeofday: Use
- types from vdso_types.h
+	bh=2ZFSs81AIopxVpJk23vsXnUXNlQYUu8F0A7B4CVaEBE=;
+	b=/UP3j5afozy/Ol/0KfuT6Tlpok1H1DMR3/BQX5zlD78CSqjC8IFSFfFdTW7/TbSwxbHplY
+	0Ng5r4lwZqUadoBw==
+Date: Thu, 13 Nov 2025 16:30:23 +0100
+Subject: [PATCH v2 07/14] selftests: vDSO: vdso_test_abi: Validate return
+ value of syscall(clock_getres)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251113-vdso-test-types-v2-5-0427eff70d08@linutronix.de>
+Message-Id: <20251113-vdso-test-types-v2-7-0427eff70d08@linutronix.de>
 References: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
 In-Reply-To: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -59,59 +59,45 @@ To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
 Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763047863; l=1506;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763047863; l=1274;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=aE/WV2Mi+bsanJlDrSl9gQQohVGvHhC6JpfJzLKQvZ4=;
- b=VNYLn2LfDOqE3yKLgg24YD0/DO4Gw8FiThFchHxpELdfOdSzRVN/FcZc794RaNgNqbD9WlcyP
- Tpd3IKmrrKBBLpWe6rGMsc1dNrMoSFYr5WFLgWkwYF7y/9uTbO4VKuE
+ bh=TK3kDMdKI7t7x2lzP/yrgs3XhFSrM6UorVFO2YD8btE=;
+ b=eeHGGgJt+gpM1IhzcBzDHm+KY3Wx4fTV35i3di87gmYvJyLmaJ3jnkIkXo8vv3VSScVnmlhdZ
+ +WuY82so5weBeDZbq5sYXMVMSrTBQ2SIYY4gfpX2jolL09PAqZW6NGb
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The libc types are not necessarily compatible with the vDSO functions.
-
-Use the dedicated types from vdso_types.h instead.
+If the system call failed the output memory is not usable.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/vDSO/vdso_test_gettimeofday.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ tools/testing/selftests/vDSO/vdso_test_abi.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-index 636a56ccf8e4e7943ca446fe3fad6897598ca77f..3c14ed654428e0dbe08e9d44671e82737ac61486 100644
---- a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-@@ -12,12 +12,12 @@
- 
- #include <stdio.h>
- #include <sys/auxv.h>
--#include <sys/time.h>
- 
- #include "../kselftest.h"
- #include "parse_vdso.h"
- #include "vdso_config.h"
- #include "vdso_call.h"
-+#include "vdso_types.h"
- 
- int main(int argc, char **argv)
- {
-@@ -33,15 +33,14 @@ int main(int argc, char **argv)
- 	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
- 
- 	/* Find gettimeofday. */
--	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
--	gtod_t gtod = (gtod_t)vdso_sym(version, name[0]);
-+	vdso_gettimeofday_t gtod = (vdso_gettimeofday_t)vdso_sym(version, name[0]);
- 
- 	if (!gtod) {
- 		printf("Could not find %s\n", name[0]);
- 		return KSFT_SKIP;
+diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
+index 7826d9c10ccaf313dc003e8959d9eb84b2cda874..ff142b3b9075b18e60a46b77492d285e9937fa71 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_abi.c
++++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
+@@ -168,12 +168,15 @@ static void vdso_test_clock_getres(__kernel_clockid_t clk_id)
  	}
  
--	struct timeval tv;
-+	struct __kernel_old_timeval tv;
- 	long ret = VDSO_CALL(gtod, 2, &tv, 0);
+ 	ret = syscall(SYS_clock_getres, clk_id, &sys_ts);
++	if (ret == 0) {
++		ksft_print_msg("The syscall resolution is %lld %lld\n",
++				(long long)sys_ts.tv_sec, (long long)sys_ts.tv_nsec);
  
- 	if (ret == 0) {
+-	ksft_print_msg("The syscall resolution is %lld %lld\n",
+-			(long long)sys_ts.tv_sec, (long long)sys_ts.tv_nsec);
+-
+-	if ((sys_ts.tv_sec != ts.tv_sec) || (sys_ts.tv_nsec != ts.tv_nsec))
++		if ((sys_ts.tv_sec != ts.tv_sec) || (sys_ts.tv_nsec != ts.tv_nsec))
++			clock_getres_fail++;
++	} else {
+ 		clock_getres_fail++;
++	}
+ 
+ 	if (clock_getres_fail > 0) {
+ 		ksft_test_result_fail("%s %s\n", name[3],
 
 -- 
 2.51.0
