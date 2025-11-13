@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282382E2DC1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFF92E8E01;
 	Thu, 13 Nov 2025 00:43:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762994625; cv=none; b=HpJrOFqP85sJLGMs2KIy/91rmTJglNZiT5cHkz6xZOgtftS7u2091F5Wrp/kgHF+a8m3i6rMLaCGP4vUtpCpQlV4AiNgwGF2sVaAw7dQEWMD0dl5LlwLnHHgI6wTZvhU0Ri8Y/oZOprqVio7GutArM2pNudxZfJHgTpGt4mBiIo=
+	t=1762994625; cv=none; b=noHY3VfIqthaAz3igNQbg1DMHGI7Iu6tfNBvUR4lqw5CqzrqGQCycr+0Mv7l6+5FRQhSIW0PhmaKL0455iADz4reKKJgEyNDlhgPDXHdJuR5JgUKuGRY6o4LVneTohxkZmxfcTKQHLglcPMO0aWZhwCjViHsmwyD+w999lBnrX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762994625; c=relaxed/simple;
-	bh=bPL6vxe17/1hYXtbU8DLV1GggN8NhUYMmyQybHsKecI=;
+	bh=IPjzSuwKw0/IvILddCYwySiXTQZGu/tjP3Sc0NnpRVA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=a/FASLX8wswbTq1zWsVRZwGPT++PrQ2cW2EPVTL2qXfTsXtDnZuX8t14Cna8v28FnjxH1k1hQyzIXkTs1weRorvuDblALVcOm81FUbAId14axTp8Cnj6tn2JyuMQz3qyyzwhToIoJnFF1va7/mriVJAkKbUyDZItybWUPMDnCLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bXYY0Gtc; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=WmiCP6kiwqf1cDQIBQH3TxsPwQigRJ37Zjo9fFpSLdcMJh+ktUPhi2vYWpMhVmy7zucRfB+HRi60mzocNP5jEgYMQNDqz5sslosJ5xj44W1jmQqxtOnNT1KLEFchBE8LzlJwFoz5yU0RntwBWv4QAZpwPkdv+4bKt5+6+rhx3wE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HClatwGe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bXYY0Gtc"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 33001C2BCB0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HClatwGe"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B239C2BCF4;
 	Thu, 13 Nov 2025 00:43:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1762994624;
-	bh=bPL6vxe17/1hYXtbU8DLV1GggN8NhUYMmyQybHsKecI=;
+	bh=IPjzSuwKw0/IvILddCYwySiXTQZGu/tjP3Sc0NnpRVA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=bXYY0Gtc5m/IgrqvtRhKLkGuY/wa7llxyed0x7yJ/JK6J67dn8RJNzwVbUGRtJbAx
-	 d3wfFC48V66GZtTl/AsAJZCaS832Bauea0UFuQfLimeY9yHT6pA90rDceNE16Mu+Yj
-	 UXID0ePl+vSRyL6Khh7yjWDIOSwJM0YYAaefAeC3w5Iu50A0Oui89O0PmyojQe8oqb
-	 ANe4P79R6lLQ4X6p//vGKAwGzl2CLYDX/5N6OIASA/vCng58EghME3MF+njPhOzEdC
-	 BKVyRYeuI1Pmi6gjhF7MT4B+aS2sGLC5w1Swpt09CgvT97suIxFQWdt6/Xa9ksmaUG
-	 jcPs/0ERD9beg==
+	b=HClatwGeLgEDkLF0L9q9UC7sGvjRTqnRYNEWUMALMORNuTuJ3huk4PrYDDQftJu9n
+	 0ZYdKq6GdtGf6RoZYv3J+qda6Zruw+B2BktX44bp5m5ICdAnmhyrOyw7/KUeI2D3Mj
+	 k7PO6GWK0ED+zb9ViTcuTwh+VXRItmQwpTLhu4wgZueWmxYJjGdoyJmrNFgmbPYYpd
+	 6R6UaJQsYl+WGozphTPYCKQMonakhEFsGQu4MqCqDfH8TsAZObbWdkveKxj/A3x+64
+	 L0mUOaLyRCwy5SYrpfo/zVXfPCY00Wj3CrDhaQWVHO7SbrLkfd9+ekINTzGO+KsxQ6
+	 SFezk6nHipARA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 096F3CD4F34;
-	Thu, 13 Nov 2025 00:43:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D52E6CD4F30;
+	Thu, 13 Nov 2025 00:43:43 +0000 (UTC)
 From: Deepak Gupta via B4 Relay <devnull+debug.rivosinc.com@kernel.org>
-Date: Wed, 12 Nov 2025 16:43:24 -0800
-Subject: [PATCH v23 26/28] riscv: Documentation for landing pad / indirect
- branch tracking
+Date: Wed, 12 Nov 2025 16:43:22 -0800
+Subject: [PATCH v23 24/28] arch/riscv: dual vdso creation logic and select
+ vdso based on hw
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251112-v5_user_cfi_series-v23-26-b55691eacf4f@rivosinc.com>
+Message-Id: <20251112-v5_user_cfi_series-v23-24-b55691eacf4f@rivosinc.com>
 References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
 In-Reply-To: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
@@ -74,13 +74,13 @@ Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
  atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
  alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
  rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org, 
- Zong Li <zong.li@sifive.com>, Deepak Gupta <debug@rivosinc.com>
+ Deepak Gupta <debug@rivosinc.com>, Charles Mirabile <cmirabil@redhat.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1762994618; l=6062;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762994618; l=9508;
  i=debug@rivosinc.com; s=20251023; h=from:subject:message-id;
- bh=7LCUsE6kNUEwcM1QtIZIjQu/BHRL3vY+rwSlBm5MqpY=;
- b=YGn4JF1PeUciH7tnmNDeYMr93FsrQPGK8IBTWaZhdo8Ww5zDMmLFWThqlfokLf4AjqbWK6m3d
- tR0itMlTauECBoy3809z75tX6PjdY0Eyok7/8fsnflHGPHBxu5PJTRl
+ bh=5kW3ppW7X69x7Q0biC+r7pIGZhVe4tEPfC6qDLBYOh8=;
+ b=ZUXxP2jWCx9aFYnGqIw4ZsqI92ReGz8O6QXxYZ+AufkCBA+XalcYH6JabYrkZOEtgw87F9Xcu
+ ynT+1r2EZu4CmOCea5IVkwApRI+S+9Wm76tPnaNvGxjacIb6AUTi8LA
 X-Developer-Key: i=debug@rivosinc.com; a=ed25519;
  pk=O37GQv1thBhZToXyQKdecPDhtWVbEDRQ0RIndijvpjk=
 X-Endpoint-Received: by B4 Relay for debug@rivosinc.com/20251023 with
@@ -90,149 +90,246 @@ Reply-To: debug@rivosinc.com
 
 From: Deepak Gupta <debug@rivosinc.com>
 
-Adding documentation on landing pad aka indirect branch tracking on riscv
-and kernel interfaces exposed so that user tasks can enable it.
+Shadow stack instructions are taken from zimop (mandated on RVA23).
+Any hardware prior to RVA23 profile will fault on shadow stack instruction.
+Any userspace with shadow stack instruction in it will fault on such
+hardware. Thus such userspace can't be brought onto such a hardware.
 
-Reviewed-by: Zong Li <zong.li@sifive.com>
+It's not known how userspace will respond to such binary fragmentation.
+However in order to keep kernel portable across such different hardware,
+`arch/riscv/kernel/vdso_cfi` is created which has logic (Makefile) to
+compile `arch/riscv/kernel/vdso` sources with cfi flags and then changes
+in `arch/riscv/kernel/vdso.c` for selecting appropriate vdso depending
+on whether underlying hardware(cpu) implements zimop extension. Offset
+of vdso symbols will change due to having two different vdso binaries,
+there is added logic to include new generated vdso offset header and
+dynamically select offset (like for rt_sigreturn).
+
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+Acked-by: Charles Mirabile <cmirabil@redhat.com>
 ---
- Documentation/arch/riscv/index.rst   |   1 +
- Documentation/arch/riscv/zicfilp.rst | 115 +++++++++++++++++++++++++++++++++++
- 2 files changed, 116 insertions(+)
+ arch/riscv/Makefile                        |  3 +++
+ arch/riscv/include/asm/vdso.h              | 13 ++++++++++++-
+ arch/riscv/kernel/Makefile                 |  1 +
+ arch/riscv/kernel/vdso.c                   |  7 +++++++
+ arch/riscv/kernel/vdso/Makefile            | 29 ++++++++++++++++++++---------
+ arch/riscv/kernel/vdso/gen_vdso_offsets.sh |  4 +++-
+ arch/riscv/kernel/vdso_cfi/Makefile        | 25 +++++++++++++++++++++++++
+ arch/riscv/kernel/vdso_cfi/vdso-cfi.S      | 11 +++++++++++
+ 8 files changed, 82 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/arch/riscv/index.rst b/Documentation/arch/riscv/index.rst
-index eecf347ce849..be7237b69682 100644
---- a/Documentation/arch/riscv/index.rst
-+++ b/Documentation/arch/riscv/index.rst
-@@ -14,6 +14,7 @@ RISC-V architecture
-     uabi
-     vector
-     cmodx
-+    zicfilp
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index f60c2de0ca08..b74b63da16a7 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -176,6 +176,8 @@ ifeq ($(CONFIG_MMU),y)
+ prepare: vdso_prepare
+ vdso_prepare: prepare0
+ 	$(Q)$(MAKE) $(build)=arch/riscv/kernel/vdso include/generated/vdso-offsets.h
++	$(if $(CONFIG_RISCV_USER_CFI),$(Q)$(MAKE) \
++		$(build)=arch/riscv/kernel/vdso_cfi include/generated/vdso-cfi-offsets.h)
+ 	$(if $(CONFIG_COMPAT),$(Q)$(MAKE) \
+ 		$(build)=arch/riscv/kernel/compat_vdso include/generated/compat_vdso-offsets.h)
  
-     features
+@@ -183,6 +185,7 @@ endif
+ endif
  
-diff --git a/Documentation/arch/riscv/zicfilp.rst b/Documentation/arch/riscv/zicfilp.rst
+ vdso-install-y			+= arch/riscv/kernel/vdso/vdso.so.dbg
++vdso-install-$(CONFIG_RISCV_USER_CFI)	+= arch/riscv/kernel/vdso_cfi/vdso-cfi.so.dbg
+ vdso-install-$(CONFIG_COMPAT)	+= arch/riscv/kernel/compat_vdso/compat_vdso.so.dbg
+ 
+ BOOT_TARGETS := Image Image.gz Image.bz2 Image.lz4 Image.lzma Image.lzo Image.zst Image.xz loader loader.bin xipImage vmlinuz.efi
+diff --git a/arch/riscv/include/asm/vdso.h b/arch/riscv/include/asm/vdso.h
+index f80357fe24d1..35bf830a5576 100644
+--- a/arch/riscv/include/asm/vdso.h
++++ b/arch/riscv/include/asm/vdso.h
+@@ -18,9 +18,19 @@
+ 
+ #ifndef __ASSEMBLER__
+ #include <generated/vdso-offsets.h>
++#ifdef CONFIG_RISCV_USER_CFI
++#include <generated/vdso-cfi-offsets.h>
++#endif
+ 
++#ifdef CONFIG_RISCV_USER_CFI
+ #define VDSO_SYMBOL(base, name)							\
+-	(void __user *)((unsigned long)(base) + __vdso_##name##_offset)
++	  (riscv_has_extension_unlikely(RISCV_ISA_EXT_ZIMOP) ?			\
++	  (void __user *)((unsigned long)(base) + __vdso_##name##_cfi_offset) :	\
++	  (void __user *)((unsigned long)(base) + __vdso_##name##_offset))
++#else
++#define VDSO_SYMBOL(base, name)							\
++	  ((void __user *)((unsigned long)(base) + __vdso_##name##_offset))
++#endif
+ 
+ #ifdef CONFIG_COMPAT
+ #include <generated/compat_vdso-offsets.h>
+@@ -33,6 +43,7 @@ extern char compat_vdso_start[], compat_vdso_end[];
+ #endif /* CONFIG_COMPAT */
+ 
+ extern char vdso_start[], vdso_end[];
++extern char vdso_cfi_start[], vdso_cfi_end[];
+ 
+ #endif /* !__ASSEMBLER__ */
+ 
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 2d0e0dcedbd3..9026400cba10 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -72,6 +72,7 @@ obj-y	+= vendor_extensions/
+ obj-y	+= probes/
+ obj-y	+= tests/
+ obj-$(CONFIG_MMU) += vdso.o vdso/
++obj-$(CONFIG_RISCV_USER_CFI) += vdso_cfi/
+ 
+ obj-$(CONFIG_RISCV_MISALIGNED)	+= traps_misaligned.o
+ obj-$(CONFIG_RISCV_MISALIGNED)	+= unaligned_access_speed.o
+diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+index 3a8e038b10a2..43f70198ac3c 100644
+--- a/arch/riscv/kernel/vdso.c
++++ b/arch/riscv/kernel/vdso.c
+@@ -98,6 +98,13 @@ static struct __vdso_info compat_vdso_info __ro_after_init = {
+ 
+ static int __init vdso_init(void)
+ {
++	/* Hart implements zimop, expose cfi compiled vdso */
++	if (IS_ENABLED(CONFIG_RISCV_USER_CFI) &&
++	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZIMOP)) {
++		vdso_info.vdso_code_start = vdso_cfi_start;
++		vdso_info.vdso_code_end = vdso_cfi_end;
++	}
++
+ 	__vdso_init(&vdso_info);
+ #ifdef CONFIG_COMPAT
+ 	__vdso_init(&compat_vdso_info);
+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+index 272f1d837a80..a842dc034571 100644
+--- a/arch/riscv/kernel/vdso/Makefile
++++ b/arch/riscv/kernel/vdso/Makefile
+@@ -20,6 +20,10 @@ endif
+ ifdef VDSO_CFI_BUILD
+ CFI_MARCH = _zicfilp_zicfiss
+ CFI_FULL = -fcf-protection=full
++CFI_SUFFIX = -cfi
++OFFSET_SUFFIX = _cfi
++ccflags-y += -DVDSO_CFI=1
++asflags-y += -DVDSO_CFI=1
+ endif
+ 
+ # Files to link into the vdso
+@@ -48,13 +52,20 @@ endif
+ CFLAGS_hwprobe.o += -fPIC
+ 
+ # Build rules
+-targets := $(obj-vdso) vdso.so vdso.so.dbg vdso.lds
++vdso_offsets := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),)-offsets.h
++vdso_o := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).o
++vdso_so := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).so
++vdso_so_dbg := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).so.dbg
++vdso_lds := vdso.lds
++
++targets := $(obj-vdso) $(vdso_so) $(vdso_so_dbg) $(vdso_lds)
++
+ obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
+ 
+-obj-y += vdso.o
+-CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
++obj-y += vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).o
++CPPFLAGS_$(vdso_lds) += -P -C -U$(ARCH)
+ ifneq ($(filter vgettimeofday, $(vdso-syms)),)
+-CPPFLAGS_vdso.lds += -DHAS_VGETTIMEOFDAY
++CPPFLAGS_$(vdso_lds) += -DHAS_VGETTIMEOFDAY
+ endif
+ 
+ # Disable -pg to prevent insert call site
+@@ -63,12 +74,12 @@ CFLAGS_REMOVE_getrandom.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
+ CFLAGS_REMOVE_hwprobe.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
+ 
+ # Force dependency
+-$(obj)/vdso.o: $(obj)/vdso.so
++$(obj)/$(vdso_o): $(obj)/$(vdso_so)
+ 
+ # link rule for the .so file, .lds has to be first
+-$(obj)/vdso.so.dbg: $(obj)/vdso.lds $(obj-vdso) FORCE
++$(obj)/$(vdso_so_dbg): $(obj)/$(vdso_lds) $(obj-vdso) FORCE
+ 	$(call if_changed,vdsold_and_check)
+-LDFLAGS_vdso.so.dbg = -shared -soname=linux-vdso.so.1 \
++LDFLAGS_$(vdso_so_dbg) = -shared -soname=linux-vdso.so.1 \
+ 	--build-id=sha1 --eh-frame-hdr
+ 
+ # strip rule for the .so file
+@@ -79,9 +90,9 @@ $(obj)/%.so: $(obj)/%.so.dbg FORCE
+ # Generate VDSO offsets using helper script
+ gen-vdsosym := $(src)/gen_vdso_offsets.sh
+ quiet_cmd_vdsosym = VDSOSYM $@
+-	cmd_vdsosym = $(NM) $< | $(gen-vdsosym) | LC_ALL=C sort > $@
++	cmd_vdsosym = $(NM) $< | $(gen-vdsosym) $(OFFSET_SUFFIX) | LC_ALL=C sort > $@
+ 
+-include/generated/vdso-offsets.h: $(obj)/vdso.so.dbg FORCE
++include/generated/$(vdso_offsets): $(obj)/$(vdso_so_dbg) FORCE
+ 	$(call if_changed,vdsosym)
+ 
+ # actual build commands
+diff --git a/arch/riscv/kernel/vdso/gen_vdso_offsets.sh b/arch/riscv/kernel/vdso/gen_vdso_offsets.sh
+index c2e5613f3495..bd5d5afaaa14 100755
+--- a/arch/riscv/kernel/vdso/gen_vdso_offsets.sh
++++ b/arch/riscv/kernel/vdso/gen_vdso_offsets.sh
+@@ -2,4 +2,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ LC_ALL=C
+-sed -n -e 's/^[0]\+\(0[0-9a-fA-F]*\) . \(__vdso_[a-zA-Z0-9_]*\)$/\#define \2_offset\t0x\1/p'
++SUFFIX=${1:-""}
++sed -n -e \
++'s/^[0]\+\(0[0-9a-fA-F]*\) . \(__vdso_[a-zA-Z0-9_]*\)$/\#define \2'$SUFFIX'_offset\t0x\1/p'
+diff --git a/arch/riscv/kernel/vdso_cfi/Makefile b/arch/riscv/kernel/vdso_cfi/Makefile
 new file mode 100644
-index 000000000000..3575c7db2cef
+index 000000000000..8ebd190782b0
 --- /dev/null
-+++ b/Documentation/arch/riscv/zicfilp.rst
-@@ -0,0 +1,115 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/arch/riscv/kernel/vdso_cfi/Makefile
+@@ -0,0 +1,25 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# RISC-V VDSO CFI Makefile
++# This Makefile builds the VDSO with CFI support when CONFIG_RISCV_USER_CFI is enabled
 +
-+:Author: Deepak Gupta <debug@rivosinc.com>
-+:Date:   12 January 2024
++# setting VDSO_CFI_BUILD triggers build for vdso differently
++VDSO_CFI_BUILD := 1
 +
-+====================================================
-+Tracking indirect control transfers on RISC-V Linux
-+====================================================
++# Set the source directory to the main vdso directory
++src := $(srctree)/arch/riscv/kernel/vdso
 +
-+This document briefly describes the interface provided to userspace by Linux
-+to enable indirect branch tracking for user mode applications on RISC-V
++# Copy all .S and .c files from vdso directory to vdso_cfi object build directory
++vdso_c_sources := $(wildcard $(src)/*.c)
++vdso_S_sources := $(wildcard $(src)/*.S)
++vdso_c_objects := $(addprefix $(obj)/, $(notdir $(vdso_c_sources)))
++vdso_S_objects := $(addprefix $(obj)/, $(notdir $(vdso_S_sources)))
 +
-+1. Feature Overview
-+--------------------
++$(vdso_S_objects): $(obj)/%.S: $(src)/%.S
++	$(Q)cp $< $@
 +
-+Memory corruption issues usually result into crashes, however when in hands of
-+an adversary and if used creatively can result into a variety security issues.
++$(vdso_c_objects): $(obj)/%.c: $(src)/%.c
++	$(Q)cp $< $@
 +
-+One of those security issues can be code re-use attacks on program where adversary
-+can use corrupt function pointers and chain them together to perform jump oriented
-+programming (JOP) or call oriented programming (COP) and thus compromising control
-+flow integrity (CFI) of the program.
++# Include the main VDSO Makefile which contains all the build rules and sources
++# The VDSO_CFI_BUILD variable will be passed to it to enable CFI compilation
++include $(src)/Makefile
+diff --git a/arch/riscv/kernel/vdso_cfi/vdso-cfi.S b/arch/riscv/kernel/vdso_cfi/vdso-cfi.S
+new file mode 100644
+index 000000000000..d426f6accb35
+--- /dev/null
++++ b/arch/riscv/kernel/vdso_cfi/vdso-cfi.S
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright 2025 Rivos, Inc
++ */
 +
-+Function pointers live in read-write memory and thus are susceptible to corruption
-+and allows an adversary to reach any program counter (PC) in address space. On
-+RISC-V zicfilp extension enforces a restriction on such indirect control
-+transfers:
++#define	vdso_start	vdso_cfi_start
++#define	vdso_end	vdso_cfi_end
 +
-+- indirect control transfers must land on a landing pad instruction ``lpad``.
-+  There are two exception to this rule:
++#define __VDSO_PATH "arch/riscv/kernel/vdso_cfi/vdso-cfi.so"
 +
-+  - rs1 = x1 or rs1 = x5, i.e. a return from a function and returns are
-+    protected using shadow stack (see zicfiss.rst)
-+
-+  - rs1 = x7. On RISC-V compiler usually does below to reach function
-+    which is beyond the offset possible J-type instruction::
-+
-+      auipc x7, <imm>
-+      jalr (x7)
-+
-+    Such form of indirect control transfer are still immutable and don't rely
-+    on memory and thus rs1=x7 is exempted from tracking and considered software
-+    guarded jumps.
-+
-+``lpad`` instruction is pseudo of ``auipc rd, <imm_20bit>`` with ``rd=x0`` and
-+is a HINT nop. ``lpad`` instruction must be aligned on 4 byte boundary and
-+compares 20 bit immediate with x7. If ``imm_20bit`` == 0, CPU doesn't perform
-+any comparision with ``x7``. If ``imm_20bit`` != 0, then ``imm_20bit`` must
-+match ``x7`` else CPU will raise ``software check exception`` (``cause=18``)
-+with ``*tval = 2``.
-+
-+Compiler can generate a hash over function signatures and setup them (truncated
-+to 20bit) in x7 at callsites and function prologues can have ``lpad`` with same
-+function hash. This further reduces number of program counters a call site can
-+reach.
-+
-+2. ELF and psABI
-+-----------------
-+
-+Toolchain sets up :c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_FCFI` for property
-+:c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_AND` in notes section of the object file.
-+
-+3. Linux enabling
-+------------------
-+
-+User space programs can have multiple shared objects loaded in its address space
-+and it's a difficult task to make sure all the dependencies have been compiled
-+with support of indirect branch. Thus it's left to dynamic loader to enable
-+indirect branch tracking for the program.
-+
-+4. prctl() enabling
-+--------------------
-+
-+:c:macro:`PR_SET_INDIR_BR_LP_STATUS` / :c:macro:`PR_GET_INDIR_BR_LP_STATUS` /
-+:c:macro:`PR_LOCK_INDIR_BR_LP_STATUS` are three prctls added to manage indirect
-+branch tracking. prctls are arch agnostic and returns -EINVAL on other arches.
-+
-+* prctl(PR_SET_INDIR_BR_LP_STATUS, unsigned long arg)
-+
-+If arg1 is :c:macro:`PR_INDIR_BR_LP_ENABLE` and if CPU supports ``zicfilp``
-+then kernel will enable indirect branch tracking for the task. Dynamic loader
-+can issue this :c:macro:`prctl` once it has determined that all the objects
-+loaded in address space support indirect branch tracking. Additionally if there
-+is a `dlopen` to an object which wasn't compiled with ``zicfilp``, dynamic
-+loader can issue this prctl with arg1 set to 0 (i.e.
-+:c:macro:`PR_INDIR_BR_LP_ENABLE` being clear)
-+
-+* prctl(PR_GET_INDIR_BR_LP_STATUS, unsigned long * arg)
-+
-+Returns current status of indirect branch tracking. If enabled it'll return
-+:c:macro:`PR_INDIR_BR_LP_ENABLE`
-+
-+* prctl(PR_LOCK_INDIR_BR_LP_STATUS, unsigned long arg)
-+
-+Locks current status of indirect branch tracking on the task. User space may
-+want to run with strict security posture and wouldn't want loading of objects
-+without ``zicfilp`` support in it and thus would want to disallow disabling of
-+indirect branch tracking. In that case user space can use this prctl to lock
-+current settings.
-+
-+5. violations related to indirect branch tracking
-+--------------------------------------------------
-+
-+Pertaining to indirect branch tracking, CPU raises software check exception in
-+following conditions:
-+
-+- missing ``lpad`` after indirect call / jmp
-+- ``lpad`` not on 4 byte boundary
-+- ``imm_20bit`` embedded in ``lpad`` instruction doesn't match with ``x7``
-+
-+In all 3 cases, ``*tval = 2`` is captured and software check exception is
-+raised (``cause=18``)
-+
-+Linux kernel will treat this as :c:macro:`SIGSEGV` with code =
-+:c:macro:`SEGV_CPERR` and follow normal course of signal delivery.
++#include "../vdso/vdso.S"
 
 -- 
 2.43.0
