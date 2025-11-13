@@ -1,191 +1,106 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DA633BBAB
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 11:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C82533E359;
+	Thu, 13 Nov 2025 11:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763032518; cv=none; b=SRktUGRhBBccIaStUiDwLNzRe8jDkXaik7iowDtU3x6fVc6m8LmlVml9C4Aqf3QIaeHcI71bAxxY1ogqNXm9KPjb8+q6fwUUqnNlGEXqbSiAmKr2Ohf4CbiRVQm6pR/oW5ouWsdygH9Yc1NIdkppDOcTltQj8T5cAx2WIhnYtMo=
+	t=1763033575; cv=none; b=XIDxKYV1zj52qeHb16UXaZjsGt+P9//pcgofIwG+jE40UH2pfjU71K5c8zZYJO7DuMqfkUR1s9K/XoH4XtOldtnfjDVP0rfGPqC/sBK/0bNiRvO1iKD0HYAyph9bEe64vjBRxvfRLYp138f1NC9l+1repjgqAknxr7gf7LL2o7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763032518; c=relaxed/simple;
-	bh=ZDIjKrxNRsNKjDHyHEBYoPmLkLVi1miMphnKseqdm2M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gFQn66r2l+0NuNvaC6cLFd8nyn6txhTMJkRkY3UTznEM1ih+Rwq6oP1ANxzWYE/ykw28dpcbIuz3j2Qbm99vsBR8se7LTwcXtlFXAupnYWpC4KFtbzms84RgizaooOcmrkINPC3Mhq20xUlnOdNtF16xc1x6DUMh4ac9fP47yoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ekL7KdFa; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763033575; c=relaxed/simple;
+	bh=0FA/UK5uggRFQxC3xmplwTQTHHPL7TE1LaZAOehZNIE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=f+PWgJzM4GWtmwvORfWZgSxKRPK0bc8Jh0GHEZdMR2e0EwQZsvYQ+jgfjNZVpSfY6JcDR6iTOr6ag/tnDTdXQQT9rgVEN5KQR5O5yHN5xjZynHBp7x9Cvp4TkUen6OlTYyw8pYGI0dA6dN4rMHmR75FE3QCWFR18j9FRKhr7c1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=g13zL3BR; arc=none smtp.client-ip=115.124.30.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ekL7KdFa"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4774f41628bso9530785e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 03:15:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763032515; x=1763637315; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MO9XnnVHj/rspITKiAGHVAzlJx09tqhwIOhjHMpSEAU=;
-        b=ekL7KdFacIWNCU+Z7idSzNL5LXSB0isrLFrrCBfQoBIp9HIr6hcNxzf4TM29pfhvei
-         IAB4tfNEYTqtYmURIMYZ2HmYFiGVzhaIp6owckjsGs/RRPkdGDYXwdOgC29BDDBqql7X
-         Csft1dSvkN3q7siWtYZ7ZrSco2mtoS0knTnMLlvBCu5HUu849q9PzLWKGRdLtJUB00n/
-         PKD/NGskl3JaPeBqVH5ROVBFEgy/xIB/4wrvP8YaguHq2Ag2qmggEYFEo1q3ETsxQxdU
-         ViyPNDHlqJRUz7PasJ0uPaiR3o8tWeN2FkTCJ98GQEsAyyM3FXmceop/ZFXk6Q2ei/dm
-         TWVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763032515; x=1763637315;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=MO9XnnVHj/rspITKiAGHVAzlJx09tqhwIOhjHMpSEAU=;
-        b=G9i4Dc4pLUz/Rb8X8TXLFOpiiFgMnaMreRMp4k9M10fKVOhjAyuVnxJRAJ1Qba8Xgm
-         MU+DWt7MMn9hQ8tF9a4qNDRzKk0R4WmSmkl2IKg/bakgSiMeOBqvY417V5IDo1tfVVl4
-         XTUmN9HnfrcueE69w1iEH4oEuVeVD1lJC6z0p/qCrn6zuoBU6zGtW6yh8xbkoUVmnIJA
-         qc8RSTEpX4XjM+h/rGvIDbl2PosK/AvHRTttBh0BlJ+yqSQZbCXlqwU6uMeSjUkmpJKV
-         8gBOBYelaRZq0EcV3YhDlYifMXp+vDVVbgcty9bdRZ5DE3t+ITe9/Q4sTFhmndST+fD4
-         PFdA==
-X-Forwarded-Encrypted: i=1; AJvYcCW8y1c3va7ed9XGtGwo0rHxRZB/Q9DHl91YTOjxvIyk2/i3hwtO8CxDtSeh4WIiYDYvleLV0nO0wnXtP5UTeUk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAk5Nlr/iZxJoo1GLsaykjP46/+EWPMq3cjG3jOv2D1LT9kdY3
-	jsJRddfDv88s4frC5i5yiIMVi6f4UdeQpM6pSAyZcwSDnstzXGC/3N3x
-X-Gm-Gg: ASbGnctYFpnmnzJA+U2JnK5PtiWUhGhtUMmZDkYlgpPYYVJcQagg6efS/JF4VDJfb+A
-	Jm/DpWg2Q4uMeL6gwUxqbHDHRw4n74122zcAi5mcS+WF0wWYQPa3dnaaXG4wi8rwvI9bI9Pja8/
-	KzGqCNuccB+bCG9c5x63NV6ILI9nGbT/XtRdZM8CbdtrlYoRVB9JFM2FlJ5AzAAiIkAT6Av8elg
-	x6SaiMnwUZ2zN4JkQJxp83gVwhsP032yzK8rt4heujL52VCWH8F8Vo11ZYZUQ0+R+8oxbUfZEiF
-	J/RsaOkuF0kfUeAvHz9+YhT7xdGe3w0ZpbPCnDl7CQ17n3xFovYCklcZrci1SPw5eXHRFv23mCc
-	3ENj5iZGCC/UXBarR3jAH+HdxmEydRKdLG3ZkBX56q4a/J3PdjEd8/ecIFxkpKGHtEAcMxAgcey
-	K4yPhlczmGW+zi
-X-Google-Smtp-Source: AGHT+IEXbGLWZEjRrYrXvD5qQyxHy/qVaSW5hVRb4W7YjSQHnlUr1eV81RIDEqWn4jjaLy1xF5bxNA==
-X-Received: by 2002:a05:600c:285:b0:477:3fcf:368c with SMTP id 5b1f17b1804b1-4778bcdb884mr18553865e9.9.1763032515217;
-        Thu, 13 Nov 2025 03:15:15 -0800 (PST)
-Received: from paul-Precision-5770 ([80.12.41.69])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4778bcfa2e9sm17739825e9.12.2025.11.13.03.15.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Nov 2025 03:15:14 -0800 (PST)
-From: Paul Houssel <paulhoussel2@gmail.com>
-X-Google-Original-From: Paul Houssel <paul.houssel@orange.com>
-To: Paul Houssel <paulhoussel2@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Martin Horth <martin.horth@telecom-sudparis.eu>,
-	Ouail Derghal <ouail.derghal@imt-atlantique.fr>,
-	Guilhem Jazeron <guilhem.jazeron@inria.fr>,
-	Ludovic Paillat <ludovic.paillat@inria.fr>,
-	Robin Theveniaut <robin.theveniaut@irit.fr>,
-	Tristan d'Audibert <tristan.daudibert@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Paul Houssel <paul.houssel@orange.com>
-Subject: [PATCH v3 2/2] selftests/bpf: add BTF dedup tests for recursive typedef definitions
-Date: Thu, 13 Nov 2025 12:14:06 +0100
-Message-ID: <6aa4391604ee79ee7c9805906a7340ce60ff8a0c.1763024337.git.paul.houssel@orange.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1763024337.git.paul.houssel@orange.com>
-References: <cover.1763024337.git.paul.houssel@orange.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="g13zL3BR"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1763033569; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=iK7SyfUTYZ0NY7SlAfoVfPpY/ANu8iSrVtPJybO+c20=;
+	b=g13zL3BR/IRDL8HxGPpmn9ygdShOp3+akM9kULJuNnG4Z2lXA4jeQhs4W4b6PaHUBAlbpzBJFWkIgrtFG0/lY69KiIgeffE5zWqZjJX2sj09LbTw0Q4CEh9ODaBw3yWyD9RoeYr/ddUjjXV20MeK2L6VhAKAoupdXK0Mo5bzMWM=
+Received: from 30.246.165.27(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WsJcCiM_1763033566 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 13 Nov 2025 19:32:47 +0800
+Message-ID: <37715c7b-8914-4ce7-84a7-288a808d7933@linux.alibaba.com>
+Date: Thu, 13 Nov 2025 19:32:46 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/9] Initial DMABUF support for iommufd
+To: Nicolin Chen <nicolinc@nvidia.com>, Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alex Williamson <alex@shazbot.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ dri-devel@lists.freedesktop.org, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+ kvm@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Will Deacon <will@kernel.org>,
+ Krishnakant Jaju <kjaju@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+ Matt Ochs <mochs@nvidia.com>, patches@lists.linux.dev,
+ Simona Vetter <simona.vetter@ffwll.ch>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>,
+ Xu Yilun <yilun.xu@linux.intel.com>
+References: <0-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
+ <aQ4x7UiMMCB0m0dH@Asurada-Nvidia>
+ <29f0cddc-3c23-4ab1-92d9-8c9918ddc187@linux.alibaba.com>
+ <aRWKA4zBwi+JagaT@Asurada-Nvidia>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <aRWKA4zBwi+JagaT@Asurada-Nvidia>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Add several ./test_progs tests:
-    1.  btf/dedup:recursive typedef ensures that deduplication no
-	longer fails on recursive typedefs.
-    2.  btf/dedup:typedef ensures that typedefs are deduplicated correctly
-	just as they were before this patch.
+Hi, Nicolin,
 
-Signed-off-by: Paul Houssel <paul.houssel@orange.com>
----
- tools/testing/selftests/bpf/prog_tests/btf.c | 65 ++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+在 2025/11/13 15:34, Nicolin Chen 写道:
+> On Thu, Nov 13, 2025 at 02:33:01PM +0800, Shuai Xue wrote:
+>> Could you share more details for testing?, e.g. QEMU cmdline,
+>> Guest kernel version.
+> 
+> My v6.8 and v6.14 kernels can boot cleanly in the VM.
+> 
+> vm_image=PATH-to-FILE
+> e1000_rom=PATH-to-FILE
+> qemu-system-aarch64 \
+> 	-object iommufd,id=iommufd0 \
+> 	-machine hmat=on -machine virt,accel=kvm,gic-version=3,ras=on,highmem-mmio-size=4T \
+> 	-cpu host -smp cpus=62 -m size=16G,slots=2,maxmem=256G -nographic \
+> 	-object memory-backend-ram,size=8G,id=m0 -object memory-backend-ram,size=8G,id=m1 \
+> 	-numa node,memdev=m0,cpus=0-61,nodeid=0 -numa node,memdev=m1,nodeid=1 \
+> 	-numa node,nodeid=2 -numa node,nodeid=3 -numa node,nodeid=4 -numa node,nodeid=5 \
+> 	-numa node,nodeid=6 -numa node,nodeid=7 -numa node,nodeid=8 -numa node,nodeid=9 \
+> 	-device pxb-pcie,id=pcie.1,bus_nr=1,bus=pcie.0 -device arm-smmuv3,primary-bus=pcie.1,id=smmuv3.1,accel=on,ats=on,ril=off,pasid=on,oas=48 \
+> 	-device pcie-root-port,id=pcie.port1,bus=pcie.1,chassis=1,io-reserve=0 \
+> 	-device vfio-pci-nohotplug,host=0009:01:00.0,bus=pcie.port1,rombar=0,id=dev0,iommufd=iommufd0 \
+> 	-object acpi-generic-initiator,id=gi0,pci-dev=dev0,node=2 \
+> 	-object acpi-generic-initiator,id=gi1,pci-dev=dev0,node=3 \
+> 	-object acpi-generic-initiator,id=gi2,pci-dev=dev0,node=4 \
+> 	-object acpi-generic-initiator,id=gi3,pci-dev=dev0,node=5 \
+> 	-object acpi-generic-initiator,id=gi4,pci-dev=dev0,node=6 \
+> 	-object acpi-generic-initiator,id=gi5,pci-dev=dev0,node=7 \
+> 	-object acpi-generic-initiator,id=gi6,pci-dev=dev0,node=8 \
+> 	-object acpi-generic-initiator,id=gi7,pci-dev=dev0,node=9 \
+> 	-bios /usr/share/AAVMF/AAVMF_CODE.fd \
+> 	-device nvme,drive=nvme0,serial=deadbeaf1,bus=pcie.0 \
+> 	-drive file=${vm_image},index=0,media=disk,format=qcow2,if=none,id=nvme0 \
+> 	-device e1000,romfile=${e1000_rom},netdev=net0,bus=pcie.0 \
+> 	-netdev user,id=net0,hostfwd=tcp::5558-:22,hostfwd=tcp::5586-:5586
+> 
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index 8a9ba4292109..054ecb6b1e9f 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -7495,6 +7495,71 @@ static struct btf_dedup_test dedup_tests[] = {
- 		BTF_STR_SEC("\0t\0m1\0m2\0tag1\0tag2\0tag3"),
- 	},
- },
-+{
-+	.descr = "dedup: recursive typedef",
-+	/*
-+	 * This test simulates a recursive typedef, which in GO is defined as such:
-+	 *
-+	 *   type Foo func() Foo
-+	 *
-+	 * In BTF terms, this is represented as a TYPEDEF referencing
-+	 * a FUNC_PROTO that returns the same TYPEDEF.
-+	 */
-+	.input = {
-+		.raw_types = {
-+			/*
-+			 * [1] typedef Foo -> func() Foo
-+			 * [2] func_proto() -> Foo
-+			 * [3] typedef Foo -> func() Foo
-+			 * [4] func_proto() -> Foo
-+			 */
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 2),	/* [1] */
-+			BTF_FUNC_PROTO_ENC(1, 0),		/* [2] */
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 4),	/* [3] */
-+			BTF_FUNC_PROTO_ENC(3, 0),		/* [4] */
-+			BTF_END_RAW,
-+		},
-+		BTF_STR_SEC("\0Foo"),
-+	},
-+	.expect = {
-+		.raw_types = {
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 2),	/* [1] */
-+			BTF_FUNC_PROTO_ENC(1, 0),		/* [2] */
-+			BTF_END_RAW,
-+		},
-+		BTF_STR_SEC("\0Foo"),
-+	},
-+},
-+{
-+	.descr = "dedup: typedef",
-+    /*
-+     * // CU 1:
-+     * typedef int foo;
-+     *
-+     * // CU 2:
-+     * typedef int foo;
-+     */
-+	.input = {
-+		.raw_types = {
-+			/* CU 1 */
-+			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 1),		/* [2] */
-+			/* CU 2 */
-+			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [3] */
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 3),		/* [4] */
-+			BTF_END_RAW,
-+		},
-+		BTF_STR_SEC("\0foo"),
-+	},
-+	.expect = {
-+		.raw_types = {
-+			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 1),		/* [2] */
-+			BTF_END_RAW,
-+		},
-+		BTF_STR_SEC("\0foo"),
-+	},
-+},
- {
- 	.descr = "dedup: typedef tags",
- 	.input = {
--- 
-2.51.0
+Thanks for sharing the command line. The issue was with my QEMU command
+line configuration.
 
+Using your command line, I can now boot my v6.6 kernel cleanly in the
+VM, and the PCIe passthrough device works correctly.
+
+Tested-by: Shuai Xue <xueshuai@linux.alibaba.com>
+
+Thanks.
+Shuai
