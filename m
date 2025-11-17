@@ -1,38 +1,38 @@
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F77334C10;
-	Mon, 17 Nov 2025 13:31:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810F93328EC;
+	Mon, 17 Nov 2025 13:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763386285; cv=none; b=pVJ1dzYCS44MGvW78b3pNHTLpB4GJ2DoL1iiU47RM2/nh8f6qt1ZL7w+Bq0sZ7C3RZjvlPONHK4SS8oik0hAiQ23oVj1XDBcM4CCPT5ifSD9vONJBY8VBNolsYhlqIEFpRlV93cUVHjp99o71L3d7DbcyaDY8e/tK5diHU6rrKE=
+	t=1763386285; cv=none; b=sDkae78wFZhLAWrqqPOxPZLB3RxhIr5blIlNNGfDxe+cZoXXgcQ0TNGcHpwE4BhYJivo97+E26TkJUtdATcZo/+Kc5mUValRaPJZYqg6jkti/mFjbVo1gDQsh9LraoWrv8K3jPHffEw6rtv81fsdfEtkBi4xbYgw34kMSuuxZb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763386285; c=relaxed/simple;
-	bh=eJuBDNGuRK1zWani3rxt9NUaoN3lvcp+TJtZRlKVcI0=;
+	bh=e2EqaLHY+hi8mOpTTTohUlXK6N1GgMucbwUdNtAo4mQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LziJgxC3zE4m6p32UBi56bRD1vgZjtUuIMtJF2WLB8PqiC+lgLwMu5rfl+2s1ND1s0XdNNt7r3NuNLV9PGyfuEGc//WAfUcRzEIGAuvpx7th9BjPh6p11BnxTJTYCinPNr07Rw4IZktxSIw07BQESZD9e/F+kwFovxTK5/URkFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Z1uA/unQ; arc=none smtp.client-ip=113.46.200.219
+	 MIME-Version:Content-Type; b=IFsz26mNkc1vTjh2j1hYgIJ5NLVCXGMnioQJQ9pHh1q/AiR+hmF5tNoBEJ0tOtVGrRsdM5+MyjvJZ1HUc72s3pz43M+fx0PdjyfRF69NkCh2l7LgNxVdc/PLNBKaAQt9s/eSKM72W2FJOB0HXKw5kx/2Rpzd7L2J0syp7rybzYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=S7xkFUo5; arc=none smtp.client-ip=113.46.200.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Z1uA/unQ"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="S7xkFUo5"
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=30ysq1zKlbnYeZwp+m2gLXTGDwEJmQJK7zrgP/PsCwA=;
-	b=Z1uA/unQOJAeHJXfkKp+yStnZd4muxK8p5GFf9i9u82AOLbVoFgwUMcFfC6D4XNNnKqj1scJ8
-	nECxV8SYy1tpy6yxSOp+UOdVnvo1wjm2wdToy8ivrQtR09iAQqYiGzIdYUFSICykJUnQM/3Ya0M
-	qsAV5G8NPZQUBPDBZwNEUAE=
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4d97rV55prz1prKL;
-	Mon, 17 Nov 2025 21:29:30 +0800 (CST)
+	bh=g+Lx46iAeOgPpubr+gkS3rp+7tkakNKdnP1SW8F/O7E=;
+	b=S7xkFUo5md6dhTG0nsu8qRM2GgJ9v6v89JBKj8/wzVd31elaHwd1fP2zVW/A3+qqgBnQ+4A7z
+	wQSKuQnOtm3YmNhaO5bKVUSjbLwTiKvCKE8XvNbByBo36USluVhNnhXIY0Y4Mhox+LsCBXRGBki
+	kDx0a9NwJN4XiI12mMBbuSU=
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4d97rT0vnSzpSyw;
+	Mon, 17 Nov 2025 21:29:29 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 148EB140132;
-	Mon, 17 Nov 2025 21:31:14 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 0F9F7180477;
+	Mon, 17 Nov 2025 21:31:21 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
  (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 17 Nov
- 2025 21:31:12 +0800
+ 2025 21:31:19 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
 	<tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
@@ -45,9 +45,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
 	<lihongbo22@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v7 06/11] arm64/ptrace: Expand secure_computing() in place
-Date: Mon, 17 Nov 2025 21:30:43 +0800
-Message-ID: <20251117133048.53182-7-ruanjinjie@huawei.com>
+Subject: [PATCH v7 11/11] selftests: sud_test: Support aarch64
+Date: Mon, 17 Nov 2025 21:30:48 +0800
+Message-ID: <20251117133048.53182-12-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251117133048.53182-1-ruanjinjie@huawei.com>
 References: <20251117133048.53182-1-ruanjinjie@huawei.com>
@@ -62,37 +62,31 @@ Content-Type: text/plain
 X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
  dggpemf500011.china.huawei.com (7.185.36.131)
 
-The generic entry expand secure_computing() in place and call
-__secure_computing() directly.
+From: kemal <kmal@cock.li>
 
-In order to switch to the generic entry for arm64, refactor
-secure_computing() for syscall_trace_enter().
+Support aarch64 to test "Syscall User Dispatch" with sud_test
+selftest testcase.
 
-No functional changes.
-
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+Signed-off-by: kemal <kmal@cock.li>
 ---
- arch/arm64/kernel/ptrace.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/syscall_user_dispatch/sud_test.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 707951ad5d24..9af3046a2ce9 100644
---- a/arch/arm64/kernel/ptrace.c
-+++ b/arch/arm64/kernel/ptrace.c
-@@ -2387,8 +2387,11 @@ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
- 	}
+diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
+index 2eb2c06303f2..f53ebc89befc 100644
+--- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
++++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
+@@ -192,6 +192,10 @@ static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
+ 	((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A0] =
+ 			((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A7];
+ #endif
++#ifdef __aarch64__
++	((ucontext_t *)ucontext)->uc_mcontext.regs[0] = (unsigned int)
++			((ucontext_t *)ucontext)->uc_mcontext.regs[8];
++#endif
+ }
  
- 	/* Do the secure computing after ptrace; failures should be fast. */
--	if (secure_computing() == -1)
--		return NO_SYSCALL;
-+	if (flags & _TIF_SECCOMP) {
-+		ret = __secure_computing(NULL);
-+		if (ret == -1L)
-+			return NO_SYSCALL;
-+	}
- 
- 	/* Either of the above might have changed the syscall number */
- 	syscall = syscall_get_nr(current, regs);
+ int setup_sigsys_handler(void)
 -- 
 2.34.1
 
