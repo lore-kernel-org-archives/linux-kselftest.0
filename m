@@ -1,38 +1,38 @@
-Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41613333427;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD18A332ED9;
 	Mon, 17 Nov 2025 13:31:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763386281; cv=none; b=OxIykw3gZCGWl5aYLuB51EUtHmx9SL6MBr8qupX/1tQQTR2OZnn36f8opKWUwrkcqLLd2kXlXANpKVCNAdrJprswokbl7ZKhr+bjR5J0lMQ8toOVH/sg6suMHexOzGkoWhkXZ6XYGk2oVOAFAay7RocY8GqZh8YZiSDExXvM8RE=
+	t=1763386282; cv=none; b=q16aYfXdd0nWtnouAEiFKPz+ViOgYQUvbVOA2DlYTPFY0egzWyvNPpDdfnFMFswxLJOmquG7/RSw8mhwCadQpZqFEQd8v7k1JMAtTgKmAQvQ4Wdg4AFUrx7mjkhZU2Wtp3UQQEGwp2ayPXUlb40kLjwPYvWfTg9wK4vtWgFw+Uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763386281; c=relaxed/simple;
-	bh=JIaz9zgfcVFK3ca6qDzFvUQP6GbZmkf7k9Apn3brebY=;
+	s=arc-20240116; t=1763386282; c=relaxed/simple;
+	bh=pIgmyIPdr04iwBMGzgc1Eze631etDhQUWA5uqPUAIZY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pkpdx/ccZw1CqJ4/YiOAWsCQA+kTbnq9G73dlvkS9LZmevVFeO+Nm0I1zSScKSULqRGvS4MazFzwDc4sib7UR5Ul1NaW+RJL3lMrbdct0w4hAEM4SB3hcwzV7yft/ZOOPHJrxSUO3pUrDlfjASclU/k+LI/KUzMMU1D9eCgBx1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=pnc6gW7e; arc=none smtp.client-ip=113.46.200.218
+	 MIME-Version:Content-Type; b=Ol8aFSdWd4GaPC4tXgRuGNy+4KQC3kFRkq+CbuFBU4CDRx2PSnWqenQemRu+wOZ0OJQBvBjs1Zat/EmGNcNgRNzkHeCtX+vDxwth4FPSfXN70B9uLC2o+JMlnQYyZusiwo28L5jpj3Lm26FO/POznpuhjQTEs3ZZB/XZrDjp8Mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=3EKFsV5C; arc=none smtp.client-ip=113.46.200.225
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="pnc6gW7e"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="3EKFsV5C"
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=L7VSQzrso9GSPLc8m0QenwYICMxW9oDwCZBjF11X5ag=;
-	b=pnc6gW7eV6qXsHPrMzzc+1zBhX5PMceiCd1YbXc0Ij2ZQKwwNIXX6586xpe/44NNKqp92FxRe
-	KLkIjSlAFHiXQAuzR4SzdX+F2b9s0CUzEP6/zCxmA5DEnM932nDKCe0RkHYm/wDubEkBmrqMWzs
-	zYM4yx+QIx44xM7UxHf54S8=
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4d97rH2l06zpSyw;
-	Mon, 17 Nov 2025 21:29:19 +0800 (CST)
+	bh=O3MpI9LxI/OlMZoqxaz/4H0SoLaP3c9QUvB4fy5mP1A=;
+	b=3EKFsV5Cza6woM5b+7/9KO21oWD3ebNmUQfUorFXJgBFOnJc+TeLzpC4gPEMpecW3kzaJp50X
+	Rc8t5B8D3kKY6RfYFkm7QXfN4EWH3Q+oW4ZgAEeoKjuE8XJ58PY6qs27Q9rLjAKjnfH0SZAz6uS
+	uRhmZNwBbM9cmJcAT0ISzF0=
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4d97rZ3Tc0z1K9Bq;
+	Mon, 17 Nov 2025 21:29:34 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 480FC140202;
-	Mon, 17 Nov 2025 21:31:11 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 7929814010D;
+	Mon, 17 Nov 2025 21:31:15 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
  (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 17 Nov
- 2025 21:31:09 +0800
+ 2025 21:31:14 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
 	<tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
@@ -45,9 +45,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
 	<lihongbo22@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v7 04/11] entry: Add syscall_exit_to_user_mode_prepare() helper
-Date: Mon, 17 Nov 2025 21:30:41 +0800
-Message-ID: <20251117133048.53182-5-ruanjinjie@huawei.com>
+Subject: [PATCH v7 07/11] arm64/ptrace: Use syscall_get_arguments() heleper
+Date: Mon, 17 Nov 2025 21:30:44 +0800
+Message-ID: <20251117133048.53182-8-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251117133048.53182-1-ruanjinjie@huawei.com>
 References: <20251117133048.53182-1-ruanjinjie@huawei.com>
@@ -62,75 +62,57 @@ Content-Type: text/plain
 X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
  dggpemf500011.china.huawei.com (7.185.36.131)
 
-In the generic entry code, the part before
-syscall_exit_to_user_mode_work() calls syscall_exit_work(), which
-serves the same purpose as syscall_exit_to_user_mode_prepare()
-in arm64.
+The generic entry check audit context first and use
+syscall_get_arguments() helper.
 
-In preparation for moving arm64 over to the generic entry
-code, extract syscall_exit_to_user_mode_prepare() helper from
-syscall_exit_to_user_mode_work().
+In order to switch to the generic entry for arm64,
+
+- Also use the helper.
+
+- Extract the syscall_enter_audit() helper to make it clear.
+
+- Check audit context for syscall_enter_audit(), which only adds
+  one additional check without any other differences as
+  audit_syscall_entry() check it first otherwise do nothing.
 
 No functional changes.
 
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 ---
- include/linux/entry-common.h | 35 ++++++++++++++++++++++-------------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+ arch/arm64/kernel/ptrace.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-index 7177436f0f9e..cd6dacb2d8bf 100644
---- a/include/linux/entry-common.h
-+++ b/include/linux/entry-common.h
-@@ -137,20 +137,11 @@ static __always_inline long syscall_enter_from_user_mode(struct pt_regs *regs, l
-  */
- void syscall_exit_work(struct pt_regs *regs, unsigned long work);
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 9af3046a2ce9..9455ccf1ecc1 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -2376,6 +2376,17 @@ static void report_syscall_exit(struct pt_regs *regs)
+ 	}
+ }
  
--/**
-- * syscall_exit_to_user_mode_work - Handle work before returning to user mode
-- * @regs:	Pointer to currents pt_regs
-- *
-- * Same as step 1 and 2 of syscall_exit_to_user_mode() but without calling
-- * exit_to_user_mode() to perform the final transition to user mode.
-- *
-- * Calling convention is the same as for syscall_exit_to_user_mode() and it
-- * returns with all work handled and interrupts disabled. The caller must
-- * invoke exit_to_user_mode() before actually switching to user mode to
-- * make the final state transitions. Interrupts must stay disabled between
-- * return from this function and the invocation of exit_to_user_mode().
-+/*
-+ * Syscall specific exit to user mode preparation. Runs with interrupts
-+ * enabled.
-  */
--static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
-+static __always_inline void syscall_exit_to_user_mode_prepare(struct pt_regs *regs)
- {
- 	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
- 	unsigned long nr = syscall_get_nr(current, regs);
-@@ -171,6 +162,24 @@ static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
- 	 */
- 	if (unlikely(work & SYSCALL_WORK_EXIT))
- 		syscall_exit_work(regs, work);
++static inline void syscall_enter_audit(struct pt_regs *regs, long syscall)
++{
++	if (unlikely(audit_context())) {
++		unsigned long args[6];
++
++		syscall_get_arguments(current, regs, args);
++		audit_syscall_entry(syscall, args[0], args[1], args[2], args[3]);
++	}
++
 +}
 +
-+/**
-+ * syscall_exit_to_user_mode_work - Handle work before returning to user mode
-+ * @regs:	Pointer to currents pt_regs
-+ *
-+ * Same as step 1 and 2 of syscall_exit_to_user_mode() but without calling
-+ * exit_to_user_mode() to perform the final transition to user mode.
-+ *
-+ * Calling convention is the same as for syscall_exit_to_user_mode() and it
-+ * returns with all work handled and interrupts disabled. The caller must
-+ * invoke exit_to_user_mode() before actually switching to user mode to
-+ * make the final state transitions. Interrupts must stay disabled between
-+ * return from this function and the invocation of exit_to_user_mode().
-+ */
-+static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
-+{
-+	syscall_exit_to_user_mode_prepare(regs);
- 	local_irq_disable_exit_to_user();
- 	exit_to_user_mode_prepare(regs);
+ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
+ {
+ 	int ret;
+@@ -2406,8 +2417,7 @@ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
+ 		 syscall = syscall_get_nr(current, regs);
+ 	}
+ 
+-	audit_syscall_entry(syscall, regs->orig_x0, regs->regs[1],
+-			    regs->regs[2], regs->regs[3]);
++	syscall_enter_audit(regs, syscall);
+ 
+ 	return regs->syscallno;
  }
 -- 
 2.34.1
