@@ -1,38 +1,38 @@
-Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34FDE333755;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D21D933373D;
 	Mon, 17 Nov 2025 13:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763386282; cv=none; b=fsVqNcaZjnqktrXF8ErOTk8KFPibKSroEJkHzKz9yBzunSTbhWfw37ny5Tcqm96OaCV//KtQB0+yr3i/q5g1mDqclCTJ1+KxQ5dlZoXRPdrEu83jfF8oTEZV0bSIGBiTlGdHo4KGl2kErXMRqHmZRWnGHVo83gQ3B+e9U7DMr+g=
+	t=1763386283; cv=none; b=pqyLXS6kMges9CZsAfTBhIhniN34IvsH7nL+9IZOxB/lFGhUr0xXoXftQ6oH43SfqtWT4CbTO513D59WYqSUwjG2qt/DL1CRKHAwOQxLOCGAzot+JS0eNdfgpoJU9rnuCgBQyki2jnDsSMvwk8TrDjJ4TK25XslCQfqokn8CaVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763386282; c=relaxed/simple;
-	bh=Ju/mymHs/AiYsKpoIWu/nrpZTM9/XFNzstz5vCKBKhk=;
+	s=arc-20240116; t=1763386283; c=relaxed/simple;
+	bh=vR4ujFeL/c/rSyeE+Ew/QgmViHAeCETlnfNIV7PYf2Y=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RCTl85bugrjqjaAnWWH2T0viPkTuEGJBU0LI74MXjRk3FlGPp/7CAVopoKsBspbRsvkhPoy16fA7jzMfhfaxMGFiEpCOQBdxsNp9BzP9vWKudK8Cx3XF4jlUPDRJm/D/fHmcK+TajYtsJyRZ/PKpWjTGiRmoIlLHbMlVhYLqhPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=l4fE+B9Z; arc=none smtp.client-ip=113.46.200.218
+	 MIME-Version:Content-Type; b=DdZjyoAE2gBJ3HpbvCiEQigGXm2vfBwWAbKF60VZltXzJdwutB8GDpZM/epnomI/YLivNTstQncZPJz67vnzrF7cCmIjAF8ylwqHUC+hPLpxbQn2ggGM270lrEPUaXvXlICx1ywbIRAb0P/ILuXG06EvmO2cUbdOu9rZmepHHAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=XCdll9/W; arc=none smtp.client-ip=113.46.200.224
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="l4fE+B9Z"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="XCdll9/W"
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=dLrfgy8TOLZhKOg9TpR8Wk1N6DHgABzMsigfkHUhMuM=;
-	b=l4fE+B9ZcmKRodkU19wgUeoEYbjgTYiJpAhW1gBJsI9B/Gynd68hmIhfHa7TxofVBEQomoGl0
-	0PcO+Wqg2f+Vr6G6/uZ2ZiO4UEwEofN8BNdj0lw66KGA6FMeebwcgT0+5ihTjN0L/txrb2caviJ
-	N38zBiqZXgCt9kfZz4dPkvE=
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4d97rQ2ZghzpTKW;
-	Mon, 17 Nov 2025 21:29:26 +0800 (CST)
+	bh=kQJChy4CSig7WwWYt7pGFEdPu8K8NX2y5MQxbd1imwo=;
+	b=XCdll9/WfiN+9U5PmTpPKoAREVR7KqYPR4vpBiFW1qdQOrehyTN+qOdp6g4vWfpvcmKX4Ek1o
+	ZaxJoqJiZOKKoW/7JzAhVQ/sWCNiZDkXuW++bpMiXhOo2Nrn6NWbHi9iKn+3lhHdK12FtfG96OU
+	FbilBiHRQZ6cuST6Q8DJ/bk=
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4d97rT4yJXz1cyqF;
+	Mon, 17 Nov 2025 21:29:29 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 42291140277;
-	Mon, 17 Nov 2025 21:31:18 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id AB31B1A0188;
+	Mon, 17 Nov 2025 21:31:12 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
  (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 17 Nov
- 2025 21:31:16 +0800
+ 2025 21:31:11 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
 	<tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
@@ -45,9 +45,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
 	<lihongbo22@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v7 09/11] entry: Add has_syscall_work() helper
-Date: Mon, 17 Nov 2025 21:30:46 +0800
-Message-ID: <20251117133048.53182-10-ruanjinjie@huawei.com>
+Subject: [PATCH v7 05/11] arm64/ptrace: Handle ptrace_report_syscall_entry() error
+Date: Mon, 17 Nov 2025 21:30:42 +0800
+Message-ID: <20251117133048.53182-6-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251117133048.53182-1-ruanjinjie@huawei.com>
 References: <20251117133048.53182-1-ruanjinjie@huawei.com>
@@ -62,41 +62,67 @@ Content-Type: text/plain
 X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
  dggpemf500011.china.huawei.com (7.185.36.131)
 
-Add has_syscall_work() helper to facilitate reuse of this
-function in other places.
+The generic entry handle error of ptrace_report_syscall_entry(), but
+arm64 not.
 
-No functional changes.
+As the comment said, the calling arch code should abort the system
+call and must prevent normal entry so no system call is
+made if ptrace_report_syscall_entry() return nonzero.
+
+In preparation for moving arm64 over to the generic entry code,
+return early if ptrace_report_syscall_entry() encounters an error.
 
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 ---
- include/linux/entry-common.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/arm64/kernel/ptrace.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-index cd6dacb2d8bf..e0f94e937e84 100644
---- a/include/linux/entry-common.h
-+++ b/include/linux/entry-common.h
-@@ -44,6 +44,11 @@
- 				 SYSCALL_WORK_SYSCALL_EXIT_TRAP	|	\
- 				 ARCH_SYSCALL_WORK_EXIT)
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 95984bbf53db..707951ad5d24 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -2317,10 +2317,10 @@ enum ptrace_syscall_dir {
+ 	PTRACE_SYSCALL_EXIT,
+ };
  
-+static inline bool has_syscall_work(unsigned long work)
-+{
-+	return unlikely(work & SYSCALL_WORK_ENTER);
-+}
-+
- /**
-  * syscall_enter_from_user_mode_prepare - Establish state and enable interrupts
-  * @regs:	Pointer to currents pt_regs
-@@ -91,7 +96,7 @@ static __always_inline long syscall_enter_from_user_mode_work(struct pt_regs *re
+-static void report_syscall_enter(struct pt_regs *regs)
++static int report_syscall_enter(struct pt_regs *regs)
  {
- 	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
+-	int regno;
+ 	unsigned long saved_reg;
++	int regno, ret;
  
--	if (work & SYSCALL_WORK_ENTER)
-+	if (has_syscall_work(work))
- 		syscall = syscall_trace_enter(regs, syscall, work);
+ 	/*
+ 	 * We have some ABI weirdness here in the way that we handle syscall
+@@ -2342,9 +2342,13 @@ static void report_syscall_enter(struct pt_regs *regs)
+ 	saved_reg = regs->regs[regno];
+ 	regs->regs[regno] = PTRACE_SYSCALL_ENTER;
  
- 	return syscall;
+-	if (ptrace_report_syscall_entry(regs))
++	ret = ptrace_report_syscall_entry(regs);
++	if (ret)
+ 		forget_syscall(regs);
++
+ 	regs->regs[regno] = saved_reg;
++
++	return ret;
+ }
+ 
+ static void report_syscall_exit(struct pt_regs *regs)
+@@ -2374,9 +2378,11 @@ static void report_syscall_exit(struct pt_regs *regs)
+ 
+ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
+ {
++	int ret;
++
+ 	if (flags & (_TIF_SYSCALL_EMU | _TIF_SYSCALL_TRACE)) {
+-		report_syscall_enter(regs);
+-		if (flags & _TIF_SYSCALL_EMU)
++		ret = report_syscall_enter(regs);
++		if (ret || (flags & _TIF_SYSCALL_EMU))
+ 			return NO_SYSCALL;
+ 	}
+ 
 -- 
 2.34.1
 
