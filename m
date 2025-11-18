@@ -1,611 +1,284 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC1A314B74;
-	Tue, 18 Nov 2025 10:01:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763460072; cv=none; b=BeyMQjaalEk8RdUyj7MOWiUDMhZ6FYb/KUiS3b+g4rJebqUiM5rnPUYpIqJS1i8IJrGK7wngAGYMpGnxHwLNZUtaS1tZAuYlvssXsa5YrlGmSWRFG+oA6Se/6IiNoXearHteKA7QwkqQhEsDxXBVy2yAprJeDqiKGMnoiNqmhYI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763460072; c=relaxed/simple;
-	bh=1fgda7XqTVGrmCRU6ZsOIKirsmCPvb/orwZgSf9XXlM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ddsBzjqajAguQaFNAiYALVoEBaD58m2bdSKHizzx85XUqALJ2U26ReLQdvcFCFLN9SWkHhCNFlCeEB7a/f8834v1Hr2h03r0rwKpLFzo85wF4w8oqevY2MVZIY2DVAWlupCWBFBRCkYObkMUDdwhSiws2IUsVz+JN2zCMrY/Lvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4d9g8l2FlzzJ46jL;
-	Tue, 18 Nov 2025 18:00:23 +0800 (CST)
-Received: from mscpeml500004.china.huawei.com (unknown [7.188.26.250])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5C6601404FE;
-	Tue, 18 Nov 2025 18:01:05 +0800 (CST)
-Received: from huawei-ThinkCentre-M920t.huawei.com (10.123.122.223) by
- mscpeml500004.china.huawei.com (7.188.26.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 18 Nov 2025 13:01:04 +0300
-From: Dmitry Skorodumov <skorodumov.dmitry@huawei.com>
-To: <netdev@vger.kernel.org>, Simon Horman <horms@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC: <andrey.bokhanko@huawei.com>, <edumazet@google.com>, Dmitry Skorodumov
-	<skorodumov.dmitry@huawei.com>, "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
-	<shuah@kernel.org>
-Subject: [PATCH net-next 13/13] selftests: drv-net: selftest for ipvlan-macnat mode
-Date: Tue, 18 Nov 2025 13:00:45 +0300
-Message-ID: <20251118100046.2944392-14-skorodumov.dmitry@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20251118100046.2944392-1-skorodumov.dmitry@huawei.com>
-References: <20251118100046.2944392-1-skorodumov.dmitry@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE3134320F;
+	Tue, 18 Nov 2025 10:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763461172; cv=fail; b=WemqXc79aLFMANp/h7kZwiecfdvRmoCSYts3GaUx4/sAxGRO7x2xYeubUOk9gv7EseQWqHsMF2RrcA+yBfW7fhwpgwTg2Gsky6zqqYtGGcwA1Nt5Rb4C7ArIqVxg/TKmK7Xt7LCFTIQbROCtMv2zWIy2X00cxKBXJ8BPFHcHKjQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763461172; c=relaxed/simple;
+	bh=d2FNTytGtZ53VKN9zIBZcTNUa0rj1LNB4pUrzR9/tNM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=UtS2iWszv8pHhEuM4477HltZnW4iEfkDT0F7sWuY2UO0dwsxDeXVMm7pBvDBRJdRwJtcaZE5cRoBT2pnFkltGyTky7eqHa4MF5Ae6NxZ58ROeJcCTuD8gQ8Rwf8TLQlu9v3rPptwk/nwexMZ78Z3fPCZxRRCJsub5zg19omeiwU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=TR68TXqj; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=iIwDjg9Z; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TR68TXqj";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="iIwDjg9Z"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AI9CDe1007841;
+	Tue, 18 Nov 2025 10:18:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=qsb5wH3T3F6rhGHk7DsnRdSMIQc4F3lgVOnHE0S143o=; b=
+	TR68TXqjSePgA09QOgx8fQt6rnzp+PujL8NN/HDwzz1FZBrMRjz55bmfzoYB6f9u
+	+8O50Sq5T3nqak/InjK9C1GzzwJDaguXdAuNYfqVXyeJi8oAOw8tiy0MCroPyMf3
+	5xWRrnVX3xtLsOHq9jtHQ/07cQyQ+Ia+THCxP5bDSUmL8mBxjd0DxMu4iXjE9z67
+	Gv+L780hJhCjsJbLk4HEVp5/In0xLs+qLtH+9onGb8taDLsug7PtLzEfiZLaGSti
+	TkUXGkXgrA/UDXlAXFnaqjbHmOB+61bmSVRLQnRhTZc9RNNlU2EcehZroWd/svMN
+	of/UjUrK7BRHBZRSvel3vw==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aejbbvgyw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Nov 2025 10:18:39 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AI9NsrV040040;
+	Tue, 18 Nov 2025 10:18:39 GMT
+Received: from sn4pr0501cu005.outbound.protection.outlook.com (mail-southcentralusazon11011045.outbound.protection.outlook.com [40.93.194.45])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4aefyk8qpj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Nov 2025 10:18:39 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bW04fsgsQ4ANdEX00urwnkrGRGfO2AIc5poXEoH8HH0rvZZsBnZdHyuWd//rhh8EF06IZFfkjt7lQSVzgjQJ0ZeL+dd1tomILJPE4gS/HozHnG7rGtY++Zmu7klKjO3N42hmoQU6+wNYs898drkEdSVb6Xcp1n0jDDwuBMMboUafEbRircLz3htFkOrAaR4+NeSLSSrkZYLVawJ1NMNJcJc9tUZfiuVKtiIETcsygyE1yEiDvJ1oJyAOnhcAe0IBdljxEsk2I+nS64QM2vIQrEzkVnYrHLukRc1eN+jdsUJv9bH7BJcczeTtqi5uuqNPJxtt6ciX3wKoe3ZuKyNDPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qsb5wH3T3F6rhGHk7DsnRdSMIQc4F3lgVOnHE0S143o=;
+ b=uaMfKxjNj2PfgB9ivSpFRZmdgQs+iwzdao4tghqWoGvPWimO/Rek2gHpXw37jihr89qd47l47Kb/cAMgBmjM600pLMKmEvRv+fRE9c6U1OUtoUJRMWwV6PGERrOxHXMvpzzAv/547UcOxsUDsmCkc40HBZYPLZ4a9wg9T5Duz/td58+y8ZLr3Jjpe+/oYhq2uhyY6FpGAtUGiTwQg+VssrcCgOD/HiObRiyrWpwQvewbQRDlSvbUnOEQxayqVouxhBE9GmlidkjDhSvJ8tfXZFNFvtsidaOQCqG2CMf3QvVWze2L8jbXxSsSIy1n6ROqgdfo4F1DTjTRv0AXGdZraw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qsb5wH3T3F6rhGHk7DsnRdSMIQc4F3lgVOnHE0S143o=;
+ b=iIwDjg9Z6WMpVI0UbVrY+QhSoDyf3Dv6f8LYOxMngBwPjOW/2ncjbglKEdp6+i8FySdTdinBkpeBT+UAuNZtddKz/KyvbBoI/PxSFeGeZb7oOlNgr1ASbl56CHctSbjA6Uzfa39InkphaeKyGz2MC/+DOET1hoSCy3vs5NjQ9o0=
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
+ by IA4PR10MB8756.namprd10.prod.outlook.com (2603:10b6:208:562::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.21; Tue, 18 Nov
+ 2025 10:18:24 +0000
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2%7]) with mapi id 15.20.9343.009; Tue, 18 Nov 2025
+ 10:18:24 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+        Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+        Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+        Lance Yang <lance.yang@linux.dev>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Andrei Vagin <avagin@gmail.com>
+Subject: [PATCH v4 2/9] mm: add atomic VMA flags and set VM_MAYBE_GUARD as such
+Date: Tue, 18 Nov 2025 10:17:44 +0000
+Message-ID: <97e57abed09f2663077ed7a36fb8206e243171a9.1763460113.git.lorenzo.stoakes@oracle.com>
+X-Mailer: git-send-email 2.51.2
+In-Reply-To: <cover.1763460113.git.lorenzo.stoakes@oracle.com>
+References: <cover.1763460113.git.lorenzo.stoakes@oracle.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO3P123CA0019.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:388::15) To DM4PR10MB8218.namprd10.prod.outlook.com
+ (2603:10b6:8:1cc::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: mscpeml500003.china.huawei.com (7.188.49.51) To
- mscpeml500004.china.huawei.com (7.188.26.250)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|IA4PR10MB8756:EE_
+X-MS-Office365-Filtering-Correlation-Id: ac50dbc3-5450-40d7-5078-08de268bceb5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?EpzpSwFgRwt/BVHyDh1mvQTIxiJF5MlZH1Q/JOZoYa81Yp57kCjbaGi8C11H?=
+ =?us-ascii?Q?kp7+pQHMoiOTlkGZqGxZzjr/WQ6ywTcc6w5ZrQd5zVnNQDhdGBImoSAcp/t/?=
+ =?us-ascii?Q?9ZGUHUx+lxZ7sIhD4nlsRVnRM5PWJCpPNMkh+G8daqapSZ1J3NJBN5JD3oCv?=
+ =?us-ascii?Q?DgGR2Wvnfkv9a0s/00GGTq/hc2cBUdIOgzZVPm+rrZTrSqvgMm1N/v8eo2BG?=
+ =?us-ascii?Q?IhXbGjByrM7heAg7tJqqCuVcDXigO50OVyeHpgsfcTQBMtG4rLKi19Poo/6Q?=
+ =?us-ascii?Q?RHbT6OeB08K2I6womb/rYwuN6I0vFAbkANkJ5BWGzPUOb/OyUWVYpG3wl11t?=
+ =?us-ascii?Q?BlrJ85OGx3BZgVxLnnU37InAnLV/bshOde/nri55rx76FCxXmk+WjhvJObHy?=
+ =?us-ascii?Q?YxJvq2/RH5kJPttOoZWYc1i+MuSjWSUHGRiG6hK3MScdfOuAsftnCtjWttb8?=
+ =?us-ascii?Q?wnNF8EkyPZn7VRsrVYXo3DQOilL/jYbvsN6KgqqPou4V+CPGXhDizrAcGn8r?=
+ =?us-ascii?Q?ZU70NqAaj7kaYiN+2WyE5OQ5Fd1to5gAUa8rydPiIlJCI3n4SJ38Sbeee/fl?=
+ =?us-ascii?Q?JwYrGXa2+dp1FDBjD2oFDayH9rH7yP118fBl2+a3dpDv0O/EvLwERgxKbjG3?=
+ =?us-ascii?Q?0mB+J0gClVeP8aB7R66HNMzbdBJbXJYvpDDRDn5cFTkUzJ+3P7rwxfxJHWCh?=
+ =?us-ascii?Q?PR52+OEBxukNfF4iKFUDbb0TRxWZiBM4hPaKj4skn3/7pq6psj6HPUEFYpxi?=
+ =?us-ascii?Q?zPJBKRaeaMi8pRIZVkf7EMmkx1a/8z/+00+Bwe4FlpVmBzpOgrh3h/sBDyku?=
+ =?us-ascii?Q?NHCqrI5h01gf2oIp5x0/QBinAng+vr+E//4OzYc4gAoIseN2hvbnbG1Iok6V?=
+ =?us-ascii?Q?lfuSmmxc9NT1mWwwHCclzDXJwD0vbNqPjrizcJha3DsvLiCEAUXSLvxy5K2U?=
+ =?us-ascii?Q?wwRLwzwVAnJ+q41zQFxoa4u0t+pGRkCAlvLNTFUTsPDiS/pLc/OE08t3pZ5d?=
+ =?us-ascii?Q?4uMEhWiHPs2T6vepBFb5eBznctHXTECp/kIJIeLLIZ7OF196ZIe/5QL9nzGa?=
+ =?us-ascii?Q?JuveiBzv3D+loRHSWeZc0WVOPsdstpXVy3jLGURVmr5uUj9MhEZQaDCBOUPb?=
+ =?us-ascii?Q?zPPpNz0vRUhunDn+bEL1r1pXon94g6g518UGVUwad/TEg19DAFci0tT0wkAK?=
+ =?us-ascii?Q?IWU84+GZvLso9IDdDrXDERsLebhyjQjkevi2R4+P1ZBKm2RDaqMjYRoishca?=
+ =?us-ascii?Q?cC9W+4LAtnhV7xZgBKJ41wc50r6wWGvbNRxsxd0V5JLGrSHf/dq4FNRAJ+vb?=
+ =?us-ascii?Q?Rlog/fxC51w5Wa70tcp/Juy2U77rgBmrT44YaBT82Kaf1Xe+VySZyin+U4gM?=
+ =?us-ascii?Q?H6sjRsOsFdNcb34JN7wkiVWjWE+9JTSdOTKDyPEX46hcZGudUb9VOkUTM46U?=
+ =?us-ascii?Q?AyGnPQE5q/yaGOuQnVSLCy1vUWQ7ROYZ?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?1uDnZ3Ghx1qCZZ55fZKLrWHzSToHcR1x2ahRkzMkjcm3vDvdD/HOBfhY3MC7?=
+ =?us-ascii?Q?rVFNThSwP7fjwUMXrC14BH+KRsMUJk0GkAZiZnV7QIps20Fyuf2G7VkZ9TYE?=
+ =?us-ascii?Q?HiwdtJmQ6MR2JYJ64EeRlKpa+D0aGIRlxbB8AAoStc7vIPUyWUywG6wtw3hA?=
+ =?us-ascii?Q?YLHGE2F8mnTPXcf4FUfAGB49/5AShkrA5fDGqs4aWO60vUInfsmAW8dU9S2I?=
+ =?us-ascii?Q?0cfPyacOKiG6lVh9uumX0y4mHOHVcJOBphGNp1WYXVWcmq9EJw/Bj9E4nR6X?=
+ =?us-ascii?Q?wBmv4wP3TQsz8IKDokpSOBEB7H+mNHglpXBpKqDLJcIeCmOCOOvk1Dubm8i0?=
+ =?us-ascii?Q?H+pPf5pxIOOvB/CI3LSP7d1NNbGihYVB3kePS8lqA1bF2r0EL8ylS9gFRQCb?=
+ =?us-ascii?Q?wWt9/Fi8Gab781yZgkSesfmYPvbsZArvJRZ5kGt0Za2Kw29GuaqKidUBcruR?=
+ =?us-ascii?Q?2gqAmme5yGjpGZc+iekaGlKs91We5xSZyw7l9YxIpkkmVv5lx4nhE61OxLqZ?=
+ =?us-ascii?Q?WU6ZeBzvHh1vBbhQG5LCrlTKcTUGbXGVjXyaXQ4U4pRFe0Rj3myLlm2Osr+I?=
+ =?us-ascii?Q?hpy3bBDMPVoacZf1e5yVRR8+5PReEEbeZWCxfAlAkVfwQ+EEb1qdVpj3Gqjn?=
+ =?us-ascii?Q?xet8yoi4lfvkn3/TsG6GpuUIcTMPqzXs4eIbmOhzl4OaGVCY+UMda11Gghbg?=
+ =?us-ascii?Q?G1IlzP0JVnYdEyP6vbqUAGyHPZbW+HGJ1HiI5cvui6pXEKOjgjh9NhSRU3xf?=
+ =?us-ascii?Q?4nC0muq0QrdNWZi62BE9r+EKoWNmS0Kz2O6mKbst08jokF06AWwCOncSx9rE?=
+ =?us-ascii?Q?jniESZ8fOkw6Ziea1tdmKQrtOLOHnjMGcFQEnWjJrg9U3jkmMahwlybQfOEq?=
+ =?us-ascii?Q?sJJk7q+XyRPuvJS1bNTTUTjHSrw0IzQpjfytlY4wiTFgr9GcIOXTqecS4XPN?=
+ =?us-ascii?Q?qUpuMoEhQ5GlFjYQYy8rwUlrnnn1r4MU7RY00f0l8iv8v4tRuvUhHrRWLVmL?=
+ =?us-ascii?Q?gVLT1HSTjINMKTO6Hojpb695bQ2BeYK5faHQP34x8Dzg2GQWkGCfTpB3Z0sW?=
+ =?us-ascii?Q?Spt79cJ3W7DWANBeSdG2+PsqzllF6GP7Shj17cIKJo2zr/+K4r77xjX5bolQ?=
+ =?us-ascii?Q?j1JDVRDOa76RPgHneCUDNNwhdD9UnsDLwPYF5ZWQU8Btct70rCurPovsrWCJ?=
+ =?us-ascii?Q?lmTD2M8nAW6vTBlXEuz/Ru9rLke9dXXdgiduWMFcGUFwR+aO3EUden2j/yWa?=
+ =?us-ascii?Q?anrA4T1Ymw35zwtoStk82Alocl6DhwS9RtIc4cPuiCOJXpVuqLOGiRnDXPnA?=
+ =?us-ascii?Q?ZbJGtKM8vxHi6NK+TPb76h+2zqsZoWE3eu6mzSoxMr99eqRq5RjTcxU+H6YH?=
+ =?us-ascii?Q?HCD6DeFbHS7cbHfu2/5jG1jGyShMF/K68U+EtyGsn7bF5/2prbVY+q09/ldz?=
+ =?us-ascii?Q?6snBpPVGNM4yv8NtbCfzjjuIrLd5U4K4m2JA3vWUNGlchBdf97inJjrBD7ZN?=
+ =?us-ascii?Q?/Hk55X1xigTdwO8+hYyLsT9mW44RwUCOF/rMqkX9vnvYXSWMka3/n604oFYS?=
+ =?us-ascii?Q?x2q8og9qvwyS1bcl+AsXKiqBA6VL6fXTNy44kEIoWSvRejHnwSXGuvkW8dQp?=
+ =?us-ascii?Q?oA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	JxNcFjl7Y63m12x4JFagC4xyNjW11umPWXEQOjpau37U/xI+i72/yEfuQWSZs+eyuKb9dUGHud2saQMn7Q8dHiECxoBf29DkDYeZwDZ6gLW1UyRR3UanFIe43QShRZ8Er/gCRN4qm8SJPyDh2IHh8NkCOiKGRz3cVODAg/1X3ndiHoxz+zMg3Gih87IG6NGLf9N/g42APASlkLHKYxp2HmKTeFuo8eJp8aZ8wOLjbWMVlDBGlVMEV/H5lYmdMyulh6L+3GnHuQt97nms8+PHhidzjR/HbZ1nnBwBgQmeijTLmUkED2lDNSK2OgQrMd6jySl+C/eecA5s7PA/aKXbiDgGCFfbvxepONMBihSNrZ+hnZIC7KZ3rhEdHfBYR4mZBGevAfY3V/WsEUhPeDijj8vzGnPPXcYVLfGJRHtTyTFOFgLpf+3qZLrBTyZ/4Zk8pwlSsKp1xAKA9gek7MLdeh3W0RVvJSQaJu0I1UyiOAZOR1mkBjaEM9kaqcOOXN+qr6XCRcr7BIEmoYyqCmq+vCvtIsgr9YIAvWQLW4sZV1FGvj1s4nhVVJdSkxnT9snLwdf09tKNvjtqCYsvZHP25jtm3tWGwQui4tr5gF4RBrg=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac50dbc3-5450-40d7-5078-08de268bceb5
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2025 10:18:24.4110
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kHnue1r6aUOkmwCuymNzrjKhTmfG9jEF3H2Y6PyOhMW2i98ri7c1k2G3wcVmBoo7JR3z7A6TyyvTRFyls6LFeuOZkUVX+CjjySBha/32AV0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR10MB8756
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-17_04,2025-11-13_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 spamscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=995 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
+ definitions=main-2511180082
+X-Proofpoint-GUID: 9YUnt2O-f3duCxjATJFTX7UK9fpbKDuD
+X-Authority-Analysis: v=2.4 cv=JZyxbEKV c=1 sm=1 tr=0 ts=691c47ff b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=6UeiqGixMTsA:10
+ a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=yPCof4ZbAAAA:8
+ a=_GmWhKkRMyt_Xr-G3xIA:9 cc=ntf awl=host:12099
+X-Proofpoint-ORIG-GUID: 9YUnt2O-f3duCxjATJFTX7UK9fpbKDuD
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX529o8I1qLZP9
+ LPiAc7s3LjlazUGWbPdPf53NJ0A7OdWx/Y/TmeuORVnbjq4Bbs8W3rbNfhPPUUMf/rAG3RDj4DE
+ s6eARfv58NP8UbdyEfrvhah4Ok2M7qwS5Kdn5SUj7UsJEizbpCIrc/x+ZH594oIZMRUPjo+bsev
+ U+7NzbNLTYMXZK/STgKGPwn2iYeMo3alrvsCdrPC0dN/9mdkwfaM0pZ/5Vyznp33PL4+kVUhdQ5
+ 34Fkc29dp0Viyc2+v9the5Xu7aYdSP9kZmH9Go8ALG9Tigoauim1mCI5+LXwZoqhEAR4o+qDzOT
+ n9JHCLHMlzTYUbzlq3o/xPtXQSgabT1umzgegt3hfPaHbrk7VT/IYfm7dmPMFHTBseySMOl30mh
+ 0XIflgRO7GnXSTIVIjOLd+ePbi8sp9SLX7f6LCzxElCHR4f/zzE=
 
-Implemented a self-test for ipvlan in l2macnat mode.
+This patch adds the ability to atomically set VMA flags with only the mmap
+read/VMA read lock held.
 
-The test verifies:
-1) It's not possible to configure an ip in l2macnat mode on ipvtap
+As this could be hugely problematic for VMA flags in general given that
+all other accesses are non-atomic and serialised by the mmap/VMA locks, we
+implement this with a strict allow-list - that is, only designated flags
+are allowed to do this.
 
-2) It creates several net namespaces
-- Default namespace emulates host,
-- ipvlan-tst-phy emulates some host in remote network
-- ipvlan-tst-0/1 emulate VMs on host.
+We make VM_MAYBE_GUARD one of these flags.
 
-Test verifies, that MAC addresses are as expected in ARP/NEIGH tables:
-all MACs in 'tst-phy' points to "host" mac-address
-all MACs in Default and tst are real ones
-
-3) The l2macnat mode has limited number of addresses remembered on port.
-Test verifies, that this limit really works.
-
-Signed-off-by: Dmitry Skorodumov <skorodumov.dmitry@huawei.com>
+Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Reviewed-by: Pedro Falcato <pfalcato@suse.de>
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- tools/testing/selftests/net/Makefile          |   3 +
- .../selftests/net/ipvtap_macnat_bridge.py     | 174 +++++++++
- .../selftests/net/ipvtap_macnat_test.sh       | 332 ++++++++++++++++++
- 3 files changed, 509 insertions(+)
- create mode 100755 tools/testing/selftests/net/ipvtap_macnat_bridge.py
- create mode 100755 tools/testing/selftests/net/ipvtap_macnat_test.sh
+ include/linux/mm.h | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index b5127e968108..ff28012d34db 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -203,6 +203,9 @@ YNL_GEN_PROGS := netlink-dumps
- TEST_GEN_FILES += $(YNL_GEN_FILES)
- TEST_GEN_PROGS += $(YNL_GEN_PROGS)
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 36b9418c00fc..03776aab3837 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -518,6 +518,9 @@ extern unsigned int kobjsize(const void *objp);
+ /* This mask represents all the VMA flag bits used by mlock */
+ #define VM_LOCKED_MASK	(VM_LOCKED | VM_LOCKONFAULT)
  
-+TEST_PROGS += ipvtap_macnat_test.sh
-+TEST_FILES += ipvtap_macnat_bridge.py
++/* These flags can be updated atomically via VMA/mmap read lock. */
++#define VM_ATOMIC_SET_ALLOWED VM_MAYBE_GUARD
 +
- TEST_GEN_FILES += $(patsubst %.c,%.o,$(wildcard *.bpf.c))
+ /* Arch-specific flags to clear when updating VM flags on protection change */
+ #ifndef VM_ARCH_CLEAR
+ # define VM_ARCH_CLEAR	VM_NONE
+@@ -860,6 +863,47 @@ static inline void vm_flags_mod(struct vm_area_struct *vma,
+ 	__vm_flags_mod(vma, set, clear);
+ }
  
- TEST_INCLUDES := forwarding/lib.sh
-diff --git a/tools/testing/selftests/net/ipvtap_macnat_bridge.py b/tools/testing/selftests/net/ipvtap_macnat_bridge.py
-new file mode 100755
-index 000000000000..6fc4762b03cd
---- /dev/null
-+++ b/tools/testing/selftests/net/ipvtap_macnat_bridge.py
-@@ -0,0 +1,174 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
++static inline bool __vma_flag_atomic_valid(struct vm_area_struct *vma,
++				       int bit)
++{
++	const vm_flags_t mask = BIT(bit);
 +
-+"""
-+Script to bridge ipvtap and tap,
-+needed to simulate behaviour of virtual machine using ipvtap.
++	/* Only specific flags are permitted */
++	if (WARN_ON_ONCE(!(mask & VM_ATOMIC_SET_ALLOWED)))
++		return false;
 +
-+ipvtap in macnat mode cannot have IP address.
-+Due to limitations of ipvtap, it also cannot be plugged
-+into bridge.
-+Use this script to connect ipvtap and tap and assing IP to tap.
-+"""
-+
-+import socket
-+import os
-+import select
-+import sys
-+import signal
-+import fcntl
-+import struct
-+import subprocess
-+
-+# Linux TUN/TAP constants
-+TUNSETIFF = 0x400454ca
-+IFF_TUN = 0x0001
-+IFF_TAP = 0x0002
-+IFF_NO_PI = 0x1000
-+
-+ns_name = "non-initialized"
-+
-+class TapBridge:
-+    def __init__(self, tap, ipvtap, buffer_size=65536):
-+        self.tap_name = tap
-+        self.ipvtap_name = ipvtap
-+        self.buffer_size = buffer_size
-+        self.running = False
-+
-+    def open_tap_file(self, path):
-+        """Open TAP interface as a file"""
-+        try:
-+            return os.open(path, os.O_RDWR)
-+        except Exception as e:
-+            print(f"Error opening {path}: {e}")
-+            return None
-+
-+    def open_ipvtap_sock(self, tap_name):
-+        """Open a TAP interface using raw socket"""
-+        try:
-+            sock = socket.socket(socket.AF_PACKET,
-+                                 socket.SOCK_RAW,
-+                                 socket.ntohs(0x0003))
-+            sock.bind((tap_name, 0))
-+            sock.setblocking(False)
-+            print(f"Connected to IPVTAP interface: {tap_name}")
-+            return sock
-+
-+        except Exception as e:
-+            print(f"Error opening IPVTAP interface {tap_name}: {e}")
-+            return None
-+
-+    def create_tap_interface(self, tap_name):
-+        """Create and configure a TAP interface using /dev/net/tun"""
-+        try:
-+            # Open the tun device
-+            tun_fd = os.open('/dev/net/tun', os.O_RDWR)
-+            if tun_fd < 0:
-+                raise Exception("Failed to open /dev/net/tun")
-+
-+            # Prepare the ifr structure
-+            tap_name_bytes = tap_name.encode('utf-8')
-+            ifr = struct.pack('16sH', tap_name_bytes, IFF_TAP | IFF_NO_PI)
-+
-+            # Set the interface name and flags
-+            result = fcntl.ioctl(tun_fd, TUNSETIFF, ifr)
-+
-+            # Get the actual interface name that was set
-+            unpacked = struct.unpack('16sH', result)
-+            actual_name = unpacked[0].split(b'\x00')[0].decode()
-+            print(f"Created TAP interface: {actual_name}")
-+
-+            return tun_fd
-+
-+        except Exception as e:
-+            print(f"Error creating TAP interface {tap_name}: {e}")
-+            return None
-+
-+    def forward_data(self, from_fd, to_fd, description):
-+        """Forward data from one file descriptor to another"""
-+        try:
-+            data = os.read(from_fd, self.buffer_size)
-+            if data:
-+                os.write(to_fd, data)
-+                return True
-+            return False
-+
-+        except BlockingIOError:
-+            return True
-+        except Exception as e:
-+            print(f"Error forwarding data {description}: {e}")
-+            return False
-+
-+    def run(self):
-+        """Main bridge loop"""
-+        # Create TAP interfaces
-+        tap1_fd = self.create_tap_interface(self.tap_name)
-+
-+        sock = self.open_ipvtap_sock(self.ipvtap_name)
-+        tap2_fd = sock.fileno()
-+
-+        if tap1_fd is None or tap2_fd is None:
-+            print("Failed to create TAP interfaces")
-+            return
-+
-+        print("Press Ctrl+C to stop\n")
-+
-+        self.running = True
-+        stats = {'tap1_to_tap2': 0, 'tap2_to_tap1': 0}
-+        while self.running:
-+            try:
-+                # Use select to monitor both file descriptors
-+                readable, _, _ = select.select([tap1_fd, tap2_fd], [], [], 1.0)
-+
-+                for fd in readable:
-+                    if fd == tap1_fd:
-+                        descr = f"from {self.tap_name} to {self.ipvtap_name}"
-+                        if self.forward_data(tap1_fd, tap2_fd, descr):
-+                            stats['tap1_to_tap2'] += 1
-+                        else:
-+                            self.running = False
-+                    elif fd == tap2_fd:
-+                        descr = f"from {self.ipvtap_name} to {self.tap_name}"
-+                        if self.forward_data(tap2_fd, tap1_fd, descr):
-+                            stats['tap2_to_tap1'] += 1
-+                        else:
-+                            self.running = False
-+
-+            except KeyboardInterrupt:
-+                print("\nShutting down...")
-+                self.running = False
-+            except Exception as e:
-+                print(f"Error in main loop: {e}")
-+                self.running = False
-+
-+        # Cleanup
-+        os.close(tap1_fd)
-+        os.close(tap2_fd)
-+        print(f"Bridge stopped in {ns_name}. Stats: {stats}")
-+
-+
-+def signal_handler(_sig, _frame):
-+    print(f'\nReceived interrupt signal, shutting down bridge in {ns_name}')
-+    sys.exit(0)
-+
-+
-+if __name__ == "__main__":
-+    ns_name = subprocess.getoutput("ip netns identify") or "default"
-+
-+    signal.signal(signal.SIGINT, signal_handler)
-+
-+    # Check if running as root
-+    if os.geteuid() != 0:
-+        print("ERROR: This script must be run as root!")
-+        sys.exit(1)
-+
-+    if len(sys.argv) != 3:
-+        print("Usage: tap_bridge.py tap_name ipvtap_name")
-+        sys.exit(1)
-+
-+    TAP = sys.argv[1]
-+    IPVTAP = sys.argv[2]
-+
-+    print(f"Starting TAP bridge between {TAP} and {IPVTAP} in {ns_name}")
-+    bridge = TapBridge(TAP, IPVTAP)
-+    bridge.run()
-diff --git a/tools/testing/selftests/net/ipvtap_macnat_test.sh b/tools/testing/selftests/net/ipvtap_macnat_test.sh
-new file mode 100755
-index 000000000000..5f684a6d7603
---- /dev/null
-+++ b/tools/testing/selftests/net/ipvtap_macnat_test.sh
-@@ -0,0 +1,332 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Tests for ipvtap in macnat mode
-+
-+NS_TST0=ipvlan-tst-0
-+NS_TST1=ipvlan-tst-1
-+NS_PHY=ipvlan-tst-phy
-+
-+IP_HOST=172.25.0.1
-+IP_PHY=172.25.0.2
-+IP_TST0=172.25.0.10
-+IP_TST1=172.25.0.30
-+
-+IP_OK0=("172.25.0.10" "172.25.0.11" "172.25.0.12" "172.25.0.13")
-+IP6_OK0=("fc00::10" "fc00::11" "fc00::12" "fc00::13" )
-+
-+IP_OVFL0="172.25.0.14"
-+IP6_OVFL0="fc00::14"
-+
-+IP6_HOST=fc00::1
-+IP6_PHY=fc00::2
-+IP6_TST0=fc00::10
-+IP6_TST1=fc00::30
-+
-+MAC_HOST="92:3a:00:00:00:01"
-+MAC_PHY="92:3a:00:00:00:02"
-+MAC_TST0="92:3a:00:00:00:10"
-+MAC_TST1="92:3a:00:00:00:30"
-+
-+VETH_HOST=vethtst
-+VETH_PHY=vethtst.p
-+
-+#
-+# The testing environment looks this way:
-+#
-+# |------HOST------|     |------PHY-------|
-+# |      veth<----------------->veth      |
-+# |------|--|------|     |----------------|
-+#        |  |
-+#        |  |            |-----TST0-------|
-+#        |  |------------|----ipvtap      |
-+#        |               |----------------|
-+#        |
-+#        |               |-----TST1-------|
-+#        |---------------|----ivtap       |
-+#                        |----------------|
-+#
-+# The macnat mode is for virtual machines, so ipvtap-interface is supposed
-+# to be used only for traffic monitoring and doesn't have ip-address.
-+#
-+# To simulate a virtual machine on ipvtap, we create TAP-interfaces
-+# in TST environments and assing IP-addresses to them.
-+# TAP and IPVTAP are connected with simple python script.
-+#
-+
-+ns_run() {
-+	ns=$1
-+	shift
-+	if [[ "$ns" == "default" ]]; then
-+		"$@" >/dev/null
-+	else
-+		ip netns exec "$ns" "$@" >/dev/null
-+	fi
++	return true;
 +}
 +
-+configure_ns() {
-+	local ns=$1
-+	local n=$2
-+	local ip=$3
-+	local ip6=$4
-+	local mac=$5
++/*
++ * Set VMA flag atomically. Requires only VMA/mmap read lock. Only specific
++ * valid flags are allowed to do this.
++ */
++static inline void vma_flag_set_atomic(struct vm_area_struct *vma, int bit)
++{
++	/* mmap read lock/VMA read lock must be held. */
++	if (!rwsem_is_locked(&vma->vm_mm->mmap_lock))
++		vma_assert_locked(vma);
 +
-+	ns_run $ns ip link set lo up
-+
-+	if ! ip link add netns $ns name ipvtap0.$n link $VETH_HOST \
-+	    type ipvtap mode l2macnat bridge; then
-+		exit_error "FAIL: Failed to configure ipvtap link."
-+	fi
-+	ns_run $ns ip link set ipvtap0.$n up
-+
-+	ns_run $ns ip tuntap add mode tap tap0.$n
-+	ns_run $ns ip link set dev tap0.$n address $mac
-+	# disable dad
-+	ns_run $ns sysctl -w net/ipv6/conf/tap0.$n/accept_dad=0
-+	ns_run $ns ip link set tap0.$n up
-+	ns_run $ns ip a a $ip/24 dev tap0.$n
-+	ns_run $ns ip a a $ip6/64 dev tap0.$n
++	if (__vma_flag_atomic_valid(vma, bit))
++		set_bit(bit, &ACCESS_PRIVATE(vma, __vm_flags));
 +}
 +
-+start_macnat_bridge() {
-+	local ns=$1
-+	local n=$2
-+	ip netns exec $ns python3 ipvtap_macnat_bridge.py tap0.$n ipvtap0.$n &
++/*
++ * Test for VMA flag atomically. Requires no locks. Only specific valid flags
++ * are allowed to do this.
++ *
++ * This is necessarily racey, so callers must ensure that serialisation is
++ * achieved through some other means, or that races are permissible.
++ */
++static inline bool vma_flag_test_atomic(struct vm_area_struct *vma, int bit)
++{
++	if (__vma_flag_atomic_valid(vma, bit))
++		return test_bit(bit, &vma->vm_flags);
++
++	return false;
 +}
 +
-+configure_veth() {
-+	local ns=$1
-+	local veth=$2
-+	local ip=$3
-+	local ip6=$4
-+	local mac=$5
-+
-+	ns_run $ns ip link set lo up
-+	ns_run $ns ethtool -K $veth tx off rx off
-+	ns_run $ns ip link set dev $veth address $mac
-+	ns_run $ns ip link set $veth up
-+	ns_run $ns ip a a $ip/24 dev $veth
-+	ns_run $ns ip a a $ip6/64 dev $veth
-+}
-+
-+setup_env() {
-+	ip netns add $NS_TST0
-+	ip netns add $NS_TST1
-+	ip netns add $NS_PHY
-+
-+	# setup simulated other-host (phy) and host itself
-+	ip link add $VETH_HOST type veth peer name $VETH_PHY \
-+	    netns $NS_PHY >/dev/null
-+
-+	# host config
-+	configure_veth default $VETH_HOST $IP_HOST $IP6_HOST $MAC_HOST
-+	configure_veth $NS_PHY $VETH_PHY $IP_PHY $IP6_PHY $MAC_PHY
-+
-+	# TST namespaces config
-+	configure_ns $NS_TST0 0 $IP_TST0 $IP6_TST0 $MAC_TST0
-+	configure_ns $NS_TST1 1 $IP_TST1 $IP6_TST1 $MAC_TST1
-+}
-+
-+ping_all() {
-+	# This will learn MAC/IP addresses on ipvtap
-+	local ns=$1
-+
-+	ns_run $ns ping -c 1 $IP_TST0
-+	ns_run $ns ping -c 1 $IP6_TST0
-+
-+	ns_run $ns ping -c 1 $IP_TST1
-+	ns_run $ns ping -c 1 $IP6_TST1
-+
-+	ns_run $ns ping -c 1 $IP_HOST
-+	ns_run $ns ping -c 1 $IP6_HOST
-+
-+	ns_run $ns ping -c 1 $IP_PHY
-+	ns_run $ns ping -c 1 $IP6_PHY
-+}
-+
-+check_mac_eq() {
-+	# Ensure IP corresponds to MAC.
-+	local ns=$1
-+	local ip=$2
-+	local mac=$3
-+	local dev=$4
-+
-+	if [[ "$ns" == "default" ]]; then
-+		out=$(
-+			ip neigh show $ip dev $dev \
-+			| grep "$ip" \
-+			| grep "$mac"
-+		)
-+	else
-+		out=$(
-+			ip netns exec $ns \
-+			ip neigh show $ip dev $dev \
-+			| grep "$ip" \
-+			| grep "$mac"
-+		)
-+	fi
-+
-+	if [[ 'X'$out'X' == "XX" ]]; then
-+		exit_error "FAIL: '$ip' is not '$mac'"
-+	fi
-+}
-+
-+cleanup_env() {
-+	ip link del $VETH_HOST
-+	ip netns del $NS_TST0
-+	ip netns del $NS_TST1
-+	ip netns del $NS_PHY
-+}
-+
-+exit_error() {
-+	echo $1
-+	exit 1
-+}
-+
-+test_check_mac() {
-+	# All IPs in NS_PHY should have MAC of the host
-+	check_mac_eq $NS_PHY $IP_TST0 $MAC_HOST $VETH_PHY
-+	check_mac_eq $NS_PHY $IP6_TST0 $MAC_HOST $VETH_PHY
-+	check_mac_eq $NS_PHY $IP_TST1 $MAC_HOST $VETH_PHY
-+	check_mac_eq $NS_PHY $IP6_TST1 $MAC_HOST $VETH_PHY
-+	check_mac_eq $NS_PHY $IP_HOST $MAC_HOST $VETH_PHY
-+	check_mac_eq $NS_PHY $IP6_HOST $MAC_HOST $VETH_PHY
-+
-+	# All IPs in TST0 should have corresponding MAC
-+	check_mac_eq $NS_TST0 $IP_HOST $MAC_HOST tap0.0
-+	check_mac_eq $NS_TST0 $IP6_HOST $MAC_HOST tap0.0
-+	check_mac_eq $NS_TST0 $IP_TST1 $MAC_TST1 tap0.0
-+	check_mac_eq $NS_TST0 $IP6_TST1 $MAC_TST1 tap0.0
-+	check_mac_eq $NS_TST0 $IP_PHY $MAC_PHY tap0.0
-+	check_mac_eq $NS_TST0 $IP6_PHY $MAC_PHY tap0.0
-+
-+	# All IPs in host should have corresponding MAC
-+	check_mac_eq default $IP_TST0 $MAC_TST0 $VETH_HOST
-+	check_mac_eq default $IP6_TST0 $MAC_TST0 $VETH_HOST
-+	check_mac_eq default $IP_TST1 $MAC_TST1 $VETH_HOST
-+	check_mac_eq default $IP6_TST1 $MAC_TST1 $VETH_HOST
-+	check_mac_eq default $IP_PHY $MAC_PHY $VETH_HOST
-+	check_mac_eq default $IP6_PHY $MAC_PHY $VETH_HOST
-+}
-+
-+test_ip_add() {
-+	# adding IPs to ipvtap should be forbidden and should fail
-+	if ns_run $NS_TST0 ip a a 172.26.0.1/24 dev ipvtap0.0; then
-+		exit_error "FAIL: Module allowed to add ip to ipvtap."
-+	fi
-+
-+	if ns_run $NS_TST0 ip a a fc01::1/64 dev ipvtap0.0; then
-+		exit_error "FAIL: Module allowed to add ip6 to ipvtap."
-+	fi
-+}
-+
-+test_ip_overflow() {
-+	# The ipvtap remembers limited number of addresses on interface.
-+	# Let's overflow it and check that oldest one doesn't work.
-+
-+	ns_run $NS_TST0 ip addr flush dev tap0.0
-+
-+	# Add exactly 4 ip addresses
-+	for ip in "${IP_OK0[@]}"; do
-+		ns_run $NS_TST0 ip a a $ip/24 dev tap0.0
-+		ns_run $NS_TST0 ping -c 1 $IP_HOST -I $ip
-+	done
-+
-+	# Initial check that ping works
-+	if ! ping -c 2 $IP_TST0; then
-+		exit_error "FAIL: Failed to ping tst0"
-+	fi
-+
-+	# Add 1 more ip addresses
-+	ns_run $NS_TST0 ip a a $IP_OVFL0/24 dev tap0.0
-+	ns_run $NS_TST0 ping -c 1 $IP_HOST -I $IP_OVFL0
-+	# check that ping to oldest one from host fails.
-+	echo "the next ping should fail:"
-+	if ping -c 2 $IP_TST0; then
-+		exit_error "FAIL: IP-0 still exists on interface"
-+	fi
-+
-+	# ping host using address-0 and force relearn of IP0.
-+	# Host should be able ping after that
-+	ns_run $NS_TST0 ping -c 1 $IP_HOST -I $IP_TST0
-+
-+	if ! ping -c 2 $IP_TST0; then
-+		exit_error "FAIL: Failed to ping tst0 at stage 3"
-+	fi
-+}
-+
-+test_ip6_overflow() {
-+	# The ipvtap stores limited number of addresses on interface.
-+	# Let's overflow it and check that oldest one doesn't work.
-+
-+	ns_run $NS_TST0 ip addr flush dev tap0.0
-+
-+	# Add exactly 4 ip addresses
-+	for ip6 in "${IP6_OK0[@]}"; do
-+		ns_run $NS_TST0 ip a a $ip6/64 dev tap0.0
-+		ns_run $NS_TST0 ping -c 1 $IP6_HOST -I $ip6
-+	done
-+
-+	# Initial check that ping6 works
-+	if ! ping -c 2 $IP6_TST0; then
-+		exit_error "FAIL: Failed to ping6 tst0"
-+	fi
-+
-+	# Add 1 more ip6 addresses
-+	ns_run $NS_TST0 ip a a $IP6_OVFL0/64 dev tap0.0
-+	ns_run $NS_TST0 ping -c 1 $IP6_HOST -I $IP6_OVFL0
-+	# check that ping to oldest one from host fails.
-+	echo "the next ping should fail:"
-+	if ping -c 2 $IP6_TST0; then
-+		exit_error "FAIL: IP6-0 still exists on interface"
-+	fi
-+
-+	# ping host using address-0 and force relearn of IP0.
-+	# Host should be able ping after that
-+	ns_run $NS_TST0 ping -c 1 $IP6_HOST -I $IP6_TST0
-+	if ! ping -c 2 $IP6_TST0; then
-+		exit_error "FAIL: Failed to ping6 tst0 at stage 3"
-+	fi
-+}
-+
-+exec_test() {
-+	echo "TEST: "$2
-+	$1
-+	echo "PASSED: "$2
-+}
-+
-+trap cleanup_env EXIT
-+
-+echo "ipvlan macnat tests"
-+echo "==================="
-+
-+modprobe -q tap
-+modprobe -q ipvlan
-+modprobe -q ipvtap
-+
-+setup_env
-+
-+exec_test test_ip_add "ip add not allowed"
-+
-+start_macnat_bridge $NS_TST0 0
-+mb_pid1=$!
-+start_macnat_bridge $NS_TST1 1
-+mb_pid2=$!
-+
-+echo "<<< Preparation: pinging all...."
-+ping_all default
-+ping_all $NS_TST0
-+ping_all $NS_TST1
-+ping_all $NS_PHY
-+echo "Finished preparational pinging all. >>>"
-+
-+exec_test test_check_mac "mac correctness"
-+exec_test test_ip_overflow "ip learn capacity overflow"
-+exec_test test_ip6_overflow "ip6 learn capacity overflow"
-+
-+kill -INT $mb_pid1
-+kill -INT $mb_pid2
-+wait $mb_pid1
-+wait $mb_pid2
-+
-+echo "All tests passed"
+ static inline void vma_set_anonymous(struct vm_area_struct *vma)
+ {
+ 	vma->vm_ops = NULL;
 -- 
-2.25.1
+2.51.2
 
