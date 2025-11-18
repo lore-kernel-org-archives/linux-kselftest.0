@@ -1,542 +1,130 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29BE234F491
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 17:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5622283FE2;
+	Tue, 18 Nov 2025 17:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763485898; cv=none; b=pOfyfRUPIALwDPMtDBrh7MOJ+R9E+rA+Vlm+K8FnIGv1STfv/c2spWKjKJbl5pHaKomxbYoHGBrLx5HOb0/t/KVcV5K+aAJY2Ntx3JZPum45WE+64n4Zh8WMkXtnWtXaGeFHG5lNG6PTU6yUoeHibMgWkPE/KYZAPIZ6xpcefG0=
+	t=1763485934; cv=none; b=ZkbxGBWoN1CR20ZhXm9q80sLGq+OsBmmj8SIJLJ663Ad4YWx5MpBVAL+lwNcH2MxiWJL742Ujs6lRxpn0aOtA36XBCL4JwPboDPM3DSCn+fBA5flBAwnJZK2lW1Cp26WNdvIA3FRDStl2IUnoL/13RTii9FResgkfMNAM43pIj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763485898; c=relaxed/simple;
-	bh=xzwRLQEcrDtgwyEHwiBCiDScE8JYSDiIrumzHzd6MhM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oQTaNUkmFn/1/RIWREo3IGBMQ6Scpp0/Z3MwFP6hDQMwk/7RnCza5l+7H5v0vMJc8Pqu150QkHcVfwWQgZTtnVsXTiBMXmevfvLtrBLDf/la9iCLKims9uLFcGi08peX/YG12Z2Hqu4dLUg+5OoRFkW836Y8OI/a7FcRbcowwMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XWw3CXSp; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XWw3CXSp"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4779adb38d3so27418695e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 09:11:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763485894; x=1764090694; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ezTG0c03OD07wwSaXajwua3oK74Hbi6tRsK/GFCnf+c=;
-        b=XWw3CXSpnIBoQiJ8DpPccVDVobYMHD6AMgpCf25UkkJwgW0rm3nTltBfsiT7lCZa5u
-         rGmLQ/c4XtTKud5kifPYiz1ozCj3yx88JzjMuXksZZt3ahR+ymK46cBBo8fcTy1uYoQZ
-         gq4nE5Z6LxaQOlb4YgTdfc24lPG9+d+X5XeYLbcrvbn3MiN5X4UtHzO7v0TG1KAYaVn9
-         haxQV3p8QahWJSIekwquJw00gfNREM1/qtH3iE8nn/VcVEhgjl1an/3iVnZqx2nyDRZt
-         ugYNpZmRfXrjCIx/CUtVn/mn07ZyCXW58HzXSYh4hdro68bihOo3x2oPsx/3qtVR+o67
-         +wlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763485894; x=1764090694;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ezTG0c03OD07wwSaXajwua3oK74Hbi6tRsK/GFCnf+c=;
-        b=aP2rOOxwPBN1l+xteFwzJo7vTN5oqqOsr9zGKOYX3ph3u2QKbqKjy3mkERY8vQyOf9
-         HEciHBbi5qQvah8ZUjp4GPkilswiGjx3DjL+aZeMNI1qIcyHV5bCQpnyNlwYBqYzGNcS
-         JQVGGpLpupSv6T8mtYb8oYG4mJ8GXsrBlrN5TlpZnfkwHHXAZFohnEnrWD8+pIfr2k90
-         Lc+u/hSoL4+bP8iaj5KmK867l8c9quM/CY4wHzfGHm1MUH79Vnbqbxap1+vxPTJ2NhS+
-         Vgl2XP7BWycfPy/LIPPz3uZc3JG4gympBwDd6PvXanDXQmTlfOu38Q13um80YKDkUI7M
-         Ux3g==
-X-Forwarded-Encrypted: i=1; AJvYcCV14WObf9xmP60xGZdnLeogzDhfHeuAiR/KQuYvenRm7i41XTpdKJ1vx9b2kYtzcjb9P+Zrxn2Co2czhagUJ1k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq6riGTmeXTXrobGHQzbNyz5UKVfLeFMYcdXrjTF58IjbsI/WB
-	8LX2r7/6ENu2Nn4WU0VyrrkwVjFfOBSoQKBhDkRpQXUDDDO9z73JxRkg
-X-Gm-Gg: ASbGnct+sBIQDtB9BfWINijvZaIiQ6/1Xl0Lq+Fm8QoPl3O7VWP19/7ggcU/pg5jU9R
-	RbUj7CEPd/sGMhYiJMtgjvjxpHbR49a34A0/6N5iRX9+XZdfQR1d4gnpC3zWtqHVLkIA70jCRG7
-	xRGpYK3PDqEFaiJgx3ekmXtSySaBqcz3L+QnnKdCRrdzOuSIkZNqxy6vtofAPIBiDHFu+qhZOyV
-	uqnZS63iG/ppGaKxuEUWWJkFQGWHXLocIBKCFeCERYrZbrkY+KwmlmGeHlUg8Vq+fPA/4K7vM64
-	NYuJ6sgJOCLfaLRpf119n703V47hYOhKk7nvpsoMSv7OXQ6XXVcJgRIsFTWmxztVSgY5WZlWSNJ
-	r0TgUE5bhFXOCouW6MCMU1R9uIkQa8ZMPmQMa72bVIVw1wDa30+XAqQBdHTWznGZIPkfY5Ibftp
-	OXcbRg7utc03x2L/u5ssER6/245RqLEQ5hjyes+XCEfhZCH3+fMLL1Ioz/rek0FY4iZuYQHrYay
-	34f42mKjpNXQSOc7Bl9qFM2CZmAx4mg8UOAbghRA8k=
-X-Google-Smtp-Source: AGHT+IEuPLXiYYXVDmDRfeX5lAmqTDtdEs/DaUQ5W1+v75g7rKYRgYma+Sf7nPG1mEMNdp7KrqC8Rw==
-X-Received: by 2002:a05:600c:a49:b0:477:73cc:82c2 with SMTP id 5b1f17b1804b1-4778fe6822fmr157478735e9.9.1763485894354;
-        Tue, 18 Nov 2025 09:11:34 -0800 (PST)
-Received: from ip-10-0-150-200.eu-west-1.compute.internal (ec2-52-49-196-232.eu-west-1.compute.amazonaws.com. [52.49.196.232])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b103d312sm706385e9.13.2025.11.18.09.11.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Nov 2025 09:11:33 -0800 (PST)
-From: griffoul@gmail.com
-X-Google-Original-From: griffoul@gmail.org
-To: kvm@vger.kernel.org
-Cc: seanjc@google.com,
-	pbonzini@redhat.com,
-	vkuznets@redhat.com,
-	shuah@kernel.org,
-	dwmw@amazon.co.uk,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Fred Griffoul <fgriffo@amazon.co.uk>
-Subject: [PATCH v2 10/10] KVM: selftests: Add L2 vcpu context switch test
-Date: Tue, 18 Nov 2025 17:11:13 +0000
-Message-ID: <20251118171113.363528-11-griffoul@gmail.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251118171113.363528-1-griffoul@gmail.org>
-References: <20251118171113.363528-1-griffoul@gmail.org>
+	s=arc-20240116; t=1763485934; c=relaxed/simple;
+	bh=rVb/hqAEDh/VX1MxWqR988V+RJ3+PUPsOJQP3K5sjBU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=czuM8ro7ThPo78SbLkS6gvuS/U3ml/xZK7YO0U+D8R4K3IIR3GXEUx45IfekgniZD+INh0qd/G/uybcqZg+jKhNGwukIzYBjtUCethqd4epP5RQA0j5FyhZx72ZUg5QP1R0yCM2BiriXzEPC73HNQt5M8ntn3fSACdxSAV2ydQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 921DB1596;
+	Tue, 18 Nov 2025 09:12:04 -0800 (PST)
+Received: from [10.57.39.196] (unknown [10.57.39.196])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 90A1D3F66E;
+	Tue, 18 Nov 2025 09:12:07 -0800 (PST)
+Message-ID: <ba8450ad-e5ab-4b4f-868f-9b0da274f406@arm.com>
+Date: Tue, 18 Nov 2025 18:12:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 05/11] arm64/ptrace: Handle
+ ptrace_report_syscall_entry() error
+To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+ will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
+ luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
+ akpm@linux-foundation.org, ldv@strace.io, macro@orcam.me.uk, deller@gmx.de,
+ mark.rutland@arm.com, song@kernel.org, mbenes@suse.cz, ryan.roberts@arm.com,
+ ada.coupriediaz@arm.com, anshuman.khandual@arm.com, broonie@kernel.org,
+ pengcan@kylinos.cn, dvyukov@google.com, kmal@cock.li, lihongbo22@huawei.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251117133048.53182-1-ruanjinjie@huawei.com>
+ <20251117133048.53182-6-ruanjinjie@huawei.com>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20251117133048.53182-6-ruanjinjie@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Fred Griffoul <fgriffo@amazon.co.uk>
+On 17/11/2025 14:30, Jinjie Ruan wrote:
+> The generic entry handle error of ptrace_report_syscall_entry(), but
+> arm64 not.
 
-Add selftest to validate nested VMX context switching between multiple
-L2 vCPUs running on the same L1 vCPU. The test exercises both direct
-VMX interface (using vmptrld/vmclear operations) and enlightened VMCS
-(eVMCS) interface for Hyper-V nested scenarios.
+This suggests that arm64 ignores the error completely, which isn't the
+case: no syscall will be performed, but tracing will still occur as normal.
 
-The test creates multiple VMCS structures and switches between them to
-verify that the nested_context kvm counters are correct, according to
-the number of L2 vCPUs and the number of switches.
+What this patch seems to be doing is to abort the _enter sequence if
+ptrace_report_syscall_entry() errors out. The commit title and message
+should be reworded accordingly.
 
-Signed-off-by: Fred Griffoul <fgriffo@amazon.co.uk>
----
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/x86/vmx_l2_switch_test.c    | 416 ++++++++++++++++++
- 2 files changed, 417 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/vmx_l2_switch_test.c
+> As the comment said, the calling arch code should abort the system
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 3431568d837e..5d47afa5789b 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -138,6 +138,7 @@ TEST_GEN_PROGS_x86 += x86/triple_fault_event_test
- TEST_GEN_PROGS_x86 += x86/recalc_apic_map_test
- TEST_GEN_PROGS_x86 += x86/aperfmperf_test
- TEST_GEN_PROGS_x86 += x86/vmx_apic_update_test
-+TEST_GEN_PROGS_x86 += x86/vmx_l2_switch_test
- TEST_GEN_PROGS_x86 += access_tracking_perf_test
- TEST_GEN_PROGS_x86 += coalesced_io_test
- TEST_GEN_PROGS_x86 += dirty_log_perf_test
-diff --git a/tools/testing/selftests/kvm/x86/vmx_l2_switch_test.c b/tools/testing/selftests/kvm/x86/vmx_l2_switch_test.c
-new file mode 100644
-index 000000000000..5ec0da2f8386
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/vmx_l2_switch_test.c
-@@ -0,0 +1,416 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Test nested VMX context switching between multiple VMCS
-+ */
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "vmx.h"
-+
-+#define L2_GUEST_STACK_SIZE 64
-+#define L2_VCPU_MAX 16
-+
-+struct l2_vcpu_config {
-+	vm_vaddr_t hv_pages_gva;	/* Guest VA for eVMCS */
-+	vm_vaddr_t vmx_pages_gva;	/* Guest VA for VMX pages */
-+	unsigned long stack[L2_GUEST_STACK_SIZE];
-+	uint16_t vpid;
-+};
-+
-+struct l1_test_config {
-+	struct l2_vcpu_config l2_vcpus[L2_VCPU_MAX];
-+	uint64_t hypercall_gpa;
-+	uint32_t nr_l2_vcpus;
-+	uint32_t nr_switches;
-+	bool enable_vpid;
-+	bool use_evmcs;
-+	bool sched_only;
-+};
-+
-+static void l2_guest(void)
-+{
-+	while (1)
-+		vmcall();
-+}
-+
-+static void run_l2_guest_evmcs(struct hyperv_test_pages *hv_pages,
-+			       struct vmx_pages *vmx,
-+			       void *guest_rip,
-+			       void *guest_rsp,
-+			       uint16_t vpid)
-+{
-+	GUEST_ASSERT(load_evmcs(hv_pages));
-+	prepare_vmcs(vmx, guest_rip, guest_rsp);
-+	current_evmcs->hv_enlightenments_control.msr_bitmap = 1;
-+	vmwrite(VIRTUAL_PROCESSOR_ID, vpid);
-+
-+	GUEST_ASSERT(!vmlaunch());
-+	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_VMCALL);
-+	current_evmcs->guest_rip += 3;	/* vmcall */
-+
-+	GUEST_ASSERT(!vmresume());
-+	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_VMCALL);
-+}
-+
-+static void run_l2_guest_vmx_migrate(struct vmx_pages *vmx,
-+				     void *guest_rip,
-+				     void *guest_rsp,
-+				     uint16_t vpid,
-+				     bool start)
-+{
-+	uint32_t control;
-+
-+	/*
-+	 * Emulate L2 vCPU migration: vmptrld/vmlaunch/vmclear
-+	 */
-+
-+	if (start)
-+		GUEST_ASSERT(load_vmcs(vmx));
-+	else
-+		GUEST_ASSERT(!vmptrld(vmx->vmcs_gpa));
-+
-+	prepare_vmcs(vmx, guest_rip, guest_rsp);
-+
-+	control = vmreadz(CPU_BASED_VM_EXEC_CONTROL);
-+	control |= CPU_BASED_USE_MSR_BITMAPS;
-+	vmwrite(CPU_BASED_VM_EXEC_CONTROL, control);
-+	vmwrite(VIRTUAL_PROCESSOR_ID, vpid);
-+
-+	GUEST_ASSERT(!vmlaunch());
-+	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_VMCALL);
-+
-+	GUEST_ASSERT(vmptrstz() == vmx->vmcs_gpa);
-+	GUEST_ASSERT(!vmclear(vmx->vmcs_gpa));
-+}
-+
-+static void run_l2_guest_vmx_sched(struct vmx_pages *vmx,
-+				   void *guest_rip,
-+				   void *guest_rsp,
-+				   uint16_t vpid,
-+				   bool start)
-+{
-+	/*
-+	 * Emulate L2 vCPU multiplexing: vmptrld/vmresume
-+	 */
-+
-+	if (start) {
-+		uint32_t control;
-+
-+		GUEST_ASSERT(load_vmcs(vmx));
-+		prepare_vmcs(vmx, guest_rip, guest_rsp);
-+
-+		control = vmreadz(CPU_BASED_VM_EXEC_CONTROL);
-+		control |= CPU_BASED_USE_MSR_BITMAPS;
-+		vmwrite(CPU_BASED_VM_EXEC_CONTROL, control);
-+		vmwrite(VIRTUAL_PROCESSOR_ID, vpid);
-+
-+		GUEST_ASSERT(!vmlaunch());
-+	} else {
-+		GUEST_ASSERT(!vmptrld(vmx->vmcs_gpa));
-+		GUEST_ASSERT(!vmresume());
-+	}
-+
-+	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_VMCALL);
-+
-+	vmwrite(GUEST_RIP,
-+		vmreadz(GUEST_RIP) + vmreadz(VM_EXIT_INSTRUCTION_LEN));
-+}
-+
-+static void l1_guest_evmcs(struct l1_test_config *config)
-+{
-+	struct hyperv_test_pages *hv_pages;
-+	struct vmx_pages *vmx_pages;
-+	uint32_t i, j;
-+
-+	/* Initialize Hyper-V MSRs */
-+	wrmsr(HV_X64_MSR_GUEST_OS_ID, HYPERV_LINUX_OS_ID);
-+	wrmsr(HV_X64_MSR_HYPERCALL, config->hypercall_gpa);
-+
-+	/* Enable VP assist page */
-+	hv_pages = (struct hyperv_test_pages *)config->l2_vcpus[0].hv_pages_gva;
-+	enable_vp_assist(hv_pages->vp_assist_gpa, hv_pages->vp_assist);
-+
-+	/* Enable evmcs */
-+	evmcs_enable();
-+
-+	vmx_pages = (struct vmx_pages *)config->l2_vcpus[0].vmx_pages_gva;
-+	GUEST_ASSERT(prepare_for_vmx_operation(vmx_pages));
-+
-+	for (i = 0; i < config->nr_switches; i++) {
-+		for (j = 0; j < config->nr_l2_vcpus; j++) {
-+			struct l2_vcpu_config *l2 = &config->l2_vcpus[j];
-+
-+			hv_pages = (struct hyperv_test_pages *)l2->hv_pages_gva;
-+			vmx_pages = (struct vmx_pages *)l2->vmx_pages_gva;
-+
-+			run_l2_guest_evmcs(hv_pages, vmx_pages, l2_guest,
-+					   &l2->stack[L2_GUEST_STACK_SIZE],
-+					   l2->vpid);
-+		}
-+	}
-+
-+	GUEST_DONE();
-+}
-+
-+static void l1_guest_vmx(struct l1_test_config *config)
-+{
-+	struct vmx_pages *vmx_pages;
-+	uint32_t i, j;
-+
-+	vmx_pages = (struct vmx_pages *)config->l2_vcpus[0].vmx_pages_gva;
-+	GUEST_ASSERT(prepare_for_vmx_operation(vmx_pages));
-+
-+	for (i = 0; i < config->nr_switches; i++) {
-+		for (j = 0; j < config->nr_l2_vcpus; j++) {
-+			struct l2_vcpu_config *l2 = &config->l2_vcpus[j];
-+
-+			vmx_pages = (struct vmx_pages *)l2->vmx_pages_gva;
-+
-+			if (config->sched_only)
-+				run_l2_guest_vmx_sched(vmx_pages, l2_guest,
-+						       &l2->stack[L2_GUEST_STACK_SIZE],
-+						       l2->vpid, i == 0);
-+			else
-+				run_l2_guest_vmx_migrate(vmx_pages, l2_guest,
-+							 &l2->stack[L2_GUEST_STACK_SIZE],
-+							 l2->vpid, i == 0);
-+		}
-+	}
-+
-+	if (config->sched_only) {
-+		for (j = 0; j < config->nr_l2_vcpus; j++) {
-+			struct l2_vcpu_config *l2 = &config->l2_vcpus[j];
-+
-+			vmx_pages = (struct vmx_pages *)l2->vmx_pages_gva;
-+			vmclear(vmx_pages->vmcs_gpa);
-+		}
-+	}
-+
-+	GUEST_DONE();
-+}
-+
-+static void vcpu_clone_hyperv_test_pages(struct kvm_vm *vm,
-+					 vm_vaddr_t src_gva,
-+					 vm_vaddr_t *dst_gva)
-+{
-+	struct hyperv_test_pages *src, *dst;
-+	vm_vaddr_t evmcs_gva;
-+
-+	*dst_gva = vm_vaddr_alloc_page(vm);
-+
-+	src = addr_gva2hva(vm, src_gva);
-+	dst = addr_gva2hva(vm, *dst_gva);
-+	memcpy(dst, src, sizeof(*dst));
-+
-+	/* Allocate a new evmcs page */
-+	evmcs_gva = vm_vaddr_alloc_page(vm);
-+	dst->enlightened_vmcs = (void *)evmcs_gva;
-+	dst->enlightened_vmcs_hva = addr_gva2hva(vm, evmcs_gva);
-+	dst->enlightened_vmcs_gpa = addr_gva2gpa(vm, evmcs_gva);
-+}
-+
-+static void prepare_vcpu(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
-+			 uint32_t nr_l2_vcpus, uint32_t nr_switches,
-+			 bool enable_vpid, bool use_evmcs,
-+			 bool sched_only)
-+{
-+	vm_vaddr_t config_gva;
-+	struct l1_test_config *config;
-+	vm_vaddr_t hypercall_page_gva = 0;
-+	uint32_t i;
-+
-+	TEST_ASSERT(nr_l2_vcpus <= L2_VCPU_MAX,
-+		    "Too many L2 vCPUs: %u (max %u)", nr_l2_vcpus, L2_VCPU_MAX);
-+
-+	/* Allocate config structure in guest memory */
-+	config_gva = vm_vaddr_alloc(vm, sizeof(*config), 0x1000);
-+	config = addr_gva2hva(vm, config_gva);
-+	memset(config, 0, sizeof(*config));
-+
-+	if (use_evmcs) {
-+		/* Allocate hypercall page */
-+		hypercall_page_gva = vm_vaddr_alloc_page(vm);
-+		memset(addr_gva2hva(vm, hypercall_page_gva), 0, getpagesize());
-+		config->hypercall_gpa = addr_gva2gpa(vm, hypercall_page_gva);
-+
-+		/* Enable Hyper-V enlightenments */
-+		vcpu_set_hv_cpuid(vcpu);
-+		vcpu_enable_evmcs(vcpu);
-+	}
-+
-+	/* Allocate resources for each L2 vCPU */
-+	for (i = 0; i < nr_l2_vcpus; i++) {
-+		vm_vaddr_t vmx_pages_gva;
-+
-+		/* Allocate VMX pages (needed for both VMX and eVMCS) */
-+		vcpu_alloc_vmx(vm, &vmx_pages_gva);
-+		config->l2_vcpus[i].vmx_pages_gva = vmx_pages_gva;
-+
-+		if (use_evmcs) {
-+			vm_vaddr_t hv_pages_gva;
-+
-+			/* Allocate or clone hyperv_test_pages */
-+			if (i == 0) {
-+				vcpu_alloc_hyperv_test_pages(vm, &hv_pages_gva);
-+			} else {
-+				vm_vaddr_t first_hv_gva =
-+				    config->l2_vcpus[0].hv_pages_gva;
-+				vcpu_clone_hyperv_test_pages(vm, first_hv_gva,
-+							     &hv_pages_gva);
-+			}
-+			config->l2_vcpus[i].hv_pages_gva = hv_pages_gva;
-+		}
-+
-+		/* Set VPID */
-+		config->l2_vcpus[i].vpid = enable_vpid ? (i + 3) : 0;
-+	}
-+
-+	config->nr_l2_vcpus = nr_l2_vcpus;
-+	config->nr_switches = nr_switches;
-+	config->enable_vpid = enable_vpid;
-+	config->use_evmcs = use_evmcs;
-+	config->sched_only = use_evmcs ? false : sched_only;
-+
-+	/* Pass single pointer to config structure */
-+	vcpu_args_set(vcpu, 1, config_gva);
-+
-+	if (use_evmcs)
-+		vcpu_set_msr(vcpu, HV_X64_MSR_VP_INDEX, vcpu->id);
-+}
-+
-+static bool opt_enable_vpid = true;
-+static const char *progname;
-+
-+static void check_stats(struct kvm_vm *vm,
-+			uint32_t nr_l2_vcpus,
-+			uint32_t nr_switches,
-+			bool use_evmcs,
-+			bool sched_only)
-+{
-+	uint64_t reuse = 0;
-+	uint64_t recycle = 0;
-+
-+	reuse = vm_get_stat(vm, nested_context_reuse);
-+	recycle = vm_get_stat(vm, nested_context_recycle);
-+
-+	if (nr_l2_vcpus <= KVM_NESTED_OVERSUB_RATIO) {
-+		GUEST_ASSERT_EQ(reuse, nr_l2_vcpus * (nr_switches - 1));
-+		GUEST_ASSERT_EQ(recycle, 0);
-+	} else {
-+		if (sched_only) {
-+			/*
-+			 * When scheduling only no L2 vCPU vmcs is cleared so
-+			 * we reuse up to the max. number of contexts, but we
-+			 * cannot recycle any of them.
-+			 */
-+			GUEST_ASSERT_EQ(reuse,
-+					KVM_NESTED_OVERSUB_RATIO *
-+					(nr_switches - 1));
-+			GUEST_ASSERT_EQ(recycle, 0);
-+		} else {
-+			/*
-+			 * When migration we cycle in LRU order so no context
-+			 * can be reused they are all recycled.
-+			 */
-+			GUEST_ASSERT_EQ(reuse, 0);
-+			GUEST_ASSERT_EQ(recycle,
-+					(nr_l2_vcpus * nr_switches) -
-+					KVM_NESTED_OVERSUB_RATIO);
-+		}
-+	}
-+
-+	printf("%s %u switches with %u L2 vCPUS (%s) reuse %" PRIu64
-+	       " recycle %" PRIu64 "\n", progname, nr_switches, nr_l2_vcpus,
-+	       use_evmcs ? "evmcs" : (sched_only ? "vmx sched" : "vmx migrate"),
-+	       reuse, recycle);
-+}
-+
-+static void run_test(uint32_t nr_l2_vcpus, uint32_t nr_switches,
-+		     bool use_evmcs, bool sched_only)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, use_evmcs
-+				     ? l1_guest_evmcs : l1_guest_vmx);
-+
-+	prepare_vcpu(vm, vcpu, nr_l2_vcpus, nr_switches,
-+		     opt_enable_vpid, use_evmcs, sched_only);
-+
-+	for (;;) {
-+		vcpu_run(vcpu);
-+		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_DONE:
-+			goto done;
-+		case UCALL_ABORT:
-+			REPORT_GUEST_ASSERT(uc);
-+		default:
-+			TEST_FAIL("Unexpected ucall: %lu", uc.cmd);
-+		}
-+	}
-+
-+done:
-+	check_stats(vm, nr_l2_vcpus, nr_switches, use_evmcs, sched_only);
-+	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	uint32_t opt_nr_l2_vcpus = 0;
-+	uint32_t opt_nr_switches = 0;
-+	bool opt_sched_only = true;
-+	int opt;
-+	int i;
-+
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_VMX));
-+
-+	progname = argv[0];
-+
-+	while ((opt = getopt(argc, argv, "c:rs:v")) != -1) {
-+		switch (opt) {
-+		case 'c':
-+			opt_nr_l2_vcpus = atoi_paranoid(optarg);
-+			break;
-+		case 'r':
-+			opt_sched_only = false;
-+			break;
-+		case 's':
-+			opt_nr_switches = atoi_paranoid(optarg);
-+			break;
-+		case 'v':
-+			opt_enable_vpid = false;
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	if (opt_nr_l2_vcpus && opt_nr_switches) {
-+		run_test(opt_nr_l2_vcpus, opt_nr_switches, false,
-+			 opt_sched_only);
-+
-+		if (kvm_has_cap(KVM_CAP_HYPERV_ENLIGHTENED_VMCS))
-+			run_test(opt_nr_l2_vcpus, opt_nr_switches,
-+				 true, false);
-+	} else {
-+		/* VMX vmlaunch */
-+		for (i = 2; i <= 16; i++)
-+			run_test(i, 4, false, false);
-+
-+		/* VMX vmresume */
-+		for (i = 2; i <= 16; i++)
-+			run_test(i, 4, false, true);
-+
-+		/* eVMCS */
-+		if (kvm_has_cap(KVM_CAP_HYPERV_ENLIGHTENED_VMCS)) {
-+			for (i = 2; i <= 16; i++)
-+				run_test(i, 4, true, false);
-+		}
-+	}
-+
-+	return 0;
-+}
--- 
-2.43.0
+Which comment?
 
+> call and must prevent normal entry so no system call is
+> made if ptrace_report_syscall_entry() return nonzero.
+
+This is already the case since we're calling forget_syscall().
+
+> In preparation for moving arm64 over to the generic entry code,
+> return early if ptrace_report_syscall_entry() encounters an error.
+>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> ---
+>  arch/arm64/kernel/ptrace.c | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+> index 95984bbf53db..707951ad5d24 100644
+> --- a/arch/arm64/kernel/ptrace.c
+> +++ b/arch/arm64/kernel/ptrace.c
+> @@ -2317,10 +2317,10 @@ enum ptrace_syscall_dir {
+>  	PTRACE_SYSCALL_EXIT,
+>  };
+>  
+> -static void report_syscall_enter(struct pt_regs *regs)
+> +static int report_syscall_enter(struct pt_regs *regs)
+>  {
+> -	int regno;
+>  	unsigned long saved_reg;
+> +	int regno, ret;
+>  
+>  	/*
+>  	 * We have some ABI weirdness here in the way that we handle syscall
+> @@ -2342,9 +2342,13 @@ static void report_syscall_enter(struct pt_regs *regs)
+>  	saved_reg = regs->regs[regno];
+>  	regs->regs[regno] = PTRACE_SYSCALL_ENTER;
+>  
+> -	if (ptrace_report_syscall_entry(regs))
+> +	ret = ptrace_report_syscall_entry(regs);
+> +	if (ret)
+>  		forget_syscall(regs);
+
+The generic syscall_trace_enter() doesn't do this (i.e. setting
+regs->syscallno to NO_SYSCALL). Is that an oversight or do we just not
+need it? In principle this does have a visible effect (e.g. via
+REGSET_SYSTEM_CALL).
+
+- Kevin
+
+> +
+>  	regs->regs[regno] = saved_reg;
+> +
+> +	return ret;
+>  }
+>  
+>  static void report_syscall_exit(struct pt_regs *regs)
+> @@ -2374,9 +2378,11 @@ static void report_syscall_exit(struct pt_regs *regs)
+>  
+>  int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
+>  {
+> +	int ret;
+> +
+>  	if (flags & (_TIF_SYSCALL_EMU | _TIF_SYSCALL_TRACE)) {
+> -		report_syscall_enter(regs);
+> -		if (flags & _TIF_SYSCALL_EMU)
+> +		ret = report_syscall_enter(regs);
+> +		if (ret || (flags & _TIF_SYSCALL_EMU))
+>  			return NO_SYSCALL;
+>  	}
+>  
