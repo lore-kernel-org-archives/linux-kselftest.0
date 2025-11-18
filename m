@@ -1,129 +1,189 @@
-Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5AE3A79D8
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 17:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC05288514;
+	Tue, 18 Nov 2025 17:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763485826; cv=none; b=BtuzELrptD8srDw8bYvvslNyvV97FChRD7lfP6I6eAG/0JjVnHuQfuw7C/8fnIwA4n2eXt95Uphrkn1cZ9Gh/kq01pM5f9a7sIzfx2Ss5xgdfBRdy40vswwoc8Zxd6kzwRYe9nxHzgR1qLh86kvC0Sg2CU3Pop+f9NO7q1kuifY=
+	t=1763485855; cv=none; b=idBuZquFZnjpsI/kSM7rmMSxiXi7Y0lYZWXOhphHRg+tgyLcRpctm1Ix8r7f+3RGdCRLYhlkdMeudEk6nK4FpUN3Sc7xIOWmGTOaPmmFMGeLlqcO9fR0dw+TgfHkyaFjRtq/bXzOm4/99tcxHsyMFRKRokxbOx8iWv1cW+fJ0AY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763485826; c=relaxed/simple;
-	bh=LDZGL4a3vvv8O1BiYRfiPuGsVbYdd3TRXhA8IpuHpl4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sKIhAGcVnmXd1RJtlBblNfucxsX0IvyOh765slerT1GZiTzremTdaceGIdiKQPQGYs5VWxZJg23gTtkkHAvUP5/GKBc1+5R2/2owYoKahGXN5gasUK5rhSQFR3g91ZJ7QgUyJlLyV9J89eJJcOdh0/9ALmjR57ChDGoiQHfn8+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OgiMk+K7; arc=none smtp.client-ip=209.85.214.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgiMk+K7"
-Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-299d40b0845so46093305ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 09:10:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763485823; x=1764090623; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=opKHW4snE6AbRbbuPkU9JelehU8sZTSa7jldV99EN8Y=;
-        b=OgiMk+K7HrwvraM9WNKcUdSGGEjH8O9zvy6yOQ3pIk/8Qf0nvO9z7CTrA/QTrirRS4
-         fC6uQt8dzxSk+BruPCH2ShwshRiW/vZjgczbsgQwtrgPZ0zVSSDIQT+mKySYyb3wa3b1
-         SFIjjZ/ywbLvsdyz0xzzFkP3M7mJNsw3R12L7GZ5oj6QdFC7439SJ2F8K/BsYzV1twnc
-         4S6rP3S0RmJHu2biCrjedTf+W7q/WmSXjqrB97fPqTdrz0yuELqORrnhntoefQV/q3RR
-         N3qlcU2YYL55LrJp28w3xo4NbaxC7pcE1JOFdSVMeYyTbLaAY7dXrwem7fdbOKjyYzIm
-         C77g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763485823; x=1764090623;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=opKHW4snE6AbRbbuPkU9JelehU8sZTSa7jldV99EN8Y=;
-        b=tHShDl0yrWmhH+XubBwOKNykTF2XEIBlbQCPE2LGmJAes+vl0rgLZf+FNBY4Cbllqy
-         UCXyGVKLui6N/fMbIqNq9pBbFfNUuWsb/6qUJ64yB63vBa5qPY5Rv2aG2wsITPTol8AL
-         OqWQujEhODYuTJ+NxThh719J23hZbieViCr+t4CGgVIdlBax+S9ds5gyE+LD+0eekvDk
-         h5bkKAjumUbPLot0kovYYLfkEQaLewqKbVJV/X7RFQoCx475rxrF+QhYw04/MnX0hVCB
-         nGv/CJ9Dfo8E+kK+cL+Shkw1WlRwx5xPamNQ7NtLzEa2M0wZDepRWlkxagLv+XLeizxT
-         FA3w==
-X-Forwarded-Encrypted: i=1; AJvYcCVLiXbsW3FsSatzJqVq6SB4l8N4i1wsedWdC2RldoKrEGlnowp5yWrgPNUE+WBbtaSbRfzAoeaH414bhTZnFjk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwU+0wacBxZo0e9McYQXQfA9SVB8mNKxcVCkOQAGa0uYr4/q5vK
-	ArJkGynefMtLYdYUtPQQTXV23tjKKq76OGdWZCSnjFAhpsbptZA0n0ZR
-X-Gm-Gg: ASbGncs61WlBmX7xyk2UqYcylVr4pj8AzFNQVybnQTw25655eAh8fDTEveuFlrgMeJ2
-	FCpYJnySVlN4GP7de5BV1PkRg3bOQsMNsUz0N58rI5TjMAuaWRhGFI6RDb06GQcKdjMmgwMNNUf
-	vVWwyFMGDJ7mmIxh0YXkugSFowyXNpRsa3hC7mPPYw3qcRe71pdySDY0FQ04B3Nv5VHjOlcsIAy
-	fxxSzspskXr9YRbidhnh9rDZOi2T82b3UUsbsXfDtB77P+0eilYnoXcWeY3rKYOsMpeDSb09UcG
-	R0hbJNNEih51l9cscXGW2bNjNKOoqVH66E/sI55u+sS/Svd49ofHOE6ccgxM0GdSBHDOkAm6t1i
-	tQE8hpfePqvXK8lNCZLVGLk4CxlovdYM+NCg3THXfKSkTnkZvnQjiCAffSTzaVWu0+GcRD2jn6y
-	DLNV6rJVQVTuCXNRjfB2LkotFtkKJZ21RFz3bwh+/+pr/1/5j9mEc=
-X-Google-Smtp-Source: AGHT+IF/KaWmF75r7fV6/1/dLuD/8Mw6nF7YF5EqK1ZwOJVDh9j7Np/kDiIrJ8NQOoRAy343jV5yJw==
-X-Received: by 2002:a17:902:d506:b0:294:f30f:ea4b with SMTP id d9443c01a7336-2986a6b876dmr166505575ad.8.1763485822999;
-        Tue, 18 Nov 2025 09:10:22 -0800 (PST)
-Received: from fedora ([103.120.31.122])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b9250d332asm17165019b3a.25.2025.11.18.09.10.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Nov 2025 09:10:22 -0800 (PST)
-From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	andrealmeid@igalia.com,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Subject: [PATCH v2] selftests/futex: Fix storing address of local variable
-Date: Tue, 18 Nov 2025 22:38:50 +0530
-Message-ID: <20251118170907.108832-1-ankitkhushwaha.linux@gmail.com>
-X-Mailer: git-send-email 2.51.1
+	s=arc-20240116; t=1763485855; c=relaxed/simple;
+	bh=/Uc281nLugbVMb8A4fGMDJAfBH5XvXt1z4kRaZd5WH4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=hP5xJwyGNidMPKkz2zy7CMXL3Td4QbwFvCRZkxr8+VlhU1pB7ETXNcq6zYB4xB7Vh3vPdUf1RGieGkTDeYsq6RpuqcAP+tYNjAtJ1s56CIUuzTORMAADvY1wwYelwGppn4CucAtIJM503NGriwZlyieXKQc5WdrLzvoot6I+9P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 649E91516;
+	Tue, 18 Nov 2025 09:10:45 -0800 (PST)
+Received: from [10.57.39.196] (unknown [10.57.39.196])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51BE83F66E;
+	Tue, 18 Nov 2025 09:10:47 -0800 (PST)
+Message-ID: <57c2c83c-9eea-40e0-9f95-47f21b1c75be@arm.com>
+Date: Tue, 18 Nov 2025 18:10:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 03/11] arm64/ptrace: Refator el0_svc_common()
+To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+ will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
+ luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
+ akpm@linux-foundation.org, ldv@strace.io, macro@orcam.me.uk, deller@gmx.de,
+ mark.rutland@arm.com, song@kernel.org, mbenes@suse.cz, ryan.roberts@arm.com,
+ ada.coupriediaz@arm.com, anshuman.khandual@arm.com, broonie@kernel.org,
+ pengcan@kylinos.cn, dvyukov@google.com, kmal@cock.li, lihongbo22@huawei.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251117133048.53182-1-ruanjinjie@huawei.com>
+ <20251117133048.53182-4-ruanjinjie@huawei.com>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20251117133048.53182-4-ruanjinjie@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-In "child_circular_list()" address of local variable ‘lock_struct a’
-is assigned to "" raising the following warning.
+In subject: s/refator/refactor/
 
-robust_list.c: In function ‘child_circular_list’:
-robust_list.c:522:24: warning: storing the address of local variable ‘a’
-in ‘head.list.next’ [-Wdangling-pointer=]
+Also nit: this is less about ptrace than about syscall entry, so maybe
+"arm64/syscall:"?
 
-  522 |         head.list.next = &a.list;
-      |         ~~~~~~~~~~~~~~~^~~~~~~~~
-robust_list.c:513:28: note: ‘a’ declared here
-  513 |         struct lock_struct a, b, c;
-      |                            ^
-robust_list.c:512:40: note: ‘head’ declared here
-  512 |         static struct robust_list_head head;
-      |                                        ^~~~
+On 17/11/2025 14:30, Jinjie Ruan wrote:
+> Compared to the generic entry code, arm64 terminate the process
 
-removing the static keyword of "head" to fix this.
+s/terminate/terminates/ (similar observation for other commit messages)
 
-Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
----
-changelog:
+> after report_syscall_exit() if the syscall is issued within
+> a restartable sequence.
 
-v2:
-Added changes suggested by André.
+Presumably this implies that forcing SIGSEGV before or after calling the
+tracing handlers makes no difference, if so it should be clarified.
 
-v1: https://lore.kernel.org/all/20251118162619.50586-1-ankitkhushwaha.linux@gmail.com/
----
- tools/testing/selftests/futex/functional/robust_list.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> In preparation for moving arm64 over to the generic entry code,
+> refactor el0_svc_common() as below:
+>
+> - Extract syscall_exit_to_user_mode_prepare() to replace the
+>   the combination of read_thread_flags() and syscall_trace_exit(),
+>   also move the syscall exit check logic into it.
+>
+> - Move rseq_syscall() ahead, so the CONFIG_DEBUG_RSEQ check is
+>   not needed.
+>
+> - Move has_syscall_work() helper into asm/syscall.h, which will be
+>   reused by ptrace.c.
+>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> ---
+>  arch/arm64/include/asm/syscall.h |  7 ++++++-
+>  arch/arm64/kernel/ptrace.c       | 10 +++++++++-
+>  arch/arm64/kernel/syscall.c      | 26 +++++---------------------
+>  3 files changed, 20 insertions(+), 23 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/syscall.h b/arch/arm64/include/asm/syscall.h
+> index d69f590a989b..6225981fbbdb 100644
+> --- a/arch/arm64/include/asm/syscall.h
+> +++ b/arch/arm64/include/asm/syscall.h
+> @@ -114,7 +114,12 @@ static inline int syscall_get_arch(struct task_struct *task)
+>  	return AUDIT_ARCH_AARCH64;
+>  }
+>  
+> +static inline bool has_syscall_work(unsigned long flags)
+> +{
+> +	return unlikely(flags & _TIF_SYSCALL_WORK);
+> +}
+> +
+>  int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags);
+> -void syscall_trace_exit(struct pt_regs *regs, unsigned long flags);
+> +void syscall_exit_to_user_mode_prepare(struct pt_regs *regs);
+>  
+>  #endif	/* __ASM_SYSCALL_H */
+> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+> index bbb868f6b292..95984bbf53db 100644
+> --- a/arch/arm64/kernel/ptrace.c
+> +++ b/arch/arm64/kernel/ptrace.c
+> @@ -2403,7 +2403,7 @@ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
+>  	return regs->syscallno;
+>  }
+>  
+> -void syscall_trace_exit(struct pt_regs *regs, unsigned long flags)
+> +static void syscall_trace_exit(struct pt_regs *regs, unsigned long flags)
+>  {
+>  	audit_syscall_exit(regs);
+>  
+> @@ -2412,8 +2412,16 @@ void syscall_trace_exit(struct pt_regs *regs, unsigned long flags)
+>  
+>  	if (flags & (_TIF_SYSCALL_TRACE | _TIF_SINGLESTEP))
+>  		report_syscall_exit(regs);
+> +}
+> +
+> +void syscall_exit_to_user_mode_prepare(struct pt_regs *regs)
+> +{
+> +	unsigned long flags = read_thread_flags();
+>  
+>  	rseq_syscall(regs);
+> +
+> +	if (has_syscall_work(flags) || flags & _TIF_SINGLESTEP)
+> +		syscall_trace_exit(regs, flags);
 
-diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/tools/testing/selftests/futex/functional/robust_list.c
-index e7d1254e18ca..ef21a7ec9def 100644
---- a/tools/testing/selftests/futex/functional/robust_list.c
-+++ b/tools/testing/selftests/futex/functional/robust_list.c
-@@ -509,7 +509,7 @@ TEST(test_robust_list_multiple_elements)
+Since we're trying to align as much with the generic code as possible,
+we might as well rename this function to syscall_exit_work() as well.
 
- static int child_circular_list(void *arg)
- {
--	static struct robust_list_head head;
-+	struct robust_list_head head;
- 	struct lock_struct a, b, c;
- 	int ret;
+>  }
+>  
+>  /*
+> diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+> index 6e3fe760e0bb..9713b038d750 100644
+> --- a/arch/arm64/kernel/syscall.c
+> +++ b/arch/arm64/kernel/syscall.c
+> @@ -65,11 +65,6 @@ static void invoke_syscall(struct pt_regs *regs, unsigned int scno,
+>  	choose_random_kstack_offset(get_random_u16());
+>  }
+>  
+> -static inline bool has_syscall_work(unsigned long flags)
+> -{
+> -	return unlikely(flags & _TIF_SYSCALL_WORK);
+> -}
+> -
+>  static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+>  			   const syscall_fn_t syscall_table[])
+>  {
+> @@ -125,26 +120,15 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+>  		if (scno == NO_SYSCALL)
+>  			syscall_set_return_value(current, regs, -ENOSYS, 0);
+>  		scno = syscall_trace_enter(regs, regs->syscallno, flags);
+> -		if (scno == NO_SYSCALL)
+> -			goto trace_exit;
 
---
-2.51.1
+Why not keep the goto instead of duplicating the call? It could be
+renamed if necessary.
 
+- Kevin
+
+> +		if (scno == NO_SYSCALL) {
+> +			syscall_exit_to_user_mode_prepare(regs);
+> +			return;
+> +		}
+>  	}
+>  
+>  	invoke_syscall(regs, scno, sc_nr, syscall_table);
+>  
+> -	/*
+> -	 * The tracing status may have changed under our feet, so we have to
+> -	 * check again. However, if we were tracing entry, then we always trace
+> -	 * exit regardless, as the old entry assembly did.
+> -	 */
+> -	if (!has_syscall_work(flags) && !IS_ENABLED(CONFIG_DEBUG_RSEQ)) {
+> -		flags = read_thread_flags();
+> -		if (!has_syscall_work(flags) && !(flags & _TIF_SINGLESTEP))
+> -			return;
+> -	}
+> -
+> -trace_exit:
+> -	flags = read_thread_flags();
+> -	syscall_trace_exit(regs, flags);
+> +	syscall_exit_to_user_mode_prepare(regs);
+>  }
+>  
+>  void do_el0_svc(struct pt_regs *regs)
