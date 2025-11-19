@@ -1,213 +1,186 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from sg-1-100.ptr.blmpb.com (sg-1-100.ptr.blmpb.com [118.26.132.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B6436CDF4
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 15:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F2927280E
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 15:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.26.132.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763567381; cv=none; b=UUVIHL+ZGA0CIAfgVXhk6V8WxtdqzM7miSoAKaCw0P5V9Ema9nX8/aQaxxi4f2Bwc5a1ZWHv6Ohl0/Y8WYh33GJ28f+FmDIISuBP1OnKz2rF2W6kBPMjFSorcGcrHOF5a42aRaMWPTyt1AGrMhxYOyuwOBhicPfsYqr0eo8l1F8=
+	t=1763567983; cv=none; b=TSBhjSHYyQao8VHFzic4JCYbzt6rxPiFZMZ1j3MbPhvrE+HLBWy3vYU/16UTeevZwscr6rIWsWCKqC/kMxbVohYfK9pbNxv1Ul4fMzz+sCaQ0IWVEuRr/h1Ulz62CnHusD+BWzBL/A7HkU4AdtNpPsnK/OzJ/JJROd8nJN3puGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763567381; c=relaxed/simple;
-	bh=sTnGVg0SCaIrS4UjjUcMvcDbivW2KJoCD34GtIJku8M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iANlOUkApk/azyHZaZo3APoNUBlCGMA3dZehZmCag3+tF/160riaVAvaGSICz7AF4Dzi3rYbzeIBOvDe5p7x+jny5A0Yy2YEEdCe4NEVvAVu/wSdq3EMwhoxbUQNSqZWchuCLz/UhJISAQ24HwsUH4zSAwB/t0NI6jCvdptGtkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QUiH1uoa; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763567983; c=relaxed/simple;
+	bh=mQ45HxHEz7bEk0U1Kg7KEiKQ1cBt2yG8qBc7T+EeuPs=;
+	h=Message-Id:To:Subject:References:Content-Type:Date:Cc:From:
+	 Mime-Version:In-Reply-To; b=tHXNdaPtC7fgKFqOlVQYfUFbpCbj8ohQyQP5ZQebnEJo6VtWkLTWf/qwxjq1j24IvjEm6b38MdzQHxe2eUHgxGMl1m4pIWWNY8iVkTEnqGYyzWR4lbp99VMZ2P+HWUduI905WfExDMzwQ2z7rZkGWjfw7hmSvIm3mM0AOKVhW/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=UqQV/M0K; arc=none smtp.client-ip=118.26.132.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QUiH1uoa"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47755de027eso46953095e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 07:49:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763567377; x=1764172177; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fxA90nGyzmSaiY6A5XGVLVAHyvsgTHRyJZyrvZboKIE=;
-        b=QUiH1uoatNKgaVZS7t15EjkrJsfRTJixt+bHZtUNcxvZJ9XqioXXHnQ36zSLj6YdA8
-         7euX9erZBOia5tI4DqzWu3hChskAfwnbEpQmoO5rkzHf95jjij7vA44RF0CNbiVT3/vO
-         A4ykgJaSw43+R4i03wLy56+opWW9SJ07kmcdkNwhbVR1D3gMgmhTE4Vat0sgB2bejVqI
-         PizjpwziAQtBFp9K8TercF38i1A9RSeI1R2T67Fri3eukT/w2w1KyhdO1vC+IL8DeJOi
-         jvqUYPdhpexljHvb2fYB1G2lzTObxQsNh+49eU+5Z1HlUQ80IdTdChdK71Egfn99vSBV
-         pbSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763567377; x=1764172177;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fxA90nGyzmSaiY6A5XGVLVAHyvsgTHRyJZyrvZboKIE=;
-        b=mjkSu/KMUAI4qRjWKGChjf6mjPng2fR5rltG1i3IWR588oc94ra1AmZz1DOiA9lWlp
-         tuNPfBvTpiWk5bWaAEJUc5WdTgQdhVFoDzpYd7RTttrkBlC1WgB3btwGIQmwZOtCVJd0
-         GNgstWfkA2pNba56zo0Qxz0WKHHNVs0NxoTXXwuNm+orx037pJJgt1xjTN8cky8nNNjC
-         9E3HzdA6d+ol5HRW5KNm2dtvlgDxKvovbhINS3Z0HTfNwMliFApP+UHTxC0uEHXXKuzq
-         d8JuIJQh2t3LydgdaYG/NusBuzn0L8UjsqD4gCf61n0yKWKEvWgeAm+inLUCeR+eVi/3
-         5qpA==
-X-Forwarded-Encrypted: i=1; AJvYcCVT8CTk+hTfKHNbkX7Gkld+Hc8Qp4F+dO2GMT4NR11bJVxzbgZQ6Nv7DKyesVbUBPoTnz5Q43AyeANvjF7xtwo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwpD4vVwp3BxtBg3w16JtzXg/7wudUcNFuhRpQ5JpXTq5uJwmU
-	frn7h39iOQADrLv4aIOsZdFtxyL/G6MUDY7/KfSZx7S/nK28lc/5FPpx
-X-Gm-Gg: ASbGncuEXIUzXZix96S7ZbHKueNCxK9b3PlOPM1PCE3OFNySsU8OHS/4xw3HE3R6bx/
-	PMYXAc/k2TIeUS+rhIsVNz2o0KhXnprfSf8WA2riipw24IpBESwJDZxTqhYyQMg/F1wHHtxKpR5
-	Q8LbBc9B+gWrROSqcQnZ4yabzulTuPigVWLtYgEg9vDRnkZ7cGVaJYBK4z5pUM+zsmtRP1rfkNu
-	UMrkV/rMpxcCpfkOOlrVINJqlpzJyupmy533V33tox5VXhAIfYGpIkUnuoH+j7NR127hzK5itRn
-	wBWJnOot1JpZU5ofwvrZkTTqm459ixhVjL9sPv1e8snooqcGecbAUV3LWN60quOkko5t9MddC8w
-	1U57saLQgwlOd9g92iGe6P/ESwPh1Py9EaoTEQ6qUGO4ADe0nCjFwTaLP4kO8IaRDGNYIiM6qNv
-	hWm/z+2uDz40gvFFd+n5CusARhhnw3geHLZS+tBXvjDoIgePkcBec1vNxpmG3spHjLuQ==
-X-Google-Smtp-Source: AGHT+IEHRSEOlV/PjXO/es3oQjzN6p04w3tM9GnKGrsmunlZpgWhO8lg57u4CtlSOr65Ov1n2stQfw==
-X-Received: by 2002:a05:6000:288d:b0:42b:5567:854b with SMTP id ffacd0b85a97d-42b59394d6cmr19768291f8f.45.1763567376680;
-        Wed, 19 Nov 2025 07:49:36 -0800 (PST)
-Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.3.91])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42c9628ebacsm25969755f8f.30.2025.11.19.07.49.35
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 19 Nov 2025 07:49:36 -0800 (PST)
-From: Jack Thomson <jackabt.amazon@gmail.com>
-To: maz@kernel.org,
-	oliver.upton@linux.dev,
-	pbonzini@redhat.com
-Cc: joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	isaku.yamahata@intel.com,
-	xmarcalx@amazon.co.uk,
-	kalyazin@amazon.co.uk,
-	jackabt@amazon.com
-Subject: [PATCH v3 3/3] KVM: selftests: Add option for different backing in pre-fault tests
-Date: Wed, 19 Nov 2025 15:49:10 +0000
-Message-ID: <20251119154910.97716-4-jackabt.amazon@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251119154910.97716-1-jackabt.amazon@gmail.com>
-References: <20251119154910.97716-1-jackabt.amazon@gmail.com>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="UqQV/M0K"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1763567861; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=mQ45HxHEz7bEk0U1Kg7KEiKQ1cBt2yG8qBc7T+EeuPs=;
+ b=UqQV/M0KVnqVIbes+T1VV5SYDQBUho8kznxbAiYsToK+jUa4il3/H/XbholIfk2vhMtJjp
+ qBcw52taj1iZnwQoxlvwy6vQyl96TiF5DLpAY/hnB8OKpiyrxr3bxooNrdZddhA7V4FTh5
+ cModvja+7QNJsvuYxDrSOrVjKQI+lSnHCBf4TMYmvtLXrpNTTgkaB6Xadywgbtlfw2YI4R
+ 1HMOwLrt30weNo9TEwQpsV6nTf4bz4Zbwq3Jq/+Ttc+NwLbHFhn89RC5I13WCOSG9aNnOl
+ yfod9OGzB8lb4c9K7hvmAD7rJwuVYmdbbk2hWYvfNJf/0OF4eMx4QOpG4cabOQ==
+Message-Id: <b0b0f9d727b334fa569c726fc13490dd51d4fe42.7caea664.2799.41de.8705.9603c8f00a51@bytedance.com>
+To: "Paul Walmsley" <pjw@kernel.org>
+Subject: Re: [PATCH v4 00/10] riscv: Add Zalasr ISA extension support
+References: <20251020042056.30283-1-luxu.kernel@bytedance.com> <176355541475.758643.7685467502830246491.git-patchwork-notify@kernel.org>
+	<b7dc669e-cc48-f163-0146-0ef37dbd19ec@kernel.org>
+X-Lms-Return-Path: <lba+1691de8f3+3eb7e6+vger.kernel.org+luxu.kernel@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 19 Nov 2025 23:57:38 +0800
+Cc: <patchwork-bot+linux-riscv@kernel.org>, 
+	<linux-riscv@lists.infradead.org>, <corbet@lwn.net>, 
+	<paul.walmsley@sifive.com>, <palmer@dabbelt.com>, 
+	<aou@eecs.berkeley.edu>, <alex@ghiti.fr>, <robh@kernel.org>, 
+	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <will@kernel.org>, 
+	<peterz@infradead.org>, <boqun.feng@gmail.com>, <mark.rutland@arm.com>, 
+	<anup@brainfault.org>, <atish.patra@linux.dev>, <pbonzini@redhat.com>, 
+	<shuah@kernel.org>, <parri.andrea@gmail.com>, <ajones@ventanamicro.com>, 
+	<brs@rivosinc.com>, <guoren@kernel.org>, <linux-doc@vger.kernel.org>, 
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>, 
+	<kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>, 
+	<linux-kselftest@vger.kernel.org>, <apw@canonical.com>, 
+	<joe@perches.com>, <lukas.bulwahn@gmail.com>
+From: =?utf-8?q?=E8=B7=AF=E6=97=AD?= <luxu.kernel@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+In-Reply-To: <b7dc669e-cc48-f163-0146-0ef37dbd19ec@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-From: Jack Thomson <jackabt@amazon.com>
+Hi Paul,
 
-Add a -m option to specify different memory backing types for the
-pre-fault tests (e.g., anonymous, hugetlb), allowing testing of the
-pre-fault functionality across different memory configurations.
+I will continue with this work. And thanks for Andrea's feedback.
 
-Signed-off-by: Jack Thomson <jackabt@amazon.com>
----
- .../selftests/kvm/pre_fault_memory_test.c     | 42 +++++++++++++++----
- 1 file changed, 33 insertions(+), 9 deletions(-)
+Best Regards,
+Xu Lu
 
-diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-index 674931e7bb3a..e1111c4df748 100644
---- a/tools/testing/selftests/kvm/pre_fault_memory_test.c
-+++ b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-@@ -172,6 +172,7 @@ static void pre_fault_memory(struct kvm_vcpu *vcpu, u64 base_gpa, u64 offset,
- struct test_params {
- 	unsigned long vm_type;
- 	bool private;
-+	enum vm_mem_backing_src_type mem_backing_src;
- };
- 
- static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
-@@ -190,14 +191,19 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
- 	uint64_t guest_test_virt_mem;
- 	uint64_t alignment, guest_page_size;
- 
-+	size_t backing_src_pagesz = get_backing_src_pagesz(p->mem_backing_src);
-+
- 	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(guest_mode));
-+	pr_info("Testing memory backing src type: %s\n",
-+		vm_mem_backing_src_alias(p->mem_backing_src)->name);
- 
- 	vm = vm_create_shape_with_one_vcpu(shape, &vcpu, guest_code);
- 
- 	guest_page_size = vm_guest_mode_params[guest_mode].page_size;
- 
- 	test_config.page_size = guest_page_size;
--	test_config.test_size = TEST_BASE_SIZE + test_config.page_size;
-+	test_config.test_size = align_up(TEST_BASE_SIZE + test_config.page_size,
-+					 backing_src_pagesz);
- 	test_config.test_num_pages = vm_calc_num_guest_pages(vm->mode, test_config.test_size);
- 
- 	guest_test_phys_mem = (vm->max_gfn - test_config.test_num_pages) * test_config.page_size;
-@@ -206,20 +212,23 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
- #else
- 	alignment = SZ_2M;
- #endif
-+	alignment = max(alignment, backing_src_pagesz);
- 	guest_test_phys_mem = align_down(guest_test_phys_mem, alignment);
- 	guest_test_virt_mem = guest_test_phys_mem & ((1ULL << (vm->va_bits - 1)) - 1);
- 
--	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+	vm_userspace_mem_region_add(vm, p->mem_backing_src,
- 				    guest_test_phys_mem, TEST_SLOT, test_config.test_num_pages,
- 				    p->private ? KVM_MEM_GUEST_MEMFD : 0);
- 	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, test_config.test_num_pages);
- 
- 	if (p->private)
- 		vm_mem_set_private(vm, guest_test_phys_mem, test_config.test_size);
--	pre_fault_memory(vcpu, guest_test_phys_mem, TEST_BASE_SIZE, 0, p->private);
-+
-+	pre_fault_memory(vcpu, guest_test_phys_mem, test_config.test_size, 0, p->private);
- 	/* Test pre-faulting over an already faulted range */
--	pre_fault_memory(vcpu, guest_test_phys_mem, TEST_BASE_SIZE, 0, p->private);
--	pre_fault_memory(vcpu, guest_test_phys_mem + TEST_BASE_SIZE,
-+	pre_fault_memory(vcpu, guest_test_phys_mem, test_config.test_size, 0, p->private);
-+	pre_fault_memory(vcpu, guest_test_phys_mem +
-+			 test_config.test_size - test_config.page_size,
- 			 test_config.page_size * 2, test_config.page_size, p->private);
- 	pre_fault_memory(vcpu, guest_test_phys_mem + test_config.test_size,
- 			 test_config.page_size, test_config.page_size, p->private);
-@@ -251,7 +260,8 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
- 	kvm_vm_free(vm);
- }
- 
--static void test_pre_fault_memory(unsigned long vm_type, bool private)
-+static void test_pre_fault_memory(unsigned long vm_type, enum vm_mem_backing_src_type backing_src,
-+				  bool private)
- {
- 	if (vm_type && !(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(vm_type))) {
- 		pr_info("Skipping tests for vm_type 0x%lx\n", vm_type);
-@@ -261,6 +271,7 @@ static void test_pre_fault_memory(unsigned long vm_type, bool private)
- 	struct test_params p = {
- 		.vm_type = vm_type,
- 		.private = private,
-+		.mem_backing_src = backing_src,
- 	};
- 
- 	for_each_guest_mode(__test_pre_fault_memory, &p);
-@@ -270,10 +281,23 @@ int main(int argc, char *argv[])
- {
- 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
- 
--	test_pre_fault_memory(0, false);
-+	int opt;
-+	enum vm_mem_backing_src_type backing = VM_MEM_SRC_ANONYMOUS;
-+
-+	while ((opt = getopt(argc, argv, "m:")) != -1) {
-+		switch (opt) {
-+		case 'm':
-+			backing = parse_backing_src_type(optarg);
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	test_pre_fault_memory(0, backing, false);
- #ifdef __x86_64__
--	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, false);
--	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, true);
-+	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, backing, false);
-+	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, backing, true);
- #endif
- 	return 0;
- }
--- 
-2.43.0
+> From: "Paul Walmsley"<pjw@kernel.org>
+> Date:=C2=A0 Wed, Nov 19, 2025, 23:42
+> Subject:=C2=A0 Re: [PATCH v4 00/10] riscv: Add Zalasr ISA extension suppo=
+rt
+> To: <patchwork-bot+linux-riscv@kernel.org>
+> Cc: "Xu Lu"<luxu.kernel@bytedance.com>, <linux-riscv@lists.infradead.org>=
+, <corbet@lwn.net>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>, <aou@=
+eecs.berkeley.edu>, <alex@ghiti.fr>, <robh@kernel.org>, <krzk+dt@kernel.org=
+>, <conor+dt@kernel.org>, <will@kernel.org>, <peterz@infradead.org>, <boqun=
+.feng@gmail.com>, <mark.rutland@arm.com>, <anup@brainfault.org>, <atish.pat=
+ra@linux.dev>, <pbonzini@redhat.com>, <shuah@kernel.org>, <parri.andrea@gma=
+il.com>, <ajones@ventanamicro.com>, <brs@rivosinc.com>, <guoren@kernel.org>=
+, <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <devicetree@=
+vger.kernel.org>, <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>, <=
+linux-kselftest@vger.kernel.org>, <apw@canonical.com>, <joe@perches.com>, <=
+lukas.bulwahn@gmail.com>
+> Folks,
 
+>=C2=A0
+> On Wed, 19 Nov 2025, patchwork-bot+linux-riscv@kernel.org wrote:
+
+>=C2=A0
+> > This series was applied to riscv/linux.git (for-next)
+
+> > by Paul Walmsley <pjw@kernel.org>:
+
+>=C2=A0
+> This actually isn't true; I've only applied the first four patches (see=
+=C2=A0
+
+> below).
+
+>=C2=A0
+> > On Mon, 20 Oct 2025 12:20:46 +0800 you wrote:
+
+> > > This patch adds support for the Zalasr ISA extension, which supplies =
+the
+
+> > > real load acquire/store release instructions.
+
+> > >=C2=A0
+
+> > > The specification can be found here:
+
+> > > https://github.com/riscv/riscv-zalasr/blob/main/chapter2.adoc
+
+> > >=C2=A0
+
+> > > This patch seires has been tested with ltp on Qemu with Brensan's zal=
+asr
+
+> > > support patch[1].
+
+> > >=C2=A0
+
+> > > [...]
+
+> >=C2=A0
+
+> > Here is the summary with links:
+
+> > =C2=A0 - [v4,01/10] riscv: Add ISA extension parsing for Zalasr
+
+> > =C2=A0 =C2=A0 https://git.kernel.org/riscv/c/0597b9c8627e
+
+> > =C2=A0 - [v4,02/10] dt-bindings: riscv: Add Zalasr ISA extension descri=
+ption
+
+> > =C2=A0 =C2=A0 https://git.kernel.org/riscv/c/6e2a0ff70abe
+
+> > =C2=A0 - [v4,03/10] riscv: hwprobe: Export Zalasr extension
+
+> > =C2=A0 =C2=A0 https://git.kernel.org/riscv/c/d5e20628a882
+
+> > =C2=A0 - [v4,04/10] riscv: Introduce Zalasr instructions
+
+> > =C2=A0 =C2=A0 https://git.kernel.org/riscv/c/c4139ea6717c
+
+> > =C2=A0 - [v4,05/10] riscv: Apply Zalasr to smp_load_acquire/smp_store_r=
+elease
+
+> > =C2=A0 =C2=A0 (no matching commit)
+
+> > =C2=A0 - [v4,06/10] riscv: Apply acquire/release semantics to arch_xchg=
+/arch_cmpxchg operations
+
+> > =C2=A0 =C2=A0 (no matching commit)
+
+> > =C2=A0 - [v4,07/10] riscv: Apply acquire/release semantics to arch_atom=
+ic operations
+
+> > =C2=A0 =C2=A0 (no matching commit)
+
+> > =C2=A0 - [v4,08/10] riscv: Remove arch specific __atomic_acquire/releas=
+e_fence
+
+> > =C2=A0 =C2=A0 (no matching commit)
+
+> > =C2=A0 - [v4,09/10] RISC-V: KVM: Allow Zalasr extensions for Guest/VM
+
+> > =C2=A0 =C2=A0 (no matching commit)
+
+> > =C2=A0 - [v4,10/10] RISC-V: KVM: selftests: Add Zalasr extensions to ge=
+t-reg-list test
+
+> > =C2=A0 =C2=A0 (no matching commit)
+
+>=C2=A0
+> In terms of patches 5-8, we're still waiting for Xu Lu to update the=C2=
+=A0
+
+> patches based on Andrea's feedback. =C2=A0Xu Lu, are you still planning t=
+o=C2=A0
+
+> update these?
+
+>=C2=A0
+>=C2=A0
+> - Paul
+>=C2=A0
