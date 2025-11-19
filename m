@@ -1,68 +1,104 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FF3285CB3;
-	Wed, 19 Nov 2025 15:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7672B2D6612;
+	Wed, 19 Nov 2025 15:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763566319; cv=none; b=B/PXPxBGak8WlkxG+UguBSvNX4AfJD4oxBgaqQsOt3RxFPmTSzACcdX6q97FDGa7IgdMuMN9xniVJNI7y2/JGobmDmAV7TD1JUCIlolp4wEmVk/IrB3iiAbANAOxdQtD7AevMiNXJlo410DwlQRjCZLvYJhRPNziCaUoxpGtikM=
+	t=1763566938; cv=none; b=KtLJMfmQnRaBnDoUXycr6RAAn85yx6L1PUmnAdeO9w3QX+3HKhq+wxt+tko3Vfwfhdr9xkxS2+VPbBHXE1FRrY2LHxcYuTYwWK2HxLGy1EREUnV/fuiO6a2w5XNTgICzoxUZkn46F8RyjwRk4sGnCx9sHiGo/z/tWBHKc/7l6Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763566319; c=relaxed/simple;
-	bh=UA6BbECwsiGdz8YYnxOIoGO1ZKDze8WBFj4cUmpvk84=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RkafdT1Gh9DtUBXZGEI4gYr0jb8iHSGbqjIyvugkNno1spV4OSIcOEjuV3Dvdax3HuoP5dcjOJRxO6mbRvonyAx2X/JMrFPne38liyIk7purPXRezQ/HxMpORV8T3PG6mXlUmRHXDQizS+r4LqdwCsdtEECZUmXNd9625wQgW2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=DiOLNDF7; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1763566938; c=relaxed/simple;
+	bh=ytrC31SzVFXSnjTf0qvd0BBEtuw54RVFHossnCqW1pQ=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=BIuTkQhgopdOF30OWZoeco+H5PKbQo+oiji/NMtEndQdWrxOQ6QEJshOB4ylEU3QOwf/QAhpZ9gs0aDSr3tVMlriSxsGKquZYTVAzBtjUfWmAg4rb8F7/lcL53aTaVTtd6TMdJBUuLkTGaVGxu18bQzjdpfis5QnrnnvsSgUhsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uq6ah7Bb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="DiOLNDF7"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=ZEydrG7L1tp3+i+7Fup4PEypaIBN4DKaXmuX18Pd51Q=; b=DiOLNDF74veKYhJgk4wDwEDoXF
-	yY6VNA0wHAm0EiJ0FcnqW8SHxNNJ6CTleyLTnbRiPPWZ5rCPBbwG1vrYepwtSSfvUqtHa2wyNCnEI
-	N2Djv8x9ggJwy5k/to2cyFTa5h96cgTU102th7uOlswxWwhpWb7w7dd1KiqVZBYBKYtxMkNrqEAJP
-	w6Wqtkx0OJBF123yRplNV/vKfyh8M+r8DSKkpIGGDCcBnsOL/wdVr/CSDb6zbkg78uSmsNyuhyeWU
-	RoUzr4f6sQf9Y8cqXQy3293np/81zxsyX9CObieyFuMZuONOTF8/ZqSJRY8cqrZemMkW4hqWuhB+/
-	2qT7O7Mw==;
-Received: from [187.101.0.152] (helo=[192.168.15.100])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1vLk9q-002pHQ-Ug; Wed, 19 Nov 2025 16:31:46 +0100
-Message-ID: <b133c105-861f-4c56-b3ef-ea2ec5054e65@igalia.com>
-Date: Wed, 19 Nov 2025 12:31:42 -0300
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uq6ah7Bb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4975C2BC86;
+	Wed, 19 Nov 2025 15:42:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763566937;
+	bh=ytrC31SzVFXSnjTf0qvd0BBEtuw54RVFHossnCqW1pQ=;
+	h=Date:From:List-Id:To:cc:Subject:In-Reply-To:References:From;
+	b=Uq6ah7BbsL8XTJVVvRb0IDaOFYwVVETuv23G/zI21sj6VxKv0YJtaoTm4xkLzT+JK
+	 qjFtNQClKB7k/bsxYg2/s0WnT0Xw/IUGVv5KSfKO/Zv9mqGhv/qKcRdsOcUZ9qBJ7I
+	 WZPUqEfYQp+1zgswQOSKGKbg4p2zxBEmW4AQpspD5ObiKYkYoxfbtdkjGQcsEYJ3Jd
+	 US5VHWXpSp6nbFvS5VBM4AfYNhEyPPqwGYK95gSSkKGK3ukZXF4yTgRT4IixEKHbPa
+	 qRMveG6I2pvHJd0KqcOyYGDBEPM/fF673TI4EO06uVW/6WN38ywOW0b+T08MGDztIc
+	 Z/RKzOsFjkCPQ==
+Date: Wed, 19 Nov 2025 08:42:09 -0700 (MST)
+From: Paul Walmsley <pjw@kernel.org>
+To: patchwork-bot+linux-riscv@kernel.org
+cc: Xu Lu <luxu.kernel@bytedance.com>, linux-riscv@lists.infradead.org, 
+    corbet@lwn.net, paul.walmsley@sifive.com, palmer@dabbelt.com, 
+    aou@eecs.berkeley.edu, alex@ghiti.fr, robh@kernel.org, krzk+dt@kernel.org, 
+    conor+dt@kernel.org, will@kernel.org, peterz@infradead.org, 
+    boqun.feng@gmail.com, mark.rutland@arm.com, anup@brainfault.org, 
+    atish.patra@linux.dev, pbonzini@redhat.com, shuah@kernel.org, 
+    parri.andrea@gmail.com, ajones@ventanamicro.com, brs@rivosinc.com, 
+    guoren@kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+    devicetree@vger.kernel.org, kvm@vger.kernel.org, 
+    kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+    apw@canonical.com, joe@perches.com, lukas.bulwahn@gmail.com
+Subject: Re: [PATCH v4 00/10] riscv: Add Zalasr ISA extension support
+In-Reply-To: <176355541475.758643.7685467502830246491.git-patchwork-notify@kernel.org>
+Message-ID: <b7dc669e-cc48-f163-0146-0ef37dbd19ec@kernel.org>
+References: <20251020042056.30283-1-luxu.kernel@bytedance.com> <176355541475.758643.7685467502830246491.git-patchwork-notify@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kselftest: futex: Fix memset with zero size warning
-To: Wake Liu <wakel@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-References: <20251119030052.315502-1-wakel@google.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20251119030052.315502-1-wakel@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Wake,
+Folks,
 
-Em 19/11/2025 00:00, Wake Liu escreveu:
-> The `FIXTURE(args)` macro defines an empty `struct _test_data_args`,
-> leading to `sizeof(struct _test_data_args)` evaluating to 0. This
-> caused a build error due to a compiler warning on a `memset` call
-> with a zero size argument.
+On Wed, 19 Nov 2025, patchwork-bot+linux-riscv@kernel.org wrote:
+
+> This series was applied to riscv/linux.git (for-next)
+> by Paul Walmsley <pjw@kernel.org>:
+
+This actually isn't true; I've only applied the first four patches (see 
+below).
+
+> On Mon, 20 Oct 2025 12:20:46 +0800 you wrote:
+> > This patch adds support for the Zalasr ISA extension, which supplies the
+> > real load acquire/store release instructions.
+> > 
+> > The specification can be found here:
+> > https://github.com/riscv/riscv-zalasr/blob/main/chapter2.adoc
+> > 
+> > This patch seires has been tested with ltp on Qemu with Brensan's zalasr
+> > support patch[1].
+> > 
+> > [...]
 > 
+> Here is the summary with links:
+>   - [v4,01/10] riscv: Add ISA extension parsing for Zalasr
+>     https://git.kernel.org/riscv/c/0597b9c8627e
+>   - [v4,02/10] dt-bindings: riscv: Add Zalasr ISA extension description
+>     https://git.kernel.org/riscv/c/6e2a0ff70abe
+>   - [v4,03/10] riscv: hwprobe: Export Zalasr extension
+>     https://git.kernel.org/riscv/c/d5e20628a882
+>   - [v4,04/10] riscv: Introduce Zalasr instructions
+>     https://git.kernel.org/riscv/c/c4139ea6717c
+>   - [v4,05/10] riscv: Apply Zalasr to smp_load_acquire/smp_store_release
+>     (no matching commit)
+>   - [v4,06/10] riscv: Apply acquire/release semantics to arch_xchg/arch_cmpxchg operations
+>     (no matching commit)
+>   - [v4,07/10] riscv: Apply acquire/release semantics to arch_atomic operations
+>     (no matching commit)
+>   - [v4,08/10] riscv: Remove arch specific __atomic_acquire/release_fence
+>     (no matching commit)
+>   - [v4,09/10] RISC-V: KVM: Allow Zalasr extensions for Guest/VM
+>     (no matching commit)
+>   - [v4,10/10] RISC-V: KVM: selftests: Add Zalasr extensions to get-reg-list test
+>     (no matching commit)
 
-Do you mind sharing your compiler options? I can't reproduce this 
-warning here. I also noted that a few other selftests have this pattern 
-of defining an empty FIXTURE(), do they also produce warnings?
+In terms of patches 5-8, we're still waiting for Xu Lu to update the 
+patches based on Andrea's feedback.  Xu Lu, are you still planning to 
+update these?
+
+
+- Paul
