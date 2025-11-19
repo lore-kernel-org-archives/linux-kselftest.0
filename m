@@ -1,104 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7672B2D6612;
-	Wed, 19 Nov 2025 15:42:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2FB36C0C8
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 15:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763566938; cv=none; b=KtLJMfmQnRaBnDoUXycr6RAAn85yx6L1PUmnAdeO9w3QX+3HKhq+wxt+tko3Vfwfhdr9xkxS2+VPbBHXE1FRrY2LHxcYuTYwWK2HxLGy1EREUnV/fuiO6a2w5XNTgICzoxUZkn46F8RyjwRk4sGnCx9sHiGo/z/tWBHKc/7l6Vo=
+	t=1763567367; cv=none; b=SH4WfB9qwhLvagVtdR5rCbByGFYafuR3SswudNM77JaoM3S5jKqHLVXvB+P2X2zFyTY3mC4xdHuEa5su6rshexQclCZUrZOPQUreVQf1w9Q/dxDwhzDxc5lbzeI6b28wMiiHAszfu9YP4eF9BfwnZ0IjFCZHVwCcoCFFxaGKr7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763566938; c=relaxed/simple;
-	bh=ytrC31SzVFXSnjTf0qvd0BBEtuw54RVFHossnCqW1pQ=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=BIuTkQhgopdOF30OWZoeco+H5PKbQo+oiji/NMtEndQdWrxOQ6QEJshOB4ylEU3QOwf/QAhpZ9gs0aDSr3tVMlriSxsGKquZYTVAzBtjUfWmAg4rb8F7/lcL53aTaVTtd6TMdJBUuLkTGaVGxu18bQzjdpfis5QnrnnvsSgUhsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uq6ah7Bb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763567367; c=relaxed/simple;
+	bh=e9o1/GNMLjcy+Zk5rqn6PgwLxkXMSjNL5BWwJUqnu/4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hs3+R4KBeB8y8NsUC1NhJGHodCKknLy1rcM45IkcmuwFd+6o9Go2NPf89q5INFfK5RVQKXFO/yeb5OtY+e6Dzee+ojQookF+VA3aBp9kwVWkELaPj0YgMXnbcTPuG0Vrb8X8psPj8AplfYV6DP6zrg3gpYcbMByQwAAS6kO42S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nlCX45z3; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uq6ah7Bb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4975C2BC86;
-	Wed, 19 Nov 2025 15:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763566937;
-	bh=ytrC31SzVFXSnjTf0qvd0BBEtuw54RVFHossnCqW1pQ=;
-	h=Date:From:List-Id:To:cc:Subject:In-Reply-To:References:From;
-	b=Uq6ah7BbsL8XTJVVvRb0IDaOFYwVVETuv23G/zI21sj6VxKv0YJtaoTm4xkLzT+JK
-	 qjFtNQClKB7k/bsxYg2/s0WnT0Xw/IUGVv5KSfKO/Zv9mqGhv/qKcRdsOcUZ9qBJ7I
-	 WZPUqEfYQp+1zgswQOSKGKbg4p2zxBEmW4AQpspD5ObiKYkYoxfbtdkjGQcsEYJ3Jd
-	 US5VHWXpSp6nbFvS5VBM4AfYNhEyPPqwGYK95gSSkKGK3ukZXF4yTgRT4IixEKHbPa
-	 qRMveG6I2pvHJd0KqcOyYGDBEPM/fF673TI4EO06uVW/6WN38ywOW0b+T08MGDztIc
-	 Z/RKzOsFjkCPQ==
-Date: Wed, 19 Nov 2025 08:42:09 -0700 (MST)
-From: Paul Walmsley <pjw@kernel.org>
-To: patchwork-bot+linux-riscv@kernel.org
-cc: Xu Lu <luxu.kernel@bytedance.com>, linux-riscv@lists.infradead.org, 
-    corbet@lwn.net, paul.walmsley@sifive.com, palmer@dabbelt.com, 
-    aou@eecs.berkeley.edu, alex@ghiti.fr, robh@kernel.org, krzk+dt@kernel.org, 
-    conor+dt@kernel.org, will@kernel.org, peterz@infradead.org, 
-    boqun.feng@gmail.com, mark.rutland@arm.com, anup@brainfault.org, 
-    atish.patra@linux.dev, pbonzini@redhat.com, shuah@kernel.org, 
-    parri.andrea@gmail.com, ajones@ventanamicro.com, brs@rivosinc.com, 
-    guoren@kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    devicetree@vger.kernel.org, kvm@vger.kernel.org, 
-    kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-    apw@canonical.com, joe@perches.com, lukas.bulwahn@gmail.com
-Subject: Re: [PATCH v4 00/10] riscv: Add Zalasr ISA extension support
-In-Reply-To: <176355541475.758643.7685467502830246491.git-patchwork-notify@kernel.org>
-Message-ID: <b7dc669e-cc48-f163-0146-0ef37dbd19ec@kernel.org>
-References: <20251020042056.30283-1-luxu.kernel@bytedance.com> <176355541475.758643.7685467502830246491.git-patchwork-notify@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nlCX45z3"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42b427cda88so4952748f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 07:49:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763567364; x=1764172164; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zsMgANA5eM7ZKAX6n6+aWoRlKM8M0oaGArWvq51zEek=;
+        b=nlCX45z326861M0Ts/dYSqIsTqwIWlt6Rz5v0Gqss+9sGUMLX96Ogm7lu1ktG0c+sA
+         f1zeL0Of8o6tf+NHcLeTiY99fgnMsWyBRt90KvqYEVOjRUcF6jwlVv4OSVbORdWpJvMc
+         gKKG9J5eXy38J9IsjA0ShakNLUdQM9Xg7XAHLfmbZA8Yn8J0d5B7mL18YHOP3NQN1Wqy
+         SKnIsRz3XIHkmDDlbIO/lKxfNQdmsyhPztm+ZsuCEw+XdafSd3NXLHZRyRQ8D6s29BuQ
+         W0P5xVisnuElScH1mG3uzn5KS7JXpXwaYLRPMuUFo3+1bB3M0SefsrhkwpPQEbyHsbKG
+         BWgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763567364; x=1764172164;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zsMgANA5eM7ZKAX6n6+aWoRlKM8M0oaGArWvq51zEek=;
+        b=FiUyBYwYxwT9oLIV+kaUJGOhEbOM//FA/lICzqP166e1obv86qz140OeJnSPxdurTe
+         HZTUgp6hj02ZxxwkL5N2DxRDWiNAy0TvMbpBDWL0wzw0FmFmKrTDACLPIKyADbYzLJv6
+         iLliJUgbLR7/IhKX816HeA9ZgOGxhNbaGNLQNW3GzsW1SsKAIdPcpy2v44rTvNYLk5Vg
+         mQpKnCAXz3vi8TPPeFmgGZgoDkDYfXpdV1dyK+Ju4uELI0sHZjQ0k0G8DQXe686qLyiR
+         HKBqEz7vp05eOK+xJHwoV3Jq9oCy6niXZ772Axt2sg06/LSqe7PWvnSDknhCH1KBGhMf
+         /Isw==
+X-Forwarded-Encrypted: i=1; AJvYcCWIBhsdTyU4XNe0ktQTj4KaMvOJDkQiRBh9P8b20x/PTVqiQnTIGM/rwB89hQI3E/Gv/kBnO8zEHobFoft479c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk3kNIbxK3+3YKJB5a0vuVtquUJA8v7Yx5wnTLpi+t400+1qVY
+	e25lewmIquEwWb+HSNp5QA690gsRLLi644XOSM+zjXU1PJrqU6wGFvbZ
+X-Gm-Gg: ASbGncszd6qFB3Bv/zzCWXcgABc2im1qh16sGBrw6psirOlPq8BLjQesv2pX6Fw5CON
+	+d7WACoFaGqSiBRxS4JDbPkHaq2t/1oBDEyXDIHq2xv1vEMVgF5Vyoptl4T0ymLqivoGqGsnEDk
+	itleuv2FvMxk6Nenr8OR5bZ5xesA+tVshitzB35757v5/W7G9d8UTdUsYXP5p0bUk9JtW51268F
+	m8c4A4/03N1HA8oOn9FaUSe06Yx1uKernnORAbW4G7+HFsMc0++914GKQknZLNAieby7I79FRBI
+	X9m+HRmgVOj70vF37us781uQZ4kH9RlDd6JMgzEEzbuo+tpxs4BdRmktE6lMJVAshbzf2NGhTFL
+	ZzwRDuJEoj7lk+IP5dcwKse8bya7PaaYet4i4RqPn6YUSoSpNGR47bip96nFWD24geApTCwqIAt
+	AafewUQP0hf0lVcHmZMkHI87VkDNxcGzbOCzjfsAGdDpuiXCPUTf/+Wj2OPqa82nn6VQ==
+X-Google-Smtp-Source: AGHT+IHKBCKSyXwqmqDibyNSehgzgh3KJ1v3HqV1svmFXRruujCX1mFQdmNmlH2lr9fy9Bcfr5S55w==
+X-Received: by 2002:a05:6000:4024:b0:42b:2dd5:42be with SMTP id ffacd0b85a97d-42b593234e0mr18915716f8f.8.1763567364171;
+        Wed, 19 Nov 2025 07:49:24 -0800 (PST)
+Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.3.91])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42c9628ebacsm25969755f8f.30.2025.11.19.07.49.23
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 19 Nov 2025 07:49:23 -0800 (PST)
+From: Jack Thomson <jackabt.amazon@gmail.com>
+To: maz@kernel.org,
+	oliver.upton@linux.dev,
+	pbonzini@redhat.com
+Cc: joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	isaku.yamahata@intel.com,
+	xmarcalx@amazon.co.uk,
+	kalyazin@amazon.co.uk,
+	jackabt@amazon.com
+Subject: [PATCH v3 0/3] KVM ARM64 pre_fault_memory
+Date: Wed, 19 Nov 2025 15:49:07 +0000
+Message-ID: <20251119154910.97716-1-jackabt.amazon@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 
-Folks,
+From: Jack Thomson <jackabt@amazon.com>
 
-On Wed, 19 Nov 2025, patchwork-bot+linux-riscv@kernel.org wrote:
+This patch series adds ARM64 support for the KVM_PRE_FAULT_MEMORY
+feature, which was previously only available on x86 [1]. This allows us
+to reduce the number of stage-2 faults during execution. This is of
+benefit in post-copy migration scenarios, particularly in memory
+intensive applications, where we are experiencing high latencies due to
+the stage-2 faults.
 
-> This series was applied to riscv/linux.git (for-next)
-> by Paul Walmsley <pjw@kernel.org>:
+Patch Overview:
 
-This actually isn't true; I've only applied the first four patches (see 
-below).
+ - The first patch adds support for the KVM_PRE_FAULT_MEMORY ioctl
+   on arm64.
 
-> On Mon, 20 Oct 2025 12:20:46 +0800 you wrote:
-> > This patch adds support for the Zalasr ISA extension, which supplies the
-> > real load acquire/store release instructions.
-> > 
-> > The specification can be found here:
-> > https://github.com/riscv/riscv-zalasr/blob/main/chapter2.adoc
-> > 
-> > This patch seires has been tested with ltp on Qemu with Brensan's zalasr
-> > support patch[1].
-> > 
-> > [...]
-> 
-> Here is the summary with links:
->   - [v4,01/10] riscv: Add ISA extension parsing for Zalasr
->     https://git.kernel.org/riscv/c/0597b9c8627e
->   - [v4,02/10] dt-bindings: riscv: Add Zalasr ISA extension description
->     https://git.kernel.org/riscv/c/6e2a0ff70abe
->   - [v4,03/10] riscv: hwprobe: Export Zalasr extension
->     https://git.kernel.org/riscv/c/d5e20628a882
->   - [v4,04/10] riscv: Introduce Zalasr instructions
->     https://git.kernel.org/riscv/c/c4139ea6717c
->   - [v4,05/10] riscv: Apply Zalasr to smp_load_acquire/smp_store_release
->     (no matching commit)
->   - [v4,06/10] riscv: Apply acquire/release semantics to arch_xchg/arch_cmpxchg operations
->     (no matching commit)
->   - [v4,07/10] riscv: Apply acquire/release semantics to arch_atomic operations
->     (no matching commit)
->   - [v4,08/10] riscv: Remove arch specific __atomic_acquire/release_fence
->     (no matching commit)
->   - [v4,09/10] RISC-V: KVM: Allow Zalasr extensions for Guest/VM
->     (no matching commit)
->   - [v4,10/10] RISC-V: KVM: selftests: Add Zalasr extensions to get-reg-list test
->     (no matching commit)
+ - The second patch updates the pre_fault_memory_test to support
+   arm64.
 
-In terms of patches 5-8, we're still waiting for Xu Lu to update the 
-patches based on Andrea's feedback.  Xu Lu, are you still planning to 
-update these?
+ - The last patch extends the pre_fault_memory_test to cover
+   different vm memory backings.
+
+=== Changes Since v2 [2] ===
+
+ - Update fault info synthesize value. Thanks Suzuki
+ - Remove change to selftests for unaligned mmap allocations. Thanks
+   Sean
+
+[1]: https://lore.kernel.org/kvm/20240710174031.312055-1-pbonzini@redhat.com
+[2]: https://lore.kernel.org/linux-arm-kernel/20251013151502.6679-1-jackabt.amazon@gmail.com
+
+Jack Thomson (3):
+  KVM: arm64: Add pre_fault_memory implementation
+  KVM: selftests: Enable pre_fault_memory_test for arm64
+  KVM: selftests: Add option for different backing in pre-fault tests
+
+ Documentation/virt/kvm/api.rst                |   3 +-
+ arch/arm64/kvm/Kconfig                        |   1 +
+ arch/arm64/kvm/arm.c                          |   1 +
+ arch/arm64/kvm/mmu.c                          |  73 +++++++++++-
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/pre_fault_memory_test.c     | 110 ++++++++++++++----
+ 6 files changed, 159 insertions(+), 30 deletions(-)
 
 
-- Paul
+base-commit: 8a4821412cf2c1429fffa07c012dd150f2edf78c
+-- 
+2.43.0
+
