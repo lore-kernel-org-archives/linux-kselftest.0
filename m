@@ -1,612 +1,174 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6DA34C830;
-	Thu, 20 Nov 2025 17:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E9F2FE59C;
+	Thu, 20 Nov 2025 18:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763661074; cv=none; b=GD03+CaeCRFxNCTo0hYFhG1Hq+z3RV52tPFqpxSuZNu9I8lMonJhmAmKe1I2GXd1YFOQnAlL1P3AQ4DdC5++AdEqbfcMFNWelMndpBfgAvYqeQrRp979pygsNomGNNREIuyzwrvXG4hEO/4a9Rddp/gwCDYji69GhQpxBL38ndg=
+	t=1763662421; cv=none; b=gJDHAytPdGJbfnxPSRcJHvZmqPj9FtyalBtrRRSS1b4EG3Y5DCr2RWEgbpgMPkAHS30GLfTHPEGf4gzARozBJxiUzOMp2xv8Uy9VuOsKywRhUqZ7Hdls71MCTKZl65PiFd6BeTBji7GbcVx2bxUnxpFnUIGVeNW+OwnAYbIm2ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763661074; c=relaxed/simple;
-	bh=IS4DwUTshEojQGj9lFhpaXs38iiJg3QzsW2FEaMMwMg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bWhcxqOJ8TapM/c+5536CDJpk+9sG+gPC9I4KGKW3ICV23gzWOpQ0x6dUL9WBEA8D7QmJFdXU96PvQbuSKsyKHS5YDEqREpXtDRTTnPGqgGCV0u7Tos8Z5D/DMvJ/Byo7+bgyf3jyRlfJHtnfnqu5FCqmrSFbUc9DKDPSNBpoDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dC5VB3xW7zHnGf1;
-	Fri, 21 Nov 2025 01:50:26 +0800 (CST)
-Received: from mscpeml500004.china.huawei.com (unknown [7.188.26.250])
-	by mail.maildlp.com (Postfix) with ESMTPS id AE85E1402EF;
-	Fri, 21 Nov 2025 01:51:01 +0800 (CST)
-Received: from huawei-ThinkCentre-M920t.huawei.com (10.123.122.223) by
- mscpeml500004.china.huawei.com (7.188.26.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 20 Nov 2025 20:51:01 +0300
-From: Dmitry Skorodumov <skorodumov.dmitry@huawei.com>
-To: <netdev@vger.kernel.org>, Simon Horman <horms@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC: <andrey.bokhanko@huawei.com>, <edumazet@google.com>, Dmitry Skorodumov
-	<skorodumov.dmitry@huawei.com>, "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
-	<shuah@kernel.org>
-Subject: [PATCH net-next 12/12] selftests: net: selftest for ipvlan-macnat mode
-Date: Thu, 20 Nov 2025 20:49:49 +0300
-Message-ID: <20251120174949.3827500-13-skorodumov.dmitry@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20251120174949.3827500-1-skorodumov.dmitry@huawei.com>
-References: <20251120174949.3827500-1-skorodumov.dmitry@huawei.com>
+	s=arc-20240116; t=1763662421; c=relaxed/simple;
+	bh=QIS6mpBdq2N3xQljBgRUlhU8C+c5gVyatzHM0SIxhyQ=;
+	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=cxt/aEyJotjk1o79gWNWXLKSN6hM3DxDYFkQHZUHaMHN3reTx9PaKLiFHx1JAz/bAiFNIis4F3DT/mPBuYuS+xrZ/3ROzwK2WTNcBpGkht8Ka/OP7LOlpTWu1OozuO/xvJssizzxYD/3dl6NGvgEOgbT5bsczrku6g4QEZIwYpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in01.mta.xmission.com ([166.70.13.51]:36142)
+	by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1vM8TC-0080O5-W2; Thu, 20 Nov 2025 10:29:23 -0700
+Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:33708 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1vM8TB-00Fz5d-R2; Thu, 20 Nov 2025 10:29:22 -0700
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,  Alexey Dobriyan
+ <adobriyan@gmail.com>,  Oleg Nesterov <oleg@redhat.com>,  Kees Cook
+ <kees@kernel.org>,  Andy Lutomirski <luto@amacapital.net>,  Will Drewry
+ <wad@chromium.org>,  Christian Brauner <brauner@kernel.org>,  Andrew
+ Morton <akpm@linux-foundation.org>,  Michal Hocko <mhocko@suse.com>,
+  Serge Hallyn <serge@hallyn.com>,  James Morris
+ <jamorris@linux.microsoft.com>,  Randy Dunlap <rdunlap@infradead.org>,
+  Suren Baghdasaryan <surenb@google.com>,  Yafang Shao
+ <laoar.shao@gmail.com>,  Helge Deller <deller@gmx.de>,  Adrian Reber
+ <areber@redhat.com>,  Thomas Gleixner <tglx@linutronix.de>,  Jens Axboe
+ <axboe@kernel.dk>,  Alexei Starovoitov <ast@kernel.org>,
+  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
+  linux-security-module@vger.kernel.org,  tiozhang
+ <tiozhang@didiglobal.com>,  Luis Chamberlain <mcgrof@kernel.org>,  "Paulo
+ Alcantara (SUSE)" <pc@manguebit.com>,  Sergey Senozhatsky
+ <senozhatsky@chromium.org>,  Frederic Weisbecker <frederic@kernel.org>,
+  YueHaibing <yuehaibing@huawei.com>,  Paul Moore <paul@paul-moore.com>,
+  Aleksa Sarai <cyphar@cyphar.com>,  Stefan Roesch <shr@devkernel.io>,
+  Chao Yu <chao@kernel.org>,  xu xin <xu.xin16@zte.com.cn>,  Jeff Layton
+ <jlayton@kernel.org>,  Jan Kara <jack@suse.cz>,  David Hildenbrand
+ <david@redhat.com>,  Dave Chinner <dchinner@redhat.com>,  Shuah Khan
+ <shuah@kernel.org>,  Elena Reshetova <elena.reshetova@intel.com>,  David
+ Windsor <dwindsor@gmail.com>,  Mateusz Guzik <mjguzik@gmail.com>,  Ard
+ Biesheuvel <ardb@kernel.org>,  "Joel Fernandes (Google)"
+ <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>,  Hans Liljestrand <ishkamiel@gmail.com>,  Penglei
+ Jiang <superman.xpt@gmail.com>,  Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>,  Adrian Ratiu <adrian.ratiu@collabora.com>,
+  Ingo Molnar <mingo@kernel.org>,  "Peter Zijlstra (Intel)"
+ <peterz@infradead.org>,  Cyrill Gorcunov <gorcunov@gmail.com>,  Eric
+ Dumazet <edumazet@google.com>
+In-Reply-To: <87tsyozqdu.fsf@email.froward.int.ebiederm.org> (Eric
+	W. Biederman's message of "Thu, 20 Nov 2025 09:15:57 -0600")
+References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+	<AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+	<AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<87tsyozqdu.fsf@email.froward.int.ebiederm.org>
+Date: Thu, 20 Nov 2025 11:29:14 -0600
+Message-ID: <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: mscpeml500004.china.huawei.com (7.188.26.250) To
- mscpeml500004.china.huawei.com (7.188.26.250)
+X-XM-SPF: eid=1vM8TB-00Fz5d-R2;;;mid=<87wm3ky5n9.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX18WRCiEc86RNupml3aU1I9F5t8x9s6oRjc=
+X-Spam-Level: 
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.5000]
+	*  0.7 XMSubLong Long Subject
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  1.0 XM_B_SpammyTLD Contains uncommon/spammy TLD
+	*  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Bernd Edlinger <bernd.edlinger@hotmail.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 514 ms - load_scoreonly_sql: 0.05 (0.0%),
+	signal_user_changed: 11 (2.1%), b_tie_ro: 9 (1.8%), parse: 1.07 (0.2%),
+	 extract_message_metadata: 17 (3.4%), get_uri_detail_list: 1.68 (0.3%),
+	 tests_pri_-2000: 14 (2.8%), tests_pri_-1000: 11 (2.1%),
+	tests_pri_-950: 1.22 (0.2%), tests_pri_-900: 1.10 (0.2%),
+	tests_pri_-90: 92 (17.9%), check_bayes: 81 (15.7%), b_tokenize: 18
+	(3.5%), b_tok_get_all: 8 (1.5%), b_comp_prob: 3.2 (0.6%),
+	b_tok_touch_all: 49 (9.4%), b_finish: 0.90 (0.2%), tests_pri_0: 352
+	(68.5%), check_dkim_signature: 0.56 (0.1%), check_dkim_adsp: 2.4
+	(0.5%), poll_dns_idle: 0.53 (0.1%), tests_pri_10: 2.2 (0.4%),
+	tests_pri_500: 8 (1.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v18] exec: Fix dead-lock in de_thread with ptrace_attach
+X-SA-Exim-Connect-IP: 166.70.13.51
+X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-SA-Exim-Scanned: No (on out02.mta.xmission.com); SAEximRunCond expanded to false
 
-Implemented a self-test for ipvlan in l2macnat mode.
+"Eric W. Biederman" <ebiederm@xmission.com> writes:
 
-The test verifies:
-1) It's not possible to configure an ip in l2macnat mode on ipvtap
+> Bernd Edlinger <bernd.edlinger@hotmail.de> writes:
+>
+>> This introduces signal->exec_bprm, which is used to
+>> fix the case when at least one of the sibling threads
+>> is traced, and therefore the trace process may dead-lock
+>> in ptrace_attach, but de_thread will need to wait for the
+>> tracer to continue execution.
+>
+> A small quibble it isn't a dead lock.  It isn't even really a live lock,
+> as it is possible to SIGKILL our way out.
+>
+> Thinking about this there is a really silly and simple way we can deal
+> with this situation for PTRACE_ATTACH.  We can send SIGSTOP and wait for
+> the thread to stop before doing anything with cred_guard_mutex.
+>
+> PTRACE_ATTACH already implies sending SIGSTOP so as long as we have
+> enough permissions to send SIGSTOP I don't see that being a problem.
+>
+> The worst case I can see is that we get a case where we stop the
+> process, the permission check fails under cred_guard_mutex and
+> and ptrace attach has fails and has to send SIGCONT to undo it's
+> premature SIGSTOP.  That might almost be visible, but it would still
+> be legitimate because we can still check that we have permission to
+> send SIGSTOP.
 
-2) It creates several net namespaces
-- Default namespace emulates host,
-- ipvlan-tst-phy emulates some host in remote network
-- ipvlan-tst-0/1 emulate VMs on host.
+Bah no I am full of it.
 
-Test verifies, that MAC addresses are as expected in ARP/NEIGH tables:
-all MACs in 'tst-phy' points to "host" mac-address
-all MACs in Default and tst are real ones
+The challenging behavior is in the semantics of the kernel operations.
+We need to describe it as such please.
 
-3) The l2macnat mode has limited number of addresses remembered on port.
-Test verifies, that this limit really works.
+It is the same class of problem as a single threaded process calls exec
+with a pipe attached to both stdin and stdout of the new process.
 
-Signed-off-by: Dmitry Skorodumov <skorodumov.dmitry@huawei.com>
----
- tools/testing/selftests/net/Makefile          |   2 +
- .../selftests/net/ipvtap_macnat_bridge.py     | 168 +++++++++
- .../selftests/net/ipvtap_macnat_test.sh       | 333 ++++++++++++++++++
- 3 files changed, 503 insertions(+)
- create mode 100755 tools/testing/selftests/net/ipvtap_macnat_bridge.py
- create mode 100755 tools/testing/selftests/net/ipvtap_macnat_test.sh
+For the stdin and stdout we can say just use pull and nonblocking I/O.
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index b5127e968108..050d864f0bd9 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -49,6 +49,7 @@ TEST_PROGS := \
- 	ipv6_flowlabel.sh \
- 	ipv6_force_forwarding.sh \
- 	ipv6_route_update_soft_lockup.sh \
-+	ipvtap_macnat_test.sh \
- 	l2_tos_ttl_inherit.sh \
- 	l2tp.sh \
- 	link_netns.py \
-@@ -191,6 +192,7 @@ TEST_GEN_PROGS := \
- TEST_FILES := \
- 	fcnal-test.sh \
- 	in_netns.sh \
-+	ipvtap_macnat_bridge.py \
- 	lib.sh \
- 	settings \
- 	setup_loopback.sh \
-diff --git a/tools/testing/selftests/net/ipvtap_macnat_bridge.py b/tools/testing/selftests/net/ipvtap_macnat_bridge.py
-new file mode 100755
-index 000000000000..7dc4a626e5bb
---- /dev/null
-+++ b/tools/testing/selftests/net/ipvtap_macnat_bridge.py
-@@ -0,0 +1,168 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""
-+Script to bridge ipvtap and tap,
-+needed to simulate behaviour of virtual machine using ipvtap.
-+
-+ipvtap in macnat mode cannot have IP address.
-+Due to limitations of ipvtap, it also cannot be plugged
-+into bridge.
-+Use this script to connect ipvtap and tap and assing IP to tap.
-+"""
-+
-+import socket
-+import os
-+import select
-+import sys
-+import signal
-+import fcntl
-+import struct
-+import subprocess
-+
-+# Linux TUN/TAP constants
-+TUNSETIFF = 0x400454ca
-+IFF_TUN = 0x0001
-+IFF_TAP = 0x0002
-+IFF_NO_PI = 0x1000
-+
-+ns_name = "non-initialized"
-+
-+class TapBridge:
-+    """Simple class to bridge ipvtap and tap interfaces"""
-+    def __init__(self, tap, ipvtap, buffer_size=65536):
-+        self.tap_name = tap
-+        self.ipvtap_name = ipvtap
-+        self.buffer_size = buffer_size
-+        self.running = False
-+
-+    def open_ipvtap_sock(self, tap_name):
-+        """Open a IPVTAP interface using raw socket"""
-+        try:
-+            sock = socket.socket(socket.AF_PACKET,
-+                                 socket.SOCK_RAW,
-+                                 socket.ntohs(0x0003))
-+            sock.bind((tap_name, 0))
-+            sock.setblocking(False)
-+            print(f"Connected to IPVTAP interface: {tap_name}")
-+            return sock
-+
-+        except (OSError, IOError) as e:
-+            print(f"Error opening IPVTAP interface {tap_name}: {e}")
-+            return None
-+
-+    def create_tap_interface(self, tap_name):
-+        """Create and configure a TAP interface using /dev/net/tun"""
-+        try:
-+            # Open the tun device
-+            tun_fd = os.open('/dev/net/tun', os.O_RDWR)
-+            if tun_fd < 0:
-+                raise OSError("Failed to open /dev/net/tun (err: {os.errno})")
-+
-+            # Prepare the ifr structure
-+            tap_name_bytes = tap_name.encode('utf-8')
-+            ifr = struct.pack('16sH', tap_name_bytes, IFF_TAP | IFF_NO_PI)
-+
-+            # Set the interface name and flags
-+            result = fcntl.ioctl(tun_fd, TUNSETIFF, ifr)
-+
-+            # Get the actual interface name that was set
-+            unpacked = struct.unpack('16sH', result)
-+            actual_name = unpacked[0].split(b'\x00')[0].decode()
-+            print(f"Created TAP interface: {actual_name}")
-+
-+            return tun_fd
-+
-+        except (OSError, IOError) as e:
-+            print(f"Error creating TAP interface {tap_name}: {e}")
-+            return None
-+
-+    def forward_data(self, from_fd, to_fd, description):
-+        """Forward data from one file descriptor to another"""
-+        try:
-+            data = os.read(from_fd, self.buffer_size)
-+            if data:
-+                os.write(to_fd, data)
-+                return True
-+            return False
-+
-+        except BlockingIOError:
-+            return True
-+        except (OSError, IOError) as e:
-+            print(f"Error forwarding data {description}: {e}")
-+            return False
-+
-+    def run(self):
-+        """Main bridge loop"""
-+        # Create TAP interfaces
-+        tap1_fd = self.create_tap_interface(self.tap_name)
-+
-+        sock = self.open_ipvtap_sock(self.ipvtap_name)
-+        tap2_fd = sock.fileno()
-+
-+        if tap1_fd is None or tap2_fd is None:
-+            print("Failed to create TAP interfaces")
-+            return
-+
-+        print("Press Ctrl+C to stop\n")
-+
-+        self.running = True
-+        stats = {'tap1_to_tap2': 0, 'tap2_to_tap1': 0}
-+        while self.running:
-+            try:
-+                # Use select to monitor both file descriptors
-+                readable, _, _ = select.select([tap1_fd, tap2_fd], [], [], 1.0)
-+
-+                for fd in readable:
-+                    if fd == tap1_fd:
-+                        descr = f"from {self.tap_name} to {self.ipvtap_name}"
-+                        if self.forward_data(tap1_fd, tap2_fd, descr):
-+                            stats['tap1_to_tap2'] += 1
-+                        else:
-+                            self.running = False
-+                    elif fd == tap2_fd:
-+                        descr = f"from {self.ipvtap_name} to {self.tap_name}"
-+                        if self.forward_data(tap2_fd, tap1_fd, descr):
-+                            stats['tap2_to_tap1'] += 1
-+                        else:
-+                            self.running = False
-+
-+            except KeyboardInterrupt:
-+                print("\nShutting down...")
-+                self.running = False
-+            except (OSError, IOError) as e:
-+                print(f"Error in main loop: {e}")
-+                self.running = False
-+
-+        # Cleanup
-+        os.close(tap1_fd)
-+        os.close(tap2_fd)
-+        print(f"Bridge stopped in {ns_name}. Stats: {stats}")
-+
-+
-+def signal_handler(_sig, _frame):
-+    """SIGINT handler for macnat bridge"""
-+    print(f'\nReceived interrupt signal, shutting down bridge in {ns_name}')
-+    sys.exit(0)
-+
-+
-+if __name__ == "__main__":
-+    ns_name = subprocess.getoutput("ip netns identify") or "default"
-+
-+    signal.signal(signal.SIGINT, signal_handler)
-+
-+    # Check if running as root
-+    if os.geteuid() != 0:
-+        print("ERROR: This script must be run as root!")
-+        sys.exit(1)
-+
-+    if len(sys.argv) != 3:
-+        print("Usage: tap_bridge.py tap_name ipvtap_name")
-+        sys.exit(1)
-+
-+    TAP = sys.argv[1]
-+    IPVTAP = sys.argv[2]
-+
-+    print(f"Starting TAP bridge between {TAP} and {IPVTAP} in {ns_name}")
-+    bridge = TapBridge(TAP, IPVTAP)
-+    bridge.run()
-diff --git a/tools/testing/selftests/net/ipvtap_macnat_test.sh b/tools/testing/selftests/net/ipvtap_macnat_test.sh
-new file mode 100755
-index 000000000000..927d75af776b
---- /dev/null
-+++ b/tools/testing/selftests/net/ipvtap_macnat_test.sh
-@@ -0,0 +1,333 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Tests for ipvtap in macnat mode
-+
-+NS_TST0=ipvlan-tst-0
-+NS_TST1=ipvlan-tst-1
-+NS_PHY=ipvlan-tst-phy
-+
-+IP_HOST=172.25.0.1
-+IP_PHY=172.25.0.2
-+IP_TST0=172.25.0.10
-+IP_TST1=172.25.0.30
-+
-+IP_OK0=("172.25.0.10" "172.25.0.11" "172.25.0.12" "172.25.0.13")
-+IP6_OK0=("fc00::10" "fc00::11" "fc00::12" "fc00::13" )
-+
-+IP_OVFL0="172.25.0.14"
-+IP6_OVFL0="fc00::14"
-+
-+IP6_HOST=fc00::1
-+IP6_PHY=fc00::2
-+IP6_TST0=fc00::10
-+IP6_TST1=fc00::30
-+
-+MAC_HOST="92:3a:00:00:00:01"
-+MAC_PHY="92:3a:00:00:00:02"
-+MAC_TST0="92:3a:00:00:00:10"
-+MAC_TST1="92:3a:00:00:00:30"
-+
-+VETH_HOST=vethtst
-+VETH_PHY=vethtst.p
-+
-+#
-+# The testing environment looks this way:
-+#
-+# |------HOST------|     |------PHY-------|
-+# |      veth<----------------->veth      |
-+# |------|--|------|     |----------------|
-+#        |  |
-+#        |  |            |-----TST0-------|
-+#        |  |------------|----ipvtap      |
-+#        |               |----------------|
-+#        |
-+#        |               |-----TST1-------|
-+#        |---------------|----ivtap       |
-+#                        |----------------|
-+#
-+# The macnat mode is for virtual machines, so ipvtap-interface is supposed
-+# to be used only for traffic monitoring and doesn't have ip-address.
-+#
-+# To simulate a virtual machine on ipvtap, we create TAP-interfaces
-+# in TST environments and assing IP-addresses to them.
-+# TAP and IPVTAP are connected with simple python script.
-+#
-+
-+ns_run() {
-+	ns=$1
-+	shift
-+	if [[ "$ns" == "default" ]]; then
-+		"$@" >/dev/null
-+	else
-+		ip netns exec "$ns" "$@" >/dev/null
-+	fi
-+}
-+
-+configure_ns() {
-+	local ns=$1
-+	local n=$2
-+	local ip=$3
-+	local ip6=$4
-+	local mac=$5
-+
-+	ns_run "$ns" ip link set lo up
-+
-+	if ! ip link add netns "$ns" name "ipvtap0.$n" link $VETH_HOST \
-+	    type ipvtap mode l2macnat bridge; then
-+		exit_error "FAIL: Failed to configure ipvtap link."
-+	fi
-+	ns_run "$ns" ip link set "ipvtap0.$n" up
-+
-+	ns_run "$ns" ip tuntap add mode tap "tap0.$n"
-+	ns_run "$ns" ip link set dev "tap0.$n" address "$mac"
-+	# disable dad
-+	ns_run "$ns" sysctl -w "net/ipv6/conf/tap0.$n/accept_dad"=0
-+	ns_run "$ns" ip link set "tap0.$n" up
-+	ns_run "$ns" ip a a "$ip/24" dev "tap0.$n"
-+	ns_run "$ns" ip a a "$ip6/64" dev "tap0.$n"
-+}
-+
-+start_macnat_bridge() {
-+	local ns=$1
-+	local n=$2
-+	ip netns exec "$ns" python3 ipvtap_macnat_bridge.py \
-+		"tap0.$n" "ipvtap0.$n" &
-+}
-+
-+configure_veth() {
-+	local ns=$1
-+	local veth=$2
-+	local ip=$3
-+	local ip6=$4
-+	local mac=$5
-+
-+	ns_run "$ns" ip link set lo up
-+	ns_run "$ns" ethtool -K "$veth" tx off rx off
-+	ns_run "$ns" ip link set dev "$veth" address "$mac"
-+	ns_run "$ns" ip link set "$veth" up
-+	ns_run "$ns" ip a a "$ip/24" dev "$veth"
-+	ns_run "$ns" ip a a "$ip6/64" dev "$veth"
-+}
-+
-+setup_env() {
-+	ip netns add $NS_TST0
-+	ip netns add $NS_TST1
-+	ip netns add $NS_PHY
-+
-+	# setup simulated other-host (phy) and host itself
-+	ip link add $VETH_HOST type veth peer name $VETH_PHY \
-+	    netns $NS_PHY >/dev/null
-+
-+	# host config
-+	configure_veth default $VETH_HOST $IP_HOST $IP6_HOST $MAC_HOST
-+	configure_veth $NS_PHY $VETH_PHY $IP_PHY $IP6_PHY $MAC_PHY
-+
-+	# TST namespaces config
-+	configure_ns $NS_TST0 0 $IP_TST0 $IP6_TST0 $MAC_TST0
-+	configure_ns $NS_TST1 1 $IP_TST1 $IP6_TST1 $MAC_TST1
-+}
-+
-+ping_all() {
-+	# This will learn MAC/IP addresses on ipvtap
-+	local ns=$1
-+
-+	ns_run "$ns" ping -c 1 $IP_TST0
-+	ns_run "$ns" ping -c 1 $IP6_TST0
-+
-+	ns_run "$ns" ping -c 1 $IP_TST1
-+	ns_run "$ns" ping -c 1 $IP6_TST1
-+
-+	ns_run "$ns" ping -c 1 $IP_HOST
-+	ns_run "$ns" ping -c 1 $IP6_HOST
-+
-+	ns_run "$ns" ping -c 1 $IP_PHY
-+	ns_run "$ns" ping -c 1 $IP6_PHY
-+}
-+
-+check_mac_eq() {
-+	# Ensure IP corresponds to MAC.
-+	local ns=$1
-+	local ip=$2
-+	local mac=$3
-+	local dev=$4
-+
-+	if [[ "$ns" == "default" ]]; then
-+		out=$(
-+			ip neigh show "$ip" dev "$dev" \
-+			| grep "$ip" \
-+			| grep "$mac"
-+		)
-+	else
-+		out=$(
-+			ip netns exec "$ns" \
-+			ip neigh show "$ip" dev "$dev" \
-+			| grep "$ip" \
-+			| grep "$mac"
-+		)
-+	fi
-+
-+	if [[ $out'X' == "X" ]]; then
-+		exit_error "FAIL: '$ip' is not '$mac'"
-+	fi
-+}
-+
-+cleanup_env() {
-+	ip link del $VETH_HOST
-+	ip netns del $NS_TST0
-+	ip netns del $NS_TST1
-+	ip netns del $NS_PHY
-+}
-+
-+exit_error() {
-+	echo "$1"
-+	exit 1
-+}
-+
-+test_check_mac() {
-+	# All IPs in NS_PHY should have MAC of the host
-+	check_mac_eq $NS_PHY $IP_TST0 $MAC_HOST $VETH_PHY
-+	check_mac_eq $NS_PHY $IP6_TST0 $MAC_HOST $VETH_PHY
-+	check_mac_eq $NS_PHY $IP_TST1 $MAC_HOST $VETH_PHY
-+	check_mac_eq $NS_PHY $IP6_TST1 $MAC_HOST $VETH_PHY
-+	check_mac_eq $NS_PHY $IP_HOST $MAC_HOST $VETH_PHY
-+	check_mac_eq $NS_PHY $IP6_HOST $MAC_HOST $VETH_PHY
-+
-+	# All IPs in TST0 should have corresponding MAC
-+	check_mac_eq $NS_TST0 $IP_HOST $MAC_HOST tap0.0
-+	check_mac_eq $NS_TST0 $IP6_HOST $MAC_HOST tap0.0
-+	check_mac_eq $NS_TST0 $IP_TST1 $MAC_TST1 tap0.0
-+	check_mac_eq $NS_TST0 $IP6_TST1 $MAC_TST1 tap0.0
-+	check_mac_eq $NS_TST0 $IP_PHY $MAC_PHY tap0.0
-+	check_mac_eq $NS_TST0 $IP6_PHY $MAC_PHY tap0.0
-+
-+	# All IPs in host should have corresponding MAC
-+	check_mac_eq default $IP_TST0 $MAC_TST0 $VETH_HOST
-+	check_mac_eq default $IP6_TST0 $MAC_TST0 $VETH_HOST
-+	check_mac_eq default $IP_TST1 $MAC_TST1 $VETH_HOST
-+	check_mac_eq default $IP6_TST1 $MAC_TST1 $VETH_HOST
-+	check_mac_eq default $IP_PHY $MAC_PHY $VETH_HOST
-+	check_mac_eq default $IP6_PHY $MAC_PHY $VETH_HOST
-+}
-+
-+test_ip_add() {
-+	# adding IPs to ipvtap should be forbidden and should fail
-+	if ns_run $NS_TST0 ip a a 172.26.0.1/24 dev ipvtap0.0; then
-+		exit_error "FAIL: Module allowed to add ip to ipvtap."
-+	fi
-+
-+	if ns_run $NS_TST0 ip a a fc01::1/64 dev ipvtap0.0; then
-+		exit_error "FAIL: Module allowed to add ip6 to ipvtap."
-+	fi
-+}
-+
-+test_ip_overflow() {
-+	# The ipvtap remembers limited number of addresses on interface.
-+	# Let's overflow it and check that oldest one doesn't work.
-+
-+	ns_run $NS_TST0 ip addr flush dev tap0.0
-+
-+	# Add exactly 4 ip addresses
-+	for ip in "${IP_OK0[@]}"; do
-+		ns_run $NS_TST0 ip a a "$ip/24" dev tap0.0
-+		ns_run $NS_TST0 ping -c 1 $IP_HOST -I "$ip"
-+	done
-+
-+	# Initial check that ping works
-+	if ! ping -c 2 $IP_TST0; then
-+		exit_error "FAIL: Failed to ping tst0"
-+	fi
-+
-+	# Add 1 more ip addresses
-+	ns_run "$NS_TST0" ip a a $IP_OVFL0/24 dev tap0.0
-+	ns_run $NS_TST0 ping -c 1 $IP_HOST -I $IP_OVFL0
-+	# check that ping to oldest one from host fails.
-+	echo "the next ping should fail:"
-+	if ping -c 2 $IP_TST0; then
-+		exit_error "FAIL: IP-0 still exists on interface"
-+	fi
-+
-+	# ping host using address-0 and force relearn of IP0.
-+	# Host should be able ping after that
-+	ns_run $NS_TST0 ping -c 1 $IP_HOST -I $IP_TST0
-+
-+	if ! ping -c 2 $IP_TST0; then
-+		exit_error "FAIL: Failed to ping tst0 at stage 3"
-+	fi
-+}
-+
-+test_ip6_overflow() {
-+	# The ipvtap stores limited number of addresses on interface.
-+	# Let's overflow it and check that oldest one doesn't work.
-+
-+	ns_run $NS_TST0 ip addr flush dev tap0.0
-+
-+	# Add exactly 4 ip addresses
-+	for ip6 in "${IP6_OK0[@]}"; do
-+		ns_run $NS_TST0 ip a a "$ip6/64" dev tap0.0
-+		ns_run $NS_TST0 ping -c 1 $IP6_HOST -I "$ip6"
-+	done
-+
-+	# Initial check that ping6 works
-+	if ! ping -c 2 $IP6_TST0; then
-+		exit_error "FAIL: Failed to ping6 tst0"
-+	fi
-+
-+	# Add 1 more ip6 addresses
-+	ns_run $NS_TST0 ip a a $IP6_OVFL0/64 dev tap0.0
-+	ns_run $NS_TST0 ping -c 1 $IP6_HOST -I $IP6_OVFL0
-+	# check that ping to oldest one from host fails.
-+	echo "the next ping should fail:"
-+	if ping -c 2 $IP6_TST0; then
-+		exit_error "FAIL: IP6-0 still exists on interface"
-+	fi
-+
-+	# ping host using address-0 and force relearn of IP0.
-+	# Host should be able ping after that
-+	ns_run $NS_TST0 ping -c 1 $IP6_HOST -I $IP6_TST0
-+	if ! ping -c 2 $IP6_TST0; then
-+		exit_error "FAIL: Failed to ping6 tst0 at stage 3"
-+	fi
-+}
-+
-+exec_test() {
-+	echo "TEST: $2"
-+	$1
-+	echo "PASSED: $2"
-+}
-+
-+trap cleanup_env EXIT
-+
-+echo "ipvlan macnat tests"
-+echo "==================="
-+
-+modprobe -q tap
-+modprobe -q ipvlan
-+modprobe -q ipvtap
-+
-+setup_env
-+
-+exec_test test_ip_add "ip add not allowed"
-+
-+start_macnat_bridge $NS_TST0 0
-+mb_pid1=$!
-+start_macnat_bridge $NS_TST1 1
-+mb_pid2=$!
-+
-+echo "<<< Preparation: pinging all...."
-+ping_all default
-+ping_all $NS_TST0
-+ping_all $NS_TST1
-+ping_all $NS_PHY
-+echo "Finished preparational pinging all. >>>"
-+
-+exec_test test_check_mac "mac correctness"
-+exec_test test_ip_overflow "ip learn capacity overflow"
-+exec_test test_ip6_overflow "ip6 learn capacity overflow"
-+
-+kill -INT $mb_pid1
-+kill -INT $mb_pid2
-+wait $mb_pid1
-+wait $mb_pid2
-+
-+echo "All tests passed"
--- 
-2.25.1
+The problem is that both PTRACE_ATTACH and PTRACE_SEIZE block over
+the duration of exec, and if exec is waiting for a thread to exit,
+and that thread is blocked in PTRACE_EVENT_EXIT waiting for that very
+same tracer those processes will hang. Not deadlock.
 
+
+I haven't seen anyone clearly describe the problem lately so I am
+repeating it.
+
+
+Just looking at the code I don't think there is any fundamental reason
+to call commit_creds after de_thread.  If we can change that we can sort
+this out without any change in userspace semantics.
+
+If we can't move commit_creds we have to either give
+PTRACE_ATTACH/PTRACE_SEIZE a non-block mode, or break out of
+PTRACE_EVENT_EXIT in de_thread.
+
+I will post a proof of concept of moving commit_creds in just a minute.
+
+Eric
