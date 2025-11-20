@@ -1,560 +1,159 @@
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B73A239E8B;
-	Thu, 20 Nov 2025 21:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DE118A956;
+	Thu, 20 Nov 2025 23:03:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763674930; cv=none; b=BOswSSwNZCT5VSPay0meYTHO73aQHqzIAAtbasBJZMvkDW3f+NhlJAueZVT/Rmn4nt8aFBWvHxF3x/eKJn+BfZgvvNNTregFf60S8alXJdwekTKHFUnCxo2Jnc7qyjZKsjvtQf7xNoZWTRYJMhQfpqcIOkeZhcOSeWR4yXbm7sc=
+	t=1763679790; cv=none; b=l4UiudASGuPsJxqtJz/zeu54cEVjw9t0bNCo9JvqpcKXH4WW0qdOGpv9fWt9d9ITljI0hJtTw/pxfHgIH13q+hzfoBMLCcjdtTEBo1FJSpZOf1zambZkGyQxX4WBssHCN1ttEKipdDDrSLuxirfgltB+RLyovKgw7oGIGTipOHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763674930; c=relaxed/simple;
-	bh=xFH6A0g728Dk7eYdvrGoI8hrsMpXegdWlly+ZmhE14c=;
-	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
-	 Content-Type:Subject; b=pTE86ASu4xvoMR/8Q5aWfsAKH5hEQkJ5/9+f0g6OftHWRUlX3+dvifI6x7SglJlGYJ0/Z5oS8RdEOWsB6+g6TsrwFPhFRqdC9Op+U9n2AV9AHiZxnNLXW9XbDKSxOIhOQsbZyHvLfaAxVZPa7KGiLALxGtBPZ9OjM1DrBd2ysGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
-Received: from in02.mta.xmission.com ([166.70.13.52]:46344)
-	by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vMBik-00C0Xc-GI; Thu, 20 Nov 2025 13:57:38 -0700
-Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:45204 helo=email.froward.int.ebiederm.org.xmission.com)
-	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vMBii-00Bjcg-Ml; Thu, 20 Nov 2025 13:57:38 -0700
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,  Alexey Dobriyan
- <adobriyan@gmail.com>,  Oleg Nesterov <oleg@redhat.com>,  Kees Cook
- <kees@kernel.org>,  Andy Lutomirski <luto@amacapital.net>,  Will Drewry
- <wad@chromium.org>,  Christian Brauner <brauner@kernel.org>,  Andrew
- Morton <akpm@linux-foundation.org>,  Michal Hocko <mhocko@suse.com>,
-  Serge Hallyn <serge@hallyn.com>,  James Morris
- <jamorris@linux.microsoft.com>,  Randy Dunlap <rdunlap@infradead.org>,
-  Suren Baghdasaryan <surenb@google.com>,  Yafang Shao
- <laoar.shao@gmail.com>,  Helge Deller <deller@gmx.de>,  Adrian Reber
- <areber@redhat.com>,  Thomas Gleixner <tglx@linutronix.de>,  Jens Axboe
- <axboe@kernel.dk>,  Alexei Starovoitov <ast@kernel.org>,
-  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
-  linux-security-module@vger.kernel.org,  tiozhang
- <tiozhang@didiglobal.com>,  Luis Chamberlain <mcgrof@kernel.org>,  "Paulo
- Alcantara (SUSE)" <pc@manguebit.com>,  Sergey Senozhatsky
- <senozhatsky@chromium.org>,  Frederic Weisbecker <frederic@kernel.org>,
-  YueHaibing <yuehaibing@huawei.com>,  Paul Moore <paul@paul-moore.com>,
-  Aleksa Sarai <cyphar@cyphar.com>,  Stefan Roesch <shr@devkernel.io>,
-  Chao Yu <chao@kernel.org>,  xu xin <xu.xin16@zte.com.cn>,  Jeff Layton
- <jlayton@kernel.org>,  Jan Kara <jack@suse.cz>,  David Hildenbrand
- <david@redhat.com>,  Dave Chinner <dchinner@redhat.com>,  Shuah Khan
- <shuah@kernel.org>,  Elena Reshetova <elena.reshetova@intel.com>,  David
- Windsor <dwindsor@gmail.com>,  Mateusz Guzik <mjguzik@gmail.com>,  Ard
- Biesheuvel <ardb@kernel.org>,  "Joel Fernandes (Google)"
- <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)"
- <willy@infradead.org>,  Hans Liljestrand <ishkamiel@gmail.com>,  Penglei
- Jiang <superman.xpt@gmail.com>,  Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>,  Adrian Ratiu <adrian.ratiu@collabora.com>,
-  Ingo Molnar <mingo@kernel.org>,  "Peter Zijlstra (Intel)"
- <peterz@infradead.org>,  Cyrill Gorcunov <gorcunov@gmail.com>,  Eric
- Dumazet <edumazet@google.com>
-In-Reply-To: <87wm3ky5n9.fsf@email.froward.int.ebiederm.org> (Eric
-	W. Biederman's message of "Thu, 20 Nov 2025 11:29:14 -0600")
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<87tsyozqdu.fsf@email.froward.int.ebiederm.org>
-	<87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
-Date: Thu, 20 Nov 2025 14:57:29 -0600
-Message-ID: <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1763679790; c=relaxed/simple;
+	bh=O1Qi6nhG/zHyyZZ5m3S3q50NgcDPuwBjbUjZcPeZgGw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TE6zaHfnAHOJCZqeHJegMNRul4Cba4hKKLHf+g9NjQ8F0UGM1CdGUmT1iRPvcBBQ6GrYWH2PP5DtNsY54A3flsLp6ZEuF9+U40DtYaCw6opwlV0nhSZfsNFABllZTZpWYSAhyhiRdwNk3Ewc/sT9Gb66rhw+RZ1r4yaEALQb/Es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QG6h9CE+; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QG6h9CE+"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AKJgJvB026338;
+	Thu, 20 Nov 2025 23:03:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=RsElIDttcWvAo74H8bTGmkSCUHxJ8
+	gnNR8dvyyJmZ8w=; b=QG6h9CE+/8jnys2cz1Q732FDXgWe34RpMFRra6oJp1M/v
+	EtkuvhWfVfb23C58VDczyHvDvRdEPL9qf2UPhxRYT6p9XcLDTungOXFWBEUI1oZE
+	lFPMGg5p/GM5awQCPd2EPSJm9BCfAzDAGhukKhEedOmfq8POcPe5Off0TZtEQTcL
+	8WqCOWzIjQ30E9mpU0XahYzCBwdQptDGJTrMn5axCJscVC9exOkIkEdeLy1tA7M2
+	OD9mewDgtQLHFguAv28OAKqv4iOrwatCCN4QSt4PguTiSE8F2Nqhak0d9qcuaBCi
+	RbxEO3QcO6UYBitqu97gs2H6kRrooqpqaCqTL6o5A==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aej90a7vv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 20 Nov 2025 23:03:05 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AKMWcxm039958;
+	Thu, 20 Nov 2025 23:03:05 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4aefyq5au1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 20 Nov 2025 23:03:04 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AKN34pW037023;
+	Thu, 20 Nov 2025 23:03:04 GMT
+Received: from ca-dev110.us.oracle.com (ca-dev110.us.oracle.com [10.129.136.45])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4aefyq5atm-1;
+	Thu, 20 Nov 2025 23:03:04 +0000
+From: Yifei Liu <yifei.l.liu@oracle.com>
+To: shuah@kernel.org
+Cc: yifei.l.liu@oracle.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v2 1/1] selftest/sched: skip the test if smt is not enabled
+Date: Thu, 20 Nov 2025 15:02:35 -0800
+Message-ID: <20251120230235.2857291-1-yifei.l.liu@oracle.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1vMBii-00Bjcg-Ml;;;mid=<87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX1/yI+0jxd75r+xV/noKUQQ5aYKsGTMf/70=
-X-Spam-Level: **
-X-Spam-Virus: No
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-	*      [score: 0.4998]
-	*  1.5 TR_Symld_Words too many words that have symbols inside
-	*  0.7 XMSubLong Long Subject
-	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-	*      [sa01 1397; Body=1 Fuz1=1 Fuz2=1]
-	*  1.0 XM_B_Phish_Phrases Commonly used Phishing Phrases
-	*  0.2 XM_B_SpammyWords One or more commonly used spammy words
-	*  0.0 TR_XM_PhishingBody Phishing flag in body of message
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Bernd Edlinger <bernd.edlinger@hotmail.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1042 ms - load_scoreonly_sql: 0.04 (0.0%),
-	signal_user_changed: 4.5 (0.4%), b_tie_ro: 3.1 (0.3%), parse: 2.3
-	(0.2%), extract_message_metadata: 9 (0.8%), get_uri_detail_list: 6
-	(0.6%), tests_pri_-2000: 3.7 (0.4%), tests_pri_-1000: 8 (0.7%),
-	tests_pri_-950: 1.03 (0.1%), tests_pri_-900: 0.93 (0.1%),
-	tests_pri_-90: 94 (9.0%), check_bayes: 93 (8.9%), b_tokenize: 29
-	(2.7%), b_tok_get_all: 16 (1.6%), b_comp_prob: 3.9 (0.4%),
-	b_tok_touch_all: 41 (3.9%), b_finish: 0.63 (0.1%), tests_pri_0: 903
-	(86.6%), check_dkim_signature: 0.63 (0.1%), check_dkim_adsp: 2.5
-	(0.2%), poll_dns_idle: 1.10 (0.1%), tests_pri_10: 1.72 (0.2%),
-	tests_pri_500: 7 (0.6%), rewrite_mail: 0.00 (0.0%)
-Subject: [RFC][PATCH] exec: Move cred computation under exec_update_lock
-X-SA-Exim-Connect-IP: 166.70.13.52
-X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-SA-Exim-Scanned: No (on out03.mta.xmission.com); SAEximRunCond expanded to false
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-20_09,2025-11-20_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 spamscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
+ definitions=main-2511200163
+X-Authority-Analysis: v=2.4 cv=OMAqHCaB c=1 sm=1 tr=0 ts=691f9e29 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=S9UabVrJeSShYSHE:21 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=NSVNPXkua3VteFUyN44A:9 cc=ntf
+ awl=host:12099
+X-Proofpoint-ORIG-GUID: 8xTikaGVylB1xWtipBRNP_l9OkOfsobA
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMSBTYWx0ZWRfX1r7NqTz2GOOb
+ rmi82ENp99pfk14yrjmat3/Vyx1OVSOyqv4uwarF+zm/RDlVVCUoPM2GP46NRHhzQ7DrWiCUWWI
+ +JqEgRCypg/OeqKSY4ESvhdMDnsN7/Ss0Qxu5ZHV75Ot1EbsIKlbHYPeJ9wRjRJgBkaCjvKZNsS
+ vcIy8t9Yb5FBNHLKSPUBoKfo1TlSy/39nxny2z/QHTs+aIJ6EOa6UuF9a+77L4QyA3dOHzlQ1RF
+ 6CbP8mINCTE59vPbBoFUJRcAN6FqByKxeNDn7Ma/Kd3gpThnbOlWcsAP89NJx24QR8z5GG2KYz2
+ p8Jii7GB8S+yHYQarZE8wg1s3oldq2CGmG4r76sPxIRDkp7eQfbTC/Iyu8S0Q+h56XvK3aONOpV
+ aOsBa3qFn81iy8M7U5xp0s04S6z7FpiacIbM2nX/PyDsZoukWKs=
+X-Proofpoint-GUID: 8xTikaGVylB1xWtipBRNP_l9OkOfsobA
 
+The core scheduling is for smt enabled cpus. It is not returns
+failure and gives plenty of error messages and not clearly points
+to the smt issue if the smt is disabled. It just mention
+"not a core sched system" and many other messages. For example:
 
-Instead of computing the new cred before we pass the point of no
-return compute the new cred just before we use it.
+Not a core sched system
+tid=210574, / tgid=210574 / pgid=210574: ffffffffffffffff
+Not a core sched system
+    tid=210575, / tgid=210575 / pgid=210574: ffffffffffffffff
+Not a core sched system
+        tid=210577, / tgid=210575 / pgid=210574: ffffffffffffffff
 
-This allows the removal of fs_struct->in_exec and cred_guard_mutex.
+(similar things many other times)
 
-I am not certain why we wanted to compute the cred for the new
-executable so early.  Perhaps I missed something but I did not see any
-common errors being signaled.   So I don't think we loose anything by
-computing the new cred later.
+In this patch, the test will first read /sys/devices/system/cpu/smt/active,
+if the file cannot be opened or its value is 0, the test is skipped with
+an explanatory message. This helps developers understand why it is skipped
+and avoids unnecessary attention when running the full selftest suite.
 
-We gain a lot.
-
-We stop holding the cred_guard_mutex over places where the code sleeps
-and waits for userspace.  These places include the waiting for the
-tracer in PTRACE_EVENT_EXIT, "put_user(0, tsk->clear_child_tid)" in
-mm_release, and "get_user(futex_offset, ...") in exit_robust_mutex.
-
-We can remove fs_struct->in_exec.  The case where it was used simply
-never comes up, when we compute the cred after de_thread completes.
-
-We remove the possibility of a hang between a tracer calling
-PTRACE_ATTACH/PTRACE_SIEZE and the kernel waiting for the tracer
-in PTRACE_EVENT_EXIT.
-
+Cc: stable@vger.kernel.org
+Signed-off-by: Yifei Liu <yifei.l.liu@oracle.com>
 ---
-Oleg, Kees, Bernd, Can you see anything I am missing?
+ tools/testing/selftests/sched/cs_prctl_test.c | 23 ++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-The code compiles but I haven't test it yet.
-
-I thought I was going to move commit_creds before de_thread, but that
-would have taken commit_cred out of exec_update_lock (which introduces
-races).
-
-However I can't see any drawbacks of going the other direction.
-
-
- fs/exec.c                    | 88 ++++++++++++++----------------------
- fs/fs_struct.c               |  1 -
- fs/proc/base.c               |  4 +-
- include/linux/fs_struct.h    |  1 -
- include/linux/sched/signal.h |  6 ---
- init/init_task.c             |  1 -
- kernel/cred.c                |  2 +-
- kernel/fork.c                |  8 +---
- kernel/ptrace.c              |  4 +-
- kernel/seccomp.c             | 12 ++---
- 10 files changed, 45 insertions(+), 82 deletions(-)
-
-diff --git a/fs/exec.c b/fs/exec.c
-index 4298e7e08d5d..5ae96584dab0 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1090,6 +1090,9 @@ void __set_task_comm(struct task_struct *tsk, const char *buf, bool exec)
- 	perf_event_comm(tsk, exec);
+diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
+index 52d97fae4dbd..7ce8088cde6a 100644
+--- a/tools/testing/selftests/sched/cs_prctl_test.c
++++ b/tools/testing/selftests/sched/cs_prctl_test.c
+@@ -32,6 +32,8 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#include "../kselftest.h"
++
+ #if __GLIBC_PREREQ(2, 30) == 0
+ #include <sys/syscall.h>
+ static pid_t gettid(void)
+@@ -109,6 +111,22 @@ static void handle_usage(int rc, char *msg)
+ 	exit(rc);
  }
  
-+static int prepare_bprm_creds(struct linux_binprm *bprm);
-+static void check_unsafe_exec(struct linux_binprm *bprm);
++int check_smt(void)
++{
++	int c = 0;
++	FILE *file;
 +
- /*
-  * Calling this is the point of no return. None of the failures will be
-  * seen by userspace since either the process is already taking a fatal
-@@ -1101,10 +1104,6 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	struct task_struct *me = current;
- 	int retval;
- 
--	/* Once we are committed compute the creds */
--	retval = bprm_creds_from_file(bprm);
--	if (retval)
--		return retval;
- 
- 	/*
- 	 * This tracepoint marks the point before flushing the old exec where
-@@ -1123,8 +1122,6 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	retval = de_thread(me);
- 	if (retval)
- 		goto out;
--	/* see the comment in check_unsafe_exec() */
--	current->fs->in_exec = 0;
- 	/*
- 	 * Cancel any io_uring activity across execve
- 	 */
-@@ -1251,6 +1248,25 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	WRITE_ONCE(me->self_exec_id, me->self_exec_id + 1);
- 	flush_signal_handlers(me, 0);
- 
-+	retval = prepare_bprm_creds(bprm);
-+	if (retval)
-+		goto out_unlock;
-+
-+	/*
-+	 * Check for unsafe execution states before exec_binprm(), which
-+	 * will call back into begin_new_exec(), into bprm_creds_from_file(),
-+	 * where setuid-ness is evaluated.
-+	 */
-+	check_unsafe_exec(bprm);
-+
-+	/* Set the unchanging part of bprm->cred */
-+	retval = security_bprm_creds_for_exec(bprm);
-+
-+	/* Once we are committed compute the creds */
-+	retval = bprm_creds_from_file(bprm);
-+	if (retval)
-+		goto out_unlock;
-+
- 	retval = set_cred_ucounts(bprm->cred);
- 	if (retval < 0)
- 		goto out_unlock;
-@@ -1272,9 +1288,9 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	if (get_dumpable(me->mm) != SUID_DUMP_USER)
- 		perf_event_exit_task(me);
- 	/*
--	 * cred_guard_mutex must be held at least to this point to prevent
-+	 * exec_update_lock must be held at least to this point to prevent
- 	 * ptrace_attach() from altering our determination of the task's
--	 * credentials; any time after this it may be unlocked.
-+	 * credentials.
- 	 */
- 	security_bprm_committed_creds(bprm);
- 
-@@ -1291,8 +1307,6 @@ int begin_new_exec(struct linux_binprm * bprm)
- 
- out_unlock:
- 	up_write(&me->signal->exec_update_lock);
--	if (!bprm->cred)
--		mutex_unlock(&me->signal->cred_guard_mutex);
- 
- out:
- 	return retval;
-@@ -1336,7 +1350,6 @@ void setup_new_exec(struct linux_binprm * bprm)
- 	 */
- 	me->mm->task_size = TASK_SIZE;
- 	up_write(&me->signal->exec_update_lock);
--	mutex_unlock(&me->signal->cred_guard_mutex);
- }
- EXPORT_SYMBOL(setup_new_exec);
- 
-@@ -1351,21 +1364,15 @@ void finalize_exec(struct linux_binprm *bprm)
- EXPORT_SYMBOL(finalize_exec);
- 
- /*
-- * Prepare credentials and lock ->cred_guard_mutex.
-- * setup_new_exec() commits the new creds and drops the lock.
-- * Or, if exec fails before, free_bprm() should release ->cred
-- * and unlock.
-+ * Prepare credentials.  begin_new_exec() commits the new creds.
-+ * Or, if exec fails before, free_bprm() should release ->cred.
-  */
- static int prepare_bprm_creds(struct linux_binprm *bprm)
- {
--	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
--		return -ERESTARTNOINTR;
--
- 	bprm->cred = prepare_exec_creds();
- 	if (likely(bprm->cred))
- 		return 0;
- 
--	mutex_unlock(&current->signal->cred_guard_mutex);
- 	return -ENOMEM;
- }
- 
-@@ -1386,9 +1393,7 @@ static void free_bprm(struct linux_binprm *bprm)
- 	}
- 	free_arg_pages(bprm);
- 	if (bprm->cred) {
--		/* in case exec fails before de_thread() succeeds */
--		current->fs->in_exec = 0;
--		mutex_unlock(&current->signal->cred_guard_mutex);
-+		/* in case exec fails before commit_creds succeeds */
- 		abort_creds(bprm->cred);
- 	}
- 	do_close_execat(bprm->file);
-@@ -1486,13 +1491,12 @@ EXPORT_SYMBOL(bprm_change_interp);
- 
- /*
-  * determine how safe it is to execute the proposed program
-- * - the caller must hold ->cred_guard_mutex to protect against
-+ * - the caller must hold ->exec_update_lock to protect against
-  *   PTRACE_ATTACH or seccomp thread-sync
-  */
- static void check_unsafe_exec(struct linux_binprm *bprm)
- {
--	struct task_struct *p = current, *t;
--	unsigned n_fs;
-+	struct task_struct *p = current;
- 
- 	if (p->ptrace)
- 		bprm->unsafe |= LSM_UNSAFE_PTRACE;
-@@ -1509,25 +1513,9 @@ static void check_unsafe_exec(struct linux_binprm *bprm)
- 	 * suid exec because the differently privileged task
- 	 * will be able to manipulate the current directory, etc.
- 	 * It would be nice to force an unshare instead...
--	 *
--	 * Otherwise we set fs->in_exec = 1 to deny clone(CLONE_FS)
--	 * from another sub-thread until de_thread() succeeds, this
--	 * state is protected by cred_guard_mutex we hold.
- 	 */
--	n_fs = 1;
--	read_seqlock_excl(&p->fs->seq);
--	rcu_read_lock();
--	for_other_threads(p, t) {
--		if (t->fs == p->fs)
--			n_fs++;
--	}
--	rcu_read_unlock();
--
--	/* "users" and "in_exec" locked for copy_fs() */
--	if (p->fs->users > n_fs)
-+	if (p->fs->users > 1)
- 		bprm->unsafe |= LSM_UNSAFE_SHARE;
--	else
--		p->fs->in_exec = 1;
- 	read_sequnlock_excl(&p->fs->seq);
- }
- 
-@@ -1731,25 +1719,15 @@ static int bprm_execve(struct linux_binprm *bprm)
- {
- 	int retval;
- 
--	retval = prepare_bprm_creds(bprm);
--	if (retval)
--		return retval;
-+	if (bprm->is_check)
++	file = fopen("/sys/devices/system/cpu/smt/active", "r");
++	if (!file)
 +		return 0;
- 
--	/*
--	 * Check for unsafe execution states before exec_binprm(), which
--	 * will call back into begin_new_exec(), into bprm_creds_from_file(),
--	 * where setuid-ness is evaluated.
--	 */
--	check_unsafe_exec(bprm);
- 	current->in_execve = 1;
- 	sched_mm_cid_before_execve(current);
- 
- 	sched_exec();
- 
--	/* Set the unchanging part of bprm->cred */
--	retval = security_bprm_creds_for_exec(bprm);
--	if (retval || bprm->is_check)
--		goto out;
++	c = fgetc(file) - 0x30;
++	fclose(file);
++	if (c == 0 || c == 1)
++		return c;
++	//if fgetc returns EOF or -1 for correupted files, return 0.
++	return 0;
++}
 +
- 
- 	retval = exec_binprm(bprm);
- 	if (retval < 0)
-diff --git a/fs/fs_struct.c b/fs/fs_struct.c
-index 28be762ac1c6..945bc0916f65 100644
---- a/fs/fs_struct.c
-+++ b/fs/fs_struct.c
-@@ -109,7 +109,6 @@ struct fs_struct *copy_fs_struct(struct fs_struct *old)
- 	/* We don't need to lock fs - think why ;-) */
- 	if (fs) {
- 		fs->users = 1;
--		fs->in_exec = 0;
- 		seqlock_init(&fs->seq);
- 		fs->umask = old->umask;
- 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 6299878e3d97..7041fb4d1689 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -2834,14 +2834,14 @@ static ssize_t proc_pid_attr_write(struct file * file, const char __user * buf,
- 	}
- 
- 	/* Guard against adverse ptrace interaction */
--	rv = mutex_lock_interruptible(&current->signal->cred_guard_mutex);
-+	rv = down_write_killable(&current->signal->exec_update_lock);
- 	if (rv < 0)
- 		goto out_free;
- 
- 	rv = security_setprocattr(PROC_I(inode)->op.lsmid,
- 				  file->f_path.dentry->d_name.name, page,
- 				  count);
--	mutex_unlock(&current->signal->cred_guard_mutex);
-+	up_write(&current->signal->exec_update_lock);
- out_free:
- 	kfree(page);
- out:
-diff --git a/include/linux/fs_struct.h b/include/linux/fs_struct.h
-index baf200ab5c77..29d0f7d57743 100644
---- a/include/linux/fs_struct.h
-+++ b/include/linux/fs_struct.h
-@@ -10,7 +10,6 @@ struct fs_struct {
- 	int users;
- 	seqlock_t seq;
- 	int umask;
--	int in_exec;
- 	struct path root, pwd;
- } __randomize_layout;
- 
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index 7d6449982822..7e9259c8fb2b 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -241,12 +241,6 @@ struct signal_struct {
- 	struct mm_struct *oom_mm;	/* recorded mm when the thread group got
- 					 * killed by the oom killer */
- 
--	struct mutex cred_guard_mutex;	/* guard against foreign influences on
--					 * credential calculations
--					 * (notably. ptrace)
--					 * Deprecated do not use in new code.
--					 * Use exec_update_lock instead.
--					 */
- 	struct rw_semaphore exec_update_lock;	/* Held while task_struct is
- 						 * being updated during exec,
- 						 * and may have inconsistent
-diff --git a/init/init_task.c b/init/init_task.c
-index a55e2189206f..4813bffe217e 100644
---- a/init/init_task.c
-+++ b/init/init_task.c
-@@ -30,7 +30,6 @@ static struct signal_struct init_signals = {
- #ifdef CONFIG_CGROUPS
- 	.cgroup_threadgroup_rwsem	= __RWSEM_INITIALIZER(init_signals.cgroup_threadgroup_rwsem),
- #endif
--	.cred_guard_mutex = __MUTEX_INITIALIZER(init_signals.cred_guard_mutex),
- 	.exec_update_lock = __RWSEM_INITIALIZER(init_signals.exec_update_lock),
- #ifdef CONFIG_POSIX_TIMERS
- 	.posix_timers		= HLIST_HEAD_INIT,
-diff --git a/kernel/cred.c b/kernel/cred.c
-index dbf6b687dc5c..80e376ce005f 100644
---- a/kernel/cred.c
-+++ b/kernel/cred.c
-@@ -252,7 +252,7 @@ EXPORT_SYMBOL(prepare_creds);
- 
- /*
-  * Prepare credentials for current to perform an execve()
-- * - The caller must hold ->cred_guard_mutex
-+ * - The caller must hold ->exec_update_lock
-  */
- struct cred *prepare_exec_creds(void)
+ static unsigned long get_cs_cookie(int pid)
  {
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 3da0f08615a9..996c649b9a4c 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1555,11 +1555,6 @@ static int copy_fs(u64 clone_flags, struct task_struct *tsk)
- 	if (clone_flags & CLONE_FS) {
- 		/* tsk->fs is already what we want */
- 		read_seqlock_excl(&fs->seq);
--		/* "users" and "in_exec" locked for check_unsafe_exec() */
--		if (fs->in_exec) {
--			read_sequnlock_excl(&fs->seq);
--			return -EAGAIN;
--		}
- 		fs->users++;
- 		read_sequnlock_excl(&fs->seq);
- 		return 0;
-@@ -1699,7 +1694,6 @@ static int copy_signal(u64 clone_flags, struct task_struct *tsk)
- 	sig->oom_score_adj = current->signal->oom_score_adj;
- 	sig->oom_score_adj_min = current->signal->oom_score_adj_min;
+ 	unsigned long long cookie;
+@@ -271,7 +289,10 @@ int main(int argc, char *argv[])
+ 		delay = -1;
  
--	mutex_init(&sig->cred_guard_mutex);
- 	init_rwsem(&sig->exec_update_lock);
- 
- 	return 0;
-@@ -1710,7 +1704,7 @@ static void copy_seccomp(struct task_struct *p)
- #ifdef CONFIG_SECCOMP
- 	/*
- 	 * Must be called with sighand->lock held, which is common to
--	 * all threads in the group. Holding cred_guard_mutex is not
-+	 * all threads in the group. Holding exec_update_lock is not
- 	 * needed because this new task is not yet running and cannot
- 	 * be racing exec.
- 	 */
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 75a84efad40f..8140d4bfc279 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -444,8 +444,8 @@ static int ptrace_attach(struct task_struct *task, long request,
- 	 * SUID, SGID and LSM creds get determined differently
- 	 * under ptrace.
- 	 */
--	scoped_cond_guard (mutex_intr, return -ERESTARTNOINTR,
--			   &task->signal->cred_guard_mutex) {
-+	scoped_cond_guard (rwsem_read_intr, return -ERESTARTNOINTR,
-+			   &task->signal->exec_update_lock) {
- 
- 		scoped_guard (task_lock, task) {
- 			retval = __ptrace_may_access(task, PTRACE_MODE_ATTACH_REALCREDS);
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 25f62867a16d..87de8d47d876 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -479,7 +479,7 @@ static int is_ancestor(struct seccomp_filter *parent,
- /**
-  * seccomp_can_sync_threads: checks if all threads can be synchronized
-  *
-- * Expects sighand and cred_guard_mutex locks to be held.
-+ * Expects sighand and exec_update_lock locks to be held.
-  *
-  * Returns 0 on success, -ve on error, or the pid of a thread which was
-  * either not in the correct seccomp mode or did not have an ancestral
-@@ -489,7 +489,7 @@ static inline pid_t seccomp_can_sync_threads(void)
- {
- 	struct task_struct *thread, *caller;
- 
--	BUG_ON(!mutex_is_locked(&current->signal->cred_guard_mutex));
-+	BUG_ON(!rwsem_is_locked(&current->signal->exec_update_lock));
- 	assert_spin_locked(&current->sighand->siglock);
- 
- 	/* Validate all threads being eligible for synchronization. */
-@@ -590,7 +590,7 @@ void seccomp_filter_release(struct task_struct *tsk)
-  *
-  * @flags: SECCOMP_FILTER_FLAG_* flags to set during sync.
-  *
-- * Expects sighand and cred_guard_mutex locks to be held, and for
-+ * Expects sighand and exec_update_lock locks to be held, and for
-  * seccomp_can_sync_threads() to have returned success already
-  * without dropping the locks.
-  *
-@@ -599,7 +599,7 @@ static inline void seccomp_sync_threads(unsigned long flags)
- {
- 	struct task_struct *thread, *caller;
- 
--	BUG_ON(!mutex_is_locked(&current->signal->cred_guard_mutex));
-+	BUG_ON(!rwsem_is_locked(&current->signal->exec_update_lock));
- 	assert_spin_locked(&current->sighand->siglock);
- 
- 	/*
-@@ -2011,7 +2011,7 @@ static long seccomp_set_mode_filter(unsigned int flags,
- 	 * while another thread is in the middle of calling exec.
- 	 */
- 	if (flags & SECCOMP_FILTER_FLAG_TSYNC &&
--	    mutex_lock_killable(&current->signal->cred_guard_mutex))
-+	    down_read_killable(&current->signal->exec_update_lock))
- 		goto out_put_fd;
- 
- 	spin_lock_irq(&current->sighand->siglock);
-@@ -2034,7 +2034,7 @@ static long seccomp_set_mode_filter(unsigned int flags,
- out:
- 	spin_unlock_irq(&current->sighand->siglock);
- 	if (flags & SECCOMP_FILTER_FLAG_TSYNC)
--		mutex_unlock(&current->signal->cred_guard_mutex);
-+		up_read(&current->signal->exec_update_lock);
- out_put_fd:
- 	if (flags & SECCOMP_FILTER_FLAG_NEW_LISTENER) {
- 		if (ret) {
+ 	srand(time(NULL));
+-
++	if (!check_smt()) {
++		ksft_test_result_skip("smt not enabled\n");
++		return 1;
++	}
+ 	/* put into separate process group */
+ 	if (setpgid(0, 0) != 0)
+ 		handle_error("process group");
 -- 
-2.41.0
+2.50.1
 
