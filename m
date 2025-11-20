@@ -1,459 +1,163 @@
-Received: from iad-out-013.esa.us-east-1.outbound.mail-perimeter.amazon.com (iad-out-013.esa.us-east-1.outbound.mail-perimeter.amazon.com [34.198.218.121])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D887E3451CB;
-	Thu, 20 Nov 2025 14:06:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.198.218.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EA6256C9E;
+	Thu, 20 Nov 2025 14:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763647604; cv=none; b=OrDyrTmF7hLKDZtI1/0bTkGoboCn240tm1gJQJPunqLqtXa1kRIiVkpRzCKefowtEV8hyTkuOcYbOwS5A5lLGW0/q3Ldla5w33OfUvP0kumNOOkHLVE7QLSpfhHCvMBjo91cXNeO2mkfB2zvCQ0j59kwd5v/H+q0N4wYbONfunI=
+	t=1763649631; cv=none; b=UXpCz/rDgBGVLt4L1ylGQVIXnypoWuRCHPIkfJ9A9Vh+Wmrm7h6Is3ICwskqZAtFK8capPauE8lEsoqm2NOolSii4TWK8E9o+C01JHCARNgT+uKvMyCp6TLLdfN0RLSM9cNLx5pZqT/ma5PYCvnU6y5BNKkp3Y6AL2i8Lvg+tGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763647604; c=relaxed/simple;
-	bh=DtqmoiVLaBdJeNm3YJqME1M8KvGR+m5inZtCXIkz7xI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nTZScWePKbcS1hu2BytQ0hU/HoGgiwNpsNemekIUUKcKxoTBQxi/J6G+Wge0lzRv9sthc6Eulm5hNYMK2gojcGx9N7t/Ln1cnujzJbFZCE4Jn7JO1vSHwfWWttIbxSYQD65yos9CYdsGkkavtZ1paUD4c2jyeZx4wstBmegglKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=TuVGjvoA; arc=none smtp.client-ip=34.198.218.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
+	s=arc-20240116; t=1763649631; c=relaxed/simple;
+	bh=hP2rrXLl45oNk0vB1/YtmaDxUpumojiwKa4dQyuZ/ZE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dkA7qRMDqkIzQRSKVzfXXQzVNaD14fFcqLNukQDX4lXqgzh5tfLTN8kG2Ntb+nC+k2n96I5AriIsRjZEuF5theqlLd1ebrGzU29puN4VdpkYSki+lLNvLelfQGdhWSie7ZOHo9KPdI8Xjkb5IiC38BqFCwRb2+rEntvqLg8FPus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKLnp1EO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="TuVGjvoA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
-  t=1763647602; x=1795183602;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=r17NPabB3Mb9A+ei+bmQTwfaoKUDCzKk3n5O7OHsMPU=;
-  b=TuVGjvoAtQYd45Ni2A10gbCKB8/Qu4mzURPyUy2jT9SRQobEf4Oduk/A
-   bTtJxssK1/EaykCcssA7cLiIoMLzFO+QaG9vmnqpnl/5pr0YdYtU4iafv
-   xe/UyLXCmRRqPShrPr0CsSIbqZ8vZvTh3b3b39S8PYvzmoVsGJvednkHW
-   Yn5mJtocqrIfBn5Td7HbaNry9WNHoSdSsKecU9E7fPYAn/Elv5jM8BH2g
-   0KnSeS8d/f0zpsv0aC6C9mz/TNQ3R8i2f3hFKpu7dcBfiEjDMaAD1ZcAa
-   oojvCPIJUk9s8PhDFnihwZykCV2rOaJO9iT736koMMGgAzjMrnvXzl1a2
-   w==;
-X-CSE-ConnectionGUID: 1DyTEg71QzS09rj7cU4tlw==
-X-CSE-MsgGUID: lZfweM6lRouJX0QvMgQYMg==
-X-IronPort-AV: E=Sophos;i="6.20,213,1758585600"; 
-   d="scan'208";a="6295532"
-Received: from ip-10-4-13-79.ec2.internal (HELO smtpout.naws.us-east-1.prod.farcaster.email.amazon.dev) ([10.4.13.79])
-  by internal-iad-out-013.esa.us-east-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 14:06:37 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.236:13000]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.61.192:2525] with esmtp (Farcaster)
- id 6fdd39a5-b79b-4fab-bbaf-cdade7fef510; Thu, 20 Nov 2025 14:06:37 +0000 (UTC)
-X-Farcaster-Flow-ID: 6fdd39a5-b79b-4fab-bbaf-cdade7fef510
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Thu, 20 Nov 2025 14:06:36 +0000
-Received: from amazon.com (10.1.213.15) by EX19D001UWA001.ant.amazon.com
- (10.13.138.214) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Thu, 20 Nov 2025
- 14:06:34 +0000
-From: Maximilian Dittgen <mdittgen@amazon.de>
-To: <maz@kernel.org>, <oliver.upton@linux.dev>
-CC: <pbonzini@redhat.com>, <shuah@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<mdittgen@amazon.de>, <lilitj@amazon.de>, <sauravsc@amazon.de>,
-	<nh-open-source@amazon.com>
-Subject: [RFC PATCH 13/13] KVM: arm64: selftests: Add test for per-vCPU vLPI control API
-Date: Thu, 20 Nov 2025 15:03:02 +0100
-Message-ID: <20251120140305.63515-14-mdittgen@amazon.de>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKLnp1EO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10751C4CEF1;
+	Thu, 20 Nov 2025 14:40:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763649631;
+	bh=hP2rrXLl45oNk0vB1/YtmaDxUpumojiwKa4dQyuZ/ZE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dKLnp1EOQnEGrX9BJ7gtw/RVIIlOCygiWlne2eGq3Po3mip1OVTa+v4C37f+CeUpT
+	 KtRM1eFoqTAwdcBKpLlrXOI9KNzwT78epRV+541Xp0A/VQ8LAckKYCTVPvZE2hO/BI
+	 jb1iF9oiTwlOUK2hRO2mYpas5bMF+Wt4kCOrg0aNKNHYSAe4Rfq8lQu3G2aEocRGv2
+	 lckQEM6N0gMbk3btuvOHjqSAsFw7iYkHE2ApR1v4Y0UxZTJKuxcAA5vGzKXbEGAWZn
+	 M5SEdH8VfRdHTRfAONiYenMlqZssQrcuseA3rzIWjUJYeRQqJwyq+h38uQOFpKZaL7
+	 Z7SKYrzFdEv9A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vM5pk-00000006uwP-3bj9;
+	Thu, 20 Nov 2025 14:40:28 +0000
+Date: Thu, 20 Nov 2025 14:40:28 +0000
+Message-ID: <867bvksr6r.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Maximilian Dittgen <mdittgen@amazon.de>
+Cc: <oliver.upton@linux.dev>,
+	<pbonzini@redhat.com>,
+	<shuah@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>,
+	<kvm@vger.kernel.org>,
+	<lilitj@amazon.de>,
+	<sauravsc@amazon.de>,
+	<nh-open-source@amazon.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <zenghui.yu@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>
+Subject: Re: [RFC PATCH 00/13] Introduce per-vCPU vLPI injection control API
 In-Reply-To: <20251120140305.63515-1-mdittgen@amazon.de>
 References: <20251120140305.63515-1-mdittgen@amazon.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-ClientProxiedBy: EX19D041UWB002.ant.amazon.com (10.13.139.179) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mdittgen@amazon.de, oliver.upton@linux.dev, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, lilitj@amazon.de, sauravsc@amazon.de, nh-open-source@amazon.com, suzuki.poulose@arm.com, zenghui.yu@linux.dev, joey.gouly@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Add a selftest for KVM API ioctls for enabling, disabling, and
-querying direct vLPI injection capability on a per-vCPU basis.
-Ensure that ITS data structures remain correct, vPEIDs can
-be reused by different vCPUs, and ioctl behavior works as
-intended in corner cases (idempotent behavior, vGIC uninitialized).
+Maximilian: you keep ignoring the reviewers that are listed in
+MAINTAINERS. This isn't acceptable. Next time, I will simply ignore
+your patches.
 
-Signed-off-by: Maximilian Dittgen <mdittgen@amazon.de>
----
- arch/arm64/kvm/arm.c                          |   4 +
- drivers/irqchip/irq-gic-v3-its.c              |   6 +
- include/linux/irqchip/arm-gic-v4.h            |   1 +
- include/uapi/linux/kvm.h                      |   1 +
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/arm64/per_vcpu_vlpi.c       | 274 ++++++++++++++++++
- 6 files changed, 287 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/arm64/per_vcpu_vlpi.c
+On Thu, 20 Nov 2025 14:02:49 +0000,
+Maximilian Dittgen <mdittgen@amazon.de> wrote:
+> 
+> At the moment, the ability to direct-inject vLPIs is only enableable
+> on an all-or-nothing per-VM basis, causing unnecessary I/O performance
+> loss in cases where a VM's vCPU count exceeds available vPEs. This RFC
+> introduces per-vCPU control over vLPI injection to realize potential
+> I/O performance gain in such situations.
+> 
+> Background
+> ----------
+> 
+> The value of dynamically enabling the direct injection of vLPIs on a
+> per-vCPU basis is the ability to run guest VMs with simultaneous
+> hardware-forwarded and software-forwarded message-signaled interrupts.
+> 
+> Currently, hardware-forwarded vLPI direct injection on a KVM guest
+> requires GICv4 and is enabled on a per-VM, all-or-nothing basis. vLPI
+> injection enablment happens in two stages:
+> 
+>     1) At vGIC initialization, allocate direct injection structures for
+>        each vCPU (doorbell IRQ, vPE table entry, virtual pending table,
+>        vPEID).
+>     2) When a PCI device is configured for passthrough, map its MSIs to
+>        vLPIs using the structures allocated in step 1.
+> 
+> Step 1 is all-or-nothing; if any vCPU cannot be configured with the
+> vPE structures necessary for direct injection, the vPEs of all vCPUs
+> are torn down and direct injection is disabled VM-wide.
+> 
+> This universality of direct vLPI injection enablement sparks several
+> issues, with the most pressing being performance degradation on
+> overcommitted hosts.
+> 
+> VM-wide vLPI enablement creates resource inefficiency when guest
+> VMs have more vCPUs than the host has available vPEIDs. The amount of
+> vPEIDs (and consequently, vPEs) a host can allocate is constrained by
+> hardware and defined by GICD_TYPER2.VID + 1 (ITS_MAX_VPEID). Since
+> direct injection requires a vCPU to be assigned a vPEID, at most
+> ITS_MAX_VPEID vCPUs can be configured for direct injection at a time.
+> Because vLPI direct injection is all-or-nothing on a VM, if a new guest
+> VM would exhaust remaining vPEIDs, all vCPUs on that VM would fall back
+> to hypervisor-forwarded LPIs, causing considerable I/O performance
+> degradation. 
+> 
+> Such performance degradation is exemplified on hosts with CPU
+> overcommitment. Overcommitting an arbitrarily high number of vCPUs
+> enables a VM's vCPU count to easily exceed the host's available vPEIDs.
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index ecc3c87889db..eea0d77508a2 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -21,6 +21,7 @@
- #include <linux/sched/stat.h>
- #include <linux/psci.h>
- #include <trace/events/kvm.h>
-+#include <linux/irqchip/arm-gic-v4.h>
- 
- #define CREATE_TRACE_POINTS
- #include "trace_arm.h"
-@@ -429,6 +430,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_ARM_PER_VCPU_VLPI:
- 		r = kvm_per_vcpu_vlpi_supported();
- 		break;
-+	case KVM_CAP_ARM_MAX_VPEID:
-+		r = its_get_max_vpeid();
-+		break;
- 
- 	default:
- 		r = 0;
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 0e0778d61df2..078a9cafaf17 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -4546,6 +4546,12 @@ static const struct irq_domain_ops its_sgi_domain_ops = {
- 	.deactivate	= its_sgi_irq_domain_deactivate,
- };
- 
-+int its_get_max_vpeid(void)
-+{
-+	return ITS_MAX_VPEID;
-+}
-+EXPORT_SYMBOL_GPL(its_get_max_vpeid);
-+
- static int its_vpe_id_alloc(void)
- {
- 	return ida_alloc_max(&its_vpeid_ida, ITS_MAX_VPEID - 1, GFP_KERNEL);
-diff --git a/include/linux/irqchip/arm-gic-v4.h b/include/linux/irqchip/arm-gic-v4.h
-index bd3e8de35147..3a42cccb72af 100644
---- a/include/linux/irqchip/arm-gic-v4.h
-+++ b/include/linux/irqchip/arm-gic-v4.h
-@@ -147,6 +147,7 @@ int its_alloc_vcpu_irqs(struct its_vm *vm);
- int its_alloc_vcpu_irq(struct kvm_vcpu *vcpu);
- void its_free_vcpu_irqs(struct its_vm *vm);
- void its_free_vcpu_irq(struct kvm_vcpu *vcpu);
-+int its_get_max_vpeid(void);
- int its_make_vpe_resident(struct its_vpe *vpe, bool g0en, bool g1en);
- int its_make_vpe_non_resident(struct its_vpe *vpe, bool db);
- int its_commit_vpe(struct its_vpe *vpe);
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 057eb9e61ac8..9f0ae2096e58 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -974,6 +974,7 @@ struct kvm_enable_cap {
- #define KVM_CAP_GUEST_MEMFD_FLAGS 244
- #define KVM_CAP_ARM_SEA_TO_USER 245
- #define KVM_CAP_ARM_PER_VCPU_VLPI 246
-+#define KVM_CAP_ARM_MAX_VPEID 247
- 
- struct kvm_irq_routing_irqchip {
- 	__u32 irqchip;
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 02a7663c097b..71a929ef7e5d 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -162,6 +162,7 @@ TEST_GEN_PROGS_arm64 += arm64/host_sve
- TEST_GEN_PROGS_arm64 += arm64/hypercalls
- TEST_GEN_PROGS_arm64 += arm64/external_aborts
- TEST_GEN_PROGS_arm64 += arm64/page_fault_test
-+TEST_GEN_PROGS_arm64 += arm64/per_vcpu_vlpi
- TEST_GEN_PROGS_arm64 += arm64/psci_test
- TEST_GEN_PROGS_arm64 += arm64/sea_to_user
- TEST_GEN_PROGS_arm64 += arm64/set_id_regs
-diff --git a/tools/testing/selftests/kvm/arm64/per_vcpu_vlpi.c b/tools/testing/selftests/kvm/arm64/per_vcpu_vlpi.c
-new file mode 100644
-index 000000000000..9a5b1b40ff10
---- /dev/null
-+++ b/tools/testing/selftests/kvm/arm64/per_vcpu_vlpi.c
-@@ -0,0 +1,274 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test per-vCPU vLPI enable/disable/query correctness
-+ */
-+
-+#include <linux/kvm.h>
-+#include <pthread.h>
-+#include <sys/resource.h>
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "gic.h"
-+#include "vgic.h"
-+#include "../kselftest_harness.h"
-+
-+static int MAX_VCPUS;
-+static int ITS_MAX_VPEID;
-+
-+/* Dynamically fetch MAX_VCPUS and ITS_MAX_VPEID values */
-+__attribute__((constructor))
-+static void init_test_limits(void)
-+{
-+	int kvm_fd = open("/dev/kvm", O_RDWR);
-+	int max_vcpus, max_vpeids;
-+
-+	if (kvm_fd >= 0) {
-+		max_vcpus = ioctl(kvm_fd, KVM_CHECK_EXTENSION, KVM_CAP_MAX_VCPUS);
-+		if (max_vcpus > 0)
-+			MAX_VCPUS = max_vcpus;
-+
-+		max_vpeids = ioctl(kvm_fd, KVM_CHECK_EXTENSION, KVM_CAP_ARM_MAX_VPEID);
-+		if (max_vpeids > 0)
-+			ITS_MAX_VPEID = max_vpeids;
-+
-+		close(kvm_fd);
-+	}
-+}
-+
-+static void guest_code(void)
-+{
-+	GUEST_SYNC(0);
-+	GUEST_DONE();
-+}
-+
-+static void setup_vm_with_gic(struct kvm_vm **vm, struct kvm_vcpu **vcpu, int nr_vcpus)
-+{
-+	struct kvm_vcpu **vcpus;
-+
-+	TEST_REQUIRE(kvm_supports_vgic_v3());
-+
-+	if (nr_vcpus == 1) {
-+		*vm = vm_create_with_one_vcpu(vcpu, guest_code);
-+	} else {
-+		vcpus = calloc(nr_vcpus, sizeof(*vcpus));
-+		TEST_ASSERT(vcpus, "Failed to allocate vcpu array");
-+		*vm = vm_create_with_vcpus(nr_vcpus, guest_code, vcpus);
-+		*vcpu = vcpus[0];
-+		free(vcpus);
-+	}
-+}
-+
-+static void cleanup_vm(struct kvm_vm *vm, int its_fd)
-+{
-+	if (its_fd >= 0)
-+		close(its_fd);
-+	kvm_vm_free(vm);
-+}
-+
-+TEST(basic_vlpi_toggle)
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+	int its_fd, ret;
-+	int vcpu_id = 0;
-+
-+	setup_vm_with_gic(&vm, &vcpu, 1);
-+	its_fd = vgic_its_setup(vm);
-+
-+	ret = ioctl(vm->fd, KVM_QUERY_VCPU_VLPI, &vcpu_id);
-+	EXPECT_GE(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_ENABLE_VCPU_VLPI, &vcpu_id);
-+	EXPECT_EQ(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_QUERY_VCPU_VLPI, &vcpu_id);
-+	EXPECT_GT(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_DISABLE_VCPU_VLPI, &vcpu_id);
-+	EXPECT_EQ(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_QUERY_VCPU_VLPI, &vcpu_id);
-+	EXPECT_EQ(ret, 0);
-+
-+	cleanup_vm(vm, its_fd);
-+}
-+
-+/* recycle test */
-+struct thread_data {
-+	struct kvm_vm *vm;
-+	int vcpu_id;
-+	int ret;
-+};
-+
-+static void *vlpi_thread(void *arg)
-+{
-+	struct thread_data *data = arg;
-+
-+	data->ret = ioctl(data->vm->fd, KVM_ENABLE_VCPU_VLPI, &data->vcpu_id);
-+	if (data->ret == 0)
-+		data->ret = ioctl(data->vm->fd, KVM_DISABLE_VCPU_VLPI, &data->vcpu_id);
-+
-+	return NULL;
-+}
-+
-+TEST(vpeid_recycling)
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+	int its_fd;
-+	int vcpu_id, i;
-+	int cycles = (ITS_MAX_VPEID * 2) / MAX_VCPUS;
-+	pthread_t threads[MAX_VCPUS];
-+	struct thread_data data[MAX_VCPUS];
-+
-+	setup_vm_with_gic(&vm, &vcpu, MAX_VCPUS);
-+	its_fd = vgic_its_setup(vm);
-+
-+	for (i = 0; i < cycles; i++) {
-+		for (vcpu_id = 0; vcpu_id < MAX_VCPUS; vcpu_id++) {
-+			data[vcpu_id].vm = vm;
-+			data[vcpu_id].vcpu_id = vcpu_id;
-+			pthread_create(&threads[vcpu_id], NULL, vlpi_thread, &data[vcpu_id]);
-+		}
-+
-+		for (vcpu_id = 0; vcpu_id < MAX_VCPUS; vcpu_id++) {
-+			pthread_join(threads[vcpu_id], NULL);
-+			EXPECT_EQ(data[vcpu_id].ret, 0);
-+		}
-+	}
-+
-+	cleanup_vm(vm, its_fd);
-+}
-+
-+TEST(double_enable_disable)
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+	int its_fd, ret;
-+	int vcpu_id = 0;
-+
-+	setup_vm_with_gic(&vm, &vcpu, 1);
-+	its_fd = vgic_its_setup(vm);
-+
-+	ret = ioctl(vm->fd, KVM_ENABLE_VCPU_VLPI, &vcpu_id);
-+	EXPECT_EQ(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_ENABLE_VCPU_VLPI, &vcpu_id);
-+	EXPECT_EQ(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_QUERY_VCPU_VLPI, &vcpu_id);
-+	EXPECT_GT(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_DISABLE_VCPU_VLPI, &vcpu_id);
-+	EXPECT_EQ(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_DISABLE_VCPU_VLPI, &vcpu_id);
-+	EXPECT_EQ(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_QUERY_VCPU_VLPI, &vcpu_id);
-+	EXPECT_EQ(ret, 0);
-+
-+	cleanup_vm(vm, its_fd);
-+}
-+
-+TEST(uninitialized_vcpu)
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+	int its_fd, ret;
-+	int invalid_vcpu_id = 999;
-+
-+	setup_vm_with_gic(&vm, &vcpu, 1);
-+	its_fd = vgic_its_setup(vm);
-+
-+	ret = ioctl(vm->fd, KVM_QUERY_VCPU_VLPI, &invalid_vcpu_id);
-+	EXPECT_LT(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_ENABLE_VCPU_VLPI, &invalid_vcpu_id);
-+	EXPECT_LT(ret, 0);
-+
-+	ret = ioctl(vm->fd, KVM_DISABLE_VCPU_VLPI, &invalid_vcpu_id);
-+	EXPECT_LT(ret, 0);
-+
-+	cleanup_vm(vm, its_fd);
-+}
-+
-+TEST(vpeid_exhaustion)
-+{
-+	struct rlimit rlim;
-+	struct kvm_vm **vms;
-+	struct kvm_vcpu **vcpus;
-+	int *its_fds;
-+	/* Allocate enough VMs to exhaust vPEs, plus one */
-+	int num_vms = ITS_MAX_VPEID / MAX_VCPUS + 1;
-+	int remainder_vcpus = ITS_MAX_VPEID % MAX_VCPUS;
-+	int vm_idx, vcpu_id, ret;
-+	int successful_enables = 0;
-+
-+	/* Raise fd limit if below vPE limit, as we can't allocate enough vCPUs */
-+	if (getrlimit(RLIMIT_NOFILE, &rlim) == 0) {
-+		struct rlimit new_rlim = rlim;
-+		/*
-+		 * Require [num_vms * (vcpus_per_vm + VM_fd + ITS_fd) + KVM] file
-+		 * descriptors, tripled for safety.
-+		 */
-+		int required_fds = (num_vms * (MAX_VCPUS + 2) + 1) * 3;
-+
-+		if (rlim.rlim_cur < required_fds) {
-+			new_rlim.rlim_cur = min_t(rlim_t, required_fds, rlim.rlim_max);
-+			if (setrlimit(RLIMIT_NOFILE, &new_rlim) != 0) {
-+				SKIP(return, "Need %d FDs, have %ld, cannot increase limit",
-+					required_fds, rlim.rlim_cur);
-+			}
-+		}
-+	}
-+
-+	vms = calloc(num_vms, sizeof(*vms));
-+	vcpus = calloc(num_vms, sizeof(*vcpus));
-+	its_fds = calloc(num_vms, sizeof(*its_fds));
-+	TEST_ASSERT(vms && vcpus && its_fds, "Failed to allocate VM arrays");
-+
-+	/* Create all VMs */
-+	for (vm_idx = 0; vm_idx < num_vms; vm_idx++) {
-+		setup_vm_with_gic(&vms[vm_idx], &vcpus[vm_idx], MAX_VCPUS);
-+		its_fds[vm_idx] = vgic_its_setup(vms[vm_idx]);
-+	}
-+
-+	/* Exhaust all vPEs */
-+	for (vm_idx = 0; vm_idx < num_vms - 1; vm_idx++) {
-+		for (vcpu_id = 0; vcpu_id < MAX_VCPUS; vcpu_id++) {
-+			ret = ioctl(vms[vm_idx]->fd, KVM_ENABLE_VCPU_VLPI, &vcpu_id);
-+			if (ret == 0)
-+				successful_enables++;
-+		}
-+	}
-+
-+	for (vcpu_id = 0; vcpu_id < remainder_vcpus; vcpu_id++) {
-+		ret = ioctl(vms[num_vms - 1]->fd, KVM_ENABLE_VCPU_VLPI, &vcpu_id);
-+		if (ret == 0)
-+			successful_enables++;
-+	}
-+
-+	/* Should have exhausted vPEID limit */
-+	TEST_ASSERT(successful_enables == ITS_MAX_VPEID,
-+		"Failed to allocate all existing vPEIDs");
-+
-+	/* Try assigning one more vPEID past exhaustion*/
-+	vcpu_id = remainder_vcpus;
-+	ret = ioctl(vms[num_vms - 1]->fd, KVM_ENABLE_VCPU_VLPI, &vcpu_id);
-+
-+	/* Verify failure to allocate additional vPEID */
-+	TEST_ASSERT(ret < 0, "Failed to detect vPEID exhaustion");
-+
-+	/* Cleanup all VMs */
-+	for (vm_idx = 0; vm_idx < num_vms; vm_idx++)
-+		cleanup_vm(vms[vm_idx], its_fds[vm_idx]);
-+
-+	free(vms);
-+	free(vcpus);
-+	free(its_fds);
-+	setrlimit(RLIMIT_NOFILE, &rlim); /* Restore fd limit */
-+}
-+
-+TEST_HARNESS_MAIN
+Let it be crystal clear: GICv4 and overcommitment is a non-story. It
+isn't designed for that. If that's what you are trying to achieve, you
+clearly didn't get the memo.
+
+> Even with marginally more vCPUs than vPEIDs, the current all-or-nothing
+> vLPI paradigm disables direct injection entirely. This creates two
+> problems: first, a single many-vCPU overcommitted VM loses all direct
+> injection despite having vPEIDs available;
+
+Are you saying that your HW is so undersized that you cannot create a
+*single VM* with direct injection? You really have fewer than 9 bit
+worth of VPEIDs? I'm sorry, but that's laughable. Even a $200 dev
+board does better.
+
+> second, on multi-tenant
+> hosts, VMs booted first consume all vPEIDs, leaving later VMs without
+> direct injection regardless of their I/O intensity. Per-vCPU control
+> would allow userspace to allocate available vPEIDs across VMs based on
+> I/O workload rather than boot order or per-VM vCPU count. This per-vCPU
+> granularity recovers most of the direct injection performance benefit
+> instead of losing it completely.
+> 
+> To allow this per-vCPU granularity, this RFC introduces three new ioctls
+> to the KVM API that enables userspace the ability to activate/deactivate
+> direct vLPI injection capability and resources to vCPUs ad-hoc during VM
+> runtime.
+
+How can that even work when changing the affinity of a vLPI (directly
+injected) to a vcpu that doesn't have direct injection enabled? You'd
+have to unmap the vLPI, and plug it back as a normal LPI. Not only
+this is absolutely ridiculous from a performance perspective, but you
+are also guaranteed to lose interrupts that would have fired in the
+meantime. Losing interrupts in a total no-go.
+
+Before I even look at the code, I you to explain how you are dealing
+with this.
+
+	M.
+
 -- 
-2.50.1 (Apple Git-155)
-
-
-
-
-Amazon Web Services Development Center Germany GmbH
-Tamara-Danz-Str. 13
-10243 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Christof Hellmis
-Eingetragen am Amtsgericht Charlottenburg unter HRB 257764 B
-Sitz: Berlin
-Ust-ID: DE 365 538 597
-
+Without deviation from the norm, progress is not possible.
