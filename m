@@ -1,84 +1,144 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC1A2D1F40
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 06:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32CC2D7D2E;
+	Thu, 20 Nov 2025 06:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763619125; cv=none; b=fTRxQrX/aSULKZnV4AkRTr58MCfgKE7yIV/6FbCN9aswZ7JxNl6w5wPV+DfDOEHLmMQnDstNIwcoUH1iP2p1+Nko90upFAIv07MzJKFcBl2p5RcLL/jwf9xIghs25cZaS5jC292PSKSu3JPMQawuwm7TnOWyxWYsbpo49WKAWNk=
+	t=1763621902; cv=none; b=ROjK+O5qj4vJfpGJrmth+pDtj1RuL5W/0dMeul97Q/eCEU7Qp1lopDTwgFUJ03V2lLqoO5fzScAHlUNdLUDQYRHIauxyJ1psTiGPChXsefQff2oz+ZLp9diM4ncxJA+JB9zNcGsvOqmR46DGVQmyHmou+EQdaV5AssiU9TCDbj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763619125; c=relaxed/simple;
-	bh=pyDm/WPAmz9Flk6qnMK5lVHCOsLKwooTzGtOd8kQ9ow=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T7vzzLhmqhD3jAyh+p1izyw7QgTGovDW6NGiY+mFaMgagB6Jlnq18lK6BC2duTTJQ6uwQUYcdu/1KbZriMd+BwoORAS7wjvGD06EhIcWJWt/xYk3oDpRmnnZVZJlLsXr3rw2V422N9UU+E7OWK5eFkM8nW3fH64XD5PUJ3XWgAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ixJRlqmY; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ixJRlqmY"
-Message-ID: <91396181-1813-4ea1-a081-06f97e703be3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763619111;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Eh3iY/0Dx1yebP0GWfJ20Z3mrY3JQYu3VbYsy5OeNlA=;
-	b=ixJRlqmYUW1hPKe2xcV+KHpM+JSSHkyJfk9zszG6yWhPbjZfGTICW8vMWpGZI9vjz+FI/R
-	ALPqYtWd8htC60MUwW3NmoaHhXYj36vA+J8x3dEhu8jATndgvAxM14mSzfekV2fsaocrvx
-	Gu2ajojAgC+vbqu80mUjxZIOhc0a5O8=
-Date: Thu, 20 Nov 2025 14:11:39 +0800
+	s=arc-20240116; t=1763621902; c=relaxed/simple;
+	bh=mpy38o7IPkXZYDW/opqrxRx3NKysg9a7Zk5SnY8wMKI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=UhGnGRZF62qyH4AZnlQ5q8c3jbSOLtEeSsZPq+NIGrFDbktLWizCZfn1XGw11U75tK3NyEiYZbqhF99iMiQIGAXT4Mpqy0QxuRfJO/Vq8S2ZuFJv0sa5zc/HRu8qYuQQhCA1mkXaX798NOBIA8fEEXR+1+yU1z/LBJdjVgRJY8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.2.5.213])
+	by gateway (Coremail) with SMTP id _____8AxxtAHvB5p_f4lAA--.14920S3;
+	Thu, 20 Nov 2025 14:58:15 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.213])
+	by front1 (Coremail) with SMTP id qMiowJBxicD3ux5pSkU5AQ--.5850S4;
+	Thu, 20 Nov 2025 14:58:14 +0800 (CST)
+From: Bibo Mao <maobibo@loongson.cn>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Tianrui Zhao <zhaotianrui@loongson.cn>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 2/6] KVM: LoongArch: selftests: Add basic interfaces
+Date: Thu, 20 Nov 2025 14:57:54 +0800
+Message-Id: <20251120065758.3064368-3-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20251120065758.3064368-1-maobibo@loongson.cn>
+References: <20251120065758.3064368-1-maobibo@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 2/9] mm: add atomic VMA flags and set VM_MAYBE_GUARD as
- such
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Andrei Vagin <avagin@gmail.com>, Andrew Morton <akpm@linux-foundation.org>
-References: <cover.1763460113.git.lorenzo.stoakes@oracle.com>
- <97e57abed09f2663077ed7a36fb8206e243171a9.1763460113.git.lorenzo.stoakes@oracle.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <97e57abed09f2663077ed7a36fb8206e243171a9.1763460113.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJBxicD3ux5pSkU5AQ--.5850S4
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+	nUUI43ZEXa7xR_UUUUUUUUU==
 
+Add some basic function interfaces such as CSR register access,
+local irq enable or disable APIs.
 
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ .../kvm/include/loongarch/processor.h         | 52 +++++++++++++++++++
+ .../selftests/kvm/lib/loongarch/processor.c   |  5 ++
+ 2 files changed, 57 insertions(+)
 
-On 2025/11/18 18:17, Lorenzo Stoakes wrote:
-> This patch adds the ability to atomically set VMA flags with only the mmap
-> read/VMA read lock held.
-> 
-> As this could be hugely problematic for VMA flags in general given that
-> all other accesses are non-atomic and serialised by the mmap/VMA locks, we
-> implement this with a strict allow-list - that is, only designated flags
-> are allowed to do this.
-> 
-> We make VM_MAYBE_GUARD one of these flags.
-> 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> Reviewed-by: Pedro Falcato <pfalcato@suse.de>
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
+diff --git a/tools/testing/selftests/kvm/include/loongarch/processor.h b/tools/testing/selftests/kvm/include/loongarch/processor.h
+index 374caddfb0db..0bf120d23092 100644
+--- a/tools/testing/selftests/kvm/include/loongarch/processor.h
++++ b/tools/testing/selftests/kvm/include/loongarch/processor.h
+@@ -113,6 +113,28 @@
+ #define  CSR_TLBREHI_PS_SHIFT		0
+ #define  CSR_TLBREHI_PS			(0x3fUL << CSR_TLBREHI_PS_SHIFT)
+ 
++#define csr_read(csr)				\
++({						\
++	register unsigned long __v;		\
++	__asm__ __volatile__(			\
++		"csrrd %[val], %[reg]\n\t"	\
++		: [val] "=r" (__v)		\
++		: [reg] "i" (csr)		\
++		: "memory");			\
++	__v;					\
++})
++
++#define csr_write(v, csr)			\
++({						\
++	register unsigned long __v = v;		\
++	__asm__ __volatile__ (			\
++		"csrwr %[val], %[reg]\n\t"	\
++		: [val] "+r" (__v)		\
++		: [reg] "i" (csr)		\
++		: "memory");			\
++	__v;					\
++})
++
+ #define EXREGS_GPRS			(32)
+ 
+ #ifndef __ASSEMBLER__
+@@ -133,6 +155,36 @@ struct ex_regs {
+ #define PRMD_OFFSET_EXREGS		offsetof(struct ex_regs, prmd)
+ #define EXREGS_SIZE			sizeof(struct ex_regs)
+ 
++static inline void local_irq_enable(void)
++{
++	unsigned int flags = CSR_CRMD_IE;
++
++	register unsigned int mask asm("$t0") = CSR_CRMD_IE;
++
++	__asm__ __volatile__(
++		"csrxchg %[val], %[mask], %[reg]\n\t"
++		: [val] "+r" (flags)
++		: [mask] "r" (mask), [reg] "i" (LOONGARCH_CSR_CRMD)
++		: "memory");
++}
++
++static inline void local_irq_disable(void)
++{
++	unsigned int flags = 0;
++
++	register unsigned int mask asm("$t0") = CSR_CRMD_IE;
++
++	__asm__ __volatile__(
++		"csrxchg %[val], %[mask], %[reg]\n\t"
++		: [val] "+r" (flags)
++		: [mask] "r" (mask), [reg] "i" (LOONGARCH_CSR_CRMD)
++		: "memory");
++}
++
++static inline void cpu_relax(void)
++{
++	asm volatile("nop" ::: "memory");
++}
+ #else
+ #define PC_OFFSET_EXREGS		((EXREGS_GPRS + 0) * 8)
+ #define ESTAT_OFFSET_EXREGS		((EXREGS_GPRS + 1) * 8)
+diff --git a/tools/testing/selftests/kvm/lib/loongarch/processor.c b/tools/testing/selftests/kvm/lib/loongarch/processor.c
+index 0ac1abcb71cb..5b5f09acf229 100644
+--- a/tools/testing/selftests/kvm/lib/loongarch/processor.c
++++ b/tools/testing/selftests/kvm/lib/loongarch/processor.c
+@@ -344,3 +344,8 @@ void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
+ 	regs.pc = (uint64_t)guest_code;
+ 	vcpu_regs_set(vcpu, &regs);
+ }
++
++uint32_t guest_get_vcpuid(void)
++{
++	return csr_read(LOONGARCH_CSR_CPUID);
++}
+-- 
+2.39.3
 
-LGTM! Feel free to add:
-
-Reviewed-by: Lance Yang <lance.yang@linux.dev>
