@@ -1,81 +1,62 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7241D27A477
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 19:33:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720A1302774;
+	Thu, 20 Nov 2025 21:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763667211; cv=none; b=QTLx3Rrp35mEg9a7tiRd2lQdrP0tAntKYp5fPzQuOXxVVV2Qyw0rsNo3e4jaEA3evsdGtwYIptRZqDHQeSh9psEzRJR/ACxhRep79+JoPAkuY59ErUpwp+tL7FG1r78uM/lsDE4Yn14nSvrWm9crd6fjXJubOiZNruEFXNNYIfI=
+	t=1763674588; cv=none; b=U7rgVX1RIjs+Upct/wajWOMPQxVaaiHyo3wYprbnxrfNl6SZNeKgdKf4whYRzK8+NEBiVLCAhT4n+MyzK2Ipm0gu6dTZ8G4hXtNoTlNzdA8YbUj64/I6vlv+HTVmZTzY2mOxjkt6xXpiMqUHGWZExN65VnWZFcRgY5QZ6HAwfF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763667211; c=relaxed/simple;
-	bh=hzYdS2RbjjdpNPkRll9+qBCneRKVB6myqbcq8DhMp4U=;
+	s=arc-20240116; t=1763674588; c=relaxed/simple;
+	bh=pZ8ivgqMDkOJbGubFInE/45I1Jd0L9jrqG0Z1uaW19Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZYy2CK4PSbXQ8My3SNzcVdDDcjfEkeIOx4NoDPmRgxkXJ48X+FOIoYOo+A/5NVLHr86WdADVh4ko3ClnF2gHpmP0YG2SYZKKloG/k4dkn51aHowsnTt2+ubvgfxM/k5UwzKaKkaATYhl8jpsQVUL0dBY1pJ61dMkl8GtbwWdlF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=IubsUJVs; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	 Content-Type:Content-Disposition:In-Reply-To; b=UYtL4f00lbmUvBIWB7tr8LqQP20r9lxcR0Nf0pJfqInjbtg9NuHPpRyiw3VVxunJI3E7t4ct6pN6YK8uURgeUxB2R5KZRSptQKrf5RsU5xwIGyKJ2SbwwaBLH6Oi/CCoo6bUd7AP7zISK00Wtv+2qxmhlu8ujXHZY/rQ5ceMkCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XzX3FUQs; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="IubsUJVs"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-8b2ed01ba15so105345785a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 11:33:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1763667208; x=1764272008; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJbOTvKtBkMETxUQbFFc6nVU6t/7S/ESP6xTtKSK0tM=;
-        b=IubsUJVsozjeY2Y4jN50q/fx1c4JbqqwWtVNLozAKP6oHvzL7bYZiqv2sOsvHXv92j
-         xtbvwVUHcJfYaC5ydUgAxU3ZBgBtCvMnHYWjgA4Bt+ez638hPh0auuIVTV5QnL3cq9Vi
-         gdq/h4LzTHAnaCcPPBZ7miB+PdphgmZKyq5aoZhv97qooz2FwNoRdcuqdqtZnAOckH9d
-         PF+UBh0W8hInqjFod7jv31MhqJsDM/HGF2OZ+bga9IX7bW3tN+ZEw3Vqk+lIeSw7hdRf
-         0j6il7WIzRiDXfnptOfoOAhN0g5V6mb5BRXbr9U4B5uga4awi7QuS1KR7+8ON1rnBkpv
-         QbrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763667208; x=1764272008;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OJbOTvKtBkMETxUQbFFc6nVU6t/7S/ESP6xTtKSK0tM=;
-        b=OPC57g6Ruv7bDfOxaFzd1+xrFv0SktFAn6n77/17eJId4YP1HiEgttPM/5MXDZYgd2
-         3s42/hgvwim4S1yaicrpX62ANeqaF/6GRjUhhqjkbkJCknQ7zMSkI40cHQ4aizKGiTS8
-         mElzqQv7hLmOIlpkfu2bXUj0yowqIUMLq92m3qFN729Ku3dluqftgmRY0OlP3pbllUgC
-         nz3TGtaV8gjDDZIH0GuAKi20dPVCxVFEyUE+A2baD3JQ1ycL7TnntScc+W9q1OZrNWRL
-         Jp686EbEwlbae4ItUGtzXzh85+OH7rpeoZM10Ii4Wlb33YDlGKnvbUYwzAkcAvaRaytR
-         J4kw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9D1uLHs2sCEICW08ec9rTgbCCuiDiLiFYsdmJ9hsVMBwl6sSwhSzoXjUrlNaLaD6ed/QLwBv+ZIRlOjye73g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsJc5u0+sUEsQKoId2TOH+sV6K0bpnzu+XwyPXq7gbhsh85CPo
-	1Xhp1Z8GzZd6TL06pDYRg5MCTgKyyJ168hr6vchWkmabkvwvvNaiX0ZkqAGzGARfjsk=
-X-Gm-Gg: ASbGnctirW5PoyoZvNCipfft/sBHpUK+SHw5T3UldGRf7avNyyPU4K2JEOMk6+5bLT7
-	15L8Uylpmhoo5/tZlbvSVn7vMF6hq91PQ5mJ/pfs4mME+sng1pJINzJ4dY9sr6P1GToslu60bJb
-	v0pO0ZLBMl1e9tEqtaRE2+WDaFRq1hYpjalIzDsBqlszstY1PyfX4z8XIEeaYgP2sIXkKjbPMl1
-	lzwoLB7Ej4JyJiNnt/Sb7WmbhLv5cCPYbwzwA67tG5apCRfqPyI2xHBWJBA+7OH+U0VMdkt67T/
-	bVAADrKEknDPRRf7YE/EFMIWYcLj0Yumi8ougwdgH5YgKTu1EPEltNOYMOt0CtUUDZZNyvTebyY
-	2al5Ynjz/pdU9GRAOdfzsUfv0+o844U9+/SVCi2iUXd0Gzi0a/2+qA+MLmjEywEubhOsGUTamN3
-	P3TjG+ifjrjmyJk7DwO62ryDl9ylvTBpzdAG0VDJAnH2ZMVG+hDOlXkk6p
-X-Google-Smtp-Source: AGHT+IGpaR+w3wp4votZhuUNdazIQPQ2JUOa4gTel/dGSMeoCPvMZg4kNVugdag6pW8h3TthvdJcbg==
-X-Received: by 2002:a05:620a:7103:b0:8a2:45ba:1b5e with SMTP id af79cd13be357-8b33860b8eamr108942585a.28.1763667208042;
-        Thu, 20 Nov 2025 11:33:28 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-47-55-120-4.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.120.4])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b3294321dcsm208458485a.13.2025.11.20.11.33.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 11:33:27 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1vMAPG-000000015S2-37Ge;
-	Thu, 20 Nov 2025 15:33:26 -0400
-Date: Thu, 20 Nov 2025 15:33:26 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	KUnit Development <kunit-dev@googlegroups.com>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] genpt: Make GENERIC_PT invisible
-Message-ID: <20251120193326.GB233636@ziepe.ca>
-References: <48381c47930d98380871458ca471ea5a7a89aafc.1762956447.git.geert+renesas@glider.be>
- <20251120164933.GV17968@ziepe.ca>
- <20251120170744.GA236839@ziepe.ca>
- <CAMuHMdVsyu_vnYiV7EcChd3a6czUCh4Gis3hL8uDVmbDcGo06w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XzX3FUQs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763674586; x=1795210586;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pZ8ivgqMDkOJbGubFInE/45I1Jd0L9jrqG0Z1uaW19Q=;
+  b=XzX3FUQsOXxPB2h6+8fOdKugPep7oPSJmSaRpSHywjcMwtnA+GEx6iqo
+   0H7LvdecW+jR9fVeB1mdpZ/lesD9alXsobYfNWsM/NDd3ucNfxqUVwIr1
+   b39351TIdlxqNQYD54ufwiTuLzzzlp5ioRE67tGuBxjQcP3KqbeK+D/99
+   0cyeE9++nRDkt/G1OMZcl5Q307TcOhKJPjnGj64OYA95wYWAoKIZ3FgiA
+   Qxa5nAXZvluv650tqyvMsSxJESjPCbzkaMA00d34MYW1NQyi7MsJcFNtm
+   kCOCfrjrsJkPGbcqL/j+nUuhPKow4Pkr08tsz0b/Uco3Zk8RxbjUSiq69
+   g==;
+X-CSE-ConnectionGUID: fhRI6N2/Rc6Z2QGt/QyfJA==
+X-CSE-MsgGUID: EA5nORtWTaSBmz0kXvhtJw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="76864709"
+X-IronPort-AV: E=Sophos;i="6.20,214,1758610800"; 
+   d="scan'208";a="76864709"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 13:36:25 -0800
+X-CSE-ConnectionGUID: KqDocwj6RnWMdsLi4JMTFg==
+X-CSE-MsgGUID: r/Me6OORQda8xGobvBAfeA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,214,1758610800"; 
+   d="scan'208";a="191591619"
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 20 Nov 2025 13:36:22 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vMCKB-0004bH-2v;
+	Thu, 20 Nov 2025 21:36:19 +0000
+Date: Fri, 21 Nov 2025 05:35:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: griffoul@gmail.com, kvm@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, seanjc@google.com, pbonzini@redhat.com,
+	vkuznets@redhat.com, shuah@kernel.org, dwmw@amazon.co.uk,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Fred Griffoul <fgriffo@amazon.co.uk>
+Subject: Re: [PATCH v2 08/10] KVM: x86: Add nested context management
+Message-ID: <202511210515.8L9NBb1R-lkp@intel.com>
+References: <20251118171113.363528-9-griffoul@gmail.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,86 +65,100 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdVsyu_vnYiV7EcChd3a6czUCh4Gis3hL8uDVmbDcGo06w@mail.gmail.com>
+In-Reply-To: <20251118171113.363528-9-griffoul@gmail.org>
 
-On Thu, Nov 20, 2025 at 07:31:10PM +0100, Geert Uytterhoeven wrote:
-> Hi Jason,
-> 
-> CC kunit
-> 
-> On Thu, 20 Nov 2025 at 18:07, Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > On Thu, Nov 20, 2025 at 12:49:33PM -0400, Jason Gunthorpe wrote:
-> > > On Wed, Nov 12, 2025 at 03:08:05PM +0100, Geert Uytterhoeven wrote:
-> > > > There is no point in asking the user about the Generic Radix Page
-> > > > Table API:
-> > > >   - All IOMMU drivers that use this API already select GENERIC_PT when
-> > > >     needed,
-> > > >   - Most users probably do not know what to answer anyway.
-> > > >
-> > > > Fixes: 7c5b184db7145fd4 ("genpt: Generic Page Table base API")
-> > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > ---
-> > > >  drivers/iommu/generic_pt/Kconfig | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> >
-> > Actually, it doesn't work :\
-> >
-> > $ tools/testing/kunit/kunit.py run --build_dir build_kunit_x86_64 --arch x86_64 --kunitconfig ./drivers/iommu/generic_pt/.kunitconfig
-> > [13:01:26] Configuring KUnit Kernel ...
-> > [13:01:26] Building KUnit Kernel ...
-> > Populating config with:
-> > $ make ARCH=x86_64 O=build_kunit_x86_64 olddefconfig
-> > Building with:
-> > $ make all compile_commands.json scripts_gdb ARCH=x86_64 O=build_kunit_x86_64 --jobs=20
-> > ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
-> > This is probably due to unsatisfied dependencies.
-> > Missing: CONFIG_IOMMUFD_TEST=y, CONFIG_DEBUG_GENERIC_PT=y, CONFIG_IOMMU_PT_VTDSS=y, CONFIG_IOMMU_PT=y, CONFIG_IOMMU_PT_AMDV1=y, CONFIG_IOMMU_PT_X86_64=y, CONFIG_GENERIC_PT=y, CONFIG_IOMMU_PT_KUNIT_TEST=y
-> >
-> > Can you add this hunk and send a v2?
-> >
-> > --- a/drivers/iommu/generic_pt/.kunitconfig
-> > +++ b/drivers/iommu/generic_pt/.kunitconfig
-> > @@ -1,4 +1,5 @@
-> >  CONFIG_KUNIT=y
-> > +CONFIG_COMPILE_TEST=y
-> >  CONFIG_GENERIC_PT=y
-> >  CONFIG_DEBUG_GENERIC_PT=y
-> >  CONFIG_IOMMU_PT=y
-> 
-> Do you really want to enable CONFIG_COMPILE_TEST in a .kunitconfig?
+Hi,
 
-IDK, why not?
+kernel test robot noticed the following build warnings:
 
-> Hm, that .kunitconfig already enables IOMMUFD_TEST, which is
-> documented to be dangerous (why?)
+[auto build test WARNING on kvm/queue]
+[also build test WARNING on kvm/next mst-vhost/linux-next linus/master v6.18-rc6 next-20251120]
+[cannot apply to kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-It builds in a kernel module with a uapi that is kind of unsafe.
+url:    https://github.com/intel-lab-lkp/linux/commits/griffoul-gmail-com/KVM-nVMX-Implement-cache-for-L1-MSR-bitmap/20251119-012332
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20251118171113.363528-9-griffoul%40gmail.org
+patch subject: [PATCH v2 08/10] KVM: x86: Add nested context management
+config: i386-randconfig-141-20251120 (https://download.01.org/0day-ci/archive/20251121/202511210515.8L9NBb1R-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210515.8L9NBb1R-lkp@intel.com/reproduce)
 
-Though, hmm, maybe that is some weird a leftover I don't recall that
-this kunit needed IOMMUFD_TEST stanza at all..
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511210515.8L9NBb1R-lkp@intel.com/
 
->  and already enabled by allyesconfig (except on GENERIC_ATOMIC64
-> architectures).  
+All warnings (new ones prefixed by >>):
 
-I guess allyesconfig would do that.
+>> arch/x86/kvm/nested.c:133:10: warning: expression which evaluates to zero treated as a null pointer constant of type 'struct kvm_nested_context *' [-Wnon-literal-null-conversion]
+     133 |                 return false;
+         |                        ^~~~~
+   1 warning generated.
 
-> IOMMUFD_TEST cannot select GENERIC_PT, as that would lead to a
-> recursive dependency (and I am not a huge fan of test code
-> auto-enabling extra attack surfaces^W^W functionality).
 
-Yes
+vim +133 arch/x86/kvm/nested.c
 
-> Or perhaps:
-> 
-> -       bool "Generic Radix Page Table"
-> +       bool "Generic Radix Page Table" if COMPILE_TEST || KUNIT
-> 
-> ?
+   122	
+   123	struct kvm_nested_context *kvm_nested_context_load(struct kvm_vcpu *vcpu,
+   124							   gpa_t gpa)
+   125	{
+   126		struct kvm_nested_context_table *table;
+   127		struct kvm_nested_context *ctx, *new_ctx = NULL;
+   128		struct kvm *vm = vcpu->kvm;
+   129		bool reset = false;
+   130	
+   131		table = vcpu->kvm->arch.nested_context_table;
+   132		if (WARN_ON_ONCE(!table))
+ > 133			return false;
+   134	retry:
+   135		spin_lock(&table->lock);
+   136		ctx = kvm_nested_context_find(table, vcpu, gpa);
+   137		if (!ctx) {
+   138			/* At capacity? Recycle the LRU context */
+   139			if (table->count >= kvm_nested_context_max(vcpu->kvm)) {
+   140				ctx = kvm_nested_context_recycle(table);
+   141				if (unlikely(!ctx))
+   142					goto finish;
+   143	
+   144				kvm_nested_context_insert(table, ctx, gpa);
+   145				++vm->stat.nested_context_recycle;
+   146				reset = true;
+   147	
+   148			} else if (new_ctx) {
+   149				++table->count;
+   150				ctx = new_ctx;
+   151				kvm_nested_context_insert(table, ctx, gpa);
+   152				new_ctx = NULL;
+   153	
+   154			} else {
+   155				/* Allocate a new context without holding the lock */
+   156				spin_unlock(&table->lock);
+   157				new_ctx = kvm_x86_ops.nested_ops->alloc_context(vcpu);
+   158				if (unlikely(!new_ctx))
+   159					return NULL;
+   160	
+   161				goto retry;
+   162			}
+   163		} else
+   164			++vm->stat.nested_context_reuse;
+   165	
+   166		ctx->vcpu = vcpu;
+   167	finish:
+   168		spin_unlock(&table->lock);
+   169	
+   170		if (new_ctx)
+   171			kvm_x86_ops.nested_ops->free_context(new_ctx);
+   172	
+   173		if (reset)
+   174			kvm_x86_ops.nested_ops->reset_context(ctx);
+   175	
+   176		return ctx;
+   177	}
+   178	
 
-It would work, that does seem like a better choice if someone wants to
-make the kunit run in a normal disto kernel.
-
-Thanks,
-Jason
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
