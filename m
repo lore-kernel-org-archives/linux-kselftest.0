@@ -1,55 +1,55 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5AB3451CB
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 18:15:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439DF34DB5C
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 18:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763748913; cv=none; b=siYZ/u1Mz2CvEdMShoQe+lvS/ePHh6BzPbuT4gYvCpxTVQbVBvpdfXKByQjbWhabUdJYIO/ZoVMvAVLLOg0x1WMYCvkxByH/tZWBHE8UaGFn8Wm+h45on4VUWvYofUaadFRSNlYLV24n53E8Vb/qohBbl7DOqf542bl1KZ3VM+4=
+	t=1763748916; cv=none; b=C+az5+xtZZ6AgNe7IyNxPafeewVpWCcoBdU5B8OZryYD5zXBxm1vzpVGeQceIXgF2HRXhKsnK5s026lCro280rjUXLh2T9UdJGYGyjaMHYQUJEsNYtglDDd3HQUJ2ubsS6CXZS4W8bkuspgv8RNJNIlM/xUjLQnddro4AUC4GKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763748913; c=relaxed/simple;
-	bh=O7FYcy0EeK57NXbNCjSJSiTya2snlbNOBcj/IqOunN8=;
+	s=arc-20240116; t=1763748916; c=relaxed/simple;
+	bh=y9f/Tucry1hsY9LeYUBKujhZ6OwShFYUbS5Y4yU0CCw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lmetoPOoTaZBcgsXW5p5g28fPVTXKyUvYpcYccnDYRFiWbstLFgkISAzMnT8t5Or4A14HI6MOqB6RrEQdvLH+Vh2bffwoSjTiLYTGfrnEv7NDyV9knmGzdcaAzRC3JlMY/EByiq1EFyMmQe2Gn0s4iibQJgyFUTY+cBs0KfHdWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dL5YZ3x5; arc=none smtp.client-ip=209.85.210.202
+	 To:Cc:Content-Type; b=Ks3j4z8t6hID5yHedrSfudZULlengUFM/BRcidzPk13LHxa6DMoLriaf58IQbCA58LMomw6nDDpHCes4R+h23+3ZKFpLdI+hfRkN0Ul7VqjrcbKuJJb6U5XZNMEQkAQED3LOVTfEBG+UjB5IEWFpLsaL1W7Vv6sh94n1+s7TTZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s0BiZf0V; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dL5YZ3x5"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-7b9208e1976so5137032b3a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 10:15:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s0BiZf0V"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7a998ab7f87so4268872b3a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 10:15:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763748903; x=1764353703; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1763748906; x=1764353706; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HMEvwC8Vf1hNFRxW8gMqcv6dRhd2ZJX53eGoUogab78=;
-        b=dL5YZ3x5rJRYegUxbWX/nxb2oyMvi0fp3/rKuqUhWCZ8CPGeCi6+IfyIIC1X4oQq4s
-         6Xxt4nSAdlpfItG2g3S3Nl1FvOgng522tMCUuJPr7CdQMFs56rXQ8xNPPqXc58l0VBHC
-         a92rhVZd6t9uOTrY3dR8TOwCU+SaAcdEshHerd1zNrF9ikGIfK333nPwfmPAzrHzKW67
-         nNBlq+xNHz8fB0XtZAARLY8JqukfidKS4zDPOoFRS/mRgrwrYRlQOJBZ4ouxQ6A6ecTX
-         QNMRzeKm3NNdjLfuFBU1PAZ0rFH+YpqjrhqNAIgtPCY++wlFw0hn7XN46ouxg/vr8pgx
-         rd7A==
+        bh=aImDlLkdwi5IFhoPbJDPVG9tN+ymVEKJWl0wF/tcJUA=;
+        b=s0BiZf0VvQIDR1SMSXYDNGd0YEXEc1wZsGzkBk6Rc5zyxmHsPjK82WOKHklE295GKB
+         cYdiObuaUwRg3dmpAJMMuC+0GGX1rjShr9VbeL12pR7oDXqsiqU2bzcmg1t09X9mgFx0
+         HDm5f2ZCZSdEAazzT2KWBF4SSO+bQyrzbQ4qjxql/1DctV5xVwnNHCP0Z+Az9IAshNYh
+         ICadutOgYkiuSuXj9Tm9zZmfZ/cjI+qzfP4XlvENNBmYCbBP/DDcmNojZ6z9Tup+35Si
+         mMP+TzkHge6TZGm8oB3+HRWVhi35YZhvVTsK4ej9EV3O9FdVvnfk7nocfJ7krcfp1xxa
+         nntA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763748903; x=1764353703;
+        d=1e100.net; s=20230601; t=1763748906; x=1764353706;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HMEvwC8Vf1hNFRxW8gMqcv6dRhd2ZJX53eGoUogab78=;
-        b=NmKIQYwT2XWolDQk9xzwxkzuXWXLYXCojdIbj47KdZNY+xZ9eFQ2Yx9vrSm6FCPzAz
-         Tv6oxsqNktoypRIWcriv8wFTAuG9DW48QYKqm5kuYogQDsm7LkKFqm84gXl9PDpHpYwK
-         ez/NgmuN6oqWkcFk4GZS+rgF2hhx8JiS5zhEpuZu+0m2neDU60WmGTAKqvPgFSk6BrnK
-         3JBwDJpK99fyT2YPpUK9GpQ7I6DY/4j/SMhaXWqH8+20ibSL9bA/mB1T3UgzlFfSADRj
-         9BlfZMZMnE8P0jCeeFSTVBe0ENpCzTPz3dz7ps2CN/CSsjAIbBZ9Jt18xqdMv/EjKjOu
-         eYPg==
-X-Forwarded-Encrypted: i=1; AJvYcCU2k7Jj7gS57yl6nZs2kpTBV5Qr6Mg0uG7azGHau4OCecgAJYej+hRwqOUWhhrkqm85Qe5EFI+0Fnwm7DDvwt8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJgRf3A1GGgh8kmHwcIcj+PITJXr2r0ijnJPkUXBuTJO1z1gSl
-	JFq+zuutUJqlK176jccfsm0OujsRq1CY8vI2M0RsXwISsEuBh+3N455+nbVDGspgmOS6asQVAv8
-	hT2/8JQ7OGBzJtQ==
-X-Google-Smtp-Source: AGHT+IFvGRUxxpn2Waw2LILGulaRH1HRzh6C//LRS6tJE+9Uj9HoAkeqFoZldrevGeeOCMb1cfx3h1lq8sEcdg==
-X-Received: from pfny8.prod.google.com ([2002:aa7:8548:0:b0:7ae:309d:349])
+        bh=aImDlLkdwi5IFhoPbJDPVG9tN+ymVEKJWl0wF/tcJUA=;
+        b=bykwRAkRBAbn49v65VWYp4DdHCpActDGKR+WvnZiyYF6epNLn5w3zErzdXgxbdfz0S
+         v7n8X3wbNSqdjCZJWBc4F3DbmBYOUArhtxV56fluWv2oT7dDHBwR/X9+/PM4yYJFsHOr
+         KWve4aRI4dow3LtNU3Y2mHT80oLatomtwM3fTsam//bDEUx0wjIxA0XrxwKoKfsgVn18
+         /dh5KMxF5SEeLEaFmVxlK8lbBVFHcjglmOk1uBSr7i2po7yrP70vTNm3FGMHfr7Yc8Zh
+         cCb8bNahWfcYKnR3bSCN4+7FlUcub+awG7/aGeJHNpzclOnoUMl90b7cBCxc7yfiIAtT
+         syjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVuG4i/12VA+g4BB+9JB+/kk512sZmB9tETaZ38OgFFIFSCw5MEqbESt4kMcEzqdUGBHjQPZcyDkzVStfzNdH0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySKvbXTO+cryjDZ5jGovHD4Kr3W/55h4mEm68/FJsrDOspSt5x
+	gIYsP1bwXLP+THXuJdhVedd0QZ0swyOOOcaDze/Dzecku2lGtoedS1yuQr1jXI+4xHEv+1GWDn+
+	5RD37oY1dFUgaAg==
+X-Google-Smtp-Source: AGHT+IGZPynVuiLCHAiwBzSdaJErjcxqKMyzgzkXeH80cyVu6Qu3tMgiXJPN+ZnWokCbF5gwN+sv9QgUKOEVQg==
+X-Received: from pfbdo11.prod.google.com ([2002:a05:6a00:4a0b:b0:7b8:282e:c971])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:bd13:b0:7b8:d791:2609 with SMTP id d2e1a72fcca58-7c58eff684emr3209161b3a.30.1763748903016;
- Fri, 21 Nov 2025 10:15:03 -0800 (PST)
-Date: Fri, 21 Nov 2025 18:14:26 +0000
+ 2002:a05:6a00:8d4:b0:7b8:ac7f:5968 with SMTP id d2e1a72fcca58-7c58e601f29mr3822571b3a.24.1763748906161;
+ Fri, 21 Nov 2025 10:15:06 -0800 (PST)
+Date: Fri, 21 Nov 2025 18:14:28 +0000
 In-Reply-To: <20251121181429.1421717-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,9 +59,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251121181429.1421717-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.52.0.rc2.455.g230fcf2819-goog
-Message-ID: <20251121181429.1421717-16-dmatlack@google.com>
-Subject: [PATCH v3 15/18] vfio: selftests: Move vfio_selftests_*() helpers
- into libvfio.c
+Message-ID: <20251121181429.1421717-18-dmatlack@google.com>
+Subject: [PATCH v3 17/18] vfio: selftests: Eliminate INVALID_IOVA
 From: David Matlack <dmatlack@google.com>
 To: Alex Williamson <alex@shazbot.org>
 Cc: Alex Mastro <amastro@fb.com>, David Matlack <dmatlack@google.com>, 
@@ -70,197 +69,109 @@ Cc: Alex Mastro <amastro@fb.com>, David Matlack <dmatlack@google.com>,
 	Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Move the vfio_selftests_*() helpers into their own file libvfio.c. These
-helpers have nothing to do with struct vfio_pci_device, so they don't
-make sense in vfio_pci_device.c.
-
-No functional change intended.
+Eliminate INVALID_IOVA as there are platforms where UINT64_MAX is a
+valid iova.
 
 Reviewed-by: Alex Mastro <amastro@fb.com>
 Tested-by: Alex Mastro <amastro@fb.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- tools/testing/selftests/vfio/lib/libvfio.c    | 78 +++++++++++++++++++
- tools/testing/selftests/vfio/lib/libvfio.mk   |  1 +
- .../selftests/vfio/lib/vfio_pci_device.c      | 71 -----------------
- 3 files changed, 79 insertions(+), 71 deletions(-)
- create mode 100644 tools/testing/selftests/vfio/lib/libvfio.c
+ .../selftests/vfio/lib/include/libvfio/iommu.h     |  3 +--
+ .../vfio/lib/include/libvfio/vfio_pci_device.h     |  4 ++--
+ tools/testing/selftests/vfio/lib/iommu.c           | 14 +++++++++-----
+ .../testing/selftests/vfio/vfio_dma_mapping_test.c |  2 +-
+ 4 files changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/vfio/lib/libvfio.c b/tools/testing/selftests/vfio/lib/libvfio.c
-new file mode 100644
-index 000000000000..a23a3cc5be69
---- /dev/null
-+++ b/tools/testing/selftests/vfio/lib/libvfio.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+
-+#include "../../../kselftest.h"
-+#include <libvfio.h>
-+
-+static bool is_bdf(const char *str)
-+{
-+	unsigned int s, b, d, f;
-+	int length, count;
-+
-+	count = sscanf(str, "%4x:%2x:%2x.%2x%n", &s, &b, &d, &f, &length);
-+	return count == 4 && length == strlen(str);
-+}
-+
-+static char **get_bdfs_cmdline(int *argc, char *argv[], int *nr_bdfs)
-+{
-+	int i;
-+
-+	for (i = *argc - 1; i > 0 && is_bdf(argv[i]); i--)
-+		continue;
-+
-+	i++;
-+	*nr_bdfs = *argc - i;
-+	*argc -= *nr_bdfs;
-+
-+	return *nr_bdfs ? &argv[i] : NULL;
-+}
-+
-+static char *get_bdf_env(void)
-+{
-+	char *bdf;
-+
-+	bdf = getenv("VFIO_SELFTESTS_BDF");
-+	if (!bdf)
-+		return NULL;
-+
-+	VFIO_ASSERT_TRUE(is_bdf(bdf), "Invalid BDF: %s\n", bdf);
-+	return bdf;
-+}
-+
-+char **vfio_selftests_get_bdfs(int *argc, char *argv[], int *nr_bdfs)
-+{
-+	static char *env_bdf;
-+	char **bdfs;
-+
-+	bdfs = get_bdfs_cmdline(argc, argv, nr_bdfs);
-+	if (bdfs)
-+		return bdfs;
-+
-+	env_bdf = get_bdf_env();
-+	if (env_bdf) {
-+		*nr_bdfs = 1;
-+		return &env_bdf;
-+	}
-+
-+	fprintf(stderr, "Unable to determine which device(s) to use, skipping test.\n");
-+	fprintf(stderr, "\n");
-+	fprintf(stderr, "To pass the device address via environment variable:\n");
-+	fprintf(stderr, "\n");
-+	fprintf(stderr, "    export VFIO_SELFTESTS_BDF=\"segment:bus:device.function\"\n");
-+	fprintf(stderr, "    %s [options]\n", argv[0]);
-+	fprintf(stderr, "\n");
-+	fprintf(stderr, "To pass the device address(es) via argv:\n");
-+	fprintf(stderr, "\n");
-+	fprintf(stderr, "    %s [options] segment:bus:device.function ...\n", argv[0]);
-+	fprintf(stderr, "\n");
-+	exit(KSFT_SKIP);
-+}
-+
-+const char *vfio_selftests_get_bdf(int *argc, char *argv[])
-+{
-+	int nr_bdfs;
-+
-+	return vfio_selftests_get_bdfs(argc, argv, &nr_bdfs)[0];
-+}
-diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
-index f15b966877e9..9f47bceed16f 100644
---- a/tools/testing/selftests/vfio/lib/libvfio.mk
-+++ b/tools/testing/selftests/vfio/lib/libvfio.mk
-@@ -5,6 +5,7 @@ LIBVFIO_SRCDIR := $(selfdir)/vfio/lib
+diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/iommu.h b/tools/testing/selftests/vfio/lib/include/libvfio/iommu.h
+index e35f13ed3f3c..5c9b9dc6d993 100644
+--- a/tools/testing/selftests/vfio/lib/include/libvfio/iommu.h
++++ b/tools/testing/selftests/vfio/lib/include/libvfio/iommu.h
+@@ -8,7 +8,6 @@
+ #include <libvfio/assert.h>
  
- LIBVFIO_C := iommu.c
- LIBVFIO_C += iova_allocator.c
-+LIBVFIO_C += libvfio.c
- LIBVFIO_C += vfio_pci_device.c
- LIBVFIO_C += vfio_pci_driver.c
+ typedef u64 iova_t;
+-#define INVALID_IOVA UINT64_MAX
  
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index 282c14bbdd00..3c21f48907b9 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -375,74 +375,3 @@ void vfio_pci_device_cleanup(struct vfio_pci_device *device)
- 
- 	free(device);
+ struct iommu_mode {
+ 	const char *name;
+@@ -57,7 +56,7 @@ static inline void iommu_unmap_all(struct iommu *iommu)
+ 	VFIO_ASSERT_EQ(__iommu_unmap_all(iommu, NULL), 0);
  }
--
--static bool is_bdf(const char *str)
--{
--	unsigned int s, b, d, f;
--	int length, count;
--
--	count = sscanf(str, "%4x:%2x:%2x.%2x%n", &s, &b, &d, &f, &length);
--	return count == 4 && length == strlen(str);
--}
--
--static char **get_bdfs_cmdline(int *argc, char *argv[], int *nr_bdfs)
--{
--	int i;
--
--	for (i = *argc - 1; i > 0 && is_bdf(argv[i]); i--)
--		continue;
--
--	i++;
--	*nr_bdfs = *argc - i;
--	*argc -= *nr_bdfs;
--
--	return *nr_bdfs ? &argv[i] : NULL;
--}
--
--static char *get_bdf_env(void)
--{
--	char *bdf;
--
--	bdf = getenv("VFIO_SELFTESTS_BDF");
--	if (!bdf)
--		return NULL;
--
--	VFIO_ASSERT_TRUE(is_bdf(bdf), "Invalid BDF: %s\n", bdf);
--	return bdf;
--}
--
--char **vfio_selftests_get_bdfs(int *argc, char *argv[], int *nr_bdfs)
--{
--	static char *env_bdf;
--	char **bdfs;
--
--	bdfs = get_bdfs_cmdline(argc, argv, nr_bdfs);
--	if (bdfs)
--		return bdfs;
--
--	env_bdf = get_bdf_env();
--	if (env_bdf) {
--		*nr_bdfs = 1;
--		return &env_bdf;
--	}
--
--	fprintf(stderr, "Unable to determine which device(s) to use, skipping test.\n");
--	fprintf(stderr, "\n");
--	fprintf(stderr, "To pass the device address via environment variable:\n");
--	fprintf(stderr, "\n");
--	fprintf(stderr, "    export VFIO_SELFTESTS_BDF=\"segment:bus:device.function\"\n");
--	fprintf(stderr, "    %s [options]\n", argv[0]);
--	fprintf(stderr, "\n");
--	fprintf(stderr, "To pass the device address(es) via argv:\n");
--	fprintf(stderr, "\n");
--	fprintf(stderr, "    %s [options] segment:bus:device.function ...\n", argv[0]);
--	fprintf(stderr, "\n");
--	exit(KSFT_SKIP);
--}
--
--const char *vfio_selftests_get_bdf(int *argc, char *argv[])
--{
--	int nr_bdfs;
--
--	return vfio_selftests_get_bdfs(argc, argv, &nr_bdfs)[0];
--}
+ 
+-iova_t __iommu_hva2iova(struct iommu *iommu, void *vaddr);
++int __iommu_hva2iova(struct iommu *iommu, void *vaddr, iova_t *iova);
+ iova_t iommu_hva2iova(struct iommu *iommu, void *vaddr);
+ 
+ struct iommu_iova_range *iommu_iova_ranges(struct iommu *iommu, u32 *nranges);
+diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+index 160e003131d6..2858885a89bb 100644
+--- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
++++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+@@ -103,9 +103,9 @@ static inline void vfio_pci_msix_disable(struct vfio_pci_device *device)
+ 	vfio_pci_irq_disable(device, VFIO_PCI_MSIX_IRQ_INDEX);
+ }
+ 
+-static inline iova_t __to_iova(struct vfio_pci_device *device, void *vaddr)
++static inline int __to_iova(struct vfio_pci_device *device, void *vaddr, iova_t *iova)
+ {
+-	return __iommu_hva2iova(device->iommu, vaddr);
++	return __iommu_hva2iova(device->iommu, vaddr, iova);
+ }
+ 
+ static inline iova_t to_iova(struct vfio_pci_device *device, void *vaddr)
+diff --git a/tools/testing/selftests/vfio/lib/iommu.c b/tools/testing/selftests/vfio/lib/iommu.c
+index 52f9cdf5f171..8079d43523f3 100644
+--- a/tools/testing/selftests/vfio/lib/iommu.c
++++ b/tools/testing/selftests/vfio/lib/iommu.c
+@@ -67,7 +67,7 @@ static const struct iommu_mode *lookup_iommu_mode(const char *iommu_mode)
+ 	VFIO_FAIL("Unrecognized IOMMU mode: %s\n", iommu_mode);
+ }
+ 
+-iova_t __iommu_hva2iova(struct iommu *iommu, void *vaddr)
++int __iommu_hva2iova(struct iommu *iommu, void *vaddr, iova_t *iova)
+ {
+ 	struct dma_region *region;
+ 
+@@ -78,18 +78,22 @@ iova_t __iommu_hva2iova(struct iommu *iommu, void *vaddr)
+ 		if (vaddr >= region->vaddr + region->size)
+ 			continue;
+ 
+-		return region->iova + (vaddr - region->vaddr);
++		if (iova)
++			*iova = region->iova + (vaddr - region->vaddr);
++
++		return 0;
+ 	}
+ 
+-	return INVALID_IOVA;
++	return -ENOENT;
+ }
+ 
+ iova_t iommu_hva2iova(struct iommu *iommu, void *vaddr)
+ {
+ 	iova_t iova;
++	int ret;
+ 
+-	iova = __iommu_hva2iova(iommu, vaddr);
+-	VFIO_ASSERT_NE(iova, INVALID_IOVA, "%p is not mapped into IOMMU\n", vaddr);
++	ret = __iommu_hva2iova(iommu, vaddr, &iova);
++	VFIO_ASSERT_EQ(ret, 0, "%p is not mapped into the iommu\n", vaddr);
+ 
+ 	return iova;
+ }
+diff --git a/tools/testing/selftests/vfio/vfio_dma_mapping_test.c b/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
+index 213fcd8dcc79..5397822c3dd4 100644
+--- a/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
++++ b/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
+@@ -199,7 +199,7 @@ TEST_F(vfio_dma_mapping_test, dma_map_unmap)
+ 	ASSERT_EQ(rc, 0);
+ 	ASSERT_EQ(unmapped, region.size);
+ 	printf("Unmapped IOVA 0x%lx\n", region.iova);
+-	ASSERT_EQ(INVALID_IOVA, __to_iova(self->device, region.vaddr));
++	ASSERT_NE(0, __to_iova(self->device, region.vaddr, NULL));
+ 	ASSERT_NE(0, iommu_mapping_get(device_bdf, region.iova, &mapping));
+ 
+ 	ASSERT_TRUE(!munmap(region.vaddr, size));
 -- 
 2.52.0.rc2.455.g230fcf2819-goog
 
