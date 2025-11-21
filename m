@@ -1,46 +1,46 @@
 Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010037.outbound.protection.outlook.com [52.101.61.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C653734DB6E;
-	Fri, 21 Nov 2025 15:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89E734FF45;
+	Fri, 21 Nov 2025 15:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.37
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763740288; cv=fail; b=sVP54JQ0fFAMBFM1fU+8dVPA4BhxXGMeOG/wW/BQq+4XbriA0K73/HWl5lQ6IEubmtGtG0eO1azOHAFqLhqLO1FuAuUsuAO+taAeyfalOAcOlvOe+TlK/9Vn60lQiFoPRh6btojuDZmILf2cb+3hC7eabQsSSmWLRHB9I781VHg=
+	t=1763740291; cv=fail; b=sgkuzjU3LUt87va0q6g5SX+LeCn0WKqyQQnhjPWWKSEFen4aA9kOoKoStVN/w4oIYUidjoYC4FTU73GUOBc/LUdP4Zbej/1bZf68W/khvDfzdZCmx7hhRH3BL75V8KSPA14AQ5Jn8sDGRgtzl0xjbNfet9RKbgB1Qzt56VNz1rs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763740288; c=relaxed/simple;
-	bh=x0YaL8EzmNloWpsnmPtJIkKZSUlXJA6FayvKPAMPuEA=;
+	s=arc-20240116; t=1763740291; c=relaxed/simple;
+	bh=4rxs6Yy+X/sSsGGlIcgEQ0G319wgQ33e6UPR6ukuSsQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VMYUYM4mdIe2NHWpmc6NA8jIE4V71RXFi2cUQrqnIeHMABch2bViM7TmosV81Eg9410944vl3qcO95aQRPv1xbRxkHT2q6SEo6aUB5aPwp2GWviwTCwDJAWNRDBxbh3SriPnHIVTnMZbmgYkyAWM/pfAKQjfpfOdXiQNX6Fno3I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Mv7yuyKE; arc=fail smtp.client-ip=52.101.61.37
+	 Content-Type:MIME-Version; b=H9laWXnn78u9wD6WGB2NHc0LYl29easAjXznia7p4PhfaNdz56Myw7WaGMpu33pVFAVtd+NTYMFKINVXuCOt6VFtO2uJrMUwOWP4t+khlTO+hnxHv7bf7BVX6Hqcre/wHlMuarv94J9CMZGBwMPvrk6koWF5oFKhO1HNteK4Vm0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=F3m77wTN; arc=fail smtp.client-ip=52.101.61.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Mv7yuyKE"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="F3m77wTN"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GJBWsJtr9vVo7SRCAhOYLw54b+zRMdiJIb68GFFRJ/XLKj1t+ofqfAXt9lX71C/n/wf1zCiw4v9cr/0MyNrbifKDlxZHqXSKq4tYoVMJQdGnMyZ1HSi3br6NLsdzacHRmkQhP+UcTxs75uGSHbGX4RNhET/AnP+Nwc0ApgRVy6hr4MX6Kp49I0k4YjVQsAmz+nUf+meueTjAay5Js817Av/Y6TST0WLIk0NdrJu62QliaeJF9tt/nENgoHsT8FEacaPUFUfB6bPtuV166TSf4eOip1V0ACyHJ1qyI3QkHzK7TVHMaAOqPaEgaTiuMpUwLQADfUSN2rUXYUsYGDLEnQ==
+ b=ydvjnjXPmMWqlCkLPy+rjAYlWlW6ba0qmUQ634ACgn6OSXeu0eiHfXGfFFJzBW7qh+M8fhAaD5+aGodLcNKBQblDFgn5wzJWTKST3c1q6SQ4VXIjYFRrFTGZSvVTYtJmzEBSVNkozGccGXJQltk2q2+lXfyVtCiPtY4J6SHaAFULRR4QVEOKv3KZ2POhNsDV2P+d70bdvUckrRBNInY7MWaLYNIx3CQlUh+HV6KXfIufULXlutxrx4GEataiwql1v9DxfT/VJsv7D3sbdjsX+4zRXwjmHB7lAOBRuZ6+XFyNjdONaVb+jho20h7tK9mBHY+35/QIcoMWah16CGHJTw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6GSwh1bPlKyFq+txf1BrObQxNDD41nCzEQb0PjG8i7I=;
- b=ti1146zdhuwoIjwC8/7v9Kh/G0HxYMxgOfHFztgbF48/xfIT8NoHMhAqMCvkPRJcAmWbOWXbifiqjhYNDm3xBSSzAR/eAQ6fJEqn+Mk4iXG9aHVABexJxjT4kc8zdJHJwa1+Tk94IFd6JsLUXD7nxhpGdRD7Lm4zoq5sM0ZYgd1SMvyHyDjJPm9GIiHMNq/saxdNt5JgywxWzLh+Yposq38c5q7n0AZaHM0Lw5KR8YI3Xw0iNGL7ks236tw908EMr2/wQ2H3JQiuE/Y0XCaiC7xYbpUeiYTKhtd9kcDhFddNQZui4UuLTHL2dYknR83jheL+lsX1Hfv/mZHKYHVTHg==
+ bh=A/rb1rCs+OgXRjwyZb/xopxLtojgl1e6LheTlmXn5VA=;
+ b=k2VtvYL2iBcZ7uYVNjGr+SBF2Mres7YwiSo34BHqKUAqm9KEmVyjOPqrRpwHuz2fbcPXALLKoX4mSLZ/eNtrwKdimv+sPlTNb9ALfeJ0UYJnkMmdP489oQSBYiOGCYN4yYdHG3RtC/L3QZpwglKJ/Pgz15I0SqhA1WzvINSks4gF4X3MNzUSXivNw9YzABJl44p8MbVviXZYHdgTTbfeo+PJvU7pQlQc/AX21ZilfQSawF8itbpJIRBFZqe5dVmeM+GOPOAXyOJDZwWZtlmz4TJBgUIJXMgrZbvAGbj7+xyOblUSydEOd2YXSft8Hjm/dsjY0+h0qxpMwu7rQINB9g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6GSwh1bPlKyFq+txf1BrObQxNDD41nCzEQb0PjG8i7I=;
- b=Mv7yuyKENQBzQVC9eDz9V6TlbuE9L9gyKBNdtX7/JfxEkfWd7a95ILWLV5dDs5gIjZOoFSZzCbJKijB/NwSXdRXQnT13dJlB9CZkY3gY0F2tgOzEMfRdcnzpT0brAta55tWB5Cx5lcmZIXCB8zsVsljpph+v9rnVpqWW3hCr37LrRhQwlGw2qAbWeC2FfA/Xw8YxP9J9iWyt9YIVRXJ+pguRAEFnbk7rSdoj4o1xf4YycqfKZ3igNpalTD4J4YsOKXYnsayenWXd4QZw7fhGVsNzwzDp9XgprnYny1by/FCeOY235xE8vm2xne6rCr2nkVs0DaIn4LVpGnBB1dGSBA==
+ bh=A/rb1rCs+OgXRjwyZb/xopxLtojgl1e6LheTlmXn5VA=;
+ b=F3m77wTNH/C3eMEXs41X46t5xIF2kaesveyirQznhV3wji1OfG1u2SCVnfQ+DfBqtG723IyuKpHZkYjkmo8pVqZcuqrbLR6rCB2M/crSyKQD9UDT61c/2gevIun/T6YQASaF4knv3yKEudaKg/R2Zf38zdjDGfuCIFyPKa5JDMZkje80/qq6tJeJcNtbzpQNS0kkX9zEojxUmpkoulg4OCQNalK74Bv+yELor0sji0w7x3JwdnScDhjwQDqIMdXxL1cbq8ZE9X8Gts1khv/wP4TSlz5SuFMXkPwIfvuqnTC+22hlJgczGGhKAa4//+/CXLNudBcoEj0NbjQd1VhvkA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
  by DS0PR12MB6439.namprd12.prod.outlook.com (2603:10b6:8:c9::7) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9275.15; Fri, 21 Nov 2025 15:51:09 +0000
+ 15.20.9275.15; Fri, 21 Nov 2025 15:51:13 +0000
 Received: from MN2PR12MB3613.namprd12.prod.outlook.com
  ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
  ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9343.009; Fri, 21 Nov 2025
- 15:51:09 +0000
+ 15:51:13 +0000
 From: Jason Gunthorpe <jgg@nvidia.com>
 To: Alex Williamson <alex@shazbot.org>,
 	=?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
@@ -65,15 +65,15 @@ Cc: Kevin Tian <kevin.tian@intel.com>,
 	Vivek Kasireddy <vivek.kasireddy@intel.com>,
 	Shuai Xue <xueshuai@linux.alibaba.com>,
 	Xu Yilun <yilun.xu@linux.intel.com>
-Subject: [PATCH v2 9/9] iommufd/selftest: Add some tests for the dmabuf flow
-Date: Fri, 21 Nov 2025 11:51:06 -0400
-Message-ID: <9-v2-b2c110338e3f+5c2-iommufd_dmabuf_jgg@nvidia.com>
+Subject: [PATCH v2 1/9] vfio/pci: Add vfio_pci_dma_buf_iommufd_map()
+Date: Fri, 21 Nov 2025 11:50:58 -0400
+Message-ID: <1-v2-b2c110338e3f+5c2-iommufd_dmabuf_jgg@nvidia.com>
 In-Reply-To: <0-v2-b2c110338e3f+5c2-iommufd_dmabuf_jgg@nvidia.com>
 References:
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0152.namprd13.prod.outlook.com
- (2603:10b6:208:2bd::7) To MN2PR12MB3613.namprd12.prod.outlook.com
+X-ClientProxiedBy: MN2PR07CA0029.namprd07.prod.outlook.com
+ (2603:10b6:208:1a0::39) To MN2PR12MB3613.namprd12.prod.outlook.com
  (2603:10b6:208:c1::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -83,458 +83,184 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|DS0PR12MB6439:EE_
-X-MS-Office365-Filtering-Correlation-Id: 99b5c45d-9bde-40d4-1def-08de2915c915
+X-MS-Office365-Filtering-Correlation-Id: b1d46f57-e036-4bbf-fd30-08de2915ca04
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?f16kzs2GkBSI8FPa0tEeB/+qrNGoPk2m1Kfc5MmzONZtpH9CbVyvNbpNwsP2?=
- =?us-ascii?Q?Lt4T+ofOd5YNbPxuX9fyFd17z4rTB9eLcCjJM0kwGztt9fD5FfzK79cjhrmJ?=
- =?us-ascii?Q?f77KSyDHcso1T//3ihX27POS6Rp0P6FxviwsSiCqVjTldWX2UYGP0qkukeHK?=
- =?us-ascii?Q?X5HxhrvBmRKLKUC9lK32x+het6pc1BmVemFJ7zYsVcW46wOzuFrjyxfIyCxC?=
- =?us-ascii?Q?WSHO16lS/7aoCDbCEKetXzNmUKti1Jsv2c5z9tuRRHwTHJIDzaOc8AGsE/+p?=
- =?us-ascii?Q?OGqEAdyk4WzZKk5GT00TxP0uODMQdif/9RoY/HjVeeaB4Nces168c8hYoNgZ?=
- =?us-ascii?Q?1L5yNP0Qnzp32e4BholvvJtKZbb55NaoxOpgnwYGsooiZTUb7Jr0Rk5nhk2T?=
- =?us-ascii?Q?0oNIQa1fIzOpXJxmvb60al0aHPl++tYUOZY1i238S+3FVbIO+o6Eap+bLcj6?=
- =?us-ascii?Q?ehpY9qSawGOu0lYStMgSiAksL3g/8aZU/aQ62mXOFGzcuhDwzgfWhSqtMYI/?=
- =?us-ascii?Q?eD1hLSkM8RtHCaWcSD01uF07a2ColcdetbAqdu5qNpHQ8fC2hm94UY13HUsq?=
- =?us-ascii?Q?atqa5v+OcLxpBI9JuakIicLHJ7w/V150Oy/K1+XfajP9PYrijaRWZTP4+WH7?=
- =?us-ascii?Q?O69/2OuLoXiPMk4dIfhRHhstghjgEltXCsDkuclt+XMcttJFIKE+fwFHFkAO?=
- =?us-ascii?Q?aD6l5Wdmj7oHUVWBOlJ3iG+P0O3GnuMQq/9D0Cc/4+QPzjvn+n6WFYZTDHey?=
- =?us-ascii?Q?q6OLA63br0lzCKRWSnLE1d8Xvh3n0mHtQahjE0Dykkr8UJ2xvW8EpBhwFBcb?=
- =?us-ascii?Q?YzjPSBW0T6KGQVQOYJY9g4FlrPrWqn7sfbryAMN/k75eoxR5IdLOYM/1R5Ci?=
- =?us-ascii?Q?Qdceri57SwWthZ/eIdDzK6uu/hSegHFRR/nmm/yHhmCZnkCqL3+tG3/BgKtl?=
- =?us-ascii?Q?Qhx9G8oYIuuI1NfGgE6ejhRL0aGy+kDgQytVcwcHupt4loNGznYKXUxTbFWc?=
- =?us-ascii?Q?A01XHWBwWuuL4/umi4Q/95FgyafbQdDwus3p6+xj28upx+DyR9xaPMaoZvMj?=
- =?us-ascii?Q?gMMvMLCjJiLLt5U0tvfjYyyGyU4nAv6p8o4HVvGPRCTZJen+Im3fKnuFKV6X?=
- =?us-ascii?Q?PaTQ/prRAdVX2wkia5EAtESbYj2LD88fQ8YdtIn0Vv085L0UMH3/W96EZ6Nt?=
- =?us-ascii?Q?qcq8cy/tq0TxYyIkommevlqTaHTtj2mcvgk3oXANseA/btvnaYDnEd3Ay9pr?=
- =?us-ascii?Q?lb2rhUKbpHPVAXvVSF73KnqQK/6FRVjfBeCRdk79Knu3XB9v0reBrFv1wUxx?=
- =?us-ascii?Q?rSqbLQICiFlAeHJPd3dQkOeat/GSe6qOJBXgZ1A4pk4+G0K3BkZ8vEDUF/Sy?=
- =?us-ascii?Q?Byqt8uh/9l2f4KoAHMY6jY9hNIWQgTnylm2rfGRrdzVMjYt1JaxcAAIVksLB?=
- =?us-ascii?Q?Dn83AZ87Jni7pbMqcH1NmgrdicBNDQj1COFwo3E1vdp/L245j0qiGVVlIM20?=
- =?us-ascii?Q?MX+qlZxz/vkFRqc=3D?=
+	=?us-ascii?Q?1JH8Xp78myfatmMsSfj4x9BeV+qvAFvQRbOkEHaGWGvwZmwJaRKGDc1b9tMW?=
+ =?us-ascii?Q?p5VpjhPnBpFnL8F9xQgqUXS872sBhfDrchrf/KyIIKBkX31+j+kn1Z3N/Htk?=
+ =?us-ascii?Q?5Rkxs9/+xXGxggRJi2c3bWGtV7Mz5ToapIqvTBnuHvPtUS7o2AICV2QQGaZB?=
+ =?us-ascii?Q?Kfn5dwzRFPv8nOBL7x5sIyqKvkEV2D5qNmQoQdlvTqDRX+/hIRf9XspIpsme?=
+ =?us-ascii?Q?NQkXmwzGgHkGZI/jSnFlhWfBfDWje8UlQA+6MpkWDoQDS2TTMh38IjoHlfZR?=
+ =?us-ascii?Q?3QaR5M7iK3YR6QY1Da3IFE8HMq9r5ZINW2elWSAP+oSEDLn2jV1RKoOBYDdS?=
+ =?us-ascii?Q?oji/UfuLHpInYFYmwHzUTHUd+9+SByL7PMcm+HBG4BewPEbRqklz4H5O/fPN?=
+ =?us-ascii?Q?4k6RH2A6OKzatABGPUA2o+B6QB64XE2ZGXIphRSJx7K5BrPwwxUzW0c7yST+?=
+ =?us-ascii?Q?GP98Vxe/RvQfvVi46IqIvPcRDz8TXt7EWsbcQ90CXmW4w6RvBM9JYAvKEzE6?=
+ =?us-ascii?Q?xkLeHHmowMDuuH1bYWnfuIVoo0YPZboZo2pY9AQqnGT4veAbuZ9/MzzIkoMt?=
+ =?us-ascii?Q?+Od6tSdbAkdlXdw0qa3CiJhOiqIczHPAA7p7Y/c1ZvqkGzHvxwqoYV7Jd2C5?=
+ =?us-ascii?Q?vmK0UfXI7k+OT/jAOKwm3Rt5oZn67DTXoAhiTKxhTCWyfvWBfnl65XZv2zT2?=
+ =?us-ascii?Q?9iOx1RDfDx4lAHaf9MeoAeEJoA9RN8r5IDR7397ltNO60xmT01D35tFWA1ee?=
+ =?us-ascii?Q?bQagIxvRF+EhAY9Brbgn6ut4tsCaPBWYLZFVEFwR3OKjxb6x4vBS879H1HIw?=
+ =?us-ascii?Q?f3qyUPGa54IVX1s/vgAejLbkOVhs5bKoc2kFhhoEFcdkL7FRkQi5gyZLv6mK?=
+ =?us-ascii?Q?sXjG/+b7wE+4NNEzRQr6L3c160YOVwJoZ6ZKRqY8T5GLtWW25xI/9cdKDvGk?=
+ =?us-ascii?Q?/aKRNDGfPZeYvEhmzAEHwf+X3Cm9qwbEcLYb3xQBP3t7KawVMsVaLgw1lY1l?=
+ =?us-ascii?Q?xwQmlBtaR3cMSZdCXQ5RpS4RQtTTjYQZ5mhgTXfyRwK4XhdeN+e/SjdXyj/T?=
+ =?us-ascii?Q?FHTGvbJs508AZYXhm9dhyKuX3SUZHnI8Imwe7272sDNh5wCLV7/iieeJ6Tnn?=
+ =?us-ascii?Q?aZrB7bvhdtlTKl0JqlcN2THhoamheeWyB9RO3jt72Wy0/bR7gQ3KG9eutBgr?=
+ =?us-ascii?Q?KjlMaaqbmEduuOHgx0a45xVB6HMaa1f5r3P0H6TdyF83A14OXLPiA+guxT6H?=
+ =?us-ascii?Q?Z+3Vom4hGAK2HcalvJO+sPUaPP06B+Ryi1OgNbhzkI2AoBZS3PCs8V3ywJ5W?=
+ =?us-ascii?Q?t7x/zFWHoySroarCstjSeNXkI4sOrnrMgCMWp181QO+HFM/OLcXGvWLYK5zw?=
+ =?us-ascii?Q?vSSQ/s1ZnvmxIJV7yAivBlbJ3IwVsRluHNwJuJbizzEXcklf7K/vYdaF0d66?=
+ =?us-ascii?Q?m/PqZL7IvDdlJKVAWp3Mqrs7BiC+1zd4NCuaK85LNYWDdaJqOpxVQRGVc2Zh?=
+ =?us-ascii?Q?SWXmbcKYR8uSF5o=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?nPqHYtbF/ujpn1wSf/RFq1lp8baKAwJpkCeSHbWPj/FrpdM7J5djcZTT3WFu?=
- =?us-ascii?Q?/vecWPZCawFAgtFRFbpAc1v7x6svkrP1C26hLDf0D+UmXNJ4LJdx/7R7hDhB?=
- =?us-ascii?Q?N7S4/4eCJcpND5rPSXE8uQ/Ts4pYyQZh4SYnBUza6UBA0+eQbETyESUqLf6g?=
- =?us-ascii?Q?T3S0bx9wwvdoJBCaVv9FnoPGdWHCWH1xcTQtVO3HDppppt+AmGlCumPOwrId?=
- =?us-ascii?Q?VWftqxjqUDnMQjzE06LJ/J3TxMA0SzoSqpOz795WlpMy2bG4NWiHUfQbFPu/?=
- =?us-ascii?Q?Z/ee5buzmUrjPq38IOCojUIsuoiWnCozpeDC+CZqCgTSnuTAjJjPM4cfd8bU?=
- =?us-ascii?Q?WpwB+tDmrNbAHjTf5HhhZDUEq42QgpqMYBK3tTmPyb/CxeP/rJLsnDgDDThM?=
- =?us-ascii?Q?V2tjxme+SC8CdpOHsm+Pk0l35fjDFoLsDnjlIOcZhpeuLEKP0aImunrgP5nd?=
- =?us-ascii?Q?cUnohpaxMaVYDiv38rLPDyAk7DL7YBI+xYsxS2NOG/aH3PVsRPbY9aH5fuWb?=
- =?us-ascii?Q?fKXg4ZAWPO99P5MyUluSB6xYx7bzBNee8IAS6lEilmUVgtlpv33bPXdXc0IB?=
- =?us-ascii?Q?sPBdwpXLp3vmXGmDMcaSxECSL1iUIJ/egnBBn9aFgRS5CpnWBqQ4QGcVCGzA?=
- =?us-ascii?Q?4CYeWBPgYAQflnFc7AfrhPZj0tnpXFtWsvpU7bJtkk+JlIuvv0iRzpWK1Xcm?=
- =?us-ascii?Q?bitZwEQ1ohZnQkPv9mALpXx2MKxZr4MR1A1rSblHO8bl7Sm1JFKnv40Dbsh5?=
- =?us-ascii?Q?3kDZWUQl4Fkjrh5A7W03SiM67nyhuoaZTncHnmVxdi0C09E+9JpgakD5FtSV?=
- =?us-ascii?Q?kEAKp970rweP5yAGW9eJEsryEHAinfEdtFuGrwajkACzITGSQ0hfWXimZav5?=
- =?us-ascii?Q?hj8ZWxnwuvgkoi5bBTrq6ivdT9N1o461fjOhs/UR67NHuU5og6V4AGASvOuu?=
- =?us-ascii?Q?AWdLxWWxz3BgIO1zwDQIEN7xaulESWfYjL2rpCQmUPo2pv4oPcmfriEWoaSb?=
- =?us-ascii?Q?qbAFFw6aTMVhWMQqGrn13dVAdY4U+A+2uEKBhfuNopgGEx6J1btNmuuiY6Xq?=
- =?us-ascii?Q?IiPlxhh8kGtpQWJTsgZ2+isqESjzeAshmB4Lc0GTYpuYMqZkY/gtaGON8TDm?=
- =?us-ascii?Q?SxDsO2ZR8iEH5FiwAYByDZ8ypPH4tlNVMRZr7KNCFwMBnF+IDNI1M70PCSm8?=
- =?us-ascii?Q?ka9+NQuObNav2KNafcFipHvOmU7CFou/8BjbquepVHxrjb2G1Z46SX2dqhze?=
- =?us-ascii?Q?z6A1mngnROHtc6IPZzpgNUAheZ9dYKdrI2R9gEBzMqLBjkex7EtmKcllGbJD?=
- =?us-ascii?Q?YJp1fOesrinLM0iMQ0sZEr+bQpMODzoKw0JOFHN0MeUEJ9kOgtUT2db6Afqn?=
- =?us-ascii?Q?adSRP1I9LNhontVS5a6/P1KWezNvin+fBZW6r5CGBQKy0QF3Md3M5fanqdvC?=
- =?us-ascii?Q?6+ghbTolT/InSy0bpEuSG0FfocK/G2JFcdneA8H3IWpFANHBjmbLRs0pknTP?=
- =?us-ascii?Q?f8P2YeVxl86FkSRjYDs+ReZBQOgFJAKmTtw80KKBmIIVKCvEXqKbaf7CuHs4?=
- =?us-ascii?Q?QnHfOkV9eLWhGAPBOWo=3D?=
+	=?us-ascii?Q?GLcNaeNigrFGLyuYH0EpNLmvyVkp+6IIoliRbuK7Qmer2t/mJsYJS6F+TL2G?=
+ =?us-ascii?Q?xF5srvFtRAxrJ7L8SMJX4shlDD2qDhYeYXVLsChU3lJj40pdWHvpJFc2nZuh?=
+ =?us-ascii?Q?+yXrcI7rZGttX21YHCNyTNVztAORJqPXGk2FgT9dW1Y2M+4LABifKt+pY+nw?=
+ =?us-ascii?Q?HHusx2VtP6WGjTj1OtvGWCUHyvsLoLOSg2wnhxLXwNLk1fVWccpk8oxQi/kD?=
+ =?us-ascii?Q?u1ij4ozddEHVK0yfzrnaZp6L4pcdbdvaT/lQqTHQAvvDpxK8DAiz2CIpXdXI?=
+ =?us-ascii?Q?nqAKX6sm1TsvIY4lxXur+at9m2qG70BuSudIESwOqZbuHLz3lHP4tR1eki52?=
+ =?us-ascii?Q?GORq4rfetXHFwjlBsO3vjfE1Slz5zQWrsD8DFaIUD3JrcE3XGwNUkMuUNSdC?=
+ =?us-ascii?Q?Wjqg8i8yhVzCmp21BbK77sBOnzhMQn8K8iyQzL1eAVA6Mhn6HC4VIih6GE/j?=
+ =?us-ascii?Q?j9MReuCb7pmg0gzYoFDhnv8kAXXSGXZXjSZhQTvjvIE9OxGfoaBzK9pUZXhD?=
+ =?us-ascii?Q?RERwxynD7Xlb3cTRsRHIp8N9NNdJKZzLg9D16G7ol7Q8Rp0++eL4OsaO0DCS?=
+ =?us-ascii?Q?60/Nk18FewP4++DW+WxU5fjeUb6Pe1YFKRKOC0zumxjoG6Tsqaj6AjBslj6q?=
+ =?us-ascii?Q?+SWwKVskhNgjs67amKxpbHJEp1OszhQTF/fwb/Rg9w/Ll8rcpjSB12kaJmYI?=
+ =?us-ascii?Q?4wABElIsaRr6RZWUmmfvwSYW5XVmWNBzvJBMfIQQ/K9clJfEOOex73zHDMFT?=
+ =?us-ascii?Q?rbeN+/PGzqDDIIIz4chQDB5LQx7yQLRi7flGTJkmvILt9ot7j81Vh7mJYC7t?=
+ =?us-ascii?Q?cp/7T9FokD77yzvfGT+4qX+7zxX5/zNpg86lFOP0rHyhk34JgDh/rSMkptgS?=
+ =?us-ascii?Q?hX1CuJ0whtDE/Mnl9UbnUntwaz36n/JCt3zKbWvqo9iCC3JgHa+/YJe2iC+G?=
+ =?us-ascii?Q?yFUkwXAqvNq0+zw+hXIbta8/E6XOeKNvNETURtH04uInG9YfokngAz6oBM6H?=
+ =?us-ascii?Q?qM67EGwjWeJChmLrs2Ys5LIFaF+LGlMJjVO8fYGt3swPKyXtXE4pI8qDjJxw?=
+ =?us-ascii?Q?cmTMv8OQzPyFgcLP6FCR+27pPqYTEWVgV0iY2kbUksmdTqpaDDUkhpbi9YqR?=
+ =?us-ascii?Q?P0HWMlL95aYl8ljAJuxoddYuMrlfLbTnKyArbO9cmlVTb2I7MLF0bFJotowU?=
+ =?us-ascii?Q?YZ5VpqF3DoWHV0RNb6wOVSB8HcCexSuD/JX4T9uMcNhglBX4tX/biE03xL/9?=
+ =?us-ascii?Q?gh8W+tOmniihxUdc1R8sJ1JMBP4wB+zFNL8n4Gnu4Fp9oXuynr4yAhmQUIgv?=
+ =?us-ascii?Q?1lUW1VE41a5RKJElVEKOgVFzHg5oJRZ7KTL85BW3OEiLuIVBNRs8YW/VzKlE?=
+ =?us-ascii?Q?+chVZHB5l2NnzbwhhMsXDg1hAo6G6gpa+LjO4VXL2GtsaM2raMT2lRNpPlM5?=
+ =?us-ascii?Q?ZEpwZhJ3iFY+ZvDN4F+zbeABqIAlhFE9rE/3wDQ5Jzh3G0iSoxgTmVRUDwGS?=
+ =?us-ascii?Q?qdwfq1ZmhwZRlFE37nkdtSImkQZGH31l+oTFvASTh6m8qPlvVj2JvGMB9QHa?=
+ =?us-ascii?Q?z6MkL/v87+PZqEhSXCE=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99b5c45d-9bde-40d4-1def-08de2915c915
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1d46f57-e036-4bbf-fd30-08de2915ca04
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2025 15:51:07.9063
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2025 15:51:09.4521
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ftS7x7GfB7vB6tet7ezQUolmq39V3gmhHLq0bvDQw/6YjdlOgaBC0PdbZ59Iq6kl
+X-MS-Exchange-CrossTenant-UserPrincipalName: D8k/yL/sPCbOzh32DiuMbbmWZgQdqE66AP/LFRRiXwseqnTGHezpdCDZLBB4h0UM
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6439
 
-Basic tests of establishing a dmabuf and revoking it. The selftest kernel
-side provides a basic small dmabuf for this testing.
+This function is used to establish the "private interconnect" between the
+VFIO DMABUF exporter and the iommufd DMABUF importer. This is intended to
+be a temporary API until the core DMABUF interface is improved to natively
+support a private interconnect and revocable negotiation.
+
+This function should only be called by iommufd when trying to map a
+DMABUF. For now iommufd will only support VFIO DMABUFs.
+
+The following improvements are needed in the DMABUF API to generically
+support more exporters with iommufd/kvm type importers that cannot use the
+DMA API:
+
+ 1) Revoke semantics. VFIO needs to be able to prevent access to the MMIO
+    during FLR, and so it will use dma_buf_move_notify() to prevent
+    access. iommmufd does not support fault handling so it cannot
+    implement the full move_notify. Instead if revoke is negotiated the
+    exporter promises not to use move_notify() unless the importer can
+    experiance failures. iommufd will unmap the dmabuf from the iommu page
+    tables while it is revoked.
+
+ 2) Private interconnect negotiation. iommufd will only be able to map
+    a "private interconnect" that provides a phys_addr_t and a
+    struct p2pdma_provider * to describe the memory. It cannot use a DMA
+    mapped scatterlist since it is directly calling iommu_map().
+
+ 3) NULL device during dma_buf_dynamic_attach(). Since iommufd doesn't use
+    the DMA API it doesn't have a DMAable struct device to pass here.
 
 Reviewed-by: Nicolin Chen <nicolinc@nvidia.com>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 Tested-by: Nicolin Chen <nicolinc@nvidia.com>
+Tested-by: Shuai Xue <xueshuai@linux.alibaba.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- drivers/iommu/iommufd/iommufd_private.h       |  10 ++
- drivers/iommu/iommufd/iommufd_test.h          |  10 ++
- drivers/iommu/iommufd/pages.c                 |   4 +
- drivers/iommu/iommufd/selftest.c              | 143 ++++++++++++++++++
- tools/testing/selftests/iommu/iommufd.c       |  43 ++++++
- tools/testing/selftests/iommu/iommufd_utils.h |  44 ++++++
- 6 files changed, 254 insertions(+)
+ drivers/vfio/pci/vfio_pci_dmabuf.c | 34 ++++++++++++++++++++++++++++++
+ include/linux/vfio_pci_core.h      |  4 ++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index a2786fee7603f5..ef2db82e3d7bf5 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -19,6 +19,8 @@ struct iommu_domain;
- struct iommu_group;
- struct iommu_option;
- struct iommufd_device;
-+struct dma_buf_attachment;
-+struct dma_buf_phys_vec;
+diff --git a/drivers/vfio/pci/vfio_pci_dmabuf.c b/drivers/vfio/pci/vfio_pci_dmabuf.c
+index 6698f540bdac87..d4d0f7d08c53e2 100644
+--- a/drivers/vfio/pci/vfio_pci_dmabuf.c
++++ b/drivers/vfio/pci/vfio_pci_dmabuf.c
+@@ -82,6 +82,40 @@ static const struct dma_buf_ops vfio_pci_dmabuf_ops = {
+ 	.release = vfio_pci_dma_buf_release,
+ };
  
- struct iommufd_sw_msi_map {
- 	struct list_head sw_msi_item;
-@@ -713,6 +715,8 @@ bool iommufd_should_fail(void);
- int __init iommufd_test_init(void);
- void iommufd_test_exit(void);
- bool iommufd_selftest_is_mock_dev(struct device *dev);
-+int iommufd_test_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
-+				     struct dma_buf_phys_vec *phys);
- #else
- static inline void iommufd_test_syz_conv_iova_id(struct iommufd_ucmd *ucmd,
- 						 unsigned int ioas_id,
-@@ -734,5 +738,11 @@ static inline bool iommufd_selftest_is_mock_dev(struct device *dev)
- {
- 	return false;
- }
-+static inline int
-+iommufd_test_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
++/*
++ * This is a temporary "private interconnect" between VFIO DMABUF and iommufd.
++ * It allows the two co-operating drivers to exchange the physical address of
++ * the BAR. This is to be replaced with a formal DMABUF system for negotiated
++ * interconnect types.
++ *
++ * If this function succeeds the following are true:
++ *  - There is one physical range and it is pointing to MMIO
++ *  - When move_notify is called it means revoke, not move, vfio_dma_buf_map
++ *    will fail if it is currently revoked
++ */
++int vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
 +				 struct dma_buf_phys_vec *phys)
 +{
-+	return -EOPNOTSUPP;
-+}
- #endif
- #endif
-diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-index 8fc618b2bcf967..9166c39eb0c8b2 100644
---- a/drivers/iommu/iommufd/iommufd_test.h
-+++ b/drivers/iommu/iommufd/iommufd_test.h
-@@ -29,6 +29,8 @@ enum {
- 	IOMMU_TEST_OP_PASID_REPLACE,
- 	IOMMU_TEST_OP_PASID_DETACH,
- 	IOMMU_TEST_OP_PASID_CHECK_HWPT,
-+	IOMMU_TEST_OP_DMABUF_GET,
-+	IOMMU_TEST_OP_DMABUF_REVOKE,
- };
- 
- enum {
-@@ -176,6 +178,14 @@ struct iommu_test_cmd {
- 			__u32 hwpt_id;
- 			/* @id is stdev_id */
- 		} pasid_check;
-+		struct {
-+			__u32 length;
-+			__u32 open_flags;
-+		} dmabuf_get;
-+		struct {
-+			__s32 dmabuf_fd;
-+			__u32 revoked;
-+		} dmabuf_revoke;
- 	};
- 	__u32 last;
- };
-diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
-index c73456833d04d6..dbe51ecb9a20f8 100644
---- a/drivers/iommu/iommufd/pages.c
-+++ b/drivers/iommu/iommufd/pages.c
-@@ -1465,6 +1465,10 @@ sym_vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
- 	typeof(&vfio_pci_dma_buf_iommufd_map) fn;
- 	int rc;
- 
-+	rc = iommufd_test_dma_buf_iommufd_map(attachment, phys);
-+	if (rc != -EOPNOTSUPP)
-+		return rc;
-+
- 	if (!IS_ENABLED(CONFIG_VFIO_PCI_DMABUF))
- 		return -EOPNOTSUPP;
- 
-diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-index de178827a078a9..5d14dd0fb37d6a 100644
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@ -5,6 +5,8 @@
-  */
- #include <linux/anon_inodes.h>
- #include <linux/debugfs.h>
-+#include <linux/dma-buf.h>
-+#include <linux/dma-resv.h>
- #include <linux/fault-inject.h>
- #include <linux/file.h>
- #include <linux/iommu.h>
-@@ -2031,6 +2033,140 @@ void iommufd_selftest_destroy(struct iommufd_object *obj)
- 	}
- }
- 
-+struct iommufd_test_dma_buf {
-+	void *memory;
-+	size_t length;
-+	bool revoked;
-+};
-+
-+static int iommufd_test_dma_buf_attach(struct dma_buf *dmabuf,
-+				       struct dma_buf_attachment *attachment)
-+{
-+	return 0;
-+}
-+
-+static void iommufd_test_dma_buf_detach(struct dma_buf *dmabuf,
-+					struct dma_buf_attachment *attachment)
-+{
-+}
-+
-+static struct sg_table *
-+iommufd_test_dma_buf_map(struct dma_buf_attachment *attachment,
-+			 enum dma_data_direction dir)
-+{
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
-+
-+static void iommufd_test_dma_buf_unmap(struct dma_buf_attachment *attachment,
-+				       struct sg_table *sgt,
-+				       enum dma_data_direction dir)
-+{
-+}
-+
-+static void iommufd_test_dma_buf_release(struct dma_buf *dmabuf)
-+{
-+	struct iommufd_test_dma_buf *priv = dmabuf->priv;
-+
-+	kfree(priv->memory);
-+	kfree(priv);
-+}
-+
-+static const struct dma_buf_ops iommufd_test_dmabuf_ops = {
-+	.attach = iommufd_test_dma_buf_attach,
-+	.detach = iommufd_test_dma_buf_detach,
-+	.map_dma_buf = iommufd_test_dma_buf_map,
-+	.release = iommufd_test_dma_buf_release,
-+	.unmap_dma_buf = iommufd_test_dma_buf_unmap,
-+};
-+
-+int iommufd_test_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
-+				     struct dma_buf_phys_vec *phys)
-+{
-+	struct iommufd_test_dma_buf *priv = attachment->dmabuf->priv;
++	struct vfio_pci_dma_buf *priv;
 +
 +	dma_resv_assert_held(attachment->dmabuf->resv);
 +
-+	if (attachment->dmabuf->ops != &iommufd_test_dmabuf_ops)
++	if (attachment->dmabuf->ops != &vfio_pci_dmabuf_ops)
 +		return -EOPNOTSUPP;
 +
++	priv = attachment->dmabuf->priv;
 +	if (priv->revoked)
 +		return -ENODEV;
 +
-+	phys->paddr = virt_to_phys(priv->memory);
-+	phys->len = priv->length;
++	/* More than one range to iommufd will require proper DMABUF support */
++	if (priv->nr_ranges != 1)
++		return -EOPNOTSUPP;
++
++	*phys = priv->phys_vec[0];
 +	return 0;
 +}
++EXPORT_SYMBOL_FOR_MODULES(vfio_pci_dma_buf_iommufd_map, "iommufd");
 +
-+static int iommufd_test_dmabuf_get(struct iommufd_ucmd *ucmd,
-+				   unsigned int open_flags,
-+				   size_t len)
-+{
-+	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
-+	struct iommufd_test_dma_buf *priv;
-+	struct dma_buf *dmabuf;
-+	int rc;
-+
-+	len = ALIGN(len, PAGE_SIZE);
-+	if (len == 0 || len > PAGE_SIZE * 512)
-+		return -EINVAL;
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->length = len;
-+	priv->memory = kzalloc(len, GFP_KERNEL);
-+	if (!priv->memory) {
-+		rc = -ENOMEM;
-+		goto err_free;
-+	}
-+
-+	exp_info.ops = &iommufd_test_dmabuf_ops;
-+	exp_info.size = len;
-+	exp_info.flags = open_flags;
-+	exp_info.priv = priv;
-+
-+	dmabuf = dma_buf_export(&exp_info);
-+	if (IS_ERR(dmabuf)) {
-+		rc = PTR_ERR(dmabuf);
-+		goto err_free;
-+	}
-+
-+	return dma_buf_fd(dmabuf, open_flags);
-+
-+err_free:
-+	kfree(priv->memory);
-+	kfree(priv);
-+	return rc;
-+}
-+
-+static int iommufd_test_dmabuf_revoke(struct iommufd_ucmd *ucmd, int fd,
-+				      bool revoked)
-+{
-+	struct iommufd_test_dma_buf *priv;
-+	struct dma_buf *dmabuf;
-+	int rc = 0;
-+
-+	dmabuf = dma_buf_get(fd);
-+	if (IS_ERR(dmabuf))
-+		return PTR_ERR(dmabuf);
-+
-+	if (dmabuf->ops != &iommufd_test_dmabuf_ops) {
-+		rc = -EOPNOTSUPP;
-+		goto err_put;
-+	}
-+
-+	priv = dmabuf->priv;
-+	dma_resv_lock(dmabuf->resv, NULL);
-+	priv->revoked = revoked;
-+	dma_buf_move_notify(dmabuf);
-+	dma_resv_unlock(dmabuf->resv);
-+
-+err_put:
-+	dma_buf_put(dmabuf);
-+	return rc;
-+}
-+
- int iommufd_test(struct iommufd_ucmd *ucmd)
- {
- 	struct iommu_test_cmd *cmd = ucmd->cmd;
-@@ -2109,6 +2245,13 @@ int iommufd_test(struct iommufd_ucmd *ucmd)
- 		return iommufd_test_pasid_detach(ucmd, cmd);
- 	case IOMMU_TEST_OP_PASID_CHECK_HWPT:
- 		return iommufd_test_pasid_check_hwpt(ucmd, cmd);
-+	case IOMMU_TEST_OP_DMABUF_GET:
-+		return iommufd_test_dmabuf_get(ucmd, cmd->dmabuf_get.open_flags,
-+					       cmd->dmabuf_get.length);
-+	case IOMMU_TEST_OP_DMABUF_REVOKE:
-+		return iommufd_test_dmabuf_revoke(ucmd,
-+						  cmd->dmabuf_revoke.dmabuf_fd,
-+						  cmd->dmabuf_revoke.revoked);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index 3eebf5e3b974f4..de348d6412791b 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -1574,6 +1574,49 @@ TEST_F(iommufd_ioas, copy_sweep)
- 	test_ioctl_destroy(dst_ioas_id);
- }
+ int vfio_pci_core_fill_phys_vec(struct dma_buf_phys_vec *phys_vec,
+ 				struct vfio_region_dma_range *dma_ranges,
+ 				size_t nr_ranges, phys_addr_t start,
+diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+index c9466ba323fa9c..6a3074f2cf1cea 100644
+--- a/include/linux/vfio_pci_core.h
++++ b/include/linux/vfio_pci_core.h
+@@ -28,6 +28,7 @@ struct vfio_pci_core_device;
+ struct vfio_pci_region;
+ struct p2pdma_provider;
+ struct dma_buf_phys_vec;
++struct dma_buf_attachment;
  
-+TEST_F(iommufd_ioas, dmabuf_simple)
-+{
-+	size_t buf_size = PAGE_SIZE*4;
-+	__u64 iova;
-+	int dfd;
-+
-+	test_cmd_get_dmabuf(buf_size, &dfd);
-+	test_err_ioctl_ioas_map_file(EINVAL, dfd, 0, 0, &iova);
-+	test_err_ioctl_ioas_map_file(EINVAL, dfd, buf_size, buf_size, &iova);
-+	test_err_ioctl_ioas_map_file(EINVAL, dfd, 0, buf_size + 1, &iova);
-+	test_ioctl_ioas_map_file(dfd, 0, buf_size, &iova);
-+
-+	close(dfd);
-+}
-+
-+TEST_F(iommufd_ioas, dmabuf_revoke)
-+{
-+	size_t buf_size = PAGE_SIZE*4;
-+	__u32 hwpt_id;
-+	__u64 iova;
-+	__u64 iova2;
-+	int dfd;
-+
-+	test_cmd_get_dmabuf(buf_size, &dfd);
-+	test_ioctl_ioas_map_file(dfd, 0, buf_size, &iova);
-+	test_cmd_revoke_dmabuf(dfd, true);
-+
-+	if (variant->mock_domains)
-+		test_cmd_hwpt_alloc(self->device_id, self->ioas_id, 0,
-+				    &hwpt_id);
-+
-+	test_err_ioctl_ioas_map_file(ENODEV, dfd, 0, buf_size, &iova2);
-+
-+	test_cmd_revoke_dmabuf(dfd, false);
-+	test_ioctl_ioas_map_file(dfd, 0, buf_size, &iova2);
-+
-+	/* Restore the iova back */
-+	test_ioctl_ioas_unmap(iova, buf_size);
-+	test_ioctl_ioas_map_fixed_file(dfd, 0, buf_size, iova);
-+
-+	close(dfd);
-+}
-+
- FIXTURE(iommufd_mock_domain)
- {
- 	int fd;
-diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-index 772ca1db6e5971..f6d1678b310e1f 100644
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -548,6 +548,39 @@ static int _test_cmd_destroy_access_pages(int fd, unsigned int access_id,
- 	EXPECT_ERRNO(_errno, _test_cmd_destroy_access_pages(              \
- 				     self->fd, access_id, access_pages_id))
+ struct vfio_pci_regops {
+ 	ssize_t (*rw)(struct vfio_pci_core_device *vdev, char __user *buf,
+@@ -203,4 +204,7 @@ VFIO_IOREAD_DECLARATION(32)
+ VFIO_IOREAD_DECLARATION(64)
+ #endif
  
-+static int _test_cmd_get_dmabuf(int fd, size_t len, int *out_fd)
-+{
-+	struct iommu_test_cmd cmd = {
-+		.size = sizeof(cmd),
-+		.op = IOMMU_TEST_OP_DMABUF_GET,
-+		.dmabuf_get = { .length = len, .open_flags = O_CLOEXEC },
-+	};
++int vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
++				 struct dma_buf_phys_vec *phys);
 +
-+	*out_fd = ioctl(fd, IOMMU_TEST_CMD, &cmd);
-+	if (*out_fd < 0)
-+		return -1;
-+	return 0;
-+}
-+#define test_cmd_get_dmabuf(len, out_fd) \
-+	ASSERT_EQ(0, _test_cmd_get_dmabuf(self->fd, len, out_fd))
-+
-+static int _test_cmd_revoke_dmabuf(int fd, int dmabuf_fd, bool revoked)
-+{
-+	struct iommu_test_cmd cmd = {
-+		.size = sizeof(cmd),
-+		.op = IOMMU_TEST_OP_DMABUF_REVOKE,
-+		.dmabuf_revoke = { .dmabuf_fd = dmabuf_fd, .revoked = revoked },
-+	};
-+	int ret;
-+
-+	ret = ioctl(fd, IOMMU_TEST_CMD, &cmd);
-+	if (ret < 0)
-+		return -1;
-+	return 0;
-+}
-+#define test_cmd_revoke_dmabuf(dmabuf_fd, revoke) \
-+	ASSERT_EQ(0, _test_cmd_revoke_dmabuf(self->fd, dmabuf_fd, revoke))
-+
- static int _test_ioctl_destroy(int fd, unsigned int id)
- {
- 	struct iommu_destroy cmd = {
-@@ -718,6 +751,17 @@ static int _test_ioctl_ioas_map_file(int fd, unsigned int ioas_id, int mfd,
- 			  self->fd, ioas_id, mfd, start, length, iova_p,     \
- 			  IOMMU_IOAS_MAP_WRITEABLE | IOMMU_IOAS_MAP_READABLE))
- 
-+#define test_ioctl_ioas_map_fixed_file(mfd, start, length, iova)          \
-+	({                                                                \
-+		__u64 __iova = iova;                                      \
-+		ASSERT_EQ(0, _test_ioctl_ioas_map_file(                   \
-+				     self->fd, self->ioas_id, mfd, start, \
-+				     length, &__iova,                     \
-+				     IOMMU_IOAS_MAP_FIXED_IOVA |          \
-+					     IOMMU_IOAS_MAP_WRITEABLE |   \
-+					     IOMMU_IOAS_MAP_READABLE));   \
-+	})
-+
- static int _test_ioctl_set_temp_memory_limit(int fd, unsigned int limit)
- {
- 	struct iommu_test_cmd memlimit_cmd = {
+ #endif /* VFIO_PCI_CORE_H */
 -- 
 2.43.0
 
