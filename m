@@ -1,32 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E711E2F291A;
-	Sat, 22 Nov 2025 16:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC9B2F49E9;
+	Sat, 22 Nov 2025 16:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763830799; cv=none; b=kXRWygeOXCZjrvDpUI9wMmZjeBbAU+3UttW0G3C4kVNfK8AQjHjdkmX/K9Jkl1H+o+1hFTfZDw3cerhyalOflqdqcD/jniE2HoUj9UAjrq4RuCIRAxGOGV4XodF5Id2YH1GB/P88nI8NE4JeuzOJ0z+WqIVXu+Q3jQ6SNivwzaw=
+	t=1763830799; cv=none; b=TiFWyivUyMzcjoxgC/ZsRWaQnbIR3jpdItBdlaTOxCBA3T6kptsgsxhD2VkFvhTaxb+pvT5XNWJMvzrdw1Y8kPk7Pg8Zwks85cQyXUZZLjEGLTTgRQvQSGX87P5qAluCK26fzZAfCoQIDnhsx33kSqxbKdlQVL6w8YHuSI3TocA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763830799; c=relaxed/simple;
-	bh=DGGFbtrCGkFAYALb/LFAgRmgYHNiZTify5lh6Fq4wXY=;
+	bh=bsQW4lHwKKOWdaZNmUTzPbVW4plm0Vc565vNPYmYsB0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=klLixb9P4OwpuCjhfqviYzJMD2qQiSqrMqb7wcivDZDrz5EDCvQswT7dMvZB7oStPnpj1b5uPm+/UF+U1YtOqmdrBSzbm3dpRQeQ2WS1Y07EphC9BLUwLLqnC4p8AFS+N/Rh9UoEZ02AxDRo7/WXdSt8Y8hKh9J1lgtORtDHTA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=GnKySNMC; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=QqEHEVN67SjPl/HUvT9Xk2ndMgrZcCoLsCovaBq9Wy5/OF186BHS10MXn8RltGgxkLNSBPpVFaHBpH5yPnNG3yOJhT1RTNmtw7KaFEGvVwfQxrlDxP8N3DQngevcMTltnX1UqzEgg+izz1KdRFnxFceUlDbXnMxiamNeolRXk/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=NRLQt+wn; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="GnKySNMC"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="NRLQt+wn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1763830792;
-	bh=DGGFbtrCGkFAYALb/LFAgRmgYHNiZTify5lh6Fq4wXY=;
+	bh=bsQW4lHwKKOWdaZNmUTzPbVW4plm0Vc565vNPYmYsB0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=GnKySNMC8mLPXy6E7ER8ve+84oTqdhXyd2PYGOOtdrQAW1ciAQBSq1PlwJGQnbRRn
-	 WfgfRINFWnGt0/ranpFyiI1iX9Nkugb9xlvLlMiMThvQA0ZQ+XqxkMqgpxfSPRvay/
-	 ik6NeA1t0HRJ5iWUcHlQmV2qJODaQriSQgfUjG74=
+	b=NRLQt+wnRr0BSCzmD+FM+xl1op6CLbhMGA+FuNGp33DZjuamsY/bWjYMYVSHkOkXh
+	 zaLneOMB2+SKooa0chX3BxKxO89ODO9+MTxZmul4lu8oZTp8myUa4e+LCB4GXYXW3q
+	 S3ZAyIHGulR1KX9agMKq2FpbksnoH7+T5Zn61cYs=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 22 Nov 2025 17:59:19 +0100
-Subject: [PATCH v2 13/13] selftests/nolibc: add static assertions around
- time types handling
+Date: Sat, 22 Nov 2025 17:59:17 +0100
+Subject: [PATCH v2 11/13] tools/nolibc: remove time conversions
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,7 +34,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251122-nolibc-uapi-types-v2-13-b814a43654f5@weissschuh.net>
+Message-Id: <20251122-nolibc-uapi-types-v2-11-b814a43654f5@weissschuh.net>
 References: <20251122-nolibc-uapi-types-v2-0-b814a43654f5@weissschuh.net>
 In-Reply-To: <20251122-nolibc-uapi-types-v2-0-b814a43654f5@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
@@ -43,134 +42,182 @@ Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763830790; l=4449;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763830790; l=6491;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=DGGFbtrCGkFAYALb/LFAgRmgYHNiZTify5lh6Fq4wXY=;
- b=RqQUDy8oIubMSEc2e4Y5IH0Pm/s2Sz83uDUIEK4azAqhQ/nK3g0uaN8FqqNZQhQM2fkWJISN7
- J+y0r6hhGzGCsG3kxk/6v2X51Jg/0hPUQ+K7jICAsnHd6xYOKKLP2bf
+ bh=bsQW4lHwKKOWdaZNmUTzPbVW4plm0Vc565vNPYmYsB0=;
+ b=89Q/NKTm6FrBXMF50DdWZvKlnXbBwssaHeDF0IZ4DaE1a4310m0qPwArWJarZn0RSXyJmxwyB
+ 9r7aJuKhDIcCT6yF2SgUruX6EUa+Z7iB8gBJM8AqUf0WyIkPMZdQ1jf
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The nolibc system call wrappers expect the libc types to be compatible
-to the kernel types.
+Now that 'struct timespec' and 'struct __kernel_timespec' are
+compatible, the conversions are not necessary anymore.
+The same holds true for 'struct itimerspec' and 'struct
+__kernel_itimerspec'.
 
-Make sure these expectations hold at compile-time.
+Remove the conversions.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/sys/timerfd.h |  4 ++++
- tools/include/nolibc/time.h        | 18 ++++++++++++++++++
- 2 files changed, 22 insertions(+)
+ tools/include/nolibc/sys/timerfd.h | 20 ++----------
+ tools/include/nolibc/time.h        | 64 ++++----------------------------------
+ 2 files changed, 8 insertions(+), 76 deletions(-)
 
 diff --git a/tools/include/nolibc/sys/timerfd.h b/tools/include/nolibc/sys/timerfd.h
-index 616fcfb416a9..29fd92bd47d2 100644
+index 66f779553d31..616fcfb416a9 100644
 --- a/tools/include/nolibc/sys/timerfd.h
 +++ b/tools/include/nolibc/sys/timerfd.h
-@@ -33,8 +33,10 @@ static __attribute__((unused))
+@@ -33,13 +33,7 @@ static __attribute__((unused))
  int sys_timerfd_gettime(int fd, struct itimerspec *curr_value)
  {
  #if defined(__NR_timerfd_gettime64)
-+	__nolibc_assert_time64_type(curr_value->it_value.tv_sec);
- 	return my_syscall2(__NR_timerfd_gettime64, fd, curr_value);
+-	struct __kernel_itimerspec kcurr_value;
+-	int ret;
+-
+-	ret = my_syscall2(__NR_timerfd_gettime64, fd, &kcurr_value);
+-	__nolibc_timespec_kernel_to_user(&kcurr_value.it_interval, &curr_value->it_interval);
+-	__nolibc_timespec_kernel_to_user(&kcurr_value.it_value, &curr_value->it_value);
+-	return ret;
++	return my_syscall2(__NR_timerfd_gettime64, fd, curr_value);
  #else
-+	__nolibc_assert_native_time64();
  	return my_syscall2(__NR_timerfd_gettime, fd, curr_value);
  #endif
- }
-@@ -51,8 +53,10 @@ int sys_timerfd_settime(int fd, int flags,
+@@ -57,17 +51,7 @@ int sys_timerfd_settime(int fd, int flags,
  			const struct itimerspec *new_value, struct itimerspec *old_value)
  {
  #if defined(__NR_timerfd_settime64)
-+	__nolibc_assert_time64_type(new_value->it_value.tv_sec);
- 	return my_syscall4(__NR_timerfd_settime64, fd, flags, new_value, old_value);
+-	struct __kernel_itimerspec knew_value, kold_value;
+-	int ret;
+-
+-	__nolibc_timespec_user_to_kernel(&new_value->it_value, &knew_value.it_value);
+-	__nolibc_timespec_user_to_kernel(&new_value->it_interval, &knew_value.it_interval);
+-	ret = my_syscall4(__NR_timerfd_settime64, fd, flags, &knew_value, &kold_value);
+-	if (old_value) {
+-		__nolibc_timespec_kernel_to_user(&kold_value.it_interval, &old_value->it_interval);
+-		__nolibc_timespec_kernel_to_user(&kold_value.it_value, &old_value->it_value);
+-	}
+-	return ret;
++	return my_syscall4(__NR_timerfd_settime64, fd, flags, new_value, old_value);
  #else
-+	__nolibc_assert_native_time64();
  	return my_syscall4(__NR_timerfd_settime, fd, flags, new_value, old_value);
  #endif
- }
 diff --git a/tools/include/nolibc/time.h b/tools/include/nolibc/time.h
-index ab67f209c99f..f9257d6a7878 100644
+index 45df9b09d7b6..ab67f209c99f 100644
 --- a/tools/include/nolibc/time.h
 +++ b/tools/include/nolibc/time.h
-@@ -18,6 +18,12 @@
+@@ -18,20 +18,6 @@
  #include <linux/signal.h>
  #include <linux/time.h>
  
-+#define __nolibc_assert_time64_type(t) \
-+	__nolibc_static_assert(sizeof(t) == 8)
-+
-+#define __nolibc_assert_native_time64() \
-+	__nolibc_assert_time64_type(__kernel_old_time_t)
-+
+-static __inline__
+-void __nolibc_timespec_user_to_kernel(const struct timespec *ts, struct __kernel_timespec *kts)
+-{
+-	kts->tv_sec = ts->tv_sec;
+-	kts->tv_nsec = ts->tv_nsec;
+-}
+-
+-static __inline__
+-void __nolibc_timespec_kernel_to_user(const struct __kernel_timespec *kts, struct timespec *ts)
+-{
+-	ts->tv_sec = kts->tv_sec;
+-	ts->tv_nsec = kts->tv_nsec;
+-}
+-
  /*
   * int clock_getres(clockid_t clockid, struct timespec *res);
   * int clock_gettime(clockid_t clockid, struct timespec *tp);
-@@ -30,8 +36,10 @@ static __attribute__((unused))
+@@ -44,13 +30,7 @@ static __attribute__((unused))
  int sys_clock_getres(clockid_t clockid, struct timespec *res)
  {
  #if defined(__NR_clock_getres_time64)
-+	__nolibc_assert_time64_type(res->tv_sec);
- 	return my_syscall2(__NR_clock_getres_time64, clockid, res);
+-	struct __kernel_timespec kres;
+-	int ret;
+-
+-	ret = my_syscall2(__NR_clock_getres_time64, clockid, &kres);
+-	if (res)
+-		__nolibc_timespec_kernel_to_user(&kres, res);
+-	return ret;
++	return my_syscall2(__NR_clock_getres_time64, clockid, res);
  #else
-+	__nolibc_assert_native_time64();
  	return my_syscall2(__NR_clock_getres, clockid, res);
  #endif
- }
-@@ -46,8 +54,10 @@ static __attribute__((unused))
+@@ -66,13 +46,7 @@ static __attribute__((unused))
  int sys_clock_gettime(clockid_t clockid, struct timespec *tp)
  {
  #if defined(__NR_clock_gettime64)
-+	__nolibc_assert_time64_type(tp->tv_sec);
- 	return my_syscall2(__NR_clock_gettime64, clockid, tp);
+-	struct __kernel_timespec ktp;
+-	int ret;
+-
+-	ret = my_syscall2(__NR_clock_gettime64, clockid, &ktp);
+-	if (tp)
+-		__nolibc_timespec_kernel_to_user(&ktp, tp);
+-	return ret;
++	return my_syscall2(__NR_clock_gettime64, clockid, tp);
  #else
-+	__nolibc_assert_native_time64();
  	return my_syscall2(__NR_clock_gettime, clockid, tp);
  #endif
- }
-@@ -62,8 +72,10 @@ static __attribute__((unused))
+@@ -88,10 +62,7 @@ static __attribute__((unused))
  int sys_clock_settime(clockid_t clockid, struct timespec *tp)
  {
  #if defined(__NR_clock_settime64)
-+	__nolibc_assert_time64_type(tp->tv_sec);
- 	return my_syscall2(__NR_clock_settime64, clockid, tp);
+-	struct __kernel_timespec ktp;
+-
+-	__nolibc_timespec_user_to_kernel(tp, &ktp);
+-	return my_syscall2(__NR_clock_settime64, clockid, &ktp);
++	return my_syscall2(__NR_clock_settime64, clockid, tp);
  #else
-+	__nolibc_assert_native_time64();
  	return my_syscall2(__NR_clock_settime, clockid, tp);
  #endif
- }
-@@ -79,8 +91,10 @@ int sys_clock_nanosleep(clockid_t clockid, int flags, const struct timespec *rqt
+@@ -108,14 +79,7 @@ int sys_clock_nanosleep(clockid_t clockid, int flags, const struct timespec *rqt
  			struct timespec *rmtp)
  {
  #if defined(__NR_clock_nanosleep_time64)
-+	__nolibc_assert_time64_type(rqtp->tv_sec);
- 	return my_syscall4(__NR_clock_nanosleep_time64, clockid, flags, rqtp, rmtp);
+-	struct __kernel_timespec krqtp, krmtp;
+-	int ret;
+-
+-	__nolibc_timespec_user_to_kernel(rqtp, &krqtp);
+-	ret = my_syscall4(__NR_clock_nanosleep_time64, clockid, flags, &krqtp, &krmtp);
+-	if (rmtp)
+-		__nolibc_timespec_kernel_to_user(&krmtp, rmtp);
+-	return ret;
++	return my_syscall4(__NR_clock_nanosleep_time64, clockid, flags, rqtp, rmtp);
  #else
-+	__nolibc_assert_native_time64();
  	return my_syscall4(__NR_clock_nanosleep, clockid, flags, rqtp, rmtp);
  #endif
- }
-@@ -154,8 +168,10 @@ static __attribute__((unused))
+@@ -190,13 +154,7 @@ static __attribute__((unused))
  int sys_timer_gettime(timer_t timerid, struct itimerspec *curr_value)
  {
  #if defined(__NR_timer_gettime64)
-+	__nolibc_assert_time64_type(curr_value->it_value.tv_sec);
- 	return my_syscall2(__NR_timer_gettime64, timerid, curr_value);
+-	struct __kernel_itimerspec kcurr_value;
+-	int ret;
+-
+-	ret = my_syscall2(__NR_timer_gettime64, timerid, &kcurr_value);
+-	__nolibc_timespec_kernel_to_user(&kcurr_value.it_interval, &curr_value->it_interval);
+-	__nolibc_timespec_kernel_to_user(&kcurr_value.it_value, &curr_value->it_value);
+-	return ret;
++	return my_syscall2(__NR_timer_gettime64, timerid, curr_value);
  #else
-+	__nolibc_assert_native_time64();
  	return my_syscall2(__NR_timer_gettime, timerid, curr_value);
  #endif
- }
-@@ -171,8 +187,10 @@ int sys_timer_settime(timer_t timerid, int flags,
+@@ -213,17 +171,7 @@ int sys_timer_settime(timer_t timerid, int flags,
  		      const struct itimerspec *new_value, struct itimerspec *old_value)
  {
  #if defined(__NR_timer_settime64)
-+	__nolibc_assert_time64_type(new_value->it_value.tv_sec);
- 	return my_syscall4(__NR_timer_settime64, timerid, flags, new_value, old_value);
+-	struct __kernel_itimerspec knew_value, kold_value;
+-	int ret;
+-
+-	__nolibc_timespec_user_to_kernel(&new_value->it_value, &knew_value.it_value);
+-	__nolibc_timespec_user_to_kernel(&new_value->it_interval, &knew_value.it_interval);
+-	ret = my_syscall4(__NR_timer_settime64, timerid, flags, &knew_value, &kold_value);
+-	if (old_value) {
+-		__nolibc_timespec_kernel_to_user(&kold_value.it_interval, &old_value->it_interval);
+-		__nolibc_timespec_kernel_to_user(&kold_value.it_value, &old_value->it_value);
+-	}
+-	return ret;
++	return my_syscall4(__NR_timer_settime64, timerid, flags, new_value, old_value);
  #else
-+	__nolibc_assert_native_time64();
  	return my_syscall4(__NR_timer_settime, timerid, flags, new_value, old_value);
  #endif
- }
 
 -- 
 2.52.0
