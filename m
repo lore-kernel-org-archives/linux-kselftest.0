@@ -1,32 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E292E7BAA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948D02E8B8B;
 	Sat, 22 Nov 2025 16:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763830798; cv=none; b=QW33S+yidYQ0GflNQLXnNBSU3QY2DKLPY/1bfIk8QOrz5Ikt890zULDbOzPOJ/ZfNzEc7W6aqzTVIjsFoGT1sq/7TQKiVso+dSgkaRS3EBrTE+4XUemb6FM0Aej0AGDKisKGOIM0hri5bD+1Sbol5BpQb9is7iKtychgqmXPpV4=
+	t=1763830798; cv=none; b=PfRYLOFYbtE/OGEjnGEa63/0/4d1WtV0NT0SQ8gAzZXIkeI1nzcXpOQYbBsHqdOgDgiMFOj0oCvzgnK2gXGGG9ze26/uV45Vwg4wnZydoNVSllZqY6aQA+3eKd2/PRxp8048n0nRr9nuh6JoRT5puwUCGsIeDHZMmoGktYn2vmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763830798; c=relaxed/simple;
-	bh=bPkH6voRfrAwZjOsEEP1623h6Mf0N8JgvChGd5XT+5c=;
+	bh=zVlfBuvSWTC8u1cxFlDc1diGCWQOUvi9vXBHqIirOyk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=G8wPZ9lxh+3hkpzo2HUHf4+iAL1C49YeMWrfKAndd53nR+n2zGpXJA1i+Y/rWt+9dZ6ZVZtuoF28+6vVcj+lQfeoamJVobixOXL9Y8EN8xPC54Tfb6nnErPQ/IoVyPGt9QtNWqldK+pP2+KrUhLTFzlpIYKXJ7J61UzORDoGiO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=uEF4JVMW; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=HBIibN9eeJm95zj1G0abyQ8Mwg0KmIlDA+m/KQSwvpiHmoXfMKMPLTKixri4p/zV/ZqxBWrdEWv+Z8Gkvk9m7edQSZ4QvQfTTbay2v8Abtajg3eUzo8FSWohDeKq0EcWai5nGQ78hEL5hKKeWL5uGQ+yTJ9nU+B0/nwWaV3VpuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=UZ9CZiWX; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="uEF4JVMW"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="UZ9CZiWX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1763830791;
-	bh=bPkH6voRfrAwZjOsEEP1623h6Mf0N8JgvChGd5XT+5c=;
+	bh=zVlfBuvSWTC8u1cxFlDc1diGCWQOUvi9vXBHqIirOyk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=uEF4JVMWSQBktcIXS9pvlp1cfSi3CiRJR5mWIFfA0pfJLnfbBRRziPD5BTnQNyJEl
-	 BLYjZPtUq+fqP8Sins4Qx937wK/1/vE/X811lLTAEXEPhrQ8RYZVfG8jibh4CEsH+1
-	 zhJLXmDK6bk9F7nEfnEtYmDUqHG20KTsbhbESN3g=
+	b=UZ9CZiWXTbY9CFnIpVXDrfayvZzkChvvZ4+xy8qPwpA8/6/sqr2wjNpvAHZwEAz4p
+	 Bw6CNUMT0IH0RO2sopVeJApRdJp/F6rJfjNaXztwnj0Z+Ns6KNjMBGUAMazYUR5hVJ
+	 ANbIdXUqmOOEH7f+Iz+homEsS8YWTU33E3RIX8iE=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 22 Nov 2025 17:59:14 +0100
-Subject: [PATCH v2 08/13] tools/nolibc: use custom structs timespec and
- timeval
+Date: Sat, 22 Nov 2025 17:59:16 +0100
+Subject: [PATCH v2 10/13] selftests/nolibc: test compatibility of nolibc
+ and kernel time types
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,7 +35,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251122-nolibc-uapi-types-v2-8-b814a43654f5@weissschuh.net>
+Message-Id: <20251122-nolibc-uapi-types-v2-10-b814a43654f5@weissschuh.net>
 References: <20251122-nolibc-uapi-types-v2-0-b814a43654f5@weissschuh.net>
 In-Reply-To: <20251122-nolibc-uapi-types-v2-0-b814a43654f5@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
@@ -43,70 +43,69 @@ Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763830790; l=1759;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763830790; l=1823;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=bPkH6voRfrAwZjOsEEP1623h6Mf0N8JgvChGd5XT+5c=;
- b=rnlNsRGSiYjUe6f20u1gGvDlUCD/+EVQKjx+pSTw2zjtkFvVoxcZHiAN5zTMjWrnIX3nY0ymC
- HVyLcrPDB0CD9Feqx7aXZzpYdVw5z7Ev7f00dwLYGLPWrj65KhEVt9z
+ bh=zVlfBuvSWTC8u1cxFlDc1diGCWQOUvi9vXBHqIirOyk=;
+ b=MDLh33pWyZGEiDAtsJjWAJzIn9EwSAjzSVJY0KDdV864nDWb7a2jP9JZhUO67hyX5oII7wJHh
+ HLt0uoKJLi4Dq1cILKXEo6nMHdefFV2ZeZd6CGjgib5KBHkO0tvJz2B
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-A custom 'struct timespec' and 'struct timeval' will be necessary for
-64-bit time types on 32-bit architectures. <linux/time.h> will define
-other time-related types in terms of the custom 'struct timespec'.
+Keeping 'struct timespec' and 'struct __kernel_timespec' compatible
+allows the source code to stay simple.
 
-Add custom struct definitions which for now mirror exactly the ones from
-the UAPI headers, but provide the foundation for further changes.
+Validate that the types stay compatible.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/arch-s390.h |  3 +++
- tools/include/nolibc/types.h     | 16 +++++++++++++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
-index 6237211385c0..1e87ac42ab9c 100644
---- a/tools/include/nolibc/arch-s390.h
-+++ b/tools/include/nolibc/arch-s390.h
-@@ -5,6 +5,9 @@
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 3c5a226dad3a..3446d76a984e 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -1428,6 +1428,32 @@ int test_difftime(void)
+ 	return 0;
+ }
  
- #ifndef _NOLIBC_ARCH_S390_H
- #define _NOLIBC_ARCH_S390_H
++int test_time_types(void)
++{
++	struct __kernel_timespec kts;
++	struct timespec ts;
 +
-+#include "types.h"
++	if (!__builtin_types_compatible_p(time_t, __kernel_time64_t))
++		return 1;
 +
- #include <linux/signal.h>
- #include <linux/unistd.h>
++	if (sizeof(ts) != sizeof(kts))
++		return 1;
++
++	if (!__builtin_types_compatible_p(__typeof__(ts.tv_sec), __typeof__(kts.tv_sec)))
++		return 1;
++
++	if (!__builtin_types_compatible_p(__typeof__(ts.tv_nsec), __typeof__(kts.tv_nsec)))
++		return 1;
++
++	if (offsetof(__typeof__(ts), tv_sec) != offsetof(__typeof__(kts), tv_sec))
++		return 1;
++
++	if (offsetof(__typeof__(ts), tv_nsec) != offsetof(__typeof__(kts), tv_nsec))
++		return 1;
++
++	return 0;
++}
++
+ int run_stdlib(int min, int max)
+ {
+ 	int test;
+@@ -1553,6 +1579,7 @@ int run_stdlib(int min, int max)
+ 		CASE_TEST(difftime);                EXPECT_ZR(1, test_difftime()); break;
+ 		CASE_TEST(memchr_foobar6_o);        EXPECT_STREQ(1, memchr("foobar", 'o', 6), "oobar"); break;
+ 		CASE_TEST(memchr_foobar3_b);        EXPECT_STRZR(1, memchr("foobar", 'b', 3)); break;
++		CASE_TEST(time_types);              EXPECT_ZR(1, test_time_types()); break;
  
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index 470a5f77bc0f..5d180ffabcb6 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -13,9 +13,23 @@
- #include "std.h"
- #include <linux/mman.h>
- #include <linux/stat.h>
--#include <linux/time.h>
-+#include <linux/time_types.h>
- #include <linux/wait.h>
- 
-+struct timespec {
-+	__kernel_old_time_t	tv_sec;
-+	long			tv_nsec;
-+};
-+#define _STRUCT_TIMESPEC
-+
-+struct timeval {
-+	__kernel_old_time_t	tv_sec;
-+	__kernel_suseconds_t	tv_usec;
-+};
-+
-+#define timeval __nolibc_kernel_timeval
-+#include <linux/time.h>
-+#undef timeval
- 
- /* Only the generic macros and types may be defined here. The arch-specific
-  * ones such as the O_RDONLY and related macros used by fcntl() and open()
+ 		case __LINE__:
+ 			return ret; /* must be last */
 
 -- 
 2.52.0
