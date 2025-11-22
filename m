@@ -1,256 +1,273 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75F49200110
-	for <linux-kselftest@vger.kernel.org>; Sat, 22 Nov 2025 02:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BC827472;
+	Sat, 22 Nov 2025 05:51:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763778878; cv=none; b=W7yhO3HTp9FOsbNzdEDlUQ8onTSPC7q/kqKiMeabBBHdHeNCip1FEFHWAxH1fsWVm+KZ3/A9u+oXvG8/BgxlqwXPXcwCXLdg56eiUvKNcjzsoVUXwGbGb2YCbBSHVilQ+xq+AMVv45KbYkd1Qb/j4xJqyioqfecCf1cID4mmfmg=
+	t=1763790678; cv=none; b=lWoKiK+7WvD2Wa/Ze3fEiGoFquz1wHvBa4lC9PxFScsxTO91QXl/Qx3LGA4giinYS2vnIVixsVCS2bCPEnOUINxt+c9YLLLPX+LWaW8T3xf+tWRgH87HSX/Y6RfEl7gW8DCAHX7b9KtcDX8w2UlzXkd1C3U0OQWtQud2DklM1SE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763778878; c=relaxed/simple;
-	bh=gg3inNzqFDLEFM/kWhoOulqPeu8YnqO8bKZm7XCrZc8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q9xoh5QRrp++A1NyWcBbe5biwLPmBLZmlQAJPyNM6k46uBzbyAaB0X/3pfwAIfwAOct6RZY+FfPsTtERsN4ZS1SoLp30kQfh1K8iqc+KjsOADvyCIZT2N71fDgEo9nb4/MDB9xdvqprNf0HGkmTKMEwUzVeLNyMbj7DjtvjmWis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mu3+r+jy; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763790678; c=relaxed/simple;
+	bh=a5e0WtmE31hjyJgzIO30tYa+3yYEus9iohkBFUET4TM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=RWvDfKJdgIOScnSWzgJw8mbDg61y6YK0C0LBIy9VYpYLvNLwZADuDzyrO394rTvnprcI18O/sE7w8FKJyv7RC4bF+wBgv9dQ/YN6UO6bNp2MauBsaxzbcdoAFvk2HTbLZpAOG6m6IrErN576oPoAXQWpHuXXq8bdP5Q5eKlM+rU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=NnEnLTar; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mu3+r+jy"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-477a1c28778so29260955e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 18:34:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763778875; x=1764383675; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hok8AGdazJb1+w9joZDPy/FV83MbsH7Pu+Z0JLsw5uQ=;
-        b=Mu3+r+jyMMru6r07edIsGaLjNNmGxsxebNjZ0ZRAxsCt/8mDjfPZgHuz7uMDETSIof
-         jBzBWl7ZegL+M5WZsxSk8xV0WXpc/Azml0q0iIe5MB4qWxvSXOs24ScN0zfE1pUfi6io
-         QMChpJZYoEfiap7WMogliWapIvZY0N8DLj5JzcwxTmkNH3fFSmm+HgK3wUzNPPzm5k8p
-         gEmaYLcrWdbPdfmNVUqqXbFsrMqgqDcCUWZfX8Z2SPmsEjPMTjlqLAXBjBcF4xkWBStA
-         5wUZjnLCgOVBKAHc6tgxRrP+vt2SVddvw/og4lQpHaWdhibbJZJvhDUJLu0+aBmyBBJM
-         ZUkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763778875; x=1764383675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Hok8AGdazJb1+w9joZDPy/FV83MbsH7Pu+Z0JLsw5uQ=;
-        b=wo3rOIP1qE+pHjRhHTjFVTEcx6Yn7wdoyPklPWX4w/tCm+h0XSmYl6Co9tV0eqXYfL
-         31ItJ4QPymZwsGd3igJ3lCjUrBTXo+0zodctFfjlEUcxCfsPlWiDEbs935gyC+n4rMz3
-         qBi47XUHcbr+VLY9KeHlIiZTQGAV3zhspmLLMk2oevDHNISOzQg0Y7vZja1mCWxinDlo
-         bp2qv5YLWj2nt5eKTSp1BLfcF7BH4Uza+Fjf09iF2R8cAjbbZZYPwcceArjLVOewsipr
-         rnS9513gzmXB5mPFfbZP5ZyLc/HqOqXWcamLClY0SKZO0fPHEBEvRN4UrQ2GBg2hCGLj
-         ub0g==
-X-Forwarded-Encrypted: i=1; AJvYcCUcMgGkOLS34SJexf8tQXjy5JGiGQp9/65ZNaOgLGJ5iXUGZhwFqgM51zSsgBFAx4kTTf+xI/lRZxyxKPipneQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuEVDI8xatVJ1hnAXUiVlFwcZpOJhC0U/Gh+cy8bntUlA9x6D6
-	C9OWv9IxgdQXNGnXywsb3HmWULJ8Ajxm/ifQvFnvEECXWF610nJeSh2uCaWkVaiBIGMfbCCSvHU
-	CuTzDoyMvutv4lMhd3DCey4gMsZUW4sk=
-X-Gm-Gg: ASbGncuSh+TvT/1Uv9x2kFTPcBYjw3xuA8zYFjOrX827P707wgC8VYeCGOR74kcF3dw
-	ExDd7IRwR4HNv3rMopvHyJORUQvxYjc/Sq30DyDiZG9YUqfpDqQjks1GzINBKk/cdbPcb2SBhnc
-	2WnPsAfgOSN6oBdeGTKJHOG/kHr5XjNZj9BJrrz2u6oNPQOELWk3ysp+3PvgEsupmTpuE1R9eDx
-	iEpbWcVZ9XeWbaXIoTcNjFz2axAsUXqHoBRebAzrv/LOFYCeFUR0joBcYG37wSCTN2ztuKVRomJ
-	Ou6LN/5qhcAgUC2mcvJu9Fcl5TQG
-X-Google-Smtp-Source: AGHT+IFgIFbkdCBM0dRi8pm9bBEp4qcc6ceQPj/Lk5cQvVZpn6hTh5Ww5jMT4yDAAD5Jnb5DMblP3nk6CQb8+8UJjes=
-X-Received: by 2002:a05:600c:45ce:b0:45d:d1a3:ba6a with SMTP id
- 5b1f17b1804b1-477c01f55e5mr40208495e9.33.1763778874640; Fri, 21 Nov 2025
- 18:34:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="NnEnLTar"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=AnwA/qmj6OsksCBaVbOLbdcJ5EzsvrOTwevQOw/XH3U=; b=NnEnLTarqdBzDJi0nODi4YraZr
+	G7bp0R8ESu5YQ7mpoMx10jddeS1L9ZaiFZnsHwSH/5+yh7VAtrT/AtmkBrfO3nGcwDpN90CdTsfAt
+	XsZYVMvkEVdDbwzhJN0cx8KhTOJMOj0drme3mHRbbQ89KdP0FM5xe49AWOChJCYgXCODNRtbc+vT4
+	eSjTDqEHhcyAnYPKb2z/z8rQ24HB6N5XXwabY/lP4NsiqQPaJBg0aPlrhj0UXLmoy6Sym7Skw1h98
+	+ewieIgynNLafzHT9Zcy6ZIYnCmuFTVJ7WDKU4qjYfOac3ka61O0ii/kNzsCAZE9GNGTC3Utsv8vf
+	LlY8jURw==;
+Received: from [187.101.0.152] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1vMgWc-003xEt-Dq; Sat, 22 Nov 2025 06:51:10 +0100
+From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+Date: Sat, 22 Nov 2025 02:50:43 -0300
+Subject: [PATCH v6 1/9] futex: Use explicit sizes for compat_robust_list
+ structs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251117162033.6296-1-leon.hwang@linux.dev> <20251117162033.6296-9-leon.hwang@linux.dev>
-In-Reply-To: <20251117162033.6296-9-leon.hwang@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 21 Nov 2025 18:34:23 -0800
-X-Gm-Features: AWmQ_bmdqcJ1vlA4UXuQ-I4HU8G-hq3Y4taDV62L2m9v3V4-_e0IkWFi5HrVnPw
-Message-ID: <CAADnVQLARr69Qv9EfwWkpudXLZNb21zYd86aPux_Fv3UAsrLGw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v10 8/8] selftests/bpf: Add cases to test
- BPF_F_CPU and BPF_F_ALL_CPUS flags
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jiri Olsa <jolsa@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Daniel Xu <dxu@dxuuu.xyz>, =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Shuah Khan <shuah@kernel.org>, Jason Xing <kerneljasonxing@gmail.com>, 
-	Tao Chen <chen.dylane@linux.dev>, Willem de Bruijn <willemb@google.com>, 
-	Paul Chaignon <paul.chaignon@gmail.com>, Anton Protopopov <a.s.protopopov@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
-	Tobias Klauser <tklauser@distanz.ch>, kernel-patches-bot@fb.com, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20251122-tonyk-robust_futex-v6-1-05fea005a0fd@igalia.com>
+References: <20251122-tonyk-robust_futex-v6-0-05fea005a0fd@igalia.com>
+In-Reply-To: <20251122-tonyk-robust_futex-v6-0-05fea005a0fd@igalia.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
+ Davidlohr Bueso <dave@stgolabs.net>, Arnd Bergmann <arnd@arndb.de>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+ Waiman Long <longman@redhat.com>, Ryan Houdek <Sonicadvance1@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-api@vger.kernel.org, kernel-dev@igalia.com, 
+ =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+X-Mailer: b4 0.14.3
 
-On Mon, Nov 17, 2025 at 8:22=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> Add test coverage for the new BPF_F_CPU and BPF_F_ALL_CPUS flags support
-> in percpu maps. The following APIs are exercised:
->
-> * bpf_map_update_batch()
-> * bpf_map_lookup_batch()
-> * bpf_map_update_elem()
-> * bpf_map__update_elem()
-> * bpf_map_lookup_elem_flags()
-> * bpf_map__lookup_elem()
->
-> Add tests to verify that array and hash maps do not support BPF_F_CPU
-> and BPF_F_ALL_CPUS flags.
->
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  .../selftests/bpf/prog_tests/percpu_alloc.c   | 312 ++++++++++++++++++
->  .../selftests/bpf/progs/percpu_alloc_array.c  |  32 ++
->  2 files changed, 344 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tool=
-s/testing/selftests/bpf/prog_tests/percpu_alloc.c
-> index 343da65864d6d..b9c3f5f6cd9c3 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <test_progs.h>
-> +#include "cgroup_helpers.h"
->  #include "percpu_alloc_array.skel.h"
->  #include "percpu_alloc_cgrp_local_storage.skel.h"
->  #include "percpu_alloc_fail.skel.h"
-> @@ -115,6 +116,305 @@ static void test_failure(void) {
->         RUN_TESTS(percpu_alloc_fail);
->  }
->
-> +static void test_percpu_map_op_cpu_flag(struct bpf_map *map, void *keys,=
- size_t key_sz,
-> +                                       u32 max_entries, bool test_batch)
-> +{
-> +       size_t value_sz =3D sizeof(u32), value_sz_cpus, value_sz_total;
-> +       u32 *values =3D NULL, *values_percpu =3D NULL;
-> +       int i, j, cpu, map_fd, nr_cpus, err;
-> +       const u32 value =3D 0xDEADC0DE;
-> +       u32 count =3D max_entries, v;
-> +       u64 batch =3D 0, flags;
-> +       void *values_row;
-> +       LIBBPF_OPTS(bpf_map_batch_opts, batch_opts);
-> +
-> +       nr_cpus =3D libbpf_num_possible_cpus();
-> +       if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-> +               return;
-> +
-> +       value_sz_cpus =3D value_sz * nr_cpus;
-> +       values =3D calloc(max_entries, value_sz_cpus);
-> +       if (!ASSERT_OK_PTR(values, "calloc values"))
-> +               return;
-> +
-> +       values_percpu =3D calloc(max_entries, roundup(value_sz, 8) * nr_c=
-pus);
-> +       if (!ASSERT_OK_PTR(values_percpu, "calloc values_percpu")) {
-> +               free(values);
-> +               return;
-> +       }
-> +
-> +       value_sz_total =3D value_sz_cpus * max_entries;
-> +       memset(values, 0, value_sz_total);
-> +
-> +       map_fd =3D bpf_map__fd(map);
-> +       flags =3D BPF_F_CPU | BPF_F_ALL_CPUS;
-> +       err =3D bpf_map_lookup_elem_flags(map_fd, keys, values, flags);
-> +       if (!ASSERT_ERR(err, "bpf_map_lookup_elem_flags cpu|all_cpus"))
-> +               goto out;
-> +
-> +       err =3D bpf_map_update_elem(map_fd, keys, values, flags);
-> +       if (!ASSERT_ERR(err, "bpf_map_update_elem cpu|all_cpus"))
-> +               goto out;
-> +
-> +       flags =3D BPF_F_ALL_CPUS;
-> +       err =3D bpf_map_lookup_elem_flags(map_fd, keys, values, flags);
-> +       if (!ASSERT_ERR(err, "bpf_map_lookup_elem_flags all_cpus"))
-> +               goto out;
-> +
-> +       flags =3D BPF_F_LOCK | BPF_F_CPU;
-> +       err =3D bpf_map_lookup_elem_flags(map_fd, keys, values, flags);
-> +       if (!ASSERT_ERR(err, "bpf_map_lookup_elem_flags BPF_F_LOCK"))
-> +               goto out;
-> +
-> +       flags =3D BPF_F_LOCK | BPF_F_ALL_CPUS;
-> +       err =3D bpf_map_update_elem(map_fd, keys, values, flags);
-> +       if (!ASSERT_ERR(err, "bpf_map_update_elem BPF_F_LOCK"))
-> +               goto out;
-> +
-> +       flags =3D (u64)nr_cpus << 32 | BPF_F_CPU;
-> +       err =3D bpf_map_update_elem(map_fd, keys, values, flags);
-> +       if (!ASSERT_EQ(err, -ERANGE, "bpf_map_update_elem -ERANGE"))
-> +               goto out;
-> +
-> +       err =3D bpf_map__update_elem(map, keys, key_sz, values, value_sz,=
- flags);
-> +       if (!ASSERT_EQ(err, -ERANGE, "bpf_map__update_elem -ERANGE"))
-> +               goto out;
-> +
-> +       err =3D bpf_map_lookup_elem_flags(map_fd, keys, values, flags);
-> +       if (!ASSERT_EQ(err, -ERANGE, "bpf_map_lookup_elem_flags -ERANGE")=
-)
-> +               goto out;
-> +
-> +       err =3D bpf_map__lookup_elem(map, keys, key_sz, values, value_sz,=
- flags);
-> +       if (!ASSERT_EQ(err, -ERANGE, "bpf_map__lookup_elem -ERANGE"))
-> +               goto out;
-> +
-> +       for (cpu =3D 0; cpu < nr_cpus; cpu++) {
-> +               /* clear value on all cpus */
-> +               values[0] =3D 0;
-> +               flags =3D BPF_F_ALL_CPUS;
-> +               for (i =3D 0; i < max_entries; i++) {
-> +                       err =3D bpf_map__update_elem(map, keys + i * key_=
-sz, key_sz, values,
-> +                                                  value_sz, flags);
-> +                       if (!ASSERT_OK(err, "bpf_map__update_elem all_cpu=
-s"))
-> +                               goto out;
-> +               }
-> +
-> +               /* update value on specified cpu */
-> +               for (i =3D 0; i < max_entries; i++) {
-> +                       values[0] =3D value;
-> +                       flags =3D (u64)cpu << 32 | BPF_F_CPU;
-> +                       err =3D bpf_map__update_elem(map, keys + i * key_=
-sz, key_sz, values,
-> +                                                  value_sz, flags);
-> +                       if (!ASSERT_OK(err, "bpf_map__update_elem specifi=
-ed cpu"))
-> +                               goto out;
-> +
-> +                       /* lookup then check value on CPUs */
-> +                       for (j =3D 0; j < nr_cpus; j++) {
-> +                               flags =3D (u64)j << 32 | BPF_F_CPU;
-> +                               err =3D bpf_map__lookup_elem(map, keys + =
-i * key_sz, key_sz, values,
-> +                                                          value_sz, flag=
-s);
-> +                               if (!ASSERT_OK(err, "bpf_map__lookup_elem=
- specified cpu"))
-> +                                       goto out;
-> +                               if (!ASSERT_EQ(values[0], j !=3D cpu ? 0 =
-: value,
-> +                                              "bpf_map__lookup_elem valu=
-e on specified cpu"))
-> +                                       goto out;
+There are two functions for handling robust lists during a task exit:
+exit_robust_list() and compat_exit_robust_list(). The first one handles
+either 64-bit or 32-bit lists, depending on the kernel bitness.
+compat_exit_robust_list() exists only in 64-bit kernels that supports
+32-bit syscalls entry points (also known as compat entry points).
 
-I was about to apply it, but noticed that the test is unstable.
-It fails 1 out of 10 for me in the above line.
-test_percpu_map_op_cpu_flag:PASS:bpf_map_lookup_batch value on
-specified cpu 0 nsec
-test_percpu_map_op_cpu_flag:FAIL:bpf_map_lookup_batch value on
-specified cpu unexpected bpf_map_lookup_batch value on specified cpu:
-actual 0 !=3D expected 3735929054
-#261/15  percpu_alloc/cpu_flag_lru_percpu_hash:FAIL
-#261     percpu_alloc:FAIL
+The new syscall set_robust_list2() needs to handle both 64-bit and
+32-bit robust lists, regardless of compat entry being enabled, so it
+needs to have both functions always available.
 
-Please investigate what is going on.
+In preparation for this, use explicit size for struct members of
+compat_robust_list and compat_robust_list_head. Rename the structs and
+compat_exit_robust_list() to make clear which bitness it handles.
 
-pw-bot: cr
+Keep exit_robust_list() as it is: used to handle the native bit size of
+the kernel.
+
+Signed-off-by: André Almeida <andrealmeid@igalia.com>
+---
+ include/linux/compat.h     | 13 +++----------
+ include/linux/futex.h      |  2 +-
+ include/linux/sched.h      |  2 +-
+ include/uapi/linux/futex.h | 10 ++++++++++
+ kernel/futex/core.c        | 20 ++++++++++----------
+ kernel/futex/syscalls.c    |  8 ++++----
+ 6 files changed, 29 insertions(+), 26 deletions(-)
+
+diff --git a/include/linux/compat.h b/include/linux/compat.h
+index 56cebaff0c91..2c5a7f980182 100644
+--- a/include/linux/compat.h
++++ b/include/linux/compat.h
+@@ -385,15 +385,8 @@ struct compat_ifconf {
+ 	compat_caddr_t  ifcbuf;
+ };
+ 
+-struct compat_robust_list {
+-	compat_uptr_t			next;
+-};
+-
+-struct compat_robust_list_head {
+-	struct compat_robust_list	list;
+-	compat_long_t			futex_offset;
+-	compat_uptr_t			list_op_pending;
+-};
++struct robust_list32;
++struct robust_list_head32;
+ 
+ #ifdef CONFIG_COMPAT_OLD_SIGACTION
+ struct compat_old_sigaction {
+@@ -672,7 +665,7 @@ asmlinkage long compat_sys_waitid(int, compat_pid_t,
+ 		struct compat_siginfo __user *, int,
+ 		struct compat_rusage __user *);
+ asmlinkage long
+-compat_sys_set_robust_list(struct compat_robust_list_head __user *head,
++compat_sys_set_robust_list(struct robust_list_head32 __user *head,
+ 			   compat_size_t len);
+ asmlinkage long
+ compat_sys_get_robust_list(int pid, compat_uptr_t __user *head_ptr,
+diff --git a/include/linux/futex.h b/include/linux/futex.h
+index 9e9750f04980..322851e4a703 100644
+--- a/include/linux/futex.h
++++ b/include/linux/futex.h
+@@ -66,7 +66,7 @@ static inline void futex_init_task(struct task_struct *tsk)
+ {
+ 	tsk->robust_list = NULL;
+ #ifdef CONFIG_COMPAT
+-	tsk->compat_robust_list = NULL;
++	tsk->robust_list32 = NULL;
+ #endif
+ 	INIT_LIST_HEAD(&tsk->pi_state_list);
+ 	tsk->pi_state_cache = NULL;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index cbb7340c5866..76cabfab5b73 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1332,7 +1332,7 @@ struct task_struct {
+ #ifdef CONFIG_FUTEX
+ 	struct robust_list_head __user	*robust_list;
+ #ifdef CONFIG_COMPAT
+-	struct compat_robust_list_head __user *compat_robust_list;
++	struct robust_list_head32 __user *robust_list32;
+ #endif
+ 	struct list_head		pi_state_list;
+ 	struct futex_pi_state		*pi_state_cache;
+diff --git a/include/uapi/linux/futex.h b/include/uapi/linux/futex.h
+index 7e2744ec8933..86efb089893d 100644
+--- a/include/uapi/linux/futex.h
++++ b/include/uapi/linux/futex.h
+@@ -153,6 +153,16 @@ struct robust_list_head {
+ 	struct robust_list __user *list_op_pending;
+ };
+ 
++struct robust_list32 {
++	__u32 next;
++};
++
++struct robust_list_head32 {
++	struct robust_list32	list;
++	__s32			futex_offset;
++	__u32			list_op_pending;
++};
++
+ /*
+  * Are there any waiters for this robust futex:
+  */
+diff --git a/kernel/futex/core.c b/kernel/futex/core.c
+index 125804fbb5cb..c99d7baab24e 100644
+--- a/kernel/futex/core.c
++++ b/kernel/futex/core.c
+@@ -1227,7 +1227,7 @@ static void __user *futex_uaddr(struct robust_list __user *entry,
+  * Fetch a robust-list pointer. Bit 0 signals PI futexes:
+  */
+ static inline int
+-compat_fetch_robust_entry(compat_uptr_t *uentry, struct robust_list __user **entry,
++fetch_robust_entry32(compat_uptr_t *uentry, struct robust_list __user **entry,
+ 		   compat_uptr_t __user *head, unsigned int *pi)
+ {
+ 	if (get_user(*uentry, head))
+@@ -1245,9 +1245,9 @@ compat_fetch_robust_entry(compat_uptr_t *uentry, struct robust_list __user **ent
+  *
+  * We silently return on any sign of list-walking problem.
+  */
+-static void compat_exit_robust_list(struct task_struct *curr)
++static void exit_robust_list32(struct task_struct *curr)
+ {
+-	struct compat_robust_list_head __user *head = curr->compat_robust_list;
++	struct robust_list_head32 __user *head = curr->robust_list32;
+ 	struct robust_list __user *entry, *next_entry, *pending;
+ 	unsigned int limit = ROBUST_LIST_LIMIT, pi, pip;
+ 	unsigned int next_pi;
+@@ -1259,7 +1259,7 @@ static void compat_exit_robust_list(struct task_struct *curr)
+ 	 * Fetch the list head (which was registered earlier, via
+ 	 * sys_set_robust_list()):
+ 	 */
+-	if (compat_fetch_robust_entry(&uentry, &entry, &head->list.next, &pi))
++	if (fetch_robust_entry32(&uentry, &entry, &head->list.next, &pi))
+ 		return;
+ 	/*
+ 	 * Fetch the relative futex offset:
+@@ -1270,7 +1270,7 @@ static void compat_exit_robust_list(struct task_struct *curr)
+ 	 * Fetch any possibly pending lock-add first, and handle it
+ 	 * if it exists:
+ 	 */
+-	if (compat_fetch_robust_entry(&upending, &pending,
++	if (fetch_robust_entry32(&upending, &pending,
+ 			       &head->list_op_pending, &pip))
+ 		return;
+ 
+@@ -1280,8 +1280,8 @@ static void compat_exit_robust_list(struct task_struct *curr)
+ 		 * Fetch the next entry in the list before calling
+ 		 * handle_futex_death:
+ 		 */
+-		rc = compat_fetch_robust_entry(&next_uentry, &next_entry,
+-			(compat_uptr_t __user *)&entry->next, &next_pi);
++		rc = fetch_robust_entry32(&next_uentry, &next_entry,
++			(u32 __user *)&entry->next, &next_pi);
+ 		/*
+ 		 * A pending lock might already be on the list, so
+ 		 * dont process it twice:
+@@ -1413,9 +1413,9 @@ static void futex_cleanup(struct task_struct *tsk)
+ 	}
+ 
+ #ifdef CONFIG_COMPAT
+-	if (unlikely(tsk->compat_robust_list)) {
+-		compat_exit_robust_list(tsk);
+-		tsk->compat_robust_list = NULL;
++	if (unlikely(tsk->robust_list32)) {
++		exit_robust_list32(tsk);
++		tsk->robust_list32 = NULL;
+ 	}
+ #endif
+ 
+diff --git a/kernel/futex/syscalls.c b/kernel/futex/syscalls.c
+index 880c9bf2f315..1de8ff230d54 100644
+--- a/kernel/futex/syscalls.c
++++ b/kernel/futex/syscalls.c
+@@ -43,7 +43,7 @@ static inline void __user *futex_task_robust_list(struct task_struct *p, bool co
+ {
+ #ifdef CONFIG_COMPAT
+ 	if (compat)
+-		return p->compat_robust_list;
++		return p->robust_list32;
+ #endif
+ 	return p->robust_list;
+ }
+@@ -468,13 +468,13 @@ SYSCALL_DEFINE4(futex_requeue,
+ 
+ #ifdef CONFIG_COMPAT
+ COMPAT_SYSCALL_DEFINE2(set_robust_list,
+-		struct compat_robust_list_head __user *, head,
++		struct robust_list_head32 __user *, head,
+ 		compat_size_t, len)
+ {
+ 	if (unlikely(len != sizeof(*head)))
+ 		return -EINVAL;
+ 
+-	current->compat_robust_list = head;
++	current->robust_list32 = head;
+ 
+ 	return 0;
+ }
+@@ -483,7 +483,7 @@ COMPAT_SYSCALL_DEFINE3(get_robust_list, int, pid,
+ 			compat_uptr_t __user *, head_ptr,
+ 			compat_size_t __user *, len_ptr)
+ {
+-	struct compat_robust_list_head __user *head = futex_get_robust_list_common(pid, true);
++	struct robust_list_head32 __user *head = futex_get_robust_list_common(pid, true);
+ 
+ 	if (IS_ERR(head))
+ 		return PTR_ERR(head);
+
+-- 
+2.52.0
+
