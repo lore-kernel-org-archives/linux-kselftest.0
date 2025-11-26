@@ -1,63 +1,66 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D332EE60B
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 23:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD90319618
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 23:17:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764199067; cv=none; b=IgcVfbtM87TEndq/JVk9CkTYhls/ISgO6ESx3QVk0WSI0zpEA3oW6H2biZBqN8v6b0WqI/6Cftn99UBFX6MN3MrmSXeu/b9TXXbhcCcf2ydBuHFielzFjQQ7vE/oLI8sdPn/it/CuVbdTiVWuUkBPMSGU6CZWPK/jt33x1QG4oc=
+	t=1764199067; cv=none; b=cXPBk0Fft21kXNBt0s2mO+FmIExRBDB9rv8gPQXi/3m+Ypa3yRIlJKtURQoCHLWv7DEfFzyqD5C+FX2iidebtiOZphX5LyphlWfVcHhfsMPY+QSOfOlba1QqEATitPcnvEm53fiw+9PfMUsblbHv6eNsK2B8LQ3FA4OHt4G/5Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1764199067; c=relaxed/simple;
-	bh=fAal4CbC565T8AukEvsx1Y6yN5vA0dvGqZqu9gFQxDs=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=jj9Z2RsCfLXWweEqXheFgQ8seIYqWGP0nvZQ9PhAtH9vAb4bObP5qUW6VXs9YZmBMW4Jj2LcxrQGqQnoHg3o7Dl087Yn5j5K8eRnYi3Gi/TIfY0DpBiZ4i1Y7NQM+jU7gI0q5DPceozE9qORGAMWbAjLhbHYzwCXDNAn4DIRSxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I1+ajg7g; arc=none smtp.client-ip=209.85.215.202
+	bh=ytX3CBxQB6HM7NBMnooSFk7NJ1C8J9dghwZd8ZNMX3I=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=HQXGRlUaQE66kTgwCTZVxaUKzkiRiE3E1scSu+ICVvzy5TCpVVt/pF0+NnbDymMfV22T2yLZhXWh7KEmmzdsd4dhlD0BAqPBe6TDHOpDXv7CN1AF70w0lqkF9t7wcChWXKDvBO0o4UwwAAD2wBhqjUztLL08+Urj6lUfSLSh0OM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kX84I2As; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I1+ajg7g"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-bcecfea0e8aso749774a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 15:17:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kX84I2As"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-7c240728e2aso349372b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 15:17:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764199062; x=1764803862; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rewarsz5lHkyJG1w0S/5e9AJ4dOqmqfJKq6P5FJmAK8=;
-        b=I1+ajg7gLu0C1JXsCc+MEYUEfw+D96YOi9fi0syPMTkydsI9LQP7SHJ9eFIau40I9k
-         8Bx1rkfUydkydIor6toNBmDY5nhnvsb9ctRQXMifl5dD+OFIoyZxNWVX3IcEOwvQ3+Wp
-         rvbqDJanoIuEMu1vkeJW9PeLGR8KrpiPjZ/egOrb9EUQMwCkndiSqxMoI1XzHdJqee8/
-         UaWqhVy13UBZsIfRTFcqzKsEKmGvHmbCU/GYNujBsQJM35PX/SpP7fB9A4Sx3c+CIKk1
-         a7fHTCqv3KMDlYjMbCrLqVtfCOnT0AJJ6j2uV0T8n+bmQLi1eN/X2RFOUhm5WF08p1pf
-         IwAw==
+        d=google.com; s=20230601; t=1764199065; x=1764803865; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Wp2S1X0hew5lZQcMv1NbnHtXE5tMGk6LyL82ko2ZiQ=;
+        b=kX84I2AsXmCq1gftss2oLYteQ1BWfA8liVX197aFLP0aupL6K5e8/yJK5W/S1gwezP
+         cQS0RQzzDOvbg0jeZBOH9N7rLUKffyp2j5s2LAJEBHaQQiaIaDbYG8+UFh43A0y9wUD7
+         5vfFosVP3txG8Nr7wmHpsOwPn4bKxQp0Z9Vfi6ZxuFU2aw/2YWkAdS4AJVZY0pIcmpV0
+         Ft3gKSiFEbW8UkrNogR49dK2Z/UZ87fNlTRw+2E8EvDXu1knqmNvc2rly7dYRVNOAU/D
+         kQnNukIchwquN4qqSrkVZ225BVcbnjxw37mhQUVXscP4JM8aKVI6EUxSKGyN1tGerIAG
+         bMhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764199062; x=1764803862;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rewarsz5lHkyJG1w0S/5e9AJ4dOqmqfJKq6P5FJmAK8=;
-        b=ZPooT2CJhCgiAKp9BsHvVNM9BgOdccN3ShRCtT2DxFI3iI3kP0XJI6xt5BG5RoNdA2
-         WwIWcn/+Mx56jttAyO4SMBKJ/5A+n+PAwHcE69Kcy8ycqBd4FoCvO0x+VJogwVKIT8mp
-         ng/N3H0VACaIYel3Mb91LHTd+jqQ6FzlBh8ny6cdctwiGA5fquAEcwnWkKd4yj6jd2HN
-         PjKkUdJm+MQXeFntmGWDjZUOAFso6oheG+uhohK81j+gP5/YdTMYkPYzVHss4k6ZYHu+
-         eQIYsgjetlPiA/UVA0qSrlFLst/NuJ/gkTaxYPS6+QmUT4mTH8ltWJmJnfJ7JJBpvf/i
-         l32Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVeO7C1cnqTbmsO3ATPP4Hey85JhMnk77OYJPhj++ppdn4k0AJ3H59IJZWtiNfUGvdPvxn3ss6NTDsxt4VPvhc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJfK8upTztbsV/VRe6er5+6VZ0VZWAMJ+Q4AFQzMXckcnBGj80
-	cmUgW/ePKBmHlsgUqq1lcJGFaPNgW0MghzuKNAhD+WeOv/tbj0UtKVPiYTJu4mIz/bm6GsbZhUT
-	e5OltERAFDQdPNA==
-X-Google-Smtp-Source: AGHT+IGl4ix+WUhNbfT6GuNED+PoTbz7h6VtC9pC+cMM5HkCe/+8ngbNnsgCrJsl2QHM7TWeuuvo+gqpPhueqw==
-X-Received: from pjvl19.prod.google.com ([2002:a17:90a:dd93:b0:340:b503:505f])
+        d=1e100.net; s=20230601; t=1764199065; x=1764803865;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Wp2S1X0hew5lZQcMv1NbnHtXE5tMGk6LyL82ko2ZiQ=;
+        b=OEAUkqVlihdSwx3Ystw8cjvnHdc406Q9kN7pL3ZyS80422ZUhmZGkxuT+PmVPbE4du
+         5MyMj82GcTqPUpfSEHxzBy8bxdEImx6P1FqLMLSSvZZlnC9Q0kV3sn/Wj1Bv1ZDKKiC+
+         eA06iDuB6+HgZxvhSVJQgF+s0RsGYVTXKJuhbp6nBdpLTjOJn0Q9Wxs/YfsaVE0NE3En
+         26nDvqpxjsi5xzhsHA36ENbWbpHV+9PVu3WmOApG1lNV3eDeVrUOWZ03aftU2Gy9Gmk7
+         0Vx5P+CXxUOqlgbWOoRYo6PhxaFDm8ovCl87MFPP3W47snfrES+BQFF6jLmLc6Z+Q6c8
+         Z5Ww==
+X-Forwarded-Encrypted: i=1; AJvYcCW67veWidtcUG9ZwkWSf0k2lpoDvLgNJ6xmCfiJuNV9Yzb+PYhpCe3lYOWFzFu5yYJpKVRkq2QBJbLOD9uRGEw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjGFf7LanzhrNfiwwIg3qRo/0oRTnr7aIaA20ESNs0aDiqfDjt
+	2Xm469Mup+RZ8huPsTVNCmqx7dNb+8Wa0PL19+JjEuTA+lSnxCtYELZrZ+EWv/JzMmszpzN4yr/
+	yq81t5LU/doZHeg==
+X-Google-Smtp-Source: AGHT+IGbazQZf/QHG81eyMCjbSlrE/uzdGeYHEtqJoKQRqGpn+IKGzk8l6bKvcyAxXvVmw2bCeNKfyIocPBneA==
+X-Received: from pfbfp10.prod.google.com ([2002:a05:6a00:608a:b0:7b2:242c:6852])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:4f8a:b0:343:78ed:8d19 with SMTP id 98e67ed59e1d1-3472985089cmr27137255a91.7.1764199062081;
- Wed, 26 Nov 2025 15:17:42 -0800 (PST)
-Date: Wed, 26 Nov 2025 23:17:15 +0000
+ 2002:a05:6a00:3d12:b0:7ac:c6f4:abc2 with SMTP id d2e1a72fcca58-7c58eaff95bmr22874258b3a.26.1764199065201;
+ Wed, 26 Nov 2025 15:17:45 -0800 (PST)
+Date: Wed, 26 Nov 2025 23:17:17 +0000
+In-Reply-To: <20251126231733.3302983-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20251126231733.3302983-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.52.0.487.g5c8c507ade-goog
-Message-ID: <20251126231733.3302983-1-dmatlack@google.com>
-Subject: [PATCH v4 00/18] vfio: selftests: Support for multi-device tests
+Message-ID: <20251126231733.3302983-3-dmatlack@google.com>
+Subject: [PATCH v4 02/18] vfio: selftests: Split run.sh into separate scripts
 From: David Matlack <dmatlack@google.com>
 To: Alex Williamson <alex@shazbot.org>
 Cc: Alex Mastro <amastro@fb.com>, David Matlack <dmatlack@google.com>, 
@@ -66,151 +69,339 @@ Cc: Alex Mastro <amastro@fb.com>, David Matlack <dmatlack@google.com>,
 	Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This series adds support for tests that use multiple devices, and adds
-one new test, vfio_pci_device_init_perf_test, which measures parallel
-device initialization time to demonstrate the improvement from commit
-e908f58b6beb ("vfio/pci: Separate SR-IOV VF dev_set").
+Split run.sh into separate scripts (setup.sh, run.sh, cleanup.sh) to
+enable multi-device testing, and prepare for VFIO selftests
+automatically detecting which devices to use for testing by storing
+device metadata on the filesystem.
 
-This series also breaks apart the monolithic vfio_util.h and
-vfio_pci_device.c into separate files, to account for all the new code.
-This required quite a bit of code motion so the diffstat looks large.
-The final layout is more granular and provides a better separation of
-the IOMMU code from the device code.
+ - setup.sh takes one or more BDFs as arguments and sets up each device.
+   Metadata about each device is stored on the filesystem in the
+   directory:
 
-Final layout:
+	   ${TMPDIR:-/tmp}/vfio-selftests-devices
 
-  C files:
-    - tools/testing/selftests/vfio/lib/libvfio.c
-    - tools/testing/selftests/vfio/lib/iommu.c
-    - tools/testing/selftests/vfio/lib/iova_allocator.c
-    - tools/testing/selftests/vfio/lib/vfio_pci_device.c
-    - tools/testing/selftests/vfio/lib/vfio_pci_driver.c
+   Within this directory is a directory for each BDF, and then files in
+   those directories that cleanup.sh uses to cleanup the device.
 
-  H files:
-   - tools/testing/selftests/vfio/lib/include/libvfio.h
-   - tools/testing/selftests/vfio/lib/include/libvfio/assert.h
-   - tools/testing/selftests/vfio/lib/include/libvfio/iommu.h
-   - tools/testing/selftests/vfio/lib/include/libvfio/iova_allocator.h
-   - tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-   - tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
+ - run.sh runs a selftest by passing it the BDFs of all set up devices.
 
-Notably, vfio_util.h is now gone and replaced with libvfio.h.
+ - cleanup.sh takes zero or more BDFs as arguments and cleans up each
+   device. If no BDFs are provided, it cleans up all devices.
 
-This series is based on vfio/next plus Alex Mastro's series to add the
-IOVA allocator [1]. It should apply cleanly to vfio/next once Alex's
-series makes its way to vfio/next via Linus' tree.
+This split enables multi-device testing by allowing multiple BDFs to be
+set up and passed into tests:
 
-This series can be found on GitHub:
+For example:
 
-  https://github.com/dmatlack/linux/tree/vfio/selftests/init_perf_test/v4
+  $ tools/testing/selftests/vfio/scripts/setup.sh <BDF1> <BDF2>
+  $ tools/testing/selftests/vfio/scripts/setup.sh <BDF3>
+  $ tools/testing/selftests/vfio/scripts/run.sh echo
+  <BDF1> <BDF2> <BDF3>
+  $ tools/testing/selftests/vfio/scripts/cleanup.sh
 
-[1] https://lore.kernel.org/kvm/20251111-iova-ranges-v3-0-7960244642c5@fb.com/
+In the future, VFIO selftests can automatically detect set up devices by
+inspecting ${TMPDIR:-/tmp}/vfio-selftests-devices. This will avoid the
+need for the run.sh script.
 
-Cc: Alex Mastro <amastro@fb.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Josh Hilke <jrhilke@google.com>
-Cc: Raghavendra Rao Ananta <rananta@google.com>
-Cc: Vipin Sharma <vipinsh@google.com>
-
-v4:
- - Collect Reviewed-bys from Raghavendra
- - Check iommu is not null in vfio_pci_device_init() (Raghavendra)
- - Do not include any fixes for the kernel-test-robot errors on riscv.
-   These issues also exist when building the VFIO selftests without this
-   series using kernel-test-robot's cross compiler. The issue appears to
-   be that the cross compiler used by ktr does not have libc, which the
-   selftests depend on.
-
-v3: https://lore.kernel.org/kvm/20251121181429.1421717-1-dmatlack@google.com/
- - Replace literal with NSEC_PER_SEC (Alex Mastro)
- - Fix Makefile accumulate vs. assignment (Alex Mastro)
-
-v2: https://lore.kernel.org/kvm/20251112192232.442761-1-dmatlack@google.com/
- - Require tests to call iommu_init() and manage struct iommu objects
-   rather than implicitly doing it in vfio_pci_device_init().
- - Drop all the device wrappers for IOMMU methods and require tests to
-   interact with the iommu_*() helper functions directly.
- - Add a commit to eliminate INVALID_IOVA. This is a simple cleanup I've
-   been meaning to make.
- - Upgrade some driver logging to error (Raghavendra)
- - Remove plurality from helper function that fetches BDF from
-   environment variable (Raghavendra)
- - Fix cleanup.sh to only delete the device directory when cleaning up
-   all devices (Raghavendra)
-
-v1: https://lore.kernel.org/kvm/20251008232531.1152035-1-dmatlack@google.com/
-
-David Matlack (18):
-  vfio: selftests: Move run.sh into scripts directory
-  vfio: selftests: Split run.sh into separate scripts
-  vfio: selftests: Allow passing multiple BDFs on the command line
-  vfio: selftests: Rename struct vfio_iommu_mode to iommu_mode
-  vfio: selftests: Introduce struct iommu
-  vfio: selftests: Support multiple devices in the same
-    container/iommufd
-  vfio: selftests: Eliminate overly chatty logging
-  vfio: selftests: Prefix logs with device BDF where relevant
-  vfio: selftests: Upgrade driver logging to dev_err()
-  vfio: selftests: Rename struct vfio_dma_region to dma_region
-  vfio: selftests: Move IOMMU library code into iommu.c
-  vfio: selftests: Move IOVA allocator into iova_allocator.c
-  vfio: selftests: Stop passing device for IOMMU operations
-  vfio: selftests: Rename vfio_util.h to libvfio.h
-  vfio: selftests: Move vfio_selftests_*() helpers into libvfio.c
-  vfio: selftests: Split libvfio.h into separate header files
-  vfio: selftests: Eliminate INVALID_IOVA
-  vfio: selftests: Add vfio_pci_device_init_perf_test
-
- tools/testing/selftests/vfio/Makefile         |  10 +-
- .../selftests/vfio/lib/drivers/dsa/dsa.c      |  36 +-
- .../selftests/vfio/lib/drivers/ioat/ioat.c    |  18 +-
- .../selftests/vfio/lib/include/libvfio.h      |  26 +
- .../vfio/lib/include/libvfio/assert.h         |  54 ++
- .../vfio/lib/include/libvfio/iommu.h          |  76 +++
- .../vfio/lib/include/libvfio/iova_allocator.h |  23 +
- .../lib/include/libvfio/vfio_pci_device.h     | 125 ++++
- .../lib/include/libvfio/vfio_pci_driver.h     |  97 +++
- .../selftests/vfio/lib/include/vfio_util.h    | 331 -----------
- tools/testing/selftests/vfio/lib/iommu.c      | 465 +++++++++++++++
- .../selftests/vfio/lib/iova_allocator.c       |  94 +++
- tools/testing/selftests/vfio/lib/libvfio.c    |  78 +++
- tools/testing/selftests/vfio/lib/libvfio.mk   |   5 +-
- .../selftests/vfio/lib/vfio_pci_device.c      | 556 +-----------------
- .../selftests/vfio/lib/vfio_pci_driver.c      |  16 +-
- tools/testing/selftests/vfio/run.sh           | 109 ----
- .../testing/selftests/vfio/scripts/cleanup.sh |  41 ++
- tools/testing/selftests/vfio/scripts/lib.sh   |  42 ++
- tools/testing/selftests/vfio/scripts/run.sh   |  16 +
- tools/testing/selftests/vfio/scripts/setup.sh |  48 ++
- .../selftests/vfio/vfio_dma_mapping_test.c    |  46 +-
- .../selftests/vfio/vfio_iommufd_setup_test.c  |   2 +-
- .../vfio/vfio_pci_device_init_perf_test.c     | 168 ++++++
- .../selftests/vfio/vfio_pci_device_test.c     |  12 +-
- .../selftests/vfio/vfio_pci_driver_test.c     |  51 +-
- 26 files changed, 1482 insertions(+), 1063 deletions(-)
- create mode 100644 tools/testing/selftests/vfio/lib/include/libvfio.h
- create mode 100644 tools/testing/selftests/vfio/lib/include/libvfio/assert.h
- create mode 100644 tools/testing/selftests/vfio/lib/include/libvfio/iommu.h
- create mode 100644 tools/testing/selftests/vfio/lib/include/libvfio/iova_allocator.h
- create mode 100644 tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
- create mode 100644 tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
- delete mode 100644 tools/testing/selftests/vfio/lib/include/vfio_util.h
- create mode 100644 tools/testing/selftests/vfio/lib/iommu.c
- create mode 100644 tools/testing/selftests/vfio/lib/iova_allocator.c
- create mode 100644 tools/testing/selftests/vfio/lib/libvfio.c
- delete mode 100755 tools/testing/selftests/vfio/run.sh
+Reviewed-by: Alex Mastro <amastro@fb.com>
+Tested-by: Alex Mastro <amastro@fb.com>
+Reviewed-by: Raghavendra Rao Ananta <rananta@google.com>
+Signed-off-by: David Matlack <dmatlack@google.com>
+---
+ tools/testing/selftests/vfio/Makefile         |   3 +
+ .../testing/selftests/vfio/scripts/cleanup.sh |  41 +++++++
+ tools/testing/selftests/vfio/scripts/lib.sh   |  42 +++++++
+ tools/testing/selftests/vfio/scripts/run.sh   | 105 +-----------------
+ tools/testing/selftests/vfio/scripts/setup.sh |  48 ++++++++
+ 5 files changed, 140 insertions(+), 99 deletions(-)
  create mode 100755 tools/testing/selftests/vfio/scripts/cleanup.sh
  create mode 100755 tools/testing/selftests/vfio/scripts/lib.sh
- create mode 100755 tools/testing/selftests/vfio/scripts/run.sh
  create mode 100755 tools/testing/selftests/vfio/scripts/setup.sh
- create mode 100644 tools/testing/selftests/vfio/vfio_pci_device_init_perf_test.c
 
-
-base-commit: fa804aa4ac1b091ef2ec2981f08a1c28aaeba8e7
-prerequisite-patch-id: dcf23dcc1198960bda3102eefaa21df60b2e4c54
-prerequisite-patch-id: e32e56d5bf7b6c7dd40d737aa3521560407e00f5
-prerequisite-patch-id: 4f79a41bf10a4c025ba5f433551b46035aa15878
-prerequisite-patch-id: f903a45f0c32319138cd93a007646ab89132b18c
+diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+index ad7fa4071c20..a29f99395206 100644
+--- a/tools/testing/selftests/vfio/Makefile
++++ b/tools/testing/selftests/vfio/Makefile
+@@ -4,7 +4,10 @@ TEST_GEN_PROGS += vfio_iommufd_setup_test
+ TEST_GEN_PROGS += vfio_pci_device_test
+ TEST_GEN_PROGS += vfio_pci_driver_test
+ 
++TEST_FILES += scripts/cleanup.sh
++TEST_FILES += scripts/lib.sh
+ TEST_FILES += scripts/run.sh
++TEST_FILES += scripts/setup.sh
+ 
+ include ../lib.mk
+ include lib/libvfio.mk
+diff --git a/tools/testing/selftests/vfio/scripts/cleanup.sh b/tools/testing/selftests/vfio/scripts/cleanup.sh
+new file mode 100755
+index 000000000000..69c922d8aafb
+--- /dev/null
++++ b/tools/testing/selftests/vfio/scripts/cleanup.sh
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: GPL-2.0-or-later
++
++source $(dirname -- "${BASH_SOURCE[0]}")/lib.sh
++
++function cleanup_devices() {
++	local device_bdf
++	local device_dir
++
++	for device_bdf in "$@"; do
++		device_dir=${DEVICES_DIR}/${device_bdf}
++
++		if [ -f ${device_dir}/vfio-pci ]; then
++			unbind ${device_bdf} vfio-pci
++		fi
++
++		if [ -f ${device_dir}/driver_override ]; then
++			clear_driver_override ${device_bdf}
++		fi
++
++		if [ -f ${device_dir}/driver ]; then
++			bind ${device_bdf} $(cat ${device_dir}/driver)
++		fi
++
++		if [ -f ${device_dir}/sriov_numvfs ]; then
++			set_sriov_numvfs ${device_bdf} $(cat ${device_dir}/sriov_numvfs)
++		fi
++
++		rm -rf ${device_dir}
++	done
++}
++
++function main() {
++	if [ $# = 0 ]; then
++		cleanup_devices $(ls ${DEVICES_DIR})
++		rmdir ${DEVICES_DIR}
++	else
++		cleanup_devices "$@"
++	fi
++}
++
++main "$@"
+diff --git a/tools/testing/selftests/vfio/scripts/lib.sh b/tools/testing/selftests/vfio/scripts/lib.sh
+new file mode 100755
+index 000000000000..9f05f29c7b86
+--- /dev/null
++++ b/tools/testing/selftests/vfio/scripts/lib.sh
+@@ -0,0 +1,42 @@
++# SPDX-License-Identifier: GPL-2.0-or-later
++
++readonly DEVICES_DIR="${TMPDIR:-/tmp}/vfio-selftests-devices"
++
++function write_to() {
++	# Unfortunately set -x does not show redirects so use echo to manually
++	# tell the user what commands are being run.
++	echo "+ echo \"${2}\" > ${1}"
++	echo "${2}" > ${1}
++}
++
++function get_driver() {
++	if [ -L /sys/bus/pci/devices/${1}/driver ]; then
++		basename $(readlink -m /sys/bus/pci/devices/${1}/driver)
++	fi
++}
++
++function bind() {
++	write_to /sys/bus/pci/drivers/${2}/bind ${1}
++}
++
++function unbind() {
++	write_to /sys/bus/pci/drivers/${2}/unbind ${1}
++}
++
++function set_sriov_numvfs() {
++	write_to /sys/bus/pci/devices/${1}/sriov_numvfs ${2}
++}
++
++function get_sriov_numvfs() {
++	if [ -f /sys/bus/pci/devices/${1}/sriov_numvfs ]; then
++		cat /sys/bus/pci/devices/${1}/sriov_numvfs
++	fi
++}
++
++function set_driver_override() {
++	write_to /sys/bus/pci/devices/${1}/driver_override ${2}
++}
++
++function clear_driver_override() {
++	set_driver_override ${1} ""
++}
+diff --git a/tools/testing/selftests/vfio/scripts/run.sh b/tools/testing/selftests/vfio/scripts/run.sh
+index 0476b6d7adc3..91fd38f9f6f6 100755
+--- a/tools/testing/selftests/vfio/scripts/run.sh
++++ b/tools/testing/selftests/vfio/scripts/run.sh
+@@ -1,109 +1,16 @@
+ # SPDX-License-Identifier: GPL-2.0-or-later
+ 
+-# Global variables initialized in main() and then used during cleanup() when
+-# the script exits.
+-declare DEVICE_BDF
+-declare NEW_DRIVER
+-declare OLD_DRIVER
+-declare OLD_NUMVFS
+-declare DRIVER_OVERRIDE
+-
+-function write_to() {
+-	# Unfortunately set -x does not show redirects so use echo to manually
+-	# tell the user what commands are being run.
+-	echo "+ echo \"${2}\" > ${1}"
+-	echo "${2}" > ${1}
+-}
+-
+-function bind() {
+-	write_to /sys/bus/pci/drivers/${2}/bind ${1}
+-}
+-
+-function unbind() {
+-	write_to /sys/bus/pci/drivers/${2}/unbind ${1}
+-}
+-
+-function set_sriov_numvfs() {
+-	write_to /sys/bus/pci/devices/${1}/sriov_numvfs ${2}
+-}
+-
+-function set_driver_override() {
+-	write_to /sys/bus/pci/devices/${1}/driver_override ${2}
+-}
+-
+-function clear_driver_override() {
+-	set_driver_override ${1} ""
+-}
+-
+-function cleanup() {
+-	if [ "${NEW_DRIVER}"      ]; then unbind ${DEVICE_BDF} ${NEW_DRIVER} ; fi
+-	if [ "${DRIVER_OVERRIDE}" ]; then clear_driver_override ${DEVICE_BDF} ; fi
+-	if [ "${OLD_DRIVER}"      ]; then bind ${DEVICE_BDF} ${OLD_DRIVER} ; fi
+-	if [ "${OLD_NUMVFS}"      ]; then set_sriov_numvfs ${DEVICE_BDF} ${OLD_NUMVFS} ; fi
+-}
+-
+-function usage() {
+-	echo "usage: $0 [-d segment:bus:device.function] [-s] [-h] [cmd ...]" >&2
+-	echo >&2
+-	echo "  -d: The BDF of the device to use for the test (required)" >&2
+-	echo "  -h: Show this help message" >&2
+-	echo "  -s: Drop into a shell rather than running a command" >&2
+-	echo >&2
+-	echo "   cmd: The command to run and arguments to pass to it." >&2
+-	echo "        Required when not using -s. The SBDF will be " >&2
+-	echo "        appended to the argument list." >&2
+-	exit 1
+-}
++source $(dirname -- "${BASH_SOURCE[0]}")/lib.sh
+ 
+ function main() {
+-	local shell
+-
+-	while getopts "d:hs" opt; do
+-		case $opt in
+-			d) DEVICE_BDF="$OPTARG" ;;
+-			s) shell=true ;;
+-			*) usage ;;
+-		esac
+-	done
+-
+-	# Shift past all optional arguments.
+-	shift $((OPTIND - 1))
+-
+-	# Check that the user passed in the command to run.
+-	[ ! "${shell}" ] && [ $# = 0 ] && usage
+-
+-	# Check that the user passed in a BDF.
+-	[ "${DEVICE_BDF}" ] || usage
+-
+-	trap cleanup EXIT
+-	set -e
++	local device_bdfs=$(ls ${DEVICES_DIR})
+ 
+-	test -d /sys/bus/pci/devices/${DEVICE_BDF}
+-
+-	if [ -f /sys/bus/pci/devices/${DEVICE_BDF}/sriov_numvfs ]; then
+-		OLD_NUMVFS=$(cat /sys/bus/pci/devices/${DEVICE_BDF}/sriov_numvfs)
+-		set_sriov_numvfs ${DEVICE_BDF} 0
+-	fi
+-
+-	if [ -L /sys/bus/pci/devices/${DEVICE_BDF}/driver ]; then
+-		OLD_DRIVER=$(basename $(readlink -m /sys/bus/pci/devices/${DEVICE_BDF}/driver))
+-		unbind ${DEVICE_BDF} ${OLD_DRIVER}
++	if [ -z "${device_bdfs}" ]; then
++		echo "No devices found, skipping."
++		exit 4
+ 	fi
+ 
+-	set_driver_override ${DEVICE_BDF} vfio-pci
+-	DRIVER_OVERRIDE=true
+-
+-	bind ${DEVICE_BDF} vfio-pci
+-	NEW_DRIVER=vfio-pci
+-
+-	echo
+-	if [ "${shell}" ]; then
+-		echo "Dropping into ${SHELL} with VFIO_SELFTESTS_BDF=${DEVICE_BDF}"
+-		VFIO_SELFTESTS_BDF=${DEVICE_BDF} ${SHELL}
+-	else
+-		"$@" ${DEVICE_BDF}
+-	fi
+-	echo
++	"$@" ${device_bdfs}
+ }
+ 
+ main "$@"
+diff --git a/tools/testing/selftests/vfio/scripts/setup.sh b/tools/testing/selftests/vfio/scripts/setup.sh
+new file mode 100755
+index 000000000000..49a499e51cbe
+--- /dev/null
++++ b/tools/testing/selftests/vfio/scripts/setup.sh
+@@ -0,0 +1,48 @@
++# SPDX-License-Identifier: GPL-2.0-or-later
++set -e
++
++source $(dirname -- "${BASH_SOURCE[0]}")/lib.sh
++
++function main() {
++	local device_bdf
++	local device_dir
++	local numvfs
++	local driver
++
++	if [ $# = 0 ]; then
++		echo "usage: $0 segment:bus:device.function ..." >&2
++		exit 1
++	fi
++
++	for device_bdf in "$@"; do
++		test -d /sys/bus/pci/devices/${device_bdf}
++
++		device_dir=${DEVICES_DIR}/${device_bdf}
++		if [ -d "${device_dir}" ]; then
++			echo "${device_bdf} has already been set up, exiting."
++			exit 0
++		fi
++
++		mkdir -p ${device_dir}
++
++		numvfs=$(get_sriov_numvfs ${device_bdf})
++		if [ "${numvfs}" ]; then
++			set_sriov_numvfs ${device_bdf} 0
++			echo ${numvfs} > ${device_dir}/sriov_numvfs
++		fi
++
++		driver=$(get_driver ${device_bdf})
++		if [ "${driver}" ]; then
++			unbind ${device_bdf} ${driver}
++			echo ${driver} > ${device_dir}/driver
++		fi
++
++		set_driver_override ${device_bdf} vfio-pci
++		touch ${device_dir}/driver_override
++
++		bind ${device_bdf} vfio-pci
++		touch ${device_dir}/vfio-pci
++	done
++}
++
++main "$@"
 -- 
 2.52.0.487.g5c8c507ade-goog
 
