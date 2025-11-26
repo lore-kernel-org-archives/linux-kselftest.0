@@ -1,79 +1,56 @@
-Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD02C1F03D9
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 05:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686BB21FF46;
+	Wed, 26 Nov 2025 07:15:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764136049; cv=none; b=r3ZGChm90R8SgazyKPMrVWdn+KnrKxMBHHXDwRd/xnUoh0g9Yaock62QIJKpegxCedG/719l55lMox9z2jG7+UiWDpNrXbUnMZHwlzzbCiR6MmAk8oHgN5Izuig2rHjNu/iNbegXD/YbMTMaYxkmVf0b7QhHlp9LL71ijp0xy8U=
+	t=1764141303; cv=none; b=thQld0QQAOOmyFdD7MmcTwSaiIVQvkUrgOa53l77pdqIuNEIZaZ9+Fuj4Wm8O8yrI4xSgOJRAouH52V7rNVjGzJ5WuZoe21Bl2Uh6w8fi2X9P8+k9dV0bq3DG7awBnaByDtr1dQ/FmSHNbFAiN8xnzCfM/jsod9FjQCpEPIjXng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764136049; c=relaxed/simple;
-	bh=SX4gdnaKbrrM/98jsYyscC7GPKCA8qiYmGpiNZ6mimU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BnWkGRcBHImXuc+lMK5m2ar3wyfe+AjJQ8ZVRwQnoX5JTsaWAtKs5XbC9kaXQlw8BqRoi6K2GxkV475YdeJUYk9kXi+Qeimv3RwW6wqEskJrP5Fo0ZNL2Tpa0e+G5BufAj5eNy0xWYoQEzRF46fvse8hjpFWPFOZM97OmcBl/ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lgz0TpeK; arc=none smtp.client-ip=209.85.214.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1764141303; c=relaxed/simple;
+	bh=I+995feiIQlvI5w2DpfXefRJlZ4xjz5o7lg57KdVKxI=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YSB2DHUD+aXGEXiaaysL2DRQKz588bnMcnzqvtNPL5Vfru21HP28OCv+YasICLMFbeczmIYtbU0iyNCkYbIt2Rg6RKYNswnozEjT4JgeAhT3BxaE6m18aoccCKFY2DRmjGoGy4NiaXionqLiXPZq8CEDjYbagxOw8VyGn6AN0Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Lz4Ee3ld; arc=none smtp.client-ip=113.46.200.224
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lgz0TpeK"
-Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-298250d7769so47523405ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Nov 2025 21:47:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764136047; x=1764740847; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oYN7Mj32IOmlBJhYBCg5Nac20JOashG6O7HeX4jvMpQ=;
-        b=Lgz0TpeK9lbozgg3aF3W5/9ovOF69hKLGpl7q4XKRxBngJvz+KFMTB/PUmDoWQOEzn
-         hGAp/ZXVJa+L2vke7NfOuNwXyaLj77u6LS9s4/HTjr8OCP8CMtFNKWXZMEOu/v8C0hRY
-         7f09xjYhGVUb76WLP0tVlps/bj9npjvEkQvOF5KJvCjVxLcMOSFA5QzcyKNqfS0EmqYT
-         MNcS5566NX104p5Cu6ynHC6sim37bp+nPiVi/wBJU+KI2AA5gl0jeQ06gqmni8sBkXYQ
-         kj5Hd+rD+PHnKkGRNaYSP1Ad9ARwnLiKKuReMIG36q6mmu2X+XbYpaNpG2cWB0HRzfej
-         VPzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764136047; x=1764740847;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oYN7Mj32IOmlBJhYBCg5Nac20JOashG6O7HeX4jvMpQ=;
-        b=KNxN2lVxmZb5fpCsw4f8rF7DejJCG31CaSSXjQMM0fu2fzNZWbtfL7jGT+7cAfqp91
-         Ml1SFQrKgaKGYUtNuXh4tYBijNC+A3rCAWebMwwMm3b06JOABFqi3Qucwm0znDr1Ynt7
-         XVl5+2I/xiGNyRR88T5IxKxfAjUfft0nl8jAtcjCHvMQtq3iIA4Kkqs2COwXya7EbiNs
-         gw8JeJcVY4ZPLnWO2ju4CZ1Oh2HOKxGFkcPxFaw0HlTxuOlPqdhTqwvkDcxpt15XhDTa
-         UzCL+RUZ/S8M7yaXqEta0wf9xrE9iQ1HYU/3e9Y+WArXUW5kwRg8K8mgdTrYl1sDv+FP
-         cgoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUDR1AyLNF4sk8c6YaGLkdqauUqRKkufeP2qHujY5/myNRtQW8d9Z+zLU8hwK97AaT1olY8eXOnzH87hhaWTaY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUFmydIcqFnzNpUcSiGiEWe4Dpbin5tooyTD4Ssqq7/tgmQGZM
-	G9wk+Z0Qs0YxBt2s8mczDSfDga8XitYoNutrsNKCQCfFpYoeJ9gmzGbk/vTuzU+z
-X-Gm-Gg: ASbGncu+t3zLuBhhtymUlPMfUKgZWEnM+PALeJwtxLW8ZtVSM3R4vanuQ1GoW/jSwc0
-	X5EmODC/dZKoP+HaaMICv9cKWrWD8Ov56LuTBuokuCUKCv5Qeo7alvMLt7DIv4lonz+ONO+39lW
-	O1yZmzDOb2OF8e4pgSw9cHxAnf3hl7yuQNw83p67CcF9Aqme/EYR2bXSRNYaxYkrcgXzVJ1xeG+
-	2XC/oQ2YBoknCEmJNHh1SEGiErBTquI987bDropqTwutya5+gxmIq2AOYXA/zbbk5Thv4oqlNaa
-	Hm1yFbVlF4fPgjejEjqpSXc0HwS7LSIqvsi3+WRfjOjEnr4YxCkLildFGbIXqxOy5gDJJh4YkaX
-	0bpAF42QgjHXbpj65KcMh953JOQrx5vs4OhmHGE3JGD18PamZNp49EA0GkBF6Mu9iYJPacU1Lw3
-	NquqNXEmNQXyGu/FjOvJLYOM8+mwyAkQ==
-X-Google-Smtp-Source: AGHT+IGr1tQa7Uao2h+kQ37gSFBMOo/Ip9Hcs/Ret4+9Zty10j81F1qt78ZblE66dvLORo7hYxLb6A==
-X-Received: by 2002:a17:903:292:b0:298:43f4:cc4b with SMTP id d9443c01a7336-29b6c50c632mr197507855ad.26.1764136046937;
-        Tue, 25 Nov 2025 21:47:26 -0800 (PST)
-Received: from fedora ([103.120.31.122])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b1077e9sm188374075ad.15.2025.11.25.21.47.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 21:47:26 -0800 (PST)
-From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-To: Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Subject: [PATCH net-next] selftests/net/ipsec: Fix variable size type not at the end of struct
-Date: Wed, 26 Nov 2025 11:17:11 +0530
-Message-ID: <20251126054711.26465-1-ankitkhushwaha.linux@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Lz4Ee3ld"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=FtKvnxZXZgzObQ4W0owI/iA3ruc5UMsJHnOfm0fb+ao=;
+	b=Lz4Ee3ldUBERYkkic7N0aU+DN9IO0pS11twtCQgkoqp8dF8vCz5+7fjuxQlKHyokH7WuMWD9r
+	BRmAylsJUVyBOZ73xn+7Gsb25Bu5l2/7UM3f0WGZiEULC0QAJNv13vpc2nvMk97LWJ5UIeitHCS
+	SbOnPovP80uiYKpEvd+8h+0=
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4dGW453jtKz1cyQD;
+	Wed, 26 Nov 2025 15:13:09 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id BCE3414011F;
+	Wed, 26 Nov 2025 15:14:57 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
+ (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 26 Nov
+ 2025 15:14:56 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
+	<tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
+	<shuah@kernel.org>, <kees@kernel.org>, <wad@chromium.org>,
+	<charlie@rivosinc.com>, <akpm@linux-foundation.org>, <ldv@strace.io>,
+	<macro@orcam.me.uk>, <deller@gmx.de>, <mark.rutland@arm.com>,
+	<efault@gmx.de>, <song@kernel.org>, <mbenes@suse.cz>, <ryan.roberts@arm.com>,
+	<ada.coupriediaz@arm.com>, <anshuman.khandual@arm.com>, <broonie@kernel.org>,
+	<kevin.brodsky@arm.com>, <pengcan@kylinos.cn>, <dvyukov@google.com>,
+	<kmal@cock.li>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH v8 03/12] arm64/ptrace: Refactor syscall_trace_enter/exit()
+Date: Wed, 26 Nov 2025 15:14:37 +0800
+Message-ID: <20251126071446.3234218-4-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251126071446.3234218-1-ruanjinjie@huawei.com>
+References: <20251126071446.3234218-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,77 +58,119 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-The "struct alg" object contains a union of 3 xfrm structures:
+The generic syscall entry code has the following form, which use
+the input syscall work flag and syscall number:
 
-	union {
-		struct xfrm_algo;
-		struct xfrm_algo_aead;
-		struct xfrm_algo_auth;
-	}
+| syscall_trace_enter(struct pt_regs *regs, long syscall,
+|		      unsigned long work)
+|
+| syscall_exit_work(struct pt_regs *regs, unsigned long work)
 
-All of them end with a flexible array member used to store key material,
-but the flexible array appears at *different offsets* in each struct.
-bcz of this, union itself is of variable-sized & Placing it above
-char buf[...] triggers:
+In preparation for moving arm64 over to the generic entry code,
+refactor syscall_trace_enter/exit() to also pass thread flags, and
+get syscall number by syscall_get_nr() helper.
 
-ipsec.c:835:5: warning: field 'u' with variable sized type 'union
-(unnamed union at ipsec.c:831:3)' not at the end of a struct or class
-is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-  835 |                 } u;
-      |                   ^
+No functional changes.
 
-one fix is to use "TRAILING_OVERLAP()" which works with one flexible
-array member only.
-
-But In "struct alg" flexible array member exists in all union members,
-but not at the same offset, so TRAILING_OVERLAP cannot be applied.
-
-so the fix is to explicitly overlay the key buffer at the correct offset
-for the largest union member (xfrm_algo_auth). This ensures that the
-flexible-array region and the fixed buffer line up.
-
-No functional change.
-
-Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 ---
- tools/testing/selftests/net/ipsec.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ arch/arm64/include/asm/syscall.h |  4 ++--
+ arch/arm64/kernel/ptrace.c       | 26 ++++++++++++++++----------
+ arch/arm64/kernel/syscall.c      |  5 +++--
+ 3 files changed, 21 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
-index 0ccf484b1d9d..f4afef51b930 100644
---- a/tools/testing/selftests/net/ipsec.c
-+++ b/tools/testing/selftests/net/ipsec.c
-@@ -43,6 +43,10 @@
-
- #define BUILD_BUG_ON(condition) ((void)sizeof(char[1 - 2*!!(condition)]))
-
-+#ifndef offsetof
-+#define offsetof(TYPE, MEMBER)	__builtin_offsetof(TYPE, MEMBER)
-+#endif
-+
- #define IPV4_STR_SZ	16	/* xxx.xxx.xxx.xxx is longest + \0 */
- #define MAX_PAYLOAD	2048
- #define XFRM_ALGO_KEY_BUF_SIZE	512
-@@ -827,13 +831,16 @@ static int xfrm_fill_key(char *name, char *buf,
- static int xfrm_state_pack_algo(struct nlmsghdr *nh, size_t req_sz,
- 		struct xfrm_desc *desc)
+diff --git a/arch/arm64/include/asm/syscall.h b/arch/arm64/include/asm/syscall.h
+index 712daa90e643..d69f590a989b 100644
+--- a/arch/arm64/include/asm/syscall.h
++++ b/arch/arm64/include/asm/syscall.h
+@@ -114,7 +114,7 @@ static inline int syscall_get_arch(struct task_struct *task)
+ 	return AUDIT_ARCH_AARCH64;
+ }
+ 
+-int syscall_trace_enter(struct pt_regs *regs);
+-void syscall_trace_exit(struct pt_regs *regs);
++int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags);
++void syscall_trace_exit(struct pt_regs *regs, unsigned long flags);
+ 
+ #endif	/* __ASM_SYSCALL_H */
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index abc5baa29cc9..63ba6c961ecc 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -2378,10 +2378,8 @@ static void report_syscall_exit(struct pt_regs *regs)
+ 	}
+ }
+ 
+-int syscall_trace_enter(struct pt_regs *regs)
++int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
  {
--	struct {
-+	union {
- 		union {
- 			struct xfrm_algo	alg;
- 			struct xfrm_algo_aead	aead;
- 			struct xfrm_algo_auth	auth;
- 		} u;
--		char buf[XFRM_ALGO_KEY_BUF_SIZE];
-+		struct {
-+			unsigned char __offset_to_FAM[offsetof(struct xfrm_algo_auth, alg_key)];
-+			char buf[XFRM_ALGO_KEY_BUF_SIZE];
-+		};
- 	} alg = {};
- 	size_t alen, elen, clen, aelen;
- 	unsigned short type;
---
-2.52.0
+-	unsigned long flags = read_thread_flags();
+-
+ 	if (flags & (_TIF_SYSCALL_EMU | _TIF_SYSCALL_TRACE)) {
+ 		report_syscall_entry(regs);
+ 		if (flags & _TIF_SYSCALL_EMU)
+@@ -2392,19 +2390,27 @@ int syscall_trace_enter(struct pt_regs *regs)
+ 	if (secure_computing() == -1)
+ 		return NO_SYSCALL;
+ 
+-	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+-		trace_sys_enter(regs, regs->syscallno);
++	/* Either of the above might have changed the syscall number */
++	syscall = syscall_get_nr(current, regs);
++
++	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT)) {
++		trace_sys_enter(regs, syscall);
+ 
+-	audit_syscall_entry(regs->syscallno, regs->orig_x0, regs->regs[1],
++		/*
++		 * Probes or BPF hooks in the tracepoint may have changed the
++		 * system call number as well.
++		 */
++		 syscall = syscall_get_nr(current, regs);
++	}
++
++	audit_syscall_entry(syscall, regs->orig_x0, regs->regs[1],
+ 			    regs->regs[2], regs->regs[3]);
+ 
+-	return regs->syscallno;
++	return syscall;
+ }
+ 
+-void syscall_trace_exit(struct pt_regs *regs)
++void syscall_trace_exit(struct pt_regs *regs, unsigned long flags)
+ {
+-	unsigned long flags = read_thread_flags();
+-
+ 	audit_syscall_exit(regs);
+ 
+ 	if (flags & _TIF_SYSCALL_TRACEPOINT)
+diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+index aba7ca6bca2d..ec31f82d2e9f 100644
+--- a/arch/arm64/kernel/syscall.c
++++ b/arch/arm64/kernel/syscall.c
+@@ -124,7 +124,7 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+ 		 */
+ 		if (scno == NO_SYSCALL)
+ 			syscall_set_return_value(current, regs, -ENOSYS, 0);
+-		scno = syscall_trace_enter(regs);
++		scno = syscall_trace_enter(regs, scno, flags);
+ 		if (scno == NO_SYSCALL)
+ 			goto trace_exit;
+ 	}
+@@ -143,7 +143,8 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+ 	}
+ 
+ trace_exit:
+-	syscall_trace_exit(regs);
++	flags = read_thread_flags();
++	syscall_trace_exit(regs, flags);
+ }
+ 
+ void do_el0_svc(struct pt_regs *regs)
+-- 
+2.34.1
 
