@@ -1,205 +1,199 @@
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011033.outbound.protection.outlook.com [52.101.65.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705CC3346AC;
-	Mon,  1 Dec 2025 16:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764606840; cv=none; b=JpxkdQGUWdFp88D3NW4VuHDfERd63Gnw5X+UYu9I0dZPvK3XO4vx+9hOkKbyT8EYnHesQtCyQTIjWJcIXLkTCZ+NFwPH2VE0+1A1/G+XrEr+gZOmaMTR1BHaD3DRODbTrNmOZFGSoEOu3Wka7O1h3H/VFXHniDDKektMam87vUQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764606840; c=relaxed/simple;
-	bh=KKXMY60fzcmlXfqjSzlbbHZRwQdsCfygDV9sIcYYUxc=;
-	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
-	 Content-Type:Subject; b=KBVUkvWQcqVf/8swYjk1Kt9Zij1FqPlb9pNgdE3JMv3wfHLPe6ZT6Srs1goA12UuNsALKoVEZzPk/cRwEA0RvVe/azol5Ooxvfx/4pg97WivOyypC6TOdpboDgKr43JPg09shwsJxQ86BgUJIzzC6Kp7tXpCrmqiSt3jhdOqWpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
-Received: from in01.mta.xmission.com ([166.70.13.51]:50512)
-	by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vQ6Pi-009mGN-1t; Mon, 01 Dec 2025 09:06:10 -0700
-Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:40282 helo=email.froward.int.ebiederm.org.xmission.com)
-	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vQ6Pg-00Cg1V-BQ; Mon, 01 Dec 2025 09:06:09 -0700
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: Bernd Edlinger <bernd.edlinger@hotmail.de>,  Alexander Viro
- <viro@zeniv.linux.org.uk>,  Alexey Dobriyan <adobriyan@gmail.com>,  Oleg
- Nesterov <oleg@redhat.com>,  Kees Cook <kees@kernel.org>,  Andy Lutomirski
- <luto@amacapital.net>,  Will Drewry <wad@chromium.org>,  Christian Brauner
- <brauner@kernel.org>,  Andrew Morton <akpm@linux-foundation.org>,  Michal
- Hocko <mhocko@suse.com>,  Serge Hallyn <serge@hallyn.com>,  James Morris
- <jamorris@linux.microsoft.com>,  Randy Dunlap <rdunlap@infradead.org>,
-  Suren Baghdasaryan <surenb@google.com>,  Yafang Shao
- <laoar.shao@gmail.com>,  Helge Deller <deller@gmx.de>,  Adrian Reber
- <areber@redhat.com>,  Thomas Gleixner <tglx@linutronix.de>,  Jens Axboe
- <axboe@kernel.dk>,  Alexei Starovoitov <ast@kernel.org>,
-  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
-  linux-security-module@vger.kernel.org,  tiozhang
- <tiozhang@didiglobal.com>,  Luis Chamberlain <mcgrof@kernel.org>,  "Paulo
- Alcantara (SUSE)" <pc@manguebit.com>,  Sergey Senozhatsky
- <senozhatsky@chromium.org>,  Frederic Weisbecker <frederic@kernel.org>,
-  YueHaibing <yuehaibing@huawei.com>,  Paul Moore <paul@paul-moore.com>,
-  Aleksa Sarai <cyphar@cyphar.com>,  Stefan Roesch <shr@devkernel.io>,
-  Chao Yu <chao@kernel.org>,  xu xin <xu.xin16@zte.com.cn>,  Jeff Layton
- <jlayton@kernel.org>,  Jan Kara <jack@suse.cz>,  David Hildenbrand
- <david@redhat.com>,  Dave Chinner <dchinner@redhat.com>,  Shuah Khan
- <shuah@kernel.org>,  Elena Reshetova <elena.reshetova@intel.com>,  David
- Windsor <dwindsor@gmail.com>,  Mateusz Guzik <mjguzik@gmail.com>,  Ard
- Biesheuvel <ardb@kernel.org>,  "Joel Fernandes (Google)"
- <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)"
- <willy@infradead.org>,  Hans Liljestrand <ishkamiel@gmail.com>,  Penglei
- Jiang <superman.xpt@gmail.com>,  Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>,  Adrian Ratiu <adrian.ratiu@collabora.com>,
-  Ingo Molnar <mingo@kernel.org>,  "Peter Zijlstra (Intel)"
- <peterz@infradead.org>,  Cyrill Gorcunov <gorcunov@gmail.com>,  Eric
- Dumazet <edumazet@google.com>,  zohar@linux.ibm.com,
-  linux-integrity@vger.kernel.org,  Ryan Lee <ryan.lee@canonical.com>,
- apparmor <apparmor@lists.ubuntu.com> 
-In-Reply-To: <6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
-	(Roberto Sassu's message of "Tue, 25 Nov 2025 12:55:00 +0100")
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<87tsyozqdu.fsf@email.froward.int.ebiederm.org>
-	<87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
-	<87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
-	<6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
-Date: Mon, 01 Dec 2025 10:06:00 -0600
-Message-ID: <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E6430FC12;
+	Mon,  1 Dec 2025 16:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764607109; cv=fail; b=UWVbjmvny+h/mGOaDwV83mAXAYngI8O0HQNpruIDqmpCpwiCOHDXLPSYEv13ZlM0VsOB9GzDKPn7Lj3ojYIKVAbV/q3evAf3nO76Evuzf9+JZN8TuO+5sagJ5etJkWAM3P5L2YMzy3/wahTf4jKDAzKYIJ55FV+beK/SSutVpqc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764607109; c=relaxed/simple;
+	bh=Q49lg1ygR5li/7gImh7zFQzfI3h2ISG+4HsdDeihcTE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=usYh3fKKBA1YmJ0zLuXsklJLDDEFT12gbbfYKszHszI2CcqtB88J7eGaUia7cjZ2bENQL7tsoFolJxpimc5XG5ngigTCcrX9t8ZwSVn416p66RRkhxgv56esH6Q/CC5Afr6f6dikaleLme3Huz9w5sbf/e6yxEyoW16UxrrEda0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=PPQyyGvA; arc=fail smtp.client-ip=52.101.65.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="PPQyyGvA"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=T3FqPqKlyBWeTekUc3XUhmP1Gitgnqyo67t6MQLSvPWlHel1ml7yRKYn/JbjqQgcHwjvFkvyJICP7ikzFroNJJRnVmzCChcNELOCP45B00xnaWLH+F+ybadSsTzLCSkgLCQdeEB0TpDPDToQhFYWsWXZCJFdFNUUVPd+neeSsuHnku34Zjc8MgpLhCS1UDKbTCtQCF4Q6+wuijOHML1V7/S5l0gpfqawLgsoOPxrxiKo6ka6qQSKF6L4+Kcc9raR/ha9mnjbs6fvzukoEZEtMSXGbdlNaLZESwoTCoojxOySSb4dI/ugn0UMzc/aDMEfT0VoKlGGIBe4jIhhy7FepA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+kuB7eRxeMGDNwXVB8pJvlHLKjUPv3X1qilnfBJ6Mdw=;
+ b=WZRujJHUToy+T6S2j8BWlOoHd8UIK9K9tMb4zsPqzoM9h4PvvpDLAFbIAqwA/DbLxzcPuXP3FH9aPdQtoKJYS0YmLQeg5nZ3Zf0Iz5sa7cYM2crJzS240o6q5sdOfVCr0mGu8aYAvBsolS5n43b6In+TJc4cBsfi7ddnRbfDQWFgWNhW/UE05vrB5HS0zwv0B0kdZHSpZIzhLzRxDQeIw4R02qevFsN8MhzEdAq/9qHLNuQxfKDL2oYLDY0huQHfg8ut0cdGiWAqH9ZFR1mNLCVxTq7tu1AMv1mhOlewOYRE+7FCC4UF3R9M6wDqxFATCL1cR1lg6aAWH3qzRJ1pBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.6.100) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+kuB7eRxeMGDNwXVB8pJvlHLKjUPv3X1qilnfBJ6Mdw=;
+ b=PPQyyGvAL8IRkZffsvdNU5UjW2aB/tu932Cz7VjLu0E80yZRGag2wKpsJch1qbS9yoLPfRpnvmzFWmh/m/Zsmy5NvMAf+yN8SqOtoOIFXkzrC2U5agiTMshyk8K5XLHP2CBodIOytnPCTUjOydDHC6UNXdv5quMwCO2ExGVlwRzG+v6C5oe21KpptifRmTiusaRPIBfk5x6KRVHVnCYj3+bffFwo0YRP9/BLCDahl7PRAgElo6VmIxUcz0WlWnUr2jqHOEhrwuNLtQUJQewS8c8uFY/xx2uV2hbY5Dk2NbkyeGYwGyB9Je/BlIwUgtPMJsq36R3DkU6PGcKXs/YoOg==
+Received: from AS4P192CA0006.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:5da::7)
+ by VI1PR07MB9828.eurprd07.prod.outlook.com (2603:10a6:800:1d0::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Mon, 1 Dec
+ 2025 16:38:21 +0000
+Received: from AM3PEPF00009B9C.eurprd04.prod.outlook.com
+ (2603:10a6:20b:5da:cafe::b) by AS4P192CA0006.outlook.office365.com
+ (2603:10a6:20b:5da::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.17 via Frontend Transport; Mon,
+ 1 Dec 2025 16:38:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.100)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.6.100 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.6.100;
+ helo=fr711usmtp2.zeu.alcatel-lucent.com; pr=C
+Received: from fr711usmtp2.zeu.alcatel-lucent.com (131.228.6.100) by
+ AM3PEPF00009B9C.mail.protection.outlook.com (10.167.16.21) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9388.8
+ via Frontend Transport; Mon, 1 Dec 2025 16:38:21 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fr711usmtp2.zeu.alcatel-lucent.com (Postfix) with ESMTP id BDA18680033;
+	Mon,  1 Dec 2025 18:38:19 +0200 (EET)
+From: chia-yu.chang@nokia-bell-labs.com
+To: pabeni@redhat.com,
+	edumazet@google.com,
+	parav@nvidia.com,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	kuniyu@google.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v7 net-next 02/13] gro: flushing when CWR is set negatively affects AccECN
+Date: Mon,  1 Dec 2025 17:37:49 +0100
+Message-Id: <20251201163800.3965-3-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251201163800.3965-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20251201163800.3965-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1vQ6Pg-00Cg1V-BQ;;;mid=<87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX1/O4IKUzWWwapDxt1axB69s37nkia9NNac=
-X-Spam-Level: ****
-X-Spam-Virus: No
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-	*      [score: 0.5000]
-	*  0.7 XMSubLong Long Subject
-	*  1.0 XMGappySubj_02 Gappier still
-	*  0.5 XMGappySubj_01 Very gappy subject
-	*  1.2 XM_Multi_Part_URI URI: Long-Multi-Part URIs
-	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-	*      [sa01 1397; Body=1 Fuz1=1 Fuz2=1]
-	*  1.0 XM_B_Phish_Phrases Commonly used Phishing Phrases
-	*  0.0 XM_B_AI_SPAM_COMBINATION Email matches multiple AI-related
-	*      patterns
-	*  0.5 TR_AI_Phishing Email matches multiple AI-related patterns
-	*  0.0 TR_XM_PhishingBody Phishing flag in body of message
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Roberto Sassu <roberto.sassu@huaweicloud.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 576 ms - load_scoreonly_sql: 0.03 (0.0%),
-	signal_user_changed: 2.8 (0.5%), b_tie_ro: 1.85 (0.3%), parse: 1.32
-	(0.2%), extract_message_metadata: 17 (2.9%), get_uri_detail_list: 2.5
-	(0.4%), tests_pri_-2000: 24 (4.1%), tests_pri_-1000: 14 (2.5%),
-	tests_pri_-950: 1.46 (0.3%), tests_pri_-900: 1.33 (0.2%),
-	tests_pri_-90: 118 (20.4%), check_bayes: 116 (20.1%), b_tokenize: 24
-	(4.1%), b_tok_get_all: 11 (1.9%), b_comp_prob: 3.5 (0.6%),
-	b_tok_touch_all: 74 (12.9%), b_finish: 0.62 (0.1%), tests_pri_0: 385
-	(66.9%), check_dkim_signature: 0.44 (0.1%), check_dkim_adsp: 2.7
-	(0.5%), poll_dns_idle: 0.61 (0.1%), tests_pri_10: 1.64 (0.3%),
-	tests_pri_500: 7 (1.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Are setuid shell scripts safe? (Implied by
- security_bprm_creds_for_exec)
-X-SA-Exim-Connect-IP: 166.70.13.51
-X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-SA-Exim-Scanned: No (on out02.mta.xmission.com); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM3PEPF00009B9C:EE_|VI1PR07MB9828:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2548178b-c24b-4d24-367b-08de30f80a2b
+X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|36860700013|1800799024|376014|7416014|82310400026|921020;
+X-Microsoft-Antispam-Message-Info:
+ =?utf-8?B?K0dydENBemdxU0pFbGZiOGVQVlBWMGJ3YWUwRWJCWGxZODRQMy8xVmx3KzU1?=
+ =?utf-8?B?SWVTWlZzeTFNWWZNMTNiN3Frbk1sTHRNSUxhWWx4UDJDdWczYnptY1A2ZGZN?=
+ =?utf-8?B?S2dKVjZnMHVtN1A2MUpiZS9seGJPSlpOWDBXb1UyMGNCZ0MxaXdBY0xoTlhN?=
+ =?utf-8?B?WFFHa0s4cC9qajBoR3FOWnNrYmEwelYyZDd5Q2FnMG5CVmhWbUFlZGJjb1BR?=
+ =?utf-8?B?eE9zY1o0MUN1RCt2cTJaRWNSTkswNnZNd0svT3Q4N082ZW5KQVNWcy8rY09V?=
+ =?utf-8?B?TkF1ajRFMTdMR1cxSDFITzZMYytyaVNxOGVuSjk4UE44aFBCODAyVFU2S003?=
+ =?utf-8?B?TE9GQkRUMXBxR1dyUVlyL0M3dHBKRnVCckFxa29ROTVNdGVJcFJEM1BpaEhQ?=
+ =?utf-8?B?VVluWlBFRk5ic0NZanZLK2ZaOEM1dlNJbzI3a2lTM1ZEVGdyaVBONEs1bHlk?=
+ =?utf-8?B?bVJxTExtM1RoR3R4amlVWms5L1ZQNnEzN3B2RGZ5azFkUHBGbEdxRjI4a2xz?=
+ =?utf-8?B?VnN2UHNsWWw5VWtLSnEwN1B1UGlac0dVZTRpcUNPeUwycWdNN0Y4UkplSy9Q?=
+ =?utf-8?B?eVkyTmQ0cDllOWZQcEFZbS9zakd1ZWR2UVZYZ0VUb2JSQmlYZHkxTWdodWlE?=
+ =?utf-8?B?OUsrc1ZGdmhRUHNrcnIyNjJMckNNZmtIRzBBRzhQc3ROVzUyNVhDcGpPWjYz?=
+ =?utf-8?B?enFXUjdnazRBVC9SK1ROYTFBZUwraGprVUt1RGVVaGFwemo1UkI0MGgwekJx?=
+ =?utf-8?B?elNDcEJDTlh4S3BaRXcxaERRK3FqZUtYS2hpOVBWRUJmNU5kMHpHVGUyTDlW?=
+ =?utf-8?B?V3dDRXdCY0V5M3RWQjVMdnAzdjRLQUR6NzV6WGlSUCtTNy9GdG1idFhYWW9v?=
+ =?utf-8?B?ekU2TnExejJMODJJa2g2NXNySmgzUFV4RVdpVGtFdVVPY01yRXZOaXBpdlQ3?=
+ =?utf-8?B?R2Y5aWNuTlZGcTVTVTFpMzVjbk5BZVUyblVnQklqT2NncTVUSFBKVFQ2ZXpy?=
+ =?utf-8?B?eFV0b3hLNGM1K2I3M2xxRDJhTXFMNUFXRUVNRlpWOXdZZ1RGZ09CSzZJUTgy?=
+ =?utf-8?B?aDA5MjBLQ3k0QldFY0tnQ1RxaktTVDIvQ2NYdS82MWFTdTUreC8rYStiYTNp?=
+ =?utf-8?B?YU5PbTJFUkdYMHNjR2lmU0ErRDZQSTJqRWVBR3ZaeWJWT0pmWG1Za2ovSTJl?=
+ =?utf-8?B?cUtDL1FDZVk0UlpwUWZwLzd3M1RLY1o0R0gxMGRsRFhQQ3Z4NkRRV2hiS3pj?=
+ =?utf-8?B?YVZlc21jeXdwMmd0TTl5cXBZSEx2bzMwZ29hV0tIeDR5MlUxRHgxZ1VRQTB4?=
+ =?utf-8?B?YUVobTh3akZ2UjVHSnJYUVJmMXNTSVMwd2pBMVVXSTBBMXNkYVRjRm95cXRD?=
+ =?utf-8?B?UWpvQUNSYU0xMmVEazJrakxmblliOXh5aWVwa0x4T0duMTVFUWtISmxrOVBj?=
+ =?utf-8?B?S0ZERnpNRWQzVDNVcGJSUUpoUmlaMzVNNDdHSmFSTW03YUsraVlNbnJWU1U0?=
+ =?utf-8?B?QzNnZ2V6c3Q4bElpL0V6L2o0Z1dWREwwMmhvVThzdUlEWDFWbno3VnZhT25s?=
+ =?utf-8?B?NGx2TUFZSFpiY3VGSnFNVjdNbEVJb1prUGZsd3VUKzlXSVR0Vy9xWUo0Z0hM?=
+ =?utf-8?B?cjJZUHRNSGp5clJpMHhWUGR3L2RRdnN0MXZheHY1N3ZlQ1dncmRDUktSOUI3?=
+ =?utf-8?B?aVdzREVZUmRZbXNNdGE3MVZQTFN5aTMrRnZxNkF4dklEdzgrNzlaMDV0SWVX?=
+ =?utf-8?B?a2ROTU1ycStQakUyc0Q0MHJEMkpLZi9nOXRWVTEzL1Y5RU4yWmxDZmdma0xa?=
+ =?utf-8?B?RnFSbVgzVEppZkgvNzg4dnQwRTUrZ3Z5ODV1QUhWbUkyV2JMUnVqZitidHlk?=
+ =?utf-8?B?VlYvNm1nemo2cU9zNEdNS2tTdW1OWDh3enpmZ3hSZ1JIcCt3b2cxeG1pYlRs?=
+ =?utf-8?B?Unhwekk3aHM5amJMMFI5ZFR5Uk8rWHVVb0VCVUNKMEFraVRsRG9hbTVpSnB6?=
+ =?utf-8?B?dUpFb1VxT0xXVENpU2tUU3hUSGJiTlltMG5sRExRamlvUU1zek00UDlycWtt?=
+ =?utf-8?B?RnBoWEwvQ1ZYdTFtczhKc0dHYUsrdGxheTg0S1ptWFFCUUYwRlNFL3NLWnky?=
+ =?utf-8?Q?x3jOc0+pvbaHe6hRmEZHqaWqL?=
+X-Forefront-Antispam-Report:
+ CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(7416014)(82310400026)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2025 16:38:21.3089
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2548178b-c24b-4d24-367b-08de30f80a2b
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.100];Helo=[fr711usmtp2.zeu.alcatel-lucent.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM3PEPF00009B9C.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB9828
 
-Roberto Sassu <roberto.sassu@huaweicloud.com> writes:
+From: Ilpo Järvinen <ij@kernel.org>
 
-> + Mimi, linux-integrity (would be nice if we are in CC when linux-
-> security-module is in CC).
->
-> Apologies for not answering earlier, it seems I don't receive the
-> emails from the linux-security-module mailing list (thanks Serge for
-> letting me know!).
->
-> I see two main effects of this patch. First, the bprm_check_security
-> hook implementations will not see bprm->cred populated. That was a
-> problem before we made this patch:
->
-> https://patchew.org/linux/20251008113503.2433343-1-roberto.sassu@huaweicloud.com/
+As AccECN may keep CWR bit asserted due to different
+interpretation of the bit, flushing with GRO because of
+CWR may effectively disable GRO until AccECN counter
+field changes such that CWR-bit becomes 0.
 
-Thanks, that is definitely needed.
+There is no harm done from not immediately forwarding the
+CWR'ed segment with RFC3168 ECN.
 
-Does calling process_measurement(CREDS_CHECK) on only the final file
-pass review?  Do you know of any cases where that will break things?
+Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+---
+ net/ipv4/tcp_offload.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-As it stands I don't think it should be assumed that any LSM has
-computed it's final creds until bprm_creds_from_file.  Not just the
-uid and gid.
+diff --git a/net/ipv4/tcp_offload.c b/net/ipv4/tcp_offload.c
+index fdda18b1abda..9bd710c7bc95 100644
+--- a/net/ipv4/tcp_offload.c
++++ b/net/ipv4/tcp_offload.c
+@@ -303,8 +303,7 @@ struct sk_buff *tcp_gro_receive(struct list_head *head, struct sk_buff *skb,
+ 		goto out_check_final;
+ 
+ 	th2 = tcp_hdr(p);
+-	flush = (__force int)(flags & TCP_FLAG_CWR);
+-	flush |= (__force int)((flags ^ tcp_flag_word(th2)) &
++	flush = (__force int)((flags ^ tcp_flag_word(th2)) &
+ 		  ~(TCP_FLAG_FIN | TCP_FLAG_PSH));
+ 	flush |= (__force int)(th->ack_seq ^ th2->ack_seq);
+ 	for (i = sizeof(*th); i < thlen; i += 4)
+-- 
+2.34.1
 
-If the patch you posted for review works that helps sort that mess out.
-
-> to work around the problem of not calculating the final DAC credentials
-> early enough (well, we actually had to change our CREDS_CHECK hook
-> behavior).
->
-> The second, I could not check. If I remember well, unlike the
-> capability LSM, SELinux/Apparmor/SMACK calculate the final credentials
-> based on the first file being executed (thus the script, not the
-> interpreter). Is this patch keeping the same behavior despite preparing
-> the credentials when the final binary is found?
-
-The patch I posted was.
-
-My brain is still reeling from the realization that our security modules
-have the implicit assumption that it is safe to calculate their security
-information from shell scripts.
-
-In the first half of the 90's I remember there was lots of effort to try
-and make setuid shell scripts and setuid perl scripts work, and the
-final conclusion was it was a lost cause.
-
-Now I look at security_bprm_creds_for_exec and security_bprm_check which
-both have the implicit assumption that it is indeed safe to compute the
-credentials from a shell script.
-
-When passing a file descriptor to execat we have
-BINPRM_FLAGS_PATH_INACCESSIBLE and use /dev/fd/NNN as the filename
-which reduces some of the races.
-
-However when just plain executing a shell script we pass the filename of
-the shell script as a command line argument, and expect the shell to
-open the filename again.  This has been a time of check to time of use
-race for decades, and one of the reasons we don't have setuid shell
-scripts.
-
-Yet the IMA implementation (without the above mentioned patch) assumes
-the final creds will be calculated before security_bprm_check is called,
-and security_bprm_creds_for_exec busily calculate the final creds.
-
-For some of the security modules I believe anyone can set any label they
-want on a file and they remain secure (At which point I don't understand
-the point of having labels on files).  I don't believe that is the case
-for selinux, or in general.
-
-So just to remove the TOCTOU race the security_bprm_creds_for_exec
-and security_bprm_check hooks need to be removed, after moving their
-code into something like security_bprm_creds_from_file.
-
-Or am I missing something and even with the TOCTOU race are setuid shell
-scripts somehow safe now?
-
-Eric
