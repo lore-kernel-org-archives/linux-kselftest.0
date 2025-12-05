@@ -1,70 +1,101 @@
-Received: from out28-73.mail.aliyun.com (out28-73.mail.aliyun.com [115.124.28.73])
+Received: from out28-4.mail.aliyun.com (out28-4.mail.aliyun.com [115.124.28.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D2926C3B0;
-	Fri,  5 Dec 2025 07:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D07B3043CF;
+	Fri,  5 Dec 2025 09:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764918929; cv=none; b=bWOr2JN/IzVMXjtGYFFauJgUcUw4YD8q9YltR+UNWKjuaG0VBc5/0sTn48fEg8QiZw70OPiVseQETgakssNWFa3dYlfqnl1P7B8+O10nHQZzf9hhoIK3jcNVUsqBFtupRm0/4QClf2SXZjcd83SrD7+qG/XzNxgiKlBj5BsVr94=
+	t=1764926804; cv=none; b=NMKSJ7Nh8lDkkoHmCWiePMUZiTZ/UkzDfSjJhb9YAx35PaealkSsyPJGTuSgdxwdI1XFAIIQhFX/aVo8BdH5w5Zb+wlMA5jpatO8dtLiaDFu98Id0HUHJhzRmWh0gvfPZ3nJxOn5RpiqD4a/G5c2u6SVQMrVp5yXztwmFp0gH3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764918929; c=relaxed/simple;
-	bh=JF0R2KKNXnghqbJLNnzi14kmoLvvAZflarM4SvoCNyo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DMqnA2QgdN5sStaUm+VpnEoi173wTKHDiGDJ6bUW1JrctMNiYn8NMmayBGJukNUDrV+7q+W+is2/o0O0+I+pfwuoI2GGeCxbl1xCzR86kE2spCi/jxaQshNmrOwMLBpkHcAPsbbxbgFiPHKjCYX6MxnUHOmw/6JzlLLIcs159PQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.73
+	s=arc-20240116; t=1764926804; c=relaxed/simple;
+	bh=WseTNk88/NYojYS1ySl2tLjv9eX/PweY/wlISWR/G8Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HjZiwh2F8DYSi9p0/Nhu/vHit6mUqAVJh2/DekRFgrd8GB2W8T95dN0SRSkMjzPQDVwSxgqN8Zq+3eAlMH6o7zbspzX/bBpv5/tbHqVLR3zfC9h320fnM3jnopNb0Mtmi7o4+mZJDhaQuIDpRiQ2ZcxCeaOTMR/q7JyW00xvFVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from 172.18.26.4(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fdRjYRY_1764918911 cluster:ay29)
+Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fdWs0Y2_1764926787 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Fri, 05 Dec 2025 15:15:15 +0800
-Message-ID: <7fa13af7-48d1-4cb8-a42a-5ccf58baed4f@open-hieco.net>
-Date: Fri, 5 Dec 2025 15:15:10 +0800
+          Fri, 05 Dec 2025 17:26:30 +0800
+From: Xiaochen Shen <shenxiaochen@open-hieco.net>
+To: tony.luck@intel.com,
+	reinette.chatre@intel.com,
+	bp@alien8.de,
+	fenghuay@nvidia.com,
+	shuah@kernel.org,
+	skhan@linuxfoundation.org
+Cc: babu.moger@amd.com,
+	james.morse@arm.com,
+	Dave.Martin@arm.com,
+	x86@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shenxiaochen@open-hieco.net
+Subject: [PATCH v2 2/3] selftests/resctrl: Fix a division by zero error on Hygon
+Date: Fri,  5 Dec 2025 17:25:43 +0800
+Message-ID: <20251205092544.2685728-3-shenxiaochen@open-hieco.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251205092544.2685728-1-shenxiaochen@open-hieco.net>
+References: <20251205092544.2685728-1-shenxiaochen@open-hieco.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] selftests/resctrl: Fix non-contiguous CBM check for
- Hygon
-To: Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com,
- bp@alien8.de, fenghuay@nvidia.com, shuah@kernel.org,
- skhan@linuxfoundation.org
-Cc: babu.moger@amd.com, james.morse@arm.com, Dave.Martin@arm.com,
- x86@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shenxiaochen@open-hieco.net
-References: <20251204123816.2802393-1-shenxiaochen@open-hieco.net>
- <20251204123816.2802393-4-shenxiaochen@open-hieco.net>
- <87eb3a3d-854d-4c3c-a075-9096ca67c89d@intel.com>
-Content-Language: en-US
-From: Xiaochen Shen <shenxiaochen@open-hieco.net>
-In-Reply-To: <87eb3a3d-854d-4c3c-a075-9096ca67c89d@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Reinette,
+Commit
 
-On 12/5/2025 8:55 AM, Reinette Chatre wrote:
->> Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
->> ---
-> I think it may help to add a maintainer note here to highlight even though this
-> is a fix it is not a candidate for backport since, based on your other series,
-> support for Hygon is in process of being added to resctrl.
->
+  a1cd99e700ec ("selftests/resctrl: Adjust effective L3 cache size with SNC enabled")
 
-Great suggestion.
-I will add a maintainer note as you suggested in v2 patch series.
+introduced the snc_nodes_per_l3_cache() function to detect the Intel
+Sub-NUMA Clustering (SNC) feature by comparing #CPUs in node0 with #CPUs
+sharing LLC with CPU0. The function was designed to return:
+  (1) >1: SNC mode is enabled.
+  (2)  1: SNC mode is not enabled or not supported.
 
+However, on certain Hygon CPUs, #CPUs sharing LLC with CPU0 is actually
+less than #CPUs in node0. This results in snc_nodes_per_l3_cache()
+returning 0 (calculated as cache_cpus / node_cpus).
+
+This leads to a division by zero error in get_cache_size():
+  *cache_size /= snc_nodes_per_l3_cache();
+
+Causing the resctrl selftest to fail with:
+  "Floating point exception (core dumped)"
+
+Fix the issue by ensuring snc_nodes_per_l3_cache() returns 1 when SNC
+mode is not supported on the platform.
+
+Fixes: a1cd99e700ec ("selftests/resctrl: Adjust effective L3 cache size with SNC enabled")
+Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+---
+ tools/testing/selftests/resctrl/resctrlfs.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 195f04c4d158..2b075e7334bf 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -243,6 +243,16 @@ int snc_nodes_per_l3_cache(void)
+ 		}
+ 		snc_mode = cache_cpus / node_cpus;
  
->>  tools/testing/selftests/resctrl/cat_test.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> 
-> Reinette
++		/*
++		 * On certain Hygon platforms:
++		 * cache_cpus < node_cpus, the calculated snc_mode is 0.
++		 *
++		 * Set snc_mode = 1 to indicate that SNC mode is not
++		 * supported on the platform.
++		 */
++		if (!snc_mode)
++			snc_mode = 1;
++
+ 		if (snc_mode > 1)
+ 			ksft_print_msg("SNC-%d mode discovered.\n", snc_mode);
+ 	}
+-- 
+2.47.3
 
-Thank you very much for code review!
-
-
-Best regards,
-Xiaochen Shen
