@@ -1,342 +1,248 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7655635E524;
-	Fri,  5 Dec 2025 18:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082513656E3
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Dec 2025 18:50:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764960112; cv=none; b=Bwm+aGoLU97sTJpqftAwi1ydwfVxgMYeQQFmOFI0YekVjx1hrrtxCdcDyJccPBZGpj6j1viAKhK8nY/cAB8o/55g9M52T8OeifZwWHe8eBkBDBJEoHN5jJrulOD+yLi1RVbAqw2kB1sXPrrdpTgKS52j6jWTSR9QookyW1XDLmU=
+	t=1764960656; cv=none; b=F1vpA9QEmNOI6rsbanZKIWlN/K/xnF/yM9eKtXoGJEQzpu1egQR5DpjjGPUEU1wFyYu3RpAlJIXVpQp0VnLIJyv8wLF3BnUdtL4mdWzcjRf+QY6fh7pgvICEiLZ2Z8zCJl5IZ167GYu+LINct1fzwNmwqe6HmqFBj4Infstup88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764960112; c=relaxed/simple;
-	bh=Gik5Ne1eWFaL8sJvPEFgazq3pfqJqZjDQJJ5q2/JRd0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DIjNz6UpmQTViUq1vtRdlNOdg/YFs3M5KW6viJaftStA/6b7ho+VXB/ikfaT0iRxNBGWTYvjc7/QNP9WRGVeDkZ2F3YwI6jcnIwncikElXLFS4lp/rLW4iaf9oTtZC116626PE2A/zv5xOQo1Ecsnfm63zPzH1XJwJhOG0+Vukg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F6avrz8g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764960656; c=relaxed/simple;
+	bh=UBKr0ISxy3/NRj2i2jOnTJqO6nRXBcHTm+VOrHhEolU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rXbHsDPZbaNJXhAIRHbXDq5IX9Z7iW0i0mBrpZtsC4b8lWaowd6dHjea/lQbYggKU4ppmECb7DoWffV0yNCoqxwxjymjThfDmaMvFByOeHknBBJOir98SVcVs57tO1/Xu1ZIzFCrgIkuMwkA4fnyfLR0fb6BLbdGiXZHFR8qcto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mz8SbbSh; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F6avrz8g"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 497C1C4DDE7;
-	Fri,  5 Dec 2025 18:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764960112;
-	bh=Gik5Ne1eWFaL8sJvPEFgazq3pfqJqZjDQJJ5q2/JRd0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=F6avrz8gVZ5NwH3jIQ6JtuU/y/Fz1XxnTF764a/WpISi+J4vSKnHTCFcgIABqLJfu
-	 YaDacW7UVQGPG7bOoom0TZuml6f8IRDsUXvcJs7mFRmMPR1RrTjAn1irHMwwEkJs4N
-	 McArng8V1lpuz1m2fsilKxzEHiuE9d0XP8BlVTuC5YxVfdnt7t1Tv6PX8Iyiveg+Af
-	 nQHxiGgJZE0TkzHv0hrLouiUrP4RjvHT2+teHZYK8KSKcgzE9dQawh6duer069zaS7
-	 AtHkfAHjSYMWD5C7+3SiFGkM1ZK3fn2C9AQzWMHdM3hHmx+I5lUotQ8Y3PEW2yhGrk
-	 DSDEPrKk61b0Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39C03D339B2;
-	Fri,  5 Dec 2025 18:41:52 +0000 (UTC)
-From: Deepak Gupta via B4 Relay <devnull+debug.rivosinc.com@kernel.org>
-Date: Fri, 05 Dec 2025 10:42:02 -0800
-Subject: [PATCH v25 24/28] arch/riscv: dual vdso creation logic and select
- vdso based on hw
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mz8SbbSh"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4779cb0a33fso31452015e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Dec 2025 10:50:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764960652; x=1765565452; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kM/KDQdobCWd595EPWaLr5CulKCAszd3ydD+m6x7q7s=;
+        b=mz8SbbShaoy21AnRg0h0fmmlwjSUVLmxByhuVcLXVHueQHHkrGiaXkOkA8G6wp555R
+         8YvcEmDNyTr9FlJEFz4fJArbJlEfllJ+NEgo3kbXyb+/AE+NN8wqAL5Nu/SBHgoeiofu
+         6qLcBcx0YEIGvY7BD6dH9ZkPNsxc+2qf4kmuNSJlptakqtxngltYoyGAXMmVwmnAiRbx
+         Fpaqgbck/HM22Khy3zD3OP7WFUWmgMI59DCdrRan1qmwK0+wqkqBnNkFXTVQ6E7P0zNt
+         sZBh2ggqKIihHh5WI8a3fvTVvutfzRMukEOrv0JztAwTTjeRwJ680byHHO/wTrMhiZzv
+         UWJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764960652; x=1765565452;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kM/KDQdobCWd595EPWaLr5CulKCAszd3ydD+m6x7q7s=;
+        b=C3+wsyruW7+exlM1LeURwIajEzckbV5Io0mhzQ3E7Cghu+agOsoZKYdKDlqI83JufJ
+         jZ2rdJsRmGMQOB2Tn6+OQBDgY/K5tlyX4pUk+CJqmaz6txsKSMMypJuNmFNEXmyk/DMl
+         F6DXvrN4MZ3eUOlCIxmhTlAx9GaPrdMaRrVI17XUrGMUQD1MKuHdLOsXLgXQrscM8hkD
+         iuWPsUblL351vdREm7yopryAgveO7mW1Tzr8kiQJu5x0YL8lIlSdVrwl4DxbUZfofNaV
+         xhTH9DAjZ4fhcSDkvphxU60yZgY6fqpewRcmfbCpnesusz1Gc8zgxakK8LIeXLMghTVZ
+         7ZhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0U0ONPuP75t8ujf5y+spdVSsDvwp8FsbNGkq5QYOj0bUCH1CkkQ6KXfa4OyFVD1aa0zQ4ZTjuq1SLJjMIdUk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVRsEWMLxGNn9YXKgjxAsAWhKsKmjBUzdj6ZK11JYqBpQ+hiZi
+	uSLd4+UQT2KXHRTc1jNnb5YcPe3dZIthn9Tri0QvdsY3RKNz0ISC6mhp
+X-Gm-Gg: ASbGncuqVi3Snm48OWZipzS1pidxYwCbYJ3OJxEbStJRg/c2juULIafAfGB19xXqw9q
+	Y5TucysRJ2kddLy+pxFCnKvcgV3CnNjcJMB6VhMaO9gnUkGl2+S35Y1YzTbuMKyvdhb3W/khEH4
+	tori3h8LhTGe7j0pA/a1zJF8Lk2aGVmENxv75ZrECTBdgh/PdOWJk9JLV9tk4gTENMSOH27NbQi
+	4vlMwyPPNHIvWnZyn/Pm/N6enDR+22kEtvGmcOwavEHvWjImg0NcMiXSIfx2QBmjNXh9y6ChKhP
+	iqZjKXapRkfc/x3mmo90g7JDd9KdkHey/x63lepBU0pr2Bn23pmfIemm908zqtLWrKe2Rxlnnlc
+	AHBygLHC/s/T7TqUqZXpqsxWhzsOhfzfDYYidKoi/rmlkF1zYYbSsfGWkUmVATjjFbIN14P7aXh
+	XOscE1Jc+SIXvGA8MbiLBjKATXunR9gfqUTcHVJbybmRi5hAcuejpj7ZSdbQU=
+X-Google-Smtp-Source: AGHT+IEc4nhDNGEwmygKmuduA5tFJljAPV4Ij44UAFfjrsvy/czwfc50slZqky4wZIf6baHYa01TMQ==
+X-Received: by 2002:a05:600c:8284:b0:477:5aaa:57a3 with SMTP id 5b1f17b1804b1-47939df534amr3964615e9.2.1764960652262;
+        Fri, 05 Dec 2025 10:50:52 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1126:4:8efb:4626:6bd3:398c? ([2620:10d:c092:500::6:567e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47933aef61fsm61077185e9.7.2025.12.05.10.50.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Dec 2025 10:50:51 -0800 (PST)
+Message-ID: <276ec0e0-2576-4595-a713-02a9223b6aa3@gmail.com>
+Date: Fri, 5 Dec 2025 18:50:48 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/5] bpf: Add SHA hash kfunc for cryptographic
+ hashing
+To: Daniel Hodges <git@danielhodges.dev>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, vadim.fedorenko@linux.dev
+Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ herbert@gondor.apana.org.au, davem@davemloft.net, shuah@kernel.org,
+ bpf@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251205173923.31740-1-git@danielhodges.dev>
+ <20251205173923.31740-3-git@danielhodges.dev>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20251205173923.31740-3-git@danielhodges.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251205-v5_user_cfi_series-v25-24-1a07c0127361@rivosinc.com>
-References: <20251205-v5_user_cfi_series-v25-0-1a07c0127361@rivosinc.com>
-In-Reply-To: <20251205-v5_user_cfi_series-v25-0-1a07c0127361@rivosinc.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@suse.cz>, 
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Christian Brauner <brauner@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
- Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>, 
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-mm@kvack.org, linux-riscv@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
- andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
- atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
- alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
- rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org, 
- Charles Mirabile <cmirabil@redhat.com>, 
- Andreas Korb <andreas.korb@aisec.fraunhofer.de>, 
- Valentin Haudiquet <valentin.haudiquet@canonical.com>, 
- Deepak Gupta <debug@rivosinc.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1764960107; l=9634;
- i=debug@rivosinc.com; s=20251023; h=from:subject:message-id;
- bh=UxHXf2zeJLK3T0z5eiQQ+giSJlpW7xe4gjeVc08sNbM=;
- b=DdSIyGIT0BejXrohv/WSz19ORkNwZGDKVhv71d5YK3H7ZyVPYEI9qUCUKV7jxyF8wsOrF04F4
- NnehxNKd23/CZpfWpxII/HhsRNEIjZwsirBqYTlwmfhQTAKr0vbYICC
-X-Developer-Key: i=debug@rivosinc.com; a=ed25519;
- pk=O37GQv1thBhZToXyQKdecPDhtWVbEDRQ0RIndijvpjk=
-X-Endpoint-Received: by B4 Relay for debug@rivosinc.com/20251023 with
- auth_id=553
-X-Original-From: Deepak Gupta <debug@rivosinc.com>
-Reply-To: debug@rivosinc.com
 
-From: Deepak Gupta <debug@rivosinc.com>
-
-Shadow stack instructions are taken from zimop (mandated on RVA23).
-Any hardware prior to RVA23 profile will fault on shadow stack instruction.
-Any userspace with shadow stack instruction in it will fault on such
-hardware. Thus such userspace can't be brought onto such a hardware.
-
-It's not known how userspace will respond to such binary fragmentation.
-However in order to keep kernel portable across such different hardware,
-`arch/riscv/kernel/vdso_cfi` is created which has logic (Makefile) to
-compile `arch/riscv/kernel/vdso` sources with cfi flags and then changes
-in `arch/riscv/kernel/vdso.c` for selecting appropriate vdso depending
-on whether underlying hardware(cpu) implements zimop extension. Offset
-of vdso symbols will change due to having two different vdso binaries,
-there is added logic to include new generated vdso offset header and
-dynamically select offset (like for rt_sigreturn).
-
-Acked-by: Charles Mirabile <cmirabil@redhat.com>
-Tested-by: Andreas Korb <andreas.korb@aisec.fraunhofer.de>
-Tested-by: Valentin Haudiquet <valentin.haudiquet@canonical.com>
-Signed-off-by: Deepak Gupta <debug@rivosinc.com>
----
- arch/riscv/Makefile                        |  3 +++
- arch/riscv/include/asm/vdso.h              | 13 ++++++++++++-
- arch/riscv/kernel/Makefile                 |  1 +
- arch/riscv/kernel/vdso.c                   |  7 +++++++
- arch/riscv/kernel/vdso/Makefile            | 29 ++++++++++++++++++++---------
- arch/riscv/kernel/vdso/gen_vdso_offsets.sh |  4 +++-
- arch/riscv/kernel/vdso_cfi/Makefile        | 25 +++++++++++++++++++++++++
- arch/riscv/kernel/vdso_cfi/vdso-cfi.S      | 11 +++++++++++
- 8 files changed, 82 insertions(+), 11 deletions(-)
-
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index f60c2de0ca08..b74b63da16a7 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -176,6 +176,8 @@ ifeq ($(CONFIG_MMU),y)
- prepare: vdso_prepare
- vdso_prepare: prepare0
- 	$(Q)$(MAKE) $(build)=arch/riscv/kernel/vdso include/generated/vdso-offsets.h
-+	$(if $(CONFIG_RISCV_USER_CFI),$(Q)$(MAKE) \
-+		$(build)=arch/riscv/kernel/vdso_cfi include/generated/vdso-cfi-offsets.h)
- 	$(if $(CONFIG_COMPAT),$(Q)$(MAKE) \
- 		$(build)=arch/riscv/kernel/compat_vdso include/generated/compat_vdso-offsets.h)
- 
-@@ -183,6 +185,7 @@ endif
- endif
- 
- vdso-install-y			+= arch/riscv/kernel/vdso/vdso.so.dbg
-+vdso-install-$(CONFIG_RISCV_USER_CFI)	+= arch/riscv/kernel/vdso_cfi/vdso-cfi.so.dbg
- vdso-install-$(CONFIG_COMPAT)	+= arch/riscv/kernel/compat_vdso/compat_vdso.so.dbg
- 
- BOOT_TARGETS := Image Image.gz Image.bz2 Image.lz4 Image.lzma Image.lzo Image.zst Image.xz loader loader.bin xipImage vmlinuz.efi
-diff --git a/arch/riscv/include/asm/vdso.h b/arch/riscv/include/asm/vdso.h
-index f80357fe24d1..35bf830a5576 100644
---- a/arch/riscv/include/asm/vdso.h
-+++ b/arch/riscv/include/asm/vdso.h
-@@ -18,9 +18,19 @@
- 
- #ifndef __ASSEMBLER__
- #include <generated/vdso-offsets.h>
-+#ifdef CONFIG_RISCV_USER_CFI
-+#include <generated/vdso-cfi-offsets.h>
-+#endif
- 
-+#ifdef CONFIG_RISCV_USER_CFI
- #define VDSO_SYMBOL(base, name)							\
--	(void __user *)((unsigned long)(base) + __vdso_##name##_offset)
-+	  (riscv_has_extension_unlikely(RISCV_ISA_EXT_ZIMOP) ?			\
-+	  (void __user *)((unsigned long)(base) + __vdso_##name##_cfi_offset) :	\
-+	  (void __user *)((unsigned long)(base) + __vdso_##name##_offset))
-+#else
-+#define VDSO_SYMBOL(base, name)							\
-+	  ((void __user *)((unsigned long)(base) + __vdso_##name##_offset))
-+#endif
- 
- #ifdef CONFIG_COMPAT
- #include <generated/compat_vdso-offsets.h>
-@@ -33,6 +43,7 @@ extern char compat_vdso_start[], compat_vdso_end[];
- #endif /* CONFIG_COMPAT */
- 
- extern char vdso_start[], vdso_end[];
-+extern char vdso_cfi_start[], vdso_cfi_end[];
- 
- #endif /* !__ASSEMBLER__ */
- 
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 2d0e0dcedbd3..9026400cba10 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -72,6 +72,7 @@ obj-y	+= vendor_extensions/
- obj-y	+= probes/
- obj-y	+= tests/
- obj-$(CONFIG_MMU) += vdso.o vdso/
-+obj-$(CONFIG_RISCV_USER_CFI) += vdso_cfi/
- 
- obj-$(CONFIG_RISCV_MISALIGNED)	+= traps_misaligned.o
- obj-$(CONFIG_RISCV_MISALIGNED)	+= unaligned_access_speed.o
-diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
-index 3a8e038b10a2..43f70198ac3c 100644
---- a/arch/riscv/kernel/vdso.c
-+++ b/arch/riscv/kernel/vdso.c
-@@ -98,6 +98,13 @@ static struct __vdso_info compat_vdso_info __ro_after_init = {
- 
- static int __init vdso_init(void)
- {
-+	/* Hart implements zimop, expose cfi compiled vdso */
-+	if (IS_ENABLED(CONFIG_RISCV_USER_CFI) &&
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZIMOP)) {
-+		vdso_info.vdso_code_start = vdso_cfi_start;
-+		vdso_info.vdso_code_end = vdso_cfi_end;
-+	}
-+
- 	__vdso_init(&vdso_info);
- #ifdef CONFIG_COMPAT
- 	__vdso_init(&compat_vdso_info);
-diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-index 272f1d837a80..a842dc034571 100644
---- a/arch/riscv/kernel/vdso/Makefile
-+++ b/arch/riscv/kernel/vdso/Makefile
-@@ -20,6 +20,10 @@ endif
- ifdef VDSO_CFI_BUILD
- CFI_MARCH = _zicfilp_zicfiss
- CFI_FULL = -fcf-protection=full
-+CFI_SUFFIX = -cfi
-+OFFSET_SUFFIX = _cfi
-+ccflags-y += -DVDSO_CFI=1
-+asflags-y += -DVDSO_CFI=1
- endif
- 
- # Files to link into the vdso
-@@ -48,13 +52,20 @@ endif
- CFLAGS_hwprobe.o += -fPIC
- 
- # Build rules
--targets := $(obj-vdso) vdso.so vdso.so.dbg vdso.lds
-+vdso_offsets := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),)-offsets.h
-+vdso_o := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).o
-+vdso_so := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).so
-+vdso_so_dbg := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).so.dbg
-+vdso_lds := vdso.lds
-+
-+targets := $(obj-vdso) $(vdso_so) $(vdso_so_dbg) $(vdso_lds)
-+
- obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
- 
--obj-y += vdso.o
--CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
-+obj-y += vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).o
-+CPPFLAGS_$(vdso_lds) += -P -C -U$(ARCH)
- ifneq ($(filter vgettimeofday, $(vdso-syms)),)
--CPPFLAGS_vdso.lds += -DHAS_VGETTIMEOFDAY
-+CPPFLAGS_$(vdso_lds) += -DHAS_VGETTIMEOFDAY
- endif
- 
- # Disable -pg to prevent insert call site
-@@ -63,12 +74,12 @@ CFLAGS_REMOVE_getrandom.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
- CFLAGS_REMOVE_hwprobe.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
- 
- # Force dependency
--$(obj)/vdso.o: $(obj)/vdso.so
-+$(obj)/$(vdso_o): $(obj)/$(vdso_so)
- 
- # link rule for the .so file, .lds has to be first
--$(obj)/vdso.so.dbg: $(obj)/vdso.lds $(obj-vdso) FORCE
-+$(obj)/$(vdso_so_dbg): $(obj)/$(vdso_lds) $(obj-vdso) FORCE
- 	$(call if_changed,vdsold_and_check)
--LDFLAGS_vdso.so.dbg = -shared -soname=linux-vdso.so.1 \
-+LDFLAGS_$(vdso_so_dbg) = -shared -soname=linux-vdso.so.1 \
- 	--build-id=sha1 --eh-frame-hdr
- 
- # strip rule for the .so file
-@@ -79,9 +90,9 @@ $(obj)/%.so: $(obj)/%.so.dbg FORCE
- # Generate VDSO offsets using helper script
- gen-vdsosym := $(src)/gen_vdso_offsets.sh
- quiet_cmd_vdsosym = VDSOSYM $@
--	cmd_vdsosym = $(NM) $< | $(gen-vdsosym) | LC_ALL=C sort > $@
-+	cmd_vdsosym = $(NM) $< | $(gen-vdsosym) $(OFFSET_SUFFIX) | LC_ALL=C sort > $@
- 
--include/generated/vdso-offsets.h: $(obj)/vdso.so.dbg FORCE
-+include/generated/$(vdso_offsets): $(obj)/$(vdso_so_dbg) FORCE
- 	$(call if_changed,vdsosym)
- 
- # actual build commands
-diff --git a/arch/riscv/kernel/vdso/gen_vdso_offsets.sh b/arch/riscv/kernel/vdso/gen_vdso_offsets.sh
-index c2e5613f3495..bd5d5afaaa14 100755
---- a/arch/riscv/kernel/vdso/gen_vdso_offsets.sh
-+++ b/arch/riscv/kernel/vdso/gen_vdso_offsets.sh
-@@ -2,4 +2,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- LC_ALL=C
--sed -n -e 's/^[0]\+\(0[0-9a-fA-F]*\) . \(__vdso_[a-zA-Z0-9_]*\)$/\#define \2_offset\t0x\1/p'
-+SUFFIX=${1:-""}
-+sed -n -e \
-+'s/^[0]\+\(0[0-9a-fA-F]*\) . \(__vdso_[a-zA-Z0-9_]*\)$/\#define \2'$SUFFIX'_offset\t0x\1/p'
-diff --git a/arch/riscv/kernel/vdso_cfi/Makefile b/arch/riscv/kernel/vdso_cfi/Makefile
-new file mode 100644
-index 000000000000..8ebd190782b0
---- /dev/null
-+++ b/arch/riscv/kernel/vdso_cfi/Makefile
-@@ -0,0 +1,25 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+# RISC-V VDSO CFI Makefile
-+# This Makefile builds the VDSO with CFI support when CONFIG_RISCV_USER_CFI is enabled
-+
-+# setting VDSO_CFI_BUILD triggers build for vdso differently
-+VDSO_CFI_BUILD := 1
-+
-+# Set the source directory to the main vdso directory
-+src := $(srctree)/arch/riscv/kernel/vdso
-+
-+# Copy all .S and .c files from vdso directory to vdso_cfi object build directory
-+vdso_c_sources := $(wildcard $(src)/*.c)
-+vdso_S_sources := $(wildcard $(src)/*.S)
-+vdso_c_objects := $(addprefix $(obj)/, $(notdir $(vdso_c_sources)))
-+vdso_S_objects := $(addprefix $(obj)/, $(notdir $(vdso_S_sources)))
-+
-+$(vdso_S_objects): $(obj)/%.S: $(src)/%.S
-+	$(Q)cp $< $@
-+
-+$(vdso_c_objects): $(obj)/%.c: $(src)/%.c
-+	$(Q)cp $< $@
-+
-+# Include the main VDSO Makefile which contains all the build rules and sources
-+# The VDSO_CFI_BUILD variable will be passed to it to enable CFI compilation
-+include $(src)/Makefile
-diff --git a/arch/riscv/kernel/vdso_cfi/vdso-cfi.S b/arch/riscv/kernel/vdso_cfi/vdso-cfi.S
-new file mode 100644
-index 000000000000..d426f6accb35
---- /dev/null
-+++ b/arch/riscv/kernel/vdso_cfi/vdso-cfi.S
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright 2025 Rivos, Inc
-+ */
-+
-+#define	vdso_start	vdso_cfi_start
-+#define	vdso_end	vdso_cfi_end
-+
-+#define __VDSO_PATH "arch/riscv/kernel/vdso_cfi/vdso-cfi.so"
-+
-+#include "../vdso/vdso.S"
-
--- 
-2.43.0
-
+On 12/5/25 17:39, Daniel Hodges wrote:
+> Extend bpf_crypto_type structure with hash operations:
+>   - hash(): Performs hashing operation
+>   - digestsize(): Returns hash output size
+>
+> Update bpf_crypto_ctx_create() to support keyless operations:
+>   - Hash algorithms don't require keys, unlike ciphers
+>   - Only validates key presence if type->setkey is defined
+>   - Conditionally sets IV/state length for cipher operations only
+>
+> Add bpf_crypto_hash() kfunc that works with any hash algorithm
+> registered in the kernel's crypto API through the BPF crypto type
+> system. This enables BPF programs to compute cryptographic hashes for
+> use cases such as content verification, integrity checking, and data
+> authentication.
+>
+> Signed-off-by: Daniel Hodges <git@danielhodges.dev>
+> ---
+>   include/linux/bpf_crypto.h |  2 +
+>   kernel/bpf/crypto.c        | 76 ++++++++++++++++++++++++++++++++++----
+>   2 files changed, 70 insertions(+), 8 deletions(-)
+>
+> diff --git a/include/linux/bpf_crypto.h b/include/linux/bpf_crypto.h
+> index a41e71d4e2d9..c84371cc4e47 100644
+> --- a/include/linux/bpf_crypto.h
+> +++ b/include/linux/bpf_crypto.h
+> @@ -11,8 +11,10 @@ struct bpf_crypto_type {
+>   	int (*setauthsize)(void *tfm, unsigned int authsize);
+>   	int (*encrypt)(void *tfm, const u8 *src, u8 *dst, unsigned int len, u8 *iv);
+>   	int (*decrypt)(void *tfm, const u8 *src, u8 *dst, unsigned int len, u8 *iv);
+> +	int (*hash)(void *tfm, const u8 *data, u8 *out, unsigned int len);
+>   	unsigned int (*ivsize)(void *tfm);
+>   	unsigned int (*statesize)(void *tfm);
+> +	unsigned int (*digestsize)(void *tfm);
+>   	u32 (*get_flags)(void *tfm);
+>   	struct module *owner;
+>   	char name[14];
+> diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+> index 83c4d9943084..95625c7ffb1a 100644
+> --- a/kernel/bpf/crypto.c
+> +++ b/kernel/bpf/crypto.c
+> @@ -171,7 +171,12 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+>   		goto err_module_put;
+>   	}
+>   
+> -	if (!params->key_len || params->key_len > sizeof(params->key)) {
+> +	/* Hash operations don't require a key, but cipher operations do */
+> +	if (params->key_len > sizeof(params->key)) {
+> +		*err = -EINVAL;
+> +		goto err_module_put;
+> +	}
+> +	if (!params->key_len && type->setkey) {
+>   		*err = -EINVAL;
+>   		goto err_module_put;
+>   	}
+> @@ -195,16 +200,19 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+>   			goto err_free_tfm;
+>   	}
+>   
+> -	*err = type->setkey(ctx->tfm, params->key, params->key_len);
+> -	if (*err)
+> -		goto err_free_tfm;
+> +	if (params->key_len) {
+> +		*err = type->setkey(ctx->tfm, params->key, params->key_len);
+> +		if (*err)
+> +			goto err_free_tfm;
+>   
+> -	if (type->get_flags(ctx->tfm) & CRYPTO_TFM_NEED_KEY) {
+> -		*err = -EINVAL;
+> -		goto err_free_tfm;
+> +		if (type->get_flags(ctx->tfm) & CRYPTO_TFM_NEED_KEY) {
+> +			*err = -EINVAL;
+> +			goto err_free_tfm;
+> +		}
+>   	}
+>   
+> -	ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
+> +	if (type->ivsize && type->statesize)
+> +		ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
+>   
+>   	refcount_set(&ctx->usage, 1);
+>   
+> @@ -343,6 +351,54 @@ __bpf_kfunc int bpf_crypto_encrypt(struct bpf_crypto_ctx *ctx,
+>   	return bpf_crypto_crypt(ctx, src_kern, dst_kern, siv_kern, false);
+>   }
+>   
+> +#if IS_ENABLED(CONFIG_CRYPTO_HASH2)
+> +/**
+> + * bpf_crypto_hash() - Compute hash using configured context
+> + * @ctx:	The crypto context being used. The ctx must be a trusted pointer.
+> + * @data:	bpf_dynptr to the input data to hash. Must be a trusted pointer.
+> + * @out:	bpf_dynptr to the output buffer. Must be a trusted pointer.
+> + *
+> + * Computes hash of the input data using the crypto context. The output buffer
+> + * must be at least as large as the digest size of the hash algorithm.
+> + */
+> +__bpf_kfunc int bpf_crypto_hash(struct bpf_crypto_ctx *ctx,
+> +				const struct bpf_dynptr *data,
+> +				const struct bpf_dynptr *out)
+> +{
+> +	const struct bpf_dynptr_kern *data_kern = (struct bpf_dynptr_kern *)data;
+> +	const struct bpf_dynptr_kern *out_kern = (struct bpf_dynptr_kern *)out;
+> +	u32 data_len, out_len;
+> +	const u8 *data_ptr;
+> +	u8 *out_ptr;
+> +
+> +	if (!ctx->type->hash)
+> +		return -EOPNOTSUPP;
+> +
+> +	data_len = __bpf_dynptr_size(data_kern);
+> +	out_len = __bpf_dynptr_size(out_kern);
+__bpf_dynptr_size() returns u64, as well as __bpf_dynptr_data_rw()
+takes u64 as length parameter, it may be worth using that type for
+data_len and out_len.
+> +
+> +	if (data_len == 0)
+> +		return -EINVAL;
+> +
+> +	if (!ctx->type->digestsize)
+> +		return -EOPNOTSUPP;
+> +
+> +	unsigned int digestsize = ctx->type->digestsize(ctx->tfm);
+> +	if (out_len < digestsize)
+> +		return -EINVAL;
+> +
+> +	data_ptr = __bpf_dynptr_data(data_kern, data_len);
+> +	if (!data_ptr)
+> +		return -EINVAL;
+> +
+> +	out_ptr = __bpf_dynptr_data_rw(out_kern, out_len);
+> +	if (!out_ptr)
+> +		return -EINVAL;
+> +
+> +	return ctx->type->hash(ctx->tfm, data_ptr, out_ptr, data_len);
+> +}
+> +#endif /* CONFIG_CRYPTO_HASH2 */
+> +
+>   __bpf_kfunc_end_defs();
+>   
+>   BTF_KFUNCS_START(crypt_init_kfunc_btf_ids)
+> @@ -359,6 +415,9 @@ static const struct btf_kfunc_id_set crypt_init_kfunc_set = {
+>   BTF_KFUNCS_START(crypt_kfunc_btf_ids)
+>   BTF_ID_FLAGS(func, bpf_crypto_decrypt, KF_RCU)
+>   BTF_ID_FLAGS(func, bpf_crypto_encrypt, KF_RCU)
+> +#if IS_ENABLED(CONFIG_CRYPTO_HASH2)
+> +BTF_ID_FLAGS(func, bpf_crypto_hash, KF_RCU)
+> +#endif
+>   BTF_KFUNCS_END(crypt_kfunc_btf_ids)
+>   
+>   static const struct btf_kfunc_id_set crypt_kfunc_set = {
+> @@ -383,6 +442,7 @@ static int __init crypto_kfunc_init(void)
+>   	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &crypt_kfunc_set);
+>   	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &crypt_kfunc_set);
+>   	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &crypt_kfunc_set);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &crypt_kfunc_set);
+>   	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
+>   					       &crypt_init_kfunc_set);
+>   	return  ret ?: register_btf_id_dtor_kfuncs(bpf_crypto_dtors,
 
