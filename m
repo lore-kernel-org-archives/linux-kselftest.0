@@ -1,103 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF26B3B8D6A;
-	Wed, 10 Dec 2025 09:23:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBD8313E08;
+	Wed, 10 Dec 2025 09:23:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765358600; cv=none; b=WXRdyqBG2VrI+fbc5dZb2VzPUG58Yd0wdZ4Seu4XVoBuq3HJmJWILa5anUfw26kv6lAiNZ6ab9A0i7ekN6iZngP60lYB0zC5+a65MZhACMttmrjRWB2yc1j9Cm5fz5HgrcMbN5VIDd7hFn188ZwCZPHCXcUUAA16ggJO5GfXaqE=
+	t=1765358603; cv=none; b=vBmOT+EPbtlkJPOpwx8r/mwNxjCkLl3RFJ124A6+P8tk5ADyjo91xr+6f3ovagz9VhEkwHjiDXZsLYb6a94GVx+JxhIEyLKJ/OPXWrWXmnhWRNzujLQA1MnBLB24DgcxanQm4f+Cp53v6veZay+z0Y6oXqkjeaoV6jP4qA31Y5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765358600; c=relaxed/simple;
-	bh=nSXaGQyn3GMiTlmiGFa5o8nysAMOlxs79eW/FrWmqmM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Kh3oft76ELpKtcdPgsFGKWBLisBz9An1uqGJp1Frzq5X3DoQJlyUbnK4pOkEp3mufSmwLDOJzUGz+AnhV6LMEKAdgnrY/eKFeLsZxfCxNZoPdmopV3Iv9pSuIDGs2meqUUByytV7MjhHkJLYLNOKN4XcL+PCQAW/0QcpecGkoKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Prkew8MV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765358603; c=relaxed/simple;
+	bh=lb9v2yO+QpPHd9d5IjHK3ZkYycOZlqYQjQAzI9fpUTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QeL0jx7fE7sNgmvME1AA7BXgqgVy4BYKDjrBEabCa7/3lOUi7tn/wuB3XVBEGMwSyFwRa1bEVdpfj6E/l2SHqeHjctj3Xt3/etfu8dvgyBKTFBnt0S7TFSpnsXVYlGeD/OlarNxjw/LkZvTI0diCw1AgFCpT+VKOQEEsg3U9fr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rtoeuoXZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Prkew8MV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56C35C4CEF1;
-	Wed, 10 Dec 2025 09:23:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rtoeuoXZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E72EC113D0;
+	Wed, 10 Dec 2025 09:23:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765358599;
-	bh=nSXaGQyn3GMiTlmiGFa5o8nysAMOlxs79eW/FrWmqmM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Prkew8MVLr/c1LOshHUngb+MypHlPwgJF177RA90OoJtDT5kXxHHcT1T4R4zO3rLw
-	 Y53TNXyDsePF8oFFd69TIW0bEWJg27HIW8cOo8dH+OC66Ah5x/qvYMRRadz+rBYMQn
-	 y8JCmNc6GBVG7D8tuZ9S/ok2p7OIqPgbIeMscsXWlQbkB5HbhlXOi4E9VJY+wHZ18t
-	 LRo3941B6cokIvUdoxxFkeD8ZQg/8GJJ6Ebhp69XaMxP53lskcQmDAheB8a+H/+PAq
-	 r5F7k+iD7w9+uVL99sUfY9zaMLG8KeDIYolAg4tX7vezDXCy8M7F2MXVfwilVcVOE9
-	 tru6CU5ko3zXg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3BCCE3809A18;
-	Wed, 10 Dec 2025 09:20:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1765358603;
+	bh=lb9v2yO+QpPHd9d5IjHK3ZkYycOZlqYQjQAzI9fpUTo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rtoeuoXZ3BBBN+6IH51frJRoPdFIpIXS//VcCjs61R+csZgofTNEEFHV/ScO8wPc/
+	 gEz9T8m4k8pr0iZi7LmcRmOR2Y8eFuvsmN7LiNXgJsntkBJzC3kRZRUarhUpM/zKZ/
+	 EPTIjqBJ+XbCUip+X2KpYp7Ji53u5w6VgPW/z02zZBQ2p++ljq7/wyleCAiSnvag0c
+	 BG5qXXS5Or5OanmDCtswkUdxFiqfdV1u6OxP+KXJ2XzhJJuQmRWyq/NZl2T1uXm4sE
+	 06Oak4W/H0ifyN/LPlwfdlL+uuQaKmMM6oCVULEJdwzGvQ3om25ABE64DnoWDl7GzL
+	 AGQ/AxJJWPOYw==
+Date: Wed, 10 Dec 2025 09:23:18 +0000
+From: Simon Horman <horms@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2] selftests: tls: fix warning of uninitialized
+ variable
+Message-ID: <aTk8Bj9WLtjyBdV2@horms.kernel.org>
+References: <20251205163242.14615-1-ankitkhushwaha.linux@gmail.com>
+ <aTQE9WDQxBA3g6Gr@horms.kernel.org>
+ <20251210180640.62fc3145@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 00/13] selftests: Fix build warnings and errors
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176535841403.523551.9003145966659603890.git-patchwork-notify@kernel.org>
-Date: Wed, 10 Dec 2025 09:20:14 +0000
-References: <20251205171010.515236-1-linux@roeck-us.net>
-In-Reply-To: <20251205171010.515236-1-linux@roeck-us.net>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: shuah@kernel.org, kuba@kernel.org, brauner@kernel.org, tglx@linutronix.de,
- mingo@redhat.com, edumazet@google.com, kees@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- wine-devel@winehq.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251210180640.62fc3145@kernel.org>
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri,  5 Dec 2025 09:09:54 -0800 you wrote:
-> This series fixes build warnings and errors observed when trying to build
-> selftests.
+On Wed, Dec 10, 2025 at 06:06:40PM +0900, Jakub Kicinski wrote:
+> On Sat, 6 Dec 2025 10:27:01 +0000 Simon Horman wrote:
+> > Thanks for the update. Overall this seems good to me, however,
+> > net-next is currently closed.
 > 
-> v2: Emphasize that the patch series fixes build warnings and errors
->     which are seen even if -Werror is not provided.
->     Fix usage of cc-option.
->     For "ignoring return value" warnings, use perror() to display an error
->     message if the affected function returns an error.
-> 
-> [...]
+> FWIW after Simon made this comment more fixes for various ksft warnings
+> got posted, I think we should apply them now and to be consistent I'll
+> also take this one.
 
-Here is the summary with links:
-  - [v2,01/13] clone3: clone3_cap_checkpoint_restore: Fix build warnings
-    (no matching commit)
-  - [v2,02/13] selftests: ntsync: Fix build warnings
-    (no matching commit)
-  - [v2,03/13] selftests/filesystems: fclog: Fix build warnings and errors
-    (no matching commit)
-  - [v2,04/13] selftests/filesystems: file_stressor: Fix build warning
-    (no matching commit)
-  - [v2,05/13] selftests/filesystems: anon_inode_test: Fix build warning
-    (no matching commit)
-  - [v2,06/13] selftest: af_unix: Support compilers without flex-array-member-not-at-end support
-    https://git.kernel.org/netdev/net/c/06f7cae92fe3
-  - [v2,07/13] selftest/futex: Comment out test_futex_mpol
-    (no matching commit)
-  - [v2,08/13] selftests: net: netlink-dumps: Avoid uninitialized variable warning
-    (no matching commit)
-  - [v2,09/13] selftests/seccomp: Fix build warning
-    (no matching commit)
-  - [v2,10/13] selftests: net: Fix build warnings
-    https://git.kernel.org/netdev/net/c/59546e874403
-  - [v2,11/13] selftests/fs/mount-notify: Fix build warning
-    (no matching commit)
-  - [v2,12/13] selftests/fs/mount-notify-ns: Fix build warning
-    (no matching commit)
-  - [v2,13/13] selftests: net: tfo: Fix build warning
-    https://git.kernel.org/netdev/net/c/91dc09a609d9
+Understood. I'm always a little unsure where selftest changes should best land.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+In any case, feel free to add my tag as this does look good to me.
 
+Reviewed-by: Simon Horman <horms@kernel.org>
 
