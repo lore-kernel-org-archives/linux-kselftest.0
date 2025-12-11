@@ -1,70 +1,70 @@
-Received: from mail-vs1-f97.google.com (mail-vs1-f97.google.com [209.85.217.97])
+Received: from mail-qk1-f225.google.com (mail-qk1-f225.google.com [209.85.222.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A14B286D7B
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Dec 2025 05:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE4128468E
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Dec 2025 05:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765430199; cv=none; b=i6NMHUgtQwvg60a+mLk7/Q8LSymn+wKkApnNftOwYGIwkTwPCfl9jvzXaM1NB2NnB8n/jJq0LbuJSReX33Y2Yz+nYwRqu4EDJ5+K7UBcNSOJvxHxV0mfmSC5LxONlDjpkZUed9MrP3o7DUK+DUutHnT9Z2C5DiYQMvErsUkM368=
+	t=1765430200; cv=none; b=dAZyMFDaWYjIKy4YRvJmajAPd+KfxNx+293DPCNS5qu3slMtWpMIIdbwEK81pxfEV9oSkmFcCEeFYo2yc98an5m5dYqSbmEkqNfVytG0HXbwcaK8JQNK8R/C7gSp6kGPpQnlmoaNrM6VYtuBbDhuWI6x2Q4809T6kGUWGu3SSZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765430199; c=relaxed/simple;
-	bh=FKbZngLfGMe4F0ejdKJ0fZ6ILmuYiVZnIW21hOqoFMc=;
+	s=arc-20240116; t=1765430200; c=relaxed/simple;
+	bh=ugv+L91iD/mMt+noj9DgZ/5IYV37F5CcVIOzFhnzFT0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rzE7ojE6RQAebQnkPPiy8w/jVmTWNeKjipOlW17puL2xvKL9w7Qr5oAVLsdroEWFL8hlK3FsTvNi8tH/4bxWBOZpefhLB9IpKRLS55aovOXBF9uQwdM6HKKLOZ/AqZpou2OlQM8z73599m/pLNohn8K8lh1UnK79+McXODaLtyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=PyfksFWC; arc=none smtp.client-ip=209.85.217.97
+	 MIME-Version; b=osmb9v6d5sx921+oGZV/eQbGr8BX2yc14yAUSDayLidk0LN0gumNkMRqjZzA8upNRRT1gSWj12r2QiWJo1CGmEo4DGZ9tFzuAAcSpu7AUY3IUiyAhrRRGUD4AGRocvLfUgIEbItDEFHVYvD55PwVyZ3Vit5oGNInMI9sL1mQYtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Nj/B95mi; arc=none smtp.client-ip=209.85.222.225
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="PyfksFWC"
-Received: by mail-vs1-f97.google.com with SMTP id ada2fe7eead31-5dfb6430553so27901137.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 21:16:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Nj/B95mi"
+Received: by mail-qk1-f225.google.com with SMTP id af79cd13be357-8b2e0a2ffdaso12708385a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 21:16:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1765430194; x=1766034994; darn=vger.kernel.org;
+        d=purestorage.com; s=google2022; t=1765430193; x=1766034993; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lYMmhxte6MTatk0mD4pdp1WR7i9P7+V+tQDFdQu1wO4=;
-        b=PyfksFWCqbwVw34UP8Pi5hz2STwDa9VrLb75AWeKbRJ5NeoB4ZyZrX/pe0dqDpILOC
-         4BKAhD6Rln8ruAy8MhYXg4DyF/EFwjYkUJcO8QQjoJGHFu9YMHpbPBgCVsFY1ioHWidw
-         ChKxdT5SL8eickZjAVEzcAVQ6HVJGMEYhIADESbCRNe+aw3yfILlevnP2k0b8QhTIxiw
-         KkgAD0409hZ/gg/06wHLGJVAJNWF73I3XHleaGsi5RsMOyXlc3ZDov1bh8hM2l/IoiEc
-         daxgkbWG8Mv59ons6/xS9gYLcL6W67CjmFOXrKY+iOcmdUzQ9GymQE8G3DvD5AlpTPMp
-         kqMg==
+        bh=iTqVrM+5dB/aV7gHI1xfO04fFWnueqKpNcCVf0mzNKQ=;
+        b=Nj/B95miIPSr2sIWs0H87r+i3K+uNy8PV6XxYLe2ANopteY7u0954rSK6jP6s+9qfJ
+         CF/9aeNyoXDuEw+iDsQ9Bru6wRccI5jK1+gEK6y91Jm1B/WQeT20++28aObd+SaY3j/2
+         aMUjHkPI7CMuYtms1fvliBjA8LYCYfJ++bCOuOsWOQDU5khx9azO8S1K4mAyqCtiyNcu
+         6rYCQ124u6Jw2xcuwtBtJd9oTWtW67F8huw4KD3cz9E+Lmdqq4amyal0H0rvjtfHIVzF
+         fXIT42+mmVnFCszrqgzh6ejGESx20ojMPmEXojMrMt8ZbLflr94/Nx3Sn7zVHnMxslgE
+         7u9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765430194; x=1766034994;
+        d=1e100.net; s=20230601; t=1765430193; x=1766034993;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lYMmhxte6MTatk0mD4pdp1WR7i9P7+V+tQDFdQu1wO4=;
-        b=IwKvs1X7CfV9QvSB8eKHw/kU6spDIkJQ628nPlwWLUdg6/1fThuXTPnQ0vj6lNzMNc
-         wHA00Nh9iynVdN/UbnWqxpmD2ErV9zerfgdqUzn54J1VCKLaQAuxs0U7HOK7Q79Syq83
-         eOmuKhx3W6+TPk1CJapYOgASiLHGVA1eNdT2FugzjLEd2S/yKJxWx0TARHez19fOt79h
-         I9uSJMUEqMg1PjAGoQE7UpXgfXKS4RpgLA9R00v4I/LG2DNyIx5ZAtbcJyK1FiSBcXwS
-         XH3QxTCl3X/009sZ0FSU8WciUYOGTsy8Esq0uIjP8eB8/VMjN8CnHT5OnhcN2ttYjegb
-         PV4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXidjLIckkJQfxBz2Cs9b0ihm63XVR5mkxLpNxMTCZecxA4QHsQgp8Hyee++VyI4/n1MHu+n0NIioYBVz2BsIA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxs7NTTa2nncgBnvC/qBTvqp+/TzrY+8qEJNQ/zhY9Yc0KHdi43
-	KAX/7s7F+nAwg3Ed58OnPTuo0PAJPWlSsQ4SXNf7MnHbNcu0HdW3qbyX2Umu2hghwtxTJiAMsRx
-	5/fiye5JO3Y8+/4ibhQ9q2JIR+t32Bo3POf0J
-X-Gm-Gg: AY/fxX6m8PT9AOcg9rIwrI3RJeqV37AouclbH4MsZhTPXl+z93noddIYLkW/LpF2gve
-	epqNOx09GD4c8QVWIEDR3QFtZnGFz+ErNvP59k2n77gVqK4BB0mLfYjcZfcqxKWnw40y073Qh2s
-	6hFdaDtlt/PX98bTskJKlyqmuN9O9jdaus+4kKU9SzwPV3YaTJRuJ6nQcG13KwiYNvvXFR4cdDG
-	IZLJ+GHCqXLZ5GRP8aEDaK75PltHSopkf3bNT7kIQppvfRSyX0U8HxgIMSjWzQbFLaE3L+7ks41
-	Dz0fH1FOR+rvdIq6rTR0CZksT6kh1pJUVFVBihR52ujCrSc8uL2w5tsrzffzBYdsgJYcptwz5Hg
-	YE1FxckQes11CJNvN5Z4mYiDTiMaozUCjjXd+/a5ZuA==
-X-Google-Smtp-Source: AGHT+IH8wHkl6849aTSVx4QBElkuCxFtShXY/UySGgPZAopPw0H4GLbBbyJqdZsPQRlK5nTLNG77Q2JCbfO0
-X-Received: by 2002:a05:6102:644a:b0:5db:25d3:28b4 with SMTP id ada2fe7eead31-5e7d0e28186mr197796137.5.1765430193704;
+        bh=iTqVrM+5dB/aV7gHI1xfO04fFWnueqKpNcCVf0mzNKQ=;
+        b=mf9NLGyPD89LHzxrduB4PdkoFTT1pHqoqq8NPKQoAbchM9nqEDsr4reshllsVPed7z
+         79By64RacTdeu3/YHi+WfoPILirbpF1Tszo4Nw8rljYnMXe+9JJX/5epsAXKFtJnFxPp
+         vg6smT1fgkPmSedXTffjrGet11X2eKl4TCi9PJvEMgebQEaZbRUB9H7C1CNyN0l+XT3q
+         XxKwMhZp9iCplYlbC/hEwRmIihJvnEK1qTkROLu0U+iH8vxai9GdxfzgqjCRohOpJbRT
+         wa3l+vyImqcsU7QojBJXiwDHsk4QttMITtmtc45PY5iodvOwf35771KSchBazNc/P3ok
+         HtNA==
+X-Forwarded-Encrypted: i=1; AJvYcCXA7A0tTK2p+kWmsBoN+3WBiIyC4df6i3Y/41ie0mm2q+uSBzQe133ZxRHYmvS/AgoM2sbLARlQSb8Dmxl4Lq0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn4NPy7UCFBWln95JoINai4IzH6BCL1NoZIQAgAUU+WfwPMBK0
+	EF27i6EhAu/oubJL5GTVpWOnTkOJgpRt9M1v98Vn/usmNzBQaOLdauJCeZOx34FFsBNfF5fnX8Y
+	OtwApXqdLY3r6N0XaoP9/GFWwwA69nv6aOqGU
+X-Gm-Gg: AY/fxX7UcpL/A5As5v8DEhg5bEdj+3ZKavBglDc0NN2CtDGIjLgwfCwKlwKb/96chLS
+	ai5xxadWPG5xotu9fqMEhtqS95Bjjfu8gDGGffrmPnywKBkmj6YK6/Os8hkRJvTZ5BhPpzodXBc
+	je5Lr/TCXilYfY0qPhl/iGCeFA2WlNOz4tIpfgWVBGiEDAw0TJptjhPPpuiCwKD+OybpijpKX+n
+	fpExLDhmnqpK9ebicFFw9RxDnN4uLs+ht4fmUMGdu9IFyOJ45c86TZOxNM2sSaU1ayM9jgSDuhp
+	APaLQ/LEwV6ZZdUoLYfpyWg0A3FjOSQ4Ei9Eu71lApUMXStfFGV54J2SPYRDNjHzydg34PYOHwK
+	tqNVOLQ4B2QTnVaUyPs1KL2S4G8gZSkV4ZJRSJEFBjg==
+X-Google-Smtp-Source: AGHT+IEVMLDi+M2lvlTlTsrMZUIr2MTV2dKnDHRpqfJSsfAFAo3GmlWwvbybr1q1ad2xu+lmxYt/buCaOMKm
+X-Received: by 2002:ad4:5de1:0:b0:880:55fc:c984 with SMTP id 6a1803df08f44-88863ae917amr55498616d6.5.1765430193191;
         Wed, 10 Dec 2025 21:16:33 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id ada2fe7eead31-5e7db2613afsm151339137.4.2025.12.10.21.16.33
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.129])
+        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-8886eedef55sm2845916d6.18.2025.12.10.21.16.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 10 Dec 2025 21:16:33 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (unknown [IPv6:2620:125:9007:640:ffff::1199])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 42E6F341DDC;
-	Wed, 10 Dec 2025 22:16:32 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id CD284340B96;
+	Wed, 10 Dec 2025 22:16:31 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 3E0A7E41888; Wed, 10 Dec 2025 22:16:32 -0700 (MST)
+	id C9DE5E400B8; Wed, 10 Dec 2025 22:16:31 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Shuah Khan <shuah@kernel.org>
@@ -72,9 +72,9 @@ Cc: linux-block@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH 4/8] selftests: ublk: use auto_zc for PER_IO_DAEMON tests in stress_04
-Date: Wed, 10 Dec 2025 22:15:59 -0700
-Message-ID: <20251211051603.1154841-5-csander@purestorage.com>
+Subject: [PATCH 2/8] selftests: ublk: remove unused ios map in seq_io.bt
+Date: Wed, 10 Dec 2025 22:15:57 -0700
+Message-ID: <20251211051603.1154841-3-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251211051603.1154841-1-csander@purestorage.com>
 References: <20251211051603.1154841-1-csander@purestorage.com>
@@ -86,40 +86,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-stress_04 is described as "run IO and kill ublk server(zero copy)" but
-the --per_io_tasks tests cases don't use zero copy. Plus, one of the
-test cases is duplicated. Add --auto_zc to these test cases and
---auto_zc_fallback to one of the duplicated ones. This matches the test
-cases in stress_03.
+The ios map populated by seq_io.bt is never read, so remove it.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- tools/testing/selftests/ublk/test_stress_04.sh | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/ublk/trace/seq_io.bt | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/ublk/test_stress_04.sh b/tools/testing/selftests/ublk/test_stress_04.sh
-index 3f901db4d09d..965befcee830 100755
---- a/tools/testing/selftests/ublk/test_stress_04.sh
-+++ b/tools/testing/selftests/ublk/test_stress_04.sh
-@@ -38,14 +38,14 @@ if _have_feature "AUTO_BUF_REG"; then
- 	ublk_io_and_kill_daemon 256M -t stripe -q 4 --auto_zc --no_ublk_fixed_fd "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
- 	ublk_io_and_kill_daemon 8G -t null -q 4 -z --auto_zc --auto_zc_fallback &
- fi
+diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt b/tools/testing/selftests/ublk/trace/seq_io.bt
+index 507a3ca05abf..b2f60a92b118 100644
+--- a/tools/testing/selftests/ublk/trace/seq_io.bt
++++ b/tools/testing/selftests/ublk/trace/seq_io.bt
+@@ -15,11 +15,10 @@ tracepoint:block:block_rq_complete
+ 			printf("io_out_of_order: exp %llu actual %llu\n",
+ 				args.sector, $last);
+ 		}
+ 		@last_rw[$dev, str($2)] = (args.sector + args.nr_sector);
+ 	}
+-	@ios = count();
+ }
  
- if _have_feature "PER_IO_DAEMON"; then
--	ublk_io_and_kill_daemon 8G -t null -q 4 --nthreads 8 --per_io_tasks &
--	ublk_io_and_kill_daemon 256M -t loop -q 4 --nthreads 8 --per_io_tasks "${UBLK_BACKFILES[0]}" &
--	ublk_io_and_kill_daemon 256M -t stripe -q 4 --nthreads 8 --per_io_tasks "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--	ublk_io_and_kill_daemon 8G -t null -q 4 --nthreads 8 --per_io_tasks &
-+	ublk_io_and_kill_daemon 8G -t null -q 4 --auto_zc --nthreads 8 --per_io_tasks &
-+	ublk_io_and_kill_daemon 256M -t loop -q 4 --auto_zc --nthreads 8 --per_io_tasks "${UBLK_BACKFILES[0]}" &
-+	ublk_io_and_kill_daemon 256M -t stripe -q 4 --auto_zc --nthreads 8 --per_io_tasks "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
-+	ublk_io_and_kill_daemon 8G -t null -q 4 --auto_zc --auto_zc_fallback --nthreads 8 --per_io_tasks &
- fi
- wait
- 
- _cleanup_test "stress"
- _show_result $TID $ERR_CODE
+ END {
+ 	clear(@last_rw);
+ }
 -- 
 2.45.2
 
