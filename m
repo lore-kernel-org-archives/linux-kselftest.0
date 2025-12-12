@@ -1,70 +1,70 @@
-Received: from mail-pl1-f227.google.com (mail-pl1-f227.google.com [209.85.214.227])
+Received: from mail-yx1-f98.google.com (mail-yx1-f98.google.com [74.125.224.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D672D7DE7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D852D7D42
 	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 17:17:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.227
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765559835; cv=none; b=FzIsDYPPPm4G4SmU2JKtytgwnwEJfNaQoNmngzAIMBFgk+uq+TvOpb3dS3IH0btedjoKQbfSuvho0tNYpwcEMAt0ITt8P2UAweQcEWgcbJV7IpaMIp5ntW32bE2xSlOzgoza6xEVB9BsuZznf2l9AzyWor7oVHUyyOFPD39JsMU=
+	t=1765559835; cv=none; b=tQ6rz4/gyvVbYZJjeYeJO50BzvwmGIqwy+4hiddnRNYmvJN8lQkNpdv2IwQFd3eGgGNYDNLdy24MqqLIHQOK6cjcO6a5N4SgdNPbuHylmob2IFKFkZtIOAVnUp2/hj6TBF65heWaFEwbNGk594TtQrNxPsT7q9neBK6Y+e6Stwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765559835; c=relaxed/simple;
-	bh=hPIiNC1+/Ul2H1nCS4eIVMyitSwq0Uw4atB11NoOg3w=;
+	bh=Nv/iP0PPlu7PYFQwI+jBPI8ffRylYj1zxIf1qEKb0tE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BXi0MvsNoFgq7ELMiocFkMdx3h6+vlVZcp0/fBmB/yNiPh0xlXtkNubTrS+CMItjod/WuciSplGzgM+fFW9MCZgCJF5GOVEHLfD6AoMT4GGoTttulzbdxYQs8eIWrOIBLJS82qZDrzv6q/mIwXsnYhzISnkWv5kDRLfms/Zt5c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=eSSBfKlP; arc=none smtp.client-ip=209.85.214.227
+	 MIME-Version; b=A4iGJvtEEOl4BMeOru/JbKwtF0xt7kAM2vIjS+g1eRRZlWZqyOaod7H97w9Qw9TxkptgO7hdAOO0g8Fefex4xKAj2knC9vIOqe0VDgUgktdG1r2H6nsdeKZZoTE6ozDEDVRBZPdLVfxwdWSAkwbvW5xI9G29/vsgEswJ/u9ZHsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Meavvcpz; arc=none smtp.client-ip=74.125.224.98
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="eSSBfKlP"
-Received: by mail-pl1-f227.google.com with SMTP id d9443c01a7336-297ea936b39so2890995ad.1
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Meavvcpz"
+Received: by mail-yx1-f98.google.com with SMTP id 956f58d0204a3-644746e3793so230079d50.3
         for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 09:17:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1765559830; x=1766164630; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9yUeSg484LPlwnG9Kq89xJ26zoxj8oGQzdWDtSD7PIU=;
-        b=eSSBfKlPQFpdhpEjEf1+YL9zY7UPrry9TrSKiKgab8sjkcESxY5GfJS7CqlS25jI2r
-         Jp6cWJ6uIsBo9O0/Db4OT1fYMW+SR7BYoHyZ2EpC+3+fvmsuOuejAXVv273FPyryWwBF
-         SZ5tlew/zQI1uaZ+EsoPFZxY/EDSNMwZaoDMzLHQeEP2DAiew9qVDGTDl6l52gKYkUUB
-         3dCatX2+4GZQPVJg2epQtDKcie0lL+T+PYaxvPBq8T99XYV6+fv3d7KggPonDCKK6fh7
-         RoOIIb6oB3WG4o+my/LMkKwWAvvO6eie5QchP+Bk3EcxGze49W95/S6dKFw8y0DMrhyz
-         ILcw==
+        bh=Ro8OsZF3uJAug4OtKve3tUbRbgxB29DrKAw1agkxt6A=;
+        b=MeavvcpzqdlJMYBcwBc0mnEyFxzNxocWJ59dX4c95+WZtAYMrwyaMfcFPDGLZ/eihr
+         NztHHNDgvIZHwPiJG5+voyiZvS+8wiJcvRefxEeXLlWwg9rUa6lOYQWlFR1FWiClNduq
+         X6+KDRgimp3CDNNXi+/49G+P2xZLlDqz21ezUocPJnBAU63uSXVfK4lgA3lN53aaLZNL
+         uo3QbCyoX2IZshopKy9Ta2PDr7VXuYL6/zKr6zexJ95tSHQbzdUhk2NX8/OxY4iDKnbb
+         TyZW2K93zyRmf4ggx/sosAWNE2PmTrDTpEraeG5oZdYnFO5CeGN6Z60Iorwhcw5lUbKd
+         M6pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1765559830; x=1766164630;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=9yUeSg484LPlwnG9Kq89xJ26zoxj8oGQzdWDtSD7PIU=;
-        b=XzkbyBfxITXr3f7Z9SVXY/v0ONgZWDmQ2DWcP7ZI3BvtfiJiHLyDHBr+tPXmXG61nA
-         vJjJukuK/fuh/dpv0C5wtGhhvjeRBHuxmeVYjABdE3yHncXgtOFuTX7Knw7xEb2jRqxO
-         xADW6ktFwF6GDntgpFE1ur2PkV/AwIUuD/xZ+lFtv4v8d4ivg/eekVg89wS1jGyKMiB6
-         4/9hN/W6KwB0FaNfveNH7PybS4grf3qMoZsHKkQZOuqsU1AE1tRZQbjc0nxGpUADcgz/
-         AqVpshOp3rcsjoYmQy0UFd4q42t5j99ZgLKW+n15jBkew9gC2WtQx4cSzZk92rDWM6V4
-         CRoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXUe/73I2Q2jqHVwL5JAQ8qpS+tFfm5/qA9l+Wp2cHoiEAwD+WvKn7jqoZovpVdL6wuRgO+p59BoGg/8isRlHM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCQXVhBcDCvvEtN2EuKEJ/xLLImfoOiNgT9P4QhkEGig3khkdl
-	fVBytgwWpGgS4f80Ep1l1emkb9O3Y4D6VUg/UkAKGroqvxeQO7bqGmp4elS3Uu8rI3BCc/+uVAH
-	MtKeF5T5phICGTItaHA20vV4dshRa9fPI6EzKK6XGhiQSR7frTEol
-X-Gm-Gg: AY/fxX6V2zKw53eduT5LKT21UeS1jZUTtDI3iNay43gNuIiYRDLZdP21geNRw9OHFqP
-	2hx+LZLFgOMLoK5v0mIV4Z6j56SBNotMf0fn53uy6y/F4L360ZgFqjdNc3uOWsRPzfdYdLSKwMx
-	7cJ1MEAYNFyVuGIeZcgLyrF98idjoG1+KT/E2QegjBb08lZZvue0pxVstIfGDs1JYfj1NbaK3rj
-	CURu+UiWhd/lL6Px5er3fCVwqBvOqGtSjt5nooHRxi8IEYmCCiMaAt9HgFZe16vflSEHBSS4Woy
-	mjQF4SkQX6NUCCziefse4XDHOrfVenH8mNkVe3aQDOX0IrhLFVujSuBOmYDSNGh3L1SqiQCf8A9
-	4wLt7rfjCyya+ITS/3Yvuqmx9JVg=
-X-Google-Smtp-Source: AGHT+IEbfoe32paZweyOPDkuXvizadBFpFIsjkgJtJbQ2tnZucwBUDmmD4hh6aIHwvuMRz00hNAN6TCkuBCH
-X-Received: by 2002:a17:903:11d0:b0:299:db45:c5a9 with SMTP id d9443c01a7336-29f244d0d77mr22404615ad.9.1765559830547;
+        bh=Ro8OsZF3uJAug4OtKve3tUbRbgxB29DrKAw1agkxt6A=;
+        b=BghuBlzWOe8IdS9yxW4MHpt7zY9iDUezAoMuSSYYY19ppeKHkjQn7J0ZlkQsP7Zleo
+         fEG/OFRPcFQe6xHqRmYmrjBbagUnA07138LU7WaqV81OJqanOk9mb2khKOv2IPEXY/x8
+         bvqyXt17TQ0kS/ydjj4fp1N3ZXwnSq8zJW3ZuFlQ7XxuBF5osRl4AV8r25FwLTM4E8f6
+         izvoYeK39NTrcFuAv517vUuCC5zZW1t6yOEZgO5nk6kAWc+6efXfy0vK/4GHJsDgX2m7
+         tROwwzUM6mv050eAC1y1iP3cMLLVKgsh8+dWViwa1Isz+0Fu/qGb+XWfq8mv2Tbofg/i
+         eqeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/cVOt4PStNZmTD0G7c9l8umAIp4Dl1oEtJUEtfyVcADpzpETsg1Bjzsb9q32KScvPekqNZnv5XFLVAoN/imc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxdquYMcujG6PODsBg1ZJKxagFDCzkltatH9SlWFk/6GSLJDqw
+	TzK3bM4+0j4Bhpsj3pRleGlNP/UQ/6eOYZ6Gep2FyiCeuDKmZVNooW+Xl8U2YKfEJ4Z8y2w9qyJ
+	2LZ8pJ0V7fA9KYWUB+kS1Gmom/R61AYfG9kIr
+X-Gm-Gg: AY/fxX5w6WTPISZ8HuTQtHousQd/7zJKxeISdLy7s4u3d41ORrgO1Y/zp/Fc3oeyVOI
+	bg0dbvdA5D2cv+07XHMGiojO5lmYdzlgWWuKby28v8L8ggB7fH0wxeWyaHaaY47qtoIf0WSGLWm
+	KLhSCaiEj0M4fvtt7iWciVuk/cQeDjFQF3GnI+tuvOflvMki97DZGHUTcTRr4WiOvVxIkSfsXQ4
+	+xPlr41YpNiFtwDHER9Q6VkpI6eWbA48rc+gd0POtd2LRnrFx4Lm0WluwNsVaZsTaE1RSGadgTm
+	YkHIQTm+S9yS/4qd8nkePodZ3Tr8qsmZvt1GIwGyKJQv3/mZg1uECtfLbaZz7wtFTFHUlwTu8mk
+	l0q30W2QBpjItw/YXZIdVzoCNc7yj8CUv7ZHYvjTTJw==
+X-Google-Smtp-Source: AGHT+IFNTxmApTgusf4sfYV5PLHTCIAoG4zUHXYTcGDGNqkjjCZbCxVmDORyUEFBYVQ5XE3L2oQUlxV8Yis8
+X-Received: by 2002:a05:690e:13c2:b0:63f:88f9:357e with SMTP id 956f58d0204a3-64555505a93mr1715261d50.0.1765559830171;
         Fri, 12 Dec 2025 09:17:10 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-29f2f7acae8sm2502465ad.19.2025.12.12.09.17.10
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
+        by smtp-relay.gmail.com with ESMTPS id 00721157ae682-78e6a405735sm2336147b3.15.2025.12.12.09.17.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 12 Dec 2025 09:17:10 -0800 (PST)
 X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (unknown [IPv6:2620:125:9007:640:ffff::1199])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id E2190341CB6;
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 3D00C34050E;
 	Fri, 12 Dec 2025 10:17:09 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id DFBE3E4232B; Fri, 12 Dec 2025 10:17:09 -0700 (MST)
+	id 3AB55E4232B; Fri, 12 Dec 2025 10:17:09 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Shuah Khan <shuah@kernel.org>
@@ -72,9 +72,9 @@ Cc: linux-block@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v3 7/9] selftests: ublk: forbid multiple data copy modes
-Date: Fri, 12 Dec 2025 10:17:05 -0700
-Message-ID: <20251212171707.1876250-8-csander@purestorage.com>
+Subject: [PATCH v3 2/9] selftests: ublk: correct last_rw map type in seq_io.bt
+Date: Fri, 12 Dec 2025 10:17:00 -0700
+Message-ID: <20251212171707.1876250-3-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251212171707.1876250-1-csander@purestorage.com>
 References: <20251212171707.1876250-1-csander@purestorage.com>
@@ -86,93 +86,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The kublk mock ublk server allows multiple data copy mode arguments to
-be passed on the command line (--zero_copy, --get_data, and --auto_zc).
-The ublk device will be created with all the requested feature flags,
-however kublk will only use one of the modes to interact with request
-data (arbitrarily preferring auto_zc over zero_copy over get_data). To
-clarify the intent of the test, don't allow multiple data copy modes to
-be specified. --zero_copy and --auto_zc are allowed together for
---auto_zc_fallback, which uses both copy modes.
-Don't set UBLK_F_USER_COPY for zero_copy, as it's a separate feature.
-Fix the test cases in test_stress_05 passing --get_data along with
---zero_copy or --auto_zc.
+The last_rw map is initialized with a value of 0 but later assigned the
+value args.sector + args.nr_sector, which has type sector_t = u64.
+bpftrace complains about the type mismatch between int64 and uint64:
+trace/seq_io.bt:18:3-59: ERROR: Type mismatch for @last_rw: trying to assign value of type 'uint64' when map already contains a value of type 'int64'
+        @last_rw[$dev, str($2)] = (args.sector + args.nr_sector);
+
+Cast the initial value to uint64 so bpftrace will load the program.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 Reviewed-by: Ming Lei <ming.lei@redhat.com>
 ---
- tools/testing/selftests/ublk/kublk.c           | 11 ++++++++++-
- tools/testing/selftests/ublk/test_stress_05.sh | 10 +++++-----
- 2 files changed, 15 insertions(+), 6 deletions(-)
+ tools/testing/selftests/ublk/trace/seq_io.bt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/ublk/kublk.c b/tools/testing/selftests/ublk/kublk.c
-index f8fa102a627f..4dd02cb083ba 100644
---- a/tools/testing/selftests/ublk/kublk.c
-+++ b/tools/testing/selftests/ublk/kublk.c
-@@ -1611,11 +1611,11 @@ int main(int argc, char *argv[])
- 			break;
- 		case 'd':
- 			ctx.queue_depth = strtol(optarg, NULL, 10);
- 			break;
- 		case 'z':
--			ctx.flags |= UBLK_F_SUPPORT_ZERO_COPY | UBLK_F_USER_COPY;
-+			ctx.flags |= UBLK_F_SUPPORT_ZERO_COPY;
- 			break;
- 		case 'r':
- 			value = strtol(optarg, NULL, 10);
- 			if (value)
- 				ctx.flags |= UBLK_F_USER_RECOVERY;
-@@ -1684,10 +1684,19 @@ int main(int argc, char *argv[])
- 				"F_AUTO_BUF_REG nor F_SUPPORT_ZERO_COPY is enabled\n",
- 					__func__);
- 		return -EINVAL;
- 	}
- 
-+	if (!!(ctx.flags & UBLK_F_NEED_GET_DATA) +
-+	    !!(ctx.flags & UBLK_F_USER_COPY) +
-+	    (ctx.flags & UBLK_F_SUPPORT_ZERO_COPY && !ctx.auto_zc_fallback) +
-+	    (ctx.flags & UBLK_F_AUTO_BUF_REG && !ctx.auto_zc_fallback) +
-+	    ctx.auto_zc_fallback > 1) {
-+		fprintf(stderr, "too many data copy modes specified\n");
-+		return -EINVAL;
-+	}
-+
- 	i = optind;
- 	while (i < argc && ctx.nr_files < MAX_BACK_FILES) {
- 		ctx.files[ctx.nr_files++] = argv[i++];
- 	}
- 
-diff --git a/tools/testing/selftests/ublk/test_stress_05.sh b/tools/testing/selftests/ublk/test_stress_05.sh
-index 274295061042..68a194144302 100755
---- a/tools/testing/selftests/ublk/test_stress_05.sh
-+++ b/tools/testing/selftests/ublk/test_stress_05.sh
-@@ -56,21 +56,21 @@ for reissue in $(seq 0 1); do
- 	wait
- done
- 
- if _have_feature "ZERO_COPY"; then
- 	for reissue in $(seq 0 1); do
--		ublk_io_and_remove 8G -t null -q 4 -g -z -r 1 -i "$reissue" &
--		ublk_io_and_remove 256M -t loop -q 4 -g -z -r 1 -i "$reissue" "${UBLK_BACKFILES[1]}" &
-+		ublk_io_and_remove 8G -t null -q 4 -z -r 1 -i "$reissue" &
-+		ublk_io_and_remove 256M -t loop -q 4 -z -r 1 -i "$reissue" "${UBLK_BACKFILES[1]}" &
- 		wait
- 	done
- fi
- 
- if _have_feature "AUTO_BUF_REG"; then
- 	for reissue in $(seq 0 1); do
--		ublk_io_and_remove 8G -t null -q 4 -g --auto_zc -r 1 -i "$reissue" &
--		ublk_io_and_remove 256M -t loop -q 4 -g --auto_zc -r 1 -i "$reissue" "${UBLK_BACKFILES[1]}" &
--		ublk_io_and_remove 8G -t null -q 4 -g -z --auto_zc --auto_zc_fallback -r 1 -i "$reissue" &
-+		ublk_io_and_remove 8G -t null -q 4 --auto_zc -r 1 -i "$reissue" &
-+		ublk_io_and_remove 256M -t loop -q 4 --auto_zc -r 1 -i "$reissue" "${UBLK_BACKFILES[1]}" &
-+		ublk_io_and_remove 8G -t null -q 4 -z --auto_zc --auto_zc_fallback -r 1 -i "$reissue" &
- 		wait
- 	done
- fi
- 
- if _have_feature "PER_IO_DAEMON"; then
+diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt b/tools/testing/selftests/ublk/trace/seq_io.bt
+index 272ac54c9d5f..507a3ca05abf 100644
+--- a/tools/testing/selftests/ublk/trace/seq_io.bt
++++ b/tools/testing/selftests/ublk/trace/seq_io.bt
+@@ -2,11 +2,11 @@
+ 	$1: 	dev_t
+ 	$2: 	RWBS
+ 	$3:     strlen($2)
+ */
+ BEGIN {
+-	@last_rw[$1, str($2)] = 0;
++	@last_rw[$1, str($2)] = (uint64)0;
+ }
+ tracepoint:block:block_rq_complete
+ {
+ 	$dev = $1;
+ 	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
 -- 
 2.45.2
 
