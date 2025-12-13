@@ -1,22 +1,22 @@
-Received: from out28-101.mail.aliyun.com (out28-101.mail.aliyun.com [115.124.28.101])
+Received: from out198-2.us.a.mail.aliyun.com (out198-2.us.a.mail.aliyun.com [47.90.198.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4792192EE;
-	Sat, 13 Dec 2025 07:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169B623EAB3;
+	Sat, 13 Dec 2025 07:39:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765611559; cv=none; b=JYkNmSanlezo0RQPhFVUlV8I3pq5x2dRhv8GZaDUbtvWUqxOnzSQxUB/QEJC15vKinOeHOcEoCjo4555LS4D8tRF15aq+mS33qyeXbvXRvAcw2ygFtqGz/GYcyTef2LRWfolIH779Mn0ge0Yxt+bUy3bZGRO4C5IfPSdUT8hq4I=
+	t=1765611561; cv=none; b=AGTbg0kb2skNZYuBAJf1L/XPqIgy7/hOZjfxeeaOh8jHH6XTLlXo8kmSgGZE2vgIWnPnSeqLsWoBAX9U+6PfPQvTQdibu5LZTykBB8gjViDFmIsQIjRXqFM1xoLwVje4+0UFNduWThZ7Gg533Qv4lw5RkcwRpHJpeaSqM55QWQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765611559; c=relaxed/simple;
-	bh=PxGqK+Upare33OSoP8+pD90vk5IxEEo1RRc2j6W6CP8=;
+	s=arc-20240116; t=1765611561; c=relaxed/simple;
+	bh=PWVX4P/C70Eb5WxPZWLOS8flK6NgL+KCQmC97/5fE7U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XTWVPGBSCgSAhFs6zGNVr7c68HZGYWD58eN6bKwbV5EudObOlDnAvF7Si2Zr3l1pGTxz/RX7gH7jizPzRhzyaQSGyGepfXEXwdS5iI2iWQMjeB20EZShTddRmNO+dMZ3DUtJsmQCHsS05im4cu+DPtv/Vs4a/QuYZytQq/qTtXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.101
+	 MIME-Version; b=LlM9FTFYcaZV9zPjQfDYyE13nwQ4l9x3Z8t7yOrlznRJOuwN1rb8ZVjw5VQ94aCtIZCAAM2AjS1jtaKTKYCNb224+Sg6b1Cr8IGeHy2I+pAUn0JCPVWjS9gQAxuS4cMonVH0EVGekzUMYmpwvQIMe/jIf2pSfSceYuoC1b3FwZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=47.90.198.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fjNqpxr_1765611545 cluster:ay29)
+Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fjNqpoN_1765611537 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Sat, 13 Dec 2025 15:39:06 +0800
+          Sat, 13 Dec 2025 15:38:59 +0800
 From: Xiaochen Shen <shenxiaochen@open-hieco.net>
 To: tony.luck@intel.com,
 	reinette.chatre@intel.com,
@@ -31,9 +31,9 @@ Cc: babu.moger@amd.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	shenxiaochen@open-hieco.net
-Subject: [PATCH v4 4/4] selftests/resctrl: Fix non-contiguous CBM check for Hygon
-Date: Sat, 13 Dec 2025 15:38:11 +0800
-Message-ID: <20251213073811.3016864-5-shenxiaochen@open-hieco.net>
+Subject: [PATCH v4 1/4] selftests/resctrl: Fix a division by zero error on Hygon
+Date: Sat, 13 Dec 2025 15:38:08 +0800
+Message-ID: <20251213073811.3016864-2-shenxiaochen@open-hieco.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251213073811.3016864-1-shenxiaochen@open-hieco.net>
 References: <20251213073811.3016864-1-shenxiaochen@open-hieco.net>
@@ -45,42 +45,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The resctrl selftest currently fails on Hygon CPUs that always supports
-non-contiguous CBM, printing the error:
+Commit
 
-  "# Hardware and kernel differ on non-contiguous CBM support!"
+  a1cd99e700ec ("selftests/resctrl: Adjust effective L3 cache size with SNC enabled")
 
-This occurs because the arch_supports_noncont_cat() function lacks
-vendor detection for Hygon CPUs, preventing proper identification of
-their non-contiguous CBM capability.
+introduced the snc_nodes_per_l3_cache() function to detect the Intel
+Sub-NUMA Clustering (SNC) feature by comparing #CPUs in node0 with #CPUs
+sharing LLC with CPU0. The function was designed to return:
+  (1) >1: SNC mode is enabled.
+  (2)  1: SNC mode is not enabled or not supported.
 
-Fix this by adding Hygon vendor ID detection to
-arch_supports_noncont_cat().
+However, on certain Hygon CPUs, #CPUs sharing LLC with CPU0 is actually
+less than #CPUs in node0. This results in snc_nodes_per_l3_cache()
+returning 0 (calculated as cache_cpus / node_cpus).
 
+This leads to a division by zero error in get_cache_size():
+  *cache_size /= snc_nodes_per_l3_cache();
+
+Causing the resctrl selftest to fail with:
+  "Floating point exception (core dumped)"
+
+Fix the issue by ensuring snc_nodes_per_l3_cache() returns 1 when SNC
+mode is not supported on the platform.
+
+Fixes: a1cd99e700ec ("selftests/resctrl: Adjust effective L3 cache size with SNC enabled")
 Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/testing/selftests/resctrl/resctrlfs.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 94cfdba5308d..f00b622c1460 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -290,8 +290,10 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 195f04c4d158..b9c1bfb6cc02 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -243,6 +243,16 @@ int snc_nodes_per_l3_cache(void)
+ 		}
+ 		snc_mode = cache_cpus / node_cpus;
  
- static bool arch_supports_noncont_cat(const struct resctrl_test *test)
- {
--	/* AMD always supports non-contiguous CBM. */
--	if (get_vendor() == ARCH_AMD)
-+	unsigned int vendor_id = get_vendor();
++		/*
++		 * On some platforms (e.g. Hygon),
++		 * cache_cpus < node_cpus, the calculated snc_mode is 0.
++		 *
++		 * Set snc_mode = 1 to indicate that SNC mode is not
++		 * supported on the platform.
++		 */
++		if (!snc_mode)
++			snc_mode = 1;
 +
-+	/* AMD and Hygon always support non-contiguous CBM. */
-+	if (vendor_id == ARCH_AMD || vendor_id == ARCH_HYGON)
- 		return true;
- 
- #if defined(__i386__) || defined(__x86_64__) /* arch */
+ 		if (snc_mode > 1)
+ 			ksft_print_msg("SNC-%d mode discovered.\n", snc_mode);
+ 	}
 -- 
 2.47.3
 
