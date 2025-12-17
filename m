@@ -1,22 +1,22 @@
-Received: from out28-194.mail.aliyun.com (out28-194.mail.aliyun.com [115.124.28.194])
+Received: from out28-217.mail.aliyun.com (out28-217.mail.aliyun.com [115.124.28.217])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227241E9915;
-	Wed, 17 Dec 2025 03:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0FB29B781;
+	Wed, 17 Dec 2025 03:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765940748; cv=none; b=a4u0TnNrH7J55cMv6JoHC+drnuePdqNu8IINfkXixK9Kd9vNESTlbPni85FFTeBZ1VXANsH9IDKvk5YvzNMRZ7X+lSi0F8iKs0gNwBVzswbD0eSseYGem5chjZ7C4S1/MivWhd7sGweDhRoSa/c0pE1E7Xhqz0kMZAxo1d3oMrA=
+	t=1765940751; cv=none; b=R5dGLPHLnvhNRE+j6H9+x5TxITIZdVgc7tYbQ1G1MCQPnsbhw5Pmy0QKbKlE6TGAJJFSs1+44beUV5Iq6f5mJCHW5n+pXnQaVmnR7IbBusJQq0hEZ1DohkesQ4TP+PY+Pg5Yg1HhCDO25hHBQdimSMkJItaoD1Z9Bhpm4nW1Vu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765940748; c=relaxed/simple;
-	bh=PWVX4P/C70Eb5WxPZWLOS8flK6NgL+KCQmC97/5fE7U=;
+	s=arc-20240116; t=1765940751; c=relaxed/simple;
+	bh=l8aHIE+gZNMr3xtTZZTNuGftofwLC6tgTUJTEeMhtYw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q7HgMIDclr0KZ53yn4KT6kkerbEG6FCoVQggvRXfspsSgXC0k2CXvdbfkAyHTgo+HP95wwGtUv4IcSIInJCZj9pxKz9dPULlIvmtGBCrtxFwHUpWwKFSYug/8szyaXoiYxV9TIrwNY+m/R15uXg4C1wz+N2aM04NElGr5gLM8u4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.194
+	 MIME-Version; b=BTVF8IUCQe8p5hllkmzD6cXt22neKP4016nkqTdA5S2oX+THyAmreehFrtl/79XZ+kbHWWYqhqyBIi6G6l9abWEZ8qOdXJSgIVJamzFrie7TpnSC6Aw7vpuXGQ0XPsEcKWS+BHk4bhrH764xR1Cw8UFzgTsMvE0GOYCssc9NXrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.217
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fmLmm3Q_1765940732 cluster:ay29)
+Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fmLmmB0_1765940738 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Wed, 17 Dec 2025 11:05:36 +0800
+          Wed, 17 Dec 2025 11:05:39 +0800
 From: Xiaochen Shen <shenxiaochen@open-hieco.net>
 To: tony.luck@intel.com,
 	reinette.chatre@intel.com,
@@ -31,9 +31,9 @@ Cc: babu.moger@amd.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	shenxiaochen@open-hieco.net
-Subject: [PATCH v5 1/4] selftests/resctrl: Fix a division by zero error on Hygon
-Date: Wed, 17 Dec 2025 11:04:53 +0800
-Message-ID: <20251217030456.3834956-2-shenxiaochen@open-hieco.net>
+Subject: [PATCH v5 3/4] selftests/resctrl: Add CPU vendor detection for Hygon
+Date: Wed, 17 Dec 2025 11:04:55 +0800
+Message-ID: <20251217030456.3834956-4-shenxiaochen@open-hieco.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
 References: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
@@ -45,58 +45,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit
+The resctrl selftest currently fails on Hygon CPUs that support Platform
+QoS features, printing the error:
 
-  a1cd99e700ec ("selftests/resctrl: Adjust effective L3 cache size with SNC enabled")
+  "# Can not get vendor info..."
 
-introduced the snc_nodes_per_l3_cache() function to detect the Intel
-Sub-NUMA Clustering (SNC) feature by comparing #CPUs in node0 with #CPUs
-sharing LLC with CPU0. The function was designed to return:
-  (1) >1: SNC mode is enabled.
-  (2)  1: SNC mode is not enabled or not supported.
+This occurs because vendor detection is missing for Hygon CPUs.
 
-However, on certain Hygon CPUs, #CPUs sharing LLC with CPU0 is actually
-less than #CPUs in node0. This results in snc_nodes_per_l3_cache()
-returning 0 (calculated as cache_cpus / node_cpus).
+Fix this by extending the CPU vendor detection logic to include
+Hygon's vendor ID.
 
-This leads to a division by zero error in get_cache_size():
-  *cache_size /= snc_nodes_per_l3_cache();
-
-Causing the resctrl selftest to fail with:
-  "Floating point exception (core dumped)"
-
-Fix the issue by ensuring snc_nodes_per_l3_cache() returns 1 when SNC
-mode is not supported on the platform.
-
-Fixes: a1cd99e700ec ("selftests/resctrl: Adjust effective L3 cache size with SNC enabled")
 Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>
 ---
- tools/testing/selftests/resctrl/resctrlfs.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ tools/testing/selftests/resctrl/resctrl.h       | 1 +
+ tools/testing/selftests/resctrl/resctrl_tests.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 195f04c4d158..b9c1bfb6cc02 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -243,6 +243,16 @@ int snc_nodes_per_l3_cache(void)
- 		}
- 		snc_mode = cache_cpus / node_cpus;
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 4f9c7d04c98d..afe635b6e48d 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -39,6 +39,7 @@
+  */
+ #define ARCH_INTEL	BIT(0)
+ #define ARCH_AMD	BIT(1)
++#define ARCH_HYGON	BIT(2)
  
-+		/*
-+		 * On some platforms (e.g. Hygon),
-+		 * cache_cpus < node_cpus, the calculated snc_mode is 0.
-+		 *
-+		 * Set snc_mode = 1 to indicate that SNC mode is not
-+		 * supported on the platform.
-+		 */
-+		if (!snc_mode)
-+			snc_mode = 1;
-+
- 		if (snc_mode > 1)
- 			ksft_print_msg("SNC-%d mode discovered.\n", snc_mode);
- 	}
+ #define END_OF_TESTS	1
+ 
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 42605e2a3b66..dbcd5eea9fbc 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -50,6 +50,8 @@ static unsigned int detect_vendor(void)
+ 		vendor_id = ARCH_INTEL;
+ 	else if (s && !strcmp(s, ": AuthenticAMD\n"))
+ 		vendor_id = ARCH_AMD;
++	else if (s && !strcmp(s, ": HygonGenuine\n"))
++		vendor_id = ARCH_HYGON;
+ 
+ 	fclose(inf);
+ 	free(res);
 -- 
 2.47.3
 
