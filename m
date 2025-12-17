@@ -1,70 +1,70 @@
-Received: from mail-yx1-f100.google.com (mail-yx1-f100.google.com [74.125.224.100])
+Received: from mail-pl1-f225.google.com (mail-pl1-f225.google.com [209.85.214.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F7E26B2D2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B760026A0B9
 	for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 05:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.100
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765949720; cv=none; b=d4+lQYnrKO7xGYzZD/G9zBl0SqEuvu/kWEMRCaxju7hd6qM6NM3v/HXQfQSL44AM+6EGwAA4TZNUNzcCTPormEN1LES6ln4ugp79mSn9yplJJZj1pHJyO06y9IVg91hYpK9TmK38gLFlBtSHXBr75n1Uvx+VNZ9IMbp+bgHW0SE=
+	t=1765949720; cv=none; b=VJyXmNRpTujQHcojhj4luds9p/nVGILiV7+zdGOSEBiZd7tmPYPnvgtZkdLIKBZ8bKAhZFgkWiUTZF117mZ4V4rvPCPoPahmeAk9ejbikYYiLBj20C55HSgCGGE4IYcuZLz8igx3y/eLvp7LD3C54IPLt1t/YCKiD9MS+XIKeYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765949720; c=relaxed/simple;
-	bh=aD7QvT8m0ONYPgRJxDVX6ESAo8vcXx88PHv+jCm6Q1w=;
+	bh=9ogkOXR+Y8uacI3HACJU9UwIkpxDQMrtkJbS21SD2to=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ksc/NdQJ6r3ujrekICPR0ua0K2IqzRoEd9XDNUZ0QVXmUF4y8nmXk7/VrpZFAYVoll65+WfA+DlQCv1zI4hOdqYgCoOi7vimp47jzSxaWjIfwdSDMtaUKtASMDrmg0/oQthAyvQacO1dJRI3LPp44SjKQp8iGvNsFrNy3NlOoEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=SmhtK5EJ; arc=none smtp.client-ip=74.125.224.100
+	 MIME-Version; b=OfZ7Kztlja/q7w+SRtvzqhrDvgy1B+6rsMufEbFFNscYcq27KcHqMNo5SSCwpcijnchUvZHi/Ewa3kTM/neHspduh02tQHPjtsI1eFW+7QRlXuBmLRuaYFQNSNacps9PGlv4+u/P/Y+7dOTVSwwqh20tE9Kmwv+FTdiVjdbobdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=X9IKB0HT; arc=none smtp.client-ip=209.85.214.225
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="SmhtK5EJ"
-Received: by mail-yx1-f100.google.com with SMTP id 956f58d0204a3-63f9fa715c6so844997d50.2
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="X9IKB0HT"
+Received: by mail-pl1-f225.google.com with SMTP id d9443c01a7336-29f3018dfc3so9002825ad.0
         for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 21:35:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1765949713; x=1766554513; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ezc5r1HBuR8+0jmYpVSGWVnyd2FmDQBIXjG2jOM8aPQ=;
-        b=SmhtK5EJSrIJ0x3+Wgav6FlA+I8HXYuKzjmlPJbyC1gVUoO+i0JX4F7w05bREfg9gb
-         S/W58KcaGxU8SB+dsnYLyFwW3Zm34QG9wpWPxK50zXqdeGY3UjHq2jxhWaUjpJqlTH1N
-         q/eqvt77V9pu4ngugMtpgvcojmYcGHDFidIxlFcmbmLITAOnjrhGUGBNQmNEIiyRD1Hp
-         Ue9rfv2sZJp4TVYnm024/bpqDQWUzKp2B5DjpAHGJ0Q38cYv84Gz1KfWYMr/alBtLvrc
-         HeEXHrm70sq/VKnIcMNakrS4SPVO5vZj4Z1JzF5XgmX3XzkdxjAm0on7sB7/jf5UDPQ5
-         cHQQ==
+        bh=7u5SiWUWisiZXxTwmOVFVNPK/bGMmkGtOM56/HKpE6I=;
+        b=X9IKB0HTSYwklfV72sIvrTmR4B2CqtOLnXtG8R2O5FpHPadljp1bm+uDHWkC6RSgwI
+         8rCnt/YXXTjQrI743mRN8KGSZnknG2aUJWqF09O3hUNci/168Rn46JV5h2IDvoF85nwa
+         hIaZBu6xCJ0dtjFUd6DsjGQM5Hz4OZa/4YVFZ92Hw2QKXSjz4FTBUpqxJ1I9H3KYhDjP
+         nqCTmcrhBSHQMpgrT0LyLBU8PFmX0SQAdHS4VJQtV55Hxy2VAFFZwGLb3xu6LOc6qjJ6
+         4AS0eNI7NqOL0S0+Jcx3zRUFlPLyUMed068vl2DRkP5gJaer1rOT9ZCaDwL570PvrjrD
+         HZ/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1765949713; x=1766554513;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ezc5r1HBuR8+0jmYpVSGWVnyd2FmDQBIXjG2jOM8aPQ=;
-        b=Ts1delMoA18dVf0+3LG6CzwKIiUjQ8UvukqbHVXN/Mobne/xl859xPYG5QkpvPsta/
-         9m+CZHT/oIAp2mhK8o80hEp4vcjXq/3tPHJwT+dWMc4aDxjWcTbDzeVQSQF4CDN3LpLZ
-         DqH5OxNdWbJJ3wmI+/KgOi6bxFjdFTcn/+xgU3SExPharvwK+YzybIB9GN9T76f4PGir
-         B041KiExQR7Ud4hl9NH/8Sa6bEdoNar0MHnYVPT4QYl6in6xiObzFXtyg2kNATiYdfjz
-         CeNF491tyOjlV0pvfvN66QiL2NfB3VXTLOuZpCPlbXkI7IICTp9pfnpi4hMc6/G1wOiv
-         ex4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWQzczbkF4PAEuCjnkBWNrwiIY3QwEc1gk13hqLEg/nKUIx8nDhJY74aKvTix0INDK3z8E2CCtR1mN7vtwH7FI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKKAyHFqvBD3wVj9Vi8MUMgXkAdnRebC3HW3MKvV2b6FnlwyUT
-	CuJ/nwYUOZKP5CR49AfI0zfT3E4Rrz3QTRgKaNYCSFEN5rVGGx4MrzNh9yj3dcmrRA2bl7F95Z7
-	ezqpeyqH8mLagC4ymIn3qeF/iZr6BM6sdCp+4Ewt3TYapAUWk81LS
-X-Gm-Gg: AY/fxX782vTqkGUcXe5F66SVS2r14M83JD9OkLssWcahH89CkgC/1Dz4Ud2Zt6+xlJZ
-	x+gpxt4/TVabkAY1RGGyArrniYjB6sW0ptfz8Q2cdpb7oEdUiHg+GlYgT5SUtX9c/tVETyiqul0
-	h5NussE7gHV7Pi36S6Lkqv6Q+auzlXEGys03xA+mTX0usNh6yeL+woSaL/jVofj5vPfaQ3jwYsr
-	fW8hDLzxfc3+ZNm6RPKeLXzvQjVc6gICWa1QWxBeJoEnYSugICAmu3IQkmqOinNu0wTMHTjEOji
-	nJv/qMS+4owRyyytVT8PI1t8K7Q6FuSfHozYFDpjxnaCbTlSRHJjH0EVBY5Sr0EbMP9q6uoYIkm
-	GXv1rUE5pvWchWdi3WEv6i0fctr4=
-X-Google-Smtp-Source: AGHT+IGDVPrgNu9LhhkOAfEoaeOE/9G2q9MLKqgYrJRDejIIwiTDpmwJNvXg1IgkUw3GnsHHrvT+5hI1MqDw
-X-Received: by 2002:a05:690e:1448:b0:644:49be:4b8e with SMTP id 956f58d0204a3-64555515881mr10604674d50.0.1765949713087;
+        bh=7u5SiWUWisiZXxTwmOVFVNPK/bGMmkGtOM56/HKpE6I=;
+        b=gW4tnzgrKR7V/wBZ3TzWxhkxiQN7Kq01l+eJYmDvTrVaLuEUwdagDilGvAg+d8NwoT
+         ynEHcRjK6d4k+7lG512HZdeGO6+/asv3HMO/Yn7+m00ojfa/xZrB4I9ulpYA7fV8Geyu
+         5QbXcTD4zYHWOcVb0qKIEHKW/R44J2GNZN/d0uxf9aAdkc00yyNE4lOafzxzw8kwXzZS
+         YWauCvvqK5pEUQVYvR8InF+TWcRpUOWpVZUWDDKS+gi1x+24owOXQSgL1aFVTb+Sc1Dz
+         xqZV8+Cm3CGOCcKJi9GF6jdYFE4vmd8dRpNbLdXVMu8PEVdp2Gzu38Y7tq+iavG+LQc5
+         bA7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWudDEjFIrjLO6ab3fGKEp1f/huD/hV5VnDbFzYLxiAfsztLt5LFnY0ZcwHH6DSp+o6gd7FP11kNAy1bS5N4fM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywSzEdSMBpL00bKEAQj2uUMIBwCnwc3rZiyis3UROJlWmO7m6L
+	XQJDf/Q5r/IEZ2EpW8qh34JpDmrYmtCaCbery99eehFHekY+LzD8fKIF0CQgTS0tsH5RLNSd3Y9
+	bZOzW1y4AH/bWbFmLdkrxo0Z1dJvsPw15riu62LmM+RYYn6I6kCS9
+X-Gm-Gg: AY/fxX6P1iVhhoPOkNk+wiLfnMDXViO/UMsFCEUpVVxSoJ3OVCwu25Jk0MKov5iVIv3
+	udhK3C0G51C2olVmZAQN5gqkkFGRyOg0BBmILBlMSeahbvK0XgCuWoE3HmyZvDbazbKO5OchSDx
+	mSzK1/OWvec2JKBn1pA2VnRgX43poaQVE2cuZpJym9lXOhMqahmh9bB6/H7g/b4sAMmg+XLwzmK
+	JmQxOsR5JzxDZFLWIjXJz5ZxsntNwyI6Jo/f+44XFRjrZys42Mjy/xi/Ymulcb1wCzUYtWJM0+m
+	BW/Z/BkiQuaYWHLi8+gwlAqH0PMvxgHKbeIRlFyKAWQiHcfdk5GxqI1200USNWBZ9sbhGuQLjCw
+	xJeMnJwlRi9Xju7P3fgxBtW6+MEY=
+X-Google-Smtp-Source: AGHT+IEj41P1BUf7dMXgS7Hk43sGC2zUpFq8+vGee37eWRP/iFh7GVlQpIzMmAj5i5ENXIqxkVkgxN4N88rt
+X-Received: by 2002:a17:902:ef4c:b0:295:745a:800a with SMTP id d9443c01a7336-29f23afa321mr119245915ad.2.1765949713116;
         Tue, 16 Dec 2025 21:35:13 -0800 (PST)
 Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id 00721157ae682-78e747ab14fsm12279017b3.0.2025.12.16.21.35.12
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2a086eaceaesm18721215ad.5.2025.12.16.21.35.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 16 Dec 2025 21:35:13 -0800 (PST)
 X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (unknown [IPv6:2620:125:9007:640:ffff::1199])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id E5E6D34222B;
-	Tue, 16 Dec 2025 22:35:11 -0700 (MST)
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id A24773420E8;
+	Tue, 16 Dec 2025 22:35:12 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id E37E8E41A08; Tue, 16 Dec 2025 22:35:11 -0700 (MST)
+	id 9FF0EE41A08; Tue, 16 Dec 2025 22:35:12 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -75,9 +75,9 @@ Cc: linux-block@vger.kernel.org,
 	Stanley Zhang <stazhang@purestorage.com>,
 	Uday Shankar <ushankar@purestorage.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH 05/20] ublk: move ublk flag check functions earlier
-Date: Tue, 16 Dec 2025 22:34:39 -0700
-Message-ID: <20251217053455.281509-6-csander@purestorage.com>
+Subject: [PATCH 11/20] ublk: move offset check out of __ublk_check_and_get_req()
+Date: Tue, 16 Dec 2025 22:34:45 -0700
+Message-ID: <20251217053455.281509-12-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251217053455.281509-1-csander@purestorage.com>
 References: <20251217053455.281509-1-csander@purestorage.com>
@@ -89,101 +89,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ublk_dev_support_user_copy() will be used in ublk_validate_params().
-Move these functions next to ublk_{dev,queue}_is_zoned() to avoid
-needing to forward-declare them.
+__ublk_check_and_get_req() checks that the passed in offset is within
+the data length of the specified ublk request. However, only user copy
+(ublk_check_and_get_req()) supports accessing ublk request data at a
+nonzero offset. Zero-copy buffer registration (ublk_register_io_buf())
+always passes 0 for the offset, so the check is unnecessary. Move the
+check from __ublk_check_and_get_req() to ublk_check_and_get_req().
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- drivers/block/ublk_drv.c | 60 ++++++++++++++++++++--------------------
- 1 file changed, 30 insertions(+), 30 deletions(-)
+ drivers/block/ublk_drv.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 78f3e22151b9..4da5d8ff1e1d 100644
+index 273d580ddc46..7fa0a9f0bfae 100644
 --- a/drivers/block/ublk_drv.c
 +++ b/drivers/block/ublk_drv.c
-@@ -258,10 +258,40 @@ static inline struct ublksrv_io_desc *
+@@ -252,11 +252,11 @@ struct ublk_params_header {
+ 
+ static void ublk_io_release(void *priv);
+ static void ublk_stop_dev_unlocked(struct ublk_device *ub);
+ static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq);
+ static inline struct request *__ublk_check_and_get_req(struct ublk_device *ub,
+-		u16 q_id, u16 tag, struct ublk_io *io, size_t offset);
++		u16 q_id, u16 tag, struct ublk_io *io);
+ static inline unsigned int ublk_req_build_flags(struct request *req);
+ 
+ static inline struct ublksrv_io_desc *
  ublk_get_iod(const struct ublk_queue *ubq, unsigned tag)
  {
- 	return &ubq->io_cmd_buf[tag];
+@@ -2245,11 +2245,11 @@ static int ublk_register_io_buf(struct io_uring_cmd *cmd,
+ 	int ret;
+ 
+ 	if (!ublk_dev_support_zero_copy(ub))
+ 		return -EINVAL;
+ 
+-	req = __ublk_check_and_get_req(ub, q_id, tag, io, 0);
++	req = __ublk_check_and_get_req(ub, q_id, tag, io);
+ 	if (!req)
+ 		return -EINVAL;
+ 
+ 	ret = io_buffer_register_bvec(cmd, req, ublk_io_release, index,
+ 				      issue_flags);
+@@ -2539,11 +2539,11 @@ static int ublk_ch_uring_cmd_local(struct io_uring_cmd *cmd,
+ 			__func__, cmd_op, tag, ret, io ? io->flags : 0);
+ 	return ret;
  }
  
-+static inline bool ublk_support_zero_copy(const struct ublk_queue *ubq)
-+{
-+	return ubq->flags & UBLK_F_SUPPORT_ZERO_COPY;
-+}
-+
-+static inline bool ublk_dev_support_zero_copy(const struct ublk_device *ub)
-+{
-+	return ub->dev_info.flags & UBLK_F_SUPPORT_ZERO_COPY;
-+}
-+
-+static inline bool ublk_support_auto_buf_reg(const struct ublk_queue *ubq)
-+{
-+	return ubq->flags & UBLK_F_AUTO_BUF_REG;
-+}
-+
-+static inline bool ublk_dev_support_auto_buf_reg(const struct ublk_device *ub)
-+{
-+	return ub->dev_info.flags & UBLK_F_AUTO_BUF_REG;
-+}
-+
-+static inline bool ublk_support_user_copy(const struct ublk_queue *ubq)
-+{
-+	return ubq->flags & UBLK_F_USER_COPY;
-+}
-+
-+static inline bool ublk_dev_support_user_copy(const struct ublk_device *ub)
-+{
-+	return ub->dev_info.flags & UBLK_F_USER_COPY;
-+}
-+
- static inline bool ublk_dev_is_zoned(const struct ublk_device *ub)
+ static inline struct request *__ublk_check_and_get_req(struct ublk_device *ub,
+-		u16 q_id, u16 tag, struct ublk_io *io, size_t offset)
++		u16 q_id, u16 tag, struct ublk_io *io)
  {
- 	return ub->dev_info.flags & UBLK_F_ZONED;
- }
+ 	struct request *req;
  
-@@ -656,40 +686,10 @@ static void ublk_apply_params(struct ublk_device *ub)
+ 	/*
+ 	 * can't use io->req in case of concurrent UBLK_IO_COMMIT_AND_FETCH_REQ,
+@@ -2560,13 +2560,10 @@ static inline struct request *__ublk_check_and_get_req(struct ublk_device *ub,
+ 		goto fail_put;
  
- 	if (ub->params.types & UBLK_PARAM_TYPE_ZONED)
- 		ublk_dev_param_zoned_apply(ub);
- }
+ 	if (!ublk_rq_has_data(req))
+ 		goto fail_put;
  
--static inline bool ublk_support_zero_copy(const struct ublk_queue *ubq)
--{
--	return ubq->flags & UBLK_F_SUPPORT_ZERO_COPY;
--}
+-	if (offset > blk_rq_bytes(req))
+-		goto fail_put;
 -
--static inline bool ublk_dev_support_zero_copy(const struct ublk_device *ub)
--{
--	return ub->dev_info.flags & UBLK_F_SUPPORT_ZERO_COPY;
--}
--
--static inline bool ublk_support_auto_buf_reg(const struct ublk_queue *ubq)
--{
--	return ubq->flags & UBLK_F_AUTO_BUF_REG;
--}
--
--static inline bool ublk_dev_support_auto_buf_reg(const struct ublk_device *ub)
--{
--	return ub->dev_info.flags & UBLK_F_AUTO_BUF_REG;
--}
--
--static inline bool ublk_support_user_copy(const struct ublk_queue *ubq)
--{
--	return ubq->flags & UBLK_F_USER_COPY;
--}
--
--static inline bool ublk_dev_support_user_copy(const struct ublk_device *ub)
--{
--	return ub->dev_info.flags & UBLK_F_USER_COPY;
--}
--
- static inline bool ublk_need_map_io(const struct ublk_queue *ubq)
- {
- 	return !ublk_support_user_copy(ubq) && !ublk_support_zero_copy(ubq) &&
- 		!ublk_support_auto_buf_reg(ubq);
+ 	return req;
+ fail_put:
+ 	ublk_put_req_ref(io, req);
+ 	return NULL;
  }
+@@ -2644,14 +2641,19 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
+ 
+ 	if (tag >= ub->dev_info.queue_depth)
+ 		return -EINVAL;
+ 
+ 	io = &ubq->ios[tag];
+-	req = __ublk_check_and_get_req(ub, q_id, tag, io, buf_off);
++	req = __ublk_check_and_get_req(ub, q_id, tag, io);
+ 	if (!req)
+ 		return -EINVAL;
+ 
++	if (buf_off > blk_rq_bytes(req)) {
++		ret = -EINVAL;
++		goto out;
++	}
++
+ 	if (!ublk_check_ubuf_dir(req, dir)) {
+ 		ret = -EACCES;
+ 		goto out;
+ 	}
+ 
 -- 
 2.45.2
 
