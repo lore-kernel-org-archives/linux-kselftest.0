@@ -1,42 +1,86 @@
-Received: from out198-11.us.a.mail.aliyun.com (out198-11.us.a.mail.aliyun.com [47.90.198.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f228.google.com (mail-pl1-f228.google.com [209.85.214.228])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEEDF3595D;
-	Wed, 17 Dec 2025 03:36:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA1C3BB48
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 05:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765942617; cv=none; b=TkARb5zNAV5TH7XR63St46nVY4L1XBLK/OX83qphQd+74DPW4g69wVsk+cVm/BWthQSG72aPpXbp9Ulm1EU4KLQbwtwxjSVIwx/oACCQp8+Qj/AvoejyUsPeiuyDWnPttb8/vbDFYf4z/jf3mK+Q5cQF6U7I6U1yoS1BUSIuQ48=
+	t=1765949714; cv=none; b=rIX20R/Egovdvqh4i/NhgKdiDKdflbZaehiVpGuGoJn8yUyYnFyH7ZXM5eVxllB4h3sP/XQYgEhPOR4ID2HSTR++WbuQx/TV7TISEuaOIwl2/OBCKYaAtUS9dNxviSvXD4DVDWfEbhXugfYsu8fMJHHifJz4R0gEuOlrT55evVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765942617; c=relaxed/simple;
-	bh=Z5lfrJjJzPWYCKC/F+6oK2JX8Y/M9TIdFPlWdkAHreI=;
+	s=arc-20240116; t=1765949714; c=relaxed/simple;
+	bh=venmX+xFUUA0UpVlm0dl+mDk8JNjcEjxZwCydjYWYrs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AG6WOLyx4hZ45y2Rtx5UWq+7kh/HGxcaWqfpunDC7Zh4621pNgRjBViQzVmI61ICrgyS+appf+euwHlEetYFO9yijFOFLtROGk1Alum8/yI9oqYUZf9aNmh1A8PlSobV7REg8WH3fWU+zMyfcUOSGczdHUrR9+rznCxXy7rk2+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=47.90.198.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fmLmm9V_1765940736 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Wed, 17 Dec 2025 11:05:37 +0800
-From: Xiaochen Shen <shenxiaochen@open-hieco.net>
-To: tony.luck@intel.com,
-	reinette.chatre@intel.com,
-	bp@alien8.de,
-	fenghuay@nvidia.com,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org
-Cc: babu.moger@amd.com,
-	james.morse@arm.com,
-	Dave.Martin@arm.com,
-	x86@kernel.org,
-	linux-kernel@vger.kernel.org,
+	 MIME-Version; b=YHYUICAR8jrKxsQT9P9VG+oVCtdqL7XRrCIDTHmhyp3dnZyOOcOPj589d6GiviRbi75/ycLa64tRt4z/EPLrLA4pmhg7shska02wpUUjl3pGTgbvaJs4dDwLmqRqLxCyYUcsrcV12FCzCve02krK4yzvYx7f6Ve/turp4fH55Yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=RtgLSXZW; arc=none smtp.client-ip=209.85.214.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="RtgLSXZW"
+Received: by mail-pl1-f228.google.com with SMTP id d9443c01a7336-2a097cc08d5so7935615ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 21:35:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1765949712; x=1766554512; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6deGWS+C+ZX6CkDTMG90zDsqNjHQte7F2hl6ze0/JAI=;
+        b=RtgLSXZWwY9bYQA08x+/+In3lvdMQ/ijKXjtWz/27ugbLog5uKyd+QnPz9W5Dk0OG5
+         Zg2XMekCycmimBLKAkN2M2dpFky5f2BvHMJgN9JmLm3/0fEEwjkltmRIPMIZpFUKNYwu
+         aQvWpedglkurTz5tP/y7UNEms0Xs5oh3TVPHMk8IZyfsjcQcoGdnqed16dlM1ShdyA/p
+         V36qWqEUg4CkOBEf8f96XOTQhns9/k5YdvISjF+AFbmqSWODKMh8SQUvrZf6B1/pArW4
+         H6MUipu1SCZc03hUGPeZ3NYOE2b5IndS4gAdp4fmLn2z/O4HlCgKdC4LNIQoSjqxjAdx
+         HKlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765949712; x=1766554512;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6deGWS+C+ZX6CkDTMG90zDsqNjHQte7F2hl6ze0/JAI=;
+        b=Jc9UJW8EUoI3qNVPA1i4Pdo7TR6sYIaiRlGjmLiXZQ+91qtFsOBQE8byej6Lti6OIP
+         rCVPgrkcIxZFF5FIFc1r1h3h01MqEpY5AAll/TOJw4/84dASz1VriTcAlGBcMSgHIKVF
+         H/scKh2a8OnKWBBuQ/Hfyf1NcS9G+do+d5GuePagc6YhtC3zxlgxGo7qQrLA6AYUO0fo
+         2BHu2PxYLzoMHJGXRQBTZYhurVLOZdvXeh0hdglyee86SmVDYEeAZntJwyrAL8nhxU1i
+         1ty2NsCupaaKcX7gpxSwrrtot2TIgNThRSFkG7EJEKBFwYywiMBdSvUSb2tfs9cwh3Me
+         haqw==
+X-Forwarded-Encrypted: i=1; AJvYcCUcPEkK3eF9GYz6CJD2EwlWKSa8EvPVCC3NFHLAcz0jRk6LXm6IEH03or+I4k2RH9s6X6BfI+XkTgCQ0xkobFo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywx7+VujtCPsjF86J0s/kArF6+vGrRYfb8kJLaymjrzpVeFswii
+	gt31n3Y4tjwE8D0qbXpANNAMc7RzDd7uT8A2BbFlUbRjeBY8n7vu/sxl5tJ7DKSvVJXdSN4aSzc
+	9tUBprq+AkKms4m9wAcm87xtUEWUaQTCqj0n2
+X-Gm-Gg: AY/fxX4nZ1LAhlE1F/bgGhgpSR+HhFVGOZoq/FKqGvWxiOct6GOnERXmWRpBtutM8zM
+	HnWBf72HZc7pEpJpJvOAjiVTW3Sm+ZbxQYsFH9TJLyRzoMAkffe5vgx8A+v/4saJfyKuOWIaorl
+	m2Y7M0J3iMVSO1P/crbJCiaB6ietaghrIgLgVBqoqt/gjTswC94jASpupl2+7gdpG6PvsK+9fgs
+	8Z7AJI6tbXC+Rns+GATH82zSb+qg7b4peLoQfPH+O08NXOm8dOlGv6JEnytl8CAENqSWCORLkpE
+	xXtqLWLeuCfI3vfIohaJphDld8ue7zJWsmFYuGnDsXc0/ek263R6k675f3eTnxf+KPBVpDRrHVX
+	ONclpsLhUGae0aDt9w6McLl/WKmVWC4EF+dDbhTmMSw==
+X-Google-Smtp-Source: AGHT+IGN6JHAHDS/K6rl0nUyK+Z/ER5lvYDtEq56HR7i2Pc/7hcthk8RgG5mE7Ltq0iDaECSRtWvto2Z+B2u
+X-Received: by 2002:a05:7300:d213:b0:2a4:3592:cf89 with SMTP id 5a478bee46e88-2ac2f395b31mr5118805eec.0.1765949712106;
+        Tue, 16 Dec 2025 21:35:12 -0800 (PST)
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.129])
+        by smtp-relay.gmail.com with ESMTPS id 5a478bee46e88-2ae5e423a86sm96829eec.1.2025.12.16.21.35.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Dec 2025 21:35:12 -0800 (PST)
+X-Relaying-Domain: purestorage.com
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id AA4A23420E8;
+	Tue, 16 Dec 2025 22:35:11 -0700 (MST)
+Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
+	id A81EAE41A08; Tue, 16 Dec 2025 22:35:11 -0700 (MST)
+From: Caleb Sander Mateos <csander@purestorage.com>
+To: Ming Lei <ming.lei@redhat.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-block@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	shenxiaochen@open-hieco.net
-Subject: [PATCH v5 2/4] selftests/resctrl: Define CPU vendor IDs as bits to match usage
-Date: Wed, 17 Dec 2025 11:04:54 +0800
-Message-ID: <20251217030456.3834956-3-shenxiaochen@open-hieco.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
-References: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
+	linux-kernel@vger.kernel.org,
+	Stanley Zhang <stazhang@purestorage.com>,
+	Uday Shankar <ushankar@purestorage.com>,
+	Caleb Sander Mateos <csander@purestorage.com>
+Subject: [PATCH 03/20] blk-integrity: take const pointer in blk_integrity_rq()
+Date: Tue, 16 Dec 2025 22:34:37 -0700
+Message-ID: <20251217053455.281509-4-csander@purestorage.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20251217053455.281509-1-csander@purestorage.com>
+References: <20251217053455.281509-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -45,125 +89,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The CPU vendor IDs are required to be unique bits because they're used
-for vendor_specific bitmask in the struct resctrl_test.
-Consider for example their usage in test_vendor_specific_check():
-	return get_vendor() & test->vendor_specific
+blk_integrity_rq() doesn't modify the struct request passed in, so allow
+a const pointer to be passed. Use a matching signature for the
+!CONFIG_BLK_DEV_INTEGRITY version.
 
-However, the definitions of CPU vendor IDs in file resctrl.h is quite
-subtle as a bitmask value:
-  #define ARCH_INTEL     1
-  #define ARCH_AMD       2
-
-A clearer and more maintainable approach is to define these CPU vendor
-IDs using BIT(). This ensures each vendor corresponds to a distinct bit
-and makes it obvious when adding new vendor IDs.
-
-Accordingly, update the return types of detect_vendor() and get_vendor()
-from 'int' to 'unsigned int' to align with their usage as bitmask values
-and to prevent potentially risky type conversions.
-
-Furthermore, introduce a bool flag 'initialized' to simplify the
-get_vendor() -> detect_vendor() logic. This ensures the vendor ID is
-detected only once and resolves the ambiguity of using the same variable
-'vendor' both as a value and as a state.
-
-Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
-Suggested-by: Fenghua Yu <fenghuay@nvidia.com>
-Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- tools/testing/selftests/resctrl/resctrl.h     |  7 ++---
- .../testing/selftests/resctrl/resctrl_tests.c | 26 +++++++++++++------
- 2 files changed, 22 insertions(+), 11 deletions(-)
+ include/linux/blk-integrity.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 3c51bdac2dfa..4f9c7d04c98d 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -23,6 +23,7 @@
- #include <asm/unistd.h>
- #include <linux/perf_event.h>
- #include <linux/compiler.h>
-+#include <linux/bits.h>
- #include "kselftest.h"
- 
- #define MB			(1024 * 1024)
-@@ -36,8 +37,8 @@
-  * Define as bits because they're used for vendor_specific bitmask in
-  * the struct resctrl_test.
-  */
--#define ARCH_INTEL     1
--#define ARCH_AMD       2
-+#define ARCH_INTEL	BIT(0)
-+#define ARCH_AMD	BIT(1)
- 
- #define END_OF_TESTS	1
- 
-@@ -163,7 +164,7 @@ extern int snc_unreliable;
- extern char llc_occup_path[1024];
- 
- int snc_nodes_per_l3_cache(void);
--int get_vendor(void);
-+unsigned int get_vendor(void);
- bool check_resctrlfs_support(void);
- int filter_dmesg(void);
- int get_domain_id(const char *resource, int cpu_no, int *domain_id);
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 5154ffd821c4..42605e2a3b66 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -23,16 +23,24 @@ static struct resctrl_test *resctrl_tests[] = {
- 	&l2_noncont_cat_test,
- };
- 
--static int detect_vendor(void)
-+static unsigned int detect_vendor(void)
+diff --git a/include/linux/blk-integrity.h b/include/linux/blk-integrity.h
+index a6b84206eb94..c15b1ac62765 100644
+--- a/include/linux/blk-integrity.h
++++ b/include/linux/blk-integrity.h
+@@ -89,11 +89,11 @@ static inline unsigned int bio_integrity_bytes(struct blk_integrity *bi,
+ 					       unsigned int sectors)
  {
--	FILE *inf = fopen("/proc/cpuinfo", "r");
--	int vendor_id = 0;
-+	static unsigned int vendor_id;
-+	static bool initialized;
- 	char *s = NULL;
-+	FILE *inf;
- 	char *res;
- 
--	if (!inf)
-+	if (initialized)
- 		return vendor_id;
- 
-+	inf = fopen("/proc/cpuinfo", "r");
-+	if (!inf) {
-+		vendor_id = 0;
-+		initialized = true;
-+		return vendor_id;
-+	}
-+
- 	res = fgrep(inf, "vendor_id");
- 
- 	if (res)
-@@ -45,15 +53,17 @@ static int detect_vendor(void)
- 
- 	fclose(inf);
- 	free(res);
-+
-+	initialized = true;
- 	return vendor_id;
+ 	return bio_integrity_intervals(bi, sectors) * bi->metadata_size;
  }
  
--int get_vendor(void)
-+unsigned int get_vendor(void)
+-static inline bool blk_integrity_rq(struct request *rq)
++static inline bool blk_integrity_rq(const struct request *rq)
  {
--	static int vendor = -1;
-+	unsigned int vendor;
-+
-+	vendor = detect_vendor();
+ 	return rq->cmd_flags & REQ_INTEGRITY;
+ }
  
--	if (vendor == -1)
--		vendor = detect_vendor();
- 	if (vendor == 0)
- 		ksft_print_msg("Can not get vendor info...\n");
+ /*
+@@ -166,13 +166,13 @@ static inline unsigned int bio_integrity_intervals(struct blk_integrity *bi,
+ static inline unsigned int bio_integrity_bytes(struct blk_integrity *bi,
+ 					       unsigned int sectors)
+ {
+ 	return 0;
+ }
+-static inline int blk_integrity_rq(struct request *rq)
++static inline bool blk_integrity_rq(const struct request *rq)
+ {
+-	return 0;
++	return false;
+ }
  
+ static inline struct bio_vec rq_integrity_vec(struct request *rq)
+ {
+ 	/* the optimizer will remove all calls to this function */
 -- 
-2.47.3
+2.45.2
 
