@@ -1,116 +1,141 @@
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from out28-76.mail.aliyun.com (out28-76.mail.aliyun.com [115.124.28.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C1E256D;
-	Wed, 17 Dec 2025 03:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BAD256D;
+	Wed, 17 Dec 2025 03:21:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765941513; cv=none; b=Txngn4arXRqzh9KvvXsNyACliPyNDpdS2RcHnI9OdjQGluugR/W2FZr6b2UW4LH5QI6Cz+WXLR+PaagDw1u0XZPhS3kT2ZWh/gVaIBHtFWx982ATtVSzHsZy2YuefBJnTa6NwShmvLq0d6Olt5YR3GCC68J5T5dWchmwJURrOk0=
+	t=1765941684; cv=none; b=ocbdCe9j/dBjATrMco9rMVVt0YAc83HvTCbHr8xBkcoDooxZCT6xk5BVGZ4wbbiJdrlWd85oCuQxJzHxxdtL90Rp8wsYmU4pCqNQr0LCHwUmdHOT9CzKKjSnPi03CNCXgwW8y2pPkL/xhjk+YRZAnj6IDKNIzxNtEswD7Emx7wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765941513; c=relaxed/simple;
-	bh=8dL7aBrMbHQuWLe7o83TzNW1A4Opgrxt9bnUpPzEsqA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=MH8gAL+pK6W2FR/cVdYpr5DjIb6FCQ9vGFzOIbWgahgPqzb9pzBArxfnXvM9Rn7NjFmDthOPT3z0B4GD2Y+9qylsw2cKcyORvINA2YZM6tP/lZ9UHx74l6wmGD8tLFJg9tnkIVaKAavjc0IsFOfAJk9KJicXxw3LK+TYYCbbapk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=oR+cDav9; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="oR+cDav9"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=ZUOzTgYQB8Tecz2GimhrlhEA5uFteptR3rbBR5YGgXs=;
-	b=oR+cDav99PZGFTqVPoFeaCYAS52GFj3uo08gPMDEQTkxU7OmAyb5HCgdGxyQ6SazlXYGjaiHi
-	LwI5EP0RJW+uOZ8YknIdKr/AGBHoTK0noPRP6gNgaLKWzgVFwrcomi5c11DXIKf8Nej70xLdorp
-	9SsiSrcz9g5m+iAuRptAUuY=
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4dWJqF3MXVz1prLY;
-	Wed, 17 Dec 2025 11:16:25 +0800 (CST)
-Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5707C140158;
-	Wed, 17 Dec 2025 11:18:27 +0800 (CST)
-Received: from [10.67.112.40] (10.67.112.40) by dggpemf200006.china.huawei.com
- (7.185.36.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 17 Dec
- 2025 11:18:26 +0800
-Message-ID: <b62c18a2-7036-4cca-a3e6-8a873a2ca832@huawei.com>
-Date: Wed, 17 Dec 2025 11:18:20 +0800
+	s=arc-20240116; t=1765941684; c=relaxed/simple;
+	bh=BJYLY8Cl3VIqPm0/E/s987RAJ8gV7KIHLNAVJdCfeVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A1jlM6XFcRxs1gqT8zTKj+xNlWFY/6Zy6htx4msTCYn5yMSUrnLQriPJSCrYnT5ZUBJ7qZjWouILKw5N6+twRJBWb0Rkka/9l+6Y0irgtVa4Odx50OI2BhnaADRMJBHOs5gQMf4+frYqE1ubJIDzxLPkQYXmDdR044hT8LCxBmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fmLmlwM_1765940724 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Wed, 17 Dec 2025 11:05:31 +0800
+From: Xiaochen Shen <shenxiaochen@open-hieco.net>
+To: tony.luck@intel.com,
+	reinette.chatre@intel.com,
+	bp@alien8.de,
+	fenghuay@nvidia.com,
+	shuah@kernel.org,
+	skhan@linuxfoundation.org
+Cc: babu.moger@amd.com,
+	james.morse@arm.com,
+	Dave.Martin@arm.com,
+	x86@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shenxiaochen@open-hieco.net
+Subject: [PATCH v5 0/4] selftests/resctrl: Add Hygon CPUs support and bug fixes
+Date: Wed, 17 Dec 2025 11:04:52 +0800
+Message-ID: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] selftests/mm: remove flaky header check
-To: Kevin Brodsky <kevin.brodsky@arm.com>, <linux-mm@kvack.org>,
-	<linux-kselftest@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes
-	<lorenzo.stoakes@oracle.com>, Mark Brown <broonie@kernel.org>, Ryan Roberts
-	<ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>
-References: <20251216142633.2401447-1-kevin.brodsky@arm.com>
- <20251216142633.2401447-2-kevin.brodsky@arm.com>
-Content-Language: en-US
-From: Yunsheng Lin <linyunsheng@huawei.com>
-In-Reply-To: <20251216142633.2401447-2-kevin.brodsky@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- dggpemf200006.china.huawei.com (7.185.36.61)
+Content-Transfer-Encoding: 8bit
 
-On 2025/12/16 22:26, Kevin Brodsky wrote:
-> Commit 96ed62ea0298 ("mm: page_frag: fix a compile error when kernel
-> is not compiled") introduced a check to avoid attempting to build
-> the page_frag module if <linux/page_frag_cache.h> is missing.
-> 
-> Unfortunately this check only works if KDIR points to
-> /lib/modules/... or an in-tree kernel build. It always fails if KDIR
-> points to an out-of-tree build (i.e. when the kernel was built with
-> O=$KDIR make) because only generated headers are present under
-> $KDIR/include/ in that case.
-> 
-> <linux/page_frag_cache.h> was added more than a year ago (v6.13) so
-> we can probably live without that check.
+The resctrl selftest currently exhibits several failures on Hygon CPUs
+due to missing vendor detection and edge-case handling specific to
+Hygon's architecture.
 
-As some commercial OS still uses v6.6, I am wondering if we need that
-check for a little longer, is it possible to do something like below to
-avoid the flaky check?
+This patch series addresses three distinct issues:
+1. A division-by-zero crash in SNC detection on some platforms (e.g.,
+   Hygon).
+2. Missing CPU vendor detection, causing the test to fail with
+   "# Can not get vendor info..." on Hygon CPUs.
+3. Incorrect handling of non-contiguous CBM support on Hygon CPUs.
 
-@@ -46,7 +46,8 @@ CFLAGS += -U_FORTIFY_SOURCE
+These changes enable resctrl selftest to run successfully on
+Hygon CPUs that support Platform QoS features.
 
- KDIR ?= /lib/modules/$(shell uname -r)/build
- ifneq (,$(wildcard $(KDIR)/Module.symvers))
--ifneq (,$(wildcard $(KDIR)/include/linux/page_frag_cache.h))
-+KSRC := $(shell readlink -f $(KDIR)/source 2>/dev/null || echo $(KDIR))
-+ifneq (,$(wildcard $(KSRC)/include/linux/page_frag_cache.h))
- TEST_GEN_MODS_DIR := page_frag
- else
- PAGE_FRAG_WARNING = "missing page_frag_cache.h, please use a newer kernel"
+Maintainer notes:
+-----------------
+Patch 1: selftests/resctrl: Fix a division by zero error on Hygon
+ - This is a candidate for backport with "Fixes:" tag.
 
-> 
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Yunsheng Lin <linyunsheng@huawei.com>
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> ---
->  tools/testing/selftests/mm/Makefile | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> index eaf9312097f7..aba51fcac752 100644
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -46,12 +46,8 @@ CFLAGS += -U_FORTIFY_SOURCE
->  
->  KDIR ?= /lib/modules/$(shell uname -r)/build
->  ifneq (,$(wildcard $(KDIR)/Module.symvers))
-> -ifneq (,$(wildcard $(KDIR)/include/linux/page_frag_cache.h))
->  TEST_GEN_MODS_DIR := page_frag
->  else
-> -PAGE_FRAG_WARNING = "missing page_frag_cache.h, please use a newer kernel"
-> -endif
-> -else
->  PAGE_FRAG_WARNING = "missing Module.symvers, please have the kernel built first"
->  endif
->  
+Patch 2: selftests/resctrl: Define CPU vendor IDs as bits to match usage
+ - This is *not* a candidate for backport since it is an enhancement and
+   preparatory patch for patch 3.
+
+Patch 3: selftests/resctrl: Add CPU vendor detection for Hygon
+Patch 4: selftests/resctrl: Fix non-contiguous CBM check for Hygon
+ - Even though they are fixes they are *not* candidates for backport
+   since they are based on another patch series (x86/resctrl: Fix
+   Platform QoS issues for Hygon) which is in process of being added to
+   resctrl.
+-----------------
+
+Changelog:
+v5:
+- Patch 2:
+  1. Fix a nit of "reverse fir ordering" of the variable declarations in
+     detect_vendor() in v4 patch series (Reinette).
+  2. Add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>.
+
+v4:
+- Cover letter: add maintainer notes outlining how these patches to be
+  handled (Reinette).
+- Re-organize the patch series to move original patch 3 to the beginning
+  of series. The patch order has changed between v3 and v4 (Reinette):
+     v3    ->    v4
+  patch #3 -> patch #1
+  patch #1 -> patch #2
+  patch #2 -> patch #3
+  patch #4 -> patch #4
+- Patch 2:
+  1. Resolve a conflict against latest upstream kernel (Reinette).
+  2. Fix a nit to maintain the reverse fir ordering of variables in
+     detect_vendor() (Reinette).
+- Patch 3: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+- Patch 4: move the maintainer note into the cover letter (Reinette).
+
+v3:
+- Patch 1:
+  1. Update the return types of detect_vendor() and get_vendor() from
+     'int' to 'unsigned int' to align with their usage as bitmask values
+     and to prevent potentially risky type conversions (Fenghua).
+  2. Split the code changes of "define CPU vendor IDs as bits to match
+     usage" from original patch 1 into a separate patch (this patch,
+     suggested by Fenghua and Reinette).
+  3. Introduce the flag 'initialized' to simplify the get_vendor() ->
+     detect_vendor() logic (Reinette).
+- Patch 2 (original patch 1):
+  1. Move the code changes of "define CPU vendor IDs as bits to match
+     usage" into patch 1.
+- Patch 3 (original patch 2): 
+  1. Fix a nit of code comment for affected platforms (Fenghua).
+  2. Add Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>.
+- Patch 4 (original patch 3): 
+  1. Fix a nit to avoid calling get_vendor() twice (Fenghua).
+  2. Add Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>.
+
+v2:
+- Patch 1: switch all of the vendor id bitmasks to use BIT() (Reinette)
+- Patch 2: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+- Patch 3: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+           add a maintainer note to highlight it is not a candidate for
+	   backport (Reinette)
+
+Xiaochen Shen (4):
+  selftests/resctrl: Fix a division by zero error on Hygon
+  selftests/resctrl: Define CPU vendor IDs as bits to match usage
+  selftests/resctrl: Add CPU vendor detection for Hygon
+  selftests/resctrl: Fix non-contiguous CBM check for Hygon
+
+ tools/testing/selftests/resctrl/cat_test.c    |  6 ++--
+ tools/testing/selftests/resctrl/resctrl.h     |  8 ++++--
+ .../testing/selftests/resctrl/resctrl_tests.c | 28 +++++++++++++------
+ tools/testing/selftests/resctrl/resctrlfs.c   | 10 +++++++
+ 4 files changed, 39 insertions(+), 13 deletions(-)
+
+-- 
+2.47.3
+
