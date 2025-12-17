@@ -1,70 +1,70 @@
-Received: from mail-oi1-f225.google.com (mail-oi1-f225.google.com [209.85.167.225])
+Received: from mail-ot1-f99.google.com (mail-ot1-f99.google.com [209.85.210.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0FF821772A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5442848BB
 	for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 05:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.225
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765949722; cv=none; b=bnMs9u4aR18ekKvjPBRsS5cA4h23lHbXb0DP/ZmEVZ0xEM15/FU2y6lC2WesewFuEEYSbY3S7jSXV8neiCwe5EWEhhmKz8Temfs1hBXcu1aV/BJzWtGviNPQ0iV9B6wutK6uXpSKM84YPhKjh7E/ckXLkAa6oPDkqveBNrpCTQA=
+	t=1765949722; cv=none; b=afCouq1DWwgs0MBCso1YFgBjH+q4ap0Vu3ejxoGer4zZAt3DT20idNi+dkWnU3Z91hp6fPFR63JQ0NHaTvKWBreTtf183WOy5c2kPDke5uSJwn69eD3Ek1M+0nAHEQrGz1KbXZ8DLE25UcmafwlBR6PwOgLwjVwemvnz5pALA5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765949722; c=relaxed/simple;
-	bh=tNS2wrfRbubpl2FKYaIvxyO2cy+QowCqwPCVDfS/LJs=;
+	bh=gCDcxrwsQIo9Zl4D9+H5tFsOAIyHBgcO/hwZeW+CHUU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T0InwsqmnzMBvaSHfm7/6nw9w80Jwv+8CZiAy55sl+fh3sAHCz5QAPRLpZZJlFpeNUbKtZbmunVwzKU+Q00qm0ClMY/zeYo1IpCUHkCSi4HtmtS3R+fUsPThoE4TBbqRbLi1aGs38Lt0TLUbcXVVs+vVcEBYUN4+36zFjSKIL/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=SNxVTOz3; arc=none smtp.client-ip=209.85.167.225
+	 MIME-Version; b=CJtdPfC2nel4MGpK8MoKd/iPtaF0Mj2wDFOOT4HOcsKycYxFakdhsem/ym9LBgwgeomH6Kk+YACloTADdwo5s13XPr/pjD4eMoLwQlu9KybGCoTN606/wbIh67NZLphEONcUM0R5urSEV965tkOEW4qTuNWIDS+qJS8YrEw8fGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=KPEueBWg; arc=none smtp.client-ip=209.85.210.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="SNxVTOz3"
-Received: by mail-oi1-f225.google.com with SMTP id 5614622812f47-450ae3d15faso208380b6e.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 21:35:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="KPEueBWg"
+Received: by mail-ot1-f99.google.com with SMTP id 46e09a7af769-7c6cc5e5f42so826615a34.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 21:35:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1765949715; x=1766554515; darn=vger.kernel.org;
+        d=purestorage.com; s=google2022; t=1765949714; x=1766554514; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vlHrt31dSzsMCqKtBJiCTlOW1Fegip2uQ4N5CLB4TZY=;
-        b=SNxVTOz3b75is+WidNjLZ5dAT0iTbqHaJbQxtyBniJ2AhNxb5CQl379dAZZtW42dOg
-         4yyrnb51Dd3MRi+aT+BDlX7g4P1/yq7lG1SHwlv5pMUtaySVQTK3fC2UGvNZsh8XWpNR
-         ZBSWKmSKVoTir/AcAgNOfQKY+cpMyRVntdpfNqbZZG3MOLdRrkVsKldYjml+P5oBEukL
-         l0nEIf6O/XNyTa6DzjHvjP7GjJOPxrFZ3Uc6bICVXuIqN1qddx1qYqT01k3pl1nI95o5
-         mbSx85BjwOx5fi1VqTklipOU88mqUwRxr255KpOE5Z1Z3tz6nowLr51W80zdgbKuWn5f
-         RJxw==
+        bh=2OvJx7AxTUJ0pacBHpfR4EB7axuem5OmBv1tntyjd18=;
+        b=KPEueBWgGwFpRBHMsmlxq+17449raT7ttquKsRKjNsssQxetX3ulLY7866k/dwShWw
+         5Tm9ENFk/TOFJwhRLAGay1NBoN8m+tD51thMeLoC1WbUG8U957EzPYrqQiBSmGoDbO6s
+         nR4Og2Qz+z03peiVFERzOfjBW2bXcCjrjEvOdibugyDL1iRNQlosBPXhAGGKQa7ilDev
+         /GX1stlQj2fxDySShZUcxHPI5bgxFRlr7QrNewYs4SPBT2857m1bhsZI6AD38KO1X5Lt
+         6Y+FQa1fv3IUITOKmWt9FNlGYSj83JBRTdg+j+ddPCUDG/HqlRiWk5T8gr6iHmOBobrZ
+         vAIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765949715; x=1766554515;
+        d=1e100.net; s=20230601; t=1765949714; x=1766554514;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=vlHrt31dSzsMCqKtBJiCTlOW1Fegip2uQ4N5CLB4TZY=;
-        b=iRERT9FSB8LwKe3NnOa5k5rBSgO8yyjUqf//4XKLQ3DQdSa8Pg8lmnEXwTTMXf4Cg1
-         F+bxyjMQcPAHXrBj0T+KD4Y4P+ZZ2iS+n91x5tgvhdNXqaDdqUwuruPDswPt53fDiVPF
-         pGePxGrprddM6mVQsw7BGfcMtWxXa1ti9XfDSIaFmwLP9A0XUZt4+Cov6Nqapj2c85j3
-         BPhzGGqSsBqy8+yplETL9MKNEJMWxxw5qcnI/NrFtwc5Fmuzw2L8Pvnq5t02xPBjcVln
-         u1E7XEdoFJa8AhamP/BcotFy/6rREg6V9wvBg60PRr3K9I4ECURX7Gw4J1aGTGTc/azz
-         ANjg==
-X-Forwarded-Encrypted: i=1; AJvYcCXa2wYszgp1+RZDIp5f5rzEjG1Bah6NcXJ8BEYqOtNmoEcRQ6m5rQ7URddkaTSdLke0IYl3WlGySkMLp9kfvZo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywc58A0x0AavxyssQDJXHFnzyOxSXbEexNHTG5zBE/nWBFdyJJP
-	BGhnyGhKcNKcCGEIiptGuaoP9q8a7mDzmmVX/1GkqHLe1YHf/bPtuS7yU/9m/iWFWxpS8kyC2wW
-	i1O4Dnb9RYAy4M6IgHTZAvnTpA8/keWl59252Nan/L1TlB21zWpyQ
-X-Gm-Gg: AY/fxX48KLkTZIEeBS1+mP3sEMtaa2lJtUbcwLunwhrSt9luKdXBHJXtXtzVAryJBgW
-	VQ5SmlG74FWnfLPA9+3iqqph9sN9ABd/0gOIIXQ8WBZubODpUQzvuuzwrahOxP/VkSesbrr+D5r
-	o+XJragBD4a6a+Yf3WGJ3qX0/Mm92itK7aEU0gxl2Sn2LhZb3ThqGha8Y+fAB//bXbv1nAoS/12
-	MOyY0TV99TUer5YMxIMMVC6hJJ0TlXdgSCvYIYW7qjPHjvGi0KsiyTkgWknxAwjTrzYU3W6CfTZ
-	9a8isspNS9zN11b5l00fmzVAmiU4IlUaXwgaUrIO21XsC2R6OmLDowvjc4bzC5BslqEpWqDayUT
-	k0GCYGepQqFRtIRfCPvdttYU4OSU=
-X-Google-Smtp-Source: AGHT+IFmg7UFWWMtPg9z6BqUt2g1F1zPH+pOkUttTKRwp+eStSdZRSo6zkGL63PLfLuD5BP2o3UTB1a4nGUw
-X-Received: by 2002:a05:6871:3416:b0:3ea:d0e3:9696 with SMTP id 586e51a60fabf-3f5f8989e9fmr6393090fac.9.1765949714710;
-        Tue, 16 Dec 2025 21:35:14 -0800 (PST)
+        bh=2OvJx7AxTUJ0pacBHpfR4EB7axuem5OmBv1tntyjd18=;
+        b=LWxSiIWfQtE0spsVB50uvQVgUfpF6SByELS4nefdgjBbd7ByRVt4r85Tlj/DXffmVH
+         IA1lqKu5YBczXg4opfSFEyz7ouJld8NZYxNwNyBgbwmOTuMoIg+BjpTPIuqbeW77//Yh
+         8pf0oFPDwJw01xkW40fgmuoO0Ov9hap1UFE5QqE/bDmwtOY9qof5pRNk+YIeneWJO+mS
+         zX1KWp9j6TMdSFYmrEZogiydZbPT8F07cyBccp3S197NXG4f4agM/ll8KxmyQrxH9UWY
+         NnaRQUMsq9lMjEO7gweMHJoO+Zz69aab3F4pqua1+7U6SDTWjavTHWKWsPbqEJUwOzOF
+         d4zQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWqwhImPx3IlKlT4/Oh6bmQ8HNqNRSgKTFvKf3YjNPBp1fB8npMCKxB3F87ONeu0lPHvpKN22U5+N7O2EoQ44o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOYC2nuSaZHV/fKPgAR6Q9ORKdP3JUjLrUjDLC69nkes6aRM16
+	9vVupM/Olv3DZTkmB2FxAV1SZ+n82+6qoaH5ZjZp6Sg+QgxdAaJYy+r2La7+GV2tk23Kpo66eEg
+	3o8edSY4e/jHt/ea6tIvUkPEaGZfdi7ubrpPnphlUXfDs6EI58EsQ
+X-Gm-Gg: AY/fxX4ZaL2FzrZvcrM74y01ZFwVKsRPk6vmYxNQzJa1U4UxeSAlp2+flFw0s9slxfA
+	9FQ9ehvvXQOtUiei4b0cJ23dMgU7c5j/EB2jSjqHx6wmzr/y7obBJp39/mqmbf/kHr2BE5sCnNu
+	ENpKsoDgd3/4Al0Z7IwSHpy5jSVTC885vag6wmhppDH/xIflin574xhYgmIL/LM+lHTfz5VQPfs
+	zoY4qNhdrvk1HHeF6LaaSh/6t4rdfE4sYgUR4viLQrVTkM976hWRbJTSzkffe6PpnqWWbk0CyrA
+	HaxtmUbhvU9s3366rMb7T7KiX+G01udL7lD2AbPoKTfP4EBf4Q/CkWM6MqaLxQLJ9JBFfC8b3qk
+	a9O59epvCBWQ8Gyz3lIrwwFk/Jso=
+X-Google-Smtp-Source: AGHT+IFbG6sbuUMK8Z52DIdwdRmhPJfwF/v7UIPe9gL8Y8b6oOH7po6qZZFyRaDqM7Jnd07PI/nXVcYALu2n
+X-Received: by 2002:a05:6870:e8e:b0:3ec:3bfe:bda7 with SMTP id 586e51a60fabf-3f5f8a3a5admr7121872fac.1.1765949713810;
+        Tue, 16 Dec 2025 21:35:13 -0800 (PST)
 Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-3f614e29004sm1368934fac.13.2025.12.16.21.35.14
+        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-3f614e7dab4sm1520399fac.18.2025.12.16.21.35.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 21:35:14 -0800 (PST)
+        Tue, 16 Dec 2025 21:35:13 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (unknown [IPv6:2620:125:9007:640:ffff::1199])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id C7CF33401D2;
-	Tue, 16 Dec 2025 22:35:13 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id E028D3420F0;
+	Tue, 16 Dec 2025 22:35:12 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id C2E38E41AC4; Tue, 16 Dec 2025 22:35:13 -0700 (MST)
+	id DCFA5E41A08; Tue, 16 Dec 2025 22:35:12 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -75,9 +75,9 @@ Cc: linux-block@vger.kernel.org,
 	Stanley Zhang <stazhang@purestorage.com>,
 	Uday Shankar <ushankar@purestorage.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH 20/20] selftests: ublk: add end-to-end integrity test
-Date: Tue, 16 Dec 2025 22:34:54 -0700
-Message-ID: <20251217053455.281509-21-csander@purestorage.com>
+Subject: [PATCH 13/20] ublk: optimize ublk_user_copy() on daemon task
+Date: Tue, 16 Dec 2025 22:34:47 -0700
+Message-ID: <20251217053455.281509-14-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251217053455.281509-1-csander@purestorage.com>
 References: <20251217053455.281509-1-csander@purestorage.com>
@@ -89,154 +89,95 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add test case loop_08 to verify the ublk integrity data flow. It uses
-the kublk loop target to create a ublk device with integrity on top of
-backing data and integrity files. It then writes to the whole device
-with fio configured to generate integrity data. Then it reads back the
-whole device with fio configured to verify the integrity data.
-It also verifies that injected guard, reftag, and apptag corruptions are
-correctly detected.
+ublk user copy syscalls may be issued from any task, so they take a
+reference count on the struct ublk_io to check whether it is owned by
+the ublk server and prevent a concurrent UBLK_IO_COMMIT_AND_FETCH_REQ
+from completing the request. However, if the user copy syscall is issued
+on the io's daemon task, a concurrent UBLK_IO_COMMIT_AND_FETCH_REQ isn't
+possible, so the atomic reference count dance is unnecessary. Check for
+UBLK_IO_FLAG_OWNED_BY_SRV to ensure the request is dispatched to the
+sever and obtain the request from ublk_io's req field instead of looking
+it up on the tagset. Skip the reference count increment and decrement.
+Commit 8a8fe42d765b ("ublk: optimize UBLK_IO_REGISTER_IO_BUF on daemon
+task") made an analogous optimization for ublk zero copy buffer
+registration.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- tools/testing/selftests/ublk/Makefile        |   1 +
- tools/testing/selftests/ublk/test_loop_08.sh | 111 +++++++++++++++++++
- 2 files changed, 112 insertions(+)
- create mode 100755 tools/testing/selftests/ublk/test_loop_08.sh
+ drivers/block/ublk_drv.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
-index d567f90d30b3..e04922085fd5 100644
---- a/tools/testing/selftests/ublk/Makefile
-+++ b/tools/testing/selftests/ublk/Makefile
-@@ -32,10 +32,11 @@ TEST_PROGS += test_loop_02.sh
- TEST_PROGS += test_loop_03.sh
- TEST_PROGS += test_loop_04.sh
- TEST_PROGS += test_loop_05.sh
- TEST_PROGS += test_loop_06.sh
- TEST_PROGS += test_loop_07.sh
-+TEST_PROGS += test_loop_08.sh
- TEST_PROGS += test_stripe_01.sh
- TEST_PROGS += test_stripe_02.sh
- TEST_PROGS += test_stripe_03.sh
- TEST_PROGS += test_stripe_04.sh
- TEST_PROGS += test_stripe_05.sh
-diff --git a/tools/testing/selftests/ublk/test_loop_08.sh b/tools/testing/selftests/ublk/test_loop_08.sh
-new file mode 100755
-index 000000000000..ca289cfb2ad4
---- /dev/null
-+++ b/tools/testing/selftests/ublk/test_loop_08.sh
-@@ -0,0 +1,111 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index 042df4de9253..a0fbabd49feb 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -180,11 +180,11 @@ struct ublk_io {
+ 	/*
+ 	 * The number of uses of this I/O by the ublk server
+ 	 * if user copy or zero copy are enabled:
+ 	 * - UBLK_REFCOUNT_INIT from dispatch to the server
+ 	 *   until UBLK_IO_COMMIT_AND_FETCH_REQ
+-	 * - 1 for each inflight ublk_ch_{read,write}_iter() call
++	 * - 1 for each inflight ublk_ch_{read,write}_iter() call not on task
+ 	 * - 1 for each io_uring registered buffer not registered on task
+ 	 * The I/O can only be completed once all references are dropped.
+ 	 * User copy and buffer registration operations are only permitted
+ 	 * if the reference count is nonzero.
+ 	 */
+@@ -2644,10 +2644,11 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
+ 	struct ublk_queue *ubq;
+ 	struct request *req;
+ 	struct ublk_io *io;
+ 	unsigned data_len;
+ 	bool is_integrity;
++	bool on_daemon;
+ 	size_t buf_off;
+ 	u16 tag, q_id;
+ 	ssize_t ret;
+ 
+ 	if (!user_backed_iter(iter))
+@@ -2670,13 +2671,24 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
+ 
+ 	if (tag >= ub->dev_info.queue_depth)
+ 		return -EINVAL;
+ 
+ 	io = &ubq->ios[tag];
+-	req = __ublk_check_and_get_req(ub, q_id, tag, io);
+-	if (!req)
+-		return -EINVAL;
++	on_daemon = current == READ_ONCE(io->task);
++	if (on_daemon) {
++		/* On daemon, io can't be completed concurrently, so skip ref */
++		if (!(io->flags & UBLK_IO_FLAG_OWNED_BY_SRV))
++			return -EINVAL;
 +
-+. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
-+
-+if ! _have_program fio; then
-+	exit $UBLK_SKIP_CODE
-+fi
-+
-+fio_version=$(fio --version)
-+if [[ "$fio_version" =~ fio-[0-9]+\.[0-9]+$ ]]; then
-+	echo "Requires development fio version with https://github.com/axboe/fio/pull/1992"
-+	exit $UBLK_SKIP_CODE
-+fi
-+
-+TID=loop_08
-+
-+_prep_test "loop" "end-to-end integrity"
-+
-+_create_backfile 0 256M
-+_create_backfile 1 32M # 256M * (64 integrity bytes / 512 data bytes)
-+integrity_params="--integrity_capable --integrity_reftag
-+                  --metadata_size 64 --pi_offset 56 --csum_type t10dif"
-+dev_id=$(_add_ublk_dev -t loop -u $integrity_params "${UBLK_BACKFILES[@]}")
-+_check_add_dev $TID $?
-+
-+# 1M * (64 integrity bytes / 512 data bytes) = 128K
-+fio_args="--ioengine io_uring --direct 1 --bsrange 512-1M --iodepth 32
-+          --md_per_io_size 128K --pi_act 0 --pi_chk GUARD,REFTAG,APPTAG
-+          --filename /dev/ublkb$dev_id"
-+fio --name fill --rw randwrite $fio_args > /dev/null
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "fio fill failed"
-+	_show_result $TID $err
-+fi
-+
-+fio --name verify --rw randread $fio_args > /dev/null
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "fio verify failed"
-+	_show_result $TID $err
-+fi
-+
-+fio_err=$(mktemp fio_err_XXXXX)
-+
-+# Overwrite 4-byte reftag at offset 56 + 4 = 60
-+dd_reftag_args="bs=1 seek=60 count=4 oflag=dsync conv=notrunc status=none"
-+dd if=/dev/urandom "of=${UBLK_BACKFILES[1]}" $dd_reftag_args
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "dd corrupted_reftag failed"
-+	rm -f "$fio_err"
-+	_show_result $TID $err
-+fi
-+if fio --name corrupted_reftag --rw randread $fio_args > /dev/null 2> "$fio_err"; then
-+	echo "fio corrupted_reftag unexpectedly succeeded"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+expected_err="REFTAG compare error: LBA: 0 Expected=0, Actual="
-+if ! grep -q "$expected_err" "$fio_err"; then
-+	echo "fio corrupted_reftag message not found: $expected_err"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+# Reset to 0
-+dd if=/dev/zero "of=${UBLK_BACKFILES[1]}" $dd_reftag_args
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "dd restore corrupted_reftag failed"
-+	rm -f "$fio_err"
-+	_show_result $TID $err
-+fi
-+
-+dd_data_args="bs=512 count=1 oflag=direct,dsync conv=notrunc status=none"
-+dd if=/dev/zero "of=${UBLK_BACKFILES[0]}" $dd_data_args
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "dd corrupted_data failed"
-+	rm -f "$fio_err"
-+	_show_result $TID $err
-+fi
-+if fio --name corrupted_data --rw randread $fio_args > /dev/null 2> "$fio_err"; then
-+	echo "fio corrupted_data unexpectedly succeeded"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+expected_err="Guard compare error: LBA: 0 Expected=0, Actual="
-+if ! grep -q "$expected_err" "$fio_err"; then
-+	echo "fio corrupted_data message not found: $expected_err"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+
-+if fio --name bad_apptag --rw randread $fio_args --apptag 0x4321 > /dev/null 2> "$fio_err"; then
-+	echo "fio bad_apptag unexpectedly succeeded"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+expected_err="APPTAG compare error: LBA: [0-9]* Expected=4321, Actual=1234"
-+if ! grep -q "$expected_err" "$fio_err"; then
-+	echo "fio bad_apptag message not found: $expected_err"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+
-+rm -f "$fio_err"
-+
-+_cleanup_test
-+_show_result $TID 0
++		req = io->req;
++		if (!ublk_rq_has_data(req))
++			return -EINVAL;
++	} else {
++		req = __ublk_check_and_get_req(ub, q_id, tag, io);
++		if (!req)
++			return -EINVAL;
++	}
+ 
+ 	if (is_integrity) {
+ 		struct blk_integrity *bi = &req->q->limits.integrity;
+ 
+ 		data_len = bio_integrity_bytes(bi, blk_rq_sectors(req));
+@@ -2697,11 +2709,12 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
+ 		ret = ublk_copy_user_integrity(req, buf_off, iter, dir);
+ 	else
+ 		ret = ublk_copy_user_pages(req, buf_off, iter, dir);
+ 
+ out:
+-	ublk_put_req_ref(io, req);
++	if (!on_daemon)
++		ublk_put_req_ref(io, req);
+ 	return ret;
+ }
+ 
+ static ssize_t ublk_ch_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ {
 -- 
 2.45.2
 
