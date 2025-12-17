@@ -1,21 +1,22 @@
-Received: from out28-76.mail.aliyun.com (out28-76.mail.aliyun.com [115.124.28.76])
+Received: from out198-11.us.a.mail.aliyun.com (out198-11.us.a.mail.aliyun.com [47.90.198.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BAD256D;
-	Wed, 17 Dec 2025 03:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEEDF3595D;
+	Wed, 17 Dec 2025 03:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765941684; cv=none; b=ocbdCe9j/dBjATrMco9rMVVt0YAc83HvTCbHr8xBkcoDooxZCT6xk5BVGZ4wbbiJdrlWd85oCuQxJzHxxdtL90Rp8wsYmU4pCqNQr0LCHwUmdHOT9CzKKjSnPi03CNCXgwW8y2pPkL/xhjk+YRZAnj6IDKNIzxNtEswD7Emx7wY=
+	t=1765942617; cv=none; b=TkARb5zNAV5TH7XR63St46nVY4L1XBLK/OX83qphQd+74DPW4g69wVsk+cVm/BWthQSG72aPpXbp9Ulm1EU4KLQbwtwxjSVIwx/oACCQp8+Qj/AvoejyUsPeiuyDWnPttb8/vbDFYf4z/jf3mK+Q5cQF6U7I6U1yoS1BUSIuQ48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765941684; c=relaxed/simple;
-	bh=BJYLY8Cl3VIqPm0/E/s987RAJ8gV7KIHLNAVJdCfeVQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A1jlM6XFcRxs1gqT8zTKj+xNlWFY/6Zy6htx4msTCYn5yMSUrnLQriPJSCrYnT5ZUBJ7qZjWouILKw5N6+twRJBWb0Rkka/9l+6Y0irgtVa4Odx50OI2BhnaADRMJBHOs5gQMf4+frYqE1ubJIDzxLPkQYXmDdR044hT8LCxBmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.76
+	s=arc-20240116; t=1765942617; c=relaxed/simple;
+	bh=Z5lfrJjJzPWYCKC/F+6oK2JX8Y/M9TIdFPlWdkAHreI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AG6WOLyx4hZ45y2Rtx5UWq+7kh/HGxcaWqfpunDC7Zh4621pNgRjBViQzVmI61ICrgyS+appf+euwHlEetYFO9yijFOFLtROGk1Alum8/yI9oqYUZf9aNmh1A8PlSobV7REg8WH3fWU+zMyfcUOSGczdHUrR9+rznCxXy7rk2+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=47.90.198.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fmLmlwM_1765940724 cluster:ay29)
+Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fmLmm9V_1765940736 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Wed, 17 Dec 2025 11:05:31 +0800
+          Wed, 17 Dec 2025 11:05:37 +0800
 From: Xiaochen Shen <shenxiaochen@open-hieco.net>
 To: tony.luck@intel.com,
 	reinette.chatre@intel.com,
@@ -30,10 +31,12 @@ Cc: babu.moger@amd.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	shenxiaochen@open-hieco.net
-Subject: [PATCH v5 0/4] selftests/resctrl: Add Hygon CPUs support and bug fixes
-Date: Wed, 17 Dec 2025 11:04:52 +0800
-Message-ID: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
+Subject: [PATCH v5 2/4] selftests/resctrl: Define CPU vendor IDs as bits to match usage
+Date: Wed, 17 Dec 2025 11:04:54 +0800
+Message-ID: <20251217030456.3834956-3-shenxiaochen@open-hieco.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
+References: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,100 +45,125 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The resctrl selftest currently exhibits several failures on Hygon CPUs
-due to missing vendor detection and edge-case handling specific to
-Hygon's architecture.
+The CPU vendor IDs are required to be unique bits because they're used
+for vendor_specific bitmask in the struct resctrl_test.
+Consider for example their usage in test_vendor_specific_check():
+	return get_vendor() & test->vendor_specific
 
-This patch series addresses three distinct issues:
-1. A division-by-zero crash in SNC detection on some platforms (e.g.,
-   Hygon).
-2. Missing CPU vendor detection, causing the test to fail with
-   "# Can not get vendor info..." on Hygon CPUs.
-3. Incorrect handling of non-contiguous CBM support on Hygon CPUs.
+However, the definitions of CPU vendor IDs in file resctrl.h is quite
+subtle as a bitmask value:
+  #define ARCH_INTEL     1
+  #define ARCH_AMD       2
 
-These changes enable resctrl selftest to run successfully on
-Hygon CPUs that support Platform QoS features.
+A clearer and more maintainable approach is to define these CPU vendor
+IDs using BIT(). This ensures each vendor corresponds to a distinct bit
+and makes it obvious when adding new vendor IDs.
 
-Maintainer notes:
------------------
-Patch 1: selftests/resctrl: Fix a division by zero error on Hygon
- - This is a candidate for backport with "Fixes:" tag.
+Accordingly, update the return types of detect_vendor() and get_vendor()
+from 'int' to 'unsigned int' to align with their usage as bitmask values
+and to prevent potentially risky type conversions.
 
-Patch 2: selftests/resctrl: Define CPU vendor IDs as bits to match usage
- - This is *not* a candidate for backport since it is an enhancement and
-   preparatory patch for patch 3.
+Furthermore, introduce a bool flag 'initialized' to simplify the
+get_vendor() -> detect_vendor() logic. This ensures the vendor ID is
+detected only once and resolves the ambiguity of using the same variable
+'vendor' both as a value and as a state.
 
-Patch 3: selftests/resctrl: Add CPU vendor detection for Hygon
-Patch 4: selftests/resctrl: Fix non-contiguous CBM check for Hygon
- - Even though they are fixes they are *not* candidates for backport
-   since they are based on another patch series (x86/resctrl: Fix
-   Platform QoS issues for Hygon) which is in process of being added to
-   resctrl.
------------------
+Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
+Suggested-by: Fenghua Yu <fenghuay@nvidia.com>
+Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+---
+ tools/testing/selftests/resctrl/resctrl.h     |  7 ++---
+ .../testing/selftests/resctrl/resctrl_tests.c | 26 +++++++++++++------
+ 2 files changed, 22 insertions(+), 11 deletions(-)
 
-Changelog:
-v5:
-- Patch 2:
-  1. Fix a nit of "reverse fir ordering" of the variable declarations in
-     detect_vendor() in v4 patch series (Reinette).
-  2. Add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>.
-
-v4:
-- Cover letter: add maintainer notes outlining how these patches to be
-  handled (Reinette).
-- Re-organize the patch series to move original patch 3 to the beginning
-  of series. The patch order has changed between v3 and v4 (Reinette):
-     v3    ->    v4
-  patch #3 -> patch #1
-  patch #1 -> patch #2
-  patch #2 -> patch #3
-  patch #4 -> patch #4
-- Patch 2:
-  1. Resolve a conflict against latest upstream kernel (Reinette).
-  2. Fix a nit to maintain the reverse fir ordering of variables in
-     detect_vendor() (Reinette).
-- Patch 3: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-- Patch 4: move the maintainer note into the cover letter (Reinette).
-
-v3:
-- Patch 1:
-  1. Update the return types of detect_vendor() and get_vendor() from
-     'int' to 'unsigned int' to align with their usage as bitmask values
-     and to prevent potentially risky type conversions (Fenghua).
-  2. Split the code changes of "define CPU vendor IDs as bits to match
-     usage" from original patch 1 into a separate patch (this patch,
-     suggested by Fenghua and Reinette).
-  3. Introduce the flag 'initialized' to simplify the get_vendor() ->
-     detect_vendor() logic (Reinette).
-- Patch 2 (original patch 1):
-  1. Move the code changes of "define CPU vendor IDs as bits to match
-     usage" into patch 1.
-- Patch 3 (original patch 2): 
-  1. Fix a nit of code comment for affected platforms (Fenghua).
-  2. Add Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>.
-- Patch 4 (original patch 3): 
-  1. Fix a nit to avoid calling get_vendor() twice (Fenghua).
-  2. Add Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>.
-
-v2:
-- Patch 1: switch all of the vendor id bitmasks to use BIT() (Reinette)
-- Patch 2: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-- Patch 3: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-           add a maintainer note to highlight it is not a candidate for
-	   backport (Reinette)
-
-Xiaochen Shen (4):
-  selftests/resctrl: Fix a division by zero error on Hygon
-  selftests/resctrl: Define CPU vendor IDs as bits to match usage
-  selftests/resctrl: Add CPU vendor detection for Hygon
-  selftests/resctrl: Fix non-contiguous CBM check for Hygon
-
- tools/testing/selftests/resctrl/cat_test.c    |  6 ++--
- tools/testing/selftests/resctrl/resctrl.h     |  8 ++++--
- .../testing/selftests/resctrl/resctrl_tests.c | 28 +++++++++++++------
- tools/testing/selftests/resctrl/resctrlfs.c   | 10 +++++++
- 4 files changed, 39 insertions(+), 13 deletions(-)
-
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 3c51bdac2dfa..4f9c7d04c98d 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -23,6 +23,7 @@
+ #include <asm/unistd.h>
+ #include <linux/perf_event.h>
+ #include <linux/compiler.h>
++#include <linux/bits.h>
+ #include "kselftest.h"
+ 
+ #define MB			(1024 * 1024)
+@@ -36,8 +37,8 @@
+  * Define as bits because they're used for vendor_specific bitmask in
+  * the struct resctrl_test.
+  */
+-#define ARCH_INTEL     1
+-#define ARCH_AMD       2
++#define ARCH_INTEL	BIT(0)
++#define ARCH_AMD	BIT(1)
+ 
+ #define END_OF_TESTS	1
+ 
+@@ -163,7 +164,7 @@ extern int snc_unreliable;
+ extern char llc_occup_path[1024];
+ 
+ int snc_nodes_per_l3_cache(void);
+-int get_vendor(void);
++unsigned int get_vendor(void);
+ bool check_resctrlfs_support(void);
+ int filter_dmesg(void);
+ int get_domain_id(const char *resource, int cpu_no, int *domain_id);
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 5154ffd821c4..42605e2a3b66 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -23,16 +23,24 @@ static struct resctrl_test *resctrl_tests[] = {
+ 	&l2_noncont_cat_test,
+ };
+ 
+-static int detect_vendor(void)
++static unsigned int detect_vendor(void)
+ {
+-	FILE *inf = fopen("/proc/cpuinfo", "r");
+-	int vendor_id = 0;
++	static unsigned int vendor_id;
++	static bool initialized;
+ 	char *s = NULL;
++	FILE *inf;
+ 	char *res;
+ 
+-	if (!inf)
++	if (initialized)
+ 		return vendor_id;
+ 
++	inf = fopen("/proc/cpuinfo", "r");
++	if (!inf) {
++		vendor_id = 0;
++		initialized = true;
++		return vendor_id;
++	}
++
+ 	res = fgrep(inf, "vendor_id");
+ 
+ 	if (res)
+@@ -45,15 +53,17 @@ static int detect_vendor(void)
+ 
+ 	fclose(inf);
+ 	free(res);
++
++	initialized = true;
+ 	return vendor_id;
+ }
+ 
+-int get_vendor(void)
++unsigned int get_vendor(void)
+ {
+-	static int vendor = -1;
++	unsigned int vendor;
++
++	vendor = detect_vendor();
+ 
+-	if (vendor == -1)
+-		vendor = detect_vendor();
+ 	if (vendor == 0)
+ 		ksft_print_msg("Can not get vendor info...\n");
+ 
 -- 
 2.47.3
 
