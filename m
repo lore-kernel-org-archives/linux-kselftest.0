@@ -1,115 +1,107 @@
-Received: from out28-197.mail.aliyun.com (out28-197.mail.aliyun.com [115.124.28.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF5D34C804;
-	Thu, 18 Dec 2025 14:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A412BDC01;
+	Thu, 18 Dec 2025 14:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766066801; cv=none; b=JonUSbzMeV2sKytERNRvqrWetMVBnBzwDsbyaL1sYMR4Q555Zr9q1HX0nr6JQ4qXFCy8a6umIX6i99UI3G5fBCPiFAWaWEnj9x/ylBBFYmzn0AM28/0dLoIspPhEkYvSEoOn+YWMekRkxZyJP9xXOlIPX1KJi4EFVXhDZr6ojBs=
+	t=1766067928; cv=none; b=LwrLqIMQ1HWA19UrtageQilKhH6r2Hiq0/LlWad5Gl5tV+WFyUD4Rv054LXg3wmS0kXUlKL8LWjtb3/l122N/jvrG6vZvWTfi9hBuNUh9yUxSSNTA0LBjvB0fRV/ieODhVHPLsPdAuYNWXXctskxOSZOJkoFobFltkeeI+y/igY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766066801; c=relaxed/simple;
-	bh=PYx8mw8jcMhldgO20ghRP6zsMW7Xykx16g9vZLu2V9k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZW3tMc2CP+pGbFSLVKg/kawIvswoBPo2RivpcelTut7tKeuAF+QHne/G2yVgM821z9fisYR/UUigN3Tp5lxPWH1wtASbclop+qFcJNzMxON04GUoxDmdMPmeHvD2TBh/bt9a5qFd9tsGQhFT+A5Lq+bekVl3XHAnZr4SihB6L/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com; spf=pass smtp.mailfrom=antgroup.com; dkim=pass (1024-bit key) header.d=antgroup.com header.i=@antgroup.com header.b=tyIcFHvj; arc=none smtp.client-ip=115.124.28.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antgroup.com
+	s=arc-20240116; t=1766067928; c=relaxed/simple;
+	bh=r0E2VNvXCIpCx/++TKgBDonkZ7YJUx+FvKeMkOV/3Jk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M6oNW63LMCYwta69dM3+xiKIklHnJctj1er/cCs/NDSua9XxRnAEG/IXuiXolEv4W486c8FzyrqVUSyCMOQsi9pM5A4s0Vdm+SVWJkS57PFfecu01g54C+uLFYDqYZMgawUVKibkAvOWa+EtNK0w7HE9ze5YudR7YdU+qKoeZqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CMtqRmyw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antgroup.com header.i=@antgroup.com header.b="tyIcFHvj"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=antgroup.com; s=default;
-	t=1766066796; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=MdcZ9dB/ZZC2s3JBcz4u+PMPg0Oky+AgJqGJUglEwiU=;
-	b=tyIcFHvjWB2kmUOyZDVGsQv2jxXy4Zpw9cg+eMu+ktltfHxIHwltNRxiiGGswikUMKTaMR6m22Ii9EEbaQlymoJIpF3+NpVseDspsLdA1iopygsFpUXF4Ne531mVG0fZH5gFoHsuPDZhedBBOtvp+63ARKd5165BmdSt+OJtwlc=
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.fniSlgz_1766066469 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Thu, 18 Dec 2025 22:01:09 +0800
-From: Hou Wenlong <houwenlong.hwl@antgroup.com>
-To: kvm@vger.kernel.org
-Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 8/9] KVM: selftests: Verify guest debug DR7.GD checking during instruction emulation
-Date: Thu, 18 Dec 2025 22:00:43 +0800
-Message-Id: <f4b5af2580a1acd4b5fe0225fc44b44d6b0ecfae.1766066076.git.houwenlong.hwl@antgroup.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1766066076.git.houwenlong.hwl@antgroup.com>
-References: <cover.1766066076.git.houwenlong.hwl@antgroup.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CMtqRmyw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C393C116B1;
+	Thu, 18 Dec 2025 14:25:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766067927;
+	bh=r0E2VNvXCIpCx/++TKgBDonkZ7YJUx+FvKeMkOV/3Jk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CMtqRmywxWmOknyn1jm2k0YQDZSr1Oh+XyzEpnUWWcwyXCVf8gfOI4FcMWWEsluy/
+	 EEI5Od9UiaWP7cyRj5F2T3Jx3lZ6QVOKOrAn9BIwAIYOwN3EIvW9JPPLEc9SCOz0KD
+	 /cAWpiIlfTiI7aWlYBBb7L//03IZ8bxboBepSEpOc8zOzQuhtiwySjTAgAYQmOtg3m
+	 j1C+tkDhrZildjmqO2bExvAD1fWqfeiKSf7EE4C6cw9MJ2+yxn3vKC7BKOov3rcKnA
+	 KZ6OGu/PILpJuy5K6WakdBeSCEGhbNpMbfDvnz4l5i7xiA4qez/8+IoEGqgTzkAGIN
+	 qBqzNm+4l1dyA==
+Date: Thu, 18 Dec 2025 14:25:22 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Yunsheng Lin <linyunsheng@huawei.com>
+Subject: Re: [PATCH 1/4] selftests/mm: remove flaky header check
+Message-ID: <682f64d0-353c-47bb-808b-eacc2d4d6c00@sirena.org.uk>
+References: <20251216142633.2401447-1-kevin.brodsky@arm.com>
+ <20251216142633.2401447-2-kevin.brodsky@arm.com>
+ <5f866c1a-c8cd-4dc6-b312-9017cef89920@sirena.org.uk>
+ <e971e44e-5539-4fc4-8128-0ce9c3d10a38@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="b1+frtrHPzRKmdHc"
+Content-Disposition: inline
+In-Reply-To: <e971e44e-5539-4fc4-8128-0ce9c3d10a38@arm.com>
+X-Cookie: Close cover before striking.
 
-Similar to the global disable test case in x86's debug_regs test, use
-'KVM_FEP' to trigger instruction emulation in order to verify the guest
-debug DR7.GD checking during instruction emulation.
 
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
----
- tools/testing/selftests/kvm/x86/debug_regs.c | 23 +++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+--b1+frtrHPzRKmdHc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/tools/testing/selftests/kvm/x86/debug_regs.c b/tools/testing/selftests/kvm/x86/debug_regs.c
-index 2d814c1d1dc4..bd34cf2a96b7 100644
---- a/tools/testing/selftests/kvm/x86/debug_regs.c
-+++ b/tools/testing/selftests/kvm/x86/debug_regs.c
-@@ -19,6 +19,7 @@
- uint32_t guest_value;
- 
- extern unsigned char sw_bp, hw_bp, write_data, ss_start, bd_start;
-+extern unsigned char fep_bd_start;
- 
- static void guest_code(void)
- {
-@@ -64,6 +65,10 @@ static void guest_code(void)
- 
- 	/* DR6.BD test */
- 	asm volatile("bd_start: mov %%dr0, %%rax" : : : "rax");
-+
-+	if (is_forced_emulation_enabled)
-+		asm volatile(KVM_FEP "fep_bd_start: mov %%dr0, %%rax" : : : "rax");
-+
- 	GUEST_DONE();
- }
- 
-@@ -185,7 +190,7 @@ int main(void)
- 			    target_dr6);
- 	}
- 
--	/* Finally test global disable */
-+	/* test global disable */
- 	memset(&debug, 0, sizeof(debug));
- 	debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_USE_HW_BP;
- 	debug.arch.debugreg[7] = 0x400 | DR7_GD;
-@@ -202,6 +207,22 @@ int main(void)
- 			    run->debug.arch.pc, target_rip, run->debug.arch.dr6,
- 			    target_dr6);
- 
-+	/* test global disable in emulation */
-+	if (is_forced_emulation_enabled) {
-+		/* Skip the 3-bytes "mov dr0" */
-+		vcpu_skip_insn(vcpu, 3);
-+		vcpu_run(vcpu);
-+		TEST_ASSERT(run->exit_reason == KVM_EXIT_DEBUG &&
-+			    run->debug.arch.exception == DB_VECTOR &&
-+			    run->debug.arch.pc == CAST_TO_RIP(fep_bd_start) &&
-+			    run->debug.arch.dr6 == target_dr6,
-+			    "DR7.GD: exit %d exception %d rip 0x%llx "
-+			    "(should be 0x%llx) dr6 0x%llx (should be 0x%llx)",
-+			    run->exit_reason, run->debug.arch.exception,
-+			    run->debug.arch.pc, target_rip, run->debug.arch.dr6,
-+			    target_dr6);
-+	}
-+
- 	/* Disable all debug controls, run to the end */
- 	memset(&debug, 0, sizeof(debug));
- 	vcpu_guest_debug_set(vcpu, &debug);
--- 
-2.31.1
+On Thu, Dec 18, 2025 at 02:24:10PM +0100, Kevin Brodsky wrote:
+> On 17/12/2025 11:04, Mark Brown wrote:
 
+> > More generally building selftests with random older kernel versions
+> > isn't really something that's expected to be robust:
+
+> I suppose that Documentation/dev-tools/kselftest.rst talks about
+> *running* against older kernels, not *building* against them. That said,
+
+Yeah, running is fairly normal but huge swathes of the selftests won't
+build without current kernel headers and it's not an especially useful
+use of time to support that.
+
+> we are dealing with an out-of-tree kernel module here, so the two are
+> essentially the same... Yunsheng suggested an updated check that I think
+> is reasonable, maybe it is a reasonable compromise?
+
+Well, there's also the selection of KDIR which for some reason defaults
+to the installed kernel so we get:
+
+  $ make -C tools/testing/selftests LLVM=1 ARCH=arm64 TARGETS=mm
+
+  Warning: missing page_frag_cache.h, please use a newer kernel. page_frag test will be skipped.
+
+Your changelog says it'll work for an in tree build but I can't figure
+out how to do that (using the top level Makefile to recurse doesn't seem
+to DTRT either).  Having looked at this more I think the problem here is
+that the selection of KDIR is wrong, not the check.
+
+--b1+frtrHPzRKmdHc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlEDtEACgkQJNaLcl1U
+h9DTXwf+NKcXoL0qH47tIhKzxB1aWsfOAem/OloigbCC3HAdbAnebqErn4V3PyLU
+3PUVn9u9QB5XEIPobLqzig0dqOAgPsDtxbz5WhKUo69GKcxGl8h114OjCgQryQ1h
+mMFUAhB610D+X83WWgy71GdWQNcZL+UC6jpe4wMZojsjUYL0R3Z6YCyFrU8xL7g6
+o8r7e9dYhrNWbsUG60Y7L+293dN56TtyWRcG1iBYHGDgc3MKOFOaNO5GTQCuE6HC
+5x2excDax3yLwV9meWrl7h6yH9RJvIeSoBCTHNITSPkbbhKSKIZECwgwzZHYsFGO
+KMtV45ue9RSG0bp3BprtIV6bCsb32A==
+=dMYV
+-----END PGP SIGNATURE-----
+
+--b1+frtrHPzRKmdHc--
