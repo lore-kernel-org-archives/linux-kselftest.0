@@ -1,380 +1,204 @@
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D10D32B9AC;
-	Mon, 22 Dec 2025 11:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B53B1C84A2;
+	Mon, 22 Dec 2025 12:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766404126; cv=none; b=PN/oYfMn+d/swxW7W3MfEhgfHJzjGAaInoqF9K2fxE2Bu5ZwqvMbt8UL8rrxN+xV8TkDQj+Xe8NR2q0fL2yDxQ632/YXXDMx4N3V7wWX0P9oN5v8h90/QRSRTKjrYisb5pRlB1Uq9fwngFymdZ6A/ro2pJn/PavoiWyzccTb1dw=
+	t=1766406515; cv=none; b=bmcicKEYuDWt7TTg9SrrGKfJLQGxuEADr44SKOXB+euZM5isUTtIp/tAv0low5ydhAouXUiYttsxRSyWOvwPR6rfqddXREJpU800NNFd9HQS046KoM/6LpEcopmx80RCqa27LjeqdPnLkMG4EKa9wEiuBdmRh1+chDghwuVTwKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766404126; c=relaxed/simple;
-	bh=Uwx4KJhyIRX+0FKJqrEw/iuBXDmfw0YMxs+D9x/Ewbk=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OPyTJ3sIqB4N1qe7yFCJyQtBL0j9Dc0Ugpm17ZwEufrW10l6CS0vKiL4pgc2nmTcUm/heupi5spVbsRqOzK7AuYrUVpDZoX4TXD7h+IYn1ynwqdOi7OrpSR8i3wPI+jLxPcU9V2UIemFxu5AEyqeP74JylMVxxQO7vjiXmgppTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=oEp9Ug2a; arc=none smtp.client-ip=113.46.200.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1766406515; c=relaxed/simple;
+	bh=jOwV7nUJ5dOaWvUO6114YDd2fspA3/2foFpNPnjb0x4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=FqrKmVRzsZvPoIbuQef3U6U69pxcNdZQkfzNUJy1LYJ7GvbTuE9AiGnRjI8Cx2T/HyN++SiUtC6VLNyk1eUAnvkmoql2m0UFMRic20tO08eFUmX9SYbYdaWqxRRLkgVL0sWlHJH6kMAl5Dpxw3N/+wxvT7IHHE9gcZ0yG7diDS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4tw116O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="oEp9Ug2a"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=aJTiI4bA0T86T+t5tkcGj308AfemJUXr12sJGCUKjxE=;
-	b=oEp9Ug2akzL8mvTBxZckK/2AGC0mDTS0+1Yg50bxXbJZZwf0Kofh8opHytIvDbFFE0fTZ+mKg
-	91HGNx00zKxlBUuyoTwgobQs1gtHw90gQ6xi/9B+Xo0yzM6Q7KVc1VBm39OwekhahuHXm0g22Vv
-	pnooENZI9QBWUtKykiVbRXQ=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4dZbtK16znzRhWS;
-	Mon, 22 Dec 2025 19:45:29 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4BC574036C;
-	Mon, 22 Dec 2025 19:48:35 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
- (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 22 Dec
- 2025 19:48:33 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
-	<tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
-	<shuah@kernel.org>, <kees@kernel.org>, <wad@chromium.org>,
-	<ruanjinjie@huawei.com>, <kevin.brodsky@arm.com>, <macro@orcam.me.uk>,
-	<charlie@rivosinc.com>, <akpm@linux-foundation.org>, <ldv@strace.io>,
-	<anshuman.khandual@arm.com>, <mark.rutland@arm.com>, <thuth@redhat.com>,
-	<song@kernel.org>, <ryan.roberts@arm.com>, <ada.coupriediaz@arm.com>,
-	<broonie@kernel.org>, <liqiang01@kylinos.cn>, <pengcan@kylinos.cn>,
-	<kmal@cock.li>, <dvyukov@google.com>, <richard.weiyang@gmail.com>,
-	<reddybalavignesh9979@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH v10 15/16] entry: Inline syscall_exit_work() and syscall_trace_enter()
-Date: Mon, 22 Dec 2025 19:47:36 +0800
-Message-ID: <20251222114737.1334364-16-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251222114737.1334364-1-ruanjinjie@huawei.com>
-References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4tw116O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE8E4C113D0;
+	Mon, 22 Dec 2025 12:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766406515;
+	bh=jOwV7nUJ5dOaWvUO6114YDd2fspA3/2foFpNPnjb0x4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=F4tw116OuitRQxfvc/ZKQIX5IB/+wFDkqQBm6H9rdU/jUU0fhk29Z7r7YfOGjdW0T
+	 V+ea/cd+Tv71m2EuTyN0cmqo/IXf5rSdaeUShCbewpwmmMwYDvnduaLlDPh/MQwEL+
+	 LX+0WcovE5Dj8HAvHduBgPnyefid66SEA265TeSHzh3mayhXj2+LPDEQ9E+W8ufPQf
+	 vjkZTey0/QiZWt9L+GZInXF06kq2wZfZTYVWwb4S2nvGfE7EOay2roVljsOtoo+Ust
+	 4qRzwe5wRC+yYKtnTg0uJ0FUccVgRH9C2m7tYQ0Sp0+YYFfMJBWjDp99QhaVEiOwv+
+	 LyyRUHBh8D86w==
+From: Tamir Duberstein <tamird@kernel.org>
+Date: Mon, 22 Dec 2025 13:28:27 +0100
+Subject: [PATCH] rust: kunit: replace `kernel::c_str!` with C-Strings
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251222-cstr-kunit-v1-1-39d999672f35@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQ5AMBBA0avIrDVhkoq4ilhoOxiSkk6JRNxds
+ XyL/y8QCkwCTXZBoIOFV59Q5hnYqfcjKXbJgAXqEhGVlRjUsnuOylBVO1fbwTgNKdgCDXx+s7b
+ 7LbuZycb3APf9ABtIlkJuAAAA
+X-Change-ID: 20251222-cstr-kunit-be68dd8cfbd5
+To: Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Tamir Duberstein <tamird@gmail.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openssh-sha256; t=1766406510; l=5424;
+ i=tamird@gmail.com; h=from:subject:message-id;
+ bh=pwc3vGXHK+ibZCWjh3w0zYv5qhibNAV50Z6yzjPg+KU=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
+ MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QPHR7xsCCwONVpfA7DwG98VZ4PJ6knRY06MAhx0lsZjwcogcRr81hLQJQl62oeN9LPaVvD5Dv9R
+ k8fM1IjR1ag4=
+X-Developer-Key: i=tamird@gmail.com; a=openssh;
+ fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
-After switch arm64 to Generic Entry, a new hotspot syscall_exit_work()
-appeared because syscall_exit_work() is not inlined, so inline
-syscall_exit_work(). Also inline syscall_trace_enter() to align with
-syscall_exit_work().
+From: Tamir Duberstein <tamird@gmail.com>
 
-On v6.19-rc1 with audit on, inline both syscall_trace_enter() and
-syscall_exit_work() has 4% performance uplift on perf bench basic
-syscall on kunpeng920 as below:
+C-String literals were added in Rust 1.77. Replace instances of
+`kernel::c_str!` with C-String literals where possible.
 
-    | Metric     | W/O this patch | With this patch | Change  |
-    | ---------- | -------------- | --------------- | ------  |
-    | Total time | 2.353 [sec]    | 2.264 [sec]     |  ↓3.8%  |
-    | usecs/op   | 0.235374       | 0.226472        |  ↓3.8%  |
-    | ops/sec    | 4,248,588      | 4,415,554       |  ↑3.9%  |
-
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Benno Lossin <lossin@kernel.org>
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- include/linux/entry-common.h         | 102 ++++++++++++++++++++++++++-
- kernel/entry/common.h                |   7 --
- kernel/entry/syscall-common.c        |  96 ++-----------------------
- kernel/entry/syscall_user_dispatch.c |   4 +-
- 4 files changed, 106 insertions(+), 103 deletions(-)
- delete mode 100644 kernel/entry/common.h
+ rust/kernel/kunit.rs        | 11 ++++-------
+ rust/macros/kunit.rs        | 10 +++++-----
+ scripts/rustdoc_test_gen.rs |  4 ++--
+ 3 files changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-index 17171e8873fc..ad61a13bf24f 100644
---- a/include/linux/entry-common.h
-+++ b/include/linux/entry-common.h
-@@ -2,6 +2,7 @@
- #ifndef __LINUX_ENTRYCOMMON_H
- #define __LINUX_ENTRYCOMMON_H
+diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+index 79436509dd73..21aef6c97325 100644
+--- a/rust/kernel/kunit.rs
++++ b/rust/kernel/kunit.rs
+@@ -9,9 +9,6 @@
+ use crate::fmt;
+ use crate::prelude::*;
  
-+#include <linux/audit.h>
- #include <linux/irq-entry-common.h>
- #include <linux/livepatch.h>
- #include <linux/ptrace.h>
-@@ -64,7 +65,64 @@ static __always_inline int arch_ptrace_report_syscall_entry(struct pt_regs *regs
- }
- #endif
+-#[cfg(CONFIG_PRINTK)]
+-use crate::c_str;
+-
+ /// Prints a KUnit error-level message.
+ ///
+ /// Public but hidden since it should only be used from KUnit generated code.
+@@ -22,7 +19,7 @@ pub fn err(args: fmt::Arguments<'_>) {
+     #[cfg(CONFIG_PRINTK)]
+     unsafe {
+         bindings::_printk(
+-            c_str!("\x013%pA").as_char_ptr(),
++            c"\x013%pA".as_char_ptr(),
+             core::ptr::from_ref(&args).cast::<c_void>(),
+         );
+     }
+@@ -38,7 +35,7 @@ pub fn info(args: fmt::Arguments<'_>) {
+     #[cfg(CONFIG_PRINTK)]
+     unsafe {
+         bindings::_printk(
+-            c_str!("\x016%pA").as_char_ptr(),
++            c"\x016%pA".as_char_ptr(),
+             core::ptr::from_ref(&args).cast::<c_void>(),
+         );
+     }
+@@ -60,7 +57,7 @@ macro_rules! kunit_assert {
+                 break 'out;
+             }
  
--long syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long work);
-+static inline void syscall_enter_audit(struct pt_regs *regs, long syscall)
-+{
-+	if (unlikely(audit_context())) {
-+		unsigned long args[6];
-+
-+		syscall_get_arguments(current, regs, args);
-+		audit_syscall_entry(syscall, args[0], args[1], args[2], args[3]);
-+	}
-+}
-+
-+void __trace_sys_enter(struct pt_regs *regs, long syscall);
-+bool syscall_user_dispatch(struct pt_regs *regs);
-+
-+static __always_inline long syscall_trace_enter(struct pt_regs *regs, long syscall,
-+						unsigned long work)
-+{
-+	long ret = 0;
-+
-+	/*
-+	 * Handle Syscall User Dispatch.  This must comes first, since
-+	 * the ABI here can be something that doesn't make sense for
-+	 * other syscall_work features.
-+	 */
-+	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
-+		if (syscall_user_dispatch(regs))
-+			return -1L;
-+	}
-+
-+	/* Handle ptrace */
-+	if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)) {
-+		ret = arch_ptrace_report_syscall_entry(regs);
-+		if (ret || (work & SYSCALL_WORK_SYSCALL_EMU))
-+			return -1L;
-+	}
-+
-+	/* Do seccomp after ptrace, to catch any tracer changes. */
-+	if (work & SYSCALL_WORK_SECCOMP) {
-+		ret = __secure_computing();
-+		if (ret == -1L)
-+			return ret;
-+	}
-+
-+	/* Either of the above might have changed the syscall number */
-+	syscall = syscall_get_nr(current, regs);
-+
-+	if (unlikely(work & SYSCALL_WORK_SYSCALL_TRACEPOINT)) {
-+		__trace_sys_enter(regs, syscall);
-+		/*
-+		 * Probes or BPF hooks in the tracepoint may have changed the
-+		 * system call number as well.
-+		 */
-+		syscall = syscall_get_nr(current, regs);
-+	}
-+
-+	syscall_enter_audit(regs, syscall);
-+
-+	return ret ? : syscall;
-+}
+-            static FILE: &'static $crate::str::CStr = $crate::c_str!($file);
++            static FILE: &'static $crate::str::CStr = $file;
+             static LINE: i32 = ::core::line!() as i32 - $diff;
+             static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
  
- /**
-  * syscall_enter_from_user_mode_work - Check and handle work before invoking
-@@ -131,6 +189,19 @@ static __always_inline long syscall_enter_from_user_mode(struct pt_regs *regs, l
- 	return ret;
- }
+@@ -253,7 +250,7 @@ pub const fn kunit_case_null() -> kernel::bindings::kunit_case {
+ /// }
+ ///
+ /// static mut KUNIT_TEST_CASES: [kernel::bindings::kunit_case; 2] = [
+-///     kernel::kunit::kunit_case(kernel::c_str!("name"), test_fn),
++///     kernel::kunit::kunit_case(c"name", test_fn),
+ ///     kernel::kunit::kunit_case_null(),
+ /// ];
+ /// kernel::kunit_unsafe_test_suite!(suite_name, KUNIT_TEST_CASES);
+diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
+index b395bb053695..3d7724b35c0f 100644
+--- a/rust/macros/kunit.rs
++++ b/rust/macros/kunit.rs
+@@ -102,8 +102,8 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+     // unsafe extern "C" fn kunit_rust_wrapper_bar(_test: *mut ::kernel::bindings::kunit) { bar(); }
+     //
+     // static mut TEST_CASES: [::kernel::bindings::kunit_case; 3] = [
+-    //     ::kernel::kunit::kunit_case(::kernel::c_str!("foo"), kunit_rust_wrapper_foo),
+-    //     ::kernel::kunit::kunit_case(::kernel::c_str!("bar"), kunit_rust_wrapper_bar),
++    //     ::kernel::kunit::kunit_case(c"foo", kunit_rust_wrapper_foo),
++    //     ::kernel::kunit::kunit_case(c"bar", kunit_rust_wrapper_bar),
+     //     ::kernel::kunit::kunit_case_null(),
+     // ];
+     //
+@@ -133,7 +133,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+         writeln!(kunit_macros, "{kunit_wrapper}").unwrap();
+         writeln!(
+             test_cases,
+-            "    ::kernel::kunit::kunit_case(::kernel::c_str!(\"{test}\"), {kunit_wrapper_fn_name}),"
++            "    ::kernel::kunit::kunit_case(c\"{test}\", {kunit_wrapper_fn_name}),"
+         )
+         .unwrap();
+         writeln!(
+@@ -143,7 +143,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+ #[allow(unused)]
+ macro_rules! assert {{
+     ($cond:expr $(,)?) => {{{{
+-        kernel::kunit_assert!("{test}", "{path}", 0, $cond);
++        kernel::kunit_assert!("{test}", c"{path}", 0, $cond);
+     }}}}
+ }}
  
-+/*
-+ * If SYSCALL_EMU is set, then the only reason to report is when
-+ * SINGLESTEP is set (i.e. PTRACE_SYSEMU_SINGLESTEP).  This syscall
-+ * instruction has been already reported in syscall_enter_from_user_mode().
-+ */
-+static __always_inline bool report_single_step(unsigned long work)
-+{
-+	if (work & SYSCALL_WORK_SYSCALL_EMU)
-+		return false;
-+
-+	return work & SYSCALL_WORK_SYSCALL_EXIT_TRAP;
-+}
-+
- /**
-  * arch_ptrace_report_syscall_exit - Architecture specific
-  *				     ptrace_report_syscall_exit.
-@@ -151,6 +222,8 @@ static __always_inline void arch_ptrace_report_syscall_exit(struct pt_regs *regs
- }
- #endif
- 
-+void __trace_sys_exit(struct pt_regs *regs, long ret);
-+
- /**
-  * syscall_exit_work - Handle work before returning to user mode
-  * @regs:	Pointer to current pt_regs
-@@ -158,7 +231,32 @@ static __always_inline void arch_ptrace_report_syscall_exit(struct pt_regs *regs
-  *
-  * Do one-time syscall specific work.
-  */
--void syscall_exit_work(struct pt_regs *regs, unsigned long work);
-+static __always_inline void syscall_exit_work(struct pt_regs *regs, unsigned long work)
-+{
-+	bool step;
-+
-+	/*
-+	 * If the syscall was rolled back due to syscall user dispatching,
-+	 * then the tracers below are not invoked for the same reason as
-+	 * the entry side was not invoked in syscall_trace_enter(): The ABI
-+	 * of these syscalls is unknown.
-+	 */
-+	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
-+		if (unlikely(current->syscall_dispatch.on_dispatch)) {
-+			current->syscall_dispatch.on_dispatch = false;
-+			return;
-+		}
-+	}
-+
-+	audit_syscall_exit(regs);
-+
-+	if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
-+		__trace_sys_exit(regs, syscall_get_return_value(current, regs));
-+
-+	step = report_single_step(work);
-+	if (step || work & SYSCALL_WORK_SYSCALL_TRACE)
-+		arch_ptrace_report_syscall_exit(regs, step);
-+}
- 
- /*
-  * Syscall specific exit to user mode preparation. Runs with interrupts
-diff --git a/kernel/entry/common.h b/kernel/entry/common.h
-deleted file mode 100644
-index f6e6d02f07fe..000000000000
---- a/kernel/entry/common.h
-+++ /dev/null
-@@ -1,7 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _COMMON_H
--#define _COMMON_H
--
--bool syscall_user_dispatch(struct pt_regs *regs);
--
--#endif
-diff --git a/kernel/entry/syscall-common.c b/kernel/entry/syscall-common.c
-index fe38f84dfff3..10231d30405e 100644
---- a/kernel/entry/syscall-common.c
-+++ b/kernel/entry/syscall-common.c
-@@ -1,104 +1,16 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--#include <linux/audit.h>
- #include <linux/entry-common.h>
--#include "common.h"
- 
- #define CREATE_TRACE_POINTS
- #include <trace/events/syscalls.h>
- 
--static inline void syscall_enter_audit(struct pt_regs *regs, long syscall)
-+void __trace_sys_enter(struct pt_regs *regs, long syscall)
- {
--	if (unlikely(audit_context())) {
--		unsigned long args[6];
--
--		syscall_get_arguments(current, regs, args);
--		audit_syscall_entry(syscall, args[0], args[1], args[2], args[3]);
--	}
-+	trace_sys_enter(regs, syscall);
- }
- 
--long syscall_trace_enter(struct pt_regs *regs, long syscall,
--				unsigned long work)
-+void __trace_sys_exit(struct pt_regs *regs, long ret)
- {
--	long ret = 0;
--
--	/*
--	 * Handle Syscall User Dispatch.  This must comes first, since
--	 * the ABI here can be something that doesn't make sense for
--	 * other syscall_work features.
--	 */
--	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
--		if (syscall_user_dispatch(regs))
--			return -1L;
--	}
--
--	/* Handle ptrace */
--	if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)) {
--		ret = arch_ptrace_report_syscall_entry(regs);
--		if (ret || (work & SYSCALL_WORK_SYSCALL_EMU))
--			return -1L;
--	}
--
--	/* Do seccomp after ptrace, to catch any tracer changes. */
--	if (work & SYSCALL_WORK_SECCOMP) {
--		ret = __secure_computing();
--		if (ret == -1L)
--			return ret;
--	}
--
--	/* Either of the above might have changed the syscall number */
--	syscall = syscall_get_nr(current, regs);
--
--	if (unlikely(work & SYSCALL_WORK_SYSCALL_TRACEPOINT)) {
--		trace_sys_enter(regs, syscall);
--		/*
--		 * Probes or BPF hooks in the tracepoint may have changed the
--		 * system call number as well.
--		 */
--		syscall = syscall_get_nr(current, regs);
--	}
--
--	syscall_enter_audit(regs, syscall);
--
--	return ret ? : syscall;
--}
--
--/*
-- * If SYSCALL_EMU is set, then the only reason to report is when
-- * SINGLESTEP is set (i.e. PTRACE_SYSEMU_SINGLESTEP).  This syscall
-- * instruction has been already reported in syscall_enter_from_user_mode().
-- */
--static inline bool report_single_step(unsigned long work)
--{
--	if (work & SYSCALL_WORK_SYSCALL_EMU)
--		return false;
--
--	return work & SYSCALL_WORK_SYSCALL_EXIT_TRAP;
--}
--
--void syscall_exit_work(struct pt_regs *regs, unsigned long work)
--{
--	bool step;
--
--	/*
--	 * If the syscall was rolled back due to syscall user dispatching,
--	 * then the tracers below are not invoked for the same reason as
--	 * the entry side was not invoked in syscall_trace_enter(): The ABI
--	 * of these syscalls is unknown.
--	 */
--	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
--		if (unlikely(current->syscall_dispatch.on_dispatch)) {
--			current->syscall_dispatch.on_dispatch = false;
--			return;
--		}
--	}
--
--	audit_syscall_exit(regs);
--
--	if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
--		trace_sys_exit(regs, syscall_get_return_value(current, regs));
--
--	step = report_single_step(work);
--	if (step || work & SYSCALL_WORK_SYSCALL_TRACE)
--		arch_ptrace_report_syscall_exit(regs, step);
-+	trace_sys_exit(regs, ret);
- }
-diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
-index a9055eccb27e..d89dffcc2d64 100644
---- a/kernel/entry/syscall_user_dispatch.c
-+++ b/kernel/entry/syscall_user_dispatch.c
-@@ -2,6 +2,8 @@
- /*
-  * Copyright (C) 2020 Collabora Ltd.
-  */
-+
-+#include <linux/entry-common.h>
- #include <linux/sched.h>
- #include <linux/prctl.h>
- #include <linux/ptrace.h>
-@@ -15,8 +17,6 @@
- 
- #include <asm/syscall.h>
- 
--#include "common.h"
--
- static void trigger_sigsys(struct pt_regs *regs)
- {
- 	struct kernel_siginfo info;
--- 
-2.34.1
+@@ -151,7 +151,7 @@ macro_rules! assert {{
+ #[allow(unused)]
+ macro_rules! assert_eq {{
+     ($left:expr, $right:expr $(,)?) => {{{{
+-        kernel::kunit_assert_eq!("{test}", "{path}", 0, $left, $right);
++        kernel::kunit_assert_eq!("{test}", c"{path}", 0, $left, $right);
+     }}}}
+ }}
+         "#
+diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
+index be0561049660..967064ebd391 100644
+--- a/scripts/rustdoc_test_gen.rs
++++ b/scripts/rustdoc_test_gen.rs
+@@ -174,7 +174,7 @@ pub extern "C" fn {kunit_name}(__kunit_test: *mut ::kernel::bindings::kunit) {{
+     macro_rules! assert {{
+         ($cond:expr $(,)?) => {{{{
+             ::kernel::kunit_assert!(
+-                "{kunit_name}", "{real_path}", __DOCTEST_ANCHOR - {line}, $cond
++                "{kunit_name}", c"{real_path}", __DOCTEST_ANCHOR - {line}, $cond
+             );
+         }}}}
+     }}
+@@ -184,7 +184,7 @@ macro_rules! assert {{
+     macro_rules! assert_eq {{
+         ($left:expr, $right:expr $(,)?) => {{{{
+             ::kernel::kunit_assert_eq!(
+-                "{kunit_name}", "{real_path}", __DOCTEST_ANCHOR - {line}, $left, $right
++                "{kunit_name}", c"{real_path}", __DOCTEST_ANCHOR - {line}, $left, $right
+             );
+         }}}}
+     }}
+
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20251222-cstr-kunit-be68dd8cfbd5
+
+Best regards,
+--  
+Tamir Duberstein <tamird@gmail.com>
 
