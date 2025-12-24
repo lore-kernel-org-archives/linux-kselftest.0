@@ -1,130 +1,279 @@
-Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57AF22D9EF0;
-	Tue, 23 Dec 2025 23:42:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF48194AD7
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Dec 2025 00:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766533330; cv=none; b=kEnS2+xPyAiTtyEEXJ5vP99kcecE2gJ7SqsJzgocT7f3vTMyvEKwigJ5NTZ5NFgGErAk0XMP8EVBlr1a0QmN3ZTnEq3T0mGTNYE36EdkbnmRPsm34EMbNpSGyHDwbH8pXWrnqQzc0Jt0c827mVzulSnM6nMOsywfb03qGg3NCkg=
+	t=1766536138; cv=none; b=fMus0XZuBLHWk4uIVPxw0gkbjFM+XR+IxvcdrlB6tOc4rsEAAw1fDZbfPxhXJi1/2SUxsLJ4ZlHaZCBDkYo4S4ptANANg/q3SYgX3hppauxLnf4O0Uspf9UIOk7/8zlPJKgNOLH/0T3oq9DQ3ToJC/dsdXTx5rZIVS170FiH4mA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766533330; c=relaxed/simple;
-	bh=tLOGe/J2aqc+/4ZAx75ceTkhPZHhWr7+kFRFeDjY0O0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g1rz6yKkexmQTxc1cPT7p5gpPBrPEwS9pVDm+bvziw9UMnAtBkFzqNFI+zvUFkvypfXVFMfQEDSH7kftJC+ZTaDkajQBf5uADjdgSTbI12EFDpMTp1WJGAY3/loiLEGRsX16YtqL4u0EjFx9YVkP7yFM4nw7pbE8hfqSVL7HQ/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=WkXOpqWd; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MTxq6Jli; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	s=arc-20240116; t=1766536138; c=relaxed/simple;
+	bh=7wDYgNx+BgqVnuE0T2X8agHCrv8JLpc6NaCVH5tP4l0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=rcUVxmg1se/W5nwk8TuO4iFllrj95OgGDl3CE0op+qT8Dt2kYAbleIK/VgZ1Vybe+vBHY4yl7pat8AqkBkvixAtk5UWoqfMhWQ02m/WwVp741wgW+Uyiz93KtLIZCgl3WeW4i/86hEVRGVH/sl/aaoTKMMkqieAk5uUIMKbVLvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CWh3lOE+; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="WkXOpqWd";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MTxq6Jli"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfout.phl.internal (Postfix) with ESMTP id 76B6CEC0108;
-	Tue, 23 Dec 2025 18:42:04 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Tue, 23 Dec 2025 18:42:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1766533324;
-	 x=1766619724; bh=Y19c4fACZAnzvZCHc5/C1arfdbg9l3UmMLnXEqDYlQE=; b=
-	WkXOpqWdFMUEIGt0CRPB2uj9acGZUydnLGH6H+ENSx0nzJ6zBdRWmrl/UhDr4CsX
-	cHWE1kTFA4JsOYlOjr6R2HIhNELOpufjtFOUqFu91Ey6Jazwv2uI865m4mmx9st7
-	0oVSUQKZcDN4lw6INbqKevSMYRRvN+Rc7qdCOohRN/D43R85ImQKbu+CyUU+WIJQ
-	P/w4dDvgcWrsC2VDZoOIZtnjd1kEKKItScp7so2S+RPxNOoAVOUFFSQ5kgebE03N
-	bFeOXuYc+aGc15jlE//EWPJVJUC4RuONIlgPR4f3nRqdBTg4N0VO1sCV4uBmYcHo
-	DZ5/nBgtnZkvJQruftdQPg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1766533324; x=
-	1766619724; bh=Y19c4fACZAnzvZCHc5/C1arfdbg9l3UmMLnXEqDYlQE=; b=M
-	Txq6JliWXcmfTUQCWH+V6JBcYmTIdA/R5ks6TyydGIrFZp212oIxNcqLRUFp2t93
-	1wcF7kxS+dWd3nC+7TF+s5ifRyNsDWpEXSxeeV/wpq4e1P889u6YT+eCymW71qzl
-	zVNuzUXQGgoX3lBLUkXQCtzIE7KNSwsQ/e3IhEHqcZQi5WUzcicQF0F+ltZYatf/
-	9Q/TcttBqEvYsth9hKbkXI17eALF1l+6wjfGsoETJEL6QihO+FC2AoLVNywgi6nu
-	HhDsu41zXdSPMTpgyjoJz6dIxVOju9jqDfvtbBxXFVY/5Lkv2E4eLQw4704Q6fn3
-	wrHB8WQZY8EfVe+1i+cog==
-X-ME-Sender: <xms:zChLaZdB6w69oKqkPIvYJT5ch16W7FwvnjcRYrQPt6V4HTzi_3BErg>
-    <xme:zChLaTFqMRd3KgO0gK2TTRs7O5XR8WmkYPcndwbfzansxFXvDhhSW1u0_iFyxQKwM
-    opXsDLb7GEJFffWQC2S2hUKFyy20aM6OuBN2ONKdFC4bH12UQ44>
-X-ME-Received: <xmr:zChLafhXaXjPAdv7-quDUyPbUCQWB0SIP6cEn2wik7__h121yNlADvm->
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeiuddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfgjfhggtgfgsehtjeertddttddvnecuhfhrohhmpeetlhgvgicuhghi
-    lhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrghtth
-    gvrhhnpeetteduleegkeeigedugeeluedvffegheeliedvtdefkedtkeekheffhedutefh
-    hfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlh
-    gvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepuddupdhmohguvgepshhm
-    thhpohhuthdprhgtphhtthhopegumhgrthhlrggtkhesghhoohhglhgvrdgtohhmpdhrtg
-    hpthhtoheprghmrghsthhrohesfhgsrdgtohhmpdhrtghpthhtoheprghkphhmsehlihhn
-    uhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehjrhhhihhlkhgvsehgoh
-    hoghhlvgdrtghomhdprhgtphhtthhopehkvhhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehrrghnrghnthgrsehgohhoghhlvgdrtghomhdprhgtph
-    htthhopehshhhurghhsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:zChLaX2vtM8Bb_j9IVg34-tmkXFVMDbuVt-h4XEX6i86imdCHn_OsA>
-    <xmx:zChLaac_JrtfA_Np_43vVkqL0U6nr2RClJyNTv_6KbDkNaSV9mCRwQ>
-    <xmx:zChLaVxhG781IWr69l-EmHUO0V7_zUXrkIRtCP3RNYLpCDdLWYbnqA>
-    <xmx:zChLaayye8eSHqGCTOnsQTxHigc8O9h9234GW6HqXanqD_K_Pvqq2w>
-    <xmx:zChLaTiDUVgLNr_pI9l-7oUGeM_7ZoiARApEDLTBIsCyEx4cTBFGsSti>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 23 Dec 2025 18:42:03 -0500 (EST)
-Date: Tue, 23 Dec 2025 16:42:02 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Mastro <amastro@fb.com>, Andrew Morton <akpm@linux-foundation.org>,
- Josh Hilke <jrhilke@google.com>, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Raghavendra
- Rao Ananta <rananta@google.com>, Shuah Khan <shuah@kernel.org>, Wei Yang
- <richard.weiyang@gmail.com>, Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH 0/2] vfio: selftests: Clean up <uapi/linux/types.h>
- includes
-Message-ID: <20251223164202.34ea5015.alex@shazbot.org>
-In-Reply-To: <20251219233818.1965306-1-dmatlack@google.com>
-References: <20251219233818.1965306-1-dmatlack@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CWh3lOE+"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7bab7c997eeso6237621b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 16:28:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766536136; x=1767140936; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1idDMvZTSBBVNr5LBgZDXh7c7n41TkvVwZ0J4jmyayA=;
+        b=CWh3lOE+nnquhJ6m0WJ/7svTap0DUEs+RT3Knkla5u85yK06YmHw4g3Zpsl57lpQEU
+         2FO3AvfWrxmqFrtbIkGYW8jAOOe6atIp8AF40SSipgsbvi73MOUf8OgUAwajLpPPylgN
+         37DjAf3PBUTyWV69KYgDl2NEEjXZgfxgmLklrBk2GsUsoSml8yoEvmwhEi8R29wZX3fl
+         tjsTRKJjeMQqfNOn9jGPRRQlg1zotuX/Q6YRgIKK4H2ltTK9SV0eto4cpqrEpVIW/XXd
+         aQJqNFH5P9aX0FMmAAewYLTRbyZ3jQj7NtGfSYjxuKwyAnwbpLHSb/w1U+26JJRUDTAO
+         R35Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766536136; x=1767140936;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1idDMvZTSBBVNr5LBgZDXh7c7n41TkvVwZ0J4jmyayA=;
+        b=WlqxC+MsNlFeFjrUTJg+1YZTnGXMLPvNop6/wQnjI6ZT1flEMt4KQ7quHduLe9ju9N
+         NkxBHytIPoYCLt4ZS2OIJB172O0tjClCwIXKTIs7mt4Sm/MRL7saCYE/lvXx3EOGpAVc
+         iWzNNAId0dZiFJBGqjxHb8b0jxToTLABsp6olmxWQhZl318Xin6WvSjK3ijrrBY0FBoQ
+         qd7nYFkqbf1XnnM+CGRVqFa/ADABfZvW5l/uWPCGpVDYYW7uAzRaeZlbslqf9e6WqZej
+         K0/Ob6hu42MtUr1YTeotObwWyH+IV0fPUecGR5yYaAXJ0mdAkIlofWa0/K8jdYzhBN53
+         MvDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVv1ws1SvzN3Hzlei4v8MUMr/zLcKjN7QlQVNwOzLOYD/G7tQ1cQnS2ZscTgtUWzVQVgw7rGPEy91XQdlzklNA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+erMqn6p4o/ER9rsejHG+jTtI4/IJXXhFHa057hxtVl4wDjXg
+	C//si7ZjRdMGkwWIwozNDnWK23vwhNm4MCUh/HgA5LWHAnYi5h6RlTE4
+X-Gm-Gg: AY/fxX46/hsYlwCYxoELh2XH5OI2XsWf3X919SmDNGultp+b5RE56qsqwyx5TC3sANM
+	CT3YfwgMasMAphREfob0WoVTSJbAetokBgaRXC9cyer88rHB3Kn5eDFJzc+G2VQiN3kK/htMOpH
+	fDrX9qdV+7u2o+/euhGHaaiZLR1Sfhy6wKCe2fz7ARM9he5IJubHQvzwL2SPVyo/7/bX5JqLDyo
+	zQDha1wF5is0Irkp8qK0aRLY0L6gdhEyJMtV3+tMetQElc9Pbj0qEhdFba6m8VQ09QkUDHsp7xy
+	T2Wo8TtwqZ/YMsMij6McSx0R2GOEu0cPa9Z2P2LMP3Ne4dW/Dna8X7elE5IygtRWMQ72HhXEwRU
+	TqrYjMpRg/LIhQNVItekROtKjJN1/ipBj6JKk2IrCJZBZWLA3bXuJ5Dwu6mlORLy7jkO4IB4hmq
+	LLUNvxxXwrXyg5RXzfSlg=
+X-Google-Smtp-Source: AGHT+IFf9PGpVgIYi53KgiXyi1OO/xQjeYSDD1E1/gFj625d4hHvxV/oBQyq3/8jVDfT3E7MmlVH9w==
+X-Received: by 2002:a05:6a00:8013:b0:7e8:4471:ae61 with SMTP id d2e1a72fcca58-7ff67654e35mr13734006b3a.45.1766536136203;
+        Tue, 23 Dec 2025 16:28:56 -0800 (PST)
+Received: from localhost ([2a03:2880:2ff:6::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7e8947a1sm14718466b3a.67.2025.12.23.16.28.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Dec 2025 16:28:55 -0800 (PST)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Date: Tue, 23 Dec 2025 16:28:35 -0800
+Subject: [PATCH RFC net-next v13 01/13] vsock: add per-net vsock NS mode
+ state
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20251223-vsock-vmtest-v13-1-9d6db8e7c80b@meta.com>
+References: <20251223-vsock-vmtest-v13-0-9d6db8e7c80b@meta.com>
+In-Reply-To: <20251223-vsock-vmtest-v13-0-9d6db8e7c80b@meta.com>
+To: Stefano Garzarella <sgarzare@redhat.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+ =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+ "K. Y. Srinivasan" <kys@microsoft.com>, 
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+ Dexuan Cui <decui@microsoft.com>, Bryan Tan <bryan-bt.tan@broadcom.com>, 
+ Vishnu Dasa <vishnu.dasa@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>
+Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev, 
+ netdev@vger.kernel.org, kvm@vger.kernel.org, linux-hyperv@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, berrange@redhat.com, 
+ Sargun Dhillon <sargun@sargun.me>, Bobby Eshleman <bobbyeshleman@gmail.com>, 
+ Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-On Fri, 19 Dec 2025 23:38:16 +0000
-David Matlack <dmatlack@google.com> wrote:
+From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-> Small clean up series to eliminate the extra includes of
-> <uapi/linux/types.h> from various VFIO selftests files. This include is
-> not causing any problems now, but it is causing benign typedef
-> redifinitions. Those redifinitions will become a problem when the VFIO
-> selftests library is built into KVM selftests, since KVM selftests build
-> with -std=gnu99.
-> 
-> Cc: Yosry Ahmed <yosryahmed@google.com>
-> Cc: Josh Hilke <jrhilke@google.com>
-> 
-> David Matlack (2):
->   tools include: Add definitions for __aligned_{l,b}e64
->   vfio: selftests: Drop <uapi/linux/types.h> includes
-> 
->  tools/include/linux/types.h                               | 8 ++++++++
->  .../selftests/vfio/lib/include/libvfio/iova_allocator.h   | 1 -
->  tools/testing/selftests/vfio/lib/iommu.c                  | 1 -
->  tools/testing/selftests/vfio/lib/iova_allocator.c         | 1 -
->  tools/testing/selftests/vfio/lib/vfio_pci_device.c        | 1 -
->  tools/testing/selftests/vfio/vfio_dma_mapping_test.c      | 1 -
->  tools/testing/selftests/vfio/vfio_iommufd_setup_test.c    | 1 -
->  7 files changed, 8 insertions(+), 6 deletions(-)
-> 
-> 
-> base-commit: d721f52e31553a848e0e9947ca15a49c5674aef3
+Add the per-net vsock NS mode state. This only adds the structure for
+holding the mode and some of the functions for setting/getting and
+checking the mode, but does not integrate the functionality yet.
 
-Applied to vfio for-linus branch for v6.19.  Thanks,
+Future patches add the uAPI and transport-specific usage of these
+structures and helpers.
 
-Alex
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+---
+Changes in v13:
+- remove net_mode because net->vsock.mode becomes immutable, no need to
+  save the mode when vsocks are created.
+- add the new helpers for child_ns_mode to support ns_mode inheriting
+  the mode from child_ns_mode.
+- because ns_mode is immutable and child_ns_mode can be changed multiple
+  times, remove the write-once lock.
+- simplify vsock_net_check_mode() to no longer take mode arguments since
+  the mode can be accessed via the net pointers without fear of the mode
+  changing.
+- add logic in vsock_net_check_mode() to infer VSOCK_NET_MODE_GLOBAL
+  from NULL namespaces in order to allow only net pointers to be passed
+  to vsock_net_check_mode(), while still allowing namespace-unaware
+  transports to force global mode.
+
+Changes in v10:
+- change mode_locked to int (Stefano)
+
+Changes in v9:
+- use xchg(), WRITE_ONCE(), READ_ONCE() for mode and mode_locked (Stefano)
+- clarify mode0/mode1 meaning in vsock_net_check_mode() comment
+- remove spin lock in net->vsock (not used anymore)
+- change mode from u8 to enum vsock_net_mode in vsock_net_write_mode()
+
+Changes in v7:
+- clarify vsock_net_check_mode() comments
+- change to `orig_net_mode == VSOCK_NET_MODE_GLOBAL && orig_net_mode == vsk->orig_net_mode`
+- remove extraneous explanation of `orig_net_mode`
+- rename `written` to `mode_locked`
+- rename `vsock_hdr` to `sysctl_hdr`
+- change `orig_net_mode` to `net_mode`
+- make vsock_net_check_mode() more generic by taking just net pointers
+  and modes, instead of a vsock_sock ptr, for reuse by transports
+  (e.g., vhost_vsock)
+
+Changes in v6:
+- add orig_net_mode to store mode at creation time which will be used to
+  avoid breakage when namespace changes mode during socket/VM lifespan
+
+Changes in v5:
+- use /proc/sys/net/vsock/ns_mode instead of /proc/net/vsock_ns_mode
+- change from net->vsock.ns_mode to net->vsock.mode
+- change vsock_net_set_mode() to vsock_net_write_mode()
+- vsock_net_write_mode() returns bool for write success to avoid
+  need to use vsock_net_mode_can_set()
+- remove vsock_net_mode_can_set()
+---
+ MAINTAINERS                 |  1 +
+ include/net/af_vsock.h      | 42 ++++++++++++++++++++++++++++++++++++++++++
+ include/net/net_namespace.h |  4 ++++
+ include/net/netns/vsock.h   | 17 +++++++++++++++++
+ 4 files changed, 64 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 454b8ed119e9..38d24e5a957c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -27516,6 +27516,7 @@ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/vhost/vsock.c
+ F:	include/linux/virtio_vsock.h
++F:	include/net/netns/vsock.h
+ F:	include/uapi/linux/virtio_vsock.h
+ F:	net/vmw_vsock/virtio_transport.c
+ F:	net/vmw_vsock/virtio_transport_common.c
+diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+index d40e978126e3..6f5bc9dbefa5 100644
+--- a/include/net/af_vsock.h
++++ b/include/net/af_vsock.h
+@@ -10,6 +10,7 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/workqueue.h>
++#include <net/netns/vsock.h>
+ #include <net/sock.h>
+ #include <uapi/linux/vm_sockets.h>
+ 
+@@ -256,4 +257,45 @@ static inline bool vsock_msgzerocopy_allow(const struct vsock_transport *t)
+ {
+ 	return t->msgzerocopy_allow && t->msgzerocopy_allow();
+ }
++
++static inline enum vsock_net_mode vsock_net_mode(struct net *net)
++{
++	return READ_ONCE(net->vsock.mode);
++}
++
++static inline void vsock_net_set_child_mode(struct net *net,
++					    enum vsock_net_mode mode)
++{
++	WRITE_ONCE(net->vsock.child_ns_mode, mode);
++}
++
++static inline enum vsock_net_mode vsock_net_child_mode(struct net *net)
++{
++	return READ_ONCE(net->vsock.child_ns_mode);
++}
++
++/* Return true if two namespaces pass the mode rules. Otherwise, return false.
++ *
++ * A NULL namespace is treated as VSOCK_NET_MODE_GLOBAL.
++ *
++ * Read more about modes in the comment header of net/vmw_vsock/af_vsock.c.
++ */
++static inline bool vsock_net_check_mode(struct net *ns0, struct net *ns1)
++{
++	enum vsock_net_mode mode0, mode1;
++
++	/* Any vsocks within the same network namespace are always reachable,
++	 * regardless of the mode.
++	 */
++	if (net_eq(ns0, ns1))
++		return true;
++
++	mode0 = ns0 ? vsock_net_mode(ns0) : VSOCK_NET_MODE_GLOBAL;
++	mode1 = ns1 ? vsock_net_mode(ns1) : VSOCK_NET_MODE_GLOBAL;
++
++	/* Different namespaces are only reachable if they are both
++	 * global mode.
++	 */
++	return mode0 == VSOCK_NET_MODE_GLOBAL && mode0 == mode1;
++}
+ #endif /* __AF_VSOCK_H__ */
+diff --git a/include/net/net_namespace.h b/include/net/net_namespace.h
+index cb664f6e3558..66d3de1d935f 100644
+--- a/include/net/net_namespace.h
++++ b/include/net/net_namespace.h
+@@ -37,6 +37,7 @@
+ #include <net/netns/smc.h>
+ #include <net/netns/bpf.h>
+ #include <net/netns/mctp.h>
++#include <net/netns/vsock.h>
+ #include <net/net_trackers.h>
+ #include <linux/ns_common.h>
+ #include <linux/idr.h>
+@@ -196,6 +197,9 @@ struct net {
+ 	/* Move to a better place when the config guard is removed. */
+ 	struct mutex		rtnl_mutex;
+ #endif
++#if IS_ENABLED(CONFIG_VSOCKETS)
++	struct netns_vsock	vsock;
++#endif
+ } __randomize_layout;
+ 
+ #include <linux/seq_file_net.h>
+diff --git a/include/net/netns/vsock.h b/include/net/netns/vsock.h
+new file mode 100644
+index 000000000000..e2325e2d6ec5
+--- /dev/null
++++ b/include/net/netns/vsock.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __NET_NET_NAMESPACE_VSOCK_H
++#define __NET_NET_NAMESPACE_VSOCK_H
++
++#include <linux/types.h>
++
++enum vsock_net_mode {
++	VSOCK_NET_MODE_GLOBAL,
++	VSOCK_NET_MODE_LOCAL,
++};
++
++struct netns_vsock {
++	struct ctl_table_header *sysctl_hdr;
++	enum vsock_net_mode mode;
++	enum vsock_net_mode child_ns_mode;
++};
++#endif /* __NET_NET_NAMESPACE_VSOCK_H */
+
+-- 
+2.47.3
+
