@@ -1,65 +1,65 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CFED31328B
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Jan 2026 14:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A5A313536
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Jan 2026 14:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767363893; cv=none; b=p0EtqaQXwi659DguEp9+J7AiJyaiHxahEPPky2L7JAPTqJqkV+ezQRy3G/eT/gwbACeeDeTaDJexBb6SdPHnM/fXM9eRjT1oVYEOvaGAdIc05B+Sg/qkQJ3IBzBFhCafvPskunXAcXsPCi5JfnWD+FJNs/K/xlTwLDI2Q+C+uiY=
+	t=1767363895; cv=none; b=LFgbdado8wwNfdvQ7Tzl3WcRDxIGiVd7Bhi/o34C6RR+p+Ullir09ckaBOX6pCZvGjXLtBWbUlJSesd635m0MQyBFaD4Pf59nJTIpNPg76jq0pYFykGwU8yUTZZJhLayLaxouNuezAifcMvinEeDsE+92daGeafwvwb5bPsKkqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767363893; c=relaxed/simple;
-	bh=i5Gkck+T4vEsec3YZqZ9GfnW3xyFRPHL8iqEXxEE554=;
+	s=arc-20240116; t=1767363895; c=relaxed/simple;
+	bh=KpJRB2juYu75d3D+tIx1lXLGPYsLm8mJKfy+0v7vXwQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dikMpHp03l6iZakWfV6sl5Bl4EBA7QZ1Dsscl9sG2NpYub43XsYQmyt2fiouPfE3xi6VWJUjqCTKjMfWrVoXpEJQBiBR6DNaVomMy1PiAImhFZ+uBSyeFnB5M0ljFPoTGT3S7rimvmRDJCTKTYJg9yjUTNzBjtds/OFad3n7Fc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KTo4m9Jz; arc=none smtp.client-ip=209.85.128.48
+	 MIME-Version; b=fV4Mjn+0+zLUazZKPPT6qxZzkirnyQBnkmbNs+r7F5IFzPgIEdbc5M5WWBF/cBg0vbKmNhA8VbfNZGo3hlsYnQ7K+BU4G5TqCPHcQI3LqUApNpWmp4Lqt3eM2G3ygCO2r08c4/8j3Sn88B3njTMF495hdc5hX+x7HjXdUY2XF14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iDuPBOH3; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KTo4m9Jz"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-477632b0621so75952115e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jan 2026 06:24:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iDuPBOH3"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-430f57cd471so5726223f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jan 2026 06:24:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767363886; x=1767968686; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767363889; x=1767968689; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ksAHoz4VRcwLYvgsvjvpNNjYc97wIiL/qsWKR4MCnOk=;
-        b=KTo4m9JzrQUJMiMlywpsWIzjXe5y2MyqIhC5OWzjO6Mxyg9vmQXnaqnq06dJ4ph860
-         jov3FGIvQIbTsO1F3xGnrM7uLF/voZP8s8rc31SmQi3DXTPiGwm8t/k1dTtSctelxVpv
-         rDsmmwr4met7bD1j095lsIWvqyfQrj4UIPffyqGme2VRIjCALfCn7z8PL9RZqOxKMd1K
-         dhFSv4BZZPvdaKkxLicLmG7e2VJOt3rjtoG9p5/yefocBr/bVRGyb8wzSI7S+ZiA6oiS
-         eVMy7cGsnyd9OYmlx2WKAMs0gDz+/hb+6LQfA8aj3N2Bx2Z5AdYHYWA9jJU7fOm0KTTB
-         mttg==
+        bh=zVJDUjOkVK2qbkQbb2Wm9TnrhlHDAfzdrRLNUPyPGwk=;
+        b=iDuPBOH3lu4x6q97yV7Ij3bIgJC/yZiNPwuQKvs/GLZqmurdUd+fAtqedDa0T+S6iX
+         k/oI6UhIxtrkuMXrPXqPRjqriFHPSmugk7zo5q6KB04aXjeXByM5toxY65qquxBYmlAu
+         wGFI4zlUi7DsImRrBlXD8yDwFvk3ej/t6ds1CkyhM2EHxAXgUY/u0/b9s2JRvhoCuZr8
+         G/1sqkaGez61IHQXLJ7WFjxh+7eQTOiaI1vayDzVqJbNbdoBcmQlJrwdqXhcXb7y8Y7W
+         wNGanGCz4pine/PWNoOm0Es4mgYuVEn0HbsdhtEFkVbD7VzVQZlJPxlHkKDdyKsxaBy2
+         dGvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767363886; x=1767968686;
+        d=1e100.net; s=20230601; t=1767363889; x=1767968689;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ksAHoz4VRcwLYvgsvjvpNNjYc97wIiL/qsWKR4MCnOk=;
-        b=oquDZvk4a2moAGC80hjwns1+uuuOJP0ZPb3s09W4eKq3Fx9rsTbpwLMqAkXxI5DiRQ
-         JbevDhB5rKbQnzJDg3woHHHI41Bv/B1mW4xRTYju1xG88aVdV23QnQj/Il73J+34Klrd
-         Me6+L1A700JOCSUUwQGo0/bhSRe45VpN0nRwfDcxV9BAtnB2xTPrKypy3o12x9UbiA4b
-         9pf2Ou7QHfgoSf1pCW8VbDdk4Je/kL0cz0bDFDaJ96W08ssbbrO50CFzNWI9XGQsyyRk
-         58O7qeit8Pyce0dtuppMH5KKkyv3ux1f74c9SQTHCvqotD7piZt4CD5sWVtUinFa/l0s
-         YzDA==
-X-Forwarded-Encrypted: i=1; AJvYcCUlBoCVazZ7F8FR1ER5RhAanBg5ndIyTjCR+9emFuQk5NFDqQI+X2vJ56hryMyVt/FNNr+s9GxSO5n2RioUlWE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhfrzNIeFvd3wEQLXLKyMYYu6voAQGwub6tKxdrzexQKnPo0NL
-	qDJKAqO62Oli6ZAcbKo0jkLNuUtPgBs9s8xC5dmpRooAyo2WzIlOv4Sj
-X-Gm-Gg: AY/fxX4HMm297rXGtDnhEe2sgMIBIE0fHDGcX56wRx0fER6X2BAG8TzKcDvEXxwRXFy
-	C8zkaGugVhVxSfAYnR+HDjcLfkPXT8vV7nT9XPErBfIQY/5ghH2xEN0Gx176TLtoAb73k0jxxqU
-	hkSylz6yJpY80+utbi36dbUju3L7QM5YJ0HDrm7K9UGNMYSmCMHvESH8eqzDYspmqNlrC4aYAjP
-	A+CTkpKzYzt8gpoIaENmTakG2FNFO4cME6epI4dZnoRBWUnLFMiU78b5cDRAxyRPUzHkkIoPNct
-	g1lKxiJzLxNaYYHw6Ni/NuH7ct5+ggJET/IMqPtpR99grt5a+UlOzoCa/kRa8B6ogUhAMzcHzCy
-	uJnb0FLIL2oLY3uEQ5ppRLyepNxgta/umyAo6h1rwmUoK0h7tfZaHJYlUYCaJa+8ZnWj2xj3UZz
-	ZlFNGGrEqGpa/Uct4WhBuTC6pE/+LjtxkOxvPCgT7XnsRk7m5w2fYcnj6fsPEBjZ7U7b1kJVOy2
-	sd3Paxfu4sAY7ytbxe8hX0X725jv9i/
-X-Google-Smtp-Source: AGHT+IFnP8x4t7nk5LISqY1DnnH4/ON4U4WEURK37JteQYnnOc95DuJv9yKDOdRn9+o1IWqoF9+cyg==
-X-Received: by 2002:a05:600c:190f:b0:475:dd89:acb with SMTP id 5b1f17b1804b1-47d195a72fbmr514761835e9.22.1767363885980;
-        Fri, 02 Jan 2026 06:24:45 -0800 (PST)
+        bh=zVJDUjOkVK2qbkQbb2Wm9TnrhlHDAfzdrRLNUPyPGwk=;
+        b=uNcS4dO2JniSqzsrZzI9VXPyhpynsz3nqh4TUxlKEhnwqn0aBzXmb8aZWWRjqRlb25
+         G5SLtI5QGVcxtGI9seJzGQwiYoaKsRt7YiB0oYZ0N3V9Z3aWK/diLaEML30rLTYcQyqe
+         KxP7H29Egh7ouLKhUDfsbS65ETnstQNUrnslaXpAAH3rBumiAVOsHcsWawgcoUJSrrkl
+         NuNegn1TkX9Lq/uOQnOHEUO2zf5zOV98/VxO1rUKYi4WTMH9rL/Fh5twfRMXyGszLJi+
+         MwfSppj3w5eTYNoFhwpQ0jAxjyn24uFYsddB6/SvvaXAJCXkn2OZwurziEGXpFIcWHtS
+         ltHA==
+X-Forwarded-Encrypted: i=1; AJvYcCUyavV/w+u7b+6/I3CZjnjOuU2vfpo6htajU3hMbu3DyjMdfvvGuPzcm6zWYCStVckxSamY7BSkS/FFfXPG8ro=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxDRwktxtgwvQ1Hk1Qx8Edh2uOignf9NQEkGPwseHSyT7YmcUb
+	pOTvz73Q1j5HtBUHszhhVo9ZlabcwFnJqKlqlRx1/wWJtXrlXE3eH+pQ
+X-Gm-Gg: AY/fxX58eYYWqmAsq1W6twGJ55S34Tlin+YTirHpCxAb3mUPzTe8WJ/RJo8JQSiUkiC
+	owaVRDRAylMuZixgjO0lQhW97cwJFJFy4NLKYuEJATywbKQrtEuXhsXCZnBCjrfQi6qP/hHYMMJ
+	yEm50gQ9L1ZAqqZ/nKaszYaZiEMBDwzCnwgPv3QxpILl2tBqOYZPdscWsHq5DzWzB60McIfLFbz
+	XhncrCk7aSJl0ng4aJgizdGGfw4iOK5bmymoKGXlzKXtVkMX5y3syTz/t3tjnr9m0KdpQdTuXR3
+	XthYswxBNCJLQrDlzE2Po66i8K/7QorxutrGnxOWiBZiBaJOT6DdxBp1tlWWubvGnH2zYynWsYN
+	y8ejCUm6KNbSF7ltUijJBgMUXqzZ+BwNeju0UilAPWFxItakd1z4O09fKUzBBimJJU1mLZc8Lza
+	+U5AcvNF54a0ZJnfueq4lNK/78XOGSl8NjUU5tvh5jlzkvDe+p7oGctC1fEkoooB6fw9keVQXdh
+	UC3iAK31bSO/PyBO4bQSQnL8iFTuDpu
+X-Google-Smtp-Source: AGHT+IGmMA3Ey/13njSusK/KJK8Pqej4M42la6jOKyH4c9LB6Pzf6jGOL1PftD1GAutXELNp2HIhpQ==
+X-Received: by 2002:a05:600c:3e0b:b0:477:2f7c:314f with SMTP id 5b1f17b1804b1-47d19555af8mr499922545e9.10.1767363888761;
+        Fri, 02 Jan 2026 06:24:48 -0800 (PST)
 Received: from ip-10-0-150-200.eu-west-1.compute.internal (ec2-52-49-196-232.eu-west-1.compute.amazonaws.com. [52.49.196.232])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47be27b0d5asm806409235e9.13.2026.01.02.06.24.45
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47be27b0d5asm806409235e9.13.2026.01.02.06.24.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jan 2026 06:24:45 -0800 (PST)
+        Fri, 02 Jan 2026 06:24:48 -0800 (PST)
 From: Fred Griffoul <griffoul@gmail.com>
 To: kvm@vger.kernel.org
 Cc: seanjc@google.com,
@@ -70,9 +70,9 @@ Cc: seanjc@google.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Fred Griffoul <fgriffo@amazon.co.uk>
-Subject: [PATCH v4 08/10] KVM: x86: Add nested context management
-Date: Fri,  2 Jan 2026 14:24:27 +0000
-Message-ID: <20260102142429.896101-9-griffoul@gmail.com>
+Subject: [PATCH v4 10/10] KVM: selftests: Add L2 vcpu context switch test
+Date: Fri,  2 Jan 2026 14:24:29 +0000
+Message-ID: <20260102142429.896101-11-griffoul@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260102142429.896101-1-griffoul@gmail.com>
 References: <20260102142429.896101-1-griffoul@gmail.com>
@@ -86,357 +86,456 @@ Content-Transfer-Encoding: 8bit
 
 From: Fred Griffoul <fgriffo@amazon.co.uk>
 
-Add infrastructure to persist nested virtualization state when L2 vCPUs
-are switched on an L1 vCPU or migrated between L1 vCPUs.
+Add selftest to validate nested VMX context switching between multiple
+L2 vCPUs running on the same L1 vCPU. The test exercises both direct
+VMX interface (using vmptrld/vmclear operations) and enlightened VMCS
+(eVMCS) interface for Hyper-V nested scenarios.
 
-The nested context table uses a hash table for fast lookup by nested
-control block GPA (VMPTR for VMX, VMCB for SVM) and maintains a free
-list for context management.
-
-The kvm_nested_context_load() function searches for a context indexed by
-the target GPA; if not found, it allocates a new context up to the
-configured maximum. If at capacity, it recycles the oldest context from
-the free list.
-
-The oversubscription is hardcoded to support up to 8 L2 vCPUs per L1
-vCPU.
-
-The kvm_nested_context_clear() function moves the context to the free
-list while keeping it in the hash table for potential reuse.
-
-This allows nested hypervisors to multiplex multiple L2 vCPUs on L1
-vCPUs without losing cached nested state, significantly improving
-performance for workloads with frequent L2 context switches.
-
-This patch adds the basic infrastructure. Subsequent patches will add
-the nested VMX and SVM specific support to populate and utilize the
-cached nested state.
+The test creates multiple VMCS structures and switches between them to
+verify that the nested_context kvm counters are correct, according to
+the number of L2 vCPUs and the number of switches.
 
 Signed-off-by: Fred Griffoul <fgriffo@amazon.co.uk>
 ---
- arch/x86/include/asm/kvm_host.h |  31 +++++
- arch/x86/include/uapi/asm/kvm.h |   2 +
- arch/x86/kvm/Makefile           |   2 +-
- arch/x86/kvm/nested.c           | 199 ++++++++++++++++++++++++++++++++
- arch/x86/kvm/x86.c              |   5 +-
- 5 files changed, 237 insertions(+), 2 deletions(-)
- create mode 100644 arch/x86/kvm/nested.c
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/x86/vmx_l2_switch_test.c    | 416 ++++++++++++++++++
+ 2 files changed, 417 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86/vmx_l2_switch_test.c
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index c9a1a43fbfde..ab31885f0e99 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1376,6 +1376,28 @@ enum kvm_mmu_type {
- 	KVM_NR_MMU_TYPES,
- };
- 
-+struct kvm_nested_context {
-+	gpa_t gpa;
-+	struct hlist_node hnode;
-+	struct list_head lru_link;
-+	struct kvm_vcpu *vcpu;
-+};
-+
-+struct kvm_nested_context_table {
-+	spinlock_t lock;
-+	u32 count;
-+	struct list_head lru_list;
-+	DECLARE_HASHTABLE(hash, 8);
-+};
-+
-+void kvm_nested_context_clear(struct kvm_vcpu *vcpu, gpa_t gpa);
-+struct kvm_nested_context *kvm_nested_context_load(
-+		struct kvm_vcpu *vcpu,
-+		gpa_t gpa);
-+
-+int kvm_nested_context_table_init(struct kvm *kvm);
-+void kvm_nested_context_table_destroy(struct kvm *kvm);
-+
- struct kvm_arch {
- 	unsigned long n_used_mmu_pages;
- 	unsigned long n_requested_mmu_pages;
-@@ -1613,6 +1635,9 @@ struct kvm_arch {
- 	 * current VM.
- 	 */
- 	int cpu_dirty_log_size;
-+
-+	/* Cache for nested contexts */
-+	struct kvm_nested_context_table *nested_context_table;
- };
- 
- struct kvm_vm_stat {
-@@ -1635,6 +1660,8 @@ struct kvm_vm_stat {
- 	u64 nx_lpage_splits;
- 	u64 max_mmu_page_hash_collisions;
- 	u64 max_mmu_rmap_size;
-+	u64 nested_context_recycle;
-+	u64 nested_context_reuse;
- };
- 
- struct kvm_vcpu_stat {
-@@ -1963,6 +1990,10 @@ struct kvm_x86_nested_ops {
- 			    uint16_t *vmcs_version);
- 	uint16_t (*get_evmcs_version)(struct kvm_vcpu *vcpu);
- 	void (*hv_inject_synthetic_vmexit_post_tlb_flush)(struct kvm_vcpu *vcpu);
-+
-+	struct kvm_nested_context *(*alloc_context)(struct kvm_vcpu *vcpu);
-+	void (*free_context)(struct kvm_nested_context *ctx);
-+	void (*reset_context)(struct kvm_nested_context *ctx);
- };
- 
- struct kvm_x86_init_ops {
-diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-index 7ceff6583652..8625aa861132 100644
---- a/arch/x86/include/uapi/asm/kvm.h
-+++ b/arch/x86/include/uapi/asm/kvm.h
-@@ -1043,4 +1043,6 @@ struct kvm_tdx_init_mem_region {
- 	__u64 nr_pages;
- };
- 
-+#define KVM_NESTED_OVERSUB_RATIO 8
-+
- #endif /* _ASM_X86_KVM_H */
-diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-index c4b8950c7abe..2a5289cb5bd1 100644
---- a/arch/x86/kvm/Makefile
-+++ b/arch/x86/kvm/Makefile
-@@ -6,7 +6,7 @@ ccflags-$(CONFIG_KVM_WERROR) += -Werror
- include $(srctree)/virt/kvm/Makefile.kvm
- 
- kvm-y			+= x86.o emulate.o irq.o lapic.o cpuid.o pmu.o mtrr.o \
--			   debugfs.o mmu/mmu.o mmu/page_track.o mmu/spte.o
-+			   debugfs.o nested.o mmu/mmu.o mmu/page_track.o mmu/spte.o
- 
- kvm-$(CONFIG_X86_64) += mmu/tdp_iter.o mmu/tdp_mmu.o
- kvm-$(CONFIG_KVM_IOAPIC) += i8259.o i8254.o ioapic.o
-diff --git a/arch/x86/kvm/nested.c b/arch/x86/kvm/nested.c
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 756c3922899b..52a1f27f0cb1 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -140,6 +140,7 @@ TEST_GEN_PROGS_x86 += x86/triple_fault_event_test
+ TEST_GEN_PROGS_x86 += x86/recalc_apic_map_test
+ TEST_GEN_PROGS_x86 += x86/aperfmperf_test
+ TEST_GEN_PROGS_x86 += x86/vmx_apic_update_test
++TEST_GEN_PROGS_x86 += x86/vmx_l2_switch_test
+ TEST_GEN_PROGS_x86 += access_tracking_perf_test
+ TEST_GEN_PROGS_x86 += coalesced_io_test
+ TEST_GEN_PROGS_x86 += dirty_log_perf_test
+diff --git a/tools/testing/selftests/kvm/x86/vmx_l2_switch_test.c b/tools/testing/selftests/kvm/x86/vmx_l2_switch_test.c
 new file mode 100644
-index 000000000000..986820cb525f
+index 000000000000..5ec0da2f8386
 --- /dev/null
-+++ b/arch/x86/kvm/nested.c
-@@ -0,0 +1,199 @@
++++ b/tools/testing/selftests/kvm/x86/vmx_l2_switch_test.c
+@@ -0,0 +1,416 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/kvm_host.h>
++/*
++ * Test nested VMX context switching between multiple VMCS
++ */
 +
-+static struct kvm_nested_context_table *kvm_nested_context_table_alloc(void)
++#include "test_util.h"
++#include "kvm_util.h"
++#include "processor.h"
++#include "vmx.h"
++
++#define L2_GUEST_STACK_SIZE 64
++#define L2_VCPU_MAX 16
++
++struct l2_vcpu_config {
++	vm_vaddr_t hv_pages_gva;	/* Guest VA for eVMCS */
++	vm_vaddr_t vmx_pages_gva;	/* Guest VA for VMX pages */
++	unsigned long stack[L2_GUEST_STACK_SIZE];
++	uint16_t vpid;
++};
++
++struct l1_test_config {
++	struct l2_vcpu_config l2_vcpus[L2_VCPU_MAX];
++	uint64_t hypercall_gpa;
++	uint32_t nr_l2_vcpus;
++	uint32_t nr_switches;
++	bool enable_vpid;
++	bool use_evmcs;
++	bool sched_only;
++};
++
++static void l2_guest(void)
 +{
-+	struct kvm_nested_context_table *table;
-+
-+	table = kzalloc(sizeof(*table), GFP_KERNEL_ACCOUNT);
-+	if (!table)
-+		return NULL;
-+
-+	spin_lock_init(&table->lock);
-+	INIT_LIST_HEAD(&table->lru_list);
-+	hash_init(table->hash);
-+	return table;
++	while (1)
++		vmcall();
 +}
 +
-+static void kvm_nested_context_table_free(struct kvm_nested_context_table
-+					  *table)
++static void run_l2_guest_evmcs(struct hyperv_test_pages *hv_pages,
++			       struct vmx_pages *vmx,
++			       void *guest_rip,
++			       void *guest_rsp,
++			       uint16_t vpid)
 +{
-+	kfree(table);
++	GUEST_ASSERT(load_evmcs(hv_pages));
++	prepare_vmcs(vmx, guest_rip, guest_rsp);
++	current_evmcs->hv_enlightenments_control.msr_bitmap = 1;
++	vmwrite(VIRTUAL_PROCESSOR_ID, vpid);
++
++	GUEST_ASSERT(!vmlaunch());
++	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_VMCALL);
++	current_evmcs->guest_rip += 3;	/* vmcall */
++
++	GUEST_ASSERT(!vmresume());
++	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_VMCALL);
 +}
 +
-+int kvm_nested_context_table_init(struct kvm *kvm)
++static void run_l2_guest_vmx_migrate(struct vmx_pages *vmx,
++				     void *guest_rip,
++				     void *guest_rsp,
++				     uint16_t vpid,
++				     bool start)
 +{
-+	struct kvm_nested_context_table *table;
++	uint32_t control;
 +
-+	if (!kvm_x86_ops.nested_ops->alloc_context ||
-+	    !kvm_x86_ops.nested_ops->free_context ||
-+	    !kvm_x86_ops.nested_ops->reset_context)
-+		return -EINVAL;
++	/*
++	 * Emulate L2 vCPU migration: vmptrld/vmlaunch/vmclear
++	 */
 +
-+	table = kvm_nested_context_table_alloc();
-+	if (!table)
-+		return -ENOMEM;
++	if (start)
++		GUEST_ASSERT(load_vmcs(vmx));
++	else
++		GUEST_ASSERT(!vmptrld(vmx->vmcs_gpa));
 +
-+	kvm->arch.nested_context_table = table;
++	prepare_vmcs(vmx, guest_rip, guest_rsp);
++
++	control = vmreadz(CPU_BASED_VM_EXEC_CONTROL);
++	control |= CPU_BASED_USE_MSR_BITMAPS;
++	vmwrite(CPU_BASED_VM_EXEC_CONTROL, control);
++	vmwrite(VIRTUAL_PROCESSOR_ID, vpid);
++
++	GUEST_ASSERT(!vmlaunch());
++	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_VMCALL);
++
++	GUEST_ASSERT(vmptrstz() == vmx->vmcs_gpa);
++	GUEST_ASSERT(!vmclear(vmx->vmcs_gpa));
++}
++
++static void run_l2_guest_vmx_sched(struct vmx_pages *vmx,
++				   void *guest_rip,
++				   void *guest_rsp,
++				   uint16_t vpid,
++				   bool start)
++{
++	/*
++	 * Emulate L2 vCPU multiplexing: vmptrld/vmresume
++	 */
++
++	if (start) {
++		uint32_t control;
++
++		GUEST_ASSERT(load_vmcs(vmx));
++		prepare_vmcs(vmx, guest_rip, guest_rsp);
++
++		control = vmreadz(CPU_BASED_VM_EXEC_CONTROL);
++		control |= CPU_BASED_USE_MSR_BITMAPS;
++		vmwrite(CPU_BASED_VM_EXEC_CONTROL, control);
++		vmwrite(VIRTUAL_PROCESSOR_ID, vpid);
++
++		GUEST_ASSERT(!vmlaunch());
++	} else {
++		GUEST_ASSERT(!vmptrld(vmx->vmcs_gpa));
++		GUEST_ASSERT(!vmresume());
++	}
++
++	GUEST_ASSERT_EQ(vmreadz(VM_EXIT_REASON), EXIT_REASON_VMCALL);
++
++	vmwrite(GUEST_RIP,
++		vmreadz(GUEST_RIP) + vmreadz(VM_EXIT_INSTRUCTION_LEN));
++}
++
++static void l1_guest_evmcs(struct l1_test_config *config)
++{
++	struct hyperv_test_pages *hv_pages;
++	struct vmx_pages *vmx_pages;
++	uint32_t i, j;
++
++	/* Initialize Hyper-V MSRs */
++	wrmsr(HV_X64_MSR_GUEST_OS_ID, HYPERV_LINUX_OS_ID);
++	wrmsr(HV_X64_MSR_HYPERCALL, config->hypercall_gpa);
++
++	/* Enable VP assist page */
++	hv_pages = (struct hyperv_test_pages *)config->l2_vcpus[0].hv_pages_gva;
++	enable_vp_assist(hv_pages->vp_assist_gpa, hv_pages->vp_assist);
++
++	/* Enable evmcs */
++	evmcs_enable();
++
++	vmx_pages = (struct vmx_pages *)config->l2_vcpus[0].vmx_pages_gva;
++	GUEST_ASSERT(prepare_for_vmx_operation(vmx_pages));
++
++	for (i = 0; i < config->nr_switches; i++) {
++		for (j = 0; j < config->nr_l2_vcpus; j++) {
++			struct l2_vcpu_config *l2 = &config->l2_vcpus[j];
++
++			hv_pages = (struct hyperv_test_pages *)l2->hv_pages_gva;
++			vmx_pages = (struct vmx_pages *)l2->vmx_pages_gva;
++
++			run_l2_guest_evmcs(hv_pages, vmx_pages, l2_guest,
++					   &l2->stack[L2_GUEST_STACK_SIZE],
++					   l2->vpid);
++		}
++	}
++
++	GUEST_DONE();
++}
++
++static void l1_guest_vmx(struct l1_test_config *config)
++{
++	struct vmx_pages *vmx_pages;
++	uint32_t i, j;
++
++	vmx_pages = (struct vmx_pages *)config->l2_vcpus[0].vmx_pages_gva;
++	GUEST_ASSERT(prepare_for_vmx_operation(vmx_pages));
++
++	for (i = 0; i < config->nr_switches; i++) {
++		for (j = 0; j < config->nr_l2_vcpus; j++) {
++			struct l2_vcpu_config *l2 = &config->l2_vcpus[j];
++
++			vmx_pages = (struct vmx_pages *)l2->vmx_pages_gva;
++
++			if (config->sched_only)
++				run_l2_guest_vmx_sched(vmx_pages, l2_guest,
++						       &l2->stack[L2_GUEST_STACK_SIZE],
++						       l2->vpid, i == 0);
++			else
++				run_l2_guest_vmx_migrate(vmx_pages, l2_guest,
++							 &l2->stack[L2_GUEST_STACK_SIZE],
++							 l2->vpid, i == 0);
++		}
++	}
++
++	if (config->sched_only) {
++		for (j = 0; j < config->nr_l2_vcpus; j++) {
++			struct l2_vcpu_config *l2 = &config->l2_vcpus[j];
++
++			vmx_pages = (struct vmx_pages *)l2->vmx_pages_gva;
++			vmclear(vmx_pages->vmcs_gpa);
++		}
++	}
++
++	GUEST_DONE();
++}
++
++static void vcpu_clone_hyperv_test_pages(struct kvm_vm *vm,
++					 vm_vaddr_t src_gva,
++					 vm_vaddr_t *dst_gva)
++{
++	struct hyperv_test_pages *src, *dst;
++	vm_vaddr_t evmcs_gva;
++
++	*dst_gva = vm_vaddr_alloc_page(vm);
++
++	src = addr_gva2hva(vm, src_gva);
++	dst = addr_gva2hva(vm, *dst_gva);
++	memcpy(dst, src, sizeof(*dst));
++
++	/* Allocate a new evmcs page */
++	evmcs_gva = vm_vaddr_alloc_page(vm);
++	dst->enlightened_vmcs = (void *)evmcs_gva;
++	dst->enlightened_vmcs_hva = addr_gva2hva(vm, evmcs_gva);
++	dst->enlightened_vmcs_gpa = addr_gva2gpa(vm, evmcs_gva);
++}
++
++static void prepare_vcpu(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
++			 uint32_t nr_l2_vcpus, uint32_t nr_switches,
++			 bool enable_vpid, bool use_evmcs,
++			 bool sched_only)
++{
++	vm_vaddr_t config_gva;
++	struct l1_test_config *config;
++	vm_vaddr_t hypercall_page_gva = 0;
++	uint32_t i;
++
++	TEST_ASSERT(nr_l2_vcpus <= L2_VCPU_MAX,
++		    "Too many L2 vCPUs: %u (max %u)", nr_l2_vcpus, L2_VCPU_MAX);
++
++	/* Allocate config structure in guest memory */
++	config_gva = vm_vaddr_alloc(vm, sizeof(*config), 0x1000);
++	config = addr_gva2hva(vm, config_gva);
++	memset(config, 0, sizeof(*config));
++
++	if (use_evmcs) {
++		/* Allocate hypercall page */
++		hypercall_page_gva = vm_vaddr_alloc_page(vm);
++		memset(addr_gva2hva(vm, hypercall_page_gva), 0, getpagesize());
++		config->hypercall_gpa = addr_gva2gpa(vm, hypercall_page_gva);
++
++		/* Enable Hyper-V enlightenments */
++		vcpu_set_hv_cpuid(vcpu);
++		vcpu_enable_evmcs(vcpu);
++	}
++
++	/* Allocate resources for each L2 vCPU */
++	for (i = 0; i < nr_l2_vcpus; i++) {
++		vm_vaddr_t vmx_pages_gva;
++
++		/* Allocate VMX pages (needed for both VMX and eVMCS) */
++		vcpu_alloc_vmx(vm, &vmx_pages_gva);
++		config->l2_vcpus[i].vmx_pages_gva = vmx_pages_gva;
++
++		if (use_evmcs) {
++			vm_vaddr_t hv_pages_gva;
++
++			/* Allocate or clone hyperv_test_pages */
++			if (i == 0) {
++				vcpu_alloc_hyperv_test_pages(vm, &hv_pages_gva);
++			} else {
++				vm_vaddr_t first_hv_gva =
++				    config->l2_vcpus[0].hv_pages_gva;
++				vcpu_clone_hyperv_test_pages(vm, first_hv_gva,
++							     &hv_pages_gva);
++			}
++			config->l2_vcpus[i].hv_pages_gva = hv_pages_gva;
++		}
++
++		/* Set VPID */
++		config->l2_vcpus[i].vpid = enable_vpid ? (i + 3) : 0;
++	}
++
++	config->nr_l2_vcpus = nr_l2_vcpus;
++	config->nr_switches = nr_switches;
++	config->enable_vpid = enable_vpid;
++	config->use_evmcs = use_evmcs;
++	config->sched_only = use_evmcs ? false : sched_only;
++
++	/* Pass single pointer to config structure */
++	vcpu_args_set(vcpu, 1, config_gva);
++
++	if (use_evmcs)
++		vcpu_set_msr(vcpu, HV_X64_MSR_VP_INDEX, vcpu->id);
++}
++
++static bool opt_enable_vpid = true;
++static const char *progname;
++
++static void check_stats(struct kvm_vm *vm,
++			uint32_t nr_l2_vcpus,
++			uint32_t nr_switches,
++			bool use_evmcs,
++			bool sched_only)
++{
++	uint64_t reuse = 0;
++	uint64_t recycle = 0;
++
++	reuse = vm_get_stat(vm, nested_context_reuse);
++	recycle = vm_get_stat(vm, nested_context_recycle);
++
++	if (nr_l2_vcpus <= KVM_NESTED_OVERSUB_RATIO) {
++		GUEST_ASSERT_EQ(reuse, nr_l2_vcpus * (nr_switches - 1));
++		GUEST_ASSERT_EQ(recycle, 0);
++	} else {
++		if (sched_only) {
++			/*
++			 * When scheduling only no L2 vCPU vmcs is cleared so
++			 * we reuse up to the max. number of contexts, but we
++			 * cannot recycle any of them.
++			 */
++			GUEST_ASSERT_EQ(reuse,
++					KVM_NESTED_OVERSUB_RATIO *
++					(nr_switches - 1));
++			GUEST_ASSERT_EQ(recycle, 0);
++		} else {
++			/*
++			 * When migration we cycle in LRU order so no context
++			 * can be reused they are all recycled.
++			 */
++			GUEST_ASSERT_EQ(reuse, 0);
++			GUEST_ASSERT_EQ(recycle,
++					(nr_l2_vcpus * nr_switches) -
++					KVM_NESTED_OVERSUB_RATIO);
++		}
++	}
++
++	printf("%s %u switches with %u L2 vCPUS (%s) reuse %" PRIu64
++	       " recycle %" PRIu64 "\n", progname, nr_switches, nr_l2_vcpus,
++	       use_evmcs ? "evmcs" : (sched_only ? "vmx sched" : "vmx migrate"),
++	       reuse, recycle);
++}
++
++static void run_test(uint32_t nr_l2_vcpus, uint32_t nr_switches,
++		     bool use_evmcs, bool sched_only)
++{
++	struct kvm_vcpu *vcpu;
++	struct kvm_vm *vm;
++	struct ucall uc;
++
++	vm = vm_create_with_one_vcpu(&vcpu, use_evmcs
++				     ? l1_guest_evmcs : l1_guest_vmx);
++
++	prepare_vcpu(vm, vcpu, nr_l2_vcpus, nr_switches,
++		     opt_enable_vpid, use_evmcs, sched_only);
++
++	for (;;) {
++		vcpu_run(vcpu);
++		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
++
++		switch (get_ucall(vcpu, &uc)) {
++		case UCALL_DONE:
++			goto done;
++		case UCALL_ABORT:
++			REPORT_GUEST_ASSERT(uc);
++		default:
++			TEST_FAIL("Unexpected ucall: %lu", uc.cmd);
++		}
++	}
++
++done:
++	check_stats(vm, nr_l2_vcpus, nr_switches, use_evmcs, sched_only);
++	kvm_vm_free(vm);
++}
++
++int main(int argc, char *argv[])
++{
++	uint32_t opt_nr_l2_vcpus = 0;
++	uint32_t opt_nr_switches = 0;
++	bool opt_sched_only = true;
++	int opt;
++	int i;
++
++	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_VMX));
++
++	progname = argv[0];
++
++	while ((opt = getopt(argc, argv, "c:rs:v")) != -1) {
++		switch (opt) {
++		case 'c':
++			opt_nr_l2_vcpus = atoi_paranoid(optarg);
++			break;
++		case 'r':
++			opt_sched_only = false;
++			break;
++		case 's':
++			opt_nr_switches = atoi_paranoid(optarg);
++			break;
++		case 'v':
++			opt_enable_vpid = false;
++			break;
++		default:
++			break;
++		}
++	}
++
++	if (opt_nr_l2_vcpus && opt_nr_switches) {
++		run_test(opt_nr_l2_vcpus, opt_nr_switches, false,
++			 opt_sched_only);
++
++		if (kvm_has_cap(KVM_CAP_HYPERV_ENLIGHTENED_VMCS))
++			run_test(opt_nr_l2_vcpus, opt_nr_switches,
++				 true, false);
++	} else {
++		/* VMX vmlaunch */
++		for (i = 2; i <= 16; i++)
++			run_test(i, 4, false, false);
++
++		/* VMX vmresume */
++		for (i = 2; i <= 16; i++)
++			run_test(i, 4, false, true);
++
++		/* eVMCS */
++		if (kvm_has_cap(KVM_CAP_HYPERV_ENLIGHTENED_VMCS)) {
++			for (i = 2; i <= 16; i++)
++				run_test(i, 4, true, false);
++		}
++	}
++
 +	return 0;
 +}
-+
-+void kvm_nested_context_table_destroy(struct kvm *kvm)
-+{
-+	struct kvm_nested_context_table *table;
-+	struct kvm_nested_context *ctx;
-+	struct hlist_node *tmp;
-+	int bkt;
-+
-+	table = kvm->arch.nested_context_table;
-+	if (!table)
-+		return;
-+
-+	hash_for_each_safe(table->hash, bkt, tmp, ctx, hnode) {
-+		hash_del(&ctx->hnode);
-+		kvm_x86_ops.nested_ops->free_context(ctx);
-+	}
-+
-+	kvm_nested_context_table_free(table);
-+}
-+
-+static unsigned int kvm_nested_context_max(struct kvm *kvm)
-+{
-+	return KVM_NESTED_OVERSUB_RATIO * atomic_read(&kvm->online_vcpus);
-+}
-+
-+static struct kvm_nested_context *__kvm_nested_context_find(struct kvm_nested_context_table
-+							    *table, gpa_t gpa)
-+{
-+	struct kvm_nested_context *ctx;
-+
-+	hash_for_each_possible(table->hash, ctx, hnode, gpa) {
-+		if (ctx->gpa == gpa)
-+			return ctx;
-+	}
-+
-+	return NULL;
-+}
-+
-+static struct kvm_nested_context *kvm_nested_context_find(struct
-+							  kvm_nested_context_table
-+							  *table,
-+							  struct kvm_vcpu *vcpu,
-+							  gpa_t gpa)
-+{
-+	struct kvm_nested_context *ctx;
-+
-+	ctx = __kvm_nested_context_find(table, gpa);
-+	if (!ctx)
-+		return NULL;
-+
-+	WARN_ON_ONCE(ctx->vcpu && ctx->vcpu != vcpu);
-+
-+	/* Remove from the LRU list if not attached to a vcpu */
-+	if (!ctx->vcpu)
-+		list_del(&ctx->lru_link);
-+
-+	return ctx;
-+}
-+
-+static struct kvm_nested_context *kvm_nested_context_recycle(struct
-+							     kvm_nested_context_table
-+							     *table)
-+{
-+	struct kvm_nested_context *ctx;
-+
-+	if (list_empty(&table->lru_list))
-+		return NULL;
-+
-+	ctx =
-+	    list_first_entry(&table->lru_list, struct kvm_nested_context,
-+			     lru_link);
-+	list_del(&ctx->lru_link);
-+	hash_del(&ctx->hnode);
-+	return ctx;
-+}
-+
-+static void kvm_nested_context_insert(struct kvm_nested_context_table *table,
-+				      struct kvm_nested_context *ctx, gpa_t gpa)
-+{
-+	hash_add(table->hash, &ctx->hnode, gpa);
-+	ctx->gpa = gpa;
-+}
-+
-+struct kvm_nested_context *kvm_nested_context_load(struct kvm_vcpu *vcpu,
-+						   gpa_t gpa)
-+{
-+	struct kvm_nested_context_table *table;
-+	struct kvm_nested_context *ctx, *new_ctx = NULL;
-+	struct kvm *vm = vcpu->kvm;
-+	bool reset = false;
-+
-+	table = vcpu->kvm->arch.nested_context_table;
-+	if (WARN_ON_ONCE(!table))
-+		return NULL;
-+retry:
-+	spin_lock(&table->lock);
-+	ctx = kvm_nested_context_find(table, vcpu, gpa);
-+	if (!ctx) {
-+		/* At capacity? Recycle the LRU context */
-+		if (table->count >= kvm_nested_context_max(vcpu->kvm)) {
-+			ctx = kvm_nested_context_recycle(table);
-+			if (unlikely(!ctx))
-+				goto finish;
-+
-+			kvm_nested_context_insert(table, ctx, gpa);
-+			++vm->stat.nested_context_recycle;
-+			reset = true;
-+
-+		} else if (new_ctx) {
-+			++table->count;
-+			ctx = new_ctx;
-+			kvm_nested_context_insert(table, ctx, gpa);
-+			new_ctx = NULL;
-+
-+		} else {
-+			/* Allocate a new context without holding the lock */
-+			spin_unlock(&table->lock);
-+			new_ctx = kvm_x86_ops.nested_ops->alloc_context(vcpu);
-+			if (unlikely(!new_ctx))
-+				return NULL;
-+
-+			goto retry;
-+		}
-+	} else
-+		++vm->stat.nested_context_reuse;
-+
-+	ctx->vcpu = vcpu;
-+finish:
-+	spin_unlock(&table->lock);
-+
-+	if (new_ctx)
-+		kvm_x86_ops.nested_ops->free_context(new_ctx);
-+
-+	if (reset)
-+		kvm_x86_ops.nested_ops->reset_context(ctx);
-+
-+	return ctx;
-+}
-+
-+void kvm_nested_context_clear(struct kvm_vcpu *vcpu, gpa_t gpa)
-+{
-+	struct kvm_nested_context_table *table;
-+	struct kvm_nested_context *ctx;
-+
-+	table = vcpu->kvm->arch.nested_context_table;
-+	if (WARN_ON_ONCE(!table))
-+		return;
-+
-+	spin_lock(&table->lock);
-+	ctx = __kvm_nested_context_find(table, gpa);
-+	if (ctx && ctx->vcpu) {
-+		/*
-+		 * Move to LRU list but keep it in the hash table for possible future
-+		 * reuse.
-+		 */
-+		list_add_tail(&ctx->lru_link, &table->lru_list);
-+		ctx->vcpu = NULL;
-+	}
-+	spin_unlock(&table->lock);
-+}
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index d830770363ab..8128b82856ae 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -251,7 +251,9 @@ const struct _kvm_stats_desc kvm_vm_stats_desc[] = {
- 	STATS_DESC_ICOUNTER(VM, pages_1g),
- 	STATS_DESC_ICOUNTER(VM, nx_lpage_splits),
- 	STATS_DESC_PCOUNTER(VM, max_mmu_rmap_size),
--	STATS_DESC_PCOUNTER(VM, max_mmu_page_hash_collisions)
-+	STATS_DESC_PCOUNTER(VM, max_mmu_page_hash_collisions),
-+	STATS_DESC_COUNTER(VM, nested_context_recycle),
-+	STATS_DESC_COUNTER(VM, nested_context_reuse)
- };
- 
- const struct kvm_stats_header kvm_vm_stats_header = {
-@@ -13350,6 +13352,7 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
- 	kvm_page_track_cleanup(kvm);
- 	kvm_xen_destroy_vm(kvm);
- 	kvm_hv_destroy_vm(kvm);
-+	kvm_nested_context_table_destroy(kvm);
- 	kvm_x86_call(vm_destroy)(kvm);
- }
- 
 -- 
 2.43.0
 
