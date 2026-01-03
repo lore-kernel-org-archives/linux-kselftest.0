@@ -1,70 +1,70 @@
-Received: from mail-yx1-f98.google.com (mail-yx1-f98.google.com [74.125.224.98])
+Received: from mail-ot1-f99.google.com (mail-ot1-f99.google.com [209.85.210.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67A623D7EC
-	for <linux-kselftest@vger.kernel.org>; Sat,  3 Jan 2026 00:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB032242D87
+	for <linux-kselftest@vger.kernel.org>; Sat,  3 Jan 2026 00:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767401141; cv=none; b=dSLnC0ZhITbmZZnD0OeDPy7q1Zpj9XNgir6+xlWlxBQaGMOTGsNvw9vFY7vOsq8Xu5quQ2AawpafWRpTc6gbmeBHZQi6i4eI+O5QLQGgoPCzlOlgx6c1PhJcU6DLRgi5TwGCxaEWpiNgw9zD3h17NaoBAWDlrX2mNvu6ZGWIaBU=
+	t=1767401142; cv=none; b=ZvGD7rNjxfEhPe2DLr50X28CPb5wXscHJLYlipinn+kBrlkTTngr7C+ZhzhDLx2AYU7LJovtP3EWBZ2IoBmIwvSUgwad4FW1Ih78T6BkJrNLHcDQJSAH9sw4JB3xsKtFCYaiMMC03t2ezYY/DcTTiw/VWycFh1snqsXCBeCe3JM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767401141; c=relaxed/simple;
-	bh=0HIM3LZ+eBDph53NxGfd2/H3yZfJ10Jd7Xn1nlpLW+A=;
+	s=arc-20240116; t=1767401142; c=relaxed/simple;
+	bh=QxssRt2K7/arHhwAENIHPr/xs0l3C9sgNhJ+s1tkF+w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Tt49fMsMNzqGi1v4XR3QyjX5gPVVRx3Fmq6j6R7gdpDupmPEVe4Zq1oZ6Vxp+Qbo/p/KPHq4h45A89U7mR2iBNXFBzfT/sVj0l1UdxAgGQqNuNN9enGrauKw9GX5Okp0USudNUL/DW255Jo+BQByElnPJ/ys5EQT7DFDNcxrSqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=IabHP/Tz; arc=none smtp.client-ip=74.125.224.98
+	 MIME-Version; b=Kp/410+CyPgkZeN+/M9bkW/oPnGiL6gu/VInOeBoMBruIzuNCKs3oQLJYoyWb2Zh+0aQwWRsOc3+VYd03dnryqJfznzIrLfqJMdUKqsouxhpt2BTBR9nSCwMzR/ntq8xITBLRjdNueQAwfZrFUO9vVjQxTHv528W2Kx2P5KjzGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Zj1owq0b; arc=none smtp.client-ip=209.85.210.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="IabHP/Tz"
-Received: by mail-yx1-f98.google.com with SMTP id 956f58d0204a3-646d51949f9so215906d50.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jan 2026 16:45:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Zj1owq0b"
+Received: by mail-ot1-f99.google.com with SMTP id 46e09a7af769-7c914482db2so2140380a34.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jan 2026 16:45:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1767401134; x=1768005934; darn=vger.kernel.org;
+        d=purestorage.com; s=google2022; t=1767401135; x=1768005935; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=knbpXSf7kdrhZPbbGQ6+cIy0OZGxNBIyH+kDDZckExk=;
-        b=IabHP/Tz46C1sY2A57CQJ08tC7X7Wzj+1r8uQq7Xhpc4gQnXiqmZuVH/7NzgrjITS0
-         zWQybvNP+i8Rcd6vjPrkJu5FKDx9F4VXq2T//1d9t2DCiLtoGqHimGxmKAMF20jPpeTd
-         xz3gz5MqAqt4gvNB/h+VZBGAQMMwTfxB5jpNRhQUFEKrryHm4LgE6RHz9XFDKyWI4sMd
-         MGAt5CYX/weg2xROJM78iFJmXBknEokNZFIJS6wvlcmfHDKeLI6ce52o5neJdLnfGBnJ
-         bU+LihtgSt0dqFYWKQcP30rOHCE3M/r7lioN245+dAlPHQFcOFj5rdYA38R8WoN7iaSN
-         v5NQ==
+        bh=tY6pKUQ5Qn3DxRwxGDGPj6r/MLXemuiieYvUhI1zlzM=;
+        b=Zj1owq0bGskrbnSH51RVWb32S+ABTrOb9crYmb1Me//37C0M6PN06YUWz02qQl8UcE
+         zom0vpXsQvj2ID+mloWR8xBIrH0ETzxePwKgrZkrbPSyX+9I2nFM/F7QDiK26gJOwUw5
+         kuAM7en9rlJGa3HeA2uHKDS2BUru48ugUiuAf8bx8qmFaN81M3duW1i5h4TianGAPpT+
+         +D2IZGM0YbwwwIe3zpSwG6ag9gktVIaGbB5RscICD3l4vU+yrp2Tmst9iYaK94RcKmoT
+         owe1MC7Kn/MKGkjhCKR+iXsjoQSk1UbKkui25KGr5WUzHUO8S5g2Rs/LEUhMRlwxjEWM
+         iCWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767401134; x=1768005934;
+        d=1e100.net; s=20230601; t=1767401135; x=1768005935;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=knbpXSf7kdrhZPbbGQ6+cIy0OZGxNBIyH+kDDZckExk=;
-        b=TTIS37lSqEQQl0LKJmAu9FPv8C5+kyy9CfBKPhK/wKR9iDCE4JTQ/vWXKrDq1zKUEh
-         xPLol6RKgDcxfsQTXpQIkBdLKF4528g0J20swjzh39H2171fxnF9hEwNrM0yC08J0AvT
-         SsdSCGkejBponvnalISY+tzaeyflM+96kWVptEkN68OHKijnJ4niunwpibLBNIOtlR5V
-         eKa0fTmjQdz0KZQSwVVNEKL521GyPQ0fEhBjyb3Gj5cWNSEewJyRq7dZ7ZWjpAvtOPmO
-         rkUpC33pFTq1sixHVh/Ba+jdl5zLCg7TxyK/u6drMoUSVzMo0Kk86xH8fgkGSsnl/EXK
-         COUA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdlWV3H67rvFZvGgg8I/aSLntp1pP/V6af83sfCW5KZX1budTsdT2RcZO7tagaZTv+tAZBvpMLRH7ZP4Lf6T4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6ZqmF3wMbGXAWxJo83FzZ9JC9iss7my3hQSqJHMzrvRZMOq0D
-	xD6j4wLl9mxnOm74XoTL0A26tPdV2uPDODLChLKwRVTko/QhWaBQYcwZ31ICTr6Ctx0adLxO1et
-	+ODbLNgy0pZODL2LDDqEpHiL3QAZ226RuoIH/mbIfb+Jr7DQEJPeb
-X-Gm-Gg: AY/fxX5GDaaHPFbeU84cWiiWecapOscPBJZEfBLwp9pagCm2bl8A6wT/bFVmft0ZvbG
-	c6soGt4bv1xBYOXDEnZHaipyvROpNR5gYezJo/o8yGe3uF4I2ewQFY8ocZZyXR9o1KrUHkWw5b/
-	fO+kDWr+pVB9CxqRQp0YMCgAV7H9xwRAlsX+24jca4hDEwHCOY/noiG4rw5VM+tQNnTyhI1lcV3
-	nqE8fk4S8BFOiawhEa9CnyjQaX1PUVkRD0ZhEsuHnWYsOaTW9K3k16n1+MPe3lZ5fyKwfNbbZes
-	09aDOq+QgAMacihi94a8jyiBqajo5apPKTzcqNBM2I7wLE4SO0u+zIm52ffCsChemZGWE+F45VF
-	qANxvMWzC+Rngc71832O8gOei1VQ=
-X-Google-Smtp-Source: AGHT+IFcHgQg2WiRh4ueJncqPz5X+iE4QwTyWzS9B4z5GXHsWhkWB3IHZcttSGLuqIt6AtP9FCgncVYgpwBp
-X-Received: by 2002:a05:690e:158c:10b0:646:5127:ad64 with SMTP id 956f58d0204a3-6466a8e0f63mr23527968d50.8.1767401134561;
-        Fri, 02 Jan 2026 16:45:34 -0800 (PST)
+        bh=tY6pKUQ5Qn3DxRwxGDGPj6r/MLXemuiieYvUhI1zlzM=;
+        b=fVieFUHJjXNOp1cheuohLt0wv/OdqbV/bbgg+DEHD79P3ilwue7QPKSRx9YQyJo3J4
+         TCLMzgv9WME+Z8caFV3YbbTC09F2fGHyhIL3iDvPFq7idCaLCYW//67kdJsQGUr4z700
+         6OYq1d7EjgB3NwMSZzj2D9vQkC+dZX1h8LnqKp5iwduU5dIdT2Ss3RjwYRLmku/bOKET
+         hl2r/F9mwm2j4wBxlNzXng563OMem4RsTJ6CbUpxz0nxtSybYnxjzmf88UswcIw8VhdZ
+         NLKkblu3kiCc8YCHB5L/9XU33zd8nRBY+xgtdsoruqabhAWrrK8ygPwl52g4KHDUy+RL
+         Sf7A==
+X-Forwarded-Encrypted: i=1; AJvYcCUAgjjc7lgRQ7T+/iG9dc6kYDjObTXa3eAlAP0/Nmi39sOakD8mR5TAeq9B/kWNgwnAjAyddqzhsHfDi9o3AkE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXXOepHxoQQlFDJvUf+7H3dwHLe/KRcgXcq8c5LlF3XIGIvhHv
+	E8puSCk8ZL7hrl2u+GfyAqpXoqlQQZfUJRazD8veXEtsYsxcjrhTtXmFE2Htlb7IHHUNZSY0NmO
+	tzyGLqya2r6CWI2EeuG/adhzuSnBwvBapEOUw8JBm/jVKxjwaKsZv
+X-Gm-Gg: AY/fxX7A/aVDS5Fz5Y5t9zfiqxwaY3DdpveQQKYtti0MDznOB/MBwGwLuOONYlaaYVP
+	f8UKYVnM/q1GNPCshF+o8D7/0x+P4boWzV1lAjQDLT9/UowV2rI6EYjvNrW1eb6H6kW3yr8IWoO
+	fpRMvaG/gafSflzjvPEMF9WX6NXuZh+TVwloMya4SFHVU4vYn2BWWKNJBdfZ5gzrEo7fudSA9Rt
+	3owfXdZzpNF88FZSKvSaGM9/azEFnjFh5/CgNTmUlstTp1Q1BQ4OpiqfHXtWHwfPnn6XOX25TcE
+	PnjKxbY7EjI4h/dHxbana+ZJt25Us5PD9m4xxqzsNHy51ozaRJAJBcXv7C94YDOfMAbBMEPwlVQ
+	Zgf9GXTG4rZlcKPyHyAsxv/vZrDg=
+X-Google-Smtp-Source: AGHT+IFLwalgPrUnK/JshmelFKcHKKaza9UIJzmapQ5N39F9GOnFHGs1qG2AEw88mtSWG1HLbWTZUbhSO7Jr
+X-Received: by 2002:a05:6830:314f:b0:7c7:66df:54df with SMTP id 46e09a7af769-7cc66a0b3b8mr17419979a34.5.1767401135279;
+        Fri, 02 Jan 2026 16:45:35 -0800 (PST)
 Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id 956f58d0204a3-6466a8b1b1dsm2609242d50.2.2026.01.02.16.45.34
+        by smtp-relay.gmail.com with ESMTPS id 46e09a7af769-7cc667ba104sm5572651a34.3.2026.01.02.16.45.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jan 2026 16:45:34 -0800 (PST)
+        Fri, 02 Jan 2026 16:45:35 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.49.34.222])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 46CB3341FDC;
-	Fri,  2 Jan 2026 17:45:33 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 756C2341FB6;
+	Fri,  2 Jan 2026 17:45:34 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 442AEE4426F; Fri,  2 Jan 2026 17:45:33 -0700 (MST)
+	id 734E8E4426F; Fri,  2 Jan 2026 17:45:34 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -75,9 +75,9 @@ Cc: linux-block@vger.kernel.org,
 	Stanley Zhang <stazhang@purestorage.com>,
 	Uday Shankar <ushankar@purestorage.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v2 08/19] ublk: move offset check out of __ublk_check_and_get_req()
-Date: Fri,  2 Jan 2026 17:45:18 -0700
-Message-ID: <20260103004529.1582405-9-csander@purestorage.com>
+Subject: [PATCH v2 15/19] selftests: ublk: implement integrity user copy in kublk
+Date: Fri,  2 Jan 2026 17:45:25 -0700
+Message-ID: <20260103004529.1582405-16-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260103004529.1582405-1-csander@purestorage.com>
 References: <20260103004529.1582405-1-csander@purestorage.com>
@@ -89,96 +89,201 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-__ublk_check_and_get_req() checks that the passed in offset is within
-the data length of the specified ublk request. However, only user copy
-(ublk_check_and_get_req()) supports accessing ublk request data at a
-nonzero offset. Zero-copy buffer registration (ublk_register_io_buf())
-always passes 0 for the offset, so the check is unnecessary. Move the
-check from __ublk_check_and_get_req() to ublk_check_and_get_req().
+If integrity data is enabled for kublk, allocate an integrity buffer for
+each I/O. Extend ublk_user_copy() to copy the integrity data between the
+ublk request and the integrity buffer if the ublksrv_io_desc indicates
+that the request has integrity data.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/block/ublk_drv.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ tools/testing/selftests/ublk/kublk.c | 41 ++++++++++++++++++++++++----
+ tools/testing/selftests/ublk/kublk.h | 14 ++++++++++
+ 2 files changed, 50 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index a4f95a0f1223..3149d705cb9a 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -253,11 +253,11 @@ struct ublk_params_header {
+diff --git a/tools/testing/selftests/ublk/kublk.c b/tools/testing/selftests/ublk/kublk.c
+index 6ff110d0dcae..dfba808657b1 100644
+--- a/tools/testing/selftests/ublk/kublk.c
++++ b/tools/testing/selftests/ublk/kublk.c
+@@ -415,12 +415,14 @@ static void ublk_queue_deinit(struct ublk_queue *q)
+ 	int nr_ios = q->q_depth;
  
- static void ublk_io_release(void *priv);
- static void ublk_stop_dev_unlocked(struct ublk_device *ub);
- static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq);
- static inline struct request *__ublk_check_and_get_req(struct ublk_device *ub,
--		u16 q_id, u16 tag, struct ublk_io *io, size_t offset);
-+		u16 q_id, u16 tag, struct ublk_io *io);
- static inline unsigned int ublk_req_build_flags(struct request *req);
+ 	if (q->io_cmd_buf)
+ 		munmap(q->io_cmd_buf, ublk_queue_cmd_buf_sz(q));
  
- static void ublk_partition_scan_work(struct work_struct *work)
- {
- 	struct ublk_device *ub =
-@@ -2315,11 +2315,11 @@ static int ublk_register_io_buf(struct io_uring_cmd *cmd,
- 	int ret;
- 
- 	if (!ublk_dev_support_zero_copy(ub))
- 		return -EINVAL;
- 
--	req = __ublk_check_and_get_req(ub, q_id, tag, io, 0);
-+	req = __ublk_check_and_get_req(ub, q_id, tag, io);
- 	if (!req)
- 		return -EINVAL;
- 
- 	ret = io_buffer_register_bvec(cmd, req, ublk_io_release, index,
- 				      issue_flags);
-@@ -2609,11 +2609,11 @@ static int ublk_ch_uring_cmd_local(struct io_uring_cmd *cmd,
- 			__func__, cmd_op, tag, ret, io ? io->flags : 0);
- 	return ret;
- }
- 
- static inline struct request *__ublk_check_and_get_req(struct ublk_device *ub,
--		u16 q_id, u16 tag, struct ublk_io *io, size_t offset)
-+		u16 q_id, u16 tag, struct ublk_io *io)
- {
- 	struct request *req;
- 
- 	/*
- 	 * can't use io->req in case of concurrent UBLK_IO_COMMIT_AND_FETCH_REQ,
-@@ -2630,13 +2630,10 @@ static inline struct request *__ublk_check_and_get_req(struct ublk_device *ub,
- 		goto fail_put;
- 
- 	if (!ublk_rq_has_data(req))
- 		goto fail_put;
- 
--	if (offset > blk_rq_bytes(req))
--		goto fail_put;
--
- 	return req;
- fail_put:
- 	ublk_put_req_ref(io, req);
- 	return NULL;
- }
-@@ -2714,14 +2711,19 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
- 
- 	if (tag >= ub->dev_info.queue_depth)
- 		return -EINVAL;
- 
- 	io = &ubq->ios[tag];
--	req = __ublk_check_and_get_req(ub, q_id, tag, io, buf_off);
-+	req = __ublk_check_and_get_req(ub, q_id, tag, io);
- 	if (!req)
- 		return -EINVAL;
- 
-+	if (buf_off > blk_rq_bytes(req)) {
-+		ret = -EINVAL;
-+		goto out;
+-	for (i = 0; i < nr_ios; i++)
++	for (i = 0; i < nr_ios; i++) {
+ 		free(q->ios[i].buf_addr);
++		free(q->ios[i].integrity_buf);
 +	}
-+
- 	if (!ublk_check_ubuf_dir(req, dir)) {
- 		ret = -EACCES;
- 		goto out;
+ }
+ 
+ static void ublk_thread_deinit(struct ublk_thread *t)
+ {
+ 	io_uring_unregister_buffers(&t->ring);
+@@ -432,23 +434,25 @@ static void ublk_thread_deinit(struct ublk_thread *t)
+ 		close(t->ring.ring_fd);
+ 		t->ring.ring_fd = -1;
  	}
+ }
+ 
+-static int ublk_queue_init(struct ublk_queue *q, unsigned long long extra_flags)
++static int ublk_queue_init(struct ublk_queue *q, unsigned long long extra_flags,
++			   __u8 metadata_size)
+ {
+ 	struct ublk_dev *dev = q->dev;
+ 	int depth = dev->dev_info.queue_depth;
+ 	int i;
+-	int cmd_buf_size, io_buf_size;
++	int cmd_buf_size, io_buf_size, integrity_size;
+ 	unsigned long off;
+ 
+ 	q->tgt_ops = dev->tgt.ops;
+ 	q->flags = 0;
+ 	q->q_depth = depth;
+ 	q->flags = dev->dev_info.flags;
+ 	q->flags |= extra_flags;
++	q->metadata_size = metadata_size;
+ 
+ 	/* Cache fd in queue for fast path access */
+ 	q->ublk_fd = dev->fds[0];
+ 
+ 	cmd_buf_size = ublk_queue_cmd_buf_sz(q);
+@@ -460,15 +464,27 @@ static int ublk_queue_init(struct ublk_queue *q, unsigned long long extra_flags)
+ 				q->dev->dev_info.dev_id, q->q_id);
+ 		goto fail;
+ 	}
+ 
+ 	io_buf_size = dev->dev_info.max_io_buf_bytes;
++	integrity_size = ublk_integrity_len(q, io_buf_size);
+ 	for (i = 0; i < q->q_depth; i++) {
+ 		q->ios[i].buf_addr = NULL;
+ 		q->ios[i].flags = UBLKS_IO_NEED_FETCH_RQ | UBLKS_IO_FREE;
+ 		q->ios[i].tag = i;
+ 
++		if (integrity_size) {
++			q->ios[i].integrity_buf = malloc(integrity_size);
++			if (!q->ios[i].integrity_buf) {
++				ublk_err("ublk dev %d queue %d io %d malloc(%d) failed: %m\n",
++					 dev->dev_info.dev_id, q->q_id, i,
++					 integrity_size);
++				goto fail;
++			}
++		}
++
++
+ 		if (ublk_queue_no_buf(q))
+ 			continue;
+ 
+ 		if (posix_memalign((void **)&q->ios[i].buf_addr,
+ 					getpagesize(), io_buf_size)) {
+@@ -607,17 +623,17 @@ static void ublk_user_copy(const struct ublk_io *io, __u8 match_ublk_op)
+ 	const struct ublksrv_io_desc *iod = ublk_get_iod(q, io->tag);
+ 	__u64 off = ublk_user_copy_offset(q->q_id, io->tag);
+ 	__u8 ublk_op = ublksrv_get_op(iod);
+ 	__u32 len = iod->nr_sectors << 9;
+ 	void *addr = io->buf_addr;
++	ssize_t copied;
+ 
+ 	if (ublk_op != match_ublk_op)
+ 		return;
+ 
+ 	while (len) {
+ 		__u32 copy_len = min(len, UBLK_USER_COPY_LEN);
+-		ssize_t copied;
+ 
+ 		if (ublk_op == UBLK_IO_OP_WRITE)
+ 			copied = pread(q->ublk_fd, addr, copy_len, off);
+ 		else if (ublk_op == UBLK_IO_OP_READ)
+ 			copied = pwrite(q->ublk_fd, addr, copy_len, off);
+@@ -626,10 +642,24 @@ static void ublk_user_copy(const struct ublk_io *io, __u8 match_ublk_op)
+ 		assert(copied == (ssize_t)copy_len);
+ 		addr += copy_len;
+ 		off += copy_len;
+ 		len -= copy_len;
+ 	}
++
++	if (!(iod->op_flags & UBLK_IO_F_INTEGRITY))
++		return;
++
++	len = ublk_integrity_len(q, iod->nr_sectors << 9);
++	off = ublk_user_copy_offset(q->q_id, io->tag);
++	off += UBLKSRV_IO_INTEGRITY_FLAG;
++	if (ublk_op == UBLK_IO_OP_WRITE)
++		copied = pread(q->ublk_fd, io->integrity_buf, len, off);
++	else if (ublk_op == UBLK_IO_OP_READ)
++		copied = pwrite(q->ublk_fd, io->integrity_buf, len, off);
++	else
++		assert(0);
++	assert(copied == (ssize_t)len);
+ }
+ 
+ int ublk_queue_io_cmd(struct ublk_thread *t, struct ublk_io *io)
+ {
+ 	struct ublk_queue *q = ublk_io_to_queue(io);
+@@ -1012,11 +1042,12 @@ static int ublk_start_daemon(const struct dev_ctx *ctx, struct ublk_dev *dev)
+ 
+ 	for (i = 0; i < dinfo->nr_hw_queues; i++) {
+ 		dev->q[i].dev = dev;
+ 		dev->q[i].q_id = i;
+ 
+-		ret = ublk_queue_init(&dev->q[i], extra_flags);
++		ret = ublk_queue_init(&dev->q[i], extra_flags,
++				      ctx->metadata_size);
+ 		if (ret) {
+ 			ublk_err("ublk dev %d queue %d init queue failed\n",
+ 				 dinfo->dev_id, i);
+ 			goto fail;
+ 		}
+diff --git a/tools/testing/selftests/ublk/kublk.h b/tools/testing/selftests/ublk/kublk.h
+index d00f2b465cdf..830b49a7716a 100644
+--- a/tools/testing/selftests/ublk/kublk.h
++++ b/tools/testing/selftests/ublk/kublk.h
+@@ -110,10 +110,11 @@ struct ublk_ctrl_cmd_data {
+ 	__u32 len;
+ };
+ 
+ struct ublk_io {
+ 	char *buf_addr;
++	void *integrity_buf;
+ 
+ #define UBLKS_IO_NEED_FETCH_RQ		(1UL << 0)
+ #define UBLKS_IO_NEED_COMMIT_RQ_COMP	(1UL << 1)
+ #define UBLKS_IO_FREE			(1UL << 2)
+ #define UBLKS_IO_NEED_GET_DATA           (1UL << 3)
+@@ -173,10 +174,11 @@ struct ublk_queue {
+ /* borrow one bit of ublk uapi flags, which may never be used */
+ #define UBLKS_Q_AUTO_BUF_REG_FALLBACK	(1ULL << 63)
+ #define UBLKS_Q_NO_UBLK_FIXED_FD	(1ULL << 62)
+ 	__u64 flags;
+ 	int ublk_fd;	/* cached ublk char device fd */
++	__u8 metadata_size;
+ 	struct ublk_io ios[UBLK_QUEUE_DEPTH];
+ };
+ 
+ struct ublk_thread {
+ 	struct ublk_dev *dev;
+@@ -222,10 +224,22 @@ static inline void ublk_set_integrity_params(const struct dev_ctx *ctx,
+ 		.csum_type = ctx->csum_type,
+ 		.tag_size = ctx->tag_size,
+ 	};
+ }
+ 
++static inline size_t ublk_integrity_len(const struct ublk_queue *q, size_t len)
++{
++	/* All targets currently use interval_exp = logical_bs_shift = 9 */
++	return (len >> 9) * q->metadata_size;
++}
++
++static inline size_t
++ublk_integrity_data_len(const struct ublk_queue *q, size_t integrity_len)
++{
++	return (integrity_len / q->metadata_size) << 9;
++}
++
+ static inline int ublk_io_auto_zc_fallback(const struct ublksrv_io_desc *iod)
+ {
+ 	return !!(iod->op_flags & UBLK_IO_F_NEED_REG_BUF);
+ }
  
 -- 
 2.45.2
