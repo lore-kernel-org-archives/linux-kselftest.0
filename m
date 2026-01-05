@@ -1,30 +1,32 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB58A3164D4
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 15:19:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E32831355F
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 15:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767626347; cv=none; b=FCc2c+T0JnQpyxNv9eDxr6K1cXdiQmRfZVbxfUtuKrdQHqGLY3s0j2GKAUwNAWLosbgby/x5mc8hTlZoZtNIGN6B7pZL++fee77DV+fQpAF1ZS3e+EWFFH3T07HnZWBHWksqlt8qJFdx9uAdqxbAoqgw/echpetpTHdqFOxxQGg=
+	t=1767626350; cv=none; b=gaj4R38dCDqaO87jl/X87kXthtZt5XDF3g8hgMa+PRbAOrbPKz1QU4gPjZYgrLdg6v9V/QSXaU7L7ETQ7trY8TYEkNJO7DLI95fq2VC0I++WOuLLKatQX7ffK8vsvR5Aw1Tgvt73+lik2LBLjI/JlQhPIxiEPOYQQsla1sq2AUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767626347; c=relaxed/simple;
-	bh=JqJ2BoNtltAF4CdCixKy+9lQYGwcL8WO32rfjrQW9sc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q14X0HsdUftagXB5QMPET0jwiRUfZL0gsHAS2S5U1HCH0eAz9rlpjIw0v5BGEfEs/gkjzmy5OXpNk3sKYGSgBisDEYppEu6mIcQeHD7vujDn0g6swd74FrewisHZ2lwi4SjEwgqjz5e1nipiwZ1A/rGi4s6j85Hi2Jk3vVcPF7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gyzPxnce; arc=none smtp.client-ip=91.218.175.185
+	s=arc-20240116; t=1767626350; c=relaxed/simple;
+	bh=MEYCAJTP+gciIEx+Dxm8aAPbsaociGWG+GPRUZbDF6g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qWtyoNLOc6J6pYQezGnQHVI4W3twnCunlOXKOFaHzNQ7fyoYGyoN1dQ2s4+5L005AVHO2l7nslUyTro70OMeenwMJ1mKdKZBG7f6mg4ue+bZ5cqKV1xRpP9nu/zq/3yPLRTyn+Imw5FVd0O7AjUPtaC6TBnZbxPV7RNaGpiF0AQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kDB7MS0n; arc=none smtp.client-ip=91.218.175.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gyzPxnce"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kDB7MS0n"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767626333;
+	t=1767626345;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=UXw9mrxZiYe23hLr/K2kTlNo18tECkhAsZTVr1vBB7M=;
-	b=gyzPxncefvtoeUnk8Y4d+tfn7Du0ouNQzyShvzFoow2L+z5S6BIXWsIALPQUM6iLHUjjJF
-	GQgqiBhVLRW2utrwR4CaDHqeuAbOQflMjvQiyOBGSZsx45/+SjPe8NHHhVV9QHxd9wc++f
-	H6D2RzT8DnR3EndltUzcz5iSWpGCJMk=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1Hk4lLHbn+xMSZg4HI2VBIcbSjPr/5SQlwXAZJ1OODQ=;
+	b=kDB7MS0nez6RSI7xKNBLEhptMEHKWyXnZrarqiwVLI66N9EtNKl0ZCbbMareH0FxyXHMli
+	u5s3fGW4ZDYhldgS6oB/mPoDkQBum72FCS099rEXRyxuMbvLvKMybWSgRR9V1hOtSPHY8k
+	3xsWKUtNydOTiR/jz+QgOhROJKHXKIU=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -46,9 +48,11 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 0/5] bpf: lru: Fix unintended eviction when updating lru hash maps
-Date: Mon,  5 Jan 2026 23:18:08 +0800
-Message-ID: <20260105151813.6968-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 2/5] bpf: lru: Factor out bpf_lru_node_reset_state helper
+Date: Mon,  5 Jan 2026 23:18:10 +0800
+Message-ID: <20260105151813.6968-3-leon.hwang@linux.dev>
+In-Reply-To: <20260105151813.6968-1-leon.hwang@linux.dev>
+References: <20260105151813.6968-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,57 +62,82 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-This unintended LRU eviction issue was observed while developing the
-selftest for
-"[PATCH bpf-next v10 0/8] bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags for percpu maps" [1].
+Introduce the helper bpf_lru_node_reset_state to set type and clear ref.
 
-When updating an existing element in lru_hash or lru_percpu_hash maps,
-the current implementation calls prealloc_lru_pop() to get a new node
-before checking if the key already exists. If the map is full, this
-triggers LRU eviction and removes an existing element, even though the
-update operation only needs to modify the value in-place.
+No functional change intended.
 
-In the selftest of the aforementioned patch, this was to be worked around by
-reserving an extra entry to
-void triggering eviction in __htab_lru_percpu_map_update_elem(). However, the
-underlying issue remains problematic because:
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/bpf_lru_list.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-1. Users may unexpectedly lose entries when updating existing keys in a
-   full map.
-2. The eviction overhead is unnecessary for existing key updates.
-
-This patchset fixes the issue by first checking if the key exists before
-allocating a new node. If the key is found, update the value using the extra
-LRU node without triggering any eviction. Only proceed with node allocation
-if the key does not exist.
-
-Links:
-[1] https://lore.kernel.org/bpf/20251117162033.6296-1-leon.hwang@linux.dev/
-
-Changes:
-v1 -> v2:
- * Tidy hash handling in LRU code.
- * Factor out bpf_lru_node_reset_state helper.
- * Factor out bpf_lru_move_next_inactive_rotation helper.
- * Update element using preallocated extra elements in order to avoid
-   breaking the update atomicity (per Alexei).
- * Check values on other CPUs in tests (per bot).
- * v1: https://lore.kernel.org/bpf/20251202153032.10118-1-leon.hwang@linux.dev/
-
-Leon Hwang (5):
-  bpf: lru: Tidy hash handling in LRU code
-  bpf: lru: Factor out bpf_lru_node_reset_state helper
-  bpf: lru: Factor out bpf_lru_move_next_inactive_rotation helper
-  bpf: lru: Fix unintended eviction when updating lru hash maps
-  selftests/bpf: Add tests to verify no unintended eviction when
-    updating lru_[percpu_,]hash maps
-
- kernel/bpf/bpf_lru_list.c                     | 228 ++++++++++++++----
- kernel/bpf/bpf_lru_list.h                     |  10 +-
- kernel/bpf/hashtab.c                          |  90 ++++++-
- .../selftests/bpf/prog_tests/htab_update.c    | 129 ++++++++++
- 4 files changed, 402 insertions(+), 55 deletions(-)
-
---
+diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
+index f4e183a9c28f..b17b05f41900 100644
+--- a/kernel/bpf/bpf_lru_list.c
++++ b/kernel/bpf/bpf_lru_list.c
+@@ -41,6 +41,12 @@ static void bpf_lru_node_clear_ref(struct bpf_lru_node *node)
+ 	WRITE_ONCE(node->ref, 0);
+ }
+ 
++static void bpf_lru_node_reset_state(struct bpf_lru_node *node, enum bpf_lru_list_type type)
++{
++	node->type = type;
++	bpf_lru_node_clear_ref(node);
++}
++
+ static void bpf_lru_list_count_inc(struct bpf_lru_list *l,
+ 				   enum bpf_lru_list_type type)
+ {
+@@ -85,8 +91,7 @@ static void __bpf_lru_node_move_in(struct bpf_lru_list *l,
+ 		return;
+ 
+ 	bpf_lru_list_count_inc(l, tgt_type);
+-	node->type = tgt_type;
+-	bpf_lru_node_clear_ref(node);
++	bpf_lru_node_reset_state(node, tgt_type);
+ 	list_move(&node->list, &l->lists[tgt_type]);
+ }
+ 
+@@ -347,8 +352,7 @@ static void __local_list_add_pending(struct bpf_lru *lru,
+ 				     struct bpf_lru_node *node)
+ {
+ 	node->cpu = cpu;
+-	node->type = BPF_LRU_LOCAL_LIST_T_PENDING;
+-	bpf_lru_node_clear_ref(node);
++	bpf_lru_node_reset_state(node, BPF_LRU_LOCAL_LIST_T_PENDING);
+ 	list_add(&node->list, local_pending_list(loc_l));
+ }
+ 
+@@ -513,8 +517,7 @@ static void bpf_common_lru_push_free(struct bpf_lru *lru,
+ 			goto check_lru_list;
+ 		}
+ 
+-		node->type = BPF_LRU_LOCAL_LIST_T_FREE;
+-		bpf_lru_node_clear_ref(node);
++		bpf_lru_node_reset_state(node, BPF_LRU_LOCAL_LIST_T_FREE);
+ 		list_move(&node->list, local_free_list(loc_l));
+ 
+ 		raw_spin_unlock_irqrestore(&loc_l->lock, flags);
+@@ -559,8 +562,7 @@ static void bpf_common_lru_populate(struct bpf_lru *lru, void *buf,
+ 		struct bpf_lru_node *node;
+ 
+ 		node = (struct bpf_lru_node *)(buf + node_offset);
+-		node->type = BPF_LRU_LIST_T_FREE;
+-		bpf_lru_node_clear_ref(node);
++		bpf_lru_node_reset_state(node, BPF_LRU_LIST_T_FREE);
+ 		list_add(&node->list, &l->lists[BPF_LRU_LIST_T_FREE]);
+ 		buf += elem_size;
+ 	}
+@@ -588,8 +590,7 @@ static void bpf_percpu_lru_populate(struct bpf_lru *lru, void *buf,
+ again:
+ 		node = (struct bpf_lru_node *)(buf + node_offset);
+ 		node->cpu = cpu;
+-		node->type = BPF_LRU_LIST_T_FREE;
+-		bpf_lru_node_clear_ref(node);
++		bpf_lru_node_reset_state(node, BPF_LRU_LIST_T_FREE);
+ 		list_add(&node->list, &l->lists[BPF_LRU_LIST_T_FREE]);
+ 		i++;
+ 		buf += elem_size;
+-- 
 2.52.0
 
