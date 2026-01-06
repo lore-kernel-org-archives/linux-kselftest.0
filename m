@@ -1,150 +1,175 @@
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D225F349B13
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Jan 2026 17:18:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767719926; cv=pass; b=LIjtXD4/Ltwj7nK8QG9sOAdSLBR/w2k2O33Zuis70KaB77WZatKHlgv+bzuG7DGAxOpOAbiVTfjJblIauni9UYSjlz4s4Sn6TwSNPYCqiMCTNDGVDssLzSiywxfRc+viC5W7sCo0id1q3mYsSJAK9lgtJMZS6iTbM2JtP2tAHDc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767719926; c=relaxed/simple;
-	bh=4kIuX6Agq3HD0TLnVcZN913LVX+FCf68NrUDWYKrLZ0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OkYjg9PeOH6uj9h9eDmebmy/eDPaSBJsiYzcZavOHQ6+/LgRHp3eMZ5d/1EnnNMi2hAelMT2SasFDYRukCOtrud6xh6RfQyZU/ohPtH6tPRgNZSYs+qRZa55QYnMgkfQMwrdeUg5ixuZsxoTkbIMwxOTlF2olNmRJM2UFoov+R4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=L0JCrEf0; arc=pass smtp.client-ip=74.125.82.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B24234D3B9
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Jan 2026 17:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767720051; cv=none; b=aUYlXmWK60MDsAorK8vXH/gwwwP/2B6c3XEPVcp2UGPH/+27nu4lEl5AHLrn9rpHOqZg8nfLwvBEVIEKUES3BHtg+gdlG6YlbSsJdmOGA3WYRR0B6SAVz1HD2oUF/TQ5B75W3t6LAl4yytWgPteGMELaOVPypTwgnkU/ZDPrz+M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767720051; c=relaxed/simple;
+	bh=HdPv3+H3JbikeWHgerAWjgtMp5gB6CfTsnryr43Tn0s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KYcjoPV6V2DQkUhZuqbZHIZ/AftYDrMyqU8x+cSggK9WQqUmd41RAG7Gx0pB/Zx3zfr8yEdVAQl0hGNFwrx7GZLjH2Wpvu/nM9W7NAz13zVZ9eZ/35IY4tVf1BLCdrZNb/C8pglqxStSnnrvS9Pc/EicqhH/pS4QuBFFA4xd/y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jJ3Cd8bf; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="L0JCrEf0"
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-11f450147cfso37087c88.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jan 2026 09:18:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1767719924; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LMeWbhz0Q7IkDrncF0+X3x6jwav9LCUpedVLpIPK9MtaMFNMG8ksQj0r0Nz82iv2mj
-         oqlbzQCWaXmCX2gZyit87S02REPiVb+PL5RIJQLPX3bX8jZcjS+37lGA3RQXAc1+1SwG
-         Ha2NhmHbkPot+fTXZouldEibTXAFU3A2xo5Z+j1HfD6Mv25R1BBcmthH22JSOhfjnMnX
-         UfJ61WnY8Ec5f6wrkJAQ5dUgpDbjrQkPt8ZBerDETzFOv891kuloTXmSGy3D1NvaxcGE
-         C5VbtY+86WtDxfDhySVJ0r4zpDCHC1/0BNSoC0bwY1A1tX5AvexrKeg0vCETGzWcFNnq
-         p/6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=el9IdsVpvDRJVEdnxklkmPvqwg7S8+dzbfu1CSsjkVc=;
-        fh=YuGSa7MrV3uosFes7qc4SlKlxPJFvzCqRaqNujd8y4k=;
-        b=UvTmTrLM+R3Ud7brYtsbcVjd4u0G0jxDYTjVFpADfMUMbvog81WstRZn9JZhOr/15R
-         RJpu9QEhdfP9I9IfTYwnTYgz3Mz7nUgVJqZqZi10QZw3ng5OtZZAtDFgOKl2RDD0iPl/
-         u2nkF6NpmO85VJSMSYWGJeSlUzKyY3VrnLEMHsjoHO1hl8vZPWbM76UD4p9NJimtckdD
-         A/J5HHmVOf5pnLyg66MAXWCN0+ipVBLJ2sQlK3iAtKtZxxQFrFcD9fgqx6SR3dWLzJae
-         pc3yhGGM4dA3+HItgykRFhUMZOayY4UJ64v7KcDztRjYTjiFBvCdXxMaNyDXAF3r/SdK
-         XDjQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1767719924; x=1768324724; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=el9IdsVpvDRJVEdnxklkmPvqwg7S8+dzbfu1CSsjkVc=;
-        b=L0JCrEf0CxGjZlVPdGLiAhubcYDAobdQSZrOsNjJpiygYspAp/4Ht6kGoF1CvSSp3W
-         DSGBWeiFw1jvHjjgq0N329CbU1pzbW24n/uKPKsE4XRtpNBdy1kbfspf64RPQOJgyWdl
-         lwl4zzH//6aRLc5CRsD04toFAIpd3u5WRWVQB1Mt4680h6y1TSiwHgz6lh22zgaBrv1c
-         lT7Fp4PynyaldSrmnUTkVTkk5h8hKH0EJEPDkFnQxozoA82RuKaKm6MTgRPKCy062Sld
-         dv31/jY9T3dPFrH13drZVvny1K+4jq3cNRQP8VuRnU9j0+n1tuOH6w4QYUws/9ha/7kE
-         aDQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767719924; x=1768324724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=el9IdsVpvDRJVEdnxklkmPvqwg7S8+dzbfu1CSsjkVc=;
-        b=OFpVOC3FGKWnpNb2ky9fRpTPLT9nX0QXfaLLso0sVtn/T2Cgi+JA9Bg81/O4prf1t7
-         Mx3GJydnE6UehCVDj2F8wtBCGnjNGBlcz4Va0FS4pAHmR13hNSxHUq39aR24z1iEZHX/
-         gcoAozhgwHPBaetQWjg5pQhXk2+FEN79yoUKN9tvFBT7eQ8wth5Zp+1unzcY7aWW5Y/S
-         qzkL+oGiwiUQjvHl5AYRp5wt3OsqsbgjXNXCCDZwncWPtqinu9bxoIo2udiJI8yAJaAs
-         Ht+pW4F1eKB6IdJL96JCdq/vF+YcRQdqDzkipE7YdigT0UFnsEbTuvytY6VQ8CCdy7YO
-         PhFA==
-X-Forwarded-Encrypted: i=1; AJvYcCUWWo3o9gLA06dFMek4cnb10VNVS/zMLyM/lydJ/UPdDEhl+3Mjci7sS/S753zptRbHgkplqFporJ0NGmv2wuc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywn/XQC7IkOBdeXiUM5j6vj//EYe4jjg4TBdz+yVv3pHRauCDj7
-	cFvD4xg7mEJ0d2ds6b60s9v1+vsCKsYQZbmXMfXvM9ZAvMOISCjIWPlRKV9Z3ez5DcVAYowBR5C
-	BZy7rtOFwSNlSI7syHqUytelM6GrpK+SDcVliQ8Xsxg==
-X-Gm-Gg: AY/fxX5Urwh2fB97Wt/Yrfy+2uJsv+9ZzcNI0LFgEkC+MS5zEkr/8nQq1BuCTjVbJJm
-	sZj78dGdbVSq90FlqtZh+aM6ZHA2kMpk1B+IoUT/fMkCCVJOe+rZScbNlk7eAxqSlkknl0rUaZb
-	H8A2XnrZdoZtL4SfGdZc4Lci+rVUQr/HnwCGLp2M5E/UyMFip1Vfe0Oi6f8qSzsNZTu8HrMnhRb
-	FgELs/9HUqURAFU2UcJ9+vTc97kN5IYAMc0YKwLDAhm6sz1+W5IxNnlQUx/DQWIqtP40Bsa
-X-Google-Smtp-Source: AGHT+IHJa/wLLHrmuywVzlRGyH5Yo3APVWKq7aE4CE/jD/1YOw2SXtvug2pAPBCT3XgeLuTQ6DbQhrJVVoiNv+zqfew=
-X-Received: by 2002:a05:7022:e0b:b0:11d:faef:21c2 with SMTP id
- a92af1059eb24-121f188dca6mr1576758c88.2.1767719923753; Tue, 06 Jan 2026
- 09:18:43 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jJ3Cd8bf"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1767720045;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2qZPtXjSEqdrMSyXjyE/0ngnZGSpWT/lsvBd2C5rZW8=;
+	b=jJ3Cd8bfFGSk9qRimO74B67b50g/dcjpMJr+xQ6wntLefDU1rRVAKqAfS4Y3VeNeasufkd
+	KQv7tPMaPG2dTw11LKROhI9meq/0mMM1Q/aeAaz2hBl14M7aysxcuLTDXPKZJSEQbnlCTD
+	eG49aigAaVML+rmjCpd7oqIM5s3OWPE=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [RESEND PATCH bpf-next v4 0/9] bpf: Extend bpf syscall with common attributes support
+Date: Wed,  7 Jan 2026 01:20:09 +0800
+Message-ID: <20260106172018.57757-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260106005752.3784925-1-csander@purestorage.com>
- <20260106005752.3784925-14-csander@purestorage.com> <aV0THiUJ0S1l8FNC@fedora>
-In-Reply-To: <aV0THiUJ0S1l8FNC@fedora>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Tue, 6 Jan 2026 09:18:32 -0800
-X-Gm-Features: AQt7F2p-9Q1Gb8POklMIHL1sT1S_3cYjSMMZ_GUmQXTheHiXANNW7Tkv76aEaqo
-Message-ID: <CADUfDZpw7rfshnC649QG+N+vVvck4VNXDLwCQW=6TYFCiB7a_Q@mail.gmail.com>
-Subject: Re: [PATCH v3 13/19] selftests: ublk: add utility to get block device
- metadata size
-To: Ming Lei <ming.lei@redhat.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Stanley Zhang <stazhang@purestorage.com>, Uday Shankar <ushankar@purestorage.com>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Jan 6, 2026 at 5:50=E2=80=AFAM Ming Lei <ming.lei@redhat.com> wrote=
-:
->
-> On Mon, Jan 05, 2026 at 05:57:45PM -0700, Caleb Sander Mateos wrote:
-> > Some block device integrity parameters are available in sysfs, but
-> > others are only accessible using the FS_IOC_GETLBMD_CAP ioctl. Add a
-> > metadata_size utility program to print out the logical block metadata
-> > size, PI offset, and PI size within the metadata. Example output:
-> > $ metadata_size /dev/ublkb0
-> > metadata_size: 64
-> > pi_offset: 56
-> > pi_tuple_size: 8
-> >
-> > Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
-> > ---
-> >  tools/testing/selftests/ublk/Makefile        |  4 +--
-> >  tools/testing/selftests/ublk/metadata_size.c | 36 ++++++++++++++++++++
-> >  2 files changed, 38 insertions(+), 2 deletions(-)
-> >  create mode 100644 tools/testing/selftests/ublk/metadata_size.c
-> >
-> > diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/self=
-tests/ublk/Makefile
-> > index 06ba6fde098d..41f776bb86a6 100644
-> > --- a/tools/testing/selftests/ublk/Makefile
-> > +++ b/tools/testing/selftests/ublk/Makefile
-> > @@ -47,14 +47,14 @@ TEST_PROGS +=3D test_stress_03.sh
-> >  TEST_PROGS +=3D test_stress_04.sh
-> >  TEST_PROGS +=3D test_stress_05.sh
-> >  TEST_PROGS +=3D test_stress_06.sh
-> >  TEST_PROGS +=3D test_stress_07.sh
-> >
-> > -TEST_GEN_PROGS_EXTENDED =3D kublk
-> > +TEST_GEN_PROGS_EXTENDED =3D kublk metadata_size
-> >
-> >  LOCAL_HDRS +=3D $(wildcard *.h)
-> >  include ../lib.mk
-> >
-> > -$(TEST_GEN_PROGS_EXTENDED): $(wildcard *.c)
-> > +$(OUTPUT)/kublk: common.c fault_inject.c file_backed.c kublk.c null.c =
-stripe.c
->
-> I feel wildcard is pretty handy, can we avoid to kill it? Such as:
->
-> STANDALONE_UTILS :=3D metadata_size.c
-> KUBLK_SRCS :=3D $(filter-out $(STANDALONE_UTILS),$(wildcard *.c))
+Resending the patch series due to a previous "4.7.1 Error: too many recipients"
+failure.
 
-Sure, I wasn't aware of filter-out. I'm fine with that.
+===
 
-Thanks,
-Caleb
+This patch series builds upon the discussion in
+"[PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure" [1].
+
+This patch series introduces support for *common attributes* in the BPF
+syscall, providing a unified mechanism for passing shared metadata across
+all BPF commands.
+
+The initial set of common attributes includes:
+
+1. 'log_buf': User-provided buffer for storing log output.
+2. 'log_size': Size of the provided log buffer.
+3. 'log_level': Verbosity level for logging.
+4. 'log_true_size': The size of log reported by kernel.
+
+With this extension, the BPF syscall will be able to return meaningful
+error messages (e.g., failures of creating map), improving debuggability
+and user experience.
+
+Changes:
+RFC v3 -> v4:
+* Drop RFC.
+* Address comments from Andrii:
+  * Add parentheses in 'sys_bpf_ext()'.
+  * Avoid creating new fd in 'probe_sys_bpf_ext()'.
+  * Add a new struct to wrap log fields in libbpf.
+* Address comments from Alexei:
+  * Do not skip writing to user space when log_true_size is zero.
+  * Do not use 'bool' arguments.
+  * Drop the adding WARN_ON_ONCE()'s.
+
+RFC v2 -> RFC v3:
+* Rename probe_sys_bpf_extended to probe_sys_bpf_ext.
+* Refactor reporting 'log_true_size' for prog_load.
+* Refactor reporting 'btf_log_true_size' for btf_load.
+* Add warnings for internal bugs in map_create.
+* Check log_true_size in test cases.
+* Address comment from Alexei:
+  * Change kvzalloc/kvfree to kzalloc/kfree.
+* Address comments from Andrii:
+  * Move BPF_COMMON_ATTRS to 'enum bpf_cmd' alongside brief comment.
+  * Add bpf_check_uarg_tail_zero() for extra checks.
+  * Rename sys_bpf_extended to sys_bpf_ext.
+  * Rename sys_bpf_fd_extended to sys_bpf_ext_fd.
+  * Probe the new feature using NULL and -EFAULT.
+  * Move probe_sys_bpf_ext to libbpf_internal.h and drop LIBBPF_API.
+  * Return -EUSERS when log attrs are conflict between bpf_attr and
+    bpf_common_attr.
+  * Avoid touching bpf_vlog_init().
+  * Update the reason messages in map_create.
+  * Finalize the log using __cleanup().
+  * Report log size to users.
+  * Change type of log_buf from '__u64' to 'const char *' and cast type
+    using ptr_to_u64() in bpf_map_create().
+  * Do not return -EOPNOTSUPP when kernel doesn't support this feature
+    in bpf_map_create().
+  * Add log_level support for map creation for consistency.
+* Address comment from Eduard:
+  * Use common_attrs->log_level instead of BPF_LOG_FIXED.
+
+RFC v1 -> RFC v2:
+* Fix build error reported by test bot.
+* Address comments from Alexei:
+  * Drop new uapi for freplace.
+  * Add common attributes support for prog_load and btf_load.
+  * Add common attributes support for map_create.
+
+Links:
+[1] https://lore.kernel.org/bpf/20250224153352.64689-1-leon.hwang@linux.dev/
+
+Leon Hwang (9):
+  bpf: Extend bpf syscall with common attributes support
+  libbpf: Add support for extended bpf syscall
+  bpf: Refactor reporting log_true_size for prog_load
+  bpf: Add common attr support for prog_load
+  bpf: Refactor reporting btf_log_true_size for btf_load
+  bpf: Add common attr support for btf_load
+  bpf: Add common attr support for map_create
+  libbpf: Add common attr support for map_create
+  selftests/bpf: Add tests to verify map create failure log
+
+ include/linux/bpf.h                           |   2 +-
+ include/linux/btf.h                           |   2 +-
+ include/linux/syscalls.h                      |   3 +-
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/btf.c                              |  25 +-
+ kernel/bpf/syscall.c                          | 223 ++++++++++++++++--
+ kernel/bpf/verifier.c                         |  12 +-
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/lib/bpf/bpf.c                           |  49 +++-
+ tools/lib/bpf/bpf.h                           |  17 +-
+ tools/lib/bpf/features.c                      |   8 +
+ tools/lib/bpf/libbpf_internal.h               |   3 +
+ .../selftests/bpf/prog_tests/map_init.c       | 143 +++++++++++
+ 13 files changed, 448 insertions(+), 55 deletions(-)
+
+--
+2.52.0
+
