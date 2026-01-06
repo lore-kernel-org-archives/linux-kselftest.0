@@ -1,70 +1,70 @@
-Received: from mail-pl1-f225.google.com (mail-pl1-f225.google.com [209.85.214.225])
+Received: from mail-pl1-f227.google.com (mail-pl1-f227.google.com [209.85.214.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8EA20FAAB
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Jan 2026 00:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2E9223702
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Jan 2026 00:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767661093; cv=none; b=CgNt3nJZNWSpIDKWKoKXruwIoRwwfAKlj/t6RG4GpMazNbLHHoX5M8W8dYJcuy4tg+9yNRKhnFL2yF4bmkluYJnSvpHhYryjznVaxudGTMggX4jsPoj4M2Onui3EVLpwPPlU0PqWvjMOz/qJrtcOetAyD5E/nyvTh7k9NS0jYYM=
+	t=1767661096; cv=none; b=L3PYjUHb2IqRo+mRuTgTLAbDC7sjUn/O9dPm/3a1bA32AScgCqYSe/KhEMuEpVF75EwcIan3sF196tkzdFKASkxT4py3b/TB/FV4Wh/gClrXSRw2lUfTH1DdcDP1XESKz8kJumkD+S0hcXDiNuLHKy5hOX+QFXXQZBgClqvRFnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767661093; c=relaxed/simple;
-	bh=jzyih9dafZ4XR2piw4ZWjyPqJoo0c71+VM6fgrf47l8=;
+	s=arc-20240116; t=1767661096; c=relaxed/simple;
+	bh=W1ZlcN21O1nUErIL2QddLDLpe6HN6kZRnr32eNyAemQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rIj+YmY+AkNR76vJWFqFP6N8bSqTcWHAwDExjprmhCA9aAJ70qeq5qc5ue31YGoK4oSb+dHOrd15Xjy/Y9YaUVOEFpf+5vIjPaFUwwq0HjvptO+rVyvZf868+gTmzwdPQDic41maIjFbWHnZooCnCzixHw80F7ER0/qTu5Z6FW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=gI1Z29pP; arc=none smtp.client-ip=209.85.214.225
+	 MIME-Version; b=izr1IL/bPLAgN3PH2syvZmK47JHy2vz6l7d4xiqDmA2qTUFAfVl73TvnZvtSDY48mIRdQPhMYfxhM3xx4AlDq1ERyeOo6dLmkH69hqvv/FVq7G4rylNc6hnNtBnWbRWrqoWDwOYDxsMxw7LDXDhHui7bwJ/QFJTnUTM4MxrxIfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=AxZuJH8w; arc=none smtp.client-ip=209.85.214.227
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="gI1Z29pP"
-Received: by mail-pl1-f225.google.com with SMTP id d9443c01a7336-2a08cb5e30eso1067845ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 16:58:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="AxZuJH8w"
+Received: by mail-pl1-f227.google.com with SMTP id d9443c01a7336-2a3051bc432so682025ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 16:58:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1767661089; x=1768265889; darn=vger.kernel.org;
+        d=purestorage.com; s=google2022; t=1767661091; x=1768265891; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ieqTxRr9zPk5de54duzCoKw16y8ifpstASg31G9cIt4=;
-        b=gI1Z29pP4yAXZVJRn4QamN2Jy0wSyUYwFPSB1tS1W+rn5Puz5rbJGKEkx42meRq3bN
-         JUqSUxqEocyePhUbXWGi+2L8GMF3SLTsoqxzdYmdZrVQPc6ZRFtqgd/GXu+VUcYrVvKM
-         P5ntAUeiumiqZrznCOJ37C6TLaVPzcOYKf0HGflGWzQ3GnfZHiSFJK5zYpDDluuCTlqH
-         jwGQBWd50yv3WzstUaYUthE/E2+UrVek+eh2zzNooo4hd3u32o+G0gBs8yqxV8PRJPnu
-         SHDnm33/H5m7hwFZaytbYDHLyBg93tpIrUivECX+1C88MOXe/2fPa2me0MX4UNsCyjXy
-         Hmsg==
+        bh=Jcv9O2RJUqAVhSh3+8hkyCUs42mqp2c/jNxHfDkP5b8=;
+        b=AxZuJH8wbIWQSNz5LcKsA2GGBvgRfyBJ7Dn9hAwLesIOcKQ3VWosKqTwS8kZh9LbZD
+         OxlO4igUZkWA6OFWW7sVl/f8igL+ej9Ddz9gG4AQahlVVzOFg1DuXUsKegs0oUAl1q5a
+         KCLSaxf78MpvZV/5lb/ZJW7LutOWGxY6COLiVWibjjiu3uuOF42X8fSo/lJfLRaxW/3W
+         0EGiwEogd1prEzl8M8TB0lAfy2NSWhGQ8kwBHHylb9f+T8i/5zNnXzzefFBTuiOkZJqe
+         Dc5Er+0NLH+WJmGD4M15mK43U0iPKne//IrWWx/PzqWr25ga3eXWvdOLDyXDdVn0WIao
+         5D+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767661089; x=1768265889;
+        d=1e100.net; s=20230601; t=1767661091; x=1768265891;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ieqTxRr9zPk5de54duzCoKw16y8ifpstASg31G9cIt4=;
-        b=pd9QI73UMYlSystLoqZ6/HHsZbnpkBzeV6cQm1dCf3KYpVE/AtNwSl7GUrPfLVM0Mz
-         ZJhI86eOaxb1X9K7ljzCavMqZ8Dlogp8rNjw3ttrGUgpU7ZX1IakaRCioKs9b4gOwySW
-         jHTizWFzYXiXWUZgIgfHcZmpX+KAI19ateTrbp1vqw8EfGRA7qSZl8UOoxK5sLv3zWR1
-         rzoqx/QIvdA0CEa60xZoV3XgwkyZKa+pUvjKvzLqhTTmxp8WmP1cSF7jn7ja/FUF2CkM
-         znB4gVpf/joY2EszRZhdNbAhx7v2nOURkYq0rI34i383OQdVS0PxeCqt/AOdH4PS4wtR
-         tpOg==
-X-Forwarded-Encrypted: i=1; AJvYcCXXi5sPfxL5Hi1NyTmjFBQGyfWBc2T7L3uJhP5bo1ZKEsI+R8bb9/3TK/tJ9F+KVhzBonNLOhuSsiEXcH0E+5I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVkmk0gZSdHNKHlff95vhGhGhUtXg+wPURh4JiUkvrLi2abdsj
-	nrWarjKKeYtENrUPseKbxkmE2JMykwY9tmS/w15vohOMQiG+sSYCXVCg7w8foAj5+2e0hGHS3PW
-	o8pelpPSwiZ95Rkp6iv33twQ59YSk00om5S5h
-X-Gm-Gg: AY/fxX6l7mg6PjxEwtSlY4HogQjFcO0rVYhZNQaGrPmyPvGCwAQUkneq0/7F7iqe8xP
-	EI38aYg+ZV7pAQhy8WL2nDJXAg9cThVAi2Le4Iuz1/n6cWIM/T7mvsiSPV3gLdKgurTctIwpD9T
-	kmBfz4gZlsQBkGNmtll/NC03PWTBFMwbgbGS0B2WPQOezkijRzSMa9FKSKiRE8RAmy3j7UcwcWe
-	n67q+iKFf+y7BLrxe8eV2wJknyKt4qFsvrC+74XfotRU6eLmb6OtrA8/rWAA8VQOLeDHglGEd0a
-	mp9gzPu0NjozL3y2sa1MP8kns1QX0e0m3frXx4R72/LNQNc5uV0nUOSQ6+md37/VtVc2O1Eo/2Q
-	9Em5XTlT5El0AEs4+BE39BYuRAbLW37WEpw848kOPhQ==
-X-Google-Smtp-Source: AGHT+IGUUIlq0t3uefFMiXwBaG09hS89DAoxd/gq2atTHMJ0YrjcZZdAsObR5myPEQGUUl2SKt5hQt3PWz7w
-X-Received: by 2002:a17:903:2f8a:b0:2a0:992c:1ddd with SMTP id d9443c01a7336-2a3e2e22affmr8386995ad.8.1767661089556;
-        Mon, 05 Jan 2026 16:58:09 -0800 (PST)
+        bh=Jcv9O2RJUqAVhSh3+8hkyCUs42mqp2c/jNxHfDkP5b8=;
+        b=mnEkFW5PyQvCbIWsdGjPSgk+PSvNcjKaeyjTNTylza3jyK8KGFOSgrT5z07U8Zd9wV
+         cnbWKt8ZGVavkZNPSM0z5lda3m+lwwAS+C+8CjjC8q+mbYf+duEuwIJk4Ihug/wEg49f
+         bsU0scCTNTYSH8RE7qHeJ3wcWRV9BwWruz1ZfLHcnG0iezeo5nt6MQqs6pr0YNBPMRgD
+         jFBRt4TbjRY42N9Y4IQSoJbbuIhS7iHSLA3M5uOgHm7DtkWK0sKuMELKbH+NmYVeUoXG
+         I50wucoQX7nvBmnvttTiZrxytJ/WhTYSKUCL6/Kc1PEZJyA9RpvUY0ORZ99uAuOPpnu4
+         60zA==
+X-Forwarded-Encrypted: i=1; AJvYcCWaPekAZ1CvbqdTiuyun5yYRbit8irn9tLRBfSjXKOvyLURbzwRx/4ELD8qB86zdfO/0t5OuRch1PO/PLPrIkg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmsBViGf6K5JRHUzdkJZZv3g5Mvcuq3bGo6Jg2TR93EEjxtHo5
+	IC7x+XYS1fXqJIZ41w8O3klxBH/G+3YqGcS9tFmxoPe4z8zotHomUSv0pCJQBJna+F55MpyZ5nV
+	kt9RyCeoGsezkA7iXLne24nfMPDMaU2b24z6B
+X-Gm-Gg: AY/fxX7MdKGlSn+lvJOGbYw8ufFZNkpTY3oohdHsxqw3ZSzsPsOsj3b2YR3Bs4tSGfZ
+	CXAm6zIENUm011keqWsNUBP8AjVlgaUBZCW3okWp5ivOMmUWLXno8R/n1HUTfnQ+ySfj12x6Ezm
+	zbceFcWFLrGbarYL5cxPRqD2Tw63dV7idkJ2nT2VDf9N2bqc1tCZvPwn1sht2JunZvhtJRToc1o
+	qmfmNNb90LmTurW22brdyiP95FVP3OL9BF0NnlhPMkM9c0Y/ZlAbi05MbzeSupBe8sCu2Ebm5Hh
+	ntEw/QN7NurE5kLD6/j9VjeJlpUTI5JePaKdaDoJbEJf/MWWqpJxrW0jaIBD0ltexPQUWp20ZZw
+	z9bofR7McxkrAakoQ2OGCIShJgZDIzCzblpI1WxT7Aw==
+X-Google-Smtp-Source: AGHT+IHLQX9+6t9gQS5XXoTmsg+XV0v3ZeAzjuEnNtQMHHDKs8HvmssZR5sNGfICmbVWpPQD/SfXOwS3XIFV
+X-Received: by 2002:a17:902:c94c:b0:266:914a:2e7a with SMTP id d9443c01a7336-2a3e2e2a904mr9242545ad.6.1767661090901;
+        Mon, 05 Jan 2026 16:58:10 -0800 (PST)
 Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2a3e3cc48e4sm850425ad.41.2026.01.05.16.58.09
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2a3e3c6017asm874605ad.27.2026.01.05.16.58.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jan 2026 16:58:09 -0800 (PST)
+        Mon, 05 Jan 2026 16:58:10 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.49.34.222])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 202AC341D2E;
-	Mon,  5 Jan 2026 17:58:09 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 62C8834173B;
+	Mon,  5 Jan 2026 17:58:10 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 11EC9E44554; Mon,  5 Jan 2026 17:58:09 -0700 (MST)
+	id 5472CE44554; Mon,  5 Jan 2026 17:58:10 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -76,9 +76,9 @@ Cc: linux-block@vger.kernel.org,
 	Uday Shankar <ushankar@purestorage.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v3 07/19] ublk: inline ublk_check_and_get_req() into ublk_user_copy()
-Date: Mon,  5 Jan 2026 17:57:39 -0700
-Message-ID: <20260106005752.3784925-8-csander@purestorage.com>
+Subject: [PATCH v3 13/19] selftests: ublk: add utility to get block device metadata size
+Date: Mon,  5 Jan 2026 17:57:45 -0700
+Message-ID: <20260106005752.3784925-14-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260106005752.3784925-1-csander@purestorage.com>
 References: <20260106005752.3784925-1-csander@purestorage.com>
@@ -90,111 +90,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ublk_check_and_get_req() has a single callsite in ublk_user_copy(). It
-takes a ton of arguments in order to pass local variables from
-ublk_user_copy() to ublk_check_and_get_req() and vice versa. And more
-are about to be added. Combine the functions to reduce the argument
-passing noise.
+Some block device integrity parameters are available in sysfs, but
+others are only accessible using the FS_IOC_GETLBMD_CAP ioctl. Add a
+metadata_size utility program to print out the logical block metadata
+size, PI offset, and PI size within the metadata. Example output:
+$ metadata_size /dev/ublkb0
+metadata_size: 64
+pi_offset: 56
+pi_tuple_size: 8
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/block/ublk_drv.c | 51 ++++++++++++++--------------------------
- 1 file changed, 18 insertions(+), 33 deletions(-)
+ tools/testing/selftests/ublk/Makefile        |  4 +--
+ tools/testing/selftests/ublk/metadata_size.c | 36 ++++++++++++++++++++
+ 2 files changed, 38 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/ublk/metadata_size.c
 
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index c3832ed8cec1..abb668b460a8 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -2650,70 +2650,55 @@ static inline bool ublk_check_ubuf_dir(const struct request *req,
- 		return true;
+diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
+index 06ba6fde098d..41f776bb86a6 100644
+--- a/tools/testing/selftests/ublk/Makefile
++++ b/tools/testing/selftests/ublk/Makefile
+@@ -47,14 +47,14 @@ TEST_PROGS += test_stress_03.sh
+ TEST_PROGS += test_stress_04.sh
+ TEST_PROGS += test_stress_05.sh
+ TEST_PROGS += test_stress_06.sh
+ TEST_PROGS += test_stress_07.sh
  
- 	return false;
- }
+-TEST_GEN_PROGS_EXTENDED = kublk
++TEST_GEN_PROGS_EXTENDED = kublk metadata_size
  
--static struct request *ublk_check_and_get_req(struct kiocb *iocb,
--		struct iov_iter *iter, size_t *off, int dir,
--		struct ublk_io **io)
-+static ssize_t
-+ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
- {
- 	struct ublk_device *ub = iocb->ki_filp->private_data;
- 	struct ublk_queue *ubq;
- 	struct request *req;
-+	struct ublk_io *io;
- 	size_t buf_off;
- 	u16 tag, q_id;
-+	ssize_t ret;
+ LOCAL_HDRS += $(wildcard *.h)
+ include ../lib.mk
  
- 	if (!user_backed_iter(iter))
--		return ERR_PTR(-EACCES);
-+		return -EACCES;
+-$(TEST_GEN_PROGS_EXTENDED): $(wildcard *.c)
++$(OUTPUT)/kublk: common.c fault_inject.c file_backed.c kublk.c null.c stripe.c
  
- 	if (ub->dev_info.state == UBLK_S_DEV_DEAD)
--		return ERR_PTR(-EACCES);
-+		return -EACCES;
- 
- 	tag = ublk_pos_to_tag(iocb->ki_pos);
- 	q_id = ublk_pos_to_hwq(iocb->ki_pos);
- 	buf_off = ublk_pos_to_buf_off(iocb->ki_pos);
- 
- 	if (q_id >= ub->dev_info.nr_hw_queues)
--		return ERR_PTR(-EINVAL);
-+		return -EINVAL;
- 
- 	ubq = ublk_get_queue(ub, q_id);
- 	if (!ublk_dev_support_user_copy(ub))
--		return ERR_PTR(-EACCES);
-+		return -EACCES;
- 
- 	if (tag >= ub->dev_info.queue_depth)
--		return ERR_PTR(-EINVAL);
-+		return -EINVAL;
- 
--	*io = &ubq->ios[tag];
--	req = __ublk_check_and_get_req(ub, q_id, tag, *io, buf_off);
-+	io = &ubq->ios[tag];
-+	req = __ublk_check_and_get_req(ub, q_id, tag, io, buf_off);
- 	if (!req)
--		return ERR_PTR(-EINVAL);
--
--	if (!ublk_check_ubuf_dir(req, dir))
--		goto fail;
--
--	*off = buf_off;
--	return req;
--fail:
--	ublk_put_req_ref(*io, req);
--	return ERR_PTR(-EACCES);
--}
--
--static ssize_t
--ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
--{
--	struct request *req;
--	struct ublk_io *io;
--	size_t buf_off;
--	size_t ret;
-+		return -EINVAL;
- 
--	req = ublk_check_and_get_req(iocb, iter, &buf_off, dir, &io);
--	if (IS_ERR(req))
--		return PTR_ERR(req);
-+	if (!ublk_check_ubuf_dir(req, dir)) {
-+		ret = -EACCES;
-+		goto out;
+ check:
+ 	shellcheck -x -f gcc *.sh
+diff --git a/tools/testing/selftests/ublk/metadata_size.c b/tools/testing/selftests/ublk/metadata_size.c
+new file mode 100644
+index 000000000000..76ecddf04d25
+--- /dev/null
++++ b/tools/testing/selftests/ublk/metadata_size.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <fcntl.h>
++#include <linux/fs.h>
++#include <stdio.h>
++#include <sys/ioctl.h>
++
++int main(int argc, char **argv)
++{
++	struct logical_block_metadata_cap cap = {};
++	const char *filename;
++	int fd;
++	int result;
++
++	if (argc != 2) {
++		fprintf(stderr, "Usage: %s BLOCK_DEVICE\n", argv[0]);
++		return 1;
 +	}
- 
- 	ret = ublk_copy_user_pages(req, buf_off, iter, dir);
--	ublk_put_req_ref(io, req);
- 
-+out:
-+	ublk_put_req_ref(io, req);
- 	return ret;
- }
- 
- static ssize_t ublk_ch_read_iter(struct kiocb *iocb, struct iov_iter *to)
- {
++
++	filename = argv[1];
++	fd = open(filename, O_RDONLY);
++	if (fd < 0) {
++		perror(filename);
++		return 1;
++	}
++
++	result = ioctl(fd, FS_IOC_GETLBMD_CAP, &cap);
++	if (result < 0) {
++		perror("ioctl");
++		return 1;
++	}
++
++	printf("metadata_size: %u\n", cap.lbmd_size);
++	printf("pi_offset: %u\n", cap.lbmd_pi_offset);
++	printf("pi_tuple_size: %u\n", cap.lbmd_pi_size);
++	return 0;
++}
 -- 
 2.45.2
 
