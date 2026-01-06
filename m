@@ -1,218 +1,239 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32593396F0
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Jan 2026 17:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767718841; cv=none; b=BL7rmjpTVgCiu9ELoSyDbAy7zULnHG0mH/bQV85tlxSudO3ogodM4W/NwtJYMaIf+nzpNmdycVJUr4QZkademkOSX03hfK02m4yvK6m5hZ4WF++ggqYp3hgQLtKYgO2tr6TtsGroXOZeEG+cu/EZ6mSTZdWAWrFErdh1eD8Jmws=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767718841; c=relaxed/simple;
-	bh=Ftj/YzLelibUqHaEwRcMBZFhoEUuV8xe/0iLYvtKu9w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o47ke2wTHPsiZpID6vjNxm9v4oNNvA6j72WdO9LFO+Iw65JvGbiAjceI61+Z38WtdiJ71XqptBzJWJD0nq75oXXLdO8KRoi01dlzv2rBZiCtTXJO7YBILz1ybZQYCx5ttkX0ll603uDQgOjEgWAMvQbupcmOy6mGa5VG2bwL9sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sFk0TiIQ; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE31346781
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Jan 2026 17:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767719760; cv=pass; b=U5xIkA+UaXWJipxb3bZ33O4fnkm4bFhXja9R5oFpDF626j6JYTHfZnHpMLhvAxFqRhCX+pQehzsSLsHhQG/ZjAt/N5orkGbpXETCy0aYA/BA5r3V7Ubu9kcWp2FhDWYl06Hx2ZYsfafiTtO12To8hzCuYrzwxTbtlqn1Hx/BOY0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767719760; c=relaxed/simple;
+	bh=BcUKT/WaKF3cc5RT8cSr1Hmp5p8kpbrtWjAK1Grl5Fg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TA8/Aef4aXd9hsuns1APnl3ryw1I6bM6xPRT40vmPvRvMSddEmLke62KUUq1Toq+twbRi5nd9ABiZ7G9j84hAmY3whk0eM2XJbUTC46HnAYm7Qb7O+Bx//BHwMPSWorhcxnRpLabIWQdLzoU2NvrpZMuknbKuJZt7qozgWwMexM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=XO9wN6w3; arc=pass smtp.client-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sFk0TiIQ"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767718837;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EC0zW95wgB8/pMIwQU9ZWEcVV2VXSlvtnuFHgDLceqM=;
-	b=sFk0TiIQH5jhQ9ifiJbWro82H63vmPXDvrwn2KbYlpaXfHPldznbQhiPfBYf7SrynEw4t+
-	9EsJ3N++VTf08NSv7GxmW5yDBfvckqxNDbQ5cIjGq7pS/SHiKEAskZeeWJHkFgtHWGP2pS
-	VU/E6i/M+PvNTBX2XYR2U2LYsdaJ+8Q=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Seth Forshee <sforshee@kernel.org>,
-	Yuichiro Tsuji <yuichtsu@amazon.com>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Paul Chaignon <paul.chaignon@gmail.com>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Rong Tao <rongtao@cestc.cn>,
-	linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v4 5/9] bpf: Refactor reporting btf_log_true_size for btf_load
-Date: Wed,  7 Jan 2026 00:59:03 +0800
-Message-ID: <20260106165907.53631-6-leon.hwang@linux.dev>
-In-Reply-To: <20260106165907.53631-1-leon.hwang@linux.dev>
-References: <20260106165907.53631-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="XO9wN6w3"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-11f42eaff60so43191c88.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jan 2026 09:15:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1767719756; cv=none;
+        d=google.com; s=arc-20240605;
+        b=dEHAF3O450tzbl1Edr5eNzpnejOjAZwELUCGaaSjSJVWJ+/3uVG5fdU6R8MyTnEBRV
+         UlhrNKvunK/BnEdWULzUUcKDX8AwLudQc+4/82QJwFdCOUTA+jBJcd6toQLAab82aJ3K
+         N0Xib2U3nSyQhSHQPHvya0JjBY0PeA2Fhn03Wr/atXTW5XNtA9AxS9N7NJg/AIijm/G9
+         r+iVaQAolnJEza4SX5OIWMztL8xPz2XY4q1g+8r6Pa3rRo6wc1MN8ySf3bZOAAfKTV2g
+         0yJXC2BSl74KQy2nCE0ZQKqM7Xj6WRomMVDcx3Gor9DXsSwI3mAvqwCBhEbsiZTX46Mx
+         ylmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=h0S9X35x1dPYmVywIfwy49RDgI1meLSZA2LdM4U3+6o=;
+        fh=xn23xnKaI0/dJGQjw/2qkpcPyiJwdDraUfDqqn87uQE=;
+        b=YoJShkplpKwy0zdahEQ+YbHDgOWP+4PNnUusXLTviFivU3auHpcwqp5+9nBtLhz40R
+         FJc7lGECgQGiLCwDitrlGSIEUC6FcoKIFa+R/wf+JJ7Hmw4/74aGi0eONLskZB/E9NpQ
+         oeqxyysFkZUwDi512Lb9xNhUMuL4WoiMHEGlH5c8Oke5a9MC1cOZBpyefJ64hU1xv7O7
+         1XJNzRbP8Cb9IQpP4okNpG7qHPETc5pnHYBCbh2v99Waf+qcDrMlQ9EP5vI3+1RN6Ovb
+         0iqWUa6o5hgTsiMoDloBODeF1m5U8lLKMDBfe1+PprrbNB97xHlCDyvMuKLX0UIsbKqU
+         ATHw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1767719756; x=1768324556; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h0S9X35x1dPYmVywIfwy49RDgI1meLSZA2LdM4U3+6o=;
+        b=XO9wN6w3Opl7nMwLomPxLAU98QSEE6/7I4oGQQFjM3wtnqQSdRDxJalKkX2vq3OsWg
+         il5XdccSJfDz+Bv9lZGLKHbLnwj8mSjjhsc2zkLmIlXuevG/AQnRKeQh6oHHc0qrVBW+
+         jbkcx+Y6QPmgOM1XRyHJUcpvOM4bXFMGuD3PzfkGba0SR6NsanQfg7hQoggDguDpJX5E
+         fZabPw5l81W4yK05v1oooaBtbl9uKJKCnuzAyIxyLwoBmu2to7KoRXPJ8TZhzJZ/gN6B
+         N3eFZgSF6O5q0n8nPdKLdOA6295ZYXhU7U5edlXeY5Byov89mRUg+WPKcgHAD+n3IzfZ
+         zuCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767719756; x=1768324556;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=h0S9X35x1dPYmVywIfwy49RDgI1meLSZA2LdM4U3+6o=;
+        b=G8yDtoKb+vz+0uCzP8mKQz3mnQOFSq8oJNJRCa+wnKhJlSdovp+FmasiIW9OGzVhlG
+         JbncpJIdtaU+elpssl6Vd0E6oOlDwgKzbPsZhsUis2qMl+Ml/EnYzKotqsilgvC8Dzlg
+         W7zJGiE/bLlVHh9v0NoJw+IhJUHvx+I7/vXd9QjHjH9s7M/3jMDn7hD1DRz3ReP5pvdQ
+         5ajVDbYHiDyEECSfQB1Jjyiv4wND364k3Wwrxb2SYjEf9LACJvoveYc55Y7YbHnvFemD
+         jIXiIcetMUaYS3lKz7bzRibgXRET73DOEbrKmtRUdDf/DclwilMGS1enx3fZiKrNeZo9
+         HFEA==
+X-Forwarded-Encrypted: i=1; AJvYcCWb/hYQj5bdcWd8OB+zNFHdsGgIjjDF3D11M248i8sX3P0+fMRhoJ4TK2TX5kghOEl3YogdekttamcwC91jQs4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI1or+pykk2vq6jkTU3PxOEbXMn57+n3VpqA7YOyieOuA2/Qvo
+	TpSv8HnUi4zlKxuXcVUonHpoKtwE/FAiTAHkiMavHSQJCL0kJeXTN/47Q0Dzuhkhb98cTaMZqa6
+	9NCo/bIENyULB+KgncdGf+tTZHw9MAuYgHiBAyOuoNg==
+X-Gm-Gg: AY/fxX73+Hz6JUIL8lSkcxANQh6NlbzU0ECK0h3eRZMrnhBBCRv+NsLzLSLEvw7c6eB
+	g8NyryVk6e7e3SllHbx0T2MSwZNIspBQPUKgvlsZLpD1WIR5WbdukITGftcL+ZdBktuqV8rtIkh
+	6dY08AJqub5QMhpSz2yIJoRg9zGtdccfujiy8ZZiwwBZZEsz8ociEnHdLXrgMkev+FigGrqpO/A
+	/bnQXsJJka0UuvkmgTnlkSSs4VMKpGvYzshWG6DoVWC8sv727tC+uTRX+8QcD0DatZA7aiKaxOp
+	usyvkQ8=
+X-Google-Smtp-Source: AGHT+IHsx2prbXYg3j18SfdVTQFJ60Rbk1R0GsSR/Ko74ivczv03vINWOjHdxoRdXuVpHJS26gsubAcJWKCBQS4KIZA=
+X-Received: by 2002:a05:7022:6195:b0:119:e56a:4fff with SMTP id
+ a92af1059eb24-121f18e1ff2mr1694930c88.4.1767719756030; Tue, 06 Jan 2026
+ 09:15:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260106005752.3784925-1-csander@purestorage.com>
+ <20260106005752.3784925-20-csander@purestorage.com> <aV0Xx2vWmL5Iuls4@fedora>
+In-Reply-To: <aV0Xx2vWmL5Iuls4@fedora>
+From: Caleb Sander Mateos <csander@purestorage.com>
+Date: Tue, 6 Jan 2026 09:15:44 -0800
+X-Gm-Features: AQt7F2oH1KSrEU_qjpFRn21_6eSA-1DRw6ns58qu5_CQ83y4Pw0aC2-PF1SPR9A
+Message-ID: <CADUfDZofEg0Q=veyihy=M-XCxoga6fkueJmLdJ4CVd6KU=GdBg@mail.gmail.com>
+Subject: Re: [PATCH v3 19/19] selftests: ublk: add end-to-end integrity test
+To: Ming Lei <ming.lei@redhat.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Stanley Zhang <stazhang@purestorage.com>, Uday Shankar <ushankar@purestorage.com>, 
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In the next commit, it will be able to report logs via extended common
-attributes, which will report 'log_true_size' via the extended common
-attributes meanwhile.
+On Tue, Jan 6, 2026 at 6:10=E2=80=AFAM Ming Lei <ming.lei@redhat.com> wrote=
+:
+>
+> On Mon, Jan 05, 2026 at 05:57:51PM -0700, Caleb Sander Mateos wrote:
+> > Add test case loop_08 to verify the ublk integrity data flow. It uses
+> > the kublk loop target to create a ublk device with integrity on top of
+> > backing data and integrity files. It then writes to the whole device
+> > with fio configured to generate integrity data. Then it reads back the
+> > whole device with fio configured to verify the integrity data.
+> > It also verifies that injected guard, reftag, and apptag corruptions ar=
+e
+> > correctly detected.
+> >
+> > Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+> > ---
+> >  tools/testing/selftests/ublk/Makefile        |   1 +
+> >  tools/testing/selftests/ublk/test_loop_08.sh | 111 +++++++++++++++++++
+> >  2 files changed, 112 insertions(+)
+> >  create mode 100755 tools/testing/selftests/ublk/test_loop_08.sh
+> >
+> > diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/self=
+tests/ublk/Makefile
+> > index bfd68ae64142..ab745443fd58 100644
+> > --- a/tools/testing/selftests/ublk/Makefile
+> > +++ b/tools/testing/selftests/ublk/Makefile
+> > @@ -33,10 +33,11 @@ TEST_PROGS +=3D test_loop_02.sh
+> >  TEST_PROGS +=3D test_loop_03.sh
+> >  TEST_PROGS +=3D test_loop_04.sh
+> >  TEST_PROGS +=3D test_loop_05.sh
+> >  TEST_PROGS +=3D test_loop_06.sh
+> >  TEST_PROGS +=3D test_loop_07.sh
+> > +TEST_PROGS +=3D test_loop_08.sh
+> >  TEST_PROGS +=3D test_stripe_01.sh
+> >  TEST_PROGS +=3D test_stripe_02.sh
+> >  TEST_PROGS +=3D test_stripe_03.sh
+> >  TEST_PROGS +=3D test_stripe_04.sh
+> >  TEST_PROGS +=3D test_stripe_05.sh
+> > diff --git a/tools/testing/selftests/ublk/test_loop_08.sh b/tools/testi=
+ng/selftests/ublk/test_loop_08.sh
+> > new file mode 100755
+> > index 000000000000..ca289cfb2ad4
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/ublk/test_loop_08.sh
+> > @@ -0,0 +1,111 @@
+> > +#!/bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +
+> > +. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
+> > +
+> > +if ! _have_program fio; then
+> > +     exit $UBLK_SKIP_CODE
+> > +fi
+> > +
+> > +fio_version=3D$(fio --version)
+> > +if [[ "$fio_version" =3D~ fio-[0-9]+\.[0-9]+$ ]]; then
+> > +     echo "Requires development fio version with https://github.com/ax=
+boe/fio/pull/1992"
+> > +     exit $UBLK_SKIP_CODE
+> > +fi
+> > +
+> > +TID=3Dloop_08
+> > +
+> > +_prep_test "loop" "end-to-end integrity"
+> > +
+> > +_create_backfile 0 256M
+> > +_create_backfile 1 32M # 256M * (64 integrity bytes / 512 data bytes)
+> > +integrity_params=3D"--integrity_capable --integrity_reftag
+> > +                  --metadata_size 64 --pi_offset 56 --csum_type t10dif=
+"
+> > +dev_id=3D$(_add_ublk_dev -t loop -u $integrity_params "${UBLK_BACKFILE=
+S[@]}")
+>
+> I tried above setting:
+>
+> ./kublk add -t loop --integrity_capable --integrity_reftag --metadata_siz=
+e 64 --pi_offset 56 --csum_type t10dif --foreground -u /dev/sdb /dev/sdc
+> dev id 1: nr_hw_queues 2 queue_depth 128 block size 512 dev_capacity 8388=
+608
+>         max rq size 1048576 daemon pid 38295 flags 0x160c2 state LIVE
+>         queue 0: affinity(0 )
+>         queue 1: affinity(8 )
+>
+> However, IO error is always triggered:
+>
+> [ 9202.316382] ublkb1: ref tag error at location 0 (rcvd 128)
+> [ 9202.317171] Buffer I/O error on dev ublkb1, logical block 0, async pag=
+e read
 
-Therefore, refactor the way of 'btf_log_true_size' reporting in order to
-report 'log_true_size' via the extended common attributes easily.
+Hmm, what are the initial contents of /dev/sdc? It looks like they are
+nonzero, as the reftag being read for logical block 0 is 128 rather
+than the expected 0 (the reftag would be read from bytes 60 to 63 of
+/dev/sdc). In general, though, the partition scan may be expected to
+fail the bio-integrity-auto checks if the integrity data hasn't been
+initialized. I don't think this is an issue, since the partition scan
+is looking for a partition table but there's no guarantee that one
+exists.
+You can disable the kernel integrity checks if you want by writing 0
+to /sys/block/ublkb1/integrity/read_verify. However, I'm not sure it's
+possible to do this soon enough to take effect before the partition
+scan.
+We could also use the UBLK_F_NO_AUTO_PART_SCAN feature, once it lands,
+to suppress the partition scan and these error messages.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- include/linux/btf.h  |  2 +-
- kernel/bpf/btf.c     | 25 +++++--------------------
- kernel/bpf/syscall.c | 19 ++++++++++++++++---
- 3 files changed, 22 insertions(+), 24 deletions(-)
+Best,
+Caleb
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 691f09784933..2b27fdd567f5 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -144,7 +144,7 @@ const char *btf_get_name(const struct btf *btf);
- void btf_get(struct btf *btf);
- void btf_put(struct btf *btf);
- const struct btf_header *btf_header(const struct btf *btf);
--int btf_new_fd(const union bpf_attr *attr, bpfptr_t uattr, u32 uattr_sz);
-+int btf_new_fd(union bpf_attr *attr, bpfptr_t uattr);
- struct btf *btf_get_by_fd(int fd);
- int btf_get_info_by_fd(const struct btf *btf,
- 		       const union bpf_attr *attr,
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 539c9fdea41d..9efcbb489edb 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5745,22 +5745,7 @@ static int btf_check_type_tags(struct btf_verifier_env *env,
- 	return 0;
- }
- 
--static int finalize_log(struct bpf_verifier_log *log, bpfptr_t uattr, u32 uattr_size)
--{
--	u32 log_true_size;
--	int err;
--
--	err = bpf_vlog_finalize(log, &log_true_size);
--
--	if (uattr_size >= offsetofend(union bpf_attr, btf_log_true_size) &&
--	    copy_to_bpfptr_offset(uattr, offsetof(union bpf_attr, btf_log_true_size),
--				  &log_true_size, sizeof(log_true_size)))
--		err = -EFAULT;
--
--	return err;
--}
--
--static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size)
-+static struct btf *btf_parse(union bpf_attr *attr, bpfptr_t uattr)
- {
- 	bpfptr_t btf_data = make_bpfptr(attr->btf, uattr.is_kernel);
- 	char __user *log_ubuf = u64_to_user_ptr(attr->btf_log_buf);
-@@ -5841,7 +5826,7 @@ static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr, u32 uat
- 		}
- 	}
- 
--	err = finalize_log(&env->log, uattr, uattr_size);
-+	err = bpf_vlog_finalize(&env->log, &attr->btf_log_true_size);
- 	if (err)
- 		goto errout_free;
- 
-@@ -5853,7 +5838,7 @@ static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr, u32 uat
- 	btf_free_struct_meta_tab(btf);
- errout:
- 	/* overwrite err with -ENOSPC or -EFAULT */
--	ret = finalize_log(&env->log, uattr, uattr_size);
-+	ret = bpf_vlog_finalize(&env->log, &attr->btf_log_true_size);
- 	if (ret)
- 		err = ret;
- errout_free:
-@@ -8017,12 +8002,12 @@ static int __btf_new_fd(struct btf *btf)
- 	return anon_inode_getfd("btf", &btf_fops, btf, O_RDONLY | O_CLOEXEC);
- }
- 
--int btf_new_fd(const union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size)
-+int btf_new_fd(union bpf_attr *attr, bpfptr_t uattr)
- {
- 	struct btf *btf;
- 	int ret;
- 
--	btf = btf_parse(attr, uattr, uattr_size);
-+	btf = btf_parse(attr, uattr);
- 	if (IS_ERR(btf))
- 		return PTR_ERR(btf);
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ad565f569a4f..ce349a059d5d 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5422,7 +5422,7 @@ static int bpf_obj_get_info_by_fd(const union bpf_attr *attr,
- 
- #define BPF_BTF_LOAD_LAST_FIELD btf_token_fd
- 
--static int bpf_btf_load(const union bpf_attr *attr, bpfptr_t uattr, __u32 uattr_size)
-+static int bpf_btf_load(union bpf_attr *attr, bpfptr_t uattr)
- {
- 	struct bpf_token *token = NULL;
- 
-@@ -5449,7 +5449,7 @@ static int bpf_btf_load(const union bpf_attr *attr, bpfptr_t uattr, __u32 uattr_
- 
- 	bpf_token_put(token);
- 
--	return btf_new_fd(attr, uattr, uattr_size);
-+	return btf_new_fd(attr, uattr);
- }
- 
- #define BPF_BTF_GET_FD_BY_ID_LAST_FIELD fd_by_id_token_fd
-@@ -6211,6 +6211,16 @@ static int copy_prog_load_log_true_size(union bpf_attr *attr, bpfptr_t uattr, un
- 					      &attr->log_true_size);
- }
- 
-+static int copy_btf_load_log_true_size(union bpf_attr *attr, bpfptr_t uattr, unsigned int size)
-+{
-+	if (size >= offsetofend(union bpf_attr, btf_log_true_size) &&
-+	    copy_to_bpfptr_offset(uattr, offsetof(union bpf_attr, btf_log_true_size),
-+				  &attr->btf_log_true_size, sizeof(attr->btf_log_true_size)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
- static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
- 		     bpfptr_t uattr_common, unsigned int size_common)
- {
-@@ -6318,7 +6328,10 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
- 		err = bpf_raw_tracepoint_open(&attr);
- 		break;
- 	case BPF_BTF_LOAD:
--		err = bpf_btf_load(&attr, uattr, size);
-+		attr.btf_log_true_size = 0;
-+		err = bpf_btf_load(&attr, uattr);
-+		ret = copy_btf_load_log_true_size(&attr, uattr, size);
-+		err = ret ? ret : err;
- 		break;
- 	case BPF_BTF_GET_FD_BY_ID:
- 		err = bpf_btf_get_fd_by_id(&attr);
--- 
-2.52.0
-
+> [ 9202.319478] ublkb1: ref tag error at location 0 (rcvd 128)
+> [ 9202.319983] Buffer I/O error on dev ublkb1, logical block 0, async pag=
+e read
+> [ 9202.326332] ublkb1: ref tag error at location 0 (rcvd 128)
+> [ 9202.326974] Buffer I/O error on dev ublkb1, logical block 0, async pag=
+e read
+> [ 9202.327570] ldm_validate_partition_table(): Disk read failed.
+> [ 9202.336539] ublkb1: ref tag error at location 0 (rcvd 128)
+> [ 9202.337228] Buffer I/O error on dev ublkb1, logical block 0, async pag=
+e read
+> [ 9202.339247] ublkb1: ref tag error at location 0 (rcvd 128)
+> [ 9202.339779] Buffer I/O error on dev ublkb1, logical block 0, async pag=
+e read
+> [ 9202.344306] ublkb1: ref tag error at location 0 (rcvd 128)
+> [ 9202.344948] Buffer I/O error on dev ublkb1, logical block 0, async pag=
+e read
+> [ 9202.347067] ublkb1: ref tag error at location 0 (rcvd 128)
+> [ 9202.347558] Buffer I/O error on dev ublkb1, logical block 0, async pag=
+e read
+> [ 9202.348100] Dev ublkb1: unable to read RDB block 0
+> [ 9202.350159] ublkb1: ref tag error at location 0 (rcvd 128)
+> [ 9202.350642] Buffer I/O error on dev ublkb1, logical block 0, async pag=
+e read
+> [ 9202.354977] ublkb1: ref tag error at location 0 (rcvd 128)
+> [ 9202.355539] Buffer I/O error on dev ublkb1, logical block 0, async pag=
+e read
+> [ 9202.356280]  ublkb1: unable to read partition table
+>
+>
+>
+> Thanks,
+> Ming
+>
