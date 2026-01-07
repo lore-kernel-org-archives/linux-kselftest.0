@@ -1,87 +1,85 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8279234D917;
-	Wed,  7 Jan 2026 16:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44BA3A0B1E;
+	Wed,  7 Jan 2026 16:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767804556; cv=none; b=DHXHSrTiiP0yF1i4ZC2c1D/J8t6XOZqTSrpvQ6Tu8kbcggy+T+pgtyfiKIeFjmCyRGeB0HxmkVpZONXs+hmQEsnqOSoOkOKcQQ+jHdOdDQr7A827VpjTgIDO3/rEr0UvG5QTxdH+LpwwNN/LxttF3p/Y9YqiiDCo3p83NNr10wE=
+	t=1767805175; cv=none; b=U5y+SJkC6b4gEBOOZTi22rz7W4hjo9YMHE1nUmgp9OKPkgC3KKchq7R4sRXn9mhRlxlXw1/bwuEDXIsmG2eYrQT+GfYT5pYXtET+kffhcnYgVlq9b0LamILCwRflUjekHjMMz6PnZ2sa1CeEbHoCaMammwf/FmLTqqgqJlBysW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767804556; c=relaxed/simple;
-	bh=JThi7RLwAirOPVgwT2JD5p1WRyNKU85M6QrfMprXfB8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bPV8YHXGx9B6ybrwATot2O25NCDjMA9W7/xNYeaFhx4Iz4EJXmLP85MGBXkMi9vORU8xS8LpazTCHOc/208YWDcYVamScOh0zSCOVg+MOExH6ugABNoPSTUcshMMk7wl6EYruQVxU5TLw4t3EoeZ8INJ4MrJe83/74FloI9zaOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 98B71168F;
-	Wed,  7 Jan 2026 08:48:53 -0800 (PST)
-Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 19AA43F5A1;
-	Wed,  7 Jan 2026 08:48:58 -0800 (PST)
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-To: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Kevin Brodsky <kevin.brodsky@arm.com>,
+	s=arc-20240116; t=1767805175; c=relaxed/simple;
+	bh=HwEX46v431f+sbGo5EqxgnUwfzroRLeV1erewYphpFo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t0Kfpi8qCvkhRU0jgzVN/wfJw3yF4vkUhqXvsXGQ21VrFRN7gU3DstaXo7IByHyJKCRkmObRWkJeo1hGbRWjcdLE1K2h0Z65/J6LxtbwRppq+XMb+kpdX+/lwLJjFcun2v+jdmGgT9siyUsz/RYMZibiGj0qTrVsQvQTBwuGt9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SLtdKPjD; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SLtdKPjD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10FABC19422;
+	Wed,  7 Jan 2026 16:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767805174;
+	bh=HwEX46v431f+sbGo5EqxgnUwfzroRLeV1erewYphpFo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SLtdKPjDsjq3CIydu0nCMpF4xRX3a55iYS+c9WgEvIR/u6j3EKWGkGLeLWRiajwpS
+	 H6u1dCYqeZPV1/Ux2QI8IdGPfJuejyK9Mt0fTfD/JeNjo7JHyp3pzzLFeNN4ks5XZ5
+	 7vWfdHNcpXdGvYSU9u65pPhUzx1omRJREpdghlBG+Q25jcki5mYF0ytTjZrPFnEXtT
+	 FNW+qmTeHDbLxEgNbxQ6J/z53F1JwlmkXotfuFM2Wm1oTLUffAm4FwXJMd/QQYf5J8
+	 MLQYMW3L7Et0Rjy3GA2p/FA8V315OhSzmnnSFop+/ETv3A0XHAt8hIHXTGGO9EUGQk
+	 zCntVNjC0MKaA==
+Date: Wed, 7 Jan 2026 16:59:29 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>,
 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Mark Brown <broonie@kernel.org>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Usama Anjum <Usama.Anjum@arm.com>
-Subject: [PATCH v2 6/8] selftests/mm: fix faulting-in code in pagemap_ioctl test
-Date: Wed,  7 Jan 2026 16:48:40 +0000
-Message-ID: <20260107164842.3289559-7-kevin.brodsky@arm.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20260107164842.3289559-1-kevin.brodsky@arm.com>
+	Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v2 3/8] selftests/mm: pass down full CC and CFLAGS to
+ check_config.sh
+Message-ID: <b7458982-ec26-4057-bd4c-0609d177ae32@sirena.org.uk>
 References: <20260107164842.3289559-1-kevin.brodsky@arm.com>
+ <20260107164842.3289559-4-kevin.brodsky@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rXNMserVLWCKQhmh"
+Content-Disposition: inline
+In-Reply-To: <20260107164842.3289559-4-kevin.brodsky@arm.com>
+X-Cookie: Truth is free, but information costs.
 
-One of the pagemap_ioctl tests attempts to fault in pages by
-memcpy()'ing them to an unused buffer. This probably worked
-originally, but since commit 46036188ea1f ("selftests/mm: build with
--O2") the compiler is free to optimise away that unused buffer and
-the memcpy() with it. As a result there might not be any resident
-page in the mapping and the test may fail.
 
-We don't need to copy all that memory anyway. Just fault in every
-page.
+--rXNMserVLWCKQhmh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Cc: Usama Anjum <Usama.Anjum@arm.com>
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
----
- tools/testing/selftests/mm/pagemap_ioctl.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Wed, Jan 07, 2026 at 04:48:37PM +0000, Kevin Brodsky wrote:
 
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index 2cb5441f29c7..80d7c391f8f5 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -1056,7 +1056,6 @@ int sanity_tests(void)
- 	struct page_region *vec;
- 	char *mem, *fmem;
- 	struct stat sbuf;
--	char *tmp_buf;
- 
- 	/* 1. wrong operation */
- 	mem_size = 10 * page_size;
-@@ -1167,8 +1166,7 @@ int sanity_tests(void)
- 	if (fmem == MAP_FAILED)
- 		ksft_exit_fail_msg("error nomem %d %s\n", errno, strerror(errno));
- 
--	tmp_buf = malloc(sbuf.st_size);
--	memcpy(tmp_buf, fmem, sbuf.st_size);
-+	force_read_pages_in_range(fmem, sbuf.st_size);
- 
- 	ret = pagemap_ioctl(fmem, sbuf.st_size, vec, vec_size, 0, 0,
- 			    0, PAGEMAP_NON_WRITTEN_BITS, 0, PAGEMAP_NON_WRITTEN_BITS);
--- 
-2.51.2
+> Remove these assumptions by passing down CC and CFLAGS as-is from
+> the Makefile, so that the same command line is used as when actually
+> building the tests.
 
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+--rXNMserVLWCKQhmh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlekPAACgkQJNaLcl1U
+h9BHWwf+J+x1LLkKhs/euNG82nQXegO3caN5yRTlLIM1Nc8Kq0ZrA0Y6sBNrwZc5
+SlSYRizBioqJS1iLS47DopU7DG3+woAKh3opxwBfAk23aixyD2dLEqXFmgy0z0Un
+BwEVHQerLkh8Ogi2GAxr+sqPedN0WEr1GbSY3VfTG1qYiNW3SG5+0AJ6qtSiToIi
+830xiMgDyxn0GD+jS+sY3U+wgMfUF6T9Kwu3X/24LQTRKGUCjBMKxDK1j+5j4QuM
+I+23PU1qoMHlTDxAphGaXijY0owBT8rJZEy6pF+B81W+Ww0mFD7butnAUrubBePh
+JOG0zO8+G59kVsPNgqaeDi7Zt7UXRw==
+=PiEC
+-----END PGP SIGNATURE-----
+
+--rXNMserVLWCKQhmh--
