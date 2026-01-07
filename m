@@ -1,211 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABEAC26290
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Jan 2026 00:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2261514A8B
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Jan 2026 01:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767745712; cv=none; b=odF7lfNWJ0cxyVskAj6uDtZZszkFdUUs4D701SL98n/BxneTB4VpvI0mndJbBr5SjSuvhyYmMbdOlmZH2N3AYvNPN8Z87WBXa8n7mPbfvbrOa4gJ6YHV09NzQON0rpDXfWNONGEUkZvuZCxNJZsgnQ2sCuHHiZJdfW7rlzCg/DI=
+	t=1767747704; cv=none; b=YMLNQTEpkH6DL3ZGQ2nj2Yv1NDttDO3dwzi9XRIITkWrpVp0iZNR+GgvUuGYyXR+xHgot/Cxs0Sj8zb7bZjtgo/46l5+j7R74A3FHOU894nKmzvcvPp7rNQD73qJyvzfvsCpVKU4tmYGOjTYUy+Slib7yQwfAj8O73w/q/JumwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767745712; c=relaxed/simple;
-	bh=OqKCrFTRWQn9DrKY7pdYXv+h56N0OkFE7m8PpD5f/KA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tYKY1rlxa5dojfeNTEPxB7iBfqPe3qDzmmG0b9ng2sJhJX1XJl/4F/mjtgSocHqxGXZs5kseEsUK4+WDMMq9uTQ3hGGK1vsiq4pP/oMRXb5brlo1haWihp8TDYEY+merUO/tYIQndmNZTE6vT9D69n+b8pRTgIvbH9ugMHdqB7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ekQ4Hgpx; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1767747704; c=relaxed/simple;
+	bh=nxYTWiOaKpyGTBrQGLRPguBdRZkgWO4MwRobssvcnVI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=qpfe477aLctVzVFrb1zNwXOapRZCaviAo+TMqX9JxC+O1dPwn2hp+QggdR+OnyXTy6C50mefoRvttDXG7YvBH3Kop28/A99iZBgqltKU3hVIy1nRUvyu865eUcD0n9tIStaa+4tFht+5DmBun/mUzlht6m1yr/hExwvZlB3wAEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iKGDfuXs; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=iD/xlUe6; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ekQ4Hgpx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iKGDfuXs";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="iD/xlUe6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767745709;
+	s=mimecast20190719; t=1767747702;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F/615Uf3niDsaKYgBdiWEyWdyh4+v6hUHAWVWt1qodc=;
-	b=ekQ4Hgpx6mq+Gojd6ssj+068I28DCzt3U1oJQ1u539StQKNFtq+Dhp4KLW1QiDq3Su/dSp
-	sKVtkha5+y/TZVoJUCrGPUulqIVTnttp4EC2kFcpRuAHF4TaO/BTcTiOPdY2cHAT15xVRQ
-	LDUyHB6/030IQ1FMh1via/wlkA+0DcI=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-akNJJoCTMOGkJk8ZlX43-A-1; Tue,
- 06 Jan 2026 19:28:26 -0500
-X-MC-Unique: akNJJoCTMOGkJk8ZlX43-A-1
-X-Mimecast-MFC-AGG-ID: akNJJoCTMOGkJk8ZlX43-A_1767745705
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E3E7C195608D;
-	Wed,  7 Jan 2026 00:28:24 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.130])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BF18F30001B9;
-	Wed,  7 Jan 2026 00:28:19 +0000 (UTC)
-Date: Wed, 7 Jan 2026 08:28:14 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Caleb Sander Mateos <csander@purestorage.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>,
-	linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Stanley Zhang <stazhang@purestorage.com>,
-	Uday Shankar <ushankar@purestorage.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v3 09/19] ublk: implement integrity user copy
-Message-ID: <aV2onjve8cFAkJrV@fedora>
-References: <20260106005752.3784925-1-csander@purestorage.com>
- <20260106005752.3784925-10-csander@purestorage.com>
- <aV0PauBTiqWVQ-26@fedora>
- <CADUfDZryjLxVBFpk1c_NUp_GEWuWA=8UB6Vyx15tFUjQHGa_DQ@mail.gmail.com>
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=ndVYeGncNQkge8z7xCfAgTx6DeZHb8bhHZ5rGNYPJgE=;
+	b=iKGDfuXsO7u4xynKCfp0tAKU+jCcwBcQBAwi0TYRij17YP6dh6y+D2oTDTWB29mLI3jZNL
+	1NnfHJSNof1TrX7B1/94Ny9ezUPErlpbRMnNP1t76CaLFOuiTZo4nWZ/KNyHPk7jx/gSxN
+	qvV+B/jFW89WV6posn/8BknD7fx/Uj0=
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com
+ [74.125.82.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-695-ozpJc5FIO6-Ins9wTxlKCA-1; Tue, 06 Jan 2026 20:01:41 -0500
+X-MC-Unique: ozpJc5FIO6-Ins9wTxlKCA-1
+X-Mimecast-MFC-AGG-ID: ozpJc5FIO6-Ins9wTxlKCA_1767747700
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-2ac34c4b41fso161109eec.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jan 2026 17:01:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1767747699; x=1768352499; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ndVYeGncNQkge8z7xCfAgTx6DeZHb8bhHZ5rGNYPJgE=;
+        b=iD/xlUe6GPcjsW2mARPfyYZzIJgJuykwcuu+cYOMWKcdPjiYQM4/RDElFpY3thZ9iW
+         9FiBAvBrOjgB38hO7f6hMmFoJ6ig7pVYXb62d41vYaiAwfsoQY7f/tXOLBYqRQTEmSD8
+         nS3MJQV4weKrMM2zhABdJTC4Z6NoDBPDiez22oi2D2drhz86MCR/vTTz/I/7uwJ3Gy7Y
+         8oH0g+gVRexh09GiyiIRwrpQ1pxPneNKrovQIx1I/EUVGA7azA1F1Fm/1IgMPZEOnVYe
+         gPkwubbsVLWF2JkovnHKgJZQQZNGkVoU5L7s1PYCcgjafbYg/5Jolbufma+rMWKqJbAw
+         mE2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767747699; x=1768352499;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ndVYeGncNQkge8z7xCfAgTx6DeZHb8bhHZ5rGNYPJgE=;
+        b=cZEjnns7iYnR4HiapbLqzkwIz9KfoUjT2cLwAzyPagR6guRPv9SVBg1kqHjZvm/KTm
+         +D2DsAVhqY4zP+v5HR2VU2uo10TVtmXSsz3L9V1o+oIFoDww3Dbm8Z8kelh+WZ7DpjEm
+         HrV3fB+gguZFFxrXsDQcXr9O4TaxUz8YtS1WzgsOftvRrZC8IEF1MsZDnu0/TGd9KiNU
+         s9ex9EiYN2zamOnIF3fbmubvSIulsQRQ4QiHeynlvp0+7uBjaM3vVldSMxY3g6I0HxJC
+         FGU5EM7AX7tYw1zePJ1CU7HGW0CjflQQ9Bhz3hqlqT2UzhL4OLgvTz7ZmtLVxRP3h+QW
+         1aGA==
+X-Forwarded-Encrypted: i=1; AJvYcCURqB65jGcc9pGHjB3jalfYAwSJpnh3QcjPIpue2h8Cwt0QkbV6Kjx38rvJhzuQpbsMx1LeNwZt+phSMTBZ0b8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzH844k1HO5tI4fjb6SbiAidS9bOHV1UujtpoMmNFyPRnBT5nII
+	Qd8v0u75hsIzjoD/2hN8EIccCchjWiK5b3sSxu1K0E/tlAincBipj5JlGoAetDbyLi8s3/bEnVy
+	aLKRv+7V+tJT6UoSTCQsQ1Sp3rRltd9gcNIrJF11pG65OhQ2mVK1MQFw1/ThLRjJjyJJQx04bAt
+	zmWBFmIWJqiJvJrrp87IvROOqJZ8f14CO6JuO55mEbx7nXOvSCFOBqhl3GDqA1
+X-Gm-Gg: AY/fxX4ICkgJ/Lcav5/KFs0nE3LQUUABCNIvYMyn1jHp6Ai6VoYBgkw+CDynzxMYNDL
+	dbHXdPlkPGP5nEkrJFErgqwTCzII6exHZH6Q903Kisc9UyvffVlVId/BAk4y0EeZBdXovvmKdvd
+	vNTHXdCPxnGJmLxNnodRj6PtxJerKADCVtfT9kRCpUosZaSN0WQK0fxwh7i2Gdv3i2nXo=
+X-Received: by 2002:a05:7300:51ca:b0:2ae:556b:76f2 with SMTP id 5a478bee46e88-2b16fd9fe6fmr2837523eec.6.1767747697960;
+        Tue, 06 Jan 2026 17:01:37 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGfcBuNVl+RcQ6hf5GWUZJ5q0sEMoIt7mN9RSM5Vo+b6GS4E4oPnWI+O/DeytlfZLGFbJEhi7WJlRzojGDpDYc=
+X-Received: by 2002:a05:7300:51ca:b0:2ae:556b:76f2 with SMTP id
+ 5a478bee46e88-2b16fd9fe6fmr2837425eec.6.1767747694371; Tue, 06 Jan 2026
+ 17:01:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADUfDZryjLxVBFpk1c_NUp_GEWuWA=8UB6Vyx15tFUjQHGa_DQ@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+From: Li Wang <liwang@redhat.com>
+Date: Wed, 7 Jan 2026 09:01:22 +0800
+X-Gm-Features: AQt7F2oo-qTjdulw5KFenYHLWIwl0YehbH-CY7dg8wdDjmx2eHyhuTmqubW1gLk
+Message-ID: <CAEemH2eN8FF4-sgnNSC-pO0pFw3O6R_JQ8iyoi2JHoGM3toBrw@mail.gmail.com>
+Subject: Trailers missing for some commits in linux-next 20260106
+To: sfr@canb.auug.org.au, Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jan 06, 2026 at 10:20:14AM -0800, Caleb Sander Mateos wrote:
-> On Tue, Jan 6, 2026 at 5:34 AM Ming Lei <ming.lei@redhat.com> wrote:
-> >
-> > On Mon, Jan 05, 2026 at 05:57:41PM -0700, Caleb Sander Mateos wrote:
-> > > From: Stanley Zhang <stazhang@purestorage.com>
-> > >
-> > > Add a function ublk_copy_user_integrity() to copy integrity information
-> > > between a request and a user iov_iter. This mirrors the existing
-> > > ublk_copy_user_pages() but operates on request integrity data instead of
-> > > regular data. Check UBLKSRV_IO_INTEGRITY_FLAG in iocb->ki_pos in
-> > > ublk_user_copy() to choose between copying data or integrity data.
-> > >
-> > > Signed-off-by: Stanley Zhang <stazhang@purestorage.com>
-> > > [csander: change offset units from data bytes to integrity data bytes,
-> > >  test UBLKSRV_IO_INTEGRITY_FLAG after subtracting UBLKSRV_IO_BUF_OFFSET,
-> > >  fix CONFIG_BLK_DEV_INTEGRITY=n build,
-> > >  rebase on ublk user copy refactor]
-> > > Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
-> > > ---
-> > >  drivers/block/ublk_drv.c      | 52 +++++++++++++++++++++++++++++++++--
-> > >  include/uapi/linux/ublk_cmd.h |  4 +++
-> > >  2 files changed, 53 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> > > index e44ab9981ef4..9694a4c1caa7 100644
-> > > --- a/drivers/block/ublk_drv.c
-> > > +++ b/drivers/block/ublk_drv.c
-> > > @@ -621,10 +621,15 @@ static inline unsigned ublk_pos_to_tag(loff_t pos)
-> > >  {
-> > >       return ((pos - UBLKSRV_IO_BUF_OFFSET) >> UBLK_TAG_OFF) &
-> > >               UBLK_TAG_BITS_MASK;
-> > >  }
-> > >
-> > > +static inline bool ublk_pos_is_integrity(loff_t pos)
-> > > +{
-> > > +     return !!((pos - UBLKSRV_IO_BUF_OFFSET) & UBLKSRV_IO_INTEGRITY_FLAG);
-> > > +}
-> > > +
-> >
-> > It could be more readable to check UBLKSRV_IO_INTEGRITY_FLAG only.
-> 
-> That's assuming that UBLK_TAG_BITS = 16 has more bits than are
-> strictly required by UBLK_MAX_QUEUE_DEPTH = 4096? Otherwise, adding
-> UBLKSRV_IO_BUF_OFFSET = 1 << 31 to tag << UBLK_TAG_OFF could overflow
-> into the QID bits, which could then overflow into
-> UBLKSRV_IO_INTEGRITY_FLAG. That seems like a very fragile assumption.
-> And if you want to rely on this assumption, why bother subtracting
-> UBLKSRV_IO_BUF_OFFSET in ublk_pos_to_hwq() either? The compiler should
-> easily be able to deduplicate the iocb->ki_pos - UBLKSRV_IO_BUF_OFFSET
-> computations, so I can't imagine it matters for performance.
+Hi Stephen,
 
-UBLKSRV_IO_INTEGRITY_FLAG should be defined as one flag starting from top
-bit(bit 62), then you will see it is just fine to check it directly.
+Those patch trailers (Signed-off-by, Reviewed-by, Acked-by, etc.) are
+missing in the linux-next tree.
+Do you know what happened? What should I do to add back that?
 
-But it isn't a big deal to subtract UBLKSRV_IO_BUF_OFFSET or not here, I
-will leave it to you.
-
-> 
-> >
-> > >  static void ublk_dev_param_basic_apply(struct ublk_device *ub)
-> > >  {
-> > >       const struct ublk_param_basic *p = &ub->params.basic;
-> > >
-> > >       if (p->attrs & UBLK_ATTR_READ_ONLY)
-> > > @@ -1047,10 +1052,37 @@ static size_t ublk_copy_user_pages(const struct request *req,
-> > >                       break;
-> > >       }
-> > >       return done;
-> > >  }
-> > >
-> > > +#ifdef CONFIG_BLK_DEV_INTEGRITY
-> > > +static size_t ublk_copy_user_integrity(const struct request *req,
-> > > +             unsigned offset, struct iov_iter *uiter, int dir)
-> > > +{
-> > > +     size_t done = 0;
-> > > +     struct bio *bio = req->bio;
-> > > +     struct bvec_iter iter;
-> > > +     struct bio_vec iv;
-> > > +
-> > > +     if (!blk_integrity_rq(req))
-> > > +             return 0;
-> > > +
-> > > +     bio_for_each_integrity_vec(iv, bio, iter) {
-> > > +             if (!ublk_copy_user_bvec(&iv, &offset, uiter, dir, &done))
-> > > +                     break;
-> > > +     }
-> > > +
-> > > +     return done;
-> > > +}
-> > > +#else /* #ifdef CONFIG_BLK_DEV_INTEGRITY */
-> > > +static size_t ublk_copy_user_integrity(const struct request *req,
-> > > +             unsigned offset, struct iov_iter *uiter, int dir)
-> > > +{
-> > > +     return 0;
-> > > +}
-> > > +#endif /* #ifdef CONFIG_BLK_DEV_INTEGRITY */
-> > > +
-> > >  static inline bool ublk_need_map_req(const struct request *req)
-> > >  {
-> > >       return ublk_rq_has_data(req) && req_op(req) == REQ_OP_WRITE;
-> > >  }
-> > >
-> > > @@ -2654,10 +2686,12 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
-> > >  {
-> > >       struct ublk_device *ub = iocb->ki_filp->private_data;
-> > >       struct ublk_queue *ubq;
-> > >       struct request *req;
-> > >       struct ublk_io *io;
-> > > +     unsigned data_len;
-> > > +     bool is_integrity;
-> > >       size_t buf_off;
-> > >       u16 tag, q_id;
-> > >       ssize_t ret;
-> > >
-> > >       if (!user_backed_iter(iter))
-> > > @@ -2667,10 +2701,11 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
-> > >               return -EACCES;
-> > >
-> > >       tag = ublk_pos_to_tag(iocb->ki_pos);
-> > >       q_id = ublk_pos_to_hwq(iocb->ki_pos);
-> > >       buf_off = ublk_pos_to_buf_off(iocb->ki_pos);
-> > > +     is_integrity = ublk_pos_is_integrity(iocb->ki_pos);
-> >
-> > UBLKSRV_IO_INTEGRITY_FLAG can be set for device without UBLK_F_INTEGRITY,
-> > so UBLK_F_INTEGRITY need to be checked in case of `is_integrity`.
-> 
-> If UBLK_F_INTEGRITY isn't set, then UBLK_PARAM_TYPE_INTEGRITY isn't
-> allowed, so the ublk device won't support integrity data. Therefore,
-> blk_integrity_rq() will return false and ublk_copy_user_integrity()
-> will just return 0. Do you think it's important to return some error
-> code value instead? I would rather avoid the additional checks in the
-> hot path.
-
-The check could be zero cost, but better to fail the wrong usage than
-returning 0 silently, which may often imply big issue.
+commit 8bd5f5187 ("selftests/mm/charge_reserved_hugetlb.sh: add waits
+with timeout helper")
+commit 378d74dfd ("selftests/mm/charge_reserved_hugetlb: drop mount
+size for hugetlbfs")
+commit 99f5e30c3 ("selftests/mm/write_to_hugetlbfs: parse -s as size_t")
 
 
-Thanks, 
-Ming
+Original:
+  - [PATCH v3 1/3] selftests/mm/write_to_hugetlbfs: parse -s as size_t
+    https://lore.kernel.org/linux-kselftest/20251221122639.3168038-2-liwang@redhat.com/
+
+  - [PATCH v3 2/3] selftests/mm/charge_reserved_hugetlb: drop mount
+size for hugetlbfs
+    https://lore.kernel.org/linux-kselftest/20251221122639.3168038-3-liwang@redhat.com/
+
+  - [PATCH v3 3/3] selftests/mm/charge_reserved_hugetlb.sh: add waits
+with timeout helper
+    https://lore.kernel.org/linux-kselftest/20251221122639.3168038-4-liwang@redhat.com/
+
+
+-- 
+Regards,
+Li Wang
 
