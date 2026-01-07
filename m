@@ -1,85 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02C520297C;
-	Wed,  7 Jan 2026 01:03:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7460126E6F3;
+	Wed,  7 Jan 2026 01:12:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767747813; cv=none; b=t0kSEh9S5uvUItFGJDdIj0R3dvuVOsM3nyQFuLO99c55UVNgvNryaoSAFeGRTZf+m2O9hBD/5mYfydGRNGDen4iT6+23/X4AH4y2QQDqhUQxSKjJf+mYURnY/R68VPbhiB4y8Nme72AmtzUl6/F2cfQp15zbWIX+uxCneBEgQQI=
+	t=1767748339; cv=none; b=RhbL/Ma1AzPjCLR67VyElVobxZKAMTKZe+Ye+CB4RtJAyfFBRdrjClHmGapHUkkym2HPm8k6p29HHDHIMeR/2agXbYdTnRRhi7XBEh5ekm/gqaIqYpgrVhi7HM5lq/6M1GN5RxETSRnetz2WbwwVuKa7WWsnAHbnwvvUBOZchxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767747813; c=relaxed/simple;
-	bh=BxBpuyB0UTB+GKjoQYki3lsncSyEqpYjFlZFsxN57TE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Qbp7s6ezFrYuEN5V0GZrV6gmsSCejXAwIqTZNgbDHR8VTQn6UmWN90uMKpRXmvqT21KDs8adFGbnVwM9er1RKJzAysoYtAVdWgZT/Aj83xMxEshoFq7hdfVVr+kOS95uuKTZlH5A21NvkxxALq5R1E+7oq+3Yen8e/EfAJ4GZBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hiKdoE/G; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767748339; c=relaxed/simple;
+	bh=LXXSVaeh7UfZaj6LnMe7QNqcXuoZ/Hu60UXNaEIToiw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=uHaQ69Kc3UR//GFgwUSAu+AV83ptsAAmLKK/70U/pB23x4I4XzFMyOp5f3a+i+XPpUwNhmPM4+tpFfFhxXvJibAJoSG7vYUxLJdPdYQYIQ8rwN3R4V1AIE1iB/DaHMcJnFZMWTk9DdY6Db/IX+D9JkyjXwkwB8yV03kK9+8nxOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=QNxAQ5lI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hiKdoE/G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F50AC116C6;
-	Wed,  7 Jan 2026 01:03:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767747813;
-	bh=BxBpuyB0UTB+GKjoQYki3lsncSyEqpYjFlZFsxN57TE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=hiKdoE/GJ3jr8IZWQUOijlnUhDhvc7FQhTVgUB1Hx8HSArbK/M9HG78hSO9bBpkb7
-	 VGwgdAJTlgXsZE41osZBkG8BubRi8rPHQICeK5ZM3xCbjyzneVHEhXvv2cSsh1Hql7
-	 IKClXLWwKtk80rKpR9+baxCHtsLil3yC65zHl0Xf90/kfcRjumAWIR83QqMY5EQgiD
-	 MPMrK0DEsy4XWe+RqriUjA1A6jDaQxWLVpsfIlR5jCw06kIS4swHQN18mFs1VyHPnz
-	 Y2jY2fSu4fPoVS3k1pGA5tq9/H9oJU2rTmdLTmEhPKqVr/xK6KuSn4hZJfzQuUa2xI
-	 JnP2KLwwsDGUg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3BB82380CEF5;
-	Wed,  7 Jan 2026 01:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="QNxAQ5lI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBD8FC116C6;
+	Wed,  7 Jan 2026 01:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1767748338;
+	bh=LXXSVaeh7UfZaj6LnMe7QNqcXuoZ/Hu60UXNaEIToiw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=QNxAQ5lI8deRq9bn96jJoDJ9zPBOG4jyYio8OWb67gb7Av9RFFEu+02aIzr/Cfn9R
+	 XGhd8RZ7zazD0sRTgFiJvrKxQ8k3/nPxA2G5DZnc9KnCJ4ZVr8urnXDcvzNlfpQ2pZ
+	 TgyA8G/TOUdJDFe5SgbCiL/77/1NDP8wgMvPr/64=
+Date: Tue, 6 Jan 2026 17:12:17 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Li Wang <liwang@redhat.com>
+Cc: sfr@canb.auug.org.au, linux-kernel <linux-kernel@vger.kernel.org>,
+ linux-kselftest@vger.kernel.org
+Subject: Re: Trailers missing for some commits in linux-next 20260106
+Message-Id: <20260106171217.b97e62a450217c1e7d8e04a6@linux-foundation.org>
+In-Reply-To: <CAEemH2eN8FF4-sgnNSC-pO0pFw3O6R_JQ8iyoi2JHoGM3toBrw@mail.gmail.com>
+References: <CAEemH2eN8FF4-sgnNSC-pO0pFw3O6R_JQ8iyoi2JHoGM3toBrw@mail.gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: hw-net: rss-input-xfrm: try to enable
- the
- xfrm at the start
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176774761102.2183630.422567193178212909.git-patchwork-notify@kernel.org>
-Date: Wed, 07 Jan 2026 01:00:11 +0000
-References: <20260104184600.795280-1-kuba@kernel.org>
-In-Reply-To: <20260104184600.795280-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
- gal@nvidia.com, noren@nvidia.com, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Wed, 7 Jan 2026 09:01:22 +0800 Li Wang <liwang@redhat.com> wrote:
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sun,  4 Jan 2026 10:46:00 -0800 you wrote:
-> The test currently SKIPs if the symmetric RSS xfrm is not enabled
-> by default. This leads to spurious SKIPs in the Intel CI reporting
-> results to NIPA.
+> Those patch trailers (Signed-off-by, Reviewed-by, Acked-by, etc.) are
+> missing in the linux-next tree.
+> Do you know what happened? What should I do to add back that?
 > 
-> Testing on CX7:
-> 
->  # ./drivers/net/hw/rss_input_xfrm.py
->   TAP version 13
->   1..2
->   ok 1 rss_input_xfrm.test_rss_input_xfrm_ipv4 # SKIP Test requires IPv4 connectivity
->   # Sym input xfrm already enabled: {'sym-or-xor'}
->   ok 2 rss_input_xfrm.test_rss_input_xfrm_ipv6
->   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:1 error:0
-> 
-> [...]
+> commit 8bd5f5187 ("selftests/mm/charge_reserved_hugetlb.sh: add waits
+> with timeout helper")
+> commit 378d74dfd ("selftests/mm/charge_reserved_hugetlb: drop mount
+> size for hugetlbfs")
+> commit 99f5e30c3 ("selftests/mm/write_to_hugetlbfs: parse -s as size_t")
 
-Here is the summary with links:
-  - [net-next] selftests: hw-net: rss-input-xfrm: try to enable the xfrm at the start
-    https://git.kernel.org/netdev/net-next/c/c4df070a57de
+These patches had "^----" in their changelogs, which git-quiltimport
+incorrectly took to mean "end of changelog".  I turned those into "===="
+so things should be OK in next -next.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+I also added a rule to my nightly check-all-the-patches script to
+prevent this from occurring again.
 
