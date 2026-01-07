@@ -1,150 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52B738D4BC;
-	Wed,  7 Jan 2026 16:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F8310F2;
+	Wed,  7 Jan 2026 16:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767803483; cv=none; b=eAxwZkddSi3QR0TWFdX4m8esnaB4TVN1vk/RboShzg6fsFyjn6lEXRlt4qydtd42Xi4Zn18QYS6tI1iCY/2H3RjRis1wUt1a8G61wK6lSpZjlfJeMz2MKB6i0vg7tSzTxGOTMsxTh0s/ma2oXSvaP1cMDRVdYvn0ceqBJm1zxTQ=
+	t=1767804068; cv=none; b=S9dQZsHakHS69fTwFaGJfreSsgeSqqrA1C4DTkARXEDWwOa+FsQ3LWW/4IKKjrAqppKG1cbi514Zm2s3GZxsDyHmi4XbvGFQN2ANO5zW5Dlg72zcrIiaMpV4fgfBNcoFcKGmqREvN0VUO2ddm9Q3d0qdwvAShEHQYVMuvYwZlGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767803483; c=relaxed/simple;
-	bh=r1YX77jE0pejVZ0kyjXbEyqGpgp4bO0aXl2ENX5Wl7U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g1rRvK2iOmIbf39laCLxANrHI+kaxA56sycb4tzKJRrD1u2abBVEO4tXmCHPqeEwkImHBukQNWCfCl0JvQKgxbLyEdvmwvAsykqOGmNtyOIWYdosVGUGe9JF/HsXHdPTKv3mkDPT1qJ6zXn0jxVz0L6fxitD21Q9QS3neYxFOgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=itnFRFb0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767804068; c=relaxed/simple;
+	bh=Qz6Qqop0qFf7mBnylFBucLzsveOWJ8mTu7t3zWUscKg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J3WrVl8Fa27Tc6O8QnkTxf8Q8TrdjE6o98rCDmEJKGY4RiRjfTtLns0Yz6hDZOcvQxYF3+PWwmndyx8VrxZAIxewpU2boTzLeSkI8pb2q6A5CdMCLF9GObjEKeeD0+kOOFkHlAb4ZCaxMvEgYChJvKpEm8wOO9YCR1fYCI992bE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dbhou5KA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="itnFRFb0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50FC6C4CEF1;
-	Wed,  7 Jan 2026 16:31:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dbhou5KA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3F4C4CEF1;
+	Wed,  7 Jan 2026 16:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767803479;
-	bh=r1YX77jE0pejVZ0kyjXbEyqGpgp4bO0aXl2ENX5Wl7U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=itnFRFb0LOdIByBElrcuGzDKX2+icgsvAibWUMMrlsMSasHZgscIEsA4cDqgB/OpF
-	 D4fCMNtuEJnjoRLS3Mha+t1zZHotw+GK636Ifsn3wDeKa9T9evhbHUJsov/vcfinKU
-	 PV69admgME4dE81FPRPFnKEiB8rEM+QuQ8kja7D9KYmZQc56mHvVQSHdPMfjaE0X/c
-	 oevoTMQTTGF1I2CmKL1kVWqP0Vtjys3HqTOpmqvGVe7175ngvNFZp5Bo3XTBHFBik8
-	 noxcLqm6JTBKj46RbhYHm8BwfAvcwb6At+OH9onfVKoaIsEs7/9b7Xttb51GrI5jsd
-	 6qeKjUCzKCuLg==
-From: Gary Guo <gary@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <raemoar63@gmail.com>
-Cc: rust-for-linux@vger.kernel.org,
-	Tamir Duberstein <tamird@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/11] rust: kunit: use `pin_init::zeroed` instead of custom null value
-Date: Wed,  7 Jan 2026 16:15:50 +0000
-Message-ID: <20260107161729.3855851-12-gary@kernel.org>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20260107161729.3855851-1-gary@kernel.org>
-References: <20260107161729.3855851-1-gary@kernel.org>
-Reply-To: Gary Guo <gary@garyguo.net>
+	s=k20201202; t=1767804067;
+	bh=Qz6Qqop0qFf7mBnylFBucLzsveOWJ8mTu7t3zWUscKg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=dbhou5KAEsZutI3zbeeEbloh39Fmr3YXZCB+kci6gEifI3kjOVBXvgl1H40kZsvSD
+	 YrSy5mXiffBvPmSOxWq6bivUTvAUJV0Jooy98xZMrteCJezRAip/WSnLMAFj2iu9SF
+	 1rBK6nnd8OuAk/lLfLK5y5oKrh9eHKV6M8QCm0sHv7qXVvpTem/XK62258Vzf4oLib
+	 DWrT+B+Gl/11LvgKll5DvisqeMI4Kseu6e5mfHoCvVTEzrIg3cLEaoX8+5LXvRmWYi
+	 Efn9yRpy/SUIbmJLqYygyOeAPcuB2cXXBVnCNWtRUqR8yotUU5fX7VMvoVflkVkP5C
+	 0SlMXgC/K/MRA==
+Message-ID: <72d45fe9-c058-4944-b7a2-260b7259096f@kernel.org>
+Date: Wed, 7 Jan 2026 09:41:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2 net-next v2] selftests: ipv6_icmp: add tests for
+ ICMPv6 handling
+Content-Language: en-US
+To: Fernando Fernandez Mancera <fmancera@suse.de>, netdev@vger.kernel.org
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <20260107153841.5030-1-fmancera@suse.de>
+ <20260107153841.5030-2-fmancera@suse.de>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20260107153841.5030-2-fmancera@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Gary Guo <gary@garyguo.net>
+On 1/7/26 8:38 AM, Fernando Fernandez Mancera wrote:
+> +icmpv6_to_vrf_based_local_address()
+> +{
+> +	local rc
+> +	local lldummy
+> +
+> +	echo
+> +	echo "ICMPv6 to VRF based local address"
+> +
+> +	setup
+> +
+> +	lldummy=$(get_linklocal dummy0)
+> +
+> +	if [ -z "$lldummy" ]; then
+> +		echo "Failed to get link local address for dummy0"
+> +		return 1
+> +	fi
+> +
+> +	run_cmd "$NS_EXEC sysctl -w net.ipv6.conf.all.keep_addr_on_down=1"
+> +
+> +	# create VRF and setup
+> +	run_cmd "$IP link add vrf0 type vrf table 10"
+> +	run_cmd "$IP link set vrf0 up"
+> +	run_cmd "$IP link set dummy0 master vrf0"
 
-The last null element can be created (constly) using `pin_init::zeroed`,
-so prefer to use it instead of adding a custom way of building it.
+run_cmd "$IP -6 addr add ::1 dev vrf0 nodad"
 
-Reviewed-by: Tamir Duberstein <tamird@gmail.com>
-Reviewed-by: Benno Lossin <lossin@kernel.org>
-Signed-off-by: Gary Guo <gary@garyguo.net>
----
- rust/kernel/kunit.rs | 26 +-------------------------
- rust/macros/kunit.rs |  4 ++--
- 2 files changed, 3 insertions(+), 27 deletions(-)
+makes the VRF device the loopback.
 
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index 79436509dd73d..034158cdaf06b 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -192,9 +192,6 @@ pub fn is_test_result_ok(t: impl TestResult) -> bool {
- }
- 
- /// Represents an individual test case.
--///
--/// The [`kunit_unsafe_test_suite!`] macro expects a NULL-terminated list of valid test cases.
--/// Use [`kunit_case_null`] to generate such a delimiter.
- #[doc(hidden)]
- pub const fn kunit_case(
-     name: &'static kernel::str::CStr,
-@@ -215,27 +212,6 @@ pub const fn kunit_case(
-     }
- }
- 
--/// Represents the NULL test case delimiter.
--///
--/// The [`kunit_unsafe_test_suite!`] macro expects a NULL-terminated list of test cases. This
--/// function returns such a delimiter.
--#[doc(hidden)]
--pub const fn kunit_case_null() -> kernel::bindings::kunit_case {
--    kernel::bindings::kunit_case {
--        run_case: None,
--        name: core::ptr::null_mut(),
--        generate_params: None,
--        attr: kernel::bindings::kunit_attributes {
--            speed: kernel::bindings::kunit_speed_KUNIT_SPEED_NORMAL,
--        },
--        status: kernel::bindings::kunit_status_KUNIT_SUCCESS,
--        module_name: core::ptr::null_mut(),
--        log: core::ptr::null_mut(),
--        param_init: None,
--        param_exit: None,
--    }
--}
--
- /// Registers a KUnit test suite.
- ///
- /// # Safety
-@@ -254,7 +230,7 @@ pub const fn kunit_case_null() -> kernel::bindings::kunit_case {
- ///
- /// static mut KUNIT_TEST_CASES: [kernel::bindings::kunit_case; 2] = [
- ///     kernel::kunit::kunit_case(kernel::c_str!("name"), test_fn),
--///     kernel::kunit::kunit_case_null(),
-+///     pin_init::zeroed(),
- /// ];
- /// kernel::kunit_unsafe_test_suite!(suite_name, KUNIT_TEST_CASES);
- /// ```
-diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-index afbc708cbdc50..cb29f350d5b2b 100644
---- a/rust/macros/kunit.rs
-+++ b/rust/macros/kunit.rs
-@@ -74,7 +74,7 @@ pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Result<Toke
-     // static mut TEST_CASES: [::kernel::bindings::kunit_case; 3] = [
-     //     ::kernel::kunit::kunit_case(::kernel::c_str!("foo"), kunit_rust_wrapper_foo),
-     //     ::kernel::kunit::kunit_case(::kernel::c_str!("bar"), kunit_rust_wrapper_bar),
--    //     ::kernel::kunit::kunit_case_null(),
-+    //     ::pin_init::zeroed(),
-     // ];
-     //
-     // ::kernel::kunit_unsafe_test_suite!(kunit_test_suit_name, TEST_CASES);
-@@ -159,7 +159,7 @@ macro_rules! assert_eq {
-     processed_items.push(parse_quote! {
-         static mut TEST_CASES: [::kernel::bindings::kunit_case; #num_tests_plus_1] = [
-             #(#test_cases,)*
--            ::kernel::kunit::kunit_case_null(),
-+            ::pin_init::zeroed(),
-         ];
-     });
-     processed_items.push(parse_quote! {
--- 
-2.51.2
+> +
+> +	# route to reach 2001:db8::1/128 on VRF device and back to ::1
+> +	run_cmd "$IP -6 route add 2001:db8:1::1/64 dev vrf0"
+> +	run_cmd "$IP -6 route add ::1/128 dev vrf0 table 10"
+
+and then this route add should not be needed. This is how fcnal-test.sh
+works.
+
+> +
+> +	# ping6 to link local address
+> +	run_cmd "$NS_EXEC ${ping6} -c 3 $lldummy%dummy0"
+> +	log_test $? 0 "Ping to link local address on VRF context"
+> +
+> +	# ping6 to link local address from localhost (::1)
+> +	run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 $lldummy%dummy0"
+
+-I vrf0 should be needed for all VRF tests. I suspect your current
+passing tests are because you have a single setup step and then run
+non-VRF test followed by VRF test. Really you need to do the setup,
+run_test, cleanup for each test.
+
+> +	log_test $? 0 "Ping to link local address from ::1 on VRF context"
+> +
+> +	# ping6 to local address
+> +	run_cmd "$NS_EXEC ${ping6} -c 3 2001:db8:1::1"
+> +	log_test $? 0 "Ping to local address on VRF context"
+> +
+> +	# ping6 to local address from localhost (::1)
+> +	run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 2001:db8:1::1"
+> +	log_test $? 0 "Ping to local address from ::1 on VRF context"
+> +}
+> +
 
