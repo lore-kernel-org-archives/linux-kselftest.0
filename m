@@ -1,70 +1,70 @@
-Received: from mail-vs1-f99.google.com (mail-vs1-f99.google.com [209.85.217.99])
+Received: from mail-qk1-f226.google.com (mail-qk1-f226.google.com [209.85.222.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA3942A574
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 09:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B8242A59A
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 09:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767864009; cv=none; b=O6H89/TW+wUd9lvtb6pQA5/VnNbPWXu1+jLt1lEH+pQID4SbhD7ruCwZZ9l3yE/GCMcbQwm9e46+8SEf410N8+a6CLvYB5qKH0nb2gsjwhvq77hN2QkSWsm7i18taKKv5ifU0MhCM1ypbCtlvoLDcbhM0rnOffTgTq5gI8HreZQ=
+	t=1767864010; cv=none; b=rUqeK+vkgoscDZNS9bGijupxGdgARXnOeqqwa/Vfb7N+uKImhHhH5UXZ2EEVDVxGfDqBpwNYhgpAlRAoj0DHQextZgtn9MAdYxskE1xd1Cu2DrHa8wy1JvWgkJcdQlUorpKj/JJ2R+Ioh4gax/5qAYcJZQXJXWfYCRcL3Zapl/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767864009; c=relaxed/simple;
-	bh=9D4GyOJD6io8F4P0S/cxnoZEefdej4J2wab8Tdm/MgA=;
+	s=arc-20240116; t=1767864010; c=relaxed/simple;
+	bh=flmggBNU2hAB08i914C/deY3qRX3vSvGh6Sj4w2rzFg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R/TzcDCKI1aOfEBc0pYlOPojcgpBFgIiokJM+CZqkrbSDsE1acRG+iQ1M3gmEMDCvDp+Rqtqs4WczyDRhy7MQMXx87l4ZEIZM/MeLP9TQzlkonpmQNzBHB3kCOgr+uY0zacrotSLOlglvsf7k+lXnUhmBlLDbNerhAcprnoESGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=OJ9g9pen; arc=none smtp.client-ip=209.85.217.99
+	 MIME-Version; b=VSOUaUVquMIvinuz4VymZOdGrx+J0GkefJxiB5oOnlc2hTet2YJYhv4PGoAqS0IneR7Indi2bX4Mf32NqHNZBPGfJhyRP5+G0/3KA4w8KGDlu/lrpxVVLkhJ4JOpEIaQLPh+EsiOp/mKXH//R8EasOJ9K/qjjUUJGHYQcMt9CBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Xz9NOVdi; arc=none smtp.client-ip=209.85.222.226
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="OJ9g9pen"
-Received: by mail-vs1-f99.google.com with SMTP id ada2fe7eead31-5ed0b8b171eso64217137.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 01:19:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Xz9NOVdi"
+Received: by mail-qk1-f226.google.com with SMTP id af79cd13be357-8b1c0dcb3b3so54237785a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 01:20:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1767863997; x=1768468797; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kSXckNgZ5ICG+taX3/Ya5CBeOAwOb38yMX5qmoedbkY=;
-        b=OJ9g9pen93eIGDiu0Qv1KqQ7YDKu18c7oO2zRfQmiNwqiLfsnTUFNMG1OLzN3vQHx5
-         WploqwnCtbm8tl6ofEMyGT2XCkvuY9Uch1egjs7tptV6qXeedsjqsHEm1RNQ98tk9XWv
-         2mUs2rzCdx4EE6SrWFPOYcmTPi+CD/lBhk/n6LrjTApKqvY+JrNx063CLMpv7/QyE/hG
-         0lJ7Gf8cC5tTXoAiEioioRpueKv2TFZodOL+cqkv2WA0/7GPnL59XhHOs+mmPhkW2jil
-         GkTql6seuv0iAocdT+olA5THhqisrHrGjoM8QbXNIWb5nS2LyC/KY5oe4pMAMNmFLh/0
-         CStw==
+        bh=MRGJRe3q+wC2wVKVj2Ep1iCX4dbPSkat0FX8kDkrXQw=;
+        b=Xz9NOVdio8N5vlCIeelxt/+gpPfk4GskIpVNJI8ic8pEETiJyupVj9IT4vpWoe8Nim
+         VrqcC01Yo9lc9Hn1lArx5LZ4Mt68i4aL4TqOD+mskl/fQ99Fc7YUINONG14NzHlwKaSM
+         nxzI02XE6VDVgdg8wqU39NFNcCWzLkU+Xew7UAyvg2ftU3BElXuk0SAgJJ9djd7FPJsT
+         Ac5o+mVU0pbpBvLbq173WZJQd9jR0VipcWnlntNLR3yTR8C3smt9oRbiJ2j6cEiMJ3DA
+         rrnDHI50Y7K2opkrik0Tm/ttaanXU0Sk9UIqzu790N1aKC76pSBo74x+j5w3tzz/8WMC
+         WHUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1767863997; x=1768468797;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=kSXckNgZ5ICG+taX3/Ya5CBeOAwOb38yMX5qmoedbkY=;
-        b=VvIoONbelT3C1k+PUK+vTC8u3qDPij6TU13rlMtOD9f71Csr9kacOMA6kO+M81RqTi
-         cJkXN01Pb7o0I469uin9dVLWoq4jnubl8GNpKOnhDNyYO04UKoaPMkpDYLC/RwIwc9D4
-         7ioM/6K6UO5+cfV3/qLkSi4vVwm1NU/gpDVnvEz4EUvjp105EW4ygpcjdpc0Yk//Ri4u
-         M/+aIiFguLO3D41CYtuymKvWYWm4X6ZBiSROokQYlf5Fa+sx6mceNKhyVnW9fC+lwLjL
-         c3iRxvQhu6T8nd5xW2fIYUE0A0ZfQGpZMzB4LqqpCtBp33EJPoQzr3I2C9O0GTJX27Uy
-         D+iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUyGQ5GeFsekrSNgvqA4lyI1Yn/CZVt1nojKFrfdXJaEbp6hqjIPNuNVgrWQxpbhIFupqqA/IJWidAMpgVf6pA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4XJ/mJtBCTvu/xjT4CIxwKi0/M45qlmsoVSwCCfEmpjPbx/Xl
-	qI42jmFIk7Rl6qZlE8cZ+82A/Jh1Sn4SXEU/lmVS+zFeOfHeF7xWf7Aw8PrEXNJOqpDHtqu8dbS
-	k8j5zhWTLruekFOlo6l/4wsvqaLceecxNSjzp
-X-Gm-Gg: AY/fxX4mNcDOfC5YRU074GvVFX8IXNEuEvKvf3N6+XDDFBlSIGIgxzPE2PSctMCo/Qi
-	V3mN/Gf3s5mKHez6G0DY9XLRShC1/olfgvMCnOPTtvCHdvhHYx0pKCXZVI1d5oPSdu4E4wKmoRO
-	W+ICuVbMyMp3H0HDUi4yOhh8Whys6m1y1apy+jF+ZnylwW1EfJUmvBJJMzIIMFI816VC+z3OqVB
-	dbwBIBGMvyinfCDv5ltdLac394xVvyDFcjYezt16EpslDc7JRnrcYzql7hB9pzRjs5Rh6cF58rx
-	2H8RCo7dZhqF7qexYN6gaihpQaX3FOdz1kvfCQYmI8cF3+s30748hCKzduCxvAPZXnjqnF7E/ur
-	eXllJgHbPYYgdn/NhS/SmEZ4XXvoRrttriq2h5D4t7Q==
-X-Google-Smtp-Source: AGHT+IE7Ge1AcENQX9O/MS5JVNja68MmFbDGu7d8jgtYr1HGUxQVFEkLjbdXGKK42kA/Gk87KY6YQpwurEsq
-X-Received: by 2002:a67:e701:0:b0:5db:e851:9386 with SMTP id ada2fe7eead31-5ecb1e75d6amr1271152137.2.1767863997587;
+        bh=MRGJRe3q+wC2wVKVj2Ep1iCX4dbPSkat0FX8kDkrXQw=;
+        b=PKOSvC8SChaT3K7QqiuZa0QKWZuczyniTq92b/9QgKEgrMdpERKidq+S39OLaLN41C
+         i0pfmi3j9NmYXeihDb0UsnoVwP7y42i8NBdfjB6ShkDnubpkC/zFGF01MFRxn2+LtI12
+         xw3zTT5GYS4dLevXuXdyHbCCUKSeV0sROrrnhTruL+XKSh5ZHFEYQsA2TRYGTI8Tkuns
+         VqCKtcT7NG1ev6fi5aYQFLmLbr+fk0jVWokPReb2ZTLBYsWIRzKkXreLYHBs6+A85jja
+         28SE4k56jbmiTF4fp03e2BfR0qOhrpm79ExCcvxyNKa6s8UksOGnIvYyEv1XlmBpp0dw
+         remw==
+X-Forwarded-Encrypted: i=1; AJvYcCW4CEB8fsPFMKPdDYpwwQwg2vGqkfdKEHLtQJo7e9yIiHEelYPg+Bp9jiF1qaiBfrgD9FocUsgzVYwudlL9gv0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZaJKWVuIKct4un/41W9g5hXvsguKNQ5juKi5CQS8HfqEiRrox
+	ur8IGdnT8C8GB6M+rzdAjrZX8eaOZZ7lBlqp7uAkIaHLHCv3A+VI9siVm3ddUnGXlDMXR8Kro4l
+	hkqxENwOL0Zj4wBUZI2TKn+aWg1WcWF0TfCXNqAxQaLKBbN1Ykj9O
+X-Gm-Gg: AY/fxX4lVRXDRtS+foURU1vHJ0K5Jf7GY+mcpQpB7ixroXPvZ6IUAVgu8EOSgHRUBZ4
+	iBh6bpY3CpQR6OkQ3wJNl42DkC/7mpO1PpTcfh6P07oa140+v8bVaeqjxjLlt7HxXk+Z5Ia7wes
+	7AAvTkSEIzSbaaLUSJ4zEiYvte640QdhLrNB+Q/eLUqyHPt0OuYD8rhELshC0d9aEt+ME37+wBi
+	7DOLKcbMK1qFDmVKqUCiaZtVQam5YXQZWzCSOmHjDBNEAu11bm0Gcb7vMaMDUvmN1VY9bH2L8SK
+	aya+X7cKhI4HVNB9n2Ay/VY2PCbetXc0ZXTBL1UsP0wLPn4sftVhgAMT/dlsJWmw+JFJo5qvvFX
+	ZrQmnVOsKB1nlfNVfr4hDvgWOyW8=
+X-Google-Smtp-Source: AGHT+IFZEqHTD1jRd6BPZWZ92EgtYzPKA4eYdLHsiPbwryg/dB7+Hp2FHML2KxtaKefC9IyFoEQAGq0IYNyQ
+X-Received: by 2002:a05:6214:19c6:b0:890:6330:97b9 with SMTP id 6a1803df08f44-89084184f5dmr61349676d6.2.1767863997313;
         Thu, 08 Jan 2026 01:19:57 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id ada2fe7eead31-5ec76e62f92sm1109185137.0.2026.01.08.01.19.57
+Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
+        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-890770a55bcsm9018466d6.10.2026.01.08.01.19.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 08 Jan 2026 01:19:57 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.6.120])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 9BCE6340794;
-	Thu,  8 Jan 2026 02:19:56 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id C6236342243;
+	Thu,  8 Jan 2026 02:19:55 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 95F68E42F2C; Thu,  8 Jan 2026 02:19:56 -0700 (MST)
+	id C0460E42F2C; Thu,  8 Jan 2026 02:19:55 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -76,9 +76,9 @@ Cc: linux-block@vger.kernel.org,
 	Uday Shankar <ushankar@purestorage.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v4 11/19] ublk: optimize ublk_user_copy() on daemon task
-Date: Thu,  8 Jan 2026 02:19:39 -0700
-Message-ID: <20260108091948.1099139-12-csander@purestorage.com>
+Subject: [PATCH v4 05/19] ublk: split out ublk_copy_user_bvec() helper
+Date: Thu,  8 Jan 2026 02:19:33 -0700
+Message-ID: <20260108091948.1099139-6-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260108091948.1099139-1-csander@purestorage.com>
 References: <20260108091948.1099139-1-csander@purestorage.com>
@@ -90,96 +90,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ublk user copy syscalls may be issued from any task, so they take a
-reference count on the struct ublk_io to check whether it is owned by
-the ublk server and prevent a concurrent UBLK_IO_COMMIT_AND_FETCH_REQ
-from completing the request. However, if the user copy syscall is issued
-on the io's daemon task, a concurrent UBLK_IO_COMMIT_AND_FETCH_REQ isn't
-possible, so the atomic reference count dance is unnecessary. Check for
-UBLK_IO_FLAG_OWNED_BY_SRV to ensure the request is dispatched to the
-sever and obtain the request from ublk_io's req field instead of looking
-it up on the tagset. Skip the reference count increment and decrement.
-Commit 8a8fe42d765b ("ublk: optimize UBLK_IO_REGISTER_IO_BUF on daemon
-task") made an analogous optimization for ublk zero copy buffer
-registration.
+Factor a helper function ublk_copy_user_bvec() out of
+ublk_copy_user_pages(). It will be used for copying integrity data too.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 Reviewed-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/block/ublk_drv.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ drivers/block/ublk_drv.c | 52 +++++++++++++++++++++++-----------------
+ 1 file changed, 30 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 08674c29cfdc..707a74ab083a 100644
+index 7310d8761d2b..22e82bbf50ce 100644
 --- a/drivers/block/ublk_drv.c
 +++ b/drivers/block/ublk_drv.c
-@@ -181,11 +181,11 @@ struct ublk_io {
- 	/*
- 	 * The number of uses of this I/O by the ublk server
- 	 * if user copy or zero copy are enabled:
- 	 * - UBLK_REFCOUNT_INIT from dispatch to the server
- 	 *   until UBLK_IO_COMMIT_AND_FETCH_REQ
--	 * - 1 for each inflight ublk_ch_{read,write}_iter() call
-+	 * - 1 for each inflight ublk_ch_{read,write}_iter() call not on task
- 	 * - 1 for each io_uring registered buffer not registered on task
- 	 * The I/O can only be completed once all references are dropped.
- 	 * User copy and buffer registration operations are only permitted
- 	 * if the reference count is nonzero.
- 	 */
-@@ -2689,10 +2689,11 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
- 	struct ublk_queue *ubq;
- 	struct request *req;
- 	struct ublk_io *io;
- 	unsigned data_len;
- 	bool is_integrity;
-+	bool on_daemon;
- 	size_t buf_off;
- 	u16 tag, q_id;
- 	ssize_t ret;
+@@ -1005,10 +1005,39 @@ static const struct block_device_operations ub_fops = {
+ 	.open =		ublk_open,
+ 	.free_disk =	ublk_free_disk,
+ 	.report_zones =	ublk_report_zones,
+ };
  
- 	if (!user_backed_iter(iter))
-@@ -2718,13 +2719,24 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
- 
- 	if (tag >= ub->dev_info.queue_depth)
- 		return -EINVAL;
- 
- 	io = &ubq->ios[tag];
--	req = __ublk_check_and_get_req(ub, q_id, tag, io);
--	if (!req)
--		return -EINVAL;
-+	on_daemon = current == READ_ONCE(io->task);
-+	if (on_daemon) {
-+		/* On daemon, io can't be completed concurrently, so skip ref */
-+		if (!(io->flags & UBLK_IO_FLAG_OWNED_BY_SRV))
-+			return -EINVAL;
++static bool ublk_copy_user_bvec(const struct bio_vec *bv, unsigned *offset,
++				struct iov_iter *uiter, int dir, size_t *done)
++{
++	unsigned len;
++	void *bv_buf;
++	size_t copied;
 +
-+		req = io->req;
-+		if (!ublk_rq_has_data(req))
-+			return -EINVAL;
-+	} else {
-+		req = __ublk_check_and_get_req(ub, q_id, tag, io);
-+		if (!req)
-+			return -EINVAL;
++	if (*offset >= bv->bv_len) {
++		*offset -= bv->bv_len;
++		return true;
 +	}
++
++	len = bv->bv_len - *offset;
++	bv_buf = kmap_local_page(bv->bv_page) + bv->bv_offset + *offset;
++	if (dir == ITER_DEST)
++		copied = copy_to_iter(bv_buf, len, uiter);
++	else
++		copied = copy_from_iter(bv_buf, len, uiter);
++
++	kunmap_local(bv_buf);
++
++	*done += copied;
++	if (copied < len)
++		return false;
++
++	*offset = 0;
++	return true;
++}
++
+ /*
+  * Copy data between request pages and io_iter, and 'offset'
+  * is the start point of linear offset of request.
+  */
+ static size_t ublk_copy_user_pages(const struct request *req,
+@@ -1017,33 +1046,12 @@ static size_t ublk_copy_user_pages(const struct request *req,
+ 	struct req_iterator iter;
+ 	struct bio_vec bv;
+ 	size_t done = 0;
  
- 	if (is_integrity) {
- 		struct blk_integrity *bi = &req->q->limits.integrity;
- 
- 		data_len = bio_integrity_bytes(bi, blk_rq_sectors(req));
-@@ -2745,11 +2757,12 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
- 		ret = ublk_copy_user_integrity(req, buf_off, iter, dir);
- 	else
- 		ret = ublk_copy_user_pages(req, buf_off, iter, dir);
- 
- out:
--	ublk_put_req_ref(io, req);
-+	if (!on_daemon)
-+		ublk_put_req_ref(io, req);
- 	return ret;
+ 	rq_for_each_segment(bv, req, iter) {
+-		unsigned len;
+-		void *bv_buf;
+-		size_t copied;
+-
+-		if (offset >= bv.bv_len) {
+-			offset -= bv.bv_len;
+-			continue;
+-		}
+-
+-		len = bv.bv_len - offset;
+-		bv_buf = kmap_local_page(bv.bv_page) + bv.bv_offset + offset;
+-		if (dir == ITER_DEST)
+-			copied = copy_to_iter(bv_buf, len, uiter);
+-		else
+-			copied = copy_from_iter(bv_buf, len, uiter);
+-
+-		kunmap_local(bv_buf);
+-
+-		done += copied;
+-		if (copied < len)
++		if (!ublk_copy_user_bvec(&bv, &offset, uiter, dir, &done))
+ 			break;
+-
+-		offset = 0;
+ 	}
+ 	return done;
  }
  
- static ssize_t ublk_ch_read_iter(struct kiocb *iocb, struct iov_iter *to)
- {
+ static inline bool ublk_need_map_req(const struct request *req)
 -- 
 2.45.2
 
