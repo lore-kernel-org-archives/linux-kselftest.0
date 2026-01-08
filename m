@@ -1,70 +1,70 @@
-Received: from mail-pl1-f228.google.com (mail-pl1-f228.google.com [209.85.214.228])
+Received: from mail-dl1-f99.google.com (mail-dl1-f99.google.com [74.125.82.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09A342A101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B028542A595
 	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 09:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.228
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767864010; cv=none; b=SbFeDG/8tB+xH2QCHjb1ZER/Eoj0m18+ALoWFU5r2q2JKbc1yuAe7G1qyqhzGgcHpUW61L0aykvUI6kpuGaTIdoUZiLv+bOzf7DlGMvXBiuQyMsLEkNUoR/UJmMLnBsOB6PLNyo6eO+7P5HxA+RaHmTuswE/sTn5OnKq2+ZgWa8=
+	t=1767864011; cv=none; b=NQUZW2CYD+aDc0BW52HibLtHqgydJODnHggLTh8MLBdCeG8v5/yMLtM5ukzRkJhk6BEIzfsMvGWME278726pcHASijWAm1sOXRtptpnkmLS5q5anTQmJKa/+RkBfK7++QAifhclyfJ/kGMSu4yGPn2yJWh3PgZU+9e1fB1DT3Q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767864010; c=relaxed/simple;
-	bh=0KvuwatLuW/I7zN8Xl5wgxhrOel9MsjL8LNRUsvNxNw=;
+	s=arc-20240116; t=1767864011; c=relaxed/simple;
+	bh=1YUiZE9DU5V1hrRSlfFjaGipyAY5B04IHg4vpE+wq1I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xtp1VNtQ/Ov7as6Proc2mGuaPtW7lCShm4x3Hgr+g306KoDtNRsSiucn4wiTQJkWUGT0DdtgiChh/0ksDeBPClK67xAhsdapvUHQJ4zNRJS0EN/+fDtbjRjTTkssCzNRuiej8D2VElfVrZxrOcO6fqZYlYR/YcR/HeOdHhTchSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=CzLrUx/r; arc=none smtp.client-ip=209.85.214.228
+	 MIME-Version; b=bhIipp2O8z+H/kHwtzF1EElLkYkao/1nJACZ5IVbsxfTI3LCwHXQBkzlY2aXfngSnIUax/dh3vwXLd8U5PGeQdTaNsEEZp+vPNTi2JiTatjUeRFD/n5YTednhIkY6jLGTFwe5d1KrP5gA9TwTDqvelw1UiylfxNlEBp/8blHmvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=ZVYgPZqL; arc=none smtp.client-ip=74.125.82.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="CzLrUx/r"
-Received: by mail-pl1-f228.google.com with SMTP id d9443c01a7336-29f3018dfc3so8220645ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 01:20:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="ZVYgPZqL"
+Received: by mail-dl1-f99.google.com with SMTP id a92af1059eb24-12055b489e0so227526c88.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 01:20:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1767863998; x=1768468798; darn=vger.kernel.org;
+        d=purestorage.com; s=google2022; t=1767863996; x=1768468796; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0ybe7DAurEBgUEb5ATlnDDYhL1vOoH3YzFdXhAKpi7Y=;
-        b=CzLrUx/r8BEW6esZCx9fTsNpeACo73w6sEPZ+PbWJXG9/fBpgdGToiZD20moV7TQnu
-         GESfx36XqY8OVKrh5soCVgpp3JdsJRaO+E4hvMQTdGL3IlKp+MYBX7Znd7ytCZlUmTmK
-         g8bSBzdy1hBk/AzKF3u33QBHdO56aDQFCSIWC1J6RrdCeOTECHrl8kSiyzlycdeZEqoS
-         6vZetMb7mpCbgiIcPy99Qdj6xjMlpr7PWD6/mRf/1yA1F/oLhn7JRJVVwUdTy30Wyn4i
-         WDridH8QNOlyZL8z2QaJvZ1SuVO3vdqD1UbE7retnh810CmyI9DQHQpLG+4LqWP33qyK
-         Lg+Q==
+        bh=xUdqZxPNG/dxsQ2jTx6CQeYv/8NBzY3PHz5WVrKVkRI=;
+        b=ZVYgPZqLX3ehhBUmn/LZ3jTarX9k3lq7zU4J/YqPY79SyHq7gMu2778avEFCTHmkIF
+         anbhwGqtYFAnDc8cPyWeFC+TXjFWIxn3pnEwFUlkGBeX0ReOvPle7lR84nqp780sceNm
+         mkGLsGSKv7DkWagfq32grzbMYOq19L8r1JkVhRhAknDZ4exizWrwFftRx/b0SQ9tS91C
+         9t8CZ2CrVuwx/ACz8idCHEF28F9VBwv2t8nN+u3GKHdbG1KhO9NHlYGDG3IlfU6nAs12
+         fy/USdjtLImvt7JUts2iPIZ48R807GPxzsE/3d6VxJDcHFh0sq+Q8AW5xZ8RoXj36KzN
+         KvEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767863998; x=1768468798;
+        d=1e100.net; s=20230601; t=1767863996; x=1768468796;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=0ybe7DAurEBgUEb5ATlnDDYhL1vOoH3YzFdXhAKpi7Y=;
-        b=tiyTJf7zUXThdVNii1QOfss0BbiBSrcRTmNzZgvU6n7coCnH9x/XO7zNFZKjndaU1A
-         Yr0qlV/rGh0MJxIi1tp8ZV9gXPZqS9YuhVAaA46WKpqXDGEVcZE6yEE6XzK0EmPL/fcc
-         xaZWul5UaXD7gzq1JiHTjVypFlGT+rD+2Vb0rc13s/Uw/9WOOhxQwjA7uOLtwKczq6Wb
-         z0LSnQxSdsZVoEqCiaEGn5Gmg7aVaJWQ0OYR7ucj7t3dxEi9v5C2GNijs3h2anMQKU1V
-         kkJdFs0lfDDEs+Hp/JKxZ2Loauf/C0OzpS1om3mM0WnnSh/SGYZsakekCDzpbJQSatCQ
-         7l8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWPZHp0jgjN+QTPE/AGVju2pQKYVGrvOJCdxo4nQV2bxLjR+OJSwXOWmSm03KzrW5VgxbzbF7bTBRtIN7Pzgo0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkpEONKgk4F/SHwxTCertGt5eB1qi2cNTHXQPyFzQmXOi+u+w4
-	j/ha9mqDg7GNcUpCBZECEDqS1U69S3Q4Fr4A/b3AWILGYqfc4vET6739jswVa41BUatBm8PgK8i
-	G2pQxbCxHeM465J4eXeUpMs6iUq3F2jh2CfNclwVYLspmRRm6+Dh9
-X-Gm-Gg: AY/fxX62BxCJcbyaPJqbAe2aPiKjiNwviO2EVVOo3x/1toUfidguGpt+G1OlpLFvuOK
-	2EYhRn9AE24p4CpNigpHt8Y7bVYGmPW7iH66pX6M8YX7PD67g3KMpKOWk3CNzWCeihHp+B0V8gH
-	FSxamKklm0w6mwJfkyGaaNPiMB6fJICWCuV54i8tiq9b30r1MT45LrJr05/gQ1vTfLEqdK4VARl
-	DZrrQ/NN6jSbmr0AWRjOr1cn8Gc9JI+tAtSNRcZumZEGC1x9JWHN1VvSiehJnfNYXZ41xUl0wqi
-	hBjKF2A8o/uz8EcXcyDNV3FHU90gzaGNRc7Q4g/pURXTq9XVbbPglAX3oby7JZlhqhQhafRKfax
-	UBd50jUKg1sx/NvUruRImk6ApeH0=
-X-Google-Smtp-Source: AGHT+IEVMqSo3kvEwcOIuWZvH9ae6g25u5K+SRDpADhvLa404gSZpymGCaEKl2Gvp0ZLhh5WcAXX/U3TdyL+
-X-Received: by 2002:a17:903:1988:b0:2a0:a484:6b86 with SMTP id d9443c01a7336-2a3ee4c13c9mr32066585ad.8.1767863997760;
-        Thu, 08 Jan 2026 01:19:57 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2a3e3cae7d7sm8337595ad.36.2026.01.08.01.19.57
+        bh=xUdqZxPNG/dxsQ2jTx6CQeYv/8NBzY3PHz5WVrKVkRI=;
+        b=BPLAnYJppdj95FylsKJHWcKWEVEFS6Wm5PglrR25YLOpBT+ROxgSld6DNNod3yJrxc
+         KcPfgJtq7PgMQLlCz83dN5Rg7De3fNSsOlQf1CfeSc8k3yPIqBuBsm0Z/L0tddzY5uqn
+         yC98KqfyJGX+F43WhRZnKGQbXibIzCLTds5xk9ZVIoh4Unqmx1s4JpExerdG1LYLl1y3
+         io42Nju3eU3jNGRIKp6rlUYpuDgJWXa+PPFnIaJxHuZCxak/g8XrVQBz6Ffa+1UVBF65
+         NHMLFvRfaPtVwbVgb2KOdSJ5BmmguBYfUOS2b4z1MTiQ7TMtqJFRq893TP+3J4zDyE/Y
+         PqMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV/tiy/BXV7V80mYNeYVkUTPuEXQ4ZxtLdJUrc/nRXDcReb1KCj3ZAPcAXRHtJS/are1rot3eUDYpdbju/TJ4g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPUWXfRGpQ2FeK2NjAMZMFXjFcqSfGrQUNOvz+AGTl0phK85IM
+	kCXsv/vFI4C+OWKlq/Tj6/5opnf7CR64PwSSlVjLPoab3hG1bqwbNRsQaRoAnVj4fVZG1SA5f7b
+	yoPhVRMtFCp0I8e0+KF2fuS92pYA+ES/H8qs1
+X-Gm-Gg: AY/fxX6LM50kYzgEUmtb7EsXi9fFYXgY0rB7IX/jbAaiNsu3sH8Qa3E2zAVrVBOwD8s
+	lCxPOr0EeV/s2VSjhf8lKntYZC3jqXm4SQ/+KuplwBB7AUKXrSlRQiraQwLfBDgY+iuCjmUPGGu
+	anC87L0FDxDw5ZSewMCZeLljtmQF5TR++MXsRJuqQf9LjEwOrJFXTdIjYdtyoC5aKfy/aGwL7Qd
+	GcEmfLkRgcyhzwxIkGwZfayCILS5MmarjnpRbXrx9RgRmwq36WZdnutbzoG8zoaU6ij9N8kQJos
+	vMbUA4XdoWaS8lLbNs4tUQFon8jFoGb27aNfwg+oSYxi+ZMJ9QXOdINSGApJAnlrikyTZBLjdqu
+	VxGo+FIeeSIrj7V6G0XKlAhWXlWc04XbrkLc2N3G/hA==
+X-Google-Smtp-Source: AGHT+IHN8Chl16m6gs9Go7rWopGOSzZRPNx1u8wrS5rdJZP07Z15rR2vMP9r2rPgJ3o7t4QwcX/DtHhAq9BK
+X-Received: by 2002:a05:7022:238b:b0:119:e56b:c3f1 with SMTP id a92af1059eb24-121f8af2df3mr2828476c88.1.1767863995880;
+        Thu, 08 Jan 2026 01:19:55 -0800 (PST)
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
+        by smtp-relay.gmail.com with ESMTPS id a92af1059eb24-121f243aca8sm1644426c88.2.2026.01.08.01.19.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 01:19:57 -0800 (PST)
+        Thu, 08 Jan 2026 01:19:55 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.6.120])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 2EDF9342170;
-	Thu,  8 Jan 2026 02:19:57 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 6F22B342224;
+	Thu,  8 Jan 2026 02:19:55 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 29FD4E42F2C; Thu,  8 Jan 2026 02:19:57 -0700 (MST)
+	id 69B1FE42F2C; Thu,  8 Jan 2026 02:19:55 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -76,9 +76,9 @@ Cc: linux-block@vger.kernel.org,
 	Uday Shankar <ushankar@purestorage.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v4 15/19] selftests: ublk: implement integrity user copy in kublk
-Date: Thu,  8 Jan 2026 02:19:43 -0700
-Message-ID: <20260108091948.1099139-16-csander@purestorage.com>
+Subject: [PATCH v4 03/19] ublk: support UBLK_PARAM_TYPE_INTEGRITY in device creation
+Date: Thu,  8 Jan 2026 02:19:31 -0700
+Message-ID: <20260108091948.1099139-4-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260108091948.1099139-1-csander@purestorage.com>
 References: <20260108091948.1099139-1-csander@purestorage.com>
@@ -90,202 +90,278 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If integrity data is enabled for kublk, allocate an integrity buffer for
-each I/O. Extend ublk_user_copy() to copy the integrity data between the
-ublk request and the integrity buffer if the ublksrv_io_desc indicates
-that the request has integrity data.
+From: Stanley Zhang <stazhang@purestorage.com>
 
+Add a feature flag UBLK_F_INTEGRITY for a ublk server to request
+integrity/metadata support when creating a ublk device. The ublk server
+can also check for the feature flag on the created device or the result
+of UBLK_U_CMD_GET_FEATURES to tell if the ublk driver supports it.
+UBLK_F_INTEGRITY requires UBLK_F_USER_COPY, as user copy is the only
+data copy mode initially supported for integrity data.
+Add UBLK_PARAM_TYPE_INTEGRITY and struct ublk_param_integrity to struct
+ublk_params to specify the integrity params of a ublk device.
+UBLK_PARAM_TYPE_INTEGRITY requires UBLK_F_INTEGRITY and a nonzero
+metadata_size. The LBMD_PI_CAP_* and LBMD_PI_CSUM_* values from the
+linux/fs.h UAPI header are used for the flags and csum_type fields.
+If the UBLK_PARAM_TYPE_INTEGRITY flag is set, validate the integrity
+parameters and apply them to the blk_integrity limits.
+The struct ublk_param_integrity validations are based on the checks in
+blk_validate_integrity_limits(). Any invalid parameters should be
+rejected before being applied to struct blk_integrity.
+
+Signed-off-by: Stanley Zhang <stazhang@purestorage.com>
+[csander: drop redundant pi_tuple_size field, use block metadata UAPI
+ constants, add param validation]
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- tools/testing/selftests/ublk/kublk.c | 41 ++++++++++++++++++++++++----
- tools/testing/selftests/ublk/kublk.h | 14 ++++++++++
- 2 files changed, 50 insertions(+), 5 deletions(-)
+ drivers/block/ublk_drv.c      | 101 +++++++++++++++++++++++++++++++++-
+ include/uapi/linux/ublk_cmd.h |  19 +++++++
+ 2 files changed, 119 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/ublk/kublk.c b/tools/testing/selftests/ublk/kublk.c
-index 48e1865b4875..d95937dd6167 100644
---- a/tools/testing/selftests/ublk/kublk.c
-+++ b/tools/testing/selftests/ublk/kublk.c
-@@ -414,12 +414,14 @@ static void ublk_queue_deinit(struct ublk_queue *q)
- 	int nr_ios = q->q_depth;
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index 8e3da9b2b93a..b91b2111f280 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -42,10 +42,12 @@
+ #include <linux/mm.h>
+ #include <asm/page.h>
+ #include <linux/task_work.h>
+ #include <linux/namei.h>
+ #include <linux/kref.h>
++#include <linux/blk-integrity.h>
++#include <uapi/linux/fs.h>
+ #include <uapi/linux/ublk_cmd.h>
  
- 	if (q->io_cmd_buf)
- 		munmap(q->io_cmd_buf, ublk_queue_cmd_buf_sz(q));
+ #define UBLK_MINORS		(1U << MINORBITS)
  
--	for (i = 0; i < nr_ios; i++)
-+	for (i = 0; i < nr_ios; i++) {
- 		free(q->ios[i].buf_addr);
-+		free(q->ios[i].integrity_buf);
+ #define UBLK_INVALID_BUF_IDX 	((u16)-1)
+@@ -81,11 +83,12 @@
+ 
+ /* All UBLK_PARAM_TYPE_* should be included here */
+ #define UBLK_PARAM_TYPE_ALL                                \
+ 	(UBLK_PARAM_TYPE_BASIC | UBLK_PARAM_TYPE_DISCARD | \
+ 	 UBLK_PARAM_TYPE_DEVT | UBLK_PARAM_TYPE_ZONED |    \
+-	 UBLK_PARAM_TYPE_DMA_ALIGN | UBLK_PARAM_TYPE_SEGMENT)
++	 UBLK_PARAM_TYPE_DMA_ALIGN | UBLK_PARAM_TYPE_SEGMENT | \
++	 UBLK_PARAM_TYPE_INTEGRITY)
+ 
+ struct ublk_uring_cmd_pdu {
+ 	/*
+ 	 * Store requests in same batch temporarily for queuing them to
+ 	 * daemon context.
+@@ -313,10 +316,15 @@ static inline bool ublk_dev_is_zoned(const struct ublk_device *ub)
+ static inline bool ublk_queue_is_zoned(const struct ublk_queue *ubq)
+ {
+ 	return ubq->flags & UBLK_F_ZONED;
+ }
+ 
++static inline bool ublk_dev_support_integrity(const struct ublk_device *ub)
++{
++	return ub->dev_info.flags & UBLK_F_INTEGRITY;
++}
++
+ #ifdef CONFIG_BLK_DEV_ZONED
+ 
+ struct ublk_zoned_report_desc {
+ 	__u64 sector;
+ 	__u32 operation;
+@@ -628,10 +636,57 @@ static void ublk_dev_param_basic_apply(struct ublk_device *ub)
+ 		set_disk_ro(ub->ub_disk, true);
+ 
+ 	set_capacity(ub->ub_disk, p->dev_sectors);
+ }
+ 
++static int ublk_integrity_flags(u32 flags)
++{
++	int ret_flags = 0;
++
++	if (flags & LBMD_PI_CAP_INTEGRITY) {
++		flags &= ~LBMD_PI_CAP_INTEGRITY;
++		ret_flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
 +	}
- }
- 
- static void ublk_thread_deinit(struct ublk_thread *t)
- {
- 	io_uring_unregister_buffers(&t->ring);
-@@ -431,23 +433,25 @@ static void ublk_thread_deinit(struct ublk_thread *t)
- 		close(t->ring.ring_fd);
- 		t->ring.ring_fd = -1;
- 	}
- }
- 
--static int ublk_queue_init(struct ublk_queue *q, unsigned long long extra_flags)
-+static int ublk_queue_init(struct ublk_queue *q, unsigned long long extra_flags,
-+			   __u8 metadata_size)
- {
- 	struct ublk_dev *dev = q->dev;
- 	int depth = dev->dev_info.queue_depth;
- 	int i;
--	int cmd_buf_size, io_buf_size;
-+	int cmd_buf_size, io_buf_size, integrity_size;
- 	unsigned long off;
- 
- 	q->tgt_ops = dev->tgt.ops;
- 	q->flags = 0;
- 	q->q_depth = depth;
- 	q->flags = dev->dev_info.flags;
- 	q->flags |= extra_flags;
-+	q->metadata_size = metadata_size;
- 
- 	/* Cache fd in queue for fast path access */
- 	q->ublk_fd = dev->fds[0];
- 
- 	cmd_buf_size = ublk_queue_cmd_buf_sz(q);
-@@ -459,15 +463,27 @@ static int ublk_queue_init(struct ublk_queue *q, unsigned long long extra_flags)
- 				q->dev->dev_info.dev_id, q->q_id);
- 		goto fail;
- 	}
- 
- 	io_buf_size = dev->dev_info.max_io_buf_bytes;
-+	integrity_size = ublk_integrity_len(q, io_buf_size);
- 	for (i = 0; i < q->q_depth; i++) {
- 		q->ios[i].buf_addr = NULL;
- 		q->ios[i].flags = UBLKS_IO_NEED_FETCH_RQ | UBLKS_IO_FREE;
- 		q->ios[i].tag = i;
- 
-+		if (integrity_size) {
-+			q->ios[i].integrity_buf = malloc(integrity_size);
-+			if (!q->ios[i].integrity_buf) {
-+				ublk_err("ublk dev %d queue %d io %d malloc(%d) failed: %m\n",
-+					 dev->dev_info.dev_id, q->q_id, i,
-+					 integrity_size);
-+				goto fail;
-+			}
-+		}
-+
-+
- 		if (ublk_queue_no_buf(q))
- 			continue;
- 
- 		if (posix_memalign((void **)&q->ios[i].buf_addr,
- 					getpagesize(), io_buf_size)) {
-@@ -606,17 +622,17 @@ static void ublk_user_copy(const struct ublk_io *io, __u8 match_ublk_op)
- 	const struct ublksrv_io_desc *iod = ublk_get_iod(q, io->tag);
- 	__u64 off = ublk_user_copy_offset(q->q_id, io->tag);
- 	__u8 ublk_op = ublksrv_get_op(iod);
- 	__u32 len = iod->nr_sectors << 9;
- 	void *addr = io->buf_addr;
-+	ssize_t copied;
- 
- 	if (ublk_op != match_ublk_op)
- 		return;
- 
- 	while (len) {
- 		__u32 copy_len = min(len, UBLK_USER_COPY_LEN);
--		ssize_t copied;
- 
- 		if (ublk_op == UBLK_IO_OP_WRITE)
- 			copied = pread(q->ublk_fd, addr, copy_len, off);
- 		else if (ublk_op == UBLK_IO_OP_READ)
- 			copied = pwrite(q->ublk_fd, addr, copy_len, off);
-@@ -625,10 +641,24 @@ static void ublk_user_copy(const struct ublk_io *io, __u8 match_ublk_op)
- 		assert(copied == (ssize_t)copy_len);
- 		addr += copy_len;
- 		off += copy_len;
- 		len -= copy_len;
- 	}
-+
-+	if (!(iod->op_flags & UBLK_IO_F_INTEGRITY))
-+		return;
-+
-+	len = ublk_integrity_len(q, iod->nr_sectors << 9);
-+	off = ublk_user_copy_offset(q->q_id, io->tag);
-+	off |= UBLKSRV_IO_INTEGRITY_FLAG;
-+	if (ublk_op == UBLK_IO_OP_WRITE)
-+		copied = pread(q->ublk_fd, io->integrity_buf, len, off);
-+	else if (ublk_op == UBLK_IO_OP_READ)
-+		copied = pwrite(q->ublk_fd, io->integrity_buf, len, off);
-+	else
-+		assert(0);
-+	assert(copied == (ssize_t)len);
- }
- 
- int ublk_queue_io_cmd(struct ublk_thread *t, struct ublk_io *io)
- {
- 	struct ublk_queue *q = ublk_io_to_queue(io);
-@@ -1011,11 +1041,12 @@ static int ublk_start_daemon(const struct dev_ctx *ctx, struct ublk_dev *dev)
- 
- 	for (i = 0; i < dinfo->nr_hw_queues; i++) {
- 		dev->q[i].dev = dev;
- 		dev->q[i].q_id = i;
- 
--		ret = ublk_queue_init(&dev->q[i], extra_flags);
-+		ret = ublk_queue_init(&dev->q[i], extra_flags,
-+				      ctx->metadata_size);
- 		if (ret) {
- 			ublk_err("ublk dev %d queue %d init queue failed\n",
- 				 dinfo->dev_id, i);
- 			goto fail;
- 		}
-diff --git a/tools/testing/selftests/ublk/kublk.h b/tools/testing/selftests/ublk/kublk.h
-index d00f2b465cdf..830b49a7716a 100644
---- a/tools/testing/selftests/ublk/kublk.h
-+++ b/tools/testing/selftests/ublk/kublk.h
-@@ -110,10 +110,11 @@ struct ublk_ctrl_cmd_data {
- 	__u32 len;
- };
- 
- struct ublk_io {
- 	char *buf_addr;
-+	void *integrity_buf;
- 
- #define UBLKS_IO_NEED_FETCH_RQ		(1UL << 0)
- #define UBLKS_IO_NEED_COMMIT_RQ_COMP	(1UL << 1)
- #define UBLKS_IO_FREE			(1UL << 2)
- #define UBLKS_IO_NEED_GET_DATA           (1UL << 3)
-@@ -173,10 +174,11 @@ struct ublk_queue {
- /* borrow one bit of ublk uapi flags, which may never be used */
- #define UBLKS_Q_AUTO_BUF_REG_FALLBACK	(1ULL << 63)
- #define UBLKS_Q_NO_UBLK_FIXED_FD	(1ULL << 62)
- 	__u64 flags;
- 	int ublk_fd;	/* cached ublk char device fd */
-+	__u8 metadata_size;
- 	struct ublk_io ios[UBLK_QUEUE_DEPTH];
- };
- 
- struct ublk_thread {
- 	struct ublk_dev *dev;
-@@ -222,10 +224,22 @@ static inline void ublk_set_integrity_params(const struct dev_ctx *ctx,
- 		.csum_type = ctx->csum_type,
- 		.tag_size = ctx->tag_size,
- 	};
- }
- 
-+static inline size_t ublk_integrity_len(const struct ublk_queue *q, size_t len)
-+{
-+	/* All targets currently use interval_exp = logical_bs_shift = 9 */
-+	return (len >> 9) * q->metadata_size;
++	if (flags & LBMD_PI_CAP_REFTAG) {
++		flags &= ~LBMD_PI_CAP_REFTAG;
++		ret_flags |= BLK_INTEGRITY_REF_TAG;
++	}
++	return flags ? -EINVAL : ret_flags;
 +}
 +
-+static inline size_t
-+ublk_integrity_data_len(const struct ublk_queue *q, size_t integrity_len)
++static int ublk_integrity_pi_tuple_size(u8 csum_type)
 +{
-+	return (integrity_len / q->metadata_size) << 9;
++	switch (csum_type) {
++	case LBMD_PI_CSUM_NONE:
++		return 0;
++	case LBMD_PI_CSUM_IP:
++	case LBMD_PI_CSUM_CRC16_T10DIF:
++		return 8;
++	case LBMD_PI_CSUM_CRC64_NVME:
++		return 16;
++	default:
++		return -EINVAL;
++	}
 +}
 +
- static inline int ublk_io_auto_zc_fallback(const struct ublksrv_io_desc *iod)
++static enum blk_integrity_checksum ublk_integrity_csum_type(u8 csum_type)
++{
++	switch (csum_type) {
++	case LBMD_PI_CSUM_NONE:
++		return BLK_INTEGRITY_CSUM_NONE;
++	case LBMD_PI_CSUM_IP:
++		return BLK_INTEGRITY_CSUM_IP;
++	case LBMD_PI_CSUM_CRC16_T10DIF:
++		return BLK_INTEGRITY_CSUM_CRC;
++	case LBMD_PI_CSUM_CRC64_NVME:
++		return BLK_INTEGRITY_CSUM_CRC64;
++	default:
++		WARN_ON_ONCE(1);
++		return BLK_INTEGRITY_CSUM_NONE;
++	}
++}
++
+ static int ublk_validate_params(const struct ublk_device *ub)
  {
- 	return !!(iod->op_flags & UBLK_IO_F_NEED_REG_BUF);
+ 	/* basic param is the only one which must be set */
+ 	if (ub->params.types & UBLK_PARAM_TYPE_BASIC) {
+ 		const struct ublk_param_basic *p = &ub->params.basic;
+@@ -690,10 +745,33 @@ static int ublk_validate_params(const struct ublk_device *ub)
+ 			return -EINVAL;
+ 		if (p->max_segment_size < UBLK_MIN_SEGMENT_SIZE)
+ 			return -EINVAL;
+ 	}
+ 
++	if (ub->params.types & UBLK_PARAM_TYPE_INTEGRITY) {
++		const struct ublk_param_integrity *p = &ub->params.integrity;
++		int pi_tuple_size = ublk_integrity_pi_tuple_size(p->csum_type);
++		int flags = ublk_integrity_flags(p->flags);
++
++		if (!ublk_dev_support_integrity(ub))
++			return -EINVAL;
++		if (flags < 0)
++			return flags;
++		if (pi_tuple_size < 0)
++			return pi_tuple_size;
++		if (!p->metadata_size)
++			return -EINVAL;
++		if (p->csum_type == LBMD_PI_CSUM_NONE &&
++		    p->flags & LBMD_PI_CAP_REFTAG)
++			return -EINVAL;
++		if (p->pi_offset + pi_tuple_size > p->metadata_size)
++			return -EINVAL;
++		if (p->interval_exp < SECTOR_SHIFT ||
++		    p->interval_exp > ub->params.basic.logical_bs_shift)
++			return -EINVAL;
++	}
++
+ 	return 0;
  }
  
+ static void ublk_apply_params(struct ublk_device *ub)
+ {
+@@ -2941,10 +3019,27 @@ static int ublk_ctrl_start_dev(struct ublk_device *ub,
+ 		lim.seg_boundary_mask = ub->params.seg.seg_boundary_mask;
+ 		lim.max_segment_size = ub->params.seg.max_segment_size;
+ 		lim.max_segments = ub->params.seg.max_segments;
+ 	}
+ 
++	if (ub->params.types & UBLK_PARAM_TYPE_INTEGRITY) {
++		const struct ublk_param_integrity *p = &ub->params.integrity;
++		int pi_tuple_size = ublk_integrity_pi_tuple_size(p->csum_type);
++
++		lim.max_integrity_segments =
++			p->max_integrity_segments ?: USHRT_MAX;
++		lim.integrity = (struct blk_integrity) {
++			.flags = ublk_integrity_flags(p->flags),
++			.csum_type = ublk_integrity_csum_type(p->csum_type),
++			.metadata_size = p->metadata_size,
++			.pi_offset = p->pi_offset,
++			.interval_exp = p->interval_exp,
++			.tag_size = p->tag_size,
++			.pi_tuple_size = pi_tuple_size,
++		};
++	}
++
+ 	if (wait_for_completion_interruptible(&ub->completion) != 0)
+ 		return -EINTR;
+ 
+ 	if (ub->ublksrv_tgid != ublksrv_pid)
+ 		return -EINVAL;
+@@ -3131,10 +3226,14 @@ static int ublk_ctrl_add_dev(const struct ublksrv_ctrl_cmd *header)
+ 		if (info.flags & (UBLK_F_USER_COPY | UBLK_F_SUPPORT_ZERO_COPY |
+ 					UBLK_F_AUTO_BUF_REG))
+ 			return -EINVAL;
+ 	}
+ 
++	/* User copy is required to access integrity buffer */
++	if (info.flags & UBLK_F_INTEGRITY && !(info.flags & UBLK_F_USER_COPY))
++		return -EINVAL;
++
+ 	/* the created device is always owned by current user */
+ 	ublk_store_owner_uid_gid(&info.owner_uid, &info.owner_gid);
+ 
+ 	if (header->dev_id != info.dev_id) {
+ 		pr_warn("%s: dev id not match %u %u\n",
+diff --git a/include/uapi/linux/ublk_cmd.h b/include/uapi/linux/ublk_cmd.h
+index ec77dabba45b..4c141d7e4710 100644
+--- a/include/uapi/linux/ublk_cmd.h
++++ b/include/uapi/linux/ublk_cmd.h
+@@ -309,10 +309,16 @@
+  * the I/O's daemon task. The q_id and tag of the registered buffer are required
+  * in UBLK_U_IO_UNREGISTER_IO_BUF's ublksrv_io_cmd.
+  */
+ #define UBLK_F_BUF_REG_OFF_DAEMON (1ULL << 14)
+ 
++/*
++ * ublk device supports requests with integrity/metadata buffer.
++ * Requires UBLK_F_USER_COPY.
++ */
++#define UBLK_F_INTEGRITY (1ULL << 16)
++
+ /* device state */
+ #define UBLK_S_DEV_DEAD	0
+ #define UBLK_S_DEV_LIVE	1
+ #define UBLK_S_DEV_QUIESCED	2
+ #define UBLK_S_DEV_FAIL_IO 	3
+@@ -598,10 +604,21 @@ struct ublk_param_segment {
+ 	__u32 	max_segment_size;
+ 	__u16 	max_segments;
+ 	__u8	pad[2];
+ };
+ 
++struct ublk_param_integrity {
++	__u32	flags; /* LBMD_PI_CAP_* from linux/fs.h */
++	__u16	max_integrity_segments; /* 0 means no limit */
++	__u8	interval_exp;
++	__u8	metadata_size; /* UBLK_PARAM_TYPE_INTEGRITY requires nonzero */
++	__u8	pi_offset;
++	__u8	csum_type; /* LBMD_PI_CSUM_* from linux/fs.h */
++	__u8	tag_size;
++	__u8	pad[5];
++};
++
+ struct ublk_params {
+ 	/*
+ 	 * Total length of parameters, userspace has to set 'len' for both
+ 	 * SET_PARAMS and GET_PARAMS command, and driver may update len
+ 	 * if two sides use different version of 'ublk_params', same with
+@@ -612,16 +629,18 @@ struct ublk_params {
+ #define UBLK_PARAM_TYPE_DISCARD         (1 << 1)
+ #define UBLK_PARAM_TYPE_DEVT            (1 << 2)
+ #define UBLK_PARAM_TYPE_ZONED           (1 << 3)
+ #define UBLK_PARAM_TYPE_DMA_ALIGN       (1 << 4)
+ #define UBLK_PARAM_TYPE_SEGMENT         (1 << 5)
++#define UBLK_PARAM_TYPE_INTEGRITY       (1 << 6) /* requires UBLK_F_INTEGRITY */
+ 	__u32	types;			/* types of parameter included */
+ 
+ 	struct ublk_param_basic		basic;
+ 	struct ublk_param_discard	discard;
+ 	struct ublk_param_devt		devt;
+ 	struct ublk_param_zoned	zoned;
+ 	struct ublk_param_dma_align	dma;
+ 	struct ublk_param_segment	seg;
++	struct ublk_param_integrity	integrity;
+ };
+ 
+ #endif
 -- 
 2.45.2
 
