@@ -1,96 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A6B2D9ECD;
-	Thu,  8 Jan 2026 16:42:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B9528D8E8
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 17:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767890561; cv=none; b=f9rsR1CWXRLQA/krCYXsJHxhg1NB1ToUuvkpygpAd9BLhIU08ko4234bIUcQhphEeoA6CavKmLlh70QEmNk4mYPIFyT3CRh0Gi7D9rf7/Nalsar56dHTHYZwsEOdr2IypvYYVc+wx8fciHWg0tnFUk+2Sc/Q0qDDt3HSLC7x4+M=
+	t=1767892013; cv=none; b=OHhYunw04/2h7Y8OnPP6+TPKMqWnH8AjUr1+/Sji+E7oNQIEUi7Zqjno5ggyBG+N+ORU+kIJoYfK3hsEHME4JQzX3Gvm7z4/IKUcJxiQ6HzkeJuD7LLG2FnlfulpZW34VuGkEFxv5xMtNcVUxM+jbJa0IURYwLbBv3lKJ4VxKzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767890561; c=relaxed/simple;
-	bh=2JTt6hDJvWzDTM0dUBCnhSTPgPA0XojNDbovadYlQYg=;
+	s=arc-20240116; t=1767892013; c=relaxed/simple;
+	bh=8MyYr+bj1OlCAmDWQAgiMxA/gIzJLt2qgYTntOWG2J0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HGDftm3fYX36d/61RQd3b7DOLChqtpdiMSjrvbTYbM3NbpTWeJhp0tyawqfbqz5/GWOCp8hblLZ7kNOm/9lh359QrvFz/D8klXv3dYSzw+F7ULrMBaOhm3qkvseOeltB0jt6sXzA3++ylYMUZgkjBwRgMWLsDF7EZSLFveY7NyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLvKHVYk; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fe/r+V7FTLQ9ZVhxNrxAvOytHYlqQggBi+f4I25Bt3+khmOXuHu0D7fQ1DjDHJGoiJ7qg6McWOfhpcRVLKNLxnbfMC3YByCVRThB0r3hXNwNd3O6zWZfh6VUTNTT1lHzmxXuvZIsCu+FHreq5u1P6JNdI0dB8cE3ApZtG/Ukgjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ksxPnNx8; arc=none smtp.client-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLvKHVYk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B89FC116C6;
-	Thu,  8 Jan 2026 16:42:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767890560;
-	bh=2JTt6hDJvWzDTM0dUBCnhSTPgPA0XojNDbovadYlQYg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eLvKHVYkzB2xrU3XqpRv+2aLl6pb+jRfwARYY9Gxguxdkn8r9y0YSpc9yAOQyawit
-	 jBgZ5eOGLampXS8fNTGMK703bEQytzlTq802pMzoQzghCWEe7OXDUYVjBozH3DCnIj
-	 vnxYhigbIOOxXNN+2OyB7mlFksiJ3lyfhYBbLCtW3jfHL+uBKYkAP7fVGURjrCVufF
-	 Ug3dQE83ZJW7ZZEyzwCBVcURUF8xgKEjqODKKR1ibueNYt2Ydo/9eVTcWi5MVw8wiq
-	 V2+DYtzMYtGiZtRJ5NLbsCmxMBVkXZ4A26Z7p9xzeU+H6hdXHZiecp/bHsFvpZElwX
-	 LfyfkMgOlasPA==
-Date: Thu, 8 Jan 2026 16:42:29 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Fuad Tabba <tabba@google.com>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ksxPnNx8"
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-64455a2a096so2941235d50.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 09:06:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767892010; x=1768496810; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=p6Wvz759GUewXYsc4miB5/+NI5xDR6MKrs+hh+WMf9o=;
+        b=ksxPnNx85zgOwrFUmOzzv5mAtG2stN+B5abvL3OBEObYK4oSi7LFtTyb8rg58ApaWm
+         JLoWOcC124klwGkya7LWtkr66Vxw2ockrrbty+aEekQhz3OfrrnZlDAoA+XvjIdcZGcd
+         /9Dze+hDJ1c7Mo79HZwvPMW3CRZBtiwu8kteX2bJgaQ1Kdva688DwNrsMHlnPW8bmcu8
+         9tidfQjaTQ2CdPNuREU8EGwFNLarng85MeVhSh+8ziL4GXaSq8C9jMpKS5bF2Q0gNF/R
+         wcnsmEyo2yGTjeZRBTJYM5iIiSWPGNsN/6Ozl9mErKG7SWc8fhFkLLs+/kBKoD0T4RwV
+         CSoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767892010; x=1768496810;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p6Wvz759GUewXYsc4miB5/+NI5xDR6MKrs+hh+WMf9o=;
+        b=sgSpqObcMI+70A4IFN5HnusELPSB09mv8U2g21bdFKYy9P913SWoB/nj8DsJgVFrhD
+         npClRwaUoT0odGdVnCBMhTPc+8RFS6jqR6E9bjXalUoMPJzeXBK9B7v7mE5nq3dZoUN5
+         U3pzADoKZLtOwikJiSyjLkOvNLdkj2Hz0qsPvkkvkTQ7duLDhftFZhjZInpyFJStG5sv
+         MVWlHfgmUPqc69Qjn/uA2QnwkrK+vViWLwrPOKyKXLzYF+Oy8ijY9yZYzPP+1N3/FEdk
+         Q2ZsNzU0/xxYYB8b5n3XOk8924wSIUHaI4mzTPSgD9MqFzqq+fKafM2ZxYWUmpdgWv8i
+         13Bw==
+X-Forwarded-Encrypted: i=1; AJvYcCXHLDpXcO0ghjtho+q//niNMdWni0QSHxkJXWDF0JUOz7nAzMxzliz7pHs6jJc4w2c1sePgYhu5/OCQ+qw42eQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvaHZbuzhX0r9hKLwKnhrK5ObRqtrudB4RMPHpm9oSEABm+1OZ
+	du45au8qXRph6Lk/EQscuL+W5Va6+pVx78Tn4gqk9GHZ99SgUSo0uX2A
+X-Gm-Gg: AY/fxX68n01DeLS287VfUm4wpqmJjPoB7/tivHWMzs87ydYHoGCrWO/xWjqeTcW9Ijn
+	oXrwf0jEGY2A16Kqp8nYrKVT+7qJSi+6fTMmKYSIvAeUbgJZS9XiGyBhWG2acMBaPVl0anRNeR1
+	R5IehoZhswknmoWfs4/R0iZJjCSOTr03McaTrzSpGTyPW2wbmxdav5t69MOs4gWLHZC2Q1MZ7cx
+	UwxUL75ZJT8aKeMZ4LnUBnMYPfwkW6TQlikrnup1X+IUGutJP+c0Tu/v0PspnD3cLWPZujpoXJE
+	H8bgZ8yfxVARgcMivIf4+CWIEfEzM5PaNvm8m688oCh9NzsiQBIPPhk3OC9NLwBcHfvYfaGUuY9
+	Fm1x83e/Acj9/P7xMk2VGtoz1deYEToeOhvV3dSoZFHW9idnKF9powqM5eobz1TQHv4Vgs26EdZ
+	n4lHAfNtFIyaTn/z1ehQduDVGTWK+14Lkb/7Q=
+X-Google-Smtp-Source: AGHT+IG8IzgVV5p7db5tFvYhYnkmV4jr6FxdY8lS8LrHwrO87kVabF1WZz63vCE2N4XM2BF2d2+c7w==
+X-Received: by 2002:a05:690c:6188:b0:78e:1aa5:e98a with SMTP id 00721157ae682-790b57ff8ebmr143870847b3.37.1767892010150;
+        Thu, 08 Jan 2026 09:06:50 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:4c::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-790aa6dbb2esm31227117b3.50.2026.01.08.09.06.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 09:06:49 -0800 (PST)
+Date: Thu, 8 Jan 2026 09:06:48 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
 	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v9 02/30] arm64/fpsimd: Update FA64 and ZT0 enables when
- loading SME state
-Message-ID: <cb6372ea-b7f7-4e87-91b5-09378f2dd526@sirena.org.uk>
-References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
- <20251223-kvm-arm64-sme-v9-2-8be3867cb883@kernel.org>
- <CA+EHjTxdSnpFHkm6o85EtjQjAWemBfcv9Oq6omWyrrMdkOuuVA@mail.gmail.com>
- <3c8b4a5e-89f4-47e0-9a5d-24399407db0c@sirena.org.uk>
- <CA+EHjTxLkLjPj=1vwDqROXOUXi2LhOQb90WP6dFaTiYG1nWovA@mail.gmail.com>
- <e50b4923-ee45-43de-9d4e-344546c635bb@sirena.org.uk>
- <CA+EHjTybF+aq2b2vhcEqi6U_sJjtt7ngzMZ9UcJ15G-Kqj=A9A@mail.gmail.com>
+	Stanislav Fomichev <sdf@fomichev.me>, asml.silence@gmail.com,
+	matttbe@kernel.org, skhawaja@google.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v8 0/5] net: devmem: improve cpu cost of RX
+ token management
+Message-ID: <aV/kKIMMr7FFOFnS@devvm11784.nha0.facebook.com>
+References: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-0-92c968631496@meta.com>
+ <20260107193013.0984ab97@kernel.org>
+ <aV80jCHD9PGaOr87@devvm11784.nha0.facebook.com>
+ <20260108064200.7faf9735@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IBbOtxmVdG86xy2i"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CA+EHjTybF+aq2b2vhcEqi6U_sJjtt7ngzMZ9UcJ15G-Kqj=A9A@mail.gmail.com>
-X-Cookie: If you suspect a man, don't employ him.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260108064200.7faf9735@kernel.org>
 
+On Thu, Jan 08, 2026 at 06:42:00AM -0800, Jakub Kicinski wrote:
+> On Wed, 7 Jan 2026 20:37:32 -0800 Bobby Eshleman wrote:
+> > On Wed, Jan 07, 2026 at 07:30:13PM -0800, Jakub Kicinski wrote:
+> > > On Wed, 07 Jan 2026 16:57:34 -0800 Bobby Eshleman wrote:  
+> > > > This series improves the CPU cost of RX token management by adding an
+> > > > attribute to NETDEV_CMD_BIND_RX that configures sockets using the
+> > > > binding to avoid the xarray allocator and instead use a per-binding niov
+> > > > array and a uref field in niov.  
+> > > 
+> > > net/ipv4/tcp.c:2600:41: error: implicit declaration of function ‘net_devmem_dmabuf_binding_get’; did you mean ‘net_devmem_dmabuf_binding_put’? [-Wimplicit-function-declaration]
+> > >  2600 |                                         net_devmem_dmabuf_binding_get(binding);
+> > >       |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >       |                                         net_devmem_dmabuf_binding_put
+> > 
+> > I see that net_devmem_dmabuf_binding_get() is lacking a
+> > stub for CONFIG_NET_DEVMEM=n ...
+> > 
+> > Just curious how pw works... is this a randconfig catch? I ask because
+> > all of the build targets pass for this series (build_allmodconfig_warn,
+> > build_clang, etc.. locally and on patchwork.kernel.org), and if there is
+> > a config that pw uses that I'm missing in my local checks I'd like to
+> > add it.
+> 
+> kunit hit it on our end
 
---IBbOtxmVdG86xy2i
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Jan 08, 2026 at 04:19:34PM +0000, Fuad Tabba wrote:
-
-> Would it be worth adding a comment above the macro noting this
-> difference from sve_cond_update_zcr_vq()? Something along the lines of
-> 'Intentionally overwrites to ensure strict control of enable bits', to
-> save future readers from getting confused...
-
-Sure, makes sense.  Possibly also rename it, I'll have a think.
-
---IBbOtxmVdG86xy2i
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlf3nQACgkQJNaLcl1U
-h9B9Tgf+IN7Byiwu2Z/BASg5BnKyxCB2XaDCnpzYIDqiBTAHcDa4uurE8parsO5u
-9gSiFE/fGFAUTL0ApBcB3Q+eZ0CzXPzCri5Ao2rb19bWYj4OnhSmsrBiVvgjWc92
-pyUPxBVcXfScjS/eFtDSjiBIjLWbvOjFRRSbc2W/CJzcwBH0Ch6A35vBv5plM4QJ
-txTV72D3BnfnQFqt5cNi3UFVg+XpZQQ/i6+ickNqRBJKRy6Q9LKvoYegHabPvt8g
-oOo8YpwCAqUYl8dAEFrHLU6t0JMmMnLMzUCBDDKcTwZbZd/zMyd9L8jGbtMMuim6
-6FXHMUIcx+PFnhj4HinUO/IJYZX31A==
-=FXRp
------END PGP SIGNATURE-----
-
---IBbOtxmVdG86xy2i--
+Got it, thank you
