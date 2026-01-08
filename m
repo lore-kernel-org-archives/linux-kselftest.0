@@ -1,112 +1,87 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F46466FEE
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 12:19:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09754B3A96
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 12:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767874752; cv=none; b=X9mw7HcYxdk42PzD1Z8HQLEzXbl6GfaeS/2NlTKm7b8qCWYeS9hlY/ffviCpnyJsrpAEAcI4dwpJK3xl+s3/7RY2dQqSs09ov1hJGv3i4Q2V4VRnq7EKEa3SOYGxI30/0QuHbuM+ocgQyxmftg/4DBO9/FUdwsBmmnBrnJ6O2fA=
+	t=1767874820; cv=none; b=soKV2jIQb9iIo2EGWzqQXzGHqf0NmM9Q+8WygKXLACUdMinnCQNc2ZEgsVNjzcQbWIgHmvVj6jOS1C1vrx6U3sl+j7C5VncGTzxdUJDo7c+bLL/tN92ha62UaYZunNORY0lRTPDTgKYXpZo2dXEARNUkskFI8wpuO62SHRR2rqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767874752; c=relaxed/simple;
-	bh=XslR5Skl/tw/Xim8K72eczklMzvlOxARWwVTFZz2hyo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NBmnB37nKot+LeTE1kq3KTEaEX0xPUQwwWOmlNDsEXcBSfVH9pX1Fy6goHGbw0ClgeqFSoxIvwmrXyqHf9yKZei6AYFxITTIfg64FWb7gDueNCDZ4ubqx0Pl/ymmGGxv0szwuyRwRqL5+j8VG5LRkuKait3E38kCbW2qRtppNu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ja+7V8F1; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1767874820; c=relaxed/simple;
+	bh=NNpGr0TUosqGSN2a0EGi84k3Eo0OmIJDd6rO5DGlzxA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DTiXhlbEjMBZhWRxt5kU32fAsrEwqokN02DM8fCkvXvkfpG/Zzk07Y4Fvar3lhQ1fJCbRg9ksgHb8dcUPRq/mgouMoe/28zwP1OYK/qsd7367kJxwkng2julM9C3HHoS8KnBkB8YyhqV7UeeTEdnaWnrLjN1ggnHopuW+eqEjW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OF5+924/; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ja+7V8F1"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4f4a88e75a5so29180921cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 04:19:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767874746; x=1768479546; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XslR5Skl/tw/Xim8K72eczklMzvlOxARWwVTFZz2hyo=;
-        b=ja+7V8F1ZwjWz5gIR9kXgeJQwqADgKnij+xGhHeSKOkbZ3j0fpqSXJgQwNFDUpSKHu
-         BLRlwmWb5dG1rM6Sz97lQd8qG1LLDpxMRxJYaMGnmPnlptG5NZpECNAIr9Tm3qHE5hyY
-         piUAzuG5yyotnME9cOrJQl6abmkEoDMJBDTvgWGMzgl/OE0W9gkeHApBotwro/H/ZKDs
-         yL/HIYAMRAuDuFSAmVl2ueileIkRxaFoPFTmU+Q9KvU6xmU7xtRbJRglFTI+LTVlwgjV
-         Jc3u+GQncx4lvYaL+FriQh4RoBG8qp0tuMoKbeqSCwslizSnn2sb1YoiVqWHZZy60zhk
-         JhwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767874746; x=1768479546;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=XslR5Skl/tw/Xim8K72eczklMzvlOxARWwVTFZz2hyo=;
-        b=vGp0+cgBjycyKeKRbBMOQeItB2qG1HI4nEYjzHUssY50LH/ihVT0xhg0Lgk+h9FCz+
-         0yWfYAC9gJLku99+r4OVwdUZUWcU9ZhqQp++HoDzjUj+pz41PuzY+kwQHnh4qXGjTgYT
-         nnRItkRrjKMhDKWwGI6ie3h76HYUq83HkgrGU0VWUF4jlQh719tXfgjwPX5o6XvKa0RX
-         pFWdikBS05g/UFMnrPRkypObUal86e+tLObmps+fDPm9xCbmjRlUaPT2c7xR5VZ+iY35
-         WJZwBTPCd9780ttdHFH4z5rjMTNspwZN0SIGfSlMqp6XZIrrVKrLqjVCHgfxNtcmcmfg
-         4U8w==
-X-Forwarded-Encrypted: i=1; AJvYcCXDnhJZbu4qJev8k9+PwH2f2ASPAEC4tYd+fcAeH+cxYGiLVSXpLfvlu4yqL2PENUe0qiyGemtXStt5usxBrBw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaCXsSS9TX9YYTUnyxYcxO02ZSLXm33Tf6gKkVJF2c/CuXhc96
-	JlMbTAmvVLp1qQcN7FldPUg/V/GHktER+whvX+fmJaPiFGVMzOnRhEVUTZeF9u4uW9il0pE2pWr
-	BcWST4ZdtrxxKKTTFCx1WCM7nEGcDjbEUX4ThV3KN
-X-Gm-Gg: AY/fxX5Y2IRepANSi7xEUgQtf9Y4ggqHMtLmzKxHjaJsYB3xViA0kg74Aq9/OH+0xuP
-	TfGZ8TjdHCqefOoRIVe/f75eZP94S2TZ4uCt2Tgtk3E3VjI5swgECgnd3FOpkvl85SqhJJ7hakP
-	69wRl+ieClHum9P+oYGbzmr12SkRbK3YZBtYueJFVeOIc2YxeQELJq+ub+guWb+k7Fw66YeDJf4
-	7X/sNhX4r1JcLUnJ3/wN8uvLKZwD0jOkvzjnlX2WCBlz+T6Uo30iFzGELwFvO/QznaBhvyYltWw
-	guRq
-X-Google-Smtp-Source: AGHT+IE6CBzyCrx4IFVvz/0AqM39PV6mvwh7lOn07b9ckEerO+EpyGAL7TIuu+rk4c57j55fgOdIw95rlnzvDdfaED8=
-X-Received: by 2002:ac8:7f8c:0:b0:4e8:b2df:fe1f with SMTP id
- d75a77b69052e-4ffb487f955mr83824451cf.28.1767874745665; Thu, 08 Jan 2026
- 04:19:05 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OF5+924/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767874816;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=O3gEBAPNPXaPH1lX1DR0amMzqk/RyPoLCSLo0EIYFeo=;
+	b=OF5+924//pmTE+XzYLOk38LcqvxwnJEWxqQ/PQZIaCX0lAnLs6mULnPk4rEblggQi4VRH7
+	bLBBAB6lWd584SLpqlHgm2R251ZRBGrBY7beKPpKUhn1xmMekDKszgCGxoF+3qgEi/GYIF
+	14OTjFqc7awS3prtnYDKG8f8uRhDf6s=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-457-J4mfcCOBPt-WaBJOwseDYQ-1; Thu,
+ 08 Jan 2026 07:20:13 -0500
+X-MC-Unique: J4mfcCOBPt-WaBJOwseDYQ-1
+X-Mimecast-MFC-AGG-ID: J4mfcCOBPt-WaBJOwseDYQ_1767874811
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 60BE21956059;
+	Thu,  8 Jan 2026 12:20:11 +0000 (UTC)
+Received: from fedora (unknown [10.72.116.180])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CE57430002D1;
+	Thu,  8 Jan 2026 12:20:03 +0000 (UTC)
+Date: Thu, 8 Jan 2026 20:19:58 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: Caleb Sander Mateos <csander@purestorage.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>,
+	linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stanley Zhang <stazhang@purestorage.com>,
+	Uday Shankar <ushankar@purestorage.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v4 09/19] ublk: implement integrity user copy
+Message-ID: <aV-g7obwQw4HFcn8@fedora>
+References: <20260108091948.1099139-1-csander@purestorage.com>
+ <20260108091948.1099139-10-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260103131028.10708-1-chia-yu.chang@nokia-bell-labs.com>
- <56f6f3dd-14a8-44e9-a13d-eeb0a27d81d2@redhat.com> <PAXPR07MB798456B62DBAC92A9F5915DAA385A@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <9d64dd7e-273b-4627-ba0c-a3c8aab2dcb1@redhat.com>
-In-Reply-To: <9d64dd7e-273b-4627-ba0c-a3c8aab2dcb1@redhat.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 8 Jan 2026 13:18:54 +0100
-X-Gm-Features: AQt7F2pGmpHwQwLbaeD-dBc7rrFfr_O4l9u7b9jAwL-yY9Bn1sm999duNbFyyYY
-Message-ID: <CANn89iKRAs86PVNAGKMUgE49phgZ2zpZU99rRkJq=cc_kNYf=Q@mail.gmail.com>
-Subject: Re: [PATCH v7 net-next 00/13] AccECN protocol case handling series
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>, 
-	"parav@nvidia.com" <parav@nvidia.com>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
-	"corbet@lwn.net" <corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>, 
-	"dsahern@kernel.org" <dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
-	"dave.taht@gmail.com" <dave.taht@gmail.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>, 
-	"kuba@kernel.org" <kuba@kernel.org>, "stephen@networkplumber.org" <stephen@networkplumber.org>, 
-	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>, 
-	"davem@davemloft.net" <davem@davemloft.net>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, 
-	"donald.hunter@gmail.com" <donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>, 
-	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>, 
-	"ncardwell@google.com" <ncardwell@google.com>, 
-	"Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, 
-	"g.white@cablelabs.com" <g.white@cablelabs.com>, 
-	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>, 
-	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>, cheshire <cheshire@apple.com>, 
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, 
-	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, Vidhi Goel <vidhi_goel@apple.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260108091948.1099139-10-csander@purestorage.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Thu, Jan 8, 2026 at 1:05=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wrot=
-e:
->
-> On 1/8/26 9:47 AM, Chia-Yu Chang (Nokia) wrote:
-> > Regarding the packetdrill cases for AccECN, shall I can include in this=
- patch series (v8) or is it suggested to submit them in a standalone series=
-?
->
-> IMHO can be in a separate series, mainly because this one is already
-> quite big.
->
-> /P
->
+On Thu, Jan 08, 2026 at 02:19:37AM -0700, Caleb Sander Mateos wrote:
+> From: Stanley Zhang <stazhang@purestorage.com>
+> 
+> Add a function ublk_copy_user_integrity() to copy integrity information
+> between a request and a user iov_iter. This mirrors the existing
+> ublk_copy_user_pages() but operates on request integrity data instead of
+> regular data. Check UBLKSRV_IO_INTEGRITY_FLAG in iocb->ki_pos in
+> ublk_user_copy() to choose between copying data or integrity data.
+> 
+> Signed-off-by: Stanley Zhang <stazhang@purestorage.com>
+> [csander: change offset units from data bytes to integrity data bytes,
+>  fix CONFIG_BLK_DEV_INTEGRITY=n build, rebase on user copy refactor]
+> Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 
-If possible, please send a packetdrill series _before_ adding more code.
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-I have been reluctant to review your changes, because there is no test.
+
+Thanks,
+Ming
+
