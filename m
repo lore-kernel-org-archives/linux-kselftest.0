@@ -1,88 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD09500948;
-	Thu,  8 Jan 2026 14:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212AF50095B
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 14:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767883322; cv=none; b=i5c3bdEY7CqCKLE0mKGtajMf1qsObqnceccpwlQCq51crW4Kt6zWRM6n72F9nwfO7Ew42qyX86+xRh05sZTEuO0ifG/Tik7kXfpNMwpk7ifyCSQS8SAP5oBWSL21bF61H19jxBdejfpK26gWQVsm9h2in5BnexO+BcWUY52SjhA=
+	t=1767883673; cv=none; b=i8axC4JIdS+4Tj8HnvDz78jgqOuEY0QuqngoUQ9sJdTz1QJXKegsgCDH6Lal+2DRxX3kwK7XiC6XgXuVlpMIAe6RKImLO4wIzQRmHfl9qcBvmc91vuFQVLHrK9LHZvuNOqYZDZ8LtgrCARsE8Vhv8Yhu8cqeTe+/OCfivt9ZiC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767883322; c=relaxed/simple;
-	bh=OWGioFVBXgEJf9d2gvMx12tRfLFIpFIFoaLk5P0MMyE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eQYTB1sog4vh48iVUIV2S9114pWPZUbqC35+Z/yU90xRWW0mAVzzLIWtXUQkEhhUONSK691XCPWi+OV6aSs5R/dCPA6Nbn9szC9UW96OVN3hxaC27z2gmD92gJ3WOeVY7SLq4p233UsFLRR/lii2pRpmKeIJwMK+K2oOQm8Enyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pg26WUex; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767883673; c=relaxed/simple;
+	bh=czn6i+5JRS41ZvY2QucunbgAj9XQZu9cLO8YLR+TrTY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fRQPX+cv2rKnJZdJ3wJ2yV6jZCtCWbWcT+S0gbhJ/clOZH24FzjEmOwpNVqtfyibwNJOhnDjKandqoHbPKKjdpE7QEIUR6OqOPC1ZpdGM9r/Qa1MXqsbTtTHt+Kv5pPMUprYYmSqPIdy7JM6B2uuLhEqb4p2xWANfNxI9277DYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cXEK5ckV; arc=none smtp.client-ip=209.85.167.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pg26WUex"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F840C116C6;
-	Thu,  8 Jan 2026 14:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767883322;
-	bh=OWGioFVBXgEJf9d2gvMx12tRfLFIpFIFoaLk5P0MMyE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Pg26WUexxhpNMxI3AMNXPk3Ko/k9+IyTLkEb433lFpmJ0wUb3c2bMsSQ/0xt9MMD4
-	 QLFj0RZs31o28/YwzrGvp2hl3jd7T6gV1lth+CXaOLBfAxM118Zp5j2xqtsh8NhG/Z
-	 ATLatVCYDG+wB87FsRByb3Lyp3XQzkQT9noUiSj1Yfbq1y20UUHSJZWIH1p1ESl+R5
-	 UO4dJzr8NHSqC2EuESdEElR6NX03LKh2j2RQuNQ6gh485nBMcEojenPnFDKbR7x3Fs
-	 fdlhe26cPRVGn8JKJz+IeGxdze+Ur8KX/rjYmPXlJN52+2lNaDA46tYvjBmGnDvTFM
-	 t4gYXLzhxFT9g==
-Date: Thu, 8 Jan 2026 06:42:00 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn
- <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, David Ahern
- <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet
- <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan
- <shuah@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, Mina Almasry
- <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, Stanislav
- Fomichev <sdf@fomichev.me>, asml.silence@gmail.com, matttbe@kernel.org,
- skhawaja@google.com, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v8 0/5] net: devmem: improve cpu cost of RX
- token management
-Message-ID: <20260108064200.7faf9735@kernel.org>
-In-Reply-To: <aV80jCHD9PGaOr87@devvm11784.nha0.facebook.com>
-References: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-0-92c968631496@meta.com>
-	<20260107193013.0984ab97@kernel.org>
-	<aV80jCHD9PGaOr87@devvm11784.nha0.facebook.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cXEK5ckV"
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-450b2715b6cso1961175b6e.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 06:47:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767883671; x=1768488471; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/6hSm35yZUt3EV6dxEBlPd5kbmwwUA3xW1x0DKsS8Lk=;
+        b=cXEK5ckV88Gmtn2fuGYnFHgI4rju9IhBqucCjjNBANC1DImQQwASBzq+fGsjy8jQgY
+         OIv4zSryJP9L3UBjJrWkJKkoultuunzWunsmWucZAxLwc+8qMyi6hAEcmiDstMnC+OyP
+         ZHRkzfk90B/Rm9Fssyd7hgH+iIe9Zh+6Ov84V7sDpSxNoVZAUTZh+n61OJwS5jhVsyXi
+         23s98rHhPcCvTLlMIn/jX190iXeq0OwmDnm1j50oj26Njx00SKGxFF4/xdQuU9pRaDRc
+         4pD/wIF3h6V8Lhpuf4hvuDV3NygsrxMoKhVSveYsPYDXv5rJHLZeuIGGzxSnLxaq+s+u
+         cYgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767883671; x=1768488471;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/6hSm35yZUt3EV6dxEBlPd5kbmwwUA3xW1x0DKsS8Lk=;
+        b=MpfBkmlV0zxmii6qQN3i1XEu/FFR5LErq/ok84qyMx6oWEB6K4+7tDIBwT68F16CyW
+         PWFbQhGw2MWo8A//mrMhPqY1HsjEh293RP8x9zSLNDHRPPL+jb6mTcqK/yIR7kNeWynJ
+         lL+XhhrY63n8g8Ek7IVZHiyxKMmqa7My1BH4z/Pc6vHExA9Fq7pZMUtg8fXdG1ufuASn
+         V9JqD9gHUbRFSIEnjoKlra0Fnyuf6XZ0l0RQDIbgEISTvDw+B71zvFkYoIGx5rv4a6va
+         VN6ha1QUF5y8zrwQz47a2Ag4l6QV0TkX7g3rpVHJXcAedinj/LRvOIi+3sNon5wwJ4hy
+         5Hug==
+X-Forwarded-Encrypted: i=1; AJvYcCWMblm0OobE0N4bBffJ3qEbcCkbmE0SF2PYvfMu7sTvymbn1DePPn96VP4iRqBxiEN+SZQQNYGr0gMI48xAAPw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp3oyOKBLZjrIubZRQyCR420bLKEMN5Lwv2oTSESXqc0jyNjRe
+	DKgLI5gegU1WC2yb4kGNNDDRjWv7e4ivH+hPip+UFK1deA5IYy5liPk32AX/JA==
+X-Gm-Gg: AY/fxX7TqiSRd1Qkcp02CRVBiD9TgDP44GcBmXVGLAen2U/vRWMJAYeRb7MTQ8ocECv
+	IU4+pvXLtWvndYrefuGfsNZ69CrB1jQn1EGRhiY0ELsSdqwmZVtRnjVxchQsUJIwqPVaFHj60km
+	T1yc+CDiwpQdWl3Kt+EARDDam/2XKRL9RrZenany+z6DqNouxr27Cyp9f7Om0+iF98TFXMXCaj9
+	pdkxpUd6LL4Y7vXTLZ7R0wIquEmzjQM3jmb4PUYkjUwBQGzKcSTFoCad/r1Suw971Q8kk7gUrgh
+	1tXHkfrmK2+CztpzlMvT3sYUKpv0UVkfvOCEA6icvtyFW6LOnMCE3xjdv/hiJJoe8y9/dnCjqOT
+	QKFpqyphzTXD1efc0qyOhxYqjbLPpd0yfESEBYggdeupYRNyuYy6ydNmPOfm7DwQohVFQk9Y426
+	jG8Ee8PQPBS6BNz/e4LZZqQag=
+X-Google-Smtp-Source: AGHT+IG+5O2qxyQaHRKvy3VAjXHEnNlXj0xPAB0paZX1ShUHEyvTsyzL0eLPaW2CmcyBGY5q5wG26Q==
+X-Received: by 2002:a17:90b:3e83:b0:32e:3829:a71c with SMTP id 98e67ed59e1d1-34f68b68daamr6764560a91.16.1767877852585;
+        Thu, 08 Jan 2026 05:10:52 -0800 (PST)
+Received: from google.com ([2402:7500:577:2fcc:284d:ee3:93c1:605b])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f5f7c4118sm7952968a91.7.2026.01.08.05.10.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 05:10:52 -0800 (PST)
+Date: Thu, 8 Jan 2026 21:10:42 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Kir Chou <note351@hotmail.com>
+Cc: "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"geert@linux-m68k.org" <geert@linux-m68k.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"davidgow@google.com" <davidgow@google.com>,
+	"brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+	"kirchou@google.com" <kirchou@google.com>
+Subject: Re: [PATCH v3] lib/glob: convert selftest to KUnit
+Message-ID: <aV-s0jvOILSFkKhs@google.com>
+References: <20260107051903.35039-1-note351@hotmail.com>
+ <aV9wjyL-q1fxXjxq@google.com>
+ <TYZPR06MB691697F84E3DF898044028D3E885A@TYZPR06MB6916.apcprd06.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYZPR06MB691697F84E3DF898044028D3E885A@TYZPR06MB6916.apcprd06.prod.outlook.com>
 
-On Wed, 7 Jan 2026 20:37:32 -0800 Bobby Eshleman wrote:
-> On Wed, Jan 07, 2026 at 07:30:13PM -0800, Jakub Kicinski wrote:
-> > On Wed, 07 Jan 2026 16:57:34 -0800 Bobby Eshleman wrote: =20
-> > > This series improves the CPU cost of RX token management by adding an
-> > > attribute to NETDEV_CMD_BIND_RX that configures sockets using the
-> > > binding to avoid the xarray allocator and instead use a per-binding n=
-iov
-> > > array and a uref field in niov. =20
-> >=20
-> > net/ipv4/tcp.c:2600:41: error: implicit declaration of function =E2=80=
-=98net_devmem_dmabuf_binding_get=E2=80=99; did you mean =E2=80=98net_devmem=
-_dmabuf_binding_put=E2=80=99? [-Wimplicit-function-declaration]
-> >  2600 |                                         net_devmem_dmabuf_bindi=
-ng_get(binding);
-> >       |                                         ^~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~
-> >       |                                         net_devmem_dmabuf_bindi=
-ng_put
->=20
-> I see that net_devmem_dmabuf_binding_get() is lacking a
-> stub for CONFIG_NET_DEVMEM=3Dn ...
->=20
-> Just curious how pw works... is this a randconfig catch? I ask because
-> all of the build targets pass for this series (build_allmodconfig_warn,
-> build_clang, etc.. locally and on patchwork.kernel.org), and if there is
-> a config that pw uses that I'm missing in my local checks I'd like to
-> add it.
+Hi Kir,
 
-kunit hit it on our end
+On Thu, Jan 08, 2026 at 12:11:21PM +0000, Kir Chou wrote:
+> Thanks Kuan-Wei! I addressed all your feedback in v4.
+> 
+> https://lore.kernel.org/lkml/20260108120753.27339-1-note351@hotmail.com/T/#u
+>
+
+For future reference, please avoid top-posting.
+Also, please ensure your emails are plain text only, without html or
+base64 encoding.
+
+Regards,
+Kuan-Wei
+
