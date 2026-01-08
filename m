@@ -1,114 +1,227 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3AAFC0A;
-	Thu,  8 Jan 2026 02:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC03519258E
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 02:51:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767840085; cv=none; b=fd6cEv3QHg6AW7tp85Ybbhrn9StoCSqoQMA9BTOu4+TrCQd4yLYC3DmMEBkHUuZsfnxrPMa4U9FYJDWZ2wwpvde1lTouBQnxBp+BarNOMY5LQ2RqZDG57wxLwkjhF7cb8AqqeRGuAvL2Ml8l41j5wl8OSbVFCkyaSB5yUflg7GA=
+	t=1767840719; cv=none; b=dV6v2Qy2NzDxX9c3Cjph3zYhFkNVy+idfW+8zFpiZVxh4gkxLIJsCVA4a0koCObDn51cBuE+hnDTSc2KLJLHpBpb+gIcy1iwA509v+VActyMwjUVsBUwqNFnW0hwm7YAkKC2H3EDPIiQ7j5IIlPjn0iF8xo7lm/QZ0McNUj7/CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767840085; c=relaxed/simple;
-	bh=9N7gtfek0CZSERE5rrudUqB6NRFeojNIful35p+BAlE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X5/U+iWtDqVlO4EDiAxsz93E7Qv8Q/YnSJPh34+t01x5HCbH1Y/N+r3uvMtDJ8Ibqk/hjN2i4Y/PxuBgg7Up5YDhriVz0gqdK7wQvmoOB1JICwR7YWaQpNER+s/Sn0pZ5n2bGGdAyl5AqnT2TccvoyU5ihmnX7MjDHKU+pMRQI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=17evGVds; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1767840719; c=relaxed/simple;
+	bh=do9l6eGvvyDKINEPSQ7IHQBEOd/mowpyOxaGE0SLNeE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HOLJj9eWarz2xf4GUdttgN/FUjYMh2zBiI0c4/RTKnla7304ML07jAmar/uujVshARAc8u5KhKJ6yB0nl/JyXo5yzuRq7C/VSjkGPHq6XBZv8ugYtyzeVNJpchOdds6+GsmtlGsSdLcEuerq42lDq3X/TxPO/KkhXqFeENgmVUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FVifHYih; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="17evGVds"
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6081mYQP2888993;
-	Wed, 7 Jan 2026 18:41:15 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=s2048-2025-q2; bh=5lRmE98vcvRhVI150GA9
-	NbrLj85CvVEHBjRpAZ3nKgY=; b=17evGVdsVshoa4BNelFRCtaBDUtIDV72yDoe
-	AO1Ho5lb1s4utMUJoUoiOdMZuKJawO3ZxLFfBSfoHOWMWvujULMAjrZ95i9sR+5x
-	sWfaEZIvG9c1Akoa8bPXs/uNBti24o6E4nDrkKCrF/sXFHRcH3vIanvH7t7ppNpl
-	78J+eMQfx3HRFPWx1n3JUqFa5dbhF8Q3nm0LV+dDD8dkiFf3NeGxmsGhCa3k0zp5
-	LXuiudPalgzIMN/zakGweXFO+OQ4t4sVlfiJr9OOQ3Ziiy2UJUH7YF/IHbMnmmb5
-	eRaEMDz2t2f5U6zstKzjWyCAwyHFgkaisAXbyAlRcQ33kCkgCQ==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bhv484mrj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Wed, 07 Jan 2026 18:41:15 -0800 (PST)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Thu, 8 Jan 2026 02:41:14 +0000
-Date: Wed, 7 Jan 2026 18:41:10 -0800
-From: Alex Mastro <amastro@fb.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-CC: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
-        Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
-Message-ID: <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com>
-References: <20260107-scratch-amastro-vfio-dma-mapping-mmio-test-v1-1-0cec5e9ec89b@fb.com>
- <aV7yIchrL3mzNyFO@google.com>
- <20260108005406.GA545276@ziepe.ca>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FVifHYih"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4fc42188805so28839821cf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 18:51:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767840716; x=1768445516; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WJ0O3nuDBxLsxoMKJl4tF5zDnnuLWj/3NEIyxU+lc3Y=;
+        b=FVifHYihtgBsKIWSUuaeRz1qARDQJesQO8MzKdzbtZGER68eiLWhD4mfi6mwMsnzIC
+         sy/dnSMXUu/N+IY/srIUpeAbiv6thO1FoYpbozfLeEQFw2M+9HGjbtZwYt/sWXTZPRwk
+         E2FYuZ+av5QvsfwepMvuMf87SQutODYPs+RtuJEtrMRHHE30QlOllBn8LCLj2dehtc7K
+         0JIXDHlPAdpL15Czw6DRQOckQLNfr7eBoi/F52nEZ0DQ9kKt6sxmOyaF2IWmP1pgT9YY
+         0uMl9u+bkpjvxBiRHa7+TdWPY4Zy+xaivW/QCwtvd/alqlHn8MtpN+RfX0DCKER5qJhQ
+         M3aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767840716; x=1768445516;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WJ0O3nuDBxLsxoMKJl4tF5zDnnuLWj/3NEIyxU+lc3Y=;
+        b=pPKyP9sezm7JefSBtJpfA4KtjlG9BpJR5ev46C9Fapx1gw5QuOnfiS3UdeJa4LWdUf
+         6ASvqhMFAYTGN1tUqCUrim8baTRcp9OCqSrhBYusv0YwHk81xTUzhqNTJqkIlgiS3rXM
+         TDSuEx4iBvoBrJNCf61KEh5Q908t5yWnJ9XijhQm1aWpWZMC2jPI2RMKhlcFzjTu50UF
+         VN5BByrAolpvhP+6Sov3+cA0MUs+wNhXl7+DJkIQ/3kgUHJfk5zgnap36pGzOn5bjru0
+         hbYxuqNW19zj2XMDWCGL0hDepJZUwd4gjJpFaBkETc5RZiIc2SXsHPz3QU0kJmXRYm8n
+         A6VA==
+X-Forwarded-Encrypted: i=1; AJvYcCXV9iepdZgwfxdBIEEzTnU8fRDyPAJo5dW4eJb90JdCUqpRd4PnJOIpBB2ecK2gp3ddb/naXr3hgkiOcQX29ao=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLb+AfhmJnCe4izph2tAxxnabxwr6vpx11a1X5ff1M4b8rWxMz
+	uZa9cTAH3F39tSscQN1+XVPa0LJjSqMzLbC1FO98iV77VarY/BC6jZVpx0Fb1g==
+X-Gm-Gg: AY/fxX6GsOpcpuzfYE58wHoovFRK6ikBofZGzBXDYqQKalPVl/70zs+DDVcCiLCmkMa
+	2ZczNmRF5Asda/sJI8/CMn26z9hj/JzT+7Xw8T5iX1Im4GNdaVGiUPpb2ONt8TeTzrvAFjdEZ8a
+	ZzDPOaRiYgtVUMPkzmptgmn9Z5ksM9gSynUryYG/QBVNz/TZG4uqxnDCBJdnX46TbCxDEwqTE8V
+	nGHE4+2MziQ26AReIxlJ79XYff97TJaXx+pcIVBwA0fJro7vzXjfIYMxgnd+mUyrN9mJLFDtN+x
+	fNRlXVlgOzVZbRtyoLStk5I1vqnMYNfrloDtolU4FOkNr/CTYLEC6XINGG1zKJnKFReIPB/wW1b
+	0SINgLRxqB/SPMRMTQvs4VG4wnlOANMveKn/uBpz6VNPpjZw2X4vRPY1SPFo+RtAeGB5rXf7jxG
+	0dNLMGiBZOPA==
+X-Google-Smtp-Source: AGHT+IFTPsy9VwPhKALWTvLAxLL4YRWKWUiavLYzsq3SmgBSOEcDED2k8hwXyHd77UWp0Yyjdri5kw==
+X-Received: by 2002:a05:690e:1404:b0:644:43f7:11b8 with SMTP id 956f58d0204a3-64716b33a92mr3911696d50.13.1767833919327;
+        Wed, 07 Jan 2026 16:58:39 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:4f::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6470d80be64sm2714670d50.6.2026.01.07.16.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jan 2026 16:58:39 -0800 (PST)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: [PATCH net-next v8 0/5] net: devmem: improve cpu cost of RX token
+ management
+Date: Wed, 07 Jan 2026 16:57:34 -0800
+Message-Id: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-0-92c968631496@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260108005406.GA545276@ziepe.ca>
-X-Proofpoint-GUID: ESBitpku9tgv-bgoB0v0gHTDKnIpx58Q
-X-Authority-Analysis: v=2.4 cv=H47WAuYi c=1 sm=1 tr=0 ts=695f194b cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=gxYtzChvB9cNzsRSEx4A:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA4MDAxOCBTYWx0ZWRfX9SN81BjLRUDZ
- V/jVM1T+ZOjnO2VUGFUjvp8ApxKhDnhG0t9pT5hlB+jIQQEWJu9bFYV5Pbce1ZIe1DAI56o1j5T
- yv3P9MranlLY3+HLIXiayWvj4ZPjNm1xlxHu0sHZGHPG1uYXzlN215e4lpkm0LRHUDznh90YKsO
- cAOD58YAb+V3XNyvMLTKAbD/oY2lA0DMvSWfMes9YGU9u+tr4uALx2xKCXMPLW8MnZ+WDBGAGSF
- Ko9PoiWkzbwQGZ6g1ebd8yMq1aDRbPZJXYiNiKgJeYUTaIpzZGx1S5jthMe815fauvF7YBd3qRG
- 7WkTLZtY7RmfKKi4iT8DYdhip0S7YKG4N8WlCcuDHu8BOiNHlatJBoTLOdZeHJD565JBdJcgcjR
- c3NgmiY2SxrtIJzeJd5ZGipCcFMglNR4Ogy/+RJ+98wEhSxVxfMtMNKZRkYu2BijdMR0tI9NuoH
- vazL+rmlNOPrhM0Xnkg==
-X-Proofpoint-ORIG-GUID: ESBitpku9tgv-bgoB0v0gHTDKnIpx58Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-07_05,2026-01-07_03,2025-10-01_01
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAABX2kC/5XSS2rEMAyA4asEr0dFfsixZ9V7lC78UJrQJhliN
+ 8xQ5u6FLNqQXdaC7xdCP6LwMnAR1+ZHLLwOZZgncW3cpRGpD9MHw5DFtREKFaFTHkpaQk09xDn
+ GB5f+i8cwQeZ15BFqukGdP3mC71upC4cRlFeRZWsyoRaXRtwW7ob7VnwTE1eY+F7F+6UR/VDqv
+ Dy2VVa5zbeqR3W6ukpAyN5YaX0kInwduYaXNI9balU7XsrzvAKE5DC3mmI2pA+83vHKnuc1IKA
+ z0diYg3Pdgac/XqLS53kCBNOm6KgjRZ4PvP3nJZrzvAUEDt6lzmSD8XicdsfL8w+1toAgQ0zO2
+ FaTSTv++Xz+AkyAtcrSAgAA
+X-Change-ID: 20250829-scratch-bobbyeshleman-devmem-tcp-token-upstream-292be174d503
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, 
+ Willem de Bruijn <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, 
+ David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Shuah Khan <shuah@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, 
+ Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>, 
+ asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com, 
+ Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-On Wed, Jan 07, 2026 at 08:54:06PM -0400, Jason Gunthorpe wrote:
-> On Wed, Jan 07, 2026 at 11:54:09PM +0000, David Matlack wrote:
-> > On 2026-01-07 02:13 PM, Alex Mastro wrote:
-> > > Test MMIO-backed DMA mappings by iommu_map()-ing mmap'ed BAR regions.
-> > 
-> > Thanks for adding this!
-> > 
-> > > Also update vfio_pci_bar_map() to align BAR mmaps for efficient huge
-> > > page mappings.
-> > > 
-> > > Only vfio_type1 variants are tested; iommufd variants can be added
-> > > once kernel support lands.
-> > 
-> > Are there plans to support mapping BARs via virtual address in iommufd?
-> > I thought the plan was only to support via dma-bufs. Maybe Jason can
-> > confirm.
-> 
-> Only dmabuf.
+This series improves the CPU cost of RX token management by adding an
+attribute to NETDEV_CMD_BIND_RX that configures sockets using the
+binding to avoid the xarray allocator and instead use a per-binding niov
+array and a uref field in niov.
 
-Ack. I got confused. I had thought iommufd's vfio container compatibility mode
-was going to support this, but realized that doesn't make sense given past
-discussions about the pitfalls of achieving these mappings the legacy way.
+Improvement is ~13% cpu util per RX user thread.
 
-> 
-> > Assuming not, should we add negative tests here to make sure iommufd
-> > does not allow mapping BARs?
-> 
-> Yes
+Using kperf, the following results were observed:
 
-Will add.
+Before:
+	Average RX worker idle %: 13.13, flows 4, test runs 11
+After:
+	Average RX worker idle %: 26.32, flows 4, test runs 11
 
->  
-> > And then we can add dma-buf tests in a future commit.
-> 
-> Yes
-> 
-> Jason
+Two other approaches were tested, but with no improvement. Namely, 1)
+using a hashmap for tokens and 2) keeping an xarray of atomic counters
+but using RCU so that the hotpath could be mostly lockless. Neither of
+these approaches proved better than the simple array in terms of CPU.
+
+The attribute NETDEV_A_DMABUF_AUTORELEASE is added to toggle the
+optimization. It is an optional attribute and defaults to 0 (i.e.,
+optimization on).
+
+To: David S. Miller <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+To: Willem de Bruijn <willemb@google.com>
+To: Neal Cardwell <ncardwell@google.com>
+To: David Ahern <dsahern@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+To: Arnd Bergmann <arnd@arndb.de>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Andrew Lunn <andrew+netdev@lunn.ch>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: asml.silence@gmail.com
+Cc: matttbe@kernel.org
+Cc: skhawaja@google.com
+
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+
+Changes in v8:
+- change static branch logic (only set when enabled, otherwise just
+  always revert back to disabled)
+- fix missing tests
+- Link to v7: https://lore.kernel.org/r/20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com
+
+Changes in v7:
+- use netlink instead of sockopt (Stan)
+- restrict system to only one mode, dmabuf bindings can not co-exist
+  with different modes (Stan)
+- use static branching to enforce single system-wide mode (Stan)
+- Link to v6: https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-0-ea98cf4d40b3@meta.com
+
+Changes in v6:
+- renamed 'net: devmem: use niov array for token management' to refer to
+  optionality of new config
+- added documentation and tests
+- make autorelease flag per-socket sockopt instead of binding
+  field / sysctl
+- many per-patch changes (see Changes sections per-patch)
+- Link to v5: https://lore.kernel.org/r/20251023-scratch-bobbyeshleman-devmem-tcp-token-upstream-v5-0-47cb85f5259e@meta.com
+
+Changes in v5:
+- add sysctl to opt-out of performance benefit, back to old token release
+- Link to v4: https://lore.kernel.org/all/20250926-scratch-bobbyeshleman-devmem-tcp-token-upstream-v4-0-39156563c3ea@meta.com
+
+Changes in v4:
+- rebase to net-next
+- Link to v3: https://lore.kernel.org/r/20250926-scratch-bobbyeshleman-devmem-tcp-token-upstream-v3-0-084b46bda88f@meta.com
+
+Changes in v3:
+- make urefs per-binding instead of per-socket, reducing memory
+  footprint
+- fallback to cleaning up references in dmabuf unbind if socket
+  leaked tokens
+- drop ethtool patch
+- Link to v2: https://lore.kernel.org/r/20250911-scratch-bobbyeshleman-devmem-tcp-token-upstream-v2-0-c80d735bd453@meta.com
+
+Changes in v2:
+- net: ethtool: prevent user from breaking devmem single-binding rule
+  (Mina)
+- pre-assign niovs in binding->vec for RX case (Mina)
+- remove WARNs on invalid user input (Mina)
+- remove extraneous binding ref get (Mina)
+- remove WARN for changed binding (Mina)
+- always use GFP_ZERO for binding->vec (Mina)
+- fix length of alloc for urefs
+- use atomic_set(, 0) to initialize sk_user_frags.urefs
+- Link to v1: https://lore.kernel.org/r/20250902-scratch-bobbyeshleman-devmem-tcp-token-upstream-v1-0-d946169b5550@meta.com
+
+---
+Bobby Eshleman (5):
+      net: devmem: rename tx_vec to vec in dmabuf binding
+      net: devmem: refactor sock_devmem_dontneed for autorelease split
+      net: devmem: implement autorelease token management
+      net: devmem: document NETDEV_A_DMABUF_AUTORELEASE netlink attribute
+      selftests: drv-net: devmem: add autorelease test
+
+ Documentation/netlink/specs/netdev.yaml           |  12 +++
+ Documentation/networking/devmem.rst               |  70 +++++++++++++
+ include/net/netmem.h                              |   1 +
+ include/net/sock.h                                |   7 +-
+ include/uapi/linux/netdev.h                       |   1 +
+ net/core/devmem.c                                 | 114 ++++++++++++++++++----
+ net/core/devmem.h                                 |  13 ++-
+ net/core/netdev-genl-gen.c                        |   5 +-
+ net/core/netdev-genl.c                            |  10 +-
+ net/core/sock.c                                   | 103 ++++++++++++++-----
+ net/ipv4/tcp.c                                    |  76 ++++++++++++---
+ net/ipv4/tcp_ipv4.c                               |  11 ++-
+ net/ipv4/tcp_minisocks.c                          |   3 +-
+ tools/include/uapi/linux/netdev.h                 |   1 +
+ tools/testing/selftests/drivers/net/hw/devmem.py  |  21 +++-
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c |  19 ++--
+ 16 files changed, 389 insertions(+), 78 deletions(-)
+---
+base-commit: 627f8a2588139ec699cda5d548c6d4733d2682ca
+change-id: 20250829-scratch-bobbyeshleman-devmem-tcp-token-upstream-292be174d503
+
+Best regards,
+-- 
+Bobby Eshleman <bobbyeshleman@meta.com>
+
