@@ -1,114 +1,133 @@
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBDE365A1D
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 17:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF9435BDD9
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 18:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767979744; cv=none; b=QRO42gBKMhikHmiOMq0e4ms2JvD7Z+ZUjLSgrfRhXQt3V6g1StBMUWphcrAHgIgzRuadRwiMIOKkpVea+hFvO7EoycUnPchE1ilkDGx2um+b7CLhX9phh6c3oyOTwFc3wpKpoxWpTYM22eaZFk/w+dAlguq74RSa+ZMEC4mwdx4=
+	t=1767981717; cv=none; b=OtA7EtHdCYX4g0mkS1pEUPUX3nBAhSrREiJS5LRHrNY7U3H+TnH8b9Mkf2C9BG82ddNCTEbpL8BsQhJV+sApVU/btNK3DSkZs7yWD/56fsjprhzQDSEux4/c6nx0ZlYx4KgG11tV/Sbzih4J/CZJTYTnFkM5gMhFyyiLx3JKfj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767979744; c=relaxed/simple;
-	bh=1/l5R77pUR8ugOGX34HyrKOP4wsUDpK5m1qtPnOhuYo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j288Zx+tBT7BBKpdwqyXB/8DsbN+NwNnaMzb3u6cwZxSJ9mUTGSSlNzikNuA8lOrFl4eRlG2Xr7y3kO2NaEiRBVora3/vL/baVrwVYisJz6l6KYjFtVBeTGzV1PWSCCPmsDWnqxMExeadpBkovHHwg1b/TCIHIzgtqZqxBhdkWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lQBahsxX; arc=none smtp.client-ip=74.125.224.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1767981717; c=relaxed/simple;
+	bh=8vvLiZ0moy0BqifglQ3lLKAx30/FN3AM0NtBADFZGLE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LG9+6c2LUufAUyyQD/IZXsHxM5dCNkxVZCGHuxBvdpm0iJZzm2D2MP4LXsjGDBbB/McQEoQm+aR/ZOBAPkluVHgRlhua61dxsMz0mltbtcLSCki2Co9ky/u/EPCp70xAAqcBWOr7wJRLzsO2Ss5N7IM7wWvQed4yY+iMPH6G2HM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=mxsaMoPN; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lQBahsxX"
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-6455a60c12bso4310271d50.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jan 2026 09:29:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="mxsaMoPN"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8b23b6d9f11so477021985a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jan 2026 10:01:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767979742; x=1768584542; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CKdaUjJqG8oeq2ClRcu/iEJwRqPBhkw6Zp5ahsqycmE=;
-        b=lQBahsxXPnOH/KZPTShPRqKHY4qkimUMfMwDJmnvp5szoxARTm9Ry9Lng2ScfMeXtF
-         jH7B3aYuWQcfIKY7KlbLsT2Tl1cgj7vgmSyNekswLOvjWjDBOTLbFNPgUlk+Y02xzdJt
-         o0SkjUgK03DW60+Pz82p/CxKylEdmU8gp1hMEdExIEhq9E+DedG+ibodIrg+tAc1cfd+
-         YY/F8ZV78pb2TDRQ/8zzBoferookHqj0uvbJvG8xDCy4cNzgLj1+ICU57+N6GGRyRrg2
-         36FO/1E6CzwQTtGS5XD3MY3za+vY6CohV6INXolnXPPLXlFHYuxz+hJ0DWkKikxSDpR6
-         keqQ==
+        d=ziepe.ca; s=google; t=1767981715; x=1768586515; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+sMzdp/YVlx1Jnjwe36wn7sNt4Xwl0SeqEmouO33xVA=;
+        b=mxsaMoPNp3raQJvIVyA/ynyWqlnc2YgDtedCXXWemA1CLdcJ86UmwQxsrAvy0Ps4y/
+         OtUFn2O7aYkBYXANK7KYmynhqO8mE2Uy5mTzXHDmTN3R/tuytBeakmsRrZw6GVnc8Ya2
+         wpUv0B/dede8/3MQ76k5pKqiwYYkOllM245R0d4KnRH8UOEJn9c7hSCxw9/UB7zGnqfi
+         AgZ+xGK9ZNb3P7EV7TZz1NZt22pp4EVSMX0ucyg+cVzJl0YqCotruJYsMNDAsWmdp0Yf
+         yMQAk/nIJcUXW3//nj8f/feJl3hf3AyNvuQKx01kJhrWwW/W/llG30lnDAFdf9AkyWWw
+         mIHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767979742; x=1768584542;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CKdaUjJqG8oeq2ClRcu/iEJwRqPBhkw6Zp5ahsqycmE=;
-        b=QGgAi+xi2P/bErofSGuFIPnJSSjbZmQsJJmQu+7FLpPziOiScS1P5jiTkY5m5ZThZt
-         WNbUufqbIqVSEC0svS8952UvG2QHv58q6lmrsQNrWcFJfriBGdpQDIMhbXudWBTDgp13
-         Q8iGW82O+8X2n8gwVRrZFiY8E9IKlmFEOBbfPyB54xBIozRMUjn5+ZDleNAuY/YSgaIW
-         SEbOgJ6owXwCTfKTrrzIPSZJnlXh8zJJ6J/0i285y9uBwE4FqS7dnStp/Ty1qsUYvx+K
-         o+u1WcNoL5lmgYWHQvJOC0gEN0/AFpZqYzz9RdGLu1xcSyMfSxvqqBP7iA923D1Votsr
-         FuTw==
-X-Forwarded-Encrypted: i=1; AJvYcCUhoWEBYEtmxgBrnvrRA2m2Yn+HXuVisXTJnA+mMM0Pdc53OTggGHECCuoNUNbexsMHfuLDQcuCdc7iwsdGsaM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0/n1q4EJjtLjtX0A5WzqSaORP4oJ+ilBflbpxm2dxzDkA/MJE
-	/83nGo1dRsDTJwvp+OJiTeaEgwDDuaxGAQK0H0LrqzBwz++o2HPWakDd
-X-Gm-Gg: AY/fxX4IDw/ynBqbwR0Pguqj0pD8N/abzd7CsXWuqp82zvkJPZAX8w/WozGNBR9aHjr
-	KGVkfb68kbJGQTh1nFEKyikzXkuupoTYDoU9ceJhpTIUVRrqnKRIrbhaT26/L5M1Gy9KWLSZOfG
-	xnnFyYikDMfDmsY+OGfYdaT1qfsnTTgsddvN1/BHbrmoQC08D93mVtOsPhLqV5qK17bIWhLrYQX
-	RSJTi3+roLvThFDTrnfv7IktsIBO9XYZyKPtWYzb5HjZhi9qmbFZkuyKRozjglO5BA2wWaptKQj
-	NbZJu/49DMhg6wK47iYiNw94fXgxhGGC0DLHerfdPrqGbz3618o8NaKBaLa0EHsPsFeDwhVTCUS
-	W9sgkaTorl34y4E//eaDXTiDIsGBw5p4GW5blGXLhjUCH6wC8lJht2WIBp9TlGBXBaXrVG3ITjT
-	9Y7AvOPdEOLvCrl7sXaPxTwkT+ISAzMJ0qR41+Ts30UysTVgDMcjETjtERSbdCsOLDz412BMgM7
-	sVUFNU5pMKvkg==
-X-Google-Smtp-Source: AGHT+IHucay935+PHPaRqMUBculLyFxfPX0jedTkWAnBd1oYEZ+/yHB0cl9/8egf4uBxzRx82kDPfg==
-X-Received: by 2002:a53:e03b:0:b0:644:6c79:62d5 with SMTP id 956f58d0204a3-64716c797b6mr7021100d50.83.1767979741960;
-        Fri, 09 Jan 2026 09:29:01 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6470d89d607sm4721595d50.12.2026.01.09.09.28.58
+        d=1e100.net; s=20230601; t=1767981715; x=1768586515;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+sMzdp/YVlx1Jnjwe36wn7sNt4Xwl0SeqEmouO33xVA=;
+        b=LlFBFHOCHUsBN1LgnR4wfACfg41xwNN7crg9h0/mr3mzwemOoF3i6J6zK6jf1Ph3QE
+         voFCip5zLVmfRBMq/pc/CArPPPioXlWBbhZ85X7N3dZQT+uqlMEvXfYbO9oWY60dXQi2
+         TUu/lxpLrgtsS6Y8juW7WokaTJHkS6+YYGWHqbWgZhlk9qiUbvFXWfKxK7Z6bLyItZsE
+         fDWP57ioMSexQ504fH15hPoIRFTzA7+jUQCXYcAUuoScxIWFy10ukfzcSZ6ERDCVi3y8
+         NdmpCTlPGG4It4Udmn1XFonirDiQe7xebwSnfak1W740A7qifCwPuBE3DwmvMyNnUN2r
+         Kffw==
+X-Forwarded-Encrypted: i=1; AJvYcCWdGcVO00UgFbqKyo8opgAVs5WVSLmSqnMecbc9HUGkYCSiQqq15ZfH48Ztaq1VbCe4dJVazRt7k0SZCfoA5yI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0+KUcCUfK5G+ebTMaw+HzUkEXMFQ7cvdBoJqYJVL2vSUuV4TW
+	qhl44Ul8nGOOxTM10wcodpBg1nMii4+gfVLg9xVEuNI3tzwO5uD93fK9syrIZsBYvMs=
+X-Gm-Gg: AY/fxX7Qu3B3FdNTWAtS5LvSoUyAsWXq8MunzraxQU2pL/E99Et5t/iTN8+40L7FA85
+	bg0tapifUkaLUrqIub4KtorEGYDp8oEcn2v2pp9epAFaypLrc5reVnMXbZxbJoxfaLChlVt+6UP
+	b5MTImnVzU29M7bzkoQKiqVg+QCcsVaoRCpAo6wisigcpN6Ok+HVt3MgWtQcnM8mSRSGA2JrTSz
+	JB0Uv8vj2bKHINrJcX4Ey0aMKASldYhbD5791URY9pNpH4/gka8ByWPZIjJerL5SQ+1DWMbqBr8
+	wqZ5mYSE3/MinQsM1nMk3yK/KszCqxKP95xbv/kWVUnQJP5VXstmBnGPvakOLbswY67Mj8+0fiO
+	RmDAvXHz29VpYrsjm3M2v+Ax0rIYRqhwc0Wn9Deqz0h+R2l8LKfchbPHvtm5Z6NtuRRL5lfKbeE
+	Ub5sG8PY6+yS+ds8qhjmy7HJoqRHOwqE85CbThNNz9PPjzKPtnizPa2WsHF4ZEs23KYZI=
+X-Google-Smtp-Source: AGHT+IFuH4/syXBn2Q87Uqcqto7RR7Nq5kzUWhGBRuJQqzJjaI4hMXkkvlrpm9zyJZejTp3u6kT6ZA==
+X-Received: by 2002:a05:620a:371d:b0:8b2:d72d:e41b with SMTP id af79cd13be357-8c3893ef752mr1235192985a.44.1767981715100;
+        Fri, 09 Jan 2026 10:01:55 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c37f51ceb5sm916868785a.35.2026.01.09.10.01.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jan 2026 09:29:01 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: David Hildenbrand <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v2] selftests/mm: run_vmtests.sh: fail if invoked from the wrong directory
-Date: Sat, 10 Jan 2026 01:28:33 +0800
-Message-ID: <20260109172833.2989-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260108031604.12379-1-sun.jian.kdev@gmail.com>
-References: <20260108031604.12379-1-sun.jian.kdev@gmail.com>
+        Fri, 09 Jan 2026 10:01:54 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1veGo5-000000031Wb-3i4c;
+	Fri, 09 Jan 2026 14:01:53 -0400
+Date: Fri, 9 Jan 2026 14:01:53 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, Alex Mastro <amastro@fb.com>,
+	Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
+Message-ID: <20260109180153.GI545276@ziepe.ca>
+References: <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com>
+ <20260108141044.GC545276@ziepe.ca>
+ <20260108084514.1d5e3ee3@shazbot.org>
+ <CALzav=eRa49+2wSqrDL1gSw8MpMwXVxb9bx4hvGU0x_bOXypuw@mail.gmail.com>
+ <20260108183339.GF545276@ziepe.ca>
+ <aWAhuSgEQzr_hzv9@google.com>
+ <20260109003621.GG545276@ziepe.ca>
+ <aWBPNHOsaP1sNvze@google.com>
+ <20260109005440.GH545276@ziepe.ca>
+ <CALzav=cBGkhbbyggkfaYh3wfqodxRHZKXTNdnmjoXOgwMouBuA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzav=cBGkhbbyggkfaYh3wfqodxRHZKXTNdnmjoXOgwMouBuA@mail.gmail.com>
 
-run_vmtests.sh assumes it is invoked from tools/testing/selftests/mm.
-When run from another working directory, relative paths can lead to
-confusing failures. Detect this case and abort with a clear message.
+On Fri, Jan 09, 2026 at 09:04:30AM -0800, David Matlack wrote:
+> > If you really want to test TYPE1 you need to test what makes it
+> > unique, which is that you can map any VMA and then unmap any slice of
+> > it. Including within what should otherwise be a 1G page.
+> >
+> > But I doubt anyone cares enough to fix this, so just exclude
+> > VFIO_TYPE1_IOMMU from this test?
+> 
+> Ah, ok, thanks for the explanation. So VFIO_TYPE1_IOMMU should always
+> use 4K mappings regardless of backend (VFIO or iommufd) so that unmap
+> can work as intended.
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- tools/testing/selftests/mm/run_vmtests.sh | 7 +++++++
- 1 file changed, 7 insertions(+)
+IDK, I think you should just ignore testing TYPE1v0. The actual real
+semantics that it had are quite confusing and iommufd provides an
+emulation that is going to be functionally OK (indeed, functionally
+more capable) but is not the exactly the same.
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index d9173f2312b7..b7025afb56fd 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -5,6 +5,13 @@
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
-+# Verify invocation from the script directory.
-+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-+if [ "$(pwd -P)" != "$SCRIPT_DIR" ]; then
-+    echo "Please run this test from $SCRIPT_DIR" >&2
-+    exit 1
-+fi
-+
- count_total=0
- count_pass=0
- count_fail=0
--- 
-2.43.0
+The old comment here is sort of enlightening:
 
++        * vfio-iommu-type1 (v1) - User mappings were coalesced together to
++        * avoid tracking individual mappings.  This means that the granularity
++        * of the original mapping was lost and the user was allowed to attempt
++        * to unmap any range.  Depending on the contiguousness of physical
++        * memory and page sizes supported by the IOMMU, arbitrary unmaps may
++        * or may not have worked.  We only guaranteed unmap granularity
++        * matching the original mapping; even though it was untracked here,
++        * the original mappings are reflected in IOMMU mappings.  This
++        * resulted in a couple unusual behaviors.  First, if a range is not
++        * able to be unmapped, ex. a set of 4k pages that was mapped as a
++        * 2M hugepage into the IOMMU, the unmap ioctl returns success but with
++        * a zero sized unmap.  Also, if an unmap request overlaps the first
++        * address of a hugepage, the IOMMU will unmap the entire hugepage.
++        * This also returns success and the returned unmap size reflects the
++        * actual size unmapped.
+
+iommufd does not try to do this "returned unmap size reflects the
+actual size unmapped" part, it always unmaps exactly what was
+requested, because it disables huge pages.
+
+Jason
