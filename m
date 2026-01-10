@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3318227BB9
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Jan 2026 01:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F3C22689C
+	for <linux-kselftest@vger.kernel.org>; Sat, 10 Jan 2026 01:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768008820; cv=none; b=cxw3fca4j8RFTBdc7ORVNCyMyHffuK9bR1KykRoJzoqsPjkuzbPeLHNYMC3W7NJ32ixJM542A/o8QcSq0zwJmeshmix66XzZmnJ+MSYcFHbccXDLsBGass3cCslxLvZ+iR240YuXn0M4ByjPvfPYZG8DUamYrrVuTI8xZQnD3xw=
+	t=1768008822; cv=none; b=LtKaVd3/sDpq7Ta6w9gHrDdSpd+44CYmrw3sn/w3DYw/26CIWcKzot/LAZtefOycsmFH6WyYNYsmgUJFky/FwLLHs7HYMvdTbceVnpH6vGv2PvCg30kjldDsZAOR9V6eCI/TyfQJRmfg6dI9k+X/mHroF6M/SEqRfnigMM0Lct0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768008820; c=relaxed/simple;
-	bh=nahlisEqPxuIjyvdMr4LVeVDSZhm2bd8/Y5UY19I74c=;
+	s=arc-20240116; t=1768008822; c=relaxed/simple;
+	bh=jszMQ9Hme920SEwWQlamDC1aqLelIKuv2qdD1sEPIok=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hCir1en4NFMrxRtA9aUuZKJRltHn7rMkXeJZU4m6H7LW3+3TSsz6yW/zPfsqskNYBrcQrke9WbO9fuU0WoWq+pbP0XoTfErp1mhXFmfTwTsq8CmwIttIy8jJzSl/N6Gb9Cc9tZqkCi93KGA0wXvkPplHsdHbb/TfxnKnh+8flYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Eu3rozt8; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=biIgBpjlVNPg39UDXxAp9MxXW+0u/1wjZsCgLb6A5X1ofFtE01li3hN93yL6e8CVazuAPjT3KqmBmjY3lRdgdKRwXEklRAJ5FN987B1w1TN+xB8K5uvIAP66ISEouLsUPFWsdxY+YMOa2cb9HqQhBBXG8KlABAYUcX0s2GYHQPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M3BW45ZJ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Eu3rozt8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M3BW45ZJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768008816;
+	s=mimecast20190719; t=1768008820;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=UnUflEt7j9mnFP6cFwV27V1gu6XdfwGRHeVFFB41jWM=;
-	b=Eu3rozt89+5Nx+utMOjKWnxsJTKFpfzYf80dOZpYTmfg5VoCRrhOEV1N7yb8IPAuWhjkUq
-	L5JOhz0Zx2vH0kmoIQwsml0yTwGVb5F9s4EiCxxnjnjdl89r6TLUcqCeYqYcpxGyeyHswt
-	vBa2nYvRt6XuVckYppgJJa8Z3134RWU=
+	bh=fr0ElCgQVjIh7r1Wo+RnxZptNIJHrGjQ+YLFV8GVIR0=;
+	b=M3BW45ZJom62Sf9ytwdyn2PQoNRFLLO1jjZAoHaoiazkWiQroQoGzX3IimUGnru9JQK9Hp
+	96IB/YI5AgdtG+wD9N6/w+SHYtG09emtQZDqm9JpfaB+Eriz9WhktfS0W/Oag1ItztB7os
+	ylyD/fHgSDXs3X2MaOTL8b5tkOkwzWI=
 Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-421-fJr7coCjPlSlHKYJhVAxpw-1; Fri,
- 09 Jan 2026 20:33:31 -0500
-X-MC-Unique: fJr7coCjPlSlHKYJhVAxpw-1
-X-Mimecast-MFC-AGG-ID: fJr7coCjPlSlHKYJhVAxpw_1768008810
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-556-DhV1qanDPqGLevhPmgJHiw-1; Fri,
+ 09 Jan 2026 20:33:36 -0500
+X-MC-Unique: DhV1qanDPqGLevhPmgJHiw-1
+X-Mimecast-MFC-AGG-ID: DhV1qanDPqGLevhPmgJHiw_1768008815
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C591019560B5;
-	Sat, 10 Jan 2026 01:33:29 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0362419560B7;
+	Sat, 10 Jan 2026 01:33:35 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.90.10])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B933118004D8;
-	Sat, 10 Jan 2026 01:33:27 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CF8CB1800285;
+	Sat, 10 Jan 2026 01:33:32 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Tejun Heo <tj@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
@@ -55,9 +55,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Sun Shaojie <sunshaojie@kylinos.cn>,
 	Chen Ridong <chenridong@huaweicloud.com>,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH cgroup/for-6.20 v3 3/5] cgroup/cpuset: Don't fail cpuset.cpus change in v2
-Date: Fri,  9 Jan 2026 20:32:44 -0500
-Message-ID: <20260110013246.293889-4-longman@redhat.com>
+Subject: [PATCH cgroup/for-6.20 v3 5/5] cgroup/cpuset: Move the v1 empty cpus/mems check to cpuset1_validate_change()
+Date: Fri,  9 Jan 2026 20:32:46 -0500
+Message-ID: <20260110013246.293889-6-longman@redhat.com>
 In-Reply-To: <20260110013246.293889-1-longman@redhat.com>
 References: <20260110013246.293889-1-longman@redhat.com>
 Precedence: bulk
@@ -69,117 +69,130 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Commit fe8cd2736e75 ("cgroup/cpuset: Delay setting of CS_CPU_EXCLUSIVE
-until valid partition") introduced a new check to disallow the setting
-of a new cpuset.cpus.exclusive value that is a superset of a sibling's
-cpuset.cpus value so that there will at least be one CPU left in the
-sibling in case the cpuset becomes a valid partition root. This new
-check does have the side effect of failing a cpuset.cpus change that
-make it a subset of a sibling's cpuset.cpus.exclusive value.
+As stated in commit 1c09b195d37f ("cpuset: fix a regression in validating
+config change"), it is not allowed to clear masks of a cpuset if
+there're tasks in it. This is specific to v1 since empty "cpuset.cpus"
+or "cpuset.mems" will cause the v2 cpuset to inherit the effective CPUs
+or memory nodes from its parent. So it is OK to have empty cpus or mems
+even if there are tasks in the cpuset.
 
-With v2, users are supposed to be allowed to set whatever value they
-want in cpuset.cpus without failure. To maintain this rule, the check
-is now restricted to only when cpuset.cpus.exclusive is being changed
-not when cpuset.cpus is changed.
+Move this empty cpus/mems check in validate_change() to
+cpuset1_validate_change() to allow more flexibility in setting
+cpus or mems in v2. cpuset_is_populated() needs to be moved into
+cpuset-internal.h as it is needed by the empty cpus/mems checking code.
 
-The cgroup-v2.rst doc file is also updated to reflect this change.
+Also add a test case to test_cpuset_prs.sh to verify that.
 
+Reported-by: Chen Ridong <chenridong@huaweicloud.com>
+Closes: https://lore.kernel.org/lkml/7a3ec392-2e86-4693-aa9f-1e668a668b9c@huaweicloud.com/
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- Documentation/admin-guide/cgroup-v2.rst |  8 +++----
- kernel/cgroup/cpuset.c                  | 30 ++++++++++++-------------
- 2 files changed, 19 insertions(+), 19 deletions(-)
+ kernel/cgroup/cpuset-internal.h               |  9 ++++++++
+ kernel/cgroup/cpuset-v1.c                     | 14 +++++++++++
+ kernel/cgroup/cpuset.c                        | 23 -------------------
+ .../selftests/cgroup/test_cpuset_prs.sh       |  3 +++
+ 4 files changed, 26 insertions(+), 23 deletions(-)
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 7f5b59d95fce..510df2461aff 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2561,10 +2561,10 @@ Cpuset Interface Files
- 	Users can manually set it to a value that is different from
- 	"cpuset.cpus".	One constraint in setting it is that the list of
- 	CPUs must be exclusive with respect to "cpuset.cpus.exclusive"
--	of its sibling.  If "cpuset.cpus.exclusive" of a sibling cgroup
--	isn't set, its "cpuset.cpus" value, if set, cannot be a subset
--	of it to leave at least one CPU available when the exclusive
--	CPUs are taken away.
-+	and "cpuset.cpus.exclusive.effective" of its siblings.	Another
-+	constraint is that it cannot be a superset of "cpuset.cpus"
-+	of its sibling in order to leave at least one CPU available to
-+	that sibling when the exclusive CPUs are taken away.
+diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
+index e8e2683cb067..fd7d19842ded 100644
+--- a/kernel/cgroup/cpuset-internal.h
++++ b/kernel/cgroup/cpuset-internal.h
+@@ -260,6 +260,15 @@ static inline int nr_cpusets(void)
+ 	return static_key_count(&cpusets_enabled_key.key) + 1;
+ }
  
- 	For a parent cgroup, any one of its exclusive CPUs can only
- 	be distributed to at most one of its child cgroups.  Having an
++static inline bool cpuset_is_populated(struct cpuset *cs)
++{
++	lockdep_assert_cpuset_lock_held();
++
++	/* Cpusets in the process of attaching should be considered as populated */
++	return cgroup_is_populated(cs->css.cgroup) ||
++		cs->attach_in_progress;
++}
++
+ /**
+  * cpuset_for_each_child - traverse online children of a cpuset
+  * @child_cs: loop cursor pointing to the current child
+diff --git a/kernel/cgroup/cpuset-v1.c b/kernel/cgroup/cpuset-v1.c
+index 04124c38a774..7a23b9e8778f 100644
+--- a/kernel/cgroup/cpuset-v1.c
++++ b/kernel/cgroup/cpuset-v1.c
+@@ -368,6 +368,20 @@ int cpuset1_validate_change(struct cpuset *cur, struct cpuset *trial)
+ 	if (par && !is_cpuset_subset(trial, par))
+ 		goto out;
+ 
++	/*
++	 * Cpusets with tasks - existing or newly being attached - can't
++	 * be changed to have empty cpus_allowed or mems_allowed.
++	 */
++	ret = -ENOSPC;
++	if (cpuset_is_populated(cur)) {
++		if (!cpumask_empty(cur->cpus_allowed) &&
++		    cpumask_empty(trial->cpus_allowed))
++			goto out;
++		if (!nodes_empty(cur->mems_allowed) &&
++		    nodes_empty(trial->mems_allowed))
++			goto out;
++	}
++
+ 	ret = 0;
+ out:
+ 	return ret;
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 894131f47f78..4819ab429771 100644
+index 83fb83a86b4b..a3dbca125588 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -609,33 +609,31 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
+@@ -370,15 +370,6 @@ static inline bool is_in_v2_mode(void)
+ 	      (cpuset_cgrp_subsys.root->flags & CGRP_ROOT_CPUSET_V2_MODE);
+ }
  
- /**
-  * cpus_excl_conflict - Check if two cpusets have exclusive CPU conflicts
-- * @cs1: first cpuset to check
-- * @cs2: second cpuset to check
-+ * @trial:	the trial cpuset to be checked
-+ * @sibling:	a sibling cpuset to be checked against
-+ * @xcpus_changed: set if exclusive_cpus has been set
-  *
-  * Returns: true if CPU exclusivity conflict exists, false otherwise
-  *
-  * Conflict detection rules:
-  * 1. If either cpuset is CPU exclusive, they must be mutually exclusive
-  * 2. exclusive_cpus masks cannot intersect between cpusets
-- * 3. The allowed CPUs of one cpuset cannot be a subset of another's exclusive CPUs
-+ * 3. The allowed CPUs of a sibling cpuset cannot be a subset of the new exclusive CPUs
-  */
--static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
-+static inline bool cpus_excl_conflict(struct cpuset *trial, struct cpuset *sibling,
-+				      bool xcpus_changed)
- {
- 	/* If either cpuset is exclusive, check if they are mutually exclusive */
--	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
--		return !cpusets_are_exclusive(cs1, cs2);
-+	if (is_cpu_exclusive(trial) || is_cpu_exclusive(sibling))
-+		return !cpusets_are_exclusive(trial, sibling);
- 
- 	/* Exclusive_cpus cannot intersect */
--	if (cpumask_intersects(cs1->exclusive_cpus, cs2->exclusive_cpus))
-+	if (cpumask_intersects(trial->exclusive_cpus, sibling->exclusive_cpus))
- 		return true;
- 
--	/* The cpus_allowed of one cpuset cannot be a subset of another cpuset's exclusive_cpus */
--	if (!cpumask_empty(cs1->cpus_allowed) &&
--	    cpumask_subset(cs1->cpus_allowed, cs2->exclusive_cpus))
--		return true;
+-static inline bool cpuset_is_populated(struct cpuset *cs)
+-{
+-	lockdep_assert_held(&cpuset_mutex);
 -
--	if (!cpumask_empty(cs2->cpus_allowed) &&
--	    cpumask_subset(cs2->cpus_allowed, cs1->exclusive_cpus))
-+	/* The cpus_allowed of a sibling cpuset cannot be a subset of the new exclusive_cpus */
-+	if (xcpus_changed && !cpumask_empty(sibling->cpus_allowed) &&
-+	    cpumask_subset(sibling->cpus_allowed, trial->exclusive_cpus))
- 		return true;
+-	/* Cpusets in the process of attaching should be considered as populated */
+-	return cgroup_is_populated(cs->css.cgroup) ||
+-		cs->attach_in_progress;
+-}
+-
+ /**
+  * partition_is_populated - check if partition has tasks
+  * @cs: partition root to be checked
+@@ -695,20 +686,6 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
  
- 	return false;
-@@ -672,6 +670,7 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
- {
- 	struct cgroup_subsys_state *css;
- 	struct cpuset *c, *par;
-+	bool xcpus_changed;
- 	int ret = 0;
+ 	par = parent_cs(cur);
  
- 	rcu_read_lock();
-@@ -728,10 +727,11 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
- 	 * overlap. exclusive_cpus cannot overlap with each other if set.
- 	 */
- 	ret = -EINVAL;
-+	xcpus_changed = !cpumask_equal(cur->exclusive_cpus, trial->exclusive_cpus);
- 	cpuset_for_each_child(c, css, par) {
- 		if (c == cur)
- 			continue;
--		if (cpus_excl_conflict(trial, c))
-+		if (cpus_excl_conflict(trial, c, xcpus_changed))
- 			goto out;
- 		if (mems_excl_conflict(trial, c))
- 			goto out;
+-	/*
+-	 * Cpusets with tasks - existing or newly being attached - can't
+-	 * be changed to have empty cpus_allowed or mems_allowed.
+-	 */
+-	ret = -ENOSPC;
+-	if (cpuset_is_populated(cur)) {
+-		if (!cpumask_empty(cur->cpus_allowed) &&
+-		    cpumask_empty(trial->cpus_allowed))
+-			goto out;
+-		if (!nodes_empty(cur->mems_allowed) &&
+-		    nodes_empty(trial->mems_allowed))
+-			goto out;
+-	}
+-
+ 	/*
+ 	 * We can't shrink if we won't have enough room for SCHED_DEADLINE
+ 	 * tasks. This check is not done when scheduling is disabled as the
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index ff4540b0490e..5dff3ad53867 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -425,6 +425,9 @@ TEST_MATRIX=(
+ 	# cpuset.cpus can be set to a subset of sibling's cpuset.cpus.exclusive
+ 	" C1-3:X1-3  .      .    C4-5      .     .      .     C1-2   0 A1:1-3|B1:1-2"
+ 
++	# cpuset.cpus can become empty with task in it as it inherits parent's effective CPUs
++	" C1-3:S+   C2      .      .       .    T:C     .      .     0 A1:1-3|A2:1-3"
++
+ 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+ 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+ 	# Failure cases:
 -- 
 2.52.0
 
