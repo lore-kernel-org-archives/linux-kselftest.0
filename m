@@ -1,67 +1,67 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F9E26056E
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 23:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FC0199EAD
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 23:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768260877; cv=none; b=JvDCPumjIi33TFHNWOD3Rs8VtOCMUVaNSWMQfy1iWvY0XhLn6acB3wfDNMmq8UdE7g0s2ubnhYOa8DXugc+FngmZXMF1OWTBPyWtiDM+Sm7UIbjvjz5AHcIzP/X6s3okhkbXcfuTerljR8okw4eSirVRS5vezvtKp8nhVq3tEAI=
+	t=1768261181; cv=none; b=h4YDNgPp80zQnAI30p28W1Hyw3Z+FRXwPEXHBls2mWorMb9zHo292fL8AvzmlfR9FG6DqonPflDeMP10lvxdgu398hvYBUkyYbqhVQqwNB0FSeOxfe6UH/a0m+ncWCTx0rl1jRHfzIi+TvN/VUuY1y2u+FdbjmnrR0ADy5sCqEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768260877; c=relaxed/simple;
-	bh=ciALBiXpEllKNFFriaJFGexCh1jC8WmBZIOo2yR764A=;
+	s=arc-20240116; t=1768261181; c=relaxed/simple;
+	bh=D/QOV+PvgeGDhnZ/ix6Fp2phNTxa9gFGlVxWZXZmAqE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H29UjGqz8xOFqVblNqE+9nvV67CfFEuKcuiV3ddAEhNBTUhiz2WtehQ1tzBhpoHONYYUKAesqLEo8LnNt++rbNQRJVdOH66KJIsq9QbREs+y+0UPhP4m9HdV88qbEY1wZ1DSLGsWyDRYmhwUNptM83xtrY396NTsyeiT8SRH7kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GLsM2Q0v; arc=none smtp.client-ip=209.85.128.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cd2x0FDk+5n7HC7eiNmC+V1O0t75arAlQLYGBaxL8fqPsEn9x0UPnLcU8nfeGpvfGahwSEL0cLgfG4GpBvP/05g9dg7Q3VzY1YnTIigsbTyYBbXwcALchTon5QBknw83IWPJP+UI17MQIyFh7akSilkiFJLL3rQEa949W/pYS5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d7xncfja; arc=none smtp.client-ip=209.85.222.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GLsM2Q0v"
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-78e7ba9fc29so73978967b3.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 15:34:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d7xncfja"
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8c30365ac43so655375485a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 15:39:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768260873; x=1768865673; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768261179; x=1768865979; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lU3GpweyZ8RZOMAzOI1qx6iERtUR7NcEkRCk8jZG9C4=;
-        b=GLsM2Q0vk2Ks1InFDU1aFAEOW3ml3VNM9MPHGwUKpiJk0yG09otzeKJzwx4w/9goq7
-         jo3fNI85FbzAVRmFLtt4ki8HFOUAGMRd6iYvuwBhn1lvG8+lq/POhLuzSooUzN/MfvJ6
-         pB720rbU4eLMxBKnD33+SKhGK7A7vpVunyg+n05qSwXyww6TX/J9SdAPdfL+MQuVWwqJ
-         nIO0QDTvsFr4yI6oJW3exxkP2wPuwefKXH7M0DRY2lJeepeE+Bcc+g/EujrtWyozG0QE
-         q/FjwbmotSJZzAsn42J7rQvb1W++aoewfBc3JaOFoyIqgc7nI8PDPCGUGrHEoshcQQH3
-         exPw==
+        bh=VrgEBLHMQ7w7z7OSk0+LmFxB5np8c3y6da/CYllo/d4=;
+        b=d7xncfjaPlYGgAVN189xM8le3AGcP9UCam2ecLPl4eMo0apKePl+k/MoFfvTOESri9
+         jpKEGW8OpLOehZ4WQxGeRc+iHkBT9wyZJdvfvlULMdSiX9F8rPkT6PgiEoJq4dHlhRoh
+         qkv4dEP7IjphDnzvoWSqE+Edg4auIJy4Q6rk8vaByrnJKM86MbjVpaIS/FIjthkUqt0q
+         DKNrLmOqjB+lFO4RWknzNtnoIyNk27PZTNQ9iQ5hqqKFJKC0/MN0LZqMRlF1yo+BTdMg
+         MZIcWtsLEekQoTgRl6uZ1G6fg6psHqdVZP63GY/c+YWmY+7Fg22VNvHQ/YRS+oczPqml
+         K6NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768260873; x=1768865673;
+        d=1e100.net; s=20230601; t=1768261179; x=1768865979;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lU3GpweyZ8RZOMAzOI1qx6iERtUR7NcEkRCk8jZG9C4=;
-        b=K5NuC205pcce/87PF1XbYfypktxZF/iGZqo27AgKSdNRFLVgnjmF15nqOBuxN7n6Cc
-         g931eA+Os2lKSNxADl3mNXPS71JjCPfbhxAck5dBz2lX8CDXkd7kKbWww2985QkRHvhp
-         fcjmg1RAqgJYS9voGlfFKHmzuIcAaNCdIaO51qoIwhQ8DKNlG+ZT4fqAcBofB9xPHPKq
-         WJ8MJDDgA3eX4fk9ln54AZxGG8CKpAF3HkLDrKgs++EJF+OlwBWoaWeUd+qNsNe5nqaX
-         JvvhlV0V/BzzGm9Wq/eyo7mSLxZ+IrJrox9XgF9llrDBCiCk/F53MAuu+K/og85v6wsE
-         XOcw==
-X-Forwarded-Encrypted: i=1; AJvYcCVLDwd04nYOc42+nnq6ON0yWEtNvyQWEwas6G9KOrlSF8IMW5BBfYIOv9f8BDHKLqQggE4r6ObtH5FHd9jnSCg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmtdUA/CjNb9jo13vyZMKjKsmftBMJXeqNtamu9zgy8sEeiajq
-	37sBeal/E0mhn1Ue1ys5NF9n8YcPXsEEuV+X0ElgKIsdrRgxVOr3reEV
-X-Gm-Gg: AY/fxX70QAjPpQ0Ro8Nrq9NGVmHkVS/6M38r52ZWZw6FqECUtChYXFte4vo7lrnocd+
-	93xN8yW7ReobTffBZAZ11ActDx6VPQvKjvYbVzN26yi8PjWeLpsyrUTURaWpBJI9FxZxU1itZU0
-	VFy4TMwaqpJ/Npd5AOFfdOmdSqnkyGthOqufhzneLhQNA4/INemh6uZzQnIXBs2WoCwdvo/PJi2
-	6EK/nX4WZ73LNNKedJk94PDnz1MlgaF4aTKl2YgEyc0PLqPH1o4llIxKLQ1KEzb+6PwWYXBS7/B
-	NZEv9i72WqGkPC4xZhR1zjJWruvEtuxkq/Wu+g8A6ACcNdEYyx8pmae3dA97NnOYLWgYjpBYTtX
-	NbgbMveGzVaVAjpaWezjOD7Y1HbjkHgoKhTKhGMbt9aYNBZ5AJW9fh5mZAgy5YoFVXq/AmtJrJ5
-	KJOpy68eI7UHs/UTrYwYEsXydglAWDaiiYgg==
-X-Google-Smtp-Source: AGHT+IFhnnLo9DObqpMPdGqLw+yvW/DLOUbdTMJjsPRgCKmDKj2orYWmy7Hu/cmK9w1YD06BNt4rZg==
-X-Received: by 2002:a53:c0c9:0:b0:63f:9928:3f85 with SMTP id 956f58d0204a3-64716c61192mr12174478d50.62.1768260873367;
-        Mon, 12 Jan 2026 15:34:33 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:9::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6470d80d2c2sm8665513d50.8.2026.01.12.15.34.32
+        bh=VrgEBLHMQ7w7z7OSk0+LmFxB5np8c3y6da/CYllo/d4=;
+        b=IQpvivR96KizJScqMfgyys+/BXxEYb+pFewPfq/4enW59SKSLTO6MqyciQZdFLKAD/
+         HBWtcG8WtijX1rQdz8e7zZrLLlJkMi5AMY8/rQU0zjIYb620CnRm3c6GXQgO4sYGOyQT
+         dY8ZW7TP/vPxqBTnihVC8wi4zQTGpniHxfr6V7ILsZGRdYGLM1LuwjUL3/P8e/3+R+sk
+         bQAf5HxJfMIckzwid208N0dXqD6HlsqdEWk/w75OaRR6QINleholPFDWV500/QH/dTuE
+         2mkuZfDGVNj1YqiSeMmjpWcsE1o2DC/ik3caFAoNP6rXj3TFHsLVUhUKv67ib/owmHHW
+         E8TA==
+X-Forwarded-Encrypted: i=1; AJvYcCXGwA8siuRMAdjwapEHP3E/rxofqkyl585DKt+8QfXtMbP+IaBbN9/jIsg42DvYu1tp0R8xe5sGrDMupWpMzJo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXiyeLU8+6QYRvyZTKLN/5AJ52t+PmVGQJNIfiEcFNY+IfghlG
+	PNI0HNYiX6PIirHgzj4XiQwKV85dgN3Z1tO1rWm7nFMZx1lXBlCyIFm6pf0GSA==
+X-Gm-Gg: AY/fxX4gqT1VpdUcLJX7hPRX+RVQk/twNhWhjPhMRDyki2zeKZr7TdMYWau18UknMRu
+	AviwoL0OakB02j1crMs9VXAykXvlKWIWLgs23Ou11HqlAJho3rgIE4xxd82Edo3NLYVOqEFLKFg
+	g2XUxLdNCX7XMxAUWeyjMlg6QMiM3Lm5bkrv2jdwUNweyLaqJTKPVqwX+P1WOOfDrlz5ke8Pfdi
+	R1PJKt/i+km19al1Om/1/G+gwLsn0eqQpRxVCCLVzf93XrNDaPNvog3SuA+tJXh5FgWMwCnLWYX
+	XAn8mnvrwMx4wZ4osLY8XzRBGaLFQxDWjEkrkYimBb1z2OjRCedzVyvtMzb4/O21oJns17PhYSv
+	PZhL4i8j0pf+hWCAYyS0p3QOe3KXnlpuJ71hk/C8mv9Y1zcKHZIzVbL9UD/PgOYsN08s8zNjVx3
+	pPwrz2T8P5MCHJUMZ7NFhr8JaJ9uW+BYV2OISH0ZpxXjC/
+X-Google-Smtp-Source: AGHT+IEEIChW46EWJZZzmGq0dv1aKbX23y4OJcSbpVgI4A7CpdyG+MDzyxvMqujhAfbDeFoADMp1dQ==
+X-Received: by 2002:a53:e303:0:b0:63f:a727:8403 with SMTP id 956f58d0204a3-64716bd78d9mr12404043d50.38.1768254541320;
+        Mon, 12 Jan 2026 13:49:01 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:8::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6470d7f7c04sm8530959d50.2.2026.01.12.13.49.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 15:34:33 -0800 (PST)
-Date: Mon, 12 Jan 2026 15:34:31 -0800
+        Mon, 12 Jan 2026 13:49:00 -0800 (PST)
+Date: Mon, 12 Jan 2026 13:48:58 -0800
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -82,11 +82,13 @@ Cc: Stefano Garzarella <sgarzare@redhat.com>,
 	linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	berrange@redhat.com, Sargun Dhillon <sargun@sargun.me>,
 	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH RFC net-next v13 02/13] vsock: add netns to vsock core
-Message-ID: <aWWFB2K5H5OXGWP8@devvm11784.nha0.facebook.com>
+Subject: Re: [PATCH RFC net-next v13 00/13] vsock: add namespace support to
+ vhost-vsock and loopback
+Message-ID: <aWVsSq7lORhM+prM@devvm11784.nha0.facebook.com>
 References: <20251223-vsock-vmtest-v13-0-9d6db8e7c80b@meta.com>
- <20251223-vsock-vmtest-v13-2-9d6db8e7c80b@meta.com>
- <20260111013536-mutt-send-email-mst@kernel.org>
+ <aWGZILlNWzIbRNuO@devvm11784.nha0.facebook.com>
+ <20260110191107-mutt-send-email-mst@kernel.org>
+ <aWUnqbDlBmjfnC_Q@sgarzare-redhat>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,108 +97,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260111013536-mutt-send-email-mst@kernel.org>
+In-Reply-To: <aWUnqbDlBmjfnC_Q@sgarzare-redhat>
 
-On Sun, Jan 11, 2026 at 01:43:37AM -0500, Michael S. Tsirkin wrote:
-> On Tue, Dec 23, 2025 at 04:28:36PM -0800, Bobby Eshleman wrote:
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Mon, Jan 12, 2026 at 06:26:18PM +0100, Stefano Garzarella wrote:
+> On Sat, Jan 10, 2026 at 07:12:07PM -0500, Michael S. Tsirkin wrote:
+> > On Fri, Jan 09, 2026 at 04:11:12PM -0800, Bobby Eshleman wrote:
+> > > On Tue, Dec 23, 2025 at 04:28:34PM -0800, Bobby Eshleman wrote:
+> > > > This series adds namespace support to vhost-vsock and loopback. It does
+> > > > not add namespaces to any of the other guest transports (virtio-vsock,
+> > > > hyperv, or vmci).
+> > > >
+> > > > The current revision supports two modes: local and global. Local
+> > > > mode is complete isolation of namespaces, while global mode is complete
+> > > > sharing between namespaces of CIDs (the original behavior).
+> > > >
+> > > > The mode is set using the parent namespace's
+> > > > /proc/sys/net/vsock/child_ns_mode and inherited when a new namespace is
+> > > > created. The mode of the current namespace can be queried by reading
+> > > > /proc/sys/net/vsock/ns_mode. The mode can not change after the namespace
+> > > > has been created.
+> > > >
+> > > > Modes are per-netns. This allows a system to configure namespaces
+> > > > independently (some may share CIDs, others are completely isolated).
+> > > > This also supports future possible mixed use cases, where there may be
+> > > > namespaces in global mode spinning up VMs while there are mixed mode
+> > > > namespaces that provide services to the VMs, but are not allowed to
+> > > > allocate from the global CID pool (this mode is not implemented in this
+> > > > series).
+> > > 
+> > > Stefano, would like me to resend this without the RFC tag, or should I
+> > > just leave as is for review? I don't have any planned changes at the
+> > > moment.
+> > > 
+> > > Best,
+> > > Bobby
 > > 
-> > Add netns logic to vsock core. Additionally, modify transport hook
-> > prototypes to be used by later transport-specific patches (e.g.,
-> > *_seqpacket_allow()).
+> > i couldn't apply it on top of net-next so pls do.
 > > 
-> > Namespaces are supported primarily by changing socket lookup functions
-> > (e.g., vsock_find_connected_socket()) to take into account the socket
-> > namespace and the namespace mode before considering a candidate socket a
-> > "match".
-> > 
-> > This patch also introduces the sysctl /proc/sys/net/vsock/ns_mode to
-> > report the mode and /proc/sys/net/vsock/child_ns_mode to set the mode
-> > for new namespaces.
-> > 
-> > Add netns functionality (initialization, passing to transports, procfs,
-> > etc...) to the af_vsock socket layer. Later patches that add netns
-> > support to transports depend on this patch.
-> > 
-> > dgram_allow(), stream_allow(), and seqpacket_allow() callbacks are
-> > modified to take a vsk in order to perform logic on namespace modes. In
-> > future patches, the net will also be used for socket
-> > lookups in these functions.
-> > 
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 > 
-> ...
+> Yeah, some difficulties to apply also here.
+> I tried `base-commit: 962ac5ca99a5c3e7469215bf47572440402dfd59` as mentioned
+> in the cover, but didn't apply. After several tries I successfully applied
+> on top of commit bc69ed975203 ("Merge tag 'for_linus' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost")
 > 
+> So, I agree, better to resend and you can remove RFC.
 > 
-> >  static int __vsock_bind_connectible(struct vsock_sock *vsk,
-> >  				    struct sockaddr_vm *addr)
-> >  {
-> > +	struct net *net = sock_net(sk_vsock(vsk));
-> >  	static u32 port;
-> >  	struct sockaddr_vm new_addr;
-> >
+> BTW I'll do my best to start to review tomorrow!
 > 
+> Thanks,
+> Stefano
 > 
-> Hmm this static port gives me pause. So some port number info leaks
-> between namespaces. I am not saying it's a big security issue
-> and yet ... people expect isolation.
 
-Probably the easiest solution is making it per-ns, my quick rough draft
-looks like this:
+Sounds good to me. Sorry about that, I must have done something weird
+with b4 to pin the base commit because it has been
+962ac5ca99a5c3e7469215bf47572440402dfd59 for the last several revisions.
 
-diff --git a/include/net/netns/vsock.h b/include/net/netns/vsock.h
-index e2325e2d6ec5..b34d69a22fa8 100644
---- a/include/net/netns/vsock.h
-+++ b/include/net/netns/vsock.h
-@@ -11,6 +11,10 @@ enum vsock_net_mode {
- 
- struct netns_vsock {
- 	struct ctl_table_header *sysctl_hdr;
-+
-+	/* protected by the vsock_table_lock in af_vsock.c */
-+	u32 port;
-+
- 	enum vsock_net_mode mode;
- 	enum vsock_net_mode child_ns_mode;
- };
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 9d614e4a4fa5..cd2a47140134 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -748,11 +748,10 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
- 				    struct sockaddr_vm *addr)
- {
- 	struct net *net = sock_net(sk_vsock(vsk));
--	static u32 port;
- 	struct sockaddr_vm new_addr;
- 
--	if (!port)
--		port = get_random_u32_above(LAST_RESERVED_PORT);
-+	if (!net->vsock.port)
-+		net->vsock.port = get_random_u32_above(LAST_RESERVED_PORT);
- 
- 	vsock_addr_init(&new_addr, addr->svm_cid, addr->svm_port);
- 
-@@ -761,11 +760,11 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
- 		unsigned int i;
- 
- 		for (i = 0; i < MAX_PORT_RETRIES; i++) {
--			if (port == VMADDR_PORT_ANY ||
--			    port <= LAST_RESERVED_PORT)
--				port = LAST_RESERVED_PORT + 1;
-+			if (net->vsock.port == VMADDR_PORT_ANY ||
-+			    net->vsock.port <= LAST_RESERVED_PORT)
-+				net->vsock.port = LAST_RESERVED_PORT + 1;
- 
--			new_addr.svm_port = port++;
-+			new_addr.svm_port = net->vsock.port++;
- 
- 			if (!__vsock_find_bound_socket_net(&new_addr, net)) {
- 				found = true;
+Looks like my local of this is actually based on:
 
+7b8e9264f55a ("Merge tag 'net-6.19-rc2' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net")
 
+I'll re-apply to head and resend today!
 
-Not as nice, but not necessarily horrid. WDYT?
+While I'm at it I will try to address Michael's feedback and bump a
+version.
 
 Best,
 Bobby
