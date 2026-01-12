@@ -1,67 +1,68 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A019134A793
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 09:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068B934A794
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 09:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768210875; cv=none; b=TapoF9sMRC1wn7aZ9DqsOdotwJ1LhM8ydC95zelJ0rwaj1cKQITENKzmKckACQL8+b9wwBodCxRnlny7X/dkWpj5kC9vE57uq77HZw/0PY1FE0WIRktK0l0ETVMB1Yu0e1x7ngdK4pxl8f38WIpJlDpIaK46SFFh0kGy75lqtCM=
+	t=1768210875; cv=none; b=ACXpT0UoMcRYInGh9YBRCsHbRPbktEUJWKamxwYQyXDSNd8AqvbCsyv/6CW1gGNFsRyR6JDZ15MdHRafA3Vm2HLs90cKuVXEuFDSuwhuCfZz1BYYgD2HGLxWq7ra811m19hvYTH1ZXxBy4jbwctyjiIBHsj384Z13lyUhQf4wys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768210875; c=relaxed/simple;
-	bh=D1nZ9kM/EuuYno+ZDSEcuEqHNLsDwCPEuHBego3wBFU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=totSYYgpDD6yWqWxor3SNxzD0YPiYO7yBvAvWxpIbumgbYmvnOxKwiLh9u3bJ9DbMLCAsJ/+cZdL8B7aVqD/YJ8IAiiSYhq5CtSAnjluvbxYYzfT7eSPEW1i3RRVKhzAk13BOIb/qX4NYp4dsW1ZO8LdGjFt0WdmB0FGzi9jY1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SbrDW/lb; arc=none smtp.client-ip=209.85.218.48
+	bh=4PDwzlCI+jgQG2jAxOz1RlldCa/d+sKTSpqV/8xAtWQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Z+xfDs7yykuBNZs3OROpHoPfdD1HeAAbU3DHbbdmmSIDolFVyN3De1UsR6J0z8hs6qm8LL2vClGMBl6X4RAVNbdArnTLPrpazkSs4ixvS+JD1uoy384lGrCKpmvgmEdbPR7Hazyh+wNM+6KFAReV4In3I5yjlqy2Eb8Dh35Xj6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CP1W1YRB; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SbrDW/lb"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b8716197f3eso119300366b.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 01:41:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CP1W1YRB"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b87108066c3so126399566b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 01:41:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768210865; x=1768815665; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NcMCCbvb41kzTSUcvB+DuO2lx4ImVuo+wx0RXCc+wKw=;
-        b=SbrDW/lbtiIqu6d8HO68/knngsw5di+Fe/1guDTerjtHsHpTkTiCihnuWkmvDW6cdF
-         pxr8pQOT1P1/amv8RSerVYNKo2LQOe79NBg8r6LzeTut3ihG5S5otwSPgg9aqssmhXWR
-         2iK6gZCpJ2xoqXZNNLoSySXioiluUn3LAyleeI7vg+u9y525AAf8plrRzVlN8NE9uFjz
-         s7B12Hi64i8afjFfhi204kn4JOJlcLhRWCRrqoUA2cdLRBDXtD9FmM1BmWErqGLigHmm
-         RCkzXBDKbnVxytIewKM5RnbADgys0r4OaUwLg4xJFzmA93og+PpgnnuD3v6WXqmwdomP
-         TOyA==
+        d=gmail.com; s=20230601; t=1768210871; x=1768815671; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JUk5UFagcf4IlgTEQ/iWJeI/RTRWAeLpBdR/nh29wa0=;
+        b=CP1W1YRBqH28++jUkgZTj8LAkP/GZMUv9QQ0U11NTSCox8u1JhWxFo4w5mNlsD3Bbn
+         ef1NAZ1ZMDEfPr1thjg/8lkqcklFsI6Rrrsa7YySNtLv3xkIs4TPaapPg7FgoTXV0i2b
+         JFQeerSzvitrCC2GIgDzVLmSblTXkr7rQ66iWbyezsAmGlexfPn4QoTZNZNu1byp1Xw+
+         ytblnP3PS+BLIL5MxuNniJg96VJEiAr/Q9BL3hcVGaw2gEfMhfhpNjakJ0UY3vrvyLoE
+         6UFqm0iSTwnCqDFjtolT4g1P+Y5U4NrqyUss7WGjE+AH1u175g4mOZWF+O+dqey5kApw
+         UB4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768210865; x=1768815665;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NcMCCbvb41kzTSUcvB+DuO2lx4ImVuo+wx0RXCc+wKw=;
-        b=QxmRe2Af5y6+RHTS5DrQSPIDYVzYcsQqpPUXFIdQEkltteGQf+obeKEJ0up4TxU+EO
-         3ew95VRhyRcoUdw0IDv9n4JP6nJ5EKZYklRzSxNVp0cIWL72BtlcqxvlyngyyGtwZDi0
-         jKWUaF2LBIT3r/zrEC6pDPvCj7Gwew5YgbVEg2Zw+Zg41FvrUUAj/WxrJ8veZtdjf/Pf
-         QFto7sXobaIeyK7M7zOMVE/lBUGOTfP67ft5xVRgQV/lOlfQBJ5JEx+kjPlhBw7J6viA
-         FuxEJvHccvzyAfnwNlBbyynlT/0uH/MJOQtfWJtW5eFpw3ffHwaa9mQjGJpD9F/X4rnp
-         36Kw==
-X-Forwarded-Encrypted: i=1; AJvYcCVeYbsLMDXoD8aM233eHAkbDvwekSm6DB5qjg/Q5Q6cdYYF99qK0jhrwhxzHuwkSvC/7O0qxZxbB5u0vHlfP98=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJ+q5ExBsS8fcvP7ScsirTSx2lCsGGFAqhxg+r9S9p7a+p2Aow
-	/Y5/rqIhucrgZleCzE40ft7GoQYBgPuKs47QrESpb760iAiP7k6FU8wX
-X-Gm-Gg: AY/fxX4Pht0E7c+MmRtQH9tNcBY8Krua0ZIuqdi29UkLp30Q4JomxRdKbbrSpG/dAhq
-	Tt5G5p2oiNgzL8BmOARViHQYN0xu5o+sRwiWDBM4xUm84OagJkdzt3fLkBy0KRQS191etUZ+Ddg
-	HzRaTMaQ69lx79XwaI8vy3ZWjaItMyLPvGyFYNYojeeTYZEOViyma0AmsBHIiTFIb3LIY8EpjjP
-	483FJinPzLGEvH3NfW2eimeR6vOin7PsdPV599HmDzTVJ3N2jG687DOty8SnEiAr44UgH5OphM6
-	Pcm5QA3X0wmidPjKJ8pWGsymoagtRdYJwrSgDZ8K5mGLSEFh3i4lsHUX2K11E9bZw23UcS8GSdA
-	AqZl1jD9jxCrvEz/o/oOGKZo41KffT8x/jAptMCUy5JZPG6tA1uU51NS1Fq6zKB1bPFhW+z3GPI
-	oovpz1S9JbgX05HznoibfLrN7M
-X-Google-Smtp-Source: AGHT+IF3qwzBAX6fMwi+kTQzS94PxeyMpNh5glINk3hu98hkCYF7yoeLu5hs9WjReRTsg2GxRg4Jkw==
-X-Received: by 2002:a17:907:3d4c:b0:b83:7fb8:1f54 with SMTP id a640c23a62f3a-b8445357b42mr1845150866b.39.1768210864497;
-        Mon, 12 Jan 2026 01:41:04 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768210871; x=1768815671;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JUk5UFagcf4IlgTEQ/iWJeI/RTRWAeLpBdR/nh29wa0=;
+        b=EX4R21vHY3k5SAEjIn35mKuSO6cH6UAYIf/X++imqWDkp1MDrrkFE/8nfU9TDsD0xV
+         UorbPN5Q9FqkeeQUFAODNf5miF514yEQAQZlvmDxIVZjfcgxb2ChdRBUTuhrlu36Vaq7
+         FN1L8e8bSYpwQQYb8vA6l/ISv5rLcbCF5pTLO6AXkncqgtgyguwa/Ic7b4f3CKb0xXNp
+         827hU7+S457ZRQs2X8Nul7ESwj9uKis4sARGOao8lt5hq1ig5xHCX1voArqXMRuzWpR+
+         gCDsGBgrzE/qgOvMWKCEVZsJJegKaBLUILSDJ0X/5E8aCPNW5zbfHR//HY8mnLE9QPOG
+         ngqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWnW6/52AupHjY0b3LfRk6z2cHZAjtTJS6r50hl0CWgClhKH/xiRYdBGsL6GX1u8vvdsd3Xn0r2b18OKv7zGn8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIG6bJdtfwQZemAzoV7Z9zs0e4HuWytOBiVXUDgTmTTtc8PBrs
+	zwffZ8ZSkk1QM4x5rmY4kcnIca8TRGgJ2xs5CSgK71JMW+ZFWRi1lYsk
+X-Gm-Gg: AY/fxX5O0DfkXpWgRCwdVuOAhwBO66OzTiSk0eslUAk6OcKYAp2VWENdvuyGXkofxjJ
+	r76bYhQYGlRsjhjU8/gsXXNVMHwnbIR5L05hapP8Nr15QEmSbrmadyszi9t4A4APxz+TNTuIKyP
+	D8VscTSRKLFMcMjPOFID2krsS9J4i7UwJasQeszH6HpIqtIBibsfdxL6x/fA0CzjI+Y3WklFJr4
+	5XLQhn0flipmQr0bQuMkH0OicqKV8+px7DEhP2MkxvRFvzTJTSJjWJ3ur12J3M/BpDj7AlzD+t4
+	dm0yvpV2DyGxbT9/gWAyip4yF+Vulhyca+yJfpewGbENh5p8QSqIIMzMGByO3HhYUWX6Kr8OCwt
+	AqpMquDFKo31KwGJzEbyag5yCv7ODhtwYHUwT6yHXLjsY8P4iy0LGqWoNZTqzqbq5ovGvC1Y04Z
+	PksA84aXMsm4htfg==
+X-Google-Smtp-Source: AGHT+IGfu0MEaKm02og4PRIdkU25LNt7R3xUh98/HDOVupGAYQsgmsCOt8w9NasdgiB0ElxW68uXrg==
+X-Received: by 2002:a17:907:728f:b0:b87:2410:594d with SMTP id a640c23a62f3a-b8724105abfmr146423566b.49.1768210871030;
+        Mon, 12 Jan 2026 01:41:11 -0800 (PST)
 Received: from [192.168.1.243] ([143.58.192.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b870bcd342bsm410828766b.56.2026.01.12.01.41.03
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b870bcd342bsm410828766b.56.2026.01.12.01.41.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 01:41:03 -0800 (PST)
+        Mon, 12 Jan 2026 01:41:10 -0800 (PST)
 From: Andre Carvalho <asantostc@gmail.com>
-Subject: [PATCH net-next v10 0/7] netconsole: support automatic target
- recovery
-Date: Mon, 12 Jan 2026 09:40:51 +0000
-Message-Id: <20260112-netcons-retrigger-v10-0-d82ebfc2503e@gmail.com>
+Date: Mon, 12 Jan 2026 09:40:56 +0000
+Subject: [PATCH net-next v10 5/7] netconsole: introduce helpers for
+ dynamic_netconsole_mutex lock/unlock
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,13 +71,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23SzWrEIBAH8FdZPDdlHHWiPfU9Sg9+JSt0k2JC2
- LLsu9cNtEjWo47zc/zjjS0xp7iwt9ON5bilJc1TWXB4OTF/ttMYuxTKBkNABZpTN8XVz9PS5bj
- mNI4xd1YOSvZu8Jp6Vvq+cxzSdUc/WDleWq4r+yyVc1rWOf/st218r++uAdNwN95BJ2y0BqRB8
- sP7eLHp69XPl13bsBKQtwQsgoWoJQCh6J8E8S9w3p5BFIGTkh41OBfpKMhKaKazySIoNODUwCV
- 4PAqqFpozqCKg70OwBEqFpxmoEto5UBGMBzEoiy7QUw59LTRf0T9yCJqCs1o47o+CrgXdEnQRw
- HnvBulJaHUUzJ9AwEG2BPP4D9pakiIgalEL9/v9FxFYnA/NAgAA
-X-Change-ID: 20250816-netcons-retrigger-a4f547bfc867
+Message-Id: <20260112-netcons-retrigger-v10-5-d82ebfc2503e@gmail.com>
+References: <20260112-netcons-retrigger-v10-0-d82ebfc2503e@gmail.com>
+In-Reply-To: <20260112-netcons-retrigger-v10-0-d82ebfc2503e@gmail.com>
 To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -84,128 +81,383 @@ To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Andre Carvalho <asantostc@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768210863; l=5324;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768210863; l=12692;
  i=asantostc@gmail.com; s=20250807; h=from:subject:message-id;
- bh=D1nZ9kM/EuuYno+ZDSEcuEqHNLsDwCPEuHBego3wBFU=;
- b=1afp2v24P7yuBbwAAnExTNyO1WOGF/SSGt8ULaCiEPvIup1BBSdm42w5whAQqdFDFR843w2R7
- +2FCTRI72X0Awdb1+JbYSOZvrSTHnTnTsq0GosRsOHCpx/Qsy++SI0H
+ bh=4PDwzlCI+jgQG2jAxOz1RlldCa/d+sKTSpqV/8xAtWQ=;
+ b=+aIjU9q1palonE6THhW2JxSM5iks+VY4Hy6k9bvifYU19Y8u2cvrbdd/JHqCM78jR0shHr5eF
+ if39/p0L9EPCBkPld4+rruohaANKPVlHcGPZ7FtdhVmp6BX/A3XxKBD
 X-Developer-Key: i=asantostc@gmail.com; a=ed25519;
  pk=eWre+RwFHCxkiaQrZLsjC67mZ/pZnzSM/f7/+yFXY4Q=
 
-This patchset introduces target resume capability to netconsole allowing
-it to recover targets when underlying low-level interface comes back
-online.
+This commit introduces two helper functions to perform lock/unlock on
+dynamic_netconsole_mutex providing no-op stub versions when compiled
+without CONFIG_NETCONSOLE_DYNAMIC and refactors existing call sites to
+use the new helpers.
 
-The patchset starts by refactoring netconsole state representation in
-order to allow representing deactivated targets (targets that are
-disabled due to interfaces unregister).
-
-It then modifies netconsole to handle NETDEV_REGISTER events for such
-targets, setups netpoll and forces the device UP. Targets are matched with
-incoming interfaces depending on how they were bound in netconsole
-(by mac or interface name). For these reasons, we also attempt resuming
-on NETDEV_CHANGENAME.
-
-The patchset includes a selftest that validates netconsole target state
-transitions and that target is functional after resumed.
+This is done following kernel coding style guidelines, in preparation
+for an upcoming change. It avoids the need for preprocessor conditionals
+in the call site and keeps the logic easier to follow.
 
 Signed-off-by: Andre Carvalho <asantostc@gmail.com>
 ---
-Changes in v10:
-- Define wrappers around dynamic_netconsole_mutex lock/unlock and use
-  them on process_resume_target to avoid build failures and #ifdefs
-  inside callsite (suggested by Breno).
-- Refactored other dynamic_netconsole_mutex to use the wrappers for
-  consistency.
-- Ensure we cancel pending working during removal of dynamic targets,
-  which requires also holding dynamic_netconsole_mutex.
-- Introduce standalone workqueue to avoid potential leaks during module
-  cleanup, flushing all pending resume events before removing all
-  targets.
-- Link to v9: https://lore.kernel.org/r/20260104-netcons-retrigger-v9-0-38aa643d2283@gmail.com
+ drivers/net/netconsole.c | 97 +++++++++++++++++++++++++++++-------------------
+ 1 file changed, 58 insertions(+), 39 deletions(-)
 
-Changes in v9:
-- Hold dynamic_netconsole_mutex on process_resume_target.
-- Cleanup dev_name as part of netconsole_process_cleanups_core to ensure
-  we correctly resume by mac (for targets bound by mac)
-- Link to v8: https://lore.kernel.org/r/20251128-netcons-retrigger-v8-0-0bccbf4c6385@gmail.com
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index 02a3463e8d24..46d990f3d904 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -213,6 +213,16 @@ static void netconsole_target_put(struct netconsole_target *nt)
+ 		config_group_put(&nt->group);
+ }
+ 
++static void dynamic_netconsole_mutex_lock(void)
++{
++	mutex_lock(&dynamic_netconsole_mutex);
++}
++
++static void dynamic_netconsole_mutex_unlock(void)
++{
++	mutex_unlock(&dynamic_netconsole_mutex);
++}
++
+ #else	/* !CONFIG_NETCONSOLE_DYNAMIC */
+ 
+ static int __init dynamic_netconsole_init(void)
+@@ -240,6 +250,15 @@ static void populate_configfs_item(struct netconsole_target *nt,
+ 				   int cmdline_count)
+ {
+ }
++
++static void dynamic_netconsole_mutex_lock(void)
++{
++}
++
++static void dynamic_netconsole_mutex_unlock(void)
++{
++}
++
+ #endif	/* CONFIG_NETCONSOLE_DYNAMIC */
+ 
+ /* Check if the target was bound by mac address. */
+@@ -495,9 +514,9 @@ static ssize_t sysdata_cpu_nr_enabled_show(struct config_item *item, char *buf)
+ 	struct netconsole_target *nt = to_target(item->ci_parent);
+ 	bool cpu_nr_enabled;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	cpu_nr_enabled = !!(nt->sysdata_fields & SYSDATA_CPU_NR);
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 
+ 	return sysfs_emit(buf, "%d\n", cpu_nr_enabled);
+ }
+@@ -509,9 +528,9 @@ static ssize_t sysdata_taskname_enabled_show(struct config_item *item,
+ 	struct netconsole_target *nt = to_target(item->ci_parent);
+ 	bool taskname_enabled;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	taskname_enabled = !!(nt->sysdata_fields & SYSDATA_TASKNAME);
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 
+ 	return sysfs_emit(buf, "%d\n", taskname_enabled);
+ }
+@@ -522,9 +541,9 @@ static ssize_t sysdata_release_enabled_show(struct config_item *item,
+ 	struct netconsole_target *nt = to_target(item->ci_parent);
+ 	bool release_enabled;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	release_enabled = !!(nt->sysdata_fields & SYSDATA_TASKNAME);
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 
+ 	return sysfs_emit(buf, "%d\n", release_enabled);
+ }
+@@ -562,9 +581,9 @@ static ssize_t sysdata_msgid_enabled_show(struct config_item *item,
+ 	struct netconsole_target *nt = to_target(item->ci_parent);
+ 	bool msgid_enabled;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	msgid_enabled = !!(nt->sysdata_fields & SYSDATA_MSGID);
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 
+ 	return sysfs_emit(buf, "%d\n", msgid_enabled);
+ }
+@@ -584,7 +603,7 @@ static ssize_t enabled_store(struct config_item *item,
+ 	unsigned long flags;
+ 	ssize_t ret;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	ret = kstrtobool(buf, &enabled);
+ 	if (ret)
+ 		goto out_unlock;
+@@ -660,7 +679,7 @@ static ssize_t enabled_store(struct config_item *item,
+ 	/* Deferred cleanup */
+ 	netconsole_process_cleanups();
+ out_unlock:
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	return ret;
+ }
+ 
+@@ -671,7 +690,7 @@ static ssize_t release_store(struct config_item *item, const char *buf,
+ 	bool release;
+ 	ssize_t ret;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	if (nt->state == STATE_ENABLED) {
+ 		pr_err("target (%s) is enabled, disable to update parameters\n",
+ 		       config_item_name(&nt->group.cg_item));
+@@ -687,7 +706,7 @@ static ssize_t release_store(struct config_item *item, const char *buf,
+ 
+ 	ret = strnlen(buf, count);
+ out_unlock:
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	return ret;
+ }
+ 
+@@ -698,7 +717,7 @@ static ssize_t extended_store(struct config_item *item, const char *buf,
+ 	bool extended;
+ 	ssize_t ret;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	if (nt->state == STATE_ENABLED)  {
+ 		pr_err("target (%s) is enabled, disable to update parameters\n",
+ 		       config_item_name(&nt->group.cg_item));
+@@ -713,7 +732,7 @@ static ssize_t extended_store(struct config_item *item, const char *buf,
+ 	nt->extended = extended;
+ 	ret = strnlen(buf, count);
+ out_unlock:
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	return ret;
+ }
+ 
+@@ -722,18 +741,18 @@ static ssize_t dev_name_store(struct config_item *item, const char *buf,
+ {
+ 	struct netconsole_target *nt = to_target(item);
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	if (nt->state == STATE_ENABLED) {
+ 		pr_err("target (%s) is enabled, disable to update parameters\n",
+ 		       config_item_name(&nt->group.cg_item));
+-		mutex_unlock(&dynamic_netconsole_mutex);
++		dynamic_netconsole_mutex_unlock();
+ 		return -EINVAL;
+ 	}
+ 
+ 	strscpy(nt->np.dev_name, buf, IFNAMSIZ);
+ 	trim_newline(nt->np.dev_name, IFNAMSIZ);
+ 
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	return strnlen(buf, count);
+ }
+ 
+@@ -743,7 +762,7 @@ static ssize_t local_port_store(struct config_item *item, const char *buf,
+ 	struct netconsole_target *nt = to_target(item);
+ 	ssize_t ret = -EINVAL;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	if (nt->state == STATE_ENABLED) {
+ 		pr_err("target (%s) is enabled, disable to update parameters\n",
+ 		       config_item_name(&nt->group.cg_item));
+@@ -755,7 +774,7 @@ static ssize_t local_port_store(struct config_item *item, const char *buf,
+ 		goto out_unlock;
+ 	ret = strnlen(buf, count);
+ out_unlock:
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	return ret;
+ }
+ 
+@@ -765,7 +784,7 @@ static ssize_t remote_port_store(struct config_item *item,
+ 	struct netconsole_target *nt = to_target(item);
+ 	ssize_t ret = -EINVAL;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	if (nt->state == STATE_ENABLED) {
+ 		pr_err("target (%s) is enabled, disable to update parameters\n",
+ 		       config_item_name(&nt->group.cg_item));
+@@ -777,7 +796,7 @@ static ssize_t remote_port_store(struct config_item *item,
+ 		goto out_unlock;
+ 	ret = strnlen(buf, count);
+ out_unlock:
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	return ret;
+ }
+ 
+@@ -788,7 +807,7 @@ static ssize_t local_ip_store(struct config_item *item, const char *buf,
+ 	ssize_t ret = -EINVAL;
+ 	int ipv6;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	if (nt->state == STATE_ENABLED) {
+ 		pr_err("target (%s) is enabled, disable to update parameters\n",
+ 		       config_item_name(&nt->group.cg_item));
+@@ -802,7 +821,7 @@ static ssize_t local_ip_store(struct config_item *item, const char *buf,
+ 
+ 	ret = strnlen(buf, count);
+ out_unlock:
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	return ret;
+ }
+ 
+@@ -813,7 +832,7 @@ static ssize_t remote_ip_store(struct config_item *item, const char *buf,
+ 	ssize_t ret = -EINVAL;
+ 	int ipv6;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	if (nt->state == STATE_ENABLED) {
+ 		pr_err("target (%s) is enabled, disable to update parameters\n",
+ 		       config_item_name(&nt->group.cg_item));
+@@ -827,7 +846,7 @@ static ssize_t remote_ip_store(struct config_item *item, const char *buf,
+ 
+ 	ret = strnlen(buf, count);
+ out_unlock:
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	return ret;
+ }
+ 
+@@ -848,7 +867,7 @@ static ssize_t remote_mac_store(struct config_item *item, const char *buf,
+ 	u8 remote_mac[ETH_ALEN];
+ 	ssize_t ret = -EINVAL;
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	if (nt->state == STATE_ENABLED) {
+ 		pr_err("target (%s) is enabled, disable to update parameters\n",
+ 		       config_item_name(&nt->group.cg_item));
+@@ -863,7 +882,7 @@ static ssize_t remote_mac_store(struct config_item *item, const char *buf,
+ 
+ 	ret = strnlen(buf, count);
+ out_unlock:
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	return ret;
+ }
+ 
+@@ -984,7 +1003,7 @@ static ssize_t userdatum_value_store(struct config_item *item, const char *buf,
+ 		return -EMSGSIZE;
+ 
+ 	mutex_lock(&netconsole_subsys.su_mutex);
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 
+ 	ret = strscpy(udm->value, buf, sizeof(udm->value));
+ 	if (ret < 0)
+@@ -998,7 +1017,7 @@ static ssize_t userdatum_value_store(struct config_item *item, const char *buf,
+ 		goto out_unlock;
+ 	ret = count;
+ out_unlock:
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	mutex_unlock(&netconsole_subsys.su_mutex);
+ 	return ret;
+ }
+@@ -1026,7 +1045,7 @@ static ssize_t sysdata_msgid_enabled_store(struct config_item *item,
+ 		return ret;
+ 
+ 	mutex_lock(&netconsole_subsys.su_mutex);
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	curr = !!(nt->sysdata_fields & SYSDATA_MSGID);
+ 	if (msgid_enabled == curr)
+ 		goto unlock_ok;
+@@ -1038,7 +1057,7 @@ static ssize_t sysdata_msgid_enabled_store(struct config_item *item,
+ 
+ unlock_ok:
+ 	ret = strnlen(buf, count);
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	mutex_unlock(&netconsole_subsys.su_mutex);
+ 	return ret;
+ }
+@@ -1055,7 +1074,7 @@ static ssize_t sysdata_release_enabled_store(struct config_item *item,
+ 		return ret;
+ 
+ 	mutex_lock(&netconsole_subsys.su_mutex);
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	curr = !!(nt->sysdata_fields & SYSDATA_RELEASE);
+ 	if (release_enabled == curr)
+ 		goto unlock_ok;
+@@ -1067,7 +1086,7 @@ static ssize_t sysdata_release_enabled_store(struct config_item *item,
+ 
+ unlock_ok:
+ 	ret = strnlen(buf, count);
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	mutex_unlock(&netconsole_subsys.su_mutex);
+ 	return ret;
+ }
+@@ -1084,7 +1103,7 @@ static ssize_t sysdata_taskname_enabled_store(struct config_item *item,
+ 		return ret;
+ 
+ 	mutex_lock(&netconsole_subsys.su_mutex);
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	curr = !!(nt->sysdata_fields & SYSDATA_TASKNAME);
+ 	if (taskname_enabled == curr)
+ 		goto unlock_ok;
+@@ -1096,7 +1115,7 @@ static ssize_t sysdata_taskname_enabled_store(struct config_item *item,
+ 
+ unlock_ok:
+ 	ret = strnlen(buf, count);
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	mutex_unlock(&netconsole_subsys.su_mutex);
+ 	return ret;
+ }
+@@ -1114,7 +1133,7 @@ static ssize_t sysdata_cpu_nr_enabled_store(struct config_item *item,
+ 		return ret;
+ 
+ 	mutex_lock(&netconsole_subsys.su_mutex);
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	curr = !!(nt->sysdata_fields & SYSDATA_CPU_NR);
+ 	if (cpu_nr_enabled == curr)
+ 		/* no change requested */
+@@ -1130,7 +1149,7 @@ static ssize_t sysdata_cpu_nr_enabled_store(struct config_item *item,
+ 
+ unlock_ok:
+ 	ret = strnlen(buf, count);
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ 	mutex_unlock(&netconsole_subsys.su_mutex);
+ 	return ret;
+ }
+@@ -1192,10 +1211,10 @@ static void userdatum_drop(struct config_group *group, struct config_item *item)
+ 	ud = to_userdata(&group->cg_item);
+ 	nt = userdata_to_target(ud);
+ 
+-	mutex_lock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_lock();
+ 	update_userdata(nt);
+ 	config_item_put(item);
+-	mutex_unlock(&dynamic_netconsole_mutex);
++	dynamic_netconsole_mutex_unlock();
+ }
+ 
+ static struct configfs_attribute *userdata_attrs[] = {
 
-Changes in v8:
-- Handle NETDEV_REGISTER/CHANGENAME instead of NETDEV_UP (and force the device
-  UP), to increase the chances of succesfully resuming a target. This
-  requires using a workqueue instead of inline in the event notifier as
-  we can't UP the device otherwise.
-- Link to v7: https://lore.kernel.org/r/20251126-netcons-retrigger-v7-0-1d86dba83b1c@gmail.com
-
-Changes in v7:
-- selftest: use ${EXIT_STATUS} instead of ${ksft_pass} to avoid
-  shellcheck warning
-- Link to v6: https://lore.kernel.org/r/20251121-netcons-retrigger-v6-0-9c03f5a2bd6f@gmail.com
-
-Changes in v6:
-- Rebase on top of net-next to resolve conflicts, no functional changes.
-- Link to v5: https://lore.kernel.org/r/20251119-netcons-retrigger-v5-0-2c7dda6055d6@gmail.com
-
-Changes in v5:
-- patch 3: Set (de)enslaved target as DISABLED instead of DEACTIVATED to prevent
-  resuming it.
-- selftest: Fix test cleanup by moving trap line to outside of loop and remove
-  unneeded 'local' keyword
-- Rename maybe_resume_target to resume_target, add netconsole_ prefix to
-  process_resumable_targets.
-- Hold device reference before calling __netpoll_setup.
-- Link to v4: https://lore.kernel.org/r/20251116-netcons-retrigger-v4-0-5290b5f140c2@gmail.com
-
-Changes in v4:
-- Simplify selftest cleanup, removing trap setup in loop.
-- Drop netpoll helper (__setup_netpoll_hold) and manage reference inside
-  netconsole.
-- Move resume_list processing logic to separate function.
-- Link to v3: https://lore.kernel.org/r/20251109-netcons-retrigger-v3-0-1654c280bbe6@gmail.com
-
-Changes in v3:
-- Resume by mac or interface name depending on how target was created.
-- Attempt to resume target without holding target list lock, by moving
-  the target to a temporary list. This is required as netpoll may
-  attempt to allocate memory.
-- Link to v2: https://lore.kernel.org/r/20250921-netcons-retrigger-v2-0-a0e84006237f@gmail.com
-
-Changes in v2:
-- Attempt to resume target in the same thread, instead of using
-workqueue .
-- Add wrapper around __netpoll_setup (patch 4).
-- Renamed resume_target to maybe_resume_target and moved conditionals to
-inside its implementation, keeping code more clear.
-- Verify that device addr matches target mac address when target was
-setup using mac.
-- Update selftest to cover targets bound by mac and interface name.
-- Fix typo in selftest comment and sort tests alphabetically in
-  Makefile.
-- Link to v1:
-https://lore.kernel.org/r/20250909-netcons-retrigger-v1-0-3aea904926cf@gmail.com
-
----
-Andre Carvalho (5):
-      netconsole: convert 'enabled' flag to enum for clearer state management
-      netconsole: clear dev_name for devices bound by mac
-      netconsole: introduce helpers for dynamic_netconsole_mutex lock/unlock
-      netconsole: resume previously deactivated target
-      selftests: netconsole: validate target resume
-
-Breno Leitao (2):
-      netconsole: add target_state enum
-      netconsole: add STATE_DEACTIVATED to track targets disabled by low level
-
- drivers/net/netconsole.c                           | 305 ++++++++++++++++-----
- tools/testing/selftests/drivers/net/Makefile       |   1 +
- .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  35 ++-
- .../selftests/drivers/net/netcons_resume.sh        |  97 +++++++
- 4 files changed, 364 insertions(+), 74 deletions(-)
----
-base-commit: 60d8484c4cec811f5ceb6550655df74490d1a165
-change-id: 20250816-netcons-retrigger-a4f547bfc867
-
-Best regards,
 -- 
-Andre Carvalho <asantostc@gmail.com>
+2.52.0
 
