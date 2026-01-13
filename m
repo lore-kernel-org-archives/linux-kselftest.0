@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1EA3B1BD;
-	Tue, 13 Jan 2026 00:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB1E15C158;
+	Tue, 13 Jan 2026 00:07:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768262869; cv=none; b=CU8MhCdJ9FdexaZ+Fzo4l3axmv2asB7CnD5aNWnsL7XG++3XtHNblTWtU01OojROQMQOJUht6iEApLPAjN/yyoU6FCZnh08OhATpO/QwPpS4Wr5ttwD1Cf+YP7oxCiiBoEgaoqnkKWA10QJI6OsRGdY8U+9URocVCAZncaiL2f8=
+	t=1768262869; cv=none; b=RnnHqSaVoizHu/e1KBRU6fZ9QTGUUADCatED/HcyUXkqn2QDl5iqm2cDVoBq5Y/3MCtlSc3edGZFhRkRgcRhobpayA9Gzu9D5EteUPeE9ZDd+9uC7U3N+m3p8BvW741keKXk0bJaeXwkiID3krttXtJ53LsnGObPYlcgn3UqJtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768262869; c=relaxed/simple;
-	bh=ZWljSR+mSpCIJT+Osbk6hlYEZGtK5JiLKgJeMKBM5Fg=;
+	bh=yqCk0mi0Jo7nyv1OHkf4vdge+WvCxmdddYSJUrYS5Zg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ROffKRsGlFU6sGqQ084h4Iwn0pmRHlxg6kUH45iKFkI50/bPF3uN5u0kglQ/tHlcqQSwR0kBYWyWRiR/EMDDm2k1kGO0RbszWEY1r2zvBdNz8qNhCVErCDf0RrgBBDpAI78Xk7/Yv+cWImcqUvKzYrddupDLXUzxVInW5kso/Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ont3oInv; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=SB7z5ADECfMjF5tOYVWX5UzuvWo8I0hrtWaW3Lx7pxwRE/l6T/a+GtFKPmtqzggT08Y4n7rJaE0fdKcJH0slcC15Fo+xcAq1yKEINt0QW79sWxkIirANs/c8B5vYGMF/htNFMVBzjpuIrqD/vVoR/oHRK7canCYgOL2I0wcJliY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vDKG0byH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ont3oInv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8FFC19424;
-	Tue, 13 Jan 2026 00:07:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vDKG0byH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFBF8C19421;
+	Tue, 13 Jan 2026 00:07:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768262868;
-	bh=ZWljSR+mSpCIJT+Osbk6hlYEZGtK5JiLKgJeMKBM5Fg=;
+	s=k20201202; t=1768262869;
+	bh=yqCk0mi0Jo7nyv1OHkf4vdge+WvCxmdddYSJUrYS5Zg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ont3oInvxUCl6yolpUNTf1nThcjlTy+IO8r5wXjF1lcCNAUhgedP4brrCWiVDSHdy
-	 PDW0ksCeq4OjAw9V2zeXSKh6+wKdMV2v9pgTUglT0hH86xM5F25/tC4LGlfe6NkTuz
-	 G6poSVD0X6Cg6FteVO5MqmZbPrK/hT7oirZxM9Ll7RVXdS6rdIAMpXFvBrjrf9ht/F
-	 JdlAIek+4AvxTE/uLBf+JhE+qydO40g2+wxtH3tH3GUzYJ6k/PaZYBsa6AX+EedWJn
-	 qjZ7rGqcqP2zyunUY+2DLtPi/M+lnwrkmAaIt9Xp5KpRMk0ytF2/e7JSesEd8otQL9
-	 8hKfoentvnHiw==
+	b=vDKG0byH+HHY+5I9RK+9ukcYfvvzYq+unLBeO6UujGai1x+UDwFWPNLp3qp5uwCGK
+	 hOcEaoqLCbQ32RZ1FLmEm+f3ACJmhbHqtvNrQavPPjdY7xYoXwCl1SgAh8+pjaFVC4
+	 GFf2Ex3J/p3zEUDqUb7L+QK0e/MUISV1q+gd+bTV1PGiF5g8Yn1zp336jU3pshg+Py
+	 AO1+kJ+9+9aPjVZ1a36jR5Ei5zdq35osWR4nV1eBLKwBUXOG7y9zxbIKvNh/9yD36W
+	 ZeYwrPG4La6hPdzAwAjooyjx1lsbILAllDw2w0FJ1Lf6Kn5aRP1yBFRPrQaMFqheHh
+	 mJgxU4W2eVJhQ==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -38,10 +38,11 @@ Cc: netdev@vger.kernel.org,
 	sdf@fomichev.me,
 	willemb@google.com,
 	petrm@nvidia.com,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v3 2/6] selftests: net: py: teach cmd() how to print itself
-Date: Mon, 12 Jan 2026 16:07:36 -0800
-Message-ID: <20260113000740.255360-3-kuba@kernel.org>
+	Jakub Kicinski <kuba@kernel.org>,
+	willemdebruijn.kernel@gmail.com
+Subject: [PATCH net-next v3 4/6] selftests: drv-net: gro: improve feature config
+Date: Mon, 12 Jan 2026 16:07:38 -0800
+Message-ID: <20260113000740.255360-5-kuba@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260113000740.255360-1-kuba@kernel.org>
 References: <20260113000740.255360-1-kuba@kernel.org>
@@ -53,63 +54,113 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Teach cmd() how to print itself, to make debug prints easier.
-Example output (leading # due to ksft_pr()):
+We'll need to do a lot more feature handling to test HW-GRO and LRO.
+Clean up the feature handling for SW GRO a bit to let the next commit
+focus on the new test cases, only.
 
-  # CMD: /root/ksft-net-drv/drivers/net/gro
-  #   EXIT: 1
-  #   STDOUT: ipv6 with ext header does coalesce:
-  #   STDERR: Expected {200 }, Total 1 packets
-  #           Received {100 [!=200]100 [!=0]}, Total 2 packets.
+Make sure HW GRO-like features are not enabled for the SW tests.
+Be more careful about changing features as "nothing changed"
+situations may result in non-zero error code from ethtool.
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
+Don't disable TSO on the local interface (receiver) when running over
+netdevsim, we just want GSO to break up the segments on the sender.
+
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/net/lib/py/utils.py | 23 +++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+v3:
+ - s/tso/tcp-segmentation-offload/ for ethtool feature names
+v2: https://lore.kernel.org/20260110005121.3561437-5-kuba@kernel.org
+ - reoder the imports
+ - fix restoring all features - don't assume all the features
+   have to be flipped, some may have already been in desired state
+v1: https://lore.kernel.org/20251128005242.2604732-1-kuba@kernel.org
 
-diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
-index 824f039d384c..37243103aee3 100644
---- a/tools/testing/selftests/net/lib/py/utils.py
-+++ b/tools/testing/selftests/net/lib/py/utils.py
-@@ -41,7 +41,9 @@ import time
-         self.ret = None
-         self.ksft_term_fd = None
+CC: willemdebruijn.kernel@gmail.com
+CC: shuah@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/drivers/net/gro.py | 39 ++++++++++++++++++++--
+ 1 file changed, 36 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
+index 4e0fb19d1527..3c30749ead39 100755
+--- a/tools/testing/selftests/drivers/net/gro.py
++++ b/tools/testing/selftests/drivers/net/gro.py
+@@ -20,7 +20,7 @@ coalescing behavior.
+ import os
+ from lib.py import ksft_run, ksft_exit, ksft_pr
+ from lib.py import NetDrvEpEnv, KsftXfailEx
+-from lib.py import cmd, defer, bkg, ip
++from lib.py import bkg, cmd, defer, ethtool, ip
+ from lib.py import ksft_variants
  
-+        self.host = host
-         self.comm = comm
-+
-         if host:
-             self.proc = host.cmd(comm)
-         else:
-@@ -99,6 +101,27 @@ import time
-             raise CmdExitFailure("Command failed: %s\nSTDOUT: %s\nSTDERR: %s" %
-                                  (self.proc.args, stdout, stderr), self)
  
-+    def __repr__(self):
-+        def str_fmt(name, s):
-+            name += ': '
-+            return (name + s.strip().replace('\n', '\n' + ' ' * len(name)))
-+
-+        ret = "CMD"
-+        if self.host:
-+            ret += "[remote]"
-+        if self.ret is None:
-+            ret += f" (unterminated): {self.comm}\n"
-+        elif self.ret == 0:
-+            ret += f" (success): {self.comm}\n"
-+        else:
-+            ret += f": {self.comm}\n"
-+            ret += f"  EXIT: {self.ret}\n"
-+        if self.stdout:
-+            ret += str_fmt("  STDOUT", self.stdout) + "\n"
-+        if self.stderr:
-+            ret += str_fmt("  STDERR", self.stderr) + "\n"
-+        return ret.strip()
-+
+@@ -70,6 +70,27 @@ from lib.py import ksft_variants
+         defer(ip, f"link set dev {dev['ifname']} mtu {dev['mtu']}", host=host)
  
- class bkg(cmd):
-     """
+ 
++def _set_ethtool_feat(dev, current, feats, host=None):
++    s2n = {True: "on", False: "off"}
++
++    new = ["-K", dev]
++    old = ["-K", dev]
++    no_change = True
++    for name, state in feats.items():
++        new += [name, s2n[state]]
++        old += [name, s2n[current[name]["active"]]]
++
++        if current[name]["active"] != state:
++            no_change = False
++            if current[name]["fixed"]:
++                raise KsftXfailEx(f"Device does not support {name}")
++    if no_change:
++        return
++
++    ethtool(" ".join(new), host=host)
++    defer(ethtool, " ".join(old), host=host)
++
++
+ def _setup(cfg, test_name):
+     """ Setup hardware loopback mode for GRO testing. """
+ 
+@@ -77,6 +98,11 @@ from lib.py import ksft_variants
+         cfg.bin_local = cfg.test_dir / "gro"
+         cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
+ 
++    if not hasattr(cfg, "feat"):
++        cfg.feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
++        cfg.remote_feat = ethtool(f"-k {cfg.remote_ifname}",
++                                  host=cfg.remote, json=True)[0]
++
+     # "large" test needs at least 4k MTU
+     if test_name == "large":
+         _set_mtu_restore(cfg.dev, 4096, None)
+@@ -88,15 +114,22 @@ from lib.py import ksft_variants
+     _write_defer_restore(cfg, flush_path, "200000", defer_undo=True)
+     _write_defer_restore(cfg, irq_path, "10", defer_undo=True)
+ 
++    _set_ethtool_feat(cfg.ifname, cfg.feat,
++                      {"generic-receive-offload": True,
++                       "rx-gro-hw": False,
++                       "large-receive-offload": False})
++
+     try:
+         # Disable TSO for local tests
+         cfg.require_nsim()  # will raise KsftXfailEx if not running on nsim
+ 
+-        cmd(f"ethtool -K {cfg.ifname} gro on tso off")
+-        cmd(f"ethtool -K {cfg.remote_ifname} gro on tso off", host=cfg.remote)
++        _set_ethtool_feat(cfg.remote_ifname, cfg.remote_feat,
++                          {"tcp-segmentation-offload": False},
++                          host=cfg.remote)
+     except KsftXfailEx:
+         pass
+ 
++
+ def _gro_variants():
+     """Generator that yields all combinations of protocol and test types."""
+ 
 -- 
 2.52.0
 
