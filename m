@@ -1,111 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4666C2F39D7;
-	Wed, 14 Jan 2026 18:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9698337BB2;
+	Wed, 14 Jan 2026 18:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768414932; cv=none; b=l8eLWoXzKhsGJYu+iZoAANRRJsDqQTF4aDv25nVsZUfEx4UPCwnVtkeX6r8bJFmMVfwdbjMFhtPo9WvjLn4C/Xal8k2BW/PYxgGioWxQI1EWrCnfWJkmhQQh16TrAPpq4MDlG5PuvTrkPMKhueoyEQ+q4WQMWaW8MI6Y1UqiqOg=
+	t=1768416283; cv=none; b=DMEUjUZ7EZe0kI0fGnmvZH2F3HADaIxNH70EEPZtli8z7Xx4VT0qjc6Gc7jilPBqxCLAvHsuaDz2/RmxicYr7W+L9mQKjmS9NnenytE2Z8FQG+yCEX/3f14Y7IcI1ZwMJnPkZo78D26JWpn0DV+/WR3P3swqc6Ikv55WPpDsXfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768414932; c=relaxed/simple;
-	bh=tcknC6iemaw7J5r4is+1RFQMsTj8mbkEYsrSA6D6Saw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YeGh2TkGZ+xujEu49iTscHhbDPLCHQLyS3huzF9AERfRBpM3IXosH3KqCGiWSFO1S5X/I56GvkkgnXEjxJ4y5Sdht7LGqHvGzevl7mcCIePaINQ7AqVBI3JPwe57awqWBQsgZK4be+OA6fORRQFja+rXsXv6xu+hTplHZQa4Azs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gnv936Pw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768416283; c=relaxed/simple;
+	bh=ClypWUCcmZdhOgMSv7cAqWse/cL4IEXeAo2k6l1M1+U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ue6MRNxzQWJ+Li1VJ/TWAt/6ugRGtNU12iqLJWjEofWSCj+T9pgducSO9/3OH79LDRSjSlFC6nSDx7Uaf8Qx9NT8Fh7yEGBP2LsNmG67KMDSqAKOpDGYhVqKm8qA1bhdOL7MWiqoNQYXMSBLFbf3ym9nMgf66bLplJC8xPjjh/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kUJ/7MOi; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gnv936Pw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C6A5C19421;
-	Wed, 14 Jan 2026 18:22:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768414931;
-	bh=tcknC6iemaw7J5r4is+1RFQMsTj8mbkEYsrSA6D6Saw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gnv936PwAOYqla2o5RLnSGyPnWK7eepNYoigSv3xXJ9tqfUVL17uGzncwmmSr8jmA
-	 fh4eTYbjwkRZaR/lWB4BeQFZeI321YENVp8PuJFL27WkKn6hGS7oxQ3cluEXsJKnUf
-	 e+CWfzWOQOHbIi1FxuPUJvknfYFlCBcidWhMHmmDTsRmlcrzYEpjBMYMaEoTVksV3U
-	 fApWuGawlIvleBifk6rYfDE4Q+QM7Y/6v3afg+uN1IThtpoL1Pr8o8yr+UBntNCr1j
-	 6RfbmLF9dPh2zIAHhUCaPHd+V49mgU2eFN3GXxpC4hWgyf7Rz4pazXUXqAZC71JL5u
-	 nbaDt7DOD7v/Q==
-Date: Wed, 14 Jan 2026 18:22:05 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Fuad Tabba <tabba@google.com>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v9 25/30] KVM: arm64: Expose SME to nested guests
-Message-ID: <2498896a-78cb-4184-82ac-6497b1e9bd03@sirena.org.uk>
-References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
- <20251223-kvm-arm64-sme-v9-25-8be3867cb883@kernel.org>
- <CA+EHjTwZCcMFT6gAM2oaQz5V_vqEBmVuggFBbABbXPvC+U919Q@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kUJ/7MOi"
+Message-ID: <b20c1231-c8ef-4d66-97a9-120f2d77738e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768416274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8MuE08WjOKJJ911Tg0cdT6a/SadtO731OH3L0J+ZIjA=;
+	b=kUJ/7MOi8ckRi8Q39kTf4knDQP3iSskFER8XOHkyRahsTZBtPaUNxXeVH5AhGvIOosaAMT
+	Enux6nAn6cKwi/tOtLvyrjXE7ic1DwO0GWTZLzGCfTTuDLMxEjoowT+HcuCe2lRpoMN1nr
+	vbGEKevRA0L3w6gzt7TvHzlFuodDrr4=
+Date: Wed, 14 Jan 2026 10:44:27 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="GsOJE4+Rwb8rI0F1"
-Content-Disposition: inline
-In-Reply-To: <CA+EHjTwZCcMFT6gAM2oaQz5V_vqEBmVuggFBbABbXPvC+U919Q@mail.gmail.com>
-X-Cookie: Absence makes the heart grow frantic.
+Subject: Re: [PATCH bpf-next v3 1/5] bpf: lru: Tidy hash handling in LRU code
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+ "David S . Miller" <davem@davemloft.net>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
+ bpf@vger.kernel.org
+References: <20260107151456.72539-1-leon.hwang@linux.dev>
+ <20260107151456.72539-2-leon.hwang@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260107151456.72539-2-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
---GsOJE4+Rwb8rI0F1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Tue, Jan 13, 2026 at 02:37:57PM +0000, Fuad Tabba wrote:
-> On Tue, 23 Dec 2025 at 01:23, Mark Brown <broonie@kernel.org> wrote:
+On 1/7/26 7:14 AM, Leon Hwang wrote:
+> The hash field is not used by the LRU list itself.
+> 
+> Setting hash while manipulating the LRU list also obscures the intent
+> of the code and makes it harder to follow.
+> 
+> Tidy this up by moving the hash assignment to prealloc_lru_pop(),
+> where the element is prepared for insertion into the hash table.
+> 
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>   kernel/bpf/bpf_lru_list.c | 24 +++++++++---------------
+>   kernel/bpf/bpf_lru_list.h |  5 ++---
+>   kernel/bpf/hashtab.c      |  5 ++---
+>   3 files changed, 13 insertions(+), 21 deletions(-)
+> 
+> diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
+> index e7a2fc60523f..f4e183a9c28f 100644
+> --- a/kernel/bpf/bpf_lru_list.c
+> +++ b/kernel/bpf/bpf_lru_list.c
+> @@ -344,10 +344,8 @@ static void bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
+>   static void __local_list_add_pending(struct bpf_lru *lru,
+>   				     struct bpf_lru_locallist *loc_l,
+>   				     int cpu,
+> -				     struct bpf_lru_node *node,
+> -				     u32 hash)
+> +				     struct bpf_lru_node *node)
+>   {
+> -	*(u32 *)((void *)node + lru->hash_offset) = hash;
+>   	node->cpu = cpu;
+>   	node->type = BPF_LRU_LOCAL_LIST_T_PENDING;
+>   	bpf_lru_node_clear_ref(node);
+> @@ -393,8 +391,7 @@ __local_list_pop_pending(struct bpf_lru *lru, struct bpf_lru_locallist *loc_l)
+>   	return NULL;
+>   }
+>   
+> -static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
+> -						    u32 hash)
+> +static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru)
+>   {
+>   	struct list_head *free_list;
+>   	struct bpf_lru_node *node = NULL;
+> @@ -415,7 +412,6 @@ static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
+>   
+>   	if (!list_empty(free_list)) {
+>   		node = list_first_entry(free_list, struct bpf_lru_node, list);
+> -		*(u32 *)((void *)node + lru->hash_offset) = hash;
+>   		bpf_lru_node_clear_ref(node);
+>   		__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_INACTIVE);
 
-> >         case SYS_ID_AA64PFR1_EL1:
-> > -               /* Only support BTI, SSBS, CSV2_frac */
-> > +               /* Only support BTI, SME, SSBS, CSV2_frac */
-> >                 val &= ~(ID_AA64PFR1_EL1_PFAR           |
-> >                          ID_AA64PFR1_EL1_MTEX           |
-> >                          ID_AA64PFR1_EL1_THE            |
-> >                          ID_AA64PFR1_EL1_GCS            |
-> >                          ID_AA64PFR1_EL1_MTE_frac       |
-> >                          ID_AA64PFR1_EL1_NMI            |
-> > -                        ID_AA64PFR1_EL1_SME            |
+init the hash value later (after releasing l->lock) is not correct. The 
+node is in the inactive list. The inactive list is one of the rotate and 
+_evict_ candidates, meaning tgt_l->hash will be used in 
+htab_lru_map_delete_node(). In practice, it does not matter if 
+htab_lru_map_delete_node() cannot find the node in an incorrect bucket. 
+However, it still should not use an uninitialized value to begin with.
 
-> Should we also limit this to SME2, i.e.
-
-> + val = ID_REG_LIMIT_FIELD_ENUM(val, ID_AA64PFR1_EL1, SME, SME2);
-
-> That said, we don't do anything similar to SVE, but it might also be
-> worth doing that there.
-
-This feels like a general approach issue with these registers that's out
-of scope for this series, it's not just the vector extensions which
-could introduce new state or anything else that requires explicit
-support.  AIUI the theory here is that we bootstrap from the host's
-sanitised registers so the time to add any required limits on future
-values would be when enabling them for the host kernel, assuming KVM
-support isn't added simultaneously.
-
---GsOJE4+Rwb8rI0F1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmln3swACgkQJNaLcl1U
-h9D5Awf+IRsqdR9I7nYCFQPlwzCHBQBbuNnWwG5/UXXDqIc3+6wyvcIQNcpbea0/
-TQLaQPJEdkXSt9dQkg0iKdV3YBSDo8IW8JMvqDcgNueXpfuJdIPFDerneL0HTO/l
-/80XNxIjRpwrR71w+bFdSGWj6TpDcgtNYQj4z1wT6wRQ3VoQxnRsNiZoxObmnM8A
-t1DLEPg1EigeOwvBt12Q6yOVBiAM+lAF04JU7Kq28s3Nho38aMBGrMkiz9zLY/bv
-Lk+KVaDLIh5KmecygdX5rm/EEyT96tV/fj+NXrctDs2+/ktqa2JYtF2PpuQuNXZx
-6dDmflaX69rqabPcKmADbMedkpxJRA==
-=kw66
------END PGP SIGNATURE-----
-
---GsOJE4+Rwb8rI0F1--
+> index 441ff5bc54ac..c2d12db9036a 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -296,12 +296,13 @@ static void htab_free_elems(struct bpf_htab *htab)
+>   static struct htab_elem *prealloc_lru_pop(struct bpf_htab *htab, void *key,
+>   					  u32 hash)
+>   {
+> -	struct bpf_lru_node *node = bpf_lru_pop_free(&htab->lru, hash);
+> +	struct bpf_lru_node *node = bpf_lru_pop_free(&htab->lru);
+>   	struct htab_elem *l;
+>   
+>   	if (node) {
+>   		bpf_map_inc_elem_count(&htab->map);
+>   		l = container_of(node, struct htab_elem, lru_node);
+> +		l->hash = hash;
+>   		memcpy(l->key, key, htab->map.key_size);
+>   		return l;
+>   	}
