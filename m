@@ -1,151 +1,125 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86F2330B2F
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 23:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2DC1D432D
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 23:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768519350; cv=none; b=Ob/cWH9+Vql7VcOCm65/rcDghQcXJZHeSg8Lw2O0ILV1aF6o5pFEdyI3kbCZ5k/2mBHNKoJEg7iVzVNSxRGX/K9DxLhOPkBmqJIPZY4ulxdwhDFBsB+i5r0KOKywWUIpYkSkBvsemNDJ0Xnn8L+Jk0vX/y6FnMw7e8dBcdVxWWU=
+	t=1768520727; cv=none; b=kXyJy2AGeJf0j0RLXg5B4MPywKPeQKHKlARCf0qphI1PbXo901ipVQMUUWPGxo/+ReBme5RAt5ZUurquqWj306dwkKP4xiD9co3Soa6vWPoaAwYIy2thHtSPGoLkBRWh/wDiMcnaScJwr2/Kyy8zNaV2rW0NAHrRH2Yuz06rtvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768519350; c=relaxed/simple;
-	bh=QGaBI2jmMXiz5Zzh8UzMEfKuZBd6orN3mlkFUEX03hI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=i4o9uBpWKPYKDi6UhC1eyXn1ISW0mqud/PJZQS0faDr2riWMlK0nprRtZpX6V1Znx8Jjg45uNOQEgFRP3Z06yKx3+/FNFgOIasOdKUXsg2o6QIuutPZ1oWEuhKwAK5QF9Ry6pzJINlt/QuxnIUyU4PE1tkkoeFFJV93Z7Wc3Oaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cxPsHpYF; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
+	s=arc-20240116; t=1768520727; c=relaxed/simple;
+	bh=anu0cb12MUsXZDetyUJXmHWS6gx5i4J6kT+HeZDwZ7E=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QVUswLicE0CNVXaQ6zkLM09kFIG+/dFPjQVySILiMCKkMUVg7AC2lVUFkqndIQ4T2dU2YuuQWbhvO0IOtqum8zR4sXeKY88ycg+HAD47mc4WfzQF+Z8gGS86B1SECSY0l6s6w/fP+AlQYDM0Fj1kHP4gfv70V0JsdN2w+vnMCBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PNC6WO9/; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cxPsHpYF"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-34c704d5d15so2388845a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 15:22:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PNC6WO9/"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a09d981507so10196435ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 15:45:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768519343; x=1769124143; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=X41FAJWB3N1JsaEn1Z67wfrNr3PEAApqVjSGPombTu8=;
-        b=cxPsHpYFdUSeHGJ9xX3z+/Yt6qKvljuGIAInnN2I65i78DPIUmHJV6UmYqeMdVtKkd
-         zr9ylpi1hpiZJURV6smmbLB7kbHcIX0sQnzLXcsVEEEUkSjo2ehvXtjIIB8TmLdB3XPC
-         hzNtEoD8mEU/XyuVQm6QbOyFHbp3YCrjD7T3NX9fu6nfYDKowuaAYpjtQtD0TO3zMdpB
-         jir6ay6CnKDpvSzGOEHdpupD+EKaSGeGyXctWEdQ47bcmILjWFiq32uEzUb/y/51eHNZ
-         /SHXLXH+D2WYy5i1SqJJMgmobI4LqcJ3v1BVYqVmc4oq7cLwZaRdZJgmVlRWMlwgfcyw
-         aGmg==
+        d=gmail.com; s=20230601; t=1768520726; x=1769125526; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pxBy609TOOX7PEiqMrbm1/JiMEAuCKLzkMf3kkYPtDA=;
+        b=PNC6WO9/n9mgliX46Y6vyS1hq8+8wb1ElL1BH9V9Hu6clMYs83H5X4/z+v6uovev3N
+         wbF1ABmd/zuGaeTyENQp1nQcGs9BR/Pu3V7SUbU4kRzSczegI44XUBO17AyNZWmghrxn
+         ATIUz9M9JkaDES5vJp5WQxPpKps7VA2lcCLuSSj/RuoMZZkFCAhPWaLeZkIS5gESfif5
+         KDDXI3cMO6KkP5KUH2wwQnOQjIjoY4fOYBtlppnTRPsZShAxRij4HFzXHvkGMcIzQBU6
+         xhRAAOOsPXXsejfFkQEwrSRnIAfKeWcXVvlhU47BMLSxdydTkFxQe/Khw6+fg1GCWJNh
+         3IPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768519343; x=1769124143;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X41FAJWB3N1JsaEn1Z67wfrNr3PEAApqVjSGPombTu8=;
-        b=P3/DyboKjixuKAQQf5h5qlFP+qo5A5hXSHnREdDRJxoPdzOwZG3KbofRYDO1qb4D/d
-         97tZvqvoQnLjaDkwqlf9KRHYJnDboNq3e59Hoa9RnNS4vCel3ieQ9nPwIdmM0DW2mgOR
-         cCFxLQUltldcUjCI/K0C4zbDUIhqaRTj2JnKSFYx1V9/ZAAdlgghT/Qf6QKMcBO23VD5
-         0RG0hUgC57gmvQC8MRi1tnlG5pTqcls9DLiaSt/yAR1JRi1u555P1H4RIuU6iBCToAW4
-         YBWatnlRwz9zgc+bZ8yR9vsWs7p401cqOPh8idLKI+sOpiNyl5jm8KqMmfsOtYIxFReQ
-         rMEw==
-X-Forwarded-Encrypted: i=1; AJvYcCXJIbQaMtmBVy8WT3SDceBnRfnkYAJ4yYHjGKfojU/2d9g4XoUQOwcCtIxz99q8g8vNJsAi/s2yoXde6SWc/zk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRGLK/kZu+Neb3HhZ2f/xzAkj7v0Mm4Ppkboeh7tR/dpcxvY2h
-	c/R0AaTCMXgt8Ev5dhvEdQeOJpqJIkgFbP8QobIgqjMd5Ob8JqSI8c0AZYBLzaBdiXHbGeJ5OWa
-	xteXWM88X62tDMw==
-X-Received: from pgct22.prod.google.com ([2002:a05:6a02:5296:b0:c1d:b0b3:5e63])
- (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:7116:b0:38b:e9eb:b12c with SMTP id adf61e73a8af0-38dfe67bddemr1490481637.31.1768519342651;
- Thu, 15 Jan 2026 15:22:22 -0800 (PST)
-Date: Thu, 15 Jan 2026 15:21:46 -0800
-In-Reply-To: <20260115232154.3021475-1-jmattson@google.com>
+        d=1e100.net; s=20230601; t=1768520726; x=1769125526;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pxBy609TOOX7PEiqMrbm1/JiMEAuCKLzkMf3kkYPtDA=;
+        b=KjV9jRu5hvQ6a6Ljkt5/XzsKQnLnJHV67553Q+oQboZrlal8tf5L+sibBJ57ixKWsf
+         a9ztRWjpKs57w16Tcu1KlUqkGTNnleLakXj9AiehlBFWAxa7w6Mh2zqJOp33tiz4r6jb
+         43umZxOAeHX9mlLU0MamuL0yT4WpTyHcQsXxjmnTkRw+UZEjOZR7mlGeSz2q5rO1BBnZ
+         HQtcxZeJ7vMNi6DFaO+DX1h5sZynDjL4HeFDOSpGdpoHSFNaXVY29yYpdTYCdNYH8dXf
+         PpvR6T4Q1M/+7MUq7MvsxbcqxboWVUyIG1AL7t8Yt5CNcenbCrQvLS/Syu+VMBqvY+uI
+         7bBw==
+X-Forwarded-Encrypted: i=1; AJvYcCXAxVvieHxSnppDcDC4dPAFl5N+E9Dc6lesPV/FZbDo8/MA4FmjqtIGXFytAwrPIIhwPVXeZIwdHOAaKNbdAeo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyY6w6CbHCtYB1wCTgNu3Ldsv5TFi6LIHyZht72m1ZTRqFW1nr2
+	CjYAnaENAsPxh31Nv3mowfGdyiDr/VZ1nqUsfz72XIWh05/zYN8WsWYe
+X-Gm-Gg: AY/fxX6I0XiMCDgVK6GIZOZSLvTjEiU74cUxvjE0RPCmuIuM44AmncK/k/Fuaz6WEBU
+	WBcWjgTWQYF5Sp7PCREo2JoUYxQjpuhKn0am34+P9KBh4y978G4jcdUQseR3ExbD3s8B4bAtn9B
+	P6+rGzvS2Kf0wAeQTcsjUFT458pKAaHDwzzoH+5u3oC+dm9vx/K+K6XHxFsvbyA0YcbPMZScP76
+	A9p8ZS3CvQGfZ+HyYczmTT1CnP2PlAZq2pTFPGcWHZZYAtC6V9rq2dwouoVVk4o1HcL7jkvCo0y
+	qYZ4BoA7xDWH3nOBtdvZhVDK+V9eVU3I8BV2MNOfTkevj9BDuWFka0Z/vOoUbPezfZyE+urM2pn
+	po5Th4G4pzAkCmZJZ2sDwWsRMfC6UrgYogPC4HrfW7Av4mQL19NJqQtwlwbu2jWHt/asbAP7Iyb
+	zpUQRt8wxAi88pRhq9yg==
+X-Received: by 2002:a17:902:e745:b0:2a3:ccf5:6691 with SMTP id d9443c01a7336-2a71782783emr12224645ad.30.1768520725819;
+        Thu, 15 Jan 2026 15:45:25 -0800 (PST)
+Received: from archie.me ([210.87.74.117])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a7190eee4fsm3623595ad.42.2026.01.15.15.45.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jan 2026 15:45:24 -0800 (PST)
+Received: by archie.me (Postfix, from userid 1000)
+	id 814914207D2D; Fri, 16 Jan 2026 06:45:21 +0700 (WIB)
+Date: Fri, 16 Jan 2026 06:45:21 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Brett A C Sheffield <bacs@librecast.net>, Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kselftest@vger.kernel.org,
+	workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] docs: kselftest: remove link to obsolete wiki
+Message-ID: <aWl8EXT-Fp59WDMS@archie.me>
+References: <20260115172817.7120-1-bacs@librecast.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260115232154.3021475-1-jmattson@google.com>
-X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260115232154.3021475-8-jmattson@google.com>
-Subject: [PATCH v2 7/8] KVM: x86: nSVM: Handle restore of legacy nested state
-From: Jim Mattson <jmattson@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="a/+0KyrOdn65OOla"
+Content-Disposition: inline
+In-Reply-To: <20260115172817.7120-1-bacs@librecast.net>
 
-When nested NPT is enabled and KVM_SET_NESTED_STATE is used to restore an
-old checkpoint (without a valid gPAT), the current IA32_PAT value must be
-copied to vmcb02->save.g_pat.
 
-Unfortunately, the current IA32_PAT value may be restored by KVM_SET_MSRS
-after KVM_SET_NESTED_STATE.
+--a/+0KyrOdn65OOla
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Introduce a new boolean, svm->nested.restore_gpat_from_pat. If set,
-svm_vcpu_pre_run() will copy vcpu->arch.pat to vmcb02->save.g_pat and clear
-the boolean.
+On Thu, Jan 15, 2026 at 05:24:44PM +0000, Brett A C Sheffield wrote:
+> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-to=
+ols/kselftest.rst
+> index 18c2da67fae4..e13aff7a80b5 100644
+> --- a/Documentation/dev-tools/kselftest.rst
+> +++ b/Documentation/dev-tools/kselftest.rst
+> @@ -15,11 +15,6 @@ able to run that test on an older kernel. Hence, it is=
+ important to keep
+>  code that can still test an older kernel and make sure it skips the test
+>  gracefully on newer releases.
+> =20
+> -You can find additional information on Kselftest framework, how to
+> -write new tests using the framework on Kselftest wiki:
+> -
+> -https://kselftest.wiki.kernel.org/
+> -
+>  On some systems, hot-plug tests could hang forever waiting for cpu and
+>  memory to be ready to be offlined. A special hot-plug target is created
+>  to run the full range of hot-plug tests. In default mode, hot-plug tests=
+ run
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
----
- arch/x86/kvm/svm/nested.c | 9 ++++++---
- arch/x86/kvm/svm/svm.c    | 8 ++++++++
- arch/x86/kvm/svm/svm.h    | 6 ++++++
- 3 files changed, 20 insertions(+), 3 deletions(-)
+Acked-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index c50fb7172672..61a3e7226cde 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -1958,9 +1958,12 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
- 	if (ret)
- 		goto out_free;
- 
--	if (is_guest_mode(vcpu) && nested_npt_enabled(svm) &&
--	    (kvm_state.hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT))
--		svm->vmcb->save.g_pat = save_cached.g_pat;
-+	if (is_guest_mode(vcpu) && nested_npt_enabled(svm)) {
-+		svm->nested.restore_gpat_from_pat =
-+			!(kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT);
-+		if (kvm_state->hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT)
-+			svm->vmcb->save.g_pat = save_cached.g_pat;
-+	}
- 
- 	svm->nested.force_msr_bitmap_recalc = true;
- 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 3f8581adf0c1..5dceab9f4c3f 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4217,9 +4217,17 @@ static void svm_cancel_injection(struct kvm_vcpu *vcpu)
- 
- static int svm_vcpu_pre_run(struct kvm_vcpu *vcpu)
- {
-+	struct vcpu_svm *svm = to_svm(vcpu);
-+
- 	if (to_kvm_sev_info(vcpu->kvm)->need_init)
- 		return -EINVAL;
- 
-+	if (svm->nested.restore_gpat_from_pat) {
-+		svm->vmcb->save.g_pat = vcpu->arch.pat;
-+		vmcb_mark_dirty(svm->vmcb, VMCB_NPT);
-+		svm->nested.restore_gpat_from_pat = false;
-+	}
-+
- 	return 1;
- }
- 
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 39138378531e..1964ab6e45f4 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -219,6 +219,12 @@ struct svm_nested_state {
- 	 * on its side.
- 	 */
- 	bool force_msr_bitmap_recalc;
-+
-+	/*
-+	 * Indicates that vcpu->arch.pat should be copied to
-+	 * vmcb02->save.g_pat at the next vcpu_run.
-+	 */
-+	bool restore_gpat_from_pat;
- };
- 
- struct vcpu_sev_es_state {
--- 
-2.52.0.457.g6b5491de43-goog
+--=20
+An old man doll... just what I always wanted! - Clara
 
+--a/+0KyrOdn65OOla
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaWl8DQAKCRD2uYlJVVFO
+o7FCAP4u3YWvqpb7XuvP/CShB6gKhNtUSEORxT+JfChh/8g9KwD7BwQstmQJZk8i
+g7dOs1hlHWOFkH38sNz4SQJkGR3F+AY=
+=39Y4
+-----END PGP SIGNATURE-----
+
+--a/+0KyrOdn65OOla--
