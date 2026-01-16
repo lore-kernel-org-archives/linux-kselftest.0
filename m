@@ -1,213 +1,311 @@
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38DF34DCD7
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 06:54:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1792D948A;
+	Fri, 16 Jan 2026 07:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768546480; cv=none; b=hbEUCOiAxeQ4OOJ2vOZgTxZ5OJMiRV8KLvfZtti9tntqM30YAMJhJ83/087mvg1M0jT4NjPk8+/C+Q1iAjwBjIslPCFxh3L2M2Urt9WLBeTn0KDYNq1NtJ9YVG5oj8woDyhGF5SsKOO8tNZCa0qjJpFLmvYX0MrPjClCvdS0Hv4=
+	t=1768549749; cv=none; b=hUfYacDMD/4DeDdZHwFkbNQF/99voMDZP2Mrs9TODoHwxdraqw2OFUzlbKbE6o1KkW9Y33KPCdE8FdJKwAIPWHiz79pxtBe1eTZ1m70fASuuNrhqnmZIe1x+Z1JIMjGwIAgw23ENiAMS37BzprfGnmaJcAmCzn+S5ojG3oeLZdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768546480; c=relaxed/simple;
-	bh=auSMoPKWCajUDwEFhG4/1C5B0ulKuOi59DJ5mdB4wqw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DC8EEwjI6YTjnOhwfcuxK5QjZLi98+RTnMRhKN0llS8Yhxi/wNxzFqkf/HYnYqpOmzO5x9QPzaXlET/wHaEHL8q8qyG2KaiYW5roMvp1D2UaRorA3lgOPQGTCPRVboW/zOATxUUDF12m52EkbNVdBZZFNCth2iDJECQVgLYOa8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TpHRZA1l; arc=none smtp.client-ip=209.85.222.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768549749; c=relaxed/simple;
+	bh=9iYSmjC1IFeyQbUHm3jnENmR4qxGtlmYqJHbEzwOSxs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gkB9o1PgQWRiyPSRchJrUnYHjMvhiBEXaSrmv8XvATbUEJlOFEhd4bQGaDyzFkDrRbwq8IO7usL1+IylMSbEDKbWlxKbR1ox52l5pYBpFG2Baf0X0s6kOQrsBDk1dKHuEdGUiWbEiwCJGt8rZMb4+cIqwHJCetpNeTz8C12iCHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=maITxhbR; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TpHRZA1l"
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-8c5384ee23fso193192285a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 22:54:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768546478; x=1769151278; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eSj8YbqJilmqRga93ax0BVm+4H5y9SZdZjVdaZpiAbo=;
-        b=TpHRZA1lZNgNiWlxSWGcUIR6s9OO0U/svH5el8kGEq195DSXSMUGl+2utn/VedrkUP
-         x9pDHqaag0MuUNJusQhHtuOdKi9c6WWQ8orp6pqDD1QUVX6oohxUmJ9kbvYBt0llrZs3
-         YXCVyIvA+lnBB9aZwHU/h0XLMOBG58Ky/HtR0GI2LIWVmzRMw7TpoZdWLQPipPGCpvcm
-         /4TtGKLLivTrE5Af09fDwpkIGw3/yRwkf/Rt0YJL/NU8jgxzvmyl4ap8G5fQ+lsj6C2c
-         zj9tPO6XwL3heqjYdHwrcjisbn47xJy0zULaRHztq5Z7916l2Xu9AtMMejR8U99Gp5dZ
-         Ur0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768546478; x=1769151278;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eSj8YbqJilmqRga93ax0BVm+4H5y9SZdZjVdaZpiAbo=;
-        b=UKtmdS4rtAaztEGmO4EUQItJQ5URjr4FzPt10NooEB5nEFcj7xbcmAabTJhjOUloN+
-         LKewv53yxd4aZjf5UxvNhb2i+4b4wGHzMy7kT7EiZnPZKr5ADw6YAM8tW4extXGBSDrO
-         X83udZaFvD8PMRMjOwY6AszWfRoNEBfL066CjqE5ozZKT47jrJZ5c/ABxEyeHpmLWm1R
-         isWWmyvMmiTR84Aaa9x/E+S5FqdXW6DSXghFB0WXF1lVOFzqIQ2eR1ekHZlVWNI/6kPG
-         2pZcVEiCIMoIxBulqjfhyeDm5M34ccUC7u+zirhQBilU/gXuAakiUzimmLB8BFv0qdJz
-         qTXw==
-X-Forwarded-Encrypted: i=1; AJvYcCUXIX7R0MDqGJHOXW6iMgI7re40+ZKk/Qmf7U0iEL6kCVFiLvQYL8piBpu0SAepaWzKgBhHmjGx6eYxdaR37Ow=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQxxNihbQ67g2PMTQei+VowHEWrRafBAsDE3eDmIsJ0ZAfi84S
-	CEZ5n4MQ+0CEsWuozFqeSE7LpxUbMUIRVMd6stXBTnWRZb2yj23lu42l
-X-Gm-Gg: AY/fxX7alB4/WFSiGYfQR/6fGr3X6i3p13ezAVrJ4O829kkIJNUjMy9ILHD7o9KhsNl
-	T3bMyb7FbyDwBOY6XoQyJ/2vDYhFLCFSN+cG8IwrNYSVX2L+qXSxDQv2E5GHhgnCD/zJdmssseE
-	paCLK5PL0wakqL+jEWtIy2+Kw77gI7e1EnQgD1MMljAXdu37v35QlNFEvUY+ryuYMsO/4o5JGJh
-	4l9bmibpBWxTe0gtTyUGImur7dPbGFTXPNJdgDvvDkGyHPDsZ6dVMzZrGCJxgDDq92giFJinX1v
-	DhMZuZfbdpsbJKXPARfZhl7pu9193wvGOFpeDTjk0K1MekG9GDNwuE4IwI6kTRjys9R5pBdQNak
-	yOXtDUwCbJOi1Kc02XcsCn1VKsIzCkRq5xaIRtG3hdBt7PvMvUQxoIPnI8fvGT4K4Z3wdOJN4hm
-	tkAk2o/c9gpg==
-X-Received: by 2002:a05:690c:46ca:b0:78c:25fa:1bb7 with SMTP id 00721157ae682-793c68762a3mr13549577b3.60.1768539797365;
-        Thu, 15 Jan 2026 21:03:17 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:5e::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-793c66f326bsm5392537b3.19.2026.01.15.21.03.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jan 2026 21:03:16 -0800 (PST)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Subject: [PATCH net-next v10 0/5] net: devmem: improve cpu cost of RX token
- management
-Date: Thu, 15 Jan 2026 21:02:11 -0800
-Message-Id: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="maITxhbR"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60FMm1V8032354;
+	Fri, 16 Jan 2026 07:48:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=qeMS7w
+	F/8+L/ImLqFPZRpd4gSsr4wBBTyBXOKDC+1+0=; b=maITxhbRDA+KJuWkZHK8hE
+	ythr5Kvz1unIc+r5NByQNf2yyBA6tco+E44QvS9CMfunSG81JRqG8ZlX9V2Rv+u7
+	0IGs4iRuX5uGIb0aN7jniB6Otq5DvkQuqiAtibYs4MrS5EshZebjMv9g0mexfRr2
+	V5kKH6HJKYGgloDYmVTT69yVQfJpeV/ZWzzKZBPos+afqpcMK4S/mztb/JX8Tbt2
+	Fey/YDwg+X+OPUd7HL2RL+y23mYCyVUjCUwzdnBg5/WlekRT736JQ8B7HB8OVpqc
+	aRtJ8/B4JLrrsvKrSGnXp8fEL1J2fGm6kcPeX+GevehL2MvmWRIKN+hUeNWJhz2A
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bq9bmhhda-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Jan 2026 07:48:19 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60G7imAq015536;
+	Fri, 16 Jan 2026 07:48:19 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bq9bmhhd8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Jan 2026 07:48:18 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60G7glgs002565;
+	Fri, 16 Jan 2026 07:48:17 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bm13t50mp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Jan 2026 07:48:17 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60G7mDgD54984998
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 16 Jan 2026 07:48:13 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C7C2720040;
+	Fri, 16 Jan 2026 07:48:13 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 30AB02004E;
+	Fri, 16 Jan 2026 07:48:08 +0000 (GMT)
+Received: from [9.43.69.239] (unknown [9.43.69.239])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 16 Jan 2026 07:48:07 +0000 (GMT)
+Message-ID: <493cebef-4df6-4cf8-898b-483a10889359@linux.ibm.com>
+Date: Fri, 16 Jan 2026 13:18:07 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFTGaWkC/53SS2rDMBCA4asYrTNl9Jayyj1KF3qMa9PaDpZqE
- kLuXjC0Nd6564HvH4Z5sEJzT4WdmwebaelLP43s3HA8NSx1YXwn6DM7N0yg0OiEh5LmUFMHcYr
- xTqX7pCGMkGkZaICarlCnDxrh61rqTGEA4UUkblXWKNmpYdeZ2v62Jl/ZSBVGulX2dmpY15c6z
- fd1l4Wv87XqURyuLhwQsleGGx+11ngZqIaXNA1rahEbnvPjvACE5DBbqWNWWu54ueGFOc5LQEC
- nojIxB+faHa9/eY5CHuc1ICibotOtFtrTjjd/PEd1nDeAQMG71KqsMO6PYzc8P/5QiwUEHmJyy
- lipVdrx7oc3yNEe5x0geJG8cUZy5c2O91v+H9t7QHCohJeYEbPd8M/n8xvX8SiHkQMAAA==
-X-Change-ID: 20250829-scratch-bobbyeshleman-devmem-tcp-token-upstream-292be174d503
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Kuniyuki Iwashima <kuniyu@google.com>, 
- Willem de Bruijn <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, 
- David Ahern <dsahern@kernel.org>, Mina Almasry <almasrymina@google.com>, 
- Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
- Donald Hunter <donald.hunter@gmail.com>
-Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/6] powerpc64/bpf: Support exceptions
+To: adubey <adubey@imap.linux.ibm.com>
+Cc: adubey@linux.ibm.com, bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
+        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
+        iii@linux.ibm.com, shuah@kernel.org
+References: <20260114114450.30405-1-adubey@linux.ibm.com>
+ <20260114114450.30405-6-adubey@linux.ibm.com>
+ <70242dc7-0f3e-4b8d-ad11-e24d9e4dfbb3@linux.ibm.com>
+ <77a6a07add66189fbc9b68a410911e3c@imap.linux.ibm.com>
+ <cf1aea1601d03d42b3afde367c29d26b@imap.linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <cf1aea1601d03d42b3afde367c29d26b@imap.linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: _NWV7wnYPza___l0_N_W2Hd5blTmq7Z_
+X-Proofpoint-ORIG-GUID: a0U7x-XwLWlSywnPqZwgCeS1SC5znx4Y
+X-Authority-Analysis: v=2.4 cv=TrvrRTXh c=1 sm=1 tr=0 ts=6969ed43 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=DU0EyFXtAAAA:8 a=VnNF1IyMAAAA:8 a=Hr_YKmzSsgGm0unBTDUA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=UCR5be5CC-YrbG9FbbB0:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE2MDA1OCBTYWx0ZWRfX0YDoeL/wfm0W
+ De/cThvMzBGYaBEFi74xGca9imp+dSsXxq92Ugh5m0xmpDuPmbZGMrICHrsmHsbJlzfhW6Q9DGz
+ hf0gQzEpig5/bAZjr57hDzqre24Cj6FHQ0DMkZYAQ/Aqn//KbTK/HMbDUwpkws9gC3oZUPo9tFn
+ 0l41SGo1z+I3Ef8bdqH6o0azTnvc3KGXiX+TZEpbCm6ctvIdE04wedAIteMvFc+S/qU00Gb5sMV
+ W0K+KmZBuuqtb2BFLA90gw6FY0I5vgVwCd+w+4cpo6KM9MDKHhRbSm99CfuuRpHh1nfPngJXvSt
+ kFBhlEfHgMcdapmbfiZQo65/9Yo4MtCqmgbADXdx6T0thHZNum3LZKdQmA49anCpDEIx7ZT/JJ8
+ G/GpaEMU/RM1nrYr4an1L7gktpMTVspHI7kqt8IUpEwwfuilwOzfk4/wZJHcH/KaWUxi+vjoyVp
+ 8zQY7RWaXfy6oFkAnMw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-16_02,2026-01-15_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0 clxscore=1015
+ bulkscore=0 impostorscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2601160058
 
-This series improves the CPU cost of RX token management by adding an
-attribute to NETDEV_CMD_BIND_RX that configures sockets using the
-binding to avoid the xarray allocator and instead use a per-binding niov
-array and a uref field in niov.
 
-Improvement is ~13% cpu util per RX user thread.
 
-Using kperf, the following results were observed:
+On 16/01/26 12:17 pm, adubey wrote:
+> On 2026-01-16 12:14, adubey wrote:
+>> On 2026-01-16 11:57, Hari Bathini wrote:
+>>> On 14/01/26 5:14 pm, adubey@linux.ibm.com wrote:
+>>>> From: Abhishek Dubey <adubey@linux.ibm.com>
+>>>>
+>>>> The modified prologue/epilogue generation code now
+>>>> enables exception-callback to use the stack frame of
+>>>> the program marked as exception boundary, where callee
+>>>> saved registers are stored.
+>>>>
+>>>> As per ppc64 ABIv2 documentation[1], r14-r31 are callee
+>>>> saved registers. BPF programs on ppc64 already saves
+>>>> r26-r31 registers. Saving the remaining set of callee
+>>>> saved registers(r14-r25) is handled in the next patch.
+>>>>
+>>>> [1] https://ftp.rtems.org/pub/rtems/people/sebh/ 
+>>>> ABI64BitOpenPOWERv1.1_16July2015_pub.pdf
+>>>>
+>>>> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+>>>> ---
+>>>>   arch/powerpc/net/bpf_jit.h        |  2 ++
+>>>>   arch/powerpc/net/bpf_jit_comp.c   |  7 ++++
+>>>>   arch/powerpc/net/bpf_jit_comp64.c | 53 ++++++++++++++++++++ 
+>>>> +----------
+>>>>   3 files changed, 45 insertions(+), 17 deletions(-)
+>>>>
+>>>> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+>>>> index 5d735bc5e6bd..fb548ae5d143 100644
+>>>> --- a/arch/powerpc/net/bpf_jit.h
+>>>> +++ b/arch/powerpc/net/bpf_jit.h
+>>>> @@ -179,6 +179,8 @@ struct codegen_context {
+>>>>       u64 arena_vm_start;
+>>>>       u64 user_vm_start;
+>>>>       bool is_subprog;
+>>>> +    bool exception_boundary;
+>>>> +    bool exception_cb;
+>>>>   };
+>>>>     #define bpf_to_ppc(r)    (ctx->b2p[r])
+>>>> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/ 
+>>>> bpf_jit_comp.c
+>>>> index e3088cf089d1..26991940d36e 100644
+>>>> --- a/arch/powerpc/net/bpf_jit_comp.c
+>>>> +++ b/arch/powerpc/net/bpf_jit_comp.c
+>>>> @@ -207,6 +207,8 @@ struct bpf_prog *bpf_int_jit_compile(struct 
+>>>> bpf_prog *fp)
+>>>>       cgctx.arena_vm_start = bpf_arena_get_kern_vm_start(fp->aux- 
+>>>> >arena);
+>>>>       cgctx.user_vm_start = bpf_arena_get_user_vm_start(fp->aux- 
+>>>> >arena);
+>>>>       cgctx.is_subprog = bpf_is_subprog(fp);
+>>>> +    cgctx.exception_boundary = fp->aux->exception_boundary;
+>>>> +    cgctx.exception_cb = fp->aux->exception_cb;
+>>>>         /* Scouting faux-generate pass 0 */
+>>>>       if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, 
+>>>> false)) {
+>>>> @@ -436,6 +438,11 @@ void bpf_jit_free(struct bpf_prog *fp)
+>>>>       bpf_prog_unlock_free(fp);
+>>>>   }
+>>>>   +bool bpf_jit_supports_exceptions(void)
+>>>> +{
+>>>> +    return IS_ENABLED(CONFIG_PPC64);
+>>>> +}
+>>>> +
+>>>>   bool bpf_jit_supports_subprog_tailcalls(void)
+>>>>   {
+>>>>       return IS_ENABLED(CONFIG_PPC64);
+>>>> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/ 
+>>>> bpf_jit_comp64.c
+>>>> index ec58395f74f7..a6083dd9786c 100644
+>>>> --- a/arch/powerpc/net/bpf_jit_comp64.c
+>>>> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+>>>> @@ -89,7 +89,9 @@ static inline bool bpf_has_stack_frame(struct 
+>>>> codegen_context *ctx)
+>>>>        * - the bpf program uses its stack area
+>>>>        * The latter condition is deduced from the usage of BPF_REG_FP
+>>>>        */
+>>>> -    return ctx->seen & SEEN_FUNC || bpf_is_seen_register(ctx, 
+>>>> bpf_to_ppc(BPF_REG_FP));
+>>>> +    return ctx->seen & SEEN_FUNC ||
+>>>> +           bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)) ||
+>>>> +           ctx->exception_cb;
+>>>>   }
+>>>>     /*
+>>>> @@ -190,23 +192,32 @@ void bpf_jit_build_prologue(u32 *image, struct 
+>>>> codegen_context *ctx)
+>>>>           EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_STACKFRAME + ctx- 
+>>>> >stack_size)));
+>>>>       }
+>>>>   -    /*
+>>>> -     * Back up non-volatile regs -- BPF registers 6-10
+>>>> -     * If we haven't created our own stack frame, we save these
+>>>> -     * in the protected zone below the previous stack frame
+>>>> -     */
+>>>> -    for (i = BPF_REG_6; i <= BPF_REG_10; i++)
+>>>> -        if (bpf_is_seen_register(ctx, bpf_to_ppc(i)))
+>>>> -            EMIT(PPC_RAW_STD(bpf_to_ppc(i), _R1, 
+>>>> bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+>>>> +    if (!ctx->exception_cb) {
+>>>> +        /*
+>>>> +         * Back up non-volatile regs -- BPF registers 6-10
+>>>> +         * If we haven't created our own stack frame, we save these
+>>>> +         * in the protected zone below the previous stack frame
+>>>> +         */
+>>>> +        for (i = BPF_REG_6; i <= BPF_REG_10; i++)
+>>>> +            if (ctx->exception_boundary || 
+>>>> bpf_is_seen_register(ctx, bpf_to_ppc(i)))
+>>>> +                EMIT(PPC_RAW_STD(bpf_to_ppc(i), _R1,
+>>>> +                    bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+>>>>   -    if (ctx->arena_vm_start)
+>>>> -        EMIT(PPC_RAW_STD(bpf_to_ppc(ARENA_VM_START), _R1,
+>>>> +        if (ctx->exception_boundary || ctx->arena_vm_start)
+>>>> +            EMIT(PPC_RAW_STD(bpf_to_ppc(ARENA_VM_START), _R1,
+>>>>                    bpf_jit_stack_offsetof(ctx, 
+>>>> bpf_to_ppc(ARENA_VM_START))));
+>>>>   -    /* Setup frame pointer to point to the bpf stack area */
+>>>> -    if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+>>>> -        EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+>>>> +        /* Setup frame pointer to point to the bpf stack area */
+>>>> +        if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+>>>> +            EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+>>>>                   STACK_FRAME_MIN_SIZE + ctx->stack_size));
+>>>> +    } else {
+>>>> +        /*
+>>>> +         * Exception callback receives Frame Pointer of main
+>>>> +         * program as third arg
+>>>> +         */
+>>>> +        EMIT(PPC_RAW_MR(_R1, _R5));
+>>>> +    }
+>>>>         if (ctx->arena_vm_start)
+>>>>           PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
+>>>> @@ -218,17 +229,25 @@ static void bpf_jit_emit_common_epilogue(u32 
+>>>> *image, struct codegen_context *ctx
+>>>>         /* Restore NVRs */
+>>>>       for (i = BPF_REG_6; i <= BPF_REG_10; i++)
+>>>> -        if (bpf_is_seen_register(ctx, bpf_to_ppc(i)))
+>>>> +        if (ctx->exception_cb || bpf_is_seen_register(ctx, 
+>>>> bpf_to_ppc(i)))
+>>>>               EMIT(PPC_RAW_LD(bpf_to_ppc(i), _R1, 
+>>>> bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+>>>>   -    if (ctx->arena_vm_start)
+>>>> +    if (ctx->exception_cb || ctx->arena_vm_start)
+>>>>           EMIT(PPC_RAW_LD(bpf_to_ppc(ARENA_VM_START), _R1,
+>>>>                   bpf_jit_stack_offsetof(ctx, 
+>>>> bpf_to_ppc(ARENA_VM_START))));
+>>>>
+>>>
+>>>> +    if (ctx->exception_cb) {
+>>>> +        /*
+>>>> +         * LR value from boundary-frame is received as second 
+>>>> parameter
+>>>> +         * in exception callback.
+>>>> +         */
+>>>> +        EMIT(PPC_RAW_MTLR(_R4));
+>>>> +    }
+>>>> +
+>>>
+>>> No. Both second and third parameter of exception_cb() are stack pointer
+>>> (or frame pointer, if you prefer that) and not LR.
+>>> The above hunk is wrong. It still worked because of mtlr
+>>> instruction below that restored LR from PPC_LR_STKOFF offset
+>>> on the stack. Please drop the above hunk.
+>> Okay, but from patch 3/6:
+> My mistake, its patch 4/6.
 
-Before:
-	Average RX worker idle %: 13.13, flows 4, test runs 11
-After:
-	Average RX worker idle %: 26.32, flows 4, test runs 11
+Please note the consume_fn() is not exception_cb(). It is
+bpf_stack_walker() that helps with the stack walk to be precise.
+You can find the exception_cb() call in bpf_throw() kfunc as:
 
-Two other approaches were tested, but with no improvement. Namely, 1)
-using a hashmap for tokens and 2) keeping an xarray of atomic counters
-but using RCU so that the hotpath could be mostly lockless. Neither of
-these approaches proved better than the simple array in terms of CPU.
+   ctx.aux->bpf_exception_cb(cookie, ctx.sp, ctx.bp, 0, 0);
 
-The attribute NETDEV_A_DMABUF_AUTORELEASE is added to toggle the
-optimization. It is an optional attribute and defaults to 0 (i.e.,
-optimization on).
-
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-
-Changes in v10:
-- add new tests for edge cases
-- add new binding->users to binding for tracking socket/rxq users
-- remove rx binding count (use xarray instead)
-- Link to v9: https://lore.kernel.org/r/20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-0-8042930d00d7@meta.com
-
-Changes in v9:
-- fixed build with NET_DEVMEM=n
-- fixed bug in rx bindings count logic
-- Link to v8: https://lore.kernel.org/r/20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-0-92c968631496@meta.com
-
-Changes in v8:
-- change static branch logic (only set when enabled, otherwise just
-  always revert back to disabled)
-- fix missing tests
-- Link to v7: https://lore.kernel.org/r/20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com
-
-Changes in v7:
-- use netlink instead of sockopt (Stan)
-- restrict system to only one mode, dmabuf bindings can not co-exist
-  with different modes (Stan)
-- use static branching to enforce single system-wide mode (Stan)
-- Link to v6: https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-0-ea98cf4d40b3@meta.com
-
-Changes in v6:
-- renamed 'net: devmem: use niov array for token management' to refer to
-  optionality of new config
-- added documentation and tests
-- make autorelease flag per-socket sockopt instead of binding
-  field / sysctl
-- many per-patch changes (see Changes sections per-patch)
-- Link to v5: https://lore.kernel.org/r/20251023-scratch-bobbyeshleman-devmem-tcp-token-upstream-v5-0-47cb85f5259e@meta.com
-
-Changes in v5:
-- add sysctl to opt-out of performance benefit, back to old token release
-- Link to v4: https://lore.kernel.org/all/20250926-scratch-bobbyeshleman-devmem-tcp-token-upstream-v4-0-39156563c3ea@meta.com
-
-Changes in v4:
-- rebase to net-next
-- Link to v3: https://lore.kernel.org/r/20250926-scratch-bobbyeshleman-devmem-tcp-token-upstream-v3-0-084b46bda88f@meta.com
-
-Changes in v3:
-- make urefs per-binding instead of per-socket, reducing memory
-  footprint
-- fallback to cleaning up references in dmabuf unbind if socket
-  leaked tokens
-- drop ethtool patch
-- Link to v2: https://lore.kernel.org/r/20250911-scratch-bobbyeshleman-devmem-tcp-token-upstream-v2-0-c80d735bd453@meta.com
-
-Changes in v2:
-- net: ethtool: prevent user from breaking devmem single-binding rule
-  (Mina)
-- pre-assign niovs in binding->vec for RX case (Mina)
-- remove WARNs on invalid user input (Mina)
-- remove extraneous binding ref get (Mina)
-- remove WARN for changed binding (Mina)
-- always use GFP_ZERO for binding->vec (Mina)
-- fix length of alloc for urefs
-- use atomic_set(, 0) to initialize sk_user_frags.urefs
-- Link to v1: https://lore.kernel.org/r/20250902-scratch-bobbyeshleman-devmem-tcp-token-upstream-v1-0-d946169b5550@meta.com
-
----
-Bobby Eshleman (5):
-      net: devmem: rename tx_vec to vec in dmabuf binding
-      net: devmem: refactor sock_devmem_dontneed for autorelease split
-      net: devmem: implement autorelease token management
-      net: devmem: document NETDEV_A_DMABUF_AUTORELEASE netlink attribute
-      selftests: drv-net: devmem: add autorelease tests
-
- Documentation/netlink/specs/netdev.yaml           |  12 ++
- Documentation/networking/devmem.rst               |  73 +++++++++++
- include/net/netmem.h                              |   1 +
- include/net/sock.h                                |   7 +-
- include/uapi/linux/netdev.h                       |   1 +
- net/core/devmem.c                                 | 148 ++++++++++++++++++----
- net/core/devmem.h                                 |  66 +++++++++-
- net/core/netdev-genl-gen.c                        |   5 +-
- net/core/netdev-genl.c                            |  10 +-
- net/core/sock.c                                   | 103 +++++++++++----
- net/ipv4/tcp.c                                    |  87 ++++++++++---
- net/ipv4/tcp_ipv4.c                               |  15 ++-
- net/ipv4/tcp_minisocks.c                          |   3 +-
- tools/include/uapi/linux/netdev.h                 |   1 +
- tools/testing/selftests/drivers/net/hw/devmem.py  |  98 +++++++++++++-
- tools/testing/selftests/drivers/net/hw/ncdevmem.c |  68 +++++++++-
- 16 files changed, 611 insertions(+), 87 deletions(-)
----
-base-commit: d4596891e72cbf155d61798a81ce9d36b69bfaf4
-change-id: 20250829-scratch-bobbyeshleman-devmem-tcp-token-upstream-292be174d503
-
-Best regards,
--- 
-Bobby Eshleman <bobbyeshleman@meta.com>
-
+>>
+>> ip = frame[STACK_FRAME_LR_SAVE];
+>> ...
+>> if (ip && !consume_fn(cookie, ip, fp, fp))
+>> we send cookie as first, LR as second parameter and fp as third & 
+>> fourth both.
+>> Default callback expects 4 parameter, so we copy fp in both.
+>>
+>>>
+>>>>       /* Tear down our stack frame */
+>>>>       if (bpf_has_stack_frame(ctx)) {
+>>>>           EMIT(PPC_RAW_ADDI(_R1, _R1, BPF_PPC_STACKFRAME + ctx- 
+>>>> >stack_size));
+>>>> -        if (ctx->seen & SEEN_FUNC) {
+>>>> +        if (ctx->seen & SEEN_FUNC || ctx->exception_cb) {
+>>>>               EMIT(PPC_RAW_LD(_R0, _R1, PPC_LR_STKOFF));
+>>>>               EMIT(PPC_RAW_MTLR(_R0));
+>>>>           }
+>>>
+- Hari
