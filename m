@@ -1,67 +1,67 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-yw1-f194.google.com (mail-yw1-f194.google.com [209.85.128.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CE617A2FB
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 05:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C4D34BA5B
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 05:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768539806; cv=none; b=SxTe9RGPIttuPRUip1oeZgNveBvf8Hwydwn7KkEPhAsGa8Nv7IwO992BwYtNE30svbjbUKNFNdtGQ1wV9rtzmaDgbT7q1YtoCqPe7Ocip4RCA6H/bdHgktTPXx8BRV6QyfM8VcyBppkTtzSkIz6TPHTz73yEZodrjP7Hy3NYTGc=
+	t=1768539808; cv=none; b=sX4qaha/6146pAsNfGKKKwWh+znRmhK9i2yc7sIl0UX0QEnu11ImnzdFN69lW6CAE94+G5KywjOOT4zmx9m/KW8soTg8f+MZpc8FmLGDCtftrfvoP5Nh61oueWh86vFdsBOiP0PpWVELxKka45+FswoY0TjylxqkVwOcnlBG9Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768539806; c=relaxed/simple;
-	bh=/8irlWx212MZNFNuTQquG/o/4qXs4GzUcqgDeIkWkeY=;
+	s=arc-20240116; t=1768539808; c=relaxed/simple;
+	bh=s3BhnRo4qYeui2ODW6ff8S6N7tSfK9I74K29oR3s67M=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nqJEBkRswhHlNTbHcP9Wf/tjz1ajjMCN3EPRE5WBXTo6rZ65op+Y2NKofvIRf/czzSRpS5qd4/9yDryMhe52oGNEjYZvfOLEmXD2HG1JkgQGYZGB8u44B/H/z8A7nnivbY2PniYNB7HqcjXcf597bX/cwbcFdjuV4FrKbscx5dA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Anb1f3io; arc=none smtp.client-ip=209.85.128.180
+	 In-Reply-To:To:Cc; b=C/8L8NRKVtZJuqP+ww65wdQAwIaWNtItPmRnLDaCdgP9CoO+2wUo/6tMnz30PVxP6UDI8DY7/wzQXg/0nOmw3FEcaY8aL9P86qHFvP5ogcXvopQn6PQ35ue1+IpbxlVvbgXVGhMCid9JxPgrUnNTRC0Q70Wzf7wY0kKcvxLTN/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJvglZt2; arc=none smtp.client-ip=209.85.128.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Anb1f3io"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-78e6dc6d6d7so17447857b3.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 21:03:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJvglZt2"
+Received: by mail-yw1-f194.google.com with SMTP id 00721157ae682-78d6a3c3b77so30750447b3.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 21:03:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768539799; x=1769144599; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768539801; x=1769144601; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vJwRH55S+4zS4rc7LIeDbyFWVKjFx7zOxvxC4DTtZFU=;
-        b=Anb1f3iovHiDvlnpirku9R6ubteBBL791YYQz+9ZbGJ0zxCcO9CFupB7IEa4Lkld6b
-         AYZSFNHidrxVDodoR5m6s86G/8TftF/m6AYTQVWQd+5OYr1CEojeyJ1mCBTHCh1Z2Xbq
-         4OupmM3Ci3yGW5Y3eeSWx6hV3vZXVTiq3FWUc7YvysxhQhrU8NJSqLsKQ1w4yv1w2Cg/
-         GMnf0VgWpzpqY9LdyhxcX7z3XKRzTB0NjzY/2xDzuobIn4/mE08a0WK4I4XzrxNc/3av
-         JyQKQocsgd/untpIK9cYlIQeYhV5ce9pb6F4qK4eLGzHB3shm6yyygfb0+ahNxmk8KW/
-         CdiA==
+        bh=K+I56CVp15hcfRzFNLZYMGassuBp58/sVTYq1ymlLks=;
+        b=BJvglZt2EHUWZv3P2Z5dXbAAF5ohuFFr0vlbMVfB/ewM9z6S95XtSXAU5S+hjlaneV
+         w6mNPh2RPODTngH1nCrwsSNqIzeZ/KQMfZc9+jNlrV9Gag06Koqafxzs6V7EB83c65S7
+         0iXs95woS82onCi+0K70TfBTZ8ngPh0vf5oOzLfA3f26SiuG0UPg1zkX7TvqmvnL8Z9s
+         oUgiQGYSaCkYc2zwzFHkvA3AIvXPHp433pPVg754O7vUElhH3oJiiER6widNMLlwIEy0
+         Iej+iKBAofWwGA0pR8ky/DzgrFzk++1p3TlOAUsUC2N3/lzrMbfi0CanUZ7H7CWDg1Jh
+         UvqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768539799; x=1769144599;
+        d=1e100.net; s=20230601; t=1768539801; x=1769144601;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=vJwRH55S+4zS4rc7LIeDbyFWVKjFx7zOxvxC4DTtZFU=;
-        b=gg6ApVn5i36sR56JnzaWuo4lJbZ3+UxmxjsOa/+MbKVFFcZq/ffU2vhqBZX6Vb9qwC
-         nBoO8m4W+6RIfpkEIv12oPwzQjd7GLRhfw9f9Qpy5tII16+zeOCDhtqFcoKK5dyIrwjE
-         Be4OwZByqpkCXuMvZhi+tcziHECydcmpJ23pDCJHFT1dZOrXtC7NuC3iAPJYnaemiuGP
-         Q7XV9A7WzoiPWhg1DScBz/a4aFKGHrvqJHA7OJTmx+hbtIyvR3GcvlZbsVQDnyu5QlQL
-         jjB1rTFu1pAISJWwZ+Rb5l5VNC7260kAyko8c7dubbHXfl9AzJ+BITG34+C6eTjQ9gSI
-         qXEA==
-X-Forwarded-Encrypted: i=1; AJvYcCU6iXCaWpp99k4EM6mcG0YPe7KW5hw8kXkZdKccUA2Q5VII4mZJfPXRWkLWp7jedJZ3UZjuux0FWxFsnWbTUjc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9XF9BVJkvLqA4yv+k0kHfBiaaV6ZXNuvszsDVo+XnGv55II8u
-	5WVaGq1VrDZ+gO0R6gTzitFzBkd7rPsDSG9cNBL24nPofvMrFlXDwT/b
-X-Gm-Gg: AY/fxX77Y2MxQYNSw3p3IfO7YCKDyfOBCCyop40N+uA0KLQRzMIsuGGqK2XM1cauenr
-	S7TCMwx/7PsGFkyylP0cFNtnJ7LDbPkeOw/RYghOR789/u//+MuLKb4QHohINxrEZtfyAYHBSYZ
-	NPQPd6V+2BXzENK1IzqsPSYno45FnzFi5dZbnfDlNSIKp6YeVQOgl69mb/LPHrla9ZJi6BpFeDa
-	jcW5pwCI96pOJyt9lBDLxmdmfS4lK/zhh5jZgZ8fbAptvEZZHudboHv9ot4k/ZcMLFNIhInY/YB
-	ZGF9JesuB5kjrDDj9/NYXbYGku3BvDEBVnzJoQ6lvHtho6NIQ/AraUKbtupeYtPafz32QRHx/wV
-	CpaiGLJ+bwP5IKIES85nDdRtEj9GzVylVKXRcZGXgobq+WXX7StaHVGqsMaC79Z+CQ52BQcqo3g
-	zv/TdLDZvSwg==
-X-Received: by 2002:a05:690c:4a07:b0:787:d0d5:808e with SMTP id 00721157ae682-793c682d2ebmr12993417b3.50.1768539798910;
-        Thu, 15 Jan 2026 21:03:18 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:52::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-793c68c31dfsm5205817b3.51.2026.01.15.21.03.18
+        bh=K+I56CVp15hcfRzFNLZYMGassuBp58/sVTYq1ymlLks=;
+        b=EaZs1r0CWc7xS8LRAINqZiEP7S5lksFxzrLyRBOdkY61IOHn3h+DDDDMsssnQrbYn8
+         LTDByijtAFrHx+u65GTUiLBnQ3Lf8wbPdn4vYn0OcCwGpxQsbRb6AAPkbufMG2brqWCn
+         XMbewB8RM7mO0CzuvpzNTLle/aHvJ6btjgHAIMejOhNQFOJ/u2NXrBxtkOGYNpYKwxJK
+         mqAFnxuR/oVeD5fX+YCz8eirw3lo5Ba//5/cdhYfmldYFi35gYhXtmFmGF2XWvA3K/uD
+         d0z9JfGZRZgyaVRS7fz/uh3lWT8C0rMS+LwD9szHwe1qWotf44Al5SDaK9v3l+ahS7bP
+         4GtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWdJtFO3kxVrZlN1kH2Qh6foV8Ow5Lm/uK2NDm/YF8OCme74agXrsIVuW3MgI8LLcJst31aksmpwlk1A71LC5k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyIy+fLkl20lP3KT4Y45EgSDS0Itjtu14pvTQ4//0LbmTxwPnN
+	ZY+FQ0hNiTf4tDXcUy/SXQ02EKqLw502Ssh9M1o47lN9XeEpGsp2TjiD
+X-Gm-Gg: AY/fxX5O10ixi52iBE8DT3NPib36WlTJ31ULZ+WVDDtYJ92BTm2I0cxcXxZowfLkc3Z
+	Z0P7ijjZYNqxoHkH74UdHaXKTHHQ+gHGgPYpvmpLaZJ05iPd5daP7ijVvX7sqqGKPnF7zIeZdL6
+	jPyL8RLfa1L0uzCxeylI7LRuK1SAy1P3Ixo2XtlC1hreKcB8jypTSKga1yQrd9u78vWlRd3LiTP
+	WE/UPU135pIlgCFH3OWEb3av+GXK0oNPcfUhjeskNr0/gm9bK9xlAfwpLSn5PVm46Ki4pK3UfQi
+	Jef1vgCt+KikKDjlsnr6auCy189k7Qbnd9NWYSBfylPSQzuQQcejtwnGLt3FGCgx05AKAJv0PXt
+	PkDxpyVS9uprmPHpjHm/jEJkXce9RgE+H9oD16Nk/iG1C1zbbDR5wh4KQlHtoAWwkS6IhcXzM3+
+	TjceSY/Mny
+X-Received: by 2002:a53:ac89:0:b0:645:5ac1:8ca with SMTP id 956f58d0204a3-6491691b79amr1489058d50.11.1768539800827;
+        Thu, 15 Jan 2026 21:03:20 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:c::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-649170be5desm713936d50.19.2026.01.15.21.03.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jan 2026 21:03:18 -0800 (PST)
+        Thu, 15 Jan 2026 21:03:20 -0800 (PST)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Thu, 15 Jan 2026 21:02:13 -0800
-Subject: [PATCH net-next v10 2/5] net: devmem: refactor
- sock_devmem_dontneed for autorelease split
+Date: Thu, 15 Jan 2026 21:02:15 -0800
+Subject: [PATCH net-next v10 4/5] net: devmem: document
+ NETDEV_A_DMABUF_AUTORELEASE netlink attribute
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-2-686d0af71978@meta.com>
+Message-Id: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-4-686d0af71978@meta.com>
 References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
 In-Reply-To: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -91,103 +91,110 @@ X-Mailer: b4 0.14.3
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Refactor sock_devmem_dontneed() in preparation for supporting both
-autorelease and manual token release modes.
+Update devmem.rst documentation to describe the autorelease netlink
+attribute used during RX dmabuf binding.
 
-Split the function into two parts:
-- sock_devmem_dontneed(): handles input validation, token allocation,
-  and copying from userspace
-- sock_devmem_dontneed_autorelease(): performs the actual token release
-  via xarray lookup and page pool put
+The autorelease attribute is specified at bind-time via the netlink API
+(NETDEV_CMD_BIND_RX) and controls what happens to outstanding tokens
+when the socket closes.
 
-This separation allows a future commit to add a parallel
-sock_devmem_dontneed_manual_release() function that uses a different
-token tracking mechanism (per-niov reference counting) without
-duplicating the input validation logic.
+Document the two token release modes (automatic vs manual), how to
+configure the binding for autorelease, the perf benefits, new caveats
+and restrictions, and the way the mode is enforced system-wide.
 
-The refactoring is purely mechanical with no functional change. Only
-intended to minimize the noise in subsequent patches.
-
-Reviewed-by: Mina Almasry <almasrymina@google.com>
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- net/core/sock.c | 52 ++++++++++++++++++++++++++++++++--------------------
- 1 file changed, 32 insertions(+), 20 deletions(-)
+Changes in v7:
+- Document netlink instead of sockopt
+- Mention system-wide locked to one mode
+---
+ Documentation/networking/devmem.rst | 73 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-diff --git a/net/core/sock.c b/net/core/sock.c
-index a1c8b47b0d56..f6526f43aa6e 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1082,30 +1082,13 @@ static int sock_reserve_memory(struct sock *sk, int bytes)
- #define MAX_DONTNEED_FRAGS 1024
+diff --git a/Documentation/networking/devmem.rst b/Documentation/networking/devmem.rst
+index a6cd7236bfbd..f85f1dcc9621 100644
+--- a/Documentation/networking/devmem.rst
++++ b/Documentation/networking/devmem.rst
+@@ -235,6 +235,79 @@ can be less than the tokens provided by the user in case of:
+ (a) an internal kernel leak bug.
+ (b) the user passed more than 1024 frags.
  
- static noinline_for_stack int
--sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
-+sock_devmem_dontneed_autorelease(struct sock *sk, struct dmabuf_token *tokens,
-+				 unsigned int num_tokens)
- {
--	unsigned int num_tokens, i, j, k, netmem_num = 0;
--	struct dmabuf_token *tokens;
-+	unsigned int i, j, k, netmem_num = 0;
- 	int ret = 0, num_frags = 0;
- 	netmem_ref netmems[16];
++
++Autorelease Control
++~~~~~~~~~~~~~~~~~~~
++
++The autorelease mode controls what happens to outstanding tokens (tokens not
++released via SO_DEVMEM_DONTNEED) when the socket closes. Autorelease is
++configured per-binding at binding creation time via the netlink API::
++
++	struct netdev_bind_rx_req *req;
++	struct netdev_bind_rx_rsp *rsp;
++	struct ynl_sock *ys;
++	struct ynl_error yerr;
++
++	ys = ynl_sock_create(&ynl_netdev_family, &yerr);
++
++	req = netdev_bind_rx_req_alloc();
++	netdev_bind_rx_req_set_ifindex(req, ifindex);
++	netdev_bind_rx_req_set_fd(req, dmabuf_fd);
++	netdev_bind_rx_req_set_autorelease(req, 0); /* 0 = manual, 1 = auto */
++	__netdev_bind_rx_req_set_queues(req, queues, n_queues);
++
++	rsp = netdev_bind_rx(ys, req);
++
++	dmabuf_id = rsp->id;
++
++When autorelease is disabled (0):
++
++- Outstanding tokens are NOT released when the socket closes
++- Outstanding tokens are only released when all RX queues are unbound AND all
++  sockets that called recvmsg() are closed
++- Provides better performance by eliminating xarray overhead (~13% CPU reduction)
++- Kernel tracks tokens via atomic reference counters in net_iov structures
++
++When autorelease is enabled (1):
++
++- Outstanding tokens are automatically released when the socket closes
++- Backwards compatible behavior
++- Kernel tracks tokens in an xarray per socket
++
++The default is autorelease disabled.
++
++Important: In both modes, applications should call SO_DEVMEM_DONTNEED to
++return tokens as soon as they are done processing. The autorelease setting only
++affects what happens to tokens that are still outstanding when close() is called.
++
++The mode is enforced system-wide. Once a binding is created with a specific
++autorelease mode, all subsequent bindings system-wide must use the same mode.
++
++
++Performance Considerations
++~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++Disabling autorelease provides approximately ~13% CPU utilization improvement
++in RX workloads. That said, applications must ensure all tokens are released
++via SO_DEVMEM_DONTNEED before closing the socket, otherwise the backing pages
++will remain pinned until all RX queues are unbound AND all sockets that called
++recvmsg() are closed.
++
++
++Caveats
++~~~~~~~
++
++- Once a system-wide autorelease mode is selected (via the first binding),
++  all subsequent bindings must use the same mode. Attempts to create bindings
++  with a different mode will be rejected with -EBUSY.
++
++- Applications using manual release mode (autorelease=0) must ensure all tokens
++  are returned via SO_DEVMEM_DONTNEED before socket close to avoid resource
++  leaks during the lifetime of the dmabuf binding. Tokens not released before
++  close() will only be freed when all RX queues are unbound AND all sockets
++  that called recvmsg() are closed.
++
++
+ TX Interface
+ ============
  
--	if (!sk_is_tcp(sk))
--		return -EBADF;
--
--	if (optlen % sizeof(*tokens) ||
--	    optlen > sizeof(*tokens) * MAX_DONTNEED_TOKENS)
--		return -EINVAL;
--
--	num_tokens = optlen / sizeof(*tokens);
--	tokens = kvmalloc_array(num_tokens, sizeof(*tokens), GFP_KERNEL);
--	if (!tokens)
--		return -ENOMEM;
--
--	if (copy_from_sockptr(tokens, optval, optlen)) {
--		kvfree(tokens);
--		return -EFAULT;
--	}
--
- 	xa_lock_bh(&sk->sk_user_frags);
- 	for (i = 0; i < num_tokens; i++) {
- 		for (j = 0; j < tokens[i].token_count; j++) {
-@@ -1135,6 +1118,35 @@ sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
- 	for (k = 0; k < netmem_num; k++)
- 		WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
- 
-+	return ret;
-+}
-+
-+static noinline_for_stack int
-+sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
-+{
-+	struct dmabuf_token *tokens;
-+	unsigned int num_tokens;
-+	int ret;
-+
-+	if (!sk_is_tcp(sk))
-+		return -EBADF;
-+
-+	if (optlen % sizeof(*tokens) ||
-+	    optlen > sizeof(*tokens) * MAX_DONTNEED_TOKENS)
-+		return -EINVAL;
-+
-+	num_tokens = optlen / sizeof(*tokens);
-+	tokens = kvmalloc_array(num_tokens, sizeof(*tokens), GFP_KERNEL);
-+	if (!tokens)
-+		return -ENOMEM;
-+
-+	if (copy_from_sockptr(tokens, optval, optlen)) {
-+		kvfree(tokens);
-+		return -EFAULT;
-+	}
-+
-+	ret = sock_devmem_dontneed_autorelease(sk, tokens, num_tokens);
-+
- 	kvfree(tokens);
- 	return ret;
- }
 
 -- 
 2.47.3
