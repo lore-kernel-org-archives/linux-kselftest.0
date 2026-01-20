@@ -1,53 +1,52 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2D13DA7E6;
-	Tue, 20 Jan 2026 08:00:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29E83ECBEB;
+	Tue, 20 Jan 2026 08:00:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768896052; cv=none; b=CzutOuN5y3NjIGUJyphbRn5tTFpPLCeo7wD3R0xQkhEjgCpL6y/aVWb7nxDxBK8cG05/86iOk6no2q7VTOjH+ir8i2n3IqDwYULHiF5Bp3aqUNhz+gGOz9QRGFVD1P0HHGbQzBuDSXkfLeA1z0PnP1CN8FLsEBlXV47Tbw68Gb0=
+	t=1768896054; cv=none; b=fV30h7Bp99z9yeuz5f2mFOGb+xrdff0kRWh2ggk/9yxXL2VHtDqB36cx37o2nqhC7cmZtjmrN++mnYL5PS1MeazpZhPO5eqGsvMTpAo1a2oD4FYKbb+L8uDOfeWeNuFoU4cGdSpZ5zkUGXRU6r+Hvajb+NIAjaCuIPByFPwM9+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768896052; c=relaxed/simple;
-	bh=WEFkU71b46e12Bd3hZTi7CXh7Xhz03EAyNq5taOVm7k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mC3jus7adgF5BwvsX5hkXffC0gDUZG+/y4ytnmCGtdBpbxPi10pYFFmlhnG1KksNOOBd9Sv/AKIibZ1HZfYfUGP88CiXxEBLM3GVExQgfgSjX6d0veiMd8JoIP5cgycFdApI+nPml59AW8P/nNmOFl4WX9gMlCYAXtarN4PKexI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KPaTeKku; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1768896054; c=relaxed/simple;
+	bh=qpTXmcjggay0Qs2GhOq2XMSMvtJ99P9d0ghkNSkPhLg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PIx+9gXnPmuQ/wrE7a9C62qe8/QqyLdzFIRyCmZfDwjB5HKH8ibVTuoVmmg6e6YUKM7MoSTBwMQN7K4i1H8njHtVBtMb/vH6MxwfeEGK8Q6enq1GfKNRTWjhkMXhOin0/1R3694j4i59zSKUAXnhPuRHLBFVr/jzh1fftG9T0Qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=PWc0Hf5G; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KPaTeKku"
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60K33JkR3805148;
-	Tue, 20 Jan 2026 08:00:21 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="PWc0Hf5G"
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60K3sKEi3252355;
+	Tue, 20 Jan 2026 08:00:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=L6D8Q/qpBkH
-	ZrHRSr2hQZStPOkorX05cYWshdwfWV/0=; b=KPaTeKkuojHsO53sjm6LoIWtaG2
-	CLa+xPt91fL8X7w7OxHzoVKLEin+lLE1tsQeNRxeJoKQuqEWGo0F3X0sNBJXAxUa
-	xD5AW7/QA2qcDZPQ1peQE3hi45XNnjraDFG7U36wRgy5oFl34r5hJfB/WqRjnFUB
-	FkdMz2BVXRs3qHknQumIRGx3oybnQMI+ng40IWmgDHBQIOcA58CAdOIuVfevmSdM
-	c3ZHypiby1gH+4TAk/vBUWd1a5DqaDce7sRVXZOHyeHF0+DXwyz5bZuWo9xq7Slj
-	0CMdEXTAqWKhnc3BMhMnATONDfUzUnwk8UY6D2VkbprP1rJKqCilGLWqKLw==
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=LUwtVb+zh7pOah3RTznusDvjfmcsislhfpa
+	71/C+XK4=; b=PWc0Hf5GVi0L4cJ3NTXYA42CqC9NbgBlNdKMAjOVlk3tdOGww4B
+	IkRcaD6EjukjbmiVBhDtpAMRfXGI5uPq7VBEIqTx8MXGwse4U5NcGa3K75/SMaXy
+	2A/oc+NE339iNsSRkyguuqnirXNB9kl3RcualVPKDuVydwgD1c84t/lrm1oD+FSx
+	zPCP0J//Dd8FyRjA3Z/86Bkh8+80RpNrdm4saOzgKwls0Ka0483KJAt7jtfvQ3ef
+	Z2lE1vGC5jPGULXAxrV9lJghqUzRMKI1V0O1gidwDt/tg708kPUAb8ZjINAff1R+
+	N99GgABx+3qlKzk0HFvnfqubqtk//0iqCmw==
 Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bt1f88s3m-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bt27agnk5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Jan 2026 08:00:20 +0000 (GMT)
+	Tue, 20 Jan 2026 08:00:19 +0000 (GMT)
 Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 60K80Grh007970;
-	Tue, 20 Jan 2026 08:00:16 GMT
+	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 60K80Fmq007858;
+	Tue, 20 Jan 2026 08:00:15 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 4br3gm8q66-1
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 4br3gm8q4t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Jan 2026 08:00:16 +0000
+	Tue, 20 Jan 2026 08:00:15 +0000
 Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 60K80GHN007913;
-	Tue, 20 Jan 2026 08:00:16 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 60K80Fat007833;
+	Tue, 20 Jan 2026 08:00:15 GMT
 Received: from hu-devc-blr-u24-a.qualcomm.com (hu-anuppate-blr.qualcomm.com [10.131.36.165])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 60K80Gss007892
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 60K80Flv007823
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Jan 2026 08:00:16 +0000
+	Tue, 20 Jan 2026 08:00:15 +0000
 Received: by hu-devc-blr-u24-a.qualcomm.com (Postfix, from userid 486687)
-	id C207325577; Tue, 20 Jan 2026 13:30:14 +0530 (+0530)
+	id 93FB522B37; Tue, 20 Jan 2026 13:30:14 +0530 (+0530)
 From: Anup Patel <anup.patel@oss.qualcomm.com>
 To: Paolo Bonzini <pbonzini@redhat.com>, Atish Patra <atish.patra@linux.dev>
 Cc: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
@@ -58,12 +57,10 @@ Cc: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Anup Patel <anup.patel@oss.qualcomm.com>
-Subject: [PATCH 14/27] RISC-V: KVM: Extend kvm_riscv_vcpu_update_timedelta() for nested virt
-Date: Tue, 20 Jan 2026 13:30:00 +0530
-Message-ID: <20260120080013.2153519-15-anup.patel@oss.qualcomm.com>
+Subject: [PATCH 00/27] Nested virtualization for KVM RISC-V
+Date: Tue, 20 Jan 2026 13:29:46 +0530
+Message-ID: <20260120080013.2153519-1-anup.patel@oss.qualcomm.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260120080013.2153519-1-anup.patel@oss.qualcomm.com>
-References: <20260120080013.2153519-1-anup.patel@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,96 +72,127 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIwMDA2NSBTYWx0ZWRfX7mzwrHLk2RzX
- jG+UTSeABLqs3nocBTdnhTpWRfIcrEDS0GJAG7oTXiZ0XIOq1AyG9AhZEGjD3fIyEm8eEVVFWpG
- jlAPfSIkhbLr747vAslPfcjP3MXxVaemyRzYSb5KCRy2uXEnfFN9z6vhI0Uy3F+lJtjSMd4IeZX
- NI6suI+/SLS8VcsUh+bdHL+iD90tc90nA6Qu0CcpoJw+AEMS9mK8HzbLN+AQymIKXAqtzq4LXNU
- /1FgxxHHa9c9rUZZje7HGXVXqVfv5s0oNZrALtTMxLKkWrp1tbdbDTr+slbLlu1FliOHviKALcY
- kMZiagOLNMn6NNaSF0xIlNLXixx31VERCsN/zATu0fhza+yNc8iojV3wbGuBX9NCsnK0PB1xw6J
- yrUwyoa7aoyYX9xgQUvVLGxY3P6jjc/bG/WsidLN0ArThxtg9EjBTpOvpRYpucGdHUjlsgVM92n
- +bwWOAnqi+9WXUo5OZg==
-X-Proofpoint-GUID: fTIY7cgydlf5VyitxbuTJkk2Y1FSMuol
-X-Proofpoint-ORIG-GUID: fTIY7cgydlf5VyitxbuTJkk2Y1FSMuol
-X-Authority-Analysis: v=2.4 cv=LdQxKzfi c=1 sm=1 tr=0 ts=696f3614 cx=c_pps
+X-Proofpoint-ORIG-GUID: VQ3woIZCChEQITWoDZsuYTYmDwBvlg2X
+X-Proofpoint-GUID: VQ3woIZCChEQITWoDZsuYTYmDwBvlg2X
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIwMDA2NSBTYWx0ZWRfX+seI/qlFN9ds
+ 6HawpbYn5OSwQSWeC9ptm4pgEO88gxZ3o+JMPgk3U9EWTUwQPTzUxUp/9LpHPwFGCpWL0LeAInM
+ 92MGwLCUJ5mrD1QMoWeb5dad+/1BD9aq7i47uDI27GDaJtQbHlzmMk5VeTd3d5829f3jlVU8CO0
+ 514TxJt9VYAwMHSVpn5/af8MkezzjBbj3sKHBEyjwW4ODK1Gjx1NR8ZVrK7BbImQvp8jN8hdxrU
+ NMufIYnHEbPDhUo6/s5JOTCpjpAbrrlnW8gCahvehjs3AMnRFJ/fcj31jHC2Wbp23yRuZmvEFtJ
+ 9ixkwFP7zjAU7HVF05zed1DXezRUjVZlgfQGAZpWqtgcQnrYXM5wG2MQXrrIgU74r1uC5Pcpi1V
+ xke6PxqPwPT091aX2x5FAY3lzsi5qrYjgmA8Y3bjMOJHWSXBpjnuJDQc7ZlA+CI6AMrZTiVqAwW
+ saeTKq41Nq7/qRuWPng==
+X-Authority-Analysis: v=2.4 cv=P6U3RyAu c=1 sm=1 tr=0 ts=696f3613 cx=c_pps
  a=Ou0eQOY4+eZoSc0qltEV5Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8
- a=hMel4s6c26khOlIOFZAA:9
+ a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=NEAV23lmAAAA:8
+ a=EAKoEhkXCw2zVP5q2N0A:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-20_02,2026-01-19_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 bulkscore=0 clxscore=1015 impostorscore=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 suspectscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2601200065
+ priorityscore=1501 malwarescore=0 clxscore=1015 adultscore=0 impostorscore=0
+ phishscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601200065
 
-The kvm_riscv_vcpu_update_timedelta() will be also used for when
-switching between guest HS-mode and guest VS/VU-mode so extend
-it accordingly.
+Initial nested virtualization support for KVM RISC-V. Using
+this series, we can boot Xvisor inside KVM guest and KVM RISC-V
+insmod also works inside KVM guest but we can't run nested guest
+at the moment due to work-in-progress G-stage emulation (or
+G-stage page table walker).
 
-Signed-off-by: Anup Patel <anup.patel@oss.qualcomm.com>
----
- arch/riscv/include/asm/kvm_vcpu_timer.h |  1 +
- arch/riscv/kvm/vcpu_timer.c             | 21 ++++++++++++++++-----
- 2 files changed, 17 insertions(+), 5 deletions(-)
+Patch01-to-Patch09: Fixes and preparatory changes
+Patch10-to-Patch23: Actual nested virtualization support
+Patch24-to-Patch27: ONE_REG interface and get-reg-list selftest
 
-diff --git a/arch/riscv/include/asm/kvm_vcpu_timer.h b/arch/riscv/include/asm/kvm_vcpu_timer.h
-index 82f7260301da..f97cf1d7d760 100644
---- a/arch/riscv/include/asm/kvm_vcpu_timer.h
-+++ b/arch/riscv/include/asm/kvm_vcpu_timer.h
-@@ -43,6 +43,7 @@ int kvm_riscv_vcpu_set_reg_timer(struct kvm_vcpu *vcpu,
- int kvm_riscv_vcpu_timer_init(struct kvm_vcpu *vcpu);
- int kvm_riscv_vcpu_timer_deinit(struct kvm_vcpu *vcpu);
- int kvm_riscv_vcpu_timer_reset(struct kvm_vcpu *vcpu);
-+void kvm_riscv_vcpu_update_timedelta(struct kvm_vcpu *vcpu, bool nested_virt);
- void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu);
- void kvm_riscv_guest_timer_init(struct kvm *kvm);
- void kvm_riscv_vcpu_timer_sync(struct kvm_vcpu *vcpu);
-diff --git a/arch/riscv/kvm/vcpu_timer.c b/arch/riscv/kvm/vcpu_timer.c
-index 9817ff802821..eda530228b05 100644
---- a/arch/riscv/kvm/vcpu_timer.c
-+++ b/arch/riscv/kvm/vcpu_timer.c
-@@ -287,15 +287,26 @@ int kvm_riscv_vcpu_timer_reset(struct kvm_vcpu *vcpu)
- 	return kvm_riscv_vcpu_timer_cancel(&vcpu->arch.timer);
- }
- 
--static void kvm_riscv_vcpu_update_timedelta(struct kvm_vcpu *vcpu)
-+void kvm_riscv_vcpu_update_timedelta(struct kvm_vcpu *vcpu, bool nested_virt)
- {
-+	struct kvm_vcpu_nested_csr *nsc = &vcpu->arch.nested.csr;
- 	struct kvm_guest_timer *gt = &vcpu->kvm->arch.timer;
-+	u64 ndelta = 0;
- 
-+	if (nested_virt) {
-+		ndelta = nsc->htimedelta;
- #if defined(CONFIG_32BIT)
--	ncsr_write(CSR_HTIMEDELTA, (u32)(gt->time_delta));
--	ncsr_write(CSR_HTIMEDELTAH, (u32)(gt->time_delta >> 32));
-+		ndelta |= ((u64)nsc->htimedeltah) << 32;
-+#endif
-+	}
-+
-+	ndelta += gt->time_delta;
-+
-+#if defined(CONFIG_32BIT)
-+	ncsr_write(CSR_HTIMEDELTA, (u32)ndelta);
-+	ncsr_write(CSR_HTIMEDELTAH, (u32)(ndelta >> 32));
- #else
--	ncsr_write(CSR_HTIMEDELTA, gt->time_delta);
-+	ncsr_write(CSR_HTIMEDELTA, ndelta);
- #endif
- }
- 
-@@ -303,7 +314,7 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_vcpu_timer *t = &vcpu->arch.timer;
- 
--	kvm_riscv_vcpu_update_timedelta(vcpu);
-+	kvm_riscv_vcpu_update_timedelta(vcpu, kvm_riscv_vcpu_nested_virt(vcpu));
- 
- 	if (!t->sstc_enabled)
- 		return;
+Upcoming work on-top-of this series include:
+ * Software MMU emulation for nested guest (aka swtlb)
+ * HLV/HSV emulation
+ * Sstc emulation for nested guest
+ * SBI NACL for guest hypervisor
+ * ... and more ...
+
+These patches can also be found in the riscv_kvm_nested_v1
+branch at: https://github.com/avpatel/linux.git
+
+Anup Patel (27):
+  RISC-V: KVM: Fix error code returned for Smstateen ONE_REG
+  RISC-V: KVM: Fix error code returned for Ssaia ONE_REG
+  RISC-V: KVM: Check host Ssaia extension when creating AIA irqchip
+  RISC-V: KVM: Introduce common kvm_riscv_isa_check_host()
+  RISC-V: KVM: Factor-out ISA checks into separate sources
+  RISC-V: KVM: Move timer state defines closer to struct in UAPI header
+  RISC-V: KVM: Add hideleg to struct kvm_vcpu_config
+  RISC-V: KVM: Factor-out VCPU config into separate sources
+  RISC-V: KVM: Don't check hstateen0 when updating sstateen0 CSR
+  RISC-V: KVM: Initial skeletal nested virtualization support
+  RISC-V: KVM: Use half VMID space for nested guest
+  RISC-V: KVM: Extend kvm_riscv_mmu_update_hgatp() for nested
+    virtualization
+  RISC-V: KVM: Extend kvm_riscv_vcpu_config_load() for nested
+    virtualization
+  RISC-V: KVM: Extend kvm_riscv_vcpu_update_timedelta() for nested virt
+  RISC-V: KVM: Extend trap redirection for nested virtualization
+  RISC-V: KVM: Check and inject nested virtual interrupts
+  RISC-V: KVM: Extend kvm_riscv_isa_check_host() for nested virt
+  RISC-V: KVM: Trap-n-emulate SRET for Guest HS-mode
+  RISC-V: KVM: Redirect nested supervisor ecall and breakpoint traps
+  RISC-V: KVM: Redirect nested WFI and WRS traps
+  RISC-V: KVM: Implement remote HFENCE SBI calls for guest
+  RISC-V: KVM: Add CSR emulation for nested virtualization
+  RISC-V: KVM: Add HFENCE emulation for nested virtualization
+  RISC-V: KVM: Add ONE_REG interface for nested virtualization state
+  RISC-V: KVM: selftests: Add nested virt state to get-reg-list test
+  RISC-V: KVM: Add ONE_REG interface for nested virtualization CSRs
+  RISC-V: KVM: selftests: Add nested virt CSRs to get-reg-list test
+
+ arch/riscv/include/asm/csr.h                  |  17 +
+ arch/riscv/include/asm/insn.h                 |   9 +
+ arch/riscv/include/asm/kvm_gstage.h           |   2 +
+ arch/riscv/include/asm/kvm_host.h             |  29 +-
+ arch/riscv/include/asm/kvm_isa.h              |  20 +
+ arch/riscv/include/asm/kvm_mmu.h              |   2 +-
+ arch/riscv/include/asm/kvm_tlb.h              |  37 +-
+ arch/riscv/include/asm/kvm_vcpu_config.h      |  25 ++
+ arch/riscv/include/asm/kvm_vcpu_nested.h      | 163 ++++++++
+ arch/riscv/include/asm/kvm_vcpu_timer.h       |   1 +
+ arch/riscv/include/asm/kvm_vmid.h             |   1 +
+ arch/riscv/include/uapi/asm/kvm.h             |  36 +-
+ arch/riscv/kvm/Makefile                       |   6 +
+ arch/riscv/kvm/aia.c                          |   4 +
+ arch/riscv/kvm/aia_device.c                   |   5 +
+ arch/riscv/kvm/gstage.c                       |  14 +
+ arch/riscv/kvm/isa.c                          | 259 ++++++++++++
+ arch/riscv/kvm/main.c                         |  13 +-
+ arch/riscv/kvm/mmu.c                          |  18 +-
+ arch/riscv/kvm/tlb.c                          | 135 +++++-
+ arch/riscv/kvm/vcpu.c                         | 117 ++----
+ arch/riscv/kvm/vcpu_config.c                  | 130 ++++++
+ arch/riscv/kvm/vcpu_exit.c                    |  62 ++-
+ arch/riscv/kvm/vcpu_fp.c                      |   9 +-
+ arch/riscv/kvm/vcpu_insn.c                    |  46 +++
+ arch/riscv/kvm/vcpu_nested.c                  | 258 ++++++++++++
+ arch/riscv/kvm/vcpu_nested_csr.c              | 389 ++++++++++++++++++
+ arch/riscv/kvm/vcpu_nested_insn.c             | 140 +++++++
+ arch/riscv/kvm/vcpu_nested_swtlb.c            | 146 +++++++
+ arch/riscv/kvm/vcpu_onereg.c                  | 334 +++------------
+ arch/riscv/kvm/vcpu_pmu.c                     |   5 +-
+ arch/riscv/kvm/vcpu_sbi_replace.c             |  63 ++-
+ arch/riscv/kvm/vcpu_timer.c                   |  24 +-
+ arch/riscv/kvm/vcpu_vector.c                  |   5 +-
+ arch/riscv/kvm/vmid.c                         |  33 +-
+ .../selftests/kvm/riscv/get-reg-list.c        | 106 ++++-
+ 36 files changed, 2244 insertions(+), 419 deletions(-)
+ create mode 100644 arch/riscv/include/asm/kvm_isa.h
+ create mode 100644 arch/riscv/include/asm/kvm_vcpu_config.h
+ create mode 100644 arch/riscv/include/asm/kvm_vcpu_nested.h
+ create mode 100644 arch/riscv/kvm/isa.c
+ create mode 100644 arch/riscv/kvm/vcpu_config.c
+ create mode 100644 arch/riscv/kvm/vcpu_nested.c
+ create mode 100644 arch/riscv/kvm/vcpu_nested_csr.c
+ create mode 100644 arch/riscv/kvm/vcpu_nested_insn.c
+ create mode 100644 arch/riscv/kvm/vcpu_nested_swtlb.c
+
 -- 
 2.43.0
 
