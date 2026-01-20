@@ -1,85 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE264218A3;
-	Tue, 20 Jan 2026 18:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266EE43E9FF;
+	Tue, 20 Jan 2026 19:13:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768935235; cv=none; b=dZB30WXJh+6Wpvnngx9Y165Q0qLiD43Kd1peug8Nfy/2FeR9pY0ZbsBsddGq/TzDGKRQePLaHV8uUA31mAhPPTkCjO2aSpjxe4P7GIvxM9Um79X9BEFlMcSzpfO3qcPOQ4iRyixulk4ABWeMOkTY+dFegGg40DhMulQefIkffak=
+	t=1768936423; cv=none; b=eBa00F9jFzMay7CWvz5/8X4kYjgz+gK76yBcAm69v34cX2e9CXDoJxJ3Y5Er1mLZypNpP1ZIQ65Mt1H6KQGKyBTq6Lqd+ekOxYHrBYijjYf8wKczCOR2DWJ/Tfsu69dPdD6+NmtGCrPWFejyRBflv5M1+9kYbU9se64lyNRzh2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768935235; c=relaxed/simple;
-	bh=/wQzm2XYcRO1SK1rQYfV8CL2Qb5EIXOxQEZj/ZpIjW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aUWK0XZQSLk4nsOXsW4yDPPAPgHEhA3KIdHIJJZCHp2ksR3hTaYQuYNEnlpzWIvhyVkayEa3K5wpGcDf/hpOz9Cr4ey9pgtvaM5y8kd61Mn4HtZ4y5r4iZ1b9ud3oshW/Iio7HyBMbbbi42qAmPOcCv3Iv9wnEF95ryTgbiuSlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qKbzjEVV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768936423; c=relaxed/simple;
+	bh=vilp2Rq6f8QY1I2zQzlF3hPntVSFbgK28Pjbl9Zciuw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=hZqDADnv8u0IbxJl26yS5e1eeX5lXSYPe8i0d2NPuq3rjNKY4KMVXn+5Kbp6ufy+lw0r9XOwAB22DSaf7UvLhwMswNHrJqy3cnw7GNXahg9k9Ig9UmbKNfIDUFVT8RKv7mGjwCUT54/xcHmBu77wVyejqIZWOIQz7O3G6gIZ2yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9ZETNdr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qKbzjEVV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D346C16AAE;
-	Tue, 20 Jan 2026 18:53:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9ZETNdr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91431C16AAE;
+	Tue, 20 Jan 2026 19:13:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768935234;
-	bh=/wQzm2XYcRO1SK1rQYfV8CL2Qb5EIXOxQEZj/ZpIjW4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qKbzjEVVruuvO0RUZvYgurzcRBkDUOWjIq4Msz1MktbzTgS4t0cFSewshRH1/qpJR
-	 1X8+gn2oe/uvYbqLy1MgXpBweHdi4XKYBe5DohqudgZeqUc/N6lhudQeI43Vc7Vegn
-	 3DBSuYOq/P701m0kNloLuYkZPbC/aW9KFdwIpw9om9IY9+xVsxdeBz/gN333VUQtnS
-	 s24JGTwpsSn/N5klqJ03o6tkotgu3ODeSSJL2wEKQkGuvyYpKhNseUO+Gl5Pigi+zY
-	 vP174zU1Y34V/99KzBOc0HF3nY0WA6Pjgav/71eCFyXa2unCxBm8X/zoTicMPL7elo
-	 59uCy6UuN2v6Q==
-Date: Tue, 20 Jan 2026 10:53:52 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
- linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
- dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
- stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
- davem@davemloft.net, andrew+netdev@lunn.ch, donald.hunter@gmail.com,
- ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com,
- koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
- ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
- cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
- vidhi_goel@apple.com
-Subject: Re: [PATCH v9 net-next 15/15] selftests/net: packetdrill: add TCP
- Accurate ECN cases
-Message-ID: <20260120105352.423ea3cd@kernel.org>
-In-Reply-To: <20260119185852.11168-16-chia-yu.chang@nokia-bell-labs.com>
-References: <20260119185852.11168-1-chia-yu.chang@nokia-bell-labs.com>
-	<20260119185852.11168-16-chia-yu.chang@nokia-bell-labs.com>
+	s=k20201202; t=1768936422;
+	bh=vilp2Rq6f8QY1I2zQzlF3hPntVSFbgK28Pjbl9Zciuw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=T9ZETNdrNmFkfS/pxA7G6I/FFhsx9D+I4HR5tejrIoIrgldoEoz3J3nsJGi1UNOcs
+	 S3kAmgNI7BeFfFnc1/L1lDzhGQX1LALd7sy1uEBEkFWdw9H7yP4UVLpUyZViOsMmRJ
+	 zWCn8uJyufWtLjf1e+69yIxGUpUhwr6n+pqml4VR8tvWouKBqthByXyjmDeqsJk+93
+	 w65EMOMlW7jT3ZKtVnMdt+xAT+MNcwcRRSPrImXbtbNz3fMlCLpHpXN5EkBnAhCaP3
+	 xhVr+Wxei3dW0VHnJ5dH1+eGZdMCm2xDi4NzsGGAUP6rYGRRJoe3p9hAsfGfzjyshA
+	 7gdMz5hsymyRw==
+Content-Type: multipart/mixed; boundary="===============3459075531568831871=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <e3277b8c7dfe09fae49d0ea7caacc2327f37a18261176964b0be6a67da50c6be@mail.kernel.org>
+In-Reply-To: <20260120184701.23082-3-git@danielhodges.dev>
+References: <20260120184701.23082-3-git@danielhodges.dev>
+Subject: Re: [PATCH bpf-next v5 2/7] crypto: Add BPF hash algorithm type registration module
+From: bot+bpf-ci@kernel.org
+To: git@danielhodges.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,vadim.fedorenko@linux.dev,song@kernel.org,yatsenko@meta.com,martin.lau@linux.dev,eddyz87@gmail.com,haoluo@google.com,jolsa@kernel.org,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,yonghong.song@linux.dev,herbert@gondor.apana.org.au,davem@davemloft.net,linux-crypto@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,git@danielhodges.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 20 Jan 2026 19:13:40 +0000 (UTC)
+
+--===============3459075531568831871==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Mon, 19 Jan 2026 19:58:52 +0100 chia-yu.chang@nokia-bell-labs.com
-wrote:
-> Linux Accurate ECN test sets using ACE counters and AccECN options to
-> cover several scenarios: Connection teardown, different ACK conditions,
-> counter wrapping, SACK space grabbing, fallback schemes, negotiation
-> retransmission/reorder/loss, AccECN option drop/loss, different
-> handshake reflectors, data with marking, and different sysctl values.
+> diff --git a/crypto/bpf_crypto_shash.c b/crypto/bpf_crypto_shash.c
+> new file mode 100644
+> index 000000000000..6e9b0d757ec9
+> --- /dev/null
+> +++ b/crypto/bpf_crypto_shash.c
 
-Thank you for closing the packetdrill side, and big thanks to Neal 
-for prioritizing getting it reviewed and merged!
+[ ... ]
 
-I updated the packetdrill build in netdev CI and looks like one of
-the cases is flaking a little. Since it looks like you'll have to
-respin, please try to fix:
+> +static const struct bpf_crypto_type bpf_crypto_shash_type = {
+> +	.alloc_tfm	= bpf_crypto_shash_alloc_tfm,
+> +	.free_tfm	= bpf_crypto_shash_free_tfm,
+> +	.has_algo	= bpf_crypto_shash_has_algo,
+> +	.hash		= bpf_crypto_shash_hash,
+> +	.digestsize	= bpf_crypto_shash_digestsize,
+> +	.get_flags	= bpf_crypto_shash_get_flags,
+> +	.owner		= THIS_MODULE,
+> +	.type_id	= BPF_CRYPTO_TYPE_HASH,
+> +	.name		= "hash",
+> +};
 
-# 1..2
-# tcp_accecn_client_accecn_options_lost.pkt:32: error handling packet: timing error: expected outbound packet in relative time range +0.020000~+0.500000 sec but happened at +0.015816 sec
-# script packet:  0.181936 .5 1:1013(1012) ack 1 <ECN e1b 1 ceb 0 e0b 1,nop>
-# actual packet:  0.177752 .EA 1:1013(1012) ack 1 win 1050 <ECN e1b 1 ceb 0 e0b 1,nop>
-# not ok 1 ipv4
-# tcp_accecn_client_accecn_options_lost.pkt:32: error handling packet: timing error: expected outbound packet in relative time range +0.020000~+0.500000 sec but happened at +0.015800 sec
-# script packet:  0.181952 .5 1:1013(1012) ack 1 <ECN e1b 1 ceb 0 e0b 1,nop>
-# actual packet:  0.177752 .EA 1:1013(1012) ack 1 win 1050 <ECN e1b 1 ceb 0 e0b 1,nop>
-# not ok 2 ipv6
-# # Totals: pass:0 fail:2 xfail:0 xpass:0 skip:0 error:0
+Can this cause a NULL pointer dereference when a BPF program calls
+bpf_crypto_ctx_create() with type="hash"?
 
-https://netdev-ctrl.bots.linux.dev/logs/vmksft/packetdrill/results/482201/115-tcp-accecn-client-accecn-options-lost-pkt/stdout
+The bpf_crypto_ctx_create() function in kernel/bpf/crypto.c unconditionally
+calls type->setkey(), type->ivsize(), and type->statesize():
+
+    *err = type->setkey(ctx->tfm, params->key, params->key_len);
+    ...
+    ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
+
+But bpf_crypto_shash_type does not implement these callbacks, leaving them
+as NULL.
+
+Note: This appears to be fixed later in the series by commit 76d771a64b50
+("bpf: Add hash kfunc for cryptographic hashing") which adds NULL checks
+before calling these function pointers. Should this commit be squashed
+with 76d771a64b50 to ensure each patch in the series is bisectable without
+introducing crashes?
+
+> +module_init(bpf_crypto_shash_init);
+> +module_exit(bpf_crypto_shash_exit);
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Hash algorithm support for BPF");
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21183820118
+
+--===============3459075531568831871==--
