@@ -1,119 +1,92 @@
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4360D3A1A27
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 22:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077733451AB;
+	Tue, 20 Jan 2026 22:17:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768946714; cv=none; b=WwTfnfRrAi07n5q165YgPxfpkwUsqOaupBu4Ow5f67gIEATqUKAehRCOTjwDXHlJExX1phTgpLaMnkJd7A8Y1E8ydikeVEUHrXuTWAbkSdLnDX00maqJp/IgI8OGEl33YhH+csrADJN63pZixzpBAAur5l09/+AN5d/ODKeuups=
+	t=1768947432; cv=none; b=pQ6vkos30DB4reVKyxtFvfBJsG5KpwMRP25KU4ZyErRW1yjWHLuOK3zrn3RUzqrhEPbi6siAX9Eziq5zQJP6FRp3fW83xUf/2WGwowxDoeZ0dblA9X0DYE7Oqdqd25eTzlQrLkb8wggcucn3uCR+PRVNLzG7zRKRYz6wAeXtoFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768946714; c=relaxed/simple;
-	bh=AwHUD+rXuhKyKmXPrdQZrRAZDbCQlrWch9VuSW3eH3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rYxHT59HY6xRQbzYwSDFvfT1iXZ5Kpyku9EomzQqFUq3CjObNjvNHUKXmDfTg3JoPrrMJlSz1zwt57ELEU9nFde4eqXJcX1uVeE3rwLLmveokdTg13MzvSY5fALIGqkMz+r0kpqpCKGPtM1ix7AhDz4MZRd0ILDM5bJtJYAgNlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=WcCwNIfl; arc=none smtp.client-ip=84.16.66.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1768947432; c=relaxed/simple;
+	bh=UxlsqwugPvD8LR7XY48QOQTZmggtMET6utD6Q+mBpfc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RuzVl0VGIbCiooUVEy26LRv76JC8KqtqDViFZ83vLRzrKF9cjA0rhAPWH1bkdVl7bIQyssIwNueR56t4oS6GJafB+aexC84KgvCHQaNJFXAdA0pfVhwNCuw5ZIJaxmYE1fNu/50VZTA/JOamukpKA/R6JORMiq7JBH27l4ChGPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=tKBiV6no; arc=none smtp.client-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="WcCwNIfl"
-Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dwgrd52Bmzg9t;
-	Tue, 20 Jan 2026 22:46:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1768945601;
-	bh=CUnC6gBg1b8DZjIFRJjoz21kw+O4IDvw1ZCQ7hb32w0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WcCwNIfltvas3I8WkaxOw4+8cb98Kkmo+ZF7qsZUr3tX3je8MAfeFMOjr92TJkrD7
-	 XHcq1YNheRGDGLozfVE6lbHz+Sh1sEIyypT2HGH9iGOunB8tq0HyME1MLnr3r6W7tB
-	 iUtAbnd0WOsULgDiW94Mr0CTZWRkmIpnuHhdLSR0=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4dwgrb45vZzqrp;
-	Tue, 20 Jan 2026 22:46:39 +0100 (CET)
-Date: Tue, 20 Jan 2026 22:46:34 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
-	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>, klibc@zytor.com, 
-	Florian Weimer <fweimer@redhat.com>
-Subject: Re: [PATCH net-next v2 2/4] selftests/landlock: Move some UAPI
- header inclusions after libc ones
-Message-ID: <20260120.ahGaepheZah8@digikod.net>
-References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
- <20260120-uapi-sockaddr-v2-2-63c319111cf6@linutronix.de>
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="tKBiV6no"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
+	Content-Type; bh=JF0KQIEGWn2HYz/B51v506ZRihIJ31ziQ3oS4QAmx84=; b=tKBiV6nol2v1
+	WYsN5KYlSBKahY1yWkmkuRybxcW3h8ze83ZMaE0Hvj3v/f3LyVIK+uPD9ySq19kmTXiALfjxmHILd
+	JKl2zn511jnJJd1o1h9NSrfINpP5P5H9YMlydtUVNqwTolj6ASho18uU1UuJNhli7Vondh4nuTNgu
+	M3R2mBLbkBtWHceDvo7ZWd3rthH0VZ8cY3M11KmpNErET78hIK6oVGEz2DydinuOmgjLp43pTpxxx
+	6j35sxTFN14LpdlFgJmU5patjhWoIaSzUTYiwKh96VoVHHAN+lEV9v05rYrOuHlKkVj9nCODzbM+C
+	IyBpnNkIo5qntmyykJnIIw==;
+Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
+	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <aleksey.oladko@virtuozzo.com>)
+	id 1viJmK-00E1oA-2n;
+	Tue, 20 Jan 2026 23:01:09 +0100
+Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 60KM1HfU327795
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 20 Jan 2026 22:01:17 GMT
+Received: (from root@localhost)
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 60KM1COM327794;
+	Tue, 20 Jan 2026 22:01:12 GMT
+From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
+        Phil Sutter <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc: Aleksei Oladko <aleksey.oladko@virtuozzo.com>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: netfilter: ensure conntrack is enabled for helper test
+Date: Tue, 20 Jan 2026 22:01:02 +0000
+Message-ID: <20260120220103.327771-1-aleksey.oladko@virtuozzo.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260120-uapi-sockaddr-v2-2-63c319111cf6@linutronix.de>
-X-Infomaniak-Routing: alpha
 
-On Tue, Jan 20, 2026 at 03:10:32PM +0100, Thomas Weißschuh wrote:
-> Interleaving inclusions of UAPI headers and libc headers is problematic.
-> Both sets of headers define conflicting symbols. To enable their
-> coexistence a compatibility-mechanism is in place.
-> 
-> An upcoming change will define 'struct sockaddr' from linux/socket.h.
-> However sys/socket.h from libc does not yet handle this case and a
-> symbol conflict will arise.
-> 
-> Move the inclusion of all UAPI headers after the inclusion of the glibc
-> ones, so the compatibility mechanism from the UAPI headers is used.
-> 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+The nft_conntrack_helper.sh assumes that conntrack entries are created
+for the generated test traffic. This is not the case when only raw table
+rules are installed, as conntrack is not required and remains disabled.
 
-Reviewed-by: Mickaël Salaün <mic@digikod.net>
+Add a stateful rule to force conntrack to be enabled, ensuring that
+conntrack entries are created and the helper assignment can be verified.
 
-Thanks!
+Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+---
+ .../testing/selftests/net/netfilter/nft_conntrack_helper.sh | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> ---
->  tools/testing/selftests/landlock/audit.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/landlock/audit.h b/tools/testing/selftests/landlock/audit.h
-> index 44eb433e9666..c12b16c690dc 100644
-> --- a/tools/testing/selftests/landlock/audit.h
-> +++ b/tools/testing/selftests/landlock/audit.h
-> @@ -7,9 +7,6 @@
->  
->  #define _GNU_SOURCE
->  #include <errno.h>
-> -#include <linux/audit.h>
-> -#include <linux/limits.h>
-> -#include <linux/netlink.h>
->  #include <regex.h>
->  #include <stdbool.h>
->  #include <stdint.h>
-> @@ -20,6 +17,10 @@
->  #include <sys/time.h>
->  #include <unistd.h>
->  
-> +#include <linux/audit.h>
-> +#include <linux/limits.h>
-> +#include <linux/netlink.h>
-> +
->  #include "kselftest.h"
->  
->  #ifndef ARRAY_SIZE
-> 
-> -- 
-> 2.52.0
-> 
-> 
+diff --git a/tools/testing/selftests/net/netfilter/nft_conntrack_helper.sh b/tools/testing/selftests/net/netfilter/nft_conntrack_helper.sh
+index abcaa7337197..43761f2eb3ec 100755
+--- a/tools/testing/selftests/net/netfilter/nft_conntrack_helper.sh
++++ b/tools/testing/selftests/net/netfilter/nft_conntrack_helper.sh
+@@ -60,6 +60,12 @@ table $family raw {
+ 		tcp dport 2121 ct helper set "ftp"
+ 	}
+ }
++table $family filter {
++	chain forward {
++		type filter hook forward priority 0; policy accept;
++		ct state new,established,related accept
++	}
++}
+ EOF
+ 	return $?
+ }
+-- 
+2.43.0
+
