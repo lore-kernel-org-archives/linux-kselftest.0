@@ -1,53 +1,53 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863EB3ED11F;
-	Tue, 20 Jan 2026 08:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111363B8BA9;
+	Tue, 20 Jan 2026 08:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768896055; cv=none; b=ANFSIKQzNdCtluJyY6P1PIPiK/5JWYecf3Ku2Xk2QvY0IHr3gelQ+3TD6zc+490rKcThU8cQJB/pDoW2K7/LJN5JU+SZxnijHYQwN+KjFdjjM6XPeKmiZRO91KIYqCCFsSUuUPmS1rUJgVCVz6xL6ZtPP6E1FLqDKe2tdhibomg=
+	t=1768896095; cv=none; b=WJreIWwtN1MKbgub10o9E7PMxgJRpVinrHQ9kZuPEJVLwf0pT65DF5qp2fc1LVHMHyaEsMFNMTBxGzhxhh/M+5SFtj9ua8tRZ8agNqiGAhVv2BuWot1d9AiBUyGdLevuk0xmKJyL/PtU3qkc1OW2L/2/EMLpfAIv2SViQVwcFoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768896055; c=relaxed/simple;
-	bh=hS1Ls+zoTFdq2THV17MRs2+GdhNM1SjsFh6aLTOh9iI=;
+	s=arc-20240116; t=1768896095; c=relaxed/simple;
+	bh=4fb7vrv3n2d5WIlSacydWTSdBsTfaasSJ/xf35ao1OY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n4VjkPPiNiAQLNJZQMs/8cPGk3uaKEwuqp5qoLP88LiRKZwGngvX5ZfeABbvfiGNO16Jg7Q8c7SybsFEbjssvY5bTnIZIRpz96ACtNN++g6btfP+uuSGPEveNHlaBaUflJS33D87iD76qgaV8P3xZFmEWM2vyyGaxmEaZrDJI/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=i2diQnQU; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version; b=ttjdANvHMtRZdnvrqMSS4KdEO4i8nevi8OvXmsGOetZvkyAWiipgiEvWuEs5OfSJW11vLry/s9Gp+LOH0UcfhIIOcQptrQIJqtnb/vzgEGXZhi7Q7pork+Br69kAmbkDbaHKhxVtXen4i4sQUUHUSmVLaUJO9VPmu4ZmbuxK8As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DfTgalRq; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="i2diQnQU"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60K2pZKZ1347293;
-	Tue, 20 Jan 2026 08:00:19 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DfTgalRq"
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60K33HNt3805126;
+	Tue, 20 Jan 2026 08:00:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=LaxxwPakaHP
-	0J6+6fJHTNCpSEaD/S5LWx5xDwoV+Vcw=; b=i2diQnQUDhaA/c2F9STxlYpPAM3
-	8S3/0uXoiMq6HrWLRNaQ7JhcgkVirpWndk4FX7mGFFr3mm2usGQNfWUZbejO/DHb
-	EVu2aAntYQLZbrCM2SiScSG96zuCSO9pfR4rGqzBOTrq5B6CM/mTQEYtp7d6wOxS
-	+rI/C0vnPIEimXiLlKk3RXgQ/WNRzjiM4lMM91wOfi8UkV+/R/3TrqSN7mbkdRYi
-	o5aLF+klbswBuopZdS91wpKw4U0mD8+J5sPk1yD3pUWOFE7Xo0Rh8BO379/shHOO
-	lloErmw71dil8oNJ+6puLDG16ay1sskd7gvR7wgGEwcKxPdZgWneuv8dGAw==
+	:mime-version:references:subject:to; s=qcppdkim1; bh=wTwGUvXPNkh
+	i00Bckxai6W1K9UCx0dIgkJ+74D0lC90=; b=DfTgalRq9yuDmHOKyQJreWlzb06
+	+9xwhXEBnYuXMV+VdT8DXutnXOpMCeUSmbfEUbt9BK8S3uP5pmI27QMzpOW3jJ3N
+	Qm7mVF4ppCNJzpHxvlt7SYjhqRLiXLk/kPaXmvg5PlsfPtiJn6toaa/J1msybSYW
+	xVL5jV/sEBjowPcv94p1jLFw0ny4efTPhyBz+yFbN+uc4wp2PfgvySl3FojIH2YL
+	geCpCx05c0m+TetZkKvnR3C2NleZjchO/ZgwbASL6DYxFxM4jwSpF5ypTgeMl/J6
+	DvzV5BPNI+Ku/2cpN1uCq2g0kpAmlBQL3d/yfugXDcJ+Nh1js/WUAc0jhCQ==
 Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bsnpdjeda-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bt1f88s3k-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Jan 2026 08:00:18 +0000 (GMT)
+	Tue, 20 Jan 2026 08:00:19 +0000 (GMT)
 Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 60K80Fat007861;
-	Tue, 20 Jan 2026 08:00:15 GMT
+	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 60K80Gwa007949;
+	Tue, 20 Jan 2026 08:00:16 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 4br3gm8q4p-1
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 4br3gm8q5v-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Jan 2026 08:00:15 +0000
+	Tue, 20 Jan 2026 08:00:16 +0000
 Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 60K80FZa007832;
-	Tue, 20 Jan 2026 08:00:15 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 60K80FQ8007834;
+	Tue, 20 Jan 2026 08:00:16 GMT
 Received: from hu-devc-blr-u24-a.qualcomm.com (hu-anuppate-blr.qualcomm.com [10.131.36.165])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 60K80F20007825
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 60K80G9C007889
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Jan 2026 08:00:15 +0000
+	Tue, 20 Jan 2026 08:00:16 +0000
 Received: by hu-devc-blr-u24-a.qualcomm.com (Postfix, from userid 486687)
-	id 9F9E32352B; Tue, 20 Jan 2026 13:30:14 +0530 (+0530)
+	id B7DE925050; Tue, 20 Jan 2026 13:30:14 +0530 (+0530)
 From: Anup Patel <anup.patel@oss.qualcomm.com>
 To: Paolo Bonzini <pbonzini@redhat.com>, Atish Patra <atish.patra@linux.dev>
 Cc: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
@@ -58,9 +58,9 @@ Cc: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Anup Patel <anup.patel@oss.qualcomm.com>
-Subject: [PATCH 04/27] RISC-V: KVM: Introduce common kvm_riscv_isa_check_host()
-Date: Tue, 20 Jan 2026 13:29:50 +0530
-Message-ID: <20260120080013.2153519-5-anup.patel@oss.qualcomm.com>
+Subject: [PATCH 11/27] RISC-V: KVM: Use half VMID space for nested guest
+Date: Tue, 20 Jan 2026 13:29:57 +0530
+Message-ID: <20260120080013.2153519-12-anup.patel@oss.qualcomm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260120080013.2153519-1-anup.patel@oss.qualcomm.com>
 References: <20260120080013.2153519-1-anup.patel@oss.qualcomm.com>
@@ -75,290 +75,176 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=NtncssdJ c=1 sm=1 tr=0 ts=696f3612 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIwMDA2NSBTYWx0ZWRfXxSZgNiD2xzl3
+ O7ekqi/owUIdOk+iiFPTVMV8uywl0u/D3B6mnsHEIPviSe/YOBKQ8Jy+unJebkuAdPVOzJ2w4TK
+ ECinXzxxg9niSfccQRJxiuEqRH9nqhm7hQxPVCcqRhXCVeGAbWn8cKatimMuwTk35Wz/gl77p6a
+ OV8GDI9dPmyu21mLYKLghU7roQ3Gl9o/F/4/J+gXTw6c4SEiYicil21jFAYBLdEQ1oXIWhOt8/v
+ 1VYEMqJlBQMiMR/29sd/kpOoRlOD4DKZp8DcMdoM/Dhp/y6hI35A3Mn1U3XPMB6MrcB8BNUA2eD
+ uc1YmK6Q+S6hgalnMz7VN1HArmBTbEyB4h+t6VjE2PP4qxxuFq1jjmCP356fSA1JeRJK1uTPzsW
+ mI74Yd0pPkhe5hlhi7speoQMTP7HT0IofkbLQFF7rI2PK+lrA/QSMwzpJcJepXDtA0a+g9Ybtcz
+ MQu8wWVEPpCL8COjwlQ==
+X-Proofpoint-GUID: 0sv9t_hnm_GzgT4RGiCnwb7eh4l0Ch5d
+X-Proofpoint-ORIG-GUID: 0sv9t_hnm_GzgT4RGiCnwb7eh4l0Ch5d
+X-Authority-Analysis: v=2.4 cv=LdQxKzfi c=1 sm=1 tr=0 ts=696f3613 cx=c_pps
  a=Ou0eQOY4+eZoSc0qltEV5Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
  a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8
- a=2gNUke5l5vCDW47KHagA:9
-X-Proofpoint-GUID: n8tAdbkdss_3TwU2Qp7mQWngD_9rgSbY
-X-Proofpoint-ORIG-GUID: n8tAdbkdss_3TwU2Qp7mQWngD_9rgSbY
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIwMDA2NSBTYWx0ZWRfX5LNtVsSdipJ0
- NkrdjhLJutRkUaIjJzkMwdJyMp3DPlYzj0D8leRbIXgbcZFP5/H4BtyM8spNCp5QE/HDzpS/Fvq
- +N5TFrDAHgMI55tg8dh4s93amnWt8umWODA7v8PdPXUsDoiGF5x18UXaXic8zkM96Oef4rWCx3w
- aFw9JS7BEb1olQl8XfaoTjFsBpf460OEYkbA0HSBKMNPTWbQac/2n3Vb4xBfIU63Yf6tJBGmN8A
- bOyM5xj0uOvVWd92WMuMPHjFJY/HXwwy8+823AeHIO0kaS+ip69xIQj7AZObEwmdE+BGCrEBu9T
- YK+xnwekDbVS4fc7QCIR/omajLoqb1BizkoXwF/csrXZUpM4PwTMHXwLtYFdNLl9nuC37QDXdGF
- R95+xoo7fGxIaIjtFraQ49zuevZangBIOA8XXwX3jmmqurN0qC7g06dFguL43J4Dkvp4QY2inxS
- zWYGN5q/tUsEaF51jhw==
+ a=8kQOq8E8dDssKVZDBeIA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-20_02,2026-01-19_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 clxscore=1011 lowpriorityscore=0 phishscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601200065
+ phishscore=0 bulkscore=0 clxscore=1011 impostorscore=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2601200065
 
-Rename kvm_riscv_vcpu_isa_check_host() to kvm_riscv_isa_check_host()
-and use it as common function with KVM RISC-V to check isa extensions
-supported by host.
+A single guest with nested virtualization needs two VMIDs: one for
+the guest hypervisor (L1) and another for the nested guest (L2).
+
+To support this, divide the VMID space into two equal parts when
+nested virtualization is enabled.
 
 Signed-off-by: Anup Patel <anup.patel@oss.qualcomm.com>
 ---
- arch/riscv/include/asm/kvm_host.h |  4 ++++
- arch/riscv/kvm/aia_device.c       |  2 +-
- arch/riscv/kvm/vcpu_fp.c          |  8 +++----
- arch/riscv/kvm/vcpu_onereg.c      | 38 ++++++++++++++++---------------
- arch/riscv/kvm/vcpu_pmu.c         |  2 +-
- arch/riscv/kvm/vcpu_timer.c       |  2 +-
- arch/riscv/kvm/vcpu_vector.c      |  4 ++--
- 7 files changed, 33 insertions(+), 27 deletions(-)
+ arch/riscv/include/asm/kvm_vmid.h |  1 +
+ arch/riscv/kvm/main.c             |  4 ++--
+ arch/riscv/kvm/tlb.c              | 11 +++++++++--
+ arch/riscv/kvm/vmid.c             | 33 ++++++++++++++++++++++++++++---
+ 4 files changed, 42 insertions(+), 7 deletions(-)
 
-diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-index 24585304c02b..47a350c25555 100644
---- a/arch/riscv/include/asm/kvm_host.h
-+++ b/arch/riscv/include/asm/kvm_host.h
-@@ -308,6 +308,10 @@ int kvm_riscv_vcpu_exit(struct kvm_vcpu *vcpu, struct kvm_run *run,
+diff --git a/arch/riscv/include/asm/kvm_vmid.h b/arch/riscv/include/asm/kvm_vmid.h
+index db61b0525a8d..3048e12a639c 100644
+--- a/arch/riscv/include/asm/kvm_vmid.h
++++ b/arch/riscv/include/asm/kvm_vmid.h
+@@ -19,6 +19,7 @@ struct kvm_vmid {
  
- void __kvm_riscv_switch_to(struct kvm_vcpu_arch *vcpu_arch);
- 
-+int __kvm_riscv_isa_check_host(unsigned long kvm_ext, unsigned long *guest_ext);
-+#define kvm_riscv_isa_check_host(ext)	\
-+	__kvm_riscv_isa_check_host(KVM_RISCV_ISA_EXT_##ext, NULL)
-+
- void kvm_riscv_vcpu_setup_isa(struct kvm_vcpu *vcpu);
- unsigned long kvm_riscv_vcpu_num_regs(struct kvm_vcpu *vcpu);
- int kvm_riscv_vcpu_copy_reg_indices(struct kvm_vcpu *vcpu,
-diff --git a/arch/riscv/kvm/aia_device.c b/arch/riscv/kvm/aia_device.c
-index bed4d2c8c44c..4cecab9bf102 100644
---- a/arch/riscv/kvm/aia_device.c
-+++ b/arch/riscv/kvm/aia_device.c
-@@ -23,7 +23,7 @@ static int aia_create(struct kvm_device *dev, u32 type)
- 	if (irqchip_in_kernel(kvm))
- 		return -EEXIST;
- 
--	if (!riscv_isa_extension_available(NULL, SSAIA))
-+	if (kvm_riscv_isa_check_host(SSAIA))
+ void __init kvm_riscv_gstage_vmid_detect(void);
+ unsigned long kvm_riscv_gstage_vmid_bits(void);
++unsigned long kvm_riscv_gstage_nested_vmid(unsigned long vmid);
+ int kvm_riscv_gstage_vmid_init(struct kvm *kvm);
+ bool kvm_riscv_gstage_vmid_ver_changed(struct kvm_vmid *vmid);
+ void kvm_riscv_gstage_vmid_update(struct kvm_vcpu *vcpu);
+diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+index 5b4bf972d242..28044eefda47 100644
+--- a/arch/riscv/kvm/main.c
++++ b/arch/riscv/kvm/main.c
+@@ -123,8 +123,6 @@ static int __init riscv_kvm_init(void)
  		return -ENODEV;
- 
- 	ret = -EBUSY;
-diff --git a/arch/riscv/kvm/vcpu_fp.c b/arch/riscv/kvm/vcpu_fp.c
-index 030904d82b58..32ab5938a2ec 100644
---- a/arch/riscv/kvm/vcpu_fp.c
-+++ b/arch/riscv/kvm/vcpu_fp.c
-@@ -59,17 +59,17 @@ void kvm_riscv_vcpu_guest_fp_restore(struct kvm_cpu_context *cntx,
- void kvm_riscv_vcpu_host_fp_save(struct kvm_cpu_context *cntx)
- {
- 	/* No need to check host sstatus as it can be modified outside */
--	if (riscv_isa_extension_available(NULL, d))
-+	if (!kvm_riscv_isa_check_host(D))
- 		__kvm_riscv_fp_d_save(cntx);
--	else if (riscv_isa_extension_available(NULL, f))
-+	else if (!kvm_riscv_isa_check_host(F))
- 		__kvm_riscv_fp_f_save(cntx);
- }
- 
- void kvm_riscv_vcpu_host_fp_restore(struct kvm_cpu_context *cntx)
- {
--	if (riscv_isa_extension_available(NULL, d))
-+	if (!kvm_riscv_isa_check_host(D))
- 		__kvm_riscv_fp_d_restore(cntx);
--	else if (riscv_isa_extension_available(NULL, f))
-+	else if (!kvm_riscv_isa_check_host(F))
- 		__kvm_riscv_fp_f_restore(cntx);
- }
- #endif
-diff --git a/arch/riscv/kvm/vcpu_onereg.c b/arch/riscv/kvm/vcpu_onereg.c
-index 6dab4deed86d..f0f8c293d950 100644
---- a/arch/riscv/kvm/vcpu_onereg.c
-+++ b/arch/riscv/kvm/vcpu_onereg.c
-@@ -119,7 +119,7 @@ static unsigned long kvm_riscv_vcpu_base2isa_ext(unsigned long base_ext)
- 	return KVM_RISCV_ISA_EXT_MAX;
- }
- 
--static int kvm_riscv_vcpu_isa_check_host(unsigned long kvm_ext, unsigned long *guest_ext)
-+int __kvm_riscv_isa_check_host(unsigned long kvm_ext, unsigned long *base_ext)
- {
- 	unsigned long host_ext;
- 
-@@ -127,8 +127,7 @@ static int kvm_riscv_vcpu_isa_check_host(unsigned long kvm_ext, unsigned long *g
- 	    kvm_ext >= ARRAY_SIZE(kvm_isa_ext_arr))
- 		return -ENOENT;
- 
--	*guest_ext = kvm_isa_ext_arr[kvm_ext];
--	switch (*guest_ext) {
-+	switch (kvm_isa_ext_arr[kvm_ext]) {
- 	case RISCV_ISA_EXT_SMNPM:
- 		/*
- 		 * Pointer masking effective in (H)S-mode is provided by the
-@@ -139,13 +138,16 @@ static int kvm_riscv_vcpu_isa_check_host(unsigned long kvm_ext, unsigned long *g
- 		host_ext = RISCV_ISA_EXT_SSNPM;
- 		break;
- 	default:
--		host_ext = *guest_ext;
-+		host_ext = kvm_isa_ext_arr[kvm_ext];
- 		break;
  	}
  
- 	if (!__riscv_isa_extension_available(NULL, host_ext))
- 		return -ENOENT;
+-	kvm_riscv_gstage_vmid_detect();
+-
+ 	rc = kvm_riscv_aia_init();
+ 	if (rc && rc != -ENODEV) {
+ 		kvm_riscv_nacl_exit();
+@@ -133,6 +131,8 @@ static int __init riscv_kvm_init(void)
  
-+	if (base_ext)
-+		*base_ext = kvm_isa_ext_arr[kvm_ext];
+ 	kvm_riscv_nested_init();
+ 
++	kvm_riscv_gstage_vmid_detect();
 +
- 	return 0;
- }
+ 	kvm_info("hypervisor extension available\n");
  
-@@ -156,7 +158,7 @@ static bool kvm_riscv_vcpu_isa_enable_allowed(unsigned long ext)
- 		return false;
- 	case KVM_RISCV_ISA_EXT_SSCOFPMF:
- 		/* Sscofpmf depends on interrupt filtering defined in ssaia */
--		return __riscv_isa_extension_available(NULL, RISCV_ISA_EXT_SSAIA);
-+		return !kvm_riscv_isa_check_host(SSAIA);
- 	case KVM_RISCV_ISA_EXT_SVADU:
- 		/*
- 		 * The henvcfg.ADUE is read-only zero if menvcfg.ADUE is zero.
-@@ -263,7 +265,7 @@ void kvm_riscv_vcpu_setup_isa(struct kvm_vcpu *vcpu)
- 	unsigned long guest_ext, i;
+ 	if (kvm_riscv_nacl_available()) {
+diff --git a/arch/riscv/kvm/tlb.c b/arch/riscv/kvm/tlb.c
+index ff1aeac4eb8e..a95aa5336560 100644
+--- a/arch/riscv/kvm/tlb.c
++++ b/arch/riscv/kvm/tlb.c
+@@ -160,7 +160,7 @@ void kvm_riscv_local_hfence_vvma_all(unsigned long vmid)
  
- 	for (i = 0; i < ARRAY_SIZE(kvm_isa_ext_arr); i++) {
--		if (kvm_riscv_vcpu_isa_check_host(i, &guest_ext))
-+		if (__kvm_riscv_isa_check_host(i, &guest_ext))
- 			continue;
- 		if (kvm_riscv_vcpu_isa_enable_allowed(i))
- 			set_bit(guest_ext, vcpu->arch.isa);
-@@ -288,17 +290,17 @@ static int kvm_riscv_vcpu_get_reg_config(struct kvm_vcpu *vcpu,
- 		reg_val = vcpu->arch.isa[0] & KVM_RISCV_BASE_ISA_MASK;
- 		break;
- 	case KVM_REG_RISCV_CONFIG_REG(zicbom_block_size):
--		if (!riscv_isa_extension_available(NULL, ZICBOM))
-+		if (kvm_riscv_isa_check_host(ZICBOM))
- 			return -ENOENT;
- 		reg_val = riscv_cbom_block_size;
- 		break;
- 	case KVM_REG_RISCV_CONFIG_REG(zicboz_block_size):
--		if (!riscv_isa_extension_available(NULL, ZICBOZ))
-+		if (kvm_riscv_isa_check_host(ZICBOZ))
- 			return -ENOENT;
- 		reg_val = riscv_cboz_block_size;
- 		break;
- 	case KVM_REG_RISCV_CONFIG_REG(zicbop_block_size):
--		if (!riscv_isa_extension_available(NULL, ZICBOP))
-+		if (kvm_riscv_isa_check_host(ZICBOP))
- 			return -ENOENT;
- 		reg_val = riscv_cbop_block_size;
- 		break;
-@@ -382,19 +384,19 @@ static int kvm_riscv_vcpu_set_reg_config(struct kvm_vcpu *vcpu,
- 		}
- 		break;
- 	case KVM_REG_RISCV_CONFIG_REG(zicbom_block_size):
--		if (!riscv_isa_extension_available(NULL, ZICBOM))
-+		if (kvm_riscv_isa_check_host(ZICBOM))
- 			return -ENOENT;
- 		if (reg_val != riscv_cbom_block_size)
- 			return -EINVAL;
- 		break;
- 	case KVM_REG_RISCV_CONFIG_REG(zicboz_block_size):
--		if (!riscv_isa_extension_available(NULL, ZICBOZ))
-+		if (kvm_riscv_isa_check_host(ZICBOZ))
- 			return -ENOENT;
- 		if (reg_val != riscv_cboz_block_size)
- 			return -EINVAL;
- 		break;
- 	case KVM_REG_RISCV_CONFIG_REG(zicbop_block_size):
--		if (!riscv_isa_extension_available(NULL, ZICBOP))
-+		if (kvm_riscv_isa_check_host(ZICBOP))
- 			return -ENOENT;
- 		if (reg_val != riscv_cbop_block_size)
- 			return -EINVAL;
-@@ -660,7 +662,7 @@ static int riscv_vcpu_get_isa_ext_single(struct kvm_vcpu *vcpu,
- 	unsigned long guest_ext;
- 	int ret;
+ void kvm_riscv_local_tlb_sanitize(struct kvm_vcpu *vcpu)
+ {
+-	unsigned long vmid;
++	unsigned long vmid, nvmid;
  
--	ret = kvm_riscv_vcpu_isa_check_host(reg_num, &guest_ext);
-+	ret = __kvm_riscv_isa_check_host(reg_num, &guest_ext);
- 	if (ret)
- 		return ret;
+ 	if (!kvm_riscv_gstage_vmid_bits() ||
+ 	    vcpu->arch.last_exit_cpu == vcpu->cpu)
+@@ -180,12 +180,19 @@ void kvm_riscv_local_tlb_sanitize(struct kvm_vcpu *vcpu)
+ 	vmid = READ_ONCE(vcpu->kvm->arch.vmid.vmid);
+ 	kvm_riscv_local_hfence_gvma_vmid_all(vmid);
  
-@@ -678,7 +680,7 @@ static int riscv_vcpu_set_isa_ext_single(struct kvm_vcpu *vcpu,
- 	unsigned long guest_ext;
- 	int ret;
- 
--	ret = kvm_riscv_vcpu_isa_check_host(reg_num, &guest_ext);
-+	ret = __kvm_riscv_isa_check_host(reg_num, &guest_ext);
- 	if (ret)
- 		return ret;
- 
-@@ -837,13 +839,13 @@ static int copy_config_reg_indices(const struct kvm_vcpu *vcpu,
- 		 * was not available.
- 		 */
- 		if (i == KVM_REG_RISCV_CONFIG_REG(zicbom_block_size) &&
--			!riscv_isa_extension_available(NULL, ZICBOM))
-+		    kvm_riscv_isa_check_host(ZICBOM))
- 			continue;
- 		else if (i == KVM_REG_RISCV_CONFIG_REG(zicboz_block_size) &&
--			!riscv_isa_extension_available(NULL, ZICBOZ))
-+			 kvm_riscv_isa_check_host(ZICBOZ))
- 			continue;
- 		else if (i == KVM_REG_RISCV_CONFIG_REG(zicbop_block_size) &&
--			!riscv_isa_extension_available(NULL, ZICBOP))
-+			 kvm_riscv_isa_check_host(ZICBOP))
- 			continue;
- 
- 		size = IS_ENABLED(CONFIG_32BIT) ? KVM_REG_SIZE_U32 : KVM_REG_SIZE_U64;
-@@ -1064,7 +1066,7 @@ static int copy_isa_ext_reg_indices(const struct kvm_vcpu *vcpu,
- 			   KVM_REG_SIZE_U32 : KVM_REG_SIZE_U64;
- 		u64 reg = KVM_REG_RISCV | size | KVM_REG_RISCV_ISA_EXT | i;
- 
--		if (kvm_riscv_vcpu_isa_check_host(i, &guest_ext))
-+		if (__kvm_riscv_isa_check_host(i, &guest_ext))
- 			continue;
- 
- 		if (uindices) {
-diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-index 4d8d5e9aa53d..9759143c1785 100644
---- a/arch/riscv/kvm/vcpu_pmu.c
-+++ b/arch/riscv/kvm/vcpu_pmu.c
-@@ -819,7 +819,7 @@ void kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
- 	 * filtering is available in the host. Otherwise, guest will always count
- 	 * events while the execution is in hypervisor mode.
++	nvmid = kvm_riscv_gstage_nested_vmid(vmid);
++	if (vmid != nvmid)
++		kvm_riscv_local_hfence_gvma_vmid_all(nvmid);
++
+ 	/*
+ 	 * Flush VS-stage TLB entries for implementation where VS-stage
+ 	 * TLB does not cahce guest physical address and VMID.
  	 */
--	if (!riscv_isa_extension_available(NULL, SSCOFPMF))
-+	if (kvm_riscv_isa_check_host(SSCOFPMF))
- 		return;
- 
- 	ret = riscv_pmu_get_hpm_info(&hpm_width, &num_hw_ctrs);
-diff --git a/arch/riscv/kvm/vcpu_timer.c b/arch/riscv/kvm/vcpu_timer.c
-index f36247e4c783..cac4f3a5f213 100644
---- a/arch/riscv/kvm/vcpu_timer.c
-+++ b/arch/riscv/kvm/vcpu_timer.c
-@@ -253,7 +253,7 @@ int kvm_riscv_vcpu_timer_init(struct kvm_vcpu *vcpu)
- 	t->next_set = false;
- 
- 	/* Enable sstc for every vcpu if available in hardware */
--	if (riscv_isa_extension_available(NULL, SSTC)) {
-+	if (!kvm_riscv_isa_check_host(SSTC)) {
- 		t->sstc_enabled = true;
- 		hrtimer_setup(&t->hrt, kvm_riscv_vcpu_vstimer_expired, CLOCK_MONOTONIC,
- 			      HRTIMER_MODE_REL);
-diff --git a/arch/riscv/kvm/vcpu_vector.c b/arch/riscv/kvm/vcpu_vector.c
-index 05f3cc2d8e31..8c7315a96b9e 100644
---- a/arch/riscv/kvm/vcpu_vector.c
-+++ b/arch/riscv/kvm/vcpu_vector.c
-@@ -63,13 +63,13 @@ void kvm_riscv_vcpu_guest_vector_restore(struct kvm_cpu_context *cntx,
- void kvm_riscv_vcpu_host_vector_save(struct kvm_cpu_context *cntx)
- {
- 	/* No need to check host sstatus as it can be modified outside */
--	if (riscv_isa_extension_available(NULL, v))
-+	if (!kvm_riscv_isa_check_host(V))
- 		__kvm_riscv_vector_save(cntx);
+-	if (static_branch_unlikely(&kvm_riscv_vsstage_tlb_no_gpa))
++	if (static_branch_unlikely(&kvm_riscv_vsstage_tlb_no_gpa)) {
+ 		kvm_riscv_local_hfence_vvma_all(vmid);
++		if (vmid != nvmid)
++			kvm_riscv_local_hfence_vvma_all(nvmid);
++	}
  }
  
- void kvm_riscv_vcpu_host_vector_restore(struct kvm_cpu_context *cntx)
+ void kvm_riscv_fence_i_process(struct kvm_vcpu *vcpu)
+diff --git a/arch/riscv/kvm/vmid.c b/arch/riscv/kvm/vmid.c
+index cf34d448289d..2ddd95fe2d9c 100644
+--- a/arch/riscv/kvm/vmid.c
++++ b/arch/riscv/kvm/vmid.c
+@@ -25,6 +25,8 @@ static DEFINE_SPINLOCK(vmid_lock);
+ 
+ void __init kvm_riscv_gstage_vmid_detect(void)
  {
--	if (riscv_isa_extension_available(NULL, v))
-+	if (!kvm_riscv_isa_check_host(V))
- 		__kvm_riscv_vector_restore(cntx);
++	unsigned long min_vmids;
++
+ 	/* Figure-out number of VMID bits in HW */
+ 	csr_write(CSR_HGATP, (kvm_riscv_gstage_mode << HGATP_MODE_SHIFT) | HGATP_VMID);
+ 	vmid_bits = csr_read(CSR_HGATP);
+@@ -35,8 +37,23 @@ void __init kvm_riscv_gstage_vmid_detect(void)
+ 	/* We polluted local TLB so flush all guest TLB */
+ 	kvm_riscv_local_hfence_gvma_all();
+ 
+-	/* We don't use VMID bits if they are not sufficient */
+-	if ((1UL << vmid_bits) < num_possible_cpus())
++	/*
++	 * A single guest with nested virtualization needs two
++	 * VMIDs: one for the guest hypervisor (L1) and another
++	 * for the nested guest (L2).
++	 *
++	 * Potentially, we can have a separate guest running on
++	 * each host CPU so the number of VMIDs should not be:
++	 *
++	 * 1. less than the number of host CPUs for
++	 *    nested virtualization disabled
++	 * 2. less than twice the number of host CPUs for
++	 *    nested virtualization enabled
++	 */
++	min_vmids = num_possible_cpus();
++	if (kvm_riscv_nested_available())
++		min_vmids = min_vmids * 2;
++	if (BIT(vmid_bits) < min_vmids)
+ 		vmid_bits = 0;
  }
+ 
+@@ -45,6 +62,13 @@ unsigned long kvm_riscv_gstage_vmid_bits(void)
+ 	return vmid_bits;
+ }
+ 
++unsigned long kvm_riscv_gstage_nested_vmid(unsigned long vmid)
++{
++	if (kvm_riscv_nested_available())
++		return vmid | BIT(vmid_bits - 1);
++	return vmid;
++}
++
+ int kvm_riscv_gstage_vmid_init(struct kvm *kvm)
+ {
+ 	/* Mark the initial VMID and VMID version invalid */
+@@ -112,7 +136,10 @@ void kvm_riscv_gstage_vmid_update(struct kvm_vcpu *vcpu)
+ 
+ 	vmid->vmid = vmid_next;
+ 	vmid_next++;
+-	vmid_next &= (1 << vmid_bits) - 1;
++	if (kvm_riscv_nested_available())
++		vmid_next &= BIT(vmid_bits - 1) - 1;
++	else
++		vmid_next &= BIT(vmid_bits) - 1;
+ 
+ 	WRITE_ONCE(vmid->vmid_version, READ_ONCE(vmid_version));
  
 -- 
 2.43.0
