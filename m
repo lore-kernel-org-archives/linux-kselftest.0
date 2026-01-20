@@ -1,42 +1,42 @@
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A083F23C2;
-	Tue, 20 Jan 2026 23:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E9F3F075C;
+	Tue, 20 Jan 2026 23:06:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768950380; cv=none; b=ch2DmtDUph3hpi/cTv9ZOZ1T38LGmiVeJ9z86wT1Is91pKvzaWNs3l8ubS24djp4UD/DozvL1DmTXmM7tkkKS/ww+QHkCCpjhgnqucw20yi9t92U6Vj7FUQYQgI/2n4QmJOUvbYv3+XJDvSdfYFfMECMzdidUkICvQJaM+s9sp4=
+	t=1768950382; cv=none; b=kevPd4ADCMHC2L+lMT4acNgxcOyM0HSimlwrIXybhsk7dV/tJzeGAwLjTVXrMbSeolpAWH0NxAdjmmElZ7FsAoIBY23h+uamK2BBxyiM+2pybWqVYCdzg5zotlcAc9O2jAxxVNDe+rMShP6ZtDghZIBP0q+kFwH888TdRmXiqAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768950380; c=relaxed/simple;
-	bh=kG0DFN6CxRYRGm89iojhHsVoORMw2BVOr7qSQCqG7mY=;
+	s=arc-20240116; t=1768950382; c=relaxed/simple;
+	bh=1pBPr/1O+Zc9ubpe25bP3E87XGakOzFEtSPpaxOVux4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mmWURyBXVlV61l53/B+XbqUKFBAz3uxkR+xstXNyiBPrhh/D2l1w9jsNPzb+MqnNcgHCr9xwQUADpeGE9CqEO1mKDPeCwVhebuHQjXdXq05ksZ2+l0LS9iki2/p7MSnjMEtstHarPw9zNz/HrO60vNUgnRdewgbimf344gtO0BM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=nrGk7IGG; arc=none smtp.client-ip=130.117.225.111
+	 MIME-Version; b=DdKKhtkI2SZ0dnLfUwjT06jeWTvczNglzFpv6P1pQsPE2GCn3OTjs8RhnEYHXG6ohAWbfe3HMCMyGZK2ucpocyXhi2R7sL94OAG1eMJgrdizBYHMyejaRLUqwYdUGEGqF+d/z5RPGF0dgVPvBpoPGdiVoIekOWw0o6X1GZUuddo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=yJrpIYU2; arc=none smtp.client-ip=130.117.225.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="nrGk7IGG"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="yJrpIYU2"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=5kp5amFk0WvUViKQl4hXNv+X4iisrwrDGiUpdJQxW90=; b=nrGk7IGGleis
-	4bpmhRyyDcYR4Y6CTF0rhSs6a4ISu1M6AsO+aPyd/NSeoql+FYmPVr0aGwVfUUkqTHMC8fu8/vYre
-	+kCvchEGLOXH2G5YeSYOEV1xLLN6aurpUWamOOCXqK1TZXiYQ9mOAaEB9tl3gevcsDUtioGmseioZ
-	m+KupjRYXitwdN7a5K9KD73bnf8xgOhJymQiGSBeJls3dHGp61kjk2y0xzBbx+/+DEXC616/pKedd
-	GYMOMJqh2jYb52YVpyOr5Ekq876hWF4HQDpYE0eZaBhxVsxCthfrMLRmMIE34OlJl91GBmJy9NyKB
-	2V27GOqycwsLNfUhFIFDSA==;
+	Content-Type; bh=xH68nDre/GSdA+pta6G83GvGfKOp/YUqjmBjhttBy3A=; b=yJrpIYU2RXbl
+	cdNpuj3meMnPZ2E6m1XvFODnWDSP1uQ5RNMZN7vKURW6Yn5vMiivEkHCzPCXJir0vQPbgXU2OA41a
+	nNT5hQ1mzjmiomHDGFTJ76AT/59dD7Dk8bZuuL7YK49H98twNJo7v0vlPVGjimeeTc8t0kMC4nRrB
+	6o2+eF0YimCPwNwXKjxZdEm/O8pb02UHPkl+qSpkgli/zdbHJkINDNu6VKkPn1t8yCPkPneKIp8kA
+	6zKkpKRujyerUCxkD6mX7rPbwa7v0eeh/xqKyyW477jxtPuftSa0TzVOFLY1FYKmxV0DLhDmavFlI
+	5vlF7zuxpr5/7uk+um8NaQ==;
 Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
 	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1viKnA-00Fnsx-18;
-	Wed, 21 Jan 2026 00:06:04 +0100
+	id 1viKnB-00Fnt7-2f;
+	Wed, 21 Jan 2026 00:06:05 +0100
 Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 60KN6DxV328462
+	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 60KN6FOD328466
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 20 Jan 2026 23:06:13 GMT
+	Tue, 20 Jan 2026 23:06:15 GMT
 Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 60KN6Dke328461;
-	Tue, 20 Jan 2026 23:06:13 GMT
+	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 60KN6Emu328465;
+	Tue, 20 Jan 2026 23:06:14 GMT
 From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
 To: "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
@@ -45,9 +45,9 @@ To: "David S . Miller" <davem@davemloft.net>,
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Konstantin Khorenko <khorenko@virtuozzo.com>
-Subject: [PATCH 3/5] selftests: net: run reuseport tests in netns to avoid port conflicts
-Date: Tue, 20 Jan 2026 23:05:56 +0000
-Message-ID: <20260120230558.328423-4-aleksey.oladko@virtuozzo.com>
+Subject: [PATCH 4/5] selftests: net: run pmtu.sh in netns to avoid host firewall interference
+Date: Tue, 20 Jan 2026 23:05:57 +0000
+Message-ID: <20260120230558.328423-5-aleksey.oladko@virtuozzo.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260120230558.328423-1-aleksey.oladko@virtuozzo.com>
 References: <20260120230558.328423-1-aleksey.oladko@virtuozzo.com>
@@ -61,105 +61,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Konstantin Khorenko <khorenko@virtuozzo.com>
 
-Some net kselftests use fixed ports which overlap with process-exporter
-service already running on the host. When such a conflict happens,
-the test fail with:
+The pmtu.sh kselftest sets up a multi-namespace test topology where the
+host network itself is part of the test setup. Test packets originating
+from the created namespace are expected to reach test interface created
+in the host. When firewall rules are present on the host, this traffic
+may be blocked, causing the test to fail.
 
-  failed to bind receive socket: Address already in use
-
-Instead of changing port numbers, run the affected tests in isolated
-network namespace to avoid conflicts with running daemons.
+Run the test in an isolated network namespace to avoid interference
+from host firewall rules.
 
 Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
 ---
- tools/testing/selftests/net/Makefile               | 12 ++++++++----
- tools/testing/selftests/net/reuseport_bpf.sh       |  4 ++++
- tools/testing/selftests/net/reuseport_bpf_cpu.sh   |  4 ++++
- tools/testing/selftests/net/reuseport_bpf_numa.sh  |  4 ++++
- tools/testing/selftests/net/reuseport_dualstack.sh |  4 ++++
- 5 files changed, 24 insertions(+), 4 deletions(-)
- create mode 100755 tools/testing/selftests/net/reuseport_bpf.sh
- create mode 100755 tools/testing/selftests/net/reuseport_bpf_cpu.sh
- create mode 100755 tools/testing/selftests/net/reuseport_bpf_numa.sh
- create mode 100755 tools/testing/selftests/net/reuseport_dualstack.sh
+ tools/testing/selftests/net/Makefile        | 2 +-
+ tools/testing/selftests/net/pmtu_wrapper.sh | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/net/pmtu_wrapper.sh
 
 diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index b66ba04f19d9..a160e0d816d9 100644
+index a160e0d816d9..7c6b61e90062 100644
 --- a/tools/testing/selftests/net/Makefile
 +++ b/tools/testing/selftests/net/Makefile
-@@ -64,6 +64,10 @@ TEST_PROGS := \
+@@ -60,7 +60,7 @@ TEST_PROGS := \
+ 	netns-name.sh \
+ 	netns-sysctl.sh \
+ 	nl_netdev.py \
+-	pmtu.sh \
++	pmtu_wrapper.sh \
  	psock_snd.sh \
  	reuseaddr_ports_exhausted.sh \
  	reuseport_addr_any.sh \
-+	reuseport_bpf.sh \
-+	reuseport_bpf_cpu.sh \
-+	reuseport_bpf_numa.sh \
-+	reuseport_dualstack.sh
- 	route_hint.sh \
- 	route_localnet.sh \
- 	rps_default_mask.sh \
-@@ -142,6 +146,10 @@ TEST_GEN_FILES := \
- 	psock_tpacket \
- 	reuseaddr_ports_exhausted \
- 	reuseport_addr_any \
-+	reuseport_bpf \
-+	reuseport_bpf_cpu \
-+	reuseport_bpf_numa \
-+	reuseport_dualstack \
- 	rxtimestamp \
- 	sctp_hello \
- 	skf_net_off \
-@@ -169,10 +177,6 @@ TEST_GEN_PROGS := \
- 	ipv6_fragmentation \
- 	proc_net_pktgen \
- 	reuseaddr_conflict \
--	reuseport_bpf \
--	reuseport_bpf_cpu \
--	reuseport_bpf_numa \
--	reuseport_dualstack \
- 	sk_bind_sendto_listen \
- 	sk_connect_zero_addr \
- 	sk_so_peek_off \
-diff --git a/tools/testing/selftests/net/reuseport_bpf.sh b/tools/testing/selftests/net/reuseport_bpf.sh
+diff --git a/tools/testing/selftests/net/pmtu_wrapper.sh b/tools/testing/selftests/net/pmtu_wrapper.sh
 new file mode 100755
-index 000000000000..75014a5462a1
+index 000000000000..d43c23ba5155
 --- /dev/null
-+++ b/tools/testing/selftests/net/reuseport_bpf.sh
++++ b/tools/testing/selftests/net/pmtu_wrapper.sh
 @@ -0,0 +1,4 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
 +
-+./in_netns.sh ./reuseport_bpf
-diff --git a/tools/testing/selftests/net/reuseport_bpf_cpu.sh b/tools/testing/selftests/net/reuseport_bpf_cpu.sh
-new file mode 100755
-index 000000000000..243dc5bee014
---- /dev/null
-+++ b/tools/testing/selftests/net/reuseport_bpf_cpu.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+./in_netns.sh ./reuseport_bpf_cpu
-diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.sh b/tools/testing/selftests/net/reuseport_bpf_numa.sh
-new file mode 100755
-index 000000000000..eccab95a3202
---- /dev/null
-+++ b/tools/testing/selftests/net/reuseport_bpf_numa.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+./in_netns.sh ./reuseport_bpf_numa
-diff --git a/tools/testing/selftests/net/reuseport_dualstack.sh b/tools/testing/selftests/net/reuseport_dualstack.sh
-new file mode 100755
-index 000000000000..82cc8e345a83
---- /dev/null
-+++ b/tools/testing/selftests/net/reuseport_dualstack.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+./in_netns.sh ./reuseport_dualstack
++./in_netns.sh ./pmtu.sh "$@"
 -- 
 2.43.0
 
