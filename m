@@ -1,116 +1,103 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cvsmtppost02.nmdf.navercorp.com (cvsmtppost02.nmdf.navercorp.com [114.111.35.60])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2B3341AC0
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 09:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768901790; cv=pass; b=R1incgC//cNJsZsQcBHzkDzUc63JXX0+ud8CVsHYQREtxhXbRXNGxkvOZvjilRsI6geT0jfwkdpgWzy6wCmOAFE2vuoksd4LYukUIbfDa0MW6A1A0pRIcToNkTasgmIDfyTNpY1yczX1ccESgGqjyfegVVWqgsxJQigFZD+pX/E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768901790; c=relaxed/simple;
-	bh=i3I124kDIFRAt475DmJvL319sDurBF9+70I4XBQkzu8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jzQk7DVgGU0NJRQb6rL73kPHhylZI25ldipUVBIkr9Jg8vtGo8KCkxeX/+drxZ+be0naxlR/mYMREKvzsBbRx/ORwDz9kMax13J/OpXxca9SNlgJlzVy7dOZMsp+ZDAYguWaYZSP0qyoJWOoP9XxYLZnvTPrK/etWEkCEnAisD8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2ndOfVqv; arc=pass smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24EAD3A89DE
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 09:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.111.35.60
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768901893; cv=none; b=hIH8E7RonHOGpbg3sYIshpdY+NafpFcC/FMalr2zmnvt37jC+R+3PVQmB3TRNmvYivkf2ftQGODyLlEWV86T0R3zhLt5ePFpVJ+kKuWY3KK34SrauuezXnPhyCpcMs/zXH7iQUZszDQyLNROlDQ7xea06zXohCFvhPSMPpaF3uM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768901893; c=relaxed/simple;
+	bh=O/Mh7nvFRqR2V1lgWfJzdy5gT+PjfnHfRYG3+XYzr90=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KoXILreTQ3T5QjXm7/z9vyhSk4wup8BfHPhXoh9RLAaDe1p0ukwQg75CgYcpxTiTmDV0G0DzxmC7gx86LzfvZGPrzg99gaN+XNo601m3NuFjMEX5qCl6X6FFa125xeP2x87x/SRlnTukDPVcMj/EnzoM0VoaTPN2EdZ7lua+Bto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=navercorp.com; spf=pass smtp.mailfrom=navercorp.com; dkim=pass (2048-bit key) header.d=navercorp.com header.i=@navercorp.com header.b=hSmEy0IY; arc=none smtp.client-ip=114.111.35.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=navercorp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=navercorp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2ndOfVqv"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-50146483bf9so66897681cf.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 01:36:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768901787; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LYLNEFTrCavrV32kUFYXy9gcxZ7a9dxjaeYfbnEboXG+s8JGSi3m99+7pschePuDOa
-         ZaiPNZ9+Xjy2dmL/fwaNlpCbPc0pcSQGQ2ANowmOG18zsuiGvB/WPyuIGAoiK79PzJk7
-         HMCKv+oJ4LoUgaeFRMRvT2pxdlfhANq/ZruwvPFXrWLP3bqAqYoD36hljSEpucbpeiYJ
-         JCHKcAFKnnqGS2Ra5Xo/J1c1TpjI684EmgS7OA0I/gH/mT58dS7lJPBmqpWUIZdf+321
-         cBJl9Z4J+37FFBnoqmlf5p3DWk0CDHpgHX3+mRS9AQApqqEMt6wke31bt4z/xp9DY0Ib
-         QVXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=i3I124kDIFRAt475DmJvL319sDurBF9+70I4XBQkzu8=;
-        fh=eZB0DD0uKfhEINF6QMWi3i0oui5AzAZash8XljmnL8g=;
-        b=JDEz1/ILVwYSXVkHACl3dFqNP9e3RtFEaskqZHFPk9HOc+G1X2GYoV0QYDqDp9l0qu
-         CJK20UAATL4Qel4SDPdMXijgRCzBMNcjsqEqNSDpVoarx1DnaHGGPhxN97jXJhrc3FTd
-         tnm3x0e0X3qisiOMPIOUsLqUY2w2D29DKRJezfCNbbwZDZ60+7UHCotqY9fS8R/ODyAR
-         GzSb2bb5UW47C/OKxuta3daoJ59b2siRP8XAjQ5AJ8mN0x24xeNzPypnoj0IBNTr82Vf
-         RE89Z4jOiNbwdjAcoLwk6Y3aybqlZ50Buxs9Ukv7+h6plAfiz8pSZGHcmuZ6+Km56ykW
-         QcuQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768901787; x=1769506587; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i3I124kDIFRAt475DmJvL319sDurBF9+70I4XBQkzu8=;
-        b=2ndOfVqv4fK/TW+z5jKOb/UcajjFo/tOTQT6yvatC5jm5+XPDy7mU6DadDkJT1Mle1
-         61ETuJ61zbQwfq5yIwsHyrqHPcjPe8+V3KODtHYyXJeK7QSQBEy0xv2mhXw6c1NqLoLW
-         5ysj/VFaP4nI4f5jxQdVKI7EbPI9ly55bpH28cJimcm0czM8U5h/w7GwbwAfTNRtX1k1
-         xv/awNwSLU3l5THmZBjVLlHXzwGbUbSN7Fep9X2lqtpPF8L9Y5eupsFQH5K5Ct0uVUnX
-         2/xYuRl5usVIcOXiQp66YMwSvx3TDN5nQOV3s2d1QKBTwydj56smrEdi35z7YlEs13gm
-         aG0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768901787; x=1769506587;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=i3I124kDIFRAt475DmJvL319sDurBF9+70I4XBQkzu8=;
-        b=ckTQPq6ZNP+vys9GSwuZbK0T9ZRirM7lb1shooOCHrehjKBixpWU7slE6NiQbQNFx8
-         H9EfSCzQ3ewaCrLW5fOTNO8VXltC/dRr0Xqu5ZdQydXIefjMOJnCoXIu/8ns3qFqvzPJ
-         BGrH9Ip9+k+uf7Mts1xPGmSNmbkaxtUBxnoC66kqzlpIyMmGu7FXdTMRQ/JfMdbgjo0o
-         1s8Q/5w3fK4msxl9lxEY1TE46DlrpnPGfCriY2DBODnFltUGsE9tU1G8Spq9tZr0zRmj
-         IX692l+heLTjr/o0JUWEVrYFf701n79rvjCOzqka2qMWSg6Mn3ShCPm2ZzP5IH2ocoxF
-         7hsA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJemvbpp9cb8NbauxsWxuwv/iN8raosHoSqnRo9/sVsGOFvp76wn85hNKceHXh+G0fCBnBfsE8/8G3aY8hh9Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywnjhv5VjaEUfaOWalryllub+iCLhTR6oRs5u3OiYG0/H+T2YfV
-	NlVT+FtU2eX75aPfXNK8POryAXpf67RzFzpmGdNXnSCDZaQIwWZ/sSUtybsWgVFKpEs4x258TZc
-	cSH+FZ864AKyVyrEWaLJAYDnqfEKIjlmy5H+d4uax
-X-Gm-Gg: AY/fxX7BpxYecBxw6vS3Sd8gOqKwtHhtOcjnIlIFWzuJEAyRgSdLLunFPC9DW9yTajA
-	pLcuvwIMBxF4l1DQTono5jck8HTHEWvvv/gBmLYMCUspxEuIx1EcFDMYpHGp/DYDK7VfDB9uAXJ
-	bpcGAunG28sed6oNUn2gKoX4RM/a+nzmJLqySBQrpeJfZTb3Fr3fsJSRyKjrb1zVivYTEvl2Fgh
-	+wppILqooV/YzUThy26+p6Cn4zAioorHaTPEo8MuW6NOxZ3VskmC5+nKgSwX2SusLndZ/8=
-X-Received: by 2002:a05:622a:180e:b0:501:4730:fbe1 with SMTP id
- d75a77b69052e-502a16073e7mr186116891cf.22.1768901786640; Tue, 20 Jan 2026
- 01:36:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=navercorp.com header.i=@navercorp.com header.b="hSmEy0IY"
+Received: from cvsendbo02.nmdf ([10.112.18.65])
+  by cvsmtppost02.nmdf.navercorp.com with ESMTP id NzNj8JrzTWuMo6y5fFau9A
+  for <linux-kselftest@vger.kernel.org>;
+  Tue, 20 Jan 2026 09:07:47 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=navercorp.com;
+	s=s20171120; t=1768900067;
+	bh=O/Mh7nvFRqR2V1lgWfJzdy5gT+PjfnHfRYG3+XYzr90=;
+	h=From:To:Subject:Date:Message-Id:From:Subject:Feedback-ID:
+	 X-Works-Security;
+	b=hSmEy0IYtw3UATRf3YlijmWV1yoWIO2t81aohFITPe2RhRUKVpdrLFO/npxxP/V39
+	 w1zBStyMGyKPWOzon1ep0vh9fu2zCPeaIb7uq3dNboFSgVR0cd4wmMr7tpNQGAw5Wx
+	 UDhjEHtLtW25FlYZ7A+batnJBII6dfLllwB6JUuHhSBaICqTqGMO9fD5seC2kc1wze
+	 0IzlyFTWF3GCWphSUrN0Uh/lyvhYn32pe5DZoDCHWsC6gAMx6POiUO32px9sC6i6xT
+	 DlVb1Idz8x2hR8fOYzTzpnMUGqtSBgJMOKQMKyvxzoPMXyRkY5HhWxhTsf3n7qAlFj
+	 VPtH26GGyteFQ==
+X-Session-ID: 5VnN9bM4RnaQzANsq-UP1Q
+X-Works-Send-Opt: LebwjAJYjHm2KHwYjHm9UVg=
+X-Works-Smtp-Source: u9nraA2rFqJZ+HmXFoMX+6E=
+Received: from localhost.localdomain ([10.25.156.135])
+  by cvnsmtp02.nmdf.navercorp.com with ESMTP id 5VnN9bM4RnaQzANsq-UP1Q
+  for <multiple recipients>
+  (version=TLSv1.3 cipher=TLS_CHACHA20_POLY1305_SHA256);
+  Tue, 20 Jan 2026 09:07:47 -0000
+From: Gyutae Bae <gyutae.opensource@navercorp.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	gyutae.bae@navercorp.com
+Subject: [PATCH] selftests/bpf: Add perfbuf multi-producer benchmark
+Date: Tue, 20 Jan 2026 18:07:16 +0900
+Message-Id: <20260120090716.82927-1-gyutae.opensource@navercorp.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260119185852.11168-1-chia-yu.chang@nokia-bell-labs.com> <20260119185852.11168-4-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20260119185852.11168-4-chia-yu.chang@nokia-bell-labs.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 20 Jan 2026 10:36:15 +0100
-X-Gm-Features: AZwV_QiBVALGf5mVTwkAOxxW_7LaEeT-CXPBAq0Ya9GQEa2O6BH9EXhsIb0Qnrc
-Message-ID: <CANn89iKNgD9tUqck8xHphqc3iiERFjYcLBa+PTHCqXwT7cxY-w@mail.gmail.com>
-Subject: Re: [PATCH v9 net-next 03/15] selftests/net: gro: add self-test for
- TCP CWR flag
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: pabeni@redhat.com, parav@nvidia.com, linux-doc@vger.kernel.org, 
-	corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@google.com, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com, 
-	jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org, 
-	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net, 
-	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net, 
-	liuhangbin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
-	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
-	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
-	Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 19, 2026 at 7:59=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com>=
- wrote:
->
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
->
-> Currently, GRO does not flush packets when the CWR bit is set.
-> A corresponding self-test is being added, in which the CWR flag
-> is set for two consecutive packets, but the first packet with the
-> CWR flag set will not be flushed immediately.
+From: Gyutae Bae <gyutae.bae@navercorp.com>
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Add a multi-producer benchmark for perfbuf to complement the existing
+ringbuf multi-producer test. Unlike ringbuf which uses a shared buffer
+and experiences contention, perfbuf uses per-CPU buffers so the test
+measures scaling behavior rather than contention.
+
+This allows developers to compare perfbuf vs ringbuf performance under
+multi-producer workloads when choosing between the two for their systems.
+
+Signed-off-by: Gyutae Bae <gyutae.bae@navercorp.com>
+---
+ tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh b/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
+index 83e05e837871..123b7feb6935 100755
+--- a/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
++++ b/tools/testing/selftests/bpf/benchs/run_bench_ringbufs.sh
+@@ -49,6 +49,11 @@ for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
+ 	summarize "rb-libbpf nr_prod $b" "$($RUN_RB_BENCH -p$b --rb-batch-cnt 50 rb-libbpf)"
+ done
+ 
++header "Perfbuf, multi-producer"
++for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
++	summarize "pb-libbpf nr_prod $b" "$($RUN_RB_BENCH -p$b --rb-batch-cnt 50 --rb-sample-rate 50 pb-libbpf)"
++done
++
+ header "Ringbuf, multi-producer contention in overwrite mode, no consumer"
+ for b in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
+ 	summarize "rb-prod nr_prod $b" "$($RUN_BENCH -p$b --rb-batch-cnt 50 --rb-overwrite --rb-bench-producer rb-libbpf)"
+-- 
+2.39.5 (Apple Git-154)
+
