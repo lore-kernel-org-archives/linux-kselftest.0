@@ -1,149 +1,83 @@
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75464350D48
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 17:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF6533B96A;
+	Tue, 20 Jan 2026 17:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768929216; cv=none; b=Rf47llf+7znrNA78e/m0fyOtunl5eExJw1atQjE/bX6nX05nPbTj+3oDbTm2CMpFSWSrgricDuMrmXlE4WNFd4GEIdc7TJIwGrGEEo5KjOUU3f3eeWMYv1MKJ3s+2+YK/xdUqlTs5IC8iNRApoy+JmQmI+4IFVGQK4KcK3BwO1A=
+	t=1768929775; cv=none; b=SMvNB+b9am3l4fo5WvPhXlfR4NCrivXUSMI2rHYXMBl0sc6egFqDdGL9P77UxWvy2K6VNcQXR0nQraV4SobxPoFbJFWtd2GvKS5BI40oromEpt2o6EMe68dMnSAwkF2EFGtGiaXqra4J6mIr7QSSfFRKzxPEtH18mCO+tZm6LPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768929216; c=relaxed/simple;
-	bh=Ckdv+LBfVcrA4JvvMxCIADVWbw04Tilid9Ikn1lV+1Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R+DAaJADVb4hB2mmJ69cNJsu7yuvrgjzf7wuTgZPWEjq2cIWwPeiugcKXE2cw2Az9dTzFwwjRzzu7Cxaaq14J2APHVtFZuI1sNguJO3uicNG1LYk5ZhilB6Wd9YP9IbSU1ln3ma/Eazsgc7oyVuJLz6yt/TsqeeWIhgbMoDPMo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U/2fDR8E; arc=none smtp.client-ip=74.125.82.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768929775; c=relaxed/simple;
+	bh=+PpQhlnYOghCS9FQdpea1dqa5DXErdHY+bL/BwEjMXw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=gR1i/BAfGyw6g/wfredhZoLmO/uWKkLyZ29/5qXoiaq/Zu0CONmGzNXtHOcVZinQgRs/mNCJPAnSbj6acZ25uLyXEuQT7P4S7FsUFN0mdvHubsjxaXOTlvHZCp20kRJet76fxYQog2xdEQruCBREtLsm2Zlb2XL2UPXFi9vp4Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=s8lvO7fL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U/2fDR8E"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-12336c0a8b6so11815844c88.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 09:13:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768929214; x=1769534014; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=md0g+j6qZSK2w0IJlJPci/fZMbMlDX58xj6TKgMT//Y=;
-        b=U/2fDR8ELM+fyEwCNTKmR8NRnFb7/7mBUoZ3trQHIjxl0OOv95Gacw6frHzq+JSvmV
-         YqNJAh4o1DZoUr+4DsG3KZXJunAViFUnUylTWZWSw4GHyXKvzJv9gY3nyqVYZLpPD0gt
-         cvnoEfdsteoW8CDTCMsblLgVT8DQl6TrFPRA1teD2Fv+GeEkRtfVbDwdX3oy6QTpzYjh
-         i/NjtOwTFPuF7o9EYhVO4H0KxeaQATF1CKVb8Ka5xE5D3OjSfHgZOipLF4LlwrSKndRX
-         5+x1c4Qv5p9zQwACbF97zwham/NRGKqMdbuC8KokGnxi1cenTVdEf4YxlIjpluf/dn7W
-         agFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768929214; x=1769534014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=md0g+j6qZSK2w0IJlJPci/fZMbMlDX58xj6TKgMT//Y=;
-        b=jOuCyus5R/uzY/zGmBhOg+RoQXBne6CFrLbMSo3MrGeafuTuR0NBIkoDiEw2IFujgT
-         Sd/3T2n4xEEbIdD+dW9j8ZP+xOIopz8gJvUTSMlvAyQ7lOxvyRdf8pMfOvvyADx9RK6F
-         gyzobv+WjFtrhjZtBmcxpKyJJFI420vw+9CEZEggRg8I8vn9wLhCZXpupvGqOAdtivTI
-         B2VKGfF+oC/lGEWq58T/s7k3U6B2q0zyY3gCtuEPyVRCFfghYk5A4v9CKFitqWejgxC+
-         ItclRWJTY7wjCadOf3zz6aBTvLldh64b6Yo+BQ8s9LWYpNi+lwm3sHE3jRWmdD4X4vWe
-         LxMg==
-X-Forwarded-Encrypted: i=1; AJvYcCVPEoMjCF0rCHeYtMrzPbMx3o6URvLbelgcYnQYA/4mMdA39WcLTUDTEVllvYYvmgtG0G3/rTrAfBl1rkTChBg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIiSULmzcYW7cnvdiHHn349s/5/UPFgGa5ozfShl4iq19xvvKm
-	PeQ6aJm3DbCLYduN8nb3vUC5R5gTKmKQuatj31TlyBO0HAZJA+hgVPVrftJWbg==
-X-Gm-Gg: AY/fxX588lUD9IO3SpQX2aMIRx9SXcNNjQ3e0J/xcCHQQ8ZRiTNEWQxLAuOhAdgvit3
-	Nimkp5DsWyxK1z8KGoJdKukVkPUZGdQ8dYSMqL9NkwC0ofeTU5ilSy7eOrUK2CzN/vdVLk6ff9f
-	wVK0ee3oxpeCTcJMDFpwWxpzGk8X+S3LbI9BRCK6szJlunyDkoFi4VkmH2XV5J8vHvDj1ga+ZRS
-	kqjM7Xyi7+heX4hkTKpjFTh3J/ZkK47uXomBVR+YUfsWvO2GAxpB/OAtwI0YWmRpvfCo6Szbbey
-	dmJqzODxdNRdoA3VQBRgpSJpCfg1TGAwzJFDMWe6CRpxagfSi9+J/osa7LCNXn4A4De3zoenDLN
-	a5GawpkL/UAwVY80LR0V3WDHmTRR4mmqsDy4R6D1yxl6uIM8gByaVbuy24E/TelAugtESmn09S8
-	jfVgyy8PfFyiU=
-X-Received: by 2002:a17:902:d4cb:b0:2a7:9196:a94e with SMTP id d9443c01a7336-2a79196aa80mr1234755ad.15.1768923524001;
-        Tue, 20 Jan 2026 07:38:44 -0800 (PST)
-Received: from gmail.com ([98.97.43.126])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a7190ce693sm112017965ad.36.2026.01.20.07.38.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 07:38:43 -0800 (PST)
-Date: Tue, 20 Jan 2026 07:38:16 -0800
-From: John Fastabend <john.fastabend@gmail.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Michal Luczaj <mhal@rbox.co>,
-	Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 1/3] bpf, sockmap: Fix incorrect copied_seq
- calculation
-Message-ID: <20260120153807.gzwnhxxtcocycfmr@gmail.com>
-References: <20260113025121.197535-1-jiayuan.chen@linux.dev>
- <20260113025121.197535-2-jiayuan.chen@linux.dev>
- <875x8wuy4e.fsf@cloudflare.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="s8lvO7fL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E111C16AAE;
+	Tue, 20 Jan 2026 17:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1768929773;
+	bh=+PpQhlnYOghCS9FQdpea1dqa5DXErdHY+bL/BwEjMXw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=s8lvO7fLdDgmuSM7nWDJ+1STjiJK4yz0QTXDWDsnC60f57BOxkn1aV8PUyyd5tGJv
+	 CpAdZzrrFM1+UaaGDgyfYAsCdjuC6mXplHGhDQyBJpXj/zJLdQSmuTBoh6XNq+clD7
+	 itFs77aewVdoUUl2AggxsHzWejrcHv5vSI5/BXM0=
+Date: Tue, 20 Jan 2026 09:22:52 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Hildenbrand <david@kernel.org>, Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Suren
+ Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah
+ Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky
+ <leon@kernel.org>, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: Have the harness run each test category
+ separately
+Message-Id: <20260120092252.8597a496ed1cdebe5e120fb6@linux-foundation.org>
+In-Reply-To: <20260120-selftests-mm-run-suites-separately-v1-1-a4334f0cbb3a@kernel.org>
+References: <20260120-selftests-mm-run-suites-separately-v1-1-a4334f0cbb3a@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <875x8wuy4e.fsf@cloudflare.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 2026-01-20 16:01:21, Jakub Sitnicki wrote:
-> On Tue, Jan 13, 2026 at 10:50 AM +08, Jiayuan Chen wrote:
-> > A socket using sockmap has its own independent receive queue: ingress_msg.
-> > This queue may contain data from its own protocol stack or from other
-> > sockets.
-> >
-> > The issue is that when reading from ingress_msg, we update tp->copied_seq
-> > by default. However, if the data is not from its own protocol stack,
-> > tcp->rcv_nxt is not increased. Later, if we convert this socket to a
-> > native socket, reading from this socket may fail because copied_seq might
-> > be significantly larger than rcv_nxt.
-> >
-> > This fix also addresses the syzkaller-reported bug referenced in the
-> > Closes tag.
-> >
-> > This patch marks the skmsg objects in ingress_msg. When reading, we update
-> > copied_seq only if the data is from its own protocol stack.
-> >
-> >                                                      FD1:read()
-> >                                                      --  FD1->copied_seq++
-> >                                                          |  [read data]
-> >                                                          |
-> >                                 [enqueue data]           v
-> >                   [sockmap]     -> ingress to self ->  ingress_msg queue
-> > FD1 native stack  ------>                                 ^
-> > -- FD1->rcv_nxt++               -> redirect to other      | [enqueue data]
-> >                                        |                  |
-> >                                        |             ingress to FD1
-> >                                        v                  ^
-> >                                       ...                 |  [sockmap]
-> >                                                      FD2 native stack
-> >
-> > Closes: https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
-> > Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
-> > Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-> > Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+On Tue, 20 Jan 2026 13:25:32 +0000 Mark Brown <broonie@kernel.org> wrote:
 
-[...]
-
-> > @@ -487,6 +494,14 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-> >  out:
-> >  	return copied;
-> >  }
-> > +EXPORT_SYMBOL_GPL(__sk_msg_recvmsg);
+> At present the mm selftests are integrated into the kselftest harness by
+> having it run run_vmtest.sh and letting it pick it's default set of
+> tests to invoke, rather than by telling the kselftest framework about
+> each test program individually as is more standard.   This has some
+> unfortunate interactions with the kselftest harness:
 > 
-> Nit: Sorry, I haven't caught that before. tcp_bpf is a built-in. We
-> don't need to export this internal helper to modules.
+>  - If any of the tests hangs the harness will kill the entire mm
+>    selftests run rather than just the individual test, meaning no
+>    further tests get run.
+>  - The timeout applied by the harness is applied to the whole run rather
+>    than an individual test which frequently leads to the suite not being
+>    completed in production testing.
+> 
+> Deploy a crude but effective mitigation for these issues by telling the
+> kselftest framework to run each of the test categories that run_vmtests.sh
+> has separately.  Since kselftest really wants to run test programs this
+> is done by providing a trivial wrapper script for each categorty that
+> invokes run_vmtest.sh, this is not a thing of great elegence but it is
+> clear and simple.  Since run_vmtests.sh is doing runtime support
+> detection, scenario enumeration and setup for many of the tests we can't
+> consistently tell the framework about the individual test programs.
+> 
+> This has the side effect of reordering the tests, hopefully the testing
+> is not overly sensitive to this.
 
-We could probably push this without the 2/3 patch? If we are debating
-that patch still would be good to get this merged.
+Thanks, let's see what people think.
 
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+What happens with tests which are newly added but which don't integrate
+into this new framework?  eg,
+https://lkml.kernel.org/r/20260120123239.909882-2-linmiaohe@huawei.com
+
