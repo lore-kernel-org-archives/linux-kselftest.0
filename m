@@ -1,61 +1,76 @@
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFD33B52FE;
-	Tue, 20 Jan 2026 23:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B9C41B37B;
+	Tue, 20 Jan 2026 23:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768951217; cv=none; b=msHNLpAZ48raA9IclX/rgLGXe6BKKZMFmLX46BdsnKZ07bkD49fItmw8+THQgpUlu/cx3gT0FvVs7MxhG71vjD080jIVSPdD3WPgAWJCI7xaDIGnnFAg8OEoxz+pGaInhghwF9BKLlqqYeGw78/4kFAHjjDI2kJIQ3OpmN9a9Ro=
+	t=1768952655; cv=none; b=lF1B47WqcawXkSpOO+8Ej1LNyeP4/FFUnJk7fH4lzXNSrBhJ2yD9EaYUS6XoIvbdzD9K1lnpvV9nY828cF8fukyjIcBuPw2PvfLLW1zM2hHYV4p7O+EqyF6nNXUPMxIymdey+plLLtfMjt9vgWRNr4xma+vIe/uNFu+rdQg/Qik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768951217; c=relaxed/simple;
-	bh=F0yHXtmpIxcTfkWf3PjyLYYBWYljo+hj5xQHYjzEAlQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BSnmgv7KyJJMjgF8zQ4hiQeMSMyNtGvBjWqtslblUhMsuIPHZsTqjk4Kjcr1Q9v+BQWp0uFvCaPxlHNgOgSbku1ZNQjcB8fDhBwc0/jeCOn+raCUDmJIKAuREbn6z595vtkOgLmaOb8FlbPsDg0t4o6QtixlEB8J9lBNRLqwmco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=strlen.de; arc=none smtp.client-ip=91.216.245.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
-Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
-	id 269E1602AB; Wed, 21 Jan 2026 00:20:12 +0100 (CET)
-Date: Wed, 21 Jan 2026 00:20:11 +0100
-From: Florian Westphal <fw@strlen.de>
-To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>, Phil Sutter <phil@nwl.cc>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Konstantin Khorenko <khorenko@virtuozzo.com>,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: netfilter: avoid RULE_REPLACE error when
- zeroing rule counters
-Message-ID: <aXANq__7K0_fhq2D@strlen.de>
-References: <20260120231106.328585-1-aleksey.oladko@virtuozzo.com>
+	s=arc-20240116; t=1768952655; c=relaxed/simple;
+	bh=mcsyzByCvkGLlugDD/5Aaw9CFYHbBzbPOcx2/0kg+gY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aR2QUEIUadFvqhjX4VlLQxvZxSU+VwFqoOePzZwWmfxrISHBrWH0pfjb4S/r4+cYBg3Mxi13y4zyk7k4ERMr3tJuoWw5qgmFqpR3gTEiM2hKAZx/CCR18Fwk7M5a1jmR1yDDZnEulo7N46ZlCKbYlCp64lt9UNIpZG3NSZTpvJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SGCncxSP; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SGCncxSP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1FDC16AAE;
+	Tue, 20 Jan 2026 23:44:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768952655;
+	bh=mcsyzByCvkGLlugDD/5Aaw9CFYHbBzbPOcx2/0kg+gY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=SGCncxSPQ1MwLqR4bJNswZ+TU01kFJRUAt0rmY+ohxM3h5A17ocSloKT1B+9v65Zw
+	 Z8fosnIm5R09utCC9CCpwYAYoUmLVhxnw8UIoRzNlF1VGXGy4MxnAXpo81PC8yTrX6
+	 4hHFOwiTNBdslK2MRvlVbhIUWloWwZWvD41S2fi2B4i/DvPVxUP5ONULIva3Z2baqy
+	 dRU97svXWEaly64mutGTz7iI8KOViepx406ccGNJfK+S77IGLVW7bwKwcMnwcUqXTV
+	 kkjG1Nq1beXZ7fZa1JQ9xoLjDi7mPxbk97C8vbPXTY4mRQjE3knoISq0Gw+RXTzllB
+	 PC6I3TqsN+wvg==
+Date: Tue, 20 Jan 2026 15:44:13 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Gal Pressman <gal@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, <netdev@vger.kernel.org>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Joe Damato
+ <joe@dama.to>, Stanislav Fomichev <sdf@fomichev.me>,
+ <linux-kselftest@vger.kernel.org>, Nimrod Oren <noren@nvidia.com>
+Subject: Re: [PATCH net] selftests: net: fix wrong boolean evaluation in
+ __exit__
+Message-ID: <20260120154413.6fe90947@kernel.org>
+In-Reply-To: <20260120124733.604590-1-gal@nvidia.com>
+References: <20260120124733.604590-1-gal@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260120231106.328585-1-aleksey.oladko@virtuozzo.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Aleksei Oladko <aleksey.oladko@virtuozzo.com> wrote:
-> diff --git a/tools/testing/selftests/net/netfilter/rpath.sh b/tools/testing/selftests/net/netfilter/rpath.sh
-> index 24ad41d526d9..90cc21233235 100755
-> --- a/tools/testing/selftests/net/netfilter/rpath.sh
-> +++ b/tools/testing/selftests/net/netfilter/rpath.sh
-> @@ -125,8 +125,24 @@ netns_ping() { # (netns, args...)
->  }
->  
->  clear_counters() {
-> -	[ -n "$iptables" ] && ip netns exec "$ns2" "$iptables" -t raw -Z
-> -	[ -n "$ip6tables" ] && ip netns exec "$ns2" "$ip6tables" -t raw -Z
-> +	if [ -n "$iptables" ]; then
-> +		if ! ip netns exec "$ns2" "$iptables" -t raw -Z 2>/dev/null; then
-> +			ip netns exec "$ns2" "$iptables" -L PREROUTING -t raw -n --line-numbers | \
+On Tue, 20 Jan 2026 14:47:33 +0200 Gal Pressman wrote:
+> The __exit__ method receives ex_type as the exception class when an
+> exception occurs. The previous code used implicit boolean evaluation:
+> 
+>     terminate = self.terminate or (self._exit_wait and ex_type)
+>                                                    ^^^^^^^^^^^
+> 
+> In Python, the and operator can be used with non-boolean values, but it
+> does not always return a boolean result.
+> 
+> This is probably not what we want, because 'self._exit_wait and ex_type'
+> could return the actual ex_type value (the exception class) rather than
+> a boolean True when an exception occurs.
+> 
+> Use explicit `ex_type is not None` check to properly evaluate whether
+> an exception occurred, returning a boolean result.
 
-I would prefer to SKIP in this case rather than working around
-userspace bugs.
+Sure, the checkers complain about this, but I don't see an actual bug
+here. bool(terminate) must evaluate correctly, we don't compare it
+to True or False explicitly.
+
+To be clear - the patch LGTM, I'm just not connecting the dots on why
+its a fix at this stage.
+-- 
+pw-bot: cr
