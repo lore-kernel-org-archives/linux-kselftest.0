@@ -1,540 +1,473 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D464243E4A9;
-	Tue, 20 Jan 2026 18:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4255844D012;
+	Tue, 20 Jan 2026 18:36:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768933815; cv=none; b=IcKQL2ruTf9ek8erLErbKGt6GLe4ASbk7Q2NavvGxK55as45GaeD/QhnLrCQYRjW4IIoAgFULengdoH4kwS79bPqBmvQ4IsdXSNZBN2Er41Ml6OrJE1la5c3/avK/AqmTJrFOhM8vsfX/6jkWTSnM1TUWdjQ49bMni1Scd3Ym2A=
+	t=1768934190; cv=none; b=qUT9K6+eJhFO20aL50/wPIUOxGOvryg2XK8YVT3A+Kmu0fz5FLGiRHoUTUoEK468DtPiiyXk83ZEH3LjR+bX4nuBP7njsYTC0ZBhjdlr5t779/WBn5TJa/539odv/IBqJZWiVZG+LcKBtoYi1ik+/C44BeMzSDdwMOf2isSlg+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768933815; c=relaxed/simple;
-	bh=km3HjgnU7wgjaUhMxS9FwHTpr+q5UFHbNek+XbOadRk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AOswDdUpR5+sTtg4MtmmV+S4XpFI9pw+uJMD/qr4FXPi9LClqaMYSP0FMieM3HAsSW+HHcxEdrRwIoWh1kSUF7INraoqzZjRxLjyU/GkMlFB9bI4w2XSpFfWlCtAbWCxsQNnaNq2RNjKhKRM8QmeuKbWk0QpO1z6uBtqpC5S7JI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hjlPxybX; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1768934190; c=relaxed/simple;
+	bh=Q0gh/+qP9d73ycX7K9fMug1nHr0xoM54Ue18v9RVVtM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BBXR+DtdwNGx+195gArNxBT1xkutP/+y0u1PvLjX9BD2vOLbzVM7ADpqxnBR2sPCvDqPyS88unXiApWbtNi6kvtmGfX/ldS9dKFLfnf2bAoE76pdeWFsQ2YZvVtG6k4slTeaJ96cKRZEW2i4jDvWeQVe88z+pZbdv67tu4L1wcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=h1w9faK7; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hjlPxybX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768933813; x=1800469813;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=km3HjgnU7wgjaUhMxS9FwHTpr+q5UFHbNek+XbOadRk=;
-  b=hjlPxybXS1dlTTKt7w+dtjIMh/bBS1BtD/FPanGXUjSGiM8oqWvHgvDf
-   I4BmYpAdO3lukJ1S0c3qIlVpBSv8Y/gl+4uiqFdsSb6JVpd5xABcg04GC
-   WhRQFXC1ydSikf1Xm8tMER6fCz8NP+MbCuqm0TBwsbySHWb6z3s5gHnPH
-   eAg2khYVpErJrBTorRnVnf9JLlzek4qKdk2aoddKdIHrQRwcMoaBljrbY
-   FJc+rCJIxX430cbXB2Baznxz//lOtw/lOy4Aut+fdBteNiGNG1PCo2c1a
-   YZHsnSCTwGuTT0esukePjbsanRB26QHfNTGT0elOhrm5wUvsMmEe0nL/N
-   w==;
-X-CSE-ConnectionGUID: h0EybezHSLGHOuqRYmPWKg==
-X-CSE-MsgGUID: u28sx2jLR0qbCLRme7Yuig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11677"; a="70060402"
-X-IronPort-AV: E=Sophos;i="6.21,241,1763452800"; 
-   d="scan'208";a="70060402"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 10:30:12 -0800
-X-CSE-ConnectionGUID: 2SqOv8OmTG6sgUYYd8Os6g==
-X-CSE-MsgGUID: /H0rTdYRT1GWA+ucnLUVZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,241,1763452800"; 
-   d="scan'208";a="206245824"
-Received: from cjhill-mobl.amr.corp.intel.com (HELO [10.125.108.33]) ([10.125.108.33])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 10:30:09 -0800
-Message-ID: <120e42c4-9ba8-4f4b-a06c-61888fc961d1@intel.com>
-Date: Tue, 20 Jan 2026 11:30:07 -0700
+	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="h1w9faK7"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
+	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=tF2zg7A3WHXcnOcrAAObHYY8FOEWr9D49EvwtJpgfVM=; t=1768934187;
+	x=1769538987; b=h1w9faK72SO4DQshKiu8R1qbeoEghhcI+ZpCi6bX4+VcwA2nbyOw7ZVZE2nTp
+	tVXfHH1nHgYt5OdFyCaDICqW6SF0makkRg99W8kHcVkkBMhHPSLekTfQssno3CZ+d+zLnxEHKovQM
+	u9BL9zV3PRMBb5Kv5172sgqBf6cFh9tZqRbK9I7SVpVW5Miz6p0P1lB2tv9ofTIXaRyy9oQ3KrnXe
+	j2bUHefZmjlB860FoTpbp+Ek9awh4a1qD8Y4dJfrb22C5pvhbxTClZGLkLdS+eGW1O2Wk+PNRUzKU
+	lHUJP+wbqHPf/XvOYNez+Kgbe33n40Q8QXrNLp0pEbm+0+kTmA==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.99)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1viGaV-00000003yUo-0f7B; Tue, 20 Jan 2026 19:36:23 +0100
+Received: from p5dc55f29.dip0.t-ipconnect.de ([93.197.95.41] helo=[192.168.178.61])
+          by inpost2.zedat.fu-berlin.de (Exim 4.99)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1viGaU-00000000QG9-3gPv; Tue, 20 Jan 2026 19:36:23 +0100
+Message-ID: <19a5e4418565e6b2aa3fac7bacf91f7a04d1df47.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v2 2/2] sparc: Add architecture support for clone3
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Ludwig Rydberg <ludwig.rydberg@gaisler.com>, davem@davemloft.net, 
+	andreas@gaisler.com, brauner@kernel.org, shuah@kernel.org
+Cc: sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, arnd@arndb.de, geert@linux-m68k.org, 
+	schuster.simon@siemens-energy.com, jrtc27@jrtc27.com
+Date: Tue, 20 Jan 2026 19:36:21 +0100
+In-Reply-To: <20260119144753.27945-3-ludwig.rydberg@gaisler.com>
+References: <20260119144753.27945-1-ludwig.rydberg@gaisler.com>
+	 <20260119144753.27945-3-ludwig.rydberg@gaisler.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v4 00/38] NTB transport backed by PCI EP embedded DMA
-To: Koichiro Den <den@valinux.co.jp>, Frank.Li@nxp.com, cassel@kernel.org,
- mani@kernel.org, kwilczynski@kernel.org, kishon@kernel.org,
- bhelgaas@google.com, geert+renesas@glider.be, robh@kernel.org,
- vkoul@kernel.org, jdmason@kudzu.us, allenbh@gmail.com, jingoohan1@gmail.com,
- lpieralisi@kernel.org
-Cc: linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
- iommu@lists.linux.dev, ntb@lists.linux.dev, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
- joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
- magnus.damm@gmail.com, krzk+dt@kernel.org, conor+dt@kernel.org,
- corbet@lwn.net, skhan@linuxfoundation.org,
- andriy.shevchenko@linux.intel.com, jbrunet@baylibre.com, utkarsh02t@gmail.com
-References: <20260118135440.1958279-1-den@valinux.co.jp>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20260118135440.1958279-1-den@valinux.co.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
+Hi Ludwig,
 
+On Mon, 2026-01-19 at 15:47 +0100, Ludwig Rydberg wrote:
+> Add support for the clone3 system call to the SPARC architectures.
+>=20
+> The implementation follows the pattern of the original clone syscall.
+> However, instead of explicitly calling kernel_clone, the clone3
+> handler calls the generic sys_clone3 handler in kernel/fork.
+> In case no stack is provided, the parents stack is reused.
+>=20
+> The return value convention for clone3 follows the regular kernel return
+> value convention (in contrast to the original clone/fork on SPARC).
+>=20
+> Closes: https://github.com/sparclinux/issues/issues/10
+> Signed-off-by: Ludwig Rydberg <ludwig.rydberg@gaisler.com>
+> ---
+>  arch/sparc/include/asm/syscalls.h      |  1 +
+>  arch/sparc/include/asm/unistd.h        |  2 --
+>  arch/sparc/kernel/entry.S              | 15 ++++++++++++++
+>  arch/sparc/kernel/kernel.h             |  1 +
+>  arch/sparc/kernel/process.c            | 14 +++++++++++++
+>  arch/sparc/kernel/process_32.c         | 23 ++++++++++++++++------
+>  arch/sparc/kernel/process_64.c         | 27 ++++++++++++++++++++------
+>  arch/sparc/kernel/syscalls.S           |  8 ++++++++
+>  arch/sparc/kernel/syscalls/syscall.tbl |  2 +-
+>  9 files changed, 78 insertions(+), 15 deletions(-)
+>=20
+> diff --git a/arch/sparc/include/asm/syscalls.h b/arch/sparc/include/asm/s=
+yscalls.h
+> index 35575fbfb9dc..282e62b66518 100644
+> --- a/arch/sparc/include/asm/syscalls.h
+> +++ b/arch/sparc/include/asm/syscalls.h
+> @@ -7,5 +7,6 @@ struct pt_regs;
+>  asmlinkage long sparc_fork(struct pt_regs *regs);
+>  asmlinkage long sparc_vfork(struct pt_regs *regs);
+>  asmlinkage long sparc_clone(struct pt_regs *regs);
+> +asmlinkage long sparc_clone3(struct pt_regs *regs);
+> =20
+>  #endif /* _SPARC64_SYSCALLS_H */
+> diff --git a/arch/sparc/include/asm/unistd.h b/arch/sparc/include/asm/uni=
+std.h
+> index 3380411a4537..d6bc76706a7a 100644
+> --- a/arch/sparc/include/asm/unistd.h
+> +++ b/arch/sparc/include/asm/unistd.h
+> @@ -49,8 +49,6 @@
+>  #define __ARCH_WANT_COMPAT_STAT
+>  #endif
+> =20
+> -#define __ARCH_BROKEN_SYS_CLONE3
+> -
+>  #ifdef __32bit_syscall_numbers__
+>  /* Sparc 32-bit only has the "setresuid32", "getresuid32" variants,
+>   * it never had the plain ones and there is no value to adding those
+> diff --git a/arch/sparc/kernel/entry.S b/arch/sparc/kernel/entry.S
+> index a3fdee4cd6fa..ea51ef52c952 100644
+> --- a/arch/sparc/kernel/entry.S
+> +++ b/arch/sparc/kernel/entry.S
+> @@ -907,6 +907,21 @@ flush_patch_four:
+>  	jmpl	%l1 + %lo(sparc_vfork), %g0
+>  	 add	%sp, STACKFRAME_SZ, %o0
+> =20
+> +	.globl	__sys_clone3, flush_patch_five
+> +__sys_clone3:
+> +	mov	%o7, %l5
+> +flush_patch_five:
+> +	FLUSH_ALL_KERNEL_WINDOWS;
+> +	ld	[%curptr + TI_TASK], %o4
+> +	rd	%psr, %g4
+> +	WRITE_PAUSE
+> +	rd	%wim, %g5
+> +	WRITE_PAUSE
+> +	std	%g4, [%o4 + AOFF_task_thread + AOFF_thread_fork_kpsr]
+> +	add	%sp, STACKFRAME_SZ, %o0
+> +	call	sparc_clone3
+> +	 mov	%l5, %o7
+> +
+>          .align  4
+>  linux_sparc_ni_syscall:
+>  	sethi   %hi(sys_ni_syscall), %l7
+> diff --git a/arch/sparc/kernel/kernel.h b/arch/sparc/kernel/kernel.h
+> index 8328a3b78a44..4ee85051521a 100644
+> --- a/arch/sparc/kernel/kernel.h
+> +++ b/arch/sparc/kernel/kernel.h
+> @@ -18,6 +18,7 @@ extern int ncpus_probed;
+>  asmlinkage long sparc_clone(struct pt_regs *regs);
+>  asmlinkage long sparc_fork(struct pt_regs *regs);
+>  asmlinkage long sparc_vfork(struct pt_regs *regs);
+> +asmlinkage long sparc_clone3(struct pt_regs *regs);
+> =20
+>  #ifdef CONFIG_SPARC64
+>  /* setup_64.c */
+> diff --git a/arch/sparc/kernel/process.c b/arch/sparc/kernel/process.c
+> index 7d69877511fa..d72fa0665943 100644
+> --- a/arch/sparc/kernel/process.c
+> +++ b/arch/sparc/kernel/process.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/sched/task.h>
+>  #include <linux/sched/task_stack.h>
+>  #include <linux/signal.h>
+> +#include <linux/syscalls.h>
+> =20
+>  #include "kernel.h"
+> =20
+> @@ -118,3 +119,16 @@ asmlinkage long sparc_clone(struct pt_regs *regs)
+> =20
+>  	return ret;
+>  }
+> +
+> +asmlinkage long sparc_clone3(struct pt_regs *regs)
+> +{
+> +	unsigned long sz;
+> +	struct clone_args __user *cl_args;
+> +
+> +	synchronize_user_stack();
+> +
+> +	cl_args =3D (struct clone_args __user *)regs->u_regs[UREG_I0];
+> +	sz =3D regs->u_regs[UREG_I1];
+> +
+> +	return sys_clone3(cl_args, sz);
+> +}
+> diff --git a/arch/sparc/kernel/process_32.c b/arch/sparc/kernel/process_3=
+2.c
+> index 5a28c0e91bf1..dd8c6c02b0f1 100644
+> --- a/arch/sparc/kernel/process_32.c
+> +++ b/arch/sparc/kernel/process_32.c
+> @@ -247,6 +247,8 @@ clone_stackframe(struct sparc_stackf __user *dst,
+>   * Parent -->  %o0 =3D=3D childs  pid, %o1 =3D=3D 0
+>   * Child  -->  %o0 =3D=3D parents pid, %o1 =3D=3D 1
+>   *
+> + * clone3() - Uses regular kernel return value conventions
+> + *
+>   * NOTE: We have a separate fork kpsr/kwim because
+>   *       the parent could change these values between
+>   *       sys_fork invocation and when we reach here
+> @@ -261,11 +263,11 @@ extern void ret_from_kernel_thread(void);
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+>  	u64 clone_flags =3D args->flags;
+> -	unsigned long sp =3D args->stack;
+>  	unsigned long tls =3D args->tls;
+>  	struct thread_info *ti =3D task_thread_info(p);
+>  	struct pt_regs *childregs, *regs =3D current_pt_regs();
+>  	char *new_stack;
+> +	unsigned long sp =3D args->stack ? args->stack : regs->u_regs[UREG_FP];
+> =20
+>  #ifndef CONFIG_SMP
+>  	if(last_task_used_math =3D=3D current) {
+> @@ -350,13 +352,22 @@ int copy_thread(struct task_struct *p, const struct=
+ kernel_clone_args *args)
+>  	childregs->psr &=3D ~PSR_EF;
+>  	clear_tsk_thread_flag(p, TIF_USEDFPU);
+>  #endif
+> +	/* Handle return value conventions */
+> +	if (regs->u_regs[UREG_G1] =3D=3D __NR_clone3) {
+> +		/* clone3() - use regular kernel return value convention */
+> +
+> +		/* Set the return value for the child. */
+> +		childregs->u_regs[UREG_I0] =3D 0;
+> +	} else {
+> +		/* clone()/fork() - use SunOS return value convention */
+> =20
+> -	/* Set the return value for the child. */
+> -	childregs->u_regs[UREG_I0] =3D current->pid;
+> -	childregs->u_regs[UREG_I1] =3D 1;
+> +		/* Set the return value for the child. */
+> +		childregs->u_regs[UREG_I0] =3D current->pid;
+> +		childregs->u_regs[UREG_I1] =3D 1;
+> =20
+> -	/* Set the return value for the parent. */
+> -	regs->u_regs[UREG_I1] =3D 0;
+> +		/* Set the return value for the parent. */
+> +		regs->u_regs[UREG_I1] =3D 0;
+> +	}
+> =20
+>  	if (clone_flags & CLONE_SETTLS)
+>  		childregs->u_regs[UREG_G7] =3D tls;
+> diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_6=
+4.c
+> index 25781923788a..e889da8e4835 100644
+> --- a/arch/sparc/kernel/process_64.c
+> +++ b/arch/sparc/kernel/process_64.c
+> @@ -564,17 +564,19 @@ void fault_in_user_windows(struct pt_regs *regs)
+>   * under SunOS are nothing short of bletcherous:
+>   * Parent -->  %o0 =3D=3D childs  pid, %o1 =3D=3D 0
+>   * Child  -->  %o0 =3D=3D parents pid, %o1 =3D=3D 1
+> + *
+> + * clone3() - Uses regular kernel return value conventions
+>   */
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+>  	u64 clone_flags =3D args->flags;
+> -	unsigned long sp =3D args->stack;
+>  	unsigned long tls =3D args->tls;
+>  	struct thread_info *t =3D task_thread_info(p);
+>  	struct pt_regs *regs =3D current_pt_regs();
+>  	struct sparc_stackf *parent_sf;
+>  	unsigned long child_stack_sz;
+>  	char *child_trap_frame;
+> +	unsigned long sp =3D args->stack ? args->stack : regs->u_regs[UREG_FP];
+> =20
+>  	/* Calculate offset to stack_frame & pt_regs */
+>  	child_stack_sz =3D (STACKFRAME_SZ + TRACEREG_SZ);
+> @@ -616,12 +618,25 @@ int copy_thread(struct task_struct *p, const struct=
+ kernel_clone_args *args)
+>  	if (t->utraps)
+>  		t->utraps[0]++;
+> =20
+> -	/* Set the return value for the child. */
+> -	t->kregs->u_regs[UREG_I0] =3D current->pid;
+> -	t->kregs->u_regs[UREG_I1] =3D 1;
+> +	/* Handle return value conventions */
+> +	if (regs->u_regs[UREG_G1] =3D=3D __NR_clone3) {
+> +		/* clone3() - use regular kernel return value convention */
+> +
+> +		/* Set the return value for the child. */
+> +		t->kregs->u_regs[UREG_I0] =3D 0;
+> +
+> +		/* Clear g1 to indicate user thread */
+> +		t->kregs->u_regs[UREG_G1] =3D 0;
+> +	} else {
+> +		/* clone()/fork() - use SunOS return value convention */
+> +
+> +		/* Set the return value for the child. */
+> +		t->kregs->u_regs[UREG_I0] =3D current->pid;
+> +		t->kregs->u_regs[UREG_I1] =3D 1;
+> =20
+> -	/* Set the second return value for the parent. */
+> -	regs->u_regs[UREG_I1] =3D 0;
+> +		/* Set the second return value for the parent. */
+> +		regs->u_regs[UREG_I1] =3D 0;
+> +	}
+> =20
+>  	if (clone_flags & CLONE_SETTLS)
+>  		t->kregs->u_regs[UREG_G7] =3D tls;
+> diff --git a/arch/sparc/kernel/syscalls.S b/arch/sparc/kernel/syscalls.S
+> index 0e8ab0602c36..96fe8763d70c 100644
+> --- a/arch/sparc/kernel/syscalls.S
+> +++ b/arch/sparc/kernel/syscalls.S
+> @@ -103,6 +103,12 @@ sys_clone:
+>  	ba,pt	%xcc, sparc_clone
+>  	 add	%sp, PTREGS_OFF, %o0
+> =20
+> +	.align	32
+> +__sys_clone3:
+> +	flushw
+> +	ba,pt	%xcc, sparc_clone3
+> +	 add	%sp, PTREGS_OFF, %o0
+> +
+>  	.globl	ret_from_fork
+>  ret_from_fork:
+>  	/* Clear current_thread_info()->new_child. */
+> @@ -113,6 +119,8 @@ ret_from_fork:
+>  	brnz,pt	%o0, ret_sys_call
+>  	 ldx	[%g6 + TI_FLAGS], %l0
+>  	ldx	[%sp + PTREGS_OFF + PT_V9_G1], %l1
+> +	brz,pt	%l1, ret_sys_call
+> +	 nop
+>  	call	%l1
+>  	 ldx	[%sp + PTREGS_OFF + PT_V9_G2], %o0
+>  	ba,pt	%xcc, ret_sys_call
+> diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/s=
+yscalls/syscall.tbl
+> index 39aa26b6a50b..c0307bb09892 100644
+> --- a/arch/sparc/kernel/syscalls/syscall.tbl
+> +++ b/arch/sparc/kernel/syscalls/syscall.tbl
+> @@ -480,7 +480,7 @@
+>  432	common	fsmount				sys_fsmount
+>  433	common	fspick				sys_fspick
+>  434	common	pidfd_open			sys_pidfd_open
+> -# 435 reserved for clone3
+> +435	common	clone3				__sys_clone3
+>  436	common	close_range			sys_close_range
+>  437	common	openat2			sys_openat2
+>  438	common	pidfd_getfd			sys_pidfd_getfd
 
-On 1/18/26 6:54 AM, Koichiro Den wrote:
-> Hi,
-> 
-> This is RFC v4 of the NTB/PCI/dmaengine series that introduces an
-> optional NTB transport variant where payload data is moved by a PCI
-> embedded-DMA engine (eDMA) residing on the endpoint side.
+I can confirm that this patch passes both the clone3 selftest from within t=
+he
+kernel sources in ./tools/testing/selftests/clone3:
 
-Just a fly by comment. This series is huge. I do suggest break it down to something more manageable to prevent review fatigue from patch reviewers. For example, linux network sub-system has a rule to restrict patch series to no more than 15 patches. NTB sub-system does not have that rule. But maybe split out the dmaengine changes and the hardware specific dw-edma bits from the ntb core changes.
+root@raverin:/usr/src/linux/tools/testing/selftests/clone3# uname -a
+Linux raverin 6.19.0-rc6+ #21 Tue Jan 20 12:41:03 UTC 2026 sparc64 GNU/Linu=
+x
+root@raverin:/usr/src/linux/tools/testing/selftests/clone3# ./clone3
+TAP version 13
+1..19
+# clone3() syscall supported
+# Running test 'simple clone3()'
+# [1495] Trying clone3() with flags 0 (size 0)
+# I am the parent (1495). My child's pid is 1496
+# I am the child, my PID is 1496
+# [1495] clone3() with flags says: 0 expected 0
+ok 1 simple clone3()
+# Running test 'clone3() in a new PID_NS'
+# [1495] Trying clone3() with flags 0x20000000 (size 0)
+# I am the parent (1495). My child's pid is 1497
+# I am the child, my PID is 1
+# [1495] clone3() with flags says: 0 expected 0
+ok 2 clone3() in a new PID_NS
+# Running test 'CLONE_ARGS_SIZE_VER0'
+# [1495] Trying clone3() with flags 0 (size 64)
+# I am the parent (1495). My child's pid is 1498
+# I am the child, my PID is 1498
+# [1495] clone3() with flags says: 0 expected 0
+ok 3 CLONE_ARGS_SIZE_VER0
+# Running test 'CLONE_ARGS_SIZE_VER0 - 8'
+# [1495] Trying clone3() with flags 0 (size 56)
+# Invalid argument - Failed to create new process
+# [1495] clone3() with flags says: -22 expected -22
+ok 4 CLONE_ARGS_SIZE_VER0 - 8
+# Running test 'sizeof(struct clone_args) + 8'
+# [1495] Trying clone3() with flags 0 (size 96)
+# I am the parent (1495). My child's pid is 1499
+# I am the child, my PID is 1499
+# [1495] clone3() with flags says: 0 expected 0
+ok 5 sizeof(struct clone_args) + 8
+# Running test 'exit_signal with highest 32 bits non-zero'
+# [1495] Trying clone3() with flags 0 (size 0)
+# Invalid argument - Failed to create new process
+# [1495] clone3() with flags says: -22 expected -22
+ok 6 exit_signal with highest 32 bits non-zero
+# Running test 'negative 32-bit exit_signal'
+# [1495] Trying clone3() with flags 0 (size 0)
+# Invalid argument - Failed to create new process
+# [1495] clone3() with flags says: -22 expected -22
+ok 7 negative 32-bit exit_signal
+# Running test 'exit_signal not fitting into CSIGNAL mask'
+# [1495] Trying clone3() with flags 0 (size 0)
+# Invalid argument - Failed to create new process
+# [1495] clone3() with flags says: -22 expected -22
+ok 8 exit_signal not fitting into CSIGNAL mask
+# Running test 'NSIG < exit_signal < CSIG'
+# [1495] Trying clone3() with flags 0 (size 0)
+# Invalid argument - Failed to create new process
+# [1495] clone3() with flags says: -22 expected -22
+ok 9 NSIG < exit_signal < CSIG
+# Running test 'Arguments sizeof(struct clone_args) + 8'
+# [1495] Trying clone3() with flags 0 (size 96)
+# I am the parent (1495). My child's pid is 1500
+# I am the child, my PID is 1500
+# [1495] clone3() with flags says: 0 expected 0
+ok 10 Arguments sizeof(struct clone_args) + 8
+# Running test 'Arguments sizeof(struct clone_args) + 16'
+# [1495] Trying clone3() with flags 0 (size 104)
+# Argument list too long - Failed to create new process
+# [1495] clone3() with flags says: -7 expected -7
+ok 11 Arguments sizeof(struct clone_args) + 16
+# Running test 'Arguments sizeof(struct clone_arg) * 2'
+# [1495] Trying clone3() with flags 0 (size 104)
+# Argument list too long - Failed to create new process
+# [1495] clone3() with flags says: -7 expected -7
+ok 12 Arguments sizeof(struct clone_arg) * 2
+# Running test 'Arguments > page size'
+# [1495] Trying clone3() with flags 0 (size 8200)
+# Argument list too long - Failed to create new process
+# [1495] clone3() with flags says: -7 expected -7
+ok 13 Arguments > page size
+# Running test 'CLONE_ARGS_SIZE_VER0 in a new PID NS'
+# [1495] Trying clone3() with flags 0x20000000 (size 64)
+# I am the parent (1495). My child's pid is 1501
+# I am the child, my PID is 1
+# [1495] clone3() with flags says: 0 expected 0
+ok 14 CLONE_ARGS_SIZE_VER0 in a new PID NS
+# Running test 'CLONE_ARGS_SIZE_VER0 - 8 in a new PID NS'
+# [1495] Trying clone3() with flags 0x20000000 (size 56)
+# Invalid argument - Failed to create new process
+# [1495] clone3() with flags says: -22 expected -22
+ok 15 CLONE_ARGS_SIZE_VER0 - 8 in a new PID NS
+# Running test 'sizeof(struct clone_args) + 8 in a new PID NS'
+# [1495] Trying clone3() with flags 0x20000000 (size 96)
+# I am the parent (1495). My child's pid is 1502
+# I am the child, my PID is 1
+# [1495] clone3() with flags says: 0 expected 0
+ok 16 sizeof(struct clone_args) + 8 in a new PID NS
+# Running test 'Arguments > page size in a new PID NS'
+# [1495] Trying clone3() with flags 0x20000000 (size 8200)
+# Argument list too long - Failed to create new process
+# [1495] clone3() with flags says: -7 expected -7
+ok 17 Arguments > page size in a new PID NS
+# Time namespaces are not supported
+ok 18 # SKIP New time NS
+# Running test 'exit signal (SIGCHLD) in flags'
+# [1495] Trying clone3() with flags 0x14 (size 0)
+# Invalid argument - Failed to create new process
+# [1495] clone3() with flags says: -22 expected -22
+ok 19 exit signal (SIGCHLD) in flags
+# 1 skipped test(s) detected. Consider enabling relevant config options to =
+improve coverage.
+# Totals: pass:18 fail:0 xfail:0 xpass:0 skip:1 error:0
+root@raverin:/usr/src/linux/tools/testing/selftests/clone3#
 
-DJ
- 
-> 
-> The primary target is Synopsys DesignWare PCIe endpoint controllers that
-> integrate a DesignWare eDMA instance (dw-edma). In the remote
-> embedded-DMA mode, payload is transferred by DMA directly between the
-> two systems' memory, and NTB Memory Windows are used primarily for
-> control/metadata and for exposing the endpoint eDMA resources (register
-> window + linked-list rings) to the host.
-> 
-> Compared to the existing cpu/dma memcpy-based implementation, this
-> approach avoids window-backed payload rings and the associated extra
-> copies, and it is less sensitive to scarce MW space. This also enables
-> scaling out to multiple queue pairs, which is particularly beneficial
-> for ntb_netdev. On R-Car S4, preliminary iperf3 results show 10~20x
-> throughput improvement. Latency improvements are also observed.
-> 
-> RFC history:
->   RFC v3: https://lore.kernel.org/all/20251217151609.3162665-1-den@valinux.co.jp/
->   RFC v2: https://lore.kernel.org/all/20251129160405.2568284-1-den@valinux.co.jp/
->   RFC v1: https://lore.kernel.org/all/20251023071916.901355-1-den@valinux.co.jp/
-> 
-> Parts of RFC v3 series have already been split out and posted separately
-> (see "Kernel base / dependencies" section below). However, feedback on
-> the remaining parts led to substantial restructuring and code changes,
-> so I am sending an RFC v4 as a refreshed version of the full series.
-> 
-> RFC v4 is still a large, cross-subsystem series. At this RFC stage,
-> I am sending the full picture in a single set to make it easier to
-> review the overall direction and architecture. Once the direction is
-> agreed upon and no further large restructuring appears necessary, I will stop
-> posting the new RFC-tagged revisions and continue development on
-> separate threads, split by sub-topic.
-> 
-> Many thanks for all the reviews and feedback from multiple perspectives.
-> 
-> 
-> Software architecture overview (RFC v4)
-> =======================================
-> 
-> A major change in RFC v4 is the software layering and module split.
-> 
-> The existing memcpy-based transport and the new remote embedded-DMA
-> transport are implemented as two independent NTB client drivers on top
-> of a shared core library:
-> 
->                        +--------------------+
->                        | ntb_transport_core |
->                        +--------------------+
->                            ^            ^
->                            |            |
->         ntb_transport -----+            +----- ntb_transport_edma
->        (cpu/dma memcpy)                   (remote embedded DMA transfer)
->                                                        |
->                                                        v
->                                                  +-----------+
->                                                  |  ntb_edma |
->                                                  +-----------+
->                                                        ^
->                                                        |
->                                                +----------------+
->                                                |                |
->                                           ntb_dw_edma         [...]
-> 
-> Key points:
->   * ntb_transport_core provides the queue-pair abstraction used by upper
->     layer clients (e.g. ntb_netdev).
->   * ntb_transport is the legacy shared-memory transport client (CPU/DMA
->     memcpy).
->   * ntb_transport_edma is the remote embedded-DMA transport client.
->   * ntb_transport_edma relies on an ntb_edma backend registry.
->     This RFC provides an initial DesignWare backend (ntb_dw_edma).
->   * Transport selection is per-NTB device via the standard
->     driver_override mechanism. To enable that, this RFC adds
->     driver_override support to ntb_bus. This allows mixing transports
->     across multiple NTB ports and provides an explicit fallback path to
->     the legacy transport.
-> 
-> So, if ntb_transport / ntb_transport_edma are built as loadable modules,
-> you can just run modprobe ntb_transport as before and the original cpu/dma
-> memcpy-based implementation will be active. If they are built-in, whether
-> ntb_transport or ntb_transport_edma are bound by default depends on
-> initcall order. Regarding how to switch the driver, please see Patch 34
-> ("Documentation: driver-api: ntb: Document remote embedded-DMA transport")
-> for details.
-> 
-> 
-> Data flow overview (remote embedded-DMA transport)
-> ==================================================
-> 
-> At a high level:
->   * One MW is reserved as an "eDMA window". The endpoint exposes the
->     eDMA register block plus LL descriptor rings through that window, so
->     the peer can ioremap it and drive DMA reads remotely.
->   * Remaining MWs carry only small control-plane rings used to exchange
->     buffer addresses and completion information.
->   * For RC->EP traffic, the RC drives endpoint DMA read channels through
->     the peer-visible eDMA window.
->   * For EP->RC traffic, the endpoint uses its local DMA write channels.
-> 
-> The following figures illustrate the data flow when ntb_netdev sits on
-> top of the transport:
-> 
->      Figure 1. RC->EP traffic via ntb_netdev + ntb_transport_edma
->                    backed by ntb_edma/ntb_dw_edma
-> 
->              EP                                   RC
->           phys addr                            phys addr
->             space                                space
->              +-+                                  +-+
->              | |                                  | |
->              | |                ||                | |
->              +-+-----.          ||                | |
->     EDMA REG | |      \     [A] ||                | |
->              +-+----.  '---+-+  ||                | |
->              | |     \     | |<---------[0-a]----------
->              +-+-----------| |<----------[2]----------.
->      EDMA LL | |           | |  ||                | | :
->              | |           | |  ||                | | :
->              +-+-----------+-+  ||  [B]           | | :
->              | |                ||  ++            | | :
->           ---------[0-b]----------->||----------------'
->              | |            ++  ||  ||            | |
->              | |            ||  ||  ++            | |
->              | |            ||<----------[4]-----------
->              | |            ++  ||                | |
->              | |           [C]  ||                | |
->           .--|#|<------------------------[3]------|#|<-.
->           :  |#|                ||                |#|  :
->          [5] | |                ||                | | [1]
->           :  | |                ||                | |  :
->           '->|#|                                  |#|--'
->              |#|                                  |#|
->              | |                                  | |
-> 
->      Figure 2. EP->RC traffic via ntb_netdev + ntb_transport_edma
->                   backed by ntb_edma/ntb_dw_edma
-> 
->              EP                                   RC
->           phys addr                            phys addr
->             space                                space
->              +-+                                  +-+
->              | |                                  | |
->              | |                ||                | |
->              +-+                ||                | |
->     EDMA REG | |                ||                | |
->              +-+                ||                | |
->     ^        | |                ||                | |
->     :        +-+                ||                | |
->     : EDMA LL| |                ||                | |
->     :        | |                ||                | |
->     :        +-+                ||  [C]           | |
->     :        | |                ||  ++            | |
->     :     -----------[4]----------->||            | |
->     :        | |            ++  ||  ||            | |
->     :        | |            ||  ||  ++            | |
->     '----------------[2]-----||<--------[0-b]-----------
->              | |            ++  ||                | |
->              | |           [B]  ||                | |
->           .->|#|--------[3]---------------------->|#|--.
->           :  |#|                ||                |#|  :
->          [1] | |                ||                | | [5]
->           :  | |                ||                | |  :
->           '--|#|                                  |#|<-'
->              |#|                                  |#|
->              | |                                  | |
-> 
->     0-a. configure remote embedded DMA (program endpoint DMA registers)
->     0-b. DMA-map and publish destination address (DAR)
->     1.   network stack builds skb (copy from application/user memory)
->     2.   consume DAR, DMA-map source address (SAR) and kick DMA transfer
->     3.   DMA transfer (payload moves between RC/EP memory)
->     4.   consume completion (commit)
->     5.   network stack delivers data to application/user memory
-> 
->     [A]: Dedicated MW that aggregates DMA regs and LL (peer ioremaps it)
->     [B]: Control-plane ring buffer for "produce"
->     [C]: Control-plane ring buffer for "consume"
-> 
-> 
-> Kernel base / dependencies
-> ==========================
-> 
-> This series is based on:
-> 
->   - next-20260114 (commit b775e489bec7)
-> 
-> plus the following seven unmerged patch series or standalone patches:
-> 
->   - [PATCH v4 0/7] PCI: endpoint/NTB: Harden vNTB resource management
->     https://lore.kernel.org/all/20251202072348.2752371-1-den@valinux.co.jp/
-> 
->   - [PATCH v2 0/2] NTB: ntb_transport: debugfs cleanups
->     https://lore.kernel.org/all/20260107042458.1987818-1-den@valinux.co.jp/
-> 
->   - [PATCH v3 0/9] dmaengine: Add new API to combine configuration and descriptor preparation
->     https://lore.kernel.org/all/20260105-dma_prep_config-v3-0-a8480362fd42@nxp.com/
-> 
->   - [PATCH v8 0/5] PCI: endpoint: BAR subrange mapping support
->     https://lore.kernel.org/all/20260115084928.55701-1-den@valinux.co.jp/
-> 
->   - [PATCH] PCI: endpoint: pci-epf-vntb: Use array_index_nospec() on mws_size[] access
->     https://lore.kernel.org/all/20260105075606.1253697-1-den@valinux.co.jp/
-> 
->   - [PATCH] dmaengine: dw-edma: Fix MSI data values for multi-vector IMWr interrupts
->     https://lore.kernel.org/all/20260105075904.1254012-1-den@valinux.co.jp/
-> 
->   - [PATCH v2 01/11] dmaengine: dw-edma: Add spinlock to protect DONE_INT_MASK and ABORT_INT_MASK
->     https://lore.kernel.org/imx/20260109-edma_ll-v2-1-5c0b27b2c664@nxp.com/
->     (only this single commit is cherry-picked from the series)
-> 
-> 
-> Patch layout
-> ============
-> 
->   1. dw-edma / DesignWare EP helpers needed for remote embedded-DMA (export
->      register/LL windows, IRQ routing control, etc.)
-> 
->      Patch 01 : dmaengine: dw-edma: Export helper to get integrated register window
->      Patch 02 : dmaengine: dw-edma: Add per-channel interrupt routing control
->      Patch 03 : dmaengine: dw-edma: Poll completion when local IRQ handling is disabled
->      Patch 04 : dmaengine: dw-edma: Add notify-only channels support
->      Patch 05 : dmaengine: dw-edma: Add a helper to query linked-list region
-> 
->   2. NTB EPF/core + vNTB prep (mwN_offset + versioning, MSI vector
->      management, new ntb_dev_ops helpers, driver_override, vntb glue)
-> 
->      Patch 06 : NTB: epf: Add mwN_offset support and config region versioning
->      Patch 07 : NTB: epf: Reserve a subset of MSI vectors for non-NTB users
->      Patch 08 : NTB: epf: Provide db_vector_count/db_vector_mask callbacks
->      Patch 09 : NTB: core: Add mw_set_trans_ranges() for subrange programming
->      Patch 10 : NTB: core: Add .get_private_data() to ntb_dev_ops
->      Patch 11 : NTB: core: Add .get_dma_dev() to ntb_dev_ops
->      Patch 12 : NTB: core: Add driver_override support for NTB devices
->      Patch 13 : PCI: endpoint: pci-epf-vntb: Support BAR subrange mappings for MWs
->      Patch 14 : PCI: endpoint: pci-epf-vntb: Implement .get_private_data() callback
->      Patch 15 : PCI: endpoint: pci-epf-vntb: Implement .get_dma_dev()
-> 
->   3. ntb_transport refactor/modularization and backend infrastructure
-> 
->      Patch 16 : NTB: ntb_transport: Move TX memory window setup into setup_qp_mw()
->      Patch 17 : NTB: ntb_transport: Dynamically determine qp count
->      Patch 18 : NTB: ntb_transport: Use ntb_get_dma_dev()
->      Patch 19 : NTB: ntb_transport: Rename ntb_transport.c to ntb_transport_core.c
->      Patch 20 : NTB: ntb_transport: Move internal types to ntb_transport_internal.h
->      Patch 21 : NTB: ntb_transport: Export common helpers for modularization
->      Patch 22 : NTB: ntb_transport: Split core library and default NTB client
->      Patch 23 : NTB: ntb_transport: Add transport backend infrastructure
->      Patch 24 : NTB: ntb_transport: Run ntb_set_mw() before link-up negotiation
-> 
->   4. ntb_edma backend registry + DesignWare backend + transport client
-> 
->      Patch 25 : NTB: hw: Add remote eDMA backend registry and DesignWare backend
->      Patch 26 : NTB: ntb_transport: Add remote embedded-DMA transport client
-> 
->   5. ntb_netdev multi-queue support
-> 
->      Patch 27 : ntb_netdev: Multi-queue support
-> 
->   6. Renesas R-Car S4 enablement (IOMMU, DTs, quirks)
-> 
->      Patch 28 : iommu: ipmmu-vmsa: Add PCIe ch0 to devices_allowlist
->      Patch 29 : iommu: ipmmu-vmsa: Add support for reserved regions
->      Patch 30 : arm64: dts: renesas: Add Spider RC/EP DTs for NTB with remote DW PCIe eDMA
->      Patch 31 : NTB: epf: Add per-SoC quirk to cap MRRS for DWC eDMA (128B for R-Car)
->      Patch 32 : NTB: epf: Add an additional memory window (MW2) barno mapping on Renesas R-Car
-> 
->   7. Documentation updates
-> 
->      Patch 33 : Documentation: PCI: endpoint: pci-epf-vntb: Update and add mwN_offset usage
->      Patch 34 : Documentation: driver-api: ntb: Document remote embedded-DMA transport
-> 
->   8. pci-epf-test / pci_endpoint_test / kselftest coverage for remote eDMA
-> 
->      Patch 35 : PCI: endpoint: pci-epf-test: Add pci_epf_test_next_free_bar() helper
->      Patch 36 : PCI: endpoint: pci-epf-test: Add remote eDMA-backed mode
->      Patch 37 : misc: pci_endpoint_test: Add remote eDMA transfer test mode
->      Patch 38 : selftests: pci_endpoint: Add remote eDMA transfer coverage
-> 
-> 
-> Tested on
-> =========
-> 
-> * 2x Renesas R-Car S4 Spider (RC<->EP connected with OCuLink cable)
-> * Kernel base as described above
-> 
-> 
-> Performance notes
-> =================
-> 
-> The primary motivation remains improving throughput/latency for ntb_transport
-> users (typically ntb_netdev). On R-Car S4, the earlier prototype (RFC v3)
-> showed roughly 10-20x throughput improvement in preliminary iperf3 tests and
-> lower ping RTT. I have not yet re-measured after the v4 refactor and
-> module split.
-> 
-> 
-> Changelog
-> =========
-> 
-> RFCv3->RFCv4 changes:
->   - Major refactor of the transport layering:
->     - Introduce ntb_transport_core as a shared library module.
->     - Split the legacy shared-memory transport client (ntb_transport) and the
->       remote embedded-DMA transport client (ntb_transport_edma).
->     - Add driver_override support for ntb_bus and use it for per-port transport
->       selection.
->   - Introduce a vendor-agnostic remote embedded-DMA backend registry (ntb_edma)
->     and add the initial DesignWare backend (ntb_dw_edma).
->   - Rebase to next-20260114 and move several prerequisite/fixup patchsets into
->     separate threads (listed above), including BAR subrange mapping support and
->     dw-edma fixes.
->   - Add PCI endpoint test coverage for the remote embedded-DMA path:
->     - extend pci-epf-test / pci_endpoint_test
->     - add a kselftest variant to exercise remote-eDMA transfers
->     Note: to keep the changes as small as possible, I added a few #ifdefs
->     in the main test code. Feedback on whether/how/to what extent this
->     should be split into separate modules would be appreciated.
->   - Expand documentation (Documentation/driver-api/ntb.rst) to describe transport
->     variants, the new module structure, and the remote embedded-DMA data flow.
->   - Addressed other feedbacks from the RFC v3 thread.
-> 
-> RFCv2->RFCv3 changes:
->   - Architecture
->     - Have EP side use its local write channels, while leaving RC side to
->       use remote read channels.
->     - Abstraction/HW-specific stuff encapsulation improved.
->   - Added control/config region versioning for the vNTB/EPF control region
->     so that mismatched RC/EP kernels fail early instead of silently using an
->     incompatible layout.
->   - Reworked BAR subrange / multi-region mapping support:
->     - Dropped the v2 approach that added new inbound mapping ops in the EPC
->       core.
->     - Introduced `struct pci_epf_bar.submap` and extended DesignWare EP to
->       support BAR subrange inbound mapping via Address Match Mode IB iATU.
->     - pci-epf-vntb now provides a subrange mapping hint to the EPC driver
->       when offsets are used.
->   - Changed .get_pci_epc() to .get_private_data()
->   - Dropped two commits from RFC v2 that should be submitted separately:
->     (1) ntb_transport debugfs seq_file conversion
->     (2) DWC EP outbound iATU MSI mapping/cache fix (will be re-posted separately)
->   - Added documentation updates.
->   - Addressed assorted review nits from the RFC v2 thread (naming/structure).
-> 
-> RFCv1->RFCv2 changes:
->   - Architecture
->     - Drop the generic interrupt backend + DW eDMA test-interrupt backend
->       approach and instead adopt the remote eDMA-backed ntb_transport mode
->       proposed by Frank Li. The BAR-sharing / mwN_offset / inbound
->       mapping (Address Match Mode) infrastructure from RFC v1 is largely
->       kept, with only minor refinements and code motion where necessary
->       to fit the new transport-mode design.
->   - For Patch 01
->     - Rework the array_index_nospec() conversion to address review
->       comments on "[RFC PATCH 01/25]".
-> 
-> RFCv3: https://lore.kernel.org/all/20251217151609.3162665-1-den@valinux.co.jp/
-> RFCv2: https://lore.kernel.org/all/20251129160405.2568284-1-den@valinux.co.jp/
-> RFCv1: https://lore.kernel.org/all/20251023071916.901355-1-den@valinux.co.jp/
-> 
-> Thank you for reviewing,
-> 
-> 
-> Koichiro Den (38):
->   dmaengine: dw-edma: Export helper to get integrated register window
->   dmaengine: dw-edma: Add per-channel interrupt routing control
->   dmaengine: dw-edma: Poll completion when local IRQ handling is
->     disabled
->   dmaengine: dw-edma: Add notify-only channels support
->   dmaengine: dw-edma: Add a helper to query linked-list region
->   NTB: epf: Add mwN_offset support and config region versioning
->   NTB: epf: Reserve a subset of MSI vectors for non-NTB users
->   NTB: epf: Provide db_vector_count/db_vector_mask callbacks
->   NTB: core: Add mw_set_trans_ranges() for subrange programming
->   NTB: core: Add .get_private_data() to ntb_dev_ops
->   NTB: core: Add .get_dma_dev() to ntb_dev_ops
->   NTB: core: Add driver_override support for NTB devices
->   PCI: endpoint: pci-epf-vntb: Support BAR subrange mappings for MWs
->   PCI: endpoint: pci-epf-vntb: Implement .get_private_data() callback
->   PCI: endpoint: pci-epf-vntb: Implement .get_dma_dev()
->   NTB: ntb_transport: Move TX memory window setup into setup_qp_mw()
->   NTB: ntb_transport: Dynamically determine qp count
->   NTB: ntb_transport: Use ntb_get_dma_dev()
->   NTB: ntb_transport: Rename ntb_transport.c to ntb_transport_core.c
->   NTB: ntb_transport: Move internal types to ntb_transport_internal.h
->   NTB: ntb_transport: Export common helpers for modularization
->   NTB: ntb_transport: Split core library and default NTB client
->   NTB: ntb_transport: Add transport backend infrastructure
->   NTB: ntb_transport: Run ntb_set_mw() before link-up negotiation
->   NTB: hw: Add remote eDMA backend registry and DesignWare backend
->   NTB: ntb_transport: Add remote embedded-DMA transport client
->   ntb_netdev: Multi-queue support
->   iommu: ipmmu-vmsa: Add PCIe ch0 to devices_allowlist
->   iommu: ipmmu-vmsa: Add support for reserved regions
->   arm64: dts: renesas: Add Spider RC/EP DTs for NTB with remote DW PCIe
->     eDMA
->   NTB: epf: Add per-SoC quirk to cap MRRS for DWC eDMA (128B for R-Car)
->   NTB: epf: Add an additional memory window (MW2) barno mapping on
->     Renesas R-Car
->   Documentation: PCI: endpoint: pci-epf-vntb: Update and add mwN_offset
->     usage
->   Documentation: driver-api: ntb: Document remote embedded-DMA transport
->   PCI: endpoint: pci-epf-test: Add pci_epf_test_next_free_bar() helper
->   PCI: endpoint: pci-epf-test: Add remote eDMA-backed mode
->   misc: pci_endpoint_test: Add remote eDMA transfer test mode
->   selftests: pci_endpoint: Add remote eDMA transfer coverage
-> 
->  Documentation/PCI/endpoint/pci-vntb-howto.rst |   19 +-
->  Documentation/driver-api/ntb.rst              |  193 ++
->  arch/arm64/boot/dts/renesas/Makefile          |    2 +
->  .../boot/dts/renesas/r8a779f0-spider-ep.dts   |   37 +
->  .../boot/dts/renesas/r8a779f0-spider-rc.dts   |   52 +
->  drivers/dma/dw-edma/dw-edma-core.c            |  207 +-
->  drivers/dma/dw-edma/dw-edma-core.h            |   10 +
->  drivers/dma/dw-edma/dw-edma-v0-core.c         |   26 +-
->  drivers/iommu/ipmmu-vmsa.c                    |    7 +-
->  drivers/misc/pci_endpoint_test.c              |  633 +++++
->  drivers/net/ntb_netdev.c                      |  341 ++-
->  drivers/ntb/Kconfig                           |   13 +
->  drivers/ntb/Makefile                          |    2 +
->  drivers/ntb/core.c                            |   68 +
->  drivers/ntb/hw/Kconfig                        |    1 +
->  drivers/ntb/hw/Makefile                       |    1 +
->  drivers/ntb/hw/edma/Kconfig                   |   28 +
->  drivers/ntb/hw/edma/Makefile                  |    5 +
->  drivers/ntb/hw/edma/backend.c                 |   87 +
->  drivers/ntb/hw/edma/backend.h                 |  102 +
->  drivers/ntb/hw/edma/ntb_dw_edma.c             |  977 +++++++
->  drivers/ntb/hw/epf/ntb_hw_epf.c               |  199 +-
->  drivers/ntb/ntb_transport.c                   | 2458 +---------------
->  drivers/ntb/ntb_transport_core.c              | 2523 +++++++++++++++++
->  drivers/ntb/ntb_transport_edma.c              | 1110 ++++++++
->  drivers/ntb/ntb_transport_internal.h          |  261 ++
->  drivers/pci/controller/dwc/pcie-designware.c  |   26 +
->  drivers/pci/endpoint/functions/pci-epf-test.c |  497 +++-
->  drivers/pci/endpoint/functions/pci-epf-vntb.c |  380 ++-
->  include/linux/dma/edma.h                      |  106 +
->  include/linux/ntb.h                           |   88 +
->  include/uapi/linux/pcitest.h                  |    3 +-
->  .../pci_endpoint/pci_endpoint_test.c          |   17 +
->  33 files changed, 7855 insertions(+), 2624 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/renesas/r8a779f0-spider-ep.dts
->  create mode 100644 arch/arm64/boot/dts/renesas/r8a779f0-spider-rc.dts
->  create mode 100644 drivers/ntb/hw/edma/Kconfig
->  create mode 100644 drivers/ntb/hw/edma/Makefile
->  create mode 100644 drivers/ntb/hw/edma/backend.c
->  create mode 100644 drivers/ntb/hw/edma/backend.h
->  create mode 100644 drivers/ntb/hw/edma/ntb_dw_edma.c
->  create mode 100644 drivers/ntb/ntb_transport_core.c
->  create mode 100644 drivers/ntb/ntb_transport_edma.c
->  create mode 100644 drivers/ntb/ntb_transport_internal.h
-> 
+and the libcamera build and testsuite:
 
+Ok:                38
+Expected Fail:     1
+Fail:              0
+Skipped:           31
+
+Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+
+Adrian
+
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
