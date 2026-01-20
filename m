@@ -1,96 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBFB847278A;
-	Tue, 20 Jan 2026 19:13:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6106933C180
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 19:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768936426; cv=none; b=tya7kFZTgL+HHWeUGhEw3kuTrmOAaaaPez6HLHRcQ6ITy9Unjgc5g38laNLeeBp+15kdOpLzn4kURH8J7y3aCndLeT613YzWqf1RAwobV/iPN4pmTLMqBFofNAkprAcYHa7TqKcsKUYQB2FrhCisX0/p+v5prYKFOuLQxXavgyE=
+	t=1768937106; cv=none; b=ldTFO3ZzcWep225zYDeg1hOQ1QdVGGj9uUiB/NxQvU0JEOFXH4Oquo+kdv0lhpLlAmFJc783VD/OxKGBHme0qK6pJzL8icg7Q4Aa3uhGu8xtDQZ7vBmgvtHc2gnvXE600heN72yCNVqmQYwpoSIa26VHqjonGN1Gc8RqWejP7lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768936426; c=relaxed/simple;
-	bh=hR7VS+eGnEIFJeV2CJ6Lyfs5CIcoszKcZFkapk5y51A=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=XZmpEILd8enAzk/mL0FgXY8MnsDfEimZWA0eiHstU7wFLb4xK98Y+08zongAKzQnW/iYPNg/cuzfrrs448RHfr5qi4GIAqrXVOeePeuWuhC6I5m0gk5SLYGK+qD5FRNVE3fpxc2Bdij4pXI4F3vJRPmrV1J0OeBn6en3OxKz4WY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fIXHpLSj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768937106; c=relaxed/simple;
+	bh=4bX/mQ7QGh+bsrmjRcU2XkTtFX6nZjakQrEeRn1qzlQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jmeAz9aR19s6lTGxzVi5Ju/Qf1CUQ93rKmbbV1C8G5NE9a7le39bZMEpWcTNV+5DUzF1mJ/TPpi2LzDSrDOfgTjH4A6KoHdcLBnVJlt03WpnSCsswVChDfF39rqTaORRPbURp21ugwfc4pOKOK/UjIVqOWYuPOg1M5Sh/+Wdxng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0pQsLXak; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xT+/+ihP; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0pQsLXak; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xT+/+ihP; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fIXHpLSj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E5DCC19425;
-	Tue, 20 Jan 2026 19:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768936426;
-	bh=hR7VS+eGnEIFJeV2CJ6Lyfs5CIcoszKcZFkapk5y51A=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=fIXHpLSjwwcIrK3t16Ux31rx7B3CC/uf12EHkBRtXsIKsaIIfMTIMmPAAxa+7ZnXb
-	 uxmxogIu+BEGZ9asCjo/Z622Clnq807VAt2nQMHzAgvaeU4qAbuSClhoOdHWzRkptb
-	 pN6YitKMvni2EsFreIafxjsyNmkDPhzbRn746kO9sf30/3OnwCUzJtWEn0azwm16kl
-	 UPmr5rk9BcDd39oiCwgNe/ntDIPy9Y+MKESY971qTJF/RpjYiZxWJ7kVwWnaok49J4
-	 fzMiHk04TnuYIzRrpO0C11GMD1g/9tw17UtOWxAI5R+VO4fMN9VUQlVD2d4MIaVh3i
-	 zPWyqTkyXHHJQ==
-Content-Type: multipart/mixed; boundary="===============7877633429921621322=="
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0pQsLXak";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xT+/+ihP";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0pQsLXak";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xT+/+ihP"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 2CA6D5BCC9;
+	Tue, 20 Jan 2026 19:25:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1768937101; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TxBGR4zZTejpTEPHfW1rYgP7AuX3Smyq6eE2tYmdeMM=;
+	b=0pQsLXakjD532CsxCG/ffwBcfgbECp8nRJ6xhIJrmCG2yn3dOArdka+pzvFBJBn7f3AZOI
+	T6DFVha/EKfL8LurUVaNNOYFeaK3tU2ISKjeAge78WwBnGLpX5KKe/oXvLDYJXj523eRiU
+	3+tEEX/ozSbxxBrHBC9CGcZpSyT8o8M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1768937101;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TxBGR4zZTejpTEPHfW1rYgP7AuX3Smyq6eE2tYmdeMM=;
+	b=xT+/+ihPYMslSCgaPZ63JvLSVfflqFycZG4KlmtllyPR9GoKrP2eOlwjbcqoOewK3rlGs+
+	9kCXU2stnlo5k1CA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=0pQsLXak;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="xT+/+ihP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1768937101; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TxBGR4zZTejpTEPHfW1rYgP7AuX3Smyq6eE2tYmdeMM=;
+	b=0pQsLXakjD532CsxCG/ffwBcfgbECp8nRJ6xhIJrmCG2yn3dOArdka+pzvFBJBn7f3AZOI
+	T6DFVha/EKfL8LurUVaNNOYFeaK3tU2ISKjeAge78WwBnGLpX5KKe/oXvLDYJXj523eRiU
+	3+tEEX/ozSbxxBrHBC9CGcZpSyT8o8M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1768937101;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TxBGR4zZTejpTEPHfW1rYgP7AuX3Smyq6eE2tYmdeMM=;
+	b=xT+/+ihPYMslSCgaPZ63JvLSVfflqFycZG4KlmtllyPR9GoKrP2eOlwjbcqoOewK3rlGs+
+	9kCXU2stnlo5k1CA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id ADD993EA63;
+	Tue, 20 Jan 2026 19:25:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id g5V+J4zWb2nnAwAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Tue, 20 Jan 2026 19:25:00 +0000
+Message-ID: <061a4df2-2ccd-449f-a21b-4ffa03be4533@suse.de>
+Date: Tue, 20 Jan 2026 20:24:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b1f74213800152dbd91fa2649b82c182058c295f6c1c15799a5b5871aa5ced48@mail.kernel.org>
-In-Reply-To: <20260120184701.23082-4-git@danielhodges.dev>
-References: <20260120184701.23082-4-git@danielhodges.dev>
-Subject: Re: [PATCH bpf-next v5 3/7] crypto: Add BPF signature algorithm type registration module
-From: bot+bpf-ci@kernel.org
-To: git@danielhodges.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,vadim.fedorenko@linux.dev,song@kernel.org,yatsenko@meta.com,martin.lau@linux.dev,eddyz87@gmail.com,haoluo@google.com,jolsa@kernel.org,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,yonghong.song@linux.dev,herbert@gondor.apana.org.au,davem@davemloft.net,linux-crypto@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,git@danielhodges.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 20 Jan 2026 19:13:44 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2 net-next v2] selftests: ipv6_icmp: add tests for
+ ICMPv6 handling
+To: David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <20260107153841.5030-1-fmancera@suse.de>
+ <20260107153841.5030-2-fmancera@suse.de>
+ <72d45fe9-c058-4944-b7a2-260b7259096f@kernel.org>
+ <1660abed-e6ad-4657-8736-599ab9114f68@suse.de>
+ <604c7b1d-f366-4faa-9abd-bae8ae73b561@kernel.org>
+Content-Language: en-US
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+In-Reply-To: <604c7b1d-f366-4faa-9abd-bae8ae73b561@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -4.51
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MIME_TRACE(0.00)[0:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:mid];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 2CA6D5BCC9
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
 
---===============7877633429921621322==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 1/8/26 4:20 PM, David Ahern wrote:
+> On 1/8/26 4:24 AM, Fernando Fernandez Mancera wrote:
+>> On 1/7/26 5:41 PM, David Ahern wrote:
+>>> On 1/7/26 8:38 AM, Fernando Fernandez Mancera wrote:
+>>>> +icmpv6_to_vrf_based_local_address()
+>>>> +{
+>>>> +    local rc
+>>>> +    local lldummy
+>>>> +
+>>>> +    echo
+>>>> +    echo "ICMPv6 to VRF based local address"
+>>>> +
+>>>> +    setup
+>>>> +
+>>>> +    lldummy=$(get_linklocal dummy0)
+>>>> +
+>>>> +    if [ -z "$lldummy" ]; then
+>>>> +        echo "Failed to get link local address for dummy0"
+>>>> +        return 1
+>>>> +    fi
+>>>> +
+>>>> +    run_cmd "$NS_EXEC sysctl -w net.ipv6.conf.all.keep_addr_on_down=1"
+>>>> +
+>>>> +    # create VRF and setup
+>>>> +    run_cmd "$IP link add vrf0 type vrf table 10"
+>>>> +    run_cmd "$IP link set vrf0 up"
+>>>> +    run_cmd "$IP link set dummy0 master vrf0"
+>>>
+>>> run_cmd "$IP -6 addr add ::1 dev vrf0 nodad"
+>>>
+>>> makes the VRF device the loopback.
+>>>
+>>>> +
+>>>> +    # route to reach 2001:db8::1/128 on VRF device and back to ::1
+>>>> +    run_cmd "$IP -6 route add 2001:db8:1::1/64 dev vrf0"
+>>>> +    run_cmd "$IP -6 route add ::1/128 dev vrf0 table 10"
+>>>
+>>> and then this route add should not be needed. This is how fcnal-test.sh
+>>> works.
+>>>
+>>
+>> Oh neat! Thanks.
+>>
+>>>> +
+>>>> +    # ping6 to link local address
+>>>> +    run_cmd "$NS_EXEC ${ping6} -c 3 $lldummy%dummy0"
+>>>> +    log_test $? 0 "Ping to link local address on VRF context"
+>>>> +
+>>>> +    # ping6 to link local address from localhost (::1)
+>>>> +    run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 $lldummy%dummy0"
+>>>
+>>> -I vrf0 should be needed for all VRF tests. I suspect your current
+>>> passing tests are because you have a single setup step and then run
+>>> non-VRF test followed by VRF test. Really you need to do the setup,
+>>> run_test, cleanup for each test.
+>>>
+>>
+>> You are right here about the cleanup, although the tests are passing
+>> even if the cleanup is properly done or if `-t
+>> icmpv6_to_vrf_based_local_address`. I don't see why they should not pass.
+> 
+> Without ::1 on the vrf device there is no valid address. ie., ::1 is in
+> the default vrf and dummy0 is in the VRF so it should not be allowed.
+> Something is off.
 
-> diff --git a/crypto/bpf_crypto_sig.c b/crypto/bpf_crypto_sig.c
-> new file mode 100644
-> index 000000000000..1d6521a066be
-> --- /dev/null
-> +++ b/crypto/bpf_crypto_sig.c
+Yes, what is off is the setup but see comment below, please disregard 
+the test file I created.
 
-[ ... ]
+>>
+>> I am changing them to use `-I vrf0` because it makes more sense.
+> 
+> I should have asked yesterday: how do these tests differ from what is
+> done in fcnal-test.sh - ipv4_ping and ipv6_ping? Those tests cover
+> loopback, linklocal address and global address combined with vrf and no vrf.
+> 
+> 
 
-> +static const struct bpf_crypto_type bpf_crypto_sig_type = {
-> +	.alloc_tfm	= bpf_crypto_sig_alloc_tfm,
-> +	.free_tfm	= bpf_crypto_sig_free_tfm,
-> +	.has_algo	= bpf_crypto_sig_has_algo,
-> +	.get_flags	= bpf_crypto_sig_get_flags,
-> +	.setkey		= bpf_crypto_sig_setkey,
-> +	.verify		= bpf_crypto_sig_verify,
-> +	.owner		= THIS_MODULE,
-> +	.type_id	= BPF_CRYPTO_TYPE_SIG,
-> +	.name		= "sig",
-> +};
+Sorry for my late reply. About fcnal-test.sh - ipv6_ping, I didn't know 
+this existed, sorry. The main difference is that they do not use -I ::1. 
+Indeed, if `-I ::1` case is added for pinging a configured local address 
+it fails. Both, vrf and no vrf.
 
-The bpf_crypto_sig_type struct does not set .ivsize or .statesize callbacks.
-In bpf_crypto_ctx_create() in kernel/bpf/crypto.c, there is an unconditional
-call:
+I am preparing a v3 adding a scenario to that test instead of creating 
+new ones.
 
-    ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
+Thank you very much David for all this feedback,
+Fernando.
 
-If a BPF program creates a crypto context with type="sig", this will call
-NULL function pointers and crash the kernel.
-
-I see this is fixed later in the series by commit 76d771a64b50 ("bpf: Add
-hash kfunc for cryptographic hashing") which adds NULL checks:
-
-    if (type->ivsize && type->statesize)
-        ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
-
-Should this fix be folded into this commit to avoid the intermediate crash?
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21183820118
-
---===============7877633429921621322==--
