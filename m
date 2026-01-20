@@ -1,177 +1,472 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012058.outbound.protection.outlook.com [52.101.48.58])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B46429821;
-	Tue, 20 Jan 2026 12:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768913268; cv=fail; b=LVOwECsyvn6e1GOXYnaj+/RzyEMiOoxIoVCMv3iu5kGHhXquzIysb+lDgDrglCboLi4EQi/SHZ6jDz9LIRsANcP02JVWSyx4uuQy2yE0ZnonFsHaivvq2eRzqaRfom5ikLxaMkImGqIvL487pSQlhU9VadlfB91kH+N9PJtnmko=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768913268; c=relaxed/simple;
-	bh=cCFKi8WfjuFK9OVPxaiQM6DTThLqT7F8JjMgWfEyqHU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QQMw6b9j2LpnrYo6At79TmqUnWTWEHNNyuFRoM5/gXCOX3dD8Uzd/+U9ap4WCw+lLYUNLDACwNUuYTQXaClAZlIjIZfsmFmDfUxAx6M8oQKvO4B8EO1eIbJCPWy+4ygVvcQGgWUxneeDl19t234WDhgZNOsZcj6ASBp4uICGpKU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OCZ1cgQf; arc=fail smtp.client-ip=52.101.48.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0873D3D04;
+	Tue, 20 Jan 2026 13:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768915725; cv=none; b=fLfrFi3mLQiwC6qs3oLZak2RNR0/+csF5VDm77pum2Rl0G6+qPufnKMKsutzxo8Rqx5U865eXTd89yi4QEgCvfchi+ghyU4iOhOIpRlRYdIiFiKNhNjC8qEr6Oo7OdTNwibBz/usTKB7gL9KP6bykAG6FUs201dhQ4A+YflzpUI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768915725; c=relaxed/simple;
+	bh=l7OaSrpvOXeA2V4ZY/20vY2Xxa9QbTE77B6bJPqs5ng=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=h5QmbUq+PYEM1+6do4/Y2HIsRT66UyKGjDVdEBXMTAy8JAK2Il/4kq4M3M/F2nEMibcDBQVH6Tn8kPRtImPbGZOFF6wW24eQ/zm2WZm2e41Q2bikNhwMcBLfSeE7caolMvwSe4aMRCv8/2QRRe3yveFEF+PorkihPMs2G2SdPn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c6N675Sc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OCZ1cgQf"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=P2gJM6yufOhfJ+1sxserfM30MWnWao3tfsqdMrDhJfsURLJsc5nccJzOB8kVBWNpgXSdKZ9d0xpwxAb2+nXqKzShy1I0lsGEmDLXv4bl47um5HJGG8gXuCX5ztm5iS4iWygHPptIPZh5Yk1rjWp0EVDSyr84G2cYnDQcbyR/+B26OYeZ5kZCsjumI+v1+IHLia1JwXXMaVqAL/TGLSR5az+YZ64BW7gjENTzilLN/u3mF91xnAB3eUWu33eONWzaIT29t/p2pe9ZNnvKRbQxg1lPi2KVdn0CMHARo3ou3H9pKZkOmGeLL+LFtjV4xlMD3lBRnizq/QQdCmOFIqaaWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kxsck0M6oO75P4LPqNt7j44OGCo9lh9z+aZRMMNAVaA=;
- b=t7GLUSpfhT1weP8U64Laums7fiu+as28q9t2Vfom7G2eLUBlrk2nu7YRgz61TmbQo6ZTH/CZwJmEar5e6fS1vAW1ctTDh43RDValMQBNkpGcivD+R3vVlEjZL/VGHd+9/aKxWXOeRVEFMawvhbNQ/k4zTTUs28s0haQQgZyUSBth8ScRlTYmIqYhVb72D0NxQMyw101VyGbriydjlmLd/oaEVwhZHfbsyx6ThPt6+HK/kAZhZtKJAnFA7YWoxZ5KYiq/iXohFHI8/jbKB88FSscGLJaeRBqpF9JHe9/TpVvVRazYU8YvYxSPbQo/zHmrNPO5flrIkC2g84V1sXrC0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kxsck0M6oO75P4LPqNt7j44OGCo9lh9z+aZRMMNAVaA=;
- b=OCZ1cgQfIS64KfyqKQLu1s10Ip+JkEbJp8nsPQwRzjTO0U6H55i4n+gxsql8+PxCIwGOSUlNczjl8HqZRTzxITIxSWGE9HakmuTy81lJEYHLh+b2f7gHgrt4Xl7co1d+Z3PWDC1OmxpGZ0fOLh6qvEXwujLSA96Mlt4Ghr/Tp1c+SVI1RkVFhkHyEYVzoODo+pOrX38tdwMI+IMO4/fWhKQVK0tSn1o86ZpBvq+A7/c++aPjDLej38Et3dI46oOGAx8xCxuxhuZr0GMKRymuO1GW2iCouBgb9JL5RrdNEqq6EuBWt9XGl4JdZl1Bo8qffpdt41Hmwl5h2IwvZyYrHg==
-Received: from SJ0P220CA0006.NAMP220.PROD.OUTLOOK.COM (2603:10b6:a03:41b::29)
- by BN5PR12MB9463.namprd12.prod.outlook.com (2603:10b6:408:2a9::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.13; Tue, 20 Jan
- 2026 12:47:42 +0000
-Received: from MWH0EPF000A6732.namprd04.prod.outlook.com
- (2603:10b6:a03:41b:cafe::f9) by SJ0P220CA0006.outlook.office365.com
- (2603:10b6:a03:41b::29) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.12 via Frontend Transport; Tue,
- 20 Jan 2026 12:47:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- MWH0EPF000A6732.mail.protection.outlook.com (10.167.249.24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9542.4 via Frontend Transport; Tue, 20 Jan 2026 12:47:42 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 20 Jan
- 2026 04:47:31 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Tue, 20 Jan 2026 04:47:31 -0800
-Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Tue, 20 Jan 2026 04:47:28 -0800
-From: Gal Pressman <gal@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	<netdev@vger.kernel.org>
-CC: Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Joe Damato
-	<joe@dama.to>, Stanislav Fomichev <sdf@fomichev.me>,
-	<linux-kselftest@vger.kernel.org>, Gal Pressman <gal@nvidia.com>, Nimrod Oren
-	<noren@nvidia.com>
-Subject: [PATCH net] selftests: net: fix wrong boolean evaluation in __exit__
-Date: Tue, 20 Jan 2026 14:47:33 +0200
-Message-ID: <20260120124733.604590-1-gal@nvidia.com>
-X-Mailer: git-send-email 2.40.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c6N675Sc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC146C16AAE;
+	Tue, 20 Jan 2026 13:28:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768915724;
+	bh=l7OaSrpvOXeA2V4ZY/20vY2Xxa9QbTE77B6bJPqs5ng=;
+	h=From:Date:Subject:To:Cc:From;
+	b=c6N675Sc4M6L9G8ibxY1ntPd0Yqd+OYkBZnp63B72h3IB8SlPf07dQ+7zaunkgD5k
+	 9Sx4rmUh7ChLoOLxIewg3JrKrRn9S5y0db9EB/6dcqUDyLp4T8Cprk1YKIR/HVEAjh
+	 /KOOZLTQXpyH18sYvc/nsRK3Uplby7B5cdKiNyQlmYfK2TIbl15T7orxRFPC3JYffl
+	 jWjti9oResKV2AyDq30ZaUzyGtvPWN9XbvGFw14EuLgRjZPgeDUc44J4p5WZeNf4Kt
+	 rHeb8TM+z9IwkYDh017LnDyXdSGY/lvrZIJxyzvCrXEIv4XtpjvO0G3+LT/K2T6Dhg
+	 ZIxiwlKAqPDFA==
+From: Mark Brown <broonie@kernel.org>
+Date: Tue, 20 Jan 2026 13:25:32 +0000
+Subject: [PATCH] selftests/mm: Have the harness run each test category
+ separately
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000A6732:EE_|BN5PR12MB9463:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30b8a3a3-07ac-4eba-f619-08de58221a07
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?EUltaRW1cn/YHLX3piH0LJdqpOeY6rSBk/bDb0VfmORi+VxLtlfZrCulLc/L?=
- =?us-ascii?Q?0ii5pG9+3VL130a5Z4nMzQPZPpwwNSGZdQNV+tqUjSc7Lv5r71zQpRxMQNwr?=
- =?us-ascii?Q?A53MXkrbv3/9yLzox3/8Hf04/RTd4Q17uRbBwE77k4JudGyh70bLJgJNs1er?=
- =?us-ascii?Q?w1rCfoevj4yc4SuSBRKIvKomkVcUUyqozND28UIDNZ4g+MELqAN65X4WdjxP?=
- =?us-ascii?Q?W6Z0EAS+fkPBOanGUkrLhaicKF622o2kvZWCZW5E74bk65H7MDdzZ+UA01r/?=
- =?us-ascii?Q?JVXmKW56ZpheUQP6XkCRfj4y+mDLHLDWOkx5tcawANEaUHSUU3DgM0JloSVa?=
- =?us-ascii?Q?eWGW8tvqmr3DLbImnYCHT8JTy8RLmvccNxqEKrE83s0WkGL60zzutWdsuhLB?=
- =?us-ascii?Q?dvnrQ89qz5eNFmWseri43SCKuYkcpAdsPr2dn7HA26aUvz096wH7KFfVel/5?=
- =?us-ascii?Q?FMAi4PfuC9sLxKW+sVOpdbCOhV3r09GuQVTUeTfYOZtWh3YUe5L1pmu788II?=
- =?us-ascii?Q?HtlZSrHswiEKzlaC/WxKMSobBHHLy6rV21Olb8N9CoPRVfgNwKty3lDCMXe8?=
- =?us-ascii?Q?Q4NFI0Qkb++z2xxAiuZPjbm007Qbxe16SHi7sZRM2ZtIuD2te/3g3rN929CD?=
- =?us-ascii?Q?FPqe1L9CJSOwswu9/ao7dpNWMGv+9DZEL8VX6hEbcsmv2Y6nUKFZ2modhgqu?=
- =?us-ascii?Q?Yxfo+T3rwzCOLuTT/6sv5coZGkK8Ny2pyAPa38jav51yvt89OXVuJATyTYya?=
- =?us-ascii?Q?NmZH6U49VvqaxJt+J0njj/GT6fTaKrjenHpQydQhDM5SekGXjapZ+8aUxo3s?=
- =?us-ascii?Q?lY8yxir66QsmEI/UdjEXHma5bTZbM0mVHS6ckndqstwpXMcWSSyuHwqA6hdM?=
- =?us-ascii?Q?vyTNkZzIL3FFRg3c8gka4c5k90A26POt587aZgp8/rnbJV3Eh/pAOVIiZbmO?=
- =?us-ascii?Q?4DrfjfKABgJ6745XsmpcmHt5cz60vbkMMkiT9xMsZ8DPN6XjgpPl0ge5sFuh?=
- =?us-ascii?Q?DXEE+Bw2T24BPJmG1NEvrKf4FG/3+II4RurexamSVz10JJAa+Qd/ag/vlR2C?=
- =?us-ascii?Q?6eH3+2k/EeklKr2WQsUFPjHpEiVpn/diy6IOyDlvYvw+iNllGwU+Z6Quq28N?=
- =?us-ascii?Q?uLGpZO0RFud6WiN38FANbS73fByKA/AEs8dQNIv4yPJw/lDBxAKMa6t/kYWg?=
- =?us-ascii?Q?eh54CuxG1wUxx3sO0uRIldLqS0M8YRbs9HpvJMYqp4vbMtegtNj443PFCgeI?=
- =?us-ascii?Q?u56ZI0rMaRGxrjzhBs2s3GFWyjz2I25xwYLPYivqy5UAPGzD4wxQPQMEqy8P?=
- =?us-ascii?Q?03U1k/3DSq4HiMiSnHhu4/JdbC9UPNGaJgMqoAzgV5trSLgLxbswRWTcWxJR?=
- =?us-ascii?Q?eei+18emsPX8t6b35/5i4OMeX4rWWec7WYKLGkMzPGDYmS6StMX7VH6Q/Z2e?=
- =?us-ascii?Q?FX9kqqbdwBNiRFaKtoW0j9rOwXMoTf3dcC8x0aToBSLvGhFpnieTQc1XOOms?=
- =?us-ascii?Q?oOSd1uLdJlCnrik7q12kiHwWL62dcCQRMbcgYkW2ELYpG2UIj8ATzC5rwJu1?=
- =?us-ascii?Q?nH1yxhWeCsc5UTPNaZUaOPtcEfHDBv/Area+jgXv+bL1AOmj1b3V/4URnVYk?=
- =?us-ascii?Q?Wr7Dyn6DqtjzQKvnFd2/PMnV/9FU2K1Wtr+wdF7BzaK6mw0GyZRbp9Wz8tbz?=
- =?us-ascii?Q?6Da34Q=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2026 12:47:42.1202
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30b8a3a3-07ac-4eba-f619-08de58221a07
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000A6732.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN5PR12MB9463
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260120-selftests-mm-run-suites-separately-v1-1-a4334f0cbb3a@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAEuCb2kC/yXNQQ6CMBCF4auQWTsJRdJEr2JcjO2gY6CSTmskh
+ Lsz6vJ7i/+toJyFFc7NCpnfovJKBndoIDwo3RklmqFrO986d0LlcSisRXGaMNeEWsVs+0yZCo8
+ LeuojRXJHH3qw0Jx5kM/v5HL9W+vtyaF8y7BtO/ivgOCGAAAA
+X-Change-ID: 20260119-selftests-mm-run-suites-separately-6a4dada136c4
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, 
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+ Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, 
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+ Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
+ Leon Romanovsky <leon@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=14575; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=l7OaSrpvOXeA2V4ZY/20vY2Xxa9QbTE77B6bJPqs5ng=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpb4MIxOksEwEdA0i4Ekepapi/owMSOW8b25qgW
+ pbNGDAZPtSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaW+DCAAKCRAk1otyXVSH
+ 0D7fB/95wEekw15kwcNccNI53G0IWlLpNpN6Zi79jwj8mfjvDMuPt78KYe3F5xT/Rp9s3yp0Dve
+ ErEHNWpFisxFDxwDOfs9bCwWXYjvk2fWnMJ+Ra7Tpewkec/9P08Pgwso2p6HiYG41hvBqJWXk4w
+ d7Z5M5PzWR04BV3YmG6SMw2t+Sk1TezDzbs6jvVOPMB2+JT8Zoq8Twcosd7h1z+3x5f0xZ7Wjiw
+ tM9HfibLHI2pDNhDDV1nEYBoc6jd7qB88dbfs0ikj7ooUeq2ObKjzm7t2jowYGIs45fo/YUbrOc
+ E710NLLr9nb/3W1E+mILIZP1RLoQ73HwOUNKIHqPBrmHAQk+
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-The __exit__ method receives ex_type as the exception class when an
-exception occurs. The previous code used implicit boolean evaluation:
+At present the mm selftests are integrated into the kselftest harness by
+having it run run_vmtest.sh and letting it pick it's default set of
+tests to invoke, rather than by telling the kselftest framework about
+each test program individually as is more standard.   This has some
+unfortunate interactions with the kselftest harness:
 
-    terminate = self.terminate or (self._exit_wait and ex_type)
-                                                   ^^^^^^^^^^^
+ - If any of the tests hangs the harness will kill the entire mm
+   selftests run rather than just the individual test, meaning no
+   further tests get run.
+ - The timeout applied by the harness is applied to the whole run rather
+   than an individual test which frequently leads to the suite not being
+   completed in production testing.
 
-In Python, the and operator can be used with non-boolean values, but it
-does not always return a boolean result.
+Deploy a crude but effective mitigation for these issues by telling the
+kselftest framework to run each of the test categories that run_vmtests.sh
+has separately.  Since kselftest really wants to run test programs this
+is done by providing a trivial wrapper script for each categorty that
+invokes run_vmtest.sh, this is not a thing of great elegence but it is
+clear and simple.  Since run_vmtests.sh is doing runtime support
+detection, scenario enumeration and setup for many of the tests we can't
+consistently tell the framework about the individual test programs.
 
-This is probably not what we want, because 'self._exit_wait and ex_type'
-could return the actual ex_type value (the exception class) rather than
-a boolean True when an exception occurs.
+This has the side effect of reordering the tests, hopefully the testing
+is not overly sensitive to this.
 
-Use explicit `ex_type is not None` check to properly evaluate whether
-an exception occurred, returning a boolean result.
-
-Fixes: 6e9a12f85a75 ("selftests: net: terminate bkg() commands on exception")
-Reviewed-by: Nimrod Oren <noren@nvidia.com>
-Signed-off-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/net/lib/py/utils.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/mm/Makefile                | 29 +++++++++++++++++++++-
+ tools/testing/selftests/mm/ksft_compaction.sh      |  4 +++
+ tools/testing/selftests/mm/ksft_cow.sh             |  4 +++
+ tools/testing/selftests/mm/ksft_gup_test.sh        |  4 +++
+ tools/testing/selftests/mm/ksft_hmm.sh             |  4 +++
+ tools/testing/selftests/mm/ksft_hugetlb.sh         |  4 +++
+ tools/testing/selftests/mm/ksft_hugevm.sh          |  4 +++
+ tools/testing/selftests/mm/ksft_ksm.sh             |  4 +++
+ tools/testing/selftests/mm/ksft_ksm_numa.sh        |  4 +++
+ tools/testing/selftests/mm/ksft_madv_guard.sh      |  4 +++
+ tools/testing/selftests/mm/ksft_madv_populate.sh   |  4 +++
+ tools/testing/selftests/mm/ksft_mdwe.sh            |  4 +++
+ tools/testing/selftests/mm/ksft_memfd_secret.sh    |  4 +++
+ tools/testing/selftests/mm/ksft_migration.sh       |  4 +++
+ tools/testing/selftests/mm/ksft_mkdirty.sh         |  4 +++
+ tools/testing/selftests/mm/ksft_mlock.sh           |  4 +++
+ tools/testing/selftests/mm/ksft_mmap.sh            |  4 +++
+ tools/testing/selftests/mm/ksft_mremap.sh          |  4 +++
+ tools/testing/selftests/mm/ksft_page_frag.sh       |  4 +++
+ tools/testing/selftests/mm/ksft_pagemap.sh         |  4 +++
+ tools/testing/selftests/mm/ksft_pfnmap.sh          |  4 +++
+ tools/testing/selftests/mm/ksft_pkey.sh            |  4 +++
+ tools/testing/selftests/mm/ksft_process_madv.sh    |  4 +++
+ .../testing/selftests/mm/ksft_process_mrelease.sh  |  4 +++
+ tools/testing/selftests/mm/ksft_rmap.sh            |  4 +++
+ tools/testing/selftests/mm/ksft_soft_dirty.sh      |  4 +++
+ tools/testing/selftests/mm/ksft_thp.sh             |  4 +++
+ tools/testing/selftests/mm/ksft_userfaultfd.sh     |  4 +++
+ tools/testing/selftests/mm/ksft_vma_merge.sh       |  4 +++
+ tools/testing/selftests/mm/ksft_vmalloc.sh         |  4 +++
+ 30 files changed, 144 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
-index 106ee1f2df86..dc1db78b5304 100644
---- a/tools/testing/selftests/net/lib/py/utils.py
-+++ b/tools/testing/selftests/net/lib/py/utils.py
-@@ -137,7 +137,7 @@ class bkg(cmd):
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index eaf9312097f7..69f10947735a 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -146,7 +146,33 @@ endif
+ TEST_GEN_FILES += write_to_hugetlbfs
+ endif
  
-     def __exit__(self, ex_type, ex_value, ex_tb):
-         # Force termination on exception
--        terminate = self.terminate or (self._exit_wait and ex_type)
-+        terminate = self.terminate or (self._exit_wait and ex_type is not None)
-         return self.process(terminate=terminate, fail=self.check_fail)
+-TEST_PROGS := run_vmtests.sh
++TEST_PROGS += ksft_compaction.sh
++TEST_PROGS += ksft_cow.sh
++TEST_PROGS += ksft_gup_test.sh
++TEST_PROGS += ksft_hmm.sh
++TEST_PROGS += ksft_hugetlb.sh
++TEST_PROGS += ksft_hugevm.sh
++TEST_PROGS += ksft_ksm.sh
++TEST_PROGS += ksft_ksm_numa.sh
++TEST_PROGS += ksft_madv_guard.sh
++TEST_PROGS += ksft_madv_populate.sh
++TEST_PROGS += ksft_memfd_secret.sh
++TEST_PROGS += ksft_migration.sh
++TEST_PROGS += ksft_mkdirty.sh
++TEST_PROGS += ksft_mlock.sh
++TEST_PROGS += ksft_mmap.sh
++TEST_PROGS += ksft_mremap.sh
++TEST_PROGS += ksft_pagemap.sh
++TEST_PROGS += ksft_pfnmap.sh
++TEST_PROGS += ksft_pkey.sh
++TEST_PROGS += ksft_process_madv.sh
++TEST_PROGS += ksft_process_mrelease.sh
++TEST_PROGS += ksft_rmap.sh
++TEST_PROGS += ksft_soft_dirty.sh
++TEST_PROGS += ksft_thp.sh
++TEST_PROGS += ksft_userfaultfd.sh
++TEST_PROGS += ksft_vma_merge.sh
++TEST_PROGS += ksft_vmalloc.sh
  
+ TEST_FILES := test_vmalloc.sh
+ TEST_FILES += test_hmm.sh
+@@ -154,6 +180,7 @@ TEST_FILES += va_high_addr_switch.sh
+ TEST_FILES += charge_reserved_hugetlb.sh
+ TEST_FILES += hugetlb_reparenting_test.sh
+ TEST_FILES += test_page_frag.sh
++TEST_FILES += run_vmtests.sh
  
--- 
-2.40.1
+ # required by charge_reserved_hugetlb.sh
+ TEST_FILES += write_hugetlb_memory.sh
+diff --git a/tools/testing/selftests/mm/ksft_compaction.sh b/tools/testing/selftests/mm/ksft_compaction.sh
+new file mode 100755
+index 000000000000..1f38f4228a34
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_compaction.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t compaction
+diff --git a/tools/testing/selftests/mm/ksft_cow.sh b/tools/testing/selftests/mm/ksft_cow.sh
+new file mode 100755
+index 000000000000..1e03a95fd5f6
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_cow.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t cow
+diff --git a/tools/testing/selftests/mm/ksft_gup_test.sh b/tools/testing/selftests/mm/ksft_gup_test.sh
+new file mode 100755
+index 000000000000..09e586d2f446
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_gup_test.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t gup_test
+diff --git a/tools/testing/selftests/mm/ksft_hmm.sh b/tools/testing/selftests/mm/ksft_hmm.sh
+new file mode 100755
+index 000000000000..0a7b04f454d5
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_hmm.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t hmm
+diff --git a/tools/testing/selftests/mm/ksft_hugetlb.sh b/tools/testing/selftests/mm/ksft_hugetlb.sh
+new file mode 100755
+index 000000000000..4f92974a4eb5
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_hugetlb.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t hugetlb
+diff --git a/tools/testing/selftests/mm/ksft_hugevm.sh b/tools/testing/selftests/mm/ksft_hugevm.sh
+new file mode 100755
+index 000000000000..377967fe9c91
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_hugevm.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t hugevm
+diff --git a/tools/testing/selftests/mm/ksft_ksm.sh b/tools/testing/selftests/mm/ksft_ksm.sh
+new file mode 100755
+index 000000000000..f6a6fe13a3b0
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_ksm.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t ksm
+diff --git a/tools/testing/selftests/mm/ksft_ksm_numa.sh b/tools/testing/selftests/mm/ksft_ksm_numa.sh
+new file mode 100755
+index 000000000000..144b41a5e3bb
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_ksm_numa.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t ksm_numa
+diff --git a/tools/testing/selftests/mm/ksft_madv_guard.sh b/tools/testing/selftests/mm/ksft_madv_guard.sh
+new file mode 100755
+index 000000000000..2d810c049182
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_madv_guard.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t madv_guard
+diff --git a/tools/testing/selftests/mm/ksft_madv_populate.sh b/tools/testing/selftests/mm/ksft_madv_populate.sh
+new file mode 100755
+index 000000000000..127e22ed02c4
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_madv_populate.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t madv_populate
+diff --git a/tools/testing/selftests/mm/ksft_mdwe.sh b/tools/testing/selftests/mm/ksft_mdwe.sh
+new file mode 100755
+index 000000000000..3dcae95ddabc
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_mdwe.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mdwe
+diff --git a/tools/testing/selftests/mm/ksft_memfd_secret.sh b/tools/testing/selftests/mm/ksft_memfd_secret.sh
+new file mode 100755
+index 000000000000..56e82dd648a7
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_memfd_secret.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t memfd_secret
+diff --git a/tools/testing/selftests/mm/ksft_migration.sh b/tools/testing/selftests/mm/ksft_migration.sh
+new file mode 100755
+index 000000000000..7cf37c72d26e
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_migration.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t migration
+diff --git a/tools/testing/selftests/mm/ksft_mkdirty.sh b/tools/testing/selftests/mm/ksft_mkdirty.sh
+new file mode 100755
+index 000000000000..dd6332df3204
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_mkdirty.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mkdirty
+diff --git a/tools/testing/selftests/mm/ksft_mlock.sh b/tools/testing/selftests/mm/ksft_mlock.sh
+new file mode 100755
+index 000000000000..1e25ab9fdc8b
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_mlock.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mlock
+diff --git a/tools/testing/selftests/mm/ksft_mmap.sh b/tools/testing/selftests/mm/ksft_mmap.sh
+new file mode 100755
+index 000000000000..2c3137ae8bc8
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_mmap.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mmap
+diff --git a/tools/testing/selftests/mm/ksft_mremap.sh b/tools/testing/selftests/mm/ksft_mremap.sh
+new file mode 100755
+index 000000000000..4101670d0e19
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_mremap.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mremap
+diff --git a/tools/testing/selftests/mm/ksft_page_frag.sh b/tools/testing/selftests/mm/ksft_page_frag.sh
+new file mode 100755
+index 000000000000..216e20ffe390
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_page_frag.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t page_frag
+diff --git a/tools/testing/selftests/mm/ksft_pagemap.sh b/tools/testing/selftests/mm/ksft_pagemap.sh
+new file mode 100755
+index 000000000000..b8d270fdd43e
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_pagemap.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t pagemap
+diff --git a/tools/testing/selftests/mm/ksft_pfnmap.sh b/tools/testing/selftests/mm/ksft_pfnmap.sh
+new file mode 100755
+index 000000000000..75758de968bb
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_pfnmap.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t pfnmap
+diff --git a/tools/testing/selftests/mm/ksft_pkey.sh b/tools/testing/selftests/mm/ksft_pkey.sh
+new file mode 100755
+index 000000000000..ac944233b7f7
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_pkey.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t pkey
+diff --git a/tools/testing/selftests/mm/ksft_process_madv.sh b/tools/testing/selftests/mm/ksft_process_madv.sh
+new file mode 100755
+index 000000000000..2c3137ae8bc8
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_process_madv.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mmap
+diff --git a/tools/testing/selftests/mm/ksft_process_mrelease.sh b/tools/testing/selftests/mm/ksft_process_mrelease.sh
+new file mode 100755
+index 000000000000..f560aa5e4218
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_process_mrelease.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t process_mrelease
+diff --git a/tools/testing/selftests/mm/ksft_rmap.sh b/tools/testing/selftests/mm/ksft_rmap.sh
+new file mode 100755
+index 000000000000..974742b9b02f
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_rmap.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t rmap
+diff --git a/tools/testing/selftests/mm/ksft_soft_dirty.sh b/tools/testing/selftests/mm/ksft_soft_dirty.sh
+new file mode 100755
+index 000000000000..d160d7fea0a9
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_soft_dirty.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t soft_dirty
+diff --git a/tools/testing/selftests/mm/ksft_thp.sh b/tools/testing/selftests/mm/ksft_thp.sh
+new file mode 100755
+index 000000000000..95321aecabdb
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_thp.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t thp
+diff --git a/tools/testing/selftests/mm/ksft_userfaultfd.sh b/tools/testing/selftests/mm/ksft_userfaultfd.sh
+new file mode 100755
+index 000000000000..92667abde6c6
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_userfaultfd.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t userfaultfd
+diff --git a/tools/testing/selftests/mm/ksft_vma_merge.sh b/tools/testing/selftests/mm/ksft_vma_merge.sh
+new file mode 100755
+index 000000000000..68449d840680
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_vma_merge.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t vma_merge
+diff --git a/tools/testing/selftests/mm/ksft_vmalloc.sh b/tools/testing/selftests/mm/ksft_vmalloc.sh
+new file mode 100755
+index 000000000000..0b5019a76612
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_vmalloc.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t vmalloc
+
+---
+base-commit: 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7
+change-id: 20260119-selftests-mm-run-suites-separately-6a4dada136c4
+
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
 
