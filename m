@@ -1,230 +1,224 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C8F47CC8B
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 19:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F393BF2EF;
+	Tue, 20 Jan 2026 20:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768938303; cv=none; b=gsG02kTu2Xix0HXYpmPY3/hQz4fzGQ6NysRPWmjO1sC4E51FsYUpBnxwFVw1/5yPCYCleMq9/qnC7vtrMUuOFIgGzJYex8nbH5VaXJq1gBIyzyKyhQDZFac3wiCis8JSVMsOyMTEsOhX+NQnuQ/t6x1DRtBeMDwKmeAKLAhoqGU=
+	t=1768942233; cv=none; b=VjnBOzMQ8Ezy+u1aw3xd26yACS8VT5R9LRR4DLqaHiIQhG7JDr9VlYKH9vFZOv5YBJ4SCyIl1h44VOtNZQabV3aYikJKP3mJ7+9r0ZFevl0YN1L2uI1RYZYBhte95rLdhjoezlW1Ge3Vf1Nsy2k8MyB0br56NAJ8LD9tLc6g8D4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768938303; c=relaxed/simple;
-	bh=fnHTYKoRmjsneSKmJmk5uNghMHCy+6dx8CZiiPq1vYQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=N/5pa9t7AG2VXvvISqxr8XJrKZo6WqPuA48J15DbgjzYPajTLkBO5SX2pq/K5C2aMr2uFK+9Mc+vOETcR4j2870VBiWrnd6KkXRn7/3MkQl3KCULmYChoEsrQeR/uaVA9lbkBcj3WryflcElKKdaZU6PR1pxjAsgrtFgoLbqxZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Xl/VhU/8; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=fdIKl0IJ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Xl/VhU/8; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=fdIKl0IJ; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Xl/VhU/8";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="fdIKl0IJ";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Xl/VhU/8";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="fdIKl0IJ"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id A39925BCCF;
-	Tue, 20 Jan 2026 19:44:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1768938298; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oB8L91jGPNcK38t02Oh2/Lp/HdtpKCMAVWKjAGV+TL4=;
-	b=Xl/VhU/8WQ8msMdAlcXAdo0sZQqQzDPjRU2TCD7Q4qGqDxPzX1qYsajKPls2CmwUEr7K89
-	g8YyjNn3x2X72Yeq9ZOHcfufoSMgYERzvKfSvq7rjT4NOqeyjpbgYmP3/ITZZg5oiJ9Exu
-	89WBKizi6v69SyB6SZt/F++CNXbW3E8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1768938298;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oB8L91jGPNcK38t02Oh2/Lp/HdtpKCMAVWKjAGV+TL4=;
-	b=fdIKl0IJS7zT6/o4a94BQx+6ccxZN2f9fCaIc1af1Cr8eRp7bfQJAkQhD/HSNIWjy8JdIE
-	qyXa9i5NQ7RL8iAg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="Xl/VhU/8";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=fdIKl0IJ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1768938298; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oB8L91jGPNcK38t02Oh2/Lp/HdtpKCMAVWKjAGV+TL4=;
-	b=Xl/VhU/8WQ8msMdAlcXAdo0sZQqQzDPjRU2TCD7Q4qGqDxPzX1qYsajKPls2CmwUEr7K89
-	g8YyjNn3x2X72Yeq9ZOHcfufoSMgYERzvKfSvq7rjT4NOqeyjpbgYmP3/ITZZg5oiJ9Exu
-	89WBKizi6v69SyB6SZt/F++CNXbW3E8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1768938298;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oB8L91jGPNcK38t02Oh2/Lp/HdtpKCMAVWKjAGV+TL4=;
-	b=fdIKl0IJS7zT6/o4a94BQx+6ccxZN2f9fCaIc1af1Cr8eRp7bfQJAkQhD/HSNIWjy8JdIE
-	qyXa9i5NQ7RL8iAg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2A7BF3EA63;
-	Tue, 20 Jan 2026 19:44:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id BGtJBzrbb2lwFgAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Tue, 20 Jan 2026 19:44:58 +0000
-Message-ID: <f22691c9-63c6-444a-899f-adac93a2bbbf@suse.de>
-Date: Tue, 20 Jan 2026 20:44:48 +0100
+	s=arc-20240116; t=1768942233; c=relaxed/simple;
+	bh=rpRZpV3FMkK3I6Msimm2uVhMDG5RHUvCYbjEqE3O7yQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UFwZrAznpphkuBoT0F56zpKBWjPPUSBBAC16CJG9I95vMeI6yeICPmftBNStcwUHKCg7Hts50rGPasBqTLssBMGJt8SNnUvk2DQOQg9Fs4waQbIddPSer+2Im3lXwAoVg4tvkeBaT4Pufixp3OwxSsIW7hslfaXjTXe3Y/Qmx0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 1D7438C2F3;
+	Tue, 20 Jan 2026 20:50:28 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id E3C8D60011;
+	Tue, 20 Jan 2026 20:50:25 +0000 (UTC)
+Date: Tue, 20 Jan 2026 15:50:47 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
+Cc: mhiramat@kernel.org, corbet@lwn.net, shuah@kernel.org,
+ mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] tracing/fprobe: Support comma-separated symbols
+ and :entry/:exit
+Message-ID: <20260120155047.4ef3c378@gandalf.local.home>
+In-Reply-To: <20260114221341.128038-2-seokwoo.chung130@gmail.com>
+References: <20251126184110.72241-1-seokwoo.chung130@gmail.com>
+	<20260114221341.128038-1-seokwoo.chung130@gmail.com>
+	<20260114221341.128038-2-seokwoo.chung130@gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2 net-next v2] selftests: ipv6_icmp: add tests for
- ICMPv6 handling
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20260107153841.5030-1-fmancera@suse.de>
- <20260107153841.5030-2-fmancera@suse.de>
- <72d45fe9-c058-4944-b7a2-260b7259096f@kernel.org>
- <1660abed-e6ad-4657-8736-599ab9114f68@suse.de>
- <604c7b1d-f366-4faa-9abd-bae8ae73b561@kernel.org>
- <061a4df2-2ccd-449f-a21b-4ffa03be4533@suse.de>
-Content-Language: en-US
-In-Reply-To: <061a4df2-2ccd-449f-a21b-4ffa03be4533@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -4.51
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MID_RHS_MATCH_FROM(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: A39925BCCF
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: E3C8D60011
+X-Stat-Signature: jrtmepm1z88w1mizsqhattj3o37we6ky
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/nEHTVmKHy7dTLOhobmuf1oJYfvo/7lZs=
+X-HE-Tag: 1768942225-38081
+X-HE-Meta: U2FsdGVkX1+c7yx+1EdcoVJUqwtcYG1SyA1BnPp8inHrIvYWuEQpayjTmEVNiRif/GOqf/zOAK3zCZbEIMgZJeBlF8bv/JbH6cST2RI77gKiXajEHw8S9RYN8gTPvQE+L6BZFOLG4hU5K0fKE0Ts8HswieGtCrZXh1cqIx/w9tUWSaCdwrWUAOhnwlXFZ6gYPw5hd8hmxQNdwOa5SKzYPRjReCKjHQ+dqIuw/Ei9sW8YucIM7jek09N7n5X3OKhLC0cUDT7vWXrBNediIc/ED4L2+P1jJgV/bXF10cbM0nYnPTahgsPQAmQudEwtp7i19u9GdiMcLzH4D8Pgz1ahNxawfUklpENa
 
-On 1/20/26 8:24 PM, Fernando Fernandez Mancera wrote:
-> On 1/8/26 4:20 PM, David Ahern wrote:
->> On 1/8/26 4:24 AM, Fernando Fernandez Mancera wrote:
->>> On 1/7/26 5:41 PM, David Ahern wrote:
->>>> On 1/7/26 8:38 AM, Fernando Fernandez Mancera wrote:
->>>>> +icmpv6_to_vrf_based_local_address()
->>>>> +{
->>>>> +    local rc
->>>>> +    local lldummy
->>>>> +
->>>>> +    echo
->>>>> +    echo "ICMPv6 to VRF based local address"
->>>>> +
->>>>> +    setup
->>>>> +
->>>>> +    lldummy=$(get_linklocal dummy0)
->>>>> +
->>>>> +    if [ -z "$lldummy" ]; then
->>>>> +        echo "Failed to get link local address for dummy0"
->>>>> +        return 1
->>>>> +    fi
->>>>> +
->>>>> +    run_cmd "$NS_EXEC sysctl -w 
->>>>> net.ipv6.conf.all.keep_addr_on_down=1"
->>>>> +
->>>>> +    # create VRF and setup
->>>>> +    run_cmd "$IP link add vrf0 type vrf table 10"
->>>>> +    run_cmd "$IP link set vrf0 up"
->>>>> +    run_cmd "$IP link set dummy0 master vrf0"
->>>>
->>>> run_cmd "$IP -6 addr add ::1 dev vrf0 nodad"
->>>>
->>>> makes the VRF device the loopback.
->>>>
->>>>> +
->>>>> +    # route to reach 2001:db8::1/128 on VRF device and back to ::1
->>>>> +    run_cmd "$IP -6 route add 2001:db8:1::1/64 dev vrf0"
->>>>> +    run_cmd "$IP -6 route add ::1/128 dev vrf0 table 10"
->>>>
->>>> and then this route add should not be needed. This is how fcnal-test.sh
->>>> works.
->>>>
->>>
->>> Oh neat! Thanks.
->>>
->>>>> +
->>>>> +    # ping6 to link local address
->>>>> +    run_cmd "$NS_EXEC ${ping6} -c 3 $lldummy%dummy0"
->>>>> +    log_test $? 0 "Ping to link local address on VRF context"
->>>>> +
->>>>> +    # ping6 to link local address from localhost (::1)
->>>>> +    run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 $lldummy%dummy0"
->>>>
->>>> -I vrf0 should be needed for all VRF tests. I suspect your current
->>>> passing tests are because you have a single setup step and then run
->>>> non-VRF test followed by VRF test. Really you need to do the setup,
->>>> run_test, cleanup for each test.
->>>>
->>>
->>> You are right here about the cleanup, although the tests are passing
->>> even if the cleanup is properly done or if `-t
->>> icmpv6_to_vrf_based_local_address`. I don't see why they should not 
->>> pass.
->>
->> Without ::1 on the vrf device there is no valid address. ie., ::1 is in
->> the default vrf and dummy0 is in the VRF so it should not be allowed.
->> Something is off.
-> 
-> Yes, what is off is the setup but see comment below, please disregard 
-> the test file I created.
-> 
->>>
->>> I am changing them to use `-I vrf0` because it makes more sense.
->>
->> I should have asked yesterday: how do these tests differ from what is
->> done in fcnal-test.sh - ipv4_ping and ipv6_ping? Those tests cover
->> loopback, linklocal address and global address combined with vrf and 
->> no vrf.
->>
->>
-> 
-> Sorry for my late reply. About fcnal-test.sh - ipv6_ping, I didn't know 
-> this existed, sorry. The main difference is that they do not use -I ::1. 
-> Indeed, if `-I ::1` case is added for pinging a configured local address 
-> it fails. Both, vrf and no vrf.
-> 
+On Wed, 14 Jan 2026 17:13:38 -0500
+"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com> wrote:
 
-Correction: only on no-vrf scenario, as vrf scenario uses `-I $VRF` it 
-is fine.
+Missing change log. The subject is the "what" the patch is doing, the
+change log needs the "why".
 
-> I am preparing a v3 adding a scenario to that test instead of creating 
-> new ones.
+> Signed-off-by: Seokwoo Chung (Ryan) <seokwoo.chung130@gmail.com>
+> ---
+>  kernel/trace/trace.c        |  4 +--
+>  kernel/trace/trace_fprobe.c | 49 ++++++++++++++++++++-----------------
+>  kernel/trace/trace_probe.h  |  2 ++
+>  3 files changed, 31 insertions(+), 24 deletions(-)
 > 
-> Thank you very much David for all this feedback,
-> Fernando.
-> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index 10cdcc7b194e..73b59d47dfe7 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -5578,8 +5578,8 @@ static const char readme_msg[] =
+>  	"\t           r[maxactive][:[<group>/][<event>]] <place> [<args>]\n"
+>  #endif
+>  #ifdef CONFIG_FPROBE_EVENTS
+> -	"\t           f[:[<group>/][<event>]] <func-name>[:entry|:exit] [<args>]\n"
+> -	"\t		(single symbols still accept %return)\n"
+> +	"\t           f[:[<group>/][<event>]] <func-name>[%return] [<args>]\n"
+> +	"\t	      f[:[<group>/][<event>]] <func-list>[:entry|:exit] [<args>]\n" 
+>  	"\t           t[:[<group>/][<event>]] <tracepoint> [<args>]\n"
+>  #endif
+>  #ifdef CONFIG_HIST_TRIGGERS
+> diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+> index 5a2a41eea603..1663c341ddb4 100644
+> --- a/kernel/trace/trace_fprobe.c
+> +++ b/kernel/trace/trace_fprobe.c
+> @@ -187,16 +187,23 @@ DEFINE_FREE(tuser_put, struct tracepoint_user *,
+>   */
+>  struct trace_fprobe {
+>  	struct dyn_event	devent;
+> -	char			*filter;
+> +
+>  	struct fprobe		fp;
+> -	bool			list_mode;
+> -	char			*nofilter;
+>  	const char		*symbol;
+> -	struct trace_probe	tp;
+> +	char			*filter;
+> +	char			*nofilter;
+> +
+>  	bool			tprobe;
+>  	struct tracepoint_user	*tuser;
+> +
+> +	struct trace_probe tp;
+
+Why is this being updated? Nothing in the change log says why?
+
+>  };
+>  
+> +static inline bool trace_fprobe_has_list(const struct trace_fprobe *tf)
+> +{
+> +	return tf->filter || tf->nofilter;
+> +}
+> +
+>  static bool is_trace_fprobe(struct dyn_event *ev)
+>  {
+>  	return ev->ops == &trace_fprobe_ops;
+> @@ -847,7 +854,7 @@ static int __register_trace_fprobe(struct trace_fprobe *tf)
+>  	 * - list_mode: pass filter/nofilter
+>  	 * - single: pass symbol only (legacy)
+>  	 */
+> -	if (tf->list_mode)
+> +	if (trace_fprobe_has_list(tf))
+>  		return register_fprobe(&tf->fp, tf->filter, tf->nofilter);
+>  	return register_fprobe(&tf->fp, tf->symbol, NULL);
+>  }
+> @@ -1188,11 +1195,18 @@ static int parse_fprobe_spec(const char *in, bool is_tracepoint,
+>  	*base = NULL; *filter = NULL; *nofilter = NULL;
+>  	*is_return = false; *list_mode = false;
+>  
+> -	if (is_tracepoint) {
+> +	if (is_tracepoint) 
+> +	{
+>  		if (strchr(in, ',') || strchr(in, ':'))
+> +		{
+> +			trace_probe_log_err(0, BAD_TP_NAME);
+>  			return -EINVAL;
+> +		}
+>  		if (strstr(in, "%return"))
+> +		{
+> +			trace_probe_log_err(p - in, BAD_TP_NAME);
+>  			return -EINVAL;
+> +		}
+>  		for (p = in; *p; p++)
+>  			if (!isalnum(*p) && *p != '_')
+>  				return -EINVAL;
+> @@ -1225,6 +1239,7 @@ static int parse_fprobe_spec(const char *in, bool is_tracepoint,
+>  			} else if (!strcmp(p, ":entry")) {
+>  				*(char *)p = '\0';
+>  			} else {
+> +				trace_probe_log_err(p - work, BAD_LIST_SUFFIX);
+>  				return -EINVAL;
+>  			}
+>  		}
+> @@ -1233,6 +1248,7 @@ static int parse_fprobe_spec(const char *in, bool is_tracepoint,
+>  	list = !!strchr(work, ',');
+>  	
+>  	if (list && legacy_ret) {
+> +		trace_probe_log_err(p - work, BAD_LEGACY_RET);
+>  		return -EINVAL;
+>  	}
+>  
+> @@ -1245,12 +1261,9 @@ static int parse_fprobe_spec(const char *in, bool is_tracepoint,
+>  
+>  	if (list) {
+>  		char *tmp = b, *tok;
+> -		size_t fsz, nfsz;
+>  
+> -		fsz = nfsz = strlen(b) + 1;
+> -
+> -		f = kzalloc(fsz, GFP_KERNEL);
+> -		nf = kzalloc(nfsz, GFP_KERNEL);
+> +		f = kzalloc(strlen(b) + 1, GFP_KERNEL);
+> +		nf = kzalloc(strlen(b) + 1, GFP_KERNEL);
+>  		if (!f || !nf)
+>  			return -ENOMEM;
+>  
+> @@ -1261,6 +1274,7 @@ static int parse_fprobe_spec(const char *in, bool is_tracepoint,
+>  			if (*tok == '\0') {
+>  				trace_probe_log_err(tmp - b - 1, BAD_TP_NAME);
+>  				return -EINVAL;
+> +			}
+>  
+>  			if (neg)
+>  				tok++;
+> @@ -1455,17 +1469,8 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  
+>  	/* carry list parsing result into tf */
+>  	if (!is_tracepoint) {
+> -		tf->list_mode = list_mode;
+> -		if (parsed_filter) {
+> -			tf->filter = kstrdup(parsed_filter, GFP_KERNEL);
+> -			if (!tf->filter)
+> -				return -ENOMEM;
+> -		}
+> -		if (parsed_nofilter) {
+> -			tf->nofilter = kstrdup(parsed_nofilter, GFP_KERNEL);
+> -			if (!tf->nofilter)
+> -				return -ENOMEM;
+> -		}
+> +		tf->filter = no_free_ptr(parsed_filter);
+> +		tf->nofilter = no_free_ptr(parsed_nofilter);
+>  	}
+>  
+>  	/* parse arguments */
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index 9fc56c937130..b8b0544eb7cd 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -494,9 +494,11 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
+>  	C(BAD_PROBE_ADDR,	"Invalid probed address or symbol"),	\
+>  	C(NON_UNIQ_SYMBOL,	"The symbol is not unique"),		\
+>  	C(BAD_RETPROBE,		"Retprobe address must be an function entry"), \
+> +	C(BAD_LEGACY_RET,	"Legacy %return not allowed with list"), \
+>  	C(NO_TRACEPOINT,	"Tracepoint is not found"),		\
+>  	C(BAD_TP_NAME,		"Invalid character in tracepoint name"),\
+>  	C(BAD_ADDR_SUFFIX,	"Invalid probed address suffix"), \
+> +	C(BAD_LIST_SUFFIX,	"Bad list suffix"), \
+>  	C(NO_GROUP_NAME,	"Group name is not specified"),		\
+>  	C(GROUP_TOO_LONG,	"Group name is too long"),		\
+>  	C(BAD_GROUP_NAME,	"Group name must follow the same rules as C identifiers"), \
+
+This definitely needs discussion on why this is needed.
+
+-- Steve
 
