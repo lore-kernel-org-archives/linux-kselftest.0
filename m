@@ -1,108 +1,119 @@
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57413A7E02;
-	Tue, 20 Jan 2026 20:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4360D3A1A27
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 22:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768942403; cv=none; b=Kfi5JqcUGOzRcsjR79uGzwrtwxTDIBQkWycFz4hIyhNHyz7iIQTbgKMAUPrEojT74qoTTDROpG7JdznD8Y+aVpqIDVxkUn7XUM87bbwUZ4Cx7Seb9AcNX35A1rfQxBpQ/nnrYhJZu72++Bgc1TBHwfkH+pFIEmHzswB9qFDJZmM=
+	t=1768946714; cv=none; b=WwTfnfRrAi07n5q165YgPxfpkwUsqOaupBu4Ow5f67gIEATqUKAehRCOTjwDXHlJExX1phTgpLaMnkJd7A8Y1E8ydikeVEUHrXuTWAbkSdLnDX00maqJp/IgI8OGEl33YhH+csrADJN63pZixzpBAAur5l09/+AN5d/ODKeuups=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768942403; c=relaxed/simple;
-	bh=uP8d0d+fxd33Q3HUTjKUKiAlyIbc/ltGWmJgzKq6RWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Cw2JiJcIb3ubG1cIcvyW3nC3LXM0DZmuXAqN2+MCcxXVdbUoSBQ0ykPnV4AMfKkBwWtT4T0g2S14kwNNFutEATB+BHqMi6CdoBF5Y7rB83gN/VQqZJMDCHUlctnR68brQVLWYN/4ck7zpctL7w65YWPZJ3hu4yCnEjjPZU12B4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 9418B1A06CA;
-	Tue, 20 Jan 2026 20:53:20 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf18.hostedemail.com (Postfix) with ESMTPA id 6B8532F;
-	Tue, 20 Jan 2026 20:53:18 +0000 (UTC)
-Date: Tue, 20 Jan 2026 15:53:40 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
-Cc: mhiramat@kernel.org, corbet@lwn.net, shuah@kernel.org,
- mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 v5 1/3] docs: tracing/fprobe: Document list filters
- and :entry/:exit
-Message-ID: <20260120155340.2dac7fab@gandalf.local.home>
-In-Reply-To: <20260118011815.56516-2-seokwoo.chung130@gmail.com>
-References: <20260118011815.56516-1-seokwoo.chung130@gmail.com>
-	<20260118011815.56516-2-seokwoo.chung130@gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1768946714; c=relaxed/simple;
+	bh=AwHUD+rXuhKyKmXPrdQZrRAZDbCQlrWch9VuSW3eH3Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rYxHT59HY6xRQbzYwSDFvfT1iXZ5Kpyku9EomzQqFUq3CjObNjvNHUKXmDfTg3JoPrrMJlSz1zwt57ELEU9nFde4eqXJcX1uVeE3rwLLmveokdTg13MzvSY5fALIGqkMz+r0kpqpCKGPtM1ix7AhDz4MZRd0ILDM5bJtJYAgNlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=WcCwNIfl; arc=none smtp.client-ip=84.16.66.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="WcCwNIfl"
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dwgrd52Bmzg9t;
+	Tue, 20 Jan 2026 22:46:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1768945601;
+	bh=CUnC6gBg1b8DZjIFRJjoz21kw+O4IDvw1ZCQ7hb32w0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WcCwNIfltvas3I8WkaxOw4+8cb98Kkmo+ZF7qsZUr3tX3je8MAfeFMOjr92TJkrD7
+	 XHcq1YNheRGDGLozfVE6lbHz+Sh1sEIyypT2HGH9iGOunB8tq0HyME1MLnr3r6W7tB
+	 iUtAbnd0WOsULgDiW94Mr0CTZWRkmIpnuHhdLSR0=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4dwgrb45vZzqrp;
+	Tue, 20 Jan 2026 22:46:39 +0100 (CET)
+Date: Tue, 20 Jan 2026 22:46:34 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Eric Dumazet <edumazet@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
+	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>, klibc@zytor.com, 
+	Florian Weimer <fweimer@redhat.com>
+Subject: Re: [PATCH net-next v2 2/4] selftests/landlock: Move some UAPI
+ header inclusions after libc ones
+Message-ID: <20260120.ahGaepheZah8@digikod.net>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+ <20260120-uapi-sockaddr-v2-2-63c319111cf6@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 6B8532F
-X-Stat-Signature: ixutpamsajw7cik16ciuqack4n9p8ko8
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/zXRpA+Z28kL9/CYL7IFSM3d+dRjdipjE=
-X-HE-Tag: 1768942398-432765
-X-HE-Meta: U2FsdGVkX1/1f9BFMU+kqLTPKr+Vsbi2VrbCBjzDnI0kdvIzCeCDOeIwhuFkjKJSp9b1zw5jVL2xl5wRf3mP91O954f1s3uDPKe5qOpKzGK/vpmPkdJwtXX+4f0hLZfd+TuvF8NgoGCNUy8SqlRKPdkLvQOKYzRZy/DEwyyBRcrzqirq9sHZzd+fE63SXhT0D4GLwB4Nz+VQ8XdtuLrVz3vbgHumVc4LjftkVSWgPZD00BT1c8ddogXraPNXoi6W+O4Md9W/37OqXwuI5scfg9+fkSwmik2uMpTCGw3i2RY1saXiwIOwZzkZmaGk/CINiaMlZsKLUWQS13PlK2anc/4uL+UT+EOt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260120-uapi-sockaddr-v2-2-63c319111cf6@linutronix.de>
+X-Infomaniak-Routing: alpha
 
-On Sat, 17 Jan 2026 20:18:13 -0500
-"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com> wrote:
-
-> Update fprobe event documentation to describe comma-separated symbol lists,
-> exclusions, and explicit suffixes.
-
-Usually, the documentation updates comes *after* the changes.
-
--- Steve
-
+On Tue, Jan 20, 2026 at 03:10:32PM +0100, Thomas Weißschuh wrote:
+> Interleaving inclusions of UAPI headers and libc headers is problematic.
+> Both sets of headers define conflicting symbols. To enable their
+> coexistence a compatibility-mechanism is in place.
 > 
-> Signed-off-by: Seokwoo Chung (Ryan) <seokwoo.chung130@gmail.com>
+> An upcoming change will define 'struct sockaddr' from linux/socket.h.
+> However sys/socket.h from libc does not yet handle this case and a
+> symbol conflict will arise.
+> 
+> Move the inclusion of all UAPI headers after the inclusion of the glibc
+> ones, so the compatibility mechanism from the UAPI headers is used.
+> 
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
+Reviewed-by: Mickaël Salaün <mic@digikod.net>
+
+Thanks!
+
 > ---
->  Documentation/trace/fprobetrace.rst | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/landlock/audit.h | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fprobetrace.rst
-> index b4c2ca3d02c1..bbcfd57f0005 100644
-> --- a/Documentation/trace/fprobetrace.rst
-> +++ b/Documentation/trace/fprobetrace.rst
-> @@ -25,14 +25,18 @@ Synopsis of fprobe-events
->  -------------------------
->  ::
+> diff --git a/tools/testing/selftests/landlock/audit.h b/tools/testing/selftests/landlock/audit.h
+> index 44eb433e9666..c12b16c690dc 100644
+> --- a/tools/testing/selftests/landlock/audit.h
+> +++ b/tools/testing/selftests/landlock/audit.h
+> @@ -7,9 +7,6 @@
 >  
-> -  f[:[GRP1/][EVENT1]] SYM [FETCHARGS]                       : Probe on function entry
-> -  f[MAXACTIVE][:[GRP1/][EVENT1]] SYM%return [FETCHARGS]     : Probe on function exit
-> +  f[:[GRP1/][EVENT1]] SYM[%return] [FETCHARGS]		    : Single function
-> +  f[:[GRP1/][EVENT1]] SYM[,[!]SYM[,...]][:entry|:exit] [FETCHARGS] :Multiple
-> +  function
->    t[:[GRP2/][EVENT2]] TRACEPOINT [FETCHARGS]                : Probe on tracepoint
+>  #define _GNU_SOURCE
+>  #include <errno.h>
+> -#include <linux/audit.h>
+> -#include <linux/limits.h>
+> -#include <linux/netlink.h>
+>  #include <regex.h>
+>  #include <stdbool.h>
+>  #include <stdint.h>
+> @@ -20,6 +17,10 @@
+>  #include <sys/time.h>
+>  #include <unistd.h>
 >  
->   GRP1           : Group name for fprobe. If omitted, use "fprobes" for it.
->   GRP2           : Group name for tprobe. If omitted, use "tracepoints" for it.
->   EVENT1         : Event name for fprobe. If omitted, the event name is
-> -                  "SYM__entry" or "SYM__exit".
-> +		  - For a single literal symbol, the event name is
-> +		    "SYM__entry" or "SYM__exit".
-> +		  - For a *list or any wildcard*, an explicit [GRP1/][EVENT1] is
-> +		    required; otherwise the parser rejects it.
->   EVENT2         : Event name for tprobe. If omitted, the event name is
->                    the same as "TRACEPOINT", but if the "TRACEPOINT" starts
->                    with a digit character, "_TRACEPOINT" is used.
-> @@ -40,6 +44,13 @@ Synopsis of fprobe-events
->                    can be probed simultaneously, or 0 for the default value
->                    as defined in Documentation/trace/fprobe.rst
+> +#include <linux/audit.h>
+> +#include <linux/limits.h>
+> +#include <linux/netlink.h>
+> +
+>  #include "kselftest.h"
 >  
-> + SYM		: Function name or comma-separated list of symbols.
-> +		  - SYM prefixed with "!" are exclusions.
-> +		  - ":entry" suffix means it probes entry of given symbols
-> +		    (default)
-> +		  - ":exit" suffix means it probes exit of given symbols.
-> +		  - "%return" suffix means it probes exit of SYM (single
-> +		    symbol).
->   FETCHARGS      : Arguments. Each probe can have up to 128 args.
->    ARG           : Fetch "ARG" function argument using BTF (only for function
->                    entry or tracepoint.) (\*1)
-
+>  #ifndef ARRAY_SIZE
+> 
+> -- 
+> 2.52.0
+> 
+> 
