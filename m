@@ -1,134 +1,136 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587923F0742
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 13:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8475F43CECD;
+	Tue, 20 Jan 2026 14:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768916391; cv=none; b=E5NyGpXwo0iXn80V9aTXBhVVaWOz5wjFeHuKTrq3bCqKGeM6L528DOoB59eDi3uBI9/C+huBDG1kfcNGz7Q2avfEW4ebCiMmNI/GEavCUrMp0nBPwDtH5KIx+QV8a+rtHrNYL0aitV2xYM0aRurj3uAJB+EIEt3DogJYoYcMZSg=
+	t=1768918243; cv=none; b=MwusQKw5SE9SR+3+ZsVAoKg+Ia196+uFLU7J5pfpT3J4IC46J/NFV4zKw9IB5/hLlokioiw0LrklwLazmDwE4fkz+yRtvkip7vVQoQcF+wSrvz/zfuSyyZirEQCA1Ze/SFFrzNdqZTlzVVV1EeN0tHCix2ihULUNmxeusynxRso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768916391; c=relaxed/simple;
-	bh=pbO8eNAYDGYW5sX787ND9xeTQ8SshIYR4qMQ+fZMQ60=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RpuzThj7Q6ybsw0Ol+mKiPEebq2ZdkfTDPlPjo2I8HgXcoQ9ebK9vUBMph1ssslaOcKqKSu2gaHLMBC1yQn02hyUy3LTI5uEMq6lMlkoo3aWvIPisZL6aSGfOY0xBeAv8NbO6JKDEA8Nlzp4kR2IFI5twVBBdIPhHidx+f610mM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rk8i5ZQN; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768918243; c=relaxed/simple;
+	bh=Ahm6F+EOjc6R8Q0l33MFSfJ04zvpzbPYSaGnxm24BWE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=R+FGMOZ6ZOdZbc5vZEcyCtGSTJXfJZYUsV7kj6obD/xY12mBSCN9QoKQwVtJtJ8RfPGhqb81aLjUkW/ll7AZjw16N1j13jUwsVf9CrBwb87B2EgILEMmGbF754tsaVfNbVH8vAPUuq6Rtji+iFlurI/csTj0qTW5ZCamYBu55Eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NoSWA8KH; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NItJhtZf; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rk8i5ZQN"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-81f5381d168so4835440b3a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 05:39:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768916386; x=1769521186; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dsGr9dkGYMgZzi70MY6htwKKf+SUzE4Qn2hRD6kPTBw=;
-        b=Rk8i5ZQNrtuVAcil/0lI5fJ6CJTtLsf2WRnIGSHPzhFwjUW9ciDwjRDvZuV55VuOYQ
-         r4yBBRbkPWs0lANygYtCTHVnbT9fB/NG1+JfREoJUMl7dyAYj2idG0tP0mCT7NAHaIsX
-         vndtwih30SIvIwV61xo+hlQyfxRHgj3onXeNI9ijvbp+us0+3BtQ5nZ+tUq/SctXaKEp
-         CRr/dJ95S2TPwJNpm3gBQPqqHgV+t3gEkO/I/70xhU4YgAwgj1YHbcAeTsIDKBlcdwep
-         TEs4f6f5S3whxXrnDpgYDpV4XG2yq28vgTRpX11Xk0rJqC11x1hhrEK0nveym3T7lfr8
-         ocog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768916386; x=1769521186;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dsGr9dkGYMgZzi70MY6htwKKf+SUzE4Qn2hRD6kPTBw=;
-        b=u6teP8Fsri1yg8rSX90vwkcgHyefJD8En7TPunf963mPx7H22nmFBDie6f7bm9/EEV
-         70FOORh8mJdR6yvQmRIMqmiophg+hjeWd++rEpNtqmd7CNIlgSkVJ2iaLEmWp4uM+u/N
-         B02qnFFDWIF9qay/bgrR7AKej5NTunwQuNQDKiSZprc9fJ1D1udzNRituXoMwCZ2NAEI
-         27g5UAyQA5ER7tbJkxXC0xmtHmLSONEAXfWcQYOvgZbx7wJ3E0csONa4wElhdqENF3T0
-         2MhSmHym6aZRInjT/UAwwsznKHbLxtsigO1aURwle/qpqyozghEByhMJrPQumGRotg/j
-         9vhA==
-X-Forwarded-Encrypted: i=1; AJvYcCVEE+0dHBQD+57XHmzSOqcbqJ5GD6EBpNArZ1gYq7e7cvttwbFeIUW1haskcFDXOePREkRUGTJkBKZsXjlF4hk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmAQlbsc4PBqjACTNV4FwMgQPseCMpb2AlcWDQG8L0DDIndDIF
-	MvzJFt0zMEGBm5mrq57Ekb1pKKThBEOoiagO9VtbxLzTkNmFyQw59LIR
-X-Gm-Gg: AZuq6aLxT1XGrl/GnFWqUuWKmqFs/EN9dJZ6oysSdF+KluIrVeWLL1LyWfe9lZBdAuQ
-	U5bc++cxguMj9e/ZrSTeOSd6ntPKbc8PzzdmQEaTYv/th/YB4PKQQ0aK9gWXrqnfjlkzMq+mvie
-	GDkN8zlezgjAm4ia5PUKhc9e8ANmHGEsYREx6+cWYAHcFM1kKZoEiStXCehKtEwMexsPI/e1R+G
-	3P/Jn9zIafTbtudvHasRFHhdMw0EXpueFL9Y4Z82x9B+XnUgsS5qtkC6Mspr4gRJXHWfX6wGY5i
-	YItg2yIS1Fk+GjVAfjO5KupJ5fZj3tU1N0AJ8g8KmC3qwTfLglO/h8XlCeAExOJOqVXXF3PuDEn
-	HWd5nhrQpJMKDpFqp/1eHtdTJPjUVOAlCn05dqUxRPx9r6NilS5/EtEC8/coKn6QFwRSJEjD2fB
-	0=
-X-Received: by 2002:a05:6a00:1a89:b0:81f:b1d4:b486 with SMTP id d2e1a72fcca58-81fe87b2883mr1615438b3a.8.1768916385606;
-        Tue, 20 Jan 2026 05:39:45 -0800 (PST)
-Received: from ap.. ([182.213.254.91])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81fa1094e23sm12322373b3a.4.2026.01.20.05.39.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 05:39:44 -0800 (PST)
-From: Taehee Yoo <ap420073@gmail.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: ap420073@gmail.com
-Subject: [PATCH net v2] selftests: net: amt: wait longer for connection before sending packets
-Date: Tue, 20 Jan 2026 13:39:30 +0000
-Message-ID: <20260120133930.863845-1-ap420073@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NoSWA8KH";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NItJhtZf"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1768918239;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nw3GMmv6rsxzJhfQEt7gKqAEVYquIJkLViAuhkQckP0=;
+	b=NoSWA8KHAOW34ej89I6r4P9qqfRGTSrpRdLYpSX2TU/YKte6uFQbzKvdinPA0lisvYESRi
+	HYR3dbyIkym4yrwD6NuHSOFvoIRarqOstQ0TP56+/FTOn0uUTAZnuzzVzPi/0GoNDWQ88d
+	GlGpOIj51tOdACdwx6SwPz+vAN3Pgg5Z+Wm/5Ly4DbiMrVsQfo/kZ8DQ3XH2ap2jNNODle
+	ES+cM/ucSiFmYheJ92FprCtTYAW3fNxZv9iWB3FSG21peOu2k5+LOEXRiiGBNOKFoT6SFT
+	fjRfM7aEWKIcHL7Nkspjl4yIVkCDKs85aMN92Q3Dl7GWp7BAFekFEzpwlwgi/g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1768918239;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nw3GMmv6rsxzJhfQEt7gKqAEVYquIJkLViAuhkQckP0=;
+	b=NItJhtZfv+tx5epeA2xKfozfbOxxbY0+Lwh+VC3Sf/nVsyjCAfZ/h/i5gbhoRCCWad3fkz
+	//HYvaUB6h2f5DAg==
+Subject: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition of
+ 'struct sockaddr'
+Date: Tue, 20 Jan 2026 15:10:30 +0100
+Message-Id: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIANaMb2kC/12NQQ6CMBBFr0Jm7Zh2tBBdeQ/DotBBJpqWtIVgC
+ He3Yeny5eW/v0HiKJzgXm0QeZEkwRegUwX9aP2LUVxhIEVGExHOdhJMoX9b5yL2g1bc1HRt6AZ
+ lM0UeZD16T/Cc0fOaoS1mlJRD/B5Hiz58adZKK/PXXDRq7JraXGxnNVnz+Iifcwxe1rNjaPd9/
+ wFO2SCEuAAAAA==
+X-Change-ID: 20251222-uapi-sockaddr-cf10e7624729
+To: Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, 
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+ linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+ libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
+ Rich Felker <dalias@libc.org>, klibc@zytor.com, 
+ Florian Weimer <fweimer@redhat.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768918237; l=2292;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=Ahm6F+EOjc6R8Q0l33MFSfJ04zvpzbPYSaGnxm24BWE=;
+ b=5X22So3PfA/S7ayTw8eLh1EFtj1DE0Tv6sUsSL2/wnoVi2BXpK944Df4Iu5TWZmKG+GLpv7YI
+ jzfIuR+GpMBDIJ9kfKmasfJ9A3NvmYTn3p3DyGhQAXO3d2FHCDLTleb
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Both send_mcast4() and send_mcast6() use sleep 2 to wait for the tunnel
-connection between the gateway and the relay, and for the listener
-socket to be created in the LISTENER namespace.
+Various UAPI headers reference 'struct sockaddr'. Currently the
+definition of this struct is pulled in from the libc header
+sys/socket.h. This is problematic as it introduces a dependency
+on a full userspace toolchain.
 
-However, tests sometimes fail because packets are sent before the
-connection is fully established.
+Add a definition of 'struct sockaddr' to the UAPI headers.
+Before that, reorder some problematic header inclusions in the selftests.
 
-Increase the waiting time to make the tests more reliable, and use
-wait_local_port_listen() to explicitly wait for the listener socket.
-
-Fixes: c08e8baea78e ("selftests: add amt interface selftest script")
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
+Changes in v2:
+- Fix compilation failures in BPF samples and selftests
+- Link to v1: https://lore.kernel.org/r/20260105-uapi-sockaddr-v1-1-b7653aba12a5@linutronix.de
 
-v2:
- - Add wait_local_port_listen() to both send_mcast4() and send_mcast6()
+---
+Thomas Weißschuh (4):
+      selftests: net: Move some UAPI header inclusions after libc ones
+      selftests/landlock: Move some UAPI header inclusions after libc ones
+      samples/bpf: Move some UAPI header inclusions after libc ones
+      net: uapi: Provide an UAPI definition of 'struct sockaddr'
 
- tools/testing/selftests/net/amt.sh | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ include/linux/socket.h                             | 10 ----------
+ include/uapi/linux/if.h                            |  4 ----
+ include/uapi/linux/libc-compat.h                   | 12 ++++++++++++
+ include/uapi/linux/socket.h                        | 14 ++++++++++++++
+ samples/bpf/xdp_adjust_tail_user.c                 |  6 ++++--
+ samples/bpf/xdp_fwd_user.c                         |  7 ++++---
+ samples/bpf/xdp_router_ipv4_user.c                 |  6 +++---
+ samples/bpf/xdp_sample_user.c                      | 15 ++++++++-------
+ samples/bpf/xdp_tx_iptunnel_user.c                 |  4 ++--
+ tools/testing/selftests/landlock/audit.h           |  7 ++++---
+ tools/testing/selftests/net/af_unix/diag_uid.c     |  9 +++++----
+ tools/testing/selftests/net/busy_poller.c          |  3 ++-
+ tools/testing/selftests/net/mptcp/mptcp_diag.c     | 11 ++++++-----
+ tools/testing/selftests/net/nettest.c              |  4 ++--
+ tools/testing/selftests/net/tcp_ao/icmps-discard.c |  6 +++---
+ tools/testing/selftests/net/tcp_ao/lib/netlink.c   |  9 +++++----
+ tools/testing/selftests/net/tun.c                  |  5 +++--
+ 17 files changed, 77 insertions(+), 55 deletions(-)
+---
+base-commit: 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7
+change-id: 20251222-uapi-sockaddr-cf10e7624729
 
-diff --git a/tools/testing/selftests/net/amt.sh b/tools/testing/selftests/net/amt.sh
-index 3ef209cacb8e..663744305e52 100755
---- a/tools/testing/selftests/net/amt.sh
-+++ b/tools/testing/selftests/net/amt.sh
-@@ -73,6 +73,8 @@
- #       +------------------------+
- #==============================================================================
- 
-+source lib.sh
-+
- readonly LISTENER=$(mktemp -u listener-XXXXXXXX)
- readonly GATEWAY=$(mktemp -u gateway-XXXXXXXX)
- readonly RELAY=$(mktemp -u relay-XXXXXXXX)
-@@ -246,14 +248,15 @@ test_ipv6_forward()
- 
- send_mcast4()
- {
--	sleep 2
-+	sleep 5
-+	wait_local_port_listen ${LISTENER} 4000 udp
- 	ip netns exec "${SOURCE}" bash -c \
- 		'printf "%s %128s" 172.17.0.2 | nc -w 1 -u 239.0.0.1 4000' &
- }
- 
- send_mcast6()
- {
--	sleep 2
-+	wait_local_port_listen ${LISTENER} 6000 udp
- 	ip netns exec "${SOURCE}" bash -c \
- 		'printf "%s %128s" 2001:db8:3::2 | nc -w 1 -u ff0e::5:6 6000' &
- }
+Best regards,
 -- 
-2.43.0
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
