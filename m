@@ -1,194 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012058.outbound.protection.outlook.com [52.101.48.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C7B426683;
-	Tue, 20 Jan 2026 12:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768913028; cv=none; b=edEIV9g/OeMjLffydFA6OJWZ58BeadkWv/hTFc7hsCzpp9r6JPg9JRLsUnV/gaavv8sy8iczB40Ij/CzD+BRafosxJMQBJcwvVAODQdpbqi1j749UNGlIyUH+gLB5cfx1Rb6MoTgsXdboE+SizXDpwV4pvCX2q+Zm5BcfXUm13M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768913028; c=relaxed/simple;
-	bh=FwCCfap6ECVxvhkpXpxPP23hoWsWThddcKf0xfbldy4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k3ePqBQVXzH+1bFeffJweOk6uGr13twmRzc9S6QCk+FnwWjzn6jpZQmz52mg3TPmOaAnBRP+hWEZatLB9qJ4/awikd2yp/RylQVBGwzlfUO8qty8Zd0b/uyVM7lbDCnPBF1ghflM55jxc7q513N4wULBNsFkomcyNlLHyujT3b8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m8LQgbEp; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B46429821;
+	Tue, 20 Jan 2026 12:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768913268; cv=fail; b=LVOwECsyvn6e1GOXYnaj+/RzyEMiOoxIoVCMv3iu5kGHhXquzIysb+lDgDrglCboLi4EQi/SHZ6jDz9LIRsANcP02JVWSyx4uuQy2yE0ZnonFsHaivvq2eRzqaRfom5ikLxaMkImGqIvL487pSQlhU9VadlfB91kH+N9PJtnmko=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768913268; c=relaxed/simple;
+	bh=cCFKi8WfjuFK9OVPxaiQM6DTThLqT7F8JjMgWfEyqHU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QQMw6b9j2LpnrYo6At79TmqUnWTWEHNNyuFRoM5/gXCOX3dD8Uzd/+U9ap4WCw+lLYUNLDACwNUuYTQXaClAZlIjIZfsmFmDfUxAx6M8oQKvO4B8EO1eIbJCPWy+4ygVvcQGgWUxneeDl19t234WDhgZNOsZcj6ASBp4uICGpKU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OCZ1cgQf; arc=fail smtp.client-ip=52.101.48.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m8LQgbEp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 321ADC16AAE;
-	Tue, 20 Jan 2026 12:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768913027;
-	bh=FwCCfap6ECVxvhkpXpxPP23hoWsWThddcKf0xfbldy4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m8LQgbEpfs4Nl4Jma3+64k1ZQRLIGhx/e806PWcsu5/0NZ9jN2XpMUo3Ir4390JBl
-	 nkg0czB3x2dmuq/vAfUGUg9nY40lgFGKJzUk2/tOAgGE/Og9/vStnT22pqxJ3NbTJ6
-	 YoBltDg+IspqpIrj/y+CuWH4Z9bvwqMy/4ZsnLYXHi8JgUfU9U13XCxZ8rsDB0e49e
-	 EocpNTpzHDt4hcO9M58cFFKbIJQW7bn5XFu16idcASAqRsFbOjSdbDXXTuD4gDv89s
-	 br71Ugz1/wvlficrYdetEuzwKy101jV9A5/7OBZxf0IticcSoSN8Q4Uqw543Hx+s1+
-	 ObshJF2VO5esQ==
-Date: Tue, 20 Jan 2026 13:43:43 +0100
-From: Alejandro Colomar <alx@kernel.org>
-To: Alexander Atanasov <alex@zazolabs.com>
-Cc: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Jeff Layton <jlayton@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Michael Kerrisk <mtk.manpages@gmail.com>, Clint George <clintbgeorge@gmail.com>, 
-	Ranganath V N <vnranganath.20@gmail.com>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	libc-alpha@sourceware.org
-Subject: Re: [PATCH] selftests/filesystems: follow std execveat argument
- convention in anon_inode_no_exec
-Message-ID: <aW93WqpBspTwFiAC@devuan>
-References: <20260120111008.442109-1-alex@zazolabs.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OCZ1cgQf"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=P2gJM6yufOhfJ+1sxserfM30MWnWao3tfsqdMrDhJfsURLJsc5nccJzOB8kVBWNpgXSdKZ9d0xpwxAb2+nXqKzShy1I0lsGEmDLXv4bl47um5HJGG8gXuCX5ztm5iS4iWygHPptIPZh5Yk1rjWp0EVDSyr84G2cYnDQcbyR/+B26OYeZ5kZCsjumI+v1+IHLia1JwXXMaVqAL/TGLSR5az+YZ64BW7gjENTzilLN/u3mF91xnAB3eUWu33eONWzaIT29t/p2pe9ZNnvKRbQxg1lPi2KVdn0CMHARo3ou3H9pKZkOmGeLL+LFtjV4xlMD3lBRnizq/QQdCmOFIqaaWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kxsck0M6oO75P4LPqNt7j44OGCo9lh9z+aZRMMNAVaA=;
+ b=t7GLUSpfhT1weP8U64Laums7fiu+as28q9t2Vfom7G2eLUBlrk2nu7YRgz61TmbQo6ZTH/CZwJmEar5e6fS1vAW1ctTDh43RDValMQBNkpGcivD+R3vVlEjZL/VGHd+9/aKxWXOeRVEFMawvhbNQ/k4zTTUs28s0haQQgZyUSBth8ScRlTYmIqYhVb72D0NxQMyw101VyGbriydjlmLd/oaEVwhZHfbsyx6ThPt6+HK/kAZhZtKJAnFA7YWoxZ5KYiq/iXohFHI8/jbKB88FSscGLJaeRBqpF9JHe9/TpVvVRazYU8YvYxSPbQo/zHmrNPO5flrIkC2g84V1sXrC0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kxsck0M6oO75P4LPqNt7j44OGCo9lh9z+aZRMMNAVaA=;
+ b=OCZ1cgQfIS64KfyqKQLu1s10Ip+JkEbJp8nsPQwRzjTO0U6H55i4n+gxsql8+PxCIwGOSUlNczjl8HqZRTzxITIxSWGE9HakmuTy81lJEYHLh+b2f7gHgrt4Xl7co1d+Z3PWDC1OmxpGZ0fOLh6qvEXwujLSA96Mlt4Ghr/Tp1c+SVI1RkVFhkHyEYVzoODo+pOrX38tdwMI+IMO4/fWhKQVK0tSn1o86ZpBvq+A7/c++aPjDLej38Et3dI46oOGAx8xCxuxhuZr0GMKRymuO1GW2iCouBgb9JL5RrdNEqq6EuBWt9XGl4JdZl1Bo8qffpdt41Hmwl5h2IwvZyYrHg==
+Received: from SJ0P220CA0006.NAMP220.PROD.OUTLOOK.COM (2603:10b6:a03:41b::29)
+ by BN5PR12MB9463.namprd12.prod.outlook.com (2603:10b6:408:2a9::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.13; Tue, 20 Jan
+ 2026 12:47:42 +0000
+Received: from MWH0EPF000A6732.namprd04.prod.outlook.com
+ (2603:10b6:a03:41b:cafe::f9) by SJ0P220CA0006.outlook.office365.com
+ (2603:10b6:a03:41b::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.12 via Frontend Transport; Tue,
+ 20 Jan 2026 12:47:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ MWH0EPF000A6732.mail.protection.outlook.com (10.167.249.24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9542.4 via Frontend Transport; Tue, 20 Jan 2026 12:47:42 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 20 Jan
+ 2026 04:47:31 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Tue, 20 Jan 2026 04:47:31 -0800
+Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Tue, 20 Jan 2026 04:47:28 -0800
+From: Gal Pressman <gal@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	<netdev@vger.kernel.org>
+CC: Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Joe Damato
+	<joe@dama.to>, Stanislav Fomichev <sdf@fomichev.me>,
+	<linux-kselftest@vger.kernel.org>, Gal Pressman <gal@nvidia.com>, Nimrod Oren
+	<noren@nvidia.com>
+Subject: [PATCH net] selftests: net: fix wrong boolean evaluation in __exit__
+Date: Tue, 20 Jan 2026 14:47:33 +0200
+Message-ID: <20260120124733.604590-1-gal@nvidia.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4j7phh6h2fh4ebkq"
-Content-Disposition: inline
-In-Reply-To: <20260120111008.442109-1-alex@zazolabs.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000A6732:EE_|BN5PR12MB9463:EE_
+X-MS-Office365-Filtering-Correlation-Id: 30b8a3a3-07ac-4eba-f619-08de58221a07
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?EUltaRW1cn/YHLX3piH0LJdqpOeY6rSBk/bDb0VfmORi+VxLtlfZrCulLc/L?=
+ =?us-ascii?Q?0ii5pG9+3VL130a5Z4nMzQPZPpwwNSGZdQNV+tqUjSc7Lv5r71zQpRxMQNwr?=
+ =?us-ascii?Q?A53MXkrbv3/9yLzox3/8Hf04/RTd4Q17uRbBwE77k4JudGyh70bLJgJNs1er?=
+ =?us-ascii?Q?w1rCfoevj4yc4SuSBRKIvKomkVcUUyqozND28UIDNZ4g+MELqAN65X4WdjxP?=
+ =?us-ascii?Q?W6Z0EAS+fkPBOanGUkrLhaicKF622o2kvZWCZW5E74bk65H7MDdzZ+UA01r/?=
+ =?us-ascii?Q?JVXmKW56ZpheUQP6XkCRfj4y+mDLHLDWOkx5tcawANEaUHSUU3DgM0JloSVa?=
+ =?us-ascii?Q?eWGW8tvqmr3DLbImnYCHT8JTy8RLmvccNxqEKrE83s0WkGL60zzutWdsuhLB?=
+ =?us-ascii?Q?dvnrQ89qz5eNFmWseri43SCKuYkcpAdsPr2dn7HA26aUvz096wH7KFfVel/5?=
+ =?us-ascii?Q?FMAi4PfuC9sLxKW+sVOpdbCOhV3r09GuQVTUeTfYOZtWh3YUe5L1pmu788II?=
+ =?us-ascii?Q?HtlZSrHswiEKzlaC/WxKMSobBHHLy6rV21Olb8N9CoPRVfgNwKty3lDCMXe8?=
+ =?us-ascii?Q?Q4NFI0Qkb++z2xxAiuZPjbm007Qbxe16SHi7sZRM2ZtIuD2te/3g3rN929CD?=
+ =?us-ascii?Q?FPqe1L9CJSOwswu9/ao7dpNWMGv+9DZEL8VX6hEbcsmv2Y6nUKFZ2modhgqu?=
+ =?us-ascii?Q?Yxfo+T3rwzCOLuTT/6sv5coZGkK8Ny2pyAPa38jav51yvt89OXVuJATyTYya?=
+ =?us-ascii?Q?NmZH6U49VvqaxJt+J0njj/GT6fTaKrjenHpQydQhDM5SekGXjapZ+8aUxo3s?=
+ =?us-ascii?Q?lY8yxir66QsmEI/UdjEXHma5bTZbM0mVHS6ckndqstwpXMcWSSyuHwqA6hdM?=
+ =?us-ascii?Q?vyTNkZzIL3FFRg3c8gka4c5k90A26POt587aZgp8/rnbJV3Eh/pAOVIiZbmO?=
+ =?us-ascii?Q?4DrfjfKABgJ6745XsmpcmHt5cz60vbkMMkiT9xMsZ8DPN6XjgpPl0ge5sFuh?=
+ =?us-ascii?Q?DXEE+Bw2T24BPJmG1NEvrKf4FG/3+II4RurexamSVz10JJAa+Qd/ag/vlR2C?=
+ =?us-ascii?Q?6eH3+2k/EeklKr2WQsUFPjHpEiVpn/diy6IOyDlvYvw+iNllGwU+Z6Quq28N?=
+ =?us-ascii?Q?uLGpZO0RFud6WiN38FANbS73fByKA/AEs8dQNIv4yPJw/lDBxAKMa6t/kYWg?=
+ =?us-ascii?Q?eh54CuxG1wUxx3sO0uRIldLqS0M8YRbs9HpvJMYqp4vbMtegtNj443PFCgeI?=
+ =?us-ascii?Q?u56ZI0rMaRGxrjzhBs2s3GFWyjz2I25xwYLPYivqy5UAPGzD4wxQPQMEqy8P?=
+ =?us-ascii?Q?03U1k/3DSq4HiMiSnHhu4/JdbC9UPNGaJgMqoAzgV5trSLgLxbswRWTcWxJR?=
+ =?us-ascii?Q?eei+18emsPX8t6b35/5i4OMeX4rWWec7WYKLGkMzPGDYmS6StMX7VH6Q/Z2e?=
+ =?us-ascii?Q?FX9kqqbdwBNiRFaKtoW0j9rOwXMoTf3dcC8x0aToBSLvGhFpnieTQc1XOOms?=
+ =?us-ascii?Q?oOSd1uLdJlCnrik7q12kiHwWL62dcCQRMbcgYkW2ELYpG2UIj8ATzC5rwJu1?=
+ =?us-ascii?Q?nH1yxhWeCsc5UTPNaZUaOPtcEfHDBv/Area+jgXv+bL1AOmj1b3V/4URnVYk?=
+ =?us-ascii?Q?Wr7Dyn6DqtjzQKvnFd2/PMnV/9FU2K1Wtr+wdF7BzaK6mw0GyZRbp9Wz8tbz?=
+ =?us-ascii?Q?6Da34Q=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2026 12:47:42.1202
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30b8a3a3-07ac-4eba-f619-08de58221a07
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000A6732.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN5PR12MB9463
 
+The __exit__ method receives ex_type as the exception class when an
+exception occurs. The previous code used implicit boolean evaluation:
 
---4j7phh6h2fh4ebkq
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-From: Alejandro Colomar <alx@kernel.org>
-To: Alexander Atanasov <alex@zazolabs.com>
-Cc: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Jeff Layton <jlayton@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Michael Kerrisk <mtk.manpages@gmail.com>, Clint George <clintbgeorge@gmail.com>, 
-	Ranganath V N <vnranganath.20@gmail.com>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	libc-alpha@sourceware.org
-Subject: Re: [PATCH] selftests/filesystems: follow std execveat argument
- convention in anon_inode_no_exec
-Message-ID: <aW93WqpBspTwFiAC@devuan>
-References: <20260120111008.442109-1-alex@zazolabs.com>
-MIME-Version: 1.0
-In-Reply-To: <20260120111008.442109-1-alex@zazolabs.com>
+    terminate = self.terminate or (self._exit_wait and ex_type)
+                                                   ^^^^^^^^^^^
 
-[CC +=3D libc-alpha]
+In Python, the and operator can be used with non-boolean values, but it
+does not always return a boolean result.
 
-Hi Alexander,
+This is probably not what we want, because 'self._exit_wait and ex_type'
+could return the actual ex_type value (the exception class) rather than
+a boolean True when an exception occurs.
 
-On Tue, Jan 20, 2026 at 11:10:07AM +0000, Alexander Atanasov wrote:
-> While compiling filesystem selftests there is a warning:
-> anon_inode_test.c:45:37: warning: null passed to a callee that
->        requires a non-null argument [-Wnonnull]
-> 45 |  ASSERT_LT(execveat(fd_context, "", NULL, NULL, AT_EMPTY_PATH), 0);
->=20
-> Kernel code is okay to be passed NULL for argv, in which
-> case it generates argv by itself inside do_execveat_common.
-> Man page of execvat lists both argv and envp as _Nullable.
+Use explicit `ex_type is not None` check to properly evaluate whether
+an exception occurred, returning a boolean result.
 
-Yup; the manual page uses that to document that Linux accepts NULL.
+Fixes: 6e9a12f85a75 ("selftests: net: terminate bkg() commands on exception")
+Reviewed-by: Nimrod Oren <noren@nvidia.com>
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+---
+ tools/testing/selftests/net/lib/py/utils.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> But system's unistd.h says different:
-> extern int execveat (int __fd, const char *__path, char *const __argv[],
->                      char *const __envp[], int __flags)
->     __THROW __nonnull ((2, 3));
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 106ee1f2df86..dc1db78b5304 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -137,7 +137,7 @@ class bkg(cmd):
+ 
+     def __exit__(self, ex_type, ex_value, ex_tb):
+         # Force termination on exception
+-        terminate = self.terminate or (self._exit_wait and ex_type)
++        terminate = self.terminate or (self._exit_wait and ex_type is not None)
+         return self.process(terminate=terminate, fail=self.check_fail)
+ 
+ 
+-- 
+2.40.1
 
-Hmmmm, this would trigger UB for user-space users relying on the fact
-that Linux accepts NULL.  Maybe when compiled for Linux, the glibc
-headers should remove the [[gnu::nonnull()]] attribute here.
-
-
-Have a lovely day!
-Alex
-
-> (checked ubuntu 24.04 and fedora 43)
->=20
-> Which is the reason for the compiler warning.
->=20
-> Fix the warning by passing a proper argv array.
->=20
-> Fixes: f8ca403ae77cb ("selftests/filesystems: add exec() test for anonymo=
-us inodes")
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-> Cc: Alejandro Colomar <alx.manpages@gmail.com>
-> Cc: Clint George <clintbgeorge@gmail.com>
-> Cc: Ranganath V N <vnranganath.20@gmail.com>
-> Signed-off-by: Alexander Atanasov <alex@zazolabs.com>
-> ---
->  tools/testing/selftests/filesystems/anon_inode_test.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> Quote from execv's man referenced from execveat's:
-> On Linux, argv and envp can be specified as NULL.
-> In both cases, this has the same effect as specifying the argument as a p=
-ointer=20
-> to a list containing a  single null pointer.
-> ***Do not take advantage of this nonstandard and nonportable misfeature!*=
-**
->=20
-> Listed as possible to pass NULL, then a big fat warning in the man page
-> and a header that acctually marks this as invalid usage.
-> I failed to find the origin of the above contradiction.
-> It looks like POSIX/GNU/Linux missalignment.
-> I am putting this here for the record. So may be someone could step in
-> and make it right.
->=20
-> I've Cc-ed people who made fixes but they are just compile fixes, no
-> explanation of why the warning exists and in most of them the array is no=
-t a proper
-> argv.
->=20
-> diff --git a/tools/testing/selftests/filesystems/anon_inode_test.c b/tool=
-s/testing/selftests/filesystems/anon_inode_test.c
-> index 94c6c81c2301..191549a4304d 100644
-> --- a/tools/testing/selftests/filesystems/anon_inode_test.c
-> +++ b/tools/testing/selftests/filesystems/anon_inode_test.c
-> @@ -4,6 +4,7 @@
-> =20
->  #include <fcntl.h>
->  #include <stdio.h>
-> +#include <unistd.h>
->  #include <sys/stat.h>
-> =20
->  #include "kselftest_harness.h"
-> @@ -37,12 +38,13 @@ TEST(anon_inode_no_chmod)
-> =20
->  TEST(anon_inode_no_exec)
->  {
-> +	char *const argv[] =3D { "", NULL };
->  	int fd_context;
-> =20
->  	fd_context =3D sys_fsopen("tmpfs", 0);
->  	ASSERT_GE(fd_context, 0);
-> =20
-> -	ASSERT_LT(execveat(fd_context, "", NULL, NULL, AT_EMPTY_PATH), 0);
-> +	ASSERT_LT(execveat(fd_context, "", argv, NULL, AT_EMPTY_PATH), 0);
->  	ASSERT_EQ(errno, EACCES);
-> =20
->  	EXPECT_EQ(close(fd_context), 0);
-> --=20
-> 2.43.0
->=20
-
---=20
-<https://www.alejandro-colomar.es>
-
---4j7phh6h2fh4ebkq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEES7Jt9u9GbmlWADAi64mZXMKQwqkFAmlveH4ACgkQ64mZXMKQ
-wqn6nQ/7Bl38gOlgYMs0LN0jSi7IJrpGZ1TfGLeXx4WDv0acP01Uq6UJj8EL1cTP
-JlwurvcOJpgkcSRPQa79uuvFw1IbWXVUa1AKrItrFoRabf9cwvqUhZDKdoWol3am
-RvFCCeVhzk5rlius7Uv3nMWCAiWNQi5R4rdDG8eWOisIh9om/h7HQOtUe7F7V5z1
-8jXB9Ru3N9TNz7Uy71yQjOp4hlM1lcAWwE3dltm4srZR1TGkz1I208EA0Z/OMSml
-TTPByZoXIFrg3I2BOHRae5hy6JWI9YsGEktw8HyAgAighT2PGtOvh0sagAw5VrLv
-0HSLZXjH0W899xr6DtFnmqT2zl8M5dRYkELrIzlg3yWWNpq9KIFKe4zv/wMspoL+
-3jV46Pvoh4hWEgzjYfzCdWLSbqT61utGnfxwnRKXhvkt+iUPZ/Lb0rhBv1IkMqD0
-6hnSD3YJUJlhxWEHJtgrigAtvEhhd6eU+ukWqQNwj0rqkTsC90oPIw7rD1WGJL0v
-+/CuLxG3BE0h8HdAIPoVonjKnQuRf4RBPBdof9bt8mZ9iW5eEap8PCuAqTmfmpPe
-Jf+r+VWwRj71VSahymkbsSXwKr+0UO6FM0iNktkaG8Bo0qASBrTs6W8j6dKGeEnY
-U6N4K9N3DZ+2AQz1jzx0/F7l4OSmZM/A3dDT8Bwkiai1zNs0OOM=
-=6Has
------END PGP SIGNATURE-----
-
---4j7phh6h2fh4ebkq--
