@@ -1,415 +1,106 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3374279F4
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 22:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38445363C77;
+	Wed, 21 Jan 2026 23:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769036121; cv=none; b=Dh6/GDSZu2XvoxNkrgkLxqZ+wM2bk/1gafUG5IFLLg+uLXhL8A8PDDQy6ovFapjTZxwYUj/WYgzOCouhTb6X3ceXXNgo36KWtcClNsErGUBNfX0tcuxVoA9RDtxJIGtfZ0pUPEyLY+Rd9uW87cSRbr9pN2NGjVbp0s2WJcMzl1Q=
+	t=1769036759; cv=none; b=T6ZA+Cqshz1sEq2SGQVJdMd7vWNkVzWDrOkJyYJ/RkmrbHGANsdUWHBHaYmaAPFKjRaBhyZe0Znh7xtlhrgmoA5lRFeIq9xz5F+2JqD/O7GCKsk8YWonKfMgoy6df//xICOSDsLTTiPeWd3Vu/i+b0WOOZiAiXBiBPurHuNlpOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769036121; c=relaxed/simple;
-	bh=rYmfFxJAIso34omZtNLieNENfALkCc2zmC93xUg6tbg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=tUBmsBjpGaYQRQP6jL56jJ6d2+4wV1IyXoJDD/yxtP54Hd+XKRnX9LRP7K3tgmVOt0LBQ+eGvMnSlSbv+P19fgs8rwtYsuYo699qpyjePsBkTaM86sMUixdhUrAw3wgUT1VEVabNV4b2J2VlgC0aIYcJDbN6SHIbCarXbA6X/u8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YM4kIzrz; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
+	s=arc-20240116; t=1769036759; c=relaxed/simple;
+	bh=Ue+KFqmPBWjlbMcUyRtsb/L/q1gc5YVaH8pxMsrHdRI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rgeGTDfO4CoM5OYzZzrs4yih6mDaHh9q2T7Ue5z8OadEtXwBe7Xruz2bZA4P2ZcuOKj0CWgsEI14M6fCHg0XfzxtV66KHQPVMRWZP4gJoQlEI1BMUcXcvuB7NWLkCovueHL+NgxyBtcgyI//NgdSF6li73FIGPCTRUSdR1B1CeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ue0Tl7q+; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YM4kIzrz"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-29f2b45ecffso5002275ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 14:55:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769036113; x=1769640913; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JICyYLoyMG4i3hAuwsrXfwlezARecCmtVIZbGsycDJA=;
-        b=YM4kIzrz/CQDC0z+5+Gsyce9xKPiCX6241qpVUMWk2dvwefYz9g3YfdqCNF6tGqwE4
-         vYVGE9GX5jAtBRz+Twp8ZNEi5q4Yfb5vzwbFAeNtQmJubIO59M224W2dGxmxBR5JWgeS
-         /eKjOU9WOz/Fasb7b0iNl5h6nfIBoWDRkjXIaIlPi/KjiA7z17mUNeYmFuZf9fz5c8wK
-         s+4kzokwk7k5kaQBIw4aGy8uWomdd0oy/9uwgweu3qtJKRkJ610uAbRz8E1aQFOnnedh
-         +b4hs2VfKqlRhKpgF7HWybiXx00NGyB2an/AjoAg7ywRU5U/dU0iBuh5KNjozj7ghwIf
-         8deQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769036113; x=1769640913;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JICyYLoyMG4i3hAuwsrXfwlezARecCmtVIZbGsycDJA=;
-        b=lroP4DbwoBFUqvxQLtFgImKiZm6hzrVclOU/R7jNsQgD57v1E7lSvquDxs8Yj+ZwNk
-         AK1A6ng53Jt3CRDfGoHnk42s+waLWtIwtO+ueqfqFqnn98fddwKTufnNyvunC4Zqxs4V
-         32v0hlANx9n2FL03NeEXQEfk/ZyVlnXq4oWs9zvytjYr4mAIHFyuNE44vql1udBuMj7k
-         YVWL7WIrHlqAi7BiBc25VZMUOfenhOkbCF1w7LOjkR17DT6Ocu812jDQ24rIyASIN5u1
-         9xeozawLB6XA26UwhU40yMrhMRzI3MiKAKyg+OzwKGmEetkpFjMIQ/jsHCzyr6JTPmNM
-         jLsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJA8fxJJGvg6z8uDohx7cL0uwrJjlRqjAihiEK1/ZuLN4z5FDvMsAvhtG+swGz9w5unAuGBYlJAyLaBc3+I20=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyC3jxAkMTMjCCQ1B7CNHIZFK6TvXsmInySShDtNNp6pHQm7GSW
-	SCooRPGYX26PXXj1iPWM6b2USLMVtF4PU6ZH19D624QdgGAofn/0mXp7rf/orsS+UtB7USHmtOx
-	zMZ8nGcmSktaQAg==
-X-Received: from plat13.prod.google.com ([2002:a17:902:e1cd:b0:29f:13b1:d028])
- (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:196d:b0:2a7:6cdc:7f14 with SMTP id d9443c01a7336-2a76cdc8521mr50987495ad.60.1769036112692;
- Wed, 21 Jan 2026 14:55:12 -0800 (PST)
-Date: Wed, 21 Jan 2026 14:54:04 -0800
-In-Reply-To: <20260121225438.3908422-1-jmattson@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ue0Tl7q+"
+Message-ID: <3b4f4404-0298-4f9d-a6ba-e8b2f125818d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769036745;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ue+KFqmPBWjlbMcUyRtsb/L/q1gc5YVaH8pxMsrHdRI=;
+	b=Ue0Tl7q+A92I4Mkc2qNzP4zBrCvYq4xfB5zhioMQSQcwtmudCtdMtSVjkc6MyqBvIHKj76
+	T7aSn8oA+w7y2Py5AG8cmmxsDBSk8rBmVfnuzNmpHcG6/G3H15aYnoFo6WTMT8m/aOts9l
+	8QFDAIp/bscyQSCvtiXurvSQCbZc7WU=
+Date: Wed, 21 Jan 2026 15:05:32 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260121225438.3908422-1-jmattson@google.com>
-X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260121225438.3908422-7-jmattson@google.com>
-Subject: [PATCH 6/6] KVM: selftests: x86: Add svm_pmu_hg_test for HG_ONLY bits
-From: Jim Mattson <jmattson@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Cc: Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf] selftests/bpf: Fix resource leak in serial_test_wq on
+ attach failure
+Content-Language: en-GB
+To: Kery Qi <qikeyu2017@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ shuah@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, yatsenko@meta.com, bentiss@kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260121094114.1801-3-qikeyu2017@gmail.com>
+ <214f9680-b4ce-4c20-85f1-3560624fb49c@linux.dev>
+ <CALEuBam-2=QcXHH81RPdEcQ6zguY8EjzUt-Rh3BW=fn4F7vi_Q@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CALEuBam-2=QcXHH81RPdEcQ6zguY8EjzUt-Rh3BW=fn4F7vi_Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add a selftest to verify KVM correctly virtualizes the AMD PMU Host-Only
-(bit 41) and Guest-Only (bit 40) event selector bits across all relevant
-SVM state transitions.
 
-For both Guest-Only and Host-Only counters, verify that:
-  1. SVME=0: counter counts (HG_ONLY bits ignored)
-  2. Set SVME=1: counter behavior changes based on HG_ONLY bit
-  3. VMRUN to L2: counter behavior switches (guest vs host mode)
-  4. VMEXIT to L1: counter behavior switches back
-  5. Clear SVME=0: counter counts (HG_ONLY bits ignored again)
 
-Also confirm that setting both bits is the same as setting neither bit.
+On 1/21/26 9:49 AM, Kery Qi wrote:
+> Hi,
+>
+> Thank you for the review.
+>
+> You are completely right regarding wq__open_and_load(): if it fails,
+> it returns NULL and performs its own cleanup, so an immediate return
+> is correct there.
+>
+> However, my concern is about the next step: wq__attach(wq_skel).
+>
+> If wq__open_and_load() succeeds, wq_skel is allocated. If wq__attach()
+> subsequently fails, the original code returns immediately without
+> calling wq__destroy(wq_skel), which causes a memory leak of the
+> skeleton object.
+>
+> The proposed goto clean_up is intended to ensure wq__destroy(wq_skel)
+> is called specifically when wq__attach() fails.
+>
+> Does that make sense?
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
----
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/x86/svm_pmu_hg_test.c       | 297 ++++++++++++++++++
- 2 files changed, 298 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/svm_pmu_hg_test.c
+Yes.
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index e88699e227dd..06ba85d97618 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -112,6 +112,7 @@ TEST_GEN_PROGS_x86 += x86/svm_vmcall_test
- TEST_GEN_PROGS_x86 += x86/svm_int_ctl_test
- TEST_GEN_PROGS_x86 += x86/svm_nested_shutdown_test
- TEST_GEN_PROGS_x86 += x86/svm_nested_soft_inject_test
-+TEST_GEN_PROGS_x86 += x86/svm_pmu_hg_test
- TEST_GEN_PROGS_x86 += x86/tsc_scaling_sync
- TEST_GEN_PROGS_x86 += x86/sync_regs_test
- TEST_GEN_PROGS_x86 += x86/ucna_injection_test
-diff --git a/tools/testing/selftests/kvm/x86/svm_pmu_hg_test.c b/tools/testing/selftests/kvm/x86/svm_pmu_hg_test.c
-new file mode 100644
-index 000000000000..e811b4c1a818
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/svm_pmu_hg_test.c
-@@ -0,0 +1,297 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * KVM nested SVM PMU Host-Only/Guest-Only test
-+ *
-+ * Copyright (C) 2026, Google LLC.
-+ *
-+ * Test that KVM correctly virtualizes the AMD PMU Host-Only (bit 41) and
-+ * Guest-Only (bit 40) event selector bits across all SVM state transitions.
-+ *
-+ * For Guest-Only counters:
-+ *   1. SVME=0: counter counts (HG_ONLY bits ignored)
-+ *   2. Set SVME=1: counter stops (in host mode)
-+ *   3. VMRUN to L2: counter counts (in guest mode)
-+ *   4. VMEXIT to L1: counter stops (back to host mode)
-+ *   5. Clear SVME=0: counter counts (HG_ONLY bits ignored)
-+ *
-+ * For Host-Only counters:
-+ *   1. SVME=0: counter counts (HG_ONLY bits ignored)
-+ *   2. Set SVME=1: counter counts (in host mode)
-+ *   3. VMRUN to L2: counter stops (in guest mode)
-+ *   4. VMEXIT to L1: counter counts (back to host mode)
-+ *   5. Clear SVME=0: counter counts (HG_ONLY bits ignored)
-+ */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "svm_util.h"
-+#include "pmu.h"
-+
-+#define L2_GUEST_STACK_SIZE	256
-+
-+#define MSR_F15H_PERF_CTL0	0xc0010200
-+#define MSR_F15H_PERF_CTR0	0xc0010201
-+
-+#define AMD64_EVENTSEL_GUESTONLY	BIT_ULL(40)
-+#define AMD64_EVENTSEL_HOSTONLY		BIT_ULL(41)
-+
-+#define EVENTSEL_RETIRED_INSNS	(ARCH_PERFMON_EVENTSEL_OS |	\
-+				 ARCH_PERFMON_EVENTSEL_USR |	\
-+				 ARCH_PERFMON_EVENTSEL_ENABLE | \
-+				 AMD_ZEN_INSTRUCTIONS_RETIRED)
-+
-+#define LOOP_INSNS	1000
-+
-+static __always_inline void run_instruction_loop(void)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < LOOP_INSNS; i++)
-+		__asm__ __volatile__("nop");
-+}
-+
-+static __always_inline uint64_t run_and_measure(void)
-+{
-+	uint64_t count_before, count_after;
-+
-+	count_before = rdmsr(MSR_F15H_PERF_CTR0);
-+	run_instruction_loop();
-+	count_after = rdmsr(MSR_F15H_PERF_CTR0);
-+
-+	return count_after - count_before;
-+}
-+
-+struct hg_test_data {
-+	uint64_t l2_delta;
-+	bool l2_done;
-+};
-+
-+static struct hg_test_data *hg_data;
-+
-+static void l2_guest_code(void)
-+{
-+	hg_data->l2_delta = run_and_measure();
-+	hg_data->l2_done = true;
-+	vmmcall();
-+}
-+
-+/*
-+ * Test Guest-Only counter across all relevant state transitions.
-+ */
-+static void l1_guest_code_guestonly(struct svm_test_data *svm,
-+				    struct hg_test_data *data)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb = svm->vmcb;
-+	uint64_t eventsel, delta;
-+
-+	hg_data = data;
-+
-+	eventsel = EVENTSEL_RETIRED_INSNS | AMD64_EVENTSEL_GUESTONLY;
-+	wrmsr(MSR_F15H_PERF_CTL0, eventsel);
-+	wrmsr(MSR_F15H_PERF_CTR0, 0);
-+
-+	/* Step 1: SVME=0; HG_ONLY ignored */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-+	delta = run_and_measure();
-+	GUEST_ASSERT_NE(delta, 0);
-+
-+	/* Step 2: Set SVME=1; Guest-Only counter stops */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
-+	delta = run_and_measure();
-+	GUEST_ASSERT_EQ(delta, 0);
-+
-+	/* Step 3: VMRUN to L2; Guest-Only counter counts */
-+	generic_svm_setup(svm, l2_guest_code,
-+			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+	vmcb->control.intercept &= ~(1ULL << INTERCEPT_MSR_PROT);
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+	GUEST_ASSERT(data->l2_done);
-+	GUEST_ASSERT_NE(data->l2_delta, 0);
-+
-+	/* Step 4: After VMEXIT to L1; Guest-Only counter stops */
-+	delta = run_and_measure();
-+	GUEST_ASSERT_EQ(delta, 0);
-+
-+	/* Step 5: Clear SVME; HG_ONLY ignored */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-+	delta = run_and_measure();
-+	GUEST_ASSERT_NE(delta, 0);
-+
-+	GUEST_DONE();
-+}
-+
-+/*
-+ * Test Host-Only counter across all relevant state transitions.
-+ */
-+static void l1_guest_code_hostonly(struct svm_test_data *svm,
-+				   struct hg_test_data *data)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb = svm->vmcb;
-+	uint64_t eventsel, delta;
-+
-+	hg_data = data;
-+
-+	eventsel = EVENTSEL_RETIRED_INSNS | AMD64_EVENTSEL_HOSTONLY;
-+	wrmsr(MSR_F15H_PERF_CTL0, eventsel);
-+	wrmsr(MSR_F15H_PERF_CTR0, 0);
-+
-+
-+	/* Step 1: SVME=0; HG_ONLY ignored */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-+	delta = run_and_measure();
-+	GUEST_ASSERT_NE(delta, 0);
-+
-+	/* Step 2: Set SVME=1; Host-Only counter still counts */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
-+	delta = run_and_measure();
-+	GUEST_ASSERT_NE(delta, 0);
-+
-+	/* Step 3: VMRUN to L2; Host-Only counter stops */
-+	generic_svm_setup(svm, l2_guest_code,
-+			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+	vmcb->control.intercept &= ~(1ULL << INTERCEPT_MSR_PROT);
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+	GUEST_ASSERT(data->l2_done);
-+	GUEST_ASSERT_EQ(data->l2_delta, 0);
-+
-+	/* Step 4: After VMEXIT to L1; Host-Only counter counts */
-+	delta = run_and_measure();
-+	GUEST_ASSERT_NE(delta, 0);
-+
-+	/* Step 5: Clear SVME; HG_ONLY ignored */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-+	delta = run_and_measure();
-+	GUEST_ASSERT_NE(delta, 0);
-+
-+	GUEST_DONE();
-+}
-+
-+/*
-+ * Test that both bits set is the same as neither bit set (always counts).
-+ */
-+static void l1_guest_code_both_bits(struct svm_test_data *svm,
-+				    struct hg_test_data *data)
-+{
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb = svm->vmcb;
-+	uint64_t eventsel, delta;
-+
-+	hg_data = data;
-+
-+	eventsel = EVENTSEL_RETIRED_INSNS |
-+		AMD64_EVENTSEL_HOSTONLY | AMD64_EVENTSEL_GUESTONLY;
-+	wrmsr(MSR_F15H_PERF_CTL0, eventsel);
-+	wrmsr(MSR_F15H_PERF_CTR0, 0);
-+
-+	/* Step 1: SVME=0 */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-+	delta = run_and_measure();
-+	GUEST_ASSERT_NE(delta, 0);
-+
-+	/* Step 2: Set SVME=1 */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
-+	delta = run_and_measure();
-+	GUEST_ASSERT_NE(delta, 0);
-+
-+	/* Step 3: VMRUN to L2 */
-+	generic_svm_setup(svm, l2_guest_code,
-+			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+	vmcb->control.intercept &= ~(1ULL << INTERCEPT_MSR_PROT);
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
-+	GUEST_ASSERT(data->l2_done);
-+	GUEST_ASSERT_NE(data->l2_delta, 0);
-+
-+	/* Step 4: After VMEXIT to L1 */
-+	delta = run_and_measure();
-+	GUEST_ASSERT_NE(delta, 0);
-+
-+	/* Step 5: Clear SVME */
-+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
-+	delta = run_and_measure();
-+	GUEST_ASSERT_NE(delta, 0);
-+
-+	GUEST_DONE();
-+}
-+
-+static void l1_guest_code(struct svm_test_data *svm, struct hg_test_data *data,
-+			  int test_num)
-+{
-+	switch (test_num) {
-+	case 0:
-+		l1_guest_code_guestonly(svm, data);
-+		break;
-+	case 1:
-+		l1_guest_code_hostonly(svm, data);
-+		break;
-+	case 2:
-+		l1_guest_code_both_bits(svm, data);
-+		break;
-+	}
-+}
-+
-+static void run_test(int test_number, const char *test_name)
-+{
-+	struct hg_test_data *data_hva;
-+	vm_vaddr_t svm_gva, data_gva;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+
-+	pr_info("Testing: %s\n", test_name);
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
-+
-+	vcpu_alloc_svm(vm, &svm_gva);
-+
-+	data_gva = vm_vaddr_alloc_page(vm);
-+	data_hva = addr_gva2hva(vm, data_gva);
-+	memset(data_hva, 0, sizeof(*data_hva));
-+
-+	vcpu_args_set(vcpu, 3, svm_gva, data_gva, test_number);
-+
-+	for (;;) {
-+		vcpu_run(vcpu);
-+		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_ABORT:
-+			REPORT_GUEST_ASSERT(uc);
-+			/* NOT REACHED */
-+		case UCALL_DONE:
-+			pr_info("  PASSED\n");
-+			kvm_vm_free(vm);
-+			return;
-+		default:
-+			TEST_FAIL("Unknown ucall %lu", uc.cmd);
-+		}
-+	}
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
-+	TEST_REQUIRE(kvm_is_pmu_enabled());
-+	TEST_REQUIRE(get_kvm_amd_param_bool("enable_mediated_pmu"));
-+
-+	run_test(0, "Guest-Only counter across all transitions");
-+	run_test(1, "Host-Only counter across all transitions");
-+	run_test(2, "Both HG_ONLY bits set (always count)");
-+
-+	return 0;
-+}
--- 
-2.52.0.457.g6b5491de43-goog
+>
+> Best regards,
+>
+> Kery
+>
+> Yonghong Song <yonghong.song@linux.dev> 于2026年1月21日周三 23:45写道：
+>>
+>>
+>> On 1/21/26 1:41 AM, Kery Qi wrote:
+>>> When wq__attach() fails, serial_test_wq() returns early without calling
+>>> wq__destroy(), leaking the skeleton resources allocated by
+>>> wq__open_and_load(). This causes ASAN leak reports in selftests runs.
+>>>
+>>> Fix this by jumping to a common clean_up label that calls wq__destroy()
+>>> on all exit paths after successful open_and_load.
+>>>
+>>> Note that the early return after wq__open_and_load() failure is correct
+>>> and doesn't need fixing, since that function returns NULL on failure
+>>> (after internally cleaning up any partial allocations).
+>>>
+>>> Fixes: 8290dba51910 ("selftests/bpf: wq: add bpf_wq_start() checks")
+>>> Signed-off-by: Kery Qi <qikeyu2017@gmail.com>
+>> Acked-by: Yonghong Song <yonghong.song@linux.dev>
+>>
 
