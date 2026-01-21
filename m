@@ -1,116 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A3F2EC08C;
-	Wed, 21 Jan 2026 04:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D003E9F9E
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 05:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768969025; cv=none; b=NyZalhmjnqP5UGauZVBQQVcp5ue1W/MgEbRuR+CPRlIV4HHF2QUIfENGTNcDBgOWcWowXdQBWPS4iFbJXdLF/th81xatjL0EiqJECPOrPg7samHje+XbkJneyO5ajlO5FnXETn2LjyPA1eQ8A6xkbEyQELyGnqks3G6llemq4KA=
+	t=1768973381; cv=none; b=Q3R9wrvTS4rEk37dYpYwgkClNDbXeZzo1mxNDWAFUwX05tPQff2cVRwEf2tM4WRYvAa0afb74tA0wk9M/A8KfCaedCFpKRN71wgdt3itFyR1JJ5IJq++posMLonVUCenu43nW8J9+EhirDDK1HOUwe5qCSzZhyqFgeietahgvH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768969025; c=relaxed/simple;
-	bh=Vl8thQo27leGKYP+VBuDV4QcUH1ab8Zm+QHojEY2LTw=;
+	s=arc-20240116; t=1768973381; c=relaxed/simple;
+	bh=uQc7kvpnr3eWQJ+H7RqNdRd5OZKaD9lrnlN+V2TeZpw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mBeaneZzESZManiQIq9TmQLS+Bx3A9SHWp8c/Du3pgpCP62yNEvjH+/VaOEr4zCuSw/3fPVznjLKk6U35II62PPV32b5HREQZQvCWMQNzsSBx1WY7OqizUdMMJkPQKVV1xXIFk2uZ4iC0Ntkxo3QsqAUaGXyQsqlABZ0zVPo3ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NpiQrLkq; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=sUD0KcjebuHt+ICo7EUdSdHe+ejANV5RsLFSVVLLuLrVcxZV4ZrzsOPLHTbnQ8g8dvyaFUL2GqpPbKV3MYqdnIr6IyWCBYc3cL0p6Hw6Ws1ub38QdvKEJYNdYM6ONxGoXYKSbKRoHYN7NlC90ek/TdjaHtbQNIQHL+2jup33/6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N5Mlk7u9; arc=none smtp.client-ip=74.125.224.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NpiQrLkq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41D85C116D0;
-	Wed, 21 Jan 2026 04:17:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768969024;
-	bh=Vl8thQo27leGKYP+VBuDV4QcUH1ab8Zm+QHojEY2LTw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NpiQrLkqRJHXDW+JXPvNr7gw7F2ux/zr6uGSneIY4EGQMUd6kKBsNpUyo0GdLzTHa
-	 P3YoAYs5kvjZJBKnWgmGn3FDrCQht4uV/2mu8vzDQ1oHHykU74IppL1JNKa2ozpVXf
-	 QBcDFS2fUmnDwzo6jBkXQKlFG9DnaEhntgHGFpeAvYuG3v6CjWyZvtgJ9z2SdeT9RZ
-	 TCuf/5uvkSaOOPld0hpxFVF3gHFlLzakawq3BeQSGhNarXWheOGjEpDT6ykJkC5r1I
-	 xqIRP2NxIUkjwoY0bHPO/cYVhT+g8AmyWXp2GZuaKH4pEEgqp4TfeIVLjoKVyfsLYq
-	 OGL+vs/YFN28Q==
-Date: Wed, 21 Jan 2026 04:17:00 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Benson Leung <bleung@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 00/23] gpiolib: Adopt revocable mechanism for UAF
- prevention
-Message-ID: <aXBTPG9rUHMgbHYp@google.com>
-References: <20260116081036.352286-1-tzungbi@kernel.org>
- <CAMRc=MdOCvEb81k0whM9dGCE8Hp=tdxZTUuiFeiL3+WsEei9EQ@mail.gmail.com>
- <aWuFBqIfJpDL9g-J@tzungbi-laptop>
- <CAMRc=McrFa42mNWmZtD1HKKKZ+USUKpQAAME50wbfxPM7L72gA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N5Mlk7u9"
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-6420c08f886so8190777d50.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 21:29:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768973379; x=1769578179; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xj8z6sgYRSc2zcxSy7UyhR6bNJrDd7gH3jcOHm2KVdE=;
+        b=N5Mlk7u9FDtv8iuzab4wtE//XR4wWyXKvWvfNWKiMhMYaY2hk90IsgZpkX9QxE5r5W
+         E+qUf/NIq8OaJIc13eE5mtj6u9w7AAHIIoWzH5gg9L15O6Gpkq0vl64BijAuY+dpdn1l
+         Cd3MmbfbEGxleWpjm6Qz/UbSFqFOZ9oFZnKUfmoKwvefd+DUMatAKmC7j6CtXDqMy3wb
+         oKDTDIyRwiIuvQvjbjA3GujyM2WPByE0MUuc7FrndL7Og6k87i8CnbJAosSKeGKiJjob
+         4tZXjTKNqik++zdsjhNAQVzTeWVwaTbOEpfXcEJp4VjS9nLKnffIbWsvhZN+tSimS6Rr
+         upOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768973379; x=1769578179;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xj8z6sgYRSc2zcxSy7UyhR6bNJrDd7gH3jcOHm2KVdE=;
+        b=KOqnqBPlQ5TSO5/5IG9c5+EWy96Oj+cRe4YIDgcc1EcKyGqkVwQNuv3GZib6mW5KSZ
+         mXb/05M7EFVZhippaRpBv7DdV9qsbul72EFyGV/iOHP11NDTiTGC3TJvzWwOPvwmxEqe
+         igGtMhf5GbP+A1aCrF3ga6VCAsjS0jzkueJ29dfHyVqmPBn0p+8i3cWFOpD7MZYzrChZ
+         oslR0im4UalQrIZuxU0SxAmPGy876ZBD4XUaQ3P2vVZ01QPCFjHy5EUGShy7EAf3+yoF
+         2ah4+4Lq/oJ+CHzrK/yvhqzwUb7M2RMULwd688xvggMP2WE3WaKXaqUGk/r1keCj8DSF
+         WAxA==
+X-Forwarded-Encrypted: i=1; AJvYcCVdRlPBGYvyza/w1iih7JDWbAB6FUHEq64AS2zbLS7RL9ydBHonYFZxywwWpzeyhhpK13kR4Pu6zCkASKl9J+g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdiZHzLTLpBxPbqCBFZ5xLX5091C5bF4ygaaiCEiCqbfACKCwT
+	+UkDl1dcgoY7yGbGkgaxK49mJK3Budb7BarlcNwp5/ygef1Cvja6aEyN
+X-Gm-Gg: AZuq6aJlEEGz2Yslam3JO+8cPhGFmgfMc8ukG8CHvUShsxY7mjEDzH2xTztZ+yyQqkX
+	1e3gScyW1Lwb4CHsZu8+CDYZwlZQYPhIUxTqj6EjNIIUm1L+cA3cgbT8Qg2vnaP5HfD8gA6EByq
+	VzigKS9p1TDlVQAd2pGKJMqWWKBeP2MHWKuplXIwzbLy/oPcG7rVtDuyg7sHZx2DvcfHHAULR/6
+	PpRRCcNpQLdxcvvlG8QFlzijrxTK5tgY4hMR6FDgIekRWOddOLBZn5Xxsb6UoCP7bNJiu6xfXT0
+	tQIf4KC3yN880iGH9G9RWRfnHs6zLGdlb3JRYjg0AZgBS7s8PPS5EVPT6XuFUK64rK7yFwE9uBA
+	f9BK/EKX+FUS+jVzDY6C7csfBFuGCmyga+HZM3MjsM2nprELX6ep30GYHN1XilfStY6JUULqucv
+	XfhONDOc+dGmHqhDDWraa7s05ATZy+iciKiw==
+X-Received: by 2002:a05:690c:f09:b0:78d:b1e9:85f0 with SMTP id 00721157ae682-793c6831d0dmr118307367b3.47.1768973378948;
+        Tue, 20 Jan 2026 21:29:38 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:9::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-793c6888b83sm61022937b3.48.2026.01.20.21.29.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jan 2026 21:29:38 -0800 (PST)
+Date: Tue, 20 Jan 2026 21:29:36 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Mina Almasry <almasrymina@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v10 0/5] net: devmem: improve cpu cost of RX
+ token management
+Message-ID: <aXBkQErscGzJwh2i@devvm11784.nha0.facebook.com>
+References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
+ <20260120170749.101e8bcc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=McrFa42mNWmZtD1HKKKZ+USUKpQAAME50wbfxPM7L72gA@mail.gmail.com>
+In-Reply-To: <20260120170749.101e8bcc@kernel.org>
 
-On Mon, Jan 19, 2026 at 09:33:21AM +0100, Bartosz Golaszewski wrote:
-> On Sat, Jan 17, 2026 at 1:48 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> >
-> > On Fri, Jan 16, 2026 at 11:35:00AM +0100, Bartosz Golaszewski wrote:
-> > > On Fri, Jan 16, 2026 at 9:11 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> > > >
-> > > > This series transitions the UAF prevention logic within the GPIO core
-> > > > (gpiolib) to use the 'revocable' mechanism.
-> > > >
-> > > > The existing code aims to prevent UAF issues when the underlying GPIO
-> > > > chip is removed.  This series replaces that custom logic with the
-> > > > generic 'revocable' API, which is designed to handle such lifecycle
-> > > > dependencies.  There should be no change in behavior.
-> > > >
-> > > > This series depends on the 'revocable' API, introduced in [1].  Some
-> > > > build bots may report errors due to undefined symbols related to
-> > > > 'revocable' until the dependency is merged.
-> > > >
-> > >
-> > > Hi Tzung-Bi!
-> > >
-> > > Thank you for doing this and considering my suggestions from LPC. I
-> > > haven't looked at the code yet but I quickly tested the series with my
-> > > regular test-suites. The good news is: nothing is broken, every test
-> > > works fine. The bad news is: there seems to be a significant impact on
-> > > performance. With the user-space test-suite from libgpiod (for core C
-> > > library - gpiod-test) I'm seeing a consistent 40% impact on
-> > > performance. That's not really acceptable. :( I will try to bisect the
-> > > series later and see which part exactly breaks it.
-> > >
-> > > I can also help you with user-space testing with libgpiod, if you need
-> > > it? Some documentation is available here:
-> > > https://libgpiod.readthedocs.io/en/latest/testing.html
-> >
-> > How to get the performance data?
-> >
-> > I tried on libgpiod-2.2.2.tar.xz:
-> > - ./configure --enable-tools --enable-tests
-> > - make
-> > - ./tests/gpiod-test
-> >
-> > There is only TAP output.  Also I don't see the difference between:
-> > `./tests/gpiod-test` vs. `./tests/gpiod-test -m perf`.
+On Tue, Jan 20, 2026 at 05:07:49PM -0800, Jakub Kicinski wrote:
+> On Thu, 15 Jan 2026 21:02:11 -0800 Bobby Eshleman wrote:
+> > This series improves the CPU cost of RX token management by adding an
+> > attribute to NETDEV_CMD_BIND_RX that configures sockets using the
+> > binding to avoid the xarray allocator and instead use a per-binding niov
+> > array and a uref field in niov.
+> > 
+> > Improvement is ~13% cpu util per RX user thread.
+> > 
+> > Using kperf, the following results were observed:
+> > 
+> > Before:
+> > 	Average RX worker idle %: 13.13, flows 4, test runs 11
+> > After:
+> > 	Average RX worker idle %: 26.32, flows 4, test runs 11
+> > 
+> > Two other approaches were tested, but with no improvement. Namely, 1)
+> > using a hashmap for tokens and 2) keeping an xarray of atomic counters
+> > but using RCU so that the hotpath could be mostly lockless. Neither of
+> > these approaches proved better than the simple array in terms of CPU.
+> > 
+> > The attribute NETDEV_A_DMABUF_AUTORELEASE is added to toggle the
+> > optimization. It is an optional attribute and defaults to 0 (i.e.,
+> > optimization on).
 > 
-> Yeah, no, there's no dedicated performance measurement in GLib tests,
-> I just timed the test-suite and it runs 40% slower with this series.
+> IDK if the cmsg approach is still right for this flow TBH.
+> IIRC when Stan talked about this a while back we were considering doing
+> this via Netlink. Anything that proves that the user owns the binding
+> would work. IIUC the TCP socket in this design just proves that socket
+> has received a token from a given binding right?
 
-I think this is mostly introduced by a redundant synchronize_srcu() call in
-revocable_provider_alloc().  Proposed a fix in
-https://lore.kernel.org/all/20260121040204.2699886-1-tzungbi@kernel.org/.
+In both designs the owner of the binding starts of as the netlink opener,
+and then ownership spreads out to TCP sockets as packets are steered to
+them. Tokens are received by the user which gives them a share in the
+form of references on the pp and binding. This design follows the same
+approach... but I may be misinterpreting what you mean by ownership?
 
-The replacement still brings a few overhead (e.g., for allocating some in
-the .open() file operations).  Especially the test approach can accumulate
-them.
+Best,
+Bobby
