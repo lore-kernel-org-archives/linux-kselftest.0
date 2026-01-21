@@ -1,132 +1,218 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4A93093CF
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 01:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768959098; cv=none; b=rZVuXSVi4mF2KxamTjJpqCYL6dxLA43tA+7jPcxdOiGgyjQhyAOlhyxEtWvDOEXBbApQAPcE1JrlqJMG3La0Sadsh/PuH6NSA7XxQrseAuZT1Eu3LXxdJtojBwvYOXW56hdB+VZ5SLBZzBgw2jLDqbRvBpGhvTqkOZejoxcLA3E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768959098; c=relaxed/simple;
-	bh=dEcCU3CGTGTpN7l/rN2LrkYLiTkUZ0f52QXFuNFvEZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lmBNXu0ZQCu72Vt952m050jdojeral4M8EBi+DVcxxP/7snYdusj1JcdkItb6W9gcdSnjnGQI5OPFpPfPuDnye9LQ2Lriq8/vQBPI52GApb5QmayRP99t4ujA8wjFzGXUYhNK+JDzhNpY3UB9garP+CvchVoRBaXOaxfSvqaZn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h50dDHrN; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C578024A07C
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 01:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768959160; cv=pass; b=SvO5P8WiFzWW5t31v6MFc1d8Rfit4UYuuZP4Yk/QIdDLap6vk8we0ueeXhxyVT3qb+mUbg15dfU+Aw46/ZxRgAyW81FbvlRQtbdFeEJ3gmE3I+gHp1nY9/rtEo+kUB+erh12J9S/95JlJUtz46tnzaF/GxBu9xGHPhUxqeaODkg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768959160; c=relaxed/simple;
+	bh=ShWRak8oUy88OSaopaw+aLPDpDo1ZpJd6cDyp++LarM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GN70VH7b+4ngI7DgOm0wWs8AtsUArj+tCnqvWUv3IFpm+z47tTevnpJGC2IkQxXYEeiDHHI7qdzd7f+Z25rKvx4sW8hyQpYupiSOPcfp/0D94YQmhTPJt7VAyyom2WDBtqGyGGjuTCDSsWxRFUWoM9rh0qwm1iBjzQlJbIf1WoE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=A5BCDI+7; arc=pass smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h50dDHrN"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-7941578064bso5224527b3.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 17:31:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="A5BCDI+7"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-65815ec51d3so377842a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 17:32:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768959152; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZjJVV15G+rkZ3wH1IF2Scd+J5qmGoCYrVrZZrM3y8UhYvfkAoKJ1F0HEGXSzqD8ZoI
+         huxweZ7w+CkI10+M1UXIQhv4dOmegf+6qiSCIPPdUyj/sQVQhoxqbny+8apklX1r3Ez+
+         /6myQLZ7H+6J9XIrlYGzuEkURJn+by3140D0FaNVJeCPP6wMQv2ngyKqZxI9TI6p5KTv
+         E7u3HiK181YUahqChFMjAwkp4Vr0WbC2I2zGf3JzAOGCg1nDI+gnlzhL9v+y9iYjTSf6
+         kMlNF6hTH7d7zB3h8fvLiLExW4XEWzTI9xJUXJVJzw2I601yftAI0cSGEy20pP5kmEaN
+         a17Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=phhznUg1me3aMCDh6RtpPgdrBfYLQTkKfqDDafoKBZI=;
+        fh=Qqy6lZz0yUAIVN4xglQmmrWsQb6lPtseqj0+PMDEeXI=;
+        b=VCLx/mwGFWcD6l89ofMTf84zpWtPLMxATIxczgCa44tPCN0rou3Id383XPi/ftPkzy
+         M6pUD6oF7IKNerSWlUPcqpWKbv3t6pDdIi1aScyK9aMCs8ROseD4pSpGeJgPrxGYTqpn
+         IwnzAXPIxQZSgVU9NHG6tV5pT0n+6Q1bWDeko6Cdw/snf9stJMvDC9i9R6bHtrHYMK3T
+         a+HG6qESHpMJ3ajZx9kjtyzRN8TbJpLm9kwlLToPbg0rfLV6ej1gcvIMgUS4Sd0q0Uf/
+         HF7iONrbHiwB3nR74OwkY/93IinO3n5rcvK2oPr0HBtBVlVM9rXDL/4GGlQHKhi3uXcC
+         y7uw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768959090; x=1769563890; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E8iE0KBKIYKbBU2Zh8l50G8fq2WUoVHBO7RlhN61jto=;
-        b=h50dDHrNERTJ1JhLzkHKw+qQXwiVbuaQQR89ZbxOVAM/qTicqyHz+TmJptauGGBaPZ
-         cCAggqeULVjUU76rRqpnBRdWR4QMjo80ll7nemToQy3qLO6DuUagQlrdWjU0NincmOUH
-         CUGqSdo1bZJxWKGKatI5KDK0aYbiufIJWM0QBGiZ/n5L+e2/7u0EWBPvmGCebn2meFvw
-         wIWs+f+K5uv71tfkmc64xZBGFvQJhpstftvXfcn6UFTvzAAnwBKCMkwthhdCdhz4Eo3A
-         HGhRKe+s0yn1+B0sfkbjkDvmQ/7EIt+01z9dHbvQIEU6qrmkh2JjlHEwoGZ8ed/Ox6Ww
-         784w==
+        d=sifive.com; s=google; t=1768959152; x=1769563952; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=phhznUg1me3aMCDh6RtpPgdrBfYLQTkKfqDDafoKBZI=;
+        b=A5BCDI+7uaow+L1pkR0/vhbZZn6AJyq7brkzi3g5PXQfBD4lA4/eE0X3H0eaNyQ9uI
+         BhpW1W5q/SgcOo9bLiXBhGEOuJjNOLdsgI1yomjhhtiMc4yYgjkRRCEZEjOgjfqf0UZm
+         alaado9gHlyuyjKWjd2TKsKjKgLfd7fX9KqgYnaBHFx227Fx+cmQlNknKxxjjBc6MhHc
+         tG3tvKjpIj28uMUF7HVJL7ZayB6r9Ecpz7T11yD3GxnJ2kYCvSe5zS/YTgO0OkPIEynl
+         85aax+WRhLPNanwVxq+Dtb0SSQHEK2jnBzPJpDYm/K1qIbTkzVoB1lPQoyDUEHDmqQ9K
+         uN2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768959090; x=1769563890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E8iE0KBKIYKbBU2Zh8l50G8fq2WUoVHBO7RlhN61jto=;
-        b=tWxWv5PaXoPXUt4tUYIQ73k4zMchbumKUi/qiZsFn9KV0yYWlZTrPSeCT0RagH1U/S
-         bUsJEJQEeRWFDmLVGHp1PNj13GUD1HxIF0nvSwAC1b5ueseNgBnQn8TEwK1uBcQ3C1lx
-         BAteQ0AA2ECMTT45bsgDDko18Kc6RcdHul10I1kAOmOvTJmJ2Ewm8z0fF5Ic3U1Qnf+X
-         SEFAvWsswqK+qSHujFZzL541KojRqXDRAKdMdRJan1FXrjlaNcPJkHlsB3bnZPyEPp+N
-         h64JZNEKg7uwvyChiHR/qkOGGHTIvRc02gXnXT6FqXIvISNzfEiK0BbhzbQxeQdrkSIj
-         6J8g==
-X-Forwarded-Encrypted: i=1; AJvYcCXRNQPRn2D7f8rdQrv7tzhJFlmRdtnVuJFokv9Vc2gJTcDN+/vTY21EjglCNuoGHJR34brwpwMJ1wtfDxxXKGo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7VneyPBpiJXihGr0sTyaF7HNb8TVqR3CJyyBTYCGXs8T7VrWE
-	CZVtxPqslfkqx7qCwaNeo637ozt9OEO84qfxtz72omBYURsrwteR2BEB
-X-Gm-Gg: AZuq6aK5y5lpFNNINP2+UuAMcMF/w6H5A8dsKvJGriPmYIGINJXy7yIJcguFND7SFJf
-	gLjLaePuQzXmSSc2f8j5/Ww9irwZyw6/cYvpPqKsUXVqbyma5f8zdXLApD9k5bE8omwk5x7F1lV
-	Sny0FPJjeHM8e7S6h95E1v34SOCynFgQZz6JraNF7UJpq0TSaiRD1Cl+f4qriIDieaJ1Dd6X+cp
-	hxC360ANYN9AodU3e5/QUPLiftfrlBlEbeNlv8IKh5pJJ4rvgqMdWAt9OghxuI+xpwZY5Ul+xk7
-	xtPEIjggFJR5CkQ+6H7fepDucyoY5gmeLGSiyXzBg1jWmzTCHWju9J7hKk7/tF14pts11bFN1bS
-	0JTrm35cgFyB7pmib2hlqPe5VPnMzRSZS8/FZsU7J5XsrJ1M0mA4bVFgFKugku5F3xXxzVneAHY
-	MSiUjQeCsMnki5vkcK2Qof0VKKGpZLlBzlIA==
-X-Received: by 2002:a05:690c:6184:b0:78f:a535:93d4 with SMTP id 00721157ae682-793c52b1e63mr140115457b3.25.1768959089914;
-        Tue, 20 Jan 2026 17:31:29 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:7::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-793c66ee062sm59397217b3.15.2026.01.20.17.31.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 17:31:29 -0800 (PST)
-Date: Tue, 20 Jan 2026 17:31:27 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Petr Machata <petrm@nvidia.com>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: net: forwarding: cleanup veth peers created
- via NUM_NETIFS
-Message-ID: <aXAsb+sCbyeD/xkL@devvm11784.nha0.facebook.com>
-References: <20260120230905.328528-1-aleksey.oladko@virtuozzo.com>
+        d=1e100.net; s=20230601; t=1768959152; x=1769563952;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=phhznUg1me3aMCDh6RtpPgdrBfYLQTkKfqDDafoKBZI=;
+        b=IQ/JGo7UqEXXGl0Vv/nbEEyF/xBFSmsn2hRpv+RgIu+VHF6e/JYBRx6dTbFJ2pLyOB
+         HKuNbWUrs6p+DN81CGKui9YgESGfcmB7oBhtcW3If5yiWaYw2Z6hvpA5zUF+AFbcrTo7
+         /cqlNrHEYmR5Mg+OqSgtMLNx/BLfi+/E+b1pU/yDhkZDGloa2lJ9deiLKDmsg4Z8oVYT
+         IZnflvR092bPgynd1GeMiU2nsyX85YbO25sYMTuP4FO59sHHaWfW3iClAG/aUmjzqCh6
+         df4QPYE374hQo9lamSKSOvrMaPaXJFdXUGUhI70E37zT4BXCz5DxLfuU3/S1BsHXT9Oy
+         Gniw==
+X-Forwarded-Encrypted: i=1; AJvYcCVlJ+IOHt52kwZIS0AGxdSkU8URIsmaO4E7YPgkcbR1UHZVeVHxxex0FhaW4fY6JoS3cbMc88Li5Kzl3SjICDY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw24ufTf9jU+/4IsW9YCBzIGFBI3KTUeWXoABI+WEIMa7o2Tqwf
+	mYMZuVLlke0QysGvDsVW8RA/gwteHoe0rjj2CfiJbe8bDGVlrEcA6EAteElZI/+T/qPcRd1VNoO
+	alml31mwkGwYp3BAmv3mfwhoJBprQiZcmAbxMZLnoAQ==
+X-Gm-Gg: AZuq6aIBaQvHtHUTVO/0CGEMRfgSynHrMIagcKppNMDsXSuz+Rdq/v5ZJk/lVY+nxg3
+	qzj9GOXZW6FYKJgbpNtsQq8ixVyNQjfg0ZENgdYK1QyoMFnIRJkTyK2Y8rOOUiFVnG5bHMpzH7j
+	N4IHbg2y0cFa0r0gVD9LLs05Jd5CImO+0OoUaf8kgaIvR7gi6xiDi1q1UfqQmCGn7nMPCzb6GXN
+	gIP53iPwp0HgKGuo941ZNCpOFg9xQxWe04x2DrCwaxMOxI/585VGJlqq5rnzxKUlyIZXXOlPA==
+X-Received: by 2002:a17:907:9488:b0:b87:7634:b20c with SMTP id
+ a640c23a62f3a-b8796b215a4mr1301363166b.38.1768959152268; Tue, 20 Jan 2026
+ 17:32:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260120230905.328528-1-aleksey.oladko@virtuozzo.com>
+References: <20251211-v5_user_cfi_series-v26-0-f0f419e81ac0@rivosinc.com>
+ <e052745b-6bf0-c2a3-21b2-5ecd8b04ec70@kernel.org> <aTxf7IGlkGLgHgI2@debug.ba.rivosinc.com>
+ <CAKC1njQ-hS+kUJ0C_v0oqZW1EZw2zAXMp-SnnA-ZXh_H-SoVdQ@mail.gmail.com>
+In-Reply-To: <CAKC1njQ-hS+kUJ0C_v0oqZW1EZw2zAXMp-SnnA-ZXh_H-SoVdQ@mail.gmail.com>
+From: Zong Li <zong.li@sifive.com>
+Date: Wed, 21 Jan 2026 09:32:20 +0800
+X-Gm-Features: AZwV_QgpJ38WsQTA-JLh1W5jk7su1plcAErfmIKl7ceT3yMsB0wZBJHvBBZ5Ujw
+Message-ID: <CANXhq0rpjSvOThACrB6_MMc8S34--xJsUYZ+HtMu1GUNyk8zOg@mail.gmail.com>
+Subject: Re: [PATCH v26 00/28] riscv control-flow integrity for usermode
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Paul Walmsley <pjw@kernel.org>, x86@kernel.org, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, 
+	Andy Chiu <andybnac@gmail.com>, kito.cheng@sifive.com, charlie@rivosinc.com, 
+	atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
+	alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org, 
+	Andreas Korb <andreas.korb@aisec.fraunhofer.de>, 
+	Valentin Haudiquet <valentin.haudiquet@canonical.com>, Charles Mirabile <cmirabil@redhat.com>, 
+	Jesse Huang <jesse.huang@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 20, 2026 at 11:09:05PM +0000, Aleksei Oladko wrote:
-> Some net/forwarding kselftests set NUM_NETIFS, causing lib.sh to create
-> the requested number of veth peer interfaces.
-> 
-> These interfaces are not removed when the tests finish, leaving stale
-> veth devices in the system. This can cause subsequent tests to fail,
-> for example min_max_mtu.sh.
-> 
-> Ensure that veth peers created via NUM_NETIFS are properly removed at
-> the end of the tests to avoid interference between test runs.
-> 
-> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-> ---
->  tools/testing/selftests/net/forwarding/lib.sh | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-> index a9034f0bb58b..ae7699c0c7e5 100644
-> --- a/tools/testing/selftests/net/forwarding/lib.sh
-> +++ b/tools/testing/selftests/net/forwarding/lib.sh
-> @@ -597,6 +597,10 @@ vrf_cleanup()
->  	ip -6 rule del pref 32765
->  	ip -4 rule add pref 0 table local
->  	ip -4 rule del pref 32765
-> +
-> +	for ((i = 1; i <= NUM_NETIFS; i=$i+2)); do
+On Thu, Jan 8, 2026 at 11:10=E2=80=AFPM Deepak Gupta <debug@rivosinc.com> w=
+rote:
+>
+> Hi Paul,
+>
+> I have a bugfix for a bug reported by Jesse Huang (thanks Jesse) in riscv
+> implementation of `map_shadow_stack`.
+>
+> Should I send a new series or only the bugfix-patch for implementation
+> of `map_shadow_stack`
+>
 
-I'd suggest 'i = i + 2' here instead of "i=$i+2", as it seems closer to the rest of lib.sh
-style.
+Hi Deepak,
+Not sure if I missed the bugfix patch, I couldn't find it on the
+mailing list. Could I know have you submitted it? If so, could you
+please point me where the patch is?
+Thanks
 
-> +		ip link delete dev ${NETIFS[p$i]} 2>/dev/null || true
-> +	done
->  }
->  
->  adf_vrf_prepare()
-> -- 
-> 2.43.0
-> 
-
-I see that some tests that set NUM_NETIFS do not seem to call
-vrf_cleanup() (e.g. bridge_activity_notify.sh), so I think those tests
-will still leak?
-
-Maybe lib.sh needs a remove_netif() to go along with create_netif(), and
-then tests can call it from their 'cleanup()' EXIT handlers? This avoids
-the mismatch between vrf_prepare() not creating devices but
-vrf_cleanup() removing them.
-
-Thanks,
-Bobby
+> Let me know. Thanks.
+>
+> -Deepak
+>
+> -Deepak
+>
+>
+>
+> On Fri, Dec 12, 2025 at 10:33=E2=80=AFAM Deepak Gupta <debug@rivosinc.com=
+> wrote:
+> >
+> > On Fri, Dec 12, 2025 at 01:30:29AM -0700, Paul Walmsley wrote:
+> > >On Thu, 11 Dec 2025, Deepak Gupta via B4 Relay wrote:
+> > >
+> > >> v26: CONFIG_RISCV_USER_CFI depends on CONFIG_MMU (dependency of shad=
+ow stack
+> > >> on MMU). Used b4 to pick tags, apparantly it messed up some tag pick=
+s. Fixing it
+> > >
+> > >Deepak: I'm now (at least) the third person to tell you to stop resend=
+ing
+> > >this entire series over and over again.
+> >
+> > To be very honest I also feel very bad doing and DOSing the lists. Sorr=
+y to you
+> > and everyone else.
+> >
+> > But I have been sitting on this patch series for last 3-4 merge windows=
+ with
+> > patches being exactly same/similar. So I have been a little more than d=
+esperate
+> > to get it in.
+> >
+> > I really haven't had any meaningful feedback on patch series except sta=
+lling
+> > just before each merge window for reasons which really shouldn't stall =
+its
+> > merge. Sure that's the nature of open source development and it's maint=
+ainer's
+> > call at the end of the day. And I am new to this. I'll improve.
+> >
+> > >
+> > >First, a modified version of the CFI v23 series was ALREADY SITTING IN
+> > >LINUX-NEXT.  So there's no reason you should be resending the entire
+> > >series, UNLESS your intention for me is to drop the entire existing se=
+ries
+> > >and wait for another merge window.
+> > >
+> > >Second: when someone asks you questions about an individual patch, and=
+ you
+> > >want to answer those questions, it's NOT GOOD for you to resend the en=
+tire
+> > >28 series as the response!  You are DDOSing a bunch of lists and E-mai=
+l
+> > >inboxes.  Just answer the question in a single E-mail.  If you want to
+> > >update a single patch, just send that one patch.
+> >
+> > Noted. I wasn't sure about it. I'll explicitly ask next time if you wan=
+t me to
+> > send another one.
+> >
+> > >
+> > >If you don't start paying attention to these rules then people are goi=
+ng
+> > >to start ignoring you -- at best! -- and it's going to give the entire
+> > >community a bad reputation.
+> >
+> > Even before this, this patch series has been ignored largely. I don't k=
+now
+> > how to get attention. All I wanted was either feedback or get it in. An=
+d as I
+> > said I've been desparate to get it in. Also as I said, I'll improve.
+> >
+> > >
+> > >Please acknowledge that you understand this,
+> >
+> > ACKed.
+> >
+> > >
+> > >
+> > >- Paul
