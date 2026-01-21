@@ -1,144 +1,143 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AD9439014
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 22:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21DE6421890
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 22:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769033069; cv=none; b=BObMEtc/iE5B4LxpH+AlQpEUaTz2B4AZZJbqQjq6HLzXlFpS7CRekjPXH40t+P0DNJ9jhbVJ+m8cMz8Xc4tuUjF0fg5mwFCpxlO/lj96hp9LFOS4h+tk2eQbn9e07ZFispxcdBo4jlYH/RNymtbUi2kT9AeabrGDtkk1kCq1+pA=
+	t=1769033525; cv=none; b=CEI7ZN2KhA5KqzuWuQ8vxGapjTSOwuTr4gJFH8QHufRsWqWi6yLZB0wecUzHUbxI0cAxqhGeJ+qj4bVyiWMrtGXCMXe8p1ZbILRjABCe+jSCcvP0M5/vdR+B4mEbeMLwM53OoHy5cBqBqlA+vDQ/IOY0bCswDrYIpXCe4LELFUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769033069; c=relaxed/simple;
-	bh=BPC40cd+PK6beKXkMEkAPgW8Vuk6zBAwXi60FwrFXDU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F3TSwfdMqTNc7nqZXxDC8XY8SSUPXaKGU54gRMyPuWnnCh8qfAkrSr4Y94knNPD/7ckrViAfyMpZJNxTEbsrhFo+Qhw/UmERs3961s8JKMXZeTy1AZe4CLqE/YIDV3ICyYFsELbh2V8JRiPVORUSyYWo5ifMnZ73DBb7Hc5wOX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lnc/OCVx; arc=none smtp.client-ip=209.85.128.54
+	s=arc-20240116; t=1769033525; c=relaxed/simple;
+	bh=vD964Lj1wPSOw/16ssWykcRPX0KDwrhlz4wvw7+NTyw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=my/SX68zhvU4tqZ6+IwH2PqsiJdhfZZGzwsFkw2uHC5kkOJ9wGILeirikaw6lON6fJjZifpuyRCUfs/zBEPNO0Bq5HzXY3qZfiF+xZSH4n8qk2Gm26skJ/3u/inY5/ZyOIXsvP04+Eqr/tPntVP2kMnT+9C9qqz4TcCMN+hC7GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y99EiGsF; arc=none smtp.client-ip=209.85.128.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lnc/OCVx"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4801c314c84so3169815e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 14:04:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y99EiGsF"
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-790884840baso3696627b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 14:12:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769033065; x=1769637865; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CJ68qOu/lJJCVxKn/HKtPSCAAtAx0dItgoT8Dw3lvcE=;
-        b=Lnc/OCVx4gJnZ/x2tFPCQgcXmDatmD16iiKDPuMLI0gEK1O0lsFjr5I/dukAODtwMD
-         +KxvBiUbQLJiayd5eR3ePPd3pKxFrptiCURDoW0YHhfOHz8nwFyVS6V3gTFeoM7D15/O
-         3A2kBjXUon0I904hqTm5S14EzBoYiYHnmHz2ifopkmCKaTTeYBQUGceFSzq4bkcxHyRU
-         Fo1wBVblhit2N3Ko+3fYX4ie84/zFjQWPtmvFogS1hvshclw1rFVQxdVVRrE8D1l9dJR
-         J1amcpEbZEvzuHKTLHoU5XIoHHKk4iATqQSD8BE0lJVoYnAoqYKNvn20DBiXWTEAEQZg
-         ruTw==
+        d=gmail.com; s=20230601; t=1769033521; x=1769638321; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N0yb8kb1LkqAc5YpKYa8ha5gJygHDPK65XDs8oEX3qw=;
+        b=Y99EiGsF9tk6R+Itkzxd0coovOKy9u52A1TXP4htixp2HgvCl6iJKdLzALNJZbVNzj
+         aJZcvkUY/XMAR+yvEorllUkeZVJ7k7WC6zO1pZIcx8Ql8QQB95xchErZ6Ky0QukvGaAn
+         ZStdmxheSgLVJkjkLAxtRJFmIGaW7mqAe9npBxjYaYz7YYCGdaWdz4TfWJEPTEuDt4UH
+         zYBc5LesM3ZKR4CSql4qIdUQkNDkGMYmFXAom1jQ7ovREkwAMjGx4hSmomH2LVdtKYdD
+         F4WQ0B9Ix79eBtf5yFI6ozINVYcYe1yQk6QNiFgjkMm/M1/ynQOIsw44A/3Sr/regoPl
+         No/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769033065; x=1769637865;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CJ68qOu/lJJCVxKn/HKtPSCAAtAx0dItgoT8Dw3lvcE=;
-        b=jE8J4iMy3xc/zddILtKrYmJFoYbGgyUX9dukUhrSNaUEnC8DirmppXSX8lfPnaFCjo
-         7HDNiI7y5qoVx/tZCY8uJA6K7iC7SW/e9hKdvuAVnhPAQDPiILuRy7QsuIhtxcVFgVgL
-         /67BusXxy6DI3MnLNCt1SyLQbEWmGVaqOONltty25fzcJq4UjxsbnOKFovXvKVK30SPz
-         YLoo/JzbbOGD4xczdCbhwVUE2ruCiCL6S1cTeysRsQ0/51i9Lyi+mcurQVZeFEKt0pYH
-         sqtIUBp1CzveiCJkLIAdUiMpAJxLy8XB/VlOE58618v/2j1HWk/Cm37QVZ3p5zuBZD63
-         b03w==
-X-Forwarded-Encrypted: i=1; AJvYcCWQt6QqenmksH1nqeAsRV+lxu2a3fXs1+HQwDim6/Bv20fcKb55JUQe5pwbnPq8b5VJVoCVRIv/82TEcL7OabE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6rEtwtssXLaAA8TqOVF0q8J2zibaklDyedWdbvwp7UxMCTcpy
-	4iolphbL+YYfbmI8Oi6BYQSbZ82ORhnlK38aBJYI8cIJzYAMnbI+feiqqjAIYQ==
-X-Gm-Gg: AZuq6aJygFdr6rnrNfNZzoae+YIcueLSYd0GSEkSfygva69l6P7Nzf8SViHe54fRzXI
-	fGQn+9ZhmFLtTdLHIn8Ob2dxKU3+6kZ2F0BYDLWI+ZcY/y7ffMO69PxqaPgdODYdmiu7cl04MiI
-	ccH/fjFjOrjz+PEtmYJ2Ir9UVfGus0wMrRVr84mJd7avsHcZXvejBrf3E5Ze9yUkawzH4FCTZp/
-	6t4Cpi6rG/Qz99JyQt0EJNBiIgejvzPHYa1YZhWT1gaqtj4tpVrvPJ2A9phLwZnVdrKKL0RkAT9
-	b3S+txgFM1aEptjbbMcctM1yU8VkZswrBbH7kWl6QRso2MRSMQT0Py64DFLtddGCCl4qycieOnu
-	wBRmUM6myPItbjbG0xudXhm2H9ni0yV/XmeUKWAmjZrmMsvkUUeoDKqoD69nblTIARoNufU7fnZ
-	fGDhTOwA==
-X-Received: by 2002:a05:600c:8b27:b0:46e:32dd:1b1a with SMTP id 5b1f17b1804b1-48022668fd4mr258559955e9.7.1769033065384;
-        Wed, 21 Jan 2026 14:04:25 -0800 (PST)
-Received: from archlinux ([143.58.192.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4356999824csm39410535f8f.39.2026.01.21.14.04.24
+        d=1e100.net; s=20230601; t=1769033521; x=1769638321;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=N0yb8kb1LkqAc5YpKYa8ha5gJygHDPK65XDs8oEX3qw=;
+        b=WcDl+8h783jb25dDEpFqlrVtIPoawEnG+1yJOWkPriADrv5lStoaU7FcZAfDk7H34/
+         fLNCLOfTDAR2IcdFDFFYLmL4wbJ+TqMgkvHHFl/TBiSpAtGV+7FbXMuUj2AafAs0lwwc
+         ZHHB4sCi5J3Pw2YHaiuBSk9HqAia1+ploqSje3vAfmpH9/ZV7z7xI99ml4Cxxen7UabY
+         J8dqiGDbASyzMlfKgUJmBiQ73kBH7QXzjiJ9BDtGU5Ibd7TQz0hBqAtUIuQj2YRrhboB
+         KcXgAscrKl6/SzVznZHNSPB1XYIcoIpsYbRL4d5BKRj/56NLqc4CaufhRw96AdG7S7y6
+         jSKw==
+X-Forwarded-Encrypted: i=1; AJvYcCWtYQmp0aXQko8AHZivDQ/42EWXc0U4u+493tcoggwtvYvRwl+oAn3xKzSrS6Q9EQzMYotDQv8RohfXeVSeQd0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyl+DUoinST12iXkxniGmT66SVTQc7IfYHCMfG5cEXcICKcIhsH
+	J0vooBHGmBdoc/Yc5RkuURemIcEkwxBlGonTazusHETrlBQ2Ld6Zr2eb
+X-Gm-Gg: AZuq6aKTwa9mSrg9itbUNp8gcsS30jQtgxMpDzcNs5UZCUgYr8HB3MKNBRuT8InCDXT
+	9dNlUhsqlvng3/1I6LJP9MXVjxZiw7U2hQ90nF+FF0GtVGH5OESJF/zTVR4Eo8nu64ctT4ZyLi/
+	acxQZzuv5IGiWzLbR3sgBBLkwFucXWWiMXnpEt+UfnajRaNr+RcdFJ9BIEXckl4uVZ/ZHL5fo6k
+	p9KynqW4We5NTUl1odfwE1E4sW9e3FCPt8fjA+k29HBGdj+pYuoD+pn/TI8Vq1FHYVnVDnFvxjT
+	m4CjKcEsIcZ1ywsh0H9CZ00A92/UOEdW/YM+LZiP4DJ2kyw/ZxOyJ+AX4K336vUAYWmKGtkqP1x
+	mnM1Wk2+KcFRC/VWpIe3ROHXw+SI+XWVHxR0xRUzBLHNeGTVffy07C6u00MAN5dOrODR/lE4SGn
+	0M0hVsUIK8
+X-Received: by 2002:a05:690c:4990:b0:794:2ef:a445 with SMTP id 00721157ae682-79402efa762mr75302437b3.15.1769033520799;
+        Wed, 21 Jan 2026 14:12:00 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:c::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-794295ec411sm5665437b3.15.2026.01.21.14.12.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jan 2026 14:04:24 -0800 (PST)
-Date: Wed, 21 Jan 2026 22:04:23 +0000
-From: Andre Carvalho <asantostc@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v11 7/7] selftests: netconsole: validate target
- resume
-Message-ID: <aXFIk1L8G_dHF6od@archlinux>
-References: <20260118-netcons-retrigger-v11-0-4de36aebcf48@gmail.com>
- <20260118-netcons-retrigger-v11-7-4de36aebcf48@gmail.com>
- <20260120172057.6600eefe@kernel.org>
+        Wed, 21 Jan 2026 14:12:00 -0800 (PST)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Date: Wed, 21 Jan 2026 14:11:42 -0800
+Subject: [PATCH net-next v16 02/12] virtio: set skb owner of
+ virtio_transport_reset_no_sock() reply
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260120172057.6600eefe@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260121-vsock-vmtest-v16-2-2859a7512097@meta.com>
+References: <20260121-vsock-vmtest-v16-0-2859a7512097@meta.com>
+In-Reply-To: <20260121-vsock-vmtest-v16-0-2859a7512097@meta.com>
+To: Stefano Garzarella <sgarzare@redhat.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+ =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+ "K. Y. Srinivasan" <kys@microsoft.com>, 
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+ Dexuan Cui <decui@microsoft.com>, Bryan Tan <bryan-bt.tan@broadcom.com>, 
+ Vishnu Dasa <vishnu.dasa@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev, 
+ netdev@vger.kernel.org, kvm@vger.kernel.org, linux-hyperv@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, berrange@redhat.com, 
+ Sargun Dhillon <sargun@sargun.me>, linux-doc@vger.kernel.org, 
+ Bobby Eshleman <bobbyeshleman@gmail.com>, 
+ Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-Hi Jakub,
+From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-On Tue, Jan 20, 2026 at 05:20:57PM -0800, Jakub Kicinski wrote:
-> On Sun, 18 Jan 2026 11:00:27 +0000 Andre Carvalho wrote:
-> > +++ b/tools/testing/selftests/drivers/net/netcons_resume.sh
-> 
-> There's too many of them now and they keep failing on real HW.
+Associate reply packets with the sending socket. When vsock must reply
+with an RST packet and there exists a sending socket (e.g., for
+loopback), setting the skb owner to the socket correctly handles
+reference counting between the skb and sk (i.e., the sk stays alive
+until the skb is freed).
 
-Since these tests are only using netdevsim I was a bit surprised about the failures
-on real HW runs.
+This allows the net namespace to be used for socket lookups for the
+duration of the reply skb's lifetime, preventing race conditions between
+the namespace lifecycle and vsock socket search using the namespace
+pointer.
 
-I'm suspecting a race on my workaround to trigger reactivation and these runs
-potentially running on a host with systemd with MACAddressPolicy=persistent as
-I'm able to produce a similar error on this conditions. Any chance these are
-running with different configuration then SW runs?
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+---
+Changes in v11:
+- move before adding to netns support (Stefano)
 
-When the device is recreated with the same MAC address as before, there is a race
-between my workaround and the resume. netconsole will immediately resume and UP
-the device, then my workaround goes and:
+Changes in v10:
+- break this out into its own patch for easy revert (Stefano)
+---
+ net/vmw_vsock/virtio_transport_common.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-ip link set dev "${SRCIF}" down
-ip link set dev "${SRCIF}" address "${SAVED_SRCMAC}"
-# Rename device in order to trigger target resume, as initial
-# when device was recreated it didn't have correct mac address.
-ip link set dev "${SRCIF}" name "${TARGET}"
-
-The problem is that the rename won't resume, as the target has already not deactivated
-and nothing will UP the device. 
-
-Doing "ip link set dev "${TARGET}" up" at this point should address this gap. Alternative,
-we can skip restoring the mac addresses if they are the same.
-
-Does this make sense? Perhaps there are other conditions that can trigger this, but
-running it with MACAddressPolicy=persistent is a reliable way for me to reproduce it.
-
-> We'll keep this series in the queue but I think it's time to move 
-> the netcons tests out to their own target or move them to netdevsim.
-
-Given the above, let me know if you prefer I send v12 with the proposed fixes or
-a separated follow up patch to fix the test on HW runs. Since you mentioned keeping
-on the queue I want to make sure a new version of this series won't mess up your process.
-
-> With absolutely no error message getting printed :|
-
-Yes, debugging these has been quite challenging. I'd like to improve all netconsole
-selftests debuggability in a future series, looking to work on this as soon as I wrap
-this one up.
-
-> 
-> TAP version 13
-> 1..1
-> # overriding timeout to 360
-> # selftests: drivers/net: netcons_resume.sh
-> # Running with bind mode: ifname
-> # ifname : Test passed
-> # Running with bind mode: mac
-> not ok 1 selftests: drivers/net: netcons_resume.sh # exit=1
-> 
-> https://netdev-3.bots.linux.dev/vmksft-drv-hw-dbg/results/482560/4-netcons-resume-sh/stdout
+diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+index fdb8f5b3fa60..718be9f33274 100644
+--- a/net/vmw_vsock/virtio_transport_common.c
++++ b/net/vmw_vsock/virtio_transport_common.c
+@@ -1165,6 +1165,12 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
+ 		.op = VIRTIO_VSOCK_OP_RST,
+ 		.type = le16_to_cpu(hdr->type),
+ 		.reply = true,
++
++		/* Set sk owner to socket we are replying to (may be NULL for
++		 * non-loopback). This keeps a reference to the sock and
++		 * sock_net(sk) until the reply skb is freed.
++		 */
++		.vsk = vsock_sk(skb->sk),
+ 	};
+ 	struct sk_buff *reply;
+ 
 
 -- 
-Andre Carvalho
+2.47.3
+
