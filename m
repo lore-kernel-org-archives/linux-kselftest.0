@@ -1,259 +1,289 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011066.outbound.protection.outlook.com [52.101.70.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554FD33890E;
-	Wed, 21 Jan 2026 14:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.66
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769007154; cv=fail; b=e1Jk19sIwf0DEoLuSaHrpeZjoJ+CiFXqKy/WnSbyk4slv13cmhvFldyUX8Usz0+XDAQyMFWr/wHFTcWcG0jnx2Sra+3rGpz9mxwjArLVubcJL8j5wzrG2fP/5PupCr8fvK6DbViLKqZYq0hRM9MNaO0cwG81a2C9d3UKvOtivJk=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769007154; c=relaxed/simple;
-	bh=oIxW4sWeH7B01j4NK9s+ZpGXLXVs1f9+x4GesE3BqRU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=aMskO/akFhGQFANY5i4KNEdTPHMuz3aY/venhKB5QbZJ1WgBzcCcWmVA7JQY+biJoyhA50G2lQKDHmphF0dnxnKhTCdaYRPQBe5EufpucUrgiYZwkCVBkGsYygZ46l3niRwkuLJb6sasedo0R41o5l+K8YP9VHJF1svx20fzYEI=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=L7TgU28Z; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=L7TgU28Z; arc=fail smtp.client-ip=52.101.70.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B416633B6EB
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 14:53:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769007230; cv=pass; b=YxBpbDIwczUmkSELOhK+h92pCL0Hx4nVX/1K5hPdQmP622LZGrPuZb/AHh2B0tORFIKwoLKXG0CevSwr1d9mfr5l+OmC4SQj7gcfS6KfwOZPYLJqqMIY3b+BfxZ3DqMB+h+exQNHsNJZxRwAS8hYx17mn/OLvsz0Iqr8bsWTDg0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769007230; c=relaxed/simple;
+	bh=fzzbb3QnFJsxDqCdwHKZh0HE+sgF9Ktls9W4VFfaNa0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pXelfaa0cFBMtaqF9N0/oNiZDDNOxucY43u4uDH6atBO6oxjA22t4xJ+mSMgzozCKO4eTBVYHuh7E0x6NnBVKdw/h1uDq8aFSe4HvHeegrtbMBseJ9dqrfEpgFby3/1fAEh57IEJIL5+PNJsJpobLyWjDqgHb59j0TyezsDGRno=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YCRWD+mF; arc=pass smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="L7TgU28Z";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="L7TgU28Z"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=E+6/DogbxtBifA/UUIrLvxXDjNXqJdSxL1k+lKbz+j35FopkGEmvNCoxrVTpX4kc+ygt52LFNYrrUtVXS0g1s/sEPb3zqv0054NXBQGRhqhDiOW8f+9ZwGMvwb8BKOk5O+1x71eT6DtFiO2wHCtYqXDBat8kFMZ4JmsZlb3/Csr16I9LL3CQMp2NC+JqOa1elZN/SBCpb+1Y/idvWOU7a35heNm1koIw6xfgLhCj63V3ADyimEg5Q2Dsj7MKHz1ooZaH65XUoa45L/NiditCrdvyngRTYITt1LFIrCjkyzmuM6PKf2APtC7ew1US2OaQQQJEnBcZwRhy1X4F7K+Kgw==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oIxW4sWeH7B01j4NK9s+ZpGXLXVs1f9+x4GesE3BqRU=;
- b=yCUU2IRWHkJJAhdZePZarCVU8vuPqNOr/Y3KkAfV05/yuDY8+ub+2UHSp5i1U2/L34AC30LQ2+FgkZfbqrPipgHzTREr+EYrasHhiQYMtiglHtCIn1pZgg8PhSzv2NwSxAW0xOsrUKeGeAwwMup0Z5rNlg5yWm6G4N2UDtdSD22uj8s3M2MWrvVmi/tfMbH/8gtfZ7icrA9k0DzAyYLhS9+gqzD1QDbJa4VLihYSZXMkoLlkzOdmADT5UvpIhjlJCuWw45ordo8/wgFXtv/F6CuyO12H7ZDRp6nppr8Ixq41xp5/ybp0/ULkjFyFeO/F3dDxy780tpCo9b1aRGEnFw==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oIxW4sWeH7B01j4NK9s+ZpGXLXVs1f9+x4GesE3BqRU=;
- b=L7TgU28Z9S8TSTe4e4zEVeLYi+1WdEyDfGgA3QR24fjoIGpX+eiVsir5LvRIToKHJl8UamQD/XdgPma6mAFrjiOWtCAt+52kcaN2geGHErsa5aZisM5eCFQc4pTstbM14uDC+YjtHD5stAVeIzrI7d5PTIQefTWiIyPHg9zOO8w=
-Received: from AM0PR10CA0050.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:150::30)
- by GV2PR08MB8414.eurprd08.prod.outlook.com (2603:10a6:150:bc::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Wed, 21 Jan
- 2026 14:52:21 +0000
-Received: from AMS1EPF0000003F.eurprd04.prod.outlook.com
- (2603:10a6:20b:150:cafe::ef) by AM0PR10CA0050.outlook.office365.com
- (2603:10a6:20b:150::30) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.9 via Frontend Transport; Wed,
- 21 Jan 2026 14:52:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AMS1EPF0000003F.mail.protection.outlook.com (10.167.16.36) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.4
- via Frontend Transport; Wed, 21 Jan 2026 14:52:21 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uUOPNJDqOzvbQJoncALqW0262rx5WeWMiZEiwUPsDbbDR67QVHUgsMTPVWwWObblHAqhVaR5CJg40drB6GXmNuI9wTPx30ihy836TkiKiuIHHBB35pXMkSXZhgaCMstCw/yIp/HyEdbG5bHZPAgiCw0su4PPtjBipQQuxG9XkKxRmUJn1PIa/3l33HDmPlOQgt6b78CTn9UkkWeCXA8kQGNo+h4nNeOZXIzb/9ns61z6pQfqfkrI/t8Uhjp6kdF6V5JRsfYtnwaCrymtA4Iddg6+J8IUGFh3FSrPxo4py56Wz50mlg4AHAatps5YHvf9C4F8CFhFr1+H1q2U1ShN3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oIxW4sWeH7B01j4NK9s+ZpGXLXVs1f9+x4GesE3BqRU=;
- b=H3yaNNLHJICp11EjNgJ7jtIZ0nItCY1GdnpSJ2lFfTfi0SIfvHRI3bsQW2pZd7zAevQkkOUNqZtBSc/bEbOxjt6iL/1dPNsVSV+URUj5vn68Szhq5gIaOPw9q8KIRLW8FhHfBnbvlJ74qcT8VezSRQ8UoNZX7MIpuCWWQ4RyElw9aURGzggMGbctQvQFpqwnXgerMszCZ+mh9SmD7YPh1vQKr7imG81sB5BqewySKi7phEFeSYqwejNxhcpzzKDnJrqSTMItrLyLN0mS8nKFB7d3S8kZgZQYKedE9AY0Jg/NQFmYxv1AB7TifjE+NEVJsyHHiFlmimcYteqpRvNXSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oIxW4sWeH7B01j4NK9s+ZpGXLXVs1f9+x4GesE3BqRU=;
- b=L7TgU28Z9S8TSTe4e4zEVeLYi+1WdEyDfGgA3QR24fjoIGpX+eiVsir5LvRIToKHJl8UamQD/XdgPma6mAFrjiOWtCAt+52kcaN2geGHErsa5aZisM5eCFQc4pTstbM14uDC+YjtHD5stAVeIzrI7d5PTIQefTWiIyPHg9zOO8w=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20) by GVXPR08MB11095.eurprd08.prod.outlook.com
- (2603:10a6:150:1fb::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.5; Wed, 21 Jan
- 2026 14:51:16 +0000
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::8c9b:58d2:2080:eb98]) by GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::8c9b:58d2:2080:eb98%3]) with mapi id 15.20.9542.008; Wed, 21 Jan 2026
- 14:51:13 +0000
-Date: Wed, 21 Jan 2026 14:51:10 +0000
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
-	catalin.marinas@arm.com, broonie@kernel.org, oliver.upton@linux.dev,
-	miko.lenczewski@arm.com, kevin.brodsky@arm.com, ardb@kernel.org,
-	suzuki.poulose@arm.com, lpieralisi@kernel.org,
-	yangyicong@hisilicon.com, scott@os.amperecomputing.com,
-	joey.gouly@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com,
-	shuah@kernel.org, arnd@arndb.de,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v11 RESEND 9/9] arm64: armv8_deprecated: apply FEAT_LSUI
- for swpX emulation.
-Message-ID: <aXDn3iRXEtgaUtnp@e129823.arm.com>
-References: <20251214112248.901769-10-yeoreum.yun@arm.com>
- <86ms3knl6s.wl-maz@kernel.org>
- <aT/bNLQyKcrAZ6Fb@e129823.arm.com>
- <aW5O714hfl7DCl04@willie-the-truck>
- <aW6w6+B21NbUuszA@e129823.arm.com>
- <aW9O6R7v-ybhrm66@J2N7QTR9R3>
- <aW9T5b+Y2b2JOZHk@e129823.arm.com>
- <aW9sBkUVnpAkPkxN@willie-the-truck>
- <aW/Ck3M3Xg02DpQX@e129823.arm.com>
- <aXDbBKhE1SdCW6q4@willie-the-truck>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aXDbBKhE1SdCW6q4@willie-the-truck>
-X-ClientProxiedBy: LO2P265CA0008.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:62::20) To GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YCRWD+mF"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-502a98c66f7so42051751cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 06:53:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769007228; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Is3BCHxdbdaleQDbtZ7NBV3vyF8rjxIhRGW87kF+5u3zxBTjRHMdJFeBIQS0mQ0pM3
+         GULLyY8fCOBnBPyzez75FNnjGXPO0r6ubI9RGPL8vAhd5lu8i9UxmwJ4qDJdw4Uhu0ed
+         ngxld3KtWgKTty+kkylX6mFfhW5QH0LOhIeI5VjGpRtRY8zcf2b389Ds+p6zc17p1kxS
+         Yq3XS0caDzJPZHYm9YglkDHEO9ZBMGZluuFIPB5WbyjnpYFUBxa/AzsqLGE51/jrLlqf
+         2bATwZluqWkzUbUUuSlSGfP3qamIA5gCGgb3ISSnXswowpPVsxIY7kCHnzq5vkIv+JUe
+         QPoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=c9qXnOSUTaJRqoKVmmvJ/aC55OLxhDJSo/Of+Pk4eZE=;
+        fh=BXXPyy4/2qwsIjUvnWaHp8SEvFDFgBxwtthsH8PH3W4=;
+        b=O1dnDzTrwUS//Vg8VuIp5suFqb/zjLKizVisc/w4DlsTUgOQHdmZTPA31srGMPQLkV
+         Xa6hQ0hHb8fqacbr3UubAW+skaJ2JvjRnHgs1qvQDQmTCpT0wPT2e6IvyA0XGot+nxCR
+         j57ECAPsDjDbc+oUIGOxumZ/2iF7y+vhe+AQiByjVZBs1dXUzcOkysFPZmJ4GaMpQOGJ
+         xekit6xbd5UU5c96j9J8DSZSQBZLe01eUIWKUADollMuIhlNo4VF1UNqkvneT8ak6Ww9
+         t8iuf2oZtRnxwhMb9JzGgMEx5QFwRyCpeX+Q/VVZ78a77Kr069JnbzLasTpIJi7hWxVe
+         vvgQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769007227; x=1769612027; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c9qXnOSUTaJRqoKVmmvJ/aC55OLxhDJSo/Of+Pk4eZE=;
+        b=YCRWD+mFIOKM5HQ3+01g/xz3wtxwx5SlnwrWw6d/uiMV6QbsHYC00G3TdvAI9D0ZxM
+         DDAs26O+GVH632Ai3G0rxdJK2k7b1gR2EgCcyoyQpQiYjvtH1NdsL3wEJXulolQM7nlh
+         zJoNwGDfmclV1Hw/rkc+dDMIvZjqhgs0SWN2m2fHpsBcbTBwCH7LoLI1QjeWR6r3rkKL
+         91yrpTuIjkt2VCPGbo1eMBFcxaRqd5GoW9M9f0pdCnp74lTJtSxaGRjJra76P1NPxq9u
+         71ENWv4plPZmGy8AZDgxGA1kIKBSuIc9HaHDoS6ntwNsa2zKFDddEg7JxbvquIyEa0MO
+         qO3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769007227; x=1769612027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=c9qXnOSUTaJRqoKVmmvJ/aC55OLxhDJSo/Of+Pk4eZE=;
+        b=dFCA/DVup9vQrNiVIebhjYNEhbJ9cyYXihuyVGLjaztU3FGUXW2n2bZuLWKmtTn49e
+         9A1mqFnbfsQdwBa+Yj9i6GNJFuAbv6/Agej0SfnIYwZLW4m+9xJISeYKNdQ2reDyecFw
+         Se27kokoRTPhJB3hTQq39VKUtQJiEfhChytTn512h+9MgntVHmfVoUnEA7RBtaL48xbh
+         U4OnaovOsE6NXoO0bApSXgNTVvMXvVag/N9pKnx3hDShJAft1vVRgJFqHR0bH4+O0eZp
+         59V/LhwXqxYkysZ5F2lYuzjcvugOA5nYZq9qmwZWegTZsacc7DJD9mTGiEFO6TbUql4R
+         oXSA==
+X-Forwarded-Encrypted: i=1; AJvYcCUsoI0A2oVHwo6u2mUGa9DQ+bDzqEVyZ5mYY1qBo4dSKrsCpHIORLqon8gGvgH/iG+lhgIwSOFAY0QYjzruCe0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxha2lDs01u8TpKS5r/BmOX4+3wPcQfgba7pQQRY5lkl28oIeRC
+	Om32ECQOkoTs2NX5+iKsL9SDzKOHF+c2mh1NfsRa7hc6Xjg7IPqVJWpjw5LRRzPTnUz9/ezSEnv
+	hiJPxlgFJNPif0bpWHtyfr9rnD9S2h8y6xnwj73vN
+X-Gm-Gg: AZuq6aLO17iUMUooNG0ZLbM4RdKY1z8uqXwP3v7Tp0p13qyfwJJ7LNWgsuKShTWj0Wx
+	wWy17c/hoOv6HS260KX52rwjvOs7+kpSv84U/nyEZ1zBf+mlm7FH1w3tc2ONdvjFcSNoH0tcDU9
+	pwK6y1Nu8Hu+5epJF7ncfBOn1HDdv1qh/l2EkqGlyDkL68sNPoyOiv8u9mPkFdScFWlY2N+p19+
+	v+Hv4Ovdvr05V+FAdZdFdifDzBU20LmppmIx/gRc5vA5+HXtBcWB7M9cGcXlg0vvQOM7c4=
+X-Received: by 2002:a05:622a:11ce:b0:4ed:a7ba:69c with SMTP id
+ d75a77b69052e-502a17dbec7mr276708241cf.83.1769007227139; Wed, 21 Jan 2026
+ 06:53:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	GV1PR08MB10521:EE_|GVXPR08MB11095:EE_|AMS1EPF0000003F:EE_|GV2PR08MB8414:EE_
-X-MS-Office365-Filtering-Correlation-Id: 648504fb-0d99-4c51-278d-08de58fcae4b
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info-Original:
- =?utf-8?B?b2h5ejkzWVZ5MEk1REZCcDRuMFdZMUxuYlR0N1NBUWcrWGVTcklIczI4VnZv?=
- =?utf-8?B?NEpKWEtjQzAwM28rTjB5YlUvTXlEWWNRbGw2TEVNNVNrUDdVWFBLNjAyUnV3?=
- =?utf-8?B?NDlCWWNsWVZqY0xaQ2tGVFR3U1Fnc3hxRG4wRG4xZzZ6N1h5U09wRk9YWGt1?=
- =?utf-8?B?Q2o4SXhZM3kzZUpGTGdpYmc1MXRUT25Xa1BMVVRSRUpVL1NXeWJQd3VIb2hZ?=
- =?utf-8?B?T3R2QVVZK3pEVEx5Z2NFMkE0WG04ZTBCL0szNE5zaWQzV0FQbWQvZFRjanRt?=
- =?utf-8?B?YlJXejFKZkdZcEl3cGJjMHowVnUrM21uanhoc2pjK2Q0Wml0SGR2c2c3RHl3?=
- =?utf-8?B?T1Z1ZDdBNlNuN29paXk3TC9KTTRjRnZFQnd2UTZ2RkZGcTZyaEtzT3J0WUE4?=
- =?utf-8?B?UXRSY2M5WG9QVDB4UlhuQUdjendQeU5CUTdUUGVPbUNvZytYalQwTzgwMUF5?=
- =?utf-8?B?d1JiZDNFUGNZQ0ZmMG5SZ2xIY1FrbUdPdmpmcDRmeEM1amdZNWM4bFkvVU43?=
- =?utf-8?B?cXo4enhzTnpvT1BVdUlnd0JEdThMM3ZQSHdIMnFlVWVPQkdXQllMY0g1WHBu?=
- =?utf-8?B?UHJBcmQ4UjM4OGJUNTUwMi9BYWR2RDNjUVBJMVR1bDFTQ1NwdUNveFIzcGRQ?=
- =?utf-8?B?SnorYjNqc0I4cGJiRlpWRXBONlZCekFBcGtaRFAvMFVIdUtNR3J5aXRoRHd1?=
- =?utf-8?B?WXU5Q29WOEZJcDk4M09JMFhrNm9QZ2kvQXcwSzIxTG54RUxTTmV5MkxFNEdv?=
- =?utf-8?B?a0xiUzJWdXZXbm1tM0JISDlqYUhSbmlnb0xoRy9DNEZ6QWt5QVF1cU93cFBS?=
- =?utf-8?B?ZU9xRnphY1FvbHFsYWRUTHNyNGVFSkNjRG1nNTFTQVNpNXFlMFF0dG5DaThT?=
- =?utf-8?B?R1BkeDF0UDBNYUMzdWV0MmRGbHZlcTFwK2JLaEQ0NnZIb1lEVkJ2WS9CSHJO?=
- =?utf-8?B?YTE0UklUblZvK2gvR2UyRGpyMDVkc0cvdDdxT2ZMREI2SWR6SlQzWHArWTkv?=
- =?utf-8?B?dGZpT3RtK3Iva3dOZ0Z0dmpVaWNiQWZiMVUwU3RVZXNyVStmdFdKaHZ2eDY1?=
- =?utf-8?B?emVieXY4dEtBd2xSdVE3WjFEYmNGS2pIZDRCbnl5UUVNc05pYUdLeVI1UCta?=
- =?utf-8?B?ekFNMVVWY2dpdTZ3ZjBqNnptbW0xbnB3bTl2TlFTTnJBVnFkdUNkdlBLQW1F?=
- =?utf-8?B?cHRvWFg2dE1VQjZqZ24wRllYd29FRnJkdVhDS1o5ZGFtcC9vVGJyWGJFSUI0?=
- =?utf-8?B?dUw5bVZSVHM0QTFSU0hTZXBOQUtCSEdVMG5xN2RWblVORHZOSHd4djhTTmM2?=
- =?utf-8?B?d3RTTWxFek1KbXFTTmFBb3pWZ3FLQXBoaTk1bTVuMlhjL3lHMDZZd3h3dXVW?=
- =?utf-8?B?S2Y5TktpNjR1T0NQa0w3aTVHcFVzaFc5N3F5VTJKcngzdi9NSUF0d2FvOSs0?=
- =?utf-8?B?dHBURjhUaEJNVzNnK0J5bERiam5xb1lPQ1Rpa1UwcDNPNTE1TlFOL013cVgz?=
- =?utf-8?B?Yng0SWZtNDNzQUhpNmJweTN1M3c3WDA4cXdWK3FVQTNrbWQyQXAyQ09LeWdl?=
- =?utf-8?B?ajV2VGEzM29ZbGtsdTZtejIrVmZtUGlyVjVMeUJ0Y29FTm9HbnBHOVZWZm5I?=
- =?utf-8?B?cTVwcXJtb3ZndWZOd1k1dUJaekJiRUt5amNlTzJxTXB0Vnl0NWRvVVpFd2Ry?=
- =?utf-8?B?NG5NalhMazlzaXNhOFZPWVVpZUtLL09IRHZtZVZsNURLRlBSTXdaejZWZ2J2?=
- =?utf-8?B?VlMxK3Q0a2ZsczN6S3NxdXNKNGdzeWN0dU1wZnVxWEN3L09FREVhRE5IeDcy?=
- =?utf-8?B?OU5wVFRXeXpCb2kxYmVvcS9odk9nanNkdjJDU2drdTRBaUo3aTY1aGprb0NC?=
- =?utf-8?B?T3Jhd1IxTjl1OWJ3MVViZnc2eVduMFFHTVNuY2E5aEMzbW9qZjRabXJrc3ph?=
- =?utf-8?B?RHMzZndOV1kvNVRhK3NrWDJodUlNS2lQWEYzNGZIWlo1VVEyY2NmSDVteWtw?=
- =?utf-8?B?UFlrRWRycC9sUjhza0k3WmVlRWphYUVwTnFiNUFTUzR3S3RsVFlybTdwbnNo?=
- =?utf-8?B?NVB4MERmWGNEVVF6bzRUYUhhN2ZrVzUwTER1UHJZeEN6WW01KytKbHl3akF0?=
- =?utf-8?Q?C2kk=3D?=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR08MB10521.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB11095
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AMS1EPF0000003F.eurprd04.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	0b97b1da-4974-4169-b38c-08de58fc85cd
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|35042699022|7416014|1800799024|82310400026|36860700013|14060799003;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TjlESm5WZFBqbU13UjcyTmU3a3I5YS9UbTVaKzFxZ1R6ZFBpUXQzaFEwK0Ir?=
- =?utf-8?B?aGdKV3FQWUluMXNEVThhcUZTdUtqMVMrY2t1RXVVcWQ1UnhSU2tvT2hWRnEw?=
- =?utf-8?B?aUxab1d1c3dhR1ozd0l5WDRLVnZRemhCUEFUemJsN1pIRnhlTU9Qb1cyVk0x?=
- =?utf-8?B?OVJkTW5uV1NieDh0ZVlmdzJCWGgyUkhoUGloWmVQNFI5dHdoSERsR3pScDQ0?=
- =?utf-8?B?MkZtNDJaS2lUNnAxSUNQdmdRWW5SYnBBSitQSWxGcGo4RjUvRDhVZ3hoNTQ0?=
- =?utf-8?B?akhDZ0IwY2FoNmYxanptV0tOWnJPR2lQbGhxemRXUHV2Q1dwV1BUeTVDRGFG?=
- =?utf-8?B?VFRRYm9LUy9jRzV5SCsvVWdaN3NJQjF1VXhqRDQ3U25qSTZpUWx1STN3VnRv?=
- =?utf-8?B?dHFBNUFDaElPVHg3TlIzcnJMYm1udkxRL2pWNUc2S0R6L01mSEpOUkNtaE5K?=
- =?utf-8?B?VVdpdm9EZDFEcmFSOHk4TWR4bVFWdWViMlk0eTdkL3hmVkgrTGlxT0VWTWNa?=
- =?utf-8?B?MSs4a1NvM2EwczZoMkxUK0F3T3NTUm9BNHlFM2NwWExyZGdZSkowbkJOc2k2?=
- =?utf-8?B?ZXdHVnhmRjY4WTg0WDZXZ2lmbTMzYkNRZ1JDcktFNk1qOVBJUFpQYjRlWXV4?=
- =?utf-8?B?VTE3dDdqZnpsbVdvdStYUDdWdk1WK3NBUEUvVWdZVGxIWmlNOEdibXFsQjhS?=
- =?utf-8?B?Uk5PK0lFUythQzFORGtkb1Fld2picEpDRHRrNnUrSy9Jc3JwK0I5WXpzM2p3?=
- =?utf-8?B?RmxxVmVnWld6eDJPNFhUOFRibkpGN0FVdmVudlVUVHc3Q0JmS3d0Rk9NQmZo?=
- =?utf-8?B?Wis1dXdaOEZrMElkQURRVzdnYmZoalgxRytsMEw3U3dtTHBkTldxUitYcTh1?=
- =?utf-8?B?MCtobEhqcllWTllwMUloNWkvTHk3T1lSQlZSK0luUWVXUmhLNDUvM1pJN0py?=
- =?utf-8?B?UW1WWTMxalQva0g3TFV0ODV0YysyUm53QkViUjFkVHdxOExtMUtFMFpqQ3do?=
- =?utf-8?B?NWhkdFNURVRRNFNoZE13UHVxa2diQ0llc20zcXhPTHVYaXQ5ZTQ5aDhDbU9F?=
- =?utf-8?B?eVFJNEFpMThIbXRZTFdoNTRnc2RHS2Vnc09VNnp2ekdLdksyQ0F5dUVVNlBV?=
- =?utf-8?B?K0NxMlF0MkZ1Lzk2YWJQQWQ3OFMzQjJyOXNoZU1FL0Z1Uzk1QWhlaXVhcmtv?=
- =?utf-8?B?d21aS3ZINktreTZaU1EzeXFmZ3hIYm9Mc2FLbEU1ZkxlUHY2aDU3WFBGVHRG?=
- =?utf-8?B?UjNMbjNwcWo1bXdIQ1oybG9uWG1CUFNlZEZVdHlLZUFOSnZHK3p2elByTmlV?=
- =?utf-8?B?Y2xNWVBQcjNuNDRxeEF5WG01TFNvdnQrd2hYV2pPRXRQNWErOFlFa3hrOU5D?=
- =?utf-8?B?aFpZa3MzdUFGcUZtY0tLSlU1eW5ZOFc2b29seFdxQXhmdmx3SUhBNGRwRklQ?=
- =?utf-8?B?OEZzeWxPVmlmbGdpVFEzZGFBVmtkS3NVdlhqNTRMdXRka1pTSWdpTldiN213?=
- =?utf-8?B?OHdmenduUDRpZXVnYjlKeFFGMUQxakhuVVFxbm1kQU5hSVRvNnRRcVFudDBX?=
- =?utf-8?B?WnFRYnBLcmduODhPLzhVTi9nM25CcmluSFllQmw4K2tJd0I5ajdPUHZqdzZh?=
- =?utf-8?B?b2thRmJqYXpCaXpneHcwdmM1MGRDbUxtdWlkVXBaaTN5ZzJSbVRpbEZuN01h?=
- =?utf-8?B?RncrbEV0L0JFckdTaDEvb2lQZjF5Ry93WUFid1lEWEJCKzY4amthYzdKTGhI?=
- =?utf-8?B?dDJYcnR1YU1JdWhSY2N4eS9UVXBJU3FRK0FueExaTUNHOHRCZHgxUjRXK1Ny?=
- =?utf-8?B?UUU0VnZac3lLVkxFMDNqcG0ydXIzbzloMDl2Y2VGa1F3WmhtWTNNeERKeHJ4?=
- =?utf-8?B?S2FPN0w1QzIrb0tlVzBhY002b0FhODQ2a2xDU2dmeURlTURMN2dLZzI0c3ZN?=
- =?utf-8?B?Wk5ybUJzeGdsZDlHRGRiZGRzUGVMd0lxNTNnOXV4SmtSZkRJSmZmSFhTemh0?=
- =?utf-8?B?YWFnZmEwS2YzUmw0dEM2bUxSdjM3V3BWWlArVEFiRURKRjF2eFJRcy9iOFdZ?=
- =?utf-8?B?NnRiaEo4K1FZQ0ljUkU5MGYwUFRuM2NPZDN4NE5IdmdwWHRQYWJMV1dMSWNH?=
- =?utf-8?B?WlQyRk4rc3BCK3hlcjhVd2QzL09hODlyUUdaWUdxbWVBSmxUWDYyTi9MaDlH?=
- =?utf-8?B?UE96MXA2WjlaQ2hyVUFSRkNwTjVGSlNwOUFqTnQ2OEdlazhpVW9kT3hKZTJM?=
- =?utf-8?B?ZERKSHJTOU1uYnRjT0J0NWFQT09nPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(35042699022)(7416014)(1800799024)(82310400026)(36860700013)(14060799003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2026 14:52:21.1510
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 648504fb-0d99-4c51-278d-08de58fcae4b
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS1EPF0000003F.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR08MB8414
+References: <20260121143215.14717-1-chia-yu.chang@nokia-bell-labs.com> <20260121143215.14717-13-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20260121143215.14717-13-chia-yu.chang@nokia-bell-labs.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 21 Jan 2026 15:53:36 +0100
+X-Gm-Features: AZwV_QiGb7YuJm7CkwrDqLPsRX6j1FfwcEyo2MwarcIKsN7ZaUyiwGIstnxbToI
+Message-ID: <CANn89iLvMkeKG_VBrJi3vA5agDxc5+VLz_L3JNT0ALsRUF32xg@mail.gmail.com>
+Subject: Re: [PATCH v10 net-next 12/15] tcp: accecn: detect loss ACK w/ AccECN
+ option and add TCP_ACCECN_OPTION_PERSIST
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, parav@nvidia.com, linux-doc@vger.kernel.org, 
+	corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@google.com, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com, 
+	jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org, 
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net, 
+	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net, 
+	liuhangbin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> On Tue, Jan 20, 2026 at 05:59:47PM +0000, Yeoreum Yun wrote:
-> > On second thought, while a CPU that implements LSUI is unlikely to
-> > support AArch32 compatibility,
-> > I don't think LSUI requires the absence of AArch32.
-> > These two are independent features (and in fact our FVP reports/supports both).
+On Wed, Jan 21, 2026 at 3:32=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com>=
+ wrote:
 >
-> Did you have to configure the FVP specially for this or that a "default"
-> configuration?
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 >
-> > Given that, I'm not sure a WARN is really necessary.
-> > Would it be sufficient to just drop the patch for swpX instead?
+> Detect spurious retransmission of a previously sent ACK carrying the
+> AccECN option after the second retransmission. Since this might be caused
+> by the middlebox dropping ACK with options it does not recognize, disable
+> the sending of the AccECN option in all subsequent ACKs. This patch
+> follows Section 3.2.3.2.2 of AccECN spec (RFC9768).
 >
-> Given that the whole point of LSUI is to remove the PAN toggling, I think
-> we should make an effort to make sure that we don't retain PAN toggling
-> paths at runtime that could potentially be targetted by attackers. If we
-> drop the SWP emulation patch and then see that we have AArch32 at runtime,
-> we should forcefully disable the SWP emulation but, since we don't actually
-> think we're going to see this in practice, the WARN seemed simpler.
+> Also, a new AccECN option sending mode is added to tcp_ecn_option sysctl:
+> (TCP_ECN_OPTION_PERSIST), which ignores the AccECN fallback policy and
+> persistently sends AccECN option once it fits into TCP option space.
+>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> Acked-by: Paolo Abeni <pabeni@redhat.com>
+>
+> ---
+> v5:
+> - Add empty line between variable declarations and code
+> ---
+>  Documentation/networking/ip-sysctl.rst |  4 +++-
+>  include/linux/tcp.h                    |  3 ++-
+>  include/net/tcp_ecn.h                  |  2 ++
+>  net/ipv4/sysctl_net_ipv4.c             |  2 +-
+>  net/ipv4/tcp_input.c                   | 10 ++++++++++
+>  net/ipv4/tcp_output.c                  |  7 ++++++-
+>  6 files changed, 24 insertions(+), 4 deletions(-)
+>
+> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/netwo=
+rking/ip-sysctl.rst
+> index bc9a01606daf..28c7e4f5ecf9 100644
+> --- a/Documentation/networking/ip-sysctl.rst
+> +++ b/Documentation/networking/ip-sysctl.rst
+> @@ -482,7 +482,9 @@ tcp_ecn_option - INTEGER
+>         1 Send AccECN option sparingly according to the minimum option
+>           rules outlined in draft-ietf-tcpm-accurate-ecn.
+>         2 Send AccECN option on every packet whenever it fits into TCP
+> -         option space.
+> +         option space except when AccECN fallback is triggered.
+> +       3 Send AccECN option on every packet whenever it fits into TCP
+> +         option space even when AccECN fallback is triggered.
+>         =3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>         Default: 2
+> diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+> index 683f38362977..32b031d09294 100644
+> --- a/include/linux/tcp.h
+> +++ b/include/linux/tcp.h
+> @@ -294,7 +294,8 @@ struct tcp_sock {
+>         u8      nonagle     : 4,/* Disable Nagle algorithm?             *=
+/
+>                 rate_app_limited:1;  /* rate_{delivered,interval_us} limi=
+ted? */
+>         u8      received_ce_pending:4, /* Not yet transmit cnt of receive=
+d_ce */
+> -               unused2:4;
+> +               accecn_opt_sent:1,/* Sent AccECN option in previous ACK *=
+/
+> +               unused2:3;
+>         u8      accecn_minlen:2,/* Minimum length of AccECN option sent *=
+/
+>                 est_ecnfield:2,/* ECN field for AccECN delivered estimate=
+s */
+>                 accecn_opt_demand:2,/* Demand AccECN option for n next AC=
+Ks */
+> diff --git a/include/net/tcp_ecn.h b/include/net/tcp_ecn.h
+> index bf7d3f9f22c7..41b593ece1dd 100644
+> --- a/include/net/tcp_ecn.h
+> +++ b/include/net/tcp_ecn.h
+> @@ -29,6 +29,7 @@ enum tcp_accecn_option {
+>         TCP_ACCECN_OPTION_DISABLED =3D 0,
+>         TCP_ACCECN_OPTION_MINIMUM =3D 1,
+>         TCP_ACCECN_OPTION_FULL =3D 2,
+> +       TCP_ACCECN_OPTION_PERSIST =3D 3,
+>  };
+>
+>  /* Apply either ECT(0) or ECT(1) based on TCP_CONG_ECT_1_NEGOTIATION fla=
+g */
+> @@ -413,6 +414,7 @@ static inline void tcp_accecn_init_counters(struct tc=
+p_sock *tp)
+>         tp->received_ce_pending =3D 0;
+>         __tcp_accecn_init_bytes_counters(tp->received_ecn_bytes);
+>         __tcp_accecn_init_bytes_counters(tp->delivered_ecn_bytes);
+> +       tp->accecn_opt_sent =3D 0;
+>         tp->accecn_minlen =3D 0;
+>         tp->accecn_opt_demand =3D 0;
+>         tp->est_ecnfield =3D 0;
+> diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+> index a1a50a5c80dc..385b5b986d23 100644
+> --- a/net/ipv4/sysctl_net_ipv4.c
+> +++ b/net/ipv4/sysctl_net_ipv4.c
+> @@ -749,7 +749,7 @@ static struct ctl_table ipv4_net_table[] =3D {
+>                 .mode           =3D 0644,
+>                 .proc_handler   =3D proc_dou8vec_minmax,
+>                 .extra1         =3D SYSCTL_ZERO,
+> -               .extra2         =3D SYSCTL_TWO,
+> +               .extra2         =3D SYSCTL_THREE,
+>         },
+>         {
+>                 .procname       =3D "tcp_ecn_option_beacon",
+> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> index 8b774019a3a6..472bd57913ae 100644
+> --- a/net/ipv4/tcp_input.c
+> +++ b/net/ipv4/tcp_input.c
+> @@ -4863,6 +4863,8 @@ static void tcp_dsack_extend(struct sock *sk, u32 s=
+eq, u32 end_seq)
+>
+>  static void tcp_rcv_spurious_retrans(struct sock *sk, const struct sk_bu=
+ff *skb)
+>  {
+> +       struct tcp_sock *tp =3D tcp_sk(sk);
+> +
+>         /* When the ACK path fails or drops most ACKs, the sender would
+>          * timeout and spuriously retransmit the same segment repeatedly.
+>          * If it seems our ACKs are not reaching the other side,
+> @@ -4882,6 +4884,14 @@ static void tcp_rcv_spurious_retrans(struct sock *=
+sk, const struct sk_buff *skb)
+>         /* Save last flowlabel after a spurious retrans. */
+>         tcp_save_lrcv_flowlabel(sk, skb);
+>  #endif
+> +       /* Check DSACK info to detect that the previous ACK carrying the
+> +        * AccECN option was lost after the second retransmision, and the=
+n
+> +        * stop sending AccECN option in all subsequent ACKs.
+> +        */
+> +       if (tcp_ecn_mode_accecn(tp) &&
+> +           TCP_SKB_CB(skb)->seq =3D=3D tp->duplicate_sack[0].start_seq &=
+&
+> +           tp->accecn_opt_sent)
+> +               tcp_accecn_fail_mode_set(tp, TCP_ACCECN_OPT_FAIL_SEND);
+>  }
 
-TBH, I missed the FVP configuration option clusterX.max_32bit_el, which
-can disable AArch32 support by setting it to -1 (default: 3).
-Given this, I think it’s reasonable to emit a WARN when LSUI is enabled and
-drop the SWP emulation path under that condition.
+tcp_rcv_spurious_retrans() has two callers.
 
-Thanks!
+tcp_send_dupack() checked dsack is enabled.
 
---
-Sincerely,
-Yeoreum Yun
+tcp_data_queue() : No such check.
+
+So I wonder if tp->duplicate_sack[0].start_seq could contain garbage ?
+
+Perhaps test tp->rx_opt.dsack ?
+
+>
+>  static void tcp_send_dupack(struct sock *sk, const struct sk_buff *skb)
+> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> index 042e7e9b13cc..0cbba38ea87a 100644
+> --- a/net/ipv4/tcp_output.c
+> +++ b/net/ipv4/tcp_output.c
+> @@ -713,9 +713,12 @@ static void tcp_options_write(struct tcphdr *th, str=
+uct tcp_sock *tp,
+>                 if (tp) {
+>                         tp->accecn_minlen =3D 0;
+>                         tp->accecn_opt_tstamp =3D tp->tcp_mstamp;
+> +                       tp->accecn_opt_sent =3D 1;
+>                         if (tp->accecn_opt_demand)
+>                                 tp->accecn_opt_demand--;
+>                 }
+> +       } else if (tp) {
+> +               tp->accecn_opt_sent =3D 0;
+>         }
+>
+>         if (unlikely(OPTION_SACK_ADVERTISE & options)) {
+> @@ -1187,7 +1190,9 @@ static unsigned int tcp_established_options(struct =
+sock *sk, struct sk_buff *skb
+>         if (tcp_ecn_mode_accecn(tp)) {
+>                 int ecn_opt =3D READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_e=
+cn_option);
+>
+> -               if (ecn_opt && tp->saw_accecn_opt && !tcp_accecn_opt_fail=
+_send(tp) &&
+> +               if (ecn_opt && tp->saw_accecn_opt &&
+> +                   (ecn_opt >=3D TCP_ACCECN_OPTION_PERSIST ||
+> +                    !tcp_accecn_opt_fail_send(tp)) &&
+>                     (ecn_opt >=3D TCP_ACCECN_OPTION_FULL || tp->accecn_op=
+t_demand ||
+>                      tcp_accecn_option_beacon_check(sk))) {
+>                         opts->use_synack_ecn_bytes =3D 0;
+> --
+> 2.34.1
+>
