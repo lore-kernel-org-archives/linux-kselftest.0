@@ -1,218 +1,258 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11021121.outbound.protection.outlook.com [52.101.125.121])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C578024A07C
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 01:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A0030EF67;
+	Wed, 21 Jan 2026 01:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.121
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768959160; cv=pass; b=SvO5P8WiFzWW5t31v6MFc1d8Rfit4UYuuZP4Yk/QIdDLap6vk8we0ueeXhxyVT3qb+mUbg15dfU+Aw46/ZxRgAyW81FbvlRQtbdFeEJ3gmE3I+gHp1nY9/rtEo+kUB+erh12J9S/95JlJUtz46tnzaF/GxBu9xGHPhUxqeaODkg=
+	t=1768959550; cv=fail; b=TtRv4+xDER/WPLzDJ92piJ237BRq3qbI3Lw5BBxWmoGnQGY0vEMuy8SyDUyu4f8/MrTmXTS9cumkhed+w+xj4pPKp74oLH7L4JHbel79OS8pcf8/t9e3aVyvXdXLjP9YUAXwgHjIHwZgASKeENYpTSp7kDJgzZXlIgKDTcKUlnU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768959160; c=relaxed/simple;
-	bh=ShWRak8oUy88OSaopaw+aLPDpDo1ZpJd6cDyp++LarM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GN70VH7b+4ngI7DgOm0wWs8AtsUArj+tCnqvWUv3IFpm+z47tTevnpJGC2IkQxXYEeiDHHI7qdzd7f+Z25rKvx4sW8hyQpYupiSOPcfp/0D94YQmhTPJt7VAyyom2WDBtqGyGGjuTCDSsWxRFUWoM9rh0qwm1iBjzQlJbIf1WoE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=A5BCDI+7; arc=pass smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1768959550; c=relaxed/simple;
+	bh=aN6yMqNU2gOx2tEVqm4KwNEwNOTzxr1Hx+WTqjskRI0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=NuEJtB9oUw5fZPWNnT/pyDQuWfdzcfeLQNk2bniJq+EHTM3K/+cu5zGfuIom0yJuE/81/0TumkwIufTMXkWHoKIREkCvrdUeq3M7EnvVQhNhRX057cP2cvYIIqH60ICePc1EaLW7oXR6FN0TCYw0iVWQySORoUZNK5/ww6XrLNk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=ilArfXMP; arc=fail smtp.client-ip=52.101.125.121
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="A5BCDI+7"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-65815ec51d3so377842a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 17:32:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768959152; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZjJVV15G+rkZ3wH1IF2Scd+J5qmGoCYrVrZZrM3y8UhYvfkAoKJ1F0HEGXSzqD8ZoI
-         huxweZ7w+CkI10+M1UXIQhv4dOmegf+6qiSCIPPdUyj/sQVQhoxqbny+8apklX1r3Ez+
-         /6myQLZ7H+6J9XIrlYGzuEkURJn+by3140D0FaNVJeCPP6wMQv2ngyKqZxI9TI6p5KTv
-         E7u3HiK181YUahqChFMjAwkp4Vr0WbC2I2zGf3JzAOGCg1nDI+gnlzhL9v+y9iYjTSf6
-         kMlNF6hTH7d7zB3h8fvLiLExW4XEWzTI9xJUXJVJzw2I601yftAI0cSGEy20pP5kmEaN
-         a17Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=phhznUg1me3aMCDh6RtpPgdrBfYLQTkKfqDDafoKBZI=;
-        fh=Qqy6lZz0yUAIVN4xglQmmrWsQb6lPtseqj0+PMDEeXI=;
-        b=VCLx/mwGFWcD6l89ofMTf84zpWtPLMxATIxczgCa44tPCN0rou3Id383XPi/ftPkzy
-         M6pUD6oF7IKNerSWlUPcqpWKbv3t6pDdIi1aScyK9aMCs8ROseD4pSpGeJgPrxGYTqpn
-         IwnzAXPIxQZSgVU9NHG6tV5pT0n+6Q1bWDeko6Cdw/snf9stJMvDC9i9R6bHtrHYMK3T
-         a+HG6qESHpMJ3ajZx9kjtyzRN8TbJpLm9kwlLToPbg0rfLV6ej1gcvIMgUS4Sd0q0Uf/
-         HF7iONrbHiwB3nR74OwkY/93IinO3n5rcvK2oPr0HBtBVlVM9rXDL/4GGlQHKhi3uXcC
-         y7uw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1768959152; x=1769563952; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=phhznUg1me3aMCDh6RtpPgdrBfYLQTkKfqDDafoKBZI=;
-        b=A5BCDI+7uaow+L1pkR0/vhbZZn6AJyq7brkzi3g5PXQfBD4lA4/eE0X3H0eaNyQ9uI
-         BhpW1W5q/SgcOo9bLiXBhGEOuJjNOLdsgI1yomjhhtiMc4yYgjkRRCEZEjOgjfqf0UZm
-         alaado9gHlyuyjKWjd2TKsKjKgLfd7fX9KqgYnaBHFx227Fx+cmQlNknKxxjjBc6MhHc
-         tG3tvKjpIj28uMUF7HVJL7ZayB6r9Ecpz7T11yD3GxnJ2kYCvSe5zS/YTgO0OkPIEynl
-         85aax+WRhLPNanwVxq+Dtb0SSQHEK2jnBzPJpDYm/K1qIbTkzVoB1lPQoyDUEHDmqQ9K
-         uN2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768959152; x=1769563952;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=phhznUg1me3aMCDh6RtpPgdrBfYLQTkKfqDDafoKBZI=;
-        b=IQ/JGo7UqEXXGl0Vv/nbEEyF/xBFSmsn2hRpv+RgIu+VHF6e/JYBRx6dTbFJ2pLyOB
-         HKuNbWUrs6p+DN81CGKui9YgESGfcmB7oBhtcW3If5yiWaYw2Z6hvpA5zUF+AFbcrTo7
-         /cqlNrHEYmR5Mg+OqSgtMLNx/BLfi+/E+b1pU/yDhkZDGloa2lJ9deiLKDmsg4Z8oVYT
-         IZnflvR092bPgynd1GeMiU2nsyX85YbO25sYMTuP4FO59sHHaWfW3iClAG/aUmjzqCh6
-         df4QPYE374hQo9lamSKSOvrMaPaXJFdXUGUhI70E37zT4BXCz5DxLfuU3/S1BsHXT9Oy
-         Gniw==
-X-Forwarded-Encrypted: i=1; AJvYcCVlJ+IOHt52kwZIS0AGxdSkU8URIsmaO4E7YPgkcbR1UHZVeVHxxex0FhaW4fY6JoS3cbMc88Li5Kzl3SjICDY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw24ufTf9jU+/4IsW9YCBzIGFBI3KTUeWXoABI+WEIMa7o2Tqwf
-	mYMZuVLlke0QysGvDsVW8RA/gwteHoe0rjj2CfiJbe8bDGVlrEcA6EAteElZI/+T/qPcRd1VNoO
-	alml31mwkGwYp3BAmv3mfwhoJBprQiZcmAbxMZLnoAQ==
-X-Gm-Gg: AZuq6aIBaQvHtHUTVO/0CGEMRfgSynHrMIagcKppNMDsXSuz+Rdq/v5ZJk/lVY+nxg3
-	qzj9GOXZW6FYKJgbpNtsQq8ixVyNQjfg0ZENgdYK1QyoMFnIRJkTyK2Y8rOOUiFVnG5bHMpzH7j
-	N4IHbg2y0cFa0r0gVD9LLs05Jd5CImO+0OoUaf8kgaIvR7gi6xiDi1q1UfqQmCGn7nMPCzb6GXN
-	gIP53iPwp0HgKGuo941ZNCpOFg9xQxWe04x2DrCwaxMOxI/585VGJlqq5rnzxKUlyIZXXOlPA==
-X-Received: by 2002:a17:907:9488:b0:b87:7634:b20c with SMTP id
- a640c23a62f3a-b8796b215a4mr1301363166b.38.1768959152268; Tue, 20 Jan 2026
- 17:32:32 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="ilArfXMP"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=C3yfHD9kl9//ybCWCbzsatJ9tAn6f4PR46KxHKsz77COItVkAu0N4YGlJhoLjvvN4dMtGQ80Oxd0yvfCAWwh5xPNYnWoJnIWlUpXzcbW9R/x/g54mF87VkKMnz6ZvtwmRgY7S8hqTWxY4gM05AY4+yiC7QnZsDo/1o/uHnSqt0vATvmD/ZG82QIof14Bk/YEt1V2pHMsp1yslvHj50wGVvfgmmjip1Ps5eBEuDJV06bC93BWJbiKM+a/nwg2nghFoxNnvt4HNv20bqj2Mo4r5OvNk+ZWcjsN6v+2Vb6i5ntIUHI2znWQkatXGmXxiE5Yl0jeM3h92RXF5t8WNTWvpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4KVs3lE5uxOnxpa2P564KJhIMeXnXt5yfmklvfTU8M8=;
+ b=x0xUTR3BQ8Rh3F5Sd63sTjGp+mFMj615ZIgW8sK5wFn7WoH26mBj6qjxtYCiEeu7dRPNZ2qsDREp7TZoBIFiXRy5ecbe2ATKQlclJmS+vHabVluqkuUd8opGpedHrUdC62XN2gGNZ4BzsHcOvG+0aguX7I8asUMcxGlbCOQMxgrGOal5goZNzem8BM3KhoKVh7rmsIgLQwAVqb1kHWy7EnOjUKrpqylsa2u4/01pc+3gxKnRBGxSIgtD21V+UFvopRtXQLGNExK9NViByj+vZRljVRAdrGPsM7X6KvmUEhonqGY87yE0nMumYQ5al486mTCHYBCw5sB0Cssh4HbFWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
+ header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4KVs3lE5uxOnxpa2P564KJhIMeXnXt5yfmklvfTU8M8=;
+ b=ilArfXMPzaQR8b3E5Jp0I2ZmAU3UPLOME3dIPFRlCBFJ5qENAnwIRN93bZQQmN1GWAnx25kgHsvZYbX/ff7uGJJFlAU+Wv8/vf+fRxAjBsBE/Zb8Bd/6lGyBXH1+QzIuTTKkCm+FbGNs3Ho7WijVctUn8Hd9oAjGdYGT0adHoWk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=valinux.co.jp;
+Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
+ by TY7P286MB6416.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:32b::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Wed, 21 Jan
+ 2026 01:38:53 +0000
+Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::2305:327c:28ec:9b32]) by TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::2305:327c:28ec:9b32%5]) with mapi id 15.20.9542.008; Wed, 21 Jan 2026
+ 01:38:53 +0000
+Date: Wed, 21 Jan 2026 10:38:52 +0900
+From: Koichiro Den <den@valinux.co.jp>
+To: Frank Li <Frank.li@nxp.com>
+Cc: dave.jiang@intel.com, cassel@kernel.org, mani@kernel.org, 
+	kwilczynski@kernel.org, kishon@kernel.org, bhelgaas@google.com, geert+renesas@glider.be, 
+	robh@kernel.org, vkoul@kernel.org, jdmason@kudzu.us, allenbh@gmail.com, 
+	jingoohan1@gmail.com, lpieralisi@kernel.org, linux-pci@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	devicetree@vger.kernel.org, dmaengine@vger.kernel.org, iommu@lists.linux.dev, 
+	ntb@lists.linux.dev, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	arnd@arndb.de, gregkh@linuxfoundation.org, joro@8bytes.org, will@kernel.org, 
+	robin.murphy@arm.com, magnus.damm@gmail.com, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	corbet@lwn.net, skhan@linuxfoundation.org, andriy.shevchenko@linux.intel.com, 
+	jbrunet@baylibre.com, utkarsh02t@gmail.com
+Subject: Re: [RFC PATCH v4 05/38] dmaengine: dw-edma: Add a helper to query
+ linked-list region
+Message-ID: <e4y664ylum35wvj4endwprzpp4cvfaggklik5mxvdkgmakuqyj@lgevmhllem72>
+References: <20260118135440.1958279-1-den@valinux.co.jp>
+ <20260118135440.1958279-6-den@valinux.co.jp>
+ <aW0S60D2uALBXdtQ@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aW0S60D2uALBXdtQ@lizhi-Precision-Tower-5810>
+X-ClientProxiedBy: TYCP301CA0065.JPNP301.PROD.OUTLOOK.COM
+ (2603:1096:405:7d::10) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:405:38f::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251211-v5_user_cfi_series-v26-0-f0f419e81ac0@rivosinc.com>
- <e052745b-6bf0-c2a3-21b2-5ecd8b04ec70@kernel.org> <aTxf7IGlkGLgHgI2@debug.ba.rivosinc.com>
- <CAKC1njQ-hS+kUJ0C_v0oqZW1EZw2zAXMp-SnnA-ZXh_H-SoVdQ@mail.gmail.com>
-In-Reply-To: <CAKC1njQ-hS+kUJ0C_v0oqZW1EZw2zAXMp-SnnA-ZXh_H-SoVdQ@mail.gmail.com>
-From: Zong Li <zong.li@sifive.com>
-Date: Wed, 21 Jan 2026 09:32:20 +0800
-X-Gm-Features: AZwV_QgpJ38WsQTA-JLh1W5jk7su1plcAErfmIKl7ceT3yMsB0wZBJHvBBZ5Ujw
-Message-ID: <CANXhq0rpjSvOThACrB6_MMc8S34--xJsUYZ+HtMu1GUNyk8zOg@mail.gmail.com>
-Subject: Re: [PATCH v26 00/28] riscv control-flow integrity for usermode
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Paul Walmsley <pjw@kernel.org>, x86@kernel.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
-	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-	richard.henderson@linaro.org, jim.shu@sifive.com, 
-	Andy Chiu <andybnac@gmail.com>, kito.cheng@sifive.com, charlie@rivosinc.com, 
-	atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
-	alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
-	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org, 
-	Andreas Korb <andreas.korb@aisec.fraunhofer.de>, 
-	Valentin Haudiquet <valentin.haudiquet@canonical.com>, Charles Mirabile <cmirabil@redhat.com>, 
-	Jesse Huang <jesse.huang@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|TY7P286MB6416:EE_
+X-MS-Office365-Filtering-Correlation-Id: 03f2278f-88d2-4b11-9fdd-08de588dd5ee
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|10070799003|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?GyJLnoMKKJEAnwLCXMyQhJxNeURmN+qgqoDAyydiA9FJ3juGY/uPxpRkHEdS?=
+ =?us-ascii?Q?kL/lue9bO5CxvUx3Ef7YMmTBI0n4mFbVwQueqwpyeXBeTl8ap8CgRQtAJ7WV?=
+ =?us-ascii?Q?Drv72HuIcNhRrD/vxlPSd2Cbrh2xP5QbqacSv6cE1hq5iNY05TGjUNekPUC3?=
+ =?us-ascii?Q?TgIanWC2mtKRh4wx9MKeTWUpFmLnWWrDtOeR6yzmrj+cgRixpjmO+H+00/Qh?=
+ =?us-ascii?Q?Ycc1fJ5OR7vBQgGSGusLrw1ibiis8cDUfEF9X6kM/8tcXl7oBPuDYUbxfmjX?=
+ =?us-ascii?Q?81HjfD9zt9Gx/xPjrGpnvExrHKHLoxwSbyjPzwaw9NFuspWLN3PvgjfqE3eS?=
+ =?us-ascii?Q?BwU+TN4vrkPt62eGqJY29TETAKVKl2YctXNJ+QNqpdOKvTvWZtZ6+Du5on8S?=
+ =?us-ascii?Q?KKuxUTKsZ5oLTqNzPD69Llfm+VMwL4hYpvpNvE3OiaVdL38x/TJyV0vI2w7Q?=
+ =?us-ascii?Q?uRydjZSilLuXExgo9hdMA/vASeWd+jOjRK9hKGWAfoYq2eda5CTxgVADDOLh?=
+ =?us-ascii?Q?NF38CD7H3pmzfplUhZAyqosL5Uerl/3pUiGv/jGXjcNecajj5sJNQHqdA7uo?=
+ =?us-ascii?Q?RLViIedz3xIwicJcGftVdLM1KVK8mN/vVCQi7DrYHi5vDOJDGxrij5UnwSbY?=
+ =?us-ascii?Q?kHVc4fTfLbKtM92bgtLWoafTwi8KWepYJt+sssWnnQ6OKShMXL9ROaMcRRUt?=
+ =?us-ascii?Q?cqNs4Gyrj4YZ7GDGw5eVgbC3KPItEkoVFwe39YPG5l14lLDgL7YhglUOuOCU?=
+ =?us-ascii?Q?vByfk9f0TK5nT/rwYip7t3/uCMtPaCoEghe9kUs2kAEKI/lopkH4mg9o3K55?=
+ =?us-ascii?Q?562k4WKV/hvVmUcDVR7SuoJZ9QIwkHSsyPGefp4yETmWhfjKyrUgH+JJV4Hk?=
+ =?us-ascii?Q?4f2NRvjBQSbUV+siWZ1vlIFXorzJbkY/oegvfYRdFkdgedd9n0J+7e8zsOgV?=
+ =?us-ascii?Q?fIL/5tyOvWCFvgF0AIZzpV7ZPzAKFBIZwh/YHGv2JWXj0Zsd+pHU+tXpdhhA?=
+ =?us-ascii?Q?DX2fXQuwrup5ucU9qXR1z/aYfSskSiFN2Cd9VRXKcwPrjXzBNrJz/I0QHwaf?=
+ =?us-ascii?Q?i8d2AhoyDeG9GbVkKw32tdnxvuldYXIi9cdTKc8P4zyQZhYw8lqocTeM5yWO?=
+ =?us-ascii?Q?gdzIGlg3sz9/soyo33h30hOR2OWhxv0go9emc0nXFa39eOEru39EnrPbo/I8?=
+ =?us-ascii?Q?KXtMpQgu7+tUcKb8/gkUVZ3gtkt+eO9BseBBb5uEWhy3hJ+7p9XUNfGPpyxe?=
+ =?us-ascii?Q?yncRLKpm7Lh82BMaCxSl6UWQKvAQggBOIquLJDIWXKo57b5rKs17A11YeYzH?=
+ =?us-ascii?Q?KUSbVDaLPKwa77z0I8MWNQQDWS8GooX3BZSK04hclU1c+doYnsuoACWDVn2y?=
+ =?us-ascii?Q?ZZDm3kkONLv96O6Yto/3LrBP6j4yQjoqEjHTdYYdcElJf/mdSQJmxqsHCsAt?=
+ =?us-ascii?Q?zNzzKBzRDYF1/yyCQ4WpSRwqODaM0S+LZ5M7gOZfioPEge1f5IWoo/AM6tlH?=
+ =?us-ascii?Q?FZAO4s4/4lhBLBvjOQ7f4AKSoE7XylAgvv0Ewi906gOCXBrNm9anUzfoSZDv?=
+ =?us-ascii?Q?XgLS1CyajNAxzA3Hgus=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(10070799003)(1800799024);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?hm+vQO7wVkxmml8cvAx7lQUD7lEjP38SGLgA92ftn9QBfZUkmTHqkhayWKIT?=
+ =?us-ascii?Q?muqzvkCMmyTM02qE8NcmSIkM5Gu+uJaWuGp/4usir7Ygk1gn/UD3f9sSi1KE?=
+ =?us-ascii?Q?vXL2FHFtiu/Ye/LBYrvnytZ6yUBpfdJWxRX1s9oJ2Elb31aq5tLQcPD/1BP4?=
+ =?us-ascii?Q?bxPXZ7P312F4zXrw9aPkq53g10bGsiZP+4CJnrcqRLXXSjnlRl0bQRgEMFP3?=
+ =?us-ascii?Q?f12Oxw9NC8fWCnxQqCKftBUzXjE9wO/jX1nyrbYq5JqhCDtlzqa7GktObZoU?=
+ =?us-ascii?Q?xHI4xU7iVF/YdLMX1MxFUFRZ/RJxWMqW9NTzacZVdThZgrg4WMWzv4V+AEy0?=
+ =?us-ascii?Q?jq/lXnQwkkbLbBTBmpBdkpGqSixST2ORd2Q1268z2UgleKweqmm2ClXwtVsG?=
+ =?us-ascii?Q?G2OTCbhIn6b8nmwQc4A+pwsRyuNn8pv8vm+YUowpMWCkN2+7ZqedvtqzsRJb?=
+ =?us-ascii?Q?9y8Ik/vXKdKc3PilkDz3ECWV/agmUBQGAlzMftckO0/Se2qLYDxTfl68C+Vr?=
+ =?us-ascii?Q?6Q2WOHgQNVsR6cGO8+Ut2Jt43bWt8xOBB0H15Trn7PRmHJGXCo0rSilIOS3c?=
+ =?us-ascii?Q?xTasdQ9+mKkfseIzAMPWIq39DBaInnp2VPEQUivp96DAbw891Ea8nf/wthMT?=
+ =?us-ascii?Q?RpBH16k1P2hKHCctTxBDLkfjEsOImztTMPHiJQBhqkM0fkDyAjizv8wRvd8u?=
+ =?us-ascii?Q?0eTFipJPvnIAt5fYSPIsKxH1BJeCLNakgm1iIsEhOt4bf3Qupy+08Boxglgz?=
+ =?us-ascii?Q?QHlPRARXdv3WK3YRRJ46zDxDx8kV5+MbP9hy7nKU1+hR8JtRNlB9o1biodTZ?=
+ =?us-ascii?Q?E8H/11OXVC6vXpDOsMJLPYhBY/NYaOULB3EhwENYqrwqQ/hdCkpe79ss3Tmc?=
+ =?us-ascii?Q?qBJ7NT1eBqDgVCe6b/MQSwVBFiNhdSxOydxW5j3iYE7qNl4O+b/EsWL7EpEt?=
+ =?us-ascii?Q?8i7k4fpWe8F1eCgmADHODvD6BvBY4HOSPtEzAn7fQsrOtzrPYJJA3Mpj02ke?=
+ =?us-ascii?Q?nIIwBHqYpVFboh5qSdWFJFbqyJKtHGPc7VeLqptz9U4Zgws3evWuhFP0zWkX?=
+ =?us-ascii?Q?ACsuo9cjewXGmT2gYuc/G+EZ+UNvk9XZXyW/vIWlMVRUYJUezfAdKTaR9s2A?=
+ =?us-ascii?Q?9M4FHGxV+ZrKzX8lA1Sp3/xy3C3ZIU05+ah01WdyVFfDmAg0d9PbJM4PDnyM?=
+ =?us-ascii?Q?brURm+mibaee4N5HDfOfqJ85VzgROX8k6G/X9ANgAeBB2pKCj/uO+0dRugB1?=
+ =?us-ascii?Q?Poy+nC0paqSahpZPXpLJKtneZWZHzruKup7T1XcebBsud0aKNCO2pS+NV/iZ?=
+ =?us-ascii?Q?ghu7KmInG1StG/2SGzyoykK4vJZzJ+SS8CvB20k7cDiknvRgOiBBvce7xxmD?=
+ =?us-ascii?Q?ovjuEH9Ikn2+Mk4/gVlKICPiZVnUea4lBKmpQsCSvMG+Z4Q0r953mnz36V95?=
+ =?us-ascii?Q?nMD+RZYut3UtYdFMw9pR+up9BgDADuSvhssi/okkQESCGJvIyyhgdr5Cu8MT?=
+ =?us-ascii?Q?CpSE/mKq49r9Y7DlJ8zE/6uCK20YDRJKrPQ7PeuOE3IGj+OQNOlgB0rc96Dr?=
+ =?us-ascii?Q?xtpavfwoK37PeOlTo/0FiaivyE5fw4txg51Na4lFhuQXTsyyBq7trPKfny5d?=
+ =?us-ascii?Q?IQbelPSxBeAxjYN6h1afVcsJYupnXxwhWLYbIlrh/FY2Yb6d/REGqms6H8vu?=
+ =?us-ascii?Q?RGpv1AjR2hEFZ0sFMAYCGN91/BFlFFZN7EjUNz130Eq/WsV9eg3b2A54TxAf?=
+ =?us-ascii?Q?BMTpcg6VrCG2ShXV/m6AC6QJ41Erm3vUW2383A5rwpBKyCWT4H63?=
+X-OriginatorOrg: valinux.co.jp
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03f2278f-88d2-4b11-9fdd-08de588dd5ee
+X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2026 01:38:53.7309
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2oHdW80p2vtFqISk3cZ/sCOO4xgFboUR0/rfN9cTJ1geN10we1UNgyK+SsxdCJndYCvx5AWEIDtzTKTRkvDuQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY7P286MB6416
 
-On Thu, Jan 8, 2026 at 11:10=E2=80=AFPM Deepak Gupta <debug@rivosinc.com> w=
-rote:
->
-> Hi Paul,
->
-> I have a bugfix for a bug reported by Jesse Huang (thanks Jesse) in riscv
-> implementation of `map_shadow_stack`.
->
-> Should I send a new series or only the bugfix-patch for implementation
-> of `map_shadow_stack`
->
+On Sun, Jan 18, 2026 at 12:05:47PM -0500, Frank Li wrote:
+> On Sun, Jan 18, 2026 at 10:54:07PM +0900, Koichiro Den wrote:
+> > A remote eDMA provider may need to expose the linked-list (LL) memory
+> > region that was configured by platform glue (typically at boot), so the
+> > peer (host) can map it and operate the remote view of the controller.
+> >
+> > Export dw_edma_chan_get_ll_region() to return the LL region associated
+> > with a given dma_chan.
+> 
+> This informaiton passed from dwc epc driver. Is it possible to get it from
+> EPC driver.
 
-Hi Deepak,
-Not sure if I missed the bugfix patch, I couldn't find it on the
-mailing list. Could I know have you submitted it? If so, could you
-please point me where the patch is?
-Thanks
+That makes sense, from an API cleanness perspective, thanks.
+I'll add a helper function dw_pcie_edma_get_ll_region() in
+drivers/pci/controller/dwc/pcie-designware.c, instead of the current
+dw_edma_chan_get_ll_region() in dw-edma-core.c.
 
-> Let me know. Thanks.
->
-> -Deepak
->
-> -Deepak
->
->
->
-> On Fri, Dec 12, 2025 at 10:33=E2=80=AFAM Deepak Gupta <debug@rivosinc.com=
-> wrote:
+Thanks for the review,
+Koichiro
+
+> 
+> Frank
 > >
-> > On Fri, Dec 12, 2025 at 01:30:29AM -0700, Paul Walmsley wrote:
-> > >On Thu, 11 Dec 2025, Deepak Gupta via B4 Relay wrote:
-> > >
-> > >> v26: CONFIG_RISCV_USER_CFI depends on CONFIG_MMU (dependency of shad=
-ow stack
-> > >> on MMU). Used b4 to pick tags, apparantly it messed up some tag pick=
-s. Fixing it
-> > >
-> > >Deepak: I'm now (at least) the third person to tell you to stop resend=
-ing
-> > >this entire series over and over again.
+> > Signed-off-by: Koichiro Den <den@valinux.co.jp>
+> > ---
+> >  drivers/dma/dw-edma/dw-edma-core.c | 26 ++++++++++++++++++++++++++
+> >  include/linux/dma/edma.h           | 14 ++++++++++++++
+> >  2 files changed, 40 insertions(+)
 > >
-> > To be very honest I also feel very bad doing and DOSing the lists. Sorr=
-y to you
-> > and everyone else.
+> > diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> > index 0eb8fc1dcc34..c4fb66a9b5f5 100644
+> > --- a/drivers/dma/dw-edma/dw-edma-core.c
+> > +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> > @@ -1209,6 +1209,32 @@ int dw_edma_chan_register_notify(struct dma_chan *dchan,
+> >  }
+> >  EXPORT_SYMBOL_GPL(dw_edma_chan_register_notify);
 > >
-> > But I have been sitting on this patch series for last 3-4 merge windows=
- with
-> > patches being exactly same/similar. So I have been a little more than d=
-esperate
-> > to get it in.
+> > +int dw_edma_chan_get_ll_region(struct dma_chan *dchan,
+> > +			       struct dw_edma_region *region)
+> > +{
+> > +	struct dw_edma_chip *chip;
+> > +	struct dw_edma_chan *chan;
+> > +
+> > +	if (!dchan || !region || !dchan->device)
+> > +		return -ENODEV;
+> > +
+> > +	chan = dchan2dw_edma_chan(dchan);
+> > +	if (!chan)
+> > +		return -ENODEV;
+> > +
+> > +	chip = chan->dw->chip;
+> > +	if (!(chip->flags & DW_EDMA_CHIP_LOCAL))
+> > +		return -EINVAL;
+> > +
+> > +	if (chan->dir == EDMA_DIR_WRITE)
+> > +		*region = chip->ll_region_wr[chan->id];
+> > +	else
+> > +		*region = chip->ll_region_rd[chan->id];
+> > +
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(dw_edma_chan_get_ll_region);
+> > +
+> >  MODULE_LICENSE("GPL v2");
+> >  MODULE_DESCRIPTION("Synopsys DesignWare eDMA controller core driver");
+> >  MODULE_AUTHOR("Gustavo Pimentel <gustavo.pimentel@synopsys.com>");
+> > diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
+> > index 3c538246de07..c9ec426e27ec 100644
+> > --- a/include/linux/dma/edma.h
+> > +++ b/include/linux/dma/edma.h
+> > @@ -153,6 +153,14 @@ bool dw_edma_chan_ignore_irq(struct dma_chan *chan);
+> >  int dw_edma_chan_register_notify(struct dma_chan *chan,
+> >  				 void (*cb)(struct dma_chan *chan, void *user),
+> >  				 void *user);
+> > +
+> > +/**
+> > + * dw_edma_chan_get_ll_region - get linked list (LL) memory for a dma_chan
+> > + * @chan: the target DMA channel
+> > + * @region: output parameter returning the corresponding LL region
+> > + */
+> > +int dw_edma_chan_get_ll_region(struct dma_chan *chan,
+> > +			       struct dw_edma_region *region);
+> >  #else
+> >  static inline int dw_edma_probe(struct dw_edma_chip *chip)
+> >  {
+> > @@ -182,6 +190,12 @@ static inline int dw_edma_chan_register_notify(struct dma_chan *chan,
+> >  {
+> >  	return -ENODEV;
+> >  }
+> > +
+> > +static inline int dw_edma_chan_get_ll_region(struct dma_chan *chan,
+> > +					     struct dw_edma_region *region)
+> > +{
+> > +	return -EINVAL;
+> > +}
+> >  #endif /* CONFIG_DW_EDMA */
 > >
-> > I really haven't had any meaningful feedback on patch series except sta=
-lling
-> > just before each merge window for reasons which really shouldn't stall =
-its
-> > merge. Sure that's the nature of open source development and it's maint=
-ainer's
-> > call at the end of the day. And I am new to this. I'll improve.
+> >  struct pci_epc;
+> > --
+> > 2.51.0
 > >
-> > >
-> > >First, a modified version of the CFI v23 series was ALREADY SITTING IN
-> > >LINUX-NEXT.  So there's no reason you should be resending the entire
-> > >series, UNLESS your intention for me is to drop the entire existing se=
-ries
-> > >and wait for another merge window.
-> > >
-> > >Second: when someone asks you questions about an individual patch, and=
- you
-> > >want to answer those questions, it's NOT GOOD for you to resend the en=
-tire
-> > >28 series as the response!  You are DDOSing a bunch of lists and E-mai=
-l
-> > >inboxes.  Just answer the question in a single E-mail.  If you want to
-> > >update a single patch, just send that one patch.
-> >
-> > Noted. I wasn't sure about it. I'll explicitly ask next time if you wan=
-t me to
-> > send another one.
-> >
-> > >
-> > >If you don't start paying attention to these rules then people are goi=
-ng
-> > >to start ignoring you -- at best! -- and it's going to give the entire
-> > >community a bad reputation.
-> >
-> > Even before this, this patch series has been ignored largely. I don't k=
-now
-> > how to get attention. All I wanted was either feedback or get it in. An=
-d as I
-> > said I've been desparate to get it in. Also as I said, I'll improve.
-> >
-> > >
-> > >Please acknowledge that you understand this,
-> >
-> > ACKed.
-> >
-> > >
-> > >
-> > >- Paul
