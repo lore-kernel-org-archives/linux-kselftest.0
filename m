@@ -1,60 +1,135 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09B3230F553;
-	Wed, 21 Jan 2026 13:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B2D48C8DF;
+	Wed, 21 Jan 2026 13:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769003114; cv=none; b=MTCTuPH6Pov7kXJYzpJ3FaiVV0o1MAJLDv8swug6ZM8XS/gbnYGxAvZqf1u2+EwoSbtknojBOabws38zAjJSzzhq9sadESKSz3QxnHb6XsX3/fy1igG9ifLtvlN2raligcdrgIsk2ihaSvliD+SkjaP+gE6L1fd76B+BFUKiLJQ=
+	t=1769003298; cv=none; b=V5hsaZ68atd6IMUPYhvO2f3wmyaRNb/IVqKv1ILaq40fJ7iGP7ILsxKYCQL7VVNXA/P4wNaCUPzBEMqpweuMV/YZk5dspJoEM0Wb0DTXyzMtGDQ6bjxTcjmWoCAADLafrm0RXwdD34cpmTk4RwKqjHLSZDze5ZOrx9yNvyifOoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769003114; c=relaxed/simple;
-	bh=BbMCIGu3sbu4F+Pm6bWzzprjVhcgq4cBnYs4hQ+r4Y8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FGULkPHs+61tfpQKZFqah0Lq9waAlNvd25/LkjFHAVzbRlEIgKYXLAIyc1NwT4aaJ1CkWuPNc26c1RS5DVAvNb0STUtgcbl7fC0fNTFg3wdJb8hF5K3eP7aZv2gESe2/+f5aQLlHaLJ2xtNpvSQKYwWTy0xSu2mA/C7TEhvQan0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBA411476;
-	Wed, 21 Jan 2026 05:45:02 -0800 (PST)
-Received: from [10.57.49.179] (unknown [10.57.49.179])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 75B453F632;
-	Wed, 21 Jan 2026 05:45:07 -0800 (PST)
-Message-ID: <0b82e184-2a2d-41e9-a2ee-2664c382fa8a@arm.com>
-Date: Wed, 21 Jan 2026 14:45:03 +0100
+	s=arc-20240116; t=1769003298; c=relaxed/simple;
+	bh=VpCP4rWPoedg5kjG3d2wjsJQWbzX2GfdwhAN9xSoVLc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DTLmQVyFBnnUAh3k/NFuGFXIXbrM2mId3BFAmcHNIFbpIjhAcMlon7N4DudnULYJJ5UVDGMX6oIjf8PmRWXleki3iWx3pDSxnXUrbbQ7SeiPCZ6W9aFn97jg2ROuC1msaYqygffPwg2LSgrMh4Y+dlwLxdGO1Hu8NleQgXwhS0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AW2mIWUc; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AW2mIWUc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77ED5C116D0;
+	Wed, 21 Jan 2026 13:48:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769003297;
+	bh=VpCP4rWPoedg5kjG3d2wjsJQWbzX2GfdwhAN9xSoVLc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AW2mIWUcA6xvVB3CX2ffd0Gv+2enV+Qb302ghmDEvuHFFUb2Nb8p8O2GzIoCVmqjL
+	 xxpFpUbCtnCm+OHuGUAubzYXYTq65VDS61Vsk13OHdoUZSYKS3W6ukkPBZJgiTt87X
+	 LOQCEY4FubaP3wEGZkIG5IBfNjprOE5zFDrEugixMzsWd35dJ5Y9i5+GxJQorkZzV9
+	 u/8sykpDJ2eb4uNfJIuw9mqYMQzT/jdcSe0zLb4Nd6jPdtvFc5kr095gtiQkRfRVIM
+	 5aRgBdJa9/Q/2664KNUAJsMODwSapoqHbv+jKPP4B6icJzvIainfOrjq3KZi/3fyC0
+	 Gbw2TE7crSvNA==
+Date: Wed, 21 Jan 2026 13:48:10 +0000
+From: Will Deacon <will@kernel.org>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: catalin.marinas@arm.com, maz@kernel.org, broonie@kernel.org,
+	oliver.upton@linux.dev, miko.lenczewski@arm.com,
+	kevin.brodsky@arm.com, ardb@kernel.org, suzuki.poulose@arm.com,
+	lpieralisi@kernel.org, yangyicong@hisilicon.com,
+	scott@os.amperecomputing.com, joey.gouly@arm.com,
+	yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org,
+	mark.rutland@arm.com, arnd@arndb.de,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v11 RESEND 6/9] arm64: futex: support futex with FEAT_LSUI
+Message-ID: <aXDZGhFQDvoSwdc_@willie-the-truck>
+References: <20251214112248.901769-1-yeoreum.yun@arm.com>
+ <20251214112248.901769-7-yeoreum.yun@arm.com>
+ <aW5dzb0ldp8u8Rdm@willie-the-truck>
+ <aW6tix/GeqgXpTUN@e129823.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 8/8] selftests/mm: report SKIP in pfnmap if a check
- fails
-To: Ryan Roberts <ryan.roberts@arm.com>,
- "David Hildenbrand (Red Hat)" <david@kernel.org>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark Brown
- <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>
-References: <20260107164842.3289559-1-kevin.brodsky@arm.com>
- <20260107164842.3289559-9-kevin.brodsky@arm.com>
- <09c214df-c3aa-48e4-9587-c54c667c6ce9@kernel.org>
- <46e50e9d-0e4a-4f81-8b43-61b897ad9c34@arm.com>
- <42b9825a-adef-4e80-bbf3-bf01b9fb0054@kernel.org>
- <ee3750f6-dd8b-459f-bc19-8c4a857d40a7@arm.com>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <ee3750f6-dd8b-459f-bc19-8c4a857d40a7@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aW6tix/GeqgXpTUN@e129823.arm.com>
 
-On 20/01/2026 17:27, Ryan Roberts wrote:
->>> But if you think that concern is unfounded, certainly just opening it once and
->>> reusing will simplify.
->> I would just keep it simple here, yes. If this ever becomes a real problem, my
->> intuition would tell me that probably the caller is doing something unsupported
->> that we just cannot easily identify+reject.
-> Yeah fair enough.
+On Mon, Jan 19, 2026 at 10:17:47PM +0000, Yeoreum Yun wrote:
+> > > +"2:\n"
+> > > +	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)
+> > > +	: "+r" (ret), "+Q" (*uaddr), "+r" (*oldval)
+> > > +	: "r" (newval)
+> > > +	: "memory");
+> >
+> > Don't you need to update *oldval here if the CAS didn't fault?
+> 
+> No. if CAS doesn't make fault the oldval update already.
 
-Cool, will make the fd a global as well then.
+Sorry, it was the "+r" constraint with a pointer dereference that threw
+me but you have the "memory" clobber so it looks like this will work.
 
-- Kevin
+> > > +
+> > > +	for (i = 0; i < FUTEX_MAX_LOOPS; i++) {
+> > > +		if (get_user(oval64.raw, uaddr64))
+> > > +			return -EFAULT;
+> >
+> > Since oldval is passed to us as an argument, can we get away with a
+> > 32-bit get_user() here?
+> 
+> It's not a probelm. but is there any sigificant difference?
+
+I think the code would be clearer if you only read what you actually
+use.
+
+> > > +		nval64.raw = oval64.raw;
+> > > +
+> > > +		if (futex_on_lo) {
+> > > +			oval64.lo_futex.val = oldval;
+> > > +			nval64.lo_futex.val = newval;
+> > > +		} else {
+> > > +			oval64.hi_futex.val = oldval;
+> > > +			nval64.hi_futex.val = newval;
+> > > +		}
+> > > +
+> > > +		orig64.raw = oval64.raw;
+> > > +
+> > > +		if (__lsui_cmpxchg64(uaddr64, &oval64.raw, nval64.raw))
+> > > +			return -EFAULT;
+> > > +
+> > > +		if (futex_on_lo) {
+> > > +			oldval = oval64.lo_futex.val;
+> > > +			other = oval64.lo_futex.other;
+> > > +			orig_other = orig64.lo_futex.other;
+> > > +		} else {
+> > > +			oldval = oval64.hi_futex.val;
+> > > +			other = oval64.hi_futex.other;
+> > > +			orig_other = orig64.hi_futex.other;
+> > > +		}
+> > > +
+> > > +		if (other == orig_other) {
+> > > +			ret = 0;
+> > > +			break;
+> > > +		}
+> > > +	}
+> > > +
+> > > +	if (!ret)
+> > > +		*oval = oldval;
+> >
+> > Shouldn't we set *oval to the value we got back from the CAS?
+> 
+> Since it's a "success" case, the CAS return and oldval must be the same.
+> That's why it doesn't matter to use got back from the CAS.
+> Otherwise, it returns error and *oval doesn't matter for
+> futex_atomic_cmpxchg_inatomic().
+
+Got it, but then the caller you have is very weird because e.g.
+__lsui_futex_atomic_eor() goes and does another get_user() on the next
+iteration instead of using the value returned by the CAS.
+
+It would probably be clearer if you restructured your CAS helper to look
+more like try_cmpxchg() and then the loop around it would be minimal.
+You might need to distinguish the faulting case from the comparison
+failure case with e.g. -EFAULT vs -EAGAIN.
+
+Will
