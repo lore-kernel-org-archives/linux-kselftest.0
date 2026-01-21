@@ -1,139 +1,233 @@
-Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11021081.outbound.protection.outlook.com [40.107.74.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D0530F938
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 01:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768959698; cv=none; b=GGhEoqZCmaXT+3UD59+d1CetM84EneT7YAj0ofeP363ujAAcUOl11nnqaWXfqCtEoOi8kWXaZmNay4x/M2H0Wg+N8yu+evYBcW1iRp94KXhYjFLqOeKDj+s2+3z51r1wTIfjrJ6X7IgftOeFfb4oX2uksNASGwgckBFoOy2Fq0A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768959698; c=relaxed/simple;
-	bh=qzNaz3Q5oVarjJ/0tCQUpR47z40hmKMjNfdlTnOMDds=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j+j7iJXayGrRdA5g38hjxP/OxDdwbOzEpvj8L5NoN/Uqq5BDkifvC9kcBc0FBxilTrVEh2P1R+2tXX6vTRtf4ZDrHADhP9ZeM6JorWkSPZXDuxD1E7QjRHY8mAk7kuQx0lRKXwdyA3rBwrH85ojC0/pE0rrJnC8IGCUAivPe//8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZkmHKLyC; arc=none smtp.client-ip=74.125.224.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1231130E825;
+	Wed, 21 Jan 2026 01:44:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768959861; cv=fail; b=pv5pPcOCCMbI+ThV3Hveiri8+ttJdgOI6mkI2iSxlm5n7Mvv64IQO59VusP6wQBBElq6AUIRLHGQB0qYWapi1bfWPWi46eYOOPyH04yi+viPJu26Fc1Nl/Y8vqT3eVBwBLoXwCJD+jKzBFVQDpfD//tF4j70a2m5JN+PIPOPk8g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768959861; c=relaxed/simple;
+	bh=8god/nDl85lBTe/kx5w1gXFhuGHVQyTOtysalX6fUZU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=bGpNxIvQAl9eWVpRDxsgKBr8p3O1aGrBKD1LHiOZAjz/raM7A514T/gYCwXR6DBYHix9nmjiKNUOjHEp3XbF4fKahs05djYuJ4WAlCKg9Mwd1kGXfIf/7ulfbUkXEa2GoG6qJQAbx5ofpOBRpp4N7KsmKnzTPtXpdWem07ihfdU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=LXiijxHg; arc=fail smtp.client-ip=40.107.74.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZkmHKLyC"
-Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-649278a69c5so3102005d50.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 17:41:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768959690; x=1769564490; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v0gPyzl3flI+QLK9YSJSXFLXlGP49FWWM2rxD4Oz2s0=;
-        b=ZkmHKLyC/WLqo6o/mGPeAQqCceLIevx6JbsDPL5iR9Ed10MLwr3pvwPGVAui0R0wqd
-         O3foAJzBFxpO0MN74JR41sccEVcjFTahUh+Yi8VSpCtobcpgAta+pBdObhmo88mg6ZAW
-         MAwODSU6ljoF8wMNK0mr9BS8rf0fZlMxHrC1JREKWbNBWQ43PhcMGlYgX4F63KWqIAi7
-         aBbNHtWGtbeHVfPh8culwtbFiCM8DDxjRaunDgC5hzSS1EqB2DjSDDRwlI/+kix8+9z5
-         3ppUVOd8KMzNrrFx5P4Iy5Ad0eq8gu/jUXFz6gYM4h8EThbAlut6s1reNMe3t+d9CiVt
-         WQoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768959690; x=1769564490;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v0gPyzl3flI+QLK9YSJSXFLXlGP49FWWM2rxD4Oz2s0=;
-        b=nvuqJf7jZTP7DDjgsUDETpoEmajoXCG7lkArM1g+nAIn+AMhCfyrS7HqtidZ/cI0JF
-         Xnw4FAjikXc37LvwjUtv+BsrspiSTya4NINZnH8W7F9yJwIYMEIDrE5Gl22O/GLJje4X
-         NQviDMN3pzHaPUA1tLYm/eUBWhjsOw7ac6uxR26uZw4dEecYgMJpdcZWxKr8aD5o4lQQ
-         AdDP4KOM1PYXRuYuyR1gAs2MZldyhvS5OBILKuh7+wYC/6MGAQ9y6hiZFXJ1vnZouG31
-         N44IhKYYd9bN9Wa8R3t6j+tu85lJT9Sn8EevrXrmBMmzIg3y665dRlCtVxyGAm4FBd0U
-         Vn2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVV9fQ/VU7DLUdFDEcwzd4/qj9yksACXJerjWHqGJkSileX9YqlTqsgMy7aMFeh5gn3Ia0MwMJEvhPR+49V8Xs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8UhbzKGPJFLAAIXrh2HoUUw6D1xHCd1swwVvVm0s191UoMupn
-	7+t+1zpxFrr41qhgNpNiq1HAbuJreL/pVKEYU5mofulIfOZV9h8K4FhM
-X-Gm-Gg: AZuq6aJhbKQRLpCqIt6pZmY6nZ/8N0OJ8keZfZqjn4EoigUU2y22CN3oJzpca8DafqI
-	zt2SX0vyoh9sU+JBCNy3UN+b/PQSHH3D1AVGocga9LkvbTQkwFuCYYVWptdX8+Yy1zIomqEMH1I
-	CJ1Zon9eDJL3sU0Dy1KmRPJmr6kp2n/K48/HiufX8saeKKDNAoYXdzdANNqL3LQ8wEtH68Awxkq
-	1iKgA2By5W+GFJHRWiuqQ/OfDac0GHN5EHXYgQdU5BKqdBOSwNTmKoXc/0AvsNbTxGhdSH1Sqwa
-	1/7HBaboX2IhKh2gCEJ5AG+MqWb4+W89eWoE99QWU427QeOjf4w9SXOFZ5Rr/LGPsI4dtTmF1K2
-	UteB+nimHCnaL3cOQ+IB1Ih35yr74rhtNi5uVaa1wHzH6V3T+5MWutcPoyj5xbfN3SiHbQ3YAAr
-	s8DxBAxHP+ypIme920pCtqhuHtGjH+OX/autqTfQuyuDoVxg==
-X-Received: by 2002:a05:690e:d8d:b0:63e:b41:cebc with SMTP id 956f58d0204a3-6491648c379mr12616986d50.17.1768959690075;
-        Tue, 20 Jan 2026 17:41:30 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:48::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6494080138fsm1106822d50.20.2026.01.20.17.41.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 17:41:29 -0800 (PST)
-Date: Tue, 20 Jan 2026 17:41:28 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Petr Machata <petrm@nvidia.com>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: net: forwarding: cleanup veth peers created
- via NUM_NETIFS
-Message-ID: <aXAuyPwez4ZfuFT7@devvm11784.nha0.facebook.com>
-References: <20260120230905.328528-1-aleksey.oladko@virtuozzo.com>
- <aXAsb+sCbyeD/xkL@devvm11784.nha0.facebook.com>
+	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="LXiijxHg"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vDYDLa18a+gBMkVVLfrgwl+Tu2zE4jzulr+Kh64sxiwZalNi6Pugxbwh4ZukX7eUKkMO+7xK/nZEUvw9FLq+bAwDGhdSn0rDaOG++hc1BEgOpaSMNKwRcSWu7pJiZKN5fPycVCVnhF5CxfD5y4i8ObWnN8wLfretf5nkpp8jsg+iFzBrMlfh4WCCm0SAmOWRssRr4MXtTiFGJSHrnCnd4FZM7zLw0jAYflhpIBYy8gr01pMF1Xz/qlP5z/31u2FdM21rxa5u4++0Anx6bByaRn5uDp9gJ80HChxIUz0Bwq3dpNQQRkeyBGfGL4m8zkwus7iyA0lb5g8t62ODNpBYMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4LCSDnM4C182OdOzkUxJYvCagDrYwbTTqyRIr43EvIA=;
+ b=svTK5QUmHaV8OcAUhKopJsu8/jNXnuaWvXXf0kvMoXO4/WtzAs6Dksv3YAL7c120rDXV6EJZMKDy/HDB2EAFP7906huFWeUO+9iaYF2zLHNmpxvt3dc+bJ2V5Eh/wfwwCRpEFLTyzQPPzyBbtttnLBHrNpiSAlfuzF2MzDb49SoPEnBfr94sUlNn1GB9vZL6gf79xlKtUdXiMBjmM4j8j/Fe12k/3bncZYWa0LCa7wGCj+4xo417+KT1D5DMLzq5lF0w/x5YXv9d4c+c2Zv1PTfwK/pEaFotGcnD1kaSI5V5AW5jbAURf3ztJGFBIW0KQdkKHuVZ3DsRM/XIcuRo6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
+ header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4LCSDnM4C182OdOzkUxJYvCagDrYwbTTqyRIr43EvIA=;
+ b=LXiijxHg5ZEYSx5qbG+wxxIRL/t5BA51abou+NF+wcau5gIHQ2LcV52KEqCvqwQmMKDXl32IOmqzGCMZJ5S9LkNA78sijELkmPQ1mBF0Baxv7ZvqOoHmBHWwcuiFa/Ixkx8bb5lTF6eMFBhFyRfwjAalooDwE29wL/m95MUqwGk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=valinux.co.jp;
+Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
+ by TY7P286MB5505.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:253::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Wed, 21 Jan
+ 2026 01:44:08 +0000
+Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::2305:327c:28ec:9b32]) by TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::2305:327c:28ec:9b32%5]) with mapi id 15.20.9542.008; Wed, 21 Jan 2026
+ 01:44:08 +0000
+Date: Wed, 21 Jan 2026 10:44:07 +0900
+From: Koichiro Den <den@valinux.co.jp>
+To: Frank Li <Frank.li@nxp.com>
+Cc: dave.jiang@intel.com, cassel@kernel.org, mani@kernel.org, 
+	kwilczynski@kernel.org, kishon@kernel.org, bhelgaas@google.com, geert+renesas@glider.be, 
+	robh@kernel.org, vkoul@kernel.org, jdmason@kudzu.us, allenbh@gmail.com, 
+	jingoohan1@gmail.com, lpieralisi@kernel.org, linux-pci@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	devicetree@vger.kernel.org, dmaengine@vger.kernel.org, iommu@lists.linux.dev, 
+	ntb@lists.linux.dev, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	arnd@arndb.de, gregkh@linuxfoundation.org, joro@8bytes.org, will@kernel.org, 
+	robin.murphy@arm.com, magnus.damm@gmail.com, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	corbet@lwn.net, skhan@linuxfoundation.org, andriy.shevchenko@linux.intel.com, 
+	jbrunet@baylibre.com, utkarsh02t@gmail.com
+Subject: Re: [RFC PATCH v4 11/38] NTB: core: Add .get_dma_dev() to ntb_dev_ops
+Message-ID: <mfvy2vvs2272mq5qsstpluiir4ww4sdp22mj34viizr4dgwjt5@qhy2cr4rrjm3>
+References: <20260118135440.1958279-1-den@valinux.co.jp>
+ <20260118135440.1958279-12-den@valinux.co.jp>
+ <aW6PbmKpYVxHrnJE@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aW6PbmKpYVxHrnJE@lizhi-Precision-Tower-5810>
+X-ClientProxiedBy: TY4PR01CA0064.jpnprd01.prod.outlook.com
+ (2603:1096:405:370::15) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:405:38f::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aXAsb+sCbyeD/xkL@devvm11784.nha0.facebook.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|TY7P286MB5505:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a4e2808-671a-49ba-650f-08de588e918a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|10070799003|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?qVfo3yJ7SpK72YE6YeaZiY4HrtF8M9AjcqA7sUX6foFPHUgPgSASHDtHgkNs?=
+ =?us-ascii?Q?yVUnGw0LKh7WcgUm1kkdY41rpJVcUbqH1jOhHfgVkqtDED0MYDynIkiHJDAl?=
+ =?us-ascii?Q?YagP0fr5JqLJJIKrDSpVg7vB2/TttI9fWq2iTayUf+CiUUJx2PrM1J600HYO?=
+ =?us-ascii?Q?7W0puC7gR5YdKpaZPwkADak9xzNOtcV9nZvMyI4D7v4a8LyzMpil/DXLn8hp?=
+ =?us-ascii?Q?2XT+EWun9P9VWnp5sNepwLZB3nURrKovPy/tGLIdGQ8bgBSnjEmpGBbzWWQy?=
+ =?us-ascii?Q?dnTQFv6sZZCysSSSCbJc1fVfMQ1W5oOumI16Iw6KePJzwuuDy70SivrTqHr3?=
+ =?us-ascii?Q?axWEcAnXzexJTqRJharcgP2+stBbUXwxN7Ka0fenIT1DhX3eR8U+1iGHX67V?=
+ =?us-ascii?Q?13kN7ERN+qEgeOpaEAzA9oyPav+1+flHb2fgaQxNXGEJ3O6o19PSutmOQj7T?=
+ =?us-ascii?Q?51+QX9Ez8l1i6/UL7V2HNTJnURzUSjX1BCDoUd8T1kN/klXg5BovF8JM9/Ns?=
+ =?us-ascii?Q?ptHJ/h8i/9Bk2clUIqCj79psp/Y8/NyXk4Qe6jOK5p64xiX5eBNWWkIBaLUY?=
+ =?us-ascii?Q?vlB7rG9TkTHWX7QYTGVeKXZG/97k7N+6tA1XypNOAq36EaLCmaxfIOsIULCM?=
+ =?us-ascii?Q?DzXctk4tnWYLTQeZIQ9LshxhfWz77/mC+s/6nYiD3C4/UwWLIIFvPWsGGR8p?=
+ =?us-ascii?Q?tZHtFndgI7xzqafT4YPuKyzBmJo5+koVJ/QzOsVfzp1KDLoUgumMkbQVhF8C?=
+ =?us-ascii?Q?THomSOSKNHOq4v2AgUqIs2xBakkoEDimsl9ra5SZAP0JRAp1+JVSK9++puYX?=
+ =?us-ascii?Q?WA9lAo3QVDnlc2Ujaknuakp17ADoSAR5iy53ttzpOXcs5ETzBF0O9KJzm+7K?=
+ =?us-ascii?Q?c4AmFRaNEFmFnTqEW/AbWmb/+WN27mHUFlPDH1Ucdjltpe9/h1jMSKyTZuTD?=
+ =?us-ascii?Q?Tni97dr+a9f8vMKWSXuRRubsVklObSwZHWTWKjM2xnsggt+8kHFZTXzAk60O?=
+ =?us-ascii?Q?PgJ1WTHYOcLrF2X0oTkjnkekFMtpJ+vvIZaq1cJdYjhz1qqMUATwGUkfysjb?=
+ =?us-ascii?Q?0xZklyvvipnCCrlr0cGIV7QztY5ueB3W3HQFlnYJOR5WojZnNZzDHzwCjaaQ?=
+ =?us-ascii?Q?Ye3NfcZYaURF6RL32GEh79i/5dsPlJwTZjfpunWreeT4whOs7+VWQtsAxdCh?=
+ =?us-ascii?Q?U1bP4pKu42VWY6Ycr3HRYt3r4q+RcbwuzTqksoWytBbeVoE8uU70UOtjB25/?=
+ =?us-ascii?Q?hkmeImNscabwyPw4EgYVKhMWFMIGzjuNpdqQ/Gjf+4tYsxTLh+gu97Q9Oa7t?=
+ =?us-ascii?Q?g1MHe6K29d+JYs9h9bbgMBYohUbAKz57M9aBfK66zrRkVmZlPEf+hsuSGMU5?=
+ =?us-ascii?Q?Dxvoki1Q++/p92PJ3ZOwCNUuLSrE3dQkeMg90B/GOurTntbqopFsQmb/tVIJ?=
+ =?us-ascii?Q?jl5N6+gQf+YVuNsc+qo//t+8qKbZ7qj4hvYiYJ8+dkGdPfOi0/eHiJH2qgl8?=
+ =?us-ascii?Q?Y9aiXBiO7Iom6Yuutl5NjcHhhYbirBa4RcUZf1p7QktxYWONg7VJewQ4HQfX?=
+ =?us-ascii?Q?hPE3iy7mA4PpfJfehoc=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(10070799003)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?qVOeHicPzteWZojxzgvg/34mFvj0stMNXah06BIqogI1p5Zi7R3RimF77DVG?=
+ =?us-ascii?Q?1bXYpkhXXU8ie02IPU7Wbb8kHSXR/ATH/wvClIC13ohFN2y4T0MbqkVqghFT?=
+ =?us-ascii?Q?3izHtqESUECCFKciLn+7joCYrkBFlRiaHxTqlqBzEn1O1Cr2UHe9mw1l/Roo?=
+ =?us-ascii?Q?McQGN6V7Jw5+B+HPQ/tnSrUMgcpE8omjjSuFwTKXFOlqgmAchGpJ4eQ1shPh?=
+ =?us-ascii?Q?tpDhsAEBCKBVbvm+C2QyMt5MJiZEVQTycgoIuVFeJWCCPHLvfJE23Rpkg0ik?=
+ =?us-ascii?Q?1SrcllyeckUv01clBNgdVt/3TzSKXx9jqPwsIQpQVrVJIFmZ09Qbdset0sKn?=
+ =?us-ascii?Q?QAOlMNrdVkviyq3bLafDF0yoQMcsGNwDp7WNGzOr5hXKFyvbAIVE8O8MNf3n?=
+ =?us-ascii?Q?oeclut73k5EuL1/W2kjPGsyu0emyzSymFCYxUu13sEHzo6L3BMI8tbw7x0ez?=
+ =?us-ascii?Q?5KF00e8PhaALYfFkOqQ0xX4ernNi+NKWFgtCITeCaV1bU8cY8qCZt8l+QhBJ?=
+ =?us-ascii?Q?WO85QHYUFJxjq/0bSWO+fFOqFQBfpMcSoOvx3McxgByL+w8hm2yJaNB5Nqyv?=
+ =?us-ascii?Q?MdCk4e1MChyp5PpTmYIv+V/nK8P4Gci93qnphaCxBC4JpUi4BBhtn+3E+rXq?=
+ =?us-ascii?Q?4G7pHG9kQzI25u6McjL0uh7WCj2tKVq7UE5dlrazNv6BiGljJm0T3on67yHU?=
+ =?us-ascii?Q?tUar4sygJgGUCEYAr3+jMNE1MDyohBuCpi800lX2R8iApePK6p4QSIY0Ff0I?=
+ =?us-ascii?Q?pMTewXT7OdHW6JxfH159Hq7gJEn6KWzRQVMg/JlX11bJHmgYpboLvXwM5n89?=
+ =?us-ascii?Q?9hqUIrFUOrlm/+0PdrYCSzLR1iqgZxiUJhz5SGAL4u+fnm1yzrPl4Dc7jKi5?=
+ =?us-ascii?Q?6+Hinl6nzChp84ZQjijLSu+W8jzf5iLRFiN0NZ6ZmgxlU+kZbXAjWg6x4G9S?=
+ =?us-ascii?Q?N3aQCSxskKOsyB3UBz57CyFOahjS6JpZNluRN9Fu0Whqt8aWo65JUwlXeKnW?=
+ =?us-ascii?Q?SBobt9KKD1yOOoG1qO48mtTH1nFz7CmO6biCei3PoQqXmigjfTJypER2XOpJ?=
+ =?us-ascii?Q?7jZYtSenZbKBtELG9BlF4ALOY7M7o4YAdrqxXzo1MnAkUT8yb9tJkopBcU3p?=
+ =?us-ascii?Q?d/FdyGCpA/j76Wg6kxHcEZ0HFwb2RExcxNTRyDKaiceW4cDqT2Z1zUC2ba4L?=
+ =?us-ascii?Q?zjHBu8aYgFwzTNuZvEnf7TPmDYxg1MAH3QQs7BwiPqusMA69b9YyExclFkMw?=
+ =?us-ascii?Q?4mfNeoLP0ARyr/HwPCtff7X+pSLjhCznLrrNCyCwbvFEd5ShraQli58mvFEC?=
+ =?us-ascii?Q?s5jYF1NM/uO35ah+xVW0NBBq6pqhHMJISx/kUa3BUQo8wQn4ny/rWCjIvhjl?=
+ =?us-ascii?Q?tNDzbUsEIWzLeDnMs/CsqbLHTl6Hojwcln2g9oUgpLclk/8MrxUBaNp32uoI?=
+ =?us-ascii?Q?UHN4Hvl7nZv9xqiG9RK6P4UV1hidlo4Mfmzh41Y9OLwmjgwP6mxLf/TCwh+0?=
+ =?us-ascii?Q?ku7D8TRLrM1SJewyczuyCHoUzcKbkvyccrJA7R+I2KnONdvXKou676KWkZQn?=
+ =?us-ascii?Q?kZps8wWQrTje3NiVqq5EgI4HGs4luoVgLRcVZffI6uEoDVb0pKbLGgIU9fw7?=
+ =?us-ascii?Q?kcbV+XCQTAA/UJBL8o89hnNSPZJaGeFxJXAgyuZaKMnl/1ULrfC05uXy/0s7?=
+ =?us-ascii?Q?AoJPZe/5wsyk9GfXReJW8EenJD1AsRyP8XSBq7mTRmCSksqIfKkMVsgUEz9Y?=
+ =?us-ascii?Q?PBxvcYNiJI+Nvzl2NEFuBQ0e6+sgjCfsYF1+2tJJb7wczcRXJjQo?=
+X-OriginatorOrg: valinux.co.jp
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a4e2808-671a-49ba-650f-08de588e918a
+X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2026 01:44:08.4639
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ax8hho5BL3oqZ/pTiqPCgEnR5f9HtwWyAsXMyDPlxaHZovptWz5GL+k5XB1lqOsgE3UK81T0ShrFvv0tQMA4FA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY7P286MB5505
 
-On Tue, Jan 20, 2026 at 05:31:27PM -0800, Bobby Eshleman wrote:
-> On Tue, Jan 20, 2026 at 11:09:05PM +0000, Aleksei Oladko wrote:
-> > Some net/forwarding kselftests set NUM_NETIFS, causing lib.sh to create
-> > the requested number of veth peer interfaces.
-> > 
-> > These interfaces are not removed when the tests finish, leaving stale
-> > veth devices in the system. This can cause subsequent tests to fail,
-> > for example min_max_mtu.sh.
-> > 
-> > Ensure that veth peers created via NUM_NETIFS are properly removed at
-> > the end of the tests to avoid interference between test runs.
-> > 
-> > Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+On Mon, Jan 19, 2026 at 03:09:18PM -0500, Frank Li wrote:
+> On Sun, Jan 18, 2026 at 10:54:13PM +0900, Koichiro Den wrote:
+> > Not all NTB implementations are able to naturally do DMA mapping through
+> > the NTB PCI device itself (e.g. due to IOMMU topology or non-PCI backing
+> > devices).
+> >
+> > Add an optional .get_dma_dev() callback and helper so clients can use
+> > the appropriate struct device for DMA API allocations and mappings.
+> >
+> > Signed-off-by: Koichiro Den <den@valinux.co.jp>
 > > ---
-> >  tools/testing/selftests/net/forwarding/lib.sh | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-> > index a9034f0bb58b..ae7699c0c7e5 100644
-> > --- a/tools/testing/selftests/net/forwarding/lib.sh
-> > +++ b/tools/testing/selftests/net/forwarding/lib.sh
-> > @@ -597,6 +597,10 @@ vrf_cleanup()
-> >  	ip -6 rule del pref 32765
-> >  	ip -4 rule add pref 0 table local
-> >  	ip -4 rule del pref 32765
-> > +
-> > +	for ((i = 1; i <= NUM_NETIFS; i=$i+2)); do
-> 
-> I'd suggest 'i = i + 2' here instead of "i=$i+2", as it seems closer to the rest of lib.sh
-> style.
-> 
-> > +		ip link delete dev ${NETIFS[p$i]} 2>/dev/null || true
-> > +	done
+> >  include/linux/ntb.h | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> >
+> > diff --git a/include/linux/ntb.h b/include/linux/ntb.h
+> > index aa888219732a..7ac8cb13e90d 100644
+> > --- a/include/linux/ntb.h
+> > +++ b/include/linux/ntb.h
+> > @@ -262,6 +262,7 @@ struct ntb_mw_subrange {
+> >   * @msg_clear_mask:	See ntb_msg_clear_mask().
+> >   * @msg_read:		See ntb_msg_read().
+> >   * @peer_msg_write:	See ntb_peer_msg_write().
+> > + * @get_dma_dev:	See ntb_get_dma_dev().
+> >   * @get_private_data:	See ntb_get_private_data().
+> >   */
+> >  struct ntb_dev_ops {
+> > @@ -339,6 +340,7 @@ struct ntb_dev_ops {
+> >  	int (*msg_clear_mask)(struct ntb_dev *ntb, u64 mask_bits);
+> >  	u32 (*msg_read)(struct ntb_dev *ntb, int *pidx, int midx);
+> >  	int (*peer_msg_write)(struct ntb_dev *ntb, int pidx, int midx, u32 msg);
+> > +	struct device *(*get_dma_dev)(struct ntb_dev *ntb);
+> >  	void *(*get_private_data)(struct ntb_dev *ntb);
+> >  };
+> >
+> > @@ -405,6 +407,7 @@ static inline int ntb_dev_ops_is_valid(const struct ntb_dev_ops *ops)
+> >  		!ops->peer_msg_write == !ops->msg_count		&&
+> >
+> >  		/* Miscellaneous optional callbacks */
+> > +		/* ops->get_dma_dev				&& */
+> >  		/* ops->get_private_data			&& */
+> >  		1;
 > >  }
-> >  
-> >  adf_vrf_prepare()
-> > -- 
-> > 2.43.0
-> > 
+> > @@ -1614,6 +1617,21 @@ static inline int ntb_peer_msg_write(struct ntb_dev *ntb, int pidx, int midx,
+> >  	return ntb->ops->peer_msg_write(ntb, pidx, midx, msg);
+> >  }
+> >
+> > +/**
+> > + * ntb_get_dma_dev() - get the device suitable for DMA mapping
+> > + * @ntb:	NTB device context.
+> > + *
+> > + * Retrieve a struct device which is suitable for DMA mapping.
+> > + *
+> > + * Return: Pointer to struct device.
+> > + */
+> > +static inline struct device __maybe_unused *ntb_get_dma_dev(struct ntb_dev *ntb)
 > 
-> I see that some tests that set NUM_NETIFS do not seem to call
-> vrf_cleanup() (e.g. bridge_activity_notify.sh), so I think those tests
-> will still leak?
+> I remember if there are inline,  needn't __maybe_unused.
 
-My mistake here, I now see there is a more indirect call to vrf_cleanup
-via defer there.
+My bad, I'll drop it.
 
-Best,
-Bobby
+Thanks,
+Koichiro
 
 > 
-> Maybe lib.sh needs a remove_netif() to go along with create_netif(), and
-> then tests can call it from their 'cleanup()' EXIT handlers? This avoids
-> the mismatch between vrf_prepare() not creating devices but
-> vrf_cleanup() removing them.
-> 
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> > +{
+> > +	if (!ntb->ops->get_dma_dev)
+> > +		return ntb->dev.parent;
+> > +	return ntb->ops->get_dma_dev(ntb);
+> > +}
+> > +
+> >  /**
+> >   * ntb_get_private_data() - get private data specific to the hardware driver
+> >   * @ntb:	NTB device context.
+> > --
+> > 2.51.0
+> >
