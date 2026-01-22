@@ -1,132 +1,73 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F611E7C2E;
-	Thu, 22 Jan 2026 01:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7263035CB7C;
+	Thu, 22 Jan 2026 01:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769046065; cv=none; b=QFqQlMci2luhw33rJBfaMzNGJ31AKXmIb1YXJBM582jylA8AmDH3oFvGGYeMgWifM+A35lH4u+FGlxSXJtMeSyUKKWmHQUqvQIcitbUr9nBNQTaDwPkU/zeum3bcFOEB2grDALLa/YPtxb4bSM6zvoUUTFRrjU/mJ9IB7TSFmiw=
+	t=1769046307; cv=none; b=coLkie9YAr2HZBcjZh0xmO+7nZbfuBsktD0w0siSqIWXHS1I8eFQNe/8Qc5cwGVNoUL2j6spoOtbtO+eznbn51JckAgmYSul2q8y4DCeUWIGWYyTpnurgeSs/Kaqowx+HcAJ2we+ywG50NDColhtta60JIT6N9iVt13bSCZVrB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769046065; c=relaxed/simple;
-	bh=bJD8B7bMB/V2cOZrBvyhQmiOIc0VYncXJQ4LUUkgsRA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=egbxXkvnRH2jJbGJ0qmZkj+S9fXaXhlb3H2CxFG8WPPVAc9F+Jl5i1DQ4DBPd+N73o/EGHEVChGSC1qquAou3r9Q5xP8xaHoATk1CEIgOwHQ47Y3U8V8wX7KC6HBy9u/VBemwdk28AYo81nj1Xrs0HokwsdPN0w/Nc3POmAP4q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ehektt9K; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769046307; c=relaxed/simple;
+	bh=Vcm1qOWkB8oHILUnwnZvnc0LrLfTguH+RX9NkigA/7E=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f1DiXQr/eGk2AfmuWqJObyguRte1HW5KFzUwx4nQ1/xXpuk3rVU3hM01j/dcybMqJtyf0Qh9DBKpfpWrCdHbs5Q/X+AKZYtZv+9jymiBEUxcWm/4Km+E/9fsPmCO7LkrLb0uUkUKE0P4qefg2KVtHwH0z30lIrdst4q0u6gu8cQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJPwb6+B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ehektt9K"
-Date: Thu, 22 Jan 2026 01:40:49 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769046061;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MTU7xvnq/CoKFFvKaS8PklF1z9AUkIMhRVrO9s2dpgQ=;
-	b=ehektt9Kn0oW6v4eReQLNvvMM0fyiGCHe7nMmLYuqcYdtEPt4CNOpZIWSjY91C7doqZ++k
-	eOQX7xdcWIuSAI5e85pvfaeMbwMucu4dscUTdkSEpNwbRUhrqieWZH3TM0huJm14Kb+TWD
-	QPXan5EF+rQitNS31U0o7SCKvYOHJ6k=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Jim Mattson <jmattson@google.com>
-Cc: Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 3/8] KVM: x86: nSVM: Add validity check for vmcb12
- g_pat
-Message-ID: <mcxo54ct7bsu2d6xmalpsae6wq32ykjh6dd4kfgcgru474dqre@47flraln5zz5>
-References: <20260115232154.3021475-1-jmattson@google.com>
- <20260115232154.3021475-4-jmattson@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJPwb6+B"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97A20C4CEF1;
+	Thu, 22 Jan 2026 01:45:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769046307;
+	bh=Vcm1qOWkB8oHILUnwnZvnc0LrLfTguH+RX9NkigA/7E=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BJPwb6+BCZSce/4Ucq/sR7FZR0l5p8pfengCDy9M5UHcsTMzoQTi46A2/2QdpuHfU
+	 2+w99z9AlbkPS33/D1qslqE8Eeg0SPD9GdGO1vsJCLPnc0jYP2pca+1Ecxv5XGfXqk
+	 GxL7n7hDXycJq4Wni1hfZhYbUnQP6D2L/rPPor3gbTX4D0rre1aL9+jLhiFHotyyWY
+	 Fj6PeFz4lvs+gzDIsjPCq7OES7nV6AIHDSkaoRcF4erj5kLB524DrpqF0UvlGuZG60
+	 EsSJSZ/MbAojH1fOeRLrUEE1aPxzyKGc4FzpbzjSRtUhxvgE7OV19ZBejT2WrQdP1x
+	 8OVwO30QJO13w==
+Date: Wed, 21 Jan 2026 17:45:05 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Andre Carvalho <asantostc@gmail.com>
+Cc: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v11 7/7] selftests: netconsole: validate target
+ resume
+Message-ID: <20260121174505.5e710b0b@kernel.org>
+In-Reply-To: <aXFIk1L8G_dHF6od@archlinux>
+References: <20260118-netcons-retrigger-v11-0-4de36aebcf48@gmail.com>
+	<20260118-netcons-retrigger-v11-7-4de36aebcf48@gmail.com>
+	<20260120172057.6600eefe@kernel.org>
+	<aXFIk1L8G_dHF6od@archlinux>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260115232154.3021475-4-jmattson@google.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 15, 2026 at 03:21:42PM -0800, Jim Mattson wrote:
-> Add a validity check for g_pat, so that when nested paging is enabled for
-> vmcb12, an invalid g_pat causes an immediate VMEXIT with exit code
-> VMEXIT_INVALID, as specified in the APM, volume 2: "Nested Paging and
-> VMRUN/VMEXIT."
+On Wed, 21 Jan 2026 22:04:23 +0000 Andre Carvalho wrote:
+> On Tue, Jan 20, 2026 at 05:20:57PM -0800, Jakub Kicinski wrote:
+> > On Sun, 18 Jan 2026 11:00:27 +0000 Andre Carvalho wrote:  
+> > > +++ b/tools/testing/selftests/drivers/net/netcons_resume.sh  
+> > 
+> > There's too many of them now and they keep failing on real HW.  
 > 
-> Update the signature of __nested_vmcb_check_save() to include a pointer to
-> a struct vmcb_ctrl_area_cached, since the g_pat validity check depend on
-> the nested paging control bit.
-> 
-> Fixes: 3d6368ef580a ("KVM: SVM: Add VMRUN handler")
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-> ---
->  arch/x86/kvm/svm/nested.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 07a57a43fc3b..e65291434be9 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -369,7 +369,8 @@ static bool __nested_vmcb_check_controls(struct kvm_vcpu *vcpu,
->  
->  /* Common checks that apply to both L1 and L2 state.  */
->  static bool __nested_vmcb_check_save(struct kvm_vcpu *vcpu,
-> -				     struct vmcb_save_area_cached *save)
-> +				     struct vmcb_save_area_cached *save,
-> +				     struct vmcb_ctrl_area_cached *control)
->  {
->  	if (CC(!(save->efer & EFER_SVME)))
->  		return false;
-> @@ -400,6 +401,10 @@ static bool __nested_vmcb_check_save(struct kvm_vcpu *vcpu,
->  	if (CC(!kvm_valid_efer(vcpu, save->efer)))
->  		return false;
->  
-> +	if (CC((control->nested_ctl & SVM_NESTED_CTL_NP_ENABLE) &&
-> +	       npt_enabled && !kvm_pat_valid(save->g_pat)))
+> Since these tests are only using netdevsim I was a bit surprised about the failures
+> on real HW runs.
 
-If this lands after "KVM: nSVM: Drop the non-architectural consistency
-check for NP_ENABLE" [1], the npt_enabled check can be dropped, as
-SVM_NESTED_CTL_NP_ENABLE will be cleared if the guest cannot use NPTs.
+My main point is that even if we fix the HW setups to do the right thing
+in systemd policies - the tests are running against netdevsim, not the
+precious HW present on those setups. The HW setups have actual physical
+NICs, driver tests are expected to use netdevsim if $NETIF is not set,
+and if set whatever existing netdev $NETIF is pointing to.
 
-[1]https://lore.kernel.org/kvm/20260115011312.3675857-16-yosry.ahmed@linux.dev/
-
-> +		return false;
-> +
->  	return true;
->  }
->  
-> @@ -407,8 +412,9 @@ static bool nested_vmcb_check_save(struct kvm_vcpu *vcpu)
->  {
->  	struct vcpu_svm *svm = to_svm(vcpu);
->  	struct vmcb_save_area_cached *save = &svm->nested.save;
-> +	struct vmcb_ctrl_area_cached *ctl = &svm->nested.ctl;
->  
-> -	return __nested_vmcb_check_save(vcpu, save);
-> +	return __nested_vmcb_check_save(vcpu, save, ctl);
->  }
->  
->  static bool nested_vmcb_check_controls(struct kvm_vcpu *vcpu)
-> @@ -1892,7 +1898,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
->  	if (!(save->cr0 & X86_CR0_PG) ||
->  	    !(save->cr0 & X86_CR0_PE) ||
->  	    (save->rflags & X86_EFLAGS_VM) ||
-> -	    !__nested_vmcb_check_save(vcpu, &save_cached))
-> +	    !__nested_vmcb_check_save(vcpu, &save_cached, &ctl_cached))
-
-save_cached here is from vmcb01, but ctl_cached is from vmcb12, right?
-So we're conditioning the PAT validity check on L1's gPAT on NPT being
-enabled for L2 IIUC.
-
-Perhaps we should pass 'bool guest_npt' instead of the cached control
-area?  Then we can just pass npt_enabled here IIUC.
-
->  		goto out_free;
->  
->  
-> -- 
-> 2.52.0.457.g6b5491de43-goog
-> 
+I don't remember the history, it's quite possible that Breno wanted to
+have a separate target for netcons from the start and I pushed back.
+I think we reached the point where we want to create a target.
