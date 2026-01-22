@@ -1,178 +1,246 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010017.outbound.protection.outlook.com [52.101.56.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8F4238C0F
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 13:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769090148; cv=none; b=TL5AFJEssxxzBOgGiRRe2HIQ38nBq7lr91sQhb3fuxW7BEOuRn2b8ut3fzjswaVna2UHc/dARlPGqIli6WUPNmq3uYCBRxJBv1z5PV5442n6YT5iji9zIq7I0hjkw2dyF4GN6XAEOUz8C8/FB0vKZnShohETNZNqfPV+CAQULkI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769090148; c=relaxed/simple;
-	bh=2nXcGNysBiBdRcr6vy4ZStKKh5dYZxcbpIG7VnXq8as=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qb0ZUKQQQ3LfNYzVgKp6cz0HIGXT3mFUN0wXiPLfDkboMPNaqVvtoDqA90eHb9x0ZvDIeFOFBuvHPXJpo+JA5ONszFVmRCr4Vl3Xu7TFMuicM+iELkhX3qQ+lp6AERdNmHdzK3/BsiZGv3syCkHU2QomSQ/SUYe6OwuhBvTZAQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=R8epaApq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=mn8wNyGS; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E63346783;
+	Thu, 22 Jan 2026 14:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769091173; cv=fail; b=NlxhyewMnX62V6X/2UjoQ+kxNA0wNxSjwBHlQesyagdM+AlrhEqBBtX2zTkm4CnUMMyvL2wrLB4ASexkcLXYG7aDkZrCgkSOd5SlctEyXzRs7UAkYiGiUr5BdxmUIRlid40ulJg/IciquXD7rIJ8/ak2TWXtEoW1xnhrrI8nhpA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769091173; c=relaxed/simple;
+	bh=HTzJOmhMJSBpcO/nfeasf3Z+PbY3oNLcUtKUQXjj2W4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=eSz7LiIDkGheWTXp2dyy+tWrSb/GGNVwYt4AgsTMpquDBX5wcnCbzOjrVYleqJmjwd9h6BrgI5TePQTGxEhFE7yvm9rxFKaKlpcGtU8ueNS7M+DiIuRh6FrdCtr+O1WqXZW5FW2pgUPW+Fek1oyG7rF14sufXoJmwbXnJE7J62Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=LsBSTm+J; arc=fail smtp.client-ip=52.101.56.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="R8epaApq";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="mn8wNyGS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769090146;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F3Df56peZRg7yuOoU4r9j2z63CMqum3dw8Q62JAWFUY=;
-	b=R8epaApqU+zzfCY4u4zDJq0HQUb7ZADqMoHziHS6+pmBgLrink174RCwRrngTGaoMIG0Y1
-	HnD+JeOnY+gX/NxjcBq8dOTFTWpPuhCfA7DVD1h4iw/WAOMfiFk1bx/UKQJsvWSgqxngK7
-	pz7XNYbyTzmBcU4iDAFuHTwapBdEIUo=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-623-My1wSWddPlO-IXL1ibW5XA-1; Thu, 22 Jan 2026 08:55:44 -0500
-X-MC-Unique: My1wSWddPlO-IXL1ibW5XA-1
-X-Mimecast-MFC-AGG-ID: My1wSWddPlO-IXL1ibW5XA_1769090144
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-432c05971c6so796056f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 05:55:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769090143; x=1769694943; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=F3Df56peZRg7yuOoU4r9j2z63CMqum3dw8Q62JAWFUY=;
-        b=mn8wNyGShfiU8zpLqqW1CJz3jW5+8fjwrYCHmBWgOVC4SJO3MbAFX2tfxro+yd5QDm
-         0JLhe+vvs1qJcHtRo5lchGrgx2BOnItYppZYoOf1ejrjs0iqcwJKkfjVOnvok/iEi/86
-         p00hhClju5EurMCdnC9TmH/KoYzMejAKc6UDpOHrcqhLVEgKNXCgjZvesK6pkPmZv0nP
-         9HQLX/OsK0ZRDVboJL7NcCOJBhUDrGOiOPRo763osNssreWFXsqpCbvstinNRJlH5wzo
-         RWu6dp12WnWtsVWBSIq9UrDeqfpnl38BDw726f1wR+ee8TSY3Fzc4yagJg0gWUo+5IuG
-         GlHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769090143; x=1769694943;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F3Df56peZRg7yuOoU4r9j2z63CMqum3dw8Q62JAWFUY=;
-        b=GutdCvc5Y9S4O5pxcrXeAgWIUTPxz9f0ejvYwvZGTtc/4iN/ZUuF9WhSvAacaznDQr
-         T8w9oDSyy+mMvAVKNHBPtvvud3oVInLV/aEI+/5cGZNPWlq59waKRWZNy2zhaXSib4k9
-         W5tLEZkgfaOnPRI2WaJDwQ/Z9v4qOQfx2C4ffCZRjOACTHf8hkFoRRM2r6wHOzZyBu6r
-         XWkiqm4UOQtspgt0hdcwbjunZ4y8QWc7TeXDSLKV2PXv+J1UzemNgyXZONMtYXMfH3G9
-         xGbqOSW3qjhAj3kWBHY+fwsxOKYnrGfA9kiTGmw5jACB9I7Vd4w0gOIsXLK3/OJxfDWT
-         vcyg==
-X-Forwarded-Encrypted: i=1; AJvYcCXs+way6OkoyHkFGlyE+qgQXKSl6UFI2aDqIqOIKwAzDid/oDdrxLatpW2CE4qPHReBD/pX8Qd2f3rGeT9HdUg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDuISNaCDiLzONgJjSbKK7I65Ku1pMVeNMf9W5TE4ZXd3tLcyP
-	Ce8x8zg3pK63dGhE6p4aimyyXpUyPgf6CqaDGKaEncupFhdHNJYPontglUbotz8GV/0pjfejDyC
-	uKxOBHEAw7KEtPqKA7itwCVYec4HJ/TbeiiApI5ZYpkr3nJoG02Vq1ou7M6eXMipNDPeTtg==
-X-Gm-Gg: AZuq6aIEfVIGjK3O+cpKq2oZE4CJ3je8tfyzSTKPELBN5pSBbMWELaZDXh4nK0oYcqA
-	e7if/FrG9EvAZkf1C97s2I5BzqFR+dIduzeUdRBP6Xe1UBv7G7Mh4bZ1xMJ7Z9l1wjEEX7QNR2n
-	5o7xMt+fhsks8sPxVI07TcMuZlJRkpDpQgEwBPcKWEOupnsKmWbTKm1wz5doE+OTvTMI8JCjI4N
-	PkinJQQWvZBp95uABkyg+zTxHk8dW8j8yrc1NpJPnDokkyRlh86XcTtHcbES9UD1gvZHuOBIG69
-	by6Zzf0Nf6DrvYAV78VphKl2cxjuyQNe4Hmxc20rTgxapp1LlT+wNuU4dogPEp/38j/kID3GI/7
-	qtVTH1yDsQGjvDWq552YTfbTSxySm05A/wvpC9kxmJVs9UFiBAl74250FwJk=
-X-Received: by 2002:adf:f812:0:b0:435:9e32:2b85 with SMTP id ffacd0b85a97d-435a5ff993cmr4488725f8f.29.1769090143508;
-        Thu, 22 Jan 2026 05:55:43 -0800 (PST)
-X-Received: by 2002:adf:f812:0:b0:435:9e32:2b85 with SMTP id ffacd0b85a97d-435a5ff993cmr4488677f8f.29.1769090143056;
-        Thu, 22 Jan 2026 05:55:43 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-58.retail.telecomitalia.it. [82.53.134.58])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4359333b924sm18095487f8f.13.2026.01.22.05.55.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 05:55:42 -0800 (PST)
-Date: Thu, 22 Jan 2026 14:55:36 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowang@redhat.com>, Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
-	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
-	Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa <vishnu.dasa@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>, 
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, virtualization@lists.linux.dev, 
-	netdev@vger.kernel.org, kvm@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, berrange@redhat.com, Sargun Dhillon <sargun@sargun.me>, 
-	linux-doc@vger.kernel.org, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v16 00/12] vsock: add namespace support to
- vhost-vsock and loopback
-Message-ID: <aXH7YCgl0qI2dF1T@sgarzare-redhat>
-References: <20260121-vsock-vmtest-v16-0-2859a7512097@meta.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LsBSTm+J"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=frODclPiICyZoLhIEpPg1HURclbXbGvEtpey7es5JZdsJDxHar2zoeGhvL7bOcazfRoCgVZ0Cq58mRCB1RmySPoDMWTqoxSQTbDMjv309QA3iP4BXzhUwHgbwZCRCLZO2jb4CIcDgqwV1hXK/eb0Tpj/dVbsxekl2LM9dCdFV0/q2bnRWFjDProOCJ8tvRoLj+xkK6jsXLzZOblg4bD/vgvl/vIbMLYyNUsEftqjUKQcY19JP5h6L05gQkne5T0X0E1Ovlm245/QMZ44ymFcpab8DtdMmN1elxkr9sp2H5snG9yRCe/Sy2pPJLJlpL0dy+0j9G86+Erbs9hrm3XKrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u1Dt4odECtxhd0yV6f7cH/RdlrpOYRw/5tL77V0FbuY=;
+ b=g5SoOWdsxRp5fkDkWH/ir27tUENAdxQNxpKzNjtZ57yMbupgnnWB8j0z/NyDxczCycjxWhDxOUFT1v3zr6sQv2V6t4US32g6+2nqNb1Vpk1pgE1VCUx99LmHwl2BL+down/MolQs8O0DOUNYhHryYWKb1ggxX9FMQjrkyfQZrFThisHBgNlMCnKo7ZKZufOmtL7zpth7Isr17g0JgGkxmODrsjBlCFTQKVRqmDP/v39jFVJa3sINJzCYiaA15mTllEs+dXyWpjUyx5ms6nMOAy/uQBwKAvL2IpGLje9tTOvC+ZVvJVRJK0GroBxTz/FZ7EI1c22BisRzNOB1pnB0FQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u1Dt4odECtxhd0yV6f7cH/RdlrpOYRw/5tL77V0FbuY=;
+ b=LsBSTm+JoXtClYKOPK3wEaATH2YQHew1RNZDMsCzSoas47cjBbxpZDy3hsWdoX9B3cPLfSkQzm6A0UnH+c3s41KpaYK/K1IivbxXCrNZW4KtxtahIdh9XKJZCvHt/hqW3qoFGFnJZmZum1KaGApZQ4i4H0Vd0NroFl7DFYvP+96m5jJ3yAl+radoxfkvHYKHigDn8/DrKP5k4hD9m+xBbH8duRUrtm93OpeDn1gy01QiCyNJdV1zTyvUmNmD72SgKNESeSbqxcFq4wOzzt2wzRMuG//BRDQ5dCVJ1KK6dJ8Jr/9Rg98J7zkE3CPBcAM1CvO0Yma+YOWAe9He8elOgA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by LV8PR12MB9715.namprd12.prod.outlook.com (2603:10b6:408:2a0::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.11; Thu, 22 Jan
+ 2026 14:12:41 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9542.010; Thu, 22 Jan 2026
+ 14:12:41 +0000
+Date: Thu, 22 Jan 2026 10:12:40 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alexey Kardashevskiy <aik@amd.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
+	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>,
+	iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Vasant Hegde <vasant.hegde@amd.com>
+Subject: Re: [PATCH v8 07/15] iommupt: Add map_pages op
+Message-ID: <20260122141240.GM1134360@nvidia.com>
+References: <7-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+ <fc4f0354-4e6d-452d-abfb-fe24e53253a2@amd.com>
+ <20260117154347.GF1134360@nvidia.com>
+ <e0514ec6-b428-4367-9e0d-cfb53cc64379@amd.com>
+ <20260119173734.GL1134360@nvidia.com>
+ <e8cb2549-6a17-47ce-8e9f-96c576890262@amd.com>
+ <20260121170931.GG1134360@nvidia.com>
+ <5a3dfc0a-eca4-4de1-96cd-b4034f0b8e06@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5a3dfc0a-eca4-4de1-96cd-b4034f0b8e06@amd.com>
+X-ClientProxiedBy: MN0PR02CA0016.namprd02.prod.outlook.com
+ (2603:10b6:208:530::14) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260121-vsock-vmtest-v16-0-2859a7512097@meta.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|LV8PR12MB9715:EE_
+X-MS-Office365-Filtering-Correlation-Id: a23f7c04-20d3-4e69-5242-08de59c04dcc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?JWeqs0gJaI8II+BoCnHEMAUkehKE6CDwtKROiIpZAUNMB2oq/nh8QpxllvyN?=
+ =?us-ascii?Q?u13tMvHjZHyD2BuNWs2CpXmOcDWp4DSgbeQWd1flDPBX+ZYhyrfTcB1Vpoz4?=
+ =?us-ascii?Q?mkQkZvjuc02Wbvr4yIpzjywIh1TM01f41aoeiK+vIlFGKYFGpjrXkE2UswAB?=
+ =?us-ascii?Q?20S+hCgHIRvgoKfJkqzrWSUagaEMHwvZ73VenvAApwH1H8HAQzyzaEgwQ7CJ?=
+ =?us-ascii?Q?4VARZWQEpYpJi/32t4Wp0BSCTDa4z1/mukPt8XFcjomrgdXvKmGrMF1T1VCw?=
+ =?us-ascii?Q?2TEawaxUAeVRkd/QPww8gvn/CJbgfr90wrVj2zdYhxbiVUpa1Fk1PQJoYL2S?=
+ =?us-ascii?Q?UMsFeauWkR6/693MmrLXL17/My/JCniS17940NJ0x82GCyamO5F+RMMAT+Wt?=
+ =?us-ascii?Q?C2gazeJQRurZz5igiGfmIEkotQQh2Hn5NegGHuWA/Nw7L0E5a/pb9vNN/F24?=
+ =?us-ascii?Q?ETRj/XYz00UKVkyRU+Ubf9dtwZcAXR3pkP5yxpFPwLXH5RTuvQVJCYtBwExE?=
+ =?us-ascii?Q?NvqL/xTXurUnjWQ0hhMszniBTvxcwVpi+k03uKF8ecP+05uqgzSllbeuF30U?=
+ =?us-ascii?Q?+1KA8MhvpKX0u/im72tYb7/GJ0GV6xleS/11KIetaTH0/F/DrhIPZXf5LxpA?=
+ =?us-ascii?Q?gC7Ix7APeuj5xoWaiz7orYzOJUyBtNpxRQzMv5yHsCBLsbdmWPmcV0u10IBl?=
+ =?us-ascii?Q?IorJX9NoGj/Pdx0F2UncKyMCzQ+B+rYq3rJuxtIQ+KprzRbdhoUgPZ08EFgZ?=
+ =?us-ascii?Q?7g+WNFX+MJepWSx2JpW04k0pHjmzKnDmAeE2SETWQOORzx6AxExIJUE0OKV6?=
+ =?us-ascii?Q?DynpG+kHhEJEETFcXjO7evsxx5WaB2iW1AyFaLswHaT/nhMbPdmo4aV3CVNe?=
+ =?us-ascii?Q?qs4hshBLedSAopxgmZieirPaBxFv6V+Ty+U9AKaQMQjNkr8sl/WHUyUlWMR7?=
+ =?us-ascii?Q?bYXQhyF1ckJFF/xOOLf1XKEQv/+SxabJ54Fi7ejVK5O5nL8ywo+SqTQHqVbX?=
+ =?us-ascii?Q?HRXOCl90Z2oGx4I//7VpnYDk9UVAv4w7kXyw16dCsnFnfYiaqJrIiW3sfPkP?=
+ =?us-ascii?Q?iyfq8J8UG9hJNx7dcFJDZL4Qtvn3AcT2jd/5WJuZQso98umH+ltckaphgMaY?=
+ =?us-ascii?Q?jmnNHNAQ6tD+c/vUMoTKoG+2vaIUckoC6awCGnPGCWc+mNme38IH2/wFzhCR?=
+ =?us-ascii?Q?ld6cvIa39RPIXi6a0yrOJA1QcjgNNpyZbmwW29M8zHJnF2ptpOxWg8lFJ58M?=
+ =?us-ascii?Q?/xDqRT9tXo3fAiCLppfILHNEV0NNELplGlRBjeWnwkV+aSCbIcAiNMN50+Tu?=
+ =?us-ascii?Q?GKLctdw+137DUbc1LA4AiQjRH0uaGn8vqU+DTafUzBYPjwxpRzopwn6jlJFA?=
+ =?us-ascii?Q?1988isPSLX29g4i9TzSxvkmTSJsLLeZdi/F/HvIl2qisFUGno5r/EA00NcvB?=
+ =?us-ascii?Q?bIagoP9IkJ3Tgsywt6BnJf+zdaWF+hww8VInC42SvWjHg8Q8QJvNkzeedEJo?=
+ =?us-ascii?Q?rtlSDLS6FExhkdM0a7Wh8hfwnZnUBG1k/X5PI0m3XusG3Hj1TkPROCQZ8jfe?=
+ =?us-ascii?Q?+sphb2IWOjJdNqUv9CY=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?EpRQotfEnTheiyVTW1B5SgbTUtA306t0mZRPIn3FODBggi53u7aCrd+5e7FV?=
+ =?us-ascii?Q?SkG2Ldr0N6hhIJEjwfkSIiFEcaM6cr7SKVbMPLSiJbp9TjmyKgEB7ifC7KgR?=
+ =?us-ascii?Q?WhZ6T573zccxA4CoWzMUFWJSDSGbV15uwy+3vvh4IokuBK3IiKLMrWkuwtux?=
+ =?us-ascii?Q?VzY25UeOrgtr3GcISvBtoYclSo3cWlbqPLWwnD702Az2HKZCc2tM33GR6azo?=
+ =?us-ascii?Q?QpgfhbkJkppuAI5kyXvaJPxbkd8RjdSRZfmmjRsF/OjykYfD4eHxirnoNwb4?=
+ =?us-ascii?Q?BAPwxN8mFYRu2HCd5nOz872aRiFwUbrEWH4ZzmvdLDPofEaRwRkeoeENbALQ?=
+ =?us-ascii?Q?TTITholyk9h229gxFu0sssoo0qUGvojXS+mHdzpdsVARQbkvO9ywFSxZwaTB?=
+ =?us-ascii?Q?KRvzDPiYk+3mtOsDbQDueqfUsGxS3K0jnuqQo4hEM84bULn6IfubIiIozu6x?=
+ =?us-ascii?Q?neR9r+hsIIb8LWzGEO2Tq2Pntx5kQNjUXcPJLM3J3l53fEMCSSBHZuK47e4H?=
+ =?us-ascii?Q?kO3LGBSPi0Qio06NKSZ7Kg8HNQxKepPwpBwPmHpW+/JgeSarYg5NG54KyBg0?=
+ =?us-ascii?Q?tmWHsT4ADM2iKc03QGD5S7uZWm4dOcsFpOt5nNETqeKkwK0WWhemKWVFLzxG?=
+ =?us-ascii?Q?Pn4ttWxfBTmKxqihOfXfLMg1ZgVLg8KtTs0Tckeg8mYjvotpUH1k3IawekZz?=
+ =?us-ascii?Q?xLqek1QiryMtqnO/M55FR07MSLWol/ehj8rwX53inmW+Y12PExiuLiIImqNZ?=
+ =?us-ascii?Q?pXRlKrA96bImJj3SI+Hry8crp1gdbVD5zzNe77uI1UHcMvE3hncmF3ctLLE0?=
+ =?us-ascii?Q?0MPfbV8IbJr+8b/fhQ0nQQtd9uD/1PJTSXqLaH+fCsL9UkCk9cdNaygGAAHI?=
+ =?us-ascii?Q?FGQ+mR6bhN/Dl++WPg1vhaf5y3O9gnRfFhcpsgjIk2RN90e15d9Wcq64gj6Y?=
+ =?us-ascii?Q?mSFz7lAIDQQf1SlXL6C4cyXhhY2CM1iNN2KPiNZN6xG8KmcVaxg+ZoCgYYep?=
+ =?us-ascii?Q?2TxxPd5qFWGPmb76S9FFyGyNMcaHhOexlBbT/QjTyqU01KhpwM84IjHq64N7?=
+ =?us-ascii?Q?ul7bGndhezyVbRIoh8MClPOMhhAoumcNwMB9SKQNyuRZFl12s1NjxTwDVBz5?=
+ =?us-ascii?Q?dTI8lBBYI1muQ81x/AdkVdcMEA7boQyV+muUiwd5LEQsm0YKw2xmyPyNPCpU?=
+ =?us-ascii?Q?VT61zF03xot7TUYkzaxRG8xR61M/KRmxIgBQzu5q9MmuJogySeep7GxLiF6g?=
+ =?us-ascii?Q?uS2WLdgaE2eHv/GeYeqWyfAAQQOY0DEDaBnpnStIk5OecaBTJyqlAgwVz5Cq?=
+ =?us-ascii?Q?C2MQtQLj3g/ZofsXzlA79ZCU/ewyTP0JoklnLVEn2gEdniPOfC1ZjZS1NI0P?=
+ =?us-ascii?Q?/DEIaT0RcSodq8zAwFUQ5id/anlK57GBGKKGKjn5D6aPFPpBgS54Ji/uN67S?=
+ =?us-ascii?Q?XBa89Dr1VGD6V/g2TUNFen64PdUy9ETlaeaw76OdGsoQ1FAtuEPckxtpUhrO?=
+ =?us-ascii?Q?IViEsxNFloVRty/u7KjA56lnCe3NsaGTupZmdVzQ/pR7iJX1ndfe6OXtX6eE?=
+ =?us-ascii?Q?4IC2IPZJzUe16/rTS14o8TkYo2An2ySAS2uk5r+9F1e+AnMneWcHicFK3XQF?=
+ =?us-ascii?Q?Wn5ZS7JGXOkuGCV22a0p6j6pl25CFM26kwjSTECYNOiQs0Til+YOZy9Z24vi?=
+ =?us-ascii?Q?v1aKGX18JWY05w5BZvjCv0IjGF5ARwF+KcFy+k32RRA5JYiqdVJQHIJUhTkA?=
+ =?us-ascii?Q?wqyX/rey0A=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a23f7c04-20d3-4e69-5242-08de59c04dcc
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2026 14:12:40.9203
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /rNu9goGvNZ7ebqCJTOcC6CtXQQQndH1yMoay8yBdJH3T4bPqsFbpEu6EGiEQka7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9715
 
-On Wed, Jan 21, 2026 at 02:11:40PM -0800, Bobby Eshleman wrote:
->This series adds namespace support to vhost-vsock and loopback. It does
->not add namespaces to any of the other guest transports (virtio-vsock,
->hyperv, or vmci).
->
->The current revision supports two modes: local and global. Local
->mode is complete isolation of namespaces, while global mode is complete
->sharing between namespaces of CIDs (the original behavior).
->
->The mode is set using the parent namespace's
->/proc/sys/net/vsock/child_ns_mode and inherited when a new namespace is
->created. The mode of the current namespace can be queried by reading
->/proc/sys/net/vsock/ns_mode. The mode can not change after the namespace
->has been created.
->
->Modes are per-netns. This allows a system to configure namespaces
->independently (some may share CIDs, others are completely isolated).
->This also supports future possible mixed use cases, where there may be
->namespaces in global mode spinning up VMs while there are mixed mode
->namespaces that provide services to the VMs, but are not allowed to
->allocate from the global CID pool (this mode is not implemented in this
->series).
->
->Additionally, added tests for the new namespace features:
->
->tools/testing/selftests/vsock/vmtest.sh
->1..25
->ok 1 vm_server_host_client
->ok 2 vm_client_host_server
->ok 3 vm_loopback
->ok 4 ns_host_vsock_ns_mode_ok
->ok 5 ns_host_vsock_child_ns_mode_ok
->ok 6 ns_global_same_cid_fails
->ok 7 ns_local_same_cid_ok
->ok 8 ns_global_local_same_cid_ok
->ok 9 ns_local_global_same_cid_ok
->ok 10 ns_diff_global_host_connect_to_global_vm_ok
->ok 11 ns_diff_global_host_connect_to_local_vm_fails
->ok 12 ns_diff_global_vm_connect_to_global_host_ok
->ok 13 ns_diff_global_vm_connect_to_local_host_fails
->ok 14 ns_diff_local_host_connect_to_local_vm_fails
->ok 15 ns_diff_local_vm_connect_to_local_host_fails
->ok 16 ns_diff_global_to_local_loopback_local_fails
->ok 17 ns_diff_local_to_global_loopback_fails
->ok 18 ns_diff_local_to_local_loopback_fails
->ok 19 ns_diff_global_to_global_loopback_ok
->ok 20 ns_same_local_loopback_ok
->ok 21 ns_same_local_host_connect_to_local_vm_ok
->ok 22 ns_same_local_vm_connect_to_local_host_ok
->ok 23 ns_delete_vm_ok
->ok 24 ns_delete_host_ok
->ok 25 ns_delete_both_ok
->SUMMARY: PASS=25 SKIP=0 FAIL=0
->
->Thanks again for everyone's help and reviews!
+On Thu, Jan 22, 2026 at 09:58:04PM +1100, Alexey Kardashevskiy wrote:
+> > This issue with the RMP is no different, if you get a 2M IOPTE then
+> > the HW should check the RMP and load in a 4K IOPTE to the IOTLB if
+> > that is what the RMP requires.
+> > That the HW doesn't do that means you have all these difficult
+> > problems.
+> 
+> Got it. Interestingly the HW actually does that, almost. Say, for
+> >=2MB IO pages it checks if RMP==2MB and puts a 2MB IO TLB entry if
+> RMP==2MB, and for 4KB..1MB IO pages - a 4K IO TLB entry and RMP==4K
+> check. But it does not cross the 2MB boundary in RMP. Uff :-/
 
-Thank you for your hard work and patience!
+Not sure I understand this limitation, how does any aligned size cross
+a 2MB boundary?
 
-I think we've come up with an excellent solution that's also not too 
-invasive.
+Sounds like it was thought about, is it a HW bug some cases don't
+work?
 
-All the patches have my R-b, I've double-checked and tested this v16.
-Everything seems to be working fine (famous last words xD).
+> on the other hand, without swiotlb, dma_map() in the guest for
+> untrusted device is likely to be lot less than 2MB and going to
+> share another handful of pages but this activity is not that rare
+> compared to my certificates example. If only there was a way to
+> somehow bundle such allocations/mappings... :-/
 
-So this series is good to go IMO!
+ARM is pushing a thing where encrypt/decrypt has to work on certain aligned
+granual sizes > PAGE_SIZE, you could use that mechanism to select a 2M
+size for AMD too and avoid this.
 
-Next step should be to update the vsock(7) namespace.
+> > That's a completely grotesque solution!
+> > 
+> > It violates all of our software layers. The IOMMU and RMP are not
+> > controled by the same software entity and you propose to have a FW
+> > call that edits *both* together somehow? How is that even going to
+> > work safely?
+> > 
+> > Can't you do things in a sequence?
+> > 
+> > Change the iommu from 2M to 4K, flush, then change the RMP from 2M to
+> > 4K?
+> 
+> Sure we could unless there is ongoing DMA between "flush" and "then
+> change" and then DMA will fail because of mismatching page sizes
+> (that 2MB crossing thing above).
 
-Thanks,
-Stefano
+I'm confused, if the IOMMU has 4K and the RMP has 2M it doesn't work?
+Then why was I told the 4k page size kernel parameter fixes
+everything?
 
+What happens if the guest puts 4K pages into it's AMDv2 table and RMP
+is 2M?
+
+> > > If I get it right, for other platforms, the entire IOMMU table is
+> > > going to live in a secure space so there will be similar FW calls so
+> > > it is not that different.
+> > 
+> > At least ARM the iommu S2 table is in secure memory and the secure FW
+> > keeps it 1:1 with the KVM S2 table. So edits to the KVM automatically
+> > make matching edits to the IOMMU. Only one software layer is
+> > responsible for things.
+?
+> Does KVM talk to the host IOMMU code for that (and then the IOMMU code calls the secure world)?
+> Or KVM goes straight to that secure world?
+
+Straight to the secure world, there is no host IOMMU driver for the
+secure IOMMU.
+
+> Is the host IOMMU code aware of the content of the secure IOMMU table?
+
+No, it isn't even aware it exist.
+ 
+> Does 2MB->4K smashing exist on ARM at all?
+
+Every arch has cases where larger mappings need to be reduced to
+smaller ones, but ARM doesn't require synchronized coordination
+between multiple tables.
+
+Jason
