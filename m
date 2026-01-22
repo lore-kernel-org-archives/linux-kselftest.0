@@ -1,23 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996EC376472;
-	Thu, 22 Jan 2026 17:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F2B139BA2E;
+	Thu, 22 Jan 2026 17:02:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769101364; cv=none; b=MflINa3d+qU3p192Z4pAAZ0TjlGOBkLmNjyZ9cYqR+bGoWjnINaZyjKlpWuT2sVvzN7Wqs4DHi39DGnYGATH6DFdUucXOdJ3qe/RZRZ+lCBcm8KR6mohCzbUC8lfXHy/ZpSWZNkfAoiupVMYLeVp1SBC0m0TMI4efxa3WX5FO/I=
+	t=1769101367; cv=none; b=Ym6frDX6zUHEY7POh1ZCvd6as4LiUnmeqmMQPvEf2RoJD10t4tifXfVNXh7XvxoVhZuJ06vpjLdQX+arPsAmup0lM7UpYU2Qk0qD4Dyi/u+9DdrTL60I0q770VPvYtoceWT1l5F+sCrE73EvmRU4r+7o1vtu1I56HiCKdB9nYr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769101364; c=relaxed/simple;
-	bh=ZNRxNFE32weRNSCQI7tMxuz6rq0DOTVV9Nj6X02kyMk=;
+	s=arc-20240116; t=1769101367; c=relaxed/simple;
+	bh=nbWww7zFwokXENYKIQfUH/f8WSUwimnfG8LGROYYa0o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eJU6X+99ArzN36IwIcw+JlGtiv+a6w0zyjCtwY2gplxl7/kBI0fUvMkc4341Q4TL2k6CK1S37YK1vk8igXn7J9g50dWVxSOWNlulLT0LrQPvXL+2Mb/tNT6meVkA5UtbfbOheWoB+Ter7UP/5yZLsKxUCw9ceHEiQfymEn5UPaQ=
+	 MIME-Version; b=uNXdmsD3s4HLHNUUHHKY7URZhEOBlHuNyJTFlN/M089zpzec6lkyZYQ9JEiePMC+hOAKTII55w0nMIVFNIz5wm0a9KVYTh03fhvEVi7AY5jedASGCa/JBlTQYEsP9Wh7yqF1ohVxcRNWK1Q5DAtu04IusX6DwcB2V7/3oEHVFPg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 840A41515;
-	Thu, 22 Jan 2026 09:02:29 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1DD3E1596;
+	Thu, 22 Jan 2026 09:02:33 -0800 (PST)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB2283F632;
-	Thu, 22 Jan 2026 09:02:34 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 245C33F632;
+	Thu, 22 Jan 2026 09:02:38 -0800 (PST)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
@@ -29,10 +29,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
 	Mark Brown <broonie@kernel.org>,
 	Ryan Roberts <ryan.roberts@arm.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v3 1/9] selftests/mm: default KDIR to build directory
-Date: Thu, 22 Jan 2026 17:02:16 +0000
-Message-ID: <20260122170224.4056513-2-kevin.brodsky@arm.com>
+	Shuah Khan <shuah@kernel.org>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v3 3/9] selftests/mm: pass down full CC and CFLAGS to check_config.sh
+Date: Thu, 22 Jan 2026 17:02:18 +0000
+Message-ID: <20260122170224.4056513-4-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20260122170224.4056513-1-kevin.brodsky@arm.com>
 References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
@@ -44,52 +46,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-KDIR currently defaults to the running kernel's modules directory
-when building the page_frag module. The underlying assumption is
-that most users build the kselftests in order to run them against
-the system they're built on.
+check_config.sh checks that liburing is available by running the
+compiler provided as its first argument. This makes two assumptions:
 
-This assumption seems questionable, and there is no guarantee that
-the module can actually be built against the running kernel.
+1. CC consists of only one word
+2. No extra flag is required
 
-Switch the default value of KDIR to the kernel's build directory,
-i.e. $(O) if O= or KBUILD_OUTPUT= is used, and the source directory
-otherwise. This seems like the least surprising option: the test
-module is built against the kernel that has been previously built.
+Unfortunately, there are many situations where these assumptions
+don't hold. For instance:
 
-Note: we can't use $(top_srcdir) in mm/Makefile because it is only
-defined once lib.mk is included.
+- When using Clang, CC consists of multiple words
+- When cross-compiling, extra flags may be required to allow the
+  compiler to find headers
 
+Remove these assumptions by passing down CC and CFLAGS as-is from
+the Makefile, so that the same command line is used as when actually
+building the tests.
+
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+Reviewed-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- tools/testing/selftests/mm/Makefile           | 2 +-
- tools/testing/selftests/mm/page_frag/Makefile | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/Makefile        | 2 +-
+ tools/testing/selftests/mm/check_config.sh | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index eaf9312097f7..bb93101e339e 100644
+index 4e5c8a330a0c..de4afc34e3b1 100644
 --- a/tools/testing/selftests/mm/Makefile
 +++ b/tools/testing/selftests/mm/Makefile
-@@ -44,7 +44,7 @@ LDLIBS = -lrt -lpthread -lm
- # warnings.
- CFLAGS += -U_FORTIFY_SOURCE
+@@ -230,7 +230,7 @@ $(OUTPUT)/migration: LDLIBS += -lnuma
+ $(OUTPUT)/rmap: LDLIBS += -lnuma
  
--KDIR ?= /lib/modules/$(shell uname -r)/build
-+KDIR ?= $(if $(O),$(O),$(realpath ../../../..))
- ifneq (,$(wildcard $(KDIR)/Module.symvers))
- ifneq (,$(wildcard $(KDIR)/include/linux/page_frag_cache.h))
- TEST_GEN_MODS_DIR := page_frag
-diff --git a/tools/testing/selftests/mm/page_frag/Makefile b/tools/testing/selftests/mm/page_frag/Makefile
-index 8c8bb39ffa28..96e5f646e69b 100644
---- a/tools/testing/selftests/mm/page_frag/Makefile
-+++ b/tools/testing/selftests/mm/page_frag/Makefile
-@@ -1,5 +1,5 @@
- PAGE_FRAG_TEST_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
--KDIR ?= /lib/modules/$(shell uname -r)/build
-+KDIR ?= $(if $(O),$(O),$(realpath ../../../../..))
+ local_config.mk local_config.h: check_config.sh
+-	/bin/sh ./check_config.sh $(CC)
++	CC="$(CC)" CFLAGS="$(CFLAGS)" ./check_config.sh
  
- ifeq ($(V),1)
- Q =
+ EXTRA_CLEAN += local_config.mk local_config.h
+ 
+diff --git a/tools/testing/selftests/mm/check_config.sh b/tools/testing/selftests/mm/check_config.sh
+index 3954f4746161..b84c82bbf875 100755
+--- a/tools/testing/selftests/mm/check_config.sh
++++ b/tools/testing/selftests/mm/check_config.sh
+@@ -16,8 +16,7 @@ echo "#include <sys/types.h>"        > $tmpfile_c
+ echo "#include <liburing.h>"        >> $tmpfile_c
+ echo "int func(void) { return 0; }" >> $tmpfile_c
+ 
+-CC=${1:?"Usage: $0 <compiler> # example compiler: gcc"}
+-$CC -c $tmpfile_c -o $tmpfile_o >/dev/null 2>&1
++$CC $CFLAGS -c $tmpfile_c -o $tmpfile_o
+ 
+ if [ -f $tmpfile_o ]; then
+     echo "#define LOCAL_CONFIG_HAVE_LIBURING 1"  > $OUTPUT_H_FILE
 -- 
 2.51.2
 
