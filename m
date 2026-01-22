@@ -1,118 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDF2316190;
-	Thu, 22 Jan 2026 17:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C7B3EBF13;
+	Thu, 22 Jan 2026 17:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769103136; cv=none; b=jFgAQHyQ4FIljtRUlWVvtoEEeWvlN5Nr6vv590tnSwnCiu3o8TCBMqfH6qHuf8Y4C6Jhou8Z+3o/98sp2LKGLQvWCB14x13ewXW/ypKCW6R8T/nRa5n4+jKtBS1fKjwC8qZfj/3M5WlaUvSHuUbYrIeplUaPgH3mNrrfLzqq4XA=
+	t=1769103391; cv=none; b=hSrXZQ3+1HxeOiYnaplt3w0Zfb+UvUL6RmvC5TzJ9e5scX/a6cPJ9J+rZE/BDTwxGbYgLXgjy8irVmfZel5Rujuc7dxMHcV6rxhpjvcjFWMMdpCS8zAMd8QOyoUGZJubdyG6vsKjC2uhmCcav2sl/qXictR2RN+3v0HNZRGvAa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769103136; c=relaxed/simple;
-	bh=A2CbCQzi9H7Y9xtWAzN3DehfmuNIC6HQVvniPElAetg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HQV5VHnRw+S1ymv8B4YRnTJc1eQtP/EuVyY1ThK9Pq5i6av0rsKPXKVTIF8H3FAgjRo9FgFBn9TBH6Jbejf2N2yZvDLmtdrxGNFF146hZ8feudaljnLLJi1cFOCrHJujCN035LT3eGmvgkfF4D+cDQQcwjOw41sKG2ZiapC1Kvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ktVDNiW4; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ktVDNiW4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D66C116C6;
-	Thu, 22 Jan 2026 17:32:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769103134;
-	bh=A2CbCQzi9H7Y9xtWAzN3DehfmuNIC6HQVvniPElAetg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=ktVDNiW4BXGCpe67pIHOpMtbGTBn9xvT4FbWe/HXNT+/v4RPL4mzXjK4no16pIVc3
-	 Y9jUuFKKJB2MEIWxBdwxa/o+uJA3EWjDFim8eESGL+U847fXuytv68jA8hHaVw7WMJ
-	 DBvtQeGI+YuioHqDNX8Hhez3VXc7cKiFbO0MpJhBsuJQCy+/Hw+EoqHPa1WHuZ030v
-	 wBZNRYtddTlGV9uz2F0KjyN5cJW5kRQB2TefI196UxObSTdQ9CmhteAEp0WYS1A5Kp
-	 3io0CSaqiB9G5gIzqcS2Qda9XOzX3a1/ypMdp83jrlU/TTzqhlp4rLp/vLw2L8a26D
-	 yTGUpoiUOJt4w==
-Content-Type: multipart/mixed; boundary="===============5316141756419194533=="
+	s=arc-20240116; t=1769103391; c=relaxed/simple;
+	bh=wuUXmZA7ZfomimMvLlm7n5cxnu/gHSFgjcfABIq04+0=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=JZhC85w2hMY5zkhfqMdqwTZ8qFSL4PW0NaQKQZqnDvysv9fZz0N/Tnd8wLam+3fdTSfsDVn5dVhgUucZpk2Jie2eXVYXOSWZNsxP5cf1pV6/m+Brl4lRmUXQO431qWRb/6iszv3qGp5xGQGwCC9IyrBfAiWgHw/Cowb8t/DXcJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.arm.com; spf=pass smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37A4E1476;
+	Thu, 22 Jan 2026 09:36:09 -0800 (PST)
+Received: from [10.1.194.63] (e142334-100.cambridge.arm.com [10.1.194.63])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F4573F632;
+	Thu, 22 Jan 2026 09:36:14 -0800 (PST)
+Message-ID: <ab021f50-60c9-4d5c-99a0-255ead6e2288@foss.arm.com>
+Date: Thu, 22 Jan 2026 17:36:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c8f39c15a39e7985d17afbd34fd8fd0a8c58e44fa21c1c08e03b27a430fa11b0@mail.kernel.org>
-In-Reply-To: <20260122165716.10508-7-adubey@linux.ibm.com>
-References: <20260122165716.10508-7-adubey@linux.ibm.com>
-Subject: Re: [PATCH v3 6/6] powerpc64/bpf: Additional NVR handling for bpf_throw
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com,sachinpb@linux.ibm.com,venkat88@linux.ibm.com,andrii@kernel.org,eddyz87@gmail.com,mykolal@fb.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,christophe.leroy@csgroup.eu,naveen@kernel.org,maddy@linux.ibm.com,mpe@ellerman.id.au,npiggin@gmail.com,memxor@gmail.com,iii@linux.ibm.com,shuah@kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 22 Jan 2026 17:32:13 +0000 (UTC)
-
---===============5316141756419194533==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@foss.arm.com, linux-kernel@vger.kernel.org,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark Brown
+ <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
+ Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v3 5/9] selftests/mm: check that FORCE_READ() succeeded
+To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
+ <20260122170224.4056513-6-kevin.brodsky@arm.com>
+Content-Language: en-US
+From: Usama Anjum <usama.anjum@foss.arm.com>
+In-Reply-To: <20260122170224.4056513-6-kevin.brodsky@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> index d7cd8ab6559c..cbaf811e1a35 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
-
-[ ... ]
-
-> @@ -245,9 +302,25 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
->  		EMIT(PPC_RAW_LD(bpf_to_ppc(ARENA_VM_START), _R1,
->  				bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
->
-> +	if (ctx->exception_cb) {
-> +		/*
-> +		 * Recover additionally saved non volatile registers from stack
-> +		 * frame of exception boundary program.
-> +		 */
-> +		for (i = _R14; i <= _R25; i++)
-> +			EMIT(PPC_RAW_LD(i, _R1, bpf_jit_stack_offsetof(ctx, i)));
+On 22/01/2026 5:02 pm, Kevin Brodsky wrote:
+> Many cow tests rely on FORCE_READ() to populate pages. Introduce a
+> helper to make sure that the pages are actually populated, and fail
+> otherwise.
+> 
+> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
+> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> ---
+>   tools/testing/selftests/mm/cow.c | 43 ++++++++++++++++++++++++--------
+>   1 file changed, 33 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+> index 83b3563be26b..d9c69c04b67d 100644
+> --- a/tools/testing/selftests/mm/cow.c
+> +++ b/tools/testing/selftests/mm/cow.c
+> @@ -75,6 +75,18 @@ static bool range_is_swapped(void *addr, size_t size)
+>   	return true;
+>   }
+>   
+> +static bool populate_page_checked(char *addr)
+> +{
+> +	bool ret;
 > +
-> +		/*
-> +		 * LR value from boundary-frame is received as second parameter
-> +		 * in exception callback.
-> +		 */
-> +		EMIT(PPC_RAW_MTLR(_R4));
-                ^^^^^^^^^^^^^^^^^^^
+> +	FORCE_READ(*addr);
+> +	ret = pagemap_is_populated(pagemap_fd, addr);
+Very useful. Maybe extending FORCE_READ can help the entire suite?
 
-This sets LR from R4 (the boundary's LR passed as second parameter).
-
+> +	if (!ret)
+> +		ksft_print_msg("Failed to populate page\n");
+> +
+> +	return ret;
+> +}
+> +
+>   struct comm_pipes {
+>   	int child_ready[2];
+>   	int parent_ready[2];
+> @@ -1549,8 +1561,10 @@ static void run_with_zeropage(non_anon_test_fn fn, const char *desc)
+>   	}
+>   
+>   	/* Read from the page to populate the shared zeropage. */
+> -	FORCE_READ(*mem);
+> -	FORCE_READ(*smem);
+> +	if (!populate_page_checked(mem) || !populate_page_checked(smem)) {
+> +		log_test_result(KSFT_FAIL);
+> +		goto munmap;
+> +	}
+>   
+>   	fn(mem, smem, pagesize);
+>   munmap:
+> @@ -1612,8 +1626,11 @@ static void run_with_huge_zeropage(non_anon_test_fn fn, const char *desc)
+>   	 * the first sub-page and test if we get another sub-page populated
+>   	 * automatically.
+>   	 */
+> -	FORCE_READ(*mem);
+> -	FORCE_READ(*smem);
+> +	if (!populate_page_checked(mem) || !populate_page_checked(smem)) {
+> +		log_test_result(KSFT_FAIL);
+> +		goto munmap;
 > +	}
 > +
->  	/* Tear down our stack frame */
->  	if (bpf_has_stack_frame(ctx)) {
-> -		EMIT(PPC_RAW_ADDI(_R1, _R1, BPF_PPC_STACKFRAME + ctx->stack_size));
-> +		EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_jit_stack_size(ctx) + ctx->stack_size));
-> +
->  		if (ctx->seen & SEEN_FUNC || ctx->exception_cb) {
-                                          ^^^^^^^^^^^^^^^^^^^^^
->  			EMIT(PPC_RAW_LD(_R0, _R1, PPC_LR_STKOFF));
->  			EMIT(PPC_RAW_MTLR(_R0));
-                        ^^^^^^^^^^^^^^^^^^^
+>   	if (!pagemap_is_populated(pagemap_fd, mem + pagesize) ||
+>   	    !pagemap_is_populated(pagemap_fd, smem + pagesize)) {
+>   		ksft_test_result_skip("Did not get THPs populated\n");
+> @@ -1663,8 +1680,10 @@ static void run_with_memfd(non_anon_test_fn fn, const char *desc)
+>   	}
+>   
+>   	/* Fault the page in. */
+> -	FORCE_READ(*mem);
+> -	FORCE_READ(*smem);
+> +	if (!populate_page_checked(mem) || !populate_page_checked(smem)) {
+> +		log_test_result(KSFT_FAIL);
+> +		goto munmap;
+> +	}
+>   
+>   	fn(mem, smem, pagesize);
+>   munmap:
+> @@ -1719,8 +1738,10 @@ static void run_with_tmpfile(non_anon_test_fn fn, const char *desc)
+>   	}
+>   
+>   	/* Fault the page in. */
+> -	FORCE_READ(*mem);
+> -	FORCE_READ(*smem);
+> +	if (!populate_page_checked(mem) || !populate_page_checked(smem)) {
+> +		log_test_result(KSFT_FAIL);
+> +		goto munmap;
+> +	}
+>   
+>   	fn(mem, smem, pagesize);
+>   munmap:
+> @@ -1773,8 +1794,10 @@ static void run_with_memfd_hugetlb(non_anon_test_fn fn, const char *desc,
+>   	}
+>   
+>   	/* Fault the page in. */
+> -	FORCE_READ(*mem);
+> -	FORCE_READ(*smem);
+> +	if (!populate_page_checked(mem) || !populate_page_checked(smem)) {
+> +		log_test_result(KSFT_FAIL);
+> +		goto munmap;
+> +	}
+>   
+>   	fn(mem, smem, hugetlbsize);
+>   munmap:
 
-For exception_cb programs, bpf_has_stack_frame() returns true (the function
-explicitly checks ctx->exception_cb). The condition on the inner if statement
-also evaluates true because of "|| ctx->exception_cb".
-
-This means for exception_cb programs, LR is first set correctly from R4,
-but then immediately overwritten by loading from the stack and issuing a
-second MTLR.
-
-The comment above the EMIT(PPC_RAW_MTLR(_R4)) states that LR is received as
-the second parameter, suggesting R4 is the authoritative source. If
-exception_cb and exception_boundary have different stack_depth values, the
-stack-loaded LR value after the ADDI may point to an incorrect location.
-
-Should the inner condition exclude exception_cb, perhaps something like:
-
-    if (ctx->seen & SEEN_FUNC && !ctx->exception_cb) {
-
-Or alternatively, should the EMIT(PPC_RAW_MTLR(_R4)) be moved after the
-stack teardown code to ensure it takes precedence?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21257691486
-
---===============5316141756419194533==--
