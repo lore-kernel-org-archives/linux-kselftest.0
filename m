@@ -1,45 +1,89 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f193.google.com (mail-yw1-f193.google.com [209.85.128.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5092436A026
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 01:54:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC74376BFA
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 02:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769046901; cv=none; b=Buteq+oxaORTbwuC86MZ6rJyFwC7n41iPtVUWnfdYvcVkDnFkH/AeImws3VhAXh4h0jUXFE+B82UtuUWAZJzvRy3vXXdtGhW5kIv2ddApiqDADisgmI5iC0kdVf+pDedFc82YPyAxDN36SONrnP/gw/uUPydYuy6T11Ss/ycwyQ=
+	t=1769049485; cv=none; b=DdRh45H0eQi3N+Xz6W30f40m3dRVcvueafoKtSu+zfU7IKT/eewgBPt+cl5xram0MuZ4hCXwx7PkQ9KHnjOtc0Ty7LjFG9N55r5sZdVE4NI5ii9vdXiiJLWqnj+wJUTa/Er9XeERNJilqS2y4msGpGAsRlb8rrb/HNpO1c2Yj74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769046901; c=relaxed/simple;
-	bh=9CHejTIkSvIOr8hdKUWa4ZQwIJO3qAcjD9z3ijURVgA=;
+	s=arc-20240116; t=1769049485; c=relaxed/simple;
+	bh=xOcQ9yPADCbR7UJ1g9E1fC0dWQ0e9bXQE17TrQyLXSg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R2GSNwUB55JrUbcWHTr7MajgVMKPNnbpkrY5laLlWkWIiZ2AynoU2Lf4ScC4UjxGaZrggtXKiPrNaVhrrvyzetLdqjiNN9LMD6LBVKB5McASnwN5mY4REb2aYOrtxBIkHK1d2lVHFNyQv/PAfxvT+mW5PFguXHbQwsZFgVINMuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tqSlSD5q; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=Iz8MIg+omZ+DQfPhkeDWf2vAXCXGVHyEPy53JMmW9RJRfAN0sv96T0OxezvyEbK5mP6IMet/kuaT8qHsYZYO8N8hB616k0RnqaHhQI4CvO2EKxjG6m7x1YsKK02JElkkPbuMs63qvCRts9dchI0aXM71OSMpiwBzPCr+QEfxlIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nhMSVqhT; arc=none smtp.client-ip=209.85.128.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tqSlSD5q"
-Date: Thu, 22 Jan 2026 01:54:42 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769046887;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3FADtjDRNC5Zb8yoHTgprxMeVlzMfpAC0C5YPyUk0hY=;
-	b=tqSlSD5qC6eR5CO7mvLWvwW841rsSAbWCOydAYbBrJd6eS9QoQZoLECgSm6hBXkD0CVv1s
-	fKoyRhnCGnc+CGgC2FRBlgjyGbJ5JbfQhUYHAz9epSXoruIP2r3OVHZQQ2f1nEeDGjpKNQ
-	AG8Ynvtz5f00Qyp9zwLuagFltW5MeCU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Jim Mattson <jmattson@google.com>
-Cc: Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/8] KVM: x86: nSVM: Set vmcb02.g_pat correctly for
- nested NPT
-Message-ID: <kj7lqm5dsyaywgbpykat5iuy6lr25xb4myxuw73zrekgo6fdzk@pfvq24hkexyx>
-References: <20260115232154.3021475-1-jmattson@google.com>
- <20260115232154.3021475-5-jmattson@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nhMSVqhT"
+Received: by mail-yw1-f193.google.com with SMTP id 00721157ae682-790b7b3e594so5250667b3.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 18:38:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769049482; x=1769654282; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=easMu0gMme66zzGb0htyoe1e3dWIakHvb8ICaoPX2OE=;
+        b=nhMSVqhT8cDD5V79j5llAu8Dpk7kaoNjxpg8wQ8t2nnjIFEvXbSAckbH/3wPWX2A01
+         DKy1aAUAwuGO+yY119Qoj03a3+XkJlq89Y9htnOClD6ggWVXz8P+gE48HONb/L2sKA+4
+         IyqTxVmrmKLLLmFDwgWk7eotBVZI3Ke5ZLCYIyBiGgStAGNIQweW6KkeN3l2yErzHDS1
+         afBsrnT727tUEeedrWpDYgvPOPLTuFA7F8nA4lIeAM9q9/Ha1IrWo4Dkzm4whG3Xpbyt
+         NwpUPJeqPhjnsyTzGqWBtjysWiOn8Dagp8B802EQoN/CoCyaGhUVAFRER//v6uAHCPu8
+         hZbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769049482; x=1769654282;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=easMu0gMme66zzGb0htyoe1e3dWIakHvb8ICaoPX2OE=;
+        b=PYjuLDkBYnjR3cvTObNxcSVHxd2nj6De3pl4GiRjoaULq0zDWpEwsp8/yM9qT40rna
+         xx3lFXavV6hc7hjHNrglT8D1H3cYvcFaaYoeWKfbptSRHSrZh3zCMJ6RT+yztAqpiTiS
+         UbRH6qwb6MSGj0qa3M7A7aLugUUQjcbz4rsu5kqAgkufeyNssOKQX9xiyCog+SLtH/Sz
+         9RnD81GYl/wnIrzp7ihiLZ9eikKnRJ/GO1TUfVVjd6yawNFoV3p2rmVGdXcSPXblLVb6
+         l0Z6OiYEl+dym+HzB410LGcptBAorPIOApW3PJ95bPMa7AcLe3he4gsAFdIG6AuKAfdN
+         1Z7w==
+X-Forwarded-Encrypted: i=1; AJvYcCX22fis2Kus6udZPGsey98PBG2OiMXzMr13+JK6bhSSpewdcIpKkpa1CNjeGQybhWPJ+TuJDi4iRvy8Nv+NwUs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUosAHtZ+7Yp/xMpE4pyAI0I7G8CaOGZMdz5F+JFsqTP2fu1kn
+	JExq9iLHCxCQzZpDMZiAdAiqrCAcRC5QSeTBjcNRUUA6ywb/2nGgHx2g
+X-Gm-Gg: AZuq6aLacqTz/vOPNUesLDTqEqz6+3nr52NTOGB1/qfVRn+Cj6YdxbKTU/5cYAM/y8E
+	Td4zrS4TGoDxM1KVFmKqGqzdowJIu67tFUOgorRI5o7KqlTLriHgKacI0M/5o36MtGWpAcu8YTP
+	p9AC2nEI5sRX2JtAiPawCOiewj7HatrOUs40kESRsHE86coFyYkhysy6V6SPA68G5JiV+4pTSbC
+	qUJj4MS1z5aUzrC5mtRxtNduqRDiww11YtO9fTCRDJB21F+XXURFPQnpMQaBknFs28LNomZkoNB
+	q+KkKBwkD7bj4K3K6yEPkT5cenb8csonSPuzuJEKbDwBIQFP65/wvbgHoT3H2+Nv4BmjSCFobKm
+	wy7T33XjO3of1kW3FbgJLapAo9gOaXUlbjP+FnZSWpIkoVwriXIzSxTbC+g02FVY6f0pLoJpcQc
+	9Ly8LlyeBv9tFEGnzkjR/+6pAV9bhAdnwhmsA=
+X-Received: by 2002:a05:690c:dc2:b0:786:4860:21fd with SMTP id 00721157ae682-793c536b2c4mr146755317b3.39.1769049482395;
+        Wed, 21 Jan 2026 18:38:02 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:57::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-79429985287sm7862007b3.11.2026.01.21.18.38.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jan 2026 18:38:02 -0800 (PST)
+Date: Wed, 21 Jan 2026 18:37:56 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Mina Almasry <almasrymina@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v10 4/5] net: devmem: document
+ NETDEV_A_DMABUF_AUTORELEASE netlink attribute
+Message-ID: <aXGNhEKOhkTHbJvw@devvm11784.nha0.facebook.com>
+References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
+ <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-4-686d0af71978@meta.com>
+ <20260120163650.5a962648@kernel.org>
+ <aXBnqYQdomzH9bT/@devvm11784.nha0.facebook.com>
+ <20260121173512.748e2155@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,62 +92,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260115232154.3021475-5-jmattson@google.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20260121173512.748e2155@kernel.org>
 
-On Thu, Jan 15, 2026 at 03:21:43PM -0800, Jim Mattson wrote:
-> When nested NPT is enabled in vmcb12, copy the (cached and validated)
-> vmcb12 g_pat field to the guest PAT register. Under KVM, the guest PAT
-> register lives in the vmcb02 g_pat field.
+On Wed, Jan 21, 2026 at 05:35:12PM -0800, Jakub Kicinski wrote:
+> On Tue, 20 Jan 2026 21:44:09 -0800 Bobby Eshleman wrote:
+> > On Tue, Jan 20, 2026 at 04:36:50PM -0800, Jakub Kicinski wrote:
+> > > On Thu, 15 Jan 2026 21:02:15 -0800 Bobby Eshleman wrote:  
+> > > > +- Once a system-wide autorelease mode is selected (via the first binding),
+> > > > +  all subsequent bindings must use the same mode. Attempts to create bindings
+> > > > +  with a different mode will be rejected with -EBUSY.  
+> > > 
+> > > Why?
+> > 
+> > Originally I was using EINVAL, but when writing the tests I noticed this
+> > might be a confusing case for users to interpret EINVAL (i.e., some
+> > binding possibly made by someone else is in a different mode). I thought
+> > EBUSY could capture the semantic "the system is locked up in a different
+> > mode, try again when it isn't".
+> > 
+> > I'm not married to it though. Happy to go back to EINVAL or another
+> > errno.
 > 
-> When NPT is enabled, but nested NPT is disabled, copy L1's IA32_PAT MSR to
-> the vmcb02 g_pat field, since L2 shares the IA32_PAT MSR with L1,
-> 
-> When NPT is disabled, the vmcb02 g_pat field is ignored by hardware.
-> 
-> Fixes: 15038e147247 ("KVM: SVM: obey guest PAT")
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-> ---
->  arch/x86/kvm/svm/nested.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index e65291434be9..b0c0184e6e24 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -656,9 +656,6 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
->  	struct vmcb *vmcb02 = svm->nested.vmcb02.ptr;
->  	struct kvm_vcpu *vcpu = &svm->vcpu;
->  
-> -	nested_vmcb02_compute_g_pat(svm);
+> My question was more why the system-wide policy exists, rather than
+> binding-by-binding. Naively I'd think that a single socket must pick
+> but system wide there could easily be multiple bindings not bothering
+> each other, doing different things?
 
-This is last use of the function, right? Should we drop it now?
+Originally we allowed per-binding policy, but it seemed one-per-system
+may 1) simplify reasoning through the code by only allowing one policy
+per system, and 2) allow simpler deprecation of autorelease=on if its
+found to be obsolete over time (just hack off that particular path of
+the static branch set). It doesn't prevent any races/bugs or anything.
 
-> -	vmcb_mark_dirty(vmcb02, VMCB_NPT);
-> -
->  	/* Load the nested guest state */
->  	if (svm->nested.vmcb12_gpa != svm->nested.last_vmcb12_gpa) {
->  		new_vmcb12 = true;
-> @@ -666,6 +663,19 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
->  		svm->nested.force_msr_bitmap_recalc = true;
->  	}
->  
-> +	if (npt_enabled) {
-> +		if (nested_npt_enabled(svm)) {
-> +			if (unlikely(new_vmcb12 ||
-> +				     vmcb_is_dirty(vmcb12, VMCB_NPT))) {
-> +				vmcb02->save.g_pat = svm->nested.save.g_pat;
-> +				vmcb_mark_dirty(vmcb02, VMCB_NPT);
-> +			}
-> +		} else {
-> +			vmcb02->save.g_pat = vcpu->arch.pat;
-> +			vmcb_mark_dirty(vmcb02, VMCB_NPT);
-> +		}
-> +	}
-> +
->  	if (unlikely(new_vmcb12 || vmcb_is_dirty(vmcb12, VMCB_SEG))) {
->  		vmcb02->save.es = vmcb12->save.es;
->  		vmcb02->save.cs = vmcb12->save.cs;
-> -- 
-> 2.52.0.457.g6b5491de43-goog
 > 
+> > > > +- Applications using manual release mode (autorelease=0) must ensure all tokens
+> > > > +  are returned via SO_DEVMEM_DONTNEED before socket close to avoid resource
+> > > > +  leaks during the lifetime of the dmabuf binding. Tokens not released before
+> > > > +  close() will only be freed when all RX queues are unbound AND all sockets
+> > > > +  that called recvmsg() are closed.  
+> > > 
+> > > Could you add a short example on how? by calling shutdown()?  
+> > 
+> > Show an example of the three steps: returning the tokens, unbinding, and closing the
+> > sockets (TCP/NL)?
+> 
+> TBH I read the doc before reading the code, which I guess may actually
+> be better since we don't expect users to read the code first either..
+> 
+> Now after reading the code I'm not sure the doc explains things
+> properly. AFAIU there's no association of token <> socket within the
+> same binding. User can close socket A and return the tokens via socket
+> B. As written the doc made me think that there will be a leak if socket
+> is closed without releasing tokens, or that there may be a race with
+> data queued but not read. Neither is true, really?
+
+That is correct, neither is true. If the two sockets share a binding the
+kernel doesn't care which socket received the token or which one
+returned it. No token <> socket association. There is no
+queued-but-not-read race either. If any tokens are not returned, as long
+as all of the binding references are eventually released and all sockets
+that used the binding are closed, then all references will be accounted
+for and everything cleaned up.
+
+Best,
+Bobby
