@@ -1,106 +1,104 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617782749D6
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 01:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AAE22147E6;
+	Thu, 22 Jan 2026 01:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769045291; cv=none; b=m1hFYxXzLGbhocrhUq+tcchTXDnzQ9g9mdsuVlhBvscrIZh6aaopXcUsZBnad5mrihyDJ13tli0KNRFfL+OBt6S7+F9bF3eXn4t49CLRJy2F/6+smT1ywLw4NyuiB/1EiFU5qMR3FnFeoDqioEizToZdwHzsYXR/t/1TpqfTXg0=
+	t=1769045716; cv=none; b=Qq4pBj6F7R+Oxv7VYCgIz4JzrR64Q/qcFhyfmM0XYvEsluyoU86IzL0engz/GQbhrPcH+QXY3K4nuJptQBlT8Bw4ZqwbRhvvM33+biFmdGuyMwa7LWeR7a9ojUMnQozHFx/W+bHxURKl6h7AihUUDredw+HZqwv2RoX4XuaNqeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769045291; c=relaxed/simple;
-	bh=bS3uJGcSc8XzWKau3wF/igzdk6MwAfqPuCz3Fm6ZEdE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D6QN/VB0Bkr9BTkLb2P3glXC/+mFQk998iMjIkeV/bEVBcvdpxLZiiMW5LqBNlTJF0UkX4Pasxx2LNHIwV1tk8qimN6wI/q39x8o5iG+9JeZDQhC9YOvEupJKbZ2NJttRNVrU7bDOVdEmmZEzyEgw4ObqOVoDOCWqULCPtu+p3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cq00LJrY; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769045716; c=relaxed/simple;
+	bh=HGxtfHWe3WixENDmvXLbR55lrlOhLVAb+Q1rS7sz5ak=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QTwZjxjp5Tv6MFd4Q+NDwat7Ubppeu9wqL8fq+IOQjyoPoMCrjeUZPm8ojpNPz6r8tfp9krrVUZo1mPdYMOcFHij/XOMg1IvVJQzfFHyPCdLsNhmNYu86tp/q1YT+J+faUSNOwc8dn2B18NzmT3tve4lNLJW0qZ4nZHdL+2NahQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NR4tYdgU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cq00LJrY"
-Date: Thu, 22 Jan 2026 01:28:01 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769045287;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F2ablW7VskYcPWkbB6tN0UjDv6XdHdkGDUS5v3E2wMM=;
-	b=cq00LJrYkg7S808DLke5tkuUy+pERkK/OFMo68an51rUDlOY7Rfw8eKVQCyIW1ovfvoMWr
-	OH9D7FhIa2W+72Iz5CEJ502gT1Mc2c9m1TzEuDO4IHnYrRAl5MYMkzr0ugyk06gMCLUGf3
-	gvvoVsMM1lO0dM0/AocOlAndPoZIrQc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Jim Mattson <jmattson@google.com>
-Cc: Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/8] KVM: x86: nSVM: Cache g_pat in
- vmcb_save_area_cached
-Message-ID: <e3j5qgrdjad7ura7kodfzcagynvrkxv227ddg3jfjknzewvyay@h5pb67muiycd>
-References: <20260115232154.3021475-1-jmattson@google.com>
- <20260115232154.3021475-3-jmattson@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NR4tYdgU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B98EC4CEF1;
+	Thu, 22 Jan 2026 01:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769045714;
+	bh=HGxtfHWe3WixENDmvXLbR55lrlOhLVAb+Q1rS7sz5ak=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NR4tYdgUMwuBNbx6LKAkhYXEDJSjmJCXMBgPU9715glFq8CNYFkmKS+CowgJ3KAuV
+	 8DL9zHjrv1QW7M8eH6sC62Lf1oleho+yxAuyMDQoSaKczKQfgCqoEUPFRtWmOBznh3
+	 UXsVyhZIQgJb9wLLc5jkLbWJ8UGbVCyNskKSIWYT56c55VR9JXjnTlE66K6gkUIiZW
+	 nseJE9jzGs7kcYGmN7J5zRQwDzID3qV/9hfZeqOqBBsjEAJnzerk/Bp2QCHvYlR2lW
+	 JMAtNUFkbkE/te4lrM/ZrUusn1z7bn3DKYkd/ZhW7/XJkbROi4j+yXMiR8TAqIzMWG
+	 N/e6O/uOi7NvQ==
+Date: Wed, 21 Jan 2026 17:35:12 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn
+ <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, David Ahern
+ <dsahern@kernel.org>, Mina Almasry <almasrymina@google.com>, Arnd Bergmann
+ <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, Donald Hunter
+ <donald.hunter@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, asml.silence@gmail.com,
+ matttbe@kernel.org, skhawaja@google.com, Bobby Eshleman
+ <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v10 4/5] net: devmem: document
+ NETDEV_A_DMABUF_AUTORELEASE netlink attribute
+Message-ID: <20260121173512.748e2155@kernel.org>
+In-Reply-To: <aXBnqYQdomzH9bT/@devvm11784.nha0.facebook.com>
+References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
+	<20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-4-686d0af71978@meta.com>
+	<20260120163650.5a962648@kernel.org>
+	<aXBnqYQdomzH9bT/@devvm11784.nha0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260115232154.3021475-3-jmattson@google.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 15, 2026 at 03:21:41PM -0800, Jim Mattson wrote:
-> To avoid TOCTTOU issues, all fields in the vmcb12 save area that are
-> subject to validation must be copied to svm->nested.save prior to
-> validation, since vmcb12 is writable by the guest. Add g_pat to this set in
-> preparation for validting it.
+On Tue, 20 Jan 2026 21:44:09 -0800 Bobby Eshleman wrote:
+> On Tue, Jan 20, 2026 at 04:36:50PM -0800, Jakub Kicinski wrote:
+> > On Thu, 15 Jan 2026 21:02:15 -0800 Bobby Eshleman wrote:  
+> > > +- Once a system-wide autorelease mode is selected (via the first binding),
+> > > +  all subsequent bindings must use the same mode. Attempts to create bindings
+> > > +  with a different mode will be rejected with -EBUSY.  
+> > 
+> > Why?
 > 
-> Fixes: 3d6368ef580a ("KVM: SVM: Add VMRUN handler")
-
-g_pat is not currently used from VMCB12, so this patch isn't technically
-fixing an issue, right? I suspect this only applies to patch 3.
-
-Anyway, I think it's probably best to squash this into patch 3. Also
-maybe CC stable?
-
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-
-If you decide to keep this as an individual patch, feel free to add:
-
-Reviewed-by: Yosry Ahmed <yosry.ahmed@linux.dev>
-
-> ---
->  arch/x86/kvm/svm/nested.c | 2 ++
->  arch/x86/kvm/svm/svm.h    | 1 +
->  2 files changed, 3 insertions(+)
+> Originally I was using EINVAL, but when writing the tests I noticed this
+> might be a confusing case for users to interpret EINVAL (i.e., some
+> binding possibly made by someone else is in a different mode). I thought
+> EBUSY could capture the semantic "the system is locked up in a different
+> mode, try again when it isn't".
 > 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index f295a41ec659..07a57a43fc3b 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -506,6 +506,8 @@ static void __nested_copy_vmcb_save_to_cache(struct vmcb_save_area_cached *to,
->  
->  	to->dr6 = from->dr6;
->  	to->dr7 = from->dr7;
-> +
-> +	to->g_pat = from->g_pat;
->  }
->  
->  void nested_copy_vmcb_save_to_cache(struct vcpu_svm *svm,
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 7d28a739865f..39138378531e 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -145,6 +145,7 @@ struct vmcb_save_area_cached {
->  	u64 cr0;
->  	u64 dr7;
->  	u64 dr6;
-> +	u64 g_pat;
->  };
->  
->  struct vmcb_ctrl_area_cached {
-> -- 
-> 2.52.0.457.g6b5491de43-goog
+> I'm not married to it though. Happy to go back to EINVAL or another
+> errno.
+
+My question was more why the system-wide policy exists, rather than
+binding-by-binding. Naively I'd think that a single socket must pick
+but system wide there could easily be multiple bindings not bothering
+each other, doing different things?
+
+> > > +- Applications using manual release mode (autorelease=0) must ensure all tokens
+> > > +  are returned via SO_DEVMEM_DONTNEED before socket close to avoid resource
+> > > +  leaks during the lifetime of the dmabuf binding. Tokens not released before
+> > > +  close() will only be freed when all RX queues are unbound AND all sockets
+> > > +  that called recvmsg() are closed.  
+> > 
+> > Could you add a short example on how? by calling shutdown()?  
 > 
+> Show an example of the three steps: returning the tokens, unbinding, and closing the
+> sockets (TCP/NL)?
+
+TBH I read the doc before reading the code, which I guess may actually
+be better since we don't expect users to read the code first either..
+
+Now after reading the code I'm not sure the doc explains things
+properly. AFAIU there's no association of token <> socket within the
+same binding. User can close socket A and return the tokens via socket
+B. As written the doc made me think that there will be a leak if socket
+is closed without releasing tokens, or that there may be a race with
+data queued but not read. Neither is true, really?
