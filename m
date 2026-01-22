@@ -1,77 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942C0210F59;
-	Thu, 22 Jan 2026 01:37:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F611E7C2E;
+	Thu, 22 Jan 2026 01:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769045877; cv=none; b=jsqg5xXn5AZ2DmC6N2g3/a//hhdFV+PwkzdZvBP0Ef0AHJ8h59yj8gQFvHTVBsWKkZKqbSgBhajgafC8UOsGhm9qyfrixBOHFsdJDAXNIZFKwH94ltpGtR1KqnZFmH0Gz4dKFL4o8raqZcTXfaS/XMKWjz+X4CYVnmb/t3WlWG8=
+	t=1769046065; cv=none; b=QFqQlMci2luhw33rJBfaMzNGJ31AKXmIb1YXJBM582jylA8AmDH3oFvGGYeMgWifM+A35lH4u+FGlxSXJtMeSyUKKWmHQUqvQIcitbUr9nBNQTaDwPkU/zeum3bcFOEB2grDALLa/YPtxb4bSM6zvoUUTFRrjU/mJ9IB7TSFmiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769045877; c=relaxed/simple;
-	bh=tQpBBGK/tiBo551bC20Txkb/gPAPjaLfdNVO0nqHTFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m/5LBQW2v1z+zONeWIz/aUzDEY9ZQ5bU3LCx0T7lqbm45Fw1y1CihAku92cAnZaWmUqWgLoqpQZwQEHqx1IBExbQAPDE/scSIh3C3kYHUjaJf1Ifjz6eBRSnam/okQEzV2F3d8ifuA3x6j0qgGRLFL2T/ICtK2a50FAhMCNDYy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=da7NmC2S; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769046065; c=relaxed/simple;
+	bh=bJD8B7bMB/V2cOZrBvyhQmiOIc0VYncXJQ4LUUkgsRA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=egbxXkvnRH2jJbGJ0qmZkj+S9fXaXhlb3H2CxFG8WPPVAc9F+Jl5i1DQ4DBPd+N73o/EGHEVChGSC1qquAou3r9Q5xP8xaHoATk1CEIgOwHQ47Y3U8V8wX7KC6HBy9u/VBemwdk28AYo81nj1Xrs0HokwsdPN0w/Nc3POmAP4q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ehektt9K; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="da7NmC2S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11A1DC4CEF1;
-	Thu, 22 Jan 2026 01:37:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769045877;
-	bh=tQpBBGK/tiBo551bC20Txkb/gPAPjaLfdNVO0nqHTFk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=da7NmC2SALcJ5sP3HO4Lf2BNs8qmqMtW1cgWNQM7j9kazH1/9r65viSUooCEpquVu
-	 YRdrEbJv9XpulFitt6vg9FaFBoney46BLTFKISo3L26sYrL7K0gm4mpI1VomDZPznd
-	 VjK7muTAk6zQ+6M9xMlIZsjfbmiROInf5jNQkKtzAg+pEEIUW/ikXrMmgNC6o8f6Ji
-	 gbpuISirGrVZUrWx+k4UChBjnNmOnt9JOvwLeutsc6nJfz7HCgmW/tM/5PT/NGxUh4
-	 GzJktYX8e5elqFIux8LQz0CINQWhLlkWWU3teWiQ24vXwk4enRZhdp6tfbGUGwyWl6
-	 G5jJGCTBgikUQ==
-Date: Wed, 21 Jan 2026 17:37:55 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn
- <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, David Ahern
- <dsahern@kernel.org>, Mina Almasry <almasrymina@google.com>, Arnd Bergmann
- <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, Donald Hunter
- <donald.hunter@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, asml.silence@gmail.com,
- matttbe@kernel.org, skhawaja@google.com, Bobby Eshleman
- <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v10 0/5] net: devmem: improve cpu cost of RX
- token management
-Message-ID: <20260121173755.2ddd0b08@kernel.org>
-In-Reply-To: <aXBkQErscGzJwh2i@devvm11784.nha0.facebook.com>
-References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
-	<20260120170749.101e8bcc@kernel.org>
-	<aXBkQErscGzJwh2i@devvm11784.nha0.facebook.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ehektt9K"
+Date: Thu, 22 Jan 2026 01:40:49 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769046061;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MTU7xvnq/CoKFFvKaS8PklF1z9AUkIMhRVrO9s2dpgQ=;
+	b=ehektt9Kn0oW6v4eReQLNvvMM0fyiGCHe7nMmLYuqcYdtEPt4CNOpZIWSjY91C7doqZ++k
+	eOQX7xdcWIuSAI5e85pvfaeMbwMucu4dscUTdkSEpNwbRUhrqieWZH3TM0huJm14Kb+TWD
+	QPXan5EF+rQitNS31U0o7SCKvYOHJ6k=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yosry Ahmed <yosry.ahmed@linux.dev>
+To: Jim Mattson <jmattson@google.com>
+Cc: Sean Christopherson <seanjc@google.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/8] KVM: x86: nSVM: Add validity check for vmcb12
+ g_pat
+Message-ID: <mcxo54ct7bsu2d6xmalpsae6wq32ykjh6dd4kfgcgru474dqre@47flraln5zz5>
+References: <20260115232154.3021475-1-jmattson@google.com>
+ <20260115232154.3021475-4-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260115232154.3021475-4-jmattson@google.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 20 Jan 2026 21:29:36 -0800 Bobby Eshleman wrote:
-> > IDK if the cmsg approach is still right for this flow TBH.
-> > IIRC when Stan talked about this a while back we were considering doing
-> > this via Netlink. Anything that proves that the user owns the binding
-> > would work. IIUC the TCP socket in this design just proves that socket
-> > has received a token from a given binding right?  
+On Thu, Jan 15, 2026 at 03:21:42PM -0800, Jim Mattson wrote:
+> Add a validity check for g_pat, so that when nested paging is enabled for
+> vmcb12, an invalid g_pat causes an immediate VMEXIT with exit code
+> VMEXIT_INVALID, as specified in the APM, volume 2: "Nested Paging and
+> VMRUN/VMEXIT."
 > 
-> In both designs the owner of the binding starts of as the netlink opener,
-> and then ownership spreads out to TCP sockets as packets are steered to
-> them. Tokens are received by the user which gives them a share in the
-> form of references on the pp and binding. This design follows the same
-> approach... but I may be misinterpreting what you mean by ownership?
+> Update the signature of __nested_vmcb_check_save() to include a pointer to
+> a struct vmcb_ctrl_area_cached, since the g_pat validity check depend on
+> the nested paging control bit.
+> 
+> Fixes: 3d6368ef580a ("KVM: SVM: Add VMRUN handler")
+> Signed-off-by: Jim Mattson <jmattson@google.com>
+> ---
+>  arch/x86/kvm/svm/nested.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index 07a57a43fc3b..e65291434be9 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -369,7 +369,8 @@ static bool __nested_vmcb_check_controls(struct kvm_vcpu *vcpu,
+>  
+>  /* Common checks that apply to both L1 and L2 state.  */
+>  static bool __nested_vmcb_check_save(struct kvm_vcpu *vcpu,
+> -				     struct vmcb_save_area_cached *save)
+> +				     struct vmcb_save_area_cached *save,
+> +				     struct vmcb_ctrl_area_cached *control)
+>  {
+>  	if (CC(!(save->efer & EFER_SVME)))
+>  		return false;
+> @@ -400,6 +401,10 @@ static bool __nested_vmcb_check_save(struct kvm_vcpu *vcpu,
+>  	if (CC(!kvm_valid_efer(vcpu, save->efer)))
+>  		return false;
+>  
+> +	if (CC((control->nested_ctl & SVM_NESTED_CTL_NP_ENABLE) &&
+> +	       npt_enabled && !kvm_pat_valid(save->g_pat)))
 
-What I was getting at was the same point about socket A vs socket B as
-I made on the doc patch. IOW the kernel only tracks how many tokens it
-gave out for a net_iov, there's no socket state beyond the binding
-pointer. Right?
+If this lands after "KVM: nSVM: Drop the non-architectural consistency
+check for NP_ENABLE" [1], the npt_enabled check can be dropped, as
+SVM_NESTED_CTL_NP_ENABLE will be cleared if the guest cannot use NPTs.
+
+[1]https://lore.kernel.org/kvm/20260115011312.3675857-16-yosry.ahmed@linux.dev/
+
+> +		return false;
+> +
+>  	return true;
+>  }
+>  
+> @@ -407,8 +412,9 @@ static bool nested_vmcb_check_save(struct kvm_vcpu *vcpu)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  	struct vmcb_save_area_cached *save = &svm->nested.save;
+> +	struct vmcb_ctrl_area_cached *ctl = &svm->nested.ctl;
+>  
+> -	return __nested_vmcb_check_save(vcpu, save);
+> +	return __nested_vmcb_check_save(vcpu, save, ctl);
+>  }
+>  
+>  static bool nested_vmcb_check_controls(struct kvm_vcpu *vcpu)
+> @@ -1892,7 +1898,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+>  	if (!(save->cr0 & X86_CR0_PG) ||
+>  	    !(save->cr0 & X86_CR0_PE) ||
+>  	    (save->rflags & X86_EFLAGS_VM) ||
+> -	    !__nested_vmcb_check_save(vcpu, &save_cached))
+> +	    !__nested_vmcb_check_save(vcpu, &save_cached, &ctl_cached))
+
+save_cached here is from vmcb01, but ctl_cached is from vmcb12, right?
+So we're conditioning the PAT validity check on L1's gPAT on NPT being
+enabled for L2 IIUC.
+
+Perhaps we should pass 'bool guest_npt' instead of the cached control
+area?  Then we can just pass npt_enabled here IIUC.
+
+>  		goto out_free;
+>  
+>  
+> -- 
+> 2.52.0.457.g6b5491de43-goog
+> 
