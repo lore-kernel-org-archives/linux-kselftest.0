@@ -1,23 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7698B324B24;
-	Thu, 22 Jan 2026 17:02:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016DD3994A3;
+	Thu, 22 Jan 2026 17:02:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769101379; cv=none; b=nxaQZTaBiVTlB4WHATeRbvJm9Xsyn4RywBv2XptEOUEmhMHcLzuv3epFmJA9yjuG7NrlAUcIsoVAA/dPC73+GFv7AZY9R3bPTSWRtSbdXf5AuIFbt7933PlATZTIX2r7BgphsRlUOrAL4OU+JzZsUfDoI7vC3verIs3JD8bNSbs=
+	t=1769101382; cv=none; b=bu/Poh5a7y44+pyiPH70kZfvv9S2iCSRM7lv6ixENcFkts5mLAbTczppeSMKtJTR5Nya7Xu9qUZcxj0q+YbxIH4oFPWUc2DF9LrmwH0ufRyU0kNY1ZlC7GW1+doDz1OHzaywPbMygTzj+7izok7yyMh+785wMaIAWOmG2zAbkp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769101379; c=relaxed/simple;
-	bh=MIgJ0nPhFBIbzhbdKUkOS2ZaPlA5KcP0n7dfcApBgMQ=;
+	s=arc-20240116; t=1769101382; c=relaxed/simple;
+	bh=LqG8Hnz6Q5OxBgnzVjR/OTNRf+pKJfp6ootXAexNYYs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ztgif9zLOQTni1WXUUeANsJZjK1K8cCs4Nc18UWIhuCNP0Hc1WbKbKtduFi7O5TAM19C8pRdFYWz2ksnhllKI88mpcuZVLV0CUjrWju8GzRbS95OE9rBjHC9YNMS8cGbUVY+FIf0PMUs76ud6X1KVrhfJmwizp6hfKnmRtcDMnw=
+	 MIME-Version; b=Sbh9MFngFuz+mzwP9obrKv0eBsPoWMiuujSwaQYQXXa+MawQMeKQiHPIqDJ0oAYTnQZUtPTah6h+QqDxxHvz17eICdVM5iwofxapvbwJjHPcgWq8l6rxjLP2JwAz9C42Iysh+pINVMXlLPWrLgqjohw9TX8vsDS7iLpN2heCjko=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7F9A1596;
-	Thu, 22 Jan 2026 09:02:41 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 429D81684;
+	Thu, 22 Jan 2026 09:02:43 -0800 (PST)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94F103F632;
-	Thu, 22 Jan 2026 09:02:46 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7CCD93F632;
+	Thu, 22 Jan 2026 09:02:48 -0800 (PST)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
@@ -29,13 +29,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
 	Mark Brown <broonie@kernel.org>,
 	Ryan Roberts <ryan.roberts@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Usama Anjum <Usama.Anjum@arm.com>,
-	SeongJae Park <sj@kernel.org>,
-	wang lian <lianux.mm@gmail.com>
-Subject: [PATCH v3 8/9] selftests/mm: fix exit code in pagemap_ioctl
-Date: Thu, 22 Jan 2026 17:02:23 +0000
-Message-ID: <20260122170224.4056513-9-kevin.brodsky@arm.com>
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v3 9/9] selftests/mm: report SKIP in pfnmap if a check fails
+Date: Thu, 22 Jan 2026 17:02:24 +0000
+Message-ID: <20260122170224.4056513-10-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20260122170224.4056513-1-kevin.brodsky@arm.com>
 References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
@@ -47,58 +44,170 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Make sure pagemap_ioctl exits with an appropriate value:
+pfnmap currently checks the target file in FIXTURE_SETUP(pfnmap),
+meaning once for every test, and skips the test if any check fails.
 
-* If the tests are run, call ksft_finished() to report the right
-  status instead of reporting PASS unconditionally.
+The target file is the same for every test so this is a little
+overkill. More importantly, this approach means that the whole suite
+will report PASS even if all the tests are skipped because kernel
+configuration (e.g. CONFIG_STRICT_DEVMEM=y) prevented /dev/mem from
+being mapped, for instance.
 
-* Report SKIP if userfaultfd isn't available (in line with other
-  tests)
+Let's ensure that KSFT_SKIP is returned as exit code if any check
+fails by performing the checks in pfnmap_init(), run once. That
+function also takes care of finding the offset of the pages to be
+mapped and saves it in a global. The file is now opened only once
+and the fd saved in a global, but it is still mapped/unmapped for
+every test, as some of them modify the mapping.
 
-* Report FAIL if we failed to open /proc/self/pagemap, as this file
-  has been added a long time ago and doesn't depend on any CONFIG
-  option (returning -EINVAL from main() is meaningless)
-
-Cc: Usama Anjum <Usama.Anjum@arm.com>
-Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
-Reviewed-by: Mark Brown <broonie@kernel.org>
-Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
-Acked-by: SeongJae Park <sj@kernel.org>
-Reviewed-by: wang lian <lianux.mm@gmail.com>
-Reviewed-by: Dev Jain <dev.jain@arm.com>
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- tools/testing/selftests/mm/pagemap_ioctl.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/mm/pfnmap.c | 84 ++++++++++++++++++-----------
+ 1 file changed, 53 insertions(+), 31 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index 1896c7d4f72e..2ca8a7e3c27e 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -1552,7 +1552,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
- 	ksft_print_header();
+diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
+index 45b5f1cf6019..4f550822385a 100644
+--- a/tools/testing/selftests/mm/pfnmap.c
++++ b/tools/testing/selftests/mm/pfnmap.c
+@@ -25,8 +25,12 @@
+ #include "kselftest_harness.h"
+ #include "vm_util.h"
  
- 	if (init_uffd())
--		ksft_exit_pass();
-+		ksft_exit_skip("Failed to initialize userfaultfd\n");
++#define DEV_MEM_NPAGES	2
++
+ static sigjmp_buf sigjmp_buf_env;
+ static char *file = "/dev/mem";
++static off_t file_offset;
++static int fd;
  
- 	ksft_set_plan(117);
+ static void signal_handler(int sig)
+ {
+@@ -88,7 +92,7 @@ static int find_ram_target(off_t *offset,
+ 			break;
  
-@@ -1561,7 +1561,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 		/* We need two pages. */
+-		if (end > start + 2 * pagesize) {
++		if (end > start + DEV_MEM_NPAGES * pagesize) {
+ 			fclose(file);
+ 			*offset = start;
+ 			return 0;
+@@ -97,11 +101,48 @@ static int find_ram_target(off_t *offset,
+ 	return -ENOENT;
+ }
  
- 	pagemap_fd = open(PAGEMAP, O_RDONLY);
- 	if (pagemap_fd < 0)
--		return -EINVAL;
-+		ksft_exit_fail_msg("Failed to open " PAGEMAP "\n");
++static void pfnmap_init(void)
++{
++	size_t pagesize = getpagesize();
++	size_t size = DEV_MEM_NPAGES * pagesize;
++	void *addr;
++
++	if (strncmp(file, "/dev/mem", strlen("/dev/mem")) == 0) {
++		int err = find_ram_target(&file_offset, pagesize);
++
++		if (err)
++			ksft_exit_skip("Cannot find ram target in '/proc/iomem': %s\n",
++				       strerror(-err));
++	} else {
++		file_offset = 0;
++	}
++
++	fd = open(file, O_RDONLY);
++	if (fd < 0)
++		ksft_exit_skip("Cannot open '%s': %s\n", file, strerror(errno));
++
++	/*
++	 * Make sure we can map the file, and perform some basic checks; skip
++	 * the whole suite if anything goes wrong.
++	 * A fresh mapping is then created for every test case by
++	 * FIXTURE_SETUP(pfnmap).
++	 */
++	addr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, file_offset);
++	if (addr == MAP_FAILED)
++		ksft_exit_skip("Cannot mmap '%s': %s\n", file, strerror(errno));
++
++	if (!check_vmflag_pfnmap(addr))
++		ksft_exit_skip("Invalid file: '%s'. Not pfnmap'ed\n", file);
++
++	if (test_read_access(addr, size, pagesize))
++		ksft_exit_skip("Cannot read-access mmap'ed '%s'\n", file);
++
++	munmap(addr, size);
++}
++
+ FIXTURE(pfnmap)
+ {
+-	off_t offset;
+ 	size_t pagesize;
+-	int dev_mem_fd;
+ 	char *addr1;
+ 	size_t size1;
+ 	char *addr2;
+@@ -112,31 +153,10 @@ FIXTURE_SETUP(pfnmap)
+ {
+ 	self->pagesize = getpagesize();
  
- 	/* 1. Sanity testing */
- 	sanity_tests_sd();
-@@ -1733,5 +1733,5 @@ int main(int __attribute__((unused)) argc, char *argv[])
- 	zeropfn_tests();
+-	if (strncmp(file, "/dev/mem", strlen("/dev/mem")) == 0) {
+-		/* We'll require two physical pages throughout our tests ... */
+-		if (find_ram_target(&self->offset, self->pagesize))
+-			SKIP(return,
+-				   "Cannot find ram target in '/proc/iomem'\n");
+-	} else {
+-		self->offset = 0;
+-	}
+-
+-	self->dev_mem_fd = open(file, O_RDONLY);
+-	if (self->dev_mem_fd < 0)
+-		SKIP(return, "Cannot open '%s'\n", file);
+-
+-	self->size1 = self->pagesize * 2;
++	self->size1 = DEV_MEM_NPAGES * self->pagesize;
+ 	self->addr1 = mmap(NULL, self->size1, PROT_READ, MAP_SHARED,
+-			   self->dev_mem_fd, self->offset);
+-	if (self->addr1 == MAP_FAILED)
+-		SKIP(return, "Cannot mmap '%s'\n", file);
+-
+-	if (!check_vmflag_pfnmap(self->addr1))
+-		SKIP(return, "Invalid file: '%s'. Not pfnmap'ed\n", file);
+-
+-	/* ... and want to be able to read from them. */
+-	if (test_read_access(self->addr1, self->size1, self->pagesize))
+-		SKIP(return, "Cannot read-access mmap'ed '%s'\n", file);
++			   fd, file_offset);
++	ASSERT_NE(self->addr1, MAP_FAILED);
  
- 	close(pagemap_fd);
--	ksft_exit_pass();
-+	ksft_finished();
+ 	self->size2 = 0;
+ 	self->addr2 = MAP_FAILED;
+@@ -148,8 +168,6 @@ FIXTURE_TEARDOWN(pfnmap)
+ 		munmap(self->addr2, self->size2);
+ 	if (self->addr1 != MAP_FAILED)
+ 		munmap(self->addr1, self->size1);
+-	if (self->dev_mem_fd >= 0)
+-		close(self->dev_mem_fd);
+ }
+ 
+ TEST_F(pfnmap, madvise_disallowed)
+@@ -189,7 +207,7 @@ TEST_F(pfnmap, munmap_split)
+ 	 */
+ 	self->size2 = self->pagesize;
+ 	self->addr2 = mmap(NULL, self->pagesize, PROT_READ, MAP_SHARED,
+-			   self->dev_mem_fd, self->offset);
++			   fd, file_offset);
+ 	ASSERT_NE(self->addr2, MAP_FAILED);
+ }
+ 
+@@ -259,8 +277,12 @@ int main(int argc, char **argv)
+ 		if (strcmp(argv[i], "--") == 0) {
+ 			if (i + 1 < argc && strlen(argv[i + 1]) > 0)
+ 				file = argv[i + 1];
+-			return test_harness_run(i, argv);
++			argc = i;
++			break;
+ 		}
+ 	}
++
++	pfnmap_init();
++
+ 	return test_harness_run(argc, argv);
  }
 -- 
 2.51.2
