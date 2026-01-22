@@ -1,165 +1,109 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1763ACF04;
-	Thu, 22 Jan 2026 21:26:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6306836D50E
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 21:32:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769117167; cv=none; b=YrZLjzOM829GJjBHBVuLjzM4oEEB5OMdzQdA9jCZv7dZbIf0j44hxd/2YJlhzYK4CZvnuOim+hyBisIdL9hYRodQ4AfcBJPgkQoUyZFGeaYlhhDIPNnFWMSsxKwrG7p9OpIGW+jXecigSuTeeUQHj4cq7lIO6J2Sq+AJJaOv2UI=
+	t=1769117547; cv=none; b=up6S0DLp32m6bOsj5UgVa+tMhxl/XvSI/PAH9SIWmZ+PxhETLsT5lnXj5fKOqo7vhi/4tp5U/sM8c2eqsUiNw67NixjmIAc6k4zlGe4G3KdsKHePv24h0IPjWfsh7wJi5DnlaT18KNkagP9E2crPUGmkoHGi0/u7q/qr/06RjV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769117167; c=relaxed/simple;
-	bh=ZZiPNtMVFac7HGXvfmtml7hvEu08J1Eucvq6mX/4TTY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ugY1PIoCzJX8eO+6YuBOT7SlKv0v+fT6/CLbDU4iOXTf8gZSZpBsiKNpYUJzKu22DI/QMQPifEVRguzLThTf+7ZAXwVV6VVqkEvO35IWqxGAlaSYKhjeqXQ/5V6IsK9w0v4iQRj/rC+FduFpUrD97lIq8+DWM4mNfkC/q+P4vGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=i7GWayn/; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1769117547; c=relaxed/simple;
+	bh=v0P96Z0aRmf4q0S4zq2JgoGYTQnkEs7zQqmXU6ar3HE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=hexaTjp1JeNz/cc7mKafAFli86j7bEPsOqK5NggZfjXaqZOKOYxjBCiXow960nlD5RY4xbcHLLSUClpXvT71wqpyQ8GwhdN6GZcX9Kn7I2wjtD1e1PIUDo1o2R7qgOIyZrinBFWgi7Ta82tcftD6A8GkDg0E7h6GAUVFgzR5kFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WWLd9mJg; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="i7GWayn/"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60MEXF3c021316;
-	Thu, 22 Jan 2026 21:20:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=TXgmDXs4JFjAGlSMt
-	ms1ah2TwLO40IrSCwqYBvl/j9w=; b=i7GWayn/QQwrubpnUNbMqu4jZdNn+nOW/
-	1u/nQ4+BAjDVOFfg5rwqxGhMSttGrVVVO1tjXVAh9FjppGepgnFO2PDX3D1m6zZD
-	Sze1KGVN5ZtE5/kJ/Wt54VTfnFscF/UExm7I9xgcOEFkI5uGDMWLQWLOzUdT/Cvp
-	dZClv8TL3aCCvSgpGLRZjxEy32h1pbstqvDkSWbmq950ep8gqyXpGPptxt0izSav
-	nvld4lqeGmcQkOyTWZTb+wPLlKbbagR4vqRF162JyCSqMOrBWuqhZLHq5fkJ+m+O
-	Hyrz/q+RAhVQ31AQeY96HiJ1sKlA2OEsYq0ZlQKyBqFN0oYkq/5nQ==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bt612f1ma-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jan 2026 21:20:01 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60MLJPSt031579;
-	Thu, 22 Jan 2026 21:20:01 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bt612f1m6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jan 2026 21:20:01 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60ML8q7c027233;
-	Thu, 22 Jan 2026 21:20:00 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4brnrncy3b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jan 2026 21:20:00 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60MLJuLT61669880
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 22 Jan 2026 21:19:56 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 312A32004B;
-	Thu, 22 Jan 2026 21:19:56 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6406120040;
-	Thu, 22 Jan 2026 21:19:49 +0000 (GMT)
-Received: from abhi.. (unknown [9.124.222.159])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 22 Jan 2026 21:19:49 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
-        andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
-        iii@linux.ibm.com, shuah@kernel.org
-Subject: [PATCH v4 4/6] powerpc64/bpf: Add arch_bpf_stack_walk() for BPF JIT
-Date: Fri, 23 Jan 2026 02:48:52 +0530
-Message-ID: <20260122211854.5508-5-adubey@linux.ibm.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20260122211854.5508-1-adubey@linux.ibm.com>
-References: <20260122211854.5508-1-adubey@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WWLd9mJg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769117538;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oLjsVSVWp5TxJT1pf9TFdMJsBUtHxxrgfqSXsvcsR5I=;
+	b=WWLd9mJgYySllN2W1flaH7qS5WEmeXGsW7RKlB7X5qR52UVKN6IwX+A9vHd2/zsMZyu52n
+	VKtJe44jZ1TWyh/1KtdflPa3CLuIdc3RYFuOLhyIbLNFxcN3VYz59EjK0IV2jywf+N5CdO
+	JxOgBiEnqLRz+c0tUc4kdq72OELsBPE=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-408-qTfaNDFsOH6O-dzcd-SG5Q-1; Thu,
+ 22 Jan 2026 16:32:15 -0500
+X-MC-Unique: qTfaNDFsOH6O-dzcd-SG5Q-1
+X-Mimecast-MFC-AGG-ID: qTfaNDFsOH6O-dzcd-SG5Q_1769117534
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1B63918005B7;
+	Thu, 22 Jan 2026 21:32:14 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.64.171])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E18331956095;
+	Thu, 22 Jan 2026 21:32:11 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+Cc: "David S . Miller" <davem@davemloft.net>,  Eric Dumazet
+ <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
+ <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>,  netdev@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] selftests: net: make ovs-dpctl.py fail when
+ pyroute2 is unsupported
+In-Reply-To: <20260120230558.328423-3-aleksey.oladko@virtuozzo.com> (Aleksei
+	Oladko's message of "Tue, 20 Jan 2026 23:05:55 +0000")
+References: <20260120230558.328423-1-aleksey.oladko@virtuozzo.com>
+	<20260120230558.328423-3-aleksey.oladko@virtuozzo.com>
+Date: Thu, 22 Jan 2026 16:32:10 -0500
+Message-ID: <f7tzf65uyed.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Bi1LIpXrrGVye6rfzAQkPQovYN59Ekfz
-X-Authority-Analysis: v=2.4 cv=LaIxKzfi c=1 sm=1 tr=0 ts=69729481 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
- a=ovcAVf-9gG4EF5hqTukA:9
-X-Proofpoint-ORIG-GUID: BWYecn5M-kVPH1btpTP8sK0d8HdbdFG4
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIyMDE2MiBTYWx0ZWRfX2YhzRuJhLt/I
- eK5YHBqr1K76OrTkancm/KzY8JobRFCIAG2GZIZma4pigrSKQMMaRcWRIZ+ogDcc+tlH/CiRAzQ
- /J41SqKdvOQ8JgrGk/umy8YEB1Tg3RNC163EyWLw1Kj0qUrgft3ZS7wAAyvYYLPHKdn2xIcYltX
- V1/+kP6Eorgy8Frp/a3whSjC+g7Cv5u5W+Wx7ebStVxYACvwe2n9Dzud1ow45PefvmPqEykE9OA
- tVUZ0LJmrwWtlVv3KY9FLOppMDIzGfZ55RnSXuZahrhZTuuqLcXDvK1leu2oOfjchZbTTkgi/BU
- MR8N05Zuj7IKxvhwHy1I32YBt4bG4CkHs6yGNwvQ/CicRTJP6HjHoGTtFHoupd+7TIpVDdlokEr
- UHzGobbJTVv138CugPrhbk6LlCBKxz+61gap0IO1SMbxUqsLDTUbdK+U+nkECIiTGuUt0BNVyGV
- H8BGWO9eKYRmLT6PsVg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-22_05,2026-01-22_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 clxscore=1015 impostorscore=0 spamscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2601220162
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+Hi Aleksei,
 
-This function is used by bpf_throw() to unwind the stack
-until frame of exception-boundary during BPF exception
-handling.
+Aleksei Oladko <aleksey.oladko@virtuozzo.com> writes:
 
-This function is necessary to support BPF exceptions on
-PowerPC.
+> The pmtu.sh kselftest configures OVS using ovs-dpctl.py and falls back
+> to ovs-vsctl only when ovs-dpctl.py fails. However, ovs-dpctl.py exits
+> with a success status when the installed pyroute2 package version is
+> lower than 0.6, even though the OVS datapath is not configured.
+>
+> As a result, pmtu.sh assumes that the setup was successful and
+> continues running the test, which later fails due to the missing
+> OVS configuration.
+>
+> Fix the exit code handling in ovs-dpctl.py so that pmtu.sh can detect
+> that the setup did not complete successfully and fall back to
+> ovs-vsctl.
+>
+> Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
+> ---
 
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
----
- arch/powerpc/net/bpf_jit_comp64.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+You should also include the fixes line when you post another version:
 
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 18da5a866447..c25ba1ad587a 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -247,6 +247,34 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
- 	bpf_jit_build_fentry_stubs(image, ctx);
- }
- 
-+void arch_bpf_stack_walk(bool (*consume_fn)(void *, u64, u64, u64), void *cookie)
-+{
-+	// callback processing always in current context
-+	unsigned long fp = current_stack_frame();
-+
-+	for (;;) {
-+		unsigned long *frame = (unsigned long *) fp;
-+		unsigned long ip;
-+
-+		if (!validate_sp(fp, current))
-+			return;
-+
-+		ip = frame[STACK_FRAME_LR_SAVE];
-+		if (!ip)
-+			break;
-+
-+		/*
-+		 * consume_fn common code expects stack pointer(sp) in third
-+		 * argument. There is no sp in ppc64, rather pass frame
-+		 * pointer.
-+		 */
-+		if (ip && !consume_fn(cookie, ip, fp, fp))
-+			break;
-+
-+		fp = frame[0];
-+	}
-+}
-+
- int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func)
- {
- 	unsigned long func_addr = func ? ppc_function_entry((void *)func) : 0;
--- 
-2.48.1
+92e37f20f20a ("selftests: openvswitch: Add version check for pyroute2")
+
+>  tools/testing/selftests/net/openvswitch/ovs-dpctl.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> index b521e0dea506..848f61fdcee0 100644
+> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> @@ -2583,7 +2583,7 @@ def main(argv):
+>      prverscheck = pyroute2.__version__.split(".")
+>      if int(prverscheck[0]) == 0 and int(prverscheck[1]) < 6:
+>          print("Need to upgrade the python pyroute2 package to >= 0.6.")
+> -        sys.exit(0)
+> +        sys.exit(1)
+>  
+>      parser = argparse.ArgumentParser()
+>      parser.add_argument(
 
