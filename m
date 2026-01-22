@@ -1,122 +1,203 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD242DEA8F;
-	Thu, 22 Jan 2026 22:23:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769120597; cv=none; b=fEVKcbINRIz9CLG1svnoNM71AqdgVUewhk4/lTqyPH8eRmvgbaajsnE4+d9/boQE4FKViUvAiBB98Qll37seoljGvvnkHYXQSVcvMWMpSMU+yUh0CbdkWV5AeqEbKIkgFVF0qC1j6w9VthitENtpZQcYJ9HXbcWH92t6Y2t1lCg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769120597; c=relaxed/simple;
-	bh=rI8cEY7QQ/tpSibbWQK6eB3pyIwIXZc1joW/Z6zajq8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cT3LNS1uhdUvK7Q+0DAei43T4nFXytb+3RdpEp6B7d/8MtXjj5Sv9YGT1kEmamHs2jmVI++c7DOxCuFmcYi6mEXfRFvPfFKaFdLPWCYhXl/WsypRMYbs3MaTeRrAATBda9IOBcfm0XYS/8dz8jXzeNGTAWHRCqTvH28W8/bcJ6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xj5/UTFB; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E15B395728
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 22:47:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769122057; cv=pass; b=V87000vWa5DodGun7E4d2keHEtb7zmvtrf3ClQFrjkKTULRbtW2tCVUQsr3Ih33bGX+RQtbSLkDy+ELSIQDGnpYj1mYeCXA7m0mCKy9LvkremGYAO994RzNOi+uDxFIyB4x/WHZvidW3XL5NAyMBJMfxFfpACD4dqt8Pyxhlcps=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769122057; c=relaxed/simple;
+	bh=xs+dLd9PKnX16GE3/TgauaKHwwAlEIk3gXFN84JGCiE=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ap6XRkwMG2OiCgLsOf+EXbkzTFAYndQBHAuwNudgk3hGIoh/CAW4GlnKjUBBoptyMYQXMXZGfyNcTAPn81CqgAe12sHua/bpDvatXZV+jxa6xwWJRoVs9blNAt2ZE9TEJ1f6oxNlHdJ2DxgrHq6IxoDsWEqDK54ZSBtrhu1ddvk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=efb65WUp; arc=pass smtp.client-ip=209.85.222.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xj5/UTFB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C8B7C116C6;
-	Thu, 22 Jan 2026 22:23:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769120597;
-	bh=rI8cEY7QQ/tpSibbWQK6eB3pyIwIXZc1joW/Z6zajq8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Xj5/UTFB2f/mWRyHUyR7fOrgLt7tdYGJ89R8wttK585IX2k+7+zX+0Vw5XPgm9VF7
-	 F30uDULPRZTO1j4S1+OqDT2KHGAsp3BvOZRubhj5N/vxjLbRmTaJb3xExRqQXpmD4J
-	 lDrNAWDhvoECk/a/HRQfMC7hqMddcceDFOy1DH9gpiIclHnlaPK1QIU7KR8t2U4WkC
-	 IjqS2EJVdDJc7kJ+pmCN6Mp8iJXnZ1JXk5sUepdU3g89o0plkE8xjbAkfVc1pc44Da
-	 ou8b7IdFp9nuIa2fiwB785GxYWBbFT4JoUmhygCX5Ok3R0ZtE+fhRRMeKFQ9aVnvBf
-	 zGzJzp+wwBs2Q==
-Message-ID: <514a3e29-6f5e-4d7c-9e67-cb001573d41c@kernel.org>
-Date: Thu, 22 Jan 2026 23:23:11 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="efb65WUp"
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-93f500ee7b8so896733241.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 14:47:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769122051; cv=none;
+        d=google.com; s=arc-20240605;
+        b=hzZ4z4eWRWcqs2fTa1Gt6YZyRRQbYx+nBH0HfPN7H+6brPK6nJ9ry4taDxGQBcbUme
+         E0VWFEMiooNI9AV/IK9Okf2fIKL9t0Oyx4FqEWRZrVJof5rQzvv6wy1kX2lkvrvmC9qb
+         skEXVpQStERm67VJLwyCN2WE4wLg9SuzXyKk8LY6Z60IFa1NMUuaqagqUAOi3dkZVZaD
+         W2yHv4RNxP0RfhZHtSEsbmpJW8t5b3fMTwysoFkMaDizuBmJsVXWSguOJqby95cL9bWD
+         9Trh7MPAvSA8fW7TKI8c+ZQolCDiKaDd0cjhW5tMiJT/ZXwjX12fxoxw1+NjwsE98rbu
+         foDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=xs+dLd9PKnX16GE3/TgauaKHwwAlEIk3gXFN84JGCiE=;
+        fh=p4FxjpSnWizQdH1BGq4P8IUUtUDjXH2ixPWEeb8tKMA=;
+        b=IKWmNk9jYqqCh3C3/K9UEBY5lkfzygvOWcUUYezTRBpVi0rV5sCvq8Sr/O9l9wLUaH
+         O8HZcAgtfEFVOBSChI7ZxASnmSmddpMvC5eJcZbpdkeYQ89d1r6LNIm6FHE6geIVsYQY
+         EmjPIf6NCYxxNM4Waecg8I0sEMM4boyIvf2nSM1YkYmM6HyXNoZJPMiH8wPr+8k2hxgP
+         lj+dwIK+sqb27rvrSQukOOJCaKc2BsnYDi9JEe0sExeztmjakkqqb/3x1hpy/xMTGVQC
+         KCj4tFH237I7Bj26iMQZ8UwX0nQfi1zGH6qbhA5ItUE2zmEHLc/r7K2vUFCm3/xuNwUq
+         UghA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769122051; x=1769726851; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xs+dLd9PKnX16GE3/TgauaKHwwAlEIk3gXFN84JGCiE=;
+        b=efb65WUpsdnX9MYn5Ketl7Aqg/S+LI5Twe86EAN0CJTXTQi0SV6Bc272kwWB7FV0YN
+         VTMlkEUN8MS6bLkGYmILKii6n/XJ35CPl/ILj3DG7K3xM4+6SS49g6yrAvmzWytKVEOD
+         T5SY7G9OaavZfDvBTD8//I95ljshXWVriDkG6Ob3ZNbZhhRFOml4NIXTj6qn7LZyAWAQ
+         xVorS0Du0q+93wf+l2qMsTaHfD6Teinzsu04Csei+HRHvjEQI3gZYVMuVqWJCuRqmfuK
+         4swpPyoAFWCfix/BNwv0dlaxb0vbG3lHkKG0G4CbblEPQTn6grdmtf9GRYYV07o3eWEX
+         6TsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769122051; x=1769726851;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xs+dLd9PKnX16GE3/TgauaKHwwAlEIk3gXFN84JGCiE=;
+        b=n3x2xwGDav+pbtrwDi8mM5nmbP8nLOQrbO+xmIk/IJCvGvm/r1wZf8zb3BzwPMPRRm
+         RUqiUH3YPRQ5IIC3i8kt4wOpyTEsiImf/RGZ3UyRHBg3zN7fhJoGJGH0UfLq9DTNL0kK
+         NSuaICcdv5whDpIXi3EY53SMHftGiQ8Qn4ZiaC9weSdZl6uFk+Qnmb8vZ5OpSWz5jXUy
+         awrKolnbIKdzQ1rcMySvpYYu0YSpnsKR+DXauE8+OUk32tZ75pfr28IJJufeZYoGsou3
+         CCtGoxkvJi+mPcaMlRspRGRNFMJZXmMsOBSby0YEAKTUy7tesmCwWGGOWg5qcWnO7kvW
+         2JTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX3DugG/TpZLrjmRCxwzg/XmWBK2VZJgklcBpcam5TZdnVhnPznHZckcbNET1rtA5WFdYRC5zj8PXH2fW8cXoY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaEAk/Ux6KBYfkBTb03tG6G5Mrvcs9lm2XO+chlwWwWQKuCM1i
+	WpkOwqY+Y5nI0M7PCEnhOE/RbIhhYZBF6WzlVhen8wfKxBdpu9+aNN+cedmXd2yfW6xZ6bSaWjb
+	BjYX3mlWL1V4/xYXmmM0fAXe8+523/MfOhtaMx1hZ
+X-Gm-Gg: AZuq6aJeZqz7Vo+9kIWFuDL1dDJ+AdxtQBOsCtU72nrzWNkzoC5HiQ8OfyjrtIC9xQ1
+	KA4JY3chdx6kDXGl9bcCPhhTB80QUpY5ryLnBYpiVzjgmbI+Cy1mqopt3UB0QEWxwCFe6bTF3wT
+	o8zSTs4znL2nrHkIej59gp5qCuEJnNlEUJwdJV2/k7tz3BFr2Fo0fb/g0i5wtcNtb0d5Ur65g6y
+	8ClXZMyLkgCZ8o0r+MCtJ3nysqb7LDH2yDzBK94hZN+lERpn1eHPU42ZoK1AmPMjsUZRrHD85MB
+	T+ZOl6Pq2yQ4EzAEcAJBfDTGv0It8cjoc6Y=
+X-Received: by 2002:a05:6102:3a12:b0:5ef:7220:bcb2 with SMTP id
+ ada2fe7eead31-5f54bc8224dmr480092137.28.1769122050230; Thu, 22 Jan 2026
+ 14:47:30 -0800 (PST)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 22 Jan 2026 14:47:29 -0800
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 22 Jan 2026 14:47:28 -0800
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <ee9c649eed3893d852c3d20fb96bdc4904b7c295.camel@intel.com>
+References: <20260114134510.1835-1-kalyazin@amazon.com> <20260114134510.1835-8-kalyazin@amazon.com>
+ <ed01838830679880d3eadaf6f11c539b9c72c22d.camel@intel.com>
+ <CAGtprH_qGGRvk3uT74-wWXDiQyY1N1ua+_P2i-0UMmGWovaZuw@mail.gmail.com>
+ <8c1fb4092547e2453ddcdcfab97f06e273ad17d8.camel@intel.com>
+ <CAEvNRgEbG-RhCTsX1D8a3MgEKN2dfMuKj0tY0MZZioEzjw=4Xw@mail.gmail.com> <ee9c649eed3893d852c3d20fb96bdc4904b7c295.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 9/9] selftests/mm: report SKIP in pfnmap if a check
- fails
-To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Dev Jain <dev.jain@arm.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Mark Brown <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>
-References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
- <20260122170224.4056513-10-kevin.brodsky@arm.com>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
-In-Reply-To: <20260122170224.4056513-10-kevin.brodsky@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Date: Thu, 22 Jan 2026 14:47:28 -0800
+X-Gm-Features: AZwV_QhacTtf2zgQk3uMxNHfKwdT09Bqx79KDOGE5Z3VW9UujMTrgN_9VI-QiKU
+Message-ID: <CAEvNRgEz0+ic9uvcsWYqWgR5EV=TfY0SAGC39zAL+n19SoBXmw@mail.gmail.com>
+Subject: Re: [PATCH v9 07/13] KVM: guest_memfd: Add flag to remove from direct map
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>, "Annapurve, Vishal" <vannapurve@google.com>
+Cc: "david@kernel.org" <david@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>, 
+	"jgross@suse.com" <jgross@suse.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"surenb@google.com" <surenb@google.com>, "vbabka@suse.cz" <vbabka@suse.cz>, 
+	"riel@surriel.com" <riel@surriel.com>, "pfalcato@suse.de" <pfalcato@suse.de>, "x86@kernel.org" <x86@kernel.org>, 
+	"rppt@kernel.org" <rppt@kernel.org>, "thuth@redhat.com" <thuth@redhat.com>, 
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "maz@kernel.org" <maz@kernel.org>, 
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "ast@kernel.org" <ast@kernel.org>, "pjw@kernel.org" <pjw@kernel.org>, 
+	"alex@ghiti.fr" <alex@ghiti.fr>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, 
+	"tglx@linutronix.de" <tglx@linutronix.de>, "hca@linux.ibm.com" <hca@linux.ibm.com>, 
+	"willy@infradead.org" <willy@infradead.org>, "wyihan@google.com" <wyihan@google.com>, 
+	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, 
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>, "jolsa@kernel.org" <jolsa@kernel.org>, 
+	"jmattson@google.com" <jmattson@google.com>, "luto@kernel.org" <luto@kernel.org>, 
+	"aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, "haoluo@google.com" <haoluo@google.com>, 
+	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "peterx@redhat.com" <peterx@redhat.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "coxu@redhat.com" <coxu@redhat.com>, 
+	"mhocko@suse.com" <mhocko@suse.com>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>, 
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, "song@kernel.org" <song@kernel.org>, 
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "oupton@kernel.org" <oupton@kernel.org>, 
+	"kernel@xen0n.name" <kernel@xen0n.name>, 
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "peterz@infradead.org" <peterz@infradead.org>, 
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>, "martin.lau@linux.dev" <martin.lau@linux.dev>, 
+	"jthoughton@google.com" <jthoughton@google.com>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>, 
+	"Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "hpa@zytor.com" <hpa@zytor.com>, 
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "shuah@kernel.org" <shuah@kernel.org>, 
+	"chenhuacai@kernel.org" <chenhuacai@kernel.org>, "prsampat@amd.com" <prsampat@amd.com>, 
+	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "maobibo@loongson.cn" <maobibo@loongson.cn>, 
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>, 
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "itazur@amazon.co.uk" <itazur@amazon.co.uk>, 
+	"pbonzini@redhat.com" <pbonzini@redhat.com>, "yuzenghui@huawei.com" <yuzenghui@huawei.com>, 
+	"gor@linux.ibm.com" <gor@linux.ibm.com>, "dev.jain@arm.com" <dev.jain@arm.com>, 
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "jackabt@amazon.co.uk" <jackabt@amazon.co.uk>, 
+	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, "andrii@kernel.org" <andrii@kernel.org>, 
+	"mingo@redhat.com" <mingo@redhat.com>, 
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "joey.gouly@arm.com" <joey.gouly@arm.com>, 
+	"derekmn@amazon.com" <derekmn@amazon.com>, "xmarcalx@amazon.co.uk" <xmarcalx@amazon.co.uk>, 
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
+	"kalyazin@amazon.co.uk" <kalyazin@amazon.co.uk>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "sdf@fomichev.me" <sdf@fomichev.me>, 
+	"jackmanb@google.com" <jackmanb@google.com>, "bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "jannh@google.com" <jannh@google.com>, 
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kas@kernel.org" <kas@kernel.org>, 
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "will@kernel.org" <will@kernel.org>, 
+	"seanjc@google.com" <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 1/22/26 18:02, Kevin Brodsky wrote:
-> pfnmap currently checks the target file in FIXTURE_SETUP(pfnmap),
-> meaning once for every test, and skips the test if any check fails.
-> 
-> The target file is the same for every test so this is a little
-> overkill. More importantly, this approach means that the whole suite
-> will report PASS even if all the tests are skipped because kernel
-> configuration (e.g. CONFIG_STRICT_DEVMEM=y) prevented /dev/mem from
-> being mapped, for instance.
-> 
-> Let's ensure that KSFT_SKIP is returned as exit code if any check
-> fails by performing the checks in pfnmap_init(), run once. That
-> function also takes care of finding the offset of the pages to be
-> mapped and saves it in a global. The file is now opened only once
-> and the fd saved in a global, but it is still mapped/unmapped for
-> every test, as some of them modify the mapping.
-> 
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> ---
+"Edgecombe, Rick P" <rick.p.edgecombe@intel.com> writes:
 
-Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+> On Thu, 2026-01-22 at 08:44 -0800, Ackerley Tng wrote:
+>>
+>> Can we disable direct map removal for errata systems using TDX only,
+>> instead of all TDX?
+>>
+>> If it's complicated to figure that out, we can disable direct map
+>> removal for TDX for now and figure that out later.
+>
+> In theory, but it still would require changes to TDX code since it does
+> the clflush unconditionally today. To know whether clflush is needed
+> (it's a different thing to the errata), you need to check a TDX module
+> flag. (CLFLUSH_BEFORE_ALLOC)
+>
+> Gosh, you know what, I should double check that we don't need the
+> clflush from the vm shutdown optimization. It should be a different
+> thing, but for we gave scrutiny to the whole Linux flow when we did
+> that. So I'd have to double check nothing relied on it. We can follow
+> up here.
+>
+>>
+>> > Then there is the clfush. It is not actually required for the most
+>> > part. There is a TDX flag to check to see if you need to do it, so
+>> > we could probably remove the direct map accesses for some systems
+>> > and avoid temporary mappings.
+>> >
+>> > So long term, I don't see a problem. For the old systems it would
+>> > have extra cost of temporary mappings at shutdown, but I would have
+>> > imagined direct map removal would have been costly too.
+>>
+>> Is there a way to check if the code is running on the errata system
+>> and set up the temporary mappings only for those?
+>
+> The TDX code today doesn't do any remapping because the direct map is
+> reliably present. There isn't a flag or anything to just do the
+> remapping automatically. We would have to do some vmalloc mapping or
+> temporary_mm or something.
+>
+> Can you explain what the use case is for unmapping encrypted TDX
+> private memory from the host direct map?
 
--- 
-Cheers
+There's no use case I can think of for unmapping TDX private memory from
+the host direct map, but Sean's suggestion
+https://lore.kernel.org/all/aWpcDrGVLrZOqdcg@google.com/ won't even let
+shared guest_memfd memory be unmapped from the direct map for TDX VMs.
 
-David
+Actually, does TDX's clflush that assumes presence in the direct map
+apply only for private pages, or all pages?
+
+If TDX's clflush only happens for private pages, then we could restore
+private pages to the direct map, and then we'd be safe even for TDX?
