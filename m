@@ -1,176 +1,121 @@
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D836C421899
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 16:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C9534F472;
+	Thu, 22 Jan 2026 16:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769097693; cv=none; b=TOuzy/BkiVMDp+YjPuKVZqnNsqSU6lpO487Wv3PgsGNIblWV4E2G4Ur2mSYaDVD/6aN3t+cbpB9fkIRVbnkGGkj5MP0VQpigZmfFfN4hSvbRiPeJdZYwRCw+KhSIDV5e/aM/KY9OwHy+iBLvtDqZpTC5hm7j9caPmrvHQXO1LaA=
+	t=1769097736; cv=none; b=Zp2W+re9vIxpLdnAleLLelbIwsZmk/RPbpRzoXbI6ke37ioojv0QaDXjN0NtAxVysOZhFQ3gS6H8LZow+/Xz7VBXa5mUlZLF9OKWF7Z6znet7dugAxnL286bswdFCI93sJLiYWpsli2qRRLkaHi3o0J8yT4BH8zmkOFbRpWr3fo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769097693; c=relaxed/simple;
-	bh=9JzOfqiTFO39kgxFQWVLYY5umNJRQRPCw/NtCy7HzoI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ubO5sVNosjZATBL+LOTTLzT91aK0NVhP2kmXnhZHS8PeawiQVXyUUOqj3MlykTKj5fDNLJORidWvqQuhKUOqSB5Kw4Yc6E7M1yfTwqevtelc+N48Dke6V9BZUAWvQWmshwAnQwnHi0sV/GjMZOCh5dpgVMXZjmCXhSkCZlqToxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l2Rj+KiD; arc=none smtp.client-ip=74.125.224.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769097736; c=relaxed/simple;
+	bh=IrHcyedQGo0qLm6aBIsO6/oqyQpXGwxTdLybEDdlwgc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=CuJ6uSvv/9z+1QtAtUFPu74tS5k923eBVqlwXv8IIaZeymQpAmBojppVwr6DwEJDcyj61SYxoK7hgJ6iQT5h+E12SWEdXc1Lp0ZuNolSVsqLjwqkGlkBgKac0X88FOG1sZVtdClgSj4vdpLQKqvUvMgoLk+4MkA3T09a2pZKwrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O3V/oARy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l2Rj+KiD"
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-648ff033fb2so1268931d50.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 08:01:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769097688; x=1769702488; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4nNXaOW8SsH8VsbBiV479RmC0+eq7tMcFo5rcunlQoQ=;
-        b=l2Rj+KiDdtD2q2NtiGMA5033btXx9v484iJj7k8xvoYFUvON0uWN//Nj0B5cEZyYul
-         k8z+xwAcG4QnP/VahCqMOrvr3kNZJu14BB2o8opiF+eHpFAxpgElXJ6ycHbEVZkbIRD7
-         rpdBZZfPcAObZ4iovLDSomfuB/s4pjTq2lFUqlmgqWdE6oJy5RUYj5cZe9uGJHN0M494
-         llfIRIqnvzfZwBz14cODqAs3+Sa9Ytcpw6atLylFbOKCh0RbvLu7V39tzPsAij/QIppG
-         Kn19Zf7i/MnoUjTB2+4IWB1BZUNurieL8640i6M9ASZR7pjIn3vnLTbALhflJdeG896f
-         VXFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769097688; x=1769702488;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4nNXaOW8SsH8VsbBiV479RmC0+eq7tMcFo5rcunlQoQ=;
-        b=IOMwZd27YQRUc81bfdNm22hIbcnhRea8+AxVJ0MiNPd6DtxNxgaizJcJ7RH6lWHu48
-         NZgfZ1BzKjGnk2ykaL4R8nNagTHb1VDdwQQAPFPPHE6QHWeVdCDawm9G7PoyRe81dWg6
-         vaf6ihBGozrO1aHOxqJ0t9GQL/hW9G9TipmT+gBv1hhrQNpf11Vry+bLOpV85DJv77Ci
-         6TasnQr3bhUfQTEwyJy+p23Bb7XYcJRfCr3+TMJbKJmKQVk7TkRo5IsgrXaUwQvpOrpW
-         Z5e5w2ziz1HSddZoJWnjZAW9CjTQq5lFsrFZPzcaZnzItZrPQc58nN84iV8RQYdpRtfM
-         IKBA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFe+tfXkFJq3ylrOHVb00LZkylBjMIzJgCJSKbYyggZVWRTT2ch7tLZWRXnZOvzAdAgmBnu1Nxg6e3JMYpKSs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxhu47a+YLOtc8LKNLKycInUNH6oY9YczH7VYV7sgY4gyEI7v+l
-	G5d2lQMVNdPOUbR9W4Jrw1bpFOrbWwGT8m3PDmvyOGe8IdIrc1eooG47
-X-Gm-Gg: AZuq6aJBjJBG9BW9A+aqVyjzxFDTzHMZUQivQs7eWrWmLFLCjLxXBzuF5L04JCeZO6+
-	ZnxDRCVmFTmjsgIEI7RsVM41zp+ewPnxRN1yknzhxnNZMVPlHDaHSwwcw5ffZqhmEH05Kh1yEx6
-	5yxjrTpxsk0btpliTi0UcD5fef6Pw0J4bQmaU3OMVULsfjQI/L6ihD7aOHYC8H6HQXNNGLwI+Vm
-	e47BHvy0EV+rhQnrkhG4Z+lb4TBL5wefQydBM3NsN0gpR/NNekl5M4Txmjby1kDBqmKidhoUzHe
-	9J1GGWQIMN83dNO5LbGzeRB8wmr0rr+XWIDV8bA83GkLXuSPLb4v6a9qUFLDwGu+YaoZtYbY3pF
-	TeQdYzhqzDbhN8AUVImx7tJZBj41zo679hWn50MB4NmpRQrPOv18YsnPitqSenspTAZeOlhKihM
-	HGIZY1WpX9m6beFFo99P6qrYqCjWGnNnwgVA==
-X-Received: by 2002:a05:690e:d8b:b0:649:4689:c4a9 with SMTP id 956f58d0204a3-6494689c534mr4815658d50.89.1769097685513;
-        Thu, 22 Jan 2026 08:01:25 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:7::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-649170acbdbsm9523979d50.13.2026.01.22.08.01.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 08:01:24 -0800 (PST)
-Date: Thu, 22 Jan 2026 08:01:23 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Bryan Tan <bryan-bt.tan@broadcom.com>,
-	Vishnu Dasa <vishnu.dasa@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, berrange@redhat.com,
-	Sargun Dhillon <sargun@sargun.me>, linux-doc@vger.kernel.org,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v16 00/12] vsock: add namespace support to
- vhost-vsock and loopback
-Message-ID: <aXJJ0yjZB5mT162B@devvm11784.nha0.facebook.com>
-References: <20260121-vsock-vmtest-v16-0-2859a7512097@meta.com>
- <aXH7YCgl0qI2dF1T@sgarzare-redhat>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O3V/oARy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D02E9C19425;
+	Thu, 22 Jan 2026 16:02:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769097734;
+	bh=IrHcyedQGo0qLm6aBIsO6/oqyQpXGwxTdLybEDdlwgc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=O3V/oARyTLx9nPs6TolS9zMpsw6WQ7RdlXNAk11hTMDUU5FisL17BY/unrFcT3mri
+	 mTCQ73Env68145EJRNB9hdncSoX9WYtiF7TT4UMrxOIfWtagA9UOevNa7KWyME4GZ7
+	 o/S+SyqeH6AU/84GIF/2K1lIphHdg8lOw9zyS4RO4YhcZQN0Yg/FPRbaDtl8YxzQh/
+	 0y265zeimbKRUWoX23JnD6RW2xtbCgAZJE364KbdRGQAjTKDxvaTiklIjRNEi9kFsr
+	 cPD7UnRcCNFkq85L8Dvfp+nuSbiXhTPRbRWAbP+EoTDDuoOdSeX+Nscc+Gd9MzBixo
+	 Z9q/jD71OM45Q==
+Content-Type: multipart/mixed; boundary="===============3118955334998125414=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aXH7YCgl0qI2dF1T@sgarzare-redhat>
+Message-Id: <df8fb7dc501dd081fcba56b592cba94e5aecd614ea4d3b595155dec551ecbca5@mail.kernel.org>
+In-Reply-To: <20260122153120.69249-2-leon.hwang@linux.dev>
+References: <20260122153120.69249-2-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Disallow BPF_F_LOCK with mixed special fields and centralize flag checks
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 22 Jan 2026 16:02:11 +0000 (UTC)
 
-On Thu, Jan 22, 2026 at 02:55:36PM +0100, Stefano Garzarella wrote:
-> On Wed, Jan 21, 2026 at 02:11:40PM -0800, Bobby Eshleman wrote:
-> > This series adds namespace support to vhost-vsock and loopback. It does
-> > not add namespaces to any of the other guest transports (virtio-vsock,
-> > hyperv, or vmci).
-> > 
-> > The current revision supports two modes: local and global. Local
-> > mode is complete isolation of namespaces, while global mode is complete
-> > sharing between namespaces of CIDs (the original behavior).
-> > 
-> > The mode is set using the parent namespace's
-> > /proc/sys/net/vsock/child_ns_mode and inherited when a new namespace is
-> > created. The mode of the current namespace can be queried by reading
-> > /proc/sys/net/vsock/ns_mode. The mode can not change after the namespace
-> > has been created.
-> > 
-> > Modes are per-netns. This allows a system to configure namespaces
-> > independently (some may share CIDs, others are completely isolated).
-> > This also supports future possible mixed use cases, where there may be
-> > namespaces in global mode spinning up VMs while there are mixed mode
-> > namespaces that provide services to the VMs, but are not allowed to
-> > allocate from the global CID pool (this mode is not implemented in this
-> > series).
-> > 
-> > Additionally, added tests for the new namespace features:
-> > 
-> > tools/testing/selftests/vsock/vmtest.sh
-> > 1..25
-> > ok 1 vm_server_host_client
-> > ok 2 vm_client_host_server
-> > ok 3 vm_loopback
-> > ok 4 ns_host_vsock_ns_mode_ok
-> > ok 5 ns_host_vsock_child_ns_mode_ok
-> > ok 6 ns_global_same_cid_fails
-> > ok 7 ns_local_same_cid_ok
-> > ok 8 ns_global_local_same_cid_ok
-> > ok 9 ns_local_global_same_cid_ok
-> > ok 10 ns_diff_global_host_connect_to_global_vm_ok
-> > ok 11 ns_diff_global_host_connect_to_local_vm_fails
-> > ok 12 ns_diff_global_vm_connect_to_global_host_ok
-> > ok 13 ns_diff_global_vm_connect_to_local_host_fails
-> > ok 14 ns_diff_local_host_connect_to_local_vm_fails
-> > ok 15 ns_diff_local_vm_connect_to_local_host_fails
-> > ok 16 ns_diff_global_to_local_loopback_local_fails
-> > ok 17 ns_diff_local_to_global_loopback_fails
-> > ok 18 ns_diff_local_to_local_loopback_fails
-> > ok 19 ns_diff_global_to_global_loopback_ok
-> > ok 20 ns_same_local_loopback_ok
-> > ok 21 ns_same_local_host_connect_to_local_vm_ok
-> > ok 22 ns_same_local_vm_connect_to_local_host_ok
-> > ok 23 ns_delete_vm_ok
-> > ok 24 ns_delete_host_ok
-> > ok 25 ns_delete_both_ok
-> > SUMMARY: PASS=25 SKIP=0 FAIL=0
-> > 
-> > Thanks again for everyone's help and reviews!
-> 
-> Thank you for your hard work and patience!
-> 
-> I think we've come up with an excellent solution that's also not too
-> invasive.
+--===============3118955334998125414==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks, and I appreciate all of the work you and other maintainers put
-into this as well! I think we honed in on a great solution too.
-> 
-> All the patches have my R-b, I've double-checked and tested this v16.
-> Everything seems to be working fine (famous last words xD).
-> 
-> So this series is good to go IMO!
-> 
-> Next step should be to update the vsock(7) namespace.
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 5936f8e2996f..c5863487ee73 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -3935,9 +3935,16 @@ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 all
+>  	if ((u32)flags & ~allowed_flags)
+>  		return -EINVAL;
+>
+> +	/* BPF_NOEXIST and BPF_EXIST are mutually exclusive. */
+> +	if ((flags & (BPF_NOEXIST | BPF_EXIST)) == (BPF_NOEXIST | BPF_EXIST))
+> +		return -EINVAL;
+> +
+>  	if ((flags & BPF_F_LOCK) && !btf_record_has_field(map->record, BPF_SPIN_LOCK))
+>  		return -EINVAL;
+>
+> +	if ((flags & BPF_F_LOCK) && btf_record_has_field(map->record, ~BPF_SPIN_LOCK))
+> +		return -EOPNOTSUPP;
+> +
+>  	if (!(flags & BPF_F_CPU) && flags >> 32)
+>  		return -EINVAL;
 
-Sounds good, I'll follow up with that and CC you + other reviewers that
-participated here.
+[ ... ]
 
-Thanks again,
-Bobby
+> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+> index e2fe6c32822b..80b50091cbbf 100644
+> --- a/kernel/bpf/bpf_local_storage.c
+> +++ b/kernel/bpf/bpf_local_storage.c
+> @@ -493,13 +493,6 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+>  	unsigned long flags;
+>  	int err;
+>
+> -	/* BPF_EXIST and BPF_NOEXIST cannot be both set */
+> -	if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST) ||
+> -	    /* BPF_F_LOCK can only be used in a value with spin_lock */
+> -	    unlikely((map_flags & BPF_F_LOCK) &&
+> -		     !btf_record_has_field(smap->map.record, BPF_SPIN_LOCK)))
+> -		return ERR_PTR(-EINVAL);
+                ^^^^
+
+This validation was removed from bpf_local_storage_update() but it appears
+that no call to bpf_map_check_op_flags() was added in the local storage map
+update functions. For array and hash maps, calls to bpf_map_check_op_flags()
+were added in array_map_update_elem() and htab_map_update_elem(). However,
+the local storage update functions like bpf_cgrp_storage_update_elem(),
+bpf_fd_inode_storage_update_elem(), and bpf_fd_sk_storage_update_elem() pass
+map_flags directly to bpf_local_storage_update() without calling
+bpf_map_check_op_flags() first.
+
+The syscall path does call bpf_map_check_op_flags() in map_update_elem() with
+allowed_flags set to ~0, which catches the NOEXIST/EXIST mutual exclusion and
+BPF_F_LOCK validation. But with allowed_flags=~0, the check for unknown flags
+((u32)flags & ~allowed_flags) always passes zero, meaning unknown flags like
+8 or 16 would not be rejected.
+
+The old check (map_flags & ~BPF_F_LOCK) > BPF_EXIST rejected any unknown flag
+bits. Is there a missing call to bpf_map_check_op_flags() in the local storage
+update functions that should specify the allowed flags?
+
+> -
+>  	if (gfp_flags == GFP_KERNEL && (map_flags & ~BPF_F_LOCK) != BPF_NOEXIST)
+>  		return ERR_PTR(-EINVAL);
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21254704407
+
+--===============3118955334998125414==--
