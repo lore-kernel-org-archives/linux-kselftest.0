@@ -1,368 +1,207 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E033FAFC9
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 16:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACBF385539
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 16:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769099009; cv=none; b=Uws28yyX9GP1lFG6tPPPjfOaM37/Bz4TChKIiWbq3nnyeuMYlXYirWfAX9q8dnO2lTf9tBK2zsUOhkS2fIa6AL/F135s3vTJXrPCSEI/IRStaQt25jLPPWKd7s+BgDGcuzkxqhhLdCjSO95wv9cg8MrPjB+1kGUSJWWq0NPdc44=
+	t=1769099618; cv=none; b=ST6DIFxmVsqeQeUNbm2ieJDvPlcXq0kg0eGtu1uVzSpRy+hr3DkBFE0fEMHs+seUCGx3qB1QFXmgnZAF1ZHYXucfROkAsdmksEiPD+RnSU5/HRxatyBeeOJam0LR9JspJw3Cy9RJJEyDwA2Itl9nG+nViE/xLDRDm/j9YEbp/mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769099009; c=relaxed/simple;
-	bh=0cpZL4CnoQJayvprLSYCcWhCM1ZKggb8ujo1E/u12io=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eGLbc6vHC93WAg60113tIOqluYDpU8R2KeyT7gJeicEB2JGfc4e0CCxaStyVFRiLMcLntGzBoBZeXZLpM53C0srQIgCQ5GhJ/AYsxtZn0bcUePoRx5TTsIo49UnxCOvOt0kELOO8tDA18c1hsDrl/Yfnh1HEMqSismrv4DW5++M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BjEZe2x2; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=loh1vGe0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769099618; c=relaxed/simple;
+	bh=Y/DxrZLydpwmmz0Syms0uR2pI10+1mDz4PNBLrDgRbk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=CDwd6fMcmZgR5K0BVEUovjMSu6rP+OUUaSKaAQSsll2dFIi9nBOes98Z/6yKI1TPVwriweLJNPHhjVxjaGhLCrNyKic3qfOrnUhUq7d0i8H9RNBbqD4yj5D/zOLaNTP31TgwHBk+GqiyHiEf0NEVEPrywRUegr3/VU3MR54jqcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2NmUl2eb; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BjEZe2x2";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="loh1vGe0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769098992;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7WZme2OWA32GKcXEMiT1Hf8mk1aTvSRs5qR+MZWFuW0=;
-	b=BjEZe2x2Kh6mO8swr9o5DCF/On9m9+ABC9//KSSSXUuUnOBIraTBGrmq4k7ySSWYmwkpAP
-	IOxkX0+TL/3O3JHpMAXCRAjnvD/dqhmnGS1GU8iWCwB3zRRpLUa4cSdj7+uTL51k2ri5a1
-	pKeRHsnwBWvrhFsao1sF7tcBo8ZIsqg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-63-kGfoL_onPISaekogwf5a6Q-1; Thu, 22 Jan 2026 11:23:09 -0500
-X-MC-Unique: kGfoL_onPISaekogwf5a6Q-1
-X-Mimecast-MFC-AGG-ID: kGfoL_onPISaekogwf5a6Q_1769098989
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4803b4e3b9eso9606135e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 08:23:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2NmUl2eb"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-29f25e494c2so12974695ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 08:33:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769098988; x=1769703788; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7WZme2OWA32GKcXEMiT1Hf8mk1aTvSRs5qR+MZWFuW0=;
-        b=loh1vGe0ej+t+iXE1837bDxRN/UroGX8KDm8IGIX9VelTb91I4N35/PVQ84BxKysTf
-         eM6EIkPYzGpkhLoBiH8/P9ytk8fSGazemRDZ64u3AsevOWh32WZwZKVPi1vPS2yhQHRW
-         IbaqmvSO6VWvc1qkZ5Wc776E3yhjNnhIhPROpTPf/ORbJEFNyqiEdqRUcYFtZVH1ZcQP
-         ufcOKreEHd2oZsuB3SRVD8gdsXdMwyKP68yHbGnEt1AkKg6YoHv7xf5JLgaH29hAFB/o
-         VFemUvU+1YThPV7QKXco2NFyZ16Km/bc3xr5WzX03X+oL42jKvUNJIammPusji6O4HoF
-         PB4g==
+        d=google.com; s=20230601; t=1769099613; x=1769704413; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0DHre52zcfUG5Dlxo0L5XhBtVLSt791ZQgqxsuF7FrM=;
+        b=2NmUl2ebtpbENV5/kQCF9lDFfIlwJxVRZRFZ4XBnM4FljWw2fb3jLrLNixAV6e6Opb
+         FYYcMYpvLz9uL6atZjY6b+i8VZCX8S18Lf0RnQTAYLqQUtevx4hiPi652YnR+1iQ/RLV
+         WTxXfBBOQnT4i+MrsuNQCOCCGd4qBj7CLqBc8houpnuZ4ob+9SNcY4TRe5Tbar1jp6Iu
+         KU2sdpMWKjjeJv3iReueDihV9ykZAQo6AEj+lRbtEVPmJ/YohdOJ0vvyMimBaylbYCj/
+         GGrd4lneZLrVlL4xkRl9ojdU0eC/q+gCKklwsN8WxlyiST7tbz+Wcl1RFhCS81JFbhPb
+         1mGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769098988; x=1769703788;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7WZme2OWA32GKcXEMiT1Hf8mk1aTvSRs5qR+MZWFuW0=;
-        b=apJg/NMx86yAehCm4f2RlmBb2WVHyb8aisUx+g5Xx+YQNQ9cXr3y7/Jv8byjPZRPnE
-         TR+5Xj4mztv2H3ZFjkXu264t1EA9KGRzVUzDzBDDXXaW7HgR8uWkovbcerqvpQ8T0gNC
-         ehK9vtVbQfoAkU9sOz1OxeRkszaEx5YIxbmKzsOGQw0TmLt8dipe/kcxtBLZXxDJx/T/
-         QbOThsSMwbz4BKC+prrHHEbtET98wdytdnPXjH95c/BGGerKS2MralcLpAwJfDnro4jc
-         cZQCoLsotYLmiaDN5lemXUIi7qU0zsvTJO6Jw3SNsRpMDoTgsGvIZMHoHilqG06Q66Nq
-         CKdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVKqTQL2mfEPGBMZHRnkv8qZKUdVwaBulER5nmiGYcaemMh0By0xCzEG3P+lNNnWTf1ssWuWhNw8PP9A0vu00Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoYr8+wK0iXnf1pbEwz1FqRJrP4xSYMZc16RowkQu85rNiCCh3
-	Bls1FbLcxcbB9OpZmxU2dTUNRiwDJA0JgZCXi1OqfDUtxQVZm2djY09nQ9iAwIBdVTcz/ohO7YS
-	+AWDMl+jo3DXXJgtZ5tvSYRs5t2hHTHD/JcjfxRex++3GsBd9GBl02SDOj+Aq6ypmhJFeQg==
-X-Gm-Gg: AZuq6aIbhGXK6jDBAEXQ4u3mf7qKgEiTYmjYOM4W0qHaVweCP89x8qT959W1yGyfIIH
-	2x06PTPuu9wqqYKEqHzcrwtKju8bd+IlFXIt4gMISlTpMsXL480vaAmz+zR8f5iKEPVXp9r3If2
-	nTjPP6zmvbugoVEdBOXvkUw5TnCl+T3P+SU6YRuHO2X4yKMrrTxit9Plwm2nQUtook+nVb3I4Su
-	KfBKUb0P/71KeeUP1LMKQUTLpW6pSevbGxnYkQjd4FxUX0VcGyAp+yGypuSVL2eVVJyZiP0t/f4
-	fisWWfuCFluwwtDyyjcWIEHbmqXY65F1YNS8VNy2IIIKHSofkjQeQS4Xs3DdV1krnf/u+xjC+q0
-	2RYXIQl0FaDTnIgVr+vazrXCLiTRykBDGpQ==
-X-Received: by 2002:a05:600c:34d0:b0:47e:e779:36d with SMTP id 5b1f17b1804b1-4804c9afcf4mr2882825e9.23.1769098988426;
-        Thu, 22 Jan 2026 08:23:08 -0800 (PST)
-X-Received: by 2002:a05:600c:34d0:b0:47e:e779:36d with SMTP id 5b1f17b1804b1-4804c9afcf4mr2882145e9.23.1769098987778;
-        Thu, 22 Jan 2026 08:23:07 -0800 (PST)
-Received: from redhat.com (IGLD-80-230-34-155.inter.net.il. [80.230.34.155])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4804252b02dsm57271945e9.5.2026.01.22.08.23.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 08:23:06 -0800 (PST)
-Date: Thu, 22 Jan 2026 11:23:02 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Bryan Tan <bryan-bt.tan@broadcom.com>,
-	Vishnu Dasa <vishnu.dasa@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, berrange@redhat.com,
-	Sargun Dhillon <sargun@sargun.me>, linux-doc@vger.kernel.org,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v16 00/12] vsock: add namespace support to
- vhost-vsock and loopback
-Message-ID: <20260122112252-mutt-send-email-mst@kernel.org>
-References: <20260121-vsock-vmtest-v16-0-2859a7512097@meta.com>
+        d=1e100.net; s=20230601; t=1769099613; x=1769704413;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0DHre52zcfUG5Dlxo0L5XhBtVLSt791ZQgqxsuF7FrM=;
+        b=wERd6IT7oDz/6ADF27oAdF4D7pzTh4mu0m9fIsOD7bYeKnYvUJ0aBNXdWTVTwodZLI
+         R1RUSOPD6uxbwPz9oLkZ9p5jEQYE/wpFBsVqtO06/mW5lsuAa9VXm0AGq/9gDel8hkTX
+         mQwRiCpVb09ANeSGynCU/j5mAv+urOw8s46cmh0OA581Pz5470j/3MoRp2awEbORNzEo
+         fjSkTBTiinA1OIiolqSKHMIExzFFg2f/6XhmtwQ6DvrR9rfa2so1cZcGpgYX/2fLpOBx
+         rG54+Zt3hBgNIMeBMVg5tzJ3PHQTliV7hnq+DQYptAOj9GkIH4ITiIZmOoC1ExJZr+gj
+         zE3w==
+X-Forwarded-Encrypted: i=1; AJvYcCXmNjJWyG4M8G+LapBjR4vROg/RNjmCIAjr2qhLuo9/bkYt0CLNemlyxV2uLzw6iR7II11rYteD22NpnXGyxYM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9bhiskdeGOoAHCc9GfmveKHsE94OWC7Gl+BtWlgm5Pj7jTz9z
+	xHFsSiQzBOEOQg7S3Q2wrkQohnFXu2UvoZvH3od3Z7d1H5igidVjbKBIB+XDGGmmLmWGGXgD8rI
+	+G0/yGg==
+X-Received: from plbkm11.prod.google.com ([2002:a17:903:27cb:b0:2a0:9570:8e5b])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1aa7:b0:2a0:b432:4a6
+ with SMTP id d9443c01a7336-2a7d2f34befmr38192235ad.15.1769099612668; Thu, 22
+ Jan 2026 08:33:32 -0800 (PST)
+Date: Thu, 22 Jan 2026 08:33:30 -0800
+In-Reply-To: <20260121225438.3908422-3-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260121-vsock-vmtest-v16-0-2859a7512097@meta.com>
+Mime-Version: 1.0
+References: <20260121225438.3908422-1-jmattson@google.com> <20260121225438.3908422-3-jmattson@google.com>
+Message-ID: <aXJRWtdzjcb8_APA@google.com>
+Subject: Re: [PATCH 2/6] KVM: x86/pmu: Disable HG_ONLY events as appropriate
+ for current vCPU state
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Wed, Jan 21, 2026 at 02:11:40PM -0800, Bobby Eshleman wrote:
-> This series adds namespace support to vhost-vsock and loopback. It does
-> not add namespaces to any of the other guest transports (virtio-vsock,
-> hyperv, or vmci).
+On Wed, Jan 21, 2026, Jim Mattson wrote:
+> Introduce amd_pmu_dormant_hg_event(), which determines whether an AMD PMC
+> should be dormant (i.e. not count) based on the guest's Host-Only and
+> Guest-Only event selector bits and the current vCPU state.
 > 
-> The current revision supports two modes: local and global. Local
-> mode is complete isolation of namespaces, while global mode is complete
-> sharing between namespaces of CIDs (the original behavior).
+> Update amd_pmu_set_eventsel_hw() to clear the event selector's enable bit
+> when the event is dormant.
 > 
-> The mode is set using the parent namespace's
-> /proc/sys/net/vsock/child_ns_mode and inherited when a new namespace is
-> created. The mode of the current namespace can be queried by reading
-> /proc/sys/net/vsock/ns_mode. The mode can not change after the namespace
-> has been created.
-> 
-> Modes are per-netns. This allows a system to configure namespaces
-> independently (some may share CIDs, others are completely isolated).
-> This also supports future possible mixed use cases, where there may be
-> namespaces in global mode spinning up VMs while there are mixed mode
-> namespaces that provide services to the VMs, but are not allowed to
-> allocate from the global CID pool (this mode is not implemented in this
-> series).
-> 
-> Additionally, added tests for the new namespace features:
-> 
-> tools/testing/selftests/vsock/vmtest.sh
-> 1..25
-> ok 1 vm_server_host_client
-> ok 2 vm_client_host_server
-> ok 3 vm_loopback
-> ok 4 ns_host_vsock_ns_mode_ok
-> ok 5 ns_host_vsock_child_ns_mode_ok
-> ok 6 ns_global_same_cid_fails
-> ok 7 ns_local_same_cid_ok
-> ok 8 ns_global_local_same_cid_ok
-> ok 9 ns_local_global_same_cid_ok
-> ok 10 ns_diff_global_host_connect_to_global_vm_ok
-> ok 11 ns_diff_global_host_connect_to_local_vm_fails
-> ok 12 ns_diff_global_vm_connect_to_global_host_ok
-> ok 13 ns_diff_global_vm_connect_to_local_host_fails
-> ok 14 ns_diff_local_host_connect_to_local_vm_fails
-> ok 15 ns_diff_local_vm_connect_to_local_host_fails
-> ok 16 ns_diff_global_to_local_loopback_local_fails
-> ok 17 ns_diff_local_to_global_loopback_fails
-> ok 18 ns_diff_local_to_local_loopback_fails
-> ok 19 ns_diff_global_to_global_loopback_ok
-> ok 20 ns_same_local_loopback_ok
-> ok 21 ns_same_local_host_connect_to_local_vm_ok
-> ok 22 ns_same_local_vm_connect_to_local_host_ok
-> ok 23 ns_delete_vm_ok
-> ok 24 ns_delete_host_ok
-> ok 25 ns_delete_both_ok
-> SUMMARY: PASS=25 SKIP=0 FAIL=0
-> 
-> Thanks again for everyone's help and reviews!
-> 
-> Suggested-by: Sargun Dhillon <sargun@sargun.me>
-> Signed-off-by: Bobby Eshleman <bobbyeshleman@gmail.com>
-
-
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-
-> 
-> Changes in v16:
-> - updated comments/docs/commit msg (vsock_find_* funcs, init net
->   mode, why change random port alloc)
-> - removed init ns mode cmdline
-> - fixed the missing ${ns} arg for vm_ssh in vmtest.sh
-> - Link to v15: https://lore.kernel.org/r/20260116-vsock-vmtest-v15-0-bbfd1a668548@meta.com
-> 
-> Changes in v15:
-> - see per-patch change notes in 'vsock: add netns to vsock core'
-> - Link to v14: https://lore.kernel.org/r/20260112-vsock-vmtest-v14-0-a5c332db3e2b@meta.com
-> 
-> Changes in v14:
-> - squashed 'vsock: add per-net vsock NS mode state' into 'vsock: add
->   netns to vsock core' (MST)
-> - remove RFC tag
-> - fixed base-commit (still had b4 configured to depend on old vmtest.sh
->   series)
-> - Link to v13: https://lore.kernel.org/all/20251223-vsock-vmtest-v13-0-9d6db8e7c80b@meta.com/
-> 
-> Changes in v13:
-> - add support for immutable sysfs ns_mode and inheritance from sysfs child_ns_mode
-> - remove passing around of net_mode, can be accessed now via
->   vsock_net_mode(net) since it is immutable
-> - update tests for new uAPI
-> - add one patch to extend the kselftest timeout (it was starting to
->   fail with the new tests added)
-> - Link to v12: https://lore.kernel.org/r/20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com
-> 
-> Changes in v12:
-> - add ns mode checking to _allow() callbacks to reject local mode for
->   incompatible transports (Stefano)
-> - flip vhost/loopback to return true for stream_allow() and
->   seqpacket_allow() in "vsock: add netns support to virtio transports"
->   (Stefano)
-> - add VMADDR_CID_ANY + local mode documentation in af_vsock.c (Stefano)
-> - change "selftests/vsock: add tests for host <-> vm connectivity with
->   namespaces" to skip test 29 in vsock_test for namespace local
->   vsock_test calls in a host local-mode namespace. There is a
->   false-positive edge case for that test encountered with the
->   ->stream_allow() approach. More details in that patch.
-> - updated cover letter with new test output
-> - Link to v11: https://lore.kernel.org/r/20251120-vsock-vmtest-v11-0-55cbc80249a7@meta.com
-> 
-> Changes in v11:
-> - vmtest: add a patch to use ss in wait_for_listener functions and
->   support vsock, tcp, and unix. Change all patches to use the new
->   functions.
-> - vmtest: add a patch to re-use vm dmesg / warn counting functions
-> - Link to v10: https://lore.kernel.org/r/20251117-vsock-vmtest-v10-0-df08f165bf3e@meta.com
-> 
-> Changes in v10:
-> - Combine virtio common patches into one (Stefano)
-> - Resolve vsock_loopback virtio_transport_reset_no_sock() issue
->   with info->vsk setting. This eliminates the need for skb->cb,
->   so remove skb->cb patches.
-> - many line width 80 fixes
-> - Link to v9: https://lore.kernel.org/all/20251111-vsock-vmtest-v9-0-852787a37bed@meta.com
-> 
-> Changes in v9:
-> - reorder loopback patch after patch for virtio transport common code
-> - remove module ordering tests patch because loopback no longer depends
->   on pernet ops
-> - major simplifications in vsock_loopback
-> - added a new patch for blocking local mode for guests, added test case
->   to check
-> - add net ref tracking to vsock_loopback patch
-> - Link to v8: https://lore.kernel.org/r/20251023-vsock-vmtest-v8-0-dea984d02bb0@meta.com
-> 
-> Changes in v8:
-> - Break generic cleanup/refactoring patches into standalone series,
->   remove those from this series
-> - Link to dependency: https://lore.kernel.org/all/20251022-vsock-selftests-fixes-and-improvements-v1-0-edeb179d6463@meta.com/
-> - Link to v7: https://lore.kernel.org/r/20251021-vsock-vmtest-v7-0-0661b7b6f081@meta.com
-> 
-> Changes in v7:
-> - fix hv_sock build
-> - break out vmtest patches into distinct, more well-scoped patches
-> - change `orig_net_mode` to `net_mode`
-> - many fixes and style changes in per-patch change sets (see individual
->   patches for specific changes)
-> - optimize `virtio_vsock_skb_cb` layout
-> - update commit messages with more useful descriptions
-> - vsock_loopback: use orig_net_mode instead of current net mode
-> - add tests for edge cases (ns deletion, mode changing, loopback module
->   load ordering)
-> - Link to v6: https://lore.kernel.org/r/20250916-vsock-vmtest-v6-0-064d2eb0c89d@meta.com
-> 
-> Changes in v6:
-> - define behavior when mode changes to local while socket/VM is alive
-> - af_vsock: clarify description of CID behavior
-> - af_vsock: use stronger langauge around CID rules (dont use "may")
-> - af_vsock: improve naming of buf/buffer
-> - af_vsock: improve string length checking on proc writes
-> - vsock_loopback: add space in struct to clarify lock protection
-> - vsock_loopback: do proper cleanup/unregister on vsock_loopback_exit()
-> - vsock_loopback: use virtio_vsock_skb_net() instead of sock_net()
-> - vsock_loopback: set loopback to NULL after kfree()
-> - vsock_loopback: use pernet_operations and remove callback mechanism
-> - vsock_loopback: add macros for "global" and "local"
-> - vsock_loopback: fix length checking
-> - vmtest.sh: check for namespace support in vmtest.sh
-> - Link to v5: https://lore.kernel.org/r/20250827-vsock-vmtest-v5-0-0ba580bede5b@meta.com
-> 
-> Changes in v5:
-> - /proc/net/vsock_ns_mode -> /proc/sys/net/vsock/ns_mode
-> - vsock_global_net -> vsock_global_dummy_net
-> - fix netns lookup in vhost_vsock to respect pid namespaces
-> - add callbacks for vsock_loopback to avoid circular dependency
-> - vmtest.sh loads vsock_loopback module
-> - remove vsock_net_mode_can_set()
-> - change vsock_net_write_mode() to return true/false based on success
-> - make vsock_net_mode enum instead of u8
-> - Link to v4: https://lore.kernel.org/r/20250805-vsock-vmtest-v4-0-059ec51ab111@meta.com
-> 
-> Changes in v4:
-> - removed RFC tag
-> - implemented loopback support
-> - renamed new tests to better reflect behavior
-> - completed suite of tests with permutations of ns modes and vsock_test
->   as guest/host
-> - simplified socat bridging with unix socket instead of tcp + veth
-> - only use vsock_test for success case, socat for failure case (context
->   in commit message)
-> - lots of cleanup
-> 
-> Changes in v3:
-> - add notion of "modes"
-> - add procfs /proc/net/vsock_ns_mode
-> - local and global modes only
-> - no /dev/vhost-vsock-netns
-> - vmtest.sh already merged, so new patch just adds new tests for NS
-> - Link to v2:
->   https://lore.kernel.org/kvm/20250312-vsock-netns-v2-0-84bffa1aa97a@gmail.com
-> 
-> Changes in v2:
-> - only support vhost-vsock namespaces
-> - all g2h namespaces retain old behavior, only common API changes
->   impacted by vhost-vsock changes
-> - add /dev/vhost-vsock-netns for "opt-in"
-> - leave /dev/vhost-vsock to old behavior
-> - removed netns module param
-> - Link to v1:
->   https://lore.kernel.org/r/20200116172428.311437-1-sgarzare@redhat.com
-> 
-> Changes in v1:
-> - added 'netns' module param to vsock.ko to enable the
->   network namespace support (disabled by default)
-> - added 'vsock_net_eq()' to check the "net" assigned to a socket
->   only when 'netns' support is enabled
-> - Link to RFC: https://patchwork.ozlabs.org/cover/1202235/
-> 
+> Signed-off-by: Jim Mattson <jmattson@google.com>
 > ---
-> Bobby Eshleman (12):
->       vsock: add netns to vsock core
->       virtio: set skb owner of virtio_transport_reset_no_sock() reply
->       vsock: add netns support to virtio transports
->       selftests/vsock: increase timeout to 1200
->       selftests/vsock: add namespace helpers to vmtest.sh
->       selftests/vsock: prepare vm management helpers for namespaces
->       selftests/vsock: add vm_dmesg_{warn,oops}_count() helpers
->       selftests/vsock: use ss to wait for listeners instead of /proc/net
->       selftests/vsock: add tests for proc sys vsock ns_mode
->       selftests/vsock: add namespace tests for CID collisions
->       selftests/vsock: add tests for host <-> vm connectivity with namespaces
->       selftests/vsock: add tests for namespace deletion
+>  arch/x86/include/asm/perf_event.h |  2 ++
+>  arch/x86/kvm/svm/pmu.c            | 23 +++++++++++++++++++++++
+>  2 files changed, 25 insertions(+)
 > 
->  MAINTAINERS                             |    1 +
->  drivers/vhost/vsock.c                   |   44 +-
->  include/linux/virtio_vsock.h            |    9 +-
->  include/net/af_vsock.h                  |   61 +-
->  include/net/net_namespace.h             |    4 +
->  include/net/netns/vsock.h               |   21 +
->  net/vmw_vsock/af_vsock.c                |  335 +++++++++-
->  net/vmw_vsock/hyperv_transport.c        |    7 +-
->  net/vmw_vsock/virtio_transport.c        |   22 +-
->  net/vmw_vsock/virtio_transport_common.c |   62 +-
->  net/vmw_vsock/vmci_transport.c          |   26 +-
->  net/vmw_vsock/vsock_loopback.c          |   22 +-
->  tools/testing/selftests/vsock/settings  |    2 +-
->  tools/testing/selftests/vsock/vmtest.sh | 1055 +++++++++++++++++++++++++++++--
->  14 files changed, 1531 insertions(+), 140 deletions(-)
-> ---
-> base-commit: d8f87aa5fa0a4276491fa8ef436cd22605a3f9ba
-> change-id: 20250325-vsock-vmtest-b3a21d2102c2
-> 
-> Best regards,
+> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+> index 0d9af4135e0a..7649d79d91a6 100644
+> --- a/arch/x86/include/asm/perf_event.h
+> +++ b/arch/x86/include/asm/perf_event.h
+> @@ -58,6 +58,8 @@
+>  #define AMD64_EVENTSEL_INT_CORE_ENABLE			(1ULL << 36)
+>  #define AMD64_EVENTSEL_GUESTONLY			(1ULL << 40)
+>  #define AMD64_EVENTSEL_HOSTONLY				(1ULL << 41)
+> +#define AMD64_EVENTSEL_HG_ONLY				\
+
+I would strongly prefer to avoid the HG acronym, as it's not immediately obvious
+that it's HOST_GUEST, and avoiding long lines even with the full HOST_GUEST is
+pretty easy.
+
+The name should also have "MASK" at the end to make it more obvious this is a
+multi-flag macro, i.e. not a single-flag value.  Otherwise the intent and thus
+correctness of code like this isn't obvious:
+
+	if (eventsel & AMD64_EVENTSEL_HG_ONLY)
+
+How about AMD64_EVENTSEL_HOST_GUEST_MASK?
+
+> +	(AMD64_EVENTSEL_HOSTONLY | AMD64_EVENTSEL_GUESTONLY)
+>  
+>  #define AMD64_EVENTSEL_INT_CORE_SEL_SHIFT		37
+>  #define AMD64_EVENTSEL_INT_CORE_SEL_MASK		\
+> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+> index 33c139b23a9e..f619417557f9 100644
+> --- a/arch/x86/kvm/svm/pmu.c
+> +++ b/arch/x86/kvm/svm/pmu.c
+> @@ -147,10 +147,33 @@ static int amd_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  	return 1;
+>  }
+>  
+> +static bool amd_pmu_dormant_hg_event(struct kvm_pmc *pmc)
+
+I think I would prefer to flip the polarity, even though the only caller would
+then need to invert the return value.  Partly because I think we can come up with
+a more intuitive name, partly because it'll make the last check in particular
+more intutive, i.e. IMO, checking "guest == guest"
+
+	return !!(hg_only & AMD64_EVENTSEL_GUESTONLY) == is_guest_mode(vcpu);
+
+is more obvious than checking "host == guest":
+
+	return !!(hg_only & AMD64_EVENTSEL_GUESTONLY) == is_guest_mode(vcpu);
+
+Maybe amd_pmc_is_active() or amd_pmc_counts_in_current_mode()?
+
+> +{
+> +	u64 hg_only = pmc->eventsel & AMD64_EVENTSEL_HG_ONLY;
+> +	struct kvm_vcpu *vcpu = pmc->vcpu;
+> +
+> +	if (hg_only == 0)
+
+!hg_only
+
+In the spirit of avoiding the "hg" acronym, what if we do something like this?
+
+	const u64 HOST_GUEST_MASK = AMD64_EVENTSEL_HOST_GUEST_MASK;
+	struct kvm_vcpu *vcpu = pmc->vcpu;
+	u64 eventsel = pmc->eventsel;
+
+	/*
+	 * PMCs count in both host and guest if neither {HOST,GUEST}_ONLY flags
+	 * are set, or if both flags are set.
+	 */
+	if (!(eventsel & HOST_GUEST_MASK) ||
+	    ((eventsel & HOST_GUEST_MASK) == HOST_GUEST_MASK))
+		return true;
+
+	/* {HOST,GUEST}_ONLY bits are ignored when SVME is clear. */
+	if (!(vcpu->arch.efer & EFER_SVME))
+		return true;
+
+	return !!(eventsel & AMD64_EVENTSEL_GUESTONLY) == is_guest_mode(vcpu);
+
+> +		/* Not an HG_ONLY event */
+
+Please don't put comments inside single-line if-statements.  99% of the time
+it's easy to put the comment outside of the if-statement, and doing so encourages
+a more verbose comment and avoids a "does this if-statement need curly-braces"
+debate.
+
+> +		return false;
+> +
+> +	if (!(vcpu->arch.efer & EFER_SVME))
+> +		/* HG_ONLY bits are ignored when SVME is clear */
+> +		return false;
+> +
+> +	/* Always active if both HG_ONLY bits are set */
+> +	if (hg_only == AMD64_EVENTSEL_HG_ONLY)
+
+I vote to check this condition at the same time !hg_only is checked.  From a
+*very* pedantic perspective, one could argue it's "wrong" to check the bits when
+SVME=0, but the purpose of the helper is to detect if the PMC is active or not.
+Precisely following the architectural behavior is unnecessary.
+
+> +		return false;
+> +
+> +	return !!(hg_only & AMD64_EVENTSEL_HOSTONLY) == is_guest_mode(vcpu);
+> +}
+> +
+>  static void amd_pmu_set_eventsel_hw(struct kvm_pmc *pmc)
+>  {
+>  	pmc->eventsel_hw = (pmc->eventsel & ~AMD64_EVENTSEL_HOSTONLY) |
+>  		AMD64_EVENTSEL_GUESTONLY;
+> +
+> +	if (amd_pmu_dormant_hg_event(pmc))
+> +		pmc->eventsel_hw &= ~ARCH_PERFMON_EVENTSEL_ENABLE;
+>  }
+>  
+>  static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
 > -- 
-> Bobby Eshleman <bobbyeshleman@meta.com>
-
+> 2.52.0.457.g6b5491de43-goog
+> 
