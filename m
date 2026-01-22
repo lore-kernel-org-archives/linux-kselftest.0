@@ -1,279 +1,361 @@
-Received: from fra-out-008.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-008.esa.eu-central-1.outbound.mail-perimeter.amazon.com [35.158.23.94])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5642EC54C;
-	Thu, 22 Jan 2026 18:05:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.158.23.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1EA335551;
+	Thu, 22 Jan 2026 18:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769105136; cv=none; b=MVRLUefGB+I/4eR+CrXR6w6iFYSnZtWbCUo5SCP200lybOUEVcjhpto0zIukNd9cus5T4XT9jsy4OzzK9vrTFoJClvnR8LfRXQTDpBf2Xa010Qg+A7sT3DNH9qDakJ1qX6ahuCMnBIdfzt6SPsBJOTGRcTth9xdRxLsLr2tMoWY=
+	t=1769106359; cv=none; b=t/0BY2SxdVlkiOw37H0SzewdgrDbLWLU6hzrrZ1jvtSI0AdkZ4zMuLs4qhs+bYwzbjpqG17VCu1ShmqqAvXRjrLoSJGyK70aV7Y6nySl3Cs+5NBb/0oU82psEVAg7C7MxPzf1Rddq4R/lF3sOuOtug4H6+z9qoHqFt546XIOGVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769105136; c=relaxed/simple;
-	bh=dzHIKT6pbpAcJntXJuY2LaAF2Sl4NHnNq8TAcpMKU5M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=nkhCoj2YI77v8KnXBEEpV1KqioPrNfj73YB6Yc9x6qQOWAoGWu8YFpVvuyVudAGj6NQc6ZqMP8Rl1DaFr+79NWaAz6wKgy3yxKTwecSUbn5pbR722c/XAiTZqKtn3qRw1J++tu6VMm1eDn1Y8y9macKYietY/i4XlMCmDILgc9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=SRxR6z5n; arc=none smtp.client-ip=35.158.23.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1769106359; c=relaxed/simple;
+	bh=aLh8CjwfgGPV7i0+bwwtdSqKhoqStOVsDlLu0vdphXo=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=gAWRzRxOO8qrl3aV5fOsCM2glw1PcRCI0aZbeCGZvSuV+aeaGm57NLc+ROOX/ZcHZjjXExOoyNBZeDhkX+TSlUSMaKFPRa7YWxi7WxnsvN0+dQwgRNiUkHF0YroLBw7UTsO1ksAFO6PYZMlaKP3qgB3fzLdkQWLvECZ9zaVckag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=DOsG1sDg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="SRxR6z5n"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1769105124; x=1800641124;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=/VQH+ZVpl7s1y6QFfIzvVBX/lOO8CFVE93gGifWyjYo=;
-  b=SRxR6z5nIjiIyOyK1erNw+yrYS+fip4pyc/8/mYHZSjI7wxKJ8eCWVo9
-   0h7mrdIpQRWsy1u5SK2+VUHT2qN+asQxEAAEy+RmGIliYgVe2jCujRXrk
-   ryl0LyjeqxfR0+l+LjMcqXGqJtOxkqOW0C487hYKs2R9Aj8sEjSMDT4Im
-   bYkNh5U+UxubALyZIIS57OoWgX1lSYtosdvoCY1nCFoCWTjckzp38zrBQ
-   HvXlCSewTJgxOuXuxtec1AJ1mwDCEy+MmwYbyDhXWVt18fSs5gvtVKujN
-   RDUefKLO16vWtZg2S8fARVJ+VDIvql0crImPNFhl2dw2qPgAVJFvI+Lcs
-   w==;
-X-CSE-ConnectionGUID: FzJfTE6DQPiBT8xS65L//g==
-X-CSE-MsgGUID: NWC2jrzvQJKPewYEWGLFVA==
-X-IronPort-AV: E=Sophos;i="6.21,246,1763424000"; 
-   d="scan'208";a="8303027"
-Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
-  by internal-fra-out-008.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 18:04:57 +0000
-Received: from EX19MTAEUB001.ant.amazon.com [54.240.197.234:24209]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.13.107:2525] with esmtp (Farcaster)
- id 3ec1e9f4-fd44-4c0b-b87e-d835b8518924; Thu, 22 Jan 2026 18:04:57 +0000 (UTC)
-X-Farcaster-Flow-ID: 3ec1e9f4-fd44-4c0b-b87e-d835b8518924
-Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
- EX19MTAEUB001.ant.amazon.com (10.252.51.26) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
- Thu, 22 Jan 2026 18:04:57 +0000
-Received: from [192.168.23.186] (10.106.82.17) by
- EX19D005EUB003.ant.amazon.com (10.252.51.31) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
- Thu, 22 Jan 2026 18:04:53 +0000
-Message-ID: <f2f2a6bd-5cb4-46c9-a0f8-3240670094b5@amazon.com>
-Date: Thu, 22 Jan 2026 18:04:51 +0000
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="DOsG1sDg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F9BC116C6;
+	Thu, 22 Jan 2026 18:25:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1769106358;
+	bh=aLh8CjwfgGPV7i0+bwwtdSqKhoqStOVsDlLu0vdphXo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=DOsG1sDgSWjT9DPOgMH1zR1BgIEzstzAUeTXSKwKKsfsDyVQ2oWWwVhFLXN+ZFGK3
+	 vFI5lpLDlNE6TSg2vEPqDJbmhRzz2AT8XvSnSXmmPL6rOYxpjPyLqrRG5lb8pgFNKX
+	 X9viiUZLcF8X7Z2Ma6SQ87A3kxEF/Te2YtKxdFbk=
+Date: Thu, 22 Jan 2026 10:25:57 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, David Hildenbrand <david@kernel.org>, Dev
+ Jain <dev.jain@arm.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark
+ Brown <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan
+ <shuah@kernel.org>
+Subject: Re: [PATCH v3 0/9] Various mm kselftests improvements/fixes
+Message-Id: <20260122102557.991604188ed67b59baab60c5@linux-foundation.org>
+In-Reply-To: <20260122170224.4056513-1-kevin.brodsky@arm.com>
+References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v9 07/13] KVM: guest_memfd: Add flag to remove from direct
- map
-To: Ackerley Tng <ackerleytng@google.com>, "Kalyazin, Nikita"
-	<kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
-	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
-	<loongarch@lists.linux.dev>
-CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
-	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
-	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
-	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
-	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
-	<x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org"
-	<luto@kernel.org>, "peterz@infradead.org" <peterz@infradead.org>,
-	"willy@infradead.org" <willy@infradead.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>,
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "vbabka@suse.cz"
-	<vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com"
-	<surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org"
-	<ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev"
-	<martin.lau@linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
-	"song@kernel.org" <song@kernel.org>, "yonghong.song@linux.dev"
-	<yonghong.song@linux.dev>, "john.fastabend@gmail.com"
-	<john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
-	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com"
-	<peterx@redhat.com>, "jannh@google.com" <jannh@google.com>,
-	"pfalcato@suse.de" <pfalcato@suse.de>, "shuah@kernel.org" <shuah@kernel.org>,
-	"riel@surriel.com" <riel@surriel.com>, "ryan.roberts@arm.com"
-	<ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>,
-	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org"
-	<kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
-	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "maobibo@loongson.cn"
-	<maobibo@loongson.cn>, "prsampat@amd.com" <prsampat@amd.com>,
-	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jmattson@google.com"
-	<jmattson@google.com>, "jthoughton@google.com" <jthoughton@google.com>,
-	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, "alex@ghiti.fr"
-	<alex@ghiti.fr>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-	"chenhuacai@kernel.org" <chenhuacai@kernel.org>, "dev.jain@arm.com"
-	<dev.jain@arm.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>,
-	"hca@linux.ibm.com" <hca@linux.ibm.com>, "Jonathan.Cameron@huawei.com"
-	<Jonathan.Cameron@huawei.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"pjw@kernel.org" <pjw@kernel.org>, "shijie@os.amperecomputing.com"
-	<shijie@os.amperecomputing.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>,
-	"thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com"
-	<wyihan@google.com>, "yang@os.amperecomputing.com"
-	<yang@os.amperecomputing.com>, "vannapurve@google.com"
-	<vannapurve@google.com>, "jackmanb@google.com" <jackmanb@google.com>,
-	"aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, "patrick.roy@linux.dev"
-	<patrick.roy@linux.dev>, "Thomson, Jack" <jackabt@amazon.co.uk>, "Itazuri,
- Takahiro" <itazur@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>,
-	"Cali, Marco" <xmarcalx@amazon.co.uk>
-References: <20260114134510.1835-1-kalyazin@amazon.com>
- <20260114134510.1835-8-kalyazin@amazon.com>
- <CAEvNRgEzVhEzr-3GWTsE7GSBsPdvVLq7WFEeLHzcmMe=R9S51w@mail.gmail.com>
- <a2b79af7-e5d1-4668-bff3-606f57d32dfc@amazon.com>
- <CAEvNRgF46M1jp0+eBu2wQMO7P1afyo00SOkENFwvB2KYX3dnFA@mail.gmail.com>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-Autocrypt: addr=kalyazin@amazon.com; keydata=
- xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
- JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
- BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
- IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
- CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
- ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
- ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
- i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <CAEvNRgF46M1jp0+eBu2wQMO7P1afyo00SOkENFwvB2KYX3dnFA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D002EUC004.ant.amazon.com (10.252.51.230) To
- EX19D005EUB003.ant.amazon.com (10.252.51.31)
+
+On Thu, 22 Jan 2026 17:02:15 +0000 Kevin Brodsky <kevin.brodsky@arm.com> wrote:
+
+> Various improvements/fixes for the mm kselftests:
+> 
+> - Patch 1-3 extend support for more build configurations: out-of-tree
+>   $KDIR, cross-compilation, etc.
+> 
+> - Patch 4-7 fix issues related to faulting in pages, introducing a new
+>   helper for that purpose.
+> 
+> - Patch 8 fixes the value returned by pagemap_ioctl (PASS was always
+>   returned, which explains why the issue fixed in patch 6 went
+>   unnoticed).
+> 
+> - Patch 9 improves the exit code of pfnmap.
+> 
+> Net results:
+> - 1 test no longer fails (patch 7)
+> - 3 tests are no longer skipped (patch 4)
+> - More accurate return values for whole suites (patch 8, 9)
+> - Extra tests are more likely to be built (patch 1-3)
+
+Updated, thanks.
+
+> ---
+> v2..v3:
+> - Patch 5: new patch [David Hildenbrand]
+> - Patch 6: make the helper take a number of pages + pagesize, rename to
+>   force_read_pages() [David]
+> - Patch 7: improved page count calculation (avoiding floating-point
+>   helper)
+> - Patch 7: added Fixes tag [David]
+> - Patch 9: open the file only once and save the fd [David]
+> - Collected R-b/A-b
+> 
+
+Below is how v3 altered mm.git:
 
 
-
-On 22/01/2026 16:34, Ackerley Tng wrote:
-> Nikita Kalyazin <kalyazin@amazon.com> writes:
-> 
-> Was preparing the reply but couldn't get to it before the
-> meeting. Here's what was also discussed at the guest_memfd biweekly on
-> 2026-01-22:
-> 
->>
->> [...snip...]
->>
->>>> @@ -423,6 +464,12 @@ static vm_fault_t kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
->>>>                 kvm_gmem_mark_prepared(folio);
->>>>         }
->>>>
->>>> +     err = kvm_gmem_folio_zap_direct_map(folio);
->>>
->>> Perhaps the check for gmem_flags & GUEST_MEMFD_FLAG_NO_DIRECT_MAP should
->>> be done here before making the call to kvm_gmem_folio_zap_direct_map()
->>> to make it more obvious that zapping is conditional.
->>
->> Makes sense to me.
->>
->>>
->>> Perhaps also add a check for kvm_arch_gmem_supports_no_direct_map() so
->>> this call can be completely removed by the compiler if it wasn't
->>> compiled in.
->>
->> But if it is compiled in, we will be paying the cost of the call on
->> every page fault?  Eg on arm64, it will call the following:
->>
->> bool can_set_direct_map(void)
->> {
->>
->> ...
->>
->>        return rodata_full || debug_pagealloc_enabled() ||
->>                arm64_kfence_can_set_direct_map() || is_realm_world();
->> }
->>
-> 
-> You're right that this could end up paying the cost on every page
-> fault. Please ignore this request!
-> 
->>>
->>> The kvm_gmem_folio_no_direct_map() check should probably remain in
->>> kvm_gmem_folio_zap_direct_map() since that's a "if already zapped, don't
->>> zap again" check.
->>>
->>>> +     if (err) {
->>>> +             ret = vmf_error(err);
->>>> +             goto out_folio;
->>>> +     }
->>>> +
->>>>         vmf->page = folio_file_page(folio, vmf->pgoff);
->>>>
->>>>    out_folio:
->>>> @@ -533,6 +580,8 @@ static void kvm_gmem_free_folio(struct folio *folio)
->>>>         kvm_pfn_t pfn = page_to_pfn(page);
->>>>         int order = folio_order(folio);
->>>>
->>>> +     kvm_gmem_folio_restore_direct_map(folio);
->>>> +
->>>
->>> I can't decide if the kvm_gmem_folio_no_direct_map(folio) should be in
->>> the caller or within kvm_gmem_folio_restore_direct_map(), since this
->>> time it's a folio-specific property being checked.
->>
->> I'm tempted to keep it similar to the kvm_gmem_folio_zap_direct_map()
->> case.  How does the fact it's a folio-speicific property change your
->> reasoning?
->>
-> 
-> This is good too:
-> 
->    if (kvm_gmem_folio_no_direct_map(folio))
->            kvm_gmem_folio_restore_direct_map(folio)
-
-It turns out we can't do that because folio->mapping is gone by the time 
-filemap_free_folio() is called so we can't inspect the flags.  Are you 
-ok with only having this check when zapping (but not when restoring)? 
-Do you think we should add a comment saying it's conditional here?
-
-> 
->>>
->>> Perhaps also add a check for kvm_arch_gmem_supports_no_direct_map() so
->>> this call can be completely removed by the compiler if it wasn't
->>> compiled in. IIUC whether the check is added in the caller or within
->>> kvm_gmem_folio_restore_direct_map() the call can still be elided.
->>
->> Same concern as the above about kvm_gmem_folio_zap_direct_map(), ie the
->> performance of the case where kvm_arch_gmem_supports_no_direct_map() exists.
->>
-> 
-> Please ignore this request!
-> 
->>>
->>>>         kvm_arch_gmem_invalidate(pfn, pfn + (1ul << order));
->>>>    }
->>>>
->>>> @@ -596,6 +645,9 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
->>>>         /* Unmovable mappings are supposed to be marked unevictable as well. */
->>>>         WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
->>>>
->>>> +     if (flags & GUEST_MEMFD_FLAG_NO_DIRECT_MAP)
->>>> +             mapping_set_no_direct_map(inode->i_mapping);
->>>> +
->>>>         GMEM_I(inode)->flags = flags;
->>>>
->>>>         file = alloc_file_pseudo(inode, kvm_gmem_mnt, name, O_RDWR, &kvm_gmem_fops);
->>>> @@ -807,6 +859,8 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
->>>>         if (!is_prepared)
->>>>                 r = kvm_gmem_prepare_folio(kvm, slot, gfn, folio);
->>>>
->>>> +     kvm_gmem_folio_zap_direct_map(folio);
->>>> +
->>>
->>> Is there a reason why errors are not handled when faulting private memory?
->>
->> No, I can't see a reason.  Will add a check, thanks.
->>
->>>
->>>>         folio_unlock(folio);
->>>>
->>>>         if (!r)
->>>> --
->>>> 2.50.1
+--- a/tools/testing/selftests/mm/cow.c~b
++++ a/tools/testing/selftests/mm/cow.c
+@@ -75,6 +75,18 @@ static bool range_is_swapped(void *addr,
+ 	return true;
+ }
+ 
++static bool populate_page_checked(char *addr)
++{
++	bool ret;
++
++	FORCE_READ(*addr);
++	ret = pagemap_is_populated(pagemap_fd, addr);
++	if (!ret)
++		ksft_print_msg("Failed to populate page\n");
++
++	return ret;
++}
++
+ struct comm_pipes {
+ 	int child_ready[2];
+ 	int parent_ready[2];
+@@ -1549,8 +1561,10 @@ static void run_with_zeropage(non_anon_t
+ 	}
+ 
+ 	/* Read from the page to populate the shared zeropage. */
+-	FORCE_READ(*mem);
+-	FORCE_READ(*smem);
++	if (!populate_page_checked(mem) || !populate_page_checked(smem)) {
++		log_test_result(KSFT_FAIL);
++		goto munmap;
++	}
+ 
+ 	fn(mem, smem, pagesize);
+ munmap:
+@@ -1612,8 +1626,11 @@ static void run_with_huge_zeropage(non_a
+ 	 * the first sub-page and test if we get another sub-page populated
+ 	 * automatically.
+ 	 */
+-	FORCE_READ(*mem);
+-	FORCE_READ(*smem);
++	if (!populate_page_checked(mem) || !populate_page_checked(smem)) {
++		log_test_result(KSFT_FAIL);
++		goto munmap;
++	}
++
+ 	if (!pagemap_is_populated(pagemap_fd, mem + pagesize) ||
+ 	    !pagemap_is_populated(pagemap_fd, smem + pagesize)) {
+ 		ksft_test_result_skip("Did not get THPs populated\n");
+@@ -1663,8 +1680,10 @@ static void run_with_memfd(non_anon_test
+ 	}
+ 
+ 	/* Fault the page in. */
+-	FORCE_READ(*mem);
+-	FORCE_READ(*smem);
++	if (!populate_page_checked(mem) || !populate_page_checked(smem)) {
++		log_test_result(KSFT_FAIL);
++		goto munmap;
++	}
+ 
+ 	fn(mem, smem, pagesize);
+ munmap:
+@@ -1719,8 +1738,10 @@ static void run_with_tmpfile(non_anon_te
+ 	}
+ 
+ 	/* Fault the page in. */
+-	FORCE_READ(*mem);
+-	FORCE_READ(*smem);
++	if (!populate_page_checked(mem) || !populate_page_checked(smem)) {
++		log_test_result(KSFT_FAIL);
++		goto munmap;
++	}
+ 
+ 	fn(mem, smem, pagesize);
+ munmap:
+@@ -1773,8 +1794,10 @@ static void run_with_memfd_hugetlb(non_a
+ 	}
+ 
+ 	/* Fault the page in. */
+-	FORCE_READ(*mem);
+-	FORCE_READ(*smem);
++	if (!populate_page_checked(mem) || !populate_page_checked(smem)) {
++		log_test_result(KSFT_FAIL);
++		goto munmap;
++	}
+ 
+ 	fn(mem, smem, hugetlbsize);
+ munmap:
+--- a/tools/testing/selftests/mm/hugetlb-madvise.c~b
++++ a/tools/testing/selftests/mm/hugetlb-madvise.c
+@@ -47,7 +47,7 @@ void write_fault_pages(void *addr, unsig
+ 
+ void read_fault_pages(void *addr, unsigned long nr_pages)
+ {
+-	force_read_pages_in_range(addr, nr_pages * huge_page_size);
++	force_read_pages(addr, nr_pages, huge_page_size);
+ }
+ 
+ int main(int argc, char **argv)
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c~b
++++ a/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -1052,7 +1052,7 @@ static void test_simple(void)
+ int sanity_tests(void)
+ {
+ 	unsigned long long mem_size, vec_size;
+-	long ret, fd, i, buf_size;
++	long ret, fd, i, buf_size, nr_pages;
+ 	struct page_region *vec;
+ 	char *mem, *fmem;
+ 	struct stat sbuf;
+@@ -1166,13 +1166,14 @@ int sanity_tests(void)
+ 	if (fmem == MAP_FAILED)
+ 		ksft_exit_fail_msg("error nomem %d %s\n", errno, strerror(errno));
+ 
+-	force_read_pages_in_range(fmem, sbuf.st_size);
++	nr_pages = (sbuf.st_size + page_size - 1) / page_size;
++	force_read_pages(fmem, nr_pages, page_size);
+ 
+ 	ret = pagemap_ioctl(fmem, sbuf.st_size, vec, vec_size, 0, 0,
+ 			    0, PAGEMAP_NON_WRITTEN_BITS, 0, PAGEMAP_NON_WRITTEN_BITS);
+ 
+ 	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)fmem &&
+-			 LEN(vec[0]) == ceilf((float)sbuf.st_size/page_size) &&
++			 LEN(vec[0]) == nr_pages &&
+ 			 (vec[0].categories & PAGE_IS_FILE),
+ 			 "%s Memory mapped file\n", __func__);
+ 
+--- a/tools/testing/selftests/mm/pfnmap.c~b
++++ a/tools/testing/selftests/mm/pfnmap.c
+@@ -30,13 +30,14 @@
+ static sigjmp_buf sigjmp_buf_env;
+ static char *file = "/dev/mem";
+ static off_t file_offset;
++static int fd;
+ 
+ static void signal_handler(int sig)
+ {
+ 	siglongjmp(sigjmp_buf_env, -EFAULT);
+ }
+ 
+-static int test_read_access(char *addr, size_t size)
++static int test_read_access(char *addr, size_t size, size_t pagesize)
+ {
+ 	int ret;
+ 
+@@ -45,7 +46,7 @@ static int test_read_access(char *addr,
+ 
+ 	ret = sigsetjmp(sigjmp_buf_env, 1);
+ 	if (!ret)
+-		force_read_pages_in_range(addr, size);
++		force_read_pages(addr, size/pagesize, pagesize);
+ 
+ 	if (signal(SIGSEGV, SIG_DFL) == SIG_ERR)
+ 		return -EINVAL;
+@@ -104,7 +105,6 @@ static void pfnmap_init(void)
+ {
+ 	size_t pagesize = getpagesize();
+ 	size_t size = DEV_MEM_NPAGES * pagesize;
+-	int fd;
+ 	void *addr;
+ 
+ 	if (strncmp(file, "/dev/mem", strlen("/dev/mem")) == 0) {
+@@ -117,16 +117,16 @@ static void pfnmap_init(void)
+ 		file_offset = 0;
+ 	}
+ 
+-	/*
+-	 * Make sure we can open and map the file, and perform some basic
+-	 * checks; skip the whole suite if anything goes wrong.
+-	 * A fresh mapping is then created for every test case by
+-	 * FIXTURE_SETUP(pfnmap).
+-	 */
+ 	fd = open(file, O_RDONLY);
+ 	if (fd < 0)
+ 		ksft_exit_skip("Cannot open '%s': %s\n", file, strerror(errno));
+ 
++	/*
++	 * Make sure we can map the file, and perform some basic checks; skip
++	 * the whole suite if anything goes wrong.
++	 * A fresh mapping is then created for every test case by
++	 * FIXTURE_SETUP(pfnmap).
++	 */
+ 	addr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, file_offset);
+ 	if (addr == MAP_FAILED)
+ 		ksft_exit_skip("Cannot mmap '%s': %s\n", file, strerror(errno));
+@@ -134,17 +134,15 @@ static void pfnmap_init(void)
+ 	if (!check_vmflag_pfnmap(addr))
+ 		ksft_exit_skip("Invalid file: '%s'. Not pfnmap'ed\n", file);
+ 
+-	if (test_read_access(addr, size))
++	if (test_read_access(addr, size, pagesize))
+ 		ksft_exit_skip("Cannot read-access mmap'ed '%s'\n", file);
+ 
+ 	munmap(addr, size);
+-	close(fd);
+ }
+ 
+ FIXTURE(pfnmap)
+ {
+ 	size_t pagesize;
+-	int dev_mem_fd;
+ 	char *addr1;
+ 	size_t size1;
+ 	char *addr2;
+@@ -155,12 +153,9 @@ FIXTURE_SETUP(pfnmap)
+ {
+ 	self->pagesize = getpagesize();
+ 
+-	self->dev_mem_fd = open(file, O_RDONLY);
+-	ASSERT_GE(self->dev_mem_fd, 0);
+-
+ 	self->size1 = DEV_MEM_NPAGES * self->pagesize;
+ 	self->addr1 = mmap(NULL, self->size1, PROT_READ, MAP_SHARED,
+-			   self->dev_mem_fd, file_offset);
++			   fd, file_offset);
+ 	ASSERT_NE(self->addr1, MAP_FAILED);
+ 
+ 	self->size2 = 0;
+@@ -173,8 +168,6 @@ FIXTURE_TEARDOWN(pfnmap)
+ 		munmap(self->addr2, self->size2);
+ 	if (self->addr1 != MAP_FAILED)
+ 		munmap(self->addr1, self->size1);
+-	if (self->dev_mem_fd >= 0)
+-		close(self->dev_mem_fd);
+ }
+ 
+ TEST_F(pfnmap, madvise_disallowed)
+@@ -214,7 +207,7 @@ TEST_F(pfnmap, munmap_split)
+ 	 */
+ 	self->size2 = self->pagesize;
+ 	self->addr2 = mmap(NULL, self->pagesize, PROT_READ, MAP_SHARED,
+-			   self->dev_mem_fd, file_offset);
++			   fd, file_offset);
+ 	ASSERT_NE(self->addr2, MAP_FAILED);
+ }
+ 
+@@ -265,7 +258,8 @@ TEST_F(pfnmap, fork)
+ 	ASSERT_GE(pid, 0);
+ 
+ 	if (!pid) {
+-		EXPECT_EQ(test_read_access(self->addr1, self->size1), 0);
++		EXPECT_EQ(test_read_access(self->addr1, self->size1,
++					   self->pagesize), 0);
+ 		exit(0);
+ 	}
+ 
+--- a/tools/testing/selftests/mm/split_huge_page_test.c~b
++++ a/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -652,7 +652,7 @@ static int create_pagecache_thp_and_fd(c
+ 	}
+ 	madvise(*addr, fd_size, MADV_HUGEPAGE);
+ 
+-	force_read_pages_in_range(*addr, fd_size);
++	force_read_pages(*addr, fd_size / pmd_pagesize, pmd_pagesize);
+ 
+ 	if (!check_huge_file(*addr, fd_size / pmd_pagesize, pmd_pagesize)) {
+ 		ksft_print_msg("No large pagecache folio generated, please provide a filesystem supporting large folio\n");
+--- a/tools/testing/selftests/mm/vm_util.h~b
++++ a/tools/testing/selftests/mm/vm_util.h
+@@ -54,10 +54,11 @@ static inline unsigned int pshift(void)
+ 	return __page_shift;
+ }
+ 
+-static inline void force_read_pages_in_range(char *addr, size_t len)
++static inline void force_read_pages(char *addr, unsigned int nr_pages,
++				    size_t pagesize)
+ {
+-	for (size_t i = 0; i < len; i += psize())
+-		FORCE_READ(addr[i]);
++	for (unsigned int i = 0; i < nr_pages; i++)
++		FORCE_READ(addr[i * pagesize]);
+ }
+ 
+ bool detect_huge_zeropage(void);
+_
 
