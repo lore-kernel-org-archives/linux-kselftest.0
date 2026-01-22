@@ -1,41 +1,64 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016DD3994A3;
-	Thu, 22 Jan 2026 17:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3E637AA7A;
+	Thu, 22 Jan 2026 17:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769101382; cv=none; b=bu/Poh5a7y44+pyiPH70kZfvv9S2iCSRM7lv6ixENcFkts5mLAbTczppeSMKtJTR5Nya7Xu9qUZcxj0q+YbxIH4oFPWUc2DF9LrmwH0ufRyU0kNY1ZlC7GW1+doDz1OHzaywPbMygTzj+7izok7yyMh+785wMaIAWOmG2zAbkp4=
+	t=1769101540; cv=none; b=YGMYgIGR1nQT50vvaX83TQoe3YSHNOCLO/2YkjN+cKs5zHy9mxwudHnZCRMIAUDzM2LJ4Leoj0TclzReDLbTQczYUdtnOgU1Dac/ex0jwv51Jcw1DQ2mGzJ7BriNl2xTpedC9wSBzB+Fc0+HCMFiRz6Xf3UcXJHoupZCGThssXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769101382; c=relaxed/simple;
-	bh=LqG8Hnz6Q5OxBgnzVjR/OTNRf+pKJfp6ootXAexNYYs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Sbh9MFngFuz+mzwP9obrKv0eBsPoWMiuujSwaQYQXXa+MawQMeKQiHPIqDJ0oAYTnQZUtPTah6h+QqDxxHvz17eICdVM5iwofxapvbwJjHPcgWq8l6rxjLP2JwAz9C42Iysh+pINVMXlLPWrLgqjohw9TX8vsDS7iLpN2heCjko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 429D81684;
-	Thu, 22 Jan 2026 09:02:43 -0800 (PST)
-Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7CCD93F632;
-	Thu, 22 Jan 2026 09:02:48 -0800 (PST)
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-To: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Kevin Brodsky <kevin.brodsky@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Dev Jain <dev.jain@arm.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Mark Brown <broonie@kernel.org>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v3 9/9] selftests/mm: report SKIP in pfnmap if a check fails
-Date: Thu, 22 Jan 2026 17:02:24 +0000
-Message-ID: <20260122170224.4056513-10-kevin.brodsky@arm.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20260122170224.4056513-1-kevin.brodsky@arm.com>
-References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
+	s=arc-20240116; t=1769101540; c=relaxed/simple;
+	bh=yWEpMLU+9y62wL3iM8bocvJtxB/L4JUD/PYK4dc85hs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LVXVy1JwWLS2zYzTG6u7zbpx96SGQvKqf6rG/Xq9a68KJUKluVmiQjyZZjUzNZkTKLl3jj2Htutad3rmeUyp49/Q3kWRfN7GPK9872PL49tF7kxFCvAydfXRnUw7WF0Dx4uiQO8R5mFycx2xQheJZkjLT6iaFbwYO59ncSSWHnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m/ZQzR1o; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m/ZQzR1o"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769101530; x=1800637530;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yWEpMLU+9y62wL3iM8bocvJtxB/L4JUD/PYK4dc85hs=;
+  b=m/ZQzR1o01bARrvcLCT3zst8SG3b1VYwBCKmHJnJnOgblI5VKJqVO+gT
+   zwMa3d+PwqkGeYvY442iER9oTcPQ+07CeItgkm2MsM8uWfKJ6k1hi79GH
+   LU/GDkKuXD3xfZ4k5hxKaU6TQk4jDnbk+76LhiSaLTICNmnz1W8sTpTbt
+   Xp3YGADnmWQjyDiVFz63s3y3BoSsSv3sPDdTCq6hW6nGkKWrT40EFgBSG
+   4eOOLp7GjvPd0qRWjVZVmjUAMFiMaIwMSRSZzZ1tTjXPEoaaPPW7YvbAE
+   VOSQUWowymZrVcr5De91HAwHHCDI/exs+CzP0vACpfWEWzGevkUJoYvuR
+   Q==;
+X-CSE-ConnectionGUID: di9gJlbhQCquiQtQbQ4v3w==
+X-CSE-MsgGUID: 3adAMB6EQRirgUpuk4/KTw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="70408994"
+X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
+   d="scan'208";a="70408994"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 09:05:24 -0800
+X-CSE-ConnectionGUID: AXTq/WAbSEy2JySN0Ai47g==
+X-CSE-MsgGUID: U8wK6lLgSUmtaxcG0Iq1kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
+   d="scan'208";a="238044923"
+Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 09:05:23 -0800
+From: Reinette Chatre <reinette.chatre@intel.com>
+To: shuah@kernel.org,
+	Dave.Martin@arm.com,
+	james.morse@arm.com,
+	tony.luck@intel.com,
+	peternewman@google.com,
+	babu.moger@amd.com,
+	ilpo.jarvinen@linux.intel.com
+Cc: fenghuay@nvidia.com,
+	reinette.chatre@intel.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev
+Subject: [PATCH] selftests/resctrl: Improve accuracy of cache occupancy test
+Date: Thu, 22 Jan 2026 09:19:51 -0800
+Message-ID: <084e82b5c29d75f16f24af8768d50d39ba0118a5.1769101788.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,171 +67,209 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-pfnmap currently checks the target file in FIXTURE_SETUP(pfnmap),
-meaning once for every test, and skips the test if any check fails.
+Dave Martin reported inconsistent CMT test failures. In one experiment
+the first run of the CMT test failed because of too large (24%) difference
+between measured and achievable cache occupancy while the second run passed
+with an acceptable 4% difference.
 
-The target file is the same for every test so this is a little
-overkill. More importantly, this approach means that the whole suite
-will report PASS even if all the tests are skipped because kernel
-configuration (e.g. CONFIG_STRICT_DEVMEM=y) prevented /dev/mem from
-being mapped, for instance.
+The CMT test is susceptible to interference from the rest of the system.
+This can be demonstrated with a utility like stress-ng by running the CMT
+test while introducing cache misses using:
 
-Let's ensure that KSFT_SKIP is returned as exit code if any check
-fails by performing the checks in pfnmap_init(), run once. That
-function also takes care of finding the offset of the pages to be
-mapped and saves it in a global. The file is now opened only once
-and the fd saved in a global, but it is still mapped/unmapped for
-every test, as some of them modify the mapping.
+   stress-ng --matrix-3d 0 --matrix-3d-zyx
 
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+Below shows an example of the CMT test failing because of a significant
+difference between measured and achievable cache occupancy when run with
+interference:
+    # Starting CMT test ...
+    # Mounting resctrl to "/sys/fs/resctrl"
+    # Cache size :56623104
+    # Writing benchmark parameters to resctrl FS
+    # Benchmark PID: 3275
+    # Checking for pass/fail
+    # Fail: Check cache miss rate within 15%
+    # Percent diff=97
+    # Number of bits: 5
+    # Average LLC val: 501350
+    # Cache span (bytes): 23592960
+    not ok 1 CMT: test
+
+The CMT test creates a new control group that is also capable of monitoring
+and assigns the workload to it. The workload allocates a buffer that by
+default fills a portion of the L3 and keeps reading from the buffer,
+measuring the L3 occupancy at intervals. The test passes if the workload's
+L3 occupancy is within 15% of the buffer size.
+
+By not adjusting any capacity bitmasks the workload shares the cache with
+the rest of the system. Any other task that may be running could evict
+the workload's data from the cache causing it to have low cache occupancy.
+
+Reduce interference from the rest of the system by ensuring that the
+workload's control group uses the capacity bitmask found in the user
+parameters for L3 and that the rest of the system can only allocate into
+the inverse of the workload's L3 cache portion. Other tasks can thus no
+longer evict the workload's data from L3.
+
+Take the L2 cache into account to further improve test accuracy.
+By default the buffer size is the same as the L3 portion that the workload
+can allocate into. This buffer size does not take into account that some
+of the workload's data may land in L2/L1. Address this in two ways:
+ - Reduce the amount of L2 cache the workload can allocate into to the
+   minimum on systems that support L2 cache allocation.
+ - Increase the buffer size to accommodate data that may be allocated into
+   the L2 cache. Use a buffer size double the L3 portion to keep using the
+   L3 portion size as goal for L3 occupancy while taking into account that
+   some of the data my be in L2.
+
+With the above adjustments the CMT test is more consistent. Repeating the
+CMT test while generating interference with stress-ng on a sample
+system after applying the fixes show significant improvement in test
+accuracy:
+
+    # Starting CMT test ...
+    # Mounting resctrl to "/sys/fs/resctrl"
+    # Cache size :56623104
+    # Writing benchmark parameters to resctrl FS
+    # Write schema "L3:0=fe0" to resctrl FS
+    # Write schema "L3:0=1f" to resctrl FS
+    # Benchmark PID: 3223
+    # Checking for pass/fail
+    # Pass: Check cache miss rate within 15%
+    # Percent diff=3
+    # Number of bits: 5
+    # Average LLC val: 22811443
+    # Cache span (bytes): 23592960
+    ok 1 CMT: test
+
+Reported-by: Dave Martin <Dave.Martin@arm.com>
+Closes: https://lore.kernel.org/lkml/aO+7MeSMV29VdbQs@e133380.arm.com/
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- tools/testing/selftests/mm/pfnmap.c | 84 ++++++++++++++++++-----------
- 1 file changed, 53 insertions(+), 31 deletions(-)
+ tools/testing/selftests/resctrl/cmt_test.c    | 35 ++++++++++++++++---
+ tools/testing/selftests/resctrl/mba_test.c    |  4 ++-
+ tools/testing/selftests/resctrl/mbm_test.c    |  4 ++-
+ tools/testing/selftests/resctrl/resctrl.h     |  4 ++-
+ tools/testing/selftests/resctrl/resctrl_val.c |  2 +-
+ 5 files changed, 41 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
-index 45b5f1cf6019..4f550822385a 100644
---- a/tools/testing/selftests/mm/pfnmap.c
-+++ b/tools/testing/selftests/mm/pfnmap.c
-@@ -25,8 +25,12 @@
- #include "kselftest_harness.h"
- #include "vm_util.h"
+diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+index d09e693dc739..44e9938dfafd 100644
+--- a/tools/testing/selftests/resctrl/cmt_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -19,12 +19,39 @@
+ #define CON_MON_LCC_OCCUP_PATH		\
+ 	"%s/%s/mon_data/mon_L3_%02d/llc_occupancy"
  
-+#define DEV_MEM_NPAGES	2
-+
- static sigjmp_buf sigjmp_buf_env;
- static char *file = "/dev/mem";
-+static off_t file_offset;
-+static int fd;
- 
- static void signal_handler(int sig)
+-static int cmt_init(const struct resctrl_val_param *param, int domain_id)
++/*
++ * Initialize capacity bitmasks (CBMs) for control group being tested,
++ * default resource group to prevent its tasks from interfering with test,
++ * and L2 resource of control group to minimize allocations into L2 if
++ * possible to better predict L3 occupancy.
++ */
++static int cmt_init(const struct resctrl_test *test,
++		    const struct user_params *uparams,
++		    const struct resctrl_val_param *param, int domain_id)
  {
-@@ -88,7 +92,7 @@ static int find_ram_target(off_t *offset,
- 			break;
++	unsigned long long_mask;
++	char schemata[64];
++	int ret;
++
+ 	sprintf(llc_occup_path, CON_MON_LCC_OCCUP_PATH, RESCTRL_PATH,
+ 		param->ctrlgrp, domain_id);
  
- 		/* We need two pages. */
--		if (end > start + 2 * pagesize) {
-+		if (end > start + DEV_MEM_NPAGES * pagesize) {
- 			fclose(file);
- 			*offset = start;
- 			return 0;
-@@ -97,11 +101,48 @@ static int find_ram_target(off_t *offset,
- 	return -ENOENT;
+-	return 0;
++	ret = get_full_cbm(test->resource, &long_mask);
++	if (ret)
++		return ret;
++
++	snprintf(schemata, sizeof(schemata), "%lx", ~param->mask & long_mask);
++	ret = write_schemata("", schemata, uparams->cpu, test->resource);
++	if (ret)
++		return ret;
++
++	snprintf(schemata, sizeof(schemata), "%lx", param->mask);
++	ret = write_schemata(param->ctrlgrp, schemata, uparams->cpu, test->resource);
++
++	if (!ret && !strcmp(test->resource, "L3") && resctrl_resource_exists("L2"))
++		ret = write_schemata(param->ctrlgrp, "0x1", uparams->cpu, "L2");
++
++	return ret;
  }
  
-+static void pfnmap_init(void)
-+{
-+	size_t pagesize = getpagesize();
-+	size_t size = DEV_MEM_NPAGES * pagesize;
-+	void *addr;
-+
-+	if (strncmp(file, "/dev/mem", strlen("/dev/mem")) == 0) {
-+		int err = find_ram_target(&file_offset, pagesize);
-+
-+		if (err)
-+			ksft_exit_skip("Cannot find ram target in '/proc/iomem': %s\n",
-+				       strerror(-err));
-+	} else {
-+		file_offset = 0;
-+	}
-+
-+	fd = open(file, O_RDONLY);
-+	if (fd < 0)
-+		ksft_exit_skip("Cannot open '%s': %s\n", file, strerror(errno));
-+
-+	/*
-+	 * Make sure we can map the file, and perform some basic checks; skip
-+	 * the whole suite if anything goes wrong.
-+	 * A fresh mapping is then created for every test case by
-+	 * FIXTURE_SETUP(pfnmap).
-+	 */
-+	addr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, file_offset);
-+	if (addr == MAP_FAILED)
-+		ksft_exit_skip("Cannot mmap '%s': %s\n", file, strerror(errno));
-+
-+	if (!check_vmflag_pfnmap(addr))
-+		ksft_exit_skip("Invalid file: '%s'. Not pfnmap'ed\n", file);
-+
-+	if (test_read_access(addr, size, pagesize))
-+		ksft_exit_skip("Cannot read-access mmap'ed '%s'\n", file);
-+
-+	munmap(addr, size);
-+}
-+
- FIXTURE(pfnmap)
- {
--	off_t offset;
- 	size_t pagesize;
--	int dev_mem_fd;
- 	char *addr1;
- 	size_t size1;
- 	char *addr2;
-@@ -112,31 +153,10 @@ FIXTURE_SETUP(pfnmap)
- {
- 	self->pagesize = getpagesize();
+ static int cmt_setup(const struct resctrl_test *test,
+@@ -153,11 +180,11 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
+ 	span = cache_portion_size(cache_total_size, param.mask, long_mask);
  
--	if (strncmp(file, "/dev/mem", strlen("/dev/mem")) == 0) {
--		/* We'll require two physical pages throughout our tests ... */
--		if (find_ram_target(&self->offset, self->pagesize))
--			SKIP(return,
--				   "Cannot find ram target in '/proc/iomem'\n");
--	} else {
--		self->offset = 0;
--	}
--
--	self->dev_mem_fd = open(file, O_RDONLY);
--	if (self->dev_mem_fd < 0)
--		SKIP(return, "Cannot open '%s'\n", file);
--
--	self->size1 = self->pagesize * 2;
-+	self->size1 = DEV_MEM_NPAGES * self->pagesize;
- 	self->addr1 = mmap(NULL, self->size1, PROT_READ, MAP_SHARED,
--			   self->dev_mem_fd, self->offset);
--	if (self->addr1 == MAP_FAILED)
--		SKIP(return, "Cannot mmap '%s'\n", file);
--
--	if (!check_vmflag_pfnmap(self->addr1))
--		SKIP(return, "Invalid file: '%s'. Not pfnmap'ed\n", file);
--
--	/* ... and want to be able to read from them. */
--	if (test_read_access(self->addr1, self->size1, self->pagesize))
--		SKIP(return, "Cannot read-access mmap'ed '%s'\n", file);
-+			   fd, file_offset);
-+	ASSERT_NE(self->addr1, MAP_FAILED);
- 
- 	self->size2 = 0;
- 	self->addr2 = MAP_FAILED;
-@@ -148,8 +168,6 @@ FIXTURE_TEARDOWN(pfnmap)
- 		munmap(self->addr2, self->size2);
- 	if (self->addr1 != MAP_FAILED)
- 		munmap(self->addr1, self->size1);
--	if (self->dev_mem_fd >= 0)
--		close(self->dev_mem_fd);
- }
- 
- TEST_F(pfnmap, madvise_disallowed)
-@@ -189,7 +207,7 @@ TEST_F(pfnmap, munmap_split)
- 	 */
- 	self->size2 = self->pagesize;
- 	self->addr2 = mmap(NULL, self->pagesize, PROT_READ, MAP_SHARED,
--			   self->dev_mem_fd, self->offset);
-+			   fd, file_offset);
- 	ASSERT_NE(self->addr2, MAP_FAILED);
- }
- 
-@@ -259,8 +277,12 @@ int main(int argc, char **argv)
- 		if (strcmp(argv[i], "--") == 0) {
- 			if (i + 1 < argc && strlen(argv[i + 1]) > 0)
- 				file = argv[i + 1];
--			return test_harness_run(i, argv);
-+			argc = i;
-+			break;
- 		}
+ 	if (uparams->fill_buf) {
+-		fill_buf.buf_size = span;
++		fill_buf.buf_size = span * 2;
+ 		fill_buf.memflush = uparams->fill_buf->memflush;
+ 		param.fill_buf = &fill_buf;
+ 	} else if (!uparams->benchmark_cmd[0]) {
+-		fill_buf.buf_size = span;
++		fill_buf.buf_size = span * 2;
+ 		fill_buf.memflush = true;
+ 		param.fill_buf = &fill_buf;
  	}
-+
-+	pfnmap_init();
-+
- 	return test_harness_run(argc, argv);
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index c7e9adc0368f..cd4c715b7ffd 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -17,7 +17,9 @@
+ #define ALLOCATION_MIN		10
+ #define ALLOCATION_STEP		10
+ 
+-static int mba_init(const struct resctrl_val_param *param, int domain_id)
++static int mba_init(const struct resctrl_test *test,
++		    const struct user_params *uparams,
++		    const struct resctrl_val_param *param, int domain_id)
+ {
+ 	int ret;
+ 
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 84d8bc250539..58201f844740 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -83,7 +83,9 @@ static int check_results(size_t span)
+ 	return ret;
  }
+ 
+-static int mbm_init(const struct resctrl_val_param *param, int domain_id)
++static int mbm_init(const struct resctrl_test *test,
++		    const struct user_params *uparams,
++		    const struct resctrl_val_param *param, int domain_id)
+ {
+ 	int ret;
+ 
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 3c51bdac2dfa..72f3338cacca 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -133,7 +133,9 @@ struct resctrl_val_param {
+ 	char			filename[64];
+ 	unsigned long		mask;
+ 	int			num_of_runs;
+-	int			(*init)(const struct resctrl_val_param *param,
++	int			(*init)(const struct resctrl_test *test,
++					const struct user_params *uparams,
++					const struct resctrl_val_param *param,
+ 					int domain_id);
+ 	int			(*setup)(const struct resctrl_test *test,
+ 					 const struct user_params *uparams,
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 7c08e936572d..a5a8badb83d4 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -569,7 +569,7 @@ int resctrl_val(const struct resctrl_test *test,
+ 		goto reset_affinity;
+ 
+ 	if (param->init) {
+-		ret = param->init(param, domain_id);
++		ret = param->init(test, uparams, param, domain_id);
+ 		if (ret)
+ 			goto reset_affinity;
+ 	}
 -- 
-2.51.2
+2.50.1
 
