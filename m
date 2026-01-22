@@ -1,78 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062023D6661;
-	Thu, 22 Jan 2026 03:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB9D2F25E4;
+	Thu, 22 Jan 2026 03:46:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769052613; cv=none; b=jgjNLihLQfctvq0FtZLeEEKacBrfTuktdaI+XPCkqgTxWTstcZeLgzrUKeK5KjTTf7UgxtkYZtb0uomlre86EYf6nV2YjI/oDPlz0cUfjUw3MS/ToUCzlzmt/BDENLVtS9Ka6ZB2bJjuGDR9Wj6SXTUfFfPNhovx5AcuBPeZb+E=
+	t=1769053577; cv=none; b=NqmSVItR2N+GtlhNtgybL7qE1Gh0ftM7nTRyTAZOuVJQreQYnJ6cI+PFivaXa+Svy4YZgFAGKVRwkBxiDn954cg2hWhSiFzRPG7z5mfh/f35wPyWGflY2xSkderhkEMNk6jxyS1TiDVX1DciNUjm/4voPI80Ty0cQWGLaQ2XnOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769052613; c=relaxed/simple;
-	bh=Rdep9s5k5V/uQGJPz9oEpnElIDdpwIOX6HjB3ghYs5M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cZT6JqwJUw52AWw+0kv9XrhbGs4GalSQPc3oTHaK5sduoPPsPe0jj36Il+2EGeGOTq3Mn2fjLziQjIZ2MLsIFquCklxrSUjuG6wHsp1AmUqFpwvGA4eP+pKmVINxZR8GuZGmLmI4ifVEgWc0mqAYQlHtY8fdnYjZwofuGfemWbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rK/HQ68t; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769053577; c=relaxed/simple;
+	bh=ynSRihxWim5+EusyB2i7EzOv0G25NDdmVPfcT0SpmjU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qYDfSFuwdpRYtfvON+w2/lOwXYf+JH9DoUgyqnh7Kl+QWh+6fxGhNJvkOz2WxSJmEy8NBzHNtKcx1Oau44EVbghpIshQJUu9JUXeZZgKDL7LG/7zCkumaK+SjWRmaYVDug2EH+Y6f8wm76iS9nPHMWMslorS7i9XECQbcVE/AZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YTzK3DL5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rK/HQ68t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C7BC19422;
-	Thu, 22 Jan 2026 03:30:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YTzK3DL5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A6EC116C6;
+	Thu, 22 Jan 2026 03:46:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769052611;
-	bh=Rdep9s5k5V/uQGJPz9oEpnElIDdpwIOX6HjB3ghYs5M=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=rK/HQ68tE/3BcahXNwaMhUjmFdL2iijWJ++m8mdlmLwB/hxKIi4fV1Dtv0FD5GLU3
-	 jRw1TUC3flxKquHyuVp1KhPPIpSCBGvpR/it0qnZfh2xk9+SdXJSv+FseJ6WsTqjPo
-	 AKWnIwvG9bdRPpOdOgCwKfuhK/NHJbuROy/kjYAMYrQMnE6uYnB9oTSckXc90HCkCM
-	 D6Jb+9wOS0bfen0xGLHwI5ZkkJ03JHAIThFvOIL0mYkl6euT4wFKJprTF5VUZ4Fo2P
-	 YiuwX7uZ/EeyaddY4rsztPN8KnT78cLHTYfpXRXxuicPdQ9XwzpsLfnHeXKrlMkczd
-	 X/tA076vi0g5g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BD163808200;
-	Thu, 22 Jan 2026 03:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1769053577;
+	bh=ynSRihxWim5+EusyB2i7EzOv0G25NDdmVPfcT0SpmjU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=YTzK3DL5J130YmWOp6b7es/wRK1DmQ+o7wgYSuCQfXJa7NXw65UD7/olKRv5FRrKV
+	 abDOVDa4WAmJ2ODdtvSMCixwNRCWJzzEpffJUxTToRmbi7bBnZuYiGkePf1P5fsUsC
+	 SL65nWlBRhLW4WJ/o8n+HLtai9m3yzrUqTe/7vvp9B0IjWBj6ejpqCPhTqZbb0gqj6
+	 TmKF1taxXgSwKJo2iFUncQ9W50G/6/BvGhhKONon5yCvbYrLntUER48QtpymoBA38K
+	 jFcDF9VqoadGtdXHEtHKPy5b3x7SwgwOuau1PRVY6Iq1k70rYgFc4vkCEEHvz6md1P
+	 qcGku8tnlRVvQ==
+Date: Wed, 21 Jan 2026 19:46:15 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn
+ <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, David Ahern
+ <dsahern@kernel.org>, Mina Almasry <almasrymina@google.com>, Arnd Bergmann
+ <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, Donald Hunter
+ <donald.hunter@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, asml.silence@gmail.com,
+ matttbe@kernel.org, skhawaja@google.com, Bobby Eshleman
+ <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v10 4/5] net: devmem: document
+ NETDEV_A_DMABUF_AUTORELEASE netlink attribute
+Message-ID: <20260121194615.33dc0812@kernel.org>
+In-Reply-To: <CAKB00G2xNvfiV6J3RzKDs=GHMGZ7L16+VKUYLGjpZdOrLnSYKA@mail.gmail.com>
+References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
+	<20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-4-686d0af71978@meta.com>
+	<20260120163650.5a962648@kernel.org>
+	<aXBnqYQdomzH9bT/@devvm11784.nha0.facebook.com>
+	<20260121173512.748e2155@kernel.org>
+	<aXGNhEKOhkTHbJvw@devvm11784.nha0.facebook.com>
+	<20260121185021.446b00e8@kernel.org>
+	<CAKB00G2xNvfiV6J3RzKDs=GHMGZ7L16+VKUYLGjpZdOrLnSYKA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2] selftests: net: amt: wait longer for connection
- before
- sending packets
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176905260835.1542867.4557783049246974526.git-patchwork-notify@kernel.org>
-Date: Thu, 22 Jan 2026 03:30:08 +0000
-References: <20260120133930.863845-1-ap420073@gmail.com>
-In-Reply-To: <20260120133930.863845-1-ap420073@gmail.com>
-To: Taehee Yoo <ap420073@gmail.com>
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- edumazet@google.com, horms@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 20 Jan 2026 13:39:30 +0000 you wrote:
-> Both send_mcast4() and send_mcast6() use sleep 2 to wait for the tunnel
-> connection between the gateway and the relay, and for the listener
-> socket to be created in the LISTENER namespace.
+On Wed, 21 Jan 2026 19:25:27 -0800 Bobby Eshleman wrote:
+> > > That is correct, neither is true. If the two sockets share a binding the
+> > > kernel doesn't care which socket received the token or which one
+> > > returned it. No token <> socket association. There is no
+> > > queued-but-not-read race either. If any tokens are not returned, as long
+> > > as all of the binding references are eventually released and all sockets
+> > > that used the binding are closed, then all references will be accounted
+> > > for and everything cleaned up.  
+> >
+> > Naming is hard, but I wonder whether the whole feature wouldn't be
+> > better referred to as something to do with global token accounting
+> > / management? AUTORELEASE makes sense but seems like focusing on one
+> > particular side effect.  
 > 
-> However, tests sometimes fail because packets are sent before the
-> connection is fully established.
-> 
-> [...]
+> Good point. The only real use case for autorelease=on is for backwards
+> compatibility... so I thought maybe DEVMEM_A_DMABUF_COMPAT_TOKEN
+> or DEVMEM_A_DMABUF_COMPAT_DONTNEED would be clearer?
 
-Here is the summary with links:
-  - [net,v2] selftests: net: amt: wait longer for connection before sending packets
-    https://git.kernel.org/netdev/net/c/04708606fd7b
+Hm. Maybe let's return to naming once we have consensus on the uAPI.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Does everyone think that pushing this via TCP socket opts still makes
+sense, even tho in practice the TCP socket is just how we find the
+binding?
