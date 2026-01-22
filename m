@@ -1,147 +1,320 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013038.outbound.protection.outlook.com [52.101.83.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 471A836AB4A;
-	Thu, 22 Jan 2026 01:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769046748; cv=none; b=tqGUEs04mK1Q3qRV9Fgz3jf/k80GWmtATL8Q6zNJIJMSFNw90XxgScCcxG6yJ3Gctg/5fHGuyK/7NHJyZMGh8dxuGa0ItkdwoFbv9D3AvBbaEe0+ks8mDgx5LPqbdpNX3kqq0MW2j0bUvfZv8Nvi9Q/lN/Bul9Kzy5iWej7mvSs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769046748; c=relaxed/simple;
-	bh=qYwAX/Pf7Ke5XbpM2EiaK/6q423NqH3TiaABIOWSx+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BShmVPS3waH2frLNOscvbJmiagX3gitVes6UBwdC6u0hRINDINZ++sNxWyt7tYJUoPJOFjdTHdMBESCzyhftN6Ji2rxKVIqNF1xEGNc1iyT9AeKMNtIgkoJdEND4xiqAZ6GP6sYehNsNK65EcL9u+Uvwc1VcLzcpI1Sn1hEm5lU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n8/HpKxo; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5DE352FBC;
+	Thu, 22 Jan 2026 01:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.38
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769046893; cv=fail; b=bYbC+WGjM9sSgPFunXcujBPi9zOKxevC62UP08OtYqNc3nTwaneNJCm6v1oDiNVRtAzUD6r0/HD/KML/EhdT6MosiWLwCx9DjSJ4eClYZdK6mN4O7w3Oq8CoeODDaPPyD2gLBBVTHpuuV3EH5EG5FH41nu+GFXVPZir/Xd+ZZ9g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769046893; c=relaxed/simple;
+	bh=P8/5iFOZz+JTsI88gu/UH9NLz99r1RNahGof64RXfLk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=jNYpK7rOJyDcYvZPNZuQr+V7tNFV4qRytNnLbQYR1YekN9jnrKk9y2wzWhxHYtDPJaeygkjrLOwcqWR3VN8c6K2yoxFEv0vFaV7b29xI1qIywPwr0VPL3Ctf/sA/QmZClZj3n7mUQhqKmaPiz1c7e8UG66K+oEOVOfNCbzyWu4M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=lauFpQof; arc=fail smtp.client-ip=52.101.83.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n8/HpKxo"
-Date: Thu, 22 Jan 2026 01:52:16 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769046744;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=v8WrSN8hRo+4tyF0Y0UH5ZXDOaU9yhor4eMKJD38nAs=;
-	b=n8/HpKxoYG6RNTHt3cPt9IAgrfdDAwIxXw6I7tvfCkyDrHkiofZX7TuC62s16AUtUVz6xL
-	8GPShQM1IjdLZxFntaVmDso6Dc2LQXpNFAGMRgr0FleUJzUDyFcomtRoaH1Jyi+KNCQNCN
-	vPeVuKDxeHgrcMiZDd7lwf+iVFuSekI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Jim Mattson <jmattson@google.com>
-Cc: Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 6/8] KVM: x86: nSVM: Save/restore gPAT with
- KVM_{GET,SET}_NESTED_STATE
-Message-ID: <mvornetnmvtjfljpecadzjqujotup6jxvf3q43ycnn4zyf3x6e@mc45ffhi3u6a>
-References: <20260115232154.3021475-1-jmattson@google.com>
- <20260115232154.3021475-7-jmattson@google.com>
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="lauFpQof"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IpAAc9lgIzn9pWlrWlSWIucDnPZ3f4qCkn7yGZ9XnTkFry4R4g6WlFZvfzcpU9LU46FDW+5WslkJnn2RbqyiCisbwArfLL7FI8K8xI8gJyngWCeLb75Z18ZE3hCOc3n3TknZ1Vcx0BjcdRR+MFpsOZfORNubzcX6fszpNAwXDC3unuEJ7RDJU6WaCnYXTipNoKsyGnf19TanjbC5KSIxpZz0/908tchvqfNKkcbWbv+YRF5dSIj2XBK6wPtTq4NvFzmDWsIzz2BB+Q0HmE7glJj35whw3g6jUDLBeaTeqb59VrtvTmrsDJkpBRHLZ1zVfhdx01P5zbOBKoJtesXWsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5q17GNhgc/zv000IMHJ/KLnICDEBcIN8cM2Oub6Hbxw=;
+ b=XxpG6InwualJc93vFy1sQj3aMo8ZkKwDonGXz6msgrw5tHCOK+kx7m+n5q+ycbX6PqiNKBLfZxoltpKQ+zp6u53w8x1EB80/r55kSvzkBtnL7ae7tlXhsqw7c7ojbqjmD9GzAI+gbubVsrjUijf9kRiHjNEciPeglb5dfBPsZeHPYlmRQ/3tT+tC4V0EzQ5GlF5zOK0Gtl9gvCvO884w7KPEpk8+BM7jMRr/23wEtauxm7fkqOEMHuKWDG0useak2yRfbI7EUMoRH8nswEUlPDFi+cUdh3bGDVyMSRDYpO2OeQLKf8cQcqHL42qOSXWxaPPOxLdrRTbMvjZDH23hMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5q17GNhgc/zv000IMHJ/KLnICDEBcIN8cM2Oub6Hbxw=;
+ b=lauFpQofenKpUIjtxbqIMsFC4sxdU19gmmsIHwz+0IvV50DqlKsFeIt2UM2Y6Hy6gwamQ0fdaGDXc2vWIkTJVuayVM9lJxW78TjzidPEPPUxo+TTkrGA+UpHn5Np75eVgcmqhg4SCvYadUhMSgqKyrEW1J/uhUWy836Rc2sFR8jFWvMa2CvM+w2L/EI76NVZst+8yOGU8IeuKwNBctDDfkWhOwFpHkwSEtXtsS8vi6SUNXw8+wRngwyUXmQdOJG/jtFGrCxsK5j3tnpaiVrbHm7r8yQZXo73tmB57XR/dcpej/P0z3GsH2yk+lq2gRcC6DP4qVlr8f//E0Mwvm/1Ag==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22)
+ by AM0PR04MB11854.eurprd04.prod.outlook.com (2603:10a6:20b:6fc::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.10; Thu, 22 Jan
+ 2026 01:54:45 +0000
+Received: from DU2PR04MB8951.eurprd04.prod.outlook.com
+ ([fe80::753c:468d:266:196]) by DU2PR04MB8951.eurprd04.prod.outlook.com
+ ([fe80::753c:468d:266:196%4]) with mapi id 15.20.9520.011; Thu, 22 Jan 2026
+ 01:54:45 +0000
+Date: Wed, 21 Jan 2026 20:54:34 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Koichiro Den <den@valinux.co.jp>
+Cc: dave.jiang@intel.com, cassel@kernel.org, mani@kernel.org,
+	kwilczynski@kernel.org, kishon@kernel.org, bhelgaas@google.com,
+	geert+renesas@glider.be, robh@kernel.org, vkoul@kernel.org,
+	jdmason@kudzu.us, allenbh@gmail.com, jingoohan1@gmail.com,
+	lpieralisi@kernel.org, linux-pci@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	dmaengine@vger.kernel.org, iommu@lists.linux.dev,
+	ntb@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, arnd@arndb.de,
+	gregkh@linuxfoundation.org, joro@8bytes.org, will@kernel.org,
+	robin.murphy@arm.com, magnus.damm@gmail.com, krzk+dt@kernel.org,
+	conor+dt@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
+	andriy.shevchenko@linux.intel.com, jbrunet@baylibre.com,
+	utkarsh02t@gmail.com
+Subject: Re: [RFC PATCH v4 05/38] dmaengine: dw-edma: Add a helper to query
+ linked-list region
+Message-ID: <aXGDWiAxesCy1/yA@lizhi-Precision-Tower-5810>
+References: <20260118135440.1958279-1-den@valinux.co.jp>
+ <20260118135440.1958279-6-den@valinux.co.jp>
+ <aW0S60D2uALBXdtQ@lizhi-Precision-Tower-5810>
+ <e4y664ylum35wvj4endwprzpp4cvfaggklik5mxvdkgmakuqyj@lgevmhllem72>
+ <tuhaxwmmcjfltih7ckfo2l5ltzicnj6zfc5ka3pvqlljn7ldu2@ibo5eo62lndn>
+ <aXDvkRCZXQ/dPwRd@lizhi-Precision-Tower-5810>
+ <42qzkekk6yqbtcynxny3f7pl3xg6tqkywxvjsgfmrdpnr7zy53@i7ebpgazbi4z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42qzkekk6yqbtcynxny3f7pl3xg6tqkywxvjsgfmrdpnr7zy53@i7ebpgazbi4z>
+X-ClientProxiedBy: PH8PR07CA0030.namprd07.prod.outlook.com
+ (2603:10b6:510:2cf::16) To DU2PR04MB8951.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e2::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260115232154.3021475-7-jmattson@google.com>
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|AM0PR04MB11854:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5c432791-f2e2-4983-e9c2-08de595937b8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|376014|7416014|19092799006|1800799024|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?iT3hu6WJQZ+tV8SPg2SKOIQAT3CneD9rxXorJkwHhYAy0ABdMbom019AuI8i?=
+ =?us-ascii?Q?J+ody5JanrFDIbSDjSiFX+Rjld96mwM6mdk/kVjZy6IkRGK2+hFKGBswPUyo?=
+ =?us-ascii?Q?X+MYq3OmSg1MuWilAcIH/6eUlSZgel3Bpp7/XV6ZETqU4n2ySrwBBL6MEqCm?=
+ =?us-ascii?Q?pc2X47eMLqnMLQV6jQ+Hk4L54+LcuKY2ucXgUFN51D6Mx58meNbYdtx27hx/?=
+ =?us-ascii?Q?dt9eATIqWLzP6xCKx1KkCJRlIMc4+Jfyteg9mzYL4e5ugDmilkQL1nmjbwHG?=
+ =?us-ascii?Q?css3AChXKAq0JuNh6rfZN/EwFK4nujdhGSeUKfsK3t7JklTeUIKJKjn8p7Qs?=
+ =?us-ascii?Q?Sa5DoaPfeezC+hoCNiHgl/QGy9c4VJDQHTse5vXtTef1CQP2rkeJn2g1fnNN?=
+ =?us-ascii?Q?LTsT7Ue7MPxi8nlKcPCe3en4/z8jVb08I4rFAhurRWuxAj8cfd34yH0xv9eO?=
+ =?us-ascii?Q?+HhjmfumGXyO+v3lh2bfzoAOsvY0F0zRbqqtN4x7TLYIxsfQy+JD1bIeRe3h?=
+ =?us-ascii?Q?11R3ezRgZSFeY66hjtpiEYe9VUnctBNBKVyN3QYkhOSMESe6vRDUHCpynC7t?=
+ =?us-ascii?Q?hIOp9+r1kBK0x1bbhH9zIGzVXVbvZzhXfrPa/r+85ZfxgnXASm37/Hea36Az?=
+ =?us-ascii?Q?x4vppBkIE5E83cINaqBy6m1cyRx+kDRt0V3FxKwSnUw/OFtUkt0XFh3aw1TG?=
+ =?us-ascii?Q?gVq0TQ0wc+5+AB43/Qh7Yk7d08edCNTARQEiLVyIEkFoH+ScjDN7+9NzMTnf?=
+ =?us-ascii?Q?IfuW7mfilvXUinMH0sYAt149+F6iWGJ4WgQxMRFypWN1RUAApLheluYZ3/09?=
+ =?us-ascii?Q?AsMSjncr9DTYPwjyoKr63/MbO98kj57wbOf9cFRMV3QFoaWT6r1skV30lt4Z?=
+ =?us-ascii?Q?QYPY2gShtC5UOVJ5lC/VDQnBeG+axt/IEfOWLlBrBMNo5b4BZnKLGZThtdZB?=
+ =?us-ascii?Q?huhuGrFqgs9AKwsDGmXyzWcmVrU8S4TzOroC8wPcDjJYC3UOF/Tu5ddlw115?=
+ =?us-ascii?Q?gxxStzz8qEDS0IFsKiiJIribGTMfw87Xf0vC6Y1JU1UVTWM7igspin/+QIrf?=
+ =?us-ascii?Q?9nduxzRqJepKNH7d/4FlBD2GZPxXr6dNlSrx/40xBlt2GV6sxNFKSVpv94Kj?=
+ =?us-ascii?Q?mm0WAV6dKXNVdwxbZSoDmIIrr/sianqqO71xsULzwjxxCR8rz9rqiJ66YDvl?=
+ =?us-ascii?Q?Y7BOPTOp3YUJqRwyJlbkXBUjRlRFpFl/WULuZ0CMrx5+hYzPcVjrb9frNTfy?=
+ =?us-ascii?Q?vhHyrkI68ZoGwPGrLRx2PWJeUHYi/KsZp11EvsQYYIM0KGSQVmNmfGRXtoV7?=
+ =?us-ascii?Q?+vVSwnkj5p689esjaLIFYZpTb+BXBVQzfX6FdVVFXISSi/vbVDVwGd9ex8Mz?=
+ =?us-ascii?Q?EkajlLehcuJHeETyBn2OLXEZfz5iERbIJKZG4wHQKt28nBVXPliWLI3QAnVE?=
+ =?us-ascii?Q?EPJM3SZv/loG+ntvo4Z05BzbhzI4YVAw3UrnmeNAqzLhSb6vjl+jpoGf0Jcy?=
+ =?us-ascii?Q?/UejtYK1dK2fRvvqmorgp+KFYFGwyuP0ILYvBxYvuF7/IhHU0wLHaiYwi9FG?=
+ =?us-ascii?Q?/eX4aAHwigk4Vgo8o0pwDbpYUPYBO5Wem+1QJ+ykV5+2Ums9tCRmgduEd+Zx?=
+ =?us-ascii?Q?cNM72Y+k5ra7ngOWdTVI6EY=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(7416014)(19092799006)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?fRSBEWjqRI27otdZLvIFNIjb52nsVcDZArYbEAnRAXdazot5v94R2drZkaXW?=
+ =?us-ascii?Q?aTt2rZKiCF5wuzppSZv5gAV7kMn18phss2s4rFMMRN97ueJwsoB61fNDPQqy?=
+ =?us-ascii?Q?kdqoYZ+9+ReJiKoovdWnju7cUAUd0EIhWdjUZvC4dVdyKqe1QHfQ+ncpnNe/?=
+ =?us-ascii?Q?+D+THix0u0UwWXuGI1jwH3i5bMfmuIP17DeN+2Expg2TafsJUuntCZqF8TuS?=
+ =?us-ascii?Q?+qRokOGPM9p4inivR38/Jvf3Yq7molqJrdvyRWJxN4giXbf7jnHttL2PtX8d?=
+ =?us-ascii?Q?ibrjjzf17Jh37LHigwiDtySlXkEGufK+9cq8EuFENzUgFOFFBJX5d1ATwHEY?=
+ =?us-ascii?Q?f1ksfXQASBycbXQPz0bAgAQUCZ3y6DmNRnls84NCMS7VC+CyM+8KNxAwSTaa?=
+ =?us-ascii?Q?2bm7nLOO6LSdg3xZEaVpcoaKNpqbmT2cKHC3yGCVVAFN8wPyQ4ynzMuYO2vq?=
+ =?us-ascii?Q?TyNMV0Y5/eP1u2L8/Ajgga5cgksTsnW1TU+pnsqV1iyZ3y+HJC0q+UirP5DZ?=
+ =?us-ascii?Q?zO8Iy99nL78XiF0umODjwEBQuX/ss8CDhTYQZWos41o+CiFU6k42dWnqTKr/?=
+ =?us-ascii?Q?FlyRBvzIrqrxeC9QWxqyD2yg59wcJA0OlF3awea1WypxavVg94dotIW5q13n?=
+ =?us-ascii?Q?dRSkNigPCzBav41jn2XNjtM3GtmIUuTzKHfrRd9yuYqykCMo6SgZAfA33Do2?=
+ =?us-ascii?Q?f+119BymbiDIbS9NMxcuyUxLBWGHv4FookhhxkghCbVSLlurm2HkX1OklQ60?=
+ =?us-ascii?Q?2t48ElvCF9Mpyb3sy5E4WOodcByvE3pv1T6R/fj8c36dznn3IHPsd7Yqn5Gw?=
+ =?us-ascii?Q?qKGVle7uCjxWSrM+HDgeneQptYi2fEI2VQfQdTiAO8YXkk9Llg4gshXjZLxk?=
+ =?us-ascii?Q?GGcyVPRn/HZCI4+ISKDFDykf0LefdnHBgSLc2hj4ePJNoSbOGcxOFXzZU9jD?=
+ =?us-ascii?Q?NaldKQSyL8ZbTuN3Zek1OfJGsBC5zbjOPbnnqT/LmWk9l1eth5RQ6+ZRGFu5?=
+ =?us-ascii?Q?dJB2gitZV7LpqXzv4Tr6jBcFLm4yVPr4kjB2F/a1WzQcFNtNOA9F+3g0/NAt?=
+ =?us-ascii?Q?6iwT67ECBj1bVQgy7cdkrtT40BjFwaaEJk3bC9S7RRN9zhREK985HR9mG8mR?=
+ =?us-ascii?Q?6yolxBbv4gk6kAzIM7ZPrLcY/VhvbSab2X7wetBQYBT9ly8X0KIKt8AhuCYN?=
+ =?us-ascii?Q?rk4/+4NeSE7/wC6IyQIYC6WkAJF/+6mr6Vo4bV1sQidZTIhkhLJLx3HhUCVQ?=
+ =?us-ascii?Q?9w+l365Om3XIZUh0ZzPCvmfzGZCxVGBBkdUpj8HI/ceYefoxhmo/Lq9lD+pC?=
+ =?us-ascii?Q?GSlPPnwf6wksABtTe7/VIOdnISS/0dg+rlkbEiNaPF9FgwdKxMA/cRB8AUeg?=
+ =?us-ascii?Q?PvAaCyWFTJJegG/XSmWdC+1kpc54PrriT1HiLmdPmnYRV0xhoqYf0tYByBoE?=
+ =?us-ascii?Q?DUqUkqjYzImrDcMR+n0farZuSugvYq6CaguLLsP0DsFnbJ/sgwHzoKeE4Ck6?=
+ =?us-ascii?Q?/JYuYNCbm6U3SMuQ5+9/2gSwcWqmjUCYgpAcD5zHJo5zdJ5qgtipuIkjd9u/?=
+ =?us-ascii?Q?wPI+JiRDkEz9W74neXAFapFOqzNihCJc8XwjZbHd5Q4ccj7AS3qh5fdxkk8p?=
+ =?us-ascii?Q?ikgQ8PeCF0ra9QHJwyB/n6ZaTaoOiiCRX1NnR/6Rv0odV7hlsmm1mNH395UZ?=
+ =?us-ascii?Q?M8zJYkqQ+WSW7RVNPOLJfDHk0qZZSMmpXREfzPYeke2FxJpK?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c432791-f2e2-4983-e9c2-08de595937b8
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2026 01:54:45.7347
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i6Dlg9lY0m5feEOvHmtsv/+DdmJtjNIGhBmOG8g/zK4v9X3EPQ2EciRgO+Qk1hStCjU0oAR3PaxehT1MHLbffA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB11854
 
-On Thu, Jan 15, 2026 at 03:21:45PM -0800, Jim Mattson wrote:
-> Add a 'flags' field to the SVM nested state header, and use bit 0 of the
-> flags to indicate that gPAT is stored in the nested state.
-> 
-> If in guest mode with NPT enabled, store the current vmcb->save.g_pat value
-> into the vmcb save area of the nested state, and set the flag.
-> 
-> Note that most of the vmcb save area in the nested state is populated with
-> dead (and potentially already clobbered) vmcb01 state. A few fields hold L1
-> state to be restored at VMEXIT. Previously, the g_pat field was in the
-> former category.
-> 
-> Also note that struct kvm_svm_nested_state_hdr is included in a union
-> padded to 120 bytes, so there is room to add the flags field without
-> changing any offsets.
-> 
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-> ---
->  arch/x86/include/uapi/asm/kvm.h |  3 +++
->  arch/x86/kvm/svm/nested.c       | 13 ++++++++++++-
->  2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-> index 7ceff6583652..80157b9597db 100644
-> --- a/arch/x86/include/uapi/asm/kvm.h
-> +++ b/arch/x86/include/uapi/asm/kvm.h
-> @@ -495,6 +495,8 @@ struct kvm_sync_regs {
->  
->  #define KVM_STATE_VMX_PREEMPTION_TIMER_DEADLINE	0x00000001
->  
-> +#define KVM_STATE_SVM_VALID_GPAT	BIT(0)
-> +
->  /* vendor-independent attributes for system fd (group 0) */
->  #define KVM_X86_GRP_SYSTEM		0
->  #  define KVM_X86_XCOMP_GUEST_SUPP	0
-> @@ -530,6 +532,7 @@ struct kvm_svm_nested_state_data {
->  
->  struct kvm_svm_nested_state_hdr {
->  	__u64 vmcb_pa;
-> +	__u32 flags;
->  };
->  
->  /* for KVM_CAP_NESTED_STATE */
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 5fb31faf2b46..c50fb7172672 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -1789,6 +1789,8 @@ static int svm_get_nested_state(struct kvm_vcpu *vcpu,
->  	/* First fill in the header and copy it out.  */
->  	if (is_guest_mode(vcpu)) {
->  		kvm_state.hdr.svm.vmcb_pa = svm->nested.vmcb12_gpa;
-> +		if (nested_npt_enabled(svm))
-> +			kvm_state.hdr.svm.flags |= KVM_STATE_SVM_VALID_GPAT;
->  		kvm_state.size += KVM_STATE_NESTED_SVM_VMCB_SIZE;
->  		kvm_state.flags |= KVM_STATE_NESTED_GUEST_MODE;
->  
-> @@ -1823,6 +1825,11 @@ static int svm_get_nested_state(struct kvm_vcpu *vcpu,
->  	if (r)
->  		return -EFAULT;
->  
-> +	/*
-> +	 * vmcb01->save.g_pat is dead now, so it is safe to overwrite it with
-> +	 * vmcb02->save.g_pat, whether or not nested NPT is enabled.
-> +	 */
-> +	svm->vmcb01.ptr->save.g_pat = svm->vmcb->save.g_pat;
->  	if (copy_to_user(&user_vmcb->save, &svm->vmcb01.ptr->save,
->  			 sizeof(user_vmcb->save)))
->  		return -EFAULT;
-> @@ -1904,7 +1911,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
->  		goto out_free;
->  
->  	/*
-> -	 * Validate host state saved from before VMRUN (see
-> +	 * Validate host state saved from before VMRUN and gPAT (see
->  	 * nested_svm_check_permissions).
->  	 */
->  	__nested_copy_vmcb_save_to_cache(&save_cached, save);
-> @@ -1951,6 +1958,10 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
->  	if (ret)
->  		goto out_free;
->  
-> +	if (is_guest_mode(vcpu) && nested_npt_enabled(svm) &&
-> +	    (kvm_state.hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT))
-> +		svm->vmcb->save.g_pat = save_cached.g_pat;
+On Thu, Jan 22, 2026 at 10:19:24AM +0900, Koichiro Den wrote:
+> On Wed, Jan 21, 2026 at 10:24:01AM -0500, Frank Li wrote:
+> > On Wed, Jan 21, 2026 at 05:41:11PM +0900, Koichiro Den wrote:
+> > > On Wed, Jan 21, 2026 at 10:38:53AM +0900, Koichiro Den wrote:
+> > > > On Sun, Jan 18, 2026 at 12:05:47PM -0500, Frank Li wrote:
+> > > > > On Sun, Jan 18, 2026 at 10:54:07PM +0900, Koichiro Den wrote:
+> > > > > > A remote eDMA provider may need to expose the linked-list (LL) memory
+> > > > > > region that was configured by platform glue (typically at boot), so the
+> > > > > > peer (host) can map it and operate the remote view of the controller.
+> > > > > >
+> > > > > > Export dw_edma_chan_get_ll_region() to return the LL region associated
+> > > > > > with a given dma_chan.
+> > > > >
+> > > > > This informaiton passed from dwc epc driver. Is it possible to get it from
+> > > > > EPC driver.
+> > > >
+> > > > That makes sense, from an API cleanness perspective, thanks.
+> > > > I'll add a helper function dw_pcie_edma_get_ll_region() in
+> > > > drivers/pci/controller/dwc/pcie-designware.c, instead of the current
+> > > > dw_edma_chan_get_ll_region() in dw-edma-core.c.
+> > >
+> > > Hi Frank,
+> > >
+> > > I looked into exposing LL regions from the EPC driver side, but the key
+> > > issue is channel identification under possibly concurrent dmaengine users.
+> > > In practice, the only stable handle a consumer has is a pointer to struct
+> > > dma_chan, and the only reliable way to map that to the eDMA hardware
+> > > channel is via dw_edma_chan->id.
+> >
+> > If possible, I suggest change to one page pre-channel. So there are a fixed
+> > ll mapping.
+>
+> I agree that this would make the LL layout more deterministic and would
+> indeed simplify locating the region for a given dw_edma_chan ID. That said,
+> my concern was that even with a fixed per-channel layout, we still need a
+> reliable way to map a struct dma_chan obtained by a consumer to the
+> corresponding dw_edma_chan ID, especially in the presence of potentially
+> concurrent dmaengine users.
+>
+> >
+> > > I think an EPC-facing API would still need
+> > > that mapping in any case, so keeping the helper in dw-edma seems simpler
+> > > and more robust.
+> > > If you have another idea, I'd appreciate your insights.
+> >
+> > I suggest add generally DMA engine API to get such property, some likes
+> > a kind ioctrl \ dma_get_config().
+>
+> I think such a helper, combined with your one page per-channel idea, would
+> resolve the issue cleanly. For example, a helper like dma_get_hw_info()
+> returning struct dma_hw_info, whose first field is a hw_id, could work
+> well. Consumers could then use this helper, and if they know they are
+> dealing with a dw-edma channel, they can derive the LL location
+> straightforwardly as {hw_id * fixed_stride (e.g. PAGE_SIZE)}. Adding hw_id
+> to struct dma_slave_caps would make the necessary diff smaller, but I think
+> it would not semantically fit in the structure.
 
-is_guest_mode() should always be true here, right?
+It is worth to try.
 
-> +
->  	svm->nested.force_msr_bitmap_recalc = true;
->  
->  	kvm_make_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu);
-> -- 
-> 2.52.0.457.g6b5491de43-goog
-> 
+Frank
+>
+> Thanks,
+> Koichiro
+>
+> >
+> > Frank
+> >
+> > >
+> > > Regards,
+> > > Koichiro
+> > >
+> > > >
+> > > > Thanks for the review,
+> > > > Koichiro
+> > > >
+> > > > >
+> > > > > Frank
+> > > > > >
+> > > > > > Signed-off-by: Koichiro Den <den@valinux.co.jp>
+> > > > > > ---
+> > > > > >  drivers/dma/dw-edma/dw-edma-core.c | 26 ++++++++++++++++++++++++++
+> > > > > >  include/linux/dma/edma.h           | 14 ++++++++++++++
+> > > > > >  2 files changed, 40 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> > > > > > index 0eb8fc1dcc34..c4fb66a9b5f5 100644
+> > > > > > --- a/drivers/dma/dw-edma/dw-edma-core.c
+> > > > > > +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> > > > > > @@ -1209,6 +1209,32 @@ int dw_edma_chan_register_notify(struct dma_chan *dchan,
+> > > > > >  }
+> > > > > >  EXPORT_SYMBOL_GPL(dw_edma_chan_register_notify);
+> > > > > >
+> > > > > > +int dw_edma_chan_get_ll_region(struct dma_chan *dchan,
+> > > > > > +			       struct dw_edma_region *region)
+> > > > > > +{
+> > > > > > +	struct dw_edma_chip *chip;
+> > > > > > +	struct dw_edma_chan *chan;
+> > > > > > +
+> > > > > > +	if (!dchan || !region || !dchan->device)
+> > > > > > +		return -ENODEV;
+> > > > > > +
+> > > > > > +	chan = dchan2dw_edma_chan(dchan);
+> > > > > > +	if (!chan)
+> > > > > > +		return -ENODEV;
+> > > > > > +
+> > > > > > +	chip = chan->dw->chip;
+> > > > > > +	if (!(chip->flags & DW_EDMA_CHIP_LOCAL))
+> > > > > > +		return -EINVAL;
+> > > > > > +
+> > > > > > +	if (chan->dir == EDMA_DIR_WRITE)
+> > > > > > +		*region = chip->ll_region_wr[chan->id];
+> > > > > > +	else
+> > > > > > +		*region = chip->ll_region_rd[chan->id];
+> > > > > > +
+> > > > > > +	return 0;
+> > > > > > +}
+> > > > > > +EXPORT_SYMBOL_GPL(dw_edma_chan_get_ll_region);
+> > > > > > +
+> > > > > >  MODULE_LICENSE("GPL v2");
+> > > > > >  MODULE_DESCRIPTION("Synopsys DesignWare eDMA controller core driver");
+> > > > > >  MODULE_AUTHOR("Gustavo Pimentel <gustavo.pimentel@synopsys.com>");
+> > > > > > diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
+> > > > > > index 3c538246de07..c9ec426e27ec 100644
+> > > > > > --- a/include/linux/dma/edma.h
+> > > > > > +++ b/include/linux/dma/edma.h
+> > > > > > @@ -153,6 +153,14 @@ bool dw_edma_chan_ignore_irq(struct dma_chan *chan);
+> > > > > >  int dw_edma_chan_register_notify(struct dma_chan *chan,
+> > > > > >  				 void (*cb)(struct dma_chan *chan, void *user),
+> > > > > >  				 void *user);
+> > > > > > +
+> > > > > > +/**
+> > > > > > + * dw_edma_chan_get_ll_region - get linked list (LL) memory for a dma_chan
+> > > > > > + * @chan: the target DMA channel
+> > > > > > + * @region: output parameter returning the corresponding LL region
+> > > > > > + */
+> > > > > > +int dw_edma_chan_get_ll_region(struct dma_chan *chan,
+> > > > > > +			       struct dw_edma_region *region);
+> > > > > >  #else
+> > > > > >  static inline int dw_edma_probe(struct dw_edma_chip *chip)
+> > > > > >  {
+> > > > > > @@ -182,6 +190,12 @@ static inline int dw_edma_chan_register_notify(struct dma_chan *chan,
+> > > > > >  {
+> > > > > >  	return -ENODEV;
+> > > > > >  }
+> > > > > > +
+> > > > > > +static inline int dw_edma_chan_get_ll_region(struct dma_chan *chan,
+> > > > > > +					     struct dw_edma_region *region)
+> > > > > > +{
+> > > > > > +	return -EINVAL;
+> > > > > > +}
+> > > > > >  #endif /* CONFIG_DW_EDMA */
+> > > > > >
+> > > > > >  struct pci_epc;
+> > > > > > --
+> > > > > > 2.51.0
+> > > > > >
