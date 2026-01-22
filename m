@@ -1,23 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C73CD355034;
-	Thu, 22 Jan 2026 17:02:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DADD53570BB;
+	Thu, 22 Jan 2026 17:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769101372; cv=none; b=ku/LLcPJpyMGy3oGkSCo1+mv/C5yOmltyyaQ4iQYv9/YMTMvIuxy9GY3Yz1eyY0OpqkyF6picJRFbWACB9PakqLKXEamciXv+35nUAc1beNkrzBndJa2kmrIO5/CUcxeS/huF/mFWhmlNhbKkFuF1HKbUaj7XAY67opqsPIEATY=
+	t=1769101374; cv=none; b=bb8Vy9WFts5Cf//5I0VKnlWRG2sqMD62HvsrP1ItRznNKXOrLnJ9dml7qjlxnzOV/Kg6xt3USw2j3CJw7TA1lM/WF8VXFT3et8tXEGTyeK93TWEshRBCcgJjdEcy9Q4hMk5uW9s3pl8Qw3oYx1skPn63ykopqOiJjby4mmxLnik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769101372; c=relaxed/simple;
-	bh=eqotJbi0dHxoKg4oLkKC+ENr4amMMTbVd3AeFBRZzuM=;
+	s=arc-20240116; t=1769101374; c=relaxed/simple;
+	bh=bz2I6cUboOrdvtlFEV+PYfjT2bzBHtMmEAk5bUnj4Og=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jjhPdpg6ghynLwnaJv2/y8YyipkG4gu3zgn08+zbUlcSmKcu568Z+ghG89SQHIjOh1IoaLmd+uT7Qwg2r0veCYzCqqUy3aZbuidlhRGzWqHqxt/BJH++keUqLzRaBiu3kr5euvAlKQInkzxnSsSCDJ0zdMu9HGzaJ3NBWxTEUH4=
+	 MIME-Version; b=OApadnivB425jNBRApbdagz2A78T3OiRpal5GcQa4f7wlNk8c6tTjhA0ifbJpEq7iMVT9HZjtAVpJUuuMMKMqHwyqkOC9d2KroJRacWks/iT5VCfukc38dVj8BCv+ty4xk1Ls3bqUZ31DoCHmCflDI/80ETOduZ+WlTtnnap+VU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E294F15A1;
-	Thu, 22 Jan 2026 09:02:34 -0800 (PST)
-Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E6B833F632;
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C25DC1515;
 	Thu, 22 Jan 2026 09:02:39 -0800 (PST)
+Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE9423F632;
+	Thu, 22 Jan 2026 09:02:44 -0800 (PST)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
@@ -30,11 +30,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Mark Brown <broonie@kernel.org>,
 	Ryan Roberts <ryan.roberts@arm.com>,
 	Shuah Khan <shuah@kernel.org>,
-	SeongJae Park <sj@kernel.org>,
-	wang lian <lianux.mm@gmail.com>
-Subject: [PATCH v3 4/9] selftests/mm: fix usage of FORCE_READ() in cow tests
-Date: Thu, 22 Jan 2026 17:02:19 +0000
-Message-ID: <20260122170224.4056513-5-kevin.brodsky@arm.com>
+	Usama Anjum <Usama.Anjum@arm.com>
+Subject: [PATCH v3 7/9] selftests/mm: fix faulting-in code in pagemap_ioctl test
+Date: Thu, 22 Jan 2026 17:02:22 +0000
+Message-ID: <20260122170224.4056513-8-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20260122170224.4056513-1-kevin.brodsky@arm.com>
 References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
@@ -46,78 +45,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit 5bbc2b785e63 ("selftests/mm: fix FORCE_READ to read input
-value correctly") modified FORCE_READ() to take a value instead of a
-pointer. It also changed most of the call sites accordingly, but
-missed many of them in cow.c. In those cases, we ended up with the
-pointer itself being read, not the memory it points to.
+One of the pagemap_ioctl tests attempts to fault in pages by
+memcpy()'ing them to an unused buffer. This probably worked
+originally, but since commit 46036188ea1f ("selftests/mm: build with
+-O2") the compiler is free to optimise away that unused buffer and
+the memcpy() with it. As a result there might not be any resident
+page in the mapping and the test may fail.
 
-No failure occurred as a result, so it looks like the tests work
-just fine without faulting in. However, the huge_zeropage tests
-explicitly check that pages are populated, so those became skipped.
+We don't need to copy all that memory anyway. Just fault in every
+page.
 
-Convert all the remaining FORCE_READ() to fault in the mapped page,
-as was originally intended. This allows the huge_zeropage tests to
-run again (3 tests in total).
+While at it also make sure to compute the number of pages once using
+simple integer arithmetic instead of ceilf() and implicit
+conversions.
 
-Fixes: 5bbc2b785e63 ("selftests/mm: fix FORCE_READ to read input value correctly")
-Acked-by: SeongJae Park <sj@kernel.org>
-Reviewed-by: wang lian <lianux.mm@gmail.com>
+Fixes: 46036188ea1f ("selftests/mm: build with -O2")
+Cc: Usama Anjum <Usama.Anjum@arm.com>
 Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
 Reviewed-by: Dev Jain <dev.jain@arm.com>
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- tools/testing/selftests/mm/cow.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ tools/testing/selftests/mm/pagemap_ioctl.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-index accfd198dbda..83b3563be26b 100644
---- a/tools/testing/selftests/mm/cow.c
-+++ b/tools/testing/selftests/mm/cow.c
-@@ -1612,8 +1612,8 @@ static void run_with_huge_zeropage(non_anon_test_fn fn, const char *desc)
- 	 * the first sub-page and test if we get another sub-page populated
- 	 * automatically.
- 	 */
--	FORCE_READ(mem);
--	FORCE_READ(smem);
-+	FORCE_READ(*mem);
-+	FORCE_READ(*smem);
- 	if (!pagemap_is_populated(pagemap_fd, mem + pagesize) ||
- 	    !pagemap_is_populated(pagemap_fd, smem + pagesize)) {
- 		ksft_test_result_skip("Did not get THPs populated\n");
-@@ -1663,8 +1663,8 @@ static void run_with_memfd(non_anon_test_fn fn, const char *desc)
- 	}
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index 2cb5441f29c7..1896c7d4f72e 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -1052,11 +1052,10 @@ static void test_simple(void)
+ int sanity_tests(void)
+ {
+ 	unsigned long long mem_size, vec_size;
+-	long ret, fd, i, buf_size;
++	long ret, fd, i, buf_size, nr_pages;
+ 	struct page_region *vec;
+ 	char *mem, *fmem;
+ 	struct stat sbuf;
+-	char *tmp_buf;
  
- 	/* Fault the page in. */
--	FORCE_READ(mem);
--	FORCE_READ(smem);
-+	FORCE_READ(*mem);
-+	FORCE_READ(*smem);
+ 	/* 1. wrong operation */
+ 	mem_size = 10 * page_size;
+@@ -1167,14 +1166,14 @@ int sanity_tests(void)
+ 	if (fmem == MAP_FAILED)
+ 		ksft_exit_fail_msg("error nomem %d %s\n", errno, strerror(errno));
  
- 	fn(mem, smem, pagesize);
- munmap:
-@@ -1719,8 +1719,8 @@ static void run_with_tmpfile(non_anon_test_fn fn, const char *desc)
- 	}
+-	tmp_buf = malloc(sbuf.st_size);
+-	memcpy(tmp_buf, fmem, sbuf.st_size);
++	nr_pages = (sbuf.st_size + page_size - 1) / page_size;
++	force_read_pages(fmem, nr_pages, page_size);
  
- 	/* Fault the page in. */
--	FORCE_READ(mem);
--	FORCE_READ(smem);
-+	FORCE_READ(*mem);
-+	FORCE_READ(*smem);
+ 	ret = pagemap_ioctl(fmem, sbuf.st_size, vec, vec_size, 0, 0,
+ 			    0, PAGEMAP_NON_WRITTEN_BITS, 0, PAGEMAP_NON_WRITTEN_BITS);
  
- 	fn(mem, smem, pagesize);
- munmap:
-@@ -1773,8 +1773,8 @@ static void run_with_memfd_hugetlb(non_anon_test_fn fn, const char *desc,
- 	}
+ 	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)fmem &&
+-			 LEN(vec[0]) == ceilf((float)sbuf.st_size/page_size) &&
++			 LEN(vec[0]) == nr_pages &&
+ 			 (vec[0].categories & PAGE_IS_FILE),
+ 			 "%s Memory mapped file\n", __func__);
  
- 	/* Fault the page in. */
--	FORCE_READ(mem);
--	FORCE_READ(smem);
-+	FORCE_READ(*mem);
-+	FORCE_READ(*smem);
- 
- 	fn(mem, smem, hugetlbsize);
- munmap:
 -- 
 2.51.2
 
