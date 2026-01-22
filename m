@@ -1,67 +1,94 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528D4478E4B;
-	Thu, 22 Jan 2026 05:40:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34CB31E106;
+	Thu, 22 Jan 2026 05:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769060425; cv=none; b=Xy1XF6hsBMCe0z6D9muP4WO82MgGEzh0+X7Kwp2tTbAw/KagjVH7M5z4wa/VBMABT/YbXz8/NRFemYZhN8AkCkB6TFs1zo6FUkhzKjgFTGEqEpvfR1pIeU/WpG6fZyR9RTDBrTYbhHM6Q9AoG+uNXsy3Dyn/X6G0VQNGYRk5zBs=
+	t=1769061135; cv=none; b=RMXrrOF1IzxKTnxCYmIhMPaBwd/l9UfbaNgANz32mnWhXHK0qh3t5bNw8oM6MRNwfUq4Vj2YuplUI469voxlsbkm3EgDDLntZIhf8B84O+jORx0OpJ1xkQ5iiICPpgWoPg1xHHzVpgADwOkY4lkBIYZ6HAvwXDgs0gnEspnHfLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769060425; c=relaxed/simple;
-	bh=Yho00Wz8MZw3BXiG/dlKspDJeqqDMQPoA7dZhhkY2YQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WNMjOW4e2YioZ3HUEN7FDfoWyBmKZLgGGrKRCi8KnyhbkFbKkFPwVybqjyTsq9PHKbl2xFHk+3G0XMZF04rxXh1GJYfawK4sgg3pHm9RlLUBtdtqrckwklLrQE7vybFIHDMpMosXyvqeYuhG+1AWkRGarD2NBkOimvgk3Iv1OQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 849431476;
-	Wed, 21 Jan 2026 21:40:13 -0800 (PST)
-Received: from [10.164.18.63] (MacBook-Pro.blr.arm.com [10.164.18.63])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 595943F632;
-	Wed, 21 Jan 2026 21:40:17 -0800 (PST)
-Message-ID: <be2513e0-0d8b-42bf-a1f2-485041b5d320@arm.com>
-Date: Thu, 22 Jan 2026 11:10:14 +0530
+	s=arc-20240116; t=1769061135; c=relaxed/simple;
+	bh=dUd40H27/QRNpRisociEKfE85EtG7argiVmsNDA0cx8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sQN+ksG15bsaIvt68n8VH/QrvsOT9XWs+dVjd/apbLuJCsMlwTah0KvzQ4q85OWBGStr2xPTAsjY0T1hCYUKaiPpjLY02+W0eKLUtFJVGpkwKOeR96JWYKO4+jyRRBXQWQOOh6yf+/k86uklhp9D1PyJdZt6D+IVo5yv9qOSBcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nrinEVp6; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nrinEVp6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 995F5C116C6;
+	Thu, 22 Jan 2026 05:52:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769061135;
+	bh=dUd40H27/QRNpRisociEKfE85EtG7argiVmsNDA0cx8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=nrinEVp6R63Y3rK1m7zjPgkCOU4hgtzSUNuRMX+fqxD2MxfM78otFrDAuxPsWqoz7
+	 Csnk1XA6e+EotacUiUKKlIrukbQflQTWq5wdZU9Wn14QMUVFskwtK7kF/29juPAbcD
+	 m+hElcHeaxvgKJqzq0dhQz8c8gev0t9+h+f8lmGQ3IxkIQnZ6zjffvlxGQ46JucjZt
+	 UcY2vsjKY3NYn2QYWuhpdtc0QHZAmaJga3KeX2YhJ5hVUM7AHs9aevjR4y6i0R2iin
+	 0YEZpWmLQjgck1XOOBmfmA2MtK+gR5QdH1Liqbn4QgZJ3miNR9cY128LEgcVjIIuCh
+	 zV/R7erWb+72Q==
+From: Allison Henderson <achender@kernel.org>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	rds-devel@oss.oracle.com,
+	kuba@kernel.org,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	allison.henderson@oracle.com
+Subject: [PATCH net-next v2 0/2] net/rds: RDS-TCP state machine and message loss improvements
+Date: Wed, 21 Jan 2026 22:52:11 -0700
+Message-ID: <20260122055213.83608-1-achender@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/8] selftests/mm: fix usage of FORCE_READ() in cow
- tests
-To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark Brown
- <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>
-References: <20260107164842.3289559-1-kevin.brodsky@arm.com>
- <20260107164842.3289559-5-kevin.brodsky@arm.com>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20260107164842.3289559-5-kevin.brodsky@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: Allison Henderson <allison.henderson@oracle.com>
 
-On 07/01/26 10:18 pm, Kevin Brodsky wrote:
-> Commit 5bbc2b785e63 ("selftests/mm: fix FORCE_READ to read input
-> value correctly") modified FORCE_READ() to take a value instead of a
-> pointer. It also changed most of the call sites accordingly, but
-> missed many of them in cow.c. In those cases, we ended up with the
-> pointer itself being read, not the memory it points to.
->
-> No failure occurred as a result, so it looks like the tests work
-> just fine without faulting in. However, the huge_zeropage tests
-> explicitly check that pages are populated, so those became skipped.
->
-> Convert all the remaining FORCE_READ() to fault in the mapped page,
-> as was originally intended. This allows the huge_zeropage tests to
-> run again (3 tests in total).
->
-> Fixes: 5bbc2b785e63 ("selftests/mm: fix FORCE_READ to read input value correctly")
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+Hi all,
 
-Reviewed-by: Dev Jain <dev.jain@arm.com>
+This is subset 2 of the larger RDS-TCP patch series I posted last
+Oct.  The greater series aims to correct multiple rds-tcp issues that
+can cause dropped or out of sequence messages.  I've broken it down into
+smaller sets to make reviews more manageable.
+
+In this set, we correct a few RDS/TCP connection handling issues, and
+message loss issues.
+
+The entire set can be viewed in the rfc here:
+https://lore.kernel.org/netdev/20251022191715.157755-1-achender@kernel.org/
+
+Questions, comments, flames appreciated!
+Thanks!
+Allison
+
+Change Log:
+v2
+  [PATCH v1 1/3] net/rds: Change return code from rds_send_xmit() when lock is taken
+  - Dropped for further investigation of possible races
+
+  [PATCH v2 1/2] net/rds: No shortcut out of RDS_CONN_ERROR
+  - Removed Fixes tag
+
+  [PATCH v2 2/2] net/rds: rds_tcp_accept_one ought to not discard messages 
+  - Fixed netdev/checkpatch warnings
+
+Gerd Rausch (2):
+  net/rds: No shortcut out of RDS_CONN_ERROR
+  net/rds: rds_tcp_accept_one ought to not discard messages
+
+ net/rds/connection.c |   5 ++
+ net/rds/rds.h        |  66 +++++++++++++---------
+ net/rds/recv.c       |   4 ++
+ net/rds/tcp.c        |  27 ++++-----
+ net/rds/tcp.h        |  22 +++++++-
+ net/rds/tcp_listen.c | 128 +++++++++++++++++++++++++++++++------------
+ 6 files changed, 171 insertions(+), 81 deletions(-)
+
+-- 
+2.43.0
 
