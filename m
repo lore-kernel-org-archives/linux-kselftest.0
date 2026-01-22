@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E81E3D3D02;
-	Thu, 22 Jan 2026 22:18:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A10035B63D;
+	Thu, 22 Jan 2026 22:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769120324; cv=none; b=e+k9PpLaQtGyUHfCM8cyNzCprF5Ack+Us7p9i4hG6NGCdA2F99MST3V1uUt/G9pPAhZR6UHb7slmtpzb9qX8s1BEEUhDITMzbaUk4h4eLTb/mDd0UxDN26C8fag8C8dQwmd3JktqC4S7yx8/GbdgJSYU5nCycM73OGYWSABjO+8=
+	t=1769120443; cv=none; b=LdoBOq/RkhJySmKAnJ6UqcejmNbfDJFRcrP/A7+B6ZtvVYhhTMxJTsXj56QT2ShsBWytChGclcBrYbkMhW3v/uXG4iUBc4u2dDdGTBd+umSmkomc2TNPF0KaL1UGKdruXrZeXCfQyeprZz3oS9FeClvXnRRIeEXfRm8jOopzRjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769120324; c=relaxed/simple;
-	bh=NchGakzlqe0Kol+7RMYnpk/2+zt7yGePeDcQjpO3zeE=;
+	s=arc-20240116; t=1769120443; c=relaxed/simple;
+	bh=jzu4EH9RtPfER/4dAwUxG4EpQcz1B60rHGCR3ANTIko=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Az5feooqkNUM2r98IGd4uQvn2XkUOjX+GRH3Bfnfne/s4xVReHfpGtZXAIUJ6SoBRSYBAqoqLdzIh+lHuGNimOrz4OrwyUy73+l62xsq+TO3NO9pwZaVhPIVyTQ/SgvilE50sm9mgR7h5rugRam7bqdZrEnPw7GU5A7vCEpq830=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K06xaslL; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=LdJ5pDYBSuJPvqYJpenAFr/tJw4JZuNdM7Eq1DxB6vEv8eqDUaL6vL8I08NosIWcDy8h3idyWK5uFTXava/GQKT6QpQ8BVJaHQz91P9c2PGEJzMj9C+SwNOCFayAXHLzgRPZ1ZlEIJXyjwj2Mogz3t7vLfy4/g90TOIFhIGBleI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bot4zvaC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K06xaslL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06016C116C6;
-	Thu, 22 Jan 2026 22:18:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bot4zvaC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAFBEC116D0;
+	Thu, 22 Jan 2026 22:20:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769120323;
-	bh=NchGakzlqe0Kol+7RMYnpk/2+zt7yGePeDcQjpO3zeE=;
+	s=k20201202; t=1769120442;
+	bh=jzu4EH9RtPfER/4dAwUxG4EpQcz1B60rHGCR3ANTIko=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=K06xaslLMZ3tUNafsq2B+75IXysAVeG5Q2P1gRWSeA0di4iVJ94M8zhmjJl1SRuLQ
-	 5Doau9Ij3V/RfnXuBkKc/7xFflVc0nH8rvdkiAPLARjJ9l3MNJScEsoxcELaWcCKT5
-	 TH2jNb+23VTMiwvglqAOgoxtOatrvu5ut4s/ffIkUZc6mVgphmjvg/IuKxm/BvUGDB
-	 4hTYbM3g6DgFanvvrpiZzzUhqDXAFllkSgWTPqHUYBwbhJxHQy5PqM5d3e1Sgd5/NZ
-	 oaauEbMAOZzIwCwRu25+OLaWaY+NW5PgRECiFiH9gQn8psz+JBXMh1d8VfZ36cLbdM
-	 dF9V2E7nAyEpA==
-Message-ID: <fe1ecb39-abbc-452c-b3a3-61d63ca32244@kernel.org>
-Date: Thu, 22 Jan 2026 23:18:39 +0100
+	b=Bot4zvaC3VKoQCkLVxiMMW57UXfYBtgw0ff/qIvN9YUd5PizoNdJ2lOXAB7I+Eq5P
+	 GeQGgKlAh/CUAujvoR5vWMknR84HktdPw+yWM+Np72+1j9pSpEGXwR4ftwFU684A+T
+	 b66lWoDIiNsxQfM+n+7c034mIxqKRz/I3iw86yAtC9ovWh/obpnQkojQRyH/YM5M0U
+	 vIgBpuqbmjAtcNyC2bXLyWchPWAa8ypelg+YehL5g/sha5YZrTXacEr2ej8490a5/g
+	 du51+Rr54b/fwdu7okY3/2IC833rg6+rmcv21mpD+JypUnekAoqv6F7/HF+sqNnLqe
+	 c/tNK2R8Np7lA==
+Message-ID: <a4c83b16-3307-497d-9690-0e31672f3202@kernel.org>
+Date: Thu, 22 Jan 2026 23:20:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,7 +35,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/9] selftests/mm: check that FORCE_READ() succeeded
+Subject: Re: [PATCH v3 6/9] selftests/mm: introduce helper to read every page
 To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
@@ -43,7 +43,7 @@ Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
  Mark Brown <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
  Shuah Khan <shuah@kernel.org>
 References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
- <20260122170224.4056513-6-kevin.brodsky@arm.com>
+ <20260122170224.4056513-7-kevin.brodsky@arm.com>
 From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -89,48 +89,56 @@ Autocrypt: addr=david@kernel.org; keydata=
  cFAM8nBWrEmNU2vvIGJzjJ/NVYYIY0TgOc5bS9wh6jKHL2+chrfDW5neLJjY2x3snF8q7U9G
  EIbBfNHDlOV8SyhEjtX0DyKxQKioTYPOHcW9gdV5fhSz5tEv+ipqt4kIgWqBgzK8ePtDTqRM
  qZq457g1/SXSoSQi4jN+gsneqvlTJdzaEu1bJP0iv6ViVf15+qHuY5iojCz8fa0=
-In-Reply-To: <20260122170224.4056513-6-kevin.brodsky@arm.com>
+In-Reply-To: <20260122170224.4056513-7-kevin.brodsky@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 1/22/26 18:02, Kevin Brodsky wrote:
-> Many cow tests rely on FORCE_READ() to populate pages. Introduce a
-> helper to make sure that the pages are actually populated, and fail
-> otherwise.
+> FORCE_READ(*addr) ensures that the compiler will emit a load from
+> addr. Several tests need to trigger such a load for a range of
+> pages, ensuring that every page is faulted in, if it wasn't already.
 > 
-> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
+> Introduce a new helper force_read_pages() that does exactly that and
+> replace existing loops with a call to it.
+> 
+> The step size (regular/huge page size) is preserved for all loops,
+> except in split_huge_page_test. Reading every byte is unnecessary;
+> we now read every huge page, matching the following call to
+> check_huge_file().
+> 
+> Reviewed-by: Dev Jain <dev.jain@arm.com>
 > Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 > ---
->   tools/testing/selftests/mm/cow.c | 43 ++++++++++++++++++++++++--------
->   1 file changed, 33 insertions(+), 10 deletions(-)
+>   tools/testing/selftests/mm/hugetlb-madvise.c      | 9 +--------
+>   tools/testing/selftests/mm/pfnmap.c               | 9 +++------
+>   tools/testing/selftests/mm/split_huge_page_test.c | 6 +-----
+>   tools/testing/selftests/mm/vm_util.h              | 7 +++++++
+>   4 files changed, 12 insertions(+), 19 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-> index 83b3563be26b..d9c69c04b67d 100644
-> --- a/tools/testing/selftests/mm/cow.c
-> +++ b/tools/testing/selftests/mm/cow.c
-> @@ -75,6 +75,18 @@ static bool range_is_swapped(void *addr, size_t size)
->   	return true;
->   }
+> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+> index 05d9d2805ae4..5b12041fa310 100644
+> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
+> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+> @@ -47,14 +47,7 @@ void write_fault_pages(void *addr, unsigned long nr_pages)
 >   
-> +static bool populate_page_checked(char *addr)
-> +{
-> +	bool ret;
-> +
-> +	FORCE_READ(*addr);
-> +	ret = pagemap_is_populated(pagemap_fd, addr);
-> +	if (!ret)
-> +		ksft_print_msg("Failed to populate page\n");
-> +
-> +	return ret;
-> +}
+>   void read_fault_pages(void *addr, unsigned long nr_pages)
+>   {
+> -	unsigned long i;
+> -
+> -	for (i = 0; i < nr_pages; i++) {
+> -		unsigned long *addr2 =
+> -			((unsigned long *)(addr + (i * huge_page_size)));
+> -		/* Prevent the compiler from optimizing out the entire loop: */
+> -		FORCE_READ(*addr2);
+> -	}
+> +	force_read_pages(addr, nr_pages, huge_page_size);
+>   }
 
-LGTM.
+Likely we could get rid of read_fault_pages() completely and simply let 
+the callers call force_read_pages() now?
 
-On second thought, this primarily catches if someone breaks FORCE_READ() 
-... which hopefully doesn't happen that often? ;)
+Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
 
-Because if the read succeeded, surely there must be something in the 
-page tables.
 
 -- 
 Cheers
