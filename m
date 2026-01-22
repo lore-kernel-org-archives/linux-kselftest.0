@@ -1,210 +1,176 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2CA830B519
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 15:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D836C421899
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 16:01:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769095928; cv=none; b=R6K/SNqzSc9djZCn5Chaw6yl0hDxlWhz7rWxHUS+Mn7i5qG+TvIiq/PY8AQtw8Dslep8UKzH55x2TBnTAv0MDBhqK7wFkFWJlDxkaVaRe7Bk+P7GI1t4GNVJRsr9DOnBT3C0Kp5lWHDpQlfhhVtZTmwse71bYxqC+62gzjjW5uI=
+	t=1769097693; cv=none; b=TOuzy/BkiVMDp+YjPuKVZqnNsqSU6lpO487Wv3PgsGNIblWV4E2G4Ur2mSYaDVD/6aN3t+cbpB9fkIRVbnkGGkj5MP0VQpigZmfFfN4hSvbRiPeJdZYwRCw+KhSIDV5e/aM/KY9OwHy+iBLvtDqZpTC5hm7j9caPmrvHQXO1LaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769095928; c=relaxed/simple;
-	bh=VeK4ExRXCh+3B3ipuqifOQCvQneCr/2OWhViUuULlKU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AXfxq9wPaPRAj7p46F1lxJHFKxhAPWehD79QRFBDMVN2jSWglp+L0phjEn2TEFNbz1NkznX2WV4aovASpKdMZb8o8vjzTybPQhPgRlhoUq1qVhnFdyPX1sHbEA+3gDdnnaaxJZxXpg9yK+7GUPCWXdpi7y1G5wVxrOPFZISvwxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oPqhVPhE; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769097693; c=relaxed/simple;
+	bh=9JzOfqiTFO39kgxFQWVLYY5umNJRQRPCw/NtCy7HzoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ubO5sVNosjZATBL+LOTTLzT91aK0NVhP2kmXnhZHS8PeawiQVXyUUOqj3MlykTKj5fDNLJORidWvqQuhKUOqSB5Kw4Yc6E7M1yfTwqevtelc+N48Dke6V9BZUAWvQWmshwAnQwnHi0sV/GjMZOCh5dpgVMXZjmCXhSkCZlqToxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l2Rj+KiD; arc=none smtp.client-ip=74.125.224.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oPqhVPhE"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769095920;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CGFs8iwFD+3Bos+er5vmVWRRN6I8GRLoMxxtNzEogAM=;
-	b=oPqhVPhE1x8MpJ7DZ1cDXjUiTdGXJjgJ3QdDVSv006/7Fl1gElm1qmwheaj8IKTH/pKp6H
-	OoIZV3vE0sKfhn/2RU+t4a0qpmAtdvcu5EpfGSYITqKv+1ysXua4uAxVY12QT0eSRWEOOV
-	DaS9+0RlDFYSXqteD3PpkwCsN3zsStc=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add tests to verify BPF_F_LOCK restrictions
-Date: Thu, 22 Jan 2026 23:31:20 +0800
-Message-ID: <20260122153120.69249-3-leon.hwang@linux.dev>
-In-Reply-To: <20260122153120.69249-1-leon.hwang@linux.dev>
-References: <20260122153120.69249-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l2Rj+KiD"
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-648ff033fb2so1268931d50.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 08:01:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769097688; x=1769702488; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4nNXaOW8SsH8VsbBiV479RmC0+eq7tMcFo5rcunlQoQ=;
+        b=l2Rj+KiDdtD2q2NtiGMA5033btXx9v484iJj7k8xvoYFUvON0uWN//Nj0B5cEZyYul
+         k8z+xwAcG4QnP/VahCqMOrvr3kNZJu14BB2o8opiF+eHpFAxpgElXJ6ycHbEVZkbIRD7
+         rpdBZZfPcAObZ4iovLDSomfuB/s4pjTq2lFUqlmgqWdE6oJy5RUYj5cZe9uGJHN0M494
+         llfIRIqnvzfZwBz14cODqAs3+Sa9Ytcpw6atLylFbOKCh0RbvLu7V39tzPsAij/QIppG
+         Kn19Zf7i/MnoUjTB2+4IWB1BZUNurieL8640i6M9ASZR7pjIn3vnLTbALhflJdeG896f
+         VXFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769097688; x=1769702488;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4nNXaOW8SsH8VsbBiV479RmC0+eq7tMcFo5rcunlQoQ=;
+        b=IOMwZd27YQRUc81bfdNm22hIbcnhRea8+AxVJ0MiNPd6DtxNxgaizJcJ7RH6lWHu48
+         NZgfZ1BzKjGnk2ykaL4R8nNagTHb1VDdwQQAPFPPHE6QHWeVdCDawm9G7PoyRe81dWg6
+         vaf6ihBGozrO1aHOxqJ0t9GQL/hW9G9TipmT+gBv1hhrQNpf11Vry+bLOpV85DJv77Ci
+         6TasnQr3bhUfQTEwyJy+p23Bb7XYcJRfCr3+TMJbKJmKQVk7TkRo5IsgrXaUwQvpOrpW
+         Z5e5w2ziz1HSddZoJWnjZAW9CjTQq5lFsrFZPzcaZnzItZrPQc58nN84iV8RQYdpRtfM
+         IKBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUFe+tfXkFJq3ylrOHVb00LZkylBjMIzJgCJSKbYyggZVWRTT2ch7tLZWRXnZOvzAdAgmBnu1Nxg6e3JMYpKSs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxhu47a+YLOtc8LKNLKycInUNH6oY9YczH7VYV7sgY4gyEI7v+l
+	G5d2lQMVNdPOUbR9W4Jrw1bpFOrbWwGT8m3PDmvyOGe8IdIrc1eooG47
+X-Gm-Gg: AZuq6aJBjJBG9BW9A+aqVyjzxFDTzHMZUQivQs7eWrWmLFLCjLxXBzuF5L04JCeZO6+
+	ZnxDRCVmFTmjsgIEI7RsVM41zp+ewPnxRN1yknzhxnNZMVPlHDaHSwwcw5ffZqhmEH05Kh1yEx6
+	5yxjrTpxsk0btpliTi0UcD5fef6Pw0J4bQmaU3OMVULsfjQI/L6ihD7aOHYC8H6HQXNNGLwI+Vm
+	e47BHvy0EV+rhQnrkhG4Z+lb4TBL5wefQydBM3NsN0gpR/NNekl5M4Txmjby1kDBqmKidhoUzHe
+	9J1GGWQIMN83dNO5LbGzeRB8wmr0rr+XWIDV8bA83GkLXuSPLb4v6a9qUFLDwGu+YaoZtYbY3pF
+	TeQdYzhqzDbhN8AUVImx7tJZBj41zo679hWn50MB4NmpRQrPOv18YsnPitqSenspTAZeOlhKihM
+	HGIZY1WpX9m6beFFo99P6qrYqCjWGnNnwgVA==
+X-Received: by 2002:a05:690e:d8b:b0:649:4689:c4a9 with SMTP id 956f58d0204a3-6494689c534mr4815658d50.89.1769097685513;
+        Thu, 22 Jan 2026 08:01:25 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:7::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-649170acbdbsm9523979d50.13.2026.01.22.08.01.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jan 2026 08:01:24 -0800 (PST)
+Date: Thu, 22 Jan 2026 08:01:23 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, netdev@vger.kernel.org,
+	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, berrange@redhat.com,
+	Sargun Dhillon <sargun@sargun.me>, linux-doc@vger.kernel.org,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v16 00/12] vsock: add namespace support to
+ vhost-vsock and loopback
+Message-ID: <aXJJ0yjZB5mT162B@devvm11784.nha0.facebook.com>
+References: <20260121-vsock-vmtest-v16-0-2859a7512097@meta.com>
+ <aXH7YCgl0qI2dF1T@sgarzare-redhat>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aXH7YCgl0qI2dF1T@sgarzare-redhat>
 
-Add a tc-based helper program that updates a map value containing both
-bpf_spin_lock and bpf_timer and records errors for invalid flag
-combinations.
+On Thu, Jan 22, 2026 at 02:55:36PM +0100, Stefano Garzarella wrote:
+> On Wed, Jan 21, 2026 at 02:11:40PM -0800, Bobby Eshleman wrote:
+> > This series adds namespace support to vhost-vsock and loopback. It does
+> > not add namespaces to any of the other guest transports (virtio-vsock,
+> > hyperv, or vmci).
+> > 
+> > The current revision supports two modes: local and global. Local
+> > mode is complete isolation of namespaces, while global mode is complete
+> > sharing between namespaces of CIDs (the original behavior).
+> > 
+> > The mode is set using the parent namespace's
+> > /proc/sys/net/vsock/child_ns_mode and inherited when a new namespace is
+> > created. The mode of the current namespace can be queried by reading
+> > /proc/sys/net/vsock/ns_mode. The mode can not change after the namespace
+> > has been created.
+> > 
+> > Modes are per-netns. This allows a system to configure namespaces
+> > independently (some may share CIDs, others are completely isolated).
+> > This also supports future possible mixed use cases, where there may be
+> > namespaces in global mode spinning up VMs while there are mixed mode
+> > namespaces that provide services to the VMs, but are not allowed to
+> > allocate from the global CID pool (this mode is not implemented in this
+> > series).
+> > 
+> > Additionally, added tests for the new namespace features:
+> > 
+> > tools/testing/selftests/vsock/vmtest.sh
+> > 1..25
+> > ok 1 vm_server_host_client
+> > ok 2 vm_client_host_server
+> > ok 3 vm_loopback
+> > ok 4 ns_host_vsock_ns_mode_ok
+> > ok 5 ns_host_vsock_child_ns_mode_ok
+> > ok 6 ns_global_same_cid_fails
+> > ok 7 ns_local_same_cid_ok
+> > ok 8 ns_global_local_same_cid_ok
+> > ok 9 ns_local_global_same_cid_ok
+> > ok 10 ns_diff_global_host_connect_to_global_vm_ok
+> > ok 11 ns_diff_global_host_connect_to_local_vm_fails
+> > ok 12 ns_diff_global_vm_connect_to_global_host_ok
+> > ok 13 ns_diff_global_vm_connect_to_local_host_fails
+> > ok 14 ns_diff_local_host_connect_to_local_vm_fails
+> > ok 15 ns_diff_local_vm_connect_to_local_host_fails
+> > ok 16 ns_diff_global_to_local_loopback_local_fails
+> > ok 17 ns_diff_local_to_global_loopback_fails
+> > ok 18 ns_diff_local_to_local_loopback_fails
+> > ok 19 ns_diff_global_to_global_loopback_ok
+> > ok 20 ns_same_local_loopback_ok
+> > ok 21 ns_same_local_host_connect_to_local_vm_ok
+> > ok 22 ns_same_local_vm_connect_to_local_host_ok
+> > ok 23 ns_delete_vm_ok
+> > ok 24 ns_delete_host_ok
+> > ok 25 ns_delete_both_ok
+> > SUMMARY: PASS=25 SKIP=0 FAIL=0
+> > 
+> > Thanks again for everyone's help and reviews!
+> 
+> Thank you for your hard work and patience!
+> 
+> I think we've come up with an excellent solution that's also not too
+> invasive.
 
-Extend the existing map_lock tests to cover array and hash maps. Verify
-that BPF_NOEXIST|BPF_EXIST is rejected with -EINVAL/-EEXIST, and that
-BPF_F_LOCK returns -EOPNOTSUPP when mixed with other special fields.
+Thanks, and I appreciate all of the work you and other maintainers put
+into this as well! I think we honed in on a great solution too.
+> 
+> All the patches have my R-b, I've double-checked and tested this v16.
+> Everything seems to be working fine (famous last words xD).
+> 
+> So this series is good to go IMO!
+> 
+> Next step should be to update the vsock(7) namespace.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/map_lock.c       | 70 +++++++++++++++++++
- .../selftests/bpf/progs/test_map_lock.c       | 31 +++++++-
- 2 files changed, 100 insertions(+), 1 deletion(-)
+Sounds good, I'll follow up with that and CC you + other reviewers that
+participated here.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_lock.c b/tools/testing/selftests/bpf/prog_tests/map_lock.c
-index 1d6726f01dd2..aafae8d02e1d 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_lock.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- #include <network_helpers.h>
-+#include "test_map_lock.skel.h"
- 
- static void *spin_lock_thread(void *arg)
- {
-@@ -90,3 +91,72 @@ void test_map_lock(void)
- close_prog:
- 	bpf_object__close(obj);
- }
-+
-+struct map_value {
-+	struct bpf_spin_lock lock;
-+	struct bpf_timer timer;
-+	__u64 payload;
-+};
-+
-+static void test_map_lock_update_elem(enum bpf_map_type map_type, int err_exist)
-+{
-+	struct map_value val = {};
-+	struct test_map_lock *skel;
-+	int prog_fd, err;
-+	u32 key = 0;
-+	char buff[128] = {};
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		    .data_in = buff,
-+		    .data_size_in = sizeof(buff),
-+		    .repeat = 1,
-+	);
-+
-+	skel = test_map_lock__open();
-+	if (!ASSERT_OK_PTR(skel, "test_map_lock__open"))
-+		return;
-+
-+	bpf_map__set_type(skel->maps.map, map_type);
-+
-+	err = test_map_lock__load(skel);
-+	if (!ASSERT_OK(err, "test_map_lock__load"))
-+		goto out;
-+
-+	err = bpf_map__update_elem(skel->maps.map, &key, sizeof(key), &val, sizeof(val),
-+				   BPF_NOEXIST | BPF_EXIST);
-+	if (!ASSERT_EQ(err, -EINVAL, "err_exist"))
-+		goto out;
-+
-+	err = bpf_map__update_elem(skel->maps.map, &key, sizeof(key), &val, sizeof(val),
-+				   BPF_F_LOCK);
-+	if (!ASSERT_EQ(err, -EOPNOTSUPP, "err_lock"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(skel->progs.map_update);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-+		goto out;
-+
-+	ASSERT_EQ(skel->bss->err_exist, err_exist, "err_exist");
-+	ASSERT_EQ(skel->bss->err_lock, -EOPNOTSUPP, "err_lock");
-+
-+out:
-+	test_map_lock__destroy(skel);
-+}
-+
-+static void test_array_map_lock_update_elem(void)
-+{
-+	test_map_lock_update_elem(BPF_MAP_TYPE_ARRAY, -EEXIST);
-+}
-+
-+static void test_hash_map_lock_update_elem(void)
-+{
-+	test_map_lock_update_elem(BPF_MAP_TYPE_HASH, -EINVAL);
-+}
-+
-+void test_map_lock_flag(void)
-+{
-+	if (test__start_subtest("array_map"))
-+		test_array_map_lock_update_elem();
-+	if (test__start_subtest("hash_map"))
-+		test_hash_map_lock_update_elem();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_map_lock.c b/tools/testing/selftests/bpf/progs/test_map_lock.c
-index 1c02511b73cd..f1b7b741795c 100644
---- a/tools/testing/selftests/bpf/progs/test_map_lock.c
-+++ b/tools/testing/selftests/bpf/progs/test_map_lock.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2019 Facebook
--#include <linux/bpf.h>
-+#include "vmlinux.h"
- #include <linux/version.h>
- #include <bpf/bpf_helpers.h>
- 
-@@ -59,4 +59,33 @@ int bpf_map_lock_test(struct __sk_buff *skb)
- err:
- 	return err;
- }
-+
-+int err_exist;
-+int err_lock;
-+
-+struct map_value {
-+	struct bpf_spin_lock lock;
-+	struct bpf_timer timer;
-+	__u64 payload;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, u32);
-+	__type(value, struct map_value);
-+	__uint(max_entries, 1);
-+} map SEC(".maps");
-+
-+SEC("tc")
-+int map_update(struct __sk_buff *skb)
-+{
-+	struct map_value val = {};
-+	u32 key = 0;
-+
-+	val.payload = 0xDEADBEEF;
-+	err_exist = bpf_map_update_elem(&map, &key, &val, BPF_NOEXIST | BPF_EXIST);
-+	err_lock = bpf_map_update_elem(&map, &key, &val, BPF_F_LOCK);
-+	return BPF_OK;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.52.0
-
+Thanks again,
+Bobby
