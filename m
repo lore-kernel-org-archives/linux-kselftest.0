@@ -1,121 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C9534F472;
-	Thu, 22 Jan 2026 16:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9343A9DA1
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 16:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769097736; cv=none; b=Zp2W+re9vIxpLdnAleLLelbIwsZmk/RPbpRzoXbI6ke37ioojv0QaDXjN0NtAxVysOZhFQ3gS6H8LZow+/Xz7VBXa5mUlZLF9OKWF7Z6znet7dugAxnL286bswdFCI93sJLiYWpsli2qRRLkaHi3o0J8yT4BH8zmkOFbRpWr3fo=
+	t=1769097856; cv=none; b=f8p3/Lx2WayaQrJlW22GsQlP7sVzeAZEeydIESg6TL47TPoCRgB0GGVpP22JV41mNYaA2IAAl/54ibOp5E09nPbyG0gmdq3b6IuM1svEP9PlPlMjX+w9tVwBH0T54z0+qeZEo+bb6OkaE3nzjM/icpi+P00UJxc/SfOYXj2peQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769097736; c=relaxed/simple;
-	bh=IrHcyedQGo0qLm6aBIsO6/oqyQpXGwxTdLybEDdlwgc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=CuJ6uSvv/9z+1QtAtUFPu74tS5k923eBVqlwXv8IIaZeymQpAmBojppVwr6DwEJDcyj61SYxoK7hgJ6iQT5h+E12SWEdXc1Lp0ZuNolSVsqLjwqkGlkBgKac0X88FOG1sZVtdClgSj4vdpLQKqvUvMgoLk+4MkA3T09a2pZKwrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O3V/oARy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769097856; c=relaxed/simple;
+	bh=viNnaReSsAyqS/zLOY2ifZng9HyswNpsZThiO/XVk1s=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=DAK0oOQ6+DA6PP35VPEXPenObz4Qda/iPWu+uqs0czymnouTk874Yh60FSJLcdOfpAmcRVrNjTzlXz2FgixqAAelqwbKneKRCnfh1DCLhu70QU4L8uA0c+00KDMRjd6XhJNWZiSYjOlQblGk/fx4rsD9dQGzjqjTAuAhXUTU128=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y4v2IVtM; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O3V/oARy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D02E9C19425;
-	Thu, 22 Jan 2026 16:02:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769097734;
-	bh=IrHcyedQGo0qLm6aBIsO6/oqyQpXGwxTdLybEDdlwgc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=O3V/oARyTLx9nPs6TolS9zMpsw6WQ7RdlXNAk11hTMDUU5FisL17BY/unrFcT3mri
-	 mTCQ73Env68145EJRNB9hdncSoX9WYtiF7TT4UMrxOIfWtagA9UOevNa7KWyME4GZ7
-	 o/S+SyqeH6AU/84GIF/2K1lIphHdg8lOw9zyS4RO4YhcZQN0Yg/FPRbaDtl8YxzQh/
-	 0y265zeimbKRUWoX23JnD6RW2xtbCgAZJE364KbdRGQAjTKDxvaTiklIjRNEi9kFsr
-	 cPD7UnRcCNFkq85L8Dvfp+nuSbiXhTPRbRWAbP+EoTDDuoOdSeX+Nscc+Gd9MzBixo
-	 Z9q/jD71OM45Q==
-Content-Type: multipart/mixed; boundary="===============3118955334998125414=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y4v2IVtM"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2a77040ede0so11005705ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 08:04:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769097848; x=1769702648; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LD2LZ6P6QaQ5VD5Wh4MR8dbmyUc9EnoiEwigMQRIrTc=;
+        b=Y4v2IVtM0BkDOyuRdJqbjoJxqyfmoGS39JUV2Bo/sM19bW5u6wojwwa35/8lFRDzA1
+         quVRKzDNcgwIl5CtdbyNKtsAJmJB9tm6PZDKXDP8neXc9BZX1p9roP7ve17ug39vutro
+         urTIOulDUu0OA381er/9Kz+YhvEPbORgueJ67uVT8jLh8qqAjdFFUNvElpf+gMCtNKuz
+         dKeSHHy9lsgGHVTCbAXg/GRnJJTzgwYepOYzMNywryy9ccXy2nUgTf32VR7JZr+4MSDO
+         NvBuVi+BGLBPoEOpBGKcv8FLgL4FSMrjNjTT9z5EsnAHqHxTOXtf/6PUTFsgDH6zFie+
+         bwrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769097848; x=1769702648;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LD2LZ6P6QaQ5VD5Wh4MR8dbmyUc9EnoiEwigMQRIrTc=;
+        b=knza63ebdhd0mAOQHDDiVqm5QMnfRXeAw+wQlFGKk9ud/MR6kns/24X4CX2elOeZui
+         W4XTywOEK9eRIq9DVDfuxgGbC3HFsb+ZNl4hDtgut3wM6s+YhMCcR4Zl3anwU/Y8KUNS
+         sKjC/1Urk2KEEjBF2zN3ewgMYuB3DKEKHwFxoWKaLYEYbJEecKRlqltV4TVxXaSWf6/N
+         xwij2wsuc+evEgRSiM/68IGWJo766z78GeqKxqapyx8+P1asdH6Z8Wig3yD3B5JU6OeA
+         oiYngYJql+Ze941wII4nqXHL4pzYjYU/jGrI3U0LFN5rhV2GC781iO1fqfGro7NmPg+1
+         4Qnw==
+X-Forwarded-Encrypted: i=1; AJvYcCVLDgBGIFp4PKt/JeGMBzCgeFY2x79ijCmPiZPs54jY7VMf+SeQ8+D34O8asFbff/sYoavUjLRHsK+XZFFxoDo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxOopQ8USL7PfIuvzGeIIJfoHBr+ya1TQBTT83zxMHgGdt4Nra
+	kV0+02Cq2gkXoQ6Nc1wYea0VxR9TYfoHpKgRJ56M9xTZKrFWHbgcLBF8Bnf4iAMrHMhxY4n6lEV
+	BYn8e9A==
+X-Received: from plbmi13.prod.google.com ([2002:a17:902:fccd:b0:29f:cd:e7da])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ec90:b0:2a2:d2e8:9f25
+ with SMTP id d9443c01a7336-2a76ad742e9mr77688705ad.33.1769097848122; Thu, 22
+ Jan 2026 08:04:08 -0800 (PST)
+Date: Thu, 22 Jan 2026 08:04:06 -0800
+In-Reply-To: <20260121225438.3908422-2-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <df8fb7dc501dd081fcba56b592cba94e5aecd614ea4d3b595155dec551ecbca5@mail.kernel.org>
-In-Reply-To: <20260122153120.69249-2-leon.hwang@linux.dev>
-References: <20260122153120.69249-2-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Disallow BPF_F_LOCK with mixed special fields and centralize flag checks
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 22 Jan 2026 16:02:11 +0000 (UTC)
-
---===============3118955334998125414==
+Mime-Version: 1.0
+References: <20260121225438.3908422-1-jmattson@google.com> <20260121225438.3908422-2-jmattson@google.com>
+Message-ID: <aXJKdlJI3fg42gim@google.com>
+Subject: Re: [PATCH 1/6] KVM: x86/pmu: Introduce amd_pmu_set_eventsel_hw()
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 5936f8e2996f..c5863487ee73 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -3935,9 +3935,16 @@ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 all
->  	if ((u32)flags & ~allowed_flags)
->  		return -EINVAL;
->
-> +	/* BPF_NOEXIST and BPF_EXIST are mutually exclusive. */
-> +	if ((flags & (BPF_NOEXIST | BPF_EXIST)) == (BPF_NOEXIST | BPF_EXIST))
-> +		return -EINVAL;
+On Wed, Jan 21, 2026, Jim Mattson wrote:
+> Extract the computation of eventsel_hw from amd_pmu_set_msr() into a
+> separate helper function, amd_pmu_set_eventsel_hw().
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Jim Mattson <jmattson@google.com>
+> ---
+>  arch/x86/kvm/svm/pmu.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+> index 7aa298eeb072..33c139b23a9e 100644
+> --- a/arch/x86/kvm/svm/pmu.c
+> +++ b/arch/x86/kvm/svm/pmu.c
+> @@ -147,6 +147,12 @@ static int amd_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  	return 1;
+>  }
+>  
+> +static void amd_pmu_set_eventsel_hw(struct kvm_pmc *pmc)
+> +{
+> +	pmc->eventsel_hw = (pmc->eventsel & ~AMD64_EVENTSEL_HOSTONLY) |
+> +		AMD64_EVENTSEL_GUESTONLY;
+
+Align indentation.
+
+	pmc->eventsel_hw = (pmc->eventsel & ~AMD64_EVENTSEL_HOSTONLY) |
+			   AMD64_EVENTSEL_GUESTONLY;
+
+> +}
 > +
->  	if ((flags & BPF_F_LOCK) && !btf_record_has_field(map->record, BPF_SPIN_LOCK))
->  		return -EINVAL;
->
-> +	if ((flags & BPF_F_LOCK) && btf_record_has_field(map->record, ~BPF_SPIN_LOCK))
-> +		return -EOPNOTSUPP;
-> +
->  	if (!(flags & BPF_F_CPU) && flags >> 32)
->  		return -EINVAL;
-
-[ ... ]
-
-> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-> index e2fe6c32822b..80b50091cbbf 100644
-> --- a/kernel/bpf/bpf_local_storage.c
-> +++ b/kernel/bpf/bpf_local_storage.c
-> @@ -493,13 +493,6 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
->  	unsigned long flags;
->  	int err;
->
-> -	/* BPF_EXIST and BPF_NOEXIST cannot be both set */
-> -	if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST) ||
-> -	    /* BPF_F_LOCK can only be used in a value with spin_lock */
-> -	    unlikely((map_flags & BPF_F_LOCK) &&
-> -		     !btf_record_has_field(smap->map.record, BPF_SPIN_LOCK)))
-> -		return ERR_PTR(-EINVAL);
-                ^^^^
-
-This validation was removed from bpf_local_storage_update() but it appears
-that no call to bpf_map_check_op_flags() was added in the local storage map
-update functions. For array and hash maps, calls to bpf_map_check_op_flags()
-were added in array_map_update_elem() and htab_map_update_elem(). However,
-the local storage update functions like bpf_cgrp_storage_update_elem(),
-bpf_fd_inode_storage_update_elem(), and bpf_fd_sk_storage_update_elem() pass
-map_flags directly to bpf_local_storage_update() without calling
-bpf_map_check_op_flags() first.
-
-The syscall path does call bpf_map_check_op_flags() in map_update_elem() with
-allowed_flags set to ~0, which catches the NOEXIST/EXIST mutual exclusion and
-BPF_F_LOCK validation. But with allowed_flags=~0, the check for unknown flags
-((u32)flags & ~allowed_flags) always passes zero, meaning unknown flags like
-8 or 16 would not be rejected.
-
-The old check (map_flags & ~BPF_F_LOCK) > BPF_EXIST rejected any unknown flag
-bits. Is there a missing call to bpf_map_check_op_flags() in the local storage
-update functions that should specify the allowed flags?
-
-> -
->  	if (gfp_flags == GFP_KERNEL && (map_flags & ~BPF_F_LOCK) != BPF_NOEXIST)
->  		return ERR_PTR(-EINVAL);
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21254704407
-
---===============3118955334998125414==--
+>  static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  {
+>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> @@ -166,8 +172,7 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  		data &= ~pmu->reserved_bits;
+>  		if (data != pmc->eventsel) {
+>  			pmc->eventsel = data;
+> -			pmc->eventsel_hw = (data & ~AMD64_EVENTSEL_HOSTONLY) |
+> -					   AMD64_EVENTSEL_GUESTONLY;
+> +			amd_pmu_set_eventsel_hw(pmc);
+>  			kvm_pmu_request_counter_reprogram(pmc);
+>  		}
+>  		return 0;
+> -- 
+> 2.52.0.457.g6b5491de43-goog
+> 
