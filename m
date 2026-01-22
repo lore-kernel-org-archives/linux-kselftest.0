@@ -1,275 +1,385 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3E637AA7A;
-	Thu, 22 Jan 2026 17:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6869C32ABC1
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 17:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769101540; cv=none; b=YGMYgIGR1nQT50vvaX83TQoe3YSHNOCLO/2YkjN+cKs5zHy9mxwudHnZCRMIAUDzM2LJ4Leoj0TclzReDLbTQczYUdtnOgU1Dac/ex0jwv51Jcw1DQ2mGzJ7BriNl2xTpedC9wSBzB+Fc0+HCMFiRz6Xf3UcXJHoupZCGThssXA=
+	t=1769101992; cv=none; b=bKqv76TF8M9P6wHypbRZENHQwJDEMA2qQoQUhgb1wpgntIEAI8S6c5oMP82trWyMT3hdz7ryIUc44SuAyTpNRI5p152rqzGzl3YRCRLcZvAJVP8wtqpNFmC/ryJzy9o1aUSPZ+qGBnXD3C6DIh7UFz8t9aquzCgw3uXjDI8p7Hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769101540; c=relaxed/simple;
-	bh=yWEpMLU+9y62wL3iM8bocvJtxB/L4JUD/PYK4dc85hs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LVXVy1JwWLS2zYzTG6u7zbpx96SGQvKqf6rG/Xq9a68KJUKluVmiQjyZZjUzNZkTKLl3jj2Htutad3rmeUyp49/Q3kWRfN7GPK9872PL49tF7kxFCvAydfXRnUw7WF0Dx4uiQO8R5mFycx2xQheJZkjLT6iaFbwYO59ncSSWHnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m/ZQzR1o; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769101992; c=relaxed/simple;
+	bh=mcx4XvLkHggV0fRu5lan02/evHxE726XWNxe3btPGto=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=VEOS3MZxjZtLF2sLmLA8QL6jlnLpCWDZqdfXYVsk4DWFHE3N6f2vqZ+OdpJqIEHwpCQZ3eB76buwd7hRSwSW2ybUry+YEHRiISq/yUs/PjmKOYxAnIC9CtfQLmZiO+LL8niIwdtrCe9pdl65O1gmZDhkNfKVBy2VBCDgo+qVPJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wRFgeApm; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m/ZQzR1o"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769101530; x=1800637530;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yWEpMLU+9y62wL3iM8bocvJtxB/L4JUD/PYK4dc85hs=;
-  b=m/ZQzR1o01bARrvcLCT3zst8SG3b1VYwBCKmHJnJnOgblI5VKJqVO+gT
-   zwMa3d+PwqkGeYvY442iER9oTcPQ+07CeItgkm2MsM8uWfKJ6k1hi79GH
-   LU/GDkKuXD3xfZ4k5hxKaU6TQk4jDnbk+76LhiSaLTICNmnz1W8sTpTbt
-   Xp3YGADnmWQjyDiVFz63s3y3BoSsSv3sPDdTCq6hW6nGkKWrT40EFgBSG
-   4eOOLp7GjvPd0qRWjVZVmjUAMFiMaIwMSRSZzZ1tTjXPEoaaPPW7YvbAE
-   VOSQUWowymZrVcr5De91HAwHHCDI/exs+CzP0vACpfWEWzGevkUJoYvuR
-   Q==;
-X-CSE-ConnectionGUID: di9gJlbhQCquiQtQbQ4v3w==
-X-CSE-MsgGUID: 3adAMB6EQRirgUpuk4/KTw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="70408994"
-X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
-   d="scan'208";a="70408994"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 09:05:24 -0800
-X-CSE-ConnectionGUID: AXTq/WAbSEy2JySN0Ai47g==
-X-CSE-MsgGUID: U8wK6lLgSUmtaxcG0Iq1kg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
-   d="scan'208";a="238044923"
-Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 09:05:23 -0800
-From: Reinette Chatre <reinette.chatre@intel.com>
-To: shuah@kernel.org,
-	Dave.Martin@arm.com,
-	james.morse@arm.com,
-	tony.luck@intel.com,
-	peternewman@google.com,
-	babu.moger@amd.com,
-	ilpo.jarvinen@linux.intel.com
-Cc: fenghuay@nvidia.com,
-	reinette.chatre@intel.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev
-Subject: [PATCH] selftests/resctrl: Improve accuracy of cache occupancy test
-Date: Thu, 22 Jan 2026 09:19:51 -0800
-Message-ID: <084e82b5c29d75f16f24af8768d50d39ba0118a5.1769101788.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wRFgeApm"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a0d058fc56so9994675ad.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 09:12:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769101977; x=1769706777; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tY6gvpG5zxtSlYaXqjyYbiaqgPJDTjCiqC6J9d+kcsc=;
+        b=wRFgeApmLM+cqLhqQQeNNO0yhGzF0qtiXIB6FF7gDMyS8FrumkQcPHQYcEUFPzb5io
+         i80BaHrxecRBdoRUPjeYLIokAviULCHEbPimmpkUUpxYTB45P2uh5w6JdKKsJElUp4mn
+         iAnh2KLexN2Om6SMG5RUZx9GKso5qGTM/JU4e4r2s1Iuj5lw3B28kbl9OCe6J5ZZLbuF
+         MQvIeNbUiW6XiYFqqGUXmzj3+81ybTd5k02hBnZwZJC7n6XmI8d65fXaKlqtWjO6zwLR
+         grUvU9xN3RfpR8ftSbnjK19mPlpYYvh1ScnO6e0VJvN9IKKEIPBBQTYBX2p/6Ex7TBEW
+         ix/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769101977; x=1769706777;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tY6gvpG5zxtSlYaXqjyYbiaqgPJDTjCiqC6J9d+kcsc=;
+        b=NwTfMS/mcDrXcplZwYlOKOu5ke4t/xu207f4n/wPUgsZzA82TTmTJSU4qtfwWoSWM1
+         6LLzgoDWmRZ7+bpxMWSqAJFqXzVUpzeeAyL0Hoxfu8MiwrtyHTrjoyqKiDgYh3mjBseS
+         Dy6ZUa9vKp15TBHCA7eS6QOwsbYMB2ls17DweFSMM8CnGnjpt5kbXEWdYz+HzY7g+5fz
+         vqfUsaDDPf4agDybGqQuBkipyty2P7BhNd44RI2u0t/QdYAbfmlg/Wb5+k9mE/LDyPzG
+         JCME18Z2BTeCRbPRUrVIiFbRDHurZNj/uLJHan7epR7Hgm5t/wi/4rG7KtA+bvTlHZko
+         HcPg==
+X-Forwarded-Encrypted: i=1; AJvYcCXMaq5Xx8RktWsucGDuOQAzKXvdX+3S8cDYcUlN/RY0O74Izqn49p0iMyhKi+oC2HSsgOHf8o2zzV7EW7tV9MA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoaAPtoqMUX8oFYd/SUQHFcMGMw9aoS0hj7bwJWObLXhMRUBb0
+	y7AJVMjFgBvD7V9if6+1kin9rf7UN9gNnnLu+aavGsyl8yZn3XuTkbw5SjZCviEEwOqbt8Q4VOj
+	jgv5qTw==
+X-Received: from pllq3.prod.google.com ([2002:a17:902:7883:b0:2a7:73ca:9132])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:18c:b0:2a7:5171:9221
+ with SMTP id d9443c01a7336-2a7fe745737mr714765ad.42.1769101976816; Thu, 22
+ Jan 2026 09:12:56 -0800 (PST)
+Date: Thu, 22 Jan 2026 09:12:55 -0800
+In-Reply-To: <20260121225438.3908422-7-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260121225438.3908422-1-jmattson@google.com> <20260121225438.3908422-7-jmattson@google.com>
+Message-ID: <aXJal3srw2-3J5Dm@google.com>
+Subject: Re: [PATCH 6/6] KVM: selftests: x86: Add svm_pmu_hg_test for HG_ONLY bits
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Dave Martin reported inconsistent CMT test failures. In one experiment
-the first run of the CMT test failed because of too large (24%) difference
-between measured and achievable cache occupancy while the second run passed
-with an acceptable 4% difference.
+On Wed, Jan 21, 2026, Jim Mattson wrote:
+> Add a selftest to verify KVM correctly virtualizes the AMD PMU Host-Only
+> (bit 41) and Guest-Only (bit 40) event selector bits across all relevant
+> SVM state transitions.
+> 
+> For both Guest-Only and Host-Only counters, verify that:
+>   1. SVME=0: counter counts (HG_ONLY bits ignored)
+>   2. Set SVME=1: counter behavior changes based on HG_ONLY bit
+>   3. VMRUN to L2: counter behavior switches (guest vs host mode)
+>   4. VMEXIT to L1: counter behavior switches back
+>   5. Clear SVME=0: counter counts (HG_ONLY bits ignored again)
+> 
+> Also confirm that setting both bits is the same as setting neither bit.
+> 
+> Signed-off-by: Jim Mattson <jmattson@google.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+>  .../selftests/kvm/x86/svm_pmu_hg_test.c       | 297 ++++++++++++++++++
+>  2 files changed, 298 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/x86/svm_pmu_hg_test.c
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> index e88699e227dd..06ba85d97618 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -112,6 +112,7 @@ TEST_GEN_PROGS_x86 += x86/svm_vmcall_test
+>  TEST_GEN_PROGS_x86 += x86/svm_int_ctl_test
+>  TEST_GEN_PROGS_x86 += x86/svm_nested_shutdown_test
+>  TEST_GEN_PROGS_x86 += x86/svm_nested_soft_inject_test
+> +TEST_GEN_PROGS_x86 += x86/svm_pmu_hg_test
 
-The CMT test is susceptible to interference from the rest of the system.
-This can be demonstrated with a utility like stress-ng by running the CMT
-test while introducing cache misses using:
+Maybe svm_nested_pmu_test?  Hmm, that makes it sound like "nested PMU" though.
 
-   stress-ng --matrix-3d 0 --matrix-3d-zyx
+svm_pmu_host_guest_test?
 
-Below shows an example of the CMT test failing because of a significant
-difference between measured and achievable cache occupancy when run with
-interference:
-    # Starting CMT test ...
-    # Mounting resctrl to "/sys/fs/resctrl"
-    # Cache size :56623104
-    # Writing benchmark parameters to resctrl FS
-    # Benchmark PID: 3275
-    # Checking for pass/fail
-    # Fail: Check cache miss rate within 15%
-    # Percent diff=97
-    # Number of bits: 5
-    # Average LLC val: 501350
-    # Cache span (bytes): 23592960
-    not ok 1 CMT: test
+> +#define MSR_F15H_PERF_CTL0	0xc0010200
+> +#define MSR_F15H_PERF_CTR0	0xc0010201
+> +
+> +#define AMD64_EVENTSEL_GUESTONLY	BIT_ULL(40)
+> +#define AMD64_EVENTSEL_HOSTONLY		BIT_ULL(41)
 
-The CMT test creates a new control group that is also capable of monitoring
-and assigns the workload to it. The workload allocates a buffer that by
-default fills a portion of the L3 and keeps reading from the buffer,
-measuring the L3 occupancy at intervals. The test passes if the workload's
-L3 occupancy is within 15% of the buffer size.
+Please put architectural definitions in pmu.h (or whatever library header we
+have).
 
-By not adjusting any capacity bitmasks the workload shares the cache with
-the rest of the system. Any other task that may be running could evict
-the workload's data from the cache causing it to have low cache occupancy.
+> +struct hg_test_data {
 
-Reduce interference from the rest of the system by ensuring that the
-workload's control group uses the capacity bitmask found in the user
-parameters for L3 and that the rest of the system can only allocate into
-the inverse of the workload's L3 cache portion. Other tasks can thus no
-longer evict the workload's data from L3.
+Please drop "hg" (I keep reading it as "mercury").
 
-Take the L2 cache into account to further improve test accuracy.
-By default the buffer size is the same as the L3 portion that the workload
-can allocate into. This buffer size does not take into account that some
-of the workload's data may land in L2/L1. Address this in two ways:
- - Reduce the amount of L2 cache the workload can allocate into to the
-   minimum on systems that support L2 cache allocation.
- - Increase the buffer size to accommodate data that may be allocated into
-   the L2 cache. Use a buffer size double the L3 portion to keep using the
-   L3 portion size as goal for L3 occupancy while taking into account that
-   some of the data my be in L2.
+> +	uint64_t l2_delta;
+> +	bool l2_done;
+> +};
+> +
+> +static struct hg_test_data *hg_data;
+> +
+> +static void l2_guest_code(void)
+> +{
+> +	hg_data->l2_delta = run_and_measure();
+> +	hg_data->l2_done = true;
+> +	vmmcall();
+> +}
+> +
+> +/*
+> + * Test Guest-Only counter across all relevant state transitions.
+> + */
+> +static void l1_guest_code_guestonly(struct svm_test_data *svm,
+> +				    struct hg_test_data *data)
+> +{
+> +	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
+> +	struct vmcb *vmcb = svm->vmcb;
+> +	uint64_t eventsel, delta;
+> +
+> +	hg_data = data;
+> +
+> +	eventsel = EVENTSEL_RETIRED_INSNS | AMD64_EVENTSEL_GUESTONLY;
+> +	wrmsr(MSR_F15H_PERF_CTL0, eventsel);
+> +	wrmsr(MSR_F15H_PERF_CTR0, 0);
+> +
+> +	/* Step 1: SVME=0; HG_ONLY ignored */
+> +	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_NE(delta, 0);
+> +
+> +	/* Step 2: Set SVME=1; Guest-Only counter stops */
+> +	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_EQ(delta, 0);
+> +
+> +	/* Step 3: VMRUN to L2; Guest-Only counter counts */
+> +	generic_svm_setup(svm, l2_guest_code,
+> +			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
+> +	vmcb->control.intercept &= ~(1ULL << INTERCEPT_MSR_PROT);
+> +
+> +	run_guest(vmcb, svm->vmcb_gpa);
+> +
+> +	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
+> +	GUEST_ASSERT(data->l2_done);
+> +	GUEST_ASSERT_NE(data->l2_delta, 0);
+> +
+> +	/* Step 4: After VMEXIT to L1; Guest-Only counter stops */
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_EQ(delta, 0);
+> +
+> +	/* Step 5: Clear SVME; HG_ONLY ignored */
+> +	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_NE(delta, 0);
+> +
+> +	GUEST_DONE();
+> +}
+> +
+> +/*
+> + * Test Host-Only counter across all relevant state transitions.
+> + */
+> +static void l1_guest_code_hostonly(struct svm_test_data *svm,
+> +				   struct hg_test_data *data)
+> +{
+> +	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
+> +	struct vmcb *vmcb = svm->vmcb;
+> +	uint64_t eventsel, delta;
+> +
+> +	hg_data = data;
+> +
+> +	eventsel = EVENTSEL_RETIRED_INSNS | AMD64_EVENTSEL_HOSTONLY;
+> +	wrmsr(MSR_F15H_PERF_CTL0, eventsel);
+> +	wrmsr(MSR_F15H_PERF_CTR0, 0);
+> +
+> +
+> +	/* Step 1: SVME=0; HG_ONLY ignored */
+> +	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_NE(delta, 0);
+> +
+> +	/* Step 2: Set SVME=1; Host-Only counter still counts */
+> +	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_NE(delta, 0);
+> +
+> +	/* Step 3: VMRUN to L2; Host-Only counter stops */
+> +	generic_svm_setup(svm, l2_guest_code,
+> +			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
+> +	vmcb->control.intercept &= ~(1ULL << INTERCEPT_MSR_PROT);
+> +
+> +	run_guest(vmcb, svm->vmcb_gpa);
+> +
+> +	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
+> +	GUEST_ASSERT(data->l2_done);
+> +	GUEST_ASSERT_EQ(data->l2_delta, 0);
+> +
+> +	/* Step 4: After VMEXIT to L1; Host-Only counter counts */
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_NE(delta, 0);
+> +
+> +	/* Step 5: Clear SVME; HG_ONLY ignored */
+> +	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_NE(delta, 0);
+> +
+> +	GUEST_DONE();
+> +}
+> +
+> +/*
+> + * Test that both bits set is the same as neither bit set (always counts).
+> + */
+> +static void l1_guest_code_both_bits(struct svm_test_data *svm,
 
-With the above adjustments the CMT test is more consistent. Repeating the
-CMT test while generating interference with stress-ng on a sample
-system after applying the fixes show significant improvement in test
-accuracy:
+l1_guest_code gets somewhat redundant.  What about these to be more descriptive
+about the salient points, without creating monstrous names?
 
-    # Starting CMT test ...
-    # Mounting resctrl to "/sys/fs/resctrl"
-    # Cache size :56623104
-    # Writing benchmark parameters to resctrl FS
-    # Write schema "L3:0=fe0" to resctrl FS
-    # Write schema "L3:0=1f" to resctrl FS
-    # Benchmark PID: 3223
-    # Checking for pass/fail
-    # Pass: Check cache miss rate within 15%
-    # Percent diff=3
-    # Number of bits: 5
-    # Average LLC val: 22811443
-    # Cache span (bytes): 23592960
-    ok 1 CMT: test
+	l1_test_no_filtering // very open to suggestions for a better name
+	l1_test_guestonly
+	l1_test_hostonly
+	l1_test_host_and_guest
 
-Reported-by: Dave Martin <Dave.Martin@arm.com>
-Closes: https://lore.kernel.org/lkml/aO+7MeSMV29VdbQs@e133380.arm.com/
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
----
- tools/testing/selftests/resctrl/cmt_test.c    | 35 ++++++++++++++++---
- tools/testing/selftests/resctrl/mba_test.c    |  4 ++-
- tools/testing/selftests/resctrl/mbm_test.c    |  4 ++-
- tools/testing/selftests/resctrl/resctrl.h     |  4 ++-
- tools/testing/selftests/resctrl/resctrl_val.c |  2 +-
- 5 files changed, 41 insertions(+), 8 deletions(-)
+Actually, why are there even separate helpers?  Very off the cuff, but this seems
+trivial to dedup:
 
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index d09e693dc739..44e9938dfafd 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -19,12 +19,39 @@
- #define CON_MON_LCC_OCCUP_PATH		\
- 	"%s/%s/mon_data/mon_L3_%02d/llc_occupancy"
- 
--static int cmt_init(const struct resctrl_val_param *param, int domain_id)
-+/*
-+ * Initialize capacity bitmasks (CBMs) for control group being tested,
-+ * default resource group to prevent its tasks from interfering with test,
-+ * and L2 resource of control group to minimize allocations into L2 if
-+ * possible to better predict L3 occupancy.
-+ */
-+static int cmt_init(const struct resctrl_test *test,
-+		    const struct user_params *uparams,
-+		    const struct resctrl_val_param *param, int domain_id)
- {
-+	unsigned long long_mask;
-+	char schemata[64];
-+	int ret;
-+
- 	sprintf(llc_occup_path, CON_MON_LCC_OCCUP_PATH, RESCTRL_PATH,
- 		param->ctrlgrp, domain_id);
- 
--	return 0;
-+	ret = get_full_cbm(test->resource, &long_mask);
-+	if (ret)
-+		return ret;
-+
-+	snprintf(schemata, sizeof(schemata), "%lx", ~param->mask & long_mask);
-+	ret = write_schemata("", schemata, uparams->cpu, test->resource);
-+	if (ret)
-+		return ret;
-+
-+	snprintf(schemata, sizeof(schemata), "%lx", param->mask);
-+	ret = write_schemata(param->ctrlgrp, schemata, uparams->cpu, test->resource);
-+
-+	if (!ret && !strcmp(test->resource, "L3") && resctrl_resource_exists("L2"))
-+		ret = write_schemata(param->ctrlgrp, "0x1", uparams->cpu, "L2");
-+
-+	return ret;
- }
- 
- static int cmt_setup(const struct resctrl_test *test,
-@@ -153,11 +180,11 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 	span = cache_portion_size(cache_total_size, param.mask, long_mask);
- 
- 	if (uparams->fill_buf) {
--		fill_buf.buf_size = span;
-+		fill_buf.buf_size = span * 2;
- 		fill_buf.memflush = uparams->fill_buf->memflush;
- 		param.fill_buf = &fill_buf;
- 	} else if (!uparams->benchmark_cmd[0]) {
--		fill_buf.buf_size = span;
-+		fill_buf.buf_size = span * 2;
- 		fill_buf.memflush = true;
- 		param.fill_buf = &fill_buf;
- 	}
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index c7e9adc0368f..cd4c715b7ffd 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -17,7 +17,9 @@
- #define ALLOCATION_MIN		10
- #define ALLOCATION_STEP		10
- 
--static int mba_init(const struct resctrl_val_param *param, int domain_id)
-+static int mba_init(const struct resctrl_test *test,
-+		    const struct user_params *uparams,
-+		    const struct resctrl_val_param *param, int domain_id)
- {
- 	int ret;
- 
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 84d8bc250539..58201f844740 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -83,7 +83,9 @@ static int check_results(size_t span)
- 	return ret;
- }
- 
--static int mbm_init(const struct resctrl_val_param *param, int domain_id)
-+static int mbm_init(const struct resctrl_test *test,
-+		    const struct user_params *uparams,
-+		    const struct resctrl_val_param *param, int domain_id)
- {
- 	int ret;
- 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 3c51bdac2dfa..72f3338cacca 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -133,7 +133,9 @@ struct resctrl_val_param {
- 	char			filename[64];
- 	unsigned long		mask;
- 	int			num_of_runs;
--	int			(*init)(const struct resctrl_val_param *param,
-+	int			(*init)(const struct resctrl_test *test,
-+					const struct user_params *uparams,
-+					const struct resctrl_val_param *param,
- 					int domain_id);
- 	int			(*setup)(const struct resctrl_test *test,
- 					 const struct user_params *uparams,
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 7c08e936572d..a5a8badb83d4 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -569,7 +569,7 @@ int resctrl_val(const struct resctrl_test *test,
- 		goto reset_affinity;
- 
- 	if (param->init) {
--		ret = param->init(param, domain_id);
-+		ret = param->init(test, uparams, param, domain_id);
- 		if (ret)
- 			goto reset_affinity;
- 	}
--- 
-2.50.1
+static void l1_guest_code(struct svm_test_data *svm, u64 host_guest_mask)
+{
+	const bool count_in_host = !host_guest_mask ||
+				   (host_guest_mask & AMD64_EVENTSEL_HOSTONLY);
+	const bool count_in_guest = !host_guest_mask ||
+				    (host_guest_mask & AMD64_EVENTSEL_GUESTONLY);
+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
+	struct vmcb *vmcb = svm->vmcb;
+	uint64_t eventsel, delta;
 
+	wrmsr(MSR_F15H_PERF_CTL0, EVENTSEL_RETIRED_INSNS | host_guest_mask);
+	wrmsr(MSR_F15H_PERF_CTR0, 0);
+
+	/* Step 1: SVME=0; host always counts */
+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
+	delta = run_and_measure();
+	GUEST_ASSERT_NE(delta, 0);
+
+	/* Step 2: Set SVME=1; Guest-Only counter stops */
+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
+	delta = run_and_measure();
+	GUEST_ASSERT(!!delta == count_in_host);
+
+	/* Step 3: VMRUN to L2; Guest-Only counter counts */
+	generic_svm_setup(svm, l2_guest_code,
+			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
+	vmcb->control.intercept &= ~(1ULL << INTERCEPT_MSR_PROT);
+
+	run_guest(vmcb, svm->vmcb_gpa);
+
+	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
+	GUEST_ASSERT(data->l2_done);
+	GUEST_ASSERT(!!data->l2_delta == count_in_guest);
+
+	/* Step 4: After VMEXIT to L1; Guest-Only counter stops */
+	delta = run_and_measure();
+	GUEST_ASSERT(!!delta == count_in_host);
+
+	/* Step 5: Clear SVME; HG_ONLY ignored */
+	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
+	delta = run_and_measure();
+	GUEST_ASSERT_NE(delta, 0);
+
+	GUEST_DONE();
+}
+
+> +				    struct hg_test_data *data)
+> +{
+> +	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
+> +	struct vmcb *vmcb = svm->vmcb;
+> +	uint64_t eventsel, delta;
+> +
+> +	hg_data = data;
+> +
+> +	eventsel = EVENTSEL_RETIRED_INSNS |
+> +		AMD64_EVENTSEL_HOSTONLY | AMD64_EVENTSEL_GUESTONLY;
+> +	wrmsr(MSR_F15H_PERF_CTL0, eventsel);
+> +	wrmsr(MSR_F15H_PERF_CTR0, 0);
+> +
+> +	/* Step 1: SVME=0 */
+> +	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_NE(delta, 0);
+> +
+> +	/* Step 2: Set SVME=1 */
+> +	wrmsr(MSR_EFER, rdmsr(MSR_EFER) | EFER_SVME);
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_NE(delta, 0);
+> +
+> +	/* Step 3: VMRUN to L2 */
+> +	generic_svm_setup(svm, l2_guest_code,
+> +			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
+> +	vmcb->control.intercept &= ~(1ULL << INTERCEPT_MSR_PROT);
+> +
+> +	run_guest(vmcb, svm->vmcb_gpa);
+> +
+> +	GUEST_ASSERT_EQ(vmcb->control.exit_code, SVM_EXIT_VMMCALL);
+> +	GUEST_ASSERT(data->l2_done);
+> +	GUEST_ASSERT_NE(data->l2_delta, 0);
+> +
+> +	/* Step 4: After VMEXIT to L1 */
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_NE(delta, 0);
+> +
+> +	/* Step 5: Clear SVME */
+> +	wrmsr(MSR_EFER, rdmsr(MSR_EFER) & ~EFER_SVME);
+> +	delta = run_and_measure();
+> +	GUEST_ASSERT_NE(delta, 0);
+> +
+> +	GUEST_DONE();
+> +}
+> +
+> +static void l1_guest_code(struct svm_test_data *svm, struct hg_test_data *data,
+> +			  int test_num)
+> +{
+> +	switch (test_num) {
+> +	case 0:
+
+As above, I would much rather pass in the mask of GUEST_HOST bits to set, and
+then react accordingly, as opposed to passing in a magic/arbitrary @test_num.
+Then I'm pretty sure we don't need a dispatch function, just run the testcase
+using the passed in mask.
+
+> +		l1_guest_code_guestonly(svm, data);
+> +		break;
+> +	case 1:
+> +		l1_guest_code_hostonly(svm, data);
+> +		break;
+> +	case 2:
+> +		l1_guest_code_both_bits(svm, data);
+> +		break;
+> +	}
+> +}
+
+...
+
+> +int main(int argc, char *argv[])
+> +{
+> +	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
+> +	TEST_REQUIRE(kvm_is_pmu_enabled());
+> +	TEST_REQUIRE(get_kvm_amd_param_bool("enable_mediated_pmu"));
+> +
+> +	run_test(0, "Guest-Only counter across all transitions");
+> +	run_test(1, "Host-Only counter across all transitions");
+> +	run_test(2, "Both HG_ONLY bits set (always count)");
+
+As alluded to above, shouldn't we also test "no bits set"?
+> +
+> +	return 0;
+> +}
+> -- 
+> 2.52.0.457.g6b5491de43-goog
+> 
