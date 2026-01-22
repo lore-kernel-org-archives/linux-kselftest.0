@@ -1,306 +1,129 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f195.google.com (mail-dy1-f195.google.com [74.125.82.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757B53EFD01;
-	Thu, 22 Jan 2026 03:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF3339281D
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 04:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769054221; cv=none; b=TmMtzj8LfIpA34PLih36jPnVede+R99cpywJoaM7R5Wgczz3dbriGbQUdaEqDVzvT5u87wpwQ6rx3uoCnz+ha77Tr9DDbcroSb4PANYqOk/miigXZDVzvUMoF7S4A0awr3Xei3Lwv5RFUko/EwobcmN7HEws9BtAMim/HPsOPW0=
+	t=1769054835; cv=none; b=X8nJS4Rm6ddxFEGRJbDDHx7nH8NjIbIlGlqmlZ/kV2mgq99IFVHSc5NC6R5+iWa36i9DusDthGNVir5oNwekgjoUXZQo1j8zyL0hAlJTF7HzOHGk4/FKXw4ibKsYho0Q/njWisbccHoLalvFFzbnh4anIjYTjJPWJNSJL6uZqtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769054221; c=relaxed/simple;
-	bh=8CWbKn4B3otnb2aE9paHyXfek7EjnLT6DPAgKtM13bs=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=HDaUft3F41tnj9clKmtD4HhsVjQ95QjGh02gSX0BJVBZBZu/mqR6yTggw+B67mfTFRKSj4Xc4JhlZ/xttbZVAdQkQquRce8tGjbZpbrwkfPGY7AH9PG8BrJ735+JZHK6iZwYvcQsx4o6B0hX/Nh3dP+AW4yMPJno4/jsOZXrO2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tnbk32EV; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769054835; c=relaxed/simple;
+	bh=pYKf1JAAXvqM1KiJ39QNevMy+s2lzOXg1IsZoMG4W3s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nag/oEQ039lT21ch9EQad6a4cBnBCVNBUWbg1xtAOM+TVa1ft/up+UmA2QyhZ9JgqYrZKDWXhmlf0qXb2lvKG1XiQNoGAs3Jx2yhT1Jf3BSTZ0f6bkee5jGJ6bC/4WvIDb4HqZK+IWkzqTyFs+xsGNBZFdwpax/SPakaGE31bQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nIJdpQ1H; arc=none smtp.client-ip=74.125.82.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tnbk32EV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nIJdpQ1H"
+Received: by mail-dy1-f195.google.com with SMTP id 5a478bee46e88-2b71320f501so1044942eec.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Jan 2026 20:07:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769054833; x=1769659633; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xWpthCYRiRQKWxKiKOdwOg0cgTv3VLuSBcM5vN1ez5c=;
+        b=nIJdpQ1HF5vVCJ/YALlYlinRUiJBT/d+3Ojtex3XwZyGc1S5kV3cZPZs085FKiIa0r
+         JwVWCrn5xu9b+vBrsTrwm0UTdEGtqj5P2xoV4X/PkEjS+/oH1bMGPfqbygJFud+4y2MN
+         ye4jGeSbTRW7U/RcTBdik5jOzL0hTGbcz38HiTVcmCdzYohGnGU9pFV2qRsovMkQsgl0
+         KCE46IQpEdCe9bzN91tTVFUuj5q5kqbXA0cHMIKgeup33xOSYVcKwIe+qWJEq2ejHBIN
+         jM8V3SGgTA1CdG+pV9ymNc0DcYE00txsmc0hCB4VF/lTiuyo1nTUstdhgN57g8nOGJqY
+         qwjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769054833; x=1769659633;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xWpthCYRiRQKWxKiKOdwOg0cgTv3VLuSBcM5vN1ez5c=;
+        b=hmQ2DzYHQrlp+vPTEsmZ4SrLvCnl1hm5x5N+4kLPCOgJmd8g0k6d4LSdPxJK8/sF1V
+         A9SV9hVm3aJ7gW1gtRZJwBvAQXbCJCiETkJO1OpvCLaIxzu0FRhLHI2eZrgV2FRSzmKp
+         X8Z47lHZBGH/8SceuCMwiiBucQSoP+C//c0rbd1wvY+NhCFfqHtfggLIgEnUJ2arCXOb
+         E1KEl7i75KbNesnER6JnHArrYum/9f4Y7NUkkrGllIVMPYnr/BX0W6zxdK+NfuQ4PBOP
+         sPxPiwRucVDQ+K7wOyIitxFrWNFrEbpv5nrTLfjrgZZs4QXzKJWK6z/3qmVKYTQGO+Ut
+         x63Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVwkYg+0CLx4VvbauP+DojAO3zc00w67bBhnCJhk6DQMqIXUqRGkuiQgIsioRqH4vD6ZQGSXtzg9OUkDvwqAv8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXDOLYb4fb1nZBAy6GBu9msqoivH9ha2VbTRqE4N2RfqIjjGTT
+	Ppu/lZqaBnP41ATPYubS9APNkLIY2iLJm9eXKPdEx8Cf8LRvy2HpsTA=
+X-Gm-Gg: AZuq6aLICDvKrb9tb7UzlgfvopUTylCvAyHMmBMlHtTRi8B0x3UrqL7LLvcPrSL9RwX
+	Xr8idBIr/2KojYuOAMT6bClc+9s1BR64CpqPeC5xO6d95YkmOVBGNhppeFcSjvjQg67GLBcPNGB
+	MCsCxcLcwF6R12neMDTsNuvrJ/KiOoUzBtLiCEF+tkWwReaSSZDsWZeqPrvd2Qdam8LMK8HM1uC
+	mbfB7BGK29pte3WQhtYGqtE0nJt5ZDinbypiC4uOiDnSLNgbDqe7mLnS53HgGywQ/JddXOxao40
+	ib23lzU5o/dRB4u/7vYPK5TaZdMC45SI5h7XOF4g11hx5rd57Z68XQCnFmtV5D/HEv0J/5uNtdU
+	jIYTM/O5amO0v1O2vniBDO6yw8lLktjBpIuAg8NqGu+/X2nBClo4Zn6BdsEax6IQIP6gLdIq6cU
+	jV3S2qFv63DePqywmvj+bY1Pk0O4lFNYyopsQAqINA454uQDMd74wvlvWzFsRpe3o45SJv/xb+h
+	tIpJw==
+X-Received: by 2002:a05:7300:a583:b0:2b7:1744:725e with SMTP id 5a478bee46e88-2b7174476e8mr1771856eec.0.1769054832652;
+        Wed, 21 Jan 2026 20:07:12 -0800 (PST)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b34c0f7fsm24054451eec.3.2026.01.21.20.07.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jan 2026 20:07:12 -0800 (PST)
+Date: Wed, 21 Jan 2026 20:07:11 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Bobby Eshleman <bobbyeshleman@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Mina Almasry <almasrymina@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v10 4/5] net: devmem: document
+ NETDEV_A_DMABUF_AUTORELEASE netlink attribute
+Message-ID: <aXGib0OcNdHTLyZN@mini-arch>
+References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
+ <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-4-686d0af71978@meta.com>
+ <20260120163650.5a962648@kernel.org>
+ <aXBnqYQdomzH9bT/@devvm11784.nha0.facebook.com>
+ <20260121173512.748e2155@kernel.org>
+ <aXGNhEKOhkTHbJvw@devvm11784.nha0.facebook.com>
+ <20260121185021.446b00e8@kernel.org>
+ <CAKB00G2xNvfiV6J3RzKDs=GHMGZ7L16+VKUYLGjpZdOrLnSYKA@mail.gmail.com>
+ <20260121194615.33dc0812@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769054215;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CJjNbDiEoaEZiK5zl5dzy3/Rfr7vKO+iFtl3X79v/h0=;
-	b=tnbk32EVCvZcyQYvNPrutqCjjG6Pq+3mHxGetf+LgeZGpDgZtJKz9UFRvotC3hOl6Gmj00
-	L/tkh6d/Ft8ZIo2rowBAI/kkCZXjEml0x/evjBjEiPPIav9zDlKTsKKqfcpYGF4V511b3h
-	qmppEpycDdcQtZof4Tw+1SPtPIH3PdY=
-Date: Thu, 22 Jan 2026 03:56:50 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <d8c440c1255979b5120eed985f7d156f68cd7a3f@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH bpf-next v7 2/3] bpf, sockmap: Fix FIONREAD for sockmap
-To: "Jakub Sitnicki" <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, "John Fastabend" <john.fastabend@gmail.com>, "David 
-  S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, "Neal Cardwell"
- <ncardwell@google.com>, "Kuniyuki Iwashima" <kuniyu@google.com>, "David 
- Ahern" <dsahern@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel  Borkmann" <daniel@iogearbox.net>, "Martin 
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "KP  Singh"
- <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao  Luo"
- <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Michal Luczaj" <mhal@rbox.co>, "Cong Wang"
- <cong.wang@bytedance.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-In-Reply-To: <60a0c463ef6dbe38d836c773c5256706c163311c@linux.dev>
-References: <20260113025121.197535-1-jiayuan.chen@linux.dev>
- <20260113025121.197535-3-jiayuan.chen@linux.dev>
- <87a4y8uy67.fsf@cloudflare.com> <871pjjux2u.fsf@cloudflare.com>
- <60a0c463ef6dbe38d836c773c5256706c163311c@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260121194615.33dc0812@kernel.org>
 
-January 21, 2026 at 20:55, "Jiayuan Chen" <jiayuan.chen@linux.dev mailto:=
-jiayuan.chen@linux.dev?to=3D%22Jiayuan%20Chen%22%20%3Cjiayuan.chen%40linu=
-x.dev%3E > wrote:
+On 01/21, Jakub Kicinski wrote:
+> On Wed, 21 Jan 2026 19:25:27 -0800 Bobby Eshleman wrote:
+> > > > That is correct, neither is true. If the two sockets share a binding the
+> > > > kernel doesn't care which socket received the token or which one
+> > > > returned it. No token <> socket association. There is no
+> > > > queued-but-not-read race either. If any tokens are not returned, as long
+> > > > as all of the binding references are eventually released and all sockets
+> > > > that used the binding are closed, then all references will be accounted
+> > > > for and everything cleaned up.  
+> > >
+> > > Naming is hard, but I wonder whether the whole feature wouldn't be
+> > > better referred to as something to do with global token accounting
+> > > / management? AUTORELEASE makes sense but seems like focusing on one
+> > > particular side effect.  
+> > 
+> > Good point. The only real use case for autorelease=on is for backwards
+> > compatibility... so I thought maybe DEVMEM_A_DMABUF_COMPAT_TOKEN
+> > or DEVMEM_A_DMABUF_COMPAT_DONTNEED would be clearer?
+> 
+> Hm. Maybe let's return to naming once we have consensus on the uAPI.
+> 
+> Does everyone think that pushing this via TCP socket opts still makes
+> sense, even tho in practice the TCP socket is just how we find the
+> binding?
 
-
->=20
->=20January 21, 2026 at 17:36, "Jakub Sitnicki" <jakub@cloudflare.com mai=
-lto:jakub@cloudflare.com?to=3D%22Jakub%20Sitnicki%22%20%3Cjakub%40cloudfl=
-are.com%3E > wrote:
->=20
->=20>=20
->=20> On Tue, Jan 20, 2026 at 04:00 PM +01, Jakub Sitnicki wrote:
-> >=20=20
->=20>=20=20
->=20>  On Tue, Jan 13, 2026 at 10:50 AM +08, Jiayuan Chen wrote:
-> >=20=20
->=20>  [...]
-> >=20=20
->=20>=20=20
->=20>  >=20
->=20>  > diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
-> >  > index 0735d820e413..91233e37cd97 100644
-> >  > --- a/net/ipv4/udp_bpf.c
-> >  > +++ b/net/ipv4/udp_bpf.c
-> >  > @@ -5,6 +5,7 @@
-> >  > #include <net/sock.h>
-> >  > #include <net/udp.h>
-> >  > #include <net/inet_common.h>
-> >  > +#include <asm/ioctls.h>
-> >  >=20
->=20>  > #include "udp_impl.h"
-> >  >=20
->=20>  > @@ -111,12 +112,26 @@ enum {
-> >  > static DEFINE_SPINLOCK(udpv6_prot_lock);
-> >  > static struct proto udp_bpf_prots[UDP_BPF_NUM_PROTS];
-> >  >=20
->=20>  > +static int udp_bpf_ioctl(struct sock *sk, int cmd, int *karg)
-> >  > +{
-> >  > + if (cmd !=3D SIOCINQ)
-> >  > + return udp_ioctl(sk, cmd, karg);
-> >  > +
-> >  > + /* Since we don't hold a lock, sk_receive_queue may contain data=
-.
-> >  > + * BPF might only be processing this data at the moment. We only
-> >  > + * care about the data in the ingress_msg here.
-> >  > + */
-> >  >=20
->=20>  I think we should strive for a design where FIONREAD does not go d=
-own
-> >  after you add your socket to sockmap, if there was no recvmsg call i=
-n
-> >  between. To show what I mean, I added this test that's currently fai=
-ling
-> >  for udp:
-> >=20=20
->=20>  ---8<---
-> >  diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c =
-b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> >  index 1f1289f5a8c2..123c96fcaef0 100644
-> >  --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> >  +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> >  @@ -1229,6 +1229,66 @@ static void test_sockmap_copied_seq(bool strp=
-)
-> >  test_sockmap_pass_prog__destroy(skel);
-> >  }
-> >=20=20
->=20>  +/* Test FIONREAD when data exists in sk_receive_queue before sock=
-map insertion */
-> >  +static void test_sockmap_fionread_pre_insert(int sotype)
-> >  +{
-> >  + int map, err, sent, recvd, zero =3D 0, avail =3D 0;
-> >  + struct test_sockmap_pass_prog *skel =3D NULL;
-> >  + int c =3D -1, p =3D -1;
-> >  + char buf[10] =3D "0123456789", rcv[11];
-> >  + struct bpf_program *prog;
-> >  +
-> >  + skel =3D test_sockmap_pass_prog__open_and_load();
-> >  + if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> >  + return;
-> >  +
-> >  + prog =3D skel->progs.prog_skb_verdict;
-> >  + map =3D bpf_map__fd(skel->maps.sock_map_rx);
-> >  +
-> >  + err =3D bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STR=
-EAM_VERDICT, 0);
-> >  + if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
-> >  + goto end;
-> >  +
-> >  + err =3D create_pair(AF_INET, sotype, &c, &p);
-> >  + if (!ASSERT_OK(err, "create_pair"))
-> >  + goto end;
-> >  +
-> >  + /* Step 1: Send data BEFORE sockmap insertion - lands in sk_receiv=
-e_queue */
-> >  + sent =3D xsend(p, buf, sizeof(buf), 0);
-> >  + if (!ASSERT_EQ(sent, sizeof(buf), "xsend pre-insert"))
-> >  + goto end;
-> >  +
-> >  + /* Step 2: Verify FIONREAD reports data in sk_receive_queue */
-> >  + err =3D poll_read(c, IO_TIMEOUT_SEC);
-> >  + if (!ASSERT_OK(err, "poll_read pre-insert"))
-> >  + goto end;
-> >  + err =3D ioctl(c, FIONREAD, &avail);
-> >  + ASSERT_OK(err, "ioctl(FIONREAD) pre-insert error");
-> >  + ASSERT_EQ(avail, sizeof(buf), "ioctl(FIONREAD) pre-insert");
-> >  +
-> >  + /* Step 3: Insert socket into sockmap */
-> >  + err =3D bpf_map_update_elem(map, &zero, &c, BPF_ANY);
-> >  + if (!ASSERT_OK(err, "bpf_map_update_elem(c)"))
-> >  + goto end;
-> >  +
-> >  + /* Step 4: FIONREAD should still report the data in sk_receive_que=
-ue */
-> >  + err =3D ioctl(c, FIONREAD, &avail);
-> >  + ASSERT_OK(err, "ioctl(FIONREAD) post-insert error");
-> >  + ASSERT_EQ(avail, sizeof(buf), "ioctl(FIONREAD) post-insert");
-> >  +
-> >  + /* Verify we can still read the data */
-> >  + recvd =3D recv_timeout(c, rcv, sizeof(rcv), MSG_DONTWAIT, IO_TIMEO=
-UT_SEC);
-> >  + ASSERT_EQ(recvd, sizeof(buf), "recv post-insert");
-> >  + ASSERT_OK(memcmp(buf, rcv, recvd), "data mismatch");
-> >  +
-> >  +end:
-> >  + if (c >=3D 0)
-> >  + close(c);
-> >  + if (p >=3D 0)
-> >  + close(p);
-> >  + test_sockmap_pass_prog__destroy(skel);
-> >  +}
-> >  +
-> >  /* it is used to send data to via native stack and BPF redirecting *=
-/
-> >  static void test_sockmap_multi_channels(int sotype)
-> >  {
-> >  @@ -1373,4 +1433,8 @@ void test_sockmap_basic(void)
-> >  test_sockmap_multi_channels(SOCK_STREAM);
-> >  if (test__start_subtest("sockmap udp multi channels"))
-> >  test_sockmap_multi_channels(SOCK_DGRAM);
-> >  + if (test__start_subtest("sockmap tcp fionread pre-insert"))
-> >  + test_sockmap_fionread_pre_insert(SOCK_STREAM);
-> >  + if (test__start_subtest("sockmap udp fionread pre-insert"))
-> >  + test_sockmap_fionread_pre_insert(SOCK_DGRAM);
-> >  }
-> >  --->8---
-> >=20=20
->=20>  >=20
->=20>  > + *karg =3D sk_msg_first_len(sk);
-> >  > + return 0;
-> >  > +}
-> >  > +
-> >  >
-> >=20=20
->=20>  I've been thinking about this some more and came to the conclusion=
- that
-> >  this udp_bpf_ioctl implementation is actually what we want, while
-> >  tcp_bpf_ioctl *should not* be checking if the sk_receive_queue is
-> >  non-empty.
-> >=20=20
->=20>  Why? Because the verdict prog might redirect or drop the skbs from
-> >  sk_receive_queue once it actually runs. The messages might never app=
-ear
-> >  on the msg_ingress queue.
-> >=20=20
->=20>  What I think we should be doing, in the end, is kicking the
-> >  sk_receive_queue processing on bpf_map_update_elem, if there's data
-> >  ready.
-> >=20=20
->=20>  The API semantics I'm proposing is:
-> >=20=20
->=20>  1. ioctl(FIONREAD) -> reports N bytes
-> >  2. bpf_map_update_elem(sk) -> socket inserted into sockmap
-> >  3. poll() for POLLIN -> wait for socket to be ready to read
-> >  5. ioctl(FIONREAD) -> report N bytes if verdict prog didn't
-> >  redirect or drop it
-> >=20=20
->=20>  We don't have to add the the queue kick on map update in this seri=
-es.
-> >=20=20
->=20>  If you decide to leave it for later, can I ask that you open an is=
-sue at
-> >  our GH project [1]?
-> >=20=20
->=20>  I don't want it to fall through the cracks. And I sometimes have p=
-eople
-> >  asking what they could help with in sockmap.
-> >=20=20
->=20>  Thanks,
-> >  -jkbs
-> >=20=20
->=20>  [1] https://github.com/sockmap-project/sockmap-project/issues
-> >=20
->=20Hi Jakub,
->=20
->=20Thanks for taking the time to think through this carefully. I agree w=
-ith your
-> analysis - reporting sk_receive_queue length is misleading since the ve=
-rdict
-> prog might redirect or drop those skbs.
->=20
->=20There's no rush to merge this patch.
->=20
->=20Since the kick queue on bpf_map_update_elem addresses a closely relat=
-ed issue,
-> I think it makes sense to include it in this patchset for easier tracki=
-ng rather
-> than splitting it out.
->=20
->=20I'll spend more time looking into this and come back with an updated =
-version.
->=20
->=20Thanks,
-> Jiayuan
->
-
-
-Hi Jakub,
-
-  I've been thinking about this more, and I realize the problem is not as=
- simple as it seems.
-
-  Regarding kicking the sk_receive_queue on bpf_map_update_elem: the BPF
-  program may not be fully initialized at that point. For example, with a
-  redirect program, the destination fd might not yet be inserted into the
-  map. If we kick the data through the BPF program immediately, the
-  redirect lookup would fail, leading to unexpected behavior (data being
-  dropped or passed to the wrong socket).
-
-  I also considered triggering the kick in poll/select via
-  sk_msg_is_readable(). However, this approach doesn't work for TCP
-  because tcp_poll() -> tcp_stream_is_readable() -> tcp_epollin_ready()
-  will return early when sk_receive_queue has data, before ever calling
-  sk_is_readable().
-
-  In the next version, I'll address your other nits and remove the
-  sk_receive_queue check from tcp_bpf_ioctl. I'll also open an issue on
-  the GH project to track this problem so we can continue exploring
-  better solutions.
-
-  Thanks,
-  Jiayuan
+I'm not a fan of the existing cmsg scheme, but we already have userspace
+using it, so getting more performance out of it seems like an easy win?
