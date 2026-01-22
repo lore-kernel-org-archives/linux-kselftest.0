@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A10035B63D;
-	Thu, 22 Jan 2026 22:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD242DEA8F;
+	Thu, 22 Jan 2026 22:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769120443; cv=none; b=LdoBOq/RkhJySmKAnJ6UqcejmNbfDJFRcrP/A7+B6ZtvVYhhTMxJTsXj56QT2ShsBWytChGclcBrYbkMhW3v/uXG4iUBc4u2dDdGTBd+umSmkomc2TNPF0KaL1UGKdruXrZeXCfQyeprZz3oS9FeClvXnRRIeEXfRm8jOopzRjY=
+	t=1769120597; cv=none; b=fEVKcbINRIz9CLG1svnoNM71AqdgVUewhk4/lTqyPH8eRmvgbaajsnE4+d9/boQE4FKViUvAiBB98Qll37seoljGvvnkHYXQSVcvMWMpSMU+yUh0CbdkWV5AeqEbKIkgFVF0qC1j6w9VthitENtpZQcYJ9HXbcWH92t6Y2t1lCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769120443; c=relaxed/simple;
-	bh=jzu4EH9RtPfER/4dAwUxG4EpQcz1B60rHGCR3ANTIko=;
+	s=arc-20240116; t=1769120597; c=relaxed/simple;
+	bh=rI8cEY7QQ/tpSibbWQK6eB3pyIwIXZc1joW/Z6zajq8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LdJ5pDYBSuJPvqYJpenAFr/tJw4JZuNdM7Eq1DxB6vEv8eqDUaL6vL8I08NosIWcDy8h3idyWK5uFTXava/GQKT6QpQ8BVJaHQz91P9c2PGEJzMj9C+SwNOCFayAXHLzgRPZ1ZlEIJXyjwj2Mogz3t7vLfy4/g90TOIFhIGBleI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bot4zvaC; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=cT3LNS1uhdUvK7Q+0DAei43T4nFXytb+3RdpEp6B7d/8MtXjj5Sv9YGT1kEmamHs2jmVI++c7DOxCuFmcYi6mEXfRFvPfFKaFdLPWCYhXl/WsypRMYbs3MaTeRrAATBda9IOBcfm0XYS/8dz8jXzeNGTAWHRCqTvH28W8/bcJ6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xj5/UTFB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bot4zvaC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAFBEC116D0;
-	Thu, 22 Jan 2026 22:20:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xj5/UTFB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C8B7C116C6;
+	Thu, 22 Jan 2026 22:23:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769120442;
-	bh=jzu4EH9RtPfER/4dAwUxG4EpQcz1B60rHGCR3ANTIko=;
+	s=k20201202; t=1769120597;
+	bh=rI8cEY7QQ/tpSibbWQK6eB3pyIwIXZc1joW/Z6zajq8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Bot4zvaC3VKoQCkLVxiMMW57UXfYBtgw0ff/qIvN9YUd5PizoNdJ2lOXAB7I+Eq5P
-	 GeQGgKlAh/CUAujvoR5vWMknR84HktdPw+yWM+Np72+1j9pSpEGXwR4ftwFU684A+T
-	 b66lWoDIiNsxQfM+n+7c034mIxqKRz/I3iw86yAtC9ovWh/obpnQkojQRyH/YM5M0U
-	 vIgBpuqbmjAtcNyC2bXLyWchPWAa8ypelg+YehL5g/sha5YZrTXacEr2ej8490a5/g
-	 du51+Rr54b/fwdu7okY3/2IC833rg6+rmcv21mpD+JypUnekAoqv6F7/HF+sqNnLqe
-	 c/tNK2R8Np7lA==
-Message-ID: <a4c83b16-3307-497d-9690-0e31672f3202@kernel.org>
-Date: Thu, 22 Jan 2026 23:20:37 +0100
+	b=Xj5/UTFB2f/mWRyHUyR7fOrgLt7tdYGJ89R8wttK585IX2k+7+zX+0Vw5XPgm9VF7
+	 F30uDULPRZTO1j4S1+OqDT2KHGAsp3BvOZRubhj5N/vxjLbRmTaJb3xExRqQXpmD4J
+	 lDrNAWDhvoECk/a/HRQfMC7hqMddcceDFOy1DH9gpiIclHnlaPK1QIU7KR8t2U4WkC
+	 IjqS2EJVdDJc7kJ+pmCN6Mp8iJXnZ1JXk5sUepdU3g89o0plkE8xjbAkfVc1pc44Da
+	 ou8b7IdFp9nuIa2fiwB785GxYWBbFT4JoUmhygCX5Ok3R0ZtE+fhRRMeKFQ9aVnvBf
+	 zGzJzp+wwBs2Q==
+Message-ID: <514a3e29-6f5e-4d7c-9e67-cb001573d41c@kernel.org>
+Date: Thu, 22 Jan 2026 23:23:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,7 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/9] selftests/mm: introduce helper to read every page
+Subject: Re: [PATCH v3 9/9] selftests/mm: report SKIP in pfnmap if a check
+ fails
 To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
@@ -43,7 +44,7 @@ Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
  Mark Brown <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
  Shuah Khan <shuah@kernel.org>
 References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
- <20260122170224.4056513-7-kevin.brodsky@arm.com>
+ <20260122170224.4056513-10-kevin.brodsky@arm.com>
 From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -89,56 +90,31 @@ Autocrypt: addr=david@kernel.org; keydata=
  cFAM8nBWrEmNU2vvIGJzjJ/NVYYIY0TgOc5bS9wh6jKHL2+chrfDW5neLJjY2x3snF8q7U9G
  EIbBfNHDlOV8SyhEjtX0DyKxQKioTYPOHcW9gdV5fhSz5tEv+ipqt4kIgWqBgzK8ePtDTqRM
  qZq457g1/SXSoSQi4jN+gsneqvlTJdzaEu1bJP0iv6ViVf15+qHuY5iojCz8fa0=
-In-Reply-To: <20260122170224.4056513-7-kevin.brodsky@arm.com>
+In-Reply-To: <20260122170224.4056513-10-kevin.brodsky@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 1/22/26 18:02, Kevin Brodsky wrote:
-> FORCE_READ(*addr) ensures that the compiler will emit a load from
-> addr. Several tests need to trigger such a load for a range of
-> pages, ensuring that every page is faulted in, if it wasn't already.
+> pfnmap currently checks the target file in FIXTURE_SETUP(pfnmap),
+> meaning once for every test, and skips the test if any check fails.
 > 
-> Introduce a new helper force_read_pages() that does exactly that and
-> replace existing loops with a call to it.
+> The target file is the same for every test so this is a little
+> overkill. More importantly, this approach means that the whole suite
+> will report PASS even if all the tests are skipped because kernel
+> configuration (e.g. CONFIG_STRICT_DEVMEM=y) prevented /dev/mem from
+> being mapped, for instance.
 > 
-> The step size (regular/huge page size) is preserved for all loops,
-> except in split_huge_page_test. Reading every byte is unnecessary;
-> we now read every huge page, matching the following call to
-> check_huge_file().
+> Let's ensure that KSFT_SKIP is returned as exit code if any check
+> fails by performing the checks in pfnmap_init(), run once. That
+> function also takes care of finding the offset of the pages to be
+> mapped and saves it in a global. The file is now opened only once
+> and the fd saved in a global, but it is still mapped/unmapped for
+> every test, as some of them modify the mapping.
 > 
-> Reviewed-by: Dev Jain <dev.jain@arm.com>
 > Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 > ---
->   tools/testing/selftests/mm/hugetlb-madvise.c      | 9 +--------
->   tools/testing/selftests/mm/pfnmap.c               | 9 +++------
->   tools/testing/selftests/mm/split_huge_page_test.c | 6 +-----
->   tools/testing/selftests/mm/vm_util.h              | 7 +++++++
->   4 files changed, 12 insertions(+), 19 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-> index 05d9d2805ae4..5b12041fa310 100644
-> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
-> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-> @@ -47,14 +47,7 @@ void write_fault_pages(void *addr, unsigned long nr_pages)
->   
->   void read_fault_pages(void *addr, unsigned long nr_pages)
->   {
-> -	unsigned long i;
-> -
-> -	for (i = 0; i < nr_pages; i++) {
-> -		unsigned long *addr2 =
-> -			((unsigned long *)(addr + (i * huge_page_size)));
-> -		/* Prevent the compiler from optimizing out the entire loop: */
-> -		FORCE_READ(*addr2);
-> -	}
-> +	force_read_pages(addr, nr_pages, huge_page_size);
->   }
-
-Likely we could get rid of read_fault_pages() completely and simply let 
-the callers call force_read_pages() now?
 
 Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
-
 
 -- 
 Cheers
