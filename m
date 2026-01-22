@@ -1,71 +1,99 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B701E33B96B;
-	Thu, 22 Jan 2026 17:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD5033F38B;
+	Thu, 22 Jan 2026 17:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769103799; cv=none; b=Rode/uarOPyJC/RPEjjMJjBoQzTOec4Q1RIlrSIT5O0yOD5fTh9SW/ddU2Dag3qtRlb5E9y9RfADR3+rqG7rbrdZWDl7toKG7DQ57R9O4AnejF1YmGKeEI8CFQVR60W1BjBE9UbbnYqWpXxS9/FaXkT9KLfc7byvpwl4eUAxInU=
+	t=1769103993; cv=none; b=QLcOIXz3umwcjglaK7Aog3kM3FkmHHvcZ1uOwv/LCIHOe+zYh0Elbcutr7XgOeVBaoQFK6X0Lq9/a0P76YBqfbfVfnl8UMWP+uo31DHjyWFt5XnKVDZr12IsDZLYAXR7qPVAu7r5uCcfV4xy4tqOlQJHpmKG/Dr0JFNBtLh6+3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769103799; c=relaxed/simple;
-	bh=kd5U81ugSFrI2oYb9PjmzcUiQvmaYEyWje4S/R3TWbQ=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=MzBo5UD23Fz/0u0Od4V66A+w+QWvqKl+0b+YkBeZiE8+ZJTntxTHJAGSuPdIdIhM2eXSnKvyFu3nfSvLmpMTvChGjhI9VMT4MwyK1+1yLWinWrv5TjvO0GsuZw59JPj8K2GjVxbR6COYfJvUEMsziHmZVAtQg5o5fs2lKvstza8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39CAA1476;
-	Thu, 22 Jan 2026 09:43:05 -0800 (PST)
-Received: from [10.1.194.63] (e142334-100.cambridge.arm.com [10.1.194.63])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6DE1C3F632;
-	Thu, 22 Jan 2026 09:43:10 -0800 (PST)
-Message-ID: <189f12fb-a558-41aa-9194-19053c6b350b@arm.com>
-Date: Thu, 22 Jan 2026 17:43:09 +0000
+	s=arc-20240116; t=1769103993; c=relaxed/simple;
+	bh=J6EE2JV/EP3jDCqUxKjcoNGe9PWk5ovakEfZ60HsXpU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WXSOpcra/TPHsS54Bi5p2Dlx9AaGQMw9XjUQV3jbTVa51HbQbfkU1qzwJkAX+oB4Y5/wPFb9EZ2SXBj9Zov8cyxuypzZpwVKufk/R/KBb/UN+85gMgytl0iW5cQAqJAxclQY2rZeUYAlu6qldvIz3y5KDtuXpnEbK48+jR+96TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sIuK0HKN; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sIuK0HKN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D73CAC16AAE;
+	Thu, 22 Jan 2026 17:46:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769103993;
+	bh=J6EE2JV/EP3jDCqUxKjcoNGe9PWk5ovakEfZ60HsXpU=;
+	h=From:Subject:Date:To:Cc:From;
+	b=sIuK0HKNjPaDFeFLGLaIB6HB5ac6aJ3xfuMpKzDfE8DFEERMPLmKcWU4uKHZ2vdKH
+	 AE/Ldi4PPeLOKxGsA0kFNEG52gUQSEtxsWBI36yirROATAemw5S01hwpzEF9P3HSnz
+	 1cMP5LnpTmjYyUFaH51fO0ZGI1EL894YRuHGINFlVvs3CMwn6peAhKVIXIDQC9iB1R
+	 2Vrk6hQclxubXluqvHhaLEsPHwrn5RhB1u7G62DxfTyqeZSjqI+KGzrqLTFd1YBvrj
+	 pyzMsS9PIMWxaWrNgFusMvyj9GxhJNCE/Ji1lJ0dwdO8ZeUVUJ64xAtvfYCLcLCHJE
+	 NF0JR/Dz6c+0Q==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: [PATCH nf-next v4 0/5] Add IP6IP6 flowtable SW acceleration
+Date: Thu, 22 Jan 2026 18:46:12 +0100
+Message-Id: <20260122-b4-flowtable-offload-ip6ip6-v4-0-ea3dd826c23b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com, linux-kernel@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Dev Jain <dev.jain@arm.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark Brown
- <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v3 7/9] selftests/mm: fix faulting-in code in
- pagemap_ioctl test
-To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
- <20260122170224.4056513-8-kevin.brodsky@arm.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-In-Reply-To: <20260122170224.4056513-8-kevin.brodsky@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/43NUQuCMBDA8a8Se26xm3ObPfU9ooc5bzYSJ1OsE
+ L97UwiKQIJ7uP89/G4iPUaPPTnuJhJx9L0PbQqx3xF7NW2N1FepCWc8B84ULQV1TbgPpmyQBpd
+ 2U1HfyTRUY2G4lS4zSpEkdBGdf6z6+ZL66vshxOf6bITl+p87AmUUNGamVE4JbU83jC02hxBrs
+ sAj/8SKbYwnTAgNykGJuZU/WPbGJAOQ21iWMAvOmkrnpmD5FzbP8wvR56bsYQEAAA==
+X-Change-ID: 20251207-b4-flowtable-offload-ip6ip6-8e9a2c6f3a77
+To: Pablo Neira Ayuso <pablo@netfilter.org>, 
+ Jozsef Kadlecsik <kadlec@netfilter.org>, Florian Westphal <fw@strlen.de>, 
+ Phil Sutter <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Lorenzo Bianconi <lorenzo@kernel.org>
+X-Mailer: b4 0.14.2
 
-On 22/01/2026 5:02 pm, Kevin Brodsky wrote:
-> One of the pagemap_ioctl tests attempts to fault in pages by
-> memcpy()'ing them to an unused buffer. This probably worked
-> originally, but since commit 46036188ea1f ("selftests/mm: build with
-> -O2") the compiler is free to optimise away that unused buffer and
-> the memcpy() with it. As a result there might not be any resident
-> page in the mapping and the test may fail.
-> 
-> We don't need to copy all that memory anyway. Just fault in every
-> page.
-> 
-> While at it also make sure to compute the number of pages once using
-> simple integer arithmetic instead of ceilf() and implicit
-> conversions.
-> 
-> Fixes: 46036188ea1f ("selftests/mm: build with -O2")
-> Cc: Usama Anjum <Usama.Anjum@arm.com>
-> Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
-> Reviewed-by: Dev Jain <dev.jain@arm.com>
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> ---
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+Introduce SW acceleration for IP6IP6 tunnels in the netfilter flowtable
+infrastructure.
 
+---
+Changes in v4:
+- Take into account encap limit option during tunnel MTU calculation
+- Take into account ctx->offset to get next-header type in
+  nf_flow_ip6_tunnel_proto()
+- Link to v3: https://lore.kernel.org/r/20260116-b4-flowtable-offload-ip6ip6-v3-0-c1fcad85a905@kernel.org
+
+Changes in v3:
+- Split patch 1/4 in two separated patches 1/4 and 2/4 and improve
+  commit logs
+- Add more comments in the code
+- Rely on skb_header_pointer in patch 2/4
+- Link to v2: https://lore.kernel.org/r/20251209-b4-flowtable-offload-ip6ip6-v2-0-44817f1be5c6@kernel.org
+
+Changes in v2:
+- Fix compilation when CONFIG_IPV6 is disabled
+- Rely on ipv6_skip_exthdr() in nf_flow_ip6_tunnel_proto() to avoid
+  use-after-free issues
+- Drop patch 2/5 from v1
+- Link to v1: https://lore.kernel.org/r/20251207-b4-flowtable-offload-ip6ip6-v1-0-18e3ab7f748c@kernel.org
+
+---
+Lorenzo Bianconi (5):
+      netfilter: Add ctx pointer in nf_flow_skb_encap_protocol/nf_flow_ip4_tunnel_proto signature
+      netfilter: Introduce tunnel metadata info in nf_flowtable_ctx struct
+      netfilter: flowtable: Add IP6IP6 rx sw acceleration
+      netfilter: flowtable: Add IP6IP6 tx sw acceleration
+      selftests: netfilter: nft_flowtable.sh: Add IP6IP6 flowtable selftest
+
+ net/ipv6/ip6_tunnel.c                              |  27 +++
+ net/netfilter/nf_flow_table_ip.c                   | 243 ++++++++++++++++++---
+ .../selftests/net/netfilter/nft_flowtable.sh       |  62 +++++-
+ 3 files changed, 287 insertions(+), 45 deletions(-)
+---
+base-commit: f8156ef0fd8232055396ebf1e044fa06fb8bc388
+change-id: 20251207-b4-flowtable-offload-ip6ip6-8e9a2c6f3a77
+
+Best regards,
+-- 
+Lorenzo Bianconi <lorenzo@kernel.org>
 
