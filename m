@@ -1,23 +1,23 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F2B139BA2E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9610353ECA;
 	Thu, 22 Jan 2026 17:02:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769101367; cv=none; b=Ym6frDX6zUHEY7POh1ZCvd6as4LiUnmeqmMQPvEf2RoJD10t4tifXfVNXh7XvxoVhZuJ06vpjLdQX+arPsAmup0lM7UpYU2Qk0qD4Dyi/u+9DdrTL60I0q770VPvYtoceWT1l5F+sCrE73EvmRU4r+7o1vtu1I56HiCKdB9nYr0=
+	t=1769101368; cv=none; b=VbOdPnYLxo6ySd9xIRrYhYyC1Vgecycij47qXvUHMvCO0DI3mbpa1H12liUxqqQHzPfc24tHp1IOBBcmRy9AuvyZiTzG04cOVKmd80H5a78/8qEApzHE0xkMVf8ZgIORIAM++PHCaLY4+uo+mbXtqVEQSkuntHcxB8UBonfFxBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769101367; c=relaxed/simple;
-	bh=nbWww7zFwokXENYKIQfUH/f8WSUwimnfG8LGROYYa0o=;
+	s=arc-20240116; t=1769101368; c=relaxed/simple;
+	bh=2hMGx95vnh6gsO5PRXVTxc0UWEAyKtwTPhrSM17PS18=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uNXdmsD3s4HLHNUUHHKY7URZhEOBlHuNyJTFlN/M089zpzec6lkyZYQ9JEiePMC+hOAKTII55w0nMIVFNIz5wm0a9KVYTh03fhvEVi7AY5jedASGCa/JBlTQYEsP9Wh7yqF1ohVxcRNWK1Q5DAtu04IusX6DwcB2V7/3oEHVFPg=
+	 MIME-Version; b=DMdk3H4kfallLUPstaNZuduSw6jR+sVlpKw/RnwQ5r4AnCjCy0yFsBb33ortGwNRyzzdHxezbDDfXAqllqdOcz6q3tldu7ZNVCAD1/PJjDvZRszkM4nERVCtjUu6EiITWQu2JnK3i6L8cLrfxDWEG2JKcNtsogRkSmPWUxrlPOA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1DD3E1596;
-	Thu, 22 Jan 2026 09:02:33 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 523D41517;
+	Thu, 22 Jan 2026 09:02:31 -0800 (PST)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 245C33F632;
-	Thu, 22 Jan 2026 09:02:38 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 560B83F632;
+	Thu, 22 Jan 2026 09:02:36 -0800 (PST)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
@@ -30,11 +30,11 @@ Cc: linux-kernel@vger.kernel.org,
 	Mark Brown <broonie@kernel.org>,
 	Ryan Roberts <ryan.roberts@arm.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v3 3/9] selftests/mm: pass down full CC and CFLAGS to check_config.sh
-Date: Thu, 22 Jan 2026 17:02:18 +0000
-Message-ID: <20260122170224.4056513-4-kevin.brodsky@arm.com>
+	Paolo Abeni <pabeni@redhat.com>,
+	Yunsheng Lin <linyunsheng@huawei.com>
+Subject: [PATCH v3 2/9] selftests/mm: remove flaky header check
+Date: Thu, 22 Jan 2026 17:02:17 +0000
+Message-ID: <20260122170224.4056513-3-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20260122170224.4056513-1-kevin.brodsky@arm.com>
 References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
@@ -46,60 +46,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_config.sh checks that liburing is available by running the
-compiler provided as its first argument. This makes two assumptions:
+Commit 96ed62ea0298 ("mm: page_frag: fix a compile error when kernel
+is not compiled") introduced a check to avoid attempting to build
+the page_frag module if <linux/page_frag_cache.h> is missing.
 
-1. CC consists of only one word
-2. No extra flag is required
+Unfortunately this check only works if KDIR points to
+/lib/modules/... or an in-tree kernel build. It always fails if KDIR
+points to an out-of-tree build (i.e. when the kernel was built with
+O=... make) because only generated headers are present under
+$KDIR/include/ in that case.
 
-Unfortunately, there are many situations where these assumptions
-don't hold. For instance:
+A recent commit switched KDIR to default to the kernel's build
+directory, so that check is no longer justified.
 
-- When using Clang, CC consists of multiple words
-- When cross-compiling, extra flags may be required to allow the
-  compiler to find headers
-
-Remove these assumptions by passing down CC and CFLAGS as-is from
-the Makefile, so that the same command line is used as when actually
-building the tests.
-
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Yunsheng Lin <linyunsheng@huawei.com>
 Reviewed-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- tools/testing/selftests/mm/Makefile        | 2 +-
- tools/testing/selftests/mm/check_config.sh | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ tools/testing/selftests/mm/Makefile | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 4e5c8a330a0c..de4afc34e3b1 100644
+index bb93101e339e..4e5c8a330a0c 100644
 --- a/tools/testing/selftests/mm/Makefile
 +++ b/tools/testing/selftests/mm/Makefile
-@@ -230,7 +230,7 @@ $(OUTPUT)/migration: LDLIBS += -lnuma
- $(OUTPUT)/rmap: LDLIBS += -lnuma
+@@ -46,12 +46,8 @@ CFLAGS += -U_FORTIFY_SOURCE
  
- local_config.mk local_config.h: check_config.sh
--	/bin/sh ./check_config.sh $(CC)
-+	CC="$(CC)" CFLAGS="$(CFLAGS)" ./check_config.sh
+ KDIR ?= $(if $(O),$(O),$(realpath ../../../..))
+ ifneq (,$(wildcard $(KDIR)/Module.symvers))
+-ifneq (,$(wildcard $(KDIR)/include/linux/page_frag_cache.h))
+ TEST_GEN_MODS_DIR := page_frag
+ else
+-PAGE_FRAG_WARNING = "missing page_frag_cache.h, please use a newer kernel"
+-endif
+-else
+ PAGE_FRAG_WARNING = "missing Module.symvers, please have the kernel built first"
+ endif
  
- EXTRA_CLEAN += local_config.mk local_config.h
- 
-diff --git a/tools/testing/selftests/mm/check_config.sh b/tools/testing/selftests/mm/check_config.sh
-index 3954f4746161..b84c82bbf875 100755
---- a/tools/testing/selftests/mm/check_config.sh
-+++ b/tools/testing/selftests/mm/check_config.sh
-@@ -16,8 +16,7 @@ echo "#include <sys/types.h>"        > $tmpfile_c
- echo "#include <liburing.h>"        >> $tmpfile_c
- echo "int func(void) { return 0; }" >> $tmpfile_c
- 
--CC=${1:?"Usage: $0 <compiler> # example compiler: gcc"}
--$CC -c $tmpfile_c -o $tmpfile_o >/dev/null 2>&1
-+$CC $CFLAGS -c $tmpfile_c -o $tmpfile_o
- 
- if [ -f $tmpfile_o ]; then
-     echo "#define LOCAL_CONFIG_HAVE_LIBURING 1"  > $OUTPUT_H_FILE
 -- 
 2.51.2
 
