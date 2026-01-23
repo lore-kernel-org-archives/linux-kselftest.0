@@ -1,243 +1,287 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011023.outbound.protection.outlook.com [40.93.194.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DC233E34C
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 00:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A432DF707;
+	Fri, 23 Jan 2026 01:07:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.23
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769129639; cv=pass; b=o9iEEg8uofGRYel6AYhTc7SXjzpGhwLGfGUTGvs+3CH4VyFdmRYWmONptvNlSITGnVX1FOaqECs5sAiZO54DeKYy7GzOMjygp7St3kGX1O9sHRnxwjnn6i2ZiTP+DvQCjVwMHtebe86B2Pl1P61gZRyOEuF4PSb9fnyUWe/RkxM=
+	t=1769130482; cv=fail; b=BRveMtDW3dkokuOlqKLmOOh8HOGoRKx1YtKNgwEpMRgackOqt7+08krkcrQOlZMH6r32HVImEQUeCyditFqrQoWEU5CivRp19uosrVPqxmDlxnv32RNfq7bmDpdNUcpkdyHkE+5rHoW4tKO9eA4AmJDdWpppDAvs8hvPdZLFpUY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769129639; c=relaxed/simple;
-	bh=yBMXOwcpjCZoufdlj1pFQsMJaO1vK6MgX5cAbS0lKxY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vp+wNhp2ooXoxOzctqdro9bI0vHlfim7+VA4DzzyuqQ9lHLyWoWk5KRCxYebxw0NuJTs2szxFo3hqcpcLP75ls8Zpgti+3IQCzP/qTXuNY854YvF5gzeEh35sp6UhyXRysR+/1pQfdxIeUVmrUxjgAlbdV23hPo2PW0sBHDx+0M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mn0kQ2YS; arc=pass smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769130482; c=relaxed/simple;
+	bh=G5tMSZDbidT07ZdMDMVCUJ2YOjJIeRYSZbbpkrgAuD4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=iogbQBn6M3k032NUowlBlMchyWB03jr7qle0DH/TdhWdMFuM8tbueACiYToifEMseBBZQ4cD1OEguY0uEliMOnEe2CFmabWhm1uXTFSfeZd1d8owlIBJJwsz7Bu6jW9vfn3S+Uj/5DLVeSVkXetbQU3JR/y1REaFx9gpXZtB2kM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=x6q2pZYI; arc=fail smtp.client-ip=40.93.194.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mn0kQ2YS"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a0c09bb78cso11266595ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Jan 2026 16:53:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769129628; cv=none;
-        d=google.com; s=arc-20240605;
-        b=JaVaOxyLOY7zo3JFe2py7RdRhATe3VjUuv7bxL2gx3Lt3yxG481hbWVV+7jRKK+bLd
-         Iqo9ecDqANXvBZhzRrKQn5ZjQsUvgh7sYh3Zlsa82f6h3T9a0HMC7ztrVIcPTKtGTcPw
-         NBx8749in4HlAka9okJII24Ro1gl/JnoB5M++7P4IA0o2ZkroVdiI21Cn8KDvlixA3qj
-         601k0096u5JxMBY7pbvA0xNg7fUcY1HbciHNgDzffJgTnFmpgkSCXfPiqDh591xYSbyk
-         LrC55uguiFAQ+BjoerZQwvFArCvY+l/QYP2+3QLiAeiaYHLB8Lqi/kd7A3uu5evfgq0x
-         54VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0udLKwql0iZ1SIidaCEnZjm9GhWInp/dfA55RalANy8=;
-        fh=FhYzC06rbldmCZl5jD7OU4329DI14eeR2km1GRDE26k=;
-        b=AyYu5JzSXXb9NruwVptvsY4IiJd/xkKUfnHUaHCIJjs7lZgH0FitQKDkLw0kEuwv0c
-         P41neE0CXlSZZLu8WIqmvc862cSBpsr8IV/D/qYtCXKDVmYUqnd69ji0yrv9fhpD7rO2
-         p50EWwbsL3gF9IThf9/a2kQBd41VP46V9S1ZmKP2xSWzxJrQT/fr5KZuXPEmc/8Qt2Hp
-         nm/jsolNJfoCxJCkI0pVLh0vpVykkYziHyu+QdTSS1k30fYeAcb864U+utA51coX4+6l
-         pZ1/E3kUBXbg19gH6NSvJm6tGv3Mpn8kf7eDvnUMiYebyDKGLeM520jKsZrDfSJjaEK4
-         iD8A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769129628; x=1769734428; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0udLKwql0iZ1SIidaCEnZjm9GhWInp/dfA55RalANy8=;
-        b=Mn0kQ2YSe+Cnxf4NF5MddlWv1GorlD3WUAVEN2eT8o9DjsAFWLEMladCbDtKpMkKjE
-         aXe2OOaOlK6H3G/vdqmWwevrjzgZmsYyUQXIamHW+xtMFt5R14gBOdOOokd4OTL0gbL4
-         pDf2/+tKC8LDVU8IlVPRf/IWMAx+HMqLPn5QkUXXwtOYn0PWh4MRL2P8wzINscIwjweK
-         SZg8cOBhXa2UTCkXgsgzZEtKy8H9EZF4oGUaTxlrsguWlMyscc8U8lzuybAKr6weNLiK
-         WaufEs8h9KlAlopbrv/wGvltSd/MwK4ICnIw96tP3NQeEAzfkQKI5KC3aHk9qDAu4K//
-         QNtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769129628; x=1769734428;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0udLKwql0iZ1SIidaCEnZjm9GhWInp/dfA55RalANy8=;
-        b=AQiUNWRMn7h7vCZdPwVulDXjmkzZo6XG5XEmdTy7ujwdfO+/KlYxxHpiorMLL0ce4O
-         lN8AaXlEKpmflRopY+7p+x0eaisDWCSC0AeTVRvYnQvadGXtwkR74bPtkg2yOM6Gq2EI
-         xoogw+pZWGYgjX/7Hd5YlPI6PkJaiwphGSUEdLWSoBH/esYuONMQWwz6zpTWhFR3Le/d
-         XXOWB/OBPRGQ9ciWa84jW0MEhPjm7prd3+bBfO5wHY3wGsWQxZjFR3OeJVYAlDGGo9mX
-         XCxDXvx/3XsBoL2mnOWvDz4UzT/p7cxXc140unWp2m3Z5rB9JlWSy605y/pkTg5OchbB
-         7mWA==
-X-Forwarded-Encrypted: i=1; AJvYcCUNRG1Lc0Y8dnAaDeZe6LxaLUQ1GhNn1k9Z3G/+D5sPyhcMRhzyaNBfZks5u6HKyzKowKg7ElcGW6pQV0CEBvU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9DDGG+lg9bxUlfKGhKAp9m12WuoLbNgwIg9en6dgVRTw6CUOd
-	M/XKDeCGKpInrGTEkJw1k6gEeW/MKZhk5npsHuJIs1vIJI+kyZ23nu1czo57MFg6ORF+pmOpo74
-	9vplipnxLTMHSCm3MryBqYZuBwpNrIg0=
-X-Gm-Gg: AZuq6aLqOzr0C+fE8kgFtlk8Ue0/pFEVLa4gfMRk2Rlro5CYFuswqHVslHB/dwYUxnC
-	sADDiphe6amckjXb5WEZXxe2tiXJ9Kd+NwzoGqT1fDlsVUeSuQX00uT+hwJqknfYVZp4O7xYqV5
-	Va4lnvHy2iAvFWxS01NryXqOcBZENGgsUnVxD65YKGDI44f4ocPnHQdKF07K6l+snPAkpuwiNly
-	uaV2LRysl1sQTcs48smzkjgodZGT30CihRZ3sB5BzY1dLjRZ1kgd32aa/0k+O4qkgBughN47VRR
-	Eqc/8yFBGv8=
-X-Received: by 2002:a17:903:f8e:b0:2a7:9163:8e60 with SMTP id
- d9443c01a7336-2a7fe80fddfmr9079865ad.23.1769129627880; Thu, 22 Jan 2026
- 16:53:47 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="x6q2pZYI"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RcuxounpKitZ9PMK00BmzHajjeakjzTGPuGJCTsH7pxn1D30tL2tTTBqFslxqfPtYomSbXoc1u1FrGxtmv1b8/2C6KS7xsfMrgouCXBwDNDCKTVFhaQb7DYFXFKPRTAgdvVMiUXk7rc8HuUPU3sZCINGlPOyr2LP7XsyT9BisOP9uYFoxYt1O4zif5MgeC8bhcDr0LAzDaAweTmcWrVJzUQ4gGv5O99imvEKSQzCCXomO653u/dywLmfNkspsaMz/0EflLeYz6U17eF+tS9lGCQnJ9dupXVsbEbQOkfkuNlzU5cak1PDSo2fngpNaml3Wc5W7wnieAfnn/O1B7kugw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SYrhYi3iw0hbjfwdj3mGxPlOn1TG7k02knqwi3/UMzM=;
+ b=m1GqiAc81ZD7tSF1P+hPlTX11sHN6efohAZZMp2OI/TP3Th6EOmc192k9xFhWyUZbeUNYDJilyQYsiuSpJTmaLvJpl0aYG4ZFdlulS76goqFpni51Mguteq5EI2wwFzYjx0ZbbT7N+pO7SUb6Oy+U7ywvWfMrrQ6Z2w3yiKl1CgCbUD6TrnhVyq2hEJShNUDSRJr6Q1LELxD8PxkfAV8zKvSL/pmkS0CiZk6C5FQIr9mXGs678rq/zIJ3LuCT09+pfX5+xMvQAOf+tYm6Np20w+OjybquWCqXTD1iur7A8syXHgjlqHw2BKYdi0Kj9pI2pfms+G0dailwdfKFk6R5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SYrhYi3iw0hbjfwdj3mGxPlOn1TG7k02knqwi3/UMzM=;
+ b=x6q2pZYIUBVru2YI+QUx2JhLNTVf6tJYTIeE+jPIMd09dosH0dE2WJUICCESHDtmqNTBtMxi+q89n99HtigTOatLRGwBWjHekmCDZ4j5rDpxZm0SOBBmKYB/7iFesLkBJ2BWsjOdTFMr9zyM1is4wP61Q1bvAiVLM5ZRkuspUwI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH3PR12MB9194.namprd12.prod.outlook.com (2603:10b6:610:19f::7)
+ by SJ0PR12MB8140.namprd12.prod.outlook.com (2603:10b6:a03:4e3::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.10; Fri, 23 Jan
+ 2026 01:07:43 +0000
+Received: from CH3PR12MB9194.namprd12.prod.outlook.com
+ ([fe80::1e6b:ca8b:7715:6fee]) by CH3PR12MB9194.namprd12.prod.outlook.com
+ ([fe80::1e6b:ca8b:7715:6fee%4]) with mapi id 15.20.9542.010; Fri, 23 Jan 2026
+ 01:07:43 +0000
+Message-ID: <0295a5bb-2567-48f8-9806-0467907143d5@amd.com>
+Date: Fri, 23 Jan 2026 12:07:26 +1100
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v8 07/15] iommupt: Add map_pages op
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
+ Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>,
+ iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+ Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+ llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <pjw@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Will Deacon <will@kernel.org>,
+ Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+ James Gowans <jgowans@amazon.com>, Kevin Tian <kevin.tian@intel.com>,
+ Michael Roth <michael.roth@amd.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
+ Samiullah Khawaja <skhawaja@google.com>, Vasant Hegde <vasant.hegde@amd.com>
+References: <7-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+ <fc4f0354-4e6d-452d-abfb-fe24e53253a2@amd.com>
+ <20260117154347.GF1134360@nvidia.com>
+ <e0514ec6-b428-4367-9e0d-cfb53cc64379@amd.com>
+ <20260119173734.GL1134360@nvidia.com>
+ <e8cb2549-6a17-47ce-8e9f-96c576890262@amd.com>
+ <20260121170931.GG1134360@nvidia.com>
+ <5a3dfc0a-eca4-4de1-96cd-b4034f0b8e06@amd.com>
+ <20260122141240.GM1134360@nvidia.com>
+From: Alexey Kardashevskiy <aik@amd.com>
+Content-Language: en-US
+In-Reply-To: <20260122141240.GM1134360@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SY5P282CA0107.AUSP282.PROD.OUTLOOK.COM
+ (2603:10c6:10:20b::12) To CH3PR12MB9194.namprd12.prod.outlook.com
+ (2603:10b6:610:19f::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260120152424.40766-1-leon.hwang@linux.dev> <20260120152424.40766-3-leon.hwang@linux.dev>
-In-Reply-To: <20260120152424.40766-3-leon.hwang@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 22 Jan 2026 16:53:34 -0800
-X-Gm-Features: AZwV_QhVQ3_tmlZbyi2JgIuf-ozS36BC6ziWbq4VPwpzBkySzzimkp-0gd_aROE
-Message-ID: <CAEf4BzYuZsFC-DPhhzLcyFTahucHP59+6kAc0sooY2g+SqgrEA@mail.gmail.com>
-Subject: Re: [RESEND PATCH bpf-next v6 2/9] libbpf: Add support for extended
- bpf syscall
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>, 
-	Andrey Albershteyn <aalbersh@redhat.com>, Willem de Bruijn <willemb@google.com>, 
-	Jason Xing <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>, 
-	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
-	Rong Tao <rongtao@cestc.cn>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB9194:EE_|SJ0PR12MB8140:EE_
+X-MS-Office365-Filtering-Correlation-Id: d06dee70-2ce9-4ebd-152b-08de5a1bcfd7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?aHdwYTVtK0VQeGNLdFNHS3ltRUk0SjJnQ1pxWHh3MjNuUDFFVHhxYUl5R1gv?=
+ =?utf-8?B?S3FlV1FMSFNNVU1BdkhBMmk4dTUvUTl2N0JrRnYveW1BK2ppRzc1NG5RSzlP?=
+ =?utf-8?B?OG5Mc1VaVkM3ZEFkRUMrTGwwdG8vcTZiTHk3bGM3SG13cDJaQkZtTnZlN25F?=
+ =?utf-8?B?SysxbXlzSVJJektIL244NWp5UEV6dm95eUptUThiMFVmeERwTy9KV0gxWWE1?=
+ =?utf-8?B?NlFnZmI1QjZGdjhzUlQ4VDBuQ0pvcDRHV2xFRk1OMVJIVytkVERaM243bDdS?=
+ =?utf-8?B?RkFPY2YzVk5HMjhHV2dBU1UyYkh4Q1FOT0RoTWdqcHhrZW40Vi9la2V0S1dF?=
+ =?utf-8?B?Zm43S1NoSDF0NjVmb2p4dTJ3OG9rRCtydUtNWUFXdHdWM21hbHBYalFZOHd4?=
+ =?utf-8?B?bWhCSktnbWJhZThZRVdSa0FwSllId0V3bXNUek9Ec1VqZHgyVXNPVklUV2ho?=
+ =?utf-8?B?VkNSMGVjUTVJTnA5V3NKUlcwcW9SUndaNk9JRGVTZVNPVmtzY3M0N0kxVk9B?=
+ =?utf-8?B?cHpoVTNobkdFNU9KM1hLSWVrWFhCcDBBSTFtcVNlL2hOTldXcmlrVEkzVWZu?=
+ =?utf-8?B?elpWSFJJVTZXa3lFd3NKM1RLdy9RQUdEMWxZNC9tVHhicnJIMmFDYThPTmNt?=
+ =?utf-8?B?ZDIrZHRXZEZ6WGtIanltM1Q3VktZQlpCNjkrOUV6N24yTExGNVFObnBoMUJ6?=
+ =?utf-8?B?b1JUK0N5cVQxVndhTmV5eVBsd01hNGFJS0plTlB3eDFJdnVrN0hxalEyZFhL?=
+ =?utf-8?B?WTkvS21GWENWK3BDVGR6dWQrUk90UDdMcVE3YUI1M2JoMDFlSjVPQkI3bktE?=
+ =?utf-8?B?bU5lWG4wYzk1T0YvSldzMnhEd0dVQWluVWhHaWthbFNIQWM5Yk1lczZKcTRI?=
+ =?utf-8?B?bkVyMEx6KzIwNWw3dTdzbzJBRGNIVS8zaThmQWtZZXdKQmFXQmxyOUMxMUNW?=
+ =?utf-8?B?cFVVc1lONWM1U3JZdXl1MklQZnd6UTdPQUs2aWxSdHhqUkRHamNneXF6Y0Iz?=
+ =?utf-8?B?RWZiRG5PWjlOOUxNS1JEN0xoRVF1ekhtSVhId3BEZFJxUytRRS9yYkNuYXRY?=
+ =?utf-8?B?YXJBa0FUOEhUbjdndFFJSnVrVFRNOHEzNmszcUJJd1ByUXlrcmtOVUkwNmN0?=
+ =?utf-8?B?dFkzNHFYOGFOdXVlTXZvMHpwbGZ6N2t1OWFqaEJXVm9zaUFxdXdCd3ZmTTJ2?=
+ =?utf-8?B?dm9EUkhGeFlCL2RsekpPcFMzbU8vaXRKNFF5dkU2QU5QVEoxR3NmUDB1SElt?=
+ =?utf-8?B?bm41MDlwNzMyU0M4OTM2cjluWWM4cGhMRWtqdGkyU2oxOHppeDVIKzkydDUy?=
+ =?utf-8?B?bVV4NlNRbEVCcFlXRmtpYUlJdnRCU3VuK3M0Slc0MlRCZWtTNXRUdWZ5RTVh?=
+ =?utf-8?B?aVRWZk5uQ2I2ak9tSVM5NzZXMHNNelVFR1lMV0tRL3BaMVZjKzFIa0NwNFVE?=
+ =?utf-8?B?NldGYnEzWktyaWVzYkFjSFZlUUMyd3htOTVhcGQxMmVpSDc2Y2c5cHBwREll?=
+ =?utf-8?B?NVc2bXNLUFp1NGRFWVBNTHNlZzBpVzhTVEdsYjBaK1piNkZmRGcrWjJnai9E?=
+ =?utf-8?B?M1NFdXJyOWlqTmJyUnpJVHlZN2VZRHRheFQyOTNDTTF0bnpQSDBaNDFHN250?=
+ =?utf-8?B?RGQ4N3NyNVlPYytqREtxQUdkcU4xcEpOUEtZZzYrcWs5bFZ1NVVnUTlOVWFm?=
+ =?utf-8?B?SnNYdjBzM244L3g2Y245cktvS0RTVVE4Tm5zcDYyQXpsbkpEbUxIZndtUVBm?=
+ =?utf-8?B?RjhuRDlqOWx3SThYTW5tT0hJclZkT0wxV3pzcHV1WGNGNmtXakVkTE9tZ0xw?=
+ =?utf-8?B?YW9yaFdFcUJhUW9DMXdYZXNmcW1Fei8yNXhlU1pyaDU0ZWJhOW14MzNmc2ZD?=
+ =?utf-8?B?UXAyc2dLL2IyNStGTDB1QkRERHNqL3NRbkZNVmVEbWlFMkxsWVNsNWswTndL?=
+ =?utf-8?B?d1EvM3h5RUc1SEhsSXd1cWFJOUNQWnpQZmFIa3kwTlVmSCszYU9YbThUWlEw?=
+ =?utf-8?B?THlJazFRM1MzQ1o5VFl6ZVVlcmJUcFp1MWNnQWI2bEpPWlFGbk9kYllEZGdq?=
+ =?utf-8?B?cFhkSElCb0Z6QUdPR09nY2gxVnJlZDllT2MyaTJsVkYxVGhLa2o4V3VDcHdq?=
+ =?utf-8?Q?IPvE=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB9194.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZnJQcTdqbVRBaDB4ZGJPVlYwZklrOU5WSWpQcCtDL041azRrbmdOUVgrTjZR?=
+ =?utf-8?B?WitqWnZoZ3lRWVFuYk5pcDV5MkdzOFk2MmhVT3NkWVFwZzNGV2ZxV0N2NU11?=
+ =?utf-8?B?M2tiQ3ByMGRaVG80b0R2dTVpYzJhVjl3NnFiaTYwaTNSeHBkNTVJaEF2T0wr?=
+ =?utf-8?B?M2xLVGJYdERjL0ZMWU5KRXJNUXBQWFBQRDdRbEpQdXdoRWhucUZyWkh4NWJh?=
+ =?utf-8?B?RFVxRnZsTXpTcFNIdGVpYTcxelEvM0ZhNzhydldER3hPZmxqbm52d21KZkIv?=
+ =?utf-8?B?SC9DeS9kQzhiMzdQUTJIVWNobjRzcC80MUFXaDY1ZDFjaWUvMFp1Qm84NzBI?=
+ =?utf-8?B?TGpLbmhTVXZQdFRLaFAwTjBMN3NTL05MQWhJMy9LRGZqVDlOV0oydjM2SCtj?=
+ =?utf-8?B?WkU1Y1VYUHB3ZWxjdlJBNFNPcmoyampvbld1SjdBTFBJUTlWWWJJeG5WWHVn?=
+ =?utf-8?B?TVFCZUpNSytRZzhSVTM2RDc5YitQNURmU213U3JVRHBkNEVNYnRUaUN3cUoz?=
+ =?utf-8?B?cUpLd2N0QlMxeGJKWVNUWC9JY1hZQll1Vi9xTTdIZ0VLNENFSmJFUVpkSDFz?=
+ =?utf-8?B?RjcvZTFUNkxhS3RKRXFDUFJGRjVPYjFlejhSNDlxQlc1ZnBVZ2kweUYzK2VU?=
+ =?utf-8?B?UkswM3pJa1BrUWhnS29PNGFKUWFmQzYwYjRwa2R1TEhZM2dEN1dyNi93TlV6?=
+ =?utf-8?B?b0hDT2xYZlg1Q1orU0RzNHovNCtzQmplaUppenBER1NSVVlIRWRPWEpUaXBt?=
+ =?utf-8?B?cmlaQUJOYWJiSzRaM09rdG9BdkZNeDAycW9WUXRFMHg4VGhhN2RHUlZkNXhr?=
+ =?utf-8?B?Wnp2UXI3Q2hxd3htWVVwN2JqT2JmNzFrT1NXZ2JoWG96aUZ3ZnRQME1qbTdZ?=
+ =?utf-8?B?K2xtQVRNRUY5dVIwbnQzd3dPb1ZQd1dnbWd2K2JyZFVFQm5NQ3R5aXZiUXlZ?=
+ =?utf-8?B?bS9TeHhwN0FXVVgzMDJEcnV4OW1DNmJPVEU2MDRIcUhsVThqRTlsdjhnN3lp?=
+ =?utf-8?B?M1lNMG1yby9xU0RmQWdBNVZBZkJhdmJFbGo4dUpFUWVyZzJCdEdMWm5ZczJQ?=
+ =?utf-8?B?NjhJdzYxV09iQ09UQkxKQVVRU3gvS2p2UWpsRHBXSVVNR2FEdW9Rck42Q1Jr?=
+ =?utf-8?B?T1lpaUdoVzREaW9GZTVWSS9RR3FBQXdHS3R4WFIyZ25vNnVuQ3E1WngwdHRn?=
+ =?utf-8?B?WlFldDFIU3R2aVZuVHNoS1REN0NQSUhOSEhsbm1XUW9ENXRoVlQ2NUZxNFNY?=
+ =?utf-8?B?OFZ3anZ6cWdTRVh5TmFBaTV1bENyQWVmWmczRjhMUzFKK0dKeTFUdFRSdTln?=
+ =?utf-8?B?ZWVZVVVhcWMxY29QMVI4M0sxaFlKNEd3cm92dE9NQTlmMXZDWndIOWxsazBw?=
+ =?utf-8?B?eDZEaTByVXZmbm5FZHVBWDA2UTVuRVpqVDdEYndlYklVQ3VtTnhKQmFqaFBx?=
+ =?utf-8?B?RXhxZXcvL3pEVk94SE4xQXNRazBLbVpZS0FQZ1FHcjF3cGo5Ry9kK3dJekFY?=
+ =?utf-8?B?Wm5reWhkTC9JdjBadkpHVjhxa0czaWdIWWlvMUZPWU41TGNhWnFXdk80dWZG?=
+ =?utf-8?B?aEVjbmxoQ1pxZTZ2RnJIM2JKaDFmalpPK1o4K0xLVU5Mdmk2eGU0Qk16WUVs?=
+ =?utf-8?B?ZkdtaktmZEVQZndsd296SU9CaG14SngycHJaMWFydXZBVlZKMnRQTEJBSFI5?=
+ =?utf-8?B?UnpvUWY4L1BHWTIwdC84Y1JaNW9VcFNJL21kMERHdmJlTHJWeVdBWDhnRmxH?=
+ =?utf-8?B?Yll2Rng2anlxcFJaYlVZT3RmeHdzRTdPRUFMLzlYNE5INTlFTktJbTFVSVYy?=
+ =?utf-8?B?bTBnSmFtZFhiNGlPaVllaDVWd2lZWGI1bHRpRmx2eElxdEk0YUhjcWZOajAz?=
+ =?utf-8?B?Q1hXTUVkUE9XSjVGT2ZaNWozejU0M2lydTJmaDNjeFJqemhJdC9leFlHcXJ1?=
+ =?utf-8?B?bzU4My8rY25xcC9iZU8xZmxhQldUZzhnK2huaDhSdVdpazRZbE84SVhHV3dZ?=
+ =?utf-8?B?bmdEM3o5eEE0SW9IUDNYTnlhdERUUDlsNHpHQkdvSUFtNWM5L3Z4WFhOdkxv?=
+ =?utf-8?B?c0l0TmtEd0Ixa3U2TEpNcVBOQkdZR24wd2lIcXR5M3BhQlJCOHVpTHZYZWZL?=
+ =?utf-8?B?eEloajBkNWZQc2E2SjUxQm9wb25lVkN1aThmM3FDWDNqV0w1TVF5VWdaUVRZ?=
+ =?utf-8?B?U3czZ2Y4THIxQS9FMEFwbW1DSWNFeHMvQzBXcERsTUNwWG01ZFQ2TzAyL215?=
+ =?utf-8?B?SklubHZzcFFWYzdqYkhsOGhPOW43bm13aTkvTzRtdEp4WFNBSUYzbTBIRklk?=
+ =?utf-8?Q?QRriWC+odYGVFOGVCc?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d06dee70-2ce9-4ebd-152b-08de5a1bcfd7
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB9194.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2026 01:07:43.5141
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZL6PqB14mOwcjFjgyfTkPBuzE9eu6fCsznGy4ok9KpdFCBh+CrVERfocHqPDtUv51ZvH/6a0E7m3wQDPRHzLEA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8140
 
-On Tue, Jan 20, 2026 at 7:26=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> To support the extended BPF syscall introduced in the previous commit,
-> introduce the following internal APIs:
->
-> * 'sys_bpf_ext()'
-> * 'sys_bpf_ext_fd()'
->   They wrap the raw 'syscall()' interface to support passing extended
->   attributes.
-> * 'probe_sys_bpf_ext()'
->   Check whether current kernel supports the BPF syscall common attributes=
-.
->
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  tools/lib/bpf/bpf.c             | 32 ++++++++++++++++++++++++++++++++
->  tools/lib/bpf/features.c        |  8 ++++++++
->  tools/lib/bpf/libbpf_internal.h |  3 +++
->  3 files changed, 43 insertions(+)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 21b57a629916..ed9c6eaeb656 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -69,6 +69,38 @@ static inline __u64 ptr_to_u64(const void *ptr)
->         return (__u64) (unsigned long) ptr;
->  }
->
-> +static inline int sys_bpf_ext(enum bpf_cmd cmd, union bpf_attr *attr,
-> +                             unsigned int size,
-> +                             struct bpf_common_attr *attr_common,
-> +                             unsigned int size_common)
-> +{
-> +       cmd =3D attr_common ? (cmd | BPF_COMMON_ATTRS) : (cmd & ~BPF_COMM=
-ON_ATTRS);
-> +       return syscall(__NR_bpf, cmd, attr, size, attr_common, size_commo=
-n);
-> +}
-> +
-> +static inline int sys_bpf_ext_fd(enum bpf_cmd cmd, union bpf_attr *attr,
-> +                                unsigned int size,
-> +                                struct bpf_common_attr *attr_common,
-> +                                unsigned int size_common)
-> +{
-> +       int fd;
-> +
-> +       fd =3D sys_bpf_ext(cmd, attr, size, attr_common, size_common);
-> +       return ensure_good_fd(fd);
-> +}
-> +
-> +int probe_sys_bpf_ext(void)
-> +{
-> +       const size_t attr_sz =3D offsetofend(union bpf_attr, prog_token_f=
-d);
-> +       union bpf_attr attr;
-> +
-> +       memset(&attr, 0, attr_sz);
-> +       /* This syscall() will return error always. */
 
-I'll cite myself from the last review:
 
-> But fd should really not be >=3D 0, and if it is -- it's some problem,
-> so I'd return an error in that case to keep us aware, which is why I'm
-> saying I'd just return inside if (fd >=3D 0) { }
+On 23/1/26 01:12, Jason Gunthorpe wrote:
+> On Thu, Jan 22, 2026 at 09:58:04PM +1100, Alexey Kardashevskiy wrote:
+>>> This issue with the RMP is no different, if you get a 2M IOPTE then
+>>> the HW should check the RMP and load in a 4K IOPTE to the IOTLB if
+>>> that is what the RMP requires.
+>>> That the HW doesn't do that means you have all these difficult
+>>> problems.
+>>
+>> Got it. Interestingly the HW actually does that, almost. Say, for
+>>> =2MB IO pages it checks if RMP==2MB and puts a 2MB IO TLB entry if
+>> RMP==2MB, and for 4KB..1MB IO pages - a 4K IO TLB entry and RMP==4K
+>> check. But it does not cross the 2MB boundary in RMP. Uff :-/
+> 
+> Not sure I understand this limitation, how does any aligned size cross
+> a 2MB boundary?
 
-I didn't say let's just ignore syscall return with (void) cast and
-happily check errno no matter what, did I? Drop the comment, and
-handle fd >=3D 0 case explicitly, please.
+Sorry, probably wrong wording. SNP allows a guest page to be backed by only a 4K or 2M host page, IOMMU always rounds page size down to the nearest 4K or 2M boundary. 4M IO pages can work with 2M RMP but not 4K RMP.
 
-pw-bot: cr
+> Sounds like it was thought about, is it a HW bug some cases don't
+> work?
 
-> +       (void) syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS, &attr,=
- attr_sz, NULL,
-> +                      sizeof(struct bpf_common_attr));
-> +       return errno =3D=3D EFAULT;
-> +}
-> +
->  static inline int sys_bpf(enum bpf_cmd cmd, union bpf_attr *attr,
->                           unsigned int size)
->  {
-> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-> index b842b83e2480..e0d646a9e233 100644
-> --- a/tools/lib/bpf/features.c
-> +++ b/tools/lib/bpf/features.c
-> @@ -506,6 +506,11 @@ static int probe_kern_arg_ctx_tag(int token_fd)
->         return probe_fd(prog_fd);
->  }
->
-> +static int probe_bpf_syscall_common_attrs(int token_fd)
-> +{
-> +       return probe_sys_bpf_ext();
-> +}
-> +
->  typedef int (*feature_probe_fn)(int /* token_fd */);
->
->  static struct kern_feature_cache feature_cache;
-> @@ -581,6 +586,9 @@ static struct kern_feature_desc {
->         [FEAT_BTF_QMARK_DATASEC] =3D {
->                 "BTF DATASEC names starting from '?'", probe_kern_btf_qma=
-rk_datasec,
->         },
-> +       [FEAT_BPF_SYSCALL_COMMON_ATTRS] =3D {
-> +               "BPF syscall common attributes support", probe_bpf_syscal=
-l_common_attrs,
-> +       },
->  };
->
->  bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_=
-id feat_id)
-> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
-nal.h
-> index fc59b21b51b5..aa16be869c4f 100644
-> --- a/tools/lib/bpf/libbpf_internal.h
-> +++ b/tools/lib/bpf/libbpf_internal.h
-> @@ -392,6 +392,8 @@ enum kern_feature_id {
->         FEAT_ARG_CTX_TAG,
->         /* Kernel supports '?' at the front of datasec names */
->         FEAT_BTF_QMARK_DATASEC,
-> +       /* Kernel supports BPF syscall common attributes */
-> +       FEAT_BPF_SYSCALL_COMMON_ATTRS,
->         __FEAT_CNT,
->  };
->
-> @@ -757,4 +759,5 @@ int probe_fd(int fd);
->  #define SHA256_DWORD_SIZE SHA256_DIGEST_LENGTH / sizeof(__u64)
->
->  void libbpf_sha256(const void *data, size_t len, __u8 out[SHA256_DIGEST_=
-LENGTH]);
-> +int probe_sys_bpf_ext(void);
->  #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
-> --
-> 2.52.0
->
+Nah, this is intentional, I just do not understand all consequences of allowing 4K RMP to work with 8MB IO page :)
+
+>> on the other hand, without swiotlb, dma_map() in the guest for
+>> untrusted device is likely to be lot less than 2MB and going to
+>> share another handful of pages but this activity is not that rare
+>> compared to my certificates example. If only there was a way to
+>> somehow bundle such allocations/mappings... :-/
+> 
+> ARM is pushing a thing where encrypt/decrypt has to work on certain aligned
+> granual sizes > PAGE_SIZE, you could use that mechanism to select a 2M
+> size for AMD too and avoid this.
+
+2M minimum on every DMA map?
+
+>>> That's a completely grotesque solution!
+>>>
+>>> It violates all of our software layers. The IOMMU and RMP are not
+>>> controled by the same software entity and you propose to have a FW
+>>> call that edits *both* together somehow? How is that even going to
+>>> work safely?
+>>>
+>>> Can't you do things in a sequence?
+>>>
+>>> Change the iommu from 2M to 4K, flush, then change the RMP from 2M to
+>>> 4K?
+>>
+>> Sure we could unless there is ongoing DMA between "flush" and "then
+>> change" and then DMA will fail because of mismatching page sizes
+>> (that 2MB crossing thing above).
+> 
+> I'm confused, if the IOMMU has 4K and the RMP has 2M it doesn't work?
+
+I have not tried this, IOMMU pages are usually the biggest on AMD platform, often 8MB.
+
+> Then why was I told the 4k page size kernel parameter fixes
+> everything?
+
+Because IOMMU becomes 4K only and there is no huge page support in the confidential KVM yet (well, in the upstream linux) so page size mismatch cannot occur.
+
+> What happens if the guest puts 4K pages into it's AMDv2 table and RMP
+> is 2M?
+
+Is this AMDv2 - an NPT (then it is going to fail)? or nested IOMMU (never tried, in the works, I suspect failure)?
+
+>>>> If I get it right, for other platforms, the entire IOMMU table is
+>>>> going to live in a secure space so there will be similar FW calls so
+>>>> it is not that different.
+>>>
+>>> At least ARM the iommu S2 table is in secure memory and the secure FW
+>>> keeps it 1:1 with the KVM S2 table. So edits to the KVM automatically
+>>> make matching edits to the IOMMU. Only one software layer is
+>>> responsible for things.
+> ?
+>> Does KVM talk to the host IOMMU code for that (and then the IOMMU code calls the secure world)?
+>> Or KVM goes straight to that secure world?
+> 
+> Straight to the secure world, there is no host IOMMU driver for the
+> secure IOMMU.
+
+QEMU will try mapping all guest memory and will call the host for this, or it won't, on ARM? No IOMMUFD in this case? Always guest-visible IOMMU? Thanks,
+
+
+>> Is the host IOMMU code aware of the content of the secure IOMMU table?
+> 
+> No, it isn't even aware it exist.
+>   
+>> Does 2MB->4K smashing exist on ARM at all?
+> 
+> Every arch has cases where larger mappings need to be reduced to
+> smaller ones, but ARM doesn't require synchronized coordination
+> between multiple tables.
+> 
+> Jason
+
+-- 
+Alexey
+
