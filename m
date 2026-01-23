@@ -1,96 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE3C1A9F88;
-	Fri, 23 Jan 2026 19:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BBC279DC9;
+	Fri, 23 Jan 2026 19:50:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769197393; cv=none; b=uvTR4jcRTuolAtlTH16hdpdpZKAp9l78/FQZ2sqfMj4mAB1xZDITjd6cYT2DI2bzv78xqSMrnxqcNv5cqNv1PjrYi8wlM7ShfM0DUMfWMQtOb9jiYAkto0lY+4wh9O+uxmTjP9dGPtrcO+0FEAPT3jENdTDrgPMqdnfXZdxACAw=
+	t=1769197837; cv=none; b=HljNwsA6V6OVztWjl5mBa6ipPZnrlOYebeS6gSpfNM7aHPRlFnt9M0F6NB6RGSbme/5WY+YMxT2rXH+9SKLRDMaUzysqpos2YQ7lHddVH64utSPy8m8Hq3r+hxbdejB1Cbo+JLlar8uNj5knoENGszqWTCdkVCiqINH5yegslRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769197393; c=relaxed/simple;
-	bh=9iW2fL+bdbL87/HvTRzbq2r9o0MVTZB3AUK7/ku9a1Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S4mWyMZEtmVHyKUqcVZj1w3W75pWZAdj2Heb4Pnohh8VgvUMNL2vNpwqfftVIdjoK3aL+EHpf/raxmwFQIEKr/kJepnR3VDD7M5BHmggNErW82RjZFH3/SXGOAWILYnxpJDuparJqeeecfDzLQ1qPodc7KHJGCtvTFTDmWDzg+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aq9t7mfP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769197837; c=relaxed/simple;
+	bh=toyK7zvTmMEU69165FrqQsI8VeS7DHanxkiZ2wbAWno=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=uqRg307oNypfrajcmfP6CrshgSDP7YnlAwam9I2b/GeXM9vyDoASu4ldabqjH898n5RbCImQLinsCMde0Djqnfd6JTR2c1BvFNGsQBHedgRuXYRrWsyfJeMcaG/8XVWI3cHiLCjGs7vhfXEvNiKC8MzO9wDb6goJCrXZI8Uevb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LDTiUjWu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aq9t7mfP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B5C7C4CEF1;
-	Fri, 23 Jan 2026 19:43:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LDTiUjWu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD641C4CEF1;
+	Fri, 23 Jan 2026 19:50:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769197393;
-	bh=9iW2fL+bdbL87/HvTRzbq2r9o0MVTZB3AUK7/ku9a1Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Aq9t7mfPmSXPpLaKYlfAJvUjrvQk+iasjKNmFXY2AqTihtfyXaQtMPW4VWur7+poa
-	 tove0sKttvPto8h1SeDk13NprzJG8W7emeazfaDpBqoBMwSLbtwaWzFhQBcd4UDj3v
-	 TwbkrRUhk7UGDezy5DH7Q7QiaTVjztTjf3Rdti44UIFBBPA/UTKAZhqJL8+IC24oku
-	 4tg45Gn3dXBdqe82Q9EsR4uGOtYendLjVNATquzafx91OESws0c5vchyYBpXVo/+oV
-	 YnUdQ+B1su7bZUOzNi1Gq+n9ooPc/5IXv6WY1P/yuUMVDhpBGGPs+xUXbSJMuo+s/7
-	 704e0YCYOLc4A==
-Date: Fri, 23 Jan 2026 11:43:12 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Xu Du <xudu@redhat.com>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v6 4/7] selftest: tun: Add helpers for GSO over
- UDP tunnel
-Message-ID: <20260123114312.6f7c441e@kernel.org>
-In-Reply-To: <b5787b8c269f43ce11e1756f1691cc7fd9a1e901.1768979440.git.xudu@redhat.com>
-References: <cover.1768979440.git.xudu@redhat.com>
-	<b5787b8c269f43ce11e1756f1691cc7fd9a1e901.1768979440.git.xudu@redhat.com>
+	s=k20201202; t=1769197836;
+	bh=toyK7zvTmMEU69165FrqQsI8VeS7DHanxkiZ2wbAWno=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=LDTiUjWudqS3ACgoe7+D/CTz8pBoFuw/AuwUo1vvJQKqHBvk3KNvpF3V7BM7Nv1x1
+	 ASXQ5J9y2qLxlY3SLPF9nxFJ1EyCQ4r9s0E5YYlkhQFz0AIEFrYFRkZbaDhwldVaKB
+	 CDg7nbXiAn9caGcYbueircS1W6ayccrsHzB8islvgKjGFDXJAImN9DnSkxzlwLoXx0
+	 83PthFcNMMKVIDhs2oYRZPy590npPgRm1VR+yFwi2C4yHCX01T44ppIk4wFDVOyeHy
+	 Dp/Y8OEADBZAGtYYs3JmdKwsNPlauXrVgKwmkxycKcFs3sOrACtHbfyf/RAushLoi4
+	 TaQmMwRezJpbw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C8B6E3808200;
+	Fri, 23 Jan 2026 19:50:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v6 0/7] selftest: Extend tun/virtio coverage for
+ GSO
+ over UDP tunnel
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176919783234.2695110.8587748919583568584.git-patchwork-notify@kernel.org>
+Date: Fri, 23 Jan 2026 19:50:32 +0000
+References: <cover.1768979440.git.xudu@redhat.com>
+In-Reply-To: <cover.1768979440.git.xudu@redhat.com>
+To: Xu Du <xudu@redhat.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Wed, 21 Jan 2026 18:04:58 +0800 Xu Du wrote:
-> +static int geneve_fill_newlink(struct rt_link_newlink_req *req, void *data)
-> +{
-> +	struct geneve_setup_config *cfg = data;
-> +
-> +#define SET_GENEVE_REMOTE rt_link_newlink_req_set_linkinfo_data_geneve_remote
-> +#define SET_GENEVE_REMOTE6 rt_link_newlink_req_set_linkinfo_data_geneve_remote6
-> +
-> +	rt_link_newlink_req_set_address(req, cfg->hwaddr, ETH_ALEN);
-> +	rt_link_newlink_req_set_linkinfo_data_geneve_id(req, cfg->vnid);
-> +	rt_link_newlink_req_set_linkinfo_data_geneve_port(req, cfg->vnport);
-> +	rt_link_newlink_req_set_linkinfo_data_geneve_udp_csum(req, cfg->csum);
-> +
-> +	if (cfg->family == AF_INET)
-> +		SET_GENEVE_REMOTE(req, cfg->remote.r4.s_addr);
-> +	else
-> +		SET_GENEVE_REMOTE6(req, &cfg->remote.r6,
-> +				   sizeof(cfg->remote.r6));
-> +
-> +	return 0;
-> +}
-> +
-> +static int geneve_create(const char *dev, int family, void *remote,
-> +			 void *hwaddr)
-> +{
-> +	struct geneve_setup_config geneve;
-> +
-> +	memset(&geneve, 0, sizeof(geneve));
-> +	geneve.vnid = VN_ID;
-> +	geneve.vnport = htons(VN_PORT);
-> +	geneve.csum = 1;
-> +	geneve.family = family;
-> +	if (family == AF_INET)
-> +		memcpy(&geneve.remote.r4, remote, sizeof(struct in_addr));
-> +	else
-> +		memcpy(&geneve.remote.r6, remote, sizeof(struct in6_addr));
-> +	memcpy(geneve.hwaddr, hwaddr, ETH_ALEN);
-> +
-> +	return ip_link_add(dev, "geneve", geneve_fill_newlink, (void *)&geneve);
-> +}
+Hello:
 
-I'd be tempted to allocate the request in the here, and instead 
-of passing the "fill" callback optionally pass in partially /
-pre-populated req. Just food for thought in case you'd like the idea
-and what to follow up. v6 looks good so I'll merge as is already.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Thanks for converting to YNL!
+On Wed, 21 Jan 2026 18:04:54 +0800 you wrote:
+> The design strategy is to extend the existing tun testing infrastructure
+> to support this new use-case, rather than introducing a new or parallel framework.
+> This allows for better integration and re-use of existing test logic.
+> 
+> ---
+> v5 -> v6:
+>  - Fix the Makefile format errors.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v6,1/7] selftest: tun: Format tun.c existing code
+    https://git.kernel.org/netdev/net-next/c/e073c118db02
+  - [net-next,v6,2/7] selftest: tun: Introduce tuntap_helpers.h header for TUN/TAP testing
+    https://git.kernel.org/netdev/net-next/c/a942fcd72e97
+  - [net-next,v6,3/7] selftest: tun: Refactor tun_delete to use tuntap_helpers
+    https://git.kernel.org/netdev/net-next/c/82cfdcfa2010
+  - [net-next,v6,4/7] selftest: tun: Add helpers for GSO over UDP tunnel
+    https://git.kernel.org/netdev/net-next/c/24e59f26eef2
+  - [net-next,v6,5/7] selftest: tun: Add test for sending gso packet into tun
+    https://git.kernel.org/netdev/net-next/c/400e658aa096
+  - [net-next,v6,6/7] selftest: tun: Add test for receiving gso packet from tun
+    https://git.kernel.org/netdev/net-next/c/6bdd7ae6059e
+  - [net-next,v6,7/7] selftest: tun: Add test data for success and failure paths
+    https://git.kernel.org/netdev/net-next/c/87db2fdef5a7
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
