@@ -1,156 +1,84 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D0A34D922
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 01:41:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570B22DC35C;
+	Fri, 23 Jan 2026 02:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769132548; cv=none; b=q9VAHAqeyvPM5dO1DLnDphs/LBnzfcgl9BBgsZbeGwIeoS3JU11XC3/zdk9cUQ4jgUmaufLubb6F/FJNbzkNG09uXWTyAoz3AcIZtbNAwfl/i+9iVA1466n8tTabcjaG+KHzMK75tQDPMweRqsyt4LmGb7BmQ7BGeKxsSSnTn9Y=
+	t=1769136020; cv=none; b=g5Du4NfyfFjcmkX9oJttQccj95miIf0687IsGIgRpcQBX49psin5pM3LlJof20ZvuNqj8gbhEEKXUoK2XUMHA40nBEhuykBA5t0S/EEIB6Fkpn4/HiWttxW5Ye4QjjAMstVG7S7LBG8Y5O9qYjzUJpeWQ851Tw7wk2/4+G3hq3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769132548; c=relaxed/simple;
-	bh=1jYCfNu2E99u9MI+Zrtb1OeT/4uF24Ygozh31Z2W9Lo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AkA347FbBjO5Ns5JXaRCqKEJIpwCDBI5KZoOIspQjh2Bp4sUHMgmx/XlcSPi7/NgSDjj1fiWGzEr1N69KzlVd0CS6iW9zSMHd2ycHOpNxr6ODcZ2qkIvHX5xP5gZxguzox7jFbYf2Iy7JQtLWlqZvuwc0d9ptQrheRQx0Wur8Tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dVi5OMKZ; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769136020; c=relaxed/simple;
+	bh=LPMrmE7FOUiCQzRZyCnm2hOa1OspDPEUnN64lGQR2VY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=kINBeO5oWlT3WWrWaLK7Rhikky1DknbcS5DF8wWXwcchW/G3q5BtVtL/Q2BeO9QUSk8b5mpoioPKqWKYwDAK+0QkUMAume0kh/wA5s117lPOLxAchVDhPL/iIAI/rnnWngXO2P+L3VBd5PoTK2HK8jPeyK/UUkDTOpVrFfS0zhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IeV2DyJS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dVi5OMKZ"
-Message-ID: <d8f37588-2b7d-447a-ae4f-dc81e1b573c5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769132514;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iGfcUAaWbMDiu8CMjALaFc9nVb/oZtC296G14BPTQ8A=;
-	b=dVi5OMKZnN2En7ntGYp3qS0caDqEIYvqTphe3/sn0O/6gZuDkrOON6x7HgsoWD0jNsfpqz
-	nY2Taz8iZn++LOsX49O3LO4I9yG+BA+fHUYPHgGiJ7JF40NxOBbjWm8h+2ML5vJ5pfvhLu
-	FfQokaE1/T4ZFe5L/FnUYq/dDhcLujo=
-Date: Fri, 23 Jan 2026 09:41:38 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IeV2DyJS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5058CC116C6;
+	Fri, 23 Jan 2026 02:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769136018;
+	bh=LPMrmE7FOUiCQzRZyCnm2hOa1OspDPEUnN64lGQR2VY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=IeV2DyJSUWg+rYK3kxa/wadjs00KXDDYY2u2BUNQz/u2dZ68zDIDY0KaTh15uOwOK
+	 ebQtGqeiqmEzsAV1XWE5u3TgjEDQ/8p85YKEjXPIP3tEqj7oIK/DRjFcJxgqRxh1tr
+	 uh11Ey/82CxGlLQRPEuHffZRr7tmwNvDdsowtO3mEGy5pBw4JnT2s7lmg0/CMpvmZH
+	 2yv0R2B+UF02XDx82eSIv4fzvd35PMjwef6t0q/Rce+Kl7XNNTFeAErVPi5vSy7/xW
+	 TXmrFA8k3mX/snsk1HL+nlEAG5bJEzdSIjiHjhd3P3zlkQJUIA9Wrk4v0t6ZkYkxLW
+	 JEwLyJSpbemzQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C8CD83808200;
+	Fri, 23 Jan 2026 02:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RESEND PATCH bpf-next v6 2/9] libbpf: Add support for extended
- bpf syscall
-Content-Language: en-US
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
- Andrey Albershteyn <aalbersh@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
- linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260120152424.40766-1-leon.hwang@linux.dev>
- <20260120152424.40766-3-leon.hwang@linux.dev>
- <CAEf4BzYuZsFC-DPhhzLcyFTahucHP59+6kAc0sooY2g+SqgrEA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4BzYuZsFC-DPhhzLcyFTahucHP59+6kAc0sooY2g+SqgrEA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Subject: Re: [PATCH net-next v2] selftests: net: Add kernel selftest for RFC
+ 4884
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176913601461.2368645.10878797221558228157.git-patchwork-notify@kernel.org>
+Date: Fri, 23 Jan 2026 02:40:14 +0000
+References: <20260121114644.2863640-1-danieller@nvidia.com>
+In-Reply-To: <20260121114644.2863640-1-danieller@nvidia.com>
+To: Danielle Ratson <danieller@nvidia.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ willemdebruijn.kernel@gmail.com, idosch@nvidia.com, mlxsw@nvidia.com
 
+Hello:
 
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On 23/1/26 08:53, Andrii Nakryiko wrote:
-> On Tue, Jan 20, 2026 at 7:26 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> To support the extended BPF syscall introduced in the previous commit,
->> introduce the following internal APIs:
->>
->> * 'sys_bpf_ext()'
->> * 'sys_bpf_ext_fd()'
->>   They wrap the raw 'syscall()' interface to support passing extended
->>   attributes.
->> * 'probe_sys_bpf_ext()'
->>   Check whether current kernel supports the BPF syscall common attributes.
->>
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->> ---
->>  tools/lib/bpf/bpf.c             | 32 ++++++++++++++++++++++++++++++++
->>  tools/lib/bpf/features.c        |  8 ++++++++
->>  tools/lib/bpf/libbpf_internal.h |  3 +++
->>  3 files changed, 43 insertions(+)
->>
->> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
->> index 21b57a629916..ed9c6eaeb656 100644
->> --- a/tools/lib/bpf/bpf.c
->> +++ b/tools/lib/bpf/bpf.c
->> @@ -69,6 +69,38 @@ static inline __u64 ptr_to_u64(const void *ptr)
->>         return (__u64) (unsigned long) ptr;
->>  }
->>
->> +static inline int sys_bpf_ext(enum bpf_cmd cmd, union bpf_attr *attr,
->> +                             unsigned int size,
->> +                             struct bpf_common_attr *attr_common,
->> +                             unsigned int size_common)
->> +{
->> +       cmd = attr_common ? (cmd | BPF_COMMON_ATTRS) : (cmd & ~BPF_COMMON_ATTRS);
->> +       return syscall(__NR_bpf, cmd, attr, size, attr_common, size_common);
->> +}
->> +
->> +static inline int sys_bpf_ext_fd(enum bpf_cmd cmd, union bpf_attr *attr,
->> +                                unsigned int size,
->> +                                struct bpf_common_attr *attr_common,
->> +                                unsigned int size_common)
->> +{
->> +       int fd;
->> +
->> +       fd = sys_bpf_ext(cmd, attr, size, attr_common, size_common);
->> +       return ensure_good_fd(fd);
->> +}
->> +
->> +int probe_sys_bpf_ext(void)
->> +{
->> +       const size_t attr_sz = offsetofend(union bpf_attr, prog_token_fd);
->> +       union bpf_attr attr;
->> +
->> +       memset(&attr, 0, attr_sz);
->> +       /* This syscall() will return error always. */
+On Wed, 21 Jan 2026 13:46:44 +0200 you wrote:
+> RFC 4884 extended certain ICMP messages with a length attribute that
+> encodes the length of the "original datagram" field. This is needed so
+> that new information could be appended to these messages without
+> applications thinking that it is part of the "original datagram" field.
 > 
-> I'll cite myself from the last review:
+> In version 5.9, the kernel was extended with two new socket options
+> (SOL_IP/IP_RECVERR_4884 and SOL_IPV6/IPV6_RECVERR_RFC4884) that allow
+> user space to retrieve this length which is basically the offset to the
+> ICMP Extension Structure at the end of the ICMP message. This is
+> required by user space applications that need to parse the information
+> contained in the ICMP Extension Structure. For example, the RFC 5837
+> extension for tracepath.
 > 
->> But fd should really not be >= 0, and if it is -- it's some problem,
->> so I'd return an error in that case to keep us aware, which is why I'm
->> saying I'd just return inside if (fd >= 0) { }
-> 
-> I didn't say let's just ignore syscall return with (void) cast and
-> happily check errno no matter what, did I? Drop the comment, and
-> handle fd >= 0 case explicitly, please.
-> 
+> [...]
 
-My mistake — sorry for the misunderstanding.
+Here is the summary with links:
+  - [net-next,v2] selftests: net: Add kernel selftest for RFC 4884
+    https://git.kernel.org/netdev/net-next/c/d07d7c3dd944
 
-You’re right; the return value should not be ignored. In the next
-revision, I’ll handle the fd >= 0 case explicitly and drop the comment.
-The logic will be updated along the lines of:
-
-fd = syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS,
-             &attr, attr_sz, NULL, sizeof(struct bpf_common_attr));
-if (fd >= 0) {
-        close(fd);
-        return 0;
-}
-return errno == EFAULT;
-
-Thanks,
-Leon
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
