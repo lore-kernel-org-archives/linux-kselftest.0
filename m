@@ -1,245 +1,505 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B1A221540
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 22:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBDC4964F;
+	Fri, 23 Jan 2026 22:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769207493; cv=none; b=Dv8FXJ+naeFuom+2O7fZTLN47tDmGqLlHdZlGGNU0K5XxFFxanpQKRZFqWIp97SoE68Ks6QI804zTLQn9vxEcJc00zhm0fM9NzzLuEyakKBtrPlLwNx6HMUnvuAVONBB7DmjcDBZB0mG4T5B5OPGaaPDTDhO3c9tnT00RbqWRqw=
+	t=1769207996; cv=none; b=cEtxVvygP5KGd3CWpYLU5knS8qSX1dM8fgCF8CN2U0oV6cuxuZzf8yCcPCTXVzUKyJ1v/Z8HmW5clbU0tGlu4LF/+Qnl/kasYTc+BZvubPlreLWTHLA9RECypNvS66UT5H6r2bsc5szQWmscNIXiPNEs4zQNp3d4YXvWPzDYF8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769207493; c=relaxed/simple;
-	bh=z8IlIXh47dOFdPn/7YG8QvPpbpmFtqMaCCfJQd7NMlI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pliglACh5X8Mch8KMh53AtTlnmw/WY3+RKzEcXGBhrdFeyepQzcbs0LquYZecZu0tND2BfLFZIMIOfgnfAK1bd0LQIxVFH6PzO1QbpaqgoiJfwUU0c45QTll9Dg9TzZ0JtJH6cFHtFScZ0Ww4X7TIoa3g3EL1kchPtW4l2I5evE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WEvNLAZy; arc=none smtp.client-ip=74.125.82.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769207996; c=relaxed/simple;
+	bh=vZX9tEDWCPt/E4k47aOA3Hjq/sisnm01br61YI26HFA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VMHUPLYpMhlNKIetDNFcl5vA8Y+IiItbIg9vftC0kd0LQ6wLFzbrT/NrMe/t/UyXLxyi3gRgPrSIkOlydTGrb8S1Jp5g+UURdJ3T/diF1/IMXiMpeq15hP4UZW3aAq/ucODj2boSvoPy7V++0xQoFqMN+oHc7cyJq8jt0x6c3nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KW+TgC3E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WEvNLAZy"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2b6fd5bec41so6426558eec.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 14:31:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769207491; x=1769812291; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6q7jSvteo768fX3RDKijF3HLXLbv8PUQY59d7KtxMqQ=;
-        b=WEvNLAZy76SHeB77vEexawMoBIMlTBFjaLkpJAPf+bZnh1z8Pj5Zm5l52kiJVBKNXc
-         bWPots0IULAwmCpX0wsgVc4luByYdpu4P2oygM1KVAYCXCVVMCI+Mp8lNJNfkYMUTH+M
-         /OR57P36o0n6NwZv9B2SFTjOqEdAB183jpRpFrJJ3OE9bCVRPOicubnZqRPiIpc0IscI
-         rS/vUfT+X6P+C+ilgS2Eloc2PIU/i2AgsRQMoIavwWkYdAZJCCq0OoMhAE+lExu4Irn7
-         MKLdXKUJxPP3/U7RtdvNKzw9qKzg2+xW7uB/cc9bDWaCscr+T8M7YqTsROws3rTaFFj5
-         9pEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769207491; x=1769812291;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6q7jSvteo768fX3RDKijF3HLXLbv8PUQY59d7KtxMqQ=;
-        b=iwe9/WncGoXy9nrev+cclYLIAgcihXNnjRjnH/P3t4NndWY1bdNFs4gwL+bQs4RUQq
-         rmTj1YYpPXUGvK+ZdME5dSw2irHYFgGfmmiTFycjJX/7swSjAy/ly2omykmJDU/CdQG3
-         LYHmKKiCftGl5YOpUMa3FYH9eCBl0CCmLw7RlziirLoKl708TKTCL1SmqECd8OWBel5X
-         qC2EXaKqtTcyUjaQoqu0zkcceAWJ25pYoEYYbFxHiOkrjUkUbojU28GaHDdEeGdElB75
-         9o34BNgT/J6Z3nXL3IBsfuZs/8UwlAe4VerJuHwMULEh5eU5b/Z6jFS/5Drn1GuFnzQP
-         B3Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCV/8flfRnb/0UI0q6HP/R2fM8jstiCfDzkDeNnvkHhsuSKkaN5z8ywoY7Uhy0yCpeR3RcyqjYcJyOjgo16cHrE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDpPYXrm71IhA9XLHv987dLFJORVaHfOO/+K/WXPbyd+nQ/fQU
-	LokTU4514Q9SeyLtTwa6wrr8w5KqtMtHr6i+MlVlXVtau+bD7247ykCD
-X-Gm-Gg: AZuq6aLycSb2Na2wiFuxvkzI9DJmt7H6AFkRMbOorM0d6ZXnBbh/54dOmNwqOWMVfQw
-	pNplAYCbrgWggT/hT2+rXSmuc/I6hxWphpgyanyWy1JdyY3cMLBPSHxbpUGUIC5++mulH/nlAmM
-	kFiXSdq71yslvB7kyY9f50rYhs4fSaBwSd1RXtaHIoV+U+M5jeRTAWHqivhszfizVbCGQ9M40P/
-	UZ44hXFAZoHv9GT5McFDYn+5Zz2VJaWz/h1Yz4DDOBkhhWVHSJ89+9tn5woPvez3VpWaHfO8rAx
-	pkjtbsltw+88iFVCN1zNtMLkZiDYFOd+qsExDKygsXg5Ugmc0sdLCBeMXBHuVk0IWM6zdxLTumX
-	6n/rhLJT9ZVSXmH5QFlNZfPTa+dY51DsK7V71JFhtB6bbBEbK6qgMhd1JlawhIxcRUVL7jSxLMY
-	fEFChJwJ1l6csq/osLk40d
-X-Received: by 2002:a05:7300:230a:b0:2af:674e:bc73 with SMTP id 5a478bee46e88-2b74274cff4mr1359399eec.7.1769201226027;
-        Fri, 23 Jan 2026 12:47:06 -0800 (PST)
-Received: from [192.168.4.196] ([73.222.117.172])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b73a691b1esm4476320eec.3.2026.01.23.12.47.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jan 2026 12:47:05 -0800 (PST)
-Message-ID: <b90069a3-86b4-4fba-9ff3-fe5f6c4e425d@gmail.com>
-Date: Fri, 23 Jan 2026 12:47:02 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KW+TgC3E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 153F6C4CEF1;
+	Fri, 23 Jan 2026 22:39:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769207995;
+	bh=vZX9tEDWCPt/E4k47aOA3Hjq/sisnm01br61YI26HFA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=KW+TgC3EX6NjAY3+Ryc3F//h9F2cVHUFFGwc25TS4BJirCLW1xoMs+9IXsKNszYp6
+	 YfJMq9I1zNcFEkIvcwWmGO85QisDxV3GfXJt/6WWdmfmFhqzWEaqTmymHvg58ft5v9
+	 GBvfuld1ugdaqa1Ix5EOD0CeMPgyuqkrOFg9mkpehky9LK+0XNbD7+kW5f4Y3g8GoE
+	 x43TVTYiWZ2NpVGc10QZ1iQ8Bdst0+K9np4NhSIsOlu9t9224/IT5mxS0zZx1UJ5Hi
+	 6MFhe44bbqkOrJNd9UWkfEvIX6WxZ+Nsb2YLuhaYW2cPUhACfzbcgf26wzEcHVrkoA
+	 e+1vM0dx43/Qw==
+From: Mark Brown <broonie@kernel.org>
+Date: Fri, 23 Jan 2026 22:39:24 +0000
+Subject: [PATCH v2] selftests/mm: Have the harness run each test category
+ separately
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next v3 09/12] selftests/bpf: Add tests for
- memcg_bpf_ops
-To: Hui Zhu <hui.zhu@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
- Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>, mkoutny@suse.com,
- Jan Hendrik Farr <kernel@jfarr.cc>, Christian Brauner <brauner@kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>, Brian Gerst <brgerst@gmail.com>,
- Masahiro Yamada <masahiroy@kernel.org>, davem@davemloft.net,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Chen Ridong <chenridong@huaweicloud.com>,
- Lance Yang <lance.yang@linux.dev>, Jiayuan Chen <jiayuan.chen@linux.dev>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, cgroups@vger.kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>, Geliang Tang <geliang@kernel.org>
-References: <cover.1769157382.git.zhuhui@kylinos.cn>
- <c44accaaaebfc32be13234f82b501a3852ba3f0f.1769157382.git.zhuhui@kylinos.cn>
-Content-Language: en-US
-From: JP Kobryn <inwardvessel@gmail.com>
-In-Reply-To: <c44accaaaebfc32be13234f82b501a3852ba3f0f.1769157382.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260123-selftests-mm-run-suites-separately-v2-1-3e934edacbfa@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJv4c2kC/42OSw6CQBBEr0Jm7Zj5hURX3sOwaIYGR/mleyASw
+ t0d0AO4fJVKvVoFIwVkcc1WQTgHDkOfwJwy4R/QNyhDlVgYZXKl9UUytnVEjiy7TtLUS55C4pS
+ PQBCxXWQOroIKtM29E2loJKzD+5Dciy/zVD7Rx315bzwCx4GW48Ws995PaNQ/wllLLcFZ62rly
+ 9LC7YXUY3seqBHFtm0fMcek3+cAAAA=
+X-Change-ID: 20260119-selftests-mm-run-suites-separately-6a4dada136c4
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, 
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+ Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, 
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+ Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
+ Leon Romanovsky <leon@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=15844; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=vZX9tEDWCPt/E4k47aOA3Hjq/sisnm01br61YI26HFA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpc/i4Xd2nYLEbCxzebCyVOXW7b0zK52uohHVBF
+ DJLyS9uLnCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaXP4uAAKCRAk1otyXVSH
+ 0PpnB/41lmCi2xtFXJggsXO3n6ljcUlpETtJLsDdGG/IoIJxsSjoWCtM+wntYPCWdjy2SdQJFLo
+ R3y4j4CXeLz2xxCvgxe28rNEjr9qFGci77EMkZL3/jY7gHt3cff2OcAciD08h77hMC2gUFMpYaC
+ wcNOo7u0OTe2Ud+M07rAX+EyOQIZ4dhMHfyjot5a+jRwtLeH3B5EENlvGfjdDOdc7rtBjBrdgke
+ WF4sAMRZdDxPh8NY5V/AHsxatwM+xjRV7eia/0mKmdAQhsuaJBVTuP9/pvCRk4OgOHMM/M6FeOc
+ Kcy8+7Mc2dMbAX0X/bL/87AMW8HJhKEDfrzQ9p8feNu1JlSH
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Hi Hui,
+At present the mm selftests are integrated into the kselftest harness by
+having it run run_vmtest.sh and letting it pick it's default set of
+tests to invoke, rather than by telling the kselftest framework about
+each test program individually as is more standard.   This has some
+unfortunate interactions with the kselftest harness:
 
-On 1/23/26 1:00 AM, Hui Zhu wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
-> 
-> Add a comprehensive selftest suite for the `memcg_bpf_ops`
-> functionality. These tests validate that BPF programs can correctly
-> influence memory cgroup throttling behavior by implementing the new
-> hooks.
-> 
-> The test suite is added in `prog_tests/memcg_ops.c` and covers
-> several key scenarios:
-> 
-> 1. `test_memcg_ops_over_high`:
->     Verifies that a BPF program can trigger throttling on a low-priority
->     cgroup by returning a delay from the `get_high_delay_ms` hook when a
->     high-priority cgroup is under pressure.
-> 
-> 2. `test_memcg_ops_below_low_over_high`:
->     Tests the combination of the `below_low` and `get_high_delay_ms`
->     hooks, ensuring they work together as expected.
-> 
-> 3. `test_memcg_ops_below_min_over_high`:
->     Validates the interaction between the `below_min` and
->     `get_high_delay_ms` hooks.
-> 
-> The test framework sets up a cgroup hierarchy with high and low
-> priority groups, attaches BPF programs, runs memory-intensive
-> workloads, and asserts that the observed throttling (measured by
-> workload execution time) matches expectations.
-> 
-> The BPF program (`progs/memcg_ops.c`) uses a tracepoint on
-> `memcg:count_memcg_events` (specifically PGFAULT) to detect memory
-> pressure and trigger the appropriate hooks in response. This test
-> suite provides essential validation for the new memory control
-> mechanisms.
-> 
-> Signed-off-by: Geliang Tang <geliang@kernel.org>
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-> ---
-[..]
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
-> new file mode 100644
-> index 000000000000..9a8d16296f2d
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
-> @@ -0,0 +1,537 @@
-[..]
-> +
-> +static void
-> +real_test_memcg_ops_child_work(const char *cgroup_path,
-> +			       char *data_filename,
-> +			       char *time_filename,
-> +			       int read_times)
-> +{
-> +	struct timeval start, end;
-> +	double elapsed;
-> +	FILE *fp;
-> +
-> +	if (!ASSERT_OK(join_parent_cgroup(cgroup_path), "join_parent_cgroup"))
-> +		goto out;
-> +
-> +	if (env.verbosity >= VERBOSE_NORMAL)
-> +		printf("%s %d begin\n", __func__, getpid());
-> +
-> +	gettimeofday(&start, NULL);
-> +
-> +	if (!ASSERT_OK(write_file(data_filename), "write_file"))
-> +		goto out;
-> +
-> +	if (env.verbosity >= VERBOSE_NORMAL)
-> +		printf("%s %d write_file done\n", __func__, getpid());
-> +
-> +	if (!ASSERT_OK(read_file(data_filename, read_times), "read_file"))
-> +		goto out;
-> +
-> +	gettimeofday(&end, NULL);
-> +
-> +	elapsed = (end.tv_sec - start.tv_sec) +
-> +		  (end.tv_usec - start.tv_usec) / 1000000.0;
-> +
-> +	if (env.verbosity >= VERBOSE_NORMAL)
-> +		printf("%s %d end %.6f\n", __func__, getpid(), elapsed);
-> +
-> +	fp = fopen(time_filename, "w");
-> +	if (!ASSERT_OK_PTR(fp, "fopen"))
-> +		goto out;
-> +	fprintf(fp, "%.6f", elapsed);
-> +	fclose(fp);
-> +
-> +out:
-> +	exit(0);
-> +}
-> +
+ - If any of the tests hangs the harness will kill the entire mm
+   selftests run rather than just the individual test, meaning no
+   further tests get run.
+ - The timeout applied by the harness is applied to the whole run rather
+   than an individual test which frequently leads to the suite not being
+   completed in production testing.
 
-[..]
+Deploy a crude but effective mitigation for these issues by telling the
+kselftest framework to run each of the test categories that run_vmtests.sh
+has separately.  Since kselftest really wants to run test programs this
+is done by providing a trivial wrapper script for each categorty that
+invokes run_vmtest.sh, this is not a thing of great elegence but it is
+clear and simple.  Since run_vmtests.sh is doing runtime support
+detection, scenario enumeration and setup for many of the tests we can't
+consistently tell the framework about the individual test programs.
 
-> +static void real_test_memcg_ops(int read_times)
-> +{
-> +	int ret;
-> +	char data_file1[] = "/tmp/test_data_XXXXXX";
-> +	char data_file2[] = "/tmp/test_data_XXXXXX";
-> +	char time_file1[] = "/tmp/test_time_XXXXXX";
-> +	char time_file2[] = "/tmp/test_time_XXXXXX";
-> +	pid_t pid1, pid2;
-> +	double time1, time2;
-> +
-> +	ret = mkstemp(data_file1);
-> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
-> +		return;
-> +	close(ret);
-> +	ret = mkstemp(data_file2);
-> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
-> +		goto cleanup_data_file1;
-> +	close(ret);
-> +	ret = mkstemp(time_file1);
-> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
-> +		goto cleanup_data_file2;
-> +	close(ret);
-> +	ret = mkstemp(time_file2);
-> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
-> +		goto cleanup_time_file1;
-> +	close(ret);
-> +
-> +	pid1 = fork();
-> +	if (!ASSERT_GE(pid1, 0, "fork"))
-> +		goto cleanup;
-> +	if (pid1 == 0)
-> +		real_test_memcg_ops_child_work(CG_LOW_DIR,
-> +					       data_file1,
-> +					       time_file1,
-> +					       read_times);
+This has the side effect of reordering the tests, hopefully the testing
+is not overly sensitive to this.
 
-Would it be better to call exit() after real_test_memcg_ops_child_work()
-instead of within it? This way the fork/exit/wait logic is contained in
-the same scope making the lifetimes easier to track. I had to go back
-and search for the call to exit() since at a glance this function
-appears to proceed to call fork() and waitpid() from within both parent
-and child procs (though it really does not).
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v2:
+- Add comments to Makefile and run_vmtests.sh about the need for
+  updates.
+- Link to v1: https://patch.msgid.link/20260120-selftests-mm-run-suites-separately-v1-1-a4334f0cbb3a@kernel.org
+---
+ tools/testing/selftests/mm/Makefile                | 33 +++++++++++++++++++++-
+ tools/testing/selftests/mm/ksft_compaction.sh      |  4 +++
+ tools/testing/selftests/mm/ksft_cow.sh             |  4 +++
+ tools/testing/selftests/mm/ksft_gup_test.sh        |  4 +++
+ tools/testing/selftests/mm/ksft_hmm.sh             |  4 +++
+ tools/testing/selftests/mm/ksft_hugetlb.sh         |  4 +++
+ tools/testing/selftests/mm/ksft_hugevm.sh          |  4 +++
+ tools/testing/selftests/mm/ksft_ksm.sh             |  4 +++
+ tools/testing/selftests/mm/ksft_ksm_numa.sh        |  4 +++
+ tools/testing/selftests/mm/ksft_madv_guard.sh      |  4 +++
+ tools/testing/selftests/mm/ksft_madv_populate.sh   |  4 +++
+ tools/testing/selftests/mm/ksft_mdwe.sh            |  4 +++
+ tools/testing/selftests/mm/ksft_memfd_secret.sh    |  4 +++
+ tools/testing/selftests/mm/ksft_migration.sh       |  4 +++
+ tools/testing/selftests/mm/ksft_mkdirty.sh         |  4 +++
+ tools/testing/selftests/mm/ksft_mlock.sh           |  4 +++
+ tools/testing/selftests/mm/ksft_mmap.sh            |  4 +++
+ tools/testing/selftests/mm/ksft_mremap.sh          |  4 +++
+ tools/testing/selftests/mm/ksft_page_frag.sh       |  4 +++
+ tools/testing/selftests/mm/ksft_pagemap.sh         |  4 +++
+ tools/testing/selftests/mm/ksft_pfnmap.sh          |  4 +++
+ tools/testing/selftests/mm/ksft_pkey.sh            |  4 +++
+ tools/testing/selftests/mm/ksft_process_madv.sh    |  4 +++
+ .../testing/selftests/mm/ksft_process_mrelease.sh  |  4 +++
+ tools/testing/selftests/mm/ksft_rmap.sh            |  4 +++
+ tools/testing/selftests/mm/ksft_soft_dirty.sh      |  4 +++
+ tools/testing/selftests/mm/ksft_thp.sh             |  4 +++
+ tools/testing/selftests/mm/ksft_userfaultfd.sh     |  4 +++
+ tools/testing/selftests/mm/ksft_vma_merge.sh       |  4 +++
+ tools/testing/selftests/mm/ksft_vmalloc.sh         |  4 +++
+ tools/testing/selftests/mm/run_vmtests.sh          |  4 +++
+ 31 files changed, 152 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index eaf9312097f7..aa4951e8cb57 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -1,6 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for mm selftests
+ 
++# IMPORTANT: If you add a new test CATEGORY please add a simple wrapper
++# script so kunit knows to run it, and add it to the list below.
++# If you do not YOUR TESTS WILL NOT RUN IN THE CI.
++
+ LOCAL_HDRS += $(selfdir)/mm/local_config.h $(top_srcdir)/mm/gup_test.h
+ LOCAL_HDRS += $(selfdir)/mm/mseal_helpers.h
+ 
+@@ -146,7 +150,33 @@ endif
+ TEST_GEN_FILES += write_to_hugetlbfs
+ endif
+ 
+-TEST_PROGS := run_vmtests.sh
++TEST_PROGS += ksft_compaction.sh
++TEST_PROGS += ksft_cow.sh
++TEST_PROGS += ksft_gup_test.sh
++TEST_PROGS += ksft_hmm.sh
++TEST_PROGS += ksft_hugetlb.sh
++TEST_PROGS += ksft_hugevm.sh
++TEST_PROGS += ksft_ksm.sh
++TEST_PROGS += ksft_ksm_numa.sh
++TEST_PROGS += ksft_madv_guard.sh
++TEST_PROGS += ksft_madv_populate.sh
++TEST_PROGS += ksft_memfd_secret.sh
++TEST_PROGS += ksft_migration.sh
++TEST_PROGS += ksft_mkdirty.sh
++TEST_PROGS += ksft_mlock.sh
++TEST_PROGS += ksft_mmap.sh
++TEST_PROGS += ksft_mremap.sh
++TEST_PROGS += ksft_pagemap.sh
++TEST_PROGS += ksft_pfnmap.sh
++TEST_PROGS += ksft_pkey.sh
++TEST_PROGS += ksft_process_madv.sh
++TEST_PROGS += ksft_process_mrelease.sh
++TEST_PROGS += ksft_rmap.sh
++TEST_PROGS += ksft_soft_dirty.sh
++TEST_PROGS += ksft_thp.sh
++TEST_PROGS += ksft_userfaultfd.sh
++TEST_PROGS += ksft_vma_merge.sh
++TEST_PROGS += ksft_vmalloc.sh
+ 
+ TEST_FILES := test_vmalloc.sh
+ TEST_FILES += test_hmm.sh
+@@ -154,6 +184,7 @@ TEST_FILES += va_high_addr_switch.sh
+ TEST_FILES += charge_reserved_hugetlb.sh
+ TEST_FILES += hugetlb_reparenting_test.sh
+ TEST_FILES += test_page_frag.sh
++TEST_FILES += run_vmtests.sh
+ 
+ # required by charge_reserved_hugetlb.sh
+ TEST_FILES += write_hugetlb_memory.sh
+diff --git a/tools/testing/selftests/mm/ksft_compaction.sh b/tools/testing/selftests/mm/ksft_compaction.sh
+new file mode 100755
+index 000000000000..1f38f4228a34
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_compaction.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t compaction
+diff --git a/tools/testing/selftests/mm/ksft_cow.sh b/tools/testing/selftests/mm/ksft_cow.sh
+new file mode 100755
+index 000000000000..1e03a95fd5f6
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_cow.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t cow
+diff --git a/tools/testing/selftests/mm/ksft_gup_test.sh b/tools/testing/selftests/mm/ksft_gup_test.sh
+new file mode 100755
+index 000000000000..09e586d2f446
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_gup_test.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t gup_test
+diff --git a/tools/testing/selftests/mm/ksft_hmm.sh b/tools/testing/selftests/mm/ksft_hmm.sh
+new file mode 100755
+index 000000000000..0a7b04f454d5
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_hmm.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t hmm
+diff --git a/tools/testing/selftests/mm/ksft_hugetlb.sh b/tools/testing/selftests/mm/ksft_hugetlb.sh
+new file mode 100755
+index 000000000000..4f92974a4eb5
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_hugetlb.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t hugetlb
+diff --git a/tools/testing/selftests/mm/ksft_hugevm.sh b/tools/testing/selftests/mm/ksft_hugevm.sh
+new file mode 100755
+index 000000000000..377967fe9c91
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_hugevm.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t hugevm
+diff --git a/tools/testing/selftests/mm/ksft_ksm.sh b/tools/testing/selftests/mm/ksft_ksm.sh
+new file mode 100755
+index 000000000000..f6a6fe13a3b0
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_ksm.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t ksm
+diff --git a/tools/testing/selftests/mm/ksft_ksm_numa.sh b/tools/testing/selftests/mm/ksft_ksm_numa.sh
+new file mode 100755
+index 000000000000..144b41a5e3bb
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_ksm_numa.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t ksm_numa
+diff --git a/tools/testing/selftests/mm/ksft_madv_guard.sh b/tools/testing/selftests/mm/ksft_madv_guard.sh
+new file mode 100755
+index 000000000000..2d810c049182
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_madv_guard.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t madv_guard
+diff --git a/tools/testing/selftests/mm/ksft_madv_populate.sh b/tools/testing/selftests/mm/ksft_madv_populate.sh
+new file mode 100755
+index 000000000000..127e22ed02c4
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_madv_populate.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t madv_populate
+diff --git a/tools/testing/selftests/mm/ksft_mdwe.sh b/tools/testing/selftests/mm/ksft_mdwe.sh
+new file mode 100755
+index 000000000000..3dcae95ddabc
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_mdwe.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mdwe
+diff --git a/tools/testing/selftests/mm/ksft_memfd_secret.sh b/tools/testing/selftests/mm/ksft_memfd_secret.sh
+new file mode 100755
+index 000000000000..56e82dd648a7
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_memfd_secret.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t memfd_secret
+diff --git a/tools/testing/selftests/mm/ksft_migration.sh b/tools/testing/selftests/mm/ksft_migration.sh
+new file mode 100755
+index 000000000000..7cf37c72d26e
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_migration.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t migration
+diff --git a/tools/testing/selftests/mm/ksft_mkdirty.sh b/tools/testing/selftests/mm/ksft_mkdirty.sh
+new file mode 100755
+index 000000000000..dd6332df3204
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_mkdirty.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mkdirty
+diff --git a/tools/testing/selftests/mm/ksft_mlock.sh b/tools/testing/selftests/mm/ksft_mlock.sh
+new file mode 100755
+index 000000000000..1e25ab9fdc8b
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_mlock.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mlock
+diff --git a/tools/testing/selftests/mm/ksft_mmap.sh b/tools/testing/selftests/mm/ksft_mmap.sh
+new file mode 100755
+index 000000000000..2c3137ae8bc8
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_mmap.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mmap
+diff --git a/tools/testing/selftests/mm/ksft_mremap.sh b/tools/testing/selftests/mm/ksft_mremap.sh
+new file mode 100755
+index 000000000000..4101670d0e19
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_mremap.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mremap
+diff --git a/tools/testing/selftests/mm/ksft_page_frag.sh b/tools/testing/selftests/mm/ksft_page_frag.sh
+new file mode 100755
+index 000000000000..216e20ffe390
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_page_frag.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t page_frag
+diff --git a/tools/testing/selftests/mm/ksft_pagemap.sh b/tools/testing/selftests/mm/ksft_pagemap.sh
+new file mode 100755
+index 000000000000..b8d270fdd43e
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_pagemap.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t pagemap
+diff --git a/tools/testing/selftests/mm/ksft_pfnmap.sh b/tools/testing/selftests/mm/ksft_pfnmap.sh
+new file mode 100755
+index 000000000000..75758de968bb
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_pfnmap.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t pfnmap
+diff --git a/tools/testing/selftests/mm/ksft_pkey.sh b/tools/testing/selftests/mm/ksft_pkey.sh
+new file mode 100755
+index 000000000000..ac944233b7f7
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_pkey.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t pkey
+diff --git a/tools/testing/selftests/mm/ksft_process_madv.sh b/tools/testing/selftests/mm/ksft_process_madv.sh
+new file mode 100755
+index 000000000000..2c3137ae8bc8
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_process_madv.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t mmap
+diff --git a/tools/testing/selftests/mm/ksft_process_mrelease.sh b/tools/testing/selftests/mm/ksft_process_mrelease.sh
+new file mode 100755
+index 000000000000..f560aa5e4218
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_process_mrelease.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t process_mrelease
+diff --git a/tools/testing/selftests/mm/ksft_rmap.sh b/tools/testing/selftests/mm/ksft_rmap.sh
+new file mode 100755
+index 000000000000..974742b9b02f
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_rmap.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t rmap
+diff --git a/tools/testing/selftests/mm/ksft_soft_dirty.sh b/tools/testing/selftests/mm/ksft_soft_dirty.sh
+new file mode 100755
+index 000000000000..d160d7fea0a9
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_soft_dirty.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t soft_dirty
+diff --git a/tools/testing/selftests/mm/ksft_thp.sh b/tools/testing/selftests/mm/ksft_thp.sh
+new file mode 100755
+index 000000000000..95321aecabdb
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_thp.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t thp
+diff --git a/tools/testing/selftests/mm/ksft_userfaultfd.sh b/tools/testing/selftests/mm/ksft_userfaultfd.sh
+new file mode 100755
+index 000000000000..92667abde6c6
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_userfaultfd.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t userfaultfd
+diff --git a/tools/testing/selftests/mm/ksft_vma_merge.sh b/tools/testing/selftests/mm/ksft_vma_merge.sh
+new file mode 100755
+index 000000000000..68449d840680
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_vma_merge.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t vma_merge
+diff --git a/tools/testing/selftests/mm/ksft_vmalloc.sh b/tools/testing/selftests/mm/ksft_vmalloc.sh
+new file mode 100755
+index 000000000000..0b5019a76612
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_vmalloc.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0
++
++./run_vmtests.sh -t vmalloc
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index d9173f2312b7..1b4546324ba7 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -2,6 +2,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Please run as root
+ 
++# IMPORTANT: If you add a new test CATEGORY please add a simple wrapper
++# script so kunit knows to run it, and add it to the list below.
++# If you do not YOUR TESTS WILL NOT RUN IN THE CI.
++
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+ 
+
+---
+base-commit: 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7
+change-id: 20260119-selftests-mm-run-suites-separately-6a4dada136c4
+
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
+
