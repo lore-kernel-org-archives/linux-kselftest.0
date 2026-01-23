@@ -1,74 +1,116 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8787A344D9D;
-	Fri, 23 Jan 2026 08:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A65C3EBF1F;
+	Fri, 23 Jan 2026 08:30:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769156759; cv=none; b=ptoDJQJh99Jj30xsNU1ku3WpW6iboWddnDrev0PnwW4DM3Cgca/eI00q0d4KIVkFDh0kwE07MXIb3D3EcqzU9Kv8zFOlM+ouxUyCecxHXkOHRbFGPq+cFpJi1t5MfoDK/jxr4kchG2D14Ga8/XiEwIh6kowCw96MMEYSFG6cTSs=
+	t=1769157028; cv=none; b=XKCDvoA9mK8eUFGkX1wb983sR+oOwiyZ4DRimuEH9nQbvByjz+bjTflNBefrhzZzSrW94YWO+loTRsOhLnT/nKCL0SlxqB4j0GvEqL9BKAirzeWSkzrC4qbWV350O6XGhIB22h5HWzNcxf5JJT/bS9jLfSjdKoJLV6Kmf6+kJ2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769156759; c=relaxed/simple;
-	bh=H+Ph4/HiAVNACiAQVzTRg9VZTx7FI1NIAhiZlTUmiMw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ctcWo2pxPLUo1/xyCsIVNyIN5v1C8v4J61AhkD/4SkUm1OnuwDGTp3kYSddSPgjaMfbDjpe5JYtNhokZOZLKwxOwiWFN4RL+F9wPthy1WiH2TqkjVk6q0E+8g0iIHBYz9g8zp1Gt+2+yuV0tBgFTQFH6XW46lBBAHOeKZLXp6xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4FC481476;
-	Fri, 23 Jan 2026 00:25:50 -0800 (PST)
-Received: from [10.57.50.81] (unknown [10.57.50.81])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF7B63F740;
-	Fri, 23 Jan 2026 00:25:54 -0800 (PST)
-Message-ID: <cf0a3f62-5673-47b4-afa9-1f2daab5e0b5@arm.com>
-Date: Fri, 23 Jan 2026 09:25:52 +0100
+	s=arc-20240116; t=1769157028; c=relaxed/simple;
+	bh=sFvHpjPthyGm0JtTNd0MBTNFK0v9x1MQCg4mzS9XO/A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TwvgBXiqRbEYKsY1TFhDLoNkTlPZVhsAWFATK05kTRS8HXc8ATOOnuxozEInjHkmMSeGthhh+wRJYoJC5n3l6UbaxeKro5AZ2hhZwbPeQCV/+xUyrPTZTP55x/CMB7TLD/Tn5lkAnnvc4BCDG/4JSCZ1s6n25vkVQZsbjBQHBUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wwTuKWuq; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wwTuKWuq"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 516A21A2A91;
+	Fri, 23 Jan 2026 08:30:23 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 23CC36070A;
+	Fri, 23 Jan 2026 08:30:23 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4EEB6119A8790;
+	Fri, 23 Jan 2026 09:30:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1769157021; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=aFUkavDXKGlzPVd2VawjHI2EJjqyfxrLlALkjdsobK0=;
+	b=wwTuKWuqTAevxhmBLRJZAQ1KAUakhSj+JafVIcX7RiwF5DSp6aBw4lwv2TWgJEUyXW1ppZ
+	4IBZ/QW0Jtjtv2eTGp7G+0V9CMOy+FgLbLC2Rnbsw6ZnltMYNFB7U5M6nUmp1yrvwFf5c7
+	mxVi2/xgf7L5Wx2TLP8rJr1eZD6qcbUUulRA5u2qXuRW7XBtQdFse1rgXrNfPVhfDwKFtC
+	nIKbiyXs7sO4sUtHA3PIVdYed9QIUDo5s/NSZivzCzy7MsmrjM6anIFCwsQCs9Ps07UJBs
+	BXOMjk/4v+++W/zJtKGpA7rVRlaE2iqhIl6ueudqbnGmWsOwaIQTXcN85p/leA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf-next v4 0/3] selftests/bpf: migrate a few bpftool
+ testing scripts
+Date: Fri, 23 Jan 2026 09:30:07 +0100
+Message-Id: <20260123-bpftool-tests-v4-0-a6653a7f28e7@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/9] selftests/mm: introduce helper to read every page
-To: "David Hildenbrand (Red Hat)" <david@kernel.org>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Dev Jain <dev.jain@arm.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Mark Brown <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>
-References: <20260122170224.4056513-1-kevin.brodsky@arm.com>
- <20260122170224.4056513-7-kevin.brodsky@arm.com>
- <a4c83b16-3307-497d-9690-0e31672f3202@kernel.org>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <a4c83b16-3307-497d-9690-0e31672f3202@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33NQQ6DIBAF0KsY1qVxAFG76j2aLgCHSmLFCDE2x
+ ruXsGpt0uXPn/dnIwFnh4Fcio3MuLjg/JiCOBXE9Gp8IHVdyoSVrAIGjOrJRu8HGjHEQLUGWRl
+ hDOqGJDPNaN2a924kndIR10juqeldiH5+5UcL5D5tyhJAHDYXoCU1VmkwptWo7FV7Hwc3no1/5
+ q2FfXgGR8+SlwI7LWpsQeGv5389T57LRnJmeV1j9e33fX8DoqJxUzYBAAA=
+X-Change-ID: 20251212-bpftool-tests-bb165c4cceb8
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Quentin Monnet <qmo@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 22/01/2026 23:20, David Hildenbrand (Red Hat) wrote:
->> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c
->> b/tools/testing/selftests/mm/hugetlb-madvise.c
->> index 05d9d2805ae4..5b12041fa310 100644
->> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
->> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
->> @@ -47,14 +47,7 @@ void write_fault_pages(void *addr, unsigned long
->> nr_pages)
->>     void read_fault_pages(void *addr, unsigned long nr_pages)
->>   {
->> -    unsigned long i;
->> -
->> -    for (i = 0; i < nr_pages; i++) {
->> -        unsigned long *addr2 =
->> -            ((unsigned long *)(addr + (i * huge_page_size)));
->> -        /* Prevent the compiler from optimizing out the entire loop: */
->> -        FORCE_READ(*addr2);
->> -    }
->> +    force_read_pages(addr, nr_pages, huge_page_size);
->>   }
->
-> Likely we could get rid of read_fault_pages() completely and simply
-> let the callers call force_read_pages() now?
+Hello,
+this is the v4 for some bpftool tests conversion. The new tests are
+being integrated in test_progs so that they can be executed on each CI
+run.
 
-I considered it but since the test also has write_fault_pages() with the
-same arguments, I thought it was better to keep it for symmetry (neither
-takes the page size since huge_page_size is a global).
+- First commit introduces a few dedicated helpers to execute bpftool
+  commands, with or without retrieving the generated stdout output
+- Second commit integrates test_bpftool_metadata.sh into test_progs
+- Third commit integrates test_bpftool_map.sh into test_progs
 
-- Kevin
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v4:
+- Port missing map access test in bpftool_metadata
+- Link to v3: https://lore.kernel.org/r/20260121-bpftool-tests-v3-0-368632f377e5@bootlin.com
+
+Changes in v3:
+- Drop commit reordering objects in Makefile
+- Rebased series on ci/bpf-next_base to fix conflict
+- Link to v2: https://lore.kernel.org/r/20260121-bpftool-tests-v2-0-64edb47e91ae@bootlin.com
+
+Changes in v2:
+- drop standalone runner in favor of test_progs
+- Link to v1: https://lore.kernel.org/r/20260114-bpftool-tests-v1-0-cfab1cc9beaf@bootlin.com
+
+---
+Alexis Lothoré (eBPF Foundation) (3):
+      bpf/selftests: add a few helpers for bpftool testing
+      selftests/bpf: convert test_bpftool_metadata.sh into test_progs framework
+      selftests/bpf: convert test_bpftool_map_access.sh into test_progs framework
+
+ tools/testing/selftests/bpf/Makefile               |   5 +-
+ tools/testing/selftests/bpf/bpftool_helpers.c      |  74 ++++
+ tools/testing/selftests/bpf/bpftool_helpers.h      |  11 +
+ .../selftests/bpf/prog_tests/bpftool_maps_access.c | 371 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/bpftool_metadata.c    | 144 ++++++++
+ tools/testing/selftests/bpf/test_bpftool_map.sh    | 398 ---------------------
+ .../testing/selftests/bpf/test_bpftool_metadata.sh |  85 -----
+ 7 files changed, 602 insertions(+), 486 deletions(-)
+---
+base-commit: 5f0eb131037251b80c9a92af28c6be8f65d063d2
+change-id: 20251212-bpftool-tests-bb165c4cceb8
+
+Best regards,
+-- 
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+
