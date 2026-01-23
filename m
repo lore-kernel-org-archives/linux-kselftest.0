@@ -1,131 +1,193 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F2B2C21EF
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 16:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1233093C0
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 16:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769185297; cv=pass; b=QvKlvFj53RYxJa9sViCWQjMOlU0+38Z6YPpO/T39GeRyEqManSMYMGruzJ34qGHXbwIE7QsD+iVn03VizoQBUAyq/9qBZfVldWNEuWlk9WDyMYdbIHmKGmS2XXPiSH1A5U2x3UMfje+h3KMAJ+AeUfXQA7InCL/Qg2zM0sslL5s=
+	t=1769186293; cv=pass; b=H4zFqvvjmFJKSInQqBYN4ATaFHpHFvUexjG6m71oU75qkqwno/iYaELMHzJu+tTpkLCkoUtDgMURzxif5WvcrG734vmK2N1niqJIKRsUaXigwgxHcAFwYQu6IcTFmcY9/L1aD1DNuTMCnJQKhmGvdOkeVDyR9d+tpACtKboqy/o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769185297; c=relaxed/simple;
-	bh=cJdkYRcxnUEL397UI1OS3MXqry0cR6kyDUerA84EGyc=;
+	s=arc-20240116; t=1769186293; c=relaxed/simple;
+	bh=RwDPvI0pQ8Sul1C0MMRL8oO67jL+BJknFecUZPy82xA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jaPEDnvmWyYAEpXo8prBbR/yh1M70WgF6HhzN49QGA734ez343Hfnw+2dUnhjLcpyZyRaaBmM9usHdjzO1E4pmgofDP17yELp7i4cG0Kg5rx1qTEISwYLJupkZouBUf9ARXI9BUuH6JQ7dDUSEgMO0fSBAWPxfmRWwtwKFCqSjU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=IQep+ysG; arc=pass smtp.client-ip=74.125.82.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+	 To:Cc:Content-Type; b=PnuFOpZpIayZlT3DJzwFbSCwDYra5bAXYCBHFuGZvDoTHY7awq/ZASdta62lg27hqqlAZFHTxtBzXenzUvaXugVz8Eckjr2+XD1v5/mPwAmR941y1TQyt1zNX/WzuSrWbtktOAy7fhABh+gD8LULBLoVJLk1zv2YJTQX2WoC5BQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rxw8rYDV; arc=pass smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="IQep+ysG"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-1233985e56aso209385c88.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 08:21:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769185294; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rxw8rYDV"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-4359108fd24so1500848f8f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 08:38:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769186290; cv=none;
         d=google.com; s=arc-20240605;
-        b=GdNGQokWfrv8LD+kxs0acTcfS/TSvj9ao2CJtuIvUfIOhovf2yvFi9eu1+Qlu4ba09
-         7axH1RxoCExtCo8EugMBecx0pN6s/ltsSA4c42russKx2KHERNW6bxRQs9RInjMZ6G0U
-         AO7mUX1hFLHEcWT4zv+jI1B3cANEShmf31+YoRQzIX3KYEXMhlCY2xhAP1ajD/tl9Bbi
-         xpXem/qGvvIfLqXDy9Uq08Idd/HHU/cCevZFk1nl6GeqDSL5ClQPnzKIPfrRKoc3xKJ2
-         eZg38vS/FSoBt3OtrsoglzwVKZ28RKpTXRJ+ScFO0pvyIP1DoxjkgJlMRBC8kNTvkaV7
-         4qPw==
+        b=BsIMLcfRTTSGMvUY6lfRQ8AUEgJ/u1J9XMwed/CtzicicZ7ITL5672NGVfF28/qUEJ
+         SGlpP3PWk+UVcgmGprGRpOYkUudYi4sB1afp9tq7Ga1QHVLy3hFEr0aSA6xYFP8DI2eX
+         QvM42MsQ3iYguxL4IjkBn+aAYq73n3HU0IE4rHsN49+NTkjIHRXR1NS7ZQFe8K6imAUX
+         GYlptAQ4bp4ZIm8j5NHDEb+d87ptINAt31bjAWuZBxcDpvdkpABqz+7rPW9OMj93pXPk
+         tCVp/HHeoJECS7MGWN6x+1qV3m8rvtoTWJW3uqMNy5qBuM4nzAN9U81JVGkRodLmkbkQ
+         IMNw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=DxNTeWBn5w9lqozNLdO3vzm/ZdxHMZsH4CX0i7ouB0I=;
-        fh=IijnizgXtQZ5xbQ7ybVlginqZHBdtI/in+I6Ut/8Ap4=;
-        b=FgmWJQbcbswxoJF7SopTuEfLt779f/kHRFXVg4LJwmLTr+qBB0/U5l6X8+fN9seZjt
-         BZBDgILhm4LI4CnuuIUcY6By2ayTRP7AK7EHVP1Mz8pPkmvhM4MW6b47mP+PKEhnUjiM
-         171xJ+91eA3ub+1m/iOZ+PsMxy2ULRd2mVvcVq6Ivr0/0FTKfIs0Uq4Su0CTFTa+5g50
-         /N0DqPhqm1IpJ9iyNCLfIZgHUzdabJdQOWmGcVvMcNSYus2BFrXEUQVsfbAOLs3x8hl+
-         hQCOC5HEQTWXWZbTIZINO+NtRHUtD03NOFj18K28naijnJqkAZakWimtMGcPKVOtgnf5
-         KOVQ==;
+        bh=kxHbVBBXdVDou2agKorvT80NIS3RgrK7fNwOf23Uh2s=;
+        fh=gXPwV2haHcJBZVT7bTU4T0E8mFSnG2f1hziu/q/deF8=;
+        b=NWgM86E64SqbmnLxy63e3pu4l46VO58Yi0crLjYaAg9t1+jsQWK8OwMCBxmniuP+Gk
+         W1GnA9732H51Wudhy/c3h2wz9onxocseFBn/E7pzapNjcUTsRPgtvKYn7WMNRpzdwqBN
+         5i6BBPiorkAGkYsIU61PauJvBimve1ujYJC3PLCsKjMSssAi+vjp+yDkA4FGevdaGA5E
+         D7jpXH9zKwE4fkk1HbnMWfQn4NSX/woW27AOB+5fTBCUGzYyxRwhlGLSgHg6O7NSqEQI
+         +HdCB4DYwzcWlysNJ1B3tO5lXvE7h0GttwmiPdnEZFXLSU0aSjC8KgIZf1YQFGNnSxAF
+         iUqA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1769185294; x=1769790094; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769186290; x=1769791090; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DxNTeWBn5w9lqozNLdO3vzm/ZdxHMZsH4CX0i7ouB0I=;
-        b=IQep+ysGrRgSh0XljatBMco2bgUEUx/HqoQbMYiRbBas3ydLTJa++TfPnBjfqBT69x
-         vpTbHt4+8T/R4OFcDVLfQQlFnech3oL0bBXOeD5GbdDCaChc3xxTUrJ6PdIMZNiwfl8k
-         j9TLNZ2rkf34VCwJcVEIowSLaM5v0rwkbjxNdugtSX7h53+kv5O6fPFPbWzRq31l+8p6
-         MYw/iAPhpSd0dmPwzasCsvtQM6lIY66HU3QlCUFg3g+1xEj9+UlWDwXB1qo4R33FXsMG
-         o0schVYUACUHXd/e8xo4JRvVz6pLpQnX4VWmLnYFz3QsYeo23KztVJcLsN0McvHBqnCu
-         /0Cw==
+        bh=kxHbVBBXdVDou2agKorvT80NIS3RgrK7fNwOf23Uh2s=;
+        b=Rxw8rYDVZqUecuJbI/3jaSa2TAPAjaeqY14kama0avcq/kOP5XzpN2/GWzBmPMLlTB
+         DGH3DDsYq3e9utNqM1fRNDWUUdqJN11MSS63aVKBP/58Nz+zMVhLiJpvWVsgv2vfsUar
+         9HEtQF8fU0a/yB4uD1FaygFgjFpzeUsGhoDXFuobINmY7v6dhrNGDfeqTfV9MvJy4Z2x
+         UY0LFev8/CT9WLIvS+u7clipU/cNBXpGJDq+K8M8LxZwlBH9ukDB+1/gkGt1RYceo38Y
+         l2ShDeh6bxfzd/eaXwWgL+CpUiBzTWjmllRj5xSLL04vhQt3xX7x00tUZkrFAfsdx+xc
+         mxVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769185294; x=1769790094;
+        d=1e100.net; s=20230601; t=1769186290; x=1769791090;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=DxNTeWBn5w9lqozNLdO3vzm/ZdxHMZsH4CX0i7ouB0I=;
-        b=SvyXdfvxx1R4vbAJZooieXxVuAHLCvvuBoMY++mLDCWzd6KnhkCvO6vZX6twH7x28l
-         ne11qwez0uFe24OXKJo5JHu0ahWOJwg2BJPS/u6JrswnpdLEonVBX8y2mWWtl6PGI+2P
-         A2m6r7XZyS/BW8/H5F83epm0QnjIouBPjtUp74Lkl0vXMB2ITaiiTXWiovwsz8MCOehE
-         ftIfJC6EI6GZe7c0Qo1D9i8BUvZIUP1iVH6N2/0sB6ktHTek6BWv6OWWX8hJhY2nOwDI
-         I7ZSb461kv3vEXB514T/6oxUj+eNdW4kR/zqfbJPoJaHYzKjHZI7F0JjCHftOtnDx1by
-         SWrw==
-X-Forwarded-Encrypted: i=1; AJvYcCXEiVsd5EP/L8RawaWowAINsb+/5dfENbDqBpj9OjRJjTeSuREDXGdnjod/G6f01J7MZxCH2XOOE2c0liHplaw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXnqrpA5o7I0eoUb/tpqfSCdT8GT06EKiX9b50kmSn5b7ZwpN6
-	89onaW4azSmOs7ZdxMZUP3GDKdIyLfCOlNlwTHq0c2QFm1JfR0UbBHvB3bHhFCLWL7+C+0T7YNx
-	Vhu9sVRs2KX/OHW5I6ijDCkVLNJLn63nIcy2LkS2GzmSS6gAaqe+0IOI=
-X-Gm-Gg: AZuq6aKw3QRRcbkp/fAyRHX+1OQWsmGVlWL09iPGvew+BwnVUKf6KnDqk8ZQ4HaKx9w
-	8TdfuLPpqNwAD024792FGJjzOgWxtG3zNStigWBFIFumL43wXoxBPpuu+5nHa1zmmEmaEUWNVzr
-	T7/7lQjg858tC2kwzHhkSQbmx6SoWIC6BqzTCUKg6u8KgqBopAabiBLcQw23U5LscmQ7SPd6+WQ
-	6elxcFN7axW/XZTv1q1jGtpSmx33yOD+ZmXbB/BtpN65YiudL46LNi1c8nni9CeudyuQaNO
-X-Received: by 2002:a05:7022:258b:b0:119:e56b:46ba with SMTP id
- a92af1059eb24-1247dbf83afmr822047c88.4.1769185294328; Fri, 23 Jan 2026
- 08:21:34 -0800 (PST)
+        bh=kxHbVBBXdVDou2agKorvT80NIS3RgrK7fNwOf23Uh2s=;
+        b=gvCRLtbK400lRzT0pN8kL/1DgmHaTi3JEtfjoLcRnBJoLvyP2CMaX+DkM/gqIuNCvG
+         e2dTiGjr26ZMLm0qufAyFCEug5VmtIs3Or4plofJmshepo5ST35FUa37Th7Om4oWBp6K
+         5N3ymrv4GOqg1l2toywizjvNiIf5G7i40EDRsiWKftODK0sFQ+igQbyvrqCj/nUjUj4U
+         x6K1pd83Ir36SCwyYUnQOqwq47QWnWs68ST3GVXKEdpeSaaQMZyA0/hgOU0+jpgqRpYC
+         I0mIumMDQHz6RrqysJEblfVaB+UbwEl1QGAjHFd1Hime8+cxLfivRoeyNyoqL7LNnZmL
+         eKqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUl2+joRbqB14wNnq7OtYE6JNolbG+e6svtgyCM64UQG/ATm/pC7RE0xOBKKRxCH5Q4xDPxq/PR1sz+GegEAaI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYF6iR58XDQi/Kv6oI7yCjV2GH51NuDblBYJgIqyKHssVqud7t
+	t1P8wCc3TquXPKcr/4HZGYMwwePHrlYOsszuXyD5VZlNyyBenxCcWecVbDJxCWQfcpXeEfXYBVh
+	mBoQYBu5KxXUS+hGeF34audCI7mHa/bA=
+X-Gm-Gg: AZuq6aKGA+jpQ+JSTajzY2jmiUqQDqwIw+HmKCNIoTE/7HXwtB9gFm3VCO5XbqhJMGj
+	uE+0HgyKC7Xp+oaeIaU1CShs0GPXETXokJNmONsKY6SDVEbvp+yS3xor/WF4uqsx5vYsMt3ehL8
+	InyQDYFTinXkK9/aUPORzW+7zKx8ZhLNHV74Oc2fTM29Kjyl4UIviGDZPuW5xWW5nTkRwl7uzM6
+	5jIeo/peYsVU2nZUv1P7BZVezf93CNpyJlM+NKu+OsXFQXL7mzL42hAuQ4S86xMPDTAdGFLY8ZR
+	mQH5Mx91ZPi0nXKpfw7YUrVQ8N2KSt+g4V5kzdAQO+zVkq8bA2k6+ARiYCjPVAxHFkHGGJRx
+X-Received: by 2002:a05:6000:2510:b0:435:a3c5:a526 with SMTP id
+ ffacd0b85a97d-435b9306f93mr3153762f8f.14.1769186289815; Fri, 23 Jan 2026
+ 08:38:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260123112913.1371323-1-alex@zazolabs.com>
-In-Reply-To: <20260123112913.1371323-1-alex@zazolabs.com>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Fri, 23 Jan 2026 08:21:22 -0800
-X-Gm-Features: AZwV_Qh3_0A3z74JwuZQxyRjNGjleQd1M4K5VH1qZpvE0taKw_h1Ly7vckZSHC8
-Message-ID: <CADUfDZrtJO8AhRh1WbMo8_xPvwE6NBOD9K8bUr6_B+=mhiSd4g@mail.gmail.com>
-Subject: Re: [PATCH] selftests: ublk: add missing gitignore for metadata_size binary
-To: Alexander Atanasov <alex@zazolabs.com>
-Cc: Ming Lei <ming.lei@redhat.com>, Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
-	linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20260123084248.259278-1-changwoo@igalia.com> <20260123084248.259278-2-changwoo@igalia.com>
+In-Reply-To: <20260123084248.259278-2-changwoo@igalia.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 23 Jan 2026 08:37:57 -0800
+X-Gm-Features: AZwV_Qj09XJMcjRsVhLeepl5jIwtRCuMSfLzrScea9MIVqBh8kGfGuH7SfaIFuw
+Message-ID: <CAADnVQJTaYo0=aaTii6n+yXLuacLcc9XSj=PLgbq+-mn5Num9Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Introduce execution context
+ detection kfuncs
+To: Changwoo Min <changwoo@igalia.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-dev@igalia.com, 
+	bpf <bpf@vger.kernel.org>, sched-ext@lists.linux.dev, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 23, 2026 at 3:29=E2=80=AFAM Alexander Atanasov <alex@zazolabs.c=
-om> wrote:
+On Fri, Jan 23, 2026 at 12:43=E2=80=AFAM Changwoo Min <changwoo@igalia.com>=
+ wrote:
 >
-> A new utility metadata_size was added in commit:
-> 261b67f4e347 ("selftests: ublk: add utility to get block device metadata =
-size")
-> but it was not added to .gitignore. Fix that by adding it there.
+> Introduce bpf_in_nmi(), bpf_in_hardirq(), bpf_in_serving_softirq(), and
+> bpf_in_task() kfuncs to allow BPF programs to query the current execution
+> context.
 >
-> Fixes: 261b67f4e347 ("selftests: ublk: add utility to get block device me=
-tadata size")
-> Signed-off-by: Alexander Atanasov <alex@zazolabs.com>
+> While BPF programs can sometimes infer context based on the attach point,
+> certain programs (such as those in sched_ext) may be called from multiple
+> contexts. These kfuncs provide a reliable way for logic to branch based o=
+n
+> whether the CPU is currently handling an interrupt or executing in task
+> context.
+>
+> For example, this is particularly useful for sched_ext schedulers that ne=
+ed
+> to differentiate between task-to-task wake-ups and interrupt-to-task
+> wake-ups.
+>
+> As the names imply, these helpers wrap the kernel's internal in_nmi(),
+> in_hardirq(), in_serving_softirq(), and in_task() macros.
+>
+> Signed-off-by: Changwoo Min <changwoo@igalia.com>
 > ---
->  tools/testing/selftests/ublk/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
+>  kernel/bpf/helpers.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
 >
-> diff --git a/tools/testing/selftests/ublk/.gitignore b/tools/testing/self=
-tests/ublk/.gitignore
-> index 8b2871ea7751..95052c32fa09 100644
-> --- a/tools/testing/selftests/ublk/.gitignore
-> +++ b/tools/testing/selftests/ublk/.gitignore
-> @@ -1,3 +1,4 @@
->  kublk
->  /tools
->  *-verify.state
-> +metadata_size
-
-Maybe move it next to kublk (the other executable), which would also
-keep these sorted alphabetically?
-
-Other than that,
-Reviewed-by: Caleb Sander Mateos <csander@purestorage.com>
-
-> --
-> 2.43.0
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 637677815365..cb36bc7a80c6 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -4365,6 +4365,46 @@ __bpf_kfunc int bpf_dynptr_file_discard(struct bpf=
+_dynptr *dynptr)
+>         return 0;
+>  }
 >
+> +/**
+> + * bpf_in_nmi - Test if the current execution context is in NMI context.
+> + *
+> + * Return: true if we are in NMI context, false otherwise.
+> + */
+> +__bpf_kfunc bool bpf_in_nmi(void)
+> +{
+> +       return in_nmi();
+> +}
+> +
+> +/**
+> + * bpf_in_hardirq - Test if the current execution context is in hard IRQ=
+ context.
+> + *
+> + * Return: true if we are in hard IRQ context, false otherwise.
+> + */
+> +__bpf_kfunc bool bpf_in_hardirq(void)
+> +{
+> +       return in_hardirq();
+> +}
+> +
+> +/**
+> + * bpf_in_serving_softirq - Test if the current execution context is in =
+softirq context.
+> + *
+> + * Return: true if we are in softirq context, false otherwise.
+> + */
+> +__bpf_kfunc bool bpf_in_serving_softirq(void)
+> +{
+> +       return in_serving_softirq();
+> +}
+> +
+> +/**
+> + * bpf_in_task - Test if the current execution context is in task contex=
+t.
+> + *
+> + * Return: true if we are in task context, false otherwise.
+> + */
+> +__bpf_kfunc bool bpf_in_task(void)
+> +{
+> +       return in_task();
+> +}
+> +
+
+This functionality is already available.
+See bpf_in_interrupt() and get_preempt_count() in bpf_experimental.h.
+
+No need to replicate that as kfuncs.
+If something can be implemented as a bpf program it should stay as
+pure bpf code, since it's more flexible and faster this way.
+llvm together with JITs completely inline get_preempt_count().
+
+pw-bot: cr
