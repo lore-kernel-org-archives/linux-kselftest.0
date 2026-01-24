@@ -1,196 +1,173 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C93E212FAD
-	for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 10:48:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7073EBF01;
+	Sat, 24 Jan 2026 11:29:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769251693; cv=none; b=a5T/jlrqI3bKhz9oYRlcqaNMGYnRq14IwaCTzZd/wBHrupQTlfHKRuNfzFePH9qQG8UC4LIqKQmB1tNeoSRCOBdn6A6ARkr8ZBlNNX8eA9UfaqbqATp/FfOL3qbncwVyOPSSd9kS9xl9d2JdF42eHLbEf2EUQhCY5QMju16nctQ=
+	t=1769254201; cv=none; b=jGBITElbJUCx3ZLOHlRq0TQX6dK2kfpa2+MRw+cX1T44jRdYfZ9sbGnFCOO3D3e8oZVKEZ7Vp8ZFZytpI9SQyAiX8ukHYgF3V4/Z5T6gFqEJvNwkd9AFsm5zw0Ta/9Lyo65a1gqGo/QU5lkR6xJDkz4U5MCCL72wMs3V/YC3XlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769251693; c=relaxed/simple;
-	bh=47VAx5ZacdJ8aWPizoNgKSZ2gS6fvZEIp/N80TMPtLM=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=K8RrFEKVVQYfh8QUph3kZ+tDZpXPzE2j4DNcEuEMvvops7sL1YZpQnBZVex+tTF8c8acqWAoB3UpU1kWT3MMUm5vbdNl45Q0zTvfJ3PorZa1n2CWNkhvAYw3y4e556oLg7nHowQe9hdxUXNFrffqVwYyHwiOnszdwgo/m23crU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oe4i6iQF; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769254201; c=relaxed/simple;
+	bh=IrO9hNgOWsd5B+SRp4zrLjYCAzbHl5GjTs6B2AFTmmk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CCTtxcXd+lXA5TJxgTI4bdlP/IXnMTydyxvsEdYoOIhbMZJ44PuD0m3drZQhxGU16R0Gph8p6uZDOlxM/tCxKfqoqkP14+PuYFAseait4fMEhPw625BU2CU/tzL/59KLlzns3iWE1w3wZKWTMTCLbxL6PFiPoKpWmL8htHKYuAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Y8bCUnkz; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oe4i6iQF"
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Y8bCUnkz"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=xLdgTFSsgILLUq8UDqyG8adReEFkQdmZvwX/nd4lviI=; b=Y8bCUnkzodv+SH6kgBc7GXHSkB
+	D+V9oYNYNK08Ih6XGXR9dDwMDv2LI3ZQoeIBztD0yXIikyvBxq9/nNblhNocTij0dDEs1FxFgjU6/
+	tQHvE6HYaSNdqZGsOOJ96cOpX3KrZrTnNNR8ucV+/TGlcRsDDCAE2yqqL2VavDf7ih+upb23xqyDz
+	MRXUbCic+SxPGQymaLqSPpBIhQes5A9V8g6fLeov2XSKU1vFIXS0H4qU42pRWTYaBaNrG0gNJELLG
+	xJsVMJMLUW7YbDHEbWwcXQRK1nf4Hhj6v6mtE/69k5OYG6gw8U9+E4eR4rQUoSAmwQdFCHJE8Pyfk
+	tKOwPNxQ==;
+Received: from [175.114.83.198] (helo=[192.168.45.92])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1vjbpc-009MZh-Hp; Sat, 24 Jan 2026 12:29:32 +0100
+Message-ID: <933f94c8-d74c-4d01-8e55-d8dab3d79f61@igalia.com>
+Date: Sat, 24 Jan 2026 20:29:20 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769251679;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X157f6edi9qZZ/l+AyW1kCRowa/qQVlZyK7G3GoioL0=;
-	b=oe4i6iQFz0xWIvjzlHY4GRoEJjM+4sH2hXTZlqQJUolKB//bI+M7qulvXc2ajJjha8jqJa
-	BFiHUL2sIGNUH7lH2AlcI3HFAaTorof1dhO7nk92me3D3rCyqJ9ORvWW+UvVO5A1vcC0/e
-	TiUbGSAEvFTUgcUghnwT8y0HwdoG314=
-Date: Sat, 24 Jan 2026 10:47:51 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <56db5e4bb54678e0615501693a5eee0b88e2bf3e@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH bpf-next v8 3/3] bpf, selftest: Add tests for FIONREAD
- and copied_seq
-To: bpf@vger.kernel.org
-Cc: "John Fastabend" <john.fastabend@gmail.com>, "Jakub Sitnicki"
- <jakub@cloudflare.com>, "David S. Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
- "Neal Cardwell" <ncardwell@google.com>, "Kuniyuki Iwashima"
- <kuniyu@google.com>, "David Ahern" <dsahern@kernel.org>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP
- Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
- Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Stefano Garzarella" <sgarzare@redhat.com>, "Michal
- Luczaj" <mhal@rbox.co>, "Cong Wang" <cong.wang@bytedance.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-In-Reply-To: <20260124061502.24350-4-jiayuan.chen@linux.dev>
-References: <20260124061502.24350-1-jiayuan.chen@linux.dev>
- <20260124061502.24350-4-jiayuan.chen@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Introduce execution context
+ detection kfuncs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ kernel-dev@igalia.com, bpf <bpf@vger.kernel.org>, sched-ext@lists.linux.dev,
+ LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20260123084248.259278-1-changwoo@igalia.com>
+ <20260123084248.259278-2-changwoo@igalia.com>
+ <CAADnVQJTaYo0=aaTii6n+yXLuacLcc9XSj=PLgbq+-mn5Num9Q@mail.gmail.com>
+From: Changwoo Min <changwoo@igalia.com>
+Content-Language: en-US, ko-KR, en-US-large, ko, en-HK
+In-Reply-To: <CAADnVQJTaYo0=aaTii6n+yXLuacLcc9XSj=PLgbq+-mn5Num9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-January 24, 2026 at 14:14, "Jiayuan Chen" <jiayuan.chen@linux.dev mailto:=
-jiayuan.chen@linux.dev?to=3D%22Jiayuan%20Chen%22%20%3Cjiayuan.chen%40linu=
-x.dev%3E > wrote:
+Hi Alexei,
 
+Thank you for the feedback.
 
-[...]
-> +
-> +/* it is used to send data to via native stack and BPF redirecting */
-> +static void test_sockmap_multi_channels(int sotype)
-> +{
-> + int map, err, sent, recvd, zero =3D 0, one =3D 1, avail =3D 0;
-> + struct test_sockmap_pass_prog *skel =3D NULL;
-> + int c0 =3D -1, p0 =3D -1, c1 =3D -1, p1 =3D -1;
-> + char buf[10] =3D "0123456789", rcv[11];
-> + struct bpf_program *prog;
-> +
-> + skel =3D test_sockmap_pass_prog__open_and_load();
-> + if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> + return;
-> +
-> + err =3D create_socket_pairs(AF_INET, sotype, &c0, &c1, &p0, &p1);
-> + if (err)
-> + goto end;
-> +
-> + prog =3D skel->progs.prog_skb_verdict_ingress;
-> + map =3D bpf_map__fd(skel->maps.sock_map_rx);
-> +
-> + err =3D bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM=
-_VERDICT, 0);
-> + if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
-> + goto end;
-> +
-> + err =3D bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
-> + if (!ASSERT_OK(err, "bpf_map_update_elem(p0)"))
-> + goto end;
-> +
-> + err =3D bpf_map_update_elem(map, &one, &p1, BPF_ANY);
-> + if (!ASSERT_OK(err, "bpf_map_update_elem"))
-> + goto end;
-> +
-> + /* send data to p1 via native stack */
-> + sent =3D xsend(c1, buf, 2, 0);
-> + if (!ASSERT_EQ(sent, 2, "xsend(2)"))
-> + goto end;
-> +
-> + poll_read(p1, IO_TIMEOUT_SEC);
-> + err =3D ioctl(p1, FIONREAD, &avail);
-> + ASSERT_OK(err, "ioctl(FIONREAD) partial call");
-> + ASSERT_EQ(avail, 2, "ioctl(FIONREAD) partial return");
-> +
-> + /* send data to p1 via bpf redirecting */
-> + sent =3D xsend(c0, buf + 2, sizeof(buf) - 2, 0);
-> + if (!ASSERT_EQ(sent, sizeof(buf) - 2, "xsend(remain-data)"))
-> + goto end;
-> +
-> + poll_read(p1, IO_TIMEOUT_SEC);
+On 1/24/26 1:37 AM, Alexei Starovoitov wrote:
+> On Fri, Jan 23, 2026 at 12:43 AM Changwoo Min <changwoo@igalia.com> wrote:
+>>
+>> Introduce bpf_in_nmi(), bpf_in_hardirq(), bpf_in_serving_softirq(), and
+>> bpf_in_task() kfuncs to allow BPF programs to query the current execution
+>> context.
+>>
+>> While BPF programs can sometimes infer context based on the attach point,
+>> certain programs (such as those in sched_ext) may be called from multiple
+>> contexts. These kfuncs provide a reliable way for logic to branch based on
+>> whether the CPU is currently handling an interrupt or executing in task
+>> context.
+>>
+>> For example, this is particularly useful for sched_ext schedulers that need
+>> to differentiate between task-to-task wake-ups and interrupt-to-task
+>> wake-ups.
+>>
+>> As the names imply, these helpers wrap the kernel's internal in_nmi(),
+>> in_hardirq(), in_serving_softirq(), and in_task() macros.
+>>
+>> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+>> ---
+>>   kernel/bpf/helpers.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 44 insertions(+)
+>>
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index 637677815365..cb36bc7a80c6 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -4365,6 +4365,46 @@ __bpf_kfunc int bpf_dynptr_file_discard(struct bpf_dynptr *dynptr)
+>>          return 0;
+>>   }
+>>
+>> +/**
+>> + * bpf_in_nmi - Test if the current execution context is in NMI context.
+>> + *
+>> + * Return: true if we are in NMI context, false otherwise.
+>> + */
+>> +__bpf_kfunc bool bpf_in_nmi(void)
+>> +{
+>> +       return in_nmi();
+>> +}
+>> +
+>> +/**
+>> + * bpf_in_hardirq - Test if the current execution context is in hard IRQ context.
+>> + *
+>> + * Return: true if we are in hard IRQ context, false otherwise.
+>> + */
+>> +__bpf_kfunc bool bpf_in_hardirq(void)
+>> +{
+>> +       return in_hardirq();
+>> +}
+>> +
+>> +/**
+>> + * bpf_in_serving_softirq - Test if the current execution context is in softirq context.
+>> + *
+>> + * Return: true if we are in softirq context, false otherwise.
+>> + */
+>> +__bpf_kfunc bool bpf_in_serving_softirq(void)
+>> +{
+>> +       return in_serving_softirq();
+>> +}
+>> +
+>> +/**
+>> + * bpf_in_task - Test if the current execution context is in task context.
+>> + *
+>> + * Return: true if we are in task context, false otherwise.
+>> + */
+>> +__bpf_kfunc bool bpf_in_task(void)
+>> +{
+>> +       return in_task();
+>> +}
+>> +
+> 
+> This functionality is already available.
+> See bpf_in_interrupt() and get_preempt_count() in bpf_experimental.h.
+> 
+> No need to replicate that as kfuncs.
 
+I see. While bpf_in_interrupt() provides a general check, certain use
+cases in sched_ext require more granular differentiation -- specifically
+between hardirq and softirq contexts to handle different wake-up paths
+correctly.
 
-It's a race in the test - poll_read() returns early because the first 2 b=
-ytes are
-already in the queue, but the second send hasn't been processed yet.
-Will fix with a polling wait for FIONREAD.
+> If something can be implemented as a bpf program it should stay as
+> pure bpf code, since it's more flexible and faster this way.
+> llvm together with JITs completely inline get_preempt_count().
+> 
 
-pw-bot: cr
+I agree. Implementing these checks as pure BPF code is more efficient
+due to JIT inlining. I was initially hesitant to duplicate kernel-side
+macros in BPF, but since the precedent is already established in
+bpf_experimental.h, I will follow that pattern.
 
-> + err =3D ioctl(p1, FIONREAD, &avail);
-> + ASSERT_OK(err, "ioctl(FIONREAD) full call");
-> + ASSERT_EQ(avail, sotype =3D=3D SOCK_DGRAM ? 2 : sizeof(buf), "ioctl(F=
-IONREAD) full return");
-> +
-> + recvd =3D recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-> + if (!ASSERT_EQ(recvd, sizeof(buf), "recv_timeout(p1)") ||
-> + !ASSERT_OK(memcmp(buf, rcv, recvd), "data mismatch"))
-> + goto end;
-> +end:
-> + if (c0 >=3D 0)
-> + close(c0);
-> + if (p0 >=3D 0)
-> + close(p0);
-> + if (c1 >=3D 0)
-> + close(c1);
-> + if (p1 >=3D 0)
-> + close(p1);
-> + test_sockmap_pass_prog__destroy(skel);
-> +}
-> +
->  void test_sockmap_basic(void)
->  {
->  if (test__start_subtest("sockmap create_update_free"))
-> @@ -1108,4 +1363,14 @@ void test_sockmap_basic(void)
->  test_sockmap_skb_verdict_vsock_poll();
->  if (test__start_subtest("sockmap vsock unconnected"))
->  test_sockmap_vsock_unconnected();
-> + if (test__start_subtest("sockmap with zc"))
-> + test_sockmap_zc();
-> + if (test__start_subtest("sockmap recover"))
-> + test_sockmap_copied_seq(false);
-> + if (test__start_subtest("sockmap recover with strp"))
-> + test_sockmap_copied_seq(true);
-> + if (test__start_subtest("sockmap tcp multi channels"))
-> + test_sockmap_multi_channels(SOCK_STREAM);
-> + if (test__start_subtest("sockmap udp multi channels"))
-> + test_sockmap_multi_channels(SOCK_DGRAM);
->  }
-> diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c=
- b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-> index 69aacc96db36..ef9edca184ea 100644
-> --- a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-> +++ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-> @@ -44,4 +44,18 @@ int prog_skb_parser(struct __sk_buff *skb)
->  return SK_PASS;
->  }
->=20=20
->=20+SEC("sk_skb/stream_verdict")
-> +int prog_skb_verdict_ingress(struct __sk_buff *skb)
-> +{
-> + int one =3D 1;
-> +
-> + return bpf_sk_redirect_map(skb, &sock_map_rx, one, BPF_F_INGRESS);
-> +}
-> +
-> +SEC("sk_skb/stream_parser")
-> +int prog_skb_verdict_ingress_strp(struct __sk_buff *skb)
-> +{
-> + return skb->len;
-> +}
-> +
->  char _license[] SEC("license") =3D "GPL";
-> --=20
->=202.43.0
->
+I will drop the kfunc implementations in Patch 1 and instead add
+bpf_in_nmi(), bpf_in_hardirq(), bpf_in_serving_softirq(), and
+bpf_in_task() to bpf_experimental.h by wrapping get_preempt_count().
+
+I will also update the selftests in Patch 2 to use these new headers and
+submit a v2 shortly.
+
+Regards,
+Changwoo Min
