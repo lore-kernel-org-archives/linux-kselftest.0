@@ -1,137 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538212773EE;
-	Sat, 24 Jan 2026 08:23:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B5B13B5AE;
+	Sat, 24 Jan 2026 08:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769243020; cv=none; b=fh56sjCwhnTvKdB50lZIe6TZQW8/3vlTx5UYBM3XmexqSTjWtvzjkLqMD3kpO95NOouGcXDjb8YWTS4mUvQB5Gs7SChQWV4VdVWHFNGA7Gj2YNCGGjOJ0cEQArWZ2VILkMgqqH7G8XSSm8HPjC9WknW+PhSZnXT1JP6ZbgdTrf4=
+	t=1769243412; cv=none; b=D7KZEYpk9wu+hlhfF5ypfqiqdblnG38187KhFUerDNDKBcEgerjLxzl343WRgTHVvkN5dvU+YkKHsZHjnAwbIkJLu4inLcaKuTwMhBXB9y0HJH4mO6rPiDA70xOCpLm1HF+/aFe6p8XgtBLhLze3rHrX/3bqfzEsRk3DsR07vfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769243020; c=relaxed/simple;
-	bh=KpG6/0cTWVmMn8PUAbjuUFccMtoHKtkLDwvs+w3tA30=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=nkruhukGSUnta6HPDV+HzYyRb6in/PbzpxKg4CcXmN6VW+T7iwTvdsgX4+iJxaVPvR0WMF+kxBEmAcyKlQBuQ0zY+8fj70u1BW3Pi3lPXU80rurgza0oQeJtycc5dBEUu5rkRhdyNrLUG60VazhOGoX6cWye5vgidRBluZVZ0X0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQ4FHDzF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769243412; c=relaxed/simple;
+	bh=IfSksN2DAR6jItQtNlLEGOjx6mECbXSIHAxZaX3DZ2Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=nowWIA6+n9HFEfp40CuKJbLftXTBzmOpGMvP45e88pNi3GR3WTdPJqu8IM4joBDKfpcPT8098oGAzqx2XBa3LVZRMMNgfN1/dVXUtIWGDq/AG1WNdZ2DwxyGY2PMzL8XnIv+1CcUBbJoJVMPYfOso8qiQCMZ3+uDLJJLZpesYBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/KRvkYw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQ4FHDzF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4084FC116D0;
-	Sat, 24 Jan 2026 08:23:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/KRvkYw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D49C116D0;
+	Sat, 24 Jan 2026 08:30:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769243019;
-	bh=KpG6/0cTWVmMn8PUAbjuUFccMtoHKtkLDwvs+w3tA30=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=gQ4FHDzFkZAci3RjPSeRlUv/3hGiShStmoyUEcn9ch2bEwIMcMY8jYI35vBB1rmsu
-	 BsCy1xiJv+3hgS5i0koPdW75R3U/28Y+Z46TkwGi5RuyNqUrdvdv9VpscwsBDLfZ3N
-	 iw7ggIgKw+0KbixPnVGP6VL9Pueil7PtE+bxMxY3SApM5BPhuyL0o/umE0GKiysZHE
-	 xBJ7j4Qfe4TlFNKB1zR/v8tUTfYzH38wi9v+mDUQFroI61DwO47kahuO1xVqmrED3P
-	 yMf7y2mIxtjFyYJhebTa1vYWrxKQLxjmVSkhw+1pMmkM43o6FjMt3uHyrWi1c1YkGc
-	 hLMCZOrxEAbEQ==
-Content-Type: multipart/mixed; boundary="===============0520039389324384177=="
+	s=k20201202; t=1769243412;
+	bh=IfSksN2DAR6jItQtNlLEGOjx6mECbXSIHAxZaX3DZ2Q=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=o/KRvkYwoKde30JrO5/+uRYoTU1kAPgW6Tv87WJ3/WIZaZ3olmQBY90T273f1zqNM
+	 IYX4E/J6STWwO5NfWlZHiy0tjuLIgZlYH9PGdW/5fbl304e2lub+3GHNqdWmiJYgAv
+	 a7esFeaUX4E5+87E6KMXPvfXGAKsi1IEEJg7ubiR+EhHvLrzw6peuDt3yKjGzLTh1r
+	 QE0k/BOYqtEgAVkofWqfTQ2KJzkd5wNz7L8B/jl1a8gu4Ij4tOMXLvys0As0BXPa9e
+	 Q4JZZUGy3lCIPbqsqzTr6RE1nN+H6hThrTy4zKjhXquS9RhRKo6fvIEJcxRncWosb/
+	 vBBfDjfrhY0hA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11CBC3808200;
+	Sat, 24 Jan 2026 08:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2a310e86a59eb4c44c3ac9e5647814469d9c955580c9c0f1b3d9ca4a44717a34@mail.kernel.org>
-In-Reply-To: <20260124075223.6033-7-adubey@linux.ibm.com>
-References: <20260124075223.6033-7-adubey@linux.ibm.com>
-Subject: Re: [PATCH v5 6/6] powerpc64/bpf: Additional NVR handling for bpf_throw
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com,sachinpb@linux.ibm.com,venkat88@linux.ibm.com,andrii@kernel.org,eddyz87@gmail.com,mykolal@fb.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,christophe.leroy@csgroup.eu,naveen@kernel.org,maddy@linux.ibm.com,mpe@ellerman.id.au,npiggin@gmail.com,memxor@gmail.com,iii@linux.ibm.com,shuah@kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 24 Jan 2026 08:23:39 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v5 0/9] riscv: vector: misc ptrace fixes for debug
+ use-cases
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <176924340785.3247175.17185864218197872186.git-patchwork-notify@kernel.org>
+Date: Sat, 24 Jan 2026 08:30:07 +0000
+References: <20251214163537.1054292-1-geomatsi@gmail.com>
+In-Reply-To: <20251214163537.1054292-1-geomatsi@gmail.com>
+To: Sergey Matyukevich <geomatsi@gmail.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, pjw@kernel.org, palmer@dabbelt.com,
+ alex@ghiti.fr, oleg@redhat.com, shuah@kernel.org, thuth@redhat.com,
+ charlie@rivosinc.com, andybnac@gmail.com, samuel.holland@sifive.com,
+ joel.granados@kernel.org, conor.dooley@microchip.com,
+ yongxuan.wang@sifive.com, heiko@sntech.de, guoren@kernel.org
 
---===============0520039389324384177==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> index db121b1404fe..17de8b53a962 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+This series was applied to riscv/linux.git (for-next)
+by Paul Walmsley <pjw@kernel.org>:
 
-[ ... ]
+On Sun, 14 Dec 2025 19:35:04 +0300 you wrote:
+> This patch series suggests fixes for several corner cases in the RISC-V
+> vector ptrace implementation:
+> 
+> - init vector context with proper vlenb, to avoid reading zero vlenb
+>   by an early attached debugger
+> 
+> - follow gdbserver expectations and return ENODATA instead of EINVAL
+>   if vector extension is supported but not yet activated for the
+>   traced process
+> 
+> [...]
 
-> +/*
-> + * For exception boundary & exception_cb progs:
-> + *     return increased size to accommodate additional NVRs.
-> + */
-> +static int bpf_jit_stack_size(struct codegen_context *ctx)
-> +{
-> +	return ctx->exception_boundary || ctx->exception_cb ?
-> +					BPF_PPC_EXC_STACKFRAME :
-> +					BPF_PPC_STACKFRAME;
-> +}
+Here is the summary with links:
+  - [v5,1/9] riscv: ptrace: return ENODATA for inactive vector extension
+    https://git.kernel.org/riscv/c/35328975fa84
+  - [v5,2/9] riscv: vector: init vector context with proper vlenb
+    https://git.kernel.org/riscv/c/66d52c54e59f
+  - [v5,3/9] riscv: csr: define vtype register elements
+    https://git.kernel.org/riscv/c/0d9acbd7836a
+  - [v5,4/9] riscv: ptrace: validate input vector csr registers
+    https://git.kernel.org/riscv/c/995e66a25b26
+  - [v5,5/9] selftests: riscv: test ptrace vector interface
+    https://git.kernel.org/riscv/c/dca68b94a8b1
+  - [v5,6/9] selftests: riscv: verify initial vector state with ptrace
+    https://git.kernel.org/riscv/c/1a353e49a0dc
+  - [v5,7/9] selftests: riscv: verify syscalls discard vector context
+    https://git.kernel.org/riscv/c/4b7e068fe676
+  - [v5,8/9] selftests: riscv: verify ptrace rejects invalid vector csr inputs
+    https://git.kernel.org/riscv/c/bfdd22c430ca
+  - [v5,9/9] selftests: riscv: verify ptrace accepts valid vector csr values
+    https://git.kernel.org/riscv/c/ccb3038e946c
 
-[ ... ]
-
-> @@ -198,7 +249,19 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
->  			EMIT(PPC_RAW_STD(_R0, _R1, PPC_LR_STKOFF));
->  		}
->
-> -		EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_STACKFRAME + ctx->stack_size)));
-> +		EMIT(PPC_RAW_STDU(_R1, _R1,
-> +				-(bpf_jit_stack_size(ctx) + ctx->stack_size)));
-> +	}
-
-[ ... ]
-
-> @@ -248,9 +311,19 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx)
->  		EMIT(PPC_RAW_LD(bpf_to_ppc(ARENA_VM_START), _R1,
->  				bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
->
-> +	if (ctx->exception_cb) {
-> +		/*
-> +		 * Recover additionally saved non volatile registers from stack
-> +		 * frame of exception boundary program.
-> +		 */
-> +		for (i = _R14; i <= _R25; i++)
-> +			EMIT(PPC_RAW_LD(i, _R1, bpf_jit_stack_offsetof(ctx, i)));
-> +	}
-> +
->  	/* Tear down our stack frame */
->  	if (bpf_has_stack_frame(ctx)) {
-> -		EMIT(PPC_RAW_ADDI(_R1, _R1, BPF_PPC_STACKFRAME + ctx->stack_size));
-> +		EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_jit_stack_size(ctx) + ctx->stack_size));
-
-For the exception callback case, doesn't this use the wrong stack_size?
-
-In bpf_jit_build_prologue(), the exception callback does not create its own
-frame - it sets R1 to the boundary's frame pointer via EMIT(PPC_RAW_MR(_R1,
-_R5)). However here in the epilogue, the frame teardown uses ctx->stack_size
-which is the callback's stack depth, not the boundary's.
-
-The boundary program creates its frame with:
-    STDU R1, R1, -(bpf_jit_stack_size(boundary_ctx) + boundary_stack_size)
-
-But the callback tears it down with:
-    ADDI R1, R1, bpf_jit_stack_size(callback_ctx) + callback_stack_size
-
-Since each BPF subprogram can have a different stack_depth (set per-subprog
-in kernel/bpf/verifier.c via func[i]->aux->stack_depth), if the exception
-callback has a different stack depth than the boundary, R1 will end up at
-the wrong location after this ADDI.
-
-After the wrong R1 adjustment, the LR restore below loads from R1+16 which
-is now pointing to the wrong memory location, potentially causing a return
-to an invalid address.
-
-Would it be correct to store the boundary's stack_size somewhere accessible
-to the callback, or ensure the callback uses the same stack layout as the
-boundary?
-
-> +
->  		if (ctx->seen & SEEN_FUNC || ctx->exception_cb) {
->  			EMIT(PPC_RAW_LD(_R0, _R1, PPC_LR_STKOFF));
->  			EMIT(PPC_RAW_MTLR(_R0));
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21311936056
-
---===============0520039389324384177==--
