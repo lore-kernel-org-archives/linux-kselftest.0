@@ -1,99 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B5B13B5AE;
-	Sat, 24 Jan 2026 08:30:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769243412; cv=none; b=D7KZEYpk9wu+hlhfF5ypfqiqdblnG38187KhFUerDNDKBcEgerjLxzl343WRgTHVvkN5dvU+YkKHsZHjnAwbIkJLu4inLcaKuTwMhBXB9y0HJH4mO6rPiDA70xOCpLm1HF+/aFe6p8XgtBLhLze3rHrX/3bqfzEsRk3DsR07vfA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769243412; c=relaxed/simple;
-	bh=IfSksN2DAR6jItQtNlLEGOjx6mECbXSIHAxZaX3DZ2Q=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=nowWIA6+n9HFEfp40CuKJbLftXTBzmOpGMvP45e88pNi3GR3WTdPJqu8IM4joBDKfpcPT8098oGAzqx2XBa3LVZRMMNgfN1/dVXUtIWGDq/AG1WNdZ2DwxyGY2PMzL8XnIv+1CcUBbJoJVMPYfOso8qiQCMZ3+uDLJJLZpesYBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/KRvkYw; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C7F13B5AE
+	for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 08:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769243769; cv=pass; b=nQMbevKXD2SvGRrqud3pl8UYQ6ugWX4KHMrohC/ppQkNbVM0zYS10rCdBaV2hdRjeeRbNgvObP5M1E9j7toOubO/Q9CM7zmucAgmHK4xaHf8tVjNLH+VHo0pLK6mP0o7IMMk1S6nYHTBT8Gc11nOsJB7HUXQhBzv3rx+KIwx4rE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769243769; c=relaxed/simple;
+	bh=MLt6bQqDMGJm2ueBTrriOTca8kUR+hoP3hpn5JBC/8g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B7xg/HOCgIxPKoeLvreDFvmyOKAyaX6gqggnBpTYjR1iJHKiqgy1DvlvuYL93nDyK95qn1MCO2qR023epNPSa8aP1cGHtKGUpjPEIZCgRvPCPVbsrXaXQ8msy5el6eUiiSeeF2ZZDAlnEPZEpQUwTbvq8WU5c6wDO0+jaQXL2R8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aaLUe36D; arc=pass smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/KRvkYw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D49C116D0;
-	Sat, 24 Jan 2026 08:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769243412;
-	bh=IfSksN2DAR6jItQtNlLEGOjx6mECbXSIHAxZaX3DZ2Q=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=o/KRvkYwoKde30JrO5/+uRYoTU1kAPgW6Tv87WJ3/WIZaZ3olmQBY90T273f1zqNM
-	 IYX4E/J6STWwO5NfWlZHiy0tjuLIgZlYH9PGdW/5fbl304e2lub+3GHNqdWmiJYgAv
-	 a7esFeaUX4E5+87E6KMXPvfXGAKsi1IEEJg7ubiR+EhHvLrzw6peuDt3yKjGzLTh1r
-	 QE0k/BOYqtEgAVkofWqfTQ2KJzkd5wNz7L8B/jl1a8gu4Ij4tOMXLvys0As0BXPa9e
-	 Q4JZZUGy3lCIPbqsqzTr6RE1nN+H6hThrTy4zKjhXquS9RhRKo6fvIEJcxRncWosb/
-	 vBBfDjfrhY0hA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11CBC3808200;
-	Sat, 24 Jan 2026 08:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aaLUe36D"
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-385b9be0759so25895991fa.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 00:36:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769243767; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jfv1Tgv64QCzuJ7iafRSV1FjX6ZwVS6SpNIot01D+VGt4Cyc2ZdmzpO4A+nEqrYZhB
+         T+Kg1iKhzSIdkrrx9u+Lh++0Cjfwgx3WQ7uOhEntwWa1PwxT/8khhGqh5/CFTaqp42Pt
+         ZkL4paaI979JmsXLCV0auk9QqdAmFbeDp70Uo3aPPcnH5/NgvjSmXdbk15g3qRJKhOwp
+         d/I5JOz5c+4zQi0eRpyq49k4k+/ILPAeCG0nL6/Znf6QdseQQm4s+rd8W2s5oWlDi8NO
+         KB/iL7VOLz4L1F0UoSamwjR2hZsWgbssxcy8z6m0+VlPsgcyKBi/1lQHHEPwJ29cQjIw
+         cOpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=L0Yvi8KKr2tGeabM9tjvJ69j9ESj62Gs009Amzq+1dU=;
+        fh=jneOFHjStxMUVqS3wyh67POQS5jF6Gq2F06JGIqmBfw=;
+        b=EfnuZ1E0x1py9K7CAgMqdWeCggR/IOsoXlaPUTCGYDk9zmtRcojbZ0mduMq4niwkiU
+         hCQg9QXlNXJWChYUOr0dyzuQuD5b17XvFsp6RuKEeETWHk9s+8EcWsFtzi8dC8CRNm7/
+         KB9eVmVdpr9C1sdmn7VV4Bj81qH9nMBxZKTKKuR/iWdM9+DkppRpH3tPP7FxD5K9SYEL
+         mvJzQrxLZrK/IZuvQ696M7XMtgP3EN62xH+j6y/9e2a28GjPA91wY5c35WtboicB3lnM
+         gaqTg92oLNN343dA/nLBez4ir/HJIPKm6+9YctUoC2qBLdWK5Avx6G09fKe41zLv6+TA
+         RVag==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769243767; x=1769848567; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=L0Yvi8KKr2tGeabM9tjvJ69j9ESj62Gs009Amzq+1dU=;
+        b=aaLUe36Dm/yPEY1xhhKIDGKMy9j5B5+LWz40HP1hLPf8g7GdS31j1aL63VKB5TvuUN
+         hE/9sVJTgK6SvvrJtMt8aEEPXXDJrIk/JbDJ6oJdk7ByYjd0u2DSb2xPxGNAwDSsmMPo
+         RyrIqCqsO5F0JB1kraaFWyTU8UXRMyebD2/c4v1NvBcRav7ZgkHmXQTMM400c1sX/ydO
+         EBMM4lEWAmMKCm1uscooir0AXBz9bErj4+h8oW2w7eZRQW7pRfxVmx8eFFctMFHWBfot
+         dFT95IjJGLrBLPN8sSrRqCs6trnseBK+WM/KotS/woYEF7Sg7JKmnNDw4i/EFNEFG5YN
+         GdTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769243767; x=1769848567;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L0Yvi8KKr2tGeabM9tjvJ69j9ESj62Gs009Amzq+1dU=;
+        b=OFWAx+n6CAaNYKh1IzLCQ6yR2+cCrBWeW+/CMGFlHGOgpD62nqsxjPpJMilFQDcQ+R
+         aD697AhOs70y7vSTrEe3QCVlb7ZZlK728dCNZ0h3QItTsHvVe4VAMLJcKZSVneMm/j5+
+         ZtjB57jTcfH6htade5FD4JdGprmi674CT5wiDUZpfBc4IavvY/WURw0i4kO9r/XN4kZm
+         IQO37Yr0spwwmtPEMfKUq15jR8gr80XCyHO8mKr9vGH/QBl03g1JFC2Scs7c/WtWgG79
+         Ds3OGnuS9jZhUqz6J+cft5cmOGvovDS/ICjKkGOo84Pyri1nO6CL9mHIXVwwOUpcAtrE
+         4JBw==
+X-Gm-Message-State: AOJu0Yz2n+rSwtFGqtX/2qW7tGHkCRbUkKYyOPLtb7HIlrFPjC6A4B0N
+	9pWcJ8o8Ku9nVAgpWPGLzIOOfQVMmR3PCwSUNlpI3eHk28zBKN1pHDpNVtnPXlv+EPbQzRpkORJ
+	PCh4vONTZfqLibVY5pxmyodxycn3PsrBIQHYK36M=
+X-Gm-Gg: AZuq6aItM+Beb/7E/MflUtIxiz8Lzoa9lGjjrVpw2uonTHuerFT2ZzbVxxc1zz5D8ID
+	dhgB+QH3PzynWBF9FXMxmeLe2L8O5i+pELnO5cuxwsTiB3xgJfTrzobRDltujRr0vLhkDZvVv0W
+	CLr9yaRJMjLOQiSIisiIRMT7gZQSEzOUR1uJ+cXNZY3eewhfX1be87r0G673nT9JM4U02U7Qi23
+	RGE7qkOVwgqiXqgdmRQ8s36WcrzYFL/5T453ESInrRTkqQ2EEKUOQlTWJs4Y8BQsJmghipKaczW
+	0lcwWugi
+X-Received: by 2002:a05:651c:325c:b0:37f:c5ca:a6d4 with SMTP id
+ 38308e7fff4ca-385d9ed6a0cmr19258761fa.6.1769243766418; Sat, 24 Jan 2026
+ 00:36:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 0/9] riscv: vector: misc ptrace fixes for debug
- use-cases
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <176924340785.3247175.17185864218197872186.git-patchwork-notify@kernel.org>
-Date: Sat, 24 Jan 2026 08:30:07 +0000
-References: <20251214163537.1054292-1-geomatsi@gmail.com>
-In-Reply-To: <20251214163537.1054292-1-geomatsi@gmail.com>
-To: Sergey Matyukevich <geomatsi@gmail.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, pjw@kernel.org, palmer@dabbelt.com,
- alex@ghiti.fr, oleg@redhat.com, shuah@kernel.org, thuth@redhat.com,
- charlie@rivosinc.com, andybnac@gmail.com, samuel.holland@sifive.com,
- joel.granados@kernel.org, conor.dooley@microchip.com,
- yongxuan.wang@sifive.com, heiko@sntech.de, guoren@kernel.org
+References: <20260119112120.83592-1-jouyeol8739@gmail.com> <264104b5-ac21-415b-9021-76d4d9b79a55@kernel.org>
+In-Reply-To: <264104b5-ac21-415b-9021-76d4d9b79a55@kernel.org>
+From: =?UTF-8?B?7KGw7Jqw7Je0?= <jouyeol8739@gmail.com>
+Date: Sat, 24 Jan 2026 17:35:53 +0900
+X-Gm-Features: AZwV_QiO4Ai9tEjzj8GqqslvzdI7NJxzlEc6kaniy5dPatrOJLbZtTJYqq_9xV0
+Message-ID: <CALAjK2ipX33hHDWZVhd_WUKYyD-JvCL67YgOeQDhPUuP2ovM1g@mail.gmail.com>
+Subject: Re: [PATCH] selftests/ipc: skip msgque test if MSG_COPY is not supported
+To: Shuah <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	richard.weiyang@gmail.com, akpm@linux-foundation.org, sef1548@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+Hi Shuah,
 
-This series was applied to riscv/linux.git (for-next)
-by Paul Walmsley <pjw@kernel.org>:
+Thank you for your feedback.
 
-On Sun, 14 Dec 2025 19:35:04 +0300 you wrote:
-> This patch series suggests fixes for several corner cases in the RISC-V
-> vector ptrace implementation:
-> 
-> - init vector context with proper vlenb, to avoid reading zero vlenb
->   by an early attached debugger
-> 
-> - follow gdbserver expectations and return ENODATA instead of EINVAL
->   if vector extension is supported but not yet activated for the
->   traced process
-> 
-> [...]
+I have verified the behavior on kernel 6.19.0-rc1+ by testing both
+kernel configurations (with and without CONFIG_CHECKPOINT_RESTORE).
 
-Here is the summary with links:
-  - [v5,1/9] riscv: ptrace: return ENODATA for inactive vector extension
-    https://git.kernel.org/riscv/c/35328975fa84
-  - [v5,2/9] riscv: vector: init vector context with proper vlenb
-    https://git.kernel.org/riscv/c/66d52c54e59f
-  - [v5,3/9] riscv: csr: define vtype register elements
-    https://git.kernel.org/riscv/c/0d9acbd7836a
-  - [v5,4/9] riscv: ptrace: validate input vector csr registers
-    https://git.kernel.org/riscv/c/995e66a25b26
-  - [v5,5/9] selftests: riscv: test ptrace vector interface
-    https://git.kernel.org/riscv/c/dca68b94a8b1
-  - [v5,6/9] selftests: riscv: verify initial vector state with ptrace
-    https://git.kernel.org/riscv/c/1a353e49a0dc
-  - [v5,7/9] selftests: riscv: verify syscalls discard vector context
-    https://git.kernel.org/riscv/c/4b7e068fe676
-  - [v5,8/9] selftests: riscv: verify ptrace rejects invalid vector csr inputs
-    https://git.kernel.org/riscv/c/bfdd22c430ca
-  - [v5,9/9] selftests: riscv: verify ptrace accepts valid vector csr values
-    https://git.kernel.org/riscv/c/ccb3038e946c
+Regarding the MSG_COPY handling in ipc/msg.c (between lines 1098-1262),
+my analysis of do_msgrcv() shows the following execution flow:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+1. Early Return (Lines 1112-1118):
+   While the check 'if (msgflg & MSG_COPY)' is indeed outside the
+   #ifdef blocks for validation, it immediately calls prepare_copy().
+   Since prepare_copy() is stubbed to return ERR_PTR(-ENOSYS) when
+   CONFIG_CHECKPOINT_RESTORE is disabled (line 1066), the system call
+   fails and returns early at line 1118.
 
+2. Unreachable Logic (Lines 1158-1161):
+   The subsequent logic that calls copy_msg() is only reached if
+   prepare_copy() succeeds. Without the config, this entire path
+   becomes unreachable "dead code" in practice.
 
+This confirms that while the flag handling is visible in the source,
+the actual functionality is strictly dependent on the configuration.
+
+To demonstrate the necessity of this patch, I ran the mainline test
+in both environments:
+
+1. With CONFIG_CHECKPOINT_RESTORE=y:
+   # ./msgque
+   # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+   ok 1 selftests: ipc: msgque
+   (Note: 'pass:0' is normal for this test as msgque.c does not
+   explicitly call ksft_test_result_pass() for individual steps.)
+
+2. With CONFIG_CHECKPOINT_RESTORE disabled (Mainline behavior):
+   # ./msgque
+   not ok 1 Failed to copy IPC message: Function not implemented (38)
+   not ok 2 Failed to dump queue: -38
+   # Totals: pass:0 fail:2 xfail:0 xpass:0 skip:0 error:0
+
+Current mainline reports a "FAIL" for what is essentially a missing
+kernel feature. My patch changes this to a "SKIP", which aligns
+with kselftest standards.
+
+With the patch applied, the result correctly becomes:
+1..0 # SKIP MSG_COPY not supported
+
+Best regards,
+UYeol Jo
