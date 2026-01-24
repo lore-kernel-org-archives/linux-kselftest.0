@@ -1,129 +1,306 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D941C84BB
-	for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 07:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.129.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769239812; cv=pass; b=DLJOreFWIum/sv4/WvWZP/TBm35cmBL0LPQuu2Ra8EFu6R09BW+Olu4gsTvJV4HbvGQfS1AsIbJzDAh6QVdeTJBaCcVu6/ZHkAVwuJzQOhce0WpSBKaVZpbwzIc0kS7jt5h/yUzUiVwsnRIBO1+qMtnTd4pimBgtkhymwush81o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769239812; c=relaxed/simple;
-	bh=e1ixly2/NjoR2aaoEVfMiu/QisgbcNguvOb9Kj2chmI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dlOrzoZozYzY+Dn9D+avrIPMoV9cLgNvo/HK+K4Ecun1AfyS1jO8tvTtGt3GW+ui3imOeR+eRiSUVeiZpUoTsoZ+ItH3johhiMnN5pgNyT/FNQxG2c2gAf023bmvxNn3jcYiJruj2iAF3hO1RN9HPDsDnej73tR1noET5IJ9lqo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Mi3yEZzp; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=cqmwR/Rl; arc=pass smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54465478D;
+	Sat, 24 Jan 2026 07:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769241202; cv=none; b=fRITJ62gBXdD/WLKsi4aTjNlVREYEKX0ssxr9dGuvdpd/GOVWzIXM8gFWus5XSkYxzGV/EIXp4EaRnkfrBg8bdQuRvxW2frYckk3uoMGL7sn9fEn+3IVF4LRqnteiEAynjy423axT3BHrnXYE92Wd4UbiLowfoNpf4CUeR1yK7A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769241202; c=relaxed/simple;
+	bh=3DVZEgJGnBtJAfYQ9HTb8m1zPBj1B53jPvdrYlAX/YM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QAd+iEV8corKn6tc9ATEPdyzdaMRkvEZmlifSyagLXD2emTeTiLXvHu9yONE9Vg7JftB5qBP8UeZYqEQY5DSzF03r8Ee3CShniXV2+i1EehQuzk+4+hl2CqkhUqwLMos4oplUmXv2PpF8gRQt+fw+MXOYR/o5ehpN30kWHOBkbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=N5WiANOT; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Mi3yEZzp";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="cqmwR/Rl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769239810;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hTm852yTZfC4kegOsHtlkLTPRpkGn8HmDIJ+Htyp5Co=;
-	b=Mi3yEZzp/SA3n5ZFYCjR95HD8VzaJBv1PVnprjh9e7hOmYmyDDFQt4iR7JQNChjEcKrnL9
-	5P7BHdfWiN4ulEg+zEZVN20l1iHUVz1w9twW2MQ8+o98Rp95Zve27lz/63777xcY05k+rv
-	UkbsenpovGmpH7NLlmUPXNZzRmxhQr8=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-207-Bo6sGc-DNHesV_wR-GUW-w-1; Sat, 24 Jan 2026 02:30:08 -0500
-X-MC-Unique: Bo6sGc-DNHesV_wR-GUW-w-1
-X-Mimecast-MFC-AGG-ID: Bo6sGc-DNHesV_wR-GUW-w_1769239807
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-6581abb27baso3445946a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 23:30:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769239807; cv=none;
-        d=google.com; s=arc-20240605;
-        b=S/z9PWxI9bBKMCSY2CJaa6T4/EbuHllrsP9qhTzUDCqrew3ERqjB7Wfg1+sUSZmL/7
-         QmaueWrujQuLyeLtgFooGZ6WQE8W9xJW1a5xL2MRXI66A7j/uR2m9ZiJBsJ2osUfUI4D
-         IMrSahzz0dXO6+T4LO1SJmOXVdQDpNQkiAuENupBiW3zJB3Xo4f6t2+Oh+mcuZPK3dOo
-         y59kMl0e/FsyYmntZGXlBnSYGVtR2oZp6Whr1iafeXV8IA3nWLSo/fO+vtbVNkGKd3iF
-         +zqCaWIdnP8rwuYBvgpLPNZ0ld2DqPBBgjN59/phQYCV1kDzs2C2eC0oFW7Tg1nbn5Kk
-         54tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=hTm852yTZfC4kegOsHtlkLTPRpkGn8HmDIJ+Htyp5Co=;
-        fh=VrC5DTPS7x1h4ZAmWQiGOT5NdvaQG0GZ6xHdsUtqI98=;
-        b=giKGJZZSE5zOt4urZV4uBFa3Hh2lkXwpp1ieYWKnMaiX7rc/yRANBCZOBh3oJBugsi
-         2jb9SAp62Vv4HDrVGaALcZXxay+KSlGdLRxMfbxP8cF9H6ewyiUaFlT1vNxBZ9B2eM92
-         c9FMY/Ar2hJtndBi/iB/B/pIfI/srcLiibu/vDtSgEPYntfborOFkJF7a+w3BUq1HYkd
-         Lff/oMOouTUnIxx2uIQWAWss0D/avwavfnLxCY+kYJT0ejUCNtX5Zm74nb/YEnnw+g9e
-         TvfZxJphmVEcJi+lV+UGTYu63KdsrFXvGvpYWTS0jj0e6LRKpa4uoD997fC/n1kzSiMe
-         Ax1A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769239807; x=1769844607; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hTm852yTZfC4kegOsHtlkLTPRpkGn8HmDIJ+Htyp5Co=;
-        b=cqmwR/Rl3DFvSx1DZ8WTR4VjGmM8zjL+Dah9T3wMOdNz3SW9kcPZNMPqL2ruBBIlxv
-         aBT5m0otRh8a+bt282X/mqsUayEzUw3ZsE5kNchCM7TJCnxJWho8KEZZzUV1dtXw66tM
-         5HfbOxgwv+Agz+Ghwphx0PbOYysFAAGAVMSFVrkMa4Qu51QUqCMS6k8aURri2c+ngy8/
-         BUGYEcSAnj5XavoPzn4N/Nnf3ChnzipNEtYPmH2706IJwRu96qQ2syKrpOBDBxYf/DnQ
-         5Y8r3C65uP/ur7KU9SPDIK7IbBKtS8jVGkyXncC+/rlEktlez7YjTXGe4MjV/lDrpddJ
-         QvpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769239807; x=1769844607;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hTm852yTZfC4kegOsHtlkLTPRpkGn8HmDIJ+Htyp5Co=;
-        b=JTmkKLhPz6g85CXwKmxq6/09S3kBHbueT++oL4RB4TnD25BJ0vxY3dlfqi9pva3q9A
-         Qw+/ZcZvF1Tuns5OvkTo9PCcbZN93moaI4A9sLOHkYGRYlS43PXws14hCP3bi67NL/c7
-         g4mSd6DutvpCE/VM2S7wspaCBNoIJPMPlcOjlD0hsH43rT+y05zQc6F3E5Rq+nQJHnpE
-         GmMY5E5Tz0vfuZ0o7X5vTbcN7WgZWK0VOtp1/QtbzRhh6wFSHTI+NCpVMJvtHsigy+dj
-         6fGzp97UT7CiyebY+adPCnWqRU8AN2yaRDHtfQsnaqb/7B/2kxT9IYYVgX7Gs731vLjZ
-         aSbA==
-X-Forwarded-Encrypted: i=1; AJvYcCVDOdHscnxvH/UQYwIayy4gUi25Nqc3yRUvpqYBomMx0wUNVLIndJWoQW0NXbEmJRNPFifCstRzjB+hJKq98vA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUOXwrGn2ZeYYsIiufKJH5m87PkaPJ6xH0hCrPmaM9BMItwhH7
-	laR0BRA5Oko6jfGd94VlZKCgyk8173MbhkxeKQa2LMxIolvEXqPc8V1O+SrRzqahY9iykL5TvWW
-	RwC2UI7Op9QGcgKRsnQwZJSdGqK9JegSc9giDfDWIlAaOzOv0yr3lDKAHHuOdY8FEBygqS+R4J5
-	IykehGGo4Xgoiq41nP7OAb56bAQB2Yx6a43zxMi9Dylg69
-X-Gm-Gg: AZuq6aKjYJt+1gYmEs6/2oFDEk4U5rPLWb+5peFhvh21kNJ6g/Gyy3rEbvSjqL54ij9
-	ff591XjJuLPV9t7ehCzTlIXDdMJMxsEy/69PGOXPzRd171zBnEKs16PJUIya7P5KI+koAu6QsUi
-	qJ6y2KCIhJ8voYlA6U4ob4b8okwdsWnO98WT/cd7fCvfPxPGQRoT6Y7gw3xx3wLvBhlss=
-X-Received: by 2002:a05:6402:1e8e:b0:658:17fb:4890 with SMTP id 4fb4d7f45d1cf-65853cfea9bmr2031769a12.9.1769239807007;
-        Fri, 23 Jan 2026 23:30:07 -0800 (PST)
-X-Received: by 2002:a05:6402:1e8e:b0:658:17fb:4890 with SMTP id
- 4fb4d7f45d1cf-65853cfea9bmr2031753a12.9.1769239806628; Fri, 23 Jan 2026
- 23:30:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="N5WiANOT"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60O4GlQl005990;
+	Sat, 24 Jan 2026 07:52:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=tywiFIe2xb8dzvU64lxLZYOWsPqpMqem8e+4KXuWa
+	Hk=; b=N5WiANOT/VhFDtdHWwY7ISeZ4EjahNTrDu8yJW5BY6W42EFOFaPV+W+LJ
+	Of/0Jj7xBxBjhP6kFOzM4SDlQQwiENdFON3/5DTcW/ITZFoNx/53UPlkh28zs3OA
+	NL148BGIHCpFTwt1M9PdhoF5ZAg15t2RubVkEE5bgI665MIdzSL95NGpM6iYI4i3
+	tomjvjs+iWg4hX2jFyPuXSGfe1esmMFulGwhbqKxzX26nd+aPvVXU9txwqHiJr//
+	+Qfw0JeizOh79A8NLz8sqNGAOdxq49VMNmDG6sVIgXn26pjKcYtJ1VVg8WR+/OMJ
+	ggKbhZctcd9rrIR8nT4Gx6XQtEZrQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnk6grkc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 24 Jan 2026 07:52:44 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60O7qisx012033;
+	Sat, 24 Jan 2026 07:52:44 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnk6grk8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 24 Jan 2026 07:52:44 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60O21Vjj001404;
+	Sat, 24 Jan 2026 07:52:43 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4brpykcr6d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 24 Jan 2026 07:52:43 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60O7qdrT23200220
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 24 Jan 2026 07:52:39 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2921020043;
+	Sat, 24 Jan 2026 07:52:39 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8C91B20040;
+	Sat, 24 Jan 2026 07:52:32 +0000 (GMT)
+Received: from abhi.. (unknown [9.124.223.59])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Sat, 24 Jan 2026 07:52:32 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
+        andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
+        iii@linux.ibm.com, shuah@kernel.org,
+        Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH v5 0/6] powerpc64/bpf: Support tailcalls with subprogs & BPF exceptions
+Date: Sat, 24 Jan 2026 13:22:17 +0530
+Message-ID: <20260124075223.6033-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1768979440.git.xudu@redhat.com> <b5787b8c269f43ce11e1756f1691cc7fd9a1e901.1768979440.git.xudu@redhat.com>
- <20260123114312.6f7c441e@kernel.org>
-In-Reply-To: <20260123114312.6f7c441e@kernel.org>
-From: Xu Du <xudu@redhat.com>
-Date: Sat, 24 Jan 2026 15:29:53 +0800
-X-Gm-Features: AZwV_Qh186JnYHMq_Dc9JNMDPpSXsLrjlvHGtwp4k7P6haU21KBrdjwoc_oemx4
-Message-ID: <CAA92Kx=ZF3Tp9fh3q2sCEmyn_kfemMjMvzPKEqkk8-UJHQXHqA@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 4/7] selftest: tun: Add helpers for GSO over
- UDP tunnel
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, 
-	horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: gFYUwwVC4HYBvHkQpOC5-YrRXcdAE85U
+X-Proofpoint-ORIG-GUID: MdtGFG5A_kD6WTIHR7MF2x8XkOXcJNzr
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI0MDA2MCBTYWx0ZWRfX5uXUe0fKWbD6
+ HaOzEShGAsDAeLkNU0Fey20Br9A3ijnZUB5cG9QUtMKGccseR0bxPenx+WZvG/jxEjbNqGL7vXR
+ uKsSvD2mQUvO3FUwzrAe0i2s3CczOZbLEztzeQArjECFw0I2wDAMK4zlfjLBFFjWolW8RpIgyPG
+ y0I9RPMW1syQU8aTLqNMihxXJXeIjwPySSMOiv6B20rLeOK+M8uitoy384qwtgNLpCKmnIuhnHI
+ ZLoUQVpxER2U1KR6nYSty5B3lU6tHqmGq94mdNCnOXDttNu0WFkvrk7M40aVSsuoUpMHNY+9g2+
+ 3xNqRTEIrRn6dVT2VemrATxW3JHJBvhOVeTojIRRA/TLFvPAib7e+Ytp68fg2V+UPN2DnG/9/FV
+ uH17EI11Ujf96VPWoJ35JSBrFOlXvwl2bsFc4/kbaw7i7cfCbK1aN+k/eURgS4PLKCnH+hSnUnX
+ ed/DoyJ9M6iC+0TgjeA==
+X-Authority-Analysis: v=2.4 cv=AMiVTGgp c=1 sm=1 tr=0 ts=69747a4c cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=iIzsfX1pHA8hvRYzEnUA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-24_02,2026-01-22_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 spamscore=0 phishscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2601150000
+ definitions=main-2601240060
 
-> I'd be tempted to allocate the request in the here, and instead
-> of passing the "fill" callback optionally pass in partially /
-> pre-populated req. Just food for thought in case you'd like the idea
-> and what to follow up. v6 looks good so I'll merge as is already.
->
-> Thanks for converting to YNL!
->
-Thank you for accepting this patch. I will consider your suggestion later.
+From: Abhishek Dubey <adubey@linux.ibm.com>
+
+This patch series enables support for two BPF JIT features
+on powerpc64. The first three patches target support for
+tail calls with subprogram combinations. The first patch
+supports realignment of tail_call_cnt offset in stack frame.
+Implementation details are provided in the commit messages.
+
+The last three patches add support for BPF exceptions. An
+architecture-specific stack walker is implemented to assist
+with stack walk during exceptions.
+
+All selftests related to tailcalls and exceptions are passing:
+
+# ./test_progs -t tailcalls
+#442/1   tailcalls/tailcall_1:OK
+#442/2   tailcalls/tailcall_2:OK
+#442/3   tailcalls/tailcall_3:OK
+#442/4   tailcalls/tailcall_4:OK
+#442/5   tailcalls/tailcall_5:OK
+#442/6   tailcalls/tailcall_6:OK
+#442/7   tailcalls/tailcall_bpf2bpf_1:OK
+#442/8   tailcalls/tailcall_bpf2bpf_2:OK
+#442/9   tailcalls/tailcall_bpf2bpf_3:OK
+#442/10  tailcalls/tailcall_bpf2bpf_4:OK
+#442/11  tailcalls/tailcall_bpf2bpf_5:OK
+#442/12  tailcalls/tailcall_bpf2bpf_6:OK
+#442/13  tailcalls/tailcall_bpf2bpf_fentry:OK
+#442/14  tailcalls/tailcall_bpf2bpf_fexit:OK
+#442/15  tailcalls/tailcall_bpf2bpf_fentry_fexit:OK
+#442/16  tailcalls/tailcall_bpf2bpf_fentry_entry:OK
+#442/17  tailcalls/tailcall_poke:OK
+#442/18  tailcalls/tailcall_bpf2bpf_hierarchy_1:OK
+#442/19  tailcalls/tailcall_bpf2bpf_hierarchy_fentry:OK
+#442/20  tailcalls/tailcall_bpf2bpf_hierarchy_fexit:OK
+#442/21  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_fexit:OK
+#442/22  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_entry:OK
+#442/23  tailcalls/tailcall_bpf2bpf_hierarchy_2:OK
+#442/24  tailcalls/tailcall_bpf2bpf_hierarchy_3:OK
+#442/25  tailcalls/tailcall_freplace:OK
+#442/26  tailcalls/tailcall_bpf2bpf_freplace:OK
+#442/27  tailcalls/tailcall_failure:OK
+#442/28  tailcalls/reject_tail_call_spin_lock:OK
+#442/29  tailcalls/reject_tail_call_rcu_lock:OK
+#442/30  tailcalls/reject_tail_call_preempt_lock:OK
+#442/31  tailcalls/reject_tail_call_ref:OK
+#442     tailcalls:OK
+Summary: 1/31 PASSED, 0 SKIPPED, 0 FAILED
+
+# ./test_progs -t exceptions
+#105/1   exceptions/exception_throw_always_1:OK
+#105/2   exceptions/exception_throw_always_2:OK
+#105/3   exceptions/exception_throw_unwind_1:OK
+#105/4   exceptions/exception_throw_unwind_2:OK
+#105/5   exceptions/exception_throw_default:OK
+#105/6   exceptions/exception_throw_default_value:OK
+#105/7   exceptions/exception_tail_call:OK
+#105/8   exceptions/exception_ext:OK
+#105/9   exceptions/exception_ext_mod_cb_runtime:OK
+#105/10  exceptions/exception_throw_subprog:OK
+#105/11  exceptions/exception_assert_nz_gfunc:OK
+#105/12  exceptions/exception_assert_zero_gfunc:OK
+#105/13  exceptions/exception_assert_neg_gfunc:OK
+#105/14  exceptions/exception_assert_pos_gfunc:OK
+#105/15  exceptions/exception_assert_negeq_gfunc:OK
+#105/16  exceptions/exception_assert_poseq_gfunc:OK
+#105/17  exceptions/exception_assert_nz_gfunc_with:OK
+#105/18  exceptions/exception_assert_zero_gfunc_with:OK
+#105/19  exceptions/exception_assert_neg_gfunc_with:OK
+#105/20  exceptions/exception_assert_pos_gfunc_with:OK
+#105/21  exceptions/exception_assert_negeq_gfunc_with:OK
+#105/22  exceptions/exception_assert_poseq_gfunc_with:OK
+#105/23  exceptions/exception_bad_assert_nz_gfunc:OK
+#105/24  exceptions/exception_bad_assert_zero_gfunc:OK
+#105/25  exceptions/exception_bad_assert_neg_gfunc:OK
+#105/26  exceptions/exception_bad_assert_pos_gfunc:OK
+#105/27  exceptions/exception_bad_assert_negeq_gfunc:OK
+#105/28  exceptions/exception_bad_assert_poseq_gfunc:OK
+#105/29  exceptions/exception_bad_assert_nz_gfunc_with:OK
+#105/30  exceptions/exception_bad_assert_zero_gfunc_with:OK
+#105/31  exceptions/exception_bad_assert_neg_gfunc_with:OK
+#105/32  exceptions/exception_bad_assert_pos_gfunc_with:OK
+#105/33  exceptions/exception_bad_assert_negeq_gfunc_with:OK
+#105/34  exceptions/exception_bad_assert_poseq_gfunc_with:OK
+#105/35  exceptions/exception_assert_range:OK
+#105/36  exceptions/exception_assert_range_with:OK
+#105/37  exceptions/exception_bad_assert_range:OK
+#105/38  exceptions/exception_bad_assert_range_with:OK
+#105/39  exceptions/non-throwing fentry -> exception_cb:OK
+#105/40  exceptions/throwing fentry -> exception_cb:OK
+#105/41  exceptions/non-throwing fexit -> exception_cb:OK
+#105/42  exceptions/throwing fexit -> exception_cb:OK
+#105/43  exceptions/throwing extension (with custom cb) -> exception_cb:OK
+#105/44  exceptions/throwing extension -> global func in exception_cb:OK
+#105/45  exceptions/exception_ext_mod_cb_runtime:OK
+#105/46  exceptions/throwing extension (with custom cb) -> global func in exception_cb:OK
+#105/47  exceptions/exception_ext:OK
+#105/48  exceptions/non-throwing fentry -> non-throwing subprog:OK
+#105/49  exceptions/throwing fentry -> non-throwing subprog:OK
+#105/50  exceptions/non-throwing fentry -> throwing subprog:OK
+#105/51  exceptions/throwing fentry -> throwing subprog:OK
+#105/52  exceptions/non-throwing fexit -> non-throwing subprog:OK
+#105/53  exceptions/throwing fexit -> non-throwing subprog:OK
+#105/54  exceptions/non-throwing fexit -> throwing subprog:OK
+#105/55  exceptions/throwing fexit -> throwing subprog:OK
+#105/56  exceptions/non-throwing fmod_ret -> non-throwing subprog:OK
+#105/57  exceptions/non-throwing fmod_ret -> non-throwing global subprog:OK
+#105/58  exceptions/non-throwing extension -> non-throwing subprog:OK
+#105/59  exceptions/non-throwing extension -> throwing subprog:OK
+#105/60  exceptions/non-throwing extension -> non-throwing subprog:OK
+#105/61  exceptions/non-throwing extension -> throwing global subprog:OK
+#105/62  exceptions/throwing extension -> throwing global subprog:OK
+#105/63  exceptions/throwing extension -> non-throwing global subprog:OK
+#105/64  exceptions/non-throwing extension -> main subprog:OK
+#105/65  exceptions/throwing extension -> main subprog:OK
+#105/66  exceptions/reject_exception_cb_type_1:OK
+#105/67  exceptions/reject_exception_cb_type_2:OK
+#105/68  exceptions/reject_exception_cb_type_3:OK
+#105/69  exceptions/reject_exception_cb_type_4:OK
+#105/70  exceptions/reject_async_callback_throw:OK
+#105/71  exceptions/reject_with_lock:OK
+#105/72  exceptions/reject_subprog_with_lock:OK
+#105/73  exceptions/reject_with_rcu_read_lock:OK
+#105/74  exceptions/reject_subprog_with_rcu_read_lock:OK
+#105/75  exceptions/reject_with_rbtree_add_throw:OK
+#105/76  exceptions/reject_with_reference:OK
+#105/77  exceptions/reject_with_cb_reference:OK
+#105/78  exceptions/reject_with_cb:OK
+#105/79  exceptions/reject_with_subprog_reference:OK
+#105/80  exceptions/reject_throwing_exception_cb:OK
+#105/81  exceptions/reject_exception_cb_call_global_func:OK
+#105/82  exceptions/reject_exception_cb_call_static_func:OK
+#105/83  exceptions/reject_multiple_exception_cb:OK
+#105/84  exceptions/reject_exception_throw_cb:OK
+#105/85  exceptions/reject_exception_throw_cb_diff:OK
+#105/86  exceptions/reject_set_exception_cb_bad_ret1:OK
+#105/87  exceptions/reject_set_exception_cb_bad_ret2:OK
+#105/88  exceptions/check_assert_eq_int_min:OK
+#105/89  exceptions/check_assert_eq_int_max:OK
+#105/90  exceptions/check_assert_eq_zero:OK
+#105/91  exceptions/check_assert_eq_llong_min:OK
+#105/92  exceptions/check_assert_eq_llong_max:OK
+#105/93  exceptions/check_assert_lt_pos:OK
+#105/94  exceptions/check_assert_lt_zero:OK
+#105/95  exceptions/check_assert_lt_neg:OK
+#105/96  exceptions/check_assert_le_pos:OK
+#105/97  exceptions/check_assert_le_zero:OK
+#105/98  exceptions/check_assert_le_neg:OK
+#105/99  exceptions/check_assert_gt_pos:OK
+#105/100 exceptions/check_assert_gt_zero:OK
+#105/101 exceptions/check_assert_gt_neg:OK
+#105/102 exceptions/check_assert_ge_pos:OK
+#105/103 exceptions/check_assert_ge_zero:OK
+#105/104 exceptions/check_assert_ge_neg:OK
+#105/105 exceptions/check_assert_range_s64:OK
+#105/106 exceptions/check_assert_range_u64:OK
+#105/107 exceptions/check_assert_single_range_s64:OK
+#105/108 exceptions/check_assert_single_range_u64:OK
+#105/109 exceptions/check_assert_generic:OK
+#105/110 exceptions/check_assert_with_return:OK
+#105     exceptions:OK
+Summary: 1/110 PASSED, 0 SKIPPED, 0 FAILED
+
+[v1]: https://lore.kernel.org/all/20260105105212.136645-1-adubey@linux.ibm.com/
+[v2]: https://lore.kernel.org/all/20260114114450.30405-1-adubey@linux.ibm.com/
+[v3]: https://lore.kernel.org/all/20260122165716.10508-1-adubey@linux.ibm.com/
+[v4]: https://lore.kernel.org/all/20260122211854.5508-1-adubey@linux.ibm.com/
+
+Changes v4->v5:
+	Patch comments and code refactoring
+	Handle exception callback and boundary frame checks
+Changes v3->v4:
+        Handle bpf-ci warnings
+Changes v2->v3:
+        Added PPC_BCC_CONST_SHORT for short jumps of constant offset
+        Optimize tailcall allocation for BPF_TRAMP_F_CALL_ORIG flag
+        New helper for stack size calculation during exceptions
+        Prologue JIT optimizations during non exception prog case
+Changes v1->v2:
+        Move tail_call_cnt to offset 0 in stack frame
+        Remove trampoline NVR remapping-patch3/6
+
+Abhishek Dubey (6):
+  powerpc64/bpf: Moving tail_call_cnt to bottom of frame
+  powerpc64/bpf: Support tailcalls with subprogs
+  powerpc64/bpf: Avoid tailcall restore from trampoline
+  powerpc64/bpf: Add arch_bpf_stack_walk() for BPF JIT
+  powerpc64/bpf: Support exceptions
+  powerpc64/bpf: Additional NVR handling for bpf_throw
+
+ arch/powerpc/net/bpf_jit.h        |  16 ++
+ arch/powerpc/net/bpf_jit_comp.c   |  85 +++++++--
+ arch/powerpc/net/bpf_jit_comp64.c | 276 +++++++++++++++++++++++++-----
+ 3 files changed, 315 insertions(+), 62 deletions(-)
 
 -- 
-
-Regards,
-
-Xu
+2.48.1
 
