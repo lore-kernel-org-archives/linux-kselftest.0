@@ -1,293 +1,422 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11020140.outbound.protection.outlook.com [52.101.229.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC7930EF65;
-	Sat, 24 Jan 2026 13:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769261267; cv=none; b=aSMD3puG5NkRmALwvOjO0/NmTrgUnF4+q+iWYXPV95FI6uh8ayykoTz/rZN6PkWTx5aLz9BR1BskbDCs2EMX4ScFoNGWgWW4uHBtp1jy8542EKpD+fNwwzYHJz5U40WpjeLuSvwnUsJkJ3BQyp8ZuFJWui0rgkvvG8/HQrdkoDQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769261267; c=relaxed/simple;
-	bh=WcV+3KXQ5Iq8VZy1Ph6A1jDks5VwRVnksx+G4amE9Bg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e5B48MooHyP4mVbxi3yfZth2QTMV19MF8NDujdGpdLahDmKWhYy7qMw2vm+dHeUjzgR6TfRQrd8Mbrg/4iEnW3kpnnwagO3AZPrtBOOiRsB5z/qFqWaY3ru9DtPQW4ReVX4zzgDDpMgS+RWJjfmJw+Yunor6DPnJAqh4+pxZyC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=nvvtU4D0; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A301D8E10;
+	Sat, 24 Jan 2026 14:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769266221; cv=fail; b=J59KD8h9WEICODRpjZNqj0mYMdmzqNnCM0EWFntb4hbInq4bs5tCcgif4Xe8FWoRcBnRk+scMKFFHtV4vZlZIa6F9QxVEpWqNZr3pejIHvBxwnEo5h969eG6iFY4ZtkIDErRlZambaMh3MfbrmWrtcD42nHfhX4qPsKm/uAk6GY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769266221; c=relaxed/simple;
+	bh=4ejtCNNgU8B4UQBT2ghHQGMKvHpYY3ESf8+S3SxlBTQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=FG0/blJx2seK/nef3LTKFlZeLk5OZrhi31Occ4rHJ/9MF9gN1oMEo46penofNvp4tR84wDXzpmOAaf1ALeiUHfDUYshMxSgnPZ9VX0MGTNs11CvkR9M0SW9VnTWARBIY8od55nEEThUCMqs84k60bVvr44gGl1wx9C4155+3vDs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=lHC+9UNS; arc=fail smtp.client-ip=52.101.229.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="nvvtU4D0"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=MOr3CRVvstkhy6HHmCfcxtMPEyaN0J8DP7VnU2WkzBo=; b=nvvtU4D0ZFfUM+dhHRQdJWGOMX
-	vkb8gBdEDO/FWCm5izNVwLOvsEKO8FKwRrTPBt8a6R9DOf88XeNLhYyhEqWGdbj4IP7tfVW22xlBG
-	uQndcl1Q/JnOgLGMrjlMgtAWJ0bXwKR+KlpN9MQdmz0NRbSg/gC3aZYGkncUqtvNl4lT1qIDWdUVB
-	YVeihHhvy3llpXMrV8Su0276l8zLwhv+4CSTmO3zxYyuahcuhk9VM+Dnzaky2aNJWy6ZusO3fWvbg
-	aLnvOR7XIO09xSTCpNkrHgIwL24+A4CGJJfYdxW9oRpzkw06zsvr81xZgKY5J7AYtTGbGvzwe9j6C
-	XK7ntCLw==;
-Received: from [175.114.83.198] (helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1vjdfn-009OB8-BW; Sat, 24 Jan 2026 14:27:32 +0100
-From: Changwoo Min <changwoo@igalia.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	kernel-dev@igalia.com,
-	bpf@vger.kernel.org,
-	sched-ext@lists.linux.dev,
+	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="lHC+9UNS"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MCcXaDjVBTvoM2GUnou9CJmsixAvoqsU/qK8ArUivSgA6kRvpctOBUwSSj2YwfbJN1C8Caq9fN9ySCa8evuhSUJM+vIO0+Lj5hJK0ALGrIGT/lhWJxl73Igul7mi2V8zYJFKmULVu++IXVYLnZxh739yX2Ktu3sSytj2yoztzCiKE//Fin6eEIW2SRGQ+Hn89J1cVrZkYqsqWKiEscIwyO6sSmnYbKqjGuleSfe2tj8S1SxitDwmIHm2HJ3hgww/xA7KEZCcl3q2EJtnmHmKAvIzQEVy7JkuT/jGHyvhV9NrPVQjjIkRL+EqrOTZ+i8jAzCTp3AvMfM7+AdVdYlgPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hRgnrBdv+3IYRbLCZEHVeO3G8GxK+9y8oHoPBQhJ23s=;
+ b=R0N7RPR+8qbxfzoWh+sgpkQwxAdVEswSl6IznD4PuhisNfuFVm5xr8lcpLJdBqP6Zx5hGhi2NjwX2n+EtF7Y0MO2rafwqXKH1K370evwNQI3rCKJxskFUvJYLn0PtKEIk1xaJdSYLiimmVHDVdH8/Er238CkleGO2siiEc/qZJFFm5eJNw4cwkh8AhPd/sk6Qw0I4w1Y2w1acB0qTXoaffi/NP3Xn1+uBWI0cr1uZ5iYpa7rxm7osLmihT4QbI3okPZ5G0KgAmUNvTPiFIRjpqk1QWxOQAA9VWhQWnwxpY/dWTVykHjyMLBbdDgUavF+MEOP1J1K3A9bqmdjBrY7kQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
+ header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hRgnrBdv+3IYRbLCZEHVeO3G8GxK+9y8oHoPBQhJ23s=;
+ b=lHC+9UNSUrPwQfLfuI2CjTye97wOXBgOW5jyZTex6j+FYrSgfPdl5TYVF4p3nRAirjfkazTO8MZePzmRYHQM/WmRlUbvGxFsMbBna7ik92TBFjNlV7a6TvxjXy6NtESFiuUzXe0hBqS0E0XwU1GK/aUN6gqP6RXEE/WyK06ELW8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=valinux.co.jp;
+Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
+ by TYYP286MB4692.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:19c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.11; Sat, 24 Jan
+ 2026 14:50:15 +0000
+Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::2305:327c:28ec:9b32]) by TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::2305:327c:28ec:9b32%5]) with mapi id 15.20.9542.010; Sat, 24 Jan 2026
+ 14:50:15 +0000
+From: Koichiro Den <den@valinux.co.jp>
+To: jingoohan1@gmail.com,
+	mani@kernel.org,
+	lpieralisi@kernel.org,
+	kwilczynski@kernel.org,
+	robh@kernel.org,
+	bhelgaas@google.com,
+	cassel@kernel.org,
+	Frank.Li@nxp.com
+Cc: vigneshr@ti.com,
+	s-vadapalli@ti.com,
+	hongxing.zhu@nxp.com,
+	l.stach@pengutronix.de,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	minghuan.Lian@nxp.com,
+	mingkai.hu@nxp.com,
+	roy.zang@nxp.com,
+	jesper.nilsson@axis.com,
+	heiko@sntech.de,
+	srikanth.thokala@intel.com,
+	marek.vasut+renesas@gmail.com,
+	yoshihiro.shimoda.uh@renesas.com,
+	geert+renesas@glider.be,
+	magnus.damm@gmail.com,
+	christian.bruel@foss.st.com,
+	mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com,
+	thierry.reding@gmail.com,
+	jonathanh@nvidia.com,
+	hayashi.kunihiko@socionext.com,
+	mhiramat@kernel.org,
+	kishon@kernel.org,
+	jirislaby@kernel.org,
+	rongqianfeng@vivo.com,
+	18255117159@163.com,
+	shawn.lin@rock-chips.com,
+	nicolas.frattaroli@collabora.com,
+	linux.amoon@gmail.com,
+	vidyas@nvidia.com,
+	shuah@kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add tests for execution context helpers
-Date: Sat, 24 Jan 2026 22:27:06 +0900
-Message-ID: <20260124132706.183681-3-changwoo@igalia.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260124132706.183681-1-changwoo@igalia.com>
-References: <20260124132706.183681-1-changwoo@igalia.com>
+	imx@lists.linux.dev,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-arm-kernel@axis.com,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-tegra@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v10 0/8] PCI: endpoint: BAR subrange mapping support
+Date: Sat, 24 Jan 2026 23:50:04 +0900
+Message-ID: <20260124145012.2794108-1-den@valinux.co.jp>
+X-Mailer: git-send-email 2.51.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TY4PR01CA0014.jpnprd01.prod.outlook.com
+ (2603:1096:405:26e::17) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:405:38f::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|TYYP286MB4692:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b698580-b333-4a55-8af2-08de5b57e26c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|10070799003|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?TSArqQxaBkAsYc/xqhkIc2RPGZU32RFU2IGjnniFxA7tUeNplPz9oQsE4f5T?=
+ =?us-ascii?Q?bdYoJDAF5eDya1gLKs1L2poiEhm7VQvLHKxqbQvvJiKjA1vTaqRUQbD9bqUg?=
+ =?us-ascii?Q?g+PJgS/Ri4V/CrtH9YKdLymqWp5GcHCV4fKxDwrydy4Tih5gBoJ1PhHphs1p?=
+ =?us-ascii?Q?RBCgh/1f/tUk6UgM58x0B1QUxByl218d+9gYCRnOalAMlS/wOsLh9SAc7NhO?=
+ =?us-ascii?Q?Kca+rx+4vpr4uaa7+0YET+wBbSz024Cwx1TqP5C7UpqlOSgPviAAUU6T6u9L?=
+ =?us-ascii?Q?SH0ETN8yx2hEweyg3DkYZ9wSizgSgbZ2a4ghhBKIFiTrnT9jBTcC5FXxV2SB?=
+ =?us-ascii?Q?mJvJci4th9xuZhSj/ZAqq+5tAYsI4QonFjY3HjMjPMzi1tUhpug9hZVaJUWd?=
+ =?us-ascii?Q?hPXlqj9Br6+TAiwaa+JqXPv6DbHSDEt/tcLu8R+/wI3QTb6sqlWlIjaTJALX?=
+ =?us-ascii?Q?LoMHmcqehjwbzoc+/ixnKEooauvJC8AFv2uAh0yFiTtK9MbC9u3Aaddzvhz/?=
+ =?us-ascii?Q?2R28YICSHvQGIQiBRYKeh5Z0UvPgrVTO8BiD2uADWUY2FgNiw2VohhDi4xUo?=
+ =?us-ascii?Q?KBfZ8gV2TXWR6sg1LCGe3Ts7LjU/CwOSxK9RxNMSx7ZDh3KO4HfiHeeBNjqk?=
+ =?us-ascii?Q?JdRmMk0HbF/ePj7w1TJ1GK+YeNSskMyEAfHVRkgpMX0psKNIKQNpNPwGhNpC?=
+ =?us-ascii?Q?NPk7ZXNE5aHTwFWBGm0JD8bOB4a7AfKltV7GQKO0n5gy4QQySyLtlQs5+95A?=
+ =?us-ascii?Q?mWpjd08H5aNiVWF1HxlLATS9XMZr/lHydJrguQJhU0eN3vl4WnAMzh3f5rlC?=
+ =?us-ascii?Q?u/sA6B7eZI7eVEF/HARXbzHMc2kAClFSE1z0aZ/gHMuad+5NK7oZQ1gtVi3y?=
+ =?us-ascii?Q?SKrDXFnkax+/OBWDHlxFi+Ccbgj8ZThtkpiH0bGn/EvodO3Udfy9zAPuRBXA?=
+ =?us-ascii?Q?FpYhrp2mYxmOU7EOu20/4At8OWyxNc9h79WTNQFO9TIjjokSsuj6ej4nYsE/?=
+ =?us-ascii?Q?kGF4L+TsxlryhgS+kQixgLztmL24Q3cy/zXS8uGxkGV7TqCAu4OWtx4Cvv7p?=
+ =?us-ascii?Q?OcQo2JYULPmib6xdnmVo+GIo//3cI0O89kaUpYOUAhOA3yn1PZ5Z9iD3hfIE?=
+ =?us-ascii?Q?cJmeS0rTZaCPLwNs5abfZPRUl1LdFZa6CH5MNruo0qSCddfUUm09/OE2YaS8?=
+ =?us-ascii?Q?lrQGH/mKaIxrIhjBoA06cgue4stCkf5R0ozUi3jfuZEEG2POSKjsY3mbZbxx?=
+ =?us-ascii?Q?cCOWMG660QBrqlf+gWtAuz088epHYA6Cx64HYoIuxOgDFGyRothEc+DdnRdG?=
+ =?us-ascii?Q?2VCIzmhj/b/TqM13yuj1ujwcS60RjZ1ZlcTgMgTnRzxttYZgDaQ5tW4B9wXL?=
+ =?us-ascii?Q?W1iPf/Inri07H0Ue2CwUrWVVO+nzcVOrqQQ33bkN0oafwzJ+IrLwWrMjek5N?=
+ =?us-ascii?Q?ycoTyDwdCki7gF43vq362QJBsF2vdplRaya3yuJlxDs/us9gCIW19dO7HUuX?=
+ =?us-ascii?Q?rBZEMGLReqAf9VN0vmYfarox3u6fBNcrqhigQ1qMaAj/Q68pzIvDvYQddAPW?=
+ =?us-ascii?Q?U1ztcb+pqIp2KD/SchM=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(10070799003)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?L6/mMpx3FkPYoAz5ON7Y1z+4xiYdzb8A+lQ7PpIZNhnL8fgvxE5ErGOUTbAw?=
+ =?us-ascii?Q?jqtEdffswXsDXwlxp50q2wr3dxtIKl5xDqXXN80efvtABJ9NvmEy0/l++L5R?=
+ =?us-ascii?Q?SGDQDrQo+VkTOW7BMbIpKumkHA4yekQpm9lYSK5lE1Ssw8VgTxuaPL2I5UPT?=
+ =?us-ascii?Q?lgURe3Add2xb3yAxX77wKYngP7kWrTjfxJRkJcE6soCKQVdv5NYubYtKlVo9?=
+ =?us-ascii?Q?TEaYTIKMH8M/cdSQWNY8EZ50bALAgQhE1EGyEpvXoJVxOkl/cmKBrjCXTYHI?=
+ =?us-ascii?Q?jYhaSkIzKGYt2/bc2mj6zQtSZ4XutaRK2DJVs6hH7OVZiKRckGLxPw61Bxfm?=
+ =?us-ascii?Q?7RIPV89wJe38hHnkvjwm+siPQO/+h/cE+XsmXYdV3Se4r//WdLV4TuwF4vUJ?=
+ =?us-ascii?Q?Y9wmgRg1/IffQmM4L5X0zubA70j7nNo6uFzBYbD1SeTWxtGSVryq/1IGDX5l?=
+ =?us-ascii?Q?OtjNqeRhLzXmK73F8M6jDbYwp5sXYb4QY+ocqBw4ODI2X6ROSlnt6d3lCsJ+?=
+ =?us-ascii?Q?w6PcGNHGCgWci2Ljqewg8z3Rf459LW5Ji6Ibq1/xAwHEQdmodzhnIKSLNy+p?=
+ =?us-ascii?Q?O0vOgXu2A59oPBjqjiB9dFo1Z6537LwZzRHF1901A5KMYRwofy6+fVc0qry6?=
+ =?us-ascii?Q?0S5w8M5p11nyHCIEsOFNXfvouPYbwfpcJEArZ8Z7YQH4ZBXs3+UeUmDrMJqk?=
+ =?us-ascii?Q?Dm1truvM7VYo6gsLE2Ke9JIPzcjzLfleYIuIQgy8hKgvLio/yWgsgDqhNk+t?=
+ =?us-ascii?Q?U7sE52qbRPs06hbmywZufbVfRmyLPshjV2hnN9kcLWwFJaT4gFpkPkw+7jum?=
+ =?us-ascii?Q?P5NLrE5XLEvGZ9UWWqxnqMUa/KDKQDJNHoqQDW7xivXrhSXmLfdkP/QEwt72?=
+ =?us-ascii?Q?wkjdkj/xmrjxwsD8K6Ff4EZeoO1RXNSU+T0FZ9zqzVSqavpGxVA9CvI+L4Zr?=
+ =?us-ascii?Q?gzRTixK6Pb167mIQ9uAbo1SnnvxmyYjmTt5rK0dSSOQ18Dj3pK6f3prht1k+?=
+ =?us-ascii?Q?Cp3zi6fZlDiNFh6aLWqcbqjraD2EB64chAimoD14R6RpARAVrMTxggNCw/jc?=
+ =?us-ascii?Q?3C2mV/WakEQJXge1FTQSVoS0+b4fgv8dYUQlMps7PCzBKjv91Ejbhylg87i9?=
+ =?us-ascii?Q?xfyJb2R+zfaWKG89zeimq1RWuwqRrhslmRbRBlj6y/AEg439jAX8W8Rrjihz?=
+ =?us-ascii?Q?J4eRVbSVnnc804KVStK4+RrSVvHqR+reLcX3IQz3ghESE2ned4iKj5syxGqc?=
+ =?us-ascii?Q?BUH5/yKE7Ur5R95V28u+zdEaFYw73F8c0V8Sx/sZtiLyu4ZBkuvStHbFOVZo?=
+ =?us-ascii?Q?nFnykPQv7xWhe+sbVP5KFcUf3mM7Mksg/i4t09Q4UFoI6ItFU5FTpTz5a4CJ?=
+ =?us-ascii?Q?NaWBUD9V0wXFVJfbqebEGvtMUX+bq80wo2n/VZCizJOtBnse9t7vxW3gKPHZ?=
+ =?us-ascii?Q?mhq7+gKtJxCpa4xpyIsMW5uv5NOuX7am7RlCogeIfGJUPlRCdPDis5LX83dI?=
+ =?us-ascii?Q?b84kfKHH+j1vuyOMC31BSYsTKHBzuHhpWJ/moHtBM4zTXmaT0TkW6x7J0203?=
+ =?us-ascii?Q?u/pz6jZb7KF06MLS1mcOijrt8crC+ZVhvQYlgBoPb0vWvASnbU3qbnrgsoIN?=
+ =?us-ascii?Q?B4WqhHp21dpmuEtRxLCpKUnBsyxGjnWaEi9aWjNTPZ0zh9jmSaSP+fKIbus2?=
+ =?us-ascii?Q?B/GvTMGhxN8JX4JaSfwQuyJOrzMU4pOVP207RRJa78RncjQ3MVfnp9gX5EXi?=
+ =?us-ascii?Q?5824qJzBgAwWo7ApacIySM20OGLu+stg7nvb9Jug/MAE4UNdsHRX?=
+X-OriginatorOrg: valinux.co.jp
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b698580-b333-4a55-8af2-08de5b57e26c
+X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2026 14:50:15.3111
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Yc8nqa+oApPk2OrplNJMXf+qUsCX52OQ36C9iE7JKpxJgwD0RKln87osRaN+kI4fqNeoKvzJ8RA9yc4tFm/9OQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYP286MB4692
 
-Add a new selftest suite `exe_ctx` to verify the accuracy of the
-bpf_in_task(), bpf_in_hardirq(), and bpf_in_serving_softirq() helpers
-introduced in bpf_experimental.h.
+This series proposes support for mapping subranges within a PCIe endpoint
+BAR and enables controllers to program inbound address translation for
+those subranges.
 
-Testing these execution contexts deterministically requires crossing
-context boundaries within a single CPU. To achieve this, the test
-implements a "Trigger-Observer" pattern using bpf_testmod:
+Note: This series is a spin-off from a larger RFC series:
+      https://lore.kernel.org/all/20260118135440.1958279-1-den@valinux.co.jp/
+      The first user is the pci-endpoint-test, and the real user will
+      likely be epf-vntb for Remote eDMA-backed NTB transport, demonstrated
+      in that RFC series.
 
-1. Trigger: A BPF syscall program calls a new bpf_testmod kfunc
-   bpf_kfunc_trigger_ctx_check().
-2. Task to HardIRQ: The kfunc uses irq_work_queue() to trigger a
-   self-IPI on the local CPU.
-3. HardIRQ to SoftIRQ: The irq_work handler calls a dummy function
-   (observed by BPF fentry) and then schedules a tasklet to
-   transition into SoftIRQ context.
 
-The user-space runner ensures determinism by pinning itself to CPU 0
-before execution, forcing the entire interrupt chain to remain on a
-single core. Dummy noinline functions with compiler barriers are
-added to bpf_testmod.c to serve as stable attachment points for
-fentry programs. A retry loop is used in user-space to wait for the
-asynchronous SoftIRQ to complete.
+Motivation
+==========
 
-Signed-off-by: Changwoo Min <changwoo@igalia.com>
----
- .../selftests/bpf/prog_tests/exe_ctx.c        | 59 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_ctx.c  | 48 +++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 32 ++++++++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  4 ++
- 4 files changed, 143 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/exe_ctx.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ctx.c
+(This section is identical to my earlier explanation at:
+https://lore.kernel.org/linux-pci/waapztvy6jyjqtfcoo3rbgvagi4z3p5afw6x2acgf5bxatcui6@nkodhtqqtetr)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/exe_ctx.c b/tools/testing/selftests/bpf/prog_tests/exe_ctx.c
-new file mode 100644
-index 000000000000..aed6a6ef0876
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/exe_ctx.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2026 Valve Corporation.
-+ * Author: Changwoo Min <changwoo@igalia.com>
-+ */
-+
-+#include <test_progs.h>
-+#include <sys/syscall.h>
-+#include "test_ctx.skel.h"
-+
-+void test_exe_ctx(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	cpu_set_t old_cpuset, target_cpuset;
-+	struct test_ctx *skel;
-+	int err, prog_fd;
-+
-+	/* 1. Pin the current process to CPU 0. */
-+	if (sched_getaffinity(0, sizeof(old_cpuset), &old_cpuset) == 0) {
-+		CPU_ZERO(&target_cpuset);
-+		CPU_SET(0, &target_cpuset);
-+		ASSERT_OK(sched_setaffinity(0, sizeof(target_cpuset),
-+					    &target_cpuset), "setaffinity");
-+	}
-+
-+	skel = test_ctx__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
-+		goto restore_affinity;
-+
-+	err = test_ctx__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	/* 2. When we run this, the kernel will execute the BPF prog on CPU 0. */
-+	prog_fd = bpf_program__fd(skel->progs.trigger_all_contexts);
-+	err = bpf_prog_test_run_opts(prog_fd, &opts);
-+	ASSERT_OK(err, "test_run_trigger");
-+
-+	/* 3. Wait for the local CPU's softirq/tasklet to finish. */
-+	for (int i = 0; i < 1000; i++) {
-+		if (skel->bss->count_task > 0 &&
-+		    skel->bss->count_hardirq > 0 &&
-+		    skel->bss->count_softirq > 0)
-+			break;
-+		usleep(1000); /* Wait 1ms per iteration, up to 1 sec total */
-+	}
-+
-+	/* On CPU 0, these should now all be non-zero. */
-+	ASSERT_GT(skel->bss->count_task, 0, "task_ok");
-+	ASSERT_GT(skel->bss->count_hardirq, 0, "hardirq_ok");
-+	ASSERT_GT(skel->bss->count_softirq, 0, "softirq_ok");
-+
-+cleanup:
-+	test_ctx__destroy(skel);
-+
-+restore_affinity:
-+	ASSERT_OK(sched_setaffinity(0, sizeof(old_cpuset), &old_cpuset),
-+		  "restore_affinity");
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_ctx.c b/tools/testing/selftests/bpf/progs/test_ctx.c
-new file mode 100644
-index 000000000000..7d4995506717
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ctx.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2026 Valve Corporation.
-+ * Author: Changwoo Min <changwoo@igalia.com>
-+ */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_experimental.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+extern void bpf_kfunc_trigger_ctx_check(void) __ksym;
-+
-+int count_hardirq;
-+int count_softirq;
-+int count_task;
-+
-+/* Triggered via bpf_prog_test_run from user-space */
-+SEC("syscall")
-+int trigger_all_contexts(void *ctx)
-+{
-+	if (bpf_in_task())
-+		__sync_fetch_and_add(&count_task, 1);
-+
-+	/* Trigger the firing of a hardirq and softirq for test. */
-+	bpf_kfunc_trigger_ctx_check();
-+	return 0;
-+}
-+
-+/* Observer for HardIRQ */
-+SEC("fentry/bpf_testmod_test_hardirq_fn")
-+int BPF_PROG(on_hardirq)
-+{
-+	if (bpf_in_hardirq())
-+		__sync_fetch_and_add(&count_hardirq, 1);
-+	return 0;
-+}
-+
-+/* Observer for SoftIRQ */
-+SEC("fentry/bpf_testmod_test_softirq_fn")
-+int BPF_PROG(on_softirq)
-+{
-+	if (bpf_in_serving_softirq())
-+		__sync_fetch_and_add(&count_softirq, 1);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index d425034b72d3..1b04022859b7 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -1164,6 +1164,33 @@ __bpf_kfunc int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux);
- __bpf_kfunc int bpf_kfunc_implicit_arg_legacy(int a, int b, struct bpf_prog_aux *aux);
- __bpf_kfunc int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux);
- 
-+/* hook targets */
-+noinline void bpf_testmod_test_hardirq_fn(void) { barrier(); }
-+noinline void bpf_testmod_test_softirq_fn(void) { barrier(); }
-+
-+/* Tasklet for SoftIRQ context */
-+static void ctx_check_tasklet_fn(struct tasklet_struct *t)
-+{
-+	bpf_testmod_test_softirq_fn();
-+}
-+
-+DECLARE_TASKLET(ctx_check_tasklet, ctx_check_tasklet_fn);
-+
-+/* IRQ Work for HardIRQ context */
-+static void ctx_check_irq_fn(struct irq_work *work)
-+{
-+	bpf_testmod_test_hardirq_fn();
-+	tasklet_schedule(&ctx_check_tasklet);
-+}
-+
-+static struct irq_work ctx_check_irq = IRQ_WORK_INIT_HARD(ctx_check_irq_fn);
-+
-+/* The kfunc trigger */
-+__bpf_kfunc void bpf_kfunc_trigger_ctx_check(void)
-+{
-+	irq_work_queue(&ctx_check_irq);
-+}
-+
- BTF_KFUNCS_START(bpf_testmod_check_kfunc_ids)
- BTF_ID_FLAGS(func, bpf_testmod_test_mod_kfunc)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
-@@ -1209,6 +1236,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_multi_st_ops_test_1_assoc, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy_impl)
-+BTF_ID_FLAGS(func, bpf_kfunc_trigger_ctx_check)
- BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
- 
- static int bpf_testmod_ops_init(struct btf *btf)
-@@ -1840,6 +1868,10 @@ static void bpf_testmod_exit(void)
- 	while (refcount_read(&prog_test_struct.cnt) > 1)
- 		msleep(20);
- 
-+	/* Clean up irqwork and tasklet */
-+	irq_work_sync(&ctx_check_irq);
-+	tasklet_kill(&ctx_check_tasklet);
-+
- 	bpf_kfunc_close_sock();
- 	sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
- 	unregister_bpf_testmod_uprobe();
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 10f89f06245f..d5c5454e257e 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -169,4 +169,8 @@ extern int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args) __weak
- struct prog_test_member *bpf_kfunc_get_default_trusted_ptr_test(void) __ksym;
- void bpf_kfunc_put_default_trusted_ptr_test(struct prog_test_member *trusted_ptr) __ksym;
- 
-+void bpf_testmod_test_hardirq_fn(void);
-+void bpf_testmod_test_softirq_fn(void);
-+void bpf_kfunc_trigger_ctx_check(void) __ksym;
-+
- #endif /* _BPF_TESTMOD_KFUNC_H */
+The motivation for BAR subrange mapping is that some EP platforms
+effectively have only two practically usable BARs, while needing multiple
+logically independent inbound mapping.
+
+For example, on Renesas R-Car Gen4 Spider, 64-bit BAR0 and BAR2 are the
+only practically usable BARs, since BAR4 is only 256 bytes. epf-vntb
+already needs two separate regions (config+spad and MW1 for the
+data-plane), leaving no spare BAR. Adding ntb_msi requires yet another MW,
+which simply does not fit unless an existing BAR is further divided.
+
+In theory, some vNTB regions (e.g. config+spad and dynamically allocated
+memory-backed MWs) could be tightly packed into a single physically
+contiguous BAR region to barely make it work. However, it immediately makes
+features mutually exclusive (e.g. ntb_msi / ntb_edma cannot coexist), and
+the layout becomes extremely fragile.
+
+Similarly, for remote eDMA-backed NTB transport, the host needs separate
+inbound access to the eDMA register block and the LL regions, which are
+distinct local address ranges. Without subrange mapping, the only choice is
+unnatural layout (e.g. dedicating one BAR entirely to eDMA register block,
+and another one to everything else that can be packed into a single locally
+contiguous memory region), even when this is barely possible.
+
+So while some cases might be made to work by aggressive packing, they are
+already at the limit on platforms such as R-Car Spider. BAR subrange
+mapping allows these features to be implemented in a straightforward,
+loosely-coupled, and extensible way on platforms with severely constrained
+BAR resources.
+
+
+Patch layout
+============
+
+- Patch 1/8 introduces dynamic_inbound_mapping feature bit. This can be
+  used as a safeguard to check whether a BAR can really be reconfigured
+  without clearing/resetting it.
+
+- Patch 2/8 introduces generic BAR subrange mapping support in the PCI
+  endpoint core.
+
+- Patch 3/8 advertises dynamic inbound mapping support via
+  DWC_EPC_COMMON_FEATURES for all DWC-based glue drivers.
+
+- Patch 4/8 adds an implementation for the DesignWare PCIe endpoint
+  controller using Address Match Mode IB iATU. It also advertises
+  subrange_mapping support via DWC_EPC_COMMON_FEATURES.
+
+- Patch 5/8 updates a documentation for pci_epc_set_bar().
+
+- Patch 6/8 extends pci-epf-test to support BAR subrange setup/teardown
+  commands and advertise CAP_SUBRANGE_MAPPING when supported by the EPC.
+
+- Patch 7/8 adds a BAR subrange mapping test to pci_endpoint_test and
+  introduces a new uapi ioctl (PCITEST_BAR_SUBRANGE).
+
+- Patch 8/8 adds BAR_SUBRANGE_TEST to the pci_endpoint kselftest suite.
+
+
+Kernel base
+===========
+
+- repo: git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+- branch: controller/dwc
+- commit: 0ecd890e3cf5 ("PCI: dwc: Rename dw_pcie_rp::has_msi_ctrl to
+                         dw_pcie_rp::use_imsi_rx for clarity")
+
+
+Tested on
+=========
+
+I tested the new BAR_SUBRANGE_TEST on R-Car Spider boards and verified that
+it passes on BAR2. It requires the following unmerged patch as a
+prerequisite though:
+https://lore.kernel.org/all/20251023072217.901888-1-den@valinux.co.jp/
+
+
+Changelog
+=========
+
+* v9->v10 changes:
+  - Added a safeguard in dw_pcie_ep_set_bar() to ensure that
+    dw_pcie_ep_ib_atu_addr() is only called when updating an already
+    configured BAR with matching size and flags.
+  - Added BAR_SUBRANGE_TEST coverage via pci_endpoint_test and kselftest.
+  - Fixed the commit message for Patch 4/8 (dropped the line "subranges are
+    sorted in ascending order by offset").
+
+* v8->v9 changes:
+  - Dropped now meaningless source code comments, which should have been
+    removed in v8 (feedback from Frank).
+  - Added motivation text to the cover letter and to Patch 2/5 and Patch
+    4/5.
+  - Rebased onto the latest controller/dwc branch (see "Kernel base"
+    section above).
+
+* v7->v8 changes:
+  - Drop the explicit submap offset and use_submap fields. The submap
+    array order now defines BAR offsets (gapless decomposition). Commit
+    messages and source code documentations are adjusted accordingly.
+  - Drop the no-longer-needed dw_pcie_ib_map and add ib_atu_indexes field
+    to track iatu indexes used for teardown.
+  - Move inbound mapping teardown into dw_pcie_ep_set_bar() to cover all
+    BAR transition cases.
+  - Centralize feature bit advertisement via DWC_EPC_COMMON_FEATURES.
+  - Added a (epf_bar->num_submap && !epf_bar->submap) check in
+    pci_epc_set_bar().
+  - Note that some Reviewed-by tags are dropped, as the changes need to be
+    re-reviewed.
+
+* v6->v7 changes:
+  - Added missing check of dynamic_inbound_mapping feature bit in
+    pci_epc_set_bar() when use_submap is set true.
+  - Addressed the remaining review comments from Niklas (patch reordering,
+    splitting, and source code comment/documentation refinements).
+
+* v5->v6 changes:
+  - Added a new feature bit dynamic_inbound_mapping and set it centrally
+    in dw_pcie_ep_get_features() for all DWC-based glue drivers.
+  - Updated documentation for pci_epc_set_bar().
+  - Dropped a needless and harmful dw_pcie_ep_clear_bar() call on the error
+    path.
+  - Fixed "Bar Match Mode" to "BAR Match Mode" in a source code comment.
+
+* v4->v5 changes:
+  - Added subrange_mapping to struct pci_epc_features and enforced a
+    strict capability check in pci_epc_set_bar() (reject use_submap when
+    unsupported).
+  - Changed DWC-based glue drivers to return a mutable features pointer
+    and set subrange_mapping centrally at the DWC midlayer.
+  - Split the series into 3 patches accordingly.
+
+* v3->v4 changes:
+  - Drop unused includes that should have been removed in v3
+
+* v2->v3 changes:
+  - Remove submap copying and sorting from dw_pcie_ep_ib_atu_addr(), and
+    require callers to pass a sorted submap. The related source code
+    comments are updated accordingly.
+  - Refine source code comments and commit messages, including normalizing
+    "Address Match Mode" wording.
+  - Add const qualifiers where applicable.
+
+* v1->v2 changes:
+  - Introduced stricter submap validation: no holes/overlaps and the
+    subranges must exactly cover the whole BAR. Added
+    dw_pcie_ep_validate_submap() to enforce alignment and full-coverage
+    constraints.
+  - Enforced one-shot (all-or-nothing) submap programming to avoid leaving
+    half-programmed BAR state:
+    * Dropped incremental/overwrite logic that is no longer needed with the
+      one-shot design.
+    * Added dw_pcie_ep_clear_ib_maps() and used it from multiple places to
+      tear down BAR match / address match inbound mappings without code
+      duplication.
+  - Updated kernel source code comments and commit messages, including a
+    small refinement made along the way.
+  - Changed num_submap type to unsigned int.
+
+v9: https://lore.kernel.org/all/20260122084909.2390865-1-den@valinux.co.jp/
+v8: https://lore.kernel.org/all/20260115084928.55701-1-den@valinux.co.jp/
+v7: https://lore.kernel.org/all/20260113162719.3710268-1-den@valinux.co.jp/
+v6: https://lore.kernel.org/all/20260113023715.3463724-1-den@valinux.co.jp/
+v5: https://lore.kernel.org/all/20260108172403.2629671-1-den@valinux.co.jp/
+v4: https://lore.kernel.org/all/20260108044148.2352800-1-den@valinux.co.jp/
+v3: https://lore.kernel.org/all/20260108024829.2255501-1-den@valinux.co.jp/
+v2: https://lore.kernel.org/all/20260107041358.1986701-1-den@valinux.co.jp/
+v1: https://lore.kernel.org/all/20260105080214.1254325-1-den@valinux.co.jp/
+
+
+Thank you for reviewing,
+
+
+Koichiro Den (8):
+  PCI: endpoint: Add dynamic_inbound_mapping EPC feature
+  PCI: endpoint: Add BAR subrange mapping support
+  PCI: dwc: Advertise dynamic inbound mapping support
+  PCI: dwc: ep: Support BAR subrange inbound mapping via Address Match
+    Mode iATU
+  Documentation: PCI: endpoint: Clarify pci_epc_set_bar() usage
+  PCI: endpoint: pci-epf-test: Add BAR subrange mapping test support
+  misc: pci_endpoint_test: Add BAR subrange mapping test case
+  selftests: pci_endpoint: Add BAR subrange mapping test case
+
+ Documentation/PCI/endpoint/pci-endpoint.rst   |  24 ++
+ drivers/misc/pci_endpoint_test.c              | 203 ++++++++++++++++-
+ drivers/pci/controller/dwc/pci-dra7xx.c       |   1 +
+ drivers/pci/controller/dwc/pci-imx6.c         |   3 +
+ drivers/pci/controller/dwc/pci-keystone.c     |   1 +
+ drivers/pci/controller/dwc/pcie-artpec6.c     |   1 +
+ .../pci/controller/dwc/pcie-designware-ep.c   | 212 +++++++++++++++++-
+ .../pci/controller/dwc/pcie-designware-plat.c |   1 +
+ drivers/pci/controller/dwc/pcie-designware.h  |   8 +
+ drivers/pci/controller/dwc/pcie-dw-rockchip.c |   2 +
+ drivers/pci/controller/dwc/pcie-keembay.c     |   1 +
+ drivers/pci/controller/dwc/pcie-qcom-ep.c     |   1 +
+ drivers/pci/controller/dwc/pcie-rcar-gen4.c   |   1 +
+ drivers/pci/controller/dwc/pcie-stm32-ep.c    |   1 +
+ drivers/pci/controller/dwc/pcie-tegra194.c    |   1 +
+ drivers/pci/controller/dwc/pcie-uniphier-ep.c |   2 +
+ drivers/pci/endpoint/functions/pci-epf-test.c | 172 +++++++++++++-
+ drivers/pci/endpoint/pci-epc-core.c           |   8 +
+ include/linux/pci-epc.h                       |   9 +
+ include/linux/pci-epf.h                       |  23 ++
+ include/uapi/linux/pcitest.h                  |   1 +
+ .../pci_endpoint/pci_endpoint_test.c          |  17 ++
+ 22 files changed, 681 insertions(+), 12 deletions(-)
+
 -- 
-2.52.0
+2.51.0
 
