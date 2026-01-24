@@ -1,54 +1,54 @@
-Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D71A1F4181
-	for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 01:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4671FA859
+	for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 01:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769217723; cv=none; b=Jjoa6NvgbemPiLdRjEgNYlTXc3yvVLinUzKMw8YvkbkAcoBUzuQFARyqWmZ4Hg1t/PTgS8lTfYWcvW/2uOPkh/rYR8PVv8feCDSqFBHJbxyncbd34UjBXcILPCK1F6OoVjUo2EAv9YWjArZLPGXmlZ1JsgAyddnWyjp5gD62pWM=
+	t=1769217728; cv=none; b=X894NuCtfSBGx48bXi+Lts53NNMULlnbxvdo6sR/NweamsHZRHkhSm2jCNEvXrPAdnsYU1OG7txIyb24zfHUV8GMm1tAaNMgAsn4YAmSpWprWtS/s6niDb+gQ+0w0iuScmuJEZJtzYrDctLqS23Ip0U8n1R/WKP/NfV0rbmp/9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769217723; c=relaxed/simple;
-	bh=wvQSevTks610RBfJ7oBqtsKqCB/HWm0eJW4rW75kywU=;
+	s=arc-20240116; t=1769217728; c=relaxed/simple;
+	bh=O6ot7CPctdPFw6WHudhxbDM8ZE4E8EaTJG3EnZslIx8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CtjnFHkfX0ykzMuQOAaYsdaCO3Ze7vpvmsFvVb51G5EdcIPJw4f3fxOQ+HmmnlBjCDxvt/evqedT438VO06FbF393Wab00FjmhMopdFDjKtYIBb+fiZN9T3Gd1oMlUYvgvClvOP0JKRRV1XkK0lp4fwpO6TDsWwhJezkBBmQlD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YLYZQwrZ; arc=none smtp.client-ip=74.125.82.74
+	 To:Cc:Content-Type; b=G8ShU/TZy1UddcMWJTNxoMAARJtNYshD7il2sNmYMfLt9fUyCZ99tuY8AuhH4YgkP1E527yAoHZk3cHc7ndzO9PmlA5Mnnvt7uO0Moa9VEUVSXrqZuANsbI93hY26FWOVTkMtOGUZCOV4eFO/FVIlXGv6g8e6Wugno+BCqht46o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gO0cmGPH; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YLYZQwrZ"
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-1233b91de6bso4955608c88.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 17:22:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gO0cmGPH"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2b6b9c1249fso5120029eec.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jan 2026 17:22:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769217720; x=1769822520; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1769217725; x=1769822525; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a577FNgbL0JbRd6IsOu504RokGc/26jdmHoERsXu7xE=;
-        b=YLYZQwrZQdClNm0+ozko3XXQMt5QHTLB7dWO7oLhxt0v1xuuJ3CcXIKg54k0W/Qomp
-         1IMBOsUl6CvRmULjpxw6yiTLZW0Zn9lGrvDwzayqa/+ZeCrum+Tr0WdhunptrrZwhayo
-         gnfMxwWT1rbB40qlchCCJWgV+wN5AO8ttGME9i5xHxv3Tft5u0DpEBy7ji6Oo/eM8Yla
-         k4RVwQwaz+kDUB2lp38uc9IOxpEjqzCSN1+Yq16vdPd07lqh91IG3ZnpEgHYjggqIPxs
-         7WIp1zY6+RlKqwUocNhrHV5AoyjRDTu2EZMvN2b+1MMqSxMOq/sk/NChMdnqT9wNoUGc
-         9NZA==
+        bh=dJJFhVKyiKKoV+I6tkl9SP4apjw+O1s0pu7zT4uXhoI=;
+        b=gO0cmGPHoPjL0FEa7+aC8RAvx7qHuvbyE8WBKnm+mJ7K3XMBQvVCMgZVBrVFXhZYMK
+         cvxbimsepumdv2GMGLbESoNTV/kpdr3aGb4NfkY7QcH/23ZUohmskfOhpDENAmOA1MAF
+         ErUFK0v83LLa0/DIsVeBGOFH5jEz8kUxJp6/RjSLjyXoPmmyIGiUErT9lmWt0CmEPIxs
+         toboya9rT4mnGw1NeHrKW482UjnaDJLPYBkv/dohPFh4nA1SfJtt+mD01NcmPNRTiFoI
+         s2vrr0PDnK4m1XvBy6zg2H19RfTblwehcW0QrVcERQYUzEA2bsfyYhrdSDm88HkprFGA
+         iGNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769217720; x=1769822520;
+        d=1e100.net; s=20230601; t=1769217725; x=1769822525;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a577FNgbL0JbRd6IsOu504RokGc/26jdmHoERsXu7xE=;
-        b=P3TWi8p/hjU+JvLNbbEcsix1JrZYS8xs53Z0gFXlpZ1E2l/LjmAuDJTmiTV4iA75d5
-         1YoMBiDBpc6Eg0k3Jud5D6QwS5KQKU3ARZYLaPkMNyKbGitrLfIanSLHySgZTd00LSqV
-         Ukzgijdv9l2jbLFUnLaOl9xuggH7W8i5+FApbh3jahRO+zoowCaAAJopB18GN8tYzFK7
-         YBnx9+zgrN5SSw+u0ZHxA5r0n8XqdTaJSQmAd4ID42ySANK+NraoqP5kXKZc5KDD1iD8
-         pCmG4qCEsbmS6Z1z/Oviibtat1JBs8g/jcY52nl/OYOJufAdfBqxqGurRZnvoo3t+EsA
-         27hQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWGdJCwe+s8jpaFpCAXW1TukNqMY1l+tRdXLud8Bd7gy8q7drWno5lG4WREM60NuKCCjzJUkxA1hpiJyrctWM0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBigobeyKGVYzf+SK6bzIloq7Dd82yuh8hddRmLF7QuKj19Vv/
-	uRkLLlpsR7545WG2hS9tw6pPJt6rbg5LXRG6sO+yhGWlpsLC98LQlAA6k6719UZJfWosLwFH3t1
-	FPIcB4vHIZ7hdVw==
-X-Received: from dlbcj34.prod.google.com ([2002:a05:7022:69a2:b0:11f:3043:2c7f])
+        bh=dJJFhVKyiKKoV+I6tkl9SP4apjw+O1s0pu7zT4uXhoI=;
+        b=lYGEOnOzdLG6yYfWCoPapd9285rKcz+/39Gym/Q6BMR4PZz53phHpEJ5JWHNZOGyov
+         tnJIF8ia3Z/4lD5MW9QQq6zus8x28rxDP4Nq5OpT5eP04r9GsOQ52C6R9InYD+up8MFg
+         fjNwtFquWNS1Zrlrt1sQvM4VT39Ki2KW3rDqsaS4EqjXen9YdWJNIPC4FwKdIrxAfsD2
+         TWDWFE96WHFHJ7LmjiMsSGx/R1wk9Haqx5ks11+srspQzO2bCDSsE1hyrceKWaAzgV17
+         YnS+hgqb/bxTv9PunbmkZZIux+zvsavIIV4htHTic+4SEqheQYs4NHyNY428QQBrILZg
+         eu8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXW8cgXIBDJSgF/Qypi8DCX0x7CElOBKGDRC9C7Nbvmf8FHmtba5apakI8WEwSLdGggqQZL8C8NDsSx7DVHdr4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2Mvbmt63+GMlXqaf2qQ60ZdnYP+7RLcp/gg6zc4pZKfnnrowc
+	StdeyABZZGKiiczb3RTkOJQXVFvJ9GdYhMiO1jsS/G/JoQGA9h0tEnUBG0JJC67FW/gXRZG0Tpl
+	cJZMQwk/K3hkJVw==
+X-Received: from dycal40.prod.google.com ([2002:a05:7301:1ca8:b0:2b6:e20b:d5e4])
  (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7023:c081:b0:11d:fc4a:c4f7 with SMTP id a92af1059eb24-1247dba9450mr1771878c88.4.1769217720087;
- Fri, 23 Jan 2026 17:22:00 -0800 (PST)
-Date: Fri, 23 Jan 2026 17:21:29 -0800
+ 2002:a05:7300:72c9:b0:2b7:2a17:af34 with SMTP id 5a478bee46e88-2b739b74177mr2687038eec.23.1769217724430;
+ Fri, 23 Jan 2026 17:22:04 -0800 (PST)
+Date: Fri, 23 Jan 2026 17:21:30 -0800
 In-Reply-To: <20260124012133.2451708-1-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260124012133.2451708-1-wusamuel@google.com>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260124012133.2451708-2-wusamuel@google.com>
-Subject: [PATCH bpf-next v3 1/3] PM: wakeup: Handle empty list in wakeup_sources_walk
+Message-ID: <20260124012133.2451708-3-wusamuel@google.com>
+Subject: [PATCH bpf-next v3 2/3] bpf: Add wakeup_source iterator
 From: Samuel Wu <wusamuel@google.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
@@ -74,33 +74,142 @@ Cc: Samuel Wu <wusamuel@google.com>, kernel-team@android.com,
 	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-In the case of an empty wakeup_sources list, wakeup_sources_walk_start()
-will return an invalid but non-NULL address. This also affects wrappers
-of the aforementioned function, like for_each_wakeup_source().
+Add a BPF iterator for traversing through wakeup_sources.
 
-This patch updates wakeup_sources_walk_start() to return NULL in case of
-an empty list.
+Setup iterators to traverse through a SRCUs of wakeup_sources. This is a
+more elegant and efficient traversal than going through the options
+today, such as at /sys/class/wakeup, or through debugfs.
 
 Signed-off-by: Samuel Wu <wusamuel@google.com>
 ---
- drivers/base/power/wakeup.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ kernel/bpf/Makefile             |   3 +
+ kernel/bpf/wakeup_source_iter.c | 103 ++++++++++++++++++++++++++++++++
+ 2 files changed, 106 insertions(+)
+ create mode 100644 kernel/bpf/wakeup_source_iter.c
 
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 1e1a0e7eeac5..e69033d16fba 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -275,9 +275,7 @@ EXPORT_SYMBOL_GPL(wakeup_sources_read_unlock);
-  */
- struct wakeup_source *wakeup_sources_walk_start(void)
- {
--	struct list_head *ws_head = &wakeup_sources;
--
--	return list_entry_rcu(ws_head->next, struct wakeup_source, entry);
-+	return list_first_or_null_rcu(&wakeup_sources, struct wakeup_source, entry);
- }
- EXPORT_SYMBOL_GPL(wakeup_sources_walk_start);
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 79cf22860a99..1259373298e1 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -66,6 +66,9 @@ obj-$(CONFIG_BPF_SYSCALL) += kmem_cache_iter.o
+ ifeq ($(CONFIG_DMA_SHARED_BUFFER),y)
+ obj-$(CONFIG_BPF_SYSCALL) += dmabuf_iter.o
+ endif
++ifeq ($(CONFIG_PM_SLEEP),y)
++obj-$(CONFIG_BPF_SYSCALL) += wakeup_source_iter.o
++endif
  
+ CFLAGS_REMOVE_percpu_freelist.o = $(CC_FLAGS_FTRACE)
+ CFLAGS_REMOVE_bpf_lru_list.o = $(CC_FLAGS_FTRACE)
+diff --git a/kernel/bpf/wakeup_source_iter.c b/kernel/bpf/wakeup_source_iter.c
+new file mode 100644
+index 000000000000..ab83d212a1f9
+--- /dev/null
++++ b/kernel/bpf/wakeup_source_iter.c
+@@ -0,0 +1,103 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2026 Google LLC */
++#include <linux/bpf.h>
++#include <linux/btf_ids.h>
++#include <linux/kernel.h>
++#include <linux/pm_wakeup.h>
++#include <linux/seq_file.h>
++
++struct bpf_iter__wakeup_source {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct wakeup_source *, wakeup_source);
++};
++
++static void *wakeup_source_iter_seq_start(struct seq_file *seq, loff_t *pos)
++{
++	int *srcuidx = seq->private;
++	struct wakeup_source *ws;
++	loff_t i;
++
++	*srcuidx = wakeup_sources_read_lock();
++
++	ws = wakeup_sources_walk_start();
++	for (i = 0; ws && i < *pos; i++)
++		ws = wakeup_sources_walk_next(ws);
++
++	return ws;
++}
++
++static void *wakeup_source_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
++{
++	struct wakeup_source *ws = v;
++
++	++*pos;
++
++	return wakeup_sources_walk_next(ws);
++}
++
++static void wakeup_source_iter_seq_stop(struct seq_file *seq, void *v)
++{
++	int *srcuidx = seq->private;
++
++	if (*srcuidx >= 0)
++		wakeup_sources_read_unlock(*srcuidx);
++	*srcuidx = -1;
++}
++
++static int __wakeup_source_seq_show(struct seq_file *seq, void *v, bool in_stop)
++{
++	struct bpf_iter_meta meta = {
++		.seq = seq,
++	};
++	struct bpf_iter__wakeup_source ctx = {
++		.meta = &meta,
++		.wakeup_source = v,
++	};
++	struct bpf_prog *prog = bpf_iter_get_info(&meta, in_stop);
++
++	if (prog)
++		return bpf_iter_run_prog(prog, &ctx);
++
++	return 0;
++}
++
++static int wakeup_source_iter_seq_show(struct seq_file *seq, void *v)
++{
++	return __wakeup_source_seq_show(seq, v, false);
++}
++
++static const struct seq_operations wakeup_source_iter_seq_ops = {
++	.start	= wakeup_source_iter_seq_start,
++	.next	= wakeup_source_iter_seq_next,
++	.stop	= wakeup_source_iter_seq_stop,
++	.show	= wakeup_source_iter_seq_show,
++};
++
++static const struct bpf_iter_seq_info wakeup_source_iter_seq_info = {
++	.seq_ops		= &wakeup_source_iter_seq_ops,
++	.seq_priv_size		= sizeof(int),
++};
++
++static struct bpf_iter_reg bpf_wakeup_source_reg_info = {
++	.target			= "wakeup_source",
++	.ctx_arg_info_size	= 1,
++	.ctx_arg_info		= {
++		{
++			offsetof(struct bpf_iter__wakeup_source, wakeup_source),
++			PTR_TO_BTF_ID_OR_NULL
++		},
++	},
++	.seq_info		= &wakeup_source_iter_seq_info,
++};
++
++DEFINE_BPF_ITER_FUNC(wakeup_source, struct bpf_iter_meta *meta,
++		     struct wakeup_source *wakeup_source)
++BTF_ID_LIST_SINGLE(bpf_wakeup_source_btf_id, struct, wakeup_source)
++
++static int __init wakeup_source_iter_init(void)
++{
++	bpf_wakeup_source_reg_info.ctx_arg_info[0].btf_id = bpf_wakeup_source_btf_id[0];
++	return bpf_iter_reg_target(&bpf_wakeup_source_reg_info);
++}
++
++late_initcall(wakeup_source_iter_init);
 -- 
 2.52.0.457.g6b5491de43-goog
 
