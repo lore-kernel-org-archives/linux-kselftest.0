@@ -1,90 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4D019C542;
-	Sat, 24 Jan 2026 17:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C98F246BA7;
+	Sat, 24 Jan 2026 17:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769276776; cv=none; b=Mvcj117jC0FV/XITP4zy64m/yCAAnTQ/ZTMQzYO8vRZ9WTeUCJrdRmBxAhsird0Uxe3bHOAb8jn3EP12rYDJM3jjZdkYlA50awwe4JU80E6BweAUNLixqKKrQsPr/CQk87lEmxUi5NbrUw8gVe4oJazXXvQSV/FXSco1WBEgmmA=
+	t=1769276780; cv=none; b=dDzdzI7YW8O4VOvqp97wjgYV+9XPM8QL9tUuNjnLkoq5nDPisMA4MbDKuRQyJAfNiZrVlAk3Ss+zEVUCCYBPAyuJxedkpATK4Vo0Bkjzf6tczwBgybjX1N7DykW3rA50T/Ey8fDrJfRJZ+ls8HwmDrK05g3c1HWMC1h9WPNF2OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769276776; c=relaxed/simple;
-	bh=FLi5x1Bv6Y+47RbLVUzrS+CBoJDWq6L3sQAn8KSrfCg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=q3GLeq98rPZHlwKbn4VihMrcgzciWt9XSLmAMB+uaWhMeO2CafsHyE/QfFjqBp88BJ2VlHOSkvxo5FaU7vhNN2FnzjIy4rnfX/u1VeAvETYaODemR7vAyR8qKqrKgypG73LkpCbl2NwZlGYAmfPOIfccAqJHjShkC9orSExfafU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E3B01MB7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769276780; c=relaxed/simple;
+	bh=B6n3FXEkwbvMiFjXGyTJ1Pr89GX8305hAtv6RV0BRhw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g/o/sBnarPQejnkhbXAHdHpJ/L5N5JDkbNAHa1ODWGmTPpcLMxvfEspGfdxv8a5q4QE0fkeE5TE295dXr7m8JDmk1GdrOsTGXM9rDek8z1i364LEnQl59TAtTaD+ASZd9k4Hrrs8VRP59B8FafKNGXK8yyvTCTnhFHsVL/S7kLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=E4Vk+VHw; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=8arUf/Qe; arc=none smtp.client-ip=135.148.138.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E3B01MB7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 872F4C116D0;
-	Sat, 24 Jan 2026 17:46:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769276776;
-	bh=FLi5x1Bv6Y+47RbLVUzrS+CBoJDWq6L3sQAn8KSrfCg=;
-	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
-	b=E3B01MB7eYNo4vVpeJdjZ9jn2Sw06yqUAAeO2wqCCiAY+/wULR3WIMAdJQ0Pbq/BB
-	 bPX7TX+yQPpvpcTx1u+DimsqAda58ls+pgvHJENI4JTn2QOEWslPXzqpr8/n25hm7p
-	 TPuD/a8s/WvblrFLA+oynAybUN8c/EbBOJ9UkPmD+xWr2/DqqNR4ONE0miT9JUm5RD
-	 rd6VU4LxkBsCdV0zvaykpQfWieNcKc+UMhRet1b0DON9FTatlA1gih4cweSkPLb5y+
-	 0gldzaze81dcELRsHMH+I+0QuR3ZQT2r0h9AEnDUvY10BSYzfX6ivjOap4Y12CEAVf
-	 lvbPy8vAWXUPg==
+	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="E4Vk+VHw";
+	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="8arUf/Qe"
+DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1769276630; bh=me38+YbNX7nXkRdFqYhmoh2
+	ZuFR62J14KpQprodIYSo=; b=E4Vk+VHwjlCYdI5emdWUwey4zTA6mUVVZMLOHEaxQe0f9rnouq
+	4WIzMkUg6VpxYmh3DWxAKLkdB+Ob8SQCA1CI+UFTNAGAQppyzJNRkJpLAnFFuAkAA3tWfDMRAC0
+	e40QYP5ejTga0DioE+rAFLrE2TNUwpVyzWbLwyG5BhTODfGwWwHqzelVZEZFoRH46JJzQSHg2Nl
+	WbmhC+9zBJMx/eorKejVMPhDEJxTvqKqhKystNxVTU4I0PrG9vvv7LYV9MtnnmS6JYAUozN0E8Y
+	KQNC/BK4yts9KcHeMy8cjie1cR0Plun3sZR/Et2PeK3Ic/D+HkGlxE7TKPY4H09y2kQ==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1769276630; bh=me38+YbNX7nXkRdFqYhmoh2
+	ZuFR62J14KpQprodIYSo=; b=8arUf/Qe1dMkoIjJWD+0kaFEC8uCC43ZzXYufwmYu745CDV2jp
+	fMnDzvUhCq/xgXbnmgEmmG9H9Bp3IMKMx6DA==;
+From: Daniel Hodges <git@danielhodges.dev>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	vadim.fedorenko@linux.dev,
+	song@kernel.org,
+	yatsenko@meta.com,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	yonghong.song@linux.dev,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Daniel Hodges <git@danielhodges.dev>
+Subject: [PATCH bpf-next v6 0/4] Add cryptographic hash and signature verification kfuncs to BPF
+Date: Sat, 24 Jan 2026 12:43:45 -0500
+Message-ID: <20260124174349.16861-1-git@danielhodges.dev>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 24 Jan 2026 18:46:11 +0100
-Message-Id: <DFX09S7L40VL.1HVC33VXNDDBW@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH 3/3] Revert "revocable: Revocable resource management"
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J . Wysocki"
- <rafael@kernel.org>, "Tzung-Bi Shih" <tzungbi@kernel.org>, "Bartosz
- Golaszewski" <bartosz.golaszewski@oss.qualcomm.com>, "Linus Walleij"
- <linusw@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
- <shuah@kernel.org>, "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
- "Wolfram Sang" <wsa+renesas@sang-engineering.com>, "Simona Vetter"
- <simona.vetter@ffwll.ch>, "Dan Williams" <dan.j.williams@intel.com>, "Jason
- Gunthorpe" <jgg@nvidia.com>, <linux-doc@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-To: "Johan Hovold" <johan@kernel.org>
-References: <20260124170535.11756-1-johan@kernel.org>
- <20260124170535.11756-4-johan@kernel.org>
-In-Reply-To: <20260124170535.11756-4-johan@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sat Jan 24, 2026 at 6:05 PM CET, Johan Hovold wrote:
-> The revocable implementation uses two separate abstractions, struct
-> revocable_provider and struct revocable, in order to store the SRCU read
-> lock index which must be passed unaltered to srcu_read_unlock() in the
-> same context when a resource is no longer needed:
->
-> 	struct revocable {
-> 		struct revocable_provider *rp;
-> 		int idx;
-> 	};
->
-> 	void *revocable_try_access(struct revocable *rev)
-> 	{
-> 		struct revocable_provider *rp =3D rev->rp;
->
-> 		rev->idx =3D srcu_read_lock(&rp->srcu);
-> 		return srcu_dereference(rp->res, &rp->srcu);
-> 	}
->
-> 	void revocable_withdraw_access(struct revocable *rev)
-> 	{
-> 		struct revocable_provider *rp =3D rev->rp;
->
-> 		srcu_read_unlock(&rp->srcu, rev->idx);
-> 	}
->
-> Multiple threads may however share the same struct revocable and
-> therefore potentially overwrite the SRCU index of another thread which
-> can cause the SRCU synchronisation in revocable_provider_revoke() to
-> never complete.
+This patch series enhances BPF's cryptographic functionality by introducing
+kernel functions for SHA hashing and ECDSA signature verification. The changes
+enable BPF programs to verify data integrity and authenticity across
+networking, security, and observability use cases.
 
-I think the easiest fix would be to just return the index to the caller and=
- let
-the corresponding revocable macro accessors handle it, such that it is stil=
-l
-transparent to the user.
+The series addresses two gaps in BPF's cryptographic toolkit:
+
+1. Cryptographic hashing - supports content verification and message digest
+   preparation
+2. Asymmetric signature verification - allows validation of signed data
+   without requiring private keys in the datapath
+
+Use cases include:
+- Verifying signed network packets or application data in XDP/TC programs
+- Integrity checks within tracing and security monitoring
+- Zero-trust security models with BPF-based credential verification
+- Content-addressed storage in BPF-based filesystems
+
+The implementation leverages existing BPF patterns: it uses bpf_dynptr for
+memory safety, reuses kernel crypto libraries (lib/crypto/sha256.c and
+crypto/ecdsa.c) rather than reimplementing algorithms, and provides
+context-based APIs supporting multiple program types.
+
+v1: https://lore.kernel.org/bpf/20251117211413.1394-1-git@danielhodges.dev/
+
+v2: https://lore.kernel.org/bpf/20251205173923.31740-1-git@danielhodges.dev/
+- Fixed redundant __bpf_dynptr_is_rdonly() checks (Vadim)
+- Added BPF hash algorithm type registration module in crypto/ subsystem
+- Added CONFIG_CRYPTO_HASH2 guards around bpf_crypto_hash() kfunc and its
+  BTF registration, matching the pattern used for CONFIG_CRYPTO_ECDSA
+- Added mandatory digestsize validation for hash operations
+
+v3: https://lore.kernel.org/bpf/20251208030117.18892-1-git@danielhodges.dev/
+- Fixed patch ordering - header changes now in separate first commit before
+  crypto module to ensure bisectability (bot+bpf-ci)
+- Fixed type mismatch - changed u32 to u64 for dynptr sizes in
+  bpf_crypto_hash() to match __bpf_dynptr_size() return type (Mykyta)
+- Added CONFIG_CRYPTO_ECDSA to selftest config (Song)
+- Refactored test code duplication with setup_skel() helper (Song)
+- Added copyright notices to all new files
+
+v4: https://lore.kernel.org/bpf/20260105173755.22515-1-git@danielhodges.dev/
+- Reused common bpf_crypto_ctx structure for hash and signature operations
+  instead of separate context types (Song)
+- Fixed integer truncation in bpf_crypto_hash when data_len > UINT_MAX
+- Corrected KF_RCU flags for ECDSA kfuncs (only bpf_ecdsa_verify needs KF_RCU)
+- Updated MAINTAINERS file in test patches
+- Refactored selftests to use crypto_common.h for kfunc declarations
+
+v5: https://lore.kernel.org/bpf/20260120184701.23082-1-git@danielhodges.dev/
+- Fixed bisectability: moved bpf_crypto_type_id enum and type_id field
+  introduction to the hash module commit, before it's used by hash kfunc
+- Renamed kfuncs from bpf_ecdsa_* to bpf_sig_* since signature verification
+  is not ECDSA-specific (Vadim)
+- Added NULL checks in bpf_crypto_sig wrapper functions for optional
+  digest_size and max_size callbacks to prevent NULL pointer dereference
+- Added extra validation in bpf_sig_digestsize/bpf_sig_maxsize kfuncs to
+  return -EOPNOTSUPP when underlying algorithm returns 0
+- Renamed test files from ecdsa_verify to sig_verify for consistency
+
+v6:
+- Fixed bisectability issue flagged by CI: squash hash module and hash kfunc
+  commits so NULL checks in bpf_crypto_ctx_create() are present before the
+  hash type is registered (bot+bpf-ci)
+- Squash signature module and signature kfunc commits for the same reason
+- This reduces the series from 7 to 4 commits while preserving all functionality
+- Added type_id checks to bpf_crypto_encrypt() and bpf_crypto_decrypt() to
+  prevent NULL pointer dereference when called with non-skcipher contexts
+
+Daniel Hodges (4):
+  bpf: Add hash kfunc for cryptographic hashing
+  selftests/bpf: Add tests for bpf_crypto_hash kfunc
+  bpf: Add signature verification kfuncs
+  selftests/bpf: Add tests for signature verification kfuncs
+
+ MAINTAINERS                                   |   6 +
+ crypto/Makefile                               |   6 +
+ crypto/bpf_crypto_shash.c                     |  96 ++++++
+ crypto/bpf_crypto_sig.c                       |  89 ++++++
+ crypto/bpf_crypto_skcipher.c                  |   1 +
+ include/linux/bpf_crypto.h                    |  13 +
+ kernel/bpf/crypto.c                           | 210 ++++++++++++-
+ tools/testing/selftests/bpf/config            |   2 +
+ .../selftests/bpf/prog_tests/crypto_hash.c    | 210 +++++++++++++
+ .../selftests/bpf/prog_tests/sig_verify.c     | 163 ++++++++++
+ .../selftests/bpf/progs/crypto_common.h       |   8 +
+ .../testing/selftests/bpf/progs/crypto_hash.c | 231 ++++++++++++++
+ .../testing/selftests/bpf/progs/sig_verify.c  | 286 ++++++++++++++++++
+ 13 files changed, 1312 insertions(+), 9 deletions(-)
+ create mode 100644 crypto/bpf_crypto_shash.c
+ create mode 100644 crypto/bpf_crypto_sig.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/crypto_hash.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sig_verify.c
+ create mode 100644 tools/testing/selftests/bpf/progs/crypto_hash.c
+ create mode 100644 tools/testing/selftests/bpf/progs/sig_verify.c
+
+--
+2.52.0
+
