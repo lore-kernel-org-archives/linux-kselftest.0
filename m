@@ -1,143 +1,196 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C7F13B5AE
-	for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 08:36:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769243769; cv=pass; b=nQMbevKXD2SvGRrqud3pl8UYQ6ugWX4KHMrohC/ppQkNbVM0zYS10rCdBaV2hdRjeeRbNgvObP5M1E9j7toOubO/Q9CM7zmucAgmHK4xaHf8tVjNLH+VHo0pLK6mP0o7IMMk1S6nYHTBT8Gc11nOsJB7HUXQhBzv3rx+KIwx4rE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769243769; c=relaxed/simple;
-	bh=MLt6bQqDMGJm2ueBTrriOTca8kUR+hoP3hpn5JBC/8g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B7xg/HOCgIxPKoeLvreDFvmyOKAyaX6gqggnBpTYjR1iJHKiqgy1DvlvuYL93nDyK95qn1MCO2qR023epNPSa8aP1cGHtKGUpjPEIZCgRvPCPVbsrXaXQ8msy5el6eUiiSeeF2ZZDAlnEPZEpQUwTbvq8WU5c6wDO0+jaQXL2R8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aaLUe36D; arc=pass smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C93E212FAD
+	for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 10:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769251693; cv=none; b=a5T/jlrqI3bKhz9oYRlcqaNMGYnRq14IwaCTzZd/wBHrupQTlfHKRuNfzFePH9qQG8UC4LIqKQmB1tNeoSRCOBdn6A6ARkr8ZBlNNX8eA9UfaqbqATp/FfOL3qbncwVyOPSSd9kS9xl9d2JdF42eHLbEf2EUQhCY5QMju16nctQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769251693; c=relaxed/simple;
+	bh=47VAx5ZacdJ8aWPizoNgKSZ2gS6fvZEIp/N80TMPtLM=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=K8RrFEKVVQYfh8QUph3kZ+tDZpXPzE2j4DNcEuEMvvops7sL1YZpQnBZVex+tTF8c8acqWAoB3UpU1kWT3MMUm5vbdNl45Q0zTvfJ3PorZa1n2CWNkhvAYw3y4e556oLg7nHowQe9hdxUXNFrffqVwYyHwiOnszdwgo/m23crU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oe4i6iQF; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aaLUe36D"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-385b9be0759so25895991fa.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 00:36:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769243767; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jfv1Tgv64QCzuJ7iafRSV1FjX6ZwVS6SpNIot01D+VGt4Cyc2ZdmzpO4A+nEqrYZhB
-         T+Kg1iKhzSIdkrrx9u+Lh++0Cjfwgx3WQ7uOhEntwWa1PwxT/8khhGqh5/CFTaqp42Pt
-         ZkL4paaI979JmsXLCV0auk9QqdAmFbeDp70Uo3aPPcnH5/NgvjSmXdbk15g3qRJKhOwp
-         d/I5JOz5c+4zQi0eRpyq49k4k+/ILPAeCG0nL6/Znf6QdseQQm4s+rd8W2s5oWlDi8NO
-         KB/iL7VOLz4L1F0UoSamwjR2hZsWgbssxcy8z6m0+VlPsgcyKBi/1lQHHEPwJ29cQjIw
-         cOpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=L0Yvi8KKr2tGeabM9tjvJ69j9ESj62Gs009Amzq+1dU=;
-        fh=jneOFHjStxMUVqS3wyh67POQS5jF6Gq2F06JGIqmBfw=;
-        b=EfnuZ1E0x1py9K7CAgMqdWeCggR/IOsoXlaPUTCGYDk9zmtRcojbZ0mduMq4niwkiU
-         hCQg9QXlNXJWChYUOr0dyzuQuD5b17XvFsp6RuKEeETWHk9s+8EcWsFtzi8dC8CRNm7/
-         KB9eVmVdpr9C1sdmn7VV4Bj81qH9nMBxZKTKKuR/iWdM9+DkppRpH3tPP7FxD5K9SYEL
-         mvJzQrxLZrK/IZuvQ696M7XMtgP3EN62xH+j6y/9e2a28GjPA91wY5c35WtboicB3lnM
-         gaqTg92oLNN343dA/nLBez4ir/HJIPKm6+9YctUoC2qBLdWK5Avx6G09fKe41zLv6+TA
-         RVag==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769243767; x=1769848567; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=L0Yvi8KKr2tGeabM9tjvJ69j9ESj62Gs009Amzq+1dU=;
-        b=aaLUe36Dm/yPEY1xhhKIDGKMy9j5B5+LWz40HP1hLPf8g7GdS31j1aL63VKB5TvuUN
-         hE/9sVJTgK6SvvrJtMt8aEEPXXDJrIk/JbDJ6oJdk7ByYjd0u2DSb2xPxGNAwDSsmMPo
-         RyrIqCqsO5F0JB1kraaFWyTU8UXRMyebD2/c4v1NvBcRav7ZgkHmXQTMM400c1sX/ydO
-         EBMM4lEWAmMKCm1uscooir0AXBz9bErj4+h8oW2w7eZRQW7pRfxVmx8eFFctMFHWBfot
-         dFT95IjJGLrBLPN8sSrRqCs6trnseBK+WM/KotS/woYEF7Sg7JKmnNDw4i/EFNEFG5YN
-         GdTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769243767; x=1769848567;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L0Yvi8KKr2tGeabM9tjvJ69j9ESj62Gs009Amzq+1dU=;
-        b=OFWAx+n6CAaNYKh1IzLCQ6yR2+cCrBWeW+/CMGFlHGOgpD62nqsxjPpJMilFQDcQ+R
-         aD697AhOs70y7vSTrEe3QCVlb7ZZlK728dCNZ0h3QItTsHvVe4VAMLJcKZSVneMm/j5+
-         ZtjB57jTcfH6htade5FD4JdGprmi674CT5wiDUZpfBc4IavvY/WURw0i4kO9r/XN4kZm
-         IQO37Yr0spwwmtPEMfKUq15jR8gr80XCyHO8mKr9vGH/QBl03g1JFC2Scs7c/WtWgG79
-         Ds3OGnuS9jZhUqz6J+cft5cmOGvovDS/ICjKkGOo84Pyri1nO6CL9mHIXVwwOUpcAtrE
-         4JBw==
-X-Gm-Message-State: AOJu0Yz2n+rSwtFGqtX/2qW7tGHkCRbUkKYyOPLtb7HIlrFPjC6A4B0N
-	9pWcJ8o8Ku9nVAgpWPGLzIOOfQVMmR3PCwSUNlpI3eHk28zBKN1pHDpNVtnPXlv+EPbQzRpkORJ
-	PCh4vONTZfqLibVY5pxmyodxycn3PsrBIQHYK36M=
-X-Gm-Gg: AZuq6aItM+Beb/7E/MflUtIxiz8Lzoa9lGjjrVpw2uonTHuerFT2ZzbVxxc1zz5D8ID
-	dhgB+QH3PzynWBF9FXMxmeLe2L8O5i+pELnO5cuxwsTiB3xgJfTrzobRDltujRr0vLhkDZvVv0W
-	CLr9yaRJMjLOQiSIisiIRMT7gZQSEzOUR1uJ+cXNZY3eewhfX1be87r0G673nT9JM4U02U7Qi23
-	RGE7qkOVwgqiXqgdmRQ8s36WcrzYFL/5T453ESInrRTkqQ2EEKUOQlTWJs4Y8BQsJmghipKaczW
-	0lcwWugi
-X-Received: by 2002:a05:651c:325c:b0:37f:c5ca:a6d4 with SMTP id
- 38308e7fff4ca-385d9ed6a0cmr19258761fa.6.1769243766418; Sat, 24 Jan 2026
- 00:36:06 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oe4i6iQF"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260119112120.83592-1-jouyeol8739@gmail.com> <264104b5-ac21-415b-9021-76d4d9b79a55@kernel.org>
-In-Reply-To: <264104b5-ac21-415b-9021-76d4d9b79a55@kernel.org>
-From: =?UTF-8?B?7KGw7Jqw7Je0?= <jouyeol8739@gmail.com>
-Date: Sat, 24 Jan 2026 17:35:53 +0900
-X-Gm-Features: AZwV_QiO4Ai9tEjzj8GqqslvzdI7NJxzlEc6kaniy5dPatrOJLbZtTJYqq_9xV0
-Message-ID: <CALAjK2ipX33hHDWZVhd_WUKYyD-JvCL67YgOeQDhPUuP2ovM1g@mail.gmail.com>
-Subject: Re: [PATCH] selftests/ipc: skip msgque test if MSG_COPY is not supported
-To: Shuah <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	richard.weiyang@gmail.com, akpm@linux-foundation.org, sef1548@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769251679;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X157f6edi9qZZ/l+AyW1kCRowa/qQVlZyK7G3GoioL0=;
+	b=oe4i6iQFz0xWIvjzlHY4GRoEJjM+4sH2hXTZlqQJUolKB//bI+M7qulvXc2ajJjha8jqJa
+	BFiHUL2sIGNUH7lH2AlcI3HFAaTorof1dhO7nk92me3D3rCyqJ9ORvWW+UvVO5A1vcC0/e
+	TiUbGSAEvFTUgcUghnwT8y0HwdoG314=
+Date: Sat, 24 Jan 2026 10:47:51 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <56db5e4bb54678e0615501693a5eee0b88e2bf3e@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next v8 3/3] bpf, selftest: Add tests for FIONREAD
+ and copied_seq
+To: bpf@vger.kernel.org
+Cc: "John Fastabend" <john.fastabend@gmail.com>, "Jakub Sitnicki"
+ <jakub@cloudflare.com>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
+ "Neal Cardwell" <ncardwell@google.com>, "Kuniyuki Iwashima"
+ <kuniyu@google.com>, "David Ahern" <dsahern@kernel.org>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP
+ Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
+ Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Stefano Garzarella" <sgarzare@redhat.com>, "Michal
+ Luczaj" <mhal@rbox.co>, "Cong Wang" <cong.wang@bytedance.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+In-Reply-To: <20260124061502.24350-4-jiayuan.chen@linux.dev>
+References: <20260124061502.24350-1-jiayuan.chen@linux.dev>
+ <20260124061502.24350-4-jiayuan.chen@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-Hi Shuah,
+January 24, 2026 at 14:14, "Jiayuan Chen" <jiayuan.chen@linux.dev mailto:=
+jiayuan.chen@linux.dev?to=3D%22Jiayuan%20Chen%22%20%3Cjiayuan.chen%40linu=
+x.dev%3E > wrote:
 
-Thank you for your feedback.
 
-I have verified the behavior on kernel 6.19.0-rc1+ by testing both
-kernel configurations (with and without CONFIG_CHECKPOINT_RESTORE).
+[...]
+> +
+> +/* it is used to send data to via native stack and BPF redirecting */
+> +static void test_sockmap_multi_channels(int sotype)
+> +{
+> + int map, err, sent, recvd, zero =3D 0, one =3D 1, avail =3D 0;
+> + struct test_sockmap_pass_prog *skel =3D NULL;
+> + int c0 =3D -1, p0 =3D -1, c1 =3D -1, p1 =3D -1;
+> + char buf[10] =3D "0123456789", rcv[11];
+> + struct bpf_program *prog;
+> +
+> + skel =3D test_sockmap_pass_prog__open_and_load();
+> + if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> + return;
+> +
+> + err =3D create_socket_pairs(AF_INET, sotype, &c0, &c1, &p0, &p1);
+> + if (err)
+> + goto end;
+> +
+> + prog =3D skel->progs.prog_skb_verdict_ingress;
+> + map =3D bpf_map__fd(skel->maps.sock_map_rx);
+> +
+> + err =3D bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM=
+_VERDICT, 0);
+> + if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
+> + goto end;
+> +
+> + err =3D bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
+> + if (!ASSERT_OK(err, "bpf_map_update_elem(p0)"))
+> + goto end;
+> +
+> + err =3D bpf_map_update_elem(map, &one, &p1, BPF_ANY);
+> + if (!ASSERT_OK(err, "bpf_map_update_elem"))
+> + goto end;
+> +
+> + /* send data to p1 via native stack */
+> + sent =3D xsend(c1, buf, 2, 0);
+> + if (!ASSERT_EQ(sent, 2, "xsend(2)"))
+> + goto end;
+> +
+> + poll_read(p1, IO_TIMEOUT_SEC);
+> + err =3D ioctl(p1, FIONREAD, &avail);
+> + ASSERT_OK(err, "ioctl(FIONREAD) partial call");
+> + ASSERT_EQ(avail, 2, "ioctl(FIONREAD) partial return");
+> +
+> + /* send data to p1 via bpf redirecting */
+> + sent =3D xsend(c0, buf + 2, sizeof(buf) - 2, 0);
+> + if (!ASSERT_EQ(sent, sizeof(buf) - 2, "xsend(remain-data)"))
+> + goto end;
+> +
+> + poll_read(p1, IO_TIMEOUT_SEC);
 
-Regarding the MSG_COPY handling in ipc/msg.c (between lines 1098-1262),
-my analysis of do_msgrcv() shows the following execution flow:
 
-1. Early Return (Lines 1112-1118):
-   While the check 'if (msgflg & MSG_COPY)' is indeed outside the
-   #ifdef blocks for validation, it immediately calls prepare_copy().
-   Since prepare_copy() is stubbed to return ERR_PTR(-ENOSYS) when
-   CONFIG_CHECKPOINT_RESTORE is disabled (line 1066), the system call
-   fails and returns early at line 1118.
+It's a race in the test - poll_read() returns early because the first 2 b=
+ytes are
+already in the queue, but the second send hasn't been processed yet.
+Will fix with a polling wait for FIONREAD.
 
-2. Unreachable Logic (Lines 1158-1161):
-   The subsequent logic that calls copy_msg() is only reached if
-   prepare_copy() succeeds. Without the config, this entire path
-   becomes unreachable "dead code" in practice.
+pw-bot: cr
 
-This confirms that while the flag handling is visible in the source,
-the actual functionality is strictly dependent on the configuration.
-
-To demonstrate the necessity of this patch, I ran the mainline test
-in both environments:
-
-1. With CONFIG_CHECKPOINT_RESTORE=y:
-   # ./msgque
-   # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-   ok 1 selftests: ipc: msgque
-   (Note: 'pass:0' is normal for this test as msgque.c does not
-   explicitly call ksft_test_result_pass() for individual steps.)
-
-2. With CONFIG_CHECKPOINT_RESTORE disabled (Mainline behavior):
-   # ./msgque
-   not ok 1 Failed to copy IPC message: Function not implemented (38)
-   not ok 2 Failed to dump queue: -38
-   # Totals: pass:0 fail:2 xfail:0 xpass:0 skip:0 error:0
-
-Current mainline reports a "FAIL" for what is essentially a missing
-kernel feature. My patch changes this to a "SKIP", which aligns
-with kselftest standards.
-
-With the patch applied, the result correctly becomes:
-1..0 # SKIP MSG_COPY not supported
-
-Best regards,
-UYeol Jo
+> + err =3D ioctl(p1, FIONREAD, &avail);
+> + ASSERT_OK(err, "ioctl(FIONREAD) full call");
+> + ASSERT_EQ(avail, sotype =3D=3D SOCK_DGRAM ? 2 : sizeof(buf), "ioctl(F=
+IONREAD) full return");
+> +
+> + recvd =3D recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
+> + if (!ASSERT_EQ(recvd, sizeof(buf), "recv_timeout(p1)") ||
+> + !ASSERT_OK(memcmp(buf, rcv, recvd), "data mismatch"))
+> + goto end;
+> +end:
+> + if (c0 >=3D 0)
+> + close(c0);
+> + if (p0 >=3D 0)
+> + close(p0);
+> + if (c1 >=3D 0)
+> + close(c1);
+> + if (p1 >=3D 0)
+> + close(p1);
+> + test_sockmap_pass_prog__destroy(skel);
+> +}
+> +
+>  void test_sockmap_basic(void)
+>  {
+>  if (test__start_subtest("sockmap create_update_free"))
+> @@ -1108,4 +1363,14 @@ void test_sockmap_basic(void)
+>  test_sockmap_skb_verdict_vsock_poll();
+>  if (test__start_subtest("sockmap vsock unconnected"))
+>  test_sockmap_vsock_unconnected();
+> + if (test__start_subtest("sockmap with zc"))
+> + test_sockmap_zc();
+> + if (test__start_subtest("sockmap recover"))
+> + test_sockmap_copied_seq(false);
+> + if (test__start_subtest("sockmap recover with strp"))
+> + test_sockmap_copied_seq(true);
+> + if (test__start_subtest("sockmap tcp multi channels"))
+> + test_sockmap_multi_channels(SOCK_STREAM);
+> + if (test__start_subtest("sockmap udp multi channels"))
+> + test_sockmap_multi_channels(SOCK_DGRAM);
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c=
+ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
+> index 69aacc96db36..ef9edca184ea 100644
+> --- a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
+> +++ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
+> @@ -44,4 +44,18 @@ int prog_skb_parser(struct __sk_buff *skb)
+>  return SK_PASS;
+>  }
+>=20=20
+>=20+SEC("sk_skb/stream_verdict")
+> +int prog_skb_verdict_ingress(struct __sk_buff *skb)
+> +{
+> + int one =3D 1;
+> +
+> + return bpf_sk_redirect_map(skb, &sock_map_rx, one, BPF_F_INGRESS);
+> +}
+> +
+> +SEC("sk_skb/stream_parser")
+> +int prog_skb_verdict_ingress_strp(struct __sk_buff *skb)
+> +{
+> + return skb->len;
+> +}
+> +
+>  char _license[] SEC("license") =3D "GPL";
+> --=20
+>=202.43.0
+>
