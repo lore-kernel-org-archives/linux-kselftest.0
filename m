@@ -1,73 +1,60 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8420524290D
-	for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 12:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9189B318EE9;
+	Sat, 24 Jan 2026 13:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769257970; cv=none; b=QYPRkq6XIu7jfhw3NhLPfSRVcYUTwgjx9+FcITonRYQmP3oNxfeJBZnyAPvIyKPYP8a/azohJwYWwhbbxReoxMv/mYN5KKGqnI24I9jOdxVlmLGR6OfMezy8yh21q7iJehUzaO/0fMbxhMllQskS2gkzMezD+6vJ8512Wj3Ymbo=
+	t=1769261256; cv=none; b=mBBBrV4paQwH4YZc2DXQVx8wwgZtYI9HKSGn9aHCbYbyWlzGiIBLNnol9fEP8u4ZBwJtFKtf6B/sPSs+vVNYW3wLr1zcBraoOgc1f2H4ubSuoZKhPpFItbApQv+3U9I5aAz5nwSamhxEgNM/LEWqTRm9nYXRN+2Ky/5o14JFyUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769257970; c=relaxed/simple;
-	bh=EDOMUnShuWyRdBbytjBlLoX5GMQiwlhBv1s8A7ZO+fY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=al/E3Adfyskf+MOPNbsFARl/EXYt2AIDU2c1mGRuXT0psh80hbCpefQvooahDzf5HUiZAFzJIW93wjzok486/rHIkkkZvdmjCxy7ranrmkaOS7Sf8wEjsWBL8yB6vXRaSZhMDMskkWyI52agTm/myWF8Kg2YRIEo4MjKL2XESOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FgCfuup9; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769261256; c=relaxed/simple;
+	bh=7lWjXNt1tKyyfxb7E5X6pw47TSDceYxan+mIb6JP/uw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W2mAqGqEwLwpw4xaVzxt3Gld+AEsZuc7t18LOGr9mQYDjV39HcdlgCPQ/CGY2HKz1ZcbcQcZBN2l8krXxmbmlb0fdvNbCObyb8JVo57uDI0dqEzx0MEQGyntApRXJHP+iRwhqvk/+iOz7qiP23QcdNSyUQjOnTKZL9nbMijXuP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=rCjNIO2z; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FgCfuup9"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a78e381fc1so13916515ad.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 04:32:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769257969; x=1769862769; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rd2Zed3zKZmPmdTTOWk/dlMTWvo4vN0lvMRs9ZwBpHc=;
-        b=FgCfuup9jQKvOfJUro2Gyh77Inf6HqeGUY6n977jp/Qdy9kwOXZ0TItavWAKsOAiJy
-         o4PlUOcpycBA4zJU7N+QW2rctDdiQpfnPXTZUi7702yhUfcxvXbsT4hiZ0xOvqR+r/Py
-         /qqtu/7f60qt07NubIcT61ojXaVB+hXdtuMgSE1Tr7M8zMuqRwXyuGu3YeMcBIN+qYml
-         xh2iRzm9TFXSBdmf5hlunOcdJpsa7Ag4JhPQaOb2k1POF38bHjhpKmX4k7f7H8VjRbiP
-         wCY3sNVvD7Tbd3mFztskHrC5C/g7LXwdCJbyRMSrSgOpO6ZdvdKQ2NBIfYKaWGTJRbHT
-         qiiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769257969; x=1769862769;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rd2Zed3zKZmPmdTTOWk/dlMTWvo4vN0lvMRs9ZwBpHc=;
-        b=aKHDw6xj0bTqbBOJLcWdp5vVoyvzQy7eOWLJHVezPVC4lIYj5Uo2awkSAMIsP7xaF2
-         eEIRuaDrfsfq07bWmsRvQo++N6hEGn3paatImiKSUftPs9yiXf7OrtsQWLf43MEYVNQw
-         c7J7tYSwOmQMlaxvakXN6LZ309hcQUKcimPdDoPEX13cA4c1nOXlPixtre1VhQqnN9I6
-         0ar9646KF6Iucb2r6qusizt7gaOcB6EblM6yHwQ/zyZEGG9AX46My+0QqrASelauGFKD
-         q0eiSKWbajAeMk3jC5vS+0atSaDU83gc8wqJOvyXA2JUHswHiqrrXcfCvbHHogZqDTB5
-         XLqw==
-X-Forwarded-Encrypted: i=1; AJvYcCWRBfnUsx+gOk39Gp4EQ88OiUDsg63AJ5uXv8e//ktaAo/phdbvByFzAy6M1+WksHCL4031zbhzFvjEutF6erk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzujncRGJ1I5nTBsabgYuZ1aELyXEBaVXHUWobnB6Xhrq8c9Y/w
-	RGPVhe4dIHyn5wpXsiHJjyepoMRIc2ETNbHXVMfvBrpEWNp1fHMmMQ4u
-X-Gm-Gg: AZuq6aKLkfV8l+e3WR56sR+qUXfO2d0hbJ2yy9Pp5YCb26BuDD6MbXt/MuemPdpYadv
-	V2cIBuKD/HL//Grk/vfAfES3l1Pf+JOEQOtFi+V4qoZkxrLM9rOUPGoFD60OWkteq0YitnEciwW
-	omxs3f0SLqXg5o+Nje081kVhkIhpy43EYVNbouCsnD/gGzz45sauAR2kaGr2SLExfHxw/GWv39D
-	NeqUgkFjdIMaC4Ff8oHaSMQ8Iq7WQoaKr4pc6Tkp0N0g1dphtg4oNx6KAIIW16hbdvE/VhwLkae
-	6oWQn6sxBjJePL4lR3rMvLILYKuihiyDJqMcUE7c2/ZoxlPncLKJl/f0RUt0cGLrWHiadrfeVZw
-	fr3+kt/Z9nCqh5+BN5RQC85giRNoEzjOlk7Sk6XxUV1yVr+onQBZE3tGOdyvSEVUJCepzDHHs12
-	O0CHjK7PUiCToUMX+gfFP7OvU2MeNmQMklXZkp
-X-Received: by 2002:a17:903:360c:b0:29b:e512:752e with SMTP id d9443c01a7336-2a80ec683famr40477875ad.47.1769257968605;
-        Sat, 24 Jan 2026 04:32:48 -0800 (PST)
-Received: from MWDK4CY14F.nvidia.com ([128.77.79.177])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-353354cdcc7sm7366542a91.16.2026.01.24.04.32.46
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 24 Jan 2026 04:32:48 -0800 (PST)
-From: I-Hsin Cheng <richard120310@gmail.com>
-To: catalin.marinas@arm.com
-Cc: will@kernel.org,
-	shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="rCjNIO2z"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=29S7Y/VvO1YjQ75s2kG2K+G9TbRNachfHt6K/QZx1vk=; b=rCjNIO2zbIjmvpQgPSCXJU27N6
+	felHCtolwQ773cKx7V33UZatgysUL8JJi1WApu3IA2FjI02GHPHJVHLNdFTQbc1ykKJ8jb2HlFVUv
+	z16X1vyYfFjMxP9fSwmkP3SGpYXuOjS5hb3k4HArPTuLdGHQ1pCKjzKWzirvKkdr0a8JdfTNJCtaL
+	F60t673fT2ThS3jOe2794lfY3fmJfa8EIrudaVOs8W1xrg3KDrMphPfF4dAY/+imASUqBFql/hiPp
+	X3M7B5R/quNLz+VlOQm5x+An9RnJ9Y+FA5PLM0OaZrLVfcVQMle0d6gr+9YsC2bY5tTvmJf9ZXGhH
+	XDEwxAcQ==;
+Received: from [175.114.83.198] (helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1vjdfa-009OAq-E9; Sat, 24 Jan 2026 14:27:19 +0100
+From: Changwoo Min <changwoo@igalia.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	kernel-dev@igalia.com,
+	bpf@vger.kernel.org,
+	sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	I-Hsin Cheng <richard120310@gmail.com>
-Subject: [PATCH] kselftest/arm64: Add missing file in .gitignore
-Date: Sat, 24 Jan 2026 20:32:41 +0800
-Message-Id: <20260124123241.3257-1-richard120310@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	linux-kselftest@vger.kernel.org,
+	Changwoo Min <changwoo@igalia.com>
+Subject: [PATCH bpf-next v2 0/2] selftests/bpf: Introduce execution context detection helpers
+Date: Sat, 24 Jan 2026 22:27:04 +0900
+Message-ID: <20260124132706.183681-1-changwoo@igalia.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,24 +63,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The binary generated by check_hugetlb_options is missing in .gitignore
-under the directory. Add it into the file so it won't be logged into
-version control.
+This series introduces four new BPF-native inline helpers -- bpf_in_nmi(),
+bpf_in_hardirq(), bpf_in_serving_softirq(), and bpf_in_task() -- to allow
+BPF programs to query the current execution context.
 
-Signed-off-by: I-Hsin Cheng <richard120310@gmail.com>
----
- tools/testing/selftests/arm64/mte/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+Following the feedback on v1, these are implemented in bpf_experimental.h
+as inline helpers wrapping get_preempt_count(). This approach allows the
+logic to be JIT-inlined for better performance compared to a kfunc call,
+while providing the granular context detection (e.g., hardirq vs. softirq)
+required by subsystems like sched_ext.
 
-diff --git a/tools/testing/selftests/arm64/mte/.gitignore b/tools/testing/selftests/arm64/mte/.gitignore
-index 052d0f9f92b3..f6937f890039 100644
---- a/tools/testing/selftests/arm64/mte/.gitignore
-+++ b/tools/testing/selftests/arm64/mte/.gitignore
-@@ -6,3 +6,4 @@ check_mmap_options
- check_prctl
- check_ksm_options
- check_user_mem
-+check_hugetlb_options
+The series includes a new selftest suite, exe_ctx, which uses bpf_testmod
+to verify context detection across Task, HardIRQ, and SoftIRQ boundaries
+via irq_work and tasklets. NMI context testing is omitted as NMIs cannot
+be triggered deterministically within software-only BPF CI environments.
+
+ChangeLog v1 -> v2:
+- Dropped the core kernel kfunc implementations, and implemented context
+  detection as inline BPF helpers in bpf_experimental.h.
+- Renamed the selftest suite from ctx_kfunc to exe_ctx to reflect the
+  change from kfuncs to helpers.
+- Updated BPF programs to use the new inline helpers.
+- Swapped clean-up order between tasklet and irqwork in bpf_testmod to 
+  avoid re-scheduling the already-killed tasklet (reported by bot+bpf-ci).
+
+Changwoo Min (2):
+  selftests/bpf: Introduce execution context detection helpers
+  selftests/bpf: Add tests for execution context helpers
+
+ .../testing/selftests/bpf/bpf_experimental.h  | 38 ++++++++++++
+ .../selftests/bpf/prog_tests/exe_ctx.c        | 59 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_ctx.c  | 48 +++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 32 ++++++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  4 ++
+ 5 files changed, 181 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/exe_ctx.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ctx.c
+
 -- 
-2.39.5 (Apple Git-154)
+2.52.0
 
