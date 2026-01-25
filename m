@@ -1,86 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220C1185E4A;
-	Sun, 25 Jan 2026 16:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6AD1F7569
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 17:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769359213; cv=none; b=hgRRHm1Dqk3ToPKLjMkIY89jsyz8s5Vx3tekKYaZQ2mgIgbcOWNh/+Wc5n/k1cuxskGXqrX2GgOX7Fseu0h8GbvZyWAUAMwd/u/oy3gpls6gyoAw8gKwYvDyOVcYa5mb0wKWXSky0jzPL6KSz9rR36ZYp/DYdj/R1LJv4HounTs=
+	t=1769361132; cv=none; b=C63xVtSm54agBbHiAsYtQBhaShqcGQq5hGCeSsKsUhmJRVlYv3CmLhr4C2I5gCAgpGRGE/z4gRKuSFSMbJEaBhHY7yu3/cWoUvIUjS4i6UQWGEj/gJoasxcBBJg7OMZ2xhdHhlGiTzpuEd/ICPILnLO6Z6hCmS8u4pmjKKjnxGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769359213; c=relaxed/simple;
-	bh=ztkJkvxbbBlJoVNZzef1/Cknb9VB0P+lMZABO+II6BU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ijF0Id40ygGlc0tFo6fbJZjd17cdLu5ru/7SO6a5oTT/PeXqNXZ8kWT2yo5fOcIz3EV37KEcPttLzsrxlz6c+mG/f5HWnES/0bLLPsqGW/8OWRO3whTBLmzfs+yyl6ts+Lq8gbijWAr9PSZtiKJyLm773zSU523gfYMOE3u+MXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HNzULG8F; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769361132; c=relaxed/simple;
+	bh=/QEo7Wqu3iUNMjgPZIJZJSjNsND2rsdpxLPDFpvSVRw=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=cn5P5Fh6ZXx44D6ykkxsawIlsljykUYg4o2Rsmt1j5qtcoURy8lX/bdovrfwk4c0H1Dw9HuWRS6DMK99Eh96MxrlvvTm9ufwoCh8ybWOMzpIJy2YCdsrDWAjzY723bTUAEAtAuj5Q6dtc8sCRfv7zA1+UvYgltzgOuycOR65AGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=zG6h2k3P; arc=none smtp.client-ip=209.85.167.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HNzULG8F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5222C4CEF1;
-	Sun, 25 Jan 2026 16:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769359212;
-	bh=ztkJkvxbbBlJoVNZzef1/Cknb9VB0P+lMZABO+II6BU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=HNzULG8Ftdbp6g+y6RjYe0s4FJHsr/9fXa28rSvZv0BNn7MuH0jGze7PAA4yOOgcw
-	 7EV+k4DwVFzECf0qM1A5ty16zApXf5cF74AuBOZtZn0lbm4SaTGF9PjTPP8HnElH5V
-	 yG7qPIC24Fte5NbT09ChXO/qp9DEkAGNGLu20lvv5wtB9R6PCqu9+3A/+sCXTLsiRT
-	 YMZRKCWh5pIlpddp+vRTq1S9Ko+yEqoa4MxbA0DuzPvx6XIBJJtmmW876Jr4LcS1Q5
-	 wekzTmVv32cXpYMezq4VtCyQkMLTokXq7e5xnaK8Xl/Z2r8BhyBIu42sD9cYPlDknd
-	 nmNy7+Mxg/HFQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C8BE83809A0D;
-	Sun, 25 Jan 2026 16:40:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="zG6h2k3P"
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-45c8984fac8so904578b6e.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 09:12:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1769361130; x=1769965930; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HTG/UusmHhSRHax119uDW0R9FQMeUnyKXFiplnDVLQM=;
+        b=zG6h2k3PO+hGnwhfxa2hw73QiE1wpIv6Um8AM3v4Taor85tnUAEVsn9ZLuUulwvflE
+         1qOcmebdfsKb8MI2P9qZFBhK+hCiiY3YjdDa9+evPjWwLDYAeUjRRizNKh8B9+RRJjCR
+         41SIJzK56YFbUDqJO4SDznjvJ97E5VW6X9wba5z09CDDo3XaGdq/wLs4TdHm4OF6zjOt
+         rWghRbNl0c40W7If2uvBUbkMFrlxBhiQrHl2e/wqgTA8NHcXf/aoy+Wevb3KiVw4oqtB
+         KXOCyzbquMB1yVi5sSKS64HZ6tUojm+SVof/1Z7Qkoe08VIsqfnuGc/8Jzv6A333+TEu
+         zehA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769361130; x=1769965930;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=HTG/UusmHhSRHax119uDW0R9FQMeUnyKXFiplnDVLQM=;
+        b=wcg9NXo40P5EvDedErkAfqj9nfOztDxYvzl9klALTNwLICbzYr41l0zlsruMQKE7DW
+         N3SZDL/PaxBbZcztrAJUCXzyQFMf/LIqNTE+VpaT02qEzIyllv9AeJ5WPNAWAGCn99Se
+         7xZ/XRqiS0vzn/BbeHRFW8YKuG1Xv4hMK6Zf5CcYIROCgiODTKWQY/X+zxbygOMV46mW
+         Ym7dHdg7lEPbDF8GMEb70wuzD3yZuct+dkXMwl6OiDRzB3H6LRFKy1+2gUY4oTWkkMf3
+         aJtOEscaFjswk4kS5Ar2pixDoNl2jiDDgXfgCUgwNXQcnWRJEh5Lwpibp9uayCGPzgLD
+         bJVg==
+X-Forwarded-Encrypted: i=1; AJvYcCVn5slQjxqptsWo2lKhD8b4nRIgzbPNxRM+MF2CRB9UpIWz3BxWI5WgiIHZeuMtvJIMUeM5MVUKZ8isFYZXIkQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwD8we520ytl78vOGWXWf4BuXGIiGq2rRMUVLXpgSpwanDVnmDp
+	sglRsf6H2B8TKn8XcrPZeudmdiS8D2tsifxNZT5kszfA9CQXi3Axgh0RPCEkUOICq3Y=
+X-Gm-Gg: AZuq6aJJHSGXSXmZFmswkLwJRDSD1xRIycLesUSrTt9mBHBBBrep/YZ5mBNZx6FLVar
+	nrDzrpdHtnmG/8CHQlOBB3jlgwLi60Im8PGu5D3Zs+q60C0qsD0SrsjFiRh2CxOIm2QK/zQaZt0
+	IbdsSL5O8pOQyqJ0M4ncfYtlPMUxN629AiwOW7YiQ5SgGWPSzJEiSulyGlOTAOdKzj0QkQmMvfO
+	mAO+UVjaUAqytKwcsjRg26PJX+mOyaaumEXOJb0/YVxr61lYvdGexZJPRtWSvf5VWLbBGscwt41
+	RB8T9t8dDcmFBK28t4ZrAb3bc2stsEkajmP/uvqOp7TY3ew3Yj3lGfzVLWbnHha8btqLqGGYDa0
+	vX53PFWzUKShf70lJ9A97UablJAptav8kkrfJHQjs3B5csaDOyMIuQ2xfQ80yQc3vGShj/pHCdq
+	unWDJ2LwKIBiLpZzDga/6BSwwkGSDnP4usmSZuzcL3wnYUSgimbbkXmDALhkVGjLtR
+X-Received: by 2002:a05:6820:4a8e:b0:65d:163:3e5 with SMTP id 006d021491bc7-662e04616a9mr616403eaf.47.1769361130058;
+        Sun, 25 Jan 2026 09:12:10 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-408afc0a17bsm5629457fac.19.2026.01.25.09.12.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jan 2026 09:12:09 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: Ming Lei <ming.lei@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+ Caleb Sander Mateos <csander@purestorage.com>, 
+ Alexander Atanasov <alex@zazolabs.com>
+Cc: linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20260125085747.1631424-1-alex@zazolabs.com>
+References: <20260125085747.1631424-1-alex@zazolabs.com>
+Subject: Re: [PATCH v2] selftests: ublk: add missing gitignore for
+ metadata_size binary
+Message-Id: <176936112869.8973.14050161093900489800.b4-ty@kernel.dk>
+Date: Sun, 25 Jan 2026 10:12:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/2] selftests/bpf: Introduce execution
- context
- detection helpers
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176935920760.3538157.15856817944846369498.git-patchwork-notify@kernel.org>
-Date: Sun, 25 Jan 2026 16:40:07 +0000
-References: <20260125115413.117502-1-changwoo@igalia.com>
-In-Reply-To: <20260125115413.117502-1-changwoo@igalia.com>
-To: Changwoo Min <changwoo@igalia.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- kernel-dev@igalia.com, bpf@vger.kernel.org, sched-ext@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3
 
-Hello:
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Sun, 25 Jan 2026 20:54:11 +0900 you wrote:
-> This series introduces four new BPF-native inline helpers -- bpf_in_nmi(),
-> bpf_in_hardirq(), bpf_in_serving_softirq(), and bpf_in_task() -- to allow
-> BPF programs to query the current execution context.
+On Sun, 25 Jan 2026 08:57:46 +0000, Alexander Atanasov wrote:
+> A new utility metadata_size was added in
+> commit 261b67f4e347 ("selftests: ublk: add utility to get block device metadata size")
+> but it was not added to .gitignore. Fix that by adding it there.
 > 
-> Following the feedback on v1, these are implemented in bpf_experimental.h
-> as inline helpers wrapping get_preempt_count(). This approach allows the
-> logic to be JIT-inlined for better performance compared to a kfunc call,
-> while providing the granular context detection (e.g., hardirq vs. softirq)
-> required by subsystems like sched_ext.
+> While at it sort all entries alphabetically and add a SPDX license header.
+> 
 > 
 > [...]
 
-Here is the summary with links:
-  - [bpf-next,v3,1/2] selftests/bpf: Introduce execution context detection helpers
-    https://git.kernel.org/bpf/bpf-next/c/c31df36bd26a
-  - [bpf-next,v3,2/2] selftests/bpf: Add tests for execution context helpers
-    https://git.kernel.org/bpf/bpf-next/c/221b5e76c1c6
+Applied, thanks!
 
-You are awesome, thank you!
+[1/1] selftests: ublk: add missing gitignore for metadata_size binary
+      commit: 8e5bcc3a955a2cc4460b391f55d3b49905eb248e
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Jens Axboe
+
 
 
