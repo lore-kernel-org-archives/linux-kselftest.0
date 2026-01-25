@@ -1,78 +1,74 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com [209.85.222.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C48623D2A1
-	for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 18:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5081E3009ED
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 20:23:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769367263; cv=none; b=XOGDBrWJ7myldr370V+P13GtoTeHU3CErBOcnUSXFl4u2U67ywtHaYOTkm34YJByVPMdTrQefg/3x2wM/BHszcUhhml592tp4D9qcr8Hx5ytriogenVSK/RTeQ1T3uvdRIah2Hgu8S33voV/tdCfcQy/OnUJJLg5+8k3+R/oGaU=
+	t=1769372604; cv=none; b=pWp6mcO6AM6355VjQx7/kL9Da8sQ+CUJIc9KapEnagXECiMVMYGS2svBZOVnRPM3JuRDwL20df8MwrNsvT0xXNYPTkZ55CIuOxuPYkrPT1KJOIjQCcy8dcFDqRJpmONbopZpAVo4K4fEPN6h2ouQRDUurGNShayVQ9VocPn9qZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769367263; c=relaxed/simple;
-	bh=MNx7CpVPfK4SIp6L5qZvc4IDpYVFgEwS7rEMUXt6xuE=;
+	s=arc-20240116; t=1769372604; c=relaxed/simple;
+	bh=kA4osmuywNGnfc/EW5DvQpt+uRvoP6E0fmnIPNpufnQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VIUcBQ/pZq988xnv2Gx2Bg1KNcN7vnxxqAyynCJXoRWpkNog+73rgCWfhss0YmoJcJNeteeEvX4pnRHC7fRSpn1Z5cCoN7miaAFrao1Ydedz+wjK22tKQEBCWouc1Y3TaHAvkldzjdjuDlwUZhb/Ut/B2wvGC4L2BqVLgRhFMfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qS9l5kyW; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ONOnWNoBQ0JbZ2oBUpk9JiCQY+V/4X0XAldU+4Sn6tIVvKHOwAtsp7t93OnTiQ28ykxMswp0A7IOsyhmLN5neVD1Ci16d0SQsb5gNCnXvRYVme5rvcIH/ZhPXeZGcqsFjycOXNsHVUwR9UIDpmYCNkyd3m6LhmGZiC0ZHMfM0FQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PsYGaSLy; arc=none smtp.client-ip=209.85.222.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qS9l5kyW"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a35ae38bdfso87005ad.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 10:54:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PsYGaSLy"
+Received: by mail-qk1-f194.google.com with SMTP id af79cd13be357-8c6d76b9145so502799385a.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 12:23:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769367262; x=1769972062; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769372601; x=1769977401; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bJwaR/zGofB89ztFQf0PisW/NqMpT7fZXv1USedVEw8=;
-        b=qS9l5kyWJyOguTlDDoSHkXs/uHwTFPunwt4K9gcQYSTxNZANAcQsZaifrlQOtTIl8m
-         TjnS+FFi7fpRYTrCZDVQMKdMoTIJy0S26GJg+L3cvpqOedVdtazS2xWNWgpP3hccGAnU
-         eTNI80X7z0krS/6ih2gk2mJhtZkyDqBckXfvcZXjjJr6d5LjYQdV8ZGUFCsVrwjP1pXW
-         KIWq988JC1qmucGSvnWhykpbu7IkWsWqekpMOxQ3JUP4WUtLwipkzmbn5EoF2Sxd/VJG
-         PGbOQILXrRWTEqVlG8h5HHwRaeITTo9GopC3DiJe412R+lYCeXbjIwZm9CayKZRQWJo9
-         n4Gw==
+        bh=GVz+XHeZzWVROGlrmIWxthJXoXXHUDugP+jXUUa2fbw=;
+        b=PsYGaSLyE5wcIcqq/gJGs0mNYa5JLWRotsDc+sZtZ2tA7xmccL2e7OiNBw/cYE/Fwv
+         3Soc8iZ+vQNWLlscv3Sk4fohaE8lK5feYaSoIDgfXPj/JMJc7UA6haxWUTQHC38ZwRK4
+         0Cgl0PJ//gOJSkumLew7kHm/bQT4cQYYsqoYMo/8UAirF/uOWSTu5h40JqSBUVnCeAsN
+         MWTprOOgD9+ZBrkNfcFT6PKEMpALAT7bDF1CeStQ0rcay8G+D72x+43DviKOENSFBPxs
+         swOpwzo+o20wcoJE0Xzc8HalbJ5XFoXzfdwSVV38iLP0qYlUJdj6bgey6o2BFgm4cnG/
+         5yLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769367262; x=1769972062;
+        d=1e100.net; s=20230601; t=1769372601; x=1769977401;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bJwaR/zGofB89ztFQf0PisW/NqMpT7fZXv1USedVEw8=;
-        b=ct8wP7XLOZKFfW9lv3mCD0Ylu/kL+TW9fJXJ1zrmz+udgjU4CyMZUD4HRzbbv/vOs9
-         VbDvizOFdP5Xaj5uIgCiLtgxGQCJyWgMByqbPmZGT8dzksABj0XohlDlNaefRQTxcIJ6
-         i7ljOeDXO9bP2c+PB8TzZpptdYA6fmfrSuEDGRHQvjlrW1ghGDiEu/YCBi3I4Pf+rpP5
-         8liwCnYtzWpgMsPHCXNRmaG514dEd/TETHvaiLx5IsBkOCGKqxO5sKJYc1tMwqJ5HJiy
-         enpnc/9ECTfCce2NMUfZzVxbYMwtNQMNR4/ivsISIsPtd1QFbvcw7PKD5gohJWS5xxp8
-         JcuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXjGETP6auIbd5jMdT494Ii1sREv4pLae5M8QrPcUrUPEf9UG4/3B9m3fk51eIN5zvBmPgi6677WJ0XL6yYhwA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYJ+NV7+iTMYzQWIkZdHYZbbyXvfUFja9d3Cz0i16BrNsewfbt
-	iEpkvG8XOnujYl3b7xZcRXzlU7JxQwB3W3Fu1T1imGh4cBqQr0MYN0rje3OTd3ybfA==
-X-Gm-Gg: AZuq6aJpwGePOff4Ixr4yx7bzV5nElHmUeN22aVp97Z/0ipHfprV+cFv5tVgFI/VCSg
-	UDUPgzWIeaux/P6L63ZD6O4lgNk4bLhKaF7Cs2jr7YVXoZmFPeXVxB0feUrLtMfFd1apAyQedfE
-	YRMc2L86EhDNOGabcPDUviAK6h/74Y0kG/tH8sLU3GplHGFgzEpVGIuHFCjlWARDuKtP2GilU72
-	m9geOhWDEETTdCMZ+xQkFnGAg5ESIScbPGNwBb/C57E7W/MRc+XRJw25sVbzxIykuSYsLy287FF
-	LrH0Vb3I3RMUgboeKd+UJ2SIF/JQrPpfj7dY7nHFtBnVHnserSTAnx1uJ+Ay1EDA0T7eBKtk0+v
-	007nbfYz4xuqat9jhIFTfKuEpsBsJ9xAjzgvHszLXsLzMxh6/Ho+/meN+3GagoYRAZ43xAY3Gwi
-	3SG1Y6IpoDYycAPhCWcQe6QPHIgGEWtDPlN2yqx/SQb+yuxwBCKsg=
-X-Received: by 2002:a17:902:f788:b0:290:8ecf:e9f9 with SMTP id d9443c01a7336-2a844b04233mr923075ad.7.1769367261004;
-        Sun, 25 Jan 2026 10:54:21 -0800 (PST)
-Received: from google.com (28.117.125.34.bc.googleusercontent.com. [34.125.117.28])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82318644885sm7489927b3a.4.2026.01.25.10.54.19
+        bh=GVz+XHeZzWVROGlrmIWxthJXoXXHUDugP+jXUUa2fbw=;
+        b=dUdf+/TKsm5IcYmqRI1TPDTtzxy7dvrGhzta9YwzRU6S1VdUcU01TMR1afoB+5FOfD
+         q457f5GGinudj0EAP2IYjY2H2gF/TrmEykZWzhWEB6heIVpszL5ZpuzqZ0i2LmPCXWsF
+         WlaUDJfZ1T6kVcpl0XG/pw3vH+Z/3Oai7xjZpGNHtltl0BJ0vhS8TpzLmbmL3X0KoaQK
+         8RnIP7sBlabOcBSxbrOP91mGhbkvTP+1u27H3OKw1EWm2JUfrrA5jO7a3ZFHBe/wrxan
+         8JmoAZV/wEAoO3btIbvPEy8TQ6r2B6jwuM/Ouvs9JSMH7S1R1RPiyS+Y5g8gUlvWhaK/
+         2hzA==
+X-Forwarded-Encrypted: i=1; AJvYcCWG3CRlvkBHsXw1LSkh0tyEK7bl5if/A90zLfMPhPpRxI3Sde57qyCA2gVNL3m5yq6Tu/I5Fl/EzReLaeI0KwQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhNY8mIsI8suNI5OKStPgRKfzczOt7U9OrjW/o0888Y81feaLU
+	73ZE8YE2bW7YEWP+5idSBGxogk4bfqVRNPixvW5+QHaUqzGIf2LqXIwh
+X-Gm-Gg: AZuq6aJ+VKQ+KFdZtTyPwWlYxV8SQcnFX0UnQ3RSvx3R6CMbPTTmXYkuzieagT9+4Ye
+	Kq/F4plBSvhg+FEpN1ffDFFyqaFejunKZ2SeeJQ2I5aneqrK7tgvobetDsEkYJ4q2cFJIyp0baP
+	WQP1O6yhmMG25doIDFFm8FPFueTCJq5keaLXfbb/TvEnSlVXkrS83MhtCVchBu8DeUhNQehS2r+
+	u9Mb+kqldA4H1vM/rgnkwYPxqgrURrBeLdN2vTtSeJXQL2XM307G0Dy4CanOq2h8y5ItKNn7xD8
+	BqMLyHrdJnTDLl1vMCNYZPSyu76skqOsO74KK9sZx3KuCuDwZsC8052J/kPluBmDtC61ZS2LPth
+	i9XEu/FNuUPRSgJul4fTJ4xnIMbeHNilIX9ZkRTCUBRre3B8jdG3duzDaa5t54zDCFhUFtwjdM1
+	T+sDxG4ApXIxXOAgSF0IFdZlVuondlhNqIC0mFqI3zwg==
+X-Received: by 2002:a05:620a:178e:b0:8c0:cec4:b6fa with SMTP id af79cd13be357-8c6f96bd886mr266639585a.65.1769372601285;
+        Sun, 25 Jan 2026 12:23:21 -0800 (PST)
+Received: from pc ([2600:4041:4491:2000:c864:93f:1893:5824])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c6e385490bsm813994185a.39.2026.01.25.12.23.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jan 2026 10:54:20 -0800 (PST)
-Date: Sun, 25 Jan 2026 18:54:15 +0000
-From: Carlos Llamas <cmllamas@google.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Rae Moar <raemoar63@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Marie Zhussupova <marievic@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	Ujwal Jain <ujwaljain@google.com>, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kunit: reduce stack usage in kunit_run_tests()
-Message-ID: <aXZm10CCRgdVou90@google.com>
-References: <20251204101050.1035801-1-arnd@kernel.org>
+        Sun, 25 Jan 2026 12:23:19 -0800 (PST)
+Date: Sun, 25 Jan 2026 15:23:17 -0500
+From: Seokwoo Chung <seokwoo.chung130@gmail.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: mhiramat@kernel.org, corbet@lwn.net, shuah@kernel.org, 
+	mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 v5 1/3] docs: tracing/fprobe: Document list filters
+ and :entry/:exit
+Message-ID: <wqpijkdwziafpuci6js5mtfzro46bre4z7une547crcdzrlm67@kd4fgea5m6ov>
+References: <20260118011815.56516-1-seokwoo.chung130@gmail.com>
+ <20260118011815.56516-2-seokwoo.chung130@gmail.com>
+ <20260120155340.2dac7fab@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,333 +77,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251204101050.1035801-1-arnd@kernel.org>
+In-Reply-To: <20260120155340.2dac7fab@gandalf.local.home>
 
-On Thu, Dec 04, 2025 at 11:10:46AM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Jan 20, 2026 at 03:53:40PM -0500, Steven Rostedt wrote:
+> On Sat, 17 Jan 2026 20:18:13 -0500
+> "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com> wrote:
 > 
-> Some of the recent changes to the kunit framework caused the stack usage
-> for kunit_run_tests() to grow higher than most other kernel functions,
-> which triggers a warning when CONFIG_FRAME_WARN is set to a relatively
-> low value:
+> > Update fprobe event documentation to describe comma-separated symbol lists,
+> > exclusions, and explicit suffixes.
 > 
-> lib/kunit/test.c: In function 'kunit_run_tests':
-> lib/kunit/test.c:801:1: error: the frame size of 1312 bytes is larger than 1280 bytes [-Werror=frame-larger-than=]
+> Usually, the documentation updates comes *after* the changes.
 > 
-> Split out the inner loop into a separate function to ensure that each
-> function remains under the limit, and pass the kunit_result_stats
-> structures by reference to avoid excessive copies.
+> -- Steve
 > 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> Sending it now as I ran into the build failure while testing 6.18.
-> I only build-tested this, so please test it properly before applying.
+Thanks for the comment. As you noticed, I sent another patch since I forgot to
+put log. That said, please let me know if you want me to continue on this
+series. My apologies on the ordering. I noted after Masami mentioned but I
+misordered when sending. Thank you.
 
-I just ran this through our CI with no problems.
-
-Tested-by: Carlos Llamas <cmllamas@google.com> 
-
-> ---
->  lib/kunit/test.c | 221 ++++++++++++++++++++++++-----------------------
->  1 file changed, 115 insertions(+), 106 deletions(-)
+Best regards,
+Ryan Chung
+> > 
+> > Signed-off-by: Seokwoo Chung (Ryan) <seokwoo.chung130@gmail.com>
+> > ---
+> >  Documentation/trace/fprobetrace.rst | 17 ++++++++++++++---
+> >  1 file changed, 14 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fprobetrace.rst
+> > index b4c2ca3d02c1..bbcfd57f0005 100644
+> > --- a/Documentation/trace/fprobetrace.rst
+> > +++ b/Documentation/trace/fprobetrace.rst
+> > @@ -25,14 +25,18 @@ Synopsis of fprobe-events
+> >  -------------------------
+> >  ::
+> >  
+> > -  f[:[GRP1/][EVENT1]] SYM [FETCHARGS]                       : Probe on function entry
+> > -  f[MAXACTIVE][:[GRP1/][EVENT1]] SYM%return [FETCHARGS]     : Probe on function exit
+> > +  f[:[GRP1/][EVENT1]] SYM[%return] [FETCHARGS]		    : Single function
+> > +  f[:[GRP1/][EVENT1]] SYM[,[!]SYM[,...]][:entry|:exit] [FETCHARGS] :Multiple
+> > +  function
+> >    t[:[GRP2/][EVENT2]] TRACEPOINT [FETCHARGS]                : Probe on tracepoint
+> >  
+> >   GRP1           : Group name for fprobe. If omitted, use "fprobes" for it.
+> >   GRP2           : Group name for tprobe. If omitted, use "tracepoints" for it.
+> >   EVENT1         : Event name for fprobe. If omitted, the event name is
+> > -                  "SYM__entry" or "SYM__exit".
+> > +		  - For a single literal symbol, the event name is
+> > +		    "SYM__entry" or "SYM__exit".
+> > +		  - For a *list or any wildcard*, an explicit [GRP1/][EVENT1] is
+> > +		    required; otherwise the parser rejects it.
+> >   EVENT2         : Event name for tprobe. If omitted, the event name is
+> >                    the same as "TRACEPOINT", but if the "TRACEPOINT" starts
+> >                    with a digit character, "_TRACEPOINT" is used.
+> > @@ -40,6 +44,13 @@ Synopsis of fprobe-events
+> >                    can be probed simultaneously, or 0 for the default value
+> >                    as defined in Documentation/trace/fprobe.rst
+> >  
+> > + SYM		: Function name or comma-separated list of symbols.
+> > +		  - SYM prefixed with "!" are exclusions.
+> > +		  - ":entry" suffix means it probes entry of given symbols
+> > +		    (default)
+> > +		  - ":exit" suffix means it probes exit of given symbols.
+> > +		  - "%return" suffix means it probes exit of SYM (single
+> > +		    symbol).
+> >   FETCHARGS      : Arguments. Each probe can have up to 128 args.
+> >    ARG           : Fetch "ARG" function argument using BTF (only for function
+> >                    entry or tracepoint.) (\*1)
 > 
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 62eb529824c6..c5fce199d880 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -94,7 +94,7 @@ struct kunit_result_stats {
->  	unsigned long total;
->  };
->  
-> -static bool kunit_should_print_stats(struct kunit_result_stats stats)
-> +static bool kunit_should_print_stats(struct kunit_result_stats *stats)
->  {
->  	if (kunit_stats_enabled == 0)
->  		return false;
-> @@ -102,11 +102,11 @@ static bool kunit_should_print_stats(struct kunit_result_stats stats)
->  	if (kunit_stats_enabled == 2)
->  		return true;
->  
-> -	return (stats.total > 1);
-> +	return (stats->total > 1);
->  }
->  
->  static void kunit_print_test_stats(struct kunit *test,
-> -				   struct kunit_result_stats stats)
-> +				   struct kunit_result_stats *stats)
->  {
->  	if (!kunit_should_print_stats(stats))
->  		return;
-> @@ -115,10 +115,10 @@ static void kunit_print_test_stats(struct kunit *test,
->  		  KUNIT_SUBTEST_INDENT
->  		  "# %s: pass:%lu fail:%lu skip:%lu total:%lu",
->  		  test->name,
-> -		  stats.passed,
-> -		  stats.failed,
-> -		  stats.skipped,
-> -		  stats.total);
-> +		  stats->passed,
-> +		  stats->failed,
-> +		  stats->skipped,
-> +		  stats->total);
->  }
->  
->  /* Append formatted message to log. */
-> @@ -600,26 +600,26 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
->  }
->  
->  static void kunit_print_suite_stats(struct kunit_suite *suite,
-> -				    struct kunit_result_stats suite_stats,
-> -				    struct kunit_result_stats param_stats)
-> +				    struct kunit_result_stats *suite_stats,
-> +				    struct kunit_result_stats *param_stats)
->  {
->  	if (kunit_should_print_stats(suite_stats)) {
->  		kunit_log(KERN_INFO, suite,
->  			  "# %s: pass:%lu fail:%lu skip:%lu total:%lu",
->  			  suite->name,
-> -			  suite_stats.passed,
-> -			  suite_stats.failed,
-> -			  suite_stats.skipped,
-> -			  suite_stats.total);
-> +			  suite_stats->passed,
-> +			  suite_stats->failed,
-> +			  suite_stats->skipped,
-> +			  suite_stats->total);
->  	}
->  
->  	if (kunit_should_print_stats(param_stats)) {
->  		kunit_log(KERN_INFO, suite,
->  			  "# Totals: pass:%lu fail:%lu skip:%lu total:%lu",
-> -			  param_stats.passed,
-> -			  param_stats.failed,
-> -			  param_stats.skipped,
-> -			  param_stats.total);
-> +			  param_stats->passed,
-> +			  param_stats->failed,
-> +			  param_stats->skipped,
-> +			  param_stats->total);
->  	}
->  }
->  
-> @@ -681,13 +681,106 @@ static void kunit_init_parent_param_test(struct kunit_case *test_case, struct ku
->  	}
->  }
->  
-> -int kunit_run_tests(struct kunit_suite *suite)
-> +static int kunit_run_one_test(struct kunit_suite *suite, struct kunit_case *test_case,
-> +			      struct kunit_result_stats *suite_stats,
-> +			      struct kunit_result_stats *total_stats)
->  {
-> +	struct kunit test = { .param_value = NULL, .param_index = 0 };
-> +	struct kunit_result_stats param_stats = { 0 };
->  	char param_desc[KUNIT_PARAM_DESC_SIZE];
-> +	const void *curr_param;
-> +
-> +	kunit_init_test(&test, test_case->name, test_case->log);
-> +	if (test_case->status == KUNIT_SKIPPED) {
-> +		/* Test marked as skip */
-> +		test.status = KUNIT_SKIPPED;
-> +		kunit_update_stats(&param_stats, test.status);
-> +	} else if (!test_case->generate_params) {
-> +		/* Non-parameterised test. */
-> +		test_case->status = KUNIT_SKIPPED;
-> +		kunit_run_case_catch_errors(suite, test_case, &test);
-> +		kunit_update_stats(&param_stats, test.status);
-> +	} else {
-> +		kunit_init_parent_param_test(test_case, &test);
-> +		if (test_case->status == KUNIT_FAILURE) {
-> +			kunit_update_stats(&param_stats, test.status);
-> +			goto test_case_end;
-> +		}
-> +		/* Get initial param. */
-> +		param_desc[0] = '\0';
-> +		/* TODO: Make generate_params try-catch */
-> +		curr_param = test_case->generate_params(&test, NULL, param_desc);
-> +		test_case->status = KUNIT_SKIPPED;
-> +		kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-> +			  "KTAP version 1\n");
-> +		kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-> +			  "# Subtest: %s", test_case->name);
-> +		if (test.params_array.params &&
-> +		    test_case->generate_params == kunit_array_gen_params) {
-> +			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT
-> +				  KUNIT_SUBTEST_INDENT "1..%zd\n",
-> +				  test.params_array.num_params);
-> +		}
-> +
-> +		while (curr_param) {
-> +			struct kunit param_test = {
-> +				.param_value = curr_param,
-> +				.param_index = ++test.param_index,
-> +				.parent = &test,
-> +			};
-> +			kunit_init_test(&param_test, test_case->name, NULL);
-> +			param_test.log = test_case->log;
-> +			kunit_run_case_catch_errors(suite, test_case, &param_test);
-> +
-> +			if (param_desc[0] == '\0') {
-> +				snprintf(param_desc, sizeof(param_desc),
-> +					 "param-%d", param_test.param_index);
-> +			}
-> +
-> +			kunit_print_ok_not_ok(&param_test, KUNIT_LEVEL_CASE_PARAM,
-> +					      param_test.status,
-> +					      param_test.param_index,
-> +					      param_desc,
-> +					      param_test.status_comment);
-> +
-> +			kunit_update_stats(&param_stats, param_test.status);
-> +
-> +			/* Get next param. */
-> +			param_desc[0] = '\0';
-> +			curr_param = test_case->generate_params(&test, curr_param,
-> +								param_desc);
-> +		}
-> +		/*
-> +		 * TODO: Put into a try catch. Since we don't need suite->exit
-> +		 * for it we can't reuse kunit_try_run_cleanup for this yet.
-> +		 */
-> +		if (test_case->param_exit)
-> +			test_case->param_exit(&test);
-> +		/* TODO: Put this kunit_cleanup into a try-catch. */
-> +		kunit_cleanup(&test);
-> +	}
-> +test_case_end:
-> +	kunit_print_attr((void *)test_case, true, KUNIT_LEVEL_CASE);
-> +
-> +	kunit_print_test_stats(&test, &param_stats);
-> +
-> +	kunit_print_ok_not_ok(&test, KUNIT_LEVEL_CASE, test_case->status,
-> +			      kunit_test_case_num(suite, test_case),
-> +			      test_case->name,
-> +			      test.status_comment);
-> +
-> +	kunit_update_stats(suite_stats, test_case->status);
-> +	kunit_accumulate_stats(total_stats, param_stats);
-> +
-> +	return 0;
-
-nit: the return value is always zero and it's not being used either, so
-maybe switch to void?
-
-> +}
-> +
-> +
-> +int kunit_run_tests(struct kunit_suite *suite)
-> +{
->  	struct kunit_case *test_case;
->  	struct kunit_result_stats suite_stats = { 0 };
->  	struct kunit_result_stats total_stats = { 0 };
-> -	const void *curr_param;
->  
->  	/* Taint the kernel so we know we've run tests. */
->  	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
-> @@ -703,97 +796,13 @@ int kunit_run_tests(struct kunit_suite *suite)
->  
->  	kunit_print_suite_start(suite);
->  
-> -	kunit_suite_for_each_test_case(suite, test_case) {
-> -		struct kunit test = { .param_value = NULL, .param_index = 0 };
-> -		struct kunit_result_stats param_stats = { 0 };
-> -
-> -		kunit_init_test(&test, test_case->name, test_case->log);
-> -		if (test_case->status == KUNIT_SKIPPED) {
-> -			/* Test marked as skip */
-> -			test.status = KUNIT_SKIPPED;
-> -			kunit_update_stats(&param_stats, test.status);
-> -		} else if (!test_case->generate_params) {
-> -			/* Non-parameterised test. */
-> -			test_case->status = KUNIT_SKIPPED;
-> -			kunit_run_case_catch_errors(suite, test_case, &test);
-> -			kunit_update_stats(&param_stats, test.status);
-> -		} else {
-> -			kunit_init_parent_param_test(test_case, &test);
-> -			if (test_case->status == KUNIT_FAILURE) {
-> -				kunit_update_stats(&param_stats, test.status);
-> -				goto test_case_end;
-> -			}
-> -			/* Get initial param. */
-> -			param_desc[0] = '\0';
-> -			/* TODO: Make generate_params try-catch */
-> -			curr_param = test_case->generate_params(&test, NULL, param_desc);
-> -			test_case->status = KUNIT_SKIPPED;
-> -			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-> -				  "KTAP version 1\n");
-> -			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-> -				  "# Subtest: %s", test_case->name);
-> -			if (test.params_array.params &&
-> -			    test_case->generate_params == kunit_array_gen_params) {
-> -				kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT
-> -					  KUNIT_SUBTEST_INDENT "1..%zd\n",
-> -					  test.params_array.num_params);
-> -			}
-> -
-> -			while (curr_param) {
-> -				struct kunit param_test = {
-> -					.param_value = curr_param,
-> -					.param_index = ++test.param_index,
-> -					.parent = &test,
-> -				};
-> -				kunit_init_test(&param_test, test_case->name, NULL);
-> -				param_test.log = test_case->log;
-> -				kunit_run_case_catch_errors(suite, test_case, &param_test);
-> -
-> -				if (param_desc[0] == '\0') {
-> -					snprintf(param_desc, sizeof(param_desc),
-> -						 "param-%d", param_test.param_index);
-> -				}
-> -
-> -				kunit_print_ok_not_ok(&param_test, KUNIT_LEVEL_CASE_PARAM,
-> -						      param_test.status,
-> -						      param_test.param_index,
-> -						      param_desc,
-> -						      param_test.status_comment);
-> -
-> -				kunit_update_stats(&param_stats, param_test.status);
-> -
-> -				/* Get next param. */
-> -				param_desc[0] = '\0';
-> -				curr_param = test_case->generate_params(&test, curr_param,
-> -									param_desc);
-> -			}
-> -			/*
-> -			 * TODO: Put into a try catch. Since we don't need suite->exit
-> -			 * for it we can't reuse kunit_try_run_cleanup for this yet.
-> -			 */
-> -			if (test_case->param_exit)
-> -				test_case->param_exit(&test);
-> -			/* TODO: Put this kunit_cleanup into a try-catch. */
-> -			kunit_cleanup(&test);
-> -		}
-> -test_case_end:
-> -		kunit_print_attr((void *)test_case, true, KUNIT_LEVEL_CASE);
-> -
-> -		kunit_print_test_stats(&test, param_stats);
-> -
-> -		kunit_print_ok_not_ok(&test, KUNIT_LEVEL_CASE, test_case->status,
-> -				      kunit_test_case_num(suite, test_case),
-> -				      test_case->name,
-> -				      test.status_comment);
-> -
-> -		kunit_update_stats(&suite_stats, test_case->status);
-> -		kunit_accumulate_stats(&total_stats, param_stats);
-> -	}
-> +	kunit_suite_for_each_test_case(suite, test_case)
-> +		kunit_run_one_test(suite, test_case, &suite_stats, &total_stats);
->  
->  	if (suite->suite_exit)
->  		suite->suite_exit(suite);
->  
-> -	kunit_print_suite_stats(suite, suite_stats, total_stats);
-> +	kunit_print_suite_stats(suite, &suite_stats, &total_stats);
->  suite_end:
->  	kunit_print_suite_end(suite);
->  
-> -- 
-
-I don't see any logical changes, everything seems to have been extracted
-cleanly into kunit_run_one_test(). So this LGTM, just a minor nit.
-
---
-Carlos LLamas
