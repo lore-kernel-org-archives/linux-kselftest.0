@@ -1,279 +1,244 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC63B3242BA
-	for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 15:28:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769354938; cv=none; b=VjV3vfXu/PoYlEi+86LV1eYE3TFQx4s5hbjQu8m6J23+FhJHzNVlr98Kk43dSOWpbY5GvJLPpgJntypdRmimRx9Q2ttOLeTZqYePkY1hRRgyPpY38crkwLXGreYdgBZrS1bNSQN257RjiLeAACgOjQVRDhbSt35JZvIld9eUlZM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769354938; c=relaxed/simple;
-	bh=6FY1Ub3uSJkRf7Mx9U3HnX00fXeOes1bXeoAZmYZfz8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mgUXpP0BOSeEnb1rTK16ejZsoBDYujKCBS0F0Y6ijkR7sxJZEt92jkqCtgjNjeMlUMNDxBHW9hqwGKFlS/hDEd5TO6Y4OUFhcR7Co8BaUowMT2pq7BKlBk/oFmmNqvudRVP1xAWyS7wsG+KbFp6okChwij2+g+rI0letd05Zx1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZxizvHF5; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553E931AA95
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 15:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769355304; cv=pass; b=e+6rmylGbUUwCHG3joOqIYUeWTO5uhga7EbvUkk+Jjc7Yz31ywK8MRAziFJvWgdRtHnNEx3D8d5bw/pYUBG+0VFJjgRPtRg53Mt5uPh11eSyhWzkOnOYVDWexGn+ikUd8thj0wWcmVKWMFtFD99VD4zbLbhgutC9ZH3aGPftEnA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769355304; c=relaxed/simple;
+	bh=8vgTsasdoGFJyysV4QshjqJZujkRrkBDPiELEwZd58w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hGit9VeVlrjM0dC2uZjj3VFE/htD614K81VmMyERoFry9M6e2D5xWm1TyGQlXvZxOg5f3PH7TKbfEnt0RgkU+wZPLjtsiS91z0iTP2x5s1TGTANU4Q1B577Aezuvq+MLqDJa1rjQ98MIR6TmrXveEQPPO6gdtSPX7ivrwgAm7Ro=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dByZVtR4; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=muZcKJsh; arc=pass smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZxizvHF5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dByZVtR4";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="muZcKJsh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769354935;
+	s=mimecast20190719; t=1769355302;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=0Vl7YCd0Ji3+XuLKgfjcuaMXyBhbOPSxVdzCdbCKe6E=;
-	b=ZxizvHF5TDFPxNf1kQgTvMBpnz7P0bxkLHBEeJ2+td2yZjNjaDvA6lgkjV4RPt0t2eeB1K
-	EgWP64hjfaurw5rIyU2S8FjrSREub3TcmGEHN7SslHHiOA+CAjNfRJyqgxUBMaHOinjhSO
-	es60DLmrPMLKzc7Wr1OBB4EAzucUyRk=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-473-2zYMPMKcNTWNFbfvFPviSA-1; Sun,
- 25 Jan 2026 10:28:51 -0500
-X-MC-Unique: 2zYMPMKcNTWNFbfvFPviSA-1
-X-Mimecast-MFC-AGG-ID: 2zYMPMKcNTWNFbfvFPviSA_1769354930
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0995C1956054;
-	Sun, 25 Jan 2026 15:28:50 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.15])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 797251956095;
-	Sun, 25 Jan 2026 15:28:45 +0000 (UTC)
-Date: Sun, 25 Jan 2026 23:28:41 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Alexander Atanasov <alex@zazolabs.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: ublk: io-reorder triggered in
- test_generic_01.sh
-Message-ID: <aXY2qdYtfVTSc7jB@fedora>
-References: <20260123112039.1370223-1-alex@zazolabs.com>
- <aXN4mFuoXhtJDKyF@fedora>
- <147635F1-943E-46D5-8EF1-D1C965F85EC1@zazolabs.com>
- <aXOGrXo3AbXPHA-K@fedora>
- <03C8F5B9-B2E1-4C78-A043-B4F9422508B7@zazolabs.com>
+	bh=Hh86i8LoFrdXRrDy9tOfNcziJFbkWPtFbzTiy83QQwQ=;
+	b=dByZVtR4IVkJ5AbniCGGC2O9MvqJ5w1OL46faU2W1hT8j8nAIFbNpTseP5uu6OxpOR2xFB
+	+N9Z54a8WsCFw4lOgtCusBfOj7eOZCnFo+TB7bEjAqTWS0DLVun48ILtXZ93k7tvc/FVyT
+	4jYxR2Puq2ejO1xapWDuwTHFNr0w7q4=
+Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
+ [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-220-fREJTkr-PteTZCR_PEiv5w-1; Sun, 25 Jan 2026 10:35:00 -0500
+X-MC-Unique: fREJTkr-PteTZCR_PEiv5w-1
+X-Mimecast-MFC-AGG-ID: fREJTkr-PteTZCR_PEiv5w_1769355300
+Received: by mail-ua1-f70.google.com with SMTP id a1e0cc1a2514c-9412e67d171so15525285241.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 07:35:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769355300; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KZvS6XuuFPPYEAJNDdM4S0yng1zQr/QWddSGDf38bTRpOPpCX+PLzQ2YsIi6MIo0NY
+         GsE7xIuou6MKQvcMReFXr9lxYWXie2Ha7geML5EcCcrdgVijz4g+qYbkXegVNDg0dnv4
+         tSgzz3uyVzFPOEmJ499yLgnME8JuhFfUisYFxW+mtpEJ+VVOLo/z2NDVlQ9dNSyorDWv
+         zoSe38+SXpP8VAClYLD153gqEw4+KPehd9BB/V9U67DhfixkfkdUFAHILOAk46fR+uyp
+         OFC0TmWjEDq2DOl9PWQKyxoa4V22QEF3hx9wrcKbtTJakDqPw/xG95qV+4zZ5qcKZUZs
+         gvsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Hh86i8LoFrdXRrDy9tOfNcziJFbkWPtFbzTiy83QQwQ=;
+        fh=P7V2USKI/P5lOZpD1Z6onmF9sarwqVGTYawY5RFaMFg=;
+        b=aofNbZRCS0EXWDB+f7xduVKk3bOvY8oybhHYBd1biaUYpb4CUzfsOXJ7t2wbsC7H1W
+         SefRz7Y1Rn6qLibrnWe4ItU7q9K7KD5dLDsK6A3F8nRBxgkpjfJEqyZaieAFpVk8jx+Y
+         xd1plygKL0mkCCXVmQ8IM0zJbZsdxsXGgE/QEl5ISfE2Z5LgWduaQUJ89UEAmO6GdfVS
+         dpC4Kvq/rwYEJQhqD38hptBWoYgFo2yM+mzfQNibBnLBXL5XJJjSFhbzlGilLkApIyB/
+         zS4V4VJ3xWTQvjzuKKcqh4WU/T5OOY3SL9UETNUGzCAP9BDhBWF9DSOx4s6fbeWeD3v7
+         Dhlw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1769355300; x=1769960100; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hh86i8LoFrdXRrDy9tOfNcziJFbkWPtFbzTiy83QQwQ=;
+        b=muZcKJshEbDkmfNweNe6WRH9Joykn+wh8kFspH80xPKri1hSw6Tus/hREli8ZyfUuY
+         O3lwYiFT2BR6qqLptfAPD+r2WpAyYoKvUNnOXSG3gD/wkmkKVJFb4cyHU9GrFZPjSdJs
+         vh8Bto/M2vRyHJbtutisAeQlUdrVzoQuW/hwEntyr1T08g7TgEG5klmXvAN0D9qsKWPh
+         DTxqK0CWNQ4JMwoBHOWhgLMF7hGXUYw5BqR6q4db/kbgS8BZgS/8RAYBVGfdV8/x6NL1
+         2yyNuQFmVtm5rRH/u1YluzmyTcONpYfBg/e4A9Zs+cxJnG14sOpqC7emv5oRrBTtxloU
+         rqug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769355300; x=1769960100;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Hh86i8LoFrdXRrDy9tOfNcziJFbkWPtFbzTiy83QQwQ=;
+        b=W3mUylRhH1vN/5S6TjfVc7heMlXSuVGnsYc20nZA9x6dX0g29n7uvzTTEbTHzcJ/vg
+         1CabYBsXfOI04qe+8AEqYfw8SP+fCtZm5ap5TrYQHBQub0wouEcG+sCd/IkxUVNHy8Td
+         qkijVARnBRB60t6ogK2hiELJfIaavsIN/rXB8zMmN8Nxk4fYqXLdvnjdLBj5buMz75Ur
+         BKB+8xH2S+aIqEp2CDwJxKWSDSXAEjowInkiH8Ac0lAc65EMIkgnA+4cZE5FzH862eqq
+         QDSgfYdLlUT5bmBLPsVmSCmd0KvbvrxJLu3VCZ9+9DEBUcwojX/2zLVrDbJLdLwkjR+O
+         Knig==
+X-Forwarded-Encrypted: i=1; AJvYcCVslW1CWEXeiETDnC9unPMc/NuIfDo4uRZFmj988sqIf6fiEpTXNhlBcdeZy8PufGQpQKfCs+kpWuISQ4ctl/o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxitZqbcGy9704J/6OPVOvGaC3CxHzkXgM1FcaeSAaZdwtdjlSj
+	gA7Ohk4T7ItD60bquIPaLbJ8lCYNohvIgDA2GP9jeJULXaEx3PVHAocf8Q8nFgCC3V6D7bbDm8r
+	G5pdku+z4r3FgbtVDNAK+LFr0vFmEDaGbOsMwOrlRpQEY5aFA3vOv/g5Rd6LfOZU5HVGalMWsbI
+	7hjup2KUOV8xDm0zwwRvf3w4+XAcdL+bFTHoHaCkSolpKNWvSvtnWLJE8=
+X-Gm-Gg: AZuq6aKormV29V47EEDumHoclkqgHCLVq7Dz/2zMq1ayhUzLfQLkloRxA6bhMOgbKx9
+	krRwcL4+ftAw45ow81tl/EaU4YW4AT5uNIuCvY1LsgEndsRCXn7MulEbJBvTYv+243hh3Jd388x
+	64kMgmXOwdz/pRivhENNoq7K2eH0ZUWZU4YO9Lq4pT3o4XnabxMDbrWwqUJL7yiF9LoWc=
+X-Received: by 2002:a05:6102:440a:b0:5ef:b32c:dff8 with SMTP id ada2fe7eead31-5f5771afee6mr466114137.5.1769355299905;
+        Sun, 25 Jan 2026 07:34:59 -0800 (PST)
+X-Received: by 2002:a05:6102:440a:b0:5ef:b32c:dff8 with SMTP id
+ ada2fe7eead31-5f5771afee6mr466107137.5.1769355299558; Sun, 25 Jan 2026
+ 07:34:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <03C8F5B9-B2E1-4C78-A043-B4F9422508B7@zazolabs.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+References: <20260123112039.1370223-1-alex@zazolabs.com> <aXN4mFuoXhtJDKyF@fedora>
+ <147635F1-943E-46D5-8EF1-D1C965F85EC1@zazolabs.com> <aXOGrXo3AbXPHA-K@fedora>
+ <03C8F5B9-B2E1-4C78-A043-B4F9422508B7@zazolabs.com> <aXY2qdYtfVTSc7jB@fedora>
+In-Reply-To: <aXY2qdYtfVTSc7jB@fedora>
+From: Ming Lei <ming.lei@redhat.com>
+Date: Sun, 25 Jan 2026 23:34:48 +0800
+X-Gm-Features: AZwV_QgarjvWYF4UOUXMdwNp7c1A1qUIGGWrhDgv7qw_q1o9HQBQeyECn9XA0Pw
+Message-ID: <CAFj5m9+hGUkm2Se3iEhkmtVs8sDxVVdfvzCc-WUjYmRd+OdUrg@mail.gmail.com>
+Subject: Re: [PATCH] selftests: ublk: io-reorder triggered in test_generic_01.sh
+To: Alexander Atanasov <alex@zazolabs.com>
+Cc: Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 23, 2026 at 05:00:33PM +0200, Alexander Atanasov wrote:
-> 
-> 
-> > On 23 Jan 2026, at 16:33, Ming Lei <ming.lei@redhat.com> wrote:
-> > 
-> > On Fri, Jan 23, 2026 at 03:59:31PM +0200, Alexander Atanasov wrote:
-> >> On 23 Jan 2026, at 15:33, Ming Lei <ming.lei@redhat.com> wrote:
-> >>> 
-> >>> On Fri, Jan 23, 2026 at 11:20:36AM +0000, Alexander Atanasov wrote:
-> >>>> Create a temp dir for temporary files and use it instead of
-> >>>> placing them inside source tree.
-> >>> 
-> >>> Many temporary files are backing files of file storage target, so far
-> >>> the code requires O_DIRECT, or the size could be a bit big.
-> >>> 
-> >>> In case of ramfs/tmpfs of temp dir, it may cause problem for tests.
-> >>> 
-> >> 
-> >> I am aware of O_DIRECT problem but you can export different TMPDIR that has working O_DIRECT.
-> > 
-> > Can you share how to export TMPDIR capable of O_DIRECT?
-> 
-> 
-> +export TMPDIR=$(mktemp -d ${TMPDIR:-/tmp}/ublktest-dir.XXXXXX)
-> 
-> I made the tests to run in own TMPDIR. Which is under already set TMPDIR or
-> if TMPDIR is not set it is defaults to  /tmp.
-> 
-> export TMPDIR=/path/to/odirect/capable
-> Before running and tests will run in:
-> /path/to/odirect/capable/ublktest-dir.XXXXXX
-> 
-> 
-> > 
-> >> 
-> >> I use sshfs mount of the build to run the tests and that is a problem sshfs/fuse does not
-> >> do O_DIRECT too.
-> >> 
-> >> I think test_generic_06.sh is the only one that fails due to this(thou I still have to investigate).
-> >> 
-> >> If O_DIRECT is required by the tests it may be possible to go thru a RAM disk which does support it,
-> >> so it works eveerywhere
-> >> 
-> >> Other option is to preserve working in source tree as it is now, and just add a variable to specify working directory -
-> >> UBLK_TMPDIR or something.
-> >> 
-> >> 
-> >> I get a lot of out of order io - between 0 and 10 on average on my test setup:
-> >> tools/testing/selftests/ublk/test_generic_01.sh 
-> >> Attached 3 probes
-> >> io_out_of_order: exp 564688 actual 564648
-> >> io_out_of_order: exp 564648 actual 565584
-> >> io_out_of_order: exp 565584 actual 564688
-> >> io_out_of_order: exp 565592 actual 564688
-> >> io_out_of_order: exp 566328 actual 565592
-> >> io_out_of_order: exp 882256 actual 882248
-> >> io_out_of_order: exp 883032 actual 882912
-> >> io_out_of_order: exp 882912 actual 883040
-> >> io_out_of_order: exp 883040 actual 883032
-> >> 
-> >> 
-> >> generic_01 : [FAIL]
-> >> 
-> >> All rq-s are there just reordered , AFAIK blk-mq does not guarantee that requests will be completed in order, what’s the idea to catch this and
-> > 
-> > If there is just 0 ~ 10, it could be fine. But if all are reorderd,
-> > something must be wrong. One improvement could be check if there is too
-> > many reorder...
-> > 
-> > Actually what I am trying to test is to make sure same order is observed
-> > from both ublk driver dispatch code path and ublk target io handling code
-> > path, because io_uring task work schedule uses llist, which may introduce io
-> > reorder.
-> 
-> There are for sure other places where a reordering can be introduced, so the code should be ready and expecting 
-> It. (For my case see bellow) Is preserving the order required for some reason for ublk?
-> 
-> > 
-> > However, that involves ublk kprobe/kfunc trace, which may not be stable,
-> > so I simply check the end-to-end IO order. Sometimes blk-mq IO queue/dispatch
-> > may re-order IO.
-> > 
-> > I guess the following change may avoid the re-order, but batch IO case may
-> > not be covered:
-> > 
-> > diff --git a/tools/testing/selftests/ublk/test_generic_01.sh b/tools/testing/selftests/ublk/test_generic_01.sh
-> > index 21a31cd5491a..5805da4c84c5 100755
-> > --- a/tools/testing/selftests/ublk/test_generic_01.sh
-> > +++ b/tools/testing/selftests/ublk/test_generic_01.sh
-> > @@ -29,14 +29,8 @@ if ! kill -0 "$btrace_pid" > /dev/null 2>&1; then
-> >        exit "$UBLK_SKIP_CODE"
-> > fi
-> > 
-> > -# run fio over this ublk disk
-> > -fio --name=write_seq \
-> > -    --filename=/dev/ublkb"${dev_id}" \
-> > -    --ioengine=libaio --iodepth=16 \
-> > -    --rw=write \
-> > -    --size=512M \
-> > -    --direct=1 \
-> > -    --bs=4k > /dev/null 2>&1
-> > +taskset -c 0 dd if=/dev/zero of=/dev/ublkb"${dev_id}" bs=1M count=256 oflag=direct > /dev/null 2>&1
-> > +
-> > 
-> > 
-> >> consider it an error? (Latest tree with batch io and batch io fixes on top of if that matters)
-> > 
-> > Never observe generic_01 failure in my test VM and hardware.
-> > 
-> > My kernel config is based on Fedora, maybe scheduler config option makes the difference.
-> 
-> Fedora 43 default config with some debugging options enabled, but no changes in schedulers.
-> Test VM storage is on a networked NAS over iSCSI - both boxes VM host and NAS have two NICs,
-> I get the errors when I load the network. So I believe the requests really complete out of 
-> order due to the network in my case. All tests that have the bpftrace check fail on occasion.
+On Sun, Jan 25, 2026 at 11:28=E2=80=AFPM Ming Lei <ming.lei@redhat.com> wro=
+te:
+>
+...
 
-Can you test the following patch and see if re-order still can happen? 
+> >
+> > Fedora 43 default config with some debugging options enabled, but no ch=
+anges in schedulers.
+> > Test VM storage is on a networked NAS over iSCSI - both boxes VM host a=
+nd NAS have two NICs,
+> > I get the errors when I load the network. So I believe the requests rea=
+lly complete out of
+> > order due to the network in my case. All tests that have the bpftrace c=
+heck fail on occasion.
+>
+> Can you test the following patch and see if re-order still can happen?
+>
+>
+> diff --git a/tools/testing/selftests/ublk/test_generic_01.sh b/tools/test=
+ing/selftests/ublk/test_generic_01.sh
+> index 26cf3c7ceeb5..26d5e52ece29 100755
+> --- a/tools/testing/selftests/ublk/test_generic_01.sh
+> +++ b/tools/testing/selftests/ublk/test_generic_01.sh
+> @@ -13,7 +13,7 @@ if ! _have_program fio; then
+>         exit "$UBLK_SKIP_CODE"
+>  fi
+>
+> -_prep_test "null" "sequential io order"
+> +_prep_test "null" "ublk dispatch won't reorder IO"
+>
+>  dev_id=3D$(_add_ublk_dev -t null)
+>  _check_add_dev $TID $?
+> @@ -39,9 +39,13 @@ fio --name=3Dwrite_seq \
+>  ERR_CODE=3D$?
+>  kill "$btrace_pid"
+>  wait
+> -if grep -q "io_out_of_order" "$UBLK_TMP"; then
+> -       cat "$UBLK_TMP"
+> +
+> +# Check for out-of-order completions detected by bpftrace
+> +if grep -q "^out_of_order:" "$UBLK_TMP"; then
+> +       echo "I/O reordering detected:"
+> +       grep "^out_of_order:" "$UBLK_TMP"
+>         ERR_CODE=3D255
+>  fi
+> +
+>  _cleanup_test "null"
+>  _show_result $TID $ERR_CODE
+> diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt b/tools/testing=
+/selftests/ublk/trace/seq_io.bt
+> index b2f60a92b118..60ac40e66606 100644
+> --- a/tools/testing/selftests/ublk/trace/seq_io.bt
+> +++ b/tools/testing/selftests/ublk/trace/seq_io.bt
+> @@ -2,23 +2,45 @@
+>         $1:     dev_t
+>         $2:     RWBS
+>         $3:     strlen($2)
+> +
+> +       Track request order between block_io_start and block_rq_complete.
+> +       For each request, record its start sequence number and verify
+> +       completions happen in the same order.
+>  */
+> +
+>  BEGIN {
+> -       @last_rw[$1, str($2)] =3D (uint64)0;
+> +       @start_seq =3D (uint64)0;
+> +       @complete_seq =3D (uint64)0;
+> +       @out_of_order =3D (uint64)0;
+> +}
+> +
+> +tracepoint:block:block_io_start
+> +{
+> +       if ((int64)args.dev =3D=3D $1 && !strncmp(args.rwbs, str($2), $3)=
+) {
+> +               @start_order[args.sector] =3D @start_seq;
+> +               @start_seq =3D @start_seq + 1;
+> +       }
+>  }
+> +
+>  tracepoint:block:block_rq_complete
+>  {
+> -       $dev =3D $1;
+>         if ((int64)args.dev =3D=3D $1 && !strncmp(args.rwbs, str($2), $3)=
+) {
+> -               $last =3D @last_rw[$dev, str($2)];
+> -               if ((uint64)args.sector !=3D $last) {
+> -                       printf("io_out_of_order: exp %llu actual %llu\n",
+> -                               args.sector, $last);
+> +               $expected_order =3D @start_order[args.sector];
+> +               if ($expected_order !=3D @complete_seq) {
+> +                       printf("out_of_order: sector %llu started at seq =
+%llu but completed at seq %llu\n",
+> +                               args.sector, $expected_order, @complete_s=
+eq);
+> +                       @out_of_order =3D @out_of_order + 1;
+>                 }
+> -               @last_rw[$dev, str($2)] =3D (args.sector + args.nr_sector=
+);
+> +               delete(@start_order[args.sector]);
+> +               @complete_seq =3D @complete_seq + 1;
+>         }
+>  }
+>
+>  END {
+> -       clear(@last_rw);
+> +       printf("total_start: %llu total_complete: %llu out_of_order: %llu=
+\n",
+> +               @start_seq, @complete_seq, @out_of_order);
+> +       clear(@start_order);
+> +       clear(@start_seq);
+> +       clear(@complete_seq);
+> +       clear(@out_of_order);
+>  }
 
+Forget another change, please apply the following delta too:
 
-diff --git a/tools/testing/selftests/ublk/test_generic_01.sh b/tools/testing/selftests/ublk/test_generic_01.sh
-index 26cf3c7ceeb5..26d5e52ece29 100755
---- a/tools/testing/selftests/ublk/test_generic_01.sh
-+++ b/tools/testing/selftests/ublk/test_generic_01.sh
-@@ -13,7 +13,7 @@ if ! _have_program fio; then
- 	exit "$UBLK_SKIP_CODE"
+@@ -28,8 +28,8 @@ if ! kill -0 "$btrace_pid" > /dev/null 2>&1; then
+        exit "$UBLK_SKIP_CODE"
  fi
- 
--_prep_test "null" "sequential io order"
-+_prep_test "null" "ublk dispatch won't reorder IO"
- 
- dev_id=$(_add_ublk_dev -t null)
- _check_add_dev $TID $?
-@@ -39,9 +39,13 @@ fio --name=write_seq \
- ERR_CODE=$?
- kill "$btrace_pid"
- wait
--if grep -q "io_out_of_order" "$UBLK_TMP"; then
--	cat "$UBLK_TMP"
-+
-+# Check for out-of-order completions detected by bpftrace
-+if grep -q "^out_of_order:" "$UBLK_TMP"; then
-+	echo "I/O reordering detected:"
-+	grep "^out_of_order:" "$UBLK_TMP"
- 	ERR_CODE=255
- fi
-+
- _cleanup_test "null"
- _show_result $TID $ERR_CODE
-diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt b/tools/testing/selftests/ublk/trace/seq_io.bt
-index b2f60a92b118..60ac40e66606 100644
---- a/tools/testing/selftests/ublk/trace/seq_io.bt
-+++ b/tools/testing/selftests/ublk/trace/seq_io.bt
-@@ -2,23 +2,45 @@
- 	$1: 	dev_t
- 	$2: 	RWBS
- 	$3:     strlen($2)
-+
-+	Track request order between block_io_start and block_rq_complete.
-+	For each request, record its start sequence number and verify
-+	completions happen in the same order.
- */
-+
- BEGIN {
--	@last_rw[$1, str($2)] = (uint64)0;
-+	@start_seq = (uint64)0;
-+	@complete_seq = (uint64)0;
-+	@out_of_order = (uint64)0;
-+}
-+
-+tracepoint:block:block_io_start
-+{
-+	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
-+		@start_order[args.sector] = @start_seq;
-+		@start_seq = @start_seq + 1;
-+	}
- }
-+
- tracepoint:block:block_rq_complete
- {
--	$dev = $1;
- 	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
--		$last = @last_rw[$dev, str($2)];
--		if ((uint64)args.sector != $last) {
--			printf("io_out_of_order: exp %llu actual %llu\n",
--				args.sector, $last);
-+		$expected_order = @start_order[args.sector];
-+		if ($expected_order != @complete_seq) {
-+			printf("out_of_order: sector %llu started at seq %llu but completed at seq %llu\n",
-+				args.sector, $expected_order, @complete_seq);
-+			@out_of_order = @out_of_order + 1;
- 		}
--		@last_rw[$dev, str($2)] = (args.sector + args.nr_sector);
-+		delete(@start_order[args.sector]);
-+		@complete_seq = @complete_seq + 1;
- 	}
- }
- 
- END {
--	clear(@last_rw);
-+	printf("total_start: %llu total_complete: %llu out_of_order: %llu\n",
-+		@start_seq, @complete_seq, @out_of_order);
-+	clear(@start_order);
-+	clear(@start_seq);
-+	clear(@complete_seq);
-+	clear(@out_of_order);
- }
+
+-# run fio over this ublk disk
+-fio --name=3Dwrite_seq \
++# run fio over this ublk disk (pinned to CPU 0)
++taskset -c 0 fio --name=3Dwrite_seq \
+
 
 Thanks,
-Ming
 
