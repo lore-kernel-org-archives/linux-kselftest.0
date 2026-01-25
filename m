@@ -1,32 +1,32 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36A91D88B4;
-	Sun, 25 Jan 2026 13:22:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0697631B136;
+	Sun, 25 Jan 2026 13:24:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769347376; cv=none; b=qafkdEnplRmYPJl+9sM8g1O14liRdYljfJsRUmgYBJ0SC71lQVbJwNWGkp3K2EFPu5vchkMn4kK6LU+oiJ7A3vkOdn13jnhMLCCZ7FroPQzHM9GPsVkKQy2lVKH1GPAQfEVuGlSm2eNR5bHLDnpdFtZgicxMxilRsaqO3UjC0WU=
+	t=1769347477; cv=none; b=PU3q6rr/3zQot32m/KlzeC9OXNiaoWyOJiWTUtmPwQ3GGWU5/xx+rTkXaOXJoCQ4iukfzZRJUUz8SiUUsCSUJ8Y3snJsnzibMyYwvrN/kz5E+NywutWoqHGuARSbGJeDH0FLbnW7E4c3UXwJNp+q5QTef3LyU/ZcfHQNFD/6TW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769347376; c=relaxed/simple;
-	bh=bJ7TcokTwFtXRum/2gFYPzNs4cIvSgU1txUBKY1SboI=;
+	s=arc-20240116; t=1769347477; c=relaxed/simple;
+	bh=GWmsRHMxP7pom5yZB/8L2+GDeJ6YYxxz4OEIRIlACnM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fE/UjzOi7dtU/+oUelbet7HAmf+qsuM1qm3HqRE0NQXgo+NTKK2v7pAA4lcJ4fsQMQfQlUNia5bmAC1wAIfHBAdGAUSbVSkCJXiEuiN8hq/Bo3SYmJBohUa9bHRK9m86pBW7Jni+NYQ4eH6ziQN6YWmWupvTB0hrEOJNw7rYAQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=rScpu8RI; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=KUGYs7xvP5wRjXTIAmLpK2X391uO8+UKeAwpjupvu8F4Cuq+U/oAzpywUSRQhjuGaALRTwyiSlnuL/TwoRuHlhnA4IWYBeOpoRNBlSlMZLCXGXXYpg4+zD/LeaOIQoW1u3Tq15IUekTasPFELK1WmrJ3TDmSJ5qJ5goQl4mK9PQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=QZ1rnoM8; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="rScpu8RI"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="QZ1rnoM8"
 Received: from pendragon.ideasonboard.com (2001-14ba-703d-e500--2a1.rev.dnainternet.fi [IPv6:2001:14ba:703d:e500::2a1])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 63ACF5B3;
-	Sun, 25 Jan 2026 14:22:17 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id B75205B3;
+	Sun, 25 Jan 2026 14:23:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1769347337;
-	bh=bJ7TcokTwFtXRum/2gFYPzNs4cIvSgU1txUBKY1SboI=;
+	s=mail; t=1769347440;
+	bh=GWmsRHMxP7pom5yZB/8L2+GDeJ6YYxxz4OEIRIlACnM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rScpu8RIAeZRj1uJIT+0GtJ5HZdLm1wiq+n+ldVzdUjT5yZIVP0egbOow0EoFyuk4
-	 MDXU+gvC0xji7P4/wdsFoCbdFBt1TLg+1cGP4szYdnhQ7aaTuJql86Sq+P4T0R5PyC
-	 Xqp3nXkoPo3zzULLdJFd19mhcAHo+x0GQbEITx4k=
-Date: Sun, 25 Jan 2026 15:22:50 +0200
+	b=QZ1rnoM8yf0PnCdCljP028uSAMAaj+td9VL/iDmIbgDkkyztCtqQwjAWfqowvV4D9
+	 67LUxs3FhaDmLZjLiD0gkIzvrFi8Sfo6FjvPRrNcbYWdOPvdiazYokKtx0tdTF62zc
+	 LVbmr9NKLEkxvoHdRBvHwWyGzrU0+f0CK7EbiTIU=
+Date: Sun, 25 Jan 2026 15:24:33 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Danilo Krummrich <dakr@kernel.org>, Johan Hovold <johan@kernel.org>,
@@ -41,7 +41,7 @@ Cc: Danilo Krummrich <dakr@kernel.org>, Johan Hovold <johan@kernel.org>,
 	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
-Message-ID: <20260125132250.GP215800@killaraus>
+Message-ID: <20260125132433.GQ215800@killaraus>
 References: <20260124170535.11756-1-johan@kernel.org>
  <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
  <2026012554-chatty-policy-42a1@gregkh>
@@ -71,7 +71,9 @@ On Sun, Jan 25, 2026 at 01:47:14PM +0100, Greg KH wrote:
 > This is not "possible" for almost all real devices so we need something
 > like this for almost all classes of devices, DRM just shows the extremes
 > involved, v4l2 is also another good example.
-> 
+
+Revocable is not needed in V4L2.
+
 > Note, other OSes also have this same problem, look at all the work the
 > BSDs are going through at the moment just to get closer to the place
 > where we are in Linux today with removable devices and they have hit our
@@ -95,14 +97,6 @@ On Sun, Jan 25, 2026 at 01:47:14PM +0100, Greg KH wrote:
 > "safe" way in lots of different driver subsytems at the same time.  If
 > it doesn't work out, worst case we revert it in a release or two because
 > it didn't get used.
-
-It's the wrong solution for most cases, if not all. It will spread in
-drivers and then become another big piece of technical debt we'll wish
-we had never merged. We know what the right solution to the cdev race
-is, moving forward with the revocable API is shooting ourselves in the
-foot. Or both feet. Or much worse. I can't stop everybody from harming
-themselves, but I object vigourously when that impacts me. I want this
-to be reverted now.
 
 -- 
 Regards,
