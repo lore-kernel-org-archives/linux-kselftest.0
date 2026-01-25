@@ -1,78 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3201E0DE8;
-	Sun, 25 Jan 2026 14:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6EE31D735
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 14:26:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769350067; cv=none; b=VexYOkqxiAKM7UUl9l8IOGSIBRG3OsEhV5D+MLTy6tDvtPrZr90qNgatDDhI6GM4FRE1n/7juFyo+eV5YByDBt3nv073xSMpG5P5gHsSSPWz/NLiioyQUwn9q2Ij8b9KaA8RFflNUlUImtkvHuKSGOtTEGqpIo5AUt6/q6RYbcg=
+	t=1769351165; cv=none; b=YkyqduLCbxPC+Lgwhzy17Ll3k6IdUo0sFFMuzcnsj8hd2ztHhQiks236o2Y8kG2Sj+gNAslAVv2mPxSumNewgSXmJUkV6DNO7QPGvJNWsmCIjICgxRn6WmWbeTlwge0GaEBOBdUj/Qu55vayYy6e5st9DIy/iz+M0zIAPVbufD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769350067; c=relaxed/simple;
-	bh=RsasokAE/xoslm1w7Oy+O2smeV6JJDYMlJREUp4PT5g=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=hoPWu9NxMLAiru5b1fLzcoe96im/HuRcDugPpPl76I3iqnjNsdthdOsI4rs1dInnsSBm+2luS0LbLIwTXpTtB0D/s1n+8ymCGAZGFDVQxYZh8LDwQRxy//zniZReJQnlXSl7EkJ64J8n2NvHXz6yWX2f3CjEXYvTfK/0VNcaqEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fk/VYJr/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769351165; c=relaxed/simple;
+	bh=JzxMMuwZjGS4yWvf7Yb7zEMJyauI7cBHGYR3tx83SSU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TeVC21wunp1GyxyoJJt/rQYguUhm4W/42MjnAks6E85JPqvIuoog9RixT8k9kqLk9Pe8fivYMnvpfRbUQBj6yjRCfBy3yM1lEkKVmh1NZDyRZbq7Ua5XFgsObrkbDQbCIT3sB0o0/ASW2enLbmDpORVO2M7ztESFYLrrsOTM6vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TRdVVEuX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fk/VYJr/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A82D7C4CEF1;
-	Sun, 25 Jan 2026 14:07:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769350066;
-	bh=RsasokAE/xoslm1w7Oy+O2smeV6JJDYMlJREUp4PT5g=;
-	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
-	b=fk/VYJr/xqTJTUUU9vaexb0LDO/ysRYZAx2Jyw8Hbpw7KbN5T0FAf+ILPKT1mcP9k
-	 oi6KTvjUcoqCuJ+hHFgmwlD4XSsKY2GbGUI/55hjaoNfOwUY2RKsRZwS5Bv0QZtXI5
-	 kiqTaKi7j7eDwS3YXLIJRL8U0oS6mjLniTGBgflltAGQUSAnztIp3mWGpSPZW7SpmC
-	 Rq4OBpvNodHsIOqIclye6tJ8pidsZnyo5v6oJbGI1ebSRsE57GQqg/+WqzBvFNAMWE
-	 p9K1il4yaMI7Wd98aALKygcmWdHi5YI/hOOKvTOSBgSqOqIPlrPC8MUbcqi3/4EUbK
-	 aTppkHBxhK66w==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TRdVVEuX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769351163;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DwYLs07QAVxXf9Pa8PnBOgcRVeKGE+NJdcnmkfRwBwc=;
+	b=TRdVVEuX1CeZHI42o2725Ei7BwWmHxD6Q28/b+9Q2FUwebZ9eBBUy81eZmj7+VAE6PooFK
+	LAyR3D8OP+KzNicieIdnpa7rojNu/+oAZ6NSmC/iuOPuqlVUMVPsJw/KAae3RpGYiRWItX
+	gossrzukdlUNQDOQalu1L908DJQNiTM=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-211-7KEnwvP9PiejeIbQAIKOwg-1; Sun,
+ 25 Jan 2026 09:25:59 -0500
+X-MC-Unique: 7KEnwvP9PiejeIbQAIKOwg-1
+X-Mimecast-MFC-AGG-ID: 7KEnwvP9PiejeIbQAIKOwg_1769351158
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 01D29195608F;
+	Sun, 25 Jan 2026 14:25:58 +0000 (UTC)
+Received: from fedora (unknown [10.72.116.15])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 222A91955F66;
+	Sun, 25 Jan 2026 14:25:52 +0000 (UTC)
+Date: Sun, 25 Jan 2026 22:25:47 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: Alexander Atanasov <alex@zazolabs.com>
+Cc: Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+	Caleb Sander Mateos <csander@purestorage.com>,
+	linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: ublk: add missing gitignore for
+ metadata_size binary
+Message-ID: <aXYn66eXcs-I1Bin@fedora>
+References: <20260125085747.1631424-1-alex@zazolabs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 25 Jan 2026 15:07:41 +0100
-Message-Id: <DFXQ915MAG5K.2KYVQOTF056N5@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Johan Hovold"
- <johan@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, "Tzung-Bi
- Shih" <tzungbi@kernel.org>, "Bartosz Golaszewski"
- <bartosz.golaszewski@oss.qualcomm.com>, "Linus Walleij"
- <linusw@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
- <shuah@kernel.org>, "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
- "Simona Vetter" <simona.vetter@ffwll.ch>, "Dan Williams"
- <dan.j.williams@intel.com>, "Jason Gunthorpe" <jgg@nvidia.com>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-To: "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>
-References: <20260124170535.11756-1-johan@kernel.org>
- <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
- <2026012554-chatty-policy-42a1@gregkh> <20260125132250.GP215800@killaraus>
-In-Reply-To: <20260125132250.GP215800@killaraus>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260125085747.1631424-1-alex@zazolabs.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Sun Jan 25, 2026 at 2:22 PM CET, Laurent Pinchart wrote:
-> It's the wrong solution for most cases, if not all. It will spread in dri=
-vers
-> and then become another big piece of technical debt we'll wish we had nev=
-er
-> merged.
+On Sun, Jan 25, 2026 at 08:57:46AM +0000, Alexander Atanasov wrote:
+> A new utility metadata_size was added in
+> commit 261b67f4e347 ("selftests: ublk: add utility to get block device metadata size")
+> but it was not added to .gitignore. Fix that by adding it there.
+> 
+> While at it sort all entries alphabetically and add a SPDX license header.
+> 
+> Reviewed-by: Caleb Sander Mateos <csander@purestorage.com>
+> Fixes: 261b67f4e347 ("selftests: ublk: add utility to get block device metadata size")
+> Signed-off-by: Alexander Atanasov <alex@zazolabs.com>
+> ---
+>  tools/testing/selftests/ublk/.gitignore | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> v1->v2:
+>  - add SPDX license header
+>  - sort alphabetically as suggested by Caleb Sander Mateos
+> 
+> It is also Reviewed-by: Ming Lei <ming.lei@redhat.com> but it needs an Ack from him,
+> as he is the original author of the file, for the license header.
+> 
+> 
+> diff --git a/tools/testing/selftests/ublk/.gitignore b/tools/testing/selftests/ublk/.gitignore
+> index 8b2871ea7751..e17bd28f27e0 100644
+> --- a/tools/testing/selftests/ublk/.gitignore
+> +++ b/tools/testing/selftests/ublk/.gitignore
+> @@ -1,3 +1,5 @@
+> -kublk
+> -/tools
+> +# SPDX-License-Identifier: GPL-2.0
+>  *-verify.state
+> +/tools
+> +kublk
+> +metadata_size
 
-It is a matter of how the revocable pattern is adopted. I.e. I don't think
-drivers should create instances of revocable (device) resources by themselv=
-es.
-Instead, I think it should be up to the corresponding subsystems to adopt t=
-he
-pattern in the way necessary and make it accessible to drivers instead.
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-> We know what the right solution to the cdev race is
 
-So, what is it? Assuming that this is what you are referring to, how do you
-prevent accesses to (potentially freed) device resources after the bus devi=
-ce
-has been unbound from the driver for subsystems that may still call back in=
-to
-the driver after device unbind?
+Thanks,
+Ming
+
