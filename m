@@ -1,157 +1,160 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E3B29A1
-	for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 00:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7E28632A
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 02:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769300371; cv=pass; b=b8PEKTcAccAsURH/Zk/68/I1lA8osRzMiqVSSrcFCOUyXqPf7FDYImjqHKlEj6QreDtN1UKlBtOh9nDaaw8C7xMTjxKOKqLr2dwlyjwgfiueFmaBdgcI5BstLYN8a2wlNEA+WTWFsyf2uZqdvXDiXWAbUqcrjEnG/mKpuLW2oco=
+	t=1769307016; cv=pass; b=scm8Kj+vBPuRlVvcpkGPIlS4q/oCj+dkMCOb7/DEFbKfoweiAVwaW1jK9q8++hgtvO0LQLU0IucIBRtpoDr1ICaGY2E3AQbCKI9PdWYbxhq2wJQqAZO8r8fNUxlDm5PgGzwuXKzPsEMpi3mWNa1glZEUw8Hn/6/Grip7hvFTmiI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769300371; c=relaxed/simple;
-	bh=If3fkU4YA4+MSsxYXa/lyK9BrLCbxbAeIY/q+H3wkxM=;
+	s=arc-20240116; t=1769307016; c=relaxed/simple;
+	bh=XLZyAyp5UIrnE16IaKCD9XtL/eqE6lBlGhHJnAAFVHA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FP1RVz+Bds+BH6MyAHkKfic+zQg/Du2h5qki0la4k+JPCgLJNoQsvkTLKoI6iRwHpz5yP8yjkgXLrntgwY0qp44CLLmYlbfqLi+yDJCszcBy/6LytwBFjTeFQimVPEXvBFsyfzYvSIMZqt7ZMYOZAy94ocJB/R5FeUdo1XkHgVk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jEriKacV; arc=pass smtp.client-ip=209.85.128.52
+	 To:Cc:Content-Type; b=sDz5EDGFxPzlLEQKXCkEmNCOkcSGJt1CB+COZba1wCl5wBZ6o3uRW6nuXyzwldh1QN0Oh6h2WvICPB5nyTegQyY7x3lBuXwTm2HvJ2RHkusqIvPfRDYStFi/PduhQf7rYuvaF3wURBKEswADGl9IQotOQ95lYJW6+GCxoJ7L7Ko=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SUjbdJwH; arc=pass smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jEriKacV"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4801bc328easo38962135e9.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 16:19:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769300368; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SUjbdJwH"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4801bc328easo39344785e9.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 24 Jan 2026 18:10:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769307013; cv=none;
         d=google.com; s=arc-20240605;
-        b=XhhXHuBrLhOhPwTT8Z6lUNp6yPb4FkE8LXQeRK1EBnrkXAxc5+nA5KosCnkiXChzSF
-         Puhc+57qBaeZF5hGmSmDCdRrYHZlVkQI1YrrlMxgLjUaC0sU12Ww7kunOqd5SP7rCKl3
-         /vYIn5HrcuwbZXQ1yaRxI9W/rS/JitvNoZ37nnrkgOL7zsRqn1vDpbjefSVTzyfX6FoA
-         b1uDgTCJpcif6Eu92f1Pdwvpwzw8mZCwaqLlJ48S8aYrL47/aVA+dxntTY4WJoZAbdmP
-         2x2sQz2wweyCViQ0UpfZIemr08JHtuUebByA6EvCmRodfXjozGbkhdnwm49dWhfmL8vl
-         pJ6Q==
+        b=dJoAUJSiQz67VhAVD2YJ096D/9X73vbtYoJPMSz2hk4ZzERY1OLF2sBToF1jQ/mTQO
+         luDxecfj38Xs7FwN7AC62veHdYgXOg4rnnpEEGBeKZzhvOrn0Ad9AL/mjnNdOqta/rCz
+         SC2F9AsZKOjHWOJUEA2Zr/0WgxMeBYif1fuDVHbODav8QVYMHySRkcE9mX02RJZugDZ7
+         xDEEvQE9q0egAdXJRNptG4RX3vSEFpWgWSMcGtDP0EZH4vW2FyzXhjWj1oJScwIq9k85
+         Gc5H4bAxc1MAh2cL/9DH5AN8bpJoPzM5mwVN5k9Uv0STfYZHlrRZzOLh0iB/flEBztHl
+         K2NA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=/cWk0M9f08GlkKjx4FmxOL3406KPYNW++Cx0SwVE/qw=;
-        fh=hi4/pHwEsQ/t3fg2lWVLS6En8RAz35OJqoveVHHK4RY=;
-        b=DkgFNlhDxAnjAkVObLcPFc8/pksHHPrPP/RqSuczX85nKhOTBdAPAbXn8tIdH3mYTX
-         qZf3C8Gqu02DzVcm+MV+RiY87M2kvS0QGlGp2NwriDWhoXr2hHZ3MsOuAe1RkLbJXVOQ
-         DTVQzxuJc4NfXfABwbc3Dzk076RqW4kLyc10/yqMZ2JwVnkcVEwF02kmrA+Xmnc99ksi
-         q14DorXhMff3aFT+yJnohd54RF25Ri0MhV2gwjwBJUBw6/1+JjItl+g2avXyjLD/BaaT
-         o2WdI3G5+nQWXJ0Lusjh2+zO+39IeFpphxkoi/JuJvPwmHrrR46o92Q0h1b1XrMR7q1N
-         U86g==;
+        bh=rgZwVVbLFRja+NPlNhTLut3FqFbwxjNQ1zZe8RLLWeI=;
+        fh=750SyzVugcEYzYR5D0MbjSxccY8LqFdDcbrjBu9Becg=;
+        b=ff5+duBCXUdgOSkFgg8hJPUn/u9pQvZsmyUGC8aP8q3NcCos7F7CGVLS+ISJVBwnMN
+         ++P3NllK6BA9QYOAqavPm7BdqE72GaBWZZom2DXpS61SSfF6QR2NrtZEcWzviVZYg33x
+         hirku1VgIJbyI9OiEOaOMAkh35ujDA0gt7r9Xy0m+ziSQ3yE13i4fcMSv7qrCgCm+KoP
+         gLxByfHsSMUTZMTXo4tyBWQxjGTYpFgC7m24ijiaxLtMCgSOJUfdDYg/MG9+pWpphOMo
+         YN2fvpSbr/DOWvdWqd9ntjxaJxmC3xBSYMwjEGAeXf0Gm1ijDvLW0yetJ06QHuli8LX0
+         I78A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769300368; x=1769905168; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769307013; x=1769911813; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/cWk0M9f08GlkKjx4FmxOL3406KPYNW++Cx0SwVE/qw=;
-        b=jEriKacVJTI7Qv7KgOLtEBJcAv05zn6E8yhcP06r846B/37d9fi9XF+7GpFJAdqeDU
-         x2pPwcLiUfuhZ2b/ZckwA2m0zZuDzHCYmnEBe4XOZBsXusJzvC776paS9NFkIrBQ93Cw
-         iKJM9g9mPUhyRU+FOPofXJ5X21wyGF8orbBfiUZI19mGVga+jsKEaQKuToF+ys1orwyW
-         0v3UXk4jbnYyxVJI5dF3JNxWER06OCjYjQpPIxwUod5yDPTn6Yr4WNRtjsqqpQFQxdxl
-         AbKRfS+8tDAMsVMhlb04UdjXhhFMP8jUQvNGoaLQsa5ERAQ7VnmmtBriVlQ+nJ3mwEYw
-         aUow==
+        bh=rgZwVVbLFRja+NPlNhTLut3FqFbwxjNQ1zZe8RLLWeI=;
+        b=SUjbdJwHyDUnyCgfDnC/proUrN8BT2d7uSQd2AcybskPpAS6dHhVlW9UNsCrCpjo+L
+         Gui/lz+XR9VeAz1KAd9SoEdWdCmdOLCSHpMT4F/QajAEyOQqLxXqZNtdJWGX0cgHMUdI
+         WlikwMA1Bsvsw8BT0LLEJjGU9iRCxNC3ZTEF/lCLZRhpV31WF3m7PHFbEakXZLOMuOEk
+         bT8Hd87kRe2pI/2X8sE0H1fxDSB0HnIfP/f8jQNzjAy3Okjo6tNvvC0a7wHccW1UrWwS
+         kF70mjkx7f0XPJpL0g2eCJldUjJomCPVBkqwNdfuQXbmKCV0NW3HSDYvTv6SqO0TbhKZ
+         xYIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769300368; x=1769905168;
+        d=1e100.net; s=20230601; t=1769307013; x=1769911813;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=/cWk0M9f08GlkKjx4FmxOL3406KPYNW++Cx0SwVE/qw=;
-        b=fnIRb2ZBVIYHI9M39rUItw/pkFAbw73HFq/LwSy8q6d1Dgr0RB8jzaML7LSxU9Vcq7
-         Yl9tLG68T09aPH5b5nmIWkAUssI4amThSTRwxe10iZFpSyJL82BaEnuaDrYpZ5K8WwWy
-         guX95RmhOtcHl6pkFUQevArYikPgjfB31+oMDIVQ8rcq1CLLkOXauIi2RARt2qVQX1Wt
-         k8E78nIgIXlpwTliP8vBxqbUZMRwDUoUDA4MEUsnwKcReevW3oLumGvSP25dqvW4hJDV
-         yLBmuuy3p53r5Rm4jV3yodrT7aZAgADrUa8B1DL0XQ/FYdBBZ573RKhK+WkYKQSE30tR
-         dGcA==
-X-Forwarded-Encrypted: i=1; AJvYcCUa60Viq/qGufn5eQjJYBK7sImjz7qlL4yDP03KZLYq8SyFAlc8u0aXWSN3+fqkErs5tBKR1eCYiVCwgy7W1Wo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJlEVUHlkzf63yH3u0ZPevdbqOQK6H6opx4UBwaKW43A2QV5rv
-	iO03FG/gakYUp756pWo3YCrXhBojINJIM/dsz2WWbYmaW64uzy0VOaDo63slaFjbR1vcvungFCw
-	NdoZkwzZGbIKL5eldBZhBIgHJ4eT3hA4=
-X-Gm-Gg: AZuq6aKOYmS2fFDMDEuJplIhsmD3l8jjPxsBfrOstNzEryo+JJ4xF4fzyRprXy8Qx4V
-	M0+Bxoy2aR1NbfgQRKqjDUtglwDBiI3J/wVqI4XBrXEh9seeGQeJFtjMgE+9bVEfwTMLkCTfRRl
-	7R5tnwiKjFA09PqSkLsbR8kkHokcuWImkVa2UeDpX8jUsR2/niqmz3zH0u8Zje1TUjsWbAB1p/o
-	NvtXSvRIiFWRVsfEdXK8yFSH07y/KhjU9bo8HcGsCyK4q6rtgPO7ElljnYs3W2Z4EdpSlxCn//f
-	ilqvhK2F2+zFswXqUDp0JUUOK90Eh3vGgb/E1pUdBrr9ncgLo8i2vzh8itPzOYEKd/+zDAy9s4p
-	n1UIycS0tvE6dGg==
-X-Received: by 2002:a05:600c:1e0f:b0:47e:e807:a042 with SMTP id
- 5b1f17b1804b1-4805ce50189mr4505125e9.15.1769300368107; Sat, 24 Jan 2026
- 16:19:28 -0800 (PST)
+        bh=rgZwVVbLFRja+NPlNhTLut3FqFbwxjNQ1zZe8RLLWeI=;
+        b=rmrWPOZ3BJ0udsvLdc0RhbXR/mA+UxrraOWuhWbt5GxKJI+xnRrf2set2jun9LHfTd
+         dPqQG6siaNwlXV9cD8b4/4aFqLGR3YzfflZvgIfZN+4h+3R8y0o+JVdVvoRAZkt5lr6F
+         rGsKraLxLjzh6XPCOuMa7VE5G//7nm1wZucWNWpWoMpwJBuyE1U+UrWYLGicbvPAugvj
+         Uo2fbKP/1QBZ3aJXI0zSKngPptZFxkfQ6Qh8OTMq3dbm9URE9GsmsC8SOfqo49jx5r6+
+         p4oTxYWdEWVz94p2Y7GJ6kQbdeTk4SuCx1cUldhkNnVyXMS2TMuq7YKPyUtzBAJaWtkX
+         YNDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVCOhUqVKob4hrJ4cTXcvVJnI7E5K5RqVhyt2eD4gNzSCYTTjCRbiHTTL/M9t6pqsnWkBbWoLCjQsK0NeoROUg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNM/Ib+Wc5zpgNWMhQB1MwIe2vtOc9nLr5RAQnNDVL1xN2qpPr
+	b8LcNPaNZcHdztlZxA8odIMQ20XTdM07yaWNUYCHqGx7iDNsLFNl/QBsQr7jf6EJNnZGkYXAf3W
+	PDnNI11Tht4qEbBV4o476S9iFcudFStk=
+X-Gm-Gg: AZuq6aKiWfdDIUnFRV3HWzbX3h6dSQw0hhmxRD0dkJwFi0bv3/6sj+1Mks3wHSawgmG
+	r3wafNqOc/+Mb/vTFoK+bbkDnMZvX3PRSsNjEra5ai/cDWsjrVoxCfCbk+a967LH09hUVtkpEg3
+	GSSKewJ/ZcmtpLHDdg2zLA5MuVU2J2CJPrapkTitvq+4V8wgf03BuhgRv+7B7JkR1zhfaDZU30H
+	1IHI79/w+XnQxrr6TcNvq156EzNJOW5Xudyy4iU95f1818mCbxeXXtVTmcdEKTF+1GI5ZHZDE2h
+	+dhHQLb7fNI/gaZg5bhahJAMM8B3E5kii4SR6OWMii/2tcdkpHyP09u+pQuBkDlO8fi0KKBFLhf
+	hth23wcib/ZWVEA==
+X-Received: by 2002:a05:600c:530e:b0:47d:403e:4eaf with SMTP id
+ 5b1f17b1804b1-4805ce4e67amr6595865e9.10.1769307012798; Sat, 24 Jan 2026
+ 18:10:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260124174349.16861-1-git@danielhodges.dev> <20260124174349.16861-5-git@danielhodges.dev>
-In-Reply-To: <20260124174349.16861-5-git@danielhodges.dev>
+References: <20260124113314.113584-1-jiayuan.chen@linux.dev> <20260124113314.113584-3-jiayuan.chen@linux.dev>
+In-Reply-To: <20260124113314.113584-3-jiayuan.chen@linux.dev>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 24 Jan 2026 16:19:17 -0800
-X-Gm-Features: AZwV_QjrseQV1Yh7RsryydskQrmIxIwJ1Lh1IXL8EzEcg7C91ASKKQZu5jxevv0
-Message-ID: <CAADnVQJQsC0cQZPJpyofY4Othi5+j7xjAY+xbNRkX0p9wA7Khg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 4/4] selftests/bpf: Add tests for signature
- verification kfuncs
-To: Daniel Hodges <git@danielhodges.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>, Song Liu <song@kernel.org>, 
-	Mykyta Yatsenko <yatsenko@meta.com>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Yonghong Song <yonghong.song@linux.dev>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+Date: Sat, 24 Jan 2026 18:10:01 -0800
+X-Gm-Features: AZwV_QjbA50cTkj4c5-gGI9H_-Xy1D3AWqQcM96i4DXaFF0Q5FjjiG99twxjLXM
+Message-ID: <CAADnVQ+TGhrAhUfbhCtnN-EEWF=Vb3AHVqs=Vd7xoSJoptKcwA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 2/3] bpf, sockmap: Fix FIONREAD for sockmap
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, David Ahern <dsahern@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Michal Luczaj <mhal@rbox.co>, Cong Wang <cong.wang@bytedance.com>, 
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
 	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 24, 2026 at 9:44=E2=80=AFAM Daniel Hodges <git@danielhodges.dev=
-> wrote:
+On Sat, Jan 24, 2026 at 3:34=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
 >
-> Add tests for the signature verification kfuncs:
+> A socket using sockmap has its own independent receive queue: ingress_msg=
+.
+> This queue may contain data from its own protocol stack or from other
+> sockets.
 >
-> 1. test_ecdsa_verify_valid_signature: Verifies that a valid ECDSA
->    signature over a known message hash is correctly verified using
->    the P-256 curve with a test vector.
+> Therefore, for sockmap, relying solely on copied_seq and rcv_nxt to
+> calculate FIONREAD is not enough.
 >
-> 2. test_ecdsa_verify_invalid_signature: Verifies that an invalid
->    signature (with modified r component) is correctly rejected.
+> This patch adds a new msg_tot_len field in the psock structure to record
+> the data length in ingress_msg. Additionally, we implement new ioctl
+> interfaces for TCP and UDP to intercept FIONREAD operations.
 >
-> 3. test_ecdsa_size_queries: Tests the bpf_sig_keysize(),
->    bpf_sig_digestsize(), and bpf_sig_maxsize() kfuncs to ensure
->    they return valid positive values for a P-256 ECDSA context.
+> Note that we intentionally do not include sk_receive_queue data in the
+> FIONREAD result. Data in sk_receive_queue has not yet been processed by
+> the BPF verdict program, and may be redirected to other sockets or
+> dropped. Including it would create semantic ambiguity since this data
+> may never be readable by the user.
 >
-> 4. test_ecdsa_on_hash_ctx: Tests that calling bpf_sig_verify on
->    a hash context fails with -EINVAL due to type mismatch.
+> Unix and VSOCK sockets have similar issues, but fixing them is outside
+> the scope of this patch as it would require more intrusive changes.
 >
-> 5. test_ecdsa_keysize_on_hash_ctx: Tests that calling bpf_sig_keysize
->    on a hash context fails with -EINVAL due to type mismatch.
+> Previous work by John Fastabend made some efforts towards FIONREAD suppor=
+t:
+> commit e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
+> Although the current patch is based on the previous work by John Fastaben=
+d,
+> it is acceptable for our Fixes tag to point to the same commit.
 >
-> 6. test_ecdsa_zero_len_msg: Tests that zero-length message is rejected.
+>                                                       FD1:read()
+>                                                       --  FD1->copied_seq=
+++
+>                                                           |  [read data]
+>                                                           |
+>                                    [enqueue data]         v
+>                   [sockmap]     -> ingress to self ->  ingress_msg queue
+> FD1 native stack  ------>                                 ^
+> -- FD1->rcv_nxt++               -> redirect to other      | [enqueue data=
+]
+>                                        |                  |
+>                                        |             ingress to FD1
+>                                        v                  ^
+>                                       ...                 |  [sockmap]
+>                                                      FD2 native stack
 >
-> 7. test_ecdsa_zero_len_sig: Tests that zero-length signature is rejected.
->
-> The test uses the p1363(ecdsa-nist-p256) algorithm with a known
-> NIST P-256 test vector for reliable and reproducible testing.
->
-> Signed-off-by: Daniel Hodges <git@danielhodges.dev>
-> ---
->  MAINTAINERS                                   |   2 +
->  .../selftests/bpf/prog_tests/sig_verify.c     | 163 ++++++++++
->  .../selftests/bpf/progs/crypto_common.h       |   6 +
->  .../testing/selftests/bpf/progs/sig_verify.c  | 286 ++++++++++++++++++
->  4 files changed, 457 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/sig_verify.c
->  create mode 100644 tools/testing/selftests/bpf/progs/sig_verify.c
+> Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-It's a v6 already, but your new selftests are still failing in CI.
-
-Error: #385 sig_verify
-Error: #385/1 sig_verify/verify_valid_signature
-Error: #385/3 sig_verify/size_queries
-Error: #385/6 sig_verify/zero_len_msg
-Error: #385/7 sig_verify/zero_len_sig
-
-Please make sure CI is green before submitting v7.
-No one is reviewing the patches when they don't pass their own tests.
-
-pw-bot: cr
+Jakub, John,
+pls take another look at it and ack?
