@@ -1,208 +1,413 @@
-Received: from mail.itpri.com (mx1.itpri.com [185.125.111.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A33E1E0E14;
-	Sun, 25 Jan 2026 18:35:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.111.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C48623D2A1
+	for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 18:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769366141; cv=none; b=n0eD9l3xypbATOkRV/0fTOm11ImKsWxYDpZCmPiireK5xbo06Owo8TpIQjkNlSXgRE+gR3eQ4u613tU294jAiPAxyLcjNrjdiuEECtPZQpBA1odL2UEE2EWP5QUx7eME0Z1mBHxakW2004SFf9uneiA82zIm+L2tgC1s3SyBL54=
+	t=1769367263; cv=none; b=XOGDBrWJ7myldr370V+P13GtoTeHU3CErBOcnUSXFl4u2U67ywtHaYOTkm34YJByVPMdTrQefg/3x2wM/BHszcUhhml592tp4D9qcr8Hx5ytriogenVSK/RTeQ1T3uvdRIah2Hgu8S33voV/tdCfcQy/OnUJJLg5+8k3+R/oGaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769366141; c=relaxed/simple;
-	bh=/+JWKCl/rMmMylcDCp60yI7tIO/uuQl3FBnTc6hQyng=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uf7xAxyAPbFfMMc+K5C9kYkGQkUHwm1GmTnm2H9pL6Mzsi9haQ3dqedX+/HN8P94edtOWdJWV/J05NB/KNv9JfeVsOTApBlUW1gDRAbJdSYR4DXmYg3ka6WQatMLGjCs6RiXRJy9XNJyCBaUGB61pAHZ/n/wKBEWmJzEqeHe18E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com; spf=pass smtp.mailfrom=zazolabs.com; dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b=pbcR0W9o; arc=none smtp.client-ip=185.125.111.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zazolabs.com
+	s=arc-20240116; t=1769367263; c=relaxed/simple;
+	bh=MNx7CpVPfK4SIp6L5qZvc4IDpYVFgEwS7rEMUXt6xuE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VIUcBQ/pZq988xnv2Gx2Bg1KNcN7vnxxqAyynCJXoRWpkNog+73rgCWfhss0YmoJcJNeteeEvX4pnRHC7fRSpn1Z5cCoN7miaAFrao1Ydedz+wjK22tKQEBCWouc1Y3TaHAvkldzjdjuDlwUZhb/Ut/B2wvGC4L2BqVLgRhFMfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qS9l5kyW; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b="pbcR0W9o"
-X-Virus-Scanned: Yes
-Message-ID: <c517e1ca-0e2b-4143-b0f6-07a3d0c3abcf@zazolabs.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zazolabs.com; s=mail;
-	t=1769366136; bh=/+JWKCl/rMmMylcDCp60yI7tIO/uuQl3FBnTc6hQyng=;
-	h=Reply-To:Subject:To:Cc:References:From:In-Reply-To;
-	b=pbcR0W9oOnzO9d8lZZDDfDRngN+hxGPh9cgG7kEnWsJoUvVINyEt1xBheaKJBKCNh
-	 /yMfAKsODMUgq17C05SsX6Gp5GWua1jzD3YQREHA7KlX2BGlEYjBCXO42YnM0UZikG
-	 r26Hwa7wyGldIGYqyDZYy647Il5Ty72ghzCJ86NlbZfPnqNXcFkeJOC4F2e9zpLnZx
-	 9Rua9Lx4hNNMaebBTiSHsh2Uhn0bl1PYDOZ5QB9YYK9in5E1Cx4kSMVAPsbeW/F0hm
-	 hRrtI/JWjDMh4r7Q9WNiYn5BURpt3LiENwD1Eq+YpzxTYcaJl5clFfbNlCX1VCtS3D
-	 QQEFikF2MxGyUNvFiVY/0J3ZnhR+DZjkuy0Ih4DqNkVDevqaoaNIgtGtdU87InWeO5
-	 xNIUbZdBjIp/tskKnUBWnqhf30m51P+wEk+Li9XROJbd6EEespVjwddc659cSyiF86
-	 XYDPCygiVJBA81NDj63GSThN6muF+6XIE6fVjqj/7aaRm6/yaBGd5bH5ZXHcItJqty
-	 Cmqp9c9HA22tcqAJS8Wejeg4KL7WRXBNIZqhr6NAmlOwU0luO2EtN8/UnBlaV9CXHS
-	 pwi6OUWwMPMNz+4LJpXvnBeeAixH5uYlivZKMbS6RtIkPEIbZg7dOM2E0fJ2qhAOQB
-	 ignyJKZ1762fhyjnYnm4+7mo=
-Date: Sun, 25 Jan 2026 20:35:20 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qS9l5kyW"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a35ae38bdfso87005ad.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Jan 2026 10:54:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769367262; x=1769972062; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bJwaR/zGofB89ztFQf0PisW/NqMpT7fZXv1USedVEw8=;
+        b=qS9l5kyWJyOguTlDDoSHkXs/uHwTFPunwt4K9gcQYSTxNZANAcQsZaifrlQOtTIl8m
+         TjnS+FFi7fpRYTrCZDVQMKdMoTIJy0S26GJg+L3cvpqOedVdtazS2xWNWgpP3hccGAnU
+         eTNI80X7z0krS/6ih2gk2mJhtZkyDqBckXfvcZXjjJr6d5LjYQdV8ZGUFCsVrwjP1pXW
+         KIWq988JC1qmucGSvnWhykpbu7IkWsWqekpMOxQ3JUP4WUtLwipkzmbn5EoF2Sxd/VJG
+         PGbOQILXrRWTEqVlG8h5HHwRaeITTo9GopC3DiJe412R+lYCeXbjIwZm9CayKZRQWJo9
+         n4Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769367262; x=1769972062;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bJwaR/zGofB89ztFQf0PisW/NqMpT7fZXv1USedVEw8=;
+        b=ct8wP7XLOZKFfW9lv3mCD0Ylu/kL+TW9fJXJ1zrmz+udgjU4CyMZUD4HRzbbv/vOs9
+         VbDvizOFdP5Xaj5uIgCiLtgxGQCJyWgMByqbPmZGT8dzksABj0XohlDlNaefRQTxcIJ6
+         i7ljOeDXO9bP2c+PB8TzZpptdYA6fmfrSuEDGRHQvjlrW1ghGDiEu/YCBi3I4Pf+rpP5
+         8liwCnYtzWpgMsPHCXNRmaG514dEd/TETHvaiLx5IsBkOCGKqxO5sKJYc1tMwqJ5HJiy
+         enpnc/9ECTfCce2NMUfZzVxbYMwtNQMNR4/ivsISIsPtd1QFbvcw7PKD5gohJWS5xxp8
+         JcuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXjGETP6auIbd5jMdT494Ii1sREv4pLae5M8QrPcUrUPEf9UG4/3B9m3fk51eIN5zvBmPgi6677WJ0XL6yYhwA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYJ+NV7+iTMYzQWIkZdHYZbbyXvfUFja9d3Cz0i16BrNsewfbt
+	iEpkvG8XOnujYl3b7xZcRXzlU7JxQwB3W3Fu1T1imGh4cBqQr0MYN0rje3OTd3ybfA==
+X-Gm-Gg: AZuq6aJpwGePOff4Ixr4yx7bzV5nElHmUeN22aVp97Z/0ipHfprV+cFv5tVgFI/VCSg
+	UDUPgzWIeaux/P6L63ZD6O4lgNk4bLhKaF7Cs2jr7YVXoZmFPeXVxB0feUrLtMfFd1apAyQedfE
+	YRMc2L86EhDNOGabcPDUviAK6h/74Y0kG/tH8sLU3GplHGFgzEpVGIuHFCjlWARDuKtP2GilU72
+	m9geOhWDEETTdCMZ+xQkFnGAg5ESIScbPGNwBb/C57E7W/MRc+XRJw25sVbzxIykuSYsLy287FF
+	LrH0Vb3I3RMUgboeKd+UJ2SIF/JQrPpfj7dY7nHFtBnVHnserSTAnx1uJ+Ay1EDA0T7eBKtk0+v
+	007nbfYz4xuqat9jhIFTfKuEpsBsJ9xAjzgvHszLXsLzMxh6/Ho+/meN+3GagoYRAZ43xAY3Gwi
+	3SG1Y6IpoDYycAPhCWcQe6QPHIgGEWtDPlN2yqx/SQb+yuxwBCKsg=
+X-Received: by 2002:a17:902:f788:b0:290:8ecf:e9f9 with SMTP id d9443c01a7336-2a844b04233mr923075ad.7.1769367261004;
+        Sun, 25 Jan 2026 10:54:21 -0800 (PST)
+Received: from google.com (28.117.125.34.bc.googleusercontent.com. [34.125.117.28])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82318644885sm7489927b3a.4.2026.01.25.10.54.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jan 2026 10:54:20 -0800 (PST)
+Date: Sun, 25 Jan 2026 18:54:15 +0000
+From: Carlos Llamas <cmllamas@google.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Rae Moar <raemoar63@gmail.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Marie Zhussupova <marievic@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Ujwal Jain <ujwaljain@google.com>, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kunit: reduce stack usage in kunit_run_tests()
+Message-ID: <aXZm10CCRgdVou90@google.com>
+References: <20251204101050.1035801-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Reply-To: alex+zkern@zazolabs.com
-Subject: Re: [PATCH] selftests: ublk: io-reorder triggered in
- test_generic_01.sh
-To: Ming Lei <ming.lei@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260123112039.1370223-1-alex@zazolabs.com>
- <aXN4mFuoXhtJDKyF@fedora> <147635F1-943E-46D5-8EF1-D1C965F85EC1@zazolabs.com>
- <aXOGrXo3AbXPHA-K@fedora> <03C8F5B9-B2E1-4C78-A043-B4F9422508B7@zazolabs.com>
- <aXY2qdYtfVTSc7jB@fedora>
-Content-Language: en-GB
-From: Alexander Atanasov <alex@zazolabs.com>
-In-Reply-To: <aXY2qdYtfVTSc7jB@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251204101050.1035801-1-arnd@kernel.org>
 
-On 25.01.26 17:28, Ming Lei wrote:
-> On Fri, Jan 23, 2026 at 05:00:33PM +0200, Alexander Atanasov wrote:
->>
->>
-
-[snip]
-
-> Can you test the following patch and see if re-order still can happen?
+On Thu, Dec 04, 2025 at 11:10:46AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
+> Some of the recent changes to the kunit framework caused the stack usage
+> for kunit_run_tests() to grow higher than most other kernel functions,
+> which triggers a warning when CONFIG_FRAME_WARN is set to a relatively
+> low value:
 > 
-> diff --git a/tools/testing/selftests/ublk/test_generic_01.sh b/tools/testing/selftests/ublk/test_generic_01.sh
-> index 26cf3c7ceeb5..26d5e52ece29 100755
-> --- a/tools/testing/selftests/ublk/test_generic_01.sh
-> +++ b/tools/testing/selftests/ublk/test_generic_01.sh
-> @@ -13,7 +13,7 @@ if ! _have_program fio; then
->   	exit "$UBLK_SKIP_CODE"
->   fi
->   
-> -_prep_test "null" "sequential io order"
-> +_prep_test "null" "ublk dispatch won't reorder IO"
->   
->   dev_id=$(_add_ublk_dev -t null)
->   _check_add_dev $TID $?
-> @@ -39,9 +39,13 @@ fio --name=write_seq \
->   ERR_CODE=$?
->   kill "$btrace_pid"
->   wait
-> -if grep -q "io_out_of_order" "$UBLK_TMP"; then
-> -	cat "$UBLK_TMP"
+> lib/kunit/test.c: In function 'kunit_run_tests':
+> lib/kunit/test.c:801:1: error: the frame size of 1312 bytes is larger than 1280 bytes [-Werror=frame-larger-than=]
+> 
+> Split out the inner loop into a separate function to ensure that each
+> function remains under the limit, and pass the kunit_result_stats
+> structures by reference to avoid excessive copies.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> Sending it now as I ran into the build failure while testing 6.18.
+> I only build-tested this, so please test it properly before applying.
+
+I just ran this through our CI with no problems.
+
+Tested-by: Carlos Llamas <cmllamas@google.com> 
+
+> ---
+>  lib/kunit/test.c | 221 ++++++++++++++++++++++++-----------------------
+>  1 file changed, 115 insertions(+), 106 deletions(-)
+> 
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 62eb529824c6..c5fce199d880 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -94,7 +94,7 @@ struct kunit_result_stats {
+>  	unsigned long total;
+>  };
+>  
+> -static bool kunit_should_print_stats(struct kunit_result_stats stats)
+> +static bool kunit_should_print_stats(struct kunit_result_stats *stats)
+>  {
+>  	if (kunit_stats_enabled == 0)
+>  		return false;
+> @@ -102,11 +102,11 @@ static bool kunit_should_print_stats(struct kunit_result_stats stats)
+>  	if (kunit_stats_enabled == 2)
+>  		return true;
+>  
+> -	return (stats.total > 1);
+> +	return (stats->total > 1);
+>  }
+>  
+>  static void kunit_print_test_stats(struct kunit *test,
+> -				   struct kunit_result_stats stats)
+> +				   struct kunit_result_stats *stats)
+>  {
+>  	if (!kunit_should_print_stats(stats))
+>  		return;
+> @@ -115,10 +115,10 @@ static void kunit_print_test_stats(struct kunit *test,
+>  		  KUNIT_SUBTEST_INDENT
+>  		  "# %s: pass:%lu fail:%lu skip:%lu total:%lu",
+>  		  test->name,
+> -		  stats.passed,
+> -		  stats.failed,
+> -		  stats.skipped,
+> -		  stats.total);
+> +		  stats->passed,
+> +		  stats->failed,
+> +		  stats->skipped,
+> +		  stats->total);
+>  }
+>  
+>  /* Append formatted message to log. */
+> @@ -600,26 +600,26 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+>  }
+>  
+>  static void kunit_print_suite_stats(struct kunit_suite *suite,
+> -				    struct kunit_result_stats suite_stats,
+> -				    struct kunit_result_stats param_stats)
+> +				    struct kunit_result_stats *suite_stats,
+> +				    struct kunit_result_stats *param_stats)
+>  {
+>  	if (kunit_should_print_stats(suite_stats)) {
+>  		kunit_log(KERN_INFO, suite,
+>  			  "# %s: pass:%lu fail:%lu skip:%lu total:%lu",
+>  			  suite->name,
+> -			  suite_stats.passed,
+> -			  suite_stats.failed,
+> -			  suite_stats.skipped,
+> -			  suite_stats.total);
+> +			  suite_stats->passed,
+> +			  suite_stats->failed,
+> +			  suite_stats->skipped,
+> +			  suite_stats->total);
+>  	}
+>  
+>  	if (kunit_should_print_stats(param_stats)) {
+>  		kunit_log(KERN_INFO, suite,
+>  			  "# Totals: pass:%lu fail:%lu skip:%lu total:%lu",
+> -			  param_stats.passed,
+> -			  param_stats.failed,
+> -			  param_stats.skipped,
+> -			  param_stats.total);
+> +			  param_stats->passed,
+> +			  param_stats->failed,
+> +			  param_stats->skipped,
+> +			  param_stats->total);
+>  	}
+>  }
+>  
+> @@ -681,13 +681,106 @@ static void kunit_init_parent_param_test(struct kunit_case *test_case, struct ku
+>  	}
+>  }
+>  
+> -int kunit_run_tests(struct kunit_suite *suite)
+> +static int kunit_run_one_test(struct kunit_suite *suite, struct kunit_case *test_case,
+> +			      struct kunit_result_stats *suite_stats,
+> +			      struct kunit_result_stats *total_stats)
+>  {
+> +	struct kunit test = { .param_value = NULL, .param_index = 0 };
+> +	struct kunit_result_stats param_stats = { 0 };
+>  	char param_desc[KUNIT_PARAM_DESC_SIZE];
+> +	const void *curr_param;
 > +
-> +# Check for out-of-order completions detected by bpftrace
-> +if grep -q "^out_of_order:" "$UBLK_TMP"; then
-> +	echo "I/O reordering detected:"
-> +	grep "^out_of_order:" "$UBLK_TMP"
->   	ERR_CODE=255
->   fi
+> +	kunit_init_test(&test, test_case->name, test_case->log);
+> +	if (test_case->status == KUNIT_SKIPPED) {
+> +		/* Test marked as skip */
+> +		test.status = KUNIT_SKIPPED;
+> +		kunit_update_stats(&param_stats, test.status);
+> +	} else if (!test_case->generate_params) {
+> +		/* Non-parameterised test. */
+> +		test_case->status = KUNIT_SKIPPED;
+> +		kunit_run_case_catch_errors(suite, test_case, &test);
+> +		kunit_update_stats(&param_stats, test.status);
+> +	} else {
+> +		kunit_init_parent_param_test(test_case, &test);
+> +		if (test_case->status == KUNIT_FAILURE) {
+> +			kunit_update_stats(&param_stats, test.status);
+> +			goto test_case_end;
+> +		}
+> +		/* Get initial param. */
+> +		param_desc[0] = '\0';
+> +		/* TODO: Make generate_params try-catch */
+> +		curr_param = test_case->generate_params(&test, NULL, param_desc);
+> +		test_case->status = KUNIT_SKIPPED;
+> +		kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
+> +			  "KTAP version 1\n");
+> +		kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
+> +			  "# Subtest: %s", test_case->name);
+> +		if (test.params_array.params &&
+> +		    test_case->generate_params == kunit_array_gen_params) {
+> +			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT
+> +				  KUNIT_SUBTEST_INDENT "1..%zd\n",
+> +				  test.params_array.num_params);
+> +		}
 > +
->   _cleanup_test "null"
->   _show_result $TID $ERR_CODE
-> diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt b/tools/testing/selftests/ublk/trace/seq_io.bt
-> index b2f60a92b118..60ac40e66606 100644
-> --- a/tools/testing/selftests/ublk/trace/seq_io.bt
-> +++ b/tools/testing/selftests/ublk/trace/seq_io.bt
-> @@ -2,23 +2,45 @@
->   	$1: 	dev_t
->   	$2: 	RWBS
->   	$3:     strlen($2)
+> +		while (curr_param) {
+> +			struct kunit param_test = {
+> +				.param_value = curr_param,
+> +				.param_index = ++test.param_index,
+> +				.parent = &test,
+> +			};
+> +			kunit_init_test(&param_test, test_case->name, NULL);
+> +			param_test.log = test_case->log;
+> +			kunit_run_case_catch_errors(suite, test_case, &param_test);
 > +
-> +	Track request order between block_io_start and block_rq_complete.
-> +	For each request, record its start sequence number and verify
-> +	completions happen in the same order.
->   */
+> +			if (param_desc[0] == '\0') {
+> +				snprintf(param_desc, sizeof(param_desc),
+> +					 "param-%d", param_test.param_index);
+> +			}
 > +
->   BEGIN {
-> -	@last_rw[$1, str($2)] = (uint64)0;
-> +	@start_seq = (uint64)0;
-> +	@complete_seq = (uint64)0;
-> +	@out_of_order = (uint64)0;
+> +			kunit_print_ok_not_ok(&param_test, KUNIT_LEVEL_CASE_PARAM,
+> +					      param_test.status,
+> +					      param_test.param_index,
+> +					      param_desc,
+> +					      param_test.status_comment);
+> +
+> +			kunit_update_stats(&param_stats, param_test.status);
+> +
+> +			/* Get next param. */
+> +			param_desc[0] = '\0';
+> +			curr_param = test_case->generate_params(&test, curr_param,
+> +								param_desc);
+> +		}
+> +		/*
+> +		 * TODO: Put into a try catch. Since we don't need suite->exit
+> +		 * for it we can't reuse kunit_try_run_cleanup for this yet.
+> +		 */
+> +		if (test_case->param_exit)
+> +			test_case->param_exit(&test);
+> +		/* TODO: Put this kunit_cleanup into a try-catch. */
+> +		kunit_cleanup(&test);
+> +	}
+> +test_case_end:
+> +	kunit_print_attr((void *)test_case, true, KUNIT_LEVEL_CASE);
+> +
+> +	kunit_print_test_stats(&test, &param_stats);
+> +
+> +	kunit_print_ok_not_ok(&test, KUNIT_LEVEL_CASE, test_case->status,
+> +			      kunit_test_case_num(suite, test_case),
+> +			      test_case->name,
+> +			      test.status_comment);
+> +
+> +	kunit_update_stats(suite_stats, test_case->status);
+> +	kunit_accumulate_stats(total_stats, param_stats);
+> +
+> +	return 0;
+
+nit: the return value is always zero and it's not being used either, so
+maybe switch to void?
+
 > +}
 > +
-> +tracepoint:block:block_io_start
-> +{
-> +	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
-> +		@start_order[args.sector] = @start_seq;
-> +		@start_seq = @start_seq + 1;
-> +	}
->   }
 > +
->   tracepoint:block:block_rq_complete
->   {
-> -	$dev = $1;
->   	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
-> -		$last = @last_rw[$dev, str($2)];
-> -		if ((uint64)args.sector != $last) {
-> -			printf("io_out_of_order: exp %llu actual %llu\n",
-> -				args.sector, $last);
-> +		$expected_order = @start_order[args.sector];
-> +		if ($expected_order != @complete_seq) {
-> +			printf("out_of_order: sector %llu started at seq %llu but completed at seq %llu\n",
-> +				args.sector, $expected_order, @complete_seq);
-> +			@out_of_order = @out_of_order + 1;
->   		}
-> -		@last_rw[$dev, str($2)] = (args.sector + args.nr_sector);
-> +		delete(@start_order[args.sector]);
-> +		@complete_seq = @complete_seq + 1;
->   	}
->   }
->   
->   END {
-> -	clear(@last_rw);
-> +	printf("total_start: %llu total_complete: %llu out_of_order: %llu\n",
-> +		@start_seq, @complete_seq, @out_of_order);
-> +	clear(@start_order);
-> +	clear(@start_seq);
-> +	clear(@complete_seq);
-> +	clear(@out_of_order);
->   }
+> +int kunit_run_tests(struct kunit_suite *suite)
+> +{
+>  	struct kunit_case *test_case;
+>  	struct kunit_result_stats suite_stats = { 0 };
+>  	struct kunit_result_stats total_stats = { 0 };
+> -	const void *curr_param;
+>  
+>  	/* Taint the kernel so we know we've run tests. */
+>  	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
+> @@ -703,97 +796,13 @@ int kunit_run_tests(struct kunit_suite *suite)
+>  
+>  	kunit_print_suite_start(suite);
+>  
+> -	kunit_suite_for_each_test_case(suite, test_case) {
+> -		struct kunit test = { .param_value = NULL, .param_index = 0 };
+> -		struct kunit_result_stats param_stats = { 0 };
+> -
+> -		kunit_init_test(&test, test_case->name, test_case->log);
+> -		if (test_case->status == KUNIT_SKIPPED) {
+> -			/* Test marked as skip */
+> -			test.status = KUNIT_SKIPPED;
+> -			kunit_update_stats(&param_stats, test.status);
+> -		} else if (!test_case->generate_params) {
+> -			/* Non-parameterised test. */
+> -			test_case->status = KUNIT_SKIPPED;
+> -			kunit_run_case_catch_errors(suite, test_case, &test);
+> -			kunit_update_stats(&param_stats, test.status);
+> -		} else {
+> -			kunit_init_parent_param_test(test_case, &test);
+> -			if (test_case->status == KUNIT_FAILURE) {
+> -				kunit_update_stats(&param_stats, test.status);
+> -				goto test_case_end;
+> -			}
+> -			/* Get initial param. */
+> -			param_desc[0] = '\0';
+> -			/* TODO: Make generate_params try-catch */
+> -			curr_param = test_case->generate_params(&test, NULL, param_desc);
+> -			test_case->status = KUNIT_SKIPPED;
+> -			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
+> -				  "KTAP version 1\n");
+> -			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
+> -				  "# Subtest: %s", test_case->name);
+> -			if (test.params_array.params &&
+> -			    test_case->generate_params == kunit_array_gen_params) {
+> -				kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT
+> -					  KUNIT_SUBTEST_INDENT "1..%zd\n",
+> -					  test.params_array.num_params);
+> -			}
+> -
+> -			while (curr_param) {
+> -				struct kunit param_test = {
+> -					.param_value = curr_param,
+> -					.param_index = ++test.param_index,
+> -					.parent = &test,
+> -				};
+> -				kunit_init_test(&param_test, test_case->name, NULL);
+> -				param_test.log = test_case->log;
+> -				kunit_run_case_catch_errors(suite, test_case, &param_test);
+> -
+> -				if (param_desc[0] == '\0') {
+> -					snprintf(param_desc, sizeof(param_desc),
+> -						 "param-%d", param_test.param_index);
+> -				}
+> -
+> -				kunit_print_ok_not_ok(&param_test, KUNIT_LEVEL_CASE_PARAM,
+> -						      param_test.status,
+> -						      param_test.param_index,
+> -						      param_desc,
+> -						      param_test.status_comment);
+> -
+> -				kunit_update_stats(&param_stats, param_test.status);
+> -
+> -				/* Get next param. */
+> -				param_desc[0] = '\0';
+> -				curr_param = test_case->generate_params(&test, curr_param,
+> -									param_desc);
+> -			}
+> -			/*
+> -			 * TODO: Put into a try catch. Since we don't need suite->exit
+> -			 * for it we can't reuse kunit_try_run_cleanup for this yet.
+> -			 */
+> -			if (test_case->param_exit)
+> -				test_case->param_exit(&test);
+> -			/* TODO: Put this kunit_cleanup into a try-catch. */
+> -			kunit_cleanup(&test);
+> -		}
+> -test_case_end:
+> -		kunit_print_attr((void *)test_case, true, KUNIT_LEVEL_CASE);
+> -
+> -		kunit_print_test_stats(&test, param_stats);
+> -
+> -		kunit_print_ok_not_ok(&test, KUNIT_LEVEL_CASE, test_case->status,
+> -				      kunit_test_case_num(suite, test_case),
+> -				      test_case->name,
+> -				      test.status_comment);
+> -
+> -		kunit_update_stats(&suite_stats, test_case->status);
+> -		kunit_accumulate_stats(&total_stats, param_stats);
+> -	}
+> +	kunit_suite_for_each_test_case(suite, test_case)
+> +		kunit_run_one_test(suite, test_case, &suite_stats, &total_stats);
+>  
+>  	if (suite->suite_exit)
+>  		suite->suite_exit(suite);
+>  
+> -	kunit_print_suite_stats(suite, suite_stats, total_stats);
+> +	kunit_print_suite_stats(suite, &suite_stats, &total_stats);
+>  suite_end:
+>  	kunit_print_suite_end(suite);
+>  
+> -- 
 
+I don't see any logical changes, everything seems to have been extracted
+cleanly into kunit_run_one_test(). So this LGTM, just a minor nit.
 
-First run after reboot always fails:
-
-./test_generic_01.sh
-ublk selftest: generic_01 starting at 2026-01-25T19:08:47+02:00
-I/O reordering detected:
-out_of_order: sector 112040 started at seq 88 but completed at seq 0
-out_of_order: sector 112048 started at seq 89 but completed at seq 1
-out_of_order: sector 112056 started at seq 90 but completed at seq 2
-out_of_order: sector 112064 started at seq 91 but completed at seq 3
-out_of_order: sector 112072 started at seq 92 but completed at seq 4
-out_of_order: sector 112080 started at seq 93 but completed at seq 5
-out_of_order: sector 112088 started at seq 94 but completed at seq 6
-out_of_order: sector 112096 started at seq 95 but completed at seq 7
-out_of_order: sector 112104 started at seq 96 but completed at seq 8
-out_of_order: sector 112112 started at seq 97 but completed at seq 9
-out_of_order: sector 112120 started at seq 98 but completed at seq 10
-out_of_order: sector 112128 started at seq 99 but completed at seq 11
-
-[snip]
-
-out_of_order: sector 1048528 started at seq 117149 but completed at seq 
-117061
-out_of_order: sector 1048536 started at seq 117150 but completed at seq 
-117062
-out_of_order: sector 1048544 started at seq 117151 but completed at seq 
-117063
-out_of_order: sector 1048552 started at seq 117152 but completed at seq 
-117064
-out_of_order: sector 1048560 started at seq 117153 but completed at seq 
-117065
-out_of_order: sector 1048568 started at seq 117154 but completed at seq 
-117066
-ublk selftest: generic_01 done at 2026-01-25T19:08:54+02:00
-generic_01 : [FAIL]
-
-consecutive runs are okay
-
-./test_generic_01.sh
-ublk selftest: generic_01 starting at 2026-01-25T20:21:31+02:00
-ublk selftest: generic_01 done at 2026-01-25T20:21:38+02:00
-generic_01 : [PASS]
-
-I went thru the reboot cycle several times - it  repeats.
-
-Tried with and without setting the affinity - and i observed no difference.
-
-I will do some more testing but it was easier to reproduce before that 
-patch.
-
--- 
-have fun,
-alex
+--
+Carlos LLamas
