@@ -1,88 +1,87 @@
-Received: from mail.itpri.com (mx1.itpri.com [185.125.111.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3FA17DFE7;
-	Sun, 25 Jan 2026 08:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.111.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8327713C918;
+	Sun, 25 Jan 2026 09:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769331488; cv=none; b=SvUFkea8vkGXzImF0mUhhB57kaxhql187NQc21pk3VPwmXGVGq8cJ3fxsUQyVTBt/kKEjmwX5t6mbdfxpVNmX28msI5M4QkCVzWP2vjUPGWRmZ673YUvvMFZfsf4wouMC8LGzZd6Fq4+HXcFOIIom8JO59iYgHcnwkyh3+E77m0=
+	t=1769335153; cv=none; b=eGrMGfImjH9KHgsv9aujvUXefmEv91aGXQXDHSQWC4DNRh4nQQKNrvMCXghL57dTHdl4QZFObHYfmTgvTALrtkty46ssPKNKBuYG6fa9SP/8pEyMkQCQwFRx1pD9mxR1yiDqym/+9YGvTJNaExXOg0KKO5TApKaDWQv5k2dq36w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769331488; c=relaxed/simple;
-	bh=1HaJTy+ipoPfBFt+sG1DshpgFRc8uCED8zzZuVjhY5M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ci6ph+t2CTIbjOyfJde5SBYm0rOwYal8gx3DMBCo+TRzzhL3dnaCjjjydClbpRkNukE42xJPf9iaxTA6CQavSrT7F3ULmGFvMHb/PgN2Isv5MqPKgOtv3rkEyTDhQr9+CN8uc+AZsY4vvAdqe+QkuWSOLeoAWz1hLWEApnBCqf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com; spf=pass smtp.mailfrom=zazolabs.com; dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b=XBHQJHdV; arc=none smtp.client-ip=185.125.111.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zazolabs.com
+	s=arc-20240116; t=1769335153; c=relaxed/simple;
+	bh=t90pzN2k6Whbca/34ndSIUtQ6ODauPo1RiRNlXzDNBs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o8Z6/tCTY/wSfEggKefyVYtm2V4CsQMqpaS/MsDMHMaJh1kqGeGhgqhCk4kLBZGAJ4EG8F1SjBn+Ui5f0GdPgOMu5I0Q1OQblPbNvf2Oy7ba2opNnqgh9EY3V+SfCMxpEA6wSnL5R6jw6z2gICfAGYwhopj+mYA8SG9erNTVSCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lXW3ae0Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b="XBHQJHdV"
-X-Virus-Scanned: Yes
-From: Alexander Atanasov <alex@zazolabs.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zazolabs.com; s=mail;
-	t=1769331476; bh=1HaJTy+ipoPfBFt+sG1DshpgFRc8uCED8zzZuVjhY5M=;
-	h=From:To:Cc:Subject;
-	b=XBHQJHdVLmsXCpLl0JTrsl03fWFsGnhtn2wucK73lG6ad0FaCnbEmtf24LIjRD0VD
-	 zIRub/YHxGBhLKstqMwYtv1M60UekGBsd+gYOpzmzXngKuU2S1biptBRkEAIrUst/L
-	 mzCIw+dVtzi1hHwOZn/l4qZ0/nK8wmk7bOrdtMzZT/+wm/Xre8PTXY8RnXi0ViO87+
-	 Wc/ZLqhbspx3uiRBvglKcaU+3KGvGX4uJL0QszMJAMEKceqhw0ov2f/spjY4lo0j74
-	 WN2mUjk/gnogYM0xgS20n2L4gjvUBJ9RHw4uxtf7TogHrS0VRcy1tt+oP62TknD6d8
-	 6+BZ95Olh/0ZaM9K4z4034uAs6b56LfB9/8mUeKFqp8ZJo8e2w8GVc9ipnfmn8GAtv
-	 qU26GkG5kONlZpzFOr1IDEBLAbjeFc8kJPaA6mK/kyjSCVTVb2hT24yYx1dDTMTiYU
-	 LpHiA37QbN/4Vcv/jwpjyr44U74PDBUYQo8iRLA1lkoYA1KHcnJ3WP8pklOep4uY6f
-	 7G7AWYdL+qzFdmoMT2tsc6INW5FedWcYiodapntylB1BRUc/d85rCdYI4zEcOEDavD
-	 eKmliBBZ+IS28w1IHWrcXb+N7+IjxIEwDMiCrjAMOyyzx30fSTn4mQLU5LAr86o7tn
-	 qCq/6db6yzrvyoTwOLu4TEJg=
-To: Ming Lei <ming.lei@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Caleb Sander Mateos <csander@purestorage.com>
-Cc: Alexander Atanasov <alex@zazolabs.com>,
-	linux-block@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests: ublk: add missing gitignore for metadata_size binary
-Date: Sun, 25 Jan 2026 08:57:46 +0000
-Message-ID: <20260125085747.1631424-1-alex@zazolabs.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lXW3ae0Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4929EC4CEF1;
+	Sun, 25 Jan 2026 09:59:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769335152;
+	bh=t90pzN2k6Whbca/34ndSIUtQ6ODauPo1RiRNlXzDNBs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lXW3ae0YU8z55SpbxpHPpo8QS9OjGqTcHsbiii51ODHCMOf6hliMbhrjJWn+728Be
+	 TgZj79d5jvu5iItz6H9z2pmlrAqZUWh5ktcnp/oBBLBErOg264g+S0l93REVWuqUc7
+	 9f1SvxnhTk/H3zWkQkzLti8BWy0U2XDnGrip1KUUg+j/NWfT1ToyfG8YMEEV0sxDWC
+	 KglKM8yIWZ/13LlIhLbEqUClho2mOfcPaccYreX2EQEnOjI+jvuATB8GxADABVYNyK
+	 Jh2oups9hDCMfNMF3wtxjcp2b1X8NBJWd29wiq4EXkdQUSJ2jgLnBg87nxA121pjwM
+	 f05aOgFlDDr5w==
+Date: Sun, 25 Jan 2026 11:58:58 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Lain Fearyncess Yang <fearyncess@aosc.io>,
+	WANG Xuerui <kernel@xen0n.name>, Kexy Biscuit <kexybiscuit@aosc.io>,
+	Mingcong Bai <jeffbai@aosc.io>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH] loongarch: wire up memfd_secret system call
+Message-ID: <aXXpYqDyTeftKV2c@kernel.org>
+References: <20260109051054.188030-1-fearyncess@aosc.io>
+ <aWC6bIEg6UqvX1DO@kernel.org>
+ <CAAhV-H5tHZRHmXSA6m+fyhaN9nNjLFbEiVK7OWjL8EoJn16doQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H5tHZRHmXSA6m+fyhaN9nNjLFbEiVK7OWjL8EoJn16doQ@mail.gmail.com>
 
-A new utility metadata_size was added in
-commit 261b67f4e347 ("selftests: ublk: add utility to get block device metadata size")
-but it was not added to .gitignore. Fix that by adding it there.
+On Sun, Jan 25, 2026 at 12:03:25PM +0800, Huacai Chen wrote:
+> On Fri, Jan 9, 2026 at 4:21 PM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > On Fri, Jan 09, 2026 at 01:10:51PM +0800, Lain Fearyncess Yang wrote:
+> > > From: "Lain \"Fearyncess\" Yang" <fearyncess@aosc.io>
+> > >
+> > > LoongArch supports ARCH_HAS_SET_DIRECT_MAP, therefore wire up the
+> > > memfd_secret system call, which depends on it.
+> >
+> > LoongArch version of set_memory* does not support splitting of leaf PMD
+> > entries. Does LoongArch always use PTE-level mappings in the direct map?
+> No PMD level mappings now.
 
-While at it sort all entries alphabetically and add a SPDX license header.
+Thanks for the clarification. You can add
 
-Reviewed-by: Caleb Sander Mateos <csander@purestorage.com>
-Fixes: 261b67f4e347 ("selftests: ublk: add utility to get block device metadata size")
-Signed-off-by: Alexander Atanasov <alex@zazolabs.com>
----
- tools/testing/selftests/ublk/.gitignore | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-v1->v2:
- - add SPDX license header
- - sort alphabetically as suggested by Caleb Sander Mateos
+if it's not too late :)
 
-It is also Reviewed-by: Ming Lei <ming.lei@redhat.com> but it needs an Ack from him,
-as he is the original author of the file, for the license header.
+> Huacai
 
-
-diff --git a/tools/testing/selftests/ublk/.gitignore b/tools/testing/selftests/ublk/.gitignore
-index 8b2871ea7751..e17bd28f27e0 100644
---- a/tools/testing/selftests/ublk/.gitignore
-+++ b/tools/testing/selftests/ublk/.gitignore
-@@ -1,3 +1,5 @@
--kublk
--/tools
-+# SPDX-License-Identifier: GPL-2.0
- *-verify.state
-+/tools
-+kublk
-+metadata_size
 -- 
-2.43.0
-
+Sincerely yours,
+Mike.
