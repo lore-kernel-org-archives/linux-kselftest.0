@@ -1,53 +1,47 @@
-Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85173C17;
-	Sun, 25 Jan 2026 12:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4531F1397;
+	Sun, 25 Jan 2026 12:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769344545; cv=none; b=qUxMkZSP1TTeG0Ata4TjUduuBRe9r8MOtLYEDwGogoxJ6AW5x3Xa49ihRfF+7pLn08/1ucWUTNmdX4+gQsw/L7N6iwUxPwCGB4bxdVKlQ26Rugcpd7rPiQIyISFQpI73zvYIEFYNCUfIAqlkWd0mEiE54v28JU0/FtYWX8gOAeA=
+	t=1769345238; cv=none; b=OLMPcheMSOgoEUFprQoEU84NR0y/RV1dEVC0Fb+/AKc5iLd4GYbcyHrbjdLyG6xSxhzexyCJMJh66DifJIz4ZFkis7WOFeBiyZ737OOwAwy3zRDFriBg90WSkxVtLMRP5Z7vTNZ/5uQI7/q7sKwDXAjpPfjhw5yjNxKJpMVrZnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769344545; c=relaxed/simple;
-	bh=AdO9Ky1jH1UZBMml3ZkhvJLmWNgr0lSnD20567FTk7o=;
+	s=arc-20240116; t=1769345238; c=relaxed/simple;
+	bh=3uG70ESRyxMfbSDXcNxQas2MwAsOYF8DO1fvC8Y+/UY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sObVpgmENqtylMzf+loGeIIg1sZ54OitFXBuIJQsFUZlX8msOk1Q3R8S2OSBDzcZyKFgFhX1yVNk0geFE7MsE8QVQ7IhmQV3sO41v1iTAxtTCvtmR8ub7d+otEQjpJ33Mry5JZWI4DOem24HheEyjg2R0XGihxxt0MAAMVsyK6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=eQrpjNu2; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=cCh/uV4m; arc=none smtp.client-ip=135.148.138.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=VI/aNR0+VVNmZjaO1AHU2b4rK2z9sES7lBFMv6ofmqet8FZ1HuDCs1opxpJFjZ81KgdiYk0OXCY1OS/0aZkGXGmAQizv2EOwmYIbxR3eWy3qFEiRc1aBmoO4unF4HcgrISGiN4Wjwoe1Q/62Rpvdq0EF3vbenJZ7yDs49TT4YPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MPVljPfK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="eQrpjNu2";
-	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="cCh/uV4m"
-DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1769344498; bh=XADZthbr48JgjrdwuL81M9F
-	r5NCF871XhmhImP4amhA=; b=eQrpjNu2ly68uVfsAz9ToAqV6P4L90q46vqsjPUdM05NWhXyeW
-	flv9Wx2Qp3vdRUoE+CPXdeB55j4LelylQmqu8MZOX2z4NXsed4i7zzOjWIxvND9QaEmDphDKAI2
-	WyboGyYBEDHr0qSmoskQLAPt+fcNxCFDHWWKVMmTz/6hsQEWIvESaNJLPRi2O6JdOmQazvo+4tl
-	MXp84vzK/73BdQgs7Cy9MAcMyBlUgMchVMHnlGCu0O9GGjbcuoWL36pcWUlrfCx18Knoioj90fq
-	gcNOkksuOj0gl9oIF1tpPWxvIrFy9kdNKPuwMCl31wEg36DzDiMlwjYY9+IC9F7vqwg==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1769344498; bh=XADZthbr48JgjrdwuL81M9F
-	r5NCF871XhmhImP4amhA=; b=cCh/uV4mlVLFkJ4I56fqZgOS0EOCR3VTFvONKK/BMv8ygIaZ+G
-	d4r5xPb3HApCh9uyGyJGKXuWCtmZoTGvslCw==;
-Date: Sun, 25 Jan 2026 07:34:57 -0500
-From: Daniel Hodges <daniel@danielhodges.dev>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Daniel Hodges <git@danielhodges.dev>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
-	Song Liu <song@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Yonghong Song <yonghong.song@linux.dev>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S. Miller" <davem@davemloft.net>, Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v6 4/4] selftests/bpf: Add tests for signature
- verification kfuncs
-Message-ID: <hk2e2og5v347kmuyyegilgejktgafjgvbxopfk4a2lippmggch@nzuoznk376s3>
-References: <20260124174349.16861-1-git@danielhodges.dev>
- <20260124174349.16861-5-git@danielhodges.dev>
- <CAADnVQJQsC0cQZPJpyofY4Othi5+j7xjAY+xbNRkX0p9wA7Khg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MPVljPfK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB7EC4CEF1;
+	Sun, 25 Jan 2026 12:47:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1769345237;
+	bh=3uG70ESRyxMfbSDXcNxQas2MwAsOYF8DO1fvC8Y+/UY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MPVljPfKum5CglT/wW4Md9gDsjH3AlzWuG7GvsqoI2MsaihiQIkuOUJivI8PYJYJh
+	 eEKJXeur3u1A9DUFi4mjDObA67nu3ffqvMO8CVnu572HMTJYRZc7vnTIvpPv0ljSpS
+	 C2feiDD4RcoaYFQKPVuFrqvTEdUku+hBIbTHDcno=
+Date: Sun, 25 Jan 2026 13:47:14 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Johan Hovold <johan@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+Message-ID: <2026012554-chatty-policy-42a1@gregkh>
+References: <20260124170535.11756-1-johan@kernel.org>
+ <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,42 +50,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQJQsC0cQZPJpyofY4Othi5+j7xjAY+xbNRkX0p9wA7Khg@mail.gmail.com>
+In-Reply-To: <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
 
-> > Signed-off-by: Daniel Hodges <git@danielhodges.dev>
-> > ---
-> >  MAINTAINERS                                   |   2 +
-> >  .../selftests/bpf/prog_tests/sig_verify.c     | 163 ++++++++++
-> >  .../selftests/bpf/progs/crypto_common.h       |   6 +
-> >  .../testing/selftests/bpf/progs/sig_verify.c  | 286 ++++++++++++++++++
-> >  4 files changed, 457 insertions(+)
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/sig_verify.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/sig_verify.c
+On Sat, Jan 24, 2026 at 08:08:28PM +0100, Danilo Krummrich wrote:
+> On Sat Jan 24, 2026 at 6:05 PM CET, Johan Hovold wrote:
+> > this does not look like the right interface for the chardev unplug issue.
 > 
-> It's a v6 already, but your new selftests are still failing in CI.
+> I think it depends, we should do everything to prevent having the issue in the
+> first place, e.g. ensure that we synchronize the unplug properly on device
+> driver unbind.
 > 
-> Error: #385 sig_verify
-> Error: #385/1 sig_verify/verify_valid_signature
-> Error: #385/3 sig_verify/size_queries
-> Error: #385/6 sig_verify/zero_len_msg
-> Error: #385/7 sig_verify/zero_len_sig
-> 
-> Please make sure CI is green before submitting v7.
-> No one is reviewing the patches when they don't pass their own tests.
+> Sometimes, however, this isn't possible; this is where a revocable mechanism can
+> come in handy to prevent UAF of device resources -- DRM is a good example for
+> this.
 
-Noted, sorry about that. I think my local vm has some different config:
+This is not "possible" for almost all real devices so we need something
+like this for almost all classes of devices, DRM just shows the extremes
+involved, v4l2 is also another good example.
 
-vng -- ./tools/testing/selftests/bpf/test_progs -t sig_verify
-WARNING! Selftests relying on bpf_testmod.ko will be skipped.
-Can't find bpf_testmod.ko kernel module: -2
-#385/1   sig_verify/verify_valid_signature:OK
-#385/2   sig_verify/verify_invalid_signature:OK
-#385/3   sig_verify/size_queries:OK
-#385/4   sig_verify/ecdsa_on_hash_ctx:OK
-#385/5   sig_verify/ecdsa_keysize_on_hash_ctx:OK
-#385/6   sig_verify/zero_len_msg:OK
-#385/7   sig_verify/zero_len_sig:OK
-#385     sig_verify:OK
-Summary: 1/7 PASSED, 0 SKIPPED, 0 FAILED
+Note, other OSes also have this same problem, look at all the work the
+BSDs are going through at the moment just to get closer to the place
+where we are in Linux today with removable devices and they have hit our
+same problems.
 
-I'll figure it out properly, thanks for the direction!
+> But to be fair, I also want to point out that there is a quite significant
+> difference regarding the usefulness of the revocable concept in C compared to in
+> Rust due to language capabilities.
+
+True, but we do need something.  I took these patches without a real
+user as a base for us to start working off of.  The rust implementation
+has shown that the design-pattern is a good solution for the problem,
+and so I feel we should work with it and try to get this working
+properly.  We've been sitting and talking about it for years now, and
+here is the first real code submission that is getting us closer to fix
+the problem properly.  It might not be perfict, but let's evolve it from
+here for what is found not to work correctly.
+
+So I don't want to take these reverts, let's try this out, by putting
+this into the driver core now, we have the base to experiment with in a
+"safe" way in lots of different driver subsytems at the same time.  If
+it doesn't work out, worst case we revert it in a release or two because
+it didn't get used.
+
+thanks,
+
+greg k-h
