@@ -1,326 +1,232 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B721770814
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 01:27:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E6A19C546
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 01:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769390875; cv=none; b=nBfWWzIgk5ufBg8w0zvo3xKPfIhek9U2opuxWIm1is3PbGbIOcLQj1JwdhEpQpHGjwL6rxa58VZifMNUdHSYl2Rz6VweJYIBl2gTiAnBbHWVryun/ssk9Ao2euvucaRoT2BVZuJPuv+sU+Up3zQ1FEc8hdDZb7xe0YWrINTR6gA=
+	t=1769391631; cv=none; b=fd3C2r7UhjXdj2L7A+apDnzYZhtv/uMhwYc1vhNwlXoeiHJFoWwBJWpRyW5inMc1WwWp5Px1DY/m+ABRC3t+d2hLP3e4acgHSVOB+7M1e6AlRXDh4NOBJPRVOeqBFpaCKCzL/hpupZdTsPEwoikilHvrzPPDgAuiYp39XUUdXUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769390875; c=relaxed/simple;
-	bh=MaQ16MFjCF86robio2aChV2W+uQIjvg7Y1R2ERTVQ/E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aqypAFpBwtGgfQuWhHwZ+7zWT4M7Vne6FpmDTcQ954HHgjRPex/btS0KJQ4YATdo8xreVzWa1oqiXXDYRG+KgMOGwoZsMK+lZNOijDLi/VYnDqMA6eAK2fsae8EZUFqRwlIhvLOJUeX+58JxrkgCFAw/P2DL2oe6dL5ua7GBO/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GhHsEk+q; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769391631; c=relaxed/simple;
+	bh=st4oG32XzB15pUzcYQ7SBJEdkYV85I4fNj6S9F09L7I=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=CAeTfXhQbn5p+aFrzkQ+VK82kjGS1LB/qlH5V3xUAIPxS6dVpdCiFRkntGWNYuoaeuApCTC3oDhCkMNeJyykGjXzhy/MZdOECzx7cd4oWhgDJWO3Enc35rOlE+UwI3Z8CYqh5Q+U9XgJeZsE9AUZt4R2zQTRBV5IhE4SRuY3g+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JtIvEjky; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GhHsEk+q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769390872;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0/3PjVwTlclzpJ/pn4iW/a3eYF5SY1NpLn8jCSWnQgk=;
-	b=GhHsEk+qDG9hCJaeoDUo+/U/3MKG3q1ZhAw6pA+U42qSFzEI18FEzIDWReL3zITykBcnXk
-	780CWkON9seG2Z4jaaHO81TObKtUCNFeL71sDF5uDXm2OYUvi6OvMmPvhAyni4pI/gN1zZ
-	lPfCEZ3PXz97+Z9A+r2hsQylpCEFUUk=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-259-dsOPYKVNNDe3B-Pe4R-OmA-1; Sun,
- 25 Jan 2026 20:27:49 -0500
-X-MC-Unique: dsOPYKVNNDe3B-Pe4R-OmA-1
-X-Mimecast-MFC-AGG-ID: dsOPYKVNNDe3B-Pe4R-OmA_1769390868
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 122A8180057E;
-	Mon, 26 Jan 2026 01:27:48 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.88])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7C9DF30001A7;
-	Mon, 26 Jan 2026 01:27:44 +0000 (UTC)
-Date: Mon, 26 Jan 2026 09:27:38 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: alex+zkern@zazolabs.com
-Cc: Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: ublk: io-reorder triggered in
- test_generic_01.sh
-Message-ID: <aXbDCtZ8fvljMEsC@fedora>
-References: <20260123112039.1370223-1-alex@zazolabs.com>
- <aXN4mFuoXhtJDKyF@fedora>
- <147635F1-943E-46D5-8EF1-D1C965F85EC1@zazolabs.com>
- <aXOGrXo3AbXPHA-K@fedora>
- <03C8F5B9-B2E1-4C78-A043-B4F9422508B7@zazolabs.com>
- <aXY2qdYtfVTSc7jB@fedora>
- <c517e1ca-0e2b-4143-b0f6-07a3d0c3abcf@zazolabs.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JtIvEjky"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c517e1ca-0e2b-4143-b0f6-07a3d0c3abcf@zazolabs.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769391617;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qOS/I3qY1vByTUV0rzQTBMazz/yNAmJFWVeZH3R10+Y=;
+	b=JtIvEjkyz6fJcB1qcAm9UeGr45TrQiuC4U97SwoSQWERAEd26ARBHVe7+Pw+4xl7KifCNB
+	9NYXe7CylOwE4gcUYajwfyysJZAzkYijiu3765UOhj/R84ibbkDA0AHNiazLN02H6fY7JY
+	Q2NWiGJKpBl1suunAWTwKhLgjyy1ZxU=
+Date: Mon, 26 Jan 2026 01:40:13 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: hui.zhu@linux.dev
+Message-ID: <8ee851c5676facd43c45cdd5d434d92d85628e43@linux.dev>
+TLS-Required: No
+Subject: Re: [RFC PATCH bpf-next v3 09/12] selftests/bpf: Add tests for
+ memcg_bpf_ops
+To: "JP Kobryn" <inwardvessel@gmail.com>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Johannes Weiner" <hannes@cmpxchg.org>,
+ "Michal Hocko" <mhocko@kernel.org>, "Roman Gushchin"
+ <roman.gushchin@linux.dev>, "Shakeel Butt" <shakeel.butt@linux.dev>,
+ "Muchun Song" <muchun.song@linux.dev>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Peter Zijlstra"
+ <peterz@infradead.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, "Kees Cook" <kees@kernel.org>, "Tejun
+ Heo" <tj@kernel.org>, "Jeff Xu" <jeffxu@chromium.org>, mkoutny@suse.com,
+ "Jan Hendrik Farr" <kernel@jfarr.cc>, "Christian Brauner"
+ <brauner@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>, "Brian
+ Gerst" <brgerst@gmail.com>, "Masahiro Yamada" <masahiroy@kernel.org>,
+ davem@davemloft.net, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, "Willem de Bruijn" <willemb@google.com>,
+ "Jason Xing" <kerneljasonxing@gmail.com>, "Paul Chaignon"
+ <paul.chaignon@gmail.com>, "Anton Protopopov" <a.s.protopopov@gmail.com>,
+ "Amery Hung" <ameryhung@gmail.com>, "Chen Ridong"
+ <chenridong@huaweicloud.com>, "Lance Yang" <lance.yang@linux.dev>,
+ "Jiayuan Chen" <jiayuan.chen@linux.dev>, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, cgroups@vger.kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: "Hui Zhu" <zhuhui@kylinos.cn>, "Geliang Tang" <geliang@kernel.org>
+In-Reply-To: <b90069a3-86b4-4fba-9ff3-fe5f6c4e425d@gmail.com>
+References: <cover.1769157382.git.zhuhui@kylinos.cn>
+ <c44accaaaebfc32be13234f82b501a3852ba3f0f.1769157382.git.zhuhui@kylinos.cn>
+ <b90069a3-86b4-4fba-9ff3-fe5f6c4e425d@gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, Jan 25, 2026 at 08:35:20PM +0200, Alexander Atanasov wrote:
-> On 25.01.26 17:28, Ming Lei wrote:
-> > On Fri, Jan 23, 2026 at 05:00:33PM +0200, Alexander Atanasov wrote:
-> > > 
-> > > 
-> 
-> [snip]
-> 
-> > Can you test the following patch and see if re-order still can happen?
-> > 
-> > 
-> > diff --git a/tools/testing/selftests/ublk/test_generic_01.sh b/tools/testing/selftests/ublk/test_generic_01.sh
-> > index 26cf3c7ceeb5..26d5e52ece29 100755
-> > --- a/tools/testing/selftests/ublk/test_generic_01.sh
-> > +++ b/tools/testing/selftests/ublk/test_generic_01.sh
-> > @@ -13,7 +13,7 @@ if ! _have_program fio; then
-> >   	exit "$UBLK_SKIP_CODE"
-> >   fi
-> > -_prep_test "null" "sequential io order"
-> > +_prep_test "null" "ublk dispatch won't reorder IO"
-> >   dev_id=$(_add_ublk_dev -t null)
-> >   _check_add_dev $TID $?
-> > @@ -39,9 +39,13 @@ fio --name=write_seq \
-> >   ERR_CODE=$?
-> >   kill "$btrace_pid"
-> >   wait
-> > -if grep -q "io_out_of_order" "$UBLK_TMP"; then
-> > -	cat "$UBLK_TMP"
-> > +
-> > +# Check for out-of-order completions detected by bpftrace
-> > +if grep -q "^out_of_order:" "$UBLK_TMP"; then
-> > +	echo "I/O reordering detected:"
-> > +	grep "^out_of_order:" "$UBLK_TMP"
-> >   	ERR_CODE=255
-> >   fi
-> > +
-> >   _cleanup_test "null"
-> >   _show_result $TID $ERR_CODE
-> > diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt b/tools/testing/selftests/ublk/trace/seq_io.bt
-> > index b2f60a92b118..60ac40e66606 100644
-> > --- a/tools/testing/selftests/ublk/trace/seq_io.bt
-> > +++ b/tools/testing/selftests/ublk/trace/seq_io.bt
-> > @@ -2,23 +2,45 @@
-> >   	$1: 	dev_t
-> >   	$2: 	RWBS
-> >   	$3:     strlen($2)
-> > +
-> > +	Track request order between block_io_start and block_rq_complete.
-> > +	For each request, record its start sequence number and verify
-> > +	completions happen in the same order.
-> >   */
-> > +
-> >   BEGIN {
-> > -	@last_rw[$1, str($2)] = (uint64)0;
-> > +	@start_seq = (uint64)0;
-> > +	@complete_seq = (uint64)0;
-> > +	@out_of_order = (uint64)0;
-> > +}
-> > +
-> > +tracepoint:block:block_io_start
-> > +{
-> > +	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
-> > +		@start_order[args.sector] = @start_seq;
-> > +		@start_seq = @start_seq + 1;
-> > +	}
-> >   }
-> > +
-> >   tracepoint:block:block_rq_complete
-> >   {
-> > -	$dev = $1;
-> >   	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
-> > -		$last = @last_rw[$dev, str($2)];
-> > -		if ((uint64)args.sector != $last) {
-> > -			printf("io_out_of_order: exp %llu actual %llu\n",
-> > -				args.sector, $last);
-> > +		$expected_order = @start_order[args.sector];
-> > +		if ($expected_order != @complete_seq) {
-> > +			printf("out_of_order: sector %llu started at seq %llu but completed at seq %llu\n",
-> > +				args.sector, $expected_order, @complete_seq);
-> > +			@out_of_order = @out_of_order + 1;
-> >   		}
-> > -		@last_rw[$dev, str($2)] = (args.sector + args.nr_sector);
-> > +		delete(@start_order[args.sector]);
-> > +		@complete_seq = @complete_seq + 1;
-> >   	}
-> >   }
-> >   END {
-> > -	clear(@last_rw);
-> > +	printf("total_start: %llu total_complete: %llu out_of_order: %llu\n",
-> > +		@start_seq, @complete_seq, @out_of_order);
-> > +	clear(@start_order);
-> > +	clear(@start_seq);
-> > +	clear(@complete_seq);
-> > +	clear(@out_of_order);
-> >   }
-> 
-> 
-> First run after reboot always fails:
-> 
-> ./test_generic_01.sh
-> ublk selftest: generic_01 starting at 2026-01-25T19:08:47+02:00
-> I/O reordering detected:
-> out_of_order: sector 112040 started at seq 88 but completed at seq 0
-> out_of_order: sector 112048 started at seq 89 but completed at seq 1
-> out_of_order: sector 112056 started at seq 90 but completed at seq 2
-> out_of_order: sector 112064 started at seq 91 but completed at seq 3
-> out_of_order: sector 112072 started at seq 92 but completed at seq 4
-> out_of_order: sector 112080 started at seq 93 but completed at seq 5
-> out_of_order: sector 112088 started at seq 94 but completed at seq 6
-> out_of_order: sector 112096 started at seq 95 but completed at seq 7
-> out_of_order: sector 112104 started at seq 96 but completed at seq 8
-> out_of_order: sector 112112 started at seq 97 but completed at seq 9
-> out_of_order: sector 112120 started at seq 98 but completed at seq 10
-> out_of_order: sector 112128 started at seq 99 but completed at seq 11
-
-In the 1st bpf attachment, fio may be started between attaching
-block_start_req and block_complete_req. Maybe the following patch can
-solve it:
+2026=E5=B9=B41=E6=9C=8824=E6=97=A5 04:47, "JP Kobryn" <inwardvessel@gmail=
+.com mailto:inwardvessel@gmail.com?to=3D%22JP%20Kobryn%22%20%3Cinwardvess=
+el%40gmail.com%3E > =E5=86=99=E5=88=B0:
 
 
-diff --git a/tools/testing/selftests/ublk/test_generic_01.sh b/tools/testing/selftests/ublk/test_generic_01.sh
-index 26cf3c7ceeb5..15cea9e55e1c 100755
---- a/tools/testing/selftests/ublk/test_generic_01.sh
-+++ b/tools/testing/selftests/ublk/test_generic_01.sh
-@@ -13,7 +13,7 @@ if ! _have_program fio; then
- 	exit "$UBLK_SKIP_CODE"
- fi
- 
--_prep_test "null" "sequential io order"
-+_prep_test "null" "ublk dispatch won't reorder IO"
- 
- dev_id=$(_add_ublk_dev -t null)
- _check_add_dev $TID $?
-@@ -21,15 +21,20 @@ _check_add_dev $TID $?
- dev_t=$(_get_disk_dev_t "$dev_id")
- bpftrace trace/seq_io.bt "$dev_t" "W" 1 > "$UBLK_TMP" 2>&1 &
- btrace_pid=$!
--sleep 2
- 
--if ! kill -0 "$btrace_pid" > /dev/null 2>&1; then
-+# Wait for bpftrace probes to be attached (BEGIN block prints BPFTRACE_READY)
-+for _ in $(seq 100); do
-+	grep -q "BPFTRACE_READY" "$UBLK_TMP" 2>/dev/null && break
-+	sleep 0.1
-+done
-+
-+if ! kill -0 "$btrace_pid" 2>/dev/null; then
- 	_cleanup_test "null"
- 	exit "$UBLK_SKIP_CODE"
- fi
- 
--# run fio over this ublk disk
--fio --name=write_seq \
-+# run fio over this ublk disk (pinned to CPU 0)
-+taskset -c 0 fio --name=write_seq \
-     --filename=/dev/ublkb"${dev_id}" \
-     --ioengine=libaio --iodepth=16 \
-     --rw=write \
-@@ -39,9 +44,13 @@ fio --name=write_seq \
- ERR_CODE=$?
- kill "$btrace_pid"
- wait
--if grep -q "io_out_of_order" "$UBLK_TMP"; then
--	cat "$UBLK_TMP"
-+
-+# Check for out-of-order completions detected by bpftrace
-+if grep -q "^out_of_order:" "$UBLK_TMP"; then
-+	echo "I/O reordering detected:"
-+	grep "^out_of_order:" "$UBLK_TMP"
- 	ERR_CODE=255
- fi
-+
- _cleanup_test "null"
- _show_result $TID $ERR_CODE
-diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt b/tools/testing/selftests/ublk/trace/seq_io.bt
-index b2f60a92b118..8ebe13d24c67 100644
---- a/tools/testing/selftests/ublk/trace/seq_io.bt
-+++ b/tools/testing/selftests/ublk/trace/seq_io.bt
-@@ -2,23 +2,64 @@
- 	$1: 	dev_t
- 	$2: 	RWBS
- 	$3:     strlen($2)
-+
-+	Track request order between block_io_start and block_rq_complete.
-+	For each request, record its start sequence number and verify
-+	completions happen in the same order.
-+
-+	Sequence starts at 1 so that 0 means "never seen" (bpftrace maps
-+	return 0 for missing keys). On first valid completion, sync
-+	complete_seq to handle probe attachment races.
-+
-+	block_rq_complete is listed first to ensure it's attached before
-+	block_io_start, reducing the window for missed completions.
- */
-+
- BEGIN {
--	@last_rw[$1, str($2)] = (uint64)0;
-+	@start_seq = (uint64)1;
-+	@complete_seq = (uint64)0;
-+	@out_of_order = (uint64)0;
-+	/* Initialize map type with dummy entry */
-+	@start_order[0] = (uint64)0;
-+	delete(@start_order[0]);
-+	printf("BPFTRACE_READY\n");
- }
-+
- tracepoint:block:block_rq_complete
- {
--	$dev = $1;
- 	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
--		$last = @last_rw[$dev, str($2)];
--		if ((uint64)args.sector != $last) {
--			printf("io_out_of_order: exp %llu actual %llu\n",
--				args.sector, $last);
-+		$expected = @start_order[args.sector];
-+		if ($expected > 0) {
-+			/* Sync complete_seq on first valid completion */
-+			if (@complete_seq == 0) {
-+				@complete_seq = $expected;
-+			}
-+
-+			if ($expected != @complete_seq) {
-+				printf("out_of_order: sector %llu started at seq %llu but completed at seq %llu\n",
-+					args.sector, $expected, @complete_seq);
-+				@out_of_order = @out_of_order + 1;
-+			}
-+			delete(@start_order[args.sector]);
-+			@complete_seq = @complete_seq + 1;
- 		}
--		@last_rw[$dev, str($2)] = (args.sector + args.nr_sector);
-+		/* $expected == 0 means we never saw this sector start, skip it */
-+	}
-+}
-+
-+tracepoint:block:block_io_start
-+{
-+	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
-+		@start_order[args.sector] = @start_seq;
-+		@start_seq = @start_seq + 1;
- 	}
- }
- 
- END {
--	clear(@last_rw);
-+	printf("total_start: %llu total_complete: %llu out_of_order: %llu\n",
-+		@start_seq - 1, @complete_seq, @out_of_order);
-+	clear(@start_order);
-+	clear(@start_seq);
-+	clear(@complete_seq);
-+	clear(@out_of_order);
- }
+>=20
+>=20Hi Hui,
+>=20
+>=20On 1/23/26 1:00 AM, Hui Zhu wrote:
+>=20
+>=20>=20
+>=20> From: Hui Zhu <zhuhui@kylinos.cn>
+> >  Add a comprehensive selftest suite for the `memcg_bpf_ops`
+> >  functionality. These tests validate that BPF programs can correctly
+> >  influence memory cgroup throttling behavior by implementing the new
+> >  hooks.
+> >  The test suite is added in `prog_tests/memcg_ops.c` and covers
+> >  several key scenarios:
+> >  1. `test_memcg_ops_over_high`:
+> >  Verifies that a BPF program can trigger throttling on a low-priority
+> >  cgroup by returning a delay from the `get_high_delay_ms` hook when a
+> >  high-priority cgroup is under pressure.
+> >  2. `test_memcg_ops_below_low_over_high`:
+> >  Tests the combination of the `below_low` and `get_high_delay_ms`
+> >  hooks, ensuring they work together as expected.
+> >  3. `test_memcg_ops_below_min_over_high`:
+> >  Validates the interaction between the `below_min` and
+> >  `get_high_delay_ms` hooks.
+> >  The test framework sets up a cgroup hierarchy with high and low
+> >  priority groups, attaches BPF programs, runs memory-intensive
+> >  workloads, and asserts that the observed throttling (measured by
+> >  workload execution time) matches expectations.
+> >  The BPF program (`progs/memcg_ops.c`) uses a tracepoint on
+> >  `memcg:count_memcg_events` (specifically PGFAULT) to detect memory
+> >  pressure and trigger the appropriate hooks in response. This test
+> >  suite provides essential validation for the new memory control
+> >  mechanisms.
+> >  Signed-off-by: Geliang Tang <geliang@kernel.org>
+> >  Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> >  ---
+> >=20
+>=20[..]
+>=20
+>=20>=20
+>=20> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c b/t=
+ools/testing/selftests/bpf/prog_tests/memcg_ops.c
+> >  new file mode 100644
+> >  index 000000000000..9a8d16296f2d
+> >  --- /dev/null
+> >  +++ b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+> >  @@ -0,0 +1,537 @@
+> >=20
+>=20[..]
+>=20
+>=20>=20
+>=20> +
+> >  +static void
+> >  +real_test_memcg_ops_child_work(const char *cgroup_path,
+> >  + char *data_filename,
+> >  + char *time_filename,
+> >  + int read_times)
+> >  +{
+> >  + struct timeval start, end;
+> >  + double elapsed;
+> >  + FILE *fp;
+> >  +
+> >  + if (!ASSERT_OK(join_parent_cgroup(cgroup_path), "join_parent_cgrou=
+p"))
+> >  + goto out;
+> >  +
+> >  + if (env.verbosity >=3D VERBOSE_NORMAL)
+> >  + printf("%s %d begin\n", __func__, getpid());
+> >  +
+> >  + gettimeofday(&start, NULL);
+> >  +
+> >  + if (!ASSERT_OK(write_file(data_filename), "write_file"))
+> >  + goto out;
+> >  +
+> >  + if (env.verbosity >=3D VERBOSE_NORMAL)
+> >  + printf("%s %d write_file done\n", __func__, getpid());
+> >  +
+> >  + if (!ASSERT_OK(read_file(data_filename, read_times), "read_file"))
+> >  + goto out;
+> >  +
+> >  + gettimeofday(&end, NULL);
+> >  +
+> >  + elapsed =3D (end.tv_sec - start.tv_sec) +
+> >  + (end.tv_usec - start.tv_usec) / 1000000.0;
+> >  +
+> >  + if (env.verbosity >=3D VERBOSE_NORMAL)
+> >  + printf("%s %d end %.6f\n", __func__, getpid(), elapsed);
+> >  +
+> >  + fp =3D fopen(time_filename, "w");
+> >  + if (!ASSERT_OK_PTR(fp, "fopen"))
+> >  + goto out;
+> >  + fprintf(fp, "%.6f", elapsed);
+> >  + fclose(fp);
+> >  +
+> >  +out:
+> >  + exit(0);
+> >  +}
+> >  +
+> >=20
+>=20[..]
+>=20
+>=20>=20
+>=20> +static void real_test_memcg_ops(int read_times)
+> >  +{
+> >  + int ret;
+> >  + char data_file1[] =3D "/tmp/test_data_XXXXXX";
+> >  + char data_file2[] =3D "/tmp/test_data_XXXXXX";
+> >  + char time_file1[] =3D "/tmp/test_time_XXXXXX";
+> >  + char time_file2[] =3D "/tmp/test_time_XXXXXX";
+> >  + pid_t pid1, pid2;
+> >  + double time1, time2;
+> >  +
+> >  + ret =3D mkstemp(data_file1);
+> >  + if (!ASSERT_GT(ret, 0, "mkstemp"))
+> >  + return;
+> >  + close(ret);
+> >  + ret =3D mkstemp(data_file2);
+> >  + if (!ASSERT_GT(ret, 0, "mkstemp"))
+> >  + goto cleanup_data_file1;
+> >  + close(ret);
+> >  + ret =3D mkstemp(time_file1);
+> >  + if (!ASSERT_GT(ret, 0, "mkstemp"))
+> >  + goto cleanup_data_file2;
+> >  + close(ret);
+> >  + ret =3D mkstemp(time_file2);
+> >  + if (!ASSERT_GT(ret, 0, "mkstemp"))
+> >  + goto cleanup_time_file1;
+> >  + close(ret);
+> >  +
+> >  + pid1 =3D fork();
+> >  + if (!ASSERT_GE(pid1, 0, "fork"))
+> >  + goto cleanup;
+> >  + if (pid1 =3D=3D 0)
+> >  + real_test_memcg_ops_child_work(CG_LOW_DIR,
+> >  + data_file1,
+> >  + time_file1,
+> >  + read_times);
+> >=20
+>=20Would it be better to call exit() after real_test_memcg_ops_child_wor=
+k()
+> instead of within it? This way the fork/exit/wait logic is contained in
+> the same scope making the lifetimes easier to track. I had to go back
+> and search for the call to exit() since at a glance this function
+> appears to proceed to call fork() and waitpid() from within both parent
+> and child procs (though it really does not).
+>
 
+I will fix it.
 
-
-Thanks,
-Ming
-
+Best,
+Hui
