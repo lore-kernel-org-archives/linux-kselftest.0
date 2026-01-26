@@ -1,157 +1,103 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134288F5B
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 18:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B581620B810;
+	Mon, 26 Jan 2026 19:03:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769453126; cv=none; b=eZC6k51DOsB1p56uuGIasziZDMFMefDX2QLfCEyXwcU3wJDJh1bo0hrRco1ooog1Dw8Rx00VKMCB8gGAl96c0PN/j3JcMACPJbFnMAizj3G4hrwvfTMhknCJH04h5Nmz2QOFS6jH6kobz0duaTHuoA8ne0ztcVeJTqhMg1cHCPI=
+	t=1769454180; cv=none; b=ihy9scCNlTYPgoG2RU+tgf9ACR32jywH2nbjRX6QoiT6gUdcEwDqWYxWOSgaAiz4R6ID3YjnSlovTezA7UXc8JOQnlfvcqiDtLxo2m38z7twomdkVNQMfCzzCsUiwScOqn/DtIG5YK7vWu4Yx94I/ycXwhWlLjaqharkwIwAbGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769453126; c=relaxed/simple;
-	bh=idn99UPqC0nF9uZDjKf0+iVfU/oqm91JSUXz9Edt4Tw=;
+	s=arc-20240116; t=1769454180; c=relaxed/simple;
+	bh=NMpmmo676tzOTXBkbWzjq51xX+ZDtptvSmw/dCizBnQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QtZ5EkoCUC25g2NmZg3eHF/S+Z5DVUcLj9bO36BkfES4RVZCYfgmq67VM1+H7X9CIEfLOSybsIv8alhyWt5etnW8YyM0z2wN6UR2zj3znNqybFAQjicx8hqNxrONM9uBgjBoOyZeMDwN2hK5SYjChy2TmfMT0JZKE4+VDMtho+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eXrxGeME; arc=none smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=eM3clFcU7HU76rurj+bUl+yzfFwWbdRsNQbbZgWM6ATQHfZyHbTuyVftn5JC6DL5Bj77lfmh3SxrcW79WD7IE5S580VYaXHyzfgoHULZ13XX/UV24R+tWBkWdaptXiHKvs6QiVfdsJuQ/VOgzfRvTQ3F8a2LJPQRwKg5Jnt5CTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u7R8O7DQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eXrxGeME"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-649605d3664so3118118d50.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 10:45:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769453124; x=1770057924; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LzUUHM37iqxpGKoml5d9xTIQ0EByiMn/P+sNGyQg1IY=;
-        b=eXrxGeMEXsjtWZ7u4xag9aNbizPGsfEfHTeHM2cN9OQjuh6B498ItE+xKomXNtnBRB
-         Oyt+/FtSaAseuhh3ByClTKY0G4OJ+oo8qPRSlf+rFJqluiLnKrLW5NdVbJnZP8PZwGP7
-         zX+RbnjSR9TtLFlcy5FzIkEdINbkCY2XllR/v8c1OaByJVEiljsZdF/rvufl1q4y0XOO
-         7s2k1RNRF90F18kXWUZ0mzGP7zdNpSceOafOnc754kGut2cCB5NdnfrnGxf8aJl+Icqc
-         5v87V4AiIAhlh4vIPVdMyyfQtCJpeEdkv5szcBofZeYMMjcaZUOVyUfOf5nRtLGxuZ8j
-         cDbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769453124; x=1770057924;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LzUUHM37iqxpGKoml5d9xTIQ0EByiMn/P+sNGyQg1IY=;
-        b=O5auiDrguQSfFvWwzl64vm3MsZ8Isn6lsKq/teCoTR0YwcHUypJ3P/Z3Z92e1IProg
-         g3UG2R5crW9/s7iDjyUnXjEwtJr49bwVhEZJoFdfK1YLZEf2MJdoBoLP5qGmYyZz12Vp
-         PqPZXJLRESSZ8x3zXj/9r0UBAr04z6/4lbQzU4iXneEjRxuTDTwVTNc0GPr+kNhJXSwu
-         G4ZlK/BfN9PoiaroeJD1By8dE/D+EyZsqUT8k+e8cCD4O8Oux2bLxKqM371zw/eVWzXB
-         UDC9be+yCr2mGmDY/18w8wx6k90A9azjzMRkmmaRl/vJq3Fr55mCeg3xbDxTbvqg4dkD
-         X/DQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX0lKXUvj9dZGUVQgC3CRJbmIfXEoUxar+KR4e2hB4Qs4R+4ygLaIOemL1jbTqjDy0iozVRo3XMf0mHnElkyKE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9mdi4rfx+yZ61kVikk/dSeeVlTsEytw0Hu8x3mwUlLQwlwow0
-	5ULnlhoEBQzoic96jl2TFvXwvW+Uz9qqnkZm/rB2ZmJsD4pdEp+33QAK
-X-Gm-Gg: AZuq6aIeyrokhzhib/onVEOLNr29U2G/h/6m3PRK9lRx7owV17ld3QmXqCwtVhH80oY
-	wJwPdODbC6JXhsgt7Jl1eY8mzJ4JBhPYk52c6aMpfMRjHJZBewvB9npYSU2cyXJob6ChODVfOV7
-	q5iKg8y53r2SSzwLNcYQSaiE4JqVHzKd18fk0tWOLIyTqWKgUNwNPOgMt3LK37gmL2818DgMHPi
-	s9pzKqvn+zeBmzWYSohtZavtRJ9Yp26O9iIXhZUdM4nay1plgW7ez8Co+CZB0+tAGwuf+S+Rk03
-	mZxr5kTuFajYpCQG/9Ryb4ITNxP3O3uINiOgPQgdaVypP98txcUkpL4UBMiqGsYsL2fEXNB2GN0
-	NPtpHVFy+qDRyEHnoxrdNp7cvNVjSeENan4qnwFAICvOkuWJxslchtQ9+BjYkCCMpCczvUbT2Qp
-	ChQl4ECa/3VHfQ+O/Oc1KHiB8j/9IRk2ghYg==
-X-Received: by 2002:a05:690e:11ce:b0:635:4ecd:5fcc with SMTP id 956f58d0204a3-64970c03363mr4264419d50.41.1769453124075;
-        Mon, 26 Jan 2026 10:45:24 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:3::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6495ce752f2sm5613399d50.1.2026.01.26.10.45.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jan 2026 10:45:23 -0800 (PST)
-Date: Mon, 26 Jan 2026 10:45:22 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v10 0/5] net: devmem: improve cpu cost of RX
- token management
-Message-ID: <aXe2QhzL4DoVbesQ@devvm11784.nha0.facebook.com>
-References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-0-686d0af71978@meta.com>
- <20260120170749.101e8bcc@kernel.org>
- <CAHS8izMZxM6rcF+7Lfw=KFv4dmbHGSUrQBPmxO+sYj=V3TRuwQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u7R8O7DQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F40C116C6;
+	Mon, 26 Jan 2026 19:02:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769454180;
+	bh=NMpmmo676tzOTXBkbWzjq51xX+ZDtptvSmw/dCizBnQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=u7R8O7DQde8PBTJMl4lJAtJCbCkYvd2dlGK++9bhHIE2+Sh3CaBlVA3eM6xctJ6Fi
+	 1FUvByfXUDgMmEohYC1qb4XpTDfrfTtuZ1a8OWFF6yDtLB/5B0SQzCCQR/LpDwg9E1
+	 mdjJLPbQi54dGnDtLQxgvYHQYvb09MScWJGuhIXUQyxoctKo4MMRu0mb6hjcV6IFU4
+	 FKp69LSbUISJj3iKEhDv3AgHba8o5R9F9q2/CGYhEkmnrHsZ/PH+8hzT4tE/3cwzvH
+	 jaCMhGEY5qDwTlwCKeZStYXrr6VXLblmYa9jTMgw4UpS5Nbi8KxHATgJtOW0BvG+rl
+	 T80bpLVqbP4dw==
+Date: Mon, 26 Jan 2026 19:02:51 +0000
+From: Will Deacon <will@kernel.org>
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: catalin.marinas@arm.com, oleg@redhat.com, tglx@linutronix.de,
+	peterz@infradead.org, luto@kernel.org, shuah@kernel.org,
+	kees@kernel.org, wad@chromium.org, kevin.brodsky@arm.com,
+	macro@orcam.me.uk, charlie@rivosinc.com, akpm@linux-foundation.org,
+	ldv@strace.io, anshuman.khandual@arm.com, mark.rutland@arm.com,
+	thuth@redhat.com, song@kernel.org, ryan.roberts@arm.com,
+	ada.coupriediaz@arm.com, broonie@kernel.org, liqiang01@kylinos.cn,
+	pengcan@kylinos.cn, kmal@cock.li, dvyukov@google.com,
+	richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v10 05/16] arm64: ptrace: Move rseq_syscall() before
+ audit_syscall_exit()
+Message-ID: <aXe6W69Esd1NLEU8@willie-the-truck>
+References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
+ <20251222114737.1334364-6-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHS8izMZxM6rcF+7Lfw=KFv4dmbHGSUrQBPmxO+sYj=V3TRuwQ@mail.gmail.com>
+In-Reply-To: <20251222114737.1334364-6-ruanjinjie@huawei.com>
 
-On Wed, Jan 21, 2026 at 08:21:36PM -0800, Mina Almasry wrote:
-> On Tue, Jan 20, 2026 at 5:07 PM Jakub Kicinski <kuba@kernel.org> wrote:
-> >
-> > On Thu, 15 Jan 2026 21:02:11 -0800 Bobby Eshleman wrote:
-> > > This series improves the CPU cost of RX token management by adding an
-> > > attribute to NETDEV_CMD_BIND_RX that configures sockets using the
-> > > binding to avoid the xarray allocator and instead use a per-binding niov
-> > > array and a uref field in niov.
-> > >
-> > > Improvement is ~13% cpu util per RX user thread.
-> > >
-> > > Using kperf, the following results were observed:
-> > >
-> > > Before:
-> > >       Average RX worker idle %: 13.13, flows 4, test runs 11
-> > > After:
-> > >       Average RX worker idle %: 26.32, flows 4, test runs 11
-> > >
-> > > Two other approaches were tested, but with no improvement. Namely, 1)
-> > > using a hashmap for tokens and 2) keeping an xarray of atomic counters
-> > > but using RCU so that the hotpath could be mostly lockless. Neither of
-> > > these approaches proved better than the simple array in terms of CPU.
-> > >
-> > > The attribute NETDEV_A_DMABUF_AUTORELEASE is added to toggle the
-> > > optimization. It is an optional attribute and defaults to 0 (i.e.,
-> > > optimization on).
-> >
-> > IDK if the cmsg approach is still right for this flow TBH.
-> > IIRC when Stan talked about this a while back we were considering doing
-> > this via Netlink. Anything that proves that the user owns the binding
-> > would work. IIUC the TCP socket in this design just proves that socket
-> > has received a token from a given binding right?
+On Mon, Dec 22, 2025 at 07:47:26PM +0800, Jinjie Ruan wrote:
+> commit a9f3a74a29af ("entry: Provide generic syscall exit function")
+> introduce generic syscall exit function and call rseq_syscall()
+> before audit_syscall_exit() and arch_syscall_exit_tracehook().
 > 
-> Doesn't 'doing this via netlink' imply it's a control path operation
-> that acquires rtnl_lock or netdev_lock or some heavy lock expecting
-> you to do some config change? Returning tokens is a data-path
-> operation, IIRC we don't even lock the socket to do it in the
-> setsockopt.
+> And commit b74406f37737 ("arm: Add syscall detection for restartable
+> sequences") add rseq support for arm32, which also call rseq_syscall()
+> before audit_syscall_exit() and tracehook_report_syscall().
 > 
-> Is there precedent/path to doing fast data-path operations via netlink?
-> There may be value in not biting more than we can chew in one series.
-> Maybe an alternative non-setsockopt dontneeding scheme should be its
-> own patch series.
+> However, commit 409d5db49867c ("arm64: rseq: Implement backend rseq
+> calls and select HAVE_RSEQ") implement arm64 rseq and call
+> rseq_syscall() after audit_syscall_exit() and tracehook_report_syscall().
 > 
+> So compared to the generic entry and arm32 code, arm64 terminates
+> the process a bit later if the syscall is issued within
+> a restartable sequence.
 
-I'm onboard with improving what we have since it helps all of us
-currently using this API, though I'm not opposed to discussing a
-redesign in another thread/RFC. I do see the attraction to locating the
-core logic in one place and possibly reducing some complexity around
-socket/binding relationships.
+Given that signals are processed until later, is this actually true?
 
-FWIW regarding nl, I do see it supports rtnl lock-free operations via
-'62256f98f244 rtnetlink: add RTNL_FLAG_DOIT_UNLOCKED' and routing was
-recently made lockless with that. I don't see / know of any fast path
-precedent. I'm aware there are some things I'm not sure about being
-relevant performance-wise, like hitting skb alloc an additional time
-every release batch. I'd want to do some minimal latency comparisons
-between that path and sockopt before diving head-first.
+> But as commit b74406f37737 ("arm: Add syscall detection for restartable
+> sequences") said, syscalls are not allowed inside restartable sequences,
+> so should call rseq_syscall() at the very beginning of system call
+> exiting path for CONFIG_DEBUG_RSEQ=y kernel. This could help us to detect
+> whether there is a syscall issued inside restartable sequences.
+> 
+> It makes sense to raise SIGSEGV via rseq_syscall() before auditing
+> and ptrace syscall exit, because this guarantees that the process is
+> already in an error state with SIGSEGV pending when those later steps
+> run. Although it makes no practical difference to signal delivery (signals
+> are processed at the very end in arm64_exit_to_user_mode()), the ordering
+> is more logical: detect and flag the error first, then proceed with
+> the remaining work.
+> 
+> To make it more reasonable and in preparation for moving arm64 over to
+> the generic entry code, move rseq_syscall() ahead before
+> audit_syscall_exit().
 
-Best,
-Bobby
+I've been struggling a bit to see how this helps to align with the
+generic code. I'm also concerned that rseq_debug_update_user_cs()
+operates on instruction_pointer(regs) which is something that can be
+chaned by ptrace.
+
+So, I'm not saying this is wrong, but it feels like a user-visible
+change that needs better justification.
+
+Will
