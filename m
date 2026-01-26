@@ -1,353 +1,336 @@
-Received: from mail.itpri.com (mx1.itpri.com [185.125.111.158])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54B92FA0C6;
-	Mon, 26 Jan 2026 08:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.111.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FCE277C81
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 09:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769416457; cv=none; b=SsAK7fl4W2L5WkqEpfvVsuejmOtjjTyZNbApCEE7t26hJ/l6HdnVSX7yWNAEaz7OozV/zGtTqhMLnBMFZzTgopoo+5RTO2k8oJZy26ditXz9MY5mKdFqIWTa3sw35j2OmgtLKH9s522I0cOHXJ02TDgNi2o80I+GheIhtF8IboI=
+	t=1769418199; cv=none; b=HkcBJPVEjGdL4ZtszDhym9tZBQJSoRXrn8KYPfMgrXqstjutFdAhTKvYxUO2OxbK8ibWhLsbwpgMIRC6TH2sauK6c1u/kvJNItkcsu7vD0x26J2ZorK5ZiTbO8rJlTKFXSUsOr2Iv4aulZmFHO0X5KXfsgyw4BrsNABnPMhu1y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769416457; c=relaxed/simple;
-	bh=x6dG68/K5l0AwsEc8UvHDxe8a9IktxU8g4/oqzGOqRU=;
-	h=Content-Type:MIME-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=mqTKTV0EgIo8oKVMT2rAmIuCO6UOPR3hrKDVEiX8sTkbp+NSFrgaMzmJSp/TRROoVPotkCiRgP+gQffR1WIqrgSj7TduvOuN/X89Nk45yMhI8+hq1L/rDebzYk5q9KDL3coc64L394we927SpSIJYchcUWZoOlEk3iyl0NHc59E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com; spf=pass smtp.mailfrom=zazolabs.com; dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b=Bv/AF/cl; arc=none smtp.client-ip=185.125.111.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zazolabs.com
+	s=arc-20240116; t=1769418199; c=relaxed/simple;
+	bh=WoMSaaEa6cPJ7PS3AIOXxw/NrGUzfUkLfBRwpe+8VaA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cA1k1h+RuC4NfIGrlLnPMXx1iIso5Kj8kBFP904XJ0etDdrohVbCNwHZVET4ynzkLBiES5EOEvO0tabC56tSXSv5FbaD5jPNYfvW6VdAnIRfmlITJv3HREspKFuXLb2VttWzRwH534GzyEOb9ujybsPjb96TFJm1W9h3rAtk/Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Xa6EFDgh; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b="Bv/AF/cl"
-X-Virus-Scanned: Yes
-Content-Type: text/plain;
-	charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zazolabs.com; s=mail;
-	t=1769416450; bh=x6dG68/K5l0AwsEc8UvHDxe8a9IktxU8g4/oqzGOqRU=;
-	h=Subject:From:In-Reply-To:Cc:References:To;
-	b=Bv/AF/clkueQN9G2Z9nxzWPhTFJk/ukB5GE2jg6XqCKRft39YdrDFq3wn14Wfa9vD
-	 aECYqv0RUhNAdUB0j6q2/BH8M6EakcCLwesIU9ds8mW8vL0S4rDaEohCLYUO9OX2+5
-	 Qy9odTg9AmLwYm3TvUUTos92czumizVPnlyI172LC/RtycmmI1c7pLe0Vtw0sUv1Jy
-	 oCwmQlbas7nKnRZACftzEBcz5hYqrBbxz1XdETsQj4anGOcnLBYMSIKM71Zq8dVKXS
-	 OeRni2sxH61HuHW7B4B3FI60gNo9j6nckCJTd4Y8tqXRmzq9nOTPz6uxBluJaLo7h4
-	 g7yy3kedg8nK653bOoESjArHeDpRQwd4EZLqKVme1s7dx0MA/VttPRIsu9U6unNtOB
-	 ecnGvrViC//Zfng72/OYg+gK0LpS0KoG82tDnOwHLh7BDhKIKSveISUT3dLt6v8V8t
-	 AsOaBs5E84UAECAjxcd9742wi4cp6YIa3LwfERJ6VmU/P3ohfE6YFTAbWrt2cbNV4V
-	 8aIL3BIItnqFM4egMsOERjGjk+VdpAHjGTsV5sg6KmlznKkvSAt4yNX8uNdsI/cS1d
-	 Nt/+gN+1qNjKRER9RK1KGsbdgsklSXZfwSmWLC827uw9B4enHdlRQaq4XuyU8wGXq8
-	 1bKXSkkb5M1/8eS1uIEn7P/I=
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Xa6EFDgh"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769418184;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=gFr3YlD/FrQ5KpFJY2fbuprM3uE6y+2ho/7y/E4qt6c=;
+	b=Xa6EFDghdPtPPeaPmdck+ruV9B57Bb32pkkRJ/zJSbAsevQ6855WdTp5jvcB75IVRlEZXZ
+	J6UfsoznsXT4WH5lKLXkgc3wB8zzSliTyO4WclOeEucWwvwtUhvKwSE3PVZA1OXCAhdd71
+	aEjqyD9Xdmxvk8R78HFXfUgbVAq1/wY=
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	davem@davemloft.net,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Chen Ridong <chenridong@huaweicloud.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	cgroups@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [RFC PATCH bpf-next v4 00/12] mm: memcontrol: Add BPF hooks for memory controller
+Date: Mon, 26 Jan 2026 17:02:24 +0800
+Message-ID: <cover.1769417588.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] selftests: ublk: io-reorder triggered in
- test_generic_01.sh
-From: Alexander Atanasov <alex@zazolabs.com>
-In-Reply-To: <aXbDCtZ8fvljMEsC@fedora>
-Date: Mon, 26 Jan 2026 10:33:58 +0200
-Cc: alex+zkern@zazolabs.com,
- Shuah Khan <shuah@kernel.org>,
- linux-block@vger.kernel.org,
- linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7B09D8AA-C725-432A-AE85-D7CC620836EC@zazolabs.com>
-References: <20260123112039.1370223-1-alex@zazolabs.com>
- <aXN4mFuoXhtJDKyF@fedora> <147635F1-943E-46D5-8EF1-D1C965F85EC1@zazolabs.com>
- <aXOGrXo3AbXPHA-K@fedora> <03C8F5B9-B2E1-4C78-A043-B4F9422508B7@zazolabs.com>
- <aXY2qdYtfVTSc7jB@fedora> <c517e1ca-0e2b-4143-b0f6-07a3d0c3abcf@zazolabs.com>
- <aXbDCtZ8fvljMEsC@fedora>
-To: Ming Lei <ming.lei@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello,
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-> On 26 Jan 2026, at 3:27, Ming Lei <ming.lei@redhat.com> wrote:
->=20
-> On Sun, Jan 25, 2026 at 08:35:20PM +0200, Alexander Atanasov wrote:
->> On 25.01.26 17:28, Ming Lei wrote:
->>> On Fri, Jan 23, 2026 at 05:00:33PM +0200, Alexander Atanasov wrote:
->>>>=20
->>>>=20
->>=20
->> [snip]
->>=20
->>> Can you test the following patch and see if re-order still can =
-happen?
->>>=20
->>>=20
->>> diff --git a/tools/testing/selftests/ublk/test_generic_01.sh =
-b/tools/testing/selftests/ublk/test_generic_01.sh
->>> index 26cf3c7ceeb5..26d5e52ece29 100755
->>> --- a/tools/testing/selftests/ublk/test_generic_01.sh
->>> +++ b/tools/testing/selftests/ublk/test_generic_01.sh
->>> @@ -13,7 +13,7 @@ if ! _have_program fio; then
->>>   exit "$UBLK_SKIP_CODE"
->>>  fi
->>> -_prep_test "null" "sequential io order"
->>> +_prep_test "null" "ublk dispatch won't reorder IO"
->>>  dev_id=3D$(_add_ublk_dev -t null)
->>>  _check_add_dev $TID $?
->>> @@ -39,9 +39,13 @@ fio --name=3Dwrite_seq \
->>>  ERR_CODE=3D$?
->>>  kill "$btrace_pid"
->>>  wait
->>> -if grep -q "io_out_of_order" "$UBLK_TMP"; then
->>> - cat "$UBLK_TMP"
->>> +
->>> +# Check for out-of-order completions detected by bpftrace
->>> +if grep -q "^out_of_order:" "$UBLK_TMP"; then
->>> + echo "I/O reordering detected:"
->>> + grep "^out_of_order:" "$UBLK_TMP"
->>>   ERR_CODE=3D255
->>>  fi
->>> +
->>>  _cleanup_test "null"
->>>  _show_result $TID $ERR_CODE
->>> diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt =
-b/tools/testing/selftests/ublk/trace/seq_io.bt
->>> index b2f60a92b118..60ac40e66606 100644
->>> --- a/tools/testing/selftests/ublk/trace/seq_io.bt
->>> +++ b/tools/testing/selftests/ublk/trace/seq_io.bt
->>> @@ -2,23 +2,45 @@
->>>   $1:  dev_t
->>>   $2:  RWBS
->>>   $3:     strlen($2)
->>> +
->>> + Track request order between block_io_start and block_rq_complete.
->>> + For each request, record its start sequence number and verify
->>> + completions happen in the same order.
->>>  */
->>> +
->>>  BEGIN {
->>> - @last_rw[$1, str($2)] =3D (uint64)0;
->>> + @start_seq =3D (uint64)0;
->>> + @complete_seq =3D (uint64)0;
->>> + @out_of_order =3D (uint64)0;
->>> +}
->>> +
->>> +tracepoint:block:block_io_start
->>> +{
->>> + if ((int64)args.dev =3D=3D $1 && !strncmp(args.rwbs, str($2), $3)) =
-{
->>> + @start_order[args.sector] =3D @start_seq;
->>> + @start_seq =3D @start_seq + 1;
->>> + }
->>>  }
->>> +
->>>  tracepoint:block:block_rq_complete
->>>  {
->>> - $dev =3D $1;
->>>   if ((int64)args.dev =3D=3D $1 && !strncmp(args.rwbs, str($2), $3)) =
-{
->>> - $last =3D @last_rw[$dev, str($2)];
->>> - if ((uint64)args.sector !=3D $last) {
->>> - printf("io_out_of_order: exp %llu actual %llu\n",
->>> - args.sector, $last);
->>> + $expected_order =3D @start_order[args.sector];
->>> + if ($expected_order !=3D @complete_seq) {
->>> + printf("out_of_order: sector %llu started at seq %llu but =
-completed at seq %llu\n",
->>> + args.sector, $expected_order, @complete_seq);
->>> + @out_of_order =3D @out_of_order + 1;
->>>   }
->>> - @last_rw[$dev, str($2)] =3D (args.sector + args.nr_sector);
->>> + delete(@start_order[args.sector]);
->>> + @complete_seq =3D @complete_seq + 1;
->>>   }
->>>  }
->>>  END {
->>> - clear(@last_rw);
->>> + printf("total_start: %llu total_complete: %llu out_of_order: =
-%llu\n",
->>> + @start_seq, @complete_seq, @out_of_order);
->>> + clear(@start_order);
->>> + clear(@start_seq);
->>> + clear(@complete_seq);
->>> + clear(@out_of_order);
->>>  }
->>=20
->>=20
->> First run after reboot always fails:
->>=20
->> ./test_generic_01.sh
->> ublk selftest: generic_01 starting at 2026-01-25T19:08:47+02:00
->> I/O reordering detected:
->> out_of_order: sector 112040 started at seq 88 but completed at seq 0
->> out_of_order: sector 112048 started at seq 89 but completed at seq 1
->> out_of_order: sector 112056 started at seq 90 but completed at seq 2
->> out_of_order: sector 112064 started at seq 91 but completed at seq 3
->> out_of_order: sector 112072 started at seq 92 but completed at seq 4
->> out_of_order: sector 112080 started at seq 93 but completed at seq 5
->> out_of_order: sector 112088 started at seq 94 but completed at seq 6
->> out_of_order: sector 112096 started at seq 95 but completed at seq 7
->> out_of_order: sector 112104 started at seq 96 but completed at seq 8
->> out_of_order: sector 112112 started at seq 97 but completed at seq 9
->> out_of_order: sector 112120 started at seq 98 but completed at seq 10
->> out_of_order: sector 112128 started at seq 99 but completed at seq 11
->=20
-> In the 1st bpf attachment, fio may be started between attaching
-> block_start_req and block_complete_req. Maybe the following patch can
-> solve it:
->=20
->=20
-> diff --git a/tools/testing/selftests/ublk/test_generic_01.sh =
-b/tools/testing/selftests/ublk/test_generic_01.sh
-> index 26cf3c7ceeb5..15cea9e55e1c 100755
-> --- a/tools/testing/selftests/ublk/test_generic_01.sh
-> +++ b/tools/testing/selftests/ublk/test_generic_01.sh
-> @@ -13,7 +13,7 @@ if ! _have_program fio; then
-> exit "$UBLK_SKIP_CODE"
-> fi
->=20
-> -_prep_test "null" "sequential io order"
-> +_prep_test "null" "ublk dispatch won't reorder IO"
->=20
-> dev_id=3D$(_add_ublk_dev -t null)
-> _check_add_dev $TID $?
-> @@ -21,15 +21,20 @@ _check_add_dev $TID $?
-> dev_t=3D$(_get_disk_dev_t "$dev_id")
-> bpftrace trace/seq_io.bt "$dev_t" "W" 1 > "$UBLK_TMP" 2>&1 &
-> btrace_pid=3D$!
-> -sleep 2
->=20
-> -if ! kill -0 "$btrace_pid" > /dev/null 2>&1; then
-> +# Wait for bpftrace probes to be attached (BEGIN block prints =
-BPFTRACE_READY)
-> +for _ in $(seq 100); do
-> + grep -q "BPFTRACE_READY" "$UBLK_TMP" 2>/dev/null && break
-> + sleep 0.1
-> +done
-> +
-> +if ! kill -0 "$btrace_pid" 2>/dev/null; then
-> _cleanup_test "null"
-> exit "$UBLK_SKIP_CODE"
-> fi
->=20
-> -# run fio over this ublk disk
-> -fio --name=3Dwrite_seq \
-> +# run fio over this ublk disk (pinned to CPU 0)
-> +taskset -c 0 fio --name=3Dwrite_seq \
->     --filename=3D/dev/ublkb"${dev_id}" \
->     --ioengine=3Dlibaio --iodepth=3D16 \
->     --rw=3Dwrite \
-> @@ -39,9 +44,13 @@ fio --name=3Dwrite_seq \
-> ERR_CODE=3D$?
-> kill "$btrace_pid"
-> wait
-> -if grep -q "io_out_of_order" "$UBLK_TMP"; then
-> - cat "$UBLK_TMP"
-> +
-> +# Check for out-of-order completions detected by bpftrace
-> +if grep -q "^out_of_order:" "$UBLK_TMP"; then
-> + echo "I/O reordering detected:"
-> + grep "^out_of_order:" "$UBLK_TMP"
-> ERR_CODE=3D255
-> fi
-> +
-> _cleanup_test "null"
-> _show_result $TID $ERR_CODE
-> diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt =
-b/tools/testing/selftests/ublk/trace/seq_io.bt
-> index b2f60a92b118..8ebe13d24c67 100644
-> --- a/tools/testing/selftests/ublk/trace/seq_io.bt
-> +++ b/tools/testing/selftests/ublk/trace/seq_io.bt
-> @@ -2,23 +2,64 @@
-> $1:  dev_t
-> $2:  RWBS
-> $3:     strlen($2)
-> +
-> + Track request order between block_io_start and block_rq_complete.
-> + For each request, record its start sequence number and verify
-> + completions happen in the same order.
-> +
-> + Sequence starts at 1 so that 0 means "never seen" (bpftrace maps
-> + return 0 for missing keys). On first valid completion, sync
-> + complete_seq to handle probe attachment races.
-> +
-> + block_rq_complete is listed first to ensure it's attached before
-> + block_io_start, reducing the window for missed completions.
-> */
-> +
-> BEGIN {
-> - @last_rw[$1, str($2)] =3D (uint64)0;
-> + @start_seq =3D (uint64)1;
-> + @complete_seq =3D (uint64)0;
-> + @out_of_order =3D (uint64)0;
-> + /* Initialize map type with dummy entry */
-> + @start_order[0] =3D (uint64)0;
-> + delete(@start_order[0]);
-> + printf("BPFTRACE_READY\n");
-> }
-> +
-> tracepoint:block:block_rq_complete
-> {
-> - $dev =3D $1;
-> if ((int64)args.dev =3D=3D $1 && !strncmp(args.rwbs, str($2), $3)) {
-> - $last =3D @last_rw[$dev, str($2)];
-> - if ((uint64)args.sector !=3D $last) {
-> - printf("io_out_of_order: exp %llu actual %llu\n",
-> - args.sector, $last);
-> + $expected =3D @start_order[args.sector];
-> + if ($expected > 0) {
-> + /* Sync complete_seq on first valid completion */
-> + if (@complete_seq =3D=3D 0) {
-> + @complete_seq =3D $expected;
-> + }
-> +
-> + if ($expected !=3D @complete_seq) {
-> + printf("out_of_order: sector %llu started at seq %llu but completed =
-at seq %llu\n",
-> + args.sector, $expected, @complete_seq);
-> + @out_of_order =3D @out_of_order + 1;
-> + }
-> + delete(@start_order[args.sector]);
-> + @complete_seq =3D @complete_seq + 1;
-> }
-> - @last_rw[$dev, str($2)] =3D (args.sector + args.nr_sector);
-> + /* $expected =3D=3D 0 means we never saw this sector start, skip it =
-*/
-> + }
-> +}
-> +
-> +tracepoint:block:block_io_start
-> +{
-> + if ((int64)args.dev =3D=3D $1 && !strncmp(args.rwbs, str($2), $3)) {
-> + @start_order[args.sector] =3D @start_seq;
-> + @start_seq =3D @start_seq + 1;
-> }
-> }
->=20
-> END {
-> - clear(@last_rw);
-> + printf("total_start: %llu total_complete: %llu out_of_order: =
-%llu\n",
-> + @start_seq - 1, @complete_seq, @out_of_order);
-> + clear(@start_order);
-> + clear(@start_seq);
-> + clear(@complete_seq);
-> + clear(@out_of_order);
-> }
->=20
+eBPF infrastructure provides rich visibility into system performance
+metrics through various tracepoints and statistics.
+This patch series introduces BPF struct_ops for the memory controller.
+Then the eBPF program can help the system control the memory controller
+based on system performance metrics, thereby improving the utilization
+of system memory resources while ensuring memory limits are respected.
+
+The following example illustrates how memcg eBPF can improve memory
+utilization in some scenarios.
+The example running on x86_64 QEMU (10 CPUs, 4GB RAM), using a
+file in tmpfs on the host as a swap device to reduce I/O impact.
+root@ubuntu:~# cat /proc/sys/vm/swappiness
+60
+This the high priority memcg.
+root@ubuntu:~# mkdir /sys/fs/cgroup/high
+This the low priority memcg.
+root@ubuntu:~# mkdir /sys/fs/cgroup/low
+root@ubuntu:~# free
+               total        used        free      shared  buff/cache   available
+Mem:         4007276      392320     3684940         908      101476     3614956
+Swap:       10485756           0    10485756
+
+First, The following test uses memory.low to reduce the likelihood of tasks in
+high-priority memory cgroups being reclaimed.
+root@ubuntu:~# echo $((3 * 1024 * 1024 * 1024)) > /sys/fs/cgroup/high/memory.low
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60
+[1] 1176
+stress-ng: info:  [1177] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1176] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1177] dispatching hogs: 4 vm
+stress-ng: info:  [1176] dispatching hogs: 4 vm
+stress-ng: metrc: [1177] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1177]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1177] vm             27047770     60.07    217.79      8.87    450289.91      119330.63        94.34        886936
+stress-ng: info:  [1177] skipped: 0
+stress-ng: info:  [1177] passed: 4: vm (4)
+stress-ng: info:  [1177] failed: 0
+stress-ng: info:  [1177] metrics untrustworthy: 0
+stress-ng: info:  [1177] successful run completed in 1 min, 0.07 secs
+stress-ng: metrc: [1176] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1176]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1176] vm               679754     60.12     11.82     72.78     11307.18        8034.42        35.18        469884
+stress-ng: info:  [1176] skipped: 0
+stress-ng: info:  [1176] passed: 4: vm (4)
+stress-ng: info:  [1176] failed: 0
+stress-ng: info:  [1176] metrics untrustworthy: 0
+stress-ng: info:  [1176] successful run completed in 1 min, 0.13 secs
+[1]+  Done                    cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes $((3 * 1024 * 1024 * 1024)) --vm-method all --seed 2025 --metrics -t 60
 
 
-This solves it - no more out of order detected.
+The following test continues to use memory.low to reduce the likelihood
+of tasks in high-priority memory cgroups (memcg) being reclaimed.
+In this scenario, a Python script within the high-priority memcg simulates
+a low-load task.
+As a result, the Python script's performance is not affected by memory
+reclamation (as it sleeps after allocating memory).
+However, the performance of stress-ng is still impacted due to
+the memory.low setting.
 
-Looks like this auto mount explains why it misses a few seqs on the =
-first run.=20
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high python3 -c \
+"import time; a = bytearray(3*1024*1024*1024); time.sleep(62)"
+[1] 1196
+stress-ng: info:  [1196] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1196] dispatching hogs: 4 vm
+stress-ng: metrc: [1196] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1196]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1196] vm               886893     60.10     17.76     56.61     14756.92       11925.69        30.94        788676
+stress-ng: info:  [1196] skipped: 0
+stress-ng: info:  [1196] passed: 4: vm (4)
+stress-ng: info:  [1196] failed: 0
+stress-ng: info:  [1196] metrics untrustworthy: 0
+stress-ng: info:  [1196] successful run completed in 1 min, 0.10 secs
+[1]+  Done                    cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes $((3 * 1024 * 1024 * 1024)) --vm-method all --seed 2025 --metrics -t 60
+root@ubuntu:~# echo 0 > /sys/fs/cgroup/high/memory.low
 
-[   99.548551] ublk selftest: generic_01 starting at =
-2026-01-26T10:24:07+02:00
-[  104.173575] NOTICE: Automounting of tracing to debugfs is deprecated =
-and will be removed in 2030
-[  112.680519] ublk selftest: generic_01 done at =
-2026-01-26T10:24:20+02:00
-[  116.564281] ublk selftest: generic_01 starting at =
-2026-01-26T10:24:24+02:00
-[  130.658273] ublk selftest: generic_01 done at =
-2026-01-26T10:24:38+02:00
+Now, we switch to using the memcg eBPF program for memory priority control.
+memcg is a test program added to samples/bpf in this patch series.
+It loads memcg.bpf.c into the kernel.
+memcg.bpf.c monitors PGFAULT events in the high-priority memory cgroup.
+When the number of events triggered within one second exceeds a predefined
+threshold, the eBPF hook for the memory cgroup activates its control for
+one second.
 
+The following command configures the high-priority memory cgroup to
+return below_min during memory reclamation if the number of PGFAULT
+events per second exceeds one.
+root@ubuntu:~# ./memcg --low_path=/sys/fs/cgroup/low \
+     --high_path=/sys/fs/cgroup/high \
+     --threshold=1 --use_below_min
+Successfully attached!
 
-have fun,
-alex
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60
+[1] 1220
+stress-ng: info:  [1220] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1221] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1220] dispatching hogs: 4 vm
+stress-ng: info:  [1221] dispatching hogs: 4 vm
+stress-ng: metrc: [1221] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1221]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1221] vm             24295240     60.08    221.36      7.64    404392.49      106095.60        95.29        886684
+stress-ng: info:  [1221] skipped: 0
+stress-ng: info:  [1221] passed: 4: vm (4)
+stress-ng: info:  [1221] failed: 0
+stress-ng: info:  [1221] metrics untrustworthy: 0
+stress-ng: info:  [1221] successful run completed in 1 min, 0.11 secs
+stress-ng: metrc: [1220] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1220]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1220] vm               685732     60.13     11.69     75.98     11403.88        7822.30        36.45        496496
+stress-ng: info:  [1220] skipped: 0
+stress-ng: info:  [1220] passed: 4: vm (4)
+stress-ng: info:  [1220] failed: 0
+stress-ng: info:  [1220] metrics untrustworthy: 0
+stress-ng: info:  [1220] successful run completed in 1 min, 0.14 secs
+[1]+  Done                    cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes $((3 * 1024 * 1024 * 1024)) --vm-method all --seed 2025 --metrics -t 60
 
+This test demonstrates that because the Python process within the
+high-priority memory cgroup is sleeping after memory allocation, 
+no page fault events occur.
+As a result, the stress-ng process in the low-priority memory cgroup
+achieves normal memory performance.
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high python3 -c \
+"import time; a = bytearray(3*1024*1024*1024); time.sleep(62)"
+[1] 1238
+stress-ng: info:  [1238] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1238] dispatching hogs: 4 vm
+stress-ng: metrc: [1238] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1238]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1238] vm             33107485     60.08    205.41     13.19    551082.91      151448.44        90.97        886064
+stress-ng: info:  [1238] skipped: 0
+stress-ng: info:  [1238] passed: 4: vm (4)
+stress-ng: info:  [1238] failed: 0
+stress-ng: info:  [1238] metrics untrustworthy: 0
+stress-ng: info:  [1238] successful run completed in 1 min, 0.09 secs
 
+In this patch series, I've incorporated a portion of Roman's patch in
+[1] to ensure the entire series can be compiled cleanly with bpf-next.
+I made some modifications to bpf_struct_ops_link_create
+in "bpf: Pass flags in bpf_link_create for struct_ops" and
+"libbpf: Support passing user-defined flags for struct_ops" to allow
+the flags parameter to be passed into the kernel.
+With this change, patch "mm/bpf: Add BPF_F_ALLOW_OVERRIDE support for
+memcg_bpf_ops" enables BPF_F_ALLOW_OVERRIDE support for memcg_bpf_ops.
+
+Patch "mm: memcontrol: Add BPF struct_ops for memory controller"
+introduces BPF struct_ops support to the memory controller, enabling
+custom and dynamic control over memory pressure. This is achieved
+through a new struct_ops type, `memcg_bpf_ops`.
+The `memcg_bpf_ops` struct provides the following hooks:
+- `get_high_delay_ms`: Returns a custom throttling delay in
+  milliseconds for a cgroup that has breached its `memory.high`
+  limit. This is the primary mechanism for BPF-driven throttling.
+- `below_low`: Overrides the `memory.low` protection check. If this
+  hook returns true, the cgroup is considered to be protected by its
+  `memory.low` setting, regardless of its actual usage.
+- `below_min`: Similar to `below_low`, this overrides the `memory.min`
+  protection check.
+- `handle_cgroup_online`/`offline`: Callbacks invoked when a cgroup
+  with an attached program comes online or goes offline, allowing for
+  state management.
+
+Patch "samples/bpf: Add memcg priority control example" introduces
+the programs memcg.c and memcg.bpf.c that were used in the previous
+examples.
+
+Changelog:
+v4:
+Fix the issues acccording to the comments of bot+bof-ci.
+According to the comments of JP Kobryn, move exit(0) from
+real_test_memcg_ops_child_work to real_test_memcg_ops.
+Fix the issues in the function bpf_memcg_ops_reg.
+v3:
+According to the comments of Michal Koutný and Chen Ridong, update hooks
+to get_high_delay_ms, below_low, below_min, handle_cgroup_online and
+handle_cgroup_offline.
+According to the comments of Michal Koutný, add BPF_F_ALLOW_OVERRIDE
+support to memcg_bpf_ops.
+v2:
+According to the comments of Tejun Heo, rebased on Roman Gushchin's BPF
+OOM patch series [1] and added hierarchical delegation support.
+According to the comments of Roman Gushchin and Michal Hocko, Designed
+concrete use case scenarios and provided test results.
+
+[1] https://lore.kernel.org/lkml/20251027231727.472628-1-roman.gushchin@linux.dev/
+
+Hui Zhu (7):
+  bpf: Pass flags in bpf_link_create for struct_ops
+  libbpf: Support passing user-defined flags for struct_ops
+  mm: memcontrol: Add BPF struct_ops for memory controller
+  selftests/bpf: Add tests for memcg_bpf_ops
+  mm/bpf: Add BPF_F_ALLOW_OVERRIDE support for memcg_bpf_ops
+  selftests/bpf: Add test for memcg_bpf_ops hierarchies
+  samples/bpf: Add memcg priority control example
+
+Roman Gushchin (5):
+  bpf: move bpf_struct_ops_link into bpf.h
+  bpf: initial support for attaching struct ops to cgroups
+  bpf: mark struct oom_control's memcg field as TRUSTED_OR_NULL
+  mm: define mem_cgroup_get_from_ino() outside of CONFIG_SHRINKER_DEBUG
+  libbpf: introduce bpf_map__attach_struct_ops_opts()
+
+ MAINTAINERS                                   |   4 +
+ include/linux/bpf.h                           |   8 +
+ include/linux/memcontrol.h                    | 111 +++-
+ kernel/bpf/bpf_struct_ops.c                   |  22 +-
+ kernel/bpf/verifier.c                         |   5 +
+ mm/bpf_memcontrol.c                           | 276 +++++++-
+ mm/memcontrol.c                               |  34 +-
+ samples/bpf/.gitignore                        |   1 +
+ samples/bpf/Makefile                          |   8 +-
+ samples/bpf/memcg.bpf.c                       | 129 ++++
+ samples/bpf/memcg.c                           | 327 ++++++++++
+ tools/include/uapi/linux/bpf.h                |   2 +-
+ tools/lib/bpf/bpf.c                           |   8 +
+ tools/lib/bpf/libbpf.c                        |  19 +-
+ tools/lib/bpf/libbpf.h                        |  14 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../selftests/bpf/prog_tests/memcg_ops.c      | 611 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/memcg_ops.c | 129 ++++
+ 18 files changed, 1682 insertions(+), 27 deletions(-)
+ create mode 100644 samples/bpf/memcg.bpf.c
+ create mode 100644 samples/bpf/memcg.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_ops.c
+
+-- 
+2.43.0
 
