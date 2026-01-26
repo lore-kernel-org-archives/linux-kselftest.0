@@ -1,219 +1,326 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012064.outbound.protection.outlook.com [40.93.195.64])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5159617D2;
-	Mon, 26 Jan 2026 00:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769386056; cv=fail; b=jWCqKjLPUrwh31YpTPO9nHKTGKLhuoO5rGSUNZcd2HEjEZNtVImTSoJoupktsrvMxz+dfw/lpFG5cWBwKBvrCQde/oK670c1MQKBXZIuRmGu/KHNKqKZzG13fg8YhaA7UQsqUyOJ3Bhv8XIrDyMsy4aBRB/y/Cg9xCUEZZ2VD6k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769386056; c=relaxed/simple;
-	bh=xtO9L5VIEuO6AU18QjSBZJ26bzQWeg82qtBmHLjYH2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=pgfMjvLj3y3+W0rLsuuT0XrkeTDtMnGHQtZOM+MPk/W87BApIiY1jfOSq0BD11lxDaiQEC2TIZcWR9zHe6KxroOe3eteI28vEpFBHYZ3nNqiLAQ9jLNTbADhS7vdRtxKogoT3P58wfGLOIj0yNrKyc8yjfMswqArLJU7rEZFIP8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=So9jic3C; arc=fail smtp.client-ip=40.93.195.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B721770814
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 01:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769390875; cv=none; b=nBfWWzIgk5ufBg8w0zvo3xKPfIhek9U2opuxWIm1is3PbGbIOcLQj1JwdhEpQpHGjwL6rxa58VZifMNUdHSYl2Rz6VweJYIBl2gTiAnBbHWVryun/ssk9Ao2euvucaRoT2BVZuJPuv+sU+Up3zQ1FEc8hdDZb7xe0YWrINTR6gA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769390875; c=relaxed/simple;
+	bh=MaQ16MFjCF86robio2aChV2W+uQIjvg7Y1R2ERTVQ/E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aqypAFpBwtGgfQuWhHwZ+7zWT4M7Vne6FpmDTcQ954HHgjRPex/btS0KJQ4YATdo8xreVzWa1oqiXXDYRG+KgMOGwoZsMK+lZNOijDLi/VYnDqMA6eAK2fsae8EZUFqRwlIhvLOJUeX+58JxrkgCFAw/P2DL2oe6dL5ua7GBO/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GhHsEk+q; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="So9jic3C"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GJDlRnLis2jO0RMFTltx4SrCnmOm9X5vGTl+drJyiFnh5H12SaUCo7qMFyLXYBL561OfbskRTJyRFesmcu81ILnp2+ld9mbwahVnZuPMjQLVWWlzByuG1tt+JsIGbjINntEEXhanarHjk6ZCwXGO74qKV58fv1/IUBaFa81886PwL/gBweIQe7yF5irX5HmjkYyfOAo4zqjjXnHgaljmyZktpsn9oKGE/xIx24ICIeB9AGpuOefPu8bz4Myb5gtGGj009BLX+8Ln8TvyDN8BAF2RI0G3qbQ7XIKBZkB21prJY1XEzz7gPSpfmD0zFkiJ8GSIYzm0GnOZJj/Jgl+ocw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Sb2xJZpNds7JHWbCqbeWV5+fOQWn3Kub6b87bj8SX+0=;
- b=W4c8i3xlaPWzk72Q7QU5u0kCTiohG9XpFUDqkBsLna7h8ruHbiiztoLir/jNqD/lOQg7eCD9uqKDdomuxe7r/C7HivJPPDNvhvQNBLw69Fo54O9JGsWzAKVhu4mO2f94l3qXLUFyxwEQDKNhZyheN5r5Ikg85RxOCUzd2nPvD5zgzb0BPa1uztKxBFrWwd4mV50ULaC5t1llnStc+whZOMage88Edw5051q4c7HCvSDLqQOKgbrnc4ytfyAygTrtS1Rjuji6T7RMlX3ahcCyDXoZgsCTWdzZDh2oqlqNPaBavaLC6l1aTggbAIln+XYA/mlKLfZZWCUvkZ/moN6i0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Sb2xJZpNds7JHWbCqbeWV5+fOQWn3Kub6b87bj8SX+0=;
- b=So9jic3COZ2qiG6fKGEYzmRCcg5vgQ81gBzdWdB7ZOEbEFNJPVPHGTtr4o8gqdi2ebNOjIsKOFViTdstov3Yt3X1uPvMpSfvRcGTQsSBSSjRtLydtczzS4b57V7DDICP/SYnlc6T3WxOnQuWF8TeI0A8cnoB0mRe0SXNXByEKMViU3ZiGw2IYXKeS/dQuaRekWpYNx0j0K2vDEI0g9du6nHi8hQvW9fwdVgy2SdCb68VfvS/y4SDn6EfOut5UlKgaOxDNOQy+HBltF6gb9SnTcIOnpDAMNNwUZGa3qBiLYwQ7di3M6ABrC7ReGcXja5GEDLCuwDMRjJDIOGlJzjTMw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
- by PH0PR12MB7470.namprd12.prod.outlook.com (2603:10b6:510:1e9::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.12; Mon, 26 Jan
- 2026 00:07:32 +0000
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9542.010; Mon, 26 Jan 2026
- 00:07:31 +0000
-Date: Sun, 25 Jan 2026 20:07:30 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Johan Hovold <johan@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>, linux-doc@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GhHsEk+q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769390872;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0/3PjVwTlclzpJ/pn4iW/a3eYF5SY1NpLn8jCSWnQgk=;
+	b=GhHsEk+qDG9hCJaeoDUo+/U/3MKG3q1ZhAw6pA+U42qSFzEI18FEzIDWReL3zITykBcnXk
+	780CWkON9seG2Z4jaaHO81TObKtUCNFeL71sDF5uDXm2OYUvi6OvMmPvhAyni4pI/gN1zZ
+	lPfCEZ3PXz97+Z9A+r2hsQylpCEFUUk=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-259-dsOPYKVNNDe3B-Pe4R-OmA-1; Sun,
+ 25 Jan 2026 20:27:49 -0500
+X-MC-Unique: dsOPYKVNNDe3B-Pe4R-OmA-1
+X-Mimecast-MFC-AGG-ID: dsOPYKVNNDe3B-Pe4R-OmA_1769390868
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 122A8180057E;
+	Mon, 26 Jan 2026 01:27:48 +0000 (UTC)
+Received: from fedora (unknown [10.72.116.88])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7C9DF30001A7;
+	Mon, 26 Jan 2026 01:27:44 +0000 (UTC)
+Date: Mon, 26 Jan 2026 09:27:38 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: alex+zkern@zazolabs.com
+Cc: Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
-Message-ID: <20260126000730.GI1134360@nvidia.com>
-References: <20260124170535.11756-1-johan@kernel.org>
- <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
- <2026012554-chatty-policy-42a1@gregkh>
- <DFXV1QMQMTRK.2W8SWGVHS2K69@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DFXV1QMQMTRK.2W8SWGVHS2K69@kernel.org>
-X-ClientProxiedBy: BL1P222CA0010.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:208:2c7::15) To LV8PR12MB9620.namprd12.prod.outlook.com
- (2603:10b6:408:2a1::19)
+Subject: Re: [PATCH] selftests: ublk: io-reorder triggered in
+ test_generic_01.sh
+Message-ID: <aXbDCtZ8fvljMEsC@fedora>
+References: <20260123112039.1370223-1-alex@zazolabs.com>
+ <aXN4mFuoXhtJDKyF@fedora>
+ <147635F1-943E-46D5-8EF1-D1C965F85EC1@zazolabs.com>
+ <aXOGrXo3AbXPHA-K@fedora>
+ <03C8F5B9-B2E1-4C78-A043-B4F9422508B7@zazolabs.com>
+ <aXY2qdYtfVTSc7jB@fedora>
+ <c517e1ca-0e2b-4143-b0f6-07a3d0c3abcf@zazolabs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|PH0PR12MB7470:EE_
-X-MS-Office365-Filtering-Correlation-Id: fcb167c6-986d-480d-c808-08de5c6ee668
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?cTnon9nIlzUgBte8J85BiRgXmPRyqncQBSVexkYc4k8Q6nr3DabExPofWqEY?=
- =?us-ascii?Q?3+luqUmBGYS+KKo1mBvBDhgSmxfhtsHAfsWapLZmFm25KNJMQgyoIlBJzsHp?=
- =?us-ascii?Q?zqmk/CHRV05VYW5Z3j2VRrwMpIkdOdyRy4dewoH2bVHvtAe3q+HrU+u6kd/6?=
- =?us-ascii?Q?UXKNtH3XsYBID1rRmtoT/HPuvUcvmnqZRZlhFru/MaU/ZCs6sZTFKUVJdqhs?=
- =?us-ascii?Q?g4YT8HtnEj3/j0tDudSapWII8MfWrU248nmeCn7zhpU5jVVErUYmhWC/zx47?=
- =?us-ascii?Q?s85iPkxWjhE58B3/RXbhGtv8fyzKjavD7dYf99pQWm0fkqV6Oqjl72zZWTgk?=
- =?us-ascii?Q?DSx7ZvuMnYXWuu0pZWqCLroFX6RqpbJUK2CngLkWUHGH9C3vIrm5NJ4qTYfm?=
- =?us-ascii?Q?+pzyy4bBu3Dr5B9ayIPmVMIRWQ6AcFac0aERwwwFq+rA3W+9L183EU9Pjys+?=
- =?us-ascii?Q?u+bMF3d8nfZGXPdUyHSYd6Cp74AG7TFSSYIT5PS4tI2zUhIpDEZ2pOlobjuB?=
- =?us-ascii?Q?wJkNLbQn3d+7p8I8lHnzuTpDZxT8HQuLtayAHmzJKZpnCbdeiG4vutBZ7DsJ?=
- =?us-ascii?Q?xCS2tLQnqffE0i7G+0Z483wWMcmGLf4uiFHDSo8zosQzLhBVALqlHNGVhVCV?=
- =?us-ascii?Q?5iGk0uNU3oXV4Yu5mprrrRI3j7cj+VoxaVs6ONjKTW7Tn7ghlBQpTt+ycj+a?=
- =?us-ascii?Q?ikznstGxS4kVd8PUD9QuBES/Or7xFp897bcJZFS1K6C3MbR1SdURy784OE1d?=
- =?us-ascii?Q?CkNbsDHEgXbkiR28SfFMKuEAlmBAtvtPT/XPR9qsaYg972yXo+cMQYqT4Xnz?=
- =?us-ascii?Q?94hiUX7g3N+Rq2HOvC6oPOJ5caD8XGDELFhiwkdpYld0PhbTBIaXOzHuTkHE?=
- =?us-ascii?Q?ykiqXc2ok7mwcifsm6NsIQRlgI4CQM6pqsYt/HDqda4dmLuuFoqM8ZXxkFtU?=
- =?us-ascii?Q?iTHR0IgHGHM7xuKDgNK42G6fbLde8gyob7aRxNDi+vaBynVYesIJ6rxXCu2Q?=
- =?us-ascii?Q?tPvRYWLKRTcPDagIsV6mjK4qs86deFTU7LxYqyTmEHcXNq8Z24WiA4JxsSAP?=
- =?us-ascii?Q?tUEWsJfegt3tX1guoHTFttptvZZDK/pxA7FNKMcs93h4OjDBGdrHGVj03mp+?=
- =?us-ascii?Q?fi7GVW+KrMepE/IlXtkMEi547dYdBjPilVJdLeq57c2wriClCck6TI4GsT+s?=
- =?us-ascii?Q?Da4py36zhFivtMNU5UTNirTz4rEkwpIkkq8pNmtwD6HpvQgLcyS5Q+4OfBCV?=
- =?us-ascii?Q?TdJxr3pMynPZ3CABi1DNXXS/KKZnDPH52fMHkCdNMeQZXF7wMMe0SyYT090m?=
- =?us-ascii?Q?vLwwnjVX6sQViToFbhbJo/ef07Mc3M00pbGNV6RpUyIYZssEJIv7JjhhsSqC?=
- =?us-ascii?Q?vQmUHpUx4DgrTvLWF/wBN+6R+Wj+0cJJVdfOQNlOULnNOtCQ6Eg6SdNGDN+7?=
- =?us-ascii?Q?tbu4t4JFGAElz4+EwGQM179cWmOr5hYxhZ5z+2M1QRaF9U1OxIOj3/lLpZrd?=
- =?us-ascii?Q?NoKEhW9ZDL76S1TnEWqIwI9j7zhmj5jtHn7kIUCnqtrIqVq4Url9Bu8tpCuI?=
- =?us-ascii?Q?AG9bruof3AgcKHg+igM=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?aEIhUKT9pkffAHisMw4WrRK6dGUfzG6F2/Wdfo5Jk5588SEilfD6mHTwinps?=
- =?us-ascii?Q?ubtN/TW0q8sNWl4P5ZDd8TRWef738V/veS1gVxVh8bngvs+rUZLVitywd7/X?=
- =?us-ascii?Q?VdDvss9W7vgkOSpvGZ2RESlcXgS8xG7xMye4wyAL/MbWDfrUhMe63RSHhUkf?=
- =?us-ascii?Q?YDyJS4/nH0ZmNWiolNQ304hPXrtjwBxRzr73LAvVn9DVYc4BmVPj9AqKtUTr?=
- =?us-ascii?Q?ZXWnkw/NwcKBd5erPO1qO7pE9rz4WX3686uMQ3w38xl59BocAZdXtYhyn4Zr?=
- =?us-ascii?Q?0qa1D39AqTZDOKObRyaQuSSP81jbxJeXHy/qZD20QrJG7P4SWeWaogwIh1Uo?=
- =?us-ascii?Q?I/ldn92DXAJT/LQWYXX3oRARZcaOFpfJC52XTv5aGVvtYAyTA2ObYcPn6z2t?=
- =?us-ascii?Q?iyZEE5it2YE30KDVOzzt1scqf3AOzDnAvh2/f0kmLhMg47WRN09HHXITlG5I?=
- =?us-ascii?Q?IY9cDWPkS8OSOGJo8T8nA11o+V0+iQiQxtZrKYTFdbXCOnOFUgInL6XPM5LG?=
- =?us-ascii?Q?VPj3/Y9E6LHDFZ1svFYr8eQ5ZB/TWKNri1PCN/i9urhFUKbaBzhJDqM1yunq?=
- =?us-ascii?Q?3lLh6d1sRHKTMjlJFVw9W4KxS5gSUKT3h5KYyQ2Im19dHV+gMj8vp3ZXiYAC?=
- =?us-ascii?Q?8vigiVd7UreIQaPuPLVAXBWL0OSibGh08Nt9ZesgVE8ESeUsEiuTjw8KXund?=
- =?us-ascii?Q?/h6HGwCH+rtAuUS5s63iS0cNM0SdEALYRD3e1FsHbUKE3AAmcng0o0OWUPsy?=
- =?us-ascii?Q?z8bGTA93q3HMvPkq5qoGiCNaz0hjSlIw7i96i7xw38slMjFAP/jOqY0a0smW?=
- =?us-ascii?Q?4hA8z1V7hON2j+w9PkHloAum8ttt/oJTbMQIR0wT+TMx8M+lXbxotTf0baEs?=
- =?us-ascii?Q?Nra0g3ENuO5ni1HN1uggi06iBQrHQCL9b1oyIiuc3nnzbvLyOAlUDZ6ukIIL?=
- =?us-ascii?Q?/jaEf97lsJvoknNP1zZRqX6JU18DbaM6TXJ5ZRj2qrSJ05tL0E55h0jNVkXS?=
- =?us-ascii?Q?tgVbX5IZGX4i7WPZPjAL4EOHj1SbdjWLnDWmBFdEegsEivhUcVLlIKKd0jWG?=
- =?us-ascii?Q?mRLVMX8dUEy8Kr3xyeqGkDgsCsw/6XZ8OWC7/dMr3KeG2ejDhd/P7wcBXSGf?=
- =?us-ascii?Q?O16MzCrpogVBzaocB7rOu7xigwm6ahvj2Wn0jJYLXT6WrYBqBQ8jNS7sHfGH?=
- =?us-ascii?Q?K3lgGRX/yHqCJTzdbPFLBdL58KYsX2rkwb1rI9xa8PBI5osLJUV0zRjKyvc4?=
- =?us-ascii?Q?1S3hl4zU7OTpxdhVS0/KaQiVa2z97MZynBuHOZnNhFFnnTwtx0YKA84gExpv?=
- =?us-ascii?Q?4uM3jFpHyt4U9DgoB/ByrtZz4oH8K+pBjuLeouj4eZL0KNxxG1oWzqGZCALa?=
- =?us-ascii?Q?W+u7ZNwJdOciTGwriWhv2UO6zxkiNdE3gCLUogMEpw0MJiNL2Ef+qRaBm0iO?=
- =?us-ascii?Q?N3EroknhY77kohKZwaw9l/Lmw0GPW3LXtexLIvBgml72Sjtg3cyX48m9ShwA?=
- =?us-ascii?Q?TtO7PPjMrUbtRE3/fapo2A1OeWdqi6JDGOrGjwRjPZIz8YCENZX0HGoROLVE?=
- =?us-ascii?Q?Ylvdj96NTMtwllpxTyfvsTh0illY1JEh7kaaBK0r3tZSsJGaMU1HZyI4wKhA?=
- =?us-ascii?Q?wtaD8W52Ap8/DfSMKzfTPrqwGiEkbJTZQGuljCSEuMUGcK0wLJoTXR8x2j6r?=
- =?us-ascii?Q?SYTpgh4yIgvPB1WfpvgD9X1K7zp1eJfSK+FbF5JRhB8nDfQc?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcb167c6-986d-480d-c808-08de5c6ee668
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2026 00:07:31.7263
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sjqeQNNDrBSu17QVG5CCiiLrOjB96lj5BxN+EGMw0oMSrhEpFepQNWJnw6EZmp+n
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7470
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c517e1ca-0e2b-4143-b0f6-07a3d0c3abcf@zazolabs.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Sun, Jan 25, 2026 at 06:53:15PM +0100, Danilo Krummrich wrote:
+On Sun, Jan 25, 2026 at 08:35:20PM +0200, Alexander Atanasov wrote:
+> On 25.01.26 17:28, Ming Lei wrote:
+> > On Fri, Jan 23, 2026 at 05:00:33PM +0200, Alexander Atanasov wrote:
+> > > 
+> > > 
 > 
-> Let's take some DRM IOCTL for instance:
+> [snip]
 > 
-> 	struct MyDriver {
-> 	    bar: Devres<pci::Bar>,
-> 	}
+> > Can you test the following patch and see if re-order still can happen?
+> > 
+> > 
+> > diff --git a/tools/testing/selftests/ublk/test_generic_01.sh b/tools/testing/selftests/ublk/test_generic_01.sh
+> > index 26cf3c7ceeb5..26d5e52ece29 100755
+> > --- a/tools/testing/selftests/ublk/test_generic_01.sh
+> > +++ b/tools/testing/selftests/ublk/test_generic_01.sh
+> > @@ -13,7 +13,7 @@ if ! _have_program fio; then
+> >   	exit "$UBLK_SKIP_CODE"
+> >   fi
+> > -_prep_test "null" "sequential io order"
+> > +_prep_test "null" "ublk dispatch won't reorder IO"
+> >   dev_id=$(_add_ublk_dev -t null)
+> >   _check_add_dev $TID $?
+> > @@ -39,9 +39,13 @@ fio --name=write_seq \
+> >   ERR_CODE=$?
+> >   kill "$btrace_pid"
+> >   wait
+> > -if grep -q "io_out_of_order" "$UBLK_TMP"; then
+> > -	cat "$UBLK_TMP"
+> > +
+> > +# Check for out-of-order completions detected by bpftrace
+> > +if grep -q "^out_of_order:" "$UBLK_TMP"; then
+> > +	echo "I/O reordering detected:"
+> > +	grep "^out_of_order:" "$UBLK_TMP"
+> >   	ERR_CODE=255
+> >   fi
+> > +
+> >   _cleanup_test "null"
+> >   _show_result $TID $ERR_CODE
+> > diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt b/tools/testing/selftests/ublk/trace/seq_io.bt
+> > index b2f60a92b118..60ac40e66606 100644
+> > --- a/tools/testing/selftests/ublk/trace/seq_io.bt
+> > +++ b/tools/testing/selftests/ublk/trace/seq_io.bt
+> > @@ -2,23 +2,45 @@
+> >   	$1: 	dev_t
+> >   	$2: 	RWBS
+> >   	$3:     strlen($2)
+> > +
+> > +	Track request order between block_io_start and block_rq_complete.
+> > +	For each request, record its start sequence number and verify
+> > +	completions happen in the same order.
+> >   */
+> > +
+> >   BEGIN {
+> > -	@last_rw[$1, str($2)] = (uint64)0;
+> > +	@start_seq = (uint64)0;
+> > +	@complete_seq = (uint64)0;
+> > +	@out_of_order = (uint64)0;
+> > +}
+> > +
+> > +tracepoint:block:block_io_start
+> > +{
+> > +	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
+> > +		@start_order[args.sector] = @start_seq;
+> > +		@start_seq = @start_seq + 1;
+> > +	}
+> >   }
+> > +
+> >   tracepoint:block:block_rq_complete
+> >   {
+> > -	$dev = $1;
+> >   	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
+> > -		$last = @last_rw[$dev, str($2)];
+> > -		if ((uint64)args.sector != $last) {
+> > -			printf("io_out_of_order: exp %llu actual %llu\n",
+> > -				args.sector, $last);
+> > +		$expected_order = @start_order[args.sector];
+> > +		if ($expected_order != @complete_seq) {
+> > +			printf("out_of_order: sector %llu started at seq %llu but completed at seq %llu\n",
+> > +				args.sector, $expected_order, @complete_seq);
+> > +			@out_of_order = @out_of_order + 1;
+> >   		}
+> > -		@last_rw[$dev, str($2)] = (args.sector + args.nr_sector);
+> > +		delete(@start_order[args.sector]);
+> > +		@complete_seq = @complete_seq + 1;
+> >   	}
+> >   }
+> >   END {
+> > -	clear(@last_rw);
+> > +	printf("total_start: %llu total_complete: %llu out_of_order: %llu\n",
+> > +		@start_seq, @complete_seq, @out_of_order);
+> > +	clear(@start_order);
+> > +	clear(@start_seq);
+> > +	clear(@complete_seq);
+> > +	clear(@out_of_order);
+> >   }
 > 
-> 	fn ioctl_vm_create(
-> 	    drm: &drm::Device<MyDriver>,
-> 	    req: &mut uapi::drm_mydriver_vm_create,
-> 	    file: &drm::File<MyDriverFile>,
-> 	) -> Result<u32> {
-> 	    // Runs the closure in an (S)RCU read side critical section if the
-> 	    // resource is available, returns ENXIO otherwise.
-> 	    drm.bar.try_access_with(|bar| {
-> 	        // (S)RCU read side critical section starts here.
 > 
-> 	        bar.write32(...);
+> First run after reboot always fails:
 > 
-> 	        // (S)RCU read side critical section ends here.
-> 	    }).ok_or(ENXIO)?;
-> 
-> 	    Ok(0)
-> 	}
+> ./test_generic_01.sh
+> ublk selftest: generic_01 starting at 2026-01-25T19:08:47+02:00
+> I/O reordering detected:
+> out_of_order: sector 112040 started at seq 88 but completed at seq 0
+> out_of_order: sector 112048 started at seq 89 but completed at seq 1
+> out_of_order: sector 112056 started at seq 90 but completed at seq 2
+> out_of_order: sector 112064 started at seq 91 but completed at seq 3
+> out_of_order: sector 112072 started at seq 92 but completed at seq 4
+> out_of_order: sector 112080 started at seq 93 but completed at seq 5
+> out_of_order: sector 112088 started at seq 94 but completed at seq 6
+> out_of_order: sector 112096 started at seq 95 but completed at seq 7
+> out_of_order: sector 112104 started at seq 96 but completed at seq 8
+> out_of_order: sector 112112 started at seq 97 but completed at seq 9
+> out_of_order: sector 112120 started at seq 98 but completed at seq 10
+> out_of_order: sector 112128 started at seq 99 but completed at seq 11
 
-That's the whole issue with DRM right there - allowing driver code to
-run after the driver has unregistered from the subsystem is
-*dangerous* and creates all these bugs.
+In the 1st bpf attachment, fio may be started between attaching
+block_start_req and block_complete_req. Maybe the following patch can
+solve it:
 
-From a rust perspective I would argue you should be looking at every
-one of those try_access_with() sites in drivers as a code smell that
-says something is questionable in the driver or subsystem.
 
-In many other subsystems a driver should *never* use
-"try_access_with".  Unfortunately the rust solution forces
-synchronize_srcu()'s anyway (which Bartoz rightly pointed out as an
-unacceptable performance issue). IMHO since rust has the Device<Bound>
-stuff the revocable should have used rwsem, because the expectation
-should be that the majority uses access, not try_access.
+diff --git a/tools/testing/selftests/ublk/test_generic_01.sh b/tools/testing/selftests/ublk/test_generic_01.sh
+index 26cf3c7ceeb5..15cea9e55e1c 100755
+--- a/tools/testing/selftests/ublk/test_generic_01.sh
++++ b/tools/testing/selftests/ublk/test_generic_01.sh
+@@ -13,7 +13,7 @@ if ! _have_program fio; then
+ 	exit "$UBLK_SKIP_CODE"
+ fi
+ 
+-_prep_test "null" "sequential io order"
++_prep_test "null" "ublk dispatch won't reorder IO"
+ 
+ dev_id=$(_add_ublk_dev -t null)
+ _check_add_dev $TID $?
+@@ -21,15 +21,20 @@ _check_add_dev $TID $?
+ dev_t=$(_get_disk_dev_t "$dev_id")
+ bpftrace trace/seq_io.bt "$dev_t" "W" 1 > "$UBLK_TMP" 2>&1 &
+ btrace_pid=$!
+-sleep 2
+ 
+-if ! kill -0 "$btrace_pid" > /dev/null 2>&1; then
++# Wait for bpftrace probes to be attached (BEGIN block prints BPFTRACE_READY)
++for _ in $(seq 100); do
++	grep -q "BPFTRACE_READY" "$UBLK_TMP" 2>/dev/null && break
++	sleep 0.1
++done
++
++if ! kill -0 "$btrace_pid" 2>/dev/null; then
+ 	_cleanup_test "null"
+ 	exit "$UBLK_SKIP_CODE"
+ fi
+ 
+-# run fio over this ublk disk
+-fio --name=write_seq \
++# run fio over this ublk disk (pinned to CPU 0)
++taskset -c 0 fio --name=write_seq \
+     --filename=/dev/ublkb"${dev_id}" \
+     --ioengine=libaio --iodepth=16 \
+     --rw=write \
+@@ -39,9 +44,13 @@ fio --name=write_seq \
+ ERR_CODE=$?
+ kill "$btrace_pid"
+ wait
+-if grep -q "io_out_of_order" "$UBLK_TMP"; then
+-	cat "$UBLK_TMP"
++
++# Check for out-of-order completions detected by bpftrace
++if grep -q "^out_of_order:" "$UBLK_TMP"; then
++	echo "I/O reordering detected:"
++	grep "^out_of_order:" "$UBLK_TMP"
+ 	ERR_CODE=255
+ fi
++
+ _cleanup_test "null"
+ _show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/trace/seq_io.bt b/tools/testing/selftests/ublk/trace/seq_io.bt
+index b2f60a92b118..8ebe13d24c67 100644
+--- a/tools/testing/selftests/ublk/trace/seq_io.bt
++++ b/tools/testing/selftests/ublk/trace/seq_io.bt
+@@ -2,23 +2,64 @@
+ 	$1: 	dev_t
+ 	$2: 	RWBS
+ 	$3:     strlen($2)
++
++	Track request order between block_io_start and block_rq_complete.
++	For each request, record its start sequence number and verify
++	completions happen in the same order.
++
++	Sequence starts at 1 so that 0 means "never seen" (bpftrace maps
++	return 0 for missing keys). On first valid completion, sync
++	complete_seq to handle probe attachment races.
++
++	block_rq_complete is listed first to ensure it's attached before
++	block_io_start, reducing the window for missed completions.
+ */
++
+ BEGIN {
+-	@last_rw[$1, str($2)] = (uint64)0;
++	@start_seq = (uint64)1;
++	@complete_seq = (uint64)0;
++	@out_of_order = (uint64)0;
++	/* Initialize map type with dummy entry */
++	@start_order[0] = (uint64)0;
++	delete(@start_order[0]);
++	printf("BPFTRACE_READY\n");
+ }
++
+ tracepoint:block:block_rq_complete
+ {
+-	$dev = $1;
+ 	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
+-		$last = @last_rw[$dev, str($2)];
+-		if ((uint64)args.sector != $last) {
+-			printf("io_out_of_order: exp %llu actual %llu\n",
+-				args.sector, $last);
++		$expected = @start_order[args.sector];
++		if ($expected > 0) {
++			/* Sync complete_seq on first valid completion */
++			if (@complete_seq == 0) {
++				@complete_seq = $expected;
++			}
++
++			if ($expected != @complete_seq) {
++				printf("out_of_order: sector %llu started at seq %llu but completed at seq %llu\n",
++					args.sector, $expected, @complete_seq);
++				@out_of_order = @out_of_order + 1;
++			}
++			delete(@start_order[args.sector]);
++			@complete_seq = @complete_seq + 1;
+ 		}
+-		@last_rw[$dev, str($2)] = (args.sector + args.nr_sector);
++		/* $expected == 0 means we never saw this sector start, skip it */
++	}
++}
++
++tracepoint:block:block_io_start
++{
++	if ((int64)args.dev == $1 && !strncmp(args.rwbs, str($2), $3)) {
++		@start_order[args.sector] = @start_seq;
++		@start_seq = @start_seq + 1;
+ 	}
+ }
+ 
+ END {
+-	clear(@last_rw);
++	printf("total_start: %llu total_complete: %llu out_of_order: %llu\n",
++		@start_seq - 1, @complete_seq, @out_of_order);
++	clear(@start_order);
++	clear(@start_seq);
++	clear(@complete_seq);
++	clear(@out_of_order);
+ }
 
-> I think those examples make it obvious why a revocable implementation on the C
-> side can't provide the same value and ergonomics due to language limitations,
-> yet I think it makes sense to start experimenting how subsystems can adopt this
-> design-pattern in C.
 
-The most important part of this pattern, IMHO, is documenting when you
-are in a safe Device<Bound> scope or not.
 
-What the C version of revocable does is just enforce it *everwhere*
-without any thought as to if it is papering over a bigger problem. 
+Thanks,
+Ming
 
-In C protecting some limited "device resources" is not nearly good
-enough for alot of drivers since the root issue here is often the
-author doesn't understand the undocumented contexts when it is
-"try_access_with" vs "access" and then makes a lot more errors than
-just "device resources". :(
-
-Frankly I don't think "iterating" is going to salvage this idea. The
-real value from rust was not in creating a thin wrapper around
-SRCU. It is in all the other stuff Danilo has explained.
-
-Jason
