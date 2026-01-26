@@ -1,45 +1,65 @@
-Received: from mail.itpri.com (mx1.itpri.com [185.125.111.158])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB9E22DFB8;
-	Mon, 26 Jan 2026 14:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.111.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99DCD33B96A
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 15:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769437943; cv=none; b=XiLr1WPzwsKJLkTWcdnJdTAy4mIlYa3n6l/WybTSWH6egnSRY+PqHNUfR/p21il0jdM7yuujaYDuf8pp4cXFcLtCzFxsENJAPbcFMenErps5td6Plw0B3mhOLtTOCTMm0fw4qEQRT9YRAiTa1n50OWhADM8c3A5NEq3EJXO3mu8=
+	t=1769440482; cv=none; b=SiYMEdu7dDq5K+1SO+TfPOS53JeQs8p4DnJcCjNVhXzBZyCGQvymE/8gJiqXNe4M/gZtxOYAW46f3kQ4u9IafCSVkiMJ5mNK5+6qmGKQvmg1Qyip2nWgpoi4A4S9zbI/ytKS3MFqjJXWfrgSzESL68GyCt76uMc07QYRL9A8ODM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769437943; c=relaxed/simple;
-	bh=Lx6++P0Y08pAzledj4ODa0r7yp7FeyEzZvtm+oJhh68=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MOx6RuFMNy/13p0fIjEWIk1dfhO06bGFXlTvLPy44s4iA1xQjixnlr50RoyjBr43JwL76X6vCS/NhpG72x99maNakBVu86NuxM5SM7k4YhiWjy4DJ9vjuZMmw8sYASjv3lkHN15Ptbx5neJK2tjK/zCuNDpVyN+HBxjmkBoKr+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com; spf=pass smtp.mailfrom=zazolabs.com; dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b=rszqdR+I; arc=none smtp.client-ip=185.125.111.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zazolabs.com
+	s=arc-20240116; t=1769440482; c=relaxed/simple;
+	bh=NVE4PZaDrUMrEMKJDsONnoLmskItsh4FrwJ0yF3S6mI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=brdd+92AHLt2XCBZLCF9MFBEKan4opvRPz3ZI19GAQTikIgez57eAumwRVjfZWRC6GoNLgwO/9e6kG2F6DCR3/z4X+H0Hv0lhOu1CF/Nn7Lfza1GPtbSAyWgcJ6vLbwm3ud+ekLIkD3Gn+jWRjA0krYNfZ/jiMfZBDYJlJmuVmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=M1JJObsD; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b="rszqdR+I"
-X-Virus-Scanned: Yes
-From: Alexander Atanasov <alex@zazolabs.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zazolabs.com; s=mail;
-	t=1769437937; bh=Lx6++P0Y08pAzledj4ODa0r7yp7FeyEzZvtm+oJhh68=;
-	h=From:To:Cc:Subject;
-	b=rszqdR+I+U+iBwmMvRXpqrjQk53QZiHZBvBcd2NwS6r+MYaLD5gkoUR5Z5wc87MLu
-	 rPZ+98m6vuJhk4++oAmo+mxurRXKGV9MUGeCKWtwZCu/bEYwzAFiIj+gh5EVlfDas/
-	 uYW0BexXSi8t5ubYfGpiKNitn9SsYw2lTpMYHc5qmKI//cEcnAn/VxlJLbvKVQTeQV
-	 yv7DEWJZpC4klOR+dhQo+CUDrY+Sz3aME8O8ktdqKfRZjS6vYoovUIHkwCqDlraPj2
-	 3VEhiPMhrKU7MNAuECKrEuw90s0aUGwmywzaPMadl8FumSjN1PoRvVa6biHa0jDji0
-	 Zvbn0pJQv0PRXkpQpxbv60LF1fHMD97U49BWvd5q7kRmj+o0mZHfyD0Pfmly93TbZ4
-	 3wfNVnh6gPJb2//VXZQCdxiTKXCQQa5fewacmUjwiwTP39787yYyWDylwFn1iUcuy6
-	 tJlnXNoPhod4qRBLPv5ZnvY/VJlXZt/4jQ8ujiarbuNP7VCTOxAjNdNmuxuhj6e2c+
-	 YQMclxk8+MVVzTg36H/RuBwtDkFCKxfKzttosX/F7UribPrZiX0ORb8L36OlNxsD5A
-	 oxtcnuLP3ac3X6iI/7EutVs4QXPF2XrhS+VcDe/u4j2iUy3eXl8uae9NWHNFSrn6KN
-	 M6WgV3H0RRg65eNmJnXIRjCs=
-To: Ming Lei <ming.lei@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Alexander Atanasov <alex@zazolabs.com>,
-	linux-block@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="M1JJObsD"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769440476;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SGN/g/bAEXn5CE/fvL4L6rx4ufAM6HoidF9O/Ra4r5o=;
+	b=M1JJObsD6NHZnBeeEi0briIT7Y4rEOnYAEXM6AFgYMZ0p6vwyzA9xK39lDLjzdK8WbSBPu
+	SmywPEc5ILETEwzE8wrTJyZxk0K0nE7Kn8W5B1/t46yy8S31TFH3LgdHtA6kF7DVoo9ik2
+	NvvBrXZVDgTwFqOXfJO0Ezn1s5yXftE=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests: ublk: mark each test start and end time in dmesg
-Date: Mon, 26 Jan 2026 14:31:57 +0000
-Message-ID: <20260126143158.1830011-1-alex@zazolabs.com>
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v8 0/9] bpf: Extend BPF syscall with common attributes support
+Date: Mon, 26 Jan 2026 23:14:00 +0800
+Message-ID: <20260126151409.52072-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,42 +67,139 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Log test start and end time in dmesg, so generated log messages
-during the test run can be linked to specific test from the test
-suite.
+This patch series builds upon the discussion in
+"[PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure" [1].
 
-Signed-off-by: Alexander Atanasov <alex@zazolabs.com>
----
- tools/testing/selftests/ublk/test_common.sh | 2 ++
- 1 file changed, 2 insertions(+)
+This patch series introduces support for *common attributes* in the BPF
+syscall, providing a unified mechanism for passing shared metadata across
+all BPF commands.
 
-v1->v2:
-  - rebase to latest block tree
-  - include base-commit 
+The initial set of common attributes includes:
 
-diff --git a/tools/testing/selftests/ublk/test_common.sh b/tools/testing/selftests/ublk/test_common.sh
-index 7ff6ce79d62c..e554e89e6e67 100755
---- a/tools/testing/selftests/ublk/test_common.sh
-+++ b/tools/testing/selftests/ublk/test_common.sh
-@@ -121,6 +121,7 @@ _prep_test() {
- 	modprobe ublk_drv > /dev/null 2>&1
- 	UBLK_TMP=$(mktemp ublk_test_XXXXX)
- 	[ "$UBLK_TEST_QUIET" -eq 0 ] && echo "ublk $type: $*"
-+	echo "ublk selftest: $TID starting at $(date --iso-8601=sec)" | tee /dev/kmsg
- }
- 
- _remove_test_files()
-@@ -165,6 +166,7 @@ _cleanup_test() {
- 	"${UBLK_PROG}" del -a
- 
- 	_remove_files
-+	echo "ublk selftest: $TID done at $(date --iso-8601=sec)" | tee /dev/kmsg
- }
- 
- _have_feature()
+1. 'log_buf': User-provided buffer for storing log output.
+2. 'log_size': Size of the provided log buffer.
+3. 'log_level': Verbosity level for logging.
+4. 'log_true_size': The size of log reported by kernel.
 
-base-commit: 8e5bcc3a955a2cc4460b391f55d3b49905eb248e
--- 
-2.43.0
+With this extension, the BPF syscall will be able to return meaningful
+error messages (e.g., failures of creating map), improving debuggability
+and user experience.
+
+Links:
+[1] https://lore.kernel.org/bpf/20250224153352.64689-1-leon.hwang@linux.dev/
+
+Changes:
+v7 -> v8:
+* Return 0 when fd < 0 and errno != EFAULT in probe_sys_bpf_ext(), then simplify
+  probe_bpf_syscall_common_attrs() (per Alexei and Andrii).
+* v7: https://lore.kernel.org/bpf/20260123032445.125259-1-leon.hwang@linux.dev/
+
+v6 -> v7:
+* Return -errno when fd < 0 and errno != EFAULT in probe_sys_bpf_ext().
+* Convert return value of probe_sys_bpf_ext() to bool in
+  probe_bpf_syscall_common_attrs().
+* Address comments from Andrii:
+  * Drop the comment, and handle fd >= 0 case explicitly in
+    probe_sys_bpf_ext().
+  * Return an error when fd >= 0 in probe_sys_bpf_ext().
+* v6: https://lore.kernel.org/bpf/20260120152424.40766-1-leon.hwang@linux.dev/
+
+v5 -> v6:
+* Address comments from Andrii:
+  * Update some variables' name.
+  * Drop unnecessary 'close(fd)' in libbpf.
+  * Rename FEAT_EXTENDED_SYSCALL to FEAT_BPF_SYSCALL_COMMON_ATTRS with
+    updated description in libbpf.
+  * Use EINVAL instead of EUSERS, as EUSERS is not used in bpf yet.
+  * Rename struct bpf_syscall_common_attr_opts to bpf_log_opts in libbpf.
+  * Add 'OPTS_SET(log_opts, log_true_size, 0);' in libbpf's 'bpf_map_create()'.
+* v5: https://lore.kernel.org/bpf/20260112145616.44195-1-leon.hwang@linux.dev/
+
+v4 -> v5:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create
+  (per Alexei).
+* v4: https://lore.kernel.org/bpf/20260106172018.57757-1-leon.hwang@linux.dev/
+
+RFC v3 -> v4:
+* Drop RFC.
+* Address comments from Andrii:
+  * Add parentheses in 'sys_bpf_ext()'.
+  * Avoid creating new fd in 'probe_sys_bpf_ext()'.
+  * Add a new struct to wrap log fields in libbpf.
+* Address comments from Alexei:
+  * Do not skip writing to user space when log_true_size is zero.
+  * Do not use 'bool' arguments.
+  * Drop the adding WARN_ON_ONCE()'s.
+* v3: https://lore.kernel.org/bpf/20251002154841.99348-1-leon.hwang@linux.dev/
+
+RFC v2 -> RFC v3:
+* Rename probe_sys_bpf_extended to probe_sys_bpf_ext.
+* Refactor reporting 'log_true_size' for prog_load.
+* Refactor reporting 'btf_log_true_size' for btf_load.
+* Add warnings for internal bugs in map_create.
+* Check log_true_size in test cases.
+* Address comment from Alexei:
+  * Change kvzalloc/kvfree to kzalloc/kfree.
+* Address comments from Andrii:
+  * Move BPF_COMMON_ATTRS to 'enum bpf_cmd' alongside brief comment.
+  * Add bpf_check_uarg_tail_zero() for extra checks.
+  * Rename sys_bpf_extended to sys_bpf_ext.
+  * Rename sys_bpf_fd_extended to sys_bpf_ext_fd.
+  * Probe the new feature using NULL and -EFAULT.
+  * Move probe_sys_bpf_ext to libbpf_internal.h and drop LIBBPF_API.
+  * Return -EUSERS when log attrs are conflict between bpf_attr and
+    bpf_common_attr.
+  * Avoid touching bpf_vlog_init().
+  * Update the reason messages in map_create.
+  * Finalize the log using __cleanup().
+  * Report log size to users.
+  * Change type of log_buf from '__u64' to 'const char *' and cast type
+    using ptr_to_u64() in bpf_map_create().
+  * Do not return -EOPNOTSUPP when kernel doesn't support this feature
+    in bpf_map_create().
+  * Add log_level support for map creation for consistency.
+* Address comment from Eduard:
+  * Use common_attrs->log_level instead of BPF_LOG_FIXED.
+* v2: https://lore.kernel.org/bpf/20250911163328.93490-1-leon.hwang@linux.dev/
+
+RFC v1 -> RFC v2:
+* Fix build error reported by test bot.
+* Address comments from Alexei:
+  * Drop new uapi for freplace.
+  * Add common attributes support for prog_load and btf_load.
+  * Add common attributes support for map_create.
+* v1: https://lore.kernel.org/bpf/20250728142346.95681-1-leon.hwang@linux.dev/
+
+Leon Hwang (9):
+  bpf: Extend BPF syscall with common attributes support
+  libbpf: Add support for extended bpf syscall
+  bpf: Refactor reporting log_true_size for prog_load
+  bpf: Add syscall common attributes support for prog_load
+  bpf: Refactor reporting btf_log_true_size for btf_load
+  bpf: Add syscall common attributes support for btf_load
+  bpf: Add syscall common attributes support for map_create
+  libbpf: Add common attr support for map_create
+  selftests/bpf: Add tests to verify map create failure log
+
+ include/linux/bpf.h                           |  19 +-
+ include/linux/bpf_verifier.h                  |  17 ++
+ include/linux/btf.h                           |   3 +-
+ include/linux/syscalls.h                      |   3 +-
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/btf.c                              |  32 +---
+ kernel/bpf/log.c                              | 103 +++++++++++
+ kernel/bpf/syscall.c                          | 122 ++++++++++---
+ kernel/bpf/verifier.c                         |  19 +-
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/lib/bpf/bpf.c                           |  52 +++++-
+ tools/lib/bpf/bpf.h                           |  17 +-
+ tools/lib/bpf/features.c                      |   8 +
+ tools/lib/bpf/libbpf_internal.h               |   3 +
+ .../selftests/bpf/prog_tests/map_init.c       | 168 ++++++++++++++++++
+ 15 files changed, 521 insertions(+), 61 deletions(-)
+
+--
+2.52.0
 
