@@ -1,170 +1,124 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046A615CD7E
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 02:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B227726D4DF;
+	Mon, 26 Jan 2026 06:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769393057; cv=none; b=iva+Td7CBDTfnxZdD4lFFyArh3LEAwBDcxVnVZrswmwKnA8y3c8WsLwlqOzIlTVK0Dph9WmJUVIfsES/MSKbKire/RHbD6CMKGDc3cFn/686OKev3xMDNP+EXosx4Xf0EzKdv6oPJmWewYazjBBoHZVQNVqD2A/OfgAocwWxL6A=
+	t=1769408142; cv=none; b=oUXzAsDv2Ox57UWYWV0T7pELgnYboqFq/o+m+Eb+b912vbMGjiA2jKRcF0d+hSw516FnMKEKC14zgp9IPsvTfXqM1u0QEOtUcCcbn6FD2t1+s/vR+elDBStuVfuBiw+FIt+SDmSGAKzs8kWf+kTtdThcJYAV3LgBEiZH3VYJr/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769393057; c=relaxed/simple;
-	bh=Qho4rFAhh+NNqe9GgWpu1b9P3YLzTlEjhXB2mMkvjIg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=scH6Ncmg5gYhM2vKbD/41W6uVLMAfXn6hCi8MYFon/xSQt5j/zhXEolsxN5nqqA2WERPCWbTdDeIWrFPEf7TDt/rOk6Qa4gG8AnL2Y3bghiE05zrlFDjkhBHQqGE3J6b4t0k3zm+zsWTEfJ8CCZY0PIffxkY5fPD16396BNeVsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aG+yVF1i; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769408142; c=relaxed/simple;
+	bh=E8bsQl/1iwa5yoedXlXrpRivGIUY4bsgei8tZQqqiQk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KrTTVasjatT5WgZf4Fx0mJ8VPP8hnDHm31SmHWRl1/Bvj0qzH1i/xdAENOrTD4MICr/fJyPwbwCN74pA1bNjMCThW879Pl7QhCbxc7zNgboYkvwHx5BTU8oTQ+U/OW1W03GxFdYWZqtPxxshj55F4YZ2d3ACqzkojo9LHjZ3mdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cLT7INFZ; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aG+yVF1i"
-Message-ID: <541db2c8-7a96-4cc3-835e-b0eac64d4e3e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769393053;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YU2NlokWChX+w+wYFtB0VNNjx1y0MJTSqOSPtiMrZJc=;
-	b=aG+yVF1iuAkfFXb5QrSJdMFLtW8l+pRkmAMZl5JX5LKO+N9E3qDxLqUg7xTYdEwZZ7B8yc
-	gEJ3tsqciT1taB9oDsHk5PJvxedvZVnF9PwLtRRepoc5ThIVM8DBuXXjN3lH3MOc8D78uS
-	JTWZky/knscIsOLdIbMRc4I6UyfcA/g=
-Date: Mon, 26 Jan 2026 10:03:54 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cLT7INFZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769408141; x=1800944141;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=E8bsQl/1iwa5yoedXlXrpRivGIUY4bsgei8tZQqqiQk=;
+  b=cLT7INFZadhv85dYlhci/VMD+wEpK2zQg1jBWq5YFxhXuo8lLRlE7CEB
+   ffiu4f+DqfWYmTvViKpsliirV+0Dh8rWZEK3EKasR+EFc3ArUsjtWTQrN
+   zZwez+OtcpMSAf+y+p4Jw7ipnILRhnyhQN4tSM94e8TzoN08+4eWZcPLE
+   TtlGFCCFGcVrXhHuouET2ne2zVGVJVEmQ1ksJ+HByuAGELmOBZN8xg9Mu
+   WWmysZmGQTOvVOIo23Ey6dGIdjVgipUZPhTNOQ/1foRFrfi/Gaw6V0lt1
+   EVCDmEQ8YbvjKac5tnIZsmvLhkPOaVDy5L1rWn/bc5hkwfJlj5hUIP/7U
+   Q==;
+X-CSE-ConnectionGUID: l4z6MrVpT3m50CYSDlRXPw==
+X-CSE-MsgGUID: IRzHG6rHRuuU9y6kwYunXw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="74213913"
+X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
+   d="scan'208";a="74213913"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 22:15:40 -0800
+X-CSE-ConnectionGUID: 4pop3ZNiQpuxr08oCfiM1g==
+X-CSE-MsgGUID: NQs05qJXSmKJ2ofX/f+pyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,254,1763452800"; 
+   d="scan'208";a="238241186"
+Received: from junjie-nuc14rvs.bj.intel.com ([10.238.152.25])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 22:15:39 -0800
+From: Junjie Cao <junjie.cao@intel.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Richard Cochran <richardcochran@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] selftests: ptp: use KSFT_SKIP exit code for skip scenarios
+Date: Mon, 26 Jan 2026 14:15:31 +0800
+Message-ID: <20260126061532.12532-1-junjie.cao@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v7 2/9] libbpf: Add support for extended bpf
- syscall
-Content-Language: en-US
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
- Andrey Albershteyn <aalbersh@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
- LKML <linux-kernel@vger.kernel.org>, Linux API <linux-api@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260123032445.125259-1-leon.hwang@linux.dev>
- <20260123032445.125259-3-leon.hwang@linux.dev>
- <CAADnVQJLz+nMHCZXUgy2MOxwFczEHNbG8ZUgfZeUY4yXFUKcNw@mail.gmail.com>
- <a0ce1dab-7d7e-4b04-a033-4f0611090d34@linux.dev>
- <CAADnVQ+HJkOikzE3KPhOkd1KNugs7=1dZKY1mfog-ez8noyrDA@mail.gmail.com>
- <419976da-f296-4418-8dfe-8ad50a9f8cb5@linux.dev>
- <CAEf4BzYhhf7Jd6DDr2XVf=3gKeMMmrkWW9Sr49QxuW6QudSKig@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4BzYhhf7Jd6DDr2XVf=3gKeMMmrkWW9Sr49QxuW6QudSKig@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+The kselftest framework defines KSFT_SKIP=4 as the standard exit code
+for skipped tests. However, phc.sh currently uses a mix of 'exit 0' and
+'exit 1' to indicate skip conditions, which can confuse test harnesses
+and CI systems.
 
+This patch introduces ksft_skip=4 variable and unifies all skip exit
+paths to use 'exit $ksft_skip', consistent with other selftests like
+net/lib.sh and net/fib_nexthops.sh.
 
-On 24/1/26 02:52, Andrii Nakryiko wrote:
-> On Thu, Jan 22, 2026 at 8:19 PM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->>
->>
->> On 23/1/26 12:12, Alexei Starovoitov wrote:
->>> On Thu, Jan 22, 2026 at 8:07 PM Leon Hwang <leon.hwang@linux.dev> wrote:
->>>>
->>>>
->>>>
->>>> On 23/1/26 11:55, Alexei Starovoitov wrote:
->>>>> On Thu, Jan 22, 2026 at 7:25 PM Leon Hwang <leon.hwang@linux.dev> wrote:
->>>>>>
->>>>>>
->>>>>> +static int probe_bpf_syscall_common_attrs(int token_fd)
->>>>>> +{
->>>>>> +       int ret;
->>>>>> +
->>>>>> +       ret = probe_sys_bpf_ext();
->>>>>> +       return ret > 0;
->>>>>> +}
->>>>>
->>>>> When you look at the above, what thoughts come to mind?
->>>>>
->>>>> ... and please don't use ai for answers.
->>>>
->>>> My initial thought was whether probe_fd() is needed here to handle and
->>>> close a returned fd, since the return value of probe_sys_bpf_ext() isn’t
->>>> obvious from the call site.
-> 
-> Have you looked at how probes are called (in feat_supported()?) They
-> all follow the same contract: > 0 (normally just 1) means feature is
-> supported, 0 means feature is not supported, and <0 means something
-> went wrong. Libbpf will log an error and will assume feature is not
-> supported.
-> 
+Signed-off-by: Junjie Cao <junjie.cao@intel.com>
+---
+ tools/testing/selftests/ptp/phc.sh | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-I’ve looked at feat_supported().
-
-Even though I was aware of the probe contract, I should have thought it
-through more carefully in the context of feat_supported() and
-probe_sys_bpf_ext(). With that in mind, your suggestion makes sense now.
-
-> probe_sys_bpf_ext() should either follow that convention or drop the
-> probe_ prefix altogether to avoid confusion. And then
-> probe_bpf_syscall_common_attrs() is necessary only as a wrapper around
-> probe_sys_bpf_ext() to ignore mandatory (but unused) token_fd argument
-> (so to make it "pluggable" into feat_supported() framework).
-> 
-> So, just make probe_sys_bpf_ext() follow probe contract as described,
-> and then just:
-> 
-> static int probe_bpf_syscall_common_attr(int token_fd)
-> {
->     return probe_sys_bpf_ext();
-> }
-> 
-
-I’ll make probe_sys_bpf_ext() follow the standard probe convention, and
-keep probe_bpf_syscall_common_attrs() as a thin wrapper to ignore the
-mandatory (but unused) token_fd argument, so it plugs cleanly into
-feat_supported() framework.
-
-> Alternatively, just make probe_sys_bpf_ext() take token_fd (but ignore
-> it), and just use probe_sys_bpf_ext() directly for feat_supported().
-> 
-> 
-> probe_fd() is not suitable here because it's for a common case when we
-> expect syscall to succeed and create fd, in which case that successful
-> fd represents successful feature detection. This is not the case here,
-> so probe_fd() is not what you should use.
-> 
-
-Agreed as well that probe_fd() is not suitable here, since this probe is
-not expected to return a successful FD.
-
-Thanks for the detailed explanation.
-
-Thanks,
-Leon
-
->>>
->>> Fair enough, but then collapse it into one helper if FD is a concern.
->>> My question was about stylistic/taste preferences.
->>
->> Understood, thanks for the clarification.
->>
->> I’ll rework it with the stylistic preference in mind.
->>
->> Thanks,
->> Leon
->>
+diff --git a/tools/testing/selftests/ptp/phc.sh b/tools/testing/selftests/ptp/phc.sh
+index ac6e5a6e1d3a..51aad466d989 100755
+--- a/tools/testing/selftests/ptp/phc.sh
++++ b/tools/testing/selftests/ptp/phc.sh
+@@ -8,17 +8,20 @@ ALL_TESTS="
+ "
+ DEV=$1
+ 
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
+ ##############################################################################
+ # Sanity checks
+ 
+ if [[ "$(id -u)" -ne 0 ]]; then
+ 	echo "SKIP: need root privileges"
+-	exit 0
++	exit $ksft_skip
+ fi
+ 
+ if [[ "$DEV" == "" ]]; then
+ 	echo "SKIP: PTP device not provided"
+-	exit 0
++	exit $ksft_skip
+ fi
+ 
+ require_command()
+@@ -27,7 +30,7 @@ require_command()
+ 
+ 	if [[ ! -x "$(command -v "$cmd")" ]]; then
+ 		echo "SKIP: $cmd not installed"
+-		exit 1
++		exit $ksft_skip
+ 	fi
+ }
+ 
+@@ -37,7 +40,7 @@ phc_sanity()
+ 
+ 	if [ $? != 0 ]; then
+ 		echo "SKIP: unknown clock $DEV: No such device"
+-		exit 1
++		exit $ksft_skip
+ 	fi
+ }
+ 
+-- 
+2.43.0
 
