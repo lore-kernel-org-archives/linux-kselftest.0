@@ -1,103 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B581620B810;
-	Mon, 26 Jan 2026 19:03:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE432D7398
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 20:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769454180; cv=none; b=ihy9scCNlTYPgoG2RU+tgf9ACR32jywH2nbjRX6QoiT6gUdcEwDqWYxWOSgaAiz4R6ID3YjnSlovTezA7UXc8JOQnlfvcqiDtLxo2m38z7twomdkVNQMfCzzCsUiwScOqn/DtIG5YK7vWu4Yx94I/ycXwhWlLjaqharkwIwAbGA=
+	t=1769459987; cv=none; b=RCsWdpTJIov2XAmKDiNPp+PZSOfDRohiNWTF7F5kNjmr/zBY9qX8peSvxuoPSWk/QhULfYms38Yfh3byLHUi8sahbdsUWY+6A9eNC0CTycI4unXBkwIUQ39Hkn9YeA8H64GWnnY55vIywQjKeE2Lo+zyrTBPAy+JXZqjd6ULn1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769454180; c=relaxed/simple;
-	bh=NMpmmo676tzOTXBkbWzjq51xX+ZDtptvSmw/dCizBnQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eM3clFcU7HU76rurj+bUl+yzfFwWbdRsNQbbZgWM6ATQHfZyHbTuyVftn5JC6DL5Bj77lfmh3SxrcW79WD7IE5S580VYaXHyzfgoHULZ13XX/UV24R+tWBkWdaptXiHKvs6QiVfdsJuQ/VOgzfRvTQ3F8a2LJPQRwKg5Jnt5CTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u7R8O7DQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769459987; c=relaxed/simple;
+	bh=kkf7NqrkjU5TqFeW2lMIJ5TO7CcGz101l1cH1huc2G4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G178/S+y/n03y1uvwX0kR1Tl2DQwYEU2eX8sdj506qOQWf9+NKXUlJFYTAmRaFeQUPScOCoj4yaXTa7QvEYtAfk605mgET2oVCGHCJp2E6DawyDKJVNx3l6TwppAWCLs/JFeKG+vQb3ibuIqIfjJqboKlURfyFqF+T8Af4kPnRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N4v70e8w; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u7R8O7DQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F40C116C6;
-	Mon, 26 Jan 2026 19:02:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769454180;
-	bh=NMpmmo676tzOTXBkbWzjq51xX+ZDtptvSmw/dCizBnQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u7R8O7DQde8PBTJMl4lJAtJCbCkYvd2dlGK++9bhHIE2+Sh3CaBlVA3eM6xctJ6Fi
-	 1FUvByfXUDgMmEohYC1qb4XpTDfrfTtuZ1a8OWFF6yDtLB/5B0SQzCCQR/LpDwg9E1
-	 mdjJLPbQi54dGnDtLQxgvYHQYvb09MScWJGuhIXUQyxoctKo4MMRu0mb6hjcV6IFU4
-	 FKp69LSbUISJj3iKEhDv3AgHba8o5R9F9q2/CGYhEkmnrHsZ/PH+8hzT4tE/3cwzvH
-	 jaCMhGEY5qDwTlwCKeZStYXrr6VXLblmYa9jTMgw4UpS5Nbi8KxHATgJtOW0BvG+rl
-	 T80bpLVqbP4dw==
-Date: Mon, 26 Jan 2026 19:02:51 +0000
-From: Will Deacon <will@kernel.org>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: catalin.marinas@arm.com, oleg@redhat.com, tglx@linutronix.de,
-	peterz@infradead.org, luto@kernel.org, shuah@kernel.org,
-	kees@kernel.org, wad@chromium.org, kevin.brodsky@arm.com,
-	macro@orcam.me.uk, charlie@rivosinc.com, akpm@linux-foundation.org,
-	ldv@strace.io, anshuman.khandual@arm.com, mark.rutland@arm.com,
-	thuth@redhat.com, song@kernel.org, ryan.roberts@arm.com,
-	ada.coupriediaz@arm.com, broonie@kernel.org, liqiang01@kylinos.cn,
-	pengcan@kylinos.cn, kmal@cock.li, dvyukov@google.com,
-	richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v10 05/16] arm64: ptrace: Move rseq_syscall() before
- audit_syscall_exit()
-Message-ID: <aXe6W69Esd1NLEU8@willie-the-truck>
-References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
- <20251222114737.1334364-6-ruanjinjie@huawei.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N4v70e8w"
+Message-ID: <0575e8ab-7a70-48a4-b316-ef22fd8cece5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769459973;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=e79RITJIhc5qxeAFI/7Q2nKmsRKOeygwd2fSS3l+wYs=;
+	b=N4v70e8wAa1xE9p+MYmVOYUx8y/9DRJZNscSuHvn7Mbcv0tIm/+jnB504vC80ZClRhxYUH
+	jRQiJIEsmD9Pl4F4LMiDb2YFKY6fKwQHwpgqvBo2E0lfbQQtn0tywn8M6hV2FevDysLFcL
+	DU0Qom1hL2Aopvvc1aKh0h/VLazJiGE=
+Date: Mon, 26 Jan 2026 12:39:27 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251222114737.1334364-6-ruanjinjie@huawei.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Harden cpu flags test for
+ lru_percpu_hash map
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-patches-bot@fb.com, bpf@vger.kernel.org
+References: <20260119133417.19739-1-leon.hwang@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260119133417.19739-1-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Dec 22, 2025 at 07:47:26PM +0800, Jinjie Ruan wrote:
-> commit a9f3a74a29af ("entry: Provide generic syscall exit function")
-> introduce generic syscall exit function and call rseq_syscall()
-> before audit_syscall_exit() and arch_syscall_exit_tracehook().
-> 
-> And commit b74406f37737 ("arm: Add syscall detection for restartable
-> sequences") add rseq support for arm32, which also call rseq_syscall()
-> before audit_syscall_exit() and tracehook_report_syscall().
-> 
-> However, commit 409d5db49867c ("arm64: rseq: Implement backend rseq
-> calls and select HAVE_RSEQ") implement arm64 rseq and call
-> rseq_syscall() after audit_syscall_exit() and tracehook_report_syscall().
-> 
-> So compared to the generic entry and arm32 code, arm64 terminates
-> the process a bit later if the syscall is issued within
-> a restartable sequence.
+On 1/19/26 5:34 AM, Leon Hwang wrote:
+> Harden the test against this behavior by provisioning sufficient spare
+> elements. Set max_entries to 'nr_cpus * 2' and restrict the test to using
+> the first nr_cpus entries, ensuring that updates do not spuriously trigger
+> LRU eviction.
 
-Given that signals are processed until later, is this actually true?
+[ ... ]
 
-> But as commit b74406f37737 ("arm: Add syscall detection for restartable
-> sequences") said, syscalls are not allowed inside restartable sequences,
-> so should call rseq_syscall() at the very beginning of system call
-> exiting path for CONFIG_DEBUG_RSEQ=y kernel. This could help us to detect
-> whether there is a syscall issued inside restartable sequences.
-> 
-> It makes sense to raise SIGSEGV via rseq_syscall() before auditing
-> and ptrace syscall exit, because this guarantees that the process is
-> already in an error state with SIGSEGV pending when those later steps
-> run. Although it makes no practical difference to signal delivery (signals
-> are processed at the very end in arm64_exit_to_user_mode()), the ordering
-> is more logical: detect and flag the error first, then proceed with
-> the remaining work.
-> 
-> To make it more reasonable and in preparation for moving arm64 over to
-> the generic entry code, move rseq_syscall() ahead before
-> audit_syscall_exit().
+@ -300,7 +307,7 @@ static void test_percpu_map_cpu_flag(enum 
+bpf_map_type map_type)
+>   	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
+>   		return;
+>   
+> -	max_entries = nr_cpus + 1;
+> +	max_entries = nr_cpus * 2;
+>   	keys = calloc(max_entries, key_sz);
 
-I've been struggling a bit to see how this helps to align with the
-generic code. I'm also concerned that rseq_debug_update_user_cs()
-operates on instruction_pointer(regs) which is something that can be
-chaned by ptrace.
-
-So, I'm not saying this is wrong, but it feels like a user-visible
-change that needs better justification.
-
-Will
+Does it need to allocate "nr_cpus * 2" number of keys while only first 
+nr_cpus entries are used? This can be a followup if it's needed. Applied 
+to start getting signal from CI.
