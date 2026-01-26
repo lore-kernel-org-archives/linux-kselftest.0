@@ -1,54 +1,42 @@
-Received: from fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.178.143.178])
+Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A335934846A;
-	Mon, 26 Jan 2026 16:56:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.178.143.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDF82BE629;
+	Mon, 26 Jan 2026 17:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769446600; cv=none; b=bqJjo7hjdmwMu35ryXPYYQBrZelDNDXhXIzLtBvPWf4IoBWW0Hd4ng/Iwgg42cgRbG0P/Uw6T3kIAuc/7fyM6fnZ3o1jQn0QbCjjoqPU+2nvLxqoNntweSLfjVhfwyd0gS7z4rcvfynqUq+VqBdCOE0fST6GxgnPlkK+G1O/Nyg=
+	t=1769447019; cv=none; b=gmCbzPYaLyQZGP8gYb4wY4V12wlUuCbxW92qinkZ4JCInSAu1079YbV43uAj0PaNRazsASQATCaQZPBMGwvm4R4qS3tKkf3avv1eUphPSCavhtEAZ1f+Ul9x0C4ln3EQyP0FNHiOUE0bEqRi+QZ1dGLt/EDRRGg8nyeOVNLBBro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769446600; c=relaxed/simple;
-	bh=ukU/E1N/NHrpDBckIGLgNFAyQe4bWfQrJe2+TaF7Pt4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=JoVPEr9fvWnfqVhA5UxMTpJv85l+9AVE+e00Z7/iPvWYF8QuHhyekGA72UOxpoBhi/sx9EKQk+YdBYXqGJw2c4q0C6p6XqpQnugC4956ljUmVRPkHoAVHg4pZPKydUVHAsCGuVdiqHm8qwD6+f8kIqMNl/Jdrm8Friyk8ohpExQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Jnr8mIUb; arc=none smtp.client-ip=63.178.143.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1769447019; c=relaxed/simple;
+	bh=rw7KIPsO8h4GQPE7GIE9WZXrP0bY9EfrcCnalVL4YZg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hECqOAQ833j/BFF93ZxY/XlcB+0MA9kenW5Wt3ZL1mlg1Pe0eIe5zmKdpYlcPUu+TOIoHPj9F+PikKKsic1hzM7lWMoviyg+FDDQd5CnJG2DFCwvY4+eBU2uD3v7fChO5Pcyz9yTfYeOAN1s7Yg3fNCQ//NXJFpCZJ+nA6Bnto4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=Wg07S4fw reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Jnr8mIUb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1769446598; x=1800982598;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=i1wNPmaVv8oAnx46s+pv/CwmAbOdzYrpQ/gTMvCUjdA=;
-  b=Jnr8mIUb9PqMlTRnZfWLuDCFinsXK/iikp5GVYjdFk0J3VD8rlqQ+xUC
-   1jei9tRzoZ0vQ13/OiK5T5d1GN1bL7b6LwQQtEu3k1Olcemwb4t96yPm1
-   0PDuK5BJlfjrKRZy54JLnA5T6dwUIZFzCANvZ0UgupXgTSJGfvh1Psqug
-   faqflUyTwfS0tQi/oY0b25bP+5ag2wS58w5PWwo8pSQwx3rNBezUNwVBE
-   5mSnHv+u2leHYnoJDuuT4thSe3gM68tuvX5QfqCrrFJiiyy+f9fTUj9q5
-   KIyMPRJ7ZOyTtJ1sdSpIg77UBbT65WAS0gvUP3/J5Zoh/+d2IHFjlxcBc
-   A==;
-X-CSE-ConnectionGUID: hG/nmz7vTNmceFnAp6G6SA==
-X-CSE-MsgGUID: 3E3qoK4vTpqzDoxpd4XG1Q==
-X-IronPort-AV: E=Sophos;i="6.21,255,1763424000"; 
-   d="scan'208";a="8357615"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 16:56:36 +0000
-Received: from EX19MTAEUC001.ant.amazon.com [54.240.197.225:22549]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.9.185:2525] with esmtp (Farcaster)
- id 8a3ce0b8-5cfe-49f5-b875-46094201b2e6; Mon, 26 Jan 2026 16:56:35 +0000 (UTC)
-X-Farcaster-Flow-ID: 8a3ce0b8-5cfe-49f5-b875-46094201b2e6
-Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
- EX19MTAEUC001.ant.amazon.com (10.252.51.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
- Mon, 26 Jan 2026 16:56:30 +0000
-Received: from [192.168.25.27] (10.106.82.32) by EX19D005EUB003.ant.amazon.com
- (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35; Mon, 26 Jan 2026
- 16:56:11 +0000
-Message-ID: <afddc163-4b1e-46ee-920a-85de3b347291@amazon.com>
-Date: Mon, 26 Jan 2026 16:56:10 +0000
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="Wg07S4fw"
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.simply.com (Simply.com) with ESMTP id 4f0FHD0h6Fz1DHpY;
+	Mon, 26 Jan 2026 18:03:36 +0100 (CET)
+Received: from [10.10.15.30] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by smtp.simply.com (Simply.com) with ESMTPSA id 4f0FHC3Mpqz1DHbd;
+	Mon, 26 Jan 2026 18:03:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
+	s=simplycom2; t=1769447015;
+	bh=mEJOibruBiv6vNISyE0Rc0M4DfURwzmVFuaa5JQVwTo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Wg07S4fw4kUOsowsuPzs34ED0/xMOQZIu0rMh5g/Jzkgb4fBEZ9Dfp9zDL3H2RI3R
+	 DUqktSlyIpj5mXhBLB8eH1q+UzGm0BoDGweL112OH+Csqtua3qBM0aajJPHL+Jp4Us
+	 zQEql9OfLgZWHVC8MX9Hv0PSKJRXaX9r0Dst+nfCpA0/UvqnES+MtkyR7FjN5Tnhk0
+	 xJRsBOkYxEulwIkCOYI+A11BzWA/YpPra7CbYHmhSh8mlFOxX+ADS/udC30cntY66W
+	 w29I11WZdxmbh0k3hwzhgndv1y0cNV8pnSn+oRY6DXXH2DbOChGqfgnwyUHB4D2R25
+	 iWH4sTDyPpeww==
+Message-ID: <a270f924-22ca-450f-b3f6-826e3d2676d2@gaisler.com>
+Date: Mon, 26 Jan 2026 18:03:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,173 +44,289 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v9 07/13] KVM: guest_memfd: Add flag to remove from direct
- map
-To: Ackerley Tng <ackerleytng@google.com>, "Edgecombe, Rick P"
-	<rick.p.edgecombe@intel.com>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, "kalyazin@amazon.co.uk"
-	<kalyazin@amazon.co.uk>, "kernel@xen0n.name" <kernel@xen0n.name>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "linux-s390@vger.kernel.org"
-	<linux-s390@vger.kernel.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>
-CC: "david@kernel.org" <david@kernel.org>, "palmer@dabbelt.com"
-	<palmer@dabbelt.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"svens@linux.ibm.com" <svens@linux.ibm.com>, "jgross@suse.com"
-	<jgross@suse.com>, "surenb@google.com" <surenb@google.com>,
-	"riel@surriel.com" <riel@surriel.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
-	"peterx@redhat.com" <peterx@redhat.com>, "x86@kernel.org" <x86@kernel.org>,
-	"rppt@kernel.org" <rppt@kernel.org>, "thuth@redhat.com" <thuth@redhat.com>,
-	"maz@kernel.org" <maz@kernel.org>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "ast@kernel.org" <ast@kernel.org>,
-	"vbabka@suse.cz" <vbabka@suse.cz>, "Annapurve, Vishal"
-	<vannapurve@google.com>, "borntraeger@linux.ibm.com"
-	<borntraeger@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
-	"pjw@kernel.org" <pjw@kernel.org>, "tglx@linutronix.de" <tglx@linutronix.de>,
-	"willy@infradead.org" <willy@infradead.org>, "hca@linux.ibm.com"
-	<hca@linux.ibm.com>, "wyihan@google.com" <wyihan@google.com>,
-	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jolsa@kernel.org"
-	<jolsa@kernel.org>, "yang@os.amperecomputing.com"
-	<yang@os.amperecomputing.com>, "jmattson@google.com" <jmattson@google.com>,
-	"luto@kernel.org" <luto@kernel.org>, "aneesh.kumar@kernel.org"
-	<aneesh.kumar@kernel.org>, "haoluo@google.com" <haoluo@google.com>,
-	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "coxu@redhat.com" <coxu@redhat.com>,
-	"mhocko@suse.com" <mhocko@suse.com>, "mlevitsk@redhat.com"
-	<mlevitsk@redhat.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "hpa@zytor.com"
-	<hpa@zytor.com>, "song@kernel.org" <song@kernel.org>, "oupton@kernel.org"
-	<oupton@kernel.org>, "peterz@infradead.org" <peterz@infradead.org>,
-	"maobibo@loongson.cn" <maobibo@loongson.cn>, "lorenzo.stoakes@oracle.com"
-	<lorenzo.stoakes@oracle.com>, "Liam.Howlett@oracle.com"
-	<Liam.Howlett@oracle.com>, "jthoughton@google.com" <jthoughton@google.com>,
-	"martin.lau@linux.dev" <martin.lau@linux.dev>, "jhubbard@nvidia.com"
-	<jhubbard@nvidia.com>, "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-	"eddyz87@gmail.com" <eddyz87@gmail.com>, "yonghong.song@linux.dev"
-	<yonghong.song@linux.dev>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-	"shuah@kernel.org" <shuah@kernel.org>, "prsampat@amd.com" <prsampat@amd.com>,
-	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
-	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "itazur@amazon.co.uk"
-	<itazur@amazon.co.uk>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"yuzenghui@huawei.com" <yuzenghui@huawei.com>, "dev.jain@arm.com"
-	<dev.jain@arm.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>,
-	"jackabt@amazon.co.uk" <jackabt@amazon.co.uk>, "daniel@iogearbox.net"
-	<daniel@iogearbox.net>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-	"andrii@kernel.org" <andrii@kernel.org>, "mingo@redhat.com"
-	<mingo@redhat.com>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"joey.gouly@arm.com" <joey.gouly@arm.com>, "derekmn@amazon.com"
-	<derekmn@amazon.com>, "xmarcalx@amazon.co.uk" <xmarcalx@amazon.co.uk>,
-	"kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
-	<sdf@fomichev.me>, "jackmanb@google.com" <jackmanb@google.com>,
-	"bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>,
-	"jannh@google.com" <jannh@google.com>, "john.fastabend@gmail.com"
-	<john.fastabend@gmail.com>, "kas@kernel.org" <kas@kernel.org>,
-	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>
-References: <20260114134510.1835-1-kalyazin@amazon.com>
- <20260114134510.1835-8-kalyazin@amazon.com>
- <e619ded526a2f9a4cec4f74383cef31519624935.camel@intel.com>
- <294bca75-2f3e-46db-bb24-7c471a779cc1@amazon.com>
- <CAEvNRgEvd9tSwrkaYrQyibO2DP99vgVj6_zr=jBH5+zMnJwYbA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] sparc: Add architecture support for clone3
+To: Ludwig Rydberg <ludwig.rydberg@gaisler.com>, davem@davemloft.net,
+ brauner@kernel.org, shuah@kernel.org
+Cc: sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, arnd@arndb.de, glaubitz@physik.fu-berlin.de,
+ geert@linux-m68k.org, schuster.simon@siemens-energy.com, jrtc27@jrtc27.com
+References: <20260119144753.27945-1-ludwig.rydberg@gaisler.com>
+ <20260119144753.27945-3-ludwig.rydberg@gaisler.com>
 Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-Autocrypt: addr=kalyazin@amazon.com; keydata=
- xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
- JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
- BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
- IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
- CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
- ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
- ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
- i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <CAEvNRgEvd9tSwrkaYrQyibO2DP99vgVj6_zr=jBH5+zMnJwYbA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Andreas Larsson <andreas@gaisler.com>
+In-Reply-To: <20260119144753.27945-3-ludwig.rydberg@gaisler.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D001EUB003.ant.amazon.com (10.252.51.38) To
- EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
+On 2026-01-19 15:47, Ludwig Rydberg wrote:
+> Add support for the clone3 system call to the SPARC architectures.
+> 
+> The implementation follows the pattern of the original clone syscall.
+> However, instead of explicitly calling kernel_clone, the clone3
+> handler calls the generic sys_clone3 handler in kernel/fork.
+> In case no stack is provided, the parents stack is reused.
+> 
+> The return value convention for clone3 follows the regular kernel return
+> value convention (in contrast to the original clone/fork on SPARC).
+> 
+> Closes: https://github.com/sparclinux/issues/issues/10
+> Signed-off-by: Ludwig Rydberg <ludwig.rydberg@gaisler.com>
+> ---
+>  arch/sparc/include/asm/syscalls.h      |  1 +
+>  arch/sparc/include/asm/unistd.h        |  2 --
+>  arch/sparc/kernel/entry.S              | 15 ++++++++++++++
+>  arch/sparc/kernel/kernel.h             |  1 +
+>  arch/sparc/kernel/process.c            | 14 +++++++++++++
+>  arch/sparc/kernel/process_32.c         | 23 ++++++++++++++++------
+>  arch/sparc/kernel/process_64.c         | 27 ++++++++++++++++++++------
+>  arch/sparc/kernel/syscalls.S           |  8 ++++++++
+>  arch/sparc/kernel/syscalls/syscall.tbl |  2 +-
+>  9 files changed, 78 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/sparc/include/asm/syscalls.h b/arch/sparc/include/asm/syscalls.h
+> index 35575fbfb9dc..282e62b66518 100644
+> --- a/arch/sparc/include/asm/syscalls.h
+> +++ b/arch/sparc/include/asm/syscalls.h
+> @@ -7,5 +7,6 @@ struct pt_regs;
+>  asmlinkage long sparc_fork(struct pt_regs *regs);
+>  asmlinkage long sparc_vfork(struct pt_regs *regs);
+>  asmlinkage long sparc_clone(struct pt_regs *regs);
+> +asmlinkage long sparc_clone3(struct pt_regs *regs);
+>  
+>  #endif /* _SPARC64_SYSCALLS_H */
+> diff --git a/arch/sparc/include/asm/unistd.h b/arch/sparc/include/asm/unistd.h
+> index 3380411a4537..d6bc76706a7a 100644
+> --- a/arch/sparc/include/asm/unistd.h
+> +++ b/arch/sparc/include/asm/unistd.h
+> @@ -49,8 +49,6 @@
+>  #define __ARCH_WANT_COMPAT_STAT
+>  #endif
+>  
+> -#define __ARCH_BROKEN_SYS_CLONE3
+> -
+>  #ifdef __32bit_syscall_numbers__
+>  /* Sparc 32-bit only has the "setresuid32", "getresuid32" variants,
+>   * it never had the plain ones and there is no value to adding those
+> diff --git a/arch/sparc/kernel/entry.S b/arch/sparc/kernel/entry.S
+> index a3fdee4cd6fa..ea51ef52c952 100644
+> --- a/arch/sparc/kernel/entry.S
+> +++ b/arch/sparc/kernel/entry.S
+> @@ -907,6 +907,21 @@ flush_patch_four:
+>  	jmpl	%l1 + %lo(sparc_vfork), %g0
+>  	 add	%sp, STACKFRAME_SZ, %o0
+>  
+> +	.globl	__sys_clone3, flush_patch_five
+> +__sys_clone3:
+> +	mov	%o7, %l5
+> +flush_patch_five:
+> +	FLUSH_ALL_KERNEL_WINDOWS;
+> +	ld	[%curptr + TI_TASK], %o4
+> +	rd	%psr, %g4
+> +	WRITE_PAUSE
+> +	rd	%wim, %g5
+> +	WRITE_PAUSE
+> +	std	%g4, [%o4 + AOFF_task_thread + AOFF_thread_fork_kpsr]
+> +	add	%sp, STACKFRAME_SZ, %o0
+> +	call	sparc_clone3
+> +	 mov	%l5, %o7
+> +
+>          .align  4
+>  linux_sparc_ni_syscall:
+>  	sethi   %hi(sys_ni_syscall), %l7
+> diff --git a/arch/sparc/kernel/kernel.h b/arch/sparc/kernel/kernel.h
+> index 8328a3b78a44..4ee85051521a 100644
+> --- a/arch/sparc/kernel/kernel.h
+> +++ b/arch/sparc/kernel/kernel.h
+> @@ -18,6 +18,7 @@ extern int ncpus_probed;
+>  asmlinkage long sparc_clone(struct pt_regs *regs);
+>  asmlinkage long sparc_fork(struct pt_regs *regs);
+>  asmlinkage long sparc_vfork(struct pt_regs *regs);
+> +asmlinkage long sparc_clone3(struct pt_regs *regs);
+>  
+>  #ifdef CONFIG_SPARC64
+>  /* setup_64.c */
+> diff --git a/arch/sparc/kernel/process.c b/arch/sparc/kernel/process.c
+> index 7d69877511fa..d72fa0665943 100644
+> --- a/arch/sparc/kernel/process.c
+> +++ b/arch/sparc/kernel/process.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/sched/task.h>
+>  #include <linux/sched/task_stack.h>
+>  #include <linux/signal.h>
+> +#include <linux/syscalls.h>
+>  
+>  #include "kernel.h"
+>  
+> @@ -118,3 +119,16 @@ asmlinkage long sparc_clone(struct pt_regs *regs)
+>  
+>  	return ret;
+>  }
+> +
+> +asmlinkage long sparc_clone3(struct pt_regs *regs)
+> +{
+> +	unsigned long sz;
+> +	struct clone_args __user *cl_args;
+> +
+> +	synchronize_user_stack();
+> +
+> +	cl_args = (struct clone_args __user *)regs->u_regs[UREG_I0];
+> +	sz = regs->u_regs[UREG_I1];
+> +
+> +	return sys_clone3(cl_args, sz);
+> +}
+> diff --git a/arch/sparc/kernel/process_32.c b/arch/sparc/kernel/process_32.c
+> index 5a28c0e91bf1..dd8c6c02b0f1 100644
+> --- a/arch/sparc/kernel/process_32.c
+> +++ b/arch/sparc/kernel/process_32.c
+> @@ -247,6 +247,8 @@ clone_stackframe(struct sparc_stackf __user *dst,
+>   * Parent -->  %o0 == childs  pid, %o1 == 0
+>   * Child  -->  %o0 == parents pid, %o1 == 1
+>   *
+> + * clone3() - Uses regular kernel return value conventions
+> + *
+>   * NOTE: We have a separate fork kpsr/kwim because
+>   *       the parent could change these values between
+>   *       sys_fork invocation and when we reach here
+> @@ -261,11 +263,11 @@ extern void ret_from_kernel_thread(void);
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>  {
+>  	u64 clone_flags = args->flags;
+> -	unsigned long sp = args->stack;
+>  	unsigned long tls = args->tls;
+>  	struct thread_info *ti = task_thread_info(p);
+>  	struct pt_regs *childregs, *regs = current_pt_regs();
+>  	char *new_stack;
+> +	unsigned long sp = args->stack ? args->stack : regs->u_regs[UREG_FP];
+>  
+>  #ifndef CONFIG_SMP
+>  	if(last_task_used_math == current) {
+> @@ -350,13 +352,22 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>  	childregs->psr &= ~PSR_EF;
+>  	clear_tsk_thread_flag(p, TIF_USEDFPU);
+>  #endif
+> +	/* Handle return value conventions */
+> +	if (regs->u_regs[UREG_G1] == __NR_clone3) {
+> +		/* clone3() - use regular kernel return value convention */
+> +
+> +		/* Set the return value for the child. */
+> +		childregs->u_regs[UREG_I0] = 0;
+> +	} else {
+> +		/* clone()/fork() - use SunOS return value convention */
+>  
+> -	/* Set the return value for the child. */
+> -	childregs->u_regs[UREG_I0] = current->pid;
+> -	childregs->u_regs[UREG_I1] = 1;
+> +		/* Set the return value for the child. */
+> +		childregs->u_regs[UREG_I0] = current->pid;
+> +		childregs->u_regs[UREG_I1] = 1;
+>  
+> -	/* Set the return value for the parent. */
+> -	regs->u_regs[UREG_I1] = 0;
+> +		/* Set the return value for the parent. */
+> +		regs->u_regs[UREG_I1] = 0;
+> +	}
+>  
+>  	if (clone_flags & CLONE_SETTLS)
+>  		childregs->u_regs[UREG_G7] = tls;
+> diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_64.c
+> index 25781923788a..e889da8e4835 100644
+> --- a/arch/sparc/kernel/process_64.c
+> +++ b/arch/sparc/kernel/process_64.c
+> @@ -564,17 +564,19 @@ void fault_in_user_windows(struct pt_regs *regs)
+>   * under SunOS are nothing short of bletcherous:
+>   * Parent -->  %o0 == childs  pid, %o1 == 0
+>   * Child  -->  %o0 == parents pid, %o1 == 1
+> + *
+> + * clone3() - Uses regular kernel return value conventions
+>   */
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>  {
+>  	u64 clone_flags = args->flags;
+> -	unsigned long sp = args->stack;
+>  	unsigned long tls = args->tls;
+>  	struct thread_info *t = task_thread_info(p);
+>  	struct pt_regs *regs = current_pt_regs();
+>  	struct sparc_stackf *parent_sf;
+>  	unsigned long child_stack_sz;
+>  	char *child_trap_frame;
+> +	unsigned long sp = args->stack ? args->stack : regs->u_regs[UREG_FP];
+>  
+>  	/* Calculate offset to stack_frame & pt_regs */
+>  	child_stack_sz = (STACKFRAME_SZ + TRACEREG_SZ);
+> @@ -616,12 +618,25 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>  	if (t->utraps)
+>  		t->utraps[0]++;
+>  
+> -	/* Set the return value for the child. */
+> -	t->kregs->u_regs[UREG_I0] = current->pid;
+> -	t->kregs->u_regs[UREG_I1] = 1;
+> +	/* Handle return value conventions */
+> +	if (regs->u_regs[UREG_G1] == __NR_clone3) {
+> +		/* clone3() - use regular kernel return value convention */
+> +
+> +		/* Set the return value for the child. */
+> +		t->kregs->u_regs[UREG_I0] = 0;
+> +
+> +		/* Clear g1 to indicate user thread */
+> +		t->kregs->u_regs[UREG_G1] = 0;
+> +	} else {
+> +		/* clone()/fork() - use SunOS return value convention */
+> +
+> +		/* Set the return value for the child. */
+> +		t->kregs->u_regs[UREG_I0] = current->pid;
+> +		t->kregs->u_regs[UREG_I1] = 1;
+>  
+> -	/* Set the second return value for the parent. */
+> -	regs->u_regs[UREG_I1] = 0;
+> +		/* Set the second return value for the parent. */
+> +		regs->u_regs[UREG_I1] = 0;
+> +	}
+>  
+>  	if (clone_flags & CLONE_SETTLS)
+>  		t->kregs->u_regs[UREG_G7] = tls;
+> diff --git a/arch/sparc/kernel/syscalls.S b/arch/sparc/kernel/syscalls.S
+> index 0e8ab0602c36..96fe8763d70c 100644
+> --- a/arch/sparc/kernel/syscalls.S
+> +++ b/arch/sparc/kernel/syscalls.S
+> @@ -103,6 +103,12 @@ sys_clone:
+>  	ba,pt	%xcc, sparc_clone
+>  	 add	%sp, PTREGS_OFF, %o0
+>  
+> +	.align	32
+> +__sys_clone3:
+> +	flushw
+> +	ba,pt	%xcc, sparc_clone3
+> +	 add	%sp, PTREGS_OFF, %o0
+> +
+>  	.globl	ret_from_fork
+>  ret_from_fork:
+>  	/* Clear current_thread_info()->new_child. */
+> @@ -113,6 +119,8 @@ ret_from_fork:
+>  	brnz,pt	%o0, ret_sys_call
+>  	 ldx	[%g6 + TI_FLAGS], %l0
+>  	ldx	[%sp + PTREGS_OFF + PT_V9_G1], %l1
+> +	brz,pt	%l1, ret_sys_call
+> +	 nop
+>  	call	%l1
+>  	 ldx	[%sp + PTREGS_OFF + PT_V9_G2], %o0
+>  	ba,pt	%xcc, ret_sys_call
+> diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+> index 39aa26b6a50b..c0307bb09892 100644
+> --- a/arch/sparc/kernel/syscalls/syscall.tbl
+> +++ b/arch/sparc/kernel/syscalls/syscall.tbl
+> @@ -480,7 +480,7 @@
+>  432	common	fsmount				sys_fsmount
+>  433	common	fspick				sys_fspick
+>  434	common	pidfd_open			sys_pidfd_open
+> -# 435 reserved for clone3
+> +435	common	clone3				__sys_clone3
+>  436	common	close_range			sys_close_range
+>  437	common	openat2			sys_openat2
+>  438	common	pidfd_getfd			sys_pidfd_getfd
 
+Reviewed-by: Andreas Larsson <andreas@gaisler.com>
+Tested-by: Andreas Larsson <andreas@gaisler.com>
 
-On 22/01/2026 18:37, Ackerley Tng wrote:
-> Nikita Kalyazin <kalyazin@amazon.com> writes:
-> 
->> On 16/01/2026 00:00, Edgecombe, Rick P wrote:
->>> On Wed, 2026-01-14 at 13:46 +0000, Kalyazin, Nikita wrote:
->>>> +static void kvm_gmem_folio_restore_direct_map(struct folio *folio)
->>>> +{
->>>> +     /*
->>>> +      * Direct map restoration cannot fail, as the only error condition
->>>> +      * for direct map manipulation is failure to allocate page tables
->>>> +      * when splitting huge pages, but this split would have already
->>>> +      * happened in folio_zap_direct_map() in kvm_gmem_folio_zap_direct_map().
-> 
-> Do you know if folio_restore_direct_map() will also end up merging page
-> table entries to a higher level?
-> 
->>>> +      * Thus folio_restore_direct_map() here only updates prot bits.
->>>> +      */
->>>> +     if (kvm_gmem_folio_no_direct_map(folio)) {
->>>> +             WARN_ON_ONCE(folio_restore_direct_map(folio));
->>>> +             folio->private = (void *)((u64)folio->private & ~KVM_GMEM_FOLIO_NO_DIRECT_MAP);
->>>> +     }
->>>> +}
->>>> +
->>>
->>> Does this assume the folio would not have been split after it was zapped? As in,
->>> if it was zapped at 2MB granularity (no 4KB direct map split required) but then
->>> restored at 4KB (split required)? Or it gets merged somehow before this?
-> 
-> I agree with the rest of the discussion that this will probably land
-> before huge page support, so I will have to figure out the intersection
-> of the two later.
-> 
->>
->> AFAIK it can't be zapped at 2MB granularity as the zapping code will
->> inevitably cause splitting because guest_memfd faults occur at the base
->> page granularity as of now.
-> 
-> Here's what I'm thinking for now:
-> 
-> [HugeTLB, no conversions]
-> With initial HugeTLB support (no conversions), host userspace
-> guest_memfd faults will be:
-> 
-> + For guest_memfd with PUD-sized pages
->      + At PUD level or PTE level
-> + For guest_memfd with PMD-sized pages
->      + At PMD level or PTE level
-> 
-> Since this guest_memfd doesn't support conversions, the folio is never
-> split/merged, so the direct map is restored at whatever level it was
-> zapped. I think this works out well.
-> 
-> [HugeTLB + conversions]
-> For a guest_memfd with HugeTLB support and conversions, host userspace
-> guest_memfd faults will always be at PTE level, so the direct map will
-> be split and the faulted pages have the direct map zapped in 4K chunks
-> as they are faulted.
-> 
-> On conversion back to private, put those back into the direct map
-> (putting aside whether to merge the direct map PTEs for now).
-
-Makes sense to me.
-
-> 
-> 
-> Unfortunately there's no unmapping callback for guest_memfd to use, so
-> perhaps the principle should be to put the folios back into the direct
-> map ASAP - at unmapping if guest_memfd is doing the unmapping, otherwise
-> at freeing time?
-
-I'm not sure I fully understand what you mean here.  What would be the 
-purpose for hooking up to unmapping?  Why would making sure we put 
-folios back into the direct map whenever they are freed or converted to 
-private not be sufficient?
+Thanks,
+Andreas
 
