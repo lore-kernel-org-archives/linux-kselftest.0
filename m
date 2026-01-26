@@ -1,55 +1,40 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CD533B6EE
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 14:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC6E335072;
+	Mon, 26 Jan 2026 14:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769436220; cv=none; b=b+YMHbaPjEnwDIgu4MIh/OLM2VzeWKOH3a4+W9vi0UBpDdYsGZvJh3Pm3xrHU0I87EjSF9rGkY/YRXYOhIHGDYwpXD+9qLG1HQnt+yu5v3vHuV0Gv24vKLbU9szqITOA9fbV1cJsZX+tbXBHNZ3tdBdBAmwvIxVhNafoDkbogwU=
+	t=1769437779; cv=none; b=Zn61pibx0pFVOu37POzsn9BOI/NDtTeMIR+3Mr1UKir5Y2ubZIGASR4v2pR6bhFYSQWA4yJWgF9ydhl/7NqKxj+OxntidL4c3HArijY4Nw4SGbgRGybgaZ6DCEglb3WQr0m18aVh4/PJ0VEHENNQ4DKONK1XSRQikjFLKS5IJgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769436220; c=relaxed/simple;
-	bh=8YC1CtA/xR8I2DaiN++y/fxuhNGdRx4gljMF4wqMGdo=;
+	s=arc-20240116; t=1769437779; c=relaxed/simple;
+	bh=b0TvPe3SL5NTnQuZqhiOWbZdfVzPgR2UpfDbzN9qC44=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R1nOav8UvTSvvTjo5MHYVkmeWvplVczN0D5B8mTue0McgGAGsGR326ZB6ntZT5Q3OqouFoKjLDMl3aMokxtwQl+NdBvdHX4u5mo2FS/SzacAWl15ziw7sBgWKjzXf4pt69XtcdQaAHEXaCdGMjfD0Qq27JrVInRxl7CuaNjC+Po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Uuvz3LdS; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=pyXXQ35AunkYCQdR/Nkmk+F8Dwyn8rGYC0oPVUSs40LKxrJWWAhzDCgYIvBiKjToGsTRK6iSXT5sgHe1xr8SgHv4FCEZiNIFJs585aPCy8Pv5Tw3T0+4TlWLzhy+tYDIZxnW+//hl2r+n0ivx1EglLXU7pfvCQC1r44G9UEa5yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PM3XiT21; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Uuvz3LdS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769436217;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BTE8lF8KHMXTDyQ5CHrjUWtCI2HjcBMdXUc40qd2TUw=;
-	b=Uuvz3LdS6n4wn7hWE05clu9kBuLi0P2NB8z1FqVcMpY+j6XMH+zZNwi/VjWKz77XMAPVNP
-	5XJhiYom7Sm7uJsu4kpdMhu8xKr3KM9BoOl0wCjzhUszZGCsZY/e5THKpySuEAPM94f19k
-	746KW0i82kl2peXAtHkX3hCs9ywqp7Y=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-590-2vvGAvbAP0u1YUB0l298iA-1; Mon,
- 26 Jan 2026 09:03:34 -0500
-X-MC-Unique: 2vvGAvbAP0u1YUB0l298iA-1
-X-Mimecast-MFC-AGG-ID: 2vvGAvbAP0u1YUB0l298iA_1769436213
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5D04019775B0;
-	Mon, 26 Jan 2026 14:03:33 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.122])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 015FF30001A8;
-	Mon, 26 Jan 2026 14:03:29 +0000 (UTC)
-Date: Mon, 26 Jan 2026 22:03:21 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Alexander Atanasov <alex@zazolabs.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PM3XiT21"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95DCDC116C6;
+	Mon, 26 Jan 2026 14:29:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769437778;
+	bh=b0TvPe3SL5NTnQuZqhiOWbZdfVzPgR2UpfDbzN9qC44=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PM3XiT21tImwtde2lWrx7TMquyoCZ3cF2booR+ixNM0xm+CgENsMLcpj133h5IGxj
+	 ugNgFfi35q+ZPNGze3QQxi8WU67UQrXc+PZQb46i53w46yANgPE55HaIC3+9oZcrMh
+	 5gdtlnuSSrp/0L0gR9pEIvjqhF9zurcg6cp3oyYPaeM/hAOemNDPZDWVYra4L+dvnm
+	 2AVDfUfccoiZFgUhwiQM1xBRHRgwXABqeSRaHqdKl8+wHdy/su+stVqPZWtLy4rBE+
+	 BO8EdSLKHrBQHMauqY3lRVvUCsYhvp9xlAXxGK1/Xbbijntz6v9f5IpRX2VDpywc/O
+	 AiuRNEpoKFC4w==
+Date: Mon, 26 Jan 2026 14:29:34 +0000
+From: Will Deacon <will@kernel.org>
+To: I-Hsin Cheng <richard120310@gmail.com>
+Cc: catalin.marinas@arm.com, shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: ublk: mark each test start and end time in
- dmesg
-Message-ID: <aXd0KdG_k-LDxeDo@fedora>
-References: <20260126112544.1811817-2-alex@zazolabs.com>
+Subject: Re: [PATCH] kselftest/arm64: Add missing file in .gitignore
+Message-ID: <aXd6Tm1Npb58vlM8@willie-the-truck>
+References: <20260124123241.3257-1-richard120310@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,49 +43,28 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260126112544.1811817-2-alex@zazolabs.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+In-Reply-To: <20260124123241.3257-1-richard120310@gmail.com>
 
-On Mon, Jan 26, 2026 at 11:25:44AM +0000, Alexander Atanasov wrote:
-> Log test start and end time in dmesg, so generated log messages
-> during the test run can be linked to specific test from the test
-> suite.
+On Sat, Jan 24, 2026 at 08:32:41PM +0800, I-Hsin Cheng wrote:
+> The binary generated by check_hugetlb_options is missing in .gitignore
+> under the directory. Add it into the file so it won't be logged into
+> version control.
 > 
-> Signed-off-by: Alexander Atanasov <alex@zazolabs.com>
+> Signed-off-by: I-Hsin Cheng <richard120310@gmail.com>
 > ---
->  tools/testing/selftests/ublk/test_common.sh | 2 ++
->  1 file changed, 2 insertions(+)
+>  tools/testing/selftests/arm64/mte/.gitignore | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/testing/selftests/ublk/test_common.sh b/tools/testing/selftests/ublk/test_common.sh
-> index ab1ea5cc904a..5865f1e640ce 100755
-> --- a/tools/testing/selftests/ublk/test_common.sh
-> +++ b/tools/testing/selftests/ublk/test_common.sh
-> @@ -122,6 +122,7 @@ _prep_test() {
->  	modprobe ublk_drv > /dev/null 2>&1
->  	UBLK_TMP=$(mktemp $TMPDIR/ublk_test_XXXXX)
->  	[ "$UBLK_TEST_QUIET" -eq 0 ] && echo "ublk $type: $*"
-> +	echo "ublk selftest: $TID starting at $(date --iso-8601=sec)" | tee /dev/kmsg
->  }
->  
->  _remove_test_files()
-> @@ -166,6 +167,7 @@ _cleanup_test() {
->  	"${UBLK_PROG}" del -a
->  
->  	_remove_files
-> +	echo "ublk selftest: $TID done at $(date --iso-8601=sec)" | tee /dev/kmsg
->  }
+> diff --git a/tools/testing/selftests/arm64/mte/.gitignore b/tools/testing/selftests/arm64/mte/.gitignore
+> index 052d0f9f92b3..f6937f890039 100644
+> --- a/tools/testing/selftests/arm64/mte/.gitignore
+> +++ b/tools/testing/selftests/arm64/mte/.gitignore
+> @@ -6,3 +6,4 @@ check_mmap_options
+>  check_prctl
+>  check_ksm_options
+>  check_user_mem
+> +check_hugetlb_options
 
-Also `date "+%F %T"`(which is taken by blktests project) looks more readable, such as:
+Thanks, I'll pick this up.
 
-[root@ktest-40 blktests]# date "+%F %T"
-2026-01-26 14:00:51
-[root@ktest-40 blktests]# date --iso-8601=sec
-2026-01-26T14:01:54+00:00
-
-So would you like to consider it too?
-
-
-
-Thanks,
-Ming
-
+Will
