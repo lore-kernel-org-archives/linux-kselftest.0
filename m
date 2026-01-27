@@ -1,109 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AB42ED846;
-	Tue, 27 Jan 2026 11:39:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908D01CAA68;
+	Tue, 27 Jan 2026 12:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769513974; cv=none; b=CCpR+vE0PAjfJmpIYHFN59QodBhITki68mBs6oucEqiL5AkoCQpXbWKcw0mfB/lU/+SI/1RAeZ9G8TT6WdPCZubo8AnwXgNUamHWkkfopN+o3OFQPT6I7cOUsRmPsCuYyTQA5xvQ6bOF86jieX06WSrzkKUF3Fy7j3v/d5JIrq4=
+	t=1769515551; cv=none; b=qhQmVCeNGfTLrarMBJwf4HQSEEXY9lZKwgG6Kv4VOwK1v/VfuWr+TOwYmxcaWXYl/idjZmN7KJY97hMOhZTAxykwO/SP4NWOdmaTdMoOcxe7hJJ261Qc2eaz5kD5xmp09l0zucWnfJluLuZOUnCVMsZ7Dim0w8u13o3q8tQtF4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769513974; c=relaxed/simple;
-	bh=hPUb1Sf/Y+o1iHyYT+qaHgmrkVOaEBAa48umHaclhUw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=crEsgK/3SppABEb8WS71wRZKXKKqq02IFzMgb4wS2O0ZnIlyXFqDci6u22A2jm3Nk6b1SElaTDdB+UlKQf0u5O55GbJif31WSfb/6SMeNzoJOpfHFAY1Er7piejLeoUoTbSlvUzBc9QKF4ip8FZIVd75cNFGOFr1a7jiM8/txtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KsKjy2P1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769515551; c=relaxed/simple;
+	bh=qk2asS0D1Ie7new1Js/nxvbtuP/JwoVlkGdpRYvaepo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=njDrnCO5hQm8h6D+HOnfRVvqVhEKb1jknxhCiG5L68lSoKYfQrcvaMShtCCv44gplMw6lwC4+3BRa3XPZUbaXLDTTUSYf1wSJkVqOJ+G2TTWNmC9Atf9ZA/+LK/4LmkfXv2ePGQ8rYFXtZblMq+zXsWVokNm4Y8DH4kYio/el/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=crj/Syqf; arc=none smtp.client-ip=131.188.11.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KsKjy2P1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232B1C16AAE;
-	Tue, 27 Jan 2026 11:39:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769513974;
-	bh=hPUb1Sf/Y+o1iHyYT+qaHgmrkVOaEBAa48umHaclhUw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KsKjy2P1I4kpNU/SaUK3hQAAzsAQL0KnMZT7g9kSE29HhGgoDkANSZDKlEry1k8uA
-	 mhs1g6ZR2DIkivh/7zkCiGhq0K336psB2fT91va7/qZpNuGLv+lnLevZHg+rYogr7w
-	 Cot43YaE9jgvWKbgfWqG7OaYVlzi5GuY7pMOKSTkZCCvMPjTspcYKT0Daba/gnDN3o
-	 4cLX5kwEraDJ+3XL8CUf16Dcb0LunODG2opMgEb9kS2j3OU1GHcmFPIzrvugyGI+sM
-	 HwhAKkhFxENwSYAG0apeN4Kkoimbkwt51XH5Nh/Hn33t/tzpsq6xVtMNG/M7lXAahc
-	 KkwL0aRctMLBw==
-From: Will Deacon <will@kernel.org>
-To: catalin.marinas@arm.com,
-	oleg@redhat.com,
-	tglx@linutronix.de,
-	peterz@infradead.org,
-	luto@kernel.org,
-	shuah@kernel.org,
-	kees@kernel.org,
-	wad@chromium.org,
-	kevin.brodsky@arm.com,
-	macro@orcam.me.uk,
-	charlie@rivosinc.com,
-	akpm@linux-foundation.org,
-	ldv@strace.io,
-	anshuman.khandual@arm.com,
-	mark.rutland@arm.com,
-	thuth@redhat.com,
-	song@kernel.org,
-	ryan.roberts@arm.com,
-	ada.coupriediaz@arm.com,
-	broonie@kernel.org,
-	liqiang01@kylinos.cn,
-	pengcan@kylinos.cn,
-	kmal@cock.li,
-	dvyukov@google.com,
-	richard.weiyang@gmail.com,
-	reddybalavignesh9979@gmail.com,
-	linux-arm-kernel@lists.infradead.org,
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="crj/Syqf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
+	t=1769515191; bh=ceKm3tvX+cfQMJRYsVyxaVRalq5rHxn/ijDU8FaAKTY=;
+	h=From:To:Subject:Date:From:To:CC:Subject;
+	b=crj/SyqfH5wxPA4QBUZ2snxsqBXihBMfQ+Mpr+evmTJg48nbwrD/5eToLQddzoImC
+	 cLzY+T6vsBDQL9G0VBYtp33mdP+NrT2C9tOx6SMflLQK+vV0b1YLuuQxaKbJoArwS9
+	 S58fmFzt61PXGRTJHOvMowuTCGs2J2xKuadPNYd0xCUJ8ErBypZmK38cclrjpR9ksM
+	 iTBrP84ev7Jpu4Ga5gCIF+vRTnnKOyRvSx49E/7eK48mwOg2PbnoTpALMMI4dNfWhc
+	 MYb8hFopxRnPGdAUsla3MOouHdjN+x2QodGyh51nYyKifgN21ZnuAbv7wYl1f7thxr
+	 6q/nk8r3eQU2w==
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4f0kVH280lzPl6t;
+	Tue, 27 Jan 2026 12:59:51 +0100 (CET)
+X-Virus-Scanned: amavisd-new at boeck5.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 10.20.40.230
+Received: from luis-tp.pool.uni-erlangen.de (faustaff-010-020-040-230.pool.uni-erlangen.de [10.20.40.230])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: U2FsdGVkX18BTKOiOmJUisAGUtYWDJx1g8jCUZnPyzI=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4f0kVD43JSzPjq8;
+	Tue, 27 Jan 2026 12:59:48 +0100 (CET)
+From: Luis Gerhorst <luis.gerhorst@fau.de>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Luis Gerhorst <luis.gerhorst@fau.de>,
+	Ihor Solodrai <isolodrai@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: kernel-team@android.com,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v10 00/16] arm64: entry: Convert to Generic Entry
-Date: Tue, 27 Jan 2026 11:39:11 +0000
-Message-ID: <176951031735.722772.3896025304943173435.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251222114737.1334364-1-ruanjinjie@huawei.com>
-References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] bpf: Fix verifier_bug_if to account for BPF_CALL
+Date: Tue, 27 Jan 2026 12:59:10 +0100
+Message-ID: <20260127115912.3026761-1-luis.gerhorst@fau.de>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Mon, 22 Dec 2025 19:47:21 +0800, Jinjie Ruan wrote:
-> Currently, x86, Riscv, Loongarch use the Generic Entry which makes
-> maintainers' work easier and codes more elegant. arm64 has already
-> successfully switched to the Generic IRQ Entry in commit
-> b3cf07851b6c ("arm64: entry: Switch to generic IRQ entry"), it is
-> time to completely convert arm64 to Generic Entry.
-> 
-> The goal is to bring arm64 in line with other architectures that already
-> use the generic entry infrastructure, reducing duplicated code and
-> making it easier to share future changes in entry/exit paths, such as
-> "Syscall User Dispatch".
-> 
-> [...]
+This fixes the verifier_bug_if() that runs on nospec_result to not trigger
+for BPF_CALL (bug reported by Hu, Mei, and Mu). See patch 1 for a full
+description and patch 2 for a test (based on the PoC from the report).
 
-Applied first three to arm64 (for-next/entry), thanks!
+While working on this I noticed two other problems:
 
-[01/16] arm64: Remove unused _TIF_WORK_MASK
-        https://git.kernel.org/arm64/c/e7e7afdc7c14
-[02/16] arm64/ptrace: Split report_syscall()
-        https://git.kernel.org/arm64/c/741a9000173a
-[03/16] arm64/ptrace: Return early for ptrace_report_syscall_entry() error
-        https://git.kernel.org/arm64/c/a3386301667e
+- nospec_result is currently ignored for BPF_CALL during patching, but it
+  may be required if we assume the CPU may speculate into/out of functions.
 
-I know it's a drop in the ocean, but they look good to me and it saves
-you from having to carry them over.
+- Both the instruction patching for nospec and nospec_result erases the
+  instruction aux information even thought it might be better to keep that.
+  For nospec_result it may be fine as it is only applied to store
+  instructions currently (except for when we decide to change the thing
+  from above), but nospec may be set for arbitrary instructions and if
+  these require rewrites they break.
 
-Cheers,
+I assume these issues are better fixed separately, thus I decided to
+exclude them from this series.
+
+Luis Gerhorst (2):
+  bpf: Fix verifier_bug_if to account for BPF_CALL
+  bpf: Test nospec after dead stack write in helper
+
+ kernel/bpf/verifier.c                         | 14 +++++++-----
+ .../selftests/bpf/progs/verifier_unpriv.c     | 22 +++++++++++++++++++
+ 2 files changed, 30 insertions(+), 6 deletions(-)
+
+
+base-commit: 8016abd6314ed1ed01ff09404e3c82ceb13c185b
 -- 
-Will
+2.52.0
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
