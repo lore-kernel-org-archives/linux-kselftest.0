@@ -1,180 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B2936EA98;
-	Tue, 27 Jan 2026 19:31:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDE536E469
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 19:34:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769542294; cv=none; b=DE8HjDDmNTVK71HM51sFYSH56jss0gVwEtR+b6cEf7QkZYFInirq34VPlYlCcdRPlrgPmMrJn7bV/NqzcvdaaCPMeSoMio1X1mRWVC6yvtIzxRj30EtzwMUOhp5yegBf/f6TN9wR+BOojfuOVEFL6VTqyFYul9DWMK6BqZBlonI=
+	t=1769542490; cv=none; b=EYh5D6ArnjH+0smngvNsYLmrdyTYvLgNmp4z0hxdvsBB2MKKG4q9fBKDPsY5+ZplL86segDFVMvcArnAgnsT72g819LMFmUfwpG7fr7BQTy9EcvitCVNOiZAMCCzMlQ6/y3ZKm6XAdnruff6GkTUcNfVOZYT0O1M7cGR3IZGtEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769542294; c=relaxed/simple;
-	bh=Z7I33Hc39huXt1KMAEv+ORYc+prBLTGLG9GW3dkBprM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=korIdqBcwmri/+I5K0zI/hmlDhmgo/WWFwb2YCaPZFjccvBN3LH1Dmk7/K7yEuEXDv8Z3djgQPdtRBj82ba1QyITOClGF7BAuwMUZT5m6J9aZvrnc5wnBsnDQ/dwx0B8LhZrbyYJWEWJYK2Wqbx0OO/AeYijEovOOwQyTe1zzfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ER3jWOY0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769542490; c=relaxed/simple;
+	bh=05TbWWxv3tntbUxViB7tGA8U0cvXI8ITITBDahJ1Ac0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WXL33XsZ0mNbUGrrgZt1iliVYXw+HvWQ3zL83dwqDj9tBCdzkZayGp27hiNYoHG+Juj+Ih2i/cueFKe/I6+xMVARec/c33Qk3qox5aElhGfKpiuxlZk7L9042C6hIqU/DXCxc1O07I3jCj1oQ4E8HA8OHdBcTH6e7qYyQFu6tjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iSFeXMHE; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ER3jWOY0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 773CEC19425;
-	Tue, 27 Jan 2026 19:31:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769542294;
-	bh=Z7I33Hc39huXt1KMAEv+ORYc+prBLTGLG9GW3dkBprM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ER3jWOY07iJPn8qyjNDfRFyRgYxyWuJjiSMp41SKhB+56SWGzeoPq6P1kW90+cWm2
-	 QTgYAemvCk1w7t5MUfY/l0AkuHfpYBmxwUxPvAWGQI5l5EHWj6aTOFV/Mchq0bEU1C
-	 GOG2+qDG6uH2kXDzBlf4UO9UjRz8htNgAuMPwMN0aahfUJeQTxTlfEXYNXD30QDooW
-	 GIQamzOkF/J2WRu+6WATk/bFSXVaEhzYGRMmf6YewptxAR1UuZgiZRX7f8snoWqCcS
-	 hqMRCqk877/SG5QpuI75iQgPpzMJR/b+46TGplSy9dBIwKC6NM543/hW0GLCkk9KJW
-	 IoFmt7fkcyLwQ==
-From: Mike Rapoport <rppt@kernel.org>
-To: linux-mm@kvack.org
-Cc: Andrea Arcangeli <aarcange@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@redhat.com>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Peter Xu <peterx@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH RFC 17/17] KVM: selftests: test userfaultfd missing for guest_memfd
-Date: Tue, 27 Jan 2026 21:29:36 +0200
-Message-ID: <20260127192936.1250096-18-rppt@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260127192936.1250096-1-rppt@kernel.org>
-References: <20260127192936.1250096-1-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iSFeXMHE"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4359a302794so3835937f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 11:34:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769542487; x=1770147287; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lK5TGsJWU7nuB/Efm0pXlDktNbx5xUrIMoFBpRFKJCM=;
+        b=iSFeXMHEhGdvaET7bjhMQPIYrA2Gz9AS+OcV7YK/L0wPBPEATr8UzPbzukxz+hLiUk
+         xGn9LAegguUa29M+kOksXNIAc/6yHagr4SEFAcJqbJWNFXLttPKwrrSXbMbiCih6ZWBf
+         TASsFs5cjvzb+GqHndjnE2wU+/3C7q8YWapHSM6nhhmBpN55Fm2ZeVG+zz3ZT10TAF5d
+         amKuPWMJScIGZcsUN39WOTsQhgYls8gwWHxVzP9C+zfXmooDYkH6Lw1P2F79HRdmcVPj
+         sXJ/HiWxeIshGvo0U8GcKgDzFprU95EFTFv3NURkWcKVZh8HOLy+xmpJUx7bTPuzbkB6
+         wksw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769542487; x=1770147287;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lK5TGsJWU7nuB/Efm0pXlDktNbx5xUrIMoFBpRFKJCM=;
+        b=VjYKIm1nFCNrQRTKqK1Dlr3LAjDG/OLzhLMa80INqGbKo5Of+xB4QDEo7QBIVKEzLZ
+         aTWASwMANMQaroAetHQQNW3iiM4BY0gparFUAOW2qp4hCzMq9cduQ6aosqROjhd4+WqL
+         H0ENmOCPPPqks6w4jaoZw8jwvP2T+5JnUfzhcL8pFA81lHh53zheu1WnJGOa2X1jBpGl
+         XGsOZ50DscQmNz4gtvHYepbVGE5uYmA2zXKhC5mHpku/12CeTYLrGKXl1Q09COR1QRir
+         A6bGFwZVk7kDcvmM07NLhlIXNTROUgq0k6tu93eTOzczwN8OZkvRAoXv8LnkIjTX/YRj
+         H0JQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU9DijzQH9pqWR+ZST94VMP4FccDi401+otmLeVhHbw5VBHEJuB9zp96/mxgsEjdklz6kiXs3OWQE+wsB4I1Cw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHe546zDQ7ub78RbF8Jq0oW3MwV6LZ1ceQz7K0t/Eo3y6TMi4J
+	P1uqpJde1TzqYBwxhqcxZzHG6X7Ek0wcyJYR3MnRKLy6IMcl21v7Q8km
+X-Gm-Gg: AZuq6aLOHMdtVBG2+VUFmQWRyULKyu1SHoEQ631JzkX/aAXmHUgsor8T95BXSqpkq1B
+	xoKyFq0aFCMg97oaxdnt0O+qzjh08QkUwyij9DhjFsGfUy5eldkoJ2pjojgX11DWj1C76lO0GRu
+	3z/EVMxPweHqzpHZjUFBCl+ooZX0V49dtXhtMhjlP4DoUeM5fmRk/L+P0QIB2nacRryfWooxVM9
+	s2mZV/Zj3+O5/cmn51RIDKAz5Os+abjFtUS1zLdFpAQ7zEcdhtu1dv3DnN+BTxmcOWKGkfl7XFV
+	eHhKGu9mEeOtZTTTu44tsfQk/Gwnr+SvsBGT3w0dzEjtrY7czTIpmESExR88sRhR6kmRLyKy0UO
+	cPdUPpYvN2IcJpZbq+BwpZTavG4zK/eboesintzPPJpbWAebrlhEsLiDG4eDYzv62loFDfoGjdn
+	+knxrTaA==
+X-Received: by 2002:a05:6000:184a:b0:435:975a:131c with SMTP id ffacd0b85a97d-435dd0b6b23mr3917733f8f.36.1769542486975;
+        Tue, 27 Jan 2026 11:34:46 -0800 (PST)
+Received: from archlinux ([143.58.192.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10edfe7sm990496f8f.14.2026.01.27.11.34.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jan 2026 11:34:46 -0800 (PST)
+Date: Tue, 27 Jan 2026 19:34:44 +0000
+From: Andre Carvalho <asantostc@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] netconsole: selftests: Move netconsole
+ selftests to separate target
+Message-ID: <aXkS8b4vimfz9MvV@archlinux>
+References: <20260124-netcons-selftest-target-v1-1-d3937f44c4c2@gmail.com>
+ <aXdYwphLx2O-Hxis@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aXdYwphLx2O-Hxis@gmail.com>
 
-From: Nikita Kalyazin <kalyazin@amazon.com>
+On Mon, Jan 26, 2026 at 04:10:18AM -0800, Breno Leitao wrote:
+> 
+> I don't think you need * here. The following might be enough.
+> 
+> 	F:   tools/testing/selftests/drivers/net/netconsole/
+> 
 
-The test demonstrates that a missing userfaultfd event in guest_memfd
-can be resolved via a UFFDIO_COPY ioctl.
+Ack. I wasn't sure which form was preferable as I saw both being used. Will
+send a v2 addressing this.
 
-Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- .../testing/selftests/kvm/guest_memfd_test.c  | 80 ++++++++++++++++++-
- 1 file changed, 79 insertions(+), 1 deletion(-)
+Thanks for the review!
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index 7612819e340a..f77e70d22175 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -439,6 +439,82 @@ static void test_uffd_minor(int fd, size_t total_size)
- 	close(uffd);
- }
- 
-+static void test_uffd_missing(int fd, size_t total_size)
-+{
-+	struct uffdio_register uffd_reg;
-+	struct uffdio_copy uffd_copy;
-+	struct uffd_msg msg;
-+	struct fault_args args;
-+	pthread_t fault_thread;
-+	void *mem, *buf = NULL;
-+	int uffd, ret;
-+	off_t offset = page_size;
-+	void *fault_addr;
-+	const char test_val = 0xab;
-+
-+	ret = posix_memalign(&buf, page_size, total_size);
-+	TEST_ASSERT_EQ(ret, 0);
-+	memset(buf, test_val, total_size);
-+
-+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC);
-+	TEST_ASSERT(uffd != -1, "userfaultfd creation should succeed");
-+
-+	struct uffdio_api uffdio_api = {
-+		.api = UFFD_API,
-+		.features = 0,
-+	};
-+	ret = ioctl(uffd, UFFDIO_API, &uffdio_api);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_API) should succeed");
-+
-+	mem = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	TEST_ASSERT(mem != MAP_FAILED, "mmap should succeed");
-+
-+	uffd_reg.range.start = (unsigned long)mem;
-+	uffd_reg.range.len = total_size;
-+	uffd_reg.mode = UFFDIO_REGISTER_MODE_MISSING;
-+	ret = ioctl(uffd, UFFDIO_REGISTER, &uffd_reg);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_REGISTER) should succeed");
-+
-+	fault_addr = mem + offset;
-+	args.addr = fault_addr;
-+
-+	ret = pthread_create(&fault_thread, NULL, fault_thread_fn, &args);
-+	TEST_ASSERT(ret == 0, "pthread_create should succeed");
-+
-+	ret = read(uffd, &msg, sizeof(msg));
-+	TEST_ASSERT(ret != -1, "read from userfaultfd should succeed");
-+	TEST_ASSERT(msg.event == UFFD_EVENT_PAGEFAULT, "event type should be pagefault");
-+	TEST_ASSERT((void *)(msg.arg.pagefault.address & ~(page_size - 1)) == fault_addr,
-+		    "pagefault should occur at expected address");
-+	TEST_ASSERT(!(msg.arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WP),
-+		    "pagefault should not be write-protect");
-+
-+	uffd_copy.dst = (unsigned long)fault_addr;
-+	uffd_copy.src = (unsigned long)(buf + offset);
-+	uffd_copy.len = page_size;
-+	uffd_copy.mode = 0;
-+	ret = ioctl(uffd, UFFDIO_COPY, &uffd_copy);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_COPY) should succeed");
-+
-+	/* Wait for the faulting thread to complete - this provides the memory barrier */
-+	ret = pthread_join(fault_thread, NULL);
-+	TEST_ASSERT(ret == 0, "pthread_join should succeed");
-+
-+	/*
-+	 * Now it's safe to check args.value - the thread has completed
-+	 * and memory is synchronized
-+	 */
-+	TEST_ASSERT(args.value == test_val,
-+		    "memory should contain the value that was copied");
-+	TEST_ASSERT(*(char *)(mem + offset) == test_val,
-+		    "no further fault is expected");
-+
-+	ret = munmap(mem, total_size);
-+	TEST_ASSERT(!ret, "munmap should succeed");
-+	free(buf);
-+	close(uffd);
-+}
-+
- static void test_guest_memfd_flags(struct kvm_vm *vm)
- {
- 	uint64_t valid_flags = vm_check_cap(vm, KVM_CAP_GUEST_MEMFD_FLAGS);
-@@ -494,8 +570,10 @@ static void __test_guest_memfd(struct kvm_vm *vm, uint64_t flags)
- 	gmem_test(fallocate, vm, flags);
- 	gmem_test(invalid_punch_hole, vm, flags);
- 
--	if (flags & GUEST_MEMFD_FLAG_INIT_SHARED)
-+	if (flags & GUEST_MEMFD_FLAG_INIT_SHARED) {
- 		gmem_test(uffd_minor, vm, flags);
-+		gmem_test(uffd_missing, vm, flags);
-+	}
- }
- 
- static void test_guest_memfd(unsigned long vm_type)
 -- 
-2.51.0
-
+Andre Carvalho
