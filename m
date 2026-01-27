@@ -1,281 +1,338 @@
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010054.outbound.protection.outlook.com [52.101.56.54])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D076225775;
-	Tue, 27 Jan 2026 08:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769501336; cv=fail; b=LdLItgHPjBtEDgOPVOb8rzp6JUcg7mcDnCZqAJl2oWkK0HiZh7fM32q37PEAQuo8S+rk2iPqCf0exMQ2yup7kvKcYfCPmlK5AqRjArxjiubjWBhqaik1fbxRReOUJU9UbpwINhOb3vIidNjcuoVM7mZCHclYsjGObTkR1krvZss=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769501336; c=relaxed/simple;
-	bh=KUkDcyOFTup4d0uBWzXcdEJ8ptEy8xR0ipZcYaK8WUg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=a0KT0xx4+5fDpyyvVobEeVYupl0lmkW8HgCnQ1xVrnXP42vqsEUd+74MXnGt9WO/AQRYmGzFpSBPFvmjOmHjHVKHmjplgi5yhTXWq26kD58Yg7vW3xJP0+POaY1F2KD6ezg/exGH+LqhFO49RmOVasOBfaaXURa41LOQ8n9De1E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=CfevPdQ6; arc=fail smtp.client-ip=52.101.56.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF362DC765
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 09:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769507013; cv=none; b=Ox/6JtrA4jieJzv/T14VrQ1jj6S1Eiwc9cyssdOQ4MnthFouwqZ33Lb0qNYf6y/1uUBD9QPAe/F3adFUlnlMO3zI6fVshrrOSDTHeW+1JFgNK2G2s6qJwpwFYe6eZNrtf3jnoHii5BgGBlpBzkbl9wkx2u2NYA5Ur0v/DusjXMo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769507013; c=relaxed/simple;
+	bh=aPEE69+fQYyHXyhqbTFMx2QewPW1lY9T/brWmIi6cJQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=juyfRYfgt2nmiq/ooTRMXXDrkx7Bc87mYbgqcCdg0wVWK2GBiuPq43SPfZkRpaPD/Wk0207m3u7MebWjqbJfAyPR98PGIso6DaG/DJNwwe7A49tenvIjPSCDxsIBtAhHISkIXm+JsjmuqLqWwS1RfHTleHx/hEFB+J3S8HOL334=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=be48htH7; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="CfevPdQ6"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Sm8RsoyI0loy4aTUzjFDiUI+LM+QbVCBeFH/rWSYuMaKe5sp+eEG4orbBu7U4ycRqbHh32tH9tiK12n5VLJQoPT1t1hOM1dH05fDGFkM/CpsvIEA5B0jHf3idCcT8aeWM2Xl3vP2rGPFPy7H87xdLQjeOi2uU6wKL6sWrfEqeqf9u24KY9ui8VT95U7erIMvTrwpp4RrO1Ty//arXhwf96OmGPIiK3McKNiVLPLnUbhgw1DfryT5lec3aRhsjjgVSJJYI6PVVAPD6mfNcVubCdf8wP9G0MgQLxZnW88Y0GwsoMQiSAr3dK2UITWo5CrjAr8Rp35e9++3+vsW+IY/rg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wgqyAeNEF0Ca6gusaIYSA0MyKHxTGT1BgXV2xdoS+mQ=;
- b=xdjC1cXtROtJkH5jyeCEI4Xx51zU8yxg/7i7ov5XvGaBkNPg5IPYRMeJK9/3X1P+u5+xyxhcVCrWfR9/IDvYdkLoxgMUoyZOZGC3ol3bzzP2gNma7ZM4fz7l+4QuHEoDVYeZT8fQswV2VQDP4TRNydxBb82kuyTUFYQuyd8+c1oe4vuz5YnyaQQyPfbYUfsIjCJiGKQbHC8ORC4VlVY+Ltwriw494PnkBOfVSnIV9C6AC/He5wOI5wiBuw9E4TGuVmdaeXs6V/c6s1LtDH66dVXiEcb3d+ISAzU9PEVD0fSfCrwfl6/xnZ/1JdEoOWEUfHLBMpwn4rzhmwxWnsv0aw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wgqyAeNEF0Ca6gusaIYSA0MyKHxTGT1BgXV2xdoS+mQ=;
- b=CfevPdQ6RY9RELxRUVA6othaIfYbPDfVbpkQZM0VAqGtQUlmFBXwXXbqWV+kvAZCsD7TlNy5KFRkBm8MmLy7wrau3VTQj85YOXdQ3zFYC0yN3QErSHel/gak0yLPBCDsR9T8YnprF8zsZ+Jh9lYPeYKPPfxOBEgcy4cEVSJvFBc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH3PR12MB9194.namprd12.prod.outlook.com (2603:10b6:610:19f::7)
- by DS7PR12MB8417.namprd12.prod.outlook.com (2603:10b6:8:eb::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.16; Tue, 27 Jan
- 2026 08:08:51 +0000
-Received: from CH3PR12MB9194.namprd12.prod.outlook.com
- ([fe80::1e6b:ca8b:7715:6fee]) by CH3PR12MB9194.namprd12.prod.outlook.com
- ([fe80::1e6b:ca8b:7715:6fee%4]) with mapi id 15.20.9542.010; Tue, 27 Jan 2026
- 08:08:51 +0000
-Message-ID: <ddeb2bc8-5088-4d16-bea3-91d58a4403e8@amd.com>
-Date: Tue, 27 Jan 2026 19:08:39 +1100
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH v8 07/15] iommupt: Add map_pages op
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
- Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>,
- iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
- Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
- llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Paul Walmsley <pjw@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
- Shuah Khan <shuah@kernel.org>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
- Will Deacon <will@kernel.org>,
- Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
- James Gowans <jgowans@amazon.com>, Kevin Tian <kevin.tian@intel.com>,
- Michael Roth <michael.roth@amd.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
- Samiullah Khawaja <skhawaja@google.com>, Vasant Hegde <vasant.hegde@amd.com>
-References: <7-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
- <fc4f0354-4e6d-452d-abfb-fe24e53253a2@amd.com>
- <20260117154347.GF1134360@nvidia.com>
- <e0514ec6-b428-4367-9e0d-cfb53cc64379@amd.com>
- <20260119173734.GL1134360@nvidia.com>
- <e8cb2549-6a17-47ce-8e9f-96c576890262@amd.com>
- <20260121170931.GG1134360@nvidia.com>
- <5a3dfc0a-eca4-4de1-96cd-b4034f0b8e06@amd.com>
- <20260122141240.GM1134360@nvidia.com>
- <0295a5bb-2567-48f8-9806-0467907143d5@amd.com>
- <20260123141413.GY1134360@nvidia.com>
-From: Alexey Kardashevskiy <aik@amd.com>
-Content-Language: en-US
-In-Reply-To: <20260123141413.GY1134360@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SY5P282CA0034.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:10:206::14) To CH3PR12MB9194.namprd12.prod.outlook.com
- (2603:10b6:610:19f::7)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="be48htH7"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769506999;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PoKU+Y425dJfiv74RFmNKLX9yNp7umKwqq5sbb5Qq14=;
+	b=be48htH7QTc+UDw03iq9fTtuH0rIDTlUtWCkiHXQLDkIMCr2LrH38/bnd712FnniWBZRLw
+	F8ReErwdb3eu2WMFghK1yeG1mUU9JUHIIEiDwBbbPi1yfgVQw7NIF0+z6L66TlRJUn8opn
+	PqJu0Vx6OTJL8gqDazo7kt2kl9V/YPc=
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	davem@davemloft.net,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Chen Ridong <chenridong@huaweicloud.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	cgroups@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [RFC PATCH bpf-next v5 00/12] mm: memcontrol: Add BPF hooks for memory controller
+Date: Tue, 27 Jan 2026 17:42:37 +0800
+Message-ID: <cover.1769506741.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB9194:EE_|DS7PR12MB8417:EE_
-X-MS-Office365-Filtering-Correlation-Id: 691eae08-4154-4012-8ea4-08de5d7b4e32
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MFVVRUt5eFRTcXB2djBSUGNpQjRBSStRMVF0dmFiVDlkb01iWDliNitkTWlU?=
- =?utf-8?B?eWZPYjNqOFlQcC9NYjMvQ0tPN0tWK2RxdEpFWEdZNWJzS2wycEt4UXFMZXdh?=
- =?utf-8?B?UFNiWEw3Sng0aFVFZmtyb3FEMFI1Uk1SY1oybHhGVHZMRVhQaTN3Wjk0c0Y4?=
- =?utf-8?B?VE8zMWtNd3VUVnVyYlpTNWRQeW9hN28rV3pZNk5XTEpRcW96LytJV0t5blJ4?=
- =?utf-8?B?Qm9LK2dHb2tTT29VaFhXL0V2YWJ6a1RNMWYweisyUDFUYTZUcXM1eHRJWE91?=
- =?utf-8?B?eVVyQUZrZUJ0cC9ZZDg2aFVVUjVWdjNCYklOMmpJQlVKOXBNb1JBZW5PZFlD?=
- =?utf-8?B?S1ZWeE1QbDZscnhDUy9CQ25rZUpmQzdKR0Y1N05pWm5UaS9rVEFCYW9QSTJF?=
- =?utf-8?B?d3hnQkZIaUlKM0dDTjNkSEZhUXdZcC9DWTA3Nlo2ZkJJcW84MlpDVzVpcGh5?=
- =?utf-8?B?d2R5UVhnTTNGZHlIM1JLaGFDZTZGL2hzTUJYaUR3UTRaUmVyRHJOL2gwMGpx?=
- =?utf-8?B?NWttLzNGcGVhTmZmdDh0OC9DVjlCMkNDK21ESWFkZVdwbHVPemx1c2sydU9u?=
- =?utf-8?B?b1hOY0I1cnJBS0pKRWoyaWV3Z1p1WEF5S2o2eEo0emRZSFNkZGZyaFU4V3lS?=
- =?utf-8?B?bVR2eG1EeG5uT1pLYmJTczhieWZPdTVmbUM2TUpNUFNlTzhBL1pSRS9IQis4?=
- =?utf-8?B?Vi9tNitFRXUxblFYY2s2OGpILzhTdm1GazNRb0ZZWjI4V094Z0NkK3JDb1gy?=
- =?utf-8?B?SEZybXQwYVNPb1cydVZvTHowazFrWGk2MUVaNThDeHBGaXFDTng1MDh2RXIx?=
- =?utf-8?B?SFMwcWVXT2Q1RXJGOUZocUpaT0Z6REJraC85a1VYR1l0SzgxU3FYT1NZUXBq?=
- =?utf-8?B?dExwQW04ak9ZdGp1dUJscHQzMGNPbHZacHhML2JQNFpOV3ViV1BQRXRBems0?=
- =?utf-8?B?T3VpTjVUOU9yS1FicUlRSTFieW9SRmFpMVMzWk55T0FUVUxiZDFxbFR6djcx?=
- =?utf-8?B?OHE2R0tkMzR2Z05zRk5OZlJHQWtRMnJXY2RnRVBIWGFhekZrbmFNVXpaelhY?=
- =?utf-8?B?WTZpT1FpWlRGK3pnTXkyRnBsZUZ0ZXhqL2IyUFYrNEM3eURJRnpxL2R4WXFq?=
- =?utf-8?B?ZmJtbHdLSGhBMGhoaEs1UlQ3L2s3S2VNekFUL09Ec3o0UmJ1WnlrbUxkYzhz?=
- =?utf-8?B?VmVwUitXS3JwZXJkS3ZIbUluNHFPemV5OUJmQ1MvSm1oOHgrWlQxWDRhdEZl?=
- =?utf-8?B?VWM3Q0ZmVXdnZ24vcS9YeWZlVUVnMTlyK2xENUJVOGMvQ1hNNEswWDA5cjNW?=
- =?utf-8?B?OFZFRjR2OHdtc2pWdUQwcGp1aTcvaS9vT2p4MTRBcERkYlgybitzTjhMQ3lm?=
- =?utf-8?B?cGt6dWVRajJER1RmL3hDQWxJcFpUa2hGako0NVV3MzFwbFp2ZVIwVWlybVpi?=
- =?utf-8?B?MHRoeWN6RWpyUTVYQTVWc0lYRTNQV1JYenBWY3IwdVFlTlhTZk9oMkhZUzlG?=
- =?utf-8?B?WVUrSVFHczJkRWVvQ3ZmLzIvd1ExMXo4a0RWeWhQbXdsNnNJQTY3Vzk1Yzhh?=
- =?utf-8?B?SUdBaXZ4RXpKOWZuTWx1OUFOWWY2ZWdqU243K0ViQnZidHRJaW5HSklCWFcv?=
- =?utf-8?B?R2Urc3JaaFpEd2g0RHk5MExqQjE5bC9TZkIweHEzQWx2c3VvOS85aTVLQ0FB?=
- =?utf-8?B?WkROR3lXRUNmUFY2ZFcrWEw3OHZNQnU5a3krTWZYQmxmcTJBeGsvcXFheGcy?=
- =?utf-8?B?SUppQmFicjFBczdmZWlGZ3lBaEYyWFBEN0hrYWcrYmlsQXJCNWM0azVxdlZE?=
- =?utf-8?B?UEVXa0J6b3hRL0xCbGV3M1ZsMDErSURxZ3pYYkZuVFIySUpwTHhZSXNScnlX?=
- =?utf-8?B?NTd1OFJkRXRYQ0lDK2ovM2o3SFJVaURhTTJySERZN1dDenlPVWFHYnBBUjhZ?=
- =?utf-8?B?ZUQ4VG82ZVVkamFPc0tLS0pQcFJibys4UmlsRHFyZDJNL0s5TnRPWFhkRjVy?=
- =?utf-8?B?Q1FObnhuU0txQlZIWWpmUFY2Y2tTZVhKUmZHcXBrakUvZTlvRVFTZGNudHpX?=
- =?utf-8?B?WUxtQWlGYm9uMGlDbVlWYXRxWUs1M0hKaHZ0QTJ3Y1VVOUhaampQTUpBR05n?=
- =?utf-8?Q?SndI=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB9194.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RkpMRXYrL3lsMmRWUFRlUzF3L0NyN0liYk1lZDRDMmhWa3M1L0FIQ2VmeGdD?=
- =?utf-8?B?YmVYNjhnSnQ4ZVVJMjZoS0Y0UnZBUG9zR25Ia3ZuL2YxS2ErM2JKWlhlc1ha?=
- =?utf-8?B?d09aMXZFeVJDSEV5OE5EVXVwTWFiK3J3bFFPcG9YOTdZbyt2Tno3RHJ5WExV?=
- =?utf-8?B?Z0N4NHFIN0wraTJYOC94STVYRndIbUJFVmFUdVA5OHkzck5KTnVPVk13YkM1?=
- =?utf-8?B?OWRrcENBczRMRGJYT2l0Yk5UYVpodjN6enpOQXZhN0VZV3RGOUZpK0ZuZ2h0?=
- =?utf-8?B?aERoQ2U0aFpWdHhtR0w3Nk52bjdYUGZzY0lKVFIxRjYxWGdkcVJlTUdKREli?=
- =?utf-8?B?NjR3MDdLZXBZRWlvTmQxYVBpMzJoaDNyRVVGeXJHRnhOZU16aHMrTHZaZTBu?=
- =?utf-8?B?MlI1OVRNcUsxMzBiVlY2dFd3aW9uTm93MVR6MkVUNGhBMkpFZXFqUmpLUm53?=
- =?utf-8?B?TjVpYXpNd1JGa1hmOU5TQ1kyUkxldE5ZR1dqR1N6TmNITkdpcStCUTYvU1VK?=
- =?utf-8?B?SVZTM1VoTGlrNldBaXhmek5GeEVjWUxKWThkS0NiWk00RmF3MWJxWEppQkRl?=
- =?utf-8?B?THJGMlpFc0VON1ZhVWU0OVduUzZpTWg5NmNERlc5eVYva2hTY0Y2Q2grZURx?=
- =?utf-8?B?SnYwNTFBclZKd3Y4WjNRaHMyKzQ3ZDN3OHdDSDAwbEZyS293Sm9JODhtWUtq?=
- =?utf-8?B?RzNMYUlieUI0OWFCNGZySHJqZFdjUUd5U3R6QXdrU1dxYmFtekVESnNzcmtZ?=
- =?utf-8?B?V1VnZDBJNEhBRzBtUzQveDl6SU03NnN1cHVSSTEzWUR6RzA4SHlQUWtxa3Fh?=
- =?utf-8?B?aHRESUI0blpOR1dJYXd2cjlBMjJyK2gvelhkTlRyTloxbnUzb21BZENmSHQ4?=
- =?utf-8?B?WnJBNnptL0RzZmhjOStYNlpYTCs0cEFLS1dBQ1dPbGdDd1VzTk00YW9uVW9R?=
- =?utf-8?B?VW9UTFErZEJBQVZldmMxUEVOdURIVW1HdkVWUW5zV3hGTWMwaFdJR0FkMTYy?=
- =?utf-8?B?T2lnMHJZRWNndjAxZkdsSzN2YWFqU1BRNFBWSXVvYjJjKyt4T3VTM0hpSlJP?=
- =?utf-8?B?dDRsbUlLWDVHcis4UXdsVTQ5VEs2SFpqSEREdWw1RHN4TVBBR2RGZ3A5NTdx?=
- =?utf-8?B?OG5VZGFYUGp3QlZTeDYwWmV2K3M0MXhpd3JUS29yOTZBazlmNVA4TElXVWFB?=
- =?utf-8?B?Y3d6NWJEWDladGluS281WE9acEhyT2NtRUFuU3NxUk5CV2h4bi8yUmI3NHJw?=
- =?utf-8?B?UjNNcVMwT0ZkK3k3UUxSdWR2cUF6YmNXT3kvVmo1Umw2c29jWU1yK1I3aXBM?=
- =?utf-8?B?elQvNnVqa1ZXSmVEbjZ5NC9DV1ZwTjlUdjZJNklKdjFNYUk5N0NSRmFad1kx?=
- =?utf-8?B?aGtScUJITUJLQ0tabXRqNzVLT0RHT2hzY0hOYzBJUWpvakxGcDVzSytSMldp?=
- =?utf-8?B?emdGaUxPYmtJb2VXYmFFekcxTFFEODUzVHdDYm1nMkNNT0hic1pPUHlqODBR?=
- =?utf-8?B?VlExMHArUnZOZHNGZmFOWnh2STRpTkNLRThyeWgwbFRiWjlvTHc5dTRSS2R6?=
- =?utf-8?B?RCtWZGFDb2J5MDJSb1ZlK0h6WmE3Z2wzUDRNNERsS3hXYnJsNDd4L3JDb0pP?=
- =?utf-8?B?S3RKZTdIZlJEZEUrdkZSSk04U3gybCt0eklPcmFiUWU4bzJjZXIyT2JFL2xx?=
- =?utf-8?B?Yno4anVSTzJXcUFQUjErV1pIY2VBaTVDVzdLZWxIQzdQU1UvNU9NQTgzZEtX?=
- =?utf-8?B?NTBlaGx0eFp6aHNGeFEzWnAvYmJTUDQ2bHB5QWgyLzd2b1dYeTlXSmx4Mk9y?=
- =?utf-8?B?ZTZJcG9tRzNFeVQxalpxNVNYREE0Z0xWdzRqdS9pOGFYZlBNLzI4UWlCK0VF?=
- =?utf-8?B?VGpUeEtnMzJzWGllZWRFd1VHZkF1ekhPTnRRWE5PcFJCSzN4dEpKU1QvbjU0?=
- =?utf-8?B?S1lZN0IrSlVHNlYyMmkrVjd3MzNwVGF3ZGM4SjdJZWcyUHdFMFJPYlprWTJ1?=
- =?utf-8?B?YVg0TmRHUnQyWlBRbVF4MmFuc3Z0ZytMVVg4bXptaGI0UXVGbXFvS3d3bCtk?=
- =?utf-8?B?ZTJqMURIaTRETnZ0MFprdDU5Rm52WFI4RFRMSVVmcUxmemRZaGZWaUFLRktB?=
- =?utf-8?B?OUVQaWl0TVdtWnp6dnZGdFRSQmhYMGRxSVhaUTFZUGZDZU41NnRzNnNJUGQr?=
- =?utf-8?B?RlVwTlRKajZNd1h6WHpRbU5xSVhiY1h6bmMvTTlwZ05KWnF3YzkzVHlxNEd4?=
- =?utf-8?B?WEFib0swYTdtZlF6NWlBVzVHL2k5Rk9xZDRrTDhLQVlPVjB5b3ZhYkFScUxH?=
- =?utf-8?Q?R/W7MUVa4tU33Catxt?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 691eae08-4154-4012-8ea4-08de5d7b4e32
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB9194.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2026 08:08:51.1123
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kSXPcbz33N8qkhCQP9DIIxSOLlUzChKXjpNAO+A2fCIYTUbvW4kLlrpDKaNaiKv0QvteAE8Cq5Mt7YMkx9kZ8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8417
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+
+From: Hui Zhu <zhuhui@kylinos.cn>
+
+Changelog:
+v5:
+Fix the issues acccording to the comments of bot+bof-ci.
+v4:
+Fix the issues acccording to the comments of bot+bof-ci.
+According to the comments of JP Kobryn, move exit(0) from
+real_test_memcg_ops_child_work to real_test_memcg_ops.
+Fix the issues in the function bpf_memcg_ops_reg.
+v3:
+According to the comments of Michal Koutný and Chen Ridong, update hooks
+to get_high_delay_ms, below_low, below_min, handle_cgroup_online and
+handle_cgroup_offline.
+According to the comments of Michal Koutný, add BPF_F_ALLOW_OVERRIDE
+support to memcg_bpf_ops.
+v2:
+According to the comments of Tejun Heo, rebased on Roman Gushchin's BPF
+OOM patch series [1] and added hierarchical delegation support.
+According to the comments of Roman Gushchin and Michal Hocko, Designed
+concrete use case scenarios and provided test results.
+
+eBPF infrastructure provides rich visibility into system performance
+metrics through various tracepoints and statistics.
+This patch series introduces BPF struct_ops for the memory controller.
+Then the eBPF program can help the system control the memory controller
+based on system performance metrics, thereby improving the utilization
+of system memory resources while ensuring memory limits are respected.
+
+The following example illustrates how memcg eBPF can improve memory
+utilization in some scenarios.
+The example running on x86_64 QEMU (10 CPUs, 4GB RAM), using a
+file in tmpfs on the host as a swap device to reduce I/O impact.
+root@ubuntu:~# cat /proc/sys/vm/swappiness
+60
+This the high priority memcg.
+root@ubuntu:~# mkdir /sys/fs/cgroup/high
+This the low priority memcg.
+root@ubuntu:~# mkdir /sys/fs/cgroup/low
+root@ubuntu:~# free
+               total        used        free      shared  buff/cache   available
+Mem:         4007276      392320     3684940         908      101476     3614956
+Swap:       10485756           0    10485756
+
+First, The following test uses memory.low to reduce the likelihood of tasks in
+high-priority memory cgroups being reclaimed.
+root@ubuntu:~# echo $((3 * 1024 * 1024 * 1024)) > /sys/fs/cgroup/high/memory.low
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60
+[1] 1176
+stress-ng: info:  [1177] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1176] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1177] dispatching hogs: 4 vm
+stress-ng: info:  [1176] dispatching hogs: 4 vm
+stress-ng: metrc: [1177] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1177]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1177] vm             27047770     60.07    217.79      8.87    450289.91      119330.63        94.34        886936
+stress-ng: info:  [1177] skipped: 0
+stress-ng: info:  [1177] passed: 4: vm (4)
+stress-ng: info:  [1177] failed: 0
+stress-ng: info:  [1177] metrics untrustworthy: 0
+stress-ng: info:  [1177] successful run completed in 1 min, 0.07 secs
+stress-ng: metrc: [1176] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1176]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1176] vm               679754     60.12     11.82     72.78     11307.18        8034.42        35.18        469884
+stress-ng: info:  [1176] skipped: 0
+stress-ng: info:  [1176] passed: 4: vm (4)
+stress-ng: info:  [1176] failed: 0
+stress-ng: info:  [1176] metrics untrustworthy: 0
+stress-ng: info:  [1176] successful run completed in 1 min, 0.13 secs
+[1]+  Done                    cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes $((3 * 1024 * 1024 * 1024)) --vm-method all --seed 2025 --metrics -t 60
 
 
+The following test continues to use memory.low to reduce the likelihood
+of tasks in high-priority memory cgroups (memcg) being reclaimed.
+In this scenario, a Python script within the high-priority memcg simulates
+a low-load task.
+As a result, the Python script's performance is not affected by memory
+reclamation (as it sleeps after allocating memory).
+However, the performance of stress-ng is still impacted due to
+the memory.low setting.
 
-On 24/1/26 01:14, Jason Gunthorpe wrote:
-> On Fri, Jan 23, 2026 at 12:07:26PM +1100, Alexey Kardashevskiy wrote:
->>>> Got it. Interestingly the HW actually does that, almost. Say, for
->>>>> =2MB IO pages it checks if RMP==2MB and puts a 2MB IO TLB entry if
->>>> RMP==2MB, and for 4KB..1MB IO pages - a 4K IO TLB entry and RMP==4K
->>>> check. But it does not cross the 2MB boundary in RMP. Uff :-/
->>>
->>> Not sure I understand this limitation, how does any aligned size cross
->>> a 2MB boundary?
->>
->> Sorry, probably wrong wording. SNP allows a guest page to be backed
->> by only a 4K or 2M host page, IOMMU always rounds page size down to
->> the nearest 4K or 2M boundary. 4M IO pages can work with 2M RMP but
->> not 4K RMP.
-> 
-> Oh so it doesn't actually check the RMP, it is just rounding down to
-> two fixed sizes?
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high python3 -c \
+"import time; a = bytearray(3*1024*1024*1024); time.sleep(62)"
+[1] 1196
+stress-ng: info:  [1196] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1196] dispatching hogs: 4 vm
+stress-ng: metrc: [1196] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1196]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1196] vm               886893     60.10     17.76     56.61     14756.92       11925.69        30.94        788676
+stress-ng: info:  [1196] skipped: 0
+stress-ng: info:  [1196] passed: 4: vm (4)
+stress-ng: info:  [1196] failed: 0
+stress-ng: info:  [1196] metrics untrustworthy: 0
+stress-ng: info:  [1196] successful run completed in 1 min, 0.10 secs
+[1]+  Done                    cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes $((3 * 1024 * 1024 * 1024)) --vm-method all --seed 2025 --metrics -t 60
+root@ubuntu:~# echo 0 > /sys/fs/cgroup/high/memory.low
 
-No, it does check RMP.
+Now, we switch to using the memcg eBPF program for memory priority control.
+memcg is a test program added to samples/bpf in this patch series.
+It loads memcg.bpf.c into the kernel.
+memcg.bpf.c monitors PGFAULT events in the high-priority memory cgroup.
+When the number of events triggered within one second exceeds a predefined
+threshold, the eBPF hook for the memory cgroup activates its control for
+one second.
 
-If the IOMMU page walk ends at a >=2MB page - it will round down to 2MB (to the nearest supported RMP size) and check for 2MB RMP and if that check fails because of the page size - it won't try 4K (even though it could theoretically).
+The following command configures the high-priority memory cgroup to
+return below_min during memory reclamation if the number of PGFAULT
+events per second exceeds one.
+root@ubuntu:~# ./memcg --low_path=/sys/fs/cgroup/low \
+     --high_path=/sys/fs/cgroup/high \
+     --threshold=1 --use_below_min
+Successfully attached!
 
-The expectation is that the host OS makes sure the IOMMU uses page sizes equal or bigger than closest smaller RMP page size so there is no need in two RMP checks.
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60
+[1] 1220
+stress-ng: info:  [1220] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1221] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1220] dispatching hogs: 4 vm
+stress-ng: info:  [1221] dispatching hogs: 4 vm
+stress-ng: metrc: [1221] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1221]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1221] vm             24295240     60.08    221.36      7.64    404392.49      106095.60        95.29        886684
+stress-ng: info:  [1221] skipped: 0
+stress-ng: info:  [1221] passed: 4: vm (4)
+stress-ng: info:  [1221] failed: 0
+stress-ng: info:  [1221] metrics untrustworthy: 0
+stress-ng: info:  [1221] successful run completed in 1 min, 0.11 secs
+stress-ng: metrc: [1220] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1220]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1220] vm               685732     60.13     11.69     75.98     11403.88        7822.30        36.45        496496
+stress-ng: info:  [1220] skipped: 0
+stress-ng: info:  [1220] passed: 4: vm (4)
+stress-ng: info:  [1220] failed: 0
+stress-ng: info:  [1220] metrics untrustworthy: 0
+stress-ng: info:  [1220] successful run completed in 1 min, 0.14 secs
+[1]+  Done                    cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes $((3 * 1024 * 1024 * 1024)) --vm-method all --seed 2025 --metrics -t 60
 
-> 
->>> ARM is pushing a thing where encrypt/decrypt has to work on certain aligned
->>> granual sizes > PAGE_SIZE, you could use that mechanism to select a 2M
->>> size for AMD too and avoid this.
->>
->> 2M minimum on every DMA map?
-> On every swiotlb allocation pool chunk, yeah.
+This test demonstrates that because the Python process within the
+high-priority memory cgroup is sleeping after memory allocation, 
+no page fault events occur.
+As a result, the stress-ng process in the low-priority memory cgroup
+achieves normal memory performance.
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high python3 -c \
+"import time; a = bytearray(3*1024*1024*1024); time.sleep(62)"
+[1] 1238
+stress-ng: info:  [1238] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1238] dispatching hogs: 4 vm
+stress-ng: metrc: [1238] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1238]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1238] vm             33107485     60.08    205.41     13.19    551082.91      151448.44        90.97        886064
+stress-ng: info:  [1238] skipped: 0
+stress-ng: info:  [1238] passed: 4: vm (4)
+stress-ng: info:  [1238] failed: 0
+stress-ng: info:  [1238] metrics untrustworthy: 0
+stress-ng: info:  [1238] successful run completed in 1 min, 0.09 secs
 
-Nah, it is quite easy to force 2MB on swiotlb (just do it once and forget) but currently any guest page can be converted to shared and DMA-mapped and this skips swiotlb.
+In this patch series, I've incorporated a portion of Roman's patch in
+[1] to ensure the entire series can be compiled cleanly with bpf-next.
+I made some modifications to bpf_struct_ops_link_create
+in "bpf: Pass flags in bpf_link_create for struct_ops" and
+"libbpf: Support passing user-defined flags for struct_ops" to allow
+the flags parameter to be passed into the kernel.
+With this change, patch "mm/bpf: Add BPF_F_ALLOW_OVERRIDE support for
+memcg_bpf_ops" enables BPF_F_ALLOW_OVERRIDE support for memcg_bpf_ops.
 
+Patch "mm: memcontrol: Add BPF struct_ops for memory controller"
+introduces BPF struct_ops support to the memory controller, enabling
+custom and dynamic control over memory pressure. This is achieved
+through a new struct_ops type, `memcg_bpf_ops`.
+The `memcg_bpf_ops` struct provides the following hooks:
+- `get_high_delay_ms`: Returns a custom throttling delay in
+  milliseconds for a cgroup that has breached its `memory.high`
+  limit. This is the primary mechanism for BPF-driven throttling.
+- `below_low`: Overrides the `memory.low` protection check. If this
+  hook returns true, the cgroup is considered to be protected by its
+  `memory.low` setting, regardless of its actual usage.
+- `below_min`: Similar to `below_low`, this overrides the `memory.min`
+  protection check.
+- `handle_cgroup_online`/`offline`: Callbacks invoked when a cgroup
+  with an attached program comes online or goes offline, allowing for
+  state management.
 
->>> Then why was I told the 4k page size kernel parameter fixes
->>> everything?
->>
->> Because IOMMU becomes 4K only and there is no huge page support in
->> the confidential KVM yet (well, in the upstream linux) so page size
->> mismatch cannot occur.
-> 
-> Ok, but you say when RMP has 2M pages then this doesn't work?
+Patch "samples/bpf: Add memcg priority control example" introduces
+the programs memcg.c and memcg.bpf.c that were used in the previous
+examples.
 
-IOMMU pages size forced to 4K + 2M RMPs? Yup, does not work.
+[1] https://lore.kernel.org/lkml/20251027231727.472628-1-roman.gushchin@linux.dev/
 
->>> What happens if the guest puts 4K pages into it's AMDv2 table and RMP
->>> is 2M?
->>
->> Is this AMDv2 - an NPT (then it is going to fail)? or nested IOMMU (never tried, in the works, I suspect failure)?
-> 
-> Yes, some future nested vIOMMU
-> 
-> If guest can't have a 4K page in it's vIOMMU while the host is using
-> 2M RMP then the whole architecture is broken, sorry.
+Hui Zhu (7):
+  bpf: Pass flags in bpf_link_create for struct_ops
+  libbpf: Support passing user-defined flags for struct_ops
+  mm: memcontrol: Add BPF struct_ops for memory controller
+  selftests/bpf: Add tests for memcg_bpf_ops
+  mm/bpf: Add BPF_F_ALLOW_OVERRIDE support for memcg_bpf_ops
+  selftests/bpf: Add test for memcg_bpf_ops hierarchies
+  samples/bpf: Add memcg priority control example
 
-I re-read what I wrote and I think I was wrong, the S2 table (guest physical -> host physical) has to match RMP, not the S1.
+Roman Gushchin (5):
+  bpf: move bpf_struct_ops_link into bpf.h
+  bpf: initial support for attaching struct ops to cgroups
+  bpf: mark struct oom_control's memcg field as TRUSTED_OR_NULL
+  mm: define mem_cgroup_get_from_ino() outside of CONFIG_SHRINKER_DEBUG
+  libbpf: introduce bpf_map__attach_struct_ops_opts()
 
-
->>>>>> If I get it right, for other platforms, the entire IOMMU table is
->>>>>> going to live in a secure space so there will be similar FW calls so
->>>>>> it is not that different.
->>>>>
->>>>> At least ARM the iommu S2 table is in secure memory and the secure FW
->>>>> keeps it 1:1 with the KVM S2 table. So edits to the KVM automatically
->>>>> make matching edits to the IOMMU. Only one software layer is
->>>>> responsible for things.
->>> ?
->>>> Does KVM talk to the host IOMMU code for that (and then the IOMMU code calls the secure world)?
->>>> Or KVM goes straight to that secure world?
->>>
->>> Straight to the secure world, there is no host IOMMU driver for the
->>> secure IOMMU.
->>
->> QEMU will try mapping all guest memory and will call the host for
->> this, or it won't, on ARM? No IOMMUFD in this case? Always
->> guest-visible IOMMU? Thanks,
-> 
-> iommufd won't deal with memory maps for IO, the secure world will
-> handle that through KVM.
-
-Is QEMU going to skip on IOMMU mapping entirely? So when the device is transitioned from untrusted (when everything mapped via VFIO or IOMMU) to trusted - QEMU will unmap everything and then the guest will map everything but this time via KVM and bypassing QEMU entirely? Thanks,
-
-
-> The viommu and stuff is still optional and> would be controlled through iommufd.
-
+ MAINTAINERS                                   |   4 +
+ include/linux/bpf.h                           |   8 +
+ include/linux/memcontrol.h                    | 113 +++-
+ kernel/bpf/bpf_struct_ops.c                   |  22 +-
+ kernel/bpf/verifier.c                         |   5 +
+ mm/bpf_memcontrol.c                           | 281 +++++++-
+ mm/memcontrol.c                               |  34 +-
+ samples/bpf/.gitignore                        |   1 +
+ samples/bpf/Makefile                          |   8 +-
+ samples/bpf/memcg.bpf.c                       | 130 ++++
+ samples/bpf/memcg.c                           | 345 ++++++++++
+ tools/include/uapi/linux/bpf.h                |   2 +-
+ tools/lib/bpf/bpf.c                           |   8 +
+ tools/lib/bpf/libbpf.c                        |  19 +-
+ tools/lib/bpf/libbpf.h                        |  14 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../selftests/bpf/prog_tests/memcg_ops.c      | 606 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/memcg_ops.c | 130 ++++
+ 18 files changed, 1704 insertions(+), 27 deletions(-)
+ create mode 100644 samples/bpf/memcg.bpf.c
+ create mode 100644 samples/bpf/memcg.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_ops.c
 
 -- 
-Alexey
+2.43.0
 
