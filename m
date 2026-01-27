@@ -1,125 +1,95 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3707732AAD3
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 18:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769540346; cv=pass; b=Mx4QYXDYJpS4m5e8dpwVEvE6NXSk4qHGUvS2ZbRcYeOdjyMKulnxYDpZPH1fNm59aVmfFrw/7Tpu7QG/ZCvm0PzpzRS4mvdf6kjiJlx9uHUNbLv0IN79vZJ7ZyCVYkJ4z7aXhkOtcvWRtU6JapKbeV4Y+f2JoKkxZhymSPLeHSo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769540346; c=relaxed/simple;
-	bh=IIBGupSZWERssUHAZyAUJFNeeyb2xu/a6CxX9EN2hx0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ODezQrDpWvc3ax70+Oif3RfOcUlepBfaObc/jiqJHYEYpd/NsIcsUd8wQh3PN+nqbEZ4FmoWf0F5KD28ZuE+MGr0GQ93DVQoLhtrzs/P2ndzBISoZ8q+ocg1WwXVPAl1A2pX6sKLiGiwwe+8m3ZIh4bpKIVsxt+xtZHCoovlf8I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P2CIKXr+; arc=pass smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051BA36CDE9;
+	Tue, 27 Jan 2026 19:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769542059; cv=none; b=RiRMnErWL+DuKH4QMoGeLiuNT2tVGFovTxlfVnN8chZWIpz95w4WTdiXeZ6aPf62f/3sm+Cu/b+HxMZ6sfkOFdeXiupBg96zYUh7pfYyvNKzS0GNTPCCQYFQhDQ7wkPBL7YrFENrBY88dF0HTKh3ZFnPNapPqHlhwj+XX/YwZyM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769542059; c=relaxed/simple;
+	bh=COP0u/lwYbSxYDwiP89NvONCvNiI+1U069Dv4tpuAy4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Au/8zy8f/ywrDQjIvo4MZhNkpI/zNXDqgWjWOyGgKcg9JWbvrs6a1UTQFFmLMbQCv1TcJdXa7lKRBzB/csQ5FpR2bTTVq4A21s0YGRZKA1QhnWNzS+wUKWVsO8JnHRSPnEDLpqeYJgN973U5WMFgvwlaa3G0gxhKcgz9Rg09kzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aBbjdwB6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P2CIKXr+"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42fb2314eb0so5072368f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 10:59:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769540342; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MDeZWyHLqDhVHQFhORzaGlN7OVScafP3Wh2zYiVT9k0JyZPZEfH9SAz3T+VOqgXbI/
-         6vh1kMTuV6+jAnh2FLBxbj/v+9Y5RKwSfN8WTKQysKs3G6+fvQQPbURDJRIT0qZ5QU31
-         RpkjJj24Ifoib1U2VkAN7chwNGedH5rPsPLh4oS7iWDGN9LtqYoy6n0W2AHlS296CFR/
-         oJvogffDUFkQLCMB/7g/TwC+CHexz2DukuihR5bS4J9/Ko0P8oR2MeSsl75DC8VOqFRu
-         F6a0K9GCwFZxx0KoEKO+mygZaj9DAMHqmyRIle98oDkIwRZVDcnKOD6+6UY6dVRVaR9n
-         bX0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=aaSznZP67F0WuirhSjihADlmmfi+xxar5nLBaqaHWcQ=;
-        fh=Ik0fEQ4JhHgrzmdfmTefb+wEr0kqGIvOndPiT33enrU=;
-        b=hBYbBXmlYUPUONI6pocud+ZCIuXEn3wI28iYXStXGDwewVSQN9KqgXyCTwaherY34f
-         nOcu4aW4ZdopwEglkdwbUEqxXh8NU9a1wbA63/fMowgZgKGbrOChVzCbJULNVj3H+pOi
-         1wIKg4cdyaHT0x+VXVRvGvWLFsb9zLqBULHk8nASWbg9YfocmL/3VlNPvpx1twXvxXIn
-         v800pu/bH8fOCS+p/9qH14GNeBRwYg5Fw3wa3Q789Co/3NMM7xiDEy6FKjVU1tlwOSfG
-         1bjZsYV2L5qmk9Rn2T0Sev8Nne82iTWfAAypL/j5TgpxYd+XIVSaDxE8S0OTUZkqDGTP
-         FS/g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769540342; x=1770145142; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aaSznZP67F0WuirhSjihADlmmfi+xxar5nLBaqaHWcQ=;
-        b=P2CIKXr+DhqD0FZDzfYoE5uTwQ7aNQFdLpJ3oZegOvdLk4ERVHdgl+m5CwVqaInd9n
-         S7ACpMrKclFRP4CjIE3zE2eeCC7JRIuoZyRlx+NJfSVYb24Lq9d8oJAxK9oR5oL+dS0A
-         ROvGV28YzXfvsVa4aHZYkAk9MQuhjT+6vJV1TK4BTmWN84BiOg5JTInNMWQ/UqqN0Nuy
-         vQP+N8BCv7Nlptc//6d81GWCuGjSDQ2J91NhivjGupXj9kaWkREcEuGwz+kOUFTfn+LZ
-         ywfWpgeTrC/oy2/hXxvaIpMIdDgenu4zEoZhbJDAndZVDe/DtaALtgH4TknHFXSUuLWt
-         lWSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769540342; x=1770145142;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aaSznZP67F0WuirhSjihADlmmfi+xxar5nLBaqaHWcQ=;
-        b=BwqEyYYRuRZu+VBPQ0XdXVr/9s51VIDIbGsr2gjSXShZQ0TJNmt7qjfzsmVOHZ8H2j
-         V6ENh0ifdvvmXF7Bm1ro6AvkgkK7hwfRbmOzF3U0lhXAs+Cfps6EpfLzwAjm4KnA1802
-         QI54jgN/EbRyzrEDEppcA80ICB1aREY/0vjFVxUowohT+xZuLGUqlppRED/XbfJY6SxW
-         6jjMrG3HjPb8bPJBWLDCthSBF+xoulyYSx8r7x3+02Ij/X6HxUq4fKQpVsU56Gm70A/2
-         J9H/qPfNBEz2CMTH0rlamTjDBaYSviFm13qk562eAraoCc/jhcn53A3FhFWxHJMhfCWi
-         i2/w==
-X-Forwarded-Encrypted: i=1; AJvYcCWJyJ1d4tV1Krjrru5hPHnOGlWNuL3RPAMaf5Y1VQeBG2iC0JZEMldS1oWWRy/IaaMdDZlBCld7ipVwL7/ogNU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9N4TIXzCr1K1s8x8bxXVwxYMd5zbuCMwGUO4hyGMLHx+5GwdX
-	P87osVhMyJ0Yh2Kks0kI3cWCSR/2xd1AQopVEgF8KKUmVOlahoEAWlDZSLUWX2EHnYrS9eFpMxL
-	Y92oUwJNdXHrGAyQlFC19tHJqzWPPkMY=
-X-Gm-Gg: AZuq6aIUwmSg+EC5p115FGZTin1VJPT7M3zBUnY/bMbSHtvWBLF2lFINKt+4qtY3dfO
-	2AVqx9RxZD/h4G4eFKwPxVQooTBqSy/QjOHM6hK4JKLlbbW+wpmhx6XXRJ/XXsVtzmvLZ5xwlst
-	vU8rt9e0zhiaDAX5ujJ//HeTCyUaV9jmbIO1WESgp24w6ED/Bkfij8XXNvK8wuEp9mz8uz7aTG9
-	irAv4N42zDdVFUGNznysfflllGwsRAA3Gxic3sFRrETAviAJZT8rZf+SG9uEumUjsIvv3GN2MQ9
-	xDc0XY18ka5ycabPrGnKB2D4osjLLv747IPNy65AHJEsZ+cJFKTtnbSxMut4VrdyM4TX2r/n3MS
-	r2XJjIczZtJ8YUg==
-X-Received: by 2002:a5d:5d10:0:b0:430:f5dc:d34a with SMTP id
- ffacd0b85a97d-435dd1c1d6bmr4100001f8f.29.1769540342429; Tue, 27 Jan 2026
- 10:59:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aBbjdwB6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45419C19422;
+	Tue, 27 Jan 2026 19:27:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769542058;
+	bh=COP0u/lwYbSxYDwiP89NvONCvNiI+1U069Dv4tpuAy4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=aBbjdwB677uel5/9+Pgx7AqKa244EscJHtPfLESYsrrSkB/xR+udjb7gSV6l42of0
+	 b9RwCfTVELTp4dfcjmJIsDNsdTEqVGxClHA1DdQwhmIbx5/XREeF75fjTlg7V3kQf/
+	 fp7o2jbixELcjmb7B7xmoAOKMWCM7qWiv3xvL7Yxt2kwCcfkXpeQpf3FKy8JUngdeE
+	 j9bPGHOT+wmXjdFKT101VRDKZ+phA6t8ODqKvbcMCje3RoFdqNsYjwHFUTX26W5eQs
+	 z7pd5biu/mUNWVWTVSBuVnsWZtlhR6X7ROjtrG3UeCKCO1rYqTQknVowyShzZSxBUl
+	 GqhfnEB+5Bi/Q==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 0/5] mptcp: avoid dup NL events and propagate error
+Date: Tue, 27 Jan 2026 20:27:22 +0100
+Message-Id: <20260127-net-mptcp-dup-nl-events-v1-0-7f71e1bc4feb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260123-selftest-signal-on-connect-v1-0-b0256e7025b6@rbox.co> <20260123-selftest-signal-on-connect-v1-2-b0256e7025b6@rbox.co>
-In-Reply-To: <20260123-selftest-signal-on-connect-v1-2-b0256e7025b6@rbox.co>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 27 Jan 2026 10:58:51 -0800
-X-Gm-Features: AZwV_Qgzk7qCM0zvtA5MeIGgCCUqqQ7cMiI-0ZvBSVb44FcPjsYIcO86olVTO6c
-Message-ID: <CAADnVQL8wV1iPeMZ-ZvN-34o0gJF1xGYu5ZtLuD7GBgtj-ZNuQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add test for connect() racing
- sockmap update and signal
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJoReWkC/x3MTQqAIBBA4avErBswiaSuEi36GWugJlGTILp70
+ vItvvdAIM8UoCse8JQ48Ck5qrKAeRtlJeQlN2ilG1Vpg0IRDxdnh8vlUHakRBIDNrVtjbLa1JO
+ CrJ0ny/d/7iEjGN73AwoTSo5uAAAA
+X-Change-ID: 20260127-net-mptcp-dup-nl-events-64f970f274b0
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org, 
+ Marco Angaroni <marco.angaroni@italtel.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1270; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=COP0u/lwYbSxYDwiP89NvONCvNiI+1U069Dv4tpuAy4=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDIrBZfslus6LZEzy3fjr8M5MdnfFmi631+R+HHWhPIdi
+ R/m9QhWd5SyMIhxMciKKbJIt0Xmz3xexVvi5WcBM4eVCWQIAxenAExkmyojQ1Mk9+5tIfKflqoZ
+ 2fd6VVR3Z11UutQaPIl9Tsfff+wsLxgZZvD4BnxbfqJas/Hcy5/V11ZNPiXd1/3P8iQn8yxusc+
+ BrAA=
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Fri, Jan 23, 2026 at 8:16=E2=80=AFAM Michal Luczaj <mhal@rbox.co> wrote:
->
-> Attempt to trigger warnings/crashes by racing connect() against sockmap
-> updates and signals.
->
-> Follow-up to the discussion regarding af_vsock connect():
-> https://lore.kernel.org/netdev/20250311155601.eui5j2lta3q46i6u@gmail.com/
->
-> Suggested-by: John Fastabend <john.fastabend@gmail.com>
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
->  .../bpf/prog_tests/sockmap_interrupted_connect.c   | 200 +++++++++++++++=
-++++++
->  1 file changed, 200 insertions(+)
+Here are two fixes affecting the MPTCP Netlink events with their tests:
 
-Not sure why, but it seems to be causing reliable failures
-in what should have been an unrelated test. See bpf CI.
-I suspect there is a cleanup issue with this new test.
-Pls investigate.
+- Patches 1 & 2: a subflow closed NL event was visible multiple times in
+  some specific conditions. A fix for v5.12.
 
-pw-bot: cr
+- Patches 3 & 4: subflow closed NL events never contained the error
+  code, even when expected. A fix for v5.11.
+
+Plus an extra fix:
+
+- Patch 5: fix a false positive with the "signal addresses race test"
+  subtest when validating the MPTCP Join selftest on a v5.15.y stable
+  kernel.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Matthieu Baerts (NGI0) (5):
+      mptcp: avoid dup SUB_CLOSED events after disconnect
+      selftests: mptcp: check no dup close events after error
+      mptcp: only reset subflow errors when propagated
+      selftests: mptcp: check subflow errors in close events
+      selftests: mptcp: join: fix local endp not being tracked
+
+ net/mptcp/protocol.c                            | 13 ++--
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 81 ++++++++++++++++++++++---
+ 2 files changed, 81 insertions(+), 13 deletions(-)
+---
+base-commit: e9acda52fd2ee0cdca332f996da7a95c5fd25294
+change-id: 20260127-net-mptcp-dup-nl-events-64f970f274b0
+
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
