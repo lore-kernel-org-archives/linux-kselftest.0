@@ -1,216 +1,84 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E99832C92B
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 09:44:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2758C334C04;
+	Tue, 27 Jan 2026 09:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769507060; cv=none; b=pkhRsOb1xLSjVqN0zK5uju5mhhEJTJUh+twE7CORksm4SNeewg/FGZbKbUoxRR8RcW/Ic+L+X+wse4lhcN2W6Emg91panVcimRmrEg1Ke0NzHK8kzgheg3LIQOwFumD3UL21Y4Zh6B2heRe8mKsHuPDdVdKQO9i6EzieYCW4cyI=
+	t=1769507068; cv=none; b=WZ7gGCSQiwOZx3+LKtO5sWW6vtV4SPhsHWHGcD62YurO5LX83b3fVPoft+N1wKR0oxhpkNNOFH8Nx4+atW35yqrmK3cI1iPX64kKbHtD3/sWpuR+ISblpSrf4wgOCmWRTd9o1ARLwXDOT8ekNwVvnBghbxOqA+FJINz0sjYTN78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769507060; c=relaxed/simple;
-	bh=OGLI1S2l0PmNr2S4bsYnKqfqSXB+2A+DsfQrV5CIDWU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bzvkkckQwmFzOZ5SUZRJiyEu1knblyd4X+CYK/lorFTqwN+4W/Qtkp8LmD4yw/Hv8erN04PWkDXXY0lX6tQf2kwVNW5W29zj5P8RefscmTs2Wk5UaFKP54Hn4EsUVZ9CCqXcz3z4HefgVjWr2qIXgyvxsuswn7UjS/tTLvbssfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=czTeJJpy; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="czTeJJpy"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769507056;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FOthmRQx1S9k8S+lynuRz8PEGmhPgopf4vkxZNGup6E=;
-	b=czTeJJpyv2okdcCiyzy152EVyslqIqInTXlSCpdBL+Ji64e4WZostd/vUnqvbh34LRNCGw
-	yQwVnul1ze0+FrDsiegO0TmgTEDAMS8+i05KcRILZlHoRpR7NbsTo+61aPQwJ0OMIQbKZk
-	Efh/gHG+N5wYHpYLmwdCCpSA3ukuqA0=
-From: Hui Zhu <hui.zhu@linux.dev>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Jeff Xu <jeffxu@chromium.org>,
-	mkoutny@suse.com,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Christian Brauner <brauner@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	davem@davemloft.net,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Paul Chaignon <paul.chaignon@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH bpf-next v5 05/12] libbpf: introduce bpf_map__attach_struct_ops_opts()
-Date: Tue, 27 Jan 2026 17:42:42 +0800
-Message-ID: <635923ceadf1899672e4f7727ddc52554c11a3ac.1769506741.git.zhuhui@kylinos.cn>
-In-Reply-To: <cover.1769506741.git.zhuhui@kylinos.cn>
-References: <cover.1769506741.git.zhuhui@kylinos.cn>
+	s=arc-20240116; t=1769507068; c=relaxed/simple;
+	bh=YGARJxFZr+9cy0bpkFU2GdwIwa7Iyeec0Bvd3kgOA9Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k+4COD9467NsI60P1ljYjiAbyWtkhiNwurHiFmOJCC2Zh6Qy/dD0hTY04viQZ5X95rH31d38czasVLousebjXQeuKFG5tIQfR2s+DpEjrf2zdjzNwtfgV1aRYkKv6ke2bGCFTh/nbbryWdB366fpNvK1ZN/RnBl4RTczKYFi1h8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 154B1497;
+	Tue, 27 Jan 2026 01:44:20 -0800 (PST)
+Received: from [10.57.54.43] (unknown [10.57.54.43])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 701203F85F;
+	Tue, 27 Jan 2026 01:44:20 -0800 (PST)
+Message-ID: <28e54f74-9b3d-4c3c-9172-ceb429e7fcbe@arm.com>
+Date: Tue, 27 Jan 2026 10:44:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 05/16] arm64: ptrace: Move rseq_syscall() before
+ audit_syscall_exit()
+To: Will Deacon <will@kernel.org>, Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: catalin.marinas@arm.com, oleg@redhat.com, tglx@linutronix.de,
+ peterz@infradead.org, luto@kernel.org, shuah@kernel.org, kees@kernel.org,
+ wad@chromium.org, macro@orcam.me.uk, charlie@rivosinc.com,
+ akpm@linux-foundation.org, ldv@strace.io, anshuman.khandual@arm.com,
+ mark.rutland@arm.com, thuth@redhat.com, song@kernel.org,
+ ryan.roberts@arm.com, ada.coupriediaz@arm.com, broonie@kernel.org,
+ liqiang01@kylinos.cn, pengcan@kylinos.cn, kmal@cock.li, dvyukov@google.com,
+ richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
+ <20251222114737.1334364-6-ruanjinjie@huawei.com>
+ <aXe6W69Esd1NLEU8@willie-the-truck>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <aXe6W69Esd1NLEU8@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Roman Gushchin <roman.gushchin@linux.dev>
+On 26/01/2026 20:02, Will Deacon wrote:
+> On Mon, Dec 22, 2025 at 07:47:26PM +0800, Jinjie Ruan wrote:
+>> [...]
+>>
+>> To make it more reasonable and in preparation for moving arm64 over to
+>> the generic entry code, move rseq_syscall() ahead before
+>> audit_syscall_exit().
+> I've been struggling a bit to see how this helps to align with the
+> generic code.
 
-Introduce bpf_map__attach_struct_ops_opts(), an extended version of
-bpf_map__attach_struct_ops(), which takes additional struct
-bpf_struct_ops_opts argument.
+rseq_syscall(), or rather rseq_debug_syscall_return() since eaa9088d568c
+("rseq: Use static branch for syscall exit debug when
+GENERIC_IRQ_ENTRY=y"), is called first in the generic
+syscall_exit_to_user_mode_work(), so the aim of that patch is to align
+the order of calls with generic entry.
 
-struct bpf_struct_ops_opts has the relative_fd member, which allows
-to pass an additional file descriptor argument. It can be used to
-attach struct ops maps to cgroups.
+>  I'm also concerned that rseq_debug_update_user_cs()
+> operates on instruction_pointer(regs) which is something that can be
+> chaned by ptrace.
 
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
----
- tools/lib/bpf/bpf.c      |  8 ++++++++
- tools/lib/bpf/libbpf.c   | 18 ++++++++++++++++--
- tools/lib/bpf/libbpf.h   | 14 ++++++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- 4 files changed, 39 insertions(+), 2 deletions(-)
+Isn't that true regardless of where rseq_syscall() is called on the
+syscall exit path, though?
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 5846de364209..84a53c594f48 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -884,6 +884,14 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		if (!OPTS_ZEROED(opts, cgroup))
- 			return libbpf_err(-EINVAL);
- 		break;
-+	case BPF_STRUCT_OPS:
-+		relative_fd = OPTS_GET(opts, cgroup.relative_fd, 0);
-+		attr.link_create.cgroup.relative_fd = relative_fd;
-+		attr.link_create.cgroup.expected_revision =
-+			OPTS_GET(opts, cgroup.expected_revision, 0);
-+		if (!OPTS_ZEROED(opts, cgroup))
-+			return libbpf_err(-EINVAL);
-+		break;
- 	default:
- 		if (!OPTS_ZEROED(opts, flags))
- 			return libbpf_err(-EINVAL);
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0c8bf0b5cce4..70a00da54ff5 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -13462,12 +13462,19 @@ static int bpf_link__detach_struct_ops(struct bpf_link *link)
- 	return close(link->fd);
- }
- 
--struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
-+struct bpf_link *bpf_map__attach_struct_ops_opts(const struct bpf_map *map,
-+						 const struct bpf_struct_ops_opts *opts)
- {
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts);
- 	struct bpf_link_struct_ops *link;
- 	__u32 zero = 0;
- 	int err, fd;
- 
-+	if (!OPTS_VALID(opts, bpf_struct_ops_opts)) {
-+		pr_warn("map '%s': invalid opts\n", map->name);
-+		return libbpf_err_ptr(-EINVAL);
-+	}
-+
- 	if (!bpf_map__is_struct_ops(map)) {
- 		pr_warn("map '%s': can't attach non-struct_ops map\n", map->name);
- 		return libbpf_err_ptr(-EINVAL);
-@@ -13503,7 +13510,9 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
- 		return &link->link;
- 	}
- 
--	fd = bpf_link_create(map->fd, 0, BPF_STRUCT_OPS, NULL);
-+	link_opts.cgroup.relative_fd = OPTS_GET(opts, relative_fd, 0);
-+
-+	fd = bpf_link_create(map->fd, 0, BPF_STRUCT_OPS, &link_opts);
- 	if (fd < 0) {
- 		free(link);
- 		return libbpf_err_ptr(fd);
-@@ -13515,6 +13524,11 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
- 	return &link->link;
- }
- 
-+struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
-+{
-+	return bpf_map__attach_struct_ops_opts(map, NULL);
-+}
-+
- /*
-  * Swap the back struct_ops of a link with a new struct_ops map.
-  */
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index dfc37a615578..5aef44bcfcc2 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -920,6 +920,20 @@ bpf_program__attach_cgroup_opts(const struct bpf_program *prog, int cgroup_fd,
- struct bpf_map;
- 
- LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
-+
-+struct bpf_struct_ops_opts {
-+	/* size of this struct, for forward/backward compatibility */
-+	size_t sz;
-+	__u32 flags;
-+	__u32 relative_fd;
-+	__u64 expected_revision;
-+	size_t :0;
-+};
-+#define bpf_struct_ops_opts__last_field expected_revision
-+
-+LIBBPF_API struct bpf_link *
-+bpf_map__attach_struct_ops_opts(const struct bpf_map *map,
-+				const struct bpf_struct_ops_opts *opts);
- LIBBPF_API int bpf_link__update_map(struct bpf_link *link, const struct bpf_map *map);
- 
- struct bpf_iter_attach_opts {
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index d18fbcea7578..4779190c97b6 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -454,4 +454,5 @@ LIBBPF_1.7.0 {
- 		bpf_prog_assoc_struct_ops;
- 		bpf_program__assoc_struct_ops;
- 		btf__permute;
-+		bpf_map__attach_struct_ops_opts;
- } LIBBPF_1.6.0;
--- 
-2.43.0
+> So, I'm not saying this is wrong, but it feels like a user-visible
+> change that needs better justification.
 
+This seems to hang on whether the force_sig(SIGSEGV) that rseq_syscall()
+might issue interacts in any way with the tracing calls. My feeling is
+that it doesn't, but I haven't confirmed it. Worth noting this is only
+relevant if rseq debugging is enabled, so any potential user-visible
+effect is limited.
+
+- Kevin
