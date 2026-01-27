@@ -1,30 +1,32 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD84309F1B
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 16:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DEB350D6E
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 16:34:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769531659; cv=none; b=HZuKCW2AeXGKYAzDU//bUw3EZk7k+9rS//NNG8nWnAEfATKFHhYkyOxAZvNFsnGAQGOTzPqbe+WjB6kBlixmAAsbrwQbXDv01kLl4235BWpdw+xH0KXzC9lfi6S5GEPol97cpUwrErUUOAkOTVfMJPrFhV87J0UU9ef7Jqm1pjw=
+	t=1769531666; cv=none; b=s+C2pCNTuG0gdzSyCwM1+yMtKDGj/6O2TspC7xls1H3nlybTQYFSeFQJKCOWQF/qdLah8ubb2VWP5rqySBI065iHl6teAvJ9aqX8/yozi23A48jVdx5I8WXytSsxc5TJ1EmMaP5uzBsCCgbb9WUpz4zXbLk+tu4snyJayQ0gmXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769531659; c=relaxed/simple;
-	bh=psELCIfY+W4ONj905+j1vFlO5Yf6mkhivbJrVOMnDPA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I27Kt7kE7ajP5alJJP48J8q9TMfDP90xBZud4SZrU7sey8r+WbZ9Qs4Ef/lE7qSMIVNfOxjUMo8JonoYhUo0tM7UP3XBP7V3BO+bTuUi/8H6v9gtb5/TkPnkNI29k3Q2mv1HLahxRHxckOAwxUdvF5vIbQ6GfEGqK0uU0H5Cois=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BRJK7kqF; arc=none smtp.client-ip=95.215.58.189
+	s=arc-20240116; t=1769531666; c=relaxed/simple;
+	bh=W0Cbpf0C4qMtUBveQ/36bOrYZCTa24nxvp5lxfIYjQw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nCNONHmoBcozBzocQzK2Vs+CAVk8UkheuLPa1lXHlvNlGOP9YiYOudgGJdE6aBvmbSc5OvGXZeccpQYj/bKiQQIQnrihXkGciUpwYgZa/QfLV8xvFyim7PA+7u6hE5ZV3PKdFhRIP+6DYbh7JD48ha+QSXgbGk8nrvg2EQPnvh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Eorp8ZaS; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BRJK7kqF"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Eorp8ZaS"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769531645;
+	t=1769531663;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qVzkEJu0rwGv9GhSscFNxi7pazkxC01AqWhJ4PtbAR8=;
-	b=BRJK7kqFv7WhgeaGPzXl1G7bDC4goqi3TlEQzgGws2bMWxApxlNxAWLIpNoV7i70r0pTgI
-	yy7NkXzI17/2bvw027HbIv+ZLZoZyC4gG2JAWdSwlcbWC3CUBUlI7SD9jc2FbdosvVs22H
-	w+kGgJgFS2eWE2yyK+dt4zDkHxsww78=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=74wISzY+I2QQWizqfpjLw+tcNfcYrDh+eakCr6Jmco0=;
+	b=Eorp8ZaSdCSRoAjQbof+94IZ9zp2MDPOWzukFJnbQY3XvfAAIncEUZxp0wMjL2iTdd6B4i
+	m4eFdbLoscvu/8JefPTCCxGIj6x4aqiz3bEUC4TkyAHAURVF3KenJisoONoBn3pTFfileU
+	YF5lcs50xT0TkGlGl11qSkGmkto2nNo=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -50,9 +52,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 0/2] bpf, arm64: Add fsession support
-Date: Wed, 28 Jan 2026 00:33:42 +0800
-Message-ID: <20260127163344.92819-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 2/2] bpf/selftests: Enable fsession and get_func_ tests on arm64*
+Date: Wed, 28 Jan 2026 00:33:44 +0800
+Message-ID: <20260127163344.92819-3-leon.hwang@linux.dev>
+In-Reply-To: <20260127163344.92819-1-leon.hwang@linux.dev>
+References: <20260127163344.92819-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,40 +66,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Similar to commit 98770bd4e6df ("bpf,x86: add fsession support for x86_64"),
-add fsession support on arm64.
+Allow fsession, get_func_args, and get_func_ip selftests to run on arm64.
 
-Patch #1 implements fsession support in the arm64 BPF JIT trampoline.
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ tools/testing/selftests/bpf/prog_tests/fsession_test.c | 2 +-
+ tools/testing/selftests/bpf/progs/get_func_args_test.c | 2 +-
+ tools/testing/selftests/bpf/progs/get_func_ip_test.c   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Patch #2 enables the relevant selftests on arm64, including fsession,
-get_func_ip, and get_func_args.
-
-All enabled tests pass on arm64:
-
- cd tools/testing/selftests/bpf
- ./test_progs -t fsession
- #135/1   fsession_test/fsession_test:OK
- #135/2   fsession_test/fsession_reattach:OK
- #135/3   fsession_test/fsession_cookie:OK
- #135     fsession_test:OK
- Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
-
- ./test_progs -t get_func
- #138     get_func_args_test:OK
- #139     get_func_ip_test:OK
- Summary: 2/0 PASSED, 0 SKIPPED, 0 FAILED
-
-Leon Hwang (2):
-  bpf, arm64: Add fsession support
-  bpf/selftests: Enable fsession and get_func_ tests on arm64*
-
- arch/arm64/net/bpf_jit_comp.c                 | 66 ++++++++++++++++---
- include/linux/bpf.h                           |  7 +-
- .../selftests/bpf/prog_tests/fsession_test.c  |  2 +-
- .../selftests/bpf/progs/get_func_args_test.c  |  2 +-
- .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
- 5 files changed, 66 insertions(+), 13 deletions(-)
-
---
+diff --git a/tools/testing/selftests/bpf/prog_tests/fsession_test.c b/tools/testing/selftests/bpf/prog_tests/fsession_test.c
+index 0c4b428e1cee..d0cc6b1e29bf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fsession_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/fsession_test.c
+@@ -111,7 +111,7 @@ static void test_fsession_cookie(void)
+ 
+ void test_fsession_test(void)
+ {
+-#if !defined(__x86_64__)
++#if !defined(__x86_64__) && !defined(__aarch64__)
+ 	test__skip();
+ 	return;
+ #endif
+diff --git a/tools/testing/selftests/bpf/progs/get_func_args_test.c b/tools/testing/selftests/bpf/progs/get_func_args_test.c
+index 0a3236a7a109..180ba5098ca1 100644
+--- a/tools/testing/selftests/bpf/progs/get_func_args_test.c
++++ b/tools/testing/selftests/bpf/progs/get_func_args_test.c
+@@ -167,7 +167,7 @@ int BPF_PROG(tp_test2)
+ }
+ 
+ __u64 test7_result = 0;
+-#ifdef __TARGET_ARCH_x86
++#if defined(bpf_target_x86) || defined(bpf_target_arm64)
+ SEC("fsession/bpf_fentry_test1")
+ int BPF_PROG(test7)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+index 65f7e1f182bf..43ff836a8ed8 100644
+--- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
++++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+@@ -106,7 +106,7 @@ int BPF_URETPROBE(test8, int ret)
+ 
+ __u64 test9_entry_result = 0;
+ __u64 test9_exit_result = 0;
+-#ifdef __TARGET_ARCH_x86
++#if defined(bpf_target_x86) || defined(bpf_target_arm64)
+ SEC("fsession/bpf_fentry_test1")
+ int BPF_PROG(test9, int a)
+ {
+-- 
 2.52.0
 
