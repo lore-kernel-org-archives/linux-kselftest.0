@@ -1,100 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954813358CA;
-	Tue, 27 Jan 2026 10:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF2E3090C5;
+	Tue, 27 Jan 2026 11:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769508517; cv=none; b=dFzdED9D7VUKK7j/y6dCxCLTfWDTBuL2pyiB9EGSziHJhfy0VM4JvtPHB59Ep1HYIruloU179K/fHXXQaWm6kKpLiWMH4W7a812aOjY6l+Xmjx8EQp572A+zH4ly+kI+EAQhq6p9CE1KT3tBh1MXnrfF7nP/7ialKRSTjEgtoNY=
+	t=1769511776; cv=none; b=FaJLv6n5vqi3xQZoV8dFTimB7713nfqSo+F6QnYlAjN+xENhOQExnaWWSfY2mxg7Q8+2R0o+1nkZ9hR6pWo/Zn/9YrsX5a+D23orlxin9Bb/knNlHegWKxvvNZxsb/L1+bRvSH0T2l3wM2pWKH8z7jmBSPtWerNDyOqbRklXIIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769508517; c=relaxed/simple;
-	bh=5stgSFPOFTFIULArixFeHkYV56tWc18IJxdLX0dDglY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RPvwNuFyQPHA2NI9T4WnIMNI8lCEInCa8fkbTXmSSCl+2K3h4woM8AnEnsd/Mx1mjQSUxxOQoRZ9hQdG/bY4iGPKbDzk+IFSHYpyyuwZ1PKiC1/S7oBxwsE5HcMrdLf4aBYWPytywZi0SWw9XznEIXx9+59LKx0wDffkZ1e0czw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NV3uG0II; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769511776; c=relaxed/simple;
+	bh=6mU8gN17wNZ17oWhk45n4KUCppYMxqfdcAE1bqDheSA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=tWz/mGxRXcYzXCCRU1hYYXSGugl8zD7QjsENoNIese8sQjleYBbnbvrgCwPQoyH485Bty8acT7Y074EGAlUmRuLyyU9eTtXPpsGp2F5QGjGPrfeGsYAd9NWgXLaqQ2PGUMoirHTEdgSZoHJA3MqzgYlV2bWpUlNOmBqAO35u3C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=QwPX77kT; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NV3uG0II"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88634C116C6;
-	Tue, 27 Jan 2026 10:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769508517;
-	bh=5stgSFPOFTFIULArixFeHkYV56tWc18IJxdLX0dDglY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=NV3uG0IIJ6oSlguw1ZOHGTXtX0nknoen7oyTS8zTEgfLxcLcEXtD4qakjZdS+GRDN
-	 m/iMbO0lg+p37/K4dLa4XKE/hjJWpm7tTOpi+ndk9g64uAZDiw7gXbWFhKVHyvI7fO
-	 N9Dd9ZbQbIMC5rO1zWbIt3ZFZ1ARRxKSqZdp/SejHNvFxXCWHQl0v9TgiD9otDZ388
-	 ypdzcpuHPEWW1mOZF60Aan+OvKkWE0pYm4UcReG1RH+fTqE9qxWp611DJfQBcShTs6
-	 MlaGeAKzvdLhhZwxWiiTXlvTt8fD+2pcZncfLOhT9+en3swcxHqgm4KxDgl8rYJqPd
-	 6SrdFZVC+e2Yg==
-Content-Type: multipart/mixed; boundary="===============4752217963743545921=="
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="QwPX77kT"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=N1lvjaqhQkj8mEhgS24AJuAb84AsUGZxYBbZPk8F7T0=;
+	b=QwPX77kTAsPwEGUrVO4XKyg2YdoWDEWGAFhgbz7Ies+eHt/UsfIeyjihwTY4t4E0HZjIXkQ/a
+	spYLNzK4fiuuiJACK7ymK7g6u2GjAMSV5316vf9LN8VKUFu2VSitTuDGq5ZCkBKGM1EZIqDAc4+
+	KczS/IDtVMrt0z5qDVCO/w0=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4f0j7t5Z0Zz12LD7;
+	Tue, 27 Jan 2026 18:58:50 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 92A6D40567;
+	Tue, 27 Jan 2026 19:02:45 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 27 Jan 2026 19:02:41 +0800
+Message-ID: <a1f8a28e-84c3-dcf1-26d6-edbb37a5b750@huawei.com>
+Date: Tue, 27 Jan 2026 19:02:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6173f32708a0a1401350ac03dfeb0c3a6b212331b233b3269ff708dfc74dcffe@mail.kernel.org>
-In-Reply-To: <f14f1ad53f742f993a7ac5cb5ba6eaee26bebd91.1769506741.git.zhuhui@kylinos.cn>
-References: <f14f1ad53f742f993a7ac5cb5ba6eaee26bebd91.1769506741.git.zhuhui@kylinos.cn>
-Subject: Re: [RFC PATCH bpf-next v5 08/12] mm: memcontrol: Add BPF struct_ops for memory controller
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,akpm@linux-foundation.org,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,peterz@infradead.org,ojeda@kernel.org,nathan@kernel.org,kees@kernel.org,tj@kernel.org,jeffxu@chromium.org,mkoutny@suse.com,kernel@jfarr.cc,brauner@kernel.org,rdunlap@infradead.org,brgerst@gmail.com,masahiroy@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,inwardvessel@gmail.com,willemb@google.com,kerneljasonxing@gmail.com,paul.chaignon@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,chenridong@huaweicloud.com,lance.yang@linux.dev,jiayuan.chen@linux.dev,linux-kernel@vger.kernel.org,linux-mm@kvack.org,cgroups@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org
-Cc: zhuhui@kylinos.cn,geliang@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 27 Jan 2026 10:08:36 +0000 (UTC)
-
---===============4752217963743545921==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v10 04/16] arm64/ptrace: Refactor
+ syscall_trace_enter/exit()
+Content-Language: en-US
+To: Kevin Brodsky <kevin.brodsky@arm.com>, Will Deacon <will@kernel.org>
+CC: <catalin.marinas@arm.com>, <oleg@redhat.com>, <tglx@linutronix.de>,
+	<peterz@infradead.org>, <luto@kernel.org>, <shuah@kernel.org>,
+	<kees@kernel.org>, <wad@chromium.org>, <macro@orcam.me.uk>,
+	<charlie@rivosinc.com>, <akpm@linux-foundation.org>, <ldv@strace.io>,
+	<anshuman.khandual@arm.com>, <mark.rutland@arm.com>, <thuth@redhat.com>,
+	<song@kernel.org>, <ryan.roberts@arm.com>, <ada.coupriediaz@arm.com>,
+	<broonie@kernel.org>, <liqiang01@kylinos.cn>, <pengcan@kylinos.cn>,
+	<kmal@cock.li>, <dvyukov@google.com>, <richard.weiyang@gmail.com>,
+	<reddybalavignesh9979@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
+ <20251222114737.1334364-5-ruanjinjie@huawei.com>
+ <aXeZdh3CtznU8u6L@willie-the-truck>
+ <4f07254d-b158-a1ce-69a7-4fa4b0f339c1@huawei.com>
+ <532b42e2-3417-4e0f-af59-8c79521c34a3@arm.com>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <532b42e2-3417-4e0f-af59-8c79521c34a3@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 1f74fce27677..8d90575aa77d 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-
-[ ... ]
-
-> @@ -2530,10 +2537,14 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
->  	 * kernel. If this is successful, the return path will see it
->  	 * when it rechecks the overage and simply bail out.
->  	 */
-> -	if (current->memcg_nr_pages_over_high > MEMCG_CHARGE_BATCH &&
-> -	    !(current->flags & PF_MEMALLOC) &&
-> -	    gfpflags_allow_blocking(gfp_mask))
-> -		__mem_cgroup_handle_over_high(gfp_mask);
-> +	if (gfpflags_allow_blocking(gfp_mask)) {
-> +		unsigned long bpf_high_delay;
-> +
-> +		bpf_high_delay = bpf_memcg_get_high_delay(orig_memcg);
-> +		if (bpf_high_delay ||
-> +		    current->memcg_nr_pages_over_high > MEMCG_CHARGE_BATCH)
-> +			__mem_cgroup_handle_over_high(gfp_mask, bpf_high_delay);
-> +	}
-
-The old code checked !(current->flags & PF_MEMALLOC) before calling
-__mem_cgroup_handle_over_high(). This check appears to be missing in the
-new code.
-
-When PF_MEMALLOC is set, the task is already in the memory reclaim context.
-Calling __mem_cgroup_handle_over_high() from such a context would invoke
-reclaim_high() -> try_to_free_mem_cgroup_pages(), potentially causing
-reclaim recursion.
-
-Was the removal of the PF_MEMALLOC check intentional? If a BPF program
-returns a non-zero delay from get_high_delay_ms while the task is in a
-reclaim context, could this lead to recursive reclaim or deadlock?
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21392729810
+On 2026/1/27 17:43, Kevin Brodsky wrote:
+> On 27/01/2026 04:01, Jinjie Ruan wrote:
+>>> I understand that you're gradually making the arch code more similar to
+>>> the core code so that we can switch over to it, but I'm struggling to
+>>> understand why syscall_trace_enter() takes the 'syscall' argument.
+>>>
+>>> Even the core code just seems to use it as a local variable, which it
+>>> overrides before it ever uses it. What am I missing?
+>> Hi,
+>>
+>> You're absolutely right. The 'syscall' parameter is indeed treated as a
+>> local variable and gets overridden before any real use. Should we
+>> refactor to remove the parameter entirely in generic entry?
+> 
+> I noticed this as well, removing it from the generic function would make
+> sense. AFAICT that removal could be propagated quite far in fact:
+> syscall_enter_from_user_mode_work(), syscall_enter_from_user_mode(),
+> even arch implementation (do_syscall_64() on x86).
 
-AI-authorship-score: low
-AI-authorship-explanation: The code shows typical human characteristics including a refactoring oversight that AI would likely not make; the commit follows standard kernel conventions and has multiple human authors.
-issues-found: 1
-issue-severity-score: medium
-issue-severity-explanation: Missing PF_MEMALLOC check could cause memory reclaim recursion when BPF programs are attached, potentially leading to system instability.
+Not really, it is the default return value of
+syscall_enter_from_user_mode_work() as below, so we only need to remove
+the parameter in syscall_trace_enter().
 
---===============4752217963743545921==--
+static __always_inline long syscall_enter_from_user_mode_work(struct
+pt_regs *regs, long syscall)
+{
+	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
+
+       if (work & SYSCALL_WORK_ENTER)
+            syscall = syscall_trace_enter(regs, work);
+
+      return syscall;
+}
+
+
+> 
+> - Kevin
+> 
