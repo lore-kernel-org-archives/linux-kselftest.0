@@ -1,77 +1,74 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6A928850C;
-	Mon, 26 Jan 2026 22:36:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1D918CC13;
+	Tue, 27 Jan 2026 00:28:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769466977; cv=none; b=MXelpuvvA47A6O160l+9v8BZZY7urMCusnAWLVLHkawFJsEM+lkf7cc4j1kvg+bicG0IAIQ7Oplm6fgVbUahKU4p7bHVjmNH0HUB5IVguKcZIMTmvfIccSdadsEyFDSOlmOZ496DgZNKnIVz7VkbQ6BcAjSxvRbtVfSzjtGtuFg=
+	t=1769473682; cv=none; b=aoTwjrIMbrr9btzaLXmR3nvN+ORZf/c9zD0U04Cj9R1FJb9Soq1tZsdcPIbSnLBQx0/lYpqpvpQVQ/dzzRcuLzpmwMs0oeLjmxT9kw+um+0Xpgf9dH3mXZ1p/9UPM4pcwv8j0EjmQqOlfGPNi71mtZqfQZO59VV2Fgh82ea3qHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769466977; c=relaxed/simple;
-	bh=rmFs+IvmZfb5x+KMgHoW7cDZbA7+tSSyJuFCmPF4B6s=;
-	h=Content-Type:Date:Message-Id:Cc:To:From:Subject:Mime-Version:
-	 References:In-Reply-To; b=diWwydeTvYQMoyTOuay7TAus1E62tha0cNyBSclgMTYorSPg0asmJ9JoJtg+GiTXYiQE7aprRvm+97Ynfl/jhjGM9vuY6FgOf30cGYb/ogvALdx/LmuIlY1OT4x4C4M3Ipvs8dXvrEZ8UYpGW1mGBi9hIOtw+ElXF3rhjPq4WZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DMyQAmbn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769473682; c=relaxed/simple;
+	bh=FwWpJSMK+KrKXFsLv/93f1SUbLMFJ/zLW2o+OzeC85M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DU8BJSJglt10gSXSNLPn1NL1a4Ud/syBbfo3iLvJ8aE6FLa8zWGPmVKOPWeFpRQDZNCRCXuHRJv+SX5Ll+IV/+CdsdmS/tqIg8beMrizf/kqYls9bMusy7rq4zZa8NJRsLsJZkLsK8Gh9RG/x5yYY0stq/hj05rdlp9n2Q5XgqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kouNEQgC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DMyQAmbn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C87C116C6;
-	Mon, 26 Jan 2026 22:36:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kouNEQgC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24CE4C116C6;
+	Tue, 27 Jan 2026 00:28:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769466976;
-	bh=rmFs+IvmZfb5x+KMgHoW7cDZbA7+tSSyJuFCmPF4B6s=;
-	h=Date:Cc:To:From:Subject:References:In-Reply-To:From;
-	b=DMyQAmbnpb055ycrT4TAAB6V2jcxTIhTwMxVG4YyjoKfmAlyOscHiUdIbatS/X0Dk
-	 8Oq7ii8TWo9BBtLVtU2aeVXGwksjuPl18NHamcLo0Yo1ejpVdBTxvIsyjnTMxK4EAC
-	 iQ8CopCFj0YCpiIQiMNq6+ueiEusR3tZNobQLgYfzhR7LzNvw6F6zyFZ229DMKDSpQ
-	 PsJrM0hELS1fuMnbZXLkVdUriaVSDW+Zm2hO+nd5wsoAMfo+TJ32+kxKdMifCOSBWc
-	 oVAmI0Yd1dIhm71rRkmmyyQGqdvKcWaMSQWWcjKR2YJ01DWuC4Kug+3RFT8cPQ4K5G
-	 cv7251JGTqHBQ==
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 26 Jan 2026 23:36:12 +0100
-Message-Id: <DFYVOX2J1WKG.2GJKZ0T6O21NP@kernel.org>
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Johan Hovold"
- <johan@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, "Tzung-Bi
- Shih" <tzungbi@kernel.org>, "Bartosz Golaszewski"
- <bartosz.golaszewski@oss.qualcomm.com>, "Linus Walleij"
- <linusw@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
- <shuah@kernel.org>, "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
- "Wolfram Sang" <wsa+renesas@sang-engineering.com>, "Simona Vetter"
- <simona.vetter@ffwll.ch>, "Dan Williams" <dan.j.williams@intel.com>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-To: "Jason Gunthorpe" <jgg@nvidia.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+	s=k20201202; t=1769473681;
+	bh=FwWpJSMK+KrKXFsLv/93f1SUbLMFJ/zLW2o+OzeC85M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=kouNEQgCUTsm7WECGlGSIoeT60wpZUWymYMFalYnQoxoPaS4lTekA90CKGIf2ThkJ
+	 Qc1Lp6q95NfPPcoQuf04WYAIixfLYt2ILzmgCQ7DRj/t5V5zha7AdHmU/Z9gDNPxeE
+	 5RTuI6m52gkDGZg8G7i+bIWTU6y5NjmeWkhJczeERQNcurrq5GvPeuQDryUDQO0794
+	 q9mK+eCDdO0GMGE1/RWkM/ri7zqrhD2EgKQipbPb7JSJc+a7/OaYVqoWDS6ya/BRWX
+	 p3N1kTUoXplxVL2v6iSnuJcHTk81DE3p+Q7qNTk5065YEwLC2GDDQiawrCLfdm9T0B
+	 NhLvXQF5GDSLQ==
+Date: Mon, 26 Jan 2026 16:28:00 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andre Carvalho <asantostc@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] netconsole: selftests: Move netconsole
+ selftests to separate target
+Message-ID: <20260126162800.10d5601d@kernel.org>
+In-Reply-To: <aXdYwphLx2O-Hxis@gmail.com>
+References: <20260124-netcons-selftest-target-v1-1-d3937f44c4c2@gmail.com>
+	<aXdYwphLx2O-Hxis@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-References: <20260124170535.11756-1-johan@kernel.org>
- <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
- <2026012554-chatty-policy-42a1@gregkh>
- <DFXV1QMQMTRK.2W8SWGVHS2K69@kernel.org>
- <20260126000730.GI1134360@nvidia.com>
- <DFYNFXYTXBIW.314K249BPTA1Z@kernel.org>
- <20260126170720.GN1134360@nvidia.com>
-In-Reply-To: <20260126170720.GN1134360@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon Jan 26, 2026 at 6:07 PM CET, Jason Gunthorpe wrote:
-> On Mon, Jan 26, 2026 at 05:08:20PM +0100, Danilo Krummrich wrote:
->> Yes, the majority of uses is access(), not try_access(); not sure if rws=
-em is
->> the better solution though.
->
-> rwsem is much faster on destroy and somewhat slower on read. Which
-> sounds to match the use case here. Ie you wouldn't need to do special
-> effort to bundle the synchronize_srcu()
+On Mon, 26 Jan 2026 04:10:18 -0800 Breno Leitao wrote:
+> On Sat, Jan 24, 2026 at 06:51:42PM +0000, Andre Carvalho wrote:
+> > This patch moves netconsole selftests from drivers/net to its own target
+> > in drivers/net/netconsole.
+> > 
+> > This change helps saving some resources from CI since tests in
+> > drivers/net automatically run against real hardware which are not used
+> > by netconsole tests as they rely solely on netdevsim.
+> > 
+> > lib_netcons.sh is kept under drivers/net/lib since it is also used by
+> > bonding selftests. Finally, drivers/net config remains unchanged as
+> > netpoll_basic.py requires netconsole (and does leverage real HW testing).
+> > 
+> > Signed-off-by: Andre Carvalho <asantostc@gmail.com>  
+> 
+> Thanks for the patch. Looking at NIPA, it seems none of the netconsole
+> test run?
+> 
+> https://netdev.bots.linux.dev/contest.html?pw-n=0&branch=net-next-2026-01-25--06-00
 
-While not that many, the try_access() cases may still be in hot paths, wher=
-eas
-the destroy case is always in a cold path, i.e. device driver unbind. Also =
-note
-that if the resource is released "manually" before driver unbind, we use
-revoke_nosync() as the destructor already guarantees that there are no more
-users.
+Do you mean after the patch? I'll have to manually add it to some VM
+config (presumably the SW drv-net one). I'll do it after patch is
+merged. (Remind me if I forget? ;))
