@@ -1,46 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFDF347FED;
-	Tue, 27 Jan 2026 11:39:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AB42ED846;
+	Tue, 27 Jan 2026 11:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769513967; cv=none; b=Ljak4F7WaBYvCV1lAeXKH3uGqpyNcPlq+up1xf53TpcIxHq7g9zAU+a+jQHXC6SIo7bjpBKyNeRBLJG3EqOgO2GxtFwZ3atXXV1tDzYLx+gQfznMft9ss3XtdrYascE76yUY6Kf82WOXvz/r4R6JHI1lXh1lbN7sA3HKkhj1KNU=
+	t=1769513974; cv=none; b=CCpR+vE0PAjfJmpIYHFN59QodBhITki68mBs6oucEqiL5AkoCQpXbWKcw0mfB/lU/+SI/1RAeZ9G8TT6WdPCZubo8AnwXgNUamHWkkfopN+o3OFQPT6I7cOUsRmPsCuYyTQA5xvQ6bOF86jieX06WSrzkKUF3Fy7j3v/d5JIrq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769513967; c=relaxed/simple;
-	bh=/dlBDQEBQ+8ENH9+Eo+FEf5Oz3Exca6rQOEQG2jd6SA=;
+	s=arc-20240116; t=1769513974; c=relaxed/simple;
+	bh=hPUb1Sf/Y+o1iHyYT+qaHgmrkVOaEBAa48umHaclhUw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X0tAzkNAjjoQ5oCJycJsA2cSUAcsZecNJlMxKnJJSFgMAi/NC4zwbd8agT84IWeJgbVX3FCww1HfnBq5L0hH+kwBT7bVfIiafFSM6MEhDyvUDwIvZ0wRWDGNWSKLK8Zdv1nrjo1VBhBvOf7yHpejJtdYM2AQ64TZdH4UGgMGl08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZFD+h5Y; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=crEsgK/3SppABEb8WS71wRZKXKKqq02IFzMgb4wS2O0ZnIlyXFqDci6u22A2jm3Nk6b1SElaTDdB+UlKQf0u5O55GbJif31WSfb/6SMeNzoJOpfHFAY1Er7piejLeoUoTbSlvUzBc9QKF4ip8FZIVd75cNFGOFr1a7jiM8/txtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KsKjy2P1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZFD+h5Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2622C19425;
-	Tue, 27 Jan 2026 11:39:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KsKjy2P1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232B1C16AAE;
+	Tue, 27 Jan 2026 11:39:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769513967;
-	bh=/dlBDQEBQ+8ENH9+Eo+FEf5Oz3Exca6rQOEQG2jd6SA=;
+	s=k20201202; t=1769513974;
+	bh=hPUb1Sf/Y+o1iHyYT+qaHgmrkVOaEBAa48umHaclhUw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hZFD+h5YsGJfcf0Xf0UhuP0PTxfngQmldh+V8w+AwDX0fJ2Be6bd3iaDnZmMo7EcB
-	 whoaLQI/IdyEYC9Bbb9LfPyuiw49XD6uarYIV7xOtEhplMG4m02WyNUksQ2p9Wv5+5
-	 3aZa3fjVVn8OP9qRFToeoNbDoIsT4jbm8+Kz1qCMNvAVzpjtpSHxfLoTXwQhmlZ7fn
-	 zchHUpeN8gccRb5ydI3DF0/HnmbdQipLoTyP76cx743m9iG4EUfZVkRmBZ3o7G8nKS
-	 HoupcrB//ZN3TZeOxlzpdXsNNagGiLMhFPY1fQmlxMnUUu1tFnPloN2JuLScdG0ruf
-	 +XaNf7LPK0Fyg==
+	b=KsKjy2P1I4kpNU/SaUK3hQAAzsAQL0KnMZT7g9kSE29HhGgoDkANSZDKlEry1k8uA
+	 mhs1g6ZR2DIkivh/7zkCiGhq0K336psB2fT91va7/qZpNuGLv+lnLevZHg+rYogr7w
+	 Cot43YaE9jgvWKbgfWqG7OaYVlzi5GuY7pMOKSTkZCCvMPjTspcYKT0Daba/gnDN3o
+	 4cLX5kwEraDJ+3XL8CUf16Dcb0LunODG2opMgEb9kS2j3OU1GHcmFPIzrvugyGI+sM
+	 HwhAKkhFxENwSYAG0apeN4Kkoimbkwt51XH5Nh/Hn33t/tzpsq6xVtMNG/M7lXAahc
+	 KkwL0aRctMLBw==
 From: Will Deacon <will@kernel.org>
 To: catalin.marinas@arm.com,
-	I-Hsin Cheng <richard120310@gmail.com>
-Cc: kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
+	oleg@redhat.com,
+	tglx@linutronix.de,
+	peterz@infradead.org,
+	luto@kernel.org,
 	shuah@kernel.org,
+	kees@kernel.org,
+	wad@chromium.org,
+	kevin.brodsky@arm.com,
+	macro@orcam.me.uk,
+	charlie@rivosinc.com,
+	akpm@linux-foundation.org,
+	ldv@strace.io,
+	anshuman.khandual@arm.com,
+	mark.rutland@arm.com,
+	thuth@redhat.com,
+	song@kernel.org,
+	ryan.roberts@arm.com,
+	ada.coupriediaz@arm.com,
+	broonie@kernel.org,
+	liqiang01@kylinos.cn,
+	pengcan@kylinos.cn,
+	kmal@cock.li,
+	dvyukov@google.com,
+	richard.weiyang@gmail.com,
+	reddybalavignesh9979@gmail.com,
 	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/arm64: Add missing file in .gitignore
-Date: Tue, 27 Jan 2026 11:39:10 +0000
-Message-ID: <176943774738.423323.2833624896196313344.b4-ty@kernel.org>
+	Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: kernel-team@android.com,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v10 00/16] arm64: entry: Convert to Generic Entry
+Date: Tue, 27 Jan 2026 11:39:11 +0000
+Message-ID: <176951031735.722772.3896025304943173435.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260124123241.3257-1-richard120310@gmail.com>
-References: <20260124123241.3257-1-richard120310@gmail.com>
+In-Reply-To: <20251222114737.1334364-1-ruanjinjie@huawei.com>
+References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,17 +74,31 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Sat, 24 Jan 2026 20:32:41 +0800, I-Hsin Cheng wrote:
-> The binary generated by check_hugetlb_options is missing in .gitignore
-> under the directory. Add it into the file so it won't be logged into
-> version control.
+On Mon, 22 Dec 2025 19:47:21 +0800, Jinjie Ruan wrote:
+> Currently, x86, Riscv, Loongarch use the Generic Entry which makes
+> maintainers' work easier and codes more elegant. arm64 has already
+> successfully switched to the Generic IRQ Entry in commit
+> b3cf07851b6c ("arm64: entry: Switch to generic IRQ entry"), it is
+> time to completely convert arm64 to Generic Entry.
 > 
+> The goal is to bring arm64 in line with other architectures that already
+> use the generic entry infrastructure, reducing duplicated code and
+> making it easier to share future changes in entry/exit paths, such as
+> "Syscall User Dispatch".
 > 
+> [...]
 
-Applied to arm64 (for-next/selftests), thanks!
+Applied first three to arm64 (for-next/entry), thanks!
 
-[1/1] kselftest/arm64: Add missing file in .gitignore
-      https://git.kernel.org/arm64/c/3c58f03e805f
+[01/16] arm64: Remove unused _TIF_WORK_MASK
+        https://git.kernel.org/arm64/c/e7e7afdc7c14
+[02/16] arm64/ptrace: Split report_syscall()
+        https://git.kernel.org/arm64/c/741a9000173a
+[03/16] arm64/ptrace: Return early for ptrace_report_syscall_entry() error
+        https://git.kernel.org/arm64/c/a3386301667e
+
+I know it's a drop in the ocean, but they look good to me and it saves
+you from having to carry them over.
 
 Cheers,
 -- 
