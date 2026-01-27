@@ -1,96 +1,211 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E2B2F83AE;
-	Tue, 27 Jan 2026 22:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769554330; cv=none; b=Wx9281JMabPFfjwJnNzdXLr3RtKViyGrc57A+yGxzzFz6h9XvVHRL763+TCaWoRgOPohU8xlYw2WImclt9j+7SAg42/dsCw0qV5InjzyiGQF6VKFA1nsq4qakzQCltK/EZaCDZ066Ir2PGiXaeEWH7T2y0FNwxVxzCdEQAi6mMo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769554330; c=relaxed/simple;
-	bh=NipXyq8Olunpd4nLlWBIUAlNUcuzVjyuhISS0mQU4mU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lxseKASudE6i4PL6dH5L5sfbsKKxbZQJ7wx+5wWSa5PnzAc8GF9QPulzCGApTUNDA5yh8ELVHnq0FWA+wBt8ippybbnD/K8xgYV6cTBm5lmdXw+DvkCwzv0MHy11bnN0cIKJKLaDaOyvlmkc2f1W81Gff94qY9IST62vNY1QtH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=epVa14ju; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABFC2EDD45
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 23:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769557603; cv=pass; b=SreoiEWidCaftxfxYsmv/4wJ9o286ividZBprvHD/bhUj+cKHdVfOdawawEukr9rba3Dv+mKZGYyCWp/JZwUvwXziyXUNyqAH/R8OeIMROWv7IaR6gXN/zjkFAoNeuj9YDqVlpNldEnQxfgLE1FGV9wZcps/YegAT9MJbk1/Z8A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769557603; c=relaxed/simple;
+	bh=vst6t4peh/JV4Zuhoe6fbMyUDr/jcG7JxMjC1bUj/HY=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bRCXnkKSaN7JOpzXw55Cu4JARudhFTI9kqnqbUJqr5RVl3BVPFrky8NEGJefVe33qrhKZdfV10MP6SuBRUKEmhWSlzn5YRBazCejfd9xKmp1zzf9OOUerEN7FgzcaFLwOmY9WMTl681MrffWiZKWH4Msb9lOwzVw8z+rml6qNMI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=q0aMp+cV; arc=pass smtp.client-ip=209.85.221.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="epVa14ju"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=IpUU4MbJSN8PkPmUt1IzIbg/Bcu1M7gnSljEdtG9dlo=; b=epVa14juOxon
-	6hVjVE5o7agp+flakrjkFSJPAaApTmD0AFs1CYu7WJeId080+UhL5f+v8SVy/uf7faJbgJj1U2x+6
-	AwA12R4r0CRkfNVvNTnUhlg5FvDo9T9Az/sH5zh1W6VWEkp/JGF27cYMWONG6TyIcE/bk+ORCsnDz
-	bqm3qjpNwPW5N9IckRJvk94kTha0xMtq9ggIzeDdfs7aqF4vRdN10PsbrXEpuFsyYny2GIIX47LwZ
-	EST0UMsWY625396PxlPFfad4gvknxbHsroCxUQiyKgPO4xhPybTSA6cOBZCDZ0jXJNhizo6BsPW7N
-	hJ8Ed3+HajKYlK9cp9uxhw==;
-Received: from [130.117.225.5] (helo=dev004.aci.vzint.dev)
-	by relay.virtuozzo.com with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aleksey.oladko@virtuozzo.com>)
-	id 1vkru2-0080TH-07;
-	Tue, 27 Jan 2026 23:51:48 +0100
-Received: from dev004.aci.vzint.dev (localhost [127.0.0.1])
-	by dev004.aci.vzint.dev (8.16.1/8.16.1) with ESMTPS id 60RMpvmJ304391
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 27 Jan 2026 22:51:57 GMT
-Received: (from root@localhost)
-	by dev004.aci.vzint.dev (8.16.1/8.16.1/Submit) id 60RMpv2S304390;
-	Tue, 27 Jan 2026 22:51:57 GMT
-From: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-To: "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Aaron Conole <aconole@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Aleksei Oladko <aleksey.oladko@virtuozzo.com>
-Subject: [PATCH v2 2/5] selftests: net: make ovs-dpctl.py fail when pyroute2 is unsupported
-Date: Tue, 27 Jan 2026 22:51:31 +0000
-Message-ID: <20260127225134.304362-3-aleksey.oladko@virtuozzo.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260127225134.304362-1-aleksey.oladko@virtuozzo.com>
-References: <20260127225134.304362-1-aleksey.oladko@virtuozzo.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="q0aMp+cV"
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-5664393d409so1239506e0c.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 15:46:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769557600; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MDRcmXircBHmIcN8DISyWcZ1exR4pKbhYL6iwXpX9vfPGfV3fxldref3M2TAs9L2Iu
+         l/PovhrU88kFGej9cLUbf2YfQ+9a2jl8r09wZ7T3SsY3yH6NX0+XqhtwLxjrmeKkekIK
+         BfWGHfsLSfSkj8Nt7b8ZxlVlDY/E5ZmGhXpZzuO891NOQ5PhmJru4JUsLgvCv85WwElB
+         nbXLyX9KJ6V7bZpIL358LCCA36P76s78UyzUpUL6NNRQjvy0R+sfRjvaq54i3JlhiTVx
+         P2MyjcwL4l/NJ2598n41zOqikjt9uWfJlhe6wIesWKIokRHntFC7MtyNykSsxHfPalJm
+         tXZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=3+EqNzQT9TNRk9U4Wm8Lp51VnBAV17bgK1qxop8j5Is=;
+        fh=LXdt+XFxkrM5M14wjeNUXUESDsqdMCCTodX2hyTSTvw=;
+        b=kKKX7/JVsY2dCtrMdqQBFTmgTRadiqHXtOkpj3Ll0W/wCRnmQz7TFGT3k4ctU86h63
+         xv08sfRb8/IKX26bho24Df1YMJNDw+NWcQRTKXhLxfnQbeAaBAjspYMzvLK3i58Uzr1Q
+         jyxctV8zFed/0BLwBxgz0nwi7uN+AYYBAt2pr9WnIIjtuGO5ebxkpmG4/fkOwDth8qSq
+         Q/NV/8YFy+O3/V+uc/yG28q2B65T592Qxr0rWvfK5Op9Dpw31/BNQM9M59pDdj584vlw
+         Q9osYwCRCtOlM8QV2PISfu+bdeH+ftzeJYj6WJA1TmOW5kDtX6ZrOicAO5+aHqrA4Fyj
+         6FbA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769557600; x=1770162400; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3+EqNzQT9TNRk9U4Wm8Lp51VnBAV17bgK1qxop8j5Is=;
+        b=q0aMp+cVQgIaUs+GKsnXsbB8/OBQGmUP7zTFWK6YuIMa/8RpGMvXMR/6bZPWJUz+Ax
+         u/t64RKqMcpebPRbhQ1M6biN4IVbKs9gzGNSNkMp1uOAxFoKkJ3J2aIai8hAjHoef+oO
+         yGAQYLHOusadvqilAz8Cq8+gSfOtTAksoE5xOrb8XOmbpk7FoWeBVa3hH5MKs834fYOA
+         CLJ/rTfq30ymSa+kz+gatTy0HfxXCxyYv7Eitpa5Lcrq6+NC0vv4ZfQJ6bRsUKrik2+u
+         PKDb6B/ERV/ZDxO60V/G5dT8DoTygTVKTspVy7XBm6gYY5wd3EUNYV8jaV8k+Y2+l26V
+         yrdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769557600; x=1770162400;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3+EqNzQT9TNRk9U4Wm8Lp51VnBAV17bgK1qxop8j5Is=;
+        b=QFXGuv5NcACelmYTYpe2NUEXQjViYuM/XQwDWqk0obEnnFP2+uGHa98E1Xb4EhxSd+
+         AtKIavJggLAvlyPRgHmxCMqJM2z5YnNPDVrnvu8o82vshv5oiy5tueNpsHyqzsnIHNLi
+         XMTZ8DpdPvfuUxihiV2d+4doYwo1qcaQraeaQiROuYiS6EZm1wnDXbZvDTAWp0JAYGnh
+         uFKXrOupm7MbSGK+Vv77NMeRUKVhVytduEmHEZY+6PFqu6nRbNnoFNWNNgIhdECO73r5
+         9WxPPMIppjtvUZR5I6Q/vW62GNXlGrY9s22Wsltxrjw2OMzydCZcaC87ssxrcxZya4OW
+         zkjg==
+X-Forwarded-Encrypted: i=1; AJvYcCXvRqBIg0iOE2cgM4WLDMlqAg0NMzKOjf2TA5oFaY4F8gUvmFru/rA9Lthdpf4y46Xq/Y5Hm/aUB7qV782Zsx4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyY/Uj9BXdXEsA6/YiPbbV6ZpCaE4wbpVTGw3tvSnTmv1shf7nw
+	8Z9ZXAcZIEYbSoAJ3e7BxAg4Agxt/UGzTL2rHTUUGUHpyuRAi9MpJqVhAOuxFGCyBS6mbwC7M89
+	XFum/FponQH31vnDnVIIPgwAPfoz6DDouxACfy6U+
+X-Gm-Gg: AZuq6aLPU3DlyuJBqAWR9sjP1WqMxhhC1oktPupqk3K2rv5+/yLqCEM69x9UskJQhMc
+	mPHslztcxAUbiljE2T8XumuIAIEpEFAXJzEjbnZ/HFtv/CdWpuQHI/qCFnFtQlsF911lg/bVU96
+	YCXl+OV4rD5NmCmFtTRhIdiYyy/afNIHldnvDwhFjaFUM1PsF79qdT4LOWlkkZRD/PFBXr9difS
+	1sS7XWaKhuPWS3VCrH1yJIP8W6D9EGwmhgT2NSbYVVJQBHQB/SjKCeQKa/VOvJTKQ3DbKOvL3nC
+	dYPkikU8SmJM3c2iK9zup0ivMg==
+X-Received: by 2002:a05:6122:488a:b0:566:36e7:8934 with SMTP id
+ 71dfb90a1353d-566795c5856mr1161633e0c.16.1769557600050; Tue, 27 Jan 2026
+ 15:46:40 -0800 (PST)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 27 Jan 2026 15:46:39 -0800
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 27 Jan 2026 15:46:39 -0800
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <ce78da49-2525-44af-9cb8-301bf6a4658a@suse.cz>
+References: <cover.1760731772.git.ackerleytng@google.com> <02aad35b728f4918e62dc6eb1d1d5546487b099e.1760731772.git.ackerleytng@google.com>
+ <ce78da49-2525-44af-9cb8-301bf6a4658a@suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Tue, 27 Jan 2026 15:46:39 -0800
+X-Gm-Features: AZwV_QjMPyTn9KuYIeoCwzon32JStKYHl7N-mpSbapwuTdPZlfrcWu1xEKHINOw
+Message-ID: <CAEvNRgE07d_TaSVpkWO8gMfGgPsP9sBzrqMPCte8PET0THF=QA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 09/37] KVM: guest_memfd: Skip LRU for guest_memfd folios
+To: Vlastimil Babka <vbabka@suse.cz>, cgroups@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, x86@kernel.org
+Cc: akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de, 
+	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org, 
+	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com, 
+	david@redhat.com, dmatlack@google.com, erdemaktas@google.com, 
+	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com, hannes@cmpxchg.org, 
+	hch@infradead.org, hpa@zytor.com, hughd@google.com, ira.weiny@intel.com, 
+	isaku.yamahata@intel.com, jack@suse.cz, james.morse@arm.com, 
+	jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, jhubbard@nvidia.com, 
+	jroedel@suse.de, jthoughton@google.com, jun.miao@intel.com, 
+	kai.huang@intel.com, keirf@google.com, kent.overstreet@linux.dev, 
+	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com, 
+	mail@maciej.szmigiero.name, maobibo@loongson.cn, 
+	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org, 
+	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, mingo@redhat.com, 
+	mlevitsk@redhat.com, mpe@ellerman.id.au, muchun.song@linux.dev, 
+	nikunj@amd.com, nsaenz@amazon.es, oliver.upton@linux.dev, palmer@dabbelt.com, 
+	pankaj.gupta@amd.com, paul.walmsley@sifive.com, pbonzini@redhat.com, 
+	peterx@redhat.com, pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, 
+	qperret@google.com, richard.weiyang@gmail.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, rostedt@goodmis.org, roypat@amazon.co.uk, 
+	rppt@kernel.org, seanjc@google.com, shakeel.butt@linux.dev, shuah@kernel.org, 
+	steven.price@arm.com, steven.sistare@oracle.com, suzuki.poulose@arm.com, 
+	tabba@google.com, tglx@linutronix.de, thomas.lendacky@amd.com, 
+	vannapurve@google.com, viro@zeniv.linux.org.uk, vkuznets@redhat.com, 
+	wei.w.wang@intel.com, will@kernel.org, willy@infradead.org, wyihan@google.com, 
+	xiaoyao.li@intel.com, yan.y.zhao@intel.com, yilun.xu@intel.com, 
+	yuzenghui@huawei.com, zhiquan1.li@intel.com
+Content-Type: text/plain; charset="UTF-8"
 
-The pmtu.sh kselftest configures OVS using ovs-dpctl.py and falls back
-to ovs-vsctl only when ovs-dpctl.py fails. However, ovs-dpctl.py exits
-with a success status when the installed pyroute2 package version is
-lower than 0.6, even though the OVS datapath is not configured.
+Vlastimil Babka <vbabka@suse.cz> writes:
 
-As a result, pmtu.sh assumes that the setup was successful and
-continues running the test, which later fails due to the missing
-OVS configuration.
+> On 10/17/25 22:11, Ackerley Tng wrote:
+>> filemap_add_folio(), called from filemap_grab_folio(), adds folios to
+>> an LRU list. This is unnecessary for guest_memfd, which does not
+>> participate in swapping.
+>
+> IIRC guest_memfd mappings are unevictable. That should mean they are not
+> ultimately added to a list (see lruvec_add_folio()).
+>
+>> In addition, the LRU list takes a reference count on the folio. With
+>
+> IIUC the refcount is temporary while being on the percpu
+> &cpu_fbatches.lru_add, added by __folio_batch_add_and_move().
 
-Fix the exit code handling in ovs-dpctl.py so that pmtu.sh can detect
-that the setup did not complete successfully and fall back to
-ovs-vsctl.
+Thanks for pointing this out. You're right about this, I misunderstood
+this refcounting earlier.
 
-Fixes: 962e8a01eab9 ("selftests: openvswitch: Add version check for pyroute2")
-Signed-off-by: Aleksei Oladko <aleksey.oladko@virtuozzo.com>
----
- tools/testing/selftests/net/openvswitch/ovs-dpctl.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> When flushed
+> via folio_batch_move_lru(), the refcount is removed and there's only the LRU
+> folio flag that remains. The fbatch flushing can be triggered if you see an
+> unexpected refcount increase.
 
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index b521e0dea506..848f61fdcee0 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -2583,7 +2583,7 @@ def main(argv):
-     prverscheck = pyroute2.__version__.split(".")
-     if int(prverscheck[0]) == 0 and int(prverscheck[1]) < 6:
-         print("Need to upgrade the python pyroute2 package to >= 0.6.")
--        sys.exit(0)
-+        sys.exit(1)
- 
-     parser = argparse.ArgumentParser()
-     parser.add_argument(
--- 
-2.43.0
+The new plan is, to update kvm_gmem_is_safe_for_conversion() to drain
+the fbatch if it some elevated refcount is found:
 
+static bool kvm_gmem_is_safe_for_conversion(struct inode *inode,
+					    pgoff_t start, size_t nr_pages,
+					    pgoff_t *err_index)
+{
+	struct address_space *mapping = inode->i_mapping;
+	const int filemap_get_folios_refcount = 1;
+	pgoff_t last = start + nr_pages - 1;
+	struct folio_batch fbatch;
+	bool lru_drained = false;
+	bool safe = true;
+	int i;
+
+	folio_batch_init(&fbatch);
+	while (safe && filemap_get_folios(mapping, &start, last, &fbatch)) {
+
+		for (i = 0; i < folio_batch_count(&fbatch);) {
+			struct folio *folio = fbatch.folios[i];
+
+			safe = (folio_ref_count(folio) ==
+				folio_nr_pages(folio) +
+				filemap_get_folios_refcount);
+
+			if (safe) {
+				++i;
+			} else if (!lru_drained) {
+				lru_add_drain_all();
+				lru_drained = true;
+			} else {
+				*err_index = folio->index;
+				break;
+			}
+		}
+
+		folio_batch_release(&fbatch);
+	}
+
+	return safe;
+}
+
+I hope this is what you meant!
+
+> So it might be feasible to do without this
+> patch (maybe it was already tried and there were substantial issues, in
+> which case should be mentioned).
+>
+
+The patch "KVM: guest_memfd: Skip LRU for guest_memfd folios" will be
+dropped from the next revision, and "KVM: guest_memfd: Don't set
+FGP_ACCESSED when getting folios" is no longer a requirement for this
+patch series.
+
+>> shared-to-private memory conversions for KVM guests dependent on folio
+>> refcounts, this extra reference can cause conversions to fail due to
+>> unexpected refcounts.
+>>
+>>
+>> [...snip...]
+>>
