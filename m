@@ -1,158 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AA935DCE6;
-	Tue, 27 Jan 2026 15:57:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336A1356A17
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 16:15:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769529469; cv=none; b=pJd7RQoSXv2XiCUPiaj+g5X/Wzq3FuShBmk/LoP4T5nnQxZ3NTM9PeR/3ckRR3RCtYNZh0XzGKG2abkz8D/KV0XB/nbRR9IKDSs0NtSnbpAC+JSaQCAMwomFoS0YiQNf+3Eo1XDPSiMWdLuiPSCp0gmbepZLFCMP0Urlf/dhf4g=
+	t=1769530535; cv=none; b=cTmynEuTq2mHKuIcVH8VFJKGHaPEnZ7MJ/x62V1duCuYFlRWAvNb0qPT5s4yTieUPj6X29Pd6nD5FZr3deJSpyuJ97J+d1SdvsuekvHqaoBR4EEFfte6hiV+fuOxqg+cm+KY6o6F7jSOusAcafSg+aE2vWb90kaCzActhSAAoKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769529469; c=relaxed/simple;
-	bh=YUJDTaMgr4B1s+oKdn5bEkdHuVjvL/H15gNn8NfFlFQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j9EwMjbxnf2JBlhk++9IsrIy72ZLA5DCDJrQ/UDVL3g1yAVya+vFLSR/Y4FDrS99bLvDvLGcTm7XZe6uDMU8PNMIN3aoriHlzvmPbx6yN2FFUcA2U6LSu8abHaYHwpYEsyrGPX49efsYRWuSSfmFVUs36WWafV3zRTRxCAiDECE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PCUlt7I0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769530535; c=relaxed/simple;
+	bh=XzumbK+bcu3fqR36UKRZRGrtN/og5725vQ0Oh0QLSOU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RMjG3Db+6QCRIajyO2PEUuYC5b7V/8JEybTNfmAxr9YESScaALITyKET3ac2/37PdRHByiM32w3ClwYzQXMcBGsyCGL2ZlEsxJBdWwBSo6sY+wHfT5b1qn2s+8eueyKybcH4+902DA1XMI2OwF8Hh9N1ui5AAfDq2LndMH4JPVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OJo1KxYV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PCUlt7I0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C69AFC116C6;
-	Tue, 27 Jan 2026 15:57:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OJo1KxYV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7BAC2BCB2
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 16:15:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769529469;
-	bh=YUJDTaMgr4B1s+oKdn5bEkdHuVjvL/H15gNn8NfFlFQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PCUlt7I0Vkad1WwItCieNR87h+ZBUJyPGYiDHIv26zHMqCC0jmc+5FlRTWI88JQVr
-	 KB/PAJN4VXgtw6rEpl+KYSWmYILX2rbVIGf/uyUnKAockvNF2T5emlXrtg/akKWQ1A
-	 GFQoNtz3iBD50Hqw6a8AjdThqD1i/F9ulJp4s35RELL7r39jHpzmClnqf2HqEwZUO6
-	 MLveTGO8gMBHt5l/6QSRJL4YxO8PhrQNcviYo7SSeYaCuQ+jnwHa4cm3mgNPh2Q1nw
-	 de/Ou3EgpvBfE3bnL+8bWi3/2eulLSp1DABdJYZOcWPs0gH5uq9Xg13JgW9jCNoFrp
-	 04iKT5IsRC/zQ==
-Date: Tue, 27 Jan 2026 15:57:44 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
-Message-ID: <aXjgeNY-jf9rIw09@google.com>
-References: <20260124170535.11756-1-johan@kernel.org>
+	s=k20201202; t=1769530535;
+	bh=XzumbK+bcu3fqR36UKRZRGrtN/og5725vQ0Oh0QLSOU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OJo1KxYVIBjuQhkIAwA2nGhhz+u6yU9zGamtuX4Ly5XUd5J+5WdMF1A2RAWRvvZHt
+	 2Tp+DzyIox8FRPliODm2U6Vu+6J0Els1lrHOHYo6DBYzLNRiov0h6oKG09sOT2Dkdf
+	 w8GnVQnH1pVTH5jamWfgC85U8CoQSMRazxURRf70V5+dZBOygwuE4iXIZWzOlkvPOO
+	 0X/Q1eJu719ogIoSPmdQlVkRtvEwk3YlqqaD58vu6MbagP85VTUGSkiJ+byeLvoEMK
+	 GnlDa2oTx5DWT0sxVtHcJ2/KfrrBf5oKn3vHAzyZ70sTLPwbxEXBZ6NSZGlK0rC04y
+	 ctbcrerZfbZGg==
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-662f5c5507cso258796eaf.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 08:15:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUUmoVDISRPSV3pMFhVspprE61oJQCY2ufrmjYp06svnGnpuuJiNFTpFAwGuhw01LXxyGgPsgFnLJpf40cejKk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUmVtr2gIM8mk0xbP+I/mm8pD0D/Q3QC78mchxHB+D97dSNX2e
+	Ji1J+kQx9Qs84MgCqdAFD0GCoCMu1IcYWO43jQJtkV4qcgQTIkqgP1Wo/vPl3Qr1vol8E6uAs2s
+	XdOX9RGHs2gE/VlGP7DA11rQYXCwZw6w=
+X-Received: by 2002:a4a:e1b4:0:b0:662:f543:5d3b with SMTP id
+ 006d021491bc7-662f54363afmr525037eaf.81.1769530533808; Tue, 27 Jan 2026
+ 08:15:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260124170535.11756-1-johan@kernel.org>
+References: <20260124012133.2451708-1-wusamuel@google.com> <20260124012133.2451708-2-wusamuel@google.com>
+In-Reply-To: <20260124012133.2451708-2-wusamuel@google.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 27 Jan 2026 17:15:22 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jWCdEVgQxOAkek4qqVHMx3Xx4_W3ov9bvdJP=0acX=Yw@mail.gmail.com>
+X-Gm-Features: AZwV_QhA2857ovslXCLqyKjCKicGjIcJQZ5bsHbrqIJ3xN0iiE30rvHqvTrjTj8
+Message-ID: <CAJZ5v0jWCdEVgQxOAkek4qqVHMx3Xx4_W3ov9bvdJP=0acX=Yw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] PM: wakeup: Handle empty list in wakeup_sources_walk
+To: Samuel Wu <wusamuel@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 24, 2026 at 06:05:32PM +0100, Johan Hovold wrote:
-> I was surprised to learn that the revocable functionality was merged last week
-> given the community feedback on list and at LPC, but not least since there are
-> no users of it, which we are supposed to require to be able to evaluate it
-> properly.
-> 
-> The chromeos ec driver issue which motivated this work turned out not to need
-> it as was found during review. And the example gpiolib conversion was posted
+On Sat, Jan 24, 2026 at 2:22=E2=80=AFAM Samuel Wu <wusamuel@google.com> wro=
+te:
+>
+> In the case of an empty wakeup_sources list, wakeup_sources_walk_start()
+> will return an invalid but non-NULL address. This also affects wrappers
+> of the aforementioned function, like for_each_wakeup_source().
+>
+> This patch updates wakeup_sources_walk_start() to return NULL in case of
+> an empty list.
+>
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> ---
+>  drivers/base/power/wakeup.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 1e1a0e7eeac5..e69033d16fba 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -275,9 +275,7 @@ EXPORT_SYMBOL_GPL(wakeup_sources_read_unlock);
+>   */
+>  struct wakeup_source *wakeup_sources_walk_start(void)
+>  {
+> -       struct list_head *ws_head =3D &wakeup_sources;
+> -
+> -       return list_entry_rcu(ws_head->next, struct wakeup_source, entry)=
+;
+> +       return list_first_or_null_rcu(&wakeup_sources, struct wakeup_sour=
+ce, entry);
+>  }
+>  EXPORT_SYMBOL_GPL(wakeup_sources_walk_start);
+>
+> --
 
-Thanks for sharing your thoughts on revocable.
+This looks like a fix for the for_each_wakeup_source() users.
 
-Regarding cros_ec_chardev, my last attempt [2] to solve its hot-plug issue by
-synchronizing misc_{de,}register() with file operations using a global lock
-highlighted the difficulty of alternatives: that approach serialized all file
-operations and could easily lead to hung tasks if any file operation slept.
-Given the drawbacks of [2], I believe cros_ec_chardev remains a valid use
-case for revocable.
-
-> the very same morning that this was merged which hardly provides enough time
-> for evaluation (even if Bartosz quickly reported a performance regression).
-
-The gpiolib conversion was provided as the first concrete user to enable
-this evaluation process.  The performance regression Bartosz identified is
-valuable feedback, and I believe it is addressed by [3].  I plan to send the
-next version of the series after v7.0-rc1 and revisit the issue.
-
-[3] https://lore.kernel.org/all/20260121040204.2699886-1-tzungbi@kernel.org/
-
-> Turns out there are correctness issues with both the gpiolib conversion and
-> the revocable design itself that can lead to use-after-free and hung tasks (see
-> [1] and patch 3/3).
-
-I appreciate you identifying the issues where multiple threads share a file
-descriptor; this is a case I overlooked.  I see these kinds of findings as a
-positive outcome of having wider review and a concrete user, allowing us to
-identify and fix issues in the design.
-
-> And as was pointed out repeatedly during review, and again at the day of the
-> merge, this does not look like the right interface for the chardev unplug
-> issue.
-
-My focus has been on miscdevice [2], but I suspect cdev solutions for device
-hot-plug would face similar synchronization challenges between device removal
-and in-flight file operations.
-
-> Revert the revocable implementation until a redesign has been proposed and
-> evaluated properly.
-
-I'll work on addressing the discovered issues and send follow-up fixes.  I
-believe keeping the current series in linux-next would be beneficial, as it
-allows for easier testing and wider evaluation by others, rather than
-reverting at this stage.
-
-> 
-> Johan
-> 
-> 
-> [1] https://lore.kernel.org/all/aXT45B6vLf9R3Pbf@hovoldconsulting.com/
-
----
-[2]:
-diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-...
-+static struct miscdevice *find_miscdevice(int minor)
-+{
-+       struct miscdevice *c;
-+
-+       list_for_each_entry(c, &misc_list, list)
-+               if (c->minor == minor)
-+                       return c;
-+       return NULL;
-+}
-+
-+static __poll_t misc_sync_poll(struct file *filp, poll_table *wait)
-+{
-+       struct miscdevice *c;
-+
-+       guard(mutex)(&misc_mtx);
-+       c = find_miscdevice(iminor(filp->f_inode));
-+       if (!c)
-+               return -ENODEV;
-+       if (!c->fops->poll)
-+               return 0;
-+
-+       return c->fops->poll(filp, wait);
-+}
-...
-+static const struct file_operations misc_sync_fops = {
-+       .poll = misc_sync_poll,
-+       .read = misc_sync_read,
-+       .unlocked_ioctl = misc_sync_ioctl,
-+       .release = misc_sync_release,
-+};
-+
- static int misc_open(struct inode *inode, struct file *file)
- {
-        int minor = iminor(inode);
-@@ -161,6 +237,7 @@ static int misc_open(struct inode *inode, struct file *file)
-        replace_fops(file, new_fops);
-        if (file->f_op->open)
-                err = file->f_op->open(inode, file);
-+       file->f_op = &misc_sync_fops;
+I can apply it without the next two patches.
