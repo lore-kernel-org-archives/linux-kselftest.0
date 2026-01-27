@@ -1,162 +1,227 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04DB28489E;
-	Tue, 27 Jan 2026 20:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA632230BE9;
+	Tue, 27 Jan 2026 20:40:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769544599; cv=none; b=PxZrYOuAk5P/oXQrf/eukVKU1H+ullfQPVLyLUOhH4T5M/2vyFG7QMesxLL6e9Sxi6miUjxZ3f1FcqFjW7KgHYwCCD6fkzglNVVxM3YhY7+7DkMv+i+6IREkAeGg81RPfgSnj2s68ZwqllTndRzvuYd/VxICXQLJCrnuGXBzEKA=
+	t=1769546445; cv=none; b=X0DeqRpt4X1jO6CwQrfbn/AGmUPZYXyy/aITi/idUZW4rbBVBEGe8Nf1Fmlfh3uVXKVI4JCTgpVjnSQ9dXKcnLq21xZ+LhMTrIE260DsU4FvHyLygtLopUStEClW5HI1nPb9BW0qxqgpuwx3/EjAbqNHx9iqYr063SYZNx+kcJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769544599; c=relaxed/simple;
-	bh=WJHgbRzk+nm2ozhgo4Pc1OQr2YTFqZyBdg7StnRy7CA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L1u2nVdegDFznd1+1N5dH/RGxP+31NW0DI2vJQmETiWG+aZK03+Rg1pna7EyzE07rDJcuttwLOmc0GVr6ykk+NncsakYMpVrVFDUdcYMUKC7ErXK7iIj5F3ut60wUjXzMjxAh9G5gwEzpqexetdttoUDg1Jdl/l7IC7XBUoMVxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cWvWJBWj; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cWvWJBWj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E833CC116C6;
-	Tue, 27 Jan 2026 20:09:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769544599;
-	bh=WJHgbRzk+nm2ozhgo4Pc1OQr2YTFqZyBdg7StnRy7CA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cWvWJBWjLej5U/XidMpk0CHSRUPbMf6CASETSQphNAImXnnzilNNG77yYQOHduz+C
-	 VUpCUAVIRyQsykkwpBeMGD8bHXyTyOZ6saVt3e7DX2KglYbPHobVn5m/tUxH9d53WZ
-	 QQUeSsNasg6ZUWyDuLJBkCWYdf+y+dULLxsVnc/ibOtjejr67uzvmQuegPGamT7CNQ
-	 NEt4+NkB042+qSFIlnoN67TslSkuqaKMjkhbhxOHM0xubDHyRlwLt3EjP1jSMI/8Re
-	 YwzNXvvzGc4Y8AFWokbJye0RjmbySohEbNqTscde4O0J+VjtUG51LomQWzR6dX0nkB
-	 1A63wlBws4qrw==
-Date: Tue, 27 Jan 2026 12:09:57 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
- linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
- dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
- stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
- davem@davemloft.net, andrew+netdev@lunn.ch, donald.hunter@gmail.com,
- ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com,
- koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
- ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
- cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
- vidhi_goel@apple.com
-Subject: Re: [PATCH v11 net-next 10/15] tcp: accecn: unset ECT if receive or
- send ACE=0 in AccECN negotiaion
-Message-ID: <20260127120957.76e52cc5@kernel.org>
-In-Reply-To: <20260123100721.42451-11-chia-yu.chang@nokia-bell-labs.com>
-References: <20260123100721.42451-1-chia-yu.chang@nokia-bell-labs.com>
-	<20260123100721.42451-11-chia-yu.chang@nokia-bell-labs.com>
+	s=arc-20240116; t=1769546445; c=relaxed/simple;
+	bh=Fds3lRap6o4bjOhQoSFy9Z9uQ+rAoiEgHUpJBS1kw0I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RAasDGwmepbDAJ+jeEAv+izr9HnwPFWH6B85hRLn5NtXnwPzj5xD160+uSgixXLlnME3Cytotkbrb4fhZnHmlNFHeL5m/WSMl6MytMhTmqM5HOIXmWzpSwBTNovZhY/JgLgIesXZaYi16B6k5rudW39H/ktTwNAmAhwp+/waoTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3045D1515;
+	Tue, 27 Jan 2026 12:40:34 -0800 (PST)
+Received: from [10.1.196.46] (e134344.arm.com [10.1.196.46])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F57D3F5CA;
+	Tue, 27 Jan 2026 12:40:39 -0800 (PST)
+Message-ID: <a3428306-9fae-4add-890e-ed7b82bea0b8@arm.com>
+Date: Tue, 27 Jan 2026 20:40:37 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/5] kselftest/resctrl: Enable CAT and NONCONT_CAT
+ tests on ARM
+To: Shaopeng Tan <tan.shaopeng@fujitsu.com>, fenghuay@nvidia.com,
+ reinette.chatre@intel.com, james.morse@arm.com, shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20260123044034.141247-1-tan.shaopeng@fujitsu.com>
+From: Ben Horgan <ben.horgan@arm.com>
+Content-Language: en-US
+In-Reply-To: <20260123044034.141247-1-tan.shaopeng@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Fri, 23 Jan 2026 11:07:16 +0100 chia-yu.chang@nokia-bell-labs.com
-wrote:
-> Based on specification:
->   https://tools.ietf.org/id/draft-ietf-tcpm-accurate-ecn-28.txt
+Hi Shaopeng,
+
+On 1/23/26 04:40, Shaopeng Tan wrote:
+> Hello Fenghua, Reinette, Ben, James, and to whom it may concern,
 > 
-> Based on Section 3.1.5 of AccECN spec (RFC9768), a TCP Server in
-> AccECN mode MUST NOT set ECT on any packet for the rest of the connection,
-> if it has received or sent at least one valid SYN or Acceptable SYN/ACK
-> with (AE,CWR,ECE) = (0,0,0) during the handshake.
+> The MPAM driver is nearing upstream merge,
+> but resctrl_test doesn't work on the Arm architecture.
+> I'm actively working on a series to support CAT/NONCONT_CAT tests for the Arm. 
+> (Support for MBM/MBA tests will be considered in the future.)
+
+Great :) Having MPAM support in the resctrl kselftests will be be good.
+
 > 
-> In addition, a host in AccECN mode that is feeding back the IP-ECN
-> field on a SYN or SYN/ACK MUST feed back the IP-ECN field on the
-> latest valid SYN or acceptable SYN/ACK to arrive.
+> While I've modified the resctrl_test code to enable CAT on Arm,
+> CAT test is failing in the NVIDIA Grace environment. 
+> (I don't have any other environments.)
+> Am I misunderstanding the CAT tests, or is there something specific
+> about Grace that I'm overlooking? Any advice would be greatly appreciated.
 
-FWIW this series is marked as Changes Requested in patchwork. 
-I don't think I did that, IDK why it's in that state :S
-I see these warnings when I try to apply it:
+IIUC the L3 cache is in the nvidia interconnect and so changing the
+cache portion bitmap would correlate with events from the nvidia
+interconnect pmu. However, I don't think you are using events from the
+interconnect.
 
-Applying: selftests/net: packetdrill: add TCP Accurate ECN cases
-.git/rebase-apply/patch:325: new blank line at EOF.
-+
-.git/rebase-apply/patch:1550: new blank line at EOF.
-+
-.git/rebase-apply/patch:1641: new blank line at EOF.
-+
-warning: 3 lines add whitespace errors.
+> 
+> First of all,
+> when running CAT on Grace, I observed that cache limiting is working as expected.
+> I verified this by checking "sudo cat /sys/fs/resctrl/c1/mon_data/mon_L3_*/llc_occupancy".
+> Furthermore, I noticed that benchmark execution times varied directly with the limited cache size.
 
+Good to know.
 
-Other than that the AI code review made the following comment,
-I haven't investigated the expected behavior. Could you TAL?
+> 
+> I reused the existing Intel CAT test methodology,
+> that involves collecting cache miss counts via perf_event during a benchmark task and then
+> verifying a correlation between the cache limit value and these miss counts.
+> https://lore.kernel.org/lkml/20231215150515.36983-23-ilpo.jarvinen@linux.intel.com/#r
+> 
+> I'm aware that the specific cache miss numbers and CAT's impact can
+> differ significantly depending on the microarchitecture or SoC.
+> For Arm, we need to establish an appropriate minimum difference in LLC
+> misses between a test with n+1 bits CBM to the test with n bits.
+> 
+> However, my experiments with Grace showed that even when I significantly
+> varied the cache span size, the average LLC miss counts remained nearly unchanged.
+> 
+> Detailed test results as follows:
+> 
+> # # Starting L3_CAT test ...
+> # # Mounting resctrl to "/sys/fs/resctrl"
+> # # Cache size :119537664
+> # # Writing benchmark parameters to resctrl FS
+> # # Write schema "L3:1=fc0" to resctrl FS
+> # # Write schema "L3:1=3f" to resctrl FS
+> # # Write schema "L3:1=fe0" to resctrl FS
+> # # Write schema "L3:1=1f" to resctrl FS
+> # # Write schema "L3:1=ff0" to resctrl FS
+> # # Write schema "L3:1=f" to resctrl FS
+> # # Write schema "L3:1=ff8" to resctrl FS
+> # # Write schema "L3:1=7" to resctrl FS
+> # # Write schema "L3:1=ffc" to resctrl FS
+> # # Write schema "L3:1=3" to resctrl FS
+> # # Write schema "L3:1=ffe" to resctrl FS
+> # # Write schema "L3:1=1" to resctrl FS
+> # # Checking for pass/fail
+> # # Number of bits: 6
+> # # Average LLC val: 1609252
+> # # Cache span (lines): 933888
+> # # Fail: Check cache miss rate changed more than 4.0%
+> # # Percent diff=-0.0
+> # # Number of bits: 5
+> # # Average LLC val: 1609038
+> # # Cache span (lines): 778240
+> # # Fail: Check cache miss rate changed more than 3.0%
+> # # Percent diff=0.7
+> # # Number of bits: 4
+> # # Average LLC val: 1620802
+> # # Cache span (lines): 622592
+> # # Fail: Check cache miss rate changed more than 2.0%
+> # # Percent diff=1.1
+> # # Number of bits: 3
+> # # Average LLC val: 1639214
+> # # Cache span (lines): 466944
+> # # Fail: Check cache miss rate changed more than 1.0%
+> # # Percent diff=0.9
+> # # Number of bits: 2
+> # # Average LLC val: 1653470
+> # # Cache span (lines): 311296
+> # # Pass: Check cache miss rate changed more than 0.0%
+> # # Percent diff=1.0
+> # # Number of bits: 1
+> # # Average LLC val: 1669618
+> # # Cache span (lines): 155648
+> # not ok 4 L3_CAT: test
+> 
+> Additionally, even with a fixed alloc buffer size(span = 119537664),
+> the Average LLC value remains nearly unchanged regardless of the limited cache size.
+> Furthermore, it appears that ARMV8_PMUV3_PERFCTR_L1D_CACHE_REFILL is
+> mapped to PERF_COUNT_HW_CACHE_MISSES in "./drivers/perf/arm_pmuv3.c",
+> to counteract this, I attempted to use the perf_event measurement event
+> to ARMV8_PMUV3_PERFCTR_LL_CACHE_MISS_RD,
+> ARMV8_PMUV3_PERFCTR_L3D_CACHE_REFILL,
+> and ARMV8_PMUV3_PERFCTR_L3D_CACHE_LMISS_RD,
+> however, the Average LLC value still remains nearly unchanged.
 
-> @@ -1103,6 +1104,8 @@ static void reqsk_timer_handler(struct timer_list *t)
->  	    (!resend ||
->  	     !tcp_rtx_synack(sk_listener, req) ||
->  	     inet_rsk(req)->acked)) {
-> +		if (req->num_retrans > 1 && tcp_rsk(req)->accecn_ok)
-> +			tcp_rsk(req)->accecn_fail_mode |= TCP_ACCECN_ACE_FAIL_SEND;
+I think these are from the neoverse_v2 rather than the interconnect.
 
-Note: This correctly sets the flag on tcp_rsk(req)->accecn_fail_mode,
-which will be propagated to the child socket via tcp_ecn_openreq_child().
+> 
+> My modifications to resctrl_test (for context):
+> 
+> diff --git a/tools/testing/selftests/resctrl/cache.c
+> b/tools/testing/selftests/resctrl/cache.c
+> index 9a4a6c52b14c..9f00680039c6 100644
+> --- a/tools/testing/selftests/resctrl/cache.c
+> +++ b/tools/testing/selftests/resctrl/cache.c
+> @@ -8,7 +8,8 @@ char llc_occup_path[1024];
+>  void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config)
+>  {
+>         memset(pea, 0, sizeof(*pea));
+> -       pea->type = PERF_TYPE_HARDWARE;
+> +       //pea->type = PERF_TYPE_HARDWARE;
+> +       pea->type = PERF_TYPE_RAW;
+>         pea->size = sizeof(*pea);
+>         pea->read_format = PERF_FORMAT_GROUP;
+>         pea->exclude_kernel = 1;
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c
+> b/tools/testing/selftests/resctrl/cat_test.c
+> index 58b1590695d1..3ecf22fa1983 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -8,6 +8,7 @@
+>   *    Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+>   *    Fenghua Yu <fenghua.yu@intel.com>
+>   */
+> +#include "perf/arm_pmuv3.h"
+>  #include "resctrl.h"
+>  #include <unistd.h>
+> 
+> @@ -181,7 +182,11 @@ static int cat_test(const struct resctrl_test *test,
+>         if (ret)
+>                 goto reset_affinity;
+> 
+>         perf_event_attr_initialize(&pea, PERF_COUNT_HW_CACHE_MISSES);
+> +       //perf_event_attr_initialize(&pea, ARMV8_PMUV3_PERFCTR_L3D_CACHE);
+> +       //perf_event_attr_initialize(&pea, ARMV8_PMUV3_PERFCTR_LL_CACHE_MISS_RD);
+> +       //perf_event_attr_initialize(&pea, ARMV8_PMUV3_PERFCTR_L3D_CACHE_REFILL);
+> +       //perf_event_attr_initialize(&pea, ARMV8_PMUV3_PERFCTR_L3D_CACHE_LMISS_RD);
+>         perf_event_initialize_read_format(&pe_read);
+>         pe_fd = perf_open(&pea, bm_pid, uparams->cpu);
+>         if (pe_fd < 0) {
+> @@ -276,6 +281,7 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
+>         };
+>         param.mask = long_mask;
+>         span = cache_portion_size(cache_total_size, start_mask, full_cache_mask);
+> +       //span = 119537664; //L3 cache size of my machine
+> 
+>         remove(param.filename);
+> 
+> Any insights or suggestions would be greatly appreciated.
+> 
+> Best regards,
+> Shaopeng TAN
+> 
+> ---
+> Shaopeng Tan (5):
+>   kselftests/resctrl: Detect the ARM architecture
+>   kselftests/resctrl: enable noncont_cat for MPAM
+>   kselftests/resctrl: remove unnecessary exclude_idle
+>   kselftests/resctrl: set shareable_mask to zero if all bits are shared
+>     between software and hardware
+>   kselftests/resctrl: Add support for CAT test on ARM
+> 
+>  tools/testing/selftests/resctrl/cache.c         | 1 -
+>  tools/testing/selftests/resctrl/cat_test.c      | 5 +++--
+>  tools/testing/selftests/resctrl/fill_buf.c      | 4 ++++
+>  tools/testing/selftests/resctrl/resctrl.h       | 1 +
+>  tools/testing/selftests/resctrl/resctrl_tests.c | 7 +++++++
+>  tools/testing/selftests/resctrl/resctrlfs.c     | 2 ++
+>  6 files changed, 17 insertions(+), 3 deletions(-)
+> 
 
-> diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+Thanks,
 
-[ ... ]
+Ben
 
-> @@ -481,6 +481,8 @@ static void tcp_ecn_openreq_child(struct sock *sk,
->  		tp->syn_ect_snt = treq->syn_ect_snt;
->  		tcp_accecn_third_ack(sk, skb, treq->syn_ect_snt);
->  		tp->saw_accecn_opt = treq->saw_accecn_opt;
-> +		if (treq->accecn_fail_mode & TCP_ACCECN_ACE_FAIL_SEND)
-> +			tcp_accecn_fail_mode_set(tp, TCP_ACCECN_ACE_FAIL_SEND);
-
-This propagates TCP_ACCECN_ACE_FAIL_SEND from the request socket to the
-child, but TCP_ACCECN_ACE_FAIL_RECV is not propagated here.
-
-> @@ -749,16 +751,32 @@ struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
->  		 */
->  		if (!tcp_oow_rate_limited(sock_net(sk), skb,
->  					  LINUX_MIB_TCPACKSKIPPEDSYNRECV,
-> -					  &tcp_rsk(req)->last_oow_ack_time) &&
-> -
-> -		    !tcp_rtx_synack(sk, req)) {
-> -			unsigned long expires = jiffies;
-> -
-> -			expires += tcp_reqsk_timeout(req);
-> -			if (!fastopen)
-> -				mod_timer_pending(&req->rsk_timer, expires);
-> -			else
-> -				req->rsk_timer.expires = expires;
-> +					  &tcp_rsk(req)->last_oow_ack_time)) {
-> +			if (tcp_rsk(req)->accecn_ok) {
-> +				u8 ect_rcv = TCP_SKB_CB(skb)->ip_dsfield &
-> +					     INET_ECN_MASK;
-> +
-> +				tcp_rsk(req)->syn_ect_rcv = ect_rcv;
-> +				if (tcp_accecn_ace(tcp_hdr(skb)) == 0x0) {
-> +					u8 fail_mode = TCP_ACCECN_ACE_FAIL_RECV;
-> +
-> +					tcp_accecn_fail_mode_set(tcp_sk(sk),
-> +								 fail_mode);
-
-Should this be setting the flag on the request socket instead of the
-listener socket? Here tcp_sk(sk) is the listener, but reqsk_timer_handler()
-uses tcp_rsk(req)->accecn_fail_mode for the same purpose. The flag set
-on the listener socket will not be propagated to the child socket, so
-the child may incorrectly set ECT on outgoing packets even after receiving
-a SYN with ACE=0.
-
-For consistency with reqsk_timer_handler() and to ensure the flag reaches
-the child socket, this might need to be:
-
-    tcp_rsk(req)->accecn_fail_mode |= fail_mode;
-
-> +				}
-> +			}
-> +			if (!tcp_rtx_synack(sk, req)) {
-> +				unsigned long expires = jiffies;
-> +
-> +				tcp_accecn_ace_fail_send_set_retrans(req,
-> +								     tcp_sk(sk));
-
-Similar question here: tcp_accecn_ace_fail_send_set_retrans() sets the
-flag on tcp_sk(sk) (the listener), while reqsk_timer_handler() sets it
-on tcp_rsk(req). Is this intentional?
