@@ -1,461 +1,170 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A662122DA1C;
-	Tue, 27 Jan 2026 02:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D701E47C5
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 02:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769481260; cv=none; b=h0VVpqMfHdDa03Vl5ngQKcgvuLyZx9MczIcGgGEgiUHJ24R+T/V/RF5Knably4eLT+80sL8eSk+SxWOHpLqBDDJzRXZDbdQz49gXQpX1APBzlD7TV09aHbT5nEVBh5qZys9vNszI0OB0ei/vbNVTG2WeaVxWOcFsWyOXAEin3Ns=
+	t=1769481570; cv=none; b=qop5sehELmEo1UGTV2N3acOCWxAGIkNFN37dcn4PAFr9XAuGGc7yzBoSzmGmuE/OBdDQBIYbq/ipagz8CbtNPaCqL9umQEh8tMo+Vh649k+w5X0e2Zogb8v8Uy++YYW4dSGs/bwnpg00HwY5MRMA1Gq+dLfzOuBiFY9Ef2tJw44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769481260; c=relaxed/simple;
-	bh=MqnevzjUXiIFE9Pw/SDXTfmoh+ZvDnv83yMfB4gXfP4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=R9m6lKYeAU4mhjVqk3rz4hq78GGB5qA3/GrrI1+R6vGLpvPixSAZYp/0ZfWiXH+Qo/kEGopDoOQ+Do45IGaDsO/FzyrDTBsf3igoqbEB0aicFu98oRqkoPIwKlnC+/0P4DYyDQFKNy90mM+ygiEkMNIZp7UqrABGxvKqv3+/b2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W002QsDT; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1769481570; c=relaxed/simple;
+	bh=5XxKCFjvUeBJd3/sJWOWOhH6U2z8NICLOoQ31iyLR/g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Yuk1p1SB9RVK3iAXxSfXSQcfk1j+7UXZIZ0Olk/5RjV/gaPSQUr/mlgf5O2Is0H1QEuHs7VFTFbKPfi9B1xvvsrML5qRE5o13RKZaOgv0zSo2uN0XAem4DP5wlj6T75+1xipyOHURBWlL85qzgBMHN5vnCcvYnb+2c9HJFwV+tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Wl+NyzFk; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="W002QsDT"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60QFGRN2010776;
-	Tue, 27 Jan 2026 02:32:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=CQycuO
-	p4nIBSfW/vleYH22vyOKUKF5lfgvTu3TbeUrQ=; b=W002QsDTnpWy5bTCK6SUeq
-	k1RURfCQAs5S8BiCV6aime/l+ZAp97IhBnvrqHISKtWRVPU+RwXGfpwathlFqsiv
-	VTjjl0vqkLmYa08F0o5VuQWoVKx9Qiv22BudjEuJ/C9R9Xaycx0SjasFEX8Za3R3
-	cBwYXAPa8aoDAg9UBKWZx3O0WyEzrJ4nor6xX4G8Z0ncjkNWllTU7sPchsDvtSl5
-	+38tF/ykcRpBqPgZL3gLU85vX6MPwTcrDoAD6+hh7t5B8vGUy2PAcvBHyzI4U0pc
-	ffM8F7mqlhWghoBAbAWmAIxIa221JZPQKLKcs3DB9OPmjLVL2vR/4up/HPidGfuw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnt7k2uh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Jan 2026 02:32:44 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60R2U3X0012232;
-	Tue, 27 Jan 2026 02:32:44 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnt7k2uc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Jan 2026 02:32:44 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60QLR0dk026319;
-	Tue, 27 Jan 2026 02:32:42 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bw9wk6x95-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Jan 2026 02:32:42 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60R2WcCf42402162
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 27 Jan 2026 02:32:38 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8B8AF20043;
-	Tue, 27 Jan 2026 02:32:38 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1303920040;
-	Tue, 27 Jan 2026 02:32:32 +0000 (GMT)
-Received: from [9.43.49.170] (unknown [9.43.49.170])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 27 Jan 2026 02:32:31 +0000 (GMT)
-Message-ID: <6873d674-316e-4bc2-a39d-52ba4239e395@linux.ibm.com>
-Date: Tue, 27 Jan 2026 08:02:29 +0530
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Wl+NyzFk"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-82307c6902eso2306684b3a.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 18:39:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1769481568; x=1770086368; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QpYVNl6F2yjMKr4vJzkPb0vzLf2Qs5yJn+B2+9BM/zU=;
+        b=Wl+NyzFkEWA6kkrVN9TPoUwKU4iSKIk8IbrtHcax85vm1GHqpzfIiWPyEnM65I8xjP
+         UkALdAgdhsDDM3jN7YGTNiouscNwaAPBu8QprU8uuz0k1WpjPVzMbV9H9/S+eCTtw77N
+         f4irrdygHMYQw6/CeBrvLIXtAPtIfYKQGhquM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769481568; x=1770086368;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QpYVNl6F2yjMKr4vJzkPb0vzLf2Qs5yJn+B2+9BM/zU=;
+        b=AzVWicaT21U5P9Q2oOTpvqIGKyiMzcdWFJmSqG2JETDueVaxuAV/+OQOXmfWft6XFy
+         j4YKouZWJST+I5zGn1wupNjdAsYKoqyU1ud8iiK8XC/xm8MVI6oSWDy1FYK5pI4r20a3
+         CyW+fVRG/HE4ahbsSVgjFNiLMj9NekbAtlu1VHttagKsu064olk3/FnMohVMtlkQXtoh
+         QA4+NC+ZsqTLIY4+jBJKAifwzI2Yp41bXGIX9QII3nVcdbF3arBeoWzHGs+Xwf92m9/p
+         7ctQci+mJXz3t9FXiFWGoP+kK5DU/rHIK7a07F4zmxMOuEF7OEdubb7hkQ6RiXChzDFN
+         6OQQ==
+X-Gm-Message-State: AOJu0YxzapPcdyN/uj+XHTUCjjRmfN3xChc06ZweHeACX/A5J2/aeR5D
+	Ht8OznelMIym5r+2RqL065rpvEXYgvnHXsuR61uUQHhJmq/afRxo+nLJ5G/M/Ulz9HI7f/FDxOO
+	rSzk=
+X-Gm-Gg: AZuq6aLVbMXeyELXiL0nLuish5xBLS6f8ae5tqBGtoWpJ1PwM8sO/eFssN8Rn1hx4NM
+	Oyg/ruX5Wp58HAeuxHybZwOoqvZopZmcbHpN4FZGDMhIr5cor1EKS9DVpzGI9hQsVr2lv6VHp25
+	YMZNHCjI5p6dNfO2PKOgIzMs/e9UYchmDPvKzanp24jZnyVYhr4B/gBfbW6EzfbD3ph82bz2WPI
+	hVv0TP4gA1TiDqv6nZ4bqNY+5KzEMJCMCj/n6fdC7ZZX1n1BKdU63V2JNzD8VH0uJT7T/yVfvT0
+	3lk486wEJ9l6BiWUqvd2zo1keLYXef9IHc5hx41FvjRvT2ffXwQ2GarHJaAj3clxeJTTvpd8QKm
+	2U4XsSfRIjYsxJCXZcdBEx6VZiY2+IFZLGwpkxpEuFcvctilsXrICBIkNDR4WykmGkqOgKs5yp1
+	wbVvJnB+WxJVZvMW19+WVimws9tXX43ct7fbgg8yIxTSlNvOaO1dEwbW7Ie44bpwVLVsp+Sm7pU
+	w==
+X-Received: by 2002:a05:6a00:1c98:b0:823:1427:59e1 with SMTP id d2e1a72fcca58-8236914c638mr361715b3a.6.1769481567947;
+        Mon, 26 Jan 2026 18:39:27 -0800 (PST)
+Received: from tigerii.tok.corp.google.com ([2a00:79e0:2031:6:d089:781c:105e:9178])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8231877005dsm10297794b3a.68.2026.01.26.18.39.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jan 2026 18:39:27 -0800 (PST)
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH] selftests/zram: remove max_comp_streams test
+Date: Tue, 27 Jan 2026 11:39:09 +0900
+Message-ID: <20260127023910.2756093-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.53.0.rc1.217.geba53bf80e-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 6/6] powerpc64/bpf: Additional NVR handling for
- bpf_throw
-From: Hari Bathini <hbathini@linux.ibm.com>
-To: bot+bpf-ci@kernel.org, adubey@linux.ibm.com, bpf@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
-        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
-        iii@linux.ibm.com, shuah@kernel.org, martin.lau@kernel.org,
-        clm@meta.com, ihor.solodrai@linux.dev
-References: <20260124075223.6033-7-adubey@linux.ibm.com>
- <2a310e86a59eb4c44c3ac9e5647814469d9c955580c9c0f1b3d9ca4a44717a34@mail.kernel.org>
- <1ea2c9bc-4dde-4e26-9e50-066e5e3900ab@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <1ea2c9bc-4dde-4e26-9e50-066e5e3900ab@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FtwGbzwVp_kfmFnVmzUNWrXLGa-8yiha
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDAxNyBTYWx0ZWRfX1yQ/KGzehPNr
- 8WXEAkjlXftp4mF4R56AImVx29fMSXQ/itg6Wg4aWNWA6VbroL+l2ezdWIAsUCrWDiAD6/viWWD
- h0DmkXTxlxb1e6dprywG7goStvg1qz/OJFdP5qKObgm4MXm3lVOoBjbGGbwsiS7W2DqdshP5cOb
- mPyLXkTUYwAG6C+6oBav9lwDpsufhl/owJmT0MDsFLstnMQAMO+ZoWmZbzttUnNDWM+8DQmhGRW
- th6SlRkCP2A18V1Tz7X4WKkF6aK4KaDIBsgawN5y7laYxAODTg/odZkg/JwK03In26/cnzZEaYQ
- vW2LARFRCOa5KrnG74t+3ioRaQiuCU26s+UEyVhXqzGYCCdFFvKfxi4WN90TVeq7Q/ErDfFN6fQ
- jt+9RNsXa7RdcihilOA3Ulz/zogAhTKeJIpAjfxbO+Aho40/SxjgMD7vBNEdciwOtPsRfEGK6+W
- IfFFsvbYIi4eMomP6Mw==
-X-Authority-Analysis: v=2.4 cv=Zs3g6t7G c=1 sm=1 tr=0 ts=697823cc cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=PTKKscx9fBaGl3L8rvAA:9 a=tOGEaUVFaSAvnmsd:21
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: eI5URQBaM0cPWrVkAcznPgxx4yBPxGiw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-27_01,2026-01-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 lowpriorityscore=0 adultscore=0 phishscore=0 suspectscore=0
- bulkscore=0 impostorscore=0 priorityscore=1501 malwarescore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2601270017
 
+zram max_comp_streams device attribute has been deprecated
+and defunct since 2016 (when zram switched to per-CPU
+compression stream) and it was eventually removed a while
+ago.
 
+Drop the corresponding selftests.
 
-On 27/01/26 12:00 am, Hari Bathini wrote:
-> 
-> 
-> On 24/01/26 1:53 pm, bot+bpf-ci@kernel.org wrote:
->>> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/ 
->>> bpf_jit_comp64.c
->>> index db121b1404fe..17de8b53a962 100644
->>> --- a/arch/powerpc/net/bpf_jit_comp64.c
->>> +++ b/arch/powerpc/net/bpf_jit_comp64.c
->>
->> [ ... ]
->>
->>> +/*
->>> + * For exception boundary & exception_cb progs:
->>> + *     return increased size to accommodate additional NVRs.
->>> + */
->>> +static int bpf_jit_stack_size(struct codegen_context *ctx)
->>> +{
->>> +    return ctx->exception_boundary || ctx->exception_cb ?
->>> +                    BPF_PPC_EXC_STACKFRAME :
->>> +                    BPF_PPC_STACKFRAME;
->>> +}
->>
->> [ ... ]
->>
->>> @@ -198,7 +249,19 @@ void bpf_jit_build_prologue(u32 *image, struct 
->>> codegen_context *ctx)
->>>               EMIT(PPC_RAW_STD(_R0, _R1, PPC_LR_STKOFF));
->>>           }
->>>
->>> -        EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_STACKFRAME + ctx- 
->>> >stack_size)));
->>> +        EMIT(PPC_RAW_STDU(_R1, _R1,
->>> +                -(bpf_jit_stack_size(ctx) + ctx->stack_size)));
->>> +    }
->>
->> [ ... ]
->>
->>> @@ -248,9 +311,19 @@ static void bpf_jit_emit_common_epilogue(u32 
->>> *image, struct codegen_context *ctx)
->>>           EMIT(PPC_RAW_LD(bpf_to_ppc(ARENA_VM_START), _R1,
->>>                   bpf_jit_stack_offsetof(ctx, 
->>> bpf_to_ppc(ARENA_VM_START))));
->>>
->>> +    if (ctx->exception_cb) {
->>> +        /*
->>> +         * Recover additionally saved non volatile registers from stack
->>> +         * frame of exception boundary program.
->>> +         */
->>> +        for (i = _R14; i <= _R25; i++)
->>> +            EMIT(PPC_RAW_LD(i, _R1, bpf_jit_stack_offsetof(ctx, i)));
->>> +    }
->>> +
->>>       /* Tear down our stack frame */
->>>       if (bpf_has_stack_frame(ctx)) {
->>> -        EMIT(PPC_RAW_ADDI(_R1, _R1, BPF_PPC_STACKFRAME + ctx- 
->>> >stack_size));
->>> +        EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_jit_stack_size(ctx) + ctx- 
->>> >stack_size));
->>
->> For the exception callback case, doesn't this use the wrong stack_size?
->>
->> In bpf_jit_build_prologue(), the exception callback does not create 
->> its own
->> frame - it sets R1 to the boundary's frame pointer via 
->> EMIT(PPC_RAW_MR(_R1,
->> _R5)). However here in the epilogue, the frame teardown uses ctx- 
->> >stack_size
->> which is the callback's stack depth, not the boundary's.
->>
->> The boundary program creates its frame with:
->>      STDU R1, R1, -(bpf_jit_stack_size(boundary_ctx) + 
->> boundary_stack_size)
->>
->> But the callback tears it down with:
->>      ADDI R1, R1, bpf_jit_stack_size(callback_ctx) + callback_stack_size
->>
->> Since each BPF subprogram can have a different stack_depth (set per- 
->> subprog
->> in kernel/bpf/verifier.c via func[i]->aux->stack_depth), if the exception
->> callback has a different stack depth than the boundary, R1 will end up at
->> the wrong location after this ADDI.
->>
->> After the wrong R1 adjustment, the LR restore below loads from R1+16 
->> which
->> is now pointing to the wrong memory location, potentially causing a 
->> return
->> to an invalid address.
->>
->> Would it be correct to store the boundary's stack_size somewhere 
->> accessible
->> to the callback, or ensure the callback uses the same stack layout as the
->> boundary?
-> 
-> That is a good catch! Jitting the rollback of the stack frame of
-> exception boundary program in exception callback program is tricky
-> as stack_depth of exception boundary program is not readily available
-> while jitting exception callback program...
-> 
-> "ld r1, 0(r1)" instruction can be used instead of "addi r1, r1, size"
-> form for tearing down the stack.
-> 
-> The other issue is calculating the offset of non volatile registers
-> to restore them from the stack. To reliably restore, move one frame
-> above exception boundary frame and restore NVRs with redzone offset
-> without relying on stack_depth of exception boundary program.
-> 
-> Also, as exception callback may also use stack, setup frame for
-> exception callback and restore BPF JIT NVRs in its epilogue.
-> 
-> In essence, something like the below is needed on top of your patch..
-> 
-> ---
-> 
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/ 
-> bpf_jit_comp64.c
-> index b1a3945ccc9f..15342d76f96f 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
-> @@ -32,7 +32,8 @@
->    *
->    *        [    prev sp        ] <-------------
->    *        [    tail_call_info    ] 8        |
-> - *        [   nv gpr save area    ] 6*8 + (12*8)    |
-> + *        [   nv gpr save area    ] 6*8        |
-> + *        [ addl. nv gpr save area] (12*8)    | <--- only in exception 
-> boundary program
->    *        [    local_tmp_var    ] 24        |
->    * fp (r31) -->    [   ebpf stack space    ] upto 512    |
->    *        [     frame header    ] 32/112    |
-> @@ -125,7 +126,8 @@ static inline bool bpf_has_stack_frame(struct 
-> codegen_context *ctx)
->    *        [      ...           ]         |
->    * sp (r1) --->    [    stack pointer    ] --------------
->    *        [    tail_call_info    ] 8
-> - *        [   nv gpr save area    ] 6*8 + (12*8)
-> + *        [   nv gpr save area    ] 6*8
-> + *        [ addl. nv gpr save area] (12*8) <--- Only in case of 
-> exception boundary
->    *        [    local_tmp_var    ] 24
->    *        [   unused red zone    ] 224
->    *
-> @@ -139,12 +141,9 @@ static int bpf_jit_stack_local(struct 
-> codegen_context *ctx)
->           return STACK_FRAME_MIN_SIZE + ctx->stack_size;
->       } else {
->           /* Stack layout with redzone */
-> -        return -(BPF_PPC_TAILCALL
-> -            +BPF_PPC_STACK_SAVE
-> -            +(ctx->exception_boundary || ctx->exception_cb ?
-> -                        BPF_PPC_EXC_STACK_SAVE : 0)
-> -            +BPF_PPC_STACK_LOCALS
-> -            );
-> +        return -(BPF_PPC_TAILCALL + BPF_PPC_STACK_SAVE +
-> +             (ctx->exception_boundary ? BPF_PPC_EXC_STACK_SAVE : 0) +
-> +             BPF_PPC_STACK_LOCALS);
->       }
->   }
-> 
-> @@ -153,20 +152,27 @@ int bpf_jit_stack_tailcallinfo_offset(struct 
-> codegen_context *ctx)
->       return bpf_jit_stack_local(ctx) + BPF_PPC_STACK_LOCALS + 
-> BPF_PPC_STACK_SAVE;
->   }
-> 
-> -static int bpf_jit_stack_offsetof(struct codegen_context *ctx, int reg)
-> +static int bpf_jit_stack_offsetof(struct codegen_context *ctx, int reg, 
-> bool use_redzone)
->   {
->       int min_valid_nvreg = BPF_PPC_NVR_MIN;
->       /* Default frame size for all cases except exception boundary */
->       int frame_nvr_size = BPF_PPC_STACKFRAME;
-> 
-> +    /*
-> +     * When use_redzone is true, return offset of the NVR on redzone
-> +     * Else, return offset based on whether stack is setup or not.
-> +     */
-> +    if (!use_redzone)
-> +        use_redzone = bpf_has_stack_frame(ctx);
-> +
->       /* Consider all nv regs for handling exceptions */
-> -    if (ctx->exception_boundary || ctx->exception_cb) {
-> +    if (ctx->exception_boundary) {
->           min_valid_nvreg = _R14;
->           frame_nvr_size = BPF_PPC_EXC_STACKFRAME;
->       }
-> 
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ tools/testing/selftests/zram/zram01.sh   |  2 --
+ tools/testing/selftests/zram/zram02.sh   |  2 --
+ tools/testing/selftests/zram/zram_lib.sh | 29 ------------------------
+ 3 files changed, 33 deletions(-)
 
->       if (reg >= min_valid_nvreg && reg < 32)
+diff --git a/tools/testing/selftests/zram/zram01.sh b/tools/testing/selftests/zram/zram01.sh
+index 8f4affe34f3e..638ecc9afaa0 100755
+--- a/tools/testing/selftests/zram/zram01.sh
++++ b/tools/testing/selftests/zram/zram01.sh
+@@ -17,7 +17,6 @@ ERR_CODE=0
+ dev_num=1
+ # This is a list of parameters for zram devices.
+ # Number of items must be equal to 'dev_num' parameter.
+-zram_max_streams="2"
+ 
+ # The zram sysfs node 'disksize' value can be either in bytes,
+ # or you can use mem suffixes. But in some old kernels, mem
+@@ -58,7 +57,6 @@ zram_fill_fs()
+ 
+ check_prereqs
+ zram_load
+-zram_max_streams
+ zram_compress_alg
+ zram_set_disksizes
+ zram_set_memlimit
+diff --git a/tools/testing/selftests/zram/zram02.sh b/tools/testing/selftests/zram/zram02.sh
+index 2418b0c4ed13..e0a408160903 100755
+--- a/tools/testing/selftests/zram/zram02.sh
++++ b/tools/testing/selftests/zram/zram02.sh
+@@ -16,7 +16,6 @@ ERR_CODE=0
+ dev_num=1
+ # This is a list of parameters for zram devices.
+ # Number of items must be equal to 'dev_num' parameter.
+-zram_max_streams="2"
+ 
+ # The zram sysfs node 'disksize' value can be either in bytes,
+ # or you can use mem suffixes. But in some old kernels, mem
+@@ -30,7 +29,6 @@ zram_mem_limits="1M"
+ 
+ check_prereqs
+ zram_load
+-zram_max_streams
+ zram_set_disksizes
+ zram_set_memlimit
+ zram_makeswap
+diff --git a/tools/testing/selftests/zram/zram_lib.sh b/tools/testing/selftests/zram/zram_lib.sh
+index 21ec1966de76..4ab8ac018a0c 100755
+--- a/tools/testing/selftests/zram/zram_lib.sh
++++ b/tools/testing/selftests/zram/zram_lib.sh
+@@ -116,35 +116,6 @@ zram_load()
+ 	echo "all zram devices (/dev/zram0~$dev_end) successfully created"
+ }
+ 
+-zram_max_streams()
+-{
+-	echo "set max_comp_streams to zram device(s)"
+-
+-	kernel_gte 4.7
+-	if [ $? -eq 0 ]; then
+-		echo "The device attribute max_comp_streams was"\
+-		               "deprecated in 4.7"
+-		return 0
+-	fi
+-
+-	local i=$dev_start
+-	for max_s in $zram_max_streams; do
+-		local sys_path="/sys/block/zram${i}/max_comp_streams"
+-		echo $max_s > $sys_path || \
+-			echo "FAIL failed to set '$max_s' to $sys_path"
+-		sleep 1
+-		local max_streams=$(cat $sys_path)
+-
+-		[ "$max_s" -ne "$max_streams" ] && \
+-			echo "FAIL can't set max_streams '$max_s', get $max_stream"
+-
+-		i=$(($i + 1))
+-		echo "$sys_path = '$max_streams'"
+-	done
+-
+-	echo "zram max streams: OK"
+-}
+-
+ zram_compress_alg()
+ {
+ 	echo "test that we can set compression algorithm"
+-- 
+2.53.0.rc1.217.geba53bf80e-goog
 
-On a closely look, min_valid_nvreg has to be _R14 for exception_cb to
-satisfy the above reg condition check...
-
-> -        return (bpf_has_stack_frame(ctx) ?
-> +        return (!use_redzone ?
->               (frame_nvr_size + ctx->stack_size) : 0)
->                   - (8 * (32 - reg)) - BPF_PPC_TAILCALL;
-> 
-> @@ -179,14 +185,12 @@ void bpf_jit_realloc_regs(struct codegen_context 
-> *ctx)
->   }
-> 
->   /*
-> - * For exception boundary & exception_cb progs:
-> - *     return increased size to accommodate additional NVRs.
-> + * For exception boundary program, return increased size to
-> + * accommodate additional NVRs.
->    */
->   static int bpf_jit_stack_size(struct codegen_context *ctx)
->   {
-> -    return ctx->exception_boundary || ctx->exception_cb ?
-> -                    BPF_PPC_EXC_STACKFRAME :
-> -                    BPF_PPC_STACKFRAME;
-> +    return ctx->exception_boundary ? BPF_PPC_EXC_STACKFRAME : 
-> BPF_PPC_STACKFRAME;
->   }
-> 
->   void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
-> @@ -235,12 +239,30 @@ void bpf_jit_build_prologue(u32 *image, struct 
-> codegen_context *ctx)
->           EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, - 
-> (BPF_PPC_TAILCALL)));
->       }
-> 
-> -    if (bpf_has_stack_frame(ctx) && !ctx->exception_cb) {
-> +    if (ctx->exception_cb) {
-> +        /*
-> +         * Exception callback receives frame pointer of exception 
-> boundary program as
-> +         * third argument but reliable offset calculation for NVRs is 
-> only possible
-> +         * on the redzone because stack_depth of exception boundary is 
-> not known
-> +         * while jitting the exception_cb program. So, rollback to an 
-> sp above
-> +         * exception boundary frame and restore the additional NVRs 
-> using redzone
-> +         * offset. The regular BPF JIT NVRs can be restored now, or in 
-> the epilogue
-> +         * of exception_cb like any other bpf prog by reusing the BPF 
-> JIT NVRs part
-> +         * of exception_boundary stack frame. The latter is preferred 
-> as exception
-> +         * cb may also clobber the BPF JIT NVRs.
-> +         */
-> +        EMIT(PPC_RAW_LD(_R1, _R5, 0));
-> +
-> +        /*
-> +         * Recover additionally saved non volatile registers from stack
-> +         * frame of exception boundary program.
-> +         */
-> +        for (i = _R14; i <= _R25; i++)
-> +            EMIT(PPC_RAW_LD(i, _R1, bpf_jit_stack_offsetof(ctx, i, 
-> true)));
-> +    }
-> +
-> +    if (bpf_has_stack_frame(ctx)) {
->           /*
-> -         * exception_cb uses boundary frame after stack walk.
-> -         * It can simply use redzone, this optimization reduces
-> -         * stack walk loop by one level.
-> -         *
->            * We need a stack frame, but we don't necessarily need to
->            * save/restore LR unless we call other functions
->            */
-> @@ -257,11 +279,11 @@ void bpf_jit_build_prologue(u32 *image, struct 
-> codegen_context *ctx)
->        * Program acting as exception boundary pushes R14..R25 in 
-> addition to
->        * BPF callee-saved non volatile registers. Exception callback uses
->        * the boundary program's stack frame, recover additionally saved
-> -     * registers in epilogue of exception callback.
-> +     * registers in prologue of exception callback.
->        */
->       if (ctx->exception_boundary) {
->           for (i = _R14; i <= _R25; i++)
-> -            EMIT(PPC_RAW_STD(i, _R1, bpf_jit_stack_offsetof(ctx, i)));
-> +            EMIT(PPC_RAW_STD(i, _R1, bpf_jit_stack_offsetof(ctx, i, 
-> false)));
->       }
-> 
->       if (!ctx->exception_cb) {
-> @@ -273,17 +295,11 @@ void bpf_jit_build_prologue(u32 *image, struct 
-> codegen_context *ctx)
->           for (i = BPF_REG_6; i <= BPF_REG_10; i++)
->               if (ctx->exception_boundary || bpf_is_seen_register(ctx, 
-> bpf_to_ppc(i)))
->                   EMIT(PPC_RAW_STD(bpf_to_ppc(i), _R1,
-> -                    bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
-> +                    bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i), false)));
-> 
->           if (ctx->exception_boundary || ctx->arena_vm_start)
->               EMIT(PPC_RAW_STD(bpf_to_ppc(ARENA_VM_START), _R1,
-> -                 bpf_jit_stack_offsetof(ctx, 
-> bpf_to_ppc(ARENA_VM_START))));
-> -    } else {
-> -        /*
-> -         * Exception callback receives Frame Pointer of boundary
-> -         * program(main prog) as third arg
-> -         */
-> -        EMIT(PPC_RAW_MR(_R1, _R5));
-> +                 bpf_jit_stack_offsetof(ctx, 
-> bpf_to_ppc(ARENA_VM_START), false)));
->       }
-> 
->       /*
-> @@ -305,20 +321,12 @@ static void bpf_jit_emit_common_epilogue(u32 
-> *image, struct codegen_context *ctx
->       /* Restore NVRs */
->       for (i = BPF_REG_6; i <= BPF_REG_10; i++)
->           if (ctx->exception_cb || bpf_is_seen_register(ctx, 
-> bpf_to_ppc(i)))
-> -            EMIT(PPC_RAW_LD(bpf_to_ppc(i), _R1, 
-> bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
-> +            EMIT(PPC_RAW_LD(bpf_to_ppc(i), _R1,
-> +                    bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i), false)));
-> 
->       if (ctx->exception_cb || ctx->arena_vm_start)
->           EMIT(PPC_RAW_LD(bpf_to_ppc(ARENA_VM_START), _R1,
-> -                bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
-> -
-> -    if (ctx->exception_cb) {
-> -        /*
-> -         * Recover additionally saved non volatile registers from stack
-> -         * frame of exception boundary program.
-> -         */
-> -        for (i = _R14; i <= _R25; i++)
-> -            EMIT(PPC_RAW_LD(i, _R1, bpf_jit_stack_offsetof(ctx, i)));
-> -    }
-> +                bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START), 
-> false)));
-> 
->       /* Tear down our stack frame */
->       if (bpf_has_stack_frame(ctx)) {
-
-Also, if all exception selftests are passing, it is likely that neither
-exception boundary nor exception callback is using BPF stack.
-Need to have a test case that tests different BPF stack size for
-exception boundary and exception callback..
-
-- Hari
