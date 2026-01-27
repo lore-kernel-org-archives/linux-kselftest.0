@@ -1,35 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35F135FF46;
-	Tue, 27 Jan 2026 16:18:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E6931AAAF
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 16:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769530739; cv=none; b=r1ZMX29C4+Dun1Qttmbw3RGhc8OYYls4o2Jh7/VC8i/2RYaYCzrcEVnr8hDA306W0EjU/cE2tkn7aDAe2AE/A+9f0JA+R3FFc6tlYqzsfgaD1oM9xupneZ8beFrO6Kb12PY+h5EOtEVHPjx7RHb1Ht7oLaDq0gbaDSSzoCxsKIk=
+	t=1769531461; cv=none; b=fFgT24HW0rvXjkFqy/t+bgwoGBUGd8G/x0NIiL9BZqM8FzNLa1W0P/kOxdnXHit97p7tY5LjQdPqpVCLtpYvzKhnSI1ONMjSYY82H4DdFvysp36apqOsfRQ62LtEkmwluHuv7qFaxt2mHtVkKgPBGWktKjPprB39E/+FLhCazNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769530739; c=relaxed/simple;
-	bh=wCJEdNxOGcIpHHzzvDaU+OqZu7c9QbMKEKo1H+o03eA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JqDTeTIT43wasjYPyRqS6uBZ3JiFnVQk7HgUQDHkgXzDKr04zK5eD8r6lun/LOZl9vuJD/SQL4wqc5zui4E1tFLSmf8wv5MpmYyTeQUgo3qFlQSUiMpDnX8wzt+hbgDVGL87M2Z0ZwbtB5dpNc3erM0NDBu9gfL72y7kP+qEfZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZRVqmcey; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769531461; c=relaxed/simple;
+	bh=Ni9cZG+geyV7R5ptEtpT9bf+Z96YeRXMlBWy8S2AVbk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AEB7i0auVs8knGi8cKLvyFvNw4XMOkcOr39EfAn14/SKzNg08MuHDtK2NxRE80L3oyNUTjJjkSh0HWKX0KZvmj1wUFBybGzzx8tJ8j/MjRPW81s8PgNiuuYlZ2APqRkLTmx02OVOgc3ffq72jhQ2zpjtri41En/T0NHX/0Wzpbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gr+9OK31; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZRVqmcey"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06AEBC116C6;
-	Tue, 27 Jan 2026 16:18:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769530739;
-	bh=wCJEdNxOGcIpHHzzvDaU+OqZu7c9QbMKEKo1H+o03eA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ZRVqmceyZPtdcwqMVZAitdDYAiYep11cF8d9oa1pyfZyFA8DL1fQhg0y5bE2K8Iwf
-	 5/7rKTvc8mmP749G6r5anMYPUsamLwf0jzPailhe69gDsy3AJfF/dNQacSKHNEELYe
-	 mNhZEjsyahs893IdSn6GmryiNCcyjrjvtmheLYnYyNnDuvg8xHQwOOW8TFhongB0fl
-	 klBg1CywNIGn7SguzfhftQ80tPSOLw8lBWvGaih09liHpzA/w8bbGACDfu19Aeu5tR
-	 DF5XTgVk4uaoe5GyeFwu7WE6GfySEitz/wToJbw68fHIQ4PKPcmn700P49TjjdXTfg
-	 HJrANEdaoU8cQ==
-From: Mark Brown <broonie@kernel.org>
-Date: Tue, 27 Jan 2026 16:16:15 +0000
-Subject: [PATCH 2/2] kselftest/arm64: Raise default number of loops in
- fp-pidbench
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gr+9OK31"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-78fb6c7874cso55197307b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 08:30:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769531457; x=1770136257; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=r3HHYD4aeaQa5ff4aHF396cehTuEDTmWYhC92tg8m6k=;
+        b=gr+9OK31GZpDs6hmjZjiOxTWfr5wTUJofTfFpb4sgkfMfzWIGBVfNMumd1ah7BTx0O
+         OCnBkpVsRZcZB+nka2MD9cCazlEjbT4gjUAgH8sHQHGyVYl/+g496KF2HGwIk9a4ZDK2
+         OT1AMWXof/kOQh/VWCClh69YgU4NyMeAzRZN1RfPVSvx5DUBTgTv0kD24TPPD1EwWh4r
+         rL864Xj6oVN0jnOiCnewhZDOfQ9bDU95SYJfU04O+AjfjR0CMp9oSYt18JDvZTkb0SQJ
+         2oS6vRQguemOHixU947P0FzkD/Noz7qh+nwb0sByOLG1RwaytmyILkKb63KHm+cRsFA/
+         Bs4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769531457; x=1770136257;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r3HHYD4aeaQa5ff4aHF396cehTuEDTmWYhC92tg8m6k=;
+        b=YZUuVNgxS1ZoKFCQPvA3l/n9pUatcOCswOA/DbVjOEZThMr/Puu6JQDS7LT7ECo63U
+         lnBT0Ryzu15m2pKNqxvmGIWlTJQksBLjW+I+Gt3WWtA/k/9gBXgVfbMtM6uxTuM9Wer5
+         B2P+XssWrhib6qI9aAt1rqF3DmUNmVzAGOTKPIswmZHmDTStzwIIY6HU7YtTP2UI3JVU
+         6FdiT0h5HdDjRaBibQ8Xmtj0nWECtqxO3rVJvBn5slBy7m9xBHB9qkTTuol8xWWNUmxG
+         gJhidUjHoECIDSo0S3yEyevWGHZUXzgg4dOkutc1swIM4m06ru1D1NnTdVcawFY6967t
+         dWkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXUGM4TaukKSHNOeX9w3XiB2I66NtcUA3jQ6dT08mf47RkjNjhhBqDQM10dmxJZO9Y8tL6HKmVV13xaXdjG6F8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzhl7pgqBY+4qHZ0XBD7IHyvVWElbYFnTAIbaGw6kmEl0jCa7DK
+	EgwgCDA4N5bsy1HQHPXKp5POkUaKFX2wndAzqL/ubOLWWBg2n5XG6xG0
+X-Gm-Gg: AZuq6aLZ0ONDHKsPdEzTrBd5B5KdtCBPyxlLgDLftFnJRi0NA4iaOEVY5OT4EwuEzBO
+	VN0svyXgQoyzXTdmo/t4NteLUv8T3Jug6feP1pyN90zvGrCSrE4wgfodBN/5xuMY2GXP+wZXRFy
+	rXZybffk2RAd0iBziNxAExZYBOxVQv6h6cQjGCUGm/rwWu4MrqGu1qzMMXTgVyyChpS4xjRj+sl
+	15umkjurnxxSvywI9nSxh6x25W84ekZN56bFOSqjSv47WRd2fdSNMqgjlRw+q7r+91O/CBRMeJj
+	mWFcRFQEQaNb+bTGl53p3eNgF2T4d8T9uEuGv47zVb+L2+DCkakX9i072s5h8GvNFufjjqslX48
+	QVvxNmFUeDs/0MZO3ienMaNExvzg8DXT4P8oVlZRN9kskJY42GyO5wCudEn63UokbA/3cok3IDt
+	QfcIO37ew=
+X-Received: by 2002:a05:690c:6902:b0:78c:672:9b40 with SMTP id 00721157ae682-7947ac5b3f2mr16260637b3.55.1769531456630;
+        Tue, 27 Jan 2026 08:30:56 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:e::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7943b2a2cf6sm63595157b3.33.2026.01.27.08.30.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jan 2026 08:30:55 -0800 (PST)
+From: Daniel Zahka <daniel.zahka@gmail.com>
+Date: Tue, 27 Jan 2026 08:30:55 -0800
+Subject: [PATCH net-next] selftests: drv-net: psp: fix test flakes from
+ racy connection close
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,54 +68,146 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260127-arm64-selftests-fp-pidbench-post-sve-v1-2-3c78eda0d58b@kernel.org>
-References: <20260127-arm64-selftests-fp-pidbench-post-sve-v1-0-3c78eda0d58b@kernel.org>
-In-Reply-To: <20260127-arm64-selftests-fp-pidbench-post-sve-v1-0-3c78eda0d58b@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1135; i=broonie@kernel.org;
- h=from:subject:message-id; bh=wCJEdNxOGcIpHHzzvDaU+OqZu7c9QbMKEKo1H+o03eA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpeOVtgt8ST5SZyebzCzzIreMCj9N7OwYTqgiAm
- nqqIRy+RWeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaXjlbQAKCRAk1otyXVSH
- 0O5RB/4hrJHcagYmATJYg5v8gbWxTMdG0VIP2G/T8zoxaBoQLHVYm2HyA3DZSzhs4mOoK+NPZNV
- VYXlBhWLpJx/AVLWiKBAJtMRAzcYJBezmLXzEBWYvUIeQ3GZvyp9RGxqdz4f47CW1+0I8xpyAmW
- kREXw0oW5zpsRPV9qiwX9YrmdyVsu6FhjUnKXn4ms5tDYn0eLmhqn1v1S+PDzpWzHUXi+vjQY0v
- asbzBu35HvcCDrZYjNoO0xBGs/uqyg4D9u1FseNakmm6dSrBx8tFnU6CuC4rR9AQ3QTBSHNehMY
- jju0aiGJRonsN6VZhISot1eynvierKLRWAPz4oWnQNsTR7GU
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Message-Id: <20260127-psp-flaky-test-v1-1-13403e390af3@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAD7oeGkC/x3MQQqDMBBG4avIrDuQRAzSq5Qugv3VQUlDJhSL5
+ O4Gl9/ivZMUWaD07E7K+InKNzbYR0fTGuIClk8zOeO8sc5z0sTzHrY/F2hhBG97hKEf/UQtShm
+ zHPfwRRGFI45C71ov306BlGoAAAA=
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Daniel Zahka <daniel.zahka@gmail.com>
+X-Mailer: b4 0.13.0
 
-When fp-pidbench was originally written SVE hardware was not widely
-available so it was useful to run it in emulation and the default number
-of loops was set very low, running for less than a second on actual
-hardware. Now that SVE hardware is reasonably available it is very much
-less interesting to use emulation, bump the default number of loops up to
-even out a bit of the noise on real systems. On the machine I have to hand
-this now takes about 15s which is still a toy microbenchmark but perhaps a
-bit more useful.
+There is a bug in assoc_sk_only_mismatch() and
+assoc_sk_only_mismatch_tx() that creates a race condition which
+triggers test flakes in later test cases e.g. data_send_bad_key().
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The problem is that the client uses the "conn clr" rpc to setup a data
+connection with psp_responder, but never uses a matching "data close"
+rpc. This creates a race condition where if the client can queue
+another data sock request, like in data_send_bad_key(), before the
+server can accept the old connection from the backlog we end up in a
+situation where we have two connections in the backlog: one for the
+closed connection we have received a FIN for, and one for the new PSP
+connection which is expecting to do key exchange.
+
+From there the server pops the closed connection from the backlog, but
+the data_send_bad_key() test case in psp.py hangs waiting to perform
+key exchange.
+
+The fix is to properly use _conn_close, which fill force the server to
+remove the closed connection from the backlog before sending the RPC
+ack to the client.
+
+Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
- tools/testing/selftests/arm64/fp/fp-pidbench.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The data_send_bad_key() test case has been flaking in automated
+testing. The root cause is actually some racy connection
+setup/teardown logic between the client and server in the preceding
+test cases.
 
-diff --git a/tools/testing/selftests/arm64/fp/fp-pidbench.S b/tools/testing/selftests/arm64/fp/fp-pidbench.S
-index aeeadc7873dc..881dfa3b342e 100644
---- a/tools/testing/selftests/arm64/fp/fp-pidbench.S
-+++ b/tools/testing/selftests/arm64/fp/fp-pidbench.S
-@@ -33,7 +33,7 @@
- function _start
- 	puts	"Iterations per test: "
- 	mov	x20, #10000
--	lsl	x20, x20, #8
-+	lsl	x20, x20, #12
- 	mov	x0, x20
- 	bl	putdec
- 	puts	"\n"
+I have detailed the exact circumstances for the test failure in the
+commit. To reproduce the issue deterministically, I inserted a sleep
+into the psp_responder.c conn clr handler
 
+	if (cmd("conn clr")) {
+		if (accept_cfg != ACCEPT_CFG_NONE)
+			fprintf(stderr, "WARN: old conn config still set!\n");
+		accept_cfg = ACCEPT_CFG_CLEAR;
+		send_ack(comm_sock);
++		sleep(1);
+	}
+
+which produces the following error just running two tests:
+
+ 1..2                                           
+ ok 1 psp.assoc_sk_only_mismatch                                                                          
+ # Exception| Traceback (most recent call last):
+ # Exception|   File "/data/users/dzahka/psp-flaky-test/tools/testing/selftests/net/lib/py/ksft.py", line 319, in ksft_run
+ # Exception|     func(*args)                  
+ # Exception|   File "/data/users/dzahka/psp-flaky-test/./tools/testing/selftests/drivers/net/psp.py", line 420, in data_send_bad_key
+ # Exception|     tx = _spi_xchg(s, rx)
+ # Exception|   File "/data/users/dzahka/psp-flaky-test/./tools/testing/selftests/drivers/net/psp.py", line 65, in _spi_xchg
+ # Exception|     tx = s.recv(4 + len(rx['key']))
+ # Exception|   File "/data/users/dzahka/psp-flaky-test/tools/testing/selftests/net/lib/py/ksft.py", line 258, in _ksft_intr
+ # Exception|     raise KsftTerminate()
+ # Exception| net.lib.py.ksft.KsftTerminate                                                               
+ # Stopping tests due to KsftTerminate. 
+ not ok 2 psp.data_send_bad_key
+ # Totals: pass:1 fail:1 xfail:0 xpass:0 skip:0 error:0
+ #                                                                                                                                                                                                                 
+ # Responder logs (-15):                
+ # STDERR:                                                                                                
+ #  Set PSP enable on device 3 to 0xf                                                                     
+ #  DEBUG:  ...                                                                                           
+ #  DEBUG: command: conn clr                                                                              
+ #  DEBUG:  ...                                                                                           
+ #  DEBUG: command: conn psp                                                                              
+ #  WARN: old conn config still set!              
+ #  DEBUG: new data sock: psp     
+ #  DEBUG: create PSP connection                 
+ #  DEBUG:  ...                                                                                           
+ #  DEBUG: data sock closed                                                                               
+ #  DEBUG:  ...                                                                                                                                                                                                    
+ #  WARN: new data sock but no config                                                                     
+ #  DEBUG:  ...                                                                                           
+ #  DEBUG: data read 20                                                                                   
+ #  DEBUG:  ...                     
+Traceback (most recent call last):         
+
+The problem is caused by the conn clr and conn psp RPC handlers
+running consecutively without the first connection being accepted and
+closed by the server.
+
+The fix is simply to match all conn clr commands with a data close
+RPC. The forces the trace to be:
+
+ #  Set PSP enable on device 3 to 0xf                                                                     
+ #  DEBUG:  ...                                                                                           
+ #  DEBUG: command: conn clr                                                                              
+ #  DEBUG:  ...
+ #  DEBUG: command: data close
+ #  DEBUG: new data sock: clear               
+ #  DEBUG:  ...                                                                                           
+ #  DEBUG: command: conn psp
+ #  DEBUG:  ...                                 
+ #  DEBUG: new data sock: psp                
+ #  DEBUG: create PSP connection
+
+So the closed connection from the conn clr is removed from the backlog
+before sending the ack for data close to the client.
+---
+ tools/testing/selftests/drivers/net/psp.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
+index 528a421ecf76..864d9fce1094 100755
+--- a/tools/testing/selftests/drivers/net/psp.py
++++ b/tools/testing/selftests/drivers/net/psp.py
+@@ -266,6 +266,7 @@ def assoc_sk_only_mismatch(cfg):
+         the_exception = cm.exception
+         ksft_eq(the_exception.nl_msg.extack['bad-attr'], ".dev-id")
+         ksft_eq(the_exception.nl_msg.error, -errno.EINVAL)
++        _close_conn(cfg, s)
+ 
+ 
+ def assoc_sk_only_mismatch_tx(cfg):
+@@ -283,6 +284,7 @@ def assoc_sk_only_mismatch_tx(cfg):
+         the_exception = cm.exception
+         ksft_eq(the_exception.nl_msg.extack['bad-attr'], ".dev-id")
+         ksft_eq(the_exception.nl_msg.error, -errno.EINVAL)
++        _close_conn(cfg, s)
+ 
+ 
+ def assoc_sk_only_unconn(cfg):
+
+---
+base-commit: a8a6c8cc8796ac573fb3902803da28cfa374787c
+change-id: 20260126-psp-flaky-test-ea613ea5386c
+
+Best regards,
 -- 
-2.47.3
+Daniel Zahka <daniel.zahka@gmail.com>
 
