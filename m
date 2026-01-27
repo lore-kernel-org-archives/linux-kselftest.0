@@ -1,176 +1,92 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A74C35F8A3
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 14:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D19513AF2;
+	Tue, 27 Jan 2026 14:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769524866; cv=none; b=T1PVag0p10OeR0sLYOjywj1p5EKDasb73cm3svRD//eBzMLVTie41sf+hnW80OzicRb8f9CAUrecO/pdxYruydcEBlBWh83lNJDX0QqcyYydqAbzg4UiMU/BaewiHAFEnwKADIWfk7CDsexaVT/Gr+fPA3bqNQCWjo0RH8GTEqs=
+	t=1769525686; cv=none; b=nCvGuAlAcKh7GOD6213zNDwDnNVGlWUqgSe/DsoXS213nodz2FQ7jw+QsDTfvS2RSGdUO2pO7ZweQPMfmVee2C6Y2mJ0Jhqv4N9Cw9yzSDvO4IZD6OjmYCGPU6BnbqT3BswvR8APy2G88mMyi80J9zVsIjIkRa8cEys5rKXJaS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769524866; c=relaxed/simple;
-	bh=OpssTI3KgwuE1Jlbg+tmdEftyNSaPFzf4uR1yEOaLWg=;
+	s=arc-20240116; t=1769525686; c=relaxed/simple;
+	bh=EjITxFfaHrNpRvj40ij3H0cLe0GrW6QZX2QjuknHNxY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LKzQiw3W89G5bh8INblkuU4Sw+wg07rCNWJ43VEVxggfwwSvuMRWHLAzVS2PIcKIRn/TjzjEFbs7gF7h6HxmjMaIEeTBepCcH6+Vc1RRfXeB51NnjIwR1Jxp/jkCTjFT/dTybKG3PdBqv7EV0TK5ZaXt146hAWfbwTHuzra9UQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Xlzz6S/T; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Xlzz6S/T"
-Message-ID: <941cd39c-1358-4823-9fe3-17cffd099eca@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769524859;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nE0kyu5tR04zFg2spcEjdioih9fpsoCl95ouCV6d5Ew=;
-	b=Xlzz6S/T7STaVFAZh42LQKaE57LwmF2UFgCFvnC4keP/7C3vBIMr6IeEK4Z+G6EAx6kdsM
-	SVogx4Fg8wbBKUZKXFFijNh19WFI3lzMjTZGeWQlfCoOq1uovx1njsviSMAqHeH0viwQ2M
-	ekKrdzle8qK7+RNHht4l7YAmOBQ9790=
-Date: Tue, 27 Jan 2026 22:40:41 +0800
+	 In-Reply-To:Content-Type; b=QLmfo0+8FKeO91IZX3nsHE5oJAQWblPGfkuwHiA5PKZvnI40Fito1Gqzw98fgOBJw9zTrlisjawsO2XAQ45VA0byBMe5Kha7zDMWmP3iWgalF+8egoPScnRqhP3XQXLedFWhbce9yLfRvwPG7S8cx7Rsb2NRx2iLtQ+tWIy/EEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D7E6F1595;
+	Tue, 27 Jan 2026 06:54:37 -0800 (PST)
+Received: from [10.57.52.3] (unknown [10.57.52.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A14F3F632;
+	Tue, 27 Jan 2026 06:54:38 -0800 (PST)
+Message-ID: <666db2a4-6015-46ac-8eba-565beff8b0c1@arm.com>
+Date: Tue, 27 Jan 2026 15:54:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v8 4/9] bpf: Add syscall common attributes
- support for prog_load
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
- Andrey Albershteyn <aalbersh@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
- LKML <linux-kernel@vger.kernel.org>, Linux API <linux-api@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com
-References: <20260126151409.52072-1-leon.hwang@linux.dev>
- <20260126151409.52072-5-leon.hwang@linux.dev>
- <CAADnVQ+PDCV=YrFhxG3gXPC3jDPdbTmsaAOKBsFceKgEware0Q@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQ+PDCV=YrFhxG3gXPC3jDPdbTmsaAOKBsFceKgEware0Q@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 04/16] arm64/ptrace: Refactor
+ syscall_trace_enter/exit()
+To: Jinjie Ruan <ruanjinjie@huawei.com>, Will Deacon <will@kernel.org>
+Cc: catalin.marinas@arm.com, oleg@redhat.com, tglx@linutronix.de,
+ peterz@infradead.org, luto@kernel.org, shuah@kernel.org, kees@kernel.org,
+ wad@chromium.org, macro@orcam.me.uk, charlie@rivosinc.com,
+ akpm@linux-foundation.org, anshuman.khandual@arm.com, mark.rutland@arm.com,
+ thuth@redhat.com, song@kernel.org, ryan.roberts@arm.com,
+ ada.coupriediaz@arm.com, broonie@kernel.org, liqiang01@kylinos.cn,
+ pengcan@kylinos.cn, kmal@cock.li, dvyukov@google.com,
+ richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
+ <20251222114737.1334364-5-ruanjinjie@huawei.com>
+ <aXeZdh3CtznU8u6L@willie-the-truck>
+ <4f07254d-b158-a1ce-69a7-4fa4b0f339c1@huawei.com>
+ <532b42e2-3417-4e0f-af59-8c79521c34a3@arm.com>
+ <a1f8a28e-84c3-dcf1-26d6-edbb37a5b750@huawei.com>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <a1f8a28e-84c3-dcf1-26d6-edbb37a5b750@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7bit
 
+On 27/01/2026 12:02, Jinjie Ruan wrote:
+>
+> On 2026/1/27 17:43, Kevin Brodsky wrote:
+>> On 27/01/2026 04:01, Jinjie Ruan wrote:
+>>>> I understand that you're gradually making the arch code more similar to
+>>>> the core code so that we can switch over to it, but I'm struggling to
+>>>> understand why syscall_trace_enter() takes the 'syscall' argument.
+>>>>
+>>>> Even the core code just seems to use it as a local variable, which it
+>>>> overrides before it ever uses it. What am I missing?
+>>> Hi,
+>>>
+>>> You're absolutely right. The 'syscall' parameter is indeed treated as a
+>>> local variable and gets overridden before any real use. Should we
+>>> refactor to remove the parameter entirely in generic entry?
+>> I noticed this as well, removing it from the generic function would make
+>> sense. AFAICT that removal could be propagated quite far in fact:
+>> syscall_enter_from_user_mode_work(), syscall_enter_from_user_mode(),
+>> even arch implementation (do_syscall_64() on x86).
+> Not really, it is the default return value of
+> syscall_enter_from_user_mode_work() as below, so we only need to remove
+> the parameter in syscall_trace_enter().
+>
+> static __always_inline long syscall_enter_from_user_mode_work(struct
+> pt_regs *regs, long syscall)
+> {
+> 	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
+>
+>        if (work & SYSCALL_WORK_ENTER)
+>             syscall = syscall_trace_enter(regs, work);
+>
+>       return syscall;
+> }
 
+You're right, hadn't realised the call to syscall_trace_enter() was
+conditional.
 
-On 2026/1/27 10:43, Alexei Starovoitov wrote:
-> ,
-> 
-> 
-> On Mon, Jan 26, 2026 at 7:15 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> The log buffer of common attributes would be confusing with the one in
->> 'union bpf_attr' for BPF_PROG_LOAD.
->>
->> In order to clarify the usage of these two log buffers, they both can be
->> used for logging if:
->>
->> * They are same, including 'log_buf', 'log_level' and 'log_size'.
->> * One of them is missing, then another one will be used for logging.
->>
->> If they both have 'log_buf' but they are not same totally, return -EINVAL.
->>
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->> ---
->>  include/linux/bpf_verifier.h |  4 +++-
->>  kernel/bpf/log.c             | 29 ++++++++++++++++++++++++++---
->>  kernel/bpf/syscall.c         |  9 ++++++---
->>  3 files changed, 35 insertions(+), 7 deletions(-)
->>
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index 4a0c5ef296b9..7eb024e83d2d 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -637,9 +637,11 @@ struct bpf_log_attr {
->>         u32 log_level;
->>         struct bpf_attrs *attrs;
->>         u32 offsetof_log_true_size;
->> +       struct bpf_attrs *attrs_common;
->>  };
->>
->> -int bpf_prog_load_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_attrs *attrs);
->> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_attrs *attrs,
->> +                               struct bpf_attrs *attrs_common);
->>  int bpf_log_attr_finalize(struct bpf_log_attr *log_attr, struct bpf_verifier_log *log);
->>
->>  #define BPF_MAX_SUBPROGS 256
->> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
->> index 457b724c4176..c0b816e84384 100644
->> --- a/kernel/bpf/log.c
->> +++ b/kernel/bpf/log.c
->> @@ -865,23 +865,41 @@ void print_insn_state(struct bpf_verifier_env *env, const struct bpf_verifier_st
->>  }
->>
->>  static int bpf_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_attrs *attrs, u64 log_buf,
->> -                            u32 log_size, u32 log_level, int offsetof_log_true_size)
->> +                            u32 log_size, u32 log_level, int offsetof_log_true_size,
->> +                            struct bpf_attrs *attrs_common)
->>  {
->> +       const struct bpf_common_attr *common = attrs_common ? attrs_common->attr : NULL;
->> +
-> 
-> It seems the only point of struct bpf_attrs is to pass the attrs
-> here and remember them in bpf_log_attr.
-> It looks unnecessary. Also the cast to void and back to actual
-> type doesn't look pretty.
-> It seems all of it is to do two copy_to_bpfptr_offset() of log_true_size
-> in different places,
-> but libbpf will use only one, so let's do only one
-> copy_to_bpfptr_offset() and simply the whole thing.
-> struct bpf_log_attr only needs
->   u32 offsetof_true_size;
->   bpfptr_t uattr;
-> 
-> No need to introduce bpf_attrs and bpf_attrs_init() either.
-> When bpf_log_attr is inited make the choice of uattr and offset.
-> uattr will point at either new bpf_common_attr or old bpf_attr,
-> and offsetof_true_size will have 3 possible offsets.
-> 
-That makes sense.
-
-Then struct bpf_log_attr can be simplified to:
-
-struct bpf_log_attr {
-        u32 offsetof_true_size;
-        u32 size;
-        bpfptr_t uattr;
-};
-
-And bpf_log_attr_finalize() would become:
-
-int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct
-bpf_verifier_log *log)
-{
-        ...
-
-        err = bpf_vlog_finalize(log, &log_true_size);
-
-        size = sizeof(log_true_size);
-        if (attr->size >= off + size &&
-            copy_to_bpfptr_offset(attr->uattr, attr->offsetof_true_size,
-&log_true_size, size))
-                err = -EFAULT;
-
-        return err;
-}
-
-Thanks,
-Leon
-
+- Kevin
