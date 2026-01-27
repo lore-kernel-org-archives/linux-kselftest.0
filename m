@@ -1,153 +1,145 @@
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f193.google.com (mail-yw1-f193.google.com [209.85.128.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E622836F;
-	Tue, 27 Jan 2026 03:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B13F2F3C19
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 03:06:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769482895; cv=none; b=iNXyhgD03xoIRgQCehpxvemIAtbuLZi68ngB2liVyO7ErRhxbPnh1Q3BELSDqa+ai2DFWHT0zC2Lq8k5Qd8FQdt3EdBTJ4LD6t4219Y4vxMSGglbU7QfwTx+UjPuozq59gx6F9tpjue8k05neW8H59fR6FeSD0tBxlpN6x65cIE=
+	t=1769483213; cv=none; b=bX+4KFH2fW382yZtvG5WplOYhMaLLPui27Dmp/aocpW7+Piyk10WHwHVfjS7JcyNAE/mhvTH14O2AADHEnE5XFbYZhH+vxLfPSBDTywNue00RizpJ4HeDqCpV/RdfF9GfGNatanYE8yyR4rK6wG/29J7IKnHJvPPakDVaJbJJyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769482895; c=relaxed/simple;
-	bh=3WVIWiGh6YtGfjqPzCIhZT0UtM+Rcd+5WipHDVihDqI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ZSlRSpmjZBBrfGewpv5k/mWxLlXO52w71+ZBPOMSk7zbM9j3/a6+UcI6n3cZm/U83xidIT8AaY3/I2PxEvXMO6lwdiNj3NyZ7BYY0eHAx3LNJA8PhmO0wMQ6+R0xtxpv9lAuCLm7cId50g2IG9n1798/pF7j4P+ycK9H3/kb2a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=U9UeUm0Z; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1769483213; c=relaxed/simple;
+	bh=wYEcUgNuD+lPf2tV7/btjfFjqrI60S+N7nj/8yNW7Xo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cb8PfMvaAQnfOXbBjFq2kNNpnekv1JuNs3Svg7op0cMZATEn1kqGPM42YGT/DMrsSA+UeDHLPuutXreEz/195bPBGbtdWpqmwYQydim8pw51TjXiupNixhZZhtoGEdLTEVlOuoc4aMgo/zLq3y+tdzx/7eyaqArLKETQ5LR0F8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IU47TRk1; arc=none smtp.client-ip=209.85.128.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="U9UeUm0Z"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=LECAear6oZ7wAC861/+kjDghiRGgmPGN0pG+1RSutYI=;
-	b=U9UeUm0ZfuMBkWsdJBQ66gsKFmQ8yMAxWC/2wnbT/jj7tMyVpuy1U2Hkv5iDrl2zP71o1d+2V
-	HgwXSkD0T35iH+Ire1hJJIcW5axr80jQ4k/B6gBeRMxhLvmxjCEgFqrqiG9h6Y0UIuYrluHOHMg
-	byOerm1ChfV/bgwWY7TmE9k=
-Received: from mail.maildlp.com (unknown [172.19.162.144])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4f0VSy4kQyz1prR2;
-	Tue, 27 Jan 2026 10:57:54 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id DB91C4056A;
-	Tue, 27 Jan 2026 11:01:22 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 27 Jan 2026 11:01:17 +0800
-Message-ID: <4f07254d-b158-a1ce-69a7-4fa4b0f339c1@huawei.com>
-Date: Tue, 27 Jan 2026 11:01:16 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IU47TRk1"
+Received: by mail-yw1-f193.google.com with SMTP id 00721157ae682-79478ec4cf1so2125657b3.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 19:06:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769483211; x=1770088011; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XtcTamun/anyrF+4xJBkkNRqAbEPEhjvU9VCmmVXBeM=;
+        b=IU47TRk1K97pPGLqScYNmy4ieeG4lxxAnlN6s9T5ZO8WFpCbaJanHJru4scZJ/CbVl
+         SmKDr9/06OWQzItbsOcZI+uuqTGVB015Uq996Jb2kNYlwbiOMYACKf7wpL7on99kakp8
+         H415wOaurydKRZ4sP9l2enHfr+aDhBIQLMuW4lazcPnGyJSzVcerSo7WtZbSYgxzA2Oa
+         QO4OHhOH+mGDtYKpF+GBlnJl7CLwjkiQn5iSJ+HXjjPExlu8ajNLuurTzkaoirbPsbtK
+         DlHwskRWVw1SXw5/65rCtlEOiLMAt1gKOqNEs+NzjdM4s9c5TnNXAnoeWZKbrmDCYpXH
+         NxdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769483211; x=1770088011;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XtcTamun/anyrF+4xJBkkNRqAbEPEhjvU9VCmmVXBeM=;
+        b=aRNzFJ8I5VTFcO/ab3r64ooZswv3d/VtkI7+cq4WZLy9JmGGJgO4cebsws7J+17+pc
+         KBencEsiBQnAnZKlNT/vGBV+xQ+VCuqFgMiG1embYly/K95wjPQnrpy9BfBJmNqmp2bx
+         aqI/XCLBDfUjO+bg2iQeCkUffQ3c0u4nO7Zzhv4pAb/018IwFw49PN5JQ5bsFsut8f/8
+         je0d+OyYgjldBCTeRFjI/Dq16apocG3SsSaL8zF5Wi2lKVQmHc9Wt/sfmpDH7PhcJnak
+         FODiTi7agQmI5rncViUehvI92Nt2y3LTnYvbb5VEw1L4DPPTKddfpLiHyvBeD8DAgfpM
+         wuJA==
+X-Forwarded-Encrypted: i=1; AJvYcCXd8SIZl9UaBzRG1pj8Trwz/sYXvjjDdH8lLuWiDyD5Je8seWwAsFFKJEKL06Zu0xFxYN3Pbta/2V6y2quzwIU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUFwQB+8F/q0w7BaVskoUnEEpNr/T46d3IAYhk7I5k/kUYSh9E
+	cD5nVnFjFiVOYlPLvWyi90ymWQVOrnmw3xfWeGseC3w0rQ1AnpZKMwXQ
+X-Gm-Gg: AZuq6aJMivCmZRQ0Ng+jelKcx/2+8y2+LIooFzGQT7ke/Ov3u979g/Lc+PKMT4RAjMn
+	QVjWIv5N5z8BdCpXlnQYrizAC4QywxZzbSBFKDbV16BYgI0GHkks0RCGFBXOTwb1DyGDFBe/BCY
+	J1XeNy0KVyWDpqvfRMAXQ6avCgwjFSllOh0J364/zJqREo7SJFsyhy93G/5RxuI/thrN9pYrpXH
+	t4ytlrXGEadupRXp6634S5jQ/o+lTS1q/TLdoQtURFMCAr+8EyX+Mk04DP2hx1vPGGfUvp9nftv
+	zIo5aFIkSPlGeFOx5zNF6HaVWd020LYgB4z5PbyrAL0xwcjeLgahJzCZbWe/XZ0YbommjrFLz4b
+	O7X6EZSwDkfUAmsPqFeiBNyc9gC8kEzc3oiR39krWZnjgBj7K4jVu5IBjIT94+lHGFlC4Yon6bo
+	fmz1MuQkIONY49jyPBgccIJ/2kFG9rKVyGhA==
+X-Received: by 2002:a05:690c:f02:b0:786:7a54:4635 with SMTP id 00721157ae682-7947ab3c172mr1656687b3.21.1769483211400;
+        Mon, 26 Jan 2026 19:06:51 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:5::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-79475c0212asm5994517b3.2.2026.01.26.19.06.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jan 2026 19:06:51 -0800 (PST)
+Date: Mon, 26 Jan 2026 19:06:49 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Stanislav Fomichev <stfomichev@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Mina Almasry <almasrymina@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v10 4/5] net: devmem: document
+ NETDEV_A_DMABUF_AUTORELEASE netlink attribute
+Message-ID: <aXgryaSx9CzFR7kv@devvm11784.nha0.facebook.com>
+References: <aXBnqYQdomzH9bT/@devvm11784.nha0.facebook.com>
+ <20260121173512.748e2155@kernel.org>
+ <aXGNhEKOhkTHbJvw@devvm11784.nha0.facebook.com>
+ <20260121185021.446b00e8@kernel.org>
+ <CAKB00G2xNvfiV6J3RzKDs=GHMGZ7L16+VKUYLGjpZdOrLnSYKA@mail.gmail.com>
+ <20260121194615.33dc0812@kernel.org>
+ <aXGib0OcNdHTLyZN@mini-arch>
+ <20260126172646.2e5af2d4@kernel.org>
+ <aXgjVb5PVqdPM10J@devvm11784.nha0.facebook.com>
+ <20260126184440.755a55b2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v10 04/16] arm64/ptrace: Refactor
- syscall_trace_enter/exit()
-Content-Language: en-US
-To: Will Deacon <will@kernel.org>
-CC: <catalin.marinas@arm.com>, <oleg@redhat.com>, <tglx@linutronix.de>,
-	<peterz@infradead.org>, <luto@kernel.org>, <shuah@kernel.org>,
-	<kees@kernel.org>, <wad@chromium.org>, <kevin.brodsky@arm.com>,
-	<macro@orcam.me.uk>, <charlie@rivosinc.com>, <akpm@linux-foundation.org>,
-	<ldv@strace.io>, <anshuman.khandual@arm.com>, <mark.rutland@arm.com>,
-	<thuth@redhat.com>, <song@kernel.org>, <ryan.roberts@arm.com>,
-	<ada.coupriediaz@arm.com>, <broonie@kernel.org>, <liqiang01@kylinos.cn>,
-	<pengcan@kylinos.cn>, <kmal@cock.li>, <dvyukov@google.com>,
-	<richard.weiyang@gmail.com>, <reddybalavignesh9979@gmail.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
- <20251222114737.1334364-5-ruanjinjie@huawei.com>
- <aXeZdh3CtznU8u6L@willie-the-truck>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <aXeZdh3CtznU8u6L@willie-the-truck>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260126184440.755a55b2@kernel.org>
 
-
-
-On 2026/1/27 0:42, Will Deacon wrote:
-> On Mon, Dec 22, 2025 at 07:47:25PM +0800, Jinjie Ruan wrote:
->> The generic syscall entry code has the following form, which use
->> the input syscall work flag and syscall number:
->>
->> | syscall_trace_enter(struct pt_regs *regs, long syscall,
->> |		      unsigned long work)
->> |
->> | syscall_exit_work(struct pt_regs *regs, unsigned long work)
->>
->> In preparation for moving arm64 over to the generic entry code,
->> refactor syscall_trace_enter/exit() to also pass thread flags, and
->> get syscall number by syscall_get_nr() helper.
->>
->> No functional changes.
->>
->> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
->> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
->> ---
->>  arch/arm64/include/asm/syscall.h |  4 ++--
->>  arch/arm64/kernel/ptrace.c       | 25 ++++++++++++++++---------
->>  arch/arm64/kernel/syscall.c      |  5 +++--
->>  3 files changed, 21 insertions(+), 13 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/syscall.h b/arch/arm64/include/asm/syscall.h
->> index 5e4c7fc44f73..cef1d9ce6e1b 100644
->> --- a/arch/arm64/include/asm/syscall.h
->> +++ b/arch/arm64/include/asm/syscall.h
->> @@ -120,7 +120,7 @@ static inline int syscall_get_arch(struct task_struct *task)
->>  	return AUDIT_ARCH_AARCH64;
->>  }
->>  
->> -int syscall_trace_enter(struct pt_regs *regs);
->> -void syscall_trace_exit(struct pt_regs *regs);
->> +int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags);
->> +void syscall_trace_exit(struct pt_regs *regs, unsigned long flags);
->>  
->>  #endif	/* __ASM_SYSCALL_H */
->> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
->> index f333791ffba6..79762ff33945 100644
->> --- a/arch/arm64/kernel/ptrace.c
->> +++ b/arch/arm64/kernel/ptrace.c
->> @@ -2407,9 +2407,8 @@ static void report_syscall_exit(struct pt_regs *regs)
->>  	}
->>  }
->>  
->> -int syscall_trace_enter(struct pt_regs *regs)
->> +int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
->>  {
->> -	unsigned long flags = read_thread_flags();
->>  	int ret;
->>  
->>  	if (flags & (_TIF_SYSCALL_EMU | _TIF_SYSCALL_TRACE)) {
->> @@ -2422,19 +2421,27 @@ int syscall_trace_enter(struct pt_regs *regs)
->>  	if (secure_computing() == -1)
->>  		return NO_SYSCALL;
->>  
->> -	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
->> -		trace_sys_enter(regs, regs->syscallno);
->> +	/* Either of the above might have changed the syscall number */
->> +	syscall = syscall_get_nr(current, regs);
+On Mon, Jan 26, 2026 at 06:44:40PM -0800, Jakub Kicinski wrote:
+> On Mon, 26 Jan 2026 18:30:45 -0800 Bobby Eshleman wrote:
+> > > > I'm not a fan of the existing cmsg scheme, but we already have userspace
+> > > > using it, so getting more performance out of it seems like an easy win?  
+> > > 
+> > > I don't like:
+> > >  - the fact that we have to add the binding to a socket (extra field)
+> > >    - single socket can only serve single binding, there's no technical
+> > >      reason for this really, AFAICT, just the fact that we have a single
+> > >      pointer in the sock struct  
+> > 
+> > The core reason is that sockets lose the ability to map a given token to
+> > a given binding by no longer storing the niov ptr.
+> > 
+> > One proposal I had was to encode some number of bits in the token that
+> > can be used to lookup the binding in an array, I could reboot that
+> > approach.
+> > 
+> > With 32 bits, we can represent:
+> > 
+> > dmabuf max size = 512 GB, max dmabuf count = 8
+> > dmabuf max size = 256 GB, max dmabuf count = 16
+> > dmabuf max size = 128 GB, max dmabuf count = 32
+> > 
+> > etc...
+> > 
+> > Then, if the dmabuf count encoding space is exhausted, the socket would
+> > have to wait until the user returns all of the tokens from one of the
+> > dmabufs and frees the ID (or err out is another option).
+> > 
+> > This wouldn't change adding a field to the socket, we'd have to add one
+> > or two more for allocating the dmabuf ID and fetching the dmabuf with
+> > it. But it does fix the single binding thing.
 > 
-> I understand that you're gradually making the arch code more similar to
-> the core code so that we can switch over to it, but I'm struggling to
-> understand why syscall_trace_enter() takes the 'syscall' argument.
-> 
-> Even the core code just seems to use it as a local variable, which it
-> overrides before it ever uses it. What am I missing?
+> I think the bigger problem (than space exhaustion) is that we'd also
+> have some understanding of permissions. If an application guesses 
+> the binding ID of another app it can mess up its buffers. ENOBUENO..
 
-Hi,
+I was thinking it would be per-socket, effectively:
 
-You're absolutely right. The 'syscall' parameter is indeed treated as a
-local variable and gets overridden before any real use. Should we
-refactor to remove the parameter entirely in generic entry?
+sk->sk_devmem_info.bindings[binding_id_from_token(token)]
 
-Regards,
-Jinjie
-
-> 
-> Will
-> 
+So sockets could only access those that they have already recv'd on.
