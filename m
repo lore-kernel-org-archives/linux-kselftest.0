@@ -1,194 +1,104 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A94E2DB7B4
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 02:43:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769481828; cv=pass; b=qJCqYZx4TFiF3me8VNRFfkpWe3FS+BQVEnsYEKEFvZ2booqrgMglSRZiK7mUUh8Cf0CVrHA/vnqHsN1bAAZbs99FzLjUuRJyow79u3PxgqfJhw3r0+LpWXYAKe98GZpv15GQShbl+9xKFDLEXAUyR3qXJOBdt1Ntq8bSwOZzm6o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769481828; c=relaxed/simple;
-	bh=BvbEr7o+FAIoZ+8+sAFL5GGnCQGVrASlVNUsngs9qy0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jqPEyGm0Nd/G9BQh0spHuFlIwe3oqE92U+Laom+s8nwNz5h48dp7vCWSkGC2nLITDf5/aNsV/1Fm8iWE7Hb98eO5u+69Sdu0oKLp2FVP9zLmxuDwEbhD+jRtNCAKp2bx4Y1Dzruu+gpxukyS0vgQ59oL1SL6d7K1QY0y3PiADgE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mmYFXohr; arc=pass smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6CC2FDC20;
+	Tue, 27 Jan 2026 02:44:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769481882; cv=none; b=k5x3pqBfJoVbZu6AhE0BxHAtDNliSd+Pw77EAPn8ggLMqVC/lmx34QmdPM0KIYBBhvBSn7sCKSq5MJwHsAdw505uA98A7Yjno0GHcXHIpalqgNIu7DMCcy9+8eptymOxDWkkfJlUN6tMgDwWfs0dHyahCa4rNhebgUzg0Ck3yis=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769481882; c=relaxed/simple;
+	bh=S3Iqv2UJ//ANnGVhqJ9ttWirfCzi27qFI76ZSe0b+FQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GK9tY2CrATqMch05/87Zjf+LmTpxXB3jkJNdPFb59EWYPduOrTZ0AOHQHnj0FKCrgNHbYKe+AOIEXPm/0dhtITmIc5/zWbPL23lvf3kMDtUeiH5zypQRtC3jWc2eTMPtN36Q4z67NzbvJkAhMd2DU3rb/+EZ0+bo7nVdpAZOSbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h3OpRkkl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mmYFXohr"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-435903c4040so3122886f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jan 2026 18:43:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769481825; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jeXKTE4r2TBPrxcBpGXL2bX4RnlH4q5OhsG/TpjVPDdUjSFCwjR6WrCaHge9Ac1+Yh
-         9iHNt+fpunY/kbBaCNMQVYaIL9E/rPPQnb/ByLN/814Mwq9LqHDZGg+RBA488nMniTEb
-         MXfqVdUvDhl8F6ZXBwIAd6lpO/uANvCqe8cBnls90TkgA4Z+vDTaGaucIS4SxSTI1/iF
-         9f5BE09SpbtmPe/0InkFq10xXFcoEkkRVJWGDaCcJNasIIsFQDL3q+55MHYn8mLrsHEw
-         yGIM8Jvg6BA6uYsYz+MQVpbUSP1zSYKcr3N/Bdo/hseNT6LoEB4aV3SwWngzVG9H6+9N
-         XMaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=sNWYftb3y5oZnnbsPB6EKKeLAdQS5y4v0pCFC0lgynQ=;
-        fh=Oo7KutoAFzhuUZMcXmIZyGQ1LdcAr0vfZmsxloiiB2A=;
-        b=Fki6nFuitGH2mRFkWF8EcNaakhuI2EioPIh55X05t+Jxl6rC9anoFPHwLhbbzbkKFQ
-         5EKu+81+QU9EZCbB/nHtIQ6Pppf27Ntfx/2olyn8JjAB7sS1zCB4ijZj4X9GjZT88yh1
-         Ty7eljb4CgOLL6FGgB4Ul2svJmyokk+gqpy18XWOC+w2BKPFRChMyoGpvpX7/C7qLFwC
-         v1lGQ/T3KSD0SzPbbzwpOG4WfwzZEVP0yzPD1pxLnr8/ToMNcIeOcNxZZwdtf3x04VdF
-         NMzy1NQG8tow6NrwD+PMSgel9FOhUdbPnPg7G2qV4CZbsK3hfdmChOqFnnnnLSegp4zm
-         bykQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769481825; x=1770086625; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sNWYftb3y5oZnnbsPB6EKKeLAdQS5y4v0pCFC0lgynQ=;
-        b=mmYFXohrl4Wb8lb3KVBWlYEjhtkt6DQAYXgiZEeYsgQb8Q7d5KKbgZnL0b5dids1hh
-         HcF6B5chDd1sgwqXinDQGS22V24TpJNDauCMwztWln3V9ad6UJD+KUaZjT9aAqrlkMd4
-         OA1yQ+IBK58EAaVFs8IiR1hVqbjDU5kf+om+Udkd/CYiYuIFzTfN8BcefAfzfQmmQiJL
-         vhWJjO9tQnu9sXnrCBD4GnR4dyeki0Te2Qyojyan2s9qHXmDqa4GES234LPRTLcHm6gp
-         eZGdf42XjAMSa3osUk5fDNzzlZwH9mI8gAGZDagbVfSQc3faP0mJ8o33dKr6ApXMcUCu
-         pYwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769481825; x=1770086625;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=sNWYftb3y5oZnnbsPB6EKKeLAdQS5y4v0pCFC0lgynQ=;
-        b=xTioEZi0LL9PJiM7OMdQCMx9YCJn1h/G/xe9UpxHg1VefBNreykfkGZlrSSkzdnl86
-         hZ+DXaXeG/tt28G+iiPhODTCXpsx29t9wkRHgZ4LgoXXfZWAr3GKiZoc/jX6rd/+oS4p
-         26HhwS602uDWs1aqdb+YkH7EB9yb653GFWOBD93sHdjLiBOxikDHyShod7XHBn4kbb8L
-         l95JqP3Jbyiyd5DmG1hF9SdSnGRWOlvPFMqF+Kvg7kV0piZrjzLZeBZucprYRt2cR2xU
-         40JJsFggzw8inZPVFpBMjtOPUry2LVWQZ3Jl39V2P1rqLHBnSLOjO2PU0/l6v+avc5U1
-         yoUw==
-X-Forwarded-Encrypted: i=1; AJvYcCXFtIrqJ97hgDZ0MGd673Jt+f2X2y8+Fn8SvaydSOJD8nii+2OTEhrpoATrOkcijx7YPEW5MGUzzud+M9dP2kg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzjg1CNeASmTmrDI5iUlw7SnZGVSl9rz722pLZADbJFc6MePUn4
-	+L0CIVQ7vifLR25dTdXu5s2eeD8cYCttpkkXOMMQEOForvUSgvad+hevuBwXRxq/IFYBatbwSmp
-	L59W/ixsr00qI+5GI+MaZU4N09G3Yao4=
-X-Gm-Gg: AZuq6aLIbE1O5ai/qHU/X+6mAqFs/O6e/EGDJ7dg0oNBgHGzY9osOexiELiU4e9MwiK
-	oCO5HzWcgxF7zEnO84t4CyMzFop8On9QIygazSiA6L2KQwBlIAYAhUoxhM+tI+SlutxOFbiyy5c
-	n2FmIrFaCmPKAwrOPG0Y5DoKnQ0dJvj3SV3j8cLfFNkf32ObL7Ne9TBpxp1/RND7Xtl2q3XNQci
-	14M2rYVi7x98KTcNFrMJSPvRaq/+37E09h+tZRxvSDfb3KOKoBIuX5+a1/QEUto2HpFglC2jbTq
-	xPpX4W0D5b2wLyCuD+MltnnVPMocr0hgdcgDMfA2I/vJTQjYXPSiGcujvys3foxyI1jx0ao6Yfd
-	UVOF/YTCeoZ95XiZ48MXNDKcN
-X-Received: by 2002:a05:6000:a8c:b0:435:bbd7:185f with SMTP id
- ffacd0b85a97d-435dd029a52mr105023f8f.9.1769481824811; Mon, 26 Jan 2026
- 18:43:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h3OpRkkl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F14C19421;
+	Tue, 27 Jan 2026 02:44:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769481882;
+	bh=S3Iqv2UJ//ANnGVhqJ9ttWirfCzi27qFI76ZSe0b+FQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=h3OpRkkl4n9357WKdBrgLX7LAe+6aaa1OucIzp4sF4ML4DVrO7USZJIreSRrw0xij
+	 VpjEEqoi4J8mPAaT4Ss1ksoaq70V1KCI2946aQztwcqT6So9Zng4ruOLy7SFsr7OKD
+	 r5Y3nd3juyFxNBUBSk+ddPDwQDgElPSC8hC1XPCTJ5m/gX6OWjNlW+jpN0vGdB6eFh
+	 b6NSQ4eKMknjTb7LOIb6ipTDracDgXWPy1oaoU/776uzL22osQaLYEvPwXyWkOjpUJ
+	 xlJeKuVQuVWGBqWF7pF3YSlANL/u/lB0T5qsMFw6lW9f1tfrGdZRit3e2vh3lLQRQT
+	 pPZJWw0eSgM0A==
+Date: Mon, 26 Jan 2026 18:44:40 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Stanislav Fomichev <stfomichev@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Kuniyuki Iwashima
+ <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, Neal Cardwell
+ <ncardwell@google.com>, David Ahern <dsahern@kernel.org>, Mina Almasry
+ <almasrymina@google.com>, Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet
+ <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan
+ <shuah@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com, Bobby
+ Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v10 4/5] net: devmem: document
+ NETDEV_A_DMABUF_AUTORELEASE netlink attribute
+Message-ID: <20260126184440.755a55b2@kernel.org>
+In-Reply-To: <aXgjVb5PVqdPM10J@devvm11784.nha0.facebook.com>
+References: <20260115-scratch-bobbyeshleman-devmem-tcp-token-upstream-v10-4-686d0af71978@meta.com>
+	<20260120163650.5a962648@kernel.org>
+	<aXBnqYQdomzH9bT/@devvm11784.nha0.facebook.com>
+	<20260121173512.748e2155@kernel.org>
+	<aXGNhEKOhkTHbJvw@devvm11784.nha0.facebook.com>
+	<20260121185021.446b00e8@kernel.org>
+	<CAKB00G2xNvfiV6J3RzKDs=GHMGZ7L16+VKUYLGjpZdOrLnSYKA@mail.gmail.com>
+	<20260121194615.33dc0812@kernel.org>
+	<aXGib0OcNdHTLyZN@mini-arch>
+	<20260126172646.2e5af2d4@kernel.org>
+	<aXgjVb5PVqdPM10J@devvm11784.nha0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260126151409.52072-1-leon.hwang@linux.dev> <20260126151409.52072-5-leon.hwang@linux.dev>
-In-Reply-To: <20260126151409.52072-5-leon.hwang@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 26 Jan 2026 18:43:33 -0800
-X-Gm-Features: AZwV_Qjob0hpI61E7bKlmlYJJVAtwCwP_z812BtK6il96WSFPg5NoRPUSzKlj9k
-Message-ID: <CAADnVQ+PDCV=YrFhxG3gXPC3jDPdbTmsaAOKBsFceKgEware0Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 4/9] bpf: Add syscall common attributes
- support for prog_load
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>, 
-	Andrey Albershteyn <aalbersh@redhat.com>, Willem de Bruijn <willemb@google.com>, 
-	Jason Xing <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>, 
-	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
-	Rong Tao <rongtao@cestc.cn>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux API <linux-api@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-,
+On Mon, 26 Jan 2026 18:30:45 -0800 Bobby Eshleman wrote:
+> > > I'm not a fan of the existing cmsg scheme, but we already have userspace
+> > > using it, so getting more performance out of it seems like an easy win?  
+> > 
+> > I don't like:
+> >  - the fact that we have to add the binding to a socket (extra field)
+> >    - single socket can only serve single binding, there's no technical
+> >      reason for this really, AFAICT, just the fact that we have a single
+> >      pointer in the sock struct  
+> 
+> The core reason is that sockets lose the ability to map a given token to
+> a given binding by no longer storing the niov ptr.
+> 
+> One proposal I had was to encode some number of bits in the token that
+> can be used to lookup the binding in an array, I could reboot that
+> approach.
+> 
+> With 32 bits, we can represent:
+> 
+> dmabuf max size = 512 GB, max dmabuf count = 8
+> dmabuf max size = 256 GB, max dmabuf count = 16
+> dmabuf max size = 128 GB, max dmabuf count = 32
+> 
+> etc...
+> 
+> Then, if the dmabuf count encoding space is exhausted, the socket would
+> have to wait until the user returns all of the tokens from one of the
+> dmabufs and frees the ID (or err out is another option).
+> 
+> This wouldn't change adding a field to the socket, we'd have to add one
+> or two more for allocating the dmabuf ID and fetching the dmabuf with
+> it. But it does fix the single binding thing.
 
-
-On Mon, Jan 26, 2026 at 7:15=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> The log buffer of common attributes would be confusing with the one in
-> 'union bpf_attr' for BPF_PROG_LOAD.
->
-> In order to clarify the usage of these two log buffers, they both can be
-> used for logging if:
->
-> * They are same, including 'log_buf', 'log_level' and 'log_size'.
-> * One of them is missing, then another one will be used for logging.
->
-> If they both have 'log_buf' but they are not same totally, return -EINVAL=
-.
->
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  include/linux/bpf_verifier.h |  4 +++-
->  kernel/bpf/log.c             | 29 ++++++++++++++++++++++++++---
->  kernel/bpf/syscall.c         |  9 ++++++---
->  3 files changed, 35 insertions(+), 7 deletions(-)
->
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 4a0c5ef296b9..7eb024e83d2d 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -637,9 +637,11 @@ struct bpf_log_attr {
->         u32 log_level;
->         struct bpf_attrs *attrs;
->         u32 offsetof_log_true_size;
-> +       struct bpf_attrs *attrs_common;
->  };
->
-> -int bpf_prog_load_log_attr_init(struct bpf_log_attr *log_attr, struct bp=
-f_attrs *attrs);
-> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *log_attr, struct bp=
-f_attrs *attrs,
-> +                               struct bpf_attrs *attrs_common);
->  int bpf_log_attr_finalize(struct bpf_log_attr *log_attr, struct bpf_veri=
-fier_log *log);
->
->  #define BPF_MAX_SUBPROGS 256
-> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-> index 457b724c4176..c0b816e84384 100644
-> --- a/kernel/bpf/log.c
-> +++ b/kernel/bpf/log.c
-> @@ -865,23 +865,41 @@ void print_insn_state(struct bpf_verifier_env *env,=
- const struct bpf_verifier_st
->  }
->
->  static int bpf_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_a=
-ttrs *attrs, u64 log_buf,
-> -                            u32 log_size, u32 log_level, int offsetof_lo=
-g_true_size)
-> +                            u32 log_size, u32 log_level, int offsetof_lo=
-g_true_size,
-> +                            struct bpf_attrs *attrs_common)
->  {
-> +       const struct bpf_common_attr *common =3D attrs_common ? attrs_com=
-mon->attr : NULL;
-> +
-
-It seems the only point of struct bpf_attrs is to pass the attrs
-here and remember them in bpf_log_attr.
-It looks unnecessary. Also the cast to void and back to actual
-type doesn't look pretty.
-It seems all of it is to do two copy_to_bpfptr_offset() of log_true_size
-in different places,
-but libbpf will use only one, so let's do only one
-copy_to_bpfptr_offset() and simply the whole thing.
-struct bpf_log_attr only needs
-  u32 offsetof_true_size;
-  bpfptr_t uattr;
-
-No need to introduce bpf_attrs and bpf_attrs_init() either.
-When bpf_log_attr is inited make the choice of uattr and offset.
-uattr will point at either new bpf_common_attr or old bpf_attr,
-and offsetof_true_size will have 3 possible offsets.
-
-pw-bot: cr
+I think the bigger problem (than space exhaustion) is that we'd also
+have some understanding of permissions. If an application guesses 
+the binding ID of another app it can mess up its buffers. ENOBUENO..
