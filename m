@@ -1,213 +1,247 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E6931AAAF
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 16:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395BD32143D
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 16:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769531461; cv=none; b=fFgT24HW0rvXjkFqy/t+bgwoGBUGd8G/x0NIiL9BZqM8FzNLa1W0P/kOxdnXHit97p7tY5LjQdPqpVCLtpYvzKhnSI1ONMjSYY82H4DdFvysp36apqOsfRQ62LtEkmwluHuv7qFaxt2mHtVkKgPBGWktKjPprB39E/+FLhCazNc=
+	t=1769531659; cv=none; b=gmGVbkxE7RSB7bo2FXViKQUyeAGSxSuoBCBCUbg3m8IyRjnBic2VnnbyDYxElzav/MePbqMzYftfDpfLDA1stffzmDfv20LPSqi6qIcnad5ACATxy48xsz9JdjRc9wrYniGrJa4+1pxTnGuCTv0ldY/5s8bu8+Qp4Gg7OzvrQE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769531461; c=relaxed/simple;
-	bh=Ni9cZG+geyV7R5ptEtpT9bf+Z96YeRXMlBWy8S2AVbk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AEB7i0auVs8knGi8cKLvyFvNw4XMOkcOr39EfAn14/SKzNg08MuHDtK2NxRE80L3oyNUTjJjkSh0HWKX0KZvmj1wUFBybGzzx8tJ8j/MjRPW81s8PgNiuuYlZ2APqRkLTmx02OVOgc3ffq72jhQ2zpjtri41En/T0NHX/0Wzpbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gr+9OK31; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769531659; c=relaxed/simple;
+	bh=1Wl0HSaQlEpTHhLn1sEl13pYO6+HmJSNslydlD9iNbU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HwOhyua7v/fs/QWeQk0A4Ke1kr9kKLABIeengiTE0KRbgtVgbxs3UyKKGrD4E4/u6M3bvwGi6PA6NCz3cWu9paiWa8wOZ5qBi8qmvq2q0nPBkDgpyCd8RJyRmPH0nsncW1Y796HOJTfOiY9wI4Y60IHn5RPgixEDYwtA/UNx9RE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Xieb4/5I; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gr+9OK31"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-78fb6c7874cso55197307b3.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 08:30:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769531457; x=1770136257; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=r3HHYD4aeaQa5ff4aHF396cehTuEDTmWYhC92tg8m6k=;
-        b=gr+9OK31GZpDs6hmjZjiOxTWfr5wTUJofTfFpb4sgkfMfzWIGBVfNMumd1ah7BTx0O
-         OCnBkpVsRZcZB+nka2MD9cCazlEjbT4gjUAgH8sHQHGyVYl/+g496KF2HGwIk9a4ZDK2
-         OT1AMWXof/kOQh/VWCClh69YgU4NyMeAzRZN1RfPVSvx5DUBTgTv0kD24TPPD1EwWh4r
-         rL864Xj6oVN0jnOiCnewhZDOfQ9bDU95SYJfU04O+AjfjR0CMp9oSYt18JDvZTkb0SQJ
-         2oS6vRQguemOHixU947P0FzkD/Noz7qh+nwb0sByOLG1RwaytmyILkKb63KHm+cRsFA/
-         Bs4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769531457; x=1770136257;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r3HHYD4aeaQa5ff4aHF396cehTuEDTmWYhC92tg8m6k=;
-        b=YZUuVNgxS1ZoKFCQPvA3l/n9pUatcOCswOA/DbVjOEZThMr/Puu6JQDS7LT7ECo63U
-         lnBT0Ryzu15m2pKNqxvmGIWlTJQksBLjW+I+Gt3WWtA/k/9gBXgVfbMtM6uxTuM9Wer5
-         B2P+XssWrhib6qI9aAt1rqF3DmUNmVzAGOTKPIswmZHmDTStzwIIY6HU7YtTP2UI3JVU
-         6FdiT0h5HdDjRaBibQ8Xmtj0nWECtqxO3rVJvBn5slBy7m9xBHB9qkTTuol8xWWNUmxG
-         gJhidUjHoECIDSo0S3yEyevWGHZUXzgg4dOkutc1swIM4m06ru1D1NnTdVcawFY6967t
-         dWkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXUGM4TaukKSHNOeX9w3XiB2I66NtcUA3jQ6dT08mf47RkjNjhhBqDQM10dmxJZO9Y8tL6HKmVV13xaXdjG6F8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzhl7pgqBY+4qHZ0XBD7IHyvVWElbYFnTAIbaGw6kmEl0jCa7DK
-	EgwgCDA4N5bsy1HQHPXKp5POkUaKFX2wndAzqL/ubOLWWBg2n5XG6xG0
-X-Gm-Gg: AZuq6aLZ0ONDHKsPdEzTrBd5B5KdtCBPyxlLgDLftFnJRi0NA4iaOEVY5OT4EwuEzBO
-	VN0svyXgQoyzXTdmo/t4NteLUv8T3Jug6feP1pyN90zvGrCSrE4wgfodBN/5xuMY2GXP+wZXRFy
-	rXZybffk2RAd0iBziNxAExZYBOxVQv6h6cQjGCUGm/rwWu4MrqGu1qzMMXTgVyyChpS4xjRj+sl
-	15umkjurnxxSvywI9nSxh6x25W84ekZN56bFOSqjSv47WRd2fdSNMqgjlRw+q7r+91O/CBRMeJj
-	mWFcRFQEQaNb+bTGl53p3eNgF2T4d8T9uEuGv47zVb+L2+DCkakX9i072s5h8GvNFufjjqslX48
-	QVvxNmFUeDs/0MZO3ienMaNExvzg8DXT4P8oVlZRN9kskJY42GyO5wCudEn63UokbA/3cok3IDt
-	QfcIO37ew=
-X-Received: by 2002:a05:690c:6902:b0:78c:672:9b40 with SMTP id 00721157ae682-7947ac5b3f2mr16260637b3.55.1769531456630;
-        Tue, 27 Jan 2026 08:30:56 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:e::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7943b2a2cf6sm63595157b3.33.2026.01.27.08.30.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 08:30:55 -0800 (PST)
-From: Daniel Zahka <daniel.zahka@gmail.com>
-Date: Tue, 27 Jan 2026 08:30:55 -0800
-Subject: [PATCH net-next] selftests: drv-net: psp: fix test flakes from
- racy connection close
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Xieb4/5I"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769531654;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2CS6NuVA0swIbhooY5O62ghjEkLWzlf9aXLW2T2B2NU=;
+	b=Xieb4/5ItdoV608vLYsgdVcXovWlyKFlh+rXLfiyuurux9uTRQKe5tvoD4XbOaRwL92a9W
+	G5b5bZGK/D/gO1IA0gIIOVillYjUsm/QaKFoQlT8iX8jwkC/zB9aC28RkQdV4NjUlE55O5
+	MU+8qtmD1oWxXVv0JhH3G/lmXSXwI8E=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next 1/2] bpf, arm64: Add fsession support
+Date: Wed, 28 Jan 2026 00:33:43 +0800
+Message-ID: <20260127163344.92819-2-leon.hwang@linux.dev>
+In-Reply-To: <20260127163344.92819-1-leon.hwang@linux.dev>
+References: <20260127163344.92819-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260127-psp-flaky-test-v1-1-13403e390af3@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAD7oeGkC/x3MQQqDMBBG4avIrDuQRAzSq5Qugv3VQUlDJhSL5
- O4Gl9/ivZMUWaD07E7K+InKNzbYR0fTGuIClk8zOeO8sc5z0sTzHrY/F2hhBG97hKEf/UQtShm
- zHPfwRRGFI45C71ov306BlGoAAAA=
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Daniel Zahka <daniel.zahka@gmail.com>
-X-Mailer: b4 0.13.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-There is a bug in assoc_sk_only_mismatch() and
-assoc_sk_only_mismatch_tx() that creates a race condition which
-triggers test flakes in later test cases e.g. data_send_bad_key().
+Implement fsession support in the arm64 BPF JIT trampoline.
 
-The problem is that the client uses the "conn clr" rpc to setup a data
-connection with psp_responder, but never uses a matching "data close"
-rpc. This creates a race condition where if the client can queue
-another data sock request, like in data_send_bad_key(), before the
-server can accept the old connection from the backlog we end up in a
-situation where we have two connections in the backlog: one for the
-closed connection we have received a FIN for, and one for the new PSP
-connection which is expecting to do key exchange.
+Extend the trampoline stack layout to store function metadata and
+session cookies, and pass the appropriate metadata to fentry and
+fexit programs. This mirrors the existing x86 behavior and enables
+call session cookies on arm64.
 
-From there the server pops the closed connection from the backlog, but
-the data_send_bad_key() test case in psp.py hangs waiting to perform
-key exchange.
-
-The fix is to properly use _conn_close, which fill force the server to
-remove the closed connection from the backlog before sending the RPC
-ack to the client.
-
-Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
-The data_send_bad_key() test case has been flaking in automated
-testing. The root cause is actually some racy connection
-setup/teardown logic between the client and server in the preceding
-test cases.
+ arch/arm64/net/bpf_jit_comp.c | 66 ++++++++++++++++++++++++++++++-----
+ include/linux/bpf.h           |  7 +++-
+ 2 files changed, 63 insertions(+), 10 deletions(-)
 
-I have detailed the exact circumstances for the test failure in the
-commit. To reproduce the issue deterministically, I inserted a sleep
-into the psp_responder.c conn clr handler
-
-	if (cmd("conn clr")) {
-		if (accept_cfg != ACCEPT_CFG_NONE)
-			fprintf(stderr, "WARN: old conn config still set!\n");
-		accept_cfg = ACCEPT_CFG_CLEAR;
-		send_ack(comm_sock);
-+		sleep(1);
-	}
-
-which produces the following error just running two tests:
-
- 1..2                                           
- ok 1 psp.assoc_sk_only_mismatch                                                                          
- # Exception| Traceback (most recent call last):
- # Exception|   File "/data/users/dzahka/psp-flaky-test/tools/testing/selftests/net/lib/py/ksft.py", line 319, in ksft_run
- # Exception|     func(*args)                  
- # Exception|   File "/data/users/dzahka/psp-flaky-test/./tools/testing/selftests/drivers/net/psp.py", line 420, in data_send_bad_key
- # Exception|     tx = _spi_xchg(s, rx)
- # Exception|   File "/data/users/dzahka/psp-flaky-test/./tools/testing/selftests/drivers/net/psp.py", line 65, in _spi_xchg
- # Exception|     tx = s.recv(4 + len(rx['key']))
- # Exception|   File "/data/users/dzahka/psp-flaky-test/tools/testing/selftests/net/lib/py/ksft.py", line 258, in _ksft_intr
- # Exception|     raise KsftTerminate()
- # Exception| net.lib.py.ksft.KsftTerminate                                                               
- # Stopping tests due to KsftTerminate. 
- not ok 2 psp.data_send_bad_key
- # Totals: pass:1 fail:1 xfail:0 xpass:0 skip:0 error:0
- #                                                                                                                                                                                                                 
- # Responder logs (-15):                
- # STDERR:                                                                                                
- #  Set PSP enable on device 3 to 0xf                                                                     
- #  DEBUG:  ...                                                                                           
- #  DEBUG: command: conn clr                                                                              
- #  DEBUG:  ...                                                                                           
- #  DEBUG: command: conn psp                                                                              
- #  WARN: old conn config still set!              
- #  DEBUG: new data sock: psp     
- #  DEBUG: create PSP connection                 
- #  DEBUG:  ...                                                                                           
- #  DEBUG: data sock closed                                                                               
- #  DEBUG:  ...                                                                                                                                                                                                    
- #  WARN: new data sock but no config                                                                     
- #  DEBUG:  ...                                                                                           
- #  DEBUG: data read 20                                                                                   
- #  DEBUG:  ...                     
-Traceback (most recent call last):         
-
-The problem is caused by the conn clr and conn psp RPC handlers
-running consecutively without the first connection being accepted and
-closed by the server.
-
-The fix is simply to match all conn clr commands with a data close
-RPC. The forces the trace to be:
-
- #  Set PSP enable on device 3 to 0xf                                                                     
- #  DEBUG:  ...                                                                                           
- #  DEBUG: command: conn clr                                                                              
- #  DEBUG:  ...
- #  DEBUG: command: data close
- #  DEBUG: new data sock: clear               
- #  DEBUG:  ...                                                                                           
- #  DEBUG: command: conn psp
- #  DEBUG:  ...                                 
- #  DEBUG: new data sock: psp                
- #  DEBUG: create PSP connection
-
-So the closed connection from the conn clr is removed from the backlog
-before sending the ack for data close to the client.
----
- tools/testing/selftests/drivers/net/psp.py | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-index 528a421ecf76..864d9fce1094 100755
---- a/tools/testing/selftests/drivers/net/psp.py
-+++ b/tools/testing/selftests/drivers/net/psp.py
-@@ -266,6 +266,7 @@ def assoc_sk_only_mismatch(cfg):
-         the_exception = cm.exception
-         ksft_eq(the_exception.nl_msg.extack['bad-attr'], ".dev-id")
-         ksft_eq(the_exception.nl_msg.error, -errno.EINVAL)
-+        _close_conn(cfg, s)
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 0c4d44bcfbf4..3272dbfc3aa7 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -2510,6 +2510,12 @@ static bool is_struct_ops_tramp(const struct bpf_tramp_links *fentry_links)
+ 		fentry_links->links[0]->link.type == BPF_LINK_TYPE_STRUCT_OPS;
+ }
  
++static void store_func_meta(struct jit_ctx *ctx, u64 func_meta, int func_meta_off)
++{
++	emit_a64_mov_i64(A64_R(10), func_meta, ctx);
++	emit(A64_STR64I(A64_R(10), A64_SP, func_meta_off), ctx);
++}
++
+ /* Based on the x86's implementation of arch_prepare_bpf_trampoline().
+  *
+  * bpf prog and function entry before bpf trampoline hooked:
+@@ -2533,7 +2539,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	int regs_off;
+ 	int retval_off;
+ 	int bargs_off;
+-	int nfuncargs_off;
++	int func_meta_off;
+ 	int ip_off;
+ 	int run_ctx_off;
+ 	int oargs_off;
+@@ -2544,6 +2550,9 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	bool save_ret;
+ 	__le32 **branches = NULL;
+ 	bool is_struct_ops = is_struct_ops_tramp(fentry);
++	int cookie_off, cookie_cnt, cookie_bargs_off;
++	int fsession_cnt = bpf_fsession_cnt(tlinks);
++	u64 func_meta;
  
- def assoc_sk_only_mismatch_tx(cfg):
-@@ -283,6 +284,7 @@ def assoc_sk_only_mismatch_tx(cfg):
-         the_exception = cm.exception
-         ksft_eq(the_exception.nl_msg.extack['bad-attr'], ".dev-id")
-         ksft_eq(the_exception.nl_msg.error, -errno.EINVAL)
-+        _close_conn(cfg, s)
+ 	/* trampoline stack layout:
+ 	 *                    [ parent ip         ]
+@@ -2562,10 +2571,14 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	 *                    [ ...               ]
+ 	 * SP + bargs_off     [ arg reg 1         ] for bpf
+ 	 *
+-	 * SP + nfuncargs_off [ arg regs count    ]
++	 * SP + func_meta_off [ regs count, etc   ]
+ 	 *
+ 	 * SP + ip_off        [ traced function   ] BPF_TRAMP_F_IP_ARG flag
+ 	 *
++	 *                    [ stack cookie N    ]
++	 *                    [ ...               ]
++	 * SP + cookie_off    [ stack cookie 1    ]
++	 *
+ 	 * SP + run_ctx_off   [ bpf_tramp_run_ctx ]
+ 	 *
+ 	 *                    [ stack arg N       ]
+@@ -2582,13 +2595,18 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	/* room for bpf_tramp_run_ctx */
+ 	stack_size += round_up(sizeof(struct bpf_tramp_run_ctx), 8);
  
++	cookie_off = stack_size;
++	/* room for session cookies */
++	cookie_cnt = bpf_fsession_cookie_cnt(tlinks);
++	stack_size += cookie_cnt * 8;
++
+ 	ip_off = stack_size;
+ 	/* room for IP address argument */
+ 	if (flags & BPF_TRAMP_F_IP_ARG)
+ 		stack_size += 8;
  
- def assoc_sk_only_unconn(cfg):
-
----
-base-commit: a8a6c8cc8796ac573fb3902803da28cfa374787c
-change-id: 20260126-psp-flaky-test-ea613ea5386c
-
-Best regards,
+-	nfuncargs_off = stack_size;
+-	/* room for args count */
++	func_meta_off = stack_size;
++	/* room for function metadata, such as regs count */
+ 	stack_size += 8;
+ 
+ 	bargs_off = stack_size;
+@@ -2646,9 +2664,9 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 		emit(A64_STR64I(A64_R(10), A64_SP, ip_off), ctx);
+ 	}
+ 
+-	/* save arg regs count*/
+-	emit(A64_MOVZ(1, A64_R(10), nfuncargs, 0), ctx);
+-	emit(A64_STR64I(A64_R(10), A64_SP, nfuncargs_off), ctx);
++	/* save function metadata */
++	func_meta = nfuncargs;
++	store_func_meta(ctx, func_meta, func_meta_off);
+ 
+ 	/* save args for bpf */
+ 	save_args(ctx, bargs_off, oargs_off, m, a, false);
+@@ -2666,10 +2684,27 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 		emit_call((const u64)__bpf_tramp_enter, ctx);
+ 	}
+ 
+-	for (i = 0; i < fentry->nr_links; i++)
++	if (fsession_cnt) {
++		/* clear all the session cookies' value */
++		emit(A64_MOVZ(1, A64_R(10), 0, 0), ctx);
++		for (int i = 0; i < cookie_cnt; i++)
++			emit(A64_STR64I(A64_R(10), A64_SP, cookie_off + 8 * i), ctx);
++		/* clear the return value to make sure fentry always gets 0 */
++		emit(A64_STR64I(A64_R(10), A64_SP, retval_off), ctx);
++	}
++
++	cookie_bargs_off = (bargs_off - cookie_off) / 8;
++	for (i = 0; i < fentry->nr_links; i++) {
++		if (bpf_link_prog_session_cookie(fentry->links[i])) {
++			u64 meta = func_meta | (cookie_bargs_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
++
++			store_func_meta(ctx, meta, func_meta_off);
++			cookie_bargs_off--;
++		}
+ 		invoke_bpf_prog(ctx, fentry->links[i], bargs_off,
+ 				retval_off, run_ctx_off,
+ 				flags & BPF_TRAMP_F_RET_FENTRY_RET);
++	}
+ 
+ 	if (fmod_ret->nr_links) {
+ 		branches = kcalloc(fmod_ret->nr_links, sizeof(__le32 *),
+@@ -2701,9 +2736,22 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 		*branches[i] = cpu_to_le32(A64_CBNZ(1, A64_R(10), offset));
+ 	}
+ 
+-	for (i = 0; i < fexit->nr_links; i++)
++	/* set the "is_return" flag for fsession */
++	func_meta |= (1ULL << BPF_TRAMP_IS_RETURN_SHIFT);
++	if (fsession_cnt)
++		store_func_meta(ctx, func_meta, func_meta_off);
++
++	cookie_bargs_off = (bargs_off - cookie_off) / 8;
++	for (i = 0; i < fexit->nr_links; i++) {
++		if (bpf_link_prog_session_cookie(fexit->links[i])) {
++			u64 meta = func_meta | (cookie_bargs_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
++
++			store_func_meta(ctx, meta, func_meta_off);
++			cookie_bargs_off--;
++		}
+ 		invoke_bpf_prog(ctx, fexit->links[i], bargs_off, retval_off,
+ 				run_ctx_off, false);
++	}
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+ 		im->ip_epilogue = ctx->ro_image + ctx->idx;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 4427c6e98331..b299d1206bfc 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2192,13 +2192,18 @@ static inline int bpf_fsession_cnt(struct bpf_tramp_links *links)
+ 	return cnt;
+ }
+ 
++static inline bool bpf_link_prog_session_cookie(struct bpf_tramp_link *link)
++{
++	return link->link.prog->call_session_cookie;
++}
++
+ static inline int bpf_fsession_cookie_cnt(struct bpf_tramp_links *links)
+ {
+ 	struct bpf_tramp_links fentries = links[BPF_TRAMP_FENTRY];
+ 	int cnt = 0;
+ 
+ 	for (int i = 0; i < links[BPF_TRAMP_FENTRY].nr_links; i++) {
+-		if (fentries.links[i]->link.prog->call_session_cookie)
++		if (bpf_link_prog_session_cookie(fentries.links[i]))
+ 			cnt++;
+ 	}
+ 
 -- 
-Daniel Zahka <daniel.zahka@gmail.com>
+2.52.0
 
