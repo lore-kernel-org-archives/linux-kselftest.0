@@ -1,156 +1,71 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2C7334C1E
-	for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 09:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341D133372E;
+	Tue, 27 Jan 2026 09:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769507027; cv=none; b=VbMWI/cfCDFYj0dabzXKlHuCEpffl8g6FNB7TNeai+Yeon92zUX97fgXNXAji4u5oIuViLJd0oJ+41/7SW4xWZzJMG//ZuzW4D9Zhi1h+8J6QDRtk7ubSK4L9M1Bfj6ETA9VmujeOMOUTpslZIeSsb4JyRHfdPfVG6rKrdv8KHA=
+	t=1769507027; cv=none; b=H2rpNW7iHMk9YLszD9wvKG4DVunqaA8qv3HqPkv6AMgeRFUpmelx4WPBYH/alc7O18Qs21TgDtXdw4EoZay2bM1r26fra3Nnw33xpeXtdw1iOlt/CxrKQIWDjdu2jzB4KvfMfc0Chjo70ZUy7j7CfvfYpVHoNaBAJlOq62o8RCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1769507027; c=relaxed/simple;
-	bh=1QNC2bfHfbW9SQUgfvnKGdBr0YOvFpgcnrQNCW/0a+Y=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rl6r9oKmLLqZrRkS4jssdOCUKi+Q8TJ0i1QgQetT13nWp2kvNxQFAKCShTZkq4uXw0HiaUxpL41mZa4MQdEU/89nK946eRgC044JPydiFRQw0T653mXfotaBZkuiq754bWyhAShvAchlRuSPl4f72k2rOsbs+vO1tgmwfWv3YIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YQXTc1qw; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YQXTc1qw"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769507022;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ycrFyw6aXaYmQPmQruEJsfLSWjPHoV8ar+xnlNHnd9w=;
-	b=YQXTc1qwSK8YUcIlgs8w3Xp+DkzqZVrK9w7JA7p4wJtHvmD4cMt1T5d62d/hZOzzrTSVBH
-	tUdc78LPAuaxmK47I0TuUtkE7/SOXlNqNq3qwXbzCw/sb/tzsdCY85bnStZpiMVXlLQBKB
-	KxpyEQ0JelY7vPIP2LXhZyj+susJMGg=
-From: Hui Zhu <hui.zhu@linux.dev>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Jeff Xu <jeffxu@chromium.org>,
-	mkoutny@suse.com,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Christian Brauner <brauner@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	davem@davemloft.net,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Paul Chaignon <paul.chaignon@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH bpf-next v5 02/12] bpf: initial support for attaching struct ops to cgroups
-Date: Tue, 27 Jan 2026 17:42:39 +0800
-Message-ID: <1c5845208d235e5deb37807f3be93af325033ba5.1769506741.git.zhuhui@kylinos.cn>
-In-Reply-To: <cover.1769506741.git.zhuhui@kylinos.cn>
-References: <cover.1769506741.git.zhuhui@kylinos.cn>
+	bh=uQl13lrqMl69+IiDkd49hEB1+YJN3AQemzDhQg61l5k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Tb1UZvDCz/pXfk43Ub+mFHlIBtILLA356BJyGUwcteGsd46kc+/yNAT24J+nRZfhpKXCG88H8700SFvtI1TQt2dbkQtVeqaoAgiKodZ9bcjYtSjKLG07+l1q69PuxO1sQ4wxfkXZWjCodF5g3W+rTAM2vkr+MA0kldHubefxEvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B770C339;
+	Tue, 27 Jan 2026 01:43:38 -0800 (PST)
+Received: from [10.57.54.43] (unknown [10.57.54.43])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDCF03F632;
+	Tue, 27 Jan 2026 01:43:38 -0800 (PST)
+Message-ID: <532b42e2-3417-4e0f-af59-8c79521c34a3@arm.com>
+Date: Tue, 27 Jan 2026 10:43:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 04/16] arm64/ptrace: Refactor
+ syscall_trace_enter/exit()
+To: Jinjie Ruan <ruanjinjie@huawei.com>, Will Deacon <will@kernel.org>
+Cc: catalin.marinas@arm.com, oleg@redhat.com, tglx@linutronix.de,
+ peterz@infradead.org, luto@kernel.org, shuah@kernel.org, kees@kernel.org,
+ wad@chromium.org, macro@orcam.me.uk, charlie@rivosinc.com,
+ akpm@linux-foundation.org, ldv@strace.io, anshuman.khandual@arm.com,
+ mark.rutland@arm.com, thuth@redhat.com, song@kernel.org,
+ ryan.roberts@arm.com, ada.coupriediaz@arm.com, broonie@kernel.org,
+ liqiang01@kylinos.cn, pengcan@kylinos.cn, kmal@cock.li, dvyukov@google.com,
+ richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
+ <20251222114737.1334364-5-ruanjinjie@huawei.com>
+ <aXeZdh3CtznU8u6L@willie-the-truck>
+ <4f07254d-b158-a1ce-69a7-4fa4b0f339c1@huawei.com>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <4f07254d-b158-a1ce-69a7-4fa4b0f339c1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Roman Gushchin <roman.gushchin@linux.dev>
+On 27/01/2026 04:01, Jinjie Ruan wrote:
+>> I understand that you're gradually making the arch code more similar to
+>> the core code so that we can switch over to it, but I'm struggling to
+>> understand why syscall_trace_enter() takes the 'syscall' argument.
+>>
+>> Even the core code just seems to use it as a local variable, which it
+>> overrides before it ever uses it. What am I missing?
+> Hi,
+>
+> You're absolutely right. The 'syscall' parameter is indeed treated as a
+> local variable and gets overridden before any real use. Should we
+> refactor to remove the parameter entirely in generic entry?
 
-When a struct ops is being attached and a bpf link is created,
-allow to pass a cgroup fd using bpf attr, so that struct ops
-can be attached to a cgroup instead of globally.
+I noticed this as well, removing it from the generic function would make
+sense. AFAICT that removal could be propagated quite far in fact:
+syscall_enter_from_user_mode_work(), syscall_enter_from_user_mode(),
+even arch implementation (do_syscall_64() on x86).
 
-Attached struct ops doesn't hold a reference to the cgroup,
-only preserves cgroup id.
-
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
----
- include/linux/bpf.h         |  1 +
- kernel/bpf/bpf_struct_ops.c | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 899dd911dc82..720055d1dbce 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1895,6 +1895,7 @@ struct bpf_struct_ops_link {
- 	struct bpf_link link;
- 	struct bpf_map __rcu *map;
- 	wait_queue_head_t wait_hup;
-+	u64 cgroup_id;
- };
- 
- struct bpf_link_primer {
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index de01cf3025b3..c807793e7633 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -13,6 +13,7 @@
- #include <linux/btf_ids.h>
- #include <linux/rcupdate_wait.h>
- #include <linux/poll.h>
-+#include <linux/cgroup.h>
- 
- struct bpf_struct_ops_value {
- 	struct bpf_struct_ops_common_value common;
-@@ -1377,6 +1378,20 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
- 	}
- 	bpf_link_init(&link->link, BPF_LINK_TYPE_STRUCT_OPS, &bpf_struct_ops_map_lops, NULL,
- 		      attr->link_create.attach_type);
-+#ifdef CONFIG_CGROUPS
-+	if (attr->link_create.cgroup.relative_fd) {
-+		struct cgroup *cgrp;
-+
-+		cgrp = cgroup_get_from_fd(attr->link_create.cgroup.relative_fd);
-+		if (IS_ERR(cgrp)) {
-+			err = PTR_ERR(cgrp);
-+			goto err_out;
-+		}
-+
-+		link->cgroup_id = cgroup_id(cgrp);
-+		cgroup_put(cgrp);
-+	}
-+#endif /* CONFIG_CGROUPS */
- 
- 	err = bpf_link_prime(&link->link, &link_primer);
- 	if (err)
--- 
-2.43.0
-
+- Kevin
