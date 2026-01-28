@@ -1,112 +1,110 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFE52F3C0A
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 15:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B75128C2BF;
+	Wed, 28 Jan 2026 15:48:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769614854; cv=none; b=B4nFrkQoJQMPL8cxNaVrTTT7c5AKIVSc+XD+D1IsnvV4pbwT5H5UDkUHOYVeY83pcqH+4SmGXWna+tEaSer/J4Daof+JOzu2uwp9S+UrJGyGm+CnpkLmgFrXJa43KGyCqu9VQfbkbUzogw9G+F32vEc6mRNWJ5XadNxa4F9o6XI=
+	t=1769615295; cv=none; b=S2T/ce7H+0k6vQpF4g9MSwMuaqVjmgzfu212EUdf9zK5HWjcilNuXjs1VSomXjdlaAPRvvGxw0MskHRMfYl7FN330PKe8lCsy598xFotI/rx3iJKlP0FinIzAIzvLnf3idZA3qMEblbVpx+d9iKVbnQXaRiOKtPMRnq3EcOuKtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769614854; c=relaxed/simple;
-	bh=Lju/VwNeuA9xp6N8Mhps4bZ2ZQFAbfvsMoO/Ntp4miM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BdaR5pOZygIrdtz0olCipp8FcfzJYTFDkk2+7c+OpvpgfxVKq0B3aEYaxXF18SED+pj3jyf1GO9Otzl5y+eRsws8Djim81UetWKXx/CiEqGuWZgmhLkbxohYy/UkY7f30OOTTzoOm22plMHGleUyQSF8SznQJ74ftgmYPhH6DGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cLTbqYFH; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769615295; c=relaxed/simple;
+	bh=GhvCltR9evGDOD3D/98nyGTFabPfwNc29yamsj8Z7OA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CRgFFys+77GQopWxrT8XXh+P1KwYYMg0f/iN6s8wPuofW7g/nk3UyA0ez+gu0RFtyQHkkJGj7Qn6ATjIPKW0KOKNdAbzIWH6ozrOs1E26Yie1T1P2UrekJKupsNDwpyFPJEGL6/v+gpPn85dwUhV696lifzQJBn11NXxnbVLVc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tmWOTJtu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cLTbqYFH"
-Message-ID: <4295e99d-8638-4cff-90e2-e1f5c2452b52@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769614838;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mvHp944RWMNX+8EeKBPahp8VEBI2KMU61Tq8S7dUKfk=;
-	b=cLTbqYFHNWr961NzRQkS2qZQ9ohdj1jjpAhTS7j0cMoFziLInVkfwJmBovx9p2C4bZ9BEV
-	pTfwcm6C4EV3mxEhL4WCPuRj3d1pWYxfyIX1cxbTemfS4zqjYbdm0fIWQ+xF7QOZt5+cQd
-	FIzrAdNaMqhcx1gt1UZAv2lpc727g08=
-Date: Wed, 28 Jan 2026 23:40:26 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tmWOTJtu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8BCC4CEF1;
+	Wed, 28 Jan 2026 15:48:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769615295;
+	bh=GhvCltR9evGDOD3D/98nyGTFabPfwNc29yamsj8Z7OA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tmWOTJtuqKJJrdq7jzTfq6R/kGyog2bKlj4TQUKs4DyWYhTMnxh4hU34hjjOXNm0w
+	 ga6n61AcamtYXTZVNA1oJUDSCTJj+w23L5BG1uPpfAZSq6qXhwgKLf0xuDwsIHVD4E
+	 IDns0ljMp/lnDhBG1l8awhhuNGhTShmnYlCLeLsXfQUPv9j0xLqm7B7W/EgZICj9Vz
+	 NuehJVqPLhdJ+iWfkrhBILLoCVANi3hG/4XixJRKy4tiVUUnPHKUmhi4n2pDClZ0D8
+	 OpZcJdkc3t9mU/W/eSjDYMB4uSH+IwmPTB4icIE82FlSkxqm/k7VwQc1mR1rkxh5CR
+	 dC0jpZak4KWhg==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1vl7m2-000000004xq-2oNk;
+	Wed, 28 Jan 2026 16:48:07 +0100
+Date: Wed, 28 Jan 2026 16:48:06 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <brgl@kernel.org>
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+Message-ID: <aXovtrAM1r1UyWxA@hovoldconsulting.com>
+References: <20260124170535.11756-1-johan@kernel.org>
+ <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
+ <2026012554-chatty-policy-42a1@gregkh>
+ <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
+ <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Add bpf_arch_supports_fsession()
-To: Chris Mason <clm@meta.com>, bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, puranjay@kernel.org,
- xukuohai@huaweicloud.com, catalin.marinas@arm.com, will@kernel.org,
- shuah@kernel.org, menglong8.dong@gmail.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
- martin.lau@kernel.org, ihor.solodrai@linux.dev
-References: <20260128150112.8873-2-leon.hwang@linux.dev>
- <e64c4137e7f262e6fdab272e8ee44c8a129a36eb6d0186914375d6ba20d88474@mail.kernel.org>
- <65231eeb-1f00-4af2-9234-a290ea3f6585@meta.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <65231eeb-1f00-4af2-9234-a290ea3f6585@meta.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com>
 
+On Tue, Jan 27, 2026 at 10:18:27PM +0100, Bartosz Golaszewski wrote:
+> On Mon, Jan 26, 2026 at 2:50 PM Johan Hovold <johan@kernel.org> wrote:
 
+> > It's certainly possible to handle the chardev unplug issue without
+> > revocable as several subsystems already do. All you need is a refcount,
+> > a lock and a flag.
+> >
+> > It may be possible to provide a generic solutions at the chardev level
+> > or some kind of helper implementation (similar to revocable) for
+> > subsystems to use directly.
+>
+> This echoes the heated exchange I recently had with Johan elsewhere so
+> I would like to chime in and use the wider forum of driver core
+> maintainers to settle an important question. It seems there are two
+> camps in this discussion: one whose perception of the problem is
+> limited to character devices being referenced from user-space at the
+> time of the driver unbind (favoring fixing the issues at the vfs
+> level) and another extending the problem to any driver unbinding where
+> we cannot ensure a proper ordering of the teardown (for whatever
+> reason: fw_devlink=off, helper auxiliary devices acting as
+> intermediates, or even user-space unbinding a driver manually with
+> bus-level sysfs attributes) leaving consumers of resources exposed by
+> providers that are gone with dangling references (focusing the
+> solutions on the subsystem level).
 
-On 2026/1/28 23:35, Chris Mason wrote:
-> 
-> 
-> On 1/28/26 10:26 AM, bot+bpf-ci@kernel.org wrote:
->>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->>> index 5a075e06cf..070ba80e39 100644
->>> --- a/arch/x86/net/bpf_jit_comp.c
->>> +++ b/arch/x86/net/bpf_jit_comp.c
->>> @@ -4112,3 +4112,8 @@ bool bpf_jit_supports_timed_may_goto(void)
->>>  {
->>>  	return true;
->>>  }
->>> +
->>> +bool bpf_jit_supports_fsession(void)
->>        ^^^^^^^^^^^^^^^^^^^^^^^^^^
->> This is the actual function name in the code.
-> 
-> Ihor, I think the script parsing review-inline.txt chopped off the
-> part of the review where AI was complaining about the commit message?
-> 
-> commit f636685cc0b05bb758bb58729cc65dde79ac7108
-> Author: Leon Hwang <leon.hwang@linux.dev>
-> 
-> bpf: Add bpf_arch_supports_fsession()
-> 
-> This commit adds architecture-specific gating for fsession programs,
-> returning -EOPNOTSUPP when the architecture does not implement fsession
-> support, instead of failing at runtime with -EFAULT.
-> 
->>     bpf: Add bpf_arch_supports_fsession()
-> 
-> The commit subject references bpf_arch_supports_fsession(), but the
-> actual function implemented is named bpf_jit_supports_fsession().
-> 
->>     Introduce bpf_arch_supports_fsession() to explicitly gate fsession usage
->>     based on architecture support.
-> 
-> Similarly, the commit body describes bpf_arch_supports_fsession(), while
-> the code uses bpf_jit_supports_fsession().
-> 
-> Should the commit message be updated to match the actual function name?
-> The function follows the existing bpf_jit_supports_*() naming convention
-> used by similar functions in the codebase.
-> 
+What I've been trying to get across is that the chardev hot-unplug issue
+is real and needs to be fixed where it still exists, while the manual
+unbinding of drivers by root is a corner case which does not need to be
+addressed at *any* cost.
 
-Correct, in commit message, the function should be
-bpf_jit_supports_fsession(), too.
+If addressing the latter by wrapping every resource access in code that
+adds enough runtime overhead and makes drivers harder to write and
+maintain it *may* not be worth it and we should instead explore
+alternatives.
 
-Thanks,
-Leon
+This may involve tracking consumers like fw_devlink already does today
+so that they are unbound before their dependencies are.
 
+Because in the end, how sound is a model where we allow critical
+resources to silently go away while a device is still in use (e.g. you
+won't discover that your emergency shutdown gpio is gone until you
+actually need it)?
 
+Johan
