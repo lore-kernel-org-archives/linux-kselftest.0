@@ -1,260 +1,139 @@
-Received: from out203-205-221-149.mail.qq.com (out203-205-221-149.mail.qq.com [203.205.221.149])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E771D9346;
-	Wed, 28 Jan 2026 07:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE782FE577
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 07:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769584590; cv=none; b=WM8dE4M9+LHlra+4FWk4GN2SH07V0EbT2v46JzvmsEdKq3gi27EdYdtBRnmhVJIzEiHxiY9mwFDSLAwje6nk/s4+S7E2grK/c0Cv1BpfIhX0AG7BC6o8+ar9rA3X2t0irXnOLqCxC3py4KzfQbohNm/VEwT1PPvpcCJV+tdbcyE=
+	t=1769586258; cv=none; b=DM9NpORlzyQZM0eXjNdLzFIH1ptKIWtUsc8Q1G/mBCT7zwJe/8nyB0OCSF6/Y9SH2tS2yZdhAwqXasOyu0dyky1/4RM74X5Y4IelMtcEuGl9Vobf0wRmV32eGVVsSIfLkvRmoW+TyQUnmtbPG22NWDojUQhbfLJCBI0pRrahDoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769584590; c=relaxed/simple;
-	bh=cc/4MvYQW3AVaMospqyppf/6T8Bhygb2pcx1Oiu99M8=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version:Content-Type; b=H8b9ui+Y0xiu9HxjyhQcisoponhNWgvSs5S75uCJQ0dlPjpzuUB7LcAViWwyiUBmucdko+eocavQ4EIH7L/1sGkUSW+iUp1b6zi6MoAUStYPdc+bQoid2yH9+tkrmoifkCWSZ4cL71MdTqZQzrtUvBzXY5ZcEFPlF7NKTXhRJaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=X9ce2+1Z; arc=none smtp.client-ip=203.205.221.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1769586258; c=relaxed/simple;
+	bh=1sqaxyg9uUfww2vS/d6/pDwRt5NvTGwpHUEkBH22Jkw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=psljwDfs7D5pu6kPJDYvCJiRpq73+Fk/jm//VT7b/FJjZpgXxEVNnAg3ZWiU4HkuXWli7/hDk2TefUKOxdtEZntCo0rJAigCLpB1KDf1gTUbPN7o/AIh/bwfECozBuhnIzuDlESI9xIbda7CK95m1cmqNXPcriK0IGCXAuMHBIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=El/IZcUt; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=gt+bxbDh; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="X9ce2+1Z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1769584578;
-	bh=UsOMW+fH/0u09b+I9Maxdl9lX3AzM+KsG85N0ClPTyc=;
-	h=From:To:Cc:Subject:Date;
-	b=X9ce2+1ZXsjCEsptq/NrjPwiuDlWAggTlIcijLXL1VMBkgQZnaPiW80aHIptL8h4u
-	 /twSVgqW+3WukWxSDxyLlUZJhECLoJi/lK/wzD6raWSJuTHMyrQvysOXTF2nH0sJy8
-	 TpoACiT/xvttEJMpygYy4QFFRTZpNlvXc90DCsx0=
-Received: from meizu-Precision-3660.meizu.com ([14.21.33.152])
-	by newxmesmtplogicsvrszc50-0.qq.com (NewEsmtp) with SMTP
-	id 40E82410; Wed, 28 Jan 2026 15:16:14 +0800
-X-QQ-mid: xmsmtpt1769584574tpqv0ipnd
-Message-ID: <tencent_FC5FB35D2545AFDCA6E377AE4DE75C79AF08@qq.com>
-X-QQ-XMAILINFO: M9B58rdLYxrLjCqmWwUQoEih+LW97yLf1OdkCA7vnUGLQ+kDRxqiTcgglZJkyD
-	 qd0XtXOZaHeRu4Cdwh2BnsBbcKO2j428bCpEPmvc76KUJHHZLvqMRpw+dBxh+JP1YnDC+XTPp+9R
-	 pDwm8N/JHvuRZ9CKVapHVHuvlV9+FOr4MYYBvKU5GwVc0B9iXYWyHhbnjTH1XJEoUNRYBL2+evD1
-	 0ThthzD8I4aX3pP2C/hR1SrMbyhOmeCav9IClwOz68HUZ8SkAK/7c1eLHp7XJoyjHP1djKjbMJF/
-	 wCQ037zaEo904ptmOdiv7INvKKLY95NXNsvHxSJ8P77QP08Kd8fFwAesanCSjCdVX7c6hSOC9AT/
-	 bFsi796DGDQ7AuA8Tk5lJoEdT81GFawxSjNzTewgNybfvw+TW5SoerPPMzvQ6faKw8a26pCypPAj
-	 u00UstW9FmMzVq8WvVmr07qrOr8B7KbDEa1nTvBNFqwrEPEJt7892E0Pe7UnBURUNBs5wt4CxDvj
-	 m1axv1epDQ9SOHB+9Y0edpmfdVYPXHXhWzvz/ddgZFfOFDSzocLzIdBQYadkrEvGyV1a97lOQqP5
-	 LNEZI3wHbmsdFiBnnahCiUwmw4r6ZZAZpBvNfzd7Rmg96vdm9Acn9alspCu3dFDPmxBm50He7YV8
-	 1A99WnMhB1QRaizBumt94qAvCPKlT6Q8OjhFj4tqLQAJF/OyOS5DOoD2k4UXY9eewRRgcgAVi4SH
-	 ZQ8RCrKc1/TswqQ18jJTySPXuDzpdy7D75PV30aEcEvWNn8mFZ+l4H4ey6nRJD+NQG5PjCZE01C/
-	 dViUPdbuwq3wzNZoUGtu4zneuSkuxglmpa/Gaow3ed7LEAzcqXeTeyNjlP/YRnRAy573cJyoxDDn
-	 CHM96GFYDtDr7kuOQWkcrlr1lyAMpzEHCJPJ0ptPVrDeBDrq4zXP91NuzDHbFF5r2cHPpCAHSCMK
-	 YZvkC4yjGc9PW1RNgMOOWzHDEiRVNx13/r/E/CgHbYH2N43mI4nmrvWF/oGo/BOTibValE5ualMD
-	 hxpyj2JaXvFFU3EOTEACTq+rpoBju0oLuyd7PHf+YKvtmjWHKs339ZHZM8ROooQWleJLq0UjIXJg
-	 lyb46DJl4d44FPQFOGR4hk4LWvmnEt4ZC0X7Da
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
-From: Yuwen Chen <ywen.chen@foxmail.com>
-To: tglx@kernel.org
-Cc: akpm@linux-foundation.org,
-	andrealmeid@igalia.com,
-	bigeasy@linutronix.de,
-	colin.i.king@gmail.com,
-	dave@stgolabs.net,
-	dvhart@infradead.org,
-	edliaw@google.com,
-	justinstitt@google.com,
-	kernel-team@android.com,
-	licayy@foxmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	luto@mit.edu,
-	mingo@redhat.com,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	peterz@infradead.org,
-	shuah@kernel.org,
-	usama.anjum@collabora.com,
-	wakel@google.com,
-	Yuwen Chen <ywen.chen@foxmail.com>
-Subject: [PATCH v3] selftests/futex: fix the failed futex_requeue test issue
-Date: Wed, 28 Jan 2026 15:16:12 +0800
-X-OQ-MSGID: <20260128071612.416371-1-ywen.chen@foxmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="El/IZcUt";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="gt+bxbDh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769586256;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N2r8/rRraCmZGhd+qX9Y3lCkPKausqhtTQk0k54UGaw=;
+	b=El/IZcUtD91Bl1jAyhnfs1beUMx2BFkZSdEqGlfrJd/1tPzbprbzI021VMrNAcjQg2UX37
+	64Qx1vYIceGOyYqaJJI1hYBEYw8APwFo3x853wwATJm/0nF1dNpZCf9KTlYqpjHt+7MwwX
+	orl91IOhSMk1ZBH/p4EgdL3r7zlGdWU=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-665-wBgzADEoPXeBr94HW7egzg-1; Wed, 28 Jan 2026 02:44:14 -0500
+X-MC-Unique: wBgzADEoPXeBr94HW7egzg-1
+X-Mimecast-MFC-AGG-ID: wBgzADEoPXeBr94HW7egzg_1769586254
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-48070c21420so1066565e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jan 2026 23:44:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1769586253; x=1770191053; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N2r8/rRraCmZGhd+qX9Y3lCkPKausqhtTQk0k54UGaw=;
+        b=gt+bxbDh5U2i8qh8qd5iT8lTAuLyg1777UtIw/jUElitPWiQV7XztvS7FqeBz8tc1H
+         B26eYiAYsC753cKcSNkTD3fPVbeVyto2evz5ubqqnaxkl0/MHlL85QJU3jqMsgDEUZCc
+         q0BbCqHDW/p6b8d0EhxKRJdW7xP6RSIeevn5B1oZcqyNj4VK6aI+/DkMnS41NRPnnEN/
+         oOjO5aQIkJmMNFDseo6TfMoH2c+Wlp/qyRrgl7ZgoGU4B7IAZAvoCra+Z2APo4f7Xk70
+         QkwcgSLOr+NSIOK5oVBtG05OJAFAQLJVm2h51sNt1IjLaPrYYBROCq/ajQMCObLPVCdz
+         JFjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769586253; x=1770191053;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N2r8/rRraCmZGhd+qX9Y3lCkPKausqhtTQk0k54UGaw=;
+        b=NbOuzpvo5Ns9m/puJN5XUhp0yOBdFw6V4/ILGjLUtw7ONe93AAFNLWAekRHhQDFsnb
+         33kgdqhSKd1/B0/EwZ2n9vSS1ydUNmH3BlLrxoXKSwLmGzdCJwc2CPVkgxWXUu+AcEsh
+         QIoVqJfSaibArzLwcPZA94/PNXmNRSfPwYy7B/P5HgnKLSN2K/csnbd7QUAW0FBZ8A6T
+         OaQOFmyBp4FGpHBMPscVfsrShLZ/8YsuCDIDfV8yUuCCnjJOVkj0h79wZpOVsnvBLCYP
+         mPspZTAukSUFJr/Dcgh0eTGKTdyJ4tlaNIeEFbvyyA/IEqVxB6Fgf2MGfFP4cngJMs84
+         qjxw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKP8OeSJQI2t2CEsmCieF4jLm/GURiDfCtg1Hn/ia9IrgZNeoez+QsG6ANL9GfiBRszlLvpAJk2TwM42PAMkw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywf0ytAG0MyVHC0v6lKUG9OFT+nWKz1rv6zkcWyDJrr/QxACxB/
+	SuY5ElYngIMAQcB2zoxQ5qEo8Fsg9+qtQK1VlV1+jhAynU/JVv4zmznwtFToUU78vs1t0v+11lR
+	rGXebrjxYu6i8okzV3RRaLE5Oi3nc804nIss8Qm1K0SCtFOQMHqIqMSsOJwe6ctt7G5M75g==
+X-Gm-Gg: AZuq6aK9Lq/Jdfyy/z0U4CWOGQFRgUdO3BuGYDD1sOLCmB2YVA7POs2V9oM+CAvcvyZ
+	c4yBcoLb5LLPa5jNLMzRhAmjZubJ6KiekDZNjkWwC3BGqaflsx4GLMzYvHhLaPNTwCRuVwBirqu
+	fcVV0Fj27pehIWSMOA5ENAbOcOUiRn6Lt8VU+UlLqotxVaDeHltEqCcEqppeSwxsKNkUzCIXfHZ
+	jnpUk+HuEiSZEkGITWdBWfoJTeMSrrQpIj5S8mO9r58LEbxNV4gMjxApbInqHK1nBqVElGWlzNR
+	vtX9ttxpEZg7Oixw/ZjCTrSEqddByaUZkYKw8/msaonBytIPQXtO9SXjkoBENSpIsnlJipJsbRn
+	49uFjiKN9PQf3
+X-Received: by 2002:a05:600c:5742:b0:47e:e0b3:2437 with SMTP id 5b1f17b1804b1-48069e24623mr37363695e9.5.1769586253607;
+        Tue, 27 Jan 2026 23:44:13 -0800 (PST)
+X-Received: by 2002:a05:600c:5742:b0:47e:e0b3:2437 with SMTP id 5b1f17b1804b1-48069e24623mr37363235e9.5.1769586253131;
+        Tue, 27 Jan 2026 23:44:13 -0800 (PST)
+Received: from [192.168.88.32] ([212.105.153.56])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066c428basm116931625e9.12.2026.01.27.23.44.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jan 2026 23:44:12 -0800 (PST)
+Message-ID: <13f7664e-af7e-4c78-ba0c-b58b3ab59075@redhat.com>
+Date: Wed, 28 Jan 2026 08:44:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 net-next 10/15] tcp: accecn: unset ECT if receive or
+ send ACE=0 in AccECN negotiaion
+To: Jakub Kicinski <kuba@kernel.org>, chia-yu.chang@nokia-bell-labs.com
+Cc: edumazet@google.com, parav@nvidia.com, linux-doc@vger.kernel.org,
+ corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@google.com,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com,
+ jhs@mojatatu.com, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
+ donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
+References: <20260123100721.42451-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260123100721.42451-11-chia-yu.chang@nokia-bell-labs.com>
+ <20260127120957.76e52cc5@kernel.org>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260127120957.76e52cc5@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-This test item has extremely high requirements for timing and can only
-pass the test under specific conditions. The following situations will
-lead to test failure:
+On 1/27/26 9:09 PM, Jakub Kicinski wrote:
+> On Fri, 23 Jan 2026 11:07:16 +0100 chia-yu.chang@nokia-bell-labs.com
+> wrote:
+>> Based on specification:
+>>   https://tools.ietf.org/id/draft-ietf-tcpm-accurate-ecn-28.txt
+>>
+>> Based on Section 3.1.5 of AccECN spec (RFC9768), a TCP Server in
+>> AccECN mode MUST NOT set ECT on any packet for the rest of the connection,
+>> if it has received or sent at least one valid SYN or Acceptable SYN/ACK
+>> with (AE,CWR,ECE) = (0,0,0) during the handshake.
+>>
+>> In addition, a host in AccECN mode that is feeding back the IP-ECN
+>> field on a SYN or SYN/ACK MUST feed back the IP-ECN field on the
+>> latest valid SYN or acceptable SYN/ACK to arrive.
+> 
+> FWIW this series is marked as Changes Requested in patchwork. 
+> I don't think I did that, IDK why it's in that state :S
 
-    MainThread                  Thread1
-        │
-  pthread_create-------------------┐
-        │                          │
- futex_cmp_requeue                 │
-        │                     futex_wait
-        │                          │
+I was me. I went over the AI feedback and it looked legit and relevant
+to me: AFAICS the listener socket status is wrongly updated instead of
+the request socket and likely corrupted.
 
-If the child thread is not waiting in the futex_wait function when the
-main thread reaches the futex_cmp_requeue function, the test will fail.
+I was sure I sent the feedback email before updating the series status,
+but I see it did not land anywhere - PEBKAC here, I'm sorry.
 
-This patch avoids this problem by checking whether the child thread is
-in a sleeping state in the main thread.
-
-Fixes: 7cb5dd8e2c8c ("selftests: futex: Add futex compare requeue test")
-Signed-off-by: Yuwen Chen <ywen.chen@foxmail.com>
-Co-developed-by: Edward Liaw <edliaw@google.com>
-Signed-off-by: Edward Liaw <edliaw@google.com>
----
-v1->v2:
-    1. Fix the issue of abnormal use of fscanf in the get_thread_state function
-    2. Add timeout logic
-
-v2->v3: https://lore.kernel.org/all/tencent_B9DBF2ECBE56BAB68BDAB949C6935D01CE09@qq.com/
-    1. Use /proc/[pid]/wchan instead of /proc/[pid]/stat to check if a process has entered the sleep state
-    2. Refactor part of the logic to facilitate code reuse.
-
- .../futex/functional/futex_requeue.c          | 91 ++++++++++++++++---
- 1 file changed, 77 insertions(+), 14 deletions(-)
-
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
-index dcf0d5f2f3122..7163e827691e4 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue.c
-@@ -11,8 +11,9 @@
- #include "futextest.h"
- #include "kselftest_harness.h"
- 
--#define timeout_ns  30000000
--#define WAKE_WAIT_US 10000
-+#define FUTEX_WAIT_TIMEOUT_S	3 /* 3s */
-+#define WAIT_THREAD_RETRIES	100
-+#define WAIT_THREAD_DELAY_US	(10000 * 100) /* 1s */
- 
- volatile futex_t *f1;
- 
-@@ -20,8 +21,8 @@ void *waiterfn(void *arg)
- {
- 	struct timespec to;
- 
--	to.tv_sec = 0;
--	to.tv_nsec = timeout_ns;
-+	to.tv_sec = FUTEX_WAIT_TIMEOUT_S;
-+	to.tv_nsec = 0;
- 
- 	if (futex_wait(f1, *f1, &to, 0))
- 		printf("waiter failed errno %d\n", errno);
-@@ -29,20 +30,83 @@ void *waiterfn(void *arg)
- 	return NULL;
- }
- 
-+struct futex_thread {
-+	pthread_t thread;
-+	pthread_barrier_t barrier;
-+	pid_t tid;
-+	void *(*threadfn)(void *);
-+	void *arg;
-+};
-+
-+static int wait_for_thread(FILE *fp, int timeout_us)
-+{
-+	char buf[80] = "";
-+
-+	for (int i = 0; i < WAIT_THREAD_RETRIES; i++) {
-+		if (!fgets(buf, sizeof(buf), fp))
-+			return -EIO;
-+		if (!strncmp(buf, "futex", 5))
-+			return 0;
-+		usleep(timeout_us / WAIT_THREAD_RETRIES);
-+		rewind(fp);
-+	}
-+	return -ETIMEDOUT;
-+}
-+
-+int futex_wait_for_thread(struct futex_thread *t, int timeout_us)
-+{
-+	char fname[80];
-+	FILE *fp;
-+	int res;
-+
-+	snprintf(fname, sizeof(fname), "/proc/%d/wchan", t->tid);
-+	fp = fopen(fname, "r");
-+	if (!fp)
-+		return -EIO;
-+	res = wait_for_thread(fp, timeout_us);
-+	fclose(fp);
-+	return res;
-+}
-+
-+static void *futex_thread_fn(void *arg)
-+{
-+	struct futex_thread *t = arg;
-+
-+	t->tid = gettid();
-+	pthread_barrier_wait(&t->barrier);
-+	return t->threadfn(t->arg);
-+}
-+
-+int futex_thread_create(struct futex_thread *t, void *(*threadfn)(void *), void *arg)
-+{
-+	int ret;
-+
-+	pthread_barrier_init(&t->barrier, NULL, 2);
-+	t->tid = 0;
-+	t->threadfn = threadfn;
-+	t->arg = arg;
-+
-+	ret = pthread_create(&t->thread, NULL, futex_thread_fn, t);
-+	if (ret)
-+		return ret;
-+
-+	pthread_barrier_wait(&t->barrier);
-+	return 0;
-+}
-+
- TEST(requeue_single)
- {
- 	volatile futex_t _f1 = 0;
- 	volatile futex_t f2 = 0;
--	pthread_t waiter[10];
-+	struct futex_thread waiter;
- 
- 	f1 = &_f1;
- 
- 	/*
- 	 * Requeue a waiter from f1 to f2, and wake f2.
- 	 */
--	ASSERT_EQ(0, pthread_create(&waiter[0], NULL, waiterfn, NULL));
--
--	usleep(WAKE_WAIT_US);
-+	EXPECT_EQ(0, futex_thread_create(&waiter, waiterfn, NULL));
-+	futex_wait_for_thread(&waiter, WAIT_THREAD_DELAY_US);
- 
- 	EXPECT_EQ(1, futex_cmp_requeue(f1, 0, &f2, 0, 1, 0));
- 	EXPECT_EQ(1, futex_wake(&f2, 1, 0));
-@@ -52,8 +116,7 @@ TEST(requeue_multiple)
- {
- 	volatile futex_t _f1 = 0;
- 	volatile futex_t f2 = 0;
--	pthread_t waiter[10];
--	int i;
-+	struct futex_thread waiter[10];
- 
- 	f1 = &_f1;
- 
-@@ -61,10 +124,10 @@ TEST(requeue_multiple)
- 	 * Create 10 waiters at f1. At futex_requeue, wake 3 and requeue 7.
- 	 * At futex_wake, wake INT_MAX (should be exactly 7).
- 	 */
--	for (i = 0; i < 10; i++)
--		ASSERT_EQ(0, pthread_create(&waiter[i], NULL, waiterfn, NULL));
--
--	usleep(WAKE_WAIT_US);
-+	for (int i = 0; i < 10; i++) {
-+		EXPECT_EQ(0, futex_thread_create(&waiter[i], waiterfn, NULL));
-+		futex_wait_for_thread(&waiter[i], WAIT_THREAD_DELAY_US / 10);
-+	}
- 
- 	EXPECT_EQ(10, futex_cmp_requeue(f1, 0, &f2, 3, 7, 0));
- 	EXPECT_EQ(7, futex_wake(&f2, INT_MAX, 0));
--- 
-2.34.1
+/P
 
