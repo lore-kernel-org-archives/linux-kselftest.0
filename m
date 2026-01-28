@@ -1,102 +1,172 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613217A13A;
-	Wed, 28 Jan 2026 09:05:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9041373
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 09:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769591116; cv=none; b=RWCRrjVLeAFJTcSgZNf2RYgIRC9RBGYHpzNXx74fK7afA8s78BP/od2ULs5KJcdVrAm1r1tLSyW+M3K5xLf6TDp14Tkf60VpVg56GmWuWgWI5uWTgZaRoC2vCHBrSMni9+9g8UpATFfKWD0r8ldsDxj2eKLU6Jh1fqBHC72A7oc=
+	t=1769593206; cv=none; b=qt2OnP1iLRaaPel+JKIAMjBOBmJftYEeg2eubDRegzrfwCJXJ7LWAdcRrzNtXgO3I6APw6WLLnB3bqnzFpJ32TufnzBeSUTgJnLRqy+LZ33Awr1dSG/6VwuQf7ZByUSLX/rXwgGCMPLVyAZY5clFjfKuVW2oLzjlu8lnxzsZVFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769591116; c=relaxed/simple;
-	bh=4MpmloK2IkTMXQTxD36cXCNYLKJU7nTWbURy9RPxOE4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=disyEaqD/7wxHZdPt6CCh4OM8LFG3fNKx/MV83M9s5AJ0iwy5k9XgjpyF5dfPA48PcG4tIodzzkMgZIRjyKpw4kSZ9jDfOmtglQogpzutgMhgWkDF1lLaD5FFEu93FC6tgYr5aOTTtN+Tlrz2eKVuWlPf1w0RZ6+WCYb5NXZ/0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=t5tOpZKu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=mblVI3Vn; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1769593206; c=relaxed/simple;
+	bh=8FAywcVwqaR6yySTpdg7lvCpc9PKJmZi+hCkUBisJxU=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SpCXYTU4YlwaZhmFoG6aEAfOt79CK81qh7lhyiNFAaoOBryswtTXKQHOClOf8RbqSYTV09B5tW/RARSzptmv2VDdM3CDGT5KnH68IpbAeQHogSE34fEWLK58Vo0YuWclA/TGc/2R33HtMnSjzhzHYeOhxgTDkrcQtFNKfYLezyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d3Sy3fka; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="t5tOpZKu";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mblVI3Vn"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769591108;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=BBuKoipavT94L21ZMZdpu5yukNAdTqVjx30LOj8GfJ0=;
-	b=t5tOpZKuus4cXnqmC4dIa3jZBUgZ0V3d81SCB1Qvk5CRRcef48Wox7oMfQIxQikOna44h9
-	Ek6Cb65vcccVaQ03oxEs3kGWSmokBZpnBGbvd8d2IotYYrc1QF2tcQfsoCXFz82Vdz5KN8
-	vV4OMCyxUgLI4d5fcBUyObGWf7iMrwJsRgDhZXq7dwbFT8HIptJElwQ4llzMB7VoYB3f5J
-	QFZ+Q5sFBdXnzsCM9Brs5Q5UpBz0AU2lOdqmGCfrbMMqqx0P/5KX0CY1W/KycpPpAr3Cd+
-	GGse/VXC2NhqFyScgdFn9nnVEE/gnRV5gyewLNyj9PLozoPzh0ZKyCDR/Qiz/Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769591108;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=BBuKoipavT94L21ZMZdpu5yukNAdTqVjx30LOj8GfJ0=;
-	b=mblVI3VnbHL03d6wknjGS98AG05mHvzSyn23qn3HnuyqYdcy+jfo46uUVYBXpMWfoBNu5s
-	f0SpPBwhP3HuzfDw==
-Date: Wed, 28 Jan 2026 10:05:05 +0100
-Subject: [PATCH] selftests: runner: Avoid spurious warning about missing
- failures file
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d3Sy3fka"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DB6EC2BCB2
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 09:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769593206;
+	bh=8FAywcVwqaR6yySTpdg7lvCpc9PKJmZi+hCkUBisJxU=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
+	b=d3Sy3fkalMhzo88v5CLr/kAV/3H9qy4BGNAa0y4vi/d46usjDKen/jR6KhvvoZ622
+	 /wRLOxkgNe65hjeDol5SqxfZhU9ihhGU0yVfyNU139c2Oo3de0gqgC1HPc+V4oGNNf
+	 KrRiZZNZQiP+KsfiE2DHNTr2sH8kdy4HFonCkQx4DzMt3dfnOlFivglzj60lilZvBF
+	 7l3XMERusV7C6hrIQeZH3ByiGqm8sUicKLSGTBCEcDP/Q6F58pWQTAttih1L8596V8
+	 sZiGah7cuxnBoriLDrJXWBEeG7ZaFtKoP/RmIUn8jGIALoPysRGvevQ+oFn8RlW+KW
+	 wyBrPUzrbVd9A==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-59dd22b9895so876324e87.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 01:40:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWjzP7MOL0o4OP8KGFLe9VxgA+Ll8yag1TgtKf3hzWfgMWhoRWe2bjYBZ/moNQQD3WwpLctLDJgz/KVz3FuRLk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLRz1hztdt8u/XPVNbaTkwaLbIpOJmFI0tm0HBz3nPRlmf8N42
+	dTw9aWv/CTpIbBzkQyFSptPrzE+hZ/0BVaq6uyR7rJmMHDPHyAwLq4KWYlebjoDErpV/ncoRFAP
+	meNu1wtBOiNs68STv2AH1cKusUBZnL0tllwMVYPUGog==
+X-Received: by 2002:a05:6512:3ca8:b0:59e:a46:ebdf with SMTP id
+ 2adb3069b0e04-59e0a46ed1dmr387776e87.11.1769593204724; Wed, 28 Jan 2026
+ 01:40:04 -0800 (PST)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 28 Jan 2026 01:40:02 -0800
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 28 Jan 2026 01:40:02 -0800
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <20260127235232.GS1134360@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260128-kselftest-fix-failures-file-v1-1-b58072c66317@linutronix.de>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqDQAxG4atI1g1oBBl7FeliOv2nDQ5WJloK4
- t0buvzg8Q4yVIXRtTmo4qOm78XRXRpKr7g8wfpwk7QytJ0Eng0lb7CNs345Ry17hTkKONz7MIy
- SJPaJ/LBWePS/T7fz/AES1AtgbQAAAA==
-X-Change-ID: 20260128-kselftest-fix-failures-file-8b38692c2a3c
-To: Shuah Khan <shuah@kernel.org>, Brendan Jackman <jackmanb@google.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769591106; l=1209;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=4MpmloK2IkTMXQTxD36cXCNYLKJU7nTWbURy9RPxOE4=;
- b=clxQAX9vIVaO+ZYBF4uGomTDHEOuuhDb8pWi0gV8Ib/3uzbxoFOmsOV4UCkcvnyO483jSGhDF
- WRIbQ05X7rCD5VQJEAYOTapayobcLTf+ui87s8s+QfnoGePhaBVhtq3
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+References: <20260124170535.11756-1-johan@kernel.org> <DFX20SA67PF2.VONCFNDOZOZT@kernel.org>
+ <2026012554-chatty-policy-42a1@gregkh> <aXdxDBXdyqLFfKKI@hovoldconsulting.com>
+ <CAESzEGiA2DSp79pkjxBA5X-DWmSAAgyAF7usKn253jkGpYJMew@mail.gmail.com> <20260127235232.GS1134360@nvidia.com>
+Date: Wed, 28 Jan 2026 01:40:02 -0800
+X-Gmail-Original-Message-ID: <CAMRc=MfP1_fH91AVjerbnwVfhA0oqBKV+CTX0_1n32g1t-Pvuw@mail.gmail.com>
+X-Gm-Features: AZwV_QgQPyhxTjguD36n-D-3KzP9JI7pQykXZNXE0y0Nvldh9Ywex4wJRJirHxk
+Message-ID: <CAMRc=MfP1_fH91AVjerbnwVfhA0oqBKV+CTX0_1n32g1t-Pvuw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Johan Hovold <johan@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Danilo Krummrich <dakr@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Dan Williams <dan.j.williams@intel.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Bartosz Golaszewski <brgl@kernel.org>, 
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-When runner.sh is *not* executed via run_kselftest.sh, the variable
-$kselftest_failures_file does not exist. This triggers a harmless but
-annyoing warning from runner.sh if a test fails:
+On Wed, 28 Jan 2026 00:52:32 +0100, Jason Gunthorpe <jgg@nvidia.com> said:
+> On Tue, Jan 27, 2026 at 10:18:27PM +0100, Bartosz Golaszewski wrote:
+>> maintainers to settle an important question. It seems there are two
+>> camps in this discussion: one whose perception of the problem is
+>> limited to character devices being referenced from user-space at the
+>> time of the driver unbind (favoring fixing the issues at the vfs
+>> level) and another extending the problem to any driver unbinding where
+>> we cannot ensure a proper ordering of the teardown (for whatever
+>> reason:
+>
+> I don't think you can defend any position where the user can do
+>
+>   echo XYZ > /sys/.../YY
+>
+> and the kernel has an oops.
+>
+> Meaing in this discussion if the user does
+>    echo ".." > /sys/bus/XX/drivers/YY/unbind
+>
+> The kernel shouldn't oops or warn.
+>
+> I've seen many kinds of bogus arguments over the years (especially
+> misunderstanding what the module refcount does!!), but ultimately I
+> think this is the generally agreed expectation.
+>
+> However, in practice this isn't a common work flow, it is quite alot
+> of tricky work to understand how a subsystem works and put in the
+> necessary protections, and frankly many subsystems have had these bugs
+> for their entire existance. It isn't urgent.
+>
 
-tools/testing/selftests/kselftest/runner.sh: line 50: : No such file or directory
+In general, that's true. However I have first bumped into this can of worms
+at work when a client's custom device using a USB-to-I2C adapter and creating
+devices dynamically from user-space would crash the kernel or freeze a thread
+when the device would be disconnected with processes still referencing file
+descriptors. It may not be common but I hope we do care about corner-cases
+too.
 
-Silence the spurious warning.
+So I'd say: it's fine as is until it isn't. :)
 
-Fixes: d9e6269e3303 ("selftests/run_kselftest.sh: exit with error if tests fail")
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- tools/testing/selftests/kselftest/runner.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Several subsystems do get it right, it is very possible and the best
+> practices are much more aligned with the Device<Bound> stuff in
+> Rust. ie guarantee in most contexts that remove() can't run.
+>
+> I'm not surprised to hear pushback on trying to fix it, especially if
+> the proposed fixes are not subsystem comphrenesive in
+> nature. Sprinkling SRCU around as partial patches, especially in
+> drivers, is not a good idea, IMHO.
+>
 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 3a62039fa621..1eb935b6f790 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -47,7 +47,7 @@ tap_timeout()
- report_failure()
- {
- 	echo "not ok $*"
--	echo "$*" >> "$kselftest_failures_file"
-+	echo "$*" >> "${kselftest_failures_file:-/dev/null}"
- }
- 
- run_one()
+For sure. I've been trying to address it exclusively in subsystem code, where
+this kind of logic belongs. After all, subsystem code is where we do complex
+things to make drivers simpler. One exception is I2C where the logic is so
+broken we need to first rework a lot of drivers. Wolfram is on board with that
+though.
 
----
-base-commit: 6e39903c73df08b256322d04c4dfe4a82ec63a45
-change-id: 20260128-kselftest-fix-failures-file-8b38692c2a3c
+> The reason cdev keeps coming up is because there are few common ways a
+> typical driver can actually generate concurrent operations during and
+> after remove that would be problematic.
+>
+> File descriptors, subsystem callbacks, work queues, timers,
+> interrupts, and notifiers.
+>
+> The latter already have robust schemes to help the driver shutdown and
+> end the concurrent operations. ie cancel_work_sync(),
+> del_timer_sync(), free_irq(), and *notifier_unregister().
+>
+> Many wrappered file descriptors are safe. For example the sysfs usage
+> in a driver is sync stopped during device_del's calls to sysfs remove
+> functions.
+>
+> IMHO the largest systemic issue in this space is people making their
+> own fops without understanding the lifecycle model and without
+> hand-rolling a special a "_sync" kind of shutdown around it.
+>
+> A managed fops with a sync destruction operation would go a long way
+> to closing these issues.
+>
+> ie the gpiolib example was basically all fops, one work and a bunch of
+> places where the protection was redundant.
+>
+> Yes there are other cases, and certainly I've commonly seen cases of
+> drivers reaching into other drivers, and subsystem non-file ops, but
+> these cases usualy have other more fundamental issues with remove
+> races :(
+>
+> So I would probably also take a strong position that introducing
+> something like DevRes where you try to wrapper MMIO or other device
+> resources is adamently not something we want to do. Not because I
+> don't care about these removal races, but because I want the drivers
+> to run in a Device<Bound> context with very few exceptions.
+>
+> Jason
+>
 
-Best regards,
--- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Rust makes it very clear who owns what. That's something that we struggle
+a lot with in C, where we have drivers that create objects and then pass
+them on to the subsystem for management but the latter still references
+objects that are destroyed when the driver is unbound. Devres when used
+right is great and the lifetime is very clear: from binding to unbinding.
+The using right is the hard part though. :)
 
+Bartosz
