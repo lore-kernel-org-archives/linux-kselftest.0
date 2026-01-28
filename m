@@ -1,118 +1,119 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F45F29E114
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 19:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769627194; cv=pass; b=W2ZdXXt531mPJvjdxQVG7Gx+DEGejhjG4ulKTRR1ZXx3pafgEpmhjUXExtZPNPskF60hMrtzLgeRrox2YT/Dt8lcRw4ZvAWDB77Rd/P3W3o3Hl4Fy0sQMdsAJm1ogTjbjs1BUTac98EBTc4sdt6y/N9mA/yIgYwo2xwgz3XExcI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769627194; c=relaxed/simple;
-	bh=9ERFjcMxrp1Lrat0Wg1Z6M81o4oaqai31qW//33Vyio=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qPX/jdCDGVPIbIkL74rmW1BFM1GaQzubB2ZjpgIeW7k/gURfdiufpFbO9If1GNy6yhJXjo9h0pAJYtcTZREjOSStSIiJWnjH72eMXCLb2eN+WydWQpnRWV2oNRlY98wQ+yoL4EyBCnsO+CqrOApxI4HiKJsg88Mimz0SwWOLdNQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NgCILPcN; arc=pass smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7752264A9;
+	Wed, 28 Jan 2026 19:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769627351; cv=none; b=E1N5aWYuGRwG+0IksfklNcYybS+ldPfHglpsA15hOn8dUhHLmC5hcp4itki6an0OLiLlm3Z1gudaBHnT2zNF8ugsvhkNoI0Y0JZuqpfvGw/daemMWJQbWxldZkrpZr3Ttqh/UmSqrdYvYWrAiNg1se58aro8CqoXNU5XCJ7YeM8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769627351; c=relaxed/simple;
+	bh=4F1TG6+WlGTBF/WCPp6MXY9LYYj2ZXbTcfmFt02NhMk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CK7w42pfynqF+Bt1vFR/EJIge+TwoTQNwOxF6KDTlI8SNWH9TnFe8jGFK6s1xM/5z0G3rERjlIJbhj+phMvvLEeYKBrz/smi8Mufu4IRWjjGFfQTncGbAEgzD4XLNPpYiArlKm0urtDs3GIZY9+isD2ZXD0teY2n2TfYQn3gw30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QQfkmD5l; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NgCILPcN"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-59b6c89d302so124357e87.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 11:06:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769627191; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Hik7RTUIIMk3vLbloJSsj4qxM6S14krGlbQMitRqzrW6DY4ITZBh12p1TwqparPNqC
-         KbaUcg1w6d2OrnSqRkds2WtJ5chtxGYERiWyJXfdXpQSu73hWOdY/Fj8FF05924mO7ko
-         XE6SMiJIlalR+hsvH6BIjIgB5AvUVuBJmZOwmv6hycS/5tkB0Qo1aIaquqNS1GF/L63q
-         TdQgsAlAzZQzie6sM8uZpqMqXQ4HSGesjYD7nW0x1juD/3lzUjvYguKDj9WIDIOYOa2Z
-         vtXBM87pP3CQd3jn1msFFCyCLBrBEiNNmolIShKPMasFuP/b8TeMKWybh6kd21GjAuvp
-         AVzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9ERFjcMxrp1Lrat0Wg1Z6M81o4oaqai31qW//33Vyio=;
-        fh=SzjS3m4jSQMmxqyjFFh+qGv0hpgC1VkPzHa7TOKnKus=;
-        b=E4okCmTjLR41PvzNsXtVr0K5FieSLcCVBB9JivvtIMVCswO8j9ybH7FQRI6bjbXRqH
-         1m2iczqBIbU/Psm39ijcVshTH8mu+1M688HA+5NOT8oNgChiQuERnoIb4n611K2gi873
-         ePyvdKjTsLq4ejf3Gz3Obk1JCCg/N5M/OhpreQFr0k/02mn1vvtsFjWLT8xIHBJHjcQJ
-         DezMWGDFHOXZHUSV0J22LBlAEmvZjgqtJXWZnSFBOw5AB/KS9sEP4Ud7l0AbTj+uK8IT
-         yWwIx8AlLvaOc0a3DLq5aUQ6hKNPnVSiZ44Ihn9zI+w7knkmQxgA51z+VUpEWWf3AlJU
-         3rFA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769627191; x=1770231991; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9ERFjcMxrp1Lrat0Wg1Z6M81o4oaqai31qW//33Vyio=;
-        b=NgCILPcNSwS2HyBL1jvIf+akIMpYcyDfheerY2E/wsh0RrcfuqysqK/t1dD6VlnCjG
-         YhUmcZLzjbyc4mY3JiNcQhVe9Zh0Bw9N+vFO1T6T6/1P7CsRDa+Qq7X+rbf7XwnYVFbu
-         VJjRuVjW4yBMb4tQTEM53oK1IhXIp6I9BHvFp66JvZ9G2fMKzR2ob2A2L49YyO6mkGZi
-         C5PGgT7U08ofPeVP7csO07kb2DlsRauJG2ThSsQtKTk4hW1M5x9g5MLwtAe3QgOjT3mc
-         zqXXDNTcNV9KvN8i+pXlFdsFPuKlOIHBZJW5uXWyYiyT5cilcxsrfjFllqPs5PeRF2Tn
-         BENA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769627191; x=1770231991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9ERFjcMxrp1Lrat0Wg1Z6M81o4oaqai31qW//33Vyio=;
-        b=mo6pB1Lnsz5075VXdUp1BOZo+WnlXGmlLYeeQrpWBxxzD1iaYkQS9FpotbUC/6mNf6
-         hCxlMzD3+2vbsJbJrc0mn4KrW23m2/2gCEvdff1YGN/wL9lHAiUVmyvJpmsg8r14s/Eg
-         VXaPLlFErm0J5/R1T+v2vImcPddmZJdRLkYrk6vAZiPTyKO0u1Q3jISW+xO2doT6UvCx
-         uOz1kyIdOcRYbvAWmtOCQr8I+bCrfNVTTOHNQ+ChOOF43NhQQV554ASG7YHrA7ORpLR4
-         bkds5P38NX7LRNL5i4OKFsWAXu6yngaxYOz8rZpfk4+l9kp5ss8xvM7iDz6Oo/hWGYm4
-         0S3A==
-X-Forwarded-Encrypted: i=1; AJvYcCUgxSbgWhRQa/EzNt9mGN/jhlVMoFMGKYk084nC3e1uqa4zasHrhNH9lqjWGNeWRwCFABTOYj7G93QVEmX76W8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ5GW3lDzvcFEbkwIdcigH6QtJQjd72YBqAUb9jKVRdRb/uh2w
-	CWRIrh5Wacfk5qGQY0vvs+TzswuiCUmESKvoGSdeAFX3xQi3IsT8TO6d5w4dlCVh8hJ24xsqfFE
-	btUcNKS8D16MHiUrF1oZez1Lp+NQPnaFtWvUflcCD
-X-Gm-Gg: AZuq6aLTOQMB6nRcHPjt7xxtWb7M6yl7DVZH5Q/1EvpU/GmZQq46LbnajYmnTFP8lvS
-	RJcYmJT+mx4mnRxiy1D4CIbUW+PBeOUAQs1lYOPiqu55itsD6BAXO6stDkK3mT8QGtK0jJyJL32
-	dzUcnWA/ncbkJLkqEgsFUzQk2iqNtbdRgLu6xhmISXviI0Gud8YNFc51fKuzwRRg6XZlnA0cMon
-	9Jgl7XvK3VCth44ZU7SKWjxun4ql/vlCbPzuRzFIaBrAGdfqgEDZ4zujCyGbbLWrYyRRg==
-X-Received: by 2002:a05:6512:800e:10b0:59e:476:a1e7 with SMTP id
- 2adb3069b0e04-59e0476a285mr1721613e87.14.1769627190621; Wed, 28 Jan 2026
- 11:06:30 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QQfkmD5l"
+Message-ID: <7dbcc5d5-476b-46e5-9e4b-b260d24a51a1@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769627347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Uoce2O4bq+uQodOB69TrcPt+OZtvkCKYOFmKW88WqjE=;
+	b=QQfkmD5lsHJq3o87CYC128K2gTqM8Je0n3mmDb7+VkG836yXHnF3KY7huFJiwuXOFZwF6+
+	84fkXG22+popIKJZno2KmoEGOUfWcQ8vQiZtngJ54CILBc359vKQ7gzGPFZ8B1BKhImMSl
+	PryoO/gGwx1UTolmy4wP1qSn/KnXi4E=
+Date: Wed, 28 Jan 2026 11:08:54 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260128183750.1240176-1-tedlogan@fb.com>
-In-Reply-To: <20260128183750.1240176-1-tedlogan@fb.com>
-From: David Matlack <dmatlack@google.com>
-Date: Wed, 28 Jan 2026 11:06:03 -0800
-X-Gm-Features: AZwV_QiCfY-gKazxXujHuB-Px-mOodRPyZ3KnKJr-7oxiY8ldmqZpZW_6Z2R1Uo
-Message-ID: <CALzav=dMhycS2iBxkhPCz3tMUKxkfgr1dCLFGYzGuXZCeYhijw@mail.gmail.com>
-Subject: Re: [PATCH] vfio: selftests: fix format conversion compiler warning
-To: Ted Logan <tedlogan@fb.com>
-Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Alex Mastro <amastro@fb.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Add bpf_arch_supports_fsession()
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Chris Mason <clm@meta.com>
+Cc: bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+ Xu Kuohai <xukuohai@huaweicloud.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Menglong Dong <menglong8.dong@gmail.com>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ kernel-patches-bot@fb.com, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260128150112.8873-2-leon.hwang@linux.dev>
+ <e64c4137e7f262e6fdab272e8ee44c8a129a36eb6d0186914375d6ba20d88474@mail.kernel.org>
+ <65231eeb-1f00-4af2-9234-a290ea3f6585@meta.com>
+ <a10afa70-29b7-48ab-b241-8b0f602abe2f@linux.dev>
+ <CAADnVQJV=e2VgQzkpsUQwexhaVZMs7uXHCe1Fa6VwbVNUMPghA@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CAADnVQJV=e2VgQzkpsUQwexhaVZMs7uXHCe1Fa6VwbVNUMPghA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Jan 28, 2026 at 10:38=E2=80=AFAM Ted Logan <tedlogan@fb.com> wrote:
->
-> Use the standard format conversion macro PRIx64 to generate the
-> appropriate format conversion for 64-bit integers. Fixes a compiler
-> warning with -Wformat on i386.
->
-> Signed-off-by: Ted Logan <tedlogan@fb.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp@i=
-ntel.com/
+On 1/28/26 10:49 AM, Alexei Starovoitov wrote:
+> On Wed, Jan 28, 2026 at 9:34 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> On 1/28/26 7:35 AM, Chris Mason wrote:
+>>>
+>>>
+>>> On 1/28/26 10:26 AM, bot+bpf-ci@kernel.org wrote:
+>>>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>>>>> index 5a075e06cf..070ba80e39 100644
+>>>>> --- a/arch/x86/net/bpf_jit_comp.c
+>>>>> +++ b/arch/x86/net/bpf_jit_comp.c
+>>>>> @@ -4112,3 +4112,8 @@ bool bpf_jit_supports_timed_may_goto(void)
+>>>>>  {
+>>>>>     return true;
+>>>>>  }
+>>>>> +
+>>>>> +bool bpf_jit_supports_fsession(void)
+>>>>        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>> This is the actual function name in the code.
+>>>
+>>> Ihor, I think the script parsing review-inline.txt chopped off the
+>>> part of the review where AI was complaining about the commit message?
+>>
+>> This is the email body pre-processing in KPD, yes.
+>>
+>> At some point we decided to remove the commit message before sending
+>> an email, but now that AI reviews the messages too, I think we should
+>> just send the generated review-inline.txt as is.
+>>
+>> Alexei, wdyt?
+> 
+> I think KPD is only supposed to trim the header until 'diff ..' line.
+> In this case there is no 'diff', so I'm not sure why it trimmed so much.
 
-Thanks for the patch.
+There is. Here is the PR comment with the review:
+https://github.com/kernel-patches/bpf/pull/10868#issuecomment-3811930805
 
-I've been seeing these i386 reports as well. I find the PRIx64, etc.
-format specifiers make format strings very hard to read. And I think
-there were some other issues when building VFIO selftests with i386
-the last time I tried.
+KPD trimmed everything before the first "> diff" occurrence, as expected.
 
-I was thinking instead we should just not support i386 builds of VFIO
-selftests. But I hadn't gotten around to figuring out the right
-Makefile magic to make that happen.
+I'll try to fix this up in KPD. We should probably search for the first
+line starting with "> " (a quote start) to trim the header correctly.
+
+Alternatively, AI can be prompted to avoid generating the header in
+review-inline.txt, but that's probably less reliable. And maybe it is
+useful for local runs, idk.
+
+> 
+> commit sha...
+> Author: ...
+> 
+> are useless in email reply, so we should still trim them.
+
