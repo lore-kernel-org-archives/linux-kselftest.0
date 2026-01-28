@@ -1,119 +1,85 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7752264A9;
-	Wed, 28 Jan 2026 19:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3290B2F7ADE;
+	Wed, 28 Jan 2026 19:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769627351; cv=none; b=E1N5aWYuGRwG+0IksfklNcYybS+ldPfHglpsA15hOn8dUhHLmC5hcp4itki6an0OLiLlm3Z1gudaBHnT2zNF8ugsvhkNoI0Y0JZuqpfvGw/daemMWJQbWxldZkrpZr3Ttqh/UmSqrdYvYWrAiNg1se58aro8CqoXNU5XCJ7YeM8=
+	t=1769627557; cv=none; b=rQsx1e8RchbRhlyphefqxfgw/56R1bKULfErKdqxp6OMgtWV/sq9udMMiNuBrCuasb9dIdARFgZaYSXPBFWx+sYHbNQ84glGvFHVrjEuMw0YaXaSi9vPvyC084Vj4J5n/R7hZJPAv41yFYEnTegh9hf9+LoyjezFRPzcsDKGg9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769627351; c=relaxed/simple;
-	bh=4F1TG6+WlGTBF/WCPp6MXY9LYYj2ZXbTcfmFt02NhMk=;
+	s=arc-20240116; t=1769627557; c=relaxed/simple;
+	bh=IJFSZVCsvtg+mrh9IR4VvUNY9sVjFe98VaQ2irbJdAk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CK7w42pfynqF+Bt1vFR/EJIge+TwoTQNwOxF6KDTlI8SNWH9TnFe8jGFK6s1xM/5z0G3rERjlIJbhj+phMvvLEeYKBrz/smi8Mufu4IRWjjGFfQTncGbAEgzD4XLNPpYiArlKm0urtDs3GIZY9+isD2ZXD0teY2n2TfYQn3gw30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QQfkmD5l; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=MYklkHVievnKSfko9NzHd58cYpCHiCWGx5xD0EG50fiZ4OC2cFxVGNruzvNFJPBgNM0mL1XmvjTJowx6QK4sCd7F+G9iUwWxg+L5tewlsfwt+6JM7N4Bq10Fgcnl3qaCrpw7+zFPYSbuMyWieyZ2ntE0j5J4QU6KPDOAEz4ytw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Su/N10kA; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QQfkmD5l"
-Message-ID: <7dbcc5d5-476b-46e5-9e4b-b260d24a51a1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769627347;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Uoce2O4bq+uQodOB69TrcPt+OZtvkCKYOFmKW88WqjE=;
-	b=QQfkmD5lsHJq3o87CYC128K2gTqM8Je0n3mmDb7+VkG836yXHnF3KY7huFJiwuXOFZwF6+
-	84fkXG22+popIKJZno2KmoEGOUfWcQ8vQiZtngJ54CILBc359vKQ7gzGPFZ8B1BKhImMSl
-	PryoO/gGwx1UTolmy4wP1qSn/KnXi4E=
-Date: Wed, 28 Jan 2026 11:08:54 -0800
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Su/N10kA"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=Yk6NqBka7Y23oFWb4hZZsO9LBcBAlQiUDANZ1wr1iDA=; b=Su/N10kA2ehEE6B1rQLV1BBq47
+	7cVqMdJCWZSVnVT+FJXyvgTa4xT/mklLRSjEj6OAyi3LThQmXI1tEsJ4u4n0cwtWznS/j0Ucr1Yjy
+	4jxLxaS0zA4b10Ro7Rued3r3wM0n/re10C2UprJiYbMR2tcmE/bxG7yLYmCHeHzBaS08DVvSoAGTi
+	Jab20HFcx8P3B0h2J0pb5arVv+6ZRdyGOb3CrPVu0zZ0R2owP2IwHeZ1hKp+FVckhpEPYbv6pOlf9
+	R7KdwBor7+7Sgyk9/vRoSRZnUT9T14CG0W1/0OAaGUwlDnoFDz/N8vha5fvJz2erik+6dZ4lQFyQs
+	adlIDxIA==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vlAxt-0000000GfZ9-1460;
+	Wed, 28 Jan 2026 19:12:33 +0000
+Message-ID: <9d992d4a-1aea-42a7-aa79-4ede80293f9b@infradead.org>
+Date: Wed, 28 Jan 2026 11:12:31 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Add bpf_arch_supports_fsession()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Chris Mason <clm@meta.com>
-Cc: bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Xu Kuohai <xukuohai@huaweicloud.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Menglong Dong <menglong8.dong@gmail.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com, Martin KaFai Lau <martin.lau@kernel.org>
-References: <20260128150112.8873-2-leon.hwang@linux.dev>
- <e64c4137e7f262e6fdab272e8ee44c8a129a36eb6d0186914375d6ba20d88474@mail.kernel.org>
- <65231eeb-1f00-4af2-9234-a290ea3f6585@meta.com>
- <a10afa70-29b7-48ab-b241-8b0f602abe2f@linux.dev>
- <CAADnVQJV=e2VgQzkpsUQwexhaVZMs7uXHCe1Fa6VwbVNUMPghA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] vfio: selftests: fix format conversion compiler warning
+To: David Matlack <dmatlack@google.com>, Ted Logan <tedlogan@fb.com>
+Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+ Raghavendra Rao Ananta <rananta@google.com>, Alex Mastro <amastro@fb.com>,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20260128183750.1240176-1-tedlogan@fb.com>
+ <CALzav=dMhycS2iBxkhPCz3tMUKxkfgr1dCLFGYzGuXZCeYhijw@mail.gmail.com>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAADnVQJV=e2VgQzkpsUQwexhaVZMs7uXHCe1Fa6VwbVNUMPghA@mail.gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CALzav=dMhycS2iBxkhPCz3tMUKxkfgr1dCLFGYzGuXZCeYhijw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 1/28/26 10:49 AM, Alexei Starovoitov wrote:
-> On Wed, Jan 28, 2026 at 9:34 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+
+
+On 1/28/26 11:06 AM, David Matlack wrote:
+> On Wed, Jan 28, 2026 at 10:38 AM Ted Logan <tedlogan@fb.com> wrote:
 >>
->> On 1/28/26 7:35 AM, Chris Mason wrote:
->>>
->>>
->>> On 1/28/26 10:26 AM, bot+bpf-ci@kernel.org wrote:
->>>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->>>>> index 5a075e06cf..070ba80e39 100644
->>>>> --- a/arch/x86/net/bpf_jit_comp.c
->>>>> +++ b/arch/x86/net/bpf_jit_comp.c
->>>>> @@ -4112,3 +4112,8 @@ bool bpf_jit_supports_timed_may_goto(void)
->>>>>  {
->>>>>     return true;
->>>>>  }
->>>>> +
->>>>> +bool bpf_jit_supports_fsession(void)
->>>>        ^^^^^^^^^^^^^^^^^^^^^^^^^^
->>>> This is the actual function name in the code.
->>>
->>> Ihor, I think the script parsing review-inline.txt chopped off the
->>> part of the review where AI was complaining about the commit message?
+>> Use the standard format conversion macro PRIx64 to generate the
+>> appropriate format conversion for 64-bit integers. Fixes a compiler
+>> warning with -Wformat on i386.
 >>
->> This is the email body pre-processing in KPD, yes.
->>
->> At some point we decided to remove the commit message before sending
->> an email, but now that AI reviews the messages too, I think we should
->> just send the generated review-inline.txt as is.
->>
->> Alexei, wdyt?
+>> Signed-off-by: Ted Logan <tedlogan@fb.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp@intel.com/
 > 
-> I think KPD is only supposed to trim the header until 'diff ..' line.
-> In this case there is no 'diff', so I'm not sure why it trimmed so much.
-
-There is. Here is the PR comment with the review:
-https://github.com/kernel-patches/bpf/pull/10868#issuecomment-3811930805
-
-KPD trimmed everything before the first "> diff" occurrence, as expected.
-
-I'll try to fix this up in KPD. We should probably search for the first
-line starting with "> " (a quote start) to trim the header correctly.
-
-Alternatively, AI can be prompted to avoid generating the header in
-review-inline.txt, but that's probably less reliable. And maybe it is
-useful for local runs, idk.
-
+> Thanks for the patch.
 > 
-> commit sha...
-> Author: ...
+> I've been seeing these i386 reports as well. I find the PRIx64, etc.
+> format specifiers make format strings very hard to read. And I think
+> there were some other issues when building VFIO selftests with i386
+> the last time I tried.
 > 
-> are useless in email reply, so we should still trim them.
+> I was thinking instead we should just not support i386 builds of VFIO
+> selftests. But I hadn't gotten around to figuring out the right
+> Makefile magic to make that happen.
+
+There are other 32-bit CPUs besides i386.
+Or do only support X86?
+
+-- 
+~Randy
 
