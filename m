@@ -1,93 +1,113 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1C0B29827E;
-	Wed, 28 Jan 2026 14:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74A5369960
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 15:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769612019; cv=none; b=UODj1IbzOoCBJev0eLwfwp4bFJQYCj3WrbUbXny18sSEJGh+rEVw3Py+UX2eiAV8DIhPl+gmFOv8YYWLxHpv+b2XfsrCVcYLCTc5SpEu+yuDs8ZumtAqCBquBSr0ysfqXTvLoOkNZ+S1BI/6a6iyMt99nPUmyC9VZ5TEL59oq3E=
+	t=1769612506; cv=none; b=EhZtTfiK9+F36+FN8cpqn7dLpYJp4wUTf46BwaQYtsAg+Px39s0SMJ9nKTdWtPFRimWP+m5RthufRbIal1ZPOF9vEUr5GipndhmkSe7kzo2QDxH0KA0x3Xr/s6vpBvm6cq4N+q2SobNnAvyzzHaquu0N1/GK9d9Lzt22UpZ7bK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769612019; c=relaxed/simple;
-	bh=0lM4PcSgf1rtjHZvdcOhwOvjmWfkwAE8vzlY6lxtmaY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HwesBCUW+P6SByfRyHTFZ295ehg3+R+yoI7w95JMdXo/UM6QXwILAijqFyHPqxALQttG7fuZxPrqbMz9eBdK5tvS3DzuebpBltQugeqGAl4sgR64jHnJ5UEdF9ipajjW2jsUhFkL6J9VsjpjTs9o7x/wY8GzMEADOFUe4vDJc9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 614011515;
-	Wed, 28 Jan 2026 06:53:30 -0800 (PST)
-Received: from [10.44.160.85] (e126510-lin.lund.arm.com [10.44.160.85])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 563313F73F;
-	Wed, 28 Jan 2026 06:53:31 -0800 (PST)
-Message-ID: <647fe97e-e8c1-464f-bbc7-39dac0bda6b2@arm.com>
-Date: Wed, 28 Jan 2026 15:53:28 +0100
+	s=arc-20240116; t=1769612506; c=relaxed/simple;
+	bh=pztt026up2P4xqtjxc1Kc5KO09stPQ8UGQxMeSCjTsA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tnnvj4j7yn5ib4gDFGADggF4EOKo7g+n2D4+L6Dos8Y57iQK4igOkT8MEN0f/huY3PWylE75epmnfROP5Q2LaMuuUS/Kb8QPfBQX/oFejvkRT9vgwdw/EH+ywKNvf/6vV8OBsHsyy65c0aLee8MDSknP+3mtD+mE2KnZo7/9/iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZiwyxMFD; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZiwyxMFD"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769612495;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=k4l9+/zjVdAeQ0ROWCJXkoihmFOfDxlfbczHQ1tq6Xc=;
+	b=ZiwyxMFDDtqkv5yoZMLezAk7OywXx0Ln7OXs3BjuRsOkLUQ2xuKxLh9NimUaUb+KIKfwdY
+	Pw5ly/3E/LN8ITSNn2U796762D7cLlRzNgZdhLcfDLCidGhR9QBV1sD8lyA9I6YBmByGEM
+	Wtnr8gp/9Z9ipABzFpVyz7TS9Ns0nh0=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v2 0/3] bpf, arm64: Add fsession support
+Date: Wed, 28 Jan 2026 23:01:09 +0800
+Message-ID: <20260128150112.8873-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 05/16] arm64: ptrace: Move rseq_syscall() before
- audit_syscall_exit()
-To: Jinjie Ruan <ruanjinjie@huawei.com>, Will Deacon <will@kernel.org>
-Cc: catalin.marinas@arm.com, oleg@redhat.com, tglx@linutronix.de,
- peterz@infradead.org, luto@kernel.org, shuah@kernel.org, kees@kernel.org,
- wad@chromium.org, macro@orcam.me.uk, charlie@rivosinc.com,
- akpm@linux-foundation.org, ldv@strace.io, anshuman.khandual@arm.com,
- mark.rutland@arm.com, thuth@redhat.com, song@kernel.org,
- ryan.roberts@arm.com, ada.coupriediaz@arm.com, broonie@kernel.org,
- liqiang01@kylinos.cn, pengcan@kylinos.cn, kmal@cock.li, dvyukov@google.com,
- richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
- <20251222114737.1334364-6-ruanjinjie@huawei.com>
- <aXe6W69Esd1NLEU8@willie-the-truck>
- <28e54f74-9b3d-4c3c-9172-ceb429e7fcbe@arm.com>
- <4891191c-d1c3-6985-c2ea-1b29deb8abe1@huawei.com>
- <0f6212c1-7034-42f4-ba77-10e9ec52a4f5@arm.com>
- <6ff5d366-3a2d-089b-5ac7-e40b81a8664c@huawei.com>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <6ff5d366-3a2d-089b-5ac7-e40b81a8664c@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 28/01/2026 02:09, Jinjie Ruan wrote:
->
-> On 2026/1/27 23:06, Kevin Brodsky wrote:
->> On 27/01/2026 12:34, Jinjie Ruan wrote:
->>>> [...]
->>>>
->>>>>  I'm also concerned that rseq_debug_update_user_cs()
->>>>> operates on instruction_pointer(regs) which is something that can be
->>>>> chaned by ptrace.
->>>> Isn't that true regardless of where rseq_syscall() is called on the
->>>> syscall exit path, though?
->>> My understanding is that if instruction_pointer(regs) is hijacked and
->>> modified via ptrace at the syscall exit (ptrace_report_syscall_exit()),
->>> this modification will not be observed by rseq. Specifically, in the
->>> generic entry syscall exit path, rseq_syscall() is unable to detect such
->>> a PC modification.
->> Good point. So concretely that means that currently on arm64, one could
->> make the rseq debug check pass/fail by using the syscall exit trap to
->> modify PC. OTOH this is impossible with generic entry because the rseq
->> check is performed first. I'm not sure this is a feature anyone has even
->> noticed, but it is a user-visible change indeed.
-> After digging into the ptrace code, I found that ptrace does not modify
-> instruction_pointer(regs) on the syscall exit path; it only changes the
-> return value as below.
-> Therefore, if my understanding is correct, Will's concern does not apply
-> here.
->
-> ptrace_set_syscall_info()
->   -> ptrace_set_syscall_info_exit()
->      -> syscall_set_return_value(child, regs, 0, rval)
+Similar to commit 98770bd4e6df ("bpf,x86: add fsession support for x86_64"),
+add fsession support on arm64.
 
-I'm not following, how is that related to the call to
-ptrace_report_syscall_exit()? That eventually results in a call to
-ptrace_stop() (via ptrace_notify()), which synchronously causes the
-tracee to sleep and allows the tracer to issue ptrace commands, e.g.
-setting PC.
+Patch #1 adds bpf_arch_supports_fsession() to prevent fsession loading
+on architectures that do not implement fsession support.
 
-- Kevin
+Patch #2 implements fsession support in the arm64 BPF JIT trampoline.
+
+Patch #3 enables the relevant selftests on arm64, including get_func_ip,
+and get_func_args.
+
+All enabled tests pass on arm64:
+
+ cd tools/testing/selftests/bpf
+ ./test_progs -t fsession
+ #135/1   fsession_test/fsession_test:OK
+ #135/2   fsession_test/fsession_reattach:OK
+ #135/3   fsession_test/fsession_cookie:OK
+ #135     fsession_test:OK
+ Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+
+ ./test_progs -t get_func
+ #138     get_func_args_test:OK
+ #139     get_func_ip_test:OK
+ Summary: 2/0 PASSED, 0 SKIPPED, 0 FAILED
+
+Changes:
+v1 -> v2:
+* Add bpf_arch_supports_fsession().
+
+Leon Hwang (3):
+  bpf: Add bpf_arch_supports_fsession()
+  bpf, arm64: Add fsession support
+  bpf/selftests: Enable get_func_args and get_func_ip tests on arm64
+
+ arch/arm64/net/bpf_jit_comp.c                 | 71 ++++++++++++++++---
+ arch/x86/net/bpf_jit_comp.c                   |  5 ++
+ include/linux/bpf.h                           |  7 +-
+ include/linux/filter.h                        |  1 +
+ kernel/bpf/core.c                             |  5 ++
+ kernel/bpf/verifier.c                         |  3 +
+ .../selftests/bpf/prog_tests/fsession_test.c  | 32 ++++++---
+ .../selftests/bpf/progs/get_func_args_test.c  |  2 +-
+ .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
+ 9 files changed, 108 insertions(+), 20 deletions(-)
+
+--
+2.52.0
+
