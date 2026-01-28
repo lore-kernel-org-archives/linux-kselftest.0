@@ -1,190 +1,316 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B864C2FE05B;
-	Wed, 28 Jan 2026 10:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECFB2F2616;
+	Wed, 28 Jan 2026 10:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769595882; cv=none; b=hNCRuXpE8nQYpvfyBbj5dLA6Lc6bsZM4w96kwn2+KTlI0IG/gnJzeLlDNp6HQ6f8E6zge/znylRIgVoN3WFScb+UA1dHsF+OGz3annH/AmJqdDysw+aiW+te8TunvRwV2maJr2i98Wu5KYO78Wj7QD3hgYtI7O5nDu1rq7JNrno=
+	t=1769595994; cv=none; b=CLdZyrSL0jRW+drRwps7OzeK91q2LDc/fL1YHgyKfXxA7cV6Prz/q0lJqKiOjX9TjSl168DfqWMmebJRS3ALUoLFECZr5I+r3BvyFCnqle1xJdpBaz7fjpikohu4UyLns/+2Q8aENgfinZz641bmXrG5dEOFUccMgBOtOdc1gCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769595882; c=relaxed/simple;
-	bh=CpItbGuqViNDVOKjF5OYL74vl8pZDCV7rH9gUThemMI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=R757WFLaSd8M3IpDQ51zD8SyTICMmcW13ClFLMvy0iy2+W/9rY9L82NTlNXV5UAD6gtfdc646FIoksxEo42QLY8zFQQIG+S83IDunyjq/zIZ+OHpuq4U0o+fcsY+8bjBOhqbsWtaQ4XrYml1q1mGn6Q/HPcQbtRIujktav82pcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XNGRnSh0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YYQLmdP5; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1769595994; c=relaxed/simple;
+	bh=JEFNtcIXJumMTCCZ7WL3ORROgBWp+0/0HRw8Qv3b7J8=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version:Content-Type; b=GH2ITZaUML5rZkIgaLksrYMu1MbJxWVLIZMebL+/PwzRqxy7W7U0sgyzoUDWqYqW95JB/RqMzjxOgVdhcaEWvA/gekwE8vWX+yVBDkG1nV1pPf6ESrYgiBweBPXHLL+4Vd2aQHD9pBOUQdFOZDC+ZyNaEbyMLXuQ73szsOLEckU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=XgKTAE9E; arc=none smtp.client-ip=162.62.57.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XNGRnSh0";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YYQLmdP5"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769595879;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q0+KrQzgL1kAPuD4kd5PpMOSsltIHrny4Tn1/dEXzlk=;
-	b=XNGRnSh0+7+hKsYV8RTaJPf5GgNjVGA4Z6VkjilJ7rOgaW9WKRvxkahGfn0bukv+L6/nx6
-	iA7t22HOm/GhQ7MSXzJUsuTlkmRBloJ1s2BotcbUF8VSmjKLTHoRt9QMC9VPsTaVbAuGlj
-	GL+2gQl86xbA0eP/xf64Cr7t/NSyAVOj18kH5YUXp/Fj4mGJAhEZpXcDtjTqmB4XTdb1gP
-	z+FbZZpTtEMOMJSSkIauLd8wYGe6GM3LMhzg6lok8saui0Gxyjkcgx5+lRqQm6mm8KKf6n
-	BrixNb1dzJPezdFKc6TPEu0QRBfApqmXenHYVdLx7YVdplhxFeg1eRophgTFQQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769595879;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q0+KrQzgL1kAPuD4kd5PpMOSsltIHrny4Tn1/dEXzlk=;
-	b=YYQLmdP5xh+dydSzykG9unsL61UJrmRSxf2mENSrKE6rtgmJmc0CNEXWcJNUHq+hUlLctk
-	hOKhXiuzsGRwJADQ==
-Date: Wed, 28 Jan 2026 11:24:37 +0100
-Subject: [PATCH 5/5] selftests: harness: Validate intermixing of kselftest
- and harness functionality
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="XgKTAE9E"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1769595981;
+	bh=vZREuVvORdvibmY/zt4BBeWKYOCiAtgtDPs4Wwc+bR4=;
+	h=From:To:Cc:Subject:Date;
+	b=XgKTAE9EGxnahOWsQR6z2UdcWxLEFMHTXK4eW2ltl+QEE+MpevzfzFa1gyIDm+fnu
+	 2Zq7J2pDq4L0tNo+l6SCvRcxBXCFToGzNZkl72d+r2Cl7p1DV2ljJmZj32XSzo/1iM
+	 amikiRzpt4x5XrtzQm3DVy+KdlasIJSe1YSozUR8=
+Received: from meizu-Precision-3660.meizu.com ([14.21.33.152])
+	by newxmesmtplogicsvrszb43-0.qq.com (NewEsmtp) with SMTP
+	id 6368CA94; Wed, 28 Jan 2026 18:24:54 +0800
+X-QQ-mid: xmsmtpt1769595894tgn259yxe
+Message-ID: <tencent_204540DCC2E303AEB6E77679C05F5C5D3808@qq.com>
+X-QQ-XMAILINFO: NbgegmlEc3JunghiCKXdczfvSrrg4EklZGrDMQJTELDXreLk5drwLjHvHxqFU0
+	 5pbMNYNqjWaxjWLvON4v9YG0aCKEVNIRxgRtxRSw2tUG4B3IGdeLENtVIsKvjVj+IZE1zUf1dDRM
+	 dhHdnv5ff2iXOUYRLnD74bzT751CyqHMGL2eVY/YdGiYpOpC30HC14qJ/MlXsSpPbsQJ78Q07O4J
+	 +6oiXSB4J3UxaxXD+edu7nxjhfh8pKjKGOhp+GwWVfYW3Iul+R5+6KOUsAbc7X+GIbTul7eplY8F
+	 VF1msbx1km1haVK7CCk2UD3ZUFyKA5NDtiHMZ2Z0cYEMQXrUYWOYCLFZHoL+wo6crjHs+MHNSMi7
+	 /8wJq1c60mWqCtsedDvj9QSUGNqZ3r04uh6O/sK30jCRKuofVQfZRGY3ZSMNpdJJZVNArHVJyENv
+	 PEZ/gd0IEBOpaQyJ4XIcFtbCGMX0nfgrY3LCRFVN/cUtReGMs3AxnV2k3RKMv0WDksteM5ZWJ/dC
+	 BA4RAxC7LEr5Hqy4mwZraI13dAaBV+eHd6B3atJAxbmJYc8GaC6qk+x8mzaBwIrlt68F4YhYM4tv
+	 8TBzG1rbBrQSGuA//xsZadZ47TZhj3xfXM5rpUSYoWwmLHfauTWapgWIO11G+0gHkeP1NweWSwF4
+	 5D4LslrejCn1MtA+2cxcEBU6Vz4ob+6swignf6bhbN060Nkxtw6kGOS8LnBqgxFmXOjmfthEN9L1
+	 sOfp3JoIrQkDNJYsiZIXEjqtUjjkUuBmBfvMG99TOmZdVjLaqaDRwBsJ3mslO+RzrFtVWo87Gnn3
+	 ShSHljWi4/EVB3yYhEK2Qfx1MnKZJYDaCUoh9RnqVV9yevWjaWZIqHKgHwv0BEs9txd8dxxKHX7c
+	 hlFtwIr44GuOXpJW1fIfra5uYpeiw/5y4U3jwF3V165HPAl9gpwcGE1esvW8NLsFGKyzbce9g4z8
+	 PM12s4Nj72o58craR6/9pZJdAeBNmqS+OjhXz4KEmHBvkjgmy9Rh+lsQ4IDIbJozmlVZDBWWsHud
+	 +8irjdD0pJSak8AkMFAa/KChSCnBh2PNTtS3YwKtiCasDuoQBGA5dSqKhg9JuPFWQYfajKjchMpR
+	 ymZ1BbVKLqOHOs7fg/sPP054bE3tKA3NAiV0gl9Oj5jPwvO7g=
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+From: Yuwen Chen <ywen.chen@foxmail.com>
+To: tglx@kernel.org
+Cc: akpm@linux-foundation.org,
+	andrealmeid@igalia.com,
+	bigeasy@linutronix.de,
+	colin.i.king@gmail.com,
+	dave@stgolabs.net,
+	dvhart@infradead.org,
+	edliaw@google.com,
+	justinstitt@google.com,
+	kernel-team@android.com,
+	licayy@foxmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	luto@mit.edu,
+	mingo@redhat.com,
+	morbo@google.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	peterz@infradead.org,
+	shuah@kernel.org,
+	usama.anjum@collabora.com,
+	wakel@google.com,
+	ywen.chen@foxmail.com
+Subject: [PATCH v4] selftests/futex: fix the failed futex_requeue test issue
+Date: Wed, 28 Jan 2026 18:24:51 +0800
+X-OQ-MSGID: <20260128102451.422871-1-ywen.chen@foxmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260128-kselftest-harness-v1-5-cb259fa81cd0@linutronix.de>
-References: <20260128-kselftest-harness-v1-0-cb259fa81cd0@linutronix.de>
-In-Reply-To: <20260128-kselftest-harness-v1-0-cb259fa81cd0@linutronix.de>
-To: Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
- Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769595876; l=4451;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=CpItbGuqViNDVOKjF5OYL74vl8pZDCV7rH9gUThemMI=;
- b=FiNajDX/RN+zC3U5VW/VM8RA3z9ZFUACWJt5ru4l6Fo2la6ViiQjAiD3QL6azARVMQT3sFoYG
- ojSX2rwIDYkC2SNj2nZchalzUI3T7ru8kZAQiRe8Hn7wDolIcAOL3zW
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Make sure that calling ksft_test_result_*() functions from harness
-tests work as expected.
+This test item has extremely high requirements for timing and can only
+pass the test under specific conditions. The following situations will
+lead to test failure:
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+    MainThread                  Thread1
+        │
+  pthread_create-------------------┐
+        │                          │
+ futex_cmp_requeue                 │
+        │                     futex_wait
+        │                          │
+
+If the child thread is not waiting in the futex_wait function when the
+main thread reaches the futex_cmp_requeue function, the test will fail.
+
+This patch avoids this problem by checking whether the child thread is
+in a sleeping state in the main thread.
+
+Fixes: 7cb5dd8e2c8c ("selftests: futex: Add futex compare requeue test")
+Signed-off-by: Yuwen Chen <ywen.chen@foxmail.com>
+Co-developed-by: Edward Liaw <edliaw@google.com>
+Signed-off-by: Edward Liaw <edliaw@google.com>
 ---
- .../selftests/kselftest_harness/harness-selftest.c | 20 +++++++++++++
- .../kselftest_harness/harness-selftest.expected    | 35 ++++++++++++++++------
- 2 files changed, 46 insertions(+), 9 deletions(-)
+v1->v2:
+    1. Fix the issue of abnormal use of fscanf in the get_thread_state function
+    2. Add timeout logic
 
-diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.c b/tools/testing/selftests/kselftest_harness/harness-selftest.c
-index f109a21ed6f7..3e3033d2745a 100644
---- a/tools/testing/selftests/kselftest_harness/harness-selftest.c
-+++ b/tools/testing/selftests/kselftest_harness/harness-selftest.c
-@@ -138,6 +138,26 @@ TEST(exit_skip) {
- 	exit(KSFT_SKIP);
+v2->v3: https://lore.kernel.org/all/tencent_B9DBF2ECBE56BAB68BDAB949C6935D01CE09@qq.com/
+    1. Use /proc/[pid]/wchan instead of /proc/[pid]/stat to check if a process has entered the sleep state
+    2. Refactor part of the logic to facilitate code reuse.
+v3->v4: https://lore.kernel.org/all/tencent_FC5FB35D2545AFDCA6E377AE4DE75C79AF08@qq.com/
+    1. Add a new futex_thread.h file.
+    2. Add a new function named futex_thread_destroy.
+    3. Fix the issue that threads are not reclaimed in futex_requeue.
+
+ .../futex/functional/futex_requeue.c          |  31 +++---
+ .../selftests/futex/include/futex_thread.h    | 100 ++++++++++++++++++
+ 2 files changed, 118 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/futex/include/futex_thread.h
+
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
+index dcf0d5f2f3122..38743adcfd20f 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue.c
+@@ -9,10 +9,11 @@
+ #include <limits.h>
+ 
+ #include "futextest.h"
++#include "futex_thread.h"
+ #include "kselftest_harness.h"
+ 
+-#define timeout_ns  30000000
+-#define WAKE_WAIT_US 10000
++#define FUTEX_WAIT_TIMEOUT_S	3 /* 3s */
++#define WAIT_THREAD_DELAY_US	(10000 * 100) /* 1s */
+ 
+ volatile futex_t *f1;
+ 
+@@ -20,8 +21,8 @@ void *waiterfn(void *arg)
+ {
+ 	struct timespec to;
+ 
+-	to.tv_sec = 0;
+-	to.tv_nsec = timeout_ns;
++	to.tv_sec = FUTEX_WAIT_TIMEOUT_S;
++	to.tv_nsec = 0;
+ 
+ 	if (futex_wait(f1, *f1, &to, 0))
+ 		printf("waiter failed errno %d\n", errno);
+@@ -33,27 +34,27 @@ TEST(requeue_single)
+ {
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
+-	pthread_t waiter[10];
++	struct futex_thread waiter;
+ 
+ 	f1 = &_f1;
+ 
+ 	/*
+ 	 * Requeue a waiter from f1 to f2, and wake f2.
+ 	 */
+-	ASSERT_EQ(0, pthread_create(&waiter[0], NULL, waiterfn, NULL));
+-
+-	usleep(WAKE_WAIT_US);
++	ASSERT_EQ(0, futex_thread_create(&waiter, waiterfn, NULL));
++	futex_wait_for_thread(&waiter, WAIT_THREAD_DELAY_US);
+ 
+ 	EXPECT_EQ(1, futex_cmp_requeue(f1, 0, &f2, 0, 1, 0));
+ 	EXPECT_EQ(1, futex_wake(&f2, 1, 0));
++
++	futex_thread_destroy(&waiter);
  }
  
-+TEST(test_result_pass) {
-+	ksft_test_result_pass("");
-+}
-+
-+TEST(test_result_xpass) {
-+	ksft_test_result_xpass("");
-+}
-+
-+TEST(test_result_fail) {
-+	ksft_test_result_fail("");
-+}
-+
-+TEST(test_result_xfail) {
-+	ksft_test_result_xfail("");
-+}
-+
-+TEST(test_result_skip) {
-+	ksft_test_result_skip("");
-+}
-+
- int main(int argc, char **argv)
+ TEST(requeue_multiple)
  {
- 	/*
-diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.expected b/tools/testing/selftests/kselftest_harness/harness-selftest.expected
-index da7febc11e10..c0a68ec124f8 100644
---- a/tools/testing/selftests/kselftest_harness/harness-selftest.expected
-+++ b/tools/testing/selftests/kselftest_harness/harness-selftest.expected
-@@ -1,6 +1,6 @@
- TAP version 13
--1..14
--# Starting 14 tests from 4 test cases.
-+1..19
-+# Starting 19 tests from 4 test cases.
- #  RUN           global.standalone_pass ...
- # harness-selftest.c:19:standalone_pass:before
- # harness-selftest.c:23:standalone_pass:after
-@@ -40,6 +40,23 @@ ok 8 global.exit_xfail # XFAIL unknown
- #  RUN           global.exit_skip ...
- #            OK  global.exit_skip
- ok 9 global.exit_skip # SKIP unknown
-+#  RUN           global.test_result_pass ...
-+#            OK  global.test_result_pass
-+ok 10 global.test_result_pass
-+#  RUN           global.test_result_xpass ...
-+#            OK  global.test_result_xpass
-+ok 11 global.test_result_xpass
-+#  RUN           global.test_result_fail ...
-+not ok 1 # Illegal usage of low-level ksft APIs in harness test
-+# test_result_fail: Test failed
-+#          FAIL  global.test_result_fail
-+not ok 12 global.test_result_fail
-+#  RUN           global.test_result_xfail ...
-+#            OK  global.test_result_xfail
-+ok 13 global.test_result_xfail
-+#  RUN           global.test_result_skip ...
-+#            OK  global.test_result_skip
-+ok 14 global.test_result_skip
- #  RUN           fixture.pass ...
- # harness-selftest.c:53:pass:setup
- # harness-selftest.c:62:pass:before
-@@ -48,7 +65,7 @@ ok 9 global.exit_skip # SKIP unknown
- # harness-selftest.c:66:pass:after
- # harness-selftest.c:58:pass:teardown same-process=1
- #            OK  fixture.pass
--ok 10 fixture.pass
-+ok 15 fixture.pass
- #  RUN           fixture.fail ...
- # harness-selftest.c:53:fail:setup
- # harness-selftest.c:70:fail:before
-@@ -56,26 +73,26 @@ ok 10 fixture.pass
- # harness-selftest.c:58:fail:teardown same-process=1
- # fail: Test terminated by assertion
- #          FAIL  fixture.fail
--not ok 11 fixture.fail
-+not ok 16 fixture.fail
- #  RUN           fixture.timeout ...
- # harness-selftest.c:53:timeout:setup
- # harness-selftest.c:77:timeout:before
- # timeout: Test terminated by timeout
- #          FAIL  fixture.timeout
--not ok 12 fixture.timeout
-+not ok 17 fixture.timeout
- #  RUN           fixture_parent.pass ...
- # harness-selftest.c:87:pass:setup
- # harness-selftest.c:96:pass:before
- # harness-selftest.c:98:pass:after
- # harness-selftest.c:92:pass:teardown same-process=0
- #            OK  fixture_parent.pass
--ok 13 fixture_parent.pass
-+ok 18 fixture_parent.pass
- #  RUN           fixture_setup_failure.pass ...
- # harness-selftest.c:106:pass:setup
- # harness-selftest.c:108:pass:Expected 0 (0) == 1 (1)
- # pass: Test terminated by assertion
- #          FAIL  fixture_setup_failure.pass
--not ok 14 fixture_setup_failure.pass
--# FAILED: 8 / 14 tests passed.
-+not ok 19 fixture_setup_failure.pass
-+# FAILED: 12 / 19 tests passed.
- # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
--# Totals: pass:5 fail:6 xfail:1 xpass:1 skip:1 error:0
-+# Totals: pass:9 fail:7 xfail:1 xpass:1 skip:1 error:0
-
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
+-	pthread_t waiter[10];
+-	int i;
++	struct futex_thread waiter[10];
+ 
+ 	f1 = &_f1;
+ 
+@@ -61,13 +62,17 @@ TEST(requeue_multiple)
+ 	 * Create 10 waiters at f1. At futex_requeue, wake 3 and requeue 7.
+ 	 * At futex_wake, wake INT_MAX (should be exactly 7).
+ 	 */
+-	for (i = 0; i < 10; i++)
+-		ASSERT_EQ(0, pthread_create(&waiter[i], NULL, waiterfn, NULL));
++	for (int i = 0; i < 10; i++)
++		ASSERT_EQ(0, futex_thread_create(&waiter[i], waiterfn, NULL));
+ 
+-	usleep(WAKE_WAIT_US);
++	for (int i = 0; i < 10; i++)
++		futex_wait_for_thread(&waiter[i], WAIT_THREAD_DELAY_US / 10);
+ 
+ 	EXPECT_EQ(10, futex_cmp_requeue(f1, 0, &f2, 3, 7, 0));
+ 	EXPECT_EQ(7, futex_wake(&f2, INT_MAX, 0));
++
++	for (int i = 0; i < 10; i++)
++		futex_thread_destroy(&waiter[i]);
+ }
+ 
+ TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/futex/include/futex_thread.h b/tools/testing/selftests/futex/include/futex_thread.h
+new file mode 100644
+index 0000000000000..9761f67b6d30b
+--- /dev/null
++++ b/tools/testing/selftests/futex/include/futex_thread.h
+@@ -0,0 +1,100 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * library for futex tests
++ *
++ * Copyright 2026 Meizu Ltd.
++ */
++#ifndef _FUTEX_THREAD_H
++#define _FUTEX_THREAD_H
++#include <stdio.h>
++#include <string.h>
++#include <errno.h>
++
++#define WAIT_THREAD_RETRIES 100
++
++struct futex_thread {
++	pthread_t thread;
++	pthread_barrier_t barrier;
++	pid_t tid;
++	void *(*threadfn)(void *);
++	void *arg;
++};
++
++static int __wait_for_thread(FILE *fp, int timeout_us)
++{
++	char buf[80] = "";
++
++	for (int i = 0; i < WAIT_THREAD_RETRIES; i++) {
++		if (!fgets(buf, sizeof(buf), fp))
++			return -EIO;
++		if (!strncmp(buf, "futex", 5))
++			return 0;
++		usleep(timeout_us / WAIT_THREAD_RETRIES);
++		rewind(fp);
++	}
++	return -ETIMEDOUT;
++}
++
++static void *__futex_thread_fn(void *arg)
++{
++	struct futex_thread *t = arg;
++
++	t->tid = gettid();
++	pthread_barrier_wait(&t->barrier);
++	return t->threadfn(t->arg);
++}
++
++/**
++ * futex_wait_for_thread - Wait for the child thread to sleep in the futex context
++ * @t:          Threads for testing.
++ * @timeout_us: Optional timeout for operation
++ */
++static inline int futex_wait_for_thread(struct futex_thread *t, int timeout_us)
++{
++	char fname[80];
++	FILE *fp;
++	int res;
++
++	snprintf(fname, sizeof(fname), "/proc/%d/wchan", t->tid);
++	fp = fopen(fname, "r");
++	if (!fp)
++		return -EIO;
++	res = __wait_for_thread(fp, timeout_us);
++	fclose(fp);
++	return res;
++}
++
++/**
++ * futex_waitv - Create thread for testing.
++ * @t:        Data used for returning from the thread
++ * @threadfn: The new thread starts execution by invoking threadfn()
++ * @arg:      arg is passed as the sole argument of threadfn()
++ */
++static inline int futex_thread_create(struct futex_thread *t, void *(*threadfn)(void *), void *arg)
++{
++	int ret;
++
++	pthread_barrier_init(&t->barrier, NULL, 2);
++	t->tid = 0;
++	t->threadfn = threadfn;
++	t->arg = arg;
++
++	ret = pthread_create(&t->thread, NULL, __futex_thread_fn, t);
++	if (ret)
++		return ret;
++
++	pthread_barrier_wait(&t->barrier);
++	return 0;
++}
++
++/**
++ * futex_waitv - Destroy thread.
++ * @t: Threads for testing.
++ */
++static inline void futex_thread_destroy(struct futex_thread *t)
++{
++	pthread_join(t->thread, NULL);
++	pthread_barrier_destroy(&t->barrier);
++}
++
++#endif
 -- 
-2.52.0
+2.34.1
 
