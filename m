@@ -1,134 +1,106 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EF1320A34
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 19:22:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769628143; cv=pass; b=MB3r694gnvRHSLqcgFqpZSpb8v08xhtHCc5HQljcm1k2gWIqCI3iXnxYtPFS74A7vKCmfcMRmOfUGMaaKC+QMajA6dDMWyqrMr2Xo6I6acpobSXX2966QGPWXGVpY76cHUfO0fmbdTsYbDrZENTg1DReRZpmbiHdQxTCZzJNb3E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769628143; c=relaxed/simple;
-	bh=muM66N/w6WMow/K5blj/8GJE8PANhztwu4Gao3MXNL0=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A8C372B20
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 19:32:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769628747; cv=none; b=a1eNJAH8JmBclJsj3rvnuyamMxiF16ANnm3IK38bb4Tu/GGjU9BL2DotpCKVFWMTZctzqqjsCNGZMckuGzCdjTdQ/Cp8vWhH8Td3Sv4wFWbyhkhrMMeR2JNVqRBO8HGmZvzGA+OQe7cFd4dmfPXH2cTkYQY6C7fDRx4NdN7HOfg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769628747; c=relaxed/simple;
+	bh=IiwbjnmVlSFLLrr2f6Lv3b3fMnBrMPaG/Tsycyd1dhw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l/jq4KYIDanT1YEijvWBsE8mfFioSg/NYHynGCcT0Sj67Cc83PCAjRxY8mX3Iqql/j2G2+wpcVvU6vSgcmHxP4YsrAzh0InbncHSAg5sK7esZXyHzQn4Rl5OVjR1TdFDcEpnjDdZi30nPnVoUgYojXsF+Kxi4yqqBynqXyIxq3w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=g20JaKHk; arc=pass smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=m7NGrjlpugBjmquU1CGg6/H3KO6LSo89nKyEZFP6vzylbhAZAv6uGFjcOViPCStSgMHenNHcvndN8nDyxNqAUy/+JMMZMH7yi4S6/Zg2SPHw6ZVcwpKulBq+bsCEeB+Yf4VTLCt/3LDblHXSuKdKqdFsHn2Um18W3KBlzyUtQWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kb+HaArR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g20JaKHk"
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-59b6c13b68dso1189111e87.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 11:22:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769628140; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BAYaNWdAPY73Cax81StM82xj3+s0n9cfDguTOYtp4ClOWB01hR6uI1HKfcchGMC3BS
-         69+qX6JOI/Yba/UPSRBpFrPUDdaYtbqvbeMnTSNmF6okq/1aiOddNkdtw6t9bfjA6Fhe
-         Yxfg6bQZ1vtQ25kdKxXfvGRAQG8U6am9dQYB2S/Po54JGDTWcSlNVD6VyzCAQ3RzDrxU
-         4Rqqb4tEUR4AfMZjQxD/geZYpDUlpeZv1g6iA1bO8crQw+YZnq0vFjvT0u0pexhPU+zF
-         /kuh7HUJu03eGF2xoO+ZwYfsDxdzyQ6Y3X4ZxhFmBbYfZcDyOyRjymgfr0V17AFb2V6r
-         sJ9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=muM66N/w6WMow/K5blj/8GJE8PANhztwu4Gao3MXNL0=;
-        fh=ORpVwfQsI41EHRuMS9tQJBi64GNuGsu85m4OpXdFiMU=;
-        b=NWAbtaA19XoQ3HVjpXYV4+gPo01MWIqDnrk2ExmnB6e+tstzELBqoX6aDTjxel9x0g
-         4J1cxmYiYGPgFkK94YEQBUmkGXkmRCY1n3SWa9ykSa99Q1rmVFTB1sxh936bxK6abKfZ
-         Qp6b2ym38PA/EXYNgo8Dhv+dnigQbfUGQysAm5QuAGL0C7zAMznJKuC3AkiuRoN16vwz
-         FxdIYgBJM+tXdTISHQTtRnGigN+v4SWkz+2Rscf45+NeRGGFw+2YknDa0H3v/4EaG7mi
-         X/kvuj00vymZ9yRx4bAlCo7kSQbYQ9lt3M1rNkRoggrFyJIBA4sSOUvqgEmiH8LEul06
-         fFeg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769628140; x=1770232940; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=muM66N/w6WMow/K5blj/8GJE8PANhztwu4Gao3MXNL0=;
-        b=g20JaKHkG5DIJyuD5PsbLEKitIgXuQ7qgxNVeS/3JjpIWL75cl7BGG+OvNzXYlf7zJ
-         sUMl0zY5ujj/BdsFj/PifyTRCUSBeVxDpkvDgkJHvFxGm6SscXpTBWjEVJBEtlV0ScsH
-         QphfEkoMOKlPkb2VZc8sjCaRF1w8Qll6HQm67GbuvAI8zRHZ6fJqjvKZYQQHz/RUH/W4
-         euNJI70cbVV/ndYa9U0vEezzNFIX3xEecuKnW3ptSbpnmDNLkVBmzkRoQ1vx/Ew7BR0S
-         YgmvOe7CUxAp1X5pRLmJslUX4X+9EhqR9LQczrqAnOlCCejyhqQbVASPnuYUed0YrJIG
-         2z9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769628140; x=1770232940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=muM66N/w6WMow/K5blj/8GJE8PANhztwu4Gao3MXNL0=;
-        b=AR98Tp4Ud1LZCXSVL3x0xKEHfXZqF3MOU2kkwrzw2/3nqctDYsrarb1qsfSdqf6AiU
-         bgsDxqa1bDY6lVfSQyy4u61/dPmIrf/GAc2T5gwdbXVvzPe+ZzXn2FH/1CqxV4PS9mZo
-         xcbhv0aeoDA1qSKAqyjuQ2jU51LJ2JorPy0yaigcdE9w/vWXmV13h0d/OL6djcJpRQ98
-         pJ7c2q1JkN8xn7br0noRYpGvt+CfpNKcUfQjYcenXWjlkrKZU8jM6eXRx96g6ugJDvcI
-         6TLSKoBg89VfzJg2jQbtKWMscYKJISGz9L+p1UdVj0gNT6gG+VJrMz5/aOxBHNb/dSPW
-         E4MQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIgyUo0UpaSyB6UO/A67Mbkc6UglgtUmI4Bv++vX3iMouN3R5uVgW8xqudBOsNtgAICk1avVcwm625Knu+/CE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyM6oNpWvHdOc7X/IiTSdPAoAcPlNWgftwZc/KPalASXYEHeRV2
-	R3ovMAZq6N6OgpT+m//aCk0si5ZX/kl0n9gUXzelWjz9JHxqfutnf7tE5CvjjQGG5gtyX+FmBHk
-	4W4CkE2m7bD1QKj1DjjqmCiMz+LK547HIY3As+1yI
-X-Gm-Gg: AZuq6aLdU8eQ7DMsyIKio/FnMULNzxAdhCL+eFk1q+Ps1GU4gFbCOZpAm/lal2iRuDp
-	GH1++sROKZSKFr1wXNFUPbgASXAHO3nwJR1jNMkxcCQwlmDOUEyy6WO3UjAV+3H9I07dJsaGNnd
-	Yt0uVdilsBfAsvYoVXnuH8lF4xax8D5LXhnD6aSFffinoxRv160O0mp7SPvze+zJskctTl0C7vI
-	9QlI4PhhhwGj7xrCaj45dE3VDVeHGkKZyY89elM24XA4mS6GtBBHMKkNMxIMygqTi3vfw==
-X-Received: by 2002:a05:6512:3ba8:b0:59d:4a12:5e9 with SMTP id
- 2adb3069b0e04-59e0d89dd1bmr203716e87.14.1769628140094; Wed, 28 Jan 2026
- 11:22:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kb+HaArR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A56F7C16AAE
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 19:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769628747;
+	bh=IiwbjnmVlSFLLrr2f6Lv3b3fMnBrMPaG/Tsycyd1dhw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Kb+HaArR3As0IcZgqbCe+RnxV2EHO9zDCjJVspz1Gyu8t4fLAV2MFdEME3Q/jLAzI
+	 J2XxBHPZ8ZIEEA0kSvX7Sc5LcHqQyrW8TZMOI+m+fsQ7P3SFRW0GLznGSyRHnO8poP
+	 0fNHarOjwQgy3kYg406g817vo5xceHtpKf8TqEAcaqK7TtR58CkSx73TdRNsebqbpt
+	 shc6ulsSEgK9+P9OhmItB9cOT+1uTw+8QQqSH9LnN8xNqRCepVOaNY2CgS/IcIT8C7
+	 VUN9pE/7ZlSActDkW/xSdbij3TvhsOdarYoXTeM1ejfREh4Z/NQrRuxTnbNYzzR/O2
+	 g/r3xB72zmNdw==
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-64bea6c5819so380369a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 11:32:27 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVdv8fE9WVWWaApQQqO2+uEyncE/twJObMi69l9irHJvt1aO3xRoQn3H6b2/fNmbKA9vVjxX3adUk27mwHsltQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMWqPeAsnIYVCfqjKQWwHpNi9558N5Jo53qvPXBcDjOuvl24n7
+	j8Bq+ZFq9dRcTExezGDEUj9ZLMC7QbKObu55Nx5WcOLrfYeW3WSgjFq37X5VidHUT5zPDTiHctm
+	DSfpZyqOFKVCdrglKI0ymA6+Lx6+t8Ik=
+X-Received: by 2002:a05:6402:3481:b0:653:9849:df10 with SMTP id
+ 4fb4d7f45d1cf-658a60a2a1fmr3733526a12.26.1769628745986; Wed, 28 Jan 2026
+ 11:32:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260128183750.1240176-1-tedlogan@fb.com> <CALzav=dMhycS2iBxkhPCz3tMUKxkfgr1dCLFGYzGuXZCeYhijw@mail.gmail.com>
- <9d992d4a-1aea-42a7-aa79-4ede80293f9b@infradead.org>
-In-Reply-To: <9d992d4a-1aea-42a7-aa79-4ede80293f9b@infradead.org>
-From: David Matlack <dmatlack@google.com>
-Date: Wed, 28 Jan 2026 11:21:52 -0800
-X-Gm-Features: AZwV_QiIycZYlMzR9c8qjKHTfTE9zLaHWTJ8OVCHhljFei9sVjKoLDHMigoIZpI
-Message-ID: <CALzav=cWEoydGBpf4j5gPWy0TzLoAPP3YeG3VocbeEzytHTFrw@mail.gmail.com>
-Subject: Re: [PATCH] vfio: selftests: fix format conversion compiler warning
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Ted Logan <tedlogan@fb.com>, Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Alex Mastro <amastro@fb.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>
+References: <20260128150112.8873-1-leon.hwang@linux.dev>
+In-Reply-To: <20260128150112.8873-1-leon.hwang@linux.dev>
+From: Puranjay Mohan <puranjay@kernel.org>
+Date: Wed, 28 Jan 2026 19:32:12 +0000
+X-Gmail-Original-Message-ID: <CANk7y0j-RYyRRGOe+twJxebtW+mW1bPPWjR32FFQwtLZYgqbMQ@mail.gmail.com>
+X-Gm-Features: AZwV_Qiswo9Qd3heR-XulOgpYmPZU3b8UEXHtqM39bOgPFTkq8gNQ7vCrLWrxoc
+Message-ID: <CANk7y0j-RYyRRGOe+twJxebtW+mW1bPPWjR32FFQwtLZYgqbMQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/3] bpf, arm64: Add fsession support
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Menglong Dong <menglong8.dong@gmail.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-patches-bot@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 28, 2026 at 11:12=E2=80=AFAM Randy Dunlap <rdunlap@infradead.or=
-g> wrote:
-> On 1/28/26 11:06 AM, David Matlack wrote:
-> > On Wed, Jan 28, 2026 at 10:38=E2=80=AFAM Ted Logan <tedlogan@fb.com> wr=
-ote:
-> >>
-> >> Use the standard format conversion macro PRIx64 to generate the
-> >> appropriate format conversion for 64-bit integers. Fixes a compiler
-> >> warning with -Wformat on i386.
-> >>
-> >> Signed-off-by: Ted Logan <tedlogan@fb.com>
-> >> Reported-by: kernel test robot <lkp@intel.com>
-> >> Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lk=
-p@intel.com/
-> >
-> > Thanks for the patch.
-> >
-> > I've been seeing these i386 reports as well. I find the PRIx64, etc.
-> > format specifiers make format strings very hard to read. And I think
-> > there were some other issues when building VFIO selftests with i386
-> > the last time I tried.
-> >
-> > I was thinking instead we should just not support i386 builds of VFIO
-> > selftests. But I hadn't gotten around to figuring out the right
-> > Makefile magic to make that happen.
+On Wed, Jan 28, 2026 at 3:01=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
-> There are other 32-bit CPUs besides i386.
-> Or do only support X86?
+> Similar to commit 98770bd4e6df ("bpf,x86: add fsession support for x86_64=
+"),
+> add fsession support on arm64.
+>
+> Patch #1 adds bpf_arch_supports_fsession() to prevent fsession loading
+> on architectures that do not implement fsession support.
+>
+> Patch #2 implements fsession support in the arm64 BPF JIT trampoline.
+>
+> Patch #3 enables the relevant selftests on arm64, including get_func_ip,
+> and get_func_args.
+>
+> All enabled tests pass on arm64:
+>
+>  cd tools/testing/selftests/bpf
+>  ./test_progs -t fsession
+>  #135/1   fsession_test/fsession_test:OK
+>  #135/2   fsession_test/fsession_reattach:OK
+>  #135/3   fsession_test/fsession_cookie:OK
+>  #135     fsession_test:OK
+>  Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+>
+>  ./test_progs -t get_func
+>  #138     get_func_args_test:OK
+>  #139     get_func_ip_test:OK
+>  Summary: 2/0 PASSED, 0 SKIPPED, 0 FAILED
+>
+> Changes:
+> v1 -> v2:
+> * Add bpf_arch_supports_fsession().
+>
 
-At this point I would only call x86_64 and arm64 as supported. At
-least that is all I have access to and tested.
+Please fix the commit message issue detected by AI and then
 
-If there is legitimate desire to run these tests on 32-bit CPUs, then
-we can support it.
+For the series:
 
-Alex, do you test on 32-bit CPUs?
+Acked-by: Puranjay Mohan <puranjay@kernel.org>
+Tested-by: Puranjay Mohan <puranjay@kernel.org>
