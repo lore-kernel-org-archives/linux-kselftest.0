@@ -1,80 +1,69 @@
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17AD32F75B;
-	Wed, 28 Jan 2026 03:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2B1C8CE
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 04:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769571001; cv=none; b=nRIAtXlPHbeG6aH1bwekXwKnkBy7nAgGmaUeo6D/pOePuZlSbt7jXEZYLbuka1AqVoxoLiJQSUoLR6Lb+kFr/nFisRH4Qp54hbWMKcleiVGLS8fWThMAZvSbpcZMgwYHkUitC+rEG0j5pSEgtHmNL0CC/bBpcylKxT1VUoYyTrw=
+	t=1769575426; cv=none; b=MU7Vp6SmXmbNLRKSYpvZ+DawLCNzIO52Z00iq98rD6FbWY5bu6sk/xQ7pf/ivIVGK134VEj4O4F9O0gaEFXK8BDJbCQ7h6EEVCmureuVE7aLUZIMg2xd41QGwjS0cFKTdFXt0EvpApPwZiIeXEc1iQA+spD8iMvDdj8UYiFRzZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769571001; c=relaxed/simple;
-	bh=cRvAp1clxZ2XHsLyr7xiqYHK8H/oaatWuJDOaCSWqmE=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=a3/PRHH31m5hcD1Jf7i+Z3CkhIYo92kuv5WznqEAm9vTubviQLNJUCbgLA9N/69u31Oz4mMbRit5KsGQYJaYn8KyFJLgMBfuFSFpqErdJg77dVlj9gHoI28U5/Ei02R2XzfzSQbk5ru3IXV+VjPdn0xN3wjIu4cuGuvg27hT8qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=rE5PEdVE; arc=none smtp.client-ip=203.205.221.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1769575426; c=relaxed/simple;
+	bh=Na08qf2jeYA+I2H+hE/yjoqlFxSIRte5RSq8QCHGynw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O7AumkMMrRkx3Pl1MVtsNQwQ67jWGJ3cxCTVzjtiNwRYT/PvFKom1m3AW3sIgIkRYUaTT1c93AX5BfYPgbF6mU1y9/cJEgwCj3ikqG8pwrsXWwpd1UayW6vWhd3N3GKjrll/PTCEmIlQjL2+fK/NCL5qTWRFnNTaWmBEGbgis/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z9LjXL+k; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="rE5PEdVE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1769570995;
-	bh=eeDVqNxDC3DKmDoniWCTLTcY8HnPvFbaJUJt8qR6MKc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=rE5PEdVEiHy8CHrJpIFBWqbA0El4XXwRuLSXwZS1QojiWKMPLNUfs1M7T9TOKW9SB
-	 bHqGxr7O9JRWepTs0BichaNv+AtQSEJbdWbpD3/xGDuD/esoIP3015PpeS8s0hsZER
-	 0YFPBB5eWVVlQlj33AUFsxJmDSEfliHGdFG2kIZY=
-Received: from meizu-Precision-3660.meizu.com ([14.21.33.152])
-	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
-	id 773A80E3; Wed, 28 Jan 2026 11:29:51 +0800
-X-QQ-mid: xmsmtpt1769570991txehwjyf9
-Message-ID: <tencent_347CD8D5F7FC23EFE58BBACBA98894DB6E05@qq.com>
-X-QQ-XMAILINFO: MVuDTlnnQDnqJ3NdZ+upV0adVDMcAHxrqO7+CcwkIQCe6b13NWAKiU5/UllDpc
-	 BSj7+KSx3bYkkkhWbLOzQ3CMr5HBZ1X1YgA0zNIRaMx+Ouiv5LIZ6ijH193NxBIPJ1MRbu10tz2P
-	 5DzfeamchVBAIvhQDweGMe1KKIHUnHcN/nSttJwI/AVHBuiTJJDB+HmpsMFECrwj2LMT+r296vYC
-	 +/8cYBRaJ9M0/WtSIcxUFoc9rSSxOQpopnbVgV7+/Kss+wdmT8m+Z1HU+LMsbjxkCq597uM6DQjk
-	 3+tPTX055Sol5D5xiJFapwkoXYHcu946P/THnBmqTEu30+FdXPwPg9e6ebYsPdMgs7c0uqyIHA2Q
-	 w9FRvuTGFhmFTeapuz0r3W5uGiBfMtWSczDuS/rupRpe/bL5GUxnLdlnJOEHkAzrJoqdHyXtekJv
-	 8oRsElXt8IGjC2trpGrR7Ze2ToQ7ddlAZ08IZowzrbIMVhlldbycKd2LuAwJsau4dEmzHlNP7mDh
-	 V8QA81ZszHNRdqmN4T+3u5L0CHGxqVcmZZvxhb7W5JT9OC34bB2e4pHVc/bczRj+z/N1IisWqMrw
-	 /EABCEwb9REEg7sWeQWxBXAI8Mx8xAyZsZUnqPTZULU5OFNeNsfb28oJRYYisAUjudMf5VpGeU9E
-	 bwBqbYgsu1oIEjSOwPCaERDTHYZFuNUxMuv0Zje3kwlVMUIZO55SlRKulJvrdpnfl6WKu4sPN8bq
-	 Y4gVwv/eN9KR3hHUXPZUo1sUo0xS5yy9BMPpROi7z+c0dpBxyBmVEOAx50klCycFBOD0MzvZPuHn
-	 6mDwXjA9GpG6RahjkDf4oYtoc7DtowENJTUwdRUxPLtZpdbWR+2GUUCauqzg8tdVqkj2qJEmK75K
-	 TSvc8OIhQSJtzvcHDLAXw0Ez/U8qph8JrPOtmqhiZDAdeY/Dk1jHLkN5TPh5cUsYpoZ/Ra2Kf1bi
-	 aT2VrP0S5ZoaScpQ7j1ZlbB4axKyR4ZbwORGVdhhC/2QIXjaOgwxJGaMOwMghlQzqH1Yc5KV0kbw
-	 2/X2hHOt26qnqXbIwu7hz0gXLDgMt0UbwskvXClXbrgumwOKFkg+0ObckE3dbOyWCSN6yaqA0B4o
-	 AzGKuVDox+cuLnyjY=
-X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
-From: Yuwen Chen <ywen.chen@foxmail.com>
-To: tglx@kernel.org
-Cc: akpm@linux-foundation.org,
-	andrealmeid@igalia.com,
-	bigeasy@linutronix.de,
-	colin.i.king@gmail.com,
-	dave@stgolabs.net,
-	dvhart@infradead.org,
-	edliaw@google.com,
-	justinstitt@google.com,
-	kernel-team@android.com,
-	licayy@foxmail.com,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z9LjXL+k"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769575423;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NaQ/CDnPwfTasasbEir9k1gSpnJdJQCwBstwGtlH3Gk=;
+	b=Z9LjXL+khyKrequh+CR9f6rJOx3pu23jv+A3wWHP9UTRJ+a5UVdnliUFzB/bgq2n8t6Vri
+	nM/eB9yGOfV9r4b/RycVWnk1OVUG10lk5XkA8cuvYhApsnREH6qe2lLDinwn4/lI5jlJCL
+	cdpEQDXvfYAASf4OLUEnFPbHio+FQmI=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-669-3eNpm5EMOw-pPkkrFRakSA-1; Tue,
+ 27 Jan 2026 23:43:42 -0500
+X-MC-Unique: 3eNpm5EMOw-pPkkrFRakSA-1
+X-Mimecast-MFC-AGG-ID: 3eNpm5EMOw-pPkkrFRakSA_1769575420
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A02CC1944F12;
+	Wed, 28 Jan 2026 04:43:39 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.80.3])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BA7861800947;
+	Wed, 28 Jan 2026 04:43:34 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Chen Ridong <chenridong@huaweicloud.com>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	luto@mit.edu,
-	mingo@redhat.com,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	peterz@infradead.org,
-	shuah@kernel.org,
-	usama.anjum@collabora.com,
-	wakel@google.com,
-	ywen.chen@foxmail.com
-Subject: Re: [PATCH v2] selftests/futex: fix the failed futex_requeue test issue
-Date: Wed, 28 Jan 2026 11:29:51 +0800
-X-OQ-MSGID: <20260128032951.409044-1-ywen.chen@foxmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <878qdic3i0.ffs@tglx>
-References: <878qdic3i0.ffs@tglx>
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH/for-next 0/2] cgroup/cpuset: Fix partition related locking issues
+Date: Tue, 27 Jan 2026 23:42:49 -0500
+Message-ID: <20260128044251.1229702-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,53 +71,34 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Tue, 27 Jan 2026 19:30:31 +0100, Thomas Gleixner wrote:
-> Extremely high?
-> 
-> The main thread waits for 10000us aka. 10 seconds to allow the waiter
-> thread to reach futex_wait().
-> 
-> If anything is extreme then it's the 10 seconds wait, not the
-> requirements. Please write factual changelogs and not fairy tales.
+After booting the latest cgroup for-next debug kernel with the latest
+cgroup changes as well as Federic's "cpuset/isolation: Honour kthreads
+preferred affinity" patch series [1] merged on top and running the
+test-cpuset-prs.sh test, a circular locking dependency lockdep splat
+was reported. See patch 2 for details.
 
-10,000 us is equal to 10 ms. On a specific ARM64 platform, it's quite
-common for this test case to fail when there is a 10-millisecond waiting
-time.
+The following changes are made to resolve this locking problem.
+ 1) Deferring calling housekeeping_update() from CPU hotplug to task work
+ 2) Release cpus_read_lock before calling housekeeping_update()
 
-> That's a known issue for all futex selftests when the test system is
-> under extreme load. That's why there is a gratious 10 seconds timeout,
-> which is annoyingly long already.
-> 
-> Also why is this special for the requeue_single test case?
-> 
-> It's exactly the same issue for all futex selftests including the multi
-> waiter one in the very same file, no?
+With these changes, the cpuset test ran to completion with no failure
+and no lockdep splat.
 
-Yes, this is a common phenomenon. However, for the sake of convenient
-illustration, only the case of requeue_single is listed here.
+[1] https://lore.kernel.org/lkml/20260125224541.50226-1-frederic@kernel.org/
 
-> Why do you need an atomic store here?
-> 
-> pthread_barrier_wait() is a full memory barrier already, no?
+Waiman Long (2):
+  cgroup/cpuset: Defer housekeeping_update() call from CPU hotplug to
+    task_work
+  cgroup/cpuset: Introduce a new top level isolcpus_update_mutex
 
-Yes, there's no need to use atomic here. However, in the kernel, WRITE_ONCE
-and READ_ONCE are more likely to be used. Since it's particularly difficult
-to use them here, atomic is adopted.
+ kernel/cgroup/cpuset.c                        | 124 ++++++++++++++----
+ kernel/sched/isolation.c                      |   4 +-
+ kernel/time/timer_migration.c                 |   3 +-
+ .../selftests/cgroup/test_cpuset_prs.sh       |   9 ++
+ 4 files changed, 111 insertions(+), 29 deletions(-)
 
-> What's wrong with reading /proc/$PID/wchan ?
-> 
-> It's equally unreliable as /proc/$PID/stat because both can return the
-> desired state _before_ the thread reaches the inner workings of the test
-> related sys_futex(... WAIT).
-
-Is it possible for the waiterfn to enter the sleep state between the
-pthread_barrier_wait function and the futex_wait function? If so, would
-checking the call stack be a solution?
-Maybe using /proc/$PID/wchan is a better approach. Currently, I haven't found
-any problems when using /proc/$PID/stat on our platform.
-
-Thanks
-
-    Yuwen
+-- 
+2.52.0
 
