@@ -1,46 +1,46 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430033009ED;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B864C2FE05B;
 	Wed, 28 Jan 2026 10:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769595881; cv=none; b=N1rTs/HDz3FcCy2vphk9cugwtYORryFooITkMkQmDRN7NKn0nsLTuBxPbw3QPFD5Wk60bVPFyld+GLJ8DhjOPy4bOdveE0yFyBvCQhe8GE/cfNQ4C2VUYoCNHmrc9YoTRU7ZM0siChBNnDvnqMiXbUarVKT5aWZZAq5Q/nE743w=
+	t=1769595882; cv=none; b=hNCRuXpE8nQYpvfyBbj5dLA6Lc6bsZM4w96kwn2+KTlI0IG/gnJzeLlDNp6HQ6f8E6zge/znylRIgVoN3WFScb+UA1dHsF+OGz3annH/AmJqdDysw+aiW+te8TunvRwV2maJr2i98Wu5KYO78Wj7QD3hgYtI7O5nDu1rq7JNrno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769595881; c=relaxed/simple;
-	bh=JAGIyo7uHu02wmsXenqxKdWTtyrL5SRUkDJGKs429A0=;
+	s=arc-20240116; t=1769595882; c=relaxed/simple;
+	bh=CpItbGuqViNDVOKjF5OYL74vl8pZDCV7rH9gUThemMI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=M5MJ/PJEbrl9cR4R88/8jlEMAAhDu5sqCKz9nKLI1T1S/86g3veTMLS9Yo2GpuZNeIHMFQ7y1dziZRneCmifDdup6I0Oupcwv/H0gU8LIyFScVWNW6+2Nqs61XWYCUDIFTf+oISjj983jV5CYlTzR3u1Cq/bpcOC2t+ai2FPlKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vnGQqd4T; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sy2cBbOy; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=R757WFLaSd8M3IpDQ51zD8SyTICMmcW13ClFLMvy0iy2+W/9rY9L82NTlNXV5UAD6gtfdc646FIoksxEo42QLY8zFQQIG+S83IDunyjq/zIZ+OHpuq4U0o+fcsY+8bjBOhqbsWtaQ4XrYml1q1mGn6Q/HPcQbtRIujktav82pcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XNGRnSh0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YYQLmdP5; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vnGQqd4T";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sy2cBbOy"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XNGRnSh0";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YYQLmdP5"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769595878;
+	s=2020; t=1769595879;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=h094TGqPdEZdGAE351vHcgY/GUuHvPkqMcFJn5StH3g=;
-	b=vnGQqd4TIMQA4f/lokzkyL6N2j9vUSaLUoulNOSfngyatZhywvVfVXlseYwb/RgjsAU8Yd
-	JFwq/bRy/PQl7TFaM8Yikx2Bn2QMX/c3fUW6a+Lf3ltrX3AUePI3GDbOaP/HuBzR0OgP9n
-	bKkCVKtWo0SOR+QrRLSh+hhLtN57cfU+eRvFrIsJ4MMnyqByGZsS12m73s2XjLjlAS3Tbj
-	5LNMVudd4jPhDLJNqhXwgwMzGV/b4/fR4Jjzg5n0IEFJPUPCYEC9fU4uOB9do3NwDFKKlD
-	m4VAzSLHrazKDw3swRr0HNO/D0Bd23OGYI/F24CW7MRqVmEmgX757wuCLzKjHA==
+	bh=Q0+KrQzgL1kAPuD4kd5PpMOSsltIHrny4Tn1/dEXzlk=;
+	b=XNGRnSh0+7+hKsYV8RTaJPf5GgNjVGA4Z6VkjilJ7rOgaW9WKRvxkahGfn0bukv+L6/nx6
+	iA7t22HOm/GhQ7MSXzJUsuTlkmRBloJ1s2BotcbUF8VSmjKLTHoRt9QMC9VPsTaVbAuGlj
+	GL+2gQl86xbA0eP/xf64Cr7t/NSyAVOj18kH5YUXp/Fj4mGJAhEZpXcDtjTqmB4XTdb1gP
+	z+FbZZpTtEMOMJSSkIauLd8wYGe6GM3LMhzg6lok8saui0Gxyjkcgx5+lRqQm6mm8KKf6n
+	BrixNb1dzJPezdFKc6TPEu0QRBfApqmXenHYVdLx7YVdplhxFeg1eRophgTFQQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769595878;
+	s=2020e; t=1769595879;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=h094TGqPdEZdGAE351vHcgY/GUuHvPkqMcFJn5StH3g=;
-	b=sy2cBbOympleZ3QCQldQmqJxEMsKt5FC9HPivAVaalXBnS9Z/Ws2ACwYs6sfpOLYjuyxK2
-	uJ8uU1yUnVa2CuBg==
-Date: Wed, 28 Jan 2026 11:24:36 +0100
-Subject: [PATCH 4/5] selftests: harness: Detect illegal mixing of kselftest
+	bh=Q0+KrQzgL1kAPuD4kd5PpMOSsltIHrny4Tn1/dEXzlk=;
+	b=YYQLmdP5xh+dydSzykG9unsL61UJrmRSxf2mENSrKE6rtgmJmc0CNEXWcJNUHq+hUlLctk
+	hOKhXiuzsGRwJADQ==
+Date: Wed, 28 Jan 2026 11:24:37 +0100
+Subject: [PATCH 5/5] selftests: harness: Validate intermixing of kselftest
  and harness functionality
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -50,68 +50,140 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260128-kselftest-harness-v1-4-cb259fa81cd0@linutronix.de>
+Message-Id: <20260128-kselftest-harness-v1-5-cb259fa81cd0@linutronix.de>
 References: <20260128-kselftest-harness-v1-0-cb259fa81cd0@linutronix.de>
 In-Reply-To: <20260128-kselftest-harness-v1-0-cb259fa81cd0@linutronix.de>
 To: Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
  Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- Yuwen Chen <ywen.chen@foxmail.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769595876; l=1714;
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769595876; l=4451;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=JAGIyo7uHu02wmsXenqxKdWTtyrL5SRUkDJGKs429A0=;
- b=qz7K87evmY5YXplIseWpn7JYDZEPgT/YRPNft+DjLNg61Q2lYsS6nngaB9X3uoB7NVIvU0SVT
- 681Im/e5Lv4DSdd3hs19A23F8mynIHHBABBqw4aNLVLmnLjjrsUTcaa
+ bh=CpItbGuqViNDVOKjF5OYL74vl8pZDCV7rH9gUThemMI=;
+ b=FiNajDX/RN+zC3U5VW/VM8RA3z9ZFUACWJt5ru4l6Fo2la6ViiQjAiD3QL6azARVMQT3sFoYG
+ ojSX2rwIDYkC2SNj2nZchalzUI3T7ru8kZAQiRe8Hn7wDolIcAOL3zW
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Users may accidentally use the kselftest_test_result_*() functions in
-their harness tests. If ksft_finished() is not used, the results
-reported in this way are silently ignored.
-
-Detect such false-positive cases and fail the test.
-
-A more correct test would be to reject *any* usage of the ksft APIs but
-that would force code churn on users.
-
-Correct usages, which do use ksft_finished() will not trigger this
-validation as the test will exit before it.
-
-Reported-by: Yuwen Chen <ywen.chen@foxmail.com>
-Link: https://lore.kernel.org/lkml/tencent_56D79AF3D23CEFAF882E83A2196EC1F12107@qq.com/
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-
----
-This is intentionally a Link tag over a Closes tag, as the real fix will
-be to the selftests.
+Make sure that calling ksft_test_result_*() functions from harness
+tests work as expected.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/kselftest_harness.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../selftests/kselftest_harness/harness-selftest.c | 20 +++++++++++++
+ .../kselftest_harness/harness-selftest.expected    | 35 ++++++++++++++++------
+ 2 files changed, 46 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index baae6b7ded41..93dcba095338 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -1216,7 +1216,16 @@ static void __run_test(struct __fixture_metadata *f,
- 		t->exit_code = KSFT_FAIL;
- 	} else if (child == 0) {
- 		setpgrp();
+diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.c b/tools/testing/selftests/kselftest_harness/harness-selftest.c
+index f109a21ed6f7..3e3033d2745a 100644
+--- a/tools/testing/selftests/kselftest_harness/harness-selftest.c
++++ b/tools/testing/selftests/kselftest_harness/harness-selftest.c
+@@ -138,6 +138,26 @@ TEST(exit_skip) {
+ 	exit(KSFT_SKIP);
+ }
+ 
++TEST(test_result_pass) {
++	ksft_test_result_pass("");
++}
 +
-+		/* Reset state inherited from the harness */
-+		ksft_reset_state();
++TEST(test_result_xpass) {
++	ksft_test_result_xpass("");
++}
 +
- 		t->fn(t, variant);
++TEST(test_result_fail) {
++	ksft_test_result_fail("");
++}
 +
-+		if (__test_passed(t) && (ksft_get_fail_cnt() || ksft_get_error_cnt())) {
-+			ksft_print_msg("Illegal usage of low-level ksft APIs in harness test\n");
-+			t->exit_code = KSFT_FAIL;
-+		}
- 		_exit(t->exit_code);
- 	} else {
- 		t->pid = child;
++TEST(test_result_xfail) {
++	ksft_test_result_xfail("");
++}
++
++TEST(test_result_skip) {
++	ksft_test_result_skip("");
++}
++
+ int main(int argc, char **argv)
+ {
+ 	/*
+diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.expected b/tools/testing/selftests/kselftest_harness/harness-selftest.expected
+index da7febc11e10..c0a68ec124f8 100644
+--- a/tools/testing/selftests/kselftest_harness/harness-selftest.expected
++++ b/tools/testing/selftests/kselftest_harness/harness-selftest.expected
+@@ -1,6 +1,6 @@
+ TAP version 13
+-1..14
+-# Starting 14 tests from 4 test cases.
++1..19
++# Starting 19 tests from 4 test cases.
+ #  RUN           global.standalone_pass ...
+ # harness-selftest.c:19:standalone_pass:before
+ # harness-selftest.c:23:standalone_pass:after
+@@ -40,6 +40,23 @@ ok 8 global.exit_xfail # XFAIL unknown
+ #  RUN           global.exit_skip ...
+ #            OK  global.exit_skip
+ ok 9 global.exit_skip # SKIP unknown
++#  RUN           global.test_result_pass ...
++#            OK  global.test_result_pass
++ok 10 global.test_result_pass
++#  RUN           global.test_result_xpass ...
++#            OK  global.test_result_xpass
++ok 11 global.test_result_xpass
++#  RUN           global.test_result_fail ...
++not ok 1 # Illegal usage of low-level ksft APIs in harness test
++# test_result_fail: Test failed
++#          FAIL  global.test_result_fail
++not ok 12 global.test_result_fail
++#  RUN           global.test_result_xfail ...
++#            OK  global.test_result_xfail
++ok 13 global.test_result_xfail
++#  RUN           global.test_result_skip ...
++#            OK  global.test_result_skip
++ok 14 global.test_result_skip
+ #  RUN           fixture.pass ...
+ # harness-selftest.c:53:pass:setup
+ # harness-selftest.c:62:pass:before
+@@ -48,7 +65,7 @@ ok 9 global.exit_skip # SKIP unknown
+ # harness-selftest.c:66:pass:after
+ # harness-selftest.c:58:pass:teardown same-process=1
+ #            OK  fixture.pass
+-ok 10 fixture.pass
++ok 15 fixture.pass
+ #  RUN           fixture.fail ...
+ # harness-selftest.c:53:fail:setup
+ # harness-selftest.c:70:fail:before
+@@ -56,26 +73,26 @@ ok 10 fixture.pass
+ # harness-selftest.c:58:fail:teardown same-process=1
+ # fail: Test terminated by assertion
+ #          FAIL  fixture.fail
+-not ok 11 fixture.fail
++not ok 16 fixture.fail
+ #  RUN           fixture.timeout ...
+ # harness-selftest.c:53:timeout:setup
+ # harness-selftest.c:77:timeout:before
+ # timeout: Test terminated by timeout
+ #          FAIL  fixture.timeout
+-not ok 12 fixture.timeout
++not ok 17 fixture.timeout
+ #  RUN           fixture_parent.pass ...
+ # harness-selftest.c:87:pass:setup
+ # harness-selftest.c:96:pass:before
+ # harness-selftest.c:98:pass:after
+ # harness-selftest.c:92:pass:teardown same-process=0
+ #            OK  fixture_parent.pass
+-ok 13 fixture_parent.pass
++ok 18 fixture_parent.pass
+ #  RUN           fixture_setup_failure.pass ...
+ # harness-selftest.c:106:pass:setup
+ # harness-selftest.c:108:pass:Expected 0 (0) == 1 (1)
+ # pass: Test terminated by assertion
+ #          FAIL  fixture_setup_failure.pass
+-not ok 14 fixture_setup_failure.pass
+-# FAILED: 8 / 14 tests passed.
++not ok 19 fixture_setup_failure.pass
++# FAILED: 12 / 19 tests passed.
+ # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+-# Totals: pass:5 fail:6 xfail:1 xpass:1 skip:1 error:0
++# Totals: pass:9 fail:7 xfail:1 xpass:1 skip:1 error:0
 
 -- 
 2.52.0
