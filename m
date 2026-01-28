@@ -1,361 +1,260 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out203-205-221-149.mail.qq.com (out203-205-221-149.mail.qq.com [203.205.221.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3908E31579B
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 04:43:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E771D9346;
+	Wed, 28 Jan 2026 07:16:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769575436; cv=none; b=vDXC157ksD6aKd2pJCMzNqpzGaTBc7OzAes4Qqq5dYLD8kE7iTVMVAOiOWaaf2Thja+bWLuCzhb1YswZVSpvHKybB5vsW6uFzbr2jYtKsknC5N2eF8B/HpHQZWYPFiVuBmca/7LCp262EXS8b2HATKNSOhY8n8gD3K6uVwnDwzg=
+	t=1769584590; cv=none; b=WM8dE4M9+LHlra+4FWk4GN2SH07V0EbT2v46JzvmsEdKq3gi27EdYdtBRnmhVJIzEiHxiY9mwFDSLAwje6nk/s4+S7E2grK/c0Cv1BpfIhX0AG7BC6o8+ar9rA3X2t0irXnOLqCxC3py4KzfQbohNm/VEwT1PPvpcCJV+tdbcyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769575436; c=relaxed/simple;
-	bh=FxDI1o8m2cofdyGnkzpRhmpMOb5z4TI3owdqIfbMKtc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HU9WPA5DQtkSgUrgMm0nh/JkxK6Twqgfir50F5kgWrcxafToWh6o6goitXibsQMqX1oe/GydBZR7QQHak2psPeI6Syrd0Zh2DkMdhktXXSnk/EhDWOiKzSajF6PTuOQTlswI7oGCPEz0/RwfHslJJJ0G2s8lTXO6jSvgyv4cMyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BcukFl5u; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769584590; c=relaxed/simple;
+	bh=cc/4MvYQW3AVaMospqyppf/6T8Bhygb2pcx1Oiu99M8=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version:Content-Type; b=H8b9ui+Y0xiu9HxjyhQcisoponhNWgvSs5S75uCJQ0dlPjpzuUB7LcAViWwyiUBmucdko+eocavQ4EIH7L/1sGkUSW+iUp1b6zi6MoAUStYPdc+bQoid2yH9+tkrmoifkCWSZ4cL71MdTqZQzrtUvBzXY5ZcEFPlF7NKTXhRJaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=X9ce2+1Z; arc=none smtp.client-ip=203.205.221.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BcukFl5u"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769575433;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hfT8qurcHhZMimvKVK3njVZGYV6+2WQyDonOkfkfCMY=;
-	b=BcukFl5uo5KkiGvSSu0c43rjTLvJ51UN9QRn0pjc3V2rzQztUDrWTW/Ngyz7bzxkgUjijf
-	M2xaVc9Gg85gmK5a14gi3vQ6xDazzcagNUA1Pu06pbMgKtVP/YDe9yrU4FUv7vA3l9yibq
-	FjlqAEPvzv3Hh7H7/KTxMkCupxAQ3eo=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-307-AFq7e_hfOAupxf_JQwAfzg-1; Tue,
- 27 Jan 2026 23:43:48 -0500
-X-MC-Unique: AFq7e_hfOAupxf_JQwAfzg-1
-X-Mimecast-MFC-AGG-ID: AFq7e_hfOAupxf_JQwAfzg_1769575426
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4303F18005B5;
-	Wed, 28 Jan 2026 04:43:46 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.80.3])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3FBE11800870;
-	Wed, 28 Jan 2026 04:43:43 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Chen Ridong <chenridong@huaweicloud.com>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="X9ce2+1Z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1769584578;
+	bh=UsOMW+fH/0u09b+I9Maxdl9lX3AzM+KsG85N0ClPTyc=;
+	h=From:To:Cc:Subject:Date;
+	b=X9ce2+1ZXsjCEsptq/NrjPwiuDlWAggTlIcijLXL1VMBkgQZnaPiW80aHIptL8h4u
+	 /twSVgqW+3WukWxSDxyLlUZJhECLoJi/lK/wzD6raWSJuTHMyrQvysOXTF2nH0sJy8
+	 TpoACiT/xvttEJMpygYy4QFFRTZpNlvXc90DCsx0=
+Received: from meizu-Precision-3660.meizu.com ([14.21.33.152])
+	by newxmesmtplogicsvrszc50-0.qq.com (NewEsmtp) with SMTP
+	id 40E82410; Wed, 28 Jan 2026 15:16:14 +0800
+X-QQ-mid: xmsmtpt1769584574tpqv0ipnd
+Message-ID: <tencent_FC5FB35D2545AFDCA6E377AE4DE75C79AF08@qq.com>
+X-QQ-XMAILINFO: M9B58rdLYxrLjCqmWwUQoEih+LW97yLf1OdkCA7vnUGLQ+kDRxqiTcgglZJkyD
+	 qd0XtXOZaHeRu4Cdwh2BnsBbcKO2j428bCpEPmvc76KUJHHZLvqMRpw+dBxh+JP1YnDC+XTPp+9R
+	 pDwm8N/JHvuRZ9CKVapHVHuvlV9+FOr4MYYBvKU5GwVc0B9iXYWyHhbnjTH1XJEoUNRYBL2+evD1
+	 0ThthzD8I4aX3pP2C/hR1SrMbyhOmeCav9IClwOz68HUZ8SkAK/7c1eLHp7XJoyjHP1djKjbMJF/
+	 wCQ037zaEo904ptmOdiv7INvKKLY95NXNsvHxSJ8P77QP08Kd8fFwAesanCSjCdVX7c6hSOC9AT/
+	 bFsi796DGDQ7AuA8Tk5lJoEdT81GFawxSjNzTewgNybfvw+TW5SoerPPMzvQ6faKw8a26pCypPAj
+	 u00UstW9FmMzVq8WvVmr07qrOr8B7KbDEa1nTvBNFqwrEPEJt7892E0Pe7UnBURUNBs5wt4CxDvj
+	 m1axv1epDQ9SOHB+9Y0edpmfdVYPXHXhWzvz/ddgZFfOFDSzocLzIdBQYadkrEvGyV1a97lOQqP5
+	 LNEZI3wHbmsdFiBnnahCiUwmw4r6ZZAZpBvNfzd7Rmg96vdm9Acn9alspCu3dFDPmxBm50He7YV8
+	 1A99WnMhB1QRaizBumt94qAvCPKlT6Q8OjhFj4tqLQAJF/OyOS5DOoD2k4UXY9eewRRgcgAVi4SH
+	 ZQ8RCrKc1/TswqQ18jJTySPXuDzpdy7D75PV30aEcEvWNn8mFZ+l4H4ey6nRJD+NQG5PjCZE01C/
+	 dViUPdbuwq3wzNZoUGtu4zneuSkuxglmpa/Gaow3ed7LEAzcqXeTeyNjlP/YRnRAy573cJyoxDDn
+	 CHM96GFYDtDr7kuOQWkcrlr1lyAMpzEHCJPJ0ptPVrDeBDrq4zXP91NuzDHbFF5r2cHPpCAHSCMK
+	 YZvkC4yjGc9PW1RNgMOOWzHDEiRVNx13/r/E/CgHbYH2N43mI4nmrvWF/oGo/BOTibValE5ualMD
+	 hxpyj2JaXvFFU3EOTEACTq+rpoBju0oLuyd7PHf+YKvtmjWHKs339ZHZM8ROooQWleJLq0UjIXJg
+	 lyb46DJl4d44FPQFOGR4hk4LWvmnEt4ZC0X7Da
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+From: Yuwen Chen <ywen.chen@foxmail.com>
+To: tglx@kernel.org
+Cc: akpm@linux-foundation.org,
+	andrealmeid@igalia.com,
+	bigeasy@linutronix.de,
+	colin.i.king@gmail.com,
+	dave@stgolabs.net,
+	dvhart@infradead.org,
+	edliaw@google.com,
+	justinstitt@google.com,
+	kernel-team@android.com,
+	licayy@foxmail.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH/for-next 2/2] cgroup/cpuset: Introduce a new top level isolcpus_update_mutex
-Date: Tue, 27 Jan 2026 23:42:51 -0500
-Message-ID: <20260128044251.1229702-3-longman@redhat.com>
-In-Reply-To: <20260128044251.1229702-1-longman@redhat.com>
-References: <20260128044251.1229702-1-longman@redhat.com>
+	luto@mit.edu,
+	mingo@redhat.com,
+	morbo@google.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	peterz@infradead.org,
+	shuah@kernel.org,
+	usama.anjum@collabora.com,
+	wakel@google.com,
+	Yuwen Chen <ywen.chen@foxmail.com>
+Subject: [PATCH v3] selftests/futex: fix the failed futex_requeue test issue
+Date: Wed, 28 Jan 2026 15:16:12 +0800
+X-OQ-MSGID: <20260128071612.416371-1-ywen.chen@foxmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-The current cpuset partition code is able to dynamically update
-the sched domains of a running system and the corresponding
-HK_TYPE_DOMAIN housekeeping cpumask to perform what is essentally the
-"isolcpus=domain,..." boot command line feature at run time.
+This test item has extremely high requirements for timing and can only
+pass the test under specific conditions. The following situations will
+lead to test failure:
 
-The housekeeping cpumask update requires flushing a number of different
-workqueues which may not be safe with cpus_read_lock() held as the
-workqueue flushing code may acquire cpus_read_lock() or acquiring locks
-which have locking dependency with cpus_read_lock() down the chain. Below
-is an example of such circular locking problem.
+    MainThread                  Thread1
+        │
+  pthread_create-------------------┐
+        │                          │
+ futex_cmp_requeue                 │
+        │                     futex_wait
+        │                          │
 
-  ======================================================
-  WARNING: possible circular locking dependency detected
-  6.18.0-test+ #2 Tainted: G S
-  ------------------------------------------------------
-  test_cpuset_prs/10971 is trying to acquire lock:
-  ffff888112ba4958 ((wq_completion)sync_wq){+.+.}-{0:0}, at: touch_wq_lockdep_map+0x7a/0x180
+If the child thread is not waiting in the futex_wait function when the
+main thread reaches the futex_cmp_requeue function, the test will fail.
 
-  but task is already holding lock:
-  ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
+This patch avoids this problem by checking whether the child thread is
+in a sleeping state in the main thread.
 
-  which lock already depends on the new lock.
-
-  the existing dependency chain (in reverse order) is:
-  -> #4 (cpuset_mutex){+.+.}-{4:4}:
-  -> #3 (cpu_hotplug_lock){++++}-{0:0}:
-  -> #2 (rtnl_mutex){+.+.}-{4:4}:
-  -> #1 ((work_completion)(&arg.work)){+.+.}-{0:0}:
-  -> #0 ((wq_completion)sync_wq){+.+.}-{0:0}:
-
-  Chain exists of:
-    (wq_completion)sync_wq --> cpu_hotplug_lock --> cpuset_mutex
-
-  5 locks held by test_cpuset_prs/10971:
-   #0: ffff88816810e440 (sb_writers#7){.+.+}-{0:0}, at: ksys_write+0xf9/0x1d0
-   #1: ffff8891ab620890 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_fop_write_iter+0x260/0x5f0
-   #2: ffff8890a78b83e8 (kn->active#187){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b6/0x5f0
-   #3: ffffffffadf32900 (cpu_hotplug_lock){++++}-{0:0}, at: cpuset_partition_write+0x77/0x130
-   #4: ffffffffae47f450 (cpuset_mutex){+.+.}-{4:4}, at: cpuset_partition_write+0x85/0x130
-
-  Call Trace:
-   <TASK>
-     :
-   touch_wq_lockdep_map+0x93/0x180
-   __flush_workqueue+0x111/0x10b0
-   housekeeping_update+0x12d/0x2d0
-   update_parent_effective_cpumask+0x595/0x2440
-   update_prstate+0x89d/0xce0
-   cpuset_partition_write+0xc5/0x130
-   cgroup_file_write+0x1a5/0x680
-   kernfs_fop_write_iter+0x3df/0x5f0
-   vfs_write+0x525/0xfd0
-   ksys_write+0xf9/0x1d0
-   do_syscall_64+0x95/0x520
-   entry_SYSCALL_64_after_hwframe+0x76/0x7e
-
-To avoid such a circular locking dependency problem, we have to
-call housekeeping_update() without holding the cpus_read_lock()
-and cpuset_mutex. One way to do that is to introduce a new top level
-isolcpus_update_mutex which will be acquired first if the set of isolated
-CPUs may have to be updated. This new isolcpus_update_mutex will provide
-the need mutual exclusion without the need to hold cpus_read_lock().
-
-As cpus_read_lock() is now no longer held when
-tmigr_isolated_exclude_cpumask() is called, it needs to acquire it
-directly.
-
-The lockdep_is_cpuset_held() is also updated to check the new
-isolcpus_update_mutex.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
+Fixes: 7cb5dd8e2c8c ("selftests: futex: Add futex compare requeue test")
+Signed-off-by: Yuwen Chen <ywen.chen@foxmail.com>
+Co-developed-by: Edward Liaw <edliaw@google.com>
+Signed-off-by: Edward Liaw <edliaw@google.com>
 ---
- kernel/cgroup/cpuset.c        | 79 ++++++++++++++++++++++++-----------
- kernel/sched/isolation.c      |  4 +-
- kernel/time/timer_migration.c |  3 +-
- 3 files changed, 57 insertions(+), 29 deletions(-)
+v1->v2:
+    1. Fix the issue of abnormal use of fscanf in the get_thread_state function
+    2. Add timeout logic
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 98c7cb732206..96390ceb5122 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -78,7 +78,7 @@ static cpumask_var_t	subpartitions_cpus;
- static cpumask_var_t	isolated_cpus;
+v2->v3: https://lore.kernel.org/all/tencent_B9DBF2ECBE56BAB68BDAB949C6935D01CE09@qq.com/
+    1. Use /proc/[pid]/wchan instead of /proc/[pid]/stat to check if a process has entered the sleep state
+    2. Refactor part of the logic to facilitate code reuse.
+
+ .../futex/functional/futex_requeue.c          | 91 ++++++++++++++++---
+ 1 file changed, 77 insertions(+), 14 deletions(-)
+
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
+index dcf0d5f2f3122..7163e827691e4 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue.c
+@@ -11,8 +11,9 @@
+ #include "futextest.h"
+ #include "kselftest_harness.h"
  
- /*
-- * isolated_cpus updating flag (protected by cpuset_mutex)
-+ * isolated_cpus updating flag (protected by isolcpus_update_mutex)
-  * Set if isolated_cpus is going to be updated in the current
-  * cpuset_mutex crtical section.
-  */
-@@ -223,29 +223,46 @@ struct cpuset top_cpuset = {
- };
+-#define timeout_ns  30000000
+-#define WAKE_WAIT_US 10000
++#define FUTEX_WAIT_TIMEOUT_S	3 /* 3s */
++#define WAIT_THREAD_RETRIES	100
++#define WAIT_THREAD_DELAY_US	(10000 * 100) /* 1s */
  
- /*
-- * There are two global locks guarding cpuset structures - cpuset_mutex and
-- * callback_lock. The cpuset code uses only cpuset_mutex. Other kernel
-- * subsystems can use cpuset_lock()/cpuset_unlock() to prevent change to cpuset
-- * structures. Note that cpuset_mutex needs to be a mutex as it is used in
-- * paths that rely on priority inheritance (e.g. scheduler - on RT) for
-- * correctness.
-+ * CPUSET Locking Convention
-+ * -------------------------
-  *
-- * A task must hold both locks to modify cpusets.  If a task holds
-- * cpuset_mutex, it blocks others, ensuring that it is the only task able to
-- * also acquire callback_lock and be able to modify cpusets.  It can perform
-- * various checks on the cpuset structure first, knowing nothing will change.
-- * It can also allocate memory while just holding cpuset_mutex.  While it is
-- * performing these checks, various callback routines can briefly acquire
-- * callback_lock to query cpusets.  Once it is ready to make the changes, it
-- * takes callback_lock, blocking everyone else.
-+ * Below are the three global locks guarding cpuset structures in lock
-+ * acquisition order:
-+ *  - isolcpus_update_mutex (optional)
-+ *  - cpu_hotplug_lock (cpus_read_lock/cpus_write_lock)
-+ *  - cpuset_mutex
-+ *  - callback_lock (raw spinlock)
-  *
-- * Calls to the kernel memory allocator can not be made while holding
-- * callback_lock, as that would risk double tripping on callback_lock
-- * from one of the callbacks into the cpuset code from within
-- * __alloc_pages().
-+ * The first isolcpus_update_mutex should only be held if the existing set of
-+ * isolated CPUs (in isolated partition) or any of the partition states may be
-+ * changed when some cpuset control files are being written into. Otherwise,
-+ * it can be skipped. Holding isolcpus_update_mutex/cpus_read_lock or
-+ * cpus_write_lock will ensure mutual exclusion of isolated_cpus update.
-  *
-- * If a task is only holding callback_lock, then it has read-only
-- * access to cpusets.
-+ * As cpuset will now indirectly flush a number of different workqueues in
-+ * housekeeping_update() when the set of isolated CPUs is going to be changed,
-+ * it may not be safe from the circular locking perspective to hold the
-+ * cpus_read_lock. So cpuset_full_lock() will be released before calling
-+ * housekeeping_update() and re-acquired afterward.
-+ *
-+ * A task must hold all the remaining three locks to modify externally visible
-+ * or used fields of cpusets, though some of the internally used cpuset fields
-+ * can be modified by holding cpu_hotplug_lock and cpuset_mutex only. If only
-+ * reliable read access of the externally used fields are needed, a task can
-+ * hold either cpuset_mutex or callback_lock.
-+ *
-+ * If a task holds cpu_hotplug_lock and cpuset_mutex, it blocks others,
-+ * ensuring that it is the only task able to also acquire callback_lock and
-+ * be able to modify cpusets.  It can perform various checks on the cpuset
-+ * structure first, knowing nothing will change. It can also allocate memory
-+ * without holding callback_lock. While it is performing these checks, various
-+ * callback routines can briefly acquire callback_lock to query cpusets.  Once
-+ * it is ready to make the changes, it takes callback_lock, blocking everyone
-+ * else.
-+ *
-+ * Calls to the kernel memory allocator cannot be made while holding
-+ * callback_lock which is a spinlock, as the memory allocator may sleep or
-+ * call back into cpuset code and acquire callback_lock.
-  *
-  * Now, the task_struct fields mems_allowed and mempolicy may be changed
-  * by other task, we use alloc_lock in the task_struct fields to protect
-@@ -256,6 +273,7 @@ struct cpuset top_cpuset = {
-  * cpumasks and nodemasks.
-  */
+ volatile futex_t *f1;
  
-+static DEFINE_MUTEX(isolcpus_update_mutex);
- static DEFINE_MUTEX(cpuset_mutex);
- 
- /**
-@@ -302,7 +320,7 @@ void cpuset_full_unlock(void)
- #ifdef CONFIG_LOCKDEP
- bool lockdep_is_cpuset_held(void)
+@@ -20,8 +21,8 @@ void *waiterfn(void *arg)
  {
--	return lockdep_is_held(&cpuset_mutex);
-+	return lockdep_is_held(&isolcpus_update_mutex);
- }
- #endif
+ 	struct timespec to;
  
-@@ -1294,9 +1312,8 @@ static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
- static void __update_isolation_cpumasks(bool twork);
- static void isolation_task_work_fn(struct callback_head *cb)
- {
--	cpuset_full_lock();
-+	guard(mutex)(&isolcpus_update_mutex);
- 	__update_isolation_cpumasks(true);
--	cpuset_full_lock();
+-	to.tv_sec = 0;
+-	to.tv_nsec = timeout_ns;
++	to.tv_sec = FUTEX_WAIT_TIMEOUT_S;
++	to.tv_nsec = 0;
+ 
+ 	if (futex_wait(f1, *f1, &to, 0))
+ 		printf("waiter failed errno %d\n", errno);
+@@ -29,20 +30,83 @@ void *waiterfn(void *arg)
+ 	return NULL;
  }
  
- /*
-@@ -1338,8 +1355,18 @@ static void __update_isolation_cpumasks(bool twork)
- 		return;
- 	}
- 
-+	lockdep_assert_held(&isolcpus_update_mutex);
-+	/*
-+	 * Release cpus_read_lock & cpuset_mutex before calling
-+	 * housekeeping_update() and re-acquiring them afterward if not
-+	 * calling from task_work.
-+	 */
-+	if (!twork)
-+		cpuset_full_unlock();
- 	ret = housekeeping_update(isolated_cpus);
- 	WARN_ON_ONCE(ret < 0);
-+	if (!twork)
-+		cpuset_full_lock();
- 
- 	isolated_cpus_updating = false;
- }
-@@ -3196,6 +3223,7 @@ ssize_t cpuset_write_resmask(struct kernfs_open_file *of,
- 		return -EACCES;
- 
- 	buf = strstrip(buf);
-+	mutex_lock(&isolcpus_update_mutex);
- 	cpuset_full_lock();
- 	if (!is_cpuset_online(cs))
- 		goto out_unlock;
-@@ -3226,6 +3254,7 @@ ssize_t cpuset_write_resmask(struct kernfs_open_file *of,
- 		rebuild_sched_domains_locked();
- out_unlock:
- 	cpuset_full_unlock();
-+	mutex_unlock(&isolcpus_update_mutex);
- 	if (of_cft(of)->private == FILE_MEMLIST)
- 		schedule_flush_migrate_mm();
- 	return retval ?: nbytes;
-@@ -3329,6 +3358,7 @@ static ssize_t cpuset_partition_write(struct kernfs_open_file *of, char *buf,
- 	else
- 		return -EINVAL;
- 
-+	guard(mutex)(&isolcpus_update_mutex);
- 	cpuset_full_lock();
- 	if (is_cpuset_online(cs))
- 		retval = update_prstate(cs, val);
-@@ -3502,6 +3532,7 @@ static void cpuset_css_killed(struct cgroup_subsys_state *css)
++struct futex_thread {
++	pthread_t thread;
++	pthread_barrier_t barrier;
++	pid_t tid;
++	void *(*threadfn)(void *);
++	void *arg;
++};
++
++static int wait_for_thread(FILE *fp, int timeout_us)
++{
++	char buf[80] = "";
++
++	for (int i = 0; i < WAIT_THREAD_RETRIES; i++) {
++		if (!fgets(buf, sizeof(buf), fp))
++			return -EIO;
++		if (!strncmp(buf, "futex", 5))
++			return 0;
++		usleep(timeout_us / WAIT_THREAD_RETRIES);
++		rewind(fp);
++	}
++	return -ETIMEDOUT;
++}
++
++int futex_wait_for_thread(struct futex_thread *t, int timeout_us)
++{
++	char fname[80];
++	FILE *fp;
++	int res;
++
++	snprintf(fname, sizeof(fname), "/proc/%d/wchan", t->tid);
++	fp = fopen(fname, "r");
++	if (!fp)
++		return -EIO;
++	res = wait_for_thread(fp, timeout_us);
++	fclose(fp);
++	return res;
++}
++
++static void *futex_thread_fn(void *arg)
++{
++	struct futex_thread *t = arg;
++
++	t->tid = gettid();
++	pthread_barrier_wait(&t->barrier);
++	return t->threadfn(t->arg);
++}
++
++int futex_thread_create(struct futex_thread *t, void *(*threadfn)(void *), void *arg)
++{
++	int ret;
++
++	pthread_barrier_init(&t->barrier, NULL, 2);
++	t->tid = 0;
++	t->threadfn = threadfn;
++	t->arg = arg;
++
++	ret = pthread_create(&t->thread, NULL, futex_thread_fn, t);
++	if (ret)
++		return ret;
++
++	pthread_barrier_wait(&t->barrier);
++	return 0;
++}
++
+ TEST(requeue_single)
  {
- 	struct cpuset *cs = css_cs(css);
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
+-	pthread_t waiter[10];
++	struct futex_thread waiter;
  
-+	guard(mutex)(&isolcpus_update_mutex);
- 	cpuset_full_lock();
- 	/* Reset valid partition back to member */
- 	if (is_partition_valid(cs))
-diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
-index 3b725d39c06e..ef152d401fe2 100644
---- a/kernel/sched/isolation.c
-+++ b/kernel/sched/isolation.c
-@@ -123,8 +123,6 @@ int housekeeping_update(struct cpumask *isol_mask)
- 	struct cpumask *trial, *old = NULL;
- 	int err;
+ 	f1 = &_f1;
  
--	lockdep_assert_cpus_held();
--
- 	trial = kmalloc(cpumask_size(), GFP_KERNEL);
- 	if (!trial)
- 		return -ENOMEM;
-@@ -136,7 +134,7 @@ int housekeeping_update(struct cpumask *isol_mask)
- 	}
- 
- 	if (!housekeeping.flags)
--		static_branch_enable_cpuslocked(&housekeeping_overridden);
-+		static_branch_enable(&housekeeping_overridden);
- 
- 	if (housekeeping.flags & HK_FLAG_DOMAIN)
- 		old = housekeeping_cpumask_dereference(HK_TYPE_DOMAIN);
-diff --git a/kernel/time/timer_migration.c b/kernel/time/timer_migration.c
-index 6da9cd562b20..244a8d025e78 100644
---- a/kernel/time/timer_migration.c
-+++ b/kernel/time/timer_migration.c
-@@ -1559,8 +1559,6 @@ int tmigr_isolated_exclude_cpumask(struct cpumask *exclude_cpumask)
- 	cpumask_var_t cpumask __free(free_cpumask_var) = CPUMASK_VAR_NULL;
- 	int cpu;
- 
--	lockdep_assert_cpus_held();
--
- 	if (!works)
- 		return -ENOMEM;
- 	if (!alloc_cpumask_var(&cpumask, GFP_KERNEL))
-@@ -1570,6 +1568,7 @@ int tmigr_isolated_exclude_cpumask(struct cpumask *exclude_cpumask)
- 	 * First set previously isolated CPUs as available (unisolate).
- 	 * This cpumask contains only CPUs that switched to available now.
+ 	/*
+ 	 * Requeue a waiter from f1 to f2, and wake f2.
  	 */
-+	guard(cpus_read_lock)();
- 	cpumask_andnot(cpumask, cpu_online_mask, exclude_cpumask);
- 	cpumask_andnot(cpumask, cpumask, tmigr_available_cpumask);
+-	ASSERT_EQ(0, pthread_create(&waiter[0], NULL, waiterfn, NULL));
+-
+-	usleep(WAKE_WAIT_US);
++	EXPECT_EQ(0, futex_thread_create(&waiter, waiterfn, NULL));
++	futex_wait_for_thread(&waiter, WAIT_THREAD_DELAY_US);
  
+ 	EXPECT_EQ(1, futex_cmp_requeue(f1, 0, &f2, 0, 1, 0));
+ 	EXPECT_EQ(1, futex_wake(&f2, 1, 0));
+@@ -52,8 +116,7 @@ TEST(requeue_multiple)
+ {
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
+-	pthread_t waiter[10];
+-	int i;
++	struct futex_thread waiter[10];
+ 
+ 	f1 = &_f1;
+ 
+@@ -61,10 +124,10 @@ TEST(requeue_multiple)
+ 	 * Create 10 waiters at f1. At futex_requeue, wake 3 and requeue 7.
+ 	 * At futex_wake, wake INT_MAX (should be exactly 7).
+ 	 */
+-	for (i = 0; i < 10; i++)
+-		ASSERT_EQ(0, pthread_create(&waiter[i], NULL, waiterfn, NULL));
+-
+-	usleep(WAKE_WAIT_US);
++	for (int i = 0; i < 10; i++) {
++		EXPECT_EQ(0, futex_thread_create(&waiter[i], waiterfn, NULL));
++		futex_wait_for_thread(&waiter[i], WAIT_THREAD_DELAY_US / 10);
++	}
+ 
+ 	EXPECT_EQ(10, futex_cmp_requeue(f1, 0, &f2, 3, 7, 0));
+ 	EXPECT_EQ(7, futex_wake(&f2, INT_MAX, 0));
 -- 
-2.52.0
+2.34.1
 
