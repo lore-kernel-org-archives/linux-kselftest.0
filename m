@@ -1,214 +1,166 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C509372B20
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 19:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769628769; cv=none; b=UYusLSO5jq3rD5jmenFmuL1K9PLTqrOA7zKgPrUl2dVjn07Uh6muNl0aHzGnRymlnRbcRKkNv3uNMtXURI/ua98G7MtTPmN+vNhXE9dmaV5Zfdsj7/Qce83XfMtex6QPnrPPH3DrDLatiymiRNF2XRQAcFZEVFkHk2WY6r8rA9w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769628769; c=relaxed/simple;
-	bh=HiiF8oN/JZyzVRZvXlHfT5uyZcuQv5Z1I7+98LRA82w=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UXk1wjGR3GDUd0FaDTlbDi3c3z7Icxz8SOGS2cJyXZN9x0J6MCEebCUhRa38zPbHZuqBVaIgwRM6PxUWKFkNTMHJmKZo9IEn3/Hi+UrPj9CMLHjcuIR4x3AhBxZAQP2PrUimbaTC2xFEQs3hqKlgCatgI2psgJf8lVfLE3oVuL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=avqhoBvG; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5A8372B58
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 20:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769632328; cv=pass; b=kuZBFs7NEfxxwg8lvd8qJwTSVOTffgIsWHB4YSQ0g2Kh8dlkhfUSvnGrfqAGiCcfwtrtdGMxVXZZrLBppIuoBlx2arfRkjSrtwTBZIr2wWm+IRDBaF+PDMu8xKmT3Rzu3wLgq9t55NLiVePrQ544dcE8bOptCkTSznbbf8yvS58=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769632328; c=relaxed/simple;
+	bh=808hQIDw8HXuF8zg34i2s1I0VMLdN4AzGhcnwG8lblQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Yl2QZZTzk0/WFG9nnpJssFPRZa8V3SPfHWI1S2z/50SA9dpEPhWkwRaPBLKAOMB2FPxJTkunpD3xsDuiTdbd5h9fEKifKhrr/MLrcr8Qu8kBN/Tti4BFGeh3blaT4ZyYfLfu/RZBiUstaIpmMLGx6JSSqZElr5Vz7BZpVziiTjI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUTgv8V3; arc=pass smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="avqhoBvG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769628766;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Syj9xoENklbweTYZxw6IJ7gedxjVxbiF9vjxFzyJ5m0=;
-	b=avqhoBvGGdmaSHI5W0sI9yW8NJ1rsSar3Iq2chepTdBEII7NzI0poglNNnfXAE/imyEFfn
-	iTkgcMLEiiCogtZzqUycA9eeDhouKG3KP/7GdbrHCamqXX4xX9GUOftwqHisBeGxtBm1Vz
-	saxLJxhr4H8bxp+LMHcE0FchH0Fk2co=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-650-mkKBgdSvPEKEb4AIxGEj4w-1; Wed,
- 28 Jan 2026 14:32:43 -0500
-X-MC-Unique: mkKBgdSvPEKEb4AIxGEj4w-1
-X-Mimecast-MFC-AGG-ID: mkKBgdSvPEKEb4AIxGEj4w_1769628761
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5A23218005B8;
-	Wed, 28 Jan 2026 19:32:41 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.80.171])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4746830001A2;
-	Wed, 28 Jan 2026 19:32:38 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Aleksei Oladko <aleksey.oladko@virtuozzo.com>,  "David S . Miller"
- <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,  Paolo Abeni
- <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  netdev@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,
- ovs-dev@openvswitch.org, Ilya Maximets <imaximet@redhat.com>, Eelco
- Chaudron <echaudro@redhat.com>, Stefano Brivio <sbrivio@redhat.com>
-Subject: Re: [PATCH v2 0/5] selftests: net: fix false failures due to
- missing features and host interference
-In-Reply-To: <20260127184448.2976475f@kernel.org> (Jakub Kicinski's message of
-	"Tue, 27 Jan 2026 18:44:48 -0800")
-References: <20260127225134.304362-1-aleksey.oladko@virtuozzo.com>
-	<20260127184448.2976475f@kernel.org>
-Date: Wed, 28 Jan 2026 14:32:36 -0500
-Message-ID: <f7t1pj9v8h7.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUTgv8V3"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-432755545fcso204515f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 12:32:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769632325; cv=none;
+        d=google.com; s=arc-20240605;
+        b=XgMcZlBUNqpKvWIFoHsug8e8fbSNVX2OqXJH7D4RQ68/+85pTN9lLnFkgszWgFNfIj
+         XkH+NPH5U1lOHgvJUjGSxq115EffKsGo8lR7fypK1yHbbrmfMUNdo7LSSZyctVbu0kb8
+         pwXSQq+Q2uEqMZAZ40cJ4Y4MUD5J8FCNp7n0epjIVIBgNj8+kd24cKhdyMZa9oKtGLi2
+         ZWr/TOoAHuUWzbAV9v0KZeXtN9e+t62WUdKxivVq+CkumZ9XeQ3OFSfuYIj9tasZ3dCk
+         mNPRxditkrmLwmPv+semYGJGc1FzK9l+O+8CYfkQ1yUJWOdR0u+qCh42/js7JOXWtv0d
+         z7aQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=07rf/uTuwqt/mx7z+xU8g3Kvog0c3ZDUc5m6W+iA6DE=;
+        fh=suWSd6+br7+OSC/REf7WSyVI+dogu6wuHYeYJJ7NmPU=;
+        b=lsZ7Rn2R7o3NPfUjC/dejSwznfkCAfm4C27pHEujYL2c1rlYn5XuaBZSnTuoIiqAfa
+         ncopdSfhQyP3Uw4pDG6xyArhTW7vwYsgXzsw4IAZWrA3DzTBJxtmABf5vtFVCfednJJH
+         4jdboRelvpI9i/9kFZqW0ehPRnP6RQsKmqnRuzRebHh5hiag9nwvLy0jYMsHM4w37D+2
+         5ODQMU790Mfsc2Mxtzul9c4bIdxd4PxovSJq/1onz4tYBYcjEKC/2SceZjQMrMfzNGmc
+         IjUp7RXWfII4XvGDEDBGnzqCuedqIpnkyiXU0aM3qi7txMz8aYfqNqr9+c9uo8zyutK9
+         IrZQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769632325; x=1770237125; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=07rf/uTuwqt/mx7z+xU8g3Kvog0c3ZDUc5m6W+iA6DE=;
+        b=MUTgv8V3qcslf2OJAwqMbqAa5Wc0GJYvnYwhfsYuSMreQAuFL1wkJElStmcg6+JqWW
+         ZjJbhceLwllEP89QvD2JTFcvQyh0H1kNEp8dMUnZBouQoYkGac2l9RV1eyNOBQYWMRUw
+         8V8mfsk6A7KTkN1dULpd0cnzMAF6M7xNkm+8nywZdBXlqfCsShOWCJym70VPz7EliIwA
+         rYxEJNvGt2tlyrM+KIzQHLdVZ3wsZtRQI9nI8qVLhiWENd1tFlPHZ77Re6/jMWYjTzlc
+         i65MrWoWBhvlHqNhsE6Fup6vgaQO4IU1eB1a8L7KPg6nxWtdMnEA3JnnjcRMoe30h/BT
+         /0YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769632325; x=1770237125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=07rf/uTuwqt/mx7z+xU8g3Kvog0c3ZDUc5m6W+iA6DE=;
+        b=FmxD7sEeiWdlcL2UK4jeq6aCSe8MOipCEbGSdJV/Ex8bS1xkeisjVMfYRf0ZtTbH1j
+         J1cE/n7TqgWB1N+nNerYubz9Ix3evPUZgPPzBRQ822xG/gC7Z3fMIevDMpy7ZYp8V1JA
+         AjJvsYqLsN0yr0Xjo1LDsqHJ8Ig2iq+Q0FNBdzHUszNFcEa9yiTfAFdSwSZ5t9ycj134
+         nOglNuIvzvj4R9YjgDHDjbGCjrWTyp+UdPUAZPTL1xg3vBdm7oRlCj/LC9uCLB6OMrJa
+         JHMd2nnLaGZo/Vx8vvgikvWHHHWKPrAJGuYUvA8ZZqN+NQYQtpHZh2czHgqw6Lp0HzMC
+         AdtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUsH/yFIxZN9Qe3ALLmUoS6iqEhBD5NSNbv0f0zpe3e+n+ReOT8N7YDhRyzS/TcL3bIinTl9UofbLzUE2XcxwI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGR9q22NQYqfktxZ6t+/EPgnEMvDK/yEpYH2oNO1XbiT/O1Sth
+	O5oOG1C0NEeLfSUxJQ3K+DE1q3Ag4oyAPGArzrvuwQxF48WILiN4J7uTG+dHW7DdW/1RraTKXDb
+	ek09n6U4AK7iFlDcAKxUOADLygoLVOeA=
+X-Gm-Gg: AZuq6aI5B6yv6nwJA8MuSRRQYUvP8oShTbnJD2a9aR2RYsX72FJjeMa/RdIThHhk96n
+	Afa//ey6ZTlH+BD4m26q5MrZmjLPvNOVfoJZs7WROlIL7h+GpThSHbzAGisvQnm/kksmAamVIC1
+	b40fxObeLqVUpn1MbJRvdxS4QRthavSBeUugdpAvCRQHG4WacP6yFU+oJonyKBCZiT85p7b3aTr
+	gn9k6LWBRL9gZWdyLH3zqIQD5AjmM1Wq0QS1IuEBXGqwexR+5N1vs8qzzxD4gPXlh5XId5ySOwC
+	NXxTfY2buEJGIYvSxmNj/jfNBGXa+sMOmnVCa2ZSpe0WcNzj5KaA+MyFuZC6fHcPAAyyjZcarYE
+	FwNZeYftvfZTdKA==
+X-Received: by 2002:a05:6000:2404:b0:435:9653:e154 with SMTP id
+ ffacd0b85a97d-435dd074b2bmr9812358f8f.27.1769632325304; Wed, 28 Jan 2026
+ 12:32:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+References: <20260128150112.8873-2-leon.hwang@linux.dev> <e64c4137e7f262e6fdab272e8ee44c8a129a36eb6d0186914375d6ba20d88474@mail.kernel.org>
+ <65231eeb-1f00-4af2-9234-a290ea3f6585@meta.com> <a10afa70-29b7-48ab-b241-8b0f602abe2f@linux.dev>
+ <CAADnVQJV=e2VgQzkpsUQwexhaVZMs7uXHCe1Fa6VwbVNUMPghA@mail.gmail.com> <7dbcc5d5-476b-46e5-9e4b-b260d24a51a1@linux.dev>
+In-Reply-To: <7dbcc5d5-476b-46e5-9e4b-b260d24a51a1@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 28 Jan 2026 12:31:54 -0800
+X-Gm-Features: AZwV_QieHaFto3G-1e8bEUtCESnVn4_ZZwARjehTdXUH1XxE0kv7X3Eh3iZgKp8
+Message-ID: <CAADnVQKdZo4Qm0z-qedkfQHZhq+tW4MuRSzM5-zAGYX-ZQTiaQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Add bpf_arch_supports_fsession()
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Chris Mason <clm@meta.com>, bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Menglong Dong <menglong8.dong@gmail.com>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-Also CC'd Stefano, ovs-dev, Ilya, and Eelco
-
-Jakub Kicinski <kuba@kernel.org> writes:
-
-> On Tue, 27 Jan 2026 22:51:29 +0000 Aleksei Oladko wrote:
->> This series addresses several issues in the networking kselftests
->> that cause false-positive failures depending on the host environment,
->> kernel configuration, or library versions.
->> 
->> The main focus of these changes is to isolate tests from the host
->> environment (using namespaces) and to ensure proper fallback or
->> skipping when dependencies are missing.
->> 
->> Summary of changes:
->> 1. Adds a check for cls_basic module in fib_tests. Without this
->>    module, the test fails when attempting to add tc rules instead
->>    of skipping.
->> 2. Fixes ovs-dpctl.py to return a non-zero exit code when pyroute2
->>    is too old. This allows pmtu.sh to correctly fall back to ovs-vsctl
->>    instead of assuming the configuration was successful.
->> 3,4. Move reuseport and pmtu.sh tests info dedicated network namespaces.
->>    This prevents failures caused by port conflicts with host processes
->>    or interference from host firewall rules.
->> 5. Ensures io_uring is enabled via sysctl before running io_uring_zerocopy
->>    test, preventing failures on systems where kernel.io_uring_disabled
->>    is set.
+On Wed, Jan 28, 2026 at 11:09=E2=80=AFAM Ihor Solodrai <ihor.solodrai@linux=
+.dev> wrote:
 >
-> Something in this series breaks the pmtu test for us in the CI:
+> On 1/28/26 10:49 AM, Alexei Starovoitov wrote:
+> > On Wed, Jan 28, 2026 at 9:34=E2=80=AFAM Ihor Solodrai <ihor.solodrai@li=
+nux.dev> wrote:
+> >>
+> >> On 1/28/26 7:35 AM, Chris Mason wrote:
+> >>>
+> >>>
+> >>> On 1/28/26 10:26 AM, bot+bpf-ci@kernel.org wrote:
+> >>>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_com=
+p.c
+> >>>>> index 5a075e06cf..070ba80e39 100644
+> >>>>> --- a/arch/x86/net/bpf_jit_comp.c
+> >>>>> +++ b/arch/x86/net/bpf_jit_comp.c
+> >>>>> @@ -4112,3 +4112,8 @@ bool bpf_jit_supports_timed_may_goto(void)
+> >>>>>  {
+> >>>>>     return true;
+> >>>>>  }
+> >>>>> +
+> >>>>> +bool bpf_jit_supports_fsession(void)
+> >>>>        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> >>>> This is the actual function name in the code.
+> >>>
+> >>> Ihor, I think the script parsing review-inline.txt chopped off the
+> >>> part of the review where AI was complaining about the commit message?
+> >>
+> >> This is the email body pre-processing in KPD, yes.
+> >>
+> >> At some point we decided to remove the commit message before sending
+> >> an email, but now that AI reviews the messages too, I think we should
+> >> just send the generated review-inline.txt as is.
+> >>
+> >> Alexei, wdyt?
+> >
+> > I think KPD is only supposed to trim the header until 'diff ..' line.
+> > In this case there is no 'diff', so I'm not sure why it trimmed so much=
+.
 >
-> # 64.84 [+2.54] TEST: IPv6, bridged geneve6: PMTU exceptions - nexthop objects      [ OK ]
-> # 65.73 [+0.89]   ovs_bridge not supported
-> # 65.73 [+0.00] TEST: IPv4, OVS vxlan4: PMTU exceptions                             [SKIP]
-> # 67.20 [+1.47]   ovs_bridge not supported
-> # 67.20 [+0.00] TEST: IPv6, OVS vxlan4: PMTU exceptions                             [SKIP]
-> # 68.66 [+1.45]   ovs_bridge not supported
-> # 68.66 [+0.00] TEST: IPv4, OVS vxlan6: PMTU exceptions                             [SKIP]
-> # 70.11 [+1.45]   ovs_bridge not supported
-> # 70.11 [+0.00] TEST: IPv6, OVS vxlan6: PMTU exceptions                             [SKIP]
-> # 71.57 [+1.45]   ovs_bridge not supported
-> # 71.57 [+0.00] TEST: IPv4, OVS geneve4: PMTU exceptions                            [SKIP]
-> # 73.01 [+1.44]   ovs_bridge not supported
-> # 73.01 [+0.00] TEST: IPv6, OVS geneve4: PMTU exceptions                            [SKIP]
-> # 74.46 [+1.45]   ovs_bridge not supported
-> # 74.46 [+0.00] TEST: IPv4, OVS geneve6: PMTU exceptions                            [SKIP]
-> # 75.92 [+1.46]   ovs_bridge not supported
-> # 75.93 [+0.00] TEST: IPv6, OVS geneve6: PMTU exceptions                            [SKIP]
+> There is. Here is the PR comment with the review:
+> https://github.com/kernel-patches/bpf/pull/10868#issuecomment-3811930805
 >
-> https://netdev-ctrl.bots.linux.dev/logs/vmksft/net/results/492641/137-pmtu-wrapper-sh/stdout
+> KPD trimmed everything before the first "> diff" occurrence, as expected.
 >
-> It was fine before:
+> I'll try to fix this up in KPD. We should probably search for the first
+> line starting with "> " (a quote start) to trim the header correctly.
 >
-> https://netdev-ctrl.bots.linux.dev/logs/vmksft/net-dbg/results/492461/6-pmtu-sh/stdout
->
-> Since this is a bash test there are of course no logs to go by.. :/
+> Alternatively, AI can be prompted to avoid generating the header in
+> review-inline.txt, but that's probably less reliable. And maybe it is
+> useful for local runs, idk.
 
-FYI- we can run the script with '-v' and it will include all of the
-command output.  That could help understand what is going on if you can
-duplicate the [SKIP] behavior in another environment.  I'll try to get
-my vmtest environment back up for it.
+I see. let's then strip the first 4 lines ?
+(commit, author, subj) ?
 
-> I tried running 
->  python tools/testing/selftests/net/openvswitch/ovs-dpctl.py add-dp br0
-> in a netns and that works just fine. 
-
-Yes, I tested just changing the ovs-dpctl.py side (no other changes to
-pmtu.sh), and then tried with older pyroute2, no pyroute2, and no
-ovs-vswitchd userspace to fall back on, and didn't see anything odd on
-my end.  I am still nervous that maybe the test is/was passing even in
-cases where it shouldn't be.
-
-> No idea what's going on..
-
-+1, the setup_ovs_bridge seems to be returning some kind of error.
-
-NOTE that I was concerned maybe the test would be passing whether or not
-the ovs-dpctl was returning '0' (from change 2/5), but I see the
-following when I fake out the version check:
-
-========== 8< ===========
-
-[core@centos9 net]$ sudo ./pmtu.sh -v pmtu_ipv4_ovs_vxlan4_exception
-
-##########################################################################
-
-    COMMAND: python3 ./openvswitch/ovs-dpctl.py add-dp ovs_br0
-    Need to upgrade the python pyroute2 package to >= 0.6.
-
-    COMMAND: ip link set ovs_br0 up
-    Cannot find device "ovs_br0"
-
-    COMMAND: ip netns exec ns_c-VCOwRt ip link add veth_C-A type veth peer name veth_A-C
-    COMMAND: ip netns exec ns_c-VCOwRt ip link set veth_A-C netns 1
-    COMMAND: ip link set veth_A-C up
-    COMMAND: ip netns exec ns_c-VCOwRt ip link set veth_C-A up
-    COMMAND: ip netns exec ns_c-VCOwRt ip addr add 192.168.2.10/24 dev veth_C-A
-    COMMAND: ip netns exec ns_c-VCOwRt ip addr add fd00:2::c/64 dev veth_C-A
-    COMMAND: python3 ./openvswitch/ovs-dpctl.py add-if ovs_br0 veth_A-C
-    Need to upgrade the python pyroute2 package to >= 0.6.
-
-    COMMAND: ip netns exec ns_a-kmNqnY ip link set veth_A-R1 netns 1
-    COMMAND: ip addr add 10.0.1.1/24 dev veth_A-R1
-    COMMAND: ip addr add fc00:1::1/64 dev veth_A-R1
-    COMMAND: ip link set veth_A-R1 up
-    COMMAND: ip route add 10.0.3.1 via 10.0.1.2
-    COMMAND: ip route add fc00:3::1 via fc00:1::2
-    COMMAND: python3 ./openvswitch/ovs-dpctl.py add-if ovs_br0 vxlan_a -t vxlan
-    Need to upgrade the python pyroute2 package to >= 0.6.
-
-    COMMAND: python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 recirc_id(0),in_port(),eth(),eth_type(0x0800),ipv4() set(tunnel(tun_id=1,dst=10.0.3.1,ttl=64,tp_dst=4789,flags(df|csum))),
-    Need to upgrade the python pyroute2 package to >= 0.6.
-
-    COMMAND: python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 recirc_id(0),in_port(),eth(),eth_type(0x86dd),ipv6() set(tunnel(tun_id=1,dst=10.0.3.1,ttl=64,tp_dst=4789,flags(df|csum))),
-    Need to upgrade the python pyroute2 package to >= 0.6.
-
-    COMMAND: python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 recirc_id(0),tunnel(tun_id=1,src=10.0.3.1,dst=10.0.1.1),in_port(),eth(),eth_type(0x0800),ipv4() 
-    Need to upgrade the python pyroute2 package to >= 0.6.
-
-    COMMAND: python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 recirc_id(0),tunnel(tun_id=1,src=10.0.3.1,dst=10.0.1.1),in_port(),eth(),eth_type(0x86dd),ipv6() 
-    Need to upgrade the python pyroute2 package to >= 0.6.
-
-    COMMAND: python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 recirc_id(0),tunnel(tun_id=1,src=10.0.3.1,dst=10.0.1.1),in_port(),eth(),eth_type(0x0806),arp() 
-    Need to upgrade the python pyroute2 package to >= 0.6.
-
-    COMMAND: python3 ./openvswitch/ovs-dpctl.py add-flow ovs_br0 recirc_id(0),in_port(),eth(),eth_type(0x0806),arp(sip=192.168.2.10,tip=192.168.2.2) set(tunnel(tun_id=1,dst=10.0.3.1,ttl=64,tp_dst=4789,flags(df|csum))),
-    Need to upgrade the python pyroute2 package to >= 0.6.
-
-    COMMAND: ip netns exec ns_b-gO9WCK ip link add vxlan_b type vxlan id 1 local 10.0.3.1 remote 10.0.1.1 ttl 64 dstport 4789
-    COMMAND: ip netns exec ns_b-gO9WCK ip addr add 192.168.2.2/24 dev vxlan_b
-    COMMAND: ip netns exec ns_b-gO9WCK ip addr add fd00:2::b/64 dev vxlan_b
-    COMMAND: ip link set vxlan_a up
-    Cannot find device "vxlan_a"
-
-    COMMAND: ip netns exec ns_b-gO9WCK ip link set vxlan_b up
-Cannot find device "ovs_br0"
-    COMMAND: ip netns exec ns_c-VCOwRt ping -q -M want -i 0.1 -c 20 -s 4500 192.168.2.2
-    PING 192.168.2.2 (192.168.2.2) 4500(4528) bytes of data.
-
---- 192.168.2.2 ping statistics ---
-20 packets transmitted, 0 received, +20 errors, 100% packet loss, time 12790ms
-pipe 4
-
-TEST: IPv4, OVS vxlan4: PMTU exceptions                             [FAIL]
-
+tbh this one was unusual. If it repeats then yeah '> diff' is a wrong marke=
+r.
