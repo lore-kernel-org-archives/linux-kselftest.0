@@ -1,104 +1,143 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E317E0E4;
-	Wed, 28 Jan 2026 11:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADFA20125F;
+	Wed, 28 Jan 2026 12:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769600398; cv=none; b=Qhf0LqjhKD+SE96g6nP1btbfaq/bcVn2ZPN1VfyEBy6ddTxq5BzQM3mzBZNUfBcAcaYNgv/pZBd5o3FaYzH5pfjpnDOqM24ujOgFGfiEQSWBBw3yy99wibY3UCzzObIVFWfaIDPWGYNf/EgXr5a3HkOY1FEEBLHN7z42XxllYcA=
+	t=1769602724; cv=none; b=AhChG77u/DmFJSDKJKuQ2HiTalYHiXVVhOY6rcPv49DJYhwSrsqinyB0niJWvxSDPGnqcVrL11SvvZchL2B/KA+R/haxcmOUyNnwOItyNTSPBhTdElGne16CzA56k/VRodK4nlA7+rrNy1jhyvZ+Tbqpo+NfPyBmJIu2SawgtNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769600398; c=relaxed/simple;
-	bh=8JE6fgOxRKWA+V8VYu9R9Q+rh59VkQxn7th+VjXJ/kw=;
+	s=arc-20240116; t=1769602724; c=relaxed/simple;
+	bh=irHF387VhKHjsOnpsnW9NUk3sxxbxWzln/uy9xgtwqM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X/HNl3oXLIcsSDhOf7+74uf6JqbNcifNa34QXWafQIg4GQJr4RaIUj+JFZC7+TtTeR+oucuKWrqIN6A6Jv3UksgoyGGlk/5BpqWpGHY0oLse0abY36GN8g5tR5cTqiuiyKWfLz7MOJXDbyaE79WY/lOGjtzl/M6CYJnqZc9wzpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nMdvjuDp; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=n4uGvG1F; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=awkHM1aP4xodEhPeiEM8aN85iNxQ3jt2azKUTCmW2qnmc8HjM6PWRiB43xi2VEpHkb/MQ73nskNgWNAagvetip7B/aQYPU2knFMXvAJfUeQHZRA+h3bcL7MQrSTa0Lq2uWI+WtQMIaSJpmH9/06TJ9jFYeMMlkH5mmuZyHxxZtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TGlHRR6F; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nMdvjuDp";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="n4uGvG1F"
-Date: Wed, 28 Jan 2026 12:39:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769600395;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CJTWYk+YesdvpGhIB0dJi/fYpBD0/tHDEy3akF3Lp+w=;
-	b=nMdvjuDpEd/rTbBSzhjmJ7NPshjPCK/ChOhAswnyHBSux2QG/poQiyRuQpG8sYjpSyeQCM
-	B6R4bdJDoGAt9sYZc8A03oR4c6R7zb+cLrVCHU1/UIm4LiLJMbpqq2rLKwNleKfWTHJAKM
-	hNoZNv4Ds0dT6J7dIi1y/LtAbplBtKLM7IWBCpB2Dh603e2jm4H4+PqdzOt2z5KYuHYEwM
-	T+tU8KhQMmSL4TcmKA7gomEGwP+HNFDtVNZ1x9kW0vBDSBmk15RPeQnzqmy/Qgi+vssnx1
-	qhTRS90raMm28UxTSfnp8tDJ6n+eyg1XRmrYbs0qumvCfeKoXOE/cAy1QEvlvA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769600395;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CJTWYk+YesdvpGhIB0dJi/fYpBD0/tHDEy3akF3Lp+w=;
-	b=n4uGvG1FdMOreZxb92MIinReioVnN21YcMF5PuWN0mo2h1GNO/G04Okk0numKey41T76Ch
-	Ltc4M8gcyEujpjCg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: runner: Avoid spurious warning about missing
- failures file
-Message-ID: <20260128123203-28c3a39f-3751-40ae-91a0-35355cb0ba5a@linutronix.de>
-References: <20260128-kselftest-fix-failures-file-v1-1-b58072c66317@linutronix.de>
- <DG06J6S40UW7.15VFU5DA8YJIY@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TGlHRR6F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769602723; x=1801138723;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=irHF387VhKHjsOnpsnW9NUk3sxxbxWzln/uy9xgtwqM=;
+  b=TGlHRR6F94rKBRysVGoeJUVVWNt0zxHcxUUHuGMVDEqG6cxjzZLmjTVh
+   zigjLlb+2U1wBFRVoTfL3919JzOQG/KyWzA3jTIUOyz58xeQBP0FdLJ+z
+   spzvXvY2wrp4kTwZD+hxyWWnzz6JXZWYzzqjcZAe2oGIZPXJspe6r+RvC
+   BJbktKaB0UGBZtPrNs2Z3M5R+ROzLzeE0qXwcvh3yz9xw4S+kCAnAPVlM
+   nVNfUL7B3UrEtVrHcp902Qq2ykB+vNPTTbEvSVuNxGVpxPlLTkb/OWSQ8
+   sivcrokU6gFz9flZablWyus71nF16DvcXnceFNs9VIDfN1LwwbItjmn74
+   Q==;
+X-CSE-ConnectionGUID: BeKq8/W3QImhw2GFekEqtA==
+X-CSE-MsgGUID: yBW1TNNqRJGfBg1J7jsj5Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="93469830"
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="93469830"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 04:18:43 -0800
+X-CSE-ConnectionGUID: Q7Z5V0R1RjCKaaK9/1JSxA==
+X-CSE-MsgGUID: tIAdhHReTWOiiIA7g/WWbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="212353797"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 28 Jan 2026 04:18:35 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vl4VE-00000000ZeC-2fMW;
+	Wed, 28 Jan 2026 12:18:32 +0000
+Date: Wed, 28 Jan 2026 20:18:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"pbonzini@redhat.com" <pbonzini@redhat.com>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"maz@kernel.org" <maz@kernel.org>,
+	"oupton@kernel.org" <oupton@kernel.org>,
+	"joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"yuzenghui@huawei.com" <yuzenghui@huawei.com>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"seanjc@google.com" <seanjc@google.com>,
+	"tglx@kernel.org" <tglx@kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+	"luto@kernel.org" <luto@kernel.org>
+Subject: Re: [PATCH v10 01/15] set_memory: set_direct_map_* to take address
+Message-ID: <202601282023.vzRHJBfU-lkp@intel.com>
+References: <20260126164445.11867-2-kalyazin@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DG06J6S40UW7.15VFU5DA8YJIY@google.com>
+In-Reply-To: <20260126164445.11867-2-kalyazin@amazon.com>
 
-On Wed, Jan 28, 2026 at 11:18:35AM +0000, Brendan Jackman wrote:
-> On Wed Jan 28, 2026 at 9:05 AM UTC, Thomas Weiﬂschuh wrote:
-> > When runner.sh is *not* executed via run_kselftest.sh, 
-> 
-> Hm, what's the usecase for that? runner.sh is a "library", right? So in
-> my mind there's basically an undocumented contract that you need to set
-> this variable before you call the relevant functions.
+Hi Nikita,
 
-This happens when using 'make run_tests' in a selftest directory.
-There the failure currently is also not reported to the caller of make.
-Maybe we should make the failures file also work there.
-I am not sure what the expected semantics actually are.
-In any case, a larger fix should wait for the next cycle,
-until then I'd like to get rid of the warning.
+kernel test robot noticed the following build errors:
 
-> The fix below opens the door to bugs where we fail to report test
-> failures which would be... a shame!
-> 
-> > the variable
-> > $kselftest_failures_file does not exist. This triggers a harmless but
-> > annyoing warning from runner.sh if a test fails:
-> >
-> > tools/testing/selftests/kselftest/runner.sh: line 50: : No such file or directory
-> >
-> > Silence the spurious warning.
-> >
-> > Fixes: d9e6269e3303 ("selftests/run_kselftest.sh: exit with error if tests fail")
-> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> 
-> Having said that, it's not a big deal, the risk of those bugs is not
-> that high and we'd probably notice them before too long. Assuming you
-> have a usecase where just setting the variable to /dev/null yourself is
-> a pain, this LGTM.
+[auto build test ERROR on 0499add8efd72456514c6218c062911ccc922a99]
 
-Passing /dev/null explicitly would also work.
-I don't have a strong preference.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kalyazin-Nikita/set_memory-set_direct_map_-to-take-address/20260127-005641
+base:   0499add8efd72456514c6218c062911ccc922a99
+patch link:    https://lore.kernel.org/r/20260126164445.11867-2-kalyazin%40amazon.com
+patch subject: [PATCH v10 01/15] set_memory: set_direct_map_* to take address
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260128/202601282023.vzRHJBfU-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260128/202601282023.vzRHJBfU-lkp@intel.com/reproduce)
 
-> Reviewed-By: Brendan Jackman <jackmanb@google.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601282023.vzRHJBfU-lkp@intel.com/
 
-Thanks
+All errors (new ones prefixed by >>):
+
+>> arch/loongarch/mm/pageattr.c:211:16: error: redefinition of 'addr' with a different type: 'unsigned long' vs 'const void *'
+     211 |         unsigned long addr = (unsigned long)addr;
+         |                       ^
+   arch/loongarch/mm/pageattr.c:209:48: note: previous definition is here
+     209 | int set_direct_map_invalid_noflush(const void *addr)
+         |                                                ^
+   1 error generated.
 
 
-Thomas
+vim +211 arch/loongarch/mm/pageattr.c
+
+   208	
+   209	int set_direct_map_invalid_noflush(const void *addr)
+   210	{
+ > 211		unsigned long addr = (unsigned long)addr;
+   212	
+   213		if ((unsigned long)addr < vm_map_base)
+   214			return 0;
+   215	
+   216		return __set_memory((unsigned long)addr, 1, __pgprot(0),
+   217				    __pgprot(_PAGE_PRESENT | _PAGE_VALID));
+   218	}
+   219	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
