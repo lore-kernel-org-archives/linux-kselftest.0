@@ -1,116 +1,172 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E53E31C57B;
-	Wed, 28 Jan 2026 22:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E3E625;
+	Wed, 28 Jan 2026 23:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769638252; cv=none; b=pPW12VeOotdQ6AOIFqh+R+YKhIZkqFYdalWip44QNyiTHnDKrcP1ovYVPSZ0BiVwrLU7xhY0TW78vdodAIyUCjBhWeSqQdubY7E+B4xu/pSiF27QcVd/PX8QS21yLOYsyVUFF0ofiacBdTo9nQBqpw+0F95DBOEwhoxCeU6wB/k=
+	t=1769642940; cv=none; b=FwW0KQXSEVgjd6d1Lqy7UcuuSmigcAW9X6BcjB4WyQYQ0N3jL1P0zfzpHWhGyW1ZBiIxPhac4VDNSSFOFCOoRFgzIdwFhQ5IyH5Hj8wyM+En1AJ9PXJtYadGoqLIznJnwEuRyzqVc4M/3N9Op6xhKlKMRWbxZM/ynlRttfqdOec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769638252; c=relaxed/simple;
-	bh=vrrYl/O/CwsGif8+d5sJHsjKXbx7VdXXPfYO3qQrgaw=;
+	s=arc-20240116; t=1769642940; c=relaxed/simple;
+	bh=Re30vfT7J/lhmfCWiC6tfWOspLn8FWQy0Ol+r3MBeHs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O+siFOa7TswhQE1PcEQgwc87KVmKbemAHUlHll1g0P9S8EFKna3cI83gVmSzp6GoUSODkBKcjL1urqeTRTRHdI7Ydc+cabXLcGmj593O9QRhmCmL7sPtU5gOAHSivVsfAlObYkbUFhCDCZjYB9OyDL/o8gjYNcLK54lg0bltFg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JpLSreQM; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=shkrHqU9iQtG0MIvJfl7AcYP4yBekFhC34uyCQJ325ZzwbUVO8M61BnEUu7kn/bKP017fXx3u/9WzTwtaJdoRFqy9gHVK2y2D5FWNz9HF7E/yT+65SaJfbdo2ABBoJfO75HQx8Oi+5WPf6G8Z3H9iOmYrziadhSwl1NR9hALXhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=CstViLfg; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JpLSreQM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769638251; x=1801174251;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vrrYl/O/CwsGif8+d5sJHsjKXbx7VdXXPfYO3qQrgaw=;
-  b=JpLSreQMMm65uB3ldRgAtJf0ceZdMGmdTUFxbBrX1c62Tm4mASpuI0D9
-   RlJ0z4u2wx+SzK7+/SXnigWxmDVAR6RXEtq66PJBsLc64cFYXLxf/CDQg
-   pZMsI0MqLkgkDV9TDxFN2xRRqpx/4qc1rt6hd6L6V6nOI1Jq9ibsoHg7s
-   f+waaWorbHf531XsWCt06Cj6ab8KAsikh67sb6ydfXxoJon0lKrcftbCw
-   dpOMg7vr2d71ysZOdQ3+t0hW9iFjNG6MEkJa1H24EUodIv/1ldssngLly
-   d8F5M2opmwSfjENKduCCTwmWhxRkVK+GJ6EQPkkApcyXF4oBvYFdxFz26
-   A==;
-X-CSE-ConnectionGUID: RczQGbGDREWB6krGXUy7rQ==
-X-CSE-MsgGUID: 6IQZnUkuTEWRN4N27JUN/Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11685"; a="70954967"
-X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="70954967"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 14:10:50 -0800
-X-CSE-ConnectionGUID: 1vfA4d7wRhuyHySmsyeV2A==
-X-CSE-MsgGUID: jtkRbiZjTfifO1qHpZ+F2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
-   d="scan'208";a="231324738"
-Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
-  by fmviesa002.fm.intel.com with ESMTP; 28 Jan 2026 14:10:49 -0800
-Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vlDkM-0000000026j-3BhL;
-	Wed, 28 Jan 2026 22:10:46 +0000
-Date: Wed, 28 Jan 2026 23:10:25 +0100
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Subject: Re: [PATCH 3/5] selftests: kselftest: Add ksft_reset_state()
-Message-ID: <202601282352.QFHPcLUZ-lkp@intel.com>
-References: <20260128-kselftest-harness-v1-3-cb259fa81cd0@linutronix.de>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="CstViLfg"
+Received: from killaraus.ideasonboard.com (2001-14ba-703d-e500--2a1.rev.dnainternet.fi [IPv6:2001:14ba:703d:e500::2a1])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 01BC0581;
+	Thu, 29 Jan 2026 00:28:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1769642899;
+	bh=Re30vfT7J/lhmfCWiC6tfWOspLn8FWQy0Ol+r3MBeHs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CstViLfgetq2FaIg/mUC97M5Iyxav/KrqLbxl3ZuiZG0lDMFmSFX2V4J2LYa+MIi/
+	 /gW4Hs6M+qoCxqxTxCDaqAnXY5m4za8zTB9DXKLM+gdiwqO64yyCKdF3SVoAMuVIoy
+	 zo7ffLSFX56h534/gbMCZIce5Nx/oQHSzN4lD/9M=
+Date: Thu, 29 Jan 2026 01:28:54 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Revert "revocable: Revocable resource management"
+Message-ID: <20260128232854.GB3275574@killaraus>
+References: <20260124170535.11756-1-johan@kernel.org>
+ <aXjgeNY-jf9rIw09@google.com>
+ <aXobzoeooJqxMkEj@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260128-kselftest-harness-v1-3-cb259fa81cd0@linutronix.de>
+In-Reply-To: <aXobzoeooJqxMkEj@hovoldconsulting.com>
 
-Hi Thomas,
+On Wed, Jan 28, 2026 at 03:23:10PM +0100, Johan Hovold wrote:
+> On Tue, Jan 27, 2026 at 03:57:44PM +0000, Tzung-Bi Shih wrote:
+> > On Sat, Jan 24, 2026 at 06:05:32PM +0100, Johan Hovold wrote:
+> > > I was surprised to learn that the revocable functionality was merged last week
+> > > given the community feedback on list and at LPC, but not least since there are
+> > > no users of it, which we are supposed to require to be able to evaluate it
+> > > properly.
+> > > 
+> > > The chromeos ec driver issue which motivated this work turned out not to need
+> > > it as was found during review. And the example gpiolib conversion was posted
+> 
+> > Regarding cros_ec_chardev, my last attempt [2] to solve its hot-plug issue by
+> > synchronizing misc_{de,}register() with file operations using a global lock
+> > highlighted the difficulty of alternatives: that approach serialized all file
+> > operations and could easily lead to hung tasks if any file operation slept.
+> 
+> Yeah, fixing it at the chardev (or miscdevice) level would still require
+> some changes at the driver level (e.g. to wakeup sleeping tasks).
 
-kernel test robot noticed the following build warnings:
+Waking up sleeping tasks is a core part of the fix. Drivers will need to
+do so explicitly in their .remove() operation, through a
+subsystem-specific wrapper around a cdev helper function.
 
-[auto build test WARNING on 6d6ad32e22f028c525d5df471c5522616e645a6b]
+> > Given the drawbacks of [2], I believe cros_ec_chardev remains a valid use
+> > case for revocable.
+> 
+> Yes, possibly. 
+> 
+> Miscdevice is a bit of a special case however since you cannot tie the
+> lifetime of your driver data to that of the miscdev, but there are ways
+> to address that. And some drivers already handle this (i.e. without any
+> changes to miscdevice).
+> 
+> But notably the revocable design seems to derive from this quirk of
+> miscdevice.
+> 
+> [ Side note for completeness: Looking at the cros_ec driver it doesn't
+>   seem to involve any hotpluggable buses so this looks like a mostly
+>   theoretical issue of a developer with root access actively unbinding
+>   an ec-driver while in use. ]
+> 
+> > > the very same morning that this was merged which hardly provides enough time
+> > > for evaluation (even if Bartosz quickly reported a performance regression).
+> > 
+> > The gpiolib conversion was provided as the first concrete user to enable
+> > this evaluation process.  The performance regression Bartosz identified is
+> > valuable feedback, and I believe it is addressed by [3].  I plan to send the
+> > next version of the series after v7.0-rc1 and revisit the issue.
+> > 
+> > [3] https://lore.kernel.org/all/20260121040204.2699886-1-tzungbi@kernel.org/
+> >
+> > > Turns out there are correctness issues with both the gpiolib conversion and
+> > > the revocable design itself that can lead to use-after-free and hung tasks (see
+> > > [1] and patch 3/3).
+> > 
+> > I appreciate you identifying the issues where multiple threads share a file
+> > descriptor; this is a case I overlooked.  I see these kinds of findings as a
+> > positive outcome of having wider review and a concrete user, allowing us to
+> > identify and fix issues in the design.
+> 
+> Yes, that's exactly why we always require a user *before* merging
+> something like this. To be able to determine that the interface is sane.
+> 
+> Now the user showed up on the same day as the merge, which is obviously
+> not enough time for proper review and discussion.
+> 
+> [ And by short-circuiting the normal process you probably reduce the
+> motivation for people to spend time on the example conversion too. ]
+> 
+> > > And as was pointed out repeatedly during review, and again at the day of the
+> > > merge, this does not look like the right interface for the chardev unplug
+> > > issue.
+> > 
+> > My focus has been on miscdevice [2], but I suspect cdev solutions for device
+> > hot-plug would face similar synchronization challenges between device removal
+> > and in-flight file operations.
+> 
+> But we need to look at that before throwing up our hands and saying that
+> it's not possible and that each driver should take care of this itself.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/selftests-kselftest-Treat-xpass-as-successful-result/20260128-182856
-base:   6d6ad32e22f028c525d5df471c5522616e645a6b
-patch link:    https://lore.kernel.org/r/20260128-kselftest-harness-v1-3-cb259fa81cd0%40linutronix.de
-patch subject: [PATCH 3/5] selftests: kselftest: Add ksft_reset_state()
-config: x86_64-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20260128/202601282352.QFHPcLUZ-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260128/202601282352.QFHPcLUZ-lkp@intel.com/reproduce)
+There has been previous attempts, including a functional patch series,
+that didn't get merge due to the sole reason that it duplicated a small
+amount of logic also present in debugfs. I'll reply to Danilo somewhere
+else in this mail thread with more information.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601282352.QFHPcLUZ-lkp@intel.com/
+> > > Revert the revocable implementation until a redesign has been proposed and
+> > > evaluated properly.
+> > 
+> > I'll work on addressing the discovered issues and send follow-up fixes.  I
+> > believe keeping the current series in linux-next would be beneficial, as it
+> > allows for easier testing and wider evaluation by others, rather than
+> > reverting at this stage.
+> 
+> To the contrary, now is right time to do the revert as there are
+> fundamental problems with the current interface that will require a
+> redesign. That's not the kind of work that should be done during an rc
+> stabilisation cycle.
+> 
+> Give people a chance to see for themselves what the gpiolib conversion
+> looks like, determine whether this abstraction makes the code more or
+> less readable, and think about possible further uses of a mechanism like
+> this.
 
-All warnings (new ones prefixed by >>):
+fully agreed. Follow-up fixes is not the right way forward. As Johan
+said, the quick merge despite the open issues, circumventing the normal
+review process, damages trust, and reduces my motivation to review your
+work and help shaping a good API to solve this problem.
 
-   In file included from ovpn-cli.c:35:
->> tools/testing/selftests/../../../tools/testing/selftests/kselftest.h:488:2: warning: ISO C does not allow extra ';' outside of a function [-Wpedantic]
-     488 | };
-         |  ^
-
-
-vim +488 tools/testing/selftests/../../../tools/testing/selftests/kselftest.h
-
-   478	
-   479	static inline void ksft_reset_state(void)
-   480	{
-   481		ksft_cnt.ksft_pass = 0;
-   482		ksft_cnt.ksft_fail = 0;
-   483		ksft_cnt.ksft_xfail = 0;
-   484		ksft_cnt.ksft_xpass = 0;
-   485		ksft_cnt.ksft_xskip = 0;
-   486		ksft_cnt.ksft_error = 0;
-   487		ksft_plan = 0;
- > 488	};
-   489	
+> > > [1] https://lore.kernel.org/all/aXT45B6vLf9R3Pbf@hovoldconsulting.com/
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+
+Laurent Pinchart
