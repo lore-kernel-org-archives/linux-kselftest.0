@@ -1,141 +1,147 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824C636EABD
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 18:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769625516; cv=none; b=a1q/nnICK6RUtRKFZ9Sm0sgTd72nsqrUdwqdnYR8Bz4eyOg4UnXZgBWcSJdAmcsc6sXpXswK+A9/jEgOD6WvAbgLg267prYLme98u9IBVAi8mhcxu1NnAhIeVJ4ghD5XM4Xh21H9vOAZ8QDyGr33MxHOq7iVZ6I2o+rUOKq3V9k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769625516; c=relaxed/simple;
-	bh=wdPj+AEsKkXKm1fsdKDxQKjF1X8lRnqgiXjzhdF+tso=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QKv/FoPJkvBQj0poFpZBE4AP93gR/De9EXp3LTaMnYc8LMQaYDAnxWPhjymSmUOl/Zj2rLDBtsDW7/cfBhZV+GvFI23wiZQend6saP8Mxzf4+MbHR87TF1V1yFwRsZ3Xnp4TcEe3iEYnUi3b7mrllTAwSy5C0MpofQF504OTfU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=4ZdcnbWS; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A241F31355C
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 18:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769626174; cv=pass; b=uhpmk1GqeWrPcunQLnGJH0zlSmK8wfFs6MgpZHa6VG97w41NaqZRJtXXZ0q+M8h33EXBFcpm7uCVdxvt2eDJv2ipKu0NMDNIhjCb1GSB7sTFPqSPzb3Ko3+TaS0R/DRI/1eDWD3wWeNnhlMb4eq090XcbHC/r8X88mFLbKGVlLU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769626174; c=relaxed/simple;
+	bh=jjV5Od43uItyRHpvZGzXOvduel10uHKTWqh7dEC2oIs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O7b6GrpoOTB1FNVN3yP1lbOOAQ16OBiigjVWuv1zNDtqlCsRYEJoO2rtSECIxNf9z4KfoVNmDwHpMpHDK3BuU9iMXe5fU6QyqzG8F8YhqgUNci272ZuHh9FUsYIGfWAWn0410IXxQyiMw/c6bbHorsBtlzFtB/+KS9R1qK+Gg/c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nVNj3YeA; arc=pass smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="4ZdcnbWS"
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60SFsG0u2185008
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 10:38:33 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=s2048-2025-q2; bh=XfrX8mUNuR0msXgMd+
-	bRYSXgi24oqYnW4pxhyRlD0I8=; b=4ZdcnbWS1dZ+kSO1geYx2xCLp5xFHKy+n0
-	hg/B2Ajdjjcy45PCWMkLWCqeYUCxTQg0rclVd/0KRuNxdKbr9epfzaI6hAFA6e4i
-	uC1kFo0UQgZLoT5IDEvPBaPoIe8cGG9+9T419YDO32sTuJPAb+Jjx51or+7sLA0H
-	cU5KybFTqIs+/BLKVmiiXLsDwgCNk/+hTMMhYsGJJV6oDOOlLBk+0CY8V4BrcV1R
-	r1G4Z9h4wpD/XSbPC5pONaShaeRPMNePnJZYnbP2VC2NTY7fXJ2gvUZHHSlw7Nmm
-	tmtqrAbjQh0t9qLtb9vRetPwiFrJT8JbA6o+geDyaIURueUeDdrQ==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4byngp25x0-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 10:38:33 -0800 (PST)
-Received: from twshared22445.03.snb1.facebook.com (2620:10d:c085:208::7cb7) by
- mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.35; Wed, 28 Jan 2026 18:38:32 +0000
-Received: by devvm6375.cco0.facebook.com (Postfix, from userid 721855)
-	id AA073B4F157; Wed, 28 Jan 2026 10:38:25 -0800 (PST)
-From: Ted Logan <tedlogan@fb.com>
-To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
-        Shuah Khan <shuah@kernel.org>
-CC: Raghavendra Rao Ananta <rananta@google.com>, Alex Mastro <amastro@fb.com>,
-        Ted Logan <tedlogan@fb.com>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        kernel
- test robot <lkp@intel.com>
-Subject: [PATCH] vfio: selftests: fix format conversion compiler warning
-Date: Wed, 28 Jan 2026 10:37:50 -0800
-Message-ID: <20260128183750.1240176-1-tedlogan@fb.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nVNj3YeA"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-481188b7760so90045e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jan 2026 10:49:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769626171; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SB04zUhJoNuW58sqr2DzVqjJKhoi0lhhLARqzZjU3ZpKGWHTlbw6OoafbXDoYMbyKy
+         UgviCXHErqJjpzwQ0inJPFUM0RztDGAH69plk+GXFiMNRWR7c0n/UjMeWM+eTLZOb94p
+         2qBe3VFLMr4RN6tPcG9uolc7wgx2ls/gsZdYWwOTJEj44Rl+tlVlP3xmJk2BPsOfOtWP
+         Kqn7w4HCTEKB4T9Ba7vLQTyLnOT8ReEn6t/1pxMjExiEsOESgXF8gEl5wrmXZ+c6jbti
+         TSnAdAxuQqLKxzq4EecpYjJ1JPOPQ98EkWTh1FSsfX+gJz/69oM5hqESZlCJ2zao33ph
+         vycg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qGOxMm1K5WN+JT4uUn9nzJwvV/NU3i9BH4DGHjnCuXY=;
+        fh=8i+XzDDIRj9MT80c+8KxQTV7gYliLQrNGvjKidBogBM=;
+        b=AmfZ5p4l7df4jKsDbS/y1LFkfNVkKk+YopeKeeqwnZmkRpghtwU3v/YOlEFxBjur6T
+         e+HamVsLabJza01CQxOACLHcsCryA9ysyny0PV+CR3p6hVhEgQsO0AkJK6Vl0Zbhw1pk
+         uCmC4a8GeO0wpYWx9PQmJvPBkoHbMlS9515W2oJOJ/mPG0RayJStQcUcCH+RK/3nVsfb
+         0QdZ9q2HlBAEFjjRCBlOl2cbFxBcf8zEuV0Ysia2cueI9vf6CFcnHmjbK1v52H2ABf1m
+         02HnHbDc7Hc78s+cvS18c8A9kSXveFtiWKQDkx+g30hQT6kGphH1vjSqJ+ogdo3nXW8b
+         NgYQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769626171; x=1770230971; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qGOxMm1K5WN+JT4uUn9nzJwvV/NU3i9BH4DGHjnCuXY=;
+        b=nVNj3YeAP5cQf8s0J9mauGHzaGgztasziWZGIui/GAkpD7f2xBWfEyF6K0/i6tUe+m
+         cqt9OlAQXhWmlaL2swKiI/4mVFtOKoGXbY39NLS3qUBFBqoP87kXvh1DraTSbw5cgyKi
+         wiN2Vpmx3CvcC98ogwiTCFihJxl9+Pn0vXWAxQNq6HlhpL1KJ9l2dkiFyBEEroVNlD+G
+         yZR9i/56Bu0tFskBO3O22upn3/vky5spNRiAia+pi31HjyBg20mzoCzCQwBTVqByfupN
+         9GdR1+WsdqIsT634iRSYghrIpKBd0z1DDgjq2R6jR3pZ4kObBnx7STokE12gnZiN2xN9
+         1/IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769626171; x=1770230971;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qGOxMm1K5WN+JT4uUn9nzJwvV/NU3i9BH4DGHjnCuXY=;
+        b=a4oXBrGRL43W6l9suujPa/GK15O28lGl4XvVxeI6G0TElDuW3oacNE2EQt9TXILFNT
+         O0G1Ar4hclZmESPHKSpU8zzF7KTUeF1ty4k5RLwYIc8jWwRcOo4casqW3GbYhzlTSvdY
+         to2Gmz7qSft/Uf/niUtTVmfVO3cmgu1HFSg/97FpWjGunC4GoaMHktwbvAuP96uL0IVb
+         S2SS8Ha6hro6IpL5zK5XWm5TDzb1A3ivpsVytCgr4JZ/iQLxsHQnJja/jXvRtsM4Ummk
+         aQBxQcQdlVnKyu7rKVECqBJLPlnCjUIj4GQWaL82d6xwXZLO8J/GDQTY5qzBXkJJPnQt
+         djTA==
+X-Forwarded-Encrypted: i=1; AJvYcCWsIKpUVRFoynRh39Mt6/iilJtolMuXNfbljjKHBBCDfYkOBtCUFzUG2+9bvhlI4BKQ2M3KxZnYKuZoesjG6QM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+k5XRyLo4hyNhTtMJNQHOMwa/GobuAs5QD6IEFIESOhp9M/Ix
+	NGEUO1+Pca21plHpyAaZzY6hKuEgJZvQlQSDLofxfPbibSyLX+0Dlh6k8BZpXDesI4rhNMJc7jq
+	vdIlwbi9F2+Q+8FGYi4UyCT0DELz+B0o=
+X-Gm-Gg: AZuq6aJjPwFvVk4vxhkUq4jucR8cDiwFcKO3uDlbMsk+0ZUKbETku3r48EVoK4mU1fl
+	TsSaMcD7Nf49P3duLQZ4x+oNVSrCx9sf0Ogg7YAzamHhtQD70bw5bLxYIj3pui5e8q8hv+SnA1v
+	YoDPK1OwkRmt4Aazw3I/JRa/EHo4sc1BXazmmi1ekKCD9B0f8wKi5U8a5Olvy2uxLkmPFgQEfL+
+	munSya0kgaSNOGXkW6ScdHgeVhiRPirwrRfP0slP5Jw8mRDYtPXdnj7CnNl298UygMuQOn+TLD+
+	+Ik2rfuVaQX3aUTNOCCr8ztihZP1Gwy8gJ25b2GrPMdsObm8f7TaRuy6gWXCFynkhv+jpSsPvKn
+	dMwCeo3/7bu6jhg==
+X-Received: by 2002:a05:600c:4f82:b0:480:4d39:84b3 with SMTP id
+ 5b1f17b1804b1-48069bfabe7mr87977985e9.6.1769626170838; Wed, 28 Jan 2026
+ 10:49:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260128150112.8873-2-leon.hwang@linux.dev> <e64c4137e7f262e6fdab272e8ee44c8a129a36eb6d0186914375d6ba20d88474@mail.kernel.org>
+ <65231eeb-1f00-4af2-9234-a290ea3f6585@meta.com> <a10afa70-29b7-48ab-b241-8b0f602abe2f@linux.dev>
+In-Reply-To: <a10afa70-29b7-48ab-b241-8b0f602abe2f@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 28 Jan 2026 10:49:19 -0800
+X-Gm-Features: AZwV_Qikusk2Q6YhJBvTgmuieIgLLJz7FiVhBc9lpkAd7bZar_-wkLjd4ZlAf6c
+Message-ID: <CAADnVQJV=e2VgQzkpsUQwexhaVZMs7uXHCe1Fa6VwbVNUMPghA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Add bpf_arch_supports_fsession()
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Chris Mason <clm@meta.com>, bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Menglong Dong <menglong8.dong@gmail.com>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: hqd1quuqKBqS2Ri7czR3LSUnL611rNUN
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI4MDE1NCBTYWx0ZWRfX5a8FDfra64Q4
- eSPuLKOtQB4VZxlHZ3tz2S5UwB8+Bu08xG+Mpr6S90JNC4z6STYkgENg3SkF+q2Apwf4krJiIrI
- smBpc7eJcdYSUJLwibiwVUjXRQE6BSMyBjS2wXcI/dpxn1w+ptGhqROMKsagc/gW3ZVcoyiZ0JT
- 1zdTdHI8wjfy5267UzYPJ9Kl8nlvUQTulcxvOW22kSEn5X986SpJEs7HRUxu0NidC6ZL0ezMkys
- +JlUfvqS6QctcEfpPUdAf9CSIgaVmAx4Y35nOB4Tv3IhUTxwYILqYnN3ENZlReEJPCbKNersLua
- 7P/SDTPekMCImE8YfSkNurWk4eIP7ydYfYK1dCVIcviQH5mZFumw3MmT9IHPJsnxZcS21/NmbFw
- J8sdqpAomdiUqpVkXimNebnINZ/LGm88/KBsiy/mUVw0l3IcribVYKAYnIew6pJ07AxGJdTnwAs
- BRQipxz7ddViH360BbQ==
-X-Authority-Analysis: v=2.4 cv=aP/9aL9m c=1 sm=1 tr=0 ts=697a57a9 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8
- a=FOH2dFAWAAAA:8 a=dWR254cKOyREI92bUGEA:9
-X-Proofpoint-ORIG-GUID: hqd1quuqKBqS2Ri7czR3LSUnL611rNUN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-28_04,2026-01-28_03,2025-10-01_01
 
-Use the standard format conversion macro PRIx64 to generate the
-appropriate format conversion for 64-bit integers. Fixes a compiler
-warning with -Wformat on i386.
+On Wed, Jan 28, 2026 at 9:34=E2=80=AFAM Ihor Solodrai <ihor.solodrai@linux.=
+dev> wrote:
+>
+> On 1/28/26 7:35 AM, Chris Mason wrote:
+> >
+> >
+> > On 1/28/26 10:26 AM, bot+bpf-ci@kernel.org wrote:
+> >>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.=
+c
+> >>> index 5a075e06cf..070ba80e39 100644
+> >>> --- a/arch/x86/net/bpf_jit_comp.c
+> >>> +++ b/arch/x86/net/bpf_jit_comp.c
+> >>> @@ -4112,3 +4112,8 @@ bool bpf_jit_supports_timed_may_goto(void)
+> >>>  {
+> >>>     return true;
+> >>>  }
+> >>> +
+> >>> +bool bpf_jit_supports_fsession(void)
+> >>        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> >> This is the actual function name in the code.
+> >
+> > Ihor, I think the script parsing review-inline.txt chopped off the
+> > part of the review where AI was complaining about the commit message?
+>
+> This is the email body pre-processing in KPD, yes.
+>
+> At some point we decided to remove the commit message before sending
+> an email, but now that AI reviews the messages too, I think we should
+> just send the generated review-inline.txt as is.
+>
+> Alexei, wdyt?
 
-Signed-off-by: Ted Logan <tedlogan@fb.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp@i=
-ntel.com/
+I think KPD is only supposed to trim the header until 'diff ..' line.
+In this case there is no 'diff', so I'm not sure why it trimmed so much.
 
----
-Compiler warning fixed by patch:
+commit sha...
+Author: ...
 
-   In file included from tools/testing/selftests/vfio/lib/include/libvfio=
-.h:6:
-   tools/testing/selftests/vfio/lib/include/libvfio/iommu.h:49:2: warning=
-: format specifies type 'unsigned long' but the argument has type 'u64' (=
-aka 'unsigned long long') [-Wformat]
-      49 |         VFIO_ASSERT_EQ(__iommu_unmap(iommu, region, NULL), 0);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/vfio/lib/include/libvfio/assert.h:32:37: note:=
- expanded from macro 'VFIO_ASSERT_EQ'
-      32 | #define VFIO_ASSERT_EQ(_a, _b, ...) VFIO_ASSERT_OP(_a, _b, =3D=
-=3D, ##__VA_ARGS__)
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~
-   tools/testing/selftests/vfio/lib/include/libvfio/assert.h:27:22: note:=
- expanded from macro 'VFIO_ASSERT_OP'
-      26 |         fprintf(stderr, "  Observed: %#lx %s %#lx\n",         =
-                  \
-         |                                              ~~~~
-      27 |                         (u64)__lhs, #_op, (u64)__rhs);        =
-                  \
-         |                                           ^~~~~~~~~~
-
----
- tools/testing/selftests/vfio/lib/include/libvfio/assert.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/assert.h b/=
-tools/testing/selftests/vfio/lib/include/libvfio/assert.h
-index f4ebd122d9b6..a2d610e22acd 100644
---- a/tools/testing/selftests/vfio/lib/include/libvfio/assert.h
-+++ b/tools/testing/selftests/vfio/lib/include/libvfio/assert.h
-@@ -2,6 +2,7 @@
- #ifndef SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_ASSERT_H
- #define SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_ASSERT_H
-=20
-+#include <inttypes.h>
- #include <stdio.h>
- #include <string.h>
- #include <sys/ioctl.h>
-@@ -23,7 +24,7 @@
- 										\
- 	fprintf(stderr, "%s:%u: Assertion Failure\n\n", __FILE__, __LINE__);	\
- 	fprintf(stderr, "  Expression: " #_lhs " " #_op " " #_rhs "\n");	\
--	fprintf(stderr, "  Observed: %#lx %s %#lx\n",				\
-+	fprintf(stderr, "  Observed: %#" PRIx64 " %s %#" PRIx64 "\n",		\
- 			(u64)__lhs, #_op, (u64)__rhs);				\
- 	fprintf(stderr, "  [errno: %d - %s]\n", errno, strerror(errno));	\
- 	VFIO_LOG_AND_EXIT(__VA_ARGS__);						\
---=20
-2.47.3
-
+are useless in email reply, so we should still trim them.
