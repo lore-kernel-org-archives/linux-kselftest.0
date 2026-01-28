@@ -1,37 +1,38 @@
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348B62C21D9;
-	Wed, 28 Jan 2026 03:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD7B32E12E;
+	Wed, 28 Jan 2026 03:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769570391; cv=none; b=tUxwvRzfOrbj2aImcRSYi6uMAyS7JYUoMlCOCn07bXZADBHNOmtcsGP7DuFSDtlPonm69OWWloHpRxPAO3meBMyX2weWqwOSoDMp79HLANfEqaMFv68MXVJpE9onCGX6ff4oVCjawGYw2/M9iKs10PrKIM14AJg5Y/vscfAdRFw=
+	t=1769570392; cv=none; b=WdqErraAt9tiWUo97nKH9IR2AcBCTQ/Ky7RaIRYNtaSUq9geofe+aVTBuWPOMsc4x6xYjgX7XLNa3MuP4ktBkHG/3NyAwxWuyXypn4iIw1m6EnZsl0LuIGOP0fM3Jsva6jikDRn4z2jPQi1eUUfkzOPji2CfeOJHu1cHfeuH418=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769570391; c=relaxed/simple;
-	bh=ZUmg1XRyTFUKdxLfamwd/sOF3irnZT1Voiar9U8RW1A=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dshV6oSZu7QC13owh7sH0A2SBSZu0NWd3SdgJlRIprbhMEW1XE3nFPm9boCj5Tr42w6BbImC+7no2pHsKe40lLdvcifRDzqCf9mk6ETdkGqYRadPs8vMedWfkPF5POMPxSW3wzT3DYNsd40w8bOE1cuEbZmeIErmRRa+5dH6vi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=WLeVChXa; arc=none smtp.client-ip=113.46.200.221
+	s=arc-20240116; t=1769570392; c=relaxed/simple;
+	bh=5RG6betf6JJ2sZ/H2Y0C5K8szdTGncGvPVtzOyG9eq0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O88fj1Sz48MtpQTgnj9O1+EgyQ8FqVgsAMcL13YOR+ABVFe/5Yx3ar5u1tKc7FWwloLYKqdBS9LnPnb+7czOLpfO9A3I/7UK6/J4zZBGZ9FHD3SkbXj9rTE+4i6MKb8mEe+LK4BsogJM2uYEskERY6xsNgNrt+de5h0idlaUqOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=FmKNX9a2; arc=none smtp.client-ip=113.46.200.227
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="WLeVChXa"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="FmKNX9a2"
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=5n/f1zv2Q59ZL6IU2qOzwQQnBQsg/CsYfkVntNrHfM4=;
-	b=WLeVChXatGM5nkDn0VOPlALzOjFptrS3J2Wdop8t3zvP14LL1ig6O7JmvjDQlrF9ZwJ2KnMmn
-	4QQm5mPtVTr2F4GpzxzJN06OopuvyeeiiMYzuASh4ey/4h8MPMBZF2JA5EfvgzQpufzGc5pUF0w
-	KtismGAhm3l9TiAwZZaFUgU=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4f16qc1nxhzRhSn;
-	Wed, 28 Jan 2026 11:16:12 +0800 (CST)
+	bh=eMYoVUreRtbJVgDDXvPW6ErcnIr43ieYFt9foGlGR44=;
+	b=FmKNX9a2dfPNnhrkMtKHaKp88iAWjtttTwcTU2gvTy4PhbfTqi1cby0oYc01WXdjB7DrvhCcA
+	ChCieyiM5p4xPY6CVwoOfPxSQ4JrfluQbLBiSVeqXZNjrsXI4Q+l4Sb5v/0XYIC1psbtX0KgcPD
+	T9LUMbmTXZ3d7dO8oSguz5M=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f16qG4jmfznTVF;
+	Wed, 28 Jan 2026 11:15:54 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 48CC440537;
-	Wed, 28 Jan 2026 11:19:40 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id B1BD24048B;
+	Wed, 28 Jan 2026 11:19:48 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
  (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 28 Jan
- 2026 11:19:38 +0800
+ 2026 11:19:46 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
 	<tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
@@ -45,10 +46,12 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
 	<richard.weiyang@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v11 00/14] arm64: entry: Convert to Generic Entry
-Date: Wed, 28 Jan 2026 11:19:20 +0800
-Message-ID: <20260128031934.3906955-1-ruanjinjie@huawei.com>
+Subject: [PATCH v11 05/14] arm64/ptrace: Not check _TIF_SECCOMP/SYSCALL_EMU for syscall_exit_work()
+Date: Wed, 28 Jan 2026 11:19:25 +0800
+Message-ID: <20260128031934.3906955-6-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260128031934.3906955-1-ruanjinjie@huawei.com>
+References: <20260128031934.3906955-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,238 +63,90 @@ Content-Transfer-Encoding: 8bit
 X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
  dggpemf500011.china.huawei.com (7.185.36.131)
 
-Currently, x86, Riscv, Loongarch use the Generic Entry which makes
-maintainers' work easier and codes more elegant. arm64 has already
-successfully switched to the Generic IRQ Entry in commit
-b3cf07851b6c ("arm64: entry: Switch to generic IRQ entry"), it is
-time to completely convert arm64 to Generic Entry.
+As syscall_exit_work() do not handle seccomp, so not check _TIF_SECCOMP
+for syscall_exit_work().
 
-The goal is to bring arm64 in line with other architectures that already
-use the generic entry infrastructure, reducing duplicated code and
-making it easier to share future changes in entry/exit paths, such as
-"Syscall User Dispatch".
+And as the man manual of PTRACE_SYSEMU and PTRACE_SYSEMU_SINGLESTEP
+said, "For PTRACE_SYSEMU, continue and stop on entry to the next system
+call, which will not be executed. For PTRACE_SYSEMU_SINGLESTEP, do the same
+but also singlestep if not a system call.". So only the syscall entry need
+to be reported for SYSCALL_EMU, so not check _TIF_SYSCALL_EMU for
+syscall_exit_work().
 
-This patch set is rebased on arm64 (for-next/entry). And the performance
-was measured on Kunpeng 920 using "perf bench basic syscall" with
-"arm64.nopauth selinux=0 audit=1".
+After this, audit_syscall_exit() and report_syscall_exit() will
+no longer be called if only SECCOMP and/or SYSCALL_EMU is set.
 
-After switch to Generic Entry, the performance are below:
+And remove has_syscall_work() by the way as currently it is only used in
+el0_svc_common().
 
-| Metric     | W/O Generic Framework | With Generic Framework | Change |
-| ---------- | --------------------- | ---------------------- | ------ |
-| Total time | 2.487 [sec]           |  2.393[sec]            | ↓3.8% |
-| usecs/op   | 0.248780              |  0.239361              | ↓3.8% |
-| ops/sec    | 4,019,620             |  4,177,789             | ↑3.9% |
+This is another preparation for moving arm64 over to the generic
+entry code.
 
-Compared to earlier with arch specific handling, the performance improved
-by approximately 3.9%.
+Link：https://man7.org/linux/man-pages/man2/ptrace.2.html
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+ arch/arm64/include/asm/syscall.h     | 5 -----
+ arch/arm64/include/asm/thread_info.h | 3 +++
+ arch/arm64/kernel/ptrace.c           | 2 +-
+ arch/arm64/kernel/syscall.c          | 2 +-
+ 4 files changed, 5 insertions(+), 7 deletions(-)
 
-On the basis of optimizing syscall_get_arguments()[1], el0_svc_common()
-and syscall_exit_work(), the performance are below:
-
-| Metric     | W/O Generic Entry | With Generic Entry opt| Change |
-| ---------- | ----------------- | ------------------    | ------ |
-| Total time | 2.487 [sec]       | 2.264 [sec]           | ↓9.0% |
-| usecs/op   | 0.248780          | 0.226481              | ↓9.0% |
-| ops/sec    | 4,019,620         | 4,415,383             | ↑9.8% |
-
-Therefore, after the optimization, ARM64 System Call performance improved
-by approximately 9%.
-
-It was tested ok with following test cases on kunpeng920 and QEMU
-virt platform:
- - Perf tests.
- - Different `dynamic preempt` mode switch.
- - Pseudo NMI tests.
- - Stress-ng CPU stress test.
- - Hackbench stress test.
- - MTE test case in Documentation/arch/arm64/memory-tagging-extension.rst
-   and all test cases in tools/testing/selftests/arm64/mte/*.
- - "sud" selftest testcase.
- - get_set_sud, get_syscall_info, set_syscall_info, peeksiginfo
-   in tools/testing/selftests/ptrace.
- - breakpoint_test_arm64 in selftests/breakpoints.
- - syscall-abi and ptrace in tools/testing/selftests/arm64/abi
- - fp-ptrace, sve-ptrace, za-ptrace in selftests/arm64/fp.
- - vdso_test_getrandom in tools/testing/selftests/vDSO
- - Strace tests.
-
-The test QEMU configuration is as follows:
-
-	qemu-system-aarch64 \
-		-M virt,gic-version=3,virtualization=on,mte=on \
-		-cpu max,pauth-impdef=on \
-		-kernel Image \
-		-smp 8,sockets=1,cores=4,threads=2 \
-		-m 512m \
-		-nographic \
-		-no-reboot \
-		-device virtio-rng-pci \
-		-append "root=/dev/vda rw console=ttyAMA0 kgdboc=ttyAMA0,115200 \
-			earlycon preempt=voluntary irqchip.gicv3_pseudo_nmi=1" \
-		-drive if=none,file=images/rootfs.ext4,format=raw,id=hd0 \
-		-device virtio-blk-device,drive=hd0 \
-
-[1]: https://kernel.googlesource.com/pub/scm/linux/kernel/git/akpm/mm/+/89bf683c9507c280e20c3e17b4ea15e19696ed63%5E%21/#F0
-
-Changes in v11:
-- Remove unused syscall in syscall_trace_enter().
-- Update and provide a detailed explanation of the differences after
-  moving rseq_syscall() before audit_syscall_exit().
-- Rebased on arm64 (for-next/entry), and remove the first applied 3 patchs.
-- syscall_exit_to_user_mode_work() for arch reuse instead of adding
-  new syscall_exit_to_user_mode_work_prepare() helper.
-- Link to v10: https://lore.kernel.org/all/20251222114737.1334364-1-ruanjinjie@huawei.com/
-
-Changes in v10:
-- Rebased on v6.19-rc1, rename syscall_exit_to_user_mode_prepare() to
-  syscall_exit_to_user_mode_work_prepare() to avoid conflict.
-- Also inline syscall_trace_enter().
-- Support aarch64 for sud_benchmark.
-- Update and correct the commit message.
-- Add Reviewed-by.
-- Link to v9: https://lore.kernel.org/all/20251204082123.2792067-1-ruanjinjie@huawei.com/
-
-Changes in v9:
-- Move "Return early for ptrace_report_syscall_entry() error" patch ahead
-  to make it not introduce a regression.
-- Not check _TIF_SECCOMP/SYSCALL_EMU for syscall_exit_work() in
-  a separate patch.
-- Do not report_syscall_exit() for PTRACE_SYSEMU_SINGLESTEP in a separate
-  patch.
-- Add two performance patch to improve the arm64 performance.
-- Add Reviewed-by.
-- Link to v8: https://lore.kernel.org/all/20251126071446.3234218-1-ruanjinjie@huawei.com/
-
-Changes in v8:
-- Rename "report_syscall_enter()" to "report_syscall_entry()".
-- Add ptrace_save_reg() to avoid duplication.
-- Remove unused _TIF_WORK_MASK in a standalone patch.
-- Align syscall_trace_enter() return value with the generic version.
-- Use "scno" instead of regs->syscallno in el0_svc_common().
-- Move rseq_syscall() ahead in a standalone patch to clarify it clearly.
-- Rename "syscall_trace_exit()" to "syscall_exit_work()".
-- Keep the goto in el0_svc_common().
-- No argument was passed to __secure_computing() and check -1 not -1L.
-- Remove "Add has_syscall_work() helper" patch.
-- Move "Add syscall_exit_to_user_mode_prepare() helper" patch later.
-- Add miss header for asm/entry-common.h.
-- Update the implementation of arch_syscall_is_vdso_sigreturn().
-- Add "ARCH_SYSCALL_WORK_EXIT" to be defined as "SECCOMP | SYSCALL_EMU"
-  to keep the behaviour unchanged.
-- Add more testcases test.
-- Add Reviewed-by.
-- Update the commit message.
-- Link to v7: https://lore.kernel.org/all/20251117133048.53182-1-ruanjinjie@huawei.com/
-
-Chanegs in v7:
-- Support "Syscall User Dispatch" by implementing
-  arch_syscall_is_vdso_sigreturn() as kemal suggested.
-- Add aarch64 support for "sud" selftest testcase, which tested ok with
-  the patch series.
-- Fix the kernel test robot warning for arch_ptrace_report_syscall_entry()
-  and arch_ptrace_report_syscall_exit() in asm/entry-common.h.
-- Add perf syscall performance test.
-- Link to v6: https://lore.kernel.org/all/20250916082611.2972008-1-ruanjinjie@huawei.com/
-
-Changes in v6:
-- Rebased on v6.17-rc5-next as arm64 generic irq entry has merged.
-- Update the commit message.
-- Link to v5: https://lore.kernel.org/all/20241206101744.4161990-1-ruanjinjie@huawei.com/
-
-Changes in v5:
-- Not change arm32 and keep inerrupts_enabled() macro for gicv3 driver.
-- Move irqentry_state definition into arch/arm64/kernel/entry-common.c.
-- Avoid removing the __enter_from_*() and __exit_to_*() wrappers.
-- Update "irqentry_state_t ret/irq_state" to "state"
-  to keep it consistently.
-- Use generic irq entry header for PREEMPT_DYNAMIC after split
-  the generic entry.
-- Also refactor the ARM64 syscall code.
-- Introduce arch_ptrace_report_syscall_entry/exit(), instead of
-  arch_pre/post_report_syscall_entry/exit() to simplify code.
-- Make the syscall patches clear separation.
-- Update the commit message.
-- Link to v4: https://lore.kernel.org/all/20241025100700.3714552-1-ruanjinjie@huawei.com/
-
-Changes in v4:
-- Rework/cleanup split into a few patches as Mark suggested.
-- Replace interrupts_enabled() macro with regs_irqs_disabled(), instead
-  of left it here.
-- Remove rcu and lockdep state in pt_regs by using temporary
-  irqentry_state_t as Mark suggested.
-- Remove some unnecessary intermediate functions to make it clear.
-- Rework preempt irq and PREEMPT_DYNAMIC code
-  to make the switch more clear.
-- arch_prepare_*_entry/exit() -> arch_pre_*_entry/exit().
-- Expand the arch functions comment.
-- Make arch functions closer to its caller.
-- Declare saved_reg in for block.
-- Remove arch_exit_to_kernel_mode_prepare(), arch_enter_from_kernel_mode().
-- Adjust "Add few arch functions to use generic entry" patch to be
-  the penultimate.
-- Update the commit message.
-- Add suggested-by.
-- Link to v3: https://lore.kernel.org/all/20240629085601.470241-1-ruanjinjie@huawei.com/
-
-Changes in v3:
-- Test the MTE test cases.
-- Handle forget_syscall() in arch_post_report_syscall_entry()
-- Make the arch funcs not use __weak as Thomas suggested, so move
-  the arch funcs to entry-common.h, and make arch_forget_syscall() folded
-  in arch_post_report_syscall_entry() as suggested.
-- Move report_single_step() to thread_info.h for arm64
-- Change __always_inline() to inline, add inline for the other arch funcs.
-- Remove unused signal.h for entry-common.h.
-- Add Suggested-by.
-- Update the commit message.
-
-Changes in v2:
-- Add tested-by.
-- Fix a bug that not call arch_post_report_syscall_entry() in
-  syscall_trace_enter() if ptrace_report_syscall_entry() return not zero.
-- Refactor report_syscall().
-- Add comment for arch_prepare_report_syscall_exit().
-- Adjust entry-common.h header file inclusion to alphabetical order.
-- Update the commit message.
-
-Jinjie Ruan (13):
-  entry: Remove unused syscall in syscall_trace_enter()
-  arm64/ptrace: Refactor syscall_trace_enter/exit()
-  arm64: ptrace: Move rseq_syscall() before audit_syscall_exit()
-  arm64: syscall: Rework el0_svc_common()
-  arm64/ptrace: Not check _TIF_SECCOMP/SYSCALL_EMU for
-    syscall_exit_work()
-  arm64/ptrace: Do not report_syscall_exit() for
-    PTRACE_SYSEMU_SINGLESTEP
-  arm64/ptrace: Expand secure_computing() in place
-  arm64/ptrace: Use syscall_get_arguments() helper
-  entry: Rework syscall_exit_to_user_mode_work() for arch reuse
-  entry: Add arch_ptrace_report_syscall_entry/exit()
-  arm64: entry: Convert to generic entry
-  arm64: Inline el0_svc_common()
-  entry: Inline syscall_exit_work() and syscall_trace_enter()
-
-kemal (1):
-  selftests: sud_test: Support aarch64
-
- arch/arm64/Kconfig                            |   2 +-
- arch/arm64/include/asm/entry-common.h         |  76 +++++++++
- arch/arm64/include/asm/syscall.h              |  19 ++-
- arch/arm64/include/asm/thread_info.h          |  16 +-
- arch/arm64/kernel/debug-monitors.c            |   7 +
- arch/arm64/kernel/ptrace.c                    | 115 -------------
- arch/arm64/kernel/signal.c                    |   2 +-
- arch/arm64/kernel/syscall.c                   |  29 +---
- include/linux/entry-common.h                  | 158 ++++++++++++++++--
- kernel/entry/common.h                         |   7 -
- kernel/entry/syscall-common.c                 |  96 +----------
- kernel/entry/syscall_user_dispatch.c          |   4 +-
- .../syscall_user_dispatch/sud_benchmark.c     |   2 +-
- .../syscall_user_dispatch/sud_test.c          |   4 +
- 14 files changed, 268 insertions(+), 269 deletions(-)
- delete mode 100644 kernel/entry/common.h
-
+diff --git a/arch/arm64/include/asm/syscall.h b/arch/arm64/include/asm/syscall.h
+index c469d09a7964..dea392c081ca 100644
+--- a/arch/arm64/include/asm/syscall.h
++++ b/arch/arm64/include/asm/syscall.h
+@@ -120,11 +120,6 @@ static inline int syscall_get_arch(struct task_struct *task)
+ 	return AUDIT_ARCH_AARCH64;
+ }
+ 
+-static inline bool has_syscall_work(unsigned long flags)
+-{
+-	return unlikely(flags & _TIF_SYSCALL_WORK);
+-}
+-
+ int syscall_trace_enter(struct pt_regs *regs, unsigned long flags);
+ void syscall_exit_to_user_mode_work(struct pt_regs *regs);
+ 
+diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
+index 24fcd6adaa33..ef1462b9b00b 100644
+--- a/arch/arm64/include/asm/thread_info.h
++++ b/arch/arm64/include/asm/thread_info.h
+@@ -110,6 +110,9 @@ void arch_setup_new_exec(void);
+ 				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
+ 				 _TIF_SYSCALL_EMU)
+ 
++#define _TIF_SYSCALL_EXIT_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
++				 _TIF_SYSCALL_TRACEPOINT)
++
+ #ifdef CONFIG_SHADOW_CALL_STACK
+ #define INIT_SCS							\
+ 	.scs_base	= init_shadow_call_stack,			\
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index bf8af5247db4..ec30a23e7e93 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -2458,7 +2458,7 @@ void syscall_exit_to_user_mode_work(struct pt_regs *regs)
+ 
+ 	rseq_syscall(regs);
+ 
+-	if (has_syscall_work(flags) || flags & _TIF_SINGLESTEP)
++	if (unlikely(flags & _TIF_SYSCALL_EXIT_WORK) || flags & _TIF_SINGLESTEP)
+ 		syscall_exit_work(regs, flags);
+ }
+ 
+diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+index 66d4da641d97..ec478fc37a9f 100644
+--- a/arch/arm64/kernel/syscall.c
++++ b/arch/arm64/kernel/syscall.c
+@@ -101,7 +101,7 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+ 		return;
+ 	}
+ 
+-	if (has_syscall_work(flags)) {
++	if (unlikely(flags & _TIF_SYSCALL_WORK)) {
+ 		/*
+ 		 * The de-facto standard way to skip a system call using ptrace
+ 		 * is to set the system call to -1 (NO_SYSCALL) and set x0 to a
 -- 
 2.34.1
 
